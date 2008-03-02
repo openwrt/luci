@@ -1,0 +1,56 @@
+FFLuCI - Freifunk Lua Configuration Interface
+
+This is a leightweight MVC-Webframework for small embedded device.
+It uses the the Lua programming language and relies on Haserl.
+
+It consists of several parts:
+
+MVC Dispatcher
+	Simple PATH_INFO based dispatching mechanism using Lua modules
+	
+	> See src/ffluci/dispatcher.lua for a detailed description
+	> See src/ffluci/controller for example controllers
+
+
+Template engine
+	Support for plain and compiled templates, on-demand compiling support
+	Short markups:
+		<% Lua-Code %> 
+		<%= Lua-Code with return value %>
+		<%:i18nkey default translation%>
+		<%+template-to-be-included%>
+		<%~uci.short.cut%>
+
+	Predefined variables for controller dir and media dir
+
+	> See src/ffluci/template.lua for details
+	> See src/view/ for examples
+
+
+i18n Translation support
+	Simple multi-language per-module internationalization support
+	
+	> See src/ffluci/i18n.lua for details
+	> See src/i18n/ for examples
+
+
+UCI wrapper support
+	Lua UCI-Wrapper adapting the CLI of the uci binary
+
+	> See src/model/uci.lua for details
+
+
+Menu Building support
+	Supports menu building for modules and exported actions
+
+	> See src/ffluci/menu.lua for details
+	> See src/ffluci/view/menu.htm, src/ffluci/controller for examples
+
+
+HTTP-Abstraction and Formvalue validation support
+	HTTP-Redirect, Statuscode, Content-Type abstraction
+	Dynamic formvalue validation support including varaible type and
+	value range validation
+
+	> See src/ffluci/http.lua for details
+	> See src/ffluci/controller/public/example-action.lua for examples

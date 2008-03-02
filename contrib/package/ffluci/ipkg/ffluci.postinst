@@ -1,0 +1,4 @@
+#!/bin/sh
+PATTERN='/cgi-bin/ffluci/admin:root:$p$root'
+grep $PATTERN ${IPKG_INSTROOT}/etc/httpd.conf >/dev/null 2>/dev/null || echo $PATTERN >> ${IPKG_INSTROOT}/etc/httpd.conf 
+[ -z ${IPKG_INSTROOT} ] && /etc/init.d/httpd restart
