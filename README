@@ -54,3 +54,9 @@ HTTP-Abstraction and Formvalue validation support
 
 	> See src/ffluci/http.lua for details
 	> See src/ffluci/controller/public/example-action.lua for examples
+
+	
+Known issues:
+	There is a bug in older versions of busybox-httpd (as those in Kamikaze 7.09)
+	that do not handle Status-headers correctly making valid HTTP-Redirects impossible.
+	Using a newer version of Kamikaze should fix this.
