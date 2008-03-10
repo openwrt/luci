@@ -12,16 +12,25 @@ DIRECTORIES = dist/ffluci/model dist/ffluci/controller/public dist/ffluci/contro
 INFILES = $(CFILES:%=src/%)
 OUTFILE = ffluci/init.lua
 
+.PHONY: all dist-compile dist-source examples-compile examples-source dist examples compile source clean
+
 all: compile
 
-dist-compile: compile examples
-dist-source: source examples
+dist-compile: compile dist
+dist-source: source dist
 
-examples:
+examples-compile: compile examples
+examples-source: source examples
+
+
+dist:
 	cp src/ffluci/controller/public/* dist/ffluci/controller/public/
 	cp src/ffluci/controller/admin/* dist/ffluci/controller/admin/
 	cp src/ffluci/i18n/* dist/ffluci/i18n/
 	cp src/ffluci/view/* dist/ffluci/view/ -R
+	
+examples:
+	cp examples/* dist/ -R
 
 compile:
 	mkdir -p $(DIRECTORIES)
@@ -34,7 +43,5 @@ source:
 	for i in $(CFILES); do cp src/$$i dist/$$i; done
 	for i in $(FILES); do cp src/$$i dist/$$i; done
 	
-
-.PHONY: clean
 clean:
 	rm dist -rf

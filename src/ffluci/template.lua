@@ -39,7 +39,7 @@ viewdir = ffluci.fs.dirname(ffluci.util.__file__()) .. "view/"
 -- memory:	Always compile, do not save compiled files, ignore precompiled 
 -- always:  Same as "memory" but also saves compiled files
 -- smart:	Compile on demand, save compiled files, update precompiled
-compiler_mode = "smart"
+compiler_mode = "memory"
 
 
 -- This applies to compiler modes "always" and "smart"

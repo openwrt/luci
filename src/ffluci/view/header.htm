@@ -1,9 +1,56 @@
-<% require("ffluci.http").htmlheader() %>
-<html>
+<%
+local req  = require("ffluci.dispatcher").request
+local menu = require("ffluci.menu").get()[req.category]
+require("ffluci.i18n").loadc("default")
+require("ffluci.http").htmlheader()
+%><?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>FFLuCI Examples</title>
+<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
+<title>FFLuCI</title>
 </head>
 <body>
-<h1>FFLuCI</h1>
-<%+menu%>
-<div id="content">
+<div id="header">
+	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="Freifunk" /></div>
+	<div class="whitetext smalltext right">
+	OpenWRT Kamikaze<br />
+	Freifunk Firmware 2.0-dev<br />
+	Load average: 1.00 2.00 3.00<br />
+	1.2.3.4 - host1
+	</div>
+	<div>
+		<span class="headertitle">Freifunk Kamikaze</span><br />
+		<span class="whitetext bold"><%:batmanedition Fledermausedition%></span>
+	</div>
+</div>
+
+<div class="separator yellow bold">
+<%:path Pfad%>: <a href="<%=controller .. "/" .. req.category%>"><%=req.category%></a>
+&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module %>"><%=req.module%></a>
+&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module .. "/" .. req.action %>"><%=req.action%></a>
+</div>
+
+<div id="columns"><div id="columnswrapper">
+	<div class="sidebar left">
+	<% for k,v in pairs(menu) do %>
+	    <div<% if v[".contr"] == req.module then %> class="yellowtext"<% end %>><a href="<%=controller.."/"..req.category.."/"..v[".contr"]%>"><%=translate(v[".contr"], v[".descr"])%></a><%
+	    if v[".contr"] == req.module then %>
+	    	<ul><% for key,val in ipairs(v) do %>
+	    		<li<% if val.action == req.action then %> class="yellowtext"<% end %>><a href="<%=controller.."/"..req.category.."/"..req.module.."/"..val.action%>"><%=translate(val.action, val.descr)%></a></li>
+	    	<% end %></ul>
+	    <% end %></div>
+	<% end %>
+	</div>
+	<div class="sidebar right">
+		<div><%:webif Weboberfläche%>
+			<ul>
+				<li<% if "public" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/public"><%:public Public%></a></li>
+				<li<% if "admin" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/admin"><%:admin Admin%></a></li>
+			</ul>
+		</div>
+		<% if "admin" == req.category then %>
+		<div>Konfiguration<ul><li>x Änderungen</li><li>Anwenden</li><li>Zurücksetzen</li></ul></div>
+		<% end %>
+	</div>
+	<div id="content">

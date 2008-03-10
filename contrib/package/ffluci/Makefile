@@ -34,7 +34,9 @@ endef
 define Package/ffluci/install		
 	$(INSTALL_DIR) $(1)/usr/lib/lua
 	$(INSTALL_DIR) $(1)/www/cgi-bin
+	$(INSTALL_DIR) $(1)/www/ffluci
 	$(CP) $(PKG_BUILD_DIR)/dist/* $(1)/usr/lib/lua/ -R
+	$(CP) $(PKG_BUILD_DIR)/contrib/media $(1)/www/ffluci/ -R
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/ffluci $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/index.cgi $(1)/www/cgi-bin
 	$(CP) -a ./ipkg/ffluci.postinst $(1)/CONTROL/postinst
