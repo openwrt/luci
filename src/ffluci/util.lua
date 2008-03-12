@@ -26,6 +26,26 @@ limitations under the License.
 
 module("ffluci.util", package.seeall)
 
+
+-- Lua OO class support emulation
+function class(base)
+	local clsobj = {}
+	local metatable = {__index = clsobj}
+	
+    function clsobj.new()
+        local inst = {}
+        setmetatable(inst, metatable)
+        return inst
+    end	
+	
+	if base then
+		setmetatable(clsobj, {__index = base})
+	end
+	
+	return clsobj
+end
+
+
 -- Checks whether a table has an object "value" in it
 function contains(table, value)
 	for k,v in pairs(table) do
@@ -57,24 +77,26 @@ end
 
 
 -- Runs "command" and returns its output
-function exec(command, return_array)
+function exec(command)
 	local pp   = io.popen(command)
-	local data = nil
+	local data = pp:read("*a")
+	pp:close()
 	
-	if return_array then
-		local line = ""
-		data = {}
-		
-		while true do
-			line = pp:read()
-			if (line == nil) then break end
-			table.insert(data, line)
-		end 
-		pp:close()		
-	else
-		data = pp:read("*a")
-		pp:close()
-	end
+	return data
+end
+
+-- Runs "command" and returns its output as a array of lines
+function execl(command)
+	local pp   = io.popen(command)	
+	local line = ""
+	local data = {}
+	
+	while true do
+		line = pp:read()
+		if (line == nil) then break end
+		table.insert(data, line)
+	end 
+	pp:close()	
 	
 	return data
 end

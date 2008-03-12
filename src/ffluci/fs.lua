@@ -31,10 +31,32 @@ require("lfs")
 -- Returns the content of file
 function readfile(filename)
 	local fp = io.open(filename)
+	
 	if fp == nil then
 		error("Unable to open file for reading: " .. filename)
 	end
+	
 	local data = fp:read("*a")
+	fp:close()
+	return data	
+end
+
+-- Returns the content of file as array of lines
+function readfilel(filename)
+	local fp = io.open(filename)
+	local line = ""
+	local data = {}
+		
+	if fp == nil then
+		error("Unable to open file for reading: " .. filename)
+	end
+	
+	while true do
+		line = fp:read()
+		if (line == nil) then break end
+		table.insert(data, line)
+	end 	
+	
 	fp:close()
 	return data	
 end

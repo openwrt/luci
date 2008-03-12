@@ -96,7 +96,7 @@ function _uci2(cmd)
 end
 
 function _uci3(cmd)
-	local res = ffluci.util.exec(ucicmd .. " 2>&1 " .. cmd, true)
+	local res = ffluci.util.execl(ucicmd .. " 2>&1 " .. cmd)
 	if res[1]:sub(1, ucicmd:len() + 1) == ucicmd .. ":" then
 		return nil, res[1]
 	end

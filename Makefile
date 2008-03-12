@@ -5,7 +5,8 @@ FILES = ffluci/config.lua
 
 CFILES = ffluci/util.lua ffluci/http.lua \
 ffluci/fs.lua ffluci/i18n.lua ffluci/model/uci.lua \
-ffluci/template.lua ffluci/dispatcher.lua ffluci/menu.lua ffluci/init.lua
+ffluci/template.lua ffluci/dispatcher.lua ffluci/menu.lua \
+ffluci/init.lua ffluci/sys.lua 
 
 DIRECTORIES = dist/ffluci/model dist/ffluci/controller/public dist/ffluci/controller/admin dist/ffluci/i18n dist/ffluci/view
 
