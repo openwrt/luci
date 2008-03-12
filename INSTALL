@@ -1,0 +1,45 @@
+FFLuCI Installation Instructions
+
+TOC:
+1. Kamikaze Packages
+2. Manual Installation
+
+
+
+1. Kamikaze Packages
+	1.	At first make sure you already added "lua" from
+		the OpenWRT Packages repository to your buildroot's "package" directory
+	 
+	2.	cd to the "package" directory of your kamikaze buildroot
+	
+	3.	Type: ln -s /path/to/ff-luci/contrib/package/* ./
+	
+	4.	cd to your kamikaze build root and type: make menuconfig
+		You will find ffluci in the menu "Administration"
+
+
+2. Manual Installation
+	Prerequisites:
+		CGI enabled webserver
+		Lua 5.1.x or later
+		LuaFileSystem Lua extension
+		Haserl 0.9x or later with Lua support builtin
+	
+	Installation:
+	Use make to build a distribution of FFLuCI
+		make: creates the source distribution with freifunk config pages
+		make dist-compile: same as above but bytecompiles lua modules
+		
+		make source-examples: creates a plain distribution with example pages
+		make dist-examples: same as above but bytecompiles lua modules
+		
+		make source: creates a plain distribution without pages
+		make compile: same as above but bytecompiles lua modules
+		
+	Put the ffluci dist/ffluci directory somewhere on your harddrive
+	e.g. in your Lua Path
+	
+	Put a bootstrap file like the one in contrib/ffluci into your webservers
+	CGI-Directory and adapt it to your needs.
+	
+	Also have a look at dist/ffluci/config.lua for configuration options.
