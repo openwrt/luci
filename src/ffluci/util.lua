@@ -27,22 +27,29 @@ limitations under the License.
 module("ffluci.util", package.seeall)
 
 
--- Lua OO class support emulation
+-- Lua simplified Python-style OO class support emulation
 function class(base)
-	local clsobj = {}
-	local metatable = {__index = clsobj}
+	local class = {}
 	
-    function clsobj.new()
-        local inst = {}
-        setmetatable(inst, metatable)
-        return inst
-    end	
-	
-	if base then
-		setmetatable(clsobj, {__index = base})
+	local create = function(class, ...)
+		local inst = {}
+		setmetatable(inst, {__index = class})
+		
+		if inst.__init__ then
+			inst:__init__(...)
+		end
+		
+		return inst
 	end
 	
-	return clsobj
+	local classmeta = {__call = create}
+	
+	if base then
+		classmeta.__index = base
+	end
+	
+	setmetatable(class, classmeta)
+	return class
 end
 
 
