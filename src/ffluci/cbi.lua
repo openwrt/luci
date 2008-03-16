@@ -26,14 +26,30 @@ limitations under the License.
 ]]--
 module("ffluci.cbi", package.seeall)
 require("ffluci.util")
+local class = ffluci.util.class
 
 
 -- Node pseudo abstract class
-Node = ffluci.util.class()
-function Node.render(self)
+Node = class()
+
+function Node.__init__(self, title, description)
+	self.children = {}
+	self.title = title
+	self.description = description
 end
+
 function Node.append(self, obj)
+	table.insert(self.children, obj)
 end
 
 
-Map = ffluci.util.class(Node)
+-- CBI Map
+Map = class(Node)
+
+function Map.__init__(self, ...)
+	Node.__init__(self, ...)
+end
+
+function Map.render(self, template)
+	-- ToDo
+end
