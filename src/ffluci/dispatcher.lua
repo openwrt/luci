@@ -104,13 +104,9 @@ end
 function error404(message)
 	message = message or "Not Found"
 	
-	local s, t = pcall(ffluci.template.Template, "error404")
-	
-	if not s then
+	if not pcall(ffluci.template.render, "error404") then
 		ffluci.http.textheader()
 		print(message)
-	else
-		t:render()
 	end
 	return false	
 end
@@ -119,13 +115,9 @@ end
 function error500(message)
 	ffluci.http.status(500, "Internal Server Error")
 	
-	local s, t = pcall(ffluci.template.Template, "error500")
-	
-	if not s then
+	if not pcall(ffluci.template.render, "error500") then
 		ffluci.http.textheader()
 		print(message)
-	else
-		t:render()
 	end
 	return false	
 end
@@ -155,12 +147,8 @@ function simpleview(request)
 	local disp = require("ffluci.dispatcher")
 	
 	i18n.loadc(request.module)
-	local s, t = pcall(tmpl.Template, request.module .. "/" .. request.action)
-	
-	if not s then
+	if not pcall(tmpl.render, request.module .. "/" .. request.action) then
 		disp.error404()
-	else
-		t:render()
 	end
 end
 

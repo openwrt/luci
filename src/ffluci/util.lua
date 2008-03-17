@@ -92,6 +92,7 @@ function exec(command)
 	return data
 end
 
+
 -- Runs "command" and returns its output as a array of lines
 function execl(command)
 	local pp   = io.popen(command)	
@@ -108,11 +109,25 @@ function execl(command)
 	return data
 end
 
+
 -- Populate obj in the scope of f as key 
 function extfenv(f, key, obj)
 	local scope = getfenv(f)
 	scope[key] = obj
 	setfenv(f, scope)
+end
+
+
+-- Checks whether an object is an instanceof class
+function instanceof(object, class)
+	local meta = getmetatable(object)
+    while meta and meta.__index do 
+    	if meta.__index == class then
+    		return true
+    	end
+        meta = getmetatable(meta.__index)
+    end
+    return false	
 end
 
 
@@ -124,6 +139,7 @@ function updfenv(f, extscope)
 	end
 	setfenv(f, scope)
 end
+
 
 -- Returns the filename of the calling script
 function __file__()
