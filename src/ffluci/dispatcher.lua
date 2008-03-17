@@ -100,16 +100,17 @@ function dispatch(req)
 	end	
 end
 
-
 -- Sends a 404 error code and renders the "error404" template if available
 function error404(message)
 	message = message or "Not Found"
 	
-	ffluci.http.status(404, "Not Found")
+	local s, t = pcall(ffluci.template.Template, "error404")
 	
-	if not pcall(ffluci.template.render, "error404") then
+	if not s then
 		ffluci.http.textheader()
-		print(message)		
+		print(message)
+	else
+		t:render()
 	end
 	return false	
 end
@@ -118,9 +119,13 @@ end
 function error500(message)
 	ffluci.http.status(500, "Internal Server Error")
 	
-	if not pcall(ffluci.template.render, "error500") then
+	local s, t = pcall(ffluci.template.Template, "error500")
+	
+	if not s then
 		ffluci.http.textheader()
 		print(message)
+	else
+		t:render()
 	end
 	return false	
 end
@@ -147,14 +152,15 @@ end
 function simpleview(request)
 	local i18n = require("ffluci.i18n")
 	local tmpl = require("ffluci.template")
-	local conf = require("ffluci.config")
 	local disp = require("ffluci.dispatcher")
 	
-	pcall(i18n.load, request.module .. "." .. conf.lang)
-	if not pcall(tmpl.get, request.module .. "/" .. request.action) then
+	i18n.loadc(request.module)
+	local s, t = pcall(tmpl.Template, request.module .. "/" .. request.action)
+	
+	if not s then
 		disp.error404()
 	else
-		tmpl.render(request.module .. "/" .. request.action)
+		t:render()
 	end
 end
 
@@ -162,10 +168,9 @@ end
 -- action_"request.action" and calls it
 function action(request)
 	local i18n = require("ffluci.i18n")
-	local conf = require("ffluci.config")
 	local disp = require("ffluci.dispatcher")
 	
-	pcall(i18n.load, request.module .. "." .. conf.lang)
+	i18n.loadc(request.module)
 	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
 	if action then
 		action()

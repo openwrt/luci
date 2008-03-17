@@ -35,10 +35,9 @@ viewdir = ffluci.fs.dirname(ffluci.util.__file__()) .. "view/"
 
 
 -- Compile modes:
--- none:	Never compile, only render precompiled
+-- none:	Never compile, only use precompiled data from files
 -- memory:	Always compile, do not save compiled files, ignore precompiled 
--- always:  Same as "memory" but also saves compiled files
--- smart:	Compile on demand, save compiled files, update precompiled
+-- file:	Compile on demand, save compiled files, update precompiled
 compiler_mode = "memory"
 
 
@@ -56,25 +55,12 @@ viewns = {
 	config     = ffluci.model.uci.get,
 	controller = os.getenv("SCRIPT_NAME"),
 	media      = ffluci.config.mediaurlbase,
-	include    = function(name) return render(name, getfenv(2)) end, 
-	write      = io.write
+	write      = io.write,
+	include    = function(name) Template(name):render(getfenv(2)) end,	
 }
 
-
--- Compiles and builds a given template
-function build(template, compiled)	
-	local template = compile(ffluci.fs.readfile(template))
-	
-	if compiled then
-		ffluci.fs.writefile(compiled, template)
-	end
-	
-	return template
-end
-
-
 -- Compiles a given template into an executable Lua module
-function compile(template)
+function compile(template)	
 	-- Search all <% %> expressions (remember: Lua table indexes begin with #1)
 	local function expr_add(command)
 		table.insert(expr, command)
@@ -137,53 +123,97 @@ function compile(template)
 	return template
 end
 
+-- Oldstyle render shortcut
+function render(name, ...)
+	local s, t = pcall(Template, name)
+	if not s then
+		error("Unable to load template: " .. name)
+	else
+		t:render(...)
+	end
+end
 
--- Returns and builds the template for "name" depending on the compiler mode
-function get(name)	
-	local templatefile = viewdir .. name .. ".htm"
-	local compiledfile = viewdir .. name .. ".lua"
-	local template = nil
+
+-- Template class
+Template = ffluci.util.class()
+
+-- Shared template cache to store templates in to avoid unnecessary reloading
+Template.cache = {}
+
+
+-- Constructor - Reads and compiles the template on-demand
+function Template.__init__(self, name)	
+	if self.cache[name] then
+		self.template = self.cache[name]
+	else
+		self.template = nil
+	end
 	
-	if compiler_mode == "smart" then
-		local tplmt = ffluci.fs.mtime(templatefile)
+	-- Create a new namespace for this template
+	self.viewns = {}
+	
+	-- Copy over from general namespace
+	for k, v in pairs(viewns) do
+		self.viewns[k] = v
+	end	
+	
+	-- If we have a cached template, skip compiling and loading
+	if self.template then
+		return
+	end
+	
+	-- Compile and build
+	local sourcefile   = viewdir .. name .. ".htm"
+	local compiledfile = viewdir .. name .. ".lua"	
+	
+	if compiler_mode == "file" then
+		local tplmt = ffluci.fs.mtime(sourcefile)
 		local commt = ffluci.fs.mtime(compiledfile)
 				
 		-- Build if there is no compiled file or if compiled file is outdated
 		if ((commt == nil) and not (tplmt == nil))
 		or (not (commt == nil) and not (tplmt == nil) and commt < tplmt) then
-			template = loadstring(build(templatefile, compiledfile))
+			local compiled = compile(ffluci.fs.readfile(sourcefile))
+			ffluci.fs.writefile(compiledfile, compiled)
+			self.template = loadstring(compiled)
 		else
-			template = loadfile(compiledfile)
+			self.template = loadfile(compiledfile)
 		end
 		
 	elseif compiler_mode == "none" then
-		template = loadfile(compiledfile)
+		self.template = loadfile(self.compiledfile)
 		
 	elseif compiler_mode == "memory" then
-		template = loadstring(build(templatefile))
-		
-	elseif compiler_mode == "always" then
-		template = loadstring(build(templatefile, compiledfile))
-				
+		self.template = loadstring(compile(ffluci.fs.readfile(sourcefile)))
+			
 	else
 		error("Invalid compiler mode: " .. compiler_mode)
 		
 	end
 	
-	return template or error("Unable to load template: " .. name)
+	-- If we have no valid template throw error, otherwise cache the template
+	if not self.template then
+		error("Unable to load template: " .. name)
+	else
+		self.cache[name] = self.template
+	end
 end
 
+
 -- Renders a template
-function render(name, scope)
+function Template.render(self, scope)
 	scope = scope or getfenv(2)
 	
-	-- Our template module
-	local view = get(name)
+	-- Save old environment
+	local oldfenv = getfenv(self.template)
 	
 	-- Put our predefined objects in the scope of the template
-	ffluci.util.updfenv(view, scope)
-	ffluci.util.updfenv(view, viewns)
+	ffluci.util.updfenv(self.template, scope)
+	ffluci.util.updfenv(self.template, self.viewns)
 	
 	-- Now finally render the thing
-	return view()
+	self.template()
+	
+	-- Reset environment
+	setfenv(self.template, oldfenv)
 end
