@@ -1,0 +1,5 @@
+<div class="cbi-nsection" id="cbi-<%=map.config%>-<%=sectiontype%>-<%=section%>">
+<h2><%=title%></h2>
+<div class="cbi-nsection-descr"><%=description%></div>
+<% for k, node in ipairs(children) do node:render() end %>
+</div>

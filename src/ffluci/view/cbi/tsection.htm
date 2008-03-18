@@ -1,0 +1,22 @@
+<%
+require("ffluci.model.uci")
+local allsections = ffluci.model.uci.show(map)
+local sections = {}
+for k, v in pairs(allsections) do
+	if v[".type"] == sectiontype then
+		sections[k] = v
+	end
+end 
+%>
+<div class="cbi-tsection" id="cbi-<%=map%>-<%=sectiontype%>">
+<h2><%=title%></h2>
+<div class="cbi-tsection-descr"><%=description%></div>
+<% for k, v in pairs(sections) do %>
+<div class="cbi-tsection-node" id="cbi-<%=map%>-<%=k%>">
+<% for k, node in ipairs(children) do
+	node.section = k
+	node:render(k)
+end %>
+</div>
+<% end %>
+</div>

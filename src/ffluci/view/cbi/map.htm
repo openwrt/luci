@@ -1,0 +1,7 @@
+<div class="cbi-map" id="cbi-<%=config%>">
+<form method="post" action="<%=os.getenv("REQUEST_URI")%>">
+<h1><%=title%></h1>
+<div class="cbi-map-descr"><%=description%></div>
+<% for k, node in ipairs(children) do node:render() end %>
+</form>
+</div>

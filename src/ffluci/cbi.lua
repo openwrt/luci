@@ -27,6 +27,7 @@ limitations under the License.
 module("ffluci.cbi", package.seeall)
 require("ffluci.template")
 require("ffluci.util")
+local Template = ffluci.template.Template
 local class = ffluci.util.class
 local instanceof = ffluci.util.instanceof
 
@@ -45,6 +46,10 @@ function Node.append(self, obj)
 	table.insert(self.children, obj)
 end
 
+function Node.render(self)
+	ffluci.template.render(self.template, self)
+end
+
 
 --[[
 Map - A map describing a configuration file 
@@ -57,14 +62,10 @@ function Map.__init__(self, config, ...)
 	self.template = "cbi/map"
 end
 
-function Map.render(self)
-	ffluci.template.render(self.template)
-end
-
 function Map.section(self, class, ...)
-	if instanceof(class, AbstractClass) then
+	if instanceof(class, AbstractSection) then
 		local obj = class(...)
-		obj.map = self
+		obj.map = self.config
 		table.insert(self.children, obj)
 		return obj
 	else
@@ -78,15 +79,15 @@ AbstractSection
 ]]--
 AbstractSection = class(Node)
 
-function AbstractSection.__init__(self, ...)
+function AbstractSection.__init__(self, sectiontype, ...)
 	Node.__init__(self, ...)
+	self.sectiontype = sectiontype
 end
 
 function AbstractSection.option(self, class, ...)
 	if instanceof(class, AbstractValue) then
 		local obj = class(...)
-		obj.section = self
-		obj.map     = self.map
+		obj.map   = self.map
 		table.insert(self.children, obj)
 		return obj
 	else
@@ -103,8 +104,15 @@ NamedSection = class(AbstractSection)
 
 function NamedSection.__init__(self, section, ...)
 	AbstractSection.__init__(self, ...)
-	self.section = section
 	self.template = "cbi/nsection"
+	
+	self.section = section
+end
+
+function NamedSection.option(self, ...)
+	local obj = AbstractSection.option(self, ...)
+	obj.section = self.section
+	return obj
 end
 
 
@@ -116,9 +124,8 @@ TypedSection - A (set of) configuration section(s) defined by the type
 ]]--
 TypedSection = class(AbstractSection)
 
-function TypedSection.__init__(self, sectiontype, ...)
+function TypedSection.__init__(self, ...)
 	AbstractSection.__init__(self, ...)
-	self.sectiontype = sectiontype
 	self.template  = "cbi/tsection"
 	
 	self.addremove = true
@@ -130,8 +137,9 @@ end
 --[[
 AbstractValue - An abstract Value Type
 	null:		Value can be empty
-	valid:		A table with valid names or a function returning nil if invalid
+	valid:		A function returning nil if invalid
 	depends:	A table of option => value pairs of which one must be true
+	default:	The default value
 ]]--
 AbstractValue = class(Node)
 
@@ -139,14 +147,14 @@ function AbstractValue.__init__(self, option, ...)
 	Node.__init__(self, ...)
 	self.option  = option
 	
-	self.null    = true
 	self.valid   = nil
 	self.depends = nil
+	self.default = nil
 end
 	
 
 --[[
-Value - A one-line value 
+Value - A one-line value
 	maxlength:	The maximum length
 	isnumber:	The value must be a valid (floating point) number
 	isinteger:  The value must be a valid integer
@@ -164,11 +172,18 @@ end
 
 
 --[[
-Boolean - A simple boolean value 	
+ListValue - A one-line value predefined in a list
 ]]--
-Boolean = class(AbstractValue)
+ListValue = class(AbstractValue)
 
-function Boolean.__init__(self, ...)
+function ListValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
-	self.template = "cbi/boolean"
+	self.template  = "cbi/value"
+	
+	self.list = {}
+end
+
+function ListValue.addValue(self, key, val)
+	val = val or key
+	self.list[key] = val
 end
