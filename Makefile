@@ -8,7 +8,7 @@ ffluci/fs.lua ffluci/i18n.lua ffluci/model/uci.lua \
 ffluci/template.lua ffluci/cbi.lua ffluci/dispatcher.lua \
 ffluci/menu.lua ffluci/init.lua ffluci/sys.lua 
 
-DIRECTORIES = dist/ffluci/model dist/ffluci/controller/public dist/ffluci/controller/admin dist/ffluci/i18n dist/ffluci/view
+DIRECTORIES = dist/ffluci/model dist/ffluci/controller dist/ffluci/i18n dist/ffluci/view
 
 INFILES = $(CFILES:%=src/%)
 OUTFILE = ffluci/init.lua
@@ -25,8 +25,7 @@ examples-source: source examples
 
 
 dist:
-	cp src/ffluci/controller/public/* dist/ffluci/controller/public/
-	cp src/ffluci/controller/admin/* dist/ffluci/controller/admin/
+	cp src/ffluci/controller/* dist/ffluci/controller/ -R
 	cp src/ffluci/i18n/* dist/ffluci/i18n/
 	cp src/ffluci/view/* dist/ffluci/view/ -R
 	
