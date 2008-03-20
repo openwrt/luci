@@ -141,6 +141,29 @@ function updfenv(f, extscope)
 end
 
 
+-- Validates a variable
+function validate(value, cast_number, cast_int, valid)
+	if cast_number or cast_int then
+		value = tonumber(value)
+	end
+	
+	if cast_int and not(value % 1 == 0) then
+		value = nil
+	end
+	
+	
+	if type(valid) == "function" then
+		value = valid(value)
+	elseif type(valid) == "table" then
+		if not ffluci.util.contains(valid, value) then
+			value = nil
+		end
+	end
+	
+	return value
+end
+
+
 -- Returns the filename of the calling script
 function __file__()
 	return debug.getinfo(2, 'S').source:sub(2)

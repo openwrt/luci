@@ -54,43 +54,18 @@ function request_redirect(category, module, action)
 	redirect(pattern:format(category, module, action))
 end
 
--- Form validation function:
--- Gets a form variable "key".
--- If it does not exist: return "default"
--- If cast_number is true and "key" is not a number: return "default"
--- If valid is a table and "key" is not in it: return "default"
--- If valid is a function and returns nil: return "default"
--- Else return the value of "key"
---
--- Examples:
--- Get a form variable "foo" and return "bar" if it is not set
--- 		= formvalue("foo", "bar")
---
--- Get "foo" and make sure it is either "bar" or "baz"
---      = formvalue("foo", nil, nil, {"bar", "baz"})
---
--- Get "foo", make sure its a number and below 10 else return 5
---      = formvalue("foo", 5, true, function(a) return a < 10 and a or nil end)
-function formvalue(key, default, cast_number, valid, table)
-	table = table or formvalues()
+-- Gets form value from key
+function formvalue(key, default)
+	local c = formvalues()
 	
-	if table[key] == nil then
-		return default
-	else
-		local value = table[key]
-	
-		value = cast_number and tonumber(value) or not cast_number and nil
-		
-		if type(valid) == "function" then
-			value = valid(value)
-		elseif type(valid) == "table" then
-			if not ffluci.util.contains(valid, value) then
-				value = nil
-			end
+	for match in key:gmatch("%w+") do
+		c = c[match]
+		if c == nil then
+			return default
 		end
-		
-		return value or default
 	end
+	
+	return c
 end
 
 
