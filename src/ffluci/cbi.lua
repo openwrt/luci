@@ -27,6 +27,8 @@ limitations under the License.
 module("ffluci.cbi", package.seeall)
 require("ffluci.template")
 require("ffluci.util")
+require("ffluci.http")
+require("ffluci.model.uci")
 local Template = ffluci.template.Template
 local class = ffluci.util.class
 local instanceof = ffluci.util.instanceof
@@ -46,8 +48,14 @@ function Node.append(self, obj)
 	table.insert(self.children, obj)
 end
 
+function Node.parse(self)
+	for k, child in ipairs(self.children) do
+		child:parse()
+	end
+end
+
 function Node.render(self)
-	ffluci.template.render(self.template, self)
+	ffluci.template.render(self.template)
 end
 
 
@@ -64,15 +72,20 @@ end
 
 function Map.section(self, class, ...)
 	if instanceof(class, AbstractSection) then
-		local obj = class(...)
-		obj.map = self.config
-		table.insert(self.children, obj)
+		local obj  = class(...)
+		obj.map    = self
+		obj.config = self.config
+		self:append(obj)
 		return obj
 	else
 		error("class must be a descendent of AbstractSection")
 	end
 end
 
+function Map.read(self)
+	self.ucidata = self.ucidata or ffluci.model.uci.show(self.config)
+	return self.ucidata
+end
 
 --[[
 AbstractSection
@@ -86,9 +99,10 @@ end
 
 function AbstractSection.option(self, class, ...)
 	if instanceof(class, AbstractValue) then
-		local obj = class(...)
-		obj.map   = self.map
-		table.insert(self.children, obj)
+		local obj  = class(...)
+		obj.map    = self.map
+		obj.config = self.config
+		self:append(obj)
 		return obj
 	else
 		error("class must be a descendent of AbstractValue")
@@ -137,7 +151,7 @@ end
 --[[
 AbstractValue - An abstract Value Type
 	null:		Value can be empty
-	valid:		A function returning nil if invalid
+	valid:		A function returning the value if it is valid otherwise nil 
 	depends:	A table of option => value pairs of which one must be true
 	default:	The default value
 ]]--
@@ -151,7 +165,25 @@ function AbstractValue.__init__(self, option, ...)
 	self.depends = nil
 	self.default = nil
 end
-	
+
+
+function AbstractValue.formvalue(self)
+	local key = "uci."..self.map.config.."."..self.section.."."..self.option
+	return ffluci.http.formvalue(key)
+end
+
+function AbstractValue.ucivalue(self)
+	return self.map.read()[self.section][self.option]
+end
+
+function AbstractValue.validate(self, value)
+	return ffluci.util.validate(value, nil, nil, self.valid)
+end
+
+function AbstractValue.write(self, value)
+	ffluci.model.uci.set(self.config, self.section, self.option, value)
+end
+
 
 --[[
 Value - A one-line value
@@ -178,7 +210,7 @@ ListValue = class(AbstractValue)
 
 function ListValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
-	self.template  = "cbi/value"
+	self.template  = "cbi/lvalue"
 	
 	self.list = {}
 end

@@ -54,6 +54,7 @@ function request_redirect(category, module, action)
 	redirect(pattern:format(category, module, action))
 end
 
+
 -- Gets form value from key
 function formvalue(key, default)
 	local c = formvalues()

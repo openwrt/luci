@@ -1,0 +1,11 @@
+<div class="cbi-lvalue">
+<div class="cbi-lvalue-title"><%=self.title%></div>
+<div class="cbi-lvalue-field">
+<select name="<%=self.map.config.."."..self.section.."."..self.option%>">
+<%for k, v in self.list do%>
+<option value="<%=k%>"><%=v%></option>
+<% end %>
+</select>
+</div>
+<div class="cbi-value-description"><%=self.description%></div>
+</div>
