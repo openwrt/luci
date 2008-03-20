@@ -7,11 +7,11 @@ for k, v in pairs(allsections) do
 	end
 end 
 %>
-<div class="cbi-tsection" id="cbi-<%=self.map.config%>-<%=self.sectiontype%>">
+<div class="cbi-tsection" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 <h2><%=self.title%></h2>
 <div class="cbi-tsection-descr"><%=self.description%></div>
 <% for k, v in pairs(sections) do %>
-<div class="cbi-tsection-node" id="cbi-<%=self.map.config%>-<%=k%>">
+<div class="cbi-tsection-node" id="cbi-<%=self.config%>-<%=k%>">
 <% for k, node in ipairs(self.children) do
 	node.section = k
 	node:render(k)
