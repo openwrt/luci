@@ -1,11 +1,11 @@
-<div class="cbi-lvalue">
-<div class="cbi-lvalue-title"><%=self.title%></div>
-<div class="cbi-lvalue-field">
-<select name="<%=self.config.."."..self.section.."."..self.option%>">
-<%for k, v in self.list do%>
-<option value="<%=k%>"><%=v%></option>
+						<div class="cbi-lvalue">
+							<div class="cbi-lvalue-title"><%=self.title%></div>
+							<div class="cbi-lvalue-field">
+								<select name="cbid.<%=self.config.."."..self.section.."."..self.option%>">
+<%for k, v in pairs(self.list) do%>
+									<option value="<%=k%>"><%=v%></option>
 <% end %>
-</select>
-</div>
-<div class="cbi-value-description"><%=self.description%></div>
-</div>
+								</select>
+							</div>
+							<div class="cbi-value-description"><%=self.description%></div>
+						</div>

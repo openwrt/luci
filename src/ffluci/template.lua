@@ -124,12 +124,13 @@ function compile(template)
 end
 
 -- Oldstyle render shortcut
-function render(name, ...)
+function render(name, scope, ...)
+	scope = scope or getfenv(2)
 	local s, t = pcall(Template, name)
 	if not s then
 		error("Unable to load template: " .. name)
 	else
-		t:render(...)
+		t:render(scope, ...)
 	end
 end
 
@@ -208,6 +209,7 @@ function Template.render(self, scope)
 	local oldfenv = getfenv(self.template)
 	
 	-- Put our predefined objects in the scope of the template
+	ffluci.util.resfenv(self.template)
 	ffluci.util.updfenv(self.template, scope)
 	ffluci.util.updfenv(self.template, self.viewns)
 	

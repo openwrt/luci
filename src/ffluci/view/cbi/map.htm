@@ -1,7 +1,10 @@
-<div class="cbi-map" id="cbi-<%=self.config%>">
-<form method="post" action="<%=os.getenv("REQUEST_URI")%>">
-<h1><%=self.title%></h1>
-<div class="cbi-map-descr"><%=self.description%></div>
+		<div class="cbi-map" id="cbi-<%=self.config%>">
+			<form method="post" action="<%=os.getenv("REQUEST_URI")%>">
+				<h1><%=self.title%></h1>
+				<div class="cbi-map-descr"><%=self.description%></div>
+				<br />
 <% for k, node in ipairs(self.children) do node:render() end %>
-</form>
-</div>
+				<br />
+				<input type="submit" /> <input type="reset" />
+			</form>
+		</div>

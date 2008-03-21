@@ -25,22 +25,50 @@ limitations under the License.
 
 ]]--
 module("ffluci.cbi", package.seeall)
+
 require("ffluci.template")
 require("ffluci.util")
 require("ffluci.http")
 require("ffluci.model.uci")
-local Template = ffluci.template.Template
-local class = ffluci.util.class
+
+local Template   = ffluci.template.Template
+local class      = ffluci.util.class
 local instanceof = ffluci.util.instanceof
 
+
+function load(cbimap)
+	require("ffluci.fs")
+	require("ffluci.i18n")
+	
+	local cbidir = ffluci.fs.dirname(ffluci.util.__file__()) .. "model/cbi/"
+	local func = loadfile(cbidir..cbimap..".lua")
+	
+	if not func then
+		error("Unable to load CBI map: " .. cbimap)
+		return nil
+	end
+	
+	ffluci.util.resfenv(func)
+	ffluci.util.updfenv(func, ffluci.cbi)
+	ffluci.util.extfenv(func, "translate", ffluci.i18n.translate)
+	
+	local map = func()
+	
+	if not instanceof(map, Map) then
+		error("CBI map returns no valid map object!")
+		return nil
+	end
+	
+	return map
+end
 
 -- Node pseudo abstract class
 Node = class()
 
 function Node.__init__(self, title, description)
 	self.children = {}
-	self.title = title
-	self.description = description
+	self.title = title or ""
+	self.description = description or ""
 	self.template = "cbi/node"
 end
 
@@ -55,7 +83,7 @@ function Node.parse(self)
 end
 
 function Node.render(self)
-	ffluci.template.render(self.template)
+	ffluci.template.render(self.template, {self=self})
 end
 
 
@@ -83,7 +111,7 @@ function Map.section(self, class, ...)
 end
 
 function Map.read(self)
-	self.ucidata = self.ucidata or ffluci.model.uci.show(self.config)
+	self.ucidata = self.ucidata or ffluci.model.uci.show(self.config)[self.config]
 	return self.ucidata
 end
 
@@ -173,7 +201,7 @@ function AbstractValue.formvalue(self)
 end
 
 function AbstractValue.ucivalue(self)
-	return self.map.read()[self.section][self.option]
+	return self.map:read()[self.section][self.option]
 end
 
 function AbstractValue.validate(self, value)

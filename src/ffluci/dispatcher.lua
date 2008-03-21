@@ -95,6 +95,7 @@ function dispatch(req)
 		return error404()
 	else
 		module.request = request
+		module.dispatcher = module.dispatcher or dynamic
 		setfenv(module.dispatcher, module)
 		return module.dispatcher(request)
 	end	
@@ -139,18 +140,9 @@ function httpdispatch()
 	dispatch({category=cat, module=mod, action=act})
 end
 
--- The Simple View Dispatcher directly renders the template
--- which is placed in ffluci/views/"request.module"/"request.action" 
-function simpleview(request)
-	local i18n = require("ffluci.i18n")
-	local tmpl = require("ffluci.template")
-	local disp = require("ffluci.dispatcher")
-	
-	i18n.loadc(request.module)
-	if not pcall(tmpl.render, request.module .. "/" .. request.action) then
-		disp.error404()
-	end
-end
+
+-- Dispatchers --
+
 
 -- The Action Dispatcher searches the module for any function called
 -- action_"request.action" and calls it
@@ -163,6 +155,70 @@ function action(request)
 	if action then
 		action()
 	else
+		disp.error404()
+	end
+end
+
+-- The CBI dispatcher directly parses and renders the CBI map which is
+-- placed in ffluci/modles/cbi/"request.module"/"request.action" 
+function cbi(request)
+	local i18n = require("ffluci.i18n")
+	local disp = require("ffluci.dispatcher")
+	local tmpl = require("ffluci.template")
+	local cbi  = require("ffluci.cbi")
+	
+	i18n.loadc(request.module)
+	
+	stat, map = pcall(cbi.load, request.module.."/"..request.action)
+	if stat then
+		tmpl.render("header")
+		map:render()
+		tmpl.render("footer")
+	else
+		disp.error404()
+	end
+end
+
+-- The dynamic dispatchers combines the action, simpleview and cbi dispatchers
+-- in one dispatcher. It tries to lookup the request in this order.
+function dynamic(request)
+	local i18n = require("ffluci.i18n")
+	local disp = require("ffluci.dispatcher")
+	local tmpl = require("ffluci.template")
+	local cbi  = require("ffluci.cbi")	
+	
+	i18n.loadc(request.module)
+	
+	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
+	if action then
+		action()
+		return
+	end
+	
+	if pcall(tmpl.render, request.module .. "/" .. request.action) then
+		return
+	end
+	
+	stat, map = pcall(cbi.load, request.module.."/"..request.action)
+	if stat then
+		tmpl.render("header")
+		map:render()
+		tmpl.render("footer")
+		return
+	end	
+	
+	disp.error404()
+end
+
+-- The Simple View Dispatcher directly renders the template
+-- which is placed in ffluci/views/"request.module"/"request.action" 
+function simpleview(request)
+	local i18n = require("ffluci.i18n")
+	local tmpl = require("ffluci.template")
+	local disp = require("ffluci.dispatcher")
+	
+	i18n.loadc(request.module)
+	if not pcall(tmpl.render, request.module .. "/" .. request.action) then
 		disp.error404()
 	end
 end

@@ -114,7 +114,6 @@ end
 function extfenv(f, key, obj)
 	local scope = getfenv(f)
 	scope[key] = obj
-	setfenv(f, scope)
 end
 
 
@@ -131,13 +130,20 @@ function instanceof(object, class)
 end
 
 
+-- Resets the scope of f doing a shallow copy of its scope into a new table
+function resfenv(f)
+	local scope = getfenv(f)
+	setfenv(f, {})
+	updfenv(f, scope)
+end 
+
+
 -- Updates the scope of f with "extscope"
 function updfenv(f, extscope)
 	local scope = getfenv(f)
 	for k, v in pairs(extscope) do
 		scope[k] = v
 	end
-	setfenv(f, scope)
 end
 
 
