@@ -10,6 +10,7 @@ require("ffluci.http").htmlheader()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
+<link rel="stylesheet" type="text/css" href="<%=media%>/css/<%=req.category%>_<%=req.module%>.css" />
 <title>FFLuCI</title>
 <% if addheaders then write(addheaders) end %>
 </head>

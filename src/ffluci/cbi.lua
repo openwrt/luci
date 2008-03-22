@@ -86,6 +86,12 @@ function Node.render(self)
 	ffluci.template.render(self.template, {self=self})
 end
 
+function Node.render_children(self)
+	for k, node in ipairs(self.children) do
+		node:render()
+	end
+end
+
 
 --[[
 Map - A map describing a configuration file 
@@ -173,6 +179,23 @@ function TypedSection.__init__(self, ...)
 	self.addremove = true
 	self.anonymous = false
 	self.valid     = nil
+end
+
+function TypedSection.render_children(self, section)
+	for k, node in ipairs(self.children) do
+		node.section = section
+		node:render()
+	end
+end
+
+function TypedSection.ucisections(self)
+	local sections = {}
+	for k, v in pairs(self.map:read()) do
+		if v[".type"] == self.sectiontype then
+			sections[k] = v
+		end
+	end
+	return sections	
 end
 
 

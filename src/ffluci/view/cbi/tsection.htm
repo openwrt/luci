@@ -1,21 +1,11 @@
-<%
-local allsections = self.map:read()
-local sections = {}
-for k, v in pairs(allsections) do
-	if v[".type"] == self.sectiontype then
-		sections[k] = v
-	end
-end 
-%>
 				<div class="cbi-tsection" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 					<h2><%=self.title%></h2>
 					<div class="cbi-tsection-descr"><%=self.description%></div>
-<% for k, v in pairs(sections) do %>
-					<div class="cbi-tsection-node" id="cbi-<%=self.config%>-<%=k%>">
-<% for i, node in ipairs(self.children) do
-	node.section = k
-	node:render()
-end %>
-					</div>
+<% for k, v in pairs(self:ucisections()) do%>
+					<fieldset class="cbi-tsection-node" id="cbi-<%=self.config%>-<%=k%>">
+						<% if not self.anonymous then %><legend><%=k%></legend><% end %>
+<% self:render_children(k) %>
+					</fieldset>
+					<br />
 <% end %>
 				</div>

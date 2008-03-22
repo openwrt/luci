@@ -2,6 +2,6 @@
 					<h2><%=self.title%></h2>
 					<div class="cbi-nsection-descr"><%=self.description%></div>
 					<div class="cbi-nsection-options">
-<% for k, node in ipairs(self.children) do node:render() end %>
+<% self:render_children() %>
 					</div>
 				</div>

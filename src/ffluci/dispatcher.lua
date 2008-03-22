@@ -167,13 +167,15 @@ function cbi(request)
 	local tmpl = require("ffluci.template")
 	local cbi  = require("ffluci.cbi")
 	
+	local path = request.category.."_"..request.module.."/"..request.action
+	
 	i18n.loadc(request.module)
 	
-	stat, map = pcall(cbi.load, request.module.."/"..request.action)
+	stat, map = pcall(cbi.load, path)
 	if stat then
-		tmpl.render("header")
+		tmpl.render("cbi/header")
 		map:render()
-		tmpl.render("footer")
+		tmpl.render("cbi/footer")
 	else
 		disp.error404()
 	end
@@ -195,15 +197,16 @@ function dynamic(request)
 		return
 	end
 	
-	if pcall(tmpl.render, request.module .. "/" .. request.action) then
+	local path = request.category.."_"..request.module.."/"..request.action
+	if pcall(tmpl.render, path) then
 		return
 	end
 	
-	stat, map = pcall(cbi.load, request.module.."/"..request.action)
+	stat, map = pcall(cbi.load, path)
 	if stat then
-		tmpl.render("header")
+		tmpl.render("cbi/header")
 		map:render()
-		tmpl.render("footer")
+		tmpl.render("cbi/footer")
 		return
 	end	
 	
@@ -217,8 +220,10 @@ function simpleview(request)
 	local tmpl = require("ffluci.template")
 	local disp = require("ffluci.dispatcher")
 	
+	local path = request.category.."_"..request.module.."/"..request.action
+	
 	i18n.loadc(request.module)
-	if not pcall(tmpl.render, request.module .. "/" .. request.action) then
+	if not pcall(tmpl.render, path) then
 		disp.error404()
 	end
 end
