@@ -161,7 +161,7 @@ function validate(value, cast_number, cast_int, valid)
 	if type(valid) == "function" then
 		value = valid(value)
 	elseif type(valid) == "table" then
-		if not ffluci.util.contains(valid, value) then
+		if not contains(valid, value) then
 			value = nil
 		end
 	end

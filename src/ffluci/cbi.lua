@@ -104,6 +104,26 @@ function Map.__init__(self, config, ...)
 	self.template = "cbi/map"
 end
 
+function Map.parse(self)
+	self.ucidata = ffluci.model.uci.show(self.config)
+	if not self.ucidata then
+		error("Unable to read UCI data: " .. self.config)
+	else
+		self.ucidata = self.ucidata[self.config]
+	end
+	Node.parse(self)
+end
+
+function Map.render(self)
+	self.ucidata = ffluci.model.uci.show(self.config)
+	if not self.ucidata then
+		error("Unable to read UCI data: " .. self.config)
+	else
+		self.ucidata = self.ucidata[self.config]
+	end
+	Node.render(self)	
+end
+
 function Map.section(self, class, ...)
 	if instanceof(class, AbstractSection) then
 		local obj  = class(...)
@@ -114,11 +134,6 @@ function Map.section(self, class, ...)
 	else
 		error("class must be a descendent of AbstractSection")
 	end
-end
-
-function Map.read(self)
-	self.ucidata = self.ucidata or ffluci.model.uci.show(self.config)[self.config]
-	return self.ucidata
 end
 
 --[[
@@ -181,6 +196,15 @@ function TypedSection.__init__(self, ...)
 	self.valid     = nil
 end
 
+function TypedSection.parse(self)
+	for k, v in pairs(self:ucisections()) do
+		for i, node in ipairs(self.children) do
+			node.section = k
+			node:parse()
+		end 
+	end
+end
+
 function TypedSection.render_children(self, section)
 	for k, node in ipairs(self.children) do
 		node.section = section
@@ -190,7 +214,7 @@ end
 
 function TypedSection.ucisections(self)
 	local sections = {}
-	for k, v in pairs(self.map:read()) do
+	for k, v in pairs(self.map.ucidata) do
 		if v[".type"] == self.sectiontype then
 			sections[k] = v
 		end
@@ -217,14 +241,20 @@ function AbstractValue.__init__(self, option, ...)
 	self.default = nil
 end
 
-
 function AbstractValue.formvalue(self)
-	local key = "uci."..self.map.config.."."..self.section.."."..self.option
+	local key = "cbid."..self.map.config.."."..self.section.."."..self.option
 	return ffluci.http.formvalue(key)
 end
 
+function AbstractValue.parse(self)
+	local fvalue = self:validate(self:formvalue())
+	if fvalue and not (fvalue == self:ucivalue()) then
+		self:write(fvalue)
+	end 
+end
+
 function AbstractValue.ucivalue(self)
-	return self.map:read()[self.section][self.option]
+	return self.map.ucidata[self.section][self.option]
 end
 
 function AbstractValue.validate(self, value)
@@ -232,7 +262,7 @@ function AbstractValue.validate(self, value)
 end
 
 function AbstractValue.write(self, value)
-	ffluci.model.uci.set(self.config, self.section, self.option, value)
+	return ffluci.model.uci.set(self.config, self.section, self.option, value)
 end
 
 

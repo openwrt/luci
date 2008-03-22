@@ -28,6 +28,13 @@ module("ffluci.fs", package.seeall)
 
 require("lfs")
 
+-- Checks whether a file exists
+function isfile(filename)
+	local fp = io.open(path, "r")
+	if file then file:close() end
+	return file ~= nil
+end	
+
 -- Returns the content of file
 function readfile(filename)
 	local fp = io.open(filename)

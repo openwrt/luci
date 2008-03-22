@@ -116,7 +116,7 @@ end
 function error500(message)
 	ffluci.http.status(500, "Internal Server Error")
 	
-	if not pcall(ffluci.template.render, "error500") then
+	if not pcall(ffluci.template.render, "error500", {message=message}) then
 		ffluci.http.textheader()
 		print(message)
 	end
@@ -171,8 +171,13 @@ function cbi(request)
 	
 	i18n.loadc(request.module)
 	
-	stat, map = pcall(cbi.load, path)
+	local stat, map = pcall(cbi.load, path)
 	if stat then
+		local stat, err = pcall(map.parse, map)
+		if not stat then
+			disp.error500(err)
+			return
+		end
 		tmpl.render("cbi/header")
 		map:render()
 		tmpl.render("cbi/footer")
@@ -202,8 +207,13 @@ function dynamic(request)
 		return
 	end
 	
-	stat, map = pcall(cbi.load, path)
+	local stat, map = pcall(cbi.load, path)
 	if stat then
+		local stat, err = pcall(map.parse, map)
+		if not stat then
+			disp.error500(err)
+			return
+		end		
 		tmpl.render("cbi/header")
 		map:render()
 		tmpl.render("cbi/footer")
