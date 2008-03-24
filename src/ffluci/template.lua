@@ -128,7 +128,7 @@ function render(name, scope, ...)
 	scope = scope or getfenv(2)
 	local s, t = pcall(Template, name)
 	if not s then
-		error("Unable to load template: " .. name)
+		error(t)
 	else
 		t:render(scope, ...)
 	end
@@ -165,7 +165,8 @@ function Template.__init__(self, name)
 	
 	-- Compile and build
 	local sourcefile   = viewdir .. name .. ".htm"
-	local compiledfile = viewdir .. name .. ".lua"	
+	local compiledfile = viewdir .. name .. ".lua"
+	local err	
 	
 	if compiler_mode == "file" then
 		local tplmt = ffluci.fs.mtime(sourcefile)
@@ -176,25 +177,22 @@ function Template.__init__(self, name)
 		or (not (commt == nil) and not (tplmt == nil) and commt < tplmt) then
 			local compiled = compile(ffluci.fs.readfile(sourcefile))
 			ffluci.fs.writefile(compiledfile, compiled)
-			self.template = loadstring(compiled)
+			self.template, err = loadstring(compiled)
 		else
-			self.template = loadfile(compiledfile)
+			self.template, err = loadfile(compiledfile)
 		end
 		
 	elseif compiler_mode == "none" then
-		self.template = loadfile(self.compiledfile)
+		self.template, err = loadfile(self.compiledfile)
 		
 	elseif compiler_mode == "memory" then
-		self.template = loadstring(compile(ffluci.fs.readfile(sourcefile)))
+		self.template, err = loadstring(compile(ffluci.fs.readfile(sourcefile)))
 			
-	else
-		error("Invalid compiler mode: " .. compiler_mode)
-		
 	end
 	
 	-- If we have no valid template throw error, otherwise cache the template
 	if not self.template then
-		error("Unable to load template: " .. name)
+		error(err)
 	else
 		self.cache[name] = self.template
 	end

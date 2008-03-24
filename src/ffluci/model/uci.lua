@@ -28,55 +28,101 @@ limitations under the License.
 ]]--
 module("ffluci.model.uci", package.seeall)
 require("ffluci.util")
+require("ffluci.fs")
 
+-- The OS uci command
 ucicmd = "uci"
 
+-- Session class
+Session = ffluci.util.class()
+
+-- Session constructor
+function Session.__init__(self, path, uci)
+	uci = uci or ucicmd
+	if path then
+		self.ucicmd = uci .. " -P " .. path 
+	else
+		self.ucicmd = uci
+	end
+end
+
+-- The default Session
+local default = Session()
+
 -- Wrapper for "uci add"
-function add(config, section_type)
-	return _uci("add " .. _path(config) .. " " .. _path(section_type))
+function Session.add(self, config, section_type)
+	return self:_uci("add " .. _path(config) .. " " .. _path(section_type))
+end
+
+function add(...)
+	return default:add(...)
 end
 
 
 -- Wrapper for "uci changes"
-function changes(config)
-	return _uci3("changes " .. _path(config))
+function Session.changes(self, config)
+	return self:_uci3("changes " .. _path(config))
+end
+
+function change(...)
+	return default:change(...)
 end
 
 
 -- Wrapper for "uci commit"
-function commit(config)
-	return _uci2("commit " .. _path(config))
+function Session.commit(self, config)
+	return self:_uci2("commit " .. _path(config))
+end
+
+function commit(...)
+	return default:commit(...)
 end
 
 
 -- Wrapper for "uci get"
-function get(config, section, option)
-	return _uci("get " .. _path(config, section, option))
+function Session.get(self, config, section, option)
+	return self:_uci("get " .. _path(config, section, option))
+end
+
+function get(...)
+	return default:get(...)
 end
 
 
 -- Wrapper for "uci revert"
-function revert(config)
-	return _uci2("revert " .. _path(config))
+function Session.revert(self, config)
+	return self:_uci2("revert " .. _path(config))
+end
+
+function revert(...)
+	return self:revert(...)
 end
 
 
 -- Wrapper for "uci show"
-function show(config)
-	return _uci3("show " .. _path(config))
+function Session.show(self, config)
+	return self:_uci3("show " .. _path(config))
+end
+
+function show(...)
+	return default:show(...)
 end
 
 
 -- Wrapper for "uci set"
-function set(config, section, option, value)
-	return _uci2("set " .. _path(config, section, option, value))
+function Session.set(self, config, section, option, value)
+	return self:_uci2("set " .. _path(config, section, option, value))
+end
+
+function set(...)
+	return default:set(...)
 end
 
 
 -- Internal functions --
 
-function _uci(cmd)
-	local res = ffluci.util.exec(ucicmd .. " 2>/dev/null " .. cmd)
+function Session._uci(self, cmd)
+	local res = ffluci.util.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
 	
 	if res:len() == 0 then
 		return nil
@@ -85,8 +131,8 @@ function _uci(cmd)
 	end	
 end
 
-function _uci2(cmd)
-	local res = ffluci.util.exec(ucicmd .. " 2>&1 " .. cmd)
+function Session._uci2(self, cmd)
+	local res = ffluci.util.exec(self.ucicmd .. " 2>&1 " .. cmd)
 	
 	if res:len() > 0 then
 		return false, res
@@ -95,8 +141,8 @@ function _uci2(cmd)
 	end	
 end
 
-function _uci3(cmd)
-	local res = ffluci.util.execl(ucicmd .. " 2>&1 " .. cmd)
+function Session._uci3(self, cmd)
+	local res = ffluci.util.execl(self.ucicmd .. " 2>&1 " .. cmd)
 	if res[1]:sub(1, ucicmd:len() + 1) == ucicmd .. ":" then
 		return nil, res[1]
 	end

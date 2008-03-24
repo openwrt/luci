@@ -37,10 +37,10 @@ end
 
 -- Returns the content of file
 function readfile(filename)
-	local fp = io.open(filename)
+	local fp, err = io.open(filename)
 	
 	if fp == nil then
-		error("Unable to open file for reading: " .. filename)
+		error(err)
 	end
 	
 	local data = fp:read("*a")
@@ -50,12 +50,12 @@ end
 
 -- Returns the content of file as array of lines
 function readfilel(filename)
-	local fp = io.open(filename)
+	local fp, err = io.open(filename)
 	local line = ""
 	local data = {}
 		
 	if fp == nil then
-		error("Unable to open file for reading: " .. filename)
+		error(err)
 	end
 	
 	while true do
@@ -70,9 +70,9 @@ end
 
 -- Writes given data to a file
 function writefile(filename, data)
-	local fp = io.open(filename, "w")
+	local fp, err = io.open(filename, "w")
 	if fp == nil then
-		error("Unable to open file for writing: " .. filename)
+		error(err)
 	end
 	fp:write(data)
 	fp:close()
@@ -97,4 +97,9 @@ function dir(path)
 		end
 	end
 	return e
+end
+
+-- Alias for lfs.mkdir
+function mkdir(...)
+	return lfs.mkdir(...)
 end

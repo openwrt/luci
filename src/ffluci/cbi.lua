@@ -41,10 +41,10 @@ function load(cbimap)
 	require("ffluci.i18n")
 	
 	local cbidir = ffluci.fs.dirname(ffluci.util.__file__()) .. "model/cbi/"
-	local func = loadfile(cbidir..cbimap..".lua")
+	local func, err = loadfile(cbidir..cbimap..".lua")
 	
 	if not func then
-		error("Unable to load CBI map: " .. cbimap)
+		error(err)
 		return nil
 	end
 	
@@ -102,10 +102,11 @@ function Map.__init__(self, config, ...)
 	Node.__init__(self, ...)
 	self.config = config
 	self.template = "cbi/map"
+	self.uci = ffluci.model.uci.Session()
 end
 
 function Map.parse(self)
-	self.ucidata = ffluci.model.uci.show(self.config)
+	self.ucidata = self.uci:show(self.config)
 	if not self.ucidata then
 		error("Unable to read UCI data: " .. self.config)
 	else
@@ -115,7 +116,7 @@ function Map.parse(self)
 end
 
 function Map.render(self)
-	self.ucidata = ffluci.model.uci.show(self.config)
+	self.ucidata = self.uci:show(self.config)
 	if not self.ucidata then
 		error("Unable to read UCI data: " .. self.config)
 	else
@@ -134,6 +135,10 @@ function Map.section(self, class, ...)
 	else
 		error("class must be a descendent of AbstractSection")
 	end
+end
+
+function Map.set(self, section, option, value)
+	return self.uci:set(self.config, section, option, value)
 end
 
 --[[
@@ -262,7 +267,7 @@ function AbstractValue.validate(self, value)
 end
 
 function AbstractValue.write(self, value)
-	return ffluci.model.uci.set(self.config, self.section, self.option, value)
+	return self.map:set(self.section, self.option, value)
 end
 
 
@@ -296,7 +301,7 @@ function ListValue.__init__(self, ...)
 	self.list = {}
 end
 
-function ListValue.addValue(self, key, val)
+function ListValue.add_value(self, key, val)
 	val = val or key
 	self.list[key] = val
 end

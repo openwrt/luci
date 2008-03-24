@@ -36,7 +36,10 @@ function class(base)
 		setmetatable(inst, {__index = class})
 		
 		if inst.__init__ then
-			inst:__init__(...)
+			local stat, err = pcall(inst.__init__, inst, ...)
+			if not stat then
+				error(err)
+			end
 		end
 		
 		return inst
@@ -137,6 +140,11 @@ function resfenv(f)
 	updfenv(f, scope)
 end 
 
+
+-- Returns the Haserl unique sessionid
+function sessionid()
+	return ENV.SESSIONID
+end
 
 -- Updates the scope of f with "extscope"
 function updfenv(f, extscope)
