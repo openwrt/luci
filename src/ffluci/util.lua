@@ -156,12 +156,12 @@ end
 
 
 -- Validates a variable
-function validate(value, cast_number, cast_int, valid)
+function validate(value, valid, cast_number, cast_int)
 	if cast_number or cast_int then
 		value = tonumber(value)
 	end
 	
-	if cast_int and not(value % 1 == 0) then
+	if cast_int and value and not(value % 1 == 0) then
 		value = nil
 	end
 	

@@ -1,11 +1,11 @@
 						<div class="cbi-lvalue">
 							<div class="cbi-lvalue-title"><%=self.title%></div>
 							<div class="cbi-lvalue-field">
-								<select name="cbid.<%=self.config.."."..self.section.."."..self.option%>">
+								<select name="cbid.<%=self.config.."."..self.section.."."..self.option%>"<% if self.size then %> size="<%=self.size%>"<% end %>>
 <%for k, v in pairs(self.list) do%>
-									<option value="<%=k%>"><%=v%></option>
+									<option<% if self:ucivalue() == k then %> selected="selected"<% end %> value="<%=k%>"><%=v%></option>
 <% end %>
 								</select>
 							</div>
-							<div class="cbi-value-description"><%=self.description%></div>
+							<div class="cbi-lvalue-description"><%=self.description%></div>
 						</div>

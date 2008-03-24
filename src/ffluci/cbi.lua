@@ -59,6 +59,8 @@ function load(cbimap)
 		return nil
 	end
 	
+	ffluci.i18n.loadc("cbi")
+	
 	return map
 end
 
@@ -137,8 +139,16 @@ function Map.section(self, class, ...)
 	end
 end
 
+function Map.add(self, sectiontype)
+	return self.uci:add(self.config, sectiontype)
+end
+
 function Map.set(self, section, option, value)
 	return self.uci:set(self.config, section, option, value)
+end
+
+function Map.remove(self, section, option)
+	return self.uci:del(self.config, section, option)
 end
 
 --[[
@@ -188,7 +198,8 @@ end
 TypedSection - A (set of) configuration section(s) defined by the type
 	addremove: 	Defines whether the user can add/remove sections of this type
 	anonymous:  Allow creating anonymous sections
-	valid: 		a table with valid names or a function returning nil if invalid
+	valid: 		a list of names or a validation function for creating sections 
+	scope:		a list of names or a validation function for editing sections
 ]]--
 TypedSection = class(AbstractSection)
 
@@ -196,18 +207,68 @@ function TypedSection.__init__(self, ...)
 	AbstractSection.__init__(self, ...)
 	self.template  = "cbi/tsection"
 	
-	self.addremove = true
-	self.anonymous = false
-	self.valid     = nil
+	self.addremove   = true
+	self.anonymous   = false
+	self.valid       = nil
+	self.scope		 = nil
+end
+
+function TypedSection.create(self, name)
+	if name then	
+		self.map:set(name, nil, self.sectiontype)
+	else
+		name = self.map:add(self.sectiontype)
+	end
+	
+	for k,v in pairs(self.children) do
+		if v.default then
+			self.map:set(name, v.option, v.default)
+		end
+	end
 end
 
 function TypedSection.parse(self)
+	if self.addremove then
+		local crval = "cbi.cts." .. self.config .. "." .. self.sectiontype
+		local name  = ffluci.http.formvalue(crval)
+		if self.anonymous then
+			if name then
+				self:create()
+			end
+		else		
+			if name then
+				name = ffluci.util.validate(name, self.valid)
+				if not name then
+					self.err_invalid = true
+				end		
+				if name and name:len() > 0 then
+					self:create(name)
+				end
+			end
+		end
+		
+		
+		crval = "cbi.rts." .. self.config
+		name = ffluci.http.formvalue(crval)
+		if type(name) == "table" then
+			for k,v in pairs(name) do
+				if ffluci.util.validate(k, self.valid) then
+					self:remove(k)
+				end
+			end
+		end		
+	end
+	
 	for k, v in pairs(self:ucisections()) do
 		for i, node in ipairs(self.children) do
 			node.section = k
 			node:parse()
 		end 
 	end
+end
+
+function TypedSection.remove(self, name)
+	return self.map:remove(name)
 end
 
 function TypedSection.render_children(self, section)
@@ -221,7 +282,9 @@ function TypedSection.ucisections(self)
 	local sections = {}
 	for k, v in pairs(self.map.ucidata) do
 		if v[".type"] == self.sectiontype then
-			sections[k] = v
+			if ffluci.util.validate(k, self.scope) then
+				sections[k] = v
+			end
 		end
 	end
 	return sections	
@@ -234,6 +297,7 @@ AbstractValue - An abstract Value Type
 	valid:		A function returning the value if it is valid otherwise nil 
 	depends:	A table of option => value pairs of which one must be true
 	default:	The default value
+	size:		The size of the input fields
 ]]--
 AbstractValue = class(Node)
 
@@ -244,6 +308,7 @@ function AbstractValue.__init__(self, option, ...)
 	self.valid   = nil
 	self.depends = nil
 	self.default = nil
+	self.size    = nil
 end
 
 function AbstractValue.formvalue(self)
@@ -252,18 +317,24 @@ function AbstractValue.formvalue(self)
 end
 
 function AbstractValue.parse(self)
-	local fvalue = self:validate(self:formvalue())
-	if fvalue and not (fvalue == self:ucivalue()) then
-		self:write(fvalue)
-	end 
+	local fvalue = self:formvalue()
+	if fvalue then
+		fvalue = self:validate(fvalue)
+		if not fvalue then
+			self.err_invalid = true
+		end
+		if fvalue and not (fvalue == self:ucivalue()) then
+			self:write(fvalue)
+		end 
+	end
 end
 
 function AbstractValue.ucivalue(self)
 	return self.map.ucidata[self.section][self.option]
 end
 
-function AbstractValue.validate(self, value)
-	return ffluci.util.validate(value, nil, nil, self.valid)
+function AbstractValue.validate(self, val)
+	return ffluci.util.validate(val, self.valid)
 end
 
 function AbstractValue.write(self, value)
@@ -271,11 +342,14 @@ function AbstractValue.write(self, value)
 end
 
 
+
+
 --[[
 Value - A one-line value
 	maxlength:	The maximum length
 	isnumber:	The value must be a valid (floating point) number
 	isinteger:  The value must be a valid integer
+	ispositive: The value must be positive (and a number)
 ]]--
 Value = class(AbstractValue)
 
@@ -283,9 +357,17 @@ function Value.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/value"
 	
-	self.maxlength = nil
-	self.isnumber  = false
-	self.isinteger = false
+	self.maxlength  = nil
+	self.isnumber   = false
+	self.isinteger  = false
+end
+
+function Value.validate(self, val)
+	if self.maxlength and tostring(val):len() > self.maxlength then
+		val = nil
+	end
+	
+	return ffluci.util.validate(val, self.valid, self.isnumber, self.isinteger)
 end
 
 

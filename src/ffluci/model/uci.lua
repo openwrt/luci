@@ -79,6 +79,16 @@ function commit(...)
 end
 
 
+-- Wrapper for "uci del"
+function Session.del(self, config, section, option)
+	return self:_uci2("del " .. _path(config, section, option))
+end
+
+function del(...)
+	return default:del(...)
+end
+
+
 -- Wrapper for "uci get"
 function Session.get(self, config, section, option)
 	return self:_uci("get " .. _path(config, section, option))
@@ -173,12 +183,15 @@ function _path(...)
 	-- Not using ipairs because it is not reliable in case of nil arguments
 	arg.n = nil
 	for k,v in pairs(arg) do
-		if k == 1 then
-			result = "'" .. v:gsub("['.]", "") .. "'"
-		elseif k < 4 then
-			result = result .. ".'" .. v:gsub("['.]", "") .. "'"
-		elseif k == 4 then
-			result = result .. "='" .. v:gsub("'", "") .. "'"
+		if v then
+			v = tostring(v)
+			if k == 1 then
+				result = "'" .. v:gsub("['.]", "") .. "'"
+			elseif k < 4 then
+				result = result .. ".'" .. v:gsub("['.]", "") .. "'"
+			elseif k == 4 then
+				result = result .. "='" .. v:gsub("'", "") .. "'"
+			end
 		end
 	end
 	return result

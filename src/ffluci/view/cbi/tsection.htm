@@ -5,7 +5,19 @@
 					<fieldset class="cbi-tsection-node" id="cbi-<%=self.config%>-<%=k%>">
 						<% if not self.anonymous then %><legend><%=k%></legend><% end %>
 <% self:render_children(k) %>
+						<% if self.addremove then %>
+							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del Eintrag entfernen%>" />
+						<% end %>
 					</fieldset>
 					<br />
+<% end %>
+<% if self.addremove then %>
+				<div class="cbi-tsection-create">
+					<% if self.anonymous then %>
+					<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add Eintrag hinzufügen%>" />
+					<% else %><input type="text" class="cbi-tsection-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+					<input type="submit" value="<%:cbi_add Eintrag hinzufügen%>" />
+					<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültiger Wert%></div><% end %>
+				</div>
 <% end %>
 				</div>
