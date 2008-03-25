@@ -1,7 +1,34 @@
-				<div class="cbi-nsection" id="cbi-<%=self.config%>-<%=self.section%>">
+<% if self:ucivalue(self.section) then %>
+				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
 					<h2><%=self.title%></h2>
-					<div class="cbi-nsection-descr"><%=self.description%></div>
-					<div class="cbi-nsection-options">
-<% self:render_children() %>
-					</div>
+					<div class="cbi-section-descr"><%=self.description%></div>
+					<fieldset class="cbi-section-node">
+<% self:render_children(self.section) %>
+					<% if #self.optionals > 0 or self.dynamic then %>
+						<div class="cbi-optionals">
+						<% if self.dynamic then %>
+							<input type="text" name="cbi.opt.<%=self.config%>.<%=self.section%>" />
+						<% else %>
+							<select name="cbi.opt.<%=self.config%>.<%=self.section%>">
+								<option><%:cbi_selopt *** Zusätzliche Felder ***%></option>
+							<% for key, val in pairs(self.optionals) do %>
+								<option value="<%=val.option%>"><%=val.title%></option>
+							<% end %>
+							</select>
+						<% end %>
+							<input type="submit" value="<%:cbi_addopt Feld hinzufügen%>" />
+						</div>
+					<% end %>
+					<br />
+					<% if self.addremove then %>
+						<input type="submit" name="cbi.rns.<%=self.config%>.<%=self.section%>" value="<%:cbi_del Eintrag entfernen%>" />
+					<% end %>
+					</fieldset>
 				</div>
+<% elseif self.addremove then %>
+				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
+					<h2><%=self.title%></h2>
+					<div class="cbi-section-descr"><%=self.description%></div>
+					<input type="submit" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:cbi_cns Eintrag anlegen%>" />
+				</div>
+<% end %>

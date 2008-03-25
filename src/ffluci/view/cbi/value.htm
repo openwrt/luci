@@ -1,8 +1,11 @@
 						<div class="cbi-value">
-							<div class="cbi-value-title"><%=self.title%></div>
-							<div class="cbi-value-field">
-								<input type="text" <% if self.size then %>size="<%=self.size%>" <% end %><% if self.maxlength then %>maxlength="<%=self.maxlength%>" <% end %>name="cbid.<%=self.config.."."..self.section.."."..self.option%>" value="<%=(self:ucivalue() or "")%>" />
+							<div class="left">
+								<div class="cbi-value-title"><%=self.title%></div>
+								<div class="cbi-value-description"><%=self.description%></div>
 							</div>
-							<div class="cbi-value-description"><%=self.description%></div>
-							<% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültiger Wert%></div><% end %>
+							<div class="cbi-value-field">
+								<input type="text" <% if self.size then %>size="<%=self.size%>" <% end %><% if self.maxlength then %>maxlength="<%=self.maxlength%>" <% end %>name="cbid.<%=self.config.."."..section.."."..self.option%>" value="<%=(self:ucivalue(section) or "")%>" />
+							</div>
+							<div class="clear"></div>
+							<% if self.tag_invalid[section] then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>
 						</div>

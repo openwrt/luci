@@ -1,10 +1,26 @@
-				<div class="cbi-tsection" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
+				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 					<h2><%=self.title%></h2>
-					<div class="cbi-tsection-descr"><%=self.description%></div>
+					<div class="cbi-section-descr"><%=self.description%></div>
 <% for k, v in pairs(self:ucisections()) do%>
-					<fieldset class="cbi-tsection-node" id="cbi-<%=self.config%>-<%=k%>">
+					<fieldset class="cbi-section-node" id="cbi-<%=self.config%>-<%=k%>">
 						<% if not self.anonymous then %><legend><%=k%></legend><% end %>
 <% self:render_children(k) %>
+						<% if #self.optionals > 0 or self.dynamic then %>
+							<div class="cbi-optionals">
+							<% if self.dynamic then %>
+								<input type="text" name="cbi.opt.<%=self.config%>.<%=k%>" />
+							<% else %>
+								<select name="cbi.opt.<%=self.config%>.<%=k%>">
+									<option><%:cbi_selopt *** Zusätzliche Felder ***%></option>
+								<% for key, val in pairs(self.optionals) do %>
+									<option value="<%=val.option%>"><%=val.title%></option>
+								<% end %>
+								</select>
+							<% end %>
+								<input type="submit" value="<%:cbi_addopt Feld hinzufügen%>" />
+							</div>
+						<% end %>
+						<br />
 						<% if self.addremove then %>
 							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del Eintrag entfernen%>" />
 						<% end %>
@@ -12,12 +28,12 @@
 					<br />
 <% end %>
 <% if self.addremove then %>
-				<div class="cbi-tsection-create">
+				<div class="cbi-section-create">
 					<% if self.anonymous then %>
 					<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add Eintrag hinzufügen%>" />
-					<% else %><input type="text" class="cbi-tsection-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+					<% else %><input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
 					<input type="submit" value="<%:cbi_add Eintrag hinzufügen%>" />
-					<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültiger Wert%></div><% end %>
+					<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>
 				</div>
 <% end %>
 				</div>

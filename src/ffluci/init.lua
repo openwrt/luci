@@ -25,7 +25,7 @@ limitations under the License.
 ]]--
 module("ffluci", package.seeall)
 
-__version__ = "0.1"
+__version__ = "0.2"
 __appname__ = "FFLuCI"
 
 dispatch = require("ffluci.dispatcher").httpdispatch

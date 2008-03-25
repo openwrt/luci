@@ -1,0 +1,10 @@
+						<div class="cbi-value">
+							<div class="left">
+								<div class="cbi-value-title"><%=self.title%></div>
+								<div class="cbi-value-description"><%=self.description%></div>
+							</div>
+							<div class="cbi-value-field">
+								<input type="checkbox" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:ucivalue(section) == self.enabled then %> checked="checked"<% end %> value="1" />
+							</div>
+							<div class="clear"></div>
+						</div>
