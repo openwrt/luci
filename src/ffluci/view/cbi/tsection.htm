@@ -1,18 +1,18 @@
 				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
-<% for k, v in pairs(self:ucisections()) do%>
+<% for k, v in pairs(self:cfgsections()) do%>
 					<fieldset class="cbi-section-node" id="cbi-<%=self.config%>-<%=k%>">
-						<% if not self.anonymous then %><legend><%=k%></legend><% end %>
+						<% if not self.anonymous then %><h3><%=k%></h3><% end %>
 <% self:render_children(k) %>
-						<% if #self.optionals > 0 or self.dynamic then %>
+						<% if #self.optionals[k] > 0 or self.dynamic then %>
 							<div class="cbi-optionals">
 							<% if self.dynamic then %>
 								<input type="text" name="cbi.opt.<%=self.config%>.<%=k%>" />
 							<% else %>
 								<select name="cbi.opt.<%=self.config%>.<%=k%>">
-									<option><%:cbi_selopt *** Zusätzliche Felder ***%></option>
-								<% for key, val in pairs(self.optionals) do %>
+									<option><%:cbi_selopt *** Zusätzliche Parameter ***%></option>
+								<% for key, val in pairs(self.optionals[k]) do %>
 									<option value="<%=val.option%>"><%=val.title%></option>
 								<% end %>
 								</select>

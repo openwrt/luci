@@ -52,7 +52,7 @@ end
 
 -- Same as load but autocompletes the filename with .LANG from config.lang
 function loadc(file)
-	return load(file .. "." .. ffluci.config.lang)
+	return load(file .. "." .. ffluci.config.main.lang)
 end
 
 -- Returns the i18n-value defined by "key" or if there is no such: "default"

@@ -1,10 +1,8 @@
 						<div class="cbi-value">
-							<div class="left">
-								<div class="cbi-value-title"><%=self.title%></div>
-								<div class="cbi-value-description"><%=self.description%></div>
-							</div>
+							<div class="cbi-value-title left"><%=self.title%></div>
+							<div class="cbi-value-description right"><%=self.description%></div>
 							<div class="cbi-value-field">
-								<input type="text" <% if self.size then %>size="<%=self.size%>" <% end %><% if self.maxlength then %>maxlength="<%=self.maxlength%>" <% end %>name="cbid.<%=self.config.."."..section.."."..self.option%>" value="<%=(self:ucivalue(section) or "")%>" />
+								<input type="text" <% if self.size then %>size="<%=self.size%>" <% end %><% if self.maxlength then %>maxlength="<%=self.maxlength%>" <% end %>name="cbid.<%=self.config.."."..section.."."..self.option%>" value="<%=(self:cfgvalue(section) or "")%>" />
 							</div>
 							<div class="clear"></div>
 							<% if self.tag_invalid[section] then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>

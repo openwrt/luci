@@ -1,17 +1,17 @@
-<% if self:ucivalue(self.section) then %>
+<% if self:cfgvalue(self.section) then %>
 				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
 					<fieldset class="cbi-section-node">
 <% self:render_children(self.section) %>
-					<% if #self.optionals > 0 or self.dynamic then %>
+					<% if #self.optionals[self.section] > 0 or self.dynamic then %>
 						<div class="cbi-optionals">
 						<% if self.dynamic then %>
 							<input type="text" name="cbi.opt.<%=self.config%>.<%=self.section%>" />
 						<% else %>
 							<select name="cbi.opt.<%=self.config%>.<%=self.section%>">
-								<option><%:cbi_selopt *** Zusätzliche Felder ***%></option>
-							<% for key, val in pairs(self.optionals) do %>
+								<option><%:cbi_selopt *** Zusätzliche Parameter ***%></option>
+							<% for key, val in pairs(self.optionals[self.section]) do %>
 								<option value="<%=val.option%>"><%=val.title%></option>
 							<% end %>
 							</select>

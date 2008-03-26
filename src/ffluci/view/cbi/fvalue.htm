@@ -4,7 +4,7 @@
 								<div class="cbi-value-description"><%=self.description%></div>
 							</div>
 							<div class="cbi-value-field">
-								<input type="checkbox" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:ucivalue(section) == self.enabled then %> checked="checked"<% end %> value="1" />
+								<input type="checkbox" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == self.enabled then %> checked="checked"<% end %> value="1" />
 							</div>
 							<div class="clear"></div>
 						</div>

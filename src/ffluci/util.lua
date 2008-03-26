@@ -152,9 +152,7 @@ end
 
 -- Resets the scope of f doing a shallow copy of its scope into a new table
 function resfenv(f)
-	local scope = getfenv(f)
-	setfenv(f, {})
-	updfenv(f, scope)
+	setfenv(f, clone(getfenv(f)))
 end 
 
 
@@ -166,31 +164,41 @@ end
 
 -- Splits a string into an array (Taken from lua-users.org)
 function split(str, pat)
-   local t = {}
-   local fpat = "(.-)" .. pat
-   local last_end = 1
-   local s, e, cap = str:find(fpat, 1)
-   while s do
-      if s ~= 1 or cap ~= "" then
-	 table.insert(t,cap)
-      end
-      last_end = e+1
-      s, e, cap = str:find(fpat, last_end)
-   end
-   if last_end <= #str then
-      cap = str:sub(last_end)
-      table.insert(t, cap)
-   end
-   return t
+	pat = pat or "\n"
+	
+	local t = {}
+	local fpat = "(.-)" .. pat
+	local last_end = 1
+	local s, e, cap = str:find(fpat, 1)
+	
+	while s do
+		if s ~= 1 or cap ~= "" then
+			table.insert(t,cap)
+		end
+		last_end = e+1
+		s, e, cap = str:find(fpat, last_end)
+	end
+	
+	if last_end <= #str then
+		cap = str:sub(last_end)
+		table.insert(t, cap)
+	end
+	
+	return t
+end
+
+
+-- Updates given table with new values
+function update(t, updates)
+	for k, v in pairs(updates) do
+		t[k] = v
+	end	
 end
 
 
 -- Updates the scope of f with "extscope"
 function updfenv(f, extscope)
-	local scope = getfenv(f)
-	for k, v in pairs(extscope) do
-		scope[k] = v
-	end
+	update(getfenv(f), extscope)
 end
 
 

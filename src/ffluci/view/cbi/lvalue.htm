@@ -1,20 +1,18 @@
 						<div class="cbi-value">
-							<div class="left">
-								<div class="cbi-value-title"><%=self.title%></div>
-								<div class="cbi-value-description"><%=self.description%></div>
-							</div>
+							<div class="cbi-value-title left"><%=self.title%></div>
+							<div class="cbi-value-description right"><%=self.description%></div>
 							<div class="cbi-value-field">
 <% if self.widget == "select" then %>
 								<select name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self.size then %> size="<%=self.size%>"<% end %>>
 <%for i, key in pairs(self.keylist) do%>
-									<option<% if self:ucivalue(section) == key then %> selected="selected"<% end %> value="<%=key%>"><%=self.vallist[i]%></option>
+									<option<% if self:cfgvalue(section) == key then %> selected="selected"<% end %> value="<%=key%>"><%=self.vallist[i]%></option>
 <% end %>
 								</select>
 <% elseif self.widget == "radio" then
 	local c = 0;
 	for i, key in pairs(self.keylist) do
 	c = c + 1%>
-								<%=self.vallist[i]%><input type="radio" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:ucivalue(section) == key then %> checked="checked"<% end %> value="<%=key%>" />
+								<%=self.vallist[i]%><input type="radio" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == key then %> checked="checked"<% end %> value="<%=key%>" />
 <% if c == self.size then c = 0 %><br />
 <% end end %>
 <% end %>

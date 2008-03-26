@@ -9,12 +9,17 @@ h1 {
 	margin: 0%;
 	font-size: 1.4em;
 	font-weight: bold;
+	margin-bottom: 0.5em;
 }
 
 h2 {
 	margin: 0%;
 	font-size: 1.2em;
 	font-weight: bold;
+}
+
+h3 {
+	margin: 0%;
 }
 
 #header {
@@ -156,6 +161,19 @@ h2 {
 	display: none;
 }
 
+.inline {
+	display: inline;
+}
+
+code {
+	display: block;
+	background: #f7f7f7;
+	border: 1px solid #d7d7d7;
+	margin: 1em 1.75em;
+	padding: 1em;
+	overflow: auto;
+	white-space: pre;
+}
 
 .cbi-section {
 	margin-top: 1em;
@@ -166,24 +184,22 @@ h2 {
 }
 
 .cbi-value-title {
-	font-weight: bold;
 	line-height: 1.75em;
 }
 
 .cbi-value-field {
-	text-align: right;
-	vertical-align: center;
+	margin-left: 10em;
+	text-align: center;
 	line-height: 1.75em;
 }
 
-.cbi-value-description {
-	clear: both;
-	font-style: italic;
-	font-size: 0.8em; 
+.cbi-value-field input, .cbi-value-field select, .cbi-optionals select, .cbi-optionals input  {
+	font-size: 0.8em;
 }
 
-.cbi-value {
-	margin-bottom: 1em;
+.cbi-value-description {
+	font-style: italic;
+	font-size: 0.8em; 
 }
 
 .cbi-form-separator {
@@ -191,9 +207,14 @@ h2 {
 }
 
 .cbi-section-node {
-	margin-top: 1em;
-	border: none;
-	background-color: #eeeeee;
+	display: block;
+	background: #f7f7f7;
+	border: 1px solid #d7d7d7;
+	overflow: auto;
+}
+
+.cbi-section-node h3 {
+	margin-bottom: 0.5em;
 }
 
 .cbi-error {
@@ -203,11 +224,6 @@ h2 {
 
 .cbi-optionals {
 	margin-top: 2em;
-}
-
-.cbi-optionals select {
-	height: 1.5em;
-	width: 20em;
 }
 
 .cbi-optionals option {

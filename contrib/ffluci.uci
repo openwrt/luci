@@ -1,0 +1,20 @@
+config core main
+        option lang de
+        option mediaurlbase /ffluci/media
+        
+
+config public contact
+		option nickname	-
+		option name		-
+		option mail		-
+		option phone	-
+		option location	-
+		option geo		-
+		option note		-
+
+
+config event uci_oncommit
+        option network	"/etc/init.d/network restart"
+        option wireless	"/etc/init.d/network restart"
+        option olsrd	"/etc/init.d/olsrd restart"
+        option dhcp		"/etc/init.d/dhcp restart"

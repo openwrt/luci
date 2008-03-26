@@ -52,9 +52,9 @@ compiler_enable_bytecode = false
 -- Define the namespace for template modules
 viewns = {
 	translate  = ffluci.i18n.translate,
-	config     = ffluci.model.uci.get,
+	config     = function(...) return ffluci.model.uci.get(...) or "" end,
 	controller = os.getenv("SCRIPT_NAME"),
-	media      = ffluci.config.mediaurlbase,
+	media      = ffluci.config.main.mediaurlbase,
 	write      = io.write,
 	include    = function(name) Template(name):render(getfenv(2)) end,	
 }
@@ -108,7 +108,7 @@ function compile(template)
 		elseif p == "~" then
 			re = sanitize(v):gsub("~(.-)%.(.-)%.(.+)", r_uci)
 		elseif p == "=" then
-			re = r_pexec:format(string.sub(v, 2))
+			re = r_pexec:format(v:sub(2))
 		else
 			re = r_exec:format(v)
 		end
@@ -119,6 +119,10 @@ function compile(template)
 		tf = loadstring(template)
 		template = string.dump(tf)
 	end
+	
+	c = c or 1
+	ffluci.fs.writefile("/tmp/"..tostring(c), template)
+	c = c+1
 	
 	return template
 end

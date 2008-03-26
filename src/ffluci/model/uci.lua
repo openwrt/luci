@@ -61,11 +61,11 @@ end
 
 -- Wrapper for "uci changes"
 function Session.changes(self, config)
-	return self:_uci3("changes " .. _path(config))
+	return self:_uci("changes " .. _path(config))
 end
 
-function change(...)
-	return default:change(...)
+function changes(...)
+	return default:changes(...)
 end
 
 
@@ -105,7 +105,7 @@ function Session.revert(self, config)
 end
 
 function revert(...)
-	return self:revert(...)
+	return default:revert(...)
 end
 
 

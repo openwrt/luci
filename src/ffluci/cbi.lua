@@ -168,7 +168,9 @@ end
 
 -- UCI get (cached)
 function Map.get(self, section, option)
-	if option and self.ucidata[section] then
+	if not section then
+		return self.ucidata
+	elseif option and self.ucidata[section] then
 		return self.ucidata[section][option]
 	else
 		return self.ucidata[section]
@@ -188,8 +190,8 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.config = map.config
 	self.optionals = {}
 	
-	self.addremove = true
 	self.optional = true
+	self.addremove = false
 	self.dynamic = false
 end
 
@@ -210,14 +212,16 @@ function AbstractSection.parse_optionals(self, section)
 		return
 	end
 	
+	self.optionals[section] = {}
+	
 	local field = ffluci.http.formvalue("cbi.opt."..self.config.."."..section)
 	for k,v in ipairs(self.children) do
-		if v.optional and not v:ucivalue(section) then
+		if v.optional and not v:cfgvalue(section) then
 			if field == v.option then
 				self.map:set(section, field, v.default)
 				field = nil
 			else
-				table.insert(self.optionals, v)
+				table.insert(self.optionals[section], v)
 			end
 		end
 	end
@@ -239,7 +243,7 @@ function AbstractSection.parse_dynamic(self, section)
 		return
 	end
 	
-	local arr  = ffluci.util.clone(self:ucivalue(section))
+	local arr  = ffluci.util.clone(self:cfgvalue(section))
 	local form = ffluci.http.formvalue("cbid."..self.config.."."..section)
 	if type(form) == "table" then
 		for k,v in pairs(form) do
@@ -263,8 +267,18 @@ function AbstractSection.parse_dynamic(self, section)
 end	
 
 -- Returns the section's UCI table
-function AbstractSection.ucivalue(self, section)
+function AbstractSection.cfgvalue(self, section)
 	return self.map:get(section)
+end
+
+-- Removes the section
+function AbstractSection.remove(self, section)
+	return self.map:del(section)
+end
+
+-- Creates the section
+function AbstractSection.create(self, section)
+	return self.map:set(section, nil, self.sectiontype)
 end
 
 
@@ -282,41 +296,32 @@ function NamedSection.__init__(self, map, section, ...)
 	self.addremove = false
 end
 
-function NamedSection.parse(self)	
-	local active = self:ucivalue(self.section)
+function NamedSection.parse(self)
+	local s = self.section	
+	local active = self:cfgvalue(s)
+	
 	
 	if self.addremove then
-		local path = self.config.."."..self.section
+		local path = self.config.."."..s
 		if active then -- Remove the section
-			if ffluci.http.formvalue("cbi.rns."..path) and self:remove() then
+			if ffluci.http.formvalue("cbi.rns."..path) and self:remove(s) then
 				return
 			end
 		else           -- Create and apply default values
-			if ffluci.http.formvalue("cbi.cns."..path) and self:create() then
+			if ffluci.http.formvalue("cbi.cns."..path) and self:create(s) then
 				for k,v in pairs(self.children) do
-					v:write(self.section, v.default)
+					v:write(s, v.default)
 				end
 			end
 		end
 	end
 	
 	if active then
-		AbstractSection.parse_dynamic(self, self.section)
-		Node.parse(self, self.section)
-		AbstractSection.parse_optionals(self, self.section)
+		AbstractSection.parse_dynamic(self, s)
+		Node.parse(self, s)
+		AbstractSection.parse_optionals(self, s)
 	end	
 end
-
--- Removes the section
-function NamedSection.remove(self)
-	return self.map:del(self.section)
-end
-
--- Creates the section
-function NamedSection.create(self)
-	return self.map:set(self.section, nil, self.sectiontype)
-end
-
 
 
 --[[
@@ -385,16 +390,11 @@ function TypedSection.parse(self)
 		end		
 	end
 	
-	for k, v in pairs(self:ucisections()) do
+	for k, v in pairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
 		Node.parse(self, k)
 		AbstractSection.parse_optionals(self, k)
 	end
-end
-
--- Remove a section
-function TypedSection.remove(self, name)
-	return self.map:del(name)
 end
 
 -- Render the children
@@ -405,9 +405,9 @@ function TypedSection.render_children(self, section)
 end
 
 -- Return all matching UCI sections for this TypedSection
-function TypedSection.ucisections(self)
+function TypedSection.cfgsections(self)
 	local sections = {}
-	for k, v in pairs(self.map.ucidata) do
+	for k, v in pairs(self.map:get()) do
 		if v[".type"] == self.sectiontype then
 			if ffluci.util.validate(k, self.scope) then
 				sections[k] = v
@@ -440,7 +440,7 @@ function AbstractValue.__init__(self, map, option, ...)
 	
 	self.valid    = nil
 	self.depends  = nil
-	self.default  = nil
+	self.default  = " "
 	self.size     = nil
 	self.optional = false
 end
@@ -463,7 +463,7 @@ function AbstractValue.parse(self, section)
 		if not fvalue then
 			self.tag_invalid[section] = true
 		end
-		if fvalue and not (fvalue == self:ucivalue(section)) then
+		if fvalue and not (fvalue == self:cfgvalue(section)) then
 			self:write(section, fvalue)
 		end 
 	elseif ffluci.http.formvalue("cbi.submit") then -- Unset the UCI or error
@@ -477,13 +477,13 @@ end
 
 -- Render if this value exists or if it is mandatory
 function AbstractValue.render(self, section)
-	if not self.optional or self:ucivalue(section) then 
+	if not self.optional or self:cfgvalue(section) then 
 		ffluci.template.render(self.template, {self=self, section=section})
 	end
 end
 
 -- Return the UCI value of this object
-function AbstractValue.ucivalue(self, section)
+function AbstractValue.cfgvalue(self, section)
 	return self.map:get(section, self.option)
 end
 
@@ -559,7 +559,7 @@ function Flag.parse(self, section)
 	end	
 	
 	if fvalue == self.enabled or (not self.optional and not self.rmempty) then 		
-		if not(fvalue == self:ucivalue(section)) then
+		if not(fvalue == self:cfgvalue(section)) then
 			self:write(section, fvalue)
 		end 
 	else
@@ -625,7 +625,7 @@ function MultiValue.add_value(self, key, val)
 end
 
 function MultiValue.valuelist(self, section)
-	local val = self:ucivalue(section)
+	local val = self:cfgvalue(section)
 	
 	if not(type(val) == "string") then
 		return {}

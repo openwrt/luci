@@ -2,10 +2,8 @@
 FFLuCI - Configuration
 
 Description:
-Some FFLuCI configuration values
+Some FFLuCI configuration values read from uci file "luci"
 
-ToDo:
-Port over to UCI
 
 FileId:
 $Id$
@@ -28,10 +26,22 @@ limitations under the License.
 ]]--
 
 module("ffluci.config", package.seeall)
+require("ffluci.model.uci")
+require("ffluci.util")
+
+-- Warning! This is only for fallback and compatibility purporses! --
+main = {}
 
 -- This is where stylesheets and images go
-mediaurlbase = "/ffluci/media"
+main.mediaurlbase = "/ffluci/media"
 
 -- Does anybody think about browser autodetect here?
 -- Too bad busybox doesn't populate HTTP_ACCEPT_LANGUAGE
-lang = "de"
+main.lang = "de"
+
+
+-- Now overwrite with UCI values
+local ucidata = ffluci.model.uci.show("luci")
+if ucidata and ucidata.luci then
+	ffluci.util.update(ffluci.config, ucidata.luci)
+end

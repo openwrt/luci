@@ -11,7 +11,6 @@ require("ffluci.http").htmlheader()
 <head>
 	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
 	<link rel="stylesheet" type="text/css" href="<%=media%>/css/<%=req.category%>_<%=req.module%>.css" />
-	<link rel="stylesheet" type="text/css" href="<%=media%>/css/<%=req.category%>_<%=req.module%>/<%=req.action%>.css" />
 	<title>FFLuCI</title>
 </head>
 <body>
@@ -49,12 +48,29 @@ require("ffluci.http").htmlheader()
 	<div class="sidebar right">
 		<div><%:webif Weboberfläche%>
 			<ul>
-				<li<% if "public" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/public"><%:public Public%></a></li>
-				<li<% if "admin" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/admin"><%:admin Admin%></a></li>
+				<li<% if "public" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/public"><%:public Öffentlich%></a></li>
+				<li<% if "admin" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/admin"><%:admin Verwaltung%></a></li>
 			</ul>
 		</div>
-		<% if "admin" == req.category then %>
-		<div>Konfiguration<ul><li>x Änderungen</li><li>Anwenden</li><li>Zurücksetzen</li></ul></div>
+		<%
+			if "admin" == req.category then
+				require("ffluci.model.uci") 
+				local ucic = ffluci.model.uci.changes()
+				if ucic then
+					ucic = #ffluci.util.split(ucic)
+				end
+		%>
+		<div><%:config Konfiguration%>
+			<ul>
+			<% if ucic then %>
+				<li><a href="<%=controller%>/admin/uci/changes"><%:changes Änderungen:%> <%=ucic%></a></li>
+				<li><a href="<%=controller%>/admin/uci/apply"><%:apply Anwenden%></a></li>
+				<li><a href="<%=controller%>/admin/uci/revert"><%:revert Verwerfen%></a></li>
+			<% else %>
+				<li><%:changes Änderungen: %> 0</li>
+			<% end %>
+			</ul>
+		</div>
 		<% end %>
 	</div>
 	<div id="content">
