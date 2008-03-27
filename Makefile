@@ -20,18 +20,11 @@ all: compile
 dist-compile: compile dist
 dist-source: source dist
 
-examples-compile: compile examples
-examples-source: source examples
-
-
 dist:
 	cp src/ffluci/controller/* dist/ffluci/controller/ -R
 	cp src/ffluci/i18n/* dist/ffluci/i18n/
 	cp src/ffluci/view/* dist/ffluci/view/ -R
 	cp src/ffluci/model/cbi/* dist/ffluci/model/cbi/ -R
-	
-examples:
-	cp examples/* dist/ -R
 
 compile:
 	mkdir -p $(DIRECTORIES)

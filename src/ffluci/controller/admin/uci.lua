@@ -10,7 +10,7 @@ function action_apply()
 		
 		-- Collect files to be applied
 		for i, line in ipairs(ffluci.util.split(changes)) do
-			local r = line:match("^[^.]+")
+			local r = line:match("^-?([^.]+)")
 			if r then
 				apply[r] = true
 			end
@@ -41,7 +41,7 @@ function action_revert()
 		
 		-- Collect files to be reverted
 		for i, line in ipairs(ffluci.util.split(changes)) do
-			local r = line:match("^[^.]+")
+			local r = line:match("^-?([^.]+)")
 			if r then
 				revert[r] = true
 			end

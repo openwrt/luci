@@ -7,6 +7,9 @@ is comparable to the syntax of the uci application
 
 Any return value of false or nil can be interpreted as an error
 
+
+ToDo: Reimplement in Lua
+
 FileId:
 $Id$
 

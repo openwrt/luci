@@ -203,22 +203,13 @@ end
 
 
 -- Validates a variable
-function validate(value, valid, cast_number, cast_int)
+function validate(value, cast_number, cast_int)
 	if cast_number or cast_int then
 		value = tonumber(value)
 	end
 	
 	if cast_int and value and not(value % 1 == 0) then
 		value = nil
-	end
-	
-	
-	if type(valid) == "function" then
-		value = valid(value)
-	elseif type(valid) == "table" then
-		if not contains(valid, value) then
-			value = nil
-		end
 	end
 	
 	return value

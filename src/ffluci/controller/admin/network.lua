@@ -5,6 +5,7 @@ menu = {
 	order   = 20,
 	entries = {
 		{action = "vlan", descr = "VLAN"},
-		{action = "ifaces", descr = "Schnittstellen"}
+		{action = "ifaces", descr = "Schnittstellen"},
+		{action = "ptp", descr = "PPPoE / PPTP"},
 	}
 }

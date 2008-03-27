@@ -1,11 +1,8 @@
 <%
 local v = self:valuelist(section)	
 %>
-						<div class="cbi-value">
-							<div class="left">
-								<div class="cbi-value-title"><%=self.title%></div>
-								<div class="cbi-value-description"><%=self.description%></div>
-							</div>
+						<div class="cbi-value" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
+							<div class="cbi-value-title left"><%=self.title%></div>
 							<div class="cbi-value-field">
 <% if self.widget == "select" then %>
 								<select multiple="multiple" name="cbid.<%=self.config.."."..section.."."..self.option%>[]"<% if self.size then %> size="<%=self.size%>"<% end %>>
@@ -21,6 +18,10 @@ local v = self:valuelist(section)
 <% if c == self.size then c = 0 %><br />
 <% end end %>
 <% end %>
+								<div class="cbi-value-description inline"><%=self.description%></div>
 							</div>
-							<div class="clear"></div>
 						</div>
+						<% if #self.deps > 0 then %><script type="text/javascript">
+							<% for j, d in ipairs(self.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");
+							<% end %>
+						</script><% end %>

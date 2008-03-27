@@ -218,7 +218,6 @@ function AbstractSection.parse_optionals(self, section)
 	for k,v in ipairs(self.children) do
 		if v.optional and not v:cfgvalue(section) then
 			if field == v.option then
-				self.map:set(section, field, v.default)
 				field = nil
 			else
 				table.insert(self.optionals[section], v)
@@ -328,18 +327,30 @@ end
 TypedSection - A (set of) configuration section(s) defined by the type
 	addremove: 	Defines whether the user can add/remove sections of this type
 	anonymous:  Allow creating anonymous sections
-	valid: 		a list of names or a validation function for creating sections 
-	scope:		a list of names or a validation function for editing sections
+	validate: 	a validation function returning nil if the section is invalid 
 ]]--
 TypedSection = class(AbstractSection)
 
 function TypedSection.__init__(self, ...)
 	AbstractSection.__init__(self, ...)
 	self.template  = "cbi/tsection"
+	self.deps = {}
+	self.excludes = {}
 	
 	self.anonymous   = false
-	self.valid       = nil
-	self.scope		 = nil
+end
+
+-- Return all matching UCI sections for this TypedSection
+function TypedSection.cfgsections(self)
+	local sections = {}
+	for k, v in pairs(self.map:get()) do
+		if v[".type"] == self.sectiontype then
+			if self:checkscope(k) then
+				sections[k] = v
+			end
+		end
+	end
+	return sections	
 end
 
 -- Creates a new section of this type with the given name (or anonymous)
@@ -357,6 +368,16 @@ function TypedSection.create(self, name)
 	end
 end
 
+-- Limits scope to sections that have certain option => value pairs
+function TypedSection.depends(self, option, value)
+	table.insert(self.deps, {option=option, value=value})
+end
+
+-- Excludes several sections by name
+function TypedSection.exclude(self, field)
+	self.excludes[field] = true
+end
+
 function TypedSection.parse(self)
 	if self.addremove then
 		-- Create
@@ -368,10 +389,17 @@ function TypedSection.parse(self)
 			end
 		else		
 			if name then
-				name = ffluci.util.validate(name, self.valid)
+				-- Ignore if it already exists
+				if self:cfgvalue(name) then
+					name = nil;
+				end
+				
+				name = self:checkscope(name)
+				
 				if not name then
 					self.err_invalid = true
 				end		
+				
 				if name and name:len() > 0 then
 					self:create(name)
 				end
@@ -383,7 +411,7 @@ function TypedSection.parse(self)
 		name = ffluci.http.formvalue(crval)
 		if type(name) == "table" then
 			for k,v in pairs(name) do
-				if ffluci.util.validate(k, self.valid) then
+				if self:cfgvalue(k) and self:checkscope(k) then
 					self:remove(k)
 				end
 			end
@@ -404,19 +432,36 @@ function TypedSection.render_children(self, section)
 	end
 end
 
--- Return all matching UCI sections for this TypedSection
-function TypedSection.cfgsections(self)
-	local sections = {}
-	for k, v in pairs(self.map:get()) do
-		if v[".type"] == self.sectiontype then
-			if ffluci.util.validate(k, self.scope) then
-				sections[k] = v
+-- Verifies scope of sections
+function TypedSection.checkscope(self, section)
+	-- Check if we are not excluded
+	if self.excludes[section] then
+		return nil
+	end
+	
+	-- Check if at least one dependency is met
+	if #self.deps > 0 and self:cfgvalue(section) then
+		local stat = false
+		
+		for k, v in ipairs(self.deps) do
+			if self:cfgvalue(section)[v.option] == v.value then
+				stat = true
 			end
 		end
+		
+		if not stat then
+			return nil
+		end
 	end
-	return sections	
+	
+	return self:validate(section)
 end
 
+
+-- Dummy validate function
+function TypedSection.validate(self, section)
+	return section
+end
 
 
 --[[
@@ -437,12 +482,23 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.map    = map
 	self.config = map.config
 	self.tag_invalid = {}
+	self.deps = {}
 	
-	self.valid    = nil
-	self.depends  = nil
-	self.default  = " "
+	self.rmempty  = false
+	self.default  = nil
 	self.size     = nil
 	self.optional = false
+end
+
+-- Add a dependencie to another section field
+function AbstractValue.depends(self, field, value)
+	table.insert(self.deps, {field=field, value=value})
+end
+
+-- Return whether this object should be created
+function AbstractValue.formcreated(self, section)
+	local key = "cbi.opt."..self.config.."."..section
+	return (ffluci.http.formvalue(key) == self.option)
 end
 
 -- Returns the formvalue for this object
@@ -453,12 +509,8 @@ end
 
 function AbstractValue.parse(self, section)
 	local fvalue = self:formvalue(section)
-	if fvalue == "" then
-		fvalue = nil
-	end
 	
-	
-	if fvalue then -- If we have a form value, validate it and write it to UCI
+	if fvalue and fvalue ~= "" then -- If we have a form value, write it to UCI
 		fvalue = self:validate(fvalue)
 		if not fvalue then
 			self.tag_invalid[section] = true
@@ -469,16 +521,14 @@ function AbstractValue.parse(self, section)
 	elseif ffluci.http.formvalue("cbi.submit") then -- Unset the UCI or error
 		if self.rmempty or self.optional then
 			self:remove(section)
-		else
-			self.tag_invalid[section] = true
 		end
 	end
 end
 
 -- Render if this value exists or if it is mandatory
-function AbstractValue.render(self, section)
-	if not self.optional or self:cfgvalue(section) then 
-		ffluci.template.render(self.template, {self=self, section=section})
+function AbstractValue.render(self, s)
+	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
+		ffluci.template.render(self.template, {self=self, section=s})
 	end
 end
 
@@ -488,8 +538,8 @@ function AbstractValue.cfgvalue(self, section)
 end
 
 -- Validate the form value
-function AbstractValue.validate(self, val)
-	return ffluci.util.validate(val, self.valid)
+function AbstractValue.validate(self, value)
+	return value
 end
 
 -- Write to UCI
@@ -529,7 +579,7 @@ function Value.validate(self, val)
 		val = nil
 	end
 	
-	return ffluci.util.validate(val, self.valid, self.isnumber, self.isinteger)
+	return ffluci.util.validate(val, self.isnumber, self.isinteger)
 end
 
 
@@ -585,7 +635,7 @@ function ListValue.__init__(self, ...)
 	self.widget = "select"
 end
 
-function ListValue.add_value(self, key, val)
+function ListValue.value(self, key, val)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val)) 
@@ -618,7 +668,7 @@ function MultiValue.__init__(self, ...)
 	self.delimiter = " "
 end
 
-function MultiValue.add_value(self, key, val)
+function MultiValue.value(self, key, val)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val)) 
