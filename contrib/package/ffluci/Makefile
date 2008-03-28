@@ -40,6 +40,7 @@ define Package/ffluci/install
 	$(CP) $(PKG_BUILD_DIR)/contrib/media $(1)/www/ffluci/ -R
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/ffluci $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/index.cgi $(1)/www/cgi-bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/index.html $(1)/www
 	$(CP) $(PKG_BUILD_DIR)/contrib/ffluci.uci $(1)/etc/config/luci
 	$(CP) -a ./ipkg/ffluci.postinst $(1)/CONTROL/postinst
 	$(CP) -a ./ipkg/conffiles $(1)/CONTROL/conffiles
