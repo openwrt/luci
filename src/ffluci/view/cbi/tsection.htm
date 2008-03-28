@@ -6,37 +6,16 @@
 							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del Eintrag entfernen%>" />
 						</div><% end %>
 						<% if not self.anonymous then %><h3><%=k%></h3><% end %>
-					<fieldset class="cbi-section-node" id="cbi-<%=self.config%>-<%=k%>">
-<% self:render_children(k) %>
-						<% if #self.optionals[k] > 0 or self.dynamic then %>
-							<div class="cbi-optionals">
-							<% if self.dynamic then %>
-								<input type="text" name="cbi.opt.<%=self.config%>.<%=k%>" />
-							<% else %>
-								<select name="cbi.opt.<%=self.config%>.<%=k%>">
-									<option><%:cbi_addopt -- Feld --%></option>
-								<% for key, val in pairs(self.optionals[k]) do %>
-									<option id="cbi-<%=self.config.."-"..k.."-"..val.option%>" value="<%=val.option%>"><%=val.title%></option>
-								<% end %>
-								</select>
-								<script type="text/javascript"><% for key, val in pairs(self.optionals[k]) do %>
-									<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..k.."-"..val.option%>", "cbid.<%=self.config.."."..k.."."..d.field%>", "<%=d.value%>");
-								<% end %><% end %>
-								<% end %></script>
-							<% end %>
-								<input type="submit" value="<%:add hinzufügen%>" />
-							</div>
-						<% end %>
-					</fieldset>
-					<br />
+<% section = k %>
+<%+cbi/ucisection%>
 <% end %>
 <% if self.addremove then %>
-				<div class="cbi-section-create">
-					<% if self.anonymous then %>
-					<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add Eintrag hinzufügen%>" />
-					<% else %><input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-					<input type="submit" value="<%:cbi_add Eintrag hinzufügen%>" />
-					<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>
-				</div>
+					<div class="cbi-section-create">
+						<% if self.anonymous then %>
+						<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add Eintrag hinzufügen%>" />
+						<% else %><input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+						<input type="submit" value="<%:cbi_add Eintrag hinzufügen%>" />
+						<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>
+					</div>
 <% end %>
 				</div>

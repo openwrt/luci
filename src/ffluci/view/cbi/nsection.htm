@@ -1,32 +1,12 @@
-<% if self:cfgvalue(self.section) then %>
-				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
+<% if self:cfgvalue(self.section) then
+section = self.section %>
+				<div class="cbi-section" id="cbi-<%=self.config%>-<%=section%>">
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
 					<% if self.addremove then %><div class="cbi-section-remove">
-						<input type="submit" name="cbi.rns.<%=self.config%>.<%=self.section%>" value="<%:cbi_del Eintrag entfernen%>" />
+						<input type="submit" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:cbi_del Eintrag entfernen%>" />
 					</div><% end %>
-					<fieldset class="cbi-section-node">
-<% self:render_children(self.section) %>
-					<% if #self.optionals[self.section] > 0 or self.dynamic then %>
-						<div class="cbi-optionals">
-							<input type="submit" value="<%:cbi_addopt Feld hinzufügen%>" />
-						<% if self.dynamic then %>
-							<input type="text" name="cbi.opt.<%=self.config%>.<%=self.section%>" />
-						<% else %>
-							<select name="cbi.opt.<%=self.config%>.<%=self.section%>">
-								<option><%:cbi_selopt *** Zusätzliche Parameter ***%></option>
-							<% for key, val in pairs(self.optionals[self.section]) do %>
-								<option id="cbi-<%=self.config.."-"..self.section.."-"..val.option%>" value="<%=val.option%>"><%=val.title%></option>
-							<% end %>
-							</select>
-							<script type="text/javascript"><% for key, val in pairs(self.optionals[self.section]) do %>
-								<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..self.section.."-"..val.option%>", "cbid.<%=self.config.."."..self.section.."."..d.field%>", "<%=d.value%>");
-								<% end %><% end %>
-							<% end %></script>
-						<% end %>
-						</div>
-					<% end %>
-					</fieldset>
+<%+cbi/ucisection%>
 				</div>
 <% elseif self.addremove then %>
 				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">

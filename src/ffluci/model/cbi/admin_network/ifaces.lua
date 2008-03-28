@@ -10,6 +10,7 @@ s:depends("proto", "dhcp")
 p = s:option(ListValue, "proto", "Protokoll")
 p:value("static", "statisch")
 p:value("dhcp", "DHCP")
+p.default = "static"
 
 s:option(Value, "ifname", "Schnittstelle")
 

@@ -1,6 +1,4 @@
-						<div class="cbi-value" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
-							<div class="cbi-value-title left"><%=self.title%></div>
-							<div class="cbi-value-field">
+<%+cbi/valueheader%>
 <% if self.widget == "select" then %>
 								<select onchange="cbi_d_update(this.id)" id="cbid.<%=self.config.."."..section.."."..self.option%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self.size then %> size="<%=self.size%>"<% end %>>
 <%for i, key in pairs(self.keylist) do%>
@@ -15,10 +13,4 @@
 <% if c == self.size then c = 0 %><br />
 <% end end %>
 <% end %>
-								<div class="cbi-value-description inline"><%=self.description%></div>
-							</div>
-						</div>
-						<% if #self.deps > 0 then %><script type="text/javascript">
-							<% for j, d in ipairs(self.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");
-							<% end %>
-						</script><% end %>
+<%+cbi/valuefooter%>

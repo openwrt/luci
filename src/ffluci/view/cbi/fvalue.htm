@@ -1,11 +1,3 @@
-						<div class="cbi-value" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
-							<div class="cbi-value-title left"><%=self.title%></div>
-							<div class="cbi-value-field">
+<%+cbi/valueheader%>
 								<input onchange="cbi_d_update(this.id)" type="checkbox" id="cbid.<%=self.config.."."..section.."."..self.option%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == self.enabled then %> checked="checked"<% end %> value="1" />
-								<div class="cbi-value-description inline"><%=self.description%></div>
-							</div>
-						</div>
-						<% if #self.deps > 0 then %><script type="text/javascript">
-							<% for j, d in ipairs(self.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");
-							<% end %>
-						</script><% end %>
+<%+cbi/valuefooter%>
