@@ -17,12 +17,12 @@
 								<option><%:cbi_selopt *** Zusätzliche Parameter ***%></option>
 							<% for key, val in pairs(self.optionals[self.section]) do %>
 								<option id="cbi-<%=self.config.."-"..self.section.."-"..val.option%>" value="<%=val.option%>"><%=val.title%></option>
-								<% if #val.deps > 0 then %><script type="text/javascript">
-										<% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..self.section.."-"..val.option%>", "cbid.<%=self.config.."."..self.section.."."..d.field%>", "<%=d.value%>");
-										<% end %>
-								</script><% end %>
 							<% end %>
 							</select>
+							<script type="text/javascript"><% for key, val in pairs(self.optionals[self.section]) do %>
+								<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..self.section.."-"..val.option%>", "cbid.<%=self.config.."."..self.section.."."..d.field%>", "<%=d.value%>");
+								<% end %><% end %>
+							<% end %></script>
 						<% end %>
 						</div>
 					<% end %>

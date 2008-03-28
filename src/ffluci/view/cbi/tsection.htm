@@ -17,12 +17,12 @@
 									<option><%:cbi_addopt -- Feld --%></option>
 								<% for key, val in pairs(self.optionals[k]) do %>
 									<option id="cbi-<%=self.config.."-"..k.."-"..val.option%>" value="<%=val.option%>"><%=val.title%></option>
-									<% if #val.deps > 0 then %><script type="text/javascript">
-										<% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..k.."-"..val.option%>", "cbid.<%=self.config.."."..k.."."..d.field%>", "<%=d.value%>");
-										<% end %>
-									</script><% end %>
 								<% end %>
 								</select>
+								<script type="text/javascript"><% for key, val in pairs(self.optionals[k]) do %>
+									<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..k.."-"..val.option%>", "cbid.<%=self.config.."."..k.."."..d.field%>", "<%=d.value%>");
+								<% end %><% end %>
+								<% end %></script>
 							<% end %>
 								<input type="submit" value="<%:add hinzufügen%>" />
 							</div>
