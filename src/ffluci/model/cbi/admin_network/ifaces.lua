@@ -12,6 +12,10 @@ p:value("static", "statisch")
 p:value("dhcp", "DHCP")
 p.default = "static"
 
+br = s:option(Flag, "type", "Netzwerkbrücke", "überbrückt angegebene Schnittstelle(n)")
+br.enabled = "bridge"
+br.rmempty = true
+
 s:option(Value, "ifname", "Schnittstelle")
 
 s:option(Value, "ipaddr", "IP-Adresse")
@@ -29,5 +33,8 @@ dns.optional = true
 mtu = s:option(Value, "mtu", "MTU")
 mtu.optional = true
 mtu.isinteger = true
+
+mac = s:option(Value, "macaddr", "MAC-Adresse")
+mac.optional = true
 
 return m

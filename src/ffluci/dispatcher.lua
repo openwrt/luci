@@ -172,7 +172,7 @@ function cbi(request)
 	i18n.loadc(request.module)
 	
 	local stat, map = pcall(cbi.load, path)
-	if stat then
+	if stat and map then
 		local stat, err = pcall(map.parse, map)
 		if not stat then
 			disp.error500(err)
@@ -181,6 +181,8 @@ function cbi(request)
 		tmpl.render("cbi/header")
 		map:render()
 		tmpl.render("cbi/footer")
+	elseif not stat then
+		disp.error500(map)
 	else
 		disp.error404()
 	end
@@ -208,7 +210,7 @@ function dynamic(request)
 	end
 	
 	local stat, map = pcall(cbi.load, path)
-	if stat then
+	if stat and map then
 		local stat, err = pcall(map.parse, map)
 		if not stat then
 			disp.error500(err)
@@ -217,6 +219,9 @@ function dynamic(request)
 		tmpl.render("cbi/header")
 		map:render()
 		tmpl.render("cbi/footer")
+		return
+	elseif not stat then
+		disp.error500(map)
 		return
 	end	
 	

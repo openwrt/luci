@@ -24,7 +24,7 @@ function action_apply()
 			for k, v in pairs(apply) do
 				local cmd = ffluci.config.uci_oncommit[k]
 				if cmd then
-					output = output .. ffluci.util.exec(cmd)
+					output = output .. cmd .. ":" .. ffluci.util.exec(cmd)
 				end
 			end
 		end

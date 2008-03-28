@@ -59,7 +59,7 @@ end
 function formvalue(key, default)
 	local c = formvalues()
 	
-	for match in key:gmatch("%w+") do
+	for match in key:gmatch("[%w-_]+") do
 		c = c[match]
 		if c == nil then
 			return default

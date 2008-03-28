@@ -2,9 +2,9 @@ module(..., package.seeall)
 
 menu = {
 	descr   = "Netzwerk",
-	order   = 20,
+	order   = 30,
 	entries = {
-		{action = "vlan", descr = "VLAN"},
+		{action = "vlan", descr = "Switch"},
 		{action = "ifaces", descr = "Schnittstellen"},
 		{action = "ptp", descr = "PPPoE / PPTP"},
 	}

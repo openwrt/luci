@@ -1,0 +1,15 @@
+<%+header%>
+<h1><%:system System%></h1>
+<h2><%:changepw Passwort ändern%></h2>
+<div><br />
+<% if msg then %>
+	<code><%=msg%></code>
+<% else %>
+	<form method="post" action="<%=controller%>/admin/system/passwd">
+		<input type="password" name="pwd1" /> <%:password Passwort%><br />
+		<input type="password" name="pwd2" /> <%:confirmation Bestätigung%><br />
+		<input type="submit" value="<%:save Speichern%>" />
+	</form>
+<% end %>
+</div>
+<%+footer%>

@@ -43,9 +43,10 @@ function load(cbimap)
 	local func, err = loadfile(cbidir..cbimap..".lua")
 	
 	if not func then
-		error(err)
 		return nil
 	end
+	
+	ffluci.i18n.loadc("cbi")
 	
 	ffluci.util.resfenv(func)
 	ffluci.util.updfenv(func, ffluci.cbi)
@@ -57,8 +58,6 @@ function load(cbimap)
 		error("CBI map returns no valid map object!")
 		return nil
 	end
-	
-	ffluci.i18n.loadc("cbi")
 	
 	return map
 end
@@ -131,7 +130,8 @@ end
 function Map.add(self, sectiontype)
 	local name = self.uci:add(self.config, sectiontype)
 	if name then
-		self.ucidata[name] = self.uci:show(self.config, name)
+		self.ucidata[name] = {}
+		self.ucidata[name][".type"] = sectiontype
 	end
 	return name
 end
@@ -317,7 +317,9 @@ function NamedSection.parse(self)
 	
 	if active then
 		AbstractSection.parse_dynamic(self, s)
-		Node.parse(self, s)
+		if ffluci.http.formvalue("cbi.submit") then
+			Node.parse(self, s)
+		end
 		AbstractSection.parse_optionals(self, s)
 	end	
 end
@@ -337,7 +339,7 @@ function TypedSection.__init__(self, ...)
 	self.deps = {}
 	self.excludes = {}
 	
-	self.anonymous   = false
+	self.anonymous = false
 end
 
 -- Return all matching UCI sections for this TypedSection
@@ -420,7 +422,9 @@ function TypedSection.parse(self)
 	
 	for k, v in pairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
-		Node.parse(self, k)
+		if ffluci.http.formvalue("cbi.submit") then
+			Node.parse(self, k)
+		end
 		AbstractSection.parse_optionals(self, k)
 	end
 end
@@ -518,7 +522,7 @@ function AbstractValue.parse(self, section)
 		if fvalue and not (fvalue == self:cfgvalue(section)) then
 			self:write(section, fvalue)
 		end 
-	elseif ffluci.http.formvalue("cbi.submit") then -- Unset the UCI or error
+	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
 			self:remove(section)
 		end
@@ -583,6 +587,23 @@ function Value.validate(self, val)
 end
 
 
+-- DummyValue - This does nothing except being there
+DummyValue = class(AbstractValue)
+
+function DummyValue.__init__(self, map, ...)
+	AbstractValue.__init__(self, map, ...)
+	self.template = "cbi/dvalue"
+	self.value = nil
+end
+
+function DummyValue.parse(self)
+	
+end
+
+function DummyValue.render(self, s)
+	ffluci.template.render(self.template, {self=self, section=s})
+end
+
 
 --[[
 Flag - A flag being enabled or disabled
@@ -599,7 +620,6 @@ end
 
 -- A flag can only have two states: set or unset
 function Flag.parse(self, section)
-	self.default = self.enabled
 	local fvalue = self:formvalue(section)
 	
 	if fvalue then

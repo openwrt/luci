@@ -1,4 +1,4 @@
-module(..., package.seeall)
+module("ffluci.controller.admin.index", package.seeall)
 
 menu = {
 	descr   = "Übersicht",

@@ -29,11 +29,20 @@ require("ffluci.fs")
 
 -- Returns the hostname
 function hostname()
-	return ffluci.fs.readfilel("/proc/sys/kernel/hostname")[1]
+	return io.lines("/proc/sys/kernel/hostname")()
 end
 
 -- Returns the load average
 function loadavg()
-	local loadavg = ffluci.fs.readfilel("/proc/loadavg")[1]
+	local loadavg = io.lines("/proc/loadavg")()
 	return loadavg:match("^(.-) (.-) (.-) (.-) (.-)$")
+end
+
+-- Returns all available network interfaces
+function net_devices()
+	local devices = {}
+	for line in io.lines("/proc/net/dev") do
+		table.insert(devices, line:match(" *(.-):"))
+	end
+	return devices
 end
