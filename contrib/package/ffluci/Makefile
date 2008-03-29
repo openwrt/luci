@@ -15,7 +15,7 @@ define Package/ffluci
   SECTION:=admin
   CATEGORY:=Administration
   TITLE:=FFLuCI
-  DEPENDS:=+liblua +luafilesystem +haserl
+  DEPENDS:=+liblua +luaposix +haserl
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
 endef
 

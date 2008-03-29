@@ -26,7 +26,7 @@ limitations under the License.
 
 module("ffluci.fs", package.seeall)
 
-require("lfs")
+require("posix")
 
 -- Checks whether a file exists
 function isfile(filename)
@@ -80,26 +80,28 @@ end
 
 -- Returns the file modification date/time of "path"
 function mtime(path)
-	return lfs.attributes(path, "modification")
+	return posix.stat(path, "mtime")
 end
 
--- Simplified dirname function
-function dirname(file)
-	return string.gsub(file, "[^/]+$", "")
+-- basename wrapper
+function basename(path)
+	return posix.basename(path)
+end
+
+-- dirname wrapper
+function dirname(path)
+	return posix.dirname(path)
 end
 
 -- Diriterator - alias for lfs.dir - filter . and ..
 function dir(path)
-	local e = {}
-	for entry in lfs.dir(path) do
-		if not(entry == "." or entry == "..") then
-			table.insert(e, entry)
-		end
-	end
+	local e = posix.dir(path)
+	table.remove(e, 1)
+	table.remove(e, 1)
 	return e
 end
 
 -- Alias for lfs.mkdir
 function mkdir(...)
-	return lfs.mkdir(...)
+	return posix.mkdir(...)
 end

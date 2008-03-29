@@ -39,7 +39,7 @@ function load(cbimap)
 	require("ffluci.fs")
 	require("ffluci.i18n")
 	
-	local cbidir = ffluci.fs.dirname(ffluci.util.__file__()) .. "model/cbi/"
+	local cbidir = ffluci.fs.dirname(ffluci.util.__file__()) .. "/model/cbi/"
 	local func, err = loadfile(cbidir..cbimap..".lua")
 	
 	if not func then

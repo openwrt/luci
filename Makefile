@@ -4,9 +4,9 @@ LUAC_OPTIONS = -s
 FILES = 
 
 CFILES = ffluci/util.lua ffluci/http.lua ffluci/fs.lua \
-ffluci/model/uci.lua ffluci/config.lua ffluci/i18n.lua  \
-ffluci/template.lua ffluci/cbi.lua ffluci/dispatcher.lua \
-ffluci/menu.lua ffluci/init.lua ffluci/sys.lua 
+ffluci/sys.lua ffluci/model/uci.lua ffluci/config.lua \
+ffluci/i18n.lua ffluci/template.lua ffluci/cbi.lua \
+ffluci/dispatcher.lua ffluci/menu.lua ffluci/init.lua 
 
 DIRECTORIES = dist/ffluci/model/cbi dist/ffluci/controller dist/ffluci/i18n dist/ffluci/view
 

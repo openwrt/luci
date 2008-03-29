@@ -84,7 +84,19 @@ limitations under the License.
 module("ffluci.dispatcher", package.seeall)
 require("ffluci.http")
 require("ffluci.template")
+require("ffluci.config")
+require("ffluci.sys")
 
+
+-- Sets privilege for given category
+function assign_privileges(category)
+	local cp = ffluci.config.category_privileges
+	if cp and cp[category] then
+		local u, g = cp[category]:match("([^:]+):([^:]+)")
+		ffluci.sys.process.setuser(u)
+		ffluci.sys.process.setgroup(g)
+	end
+end
 
 -- Dispatches the "request"
 function dispatch(req)
@@ -137,6 +149,7 @@ function httpdispatch()
 	local mod = sanitize(parts(), "index")
 	local act = sanitize(parts(), "index")
 	
+	assign_privileges(cat)
 	dispatch({category=cat, module=mod, action=act})
 end
 

@@ -31,7 +31,7 @@ require("ffluci.util")
 require("ffluci.config")
 
 table   = {}
-i18ndir = ffluci.fs.dirname(ffluci.util.__file__()) .. "i18n/"
+i18ndir = ffluci.fs.dirname(ffluci.util.__file__()) .. "/i18n/"
 
 -- Clears the translation table
 function clear()

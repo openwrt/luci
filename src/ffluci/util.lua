@@ -150,6 +150,16 @@ function instanceof(object, class)
 end
 
 
+-- Creates valid XML PCDATA from a string
+function pcdata(value)
+	value = value:gsub("&", "&amp;")	
+	value = value:gsub('"', "&quot;")
+	value = value:gsub("'", "&apos;")
+	value = value:gsub("<", "&lt;")	
+	return value:gsub(">", "&gt;")
+end
+
+
 -- Resets the scope of f doing a shallow copy of its scope into a new table
 function resfenv(f)
 	setfenv(f, clone(getfenv(f)))

@@ -31,7 +31,7 @@ require("ffluci.fs")
 require("ffluci.i18n")
 require("ffluci.model.uci")
 
-viewdir = ffluci.fs.dirname(ffluci.util.__file__()) .. "view/"
+viewdir = ffluci.fs.dirname(ffluci.util.__file__()) .. "/view/"
 
 
 -- Compile modes:

@@ -29,8 +29,8 @@ require("ffluci.fs")
 require("ffluci.util")
 require("ffluci.template")
 
-ctrldir   = ffluci.fs.dirname(ffluci.util.__file__()) .. "controller/"
-modelpath = ffluci.fs.dirname(ffluci.util.__file__()) .. "model/menudata.lua"
+ctrldir   = ffluci.fs.dirname(ffluci.util.__file__()) .. "/controller/"
+modelpath = ffluci.fs.dirname(ffluci.util.__file__()) .. "/model/menudata.lua"
 
 -- Cache menudata into a Luafile instead of recollecting it at every pageload
 -- Warning: Make sure the menudata cache gets deleted everytime you update
