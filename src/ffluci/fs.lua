@@ -84,14 +84,10 @@ function mtime(path)
 end
 
 -- basename wrapper
-function basename(path)
-	return posix.basename(path)
-end
+basename = posix.basename
 
 -- dirname wrapper
-function dirname(path)
-	return posix.dirname(path)
-end
+dirname = posix.dirname
 
 -- Diriterator - alias for lfs.dir - filter . and ..
 function dir(path)
@@ -102,6 +98,4 @@ function dir(path)
 end
 
 -- Alias for lfs.mkdir
-function mkdir(...)
-	return posix.mkdir(...)
-end
+mkdir = posix.mkdir
