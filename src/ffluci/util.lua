@@ -103,33 +103,6 @@ function escape(s, c)
 end
 
 
--- Runs "command" and returns its output
-function exec(command)
-	local pp   = io.popen(command)
-	local data = pp:read("*a")
-	pp:close()
-	
-	return data
-end
-
-
--- Runs "command" and returns its output as a array of lines
-function execl(command)
-	local pp   = io.popen(command)	
-	local line = ""
-	local data = {}
-	
-	while true do
-		line = pp:read()
-		if (line == nil) then break end
-		table.insert(data, line)
-	end 
-	pp:close()	
-	
-	return data
-end
-
-
 -- Populate obj in the scope of f as key 
 function extfenv(f, key, obj)
 	local scope = getfenv(f)

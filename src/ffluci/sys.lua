@@ -27,6 +27,31 @@ limitations under the License.
 module("ffluci.sys", package.seeall)
 require("posix")
 
+-- Runs "command" and returns its output
+function exec(command)
+	local pp   = io.popen(command)
+	local data = pp:read("*a")
+	pp:close()
+	
+	return data
+end
+
+-- Runs "command" and returns its output as a array of lines
+function execl(command)
+	local pp   = io.popen(command)	
+	local line = ""
+	local data = {}
+	
+	while true do
+		line = pp:read()
+		if (line == nil) then break end
+		table.insert(data, line)
+	end 
+	pp:close()	
+	
+	return data
+end
+
 -- Returns the hostname
 function hostname()
 	return io.lines("/proc/sys/kernel/hostname")()

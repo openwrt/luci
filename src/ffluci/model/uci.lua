@@ -32,6 +32,7 @@ limitations under the License.
 module("ffluci.model.uci", package.seeall)
 require("ffluci.util")
 require("ffluci.fs")
+require("ffluci.sys")
 
 -- The OS uci command
 ucicmd = "uci"
@@ -135,7 +136,7 @@ end
 -- Internal functions --
 
 function Session._uci(self, cmd)
-	local res = ffluci.util.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
+	local res = ffluci.sys.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
 	
 	if res:len() == 0 then
 		return nil
@@ -145,7 +146,7 @@ function Session._uci(self, cmd)
 end
 
 function Session._uci2(self, cmd)
-	local res = ffluci.util.exec(self.ucicmd .. " 2>&1 " .. cmd)
+	local res = ffluci.sys.exec(self.ucicmd .. " 2>&1 " .. cmd)
 	
 	if res:len() > 0 then
 		return false, res
@@ -155,7 +156,7 @@ function Session._uci2(self, cmd)
 end
 
 function Session._uci3(self, cmd)
-	local res = ffluci.util.execl(self.ucicmd .. " 2>&1 " .. cmd)
+	local res = ffluci.sys.execl(self.ucicmd .. " 2>&1 " .. cmd)
 	if res[1]:sub(1, ucicmd:len() + 1) == ucicmd .. ":" then
 		return nil, res[1]
 	end

@@ -1,5 +1,4 @@
 -- ToDo: Translate, Add descriptions and help texts
-require("ffluci.util")
 
 m = Map("wireless", "Geräte")
 
@@ -16,8 +15,9 @@ t:value("atheros")
 t:value("mac80211")
 t:value("prism2")
 --[[
+require("ffluci.sys")
 local c = ". /etc/functions.sh;for i in /lib/wifi/*;do . $i;done;echo $DRIVERS"
-for driver in ffluci.util.execl(c)[1]:gmatch("[^ ]+") do
+for driver in ffluci.sys.execl(c)[1]:gmatch("[^ ]+") do
 	t:value(driver)
 end
 ]]--

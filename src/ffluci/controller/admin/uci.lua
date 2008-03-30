@@ -1,4 +1,6 @@
 module("ffluci.controller.admin.uci", package.seeall)
+require("ffluci.util")
+require("ffluci.sys")
 
 -- This function has a higher priority than the admin_uci/apply template
 function action_apply()
@@ -24,7 +26,7 @@ function action_apply()
 			for k, v in pairs(apply) do
 				local cmd = ffluci.config.uci_oncommit[k]
 				if cmd then
-					output = output .. cmd .. ":" .. ffluci.util.exec(cmd)
+					output = output .. cmd .. ":" .. ffluci.sys.exec(cmd)
 				end
 			end
 		end
