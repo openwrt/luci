@@ -31,9 +31,9 @@ require("ffluci.http").htmlheader()
 </div>
 
 <div class="separator yellow bold">
-<%:path Pfad%>: <a href="<%=controller .. "/" .. req.category%>"><%=req.category%></a>
-&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module %>"><%=req.module%></a>
-&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module .. "/" .. req.action %>"><%=req.action%></a>
+<%:path Pfad%>: <a href="<%=controller .. "/" .. req.category%>"><%=translate(req.category, req.category)%></a>
+&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module %>"><%=translate(req.module, req.module)%></a>
+&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module .. "/" .. req.action %>"><%=translate(req.action, req.action)%></a>
 </div>
 
 <div id="columns"><div id="columnswrapper">
