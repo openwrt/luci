@@ -40,7 +40,7 @@ function readfile(filename)
 	local fp, err = io.open(filename)
 	
 	if fp == nil then
-		error(err)
+		return nil, err
 	end
 	
 	local data = fp:read("*a")
@@ -55,7 +55,7 @@ function readfilel(filename)
 	local data = {}
 		
 	if fp == nil then
-		error(err)
+		return nil, err
 	end
 	
 	while true do
@@ -71,11 +71,15 @@ end
 -- Writes given data to a file
 function writefile(filename, data)
 	local fp, err = io.open(filename, "w")
+	
 	if fp == nil then
-		error(err)
+		return nil, err
 	end
+	
 	fp:write(data)
 	fp:close()
+	
+	return true
 end
 
 -- Returns the file modification date/time of "path"

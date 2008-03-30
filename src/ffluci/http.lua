@@ -38,20 +38,24 @@ end
 
 
 -- Asks the browser to redirect to "url"
-function redirect(url)
+function redirect(url, qs)
+	if qs then
+		url = url .. "?" .. qs
+	end
+	
 	status(302, "Found")
 	print("Location: " .. url .. "\n")
 end
 
 
 -- Same as redirect but accepts category, module and action for internal use
-function request_redirect(category, module, action)
+function request_redirect(category, module, action, ...)
 	category = category or "public"
 	module   = module   or "index"
 	action   = action   or "index"
 	
 	local pattern = os.getenv("SCRIPT_NAME") .. "/%s/%s/%s"
-	redirect(pattern:format(category, module, action))
+	redirect(pattern:format(category, module, action), ...)
 end
 
 

@@ -1,14 +1,33 @@
 <%+header%>
 <h1><%:system System%></h1>
-<h2><%:changepw Passwort ändern%></h2>
+<h2><%:passwd Passwort ändern%></h2>
 <div><br />
-<% if msg then %>
-	<code><%=msg%></code>
-<% else %>
+<% if stat then %>
+	<% if stat == 0 then %>
+		<code><%:password_changed Passwort erfolgreich geändert!%></code>
+	<% elseif stat == 10 then %>
+		<code class="error"><%:password_nomatch Passwörter stimmen nicht überein! %></code>
+	<% else %>
+		<code class="error"><%:unknown_error Unbekannter Fehler!%></code>
+	<% end %>
+<% end %>
+<% if not stat or stat == 10 then %>
 	<form method="post" action="<%=controller%>/admin/system/passwd">
-		<input type="password" name="pwd1" /> <%:password Passwort%><br />
-		<input type="password" name="pwd2" /> <%:confirmation Bestätigung%><br />
-		<input type="submit" value="<%:save Speichern%>" />
+		<fieldset class="cbi-section-node">
+			<div class="cbi-value clear">
+				<div class="cbi-value-title left"><%:password Passwort%></div>
+				<div class="cbi-value-field"><input type="password" name="pwd1" /></div>
+			</div>
+			<div class="cbi-value clear">
+				<div class="cbi-value-title left"><%:confirmation Bestätigung%></div>
+				<div class="cbi-value-field"><input type="password" name="pwd2" /></div>
+			</div>
+			<br />
+			<div>
+				<input type="submit" value="<%:save Speichern%>" />
+				<input type="reset" value="<%:reset Zurücksetzen%>" />
+			</div>
+		</fieldset>
 	</form>
 <% end %>
 </div>

@@ -38,6 +38,11 @@ function loadavg()
 	return loadavg:match("^(.-) (.-) (.-) (.-) (.-)$")
 end
 
+-- Reboots the system
+function reboot()
+	return os.execute("reboot >/dev/null 2>&1")
+end
+
 
 group = {}
 group.getgroup = posix.getgroup
@@ -70,8 +75,16 @@ user = {}
 user.getuser = posix.getpasswd
 	
 -- Changes the user password of given user
-function user.setpasswd(user, pwd1, pwd2)
-	local cmd = "(echo '"..pwd1.."';sleep 1;echo '"..pwd2.."')|"
-	cmd = cmd .. "passwd "..user.." 2>&1"
-	return ffluci.util.exec(cmd)
+function user.setpasswd(user, pwd)
+	if pwd then
+		pwd = pwd:gsub("'", "")
+	end
+	
+	if user then
+		user = user:gsub("'", "")
+	end
+	
+	local cmd = "(echo '"..pwd.."';sleep 1;echo '"..pwd.."')|"
+	cmd = cmd .. "passwd '"..user.."' >/dev/null 2>&1"
+	return os.execute(cmd)
 end

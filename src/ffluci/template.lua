@@ -120,10 +120,6 @@ function compile(template)
 		template = string.dump(tf)
 	end
 	
-	c = c or 1
-	ffluci.fs.writefile("/tmp/"..tostring(c), template)
-	c = c+1
-	
 	return template
 end
 
@@ -179,9 +175,14 @@ function Template.__init__(self, name)
 		-- Build if there is no compiled file or if compiled file is outdated
 		if ((commt == nil) and not (tplmt == nil))
 		or (not (commt == nil) and not (tplmt == nil) and commt < tplmt) then
-			local compiled = compile(ffluci.fs.readfile(sourcefile))
-			ffluci.fs.writefile(compiledfile, compiled)
-			self.template, err = loadstring(compiled)
+			local source
+			source, err = ffluci.fs.readfile(sourcefile)
+			
+			if source then
+				local compiled = compile(source)
+				ffluci.fs.writefile(compiledfile, compiled)
+				self.template, err = loadstring(compiled)
+			end
 		else
 			self.template, err = loadfile(compiledfile)
 		end
@@ -190,7 +191,11 @@ function Template.__init__(self, name)
 		self.template, err = loadfile(self.compiledfile)
 		
 	elseif compiler_mode == "memory" then
-		self.template, err = loadstring(compile(ffluci.fs.readfile(sourcefile)))
+		local source
+		source, err = ffluci.fs.readfile(sourcefile)
+		if source then
+			self.template, err = loadstring(compile(source))
+		end
 			
 	end
 	
