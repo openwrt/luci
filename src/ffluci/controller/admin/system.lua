@@ -5,16 +5,6 @@ require("ffluci.http")
 require("ffluci.util")
 require("ffluci.fs")
 
-menu = {
-	descr   = "System",
-	order   = 20,
-	entries = {
-		{action = "passwd", descr = "Passwort ändern"},
-		{action = "sshkeys", descr = "SSH-Schlüssel"},
-		{action = "reboot", descr = "Neu starten"},
-	}
-}
-
 function action_editor()
 	local file = ffluci.http.formvalue("file", "")
 	local data = ffluci.http.formvalue("data")

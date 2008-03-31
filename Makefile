@@ -8,7 +8,7 @@ ffluci/sys.lua ffluci/model/uci.lua ffluci/model/ipkg.lua \
 ffluci/config.lua ffluci/i18n.lua ffluci/template.lua \
 ffluci/cbi.lua ffluci/dispatcher.lua ffluci/menu.lua ffluci/init.lua 
 
-DIRECTORIES = dist/ffluci/model/cbi dist/ffluci/controller dist/ffluci/i18n dist/ffluci/view
+DIRECTORIES = dist/ffluci/model/cbi dist/ffluci/model/menu dist/ffluci/controller dist/ffluci/i18n dist/ffluci/view
 
 INFILES = $(CFILES:%=src/%)
 OUTFILE = ffluci/init.lua
@@ -25,6 +25,7 @@ dist:
 	cp src/ffluci/i18n/* dist/ffluci/i18n/
 	cp src/ffluci/view/* dist/ffluci/view/ -R
 	cp src/ffluci/model/cbi/* dist/ffluci/model/cbi/ -R
+	cp src/ffluci/model/menu/* dist/ffluci/model/menu/ -R
 
 compile:
 	mkdir -p $(DIRECTORIES)

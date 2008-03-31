@@ -93,12 +93,13 @@ basename = posix.basename
 -- dirname wrapper
 dirname = posix.dirname
 
--- Diriterator - alias for lfs.dir - filter . and ..
+-- dir wrapper
 function dir(path)
-	local e = posix.dir(path)
-	table.remove(e, 1)
-	table.remove(e, 1)
-	return e
+	local dir = {}
+	for node in posix.files(path) do
+		table.insert(dir, 1, node)
+	end 
+	return dir
 end
 
 -- Alias for lfs.mkdir

@@ -28,97 +28,92 @@ module("ffluci.menu", package.seeall)
 require("ffluci.fs")
 require("ffluci.util")
 require("ffluci.template")
+require("ffluci.i18n")
 
-ctrldir   = ffluci.fs.dirname(ffluci.util.__file__()) .. "/controller/"
-modelpath = ffluci.fs.dirname(ffluci.util.__file__()) .. "/model/menudata.lua"
+-- Default modelpath
+modelpath = ffluci.fs.dirname(ffluci.util.__file__()) .. "/model/menu/"
 
--- Cache menudata into a Luafile instead of recollecting it at every pageload
--- Warning: Make sure the menudata cache gets deleted everytime you update
--- the menu information of any module or add or remove a module
-builder_enable_cache = false
+-- Menu definition extra scope
+scope = {
+	translate = ffluci.i18n.translate
+}
 
+-- Local menu database
+local menu = {}
 
--- Builds the menudata file
-function build()
-	local data = collect()
-	ffluci.fs.writefile(modelpath, dump(data, "m"))
-	return data
+-- The current pointer
+local menuc = {}
+
+-- Adds a menu category to the current menu and selects it
+function add(cat, controller, title, order)
+	order = order or 50
+	if not menu[cat] then
+		menu[cat] = {}
+	end
+	
+	local entry = {}
+	entry[".descr"] = title
+	entry[".order"] = order
+	entry[".contr"] = controller
+	
+	menuc = entry
+
+	local i = 0			
+	for k,v in ipairs(menu[cat]) do
+		if v[".order"] > entry[".order"] then
+			break
+		end  
+		i = k
+	end	
+	table.insert(menu[cat], i+1, entry)
+		
+	return true
+end
+
+-- Adds an action to the current menu
+function act(action, title)
+	table.insert(menuc, {action = action, descr = title})
+	return true
+end
+
+-- Selects a menu category
+function sel(cat, controller)
+	if not menu[cat] then
+		return nil
+	end
+	menuc = menu[cat]
+	
+	local stat = nil
+	for k,v in ipairs(menuc) do
+		if v[".contr"] == controller then
+			menuc = v
+			stat = true
+		end
+	end
+	
+	return stat
 end
 
 
--- Collect all menu information provided in the controller modules
+-- Collect all menu information provided in the model dir
 function collect()
-	local m = {}
-	for k,cat in pairs(ffluci.fs.dir(ctrldir)) do
-		m[cat] = {}
-		for k,con in pairs(ffluci.fs.dir(ctrldir .. "/" .. cat)) do
-			if con:sub(-4) == ".lua" then
-				con = con:sub(1, con:len()-4)
-				local mod = require("ffluci.controller." .. cat .. "." .. con)
-				if mod.menu and mod.menu.descr
-				and mod.menu.entries and mod.menu.order then
-					local entry = {}
-					entry[".descr"] = mod.menu.descr
-					entry[".order"] = mod.menu.order
-					entry[".contr"] = con
-					for k,v in pairs(mod.menu.entries) do
-						entry[k] = v
-					end
-					local i = 0			
-					for k,v in ipairs(m[cat]) do
-						if v[".order"] > entry[".order"] then
-							break
-						end  
-						i = k
-					end	
-					table.insert(m[cat], i+1, entry)
-				end
-			end
+	for k, menu in pairs(ffluci.fs.dir(modelpath)) do
+		if menu:sub(1, 1) ~= "." then
+			local f = loadfile(modelpath.."/"..menu)
+			local env = ffluci.util.clone(scope)
+			
+			env.add = add
+			env.sel = sel
+			env.act = act
+			
+			setfenv(f, env)
+			f()
 		end
 	end
-	return m
-end
-
-
--- Dumps a table into a string of Lua code
-function dump(tbl, name)
-	local src = name .. "={}\n"
-	for k,v in pairs(tbl) do
-		if type(k) == "string" then
-			k = ffluci.util.escape(k)
-			k = "'" .. ffluci.util.escape(k, "'") .. "'"
-		end		
-		if type(v) == "string" then
-			v = ffluci.util.escape(v)
-			v = ffluci.util.escape(v, "'")
-			src = src .. name .. "[" .. k .. "]='" .. v .. "'\n"
-		elseif type(v) == "number" then
-			src = src .. name .. "[" .. k .. "]=" .. v .. "\n"
-		elseif type(v) == "table" then
-			src = src .. dump(v, name .. "[" .. k .. "]")
-		end
-	end
-	return src
 end
 
 -- Returns the menu information
 function get()
-	if builder_enable_cache then
-		local cachemt = ffluci.fs.mtime(modelpath)
-		local data = nil
-		
-		if cachemt == nil then
-			data = build()
-		else
-			local fenv = {}
-			local f    = loadfile(modelpath)
-			setfenv(f, fenv)
-			f()
-			data = fenv.m
-		end
-		
-		return data
-	else
-		return collect()
-	end
+	collect()
+	return menu
 end
