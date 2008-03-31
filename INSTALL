@@ -7,14 +7,16 @@ TOC:
 
 
 1. Kamikaze Feed
-	1. Change to your OpenWRT buldroot
+	1. Change to your OpenWRT buildroot
 
 	2. Add the following line to your OpenWRT feeds.conf:
 		src-svn ffluci https://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package
 		
 	3. Run ./scripts/feeds update ffluci
 	
-	4. Type make menuconfig and you will find ffluci in the menu "Administration"
+	4. Run ./scritps/feeds install ffluci
+	
+	5. Type make menuconfig and you will find ffluci in the menu "Administration"
 	
 		
 2. Kamikaze Packages
