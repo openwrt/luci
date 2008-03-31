@@ -157,12 +157,12 @@ end
 
 function Session._uci3(self, cmd)
 	local res = ffluci.sys.execl(self.ucicmd .. " 2>&1 " .. cmd)
-	if res[1]:sub(1, ucicmd:len() + 1) == ucicmd .. ":" then
+	if res[1] and res[1]:sub(1, self.ucicmd:len()+1) == self.ucicmd..":" then
 		return nil, res[1]
 	end
 
 	table = {}
-	
+
 	for k,line in pairs(res) do
 		c, s, t = line:match("^([^.]-)%.([^.]-)=(.-)$")
 		if c then

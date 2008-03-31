@@ -17,6 +17,8 @@ act("vlan", "Switch")
 act("ifaces", "Schnittstellen")
 act("ptp", "PPPoE / PPTP")
 act("routes", "Statische Routen")
+act("portfw", "Portweiterleitung")
+act("firewall", "Firewall")
 
 add("admin", "wifi", "Drahtlos", 40)
 act("devices", "Geräte")

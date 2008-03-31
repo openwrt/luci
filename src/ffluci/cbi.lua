@@ -111,6 +111,9 @@ function Map.__init__(self, config, ...)
 	if not self.ucidata then
 		error("Unable to read UCI data: " .. self.config)
 	else
+		if not self.ucidata[self.config] then
+			self.ucidata[self.config] = {}
+		end
 		self.ucidata = self.ucidata[self.config]
 	end	
 end
