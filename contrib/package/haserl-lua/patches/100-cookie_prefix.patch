@@ -1,0 +1,29 @@
+--- haserl-0.9.23.orig/src/haserl.c	2008-03-18 18:17:55.000000000 +0100
++++ haserl-0.9.23/src/haserl.c	2008-03-27 16:58:27.000000000 +0100
+@@ -340,7 +340,7 @@
+ 	{
+ 	  token++;
+ 	}
+-      myputenv (env, token, global.var_prefix);
++      myputenv (env, token, global.cookie_prefix);
+       token = strtok (NULL, ";");
+     }
+   free (qs);
+@@ -614,6 +614,7 @@
+   global.acceptall = FALSE;	/* don't allow POST data for GET method         */
+   global.uploadlist = NULL;	/* we don't have any uploaded files             */
+   global.var_prefix = HASERL_VAR_PREFIX;
++  global.cookie_prefix = "COOKIE_";
+   global.nul_prefix = "";
+ 
+ }
+--- haserl-0.9.23.orig/src/haserl.h	2008-01-25 22:11:38.000000000 +0100
++++ haserl-0.9.23/src/haserl.h	2008-03-27 16:58:18.000000000 +0100
+@@ -10,6 +10,7 @@
+   char *uploaddir;              /* where we upload to                                   */
+   char *uploadhandler;		/* a handler for uploads				*/
+   char *var_prefix;		/* what name we give to FORM variables			*/
++  char *cookie_prefix;
+   char *nul_prefix;		/* what name we give to environment variables		*/
+   token_t *uploadlist;		/* a linked list of pathspecs				*/
+   int debug;                    /* true if in "debug" mode                              */
