@@ -4,6 +4,7 @@ menu = {
 	descr   = "Übersicht",
 	order   = 10,
 	entries = {
+		{action = "luci", descr = "FFLuCI"},
 		{action = "contact", descr = "Kontakt"}
 	}
 }
