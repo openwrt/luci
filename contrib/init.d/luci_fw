@@ -1,0 +1,120 @@
+#!/bin/sh /etc/rc.common
+START=46
+
+apply_portfw() {
+	local cfg="$1"
+	config_get proto "$cfg" proto
+	config_get dport "$cfg" dport
+	config_get iface "$cfg" iface
+	config_get to    "$cfg" to
+
+	ports=$(echo $to | cut -sd: -f2)
+	[ -n "$ports" ] && ports="--dport $(echo $ports | sed -e 's/-/:/')"
+
+	ip=$(echo $to | cut -d: -f1)
+	
+	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "tcp" ]); then
+		iptables -t nat -A luci_prerouting -i "$iface" -p tcp --dport "$dport" -j DNAT --to "$to"
+		iptables -A luci_forward -i "$iface" -p tcp -d "$ip" "$ports" -j ACCEPT
+	fi
+
+	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "udp" ]); then
+		iptables -t nat -A luci_prerouting -i "$iface" -p udp --dport "$dport" -j DNAT --to "$to"
+		iptables -A luci_forward -i "$iface" -p udp -d "$ip" "$ports" -j ACCEPT
+	fi
+}
+
+apply_rule() {
+	local cfg="$1"
+	local cmd=""
+
+	config_get chain "$cfg" chain
+	[ -n "$chain" ] || return 0
+	[ "$chain" == "forward" ] && cmd="$cmd -A luci_forward"
+	[ "$chain" == "input" ] && cmd="$cmd -A luci_input"
+	[ "$chain" == "output" ] && cmd="$cmd -A luci_output"
+	[ "$chain" == "prerouting" ] && cmd="$cmd -t nat -A luci_prerouting"
+	[ "$chain" == "postrouting" ] && cmd="$cmd -t nat -A luci_postrouting"
+	
+	config_get iface "$cfg" iface
+	[ -n "$iface" ] && cmd="$cmd -i $iface"	
+
+	config_get oface "$cfg" oface
+	[ -n "$oface" ] && cmd="$cmd -o $oface"	
+
+	config_get proto "$cfg" proto
+	[ -n "$proto" ] && cmd="$cmd -p $proto"	
+
+	config_get source "$cfg" source
+	[ -n "$source" ] && cmd="$cmd -s $source"	
+
+	config_get destination "$cfg" destination
+	[ -n "$destination" ] && cmd="$cmd -d $destination"	
+
+	config_get sport "$cfg" sport
+	[ -n "$sport" ] && cmd="$cmd --sport $sport"	
+
+	config_get dport "$cfg" dport
+	[ -n "$dport" ] && cmd="$cmd --dport $dport"	
+	
+	config_get todest "$cfg" todest
+	[ -n "$todest" ] && cmd="$cmd --to-destination $todest"	
+
+	config_get tosrc "$cfg" tosrc
+	[ -n "$tosrc" ] && cmd="$cmd --to-source $tosrc"	
+
+	config_get jump "$cfg" jump
+	[ -n "$jump" ] && cmd="$cmd -j $jump"	
+
+	config_get state "$cfg" state
+	[ -n "$state" ] && cmd="$cmd -m state --state $state"	
+
+	config_get command "$cfg" command
+	[ -n "$command" ] && cmd="$cmd $command"	
+
+	iptables $cmd
+}
+
+start() {
+	### Create subchains
+	iptables -N luci_input
+	iptables -N luci_output
+	iptables -N luci_forward
+	iptables -t nat -N luci_prerouting
+	iptables -t nat -N luci_postrouting
+	
+	### Hook in the chains
+	iptables -A input_rule -j luci_input
+	iptables -A output_rule -j luci_output
+	iptables -A forwarding_rule -j luci_forward
+	iptables -t nat -A prerouting_rule -j luci_prerouting
+	iptables -t nat -A postrouting_rule -j luci_postrouting
+	
+	### Read chains from config
+	config_load luci_fw
+	config_foreach apply_portfw portfw
+	config_foreach apply_rule rule
+}
+
+stop() {
+	### Hook out the chains
+	iptables -D input_rule -j luci_input
+	iptables -D output_rule -j luci_output
+	iptables -D forwarding_rule -j luci_forward
+	iptables -t nat -D prerouting_rule -j luci_prerouting
+	iptables -t nat -D postrouting_rule -j luci_postrouting	
+	
+	### Clear subchains
+	iptables -F luci_input
+	iptables -F luci_output
+	iptables -F luci_forward
+	iptables -t nat -F luci_prerouting
+	iptables -t nat -F luci_postrouting
+	
+	### Delete subchains
+	iptables -X luci_input
+	iptables -X luci_output
+	iptables -X luci_forward
+	iptables -t nat -X luci_prerouting
+	iptables -t nat -X luci_postrouting
+}

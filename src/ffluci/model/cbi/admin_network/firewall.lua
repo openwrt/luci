@@ -13,12 +13,34 @@ chain:value("postrouting", "Postrouting")
 
 s:option(Value, "iface", "Eingangsschnittstelle").optional = true
 s:option(Value, "oface", "Ausgangsschnittstelle").optional = true
-s:option(Value, "proto", "Protokoll").optional = true
+
+proto = s:option(ListValue, "proto", "Protokoll")
+proto.optional = true
+proto:value("")
+proto:value("tcp", "TCP")
+proto:value("udp", "UDP")
+
 s:option(Value, "source", "Quelladresse").optional = true
 s:option(Value, "destination", "Zieladresse").optional = true
-s:option(Value, "sport", "Quellports").optional = true
-s:option(Value, "dport", "Zielports").optional = true
-s:option(Value, "to", "Neues Ziel").optional = true
+
+sport = s:option(Value, "sport", "Quellport")
+sport.optional = true
+sport:depends("proto", "tcp")
+sport:depends("proto", "udp")
+
+dport = s:option(Value, "dport", "Zielport")
+dport.optional = true
+dport:depends("proto", "tcp")
+dport:depends("proto", "udp")
+
+tosrc = s:option(Value, "tosrc", "Neue Quelladresse [SNAT]")
+tosrc.optional = true
+tosrc:depends("jump", "SNAT")
+
+tosrc = s:option(Value, "todest", "Neue Zieladresse [DNAT]")
+tosrc.optional = true
+tosrc:depends("jump", "DNAT")
+
 
 state = s:option(MultiValue, "state", "Status")
 state.optional  = true
@@ -28,10 +50,20 @@ state:value("ESTABLISHED", "etabliert")
 state:value("RELATED", "zugehörig")
 state:value("INVALID", "ungültig")
 
-s:option(Value, "jump", "Aktion", "ACCEPT, REJECT, DROP, MASQUERADE, DNAT, SNAT, ...").optional = true
+jump = s:option(ListValue, "jump", "Aktion")
+jump.rmempty = true
+jump:value("", "")
+jump:value("ACCEPT", "annehmen (ACCEPT)")
+jump:value("REJECT", "zurückweisen (REJECT)")
+jump:value("DROP", "verwerfen (DROP)")
+jump:value("LOG", "protokollieren (LOG)")
+jump:value("DNAT", "Ziel umschreiben (DNAT) [nur Prerouting]")
+jump:value("MASQUERADE", "maskieren (MASQUERADE) [nur Postrouting]")
+jump:value("SNAT", "Quelle umschreiben (SNAT) [nur Postrouting]")
 
 
-add = s:option(Value, "command", "Befehl")
+add = s:option(Value, "command", "Eigener Befehl")
 add.size = 50
+add.rmempty = true
 
 return m
