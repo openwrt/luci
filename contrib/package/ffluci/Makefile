@@ -48,6 +48,7 @@ define Package/ffluci/install
 	$(CP) $(PKG_BUILD_DIR)/contrib/uci/luci_fw $(1)/etc/config/luci_fw
 	$(CP) -a ./ipkg/ffluci.postinst $(1)/CONTROL/postinst
 	$(CP) -a ./ipkg/conffiles $(1)/CONTROL/conffiles
+	rm $(DL_DIR)/$(PKG_SOURCE)
 endef
 
 $(eval $(call BuildPackage,ffluci))
