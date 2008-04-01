@@ -15,13 +15,11 @@ apply_portfw() {
 	
 	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "tcp" ]); then
 		iptables -t nat -A luci_prerouting -i "$iface" -p tcp --dport "$dport" -j DNAT --to "$to"
-		iptables -t nat -A luci_postrouting -p tcp -d "$ip" $ports -j MASQUERADE
 		iptables -A luci_forward -i "$iface" -p tcp -d "$ip" $ports -j ACCEPT
 	fi
 
 	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "udp" ]); then
 		iptables -t nat -A luci_prerouting -i "$iface" -p udp --dport "$dport" -j DNAT --to "$to"
-		iptables -t nat -A luci_postrouting -p udp -d "$ip" $ports -j MASQUERADE
 		iptables -A luci_forward -i "$iface" -p udp -d "$ip" $ports -j ACCEPT
 	fi
 }
