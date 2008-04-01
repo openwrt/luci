@@ -41,15 +41,6 @@ tosrc = s:option(Value, "todest", "Neue Zieladresse [DNAT]")
 tosrc.optional = true
 tosrc:depends("jump", "DNAT")
 
-
-state = s:option(MultiValue, "state", "Status")
-state.optional  = true
-state.delimiter = ","
-state:value("NEW", "neu")
-state:value("ESTABLISHED", "etabliert")
-state:value("RELATED", "zugehörig")
-state:value("INVALID", "ungültig")
-
 jump = s:option(ListValue, "jump", "Aktion")
 jump.rmempty = true
 jump:value("", "")
