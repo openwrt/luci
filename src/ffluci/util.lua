@@ -145,9 +145,10 @@ function sessionid()
 end
 
 
--- Splits a string into an array (Taken from lua-users.org)
-function split(str, pat)
+-- Splits a string into an array (Adapted from lua-users.org)
+function split(str, pat, max)
 	pat = pat or "\n"
+	max = max or -1
 	
 	local t = {}
 	local fpat = "(.-)" .. pat
@@ -155,10 +156,14 @@ function split(str, pat)
 	local s, e, cap = str:find(fpat, 1)
 	
 	while s do
+		max = max - 1
 		if s ~= 1 or cap ~= "" then
 			table.insert(t,cap)
 		end
 		last_end = e+1
+		if max == 0 then
+			break
+		end
 		s, e, cap = str:find(fpat, last_end)
 	end
 	
@@ -170,6 +175,10 @@ function split(str, pat)
 	return t
 end
 
+-- Removes whitespace from beginning and end of a string
+function trim (string)
+	return string:gsub("^%s*(.-)%s*$", "%1")
+end
 
 -- Updates given table with new values
 function update(t, updates)
