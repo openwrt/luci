@@ -8,9 +8,12 @@ s.anonymous = true
 s:option(Value, "ssid", "Netzkennung (ESSID)").maxlength = 32
 
 device = s:option(ListValue, "device", "Gerät")
-for k, v in pairs(ffluci.model.uci.show("wireless").wireless) do
-	if v[".type"] == "wifi-device" then
-		device:value(k)
+local d = ffluci.model.uci.show("wireless").wireless
+if d then
+	for k, v in pairs(d) do
+		if v[".type"] == "wifi-device" then
+			device:value(k)
+		end
 	end
 end
 
