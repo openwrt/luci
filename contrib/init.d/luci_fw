@@ -9,7 +9,11 @@ apply_portfw() {
 	config_get to    "$cfg" to
 
 	ports=$(echo $to | cut -sd: -f2)
-	[ -n "$ports" ] && ports="--dport $(echo $ports | sed -e 's/-/:/')"
+	if [ -n "$ports" ]; then
+		ports="--dport $(echo $ports | sed -e 's/-/:/')"
+	else
+		ports="--dport $dport"
+	fi
 
 	ip=$(echo $to | cut -d: -f1)
 	
