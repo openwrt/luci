@@ -30,38 +30,74 @@ require("ffluci.sys")
 require("ffluci.util")
 
 ipkg = "ipkg"
-local statuslist = nil
 
 -- Returns repository information
 function info(pkg)
-	-- To be implemented
+	return _lookup("info", pkg)
 end
 
 -- Returns a table with status information
-function status(refresh)
-	if not statuslist or refresh then
-		statuslist = _parselist(ffluci.sys.exec(ipkg .. " status"))
-	end
-	
-	return statuslist 
+function status(pkg)
+	return _lookup("status", pkg)
 end
 
--- Installs a package
-function install(pkg)
-	if not pkg then
-		return nil
-	end
-	
-	local c = ipkg .. " install '" .. pkg:gsub("'", "") .. "' >/dev/null 2>&1"
-	local r = os.execute(c)
-	return (r == 0), r	
+-- Installs packages
+function install(...)
+	return _action("install", ...)
 end
 
+-- Returns whether a package is installed
 function installed(pkg, ...)
 	local p = status(...)[pkg]
 	return (p and p.Status and p.Status.installed)
 end
 
+-- Removes packages
+function remove(...)
+	return _action("remove", ...)
+end
+
+-- Updates package lists
+function update()
+	return _action("update")
+end
+
+-- Upgrades installed packages
+function upgrade()
+	return _action("upgrade")
+end
+
+
+-- Internal action function
+function _action(cmd, ...)
+	local pkg = ""
+	arg.n = nil
+	for k, v in pairs(arg) do
+		pkg = pkg .. " '" .. v:gsub("'", "") .. "'"
+	end
+	
+	local c = ipkg.." "..cmd.." "..pkg.." >/dev/null 2>&1"
+	local r = os.execute(c)
+	return (r == 0), r	
+end
+
+-- Internal lookup function
+function _lookup(act, pkg)
+	local cmd = ipkg .. " " .. act
+	if pkg then
+		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
+	end
+	
+	local info = _parselist(ffluci.sys.exec(cmd .. " 2>/dev/null"))
+	
+	if pkg then
+		return info[pkg]
+	else
+		return info
+	end	
+end
+
+-- Internal parser function
 function _parselist(rawdata)	
 	if type(rawdata) ~= "string" then
 		error("IPKG: Invalid rawdata given")
