@@ -24,7 +24,7 @@ define Package/haserl-lua
   CATEGORY:=Utilities
   TITLE:=A CGI wrapper to embed shell scripts in HTML documents
   URL:=http://haserl.sourceforge.net/
-  DEPENDS:=+liblua
+  DEPENDS:=+liblua-luci
 endef
 
 CONFIGURE_ARGS += \
