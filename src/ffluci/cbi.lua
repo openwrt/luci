@@ -38,8 +38,9 @@ local instanceof = ffluci.util.instanceof
 function load(cbimap)
 	require("ffluci.fs")
 	require("ffluci.i18n")
+	require("ffluci.config")
 	
-	local cbidir = ffluci.fs.dirname(ffluci.util.__file__()) .. "/model/cbi/"
+	local cbidir = ffluci.config.path .. "/model/cbi/"
 	local func, err = loadfile(cbidir..cbimap..".lua")
 	
 	if not func then

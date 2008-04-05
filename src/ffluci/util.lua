@@ -206,9 +206,3 @@ function validate(value, cast_number, cast_int)
 	
 	return value
 end
-
-
--- Returns the filename of the calling script
-function __file__()
-	return debug.getinfo(2, 'S').source:sub(2)
-end

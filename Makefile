@@ -1,7 +1,7 @@
 LUAC = luac
 LUAC_OPTIONS = -s
 
-FILES = 
+FILES = ffluci/debug.lua
 
 CFILES = ffluci/util.lua ffluci/http.lua ffluci/fs.lua \
 ffluci/sys.lua ffluci/model/uci.lua ffluci/model/ipkg.lua \

@@ -28,6 +28,10 @@ limitations under the License.
 module("ffluci.config", package.seeall)
 require("ffluci.model.uci")
 require("ffluci.util")
+require("ffluci.debug")
+
+-- Our path (wtf Lua lacks __file__ support)
+path = ffluci.debug.path
 
 -- Warning! This is only for fallback and compatibility purporses! --
 main = {}

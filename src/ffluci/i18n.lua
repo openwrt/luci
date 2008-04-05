@@ -26,12 +26,10 @@ limitations under the License.
 
 module("ffluci.i18n", package.seeall)
 
-require("ffluci.fs")
-require("ffluci.util")
 require("ffluci.config")
 
 table   = {}
-i18ndir = ffluci.fs.dirname(ffluci.util.__file__()) .. "/i18n/"
+i18ndir = ffluci.config.path .. "/i18n/"
 
 -- Clears the translation table
 function clear()

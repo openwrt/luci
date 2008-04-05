@@ -29,9 +29,10 @@ require("ffluci.fs")
 require("ffluci.util")
 require("ffluci.template")
 require("ffluci.i18n")
+require("ffluci.config")
 
 -- Default modelpath
-modelpath = ffluci.fs.dirname(ffluci.util.__file__()) .. "/model/menu/"
+modelpath = ffluci.config.path .. "/model/menu/"
 
 -- Menu definition extra scope
 scope = {
