@@ -120,7 +120,7 @@ function action_packages()
 					break
 				end
 			else
-				if j.Package and v.Package and j.Package > v.Package then
+				if j.Package > v.Package then
 					break
 				end
 			end

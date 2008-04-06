@@ -88,13 +88,7 @@ function _lookup(act, pkg)
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
 	
-	local info = _parselist(ffluci.sys.exec(cmd .. " 2>/dev/null"))
-	
-	if pkg then
-		return info[pkg]
-	else
-		return info
-	end	
+	return _parselist(ffluci.sys.exec(cmd .. " 2>/dev/null"))
 end
 
 -- Internal parser function
