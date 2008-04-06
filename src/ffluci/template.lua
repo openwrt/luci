@@ -29,6 +29,7 @@ require("ffluci.config")
 require("ffluci.util")
 require("ffluci.fs")
 require("ffluci.i18n")
+require("ffluci.http")
 require("ffluci.model.uci")
 
 viewdir = ffluci.config.path .. "/view/"
@@ -53,7 +54,7 @@ compiler_enable_bytecode = false
 viewns = {
 	translate  = ffluci.i18n.translate,
 	config     = function(...) return ffluci.model.uci.get(...) or "" end,
-	controller = os.getenv("SCRIPT_NAME"),
+	controller = ffluci.http.script_name(),
 	media      = ffluci.config.main.mediaurlbase,
 	write      = io.write,
 	include    = function(name) Template(name):render(getfenv(2)) end,	

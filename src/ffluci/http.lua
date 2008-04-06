@@ -54,8 +54,14 @@ function request_redirect(category, module, action, ...)
 	module   = module   or "index"
 	action   = action   or "index"
 	
-	local pattern = os.getenv("SCRIPT_NAME") .. "/%s/%s/%s"
+	local pattern = script_name() .. "/%s/%s/%s"
 	redirect(pattern:format(category, module, action), ...)
+end
+
+
+-- Returns the script name
+function script_name()
+	return ENV.SCRIPT_NAME
 end
 
 

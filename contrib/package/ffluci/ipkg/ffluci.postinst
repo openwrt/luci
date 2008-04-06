@@ -1,4 +1,9 @@
 #!/bin/sh
-PATTERN='/cgi-bin/ffluci/admin:root:$p$root'
-grep $PATTERN ${IPKG_INSTROOT}/etc/httpd.conf >/dev/null 2>/dev/null || echo $PATTERN >> ${IPKG_INSTROOT}/etc/httpd.conf 
+PATTERNS='/cgi-bin/ffluci/admin:root:$p$root /cgi-bin/ffluci-upload:root:$p$root'
+
+for i in "$PATTERNS"
+do
+	grep "$i" ${IPKG_INSTROOT}/etc/httpd.conf >/dev/null 2>/dev/null || echo "$i" >> ${IPKG_INSTROOT}/etc/httpd.conf
+done 
+
 [ -n ${IPKG_INSTROOT} ] || /etc/init.d/httpd restart
