@@ -4,6 +4,7 @@ require("ffluci.sys")
 require("ffluci.http")
 require("ffluci.util")
 require("ffluci.fs")
+require("ffluci.model.ipkg")
 
 function action_editor()
 	local file = ffluci.http.formvalue("file", "")
@@ -29,6 +30,108 @@ function action_editor()
 	ffluci.template.render("admin_system/editor", {fn=file, cnt=cnt, msg=msg})	
 end
 
+function action_ipkg()
+	local file = "/etc/ipkg.conf"
+	local data = ffluci.http.formvalue("data")
+	local stat = nil
+	local err  = nil
+	
+	if data then
+		stat, err = ffluci.fs.writefile(file, data)
+	end	
+	
+	local cnt  = ffluci.fs.readfile(file)	
+	if cnt then
+		cnt = ffluci.util.pcdata(cnt)
+	end
+	
+	ffluci.template.render("admin_system/ipkg", {cnt=cnt, msg=err})	
+end
+
+function action_packages()
+	local ipkg = ffluci.model.ipkg
+	local void = nil
+	local submit = ffluci.http.formvalue("submit")
+	
+	
+	-- Search query
+	local query = ffluci.http.formvalue("query")
+	query = (query ~= '') and query or nil
+	
+	
+	-- Packets to be installed
+	local install = ffluci.http.formvalue("install")
+	install = (type(install) == "table" and submit) and install or nil
+	
+	-- Install from URL
+	local url = ffluci.http.formvalue("url")
+	if url and url ~= '' and submit then
+		if not install then
+			install = {}
+		end
+		install[url] = 1
+	end
+	
+	-- Do install		
+	if install then
+		for k, v in pairs(install) do
+			void, install[k] = ipkg.install(k)
+		end
+	end
+	
+	
+	-- Remove packets
+	local remove = ffluci.http.formvalue("remove")
+	remove = (type(remove) == "table" and submit) and remove or nil
+	if remove then	
+		for k, v in pairs(remove) do
+			void, remove[k] = ipkg.remove(k)
+		end	
+	end
+	
+	
+	-- Update all packets
+	local update = ffluci.http.formvalue("update")
+	if update then
+		void, update = ipkg.update()
+	end
+	
+	
+	-- Upgrade all packets
+	local upgrade = ffluci.http.formvalue("upgrade")
+	if upgrade then
+		void, upgrade = ipkg.upgrade()
+	end
+	
+	
+	-- Package info
+	local info = ffluci.model.ipkg.info(query)
+	local pkgs = {}
+	
+	-- Sort after status and name
+	for k, v in pairs(info) do
+		local x = 0
+		for i, j in pairs(pkgs) do
+			local vins = (v.Status and v.Status.installed)
+			local jins = (j.Status and j.Status.installed)
+			if vins ~= jins then
+				if vins then
+					break
+				end
+			else
+				if j.Package > v.Package then
+					break
+				end
+			end
+			x = i
+		end
+		table.insert(pkgs, x+1, v)
+	end 
+	
+	ffluci.template.render("admin_system/packages", {pkgs=pkgs, query=query,
+	 install=install, remove=remove, update=update, upgrade=upgrade})	
+end
+
 function action_passwd()
 	local p1 = ffluci.http.formvalue("pwd1")
 	local p2 = ffluci.http.formvalue("pwd2")
@@ -46,8 +149,11 @@ function action_passwd()
 end
 
 function action_reboot()
-	ffluci.template.render("admin_system/reboot")
-	ffluci.sys.reboot()
+	local reboot = ffluci.http.formvalue("reboot")
+	ffluci.template.render("admin_system/reboot", {reboot=reboot})
+	if reboot then
+		ffluci.sys.reboot()
+	end
 end
 
 function action_sshkeys()

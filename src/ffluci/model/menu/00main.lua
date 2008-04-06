@@ -8,8 +8,10 @@ act("luci", "FFLuCI")
 act("contact", "Kontakt")
 
 add("admin", "system", "System", 20)
+act("packages", "Paketverwaltung")
 act("passwd", "Passwort ändern")
 act("sshkeys", "SSH-Schlüssel")
+act("ipkg", "IPKG-Konfiguration")
 act("reboot", "Neu starten")
 
 add("admin", "network", "Netzwerk", 30)

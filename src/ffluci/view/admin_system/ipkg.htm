@@ -1,0 +1,23 @@
+<%+header%>
+<h1><%:system System%></h1>
+<h2><%:ipkg IPKG-Konfiguration%></h2>
+
+<br />
+
+<div><strong><%:ipkg_pkglists Paketlisten%>:</strong><code>src <em>Name</em> <em>URL</em></code></div>
+<div><strong><%:ipkg_targets Installationsziele%>:</strong><code>dest <em>Name</em> <em>Pfad</em></code></div>
+
+<br />
+
+<form method="post" action="<%=controller%>/admin/system/ipkg">
+	<fieldset class="cbi-section-node">
+		<div><textarea style="width: 100%" rows="10" name="data"><%=(cnt or '')%></textarea></div>
+		<br />
+		<div>
+			<input type="submit" value="<%:save Speichern%>" />
+			<input type="reset" value="<%:reset Zurücksetzen%>" />
+		</div>
+		<% if msg then %><br /><div class="error"><%:error Fehler%>: <%=msg%></div><% end %>
+	</fieldset>
+</form>
+<%+footer%>
