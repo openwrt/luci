@@ -106,6 +106,7 @@ function action_packages()
 	
 	-- Package info
 	local info = ffluci.model.ipkg.info(query)
+	info = info or {}
 	local pkgs = {}
 	
 	-- Sort after status and name
