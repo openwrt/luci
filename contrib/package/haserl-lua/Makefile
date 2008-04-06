@@ -11,7 +11,7 @@ PKG_VERSION:=0.9.23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package-source/
+PKG_SOURCE_URL:=http://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package-source/
 PKG_MD5SUM:=f3a0f329904791c5662d93638f92bdfd
 
 
