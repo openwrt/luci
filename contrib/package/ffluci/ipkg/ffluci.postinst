@@ -1,7 +1,7 @@
 #!/bin/sh
 PATTERNS='/cgi-bin/ffluci/admin:root:$p$root /cgi-bin/ffluci-upload:root:$p$root'
 
-for i in "$PATTERNS"
+for i in $PATTERNS
 do
 	grep "$i" ${IPKG_INSTROOT}/etc/httpd.conf >/dev/null 2>/dev/null || echo "$i" >> ${IPKG_INSTROOT}/etc/httpd.conf
 done 
