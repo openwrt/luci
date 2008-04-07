@@ -174,3 +174,7 @@ function action_sshkeys()
 	
 	ffluci.template.render("admin_system/sshkeys", {cnt=cnt, msg=err})	
 end
+
+function action_upgrade()
+	-- To be implemented
+end

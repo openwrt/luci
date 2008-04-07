@@ -47,7 +47,7 @@ local menuc = {}
 
 -- Adds a menu category to the current menu and selects it
 function add(cat, controller, title, order)
-	order = order or 50
+	order = order or 100
 	if not menu[cat] then
 		menu[cat] = {}
 	end

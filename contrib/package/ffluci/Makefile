@@ -40,6 +40,7 @@ define Package/ffluci/install
 	$(INSTALL_DIR) $(1)/www/ffluci
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/init.d/luci_fw $(1)/etc/init.d/luci_fw
 	$(CP) $(PKG_BUILD_DIR)/dist/* $(1)/usr/lib/lua/ -R
 	$(CP) $(PKG_BUILD_DIR)/contrib/media $(1)/www/ffluci/ -R
@@ -47,6 +48,7 @@ define Package/ffluci/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/ffluci-upload $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/index.cgi $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/index.html $(1)/www
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/contrib/ffluci-flash $(1)/sbin
 	$(CP) $(PKG_BUILD_DIR)/contrib/uci/luci $(1)/etc/config/luci
 	$(CP) $(PKG_BUILD_DIR)/contrib/uci/luci_fw $(1)/etc/config/luci_fw
 	$(CP) -a ./ipkg/ffluci.postinst $(1)/CONTROL/postinst

@@ -1,0 +1,26 @@
+<%+header%>
+<h1><%:system System%></h1>
+<h2><%:upgrade Upgrade%></h2>
+<br />
+<% if sysupgrade then %>
+<form method="post" action="<%=controller%>-upload/admin/system/upgrade" enctype="multipart/form-data">
+	<fieldset class="cbi-section-node">
+		<div class="cbi-value clear">
+			<div class="cbi-value-title left"><%:fwimage Firmwareimage%></div>
+			<div class="cbi-value-field"><input type="file" size="30" name="image" /></div>
+		</div>
+		<br />
+		<div class="cbi-value clear">
+			<input type="checkbox" name="keepcfg" value="1" checked="checked" />
+			<span class="bold"><%:keepcfg Konfigurationsdateien übernehmen%></span>
+		</div>
+		<br />
+		<div>
+			<input type="submit" value="<%:fwupgrade Firmware aktualisieren%>" />
+		</div>
+	</fieldset>
+</form>
+<% else %>
+<div class="error"><%:notimplemented Diese Funktion ist leider (noch) nicht eingebaut.%></div>
+<% end %>
+<%+footer%>

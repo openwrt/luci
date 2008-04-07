@@ -4,6 +4,9 @@ config core main
         
 config core category_privileges
 		option public nobody:nogroup
+		
+config extern flash
+		option keep "/etc/config /etc/dropbear /etc/openvpn /etc/passwd /etc/ipkg.conf /etc/httpd.conf /etc/firewall.user"
 
 config public contact
 		option nickname
@@ -21,3 +24,6 @@ config event uci_oncommit
         option olsrd	"/etc/init.d/olsrd restart"
         option dhcp		"/etc/init.d/dhcp restart"
         option luci_fw  "/etc/init.d/luci_fw restart"
+        option dropbear "/etc/init.d/dropbear restart"
+        option httpd	"/etc/init.d/httpd restart"
+        option fstab	"/etc/init.d/fstab restart"
