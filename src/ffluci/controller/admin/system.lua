@@ -5,6 +5,7 @@ require("ffluci.http")
 require("ffluci.util")
 require("ffluci.fs")
 require("ffluci.model.ipkg")
+require("ffluci.model.uci")
 
 function action_editor()
 	local file = ffluci.http.formvalue("file", "")
@@ -176,5 +177,26 @@ function action_sshkeys()
 end
 
 function action_upgrade()
-	-- To be implemented
+	local ret  = nil
+	local plat = ffluci.fs.mtime("/lib/upgrade/platform.sh")
+	
+	local image   = ffluci.http.formvalue("image")
+	local imgname = ffluci.http.formvalue("image_name")
+	local keepcfg = ffluci.http.formvalue("keepcfg")
+	
+	if plat and imgname then
+		local kpattern = nil
+		if keepcfg then
+			local files = ffluci.model.uci.show("luci", "flash_keep")
+			if files.luci and files.luci.flash_keep then
+				kpattern = ""
+				for k,v in pairs(files.luci.flash_keep) do
+					kpattern = kpattern .. " " ..  v
+				end
+			end
+		end
+		ret = ffluci.sys.flash(image, kpattern)
+	end
+	
+	ffluci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret})
 end

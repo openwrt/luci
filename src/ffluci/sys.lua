@@ -52,6 +52,17 @@ function execl(command)
 	return data
 end
 
+-- Uses "ffluci-flash" to flash a new image file to the system
+function flash(image, kpattern)
+	local cmd = "ffluci-flash "
+	if kpattern then
+		cmd = cmd .. "-k '" .. kapttern:gsub("'", "") .. "' "
+	end
+	cmd = cmd .. "'" .. image:gsub("'", "") .. "'"
+	
+	return os.execute(cmd)
+end
+
 -- Returns the hostname
 function hostname()
 	return io.lines("/proc/sys/kernel/hostname")()

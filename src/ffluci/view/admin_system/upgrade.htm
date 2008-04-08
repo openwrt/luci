@@ -2,7 +2,7 @@
 <h1><%:system System%></h1>
 <h2><%:upgrade Upgrade%></h2>
 <br />
-<% if sysupgrade then %>
+<% if sysupgrade and not ret then %>
 <form method="post" action="<%=controller%>-upload/admin/system/upgrade" enctype="multipart/form-data">
 	<fieldset class="cbi-section-node">
 		<div class="cbi-value clear">
@@ -20,7 +20,13 @@
 		</div>
 	</fieldset>
 </form>
+<% elseif ret then %>
+	<% if ret == 0 then %>
+<div class="ok"><%:flashed Flashvorgang erfolgreich. Router startet neu...%></div>
+	<% else %>
+<div class="error"><%:flasherr Flashvorgang fehlgeschlagen!%> (<%:code Code%> <%=ret%>)</div>	
+	<% end %>
 <% else %>
-<div class="error"><%:notimplemented Diese Funktion ist leider (noch) nicht eingebaut.%></div>
+<div class="error"><%:notimplemented Diese Funktion steht leider (noch) nicht zur Verfügung.%></div>
 <% end %>
 <%+footer%>
