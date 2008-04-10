@@ -3,6 +3,7 @@ m = Map("luci_fw", "Firewall")
 
 s = m:section(TypedSection, "rule")
 s.addremove = true
+s.anonymous = true
 
 chain = s:option(ListValue, "chain", "Kette")
 chain:value("forward", "Forward")

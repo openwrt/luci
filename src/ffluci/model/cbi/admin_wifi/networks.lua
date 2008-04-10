@@ -20,7 +20,7 @@ end
 network = s:option(ListValue, "network", "Netzwerk")
 network:value("")
 for k, v in pairs(ffluci.model.uci.show("network").network) do
-	if v[".type"] == "interface" then
+	if v[".type"] == "interface" and k ~= "loopback" then
 		network:value(k)
 	end
 end
