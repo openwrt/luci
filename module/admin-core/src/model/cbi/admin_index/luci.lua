@@ -5,8 +5,8 @@ c = m:section(NamedSection, "main", "core", "Allgemein")
 c:option(Value, "lang", "Sprache")
 c:option(Value, "mediaurlbase", "Mediaverzeichnis")
 
-f = m:section(NamedSection, "flash", "extern", "Firmwareupgrade")
-f:option(Value, "keep", "Übernehme Dateien").size = 64
+f = m:section(NamedSection, "flash_keep", "extern", "Zu übernehmende Dateien bei Firmwareupgrade")
+f.dynamic = true
 
 p = m:section(NamedSection, "category_privileges", "core", "Kategorieprivilegien")
 p.dynamic = true
