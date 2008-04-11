@@ -51,6 +51,8 @@ define Package/ffluci/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci-upload $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/index.cgi $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/index.html $(1)/www
+	
+	$(CP) $(PKG_BUILD_DIR)/themes/fledermaus/contrib/media $(1)/www/ffluci/ -R
 		
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/contrib/uci/luci_fw $(1)/etc/config/luci_fw
