@@ -1,0 +1,16 @@
+<%+cbi/valueheader%>
+<% if self.widget == "select" then %>
+								<select onchange="cbi_d_update(this.id)" id="cbid.<%=self.config.."."..section.."."..self.option%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self.size then %> size="<%=self.size%>"<% end %>>
+<%for i, key in pairs(self.keylist) do%>
+									<option<% if self:cfgvalue(section) == key then %> selected="selected"<% end %> value="<%=key%>"><%=self.vallist[i]%></option>
+<% end %>
+								</select>
+<% elseif self.widget == "radio" then
+	local c = 0;
+	for i, key in pairs(self.keylist) do
+	c = c + 1%>
+								<%=self.vallist[i]%><input type="radio" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == key then %> checked="checked"<% end %> value="<%=key%>" />
+<% if c == self.size then c = 0 %><br />
+<% end end %>
+<% end %>
+<%+cbi/valuefooter%>

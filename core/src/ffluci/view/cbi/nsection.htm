@@ -1,0 +1,17 @@
+<% if self:cfgvalue(self.section) then
+section = self.section %>
+				<div class="cbi-section" id="cbi-<%=self.config%>-<%=section%>">
+					<h2><%=self.title%></h2>
+					<div class="cbi-section-descr"><%=self.description%></div>
+					<% if self.addremove then %><div class="cbi-section-remove">
+						<input type="submit" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:cbi_del Eintrag entfernen%>" />
+					</div><% end %>
+<%+cbi/ucisection%>
+				</div>
+<% elseif self.addremove then %>
+				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
+					<h2><%=self.title%></h2>
+					<div class="cbi-section-descr"><%=self.description%></div>
+					<input type="submit" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:cbi_cns Eintrag anlegen%>" />
+				</div>
+<% end %>
