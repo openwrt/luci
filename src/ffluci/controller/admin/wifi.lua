@@ -1,1 +1,0 @@
-module("ffluci.controller.admin.wifi", package.seeall)
