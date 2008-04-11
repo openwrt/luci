@@ -58,7 +58,7 @@ function flash(image, kpattern)
 	if kpattern then
 		cmd = cmd .. "-k '" .. kpattern:gsub("'", "") .. "' "
 	end
-	cmd = cmd .. "'" .. image:gsub("'", "") .. "'"
+	cmd = cmd .. "'" .. image:gsub("'", "") .. "' >/dev/null 2>&1"
 	
 	return os.execute(cmd)
 end
