@@ -7,9 +7,6 @@ It consists of several parts:
 
 MVC Dispatcher
 	Simple PATH_INFO based dispatching mechanism using Lua modules
-	
-	> See src/ffluci/dispatcher.lua for a detailed description
-	> See src/ffluci/controller for example controllers
 
 
 Template engine
@@ -22,45 +19,29 @@ Template engine
 		<%~uci.short.cut%>
 
 	Predefined variables for controller dir and media dir
-
-	> See src/ffluci/template.lua for details
-	> See src/view/ for examples
 	
 
 Configuration Bind Interface (CBI)
 	Generates and validates XHTML-Forms out of an UCI model description
 	Makes it very easy to create webinterface pages that manipulate UCI files
-	
-	> See src/ffluci/cbi.lua
 
 
 i18n Translation support
 	Simple multi-language per-module internationalization support
-	
-	> See src/ffluci/i18n.lua for details
-	> See src/i18n/ for examples
 
 
 UCI wrapper support
 	Lua UCI-Wrapper adapting the CLI of the uci binary
 
-	> See src/model/uci.lua for details
-
 
 Menu Building support
 	Supports menu building for modules and exported actions
-
-	> See src/ffluci/menu.lua for details
-	> See src/ffluci/view/menu.htm, src/ffluci/controller for examples
 
 
 HTTP-Abstraction and Formvalue validation support
 	HTTP-Redirect, Statuscode, Content-Type abstraction
 	Dynamic formvalue validation support including varaible type and
 	value range validation
-
-	> See src/ffluci/http.lua for details
-	> See src/ffluci/controller/public/example-action.lua for examples
 
 	
 Known issues:
