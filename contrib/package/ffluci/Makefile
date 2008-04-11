@@ -55,8 +55,8 @@ define Package/ffluci/install
 		
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/contrib/uci/luci_fw $(1)/etc/config/luci_fw
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/admin-core/contrib/init.d/luci_fw $(1)/etc/init.d/luci_fw
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/admin-core/contrib/ffluci-flash $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/init.d/luci_fw $(1)/etc/init.d/luci_fw
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/ffluci-flash $(1)/sbin
 	
 	$(CP) $(PKG_BUILD_DIR)/module/public-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	$(CP) $(PKG_BUILD_DIR)/module/public-core/contrib/media $(1)/www/ffluci/ -R
