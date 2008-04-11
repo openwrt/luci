@@ -21,7 +21,7 @@ all: compile
 
 depends:
 	mkdir -p $(OUTDIRS)
-	for i in $(CPFILES); do if [ -f "$i" ]; then i=$$(echo $$i | cut -d/ -f2-); \
+	for i in $(CPFILES); do if [ -f "$$i" ]; then i=$$(echo $$i | cut -d/ -f2-); \
 		mkdir -p dist/$$(dirname $$i); cp src/$$i dist/$$i; fi; done
 
 compile: depends
