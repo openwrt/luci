@@ -1,0 +1,14 @@
+<%+header%>
+<h1><%:texteditor Texteditor%></h1>
+<form method="post" action="<%=controller%>/admin/system/editor">
+<div><%:file Datei%>: <input type="text" name="file" size="30" value="<%=(fn or '')%>" />
+<% if msg then %><span class="error"><%:error Fehler%>: <%=msg%></span><% end %></div>
+<br />
+<div><textarea style="width: 100%" rows="20" name="data"><%=(cnt or '')%></textarea></div>
+<br />
+<div>
+	<input type="submit" value="<%:save Speichern%>" />
+	<input type="reset" value="<%:reset Zurücksetzen%>" />
+</div>
+</form>
+<%+footer%>

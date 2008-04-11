@@ -1,0 +1,1 @@
+module("ffluci.controller.admin.status", package.seeall)
