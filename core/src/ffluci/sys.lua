@@ -56,7 +56,7 @@ end
 function flash(image, kpattern)
 	local cmd = "ffluci-flash "
 	if kpattern then
-		cmd = cmd .. "-k '" .. kapttern:gsub("'", "") .. "' "
+		cmd = cmd .. "-k '" .. kpattern:gsub("'", "") .. "' "
 	end
 	cmd = cmd .. "'" .. image:gsub("'", "") .. "'"
 	
