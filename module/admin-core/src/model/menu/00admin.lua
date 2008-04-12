@@ -1,14 +1,12 @@
 add("admin", "index", "Übersicht", 10)
 act("contact", "Kontakt")
-act("luci", "FFLuCI")
-
-add("admin", "status", "Status", 20)
-act("system", "System")
+act("luci", "Oberfläche")
 
 add("admin", "system", "System", 30)
 act("packages", "Paketverwaltung")
 act("passwd", "Passwort ändern")
 act("sshkeys", "SSH-Schlüssel")
+act("hostname", "Hostname")
 act("fstab", "Einhängepunkte")
 act("upgrade", "Firmwareupgrade")
 act("reboot", "Neu starten")

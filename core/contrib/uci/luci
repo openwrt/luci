@@ -23,7 +23,6 @@ config public contact
 		option geo
 		option note
 
-
 config event uci_oncommit
         option network	"/etc/init.d/network restart"
         option wireless	"/etc/init.d/network restart"
@@ -33,3 +32,10 @@ config event uci_oncommit
         option dropbear "/etc/init.d/dropbear restart"
         option httpd	"/etc/init.d/httpd restart"
         option fstab	"/etc/init.d/fstab restart"
+        
+config internal languages
+		option de "Deutsch"
+		option en "English"
+		
+config internal themes
+		option Fledermaus "/ffluci/media"

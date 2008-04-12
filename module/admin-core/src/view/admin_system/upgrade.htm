@@ -1,6 +1,8 @@
 <%+header%>
 <h1><%:system System%></h1>
 <h2><%:upgrade Upgrade%></h2>
+<p><%:upgrade1 Ersetzt die installierte Firmware (das Betriebssystem des Routers) durch ein neues.
+Das Format der Firmware ist plattformabhängig.%></p>
 <br />
 <% if sysupgrade and not ret then %>
 <form method="post" action="<%=controller%>-upload/admin/system/upgrade" enctype="multipart/form-data">
