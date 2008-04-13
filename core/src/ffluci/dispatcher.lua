@@ -163,7 +163,7 @@ function action(request)
 	local i18n = require("ffluci.i18n")
 	local disp = require("ffluci.dispatcher")
 	
-	i18n.loadc(request.module)
+	i18n.loadc(request.category .. "_" .. request.module)
 	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
 	if action then
 		action()
@@ -182,7 +182,7 @@ function cbi(request)
 	
 	local path = request.category.."_"..request.module.."/"..request.action
 	
-	i18n.loadc(request.module)
+	i18n.loadc(request.category .. "_" .. request.module)
 	
 	local stat, map = pcall(cbi.load, path)
 	if stat and map then
@@ -209,7 +209,7 @@ function dynamic(request)
 	local tmpl = require("ffluci.template")
 	local cbi  = require("ffluci.cbi")	
 	
-	i18n.loadc(request.module)
+	i18n.loadc(request.category .. "_" .. request.module)
 	
 	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
 	if action then
@@ -250,7 +250,7 @@ function simpleview(request)
 	
 	local path = request.category.."_"..request.module.."/"..request.action
 	
-	i18n.loadc(request.module)
+	i18n.loadc(request.category .. "_" .. request.module)
 	if not pcall(tmpl.render, path) then
 		disp.error404()
 	end
