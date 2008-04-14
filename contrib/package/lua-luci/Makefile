@@ -51,7 +51,7 @@ endef
 
 define Package/lua-luci
 $(call Package/lua-luci/Default)
-  DEPENDS:=+liblua-luci +libreadline +libncurses
+  DEPENDS:=+liblua-luci
   TITLE+= (interpreter)
 endef
 
