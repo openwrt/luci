@@ -65,11 +65,11 @@ require("ffluci.http").htmlheader()
 		<div><%:config Konfiguration%>
 			<ul>
 			<% if ucic then %>
-				<li><a href="<%=controller%>/admin/uci/changes"><%:changes Änderungen:%> <%=ucic%></a></li>
+				<li><a href="<%=controller%>/admin/uci/changes"><%:changes Änderungen%>: <%=ucic%></a></li>
 				<li><a href="<%=controller%>/admin/uci/apply"><%:apply Anwenden%></a></li>
 				<li><a href="<%=controller%>/admin/uci/revert"><%:revert Verwerfen%></a></li>
 			<% else %>
-				<li><%:changes Änderungen: %> 0</li>
+				<li><%:changes Änderungen%>: 0</li>
 			<% end %>
 			</ul>
 		</div>

@@ -1,37 +1,39 @@
 -- ToDo: Translate
 require("ffluci.config")
-m = Map("luci", "Oberfläche", "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden.")
+m = Map("luci", translate("luci", "Oberfläche"), translate("luci1", 
+ "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden."))
 
-c = m:section(NamedSection, "main", "core", "Allgemein")
+c = m:section(NamedSection, "main", "core", translate("general", "Allgemein"))
 
-l = c:option(ListValue, "lang", "Sprache")
+l = c:option(ListValue, "lang", translate("language", "Sprache"))
 for k, v in pairs(ffluci.config.languages) do
 	if k:sub(1, 1) ~= "." then
 		l:value(k, v)
 	end
 end
 
-t = c:option(ListValue, "mediaurlbase", "Design")
+t = c:option(ListValue, "mediaurlbase", translate("design", "Design"))
 for k, v in pairs(ffluci.config.themes) do
 	if k:sub(1, 1) ~= "." then
 		t:value(v, k)
 	end
 end
 
-p = m:section(NamedSection, "category_privileges", "core", "Kategorieprivilegien", [[Zur
-zusätzlichen Sicherung der Oberfläche gegen Angreifer, können hier die Ausführungsrechte
-der Seiten für einzelne Kategorien reduziert werden. So können z.B. Sicherheitslücken im
-ungeschützten Bereich der Oberfläche nicht mehr zur Übernahme des Routers genutzt werden.]])
+p = m:section(NamedSection, "category_privileges", "core", translate("catpriv", "Kategorieprivilegien"),
+ translate("catpriv1", [[Zur zusätzlichen Sicherung der Oberfläche gegen Angreifer, können hier die
+Ausführungsrechte der Seiten für einzelne Kategorien reduziert werden. So können z.B. Sicherheitslücken im
+ungeschützten Bereich der Oberfläche nicht mehr zur Übernahme des Routers genutzt werden.]]))
 p.dynamic = true
 
-u = m:section(NamedSection, "uci_oncommit", "event", "UCI-Befehle beim Anwenden", [[Beim Anwenden
+u = m:section(NamedSection, "uci_oncommit", "event", translate("ucicommit", "UCI-Befehle beim Anwenden"),
+ translate("ucicommit1", [[Beim Anwenden
 der Konfiguration aus der Oberflächliche heraus können automatisch die relevanten Dienste neugestart werden,
-sodass Änderungen sofort nach dem Anwenden aktiv werden und der Router nicht erst neugestartet werden muss-]])
+sodass Änderungen sofort nach dem Anwenden aktiv werden und der Router nicht erst neugestartet werden muss.]]))
 u.dynamic = true
 
-f = m:section(NamedSection, "flash_keep", "extern", "Zu übernehmende Dateien bei Firmwareupgrade", [[Die folgenden
-Dateien und Verzeichnisse werden beim Aktualisieren der Firmware über die Oberfläche automatisch in die neue Firmware
-übernommen.]])
+f = m:section(NamedSection, "flash_keep", "extern", translate("keepflash", "Zu übernehmende Dateien bei Firmwareupgrade"),
+ translate("keepflash1", [[Die folgenden Dateien und Verzeichnisse werden beim Aktualisieren der Firmware
+über die Oberfläche automatisch in die neue Firmware übernommen.]]))
 f.dynamic = true
 
 return m

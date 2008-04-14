@@ -36,7 +36,8 @@ modelpath = ffluci.config.path .. "/model/menu/"
 
 -- Menu definition extra scope
 scope = {
-	translate = ffluci.i18n.translate
+	translate = ffluci.i18n.translate,
+	loadtrans = ffluci.i18n.loadc
 }
 
 -- Local menu database
