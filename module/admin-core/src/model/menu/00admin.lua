@@ -12,7 +12,9 @@ act("upgrade", "Firmwareupgrade")
 act("reboot", "Neu starten")
 
 add("admin", "services", "Dienste", 40)
-act("olsrd", "OLSR")
+if isfile("/etc/config/olsr") then
+	act("olsrd", "OLSR")
+end
 act("httpd", "HTTP-Server")
 act("dropbear", "SSH-Server")
 act("dnsmasq", "Dnsmasq")
@@ -25,6 +27,10 @@ act("ptp", "PPPoE / PPTP")
 act("routes", "Statische Routen")
 act("portfw", "Portweiterleitung")
 act("firewall", "Firewall")
+
+if isfile("/etc/config/qos") then
+	act("qos", "Quality of Service")
+end
 
 add("admin", "wifi", "Drahtlos", 60)
 act("devices", "Geräte")

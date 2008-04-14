@@ -30,6 +30,7 @@ require("ffluci.util")
 require("ffluci.template")
 require("ffluci.i18n")
 require("ffluci.config")
+require("ffluci.model.ipkg")
 
 -- Default modelpath
 modelpath = ffluci.config.path .. "/model/menu/"
@@ -37,7 +38,8 @@ modelpath = ffluci.config.path .. "/model/menu/"
 -- Menu definition extra scope
 scope = {
 	translate = ffluci.i18n.translate,
-	loadtrans = ffluci.i18n.loadc
+	loadtrans = ffluci.i18n.loadc,
+	isfile    = ffluci.fs.mtime
 }
 
 -- Local menu database
