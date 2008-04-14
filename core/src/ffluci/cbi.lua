@@ -99,6 +99,17 @@ end
 
 
 --[[
+A simple template element
+]]--
+Template = class(Node)
+
+function Template.__init__(self, template)
+	Node.__init__(self)
+	self.template = template
+end
+
+
+--[[
 Map - A map describing a configuration file 
 ]]--
 Map = class(Node)

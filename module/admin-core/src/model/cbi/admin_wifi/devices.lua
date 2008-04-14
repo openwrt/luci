@@ -1,6 +1,6 @@
 -- ToDo: Translate, Add descriptions and help texts
 
-m = Map("wireless", "Geräte")
+m = Map("wireless", "Geräte", [[An dieser Stelle können eingebaute WLAN-Geräte konfiguriert werden.]])
 
 s = m:section(TypedSection, "wifi-device")
 --s.addremove = true

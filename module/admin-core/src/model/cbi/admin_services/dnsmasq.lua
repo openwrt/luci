@@ -1,4 +1,4 @@
-m = Map("dhcp", "Dnsmasq")
+m = Map("dhcp", "Dnsmasq", "Dnsmasq ist ein kombinierter DHCP-Server und DNS-Forwarder für NAT-Firewalls.")
 
 s = m:section(TypedSection, "dnsmasq", "Einstellungen")
 s.anonymous = true

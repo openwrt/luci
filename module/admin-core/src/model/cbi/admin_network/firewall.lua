@@ -1,5 +1,6 @@
 -- ToDo: Translate, Add descriptions and help texts
-m = Map("luci_fw", "Firewall")
+m = Map("luci_fw", "Firewall", [[Mit Hilfe der Firewall können Zugriffe auf das Netzwerk
+erlaubt, verboten oder umgeleitet werden.]])
 
 s = m:section(TypedSection, "rule")
 s.addremove = true

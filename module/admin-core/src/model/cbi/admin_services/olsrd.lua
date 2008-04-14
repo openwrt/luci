@@ -1,7 +1,8 @@
 -- ToDo: Autodetect things, Translate, Add descriptions
 require("ffluci.fs")
 
-m = Map("olsr", "OLSR")
+m = Map("olsr", "OLSR", [[OLSR ist ein flexibles Routingprotokoll, 
+dass den Aufbau von mobilen Ad-Hoc Netzen unterstützt.]])
 
 s = m:section(NamedSection, "general", "olsr", "Allgemeine Einstellungen")
 

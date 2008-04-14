@@ -1,5 +1,8 @@
 -- ToDo: Translate, Add descriptions and help texts
-m = Map("wireless", "Netze")
+m = Map("wireless", "Netze", [[Pro WLAN-Gerät können mehrere Netze bereitgestellt werden.
+Es sollte beachtet werden, dass es hardware- / treiberspezifische Einschränkungen gibt.
+So kann pro WLAN-Gerät in der Regel entweder 1 Ad-Hoc-Zugang ODER bis zu 3 Access-Point und 1 Client-Zugang
+gleichzeitig erstellt werden.]])
 
 s = m:section(TypedSection, "wifi-iface")
 s.addremove = true
@@ -17,7 +20,7 @@ if d then
 	end
 end
 
-network = s:option(ListValue, "network", "Netzwerk")
+network = s:option(ListValue, "network", "Netzwerk", "WLAN-Netz zu Netzwerk hinzufügen")
 network:value("")
 for k, v in pairs(ffluci.model.uci.show("network").network) do
 	if v[".type"] == "interface" and k ~= "loopback" then
@@ -34,6 +37,10 @@ mode:value("wds", "WDS")
 s:option(Value, "bssid", "BSSID").optional = true
 
 s:option(Value, "txpower", "Sendeleistung", "dbm").rmempty = true
+
+s:option(Flag, "frameburst", "Broadcom-Frameburst").optional = true
+s:option(Flag, "bursting", "Atheros-Frameburst").optional = true
+
 
 encr = s:option(ListValue, "encryption", "Verschlüsselung")
 encr:value("none", "keine")

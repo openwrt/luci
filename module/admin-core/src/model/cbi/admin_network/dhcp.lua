@@ -2,7 +2,8 @@
 require("ffluci.model.uci")
 require("ffluci.sys")
 
-m = Map("dhcp", "DHCP")
+m = Map("dhcp", "DHCP", [[Mit Hilfe von DHCP können Netzteilnehmer automatisch
+ihre Netzwerkkonfiguration (IP-Adresse, Netzmaske, DNS-Server, DHCP, ...) beziehen.]])
 
 s = m:section(TypedSection, "dhcp")
 s.addremove = true
@@ -15,15 +16,15 @@ for k, v in pairs(ffluci.model.uci.show("network").network) do
 	end
 end
 
-s:option(Value, "start", "Start").rmempty = true
+s:option(Value, "start", "Start", "Erste vergebene Adresse (letztes Oktett)").rmempty = true
 
-s:option(Value, "limit", "Limit").rmempty = true
+s:option(Value, "limit", "Limit", "Letzte vergebene Adresse (letztes Oktett)").rmempty = true
 
 s:option(Flag, "dynamicdhcp", "Dynamisches DHCP").rmempty = true
 
 s:option(Value, "name", "Name").optional = true
 
-s:option(Flag, "ignore", "Schnittstelle ignorieren").optional = true
+s:option(Flag, "ignore", "Schnittstelle ignorieren", "DHCP für dieses Netzwerk deaktivieren").optional = true
 
 s:option(Value, "netmask", "Netzmaske").optional = true
 

@@ -1,5 +1,9 @@
 -- ToDo: Translate, Add descriptions and help texts
-m = Map("network", "Schnittstellen")
+m = Map("network", "Schnittstellen", [[An dieser Stelle können die einzelnen Schnittstellen 
+des Netzwerkes konfiguriert werden. Es können mehrere Schnittstellen zu einer Brücke zusammengefasst werden,
+indem diese durch Leerzeichen getrennt aufgezählt werden und ein entsprechender Haken im Feld Netzwerkbrücke
+gesetzt wird. Es können VLANs in der Notation SCHNITTSTELLE.VLANNR (z.B.: eth0.1) oder
+Aliase über die Notation SCHNITTSTELLE:ALIASNR (z.B.: eth0:1) verwendet werden.]])
 
 s = m:section(TypedSection, "interface")
 s.addremove = true

@@ -1,5 +1,7 @@
 -- ToDo: Translate, Add descriptions and help texts
-m = Map("network", "Punkt-zu-Punkt Verbindungen")
+m = Map("network", "Punkt-zu-Punkt Verbindungen", [[Punkt-zu-Punkt Verbindungen
+über PPPoE oder PPTP werden häufig dazu verwendet, um über DSL o.ä. Techniken eine
+Verbindung zum Internetgateway eines Internetzugangsanbieters aufzubauen.]])
 
 s = m:section(TypedSection, "interface")
 s.addremove = true
@@ -16,9 +18,9 @@ s:option(Value, "ifname", "Schnittstelle")
 s:option(Value, "username", "Benutzername")
 s:option(Value, "password", "Passwort")
 
-s:option(Value, "keepalive", "Keep-Alive").optional = true
+s:option(Value, "keepalive", "Keep-Alive", "Bei einer Verbindungstrennung automatisch neu verbinden").optional = true
 
-s:option(Value, "demand", "Dial on Demand (idle time)").optional = true
+s:option(Value, "demand", "Dial on Demand (idle time)", "Zeit nach der die Verbindung bei Inaktivität getrennt wird").optional = true
 
 srv = s:option(Value, "server", "PPTP-Server")
 srv:depends("proto", "pptp")
