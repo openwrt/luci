@@ -1,2 +1,2 @@
-add("index", "index", "Übersicht", 10)
+add("public", "index", "Übersicht", 10)
 act("contact", "Kontakt")
