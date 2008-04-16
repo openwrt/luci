@@ -95,7 +95,7 @@ function compile(template)
 	local r_include = "')\ninclude('%s')\nwrite('"
 	local r_i18n    = "'..translate('%1','%2')..'"
 	local r_uci     = "'..config('%1','%2','%3')..'"
-	local r_pexec   = "'..%s..'"
+	local r_pexec   = "'..(%s or '')..'"
 	local r_exec    = "')\n%s\nwrite('"
 	
 	-- Parse the expressions

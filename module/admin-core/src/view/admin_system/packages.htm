@@ -43,7 +43,7 @@
 
 	<div>
 		<span class="bold"><%:filter Filter%>:</span>
-		<input type="text" name="query" size="20" value="<%=(query or '')%>" />
+		<input type="text" name="query" size="20" value="<%=query%>" />
 		<input type="submit" name="search" value="<%:packages_search Paket suchen%>" />
 		<input type="submit" name="submit" value="<%:packages_do Aktionen ausführen%>" />
 	</div>
@@ -63,10 +63,10 @@
 		<% for k, pkg in pairs(pkgs) do %>	
 		<tr>
 			<td><%=pkg.Package%></td>
-			<td><%=(pkg.Version or '')%></td>
+			<td><%=pkg.Version%></td>
 			<td><% if not pkg.Status or not pkg.Status.installed then %><input type="checkbox" name="install.<%=pkg.Package%>" value="1" /><% else %><%:installed installiert%><% end %></td>
 			<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:notinstalled nicht installiert%><% end %></td>
-			<td><%=(pkg.Description or '')%></td>
+			<td><%=pkg.Description%></td>
 		</tr>
 		<% end %>
 	</table>

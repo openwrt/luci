@@ -1,5 +1,5 @@
 -- Todo: Translate
-m = Map("luci", translate("contact", "Kontakt"), translate("contact1", [[Diese Daten sind
+m = Map("freifunk", translate("contact", "Kontakt"), translate("contact1", [[Diese Daten sind
 auf der öffentlichen Kontaktseite sichtbar. Bitte gib an, wie man dich am besten kontaktieren kann.
 Diese Informationen sollten nach der Picopeering Vereinbarung mindestens deine E-Mail-Adresse enthalten.
 Damit dein Knoten durch Topographieprogramme erfasst werden kann, gib bitte deine Geokoordinaten oder
