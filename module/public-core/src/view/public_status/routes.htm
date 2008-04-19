@@ -1,0 +1,24 @@
+<%+header%>
+<h1><%:routes Routen%></h1>
+
+<br />
+<table cellspacing="0" cellpadding="6" class="smalltext">
+<tr>
+<th><%:target Ziel%></th>
+<th><%:netmask Netzmaske%></th>
+<th><%:gateway Gateway%></th>
+<th><%:metric Metrik%></th>
+<th><%:iface Schnittstelle%></th>
+</tr>
+<% for i, r in pairs(ffluci.sys.net.routes()) do %>
+<tr>
+<td><%=ffluci.sys.net.hexip4(r.Destination)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Mask)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Gateway)%></td>
+<td><%=r.Metric%></td>
+<td><%=r.Iface%></td>
+</tr>
+<% end %>
+</table>
+<br />
+<%+footer%>

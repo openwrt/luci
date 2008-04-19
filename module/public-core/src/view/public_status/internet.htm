@@ -1,0 +1,32 @@
+<%+header%>
+<h1><%:inetaccess Internetzugangstest%></h1>
+<br />
+
+<table cellspacing="0" cellpadding="6" class="smalltext">
+<tr>
+<th><%:target Ziel%></th>
+<th><%:host Host%></th>
+<th><%:result Ergebnis%></th>
+</tr>
+<%
+local tests = {}
+tests[1] = {descr = "Chaos Computer Club Deutschland", target = "213.73.91.29"}
+tests[2] = {descr = "Kernel.org - Mirror Niederlande", target = "199.6.1.164"}
+tests[3] = {descr = "Debian.org - Mirror Deutschland", target = "www.de.debian.org"}
+tests[4] = {descr = "Wikimedia Deutschland", target = "www.wikimedia.de"}
+
+for i, t in ipairs(tests) do 
+%>
+<tr>
+<td><%=t.descr%></td>
+<td><%=t.target%></td>
+<% if ffluci.sys.net.pingtest(t.target) == 0 then %>
+<td class="ok"><%:ok OK%></td>
+<% else %>
+<td class="error"><%:failed fehlgeschlagen%></td>
+<% end %>
+</tr>
+<% end %>
+</table>
+<br />
+<%+footer%>

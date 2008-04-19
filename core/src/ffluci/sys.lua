@@ -26,6 +26,8 @@ limitations under the License.
 
 module("ffluci.sys", package.seeall)
 require("posix")
+require("ffluci.bits")
+require("ffluci.util")
 
 -- Runs "command" and returns its output
 function exec(command)
@@ -68,6 +70,11 @@ function hostname()
 	return io.lines("/proc/sys/kernel/hostname")()
 end
 
+-- Returns the contents of a documented referred by an URL
+function httpget(url)
+	return exec("wget -qO- '"..url:gsub("'", "").."'")
+end
+
 -- Returns the load average
 function loadavg()
 	local loadavg = io.lines("/proc/loadavg")()
@@ -79,11 +86,49 @@ function reboot()
 	return os.execute("reboot >/dev/null 2>&1")
 end
 
+-- Returns the system type, cpu name, and installed physical memory
+function sysinfo()
+	local c1 = "cat /proc/cpuinfo|grep system\\ typ|cut -d: -f2 2>/dev/null"
+	local c2 = "uname -m 2>/dev/null"
+	local c3 = "cat /proc/cpuinfo|grep model\\ name|cut -d: -f2 2>/dev/null"
+	local c4 = "cat /proc/cpuinfo|grep cpu\\ model|cut -d: -f2 2>/dev/null"
+	local c5 = "cat /proc/meminfo|grep MemTotal|cut -d: -f2 2>/dev/null"
+	
+	local s = ffluci.util.trim(exec(c1))
+	local m = ""
+	local r = ""
+	
+	if s == "" then
+		s = ffluci.util.trim(exec(c2))
+		m = ffluci.util.trim(exec(c3))
+	else
+		m = ffluci.util.trim(exec(c4))
+	end
+	
+	r = ffluci.util.trim(exec(c5))
+	
+	return s, m, r
+end
+
 
 group = {}
 group.getgroup = posix.getgroup
 
 net = {}
+-- Returns whether an IP-Adress belongs to a certain net
+function net.belongs(ip, net)
+	local netparts = ffluci.util.split(net, "/")
+	
+	if #netparts ~= 2 then
+		return nil
+	end
+	
+	local binadr = net.ip4bin(ip)
+	local binnet = net.ip4bin(netparts[1])
+	
+	return (binadr:sub(1, netparts[2]) == binnet:sub(1, netparts[2]))
+end
+
 -- Returns all available network interfaces
 function net.devices()
 	local devices = {}
@@ -92,6 +137,52 @@ function net.devices()
 	end
 	return devices
 end
+
+-- Returns the kernel routing table
+function net.routes()
+	return _parse_delimited_table(io.lines("/proc/net/route"))
+end
+
+-- Returns the numeric IP to a given hexstring
+function net.hexip4(hex)
+	if #hex ~= 8 then
+		return nil
+	end
+	
+	local hexdec = ffluci.bits.Hex2Dec
+	
+	local ip = ""
+	ip = ip .. tostring(hexdec(hex:sub(7,8))) .. "."
+	ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."
+	ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
+	ip = ip .. tostring(hexdec(hex:sub(1,2)))
+	
+	return ip
+end
+
+-- Returns the binary IP to a given IP
+function net.ip4bin(ip)
+	local parts = ffluci.util.split(ip, '%.')
+	if #parts ~= 4 then
+		return nil
+	end
+	
+	local decbin = ffluci.bits.Dec2Bin
+	
+	local bin = ""
+	bin = bin .. decbin(parts[1], 8)
+	bin = bin .. decbin(parts[2], 8)
+	bin = bin .. decbin(parts[3], 8)
+	bin = bin .. decbin(parts[4], 8)
+	
+	return bin
+end
+
+-- Tests whether a host is pingable
+function net.pingtest(host)
+	return os.execute("ping -c1 '"..host:gsub("'", '').."' >/dev/null 2>&1")
+end
+
 
 process = {}
 process.info = posix.getpid 
@@ -123,4 +214,94 @@ function user.setpasswd(user, pwd)
 	local cmd = "(echo '"..pwd.."';sleep 1;echo '"..pwd.."')|"
 	cmd = cmd .. "passwd '"..user.."' >/dev/null 2>&1"
 	return os.execute(cmd)
+end
+
+
+wifi = {}
+
+function wifi.getiwconfig()
+	local cnt = exec("/usr/sbin/iwconfig 2>/dev/null")
+	local iwc = {}
+	
+	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n\n")) do
+		local k = l:match("^(.-) ")
+		l = l:gsub("^(.-) +", "", 1)
+		if k then
+			iwc[k] = _parse_mixed_record(l)
+		end
+	end
+	
+	return iwc	
+end
+
+function wifi.iwscan()
+	local cnt = exec("iwlist scan 2>/dev/null")
+	local iws = {}
+	
+	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n\n")) do
+		local k = l:match("^(.-) ")
+		l = l:gsub("^[^\n]+", "", 1)
+		if k then
+			iws[k] = {}
+			for j, c in pairs(ffluci.util.split(l, "\n          Cell")) do
+				c = c:gsub("^(.-)- ", "", 1)
+				c = ffluci.util.split(c, "\n", 7)
+				c = table.concat(c, "\n", 1, 7)
+				table.insert(iws[k], _parse_mixed_record(c))
+			end
+		end
+	end
+	
+	return iws	
+end
+
+
+-- Internal functions
+
+function _parse_delimited_table(iter, delimiter)
+	delimiter = delimiter or "\t+"
+	
+	local data  = {}
+	local trim  = ffluci.util.trim
+	local split = ffluci.util.split
+	
+	local keys = split(trim(iter()), delimiter)
+	for i, j in pairs(keys) do
+		keys[i] = trim(keys[i])
+	end
+	
+	for line in iter do
+		local row = {}
+		line = trim(line)
+		if #line > 0 then
+			for i, j in pairs(split(line, delimiter)) do
+				if keys[i] then
+					row[keys[i]] = j
+				end
+			end
+		end
+		table.insert(data, row)
+	end
+	
+	return data
+end
+
+function _parse_mixed_record(cnt)
+	local data = {}
+	
+	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n")) do
+    	for j, f in pairs(ffluci.util.split(ffluci.util.trim(l), "  ")) do
+        	local k, x, v = f:match('([^%s][^:=]+) *([:=]*) *"*([^\n"]*)"*')
+
+            if k then
+				if x == "" then
+					table.insert(data, k)				
+				else
+            		data[k] = v
+				end
+            end
+    	end
+	end
+		
+    return data
 end
