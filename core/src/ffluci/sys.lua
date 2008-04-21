@@ -162,7 +162,7 @@ end
 
 -- Returns the binary IP to a given IP
 function net.ip4bin(ip)
-	local parts = ffluci.util.split(ip, '%.')
+	local parts = ffluci.util.split(ip, '.')
 	if #parts ~= 4 then
 		return nil
 	end
@@ -265,7 +265,7 @@ function _parse_delimited_table(iter, delimiter)
 	local trim  = ffluci.util.trim
 	local split = ffluci.util.split
 	
-	local keys = split(trim(iter()), delimiter)
+	local keys = split(trim(iter()), delimiter, nil, true)
 	for i, j in pairs(keys) do
 		keys[i] = trim(keys[i])
 	end
@@ -274,7 +274,7 @@ function _parse_delimited_table(iter, delimiter)
 		local row = {}
 		line = trim(line)
 		if #line > 0 then
-			for i, j in pairs(split(line, delimiter)) do
+			for i, j in pairs(split(line, delimiter, nil, true)) do
 				if keys[i] then
 					row[keys[i]] = j
 				end

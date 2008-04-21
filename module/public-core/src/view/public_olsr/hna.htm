@@ -1,0 +1,17 @@
+<%+header%>
+<h1><%:olsrhna OLSR-HNA%></h1>
+<br />
+<table cellspacing="0" cellpadding="6">
+<tr>
+<th><%:destination Ziel%></th>
+<th><%:gateway Gateway%></th>
+</tr>
+<% for k, route in ipairs(routes) do %>
+<tr>
+<td><%=route.Network%>/<%=route.Netmask%></td>
+<td><a href="http://<%=route.Gateway%>"><%=route.Gateway%></a></td>
+</tr>
+<% end %>
+</table>
+<br />
+<%+footer%>

@@ -145,32 +145,28 @@ function sessionid()
 end
 
 
--- Splits a string into an array (Adapted from lua-users.org)
-function split(str, pat, max)
+-- Splits a string into an array
+function split(str, pat, max, regex)
 	pat = pat or "\n"
-	max = max or -1
+	max = max or #str
 	
 	local t = {}
-	local fpat = "(.-)" .. pat
-	local last_end = 1
-	local s, e, cap = str:find(fpat, 1)
+	local c = 1
 	
-	while s do
+	if #pat == 0 then
+		return nil
+	end
+	
+	if max == 0 then
+		return str
+	end
+	
+	repeat
+		local s, e = str:find(pat, c, not regex)
+		table.insert(t, str:sub(c, s and s - 1))
 		max = max - 1
-		if s ~= 1 or cap ~= "" then
-			table.insert(t,cap)
-		end
-		last_end = e+1
-		if max == 0 then
-			break
-		end
-		s, e, cap = str:find(fpat, last_end)
-	end
-	
-	if last_end <= #str then
-		cap = str:sub(last_end)
-		table.insert(t, cap)
-	end
+		c = e and e + 1 or #str + 1
+	until not s or max < 0
 	
 	return t
 end

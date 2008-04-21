@@ -3,6 +3,7 @@ require("ffluci.sys")
 local load1, load5, load15 = ffluci.sys.loadavg()
 local req  = require("ffluci.dispatcher").request
 local menu = require("ffluci.menu").get()[req.category]
+menu = menu or {}
 require("ffluci.i18n").loadc("default")
 require("ffluci.http").htmlheader()
 %><?xml version="1.0" encoding="utf-8"?>

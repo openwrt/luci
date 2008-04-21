@@ -1,0 +1,17 @@
+<%+header%>
+<h1><%:olsrmid OLSR-MID%></h1>
+<br />
+<table cellspacing="0" cellpadding="6">
+<tr>
+<th><%:node Knoten%></th>
+<th><%:aliases Aliasse%></th>
+</tr>
+<% for k, mid in ipairs(mids) do %>
+<tr>
+<td><a href="http://<%=mid.IP%>"><%=mid.IP%></a></td>
+<td><%=mid.Aliases%></td>
+</tr>
+<% end %>
+</table>
+<br />
+<%+footer%>
