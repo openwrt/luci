@@ -161,23 +161,26 @@ function Session._uci3(self, cmd)
 		return nil, res[1]
 	end
 
-	table = {}
+	tbl = {}
 
 	for k,line in pairs(res) do
 		c, s, t = line:match("^([^.]-)%.([^.]-)=(.-)$")
 		if c then
-			table[c] = table[c] or {}
-			table[c][s] = {}
-			table[c][s][".type"] = t
+			tbl[c] = tbl[c] or {}
+			tbl[c][".order"] = tbl[c][".order"] or {}
+			
+			tbl[c][s] = {}
+			table.insert(tbl[c][".order"], s)
+			tbl[c][s][".type"] = t
 		end
 	
 		c, s, o, v = line:match("^([^.]-)%.([^.]-)%.([^.]-)=(.-)$")
 		if c then
-			table[c][s][o] = v
+			tbl[c][s][o] = v
 		end
 	end
 	
-	return table
+	return tbl
 end
 
 -- Build path (config.section.option=value) and prevent command injection

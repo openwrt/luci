@@ -1,7 +1,7 @@
 				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
-<% for k, v in pairs(self:cfgsections()) do%>
+<% for i, k in ipairs(self:cfgsections()) do%>
 						<% if self.addremove then %><div class="cbi-section-remove right">
 							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del Eintrag entfernen%>" />
 						</div><% end %>

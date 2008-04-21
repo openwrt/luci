@@ -147,6 +147,7 @@ function Map.add(self, sectiontype)
 	if name then
 		self.ucidata[name] = {}
 		self.ucidata[name][".type"] = sectiontype
+		table.insert(self.ucidata[".order"], name)
 	end
 	return name
 end
@@ -163,6 +164,7 @@ function Map.set(self, section, option, value)
 				self.ucidata[section] = {}
 			end
 			self.ucidata[section][".type"] = val
+			table.insert(self.ucidata[".order"], section)
 		end
 	end
 	return stat
@@ -360,10 +362,11 @@ end
 -- Return all matching UCI sections for this TypedSection
 function TypedSection.cfgsections(self)
 	local sections = {}
-	for k, v in pairs(self.map:get()) do
-		if v[".type"] == self.sectiontype then
+	local map = self.map:get()
+	for i, k in pairs(map[".order"]) do
+		if map[k][".type"] == self.sectiontype then
 			if self:checkscope(k) then
-				sections[k] = v
+				table.insert(sections, k)
 			end
 		end
 	end
@@ -435,7 +438,7 @@ function TypedSection.parse(self)
 		end		
 	end
 	
-	for k, v in pairs(self:cfgsections()) do
+	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
 		if ffluci.http.formvalue("cbi.submit") then
 			Node.parse(self, k)
