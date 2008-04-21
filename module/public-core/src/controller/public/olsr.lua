@@ -2,7 +2,7 @@ module("ffluci.controller.public.olsr", package.seeall)
 require("ffluci.sys")
 
 function action_index()
-	local data = fetch_txtinfo()
+	local data = fetch_txtinfo("links")
 	
 	if not data or not data.Links then
 		ffluci.template.render("public_olsr/error_olsr")
@@ -27,9 +27,9 @@ function action_index()
 end
 
 function action_routes()
-	local data = fetch_txtinfo()
+	local data = fetch_txtinfo("routes")
 	
-	if not data or not data.Links then
+	if not data or not data.Routes then
 		ffluci.template.render("public_olsr/error_olsr")
 		return nil
 	end
@@ -52,9 +52,9 @@ function action_routes()
 end
 
 function action_topology()
-	local data = fetch_txtinfo()
+	local data = fetch_txtinfo("topology")
 	
-	if not data or not data.Links then
+	if not data or not data.Topology then
 		ffluci.template.render("public_olsr/error_olsr")
 		return nil
 	end
@@ -69,9 +69,9 @@ function action_topology()
 end
 
 function action_hna()
-	local data = fetch_txtinfo()
+	local data = fetch_txtinfo("hna")
 	
-	if not data or not data.Links then
+	if not data or not data.HNA then
 		ffluci.template.render("public_olsr/error_olsr")
 		return nil
 	end
@@ -86,9 +86,9 @@ function action_hna()
 end
 
 function action_mid()
-	local data = fetch_txtinfo()
+	local data = fetch_txtinfo("mid")
 	
-	if not data or not data.Links then
+	if not data or not data.MID then
 		ffluci.template.render("public_olsr/error_olsr")
 		return nil
 	end
@@ -104,8 +104,9 @@ end
 
 
 -- Internal
-function fetch_txtinfo()
-	local rawdata = ffluci.sys.httpget("http://127.0.0.1:2006")
+function fetch_txtinfo(table)
+	table = table or ""
+	local rawdata = ffluci.sys.httpget("http://127.0.0.1:2006/"..table)
 	
 	if #rawdata == 0 then
 		return nil
