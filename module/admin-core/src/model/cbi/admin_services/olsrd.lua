@@ -19,14 +19,14 @@ noint = s:option(Flag, "AllowNoInt", "Start ohne Netzwerk")
 noint.enabled = "yes"
 noint.disabled = "no"
 
-s:option(Value, "Pollrate", "Abfragerate (Pollrate)", "s").isnumber = true
+s:option(Value, "Pollrate", "Abfragerate (Pollrate)", "s")
 
 tcr = s:option(ListValue, "TcRedundancy", "TC-Redundanz")
 tcr:value("0", "MPR-Selektoren")
 tcr:value("1", "MPR-Selektoren und MPR")
 tcr:value("2", "Alle Nachbarn")
 
-s:option(Value, "MprCoverage", "MPR-Erfassung").isinteger = true
+s:option(Value, "MprCoverage", "MPR-Erfassung")
 
 lql = s:option(ListValue, "LinkQualityLevel", "VQ-Level")
 lql:value("0", "deaktiviert")
@@ -35,7 +35,7 @@ lql:value("2", "MPR-Auswahl und Routing")
 
 lqfish = s:option(Flag, "LinkQualityFishEye", "VQ-Fisheye")
 
-s:option(Value, "LinkQualityWinSize", "VQ-Fenstergröße").isinteger = true
+s:option(Value, "LinkQualityWinSize", "VQ-Fenstergröße")
 
 s:option(Value, "LinkQualityDijkstraLimit", "VQ-Dijkstralimit")
 
@@ -49,23 +49,29 @@ i.anonymous = true
 i.addremove = true
 i.dynamic = true
 
-i:option(Value, "Interface", "Netzwerkschnittstellen")
+network = i:option(ListValue, "Interface", "Netzwerkschnittstellen")
+network:value("")
+for k, v in pairs(ffluci.model.uci.show("network").network) do
+	if v[".type"] == "interface" and k ~= "loopback" then
+		network:value(k)
+	end
+end
 
-i:option(Value, "HelloInterval", "Hello-Intervall").isnumber = true
+i:option(Value, "HelloInterval", "Hello-Intervall")
 
-i:option(Value, "HelloValidityTime", "Hello-Gültigkeit").isnumber = true
+i:option(Value, "HelloValidityTime", "Hello-Gültigkeit")
 
-i:option(Value, "TcInterval", "TC-Intervall").isnumber = true
+i:option(Value, "TcInterval", "TC-Intervall")
 
-i:option(Value, "TcValidityTime", "TC-Gültigkeit").isnumber = true
+i:option(Value, "TcValidityTime", "TC-Gültigkeit")
 
-i:option(Value, "MidInterval", "MID-Intervall").isnumber = true
+i:option(Value, "MidInterval", "MID-Intervall")
 
-i:option(Value, "MidValidityTime", "MID-Gültigkeit").isnumber = true
+i:option(Value, "MidValidityTime", "MID-Gültigkeit")
 
-i:option(Value, "HnaInterval", "HNA-Intervall").isnumber = true
+i:option(Value, "HnaInterval", "HNA-Intervall")
 
-i:option(Value, "HnaValidityTime", "HNA-Gültigkeit").isnumber = true
+i:option(Value, "HnaValidityTime", "HNA-Gültigkeit")
 
 
 p = m:section(TypedSection, "LoadPlugin", "Plugins")
