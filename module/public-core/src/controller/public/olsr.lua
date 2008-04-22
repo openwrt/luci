@@ -104,9 +104,9 @@ end
 
 
 -- Internal
-function fetch_txtinfo(table)
-	table = table or ""
-	local rawdata = ffluci.sys.httpget("http://127.0.0.1:2006/"..table)
+function fetch_txtinfo(otable)
+	otable = otable or ""
+	local rawdata = ffluci.sys.httpget("http://127.0.0.1:2006/"..otable)
 	
 	if #rawdata == 0 then
 		return nil

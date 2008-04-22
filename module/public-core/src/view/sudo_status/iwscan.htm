@@ -8,7 +8,7 @@ for iface, cells in pairs(ffluci.sys.wifi.iwscan()) do
 <td><%=cell.ESSID%></td>
 <td><%=cell.Address%></td>
 <td><%=cell.Mode%></td>
-<td><%=cell.Channel%></td>
+<td><%=(cell.Channel or cell.Frequency or "")%></td>
 <td><%=cell["Encryption key"]%></td>
 <td><%=cell.Quality%></td>
 <td><%=cell["Signal level"]%></td>

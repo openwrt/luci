@@ -241,12 +241,13 @@ function wifi.iwscan()
 	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n\n")) do
 		local k = l:match("^(.-) ")
 		l = l:gsub("^[^\n]+", "", 1)
+		l = ffluci.util.trim(l)
 		if k then
 			iws[k] = {}
 			for j, c in pairs(ffluci.util.split(l, "\n          Cell")) do
 				c = c:gsub("^(.-)- ", "", 1)
 				c = ffluci.util.split(c, "\n", 7)
-				c = table.concat(c, "\n", 1, 7)
+				c = table.concat(c, "\n", 1)
 				table.insert(iws[k], _parse_mixed_record(c))
 			end
 		end
