@@ -1,1 +1,1 @@
-module(..., package.seeall)
+module("ffluci.controller.admin.network", package.seeall)
