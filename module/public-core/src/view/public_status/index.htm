@@ -34,24 +34,7 @@
 <th><%:signal Signal%></th>
 <th><%:noise Rausch%></th>
 </tr>
-<%for k, v in pairs(wifi) do%>
-<tr>
-<td rowspan="2"><%=k%></td>
-<td><%=v[1]%></td>
-<td><%=v.Frequency%></td>
-<td><%=v["Tx-Power"]%></td>
-<td><%=v["Bit Rate"]%></td>
-<td><%=v["RTS thr"]%></td>
-<td><%=v["Fragment thr"]%></td>
-<td><%=v["Link Quality"]%></td>
-<td><%=v["Signal level"]%></td>
-<td><%=v["Noise level"]%></td>
-</tr>
-<tr>
-<td colspan="4"><strong><%:essid ESSID%>: </strong><%=v.ESSID%></td>
-<td colspan="5"><strong><%:bssid BSSID%>: </strong><%=(v.Cell or v["Access Point"])%></td>
-</tr>
-<%end%>
+<%=ffluci.sys.httpget("http://127.0.0.1" .. controller .. "/sudo/status/iwconfig")%>
 </table>
 <br />
 <br />
@@ -64,7 +47,15 @@
 <th><%:iface Schnittstelle%></th>
 </tr>
 <%
-local be = (routes[1] and routes[1].Mask:sub(-2) == "00")
+
+-- UGLY hack is UGLY
+if routes[1] and routes[1].Gateway:sub(-2) == "00" then
+	local be = true
+else
+	local be = false
+end
+
+
 for i, rt in pairs(routes) do
 %>
 <tr>
