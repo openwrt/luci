@@ -10,7 +10,6 @@ function action_index()
 	data.routes = {}
 	for i, r in pairs(ffluci.sys.net.routes()) do
 		if r.Destination == "00000000" then
-			r.Gateway = ffluci.sys.net.hexip4(r.Gateway)
 			table.insert(data.routes, r)
 		end
 	end

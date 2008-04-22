@@ -153,6 +153,10 @@ function split(str, pat, max, regex)
 	local t = {}
 	local c = 1
 	
+	if #str == 0 then
+		return {""}
+	end
+	
 	if #pat == 0 then
 		return nil
 	end
@@ -172,8 +176,9 @@ function split(str, pat, max, regex)
 end
 
 -- Removes whitespace from beginning and end of a string
-function trim (string)
-	return string:gsub("^%s*(.-)%s*$", "%1")
+function trim(string)
+	local s = string:gsub("^%s*(.-)%s*$", "%1")
+	return s
 end
 
 -- Updates given table with new values
