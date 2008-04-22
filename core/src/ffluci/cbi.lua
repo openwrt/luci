@@ -367,7 +367,12 @@ end
 -- Return all matching UCI sections for this TypedSection
 function TypedSection.cfgsections(self)
 	local sections = {}
+	
 	local map = self.map:get()
+	if not map[".order"] then
+		return sections
+	end
+	
 	for i, k in pairs(map[".order"]) do
 		if map[k][".type"] == self.sectiontype then
 			if self:checkscope(k) then

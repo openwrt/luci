@@ -143,8 +143,8 @@ function net.routes()
 	return _parse_delimited_table(io.lines("/proc/net/route"))
 end
 
--- Returns the numeric IP to a given hexstring
-function net.hexip4(hex)
+-- Returns the numeric IP to a given hexstring (little endian)
+function net.hexip4(hex, bigendian)
 	if #hex ~= 8 then
 		return nil
 	end
@@ -152,10 +152,17 @@ function net.hexip4(hex)
 	local hexdec = ffluci.bits.Hex2Dec
 	
 	local ip = ""
-	ip = ip .. tostring(hexdec(hex:sub(7,8))) .. "."
-	ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."
-	ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
-	ip = ip .. tostring(hexdec(hex:sub(1,2)))
+	if bigendian then
+		ip = ip .. tostring(hexdec(hex:sub(1,2))) .. "."
+		ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
+		ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."
+		ip = ip .. tostring(hexdec(hex:sub(7,8)))
+	else
+		ip = ip .. tostring(hexdec(hex:sub(7,8))) .. "."
+		ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."
+		ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
+		ip = ip .. tostring(hexdec(hex:sub(1,2)))
+	end
 	
 	return ip
 end

@@ -10,11 +10,18 @@
 <th><%:metric Metrik%></th>
 <th><%:iface Schnittstelle%></th>
 </tr>
-<% for i, r in pairs(ffluci.sys.net.routes()) do %>
+<%
+local routes = ffluci.sys.net.routes()
+
+-- UGLY hack is UGLY
+local be = (routes[1] and routes[1].Mask:sub(-2) == "00")
+
+for i, r in pairs(routes) do
+%>
 <tr>
-<td><%=ffluci.sys.net.hexip4(r.Destination)%></td>
-<td><%=ffluci.sys.net.hexip4(r.Mask)%></td>
-<td><%=ffluci.sys.net.hexip4(r.Gateway)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Destination, be)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Mask, be)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Gateway, be)%></td>
 <td><%=r.Metric%></td>
 <td><%=r.Iface%></td>
 </tr>
