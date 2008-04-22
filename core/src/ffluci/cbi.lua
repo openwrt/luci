@@ -178,6 +178,11 @@ function Map.del(self, section, option)
 			self.ucidata[section][option] = nil
 		else
 			self.ucidata[section] = nil
+			for i, k in ipairs(self.ucidata[".order"]) do
+				if section == k then
+					table.remove(self.ucidata[".order"], i)
+				end
+			end
 		end
 	end
 	return stat
