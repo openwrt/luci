@@ -147,6 +147,7 @@ function Map.add(self, sectiontype)
 	if name then
 		self.ucidata[name] = {}
 		self.ucidata[name][".type"] = sectiontype
+		self.ucidata[".order"] = self.ucidata[".order"] or {}
 		table.insert(self.ucidata[".order"], name)
 	end
 	return name
@@ -164,6 +165,7 @@ function Map.set(self, section, option, value)
 				self.ucidata[section] = {}
 			end
 			self.ucidata[section][".type"] = val
+			self.ucidata[".order"] = self.ucidata[".order"] or {}
 			table.insert(self.ucidata[".order"], section)
 		end
 	end
