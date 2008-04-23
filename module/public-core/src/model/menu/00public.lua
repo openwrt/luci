@@ -3,7 +3,6 @@ act("contact", "Kontakt")
 
 add("public", "status", "Status", 20)
 act("routes", "Routingtabelle")
-act("internet", "Internetzugang")
 act("iwscan", "WLAN-Scan")
 
 add("public", "olsr", "OLSR", 30)
