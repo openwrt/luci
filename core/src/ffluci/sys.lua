@@ -121,8 +121,8 @@ function net.arptable()
 end
 
 -- Returns whether an IP-Adress belongs to a certain net
-function net.belongs(ip, net, prefix)
-	return (net.ip4bin(ip):sub(1, prefix) == net.ip4bin(net):sub(1, prefix))
+function net.belongs(ip, ipnet, prefix)
+	return (net.ip4bin(ip):sub(1, prefix) == net.ip4bin(ipnet):sub(1, prefix))
 end
 
 -- Returns all available network interfaces

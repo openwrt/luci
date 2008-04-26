@@ -61,7 +61,7 @@ start() {
 	iptables -t nat -A luci_splash_leases -j DROP
 	
 	### Start the splash httpd
-	httpd -c /etc/luci_splash_httpd.conf -p 8082 -h /usr/lib/luci_splash/htdocs
+	httpd -c /etc/luci_splash_httpd.conf -p 8082 -h /usr/lib/luci-splash/htdocs
 	
 	### Sync leases
 	/usr/lib/luci-splash/sync.lua
