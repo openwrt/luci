@@ -19,14 +19,15 @@ iface_add() {
 	
 	eval "$(ipcalc.sh $ipaddr $netmask)"
 	
-	iptables -t nat -A luci_splash -i "$iface" -s "$IP/$PREFIX" -j luci_splash_portal	
+	iptables -t nat -A luci_splash -i "$iface" -s "$IP/$PREFIX" -j luci_splash_portal
+	iptables -t nat -A luci_splash_portal -i "$iface" -s "$IP/$PREFIX" -d "$ipaddr" -p tcp --dport 80 -j RETURN 
 }
 
 blacklist_add() {
 	local cfg="$1"
 	
 	config_get mac "$cfg" mac
-	[ -n "$mac" ] && iptables -t nat -A luci_splash_portal -m mac --mac-source "$mac" -j REJECT
+	[ -n "$mac" ] && iptables -t nat -A luci_splash_portal -m mac --mac-source "$mac" -j DROP
 }
 
 whitelist_add() {
@@ -57,13 +58,13 @@ start() {
 	
 	### Build the leases rule
 	iptables -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
-	iptables -t nat -A luci_splash_leases -j REJECT
+	iptables -t nat -A luci_splash_leases -j DROP
 	
 	### Start the splash httpd
 	httpd -c /etc/luci_splash_httpd.conf -p 8082 -h /usr/lib/luci_splash/htdocs
 	
 	### Sync leases
-	/usr/lib/luci_splash/sync.lua
+	/usr/lib/luci-splash/sync.lua
 	
 	### Hook in the chain
 	iptables -t nat -A prerouting_rule -j luci_splash
@@ -74,13 +75,13 @@ stop() {
 	iptables -t nat -D prerouting_rule -j luci_splash
 	
 	### Clear subchains
-	iptables -t nat -F luci_splash
-	iptables -t nat -F luci_splash_portal
 	iptables -t nat -F luci_splash_leases
+	iptables -t nat -F luci_splash_portal
+	iptables -t nat -F luci_splash	
 	
 	### Delete subchains
-	iptables -t nat -X luci_splash
-	iptables -t nat -X luci_splash_portal
 	iptables -t nat -X luci_splash_leases
+	iptables -t nat -X luci_splash_portal
+	iptables -t nat -X luci_splash
 }
 

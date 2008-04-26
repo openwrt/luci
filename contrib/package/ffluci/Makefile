@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffluci
 PKG_REV:=HEAD
-PKG_VERSION:=0.2+svn$(PKG_REV)
+PKG_VERSION:=0.3+svn$(PKG_REV)
 PKG_RELEASE:=1
 PKG_BRANCH:=trunk
 
@@ -50,7 +50,7 @@ define Package/ffluci/install
 	
 	$(CP) $(PKG_BUILD_DIR)/core/dist/* $(1)/usr/lib/lua/ -R
 	$(CP) $(PKG_BUILD_DIR)/core/contrib/uci/* $(1)/etc/config/
-	$(CP) $(PKG_BUILD_DIR)/core/contrib/hotplug.d-20-aliases $(1)/etc/hotplug.d/iface -R
+	$(CP) $(PKG_BUILD_DIR)/core/contrib/hotplug.d-20-aliases $(1)/etc/hotplug.d/iface/20-aliases -R
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci-upload $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/index.cgi $(1)/www/cgi-bin
@@ -62,6 +62,7 @@ define Package/ffluci/install
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/contrib/uci/luci_fw $(1)/etc/config/luci_fw
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/init.d/luci_fw $(1)/etc/init.d/luci_fw
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/ffluci-flash $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/luci-splash $(1)/www/cgi-bin
 	
 	$(CP) $(PKG_BUILD_DIR)/module/public-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	$(CP) $(PKG_BUILD_DIR)/module/public-core/contrib/media $(1)/www/ffluci/ -R

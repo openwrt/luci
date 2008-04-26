@@ -3,6 +3,9 @@ require("ffluci.model.uci")
 
 m = Map("luci_splash", "Client-Splash", [[Client-Splash ist das Freifunk Hotspot-Authentifizierungs-System.]])
 
+s = m:section(NamedSection, "general", "core", "Allgemein")
+s:option(Value, "leasetime", "Freigabezeit", "h")
+
 s = m:section(TypedSection, "iface", "Schnittstellen")
 s.addremove = true
 s.anonymous = true
