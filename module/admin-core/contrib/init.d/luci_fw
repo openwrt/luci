@@ -18,13 +18,13 @@ apply_portfw() {
 	ip=$(echo $to | cut -d: -f1)
 	
 	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "tcp" ]); then
-		iptables -t nat -A luci_prerouting -i "$iface" -p tcp --dport "$dport" -j DNAT --to "$to"
-		iptables -A luci_forward -i "$iface" -p tcp -d "$ip" $ports -j ACCEPT
+		iptables -t nat -A luci_fw_prerouting -i "$iface" -p tcp --dport "$dport" -j DNAT --to "$to"
+		iptables -A luci_fw_forward -i "$iface" -p tcp -d "$ip" $ports -j ACCEPT
 	fi
 
 	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "udp" ]); then
-		iptables -t nat -A luci_prerouting -i "$iface" -p udp --dport "$dport" -j DNAT --to "$to"
-		iptables -A luci_forward -i "$iface" -p udp -d "$ip" $ports -j ACCEPT
+		iptables -t nat -A luci_fw_prerouting -i "$iface" -p udp --dport "$dport" -j DNAT --to "$to"
+		iptables -A luci_fw_forward -i "$iface" -p udp -d "$ip" $ports -j ACCEPT
 	fi
 }
 
@@ -34,11 +34,11 @@ apply_rule() {
 
 	config_get chain "$cfg" chain
 	[ -n "$chain" ] || return 0
-	[ "$chain" == "forward" ] && cmd="$cmd -A luci_forward"
-	[ "$chain" == "input" ] && cmd="$cmd -A luci_input"
-	[ "$chain" == "output" ] && cmd="$cmd -A luci_output"
-	[ "$chain" == "prerouting" ] && cmd="$cmd -t nat -A luci_prerouting"
-	[ "$chain" == "postrouting" ] && cmd="$cmd -t nat -A luci_postrouting"
+	[ "$chain" == "forward" ] && cmd="$cmd -A luci_fw_forward"
+	[ "$chain" == "input" ] && cmd="$cmd -A luci_fw_input"
+	[ "$chain" == "output" ] && cmd="$cmd -A luci_fw_output"
+	[ "$chain" == "prerouting" ] && cmd="$cmd -t nat -A luci_fw_prerouting"
+	[ "$chain" == "postrouting" ] && cmd="$cmd -t nat -A luci_fw_postrouting"
 	
 	config_get iface "$cfg" iface
 	[ -n "$iface" ] && cmd="$cmd -i $iface"	
@@ -66,6 +66,9 @@ apply_rule() {
 
 	config_get tosrc "$cfg" tosrc
 	[ -n "$tosrc" ] && cmd="$cmd --to-source $tosrc"	
+	
+	config_get mac "$cfg" mac
+	[ -n "$mac" ] && cmd="$cmd -m mac --mac-source $mac"
 
 	config_get jump "$cfg" jump
 	[ -n "$jump" ] && cmd="$cmd -j $jump"	
@@ -78,18 +81,18 @@ apply_rule() {
 
 start() {
 	### Create subchains
-	iptables -N luci_input
-	iptables -N luci_output
-	iptables -N luci_forward
-	iptables -t nat -N luci_prerouting
-	iptables -t nat -N luci_postrouting
+	iptables -N luci_fw_input
+	iptables -N luci_fw_output
+	iptables -N luci_fw_forward
+	iptables -t nat -N luci_fw_prerouting
+	iptables -t nat -N luci_fw_postrouting
 	
 	### Hook in the chains
-	iptables -A input_rule -j luci_input
-	iptables -A output_rule -j luci_output
-	iptables -A forwarding_rule -j luci_forward
-	iptables -t nat -A prerouting_rule -j luci_prerouting
-	iptables -t nat -A postrouting_rule -j luci_postrouting
+	iptables -A input_rule -j luci_fw_input
+	iptables -A output_rule -j luci_fw_output
+	iptables -A forwarding_rule -j luci_fw_forward
+	iptables -t nat -A prerouting_rule -j luci_fw_prerouting
+	iptables -t nat -A postrouting_rule -j luci_fw_postrouting
 	
 	### Read chains from config
 	config_load luci_fw
@@ -99,23 +102,23 @@ start() {
 
 stop() {
 	### Hook out the chains
-	iptables -D input_rule -j luci_input
-	iptables -D output_rule -j luci_output
-	iptables -D forwarding_rule -j luci_forward
-	iptables -t nat -D prerouting_rule -j luci_prerouting
-	iptables -t nat -D postrouting_rule -j luci_postrouting	
+	iptables -D input_rule -j luci_fw_input
+	iptables -D output_rule -j luci_fw_output
+	iptables -D forwarding_rule -j luci_fw_forward
+	iptables -t nat -D prerouting_rule -j luci_fw_prerouting
+	iptables -t nat -D postrouting_rule -j luci_fw_postrouting	
 	
 	### Clear subchains
-	iptables -F luci_input
-	iptables -F luci_output
-	iptables -F luci_forward
-	iptables -t nat -F luci_prerouting
-	iptables -t nat -F luci_postrouting
+	iptables -F luci_fw_input
+	iptables -F luci_fw_output
+	iptables -F luci_fw_forward
+	iptables -t nat -F luci_fw_prerouting
+	iptables -t nat -F luci_fw_postrouting
 	
 	### Delete subchains
-	iptables -X luci_input
-	iptables -X luci_output
-	iptables -X luci_forward
-	iptables -t nat -X luci_prerouting
-	iptables -t nat -X luci_postrouting
+	iptables -X luci_fw_input
+	iptables -X luci_fw_output
+	iptables -X luci_fw_forward
+	iptables -t nat -X luci_fw_prerouting
+	iptables -t nat -X luci_fw_postrouting
 }

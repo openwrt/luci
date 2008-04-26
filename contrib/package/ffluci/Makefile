@@ -43,9 +43,11 @@ define Package/ffluci/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	
 	$(CP) $(PKG_BUILD_DIR)/core/dist/* $(1)/usr/lib/lua/ -R
 	$(CP) $(PKG_BUILD_DIR)/core/contrib/uci/* $(1)/etc/config/
+	$(CP) $(PKG_BUILD_DIR)/core/contrib/hotplug.d-20-aliases $(1)/etc/hotplug.d/iface -R
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci-upload $(1)/www/cgi-bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/index.cgi $(1)/www/cgi-bin

@@ -59,6 +59,12 @@ function request_redirect(category, module, action, ...)
 end
 
 
+-- Returns the User's IP
+function remote_addr()
+	return ENV.REMOTE_ADDR
+end
+
+
 -- Returns the script name
 function script_name()
 	return ENV.SCRIPT_NAME

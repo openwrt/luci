@@ -115,18 +115,14 @@ group = {}
 group.getgroup = posix.getgroup
 
 net = {}
+-- Returns the ARP-Table
+function net.arptable()
+	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+")
+end
+
 -- Returns whether an IP-Adress belongs to a certain net
-function net.belongs(ip, net)
-	local netparts = ffluci.util.split(net, "/")
-	
-	if #netparts ~= 2 then
-		return nil
-	end
-	
-	local binadr = net.ip4bin(ip)
-	local binnet = net.ip4bin(netparts[1])
-	
-	return (binadr:sub(1, netparts[2]) == binnet:sub(1, netparts[2]))
+function net.belongs(ip, net, prefix)
+	return (net.ip4bin(ip):sub(1, prefix) == net.ip4bin(net):sub(1, prefix))
 end
 
 -- Returns all available network interfaces
@@ -136,6 +132,17 @@ function net.devices()
 		table.insert(devices, line:match(" *(.-):"))
 	end
 	return devices
+end
+
+-- Returns the prefix to a given netmask
+function net.mask4prefix(mask)
+	local bin = net.ip4bin(mask)
+	
+	if not bin then
+		return nil
+	end
+	
+	return #ffluci.util.split(bin, "1")-1
 end
 
 -- Returns the kernel routing table
@@ -267,7 +274,7 @@ end
 -- Internal functions
 
 function _parse_delimited_table(iter, delimiter)
-	delimiter = delimiter or "\t+"
+	delimiter = delimiter or "%s+"
 	
 	local data  = {}
 	local trim  = ffluci.util.trim

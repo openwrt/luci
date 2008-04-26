@@ -24,6 +24,7 @@ proto:value("udp", "UDP")
 
 s:option(Value, "source", "Quelladresse").optional = true
 s:option(Value, "destination", "Zieladresse").optional = true
+s:option(Value, "mac", "MAC-Adresse").optional = true
 
 sport = s:option(Value, "sport", "Quellport")
 sport.optional = true

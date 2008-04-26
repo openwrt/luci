@@ -1,0 +1,86 @@
+#!/bin/sh /etc/rc.common
+START=70
+
+iface_add() {
+	local cfg="$1"
+	
+	config_get net "$cfg" network
+	[ -n "$net" ] || return 0
+	
+	config_get iface "$net" ifname
+	[ -n "$iface" ] || return 0
+	iface="${iface%%:*}"
+	
+	config_get ipaddr "$net" ipaddr
+	[ -n "$ipaddr" ] || return 0
+	
+	config_get netmask "$net" netmask
+	[ -n "$netmask" ] || return 0
+	
+	eval "$(ipcalc.sh $ipaddr $netmask)"
+	
+	iptables -t nat -A luci_splash -i "$iface" -s "$IP/$PREFIX" -j luci_splash_portal	
+}
+
+blacklist_add() {
+	local cfg="$1"
+	
+	config_get mac "$cfg" mac
+	[ -n "$mac" ] && iptables -t nat -A luci_splash_portal -m mac --mac-source "$mac" -j REJECT
+}
+
+whitelist_add() {
+	local cfg="$1"
+	
+	config_get mac "$cfg" mac
+	[ -n "$mac" ] && iptables -t nat -A luci_splash_portal -m mac --mac-source "$mac" -j RETURN
+}
+
+start() {
+	### Read chains from config
+	include /lib/network
+	scan_interfaces
+	config_load luci_splash
+	
+	### Create subchains
+	iptables -t nat -N luci_splash
+	iptables -t nat -N luci_splash_portal
+	iptables -t nat -N luci_splash_leases
+	
+	### Build the main rule
+	config_foreach iface_add iface
+	
+	### Build the portal rule
+	config_foreach blacklist_add blacklist
+	config_foreach whitelist_add whitelist
+	iptables -t nat -A luci_splash_portal -j luci_splash_leases
+	
+	### Build the leases rule
+	iptables -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
+	iptables -t nat -A luci_splash_leases -j REJECT
+	
+	### Start the splash httpd
+	httpd -c /etc/luci_splash_httpd.conf -p 8082 -h /usr/lib/luci_splash/htdocs
+	
+	### Sync leases
+	/usr/lib/luci_splash/sync.lua
+	
+	### Hook in the chain
+	iptables -t nat -A prerouting_rule -j luci_splash
+}
+
+stop() {
+	### Hook out the chain
+	iptables -t nat -D prerouting_rule -j luci_splash
+	
+	### Clear subchains
+	iptables -t nat -F luci_splash
+	iptables -t nat -F luci_splash_portal
+	iptables -t nat -F luci_splash_leases
+	
+	### Delete subchains
+	iptables -t nat -X luci_splash
+	iptables -t nat -X luci_splash_portal
+	iptables -t nat -X luci_splash_leases
+}
+
