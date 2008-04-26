@@ -12,9 +12,12 @@ include $(INCLUDE_DIR)/package.mk
 define Package/luci-splash
   SECTION:=admin
   CATEGORY:=Administration
-  SUBMENU:=ffluci
-  DEPENDS:=+ffluci
+  SUBMENU:=FFLuCI
+  DEPENDS:=+ffluci +iptables-mod-nat
   TITLE:=FFLuCI DHCP-Splash
+endef
+
+define Build/Compile
 endef
 
 define Package/luci-splash/install

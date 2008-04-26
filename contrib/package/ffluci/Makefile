@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_BUILD_DEPENDS:=lua-luci
+
 MAKE_ACTION:=compile LUAC=$(BUILD_DIR_HOST)/lua-luci/luac
 
 include $(INCLUDE_DIR)/package.mk
@@ -23,6 +25,7 @@ define Package/ffluci
   SECTION:=admin
   CATEGORY:=Administration
   TITLE:=FFLuCI
+  SUBMENU:=FFLuCI
   DEPENDS:=+luaposix +haserl-lua
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
 endef

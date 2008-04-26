@@ -28,6 +28,10 @@ act("routes", "Statische Routen")
 act("portfw", "Portweiterleitung")
 act("firewall", "Firewall")
 
+if isfile("/etc/config/luci_splash") then
+	act("splash", "Client-Splash")
+end
+
 if isfile("/etc/config/qos") then
 	act("qos", "Quality of Service")
 end
