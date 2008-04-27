@@ -33,7 +33,7 @@ define Package/ffluci-splash/install
 	$(INSTALL_BIN) ./src/luci_splash.init $(1)/etc/init.d/luci_splash
 	$(INSTALL_BIN) ./src/luci-splash.lua $(1)/usr/sbin/luci-splash
 	
-	$(INSTALL_BIN) -a ./src/luci_splash.cron $(1)/etc/cron.minutely/luci_splash
+	$(INSTALL_BIN) ./src/luci_splash.cron $(1)/etc/cron.minutely/luci-splash
 	$(CP) -a ./src/luci_splash.uci $(1)/etc/config/luci_splash
 	$(CP) -a ./src/luci_splash_httpd.conf $(1)/etc/
 	
