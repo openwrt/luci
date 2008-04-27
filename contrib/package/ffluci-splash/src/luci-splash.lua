@@ -14,10 +14,7 @@ function main(argv)
 	local cmd = argv[1]
 	local arg = argv[2]
 	
-	if not cmd then
-		print("Usage: " .. argv[0] .. " <status|add|remove|sync> [MAC]")
-		os.exit(1)
-	elseif cmd == "status" then
+	if cmd == "status" then
 		if not arg then
 			os.exit(1)
 		end
@@ -47,7 +44,7 @@ function main(argv)
 		end
 		os.exit(0)
 	elseif cmd == "remove" then
-		if not cmd[2] then
+		if not arg then
 			os.exit(1)
 		end
 		
@@ -56,6 +53,9 @@ function main(argv)
 	elseif cmd == "sync" then
 		sync()
 		os.exit(0)
+	else
+		print("Usage: " .. argv[0] .. " <status|add|remove|sync> [MAC]")
+		os.exit(1)	
 	end
 end
 
