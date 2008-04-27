@@ -18,7 +18,9 @@ end
 
 s:option(Value, "start", "Start", "Erste vergebene Adresse (letztes Oktett)").rmempty = true
 
-s:option(Value, "limit", "Limit", "Letzte vergebene Adresse (letztes Oktett)").rmempty = true
+s:option(Value, "limit", "Limit", "Anzahl zu vergebender Adressen -1").rmempty = true
+
+s:option(Value, "leasetime", "Laufzeit").rmempty = true
 
 s:option(Flag, "dynamicdhcp", "Dynamisches DHCP").rmempty = true
 

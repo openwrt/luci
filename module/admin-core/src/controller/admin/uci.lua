@@ -25,7 +25,7 @@ function action_apply()
 		if ffluci.config.uci_oncommit then
 			for i, cmd in ipairs(apply) do
 				if cmd then
-					output = output .. cmd .. ":" .. ffluci.sys.exec(cmd)
+					output = output .. cmd .. ":" .. ffluci.sys.exec(cmd) .. "\n"
 				end
 			end
 		end
