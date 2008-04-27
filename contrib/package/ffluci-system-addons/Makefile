@@ -9,7 +9,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/ffluci-splash
+define Package/ffluci-system-addons
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=FFLuCI
