@@ -73,7 +73,7 @@ function remove_lease(mac)
 	mac = mac:lower()
 
 	for k, v in pairs(uci:show("luci_splash").luci_splash) do
-		if v.mac:lower() == mac then
+		if v[".type"] == "lease" and v.mac:lower() == mac then
 			remove_rule(mac)
 			uci:del("luci_splash", k)
 		end
