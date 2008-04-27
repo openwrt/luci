@@ -7,7 +7,7 @@ require("ffluci.sys")
 require("ffluci.model.uci")
 
 -- Init state session
-uci = ffluci.model.uci.Session("/var/state")
+uci = ffluci.model.uci.StateSession()
 
 
 function main(argv)

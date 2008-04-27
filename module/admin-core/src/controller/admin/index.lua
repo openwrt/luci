@@ -55,6 +55,23 @@ function configure_freifunk()
 		uci:set("network", "ffdhcp", "ipaddr", dhcpip)
 		uci:set("network", "ffdhcp", "netmask", uci:get("freifunk", "community", "dhcpmask"))
 		
+		local dhcp = uci:show("dhcp")
+		if dhcp then
+			for k, v in pairs(dhcp.dhcp) do
+				if v[".type"] == "dhcp" and v.interface == "ffdhcp" then
+					uci:del("dhcp", k)
+				end
+			end		
+			
+			local dhcpbeg = 48 + tonumber(ip:match("[0-9]+$")) * 4
+			
+			local sk = uci:add("dhcp", "dhcp")
+			uci:set("dhcp", sk, "interface", "ffdhcp")
+			uci:set("dhcp", sk, "start", dhcpbeg)
+			uci:set("dhcp", sk, "limit", (dhcpbeg < 252) and 3 or 2)
+			uci:set("dhcp", sk, "leasetime", "30m")
+		end 
+		
 		local splash = uci:show("luci_splash")
 		if splash then
 			for k, v in pairs(splash.luci_splash) do
