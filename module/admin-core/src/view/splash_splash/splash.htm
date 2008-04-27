@@ -1,6 +1,7 @@
 <%+header%>
 <%+splash/splash%>
-<form method="post" action="<%=controller%>/splash/splash/activate">
-	<input type="submit" value="<%:accept Annehmen%>" />
+<form method="get" action="<%=controller%>/splash/splash/activate">
+	<input type="submit" value="<%:decline Ablehnen%>" />
+	<input type="submit" name="accept" value="<%:accept Annehmen%>" />
 </form>
 <%+footer%>

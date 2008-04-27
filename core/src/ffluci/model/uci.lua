@@ -52,6 +52,13 @@ end
 
 -- The default Session
 local default = Session()
+local state   = Session("/var/state")
+
+-- The state Session
+function StateSession()
+	return state
+end
+
 
 -- Wrapper for "uci add"
 function Session.add(self, config, section_type)
@@ -114,8 +121,8 @@ end
 
 
 -- Wrapper for "uci show"
-function Session.show(self, config)
-	return self:_uci3("show " .. _path(config))
+function Session.show(self, config, ...)
+	return self:_uci3("show " .. _path(config), ...)
 end
 
 function show(...)
@@ -155,10 +162,14 @@ function Session._uci2(self, cmd)
 	end	
 end
 
-function Session._uci3(self, cmd)
+function Session._uci3(self, cmd, raw)
 	local res = ffluci.sys.execl(self.ucicmd .. " 2>&1 " .. cmd)
 	if res[1] and res[1]:sub(1, self.ucicmd:len()+1) == self.ucicmd..":" then
 		return nil, res[1]
+	end
+	
+	if raw then
+		return table.concat(res, "\n")
 	end
 
 	tbl = {}

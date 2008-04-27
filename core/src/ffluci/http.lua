@@ -27,6 +27,8 @@ limitations under the License.
 
 ]]--
 
+ENV = ENV or {}
+FORM = FORM or {}
 module("ffluci.http", package.seeall)
 
 require("ffluci.util")

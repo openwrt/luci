@@ -13,19 +13,12 @@
 <%
 local routes = ffluci.sys.net.routes()
 
--- UGLY hack is UGLY
-if routes[1] and routes[1].Gateway:sub(-2) == "00" then
-	local be = true
-else
-	local be = false
-end
-
 for i, r in pairs(routes) do
 %>
 <tr>
-<td><%=ffluci.sys.net.hexip4(r.Destination, be)%></td>
-<td><%=ffluci.sys.net.hexip4(r.Mask, be)%></td>
-<td><%=ffluci.sys.net.hexip4(r.Gateway, be)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Destination)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Mask)%></td>
+<td><%=ffluci.sys.net.hexip4(r.Gateway)%></td>
 <td><%=r.Metric%></td>
 <td><%=r.Iface%></td>
 </tr>

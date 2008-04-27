@@ -37,6 +37,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/core $(MAKE_ACTION)
 	$(MAKE) -C $(PKG_BUILD_DIR)/module/admin-core $(MAKE_ACTION)
 	$(MAKE) -C $(PKG_BUILD_DIR)/module/public-core $(MAKE_ACTION)
+	$(MAKE) -C $(PKG_BUILD_DIR)/module/rpc-core $(MAKE_ACTION)
 endef
 
 define Package/ffluci/install		
@@ -65,6 +66,8 @@ define Package/ffluci/install
 	
 	$(CP) $(PKG_BUILD_DIR)/module/public-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	$(CP) $(PKG_BUILD_DIR)/module/public-core/contrib/media $(1)/www/ffluci/ -R
+	
+	$(CP) $(PKG_BUILD_DIR)/module/rpc-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	
 	$(CP) -a ./ipkg/ffluci.postinst $(1)/CONTROL/postinst
 	$(CP) -a ./ipkg/conffiles $(1)/CONTROL/conffiles

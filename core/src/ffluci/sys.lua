@@ -29,6 +29,13 @@ require("posix")
 require("ffluci.bits")
 require("ffluci.util")
 
+-- Returns whether a system is bigendian
+function bigendian()
+	local fp = io.open("/bin/sh")
+	fp:seek("set", 5)
+	return (fp:read(1):byte() ~= 1)
+end
+
 -- Runs "command" and returns its output
 function exec(command)
 	local pp   = io.popen(command)
@@ -125,6 +132,20 @@ function net.belongs(ip, ipnet, prefix)
 	return (net.ip4bin(ip):sub(1, prefix) == net.ip4bin(ipnet):sub(1, prefix))
 end
 
+-- Detect the default route
+function net.defaultroute()
+	local routes = net.routes()
+	local route = nil
+	
+	for i, r in pairs(ffluci.sys.net.routes()) do
+		if r.Destination == "00000000" and (not route or route.Metric > r.Metric) then
+			route = r
+		end
+	end
+	
+	return route
+end
+
 -- Returns all available network interfaces
 function net.devices()
 	local devices = {}
@@ -163,16 +184,18 @@ function net.routes()
 	return _parse_delimited_table(io.lines("/proc/net/route"))
 end
 
--- Returns the numeric IP to a given hexstring (little endian)
-function net.hexip4(hex, bigendian)
+-- Returns the numeric IP to a given hexstring
+function net.hexip4(hex, be)
 	if #hex ~= 8 then
 		return nil
 	end
 	
+	be = be or bigendian()
+	
 	local hexdec = ffluci.bits.Hex2Dec
 	
 	local ip = ""
-	if bigendian then
+	if be then
 		ip = ip .. tostring(hexdec(hex:sub(1,2))) .. "."
 		ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
 		ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."

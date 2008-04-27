@@ -1,6 +1,7 @@
 add("admin", "index", "Übersicht", 10)
 act("contact", "Kontakt")
 act("luci", "Oberfläche")
+act("freifunk", "Freifunk")
 
 add("admin", "system", "System", 30)
 act("packages", "Paketverwaltung")

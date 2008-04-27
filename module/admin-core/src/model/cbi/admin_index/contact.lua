@@ -5,7 +5,7 @@ Diese Informationen sollten nach der Picopeering Vereinbarung mindestens deine E
 Damit dein Knoten durch Topographieprogramme erfasst werden kann, gib bitte deine Geokoordinaten oder
 zumindest deine Straße und Hausnummer unter Standort an.]]))
 
-c = m:section(NamedSection, "contact")
+c = m:section(NamedSection, "contact", "public")
 
 c:option(Value, "nickname", translate("nickname", "Pseudonym"))
 c:option(Value, "name", translate("name", "Name"))

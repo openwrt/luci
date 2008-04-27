@@ -47,19 +47,10 @@
 <th><%:iface Schnittstelle%></th>
 </tr>
 <%
-
--- UGLY hack is UGLY
-if routes[1] and routes[1].Gateway:sub(-2) == "00" then
-	local be = true
-else
-	local be = false
-end
-
-
 for i, rt in pairs(routes) do
 %>
 <tr>
-<td><%=ffluci.sys.net.hexip4(rt.Gateway, be)%></th>
+<td><%=ffluci.sys.net.hexip4(rt.Gateway)%></th>
 <td><%=rt.Metric%></th>
 <td><%=rt.Iface%></th>
 </tr>

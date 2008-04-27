@@ -13,7 +13,7 @@ function action_apply()
 		-- Collect files to be applied
 		for i, line in ipairs(ffluci.util.split(changes)) do
 			local r = line:match("^-?([^.]+)")
-			if r then
+			if r and not ffluci.util.contains(apply, ffluci.config.uci_oncommit[r]) then
 				table.insert(apply, ffluci.config.uci_oncommit[r])
 			end
 		end

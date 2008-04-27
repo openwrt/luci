@@ -10,7 +10,6 @@ require("ffluci.model.uci")
 uci = ffluci.model.uci.Session("/var/state")
 
 
--- Parse stdin and do something
 function main(argv)
 	local cmd = argv[1]
 	local arg = argv[2]
@@ -156,7 +155,7 @@ function sync()
 				local n = uci:add("luci_splash", "lease")
 				uci:set("luci_splash", n, "mac", v.mac)
 				uci:set("luci_splash", n, "start", v.start)
-				written[v.mac] = 1
+				written[v.mac:lower()] = 1
 			end
 		end
 	end
@@ -164,7 +163,7 @@ function sync()
 	
 	-- Delete rules without state
 	for i, r in ipairs(listrules()) do
-		if #r > 0 and not written[r] then
+		if #r > 0 and not written[r:lower()] then
 			remove_rule(r)
 		end
 	end
