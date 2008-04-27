@@ -134,6 +134,19 @@ function net.devices()
 	return devices
 end
 
+-- Returns the MAC-Address belonging to the given IP-Address
+function net.ip4mac(ip)
+	local mac = nil
+	
+	for i, l in ipairs(net.arptable()) do
+		if l["IP address"] == ip then
+			mac = l["HW address"]
+		end
+	end
+	
+	return mac
+end
+
 -- Returns the prefix to a given netmask
 function net.mask4prefix(mask)
 	local bin = net.ip4bin(mask)

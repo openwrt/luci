@@ -17,7 +17,7 @@ config extern flash_keep
 config event uci_oncommit
         option network	"/etc/init.d/network restart"
         option wireless	"/etc/init.d/network restart"
-        option olsr		"/etc/init.d/olsrd restart"
+        option olsr		"reboot"
         option dhcp		"/etc/init.d/dnsmasq restart"
         option luci_fw  "/etc/init.d/luci_fw restart"
         option dropbear "/etc/init.d/dropbear restart"
