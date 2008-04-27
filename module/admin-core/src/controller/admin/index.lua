@@ -53,14 +53,26 @@ function configure_freifunk()
 		uci:set("network", "ffdhcp", "proto", "static")
 		uci:set("network", "ffdhcp", "ifname", "br-ff:dhcp")
 		uci:set("network", "ffdhcp", "ipaddr", dhcpip)
-		uci:set("network", "ffdhcp", "netmask", uci:get("freifunk", "community", "dhcpmask")) 		
+		uci:set("network", "ffdhcp", "netmask", uci:get("freifunk", "community", "dhcpmask"))
+		
+		local splash = uci:show("luci_splash")
+		if splash then
+			for k, v in pairs(splash.luci_splash) do
+				if v[".type"] == "iface" then
+					uci:del("luci_splash", k)
+				end
+			end		
+			
+			local sk = uci:add("luci_splash", "iface")
+			uci:set("luci_splash", sk, "network", "ffdhcp")
+		end 		
 	end
 	
 	-- Configure OLSR
 	if ffluci.http.formvalue("olsr") and uci:show("olsr") then
 		for k, v in pairs(uci:show("olsr").olsr) do
 			if v[".type"] == "Interface" or v[".type"] == "LoadPlugin" then
-				uci:del("olsr", "k")
+				uci:del("olsr", k)
 			end
 		end
 		
