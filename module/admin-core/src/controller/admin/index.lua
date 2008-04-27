@@ -109,7 +109,7 @@ function configure_freifunk()
 	local wcfg = uci:show("wireless")
 	if type(wifi) == "table" and wcfg then
 		for iface, v in pairs(wifi) do
-			if wcfg[iface] then
+			if wcfg.wireless[iface] then
 				-- Cleanup
 				for k, v in pairs(wcfg.wireless) do
 					if v[".type"] == "wifi-iface" and v.device == iface then
