@@ -10,7 +10,7 @@
 <br />
 
 <form method="post" action="<%=controller%>/admin/system/sshkeys">
-	<fieldset class="cbi-section-node">
+	<div class="cbi-section-node">
 		<div><textarea style="width: 100%" rows="10" name="data"><%=cnt%></textarea></div>
 		<br />
 		<div>
@@ -18,6 +18,6 @@
 			<input type="reset" value="<%:reset Zurücksetzen%>" />
 		</div>
 		<% if msg then %><br /><div class="error"><%:error Fehler%>: <%=msg%></div><% end %>
-	</fieldset>
+	</div>
 </form>
 <%+footer%>

@@ -1,0 +1,36 @@
+<%+header%>
+<h1><%:ffwizard Freifunkassistent%></h1>
+<p><%:ffwizard1 Dieser Assistent konfiguriert den Router für die Benutzung im Freifunknetz%></p>
+<br />
+<form method="post" action="<%=controller%>/admin/index/wizard">
+	<div class="cbi-section-node">
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:ip IP-Adresse%>:&nbsp;
+			<input type="text" size="20" name="ip" /></div>
+		</div>
+		<% for i, k in ipairs(ifaces) do %>
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:wificfg Drahtlosgerät einrichten%>: <%=k%></div>
+			<div class="cbi-value-field"><input type="checkbox" name="wifi.<%=k%>" value="1" checked="checked" /></div>
+		</div>
+		<% end %>
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:cfgolsr OLSR konfigurieren%></div>
+			<div class="cbi-value-field"><input type="checkbox" name="olsr" value="1" checked="checked" /></div>
+		</div>
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:cfgdhcp Drahtlos DHCP konfigurieren%></div>
+			<div class="cbi-value-field"><input type="checkbox" name="dhcp" value="1" checked="checked" /></div>
+		</div>
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:shareinet Internet teilen%></div>
+			<div class="cbi-value-field"><input type="checkbox" name="shareinet" value="1" checked="checked" /></div>
+		</div>
+	</div>
+	<br />
+	<div>
+		<input type="submit" value="<%:configure Konfigurieren%>" />
+		<input type="reset" value="<%:reset Zurücksetzen%>" />
+	</div>
+</form> 
+<%+footer%>

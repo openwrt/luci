@@ -16,15 +16,21 @@ function cbi_d_update(target) {
 	}
 	
 	for (var x in cbi_d[target]) {
-		for (var i=0; i<cbi_d[target][x].length; i++) {			
-			document.getElementById(cbi_d[target][x][i]).style.display = "none";
+		for (var i=0; i<cbi_d[target][x].length; i++) {	
+			var y = document.getElementById(cbi_d[target][x][i])	
+			y.style.display = "none";
 		}
 	}
 	
 	var t = document.getElementById(target);
 	if (t && t.value && cbi_d[target][t.value]) {
 		for (var i=0; i<cbi_d[target][t.value].length; i++) {			
-			document.getElementById(cbi_d[target][t.value][i]).style.display = "block";
+			var y = document.getElementById(cbi_d[target][t.value][i])
+			if (!y.value) {	
+				y.style.display = "table-row";
+			} else {
+				y.style.display = "block";
+			}
 		}
 	}
 }

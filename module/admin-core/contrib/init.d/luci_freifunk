@@ -1,0 +1,68 @@
+#!/bin/sh /etc/rc.common
+START=70
+
+start() {
+	include /lib/network
+	scan_interfaces
+	
+	
+	### Read interface names
+	config_get wanif wan ifname
+	config_get lanif lan ifname
+	config_get ffif  ff  ifname
+	
+	
+	[ -n "$ffif" ] || return 0
+		
+	
+	### Read from config
+	config_load freifunk
+	
+	config_get_bool internal routing internal
+	[ -n "$wanif" ] && config_get_bool internet routing internal
+	
+	
+	### Freifunk to Freifunk
+	[ "$internal" -gt 0 ] && {
+		iptables -A forwarding_rule -i "$ffif" -o "$ffif" -j ACCEPT
+	}
+	
+	### Lan to Freifunk	
+	[ -n "$lanif" ] && {
+		iptables -A forwarding_rule -i "$lanif" -o "$ffif" -j ACCEPT
+		iptables -t nat -A postrouting_rule -i "$lanif" -o "$ffif" -j MASQUERADE
+	}
+	
+	### Freifunk to Wan
+	[ "$internet" -gt 0 ] && {
+		iptables -A forwarding_rule -i "$ffif" -o "$wanif" -j ACCEPT
+		iptables -t nat -A postrouting_rule -i "$ffif" -o "$wanif" -j MASQUERADE
+	}
+}
+
+stop() {
+	include /lib/network
+	scan_interfaces
+	
+	### Read interface names
+	config_get wanif wan ifname
+	config_get lanif lan ifname
+	config_get ffif  ff  ifname
+	
+	[ -n "$ffif" ] || return 0
+	
+	### Freifunk to Freifunk
+	iptables -D forwarding_rule -i "$ffif" -o "$ffif" -j ACCEPT
+	
+	### Lan to Freifunk	
+	[ -n "$lanif" ] && {
+		iptables -D forwarding_rule -i "$lanif" -o "$ffif" -j ACCEPT
+		iptables -t nat -D postrouting_rule -i "$lanif" -o "$ffif" -j MASQUERADE
+	}
+	
+	### Freifunk to Wan
+	[ -n "$wanif" -gt 0 ] && {
+		iptables -D forwarding_rule -i "$ffif" -o "$wanif" -j ACCEPT
+		iptables -t nat -D postrouting_rule -i "$ffif" -o "$wanif" -j MASQUERADE
+	}
+}

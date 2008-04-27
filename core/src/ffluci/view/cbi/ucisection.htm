@@ -1,4 +1,4 @@
-					<fieldset class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
+					<div class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
 <% self:render_children(section) %>
 						<% if #self.optionals[section] > 0 or self.dynamic then %>
 							<div class="cbi-optionals">
@@ -19,5 +19,5 @@
 								<input type="submit" value="<%:add hinzufügen%>" />
 							</div>
 						<% end %>
-					</fieldset>
+					</div>
 					<br />

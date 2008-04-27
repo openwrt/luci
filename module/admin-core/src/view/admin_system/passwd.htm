@@ -14,7 +14,7 @@
 <% end %>
 <% if not stat or stat == 10 then %>
 	<form method="post" action="<%=controller%>/admin/system/passwd">
-		<fieldset class="cbi-section-node">
+		<div class="cbi-section-node">
 			<div class="cbi-value clear">
 				<div class="cbi-value-title left"><%:password Passwort%></div>
 				<div class="cbi-value-field"><input type="password" name="pwd1" /></div>
@@ -28,7 +28,7 @@
 				<input type="submit" value="<%:save Speichern%>" />
 				<input type="reset" value="<%:reset Zurücksetzen%>" />
 			</div>
-		</fieldset>
+		</div>
 	</form>
 <% end %>
 </div>

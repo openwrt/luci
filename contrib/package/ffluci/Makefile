@@ -26,7 +26,7 @@ define Package/ffluci
   CATEGORY:=Administration
   TITLE:=FFLuCI
   SUBMENU:=FFLuCI
-  DEPENDS:=+luaposix +haserl-lua +ffluci-system-addons
+  DEPENDS:=+luaposix +haserl-lua +ffluci-system-addons +ffluci-splash
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
 endef
 
@@ -61,6 +61,7 @@ define Package/ffluci/install
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
 	$(CP) $(PKG_BUILD_DIR)/module/admin-core/contrib/uci/luci_fw $(1)/etc/config/luci_fw
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/init.d/luci_fw $(1)/etc/init.d/luci_fw
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/init.d/luci_freifunk $(1)/etc/init.d/luci_freifunk
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/ffluci-flash $(1)/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/luci-splash $(1)/www/cgi-bin
 	

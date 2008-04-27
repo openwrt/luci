@@ -1,4 +1,5 @@
 add("admin", "index", "Übersicht", 10)
+act("wizard", "Freifunkassistent")
 act("contact", "Kontakt")
 act("luci", "Oberfläche")
 act("freifunk", "Freifunk")

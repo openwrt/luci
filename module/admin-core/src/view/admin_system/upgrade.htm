@@ -6,7 +6,7 @@ Das Format der Firmware ist plattformabhängig.%></p>
 <br />
 <% if sysupgrade and not ret then %>
 <form method="post" action="<%=controller%>-upload/admin/system/upgrade" enctype="multipart/form-data">
-	<fieldset class="cbi-section-node">
+	<div class="cbi-section-node">
 		<div class="cbi-value clear">
 			<div class="cbi-value-title left"><%:fwimage Firmwareimage%></div>
 			<div class="cbi-value-field"><input type="file" size="30" name="image" /></div>
@@ -20,7 +20,7 @@ Das Format der Firmware ist plattformabhängig.%></p>
 		<div>
 			<input type="submit" value="<%:fwupgrade Firmware aktualisieren%>" />
 		</div>
-	</fieldset>
+	</div>
 </form>
 <% elseif ret then %>
 	<% if ret == 0 then %>
