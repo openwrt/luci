@@ -11,8 +11,18 @@ start() {
 	config_get lanif lan ifname
 	config_get ffif  ff  ifname
 	
+	config_get lanip   lan ipaddr
+	config_get lanmask lan netmask
+	
+	config_get ffip    ff ipaddr
+	config_get ffmask  ff netmask
 	
 	[ -n "$ffif" ] || return 0
+	
+	
+	### Creating chains
+	iptables -N luci_freifunk_forwarding
+	iptables -t nat -N luci_freifunk_postrouting
 		
 	
 	### Read from config
@@ -24,55 +34,40 @@ start() {
 	
 	### Freifunk to Freifunk
 	[ "$internal" -gt 0 ] && {
-		iptables -A forwarding_rule -i "$ffif" -o "$ffif" -j ACCEPT
+		iptables -A luci_freifunk_forwarding -i "$ffif" -o "$ffif" -j ACCEPT
 	}
 	
 	### Lan to Freifunk	
 	[ -n "$lanif" ] && {
-		config_get ipaddr lan ipaddr
-		config_get netmask lan netmask
+		eval "$(ipcalc.sh $lanip $lanmask)"
 		
-		eval "$(ipcalc.sh $ipaddr $netmask)"
-		
-		iptables -A forwarding_rule -i "$lanif" -o "$ffif" -j ACCEPT
-		iptables -t nat -A postrouting_rule -s "$NETWORK/$PREFIX" -o "$ffif" -j MASQUERADE
+		iptables -A luci_freifunk_forwarding -i "$lanif" -o "$ffif" -j ACCEPT
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$ffif" -j MASQUERADE
 	}
 	
 	### Freifunk to Wan
-	[ "$internet" -gt 0 ] && {
-		config_get ipaddr ff ipaddr
-		config_get netmask ff netmask
+	[ "$internet" -gt 0 ] && {		
+		eval "$(ipcalc.sh $ffip $ffmask)"		
 		
-		eval "$(ipcalc.sh $ipaddr $netmask)"		
-		
-		iptables -A forwarding_rule -i "$ffif" -o "$wanif" -j ACCEPT
-		iptables -t nat -A postrouting_rule -s "$NETWORK/$PREFIX" -o "$wanif" -j MASQUERADE
+		iptables -A luci_freifunk_forwarding -i "$ffif" -o "$wanif" -j ACCEPT
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$wanif" -j MASQUERADE
 	}
+	
+	### Hook in the chains
+	iptables -A forwarding_rule -j luci_freifunk_forwarding
+	iptables -t nat -A postrouting_rule -j luci_freifunk_postrouting
 }
 
 stop() {
-	include /lib/network
-	scan_interfaces
+	### Hook out the chains
+	iptables -D forwarding_rule -j luci_freifunk_forwarding
+	iptables -t nat -D postrouting_rule -j luci_freifunk_postrouting
 	
-	### Read interface names
-	config_get wanif wan ifname
-	config_get lanif lan ifname
-	config_get ffif  ff  ifname
+	### Clear the chains
+	iptables -F luci_freifunk_forwarding
+	iptables -t nat -F luci_freifunk_postrouting
 	
-	[ -n "$ffif" ] || return 0
-	
-	### Freifunk to Freifunk
-	iptables -D forwarding_rule -i "$ffif" -o "$ffif" -j ACCEPT
-	
-	### Lan to Freifunk	
-	[ -n "$lanif" ] && {
-		iptables -D forwarding_rule -i "$lanif" -o "$ffif" -j ACCEPT
-		iptables -t nat -D postrouting_rule -i "$lanif" -o "$ffif" -j MASQUERADE
-	}
-	
-	### Freifunk to Wan
-	[ -n "$wanif" -gt 0 ] && {
-		iptables -D forwarding_rule -i "$ffif" -o "$wanif" -j ACCEPT
-		iptables -t nat -D postrouting_rule -i "$ffif" -o "$wanif" -j MASQUERADE
-	}
+	### Delete chains
+	iptables -X luci_freifunk_forwarding
+	iptables -t nat -X luci_freifunk_postrouting
 }
