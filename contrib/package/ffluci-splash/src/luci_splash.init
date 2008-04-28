@@ -19,8 +19,8 @@ iface_add() {
 	
 	eval "$(ipcalc.sh $ipaddr $netmask)"
 	
-	iptables -t nat -A luci_splash -i "$iface" -s "$IP/$PREFIX" -j luci_splash_portal
-	iptables -t nat -A luci_splash_portal -i "$iface" -s "$IP/$PREFIX" -d "$ipaddr" -p tcp -m multiport --dports 22,80,443 -j RETURN
+	iptables -t nat -A luci_splash -i "$iface" -s "$NETWORK/$PREFIX" -j luci_splash_portal
+	iptables -t nat -A luci_splash_portal -i "$iface" -s "$NETWORK/$PREFIX" -d "$ipaddr" -p tcp -m multiport --dports 22,80,443 -j RETURN
 }
 
 blacklist_add() {
