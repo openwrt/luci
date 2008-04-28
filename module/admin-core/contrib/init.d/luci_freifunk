@@ -41,6 +41,13 @@ start() {
 		iptables -A luci_freifunk_forwarding -i "$ffif" -o "$ffif" -j ACCEPT
 	}
 	
+	### Freifunk DHCP to Freifunk
+	[ "$internal" -gt 0 -a -n "$ffdif" ] && {
+		eval "$(ipcalc.sh $ffdip $ffdmask)"
+		
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$ffif" -j ACCEPT
+	}
+	
 	### Lan to Freifunk	
 	[ -n "$lanif" ] && {
 		eval "$(ipcalc.sh $lanip $lanmask)"
