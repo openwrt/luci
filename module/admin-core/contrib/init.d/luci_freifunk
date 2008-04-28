@@ -45,7 +45,7 @@ start() {
 	[ "$internal" -gt 0 -a -n "$ffdif" ] && {
 		eval "$(ipcalc.sh $ffdip $ffdmask)"
 		
-		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$ffif" -j ACCEPT
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$ffif" -j MASQUERADE
 	}
 	
 	### Lan to Freifunk	
