@@ -10,12 +10,16 @@ start() {
 	config_get wanif wan ifname
 	config_get lanif lan ifname
 	config_get ffif  ff  ifname
+	config_get ffdif ffdhcp  ifname
 	
 	config_get lanip   lan ipaddr
 	config_get lanmask lan netmask
 	
 	config_get ffip    ff ipaddr
 	config_get ffmask  ff netmask
+	
+	config_get ffdip   ffdhcp ipaddr
+	config_get ffdmask ffdhcp netmask
 	
 	[ -n "$ffif" ] || return 0
 	
@@ -50,6 +54,13 @@ start() {
 		eval "$(ipcalc.sh $ffip $ffmask)"		
 		
 		iptables -A luci_freifunk_forwarding -i "$ffif" -o "$wanif" -j ACCEPT
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$wanif" -j MASQUERADE
+	}
+	
+	### Freifunk DHCP to Wan
+	[ "$internet" -gt 0 -a -n "$ffdif" ] && {		
+		eval "$(ipcalc.sh $ffdip $ffdmask)"		
+		
 		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$wanif" -j MASQUERADE
 	}
 	
