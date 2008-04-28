@@ -26,7 +26,7 @@ define Package/ffluci
   CATEGORY:=Administration
   TITLE:=FFLuCI
   SUBMENU:=FFLuCI
-  DEPENDS:=+luaposix +haserl-lua +ffluci-system-addons +ffluci-splash
+  DEPENDS:=+luaposix +haserl-lua +ffluci-system-addons
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
 endef
 
