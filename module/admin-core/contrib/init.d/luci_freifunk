@@ -29,7 +29,7 @@ start() {
 	config_load freifunk
 	
 	config_get_bool internal routing internal
-	[ -n "$wanif" ] && config_get_bool internet routing internal
+	[ -n "$wanif" ] && config_get_bool internet routing internet
 	
 	
 	### Freifunk to Freifunk
