@@ -10,14 +10,17 @@
 <br />
 
 <form method="post" action="<%=controller%>/admin/system/sshkeys">
-	<div class="cbi-section-node">
-		<div><textarea style="width: 100%" rows="10" name="data"><%=cnt%></textarea></div>
-		<br />
-		<div>
-			<input type="submit" value="<%:save Speichern%>" />
-			<input type="reset" value="<%:reset Zurücksetzen%>" />
+	<div class="cbi-section-node" style="width: 100%">
+		<div class="cbi-value">
+			<div class="cbi-value-field">
+				<textarea style="width: 100%" rows="10" name="data"><%=cnt%></textarea>
+			</div>
 		</div>
-		<% if msg then %><br /><div class="error"><%:error Fehler%>: <%=msg%></div><% end %>
 	</div>
+	<div>
+		<input type="submit" value="<%:save Speichern%>" />
+		<input type="reset" value="<%:reset Zurücksetzen%>" />
+	</div>
+	<% if msg then %><br /><div class="error"><%:error Fehler%>: <%=msg%></div><% end %>
 </form>
 <%+footer%>
