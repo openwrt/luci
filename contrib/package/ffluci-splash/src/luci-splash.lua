@@ -145,7 +145,7 @@ function sync()
 	
 	
 	-- For all leases
-	for k, v in pairs(uci:show("luci_splash")) do
+	for k, v in pairs(leases) do
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
 				-- Remove expired
