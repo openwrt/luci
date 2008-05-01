@@ -7,7 +7,12 @@ s = m:section(TypedSection, "route")
 s.addremove = true
 s.anonymous = true
 
-s:option(Value, "interface", "Schnittstelle")
+iface = s:option(ListValue, "interface", "Schnittstelle")
+for k, v in pairs(ffluci.model.uci.show("network").network) do
+	if v[".type"] == "interface" and k ~= "loopback" then
+		iface:value(k)
+	end
+end
 
 s:option(Value, "target", "Ziel", "Host-IP oder Netzwerk")
 
