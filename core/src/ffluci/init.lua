@@ -27,7 +27,3 @@ module("ffluci", package.seeall)
 
 __version__ = "0.3"
 __appname__ = "FFLuCI"
-
-dispatch = require("ffluci.dispatcher").httpdispatch
-env = ENV
-form = FORM

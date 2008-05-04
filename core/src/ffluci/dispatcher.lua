@@ -88,6 +88,8 @@ require("ffluci.config")
 require("ffluci.sys")
 
 
+local tree = {}
+
 -- Sets privilege for given category
 function assign_privileges(category)
 	local cp = ffluci.config.category_privileges
@@ -159,99 +161,130 @@ end
 
 -- The Action Dispatcher searches the module for any function called
 -- action_"request.action" and calls it
-function action(request)
-	local i18n = require("ffluci.i18n")
+function action(...)
 	local disp = require("ffluci.dispatcher")
-	
-	i18n.loadc(request.category .. "_" .. request.module)
-	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
-	if action then
-		action()
-	else
+	if not disp._action(...) then
 		disp.error404()
-	end
+	end	
 end
 
 -- The CBI dispatcher directly parses and renders the CBI map which is
 -- placed in ffluci/modles/cbi/"request.module"/"request.action" 
-function cbi(request)
-	local i18n = require("ffluci.i18n")
+function cbi(...)
 	local disp = require("ffluci.dispatcher")
-	local tmpl = require("ffluci.template")
-	local cbi  = require("ffluci.cbi")
-	
-	local path = request.category.."_"..request.module.."/"..request.action
-	
-	i18n.loadc(request.category .. "_" .. request.module)
-	
-	local stat, map = pcall(cbi.load, path)
-	if stat and map then
-		local stat, err = pcall(map.parse, map)
-		if not stat then
-			disp.error500(err)
-			return
-		end
-		tmpl.render("cbi/header")
-		map:render()
-		tmpl.render("cbi/footer")
-	elseif not stat then
-		disp.error500(map)
-	else
+	if not disp._cbi(...) then
 		disp.error404()
 	end
 end
 
--- The dynamic dispatchers combines the action, simpleview and cbi dispatchers
--- in one dispatcher. It tries to lookup the request in this order.
-function dynamic(request)
-	local i18n = require("ffluci.i18n")
+-- The dynamic dispatcher chains the action, submodule, simpleview and CBI dispatcher
+-- in this particular order. It is the default dispatcher.
+function dynamic(...)
 	local disp = require("ffluci.dispatcher")
-	local tmpl = require("ffluci.template")
-	local cbi  = require("ffluci.cbi")	
-	
-	i18n.loadc(request.category .. "_" .. request.module)
-	
-	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
-	if action then
-		action()
-		return
+	if  not disp._action(...)
+	and not disp._submodule(...)
+	and not disp._simpleview(...)
+	and not disp._cbi(...) then
+		disp.error404()
 	end
-	
-	local path = request.category.."_"..request.module.."/"..request.action
-	if pcall(tmpl.render, path) then
-		return
-	end
-	
-	local stat, map = pcall(cbi.load, path)
-	if stat and map then
-		local stat, err = pcall(map.parse, map)
-		if not stat then
-			disp.error500(err)
-			return
-		end		
-		tmpl.render("cbi/header")
-		map:render()
-		tmpl.render("cbi/footer")
-		return
-	elseif not stat then
-		disp.error500(map)
-		return
-	end	
-	
-	disp.error404()
 end
 
 -- The Simple View Dispatcher directly renders the template
 -- which is placed in ffluci/views/"request.module"/"request.action" 
-function simpleview(request)
-	local i18n = require("ffluci.i18n")
-	local tmpl = require("ffluci.template")
+function simpleview(...)
 	local disp = require("ffluci.dispatcher")
+	if not disp._simpleview(...) then
+		disp.error404()
+	end
+end
+
+
+-- The submodule dispatcher tries to load a submodule of the controller
+-- and calls its "action"-function
+function submodule(...)
+	local disp = require("ffluci.dispatcher")
+	if not disp._submodule(...) then
+		disp.error404()
+	end
+end
+
+
+-- Internal Dispatcher Functions --
+
+function _action(request)
+	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
+	local i18n = require("ffluci.i18n")
+	
+	if action then
+		i18n.loadc(request.category .. "_" .. request.module)
+		i18n.loadc(request.category .. "_" .. request.module .. "_" .. request.action)
+		action()
+		return true
+	else
+		return false
+	end
+end
+
+
+function _cbi(request)
+	local disp = require("ffluci.dispatcher")
+	local tmpl = require("ffluci.template")
+	local cbi  = require("ffluci.cbi")
+	local i18n = require("ffluci.i18n")
 	
 	local path = request.category.."_"..request.module.."/"..request.action
 	
-	i18n.loadc(request.category .. "_" .. request.module)
-	if not pcall(tmpl.render, path) then
-		disp.error404()
+	local stat, map = pcall(cbi.load, path)
+	if stat and map then
+		local stat, err = pcall(map.parse, map)
+		if not stat then
+			disp.error500(err)
+			return true
+		end
+		i18n.loadc(request.category .. "_" .. request.module)
+		i18n.loadc(request.category .. "_" .. request.module .. "_" .. request.action)
+		tmpl.render("cbi/header")
+		map:render()
+		tmpl.render("cbi/footer")
+		return true
+	elseif not stat then
+		disp.error500(map)
+		return true
+	else
+		return false
 	end
+end
+
+
+function _simpleview(request)
+	local i18n = require("ffluci.i18n")
+	local tmpl = require("ffluci.template")
+	
+	local path = request.category.."_"..request.module.."/"..request.action
+	
+	local stat, t = pcall(tmpl.Template, path)
+	if stat then
+		i18n.loadc(request.category .. "_" .. request.module)
+		i18n.loadc(request.category .. "_" .. request.module .. "_" .. request.action)
+		t:render()
+		return true
+	else
+		return false
+	end
+end
+
+
+function _submodule(request)
+	local i18n = require("ffluci.i18n")
+	local m = "ffluci.controller." .. request.category .. "." ..
+	 request.module .. "." .. request.action
+	local stat, module = pcall(require, m)
+	
+	if stat and module.action then 
+		i18n.loadc(request.category .. "_" .. request.module)
+		i18n.loadc(request.category .. "_" .. request.module .. "_" .. request.action)
+		return pcall(module.action)
+	end
+	
+	return false
 end
