@@ -4,7 +4,7 @@ LUAC_OPTIONS = -s
 FILES = ffluci/debug.lua ffluci/view/*.htm ffluci/view/cbi/*.htm ffluci/i18n/*
 
 CFILES = ffluci/bits.lua ffluci/util.lua \
-ffluci/sgi/haserl.lua \
+ffluci/sgi/haserl.lua ffluci/sgi/webuci.lua \
 ffluci/http.lua ffluci/fs.lua ffluci/sys.lua \
 ffluci/model/uci/wrapper.lua ffluci/model/uci/libuci.lua ffluci/model/uci.lua \
 ffluci/model/ipkg.lua ffluci/config.lua ffluci/i18n.lua ffluci/template.lua \

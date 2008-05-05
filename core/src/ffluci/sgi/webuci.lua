@@ -5,7 +5,7 @@ Description:
 Server Gateway Interface for Haserl
 
 FileId:
-$Id: haserl.lua 2004 2008-05-05 19:56:14Z Cyrus $
+$Id$
 
 License:
 Copyright 2008 Steven Barth <steven@midlink.org>
