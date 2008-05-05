@@ -31,4 +31,6 @@ module("ffluci.http", package.seeall)
 
 if ENV and ENV.HASERLVER then
 	require("ffluci.sgi.haserl")
+elseif webuci then
+	require("ffluci.sgi.webuci")
 end

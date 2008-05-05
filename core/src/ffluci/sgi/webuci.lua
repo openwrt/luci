@@ -5,7 +5,7 @@ Description:
 Server Gateway Interface for Haserl
 
 FileId:
-$Id$
+$Id: haserl.lua 2004 2008-05-05 19:56:14Z Cyrus $
 
 License:
 Copyright 2008 Steven Barth <steven@midlink.org>
@@ -23,46 +23,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.sgi.haserl", package.seeall)
-
-ENV = ENV or {}
-FORM = FORM or {}
+module("ffluci.sgi.webuci", package.seeall)
 
 -- HTTP interface
 
 -- Returns a table of all COOKIE, GET and POST Parameters
 function ffluci.http.formvalues(prefix)
-	return FORM
+	return webuci.vars
 end
 
 -- Gets form value from key
 function ffluci.http.formvalue(key, default)
-	local c = ffluci.http.formvalues()
-	
-	for match in key:gmatch("[%w-_]+") do
-		c = c[match]
-		if c == nil then
-			return default
-		end
-	end
-	
-	return c
+	return ffluci.http.formvalues()[key] or default
 end
 
 -- Gets a table of values with a certain prefix
 function ffluci.http.formvaluetable(prefix)
-	return ffluci.http.formvalue(prefix, {})
+	local vals = {}
+	prefix = prefix and prefix .. "." or "."
+	
+	for k, v in pairs(ffluci.http.formvalues()) do
+		if k:find(prefix, 1, true) == 1 then
+			vals[k:sub(#prefix + 1)] = v
+		end
+	end
+	
+	return vals
 end
 
 
 -- Returns the User's IP
 function ffluci.http.get_remote_addr()
-	return ENV.REMOTE_ADDR
+	return os.getenv("REMOTE_ADDR")
 end
 
 -- Returns the script name
 function ffluci.http.get_script_name()
-	return ENV.SCRIPT_NAME
+	return os.getenv("SCRIPT_NAME")
 end
 
 
