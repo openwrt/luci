@@ -43,7 +43,7 @@ scope = {
 }
 
 -- Local menu database
-local menu = {}
+local menu = nil
 
 -- The current pointer
 local menuc = {}
@@ -119,6 +119,7 @@ end
 -- Returns the menu information
 function get()
 	if not menu then
+		menu = {}
 		collect()
 	end
 	return menu
