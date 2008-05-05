@@ -11,7 +11,7 @@ s.anonymous = true
 s:option(Value, "ssid", "Netzkennung (ESSID)").maxlength = 32
 
 device = s:option(ListValue, "device", "Gerät")
-local d = ffluci.model.uci.show("wireless").wireless
+local d = ffluci.model.uci.sections("wireless")
 if d then
 	for k, v in pairs(d) do
 		if v[".type"] == "wifi-device" then
@@ -22,7 +22,7 @@ end
 
 network = s:option(ListValue, "network", "Netzwerk", "WLAN-Netz zu Netzwerk hinzufügen")
 network:value("")
-for k, v in pairs(ffluci.model.uci.show("network").network) do
+for k, v in pairs(ffluci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		network:value(k)
 	end

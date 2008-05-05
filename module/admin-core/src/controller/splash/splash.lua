@@ -6,14 +6,14 @@ function action_activate()
 		os.execute("luci-splash add "..mac.." >/dev/null 2>&1")
 		ffluci.http.redirect(ffluci.model.uci.get("freifunk", "community", "homepage"))
 	else
-		ffluci.http.request_redirect()
+		ffluci.http.redirect(ffluci.dispatcher.build_url())
 	end
 end
 
 function action_accepted()
-	ffluci.http.request_redirect()
+	ffluci.http.redirect(ffluci.dispatcher.build_url())
 end
 
 function action_unknown()
-	ffluci.http.request_redirect()
+	ffluci.http.redirect(ffluci.dispatcher.build_url())
 end

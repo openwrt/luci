@@ -45,7 +45,7 @@ main.lang = "de"
 
 
 -- Now overwrite with UCI values
-local ucidata = ffluci.model.uci.show("luci")
-if ucidata and ucidata.luci then
-	ffluci.util.update(ffluci.config, ucidata.luci)
+local ucidata = ffluci.model.uci.sections("luci")
+if ucidata then
+	ffluci.util.update(ffluci.config, ucidata)
 end

@@ -3,7 +3,7 @@ module("ffluci.controller.rpc.luciinfo", package.seeall)
 function action_index()
 	local uci = ffluci.model.uci.StateSession()
 
-	ffluci.http.textheader()
+	ffluci.http.set_content_type("text/plain")
 	
 	-- General
 	print("luciinfo.api=1")
@@ -26,8 +26,14 @@ function action_index()
 
 	
 	-- Freifunk
-	local ff = uci:show("freifunk", true) or ""
-	print(ff)
+	local ff = uci:sections("freifunk") or {}
+	for k, v in pairs(ff) do
+		if k:sub(1, 1) ~= "." then
+			for i, j in pairs(v) do
+				print("freifunk." .. k .. "." .. i .. "=" .. j)
+			end
+		end
+	end
 end
 
 function sanitize(val)

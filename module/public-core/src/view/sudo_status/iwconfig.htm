@@ -1,5 +1,5 @@
 <%
-ffluci.http.textheader()
+ffluci.http.set_content_type("text/plain")
 for k, v in pairs(ffluci.sys.wifi.getiwconfig()) do
 %>
 <tr>

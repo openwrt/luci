@@ -1,5 +1,5 @@
 <%
-ffluci.http.textheader()
+ffluci.http.set_content_type("text/plain")
 for iface, cells in pairs(ffluci.sys.wifi.iwscan()) do
 	for i, cell in ipairs(cells) do 
 %>

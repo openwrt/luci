@@ -119,15 +119,10 @@ function Map.__init__(self, config, ...)
 	self.config = config
 	self.template = "cbi/map"
 	self.uci = ffluci.model.uci.Session()
-	self.ucidata = self.uci:show(self.config)
+	self.ucidata = self.uci:sections(self.config)
 	if not self.ucidata then
 		error("Unable to read UCI data: " .. self.config)
-	else
-		if not self.ucidata[self.config] then
-			self.ucidata[self.config] = {}
-		end
-		self.ucidata = self.ucidata[self.config]
-	end	
+	end
 end
 
 -- Creates a child section
@@ -249,7 +244,7 @@ function AbstractSection.parse_optionals(self, section)
 		end
 	end
 	
-	if field and field:len() > 0 and self.dynamic then
+	if field and #field > 0 and self.dynamic then
 		self:add_dynamic(field)
 	end
 end
@@ -267,12 +262,10 @@ function AbstractSection.parse_dynamic(self, section)
 	end
 	
 	local arr  = ffluci.util.clone(self:cfgvalue(section))
-	local form = ffluci.http.formvalue("cbid."..self.config.."."..section)
-	if type(form) == "table" then
-		for k,v in pairs(form) do
-			arr[k] = v
-		end
-	end	
+	local form = ffluci.http.formvaluetable("cbid."..self.config.."."..section)
+	for k, v in pairs(form) do
+		arr[k] = v
+	end
 	
 	for key,val in pairs(arr) do
 		local create = true
@@ -440,14 +433,12 @@ function TypedSection.parse(self)
 		
 		-- Remove
 		crval = "cbi.rts." .. self.config
-		name = ffluci.http.formvalue(crval)
-		if type(name) == "table" then
-			for k,v in pairs(name) do
-				if self:cfgvalue(k) and self:checkscope(k) then
-					self:remove(k)
-				end
+		name = ffluci.http.formvaluetable(crval)
+		for k,v in pairs(name) do
+			if self:cfgvalue(k) and self:checkscope(k) then
+				self:remove(k)
 			end
-		end		
+		end	
 	end
 	
 	for i, k in ipairs(self:cfgsections()) do

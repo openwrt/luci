@@ -6,10 +6,10 @@ function action_wizard()
 	end
 	
 	local ifaces = {}
-	local wldevs = ffluci.model.uci.show("wireless")
+	local wldevs = ffluci.model.uci.sections("wireless")
 	
 	if wldevs then
-		for k, v in pairs(wldevs.wireless) do
+		for k, v in pairs(wldevs) do
 			if v[".type"] == "wifi-device" then
 				table.insert(ifaces, k)
 			end
@@ -55,9 +55,9 @@ function configure_freifunk()
 		uci:set("network", "ffdhcp", "ipaddr", dhcpip)
 		uci:set("network", "ffdhcp", "netmask", uci:get("freifunk", "community", "dhcpmask"))
 		
-		local dhcp = uci:show("dhcp")
+		local dhcp = uci:sections("dhcp")
 		if dhcp then
-			for k, v in pairs(dhcp.dhcp) do
+			for k, v in pairs(dhcp) do
 				if v[".type"] == "dhcp" and v.interface == "ffdhcp" then
 					uci:del("dhcp", k)
 				end
@@ -72,9 +72,9 @@ function configure_freifunk()
 			uci:set("dhcp", sk, "leasetime", "30m")
 		end 
 		
-		local splash = uci:show("luci_splash")
+		local splash = uci:sections("luci_splash")
 		if splash then
-			for k, v in pairs(splash.luci_splash) do
+			for k, v in pairs(splash) do
 				if v[".type"] == "iface" then
 					uci:del("luci_splash", k)
 				end
@@ -86,8 +86,8 @@ function configure_freifunk()
 	end
 	
 	-- Configure OLSR
-	if ffluci.http.formvalue("olsr") and uci:show("olsr") then
-		for k, v in pairs(uci:show("olsr").olsr) do
+	if ffluci.http.formvalue("olsr") and uci:sections("olsr") then
+		for k, v in pairs(uci:sections("olsr")) do
 			if v[".type"] == "Interface" or v[".type"] == "LoadPlugin" then
 				uci:del("olsr", k)
 			end
@@ -122,14 +122,13 @@ function configure_freifunk()
 	end
 	
 	-- Configure Wifi
-	local wifi = ffluci.http.formvalue("wifi")
-	local wcfg = uci:show("wireless")
-	if type(wifi) == "table" and wcfg then
-		for iface, v in pairs(wifi) do
-			if wcfg.wireless[iface] then
+	local wcfg = uci:sections("wireless")
+	if wcfg then
+		for iface, v in pairs(wcfg) do
+			if v[".type"] == "wifi-device" and ffluci.http.formvalue("wifi."..iface) then
 				-- Cleanup
-				for k, v in pairs(wcfg.wireless) do
-					if v[".type"] == "wifi-iface" and v.device == iface then
+				for k, j in pairs(wcfg) do
+					if j[".type"] == "wifi-iface" and j.device == iface then
 						uci:del("wireless", k)
 					end
 				end
@@ -152,5 +151,5 @@ function configure_freifunk()
 	end
 		
 
-	ffluci.http.request_redirect("admin", "uci", "changes")
+	ffluci.http.redirect(ffluci.dispatcher.build_url("admin", "uci", "changes"))
 end

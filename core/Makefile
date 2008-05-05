@@ -3,12 +3,14 @@ LUAC_OPTIONS = -s
 
 FILES = ffluci/debug.lua ffluci/view/*.htm ffluci/view/cbi/*.htm ffluci/i18n/*
 
-CFILES = ffluci/bits.lua ffluci/util.lua ffluci/http.lua ffluci/fs.lua \
-ffluci/sys.lua ffluci/model/uci.lua ffluci/model/ipkg.lua \
-ffluci/config.lua ffluci/i18n.lua ffluci/template.lua \
+CFILES = ffluci/bits.lua ffluci/util.lua \
+ffluci/sgi/haserl.lua \
+ffluci/http.lua ffluci/fs.lua ffluci/sys.lua \
+ffluci/model/uci/wrapper.lua ffluci/model/uci/libuci.lua ffluci/model/uci.lua \
+ffluci/model/ipkg.lua ffluci/config.lua ffluci/i18n.lua ffluci/template.lua \
 ffluci/cbi.lua ffluci/dispatcher.lua ffluci/menu.lua ffluci/init.lua 
 
-DIRECTORIES = ffluci/model/cbi ffluci/model/menu ffluci/controller ffluci/i18n ffluci/view/cbi
+DIRECTORIES = ffluci/model/cbi ffluci/model/menu ffluci/controller ffluci/i18n ffluci/view/cbi ffluci/model/uci ffluci/sgi
 
 OUTDIRS = $(DIRECTORIES:%=dist/%)
 INFILES = $(CFILES:%=src/%)

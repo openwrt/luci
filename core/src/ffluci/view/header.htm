@@ -5,7 +5,7 @@ local req  = require("ffluci.dispatcher").request
 local menu = require("ffluci.menu").get()[req.category]
 menu = menu or {}
 require("ffluci.i18n").loadc("default")
-require("ffluci.http").htmlheader()
+require("ffluci.http").set_content_type("text/html")
 %><?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

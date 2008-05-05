@@ -61,8 +61,7 @@ function action_packages()
 	
 	
 	-- Packets to be installed
-	local install = ffluci.http.formvalue("install")
-	install = (type(install) == "table" and submit) and install or nil
+	local install = submit and ffluci.http.formvaluetable("install")
 	
 	-- Install from URL
 	local url = ffluci.http.formvalue("url")
@@ -73,7 +72,7 @@ function action_packages()
 		install[url] = 1
 	end
 	
-	-- Do install		
+	-- Do install
 	if install then
 		for k, v in pairs(install) do
 			void, install[k] = ipkg.install(k)
@@ -82,8 +81,7 @@ function action_packages()
 	
 	
 	-- Remove packets
-	local remove = ffluci.http.formvalue("remove")
-	remove = (type(remove) == "table" and submit) and remove or nil
+	local remove = submit and ffluci.http.formvaluetable("remove")
 	if remove then	
 		for k, v in pairs(remove) do
 			void, remove[k] = ipkg.remove(k)
@@ -187,7 +185,7 @@ function action_upgrade()
 	if plat and imgname then
 		local kpattern = nil
 		if keepcfg then
-			local files = ffluci.model.uci.show("luci", "flash_keep")
+			local files = ffluci.model.uci.sections("luci").flash_keep
 			if files.luci and files.luci.flash_keep then
 				kpattern = ""
 				for k,v in pairs(files.luci.flash_keep) do

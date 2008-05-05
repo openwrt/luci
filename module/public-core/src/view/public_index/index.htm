@@ -1,5 +1,5 @@
 <%+header%>
-<% local ff = ffluci.model.uci.show("freifunk").freifunk %>
+<% local ff = ffluci.model.uci.sections("freifunk") %>
 <h1><%:hellonet Hallo und willkommen im Netz von%> <%=ff.community.name%>!</h1>
 <p><%:public1 Wir sind eine Initiative zur Schaffung eines freien, offenen und unabhängigen Funknetzwerks auf WLAN-Basis.%><br />
 <%:public2 Dies ist der Zugangspunkt %><%=ffluci.sys.hostname()%>. <%:public3 Er wird betrieben von %>

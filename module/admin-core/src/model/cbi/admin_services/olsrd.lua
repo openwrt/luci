@@ -51,7 +51,7 @@ i.dynamic = true
 
 network = i:option(ListValue, "Interface", "Netzwerkschnittstellen")
 network:value("")
-for k, v in pairs(ffluci.model.uci.show("network").network) do
+for k, v in pairs(ffluci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		network:value(k)
 	end

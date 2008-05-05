@@ -87,9 +87,6 @@ require("ffluci.template")
 require("ffluci.config")
 require("ffluci.sys")
 
-
-local tree = {}
-
 -- Sets privilege for given category
 function assign_privileges(category)
 	local cp = ffluci.config.category_privileges
@@ -99,6 +96,18 @@ function assign_privileges(category)
 		ffluci.sys.process.setgroup(g)
 	end
 end
+
+
+-- Builds a URL from a triple of category, module and action
+function build_url(category, module, action)
+	category = category or "public"
+	module   = module   or "index"
+	action   = action   or "index"
+	
+	local pattern = ffluci.http.get_script_name() .. "/%s/%s/%s"
+	return pattern:format(category, module, action)
+end
+
 
 -- Dispatches the "request"
 function dispatch(req)
@@ -117,10 +126,11 @@ end
 
 -- Sends a 404 error code and renders the "error404" template if available
 function error404(message)
+	ffluci.http.set_status(404, "Not Found")
 	message = message or "Not Found"
 	
 	if not pcall(ffluci.template.render, "error404") then
-		ffluci.http.textheader()
+		ffluci.http.set_content_type("text/plain")
 		print(message)
 	end
 	return false	
@@ -128,10 +138,10 @@ end
 
 -- Sends a 500 error code and renders the "error500" template if available
 function error500(message)
-	ffluci.http.status(500, "Internal Server Error")
+	ffluci.http.set_status(500, "Internal Server Error")
 	
 	if not pcall(ffluci.template.render, "error500", {message=message}) then
-		ffluci.http.textheader()
+		ffluci.http.set_content_type("text/plain")
 		print(message)
 	end
 	return false	
@@ -212,7 +222,7 @@ end
 -- Internal Dispatcher Functions --
 
 function _action(request)
-	local action = getfenv()["action_" .. request.action:gsub("-", "_")]
+	local action = getfenv(2)["action_" .. request.action:gsub("-", "_")]
 	local i18n = require("ffluci.i18n")
 	
 	if action then

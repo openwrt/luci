@@ -27,86 +27,8 @@ limitations under the License.
 
 ]]--
 
-ENV = ENV or {}
-FORM = FORM or {}
 module("ffluci.http", package.seeall)
 
-require("ffluci.util")
-
--- Sets HTTP-Status-Header
-function status(code, message)
-	print("Status: " .. tostring(code) .. " " .. message)
-end
-
-
--- Asks the browser to redirect to "url"
-function redirect(url, qs)
-	if qs then
-		url = url .. "?" .. qs
-	end
-	
-	status(302, "Found")
-	print("Location: " .. url .. "\n")
-end
-
-
--- Same as redirect but accepts category, module and action for internal use
-function request_redirect(category, module, action, ...)
-	category = category or "public"
-	module   = module   or "index"
-	action   = action   or "index"
-	
-	local pattern = script_name() .. "/%s/%s/%s"
-	redirect(pattern:format(category, module, action), ...)
-end
-
-
--- Returns the User's IP
-function remote_addr()
-	return ENV.REMOTE_ADDR
-end
-
-
--- Returns the script name
-function script_name()
-	return ENV.SCRIPT_NAME
-end
-
-
--- Gets form value from key
-function formvalue(key, default)
-	local c = formvalues()
-	
-	for match in key:gmatch("[%w-_]+") do
-		c = c[match]
-		if c == nil then
-			return default
-		end
-	end
-	
-	return c
-end
-
-
--- Returns a table of all COOKIE, GET and POST Parameters
-function formvalues()
-	return FORM
-end
-
-
--- Prints plaintext content-type header
-function textheader()
-	print("Content-Type: text/plain\n")
-end
-
-
--- Prints html content-type header
-function htmlheader()
-	print("Content-Type: text/html\n")
-end
-
-
--- Prints xml content-type header
-function xmlheader()
-	print("Content-Type: text/xml\n")
+if ENV and ENV.HASERLVER then
+	require("ffluci.sgi.haserl")
 end
