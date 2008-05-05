@@ -52,7 +52,7 @@ end
 
 -- Gets a table of values with a certain prefix
 function ffluci.http.formvaluetable(prefix)
-	return formvalue(prefix, {})
+	return ffluci.http.formvalue(prefix, {})
 end
 
 
@@ -73,7 +73,7 @@ function ffluci.http.redirect(url, qs)
 		url = url .. "?" .. qs
 	end
 	
-	set_status(302, "Found")
+	ffluci.http.set_status(302, "Found")
 	print("Location: " .. url .. "\n")
 end
 

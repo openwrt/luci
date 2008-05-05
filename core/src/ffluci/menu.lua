@@ -118,6 +118,8 @@ end
 
 -- Returns the menu information
 function get()
-	collect()
+	if not menu then
+		collect()
+	end
 	return menu
 end
