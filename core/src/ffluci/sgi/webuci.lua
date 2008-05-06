@@ -25,6 +25,8 @@ limitations under the License.
 ]]--
 module("ffluci.sgi.webuci", package.seeall)
 
+local status_set = false
+
 -- HTTP interface
 
 -- Returns a table of all COOKIE, GET and POST Parameters
@@ -86,10 +88,15 @@ end
 
 -- Set Content-Type
 function ffluci.http.set_content_type(type)
+	if not status_set then
+		ffluci.http.set_status(200, "OK")
+	end
+	
 	print("Content-Type: "..type.."\n")
 end
 
 -- Sets HTTP-Status-Header
 function ffluci.http.set_status(code, message)
-	print(webuci.REQUEST_METHOD .. " " .. tostring(code) .. " " .. message)
+	print(webuci.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
+	status_set = true
 end
