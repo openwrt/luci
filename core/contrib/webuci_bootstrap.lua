@@ -14,7 +14,7 @@ function init_req(context)
 	PATH_INFO       = "/" .. context.uri
 	REMOTE_PORT     = context.remote_port
 	SERVER_ADDR     = context.server_addr
-	SCRIPT_NAME     = REQUEST_URI:sub(1, #REQUEST_URI - #context.uri)
+	SCRIPT_NAME     = REQUEST_URI:sub(1, #REQUEST_URI - #PATH_INFO)
 end
 
 function handle_req(context)
