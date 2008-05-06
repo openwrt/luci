@@ -82,6 +82,11 @@ function httpget(url)
 	return exec("wget -qO- '"..url:gsub("'", "").."'")
 end
 
+-- Returns the FFLuci-Basedir
+function libpath()
+	return ffluci.fs.dirname(require("ffluci.debug").__file__)
+end
+
 -- Returns the load average
 function loadavg()
 	local loadavg = io.lines("/proc/loadavg")()

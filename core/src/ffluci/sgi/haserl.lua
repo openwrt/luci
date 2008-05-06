@@ -54,10 +54,19 @@ function ffluci.http.formvaluetable(prefix)
 	return ffluci.http.formvalue(prefix, {})
 end
 
+-- Returns the path info
+function ffluci.http.get_path_info()
+	return ENV.PATH_INFO
+end
 
 -- Returns the User's IP
 function ffluci.http.get_remote_addr()
 	return ENV.REMOTE_ADDR
+end
+
+-- Returns the request URI
+function ffluci.http.get_request_uri()
+	return ENV.REQUEST_URI
 end
 
 -- Returns the script name

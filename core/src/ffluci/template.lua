@@ -28,11 +28,9 @@ module("ffluci.template", package.seeall)
 require("ffluci.config")
 require("ffluci.util")
 require("ffluci.fs")
-require("ffluci.i18n")
 require("ffluci.http")
-require("ffluci.model.uci")
 
-viewdir = ffluci.config.path .. "/view/"
+viewdir = ffluci.sys.libpath() .. "/view/"
 
 
 -- Compile modes:
@@ -52,8 +50,8 @@ compiler_enable_bytecode = false
 
 -- Define the namespace for template modules
 viewns = {
-	translate  = ffluci.i18n.translate,
-	config     = function(...) return ffluci.model.uci.get(...) or "" end,
+	translate  = function(...) return require("ffluci.i18n").translate(...) end,
+	config     = function(...) return require("ffluci.model.uci").get(...) or "" end,
 	controller = ffluci.http.get_script_name(),
 	media      = ffluci.config.main.mediaurlbase,
 	write      = io.write,

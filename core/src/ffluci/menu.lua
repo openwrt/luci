@@ -27,18 +27,15 @@ module("ffluci.menu", package.seeall)
 
 require("ffluci.fs")
 require("ffluci.util")
-require("ffluci.template")
-require("ffluci.i18n")
-require("ffluci.config")
-require("ffluci.model.ipkg")
+require("ffluci.sys")
 
 -- Default modelpath
-modelpath = ffluci.config.path .. "/model/menu/"
+modelpath = ffluci.sys.libpath() .. "/model/menu/"
 
 -- Menu definition extra scope
 scope = {
-	translate = ffluci.i18n.translate,
-	loadtrans = ffluci.i18n.loadc,
+	translate = function(...) return require("ffluci.i18n").translate(...) end,
+	loadtrans = function(...) return require("ffluci.i18n").loadc(...) end,
 	isfile    = ffluci.fs.mtime
 }
 
@@ -101,26 +98,40 @@ end
 
 -- Collect all menu information provided in the model dir
 function collect()
+	local generators = {}
+	
 	for k, menu in pairs(ffluci.fs.dir(modelpath)) do
 		if menu:sub(1, 1) ~= "." then
 			local f = loadfile(modelpath.."/"..menu)
-			local env = ffluci.util.clone(scope)
-			
-			env.add = add
-			env.sel = sel
-			env.act = act
-			
-			setfenv(f, env)
-			f()
+			if f then
+				table.insert(generators, f)
+			end
 		end
 	end
+	
+	return generators
+end
+
+-- Parse the collected information
+function parse(generators)
+	menu = {}
+	for i, f in pairs(generators) do
+		local env = ffluci.util.clone(scope)
+		
+		env.add = add
+		env.sel = sel
+		env.act = act
+		
+		setfenv(f, env)
+		f()
+	end
+	return menu
 end
 
 -- Returns the menu information
 function get()
 	if not menu then
-		menu = {}
-		collect()
+		menu = parse(collect())
 	end
 	return menu
 end

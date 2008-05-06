@@ -139,12 +139,6 @@ function resfenv(f)
 end 
 
 
--- Returns the Haserl unique sessionid
-function sessionid()
-	return ENV.SESSIONID
-end
-
-
 -- Splits a string into an array
 function split(str, pat, max, regex)
 	pat = pat or "\n"

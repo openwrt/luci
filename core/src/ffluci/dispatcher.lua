@@ -150,7 +150,7 @@ end
 
 -- Dispatches a request depending on the PATH_INFO variable
 function httpdispatch()
-	local pathinfo = os.getenv("PATH_INFO") or ""
+	local pathinfo = ffluci.http.get_path_info() or ""
 	local parts = pathinfo:gmatch("/[%w-]+")
 	
 	local sanitize = function(s, default)

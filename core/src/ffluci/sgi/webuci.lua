@@ -51,15 +51,25 @@ function ffluci.http.formvaluetable(prefix)
 	return vals
 end
 
+-- Returns the path info
+function ffluci.http.get_path_info()
+	return webuci.PATH_INFO
+end
 
 -- Returns the User's IP
 function ffluci.http.get_remote_addr()
-	return os.getenv("REMOTE_ADDR")
+	return webuci.REMOTE_ADDR
 end
+
+-- Returns the request URI
+function ffluci.http.get_request_uri()
+	return webuci.REQUEST_URI
+end
+
 
 -- Returns the script name
 function ffluci.http.get_script_name()
-	return os.getenv("SCRIPT_NAME")
+	return webuci.SCRIPT_NAME
 end
 
 
@@ -81,5 +91,5 @@ end
 
 -- Sets HTTP-Status-Header
 function ffluci.http.set_status(code, message)
-	print("Status: " .. tostring(code) .. " " .. message)
+	print(webuci.REQUEST_METHOD .. " " .. tostring(code) .. " " .. message)
 end

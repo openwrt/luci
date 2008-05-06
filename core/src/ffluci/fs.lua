@@ -28,6 +28,11 @@ module("ffluci.fs", package.seeall)
 
 require("posix")
 
+-- Glob
+function glob(pattern)
+	return posix.glob(pattern)
+end
+
 -- Checks whether a file exists
 function isfile(filename)
 	local fp = io.open(path, "r")
