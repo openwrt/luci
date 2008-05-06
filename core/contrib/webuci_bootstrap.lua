@@ -3,8 +3,8 @@ package.cpath = "/usr/lib/lua/?.so;" .. package.cpath
 module("webuci", package.seeall)
 
 function prepare_req(uri)
-	require("ffluci.menu").get()
 	REQUEST_URI = uri
+	require("ffluci.menu").get()
 end
 
 function init_req(context)
