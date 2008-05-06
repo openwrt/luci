@@ -9,7 +9,7 @@ require("ffluci.model.uci")
 local srv
 local net
 local ip = ffluci.http.remote_addr()
-for k, v in pairs(ffluci.model.uci.show("network").network) do
+for k, v in pairs(ffluci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and v.ipaddr then
 		local p = ffluci.sys.net.mask4prefix(v.netmask)
 		if ffluci.sys.net.belongs(ip, v.ipaddr, p) then
@@ -21,7 +21,7 @@ for k, v in pairs(ffluci.model.uci.show("network").network) do
 end
 
 local stat = false
-for k, v in pairs(ffluci.model.uci.show("luci_splash").luci_splash) do
+for k, v in pairs(ffluci.model.uci.sections("luci_splash")) do
 	if v[".type"] == "iface" and v.network == net then
 		stat = true
 	end 
