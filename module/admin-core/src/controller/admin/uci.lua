@@ -10,16 +10,15 @@ function action_apply()
 	if changes then
 		local apply = {}
 		
-		-- Collect files to be applied
+		-- Collect files to be applied and commit changes
 		for i, line in ipairs(ffluci.util.split(changes)) do
 			local r = line:match("^-?([^.]+)")
 			if r and not ffluci.util.contains(apply, ffluci.config.uci_oncommit[r]) then
 				table.insert(apply, ffluci.config.uci_oncommit[r])
+				ffluci.model.uci.commit(r)
 			end
 		end
 		
-		-- Commit changes
-		ffluci.model.uci.commit()
 		
 		-- Search for post-commit commands
 		if ffluci.config.uci_oncommit then

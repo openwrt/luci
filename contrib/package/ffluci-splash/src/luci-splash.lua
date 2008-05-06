@@ -72,7 +72,7 @@ end
 function remove_lease(mac)
 	mac = mac:lower()
 
-	for k, v in pairs(uci:show("luci_splash").luci_splash) do
+	for k, v in pairs(uci:sections("luci_splash")) do
 		if v[".type"] == "lease" and v.mac:lower() == mac then
 			remove_rule(mac)
 			uci:del("luci_splash", k)
@@ -97,7 +97,7 @@ end
 function haslease(mac)
 	mac = mac:lower()
 	
-	for k, v in pairs(uci:show("luci_splash").luci_splash) do
+	for k, v in pairs(uci:sections("luci_splash")) do
 		if v[".type"] == "lease" and v.mac and v.mac:lower() == mac then
 			return true
 		end
@@ -111,7 +111,7 @@ end
 function iswhitelisted(mac)
 	mac = mac:lower()
 	
-	for k, v in pairs(uci:show("luci_splash").luci_splash) do
+	for k, v in pairs(uci:sections("luci_splash")) do
 		if v[".type"] == "whitelist" and v.mac and v.mac:lower() == mac then
 			return true
 		end
@@ -134,14 +134,16 @@ function sync()
 	local written = {}
 	local time = os.time()
 	
+	uci:t_load("luci_splash")
+	
 	-- Current leases in state files
-	local leases = uci:show("luci_splash").luci_splash
+	local leases = uci:t_sections("luci_splash")
 	
 	-- Convert leasetime to seconds
-	local leasetime = tonumber(uci:get("luci_splash", "general", "leasetime")) * 3600
+	local leasetime = tonumber(uci:t_get("luci_splash", "general", "leasetime")) * 3600
 	
 	-- Clean state file
-	uci:revert("luci_splash")
+	uci:t_revert("luci_splash")
 	
 	
 	-- For all leases
@@ -152,9 +154,9 @@ function sync()
 				remove_rule(v.mac)
 			else
 				-- Rewrite state
-				local n = uci:add("luci_splash", "lease")
-				uci:set("luci_splash", n, "mac", v.mac)
-				uci:set("luci_splash", n, "start", v.start)
+				local n = uci:t_add("luci_splash", "lease")
+				uci:t_set("luci_splash", n, "mac", v.mac)
+				uci:t_set("luci_splash", n, "start", v.start)
 				written[v.mac:lower()] = 1
 			end
 		end
@@ -167,6 +169,8 @@ function sync()
 			remove_rule(r)
 		end
 	end
+	
+	uci:t_save("luci_splash")
 end
 
 main(arg)

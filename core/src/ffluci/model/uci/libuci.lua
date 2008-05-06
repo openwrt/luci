@@ -26,24 +26,17 @@ limitations under the License.
 
 module("ffluci.model.uci.libuci", package.seeall)
 
+require("uci")
 require("ffluci.util")
-require("ffluci.fs")
 require("ffluci.sys")
-
--- The OS uci command
-ucicmd = "uci"
 
 -- Session class
 Session = ffluci.util.class()
 
 -- Session constructor
-function Session.__init__(self, path, uci)
-	uci = uci or ucicmd
-	if path then
-		self.ucicmd = uci .. " -P " .. path 
-	else
-		self.ucicmd = uci
-	end
+function Session.__init__(self, savedir)
+	self.ucicmd  = savedir and "uci -P " .. savedir or "uci"
+	self.savedir = savedir or ffluci.model.uci.savedir
 end
 
 function Session.add(self, config, section_type)
@@ -55,7 +48,8 @@ function Session.changes(self, config)
 end
 
 function Session.commit(self, config)
-	return self:_uci2("commit " .. _path(config))
+	self:t_load(config)
+	return self:t_commit(config)
 end
 
 function Session.del(self, config, section, option)
@@ -63,31 +57,96 @@ function Session.del(self, config, section, option)
 end
 
 function Session.get(self, config, section, option)
-	return self:_uci("get " .. _path(config, section, option))
+	self:t_load(config)
+	return self:t_get(config, section, option)
 end
 
 function Session.revert(self, config)
-	return self:_uci2("revert " .. _path(config))
+	self:t_load(config)
+	return self:t_revert(config)
 end
 
-function Session.sections(self, config)	
-	if not config then
-		return nil
-	end
-	
-	local r1, r2 = self:_uci3("show " .. _path(config))
-	if type(r1) == "table" then
-		return r1[config]
-	else
-		return nil, r2
-	end
+function Session.sections(self, config)
+	self:t_load(config)
+	return self:t_sections(config)
 end
 
 function Session.set(self, config, section, option, value)
-	return self:_uci2("set " .. _path(config, section, option, value))
+	self:t_load(config)
+	return self:t_set(config, section, option, value) and self:t_save(config)
+end
+
+function Session.synchronize(self)
+	return uci.set_savedir(self.savedir)
 end
 
 
+-- UCI-Transactions
+
+function Session.t_load(self, config)
+	return self:synchronize() and uci.load(config)
+end
+
+function Session.t_save(self, config)
+	return uci.save(config)
+end
+
+function Session.t_add(self, config, type)
+	self:t_save(config)
+	local r = self:add(config, type)
+	self:t_load(config)
+	return r
+end
+
+function Session.t_commit(self, config)
+	return uci.commit(config)
+end
+
+function Session.t_del(self, config, section, option)
+	self:t_save(config)
+	local r = self:del(config, section, option)
+	self:t_load(config)
+	return r
+end
+
+function Session.t_get(self, config, section, option)
+	if option then
+		return uci.get(config, section, option)
+	else
+		return uci.get(config, section)
+	end
+end
+
+function Session.t_revert(self, config)
+	return uci.revert(config)
+end
+
+function Session.t_sections(self, config)
+	local raw = uci.get_all(config)
+	if not raw then
+		return nil
+	end
+		
+	local s = {}
+	local o = {}
+	
+	for i, sec in ipairs(raw) do 
+		table.insert(o, sec.name)
+		
+		s[sec.name] = sec.options
+		s[sec.name][".type"] = sec.type
+	end
+	
+	return s, o
+end
+
+function Session.t_set(self, config, section, option, value)
+	if option then
+		return uci.set(config.."."..section.."."..option.."="..value)
+	else
+		return uci.set(config.."."..section.."="..value)
+	end
+end
 
 -- Internal functions --
 
@@ -110,34 +169,6 @@ function Session._uci2(self, cmd)
 	else
 		return true
 	end	
-end
-
-function Session._uci3(self, cmd)
-	local res = ffluci.sys.execl(self.ucicmd .. " 2>&1 " .. cmd)
-	if res[1] and res[1]:sub(1, self.ucicmd:len()+1) == self.ucicmd..":" then
-		return nil, res[1]
-	end
-
-	tbl = {}
-
-	for k,line in pairs(res) do
-		c, s, t = line:match("^([^.]-)%.([^.]-)=(.-)$")
-		if c then
-			tbl[c] = tbl[c] or {}
-			tbl[c][".order"] = tbl[c][".order"] or {}
-			
-			tbl[c][s] = {}
-			table.insert(tbl[c][".order"], s)
-			tbl[c][s][".type"] = t
-		end
-	
-		c, s, o, v = line:match("^([^.]-)%.([^.]-)%.([^.]-)=(.-)$")
-		if c then
-			tbl[c][s][o] = v
-		end
-	end
-	
-	return tbl
 end
 
 -- Build path (config.section.option=value) and prevent command injection

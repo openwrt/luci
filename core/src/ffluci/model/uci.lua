@@ -25,6 +25,9 @@ limitations under the License.
 ]]--
 module("ffluci.model.uci", package.seeall)
 
+-- Default savedir
+savedir = "/tmp/.uci"
+
 -- Test whether to load libuci-Wrapper or /sbin/uci-Wrapper
 if pcall(require, "uci") then
 	Session = require("ffluci.model.uci.libuci").Session
@@ -52,7 +55,6 @@ end
 function changes(...)
 	return default:changes(...)
 end
-
 
 -- Wrapper for "uci commit"
 function commit(...)

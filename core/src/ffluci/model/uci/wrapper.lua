@@ -30,23 +30,14 @@ limitations under the License.
 module("ffluci.model.uci.wrapper", package.seeall)
 
 require("ffluci.util")
-require("ffluci.fs")
 require("ffluci.sys")
-
--- The OS uci command
-ucicmd = "uci"
 
 -- Session class
 Session = ffluci.util.class()
 
 -- Session constructor
-function Session.__init__(self, path, uci)
-	uci = uci or ucicmd
-	if path then
-		self.ucicmd = uci .. " -P " .. path 
-	else
-		self.ucicmd = uci
-	end
+function Session.__init__(self, savedir)
+	self.ucicmd = savedir and "uci -P " .. savedir or "uci"
 end
 
 function Session.add(self, config, section_type)
@@ -80,7 +71,7 @@ function Session.sections(self, config)
 	
 	local r1, r2 = self:_uci3("show " .. _path(config))
 	if type(r1) == "table" then
-		return r1[config]
+		return r1, r2
 	else
 		return nil, r2
 	end
@@ -89,6 +80,23 @@ end
 function Session.set(self, config, section, option, value)
 	return self:_uci2("set " .. _path(config, section, option, value))
 end
+
+function Session.synchronize(self) end
+
+-- Dummy transaction functions
+
+function Session.t_load(self) end
+function Session.t_save(self) end
+
+Session.t_add = Session.add
+Session.t_commit = Session.commit
+Session.t_del = Session.del
+Session.t_get = Session.get
+Session.t_revert = Session.revert
+Session.t_sections = Session.sections
+Session.t_set = Session.set
+
+
 
 
 
@@ -121,26 +129,24 @@ function Session._uci3(self, cmd)
 		return nil, res[1]
 	end
 
-	tbl = {}
+	local tbl = {}
+	local ord = {}
 
 	for k,line in pairs(res) do
 		c, s, t = line:match("^([^.]-)%.([^.]-)=(.-)$")
 		if c then
-			tbl[c] = tbl[c] or {}
-			tbl[c][".order"] = tbl[c][".order"] or {}
-			
-			tbl[c][s] = {}
-			table.insert(tbl[c][".order"], s)
-			tbl[c][s][".type"] = t
+			tbl[s] = {}
+			table.insert(ord, s)
+			tbl[s][".type"] = t
 		end
 	
 		c, s, o, v = line:match("^([^.]-)%.([^.]-)%.([^.]-)=(.-)$")
 		if c then
-			tbl[c][s][o] = v
+			tbl[s][o] = v
 		end
 	end
 	
-	return tbl
+	return tbl, ord
 end
 
 -- Build path (config.section.option=value) and prevent command injection
