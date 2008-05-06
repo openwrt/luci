@@ -17,7 +17,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_BUILD_DEPENDS:=lua-luci
 
-MAKE_ACTION:=compile LUAC=$(BUILD_DIR_HOST)/lua-luci/luac
+# MAKE_ACTION:=compile LUAC=$(BUILD_DIR_HOST)/lua-luci/luac
+MAKE_ACTION:=source
 
 include $(INCLUDE_DIR)/package.mk
 
