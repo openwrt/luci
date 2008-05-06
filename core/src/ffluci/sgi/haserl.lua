@@ -31,7 +31,7 @@ FORM = FORM or {}
 -- HTTP interface
 
 -- Returns a table of all COOKIE, GET and POST Parameters
-function ffluci.http.formvalues(prefix)
+function ffluci.http.formvalues()
 	return FORM
 end
 

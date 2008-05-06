@@ -8,25 +8,29 @@ function action_apply()
 	local output  = ""
 	
 	if changes then
-		local apply = {}
+		local com = {}
+		local run = {}
 		
 		-- Collect files to be applied and commit changes
 		for i, line in ipairs(ffluci.util.split(changes)) do
 			local r = line:match("^-?([^.]+)")
-			if r and not ffluci.util.contains(apply, ffluci.config.uci_oncommit[r]) then
-				table.insert(apply, ffluci.config.uci_oncommit[r])
-				ffluci.model.uci.commit(r)
+			if r then
+				com[r] = true
+				
+				if ffluci.config.uci_oncommit and ffluci.config.uci_oncommit[r] then
+					run[ffluci.config.uci_oncommit[r]] = true
+				end
 			end
 		end
 		
+		-- Apply
+		for config, i in pairs(com) do
+			ffluci.model.uci.commit(config)
+		end 
 		
 		-- Search for post-commit commands
-		if ffluci.config.uci_oncommit then
-			for i, cmd in ipairs(apply) do
-				if cmd then
-					output = output .. cmd .. ":" .. ffluci.sys.exec(cmd) .. "\n"
-				end
-			end
+		for cmd, i in pairs(run) do
+			output = output .. cmd .. ":" .. ffluci.sys.exec(cmd) .. "\n"
 		end
 	end
 	
