@@ -35,9 +35,9 @@ end
 
 -- Checks whether a file exists
 function isfile(filename)
-	local fp = io.open(path, "r")
-	if file then file:close() end
-	return file ~= nil
+	local fp = io.open(filename, "r")
+	if fp then fp:close() end
+	return fp ~= nil
 end	
 
 -- Returns the content of file
