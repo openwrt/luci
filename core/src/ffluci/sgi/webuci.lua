@@ -69,6 +69,13 @@ function ffluci.http.prepare_content(type)
 	print("Content-Type: "..type.."\n")
 end
 
+-- Asks the browser to redirect to "url"
+function ffluci.http.redirect(url)
+	ffluci.http.status(302, "Found")
+	ffluci.http.header("Location", url)
+	print()
+end
+
 -- Sets HTTP-Status-Header
 function ffluci.http.status(code, message)
 	print(webuci.env.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
