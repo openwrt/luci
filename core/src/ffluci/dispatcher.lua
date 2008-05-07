@@ -104,7 +104,7 @@ function build_url(category, module, action)
 	module   = module   or "index"
 	action   = action   or "index"
 	
-	local pattern = ffluci.http.get_script_name() .. "/%s/%s/%s"
+	local pattern = ffluci.http.env.SCRIPT_NAME .. "/%s/%s/%s"
 	return pattern:format(category, module, action)
 end
 
@@ -126,11 +126,11 @@ end
 
 -- Sends a 404 error code and renders the "error404" template if available
 function error404(message)
-	ffluci.http.set_status(404, "Not Found")
+	ffluci.http.status(404, "Not Found")
 	message = message or "Not Found"
 	
 	if not pcall(ffluci.template.render, "error404") then
-		ffluci.http.set_content_type("text/plain")
+		ffluci.http.prepare_content("text/plain")
 		print(message)
 	end
 	return false	
@@ -138,10 +138,10 @@ end
 
 -- Sends a 500 error code and renders the "error500" template if available
 function error500(message)
-	ffluci.http.set_status(500, "Internal Server Error")
+	ffluci.http.status(500, "Internal Server Error")
 	
 	if not pcall(ffluci.template.render, "error500", {message=message}) then
-		ffluci.http.set_content_type("text/plain")
+		ffluci.http.prepare_content("text/plain")
 		print(message)
 	end
 	return false	
@@ -150,7 +150,7 @@ end
 
 -- Dispatches a request depending on the PATH_INFO variable
 function httpdispatch()
-	local pathinfo = ffluci.http.get_path_info() or ""
+	local pathinfo = ffluci.http.env.PATH_INFO or ""
 	local parts = pathinfo:gmatch("/[%w-]+")
 	
 	local sanitize = function(s, default)

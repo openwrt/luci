@@ -3,7 +3,7 @@ module("ffluci.controller.rpc.luciinfo", package.seeall)
 function action_index()
 	local uci = ffluci.model.uci.StateSession()
 
-	ffluci.http.set_content_type("text/plain")
+	ffluci.http.prepare_content("text/plain")
 	
 	-- General
 	print("luciinfo.api=1")

@@ -34,3 +34,13 @@ if ENV and ENV.HASERLVER then
 elseif webuci then
 	require("ffluci.sgi.webuci")
 end
+
+-- Asks the browser to redirect to "url"
+function redirect(url, qs)
+	if qs then
+		url = url .. "?" .. qs
+	end
+	
+	ffluci.http.status(302, "Found")
+	print("Location: " .. url .. "\n")
+end

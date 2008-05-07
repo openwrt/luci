@@ -25,9 +25,11 @@ limitations under the License.
 ]]--
 module("ffluci.sgi.webuci", package.seeall)
 
-local status_set = false
+-- Environment Table
+ffluci.http.env = webuci.env
 
--- HTTP interface
+
+local status_set = false
 
 -- Returns a table of all COOKIE, GET and POST Parameters
 function ffluci.http.formvalues()
@@ -53,50 +55,18 @@ function ffluci.http.formvaluetable(prefix)
 	return vals
 end
 
--- Returns the path info
-function ffluci.http.get_path_info()
-	return webuci.PATH_INFO
-end
-
--- Returns the User's IP
-function ffluci.http.get_remote_addr()
-	return webuci.REMOTE_ADDR
-end
-
--- Returns the request URI
-function ffluci.http.get_request_uri()
-	return webuci.REQUEST_URI
-end
-
-
--- Returns the script name
-function ffluci.http.get_script_name()
-	return webuci.SCRIPT_NAME
-end
-
-
--- Asks the browser to redirect to "url"
-function ffluci.http.redirect(url, qs)
-	if qs then
-		url = url .. "?" .. qs
-	end
-	
-	ffluci.http.set_status(302, "Found")
-	print("Location: " .. url .. "\n")
-end
-
 
 -- Set Content-Type
-function ffluci.http.set_content_type(type)
+function ffluci.http.prepare_content(type)
 	if not status_set then
-		ffluci.http.set_status(200, "OK")
+		ffluci.http.status(200, "OK")
 	end
 	
 	print("Content-Type: "..type.."\n")
 end
 
 -- Sets HTTP-Status-Header
-function ffluci.http.set_status(code, message)
-	print(webuci.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
+function ffluci.http.status(code, message)
+	print(webuci.env.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
 	status_set = true
 end

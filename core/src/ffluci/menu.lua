@@ -36,7 +36,7 @@ modelpath = ffluci.sys.libpath() .. "/model/menu/"
 scope = {
 	translate = function(...) return require("ffluci.i18n").translate(...) end,
 	loadtrans = function(...) return require("ffluci.i18n").loadc(...) end,
-	isfile    = ffluci.fs.mtime
+	isfile    = ffluci.fs.isfile
 }
 
 -- Local menu database

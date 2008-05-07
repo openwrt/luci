@@ -53,26 +53,6 @@ function readfile(filename)
 	return data	
 end
 
--- Returns the content of file as array of lines
-function readfilel(filename)
-	local fp, err = io.open(filename)
-	local line = ""
-	local data = {}
-		
-	if fp == nil then
-		return nil, err
-	end
-	
-	while true do
-		line = fp:read()
-		if (line == nil) then break end
-		table.insert(data, line)
-	end 	
-	
-	fp:close()
-	return data	
-end
-
 -- Writes given data to a file
 function writefile(filename, data)
 	local fp, err = io.open(filename, "w")
@@ -107,5 +87,8 @@ function dir(path)
 	return dir
 end
 
--- Alias for lfs.mkdir
+-- Alias for posix.mkdir
 mkdir = posix.mkdir
+
+-- Alias for posix.rmdir
+rmdir = posix.rmdir

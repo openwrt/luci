@@ -170,8 +170,8 @@ function split(str, pat, max, regex)
 end
 
 -- Removes whitespace from beginning and end of a string
-function trim(string)
-	local s = string:gsub("^%s*(.-)%s*$", "%1")
+function trim(str)
+	local s = str:gsub("^%s*(.-)%s*$", "%1")
 	return s
 end
 

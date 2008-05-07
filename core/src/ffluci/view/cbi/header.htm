@@ -1,5 +1,5 @@
 <%+header%>
-		<form method="post" action="<%=ffluci.http.get_request_uri()%>">
+		<form method="post" action="<%=ffluci.http.env.REQUEST_URI%>">
 			<div>
 				<script type="text/javascript" src="<%=media%>/cbi.js"></script>
 				<input type="hidden" name="cbi.submit" value="1" />

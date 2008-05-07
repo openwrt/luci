@@ -25,10 +25,9 @@ limitations under the License.
 ]]--
 module("ffluci.sgi.haserl", package.seeall)
 
-ENV = ENV or {}
-FORM = FORM or {}
+-- Environment Table
+ffluci.http.env = ENV
 
--- HTTP interface
 
 -- Returns a table of all COOKIE, GET and POST Parameters
 function ffluci.http.formvalues()
@@ -54,44 +53,13 @@ function ffluci.http.formvaluetable(prefix)
 	return ffluci.http.formvalue(prefix, {})
 end
 
--- Returns the path info
-function ffluci.http.get_path_info()
-	return ENV.PATH_INFO
-end
-
--- Returns the User's IP
-function ffluci.http.get_remote_addr()
-	return ENV.REMOTE_ADDR
-end
-
--- Returns the request URI
-function ffluci.http.get_request_uri()
-	return ENV.REQUEST_URI
-end
-
--- Returns the script name
-function ffluci.http.get_script_name()
-	return ENV.SCRIPT_NAME
-end
-
-
--- Asks the browser to redirect to "url"
-function ffluci.http.redirect(url, qs)
-	if qs then
-		url = url .. "?" .. qs
-	end
-	
-	ffluci.http.set_status(302, "Found")
-	print("Location: " .. url .. "\n")
-end
-
 
 -- Set Content-Type
-function ffluci.http.set_content_type(type)
+function ffluci.http.prepare_content(type)
 	print("Content-Type: "..type.."\n")
 end
 
 -- Sets HTTP-Status-Header
-function ffluci.http.set_status(code, message)
+function ffluci.http.status(code, message)
 	print("Status: " .. tostring(code) .. " " .. message)
 end

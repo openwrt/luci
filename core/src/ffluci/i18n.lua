@@ -25,7 +25,6 @@ limitations under the License.
 ]]--
 
 module("ffluci.i18n", package.seeall)
-require("ffluci.config")
 require("ffluci.sys")
 
 table   = {}
@@ -50,7 +49,7 @@ end
 
 -- Same as load but autocompletes the filename with .LANG from config.lang
 function loadc(file)
-	return load(file .. "." .. ffluci.config.main.lang)
+	return load(file .. "." .. require("ffluci.config").main.lang)
 end
 
 -- Returns the i18n-value defined by "key" or if there is no such: "default"
