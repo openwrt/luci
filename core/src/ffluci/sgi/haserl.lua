@@ -53,6 +53,10 @@ function ffluci.http.formvaluetable(prefix)
 	return ffluci.http.formvalue(prefix, {})
 end
 
+-- Sends a custom HTTP-Header
+function ffluci.http.header(key, value)
+	print(key .. ": " .. value)
+end
 
 -- Set Content-Type
 function ffluci.http.prepare_content(type)
