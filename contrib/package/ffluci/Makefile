@@ -154,6 +154,7 @@ define Package/ffluci-app-splash/install
 	$(call Package/ffluci/install/template,$(1),applications/luci-splash)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-splash/dist/usr/sbin/luci-splash $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-splash/dist/etc/init.d/luci_splash $(1)/etc/init.d
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-splash/dist/etc/cron.minutely/luci_splash $(1)/etc/cron.minutely
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-splash/dist/usr/lib/luci-splash/htdocs/cgi-bin/index.cgi $(1)/usr/lib/luci-splash/htdocs/cgi-bin
 endef
 
