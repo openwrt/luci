@@ -1,0 +1,91 @@
+#!/bin/sh /etc/rc.common
+START=70
+
+start() {
+	include /lib/network
+	scan_interfaces
+	
+	
+	### Read interface names
+	config_get wanif wan ifname
+	config_get lanif lan ifname
+	config_get ffif  ff  ifname
+	config_get ffdif ffdhcp  ifname
+	
+	config_get lanip   lan ipaddr
+	config_get lanmask lan netmask
+	
+	config_get ffip    ff ipaddr
+	config_get ffmask  ff netmask
+	
+	config_get ffdip   ffdhcp ipaddr
+	config_get ffdmask ffdhcp netmask
+	
+	[ -n "$ffif" ] || return 0
+	
+	
+	### Creating chains
+	iptables -N luci_freifunk_forwarding
+	iptables -t nat -N luci_freifunk_postrouting
+		
+	
+	### Read from config
+	config_load freifunk
+	
+	config_get_bool internal routing internal
+	[ -n "$wanif" ] && config_get_bool internet routing internet
+	
+	
+	### Freifunk to Freifunk
+	[ "$internal" -gt 0 ] && {
+		iptables -A luci_freifunk_forwarding -i "$ffif" -o "$ffif" -j ACCEPT
+	}
+	
+	### Freifunk DHCP to Freifunk
+	[ "$internal" -gt 0 -a -n "$ffdif" ] && {
+		eval "$(ipcalc.sh $ffdip $ffdmask)"
+		
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$ffif" -j MASQUERADE
+	}
+	
+	### Lan to Freifunk	
+	[ -n "$lanif" ] && {
+		eval "$(ipcalc.sh $lanip $lanmask)"
+		
+		iptables -A luci_freifunk_forwarding -i "$lanif" -o "$ffif" -j ACCEPT
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$ffif" -j MASQUERADE
+	}
+	
+	### Freifunk to Wan
+	[ "$internet" -gt 0 ] && {		
+		eval "$(ipcalc.sh $ffip $ffmask)"		
+		
+		iptables -A luci_freifunk_forwarding -i "$ffif" -o "$wanif" -j ACCEPT
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$wanif" -j MASQUERADE
+	}
+	
+	### Freifunk DHCP to Wan
+	[ "$internet" -gt 0 -a -n "$ffdif" ] && {		
+		eval "$(ipcalc.sh $ffdip $ffdmask)"		
+		
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$wanif" -j MASQUERADE
+	}
+	
+	### Hook in the chains
+	iptables -A forwarding_rule -j luci_freifunk_forwarding
+	iptables -t nat -A postrouting_rule -j luci_freifunk_postrouting
+}
+
+stop() {
+	### Hook out the chains
+	iptables -D forwarding_rule -j luci_freifunk_forwarding
+	iptables -t nat -D postrouting_rule -j luci_freifunk_postrouting
+	
+	### Clear the chains
+	iptables -F luci_freifunk_forwarding
+	iptables -t nat -F luci_freifunk_postrouting
+	
+	### Delete chains
+	iptables -X luci_freifunk_forwarding
+	iptables -t nat -X luci_freifunk_postrouting
+}

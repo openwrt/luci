@@ -1,0 +1,36 @@
+<%+header%>
+<h1><%:olsrlinks OLSR-Routen%></h1>
+<br />
+<table cellspacing="0" cellpadding="6">
+<tr>
+<th><%:destination Ziel%></th>
+<th><%:gateway Gateway%></th>
+<th><%:interface Schnittstelle%></th>
+<th><%:metric Metrik%></th>
+<th>ETX</th>
+</tr>
+<% for k, route in ipairs(routes) do 
+	local color = "#bb3333"
+	
+	route.ETX = tonumber(route.ETX)
+	if route.ETX == 0 then
+		color = "#bb3333"
+	elseif route.ETX < 4 then
+		color = "#00cc00"
+	elseif route.ETX < 10 then
+		color = "#ffcb05"
+	elseif route.ETX < 100 then
+		color = "#ff6600"
+	end
+%>
+<tr>
+<td><%=route.Destination%></td>
+<td><%=route.Gateway%></td>
+<td><%=route.Interface%></td>
+<td><%=route.Metric%></td>
+<td style="background-color:<%=color%>"><%=route.ETX%></td>
+</tr>
+<% end %>
+</table>
+<br />
+<%+footer%>

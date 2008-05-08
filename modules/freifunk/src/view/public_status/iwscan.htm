@@ -1,0 +1,21 @@
+<%+header%>
+<h1><%:iwscan WLAN-Scan%></h1>
+<p><%:iwscan1 Drahtlosnetzwerke in der lokalen Umgebung des Routers:%></p>
+
+<br />
+<table cellspacing="0" cellpadding="6" class="smalltext">
+<tr>
+<th><%:interface Schnittstelle%></th>
+<th><%:essid ESSID%></th>
+<th><%:bssid BSSID%></th>
+<th><%:mode Modus%></th>
+<th><%:channel Kanal%></th>
+<th><%:encr Vers.%></th>
+<th><%:link Verb.%></th>
+<th><%:signal Signal%></th>
+<th><%:noise Rausch%></th>
+</tr>
+<%=ffluci.sys.httpget("http://127.0.0.1" .. controller .. "/sudo/status/iwscan")%>
+</table>
+<br />
+<%+footer%>

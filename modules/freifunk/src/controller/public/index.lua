@@ -1,0 +1,1 @@
+module("ffluci.controller.public.index", package.seeall)
