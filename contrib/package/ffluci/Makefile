@@ -1,79 +1,205 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=ffluci
-PKG_REV:=HEAD
-PKG_VERSION:=0.3+svn$(PKG_REV)
-PKG_RELEASE:=1
 PKG_BRANCH:=trunk
+PKG_SOURCE_URL:=https://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
+PKG_REV:=$(shell LC_ALL=C svn info ${PKG_SOURCE_URL} | sed -ne's/^Last Changed Rev: //p')
 
+PKG_NAME:=ffluci
+PKG_VERSION:=0.4+svn$(PKG_REV)
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_URL:=https://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
+
+PKG_BUILD_DEPENDS:=lua-luci
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILD_DEPENDS:=lua-luci
+# LUA_TARGET:=compile LUAC=$(BUILD_DIR_HOST)/lua-luci/luac
+LUA_TARGET:=source
 
-# MAKE_ACTION:=compile LUAC=$(BUILD_DIR_HOST)/lua-luci/luac
-MAKE_ACTION:=source
 
 include $(INCLUDE_DIR)/package.mk
-
-define Package/ffluci
-  SECTION:=admin
-  CATEGORY:=Administration
-  TITLE:=FFLuCI
-  SUBMENU:=FFLuCI
-  DEPENDS:=+luaposix +haserl-lua +ffluci-system-addons
-  MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
-endef
 
 define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/core $(MAKE_ACTION)
-	$(MAKE) -C $(PKG_BUILD_DIR)/module/admin-core $(MAKE_ACTION)
-	$(MAKE) -C $(PKG_BUILD_DIR)/module/public-core $(MAKE_ACTION)
-	$(MAKE) -C $(PKG_BUILD_DIR)/module/rpc-core $(MAKE_ACTION)
+	$(MAKE) -C$(PKG_BUILD_DIR) build LUA_TARGET=$(LUA_TARGET)
+endef
+
+
+define Package/ffluci/template
+  SECTION:=admin
+  CATEGORY:=Administration
+  TITLE:=FFLuCI - Freifunk Lua Configuration Interface
+  URL:=http://luci.freifunk-halle.net/
+  MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
+endef
+
+define Package/ffluci/install/template
+  $(CP) $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
+  
+  for i in $(PKG_BUILD_DIR)/$(2)/dist/usr/bin/*; do $(INSTALL_BIN) $$i $(1)/usr/bin/; done
+  for i in $(PKG_BUILD_DIR)/$(2)/dist/usr/sbin/*; do $(INSTALL_BIN) $$i $(1)/usr/sbin/; done
+  for i in $(PKG_BUILD_DIR)/$(2)/dist/bin/*; do $(INSTALL_BIN) $$i $(1)/bin/; done
+  for i in $(PKG_BUILD_DIR)/$(2)/dist/sbin/*; do $(INSTALL_BIN) $$i $(1)/sbin/; done
+endef
+
+
+define Package/ffluci
+  $(call Package/ffluci/template)
+  MENU:=1
+  DEPENDS:=+lua-luci +luaposix +luci-addons
+endef
+
+define Package/ffluci/conffiles
+/etc/config/luci
 endef
 
 define Package/ffluci/install		
-	$(INSTALL_DIR) $(1)/usr/lib/lua/ffluci
-	$(INSTALL_DIR) $(1)/www/cgi-bin
-	$(INSTALL_DIR) $(1)/www/ffluci
-	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	
-	$(CP) $(PKG_BUILD_DIR)/core/dist/* $(1)/usr/lib/lua/ -R
-	$(CP) $(PKG_BUILD_DIR)/core/contrib/uci/* $(1)/etc/config/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci $(1)/www/cgi-bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/ffluci-upload $(1)/www/cgi-bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/index.cgi $(1)/www/cgi-bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/core/contrib/index.html $(1)/www
-	
-	$(CP) $(PKG_BUILD_DIR)/themes/fledermaus/contrib/media $(1)/www/ffluci/ -R
-		
-	$(CP) $(PKG_BUILD_DIR)/module/admin-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
-	$(CP) $(PKG_BUILD_DIR)/module/admin-core/contrib/uci/luci_fw $(1)/etc/config/luci_fw
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/init.d/luci_fw $(1)/etc/init.d/luci_fw
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/init.d/luci_freifunk $(1)/etc/init.d/luci_freifunk
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/ffluci-flash $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/module/admin-core/contrib/luci-splash $(1)/www/cgi-bin
-	
-	$(CP) $(PKG_BUILD_DIR)/module/public-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
-	$(CP) $(PKG_BUILD_DIR)/module/public-core/contrib/media $(1)/www/ffluci/ -R
-	
-	$(CP) $(PKG_BUILD_DIR)/module/rpc-core/dist/* $(1)/usr/lib/lua/ffluci/ -R
-	
-	$(CP) -a ./ipkg/ffluci.postinst $(1)/CONTROL/postinst
-	$(CP) -a ./ipkg/conffiles $(1)/CONTROL/conffiles
-	rm $(DL_DIR)/$(PKG_SOURCE)
+  $(call Package/ffluci/install/template,$(1),core)
+  $(call Package/ffluci/install/template,$(1),themes/fledermaus)
 endef
 
+
+
+### Meta Packages ###
+
+define Package/ffluci-freifunk-meta
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci +ffluci-sgi-haserl +ffluci-freifunk +ffluci-firewall +ffluci-splash
+  TITLE:=Freifunk Meta-Package
+endef
+
+define Package/ffluci-meta/install
+endef
+
+
+define Package/ffluci-freifunk-halle
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci-freifunk-meta +kmod-tun
+  TITLE:=Community Meta-Package Halle
+endef
+
+define Package/ffluci-freifunk-halle/install
+endef
+
+
+define Package/ffluci-freifunk-leipzig
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci-freifunk-meta +kmod-tun
+  TITLE:=Community Meta-Package Leipzig
+endef
+
+define Package/ffluci-freifunk-leipzig/install
+  $(call Package/ffluci/install/template,$(1),applications/community-leipzig)
+endef
+
+
+
+### Modules ###
+
+define Package/ffluci-module-admin-core
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci
+  TITLE:=Core Administrative pages for FFLuCI
+endef
+
+define Package/ffluci-module-admin-core/install
+  $(call Package/ffluci/install/template,$(1),modules/admin-core)
+endef
+
+
+define Package/ffluci-module-freifunk
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci +ffluci-module-admin-core
+  TITLE:=Freifunk public and configuration pages
+endef
+
+define Package/ffluci-module-freifunk/conffiles
+/etc/config/freifunk
+endef
+
+define Package/ffluci-module-freifunk/install
+  $(call Package/ffluci/install/template,$(1),modules/freifunk)
+endef
+
+
+
+### Applications ###
+
+define Package/ffluci-firewall
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci +ffluci-module-admin-core
+  TITLE:=Firewall and Portforwarding module
+endef
+
+define Package/ffluci-firewall/conffiles
+/etc/config/luci_fw
+endef
+
+define Package/ffluci-firewall/install
+  $(call Package/ffluci/install/template,$(1),applications/luci-fw)
+endef
+
+
+define Package/ffluci-splash
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci +ffluci-freifunk +ffluci-sgi-haserl +iptables-mod-nat
+  TITLE:=Freifunk DHCP-Splash
+endef
+
+define Package/ffluci-splash/conffiles
+/etc/config/luci_splash
+endef
+
+define Package/ffluci-splash/install
+  $(call Package/ffluci/install/template,$(1),applications/luci-splash)
+endef
+
+
+
+### Server Gateway Interfaces ###
+
+define Package/ffluci-sgi-haserl
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci +haserl-lua
+  TITLE:=SGI for Haserl on top of Busybox httpd
+endef
+
+define Package/ffluci-sgi-haserl/install
+  $(call Package/ffluci/install/template,$(1),applications/sgi-haserl)
+endef
+
+
+define Package/ffluci-sgi-webuci
+  $(call Package/ffluci/template)
+  DEPENDS:=+ffluci
+  TITLE:=SGI for Webuci
+endef
+
+define Package/ffluci-sgi-webuci/install
+  $(call Package/ffluci/install/template,$(1),applications/sgi-webuci)
+endef
+
+
+
+
 $(eval $(call BuildPackage,ffluci))
+
+$(eval $(call BuildPackage,ffluci-freifunk-meta))
+$(eval $(call BuildPackage,ffluci-freifunk-halle))
+$(eval $(call BuildPackage,ffluci-freifunk-leipzig))
+
+$(eval $(call BuildPackage,ffluci-module-admin-core))
+$(eval $(call BuildPackage,ffluci-module-freifunk))
+
+$(eval $(call BuildPackage,ffluci-firewall))
+$(eval $(call BuildPackage,ffluci-splash))
+
+$(eval $(call BuildPackage,ffluci-sgi-haserl))
+$(eval $(call BuildPackage,ffluci-sgi-webuci))
