@@ -66,36 +66,31 @@ define Package/ffluci/install
 endef
 
 
+### Community Packages ###
 
-### Meta Packages ###
-
-define Package/ffluci-freifunk-meta
+define Package/ffluci-ff-halle
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci +ffluci-sgi-haserl +ffluci-freifunk +ffluci-firewall +ffluci-splash
-  TITLE:=Freifunk Meta-Package
+  DEPENDS:=ffluci \
+   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-firewall +ffluci-app-splash \
+   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
+   +kmod-tun
+  TITLE:=Freifunk Halle Community Meta-Package
 endef
 
-define Package/ffluci-meta/install
+define Package/ffluci-ff-halle/install
 endef
 
 
-define Package/ffluci-freifunk-halle
+define Package/ffluci-ff-leipzig
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci-freifunk-meta +kmod-tun
-  TITLE:=Community Meta-Package Halle
+  DEPENDS:=ffluci \
+   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-firewall +ffluci-app-splash \
+   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
+   +kmod-tun
+  TITLE:=Freifunk Leipzig Community Meta-Package
 endef
 
-define Package/ffluci-freifunk-halle/install
-endef
-
-
-define Package/ffluci-freifunk-leipzig
-  $(call Package/ffluci/template)
-  DEPENDS:=+ffluci-freifunk-meta +kmod-tun
-  TITLE:=Community Meta-Package Leipzig
-endef
-
-define Package/ffluci-freifunk-leipzig/install
+define Package/ffluci-ff-leipzig/install
   $(call Package/ffluci/install/template,$(1),applications/community-leipzig)
 endef
 
@@ -103,28 +98,28 @@ endef
 
 ### Modules ###
 
-define Package/ffluci-module-admin-core
+define Package/ffluci-mod-admin-core
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci
-  TITLE:=Core Administrative pages for FFLuCI
+  DEPENDS:=ffluci
+  TITLE:=Core administrative pages
 endef
 
-define Package/ffluci-module-admin-core/install
+define Package/ffluci-mod-admin-core/install
   $(call Package/ffluci/install/template,$(1),modules/admin-core)
 endef
 
 
-define Package/ffluci-module-freifunk
+define Package/ffluci-mod-freifunk
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci +ffluci-module-admin-core
-  TITLE:=Freifunk public and configuration pages
+  DEPENDS:=ffluci +ffluci-mod-admin-core
+  TITLE:=Freifunk public and administrative pages
 endef
 
-define Package/ffluci-module-freifunk/conffiles
+define Package/ffluci-mod-freifunk/conffiles
 /etc/config/freifunk
 endef
 
-define Package/ffluci-module-freifunk/install
+define Package/ffluci-mod-freifunk/install
   $(call Package/ffluci/install/template,$(1),modules/freifunk)
 endef
 
@@ -132,32 +127,32 @@ endef
 
 ### Applications ###
 
-define Package/ffluci-firewall
+define Package/ffluci-app-firewall
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci +ffluci-module-admin-core
-  TITLE:=Firewall and Portforwarding module
+  DEPENDS:=ffluci +ffluci-mod-admin-core
+  TITLE:=Firewall and Portforwarding application
 endef
 
-define Package/ffluci-firewall/conffiles
+define Package/ffluci-app-firewall/conffiles
 /etc/config/luci_fw
 endef
 
-define Package/ffluci-firewall/install
+define Package/ffluci-app-firewall/install
   $(call Package/ffluci/install/template,$(1),applications/luci-fw)
 endef
 
 
-define Package/ffluci-splash
+define Package/ffluci-app-splash
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci +ffluci-freifunk +ffluci-sgi-haserl +iptables-mod-nat
-  TITLE:=Freifunk DHCP-Splash
+  DEPENDS:=ffluci +ffluci-mod-freifunk +ffluci-sgi-haserl +iptables-mod-nat
+  TITLE:=Freifunk DHCP-Splash application
 endef
 
-define Package/ffluci-splash/conffiles
+define Package/ffluci-app-splash/conffiles
 /etc/config/luci_splash
 endef
 
-define Package/ffluci-splash/install
+define Package/ffluci-app-splash/install
   $(call Package/ffluci/install/template,$(1),applications/luci-splash)
 endef
 
@@ -167,8 +162,8 @@ endef
 
 define Package/ffluci-sgi-haserl
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci +haserl-lua
-  TITLE:=SGI for Haserl on top of Busybox httpd
+  DEPENDS:=ffluci +haserl-lua
+  TITLE:=SGI for Haserl
 endef
 
 define Package/ffluci-sgi-haserl/install
@@ -178,7 +173,7 @@ endef
 
 define Package/ffluci-sgi-webuci
   $(call Package/ffluci/template)
-  DEPENDS:=+ffluci
+  DEPENDS:=ffluci
   TITLE:=SGI for Webuci
 endef
 
@@ -191,15 +186,15 @@ endef
 
 $(eval $(call BuildPackage,ffluci))
 
-$(eval $(call BuildPackage,ffluci-freifunk-meta))
-$(eval $(call BuildPackage,ffluci-freifunk-halle))
-$(eval $(call BuildPackage,ffluci-freifunk-leipzig))
 
-$(eval $(call BuildPackage,ffluci-module-admin-core))
-$(eval $(call BuildPackage,ffluci-module-freifunk))
+$(eval $(call BuildPackage,ffluci-ff-halle))
+$(eval $(call BuildPackage,ffluci-ff-leipzig))
 
-$(eval $(call BuildPackage,ffluci-firewall))
-$(eval $(call BuildPackage,ffluci-splash))
+$(eval $(call BuildPackage,ffluci-mod-admin-core))
+$(eval $(call BuildPackage,ffluci-mod-freifunk))
+
+$(eval $(call BuildPackage,ffluci-app-firewall))
+$(eval $(call BuildPackage,ffluci-app-splash))
 
 $(eval $(call BuildPackage,ffluci-sgi-haserl))
 $(eval $(call BuildPackage,ffluci-sgi-webuci))
