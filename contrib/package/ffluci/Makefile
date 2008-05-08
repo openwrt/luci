@@ -41,12 +41,7 @@ define Package/ffluci/template
 endef
 
 define Package/ffluci/install/template
-  $(CP) $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
-  
-  for i in $(PKG_BUILD_DIR)/$(2)/dist/usr/bin/*; do $(INSTALL_BIN) $$i $(1)/usr/bin/; done
-  for i in $(PKG_BUILD_DIR)/$(2)/dist/usr/sbin/*; do $(INSTALL_BIN) $$i $(1)/usr/sbin/; done
-  for i in $(PKG_BUILD_DIR)/$(2)/dist/bin/*; do $(INSTALL_BIN) $$i $(1)/bin/; done
-  for i in $(PKG_BUILD_DIR)/$(2)/dist/sbin/*; do $(INSTALL_BIN) $$i $(1)/sbin/; done
+	$(CP) $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
 endef
 
 
@@ -61,8 +56,8 @@ define Package/ffluci/conffiles
 endef
 
 define Package/ffluci/install		
-  $(call Package/ffluci/install/template,$(1),core)
-  $(call Package/ffluci/install/template,$(1),themes/fledermaus)
+	$(call Package/ffluci/install/template,$(1),core)
+	$(call Package/ffluci/install/template,$(1),themes/fledermaus)
 endef
 
 
@@ -91,7 +86,8 @@ define Package/ffluci-ff-leipzig
 endef
 
 define Package/ffluci-ff-leipzig/install
-  $(call Package/ffluci/install/template,$(1),applications/community-leipzig)
+	$(call Package/ffluci/install/template,$(1),applications/community-leipzig)
+	$(CP) -a ./ipkg/ffluci-ff-leipzig.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -105,7 +101,7 @@ define Package/ffluci-mod-admin-core
 endef
 
 define Package/ffluci-mod-admin-core/install
-  $(call Package/ffluci/install/template,$(1),modules/admin-core)
+	$(call Package/ffluci/install/template,$(1),modules/admin-core)
 endef
 
 
@@ -120,7 +116,8 @@ define Package/ffluci-mod-freifunk/conffiles
 endef
 
 define Package/ffluci-mod-freifunk/install
-  $(call Package/ffluci/install/template,$(1),modules/freifunk)
+	$(call Package/ffluci/install/template,$(1),modules/freifunk)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/freifunk/dist/etc/init.d/luci_freifunk $(1)/etc/init.d
 endef
 
 
@@ -138,7 +135,8 @@ define Package/ffluci-app-firewall/conffiles
 endef
 
 define Package/ffluci-app-firewall/install
-  $(call Package/ffluci/install/template,$(1),applications/luci-fw)
+	$(call Package/ffluci/install/template,$(1),applications/luci-fw)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-fw/dist/etc/init.d/luci_fw $(1)/etc/init.d
 endef
 
 
@@ -153,7 +151,9 @@ define Package/ffluci-app-splash/conffiles
 endef
 
 define Package/ffluci-app-splash/install
-  $(call Package/ffluci/install/template,$(1),applications/luci-splash)
+	$(call Package/ffluci/install/template,$(1),applications/luci-splash)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-splash/dist/usr/sbin/luci-splash $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-splash/dist/etc/init.d/luci_splash $(1)/etc/init.d
 endef
 
 
@@ -167,7 +167,8 @@ define Package/ffluci-sgi-haserl
 endef
 
 define Package/ffluci-sgi-haserl/install
-  $(call Package/ffluci/install/template,$(1),applications/sgi-haserl)
+	$(call Package/ffluci/install/template,$(1),applications/sgi-haserl)
+	$(CP) -a ./ipkg/ffluci-sgi-haserl.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -178,14 +179,13 @@ define Package/ffluci-sgi-webuci
 endef
 
 define Package/ffluci-sgi-webuci/install
-  $(call Package/ffluci/install/template,$(1),applications/sgi-webuci)
+	$(call Package/ffluci/install/template,$(1),applications/sgi-webuci)
 endef
 
 
 
 
 $(eval $(call BuildPackage,ffluci))
-
 
 $(eval $(call BuildPackage,ffluci-ff-halle))
 $(eval $(call BuildPackage,ffluci-ff-leipzig))

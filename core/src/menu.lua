@@ -30,7 +30,7 @@ require("ffluci.util")
 require("ffluci.sys")
 
 -- Default modelpath
-modelpath = ffluci.sys.libpath() .. "/model/menu/"
+modelpattern = ffluci.sys.libpath() .. "/model/menu/*.lua"
 
 -- Menu definition extra scope
 scope = {
@@ -100,12 +100,11 @@ end
 function collect()
 	local generators = {}
 	
-	for k, menu in pairs(ffluci.fs.dir(modelpath)) do
-		if menu:sub(1, 1) ~= "." then
-			local f = loadfile(modelpath.."/"..menu)
-			if f then
-				table.insert(generators, f)
-			end
+	local m = ffluci.fs.glob(modelpattern) or {}
+	for k, menu in pairs(m) do
+		local f = loadfile(menu)
+		if f then
+			table.insert(generators, f)
 		end
 	end
 	

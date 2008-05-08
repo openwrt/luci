@@ -29,9 +29,7 @@ module("ffluci.fs", package.seeall)
 require("posix")
 
 -- Glob
-function glob(pattern)
-	return posix.glob(pattern)
-end
+glob = posix.glob
 
 -- Checks whether a file exists
 function isfile(filename)
@@ -79,13 +77,7 @@ basename = posix.basename
 dirname = posix.dirname
 
 -- dir wrapper
-function dir(path)
-	local dir = {}
-	for node in posix.files(path) do
-		table.insert(dir, 1, node)
-	end 
-	return dir
-end
+dir = posix.dir
 
 -- Alias for posix.mkdir
 mkdir = posix.mkdir
