@@ -4,8 +4,8 @@ all: compile
 
 source:
 	mkdir -p dist$(LUCI_INSTALLDIR)
-	[ -d root ] && cp root/* dist -R
-	[ -d src ] && cp src/* dist$(LUCI_INSTALLDIR) -R
+	cp root/* dist -R 2>/dev/null || true
+	cp src/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf; done  
 	
 compile: source

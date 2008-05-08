@@ -16,7 +16,7 @@ clean:
 
 host: build
 	mkdir -p host/ffluci
-	for i in $(MODULES); do cp $$i/dist$(LUCI_INSTALLDIR) host/ffluci -R; done
+	for i in $(MODULES); do cp $$i/dist$(LUCI_INSTALLDIR) host/ -R 2>/dev/null || true; done
 	
 hostclean:
 	rm host -rf
