@@ -8,7 +8,7 @@ require("ffluci.model.uci")
 
 local srv
 local net
-local ip = ffluci.http.remote_addr()
+local ip = ffluci.http.env.REMOTE_ADDR
 for k, v in pairs(ffluci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and v.ipaddr then
 		local p = ffluci.sys.net.mask4prefix(v.netmask)
@@ -28,7 +28,7 @@ for k, v in pairs(ffluci.model.uci.sections("luci_splash")) do
 end
 
 if not srv then
-	ffluci.http.textheader()
+	ffluci.http.prepare_content("text/plain")
 	return print("Unable to detect network settings!")
 end
 
