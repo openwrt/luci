@@ -29,24 +29,22 @@ end
 
 if not srv then
 	ffluci.http.prepare_content("text/plain")
-	return print("Unable to detect network settings!")
-end
-
-if not stat then
+	print("Unable to detect network settings!")
+elseif not stat then
 	ffluci.http.redirect("http://" .. srv)
+else
+	local action = "splash"
+	
+	local mac = ffluci.sys.net.ip4mac(ip)
+	if not mac then
+		action = "unknown"
+	end
+	
+	local status = ffluci.sys.execl("luci-splash status "..mac)[1]
+	
+	if status == "whitelisted" or status == "lease" then
+		action = "allowed"
+	end
+	
+	ffluci.http.redirect("http://" .. srv .. "/cgi-bin/luci-splash/" .. action)
 end
-
-local action = "splash"
-
-local mac = ffluci.sys.net.ip4mac(ip)
-if not mac then
-	action = "unknown"
-end
-
-local status = ffluci.sys.execl("luci-splash status "..mac)[1]
-
-if status == "whitelisted" or status == "lease" then
-	action = "allowed"
-end
-
-ffluci.http.redirect("http://" .. srv .. "/cgi-bin/luci-splash/" .. action)
