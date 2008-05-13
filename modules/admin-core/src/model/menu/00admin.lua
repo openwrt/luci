@@ -1,6 +1,9 @@
 add("admin", "index", "Übersicht", 10)
 act("luci", "Oberfläche")
 
+add("admin", "status", "Status", 20)
+act("syslog", "Systemprotokoll")
+
 add("admin", "system", "System", 30)
 act("packages", "Paketverwaltung")
 act("passwd", "Passwort ändern")

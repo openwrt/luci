@@ -1,7 +1,7 @@
 <%+header%>
 <h1><%:config Konfiguration%></h1>
 <h2><%:changes Änderungen%></h2>
-<code><%=(ffluci.model.uci.changes() or "-")%></code>
+<code><%=ffluci.model.uci.changes()%></code>
 <form class="inline" method="get" action="<%=controller%>/admin/uci/apply">
 	<input type="submit" value="<%:apply Anwenden%>" />
 </form>

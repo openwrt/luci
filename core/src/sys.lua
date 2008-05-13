@@ -122,6 +122,11 @@ function sysinfo()
 	return s, m, r
 end
 
+-- Reads the syslog
+function syslog()
+	return exec("logread")
+end
+
 
 group = {}
 group.getgroup = posix.getgroup
