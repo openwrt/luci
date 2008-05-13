@@ -24,6 +24,7 @@ limitations under the License.
 
 ]]--
 module("ffluci.sgi.haserl", package.seeall)
+require("ffluci.fs")
 
 -- Environment Table
 ffluci.http.env = ENV
@@ -68,6 +69,17 @@ function ffluci.http.redirect(url)
 	ffluci.http.status(302, "Found")
 	ffluci.http.header("Location", url)
 	print()
+end
+
+-- Returns the path of an uploaded file
+-- WARNING! File uploads can be easily spoofed! Do additional sanity checks!
+function ffluci.http.upload(name)
+	local fpath = ffluci.http.formvalue(name)
+	local fname = ffluci.http.formvalue(name .. "_name")
+	
+	if fpath and fname and ffluci.fs.isfile(fpath) then
+		return fpath
+	end
 end
 
 -- Sets HTTP-Status-Header

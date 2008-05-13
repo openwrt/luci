@@ -178,11 +178,10 @@ function action_upgrade()
 	local ret  = nil
 	local plat = ffluci.fs.mtime("/lib/upgrade/platform.sh")
 	
-	local image   = ffluci.http.formvalue("image")
-	local imgname = ffluci.http.formvalue("image_name")
+	local image   = ffluci.http.upload("image")
 	local keepcfg = ffluci.http.formvalue("keepcfg")
 	
-	if plat and imgname then
+	if plat and image then
 		local kpattern = nil
 		if keepcfg then
 			local files = ffluci.model.uci.sections("luci").flash_keep

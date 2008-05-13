@@ -76,6 +76,12 @@ function ffluci.http.redirect(url)
 	print()
 end
 
+-- Returns the path of an uploaded file
+-- WARNING! File uploads can be easily spoofed! Do additional sanity checks!
+function ffluci.http.upload(name)
+	-- To be implemented
+end
+
 -- Sets HTTP-Status-Header
 function ffluci.http.status(code, message)
 	print(webuci.env.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
