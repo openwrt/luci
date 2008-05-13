@@ -142,7 +142,7 @@ endef
 
 define Package/ffluci-app-splash
   $(call Package/ffluci/template)
-  DEPENDS:=ffluci +ffluci-mod-freifunk +ffluci-sgi-haserl +iptables-mod-nat
+  DEPENDS:=ffluci +ffluci-mod-freifunk +ffluci-sgi-haserl +iptables-mod-nat +iptables-mod-ipopt
   TITLE:=Freifunk DHCP-Splash application
 endef
 
