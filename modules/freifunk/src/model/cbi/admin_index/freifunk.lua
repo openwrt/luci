@@ -1,10 +1,6 @@
 -- Todo: Translate
 m = Map("freifunk", "Freifunk")
 
-s = m:section(NamedSection, "routing", "settings", "Netzverkehr")
-s:option(Flag, "internal", "Freifunk zulassen", "immer aktivieren!")
-s:option(Flag, "internet", "Internet zulassen")
-
 c = m:section(NamedSection, "community", "public", "Gemeinschaft", [[Dies sind die Grundeinstellungen
 für die lokale Freifunkgemeinschaft. Diese Werte wirken sich NICHT auf die Konfiguration
 des Routers aus, sondern definieren nur die Vorgaben für den Freifunkassistenten.]])
