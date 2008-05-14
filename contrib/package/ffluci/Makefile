@@ -66,7 +66,7 @@ endef
 define Package/ffluci-ff-halle
   $(call Package/ffluci/template)
   DEPENDS:=ffluci \
-   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-firewall +ffluci-app-splash \
+   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-splash \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Halle Community Meta-Package
@@ -79,7 +79,7 @@ endef
 define Package/ffluci-ff-leipzig
   $(call Package/ffluci/template)
   DEPENDS:=ffluci \
-   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-firewall +ffluci-app-splash \
+   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-splash \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Leipzig Community Meta-Package
@@ -107,7 +107,7 @@ endef
 
 define Package/ffluci-mod-freifunk
   $(call Package/ffluci/template)
-  DEPENDS:=ffluci +ffluci-mod-admin-core
+  DEPENDS:=ffluci +ffluci-mod-admin-core +ffluci-app-firewall
   TITLE:=Freifunk public and administrative pages
 endef
 

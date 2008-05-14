@@ -30,6 +30,7 @@ function configure_freifunk()
 	uci:t_load("luci_splash")
 	uci:t_load("olsr")
 	uci:t_load("wireless")
+	uci:t_load("luci_fw")
 	
 	
 	-- Configure FF-Interface
@@ -43,15 +44,58 @@ function configure_freifunk()
 	uci:t_set("network", "ff", "netmask", uci:t_get("freifunk", "community", "mask")) 
 	uci:t_set("network", "ff", "dns", uci:t_get("freifunk", "community", "dns")) 
 	
-	-- Enable internal routing
-	uci:t_set("freifunk", "routing", "internal", "1")
+	-- Reset Routing
+	local routing = uci:t_sections("luci_fw")
+	if routing then
+		for k, v in pairs(routing) do
+			if v[".type"] == "routing" and (v.iface == "ff" or v.oface == "ff") then
+				uci:t_del("luci_fw", k)
+			end
+		end
 	
-	-- Enable internet routing
-	if ffluci.http.formvalue("shareinet") then
-		uci:t_set("freifunk", "routing", "internet", "1")
-	else
-		uci:t_set("freifunk", "routing", "internet", "0")
+		local int = uci:t_add("luci_fw", "routing")
+		uci:t_set("luci_fw", int, "iface", "ff")
+		uci:t_set("luci_fw", int, "oface", "ff")
+		uci:t_set("luci_fw", int, "fwd", "1")
 	end
+	
+	-- Routing from Internal
+	local iface = ffluci.http.formvalue("frominternal")
+	if iface and iface ~= "" then
+		local routing = uci:t_sections("luci_fw")
+		if routing then
+			for k, v in pairs(routing) do
+				if v[".type"] == "routing" and (v.iface == iface and v.oface == "ff") then
+					uci:t_del("luci_fw", k)
+				end
+			end
+		
+			local int = uci:t_add("luci_fw", "routing")
+			uci:t_set("luci_fw", int, "iface", iface)
+			uci:t_set("luci_fw", int, "oface", "ff")
+			uci:t_set("luci_fw", int, "fwd", "1")
+			uci:t_set("luci_fw", int, "nat", "1")
+		end		
+	end	
+	
+	-- Routing to External
+	local iface = ffluci.http.formvalue("toexternal")
+	if iface and iface ~= "" then
+		local routing = uci:t_sections("luci_fw")
+		if routing then
+			for k, v in pairs(routing) do
+				if v[".type"] == "routing" and (v.oface == iface and v.iface == "ff") then
+					uci:t_del("luci_fw", k)
+				end
+			end
+		
+			local int = uci:t_add("luci_fw", "routing")
+			uci:t_set("luci_fw", int, "iface", "ff")
+			uci:t_set("luci_fw", int, "oface", iface)
+			uci:t_set("luci_fw", int, "fwd", "1")
+			uci:t_set("luci_fw", int, "nat", "1")
+		end		
+	end	
 	
 	-- Configure DHCP
 	if ffluci.http.formvalue("dhcp") then
@@ -91,7 +135,29 @@ function configure_freifunk()
 			
 			local sk = uci:t_add("luci_splash", "iface")
 			uci:t_set("luci_splash", sk, "network", "ffdhcp")
-		end 		
+		end 	
+		
+		local routing = uci:t_sections("luci_fw")
+		if routing then
+			for k, v in pairs(routing) do
+				if v[".type"] == "routing" and (v.iface == "ffdhcp" or v.oface == "ffdhcp") then
+					uci:t_del("luci_fw", k)
+				end
+			end
+			
+			local int = uci:t_add("luci_fw", "routing")
+			uci:t_set("luci_fw", int, "iface", "ffdhcp")
+			uci:t_set("luci_fw", int, "oface", "ff")
+			uci:t_set("luci_fw", int, "nat", "1")			
+			
+			local iface = ffluci.http.formvalue("toexternal")
+			if iface and iface ~= "" then
+				local int = uci:t_add("luci_fw", "routing")
+				uci:t_set("luci_fw", int, "iface", "ffdhcp")
+				uci:t_set("luci_fw", int, "oface", iface)
+				uci:t_set("luci_fw", int, "nat", "1")				
+			end
+		end	
 	end
 	
 	-- Configure OLSR
@@ -166,6 +232,7 @@ function configure_freifunk()
 	uci:t_save("luci_splash")
 	uci:t_save("olsr")
 	uci:t_save("wireless")
+	uci:t_save("luci_fw")
 
 	ffluci.http.redirect(ffluci.dispatcher.build_url("admin", "uci", "changes"))
 end

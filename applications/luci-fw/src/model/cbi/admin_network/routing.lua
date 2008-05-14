@@ -21,8 +21,8 @@ for k, v in pairs(ffluci.model.uci.sections("network")) do
 	end
 end
 
-s:option(Flag, "fwd", "FWD", "weiterleiten")
-s:option(Flag, "nat", "NAT", "übersetzen")
-s:option(Flag, "bidi", "<->", "beide Richtungen")
+s:option(Flag, "fwd", "FWD", "weiterleiten").rmempty = true
+s:option(Flag, "nat", "NAT", "übersetzen").rmempty = true
+s:option(Flag, "bidi", "<->", "beide Richtungen").rmempty = true
 
 return m

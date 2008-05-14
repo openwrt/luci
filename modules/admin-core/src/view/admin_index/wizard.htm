@@ -23,7 +23,29 @@
 			<div class="cbi-value-field"><input type="checkbox" name="dhcp" value="1" checked="checked" /></div>
 		</div>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:shareinet Internet teilen%></div>
+			<div class="cbi-value-title"><%:cfginternal Erlaube Zugriff von internem Netzwerk%>:</div>
+			<div class="cbi-value-field"><select name="frominternal">
+				<option value=""></option>
+<% for k, v in pairs(ffluci.model.uci.sections("network")) do
+	if v[".type"] == "interface" and k ~= "loopback" then %>
+<option value="<%=k%>"<% if k == "lan" then %> selected="selected"<% end %>><%=k%></option>
+<%	end
+end %>
+			</select></div>
+		</div>
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:cfgexternal Erlaube Zugriff auf externes Netzwerk%>:</div>
+			<div class="cbi-value-field"><select name="toexternal">
+				<option value=""></option>
+<% for k, v in pairs(ffluci.model.uci.sections("network")) do
+	if v[".type"] == "interface" and k ~= "loopback" then %>
+<option value="<%=k%>"<% if k == "wan" then %> selected="selected"<% end %>><%=k%></option>
+<%	end
+end %>
+			</select></div>
+		</div>
+		<div class="cbi-value">
+			<div class="cbi-value-title"><%:shareinet Internetzugang ankündigen%></div>
 			<div class="cbi-value-field"><input type="checkbox" name="shareinet" value="1" checked="checked" /></div>
 		</div>
 	</div>
