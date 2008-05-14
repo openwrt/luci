@@ -87,8 +87,11 @@ function Node.parse(self, ...)
 end
 
 -- Render this node
-function Node.render(self)
-	ffluci.template.render(self.template, {self=self})
+function Node.render(self, scope)
+	scope = scope or {}
+	scope.self = self
+
+	ffluci.template.render(self.template, scope)
 end
 
 -- Render the children
@@ -453,13 +456,6 @@ function TypedSection.parse(self)
 	end
 end
 
--- Render the children
-function TypedSection.render_children(self, section)
-	for k, node in ipairs(self.children) do
-		node:render(section)
-	end
-end
-
 -- Verifies scope of sections
 function TypedSection.checkscope(self, section)
 	-- Check if we are not excluded
@@ -554,9 +550,11 @@ function AbstractValue.parse(self, section)
 end
 
 -- Render if this value exists or if it is mandatory
-function AbstractValue.render(self, s)
+function AbstractValue.render(self, s, scope)
 	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
-		ffluci.template.render(self.template, {self=self, section=s})
+		scope = scope or {}
+		scope.section = s
+		Node.render(self, scope)
 	end
 end
 

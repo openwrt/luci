@@ -4,10 +4,11 @@ m = Map("luci_fw", "Portweiterleitung", [[Portweiterleitungen ermöglichen es in
 Netzwerkdienste von einem anderen externen Netzwerk aus erreichbar zu machen.]])
 
 s = m:section(TypedSection, "portfw")
+s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "iface", "Externes Interface")
+iface = s:option(ListValue, "iface", "Schnittstelle", "Externe Schnittstelle")
 iface:value("")
 for k,v in pairs(ffluci.sys.net.devices()) do
 	iface:value(v)

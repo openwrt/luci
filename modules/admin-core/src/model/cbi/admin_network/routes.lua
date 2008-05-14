@@ -6,6 +6,7 @@ oder ein bestimmtes Netzwerk erreicht werden kann.]])
 s = m:section(TypedSection, "route")
 s.addremove = true
 s.anonymous = true
+s.template  = "cbi/tblsection"
 
 iface = s:option(ListValue, "interface", "Schnittstelle")
 for k, v in pairs(ffluci.model.uci.sections("network")) do
