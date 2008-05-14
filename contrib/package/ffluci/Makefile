@@ -117,7 +117,6 @@ endef
 
 define Package/ffluci-mod-freifunk/install
 	$(call Package/ffluci/install/template,$(1),modules/freifunk)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/freifunk/dist/etc/init.d/luci_freifunk $(1)/etc/init.d
 endef
 
 
