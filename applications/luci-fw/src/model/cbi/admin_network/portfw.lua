@@ -9,9 +9,11 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "iface", "Schnittstelle", "Externe Schnittstelle")
-iface:value("")
-for k,v in pairs(ffluci.sys.net.devices()) do
-	iface:value(v)
+iface.default = "wan"
+for k, v in pairs(ffluci.model.uci.sections("network")) do
+	if v[".type"] == "interface" and k ~= "loopback" then
+		iface:value(k)
+	end
 end
 
 proto = s:option(ListValue, "proto", "Protokoll")

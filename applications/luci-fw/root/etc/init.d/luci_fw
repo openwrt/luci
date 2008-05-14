@@ -7,6 +7,13 @@ apply_portfw() {
 	config_get dport "$cfg" dport
 	config_get iface "$cfg" iface
 	config_get to    "$cfg" to
+	
+	config_get ifname "$iface" ifname
+	
+	[ -n "$proto" ] || return 0
+	[ -n "$dport" ] || return 0
+	[ -n "$ifname" ] || return 0
+	[ -n "$to" ] || return 0
 
 	ports=$(echo $to | cut -sd: -f2)
 	if [ -n "$ports" ]; then
@@ -18,14 +25,50 @@ apply_portfw() {
 	ip=$(echo $to | cut -d: -f1)
 	
 	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "tcp" ]); then
-		iptables -t nat -A luci_fw_prerouting -i "$iface" -p tcp --dport "$dport" -j DNAT --to "$to"
-		iptables -A luci_fw_forward -i "$iface" -p tcp -d "$ip" $ports -j ACCEPT
+		iptables -t nat -A luci_fw_prerouting -i "$ifname" -p tcp --dport "$dport" -j DNAT --to "$to"
+		iptables -A luci_fw_forward -i "$ifname" -p tcp -d "$ip" $ports -j ACCEPT
 	fi
 
 	if ([ "$proto" == "tcpudp" ] || [ "$proto" == "udp" ]); then
-		iptables -t nat -A luci_fw_prerouting -i "$iface" -p udp --dport "$dport" -j DNAT --to "$to"
-		iptables -A luci_fw_forward -i "$iface" -p udp -d "$ip" $ports -j ACCEPT
+		iptables -t nat -A luci_fw_prerouting -i "$ifname" -p udp --dport "$dport" -j DNAT --to "$to"
+		iptables -A luci_fw_forward -i "$ifname" -p udp -d "$ip" $ports -j ACCEPT
 	fi
+}
+
+apply_routing() {
+	local cfg="$1"
+	config_get iface "$cfg" iface
+	config_get oface "$cfg" oface
+	config_get_bool fwd "$cfg" fwd
+	config_get_bool nat "$cfg" nat
+	config_get_bool bidi "$cfg" bidi
+	
+	config_get ifname "$iface" ifname
+	config_get ofname "$oface" ifname
+	
+	[ -n "$ifname" ] || return 0
+	[ -n "$ofname" ] || return 0
+	
+	[ "$fwd" -gt 0 ] && {
+		iptables -A luci_fw_forward -i "$ifname" -o "$ofname" -j ACCEPT
+		[ "$bidi" -gt 0 ] && iptables -A luci_fw_forward -i "$ofname" -o "$ifname" -j ACCEPT
+	}
+	
+	[ "$nat" -gt 0 ] && {
+		config_get ifip "$iface" ipaddr
+		config_get ifmask "$iface" netmask
+		eval "$(ipcalc.sh $ifip $ifmask)"
+		
+		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$oface" -j MASQUERADE
+		
+		[ "$bidi" -gt 0 ] && {
+			config_get ofip "$oface" ipaddr
+			config_get ofmask "$oface" netmask
+			eval "$(ipcalc.sh $ofip $ofmask)"
+			
+			iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$iface" -j MASQUERADE		
+		}
+	}
 }
 
 apply_rule() {
@@ -41,10 +84,12 @@ apply_rule() {
 	[ "$chain" == "postrouting" ] && cmd="$cmd -t nat -A luci_fw_postrouting"
 	
 	config_get iface "$cfg" iface
-	[ -n "$iface" ] && cmd="$cmd -i $iface"	
+	config_get ifname "$iface" ifname
+	[ -n "$ifname" ] && cmd="$cmd -i $ifname"	
 
 	config_get oface "$cfg" oface
-	[ -n "$oface" ] && cmd="$cmd -o $oface"	
+	config_get ofname "$oface" ifname
+	[ -n "$ofname" ] && cmd="$cmd -o $ofname"	
 
 	config_get proto "$cfg" proto
 	[ -n "$proto" ] && cmd="$cmd -p $proto"	
@@ -94,10 +139,15 @@ start() {
 	iptables -t nat -A prerouting_rule -j luci_fw_prerouting
 	iptables -t nat -A postrouting_rule -j luci_fw_postrouting
 	
+	### Scan network interfaces
+	include /lib/network
+	scan_interfaces
+	
 	### Read chains from config
 	config_load luci_fw
-	config_foreach apply_portfw portfw
 	config_foreach apply_rule rule
+	config_foreach apply_portfw portfw
+	config_foreach apply_routing routing
 }
 
 stop() {
