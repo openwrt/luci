@@ -59,14 +59,14 @@ apply_routing() {
 		config_get ifmask "$iface" netmask
 		eval "$(ipcalc.sh $ifip $ifmask)"
 		
-		iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$oface" -j MASQUERADE
+		iptables -t nat -A luci_fw_postrouting -s "$NETWORK/$PREFIX" -o "$ofname" -j MASQUERADE
 		
 		[ "$bidi" -gt 0 ] && {
 			config_get ofip "$oface" ipaddr
 			config_get ofmask "$oface" netmask
 			eval "$(ipcalc.sh $ofip $ofmask)"
 			
-			iptables -t nat -A luci_freifunk_postrouting -s "$NETWORK/$PREFIX" -o "$iface" -j MASQUERADE		
+			iptables -t nat -A luci_fw_postrouting -s "$NETWORK/$PREFIX" -o "$ifname" -j MASQUERADE		
 		}
 	}
 }
