@@ -104,7 +104,7 @@ function build_url(category, module, action)
 	module   = module   or "index"
 	action   = action   or "index"
 	
-	local pattern = ffluci.http.env.SCRIPT_NAME .. "/%s/%s/%s"
+	local pattern = ffluci.http.dispatcher() .. "/%s/%s/%s"
 	return pattern:format(category, module, action)
 end
 

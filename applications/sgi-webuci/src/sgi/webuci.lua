@@ -31,6 +31,16 @@ ffluci.http.env = webuci.env
 
 local status_set = false
 
+-- Returns the main dispatcher URL
+function ffluci.http.dispatcher()
+	return ffluci.http.env.SCRIPT_NAME or ""
+end
+
+-- Returns the upload dispatcher URL
+function ffluci.http.dispatcher_upload()
+	-- To be implemented
+end
+
 -- Returns a table of all COOKIE, GET and POST Parameters
 function ffluci.http.formvalues()
 	return webuci.vars

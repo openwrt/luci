@@ -29,6 +29,15 @@ require("ffluci.fs")
 -- Environment Table
 ffluci.http.env = ENV
 
+-- Returns the main dispatcher URL
+function ffluci.http.dispatcher()
+	return ffluci.http.env.SCRIPT_NAME or ""
+end
+
+-- Returns the upload dispatcher URL
+function ffluci.http.dispatcher_upload()
+	return ffluci.http.dispatcher() .. "-upload"
+end
 
 -- Returns a table of all COOKIE, GET and POST Parameters
 function ffluci.http.formvalues()
