@@ -54,6 +54,7 @@ viewns = {
 	config     = function(...) return require("ffluci.model.uci").get(...) or "" end,
 	controller = ffluci.http.env.SCRIPT_NAME or "",
 	media      = ffluci.config.main.mediaurlbase,
+	images     = ffluci.config.main.imagebase,
 	write      = io.write,
 	include    = function(name) Template(name):render(getfenv(2)) end,	
 }
