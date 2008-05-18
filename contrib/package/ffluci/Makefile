@@ -91,6 +91,21 @@ define Package/ffluci-ff-leipzig/install
 endef
 
 
+define Package/ffluci-ff-hannover
+  $(call Package/ffluci/template)
+  DEPENDS:=ffluci \
+   +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-splash \
+   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
+  TITLE:=Freifunk Hannover Community Meta-Package
+  URL:=http://www.freifunk-hannover.de/
+  MAINTAINER:=Mickey Knox <mickey-at-netfreaks-dot-org>
+endef
+
+define Package/ffluci-ff-hannover/install
+	$(call Package/ffluci/install/template,$(1),applications/community-hannover)
+	$(CP) -a ./ipkg/ffluci-ff-hannover.postinst $(1)/CONTROL/postinst
+endef
+
 
 ### Modules ###
 
@@ -191,6 +206,7 @@ $(eval $(call BuildPackage,ffluci))
 
 $(eval $(call BuildPackage,ffluci-ff-halle))
 $(eval $(call BuildPackage,ffluci-ff-leipzig))
+$(eval $(call BuildPackage,ffluci-ff-hannover))
 
 $(eval $(call BuildPackage,ffluci-mod-admin-core))
 $(eval $(call BuildPackage,ffluci-mod-freifunk))
