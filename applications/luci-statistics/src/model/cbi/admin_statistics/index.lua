@@ -16,28 +16,28 @@ $Id$
 require("ffluci.sys")
 
 
-m = Map("collectd", "Collector Daemon",
+m = Map("luci_statistics", "Collector Daemon",
 [[Collectd ist ein kleiner und flexibler Dienst zum Sammeln und Abfragen von Daten
 aus verschieden Quellen. Zur weiteren Verarbeitung werden die Daten in RRD Datenbanken
-gespeichert oder per Multicast Relaying über das Netzwerk versendet.]])
+gespeichert oder per Multicast Relaying Ã¼ber das Netzwerk versendet.]])
 
 -- general config section
-s = m:section( NamedSection, "general", "collectd", "Allgemeine Einstellungen" )
+s = m:section( NamedSection, "general", "luci_statistics", "Allgemeine Einstellungen" )
 
 -- general.basedir (BaseDir)
 basedir = s:option( Value, "BaseDir", "Basisverzeichnis" )
 basedir.default = "/var/run/collectd"
 
 -- general.include (Include)
-include = s:option( Value, "Include", "Verzeichnis für Unterkonfigurationen" )
+include = s:option( Value, "Include", "Verzeichnis fÃ¼r Unterkonfigurationen" )
 include.default = "/etc/collectd/conf.d/*.conf"
 
 -- general.pidfile (PIDFile)
-pidfile = s:option( Value, "PIDFile", "PID-Datei für den Collector Dienst" )
+pidfile = s:option( Value, "PIDFile", "PID-Datei fÃ¼r den Collector Dienst" )
 pidfile.default = "/var/run/collectd.pid"
 
 -- general.plugindir (PluginDir)
-plugindir = s:option( Value, "PluginDir", "Verzeichnis für die Collector-Plugins" )
+plugindir = s:option( Value, "PluginDir", "Verzeichnis fÃ¼r die Collector-Plugins" )
 plugindir.default = "/usr/lib/collectd/"
 
 -- general.typesdb (TypesDB)
@@ -45,12 +45,12 @@ typesdb = s:option( Value, "TypesDB", "Datenbank mit den Datenset-Beschreibungen
 typesdb.default = "/etc/collectd/types.db"
 
 -- general.interval (Interval)
-interval = s:option( Value, "Interval", "Abfrageintervall für die Datenerfassung in Sekunden" )
+interval = s:option( Value, "Interval", "Abfrageintervall fÃ¼r die Datenerfassung", "Sekunden" )
 interval.default  = 60
 interval.isnumber = true
 
 -- general.readthreads (ReadThreads)
-readthreads = s:option( Value, "ReadThreads", "Anzahl paralleler Prozesse für die Datenabfrage" )
+readthreads = s:option( Value, "ReadThreads", "Anzahl paralleler Prozesse fÃ¼r die Datenabfrage" )
 readthreads.default  = 5
 readthreads.isnumber = true
 
