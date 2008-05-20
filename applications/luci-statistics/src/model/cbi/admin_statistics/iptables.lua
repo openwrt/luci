@@ -91,13 +91,11 @@ rule_protocol:value("tcp")
 rule_protocol:value("udp")
 rule_protocol:value("icmp")
 
-
 -- collectd_iptables_match.source
 rule_source = rule:option( Value, "source", "Quell-IP-Bereich", "Bereich in CIDR Notation" )
 rule_source.default  = "0.0.0.0/0"
 rule_source.rmempty  = true
 rule_source.optional = true
-
 
 -- collectd_iptables_match.destination
 rule_destination = rule:option( Value, "destination", "Ziel-IP-Bereich", "Bereich in CIDR Notation" )
@@ -107,19 +105,16 @@ rule_destination.optional = true
 
 -- collectd_iptables_match.inputif
 rule_inputif = rule:option( Value, "inputif", "eingehende Schnittstelle", "z.B. eth0.0" )
-rule_inputif.default  = "0.0.0.0/0"
 rule_inputif.rmempty  = true
 rule_inputif.optional = true
 
 -- collectd_iptables_match.outputif
 rule_outputif = rule:option( Value, "outputif", "ausgehende Schnittstelle", "z.B. eth0.1" )
-rule_outputif.default  = "0.0.0.0/0"
 rule_outputif.rmempty  = true
 rule_outputif.optional = true
 
 -- collectd_iptables_match.options
 rule_options = rule:option( Value, "options", "Optionen", "z.B. reject-with tcp-reset" )
-rule_options.default  = "0.0.0.0/0"
 rule_options.rmempty  = true
 rule_options.optional = true
 
