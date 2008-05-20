@@ -1,0 +1,191 @@
+#!/usr/bin/lua
+
+--[[
+
+Luci statistics - collectd configuration generator
+(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+]]--
+
+
+require("ffluci.model.uci")
+require("ffluci.sys.iptparser")
+require("ffluci.util")
+
+local ipt = ffluci.sys.iptparser.IptParser()
+local uci = ffluci.model.uci.Session()
+local sections, names = uci:sections( "luci_statistics" )
+
+
+function section( plugin )
+
+	local config = sections[ "collectd_" .. plugin ]
+
+	if type(config) == "table" and config.enable == "1" then
+
+	        print( "<Plugin " .. plugin .. ">" )
+
+		if type( plugins[plugin] ) == "function" then
+			plugins[plugin]( config )
+		else
+			config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3] )
+		end
+
+	        print( "</Plugin>\n" )
+
+	end
+end
+
+function config_generic( c, singles, bools, lists )
+
+	if type(c) == "table" then
+
+		if type(singles) == "table" then
+			for i, key in ipairs( singles ) do
+				if c[key] then
+					print( "\t" .. key .. ' "' .. c[key] .. '"' )
+				end
+			end
+		end
+
+		if type(bools) == "table" then
+			for i, key in ipairs( bools ) do
+				if c[key] == 1 then
+					print( "\t" .. key .. " true" )
+				else
+					print( "\t" .. key .. " false" )
+				end
+			end
+		end
+
+		if type(lists) == "table" then
+			_list_expand( c, lists )
+		end
+
+	end
+
+end
+
+function config_exec( c )
+
+	for s in pairs(sections) do
+		for key, type in pairs({ Exec="collectd_exec_input", NotificationExec="collectd_exec_notify" }) do
+			if sections[s][".type"] == type then
+
+				cmd   = sections[s].cmdline
+				user  = sections[s].cmduser  or "root"
+				group = sections[s].cmdgroup or "root"
+
+				print( "\t" .. key .. " " .. user .. ":" .. group .. ' "' .. cmd .. '"' )
+			end
+		end
+	end
+end
+
+function config_iptables( c )
+
+	for s in pairs(sections) do
+		if sections[s][".type"] == "collectd_iptables_match" then
+
+			search = { }
+
+			for i, k in ipairs( {
+				"table", "chain", "target", "protocol", "source", "destination",
+				"inputif", "outputif", "options"
+			} ) do
+				v = sections[s][k]
+
+				if type(v) == "string" then
+					if k == "options" then v = ffluci.util.split( v, "%s+", nil, true ) end
+					search[k] = v
+				end
+			end
+
+			for i, rule in ipairs( ipt:find( search ) ) do
+
+				name = sections[s].name
+				if i > 1 then name = name .. " (" .. i .. ")" end
+
+				print( "\tChain " .. rule.table .. " " .. rule.chain .. " " .. rule.index .. ' "' .. name .. '"' )
+
+			end
+		end
+	end
+
+end
+
+function _list_expand( c, l )
+	for i, n in ipairs(l) do
+		if c[n] then
+			_expand( c[n], n:gsub( "(%w+)s", "%1" ) )
+		end
+	end
+end
+
+function _expand( s, n )
+
+	if type(s) == "string" then
+		for i, v in ipairs( ffluci.util.split( s, "%s+", nil, true ) ) do
+			print( "\t" .. n .. ' "' .. v .. '"' )
+		end
+	end
+end
+
+
+
+plugins = {
+	csv	= { 
+		{ "DataDir" },
+		{ "StoreRates" },
+		{ }
+	},
+
+	df	= {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Devices", "MountPoints", "FSTypes" }
+	},
+
+	disk	= {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Disks" }
+	},
+
+	dns	= {
+		{ },
+		{ },
+		{ "Interfaces", "IgnoreSources" }
+	},
+
+	email	= {
+		{ "SocketFile", "SocketUser", "SocketPerms", "MaxConns" },
+		{ },
+		{ }
+	},
+
+	exec	= config_exec,
+
+	interface = {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Interfaces" }
+	},
+
+	iptables = config_iptables,
+
+}
+
+
+for plugin in pairs(plugins) do
+
+	section( plugin )        
+end
