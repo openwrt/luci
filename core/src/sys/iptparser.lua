@@ -19,7 +19,7 @@ $Id$
 
 ]]--
 
-module("ffluci.iptparser", package.seeall)
+module("ffluci.sys.iptparser", package.seeall)
 require("ffluci.sys")
 require("ffluci.util")
 
@@ -77,7 +77,7 @@ Each rule table contains the following fields:
 
 Example:
 
-ip = IptParser();
+ip = ffluci.sys.iptparser.IptParser()
 result = ip.find( {
 	target="REJECT",
 	protocol="tcp",
