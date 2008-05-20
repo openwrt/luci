@@ -193,7 +193,7 @@ function IptParser._parse_rules( self )
 					local rule_details = { }
 
 					rule_details["table"]       = tbl
-					rule_details["chain"]       = _chain
+					rule_details["chain"]       = self._chain
 					rule_details["index"]       = tonumber(rule_parts[1])
 					rule_details["packets"]     = tonumber(rule_parts[2])
 					rule_details["bytes"]       = tonumber(rule_parts[3])
@@ -215,6 +215,8 @@ function IptParser._parse_rules( self )
 			end
 		end
 	end
+
+	self._chain = nil
 end
 
 
