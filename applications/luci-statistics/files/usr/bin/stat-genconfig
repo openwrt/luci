@@ -27,41 +27,45 @@ local sections, names = uci:sections( "luci_statistics" )
 
 function section( plugin )
 
-	local config = sections[ "collectd_" .. plugin ]
+	local config = sections[ "collectd_" .. plugin ] or sections["general"]
 
-	if type(config) == "table" and config.enable == "1" then
+	if type(config) == "table" and ( plugin == "general" or config.enable == "1" ) then
 
-	        print( "<Plugin " .. plugin .. ">" )
+		if plugin ~= "general" then print( "<Plugin " .. plugin .. ">" ) end
 
 		if type( plugins[plugin] ) == "function" then
 			plugins[plugin]( config )
 		else
-			config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3] )
+			config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3], plugin == "general" )
 		end
 
-	        print( "</Plugin>\n" )
+		if plugin ~= "general" then
+			print( "</Plugin>\n" )
+		else
+			print( "\n" )
+		end
 
 	end
 end
 
-function config_generic( c, singles, bools, lists )
+function config_generic( c, singles, bools, lists, nopad )
 
 	if type(c) == "table" then
 
 		if type(singles) == "table" then
 			for i, key in ipairs( singles ) do
-				_string( c[key], key )
+				_string( c[key], key, nopad )
 			end
 		end
 
 		if type(bools) == "table" then
 			for i, key in ipairs( bools ) do
-				_bool( c[key], key )
+				_bool( c[key], key, nopad )
 			end
 		end
 
 		if type(lists) == "table" then
-			_list_expand( c, lists )
+			_list_expand( c, lists, nopad )
 		end
 
 	end
@@ -141,46 +145,60 @@ function config_network( c )
 end
 
 
-function _list_expand( c, l )
+function _list_expand( c, l, nopad )
 	for i, n in ipairs(l) do
 		if c[n] then
-			_expand( c[n], n:gsub( "(%w+)s", "%1" ) )
+			_expand( c[n], n:gsub( "(%w+)s", "%1" ), nopad )
 		end
 	end
 end
 
-function _expand( s, n )
+function _expand( s, n, nopad )
 	if type(s) == "string" then
 		for i, v in ipairs( ffluci.util.split( s, "%s+", nil, true ) ) do
-			_string( v, n )
+			_string( v, n, nopad )
 		end
 	end
 end
 
-function _bool( s, n )
+function _bool( s, n, nopad )
+
+	local pad = ""
+	if not nopad then pad = "\t" end
+
 	if s and s == "1" then
-		print( "\t" .. n .. " true" )
+		print( pad .. n .. " true" )
 	else
-		print( "\t" .. n .. " false" )
+		print( pad .. n .. " false" )
 	end
 end
 
-function _string( s, n )
+function _string( s, n, nopad )
+
+	local pad = ""
+	if not nopad then pad = "\t" end
+
 	if s then
 		if not s:find("%d") then
 			if not s:find("%s") then
-				print( "\t" .. n .. " " .. s )
+				print( pad .. n .. " " .. s )
 			else
-				print( "\t" .. n .. ' "' .. s '"' )
+				print( pad .. n .. ' "' .. s '"' )
 			end
 		else
-			print( "\t" .. n .. " " .. s )
+			print( pad .. n .. " " .. s )
 		end
 	end
 end		
 
 
 plugins = {
+	general = {
+		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads" },
+		{ },
+		{ }
+	},
+
 	csv	= { 
 		{ "DataDir" },
 		{ "StoreRates" },
@@ -256,7 +274,10 @@ plugins = {
 }
 
 
-for plugin in pairs(plugins) do
+section("general")
 
-	section( plugin )        
+for plugin in pairs(plugins) do
+	if plugin ~= "general" then
+		section( plugin )
+	end
 end
