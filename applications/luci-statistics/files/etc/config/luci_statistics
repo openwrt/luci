@@ -97,3 +97,12 @@ config 'collectd_network_listen'
 config 'collectd_network_server'
 	option 'host' '0.0.0.0'
 
+config 'statistics' 'collectd_processes'
+	option 'enable' '1'
+	option 'Processs' 'olsrd tincd bmxd'
+
+config 'statistics' 'collectd_tcpconns'
+	option 'enable' '1'
+	option 'ListeningPorts' '0'
+	option 'LocalPorts' '22 80 443'
+
