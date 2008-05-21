@@ -50,19 +50,13 @@ function config_generic( c, singles, bools, lists )
 
 		if type(singles) == "table" then
 			for i, key in ipairs( singles ) do
-				if c[key] then
-					print( "\t" .. key .. ' "' .. c[key] .. '"' )
-				end
+				_string( c[key], key )
 			end
 		end
 
 		if type(bools) == "table" then
 			for i, key in ipairs( bools ) do
-				if c[key] == 1 then
-					print( "\t" .. key .. " true" )
-				else
-					print( "\t" .. key .. " false" )
-				end
+				_bool( c[key], key )
 			end
 		end
 
@@ -119,8 +113,33 @@ function config_iptables( c )
 			end
 		end
 	end
-
 end
+
+function config_network( c )
+
+        for s in pairs(sections) do
+                for key, type in pairs({ Listen="collectd_network_listen", Server="collectd_network_server" }) do
+                        if sections[s][".type"] == type then
+
+                                host = sections[s].host
+                                port = sections[s].port
+
+				if host then
+					if port then
+						print( "\t" .. key .. " " .. host .. " " .. port )
+					else
+						print( "\t" .. key .. " " .. host )
+					end
+				end
+                        end
+                end
+        end
+
+	_string( c["TimeToLive"], "TimeToLive" )
+	_string( c["CacheFlush"], "CacheFlush" )
+	_bool(   c["Forward"],    "Forward"    )
+end
+
 
 function _list_expand( c, l )
 	for i, n in ipairs(l) do
@@ -131,14 +150,34 @@ function _list_expand( c, l )
 end
 
 function _expand( s, n )
-
 	if type(s) == "string" then
 		for i, v in ipairs( ffluci.util.split( s, "%s+", nil, true ) ) do
-			print( "\t" .. n .. ' "' .. v .. '"' )
+			_string( v, n )
 		end
 	end
 end
 
+function _bool( s, n )
+	if s and s == "1" then
+		print( "\t" .. n .. " true" )
+	else
+		print( "\t" .. n .. " false" )
+	end
+end
+
+function _string( s, n )
+	if s then
+		if not s:find("%d") then
+			if not s:find("%s") then
+				print( "\t" .. n .. " " .. s )
+			else
+				print( "\t" .. n .. ' "' .. s '"' )
+			end
+		else
+			print( "\t" .. n .. " " .. s )
+		end
+	end
+end		
 
 
 plugins = {
@@ -181,6 +220,26 @@ plugins = {
 	},
 
 	iptables = config_iptables,
+
+	irq	= {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Irqs" }
+	},
+
+	logfile	= {
+		{ "LogLevel", "File" },
+		{ "Timestamp" },
+		{ }
+	},
+
+	netlink	= {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Interfaces", "VerboseInterfaces", "QDiscs", "Classs", "Filters" }
+	},
+
+	network	= config_network,
 
 }
 
