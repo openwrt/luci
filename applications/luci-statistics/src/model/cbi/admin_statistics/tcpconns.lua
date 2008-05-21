@@ -1,6 +1,6 @@
 --[[
 
-Luci configuration model for statistics - collectd ping plugin configuration
+Luci configuration model for statistics - collectd tcpconns plugin configuration
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
