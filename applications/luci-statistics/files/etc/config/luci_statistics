@@ -106,3 +106,7 @@ config 'statistics' 'collectd_tcpconns'
 	option 'ListeningPorts' '0'
 	option 'LocalPorts' '22 80 443'
 
+config 'statistics' 'collectd_unixsock'
+	option 'enable' '1'
+	option 'SocketFile' '/var/run/collectd-query.sock'
+
