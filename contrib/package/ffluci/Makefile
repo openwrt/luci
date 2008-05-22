@@ -13,12 +13,10 @@ PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
-PKG_BUILD_DEPENDS:=lua-luci
-
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-# LUA_TARGET:=compile LUAC=$(BUILD_DIR_HOST)/lua-luci/luac
+# LUA_TARGET:=compile LUAC=$(BUILD_DIR_HOST)/lua/luac
 LUA_TARGET:=source
 
 
@@ -48,7 +46,7 @@ endef
 define Package/ffluci
   $(call Package/ffluci/template)
   MENU:=1
-  DEPENDS:=+lua-luci +luaposix +luci-addons
+  DEPENDS:=+lua +luaposix +luci-addons
 endef
 
 define Package/ffluci/conffiles

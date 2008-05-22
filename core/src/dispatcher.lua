@@ -137,10 +137,29 @@ function createindex()
 	end
 end
 
+-- Shortcut for creating a dispatching node
+function entry(path, target, title, order, add)
+	add = add or {}
+
+	local c = node(path)
+	c.target = target
+	c.title  = title
+	c.order  = order
+	
+	for k,v in pairs(add) do
+		c[k] = v
+	end
+	
+	return c
+end
 
 -- Fetch a dispatching node
 function node(...)
 	local c = tree
+	
+	if arg[1] and type(arg[1]) == "table" then
+		arg = arg[1]
+	end
 	
 	for k,v in ipairs(arg) do
 		if not c.nodes[v] then

@@ -18,7 +18,7 @@ define Package/luaposix
   CATEGORY:=Libraries
   TITLE:=Lua Posix library
   URL:=http://luaforge.net/projects/luaposix/
-  DEPENDS:=+liblua-luci
+  DEPENDS:=+liblua
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
 endef
 
