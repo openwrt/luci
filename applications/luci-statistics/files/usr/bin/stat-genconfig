@@ -31,64 +31,75 @@ function section( plugin )
 
 	if type(config) == "table" and ( plugin == "general" or config.enable == "1" ) then
 
-		if plugin ~= "general" then print( "<Plugin " .. plugin .. ">" ) end
+		local params = ""
 
 		if type( plugins[plugin] ) == "function" then
-			plugins[plugin]( config )
+			params = plugins[plugin]( config )
 		else
-			config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3], plugin == "general" )
+			params = config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3], plugin == "general" )
 		end
+
 
 		if plugin ~= "general" then
-			print( "</Plugin>\n" )
-		else
-			print( "\n" )
-		end
+			print( "LoadPlugin " .. plugin )
 
+			if params:len() > 0 then
+				print( "<Plugin " .. plugin .. ">\n" .. params .. "</Plugin>\n" )
+			else
+				print( "" )
+			end
+		else
+			print( params .. "\n" )
+		end
 	end
 end
 
 function config_generic( c, singles, bools, lists, nopad )
+	local str = ""
 
 	if type(c) == "table" then
 
 		if type(singles) == "table" then
 			for i, key in ipairs( singles ) do
-				_string( c[key], key, nopad )
+				str = str .. _string( c[key], key, nopad )
 			end
 		end
 
 		if type(bools) == "table" then
 			for i, key in ipairs( bools ) do
-				_bool( c[key], key, nopad )
+				str = str .. _bool( c[key], key, nopad )
 			end
 		end
 
 		if type(lists) == "table" then
-			_list_expand( c, lists, nopad )
+			str = str .. _list_expand( c, lists, nopad )
 		end
-
 	end
 
+	return str
 end
 
 function config_exec( c )
+	local str = ""
 
 	for s in pairs(sections) do
 		for key, type in pairs({ Exec="collectd_exec_input", NotificationExec="collectd_exec_notify" }) do
 			if sections[s][".type"] == type then
 
 				cmd   = sections[s].cmdline
-				user  = sections[s].cmduser  or "root"
-				group = sections[s].cmdgroup or "root"
+				user  = sections[s].cmduser  or "nobody"
+				group = sections[s].cmdgroup or "nogroup"
 
-				print( "\t" .. key .. " " .. user .. ":" .. group .. ' "' .. cmd .. '"' )
+				str = str .. "\t" .. key .. " " .. user .. ":" .. group .. ' "' .. cmd .. "\"\n"
 			end
 		end
 	end
+
+	return str
 end
 
 function config_iptables( c )
+	local str = ""
 
 	for s in pairs(sections) do
 		if sections[s][".type"] == "collectd_iptables_match" then
@@ -109,86 +120,110 @@ function config_iptables( c )
 
 			for i, rule in ipairs( ipt:find( search ) ) do
 
-				name = sections[s].name
-				if i > 1 then name = name .. " (" .. i .. ")" end
+				name = sections[s].name:gsub( "%s+", "_" )
+				if i > 1 then name = name .. "_(" .. i .. ")" end
 
-				print( "\tChain " .. rule.table .. " " .. rule.chain .. " " .. rule.index .. ' "' .. name .. '"' )
-
+				str = str .. "\tChain " .. rule.table .. " " .. rule.chain .. " " .. rule.index .. ' "' .. name .. "\"\n"
 			end
 		end
 	end
+
+	return str
 end
 
 function config_network( c )
+	local str = ""
 
-        for s in pairs(sections) do
-                for key, type in pairs({ Listen="collectd_network_listen", Server="collectd_network_server" }) do
-                        if sections[s][".type"] == type then
+	for s in pairs(sections) do
+		for key, type in pairs({ Listen="collectd_network_listen", Server="collectd_network_server" }) do
+			if sections[s][".type"] == type then
 
-                                host = sections[s].host
-                                port = sections[s].port
+				host = sections[s].host
+				port = sections[s].port
 
 				if host then
 					if port then
-						print( "\t" .. key .. " " .. host .. " " .. port )
+						str = str .. "\t" .. key .. " " .. host .. " " .. port .. "\n"
 					else
-						print( "\t" .. key .. " " .. host )
+						str = str .. "\t" .. key .. " " .. host .. "\n"
 					end
 				end
                         end
                 end
         end
 
-	_string( c["TimeToLive"], "TimeToLive" )
-	_string( c["CacheFlush"], "CacheFlush" )
-	_bool(   c["Forward"],    "Forward"    )
+	return str .. _string( c["TimeToLive"], "TimeToLive" )
+		   .. _string( c["CacheFlush"], "CacheFlush" )
+		   .. _bool(   c["Forward"],    "Forward"    )
 end
 
 
 function _list_expand( c, l, nopad )
+	local str = ""
+
 	for i, n in ipairs(l) do
 		if c[n] then
-			_expand( c[n], n:gsub( "(%w+)s", "%1" ), nopad )
+			if n:find("(%w+)ses") then
+				k = n:gsub("(%w+)ses", "%1s")
+			else
+				k = n:gsub("(%w+)s", "%1")
+			end
+
+			str = str .. _expand( c[n], k, nopad )
 		end
 	end
+
+	return str
 end
 
 function _expand( s, n, nopad )
 	if type(s) == "string" then
+		local str = ""
+
 		for i, v in ipairs( ffluci.util.split( s, "%s+", nil, true ) ) do
-			_string( v, n, nopad )
+			str = str .. _string( v, n, nopad )
 		end
+
+		return str
 	end
 end
 
 function _bool( s, n, nopad )
 
+	local str = ""
 	local pad = ""
 	if not nopad then pad = "\t" end
 
 	if s and s == "1" then
-		print( pad .. n .. " true" )
+		str = pad .. n .. " true"
 	else
-		print( pad .. n .. " false" )
+		str = pad .. n .. " false"
 	end
+
+	return str .. "\n"
 end
 
 function _string( s, n, nopad )
 
+	local str = ""
 	local pad = ""
 	if not nopad then pad = "\t" end
 
 	if s then
-		if not s:find("%d") then
-			if not s:find("%s") then
-				print( pad .. n .. " " .. s )
+		if s:find("[^%d]") then
+			if not s:find("[^%w]") then
+				str = pad .. n .. " " .. s
 			else
-				print( pad .. n .. ' "' .. s '"' )
+				str = pad .. n .. ' "' .. s .. '"'
 			end
 		else
-			print( pad .. n .. " " .. s )
+			str = pad .. n .. " " .. s
 		end
+
+		str = str .. "\n"
 	end
+
+	return str
 end		
 
 
@@ -224,7 +259,7 @@ plugins = {
 	},
 
 	email	= {
-		{ "SocketFile", "SocketUser", "SocketPerms", "MaxConns" },
+		{ "SocketFile", "SocketGroup", "SocketPerms", "MaxConns" },
 		{ },
 		{ }
 	},
@@ -254,7 +289,7 @@ plugins = {
 	netlink	= {
 		{ },
 		{ "IgnoreSelected" },
-		{ "Interfaces", "VerboseInterfaces", "QDiscs", "Classs", "Filters" }
+		{ "Interfaces", "VerboseInterfaces", "QDiscs", "Classes", "Filters" }
 	},
 
 	network	= config_network,
@@ -262,7 +297,13 @@ plugins = {
 	processes = {
 		{ },
 		{ },
-		{ "Processs" }
+		{ "Processes" }
+	},
+
+	rrdtool	= {
+		{ "DataDir", "StepSize", "HeartBeat", "RRARows", "XFF", "CacheFlush", "CacheTimeout" },
+		{ "RRASingle" },
+		{ "RRATimespans" }
 	},
 
 	tcpconns = {
@@ -272,7 +313,13 @@ plugins = {
 	},
 
 	unixsock = {
-		{ "SocketFile", "SocketUser", "SocketPerms" },
+		{ "SocketFile", "SocketGroup", "SocketPerms" },
+		{ },
+		{ }
+	},
+
+	wireless = {
+		{ },
 		{ },
 		{ }
 	},

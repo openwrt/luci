@@ -1,12 +1,12 @@
 
 config 'statistics' 'general'
 	option 'BaseDir' '/var/run/collectd'
-	option 'Include' '/etc/collectd/conf.d/*.conf'
+	option 'Include' '/etc/collectd/conf.d'
 	option 'PIDFile' '/var/run/collectd.pid'
 	option 'PluginDir' '/usr/lib/collectd'
 	option 'TypesDB' '/etc/collectd/types.db'
 	option 'Interval' '30'
-	option 'ReadThreads' '5'
+	option 'ReadThreads' '2'
 
 config 'statistics' 'collectd_ping'
 	option 'enable' '1'
@@ -14,7 +14,7 @@ config 'statistics' 'collectd_ping'
 	option 'Hosts' '127.0.0.1'
 
 config 'statistics' 'collectd_csv'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'StoreRates' '0'
 	option 'DataDir' '/tmp'
 
@@ -32,12 +32,13 @@ config 'statistics' 'collectd_disk'
 
 config 'statistics' 'collectd_dns'
 	option 'enable' '1'
-	option 'Interfaces' 'ffdhcp ff lan wan'
+	option 'Interfaces' 'ffdhcp ff br-lan'
 	option 'IgnoreSources' '127.0.0.1'
 
 config 'statistics' 'collectd_email'
 	option 'enable' '1'
-	option 'SocketFile' '/var/run/collectd-email.socket'
+	option 'SocketFile' '/var/run/collectd/email.sock'
+	option 'SocketGroup' 'nogroup'
 
 config 'statistics' 'collectd_exec'
 	option 'enable' '1'
@@ -50,7 +51,7 @@ config 'collectd_exec_notify'
 
 config 'statistics' 'collectd_interface'
 	option 'enable' '1'
-	option 'Interfaces' 'ffdhcp ff lan wan'
+	option 'Interfaces' 'br-lan br-ff'
 	option 'IgnoreSelected' '0'
 
 config 'statistics' 'collectd_iptables'
@@ -77,7 +78,7 @@ config 'statistics' 'collectd_irq'
 	option 'Irqs' '2 3 4 7'
 
 config 'statistics' 'collectd_logfile'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'LogLevel' 'notice'
 	option 'File' '/var/log/collectd.log'
 	option 'Timestamp' '1'
@@ -89,7 +90,7 @@ config 'statistics' 'collectd_netlink'
 	option 'QDiscs' 'br-lan br-ff'
 
 config 'statistics' 'collectd_network'
-	option 'enable' '1'
+	option 'enable' '0'
 
 config 'collectd_network_listen'
 	option 'host' '0.0.0.0'
@@ -99,7 +100,6 @@ config 'collectd_network_server'
 
 config 'statistics' 'collectd_processes'
 	option 'enable' '1'
-	option 'Processs' 'olsrd tincd bmxd'
 
 config 'statistics' 'collectd_tcpconns'
 	option 'enable' '1'
@@ -107,6 +107,15 @@ config 'statistics' 'collectd_tcpconns'
 	option 'LocalPorts' '22 80 443'
 
 config 'statistics' 'collectd_unixsock'
-	option 'enable' '1'
-	option 'SocketFile' '/var/run/collectd-query.sock'
+	option 'enable' '0'
+	option 'SocketFile' '/var/run/collectd/query.sock'
+	option 'SocketGroup' 'nogroup'
 
+config 'statistics' 'collectd_wireless'
+	option 'enable' '1'
+
+config 'statistics' 'collectd_rrdtool'
+	option 'enable' '1'
+	option 'DataDir' '/tmp'
+	option 'RRARows' '100'
+	option 'RRASingle' '1'

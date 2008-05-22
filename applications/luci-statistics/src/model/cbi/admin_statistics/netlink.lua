@@ -56,8 +56,8 @@ for i, v in ipairs(ffluci.sys.net.devices()) do
         qdiscs:value(v)
 end
 
--- collectd_netlink.classs (Class)
-classs = s:option( MultiValue, "Classs", "Shapingklassen auf Schnittstellen Überwachen", "mehrere Einträge mit Strg selektieren" )
+-- collectd_netlink.classes (Class)
+classs = s:option( MultiValue, "Classes", "Shapingklassen auf Schnittstellen Überwachen", "mehrere Einträge mit Strg selektieren" )
 classs.widget   = "select"
 classs.optional = true
 classs:depends( "enable", 1 )
