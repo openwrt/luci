@@ -1,4 +1,3 @@
-
 config 'statistics' 'general'
 	option 'BaseDir' '/var/run/collectd'
 	option 'Include' '/etc/collectd/conf.d'
@@ -9,7 +8,7 @@ config 'statistics' 'general'
 	option 'ReadThreads' '2'
 
 config 'statistics' 'collectd_ping'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'TTL' '127'
 	option 'Hosts' '127.0.0.1'
 
@@ -19,24 +18,24 @@ config 'statistics' 'collectd_csv'
 	option 'DataDir' '/tmp'
 
 config 'statistics' 'collectd_df'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'Devices' '/dev/mtdblock/4'
 	option 'MountPoints' '/jffs'
 	option 'FSTypes' 'tmpfs'
 	option 'IgnoreSelected' '0'
 
 config 'statistics' 'collectd_disk'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'Disks' 'hda1 hdb'
 	option 'IgnoreSelected' '0'
 
 config 'statistics' 'collectd_dns'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'Interfaces' 'ffdhcp ff br-lan'
 	option 'IgnoreSources' '127.0.0.1'
 
 config 'statistics' 'collectd_email'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'SocketFile' '/var/run/collectd/email.sock'
 	option 'SocketGroup' 'nogroup'
 
@@ -74,7 +73,7 @@ config 'collectd_iptables_match'
 	option 'name' 'Verkehr WLAN-Clients'
 
 config 'statistics' 'collectd_irq'
-	option 'enable' '1'
+	option 'enable' '0'
 	option 'Irqs' '2 3 4 7'
 
 config 'statistics' 'collectd_logfile'
@@ -119,3 +118,4 @@ config 'statistics' 'collectd_rrdtool'
 	option 'DataDir' '/tmp'
 	option 'RRARows' '100'
 	option 'RRASingle' '1'
+	option 'RRATimespans' '600 86400 604800 2678400'
