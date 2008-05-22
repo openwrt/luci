@@ -23,7 +23,7 @@ s = m:section( NamedSection, "collectd_processes", "luci_statistics", "Pluginkon
 enable = s:option( Flag, "enable", "Plugin aktivieren" )
 enable.default = 0
 
--- collectd_processes.processs (Process)
+-- collectd_processes.processes (Process)
 processes = s:option( Value, "Processes", "Überwachte Prozesse", "mehrere mit Leerzeichen trennen" )
 processes.default = "olsrd bmxd httpd dnsmasq dropbear tinc"
 processes:depends( "enable", 1 )
