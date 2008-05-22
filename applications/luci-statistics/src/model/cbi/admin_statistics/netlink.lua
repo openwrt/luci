@@ -33,7 +33,7 @@ interfaces.optional = true
 interfaces:depends( "enable", 1 )
 interfaces:value("")
 for i, v in ipairs(ffluci.sys.net.devices()) do
-        interfaces:value(v)
+	interfaces:value(v)
 end
 
 -- collectd_netlink.verboseinterfaces (VerboseInterface)
@@ -43,7 +43,7 @@ verboseinterfaces.optional = true
 verboseinterfaces:depends( "enable", 1 )
 verboseinterfaces:value("")
 for i, v in ipairs(ffluci.sys.net.devices()) do
-        verboseinterfaces:value(v)
+	verboseinterfaces:value(v)
 end
 
 -- collectd_netlink.qdiscs (QDisc)

@@ -13,7 +13,7 @@ $Id$
 
 ]]--
 
-require("ffluci.model.uci")
+require("ffluci.sys")
 
 
 m = Map("luci_statistics", "DNS Plugin",
@@ -30,10 +30,8 @@ enable.default = 0
 interfaces = s:option( ListValue, "Interface", "Folgende Schnittstelle überwachen:" )
 interfaces:depends( "enable", 1 )
 interfaces:value("any")
-for k, v in pairs(ffluci.model.uci.sections("network")) do
-        if v[".type"] == "interface" and k ~= "loopback" then
-                interfaces:value(k)
-        end
+for k, v in pairs(ffluci.sys.net.devices()) do
+	interfaces:value(v)
 end
 
 -- collectd_dns.ignoresources (IgnoreSource)

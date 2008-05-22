@@ -13,6 +13,9 @@ $Id$
 
 ]]--
 
+require("ffluci.sys")
+
+
 m = Map("luci_statistics", "Interface Plugin",
 [[Das Interface-Plugin sammelt Informationen zum Netzwerkverkehr auf den einzelnen Schnittstellen.]])
 
@@ -27,10 +30,8 @@ enable.default = 0
 interfaces = s:option( MultiValue, "Interfaces", "Überwachte Schnittstellen", "mehrere Einträge mit Strg selektieren" )
 interfaces.widget = "select"
 interfaces:depends( "enable", 1 )
-for k, v in pairs(ffluci.model.uci.sections("network")) do
-        if v[".type"] == "interface" and k ~= "loopback" then
-                interfaces:value(k)
-        end
+for k, v in pairs(ffluci.sys.net.devices()) do
+	interfaces:value(v)
 end
 
 -- collectd_interface.ignoreselected (IgnoreSelected)
