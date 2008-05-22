@@ -1,4 +1,8 @@
-module("ffluci.controller.rpc.luciinfo", package.seeall)
+module("ffluci.controller.freifunk.luciinfo", package.seeall)
+
+function index()
+	node("freifunk", "luciinfo").target = action_index
+end
 
 function action_index()
 	local uci = ffluci.model.uci.StateSession()
@@ -7,7 +11,7 @@ function action_index()
 	
 	-- General
 	print("luciinfo.api=1")
-	print("luciinfo.version=" .. tostring(ffluci.__version__))
+	print("luciinfo.version=" .. tostring(require("ffluci").__version__))
 	
 	-- Sysinfo
 	local s, m, r = ffluci.sys.sysinfo()
@@ -28,11 +32,11 @@ function action_index()
 	-- Freifunk
 	local ff = uci:sections("freifunk") or {}
 	for k, v in pairs(ff) do
-		if k:sub(1, 1) ~= "." then
 			for i, j in pairs(v) do
-				print("freifunk." .. k .. "." .. i .. "=" .. j)
+				if i:sub(1, 1) ~= "." then
+					print("freifunk." .. k .. "." .. i .. "=" .. j)
+				end
 			end
-		end
 	end
 end
 

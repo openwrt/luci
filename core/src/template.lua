@@ -55,7 +55,7 @@ viewns = {
 	controller = ffluci.http.dispatcher(),
 	uploadctrl = ffluci.http.dispatcher_upload(),
 	media      = ffluci.config.main.mediaurlbase,
-	images     = ffluci.config.main.imagebase,
+	resource   = ffluci.config.main.resourcebase,
 	write      = io.write,
 	include    = function(name) Template(name):render(getfenv(2)) end,	
 }

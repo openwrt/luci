@@ -28,6 +28,7 @@ module("ffluci.menu", package.seeall)
 require("ffluci.fs")
 require("ffluci.util")
 require("ffluci.sys")
+require("ffluci.dispatcher")
 
 -- Default modelpath
 modelpattern = ffluci.sys.libpath() .. "/model/menu/*.lua"
@@ -39,98 +40,7 @@ scope = {
 	isfile    = ffluci.fs.isfile
 }
 
--- Local menu database
-local menu = nil
-
--- The current pointer
-local menuc = {}
-
--- Adds a menu category to the current menu and selects it
-function add(cat, controller, title, order)
-	order = order or 100
-	if not menu[cat] then
-		menu[cat] = {}
-	end
-	
-	local entry = {}
-	entry[".descr"] = title
-	entry[".order"] = order
-	entry[".contr"] = controller
-	
-	menuc = entry
-
-	local i = 0			
-	for k,v in ipairs(menu[cat]) do
-		if v[".order"] > entry[".order"] then
-			break
-		end  
-		i = k
-	end	
-	table.insert(menu[cat], i+1, entry)
-		
-	return true
-end
-
--- Adds an action to the current menu
-function act(action, title)
-	table.insert(menuc, {action = action, descr = title})
-	return true
-end
-
--- Selects a menu category
-function sel(cat, controller)
-	if not menu[cat] then
-		return nil
-	end
-	menuc = menu[cat]
-	
-	local stat = nil
-	for k,v in ipairs(menuc) do
-		if v[".contr"] == controller then
-			menuc = v
-			stat = true
-		end
-	end
-	
-	return stat
-end
-
-
--- Collect all menu information provided in the model dir
-function collect()
-	local generators = {}
-	
-	local m = ffluci.fs.glob(modelpattern) or {}
-	for k, menu in pairs(m) do
-		local f = loadfile(menu)
-		if f then
-			table.insert(generators, f)
-		end
-	end
-	
-	return generators
-end
-
--- Parse the collected information
-function parse(generators)
-	menu = {}
-	for i, f in pairs(generators) do
-		local env = ffluci.util.clone(scope)
-		
-		env.add = add
-		env.sel = sel
-		env.act = act
-		
-		setfenv(f, env)
-		f()
-	end
-	return menu
-end
-
 -- Returns the menu information
 function get()
-	if not menu then
-		menu = parse(collect())
-	end
 	return menu
 end

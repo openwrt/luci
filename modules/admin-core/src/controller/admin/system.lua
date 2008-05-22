@@ -7,6 +7,52 @@ require("ffluci.fs")
 require("ffluci.model.ipkg")
 require("ffluci.model.uci")
 
+function index()
+	local page  = node("admin", "system")
+	page.target = template("admin_system/index")
+	page.title  = "System"  
+	page.order  = 30
+	
+	local page  = node("admin", "system", "packages")
+	page.target = action_packages
+	page.title  = "Paketverwaltung"
+	page.order  = 10
+	
+	local page  = node("admin", "system", "packages", "ipkg")
+	page.target = action_ipkg
+	page.title  = "IPKG-Konfiguration"
+	
+	local page  = node("admin", "system", "passwd")
+	page.target = action_passwd
+	page.title  = "Passwort ändern"
+	page.order  = 20
+	
+	local page  = node("admin", "system", "sshkeys")
+	page.target = action_sshkeys
+	page.title  = "SSH-Schlüssel"
+	page.order  = 30
+	
+	local page  = node("admin", "system", "hostname")
+	page.target = cbi("admin_system/hostname")
+	page.title  = "Hostname"
+	page.order  = 40
+	
+	local page  = node("admin", "system", "fstab")
+	page.target = cbi("admin_system/fstab")
+	page.title  = "Einhängepunkte"
+	page.order  = 50
+	
+	local page  = node("admin", "system", "upgrade")
+	page.target = action_upgrade
+	page.title  = "Firmwareupgrade"
+	page.order  = 60
+	
+	local page  = node("admin", "system", "reboot")
+	page.target = action_reboot
+	page.title  = "Neu starten"
+	page.order  = 70
+end
+
 function action_editor()
 	local file = ffluci.http.formvalue("file", "")
 	local data = ffluci.http.formvalue("data")

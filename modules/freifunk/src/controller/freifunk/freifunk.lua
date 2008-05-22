@@ -1,6 +1,79 @@
-module("ffluci.controller.admin.index.wizard", package.seeall)
+module("ffluci.controller.freifunk.freifunk", package.seeall)
 
-function action()
+function index()
+	local page  = node()
+	page.target = alias("freifunk")
+
+	local page    = node("freifunk")
+	page.title    = "Freifunk"
+	page.target   = alias("freifunk", "index")
+	page.order    = 5
+	page.setuser  = "nobody"
+	page.setgroup = "nogroup"
+	
+	local page  = node("freifunk", "index")
+	page.target = template("freifunk/index")
+	page.title  = "Übersicht"
+	page.order  = 10
+	
+	local page  = node("freifunk", "index", "contact")
+	page.target = template("freifunk/contact")
+	page.title  = "Kontakt"
+	
+	
+	local page  = node("freifunk", "status")
+	page.target = action_status
+	page.title  = "Status"
+	page.order  = 20
+	page.setuser  = false
+	page.setgroup = false
+
+	local page  = node("freifunk", "status", "routes")
+	page.target = template("public_status/routes")
+	page.title  = "Routingtabelle"
+	page.order  = 10
+	
+	local page  = node("freifunk", "status", "iwscan")
+	page.target = template("public_status/iwscan")
+	page.title  = "WLAN-Scan"
+	page.order  = 20	
+
+
+	local page  = node("admin", "index", "wizard")
+	page.target = action_wizard
+	page.title  = "Freifunkassistent"
+	page.order  = 20
+	
+	local page  = node("admin", "index", "freifunk")
+	page.target = cbi("freifunk/freifunk")
+	page.title  = "Freifunk"
+	page.order  = 30
+	
+	local page  = node("admin", "index", "contact")
+	page.target = cbi("freifunk/contact")
+	page.title  = "Kontakt"
+	page.order  = 40
+end
+
+function action_status()
+	local data = {}
+	
+	data.s, data.m, data.r = ffluci.sys.sysinfo()
+	
+	data.wifi = ffluci.sys.wifi.getiwconfig()
+	
+	data.routes = {}
+	for i, r in pairs(ffluci.sys.net.routes()) do
+		if r.Destination == "00000000" then
+			table.insert(data.routes, r)
+		end
+	end
+
+	
+	ffluci.template.render("public_status/index", data)
+end
+
+function action_wizard()
 	if ffluci.http.formvalue("ip") then
 		return configure_freifunk()
 	end
@@ -16,7 +89,7 @@ function action()
 		end
 	end
 	
-	ffluci.template.render("admin_index/wizard", {ifaces=ifaces})
+	ffluci.template.render("freifunk/wizard", {ifaces=ifaces})
 end
 
 function configure_freifunk()

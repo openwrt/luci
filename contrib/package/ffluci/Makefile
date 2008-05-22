@@ -5,7 +5,7 @@ PKG_SOURCE_URL:=https://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
 PKG_REV:=$(shell LC_ALL=C svn info ${PKG_SOURCE_URL} | sed -ne's/^Last Changed Rev: //p')
 
 PKG_NAME:=ffluci
-PKG_VERSION:=0.4+svn$(PKG_REV)
+PKG_VERSION:=0.5+svn$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)

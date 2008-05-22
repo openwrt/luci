@@ -25,5 +25,5 @@ limitations under the License.
 ]]--
 module("ffluci", package.seeall)
 
-__version__ = "0.4"
+__version__ = "0.5"
 __appname__ = "FFLuCI"

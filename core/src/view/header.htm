@@ -1,21 +1,33 @@
 <%
 require("ffluci.sys")
 local load1, load5, load15 = ffluci.sys.loadavg()
-local req  = require("ffluci.dispatcher").request
-local menu = require("ffluci.menu").get()[req.category]
-menu = menu or {}
+
+local request  = require("ffluci.dispatcher").request
+local category = request[1]
+local tree     = ffluci.dispatcher.node()
+local cattree  = category and ffluci.dispatcher.node(category)
+local node     = ffluci.dispatcher.dispatched 
+
+local c = tree
+for i,r in ipairs(request) do
+	if c.nodes and c.nodes[r] then 
+		c = c.nodes[r]
+		c._menu_selected = true
+	end
+end
+
 require("ffluci.i18n").loadc("default")
+
 require("ffluci.http").prepare_content("text/html")
 %><?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
-	<link rel="stylesheet" type="text/css" href="<%=media%>/css/<%=req.category%>_<%=req.module%>.css" />
-	<link rel="stylesheet" type="text/css" href="<%=media%>/css/<%=req.category%>_<%=req.module%>_<%=req.action%>.css" />
+	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
 	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
-	<title>FFLuCI</title>
+	<title>FFLuCI - Freifunk Lua Configuration Interface</title>
 </head>
 <body>
 <div id="header">
@@ -27,37 +39,82 @@ require("ffluci.http").prepare_content("text/html")
 	<%:hostname Hostname%>: <%=ffluci.sys.hostname()%> 
 	</div>
 	<div>
-		<span class="headertitle">Freifunk Kamikaze</span><br />
-		<span class="whitetext bold"><%:batmanedition Fledermausedition%></span>
+		<span class="headertitle"><%~luci.main.title%></span><br />
+		<span class="whitetext bold"><%~luci.main.subtitle%></span>
 	</div>
 </div>
 
 <div class="separator yellow bold">
-<%:path Pfad%>: <a href="<%=controller .. "/" .. req.category%>"><%=translate(req.category, req.category)%></a>
-&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module %>"><%=translate(req.module, req.module)%></a>
-&#187; <a href="<%=controller .. "/" .. req.category .. "/" .. req.module .. "/" .. req.action %>"><%=translate(req.action, req.action)%></a>
+<%:path Pfad%>: <% 
+local c = tree
+local url = controller
+for k,v in pairs(request) do
+	if c.nodes and c.nodes[v] then
+		c = c.nodes[v]
+		url = url .. "/" .. v
+	%><a href="<%=url%>"><%=c.title or v%></a> <% if k ~= #request then %>&#187; <% end
+	end
+end
+%>
 </div>
 
 <div id="columns"><div id="columnswrapper">
 	<div class="sidebar left">
-	<% for k,v in pairs(menu) do %>
-	    <div<% if v[".contr"] == req.module then %> class="yellowtext"<% end %>><a href="<%=controller.."/"..req.category.."/"..v[".contr"]%>"><%=translate(v[".contr"], v[".descr"])%></a><%
-	    if v[".contr"] == req.module then %>
-	    	<ul><% for key,val in ipairs(v) do %>
-	    		<li<% if val.action == req.action then %> class="yellowtext"<% end %>><a href="<%=controller.."/"..req.category.."/"..req.module.."/"..val.action%>"><%=translate(val.action, val.descr)%></a></li>
-	    	<% end %></ul>
-	    <% end %></div>
+<%
+local function submenu(prefix, node)
+	if not node._menu_selected or not node.nodes then
+		return false
+	end
+	local index = {}	
+	for k, n in pairs(node.nodes) do
+		table.insert(index, {name=k, order=n.order or 100})
+	end
+		
+	table.sort(index, function(a, b) return a.order < b.order end)
+%>
+	<ul>
+	<% for j, v in pairs(index) do 
+		local nnode = node.nodes[v.name]%>
+		<li>
+			<span<% if nnode._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller .. prefix .. v.name%>"><%=nnode.title%></a></span>
+			<% submenu(prefix .. v.name .. "/", nnode) %>
+		</li>
 	<% end %>
+		</ul> 
+<%	 
+end
+
+if cattree and cattree.nodes then
+	local index = {}	
+	for k, node in pairs(cattree.nodes) do
+		table.insert(index, {name=k, order=node.order or 100})
+	end
+	
+	table.sort(index, function(a, b) return a.order < b.order end)
+
+	for i, k in ipairs(index) do
+		node = cattree.nodes[k.name]
+		if node.title then %>
+			<div<% if node._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=category%>/<%=k.name%>"><%=node.title%></a>			
+				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
+			</div>
+<%		end
+	end
+end
+%>		
 	</div>
 	<div class="sidebar right">
 		<div><%:webif Weboberfläche%>
-			<ul>
-				<li<% if "public" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/public"><%:public Öffentlich%></a></li>
-				<li<% if "admin" == req.category then %> class="yellowtext"<% end %>><a href="<%=controller%>/admin"><%:admin Verwaltung%></a></li>
+			<ul><%
+				for k,node in pairs(tree.nodes) do
+					if node.title then %>
+						<li<% if request[1] == k then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
+<%					end
+				end%>
 			</ul>
 		</div>
 		<%
-			if "admin" == req.category then
+			if "admin" == request[1] then
 				require("ffluci.model.uci") 
 				local ucic = ffluci.model.uci.changes()
 				if ucic then

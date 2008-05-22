@@ -34,7 +34,25 @@
 <th><%:signal Signal%></th>
 <th><%:noise Rausch%></th>
 </tr>
-<%=ffluci.sys.httpget("http://127.0.0.1" .. controller .. "/sudo/status/iwconfig")%>
+<%for k, v in pairs(ffluci.sys.wifi.getiwconfig()) do
+%>
+<tr>
+<td rowspan="2"><%=k%></td>
+<td><%=v[1]%></td>
+<td><%=v.Frequency%></td>
+<td><%=v["Tx-Power"]%></td>
+<td><%=v["Bit Rate"]%></td>
+<td><%=v["RTS thr"]%></td>
+<td><%=v["Fragment thr"]%></td>
+<td><%=v["Link Quality"]%></td>
+<td><%=v["Signal level"]%></td>
+<td><%=v["Noise level"]%></td>
+</tr>
+<tr>
+<td colspan="4"><strong>ESSID: </strong><%=v.ESSID%></td>
+<td colspan="5"><strong>BSSID: </strong><%=(v.Cell or v["Access Point"])%></td>
+</tr>
+<%end%>
 </table>
 <br />
 <br />

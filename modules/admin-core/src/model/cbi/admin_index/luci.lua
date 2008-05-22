@@ -19,12 +19,6 @@ for k, v in pairs(ffluci.config.themes) do
 	end
 end
 
-p = m:section(NamedSection, "category_privileges", "core", translate("catpriv", "Kategorieprivilegien"),
- translate("catpriv1", [[Zur zusätzlichen Sicherung der Oberfläche gegen Angreifer, können hier die
-Ausführungsrechte der Seiten für einzelne Kategorien reduziert werden. So können z.B. Sicherheitslücken im
-ungeschützten Bereich der Oberfläche nicht mehr zur Übernahme des Routers genutzt werden.]]))
-p.dynamic = true
-
 u = m:section(NamedSection, "uci_oncommit", "event", translate("ucicommit", "UCI-Befehle beim Anwenden"),
  translate("ucicommit1", [[Beim Anwenden
 der Konfiguration aus der Oberflächliche heraus können automatisch die relevanten Dienste neugestart werden,

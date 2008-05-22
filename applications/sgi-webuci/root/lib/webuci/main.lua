@@ -1,11 +1,9 @@
-package.path  = "/usr/lib/lua/?.lua;/usr/lib/lua/?/init.lua;" .. package.path
-package.cpath = "/usr/lib/lua/?.so;" .. package.cpath
 module("webuci", package.seeall)
 
 function prepare_req(uri)
 	env = {}
 	env.REQUEST_URI = uri
-	require("ffluci.menu").get()
+	require("ffluci.dispatcher").createindex()
 end
 
 function init_req(context)
@@ -19,5 +17,5 @@ function init_req(context)
 end
 
 function handle_req(context)
-	require("ffluci.dispatcher").httpdispatch()
+	ffluci.dispatcher.httpdispatch()
 end

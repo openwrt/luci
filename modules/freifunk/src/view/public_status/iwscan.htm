@@ -15,7 +15,24 @@
 <th><%:signal Signal%></th>
 <th><%:noise Rausch%></th>
 </tr>
-<%=ffluci.sys.httpget("http://127.0.0.1" .. controller .. "/sudo/status/iwscan")%>
+<%for iface, cells in pairs(ffluci.sys.wifi.iwscan()) do
+	for i, cell in ipairs(cells) do 
+%>
+<tr>
+<td><%=iface%></td>
+<td><%=cell.ESSID%></td>
+<td><%=cell.Address%></td>
+<td><%=cell.Mode%></td>
+<td><%=(cell.Channel or cell.Frequency or "")%></td>
+<td><%=cell["Encryption key"]%></td>
+<td><%=cell.Quality%></td>
+<td><%=cell["Signal level"]%></td>
+<td><%=cell["Noise level"]%></td>
+</tr>
+<%
+	end
+end
+%>
 </table>
 <br />
 <%+footer%>
