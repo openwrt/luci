@@ -1,0 +1,18 @@
+<%+header%>
+
+<h1><%:stat_networkplugins Netzwerkplugins%></h1>
+
+<p><%:stat_networkplugins_desc Netzwerkplugins sammeln Werte über offene TCP-Verbindung, allgemeines Verkehrsaufkommen
+auf verschiedenen Schnittstellen, DNS-Verkehr u.v.m.%></p>
+
+<p><%:stat_networkplugins_installed Installierte Netzwerkplugins:%>
+	<ul>
+		<% for plugin, desc in pairs(plugins) do %>
+			<% if ffluci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
+				<li><a href="/cgi-bin/ffluci/admin/statistics/network/<%=plugin%>"><%=desc%></a></li>
+			<% end %>
+		<% end %>
+	</ul>
+</p>
+
+<%+footer%>

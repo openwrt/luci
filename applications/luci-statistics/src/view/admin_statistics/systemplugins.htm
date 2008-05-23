@@ -1,0 +1,18 @@
+<%+header%>
+
+<h1><%:stat_systemplugins Systemplugins%></h1>
+
+<p><%:stat_systemplugins_desc Systemplugins sammeln Werte über den aktuellen Systemzustand und den Ressourcenverbrauch
+auf dem Gerät.%></p>
+
+<p><%:stat_systemplugins_installed Installierte Systemplugins:%>
+	<ul>
+		<% for plugin, desc in pairs(plugins) do %>
+			<% if ffluci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
+				<li><a href="/cgi-bin/ffluci/admin/statistics/system/<%=plugin%>"><%=desc%></a></li>
+			<% end %>
+		<% end %>
+	</ul>
+</p>
+
+<%+footer%>

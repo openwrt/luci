@@ -1,0 +1,19 @@
+<%+header%>
+
+<h1><%:stat_outputplugins Ausgabeplugins%></h1>
+
+<p><%:stat_outputplugins_desc Ausgabeplugins stellen verschiedene Möglichkeiten zur Speicherung
+der Daten bereit. Es können auch mehrere Plugins gleichzeitig aktiviert werden um beispielsweise
+die gesammelten Werte in RRD-Datenbanken zu sichern und zusätzlich über das Netzwerk zu versenden.%></p>
+
+<p><%:stat_outputplugins_installed Installierte Ausgabeplugins:%>
+	<ul>
+		<% for plugin, desc in pairs(plugins) do %>
+			<% if ffluci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
+				<li><a href="/cgi-bin/ffluci/admin/statistics/output/<%=plugin%>"><%=desc%></a></li>
+			<% end %>
+		<% end %>
+	</ul>
+</p>
+
+<%+footer%>
