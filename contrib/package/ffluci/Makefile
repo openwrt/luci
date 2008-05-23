@@ -65,6 +65,7 @@ define Package/ffluci-ff-halle
   $(call Package/ffluci/template)
   DEPENDS:=ffluci \
    +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-splash \
+   +ffluci-app-ffwizard-leipzig \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Halle Community Meta-Package
@@ -78,6 +79,7 @@ define Package/ffluci-ff-leipzig
   $(call Package/ffluci/template)
   DEPENDS:=ffluci \
    +ffluci-sgi-haserl +ffluci-mod-freifunk +ffluci-app-splash \
+   +ffluci-app-ffwizard-leipzig \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Leipzig Community Meta-Package
@@ -135,6 +137,17 @@ endef
 
 
 ### Applications ###
+
+define Package/ffluci-app-ffwizard-leipzig
+  $(call Package/ffluci/template)
+  DEPENDS:=ffluci +ffluci-mod-freifunk
+  TITLE:=Freifunk Leipzig configuration wizard
+endef
+
+define Package/ffluci-app-ffwizard-leipzig/install
+	$(call Package/ffluci/install/template,$(1),applications/luci-ffwizard-leipzig)
+endef
+
 
 define Package/ffluci-app-firewall
   $(call Package/ffluci/template)
@@ -209,6 +222,7 @@ $(eval $(call BuildPackage,ffluci-ff-hannover))
 $(eval $(call BuildPackage,ffluci-mod-admin-core))
 $(eval $(call BuildPackage,ffluci-mod-freifunk))
 
+$(eval $(call BuildPackage,ffluci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,ffluci-app-firewall))
 $(eval $(call BuildPackage,ffluci-app-splash))
 
