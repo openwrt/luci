@@ -84,3 +84,15 @@ mkdir = posix.mkdir
 
 -- Alias for posix.rmdir
 rmdir = posix.rmdir
+
+-- Alias for posix.stat
+stat = posix.stat
+
+-- Alias for posix.chmod
+chmod = posix.chmod
+
+-- Alias for posix.link
+link = posix.link
+
+-- Alias for posix.unlink
+unlink = posix.unlink

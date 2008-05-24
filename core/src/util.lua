@@ -73,6 +73,18 @@ function clone(object, deep)
 end
 
 
+-- Combines two or more numerically indexed tables into one
+function combine(...)
+	local result = {}
+	for i, a in ipairs(arg) do
+		for j, v in ipairs(a) do
+			table.insert(result, v)
+		end
+	end
+	return result
+end
+
+
 -- Checks whether a table has an object "value" in it
 function contains(table, value)
 	for k,v in pairs(table) do

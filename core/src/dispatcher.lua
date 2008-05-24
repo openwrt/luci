@@ -126,8 +126,14 @@ end
 function createindex()
 	local root = ffluci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
-	for i,c in ipairs(ffluci.fs.glob(root .. "*/*" .. suff)) do
-		c = "ffluci.controller." .. c:sub(#root+1, #c-#suff):gsub("/", ".", 1)
+	
+	local controllers = ffluci.util.combine(
+		ffluci.fs.glob(root .. "*" .. suff),
+		ffluci.fs.glob(root .. "*/*" .. suff)
+	)
+	
+	for i,c in ipairs(controllers) do
+		c = "ffluci.controller." .. c:sub(#root+1, #c-#suff):gsub("/", ".")
 		stat, mod = pcall(require, c)
 	
 		if stat and mod and type(mod.index) == "function" then
