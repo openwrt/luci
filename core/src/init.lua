@@ -2,7 +2,7 @@
 FFLuCI - Freifunk Lua Configuration Interface
 
 Description:
-This is the init file
+Main class
 
 FileId:
 $Id$
