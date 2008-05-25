@@ -56,3 +56,8 @@ end
 function translate(key, default)
 	return table[key] or default
 end
+
+-- Translate shourtcut with sprintf/string.format inclusion
+function translatef(key, default, ...)
+	return translate(key, default):format(...)
+end
