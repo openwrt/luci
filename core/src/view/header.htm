@@ -34,7 +34,7 @@ require("luci.http").prepare_content("text/html")
 	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="<%=luci.config.brand.title%>" /></div>
 	<div class="whitetext smalltext right">
 	<%=luci.config.brand.firmware%><br />
-	<%=luci.config.brand.distribution%><br />
+	<%=luci.config.brand.distro%><br />
 	<%:load Last%>: <%=load1%> <%=load5%> <%=load15%><br />
 	<%:hostname Hostname%>: <%=luci.sys.hostname()%> 
 	</div>
