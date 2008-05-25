@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Filesystem tools
+LuCI - Filesystem tools
 
 Description:
 A module offering often needed filesystem manipulation functions
@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.fs", package.seeall)
+module("luci.fs", package.seeall)
 
 require("posix")
 

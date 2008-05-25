@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Template Parser
+LuCI - Template Parser
 
 Description:
 A template parser supporting includes, translations, Lua code blocks
@@ -23,14 +23,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.template", package.seeall)
+module("luci.template", package.seeall)
 
-require("ffluci.config")
-require("ffluci.util")
-require("ffluci.fs")
-require("ffluci.http")
+require("luci.config")
+require("luci.util")
+require("luci.fs")
+require("luci.http")
 
-viewdir = ffluci.sys.libpath() .. "/view/"
+viewdir = luci.sys.libpath() .. "/view/"
 
 
 -- Compile modes:
@@ -50,12 +50,12 @@ compiler_enable_bytecode = false
 
 -- Define the namespace for template modules
 viewns = {
-	translate  = function(...) return require("ffluci.i18n").translate(...) end,
-	config     = function(...) return require("ffluci.model.uci").get(...) or "" end,
-	controller = ffluci.http.dispatcher(),
-	uploadctrl = ffluci.http.dispatcher_upload(),
-	media      = ffluci.config.main.mediaurlbase,
-	resource   = ffluci.config.main.resourcebase,
+	translate  = function(...) return require("luci.i18n").translate(...) end,
+	config     = function(...) return require("luci.model.uci").get(...) or "" end,
+	controller = luci.http.dispatcher(),
+	uploadctrl = luci.http.dispatcher_upload(),
+	media      = luci.config.main.mediaurlbase,
+	resource   = luci.config.main.resourcebase,
 	write      = io.write,
 	include    = function(name) Template(name):render(getfenv(2)) end,	
 }
@@ -70,15 +70,15 @@ function compile(template)
 	
 	-- As "expr" should be local, we have to assign it to the "expr_add" scope 
 	local expr = {}
-	ffluci.util.extfenv(expr_add, "expr", expr)
+	luci.util.extfenv(expr_add, "expr", expr)
 	
 	-- Save all expressiosn to table "expr"
 	template = template:gsub("<%%(.-)%%>", expr_add)
 	
 	local function sanitize(s)
-		s = ffluci.util.escape(s)
-		s = ffluci.util.escape(s, "'")
-		s = ffluci.util.escape(s, "\n")
+		s = luci.util.escape(s)
+		s = luci.util.escape(s, "'")
+		s = luci.util.escape(s, "\n")
 		return s
 	end
 	
@@ -137,7 +137,7 @@ end
 
 
 -- Template class
-Template = ffluci.util.class()
+Template = luci.util.class()
 
 -- Shared template cache to store templates in to avoid unnecessary reloading
 Template.cache = {}
@@ -170,18 +170,18 @@ function Template.__init__(self, name)
 	local err	
 	
 	if compiler_mode == "file" then
-		local tplmt = ffluci.fs.mtime(sourcefile)
-		local commt = ffluci.fs.mtime(compiledfile)
+		local tplmt = luci.fs.mtime(sourcefile)
+		local commt = luci.fs.mtime(compiledfile)
 				
 		-- Build if there is no compiled file or if compiled file is outdated
 		if ((commt == nil) and not (tplmt == nil))
 		or (not (commt == nil) and not (tplmt == nil) and commt < tplmt) then
 			local source
-			source, err = ffluci.fs.readfile(sourcefile)
+			source, err = luci.fs.readfile(sourcefile)
 			
 			if source then
 				local compiled = compile(source)
-				ffluci.fs.writefile(compiledfile, compiled)
+				luci.fs.writefile(compiledfile, compiled)
 				self.template, err = loadstring(compiled)
 			end
 		else
@@ -193,7 +193,7 @@ function Template.__init__(self, name)
 		
 	elseif compiler_mode == "memory" then
 		local source
-		source, err = ffluci.fs.readfile(sourcefile)
+		source, err = luci.fs.readfile(sourcefile)
 		if source then
 			self.template, err = loadstring(compile(source))
 		end
@@ -217,9 +217,9 @@ function Template.render(self, scope)
 	local oldfenv = getfenv(self.template)
 	
 	-- Put our predefined objects in the scope of the template
-	ffluci.util.resfenv(self.template)
-	ffluci.util.updfenv(self.template, scope)
-	ffluci.util.updfenv(self.template, self.viewns)
+	luci.util.resfenv(self.template)
+	luci.util.updfenv(self.template, scope)
+	luci.util.updfenv(self.template, self.viewns)
 	
 	-- Now finally render the thing
 	self.template()

@@ -1,5 +1,5 @@
 -- ToDo: Autodetect things, Translate, Add descriptions
-require("ffluci.fs")
+require("luci.fs")
 
 m = Map("olsr", "OLSR", [[OLSR ist ein flexibles Routingprotokoll, 
 dass den Aufbau von mobilen Ad-Hoc Netzen unterstützt.]])
@@ -51,7 +51,7 @@ i.dynamic = true
 
 network = i:option(ListValue, "Interface", "Netzwerkschnittstellen")
 network:value("")
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		network:value(k)
 	end
@@ -80,7 +80,7 @@ p.dynamic = true
 
 lib = p:option(ListValue, "Library", "Bibliothek")
 lib:value("")
-for k, v in pairs(ffluci.fs.dir("/usr/lib")) do
+for k, v in pairs(luci.fs.dir("/usr/lib")) do
 	if v:sub(1, 6) == "olsrd_" then
 		lib:value(v)
 	end

@@ -12,7 +12,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package-source/ \
-	http://firmware.freifunk-halle.net/ffluci/package-source/
+	http://firmware.freifunk-halle.net/luci/package-source/
 PKG_MD5SUM:=b004005594b84e35839b1d5c330f8e03
 
 

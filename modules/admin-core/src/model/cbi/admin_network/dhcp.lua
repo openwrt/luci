@@ -1,6 +1,6 @@
 -- ToDo: Translate, Add descriptions and help texts
-require("ffluci.model.uci")
-require("ffluci.sys")
+require("luci.model.uci")
+require("luci.sys")
 
 m = Map("dhcp", "DHCP", [[Mit Hilfe von DHCP können Netzteilnehmer automatisch
 ihre Netzwerkkonfiguration (IP-Adresse, Netzmaske, DNS-Server, DHCP, ...) beziehen.]])
@@ -10,7 +10,7 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "interface", "Schnittstelle")
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		iface:value(k)
 		s:depends("interface", k) -- Only change sections with existing interfaces
@@ -33,7 +33,7 @@ s:option(Value, "netmask", "Netzmaske").optional = true
 
 s:option(Flag, "force", "Start erzwingen").optional = true
 
-for i, line in pairs(ffluci.sys.execl("dnsmasq --help dhcp")) do
+for i, line in pairs(luci.sys.execl("dnsmasq --help dhcp")) do
 	k, v = line:match("([^ ]+) +([^ ]+)")
 	s:option(Value, "dhcp"..k, v).optional = true
 end

@@ -50,7 +50,7 @@
 
 --]]
 
-module("ffluci.bits", package.seeall);
+module("luci.bits", package.seeall);
 
 local hex2bin = {
 	["0"] = "0000",

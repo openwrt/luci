@@ -19,7 +19,7 @@ iface.optional = true
 oface = s:option(ListValue, "oface", "Ausgangsschnittstelle")
 oface.optional = true
 
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		iface:value(k)
 		oface:value(k)

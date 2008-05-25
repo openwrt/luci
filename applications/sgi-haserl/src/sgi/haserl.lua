@@ -1,5 +1,5 @@
 --[[
-FFLuCI - SGI-Module for Haserl
+LuCI - SGI-Module for Haserl
 
 Description:
 Server Gateway Interface for Haserl
@@ -23,30 +23,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.sgi.haserl", package.seeall)
-require("ffluci.fs")
+module("luci.sgi.haserl", package.seeall)
+require("luci.fs")
 
 -- Environment Table
-ffluci.http.env = ENV
+luci.http.env = ENV
 
 -- Returns the main dispatcher URL
-function ffluci.http.dispatcher()
-	return ffluci.http.env.SCRIPT_NAME or ""
+function luci.http.dispatcher()
+	return luci.http.env.SCRIPT_NAME or ""
 end
 
 -- Returns the upload dispatcher URL
-function ffluci.http.dispatcher_upload()
-	return ffluci.http.dispatcher() .. "-upload"
+function luci.http.dispatcher_upload()
+	return luci.http.dispatcher() .. "-upload"
 end
 
 -- Returns a table of all COOKIE, GET and POST Parameters
-function ffluci.http.formvalues()
+function luci.http.formvalues()
 	return FORM
 end
 
 -- Gets form value from key
-function ffluci.http.formvalue(key, default)
-	local c = ffluci.http.formvalues()
+function luci.http.formvalue(key, default)
+	local c = luci.http.formvalues()
 	
 	for match in key:gmatch("[%w-_]+") do
 		c = c[match]
@@ -59,39 +59,39 @@ function ffluci.http.formvalue(key, default)
 end
 
 -- Gets a table of values with a certain prefix
-function ffluci.http.formvaluetable(prefix)
-	return ffluci.http.formvalue(prefix, {})
+function luci.http.formvaluetable(prefix)
+	return luci.http.formvalue(prefix, {})
 end
 
 -- Sends a custom HTTP-Header
-function ffluci.http.header(key, value)
+function luci.http.header(key, value)
 	print(key .. ": " .. value)
 end
 
 -- Set Content-Type
-function ffluci.http.prepare_content(type)
+function luci.http.prepare_content(type)
 	print("Content-Type: "..type.."\n")
 end
 
 -- Asks the browser to redirect to "url"
-function ffluci.http.redirect(url)
-	ffluci.http.status(302, "Found")
-	ffluci.http.header("Location", url)
+function luci.http.redirect(url)
+	luci.http.status(302, "Found")
+	luci.http.header("Location", url)
 	print()
 end
 
 -- Returns the path of an uploaded file
 -- WARNING! File uploads can be easily spoofed! Do additional sanity checks!
-function ffluci.http.upload(name)
-	local fpath = ffluci.http.formvalue(name)
-	local fname = ffluci.http.formvalue(name .. "_name")
+function luci.http.upload(name)
+	local fpath = luci.http.formvalue(name)
+	local fname = luci.http.formvalue(name .. "_name")
 	
-	if fpath and fname and ffluci.fs.isfile(fpath) then
+	if fpath and fname and luci.fs.isfile(fpath) then
 		return fpath
 	end
 end
 
 -- Sets HTTP-Status-Header
-function ffluci.http.status(code, message)
+function luci.http.status(code, message)
 	print("Status: " .. tostring(code) .. " " .. message)
 end

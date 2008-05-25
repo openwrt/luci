@@ -1,5 +1,5 @@
 -- ToDo: Translate, Add descriptions and help texts
-require("ffluci.model.uci")
+require("luci.model.uci")
 
 m = Map("luci_splash", "Client-Splash", [[Client-Splash ist das Freifunk Hotspot-Authentifizierungs-System.]])
 
@@ -11,7 +11,7 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "network", "Schnittstelle")
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		iface:value(k)
 	end

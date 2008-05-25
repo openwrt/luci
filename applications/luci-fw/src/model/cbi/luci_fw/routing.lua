@@ -1,5 +1,5 @@
 -- ToDo: Translate, Add descriptions and help texts
-require("ffluci.sys")
+require("luci.sys")
 m = Map("luci_fw", "Routing", [[An dieser Stelle wird festlegt, welcher Netzverkehr zwischen einzelnen
 Schnittstellen erlaubt werden soll. Es werden jeweils nur neue Verbindungen
 betrachtet, d.h. Pakete von aufgebauten oder zugehörigen Verbindungen werden automatisch in beide Richtungen
@@ -14,7 +14,7 @@ s.anonymous = true
 iface = s:option(ListValue, "iface", "Eingang", "Eingangsschnittstelle")
 oface = s:option(ListValue, "oface", "Ausgang", "Ausgangsschnittstelle")
 
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		iface:value(k)
 		oface:value(k)

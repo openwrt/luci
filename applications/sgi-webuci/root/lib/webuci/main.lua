@@ -3,7 +3,7 @@ module("webuci", package.seeall)
 function prepare_req(uri)
 	env = {}
 	env.REQUEST_URI = uri
-	require("ffluci.dispatcher").createindex()
+	require("luci.dispatcher").createindex()
 end
 
 function init_req(context)
@@ -17,5 +17,5 @@ function init_req(context)
 end
 
 function handle_req(context)
-	ffluci.dispatcher.httpdispatch()
+	luci.dispatcher.httpdispatch()
 end

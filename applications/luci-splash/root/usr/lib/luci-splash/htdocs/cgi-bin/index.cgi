@@ -2,17 +2,17 @@
 package.path  = "/usr/lib/lua/?.lua;/usr/lib/lua/?/init.lua;" .. package.path
 package.cpath = "/usr/lib/lua/?.so;" .. package.cpath
 
-require("ffluci.http")
-require("ffluci.sys")
-require("ffluci.model.uci")
+require("luci.http")
+require("luci.sys")
+require("luci.model.uci")
 
 local srv
 local net
-local ip = ffluci.http.env.REMOTE_ADDR
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+local ip = luci.http.env.REMOTE_ADDR
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and v.ipaddr then
-		local p = ffluci.sys.net.mask4prefix(v.netmask)
-		if ffluci.sys.net.belongs(ip, v.ipaddr, p) then
+		local p = luci.sys.net.mask4prefix(v.netmask)
+		if luci.sys.net.belongs(ip, v.ipaddr, p) then
 			net = k
 			srv = v.ipaddr
 			break
@@ -21,30 +21,30 @@ for k, v in pairs(ffluci.model.uci.sections("network")) do
 end
 
 local stat = false
-for k, v in pairs(ffluci.model.uci.sections("luci_splash")) do
+for k, v in pairs(luci.model.uci.sections("luci_splash")) do
 	if v[".type"] == "iface" and v.network == net then
 		stat = true
 	end 
 end
 
 if not srv then
-	ffluci.http.prepare_content("text/plain")
+	luci.http.prepare_content("text/plain")
 	print("Unable to detect network settings!")
 elseif not stat then
-	ffluci.http.redirect("http://" .. srv)
+	luci.http.redirect("http://" .. srv)
 else
 	local action = "splash"
 	
-	local mac = ffluci.sys.net.ip4mac(ip)
+	local mac = luci.sys.net.ip4mac(ip)
 	if not mac then
 		action = "unknown"
 	end
 	
-	local status = ffluci.sys.execl("luci-splash status "..mac)[1]
+	local status = luci.sys.execl("luci-splash status "..mac)[1]
 	
 	if status == "whitelisted" or status == "lease" then
 		action = "allowed"
 	end
 	
-	ffluci.http.redirect("http://" .. srv .. "/cgi-bin/luci-splash/" .. action)
+	luci.http.redirect("http://" .. srv .. "/cgi-bin/luci-splash/" .. action)
 end

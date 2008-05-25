@@ -1,5 +1,5 @@
 --[[
-FFLuCI - HTTP-Interaction
+LuCI - HTTP-Interaction
 
 Description:
 HTTP-Header manipulator and form variable preprocessor
@@ -27,10 +27,10 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.http", package.seeall)
+module("luci.http", package.seeall)
 
 if ENV and ENV.HASERLVER then
-	require("ffluci.sgi.haserl")
+	require("luci.sgi.haserl")
 elseif webuci then
-	require("ffluci.sgi.webuci")
+	require("luci.sgi.webuci")
 end

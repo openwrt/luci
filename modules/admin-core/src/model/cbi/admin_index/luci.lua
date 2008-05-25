@@ -1,19 +1,19 @@
 -- ToDo: Translate
-require("ffluci.config")
+require("luci.config")
 m = Map("luci", translate("luci", "Oberfläche"), translate("luci1", 
  "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden."))
 
 c = m:section(NamedSection, "main", "core", translate("general", "Allgemein"))
 
 l = c:option(ListValue, "lang", translate("language", "Sprache"))
-for k, v in pairs(ffluci.config.languages) do
+for k, v in pairs(luci.config.languages) do
 	if k:sub(1, 1) ~= "." then
 		l:value(k, v)
 	end
 end
 
 t = c:option(ListValue, "mediaurlbase", translate("design", "Design"))
-for k, v in pairs(ffluci.config.themes) do
+for k, v in pairs(luci.config.themes) do
 	if k:sub(1, 1) ~= "." then
 		t:value(v, k)
 	end

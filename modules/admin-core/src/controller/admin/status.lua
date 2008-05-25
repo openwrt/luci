@@ -1,4 +1,4 @@
-module("ffluci.controller.admin.status", package.seeall)
+module("luci.controller.admin.status", package.seeall)
 
 function index()
 	local page  = node("admin", "status")
@@ -12,6 +12,6 @@ function index()
 end
 
 function action_syslog()
-	local syslog = ffluci.sys.syslog()
-	ffluci.template.render("admin_status/syslog", {syslog=syslog})
+	local syslog = luci.sys.syslog()
+	luci.template.render("admin_status/syslog", {syslog=syslog})
 end

@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Configuration Bind Interface
+LuCI - Configuration Bind Interface
 
 Description:
 Offers an interface for binding confiugration values to certain
@@ -24,35 +24,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.cbi", package.seeall)
+module("luci.cbi", package.seeall)
 
-require("ffluci.template")
-require("ffluci.util")
-require("ffluci.http")
-require("ffluci.model.uci")
+require("luci.template")
+require("luci.util")
+require("luci.http")
+require("luci.model.uci")
 
-local class      = ffluci.util.class
-local instanceof = ffluci.util.instanceof
+local class      = luci.util.class
+local instanceof = luci.util.instanceof
 
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap)
-	require("ffluci.fs")
-	require("ffluci.i18n")
-	require("ffluci.config")
-	require("ffluci.sys")
+	require("luci.fs")
+	require("luci.i18n")
+	require("luci.config")
+	require("luci.sys")
 	
-	local cbidir = ffluci.sys.libpath() .. "/model/cbi/"
+	local cbidir = luci.sys.libpath() .. "/model/cbi/"
 	local func, err = loadfile(cbidir..cbimap..".lua")
 	
 	if not func then
 		return nil
 	end
 	
-	ffluci.i18n.loadc("cbi")
+	luci.i18n.loadc("cbi")
 	
-	ffluci.util.resfenv(func)
-	ffluci.util.updfenv(func, ffluci.cbi)
-	ffluci.util.extfenv(func, "translate", ffluci.i18n.translate)
+	luci.util.resfenv(func)
+	luci.util.updfenv(func, luci.cbi)
+	luci.util.extfenv(func, "translate", luci.i18n.translate)
 	
 	local map = func()
 	
@@ -91,7 +91,7 @@ function Node.render(self, scope)
 	scope = scope or {}
 	scope.self = self
 
-	ffluci.template.render(self.template, scope)
+	luci.template.render(self.template, scope)
 end
 
 -- Render the children
@@ -122,7 +122,7 @@ function Map.__init__(self, config, ...)
 	Node.__init__(self, ...)
 	self.config = config
 	self.template = "cbi/map"
-	self.uci = ffluci.model.uci.Session()
+	self.uci = luci.model.uci.Session()
 	self.ucidata, self.uciorder = self.uci:sections(self.config)
 	if not self.ucidata or not self.uciorder then
 		error("Unable to read UCI data: " .. self.config)
@@ -242,7 +242,7 @@ function AbstractSection.parse_optionals(self, section)
 	
 	self.optionals[section] = {}
 	
-	local field = ffluci.http.formvalue("cbi.opt."..self.config.."."..section)
+	local field = luci.http.formvalue("cbi.opt."..self.config.."."..section)
 	for k,v in ipairs(self.children) do
 		if v.optional and not v:cfgvalue(section) then
 			if field == v.option then
@@ -270,8 +270,8 @@ function AbstractSection.parse_dynamic(self, section)
 		return
 	end
 	
-	local arr  = ffluci.util.clone(self:cfgvalue(section))
-	local form = ffluci.http.formvaluetable("cbid."..self.config.."."..section)
+	local arr  = luci.util.clone(self:cfgvalue(section))
+	local form = luci.http.formvaluetable("cbid."..self.config.."."..section)
 	for k, v in pairs(form) do
 		arr[k] = v
 	end
@@ -329,11 +329,11 @@ function NamedSection.parse(self)
 	if self.addremove then
 		local path = self.config.."."..s
 		if active then -- Remove the section
-			if ffluci.http.formvalue("cbi.rns."..path) and self:remove(s) then
+			if luci.http.formvalue("cbi.rns."..path) and self:remove(s) then
 				return
 			end
 		else           -- Create and apply default values
-			if ffluci.http.formvalue("cbi.cns."..path) and self:create(s) then
+			if luci.http.formvalue("cbi.cns."..path) and self:create(s) then
 				for k,v in pairs(self.children) do
 					v:write(s, v.default)
 				end
@@ -343,7 +343,7 @@ function NamedSection.parse(self)
 	
 	if active then
 		AbstractSection.parse_dynamic(self, s)
-		if ffluci.http.formvalue("cbi.submit") then
+		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, s)
 		end
 		AbstractSection.parse_optionals(self, s)
@@ -413,7 +413,7 @@ function TypedSection.parse(self)
 	if self.addremove then
 		-- Create
 		local crval = "cbi.cts." .. self.config .. "." .. self.sectiontype
-		local name  = ffluci.http.formvalue(crval)
+		local name  = luci.http.formvalue(crval)
 		if self.anonymous then
 			if name then
 				self:create()
@@ -439,7 +439,7 @@ function TypedSection.parse(self)
 		
 		-- Remove
 		crval = "cbi.rts." .. self.config
-		name = ffluci.http.formvaluetable(crval)
+		name = luci.http.formvaluetable(crval)
 		for k,v in pairs(name) do
 			if self:cfgvalue(k) and self:checkscope(k) then
 				self:remove(k)
@@ -449,7 +449,7 @@ function TypedSection.parse(self)
 	
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
-		if ffluci.http.formvalue("cbi.submit") then
+		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, k)
 		end
 		AbstractSection.parse_optionals(self, k)
@@ -522,13 +522,13 @@ end
 -- Return whether this object should be created
 function AbstractValue.formcreated(self, section)
 	local key = "cbi.opt."..self.config.."."..section
-	return (ffluci.http.formvalue(key) == self.option)
+	return (luci.http.formvalue(key) == self.option)
 end
 
 -- Returns the formvalue for this object
 function AbstractValue.formvalue(self, section)
 	local key = "cbid."..self.map.config.."."..section.."."..self.option
-	return ffluci.http.formvalue(key)
+	return luci.http.formvalue(key)
 end
 
 function AbstractValue.parse(self, section)
@@ -605,7 +605,7 @@ function Value.validate(self, val)
 		val = nil
 	end
 	
-	return ffluci.util.validate(val, self.isnumber, self.isinteger)
+	return luci.util.validate(val, self.isnumber, self.isinteger)
 end
 
 
@@ -623,7 +623,7 @@ function DummyValue.parse(self)
 end
 
 function DummyValue.render(self, s)
-	ffluci.template.render(self.template, {self=self, section=s})
+	luci.template.render(self.template, {self=self, section=s})
 end
 
 
@@ -684,7 +684,7 @@ function ListValue.value(self, key, val)
 end
 
 function ListValue.validate(self, val)
-	if ffluci.util.contains(self.keylist, val) then
+	if luci.util.contains(self.keylist, val) then
 		return val
 	else
 		return nil
@@ -723,7 +723,7 @@ function MultiValue.valuelist(self, section)
 		return {}
 	end
 	
-	return ffluci.util.split(val, self.delimiter)
+	return luci.util.split(val, self.delimiter)
 end
 
 function MultiValue.validate(self, val)
@@ -734,7 +734,7 @@ function MultiValue.validate(self, val)
 	local result = ""
 	
 	for value in val:gmatch("[^\n]+") do
-		if ffluci.util.contains(self.keylist, value) then
+		if luci.util.contains(self.keylist, value) then
 			result = result .. self.delimiter .. value
 		end 
 	end

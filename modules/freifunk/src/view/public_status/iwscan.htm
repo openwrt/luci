@@ -15,7 +15,7 @@
 <th><%:signal Signal%></th>
 <th><%:noise Rausch%></th>
 </tr>
-<%for iface, cells in pairs(ffluci.sys.wifi.iwscan()) do
+<%for iface, cells in pairs(luci.sys.wifi.iwscan()) do
 	for i, cell in ipairs(cells) do 
 %>
 <tr>

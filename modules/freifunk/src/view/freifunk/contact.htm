@@ -1,5 +1,5 @@
 <%+header%>
-<% local contact = ffluci.model.uci.sections("freifunk").contact %>
+<% local contact = luci.model.uci.sections("freifunk").contact %>
 <h1><%:contact Kontakt%></h1>
 <table cellspacing="0" cellpadding="6">
 	<tr><th><%:nickname Pseudonym%>:</th><td><%=contact.nickname%></td></tr>

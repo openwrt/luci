@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Utility library
+LuCI - Utility library
 
 Description:
 Several common useful Lua functions
@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.util", package.seeall)
+module("luci.util", package.seeall)
 
 
 -- Lua simplified Python-style OO class support emulation

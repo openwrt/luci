@@ -34,7 +34,7 @@
 <th><%:signal Signal%></th>
 <th><%:noise Rausch%></th>
 </tr>
-<%for k, v in pairs(ffluci.sys.wifi.getiwconfig()) do
+<%for k, v in pairs(luci.sys.wifi.getiwconfig()) do
 %>
 <tr>
 <td rowspan="2"><%=k%></td>
@@ -68,7 +68,7 @@
 for i, rt in pairs(routes) do
 %>
 <tr>
-<td><%=ffluci.sys.net.hexip4(rt.Gateway)%></th>
+<td><%=luci.sys.net.hexip4(rt.Gateway)%></th>
 <td><%=rt.Metric%></th>
 <td><%=rt.Iface%></th>
 </tr>

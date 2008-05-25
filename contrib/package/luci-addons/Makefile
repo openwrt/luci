@@ -17,7 +17,7 @@ endef
 define Package/luci-addons
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=FFLuCI System Addons for Kamikaze
+  TITLE:=LuCI System Addons for Kamikaze
   URL:=http://luci.freifunk-halle.net
 endef
 
@@ -28,7 +28,7 @@ define Package/luci-addons/install
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 
 	$(INSTALL_BIN) ./dist/usr/bin/run-parts $(1)/usr/bin
-	$(INSTALL_BIN) ./dist/sbin/ffluci-flash $(1)/sbin
+	$(INSTALL_BIN) ./dist/sbin/luci-flash $(1)/sbin
 	
 	$(CP) ./dist/etc/crontabs/root $(1)/etc/crontabs/root
 	$(CP) ./dist/etc/hotplug.d/iface/20-aliases $(1)/etc/hotplug.d/iface/20-aliases

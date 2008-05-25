@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Dispatcher
+LuCI - Dispatcher
 
 Description:
 The request dispatcher and module dispatcher generators
@@ -23,10 +23,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.dispatcher", package.seeall)
-require("ffluci.http")
-require("ffluci.sys")
-require("ffluci.fs")
+module("luci.dispatcher", package.seeall)
+require("luci.http")
+require("luci.sys")
+require("luci.fs")
 
 -- Local dispatch database
 local tree = {nodes={}}
@@ -40,17 +40,17 @@ dispatched = nil
 
 -- Builds a URL
 function build_url(...)
-	return ffluci.http.dispatcher() .. "/" .. table.concat(arg, "/")
+	return luci.http.dispatcher() .. "/" .. table.concat(arg, "/")
 end
 
 -- Sends a 404 error code and renders the "error404" template if available
 function error404(message)
-	ffluci.http.status(404, "Not Found")
+	luci.http.status(404, "Not Found")
 	message = message or "Not Found"
 
-	require("ffluci.template")
-	if not pcall(ffluci.template.render, "error404") then
-		ffluci.http.prepare_content("text/plain")
+	require("luci.template")
+	if not pcall(luci.template.render, "error404") then
+		luci.http.prepare_content("text/plain")
 		print(message)
 	end
 	return false
@@ -58,11 +58,11 @@ end
 
 -- Sends a 500 error code and renders the "error500" template if available
 function error500(message)
-	ffluci.http.status(500, "Internal Server Error")
+	luci.http.status(500, "Internal Server Error")
 
-	require("ffluci.template")
-	if not pcall(ffluci.template.render, "error500", {message=message}) then
-		ffluci.http.prepare_content("text/plain")
+	require("luci.template")
+	if not pcall(luci.template.render, "error500", {message=message}) then
+		luci.http.prepare_content("text/plain")
 		print(message)
 	end
 	return false
@@ -70,7 +70,7 @@ end
 
 -- Dispatches a request depending on the PATH_INFO variable
 function httpdispatch()
-	local pathinfo = ffluci.http.env.PATH_INFO or ""
+	local pathinfo = luci.http.env.PATH_INFO or ""
 	local c = tree
 
 	for s in pathinfo:gmatch("/([%w-]+)") do
@@ -97,15 +97,15 @@ function dispatch()
 
 
 	if track.i18n then
-		require("ffluci.i18n").loadc(track.i18n)
+		require("luci.i18n").loadc(track.i18n)
 	end
 
 	if track.setgroup then
-		ffluci.sys.process.setgroup(track.setgroup)
+		luci.sys.process.setgroup(track.setgroup)
 	end
 
 	if track.setuser then
-		ffluci.sys.process.setuser(track.setuser)
+		luci.sys.process.setuser(track.setuser)
 	end
 
 
@@ -124,20 +124,20 @@ end
 
 -- Calls the index function of all available controllers
 function createindex()
-	local root = ffluci.sys.libpath() .. "/controller/"
+	local root = luci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
 
-	local controllers = ffluci.util.combine(
-		ffluci.fs.glob(root .. "*" .. suff),
-		ffluci.fs.glob(root .. "*/*" .. suff)
+	local controllers = luci.util.combine(
+		luci.fs.glob(root .. "*" .. suff),
+		luci.fs.glob(root .. "*/*" .. suff)
 	)
 
 	for i,c in ipairs(controllers) do
-		c = "ffluci.controller." .. c:sub(#root+1, #c-#suff):gsub("/", ".")
+		c = "luci.controller." .. c:sub(#root+1, #c-#suff):gsub("/", ".")
 		stat, mod = pcall(require, c)
 
 		if stat and mod and type(mod.index) == "function" then
-			ffluci.util.updfenv(mod.index, ffluci.dispatcher)
+			luci.util.updfenv(mod.index, luci.dispatcher)
 			pcall(mod.index)
 		end
 	end
@@ -188,16 +188,16 @@ function alias(...)
 end
 
 function template(name)
-	require("ffluci.template")
-	return function() ffluci.template.render(name) end
+	require("luci.template")
+	return function() luci.template.render(name) end
 end
 
 function cbi(model)
-	require("ffluci.cbi")
-	require("ffluci.template")
+	require("luci.cbi")
+	require("luci.template")
 
 	return function()
-		local stat, res = pcall(ffluci.cbi.load, model)
+		local stat, res = pcall(luci.cbi.load, model)
 		if not stat then
 			error500(res)
 			return true
@@ -209,8 +209,8 @@ function cbi(model)
 			return true
 		end
 
-		ffluci.template.render("cbi/header")
+		luci.template.render("cbi/header")
 		res:render()
-		ffluci.template.render("cbi/footer")
+		luci.template.render("cbi/footer")
 	end
 end

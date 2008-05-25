@@ -1,4 +1,4 @@
-module("ffluci.controller.admin.wifi", package.seeall)
+module("luci.controller.admin.wifi", package.seeall)
 
 function index()
 	local page  = node("admin", "wifi")

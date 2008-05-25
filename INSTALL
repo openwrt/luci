@@ -1,4 +1,4 @@
-FFLuCI Installation Instructions
+LuCI Installation Instructions
 
 TOC:
 1. Kamikaze Feed
@@ -9,13 +9,13 @@ TOC:
 	1. Change to your OpenWRT buildroot
 
 	2. Add the following line to your OpenWRT feeds.conf:
-		src-svn ffluci https://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package
+		src-svn luci https://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package
 		
 	3. Run ./scripts/feeds update
 	
-	4. Run ./scripts/feeds install -a -p ffluci
+	4. Run ./scripts/feeds install -a -p luci
 	
-	5. Type make menuconfig and you will find ffluci in the menu "Administration"
+	5. Type make menuconfig and you will find luci in the menu "Administration"
 	
 		
 2. Kamikaze Packages
@@ -24,4 +24,4 @@ TOC:
 	3.	Type: ln -s /path/to/ff-luci/contrib/package/* ./
 	
 	4.	cd to your kamikaze build root and type: make menuconfig
-		You will find ffluci in the menu "Administration"
+		You will find luci in the menu "Administration"

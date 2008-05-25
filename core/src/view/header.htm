@@ -1,12 +1,12 @@
 <%
-require("ffluci.sys")
-local load1, load5, load15 = ffluci.sys.loadavg()
+require("luci.sys")
+local load1, load5, load15 = luci.sys.loadavg()
 
-local request  = require("ffluci.dispatcher").request
+local request  = require("luci.dispatcher").request
 local category = request[1]
-local tree     = ffluci.dispatcher.node()
-local cattree  = category and ffluci.dispatcher.node(category)
-local node     = ffluci.dispatcher.dispatched 
+local tree     = luci.dispatcher.node()
+local cattree  = category and luci.dispatcher.node(category)
+local node     = luci.dispatcher.dispatched 
 
 local c = tree
 for i,r in ipairs(request) do
@@ -16,9 +16,9 @@ for i,r in ipairs(request) do
 	end
 end
 
-require("ffluci.i18n").loadc("default")
+require("luci.i18n").loadc("default")
 
-require("ffluci.http").prepare_content("text/html")
+require("luci.http").prepare_content("text/html")
 %><?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,7 +27,7 @@ require("ffluci.http").prepare_content("text/html")
 	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
 	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
-	<title>FFLuCI - Freifunk Lua Configuration Interface</title>
+	<title>LuCI - Lua Configuration Interface</title>
 </head>
 <body>
 <div id="header">
@@ -36,7 +36,7 @@ require("ffluci.http").prepare_content("text/html")
 	OpenWRT Kamikaze<br />
 	Freifunk Firmware 2.0-dev<br />
 	<%:load Last%>: <%=load1%> <%=load5%> <%=load15%><br />
-	<%:hostname Hostname%>: <%=ffluci.sys.hostname()%> 
+	<%:hostname Hostname%>: <%=luci.sys.hostname()%> 
 	</div>
 	<div>
 		<span class="headertitle"><%~luci.main.title%></span><br />
@@ -115,10 +115,10 @@ end
 		</div>
 		<%
 			if "admin" == request[1] then
-				require("ffluci.model.uci") 
-				local ucic = ffluci.model.uci.changes()
+				require("luci.model.uci") 
+				local ucic = luci.model.uci.changes()
 				if ucic then
-					ucic = #ffluci.util.split(ucic)
+					ucic = #luci.util.split(ucic)
 				end
 		%>
 		<div><%:config Konfiguration%>

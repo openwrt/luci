@@ -1,11 +1,11 @@
-module("ffluci.controller.admin.system", package.seeall)
+module("luci.controller.admin.system", package.seeall)
 
-require("ffluci.sys")
-require("ffluci.http")
-require("ffluci.util")
-require("ffluci.fs")
-require("ffluci.model.ipkg")
-require("ffluci.model.uci")
+require("luci.sys")
+require("luci.http")
+require("luci.util")
+require("luci.fs")
+require("luci.model.ipkg")
+require("luci.model.uci")
 
 function index()
 	local page  = node("admin", "system")
@@ -54,63 +54,63 @@ function index()
 end
 
 function action_editor()
-	local file = ffluci.http.formvalue("file", "")
-	local data = ffluci.http.formvalue("data")
+	local file = luci.http.formvalue("file", "")
+	local data = luci.http.formvalue("data")
 	local err  = nil
 	local msg  = nil
 	local stat = true
 	
 	if file and data then
-		stat, err = ffluci.fs.writefile(file, data)
+		stat, err = luci.fs.writefile(file, data)
 	end
 	
 	if not stat then
-		err = ffluci.util.split(err, " ")
+		err = luci.util.split(err, " ")
 		table.remove(err, 1)
 		msg = table.concat(err, " ")
 	end
 	
-	local cnt, err = ffluci.fs.readfile(file)
+	local cnt, err = luci.fs.readfile(file)
 	if cnt then
-		cnt = ffluci.util.pcdata(cnt)
+		cnt = luci.util.pcdata(cnt)
 	end
-	ffluci.template.render("admin_system/editor", {fn=file, cnt=cnt, msg=msg})	
+	luci.template.render("admin_system/editor", {fn=file, cnt=cnt, msg=msg})	
 end
 
 function action_ipkg()
 	local file = "/etc/ipkg.conf"
-	local data = ffluci.http.formvalue("data")
+	local data = luci.http.formvalue("data")
 	local stat = nil
 	local err  = nil
 	
 	if data then
-		stat, err = ffluci.fs.writefile(file, data)
+		stat, err = luci.fs.writefile(file, data)
 	end	
 	
-	local cnt  = ffluci.fs.readfile(file)	
+	local cnt  = luci.fs.readfile(file)	
 	if cnt then
-		cnt = ffluci.util.pcdata(cnt)
+		cnt = luci.util.pcdata(cnt)
 	end
 	
-	ffluci.template.render("admin_system/ipkg", {cnt=cnt, msg=err})	
+	luci.template.render("admin_system/ipkg", {cnt=cnt, msg=err})	
 end
 
 function action_packages()
-	local ipkg = ffluci.model.ipkg
+	local ipkg = luci.model.ipkg
 	local void = nil
-	local submit = ffluci.http.formvalue("submit")
+	local submit = luci.http.formvalue("submit")
 	
 	
 	-- Search query
-	local query = ffluci.http.formvalue("query")
+	local query = luci.http.formvalue("query")
 	query = (query ~= '') and query or nil
 	
 	
 	-- Packets to be installed
-	local install = submit and ffluci.http.formvaluetable("install")
+	local install = submit and luci.http.formvaluetable("install")
 	
 	-- Install from URL
-	local url = ffluci.http.formvalue("url")
+	local url = luci.http.formvalue("url")
 	if url and url ~= '' and submit then
 		if not install then
 			install = {}
@@ -127,7 +127,7 @@ function action_packages()
 	
 	
 	-- Remove packets
-	local remove = submit and ffluci.http.formvaluetable("remove")
+	local remove = submit and luci.http.formvaluetable("remove")
 	if remove then	
 		for k, v in pairs(remove) do
 			void, remove[k] = ipkg.remove(k)
@@ -136,21 +136,21 @@ function action_packages()
 	
 	
 	-- Update all packets
-	local update = ffluci.http.formvalue("update")
+	local update = luci.http.formvalue("update")
 	if update then
 		void, update = ipkg.update()
 	end
 	
 	
 	-- Upgrade all packets
-	local upgrade = ffluci.http.formvalue("upgrade")
+	local upgrade = luci.http.formvalue("upgrade")
 	if upgrade then
 		void, upgrade = ipkg.upgrade()
 	end
 	
 	
 	-- Package info
-	local info = ffluci.model.ipkg.info(query)
+	local info = luci.model.ipkg.info(query)
 	info = info or {}
 	local pkgs = {}
 	
@@ -174,63 +174,63 @@ function action_packages()
 		table.insert(pkgs, x+1, v)
 	end 
 	
-	ffluci.template.render("admin_system/packages", {pkgs=pkgs, query=query,
+	luci.template.render("admin_system/packages", {pkgs=pkgs, query=query,
 	 install=install, remove=remove, update=update, upgrade=upgrade})	
 end
 
 function action_passwd()
-	local p1 = ffluci.http.formvalue("pwd1")
-	local p2 = ffluci.http.formvalue("pwd2")
+	local p1 = luci.http.formvalue("pwd1")
+	local p2 = luci.http.formvalue("pwd2")
 	local stat = nil
 	
 	if p1 or p2 then
 		if p1 == p2 then
-			stat = ffluci.sys.user.setpasswd("root", p1)
+			stat = luci.sys.user.setpasswd("root", p1)
 		else
 			stat = 10
 		end
 	end
 	
-	ffluci.template.render("admin_system/passwd", {stat=stat})
+	luci.template.render("admin_system/passwd", {stat=stat})
 end
 
 function action_reboot()
-	local reboot = ffluci.http.formvalue("reboot")
-	ffluci.template.render("admin_system/reboot", {reboot=reboot})
+	local reboot = luci.http.formvalue("reboot")
+	luci.template.render("admin_system/reboot", {reboot=reboot})
 	if reboot then
-		ffluci.sys.reboot()
+		luci.sys.reboot()
 	end
 end
 
 function action_sshkeys()
 	local file = "/etc/dropbear/authorized_keys"
-	local data = ffluci.http.formvalue("data")
+	local data = luci.http.formvalue("data")
 	local stat = nil
 	local err  = nil
 	
 	if data then
-		stat, err = ffluci.fs.writefile(file, data)
+		stat, err = luci.fs.writefile(file, data)
 	end	
 	
-	local cnt  = ffluci.fs.readfile(file)	
+	local cnt  = luci.fs.readfile(file)	
 	if cnt then
-		cnt = ffluci.util.pcdata(cnt)
+		cnt = luci.util.pcdata(cnt)
 	end
 	
-	ffluci.template.render("admin_system/sshkeys", {cnt=cnt, msg=err})	
+	luci.template.render("admin_system/sshkeys", {cnt=cnt, msg=err})	
 end
 
 function action_upgrade()
 	local ret  = nil
-	local plat = ffluci.fs.mtime("/lib/upgrade/platform.sh")
+	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
 	
-	local image   = ffluci.http.upload("image")
-	local keepcfg = ffluci.http.formvalue("keepcfg")
+	local image   = luci.http.upload("image")
+	local keepcfg = luci.http.formvalue("keepcfg")
 	
 	if plat and image then
 		local kpattern = nil
 		if keepcfg then
-			local files = ffluci.model.uci.sections("luci").flash_keep
+			local files = luci.model.uci.sections("luci").flash_keep
 			if files.luci and files.luci.flash_keep then
 				kpattern = ""
 				for k,v in pairs(files.luci.flash_keep) do
@@ -238,8 +238,8 @@ function action_upgrade()
 				end
 			end
 		end
-		ret = ffluci.sys.flash(image, kpattern)
+		ret = luci.sys.flash(image, kpattern)
 	end
 	
-	ffluci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret})
+	luci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret})
 end

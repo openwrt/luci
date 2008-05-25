@@ -1,4 +1,4 @@
-module("ffluci.controller.freifunk.freifunk", package.seeall)
+module("luci.controller.freifunk.freifunk", package.seeall)
 
 function index()
 	local page  = node()
@@ -52,17 +52,17 @@ end
 function action_status()
 	local data = {}
 	
-	data.s, data.m, data.r = ffluci.sys.sysinfo()
+	data.s, data.m, data.r = luci.sys.sysinfo()
 	
-	data.wifi = ffluci.sys.wifi.getiwconfig()
+	data.wifi = luci.sys.wifi.getiwconfig()
 	
 	data.routes = {}
-	for i, r in pairs(ffluci.sys.net.routes()) do
+	for i, r in pairs(luci.sys.net.routes()) do
 		if r.Destination == "00000000" then
 			table.insert(data.routes, r)
 		end
 	end
 
 	
-	ffluci.template.render("public_status/index", data)
+	luci.template.render("public_status/index", data)
 end

@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Freifunk Lua Configuration Interface
+LuCI - Lua Configuration Interface
 
 Description:
 Main class
@@ -23,7 +23,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci", package.seeall)
+module("luci", package.seeall)
 
 __version__ = "0.5"
-__appname__ = "FFLuCI"
+__appname__ = "LuCI"

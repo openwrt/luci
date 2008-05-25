@@ -1,5 +1,5 @@
 --[[
-FFLuCI - UCI libuci wrapper
+LuCI - UCI libuci wrapper
 
 Description:
 Wrapper for the libuci Lua bindings
@@ -24,19 +24,19 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.model.uci.libuci", package.seeall)
+module("luci.model.uci.libuci", package.seeall)
 
 require("uci")
-require("ffluci.util")
-require("ffluci.sys")
+require("luci.util")
+require("luci.sys")
 
 -- Session class
-Session = ffluci.util.class()
+Session = luci.util.class()
 
 -- Session constructor
 function Session.__init__(self, savedir)
 	self.ucicmd  = savedir and "uci -P " .. savedir or "uci"
-	self.savedir = savedir or ffluci.model.uci.savedir
+	self.savedir = savedir or luci.model.uci.savedir
 end
 
 function Session.add(self, config, section_type)
@@ -152,7 +152,7 @@ end
 
 
 function Session._uci(self, cmd)
-	local res = ffluci.sys.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
+	local res = luci.sys.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
 	
 	if res:len() == 0 then
 		return nil
@@ -162,7 +162,7 @@ function Session._uci(self, cmd)
 end
 
 function Session._uci2(self, cmd)
-	local res = ffluci.sys.exec(self.ucicmd .. " 2>&1 " .. cmd)
+	local res = luci.sys.exec(self.ucicmd .. " 2>&1 " .. cmd)
 	
 	if res:len() > 0 then
 		return false, res

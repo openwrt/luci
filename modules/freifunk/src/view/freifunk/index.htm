@@ -1,8 +1,8 @@
 <%+header%>
-<% local ff = ffluci.model.uci.sections("freifunk") %>
+<% local ff = luci.model.uci.sections("freifunk") %>
 <h1><%:hellonet Hallo und willkommen im Netz von%> <%=ff.community.name%>!</h1>
 <p><%:public1 Wir sind eine Initiative zur Schaffung eines freien, offenen und unabhängigen Funknetzwerks auf WLAN-Basis.%><br />
-<%:public2 Dies ist der Zugangspunkt %><%=ffluci.sys.hostname()%>. <%:public3 Er wird betrieben von %>
+<%:public2 Dies ist der Zugangspunkt %><%=luci.sys.hostname()%>. <%:public3 Er wird betrieben von %>
 <a href="<%=controller%>/public/index/contact"><%=ff.contact.nickname%></a>.</p>
 <p><%:public4 Weitere Informationen zur globalen Freifunkinitiative findest du unter%> <a href="http://freifunk.net">Freifunk.net</a>.<br />
 <%:public5 Hast du Interesse an diesem Projekt, dann wende dich an deine lokale Gemeinschaft%> <a href="<%=ff.community.homepage%>"><%=ff.community.name%></a>.</p>

@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Internationalisation
+LuCI - Internationalisation
 
 Description:
 A very minimalistic but yet effective internationalisation module
@@ -24,11 +24,11 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.i18n", package.seeall)
-require("ffluci.sys")
+module("luci.i18n", package.seeall)
+require("luci.sys")
 
 table   = {}
-i18ndir = ffluci.sys.libpath() .. "/i18n/"
+i18ndir = luci.sys.libpath() .. "/i18n/"
 
 -- Clears the translation table
 function clear()
@@ -49,7 +49,7 @@ end
 
 -- Same as load but autocompletes the filename with .LANG from config.lang
 function loadc(file)
-	return load(file .. "." .. require("ffluci.config").main.lang)
+	return load(file .. "." .. require("luci.config").main.lang)
 end
 
 -- Returns the i18n-value defined by "key" or if there is no such: "default"

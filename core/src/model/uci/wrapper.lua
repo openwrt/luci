@@ -1,5 +1,5 @@
 --[[
-FFLuCI - UCI wrapper library
+LuCI - UCI wrapper library
 
 Description:
 Wrapper for the /sbin/uci application, syntax of implemented functions
@@ -27,13 +27,13 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.model.uci.wrapper", package.seeall)
+module("luci.model.uci.wrapper", package.seeall)
 
-require("ffluci.util")
-require("ffluci.sys")
+require("luci.util")
+require("luci.sys")
 
 -- Session class
-Session = ffluci.util.class()
+Session = luci.util.class()
 
 -- Session constructor
 function Session.__init__(self, savedir)
@@ -104,7 +104,7 @@ Session.t_set = Session.set
 
 
 function Session._uci(self, cmd)
-	local res = ffluci.sys.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
+	local res = luci.sys.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
 	
 	if res:len() == 0 then
 		return nil
@@ -114,7 +114,7 @@ function Session._uci(self, cmd)
 end
 
 function Session._uci2(self, cmd)
-	local res = ffluci.sys.exec(self.ucicmd .. " 2>&1 " .. cmd)
+	local res = luci.sys.exec(self.ucicmd .. " 2>&1 " .. cmd)
 	
 	if res:len() > 0 then
 		return false, res
@@ -124,7 +124,7 @@ function Session._uci2(self, cmd)
 end
 
 function Session._uci3(self, cmd)
-	local res = ffluci.sys.execl(self.ucicmd .. " 2>&1 " .. cmd)
+	local res = luci.sys.execl(self.ucicmd .. " 2>&1 " .. cmd)
 	if res[1] and res[1]:sub(1, self.ucicmd:len()+1) == self.ucicmd..":" then
 		return nil, res[1]
 	end

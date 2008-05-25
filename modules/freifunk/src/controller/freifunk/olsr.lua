@@ -1,5 +1,5 @@
-module("ffluci.controller.freifunk.olsr", package.seeall)
-require("ffluci.sys")
+module("luci.controller.freifunk.olsr", package.seeall)
+require("luci.sys")
 
 function index()
 	local page  = node("freifunk", "olsr")
@@ -32,7 +32,7 @@ function action_index()
 	local data = fetch_txtinfo("links")
 	
 	if not data or not data.Links then
-		ffluci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("freifunk-olsr/error_olsr")
 		return nil
 	end
 	
@@ -50,14 +50,14 @@ function action_index()
 	
 	table.sort(data.Links, compare)
 	
-	ffluci.template.render("freifunk-olsr/index", {links=data.Links})
+	luci.template.render("freifunk-olsr/index", {links=data.Links})
 end
 
 function action_routes()
 	local data = fetch_txtinfo("routes")
 	
 	if not data or not data.Routes then
-		ffluci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("freifunk-olsr/error_olsr")
 		return nil
 	end
 	
@@ -75,14 +75,14 @@ function action_routes()
 	
 	table.sort(data.Routes, compare)
 	
-	ffluci.template.render("freifunk-olsr/routes", {routes=data.Routes})
+	luci.template.render("freifunk-olsr/routes", {routes=data.Routes})
 end
 
 function action_topology()
 	local data = fetch_txtinfo("topology")
 	
 	if not data or not data.Topology then
-		ffluci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("freifunk-olsr/error_olsr")
 		return nil
 	end
 	
@@ -92,14 +92,14 @@ function action_topology()
 	
 	table.sort(data.Topology, compare)
 	
-	ffluci.template.render("freifunk-olsr/topology", {routes=data.Topology})
+	luci.template.render("freifunk-olsr/topology", {routes=data.Topology})
 end
 
 function action_hna()
 	local data = fetch_txtinfo("hna")
 	
 	if not data or not data.HNA then
-		ffluci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("freifunk-olsr/error_olsr")
 		return nil
 	end
 	
@@ -109,14 +109,14 @@ function action_hna()
 	
 	table.sort(data.HNA, compare)
 	
-	ffluci.template.render("freifunk-olsr/hna", {routes=data.HNA})
+	luci.template.render("freifunk-olsr/hna", {routes=data.HNA})
 end
 
 function action_mid()
 	local data = fetch_txtinfo("mid")
 	
 	if not data or not data.MID then
-		ffluci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("freifunk-olsr/error_olsr")
 		return nil
 	end
 	
@@ -126,14 +126,14 @@ function action_mid()
 	
 	table.sort(data.MID, compare)
 	
-	ffluci.template.render("freifunk-olsr/mid", {mids=data.MID})
+	luci.template.render("freifunk-olsr/mid", {mids=data.MID})
 end
 
 
 -- Internal
 function fetch_txtinfo(otable)
 	otable = otable or ""
-	local rawdata = ffluci.sys.httpget("http://127.0.0.1:2006/"..otable)
+	local rawdata = luci.sys.httpget("http://127.0.0.1:2006/"..otable)
 	
 	if #rawdata == 0 then
 		return nil
@@ -141,18 +141,18 @@ function fetch_txtinfo(otable)
 	
 	local data = {}
 	
-	local tables = ffluci.util.split(ffluci.util.trim(rawdata), "\n\n")
+	local tables = luci.util.split(luci.util.trim(rawdata), "\n\n")
 	
 
 	for i, tbl in ipairs(tables) do
-		local lines = ffluci.util.split(tbl, "\n")
+		local lines = luci.util.split(tbl, "\n")
 		local name  = table.remove(lines, 1):sub(8)
-		local keys  = ffluci.util.split(table.remove(lines, 1), "\t")
+		local keys  = luci.util.split(table.remove(lines, 1), "\t")
 		
 		data[name] = {}
 		
 		for j, line in ipairs(lines) do
-			local fields = ffluci.util.split(line, "\t")
+			local fields = luci.util.split(line, "\t")
 			data[name][j] = {}
 			for k, key in pairs(keys) do
 				data[name][j][key] = fields[k] 

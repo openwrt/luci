@@ -1,3 +1,3 @@
 LUAC = luac
 LUAC_OPTIONS = -s
-LUCI_INSTALLDIR = /usr/lib/lua/ffluci
+LUCI_INSTALLDIR = /usr/lib/lua/luci

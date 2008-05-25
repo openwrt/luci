@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Iptables parser and query library
+LuCI - Iptables parser and query library
 
 Copyright 2008 Jo-Philipp Wich <freifunk@wwsnet.net>
 
@@ -19,12 +19,12 @@ $Id$
 
 ]]--
 
-module("ffluci.sys.iptparser", package.seeall)
-require("ffluci.sys")
-require("ffluci.util")
+module("luci.sys.iptparser", package.seeall)
+require("luci.sys")
+require("luci.util")
 
 
-IptParser = ffluci.util.class()
+IptParser = luci.util.class()
 
 --[[
 IptParser.__init__( ... )
@@ -77,7 +77,7 @@ Each rule table contains the following fields:
 
 Example:
 
-ip = ffluci.sys.iptparser.IptParser()
+ip = luci.sys.iptparser.IptParser()
 result = ip.find( {
 	target="REJECT",
 	protocol="tcp",
@@ -180,7 +180,7 @@ function IptParser._parse_rules( self )
 
 	for i, tbl in ipairs({ "filter", "nat", "mangle" }) do
 
-		for i, rule in ipairs(ffluci.sys.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
+		for i, rule in ipairs(luci.sys.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
 
 			if rule:find( "Chain " ) == 1 then
 		
@@ -189,7 +189,7 @@ function IptParser._parse_rules( self )
 			else
 				if rule:find("%d") == 1 then
 
-					local rule_parts   = ffluci.util.split( rule, "%s+", nil, true )
+					local rule_parts   = luci.util.split( rule, "%s+", nil, true )
 					local rule_details = { }
 
 					rule_details["table"]       = tbl

@@ -1,5 +1,5 @@
 -- ToDo: Translate, Add descriptions and help texts
-require("ffluci.sys")
+require("luci.sys")
 m = Map("luci_fw", "Portweiterleitung", [[Portweiterleitungen ermöglichen es interne
 Netzwerkdienste von einem anderen externen Netzwerk aus erreichbar zu machen.]])
 
@@ -10,7 +10,7 @@ s.anonymous = true
 
 iface = s:option(ListValue, "iface", "Schnittstelle", "Externe Schnittstelle")
 iface.default = "wan"
-for k, v in pairs(ffluci.model.uci.sections("network")) do
+for k, v in pairs(luci.model.uci.sections("network")) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		iface:value(k)
 	end

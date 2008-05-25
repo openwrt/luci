@@ -1,4 +1,4 @@
-module("ffluci.controller.admin.index", package.seeall)
+module("luci.controller.admin.index", package.seeall)
 
 function index()
 	local root = node()

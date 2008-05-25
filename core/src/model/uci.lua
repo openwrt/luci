@@ -1,5 +1,5 @@
 --[[
-FFLuCI - UCI mpdel
+LuCI - UCI mpdel
 
 Description:
 Generalized UCI model
@@ -23,16 +23,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.model.uci", package.seeall)
+module("luci.model.uci", package.seeall)
 
 -- Default savedir
 savedir = "/tmp/.uci"
 
 -- Test whether to load libuci-Wrapper or /sbin/uci-Wrapper
 if pcall(require, "uci") then
-	Session = require("ffluci.model.uci.libuci").Session
+	Session = require("luci.model.uci.libuci").Session
 else
-	Session = require("ffluci.model.uci.wrapper").Session
+	Session = require("luci.model.uci.wrapper").Session
 end
 
 -- The default Session

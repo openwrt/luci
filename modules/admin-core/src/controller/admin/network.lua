@@ -1,4 +1,4 @@
-module("ffluci.controller.admin.network", package.seeall)
+module("luci.controller.admin.network", package.seeall)
 
 function index()
 	local page  = node("admin", "network")
@@ -31,7 +31,7 @@ function index()
 	page.title  = "Statische Routen"
 	page.order  = 50
 	
-	if ffluci.fs.isfile("/etc/config/qos") then
+	if luci.fs.isfile("/etc/config/qos") then
 		local page  = node("admin", "network", "qos")
 		page.target = cbi("admin_network/qos")
 		page.title  = "Quality of Service"

@@ -1,4 +1,4 @@
-module("ffluci.controller.admin.services", package.seeall)
+module("luci.controller.admin.services", package.seeall)
 
 function index()
 	local page  = node("admin", "services")
@@ -21,7 +21,7 @@ function index()
 	page.title  = "Dnsmasq"
 	page.order  = 30
 	
-	if ffluci.fs.isfile("/etc/config/olsr") then
+	if luci.fs.isfile("/etc/config/olsr") then
 		local page  = node("admin", "services", "olsr")
 		page.target = cbi("admin_services/olsrd")
 		page.title  = "OLSR"

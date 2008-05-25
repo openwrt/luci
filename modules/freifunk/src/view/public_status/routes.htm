@@ -11,14 +11,14 @@
 <th><%:iface Schnittstelle%></th>
 </tr>
 <%
-local routes = ffluci.sys.net.routes()
+local routes = luci.sys.net.routes()
 
 for i, r in pairs(routes) do
 %>
 <tr>
-<td><%=ffluci.sys.net.hexip4(r.Destination)%></td>
-<td><%=ffluci.sys.net.hexip4(r.Mask)%></td>
-<td><%=ffluci.sys.net.hexip4(r.Gateway)%></td>
+<td><%=luci.sys.net.hexip4(r.Destination)%></td>
+<td><%=luci.sys.net.hexip4(r.Mask)%></td>
+<td><%=luci.sys.net.hexip4(r.Gateway)%></td>
 <td><%=r.Metric%></td>
 <td><%=r.Iface%></td>
 </tr>

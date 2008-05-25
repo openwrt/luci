@@ -1,5 +1,5 @@
 --[[
-FFLuCI - System library
+LuCI - System library
 
 Description:
 Utilities for interaction with the Linux system
@@ -24,10 +24,10 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.sys", package.seeall)
+module("luci.sys", package.seeall)
 require("posix")
-require("ffluci.bits")
-require("ffluci.util")
+require("luci.bits")
+require("luci.util")
 
 -- Returns whether a system is bigendian
 function bigendian()
@@ -61,9 +61,9 @@ function execl(command)
 	return data
 end
 
--- Uses "ffluci-flash" to flash a new image file to the system
+-- Uses "luci-flash" to flash a new image file to the system
 function flash(image, kpattern)
-	local cmd = "ffluci-flash "
+	local cmd = "luci-flash "
 	if kpattern then
 		cmd = cmd .. "-k '" .. kpattern:gsub("'", "") .. "' "
 	end
@@ -84,7 +84,7 @@ end
 
 -- Returns the FFLuci-Basedir
 function libpath()
-	return ffluci.fs.dirname(require("ffluci.debug").__file__)
+	return luci.fs.dirname(require("luci.debug").__file__)
 end
 
 -- Returns the load average
@@ -106,18 +106,18 @@ function sysinfo()
 	local c4 = "cat /proc/cpuinfo|grep cpu\\ model|cut -d: -f2 2>/dev/null"
 	local c5 = "cat /proc/meminfo|grep MemTotal|cut -d: -f2 2>/dev/null"
 	
-	local s = ffluci.util.trim(exec(c1))
+	local s = luci.util.trim(exec(c1))
 	local m = ""
 	local r = ""
 	
 	if s == "" then
-		s = ffluci.util.trim(exec(c2))
-		m = ffluci.util.trim(exec(c3))
+		s = luci.util.trim(exec(c2))
+		m = luci.util.trim(exec(c3))
 	else
-		m = ffluci.util.trim(exec(c4))
+		m = luci.util.trim(exec(c4))
 	end
 	
-	r = ffluci.util.trim(exec(c5))
+	r = luci.util.trim(exec(c5))
 	
 	return s, m, r
 end
@@ -147,7 +147,7 @@ function net.defaultroute()
 	local routes = net.routes()
 	local route = nil
 	
-	for i, r in pairs(ffluci.sys.net.routes()) do
+	for i, r in pairs(luci.sys.net.routes()) do
 		if r.Destination == "00000000" and (not route or route.Metric > r.Metric) then
 			route = r
 		end
@@ -186,7 +186,7 @@ function net.mask4prefix(mask)
 		return nil
 	end
 	
-	return #ffluci.util.split(bin, "1")-1
+	return #luci.util.split(bin, "1")-1
 end
 
 -- Returns the kernel routing table
@@ -202,7 +202,7 @@ function net.hexip4(hex, be)
 	
 	be = be or bigendian()
 	
-	local hexdec = ffluci.bits.Hex2Dec
+	local hexdec = luci.bits.Hex2Dec
 	
 	local ip = ""
 	if be then
@@ -222,12 +222,12 @@ end
 
 -- Returns the binary IP to a given IP
 function net.ip4bin(ip)
-	local parts = ffluci.util.split(ip, '.')
+	local parts = luci.util.split(ip, '.')
 	if #parts ~= 4 then
 		return nil
 	end
 	
-	local decbin = ffluci.bits.Dec2Bin
+	local decbin = luci.bits.Dec2Bin
 	
 	local bin = ""
 	bin = bin .. decbin(parts[1], 8)
@@ -283,7 +283,7 @@ function wifi.getiwconfig()
 	local cnt = exec("/usr/sbin/iwconfig 2>/dev/null")
 	local iwc = {}
 	
-	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n\n")) do
+	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n\n")) do
 		local k = l:match("^(.-) ")
 		l = l:gsub("^(.-) +", "", 1)
 		if k then
@@ -298,15 +298,15 @@ function wifi.iwscan()
 	local cnt = exec("iwlist scan 2>/dev/null")
 	local iws = {}
 	
-	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n\n")) do
+	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n\n")) do
 		local k = l:match("^(.-) ")
 		l = l:gsub("^[^\n]+", "", 1)
-		l = ffluci.util.trim(l)
+		l = luci.util.trim(l)
 		if k then
 			iws[k] = {}
-			for j, c in pairs(ffluci.util.split(l, "\n          Cell")) do
+			for j, c in pairs(luci.util.split(l, "\n          Cell")) do
 				c = c:gsub("^(.-)- ", "", 1)
-				c = ffluci.util.split(c, "\n", 7)
+				c = luci.util.split(c, "\n", 7)
 				c = table.concat(c, "\n", 1)
 				table.insert(iws[k], _parse_mixed_record(c))
 			end
@@ -323,8 +323,8 @@ function _parse_delimited_table(iter, delimiter)
 	delimiter = delimiter or "%s+"
 	
 	local data  = {}
-	local trim  = ffluci.util.trim
-	local split = ffluci.util.split
+	local trim  = luci.util.trim
+	local split = luci.util.split
 	
 	local keys = split(trim(iter()), delimiter, nil, true)
 	for i, j in pairs(keys) do
@@ -350,8 +350,8 @@ end
 function _parse_mixed_record(cnt)
 	local data = {}
 	
-	for i, l in pairs(ffluci.util.split(ffluci.util.trim(cnt), "\n")) do
-    	for j, f in pairs(ffluci.util.split(ffluci.util.trim(l), "  ")) do
+	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n")) do
+    	for j, f in pairs(luci.util.split(luci.util.trim(l), "  ")) do
         	local k, x, v = f:match('([^%s][^:=]+) *([:=]*) *"*([^\n"]*)"*')
 
             if k then

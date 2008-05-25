@@ -1,4 +1,4 @@
-module("ffluci.controller.luci_fw.luci_fw", package.seeall)
+module("luci.controller.luci_fw.luci_fw", package.seeall)
 
 function index()
 	entry({"admin", "network", "portfw"}, cbi("luci_fw/portfw"), "Portweiterleitung", 70)

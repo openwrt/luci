@@ -1,5 +1,5 @@
 --[[
-FFLuCI - Menu Builder
+LuCI - Menu Builder
 
 Description:
 Collects menu building information from controllers
@@ -23,21 +23,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.menu", package.seeall)
+module("luci.menu", package.seeall)
 
-require("ffluci.fs")
-require("ffluci.util")
-require("ffluci.sys")
-require("ffluci.dispatcher")
+require("luci.fs")
+require("luci.util")
+require("luci.sys")
+require("luci.dispatcher")
 
 -- Default modelpath
-modelpattern = ffluci.sys.libpath() .. "/model/menu/*.lua"
+modelpattern = luci.sys.libpath() .. "/model/menu/*.lua"
 
 -- Menu definition extra scope
 scope = {
-	translate = function(...) return require("ffluci.i18n").translate(...) end,
-	loadtrans = function(...) return require("ffluci.i18n").loadc(...) end,
-	isfile    = ffluci.fs.isfile
+	translate = function(...) return require("luci.i18n").translate(...) end,
+	loadtrans = function(...) return require("luci.i18n").loadc(...) end,
+	isfile    = luci.fs.isfile
 }
 
 -- Returns the menu information

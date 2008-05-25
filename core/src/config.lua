@@ -1,8 +1,8 @@
 --[[
-FFLuCI - Configuration
+LuCI - Configuration
 
 Description:
-Some FFLuCI configuration values read from uci file "luci"
+Some LuCI configuration values read from uci file "luci"
 
 
 FileId:
@@ -25,16 +25,16 @@ limitations under the License.
 
 ]]--
 
-module("ffluci.config", package.seeall)
-require("ffluci.model.uci")
-require("ffluci.util")
-require("ffluci.sys")
+module("luci.config", package.seeall)
+require("luci.model.uci")
+require("luci.util")
+require("luci.sys")
 
 -- Warning! This is only for fallback and compatibility purporses! --
 main = {}
 
 -- This is where stylesheets and images go
-main.mediaurlbase = "/ffluci/media"
+main.mediaurlbase = "/luci/media"
 
 -- Does anybody think about browser autodetect here?
 -- Too bad busybox doesn't populate HTTP_ACCEPT_LANGUAGE
@@ -42,7 +42,7 @@ main.lang = "de"
 
 
 -- Now overwrite with UCI values
-local ucidata = ffluci.model.uci.sections("luci")
+local ucidata = luci.model.uci.sections("luci")
 if ucidata then
-	ffluci.util.update(ffluci.config, ucidata)
+	luci.util.update(luci.config, ucidata)
 end

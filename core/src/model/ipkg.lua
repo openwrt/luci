@@ -1,5 +1,5 @@
 --[[
-FFLuCI - IPKG wrapper library
+LuCI - IPKG wrapper library
 
 Description:
 Wrapper for the ipkg Package manager
@@ -25,9 +25,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-module("ffluci.model.ipkg", package.seeall)
-require("ffluci.sys")
-require("ffluci.util")
+module("luci.model.ipkg", package.seeall)
+require("luci.sys")
+require("luci.util")
 
 ipkg = "ipkg"
 
@@ -88,7 +88,7 @@ function _lookup(act, pkg)
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
 	
-	return _parselist(ffluci.sys.exec(cmd .. " 2>/dev/null"))
+	return _parselist(luci.sys.exec(cmd .. " 2>/dev/null"))
 end
 
 -- Internal parser function
@@ -97,23 +97,23 @@ function _parselist(rawdata)
 		error("IPKG: Invalid rawdata given")
 	end
 	
-	rawdata = ffluci.util.split(rawdata) 
+	rawdata = luci.util.split(rawdata) 
 	local data = {}
 	local c = {}
 	local l = nil
 	
 	for k, line in pairs(rawdata) do
 		if line:sub(1, 1) ~= " " then
-			local split = ffluci.util.split(line, ":", 1)
+			local split = luci.util.split(line, ":", 1)
 			local key = nil
 			local val = nil
 			
 			if split[1] then
-				key = ffluci.util.trim(split[1])
+				key = luci.util.trim(split[1])
 			end
 			
 			if split[2] then
-				val = ffluci.util.trim(split[2])
+				val = luci.util.trim(split[2])
 			end
 			
 			if key and val then
@@ -122,7 +122,7 @@ function _parselist(rawdata)
 					data[val] = c
 				elseif key == "Status" then
 					c.Status = {}
-					for i, j in pairs(ffluci.util.split(val, " ")) do
+					for i, j in pairs(luci.util.split(val, " ")) do
 						c.Status[j] = true
 					end
 				else

@@ -15,7 +15,7 @@ clean:
 	for i in $(MODULES); do make -C$$i clean; done
 
 host: build
-	mkdir -p host/ffluci
+	mkdir -p host/luci
 	for i in $(MODULES); do cp $$i/dist$(LUCI_INSTALLDIR) host/ -R 2>/dev/null || true; done
 	
 hostclean: clean

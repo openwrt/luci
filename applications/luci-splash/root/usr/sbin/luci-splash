@@ -2,12 +2,12 @@
 package.path  = "/usr/lib/lua/?.lua;/usr/lib/lua/?/init.lua;" .. package.path
 package.cpath = "/usr/lib/lua/?.so;" .. package.cpath
 
-require("ffluci.http")
-require("ffluci.sys")
-require("ffluci.model.uci")
+require("luci.http")
+require("luci.sys")
+require("luci.model.uci")
 
 -- Init state session
-uci = ffluci.model.uci.StateSession()
+uci = luci.model.uci.StateSession()
 
 
 function main(argv)
@@ -125,7 +125,7 @@ end
 function listrules()
 	local cmd = "iptables -t nat -L luci_splash_leases | grep RETURN |"
 	cmd = cmd .. "egrep -io [0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+"
-	return ffluci.util.split(ffluci.sys.exec(cmd))
+	return luci.util.split(luci.sys.exec(cmd))
 end
 
 
