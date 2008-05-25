@@ -13,7 +13,7 @@ $Id$
 
 ]]--
 
-require("ffluci.sys")
+require("luci.sys")
 
 
 m = Map("luci_statistics", "Interface Plugin",
@@ -32,7 +32,7 @@ interfaces.widget   = "select"
 interfaces.optional = true
 interfaces:depends( "enable", 1 )
 interfaces:value("")
-for i, v in ipairs(ffluci.sys.net.devices()) do
+for i, v in ipairs(luci.sys.net.devices()) do
 	interfaces:value(v)
 end
 
@@ -42,7 +42,7 @@ verboseinterfaces.widget   = "select"
 verboseinterfaces.optional = true
 verboseinterfaces:depends( "enable", 1 )
 verboseinterfaces:value("")
-for i, v in ipairs(ffluci.sys.net.devices()) do
+for i, v in ipairs(luci.sys.net.devices()) do
 	verboseinterfaces:value(v)
 end
 
@@ -52,7 +52,7 @@ qdiscs.widget   = "select"
 qdiscs.optional = true
 qdiscs:depends( "enable", 1 )
 qdiscs:value("")
-for i, v in ipairs(ffluci.sys.net.devices()) do
+for i, v in ipairs(luci.sys.net.devices()) do
         qdiscs:value(v)
 end
 
@@ -62,7 +62,7 @@ classs.widget   = "select"
 classs.optional = true
 classs:depends( "enable", 1 )
 classs:value("")
-for i, v in ipairs(ffluci.sys.net.devices()) do
+for i, v in ipairs(luci.sys.net.devices()) do
         classs:value(v)
 end
 
@@ -72,7 +72,7 @@ filters.widget   = "select"
 filters.optional = true
 filters:depends( "enable", 1 )
 filters:value("")
-for i, v in ipairs(ffluci.sys.net.devices()) do
+for i, v in ipairs(luci.sys.net.devices()) do
         filters:value(v)
 end
 

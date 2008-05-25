@@ -1,4 +1,4 @@
-module("ffluci.statistics.rrdtool.definitions.cpu.cpu",package.seeall)
+module("luci.statistics.rrdtool.definitions.cpu.cpu",package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 

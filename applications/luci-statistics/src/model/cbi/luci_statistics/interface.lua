@@ -13,7 +13,7 @@ $Id$
 
 ]]--
 
-require("ffluci.sys")
+require("luci.sys")
 
 
 m = Map("luci_statistics", "Interface Plugin",
@@ -30,7 +30,7 @@ enable.default = 0
 interfaces = s:option( MultiValue, "Interfaces", "Überwachte Schnittstellen", "mehrere Einträge mit Strg selektieren" )
 interfaces.widget = "select"
 interfaces:depends( "enable", 1 )
-for k, v in pairs(ffluci.sys.net.devices()) do
+for k, v in pairs(luci.sys.net.devices()) do
 	interfaces:value(v)
 end
 

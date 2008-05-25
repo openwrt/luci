@@ -1,9 +1,9 @@
-module("ffluci.controller.luci_statistics.luci_statistics", package.seeall)
+module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 
-local fs   = require("ffluci.fs")
-local tpl  = require("ffluci.template")
-local rrd  = require("ffluci.statistics.rrdtool")
-local data = require("ffluci.statistics.datatree").Instance()
+local fs   = require("luci.fs")
+local tpl  = require("luci.template")
+local rrd  = require("luci.statistics.rrdtool")
+local data = require("luci.statistics.datatree").Instance()
 
 
 function _entry( path, ... )
@@ -93,7 +93,7 @@ end
 
 
 function statistics_render()
-	local plugin = ffluci.dispatcher.request[3]
+	local plugin = luci.dispatcher.request[3]
 	local images = { }
 
 	for i, inst in ipairs( data:plugin_instances( plugin ) ) do

@@ -1,4 +1,4 @@
-module("ffluci.statistics.rrdtool.definitions.wireless", package.seeall)
+module("luci.statistics.rrdtool.definitions.wireless", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance )
 

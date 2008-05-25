@@ -8,8 +8,8 @@ auf dem Gerät.%></p>
 <p><%:stat_systemplugins_installed Installierte Systemplugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
-			<% if ffluci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
-				<li><a href="/cgi-bin/ffluci/admin/statistics/system/<%=plugin%>"><%=desc%></a></li>
+			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
+				<li><a href="/cgi-bin/luci/admin/statistics/system/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>
 	</ul>

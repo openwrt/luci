@@ -1,4 +1,4 @@
-module("ffluci.statistics.rrdtool.definitions.processes.ps_state", package.seeall)
+module("luci.statistics.rrdtool.definitions.processes.ps_state", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 

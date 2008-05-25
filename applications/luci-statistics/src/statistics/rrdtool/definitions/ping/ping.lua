@@ -1,4 +1,4 @@
-module("ffluci.statistics.rrdtool.definitions.ping.ping", package.seeall)
+module("luci.statistics.rrdtool.definitions.ping.ping", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 

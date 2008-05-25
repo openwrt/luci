@@ -9,8 +9,8 @@ die gesammelten Werte in RRD-Datenbanken zu sichern und zusätzlich über das Ne
 <p><%:stat_outputplugins_installed Installierte Ausgabeplugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
-			<% if ffluci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
-				<li><a href="/cgi-bin/ffluci/admin/statistics/output/<%=plugin%>"><%=desc%></a></li>
+			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
+				<li><a href="/cgi-bin/luci/admin/statistics/output/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>
 	</ul>

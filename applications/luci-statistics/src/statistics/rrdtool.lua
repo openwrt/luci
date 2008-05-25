@@ -1,23 +1,23 @@
-module("ffluci.statistics.rrdtool", package.seeall)
+module("luci.statistics.rrdtool", package.seeall)
 
-require("ffluci.statistics.datatree")
-require("ffluci.statistics.rrdtool.colors")
-require("ffluci.statistics.rrdtool.definitions")
-require("ffluci.util")
-require("ffluci.bits")
-require("ffluci.fs")
+require("luci.statistics.datatree")
+require("luci.statistics.rrdtool.colors")
+require("luci.statistics.rrdtool.definitions")
+require("luci.util")
+require("luci.bits")
+require("luci.fs")
 
 
-Graph = ffluci.util.class()
+Graph = luci.util.class()
 
 function Graph.__init__( self, timespan, opts )
 
 	opts = opts or { }
 	opts.width = opts.width or "400"
 
-	self.colors = ffluci.statistics.rrdtool.colors.Instance()
-	self.defs   = ffluci.statistics.rrdtool.definitions.Instance()
-	self.tree   = ffluci.statistics.datatree.Instance()
+	self.colors = luci.statistics.rrdtool.colors.Instance()
+	self.defs   = luci.statistics.rrdtool.definitions.Instance()
+	self.tree   = luci.statistics.datatree.Instance()
 
 	-- rrdtool defalt args
 	self.args   = {
@@ -77,7 +77,7 @@ function Graph._rrdtool( self, png, rrd )
 
 	-- prepare directory
 	local dir = png:gsub("/[^/]+$","")
-	ffluci.fs.mkdir( dir, true )
+	luci.fs.mkdir( dir, true )
 
 	-- construct commandline
 	local cmdline = "rrdtool graph " .. png
@@ -195,7 +195,7 @@ function Graph.render( self, host, plugin, plugin_instance )
 	local pngs = { }
 
 	-- check for a whole graph handler
-	local plugin_def = "ffluci.statistics.rrdtool.definitions." .. plugin
+	local plugin_def = "luci.statistics.rrdtool.definitions." .. plugin
 	local stat, def = pcall( require, plugin_def )
 
 	if stat and def and type(def.rrdargs) == "function" then

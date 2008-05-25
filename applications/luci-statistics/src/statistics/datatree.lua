@@ -1,9 +1,9 @@
-module("ffluci.statistics.datatree", package.seeall)
+module("luci.statistics.datatree", package.seeall)
 
-local util = require("ffluci.util")
-local sys  = require("ffluci.sys")
-local fs   = require("ffluci.fs")
-local uci  = require("ffluci.model.uci").Session()
+local util = require("luci.util")
+local sys  = require("luci.sys")
+local fs   = require("luci.fs")
+local uci  = require("luci.model.uci").Session()
 local sections, names = uci:sections( "luci_statistics" )
 
 

@@ -1,10 +1,10 @@
-module("ffluci.statistics.rrdtool.definitions", package.seeall)
+module("luci.statistics.rrdtool.definitions", package.seeall)
 
-require("ffluci.util")
-require("ffluci.fs")
+require("luci.util")
+require("luci.fs")
 
 
-Instance = ffluci.util.class()
+Instance = luci.util.class()
 
 function Instance.__init__( self, ... )
 

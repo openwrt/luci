@@ -13,9 +13,9 @@ $Id$
 
 ]]--
 
-require("ffluci.sys.iptparser")
+require("luci.sys.iptparser")
 
-ip = ffluci.sys.iptparser.IptParser()
+ip = luci.sys.iptparser.IptParser()
 chains  = { }
 targets = { }
 

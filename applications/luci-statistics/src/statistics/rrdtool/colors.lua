@@ -1,16 +1,16 @@
-module("ffluci.statistics.rrdtool.colors", package.seeall)
+module("luci.statistics.rrdtool.colors", package.seeall)
 
-require("ffluci.util")
-require("ffluci.bits")
+require("luci.util")
+require("luci.bits")
 
 
-Instance = ffluci.util.class()
+Instance = luci.util.class()
 
 function Instance.from_string( self, s )
 	return {
-		ffluci.bits.Hex2Dec(s:sub(1,2)),
-		ffluci.bits.Hex2Dec(s:sub(3,4)),
-		ffluci.bits.Hex2Dec(s:sub(5,6))
+		luci.bits.Hex2Dec(s:sub(1,2)),
+		luci.bits.Hex2Dec(s:sub(3,4)),
+		luci.bits.Hex2Dec(s:sub(5,6))
 	}
 end
 

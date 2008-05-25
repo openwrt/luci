@@ -13,7 +13,7 @@ $Id$
 
 ]]--
 
-require("ffluci.sys")
+require("luci.sys")
 
 
 m = Map("luci_statistics", "Collector Daemon",
@@ -56,7 +56,7 @@ readthreads.isnumber = true
 
 -- general.hostname (Hostname)
 hostname = s:option( Value, "Hostname", "Hostname zur Identifikation des Collector Dienstes (leer lassen um den Namen automatisch zu bestimmen)" )
-hostname.default  = ffluci.sys.hostname()
+hostname.default  = luci.sys.hostname()
 hostname.optional = true
 
 -- general.fqdnlookup (FQDNLookup)

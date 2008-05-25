@@ -1,4 +1,4 @@
-module("ffluci.statistics.rrdtool.definitions.iptables.ipt_packets", package.seeall)
+module("luci.statistics.rrdtool.definitions.iptables.ipt_packets", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 

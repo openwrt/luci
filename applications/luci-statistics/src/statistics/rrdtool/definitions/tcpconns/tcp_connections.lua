@@ -1,4 +1,4 @@
-module("ffluci.statistics.rrdtool.definitions.tcpconns.tcp_connections", package.seeall)
+module("luci.statistics.rrdtool.definitions.tcpconns.tcp_connections", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 

@@ -13,7 +13,7 @@ $Id$
 
 ]]--
 
-require("ffluci.sys")
+require("luci.sys")
 
 
 m = Map("luci_statistics", "DNS Plugin",
@@ -30,7 +30,7 @@ enable.default = 0
 interfaces = s:option( ListValue, "Interface", "Folgende Schnittstelle überwachen:" )
 interfaces:depends( "enable", 1 )
 interfaces:value("any")
-for k, v in pairs(ffluci.sys.net.devices()) do
+for k, v in pairs(luci.sys.net.devices()) do
 	interfaces:value(v)
 end
 
