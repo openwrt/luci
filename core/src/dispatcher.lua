@@ -128,8 +128,8 @@ function createindex()
 	local suff = ".lua"
 
 	local controllers = luci.util.combine(
-		luci.fs.glob(root .. "*" .. suff),
-		luci.fs.glob(root .. "*/*" .. suff)
+		luci.fs.glob(root .. "*" .. suff) or {},
+		luci.fs.glob(root .. "*/*" .. suff) or {}
 	)
 
 	for i,c in ipairs(controllers) do

@@ -1,35 +1,39 @@
 config core main
-    option lang de
-    option mediaurlbase /luci/media
-	option resourcebase /luci/images
-	option title		"Freifunk Kamikaze"
-	option subtitle		Fledermausedition
+	option lang de
+	option mediaurlbase /luci/fledermaus
+	option resourcebase /luci/resources
+	
+config core brand
+	option title		"OpenWRT Kamikaze"
+	option subtitle		Freifunkedition
+	option firmware		"OpenWRT Kamikaze"
+	option distro		"Freifunk Firmware 2.x"
 		
 config extern flash_keep
-		option uci 		"/etc/config"
-		option dropbear "/etc/dropbear"
-		option openvpn	"/etc/openvpn"
-		option passwd	"/etc/passwd"
-		option ipkg		"/etc/ipkg.conf"
-		option httpd	"/etc/httpd.conf"
-		option firewall	"/etc/firewall.user"
+	option uci 		"/etc/config"
+	option dropbear "/etc/dropbear"
+	option openvpn	"/etc/openvpn"
+	option passwd	"/etc/passwd"
+	option ipkg		"/etc/ipkg.conf"
+	option httpd	"/etc/httpd.conf"
+	option firewall	"/etc/firewall.user"
 
 config event uci_oncommit
-        option network	"/etc/init.d/network restart"
-        option wireless	"/etc/init.d/network restart"
-        option olsr		"/sbin/reboot"
-        option dhcp		"/etc/init.d/dnsmasq restart"
-        option luci_fw  "/etc/init.d/luci_fw restart"
-        option dropbear "/etc/init.d/dropbear restart"
-        option httpd	"/etc/init.d/httpd restart"
-        option fstab	"/etc/init.d/fstab restart"
-        option qos		"/etc/init.d/qos restart"
-        option luci_splash "/etc/init.d/luci_splash restart"
-        option freifunk "/etc/init.d/luci_freifunk restart"
+	option network	"/etc/init.d/network restart"
+	option wireless	"/etc/init.d/network restart"
+	option olsr		"/sbin/reboot"
+	option dhcp		"/etc/init.d/dnsmasq restart"
+	option luci_fw  "/etc/init.d/luci_fw restart"
+ 	option dropbear "/etc/init.d/dropbear restart"
+ 	option httpd	"/etc/init.d/httpd restart"
+ 	option fstab	"/etc/init.d/fstab restart"
+	option qos		"/etc/init.d/qos restart"
+	option luci_splash "/etc/init.d/luci_splash restart"
+	option freifunk "/etc/init.d/luci_freifunk restart"
         
 config internal languages
-		option de "Deutsch"
-		option en "English"
+	option de "Deutsch"
+	option en "English"
 		
 config internal themes
-		option Fledermaus "/luci/media"
+	option Fledermaus "/luci/fledermaus"

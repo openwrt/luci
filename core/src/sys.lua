@@ -28,12 +28,15 @@ module("luci.sys", package.seeall)
 require("posix")
 require("luci.bits")
 require("luci.util")
+require("luci.fs")
 
 -- Returns whether a system is bigendian
 function bigendian()
 	local fp = io.open("/bin/sh")
 	fp:seek("set", 5)
-	return (fp:read(1):byte() ~= 1)
+	local be = (fp:read(1):byte() ~= 1)
+	fp:close()
+	return be
 end
 
 -- Runs "command" and returns its output

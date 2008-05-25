@@ -31,16 +31,16 @@ require("luci.http").prepare_content("text/html")
 </head>
 <body>
 <div id="header">
-	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="Freifunk" /></div>
+	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="<%=luci.config.brand.title%>" /></div>
 	<div class="whitetext smalltext right">
-	OpenWRT Kamikaze<br />
-	Freifunk Firmware 2.0-dev<br />
+	<%=luci.config.brand.firmware%><br />
+	<%=luci.config.brand.distribution%><br />
 	<%:load Last%>: <%=load1%> <%=load5%> <%=load15%><br />
 	<%:hostname Hostname%>: <%=luci.sys.hostname()%> 
 	</div>
 	<div>
-		<span class="headertitle"><%~luci.main.title%></span><br />
-		<span class="whitetext bold"><%~luci.main.subtitle%></span>
+		<span class="headertitle"><%=luci.config.brand.title%></span><br />
+		<span class="whitetext bold"><%=luci.config.brand.subtitle%></span>
 	</div>
 </div>
 
