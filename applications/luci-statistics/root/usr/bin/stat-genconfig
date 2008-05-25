@@ -16,31 +16,31 @@ $Id$
 ]]--
 
 
-require("ffluci.model.uci")
-require("ffluci.sys.iptparser")
-require("ffluci.util")
+require("luci.model.uci")
+require("luci.sys.iptparser")
+require("luci.util")
 
-local ipt = ffluci.sys.iptparser.IptParser()
-local uci = ffluci.model.uci.Session()
+local ipt = luci.sys.iptparser.IptParser()
+local uci = luci.model.uci.Session()
 local sections, names = uci:sections( "luci_statistics" )
 
 
 function section( plugin )
 
-	local config = sections[ "collectd_" .. plugin ] or sections["general"]
+	local config = sections[ "collectd_" .. plugin ] or sections["collectd"]
 
-	if type(config) == "table" and ( plugin == "general" or config.enable == "1" ) then
+	if type(config) == "table" and ( plugin == "collectd" or config.enable == "1" ) then
 
 		local params = ""
 
 		if type( plugins[plugin] ) == "function" then
 			params = plugins[plugin]( config )
 		else
-			params = config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3], plugin == "general" )
+			params = config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3], plugin == "collectd" )
 		end
 
 
-		if plugin ~= "general" then
+		if plugin ~= "collectd" then
 			print( "LoadPlugin " .. plugin )
 
 			if params:len() > 0 then
@@ -113,7 +113,7 @@ function config_iptables( c )
 				v = sections[s][k]
 
 				if type(v) == "string" then
-					if k == "options" then v = ffluci.util.split( v, "%s+", nil, true ) end
+					if k == "options" then v = luci.util.split( v, "%s+", nil, true ) end
 					search[k] = v
 				end
 			end
@@ -180,7 +180,7 @@ function _expand( s, n, nopad )
 	if type(s) == "string" then
 		local str = ""
 
-		for i, v in ipairs( ffluci.util.split( s, "%s+", nil, true ) ) do
+		for i, v in ipairs( luci.util.split( s, "%s+", nil, true ) ) do
 			str = str .. _string( v, n, nopad )
 		end
 
@@ -228,7 +228,7 @@ end
 
 
 plugins = {
-	general = {
+	collectd = {
 		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads" },
 		{ },
 		{ }
@@ -333,10 +333,10 @@ plugins = {
 }
 
 
-section("general")
+section("collectd")
 
 for plugin in pairs(plugins) do
-	if plugin ~= "general" then
+	if plugin ~= "collectd" then
 		section( plugin )
 	end
 end
