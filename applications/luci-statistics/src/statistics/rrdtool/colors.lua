@@ -24,15 +24,15 @@ function Instance.to_string( self, c )
 end
 
 function Instance.random( self )
-	local r   = math.random(256)
-	local g   = math.random(256)
-	local min = 1
-	local max = 256
+	local r   = math.random(255)
+	local g   = math.random(255)
+	local min = 0
+	local max = 255
 
-	if ( r + g ) < 256 then
-		min = 256 - r - g
+	if ( r + g ) < 255 then
+		min = 255 - r - g
 	else
-		max = 512 - r - g
+		max = 511 - r - g
 	end
 
 	local b = min + math.floor( math.random() * ( max - min ) )

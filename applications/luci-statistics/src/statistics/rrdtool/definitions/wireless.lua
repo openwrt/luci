@@ -7,7 +7,7 @@ function rrdargs( graph, host, plugin, plugin_instance )
 	opts = { }
 	opts.sources	= { }
 	opts.image	= graph:mkpngpath( host, plugin, plugin_instance, "wireless" )
-	opts.title	= graph:mktitle( host, plugin, plugin_instance, "wireless" )
+	opts.title	= host .. ": WLAN Signal"
 	opts.rrd 	= { "-v", "dBm" }
 	opts.colors	= {
 		signal_power = '0000ff',

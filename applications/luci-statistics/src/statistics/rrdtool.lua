@@ -66,7 +66,20 @@ function Graph._clearargs( self )
 	end
 end
 
+function Graph._forcelol( self, list )
+	if type(list[1]) ~= "table" then
+		return( { list } )
+	end
+	return( list )
+end
+
 function Graph._rrdtool( self, png, rrd )
+
+	-- prepare directory
+	local dir = png:gsub("/[^/]+$","")
+	ffluci.fs.mkdir( dir, true )
+
+	-- construct commandline
 	local cmdline = "rrdtool graph " .. png
 
 	for i, opt in ipairs(self.args) do
@@ -84,93 +97,93 @@ function Graph._rrdtool( self, png, rrd )
 		end
 	end
 
+	-- execute rrdtool
 	local rrdtool = io.popen( cmdline )
-	rrdtool:read("*a")
 	rrdtool:close()
 end
 
-function Graph._generic( self, optlist )
+function Graph._generic( self, opts )
 
 	local images = { }
 
-	if type(optlist[1]) ~= "table" then
-		optlist = { optlist }
+	-- remember images
+	table.insert( images, opts.image )
+
+	-- insert provided addition rrd options
+	self:_push( { "-t", opts.title or "Unknown title" } )
+	self:_push( opts.rrd )
+
+	-- construct an array of safe instance names
+	local inst_names = { }
+	for i, source in ipairs(opts.sources) do
+		inst_names[i] = i .. source.name:gsub("[^A-Za-z0-9%-_]","_")
 	end
 
-	for i, opts in ipairs(optlist) do
-		-- remember images
-		table.insert( images, opts.image )
-
-		-- insert provided addition rrd options
-		self:_push( { "-t", opts.title or "Unknown title" } )
-		self:_push( opts.rrd )
-
-		-- construct an array of safe instance names
-		local inst_names = { }
-		for i, source in ipairs(opts.sources) do
-			inst_names[i] = i .. source.name:gsub("[^A-Za-z0-9%-_]","_")
+	-- create DEF statements for each instance, find longest instance name
+	local longest_name = 0
+	for i, source in ipairs(opts.sources) do
+		if source.name:len() > longest_name then
+			longest_name = source.name:len()
 		end
 
-		-- create DEF statements for each instance, find longest instance name
-		local longest_name = 0
-		for i, source in ipairs(opts.sources) do
-			if source.name:len() > longest_name then
-				longest_name = source.name:len()
-			end
+		local ds = source.ds or "value"
 
-			self:_push( "DEF:" .. inst_names[i] .. "_min=" ..source.rrd .. ":value:MIN" )
-			self:_push( "DEF:" .. inst_names[i] .. "_avg=" ..source.rrd .. ":value:AVERAGE" )
-			self:_push( "DEF:" .. inst_names[i] .. "_max=" ..source.rrd .. ":value:MAX" )
-			self:_push( "CDEF:" .. inst_names[i] .. "_nnl=" .. inst_names[i] .. "_avg,UN,0," .. inst_names[i] .. "_avg,IF" )
-		end
+		self:_push( "DEF:" .. inst_names[i] .. "_min=" ..source.rrd .. ":" .. ds .. ":MIN" )
+		self:_push( "DEF:" .. inst_names[i] .. "_avg=" ..source.rrd .. ":" .. ds .. ":AVERAGE" )
+		self:_push( "DEF:" .. inst_names[i] .. "_max=" ..source.rrd .. ":" .. ds .. ":MAX" )
+		self:_push( "CDEF:" .. inst_names[i] .. "_nnl=" .. inst_names[i] .. "_avg,UN,0," .. inst_names[i] .. "_avg,IF" )
+	end
 
-		-- create CDEF statement for last instance name
-		self:_push( "CDEF:" .. inst_names[#inst_names] .. "_stk=" .. inst_names[#inst_names] .. "_nnl" )
+	-- create CDEF statement for last instance name
+	self:_push( "CDEF:" .. inst_names[#inst_names] .. "_stk=" .. inst_names[#inst_names] .. "_nnl" )
 
-		-- create CDEF statements for each instance
-		for i, source in ipairs(inst_names) do
-			if i > 1 then
-				self:_push(
-					"CDEF:" ..
-					inst_names[1 + #inst_names - i] .. "_stk=" ..
-					inst_names[1 + #inst_names - i] .. "_nnl," ..
-					inst_names[2 + #inst_names - i] .. "_stk,+"
-				)
-			end
-		end
-
-		-- create LINE and GPRINT statements for each instance
-		for i, source in ipairs(opts.sources) do
-
-			local legend = string.format(
-				"%-" .. longest_name .. "s",
-				source.name
+	-- create CDEF statements for each instance
+	for i, source in ipairs(inst_names) do
+		if i > 1 then
+			self:_push(
+				"CDEF:" ..
+				inst_names[1 + #inst_names - i] .. "_stk=" ..
+				inst_names[1 + #inst_names - i] .. "_nnl," ..
+				inst_names[2 + #inst_names - i] .. "_stk,+"
 			)
-
-			local numfmt = opts.number_format or "%6.1lf"
-
-			local line_color
-			local area_color
-
-			if type(opts.colors[source.name]) == "string" then
-				line_color = opts.colors[source.name]
-				area_color = self.colors:from_string( line_color )
-			else
-				area_color = self.colors:random()
-				line_color = self.colors:to_string( area_color )
-			end
-
-			area_color = self.colors:to_string(
-				self.colors:faded( area_color )
-			)
-
-			self:_push( "AREA:"   .. inst_names[i] .. "_stk#" .. area_color )
-			self:_push( "LINE1:"  .. inst_names[i] .. "_stk#" .. line_color .. ":" .. legend )
-			self:_push( "GPRINT:" .. inst_names[i] .. "_min:MIN:" .. numfmt .. " Min" )
-			self:_push( "GPRINT:" .. inst_names[i] .. "_avg:AVERAGE:" .. numfmt .. " Avg" )
-			self:_push( "GPRINT:" .. inst_names[i] .. "_max:MAX:" .. numfmt .. " Max" )
-			self:_push( "GPRINT:" .. inst_names[i] .. "_avg:LAST:" .. numfmt .. " Last\\l" )
 		end
+	end
+
+	-- create LINE and GPRINT statements for each instance
+	for i, source in ipairs(opts.sources) do
+
+		local legend = string.format(
+			"%-" .. longest_name .. "s",
+			source.name
+		)
+
+		local numfmt = opts.number_format or "%6.1lf"
+
+		local line_color
+		local area_color
+
+		-- find color: try source, then opts.colors; fall back to random color
+		if type(source.color) == "string" then
+			line_color = source.color
+			area_color = self.colors:from_string( line_color )
+		elseif type(opts.colors[source.name:gsub("[^%w]","_")]) == "string" then
+			line_color = opts.colors[source.name:gsub("[^%w]","_")]
+			area_color = self.colors:from_string( line_color )
+		else
+			area_color = self.colors:random()
+			line_color = self.colors:to_string( area_color )
+		end
+
+		-- derive area background color from line color
+		area_color = self.colors:to_string( self.colors:faded( area_color ) )
+
+
+		self:_push( "AREA:"   .. inst_names[i] .. "_stk#" .. area_color )
+		self:_push( "LINE1:"  .. inst_names[i] .. "_stk#" .. line_color .. ":" .. legend )
+		self:_push( "GPRINT:" .. inst_names[i] .. "_min:MIN:" .. numfmt .. " Min" )
+		self:_push( "GPRINT:" .. inst_names[i] .. "_avg:AVERAGE:" .. numfmt .. " Avg" )
+		self:_push( "GPRINT:" .. inst_names[i] .. "_max:MAX:" .. numfmt .. " Max" )
+		self:_push( "GPRINT:" .. inst_names[i] .. "_avg:LAST:" .. numfmt .. " Last\\l" )
 	end
 
 	return images
@@ -186,14 +199,16 @@ function Graph.render( self, host, plugin, plugin_instance )
 	local stat, def = pcall( require, plugin_def )
 
 	if stat and def and type(def.rrdargs) == "function" then
-		for i, png in ipairs( self:_generic( def.rrdargs( self, host, plugin, plugin_instance, dtype ) ) ) do
-			table.insert( pngs, png )
+		for i, opts in ipairs( self:_forcelol( def.rrdargs( self, host, plugin, plugin_instance, dtype ) ) ) do
+			for i, png in ipairs( self:_generic( opts ) ) do
+				table.insert( pngs, png )
 
-			-- exec
-			self:_rrdtool( png )
+				-- exec
+				self:_rrdtool( png )
 
-			-- clear args
-			self:_clearargs()
+				-- clear args
+				self:_clearargs()
+			end
 		end
 	else
 
@@ -205,14 +220,16 @@ function Graph.render( self, host, plugin, plugin_instance )
 			local stat, def = pcall( require, dtype_def )
 
 			if stat and def and type(def.rrdargs) == "function" then
-				for i, png in ipairs( self:_generic( def.rrdargs( self, host, plugin, plugin_instance, dtype ) ) ) do
-					table.insert( pngs, png )
+				for i, opts in ipairs( self:_forcelol( def.rrdargs( self, host, plugin, plugin_instance, dtype ) ) ) do
+					for i, png in ipairs( self:_generic( opts ) ) do
+						table.insert( pngs, png )
 
-					-- exec
-					self:_rrdtool( png )
+						-- exec
+						self:_rrdtool( png )
 
-					-- clear args
-					self:_clearargs()
+						-- clear args
+						self:_clearargs()
+					end
 				end
 			else
 

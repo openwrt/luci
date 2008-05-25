@@ -7,7 +7,7 @@ function rrdargs( graph, host, plugin, plugin_instance, dtype )
 	opts = { }
 	opts.sources	= { }
 	opts.image	= graph:mkpngpath( host, plugin, plugin_instance, dtype )
-	opts.title	= graph:mktitle( host, plugin, plugin_instance, dtype )
+	opts.title	= host .. ": Prozessorauslastung"
 	opts.rrd 	= { "-v", "Percent" }
 	opts.colors	= {
 		idle      = 'ffffff',
