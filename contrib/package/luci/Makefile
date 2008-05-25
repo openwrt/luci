@@ -185,6 +185,22 @@ define Package/luci-app-splash/install
 endef
 
 
+define Package/luci-app-statistics
+  $(call Package/luci/template)
+  DEPENDS:=luci +collectd +collectd-mod-rrdtool1 +rrdtool1
+  TITLE:=LuCI Statistics Application (incomplete)
+endef
+
+define Package/luci-app-statistics/conffiles
+/etc/config/luci_statistics
+endef
+
+define Package/luci-app-statistics/install
+	$(call Package/luci/install/template,$(1),applications/luci-statistics)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-statistics/dist/usr/bin/stat-genconfig $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-statistics/dist/etc/init.d/luci_statistics $(1)/etc/init.d
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -225,6 +241,7 @@ $(eval $(call BuildPackage,luci-mod-freifunk))
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))
 $(eval $(call BuildPackage,luci-app-splash))
+$(eval $(call BuildPackage,luci-app-statistics))
 
 $(eval $(call BuildPackage,luci-sgi-haserl))
 $(eval $(call BuildPackage,luci-sgi-webuci))
