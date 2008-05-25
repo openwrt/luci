@@ -1,0 +1,9 @@
+<%+header%>
+
+<h1>Statistik (<%=request%>)</h1>
+
+<% for i, img in ipairs(images) do %>
+	<img src="<%=img:gsub("/tmp/rrdimg/OpenWrt","/img")%>" />
+<% end %>
+
+<%+footer%>

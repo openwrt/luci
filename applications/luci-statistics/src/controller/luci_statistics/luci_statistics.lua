@@ -1,19 +1,14 @@
---[[
-
-    Luci controller for statistics
-    Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-    
-    $Id$
-
-]]--
-
 module("ffluci.controller.luci_statistics.luci_statistics", package.seeall)
 
-fs  = require("ffluci.fs")
-tpl = require("ffluci.template")
+local fs   = require("ffluci.fs")
+local tpl  = require("ffluci.template")
+local rrd  = require("ffluci.statistics.rrdtool")
+local data = require("ffluci.statistics.datatree").Instance()
+
 
 function _entry( path, ... )
-	if fs.isfile( "/usr/lib/collectd/" .. path[4] .. ".so" ) then
+	local file = path[4] or path[3]
+	if fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
 		entry( path, ... )
 	end
 end
@@ -32,10 +27,11 @@ function index()
 	entry({"admin", "statistics", "system"},		statistics_systemplugins,		"Systemplugins",	30)
 	_entry({"admin", "statistics", "system", "exec"},	cbi("luci_statistics/exec"),		"Exec",			10)
 	_entry({"admin", "statistics", "system", "email"},	cbi("luci_statistics/email"),		"E-Mail",		20)
-	_entry({"admin", "statistics", "system", "df"},		cbi("luci_statistics/df"),		"Speicherplatz",	30)
-	_entry({"admin", "statistics", "system", "disk"},	cbi("luci_statistics/disk"),		"Datenträger",		40)
-	_entry({"admin", "statistics", "system", "irq"},	cbi("luci_statistics/irq"),		"Interrupts",		50)
-	_entry({"admin", "statistics", "system", "processes"},	cbi("luci_statistics/processes"),	"Prozesse",		60)
+	_entry({"admin", "statistics", "system", "cpu"},	cbi("luci_statistics/cpu"),		"Prozessor",		30)
+	_entry({"admin", "statistics", "system", "df"},		cbi("luci_statistics/df"),		"Speicherplatz",	40)
+	_entry({"admin", "statistics", "system", "disk"},	cbi("luci_statistics/disk"),		"Datenträger",		50)
+	_entry({"admin", "statistics", "system", "irq"},	cbi("luci_statistics/irq"),		"Interrupts",		60)
+	_entry({"admin", "statistics", "system", "processes"},	cbi("luci_statistics/processes"),	"Prozesse",		70)
 
 	entry({"admin", "statistics", "network"},		statistics_networkplugins,		"Netzwerkplugins",	40)
 	_entry({"admin", "statistics", "network", "interface"},	cbi("luci_statistics/interface"),	"Schnittstellen",	10)
@@ -44,6 +40,14 @@ function index()
 	_entry({"admin", "statistics", "network", "tcpconns"},	cbi("luci_statistics/tcpconns"),	"Verbindungen",		40)
 	_entry({"admin", "statistics", "network", "ping"},	cbi("luci_statistics/ping"),		"Ping",			50)
 	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		"DNS",			60)
+
+	
+	-- public views
+	entry({"freifunk", "statistics"},			statistics_index,			"Statistiken",		80)
+	
+	for i, plugin in ipairs( data:plugins() ) do
+		_entry({"freifunk", "statistics", plugin},	statistics_render,			plugin,		    	 i)
+	end
 end
 
 
@@ -85,4 +89,19 @@ function statistics_networkplugins()
 	}
 
 	tpl.render("admin_statistics/networkplugins", {plugins=plugins})
+end
+
+
+function statistics_render()
+	local plugin = ffluci.dispatcher.request[3]
+	local images = { }
+
+	for i, inst in ipairs( data:plugin_instances( plugin ) ) do
+		local graph = rrd.Graph()
+		for i, img in ipairs( graph:render( "OpenWrt", plugin, inst ) ) do
+			table.insert( images, img )
+		end
+	end
+
+	tpl.render("public_statistics/graph", { images=images, plugin=plugin } )
 end
