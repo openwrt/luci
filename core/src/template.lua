@@ -50,12 +50,6 @@ compiler_enable_bytecode = false
 
 -- Define the namespace for template modules
 viewns = {
-	translate  = function(...) return require("luci.i18n").translate(...) end,
-	config     = function(...) return require("luci.model.uci").get(...) or "" end,
-	controller = luci.http.dispatcher(),
-	uploadctrl = luci.http.dispatcher_upload(),
-	media      = luci.config.main.mediaurlbase,
-	resource   = luci.config.main.resourcebase,
 	write      = io.write,
 	include    = function(name) Template(name):render(getfenv(2)) end,	
 }
@@ -94,7 +88,6 @@ function compile(template)
 	-- Replacements
 	local r_include = "')\ninclude('%s')\nwrite('"
 	local r_i18n    = "'..translate('%1','%2')..'"
-	local r_uci     = "'..config('%1','%2','%3')..'"
 	local r_pexec   = "'..(%s or '')..'"
 	local r_exec    = "')\n%s\nwrite('"
 	
@@ -106,8 +99,6 @@ function compile(template)
 			re = r_include:format(sanitize(string.sub(v, 2)))
 		elseif p == ":" then
 			re = sanitize(v):gsub(":(.-) (.+)", r_i18n)
-		elseif p == "~" then
-			re = sanitize(v):gsub("~(.-)%.(.-)%.(.+)", r_uci)
 		elseif p == "=" then
 			re = r_pexec:format(v:sub(2))
 		else

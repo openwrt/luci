@@ -1,14 +1,8 @@
 module("luci.controller.admin.status", package.seeall)
 
 function index()
-	local page  = node("admin", "status")
-	page.target = template("admin_status/index")
-	page.title  = "Status"
-	page.order  = 20
-	
-	local page  = node("admin", "status", "syslog")
-	page.target = action_syslog
-	page.title  = "Systemprotokoll"
+	entry({"admin", "status"}, template("admin_status/index"), "Status", 20)
+	entry({"admin", "status", "syslog"}, action_syslog, "Systemprotokoll")
 end
 
 function action_syslog()

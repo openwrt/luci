@@ -25,11 +25,12 @@ limitations under the License.
 ]]--
 module("luci.sgi.webuci", package.seeall)
 
--- Environment Table
-luci.http.env = webuci.env
-
-
 local status_set = false
+
+-- Initialize the environment
+function initenv(env)
+	luci.http.env = env
+end
 
 -- Returns the main dispatcher URL
 function luci.http.dispatcher()
@@ -94,6 +95,6 @@ end
 
 -- Sets HTTP-Status-Header
 function luci.http.status(code, message)
-	print(webuci.env.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
+	print(luci.http.env.SERVER_PROTOCOL .. " " .. tostring(code) .. " " .. message)
 	status_set = true
 end

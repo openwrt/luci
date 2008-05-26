@@ -73,7 +73,7 @@ function httpdispatch()
 	local pathinfo = luci.http.env.PATH_INFO or ""
 	local c = tree
 
-	for s in pathinfo:gmatch("/([%w-]+)") do
+	for s in pathinfo:gmatch("([%w_]+)") do
 		table.insert(request, s)
 	end
 
@@ -107,6 +107,14 @@ function dispatch()
 	if track.setuser then
 		luci.sys.process.setuser(track.setuser)
 	end
+	
+	-- Init template engine
+	local tpl = require("luci.template")
+	tpl.viewns.translate  = function(...) return require("luci.i18n").translate(...) end
+	tpl.viewns.controller = luci.http.dispatcher()
+	tpl.viewns.uploadctrl = luci.http.dispatcher_upload()
+	tpl.viewns.media      = luci.config.main.mediaurlbase
+	tpl.viewns.resource   = luci.config.main.resourcebase
 
 
 	if c and type(c.target) == "function" then
@@ -121,19 +129,42 @@ function dispatch()
 	end
 end
 
+-- Generates the dispatching tree
+function createindex()
+	local path = luci.sys.libpath() .. "/controller/"
+	local suff = ".lua"
+	
+	if pcall(require, "fastindex") then
+		createindex_fastindex(path, suff)
+	else
+		createindex_plain(path, suff)
+	end
+end
+
+-- Uses fastindex to create the dispatching tree
+function createindex_fastindex(path, suffix)	
+	local fi = fastindex.new("index")
+	fi.add(path .. "*" .. suffix)
+	fi.add(path .. "*/*" .. suffix)
+	fi.scan()
+	
+	for k, v in pairs(fi.indexes) do
+		local stat, mod = pcall(require, v[2])
+		
+		luci.util.updfenv(v[1], luci.dispatcher)
+		pcall(v[1])
+	end
+end
 
 -- Calls the index function of all available controllers
-function createindex()
-	local root = luci.sys.libpath() .. "/controller/"
-	local suff = ".lua"
-
+function createindex_plain(path, suffix)
 	local controllers = luci.util.combine(
-		luci.fs.glob(root .. "*" .. suff) or {},
-		luci.fs.glob(root .. "*/*" .. suff) or {}
+		luci.fs.glob(path .. "*" .. suffix) or {},
+		luci.fs.glob(path .. "*/*" .. suffix) or {}
 	)
 
 	for i,c in ipairs(controllers) do
-		c = "luci.controller." .. c:sub(#root+1, #c-#suff):gsub("/", ".")
+		c = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
 		stat, mod = pcall(require, c)
 
 		if stat and mod and type(mod.index) == "function" then
