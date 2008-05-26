@@ -31,11 +31,18 @@ require("luci.fs")
 -- Local dispatch database
 local tree = {nodes={}}
 
+-- Index table
+local index = {}
+
 -- Global request object
 request = {}
 
 -- Active dispatched node
 dispatched = nil
+
+-- Status fields
+built_index = false
+built_tree  = false
 
 
 -- Builds a URL
@@ -68,7 +75,7 @@ function error500(message)
 	return false
 end
 
--- Dispatches a request depending on the PATH_INFO variable
+-- Creates a request object for dispatching
 function httpdispatch()
 	local pathinfo = luci.http.env.PATH_INFO or ""
 	local c = tree
@@ -80,7 +87,12 @@ function httpdispatch()
 	dispatch()
 end
 
+-- Dispatches a request
 function dispatch()
+	if not built_tree then
+		createtree()
+	end
+
 	local c = tree
 	local track = {}
 
@@ -131,6 +143,7 @@ end
 
 -- Generates the dispatching tree
 function createindex()
+	index = {}
 	local path = luci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
 	
@@ -139,6 +152,8 @@ function createindex()
 	else
 		createindex_plain(path, suff)
 	end
+	
+	built_index = true
 end
 
 -- Uses fastindex to create the dispatching tree
@@ -149,10 +164,7 @@ function createindex_fastindex(path, suffix)
 	fi.scan()
 	
 	for k, v in pairs(fi.indexes) do
-		local stat, mod = pcall(require, v[2])
-		
-		luci.util.updfenv(v[1], luci.dispatcher)
-		pcall(v[1])
+		index[v[2]] = v[1]
 	end
 end
 
@@ -168,10 +180,29 @@ function createindex_plain(path, suffix)
 		stat, mod = pcall(require, c)
 
 		if stat and mod and type(mod.index) == "function" then
-			luci.util.updfenv(mod.index, luci.dispatcher)
-			pcall(mod.index)
+			index[c] = mod.index
 		end
 	end
+end
+
+-- Creates the dispatching tree from the index
+function createtree()
+	if not built_index then
+		createindex()
+	end
+
+	for k, v in pairs(index) do
+		luci.util.updfenv(v, _M)
+		
+		local stat, mod = pcall(require, k)
+		if stat then		
+			luci.util.updfenv(v, mod)
+		end
+		
+		pcall(v)
+	end
+	
+	built_tree = true
 end
 
 -- Shortcut for creating a dispatching node
