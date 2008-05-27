@@ -46,17 +46,30 @@ endef
 define Package/luci
   $(call Package/luci/template)
   MENU:=1
-  DEPENDS:=+lua +luaposix +luci-addons
-endef
-
-define Package/luci/conffiles
-/etc/config/luci
+  DEPENDS:=+lua +luaposix
 endef
 
 define Package/luci/install		
 	$(call Package/luci/install/template,$(1),core)
+endef
+
+
+### Web Packages ###
+define Package/luci-web
+  $(call Package/luci/template)
+  DEPENDS:=luci +luci-addons
+  TITLE:=LuCI - Webframework
+endef
+
+define Package/luci-web/conffiles
+/etc/config/luci
+endef
+
+define Package/luci-web/install
+	$(call Package/luci/install/template,$(1),web)
 	$(call Package/luci/install/template,$(1),themes/fledermaus)
 endef
+
 
 
 ### Community Packages ###
@@ -111,7 +124,7 @@ endef
 
 define Package/luci-mod-admin-core
   $(call Package/luci/template)
-  DEPENDS:=luci
+  DEPENDS:=luci +luci-web
   TITLE:=Core administrative pages
 endef
 

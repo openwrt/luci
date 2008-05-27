@@ -127,7 +127,10 @@ function dispatch()
 	tpl.viewns.uploadctrl = luci.http.dispatcher_upload()
 	tpl.viewns.media      = luci.config.main.mediaurlbase
 	tpl.viewns.resource   = luci.config.main.resourcebase
-
+	
+	-- Load default translation
+	require("luci.i18n").loadc("default")
+	
 
 	if c and type(c.target) == "function" then
 		dispatched = c
