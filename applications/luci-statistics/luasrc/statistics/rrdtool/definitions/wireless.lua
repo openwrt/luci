@@ -2,7 +2,7 @@ module("luci.statistics.rrdtool.definitions.wireless", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance )
 
-	dtypes = { "signal_power", "signal_noise" }
+	dtypes = { "signal_noise", "signal_power" }
 
 	opts = { }
 	opts.sources	= { }
@@ -16,8 +16,9 @@ function rrdargs( graph, host, plugin, plugin_instance )
 
 	for i, dtype in ipairs(dtypes) do
 		opts.sources[i] = {
-			name = dtype,
-			rrd  = graph:mkrrdpath( host, plugin, plugin_instance, dtype )
+			name    = dtype,
+			rrd     = graph:mkrrdpath( host, plugin, plugin_instance, dtype ),
+			overlay	= true  -- don't summarize values
 		}
 	end
 

@@ -104,65 +104,123 @@ end
 
 function Graph._generic( self, opts )
 
-	local images = { }
+	local images     = { }
+	local rrasingle  = false	-- XXX: fixme
 
-	-- remember images
-	table.insert( images, opts.image )
+	-- internal state variables
+	local _stack_neg    = { }
+	local _stack_pos    = { }
+	local _longest_name = 0
+	local _has_totals   = false
 
-	-- insert provided addition rrd options
-	self:_push( { "-t", opts.title or "Unknown title" } )
-	self:_push( opts.rrd )
+	-- some convenient aliases
+	local _ti	    = table.insert
+	local _sf	    = string.format
 
-	-- construct an array of safe instance names
-	local inst_names = { }
-	for i, source in ipairs(opts.sources) do
-		inst_names[i] = i .. source.name:gsub("[^A-Za-z0-9%-_]","_")
-	end
+	-- local helper: create definitions for min, max, avg and create *_nnl (not null) variable from avg
+	function __def(source)
 
-	-- create DEF statements for each instance, find longest instance name
-	local longest_name = 0
-	for i, source in ipairs(opts.sources) do
-		if source.name:len() > longest_name then
-			longest_name = source.name:len()
+		local inst = source.sname
+		local rrd  = source.rrd
+		local ds   = source.ds
+
+		if not ds or ds:len() == 0 then ds = "value" end
+
+		local rv = { _sf( "DEF:%s_avg=%s:%s:AVERAGE", inst, rrd, ds ) }
+
+		if not rrasingle then
+			_ti( rv, _sf( "DEF:%s_min=%s:%s:MIN", inst, rrd, ds ) )
+			_ti( rv, _sf( "DEF:%s_max=%s:%s:MAX", inst, rrd, ds ) )
 		end
 
-		local ds = source.ds or "value"
+		_ti( rv, _sf( "CDEF:%s_nnl=%s_avg,UN,0,%s_avg,IF", inst, inst, inst ) )
 
-		self:_push( "DEF:" .. inst_names[i] .. "_min=" ..source.rrd .. ":" .. ds .. ":MIN" )
-		self:_push( "DEF:" .. inst_names[i] .. "_avg=" ..source.rrd .. ":" .. ds .. ":AVERAGE" )
-		self:_push( "DEF:" .. inst_names[i] .. "_max=" ..source.rrd .. ":" .. ds .. ":MAX" )
-		self:_push( "CDEF:" .. inst_names[i] .. "_nnl=" .. inst_names[i] .. "_avg,UN,0," .. inst_names[i] .. "_avg,IF" )
+		return rv
 	end
 
-	-- create CDEF statement for last instance name
-	self:_push( "CDEF:" .. inst_names[#inst_names] .. "_stk=" .. inst_names[#inst_names] .. "_nnl" )
+	-- local helper: create cdefs depending on source options like flip and overlay
+	function __cdef(source)
 
-	-- create CDEF statements for each instance
-	for i, source in ipairs(inst_names) do
-		if i > 1 then
-			self:_push(
-				"CDEF:" ..
-				inst_names[1 + #inst_names - i] .. "_stk=" ..
-				inst_names[1 + #inst_names - i] .. "_nnl," ..
-				inst_names[2 + #inst_names - i] .. "_stk,+"
-			)
+		local rv = { }
+		local prev
+
+		-- find previous source, choose stack depending on flip state
+		if source.flip then
+			prev = _stack_neg[#_stack_neg]
+		else
+			prev = _stack_pos[#_stack_pos]
+		end
+
+		-- is first source in stack or overlay source: source_stk = source_nnl
+		if not prev or source.overlay then
+			-- create cdef statement
+			_ti( rv, _sf( "CDEF:%s_stk=%s_nnl", source.sname, source.sname ) )
+
+		-- is subsequent source without overlay: source_stk = source_nnl + previous_stk
+		else
+			-- create cdef statement				
+			_ti( rv, _sf(
+				"CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev
+			) )
+		end
+
+		-- create multiply by minus one cdef if flip is enabled
+		if source.flip then
+
+			-- create cdef statement: source_stk = source_stk * -1
+			_ti( rv, _sf( "CDEF:%s_neg=%s_stk,-1,*", source.sname, source.sname ) )
+
+			-- push to negative stack if overlay is disabled
+			if not source.overlay then
+				_ti( _stack_neg, source.sname )
+			end
+
+		-- no flipping, push to positive stack if overlay is disabled
+		elseif not source.overlay then
+
+			-- push to positive stack
+			_ti( _stack_pos, source.sname )
+		end
+
+		-- calculate total amount of data if requested
+		if source.total then
+			_ti( rv, _sf(
+				"CDEF:%s_avg_sample=%s_avg,UN,0,%s_avg,IF,sample_len,*",
+				source.sname, source.sname, source.sname
+			) )
+
+			_ti( rv, _sf(
+				"CDEF:%s_avg_sum=PREV,UN,0,PREV,IF,%s_avg_sample,+",
+				source.sname, source.sname, source.sname
+			) )
+		end
+
+
+		return rv
+	end
+
+	-- local helper: create cdefs required for calculating total values
+	function __cdef_totals()
+		if _has_totals then
+			return {
+				_sf( "CDEF:mytime=%s_avg,TIME,TIME,IF", opts.sources[1].sname ),
+				"CDEF:sample_len_raw=mytime,PREV(mytime),-",
+				"CDEF:sample_len=sample_len_raw,UN,0,sample_len_raw,IF"
+			}
+		else
+			return { }
 		end
 	end
 
-	-- create LINE and GPRINT statements for each instance
-	for i, source in ipairs(opts.sources) do
-
-		local legend = string.format(
-			"%-" .. longest_name .. "s",
-			source.name
-		)
-
-		local numfmt = opts.number_format or "%6.1lf"
+	-- local helper: create line and area statements
+	function __area(source)
 
 		local line_color
 		local area_color
+		local legend
+		local var
 
-		-- find color: try source, then opts.colors; fall back to random color
+		-- find colors: try source, then opts.colors; fall back to random color
 		if type(source.color) == "string" then
 			line_color = source.color
 			area_color = self.colors:from_string( line_color )
@@ -177,13 +235,98 @@ function Graph._generic( self, opts )
 		-- derive area background color from line color
 		area_color = self.colors:to_string( self.colors:faded( area_color ) )
 
+		-- choose source_stk or source_neg variable depending on flip state
+		if source.flip then
+			var = "neg"
+		else
+			var = "stk"
+		end
 
-		self:_push( "AREA:"   .. inst_names[i] .. "_stk#" .. area_color )
-		self:_push( "LINE1:"  .. inst_names[i] .. "_stk#" .. line_color .. ":" .. legend )
-		self:_push( "GPRINT:" .. inst_names[i] .. "_min:MIN:" .. numfmt .. " Min" )
-		self:_push( "GPRINT:" .. inst_names[i] .. "_avg:AVERAGE:" .. numfmt .. " Avg" )
-		self:_push( "GPRINT:" .. inst_names[i] .. "_max:MAX:" .. numfmt .. " Max" )
-		self:_push( "GPRINT:" .. inst_names[i] .. "_avg:LAST:" .. numfmt .. " Last\\l" )
+		-- create legend
+		legend = _sf( "%-" .. _longest_name .. "s", source.name )
+
+		-- create area and line1 statement
+		return {
+			_sf( "AREA:%s_%s#%s", source.sname, var, area_color ),
+			_sf( "LINE1:%s_%s#%s:%s", source.sname, var, line_color, legend )
+		}
+	end
+
+	-- local helper: create gprint statements
+	function __gprint(source)
+
+		local rv     = { }
+		local numfmt = opts.number_format or "%6.1lf"
+		local totfmt = opts.totals_format or "%5.1lf%s"
+
+		-- don't include MIN if rrasingle is enabled
+		if not rrasingle then
+			_ti( rv, _sf( "GPRINT:%s_min:MIN:%s Min", source.sname, numfmt ) )
+		end
+
+		-- always include AVERAGE
+		_ti( rv, _sf( "GPRINT:%s_avg:AVERAGE:%s Avg", source.sname, numfmt ) )
+
+		-- don't include MAX if rrasingle is enabled
+		if not rrasingle then
+			_ti( rv, _sf( "GPRINT:%s_max:MAX:%s Max", source.sname, numfmt ) )
+		end
+
+		-- include total count if requested else include LAST
+		if source.total then
+			_ti( rv, _sf( "GPRINT:%s_avg_sum:LAST:(ca. %s Total)", source.sname, totfmt ) )
+		else
+			_ti( rv, _sf( "GPRINT:%s_avg:LAST:%s Last", source.sname, numfmt ) )
+		end
+
+		-- end label line
+		rv[#rv] = rv[#rv] .. "\\l"
+
+
+		return rv					
+	end
+
+
+	-- remember images
+	_ti( images, opts.image )
+
+	-- insert provided addition rrd options
+	self:_push( { "-t", opts.title or "Unknown title" } )
+	self:_push( opts.rrd )
+
+	-- store index and safe instance name within each source object,
+	-- find longest instance name
+	for i, source in ipairs(opts.sources) do
+
+		if source.name:len() > _longest_name then
+			_longest_name = source.name:len()
+		end
+
+		if source.total then
+			_has_totals = true
+		end
+
+		source.index = i
+		source.sname = i .. source.name:gsub("[^A-Za-z0-9%-_]","_")
+	end
+
+	-- create DEF statements for each instance, find longest instance name
+	for i, source in ipairs(opts.sources) do
+		self:_push( __def( source ) )
+	end
+
+	-- create CDEF required for calculating totals
+	self:_push( __cdef_totals() )
+
+	-- create CDEF statements for each instance in reversed order
+	for i, source in ipairs(opts.sources) do
+		self:_push( __cdef( opts.sources[1 + #opts.sources - i] ) )
+	end
+
+	-- create LINE1, AREA and GPRINT statements for each instance
+	for i, source in ipairs(opts.sources) do
+		self:_push( __area( source ) )
+		self:_push( __gprint( source ) )
 	end
 
 	return images
