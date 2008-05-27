@@ -8,7 +8,7 @@ source: source-module
 source-module:
 	mkdir -p dist$(LUCI_INSTALLDIR)
 	cp root/* dist -R 2>/dev/null || true
-	cp src/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
+	cp luasrc/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf; done  
 	
 compile-module: source-module
