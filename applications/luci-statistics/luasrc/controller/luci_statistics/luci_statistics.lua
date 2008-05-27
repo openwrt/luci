@@ -6,25 +6,26 @@ local rrd  = require("luci.statistics.rrdtool")
 local data = require("luci.statistics.datatree").Instance()
 
 
-function _entry( path, ... )
-	local file = path[4] or path[3]
-	if fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
-		entry( path, ... )
-	end
-end
-
-
 function index()
-	entry({"admin", "statistics"},				statistics_index,			"Statistiken",		80)
+
+	function _entry( path, ... )
+		local file = path[4] or path[3]
+		if fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
+			entry( path, ... )
+		end
+	end
+
+
+	entry({"admin", "statistics"},				call("statistics_index"),		"Statistiken",		80)
 	entry({"admin", "statistics", "collectd"},		cbi("luci_statistics/collectd"),	"Collectd",		10)
 
-	entry({"admin", "statistics", "output"},		statistics_outputplugins,		"Ausgabeplugins",	20)
+	entry({"admin", "statistics", "output"},		call("statistics_outputplugins"),	"Ausgabeplugins",	20)
 	_entry({"admin", "statistics", "output", "rrdtool"},	cbi("luci_statistics/rrdtool"),		"RRDTool",		10)
 	_entry({"admin", "statistics", "output", "network"},	cbi("luci_statistics/network"),		"Netzwerk",		20)
 	_entry({"admin", "statistics", "output", "unixsock"},	cbi("luci_statistics/unixsock"),	"Unix Socket",		30)
 	_entry({"admin", "statistics", "output", "csv"},	cbi("luci_statistics/csv"),		"CSV",			40)
 
-	entry({"admin", "statistics", "system"},		statistics_systemplugins,		"Systemplugins",	30)
+	entry({"admin", "statistics", "system"},		call("statistics_systemplugins"),	"Systemplugins",	30)
 	_entry({"admin", "statistics", "system", "exec"},	cbi("luci_statistics/exec"),		"Exec",			10)
 	_entry({"admin", "statistics", "system", "email"},	cbi("luci_statistics/email"),		"E-Mail",		20)
 	_entry({"admin", "statistics", "system", "cpu"},	cbi("luci_statistics/cpu"),		"Prozessor",		30)
@@ -33,7 +34,7 @@ function index()
 	_entry({"admin", "statistics", "system", "irq"},	cbi("luci_statistics/irq"),		"Interrupts",		60)
 	_entry({"admin", "statistics", "system", "processes"},	cbi("luci_statistics/processes"),	"Prozesse",		70)
 
-	entry({"admin", "statistics", "network"},		statistics_networkplugins,		"Netzwerkplugins",	40)
+	entry({"admin", "statistics", "network"},		call("statistics_networkplugins"),	"Netzwerkplugins",	40)
 	_entry({"admin", "statistics", "network", "interface"},	cbi("luci_statistics/interface"),	"Schnittstellen",	10)
 	_entry({"admin", "statistics", "network", "netlink"},	cbi("luci_statistics/netlink"),		"Netlink",		20)
 	_entry({"admin", "statistics", "network", "iptables"},	cbi("luci_statistics/iptables"),	"Firewall",		30)
@@ -43,10 +44,10 @@ function index()
 
 	
 	-- public views
-	entry({"freifunk", "statistics"},			statistics_index,			"Statistiken",		80)
+	entry({"freifunk", "statistics"},			call("statistics_index"),		"Statistiken",		80)
 	
 	for i, plugin in ipairs( data:plugins() ) do
-		_entry({"freifunk", "statistics", plugin},	statistics_render,			plugin,		    	 i)
+		_entry({"freifunk", "statistics", plugin},	call("statistics_render"),		plugin,		    	 i)
 	end
 end
 
