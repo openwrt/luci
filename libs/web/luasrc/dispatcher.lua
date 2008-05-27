@@ -192,7 +192,7 @@ function createindex_plain(path, suffix)
 		end
 	end
 
-	if not cachetime or luci.fs.mtime(path) > cachetime then
+	if not cachetime then
 		for i,c in ipairs(controllers) do
 			c = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
 			stat, mod = pcall(require, c)
@@ -204,10 +204,6 @@ function createindex_plain(path, suffix)
 					luci.fs.writefile(indexcache .. "/" .. c, string.dump(mod.index))
 				end
 			end
-		end
-		if indexcache then
-			luci.fs.unlink(indexcache .. "/.index")
-			luci.fs.writefile(indexcache .. "/.index", "")
 		end
 	else
 		for i,c in ipairs(luci.fs.dir(indexcache)) do
