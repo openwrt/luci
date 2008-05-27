@@ -1,6 +1,6 @@
 include build/config.mk
 
-MODULES = applications/* core modules/* themes/*
+MODULES = applications/* libs/* modules/* themes/* i18n/*
 LUA_TARGET = source
 
 
