@@ -30,35 +30,65 @@ define Build/Compile
 endef
 
 
-define Package/luci/template
+### Templates ###
+
+define Package/luci/libtemplate
   SECTION:=admin
   CATEGORY:=Administration
   TITLE:=LuCI - Lua Configuration Interface
   URL:=http://luci.freifunk-halle.net/
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
+  SUBMENU:=LuCI - Libraries
+  DEPENDS:=+luci-core
 endef
+
+define Package/luci/fftemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=LuCI - Freifunk Support
+  DEPENDS:=+luci-mod-freifunk
+endef
+
+define Package/luci/webtemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=LuCI - Webinterface Components
+endef
+
 
 define Package/luci/install/template
 	$(CP) $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
 endef
 
 
-define Package/luci
-  $(call Package/luci/template)
-  MENU:=1
+
+### Core package ###
+
+define Package/luci-core
+  $(call Package/luci/libtemplate)
   DEPENDS:=+lua +luaposix
+  TITLE:=LuCI core libraries
 endef
 
-define Package/luci/install		
-	$(call Package/luci/install/template,$(1),core)
+define Package/luci-core/install		
+	$(call Package/luci/install/template,$(1),libs/core)
 endef
 
 
-### Web Packages ###
+### Libraries ###
+define Package/luci-cbi
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-web
+  TITLE:=Configuration Binding Interface
+endef
+
+define Package/luci-cbi/install
+	$(call Package/luci/install/template,$(1),libs/cbi)
+endef
+
+
 define Package/luci-web
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-addons
-  TITLE:=LuCI - Webframework
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-addons
+  TITLE:=MVC Webframework
 endef
 
 define Package/luci-web/conffiles
@@ -66,7 +96,7 @@ define Package/luci-web/conffiles
 endef
 
 define Package/luci-web/install
-	$(call Package/luci/install/template,$(1),web)
+	$(call Package/luci/install/template,$(1),libs/web)
 	$(call Package/luci/install/template,$(1),themes/fledermaus)
 endef
 
@@ -75,9 +105,9 @@ endef
 ### Community Packages ###
 
 define Package/luci-ff-halle
-  $(call Package/luci/template)
-  DEPENDS:=luci \
-   +luci-sgi-haserl +luci-mod-freifunk +luci-app-splash \
+  $(call Package/luci/fftemplate)
+  DEPENDS+= \
+   +luci-sgi-haserl +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
@@ -89,9 +119,9 @@ endef
 
 
 define Package/luci-ff-leipzig
-  $(call Package/luci/template)
-  DEPENDS:=luci \
-   +luci-sgi-haserl +luci-mod-freifunk +luci-app-splash \
+  $(call Package/luci/fftemplate)
+  DEPENDS+= \
+   +luci-sgi-haserl +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
@@ -105,9 +135,9 @@ endef
 
 
 define Package/luci-ff-hannover
-  $(call Package/luci/template)
-  DEPENDS:=luci \
-   +luci-sgi-haserl +luci-mod-freifunk +luci-app-splash \
+  $(call Package/luci/fftemplate)
+  DEPENDS+= \
+   +luci-sgi-haserl +luci-app-splash \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
   TITLE:=Freifunk Hannover Community Meta-Package
   URL:=http://www.freifunk-hannover.de/
@@ -123,9 +153,9 @@ endef
 ### Modules ###
 
 define Package/luci-mod-admin-core
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-web +luci-app-cbi
-  TITLE:=Core administrative pages
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-web +luci-cbi
+  TITLE:=Administration module
 endef
 
 define Package/luci-mod-admin-core/install
@@ -134,9 +164,9 @@ endef
 
 
 define Package/luci-mod-freifunk
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-mod-admin-core +luci-app-firewall
-  TITLE:=Freifunk public and administrative pages
+  $(call Package/luci/fftemplate)
+  DEPENDS:=+luci-mod-admin-core
+  TITLE:=LuCI Freifunk module
 endef
 
 define Package/luci-mod-freifunk/conffiles
@@ -151,20 +181,9 @@ endef
 
 ### Applications ###
 
-define Package/luci-app-cbi
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-web
-  TITLE:=Configuration Binding Interface
-endef
-
-define Package/luci-app-cbi/install
-	$(call Package/luci/install/template,$(1),applications/cbi)
-endef
-
-
 define Package/luci-app-ffwizard-leipzig
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-mod-freifunk
+  $(call Package/luci/fftemplate)
+  DEPENDS+=+luci-app-firewall
   TITLE:=Freifunk Leipzig configuration wizard
 endef
 
@@ -174,8 +193,8 @@ endef
 
 
 define Package/luci-app-firewall
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-mod-admin-core
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core
   TITLE:=Firewall and Portforwarding application
 endef
 
@@ -190,8 +209,8 @@ endef
 
 
 define Package/luci-app-splash
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-mod-freifunk +luci-sgi-haserl +iptables-mod-nat +iptables-mod-ipopt
+  $(call Package/luci/fftemplate)
+  DEPENDS+=+luci-sgi-haserl +iptables-mod-nat +iptables-mod-ipopt
   TITLE:=Freifunk DHCP-Splash application
 endef
 
@@ -210,8 +229,8 @@ endef
 
 
 define Package/luci-app-statistics
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-mod-admin-core +collectd +collectd-mod-rrdtool1 +rrdtool1
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core +collectd +collectd-mod-rrdtool1 +rrdtool1
   TITLE:=LuCI Statistics Application (incomplete)
 endef
 
@@ -229,31 +248,32 @@ endef
 ### Server Gateway Interfaces ###
 
 define Package/luci-sgi-haserl
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-web +haserl-lua
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-web +haserl-lua
   TITLE:=SGI for Haserl
 endef
 
 define Package/luci-sgi-haserl/install
-	$(call Package/luci/install/template,$(1),applications/sgi-haserl)
+	$(call Package/luci/install/template,$(1),libs/sgi-haserl)
 	$(CP) -a ./ipkg/luci-sgi-haserl.postinst $(1)/CONTROL/postinst
 endef
 
 
 define Package/luci-sgi-webuci
-  $(call Package/luci/template)
-  DEPENDS:=luci +luci-web
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-web
   TITLE:=SGI for Webuci
 endef
 
 define Package/luci-sgi-webuci/install
-	$(call Package/luci/install/template,$(1),applications/sgi-webuci)
+	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
 endef
 
 
 
 
-$(eval $(call BuildPackage,luci))
+$(eval $(call BuildPackage,luci-core))
+$(eval $(call BuildPackage,luci-cbi))
 $(eval $(call BuildPackage,luci-web))
 
 $(eval $(call BuildPackage,luci-ff-halle))
@@ -263,7 +283,6 @@ $(eval $(call BuildPackage,luci-ff-hannover))
 $(eval $(call BuildPackage,luci-mod-admin-core))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 
-$(eval $(call BuildPackage,luci-app-cbi))
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))
 $(eval $(call BuildPackage,luci-app-splash))
