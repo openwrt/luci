@@ -4,8 +4,8 @@ require("luci.sys")
 
 function index()
 	node("admin", "uci", "changes").target = template("admin_uci/changes")
-	node("admin", "uci", "revert").target  = action_revert
-	node("admin", "uci", "apply").target   = action_apply
+	node("admin", "uci", "revert").target  = call("action_revert")
+	node("admin", "uci", "apply").target   = call("action_apply")
 end
 
 -- This function has a higher priority than the admin_uci/apply template

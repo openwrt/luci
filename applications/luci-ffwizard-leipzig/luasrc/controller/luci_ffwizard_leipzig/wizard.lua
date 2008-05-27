@@ -1,7 +1,7 @@
 module("luci.controller.luci_ffwizard_leipzig.wizard", package.seeall)
 
 function index()
-	entry({"admin", "index", "wizard"}, action_wizard, "Freifunkassistent", 20)
+	entry({"admin", "index", "wizard"}, call("action_wizard"), "Freifunkassistent", 20)
 end
 
 

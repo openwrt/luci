@@ -137,7 +137,11 @@ function dispatch()
 
 	if c and type(c.target) == "function" then
 		dispatched = c
-
+		stat, mod = pcall(require, c.module)
+		if stat then
+			luci.util.updfenv(c.target, mod)
+		end
+		
 		stat, err = pcall(c.target)
 		if not stat then
 			error500(err)
@@ -222,12 +226,7 @@ function createtree()
 
 	for k, v in pairs(index) do
 		luci.util.updfenv(v, _M)
-		
-		local stat, mod = pcall(require, k)
-		if stat then		
-			luci.util.updfenv(v, mod)
-		end
-		
+		luci.util.extfenv(v, "_NAME", k)
 		pcall(v)
 	end
 	
@@ -242,6 +241,7 @@ function entry(path, target, title, order, add)
 	c.target = target
 	c.title  = title
 	c.order  = order
+	c.module = getfenv(2)._NAME
 
 	for k,v in pairs(add) do
 		c[k] = v
@@ -260,7 +260,7 @@ function node(...)
 
 	for k,v in ipairs(arg) do
 		if not c.nodes[v] then
-			c.nodes[v] = {nodes={}}
+			c.nodes[v] = {nodes={}, module=getfenv(2)._NAME}
 		end
 
 		c = c.nodes[v]
@@ -276,6 +276,10 @@ function alias(...)
 		request = req
 		dispatch()
 	end
+end
+
+function call(name)
+	return function() getfenv()[name]() end
 end
 
 function template(name)

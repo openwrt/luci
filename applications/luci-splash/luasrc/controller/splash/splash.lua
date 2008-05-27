@@ -5,9 +5,9 @@ function index()
 	page.target = cbi("splash/splash")
 	page.title  = "Client-Splash"
 
-	node("splash", "splash", "activate").target = action_activate
-	node("splash", "splash", "allowed").target  = action_allowed
-	node("splash", "splash", "unknown").target  = action_unknown
+	node("splash", "splash", "activate").target = call("action_activate")
+	node("splash", "splash", "allowed").target  = call("action_allowed")
+	node("splash", "splash", "unknown").target  = call("action_unknown")
 	node("splash", "splash", "splash").target   = template("splash_splash/splash")
 end
 

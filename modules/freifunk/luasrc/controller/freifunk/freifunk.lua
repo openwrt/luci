@@ -22,7 +22,7 @@ function index()
 	
 	
 	local page  = node("freifunk", "status")
-	page.target = action_status
+	page.target = call("action_status")
 	page.title  = "Status"
 	page.order  = 20
 	page.setuser  = false

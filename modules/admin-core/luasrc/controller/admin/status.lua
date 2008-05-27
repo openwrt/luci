@@ -2,7 +2,7 @@ module("luci.controller.admin.status", package.seeall)
 
 function index()
 	entry({"admin", "status"}, template("admin_status/index"), "Status", 20)
-	entry({"admin", "status", "syslog"}, action_syslog, "Systemprotokoll")
+	entry({"admin", "status", "syslog"}, call("action_syslog"), "Systemprotokoll")
 end
 
 function action_syslog()

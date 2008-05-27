@@ -1,7 +1,7 @@
 module("luci.controller.freifunk.luciinfo", package.seeall)
 
 function index()
-	node("freifunk", "luciinfo").target = action_index
+	node("freifunk", "luciinfo").target = call("action_index")
 end
 
 function action_index()

@@ -3,27 +3,27 @@ require("luci.sys")
 
 function index()
 	local page  = node("freifunk", "olsr")
-	page.target = action_index
+	page.target = call("action_index")
 	page.title  = "OLSR"
 	page.order  = 30
 	
 	local page  = node("freifunk", "olsr", "routes")
-	page.target = action_routes
+	page.target = call("action_routes")
 	page.title  = "Routen"
 	page.order  = 10
 	
 	local page  = node("freifunk", "olsr", "topology")
-	page.target = action_topology
+	page.target = call("action_topology")
 	page.title  = "Topologie"
 	page.order  = 20
 	
 	local page  = node("freifunk", "olsr", "hna")
-	page.target = action_hna
+	page.target = call("action_hna")
 	page.title  = "HNA"
 	page.order  = 30
 	
 	local page  = node("freifunk", "olsr", "mid")
-	page.target = action_mid
+	page.target = call("action_mid")
 	page.title  = "MID"
 	page.order  = 50
 end

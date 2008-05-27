@@ -14,21 +14,21 @@ function index()
 	page.order  = 30
 	
 	local page  = node("admin", "system", "packages")
-	page.target = action_packages
+	page.target = call("action_packages")
 	page.title  = "Paketverwaltung"
 	page.order  = 10
 	
 	local page  = node("admin", "system", "packages", "ipkg")
-	page.target = action_ipkg
+	page.target = call("action_ipkg")
 	page.title  = "IPKG-Konfiguration"
 	
 	local page  = node("admin", "system", "passwd")
-	page.target = action_passwd
+	page.target = call("action_passwd")
 	page.title  = "Passwort ändern"
 	page.order  = 20
 	
 	local page  = node("admin", "system", "sshkeys")
-	page.target = action_sshkeys
+	page.target = call("action_sshkeys")
 	page.title  = "SSH-Schlüssel"
 	page.order  = 30
 	
@@ -43,12 +43,12 @@ function index()
 	page.order  = 50
 	
 	local page  = node("admin", "system", "upgrade")
-	page.target = action_upgrade
+	page.target = call("action_upgrade")
 	page.title  = "Firmwareupgrade"
 	page.order  = 60
 	
 	local page  = node("admin", "system", "reboot")
-	page.target = action_reboot
+	page.target = call("action_reboot")
 	page.title  = "Neu starten"
 	page.order  = 70
 end
