@@ -12,4 +12,4 @@ compile: source
 	for i in $$(find dist -name *.lua -not -name debug.lua); do $(LUAC) $(LUAC_OPTIONS) -o $$i $$i; done
 	
 clean:
-	rm dist -rf
+	rm -rf dist
