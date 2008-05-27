@@ -124,7 +124,7 @@ endef
 
 define Package/luci-mod-admin-core
   $(call Package/luci/template)
-  DEPENDS:=luci +luci-web
+  DEPENDS:=luci +luci-web +luci-app-cbi
   TITLE:=Core administrative pages
 endef
 
@@ -150,6 +150,17 @@ endef
 
 
 ### Applications ###
+
+define Package/luci-app-cbi
+  $(call Package/luci/template)
+  DEPENDS:=luci +luci-web
+  TITLE:=Configuration Binding Interface
+endef
+
+define Package/luci-app-cbi/install
+	$(call Package/luci/install/template,$(1),applications/cbi)
+endef
+
 
 define Package/luci-app-ffwizard-leipzig
   $(call Package/luci/template)
@@ -200,7 +211,7 @@ endef
 
 define Package/luci-app-statistics
   $(call Package/luci/template)
-  DEPENDS:=luci +collectd +collectd-mod-rrdtool1 +rrdtool1
+  DEPENDS:=luci +luci-mod-admin-core +collectd +collectd-mod-rrdtool1 +rrdtool1
   TITLE:=LuCI Statistics Application (incomplete)
 endef
 
@@ -219,7 +230,7 @@ endef
 
 define Package/luci-sgi-haserl
   $(call Package/luci/template)
-  DEPENDS:=luci +haserl-lua
+  DEPENDS:=luci +luci-web +haserl-lua
   TITLE:=SGI for Haserl
 endef
 
@@ -231,7 +242,7 @@ endef
 
 define Package/luci-sgi-webuci
   $(call Package/luci/template)
-  DEPENDS:=luci
+  DEPENDS:=luci +luci-web
   TITLE:=SGI for Webuci
 endef
 
@@ -243,6 +254,7 @@ endef
 
 
 $(eval $(call BuildPackage,luci))
+$(eval $(call BuildPackage,luci-web))
 
 $(eval $(call BuildPackage,luci-ff-halle))
 $(eval $(call BuildPackage,luci-ff-leipzig))
@@ -251,6 +263,7 @@ $(eval $(call BuildPackage,luci-ff-hannover))
 $(eval $(call BuildPackage,luci-mod-admin-core))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 
+$(eval $(call BuildPackage,luci-app-cbi))
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))
 $(eval $(call BuildPackage,luci-app-splash))
