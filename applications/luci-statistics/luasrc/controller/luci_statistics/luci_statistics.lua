@@ -44,7 +44,7 @@ function index()
 
 	
 	-- public views
-	entry({"freifunk", "statistics"},			call("statistics_index"),		"Statistiken",		80)
+	entry({"freifunk", "statistics"},			call("statistics_index"),		"Statistiken",		80).i18n = "statistics"
 	
 	for i, plugin in ipairs( data:plugins() ) do
 		_entry({"freifunk", "statistics", plugin},	call("statistics_render"),		plugin,		    	 i)
@@ -99,7 +99,7 @@ function statistics_render()
 
 	for i, inst in ipairs( data:plugin_instances( plugin ) ) do
 		local graph = rrd.Graph()
-		for i, img in ipairs( graph:render( "OpenWrt", plugin, inst ) ) do
+		for i, img in ipairs( graph:render( plugin, inst ) ) do
 			table.insert( images, img )
 		end
 	end

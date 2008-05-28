@@ -3,10 +3,7 @@ module("luci.statistics.rrdtool.definitions.iptables.ipt_packets", package.seeal
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
-		title  = "Firewall",
-		vlabel = "Pakete/s",
-
-		data   = { 
+		data = { 
 			options = {
 				ipt_packets = { total = true }
 			}

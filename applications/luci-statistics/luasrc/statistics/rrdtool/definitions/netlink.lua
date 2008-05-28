@@ -7,12 +7,6 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local traffic = {
 
-		-- diagram title
-		title	= "Verkehr",
-
-		-- vertical label
-		vlabel  = "Bytes/s",
-
 		-- diagram data description
 		data = {
 			-- defined sources for data types, if ommitted assume a single DS named "value" (optional)
@@ -41,12 +35,6 @@ function rrdargs( graph, plugin, plugin_instance )
 	-- packet diagram
 	--
 	local packets = {
-
-		-- diagram title
-		title	= "Pakete",
-
-		-- vertical label
-		vlabel  = "Pakete/s",
 
 		-- diagram data description
 		data = {
@@ -116,12 +104,6 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local multicast = {
 
-		-- diagram title
-		title	= "Multicast-Pakete",
-
-		-- vertical label
-		vlabel  = "Pakete/s",
-
 		-- diagram data description
 		data = {
 			-- data type order
@@ -144,12 +126,6 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local collisions = {
 
-		-- diagram title
-		title	= "Paketkollisionen",
-
-		-- vertical label
-		vlabel  = "Kollisionen/s",
-
 		-- diagram data description
 		data = {
 			-- data type order
@@ -171,12 +147,6 @@ function rrdargs( graph, plugin, plugin_instance )
 	-- error diagram
 	--
 	local errors = {
-
-		-- diagram title
-		title	= "TX/RX-Fehler",
-
-		-- vertical label
-		vlabel  = "Kollisionen/s",
 
 		-- diagram data description
 		data = {

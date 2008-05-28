@@ -3,9 +3,6 @@ module("luci.statistics.rrdtool.definitions.processes.ps_state", package.seeall)
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
-		title  = "Prozesse",
-		vlabel = "Anzahl/s",
-
 		data = {
 			instances = {
 				ps_state = {

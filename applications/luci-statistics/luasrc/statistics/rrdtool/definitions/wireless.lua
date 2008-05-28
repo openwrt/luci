@@ -7,12 +7,6 @@ function rrdargs( graph, host, plugin, plugin_instance )
 	--
 	local snr = {
 
-		-- diagram title
-		title	= "Signal / Noise",
-
-		-- vertical label
-		vlabel  = "dBm",
-
 		-- draw this diagram for each data instance
 		per_instance = true,
 
@@ -40,12 +34,6 @@ function rrdargs( graph, host, plugin, plugin_instance )
 	-- signal quality diagram
 	--
 	local quality = {
-
-		-- diagram title
-		title	= "Signalqualitaet",
-
-		-- vertical label
-		vlabel  = "n/5",
 
 		-- draw this diagram for each data instance
 		per_instance = true,

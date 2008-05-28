@@ -3,12 +3,9 @@ module("luci.statistics.rrdtool.definitions.cpu.cpu",package.seeall)
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 
 	return {
-		title  = "Prozessorauslastung",
-		vlabel = "%",
-
 		data = {
-			instances = {
-				cpu = { "idle", "nice", "system", "user" }
+			instances = { 
+				cpu = { "idle", "user", "system", "nice" }
 			},
 
 			options = {

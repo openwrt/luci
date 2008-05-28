@@ -7,12 +7,6 @@ function rrdargs( graph, host, plugin, plugin_instance )
 	--
 	local traffic = {
 
-		-- diagram title
-		title	= "Verkehr",
-
-		-- vertical label
-		vlabel  = "Bytes/s",
-
 		-- draw this diagram for each data instance
 		per_instance = true,
 
@@ -44,12 +38,6 @@ function rrdargs( graph, host, plugin, plugin_instance )
 	-- packet diagram
 	--
 	local packets = {
-
-		-- diagram title
-		title	= "Pakete",
-
-		-- vertical label
-		vlabel  = "Pakete/s",
 
 		-- draw this diagram for each data instance
 		per_instance = true,

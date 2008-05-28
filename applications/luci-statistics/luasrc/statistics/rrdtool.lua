@@ -3,7 +3,7 @@ module("luci.statistics.rrdtool", package.seeall)
 require("luci.statistics.datatree")
 require("luci.statistics.rrdtool.colors")
 require("luci.statistics.rrdtool.definitions")
-require("luci.i18n")
+require("luci.statistics.i18n")
 require("luci.util")
 require("luci.fs")
 
@@ -17,7 +17,7 @@ function Graph.__init__( self, timespan, opts )
 	self.colors = luci.statistics.rrdtool.colors.Instance()
 	self.defs   = luci.statistics.rrdtool.definitions.Instance()
 	self.tree   = luci.statistics.datatree.Instance()
-	self.i18n   = luci.i18n
+	self.i18n   = luci.statistics.i18n.Instance( self )
 
 	-- options
 	opts.rrasingle = opts.rrasingle or true		-- XXX: fixme (uci)
@@ -34,12 +34,9 @@ function Graph.__init__( self, timespan, opts )
 
 	-- store options
 	self.opts = opts
-
-	-- load language file
-	self.i18n.loadc("statistics")
 end
 
-function Graph.mktitle( self, plugin, plugin_instance, dtype, dtype_instance )
+function Graph._mkpath( self, plugin, plugin_instance, dtype, dtype_instance )
 	local t = self.opts.host .. "/" .. plugin
 	if type(plugin_instance) == "string" and plugin_instance:len() > 0 then
 		t = t .. "-" .. plugin_instance
@@ -52,11 +49,17 @@ function Graph.mktitle( self, plugin, plugin_instance, dtype, dtype_instance )
 end
 
 function Graph.mkrrdpath( self, ... )
-	return string.format( "/tmp/%s.rrd", self:mktitle( ... ) )
+	return string.format( "/tmp/%s.rrd", self:_mkpath( ... ) )
 end
 
 function Graph.mkpngpath( self, ... )
-	return string.format( "/tmp/rrdimg/%s.png", self:mktitle( ... ) )
+	return string.format( "/tmp/rrdimg/%s.png", self:_mkpath( ... ) )
+end
+
+function Graph.mktitle( self, plugin, plugin_instance, dtype, dtype_instance )
+
+	-- try various strings to retrieve a diagram title from the langfile
+	return "XXX"
 end
 
 function Graph._forcelol( self, list )
@@ -366,7 +369,6 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 				-- store values
 				_ti( _sources, {
-					title    = dsname,   -- XXX: fixme i18n (dopts.title || i18n || dname)
 					rrd      = dopts.rrd     or self:mkrrdpath( plugin, plugin_instance, dtype, dinst ),
 					color    = dopts.color   or self.colors:to_string( self.colors:random() ),
 					flip     = dopts.flip    or false,
@@ -379,6 +381,10 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 					index    = #_sources + 1,
 					sname    = ( #_sources + 1 ) .. dtype
 				} )
+
+
+				-- generate datasource title
+				_sources[#_sources].title = self.i18n:ds( _sources[#_sources] )
 
 
 				-- find longest name ...
@@ -415,9 +421,9 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 		-- store title and vlabel
 		-- XXX: i18n
 		_ti( _args, "-t" )
-		_ti( _args, opts.title )
+		_ti( _args, opts.title  or self.i18n:title( plugin, plugin_instance, _sources[1].type, instance ) )
 		_ti( _args, "-v" )
-		_ti( _args, opts.vlabel )
+		_ti( _args, opts.vlabel or self.i18n:label( plugin, plugin_instance, _sources[1].type, instance ) )
 
 		-- store additional rrd options
 		if opts.rrdopts then
