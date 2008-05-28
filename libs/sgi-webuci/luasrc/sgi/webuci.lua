@@ -28,8 +28,9 @@ module("luci.sgi.webuci", package.seeall)
 local status_set = false
 
 -- Initialize the environment
-function initenv(env)
+function initenv(env, vars)
 	luci.http.env = env
+	luci.http.vars = vars
 end
 
 -- Returns the main dispatcher URL
@@ -44,7 +45,7 @@ end
 
 -- Returns a table of all COOKIE, GET and POST Parameters
 function luci.http.formvalues()
-	return webuci.vars
+	return luci.http.vars
 end
 
 -- Gets form value from key

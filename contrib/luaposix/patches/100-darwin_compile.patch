@@ -1,0 +1,27 @@
+Index: luaposix-5.1.2/Makefile
+===================================================================
+--- luaposix-5.1.2.orig/Makefile	2008-01-29 14:49:27.000000000 +0100
++++ luaposix-5.1.2/Makefile	2008-05-28 14:15:30.000000000 +0200
+@@ -34,6 +34,13 @@
+ 
+ T= 		$(MYLIB).so
+ 
++OS=$(shell uname)
++ifeq ($(OS),Darwin)
++  LDFLAGS_SHARED=-bundle -undefined dynamic_lookup
++else
++  LDFLAGS_SHARED=-shared
++endif
++
+ # targets
+ phony += all
+ all:	$T
+@@ -43,7 +50,7 @@
+ 	$(LUA) test.lua
+ 
+ $T:	$(OBJS)
+-	$(CC) $(LDFLAGS) -o $@ -shared $(OBJS)
++	$(CC) $(LDFLAGS) -o $@ $(LDFLAGS_SHARED) $(OBJS)
+ 
+ $(OBJS): modemuncher.c
+ 

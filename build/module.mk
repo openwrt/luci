@@ -1,7 +1,8 @@
 .PHONY: all compile compile-module source source-module clean clean-module
 
 all: compile
-compile: compile-module
+compile: source-module
+compile-all: compile-module
 clean: clean-module
 source: source-module
 

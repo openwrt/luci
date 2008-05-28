@@ -1,8 +1,12 @@
 include build/config.mk
 
 MODULES = applications/* libs/* modules/* themes/* i18n/*
-LUA_TARGET = source
-
+LUA_TARGET = compile
+OS:=$(shell uname)
+export OS
+ifeq ($(OS),Darwin)
+  MODULES += contrib/luaposix
+endif
 
 .PHONY: all build clean host hostclean
 
