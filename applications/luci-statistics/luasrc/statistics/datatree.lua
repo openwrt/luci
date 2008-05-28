@@ -123,11 +123,13 @@ function Instance.data_types( self, plugin, instance )
 	return rv
 end
 
-function Instance.data_instances( self, plugin, instance, type )
+function Instance.data_instances( self, plugin, instance, dtype )
 	local rv = { }
 
-	for i, instance in ipairs( self._plugins[plugin][instance][type] ) do
-		table.insert( rv, instance )
+	if type(self._plugins[plugin][instance][dtype]) == "table" then
+		for i, instance in ipairs( self._plugins[plugin][instance][dtype] ) do
+			table.insert( rv, instance )
+		end
 	end
 
 	return rv

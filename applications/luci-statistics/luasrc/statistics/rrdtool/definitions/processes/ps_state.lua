@@ -1,31 +1,26 @@
 module("luci.statistics.rrdtool.definitions.processes.ps_state", package.seeall)
 
-function rrdargs( graph, host, plugin, plugin_instance, dtype )
+function rrdargs( graph, plugin, plugin_instance, dtype )
 
-	dtype_instances = {
-		"sleeping", "running", "paging", "blocked", "stopped", "zombies"
-	}
+	return {
+		title  = "Prozesse",
+		vlabel = "Anzahl/s",
 
-	opts = { }
-	opts.sources	= { }
-	opts.image	= graph:mkpngpath( host, plugin, plugin_instance, dtype )
-	opts.title	= host .. ": Prozesse"
-	opts.rrd 	= { "-v", "Anzahl" }
-	opts.colors     = { 
-		sleeping = "008080",
-		running  = "008000",
-		paging   = "ffff00",
-		blocked  = "ff5000",
-		stopped  = "555555",
-		zombies  = "ff0000"
-	}
+		data = {
+			instances = {
+				ps_state = {
+					"sleeping", "running", "paging", "blocked", "stopped", "zombies"
+				}
+			},
 
-	for i, inst in ipairs(dtype_instances) do
-		opts.sources[i] = {
-			name = inst,
-			rrd  = graph:mkrrdpath( host, plugin, plugin_instance, "ps_state", inst )
+			options = {
+				ps_state_sleeping = { color = "0000ff" },
+				ps_state_running  = { color = "008000" },
+				ps_state_paging   = { color = "ffff00" },
+				ps_state_blocked  = { color = "ff5000" },
+				ps_state_stopped  = { color = "555555" },
+				ps_state_zombies  = { color = "ff0000" }
+			}
 		}
-	end
-
-	return opts
+	}
 end

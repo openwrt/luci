@@ -1,180 +1,208 @@
 module("luci.statistics.rrdtool.definitions.netlink", package.seeall)
 
-function rrdargs( graph, host, plugin, plugin_instance )
+function rrdargs( graph, plugin, plugin_instance )
 
-	local diagram_list = { }
+	--
+	-- traffic diagram
+	--
+	local traffic = {
 
-	-- diagram names
-	local dtypes_names = {
-		"Verkehr",
-		"Pakete",
-		"Multicast-Pakete",
-		"Paketkollisionen",
-		"Paketfehler",
-		"RX-Fehler",
-		"TX-Fehler"
-	}
+		-- diagram title
+		title	= "Verkehr",
 
-	-- diagram units
-	local dtypes_units = {
-		"Bytes/s",
-		"Pakete/s",
-		"Pakete/s",
-		"Kollisionen/s",
-		"Fehler/s",				-- (?)
-		"Fehler/s",
-		"Fehler/s"
-	}
+		-- vertical label
+		vlabel  = "Bytes/s",
 
-	-- data source overrides
-	local dtypes_sources = {
-		if_errors  = { "tx", "rx" },		-- if_errors has tx and rx
-		if_octets  = { "tx", "rx" },		-- if_octets has tx and rx
-		if_packets = { "tx", "rx" },		-- if_packets has tx and rx
-		if_dropped = { "tx", "rx" },		-- if_dopped has tx and rx
-	}
+		-- diagram data description
+		data = {
+			-- defined sources for data types, if ommitted assume a single DS named "value" (optional)
+			sources = {
+				if_octets = { "tx", "rx" }
+			},
 
-	-- diagram data types
-	local dtypes_list  = {
+			-- special options for single data lines
+			options = {
+				if_octets__tx = {
+					total = true,		-- report total amount of bytes
+					color = "00ff00"	-- tx is green
+				},
 
-		-- diagram 1: interface traffic statistics
-		{
-			if_octets     = { "" } 		-- bytes/s
-		},
-
-		-- diagram 2: combined interface packet statistics
-		{ 
-			if_dropped    = { "" }, 	-- packets/s
-			if_packets    = { "" }		-- packets/s
-		},
-
-		-- diagram 3: multicast count
-		{
-			if_multicast  = { "" }		-- packets/s
-		},
-
-		-- diagram 4: interface collision statistics
-		{
-			if_collisions = { "" } 		-- collisions/s
-		},
-
-		-- diagram 5: interface error statistics
-		{
-			if_errors     = { "" }		-- errors/s (?)
-		},
-
-		-- diagram 6: interface rx error statistics
-		{
-			if_rx_errors  = {		-- errors/s
-				"length", "missed", "over", "crc", "fifo", "frame"
-			}
-		},
-
-		-- diagram 7: interface tx error statistics
-		{
-			if_tx_errors  = {		-- errors/s
-				"aborted", "carrier", "fifo", "heartbeat", "window"
+				if_octets__rx = {
+					flip  = true,		-- flip rx line
+					total = true,		-- report total amount of bytes
+					color = "0000ff"	-- rx is blue
+				}
 			}
 		}
 	}
 
-	-- diagram colors
-	local dtypes_colors = {
 
-		-- diagram 1
-		{
-			if_octets__tx_  = "00ff00",
-			if_octets__rx_  = "0000ff"
-		},
+	--
+	-- packet diagram
+	--
+	local packets = {
 
-		-- diagram 2
-		{
-			if_dropped__tx_ = "ff0000",
-			if_dropped__rx_ = "ff5500",
-			if_packets__tx_ = "00ff00",
-			if_packets__rx_ = "0000ff"
-		},
+		-- diagram title
+		title	= "Pakete",
 
-		-- diagram 3
-		{
-			if_multicast    = "0000ff"
-		},
+		-- vertical label
+		vlabel  = "Pakete/s",
 
-		-- diagram 4
-		{
-			if_collisions   = "ff0000"
-		},
+		-- diagram data description
+		data = {
+			-- data type order
+			types = { "if_packets", "if_dropped", "if_errors" },
 
-		-- diagram 5
-		{
-			if_errors__tx_  = "ff0000",
-			if_errors__rx_  = "ff5500"
-		},
+			-- defined sources for data types
+			sources = {
+				if_packets = { "tx", "rx" },
+				if_dropped = { "tx", "rx" },
+				if_errors  = { "tx", "rx" }
+			},
 
-		-- diagram 6
-		{
-                        length          = "0000ff",
-			missed          = "ff5500",
-			over            = "ff0066",
-			crc             = "ff0000",
-			fifo            = "00ff00",
-			frame           = "ffff00"
-		},
+			-- special options for single data lines
+			options = {
+				-- processed packets (tx DS)
+				if_packets__tx = {
+					overlay = true,		-- don't summarize
+					total   = true,		-- report total amount of bytes
+					color   = "00ff00"	-- processed tx is green
+				},
 
-		-- diagram 7
-		{
-			aborted         = "ff0000",
-			carrier         = "ffff00",
-			fifo            = "00ff00",
-			heartbeat       = "0000ff",
-			window	        = "8800ff"
+				-- processed packets (rx DS)
+				if_packets__rx = {
+					overlay = true,		-- don't summarize
+					flip    = true,		-- flip rx line
+					total   = true,		-- report total amount of bytes
+					color   = "0000ff"	-- processed rx is blue
+				},
+
+				-- dropped packets (tx DS)
+				if_dropped__tx = {
+					overlay = true,		-- don't summarize
+					total   = true,		-- report total amount of bytes
+					color   = "660055"	-- dropped tx is ... dunno ;)
+				},
+
+				-- dropped packets (rx DS)
+				if_dropped__rx = {
+					overlay = true,		-- don't summarize
+					flip    = true,		-- flip rx line
+					total   = true,		-- report total amount of bytes
+					color   = "440066"	-- dropped rx is violett
+				},
+
+				-- packet errors (tx DS)
+				if_errors__tx = {
+					overlay = true,		-- don't summarize
+					total   = true,		-- report total amount of packets
+					color   = "ff5500"	-- tx errors are orange
+				},
+
+				-- packet errors (rx DS)
+				if_errors__rx = {
+					overlay = true,		-- don't summarize
+					flip    = true,		-- flip rx line
+					total   = true,		-- report total amount of packets
+					color   = "ff0000"	-- rx errors are red
+				}
+			}
 		}
 	}
 
 
-	for i, name in ipairs(dtypes_names) do
+	--
+	-- multicast diagram
+	--
+	local multicast = {
 
-		local dtypes = dtypes_list[i]
-		local opts   = { }
+		-- diagram title
+		title	= "Multicast-Pakete",
 
-		opts.sources = { }
-		opts.image   = graph:mkpngpath( host, plugin, plugin_instance, "netlink" .. i )
-		opts.title   = host .. ": Netlink Statistiken - " .. name .. " auf " .. plugin_instance
-		opts.rrd     = { "-v", dtypes_units[i] }
-		opts.colors  = dtypes_colors[i]
+		-- vertical label
+		vlabel  = "Pakete/s",
 
-		for dtype, dinstances in pairs(dtypes) do
-			for i, inst in ipairs(dinstances) do
+		-- diagram data description
+		data = {
+			-- data type order
+			types = { "if_multicast" },
 
-				local name = inst
-				if name:len() == 0 then name = dtype end
+			-- special options for single data lines
+			options = {
+				-- multicast packets
+				if_multicast = {
+					total = true,		-- report total amount of packets
+					color = "0000ff"	-- multicast is blue
+				}
+			}
+		}
+	}
 
-				-- check for data source override
-				if dtypes_sources[dtype] then
 
-					-- has override
-					for i, ds in ipairs(dtypes_sources[dtype]) do
-						table.insert( opts.sources, {
-							ds    = ds,	-- override
-							name  = name .. " (" .. ds .. ")",
-							rrd   = graph:mkrrdpath( host, plugin, plugin_instance, dtype, inst ),
-							flip  = ( ds == "rx" ),
-							total = ( ds == "rx" or ds == "tx" )
-						} )
-					end
-				else
-					-- no override, assume single "value" data source
-					table.insert( opts.sources, {
-						name  = name,
-						rrd   = graph:mkrrdpath( host, plugin, plugin_instance, dtype, inst ),
-						total = ( name == "if_multicast" )
-					} )
-				end
-			end
-		end
+	--
+	-- collision diagram
+	--
+	local collisions = {
 
-		table.insert( diagram_list, opts )
-	end
+		-- diagram title
+		title	= "Paketkollisionen",
 
-	return diagram_list
+		-- vertical label
+		vlabel  = "Kollisionen/s",
+
+		-- diagram data description
+		data = {
+			-- data type order
+			types = { "if_collisions" },
+
+			-- special options for single data lines
+			options = {
+				-- collision rate
+				if_collisions = {
+					total = true,		-- report total amount of packets
+					color = "ff0000"	-- collsions are red
+				}
+			}
+		}
+	}
+
+
+	--
+	-- error diagram
+	--
+	local errors = {
+
+		-- diagram title
+		title	= "TX/RX-Fehler",
+
+		-- vertical label
+		vlabel  = "Kollisionen/s",
+
+		-- diagram data description
+		data = {
+			-- data type order
+			types = { "if_tx_errors", "if_rx_errors" },
+
+			-- data type instances
+			instances = {
+				if_tx_errors = { "aborted", "carrier", "fifo", "heartbeat", "window" },
+				if_rx_errors = { "length", "missed", "over", "crc", "fifo", "frame" }
+			},
+
+			-- special options for single data lines
+			options = {	-- XXX: fixme (define colors...)
+				if_tx_errors = {
+					total = true
+				},
+
+				if_rx_errors = {
+					flip  = true,
+					total = true
+				}
+			}
+		}
+	}
+
+
+	return { traffic, packets, multicast, collisions, errors }
 end

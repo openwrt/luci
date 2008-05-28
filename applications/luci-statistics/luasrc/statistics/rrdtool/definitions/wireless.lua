@@ -2,25 +2,67 @@ module("luci.statistics.rrdtool.definitions.wireless", package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance )
 
-	dtypes = { "signal_noise", "signal_power" }
+	--
+	-- signal/noise diagram
+	--
+	local snr = {
 
-	opts = { }
-	opts.sources	= { }
-	opts.image	= graph:mkpngpath( host, plugin, plugin_instance, "wireless" )
-	opts.title	= host .. ": WLAN Signal"
-	opts.rrd 	= { "-v", "dBm" }
-	opts.colors	= {
-		signal_power = '0000ff',
-		signal_noise = 'ff0000'
+		-- diagram title
+		title	= "Signal / Noise",
+
+		-- vertical label
+		vlabel  = "dBm",
+
+		-- draw this diagram for each data instance
+		per_instance = true,
+
+		-- diagram data description
+		data = {
+			types = { "signal_noise", "signal_power" },
+
+			-- special options for single data lines
+			options = {
+				signal_power = {
+					overlay = true,		-- don't summarize
+					color   = "0000ff"	-- power is blue
+				},
+
+				signal_noise = {
+					overlay = true,		-- don't summarize
+					color   = "ff0000"	-- noise is red
+				}
+			}
+		}
 	}
 
-	for i, dtype in ipairs(dtypes) do
-		opts.sources[i] = {
-			name    = dtype,
-			rrd     = graph:mkrrdpath( host, plugin, plugin_instance, dtype ),
-			overlay	= true  -- don't summarize values
-		}
-	end
 
-	return opts
+	--
+	-- signal quality diagram
+	--
+	local quality = {
+
+		-- diagram title
+		title	= "Signalqualitaet",
+
+		-- vertical label
+		vlabel  = "n/5",
+
+		-- draw this diagram for each data instance
+		per_instance = true,
+
+		-- diagram data description
+		data = {
+			types = { "signal_quality" },
+
+			-- special options for single data lines
+			options = {
+				signal_quality = {
+					noarea = true,		-- don't draw area
+					color  = "0000ff"	-- quality is blue
+				}
+			}
+		}
+	}
+
+	return { snr, quality }
 end

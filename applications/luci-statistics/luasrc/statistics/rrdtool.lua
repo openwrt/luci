@@ -3,8 +3,8 @@ module("luci.statistics.rrdtool", package.seeall)
 require("luci.statistics.datatree")
 require("luci.statistics.rrdtool.colors")
 require("luci.statistics.rrdtool.definitions")
+require("luci.i18n")
 require("luci.util")
-require("luci.bits")
 require("luci.fs")
 
 
@@ -13,22 +13,34 @@ Graph = luci.util.class()
 function Graph.__init__( self, timespan, opts )
 
 	opts = opts or { }
-	opts.width = opts.width or "400"
 
 	self.colors = luci.statistics.rrdtool.colors.Instance()
 	self.defs   = luci.statistics.rrdtool.definitions.Instance()
 	self.tree   = luci.statistics.datatree.Instance()
+	self.i18n   = luci.i18n
 
-	-- rrdtool defalt args
-	self.args   = {
+	-- options
+	opts.rrasingle = opts.rrasingle or true		-- XXX: fixme (uci)
+	opts.host      = opts.host      or "OpenWrt"	-- XXX: fixme (uci)
+	opts.timespan  = opts.timespan  or 900		-- XXX: fixme (uci)
+	opts.width     = opts.width     or 400		-- XXX: fixme (uci)
+
+	-- rrdtool default args
+	self.args = {
 		"-a", "PNG",
-		"-s", "NOW-" .. ( timespan or 900 ),
+		"-s", "NOW-" .. opts.timespan,
 		"-w", opts.width
 	}
+
+	-- store options
+	self.opts = opts
+
+	-- load language file
+	self.i18n.loadc("statistics")
 end
 
-function Graph.mktitle( self, host, plugin, plugin_instance, dtype, dtype_instance )
-	local t = host .. "/" .. plugin
+function Graph.mktitle( self, plugin, plugin_instance, dtype, dtype_instance )
+	local t = self.opts.host .. "/" .. plugin
 	if type(plugin_instance) == "string" and plugin_instance:len() > 0 then
 		t = t .. "-" .. plugin_instance
 	end
@@ -47,25 +59,6 @@ function Graph.mkpngpath( self, ... )
 	return string.format( "/tmp/rrdimg/%s.png", self:mktitle( ... ) )
 end
 
-function Graph._push( self, elem )
-
-	if type(elem) == "string" then
-		table.insert( self.args, elem )
-	else
-		for i, item in ipairs(elem) do
-			table.insert( self.args, item )
-		end
-	end
-
-	return( self.args )
-end
-
-function Graph._clearargs( self )
-	for i = #self.args, 7, -1 do
-		table.remove( self.args, i )
-	end
-end
-
 function Graph._forcelol( self, list )
 	if type(list[1]) ~= "table" then
 		return( { list } )
@@ -73,17 +66,22 @@ function Graph._forcelol( self, list )
 	return( list )
 end
 
-function Graph._rrdtool( self, png, rrd )
+function Graph._rrdtool( self, def, rrd )
 
 	-- prepare directory
-	local dir = png:gsub("/[^/]+$","")
+	local dir = def[1]:gsub("/[^/]+$","")
 	luci.fs.mkdir( dir, true )
 
 	-- construct commandline
-	local cmdline = "rrdtool graph " .. png
+	local cmdline = "rrdtool graph"
 
+	-- copy default arguments to def stack
 	for i, opt in ipairs(self.args) do
+		table.insert( def, 1 + i, opt )
+	end
 
+	-- construct commandline from def stack
+	for i, opt in ipairs(def) do
 		opt = opt .. ""    -- force string
 		
 		if rrd then
@@ -102,12 +100,14 @@ function Graph._rrdtool( self, png, rrd )
 	rrdtool:close()
 end
 
-function Graph._generic( self, opts )
+function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
-	local images     = { }
-	local rrasingle  = false	-- XXX: fixme
+	-- generated graph defs
+	local defs = { }
 
 	-- internal state variables
+	local _args         = { }
+	local _sources	    = { }
 	local _stack_neg    = { }
 	local _stack_pos    = { }
 	local _longest_name = 0
@@ -116,6 +116,11 @@ function Graph._generic( self, opts )
 	-- some convenient aliases
 	local _ti	    = table.insert
 	local _sf	    = string.format
+
+	-- local helper: append a string.format() formatted string to given table
+	function _tif( list, fmt, ... )
+		table.insert( list, string.format( fmt, ... ) )
+	end
 
 	-- local helper: create definitions for min, max, avg and create *_nnl (not null) variable from avg
 	function __def(source)
@@ -126,22 +131,19 @@ function Graph._generic( self, opts )
 
 		if not ds or ds:len() == 0 then ds = "value" end
 
-		local rv = { _sf( "DEF:%s_avg=%s:%s:AVERAGE", inst, rrd, ds ) }
+		_tif( _args, "DEF:%s_avg=%s:%s:AVERAGE", inst, rrd, ds )
 
-		if not rrasingle then
-			_ti( rv, _sf( "DEF:%s_min=%s:%s:MIN", inst, rrd, ds ) )
-			_ti( rv, _sf( "DEF:%s_max=%s:%s:MAX", inst, rrd, ds ) )
+		if not self.opts.rrasingle then
+			_tif( _args, "DEF:%s_min=%s:%s:MIN", inst, rrd, ds )
+			_tif( _args, "DEF:%s_max=%s:%s:MAX", inst, rrd, ds )
 		end
 
-		_ti( rv, _sf( "CDEF:%s_nnl=%s_avg,UN,0,%s_avg,IF", inst, inst, inst ) )
-
-		return rv
+		_tif( _args, "CDEF:%s_nnl=%s_avg,UN,0,%s_avg,IF", inst, inst, inst )
 	end
 
 	-- local helper: create cdefs depending on source options like flip and overlay
 	function __cdef(source)
 
-		local rv = { }
 		local prev
 
 		-- find previous source, choose stack depending on flip state
@@ -154,21 +156,19 @@ function Graph._generic( self, opts )
 		-- is first source in stack or overlay source: source_stk = source_nnl
 		if not prev or source.overlay then
 			-- create cdef statement
-			_ti( rv, _sf( "CDEF:%s_stk=%s_nnl", source.sname, source.sname ) )
+			_tif( _args, "CDEF:%s_stk=%s_nnl", source.sname, source.sname )
 
 		-- is subsequent source without overlay: source_stk = source_nnl + previous_stk
 		else
 			-- create cdef statement				
-			_ti( rv, _sf(
-				"CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev
-			) )
+			_tif( _args, "CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev )
 		end
 
 		-- create multiply by minus one cdef if flip is enabled
 		if source.flip then
 
 			-- create cdef statement: source_stk = source_stk * -1
-			_ti( rv, _sf( "CDEF:%s_neg=%s_stk,-1,*", source.sname, source.sname ) )
+			_tif( _args, "CDEF:%s_neg=%s_stk,-1,*", source.sname, source.sname )
 
 			-- push to negative stack if overlay is disabled
 			if not source.overlay then
@@ -184,36 +184,29 @@ function Graph._generic( self, opts )
 
 		-- calculate total amount of data if requested
 		if source.total then
-			_ti( rv, _sf(
+			_tif( _args,
 				"CDEF:%s_avg_sample=%s_avg,UN,0,%s_avg,IF,sample_len,*",
 				source.sname, source.sname, source.sname
-			) )
+			)
 
-			_ti( rv, _sf(
+			_tif( _args,
 				"CDEF:%s_avg_sum=PREV,UN,0,PREV,IF,%s_avg_sample,+",
 				source.sname, source.sname, source.sname
-			) )
+			)
 		end
-
-
-		return rv
 	end
 
 	-- local helper: create cdefs required for calculating total values
 	function __cdef_totals()
 		if _has_totals then
-			return {
-				_sf( "CDEF:mytime=%s_avg,TIME,TIME,IF", opts.sources[1].sname ),
-				"CDEF:sample_len_raw=mytime,PREV(mytime),-",
-				"CDEF:sample_len=sample_len_raw,UN,0,sample_len_raw,IF"
-			}
-		else
-			return { }
+			_tif( _args, "CDEF:mytime=%s_avg,TIME,TIME,IF", _sources[1].sname    )
+			_ti(  _args, "CDEF:sample_len_raw=mytime,PREV(mytime),-"             )
+			_ti(  _args, "CDEF:sample_len=sample_len_raw,UN,0,sample_len_raw,IF" )
 		end
 	end
 
 	-- local helper: create line and area statements
-	function __area(source)
+	function __line(source)
 
 		local line_color
 		local area_color
@@ -243,96 +236,236 @@ function Graph._generic( self, opts )
 		end
 
 		-- create legend
-		legend = _sf( "%-" .. _longest_name .. "s", source.name )
+		legend = _sf( "%-" .. _longest_name .. "s", source.title )
 
-		-- create area and line1 statement
-		return {
-			_sf( "AREA:%s_%s#%s", source.sname, var, area_color ),
-			_sf( "LINE1:%s_%s#%s:%s", source.sname, var, line_color, legend )
-		}
+		-- create area if not disabled
+		if not source.noarea then
+			_tif( _args, "AREA:%s_%s#%s", source.sname, var, area_color )
+		end
+
+		-- create line1 statement
+		_tif( _args, "LINE1:%s_%s#%s:%s", source.sname, var, line_color, legend )
 	end
 
 	-- local helper: create gprint statements
 	function __gprint(source)
 
-		local rv     = { }
 		local numfmt = opts.number_format or "%6.1lf"
 		local totfmt = opts.totals_format or "%5.1lf%s"
 
 		-- don't include MIN if rrasingle is enabled
-		if not rrasingle then
-			_ti( rv, _sf( "GPRINT:%s_min:MIN:%s Min", source.sname, numfmt ) )
+		if not self.opts.rrasingle then
+			_tif( _args, "GPRINT:%s_min:MIN:%s Min", source.sname, numfmt )
 		end
 
 		-- always include AVERAGE
-		_ti( rv, _sf( "GPRINT:%s_avg:AVERAGE:%s Avg", source.sname, numfmt ) )
+		_tif( _args, "GPRINT:%s_avg:AVERAGE:%s Avg", source.sname, numfmt )
 
 		-- don't include MAX if rrasingle is enabled
-		if not rrasingle then
-			_ti( rv, _sf( "GPRINT:%s_max:MAX:%s Max", source.sname, numfmt ) )
+		if not self.opts.rrasingle then
+			_tif( _args, "GPRINT:%s_max:MAX:%s Max", source.sname, numfmt )
 		end
 
 		-- include total count if requested else include LAST
 		if source.total then
-			_ti( rv, _sf( "GPRINT:%s_avg_sum:LAST:(ca. %s Total)", source.sname, totfmt ) )
+			_tif( _args, "GPRINT:%s_avg_sum:LAST:(ca. %s Total)\\l", source.sname, totfmt )
 		else
-			_ti( rv, _sf( "GPRINT:%s_avg:LAST:%s Last", source.sname, numfmt ) )
+			_tif( _args, "GPRINT:%s_avg:LAST:%s Last\\l", source.sname, numfmt )
+		end
+	end
+
+
+	--
+	-- find all data sources
+	--
+
+	-- find data types
+	local data_types
+
+	if dtype then
+		data_types = { dtype }
+	else
+		data_types = opts.data.types or { }
+	end
+
+	if not ( dtype or opts.data.types ) then
+		if opts.data.instances then
+			for k, v in pairs(opts.data.instances) do
+				_ti( data_types, k )
+			end
+		elseif opts.data.sources then
+			for k, v in pairs(opts.data.sources) do
+				_ti( data_types, k )
+			end
+		end
+	end
+
+
+	-- iterate over data types
+	for i, dtype in ipairs(data_types) do
+
+		-- find instances
+
+		local data_instances
+
+		if not opts.per_instance then
+			if type(opts.data.instances) == "table" and type(opts.data.instances[dtype]) == "table" then
+				data_instances = opts.data.instances[dtype]
+			else
+				data_instances = self.tree:data_instances( plugin, plugin_instance, dtype )
+			end
 		end
 
-		-- end label line
-		rv[#rv] = rv[#rv] .. "\\l"
+		if type(data_instances) ~= "table" or #data_instances == 0 then data_instances = { "" } end
 
 
-		return rv					
+		-- iterate over data instances
+		for i, dinst in ipairs(data_instances) do
+
+			-- construct combined data type / instance name
+			local dname = dtype
+
+			if dinst:len() > 0 then
+				dname = dname .. "_" .. dinst
+			end
+
+
+			-- find sources
+			local data_sources = { "value" }
+
+			if type(opts.data.sources) == "table" then
+				if type(opts.data.sources[dname]) == "table" then
+					data_sources = opts.data.sources[dname]
+				elseif type(opts.data.sources[dtype]) == "table" then
+					data_sources = opts.data.sources[dtype]
+				end
+			end
+
+
+			-- iterate over data sources
+			for i, dsource in ipairs(data_sources) do
+
+				local dsname  = dtype .. "_" .. dinst:gsub("[^%w]","_") .. "_" .. dsource
+				local altname = dtype .. "__" .. dsource
+
+				-- find datasource options
+				local dopts = { }
+
+				if type(opts.data.options) == "table" then
+					if type(opts.data.options[dsname]) == "table" then
+						dopts = opts.data.options[dsname]
+					elseif type(opts.data.options[altname]) == "table" then
+						dopts = opts.data.options[altname]
+					elseif type(opts.data.options[dname]) == "table" then
+						dopts = opts.data.options[dname]
+					elseif type(opts.data.options[dtype]) == "table" then
+						dopts = opts.data.options[dtype]
+					end
+				end
+
+
+				-- store values
+				_ti( _sources, {
+					title    = dsname,   -- XXX: fixme i18n (dopts.title || i18n || dname)
+					rrd      = dopts.rrd     or self:mkrrdpath( plugin, plugin_instance, dtype, dinst ),
+					color    = dopts.color   or self.colors:to_string( self.colors:random() ),
+					flip     = dopts.flip    or false,
+					total    = dopts.total   or false,
+					overlay  = dopts.overlay or false,
+					noarea   = dopts.noarea  or false,
+					ds       = dsource,
+					type     = dtype,
+					instance = dinst,
+					index    = #_sources + 1,
+					sname    = ( #_sources + 1 ) .. dtype
+				} )
+
+
+				-- find longest name ...
+				if _sources[#_sources].title:len() > _longest_name then
+					_longest_name = _sources[#_sources].title:len()
+				end
+
+
+				-- has totals?
+				if _sources[#_sources].total then
+					_has_totals = true
+				end
+			end
+		end
 	end
 
 
-	-- remember images
-	_ti( images, opts.image )
+	--
+	-- construct diagrams
+	--
 
-	-- insert provided addition rrd options
-	self:_push( { "-t", opts.title or "Unknown title" } )
-	self:_push( opts.rrd )
+	-- if per_instance is enabled then find all instances from the first datasource in diagram
+	-- if per_instance is disabled then use an empty pseudo instance and use model provided values
+	local instances = { "" }
 
-	-- store index and safe instance name within each source object,
-	-- find longest instance name
-	for i, source in ipairs(opts.sources) do
+	if opts.per_instance then
+		instances = self.tree:data_instances( plugin, plugin_instance, _sources[1].type )
+	end
 
-		if source.name:len() > _longest_name then
-			_longest_name = source.name:len()
+
+	-- iterate over instances
+	for i, instance in ipairs(instances) do
+
+		-- store title and vlabel
+		-- XXX: i18n
+		_ti( _args, "-t" )
+		_ti( _args, opts.title )
+		_ti( _args, "-v" )
+		_ti( _args, opts.vlabel )
+
+		-- store additional rrd options
+		if opts.rrdopts then
+			for i, o in ipairs(opts.rrdopts) do _ti( _args, o ) end
 		end
 
-		if source.total then
-			_has_totals = true
+
+		-- create DEF statements for each instance
+		for i, source in ipairs(_sources) do
+			-- fixup properties for per instance mode...
+			if opts.per_instance then
+				source.instance = instance
+				source.rrd      = self:mkrrdpath( plugin, plugin_instance, source.type, instance )
+			end
+
+			__def( source )
 		end
 
-		source.index = i
-		source.sname = i .. source.name:gsub("[^A-Za-z0-9%-_]","_")
+		-- create CDEF required for calculating totals
+		__cdef_totals()
+
+		-- create CDEF statements for each instance in reversed order
+		for i, source in ipairs(_sources) do
+			__cdef( _sources[1 + #_sources - i] )
+		end
+
+		-- create LINE1, AREA and GPRINT statements for each instance
+		for i, source in ipairs(_sources) do
+			__line( source )
+			__gprint( source )
+		end
+
+		-- prepend image path to arg stack
+		_ti( _args, 1, self:mkpngpath( plugin, plugin_instance, index .. instance ) )
+
+		-- push arg stack to definition list
+		_ti( defs, _args )
+
+		-- reset stacks
+		_args         = { }
+		_stack_pos    = { }
+		_stack_neg    = { }
 	end
 
-	-- create DEF statements for each instance, find longest instance name
-	for i, source in ipairs(opts.sources) do
-		self:_push( __def( source ) )
-	end
-
-	-- create CDEF required for calculating totals
-	self:_push( __cdef_totals() )
-
-	-- create CDEF statements for each instance in reversed order
-	for i, source in ipairs(opts.sources) do
-		self:_push( __cdef( opts.sources[1 + #opts.sources - i] ) )
-	end
-
-	-- create LINE1, AREA and GPRINT statements for each instance
-	for i, source in ipairs(opts.sources) do
-		self:_push( __area( source ) )
-		self:_push( __gprint( source ) )
-	end
-
-	return images
+	return defs
 end
 
-function Graph.render( self, host, plugin, plugin_instance )
+function Graph.render( self, plugin, plugin_instance )
 
 	dtype_instances = dtype_instances or { "" }
 	local pngs = { }
@@ -342,15 +475,33 @@ function Graph.render( self, host, plugin, plugin_instance )
 	local stat, def = pcall( require, plugin_def )
 
 	if stat and def and type(def.rrdargs) == "function" then
-		for i, opts in ipairs( self:_forcelol( def.rrdargs( self, host, plugin, plugin_instance, dtype ) ) ) do
-			for i, png in ipairs( self:_generic( opts ) ) do
-				table.insert( pngs, png )
+
+		-- temporary image matrix
+		local _images = { }
+
+		-- get diagram definitions
+		for i, opts in ipairs( self:_forcelol( def.rrdargs( self, plugin, plugin_instance ) ) ) do
+
+			_images[i] = { }
+
+			-- get diagram definition instances
+			local diagrams = self:_generic( opts, plugin, plugin_instance, nil, i )
+
+			-- render all diagrams
+			for j, def in ipairs( diagrams ) do
+
+				-- remember image
+				_images[i][j] = def[1]
 
 				-- exec
-				self:_rrdtool( png )
+				self:_rrdtool( def )
+			end
+		end
 
-				-- clear args
-				self:_clearargs()
+		-- remember images - XXX: fixme (will cause probs with asymmetric data)
+		for y = 1, #_images[1] do
+			for x = 1, #_images do
+				table.insert( pngs, _images[x][y] )
 			end
 		end
 	else
@@ -363,15 +514,33 @@ function Graph.render( self, host, plugin, plugin_instance )
 			local stat, def = pcall( require, dtype_def )
 
 			if stat and def and type(def.rrdargs) == "function" then
-				for i, opts in ipairs( self:_forcelol( def.rrdargs( self, host, plugin, plugin_instance, dtype ) ) ) do
-					for i, png in ipairs( self:_generic( opts ) ) do
-						table.insert( pngs, png )
+
+				-- temporary image matrix
+				local _images = { }
+
+				-- get diagram definitions
+				for i, opts in ipairs( self:_forcelol( def.rrdargs( self, plugin, plugin_instance, dtype ) ) ) do
+
+					_images[i] = { }
+
+					-- get diagram definition instances
+					local diagrams = self:_generic( opts, plugin, plugin_instance, dtype, i )
+
+					-- render all diagrams
+					for j, def in ipairs( diagrams ) do
+
+						-- remember image
+						_images[i][j] = def[1]
 
 						-- exec
-						self:_rrdtool( png )
+						self:_rrdtool( def )
+					end
+				end
 
-						-- clear args
-						self:_clearargs()
+				-- remember images - XXX: fixme (will cause probs with asymmetric data)
+				for y = 1, #_images[1] do
+					for x = 1, #_images do
+						table.insert( pngs, _images[x][y] )
 					end
 				end
 			else
@@ -382,20 +551,20 @@ function Graph.render( self, host, plugin, plugin_instance )
 					-- iterate over data type instances
 					for i, inst in ipairs( self.tree:data_instances( plugin, plugin_instance, dtype ) ) do
 
-						local title = self:mktitle( host, plugin, plugin_instance, dtype, inst )
-						local png   = self:mkpngpath( host, plugin, plugin_instance, dtype, inst )
-						local rrd   = self:mkrrdpath( host, plugin, plugin_instance, dtype, inst )
+						local title = self:mktitle( plugin, plugin_instance, dtype, inst )
+						local png   = self:mkpngpath( plugin, plugin_instance, dtype, inst )
+						local rrd   = self:mkrrdpath( plugin, plugin_instance, dtype, inst )
+						local args  = { png, "-t", title }
+						
+						for i, o in ipairs(self.defs.definitions[dtype]) do
+							table.insert( args, o )
+						end
 
-						self:_push( { "-t", title } )
-						self:_push( self.defs.definitions[dtype] )
-
+						-- remember image
 						table.insert( pngs, png )
 
 						-- exec
-						self:_rrdtool( png, rrd )
-
-						-- clear args
-						self:_clearargs()
+						self:_rrdtool( args, rrd )
 					end
 				end
 			end
@@ -404,4 +573,3 @@ function Graph.render( self, host, plugin, plugin_instance )
 
 	return pngs
 end
-

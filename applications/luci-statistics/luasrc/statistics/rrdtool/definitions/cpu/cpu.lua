@@ -2,30 +2,25 @@ module("luci.statistics.rrdtool.definitions.cpu.cpu",package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 
-	dtype_instances = { "idle", "nice", "system", "user" }
+	return {
+		title  = "Prozessorauslastung",
+		vlabel = "%",
 
-	opts = { }
-	opts.sources	= { }
-	opts.image	= graph:mkpngpath( host, plugin, plugin_instance, dtype )
-	opts.title	= host .. ": Prozessorauslastung"
-	opts.rrd 	= { "-v", "Percent" }
-	opts.colors	= {
-		idle      = 'ffffff',
-		nice      = '00e000',
-		user      = '0000ff',
-		wait      = 'ffb000',
-		system    = 'ff0000',
-		softirq   = 'ff00ff',
-		interrupt = 'a000a0',
-		steal     = '000000'
-	}
+		data = {
+			instances = {
+				cpu = { "idle", "nice", "system", "user" }
+			},
 
-	for i, inst in ipairs(dtype_instances) do
-		opts.sources[i] = {
-			name = inst,
-			rrd  = graph:mkrrdpath( host, plugin, plugin_instance, dtype, inst )
+			options = {
+				cpu_idle      = { color = "ffffff" },
+				cpu_nice      = { color = "00e000" },
+				cpu_user      = { color = "0000ff" },
+				cpu_wait      = { color = "ffb000" },
+				cpu_system    = { color = "ff0000" },
+				cpu_softirq   = { color = "ff00ff" },
+				cpu_interrupt = { color = "a000a0" },
+				cpu_steal     = { color = "000000" }
+			}
 		}
-	end
-
-	return opts
+	}
 end
