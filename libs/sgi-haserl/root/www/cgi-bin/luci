@@ -1,2 +1,4 @@
 #!/usr/bin/haserl --shell=luac
-require("luci.dispatcher").httpdispatch()
+require("luci.dispatcher")
+luci.dispatcher.indexcache = "/tmp/.luciindex"
+luci.dispatcher.httpdispatch()

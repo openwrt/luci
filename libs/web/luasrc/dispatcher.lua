@@ -34,9 +34,6 @@ local tree = {nodes={}}
 -- Index table
 local index = {}
 
--- Indexdump
-local indexcache = "/tmp/.luciindex"
-
 -- Global request object
 request = {}
 
