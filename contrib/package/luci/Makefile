@@ -18,6 +18,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 # LUA_TARGET:=compile LUAC=$(BUILD_DIR_HOST)/lua/luac
 LUA_TARGET:=source
+PKG_SELECTED_MODULES:=
 
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,10 +26,9 @@ include $(INCLUDE_DIR)/package.mk
 define Build/Configure
 endef
 
-define Package/luci/compiletpl
-	ifneq ($(CONFIG_PACKAGE_$(1)),)
-		$(MAKE) -C$(PKG_BUILD_DIR)/$(2) build LUA_TARGET=$(LUA_TARGET)
-	endif
+
+define Build/Compile 
+	for i in '$(PKG_SELECTED_MODULES)'; do $(MAKE) -C$(PKG_BUILD_DIR)/$$i build LUA_TARGET=$(LUA_TARGET); done
 endef
 
 ### Templates ###
@@ -272,27 +272,50 @@ define Package/luci-sgi-webuci/install
 	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
 endef
 
+### Compile Templates ###
+ifneq ($(CONFIG_PACKAGE_luci-core),)
+	PKG_SELECTED_MODULES+=libs/core
+endif
+ifneq ($(CONFIG_PACKAGE_luci-cbi),)
+	PKG_SELECTED_MODULES+=libs/cbi
+endif
+ifneq ($(CONFIG_PACKAGE_luci-web),)
+	PKG_SELECTED_MODULES+=libs/web
+endif
 
-define Build/Compile 
-	$(call Package/luci/compiletpl,luci-core,libs/core)
-	$(call Package/luci/compiletpl,luci-cbi,libs/cbi)
-	$(call Package/luci/compiletpl,luci-web,libs/web)
+ifneq ($(CONFIG_PACKAGE_luci-ff-halle),)
+	PKG_SELECTED_MODULES+=applications/community-halle
+endif
+ifneq ($(CONFIG_PACKAGE_luci-ff-leipzig),)
+	PKG_SELECTED_MODULES+=applications/community-leipzig
+endif
+ifneq ($(CONFIG_PACKAGE_luci-ff-hannover),)
+	PKG_SELECTED_MODULES+=applications/community-hannover
+endif
 
-	$(call Package/luci/compiletpl,luci-ff-halle,applications/community-halle)
-	$(call Package/luci/compiletpl,luci-ff-leipzig,applications/community-leipzig)
-	$(call Package/luci/compiletpl,luci-ff-hannover,applications/community-hannover)
+ifneq ($(CONFIG_PACKAGE_luci-mod-admin-core),)
+	PKG_SELECTED_MODULES+=modules/admin-core
+endif
+ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
+	PKG_SELECTED_MODULES+=modules/freifunk
+endif
 
-	$(call Package/luci/compiletpl,luci-mod-admin-core,modules/admin-core)
-	$(call Package/luci/compiletpl,luci-mod-freifunk,modules/freifunk)
+ifneq ($(CONFIG_PACKAGE_luci-app-ffwizard-leipzig),)
+	PKG_SELECTED_MODULES+=applications/luci-ffwizard-leipzig
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-splash),)
+	PKG_SELECTED_MODULES+=applications/luci-splash
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-statistics),)
+	PKG_SELECTED_MODULES+=applications/luci-statistics
+endif
 
-	$(call Package/luci/compiletpl,luci-app-ffwizard-leipzig,applications/luci-ffwizard-leipzig)
-	$(call Package/luci/compiletpl,luci-app-firewall,applications/luci-fw)
-	$(call Package/luci/compiletpl,luci-app-splash,applications/luci-splash)
-	$(call Package/luci/compiletpl,luci-app-statistics,applications/luci-statistics)
-
-	$(call Package/luci/compiletpl,luci-sgi-haserl,libs/sgi-haserl)
-	$(call Package/luci/compiletpl,luci-sgi-webuci,libs/sgi-webuci)
-endef
+ifneq ($(CONFIG_PACKAGE_luci-sgi-haserl),)
+	PKG_SELECTED_MODULES+=libs/sgi-haserl
+endif
+ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
+	PKG_SELECTED_MODULES+=libs/sgi-webuci
+endif
 
 
 $(eval $(call BuildPackage,luci-core))
