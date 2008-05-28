@@ -1,20 +1,25 @@
-.PHONY: all compile compile-module source source-module clean clean-module
+.PHONY: all build compile luacompile luasource clean luaclean
 
-all: compile
-compile: source-module
-compile-all: compile-module
-clean: clean-module
-source: source-module
+all: build
 
-source-module:
+build: luabuild gccbuild
+
+luabuild: lua$(LUA_TARGET)
+
+gccbuild: compile
+compile:
+
+clean: luaclean
+
+luasource:
 	mkdir -p dist$(LUCI_INSTALLDIR)
 	cp root/* dist -R 2>/dev/null || true
 	cp luasrc/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf; done  
 	
-compile-module: source-module
+luacompile: luasource
 	for i in $$(find dist -name *.lua -not -name debug.lua); do $(LUAC) $(LUAC_OPTIONS) -o $$i $$i; done
 
-clean-module:
+luaclean:
 	rm -rf dist
 

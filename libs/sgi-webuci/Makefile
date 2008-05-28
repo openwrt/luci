@@ -1,4 +1,5 @@
 include ../../build/config.mk
+include ../../build/gccconfig.mk
 include ../../build/module.mk
 
 BOA_VERSION = 0.94.13

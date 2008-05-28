@@ -25,10 +25,11 @@ include $(INCLUDE_DIR)/package.mk
 define Build/Configure
 endef
 
-define Build/Compile
-	$(MAKE) -C$(PKG_BUILD_DIR) build LUA_TARGET=$(LUA_TARGET)
+define Package/luci/compiletpl
+	ifneq ($(CONFIG_PACKAGE_$(1)),)
+		$(MAKE) -C$(PKG_BUILD_DIR)/$(2) build LUA_TARGET=$(LUA_TARGET)
+	endif
 endef
-
 
 ### Templates ###
 
@@ -115,6 +116,8 @@ define Package/luci-ff-halle
 endef
 
 define Package/luci-ff-halle/install
+	$(call Package/luci/install/template,$(1),applications/community-halle)
+	$(CP) -a ./ipkg/luci-ff-halle.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -270,6 +273,26 @@ define Package/luci-sgi-webuci/install
 endef
 
 
+define Build/Compile 
+	$(call Package/luci/compiletpl,luci-core,libs/core)
+	$(call Package/luci/compiletpl,luci-cbi,libs/cbi)
+	$(call Package/luci/compiletpl,luci-web,libs/web)
+
+	$(call Package/luci/compiletpl,luci-ff-halle,applications/community-halle)
+	$(call Package/luci/compiletpl,luci-ff-leipzig,applications/community-leipzig)
+	$(call Package/luci/compiletpl,luci-ff-hannover,applications/community-hannover)
+
+	$(call Package/luci/compiletpl,luci-mod-admin-core,modules/admin-core)
+	$(call Package/luci/compiletpl,luci-mod-freifunk,modules/freifunk)
+
+	$(call Package/luci/compiletpl,luci-app-ffwizard-leipzig,applications/luci-ffwizard-leipzig)
+	$(call Package/luci/compiletpl,luci-app-firewall,applications/luci-fw)
+	$(call Package/luci/compiletpl,luci-app-splash,applications/luci-splash)
+	$(call Package/luci/compiletpl,luci-app-statistics,applications/luci-statistics)
+
+	$(call Package/luci/compiletpl,luci-sgi-haserl,libs/sgi-haserl)
+	$(call Package/luci/compiletpl,luci-sgi-webuci,libs/sgi-webuci)
+endef
 
 
 $(eval $(call BuildPackage,luci-core))
