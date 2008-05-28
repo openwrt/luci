@@ -28,7 +28,7 @@ endef
 
 
 define Build/Compile 
-	for i in '$(PKG_SELECTED_MODULES)'; do $(MAKE) -C$(PKG_BUILD_DIR)/$$i build LUA_TARGET=$(LUA_TARGET); done
+	for i in $(PKG_SELECTED_MODULES); do $(MAKE) -C$(PKG_BUILD_DIR)/$$$$i build LUA_TARGET=$(LUA_TARGET); done
 endef
 
 ### Templates ###
@@ -47,6 +47,12 @@ define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI - Freifunk Support
   DEPENDS:=+luci-mod-freifunk
+endef
+
+define Package/luci/thtemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=LuCI - Themes
+  DEPENDS:=+luci-web
 endef
 
 define Package/luci/webtemplate
@@ -98,7 +104,6 @@ endef
 
 define Package/luci-web/install
 	$(call Package/luci/install/template,$(1),libs/web)
-	$(call Package/luci/install/template,$(1),themes/fledermaus)
 endef
 
 
@@ -157,7 +162,7 @@ endef
 
 define Package/luci-mod-admin-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-web +luci-cbi
+  DEPENDS+=+luci-web +luci-cbi +luci-theme-fledermaus
   TITLE:=Administration module
 endef
 
@@ -272,7 +277,18 @@ define Package/luci-sgi-webuci/install
 	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
 endef
 
-### Compile Templates ###
+### Templates ###
+define Package/luci-theme-fledermaus
+  $(call Package/luci/thtemplate)
+  TITLE:=Fledermaus (default)
+endef
+
+define Package/luci-theme-fledermaus/install
+	$(call Package/luci/install/template,$(1),themes/fledermaus)
+endef
+
+
+### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
 endif
@@ -303,6 +319,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-ffwizard-leipzig),)
 	PKG_SELECTED_MODULES+=applications/luci-ffwizard-leipzig
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-firewall),)
+	PKG_SELECTED_MODULES+=applications/luci-fw
+endif
 ifneq ($(CONFIG_PACKAGE_luci-app-splash),)
 	PKG_SELECTED_MODULES+=applications/luci-splash
 endif
@@ -315,6 +334,10 @@ ifneq ($(CONFIG_PACKAGE_luci-sgi-haserl),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
 	PKG_SELECTED_MODULES+=libs/sgi-webuci
+endif
+
+ifneq ($(CONFIG_PACKAGE_luci-theme-fledermaus),)
+	PKG_SELECTED_MODULES+=themes/fledermaus
 endif
 
 
@@ -336,3 +359,5 @@ $(eval $(call BuildPackage,luci-app-statistics))
 
 $(eval $(call BuildPackage,luci-sgi-haserl))
 $(eval $(call BuildPackage,luci-sgi-webuci))
+
+$(eval $(call BuildPackage,luci-theme-fledermaus))
