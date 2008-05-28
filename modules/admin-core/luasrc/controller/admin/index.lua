@@ -6,6 +6,8 @@ function index()
 		root.target = alias("admin")
 	end
 	
+	entry({"about"}, template("about"))
+	
 	local page  = node("admin")
 	page.target = alias("admin", "index")
 	page.title  = "Administration"
