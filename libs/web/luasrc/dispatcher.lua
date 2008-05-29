@@ -220,11 +220,18 @@ function createtree()
 	if not built_index then
 		createindex()
 	end
+	
+	require("luci.i18n")
 
 	for k, v in pairs(index) do
 		luci.util.updfenv(v, _M)
 		luci.util.extfenv(v, "_NAME", k)
-		pcall(v)
+		
+		local stat, err = pcall(v)
+		if not stat then
+			error500(err)	
+			os.exit(1)
+		end
 	end
 	
 	built_tree = true

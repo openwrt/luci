@@ -1,0 +1,137 @@
+<%
+require("luci.sys")
+local load1, load5, load15 = luci.sys.loadavg()
+
+local request  = require("luci.dispatcher").request
+local category = request[1]
+local tree     = luci.dispatcher.node()
+local cattree  = category and luci.dispatcher.node(category)
+local node     = luci.dispatcher.dispatched 
+
+local c = tree
+for i,r in ipairs(request) do
+	if c.nodes and c.nodes[r] then 
+		c = c.nodes[r]
+		c._menu_selected = true
+	end
+end
+
+require("luci.i18n").loadc("default")
+
+require("luci.http").prepare_content("text/html")
+%><?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
+	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
+	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
+	<meta http-equiv="content-script-type" content="text/javascript" />
+	<title>LuCI - Lua Configuration Interface</title>
+</head>
+<body>
+<div id="header">
+	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="<%=luci.config.brand.title%>" /></div>
+	<div class="whitetext smalltext right">
+	<%=luci.config.brand.firmware%><br />
+	<%=luci.config.brand.distro%><br />
+	<%:load Last%>: <%=load1%> <%=load5%> <%=load15%><br />
+	<%:hostname Hostname%>: <%=luci.sys.hostname()%> 
+	</div>
+	<div>
+		<span class="headertitle"><%=luci.config.brand.title%></span><br />
+		<span class="whitetext bold"><%=luci.config.brand.subtitle%></span>
+	</div>
+</div>
+
+<div class="separator yellow bold">
+<%:path Pfad%>: <% 
+local c = tree
+local url = controller
+for k,v in pairs(request) do
+	if c.nodes and c.nodes[v] then
+		c = c.nodes[v]
+		url = url .. "/" .. v
+	%><a href="<%=url%>"><%=c.title or v%></a> <% if k ~= #request then %>&#187; <% end
+	end
+end
+%>
+</div>
+
+<div id="columns"><div id="columnswrapper">
+	<div class="sidebar left">
+<%
+local function submenu(prefix, node)
+	if not node._menu_selected or not node.nodes then
+		return false
+	end
+	local index = {}	
+	for k, n in pairs(node.nodes) do
+		table.insert(index, {name=k, order=n.order or 100})
+	end
+		
+	table.sort(index, function(a, b) return a.order < b.order end)
+%>
+	<ul>
+	<% for j, v in pairs(index) do 
+		local nnode = node.nodes[v.name]%>
+		<li>
+			<span<% if nnode._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller .. prefix .. v.name%>"><%=nnode.title%></a></span>
+			<% submenu(prefix .. v.name .. "/", nnode) %>
+		</li>
+	<% end %>
+		</ul> 
+<%	 
+end
+
+if cattree and cattree.nodes then
+	local index = {}	
+	for k, node in pairs(cattree.nodes) do
+		table.insert(index, {name=k, order=node.order or 100})
+	end
+	
+	table.sort(index, function(a, b) return a.order < b.order end)
+
+	for i, k in ipairs(index) do
+		node = cattree.nodes[k.name]
+		if node.title then %>
+			<div<% if node._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=category%>/<%=k.name%>"><%=node.title%></a>			
+				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
+			</div>
+<%		end
+	end
+end
+%>		
+	</div>
+	<div class="sidebar right">
+		<div><%:webif Weboberfläche%>
+			<ul><%
+				for k,node in pairs(tree.nodes) do
+					if node.title then %>
+						<li<% if request[1] == k then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
+<%					end
+				end%>
+			</ul>
+		</div>
+		<%
+			if "admin" == request[1] then
+				require("luci.model.uci") 
+				local ucic = luci.model.uci.changes()
+				if ucic then
+					ucic = #luci.util.split(ucic)
+				end
+		%>
+		<div><%:config Konfiguration%>
+			<ul>
+			<% if ucic then %>
+				<li><a href="<%=controller%>/admin/uci/changes"><%:changes Änderungen%>: <%=ucic%></a></li>
+				<li><a href="<%=controller%>/admin/uci/apply"><%:apply Anwenden%></a></li>
+				<li><a href="<%=controller%>/admin/uci/revert"><%:revert Verwerfen%></a></li>
+			<% else %>
+				<li><%:changes Änderungen%>: 0</li>
+			<% end %>
+			</ul>
+		</div>
+		<% end %>
+	</div>
+	<div id="content">
