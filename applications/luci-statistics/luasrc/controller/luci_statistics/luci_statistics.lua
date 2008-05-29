@@ -1,12 +1,15 @@
 module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 
 local fs   = require("luci.fs")
+local i18n = require("luci.i18n")
 local tpl  = require("luci.template")
 local rrd  = require("luci.statistics.rrdtool")
 local data = require("luci.statistics.datatree").Instance()
 
-
 function index()
+
+	-- XXX: fixme
+	i18n.load("statistics.en")
 
 	function _entry( path, ... )
 		local file = path[4] or path[3]
@@ -15,6 +18,9 @@ function index()
 		end
 	end
 
+	function _i18n( str )
+		return i18n.translate( "stat_" .. str, str )
+	end
 
 	entry({"admin", "statistics"},				call("statistics_index"),		"Statistiken",		80)
 	entry({"admin", "statistics", "collectd"},		cbi("luci_statistics/collectd"),	"Collectd",		10)
@@ -47,7 +53,20 @@ function index()
 	entry({"freifunk", "statistics"},			call("statistics_index"),		"Statistiken",		80).i18n = "statistics"
 	
 	for i, plugin in ipairs( data:plugins() ) do
-		_entry({"freifunk", "statistics", plugin},	call("statistics_render"),		plugin,		    	 i)
+
+		-- get plugin instances
+		local instances = data:plugin_instances( plugin )
+
+		-- plugin menu entry
+		_entry( { "freifunk", "statistics", plugin }, call("statistics_render"), _i18n( plugin ), i )
+
+		-- if more then one instance is found then generate submenu
+		if #instances > 1 then
+			for j, inst in ipairs(instances) do
+				-- instance menu entry
+				entry( { "freifunk", "statistics", plugin, inst }, call("statistics_render"), inst, j )
+			end
+		end			
 	end
 end
 
@@ -94,10 +113,31 @@ end
 
 
 function statistics_render()
-	local plugin = luci.dispatcher.request[3]
-	local images = { }
+	local plugin    = luci.dispatcher.request[3]
+	local instances = { luci.dispatcher.request[4] }
+	local images    = { }
 
-	for i, inst in ipairs( data:plugin_instances( plugin ) ) do
+	-- no instance requested, find all instances
+	if #instances == 0 then
+
+		instances = data:plugin_instances( plugin )
+
+		-- more than one available instance
+		if #instances > 1 then
+
+			-- redirect to first instance and return
+			local r = luci.dispatcher.request
+
+			luci.http.redirect( luci.dispatcher.build_url( {
+				r[1], r[2], r[3], instances[1]
+			} ) )
+
+			return
+		end
+	end
+
+	-- render graphs
+	for i, inst in ipairs( instances ) do
 		local graph = rrd.Graph()
 		for i, img in ipairs( graph:render( plugin, inst ) ) do
 			table.insert( images, img )
