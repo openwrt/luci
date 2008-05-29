@@ -46,7 +46,7 @@ built_tree  = false
 
 
 -- Builds a URL
-function build_url(...)
+function build_url(arg)
 	return luci.http.dispatcher() .. "/" .. table.concat(arg, "/")
 end
 
