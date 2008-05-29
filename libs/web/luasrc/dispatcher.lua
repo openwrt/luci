@@ -80,7 +80,7 @@ function httpdispatch()
 	local pathinfo = luci.http.env.PATH_INFO or ""
 	local c = tree
 
-	for s in pathinfo:gmatch("([%w_]+)") do
+	for s in pathinfo:gmatch("([%w-]+)") do
 		table.insert(request, s)
 	end
 
