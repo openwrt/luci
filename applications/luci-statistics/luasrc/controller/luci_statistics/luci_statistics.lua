@@ -128,9 +128,9 @@ function statistics_render()
 			-- redirect to first instance and return
 			local r = luci.dispatcher.request
 
-			luci.http.redirect( luci.dispatcher.build_url( {
+			luci.http.redirect( luci.dispatcher.build_url( 
 				r[1], r[2], r[3], instances[1]
-			} ) )
+			 ) )
 
 			return
 		end
