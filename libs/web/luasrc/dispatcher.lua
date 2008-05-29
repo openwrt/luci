@@ -98,7 +98,7 @@ function dispatch()
 
 	for i, s in ipairs(request) do
 		c = c.nodes[s]
-		if not c then
+		if not c or c.leaf then
 			break
 		end
 
@@ -278,6 +278,21 @@ function alias(...)
 	local req = arg
 	return function()
 		request = req
+		dispatch()
+	end
+end
+
+function rewrite(n, ...)
+	local req = arg
+	return function()
+		for i=1,n do 
+			table.remove(request, 1)
+		end
+		
+		for i,r in ipairs(req) do
+			table.insert(request, i, r)
+		end
+		
 		dispatch()
 	end
 end
