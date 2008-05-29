@@ -154,11 +154,13 @@ function createindex()
 	local path = luci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
 	
-	if pcall(require, "fastindex") then
+	--[[if pcall(require, "fastindex") then
 		createindex_fastindex(path, suff)
 	else
 		createindex_plain(path, suff)
-	end
+	end]]--
+	
+	createindex_plain(path, suff)
 	
 	built_index = true
 end
