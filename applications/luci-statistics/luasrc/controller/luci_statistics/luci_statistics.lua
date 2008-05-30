@@ -1,26 +1,39 @@
 module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 
-local fs   = require("luci.fs")
-local i18n = require("luci.i18n")
-local tpl  = require("luci.template")
-local rrd  = require("luci.statistics.rrdtool")
-local data = require("luci.statistics.datatree").Instance()
+require("luci.fs")
+require("luci.i18n")
+require("luci.template")
+
 
 function index()
 
-	-- XXX: fixme
-	i18n.load("statistics.en")
+	require("luci.i18n")
+	require("luci.statistics.datatree")
 
+	-- load language file
+	luci.i18n.load("statistics.en")
+
+	-- get rrd data tree
+	local tree = luci.statistics.datatree.Instance()
+
+	-- override entry(): check for existance <plugin>.so where <plugin> is derived from the called path
 	function _entry( path, ... )
 		local file = path[4] or path[3]
-		if fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
+		if luci.fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
 			entry( path, ... )
 		end
 	end
 
-	function _i18n( str )
-		return i18n.translate( "stat_" .. str, str )
+	-- override call(): call requested action function with supplied parameters
+	function _call( func, tree, plugin )
+		return function() getfenv()[func]( tree, plugin ) end
 	end
+
+	-- override i18n(): try to translate stat_<str> or fall back to <str>
+	function _i18n( str )
+		return luci.i18n.translate( "stat_" .. str, str )
+	end
+
 
 	entry({"admin", "statistics"},				call("statistics_index"),		"Statistiken",		80)
 	entry({"admin", "statistics", "collectd"},		cbi("luci_statistics/collectd"),	"Collectd",		10)
@@ -50,12 +63,12 @@ function index()
 
 	
 	-- public views
-	entry({"freifunk", "statistics"},			call("statistics_index"),		"Statistiken",		80).i18n = "statistics"
-	
-	for i, plugin in ipairs( data:plugins() ) do
+	entry({"freifunk", "statistics"}, call("statistics_index"), "Statistiken", 80).i18n = "statistics"
+
+	for i, plugin in ipairs( tree:plugins() ) do
 
 		-- get plugin instances
-		local instances = data:plugin_instances( plugin )
+		local instances = tree:plugin_instances( plugin )
 
 		-- plugin menu entry
 		_entry( { "freifunk", "statistics", plugin }, call("statistics_render"), _i18n( plugin ), i )
@@ -64,7 +77,10 @@ function index()
 		if #instances > 1 then
 			for j, inst in ipairs(instances) do
 				-- instance menu entry
-				entry( { "freifunk", "statistics", plugin, inst }, call("statistics_render"), inst, j )
+				entry(
+					{ "freifunk", "statistics", plugin, inst },
+					call("statistics_render"), inst, j
+				)
 			end
 		end			
 	end
@@ -72,7 +88,7 @@ end
 
 
 function statistics_index()
-	tpl.render("admin_statistics/index")
+	luci.template.render("admin_statistics/index")
 end
 
 function statistics_outputplugins()
@@ -83,7 +99,7 @@ function statistics_outputplugins()
 		csv="CSV"
 	}
 
-	tpl.render("admin_statistics/outputplugins", {plugins=plugins})
+	luci.template.render("admin_statistics/outputplugins", {plugins=plugins})
 end
 
 function statistics_systemplugins()
@@ -95,7 +111,7 @@ function statistics_systemplugins()
 		processes="Prozesse"
 	}
 
-	tpl.render("admin_statistics/systemplugins", {plugins=plugins})
+	luci.template.render("admin_statistics/systemplugins", {plugins=plugins})
 end
 
 function statistics_networkplugins()
@@ -108,41 +124,54 @@ function statistics_networkplugins()
 		dns="DNS"
 	}
 
-	tpl.render("admin_statistics/networkplugins", {plugins=plugins})
+	luci.template.render("admin_statistics/networkplugins", {plugins=plugins})
 end
 
 
-function statistics_render()
-	local plugin    = luci.dispatcher.request[3]
-	local instances = { luci.dispatcher.request[4] }
+function statistics_render( tree )
+
+	require("luci.statistics.rrdtool")
+	require("luci.template")
+
+	local req   = luci.dispatcher.request 
+	local graph = luci.statistics.rrdtool.Graph()
+
+	local plugin    = req[3]
+	local instances = { req[4] }
 	local images    = { }
 
 	-- no instance requested, find all instances
 	if #instances == 0 then
 
-		instances = data:plugin_instances( plugin )
+		instances = graph.tree:plugin_instances( plugin )
 
 		-- more than one available instance
 		if #instances > 1 then
 
 			-- redirect to first instance and return
 			local r = luci.dispatcher.request
+			local i = instances[1]
+			if i:len() == 0 then i = "-" end
 
-			luci.http.redirect( luci.dispatcher.build_url( 
-				r[1], r[2], r[3], instances[1]
-			 ) )
+			luci.http.redirect( luci.dispatcher.build_url(
+				req[1], req[2], req[3], i
+			) )
 
 			return
 		end
+
+	-- index instance requested
+	elseif instances[1] == "-" then
+		instances[1] = ""
 	end
+
 
 	-- render graphs
 	for i, inst in ipairs( instances ) do
-		local graph = rrd.Graph()
 		for i, img in ipairs( graph:render( plugin, inst ) ) do
 			table.insert( images, img )
 		end
 	end
 
-	tpl.render("public_statistics/graph", { images=images, plugin=plugin } )
+	luci.template.render("public_statistics/graph", { images=images, plugin=plugin } )
 end

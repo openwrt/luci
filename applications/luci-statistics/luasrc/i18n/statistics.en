@@ -7,6 +7,7 @@ stat_processes = "Processes"
 stat_wireless  = "Wireless"
 stat_tcpconns  = "TCP Connections"
 stat_interface = "Interfaces"
+stat_df        = "Disk Space Usage"
 
 -- diagrams
 stat_dg_title_wireless__signal_noise = "%H: Wireless - Signal Noise Ratio"
@@ -53,6 +54,23 @@ stat_dg_title_processes = "%H: Processes"
 stat_dg_label_processes = "Processes/s"
 stat_ds_ps_state = "%di"
 
+stat_dg_title_processes__ps_cputime = "%H: Process %pi - used cpu time"
+stat_dg_label_processes__ps_cputime = "Jiffies"
+stat_ds_ps_cputime__syst = "system"
+stat_ds_ps_cputime__user = "user"
+
+stat_dg_title_processes__ps_count = "%H: Process %pi - threads and processes"
+stat_dg_label_processes__ps_count = "Count"
+stat_ds_ps_count = "%ds"
+
+stat_dg_title_processes__ps_pagefaults = "%H: Process %pi - page faults"
+stat_dg_label_processes__ps_pagefaults = "Pagefaults"
+stat_ds_ps_pagefaults = "page faults"
+
+stat_dg_title_processes__ps_rss = "%H: Process %pi - virtual memory size"
+stat_dg_label_processes__ps_rss = "Bytes"
+stat_ds_ps_rss = "virtual memory"
+
 stat_dg_title_cpu = "%H: Usage on Processor #%pi"
 stat_dg_label_cpu = "%"
 stat_ds_cpu       = "%di"
@@ -66,3 +84,9 @@ stat_dg_label_interface__if_packets = "Packets/s"
 stat_dg_title_tcpconns  = "%H: TCP-Connections to Port %pi"
 stat_dg_label_tcpconns  = "Connections/s"
 stat_ds_tcp_connections = "%di"
+
+stat_dg_title_df	= "%H: Disk Space Usage on %di"
+stat_dg_label_df	= "Bytes"
+stat_ds_df__free	= "%ds"
+stat_ds_df__used	= "%ds"
+

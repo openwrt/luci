@@ -419,7 +419,6 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 	for i, instance in ipairs(instances) do
 
 		-- store title and vlabel
-		-- XXX: i18n
 		_ti( _args, "-t" )
 		_ti( _args, opts.title  or self.i18n:title( plugin, plugin_instance, _sources[1].type, instance ) )
 		_ti( _args, "-v" )
