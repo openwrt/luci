@@ -16,7 +16,6 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-# LUA_TARGET:=compile LUAC=$(BUILD_DIR_HOST)/lua/luac
 LUA_TARGET:=source
 PKG_SELECTED_MODULES:=
 
@@ -78,6 +77,24 @@ endef
 define Package/luci-core/install		
 	$(call Package/luci/install/template,$(1),libs/core)
 endef
+
+define Package/luci-core/config
+       choice
+               prompt "Build Target"
+               default PACKAGE_luci-core_compile
+
+       config PACKAGE_luci-core_compile
+               bool "Production"
+
+       config PACKAGE_luci-core_source
+               bool "Debug"
+
+       endchoice
+endef
+
+ifneq ($(CONFIG_PACKAGE_luci-core_compile),)
+	LUA_TARGET:=compile
+endif
 
 
 ### Libraries ###
