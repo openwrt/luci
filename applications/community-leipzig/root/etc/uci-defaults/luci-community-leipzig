@@ -11,6 +11,8 @@ uci batch <<-EOF
         set freifunk.community.dhcp=10.0.0.0
         set freifunk.community.dhcpmask=255.255.255.0
         set freifunk.community.dns='88.198.178.18 141.54.1.1 212.204.49.83 208.67.220.220 208.67.222.222'
+        set luci.main.mediaurlbase=/luci-static/fledermaus
         commit freifunk
+        commit luci
 EOF
 	

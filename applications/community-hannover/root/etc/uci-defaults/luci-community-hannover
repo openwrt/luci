@@ -8,6 +8,8 @@ uci batch <<-EOF
         set freifunk.community.channel=1
         set freifunk.community.net=10.2.0.0
         set freifunk.community.mask=255.255.0.0
+        set luci.main.mediaurlbase=/luci-static/fledermaus
         commit freifunk
+        commit luci
 EOF
 	
