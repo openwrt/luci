@@ -299,8 +299,9 @@ endef
 
 ### Templates ###
 define Package/luci-theme-fledermaus
-  $(call Package/luci/thtemplate)
-  TITLE:=Fledermaus (Freifunk theme)
+  $(call Package/luci/fftemplate)
+  DEPENDS:=+luci-web
+  TITLE:=Fledermaus Theme
 endef
 
 define Package/luci-theme-fledermaus/install
