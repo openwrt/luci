@@ -1,15 +1,15 @@
 <%+header%>
 <h1><%:system System%></h1>
-<h2><%:ipkg IPKG-Konfiguration%></h2>
+<h2><%:a_s_p_ipkg IPKG-Konfiguration%></h2>
 
 <br />
 
-<div><strong><%:ipkg_pkglists Paketlisten%>:</strong><code>src <em>Name</em> <em>URL</em></code></div>
-<div><strong><%:ipkg_targets Installationsziele%>:</strong><code>dest <em>Name</em> <em>Pfad</em></code></div>
+<div><strong><%:a_s_p_ipkg_pkglists Paketlisten%>:</strong><code>src <em>Name</em> <em>URL</em></code></div>
+<div><strong><%:a_s_p_ipkg_targets Installationsziele%>:</strong><code>dest <em>Name</em> <em>Pfad</em></code></div>
 
 <br />
 
-<form method="post" action="<%=controller%>/admin/system/ipkg">
+<form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-section-node" style="width: 100%">
 		<div class="cbi-value">
 			<div class="cbi-value-field">

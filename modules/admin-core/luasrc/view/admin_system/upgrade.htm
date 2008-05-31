@@ -1,34 +1,34 @@
 <%+header%>
 <h1><%:system System%></h1>
-<h2><%:upgrade Upgrade%></h2>
-<p><%:upgrade1 Ersetzt die installierte Firmware (das Betriebssystem des Routers) durch ein neues.
+<h2><%:a_s_flash Upgrade%></h2>
+<p><%:a_s_flash_upgrade1 Ersetzt die installierte Firmware (das Betriebssystem des Routers) durch ein neues.
 Das Format der Firmware ist plattformabhängig.%></p>
 <br />
 <% if sysupgrade and not ret then %>
-<form method="post" action="<%=uploadctrl%>/admin/system/upgrade" enctype="multipart/form-data">
+<form method="post" action="<%=uploadctrl%><%=luci.http.env.PATH_INFO%>" enctype="multipart/form-data">
 	<div class="cbi-section-node">
 		<div class="cbi-value clear">
-			<div class="cbi-value-title left"><%:fwimage Firmwareimage%></div>
+			<div class="cbi-value-title left"><%:a_s_flash_fwimage Firmwareimage%></div>
 			<div class="cbi-value-field"><input type="file" size="30" name="image" /></div>
 		</div>
 		<br />
 		<div class="cbi-value clear">
 			<input type="checkbox" name="keepcfg" value="1" checked="checked" />
-			<span class="bold"><%:keepcfg Konfigurationsdateien übernehmen%></span>
+			<span class="bold"><%:a_s_flash_keepcfg Konfigurationsdateien übernehmen%></span>
 		</div>
 		<br />
 		<div>
-			<input type="submit" value="<%:fwupgrade Firmware aktualisieren%>" />
+			<input type="submit" value="<%:a_s_flash_fwupgrade Firmware aktualisieren%>" />
 		</div>
 	</div>
 </form>
 <% elseif ret then %>
 	<% if ret == 0 then %>
-<div class="ok"><%:flashed Flashvorgang erfolgreich. Router startet neu...%></div>
+<div class="ok"><%:a_s_flash_flashed Flashvorgang erfolgreich. Router startet neu...%></div>
 	<% else %>
-<div class="error"><%:flasherr Flashvorgang fehlgeschlagen!%> (<%:code Code%> <%=ret%>)</div>	
+<div class="error"><%:a_s_flash_flasherr Flashvorgang fehlgeschlagen%>! (<%:code Code%> <%=ret%>)</div>	
 	<% end %>
 <% else %>
-<div class="error"><%:notimplemented Diese Funktion steht leider (noch) nicht zur Verfügung.%></div>
+<div class="error"><%:a_s_flash_notimplemented Diese Funktion steht leider (noch) nicht zur Verfügung.%></div>
 <% end %>
 <%+footer%>

@@ -13,13 +13,13 @@ function index()
 	
 	entry({"admin", "system"}, template("admin_system/index"), i18n("system", "System"), 30)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("a_s_packages", "Paketverwaltung"), 10)
-	entry({"admin", "system", "packages", "ipkg"}, call("action_ipkg"), i18n("a_s_ipkg", "IPKG-Konfiguration"))
+	entry({"admin", "system", "packages", "ipkg"}, call("action_ipkg"), i18n("a_s_p_ipkg", "IPKG-Konfiguration"))
 	entry({"admin", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw", "Passwort ändern"), 20)
 	entry({"admin", "system", "sshkeys"}, call("action_sshkeys"), i18n("a_s_sshkeys", "SSH-Schlüssel"), 30)
 	entry({"admin", "system", "hostname"}, cbi("admin_system/hostname"), i18n("hostname", "Hostname"), 40)
 	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("a_s_fstab", "Einhängepunkte"), 50)
-	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("fwupgrade", "Firmwareupgrade"), 60)
-	entry({"admin", "system", "reboot"}, call("action_reboot"), "Neu starten", 70)
+	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash", "Firmwareupgrade"), 60)
+	entry({"admin", "system", "reboot"}, call("action_reboot"), i18n("reboot", "Neu starten"), 70)
 end
 
 function action_editor()

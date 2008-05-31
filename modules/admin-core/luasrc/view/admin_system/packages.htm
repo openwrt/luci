@@ -1,31 +1,31 @@
 <%+header%>
 <h1><%:system System%></h1>
-<h2><%:packages Paketverwaltung%></h2>
+<h2><%:a_s_packages Paketverwaltung%></h2>
 
 <br />
 
 <% if install or remove or update or upgrade then %>
 <div class="code"><strong><%:status Status%>:</strong><br />
 <% if update then %>
-	<%:packages_update Paketlisten aktualisieren%>: <% if update == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=update%>)</span><% end %><br />
+	<%:a_s_packages_update Paketlisten aktualisieren%>: <% if update == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=update%>)</span><% end %><br />
 <% end %>
 <% if upgrade then%>
-	<%:packages_upgrade Installierte Pakete aktualisieren%>: <% if upgrade == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=upgrade%>)</span><% end %><br />
+	<%:a_s_packages_upgrade Installierte Pakete aktualisieren%>: <% if upgrade == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=upgrade%>)</span><% end %><br />
 <% end %>
 <% if install then for k,v in pairs(install) do %>
-	<%:packages_install Installation von%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=v%>)</span><% end %><br />
+	<%:a_s_packages_install Installation von%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=v%>)</span><% end %><br />
 <% end end %>
 <% if remove then for k,v in pairs(remove) do %>
-	<%:packages_remove Deinstallation von%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=v%>)</span><% end %><br />
+	<%:a_s_packages_remove Deinstallation von%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok OK%></span><% else %><span class="error"><%:error Fehler%> (<%:code Code%> <%=v%>)</span><% end %><br />
 <% end end %>
 </div>
 <br />
 <% end %>
 
 <div>
-<a href="<%=controller%>/admin/system/ipkg"><%:packages_ipkg Paketlisten und Installationsziele bearbeiten%></a><br />
-<a href="<%=controller%>/admin/system/packages?update=1"><%:packages_updatelist Paketlisten aktualisieren%></a><br />
-<a href="<%=controller%>/admin/system/packages?upgrade=1"><%:packages_upgrade Installierte Pakete aktualisieren%></a>
+<a href="<%=controller%>/admin/system/packages/ipkg"><%:a_s_packages_ipkg Paketlisten und Installationsziele bearbeiten%></a><br />
+<a href="<%=controller%>/admin/system/packages?update=1"><%:a_s_packages_updatelist Paketlisten aktualisieren%></a><br />
+<a href="<%=controller%>/admin/system/packages?upgrade=1"><%:a_s_packages_upgrade Installierte Pakete aktualisieren%></a>
 </div>
 
 <br />
@@ -33,7 +33,7 @@
 
 <form method="post" action="<%=controller%>/admin/system/packages">
 	<div>
-		<span class="bold"><%:packages_installurl Paket herunterladen und installieren%>:</span><br />
+		<span class="bold"><%:a_s_packages_installurl Paket herunterladen und installieren%>:</span><br />
 		<input type="text" name="url" size="30" value="" />
 		<input type="submit" name="submit" value="<%:ok OK%>" />
 	</div>
@@ -44,8 +44,8 @@
 	<div>
 		<span class="bold"><%:filter Filter%>:</span>
 		<input type="text" name="query" size="20" value="<%=query%>" />
-		<input type="submit" name="search" value="<%:packages_search Paket suchen%>" />
-		<input type="submit" name="submit" value="<%:packages_do Aktionen ausführen%>" />
+		<input type="submit" name="search" value="<%:a_s_packages_search Paket suchen%>" />
+		<input type="submit" name="submit" value="<%:a_s_packages_do Aktionen ausführen%>" />
 	</div>
 	
 	<br />
@@ -54,7 +54,7 @@
 	<div>
 	<table style="font-size: 0.8em">
 		<tr>
-			<th><%:packages_name Paketname%></th>
+			<th><%:a_s_packages_name Paketname%></th>
 			<th><%:version Version%></th>
 			<th><%:install Installieren%></th>
 			<th><%:delete Löschen%></th>
@@ -72,6 +72,6 @@
 	</table>
 	</div>
 	<br />
-	<input type="submit" name="submit" value="<%:packages_do Aktionen ausführen%>" />
+	<input type="submit" name="submit" value="<%:a_s_packages_do Aktionen ausführen%>" />
 </form>
 <%+footer%>

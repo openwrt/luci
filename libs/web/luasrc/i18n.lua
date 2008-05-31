@@ -29,6 +29,7 @@ require("luci.sys")
 
 table   = {}
 i18ndir = luci.sys.libpath() .. "/i18n/"
+loaded  = {}
 
 -- Clears the translation table
 function clear()
@@ -36,14 +37,19 @@ function clear()
 end
 
 -- Loads a translation and copies its data into the global translation table
-function load(file)
-	local f = loadfile(i18ndir .. file)
-	if f then
-		setfenv(f, table)
-		f()
-		return true
+function load(file, force)
+	if force or not loaded[file] then
+		local f = loadfile(i18ndir .. file)
+		if f then
+			setfenv(f, table)
+			f()
+			loaded[file] = true
+			return true
+		else
+			return false
+		end
 	else
-		return false
+		return true
 	end
 end
 

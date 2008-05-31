@@ -122,11 +122,12 @@ function dispatch()
 	
 	-- Init template engine
 	local tpl = require("luci.template")
-	tpl.viewns.translate  = function(...) return require("luci.i18n").translate(...) end
-	tpl.viewns.controller = luci.http.dispatcher()
-	tpl.viewns.uploadctrl = luci.http.dispatcher_upload()
-	tpl.viewns.media      = luci.config.main.mediaurlbase
-	tpl.viewns.resource   = luci.config.main.resourcebase
+	tpl.viewns.translate   = function(...) return require("luci.i18n").translate(...) end
+	tpl.viewns.controller  = luci.http.dispatcher()
+	tpl.viewns.uploadctrl  = luci.http.dispatcher_upload()
+	tpl.viewns.media       = luci.config.main.mediaurlbase
+	tpl.viewns.resource    = luci.config.main.resourcebase
+	tpl.viewns.REQUEST_URI = luci.http.env.SCRIPT_NAME .. luci.http.env.PATH_INFO
 	
 
 	if c and type(c.target) == "function" then

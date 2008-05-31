@@ -1,9 +1,12 @@
 module("luci.controller.admin.services", package.seeall)
 
 function index()
+	luci.i18n.loadc("admin-core")
+	local i18n = luci.i18n.translate
+
 	local page  = node("admin", "services")
 	page.target = template("admin_services/index")
-	page.title  = "Dienste"  
+	page.title  = i18n("services", "Dienste")  
 	page.order  = 40
 	
 	local page  = node("admin", "services", "httpd")

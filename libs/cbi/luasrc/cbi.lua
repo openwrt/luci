@@ -53,6 +53,7 @@ function load(cbimap)
 	luci.util.resfenv(func)
 	luci.util.updfenv(func, luci.cbi)
 	luci.util.extfenv(func, "translate", luci.i18n.translate)
+	luci.util.extfenv(func, "translatef", luci.i18n.translatef)
 	
 	local map = func()
 	
