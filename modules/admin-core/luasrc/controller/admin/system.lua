@@ -8,14 +8,17 @@ require("luci.model.ipkg")
 require("luci.model.uci")
 
 function index()
-	entry({"admin", "system"}, template("admin_system/index"), "System", 30)
-	entry({"admin", "system", "packages"}, call("action_packages"), "Paketverwaltung", 10)
-	entry({"admin", "system", "packages", "ipkg"}, call("action_ipkg"), "IPKG-Konfiguration")
-	entry({"admin", "system", "passwd"}, call("action_passwd"), "Passwort ändern", 20)
-	entry({"admin", "system", "sshkeys"}, call("action_sshkeys"), "SSH-Schlüssel", 30)
-	entry({"admin", "system", "hostname"}, cbi("admin_system/hostname"), "Hostname", 40)
-	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), "Einhängepunkte", 50)
-	entry({"admin", "system", "upgrade"}, call("action_upgrade"), "Firmwareupgrade", 60)
+	luci.i18n.loadc("admin-core")
+	local i18n = luci.i18n.translate
+	
+	entry({"admin", "system"}, template("admin_system/index"), i18n("system", "System"), 30)
+	entry({"admin", "system", "packages"}, call("action_packages"), i18n("a_s_packages", "Paketverwaltung"), 10)
+	entry({"admin", "system", "packages", "ipkg"}, call("action_ipkg"), i18n("a_s_ipkg", "IPKG-Konfiguration"))
+	entry({"admin", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw", "Passwort ändern"), 20)
+	entry({"admin", "system", "sshkeys"}, call("action_sshkeys"), i18n("a_s_sshkeys", "SSH-Schlüssel"), 30)
+	entry({"admin", "system", "hostname"}, cbi("admin_system/hostname"), i18n("hostname", "Hostname"), 40)
+	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("a_s_fstab", "Einhängepunkte"), 50)
+	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("fwupgrade", "Firmwareupgrade"), 60)
 	entry({"admin", "system", "reboot"}, call("action_reboot"), "Neu starten", 70)
 end
 

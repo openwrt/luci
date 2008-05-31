@@ -128,9 +128,6 @@ function dispatch()
 	tpl.viewns.media      = luci.config.main.mediaurlbase
 	tpl.viewns.resource   = luci.config.main.resourcebase
 	
-	-- Load default translation
-	require("luci.i18n").loadc("default")
-	
 
 	if c and type(c.target) == "function" then
 		dispatched = c
@@ -224,10 +221,20 @@ function createtree()
 	end
 	
 	require("luci.i18n")
+		
+	-- Load default translation
+	luci.i18n.loadc("default")
+	
+	local scope = _G
+	for k,v in pairs(_M) do
+		if type(v) == "function" then
+			scope[k] = v
+		end
+	end
 
 	for k, v in pairs(index) do
-		luci.util.updfenv(v, _M)
-		luci.util.extfenv(v, "_NAME", k)
+		scope._NAME = k
+		setfenv(v, scope)
 		
 		local stat, err = pcall(v)
 		if not stat then

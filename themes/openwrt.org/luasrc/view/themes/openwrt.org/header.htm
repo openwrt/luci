@@ -30,8 +30,7 @@ require("luci.http").prepare_content("text/html")
 </head>
 <body>
 <div id="header">
-	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="<%=luci.config.brand.title%>" /></div>
-	<div class="whitetext smalltext right">
+	<div class="whitetext smalltext bold right">
 	<%=luci.config.brand.firmware%><br />
 	<%=luci.config.brand.distro%><br />
 	<%:load Last%>: <%=load1%> <%=load5%> <%=load15%><br />
@@ -43,7 +42,7 @@ require("luci.http").prepare_content("text/html")
 	</div>
 </div>
 
-<div class="separator yellow bold">
+<div class="separator black whitetext bold">
 <%:path Pfad%>: <% 
 local c = tree
 local url = controller
@@ -57,6 +56,7 @@ end
 %>
 </div>
 
+<div id="page">
 <div id="columns"><div id="columnswrapper">
 	<div class="sidebar left">
 <%
@@ -75,7 +75,7 @@ local function submenu(prefix, node)
 	<% for j, v in pairs(index) do 
 		local nnode = node.nodes[v.name]%>
 		<li>
-			<span<% if nnode._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller .. prefix .. v.name%>"><%=nnode.title%></a></span>
+			<span<% if nnode._menu_selected then %> class="blacktext"<%end%>><a href="<%=controller .. prefix .. v.name%>"><%=nnode.title%></a></span>
 			<% submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
 	<% end %>
@@ -94,7 +94,7 @@ if cattree and cattree.nodes then
 	for i, k in ipairs(index) do
 		node = cattree.nodes[k.name]
 		if node.title then %>
-			<div<% if node._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=category%>/<%=k.name%>"><%=node.title%></a>			
+			<div<% if node._menu_selected then %> class="blacktext"<%end%>><a href="<%=controller%>/<%=category%>/<%=k.name%>"><%=node.title%></a>			
 				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
 			</div>
 <%		end
@@ -107,7 +107,7 @@ end
 			<ul><%
 				for k,node in pairs(tree.nodes) do
 					if node.title then %>
-						<li<% if request[1] == k then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
+						<li<% if request[1] == k then %> class="blacktext"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
 <%					end
 				end%>
 			</ul>

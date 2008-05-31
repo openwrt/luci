@@ -132,6 +132,7 @@ define Package/luci-ff-halle
   DEPENDS+= \
    +luci-sgi-haserl +luci-app-splash \
    +luci-app-ffwizard-leipzig \
+   +luci-theme-fledermaus \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Halle Community Meta-Package
@@ -148,6 +149,7 @@ define Package/luci-ff-leipzig
   DEPENDS+= \
    +luci-sgi-haserl +luci-app-splash \
    +luci-app-ffwizard-leipzig \
+   +luci-theme-fledermaus \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Leipzig Community Meta-Package
@@ -163,6 +165,7 @@ define Package/luci-ff-hannover
   $(call Package/luci/fftemplate)
   DEPENDS+= \
    +luci-sgi-haserl +luci-app-splash \
+   +luci-theme-fledermaus \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
   TITLE:=Freifunk Hannover Community Meta-Package
   URL:=http://www.freifunk-hannover.de/
@@ -179,7 +182,7 @@ endef
 
 define Package/luci-mod-admin-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-web +luci-cbi +luci-theme-fledermaus
+  DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt
   TITLE:=Administration module
 endef
 
@@ -297,11 +300,20 @@ endef
 ### Templates ###
 define Package/luci-theme-fledermaus
   $(call Package/luci/thtemplate)
-  TITLE:=Fledermaus (default)
+  TITLE:=Fledermaus (Freifunk theme)
 endef
 
 define Package/luci-theme-fledermaus/install
 	$(call Package/luci/install/template,$(1),themes/fledermaus)
+endef
+
+define Package/luci-theme-openwrt
+  $(call Package/luci/thtemplate)
+  TITLE:=OpenWRT.org (default)
+endef
+
+define Package/luci-theme-openwrt/install
+	$(call Package/luci/install/template,$(1),themes/openwrt.org)
 endef
 
 
@@ -356,6 +368,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-fledermaus),)
 	PKG_SELECTED_MODULES+=themes/fledermaus
 endif
+ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
+	PKG_SELECTED_MODULES+=themes/openwrt.org
+endif
 
 
 $(eval $(call BuildPackage,luci-core))
@@ -378,3 +393,4 @@ $(eval $(call BuildPackage,luci-sgi-haserl))
 $(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-fledermaus))
+$(eval $(call BuildPackage,luci-theme-openwrt))
