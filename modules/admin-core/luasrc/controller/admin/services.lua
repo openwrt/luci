@@ -11,12 +11,12 @@ function index()
 	
 	local page  = node("admin", "services", "httpd")
 	page.target = cbi("admin_services/httpd")
-	page.title  = "HTTP-Server"
+	page.title  = "Busybox HTTPd"
 	page.order  = 10
 	
 	local page  = node("admin", "services", "dropbear")
 	page.target = cbi("admin_services/dropbear")
-	page.title  = "SSH-Server"
+	page.title  = "Dropbear SSHd"
 	page.order  = 20
 	
 	local page  = node("admin", "services", "dnsmasq")
