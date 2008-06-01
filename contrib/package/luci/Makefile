@@ -139,6 +139,7 @@ define Package/luci-ff-halle
    +luci-sgi-haserl +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
+   +luci-i18n-german \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Halle Community Meta-Package
@@ -156,6 +157,7 @@ define Package/luci-ff-leipzig
    +luci-sgi-haserl +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
+   +luci-i18n-german \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Leipzig Community Meta-Package
@@ -172,6 +174,7 @@ define Package/luci-ff-hannover
   DEPENDS+= \
    +luci-sgi-haserl +luci-app-splash \
    +luci-theme-fledermaus \
+   +luci-i18n-german \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
   TITLE:=Freifunk Hannover Community Meta-Package
   URL:=http://www.freifunk-hannover.de/
