@@ -30,7 +30,7 @@ require("luci.fs")
 
 -- Dirty OpenWRT fix
 if (os.time() < luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua")) then
-	os.execute('date -s '..os.date('%m%d%H%M%Y', luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua")))
+	os.execute('date -s '..os.date('%m%d%H%M%Y', luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua"))..' > /dev/null 2>&1')
 end
 
 -- Local dispatch database
