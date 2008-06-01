@@ -188,7 +188,7 @@ endef
 
 define Package/luci-mod-admin-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt
+  DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt +luci-i18n-english
   TITLE:=Administration module
 endef
 
