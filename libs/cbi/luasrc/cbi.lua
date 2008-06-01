@@ -2,7 +2,7 @@
 LuCI - Configuration Bind Interface
 
 Description:
-Offers an interface for binding confiugration values to certain
+Offers an interface for binding configuration values to certain
 data types. Supports value and range validation and basic dependencies.
 
 FileId:
@@ -13,9 +13,9 @@ Copyright 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,28 +40,28 @@ function load(cbimap)
 	require("luci.i18n")
 	require("luci.config")
 	require("luci.sys")
-	
+
 	local cbidir = luci.sys.libpath() .. "/model/cbi/"
 	local func, err = loadfile(cbidir..cbimap..".lua")
-	
+
 	if not func then
 		return nil
 	end
-	
+
 	luci.i18n.loadc("cbi")
-	
+
 	luci.util.resfenv(func)
 	luci.util.updfenv(func, luci.cbi)
 	luci.util.extfenv(func, "translate", luci.i18n.translate)
 	luci.util.extfenv(func, "translatef", luci.i18n.translatef)
-	
+
 	local map = func()
-	
+
 	if not instanceof(map, Map) then
 		error("CBI map returns no valid map object!")
 		return nil
 	end
-	
+
 	return map
 end
 
@@ -73,6 +73,22 @@ function Node.__init__(self, title, description)
 	self.title = title or ""
 	self.description = description or ""
 	self.template = "cbi/node"
+end
+
+-- i18n helper
+function Node._i18n(self, config, section, option, title, description)
+
+	-- i18n loaded?
+	if type(luci.i18n) == "table" then
+
+		local key = config:gsub("[^%w]+", "")
+
+		if section then	key = key .. "_" .. section:lower():gsub("[^%w]+", "") end
+		if option  then key = key .. "_" .. option:lower():gsub("[^%w]+", "")  end
+
+		self.title = title or luci.i18n.translate( key, option or section or config )
+		self.description = description or luci.i18n.translate( key .. "_desc", "" )
+	end
 end
 
 -- Append child nodes
@@ -115,12 +131,14 @@ end
 
 
 --[[
-Map - A map describing a configuration file 
+Map - A map describing a configuration file
 ]]--
 Map = class(Node)
 
 function Map.__init__(self, config, ...)
 	Node.__init__(self, ...)
+	Node._i18n(self, config, nil, nil, ...)
+
 	self.config = config
 	self.template = "cbi/map"
 	self.uci = luci.model.uci.Session()
@@ -138,9 +156,12 @@ function Map.parse(self, ...)
 end
 
 -- Creates a child section
-function Map.section(self, class, ...)
+function Map.section(self, class, section, ...)
 	if instanceof(class, AbstractSection) then
-		local obj  = class(self, ...)
+		local obj  = class(self, section, ...)
+
+		Node._i18n(obj, self.config, section, nil, ...)
+
 		self:append(obj)
 		return obj
 	else
@@ -218,21 +239,24 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.map = map
 	self.config = map.config
 	self.optionals = {}
-	
+
 	self.optional = true
 	self.addremove = false
 	self.dynamic = false
 end
 
 -- Appends a new option
-function AbstractSection.option(self, class, ...)
+function AbstractSection.option(self, class, option, ...)
 	if instanceof(class, AbstractValue) then
-		local obj  = class(self.map, ...)
+		local obj  = class(self.map, option, ...)
+
+		Node._i18n(obj, self.config, self.section, option, ...)
+
 		self:append(obj)
 		return obj
 	else
 		error("class must be a descendent of AbstractValue")
-	end	
+	end
 end
 
 -- Parse optional options
@@ -240,9 +264,9 @@ function AbstractSection.parse_optionals(self, section)
 	if not self.optional then
 		return
 	end
-	
+
 	self.optionals[section] = {}
-	
+
 	local field = luci.http.formvalue("cbi.opt."..self.config.."."..section)
 	for k,v in ipairs(self.children) do
 		if v.optional and not v:cfgvalue(section) then
@@ -253,7 +277,7 @@ function AbstractSection.parse_optionals(self, section)
 			end
 		end
 	end
-	
+
 	if field and #field > 0 and self.dynamic then
 		self:add_dynamic(field)
 	end
@@ -270,27 +294,27 @@ function AbstractSection.parse_dynamic(self, section)
 	if not self.dynamic then
 		return
 	end
-	
+
 	local arr  = luci.util.clone(self:cfgvalue(section))
 	local form = luci.http.formvaluetable("cbid."..self.config.."."..section)
 	for k, v in pairs(form) do
 		arr[k] = v
 	end
-	
+
 	for key,val in pairs(arr) do
 		local create = true
-		
+
 		for i,c in ipairs(self.children) do
 			if c.option == key then
 				create = false
 			end
 		end
-		
+
 		if create and key:sub(1, 1) ~= "." then
 			self:add_dynamic(key, true)
 		end
 	end
-end	
+end
 
 -- Returns the section's UCI table
 function AbstractSection.cfgvalue(self, section)
@@ -317,16 +341,16 @@ NamedSection = class(AbstractSection)
 function NamedSection.__init__(self, map, section, ...)
 	AbstractSection.__init__(self, map, ...)
 	self.template = "cbi/nsection"
-	
+
 	self.section = section
 	self.addremove = false
 end
 
 function NamedSection.parse(self)
-	local s = self.section	
+	local s = self.section
 	local active = self:cfgvalue(s)
-	
-	
+
+
 	if self.addremove then
 		local path = self.config.."."..s
 		if active then -- Remove the section
@@ -341,14 +365,14 @@ function NamedSection.parse(self)
 			end
 		end
 	end
-	
+
 	if active then
 		AbstractSection.parse_dynamic(self, s)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, s)
 		end
 		AbstractSection.parse_optionals(self, s)
-	end	
+	end
 end
 
 
@@ -356,7 +380,7 @@ end
 TypedSection - A (set of) configuration section(s) defined by the type
 	addremove: 	Defines whether the user can add/remove sections of this type
 	anonymous:  Allow creating anonymous sections
-	validate: 	a validation function returning nil if the section is invalid 
+	validate: 	a validation function returning nil if the section is invalid
 ]]--
 TypedSection = class(AbstractSection)
 
@@ -365,7 +389,7 @@ function TypedSection.__init__(self, ...)
 	self.template  = "cbi/tsection"
 	self.deps = {}
 	self.excludes = {}
-	
+
 	self.anonymous = false
 end
 
@@ -373,7 +397,7 @@ end
 function TypedSection.cfgsections(self)
 	local sections = {}
 	local map, order = self.map:get()
-	
+
 	for i, k in ipairs(order) do
 		if map[k][".type"] == self.sectiontype then
 			if self:checkscope(k) then
@@ -381,18 +405,18 @@ function TypedSection.cfgsections(self)
 			end
 		end
 	end
-	
-	return sections	
+
+	return sections
 end
 
 -- Creates a new section of this type with the given name (or anonymous)
 function TypedSection.create(self, name)
-	if name then	
+	if name then
 		self.map:set(name, nil, self.sectiontype)
 	else
 		name = self.map:add(self.sectiontype)
 	end
-	
+
 	for k,v in pairs(self.children) do
 		if v.default then
 			self.map:set(name, v.option, v.default)
@@ -419,25 +443,25 @@ function TypedSection.parse(self)
 			if name then
 				self:create()
 			end
-		else		
+		else
 			if name then
 				-- Ignore if it already exists
 				if self:cfgvalue(name) then
 					name = nil;
 				end
-				
+
 				name = self:checkscope(name)
-				
+
 				if not name then
 					self.err_invalid = true
-				end		
-				
+				end
+
 				if name and name:len() > 0 then
 					self:create(name)
 				end
 			end
 		end
-		
+
 		-- Remove
 		crval = "cbi.rts." .. self.config
 		name = luci.http.formvaluetable(crval)
@@ -445,9 +469,9 @@ function TypedSection.parse(self)
 			if self:cfgvalue(k) and self:checkscope(k) then
 				self:remove(k)
 			end
-		end	
+		end
 	end
-	
+
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
 		if luci.http.formvalue("cbi.submit") then
@@ -463,22 +487,22 @@ function TypedSection.checkscope(self, section)
 	if self.excludes[section] then
 		return nil
 	end
-	
+
 	-- Check if at least one dependency is met
 	if #self.deps > 0 and self:cfgvalue(section) then
 		local stat = false
-		
+
 		for k, v in ipairs(self.deps) do
 			if self:cfgvalue(section)[v.option] == v.value then
 				stat = true
 			end
 		end
-		
+
 		if not stat then
 			return nil
 		end
 	end
-	
+
 	return self:validate(section)
 end
 
@@ -492,7 +516,7 @@ end
 --[[
 AbstractValue - An abstract Value Type
 	null:		Value can be empty
-	valid:		A function returning the value if it is valid otherwise nil 
+	valid:		A function returning the value if it is valid otherwise nil
 	depends:	A table of option => value pairs of which one must be true
 	default:	The default value
 	size:		The size of the input fields
@@ -508,7 +532,7 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.config = map.config
 	self.tag_invalid = {}
 	self.deps = {}
-	
+
 	self.rmempty  = false
 	self.default  = nil
 	self.size     = nil
@@ -534,7 +558,7 @@ end
 
 function AbstractValue.parse(self, section)
 	local fvalue = self:formvalue(section)
-	
+
 	if fvalue and fvalue ~= "" then -- If we have a form value, write it to UCI
 		fvalue = self:validate(fvalue)
 		if not fvalue then
@@ -542,7 +566,7 @@ function AbstractValue.parse(self, section)
 		end
 		if fvalue and not (fvalue == self:cfgvalue(section)) then
 			self:write(section, fvalue)
-		end 
+		end
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
 			self:remove(section)
@@ -594,7 +618,7 @@ Value = class(AbstractValue)
 function Value.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/value"
-	
+
 	self.maxlength  = nil
 	self.isnumber   = false
 	self.isinteger  = false
@@ -605,7 +629,7 @@ function Value.validate(self, val)
 	if self.maxlength and tostring(val):len() > self.maxlength then
 		val = nil
 	end
-	
+
 	return luci.util.validate(val, self.isnumber, self.isinteger)
 end
 
@@ -620,7 +644,7 @@ function DummyValue.__init__(self, map, ...)
 end
 
 function DummyValue.parse(self)
-	
+
 end
 
 function DummyValue.render(self, s)
@@ -636,7 +660,7 @@ Flag = class(AbstractValue)
 function Flag.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/fvalue"
-	
+
 	self.enabled = "1"
 	self.disabled = "0"
 end
@@ -644,17 +668,17 @@ end
 -- A flag can only have two states: set or unset
 function Flag.parse(self, section)
 	local fvalue = self:formvalue(section)
-	
+
 	if fvalue then
 		fvalue = self.enabled
 	else
 		fvalue = self.disabled
-	end	
-	
-	if fvalue == self.enabled or (not self.optional and not self.rmempty) then 		
+	end
+
+	if fvalue == self.enabled or (not self.optional and not self.rmempty) then
 		if not(fvalue == self:cfgvalue(section)) then
 			self:write(section, fvalue)
-		end 
+		end
 	else
 		self:remove(section)
 	end
@@ -673,7 +697,7 @@ function ListValue.__init__(self, ...)
 	self.template  = "cbi/lvalue"
 	self.keylist = {}
 	self.vallist = {}
-	
+
 	self.size   = 1
 	self.widget = "select"
 end
@@ -681,7 +705,7 @@ end
 function ListValue.value(self, key, val)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
-	table.insert(self.vallist, tostring(val)) 
+	table.insert(self.vallist, tostring(val))
 end
 
 function ListValue.validate(self, val)
@@ -705,8 +729,8 @@ function MultiValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template = "cbi/mvalue"
 	self.keylist = {}
-	self.vallist = {}	
-	
+	self.vallist = {}
+
 	self.widget = "checkbox"
 	self.delimiter = " "
 end
@@ -714,16 +738,16 @@ end
 function MultiValue.value(self, key, val)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
-	table.insert(self.vallist, tostring(val)) 
+	table.insert(self.vallist, tostring(val))
 end
 
 function MultiValue.valuelist(self, section)
 	local val = self:cfgvalue(section)
-	
+
 	if not(type(val) == "string") then
 		return {}
 	end
-	
+
 	return luci.util.split(val, self.delimiter)
 end
 
@@ -731,15 +755,15 @@ function MultiValue.validate(self, val)
 	if not(type(val) == "string") then
 		return nil
 	end
-	
+
 	local result = ""
-	
+
 	for value in val:gmatch("[^\n]+") do
 		if luci.util.contains(self.keylist, value) then
 			result = result .. self.delimiter .. value
-		end 
+		end
 	end
-	
+
 	if result:len() > 0 then
 		return result:sub(self.delimiter:len() + 1)
 	else
