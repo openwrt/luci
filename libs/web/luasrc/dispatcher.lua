@@ -28,6 +28,11 @@ require("luci.http")
 require("luci.sys")
 require("luci.fs")
 
+-- Dirty OpenWRT fix
+if (os.time() < luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua")) then
+	os.execute('date -s '..os.date('%m%d%H%M%Y', luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua")))
+end
+
 -- Local dispatch database
 local tree = {nodes={}}
 
