@@ -48,6 +48,12 @@ define Package/luci/fftemplate
   DEPENDS:=+luci-mod-freifunk
 endef
 
+define Package/luci/i18ntemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=LuCI - Translations
+  DEPENDS:=+luci-web
+endef
+
 define Package/luci/thtemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI - Themes
@@ -297,7 +303,7 @@ define Package/luci-sgi-webuci/install
 	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
 endef
 
-### Templates ###
+### Themes ###
 define Package/luci-theme-fledermaus
   $(call Package/luci/fftemplate)
   DEPENDS:=+luci-web
@@ -316,6 +322,17 @@ endef
 define Package/luci-theme-openwrt/install
 	$(call Package/luci/install/template,$(1),themes/openwrt.org)
 endef
+
+### Translations ###
+define Package/luci-i18n-english
+  $(call Package/luci/i18ntemplate)
+  TITLE:=English (incomplete)
+endef
+
+define Package/luci-i18n-english/install
+	$(call Package/luci/install/template,$(1),i18n/english)
+endef
+
 
 
 ### Compile ###
@@ -373,6 +390,10 @@ ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
 
+ifneq ($(CONFIG_PACKAGE_luci-i18n-english),)
+	PKG_SELECTED_MODULES+=i18n/english
+endif
+
 
 $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-cbi))
@@ -395,3 +416,5 @@ $(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-fledermaus))
 $(eval $(call BuildPackage,luci-theme-openwrt))
+
+$(eval $(call BuildPackage,luci-i18n-english))

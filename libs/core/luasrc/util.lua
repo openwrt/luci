@@ -200,16 +200,16 @@ function strip_bytecode(dump)
 				val = val * 256 + dump:byte(i + n - 1)
 			end
 			return val, i + l
-   		end
+		end
 	else
-    	subint = function(dump, i, l)
-        	local val = 0
-            for n = 1, l, 1 do
-                val = val * 256 + dump:byte(i + n - 1)
-            end
-            return val, i + l
-        end
-    end
+		subint = function(dump, i, l)
+			local val = 0
+			for n = 1, l, 1 do
+				val = val * 256 + dump:byte(i + n - 1)
+			end
+			return val, i + l
+		end
+	end
     
 	local strip_function
 	strip_function = function(dump)
