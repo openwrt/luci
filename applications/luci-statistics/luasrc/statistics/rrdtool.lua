@@ -4,7 +4,9 @@ require("luci.statistics.datatree")
 require("luci.statistics.rrdtool.colors")
 require("luci.statistics.rrdtool.definitions")
 require("luci.statistics.i18n")
+require("luci.model.uci")
 require("luci.util")
+require("luci.sys")
 require("luci.fs")
 
 
@@ -14,16 +16,24 @@ function Graph.__init__( self, timespan, opts )
 
 	opts = opts or { }
 
+	local uci = luci.model.uci.Session()
+	local sections, names = uci:sections( "luci_statistics" )
+
+	-- helper classes
 	self.colors = luci.statistics.rrdtool.colors.Instance()
 	self.defs   = luci.statistics.rrdtool.definitions.Instance()
 	self.tree   = luci.statistics.datatree.Instance()
 	self.i18n   = luci.statistics.i18n.Instance( self )
 
 	-- options
-	opts.rrasingle = opts.rrasingle or true		-- XXX: fixme (uci)
-	opts.host      = opts.host      or "OpenWrt"	-- XXX: fixme (uci)
-	opts.timespan  = opts.timespan  or 900		-- XXX: fixme (uci)
-	opts.width     = opts.width     or 400		-- XXX: fixme (uci)
+	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle ~= "0" )
+	opts.host      = opts.host      or sections.collectd.Hostname        or luci.sys.hostname()
+	opts.timespan  = opts.timespan  or sections.rrdtool.default_timespan or 900
+	opts.width     = opts.width     or sections.rrdtool.image_width      or 400
+	opts.rrdpath   = opts.rrdpath   or sections.collectd_rrdtool.DataDir or "/tmp/rrd"
+	opts.imgpath   = opts.imgpath   or sections.rrdtool.image_path       or "/tmp/rrdimg"
+	opts.rrdpath   = opts.rrdpath:gsub("/$","")
+	opts.imgpath   = opts.imgpath:gsub("/$","")
 
 	-- rrdtool default args
 	self.args = {
@@ -49,11 +59,15 @@ function Graph._mkpath( self, plugin, plugin_instance, dtype, dtype_instance )
 end
 
 function Graph.mkrrdpath( self, ... )
-	return string.format( "/tmp/%s.rrd", self:_mkpath( ... ) )
+	return string.format( "%s/%s.rrd", self.opts.rrdpath, self:_mkpath( ... ) )
 end
 
 function Graph.mkpngpath( self, ... )
-	return string.format( "/tmp/rrdimg/%s.png", self:_mkpath( ... ) )
+	return string.format( "%s/%s.png", self.opts.imgpath, self:_mkpath( ... ) )
+end
+
+function Graph.strippngpath( self, path )
+	return path:sub( self.opts.imgpath:len() + 2 )
 end
 
 function Graph.mktitle( self, plugin, plugin_instance, dtype, dtype_instance )

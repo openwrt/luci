@@ -60,6 +60,7 @@ function index()
 	_entry({"admin", "statistics", "network", "tcpconns"},	cbi("luci_statistics/tcpconns"),	"Verbindungen",		40)
 	_entry({"admin", "statistics", "network", "ping"},	cbi("luci_statistics/ping"),		"Ping",			50)
 	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		"DNS",			60)
+	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	"Drahtlos",		70)
 
 	
 	-- public views
@@ -169,7 +170,7 @@ function statistics_render( tree )
 	-- render graphs
 	for i, inst in ipairs( instances ) do
 		for i, img in ipairs( graph:render( plugin, inst ) ) do
-			table.insert( images, img )
+			table.insert( images, graph:strippngpath( img ) )
 		end
 	end
 

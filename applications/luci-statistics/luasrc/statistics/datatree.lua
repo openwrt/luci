@@ -12,7 +12,7 @@ Instance = util.class()
 function Instance.__init__( self, host )
 	self._host    = host or sections.collectd.Hostname or sys.hostname()
 	self._libdir  = sections.collectd.PluginDir        or "/usr/lib/collectd"
-	self._rrddir  = sections.collectd_rrdtool.DataDir  or "/tmp"
+	self._rrddir  = sections.collectd_rrdtool.DataDir  or "/tmp/rrd"
 
 	self._libdir  = self._libdir:gsub("/$","")
 	self._rrddir  = self._rrddir:gsub("/$","")
@@ -51,38 +51,48 @@ function Instance._scan( self )
 	end
 
 	for plugin, instances in pairs( self._plugins ) do
-		for i, dir in ipairs( fs.dir( self:_mkpath() ) ) do
-			if dir:find( plugin .. "%-" ) or dir == plugin then
-				local instance = ""
 
-				if dir ~= plugin then
-					instance = dir:gsub( plugin .. "%-", "", 1 )
+		local dirs = fs.dir( self:_mkpath() )
+
+		if type(dirs) == "table" then
+			for i, dir in ipairs(dirs) do
+				if dir:find( plugin .. "%-" ) or dir == plugin then
+					local instance = ""
+
+					if dir ~= plugin then
+						instance = dir:gsub( plugin .. "%-", "", 1 )
+					end
+
+					instances[instance] = { }
 				end
-
-				instances[instance] = { }
 			end
 		end
 
 		for instance, data_instances in pairs( instances ) do
-			for i, file in ipairs( fs.dir( self:_mkpath( plugin, instance ) ) ) do
-				if file:find("%.rrd") then
-					file = file:gsub("%.rrd","")
 
-					local data_type
-					local data_instance
+			dirs = fs.dir( self:_mkpath( plugin, instance ) )
 
-					if file:find("%-") then
-						data_type     = file:gsub( "%-.+","" )
-						data_instance = file:gsub( "[^%-]-%-", "", 1 )
-					else
-						data_type     = file
-						data_instance = ""
-					end
+			if type(dirs) == "table" then
+				for i, file in ipairs(dirs) do
+					if file:find("%.rrd") then
+						file = file:gsub("%.rrd","")
 
-					if not data_instances[data_type] then
-						data_instances[data_type] = { data_instance }
-					else
-						table.insert( data_instances[data_type], data_instance )
+						local data_type
+						local data_instance
+
+						if file:find("%-") then
+							data_type     = file:gsub( "%-.+","" )
+							data_instance = file:gsub( "[^%-]-%-", "", 1 )
+						else
+							data_type     = file
+							data_instance = ""
+						end
+
+						if not data_instances[data_type] then
+							data_instances[data_type] = { data_instance }
+						else
+							table.insert( data_instances[data_type], data_instance )
+						end
 					end
 				end
 			end
@@ -115,9 +125,12 @@ end
 
 function Instance.data_types( self, plugin, instance )
 	local rv = { }
+	local p  = self._plugins[plugin]
 
-	for type, val in pairs( self._plugins[plugin][instance] ) do
-		table.insert( rv, type )
+	if type(p) == "table" and type(p[instance]) == "table" then
+		for type, val in pairs(p[instance]) do
+			table.insert( rv, type )
+		end
 	end
 
 	return rv
@@ -125,9 +138,10 @@ end
 
 function Instance.data_instances( self, plugin, instance, dtype )
 	local rv = { }
+	local p  = self._plugins[plugin]
 
-	if type(self._plugins[plugin][instance][dtype]) == "table" then
-		for i, instance in ipairs( self._plugins[plugin][instance][dtype] ) do
+	if type(p) == "table" and type(p[instance]) == "table" and type(p[instance][dtype]) == "table" then
+		for i, instance in ipairs(p[instance][dtype]) do
 			table.insert( rv, instance )
 		end
 	end
