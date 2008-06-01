@@ -156,12 +156,9 @@ function Map.parse(self, ...)
 end
 
 -- Creates a child section
-function Map.section(self, class, section, ...)
+function Map.section(self, class, ...)
 	if instanceof(class, AbstractSection) then
-		local obj  = class(self, section, ...)
-
-		Node._i18n(obj, self.config, section, nil, ...)
-
+		local obj  = class(self, ...)
 		self:append(obj)
 		return obj
 	else
@@ -338,10 +335,11 @@ NamedSection - A fixed configuration section defined by its name
 ]]--
 NamedSection = class(AbstractSection)
 
-function NamedSection.__init__(self, map, section, ...)
-	AbstractSection.__init__(self, map, ...)
+function NamedSection.__init__(self, map, section, type, ...)
+	AbstractSection.__init__(self, map, type, ...)
+	Node._i18n(self, map.config, section, nil, ...)
+	
 	self.template = "cbi/nsection"
-
 	self.section = section
 	self.addremove = false
 end
@@ -384,8 +382,10 @@ TypedSection - A (set of) configuration section(s) defined by the type
 ]]--
 TypedSection = class(AbstractSection)
 
-function TypedSection.__init__(self, ...)
-	AbstractSection.__init__(self, ...)
+function TypedSection.__init__(self, map, type, ...)
+	AbstractSection.__init__(self, map, type, ...)
+	Node._i18n(self, map.config, type, nil, ...)
+
 	self.template  = "cbi/tsection"
 	self.deps = {}
 	self.excludes = {}
