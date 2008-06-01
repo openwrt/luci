@@ -247,7 +247,7 @@ function AbstractSection.option(self, class, option, ...)
 	if instanceof(class, AbstractValue) then
 		local obj  = class(self.map, option, ...)
 
-		Node._i18n(obj, self.config, self.section, option, ...)
+		Node._i18n(obj, self.config, self.section or self.sectiontype, option, ...)
 
 		self:append(obj)
 		return obj
