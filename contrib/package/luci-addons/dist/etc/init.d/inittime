@@ -2,5 +2,5 @@
 START=30
 
 start() {
-        lua -e "os.execute('date -s '..os.date('%m%d%H%M%Y', require('posix').stat('/usr/lib/lua/luci/sys.lua', 'mtime')))"
+        lua -e "os.execute('date -s '..os.date('%m%d%H%M%Y', require('posix').stat('$0', 'mtime')))"
 }
