@@ -13,9 +13,12 @@ delete = "Delete"
 descr = "Description"
 design = "Design"
 device = "Device"
+devices = "Devices"
 disable = "disable"
+distance = "Distance"
 
 enable = "enable"
+encryption = "Encryption"
 error = "Error"
 
 filesystem = "Filesystem"
@@ -27,11 +30,17 @@ hostname = "Hostname"
 
 install = "Install"
 installed = "installed"
+
+key = "Key"
+
 language = "Language"
 load = "Load"
 
 manpage = "see '%s' manpage"
+mode = "Mode"
 
+network = "Network"
+networks = "Networks"
 notinstalled = "not installed"
 
 ok = "OK"
@@ -53,8 +62,11 @@ statistics = "Statistics"
 syslog = "System Log"
 system = "System"
 
+type = "Type"
+
 unknownerror = "Unknown Error"
 
 version = "Version"
 
 webui = "Web UI"
+wifi = "Wifi"

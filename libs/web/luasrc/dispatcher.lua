@@ -177,7 +177,7 @@ end
 
 -- Calls the index function of all available controllers
 function createindex_plain(path, suffix)
-	local cachetime = nil 
+	local cache = nil 
 	
 	local controllers = luci.util.combine(
 		luci.fs.glob(path .. "*" .. suffix) or {},
@@ -185,32 +185,38 @@ function createindex_plain(path, suffix)
 	)
 	
 	if indexcache then
-		cachetime = luci.fs.mtime(indexcache)
+		cache = luci.fs.mtime(indexcache)
 		
-		if not cachetime then
+		if not cache then
 			luci.fs.mkdir(indexcache)
 			luci.fs.chmod(indexcache, "a=,u=rwx")
+			cache = luci.fs.mtime(indexcache)
 		end
 	end
 
-	if not cachetime then
-		for i,c in ipairs(controllers) do
-			c = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
-			stat, mod = pcall(require, c)
+	for i,c in ipairs(controllers) do
+		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
+		local cachefile = indexcache .. "/" .. module
+		local stime
+		local ctime
+		
+		if cache then
+			stime = luci.fs.mtime(c) or 0
+			ctime = luci.fs.mtime(cachefile) or 0
+		end
+		
+		if not cache or stime > ctime then 
+			stat, mod = pcall(require, module)
 	
 			if stat and mod and type(mod.index) == "function" then
-				index[c] = mod.index
+				index[module] = mod.index
 				
-				if indexcache then
-					luci.fs.writefile(indexcache .. "/" .. c, string.dump(mod.index))
+				if cache then
+					luci.fs.writefile(cachefile, luci.util.dump(mod.index))
 				end
 			end
-		end
-	else
-		for i,c in ipairs(luci.fs.dir(indexcache)) do
-			if c:sub(1) ~= "." then
-				index[c] = loadfile(indexcache .. "/" .. c)
-			end
+		else
+			index[module] = loadfile(cachefile)
 		end
 	end
 end
@@ -226,7 +232,7 @@ function createtree()
 	-- Load default translation
 	luci.i18n.loadc("default")
 	
-	local scope = _G
+	local scope = luci.util.clone(_G)
 	for k,v in pairs(_M) do
 		if type(v) == "function" then
 			scope[k] = v

@@ -102,3 +102,31 @@ a_srv_dropbear1 = "Dropbear offers SSH network shell access and an integrated SC
 a_srv_d_pwauth = "Password authentication"
 a_srv_d_pwauth1 = "Allow SSH password authentication"
 
+a_w_wifi1 = [[On this pages you find confiugration options for WLAN based wireless networks.]]
+a_w_wifi2 = [[You can easily integrate your 802.11a/b/g/n-devices into your physical network and use
+the virtual adapter support to build wireless repeaters or offer several networks with one device.]]
+a_w_wifi3 = [[There is support for Managed, Client, Ad-Hoc and WDS operating modes as well as
+WPA and WPA2 encryption for secure communnication.]] 
+
+a_w_devices1 = "Here you can configure installed wifi devices."
+a_w_channel  = "Channel"
+a_w_txantenna = "Transmit Antenna"
+a_w_rxantenna = "Receive Antenna"
+a_w_distance1 = "Distance to furthest station (m)" 
+a_w_diversity = "Diversity"
+a_w_countrycode = "Country Code"
+a_w_connlimit = "Connection Limit"
+
+a_w_networks1 = [[You can run several wifi networks with one device. Be aware that there are certain
+hardware and driverspecific restrictions. Normally you can operate 1 Ad-Hoc or up to 3 Master-Mode and 1 Client-Mode
+network simultaneously.]]
+a_w_netid = "Network Name (ESSID)"
+a_w_network1 = "Add the Wifi network to physical network"
+a_w_txpwr = "Transmit Power"
+a_w_brcmburst = "Broadcom Frameburst"
+a_w_athburst = "Atheros Frameburst"
+a_w_radiussrv = "Radius-Server"
+a_w_radiusport = "Radius-Port"
+a_w_apisolation = "AP-Isolation"
+a_w_apisolation1 = "Prevents Client to Client communication"
+a_w_hideessid = "Hide ESSID"

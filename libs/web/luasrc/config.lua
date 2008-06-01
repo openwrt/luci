@@ -25,10 +25,9 @@ limitations under the License.
 
 ]]--
 
-module("luci.config", package.seeall)
-require("luci.model.uci")
-require("luci.util")
-require("luci.sys")
+local uci  = require("luci.model.uci")
+local util = require("luci.util")
+module("luci.config")
 
 -- Warning! This is only for fallback and compatibility purporses! --
 main = {}
@@ -42,7 +41,7 @@ main.lang = "de"
 
 
 -- Now overwrite with UCI values
-local ucidata = luci.model.uci.sections("luci")
+local ucidata = uci.sections("luci")
 if ucidata then
-	luci.util.update(luci.config, ucidata)
+	util.update(_M, ucidata)
 end

@@ -39,7 +39,7 @@ end
 -- Loads a translation and copies its data into the global translation table
 function load(file, force)
 	if force or not loaded[file] then
-		local f = loadfile(i18ndir .. file)
+		local f = loadfile(i18ndir..file..".lua") or loadfile(i18ndir..file)
 		if f then
 			setfenv(f, table)
 			f()
@@ -54,8 +54,8 @@ function load(file, force)
 end
 
 -- Same as load but autocompletes the filename with .LANG from config.lang
-function loadc(file)
-	return load(file .. "." .. require("luci.config").main.lang)
+function loadc(file, force)
+	return load(file .. "." .. require("luci.config").main.lang, force)
 end
 
 -- Returns the i18n-value defined by "key" or if there is no such: "default"

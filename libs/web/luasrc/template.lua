@@ -30,22 +30,17 @@ require("luci.util")
 require("luci.fs")
 require("luci.http")
 
-viewdir = luci.sys.libpath() .. "/view/"
+luci.config.template = luci.config.template or {}
+
+viewdir    = luci.config.template.viewdir or luci.sys.libpath() .. "/view"
+compiledir = luci.config.template.compiledir or luci.sys.libpath() .. "/view"
 
 
 -- Compile modes:
 -- none:	Never compile, only use precompiled data from files
 -- memory:	Always compile, do not save compiled files, ignore precompiled 
 -- file:	Compile on demand, save compiled files, update precompiled
-compiler_mode = "memory"
-
-
--- This applies to compiler modes "always" and "smart"
---
--- Produce compiled lua code rather than lua sourcecode
--- WARNING: Increases template size heavily!!!
--- This produces the same bytecode as luac but does not have a strip option
-compiler_enable_bytecode = false
+compiler_mode = luci.config.template.compiler_mode or "memory"
 
 
 -- Define the namespace for template modules
@@ -107,12 +102,7 @@ function compile(template)
 		template = template:gsub("<%%"..tostring(k).."%%>", re)
 	end
 
-	if compiler_enable_bytecode then 
-		tf = loadstring(template)
-		template = string.dump(tf)
-	end
-	
-	return template
+	return loadstring(template)
 end
 
 -- Oldstyle render shortcut
@@ -156,8 +146,8 @@ function Template.__init__(self, name)
 	end
 	
 	-- Compile and build
-	local sourcefile   = viewdir .. name .. ".htm"
-	local compiledfile = viewdir .. name .. ".lua"
+	local sourcefile   = viewdir    .. "/" .. name .. ".htm"
+	local compiledfile = compiledir .. "/" .. name .. ".lua"
 	local err	
 	
 	if compiler_mode == "file" then
@@ -171,9 +161,15 @@ function Template.__init__(self, name)
 			source, err = luci.fs.readfile(sourcefile)
 			
 			if source then
-				local compiled = compile(source)
-				luci.fs.writefile(compiledfile, compiled)
-				self.template, err = loadstring(compiled)
+				local compiled, err = compile(source)
+				
+				local compiledfile_dir  = luci.fs.dirname(compiledfile)
+				if not luci.fs.mtime(compiledfile_dir) then
+					luci.fs.mkdir(compiledfile_dir)
+				end
+				
+				luci.fs.writefile(compiledfile, luci.util.dump(compiled))
+				self.template = compiled
 			end
 		else
 			self.template, err = loadfile(compiledfile)
@@ -186,7 +182,7 @@ function Template.__init__(self, name)
 		local source
 		source, err = luci.fs.readfile(sourcefile)
 		if source then
-			self.template, err = loadstring(compile(source))
+			self.template, err = compile(source)
 		end
 			
 	end
