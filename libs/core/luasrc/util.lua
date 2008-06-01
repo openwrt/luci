@@ -189,9 +189,10 @@ function split(str, pat, max, regex)
 end
 
 
--- Bytecode stripping function by Peter Cawley from http://lua-users.org/lists/lua-l/2008-02/msg01158.html
+-- Strips lua bytecode
+-- Original version by Peter Cawley (http://lua-users.org/lists/lua-l/2008-02/msg01158.html)
 function strip_bytecode(dump)
-	local version, format, endian, int, size, ins, num = dump:byte(5, 11)
+	local version, format, endian, int, size, ins, num, lnum = dump:byte(5, 12)
 	local subint
 	if endian == 1 then
 		subint = function(dump, i, l)
@@ -227,6 +228,8 @@ function strip_bytecode(dump)
 				offset = offset + size + subint(dump, offset, size)
 			elseif t == 3 then
 				offset = offset + num
+			elseif t == 254 then
+				offset = offset + lnum
 			end
 		end
 		count, offset = subint(dump, offset, int)
