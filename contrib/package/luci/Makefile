@@ -324,6 +324,16 @@ define Package/luci-theme-openwrt/install
 endef
 
 ### Translations ###
+define Package/luci-i18n-german
+  $(call Package/luci/i18ntemplate)
+  TITLE:=German
+endef
+
+define Package/luci-i18n-german/install
+	$(call Package/luci/install/template,$(1),i18n/german)
+endef
+
+
 define Package/luci-i18n-english
   $(call Package/luci/i18ntemplate)
   TITLE:=English (incomplete)
@@ -390,6 +400,9 @@ ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
 
+ifneq ($(CONFIG_PACKAGE_luci-i18n-german),)
+	PKG_SELECTED_MODULES+=i18n/german
+endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-english),)
 	PKG_SELECTED_MODULES+=i18n/english
 endif
@@ -417,4 +430,5 @@ $(eval $(call BuildPackage,luci-sgi-webuci))
 $(eval $(call BuildPackage,luci-theme-fledermaus))
 $(eval $(call BuildPackage,luci-theme-openwrt))
 
+$(eval $(call BuildPackage,luci-i18n-german))
 $(eval $(call BuildPackage,luci-i18n-english))
