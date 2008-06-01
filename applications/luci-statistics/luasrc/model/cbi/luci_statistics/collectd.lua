@@ -16,51 +16,56 @@ $Id$
 require("luci.sys")
 
 
+luci.i18n.load("statistics.en")
+
+--[[
 m = Map("luci_statistics", "Collector Daemon",
-[[Collectd ist ein kleiner und flexibler Dienst zum Sammeln und Abfragen von Daten
+Collectd ist ein kleiner und flexibler Dienst zum Sammeln und Abfragen von Daten
 aus verschieden Quellen. Zur weiteren Verarbeitung werden die Daten in RRD Datenbanken
-gespeichert oder per Multicast Relaying über das Netzwerk versendet.]])
+gespeichert oder per Multicast Relaying über das Netzwerk versendet.)
+]]--
+m = Map("luci_statistics")
 
 -- general config section
-s = m:section( NamedSection, "general", "luci_statistics", "Allgemeine Einstellungen" )
+s = m:section( NamedSection, "collectd", "luci_statistics" )
+
+-- general.hostname (Hostname)
+hostname = s:option( Value, "Hostname" )
+hostname.default  = luci.sys.hostname()
+hostname.optional = true
 
 -- general.basedir (BaseDir)
-basedir = s:option( Value, "BaseDir", "Basisverzeichnis" )
+basedir = s:option( Value, "BaseDir" )
 basedir.default = "/var/run/collectd"
 
 -- general.include (Include)
-include = s:option( Value, "Include", "Verzeichnis für Unterkonfigurationen" )
+include = s:option( Value, "Include" )
 include.default = "/etc/collectd/conf.d/*.conf"
 
--- general.pidfile (PIDFile)
-pidfile = s:option( Value, "PIDFile", "PID-Datei für den Collector Dienst" )
-pidfile.default = "/var/run/collectd.pid"
-
 -- general.plugindir (PluginDir)
-plugindir = s:option( Value, "PluginDir", "Verzeichnis für die Collector-Plugins" )
+plugindir = s:option( Value, "PluginDir" )
 plugindir.default = "/usr/lib/collectd/"
 
+-- general.pidfile (PIDFile)
+pidfile = s:option( Value, "PIDFile" )
+pidfile.default = "/var/run/collectd.pid"
+
 -- general.typesdb (TypesDB)
-typesdb = s:option( Value, "TypesDB", "Datenbank mit den Datenset-Beschreibungen" )
+typesdb = s:option( Value, "TypesDB" )
 typesdb.default = "/etc/collectd/types.db"
 
 -- general.interval (Interval)
-interval = s:option( Value, "Interval", "Abfrageintervall für die Datenerfassung", "Sekunden" )
+interval = s:option( Value, "Interval" )
 interval.default  = 60
 interval.isnumber = true
 
 -- general.readthreads (ReadThreads)
-readthreads = s:option( Value, "ReadThreads", "Anzahl paralleler Prozesse für die Datenabfrage" )
+readthreads = s:option( Value, "ReadThreads" )
 readthreads.default  = 5
 readthreads.isnumber = true
 
--- general.hostname (Hostname)
-hostname = s:option( Value, "Hostname", "Hostname zur Identifikation des Collector Dienstes (leer lassen um den Namen automatisch zu bestimmen)" )
-hostname.default  = luci.sys.hostname()
-hostname.optional = true
-
 -- general.fqdnlookup (FQDNLookup)
-fqdnlookup = s:option( Flag, "FQDNLookup", "Versuchen den vollen Hostnamen dieser Installation herauszufinden" )
+fqdnlookup = s:option( Flag, "FQDNLookup" )
 fqdnlookup.enabled  = "true"
 fqdnlookup.disabled = "false"
 fqdnlookup.default  = "false"

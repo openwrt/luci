@@ -13,25 +13,22 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics", "IRQ Plugin",
-[[Das IRQ-Plugin sammelt Informationen zur Auslastung einzelner Interrupts.
-Werden keine Interrupts angegeben, überwacht das Plugin alle vorhanden IRQs im System.
-]])
+m = Map("luci_statistics")
 
 -- collectd_irq config section
-s = m:section( NamedSection, "collectd_irq", "luci_statistics", "Pluginkonfiguration" )
+s = m:section( NamedSection, "collectd_irq", "luci_statistics" )
 
 -- collectd_irq.enable
-enable = s:option( Flag, "enable", "Plugin aktivieren" )
+enable = s:option( Flag, "enable" )
 enable.default = 0
 
 -- collectd_irq.irqs (Irq)
-irqs = s:option( Value, "Irqs", "Überwachte Interrupts", "mehrere mit Leerzeichen trennen" )
+irqs = s:option( Value, "Irqs" )
 irqs.optional = true
 irqs:depends( "enable", 1 )
 
 -- collectd_irq.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected", "Alle Interrupts außer ausgewählte überwachen" )
+ignoreselected = s:option( Flag, "IgnoreSelected" )
 ignoreselected.default  = 0
 ignoreselected.optional = "true"
 ignoreselected:depends( "enable", 1 )

@@ -13,37 +13,35 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics", "DF Plugin",
-[[Das DF-Plugin sammelt Informationen über den belegten und verfügbaren Speicherplatz auf den
-angegebenen Geräten, Mountpunkten oder Dateisystemtypen.]])
+m = Map("luci_statistics")
 
 -- collectd_df config section
-s = m:section( NamedSection, "collectd_df", "luci_statistics", "Pluginkonfiguration" )
+s = m:section( NamedSection, "collectd_df", "luci_statistics" )
 
 -- collectd_df.enable
-enable = s:option( Flag, "enable", "Plugin aktivieren" )
+enable = s:option( Flag, "enable" )
 enable.default = 0
 
 -- collectd_df.devices (Device)
-devices = s:option( Value, "Devices", "Gerätedateien", "Einträge mit Leerzeichen trennen" )
-devices.default = "/dev/mtdblock/4"
-devices.rmempty = true
+devices = s:option( Value, "Devices" )
+devices.default  = "/dev/mtdblock/4"
+devices.optional = true
 devices:depends( "enable", 1 )
 
 -- collectd_df.mountpoints (MountPoint)
-mountpoints = s:option( Value, "MountPoints", "Mountpunkte", "Einträge mit Leerzeichen trennen" )
-mountpoints.default = "/jffs"
-mountpoints.rmempty = true
+mountpoints = s:option( Value, "MountPoints" )
+mountpoints.default  = "/jffs"
+mountpoints.optional = true
 mountpoints:depends( "enable", 1 )
 
 -- collectd_df.fstypes (FSType)
-fstypes = s:option( Value, "FSTypes", "Dateisystemtypen", "Einträge mit Leerzeichen trennen" )
-fstypes.default = "tmpfs"
-fstypes.rmempty = true
+fstypes = s:option( Value, "FSTypes" )
+fstypes.default  = "tmpfs"
+fstypes.optional = true
 fstypes:depends( "enable", 1 )
 
 -- collectd_df.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected", "Logik umkehren und alle Datenträger überwachen die nicht auf die obigen Kriterien zutreffen" )
+ignoreselected = s:option( Flag, "IgnoreSelected" )
 ignoreselected.default = 0
 ignoreselected:depends( "enable", 1 )
 

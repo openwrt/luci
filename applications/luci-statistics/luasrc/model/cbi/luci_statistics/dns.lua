@@ -16,18 +16,17 @@ $Id$
 require("luci.sys")
 
 
-m = Map("luci_statistics", "DNS Plugin",
-[[Das DNS-Plugin nutzt die pcap Bibliothek um DNS-Verkehr zu analysieren.]])
+m = Map("luci_statistics")
 
 -- collectd_dns config section
-s = m:section( NamedSection, "collectd_dns", "luci_statistics", "Pluginkonfiguration" )
+s = m:section( NamedSection, "collectd_dns", "luci_statistics" )
 
 -- collectd_dns.enable
-enable = s:option( Flag, "enable", "Plugin aktivieren" )
+enable = s:option( Flag, "enable" )
 enable.default = 0
 
 -- collectd_dns.interfaces (Interface)
-interfaces = s:option( ListValue, "Interface", "Folgende Schnittstelle überwachen:" )
+interfaces = s:option( ListValue, "Interfaces" )
 interfaces:depends( "enable", 1 )
 interfaces:value("any")
 for k, v in pairs(luci.sys.net.devices()) do
@@ -35,7 +34,7 @@ for k, v in pairs(luci.sys.net.devices()) do
 end
 
 -- collectd_dns.ignoresources (IgnoreSource)
-ignoresources = s:option( Value, "IgnoreSources", "Verkehr von folgenden IP Adressen ignorieren:", "mehrere Einträge mit Leerzeichen trennen" )
+ignoresources = s:option( Value, "IgnoreSources" )
 ignoresources.default = "127.0.0.1"
 ignoresources:depends( "enable", 1 )
 

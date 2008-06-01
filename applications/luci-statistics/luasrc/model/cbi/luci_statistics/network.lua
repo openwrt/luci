@@ -14,71 +14,66 @@ $Id$
 ]]--
 
 
-m = Map("luci_statistics", "Network Plugin",
-[[Das Network-Plugin ermöglicht den netzwerkgestützen Austausch von Statistikdaten.]])
+m = Map("luci_statistics")
 
 -- collectd_network config section
-s = m:section( NamedSection, "collectd_network", "luci_statistics", "Pluginkonfiguration" )
+s = m:section( NamedSection, "collectd_network", "luci_statistics" )
 
 -- collectd_network.enable
-enable = s:option( Flag, "enable", "Plugin aktivieren" )
+enable = s:option( Flag, "enable" )
 enable.default = 0
 
 
 -- collectd_network_listen config section (Listen)
-listen = m:section( TypedSection, "collectd_network_listen", "Schnittstellen für eingehende Verbindungen",
-[[Legt fest auf welchen Schnittstellen bzw. IP-Adressen collectd auf eingehende Verbindungen wartet.]])
+listen = m:section( TypedSection, "collectd_network_listen" )
 listen.addremove = true
 listen.anonymous = true
 
-
 -- collectd_network_listen.host
-listen_host = listen:option( Value, "host", "Listen-Host", "Host-, IP- oder IPv6-Adresse" )
+listen_host = listen:option( Value, "host" )
 listen_host.default = "0.0.0.0"
 
 -- collectd_network_listen.port
-listen_port = listen:option( Value, "port", "Listen-Port", "Partnummer 0 - 65535" )
+listen_port = listen:option( Value, "port" )
 listen_port.default   = 25826
 listen_port.isinteger = true
 listen_port.optional  = true
 
 
 -- collectd_network_server config section (Server)
-server = m:section( TypedSection, "collectd_network_server", "Schnittstellen für ausgehende Verbindungen",
-[[Legt fest auf welchen Schnittstellen bzw. IP-Adressen collectd als Server agiert.]])
+server = m:section( TypedSection, "collectd_network_server" )
 server.addremove = true
 server.anonymous = true
 
-
 -- collectd_network_server.host
-server_host = server:option( Value, "host", "Server-Host", "Host-, IP- oder IPv6-Adresse" )
+server_host = server:option( Value, "host" )
 server_host.default = "0.0.0.0"
 
 -- collectd_network_server.port
-server_port = server:option( Value, "port", "Server-Port", "Partnummer 0 - 65535" )
+server_port = server:option( Value, "port" )
 server_port.default   = 25826
 server_port.isinteger = true
 server_port.optional  = true
 
 -- collectd_network.timetolive (TimeToLive)
-ttl = s:option( Value, "TimeToLive", "Time-to-Live für die Pakete", "Werte 0 bis 255" )
+ttl = s:option( Value, "TimeToLive" )
 ttl.default   = 128
 ttl.isinteger = true
 ttl.optional  = true
 ttl:depends( "enable", 1 )
 
 -- collectd_network.forward (Forward)
-forward = s:option( Flag, "Forward", "Weiterleitung zwischen verschiedenen Listen- und Server-Adressen" )
+forward = s:option( Flag, "Forward" )
 forward.default  = 0
 forward.optional = true
 forward:depends( "enable", 1 )
 
--- collectd_network.forward (CacheFlush)
-forward = s:option( Value, "CacheFlush", "Löschintervall für temporäre Daten", "in Sekunden" )
-forward.default   = 86400
-forward.isinteger = true
-forward.optional  = true
-forward:depends( "enable", 1 )
+-- collectd_network.cacheflush (CacheFlush)
+cacheflush = s:option( Value, "CacheFlush" )
+cacheflush.default   = 86400
+cacheflush.isinteger = true
+cacheflush.optional  = true
+cacheflush:depends( "enable", 1 )
 
 
 return m

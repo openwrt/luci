@@ -13,24 +13,23 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics", "Disk Plugin",
-[[Das Disk-Plugin sammelt Informationen über Augewählte Fesplatten.]])
+m = Map("luci_statistics")
 
 -- collectd_disk config section
-s = m:section( NamedSection, "collectd_disk", "luci_statistics", "Pluginkonfiguration" )
+s = m:section( NamedSection, "collectd_disk", "luci_statistics" )
 
 -- collectd_disk.enable
-enable = s:option( Flag, "enable", "Plugin aktivieren" )
+enable = s:option( Flag, "enable" )
 enable.default = 0
 
 -- collectd_disk.disks (Disk)
-devices = s:option( Value, "Disks", "Fesplatten oder Partitionen", "Einträge mit Leerzeichen trennen" )
+devices = s:option( Value, "Disks" )
 devices.default = "hda1 hdb"
 devices.rmempty = true
 devices:depends( "enable", 1 )
 
 -- collectd_disk.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected", "Logik umkehren und alle Datenträger und Partitionen überwachen die nicht auf die obigen Kriterien zutreffen" )
+ignoreselected = s:option( Flag, "IgnoreSelected" )
 ignoreselected.default = 0
 ignoreselected:depends( "enable", 1 )
 
