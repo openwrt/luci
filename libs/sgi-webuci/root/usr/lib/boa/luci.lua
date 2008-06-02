@@ -38,6 +38,8 @@ function init(path)
 		luci.sys.net.routes			= function() return {} end
 		luci.sys.wifi.getiwconfig	= function() return {} end
 		luci.sys.wifi.iwscan		= function() return {} end
+		
+		luci.sys.user.checkpasswd   = function() return true end
 	end
 end
 

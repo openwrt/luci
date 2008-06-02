@@ -263,6 +263,14 @@ end
 user = {}
 -- returns user information to a given uid
 user.getuser = posix.getpasswd
+
+-- checks whether a string matches the password of a certain system user
+function user.checkpasswd(user, password)
+	local account = user.getuser(user)
+	if posix.crypt and account then
+		return (account.passwd == posix.crypt(account.passwd, password))
+	end
+end
 	
 -- Changes the user password of given user
 function user.setpasswd(user, pwd)

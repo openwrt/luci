@@ -579,11 +579,6 @@ function AbstractValue.render(self, s, scope)
 	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
 		scope.section = s
-
-		-- fixup size for MultiValue fields
-		if instanceof(self, MultiValue) and self.widget == "select" and not self.size then
-			self.size = #self.vallist
-		end
 		
 		Node.render(self, scope)
 	end
@@ -739,6 +734,14 @@ function MultiValue.__init__(self, ...)
 
 	self.widget = "checkbox"
 	self.delimiter = " "
+end
+
+function MultiValue.render(self, ...)
+	if self.widget == "select" and not self.size then
+		self.size = #self.vallist
+	end
+
+	AbstractValue.render(self, ...)
 end
 
 function MultiValue.value(self, key, val)

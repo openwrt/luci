@@ -58,6 +58,18 @@ function build_url(...)
 	return luci.http.dispatcher() .. "/" .. table.concat(arg, "/")
 end
 
+-- Prints an error message or renders the "error401" template if available
+function error401(message)
+	message = message or "Unauthorized"
+
+	require("luci.template")
+	if not pcall(luci.template.render, "error401") then
+		luci.http.prepare_content("text/plain")
+		print(message)
+	end
+	return false
+end
+
 -- Sends a 404 error code and renders the "error404" template if available
 function error404(message)
 	luci.http.status(404, "Not Found")
@@ -115,6 +127,20 @@ function dispatch()
 		end
 	end
 
+	if track.sysauth then
+		local accs = track.sysauth
+		accs = (type(accs) == "string") and {accs} or accs
+		
+		local function sysauth(user, password)
+			return (luci.util.contains(accs, user)
+				and luci.sys.user.checkpasswd(user, password)) 
+		end
+		
+		if not luci.http.basic_auth(sysauth) then
+			error401()
+			return
+		end
+	end
 
 	if track.i18n then
 		require("luci.i18n").loadc(track.i18n)

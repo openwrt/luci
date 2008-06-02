@@ -33,6 +33,21 @@ function initenv(env, vars)
 	luci.http.vars = vars
 end
 
+-- Enforces user authentification
+function luci.http.basic_auth(verify_callback, realm)
+	local user = luci.http.env.auth_user
+	local pass = luci.http.env.auth_password
+	realm = realm or ""
+	
+	if not user or not verify_callback(user, pass) then
+		luci.http.status("401", "Unauthorized")
+		luci.http.header("WWW-Authenticate", string.format('Basic realm="%s"', realm))
+		return false	
+	else
+		return true
+	end
+end
+
 -- Returns the main dispatcher URL
 function luci.http.dispatcher()
 	return luci.http.env.SCRIPT_NAME or ""

@@ -29,6 +29,12 @@ require("luci.fs")
 -- Environment Table
 luci.http.env = ENV
 
+-- Enforces user authentification
+function luci.http.basic_auth(verify_callback, realm)
+	-- Dummy for Haserl
+	return true
+end
+
 -- Returns the main dispatcher URL
 function luci.http.dispatcher()
 	return luci.http.env.SCRIPT_NAME or ""

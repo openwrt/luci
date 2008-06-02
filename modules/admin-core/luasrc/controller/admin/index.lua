@@ -11,11 +11,12 @@ function index()
 	
 	entry({"about"}, template("about")).i18n = "admin-core"
 	
-	local page  = node("admin")
-	page.target = alias("admin", "index")
-	page.title  = i18n("administration", "Administration")
-	page.order  = 10
-	page.i18n   = "admin-core"
+	local page   = node("admin")
+	page.target  = alias("admin", "index")
+	page.title   = i18n("administration", "Administration")
+	page.order   = 10
+	page.i18n    = "admin-core"
+	page.sysauth = "root"
 	
 	local page  = node("admin", "index")
 	page.target = template("admin_index/index")
