@@ -288,3 +288,46 @@ function validate(value, cast_number, cast_int)
 	
 	return value
 end
+
+
+-- Parse units from a string and return integer value
+function parse_units(ustr)
+
+        local val = 0
+
+        -- unit map
+        local map = {
+                -- date stuff
+                y   = 60 * 60 * 24 * 366,
+                m   = 60 * 60 * 24 * 31,
+                w   = 60 * 60 * 24 * 7,
+                d   = 60 * 60 * 24,
+                h   = 60 * 60,
+
+                -- storage sizes
+                kb  = 1024,
+                mb  = 1024 * 1024,
+                gb  = 1024 * 1024 * 1024,
+
+                -- storage sizes (si)
+                kib = 1000,
+                mib = 1000 * 1000,
+                gib = 1000 * 1000 * 1000
+        }
+
+        -- parse input string
+        for spec in ustr:lower():gmatch("[0-9%.]+[a-zA-Z]*") do
+
+                local num = spec:gsub("[^0-9%.]+$","")
+                local spn = spec:gsub("^[0-9%.]+", "")
+
+                if map[spn] or map[spn:sub(1,1)] then
+                        val = val + num * ( map[spn] or map[spn:sub(1,1)] )
+                else
+                        val = val + num
+                end
+        end
+
+
+	return val
+end
