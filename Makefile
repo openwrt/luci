@@ -1,15 +1,10 @@
 include build/config.mk
 
-MODULES = applications/* libs/* modules/* themes/* i18n/*
+MODULES = applications/* libs/* modules/* themes/* i18n/* contrib/luaposix
 LUA_TARGET = source
 
-### luaposix merge (temporary) ###
 OS:=$(shell uname)
 export OS
-ifeq ($(OS),Darwin)
-  MODULES += contrib/luaposix
-endif
-
 
 .PHONY: all build gccbuild luabuild clean host gcchost luahost hostcopy hostclean
 
