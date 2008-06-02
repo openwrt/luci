@@ -44,7 +44,7 @@ boa-compile: $(BOA_DIR)/.configured
 compile: boa-compile src/luci.o src/cgi.o
 	mkdir -p dist/usr/bin dist/usr/lib/boa
 	cp $(BOA_DIR)/src/boa $(BOA_DIR)/src/boa_indexer dist/usr/bin
-	$(LINK) $(SHLIB_FLAGS) $(LUA_SHLIBS) -o dist/usr/lib/boa/luci.so src/luci.o src/cgi.o $(LUA_LIBS)
+	$(LINK) $(SHLIB_FLAGS) -o dist/usr/lib/boa/luci.so src/luci.o src/cgi.o $(LUA_LIBS)
 
 clean:
 	rm -rf $(BOA_DIR) $(BOA_FILE)
