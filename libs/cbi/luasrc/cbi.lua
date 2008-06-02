@@ -579,6 +579,12 @@ function AbstractValue.render(self, s, scope)
 	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
 		scope.section = s
+
+		-- fixup size for MultiValue fields
+		if instanceof(self, MultiValue) and self.widget == "select" and not self.size then
+			self.size = #self.vallist
+		end
+		
 		Node.render(self, scope)
 	end
 end
