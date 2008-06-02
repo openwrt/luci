@@ -1,28 +1,27 @@
-module("luci.controller.freifunk.olsr", package.seeall)
+module("luci.controller.admin.status_olsr", package.seeall)
 require("luci.sys")
 
 function index()
-	local page  = node("freifunk", "olsr")
+	local page  = node("admin", "status", "olsr")
 	page.target = call("action_index")
 	page.title  = "OLSR"
-	page.order  = 30
 	
-	local page  = node("freifunk", "olsr", "routes")
+	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
 	page.title  = "Routen"
 	page.order  = 10
 	
-	local page  = node("freifunk", "olsr", "topology")
+	local page  = node("admin", "status", "olsr", "topology")
 	page.target = call("action_topology")
 	page.title  = "Topologie"
 	page.order  = 20
 	
-	local page  = node("freifunk", "olsr", "hna")
+	local page  = node("admin", "status", "olsr", "hna")
 	page.target = call("action_hna")
 	page.title  = "HNA"
 	page.order  = 30
 	
-	local page  = node("freifunk", "olsr", "mid")
+	local page  = node("admin", "status", "olsr", "mid")
 	page.target = call("action_mid")
 	page.title  = "MID"
 	page.order  = 50
@@ -32,7 +31,7 @@ function action_index()
 	local data = fetch_txtinfo("links")
 	
 	if not data or not data.Links then
-		luci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("status-olsr/error_olsr")
 		return nil
 	end
 	
@@ -50,14 +49,14 @@ function action_index()
 	
 	table.sort(data.Links, compare)
 	
-	luci.template.render("freifunk-olsr/index", {links=data.Links})
+	luci.template.render("status-olsr/index", {links=data.Links})
 end
 
 function action_routes()
 	local data = fetch_txtinfo("routes")
 	
 	if not data or not data.Routes then
-		luci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("status-olsr/error_olsr")
 		return nil
 	end
 	
@@ -75,14 +74,14 @@ function action_routes()
 	
 	table.sort(data.Routes, compare)
 	
-	luci.template.render("freifunk-olsr/routes", {routes=data.Routes})
+	luci.template.render("status-olsr/routes", {routes=data.Routes})
 end
 
 function action_topology()
 	local data = fetch_txtinfo("topology")
 	
 	if not data or not data.Topology then
-		luci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("status-olsr/error_olsr")
 		return nil
 	end
 	
@@ -92,14 +91,14 @@ function action_topology()
 	
 	table.sort(data.Topology, compare)
 	
-	luci.template.render("freifunk-olsr/topology", {routes=data.Topology})
+	luci.template.render("status-olsr/topology", {routes=data.Topology})
 end
 
 function action_hna()
 	local data = fetch_txtinfo("hna")
 	
 	if not data or not data.HNA then
-		luci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("status-olsr/error_olsr")
 		return nil
 	end
 	
@@ -109,14 +108,14 @@ function action_hna()
 	
 	table.sort(data.HNA, compare)
 	
-	luci.template.render("freifunk-olsr/hna", {routes=data.HNA})
+	luci.template.render("status-olsr/hna", {routes=data.HNA})
 end
 
 function action_mid()
 	local data = fetch_txtinfo("mid")
 	
 	if not data or not data.MID then
-		luci.template.render("freifunk-olsr/error_olsr")
+		luci.template.render("status-olsr/error_olsr")
 		return nil
 	end
 	
@@ -126,7 +125,7 @@ function action_mid()
 	
 	table.sort(data.MID, compare)
 	
-	luci.template.render("freifunk-olsr/mid", {mids=data.MID})
+	luci.template.render("status-olsr/mid", {mids=data.MID})
 end
 
 

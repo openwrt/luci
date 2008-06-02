@@ -6,6 +6,8 @@ function index()
 
 	entry({"admin", "status"}, template("admin_status/index"), i18n("status", "Status"), 20)
 	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "Systemprotokoll"))
+	entry({"admin", "status", "routes"}, template("admin_status/routes"), "Routingtabelle", 10)
+	entry({"admin", "status", "iwscan"}, template("admin_status/iwscan"), "WLAN-Scan", 20)
 end
 
 function action_syslog()

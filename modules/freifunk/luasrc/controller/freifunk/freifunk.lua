@@ -27,16 +27,11 @@ function index()
 	page.order  = 20
 	page.setuser  = false
 	page.setgroup = false
-
-	local page  = node("freifunk", "status", "routes")
-	page.target = template("public_status/routes")
-	page.title  = "Routingtabelle"
-	page.order  = 10
 	
-	local page  = node("freifunk", "status", "iwscan")
-	page.target = template("public_status/iwscan")
-	page.title  = "WLAN-Scan"
-	page.order  = 20	
+	assign({"freifunk", "status", "routes"}, node("admin", "status", "routes"), "Routingtabelle", 10)
+	assign({"freifunk", "status", "iwscan"}, node("admin", "status", "iwscan"), "WLAN-Scan", 20)
+	
+	assign({"freifunk", "olsr"}, node("admin", "status", "olsr"), "OLSR", 30)
 	
 	local page  = node("admin", "index", "freifunk")
 	page.target = cbi("freifunk/freifunk")

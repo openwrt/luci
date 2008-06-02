@@ -293,19 +293,28 @@ function createtree()
 	built_tree = true
 end
 
--- Shortcut for creating a dispatching node
-function entry(path, target, title, order, add)
-	add = add or {}
+-- Reassigns a node to another position
+function assign(path, clone, title, order)
+	local obj  = node(path)
+	obj.nodes  = nil
+	obj.module = nil
+	
+	obj.title = title
+	obj.order = order
+	
+	setmetatable(obj, {__index = clone})
+	
+	return obj
+end
 
+-- Shortcut for creating a dispatching node
+function entry(path, target, title, order)
 	local c = node(path)
+	
 	c.target = target
 	c.title  = title
 	c.order  = order
 	c.module = getfenv(2)._NAME
-
-	for k,v in pairs(add) do
-		c[k] = v
-	end
 
 	return c
 end
