@@ -37,6 +37,9 @@ hostcopy:
 	mkdir -p host
 	for i in $(MODULES); do cp $$i/dist/* host/ -R 2>/dev/null || true; done
 	ln -sf .$(LUCI_INSTALLDIR) host/luci
-	
+
+run: host
+	./host/usr/bin/boa -c ./host/etc/boa -d
+
 hostclean: clean
 	rm -rf host
