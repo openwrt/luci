@@ -27,6 +27,7 @@ module("luci.dispatcher", package.seeall)
 require("luci.http")
 require("luci.sys")
 require("luci.fs")
+require("luci.fastindex")
 
 -- Dirty OpenWRT fix
 if (os.time() < luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua")) then
@@ -49,6 +50,8 @@ dispatched = nil
 built_index = false
 built_tree  = false
 
+-- Fastindex cache
+local fi = nil
 
 -- Builds a URL
 function build_url(...)
@@ -155,75 +158,20 @@ end
 function createindex()
 	index = {}
 	local path = luci.sys.libpath() .. "/controller/"
-	local suff = ".lua"
-	
-	--[[if pcall(require, "fastindex") then
-		createindex_fastindex(path, suff)
-	else
-		createindex_plain(path, suff)
-	end]]--
-	
-	createindex_plain(path, suff)
-	
-	built_index = true
-end
+	local suffix = ".lua"
 
--- Uses fastindex to create the dispatching tree
-function createindex_fastindex(path, suffix)	
-	local fi = fastindex.new("index")
-	fi.add(path .. "*" .. suffix)
-	fi.add(path .. "*/*" .. suffix)
+	if fi == nil then
+		fi = luci.fastindex.new("index")
+		fi.add(path .. "*" .. suffix)
+		fi.add(path .. "*/*" .. suffix)
+	end
 	fi.scan()
-	
+
 	for k, v in pairs(fi.indexes) do
 		index[v[2]] = v[1]
 	end
-end
 
--- Calls the index function of all available controllers
-function createindex_plain(path, suffix)
-	local cache = nil 
-	
-	local controllers = luci.util.combine(
-		luci.fs.glob(path .. "*" .. suffix) or {},
-		luci.fs.glob(path .. "*/*" .. suffix) or {}
-	)
-	
-	if indexcache then
-		cache = luci.fs.mtime(indexcache)
-		
-		if not cache then
-			luci.fs.mkdir(indexcache)
-			luci.fs.chmod(indexcache, "a=,u=rwx")
-			cache = luci.fs.mtime(indexcache)
-		end
-	end
-
-	for i,c in ipairs(controllers) do
-		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
-		local cachefile = indexcache .. "/" .. module
-		local stime
-		local ctime
-		
-		if cache then
-			stime = luci.fs.mtime(c) or 0
-			ctime = luci.fs.mtime(cachefile) or 0
-		end
-		
-		if not cache or stime > ctime then 
-			stat, mod = pcall(require, module)
-	
-			if stat and mod and type(mod.index) == "function" then
-				index[module] = mod.index
-				
-				if cache then
-					luci.fs.writefile(cachefile, luci.util.dump(mod.index))
-				end
-			end
-		else
-			index[module] = loadfile(cachefile)
-		end
-	end
+	built_index = true
 end
 
 -- Creates the dispatching tree from the index
