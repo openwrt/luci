@@ -25,11 +25,6 @@ include $(INCLUDE_DIR)/package.mk
 define Build/Configure
 endef
 
-
-define Build/Compile 
-	for i in $(PKG_SELECTED_MODULES); do $(MAKE) -C$(PKG_BUILD_DIR)/$$$$i build LUA_TARGET=$(LUA_TARGET); done
-endef
-
 ### Templates ###
 
 define Package/luci/libtemplate
@@ -115,9 +110,19 @@ define Package/luci-cbi/install
 endef
 
 
+define Package/luci-fastindex
+  $(call Package/luci/libtemplate)
+  TITLE:=Fastindex indexing module
+endef
+
+define Package/luci-fastindex/install
+	$(call Package/luci/install/template,$(1),libs/fastindex)
+endef
+
+
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-addons
+  DEPENDS+=+luci-addons +luci-fastindex
   TITLE:=MVC Webframework
 endef
 
@@ -355,6 +360,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-cbi),)
 	PKG_SELECTED_MODULES+=libs/cbi
 endif
+ifneq ($(CONFIG_PACKAGE_luci-fastindex),)
+	PKG_SELECTED_MODULES+=libs/fastindex
+endif
 ifneq ($(CONFIG_PACKAGE_luci-web),)
 	PKG_SELECTED_MODULES+=libs/web
 endif
@@ -411,8 +419,12 @@ ifneq ($(CONFIG_PACKAGE_luci-i18n-english),)
 endif
 
 
+MAKE_FLAGS += MODULES="$(PKG_SELECTED_MODULES)" LUA_TARGET="$(LUA_TARGET)"
+
+
 $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-cbi))
+$(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-web))
 
 $(eval $(call BuildPackage,luci-ff-halle))
