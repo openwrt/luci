@@ -36,6 +36,7 @@ compile: $(LUAPOSIX_DIR)/.patched
 	mkdir -p dist/usr/lib/lua
 	cp $(LUAPOSIX_DIR)/posix.so dist/usr/lib/lua/
 
+luasource:
 compile-all: compile
 
 clean:
