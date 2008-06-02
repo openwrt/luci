@@ -122,7 +122,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-addons +luci-fastindex
+  DEPENDS+=+luci-addons
   TITLE:=MVC Webframework
 endef
 
