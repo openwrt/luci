@@ -1,11 +1,8 @@
 <%+header%>
 
-<h1><%:stat_systemplugins Systemplugins%></h1>
+<h1><%:stat_systemplugins System plugins%></h1>
 
-<p><%:stat_systemplugins_desc Systemplugins sammeln Werte über den aktuellen Systemzustand und den Ressourcenverbrauch
-auf dem Gerät.%></p>
-
-<p><%:stat_systemplugins_installed Installierte Systemplugins:%>
+<p><%:stat_systemplugins_desc System plugins collecting values about system state and ressource usage on the device.:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>

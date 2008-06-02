@@ -1,11 +1,11 @@
 <%+header%>
 
-<h1><%:stat_networkplugins Netzwerkplugins%></h1>
+<h1><%:stat_networkplugins Network plugins%></h1>
 
-<p><%:stat_networkplugins_desc Netzwerkplugins sammeln Werte über offene TCP-Verbindung, allgemeines Verkehrsaufkommen
-auf verschiedenen Schnittstellen, DNS-Verkehr u.v.m.%></p>
+<p><%:stat_networkplugins_desc Network plugins are used to collect information
+about open tcp connections, interface traffic, iptables rules etc.%></p>
 
-<p><%:stat_networkplugins_installed Installierte Netzwerkplugins:%>
+<p><%:stat_networkplugins_installed Installed network plugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>

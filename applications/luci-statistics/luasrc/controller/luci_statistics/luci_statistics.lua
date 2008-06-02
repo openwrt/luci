@@ -11,7 +11,7 @@ function index()
 	require("luci.statistics.datatree")
 
 	-- load language file
-	luci.i18n.load("statistics.en")
+	luci.i18n.load("statistics.en") -- XXX: temporary / replace with loadc()
 
 	-- get rrd data tree
 	local tree = luci.statistics.datatree.Instance()
@@ -35,32 +35,32 @@ function index()
 	end
 
 
-	entry({"admin", "statistics"},				call("statistics_index"),		"Statistiken",		80)
-	entry({"admin", "statistics", "collectd"},		cbi("luci_statistics/collectd"),	"Collectd",		10)
+	entry({"admin", "statistics"},				call("statistics_index"),		_i18n("statistics"),	80).i18n = "statistics"
+	entry({"admin", "statistics", "collectd"},		cbi("luci_statistics/collectd"),	_i18n("collectd"),	10)
 
-	entry({"admin", "statistics", "output"},		call("statistics_outputplugins"),	"Ausgabeplugins",	20)
-	_entry({"admin", "statistics", "output", "rrdtool"},	cbi("luci_statistics/rrdtool"),		"RRDTool",		10)
-	_entry({"admin", "statistics", "output", "network"},	cbi("luci_statistics/network"),		"Netzwerk",		20)
-	_entry({"admin", "statistics", "output", "unixsock"},	cbi("luci_statistics/unixsock"),	"Unix Socket",		30)
-	_entry({"admin", "statistics", "output", "csv"},	cbi("luci_statistics/csv"),		"CSV",			40)
+	entry({"admin", "statistics", "output"},		call("statistics_outputplugins"),	_i18n("outputplugins"),	20)
+	_entry({"admin", "statistics", "output", "rrdtool"},	cbi("luci_statistics/rrdtool"),		_i18n("rrdtool"),	10)
+	_entry({"admin", "statistics", "output", "network"},	cbi("luci_statistics/network"),		_i18n("network"),	20)
+	_entry({"admin", "statistics", "output", "unixsock"},	cbi("luci_statistics/unixsock"),	_i18n("unixsock"),	30)
+	_entry({"admin", "statistics", "output", "csv"},	cbi("luci_statistics/csv"),		_i18n("csv"),		40)
 
-	entry({"admin", "statistics", "system"},		call("statistics_systemplugins"),	"Systemplugins",	30)
-	_entry({"admin", "statistics", "system", "exec"},	cbi("luci_statistics/exec"),		"Exec",			10)
-	_entry({"admin", "statistics", "system", "email"},	cbi("luci_statistics/email"),		"E-Mail",		20)
-	_entry({"admin", "statistics", "system", "cpu"},	cbi("luci_statistics/cpu"),		"Prozessor",		30)
-	_entry({"admin", "statistics", "system", "df"},		cbi("luci_statistics/df"),		"Speicherplatz",	40)
-	_entry({"admin", "statistics", "system", "disk"},	cbi("luci_statistics/disk"),		"Datenträger",		50)
-	_entry({"admin", "statistics", "system", "irq"},	cbi("luci_statistics/irq"),		"Interrupts",		60)
-	_entry({"admin", "statistics", "system", "processes"},	cbi("luci_statistics/processes"),	"Prozesse",		70)
+	entry({"admin", "statistics", "system"},		call("statistics_systemplugins"),	_i18n("systemplugins"),	30)
+	_entry({"admin", "statistics", "system", "exec"},	cbi("luci_statistics/exec"),		_i18n("exec"),		10)
+	_entry({"admin", "statistics", "system", "email"},	cbi("luci_statistics/email"),		_i18n("email"),		20)
+	_entry({"admin", "statistics", "system", "cpu"},	cbi("luci_statistics/cpu"),		_i18n("cpu"),		30)
+	_entry({"admin", "statistics", "system", "df"},		cbi("luci_statistics/df"),		_i18n("df"),		40)
+	_entry({"admin", "statistics", "system", "disk"},	cbi("luci_statistics/disk"),		_i18n("disk"),		50)
+	_entry({"admin", "statistics", "system", "irq"},	cbi("luci_statistics/irq"),		_i18n("irq"),		60)
+	_entry({"admin", "statistics", "system", "processes"},	cbi("luci_statistics/processes"),	_i18n("processes"),	70)
 
-	entry({"admin", "statistics", "network"},		call("statistics_networkplugins"),	"Netzwerkplugins",	40)
-	_entry({"admin", "statistics", "network", "interface"},	cbi("luci_statistics/interface"),	"Schnittstellen",	10)
-	_entry({"admin", "statistics", "network", "netlink"},	cbi("luci_statistics/netlink"),		"Netlink",		20)
-	_entry({"admin", "statistics", "network", "iptables"},	cbi("luci_statistics/iptables"),	"Firewall",		30)
-	_entry({"admin", "statistics", "network", "tcpconns"},	cbi("luci_statistics/tcpconns"),	"Verbindungen",		40)
-	_entry({"admin", "statistics", "network", "ping"},	cbi("luci_statistics/ping"),		"Ping",			50)
-	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		"DNS",			60)
-	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	"Drahtlos",		70)
+	entry({"admin", "statistics", "network"},		call("statistics_networkplugins"),	_i18n("networkplugins"),40)
+	_entry({"admin", "statistics", "network", "interface"},	cbi("luci_statistics/interface"),	_i18n("interface"),	10)
+	_entry({"admin", "statistics", "network", "netlink"},	cbi("luci_statistics/netlink"),		_i18n("netlink"),	20)
+	_entry({"admin", "statistics", "network", "iptables"},	cbi("luci_statistics/iptables"),	_i18n("iptables"),	30)
+	_entry({"admin", "statistics", "network", "tcpconns"},	cbi("luci_statistics/tcpconns"),	_i18n("tcpconns"),	40)
+	_entry({"admin", "statistics", "network", "ping"},	cbi("luci_statistics/ping"),		_i18n("ping"),		50)
+	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		_i18n("dns"),		60)
+	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	_i18n("wireless"),	70)
 
 	
 	-- public views
@@ -93,37 +93,31 @@ function statistics_index()
 end
 
 function statistics_outputplugins()
-	plugins = {
-		rrdtool="RRDTool",
-		network="Netzwerk",
-		unixsock="Unix Socket",
-		csv="CSV"
-	}
+	local plugins = { }
+
+	for i, p in ipairs({ "rrdtool", "network", "unixsock", "csv" }) do
+		plugins[p] = luci.i18n.translate( "stat_" .. p, p )
+	end
 
 	luci.template.render("admin_statistics/outputplugins", {plugins=plugins})
 end
 
 function statistics_systemplugins()
-	plugins = {
-		exec="Exec",
-		email="E-Mail",
-		disk="Datenträger",
-		irq="Interrupts",
-		processes="Prozesse"
-	}
+	local plugins = { }
+
+	for i, p in ipairs({ "exec", "email", "df", "disk", "irq", "processes", "cpu" }) do
+		plugins[p] = luci.i18n.translate( "stat_" .. p, p )
+	end
 
 	luci.template.render("admin_statistics/systemplugins", {plugins=plugins})
 end
 
 function statistics_networkplugins()
-	plugins = {
-		interface="Schnittstellen",
-		netlink="Netlink",
-		iptables="Firewall",
-		tcpconns="Verbindungen",
-		ping="Ping",
-		dns="DNS"
-	}
+	local plugins = { }
+
+	for i, p in ipairs({ "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless" }) do
+		plugins[p] = luci.i18n.translate( "stat_" .. p, p )
+	end
 
 	luci.template.render("admin_statistics/networkplugins", {plugins=plugins})
 end

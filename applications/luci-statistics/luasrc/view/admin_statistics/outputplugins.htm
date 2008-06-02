@@ -1,12 +1,12 @@
 <%+header%>
 
-<h1><%:stat_outputplugins Ausgabeplugins%></h1>
+<h1><%:stat_outputplugins Output plugins%></h1>
 
-<p><%:stat_outputplugins_desc Ausgabeplugins stellen verschiedene Möglichkeiten zur Speicherung
-der Daten bereit. Es können auch mehrere Plugins gleichzeitig aktiviert werden um beispielsweise
-die gesammelten Werte in RRD-Datenbanken zu sichern und zusätzlich über das Netzwerk zu versenden.%></p>
+<p><%:stat_outputplugins_desc Output plugins provide different possibilities to store collected data.
+It is possible to enable multiple plugin at one, for example to store collected data in rrd databases
+and to transmit the data over the network to other collectd instances.%></p>
 
-<p><%:stat_outputplugins_installed Installierte Ausgabeplugins:%>
+<p><%:stat_outputplugins_installed Installed output plugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
