@@ -49,6 +49,9 @@ dispatched = nil
 built_index = false
 built_tree  = false
 
+-- Fastindex
+local fi
+
 
 -- Builds a URL
 function build_url(...)
@@ -157,22 +160,22 @@ function createindex()
 	local path = luci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
 	
-	--[[if pcall(require, "fastindex") then
+	if pcall(require, "luci.fastindex") then
 		createindex_fastindex(path, suff)
 	else
 		createindex_plain(path, suff)
-	end]]--
-	
-	createindex_plain(path, suff)
+	end
 	
 	built_index = true
 end
 
 -- Uses fastindex to create the dispatching tree
 function createindex_fastindex(path, suffix)	
-	local fi = fastindex.new("index")
-	fi.add(path .. "*" .. suffix)
-	fi.add(path .. "*/*" .. suffix)
+	if not fi then
+		fi = luci.fastindex.new("index")
+		fi.add(path .. "*" .. suffix)
+		fi.add(path .. "*/*" .. suffix)
+	end
 	fi.scan()
 	
 	for k, v in pairs(fi.indexes) do
@@ -181,7 +184,12 @@ function createindex_fastindex(path, suffix)
 end
 
 -- Calls the index function of all available controllers
+-- Fallback for transition purposes / Leave it in as long as it works otherwise throw it away
 function createindex_plain(path, suffix)
+	if built_index then
+		return
+	end
+
 	local cache = nil 
 	
 	local controllers = luci.util.combine(
@@ -201,11 +209,12 @@ function createindex_plain(path, suffix)
 
 	for i,c in ipairs(controllers) do
 		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
-		local cachefile = indexcache .. "/" .. module
+		local cachefile
 		local stime
 		local ctime
 		
 		if cache then
+			cachefile = indexcache .. "/" .. module
 			stime = luci.fs.mtime(c) or 0
 			ctime = luci.fs.mtime(cachefile) or 0
 		end
