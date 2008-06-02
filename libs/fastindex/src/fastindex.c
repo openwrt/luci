@@ -32,8 +32,7 @@
 #include <lauxlib.h>
 #include "list.h"
 
-#define MODNAME        "fastindex"
-#define PATTERN        "/*.lua"
+#define MODNAME        "luci.fastindex"
 #define DEFAULT_BUFLEN 1024
 
 //#define DEBUG 1
@@ -373,7 +372,7 @@ static const luaL_Reg fastindex[] = {
 };
 
 int
-luaopen_fastindex(lua_State *L)
+luaopen_luci_fastindex(lua_State *L)
 {
 	luaL_register(L, MODNAME, fastindex);
 	return 0;
