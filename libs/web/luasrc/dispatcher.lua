@@ -24,6 +24,7 @@ limitations under the License.
 
 ]]--
 module("luci.dispatcher", package.seeall)
+require("luci.init")
 require("luci.http")
 require("luci.sys")
 require("luci.fs")
