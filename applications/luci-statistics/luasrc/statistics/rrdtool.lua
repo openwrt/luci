@@ -26,9 +26,9 @@ function Graph.__init__( self, timespan, opts )
 	self.i18n   = luci.statistics.i18n.Instance( self )
 
 	-- options
+	opts.timespan  = timespan       or sections.rrdtool.default_timespan or 900
 	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle ~= "0" )
 	opts.host      = opts.host      or sections.collectd.Hostname        or luci.sys.hostname()
-	opts.timespan  = opts.timespan  or sections.rrdtool.default_timespan or 900
 	opts.width     = opts.width     or sections.rrdtool.image_width      or 400
 	opts.rrdpath   = opts.rrdpath   or sections.collectd_rrdtool.DataDir or "/tmp/rrd"
 	opts.imgpath   = opts.imgpath   or sections.rrdtool.image_path       or "/tmp/rrdimg"
@@ -63,7 +63,7 @@ function Graph.mkrrdpath( self, ... )
 end
 
 function Graph.mkpngpath( self, ... )
-	return string.format( "%s/%s.png", self.opts.imgpath, self:_mkpath( ... ) )
+	return string.format( "%s/%s.%i.png", self.opts.imgpath, self:_mkpath( ... ), self.opts.timespan )
 end
 
 function Graph.strippngpath( self, path )
@@ -100,7 +100,7 @@ function Graph._rrdtool( self, def, rrd )
 	-- construct commandline from def stack
 	for i, opt in ipairs(def) do
 		opt = opt .. ""    -- force string
-		
+
 		if rrd then
 			opt = opt:gsub( "{file}", rrd )
 		end
@@ -177,7 +177,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- is subsequent source without overlay: source_stk = source_nnl + previous_stk
 		else
-			-- create cdef statement				
+			-- create cdef statement
 			_tif( _args, "CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev )
 		end
 
@@ -574,7 +574,7 @@ function Graph.render( self, plugin, plugin_instance )
 						local png   = self:mkpngpath( plugin, plugin_instance, dtype, inst )
 						local rrd   = self:mkrrdpath( plugin, plugin_instance, dtype, inst )
 						local args  = { png, "-t", title }
-						
+
 						for i, o in ipairs(self.defs.definitions[dtype]) do
 							table.insert( args, o )
 						end

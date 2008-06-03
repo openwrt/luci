@@ -1,12 +1,8 @@
 module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 
-require("luci.fs")
-require("luci.i18n")
-require("luci.template")
-
-
 function index()
 
+	require("luci.fs")
 	require("luci.i18n")
 	require("luci.statistics.datatree")
 
@@ -62,9 +58,12 @@ function index()
 	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		_i18n("dns"),		60)
 	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	_i18n("wireless"),	70)
 
-	
+
 	-- public views
 	entry({"freifunk", "statistics"}, call("statistics_index"), "Statistiken", 80).i18n = "statistics"
+
+	local vars = luci.http.formvalues()
+	local span = vars.timespan or nil
 
 	for i, plugin in ipairs( tree:plugins() ) do
 
@@ -72,7 +71,10 @@ function index()
 		local instances = tree:plugin_instances( plugin )
 
 		-- plugin menu entry
-		_entry( { "freifunk", "statistics", plugin }, call("statistics_render"), _i18n( plugin ), i )
+		entry(
+			{ "freifunk", "statistics", plugin },
+			call("statistics_render"), _i18n( plugin ), i
+		).query = { timespan = span }
 
 		-- if more then one instance is found then generate submenu
 		if #instances > 1 then
@@ -81,12 +83,11 @@ function index()
 				entry(
 					{ "freifunk", "statistics", plugin, inst },
 					call("statistics_render"), inst, j
-				)
+				).query = { timespan = span }
 			end
-		end			
+		end
 	end
 end
-
 
 function statistics_index()
 	luci.template.render("admin_statistics/index")
@@ -127,9 +128,14 @@ function statistics_render( tree )
 
 	require("luci.statistics.rrdtool")
 	require("luci.template")
+	require("luci.model.uci")
 
-	local req   = luci.dispatcher.request 
-	local graph = luci.statistics.rrdtool.Graph()
+	local vars  = luci.http.formvalues()
+	local req   = luci.dispatcher.request
+	local uci   = luci.model.uci.Session()
+	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
+	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
+	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
 
 	local plugin    = req[3]
 	local instances = { req[4] }
@@ -168,5 +174,10 @@ function statistics_render( tree )
 		end
 	end
 
-	luci.template.render("public_statistics/graph", { images=images, plugin=plugin } )
+	luci.template.render( "public_statistics/graph", {
+		images           = images,
+		plugin           = plugin,
+		timespans        = spans,
+		current_timespan = span
+	} )
 end

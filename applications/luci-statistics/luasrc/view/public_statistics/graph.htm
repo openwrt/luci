@@ -2,6 +2,15 @@
 
 <h1>Statistik</h1>
 
+<form action="" method="get">
+	<select name="timespan">
+		<% for i, span in ipairs(timespans) do %>
+			<option<% if span == current_timespan then %> selected="selected"<% end %>><%=span%></option>
+		<% end %>
+	</select>
+	<input type="submit" name="submit" value="<%:stat_showtimespan Display timespan &raquo;%>" />
+</form>
+
 <% for i, img in ipairs(images) do %>
 	<img src="/rrdimg/<%=img%>" />
 <% end %>
