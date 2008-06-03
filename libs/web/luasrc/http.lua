@@ -34,3 +34,13 @@ if ENV and ENV.HASERLVER then
 elseif webuci then
 	require("luci.sgi.webuci")
 end
+
+function build_querystring(table)
+	local s="?"
+	
+	for k, v in pairs(table) do
+		s = s .. k .. "=" .. v .. "&"
+	end
+	
+	return s
+end

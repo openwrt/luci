@@ -73,9 +73,12 @@ local function submenu(prefix, node)
 %>
 	<ul>
 	<% for j, v in pairs(index) do 
-		local nnode = node.nodes[v.name]%>
+		local nnode = node.nodes[v.name]
+		local href = controller .. prefix .. v.name
+		href = (v.query) and href .. luci.http.build_querystring(v.query) or href
+		%>
 		<li>
-			<span<% if nnode._menu_selected then %> class="blacktext"<%end%>><a href="<%=controller .. prefix .. v.name%>"><%=nnode.title%></a></span>
+			<span<% if nnode._menu_selected then %> class="blacktext"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
 			<% submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
 	<% end %>
@@ -93,8 +96,10 @@ if cattree and cattree.nodes then
 
 	for i, k in ipairs(index) do
 		node = cattree.nodes[k.name]
-		if node.title then %>
-			<div<% if node._menu_selected then %> class="blacktext"<%end%>><a href="<%=controller%>/<%=category%>/<%=k.name%>"><%=node.title%></a>			
+		if node.title then
+			local href = controller.."/"..category.."/"..k.name
+			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
+			<div<% if node._menu_selected then %> class="blacktext"<%end%>><a href="<%=href%>"><%=node.title%></a>			
 				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
 			</div>
 <%		end
