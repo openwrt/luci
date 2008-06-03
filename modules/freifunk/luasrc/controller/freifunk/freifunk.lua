@@ -1,6 +1,8 @@
 module("luci.controller.freifunk.freifunk", package.seeall)
 
 function index()
+	local i18n = luci.i18n.translate
+
 	local page  = node()
 	page.target = alias("freifunk")
 
@@ -32,6 +34,10 @@ function index()
 	assign({"freifunk", "status", "iwscan"}, node("admin", "status", "iwscan"), "WLAN-Scan", 20)
 	
 	assign({"freifunk", "olsr"}, node("admin", "status", "olsr"), "OLSR", 30)
+	
+	if luci.fs.isfile("/etc/config/luci_statistics") then
+		assign({"freifunk", "statistics"}, node("admin", "statistics", "graph"), i18n("stat_statistics", "Statistiken"), 40)
+	end
 	
 	local page  = node("admin", "index", "freifunk")
 	page.target = cbi("freifunk/freifunk")
