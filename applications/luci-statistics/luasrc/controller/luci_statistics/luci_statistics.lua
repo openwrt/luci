@@ -1,3 +1,18 @@
+--[[
+
+Luci statistics - statistics controller module
+(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+]]--
+
 module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 
 function index()
@@ -18,11 +33,6 @@ function index()
 		if luci.fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
 			entry( path, ... )
 		end
-	end
-
-	-- override call(): call requested action function with supplied parameters
-	function _call( func, tree, plugin )
-		return function() getfenv()[func]( tree, plugin ) end
 	end
 
 	-- override i18n(): try to translate stat_<str> or fall back to <str>
@@ -124,7 +134,7 @@ function statistics_networkplugins()
 end
 
 
-function statistics_render( tree )
+function statistics_render()
 
 	require("luci.statistics.rrdtool")
 	require("luci.template")

@@ -1,3 +1,18 @@
+--[[
+
+Luci statistics - rrdtool interface library / diagram model interpreter
+(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+]]--
+
 module("luci.statistics.rrdtool", package.seeall)
 
 require("luci.statistics.datatree")
