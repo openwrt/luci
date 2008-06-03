@@ -61,12 +61,20 @@ function config_generic( c, singles, bools, lists, nopad )
 
 		if type(singles) == "table" then
 			for i, key in ipairs( singles ) do
+				if preprocess[key] then
+					c[key] = preprocess[key](c[key])
+				end
+
 				str = str .. _string( c[key], key, nopad )
 			end
 		end
 
 		if type(bools) == "table" then
 			for i, key in ipairs( bools ) do
+				if preprocess[key] then
+					c[key] = preprocess[key](c[key])
+				end
+
 				str = str .. _bool( c[key], key, nopad )
 			end
 		end
@@ -163,6 +171,10 @@ function _list_expand( c, l, nopad )
 
 	for i, n in ipairs(l) do
 		if c[n] then
+			if preprocess[n] then
+				c[n] = preprocess[n](c[n])
+			end
+
 			if n:find("(%w+)ses") then
 				k = n:gsub("(%w+)ses", "%1s")
 			else
@@ -229,7 +241,7 @@ end
 
 plugins = {
 	collectd = {
-		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads" },
+		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads", "Hostname" },
 		{ },
 		{ }
 	},
@@ -335,7 +347,16 @@ plugins = {
 		{ },
 		{ }
 	},
+}
 
+preprocess = {
+	RRATimespans = function(val)
+		local rv = { }
+		for time in val:gmatch("[^%s]+") do
+			table.insert( rv, luci.util.parse_units(time) )
+		end
+		return table.concat(rv, " ")
+	end
 }
 
 
