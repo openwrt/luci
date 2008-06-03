@@ -1,3 +1,4 @@
+include ../../build/module.mk
 include ../../build/config.mk
 include ../../build/gccconfig.mk
 
