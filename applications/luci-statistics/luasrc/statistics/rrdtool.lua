@@ -85,12 +85,6 @@ function Graph.strippngpath( self, path )
 	return path:sub( self.opts.imgpath:len() + 2 )
 end
 
-function Graph.mktitle( self, plugin, plugin_instance, dtype, dtype_instance )
-
-	-- try various strings to retrieve a diagram title from the langfile
-	return "XXX"
-end
-
 function Graph._forcelol( self, list )
 	if type(list[1]) ~= "table" then
 		return( { list } )
@@ -585,13 +579,17 @@ function Graph.render( self, plugin, plugin_instance )
 					-- iterate over data type instances
 					for i, inst in ipairs( self.tree:data_instances( plugin, plugin_instance, dtype ) ) do
 
-						local title = self:mktitle( plugin, plugin_instance, dtype, inst )
+						local title = self.i18n:title( plugin, plugin_instance, dtype, inst )
+						local label = self.i18n:label( plugin, plugin_instance, dtype, inst )
 						local png   = self:mkpngpath( plugin, plugin_instance, dtype, inst )
 						local rrd   = self:mkrrdpath( plugin, plugin_instance, dtype, inst )
-						local args  = { png, "-t", title }
+						local args  = { png, "-t", title, "-v", label }
 
 						for i, o in ipairs(self.defs.definitions[dtype]) do
-							table.insert( args, o )
+							-- XXX: this is a somewhat ugly hack to exclude min/max RRAs when rrasingle is on
+							if not ( self.opts.rrasingle and ( o:match("_min") or o:match("_max") ) ) then
+								table.insert( args, o )
+							end
 						end
 
 						-- remember image
