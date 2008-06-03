@@ -303,6 +303,7 @@ function parse_units(ustr)
                 w   = 60 * 60 * 24 * 7,
                 d   = 60 * 60 * 24,
                 h   = 60 * 60,
+		min = 60,
 
                 -- storage sizes
                 kb  = 1024,
