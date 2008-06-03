@@ -273,7 +273,7 @@ endef
 define Package/luci-app-statistics
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-mod-admin-core +collectd +collectd-mod-rrdtool1 +rrdtool1
-  TITLE:=LuCI Statistics Application (incomplete)
+  TITLE:=LuCI Statistics Application
 endef
 
 define Package/luci-app-statistics/conffiles
