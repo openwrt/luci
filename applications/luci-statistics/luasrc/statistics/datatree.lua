@@ -44,7 +44,11 @@ function Instance._notzero( self, table )
 end
 
 function Instance._scan( self )
-	for i, plugin in ipairs( fs.dir( self._libdir ) ) do
+	local dir = fs.dir( self._libdir )
+	if not dir then
+		return
+	end
+	for i, plugin in ipairs( dir ) do
 		if plugin:match("%w+.so") then
 			self._plugins[ plugin:gsub(".so", "") ] = { }
 		end
