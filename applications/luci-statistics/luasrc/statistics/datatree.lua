@@ -4,7 +4,7 @@ local util = require("luci.util")
 local sys  = require("luci.sys")
 local fs   = require("luci.fs")
 local uci  = require("luci.model.uci").Session()
-local sections, names = uci:sections( "luci_statistics" )
+local sections = uci:sections( "luci_statistics" )
 
 
 Instance = util.class()

@@ -8,6 +8,29 @@ function index()
 	node("admin", "uci", "apply").target   = call("action_apply")
 end
 
+function convert_changes(changes)
+	local ret = {}
+	for r, tbl in pairs(changes) do
+		for s, os in pairs(tbl) do
+			for o, v in pairs(os) do
+				local val, str
+				if (v == "") then
+					str = "-"
+					val = ""
+				else
+					str = ""
+					val = "="..v
+				end
+				str = str.."."..r
+				if o ~= ".type" then
+					str = str.."."..o
+				end
+				table.insert(ret, str..val)
+			end
+		end
+	end
+end
+
 -- This function has a higher priority than the admin_uci/apply template
 function action_apply()
 	local changes = luci.model.uci.changes()
@@ -18,8 +41,7 @@ function action_apply()
 		local run = {}
 		
 		-- Collect files to be applied and commit changes
-		for i, line in ipairs(luci.util.split(changes)) do
-			local r = line:match("^-?([^.]+)")
+		for r, tbl in pairs(changes) do
 			if r then
 				com[r] = true
 				
@@ -40,7 +62,8 @@ function action_apply()
 		end
 	end
 	
-	luci.template.render("admin_uci/apply", {changes=changes, output=output})
+	
+	luci.template.render("admin_uci/apply", {changes=convert_changes(changes), output=output})
 end
 
 
@@ -50,8 +73,7 @@ function action_revert()
 		local revert = {}
 		
 		-- Collect files to be reverted
-		for i, line in ipairs(luci.util.split(changes)) do
-			local r = line:match("^-?([^.]+)")
+		for r, tbl in ipairs(changes) do
 			if r then
 				revert[r] = true
 			end
@@ -63,5 +85,5 @@ function action_revert()
 		end
 	end
 	
-	luci.template.render("admin_uci/revert", {changes=changes})
+	luci.template.render("admin_uci/revert", {changes=convert_changes(changes)})
 end

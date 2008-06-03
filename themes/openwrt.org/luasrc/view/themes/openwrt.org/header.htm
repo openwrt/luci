@@ -120,9 +120,11 @@ end
 		<%
 			if "admin" == request[1] then
 				require("luci.model.uci") 
-				local ucic = luci.model.uci.changes()
-				if ucic then
-					ucic = #luci.util.split(ucic)
+				local ucic = 0
+				for n, s in pairs(luci.model.uci.changes()) do
+					for no, o in pairs(s) do
+						ucic = ucic + 1;
+					end
 				end
 		%>
 		<div><%:config Konfiguration%>

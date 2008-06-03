@@ -35,44 +35,43 @@ Session = luci.util.class()
 
 -- Session constructor
 function Session.__init__(self, savedir)
-	self.ucicmd  = savedir and "uci -P " .. savedir or "uci"
 	self.savedir = savedir or luci.model.uci.savedir
+	uci.set_savedir(self.savedir)
 end
 
 function Session.add(self, config, section_type)
-	return self:_uci("add " .. _path(config) .. " " .. _path(section_type))
+	return uci.add(config, section_type)
 end
 
 function Session.changes(self, config)
-	return self:_uci("changes " .. _path(config))
+	if config then
+		return uci.changes(config)
+	else
+		return uci.changes()
+	end
 end
 
 function Session.commit(self, config)
-	self:t_load(config)
 	return self:t_commit(config)
 end
 
 function Session.del(self, config, section, option)
-	return self:_uci2("del " .. _path(config, section, option))
+	return uci.del(config, section, option)
 end
 
 function Session.get(self, config, section, option)
-	self:t_load(config)
 	return self:t_get(config, section, option)
 end
 
 function Session.revert(self, config)
-	self:t_load(config)
 	return self:t_revert(config)
 end
 
 function Session.sections(self, config)
-	self:t_load(config)
 	return self:t_sections(config)
 end
 
 function Session.set(self, config, section, option, value)
-	self:t_load(config)
 	return self:t_set(config, section, option, value) and self:t_save(config)
 end
 
@@ -92,10 +91,7 @@ function Session.t_save(self, config)
 end
 
 function Session.t_add(self, config, type)
-	self:t_save(config)
-	local r = self:add(config, type)
-	self:t_load(config)
-	return r
+	return self:add(config, type)
 end
 
 function Session.t_commit(self, config)
@@ -103,10 +99,7 @@ function Session.t_commit(self, config)
 end
 
 function Session.t_del(self, config, section, option)
-	self:t_save(config)
-	local r = self:del(config, section, option)
-	self:t_load(config)
-	return r
+	return self:del(config, section, option)
 end
 
 function Session.t_get(self, config, section, option)
@@ -122,72 +115,14 @@ function Session.t_revert(self, config)
 end
 
 function Session.t_sections(self, config)
-	local raw = uci.get_all(config)
-	if not raw then
-		return nil
-	end
-		
-	local s = {}
-	local o = {}
-	
-	for i, sec in ipairs(raw) do 
-		table.insert(o, sec.name)
-		
-		s[sec.name] = sec.options
-		s[sec.name][".type"] = sec.type
-	end
-	
-	return s, o
+	return uci.get_all(config)
 end
 
 function Session.t_set(self, config, section, option, value)
 	if option then
-		return uci.set(config.."."..section.."."..option.."="..value)
+		return uci.set(config, section, option, value)
 	else
-		return uci.set(config.."."..section.."="..value)
+		return uci.set(config, section, value)
 	end
 end
 
--- Internal functions --
-
-
-function Session._uci(self, cmd)
-	local res = luci.sys.exec(self.ucicmd .. " 2>/dev/null " .. cmd)
-	
-	if res:len() == 0 then
-		return nil
-	else
-		return res:sub(1, res:len()-1)
-	end	
-end
-
-function Session._uci2(self, cmd)
-	local res = luci.sys.exec(self.ucicmd .. " 2>&1 " .. cmd)
-	
-	if res:len() > 0 then
-		return false, res
-	else
-		return true
-	end	
-end
-
--- Build path (config.section.option=value) and prevent command injection
-function _path(...)
-	local result = ""
-	
-	-- Not using ipairs because it is not reliable in case of nil arguments
-	arg.n = nil
-	for k,v in pairs(arg) do
-		if v then
-			v = tostring(v)
-			if k == 1 then
-				result = "'" .. v:gsub("['.]", "") .. "'"
-			elseif k < 4 then
-				result = result .. ".'" .. v:gsub("['.]", "") .. "'"
-			elseif k == 4 then
-				result = result .. "='" .. v:gsub("'", "") .. "'"
-			end
-		end
-	end
-	return result
-end

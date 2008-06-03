@@ -17,7 +17,7 @@ function Graph.__init__( self, timespan, opts )
 	opts = opts or { }
 
 	local uci = luci.model.uci.Session()
-	local sections, names = uci:sections( "luci_statistics" )
+	local sections = uci:sections( "luci_statistics" )
 
 	-- helper classes
 	self.colors = luci.statistics.rrdtool.colors.Instance()
