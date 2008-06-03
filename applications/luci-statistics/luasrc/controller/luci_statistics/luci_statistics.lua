@@ -58,9 +58,9 @@ function index()
 	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		_i18n("dns"),		60)
 	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	_i18n("wireless"),	70)
 
-
-	-- public views
-	entry({"freifunk", "statistics"}, call("statistics_index"), "Statistiken", 80).i18n = "statistics"
+	
+	-- output views
+	entry( { "admin", "statistics", "graph" }, call("statistics_index"), _i18n("graphs"), 80).i18n = "statistics"
 
 	local vars = luci.http.formvalues()
 	local span = vars.timespan or nil
@@ -72,7 +72,7 @@ function index()
 
 		-- plugin menu entry
 		entry(
-			{ "freifunk", "statistics", plugin },
+			{ "admin", "statistics", "graph", plugin },
 			call("statistics_render"), _i18n( plugin ), i
 		).query = { timespan = span }
 
@@ -81,7 +81,7 @@ function index()
 			for j, inst in ipairs(instances) do
 				-- instance menu entry
 				entry(
-					{ "freifunk", "statistics", plugin, inst },
+					{ "admin", "statistics", "graph", plugin, inst },
 					call("statistics_render"), inst, j
 				).query = { timespan = span }
 			end
@@ -131,14 +131,14 @@ function statistics_render( tree )
 	require("luci.model.uci")
 
 	local vars  = luci.http.formvalues()
-	local req   = luci.dispatcher.request
+	local req   = luci.dispatcher.request 
 	local uci   = luci.model.uci.Session()
 	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
 	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
 
-	local plugin    = req[3]
-	local instances = { req[4] }
+	local plugin    = req[4]
+	local instances = { req[5] }
 	local images    = { }
 
 	-- no instance requested, find all instances
@@ -155,7 +155,7 @@ function statistics_render( tree )
 			if i:len() == 0 then i = "-" end
 
 			luci.http.redirect( luci.dispatcher.build_url(
-				req[1], req[2], req[3], i
+				req[1], req[2], req[3], req[4], i
 			) )
 
 			return
