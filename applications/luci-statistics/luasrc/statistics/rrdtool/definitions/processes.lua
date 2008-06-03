@@ -9,7 +9,7 @@ You may obtain a copy of the License at
 
         http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: stat-genconfig 2272 2008-06-03 22:42:01Z nbd $
+$Id$
 
 ]]--
 

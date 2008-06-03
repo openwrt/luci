@@ -1,6 +1,6 @@
 --[[
 
-Luci statistics - irq plugin diagram definition
+Luci statistics - iptables plugin diagram definition
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,15 @@ $Id$
 
 ]]--
 
-module("luci.statistics.rrdtool.definitions.irq.irq", package.seeall)
+module("luci.statistics.rrdtool.definitions.iptables.ipt_bytes", package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
-		data = {
-			types = { "irq" }
+		data = { 
+			options = {
+				ipt_bytes = { total = true }
+			}
 		}
 	}
 end
