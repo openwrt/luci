@@ -121,7 +121,8 @@ end
 			if "admin" == request[1] then
 				require("luci.model.uci") 
 				local ucic = 0
-				for n, s in pairs(luci.model.uci.changes()) do
+                                local changes = luci.model.uci.changes()
+                                for n, s in pairs(changes) do
 					for no, o in pairs(s) do
 						ucic = ucic + 1;
 					end
