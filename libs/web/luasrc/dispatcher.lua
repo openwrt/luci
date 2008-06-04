@@ -336,6 +336,8 @@ function node(...)
 		c = c.nodes[v]
 	end
 
+	c.path = arg
+
 	return c
 end
 

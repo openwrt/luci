@@ -70,7 +70,10 @@ function index()
 
 	
 	-- output views
-	entry( { "admin", "statistics", "graph" }, call("statistics_index"), _i18n("graphs"), 80).i18n = "statistics"
+	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), _i18n("graphs"), 80)
+	      page.i18n     = "statistics"
+	      page.setuser  = "nobody"
+	      page.setgroup = "nogroup"
 
 	local vars = luci.http.formvalues()
 	local span = vars.timespan or nil
@@ -142,13 +145,14 @@ function statistics_render()
 
 	local vars  = luci.http.formvalues()
 	local req   = luci.dispatcher.request 
+	local path  = luci.dispatcher.dispatched.path
 	local uci   = luci.model.uci.Session()
 	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
 	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
 
-	local plugin    = req[4]
-	local instances = { req[5] }
+	local plugin    = path[4]
+	local instances = { path[5] }
 	local images    = { }
 
 	-- no instance requested, find all instances
