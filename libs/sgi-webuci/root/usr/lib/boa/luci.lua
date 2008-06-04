@@ -47,6 +47,7 @@ function prepare_req(uri)
 	luci.dispatcher.createindex()
 	env = {}
 	env.REQUEST_URI = uri
+	-- TODO: setting luci-plugin.reload = true allows this function to trigger a context reload
 end
 
 function handle_req(context)

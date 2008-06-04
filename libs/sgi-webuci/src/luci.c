@@ -27,56 +27,63 @@ static lua_State *L = NULL;
 
 extern int luci_parse_header (lua_State *L);
 
-static int luci_init(struct httpd_plugin *p)
+static lua_State *luci_context_init(struct httpd_plugin *p)
 {
 	char *path = NULL;
+	lua_State *Lnew;
 	int ret = 0;
 
-	L = luaL_newstate();
-	if (!L)
+	Lnew = luaL_newstate();
+	if (!Lnew)
 		goto error;
 
-	luaL_openlibs(L);
+	luaL_openlibs(Lnew);
 
 	path = malloc(strlen(p->dir) + sizeof(LUAMAIN) + 2);
 	strcpy(path, p->dir);
 	strcat(path, "/" LUAMAIN);
 
-	ret = luaL_dofile(L, path);
+	ret = luaL_dofile(Lnew, path);
 
-	lua_getfield(L, LUA_GLOBALSINDEX, "luci-plugin");
+	lua_getfield(Lnew, LUA_GLOBALSINDEX, "luci-plugin");
 	do {
-		if (!lua_istable(L, -1)) {
+		if (!lua_istable(Lnew, -1)) {
 			ret = 1;
 			break;
 		}
 
-		lua_getfield(L, -1, "init");
-		if (!lua_isfunction(L, -1))
+		lua_getfield(Lnew, -1, "init");
+		if (!lua_isfunction(Lnew, -1))
 			break;
 
-		lua_pushstring(L, p->dir);
-		ret = lua_pcall(L, 1, 0, 0);
+		lua_pushstring(Lnew, p->dir);
+		ret = lua_pcall(Lnew, 1, 0, 0);
 	} while (0);
 	free(path);
 
 	if (ret != 0)
 		goto error;
 
-	return 1;
+	return Lnew;
 
 error:
 	fprintf(stderr, "Error: ");
-	if (L) {
-		const char *s = lua_tostring(L, -1);
+	if (Lnew) {
+		const char *s = lua_tostring(Lnew, -1);
 		if (!s)
 			s = "unknown error";
 		fprintf(stderr, "%s\n", s);
-		lua_close(L);
+		lua_close(Lnew);
 	} else {
 		fprintf(stderr, "Out of memory!\n");
 	}
-	return 0;
+	return NULL;
+}
+
+static int luci_init(struct httpd_plugin *p)
+{
+	L = luci_context_init(p);
+	return (L != NULL);
 }
 
 static void pushvar(char *name, char *val)
@@ -116,8 +123,20 @@ done:
 static int luci_prepare_req(struct httpd_plugin *p, struct http_context *ctx)
 {
 	int ret;
+	bool reload = false;
 
 	lua_getglobal(L, "luci-plugin");
+	lua_getfield(L, -1, "reload");
+	if (lua_isboolean(L, -1))
+		reload = lua_toboolean(L, -1);
+	lua_pop(L, 1);
+
+	if (reload) {
+		lua_close(L);
+		L = luci_context_init(p);
+		lua_getglobal(L, "luci-plugin");
+	}
+
 	lua_getfield(L, -1, "prepare_req");
 
 	ret = lua_isfunction(L, -1);
