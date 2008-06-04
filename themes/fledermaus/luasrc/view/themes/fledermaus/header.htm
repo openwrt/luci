@@ -122,9 +122,11 @@ end
 				require("luci.model.uci") 
 				local ucic = 0
 				local changes = luci.model.uci.changes()
-				for n, s in pairs(changes) do
-					for no, o in pairs(s) do
-						ucic = ucic + 1;
+				if changes then
+					for n, s in pairs(changes) do
+						for no, o in pairs(s) do
+							ucic = ucic + 1;
+						end
 					end
 				end
 		%>
