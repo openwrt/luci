@@ -68,7 +68,7 @@ function index()
 	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		_i18n("dns"),		60)
 	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	_i18n("wireless"),	70)
 
-	
+
 	-- output views
 	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), _i18n("graphs"), 80)
 	      page.i18n     = "statistics"
@@ -144,7 +144,7 @@ function statistics_render()
 	require("luci.model.uci")
 
 	local vars  = luci.http.formvalues()
-	local req   = luci.dispatcher.request 
+	local req   = luci.dispatcher.request
 	local path  = luci.dispatcher.dispatched.path
 	local uci   = luci.model.uci.Session()
 	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
@@ -155,11 +155,11 @@ function statistics_render()
 	local images = { }
 
 	-- find requested plugin and instance
-        for i, p in ipairs( luci.dispatcher.dispatched.path ) do                                                                               
-                if luci.dispatcher.dispatched.path[i] == "graph" then                                                                          
-                        plugin    = luci.dispatcher.dispatched.path[i+1]                                                                       
-                        instances = { luci.dispatcher.dispatched.path[i+2] }                                                                   
-                end                                                                                                                
+        for i, p in ipairs( luci.dispatcher.dispatched.path ) do
+                if luci.dispatcher.dispatched.path[i] == "graph" then
+                        plugin    = luci.dispatcher.dispatched.path[i+1]
+                        instances = { luci.dispatcher.dispatched.path[i+2] }
+                end
         end
 
 	-- no instance requested, find all instances
