@@ -10,12 +10,13 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "interface", "Schnittstelle")
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		iface:value(k)
-		s:depends("interface", k) -- Only change sections with existing interfaces
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+			s:depends("interface", section[".name"])
+		end
+	end)
 
 s:option(Value, "start", "Start", "Erste vergebene Adresse (letztes Oktett)").rmempty = true
 

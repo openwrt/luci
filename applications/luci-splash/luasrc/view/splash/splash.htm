@@ -1,4 +1,4 @@
-<% local c = luci.model.uci.sections("freifunk").community %>
+<% local c = luci.model.uci.get_all("freifunk", "community") %>
 
 <h1><%:welcome Willkommen%>!</h1>
 <p>

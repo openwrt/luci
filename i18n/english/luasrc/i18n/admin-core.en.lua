@@ -1,3 +1,6 @@
+uci_applied = "The following changes have been applied"
+uci_reverted = "The following changes have been reverted"
+
 a_i_ui = "User Interface"
 
 c_lucidesc = [[LuCI is a free Lua library with integrated MVC-Webframework and webinterface for embedded devices,

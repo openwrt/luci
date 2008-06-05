@@ -119,20 +119,16 @@ end
 		</div>
 		<%
 			if "admin" == request[1] then
-				require("luci.model.uci") 
 				local ucic = 0
-                                local changes = luci.model.uci.changes()
-				if type(changes) == "table" then	-- XXX: sometimes string or nil / needs investigation
-	                                for n, s in pairs(changes) do
-						for no, o in pairs(s) do
-							ucic = ucic + 1;
-						end
+				for n, s in pairs(require("luci.model.uci").changes()) do
+					for no, o in pairs(s) do
+						ucic = ucic + 1;
 					end
 				end
 		%>
 		<div><%:config Konfiguration%>
 			<ul>
-			<% if ucic then %>
+			<% if ucic > 0 then %>
 				<li><a href="<%=controller%>/admin/uci/changes"><%:changes Änderungen%>: <%=ucic%></a></li>
 				<li><a href="<%=controller%>/admin/uci/apply"><%:apply Anwenden%></a></li>
 				<li><a href="<%=controller%>/admin/uci/revert"><%:revert Verwerfen%></a></li>

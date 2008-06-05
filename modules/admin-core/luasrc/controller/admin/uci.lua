@@ -3,7 +3,7 @@ require("luci.util")
 require("luci.sys")
 
 function index()
-	node("admin", "uci", "changes").target = template("admin_uci/changes")
+	node("admin", "uci", "changes").target = call("action_changes")
 	node("admin", "uci", "revert").target  = call("action_revert")
 	node("admin", "uci", "apply").target   = call("action_apply")
 end
@@ -21,7 +21,7 @@ function convert_changes(changes)
 					str = ""
 					val = "="..v
 				end
-				str = str.."."..r
+				str = r.."."..s
 				if o ~= ".type" then
 					str = str.."."..o
 				end
@@ -29,9 +29,14 @@ function convert_changes(changes)
 			end
 		end
 	end
+	return table.concat(ret, "\n")
 end
 
--- This function has a higher priority than the admin_uci/apply template
+function action_changes()
+	local changes = convert_changes(luci.model.uci.changes())
+	luci.template.render("admin_uci/changes", {changes=changes})
+end
+
 function action_apply()
 	local changes = luci.model.uci.changes()
 	local output  = ""
@@ -43,18 +48,14 @@ function action_apply()
 		-- Collect files to be applied and commit changes
 		for r, tbl in pairs(changes) do
 			if r then
-				com[r] = true
-				
+				luci.model.uci.load(r)
+				luci.model.uci.commit(r)
+				luci.model.uci.unload(r)
 				if luci.config.uci_oncommit and luci.config.uci_oncommit[r] then
 					run[luci.config.uci_oncommit[r]] = true
 				end
 			end
 		end
-		
-		-- Apply
-		for config, i in pairs(com) do
-			luci.model.uci.commit(config)
-		end 
 		
 		-- Search for post-commit commands
 		for cmd, i in pairs(run) do
@@ -73,15 +74,10 @@ function action_revert()
 		local revert = {}
 		
 		-- Collect files to be reverted
-		for r, tbl in ipairs(changes) do
-			if r then
-				revert[r] = true
-			end
-		end
-		
-		-- Revert them
-		for k, v in pairs(revert) do
-			luci.model.uci.revert(k)
+		for r, tbl in pairs(changes) do
+			luci.model.uci.load(r)
+			luci.model.uci.revert(r)
+			luci.model.uci.unload(r)
 		end
 	end
 	

@@ -10,11 +10,12 @@ s.anonymous = true
 
 iface = s:option(ListValue, "iface", "Schnittstelle", "Externe Schnittstelle")
 iface.default = "wan"
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		iface:value(k)
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+		end
+	end)
 
 proto = s:option(ListValue, "proto", "Protokoll")
 proto:value("tcp", "TCP")

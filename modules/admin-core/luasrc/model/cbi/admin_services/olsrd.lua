@@ -51,11 +51,12 @@ i.dynamic = true
 
 network = i:option(ListValue, "Interface", "Netzwerkschnittstellen")
 network:value("")
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		network:value(k)
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			network:value(section[".name"])
+		end
+	end)
 
 i:option(Value, "HelloInterval", "Hello-Intervall")
 

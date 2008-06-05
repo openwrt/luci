@@ -9,11 +9,12 @@ s.anonymous = true
 s.template  = "cbi/tblsection"
 
 iface = s:option(ListValue, "interface", "Schnittstelle")
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		iface:value(k)
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+		end
+	end)
 
 s:option(Value, "target", "Ziel", "Host-IP oder Netzwerk")
 

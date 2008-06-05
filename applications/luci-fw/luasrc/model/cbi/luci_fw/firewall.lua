@@ -19,12 +19,13 @@ iface.optional = true
 oface = s:option(ListValue, "oface", "Ausgangsschnittstelle")
 oface.optional = true
 
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		iface:value(k)
-		oface:value(k)
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+			oface:value(section[".name"])
+		end
+	end)
 
 proto = s:option(ListValue, "proto", "Protokoll")
 proto.optional = true

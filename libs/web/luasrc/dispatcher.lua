@@ -162,6 +162,7 @@ function dispatch()
 	tpl.viewns.uploadctrl  = luci.http.dispatcher_upload()
 	tpl.viewns.media       = luci.config.main.mediaurlbase
 	tpl.viewns.resource    = luci.config.main.resourcebase
+	tpl.viewns.uci         = require("luci.model.uci").config
 	tpl.viewns.REQUEST_URI = luci.http.env.SCRIPT_NAME .. luci.http.env.PATH_INFO
 	
 

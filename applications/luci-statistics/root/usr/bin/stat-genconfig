@@ -21,8 +21,8 @@ require("luci.sys.iptparser")
 require("luci.util")
 
 local ipt = luci.sys.iptparser.IptParser()
-local uci = luci.model.uci.Session()
-local sections = uci:sections( "luci_statistics" )
+local uci = luci.model.uci
+local sections = uci.get_all( "luci_statistics" )
 
 
 function section( plugin )

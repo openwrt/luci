@@ -14,12 +14,13 @@ s.anonymous = true
 iface = s:option(ListValue, "iface", "Eingang", "Eingangsschnittstelle")
 oface = s:option(ListValue, "oface", "Ausgang", "Ausgangsschnittstelle")
 
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		iface:value(k)
-		oface:value(k)
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+			oface:value(section[".name"])
+		end
+	end)
 
 s:option(Flag, "fwd", "FWD", "weiterleiten").rmempty = true
 s:option(Flag, "nat", "NAT", "übersetzen").rmempty = true

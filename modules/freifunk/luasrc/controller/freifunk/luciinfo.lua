@@ -5,8 +5,7 @@ function index()
 end
 
 function action_index()
-	local uci = luci.model.uci.StateSession()
-
+	local uci = luci.model.uci
 	luci.http.prepare_content("text/plain")
 	
 	-- General
@@ -30,7 +29,7 @@ function action_index()
 
 	
 	-- Freifunk
-	local ff = uci:sections("freifunk") or {}
+	local ff = uci.get_all("freifunk") or {}
 	for k, v in pairs(ff) do
 			for i, j in pairs(v) do
 				if i:sub(1, 1) ~= "." then

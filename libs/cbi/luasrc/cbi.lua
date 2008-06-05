@@ -31,8 +31,10 @@ require("luci.util")
 require("luci.http")
 require("luci.model.uci")
 
+local uci        = luci.model.uci
 local class      = luci.util.class
 local instanceof = luci.util.instanceof
+
 
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap)
@@ -141,18 +143,16 @@ function Map.__init__(self, config, ...)
 
 	self.config = config
 	self.template = "cbi/map"
-	self.uci = luci.model.uci.Session()
-	self.ucidata, self.uciorder = self.uci:sections(self.config)
-	if not self.ucidata or not self.uciorder then
+	if not uci.load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
 end
 
 -- Use optimized UCI writing
 function Map.parse(self, ...)
-	self.uci:t_load(self.config)
 	Node.parse(self, ...)
-	self.uci:t_save(self.config)
+	uci.save(self.config)
+	uci.unload(self.config)
 end
 
 -- Creates a child section
@@ -168,59 +168,31 @@ end
 
 -- UCI add
 function Map.add(self, sectiontype)
-	local name = self.uci:t_add(self.config, sectiontype)
-	if name then
-		self.ucidata[name] = {}
-		self.ucidata[name][".type"] = sectiontype
-		table.insert(self.uciorder, name)
-	end
-	return name
+	return uci.add(self.config, sectiontype)
 end
 
 -- UCI set
 function Map.set(self, section, option, value)
-	local stat = self.uci:t_set(self.config, section, option, value)
-	if stat then
-		local val = self.uci:t_get(self.config, section, option)
-		if option then
-			self.ucidata[section][option] = val
-		else
-			if not self.ucidata[section] then
-				self.ucidata[section] = {}
-			end
-			self.ucidata[section][".type"] = val
-			table.insert(self.uciorder, section)
-		end
-	end
-	return stat
+	return uci.set(self.config, section, option or value, option and value)
 end
 
 -- UCI del
 function Map.del(self, section, option)
-	local stat = self.uci:t_del(self.config, section, option)
-	if stat then
-		if option then
-			self.ucidata[section][option] = nil
-		else
-			self.ucidata[section] = nil
-			for i, k in ipairs(self.uciorder) do
-				if section == k then
-					table.remove(self.uciorder, i)
-				end
-			end
-		end
+	if option then
+		return uci.delete(self.config, section, option)
+	else
+		return uci.delete(self.config, section)
 	end
-	return stat
 end
 
--- UCI get (cached)
+-- UCI get
 function Map.get(self, section, option)
 	if not section then
-		return self.ucidata, self.uciorder
-	elseif option and self.ucidata[section] then
-		return self.ucidata[section][option]
+		return uci.get_all(self.config)
+	elseif option then
+		return uci.get(self.config, section, option)
 	else
-		return self.ucidata[section]
+		return uci.get_all(self.config, section)
 	end
 end
 
@@ -396,15 +368,12 @@ end
 -- Return all matching UCI sections for this TypedSection
 function TypedSection.cfgsections(self)
 	local sections = {}
-	local map, order = self.map:get()
-
-	for i, k in ipairs(order) do
-		if map[k][".type"] == self.sectiontype then
-			if self:checkscope(k) then
-				table.insert(sections, k)
-			end
-		end
-	end
+	uci.foreach(self.map.config, self.sectiontype,
+		function (section)
+			if self:checkscope(section[".name"]) then
+				table.insert(sections, section[".name"])
+			end 
+		end)
 
 	return sections
 end

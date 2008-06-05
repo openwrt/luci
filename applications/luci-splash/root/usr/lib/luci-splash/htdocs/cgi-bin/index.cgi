@@ -1,31 +1,33 @@
 #!/usr/bin/haserl --shell=luac
-package.path  = "/usr/lib/lua/?.lua;/usr/lib/lua/?/init.lua;" .. package.path
-package.cpath = "/usr/lib/lua/?.so;" .. package.cpath
 
 require("luci.http")
 require("luci.sys")
 require("luci.model.uci")
 
+luci.model.uci.set_savedir(luci.model.uci.savedir_state)
+
 local srv
 local net
 local ip = luci.http.env.REMOTE_ADDR
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and v.ipaddr then
-		local p = luci.sys.net.mask4prefix(v.netmask)
-		if luci.sys.net.belongs(ip, v.ipaddr, p) then
-			net = k
-			srv = v.ipaddr
-			break
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section.ipaddr then
+			local p = luci.sys.net.mask4prefix(section.netmask)
+			if luci.sys.net.belongs(ip, section.ipaddr, p) then
+				net = section[".name"]
+				srv = section.ipaddr
+				return
+			end
 		end
-	end
-end
+	end)
 
 local stat = false
-for k, v in pairs(luci.model.uci.sections("luci_splash")) do
-	if v[".type"] == "iface" and v.network == net then
-		stat = true
-	end 
-end
+luci.model.uci.foreach("luci_splash", "iface",
+	function (section)
+		if section.network == net then
+			stat = true
+		end
+	end)
 
 if not srv then
 	luci.http.prepare_content("text/plain")

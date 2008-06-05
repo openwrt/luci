@@ -25,23 +25,7 @@ limitations under the License.
 
 ]]--
 
-local uci  = require("luci.model.uci")
-local util = require("luci.util")
-module("luci.config")
-
--- Warning! This is only for fallback and compatibility purporses! --
-main = {}
-
--- This is where stylesheets and images go
-main.mediaurlbase = "/luci/media"
-
--- Does anybody think about browser autodetect here?
--- Too bad busybox doesn't populate HTTP_ACCEPT_LANGUAGE
-main.lang = "de"
-
-
--- Now overwrite with UCI values
-local ucidata = uci.sections("luci")
-if ucidata then
-	util.update(_M, ucidata)
-end
+module("luci.config",
+	function(m)
+		setmetatable(m, {__index = require("luci.model.uci").get_all("luci")})
+	end)

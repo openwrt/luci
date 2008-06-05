@@ -11,22 +11,19 @@ s.anonymous = true
 s:option(Value, "ssid", translate("a_w_netid", "Netzkennung (ESSID)")).maxlength = 32
 
 device = s:option(ListValue, "device", translate("device", "Gerät"))
-local d = luci.model.uci.sections("wireless")
-if d then
-	for k, v in pairs(d) do
-		if v[".type"] == "wifi-device" then
-			device:value(k)
-		end
-	end
-end
+luci.model.uci.foreach("wireless", "wifi-device",
+	function (section)
+		device:value(section[".name"])
+	end)
 
 network = s:option(ListValue, "network", translate("network", "Netzwerk"), translate("a_w_network1", "WLAN-Netz zu Netzwerk hinzufügen"))
 network:value("")
-for k, v in pairs(luci.model.uci.sections("network")) do
-	if v[".type"] == "interface" and k ~= "loopback" then
-		network:value(k)
-	end
-end
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			network:value(section[".name"])
+		end
+	end)
 
 mode = s:option(ListValue, "mode", translate("mode", "Modus"))
 mode:value("ap", "Access Point")

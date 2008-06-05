@@ -37,6 +37,11 @@ local configs_mt = {}
 local sections_mt = {}
 local options_mt = {}
 
+savedir_default = "/tmp/.uci"
+confdir_default = "/etc/config"
+
+savedir_state = "/var/state"
+
 config = {}
 setmetatable(config, configs_mt)
 
@@ -44,6 +49,9 @@ setmetatable(config, configs_mt)
 function configs_mt.__index(self, key)
 	local node = rawget(self, key)
 	if not node then
+		if not uci.load(key) then
+			return nil
+		end
 		node = {}
 		node[".name"] = key
 		setmetatable(node, sections_mt)

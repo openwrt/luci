@@ -1,12 +1,5 @@
 module("luci.controller.admin.system", package.seeall)
 
-require("luci.sys")
-require("luci.http")
-require("luci.util")
-require("luci.fs")
-require("luci.model.ipkg")
-require("luci.model.uci")
-
 function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
@@ -65,7 +58,7 @@ function action_ipkg()
 end
 
 function action_packages()
-	local ipkg = luci.model.ipkg
+	local ipkg = require("luci.model.ipkg")
 	local void = nil
 	local submit = luci.http.formvalue("submit")
 	
@@ -190,6 +183,7 @@ function action_sshkeys()
 end
 
 function action_upgrade()
+	require("luci.model.uci")
 	local ret  = nil
 	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
 	
@@ -199,7 +193,7 @@ function action_upgrade()
 	if plat and image then
 		local kpattern = nil
 		if keepcfg then
-			local files = luci.model.uci.sections("luci").flash_keep
+			local files = luci.model.uci.get_all("luci", "flash_keep")
 			if files.luci and files.luci.flash_keep then
 				kpattern = ""
 				for k,v in pairs(files.luci.flash_keep) do

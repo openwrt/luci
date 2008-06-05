@@ -1,13 +1,13 @@
 #!/usr/bin/lua
-package.path  = "/usr/lib/lua/?.lua;/usr/lib/lua/?/init.lua;" .. package.path
-package.cpath = "/usr/lib/lua/?.so;" .. package.cpath
 
 require("luci.http")
 require("luci.sys")
 require("luci.model.uci")
 
 -- Init state session
-uci = luci.model.uci.StateSession()
+luci.model.uci.set_savedir(luci.model.uci.savedir_state)
+local uci = luci.model.uci
+local cfg = uci.config
 
 
 function main(argv)
@@ -61,10 +61,12 @@ end
 
 -- Add a lease to state and invoke add_rule
 function add_lease(mac)
-	local key = uci:add("luci_splash", "lease")
-	uci:set("luci_splash", key, "mac", mac)
-	uci:set("luci_splash", key, "start", os.time())
+	cfg.luci_splash[""] = "lease"
+	cfg.luci_splash[""].mac = mac
+	cfg.luci_splash[""].start = os.time()
 	add_rule(mac)
+	
+	uci.save()
 end
 
 
@@ -72,12 +74,15 @@ end
 function remove_lease(mac)
 	mac = mac:lower()
 
-	for k, v in pairs(uci:sections("luci_splash")) do
-		if v[".type"] == "lease" and v.mac:lower() == mac then
-			remove_rule(mac)
-			uci:del("luci_splash", k)
-		end
-	end
+	uci.foreach("luci_splash", "lease",
+		function (section)
+			if section.mac:lower() == mac then
+				remove_rule(mac)
+				uci.delete("luci_splash", section[".name"])
+			end
+		end)
+		
+	uci.save()
 end
 
 
@@ -96,14 +101,17 @@ end
 -- Check whether a MAC-Address is listed in the lease state list
 function haslease(mac)
 	mac = mac:lower()
+	local stat = false
 	
-	for k, v in pairs(uci:sections("luci_splash")) do
-		if v[".type"] == "lease" and v.mac and v.mac:lower() == mac then
-			return true
-		end
-	end
+	uci.foreach("luci_splash", "lease",
+		function (section)
+			if section.mac:lower() == mac then
+				stat = true
+				return
+			end
+		end)
 	
-	return false
+	return stat
 end
 
 
@@ -111,11 +119,13 @@ end
 function iswhitelisted(mac)
 	mac = mac:lower()
 	
-	for k, v in pairs(uci:sections("luci_splash")) do
-		if v[".type"] == "whitelist" and v.mac and v.mac:lower() == mac then
-			return true
-		end
-	end
+	uci.foreach("luci_splash", "whitelist",
+		function (section)
+			if section.mac:lower() == mac then
+				stat = true
+				return
+			end
+		end)
 	
 	return false
 end
@@ -134,16 +144,14 @@ function sync()
 	local written = {}
 	local time = os.time()
 	
-	uci:t_load("luci_splash")
-	
 	-- Current leases in state files
-	local leases = uci:t_sections("luci_splash")
+	local leases = uci.get_all("luci_splash")
 	
 	-- Convert leasetime to seconds
-	local leasetime = tonumber(uci:t_get("luci_splash", "general", "leasetime")) * 3600
+	local leasetime = tonumber(cfg.luci_splash.general.leasetime) * 3600
 	
 	-- Clean state file
-	uci:t_revert("luci_splash")
+	uci.revert("luci_splash")
 	
 	
 	-- For all leases
@@ -154,9 +162,9 @@ function sync()
 				remove_rule(v.mac)
 			else
 				-- Rewrite state
-				local n = uci:t_add("luci_splash", "lease")
-				uci:t_set("luci_splash", n, "mac", v.mac)
-				uci:t_set("luci_splash", n, "start", v.start)
+				cfg.luci_splash[""] = "lease"
+				cfg.luci_splash[""].mac = v.mac
+				cfg.luci_splash[""].start = v.start
 				written[v.mac:lower()] = 1
 			end
 		end
@@ -170,7 +178,7 @@ function sync()
 		end
 	end
 	
-	uci:t_save("luci_splash")
+	uci.save("luci_splash")
 end
 
 main(arg)
