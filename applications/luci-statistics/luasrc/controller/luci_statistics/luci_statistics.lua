@@ -151,29 +151,20 @@ function statistics_render()
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
 	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
 
-	local plugin    = path[4]
-	local instances = { path[5] }
-	local images    = { }
+	local plugin, instances
+	local images = { }
+
+	-- find requested plugin and instance
+        for i, p in ipairs( luci.dispatcher.dispatched.path ) do                                                                               
+                if luci.dispatcher.dispatched.path[i] == "graph" then                                                                          
+                        plugin    = luci.dispatcher.dispatched.path[i+1]                                                                       
+                        instances = { luci.dispatcher.dispatched.path[i+2] }                                                                   
+                end                                                                                                                
+        end
 
 	-- no instance requested, find all instances
 	if #instances == 0 then
-
-		instances = graph.tree:plugin_instances( plugin )
-
-		-- more than one available instance
-		if #instances > 1 then
-
-			-- redirect to first instance and return
-			local r = luci.dispatcher.request
-			local i = instances[1]
-			if i:len() == 0 then i = "-" end
-
-			luci.http.redirect( luci.dispatcher.build_url(
-				req[1], req[2], req[3], req[4], i
-			) )
-
-			return
-		end
+		instances = { graph.tree:plugin_instances( plugin )[1] }
 
 	-- index instance requested
 	elseif instances[1] == "-" then
