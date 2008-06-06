@@ -1,6 +1,4 @@
 module("luci.controller.admin.uci", package.seeall)
-require("luci.util")
-require("luci.sys")
 
 function index()
 	node("admin", "uci", "changes").target = call("action_changes")
