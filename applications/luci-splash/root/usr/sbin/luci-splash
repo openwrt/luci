@@ -73,14 +73,19 @@ end
 -- Remove a lease from state and invoke remove_rule
 function remove_lease(mac)
 	mac = mac:lower()
+	local del = {}
 
 	uci.foreach("luci_splash", "lease",
 		function (section)
 			if section.mac:lower() == mac then
-				remove_rule(mac)
-				uci.delete("luci_splash", section[".name"])
+				table.insert(del, section[".name"])
 			end
 		end)
+		
+	for i,j in ipairs(del) do
+		remove_rule(j)
+		uci.delete("luci_splash", j)
+	end
 		
 	uci.save()
 end
