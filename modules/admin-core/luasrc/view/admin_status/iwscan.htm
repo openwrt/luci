@@ -6,14 +6,14 @@
 <table cellspacing="0" cellpadding="6" class="smalltext">
 <tr>
 <th><%:interface Schnittstelle%></th>
-<th><%:essid ESSID%></th>
-<th><%:bssid BSSID%></th>
+<th>ESSID</th>
+<th>BSSID</th>
 <th><%:mode Modus%></th>
 <th><%:channel Kanal%></th>
-<th><%:encr Vers.%></th>
-<th><%:link Verb.%></th>
-<th><%:signal Signal%></th>
-<th><%:noise Rausch%></th>
+<th><%:iwscan_encr Vers.%></th>
+<th><%:iwscan_link Verb.%></th>
+<th><%:iwscan_signal Signal%></th>
+<th><%:iwscan_noise Rausch%></th>
 </tr>
 <%for iface, cells in pairs(luci.sys.wifi.iwscan()) do
 	for i, cell in ipairs(cells) do 

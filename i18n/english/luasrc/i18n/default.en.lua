@@ -4,6 +4,7 @@ administration = "Administration"
 apply = "Apply"
 
 changes = "Changes"
+channel = "Channel"
 code = "Code"
 config = "Configuration"
 configfile = "Configuration file"
@@ -30,6 +31,7 @@ hostname = "Hostname"
 
 install = "Install"
 installed = "installed"
+interface = "Interface"
 
 key = "Key"
 
@@ -62,6 +64,7 @@ statistics = "Statistics"
 syslog = "System Log"
 system = "System"
 
+target = "Target"
 type = "Type"
 
 unknownerror = "Unknown Error"

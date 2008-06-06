@@ -31,6 +31,18 @@ a_st_i_status1 = [[Here you can find information about the current system status
 usage or network interface data.]]
 a_st_i_status2 = [[Also kernel or service logfiles can be viewed here to get an overview over their current state.]]
 
+iwscan = "WLAN-Scan"
+iwscan1 = "Wifi networks in your local environment"
+iwscan_encr = "Encr."
+iwscan_link = "Link"
+iwscan_signal = "Signal"
+iwscan_noise = "Noise"
+
+routes = "Routes"
+routes_netmask = "Netmask"
+routes_gateway = "Gateway"
+routes_metric = "Metric"
+
 a_s_packages = "Software"
 a_s_changepw = "Admin Password"
 a_s_p_ipkg = "IPKG-Configuration"
