@@ -202,7 +202,7 @@ function configure_freifunk()
 						end)
 				end
 				
-				uci.tset("wireless", "device", {
+				uci.tset("wireless", device, {
 					disabled = "0",
 					mode = "11g",
 					txantenna = "1",
