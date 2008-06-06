@@ -1,6 +1,6 @@
 m = Map("httpd", "Busybox HTTPd", translate("a_srv_http1", "Ein kleiner Webserver, der für die Bereitstellung von LuCI genutzt werden kann."))
 
-s = m:section(TypedSection, "httpd")
+s = m:section(TypedSection, "httpd", "")
 s.anonymous = true
 
 port = s:option(Value, "port", translate("port", "Port"))

@@ -1,7 +1,7 @@
 m = Map("dropbear", "Dropbear SSHd", translate("a_srv_dropbear1", [[Der SSH-Server ermöglicht Shell-Zugriff
 über das Netzwerk und bietet einen integrierten SCP-Dienst.]]))
 
-s = m:section(TypedSection, "dropbear")
+s = m:section(TypedSection, "dropbear", "")
 s.anonymous = true
 
 port = s:option(Value, "Port", translate("port", "Port"))

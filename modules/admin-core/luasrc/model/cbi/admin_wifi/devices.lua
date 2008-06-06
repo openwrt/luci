@@ -2,7 +2,7 @@
 m = Map("wireless", translate("devices", "Geräte"), translate("a_w_devices1", 
 	"An dieser Stelle können eingebaute WLAN-Geräte konfiguriert werden."))
 
-s = m:section(TypedSection, "wifi-device")
+s = m:section(TypedSection, "wifi-device", "")
 --s.addremove = true
 
 en = s:option(Flag, "disabled", translate("enable", "Aktivieren"))

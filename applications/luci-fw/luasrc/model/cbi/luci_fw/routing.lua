@@ -6,7 +6,7 @@ betrachtet, d.h. Pakete von aufgebauten oder zugehörigen Verbindungen werden au
 akzeptiert, auch wenn das Feld "beide Richtungen" nicht explizit gesetzt ist.
 NAT ermöglicht Adressübersetzung.]])
 
-s = m:section(TypedSection, "routing")
+s = m:section(TypedSection, "routing", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true

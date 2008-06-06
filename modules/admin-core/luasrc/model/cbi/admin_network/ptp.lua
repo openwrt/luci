@@ -3,7 +3,7 @@ m = Map("network", "Punkt-zu-Punkt Verbindungen", [[Punkt-zu-Punkt Verbindungen
 über PPPoE oder PPTP werden häufig dazu verwendet, um über DSL o.ä. Techniken eine
 Verbindung zum Internetgateway eines Internetzugangsanbieters aufzubauen.]])
 
-s = m:section(TypedSection, "interface")
+s = m:section(TypedSection, "interface", "")
 s.addremove = true
 s:depends("proto", "pppoe")
 s:depends("proto", "pptp")

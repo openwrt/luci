@@ -5,7 +5,7 @@ require("luci.sys")
 m = Map("dhcp", "DHCP", [[Mit Hilfe von DHCP können Netzteilnehmer automatisch
 ihre Netzwerkkonfiguration (IP-Adresse, Netzmaske, DNS-Server, DHCP, ...) beziehen.]])
 
-s = m:section(TypedSection, "dhcp")
+s = m:section(TypedSection, "dhcp", "")
 s.addremove = true
 s.anonymous = true
 

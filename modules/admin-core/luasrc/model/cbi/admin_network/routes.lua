@@ -3,7 +3,7 @@ m = Map("network", "Statische Routen", [[Statische Routen geben an,
 über welche Schnittstelle und welches Gateway ein bestimmter Host
 oder ein bestimmtes Netzwerk erreicht werden kann.]])
 
-s = m:section(TypedSection, "route")
+s = m:section(TypedSection, "route", "")
 s.addremove = true
 s.anonymous = true
 s.template  = "cbi/tblsection"

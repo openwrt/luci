@@ -3,7 +3,7 @@ require("luci.sys")
 m = Map("luci_fw", "Portweiterleitung", [[Portweiterleitungen ermöglichen es interne
 Netzwerkdienste von einem anderen externen Netzwerk aus erreichbar zu machen.]])
 
-s = m:section(TypedSection, "portfw")
+s = m:section(TypedSection, "portfw", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true

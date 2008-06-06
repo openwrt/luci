@@ -4,7 +4,7 @@ Es sollte beachtet werden, dass es hardware- / treiberspezifische Einschränkung
 So kann pro WLAN-Gerät in der Regel entweder 1 Ad-Hoc-Zugang ODER bis zu 3 Access-Point und 1 Client-Zugang
 gleichzeitig erstellt werden.]]))
 
-s = m:section(TypedSection, "wifi-iface")
+s = m:section(TypedSection, "wifi-iface", "")
 s.addremove = true
 s.anonymous = true
 

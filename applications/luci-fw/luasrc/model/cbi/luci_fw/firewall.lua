@@ -2,7 +2,7 @@
 m = Map("luci_fw", "Firewall", [[Mit Hilfe der Firewall können Zugriffe auf das Netzwerk
 erlaubt, verboten oder umgeleitet werden.]])
 
-s = m:section(TypedSection, "rule")
+s = m:section(TypedSection, "rule", "")
 s.addremove = true
 s.anonymous = true
 
