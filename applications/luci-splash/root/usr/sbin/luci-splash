@@ -7,7 +7,6 @@ require("luci.model.uci")
 -- Init state session
 luci.model.uci.set_savedir(luci.model.uci.savedir_state)
 local uci = luci.model.uci
-local cfg = uci.config
 
 
 function main(argv)
@@ -61,9 +60,10 @@ end
 
 -- Add a lease to state and invoke add_rule
 function add_lease(mac)
-	cfg.luci_splash[""] = "lease"
-	cfg.luci_splash[""].mac = mac
-	cfg.luci_splash[""].start = os.time()
+	uci.section("luci_splash", "lease", nil, {
+		mac = mac,
+		start = os.time()
+	})
 	add_rule(mac)
 	
 	uci.save()
@@ -148,9 +148,10 @@ function sync()
 	local leases = uci.get_all("luci_splash")
 	
 	-- Convert leasetime to seconds
-	local leasetime = tonumber(cfg.luci_splash.general.leasetime) * 3600
+	local leasetime = tonumber(uci.get("luci_splash", "general", "leasetime")) * 3600
 	
 	-- Clean state file
+	uci.load("luci_splash")
 	uci.revert("luci_splash")
 	
 	
@@ -162,9 +163,10 @@ function sync()
 				remove_rule(v.mac)
 			else
 				-- Rewrite state
-				cfg.luci_splash[""] = "lease"
-				cfg.luci_splash[""].mac = v.mac
-				cfg.luci_splash[""].start = v.start
+				uci.section("luci_splash", "lease", nil, {		
+					mac = v.mac,
+					start = v.start
+				})
 				written[v.mac:lower()] = 1
 			end
 		end

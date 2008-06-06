@@ -25,92 +25,52 @@ limitations under the License.
 ]]--
 local uci  = require("uci")
 local util = require("luci.util")
-local setmetatable = setmetatable
-local rawget = rawget
-local rawset = rawset
-local error = error
-local tostring = tostring
+local setmetatable, rawget, rawset = setmetatable, rawget, rawset
+local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
 
 module("luci.model.uci", function(m) setmetatable(m, {__index = uci}) end)
-
-local configs_mt = {}
-local sections_mt = {}
-local options_mt = {}
 
 savedir_default = "/tmp/.uci"
 confdir_default = "/etc/config"
 
 savedir_state = "/var/state"
 
-config = {}
-setmetatable(config, configs_mt)
-
--- Level 1 (configs)
-function configs_mt.__index(self, key)
-	local node = rawget(self, key)
-	if not node then
-		if not uci.load(key) then
-			return nil
-		end
-		node = {}
-		node[".name"] = key
-		setmetatable(node, sections_mt)
-		rawset(self, key, node)
+function delete_all(config, type, comparator)
+	local del = {}
+	
+	foreach(config, type,
+		function (section)
+			if not comparator or comparator(section) then
+				table.insert(del, section[".name"])
+			end
+		end)
+		
+	for i, j in ipairs(del) do
+		uci.delete("config", j)
 	end
-	return node
-end
-function configs_mt.__newindex()
-	error("invalid operation")
 end
 
-
--- Level 2 (sections)
-function sections_mt.__index(self, key)
-	local node = rawget(self, key)
-	if not node then
-		node = {}
-		node[".conf"] = self[".name"]
-		node[".name"] = key
-		node[".type"] = uci.get(self[".name"], key)
-		setmetatable(node, options_mt)
-		rawset(self, key, node)
-	end
-	return node
-end
-function sections_mt.__newindex(self, key, value)
-	if not value then
-		if uci.delete(self[".name"], key) then
-			rawset(self, key, nil)
-		else
-			error("unable to delete section")
-		end
-	elseif key == "" then
-		key = uci.add(self[".name"], tostring(value))
-		if key then
-			rawset(self, "", self[key])
-		else
-			error("unable to create section")
-		end 
+function section(config, type, name, values)
+	local stat = true
+	if name then
+		stat = set(config, name, type)
 	else
-		if not uci.set(self[".name"], key, value) then
-			error("unable to create section")
-		end
+		name = add(config, type)
+		stat = name and true
 	end
+	
+	if stat and values then
+		stat = tset(config, name, values)
+	end
+	
+	return stat and name
 end
 
-
--- Level 3 (options)
-function options_mt.__index(self, key)
-	return uci.get(self[".conf"], self[".name"], key)
-end
-function options_mt.__newindex(self, key, value)
-	if not value then
-		if not uci.delete(self[".conf"], self[".name"], key) then
-			error("unable to delete option")
-		end
-	else
-		if not uci.set(self[".conf"], self[".name"], key, tostring(value)) then
-			error("unable to write option")
+function tset(config, section, values)
+	local stat = true
+	for k, v in pairs(values) do
+		if k:sub(1, 1) ~= "." then
+			stat = stat and set(config, section, k, v)
 		end
 	end
 end

@@ -120,9 +120,11 @@ end
 		<%
 			if "admin" == request[1] then
 				local ucic = 0
-				for n, s in pairs(require("luci.model.uci").changes()) do
-					for no, o in pairs(s) do
-						ucic = ucic + 1;
+				for i, j in pairs(require("luci.model.uci").changes()) do
+					for k, l in pairs(j) do
+						for m, n in pairs(l) do
+							ucic = ucic + 1;
+						end
 					end
 				end
 		%>
