@@ -1,5 +1,4 @@
-module("luci.controller.admin.status_olsr", package.seeall)
-require("luci.sys")
+module("luci.controller.olsr", package.seeall)
 
 function index()
 	local page  = node("admin", "status", "olsr")
@@ -25,6 +24,8 @@ function index()
 	page.target = call("action_mid")
 	page.title  = "MID"
 	page.order  = 50
+
+	entry({"admin", "services", "olsrd"}, cbi("olsr/olsrd.lua"), "OLSRd")
 end
 
 function action_index()
@@ -131,6 +132,7 @@ end
 
 -- Internal
 function fetch_txtinfo(otable)
+	require("luci.sys")
 	otable = otable or ""
 	local rawdata = luci.sys.httpget("http://127.0.0.1:2006/"..otable)
 	

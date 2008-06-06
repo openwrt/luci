@@ -23,10 +23,4 @@ function index()
 	page.target = cbi("admin_services/dnsmasq")
 	page.title  = "Dnsmasq"
 	page.order  = 30
-	
-	if luci.fs.isfile("/etc/config/olsr") then
-		local page  = node("admin", "services", "olsr")
-		page.target = cbi("admin_services/olsrd")
-		page.title  = "OLSR"
-	end
 end

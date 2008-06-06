@@ -99,10 +99,9 @@ end
 -- Creates a request object for dispatching
 function httpdispatch()
 	local pathinfo = luci.http.env.PATH_INFO or ""
-	local c = tree
 
-	for s in pathinfo:gmatch("([%w-]+)") do
-		table.insert(request, s)
+	for node in pathinfo:gmatch("[^/]+") do
+		table.insert(request, node)
 	end
 
 	dispatch()
@@ -163,7 +162,7 @@ function dispatch()
 	tpl.viewns.media       = luci.config.main.mediaurlbase
 	tpl.viewns.resource    = luci.config.main.resourcebase
 	tpl.viewns.uci         = require("luci.model.uci").config
-	tpl.viewns.REQUEST_URI = luci.http.env.SCRIPT_NAME .. luci.http.env.PATH_INFO
+	tpl.viewns.REQUEST_URI = luci.http.env.SCRIPT_NAME .. (luci.http.env.PATH_INFO or "")
 	
 
 	if c and type(c.target) == "function" then
@@ -304,7 +303,16 @@ function assign(path, clone, title, order)
 	obj.title = title
 	obj.order = order
 	
-	setmetatable(obj, {__index = clone})
+	local c = tree
+	for k, v in ipairs(clone) do
+		if not c.nodes[v] then
+			c.nodes[v] = {nodes={}}
+		end
+
+		c = c.nodes[v]
+	end
+	
+	setmetatable(obj, {__index = c})
 	
 	return obj
 end
@@ -325,18 +333,22 @@ end
 function node(...)
 	local c = tree
 
-	if arg[1] and type(arg[1]) == "table" then
-		arg = arg[1]
+	arg.n = nil
+	if arg[1] then
+		if type(arg[1]) == "table" then
+			arg = arg[1]
+		end
 	end
 
 	for k,v in ipairs(arg) do
 		if not c.nodes[v] then
-			c.nodes[v] = {nodes={}, module=getfenv(2)._NAME}
+			c.nodes[v] = {nodes={}}
 		end
 
 		c = c.nodes[v]
 	end
 
+	c.module = getfenv(2)._NAME
 	c.path = arg
 
 	return c

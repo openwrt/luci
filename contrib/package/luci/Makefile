@@ -152,7 +152,7 @@ endef
 define Package/luci-ff-halle
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-haserl +luci-app-splash \
+   +luci-sgi-haserl +luci-app-splash +luci-app-olsr \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
@@ -170,7 +170,7 @@ endef
 define Package/luci-ff-leipzig
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-haserl +luci-app-splash \
+   +luci-sgi-haserl +luci-app-splash +luci-app-olsr \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
@@ -188,7 +188,7 @@ endef
 define Package/luci-ff-hannover
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-haserl +luci-app-splash \
+   +luci-sgi-haserl +luci-app-splash +luci-app-olsr \
    +luci-theme-fledermaus \
    +luci-i18n-german \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
@@ -258,6 +258,17 @@ endef
 define Package/luci-app-firewall/install
 	$(call Package/luci/install/template,$(1),applications/luci-fw)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-fw/dist/etc/init.d/luci_fw $(1)/etc/init.d
+endef
+
+
+define Package/luci-app-olsr
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core +olsrd-mod-txtinfo
+  TITLE:=OLSR configuration and status module
+endef
+
+define Package/luci-app-olsr/install
+	$(call Package/luci/install/template,$(1),applications/luci-olsr)
 endef
 
 
@@ -404,6 +415,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-firewall),)
 	PKG_SELECTED_MODULES+=applications/luci-fw
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-olsr),)
+	PKG_SELECTED_MODULES+=applications/luci-olsr
+endif
 ifneq ($(CONFIG_PACKAGE_luci-app-splash),)
 	PKG_SELECTED_MODULES+=applications/luci-splash
 endif
@@ -451,6 +465,7 @@ $(eval $(call BuildPackage,luci-mod-freifunk))
 
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))
+$(eval $(call BuildPackage,luci-app-olsr))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 

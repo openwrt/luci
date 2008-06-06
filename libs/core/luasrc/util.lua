@@ -107,7 +107,7 @@ end
 function dumptable(t, i)
 	i = i or 0
 	for k,v in pairs(t) do
-		print(string.rep("\t", i) .. k, v)
+		print(string.rep("\t", i) .. tostring(k), tostring(v))
 		if type(v) == "table" then
 			dumptable(v, i+1)
 		end

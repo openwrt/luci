@@ -30,13 +30,13 @@ function index()
 	page.setuser  = false
 	page.setgroup = false
 	
-	assign({"freifunk", "status", "routes"}, node("admin", "status", "routes"), "Routingtabelle", 10)
-	assign({"freifunk", "status", "iwscan"}, node("admin", "status", "iwscan"), "WLAN-Scan", 20)
+	assign({"freifunk", "status", "routes"}, {"admin", "status", "routes"}, "Routingtabelle", 10)
+	assign({"freifunk", "status", "iwscan"}, {"admin", "status", "iwscan"}, "WLAN-Scan", 20)
 	
-	assign({"freifunk", "olsr"}, node("admin", "status", "olsr"), "OLSR", 30)
+	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 	
 	if luci.fs.isfile("/etc/config/luci_statistics") then
-		assign({"freifunk", "statistics"}, node("admin", "statistics", "graph"), i18n("stat_statistics", "Statistiken"), 40)
+		assign({"freifunk", "statistics"}, {"admin", "statistics", "graph"}, i18n("stat_statistics", "Statistiken"), 40)
 	end
 	
 	local page  = node("admin", "index", "freifunk")
