@@ -46,7 +46,7 @@ function delete_all(config, type, comparator)
 		end)
 		
 	for i, j in ipairs(del) do
-		uci.delete("config", j)
+		uci.delete(config, j)
 	end
 end
 

@@ -25,7 +25,7 @@ function index()
 	page.title  = "MID"
 	page.order  = 50
 
-	entry({"admin", "services", "olsrd"}, cbi("olsr/olsrd.lua"), "OLSRd")
+	entry({"admin", "services", "olsrd"}, cbi("olsr/olsrd"), "OLSR")
 end
 
 function action_index()
