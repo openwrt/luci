@@ -44,3 +44,19 @@ function build_querystring(table)
 	
 	return s
 end
+
+function urldecode(str)
+	str = str:gsub("+", " ")
+	str = str:gsub("%%(%x%x)",
+		function(h) return string.char(tonumber(h,16)) end)
+	str = str:gsub("\r\n", "\n")
+	return str	
+end
+
+function urlencode(str)
+	str = str:gsub("\n", "\r\n")
+	str = str:gsub("([^%w ])",
+		function (c) return string.format ("%%%02X", string.byte(c)) end)
+	str = str:gsub(" ", "+")
+	return str	
+end

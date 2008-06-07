@@ -35,6 +35,9 @@ luci.config.template = luci.config.template or {}
 viewdir    = luci.config.template.viewdir or luci.sys.libpath() .. "/view"
 compiledir = luci.config.template.compiledir or luci.sys.libpath() .. "/view"
 
+-- Enforce cache security
+compiledir = compiledir .. "/" .. luci.sys.process.info("uid")
+
 
 -- Compile modes:
 -- none:	Never compile, only use precompiled data from files
@@ -147,12 +150,16 @@ function Template.__init__(self, name)
 	
 	-- Compile and build
 	local sourcefile   = viewdir    .. "/" .. name .. ".htm"
-	local compiledfile = compiledir .. "/" .. name .. ".lua"
+	local compiledfile = compiledir .. "/" .. luci.http.urlencode(name) .. ".lua"
 	local err	
 	
 	if compiler_mode == "file" then
 		local tplmt = luci.fs.mtime(sourcefile)
 		local commt = luci.fs.mtime(compiledfile)
+		
+		if not luci.fs.mtime(compiledir) then
+			luci.fs.mkdir(compiledir, true)
+		end
 				
 		-- Build if there is no compiled file or if compiled file is outdated
 		if ((commt == nil) and not (tplmt == nil))
@@ -162,11 +169,6 @@ function Template.__init__(self, name)
 			
 			if source then
 				local compiled, err = compile(source)
-				
-				local compiledfile_dir  = luci.fs.dirname(compiledfile)
-				if not luci.fs.mtime(compiledfile_dir) then
-					luci.fs.mkdir(compiledfile_dir)
-				end
 				
 				luci.fs.writefile(compiledfile, luci.util.dump(compiled))
 				self.template = compiled

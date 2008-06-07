@@ -27,7 +27,6 @@ limitations under the License.
 module("luci.fs", package.seeall)
 
 require("posix")
-posix.umask("rwx------")
 
 -- Glob
 glob = posix.glob
