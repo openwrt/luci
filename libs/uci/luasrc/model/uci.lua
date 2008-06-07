@@ -27,6 +27,7 @@ local uci  = require("uci")
 local util = require("luci.util")
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
+local table, print = table, print
 
 module("luci.model.uci", function(m) setmetatable(m, {__index = uci}) end)
 
@@ -37,16 +38,16 @@ savedir_state = "/var/state"
 
 function delete_all(config, type, comparator)
 	local del = {}
-	
-	foreach(config, type,
-		function (section)
+	local function helper (section)
 			if not comparator or comparator(section) then
 				table.insert(del, section[".name"])
 			end
-		end)
-		
+	end
+	
+	foreach(config, type, helper)
+	
 	for i, j in ipairs(del) do
-		uci.delete(config, j)
+		delete(config, j)
 	end
 end
 

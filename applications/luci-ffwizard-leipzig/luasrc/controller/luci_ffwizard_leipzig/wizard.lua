@@ -195,29 +195,29 @@ function configure_freifunk()
 			function (section)
 				local device = section[".name"]
 				
-				if luci.http.formvalue("wifi."..iface) then
+				if luci.http.formvalue("wifi."..device) then
 					uci.delete_all("wireless", "wifi-iface",
 						function (section)
 							return (section.device == device)
 						end)
+				
+					uci.tset("wireless", device, {
+						disabled = "0",
+						mode = "11g",
+						txantenna = "1",
+						rxantenna = "1",
+						channel = uci.get("freifunk", "community", "channel")
+					})
+					
+					uci.section("wireless", "wifi-iface", nil, {
+						device = device,
+						network = "ff",
+						mode = "adhoc",
+						ssid = uci.get("freifunk", "community", "essid"),
+						bssid = uci.get("freifunk", "community", "bssid"),
+						txpower = 13
+					})
 				end
-				
-				uci.tset("wireless", device, {
-					disabled = "0",
-					mode = "11g",
-					txantenna = "1",
-					rxantenna = "1",
-					channel = uci.get("freifunk", "community", "channel")
-				})
-				
-				uci.section("wireless", "wifi-iface", nil, {
-					device = iface,
-					network = "ff",
-					mode = "adhoc",
-					ssid = uci.get("freifunk", "community", "essid"),
-					bssid = uci.get("freifunk", "community", "bssid"),
-					txpower = 13
-				})
 			end)
 	end
 
