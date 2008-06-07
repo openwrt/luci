@@ -159,6 +159,7 @@ function Template.__init__(self, name)
 		
 		if not luci.fs.mtime(compiledir) then
 			luci.fs.mkdir(compiledir, true)
+			luci.fs.chmod(luci.fs.dirname(compiledir), "a+rxw")
 		end
 				
 		-- Build if there is no compiled file or if compiled file is outdated
