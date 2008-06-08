@@ -25,5 +25,5 @@ limitations under the License.
 ]]--
 module("luci", package.seeall)
 
-__version__ = "0.5"
+__version__ = "0.6"
 __appname__ = "LuCI"
