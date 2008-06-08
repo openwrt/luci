@@ -18,6 +18,7 @@ module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 function index()
 
 	require("luci.fs")
+	require("luci.util")
 	require("luci.i18n")
 	require("luci.statistics.datatree")
 
@@ -29,7 +30,7 @@ function index()
 
 	-- override entry(): check for existance <plugin>.so where <plugin> is derived from the called path
 	function _entry( path, ... )
-		local file = path[4] or path[3]
+		local file = path[5] or path[4]
 		if luci.fs.isfile( "/usr/lib/collectd/" .. file .. ".so" ) then
 			entry( path, ... )
 		end
@@ -40,34 +41,38 @@ function index()
 		return luci.i18n.translate( "stat_" .. str, str )
 	end
 
+	-- our collectd menu
+	local collectd_menu = {
+		output  = { "rrdtool", "network", "unixsock", "csv" },
+		system  = { "exec", "email", "cpu", "df", "disk", "irq", "processes" },
+		network = { "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless" }
+	}
 
-	entry({"admin", "statistics"},				call("statistics_index"),		_i18n("statistics"),	80).i18n = "statistics"
-	entry({"admin", "statistics", "collectd"},		cbi("luci_statistics/collectd"),	_i18n("collectd"),	10)
+	-- create toplevel menu nodes
+	entry({"admin", "statistics"},             call("statistics_index"),        _i18n("statistics"), 80).i18n = "statistics"
+	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _i18n("collectd"),   10)
 
-	entry({"admin", "statistics", "output"},		call("statistics_outputplugins"),	_i18n("outputplugins"),	20)
-	_entry({"admin", "statistics", "output", "rrdtool"},	cbi("luci_statistics/rrdtool"),		_i18n("rrdtool"),	10)
-	_entry({"admin", "statistics", "output", "network"},	cbi("luci_statistics/network"),		_i18n("network"),	20)
-	_entry({"admin", "statistics", "output", "unixsock"},	cbi("luci_statistics/unixsock"),	_i18n("unixsock"),	30)
-	_entry({"admin", "statistics", "output", "csv"},	cbi("luci_statistics/csv"),		_i18n("csv"),		40)
+	-- populate collectd plugin menu
+	local index = 1
+	for section, plugins in luci.util.kspairs( collectd_menu ) do
+		entry(
+			{ "admin", "statistics", "collectd", section },
+			call( "statistics_" .. section .. "plugins" ),
+			_i18n( section .. "plugins" ),
+			index * 10
+		)
 
-	entry({"admin", "statistics", "system"},		call("statistics_systemplugins"),	_i18n("systemplugins"),	30)
-	_entry({"admin", "statistics", "system", "exec"},	cbi("luci_statistics/exec"),		_i18n("exec"),		10)
-	_entry({"admin", "statistics", "system", "email"},	cbi("luci_statistics/email"),		_i18n("email"),		20)
-	_entry({"admin", "statistics", "system", "cpu"},	cbi("luci_statistics/cpu"),		_i18n("cpu"),		30)
-	_entry({"admin", "statistics", "system", "df"},		cbi("luci_statistics/df"),		_i18n("df"),		40)
-	_entry({"admin", "statistics", "system", "disk"},	cbi("luci_statistics/disk"),		_i18n("disk"),		50)
-	_entry({"admin", "statistics", "system", "irq"},	cbi("luci_statistics/irq"),		_i18n("irq"),		60)
-	_entry({"admin", "statistics", "system", "processes"},	cbi("luci_statistics/processes"),	_i18n("processes"),	70)
+		for j, plugin in luci.util.vspairs( plugins ) do
+			_entry(
+				{ "admin", "statistics", "collectd", section, plugin },
+				cbi("luci_statistics/" .. plugin ),
+				_i18n( plugin ),
+				j * 10
+			)
+		end
 
-	entry({"admin", "statistics", "network"},		call("statistics_networkplugins"),	_i18n("networkplugins"),40)
-	_entry({"admin", "statistics", "network", "interface"},	cbi("luci_statistics/interface"),	_i18n("interface"),	10)
-	_entry({"admin", "statistics", "network", "netlink"},	cbi("luci_statistics/netlink"),		_i18n("netlink"),	20)
-	_entry({"admin", "statistics", "network", "iptables"},	cbi("luci_statistics/iptables"),	_i18n("iptables"),	30)
-	_entry({"admin", "statistics", "network", "tcpconns"},	cbi("luci_statistics/tcpconns"),	_i18n("tcpconns"),	40)
-	_entry({"admin", "statistics", "network", "ping"},	cbi("luci_statistics/ping"),		_i18n("ping"),		50)
-	_entry({"admin", "statistics", "network", "dns"},	cbi("luci_statistics/dns"),		_i18n("dns"),		60)
-	_entry({"admin", "statistics", "network", "wireless"},	cbi("luci_statistics/wireless"),	_i18n("wireless"),	70)
-
+		index = index + 1
+	end
 
 	-- output views
 	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), _i18n("graphs"), 80)
@@ -78,7 +83,7 @@ function index()
 	local vars = luci.http.formvalues()
 	local span = vars.timespan or nil
 
-	for i, plugin in ipairs( tree:plugins() ) do
+	for i, plugin in luci.util.vspairs( tree:plugins() ) do
 
 		-- get plugin instances
 		local instances = tree:plugin_instances( plugin )
@@ -91,7 +96,7 @@ function index()
 
 		-- if more then one instance is found then generate submenu
 		if #instances > 1 then
-			for j, inst in ipairs(instances) do
+			for j, inst in luci.util.vspairs(instances) do
 				-- instance menu entry
 				entry(
 					{ "admin", "statistics", "graph", plugin, inst },
