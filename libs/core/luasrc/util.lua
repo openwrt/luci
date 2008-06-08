@@ -318,3 +318,40 @@ function parse_units(ustr)
 
 	return val
 end
+
+
+-- Provide various sorting iterators
+function _sortiter( t, f )
+	local keys = { }
+
+	for k, v in pairs(t) do
+		table.insert( keys, k )
+	end
+
+	local _pos = 0
+	local _len = table.getn( keys )
+
+	table.sort( keys, f )
+
+	return function()
+		_pos = _pos + 1
+		if _pos <= _len then
+			return keys[_pos], t[keys[_pos]]
+		end
+	end
+end
+
+-- Return key, value pairs sorted by provided callback function
+function spairs(t,f)
+	return _sortiter( t, f )					
+end
+
+-- Return key, value pairs sorted by keys
+function kspairs(t)
+	return _sortiter( t )
+end
+
+-- Return key, value pairs sorted by values
+function vspairs(t)
+	return _sortiter( t, function (a,b) return t[a] < t[b] end )
+end
