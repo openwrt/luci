@@ -1,6 +1,6 @@
 --[[
 
-Luci i18n translation file for the statistics application
+Luci i18n translation file for the statistics application - german
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,14 +52,14 @@ stat_csv       = "CSV Ausgabe"
 -- diagram translations
 --
 
-stat_dg_title_wireless__signal_noise = "%H: Drahtlos - Signal-Noise-Verhältnis"
+stat_dg_title_wireless__signal_noise = "%H: Drahtlos - Signal-Noise-VerhÃ¤ltnis"
 stat_dg_label_wireless__signal_noise = "dBm"
 stat_ds_signal_noise = "Noise-Level"
-stat_ds_signal_power = "Signalstärke"
+stat_ds_signal_power = "SignalstÃ¤rke"
 
-stat_dg_title_wireless__signal_quality = "%H: Drahtlos - Signalqualität"
+stat_dg_title_wireless__signal_quality = "%H: Drahtlos - SignalqualitÃ¤t"
 stat_dg_label_wireless__signal_quality = "n"
-stat_ds_signal_quality = "Signalqualität"
+stat_ds_signal_quality = "SignalqualitÃ¤t"
 
 stat_dg_title_ping = "%H: ICMP Antwortzeiten"
 stat_dg_label_ping = "ms"
@@ -129,7 +129,7 @@ stat_ds_tcp_connections = "%di"
 
 stat_dg_title_df	= "%H: Speicherverbrauch auf %di"
 stat_dg_label_df	= "Bytes"
-stat_ds_df__free	= "verfügbar"
+stat_ds_df__free	= "verfÃ¼gbar"
 stat_ds_df__used	= "belegt   "
 
 stat_dg_title_irq	= "%H: Interrupts"
@@ -147,13 +147,13 @@ lucistatistics			= "Statistiken"
 lucistatistics_collectd		= "Collectd Einstellungen"
 lucistatistics_collectd_desc	= [[
 	Collectd ist ein schlankes Dienstprogramm zum Sammeln von Systemdaten aus verschiedenen Quellen mittels diverser Plugins.
-	Auf dieser Seite können generelle Einstellungen für den Collectd-Daemon vorgenommen werden.
+	Auf dieser Seite kÃ¶nnen generelle Einstellungen fÃ¼r den Collectd-Daemon vorgenommen werden.
 ]]
 
 lucistatistics_collectd_hostname      = "Hostname"
 lucistatistics_collectd_basedir       = "Basisverzeichnis"
-lucistatistics_collectd_include       = "Verzeichnis für Unterkonfigurationen"
-lucistatistics_collectd_plugindir     = "Verzeichnis für Collectd-Plugins"
+lucistatistics_collectd_include       = "Verzeichnis fÃ¼r Unterkonfigurationen"
+lucistatistics_collectd_plugindir     = "Verzeichnis fÃ¼r Collectd-Plugins"
 lucistatistics_collectd_pidfile       = "Pfad zu PID-Datei"
 lucistatistics_collectd_typesdb       = "Dataset-Definitionen"
 lucistatistics_collectd_interval      = "Daten-Sammelintervall"
@@ -163,45 +163,45 @@ lucistatistics_collectd_fqdnlookup    = "automatisch vollen Hostnamen herausfind
 
 -- cpu plugin
 lucistatistics_collectdcpu            = "CPU Plugin Konfiguration"
-lucistatistics_collectdcpu_desc       = "Das CPU-Plugin sammelt grundlegende Statistiken über die Prozessorauslastung."
+lucistatistics_collectdcpu_desc       = "Das CPU-Plugin sammelt grundlegende Statistiken Ã¼ber die Prozessorauslastung."
 lucistatistics_collectdcpu_enable     = "Plugin aktivieren"
 
 -- csv plugin
 lucistatistics_collectdcsv            = "CSV Plugin Konfiguration"
 lucistatistics_collectdcsv_desc       = [[
 	Das CSV-Plugin speichert die gesammelten Daten im CSV-Format,
-	geeignet für die Weiterverarbeitung durch externe Programme.
+	geeignet fÃ¼r die Weiterverarbeitung durch externe Programme.
 ]]
 
 lucistatistics_collectdcsv_enable     = "Plugin aktivieren"
-lucistatistics_collectdcsv_datadir    = "Speicherverzeichnis für die CSV-Dateien"
+lucistatistics_collectdcsv_datadir    = "Speicherverzeichnis fÃ¼r die CSV-Dateien"
 lucistatistics_collectdcsv_storerates = "Werte nicht absolut sondern als Raten speichern"
 
 -- df plugin
 lucistatistics_collectddf                  = "DF Plugin Konfiguration"
-lucistatistics_collectddf_desc             = "Das DF-Plugin sammelt Statistiken über den Speicherverbrauch auf verschiedenen Geräten, Mount-Punkten oder Dateisystemtypen."
+lucistatistics_collectddf_desc             = "Das DF-Plugin sammelt Statistiken Ã¼ber den Speicherverbrauch auf verschiedenen GerÃ¤ten, Mount-Punkten oder Dateisystemtypen."
 lucistatistics_collectddf_enable           = "Plugin aktivieren"
-lucistatistics_collectddf_devices          = "Geräte überwachen"
+lucistatistics_collectddf_devices          = "GerÃ¤te Ã¼berwachen"
 lucistatistics_collectddf_devices_desc     = "mehrere mit Leerzeichen trennen"
-lucistatistics_collectddf_mountpoints      = "Mount-Punkte überwachen"
+lucistatistics_collectddf_mountpoints      = "Mount-Punkte Ã¼berwachen"
 lucistatistics_collectddf_mountpoints_desc = "mehrere mit Leerzeichen trennen"
-lucistatistics_collectddf_fstypes          = "Datesystemtypen überwachen"
+lucistatistics_collectddf_fstypes          = "Datesystemtypen Ã¼berwachen"
 lucistatistics_collectddf_fstypes_desc     = "mehrere mit Leerzeichen trennen"
-lucistatistics_collectddf_ignoreselected   = "Alle außer Ausgewählte überwachen"
+lucistatistics_collectddf_ignoreselected   = "Alle auÃŸer AusgewÃ¤hlte Ã¼berwachen"
 
 -- disk plugin
 lucistatistics_collectddisk                = "Disk Plugin Konfiguration"
-lucistatistics_collectddisk_desc           = "Das Disk-Plugin sammelt detaillierte Statistiken über die Auslastung auf ausgewählten Festplatten und Partitionen."
+lucistatistics_collectddisk_desc           = "Das Disk-Plugin sammelt detaillierte Statistiken Ã¼ber die Auslastung auf ausgewÃ¤hlten Festplatten und Partitionen."
 lucistatistics_collectddisk_enable         = "Plugin aktivieren"
-lucistatistics_collectddisk_disks          = "Geräte und Partitionen überwachen"
+lucistatistics_collectddisk_disks          = "GerÃ¤te und Partitionen Ã¼berwachen"
 lucistatistics_collectddisk_disks_desc     = "mehrere mit Leerzeichen trennen"
-lucistatistics_collectddisk_ignoreselected = "Alle außer Ausgewählte überwachen"
+lucistatistics_collectddisk_ignoreselected = "Alle auÃŸer AusgewÃ¤hlte Ã¼berwachen"
 
 -- dns plugin
 lucistatistics_collectddns                    = "DNS Plugin Konfiguration"
-lucistatistics_collectddns_desc               = "Das DNS-Plugin sammelt detaillierte Statistiken über DNS-bezogenen Verkehr auf ausgewählten Schnittstellen."
+lucistatistics_collectddns_desc               = "Das DNS-Plugin sammelt detaillierte Statistiken Ã¼ber DNS-bezogenen Verkehr auf ausgewÃ¤hlten Schnittstellen."
 lucistatistics_collectddns_enable             = "Plugin aktivieren"
-lucistatistics_collectddns_interfaces         = "Schnittstellen überwachen"
+lucistatistics_collectddns_interfaces         = "Schnittstellen Ã¼berwachen"
 lucistatistics_collectddns_interfaces_desc    = "mehrere mit Leerzeichen trennen"
 lucistatistics_collectddns_ignoresources      = "Quelladressen ignorieren"
 lucistatistics_collectddns_ignoresources_desc = "mehrere mit Leerzeichen trennen"
@@ -210,8 +210,8 @@ lucistatistics_collectddns_ignoresources_desc = "mehrere mit Leerzeichen trennen
 lucistatistics_collectdemail                    = "E-Mail Plugin Konfiguration"
 lucistatistics_collectdemail_desc               = [[
 	Das E-Mail Plugin erstellt einen Unix-Socket welcher benutzt werden kann
-	um E-Mail-Statistiken an den laufenden Collectd-Daemon zu übermitteln.
-	Dieses Plugin ist primär für die Verwendung zusammen mit
+	um E-Mail-Statistiken an den laufenden Collectd-Daemon zu Ã¼bermitteln.
+	Dieses Plugin ist primÃ¤r fÃ¼r die Verwendung zusammen mit
 	Mail::SpamAssasin::Plugin::Collectd gedacht, kann aber auch anderweitig
 	verwendet werden.
 ]]
@@ -228,53 +228,53 @@ lucistatistics_collectdemail_maxconns         = "Maximale Anzahl erlaubter Verbi
 lucistatistics_collectdexec                = "Exec Plugin Konfiguration"
 lucistatistics_collectdexec_desc           = [[
 	Das Exec-Plugin startet externe Kommandos um Werte einzulesen oder um
-	Benachrichtigungen auszulösen falls bestimmte Grenzwerte erreicht werden.
+	Benachrichtigungen auszulÃ¶sen falls bestimmte Grenzwerte erreicht werden.
 ]]
 
 lucistatistics_collectdexec_enable         = "Plugin aktivieren"
-lucistatistics_collectdexecinput           = "Kommando zum Werte einlesen hinzufügen"
+lucistatistics_collectdexecinput           = "Kommando zum Werte einlesen hinzufÃ¼gen"
 lucistatistics_collectdexecinput_desc      = [[
-	Hier können externe Kommandos definiert werden, welche durch Collectd gestartet
+	Hier kÃ¶nnen externe Kommandos definiert werden, welche durch Collectd gestartet
 	werden um Statistik-Werte einzulesen. Die Werte werden dabei vom STDOUT des 
 	aufgerufenen Programmes gelesen.
 ]]
 
 lucistatistics_collectdexecinput_cmdline   = "Kommandozeile"
-lucistatistics_collectdexecinput_cmduser   = "Als Benutzer ausführen"
-lucistatistics_collectdexecinput_cmdgroup  = "Als Gruppe ausführen"
-lucistatistics_collectdexecnotify          = "Benachrichtigungskommando hinzufügen"
+lucistatistics_collectdexecinput_cmduser   = "Als Benutzer ausfÃ¼hren"
+lucistatistics_collectdexecinput_cmdgroup  = "Als Gruppe ausfÃ¼hren"
+lucistatistics_collectdexecnotify          = "Benachrichtigungskommando hinzufÃ¼gen"
 lucistatistics_collectdexecnotify_desc     = [[
-	Hier können externe Kommandos definiert werden, welche durch Collectd gestartet
+	Hier kÃ¶nnen externe Kommandos definiert werden, welche durch Collectd gestartet
 	werden sobald konfigurierte Grenzwerte erreicht werden. Die Werte welche die
-	Benachrichtigung ausgelöst haben werden dabei an den STDIN des aufgerufenen
-	Programmes übergeben.
+	Benachrichtigung ausgelÃ¶st haben werden dabei an den STDIN des aufgerufenen
+	Programmes Ã¼bergeben.
 ]]
 
 lucistatistics_collectdexecnotify_cmdline  = "Kommandozeile"
-lucistatistics_collectdexecnotify_cmduser  = "Als Benutzer ausführen"
-lucistatistics_collectdexecnotify_cmdgroup = "Als Gruppe ausführen"
+lucistatistics_collectdexecnotify_cmduser  = "Als Benutzer ausfÃ¼hren"
+lucistatistics_collectdexecnotify_cmdgroup = "Als Gruppe ausfÃ¼hren"
 
 -- interface plugin
 lucistatistics_collectdinterface                 = "Interface Plugin Konfiguration"
-lucistatistics_collectdinterface_desc            = "Das Interface-Plugin sammelt allgemeine Verkehrsstatistiken auf ausgewählten Schnittstellen."
+lucistatistics_collectdinterface_desc            = "Das Interface-Plugin sammelt allgemeine Verkehrsstatistiken auf ausgewÃ¤hlten Schnittstellen."
 lucistatistics_collectdinterface_enable          = "Plugin aktivieren"
-lucistatistics_collectdinterface_interfaces      = "Schnittstellen überwachen"
-lucistatistics_collectdinterface_interfaces_desc = "Strg gedrückt halten um mehrere Schnittstellen zu wählen"
-lucistatistics_collectdinterface_ignoreselected  = "Alle außer Ausgewählte überwachen"
+lucistatistics_collectdinterface_interfaces      = "Schnittstellen Ã¼berwachen"
+lucistatistics_collectdinterface_interfaces_desc = "Strg gedrÃ¼ckt halten um mehrere Schnittstellen zu wÃ¤hlen"
+lucistatistics_collectdinterface_ignoreselected  = "Alle auÃŸer AusgewÃ¤hlte Ã¼berwachen"
 
 -- iptables plugin
 lucistatistics_collectdiptables			      = "Iptables Plugin Konfiguration"
 lucistatistics_collectdiptables_desc                  = [[
-	Das Iptables-Plugin überwacht ausgewählte Firewall-Regeln und sammelt Werte über
+	Das Iptables-Plugin Ã¼berwacht ausgewÃ¤hlte Firewall-Regeln und sammelt Werte Ã¼ber
 	die Anzahl der verarbeiteten Pakete und Bytes.
 ]]
 
 lucistatistics_collectdiptables_enable                = "Plugin aktivieren"
 
-lucistatistics_collectdiptablesmatch                  = "Auswahlregel hinzufügen"
+lucistatistics_collectdiptablesmatch                  = "Auswahlregel hinzufÃ¼gen"
 lucistatistics_collectdiptablesmatch_desc             = [[
-	Hier werden die Kriterien festgelegt nach welchen die zu überwachenden
-	Firewall-Regeln ausgewählt werden.
+	Hier werden die Kriterien festgelegt nach welchen die zu Ã¼berwachenden
+	Firewall-Regeln ausgewÃ¤hlt werden.
 ]]
 
 lucistatistics_collectdiptablesmatch_name             = "Name der Regel"
@@ -297,42 +297,42 @@ lucistatistics_collectdiptablesmatch_options_desc     = "z.B. reject-with tcp-re
 -- irq plugin
 lucistatistics_collectdirq                = "IRQ Plugin Konfiguration"
 lucistatistics_collectdirq_desc           = [[
-	Das IRQ-Plugin überwacht die Anzahl der Aufrufe pro Sekunde für jeden ausgewählten Interrupt.
-	Wird kein Interrupt ausgewählt überwacht das Plugin alle im System vorhandenen Interrupts.
+	Das IRQ-Plugin Ã¼berwacht die Anzahl der Aufrufe pro Sekunde fÃ¼r jeden ausgewÃ¤hlten Interrupt.
+	Wird kein Interrupt ausgewÃ¤hlt Ã¼berwacht das Plugin alle im System vorhandenen Interrupts.
 ]]
 
 lucistatistics_collectdirq_enable         = "Plugin aktivieren"
-lucistatistics_collectdirq_irqs           = "Interrups überwachen"
+lucistatistics_collectdirq_irqs           = "Interrups Ã¼berwachen"
 lucistatistics_collectdirq_irqs_desc      = "mehrere mit Leerzeichen trennen"
-lucistatistics_collectdirq_ignoreselected = "Alle außer Ausgewählte überwachen"
+lucistatistics_collectdirq_ignoreselected = "Alle auÃŸer AusgewÃ¤hlte Ã¼berwachen"
 
 -- netlink plugin
 lucistatistics_collectdnetlink            = "Netlink Plugin Konfiguration"
 lucistatistics_collectdnetlink_desc       = [[
 	Das Netlink-Plugin sammelt erweiterte QoS-Informationen wie QDisc-, Class- und
-	Filter-Statistiken auf ausgewählten Schnittstellen.
+	Filter-Statistiken auf ausgewÃ¤hlten Schnittstellen.
 ]]
 
 lucistatistics_collectdnetlink_enable                 = "Plugin aktivieren"
-lucistatistics_collectdnetlink_interfaces             = "Schnittstellen einfach überwachen"
-lucistatistics_collectdnetlink_interfaces_desc        = "Strg gedrückt halten um mehrere zu wählen"
-lucistatistics_collectdnetlink_verboseinterfaces      = "Schnittstellen detailliert überwachen"
-lucistatistics_collectdnetlink_verboseinterfaces_desc = "Strg gedrückt halten um mehrere zu wählen"
-lucistatistics_collectdnetlink_qdiscs                 = "Queue Discipline überwachen"
-lucistatistics_collectdnetlink_qdiscs_desc            = "Strg gedrückt halten um mehrere zu wählen"
-lucistatistics_collectdnetlink_classes                = "Shapingklassen überwachen"
-lucistatistics_collectdnetlink_classes_desc           = "Strg gedrückt halten um mehrere zu wählen"
-lucistatistics_collectdnetlink_filters                = "Filterklassen überwachen"
-lucistatistics_collectdnetlink_filters_desc           = "Strg gedrückt halten um mehrere zu wählen"
+lucistatistics_collectdnetlink_interfaces             = "Schnittstellen einfach Ã¼berwachen"
+lucistatistics_collectdnetlink_interfaces_desc        = "Strg gedrÃ¼ckt halten um mehrere zu wÃ¤hlen"
+lucistatistics_collectdnetlink_verboseinterfaces      = "Schnittstellen detailliert Ã¼berwachen"
+lucistatistics_collectdnetlink_verboseinterfaces_desc = "Strg gedrÃ¼ckt halten um mehrere zu wÃ¤hlen"
+lucistatistics_collectdnetlink_qdiscs                 = "Queue Discipline Ã¼berwachen"
+lucistatistics_collectdnetlink_qdiscs_desc            = "Strg gedrÃ¼ckt halten um mehrere zu wÃ¤hlen"
+lucistatistics_collectdnetlink_classes                = "Shapingklassen Ã¼berwachen"
+lucistatistics_collectdnetlink_classes_desc           = "Strg gedrÃ¼ckt halten um mehrere zu wÃ¤hlen"
+lucistatistics_collectdnetlink_filters                = "Filterklassen Ã¼berwachen"
+lucistatistics_collectdnetlink_filters_desc           = "Strg gedrÃ¼ckt halten um mehrere zu wÃ¤hlen"
 
 -- network plugin
 lucistatistics_collectdnetwork            = "Network Plugin Konfiguration"
 lucistatistics_collectdnetwork_desc       = [[
-	Das Network-Plugin ermöglicht die netzwerkgestützte Kommunikation zwischen
+	Das Network-Plugin ermÃ¶glicht die netzwerkgestÃ¼tzte Kommunikation zwischen
 	verschiedenen Collectd-Instanzen. Collectd kann gleichzeitig im Server- und
 	Client-Modus betrieben werden.
 	Im Client-Modus werden lokal gesammelte Daten an einen Collectd-Server 
-	übermittelt, im Server-Modus empfängt die lokale Instanz Daten von anderen
+	Ã¼bermittelt, im Server-Modus empfÃ¤ngt die lokale Instanz Daten von anderen
 	Installationen.
 ]]
 
@@ -349,7 +349,7 @@ lucistatistics_collectdnetworkserver_host      = "Server-Host"
 lucistatistics_collectdnetworkserver_host_desc = "Host-, IP- oder IPv6-Adresse"
 lucistatistics_collectdnetworkserver_port      = "Server-Port"
 lucistatistics_collectdnetworkserver_port_desc = "0 - 65535"
-lucistatistics_collectdnetwork_timetolive      = "TTL für Netzwerkpakete"
+lucistatistics_collectdnetwork_timetolive      = "TTL fÃ¼r Netzwerkpakete"
 lucistatistics_collectdnetwork_timetolive_desc = "0 - 255"
 lucistatistics_collectdnetwork_forward         = "Weiterleitung zwischen Listen- und Server-Adressen"
 lucistatistics_collectdnetwork_cacheflush      = "Cache-Leerungsintervall"
@@ -358,35 +358,35 @@ lucistatistics_collectdnetwork_cacheflush_desc = "Sekunden"
 -- ping plugin
 lucistatistics_collectdping            = "Ping Plugin Konfiguration"
 lucistatistics_collectdping_desc       = [[
-	Das Ping-Plugin sendet ICMP-Echo-Requests an ausgewählte Hosts und misst die
-	Antwortzeiten für jede Adresse.
+	Das Ping-Plugin sendet ICMP-Echo-Requests an ausgewÃ¤hlte Hosts und misst die
+	Antwortzeiten fÃ¼r jede Adresse.
 ]]
 
 lucistatistics_collectdping_enable     = "Plugin aktivieren"
-lucistatistics_collectdping_hosts      = "Hosts überwachen"
+lucistatistics_collectdping_hosts      = "Hosts Ã¼berwachen"
 lucistatistics_collectdping_hosts_desc = "mehrere mit Leerzeichen trennen"
-lucistatistics_collectdping_ttl        = "TTL für Ping Pakete"
+lucistatistics_collectdping_ttl        = "TTL fÃ¼r Ping Pakete"
 lucistatistics_collectdping_ttl_desc   = "0 - 255"
 
 -- Prozesse plugin
 lucistatistics_collectdProzesse                = "Prozesse Plugin Konfiguration"
 lucistatistics_collectdProzesse_desc           = [[
 	Das Prozess-Plugin sammelt Informationen wie CPU-Zeit, Speicherzugriffsfehler und
-	Speicherverbrauch ausgewählter Prozesse.
+	Speicherverbrauch ausgewÃ¤hlter Prozesse.
 ]]
 
 lucistatistics_collectdProzesse_enable         = "Plugin aktivieren"
-lucistatistics_collectdProzesse_processes      = "Prozesse überwachen"
+lucistatistics_collectdProzesse_processes      = "Prozesse Ã¼berwachen"
 lucistatistics_collectdProzesse_processes_desc = "mehrere mit Leerzeichen trennen"
 
 -- rrdtool plugin
 lucistatistics_collectdrrdtool                   = "RRDTool Plugin Konfiguration"
 lucistatistics_collectdrrdtool_desc              = [[
 	Das RRDTool-Plugin speichert die gesammelten Daten in sogenannten RRD-Datenbanken,
-	der Grundlage für die Diagramm-Bilder.<br /><br />
+	der Grundlage fÃ¼r die Diagramm-Bilder.<br /><br />
 	<strong>Warnung: Falsche Werte resultieren in einem sehr hohen Speicherverbrauch
-	im temporären Verzeichnis. Das kann das Gerät unbrauchbar machen, da Systemspeicher
-	für den regulären Betrieb fehlt!</strong>
+	im temporÃ¤ren Verzeichnis. Das kann das GerÃ¤t unbrauchbar machen, da Systemspeicher
+	fÃ¼r den regulÃ¤ren Betrieb fehlt!</strong>
 ]]
 
 lucistatistics_collectdrrdtool_enable            = "Plugin aktivieren"
@@ -396,35 +396,35 @@ lucistatistics_collectdrrdtool_stepsize_desc     = "Sekunden"
 lucistatistics_collectdrrdtool_heartbeat         = "RRD Heartbeatintervall"
 lucistatistics_collectdrrdtool_heartbeat_desc    = "Sekunden"
 lucistatistics_collectdrrdtool_rrasingle         = "Nur 'average' RRAs erzeugen"
-lucistatistics_collectdrrdtool_rrasingle_desc    = "reduziert die RRD Größe"
+lucistatistics_collectdrrdtool_rrasingle_desc    = "reduziert die RRD GrÃ¶ÃŸe"
 lucistatistics_collectdrrdtool_rratimespans      = "gespeicherte Zeitspannen"
 lucistatistics_collectdrrdtool_rratimespans_desc = "mehrere mit Leerzeichen trennen"
 lucistatistics_collectdrrdtool_rrarows           = "Spalten pro RRA"
 lucistatistics_collectdrrdtool_xff               = "RRD XFiles Faktor"
-lucistatistics_collectdrrdtool_cachetimeout      = "Zwischenspeicherzeit für gesammelte Daten"
+lucistatistics_collectdrrdtool_cachetimeout      = "Zwischenspeicherzeit fÃ¼r gesammelte Daten"
 lucistatistics_collectdrrdtool_cachetimeout_desc = "Sekunden"
-lucistatistics_collectdrrdtool_cacheflush        = "Leerungsintervall für Zwischenspeicher"
+lucistatistics_collectdrrdtool_cacheflush        = "Leerungsintervall fÃ¼r Zwischenspeicher"
 lucistatistics_collectdrrdtool_cacheflush_desc   = "Sekunden"
 
 -- tcpconns plugin
 lucistatistics_collectdtcpconns                  = "TCPConns Plugin Konfiguration"
 lucistatistics_collectdtcpconns_desc             = [[
-	Das TCPConns-Plugin sammelt Informationen über offene TCP-Verbindungen
-	auf ausgewählten Ports.
+	Das TCPConns-Plugin sammelt Informationen Ã¼ber offene TCP-Verbindungen
+	auf ausgewÃ¤hlten Ports.
 ]]
 
 lucistatistics_collectdtcpconns_enable           = "Plugin aktivieren"
-lucistatistics_collectdtcpconns_listeningports   = "Alle durch lokale Dienste genutzten Ports überwachen"
-lucistatistics_collectdtcpconns_localports       = "lokale Ports überwachen"
+lucistatistics_collectdtcpconns_listeningports   = "Alle durch lokale Dienste genutzten Ports Ã¼berwachen"
+lucistatistics_collectdtcpconns_localports       = "lokale Ports Ã¼berwachen"
 lucistatistics_collectdtcpconns_localports_desc  = "0 - 65535; mehrere mit Leerzeichen trennen"
-lucistatistics_collectdtcpconns_remoteports      = "entfernte Ports überwachen"
+lucistatistics_collectdtcpconns_remoteports      = "entfernte Ports Ã¼berwachen"
 lucistatistics_collectdtcpconns_remoteports_desc = "0 - 65535; mehrere mit Leerzeichen trennen"
 
 -- unixsock plugin
 lucistatistics_collectdunixsock                    = "Unixsock Plugin Konfiguration"
 lucistatistics_collectdunixsock_desc               = [[
-	Das Unixsock-Plugin erstellt einen Unix-Socket über welchen gesammelte Werte
-	aus der laufenden Collectd-Instanz ausgelesen werden können.
+	Das Unixsock-Plugin erstellt einen Unix-Socket Ã¼ber welchen gesammelte Werte
+	aus der laufenden Collectd-Instanz ausgelesen werden kÃ¶nnen.
 ]]
 
 lucistatistics_collectdunixsock_enable           = "Plugin aktivieren"
@@ -437,8 +437,8 @@ lucistatistics_collectdunixsock_socketperms_desc = "oktal"
 -- wireless plugin
 lucistatistics_collectdwireless                    = "Wireless Plugin Konfiguration"
 lucistatistics_collectdwireless_desc               = [[
-	Das Wireless-Plugin sammelt Statistiken über die drahtlose Signalstärke,
-	den Störpegel und die Signalqualität.
+	Das Wireless-Plugin sammelt Statistiken Ã¼ber die drahtlose SignalstÃ¤rke,
+	den StÃ¶rpegel und die SignalqualitÃ¤t.
 ]]
 
 lucistatistics_collectdwireless_enable           = "Plugin aktivieren"
