@@ -38,6 +38,9 @@ interface = "Interface"
 interfaces = "Interfaces"
 ipaddress = "IP-Address"
 
+legend = "Legende"
+library = "Library"
+
 key = "Key"
 
 language = "Language"
@@ -46,6 +49,7 @@ load = "Load"
 
 macaddress = "MAC-Address"
 manpage = "see '%s' manpage"
+metric = "Metric"
 mode = "Mode"
 
 name = "Name"

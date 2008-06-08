@@ -5,18 +5,22 @@ function index()
 		return
 	end
 	
+	require("luci.i18n").loadc("olsr")
+	local i18n = luci.i18n.translate
+	
 	local page  = node("admin", "status", "olsr")
 	page.target = call("action_index")
 	page.title  = "OLSR"
+	page.i18n   = "olsr"
 	
 	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
-	page.title  = "Routen"
+	page.title  = i18n("olsr_routes", "Routen")
 	page.order  = 10
 	
 	local page  = node("admin", "status", "olsr", "topology")
 	page.target = call("action_topology")
-	page.title  = "Topologie"
+	page.title  = i18n("olsr_topology", "Topologie")
 	page.order  = 20
 	
 	local page  = node("admin", "status", "olsr", "hna")
@@ -29,7 +33,7 @@ function index()
 	page.title  = "MID"
 	page.order  = 50
 
-	entry({"admin", "services", "olsrd"}, cbi("olsr/olsrd"), "OLSR")
+	entry({"admin", "services", "olsrd"}, cbi("olsr/olsrd"), "OLSR").i18n = "olsr"
 end
 
 function action_index()
