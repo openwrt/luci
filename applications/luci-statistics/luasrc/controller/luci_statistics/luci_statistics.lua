@@ -22,7 +22,7 @@ function index()
 	require("luci.statistics.datatree")
 
 	-- load language file
-	luci.i18n.load("statistics.en") -- XXX: temporary / replace with loadc()
+	luci.i18n.loadc("statistics")
 
 	-- get rrd data tree
 	local tree = luci.statistics.datatree.Instance()

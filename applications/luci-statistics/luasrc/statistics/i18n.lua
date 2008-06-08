@@ -26,8 +26,7 @@ function Instance.__init__( self, graph )
 	self.i18n  = luci.i18n
 	self.graph = graph
 
-	-- XXX: compat hack
-	self.i18n.load("statistics.en")
+	self.i18n.loadc("statistics")
 end
 
 function Instance._subst( self, str, val )

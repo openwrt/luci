@@ -16,8 +16,6 @@ $Id$
 require("luci.sys")
 
 
-luci.i18n.load("statistics.en")
-
 --[[
 m = Map("luci_statistics", "Collector Daemon",
 Collectd ist ein kleiner und flexibler Dienst zum Sammeln und Abfragen von Daten
