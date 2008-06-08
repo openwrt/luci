@@ -18,5 +18,5 @@ function index()
 		return
 	end
 	
-	entry({"admin", "network", "qos"}, cbi("qos/qos"), "Quality of Service")
+	entry({"admin", "network", "qos"}, cbi("qos/qos"), "QoS").i18n = "qos"
 end

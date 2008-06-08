@@ -1,0 +1,13 @@
+qos = "Quality of Service"
+qos_desc = [[With QoS you can priorize network traffic selected by adresses, ports or services.]]
+qos_interface_classgroup = "Classification"
+qos_interface_overhead = "Calculate Overhead"
+qos_interface_download = "Downlink"
+qos_interface_upload = "Uplink"
+qos_classify = "Classification"
+qos_classify_target = "Class"
+qos_classify_srchost = "Source address"
+qos_classify_srchost_dest = "source network / source host"
+qos_classify_dsthost = "Target address"
+qos_classify_dsthost_dest = "target network / target host"
+qos_classify_portrange = "portrange"

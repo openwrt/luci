@@ -11,58 +11,57 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("qos", "Quality of Service", [[Mit Hilfe von QoS kann einzelnen Rechnern oder Netzwerkdiensten
-eine höhere oder niedrigere Priorität zugewiesen werden.]])
+m = Map("qos")
 
-s = m:section(TypedSection, "interface", "Schnittstellen")
+s = m:section(TypedSection, "interface", translate("interfaces", "Schnittstellen"))
 s.addremove = true
 
-s:option(Flag, "enabled", "aktiviert")
+s:option(Flag, "enabled", translate("enable", "aktivieren"))
 
-c = s:option(ListValue, "classgroup", "Klassifizierung")
+c = s:option(ListValue, "classgroup")
 c:value("Default", "standard")
 c.default = "Default"
 
-s:option(Flag, "overhead", "Overheadberechnung")
+s:option(Flag, "overhead")
 
-s:option(Value, "download", "Downlink", "kb/s")
+s:option(Value, "download", nil, "kb/s")
 
-s:option(Value, "upload", "Uplink", "kb/s")
+s:option(Value, "upload", nil, "kb/s")
 
-s = m:section(TypedSection, "classify", "Klassifizierung")
+s = m:section(TypedSection, "classify")
 
 s.anonymous = true
 s.addremove = true
 
-t = s:option(ListValue, "target", "Klasse")
+t = s:option(ListValue, "target")
 t:value("Priority")
 t:value("Express")
 t:value("Normal")
 t:value("Bulk")
 t.default = "Normal"
 
-s:option(Value, "srchost", "Quelladresse", "Quellhost / Quellnetz").optional = true
-s:option(Value, "dsthost", "Zieladresse", "Zielhost / Zielnetz").optional = true
+s:option(Value, "srchost").optional = true
+s:option(Value, "dsthost").optional = true
 s:option(Value, "layer7", "Layer 7").optional = true
 
 p2p = s:option(ListValue, "ipp2p", "P2P")
 p2p:value("")
-p2p:value("all", "Alle")
-p2p:value("bit", "Bittorrent")
+p2p:value("all", translate("all", "alle"))
+p2p:value("bit", "BitTorrent")
 p2p:value("dc", "DirectConnect")
 p2p:value("edk", "eDonkey")
 p2p:value("gnu", "Gnutella")
 p2p:value("kazaa", "Kazaa")
 p2p.optional = true
 
-p = s:option(ListValue, "proto", "Protokoll")
+p = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
 p:value("")
 p:value("tcp", "TCP")
 p:value("udp", "UDP")
 p:value("icmp", "ICMP")
 p.optional = true
 
-s:option(Value, "ports", "Port").optional = true
-s:option(Value, "portrange", "Portbereich").optional = true
+s:option(Value, "ports", translate("port", "Port")).optional = true
+s:option(Value, "portrange").optional = true
 
 return m
