@@ -272,6 +272,17 @@ define Package/luci-app-olsr/install
 endef
 
 
+define Package/luci-app-qos
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core +qos-scripts
+  TITLE:=Quality of Service configuration module
+endef
+
+define Package/luci-app-qos/install
+	$(call Package/luci/install/template,$(1),applications/luci-qos)
+endef
+
+
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
   DEPENDS+=+luci-sgi-haserl +iptables-mod-nat +iptables-mod-ipopt
@@ -418,6 +429,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-olsr),)
 	PKG_SELECTED_MODULES+=applications/luci-olsr
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-qos),)
+	PKG_SELECTED_MODULES+=applications/luci-qos
+endif
 ifneq ($(CONFIG_PACKAGE_luci-app-splash),)
 	PKG_SELECTED_MODULES+=applications/luci-splash
 endif
@@ -466,6 +480,7 @@ $(eval $(call BuildPackage,luci-mod-freifunk))
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))
 $(eval $(call BuildPackage,luci-app-olsr))
+$(eval $(call BuildPackage,luci-app-qos))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 

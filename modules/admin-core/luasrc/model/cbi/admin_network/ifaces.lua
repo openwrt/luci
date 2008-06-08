@@ -1,4 +1,16 @@
--- ToDo: Translate, Add descriptions and help texts
+--[[
+LuCI - Lua Configuration Interface
+
+Copyright 2008 Steven Barth <steven@midlink.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+]]--
 m = Map("network", "Schnittstellen", [[An dieser Stelle können die einzelnen Schnittstellen 
 des Netzwerkes konfiguriert werden. Es können mehrere Schnittstellen zu einer Brücke zusammengefasst werden,
 indem diese durch Leerzeichen getrennt aufgezählt werden und ein entsprechender Haken im Feld Netzwerkbrücke

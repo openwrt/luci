@@ -60,6 +60,7 @@ revert = "Revert"
 
 save = "Save"
 services = "Services"
+settings = "Settings"
 statistics = "Statistics"
 syslog = "System Log"
 system = "System"

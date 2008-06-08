@@ -1,6 +1,10 @@
 module("luci.controller.olsr", package.seeall)
 
 function index()
+	if not luci.fs.isfile("/etc/config/olsr") then
+		return
+	end
+	
 	local page  = node("admin", "status", "olsr")
 	page.target = call("action_index")
 	page.title  = "OLSR"

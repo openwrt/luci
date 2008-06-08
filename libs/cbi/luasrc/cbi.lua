@@ -579,9 +579,6 @@ end
 --[[
 Value - A one-line value
 	maxlength:	The maximum length
-	isnumber:	The value must be a valid (floating point) number
-	isinteger:  The value must be a valid integer
-	ispositive: The value must be positive (and a number)
 ]]--
 Value = class(AbstractValue)
 
@@ -590,8 +587,6 @@ function Value.__init__(self, ...)
 	self.template  = "cbi/value"
 
 	self.maxlength  = nil
-	self.isnumber   = false
-	self.isinteger  = false
 end
 
 -- This validation is a bit more complex
@@ -600,7 +595,7 @@ function Value.validate(self, val)
 		val = nil
 	end
 
-	return luci.util.validate(val, self.isnumber, self.isinteger)
+	return val
 end
 
 

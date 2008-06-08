@@ -1,3 +1,16 @@
+--[[
+LuCI - Lua Configuration Interface
+
+Copyright 2008 Steven Barth <steven@midlink.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+]]--
 module("luci.controller.admin.network", package.seeall)
 
 function index()
@@ -30,10 +43,4 @@ function index()
 	page.target = cbi("admin_network/routes")
 	page.title  = "Statische Routen"
 	page.order  = 50
-	
-	if luci.fs.isfile("/etc/config/qos") then
-		local page  = node("admin", "network", "qos")
-		page.target = cbi("admin_network/qos")
-		page.title  = "Quality of Service"
-	end
 end

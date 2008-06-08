@@ -1,8 +1,8 @@
 --[[
-LuCI - SGI-Module for Haserl
+LuCI - SGI-Module for Webuci
 
 Description:
-Server Gateway Interface for Haserl
+Server Gateway Interface for Webuci
 
 FileId:
 $Id: webuci.lua 2027 2008-05-07 21:16:35Z Cyrus $

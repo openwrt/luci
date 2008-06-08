@@ -1,4 +1,16 @@
--- ToDo: Translate, Add descriptions and help texts
+--[[
+LuCI - Lua Configuration Interface
+
+Copyright 2008 Steven Barth <steven@midlink.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+]]--
 m = Map("wireless", translate("networks", "Netze"), translate("a_w_networks1", [[Pro WLAN-Gerät können mehrere Netze bereitgestellt werden.
 Es sollte beachtet werden, dass es hardware- / treiberspezifische Einschränkungen gibt.
 So kann pro WLAN-Gerät in der Regel entweder 1 Ad-Hoc-Zugang ODER bis zu 3 Access-Point und 1 Client-Zugang
