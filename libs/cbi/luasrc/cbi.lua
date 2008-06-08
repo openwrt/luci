@@ -173,7 +173,11 @@ end
 
 -- UCI set
 function Map.set(self, section, option, value)
-	return uci.set(self.config, section, option or value, option and value)
+	if option then
+		return uci.set(self.config, section, option, value)
+	else
+		return uci.set(self.config, section, value)
+	end
 end
 
 -- UCI del
