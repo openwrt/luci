@@ -46,6 +46,7 @@ stat_exec      = "Exec"
 stat_rrdtool   = "RRDTool"
 stat_network   = "Network"
 stat_csv       = "CSV Output"
+stat_load      = "System Load"
 
 
 --
@@ -135,6 +136,12 @@ stat_ds_df__used	= "%ds"
 stat_dg_title_irq	= "%H: Interrupts"
 stat_dg_label_irq	= "Issues/s"
 stat_ds_irq		= "IRQ %di"
+
+stat_dg_title_load      = "%H: System Load"
+stat_dg_label_load      = "Load"
+stat_ds_load__shortterm = "1 min"
+stat_ds_load__midterm   = "5 min"
+stat_ds_load__longterm  = "15 min"
 
 
 --
@@ -299,6 +306,14 @@ lucistatistics_collectdirq_enable         = "Enable this plugin"
 lucistatistics_collectdirq_irqs           = "Monitor interrupts"
 lucistatistics_collectdirq_irqs_desc      = "multiple separated by space"
 lucistatistics_collectdirq_ignoreselected = "Monitor all except selected ones"
+
+-- load plugin
+lucistatistics_collectdload        = "Load Plugin Configuration"
+lucistatistics_collectdload_desc   = [[
+	The load plugin collects statistics about the general system load.
+]]
+
+lucistatistics_collectdload_enable = "Enable this plugin"
 
 -- netlink plugin
 lucistatistics_collectdnetlink            = "Netlink Plugin Configuration"

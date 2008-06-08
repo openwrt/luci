@@ -44,7 +44,7 @@ function index()
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "rrdtool", "network", "unixsock", "csv" },
-		system  = { "exec", "email", "cpu", "df", "disk", "irq", "processes" },
+		system  = { "exec", "email", "cpu", "df", "disk", "irq", "processes", "load" },
 		network = { "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless" }
 	}
 
