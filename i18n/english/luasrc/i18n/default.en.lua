@@ -38,7 +38,7 @@ interface = "Interface"
 interfaces = "Interfaces"
 ipaddress = "IP-Address"
 
-legend = "Legende"
+legend = "Legend"
 library = "Library"
 
 key = "Key"
