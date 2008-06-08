@@ -18,3 +18,11 @@ start() {
 		ln -s ${imagepath:-/tmp/rrdimg}/ /www/rrdimg
 	fi
 }
+
+restart() {
+        ### regenerate config / prepare environment
+        start()
+
+        ### restart collectd
+        /etc/init.d/collectd restart
+}
