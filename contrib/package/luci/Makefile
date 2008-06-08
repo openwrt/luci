@@ -317,6 +317,7 @@ define Package/luci-app-statistics/install
 	$(call Package/luci/install/template,$(1),applications/luci-statistics)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-statistics/dist/usr/bin/stat-genconfig $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-statistics/dist/etc/init.d/luci_statistics $(1)/etc/init.d
+	$(CP) -a ./ipkg/luci-statistics.postinst $(1)/CONTROL/postinst
 endef
 
 
