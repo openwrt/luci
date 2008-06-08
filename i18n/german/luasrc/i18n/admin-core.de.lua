@@ -59,6 +59,8 @@ dhcp_dhcp_dynamicdhcp = "Dynamisches DHCP"
 dhcp_dhcp_ignore = "Schnittstelle ignorieren"
 dhcp_dhcp_ignore_desc = "DHCP für dieses Netzwerk deaktivieren"
 dhcp_dhcp_force = "Start erzwingen"
+dhcp_dhcp_start_desc = "Erste vergebene Adresse (letztes Oktett)"
+dhcp_dhcp_limit_desc = "Anzahl zu vergebender Adressen -1"
 
 a_n_ptp = "Punkt-zu-Punkt Verbindungen"
 a_n_ptp1 = [[Punkt-zu-Punkt Verbindungen

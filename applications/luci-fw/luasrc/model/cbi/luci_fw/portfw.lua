@@ -1,14 +1,25 @@
--- ToDo: Translate, Add descriptions and help texts
+--[[
+LuCI - Lua Configuration Interface
+
+Copyright 2008 Steven Barth <steven@midlink.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+]]--
 require("luci.sys")
-m = Map("luci_fw", "Portweiterleitung", [[Portweiterleitungen ermöglichen es interne
-Netzwerkdienste von einem anderen externen Netzwerk aus erreichbar zu machen.]])
+m = Map("luci_fw", translate("fw_portfw", "Portweiterleitung"), translate("fw_portfw1"))
 
 s = m:section(TypedSection, "portfw", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "iface", "Schnittstelle", "Externe Schnittstelle")
+iface = s:option(ListValue, "iface", translate("interface", "Schnittstelle"))
 iface.default = "wan"
 luci.model.uci.foreach("network", "interface",
 	function (section)
@@ -17,13 +28,13 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-proto = s:option(ListValue, "proto", "Protokoll")
+proto = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP + UDP")
 
-dport = s:option(Value, "dport", "Externer Port", "Port[:Endport]")
+dport = s:option(Value, "dport")
 
-to = s:option(Value, "to", "Interne Adresse", "IP-Adresse[:Zielport[-Zielendport]]")
+to = s:option(Value, "to")
 
 return m

@@ -55,6 +55,7 @@ end
 
 -- Same as load but autocompletes the filename with .LANG from config.lang
 function loadc(file, force)
+	load(file .. ".en", force)
 	return load(file .. "." .. require("luci.config").main.lang, force)
 end
 

@@ -1,18 +1,25 @@
--- ToDo: Translate, Add descriptions and help texts
-require("luci.sys")
-m = Map("luci_fw", "Routing", [[An dieser Stelle wird festlegt, welcher Netzverkehr zwischen einzelnen
-Schnittstellen erlaubt werden soll. Es werden jeweils nur neue Verbindungen
-betrachtet, d.h. Pakete von aufgebauten oder zugehörigen Verbindungen werden automatisch in beide Richtungen
-akzeptiert, auch wenn das Feld "beide Richtungen" nicht explizit gesetzt ist.
-NAT ermöglicht Adressübersetzung.]])
+--[[
+LuCI - Lua Configuration Interface
+
+Copyright 2008 Steven Barth <steven@midlink.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+]]--
+m = Map("luci_fw", translate("fw_routing", "Routing"), translate("fw_routing1"))
 
 s = m:section(TypedSection, "routing", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "iface", "Eingang", "Eingangsschnittstelle")
-oface = s:option(ListValue, "oface", "Ausgang", "Ausgangsschnittstelle")
+iface = s:option(ListValue, "iface")
+oface = s:option(ListValue, "oface")
 
 luci.model.uci.foreach("network", "interface",
 	function (section)
@@ -22,8 +29,8 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-s:option(Flag, "fwd", "FWD", "weiterleiten").rmempty = true
-s:option(Flag, "nat", "NAT", "übersetzen").rmempty = true
-s:option(Flag, "bidi", "<->", "beide Richtungen").rmempty = true
+s:option(Flag, "fwd", "FWD").rmempty = true
+s:option(Flag, "nat", "NAT").rmempty = true
+s:option(Flag, "bidi", "<->").rmempty = true
 
 return m

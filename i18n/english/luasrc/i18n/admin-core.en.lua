@@ -213,6 +213,8 @@ dhcp_dhcp_dynamicdhcp = "Dynamic DHCP"
 dhcp_dhcp_ignore = "Ignore interface"
 dhcp_dhcp_ignore_desc = "disable DHCP for this interface"
 dhcp_dhcp_force = "Force"
+dhcp_dhcp_start_desc = "first address (last octet)"
+dhcp_dhcp_limit_desc = "number of leased addresses -1"
 
 a_n_ptp = "Point-to-Point Connections"
 a_n_ptp1 = [[Point-to-Point connections with PPPoE or PPTP are often used to connect a device

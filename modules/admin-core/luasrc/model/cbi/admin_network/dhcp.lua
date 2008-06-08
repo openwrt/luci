@@ -29,9 +29,9 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-s:option(Value, "start", translate("start", "Start"), "Erste vergebene Adresse (letztes Oktett)").rmempty = true
+s:option(Value, "start", translate("start", "Start")).rmempty = true
 
-s:option(Value, "limit", translate("limit", "Limit"), "Anzahl zu vergebender Adressen -1").rmempty = true
+s:option(Value, "limit", translate("limit", "Limit")).rmempty = true
 
 s:option(Value, "leasetime").rmempty = true
 
