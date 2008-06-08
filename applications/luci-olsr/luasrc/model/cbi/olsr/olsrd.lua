@@ -33,16 +33,16 @@ noint.disabled = "no"
 s:option(Value, "Pollrate")
 
 tcr = s:option(ListValue, "TcRedundancy")
-tcr:value("0", translate("olsr_general_TcRedundancy_0", "MPR-Selektoren"))
-tcr:value("1", translate("olsr_general_TcRedundancy_1", "MPR-Selektoren und MPR"))
-tcr:value("2", translate("olsr_general_TcRedundancy_2", "Alle Nachbarn"))
+tcr:value("0", translate("olsr_general_tcredundancy_0", "MPR-Selektoren"))
+tcr:value("1", translate("olsr_general_tcredundancy_1", "MPR-Selektoren und MPR"))
+tcr:value("2", translate("olsr_general_tcredundancy_2", "Alle Nachbarn"))
 
 s:option(Value, "MprCoverage")
 
 lql = s:option(ListValue, "LinkQualityLevel")
 lql:value("0", translate("disable", "deaktivieren"))
-lql:value("1", translate("olsr_general_LinkQualityLevel_1", "MPR-Auswahl"))
-lql:value("2", translate("olsr_general_LinkQualityLevel_2", "MPR-Auswahl und Routing"))
+lql:value("1", translate("olsr_general_linkqualitylevel_1", "MPR-Auswahl"))
+lql:value("2", translate("olsr_general_linkqualitylevel_2", "MPR-Auswahl und Routing"))
 
 lqfish = s:option(Flag, "LinkQualityFishEye")
 
