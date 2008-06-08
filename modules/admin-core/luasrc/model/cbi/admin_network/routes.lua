@@ -11,16 +11,14 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("network", "Statische Routen", [[Statische Routen geben an,
-über welche Schnittstelle und welches Gateway ein bestimmter Host
-oder ein bestimmtes Netzwerk erreicht werden kann.]])
+m = Map("network", translate("a_n_routes"), translate("a_n_routes1"))
 
 s = m:section(TypedSection, "route", "")
 s.addremove = true
 s.anonymous = true
 s.template  = "cbi/tblsection"
 
-iface = s:option(ListValue, "interface", "Schnittstelle")
+iface = s:option(ListValue, "interface", translate("interface", "Schnittstelle"))
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
@@ -28,10 +26,10 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-s:option(Value, "target", "Ziel", "Host-IP oder Netzwerk")
+s:option(Value, "target", translate("target", "Ziel"), translate("a_n_r_target1"))
 
-s:option(Value, "netmask", "Netzmaske", "falls Ziel ein Netzwerk ist").rmemepty = true
+s:option(Value, "netmask", translate("netmask", "Netzmaske"), translate("a_n_r_netmask1")).rmemepty = true
 
-s:option(Value, "gateway", "Gateway")
+s:option(Value, "gateway", translate("gateway", "Gateway"))
 
 return m

@@ -11,30 +11,28 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("network", "Punkt-zu-Punkt Verbindungen", [[Punkt-zu-Punkt Verbindungen
-über PPPoE oder PPTP werden häufig dazu verwendet, um über DSL o.ä. Techniken eine
-Verbindung zum Internetgateway eines Internetzugangsanbieters aufzubauen.]])
+m = Map("network", translate("a_n_ptp"), translate("a_n_ptp1"))
 
 s = m:section(TypedSection, "interface", "")
 s.addremove = true
 s:depends("proto", "pppoe")
 s:depends("proto", "pptp")
 
-p = s:option(ListValue, "proto", "Protokoll")
+p = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
 p:value("pppoe", "PPPoE")
 p:value("pptp", "PPTP")
 p.default = "pppoe"
 
-s:option(Value, "ifname", "Schnittstelle")
+s:option(Value, "ifname", translate("interface", "Schnittstelle"))
 
-s:option(Value, "username", "Benutzername")
-s:option(Value, "password", "Passwort")
+s:option(Value, "username", translate("username", "Benutzername"))
+s:option(Value, "password", translate("password", "Passwort"))
 
-s:option(Value, "keepalive", "Keep-Alive", "Bei einer Verbindungstrennung automatisch neu verbinden").optional = true
+s:option(Value, "keepalive").optional = true
 
-s:option(Value, "demand", "Dial on Demand (idle time)", "Zeit nach der die Verbindung bei Inaktivität getrennt wird").optional = true
+s:option(Value, "demand").optional = true
 
-srv = s:option(Value, "server", "PPTP-Server")
+srv = s:option(Value, "server")
 srv:depends("proto", "pptp")
 srv.optional = true
 

@@ -14,14 +14,13 @@ $Id$
 require("luci.model.uci")
 require("luci.sys")
 
-m = Map("dhcp", "DHCP", [[Mit Hilfe von DHCP können Netzteilnehmer automatisch
-ihre Netzwerkkonfiguration (IP-Adresse, Netzmaske, DNS-Server, DHCP, ...) beziehen.]])
+m = Map("dhcp", "DHCP")
 
 s = m:section(TypedSection, "dhcp", "")
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "interface", "Schnittstelle")
+iface = s:option(ListValue, "interface", translate("interface", "Schnittstelle"))
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
@@ -30,21 +29,21 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-s:option(Value, "start", "Start", "Erste vergebene Adresse (letztes Oktett)").rmempty = true
+s:option(Value, "start", translate("start", "Start"), "Erste vergebene Adresse (letztes Oktett)").rmempty = true
 
-s:option(Value, "limit", "Limit", "Anzahl zu vergebender Adressen -1").rmempty = true
+s:option(Value, "limit", translate("limit", "Limit"), "Anzahl zu vergebender Adressen -1").rmempty = true
 
-s:option(Value, "leasetime", "Laufzeit").rmempty = true
+s:option(Value, "leasetime").rmempty = true
 
-s:option(Flag, "dynamicdhcp", "Dynamisches DHCP").rmempty = true
+s:option(Flag, "dynamicdhcp").rmempty = true
 
-s:option(Value, "name", "Name").optional = true
+s:option(Value, "name", translate("name", "Name")).optional = true
 
-s:option(Flag, "ignore", "Schnittstelle ignorieren", "DHCP für dieses Netzwerk deaktivieren").optional = true
+s:option(Flag, "ignore").optional = true
 
-s:option(Value, "netmask", "Netzmaske").optional = true
+s:option(Value, "netmask", translate("netmask", "Netzmaske")).optional = true
 
-s:option(Flag, "force", "Start erzwingen").optional = true
+s:option(Flag, "force").optional = true
 
 for i, line in pairs(luci.sys.execl("dnsmasq --help dhcp")) do
 	k, v = line:match("([^ ]+) +([^ ]+)")

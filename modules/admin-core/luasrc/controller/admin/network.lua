@@ -14,24 +14,27 @@ $Id$
 module("luci.controller.admin.network", package.seeall)
 
 function index()
+	require("luci.i18n")
+	local i18n = luci.i18n.translate
+
 	local page  = node("admin", "network")
 	page.target = template("admin_network/index")
-	page.title  = "Netzwerk"  
+	page.title  = i18n("network", "Netzwerk")  
 	page.order  = 50
 	
 	local page  = node("admin", "network", "vlan")
 	page.target = cbi("admin_network/vlan")
-	page.title  = "Switch"
+	page.title  = i18n("a_n_switch", "Switch")
 	page.order  = 10
 	
 	local page  = node("admin", "network", "ifaces")
 	page.target = cbi("admin_network/ifaces")
-	page.title  = "Schnittstellen"
+	page.title  = i18n("interfaces", "Schnittstellen")
 	page.order  = 20
 	
 	local page  = node("admin", "network", "dhcp")
 	page.target = cbi("admin_network/dhcp")
-	page.title  = "DHCP-Server"
+	page.title  = "DHCP"
 	page.order  = 30
 	
 	local page  = node("admin", "network", "ptp")
@@ -41,6 +44,6 @@ function index()
 	
 	local page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
-	page.title  = "Statische Routen"
+	page.title  = i18n("a_n_routes", "Routen")
 	page.order  = 50
 end

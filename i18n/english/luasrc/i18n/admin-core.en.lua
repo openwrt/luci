@@ -181,3 +181,50 @@ dhcp_dnsmasq_dhcpleasemax = "max. DHCP-Leases"
 dhcp_dnsmasq_addnhosts = "additional hostfile"
 dhcp_dnsmasq_queryport = "query port"
 
+a_n_switch = "Switch"
+a_n_routes = "Routes"
+
+a_network1 = "In this area you find all network-related settings."
+a_network2 = "On most routers the network switch can be freely configured and splitted up into several VLANs."
+a_network3 = "Interfaces and PPPoE / PPTP-Settings allow a custom organisation of the network and connections to other networks like the internet."
+a_network4 = "With DHCP devices in your local network can be automatically configured for network communication."
+a_network5 = "Firewall and portforwarding can be used to secure your network while providing services to external networks."
+
+a_n_switch1 = [[The network ports on your router can be combined to several VLANs
+in which computers can communicate directly with each other.
+VLANs are often used to separate different network segments.
+Often there is by default one Uplink port for a connection to the next greater network like the internet
+and other ports for a local network.]]
+network_switch_desc = [[Ports belonging to a VLAN are separated with spaces.
+The port with the highest number (usually 5) is oftern the connection to the internal network interface of the router.
+On devices with 5 ports often the one with the lowest number (0) is the predefined Uplink port.]]
+
+a_n_ifaces1 = [[On this page you can configure the network interfaces.
+You can bridge several interfaces by ticking the "bridge interfaces" field and enter the names
+of several network interfaces separated by spaces.
+You can also use VLAN notation INTERFACE.VLANNR (e.g.: eth0.1).]]
+a_n_i_bridge = "Bridge interfaces"
+a_n_i_bridge1 = "creates a bridge over specified interface(s)"
+
+dhcp_desc = [[With DHCP network members can automatically receive
+their network settings (IP-address, netmaske, DNS-server, ...).]]
+dhcp_dhcp_leasetime = "Leasetime"
+dhcp_dhcp_dynamicdhcp = "Dynamic DHCP"
+dhcp_dhcp_ignore = "Ignore interface"
+dhcp_dhcp_ignore_desc = "disable DHCP for this interface"
+dhcp_dhcp_force = "Force"
+
+a_n_ptp = "Point-to-Point Connections"
+a_n_ptp1 = [[Point-to-Point connections with PPPoE or PPTP are often used to connect a device
+over DSL or similar technologies to an internet access point.]]
+network_interface_server = "PPTP-Server"
+network_interface_demand = "Automatic Disconnect"
+network_interface_demand_desc = "Time after which an unused connection will be closed"
+network_interface_keepalive = "Keep-Alive"
+network_interface_keepalive_desc = "Reconnect lost connections"
+
+a_n_routes = "Static Routes"
+a_n_routes1 = [[With Static Routes you can specify through which
+interface and gateway a certain host or network can be reached.]]
+a_n_r_target1 = "host-IP or network"
+a_n_r_netmask1 = "if target is a network"
