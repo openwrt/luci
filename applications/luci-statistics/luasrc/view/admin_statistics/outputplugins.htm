@@ -10,7 +10,7 @@ and to transmit the data over the network to other collectd instances.%></p>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
-				<li><a href="/cgi-bin/luci/admin/statistics/output/<%=plugin%>"><%=desc%></a></li>
+				<li><a href="<%=controller%>/admin/statistics/collectd/output/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>
 	</ul>

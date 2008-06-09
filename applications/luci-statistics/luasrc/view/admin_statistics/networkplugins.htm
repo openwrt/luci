@@ -9,7 +9,7 @@ about open tcp connections, interface traffic, iptables rules etc.%></p>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
-				<li><a href="/cgi-bin/luci/admin/statistics/network/<%=plugin%>"><%=desc%></a></li>
+				<li><a href="<%=controller%>/admin/statistics/collectd/network/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>
 	</ul>

@@ -6,7 +6,7 @@
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
-				<li><a href="/cgi-bin/luci/admin/statistics/system/<%=plugin%>"><%=desc%></a></li>
+				<li><a href="<%=controller%>/admin/statistics/collectd/system/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>
 	</ul>
