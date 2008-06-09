@@ -13,8 +13,8 @@ clean: luaclean
 
 luasource:
 	mkdir -p dist$(LUCI_INSTALLDIR)
-	cp root/* dist -R 2>/dev/null || true
-	cp luasrc/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
+	cp -a root/* dist -R 2>/dev/null || true
+	cp -a luasrc/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf; done  
 	
 luacompile: luasource

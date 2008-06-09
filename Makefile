@@ -30,7 +30,7 @@ luahost: luabuild hostcopy
 
 hostcopy: 
 	mkdir -p host
-	for i in $(MODULES); do cp $$i/dist/* host/ -R 2>/dev/null || true; done
+	for i in $(MODULES); do cp -a $$i/dist/* host/ -R 2>/dev/null || true; done
 	rm -f host/luci
 	ln -s .$(LUCI_INSTALLDIR) host/luci
 

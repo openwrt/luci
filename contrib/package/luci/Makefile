@@ -62,7 +62,8 @@ endef
 
 
 define Package/luci/install/template
-	$(CP) $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
+	$(CP) -a $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
+	$(CP) -a $(PKG_BUILD_DIR)/$(2)/ipkg/* $(1)/CONTROL/ 2>/dev/null || true
 endef
 
 
@@ -163,7 +164,6 @@ endef
 
 define Package/luci-ff-halle/install
 	$(call Package/luci/install/template,$(1),applications/community-halle)
-	$(CP) -a ./ipkg/luci-ff-halle.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -181,7 +181,6 @@ endef
 
 define Package/luci-ff-leipzig/install
 	$(call Package/luci/install/template,$(1),applications/community-leipzig)
-	$(CP) -a ./ipkg/luci-ff-leipzig.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -199,7 +198,6 @@ endef
 
 define Package/luci-ff-hannover/install
 	$(call Package/luci/install/template,$(1),applications/community-hannover)
-	$(CP) -a ./ipkg/luci-ff-hannover.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -257,7 +255,6 @@ endef
 
 define Package/luci-app-firewall/install
 	$(call Package/luci/install/template,$(1),applications/luci-fw)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-fw/dist/etc/init.d/luci_fw $(1)/etc/init.d
 endef
 
 
@@ -315,9 +312,6 @@ endef
 
 define Package/luci-app-statistics/install
 	$(call Package/luci/install/template,$(1),applications/luci-statistics)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-statistics/dist/usr/bin/stat-genconfig $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applications/luci-statistics/dist/etc/init.d/luci_statistics $(1)/etc/init.d
-	$(CP) -a ./ipkg/luci-statistics.postinst $(1)/CONTROL/postinst
 endef
 
 
@@ -331,7 +325,6 @@ endef
 
 define Package/luci-sgi-haserl/install
 	$(call Package/luci/install/template,$(1),libs/sgi-haserl)
-	$(CP) -a ./ipkg/luci-sgi-haserl.postinst $(1)/CONTROL/postinst
 endef
 
 
