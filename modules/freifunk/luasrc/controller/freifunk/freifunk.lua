@@ -25,6 +25,7 @@ function index()
 	page.order    = 5
 	page.setuser  = "nobody"
 	page.setgroup = "nogroup"
+	page.i18n     = "freifunk"
 	
 	local page  = node("freifunk", "index")
 	page.target = template("freifunk/index")

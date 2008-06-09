@@ -1,3 +1,6 @@
+fw_fw = [[Firewall]]
+fw_portfw = [[Portweiterleitung]]
+fw_routing = [[Routing]]
 fw_fw1 = [[Mit Hilfe der Firewall können Zugriffe auf das Netzwerk
 erlaubt, verboten oder umgeleitet werden.]]
 lucifw_rule_chain = "Kette"
