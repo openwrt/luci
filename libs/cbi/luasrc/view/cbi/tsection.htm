@@ -3,7 +3,7 @@
 					<div class="cbi-section-descr"><%=self.description%></div>
 <% for i, k in ipairs(self:cfgsections()) do%>
 						<% if self.addremove then %><div class="cbi-section-remove right">
-							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del Eintrag entfernen%>" />
+							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del%>" />
 						</div><% end %>
 						<% if not self.anonymous then %><h3><%=k%></h3><% end %>
 <% section = k %>
@@ -15,11 +15,11 @@
 <% if self.addremove then %>
 					<div class="cbi-section-create">
 						<% if self.anonymous then %>
-							<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add Eintrag hinzufügen%>" />
+							<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
 						<% else %>
 							<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-							<input type="submit" value="<%:cbi_add Eintrag hinzufügen%>" />
-						<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>
+							<input type="submit" value="<%:cbi_add%>" />
+						<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid%></div><% end %>
 					</div>
 <% end %>
 				</div>

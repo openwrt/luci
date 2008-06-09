@@ -1,14 +1,14 @@
 <%+header%>
-<h1><%:routes Routen%></h1>
+<h1><%:routes%></h1>
 
 <br />
 <table cellspacing="0" cellpadding="6" class="smalltext">
 <tr>
-<th><%:target Ziel%></th>
-<th><%:routes_netmask Netzmaske%></th>
-<th><%:routes_gateway Gateway%></th>
-<th><%:routes_metric Metrik%></th>
-<th><%:interface Schnittstelle%></th>
+<th><%:target%></th>
+<th><%:routes_netmask%></th>
+<th><%:routes_gateway%></th>
+<th><%:routes_metric%></th>
+<th><%:interface%></th>
 </tr>
 <%
 local routes = luci.sys.net.routes()

@@ -13,10 +13,10 @@ $Id$
 ]]--
 m = Map("qos")
 
-s = m:section(TypedSection, "interface", translate("interfaces", "Schnittstellen"))
+s = m:section(TypedSection, "interface", translate("interfaces"))
 s.addremove = true
 
-s:option(Flag, "enabled", translate("enable", "aktivieren"))
+s:option(Flag, "enabled", translate("enable"))
 
 c = s:option(ListValue, "classgroup")
 c:value("Default", "standard")
@@ -46,7 +46,7 @@ s:option(Value, "layer7", "Layer 7").optional = true
 
 p2p = s:option(ListValue, "ipp2p", "P2P")
 p2p:value("")
-p2p:value("all", translate("all", "alle"))
+p2p:value("all", translate("all"))
 p2p:value("bit", "BitTorrent")
 p2p:value("dc", "DirectConnect")
 p2p:value("edk", "eDonkey")
@@ -54,14 +54,14 @@ p2p:value("gnu", "Gnutella")
 p2p:value("kazaa", "Kazaa")
 p2p.optional = true
 
-p = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
+p = s:option(ListValue, "proto", translate("protocol"))
 p:value("")
 p:value("tcp", "TCP")
 p:value("udp", "UDP")
 p:value("icmp", "ICMP")
 p.optional = true
 
-s:option(Value, "ports", translate("port", "Port")).optional = true
+s:option(Value, "ports", translate("port")).optional = true
 s:option(Value, "portrange").optional = true
 
 return m

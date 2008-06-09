@@ -1,29 +1,29 @@
 <%+header%>
-<h1><%:ffwizard Freifunkassistent%></h1>
-<p><%:ffwizard1 Dieser Assistent konfiguriert den Router für die Benutzung im Freifunknetz%></p>
+<h1><%:ffwizard%></h1>
+<p><%:ffwizard1%></p>
 <br />
 <form method="post" action="<%=controller%>/admin/index/wizard">
 	<div class="cbi-section-node">
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:ip IP-Adresse%>:&nbsp;
+			<div class="cbi-value-title"><%:ip%>:&nbsp;
 			<input type="text" size="20" name="ip" /></div>
 		</div>
 		<% for i, k in ipairs(ifaces) do %>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:wificfg Drahtlosgerät einrichten%>: <%=k%></div>
+			<div class="cbi-value-title"><%:wificfg%>: <%=k%></div>
 			<div class="cbi-value-field"><input type="checkbox" name="wifi.<%=k%>" value="1" checked="checked" /></div>
 		</div>
 		<% end %>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:cfgolsr OLSR konfigurieren%></div>
+			<div class="cbi-value-title"><%:cfgolsr%></div>
 			<div class="cbi-value-field"><input type="checkbox" name="olsr" value="1" checked="checked" /></div>
 		</div>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:cfgdhcp Drahtlos DHCP konfigurieren%></div>
+			<div class="cbi-value-title"><%:cfgdhcp%></div>
 			<div class="cbi-value-field"><input type="checkbox" name="dhcp" value="1" checked="checked" /></div>
 		</div>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:cfginternal Erlaube Zugriff von internem Netzwerk%>:</div>
+			<div class="cbi-value-title"><%:cfginternal%>:</div>
 			<div class="cbi-value-field"><select name="frominternal">
 				<option value=""></option>
 <% for k, v in pairs(luci.model.uci.get_all("network")) do
@@ -34,7 +34,7 @@ end %>
 			</select></div>
 		</div>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:cfgexternal Erlaube Zugriff auf externes Netzwerk%>:</div>
+			<div class="cbi-value-title"><%:cfgexternal%>:</div>
 			<div class="cbi-value-field"><select name="toexternal">
 				<option value=""></option>
 <% for k, v in pairs(luci.model.uci.get_all("network")) do
@@ -45,14 +45,14 @@ end %>
 			</select></div>
 		</div>
 		<div class="cbi-value">
-			<div class="cbi-value-title"><%:shareinet Internetzugang ankündigen%></div>
+			<div class="cbi-value-title"><%:shareinet%></div>
 			<div class="cbi-value-field"><input type="checkbox" name="shareinet" value="1" checked="checked" /></div>
 		</div>
 	</div>
 	<br />
 	<div>
-		<input type="submit" value="<%:configure Konfigurieren%>" />
-		<input type="reset" value="<%:reset Zurücksetzen%>" />
+		<input type="submit" value="<%:configure%>" />
+		<input type="reset" value="<%:reset%>" />
 	</div>
 </form> 
 <%+footer%>

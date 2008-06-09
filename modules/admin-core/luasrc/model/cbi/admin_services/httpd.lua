@@ -11,20 +11,20 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("httpd", "Busybox HTTPd", translate("a_srv_http1", "Ein kleiner Webserver, der für die Bereitstellung von LuCI genutzt werden kann."))
+m = Map("httpd", "Busybox HTTPd", translate("a_srv_http1"))
 
 s = m:section(TypedSection, "httpd", "")
 s.anonymous = true
 
-port = s:option(Value, "port", translate("port", "Port"))
+port = s:option(Value, "port", translate("port"))
 port.isinteger = true
 
-s:option(Value, "home", translate("a_srv_http_root", "Wurzelverzeichnis"))
+s:option(Value, "home", translate("a_srv_http_root"))
 
-config = s:option(Value, "c_file", translate("configfile", "Konfigurationsdatei"), translate("a_srv_http_config1", "/etc/httpd.conf wenn leer"))
+config = s:option(Value, "c_file", translate("configfile"), translate("a_srv_http_config1"))
 config.rmempty = true
 
-realm = s:option(Value, "realm", translate("a_srv_http_authrealm", "Anmeldeaufforderung"), translate("a_srv_http_authrealm1", "Aufforderungstext zum Anmelden im Administrationsbereich"))
+realm = s:option(Value, "realm", translate("a_srv_http_authrealm"), translate("a_srv_http_authrealm1"))
 realm.rmempty = true
 
 return m

@@ -1,4 +1,4 @@
-								<% if self.tag_invalid[section] then %><div class="cbi-error"><%:cbi_invalid Fehler: Ungültige Eingabe%></div><% end %>
+								<% if self.tag_invalid[section] then %><div class="cbi-error"><%:cbi_invalid%></div><% end %>
 						</div>
 						<% if #self.deps > 0 then %><script type="text/javascript">
 							<% for j, d in ipairs(self.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");

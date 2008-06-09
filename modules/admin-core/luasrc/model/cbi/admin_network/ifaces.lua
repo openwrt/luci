@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("network", translate("interfaces", "Schnittstellen"), translate("a_n_ifaces1"))
+m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
 s = m:section(TypedSection, "interface", "")
 s.addremove = true
@@ -19,8 +19,8 @@ s:exclude("loopback")
 s:depends("proto", "static")
 s:depends("proto", "dhcp")
 
-p = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
-p:value("static", translate("static", "statisch"))
+p = s:option(ListValue, "proto", translate("protocol"))
+p:value("static", translate("static"))
 p:value("dhcp", "DHCP")
 p.default = "static"
 
@@ -28,17 +28,17 @@ br = s:option(Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"
 br.enabled = "bridge"
 br.rmempty = true
 
-s:option(Value, "ifname", translate("interface", "Schnittstelle"))
+s:option(Value, "ifname", translate("interface"))
 
-s:option(Value, "ipaddr", translate("ipaddress", "IP-Adresse"))
+s:option(Value, "ipaddr", translate("ipaddress"))
 
-s:option(Value, "netmask", translate("netmask", "Netzmaske")):depends("proto", "static")
+s:option(Value, "netmask", translate("netmask")):depends("proto", "static")
 
-gw = s:option(Value, "gateway", translate("gateway", "Gateway"))
+gw = s:option(Value, "gateway", translate("gateway"))
 gw:depends("proto", "static")
 gw.rmempty = true
 
-dns = s:option(Value, "dns", translate("dnsserver", "DNS-Server"))
+dns = s:option(Value, "dns", translate("dnsserver"))
 dns:depends("proto", "static")
 dns.optional = true
 
@@ -46,7 +46,7 @@ mtu = s:option(Value, "mtu", "MTU")
 mtu.optional = true
 mtu.isinteger = true
 
-mac = s:option(Value, "macaddr", translate("macaddress", "MAC-Adresse"))
+mac = s:option(Value, "macaddr", translate("macaddress"))
 mac.optional = true
 
 return m

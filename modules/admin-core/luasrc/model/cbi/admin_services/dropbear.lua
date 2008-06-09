@@ -11,16 +11,15 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("dropbear", "Dropbear SSHd", translate("a_srv_dropbear1", [[Der SSH-Server ermöglicht Shell-Zugriff
-über das Netzwerk und bietet einen integrierten SCP-Dienst.]]))
+m = Map("dropbear", "Dropbear SSHd", translate("a_srv_dropbear1"))
 
 s = m:section(TypedSection, "dropbear", "")
 s.anonymous = true
 
-port = s:option(Value, "Port", translate("port", "Port"))
+port = s:option(Value, "Port", translate("port"))
 port.isinteger = true
 
-pwauth = s:option(Flag, "PasswordAuth", translate("a_srv_d_pwauth", "Passwortanmeldung"), translate("a_srv_d_pwauth1", "Erlaube Anmeldung per Passwort"))
+pwauth = s:option(Flag, "PasswordAuth", translate("a_srv_d_pwauth"), translate("a_srv_d_pwauth1"))
 pwauth.enabled = 'on'
 pwauth.disabled = 'off'
 

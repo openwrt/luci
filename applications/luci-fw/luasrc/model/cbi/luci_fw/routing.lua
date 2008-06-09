@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("luci_fw", translate("fw_routing", "Routing"), translate("fw_routing1"))
+m = Map("luci_fw", translate("fw_routing"), translate("fw_routing1"))
 
 s = m:section(TypedSection, "routing", "")
 s.template  = "cbi/tblsection"

@@ -18,15 +18,15 @@ s.addremove = true
 s:depends("proto", "pppoe")
 s:depends("proto", "pptp")
 
-p = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
+p = s:option(ListValue, "proto", translate("protocol"))
 p:value("pppoe", "PPPoE")
 p:value("pptp", "PPTP")
 p.default = "pppoe"
 
-s:option(Value, "ifname", translate("interface", "Schnittstelle"))
+s:option(Value, "ifname", translate("interface"))
 
-s:option(Value, "username", translate("username", "Benutzername"))
-s:option(Value, "password", translate("password", "Passwort"))
+s:option(Value, "username", translate("username"))
+s:option(Value, "password", translate("password"))
 
 s:option(Value, "keepalive").optional = true
 

@@ -1,19 +1,19 @@
 <%+header%>
-<h1><%:iwscan WLAN-Scan%></h1>
-<p><%:iwscan1 Drahtlosnetzwerke in der lokalen Umgebung des Routers:%></p>
+<h1><%:iwscan%></h1>
+<p><%:iwscan1%></p>
 
 <br />
 <table cellspacing="0" cellpadding="6" class="smalltext">
 <tr>
-<th><%:interface Schnittstelle%></th>
+<th><%:interface%></th>
 <th>ESSID</th>
 <th>BSSID</th>
-<th><%:mode Modus%></th>
-<th><%:channel Kanal%></th>
-<th><%:iwscan_encr Vers.%></th>
-<th><%:iwscan_link Verb.%></th>
-<th><%:iwscan_signal Signal%></th>
-<th><%:iwscan_noise Rausch%></th>
+<th><%:mode%></th>
+<th><%:channel%></th>
+<th><%:iwscan_encr%></th>
+<th><%:iwscan_link%></th>
+<th><%:iwscan_signal%></th>
+<th><%:iwscan_noise%></th>
 </tr>
 <%for iface, cells in pairs(luci.sys.wifi.iwscan()) do
 	for i, cell in ipairs(cells) do 

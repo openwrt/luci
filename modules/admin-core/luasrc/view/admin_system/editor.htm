@@ -1,14 +1,14 @@
 <%+header%>
-<h1><%:texteditor Texteditor%></h1>
+<h1><%:texteditor%></h1>
 <form method="post" action="<%=controller%>/admin/system/editor">
-<div><%:file Datei%>: <input type="text" name="file" size="30" value="<%=fn%>" />
-<% if msg then %><span class="error"><%:error Fehler%>: <%=msg%></span><% end %></div>
+<div><%:file%>: <input type="text" name="file" size="30" value="<%=fn%>" />
+<% if msg then %><span class="error"><%:error%>: <%=msg%></span><% end %></div>
 <br />
 <div><textarea style="width: 100%" rows="20" name="data"><%=cnt%></textarea></div>
 <br />
 <div>
-	<input type="submit" value="<%:save Speichern%>" />
-	<input type="reset" value="<%:reset Zurücksetzen%>" />
+	<input type="submit" value="<%:save%>" />
+	<input type="reset" value="<%:reset%>" />
 </div>
 </form>
 <%+footer%>

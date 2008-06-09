@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("luci_fw", translate("fw_fw", "Firewall"), translate("fw_fw1"))
+m = Map("luci_fw", translate("fw_fw"), translate("fw_fw1"))
 
 s = m:section(TypedSection, "rule", "")
 s.addremove = true
@@ -38,7 +38,7 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-proto = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
+proto = s:option(ListValue, "proto", translate("protocol"))
 proto.optional = true
 proto:value("")
 proto:value("tcp", "TCP")

@@ -83,6 +83,7 @@ function compile(template)
 	-- Replacements
 	local r_include = "')\ninclude('%s')\nwrite('"
 	local r_i18n    = "'..translate('%1','%2')..'"
+	local r_i18n2    = "'..translate('%1', '')..'"
 	local r_pexec   = "'..(%s or '')..'"
 	local r_exec    = "')\n%s\nwrite('"
 	
@@ -93,7 +94,11 @@ function compile(template)
 		if p == "+" then
 			re = r_include:format(sanitize(string.sub(v, 2)))
 		elseif p == ":" then
-			re = sanitize(v):gsub(":(.-) (.+)", r_i18n)
+			if v:find(" ") then
+				re = sanitize(v):gsub(":(.-) (.*)", r_i18n)
+			else
+				re = sanitize(v):gsub(":(.+)", r_i18n2)
+			end
 		elseif p == "=" then
 			re = r_pexec:format(v:sub(2))
 		else

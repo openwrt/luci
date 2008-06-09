@@ -18,7 +18,7 @@ s.addremove = true
 s.anonymous = true
 s.template  = "cbi/tblsection"
 
-iface = s:option(ListValue, "interface", translate("interface", "Schnittstelle"))
+iface = s:option(ListValue, "interface", translate("interface"))
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
@@ -26,10 +26,10 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-s:option(Value, "target", translate("target", "Ziel"), translate("a_n_r_target1"))
+s:option(Value, "target", translate("target"), translate("a_n_r_target1"))
 
-s:option(Value, "netmask", translate("netmask", "Netzmaske"), translate("a_n_r_netmask1")).rmemepty = true
+s:option(Value, "netmask", translate("netmask"), translate("a_n_r_netmask1")).rmemepty = true
 
-s:option(Value, "gateway", translate("gateway", "Gateway"))
+s:option(Value, "gateway", translate("gateway"))
 
 return m

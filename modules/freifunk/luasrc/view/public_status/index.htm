@@ -1,38 +1,38 @@
 <%+header%>
-<h1><%:status Status%></h1>
-<h2><%:system System%></h2>
+<h1><%:status%></h1>
+<h2><%:system%></h2>
 
 <br />
 <table cellspacing="0" cellpadding="6" class="smalltext">
 <tr>
-<th><%:system_type Systemtyp%>:</th>
+<th><%:system_type%>:</th>
 <td><%=s%></td>
 </tr>
 <tr>
-<th><%:cpu Prozessor%>:</th>
+<th><%:cpu%>:</th>
 <td><%=m%></td>
 </tr>
 <tr>
-<th><%:ram Hauptspeicher%>:</th>
+<th><%:ram%>:</th>
 <td><%=r%></td>
 </tr>
 </table>
 <br /><br />
 
-<h2><%:wifi Drahtlos%></h2>
+<h2><%:wifi%></h2>
 <br />
 <table cellspacing="0" cellpadding="6" class="smalltext">
 <tr>
-<th><%:name Name%></th>
-<th><%:protocol Protokoll%></th>
-<th><%:frequency Frequenz%></th>
-<th><%:power Leistung%></th>
-<th><%:bitrate Bitrate%></th>
-<th><%:rts RTS%></th>
-<th><%:frag Frag.%></th>
-<th><%:link Verb.%></th>
-<th><%:signal Signal%></th>
-<th><%:noise Rausch%></th>
+<th><%:name%></th>
+<th><%:protocol%></th>
+<th><%:frequency%></th>
+<th><%:power%></th>
+<th><%:bitrate%></th>
+<th><%:rts%></th>
+<th><%:frag%></th>
+<th><%:link%></th>
+<th><%:signal%></th>
+<th><%:noise%></th>
 </tr>
 <%for k, v in pairs(luci.sys.wifi.getiwconfig()) do
 %>
@@ -56,13 +56,13 @@
 </table>
 <br />
 <br />
-<h2><%:defroutes Standardrouten%></h2>
+<h2><%:defroutes%></h2>
 <br />
 <table cellspacing="0" cellpadding="6" class="smalltext">
 <tr>
-<th><%:gateway Gateway%></th>
-<th><%:metric Metrik%></th>
-<th><%:iface Schnittstelle%></th>
+<th><%:gateway%></th>
+<th><%:metric%></th>
+<th><%:iface%></th>
 </tr>
 <%
 for i, rt in pairs(routes) do

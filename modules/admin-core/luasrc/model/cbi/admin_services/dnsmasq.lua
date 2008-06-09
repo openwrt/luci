@@ -13,7 +13,7 @@ $Id$
 ]]--
 m = Map("dhcp", "Dnsmasq")
 
-s = m:section(TypedSection, "dnsmasq", translate("settings", "Einstellungen"))
+s = m:section(TypedSection, "dnsmasq", translate("settings"))
 s.anonymous = true
 
 s:option(Flag, "domainneeded")

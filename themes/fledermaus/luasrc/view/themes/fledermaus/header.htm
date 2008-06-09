@@ -34,8 +34,8 @@ require("luci.http").prepare_content("text/html")
 	<div class="whitetext smalltext right">
 	<%=luci.config.brand.firmware%><br />
 	<%=luci.config.brand.distro%><br />
-	<%:load Last%>: <%=load1%> <%=load5%> <%=load15%><br />
-	<%:hostname Hostname%>: <%=luci.sys.hostname()%> 
+	<%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
+	<%:hostname%>: <%=luci.sys.hostname()%> 
 	</div>
 	<div>
 		<span class="headertitle"><%=luci.config.brand.title%></span><br />
@@ -44,7 +44,7 @@ require("luci.http").prepare_content("text/html")
 </div>
 
 <div class="separator yellow bold">
-<%:path Pfad%>: <% 
+<%:path%>: <% 
 local c = tree
 local url = controller
 for k,v in pairs(request) do
@@ -108,7 +108,7 @@ end
 %>		
 	</div>
 	<div class="sidebar right">
-		<div><%:webui Weboberfläche%>
+		<div><%:webui%>
 			<ul><%
 				for k,node in pairs(tree.nodes) do
 					if node.title then %>
@@ -128,14 +128,14 @@ end
 					end
 				end
 		%>
-		<div><%:config Konfiguration%>
+		<div><%:config%>
 			<ul>
 			<% if ucic > 0 then %>
-				<li><a href="<%=controller%>/admin/uci/changes"><%:changes Änderungen%>: <%=ucic%></a></li>
-				<li><a href="<%=controller%>/admin/uci/apply"><%:apply Anwenden%></a></li>
-				<li><a href="<%=controller%>/admin/uci/revert"><%:revert Verwerfen%></a></li>
+				<li><a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a></li>
+				<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
+				<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
 			<% else %>
-				<li><%:changes Änderungen%>: 0</li>
+				<li><%:changes%>: 0</li>
 			<% end %>
 			</ul>
 		</div>

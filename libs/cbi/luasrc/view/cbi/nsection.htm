@@ -4,7 +4,7 @@ section = self.section %>
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
 					<% if self.addremove then %><div class="cbi-section-remove right">
-						<input type="submit" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:cbi_del Eintrag entfernen%>" />
+						<input type="submit" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:cbi_del%>" />
 					</div><% end %>
 <div class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
 <%+cbi/ucisection%>
@@ -15,6 +15,6 @@ section = self.section %>
 				<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
-					<input type="submit" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:cbi_add Eintrag anlegen%>" />
+					<input type="submit" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:cbi_add%>" />
 				</div>
 <% end %>

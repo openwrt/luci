@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("network", translate("a_n_switch", "Switch"), translate("a_n_switch1"))
+m = Map("network", translate("a_n_switch"), translate("a_n_switch1"))
 
 s = m:section(TypedSection, "switch", "")
 

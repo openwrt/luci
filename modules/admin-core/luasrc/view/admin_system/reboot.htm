@@ -1,11 +1,11 @@
 <%+header%>
-<h1><%:system System%></h1>
-<h2><%:reboot Neu starten%></h2>
-<p><%:a_s_reboot1 Startet das Betriebssystem des Routers neu.%></p>
+<h1><%:system%></h1>
+<h2><%:reboot%></h2>
+<p><%:a_s_reboot1%></p>
 <% if not reboot then %>
-<p><a href="<%=controller%>/admin/system/reboot?reboot=1"><%:a_s_reboot_do Neustart durchführen%></a></p>
+<p><a href="<%=controller%>/admin/system/reboot?reboot=1"><%:a_s_reboot_do%></a></p>
 <% else %>
-<p><%:a_s_reboot_running Bitte warten: Neustart wird durchgeführt...%></p>
+<p><%:a_s_reboot_running%></p>
 <script type="text/javascript">setTimeout("location='<%=controller%>/admin'", 60000)</script>
 <% end %>
 <%+footer%>

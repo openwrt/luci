@@ -20,7 +20,7 @@ s = m:section(TypedSection, "dhcp", "")
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "interface", translate("interface", "Schnittstelle"))
+iface = s:option(ListValue, "interface", translate("interface"))
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
@@ -29,19 +29,19 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-s:option(Value, "start", translate("start", "Start")).rmempty = true
+s:option(Value, "start", translate("start")).rmempty = true
 
-s:option(Value, "limit", translate("limit", "Limit")).rmempty = true
+s:option(Value, "limit", translate("limit")).rmempty = true
 
 s:option(Value, "leasetime").rmempty = true
 
 s:option(Flag, "dynamicdhcp").rmempty = true
 
-s:option(Value, "name", translate("name", "Name")).optional = true
+s:option(Value, "name", translate("name")).optional = true
 
 s:option(Flag, "ignore").optional = true
 
-s:option(Value, "netmask", translate("netmask", "Netzmaske")).optional = true
+s:option(Value, "netmask", translate("netmask")).optional = true
 
 s:option(Flag, "force").optional = true
 

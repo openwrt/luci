@@ -1,11 +1,10 @@
 <%+header%>
-<h1><%:system System%></h1>
-<h2><%:a_s_sshkeys SSH-Schlüssel%></h2>
+<h1><%:system%></h1>
+<h2><%:a_s_sshkeys%></h2>
 
 <br />
 
-<div><%:a_s_sshkeys1 Hier können öffentliche SSH-Schlüssel (einer pro Zeile)
- zur Authentifizierung abgelegt werden.%></div>
+<div><%:a_s_sshkeys1%></div>
 
 <br />
 
@@ -18,9 +17,9 @@
 		</div>
 	</div>
 	<div>
-		<input type="submit" value="<%:save Speichern%>" />
-		<input type="reset" value="<%:reset Zurücksetzen%>" />
+		<input type="submit" value="<%:save%>" />
+		<input type="reset" value="<%:reset%>" />
 	</div>
-	<% if msg then %><br /><div class="error"><%:error Fehler%>: <%=msg%></div><% end %>
+	<% if msg then %><br /><div class="error"><%:error%>: <%=msg%></div><% end %>
 </form>
 <%+footer%>

@@ -33,16 +33,16 @@ noint.disabled = "no"
 s:option(Value, "Pollrate")
 
 tcr = s:option(ListValue, "TcRedundancy")
-tcr:value("0", translate("olsr_general_tcredundancy_0", "MPR-Selektoren"))
-tcr:value("1", translate("olsr_general_tcredundancy_1", "MPR-Selektoren und MPR"))
-tcr:value("2", translate("olsr_general_tcredundancy_2", "Alle Nachbarn"))
+tcr:value("0", translate("olsr_general_tcredundancy_0"))
+tcr:value("1", translate("olsr_general_tcredundancy_1"))
+tcr:value("2", translate("olsr_general_tcredundancy_2"))
 
 s:option(Value, "MprCoverage")
 
 lql = s:option(ListValue, "LinkQualityLevel")
-lql:value("0", translate("disable", "deaktivieren"))
-lql:value("1", translate("olsr_general_linkqualitylevel_1", "MPR-Auswahl"))
-lql:value("2", translate("olsr_general_linkqualitylevel_2", "MPR-Auswahl und Routing"))
+lql:value("0", translate("disable"))
+lql:value("1", translate("olsr_general_linkqualitylevel_1"))
+lql:value("2", translate("olsr_general_linkqualitylevel_2"))
 
 lqfish = s:option(Flag, "LinkQualityFishEye")
 
@@ -55,12 +55,12 @@ hyst.enabled = "yes"
 hyst.disabled = "no"
 
 
-i = m:section(TypedSection, "Interface", translate("interfaces", "Schnittstellen"))
+i = m:section(TypedSection, "Interface", translate("interfaces"))
 i.anonymous = true
 i.addremove = true
 i.dynamic = true
 
-network = i:option(ListValue, "Interface", translate("network", "Netzwerk"))
+network = i:option(ListValue, "Interface", translate("network"))
 network:value("")
 luci.model.uci.foreach("network", "interface",
 	function (section)
@@ -83,7 +83,7 @@ p = m:section(TypedSection, "LoadPlugin")
 p.addremove = true
 p.dynamic = true
 
-lib = p:option(ListValue, "Library", translate("library", "Bibliothek"))
+lib = p:option(ListValue, "Library", translate("library"))
 lib:value("")
 for k, v in pairs(luci.fs.dir("/usr/lib")) do
 	if v:sub(1, 6) == "olsrd_" then

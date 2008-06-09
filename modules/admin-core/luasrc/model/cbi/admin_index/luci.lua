@@ -12,34 +12,31 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.config")
-m = Map("luci", translate("webui", "Oberfläche"), translate("a_i_luci1", 
+m = Map("luci", translate("webui"), translate("a_i_luci1", 
  "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden."))
 
-c = m:section(NamedSection, "main", "core", translate("general", "Allgemein"))
+c = m:section(NamedSection, "main", "core", translate("general"))
 
-l = c:option(ListValue, "lang", translate("language", "Sprache"))
+l = c:option(ListValue, "lang", translate("language"))
 for k, v in pairs(luci.config.languages) do
 	if k:sub(1, 1) ~= "." then
 		l:value(k, v)
 	end
 end
 
-t = c:option(ListValue, "mediaurlbase", translate("design", "Design"))
+t = c:option(ListValue, "mediaurlbase", translate("design"))
 for k, v in pairs(luci.config.themes) do
 	if k:sub(1, 1) ~= "." then
 		t:value(v, k)
 	end
 end
 
-u = m:section(NamedSection, "uci_oncommit", "event", translate("a_i_ucicommit", "UCI-Befehle beim Anwenden"),
- translate("a_i_ucicommit1", [[Beim Anwenden
-der Konfiguration aus der Oberflächliche heraus können automatisch die relevanten Dienste neugestart werden,
-sodass Änderungen sofort nach dem Anwenden aktiv werden und der Router nicht erst neugestartet werden muss.]]))
+u = m:section(NamedSection, "uci_oncommit", "event", translate("a_i_ucicommit"),
+ translate("a_i_ucicommit1"))
 u.dynamic = true
 
-f = m:section(NamedSection, "flash_keep", "extern", translate("a_i_keepflash", "Zu übernehmende Dateien bei Firmwareupgrade"),
- translate("a_i_keepflash1", [[Die folgenden Dateien und Verzeichnisse werden beim Aktualisieren der Firmware
-über die Oberfläche automatisch in die neue Firmware übernommen.]]))
+f = m:section(NamedSection, "flash_keep", "extern", translate("a_i_keepflash"),
+ translate("a_i_keepflash1"))
 f.dynamic = true
 
 return m

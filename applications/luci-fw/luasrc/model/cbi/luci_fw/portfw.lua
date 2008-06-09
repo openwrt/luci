@@ -12,14 +12,14 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
-m = Map("luci_fw", translate("fw_portfw", "Portweiterleitung"), translate("fw_portfw1"))
+m = Map("luci_fw", translate("fw_portfw"), translate("fw_portfw1"))
 
 s = m:section(TypedSection, "portfw", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "iface", translate("interface", "Schnittstelle"))
+iface = s:option(ListValue, "iface", translate("interface"))
 iface.default = "wan"
 luci.model.uci.foreach("network", "interface",
 	function (section)
@@ -28,7 +28,7 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-proto = s:option(ListValue, "proto", translate("protocol", "Protokoll"))
+proto = s:option(ListValue, "proto", translate("protocol"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP + UDP")

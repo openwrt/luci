@@ -1,13 +1,13 @@
 <%+header%>
 <% local contact = luci.model.uci.get_all("freifunk", "contact") %>
-<h1><%:contact Kontakt%></h1>
+<h1><%:contact%></h1>
 <table cellspacing="0" cellpadding="6">
-	<tr><th><%:nickname Pseudonym%>:</th><td><%=contact.nickname%></td></tr>
-	<tr><th><%:name Name%>:</th><td><%=contact.name%></td></tr>
-	<tr><th><%:mail E-Mail%>:</th><td><%=contact.mail%></td></tr>
-	<tr><th><%:phone Telefon%>:</th><td><%=contact.phone%></td></tr>
-	<tr><th><%:location Standort%>:</th><td><%=contact.location%></td></tr>
-	<tr><th><%:geocoord Geokoordinaten%>:</th><td><%=contact.geo%></td></tr>
-	<tr><th><%:note Notiz%>:</th><td><%=contact.note%></td></tr>
+	<tr><th><%:nickname%>:</th><td><%=contact.nickname%></td></tr>
+	<tr><th><%:name%>:</th><td><%=contact.name%></td></tr>
+	<tr><th><%:mail%>:</th><td><%=contact.mail%></td></tr>
+	<tr><th><%:phone%>:</th><td><%=contact.phone%></td></tr>
+	<tr><th><%:location%>:</th><td><%=contact.location%></td></tr>
+	<tr><th><%:geocoord%>:</th><td><%=contact.geo%></td></tr>
+	<tr><th><%:note%>:</th><td><%=contact.note%></td></tr>
 </table>
 <%+footer%>
