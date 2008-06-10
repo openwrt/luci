@@ -1,4 +1,5 @@
 include ../../build/config.mk
+include ../../build/gccconfig.mk
 
 LUAPOSIX_VERSION = 5.1.2
 LUAPOSIX_SITE = http://luaforge.net/frs/download.php/3063/
@@ -32,7 +33,7 @@ $(LUAPOSIX_DIR)/.patched: $(LUAPOSIX_DIR)/.prepared $(LUAPOSIX_PATCHDIR)/series
 	touch $@
 
 compile: $(LUAPOSIX_DIR)/.patched
-	$(MAKE) -C $(LUAPOSIX_DIR) CC=$(CC) CFLAGS="$(CFLAGS)" OS="$(OS)"
+	$(MAKE) -C $(LUAPOSIX_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(LUA_CFLAGS)" LDFLAGS="$(LDFLAGS) $(LUA_SHLIBS)" OS="$(OS)"
 	mkdir -p dist/usr/lib/lua
 	cp $(LUAPOSIX_DIR)/posix.so dist/usr/lib/lua/
 
