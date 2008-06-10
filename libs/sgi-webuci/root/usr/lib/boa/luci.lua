@@ -40,6 +40,7 @@ function init(path)
 		luci.sys.wifi.iwscan		= function() return {} end
 		
 		luci.sys.user.checkpasswd   = function() return true end
+		luci.http.basic_auth = function() return true end
 	end
 end
 
