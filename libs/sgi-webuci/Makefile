@@ -32,7 +32,7 @@ $(BOA_DIR)/.patched: $(BOA_DIR)/.prepared $(BOA_PATCHDIR)/series
 	touch $@
 
 $(BOA_DIR)/.configured: $(BOA_DIR)/.patched
-	(cd $(BOA_DIR); ./configure --disable-debug) 
+	(cd $(BOA_DIR); ./configure --disable-debug --disable-gunzip) 
 	touch $@
 
 boa-compile: $(BOA_DIR)/.configured
