@@ -1,0 +1,16 @@
+Index: boa-0.94.14rc21/src/util.c
+===================================================================
+--- boa-0.94.14rc21.orig/src/util.c	2007-08-08 20:05:06.000000000 -0400
++++ boa-0.94.14rc21/src/util.c	2007-08-08 20:05:14.000000000 -0400
+@@ -410,11 +410,6 @@
+             uri_old++;
+             if ((c = *uri_old++) && (d = *uri_old++)) {
+                 *uri = HEX_TO_DECIMAL(c, d);
+-                if (*uri < 32 || *uri > 126) {
+-                    /* control chars in URI */
+-                    *uri = '\0';
+-                    return 0;
+-                }
+             } else {
+                 *uri = '\0';
+                 return 0;
