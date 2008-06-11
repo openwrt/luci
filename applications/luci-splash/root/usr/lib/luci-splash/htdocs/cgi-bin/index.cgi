@@ -1,6 +1,5 @@
-#!/usr/bin/haserl --shell=luac
+#!/usr/bin/lua
 
-require("luci.http")
 require("luci.sys")
 require("luci.model.uci")
 
@@ -8,7 +7,7 @@ luci.model.uci.set_savedir(luci.model.uci.savedir_state)
 
 local srv
 local net
-local ip = luci.http.env.REMOTE_ADDR
+local ip = os.getenv("REMOTE_ADDR")
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section.ipaddr then
@@ -30,10 +29,11 @@ luci.model.uci.foreach("luci_splash", "iface",
 	end)
 
 if not srv then
-	luci.http.prepare_content("text/plain")
+	print("Content-Type: text/plain\n")
 	print("Unable to detect network settings!")
 elseif not stat then
-	luci.http.redirect("http://" .. srv)
+	print("Status: 302 Found")
+	print("Location: http://" .. srv)
 else
 	local action = "splash"
 	
@@ -48,5 +48,6 @@ else
 		action = "allowed"
 	end
 	
-	luci.http.redirect("http://" .. srv .. "/cgi-bin/luci-splash/" .. action)
+	print("Status: 302 Found")
+	print("Location: http://" .. srv .. "/cgi-bin/luci-splash/" .. action)
 end
