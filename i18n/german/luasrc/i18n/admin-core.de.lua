@@ -69,8 +69,6 @@ a_s_fstab_swap1 = [[Falls der Arbeitsspeicher des Routers nicht ausreicht,
 kann dieser nicht benutzte Daten zeitweise auf einem SWAP-Laufwerk auslagern um so die
 effektive Größe des Arbeitsspeichers zu erhöhen. Die Auslagerung der Daten ist natürlich bedeutend langsamer
 als direkte Arbeitsspeicherzugriffe.]]
-a_s_hostname1 = [[Definiert den Hostnamen des Routers.
-Der Hostname ist eine im Netzwerk eindeutige Kennung, die dieses Gerät identifiziert.]]
 a_s_i_system1 = [[Hier finden sich Einstellungen, die das System selbst, dessen Kennung,
 installierte Software und Hardware, Authentifizierung oder eingehängte Speicher betreffen.]]
 a_s_i_system2 = [[Diese Einstellungen definieren die Grundlage des Systems, auf dem die

@@ -82,6 +82,7 @@ syslog = "Systemprotokoll"
 system = "System"
 
 target = "Ziel"
+timezone = "Zeitzone"
 type = "Typ"
 
 username = "Benutzername"

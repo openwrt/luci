@@ -82,6 +82,7 @@ syslog = "System Log"
 system = "System"
 
 target = "Target"
+timezone = "Timezone"
 type = "Type"
 
 username = "Username"

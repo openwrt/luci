@@ -76,8 +76,6 @@ a_s_changepw_nomatch = "Error: Passwords do not match"
 
 a_s_sshkeys1 = "Here you can paste public SSH-Keys (one per line) for SSH public-key authentication."
 
-a_s_hostname1 = "Defines the router's hostname. The hostname is a unique name in your local network used to identify the device" 
-
 a_s_fstab_mountpoints = "Mount Points"
 a_s_fstab_mountpoints1 = "Mount Points define at which point a memory device will be attached to the filesystem"
 

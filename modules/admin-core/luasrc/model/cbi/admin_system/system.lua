@@ -11,11 +11,12 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("system", translate("hostname"), translate("a_s_hostname1"))
+m = Map("system", translate("system"))
 
 s = m:section(TypedSection, "system", "")
 s.anonymous = true
 
 s:option(Value, "hostname", translate("hostname"))
+s:option(Value, "timezone", translate("timezone"))
 
 return m
