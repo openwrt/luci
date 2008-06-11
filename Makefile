@@ -35,6 +35,7 @@ hostcopy:
 	ln -s .$(LUCI_INSTALLDIR) host/luci
 
 run: host
+	libs/sgi-webuci/host/buildconfig.sh `pwd`/host  > host/etc/boa/boa.conf
 	./host/usr/bin/boa -c ./host/etc/boa -d
 
 hostclean: clean
