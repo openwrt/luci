@@ -2,7 +2,7 @@ include ../../build/config.mk
 include ../../build/gccconfig.mk
 include ../../build/module.mk
 
-BOA_VERSION = 0.94.14rc21
+BOA_VERSION = 0.94.13
 BOA_SITE = http://www.boa.org
 BOA_DIR = boa-$(BOA_VERSION)
 BOA_FILE = $(BOA_DIR).tar.gz
@@ -32,7 +32,7 @@ $(BOA_DIR)/.patched: $(BOA_DIR)/.prepared $(BOA_PATCHDIR)/series
 	touch $@
 
 $(BOA_DIR)/.configured: $(BOA_DIR)/.patched
-	(cd $(BOA_DIR); ./configure --disable-debug --disable-gunzip $(CFOPTS)) 
+	(cd $(BOA_DIR)/src; ./configure --disable-debug) 
 	touch $@
 
 boa-compile: $(BOA_DIR)/.configured
