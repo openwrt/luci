@@ -27,7 +27,7 @@ local uci  = require("uci")
 local util = require("luci.util")
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
-local table, print = table, print
+local table = table
 
 module("luci.model.uci", function(m) setmetatable(m, {__index = uci}) end)
 

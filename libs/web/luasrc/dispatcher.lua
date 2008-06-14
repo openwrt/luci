@@ -34,21 +34,10 @@ if (os.time() < 1000000000) then
 	os.execute('date -s '..os.date('%m%d%H%M%Y', luci.fs.mtime(luci.sys.libpath() .. "/dispatcher.lua"))..' > /dev/null 2>&1')
 end
 
--- Local dispatch database
-local tree = {nodes={}}
+context = luci.util.threadlocal()
 
 -- Index table
-local index = {}
-
--- Global request object
-request = {}
-
--- Active dispatched node
-dispatched = nil
-
--- Status fields
-built_index = false
-built_tree  = false
+local index = nil
 
 -- Fastindex
 local fi
@@ -64,9 +53,9 @@ function error401(message)
 	message = message or "Unauthorized"
 
 	require("luci.template")
-	if not pcall(luci.template.render, "error401") then
+	if not luci.util.copcall(luci.template.render, "error401") then
 		luci.http.prepare_content("text/plain")
-		print(message)
+		luci.http.write(message)
 	end
 	return false
 end
@@ -77,9 +66,9 @@ function error404(message)
 	message = message or "Not Found"
 
 	require("luci.template")
-	if not pcall(luci.template.render, "error404") then
+	if not luci.util.copcall(luci.template.render, "error404") then
 		luci.http.prepare_content("text/plain")
-		print(message)
+		luci.http.write(message)
 	end
 	return false
 end
@@ -89,31 +78,39 @@ function error500(message)
 	luci.http.status(500, "Internal Server Error")
 
 	require("luci.template")
-	if not pcall(luci.template.render, "error500", {message=message}) then
+	if not luci.util.copcall(luci.template.render, "error500", {message=message}) then
 		luci.http.prepare_content("text/plain")
-		print(message)
+		luci.http.write(message)
 	end
 	return false
 end
 
 -- Creates a request object for dispatching
-function httpdispatch()
-	local pathinfo = luci.http.env.PATH_INFO or ""
+function httpdispatch(request)
+	luci.http.context.request = request
+	context.request = {}
+	local pathinfo = request.env.PATH_INFO or ""
 
 	for node in pathinfo:gmatch("[^/]+") do
-		table.insert(request, node)
+		table.insert(context.request, node)
 	end
 
-	dispatch()
+	dispatch(context.request)
+	luci.http.close()
 end
 
 -- Dispatches a request
-function dispatch()
-	if not built_tree then
+function dispatch(request)
+	context.path = request
+	
+	require("luci.i18n")
+	luci.i18n.setlanguage(require("luci.config").main.lang)
+	
+	if not context.tree then
 		createtree()
 	end
-
-	local c = tree
+	
+	local c = context.tree
 	local track = {}
 
 	for i, s in ipairs(request) do
@@ -131,6 +128,7 @@ function dispatch()
 		local accs = track.sysauth
 		accs = (type(accs) == "string") and {accs} or accs
 		
+		--[[
 		local function sysauth(user, password)
 			return (luci.util.contains(accs, user)
 				and luci.sys.user.checkpasswd(user, password)) 
@@ -140,6 +138,7 @@ function dispatch()
 			error401()
 			return
 		end
+		]]--
 	end
 
 	if track.i18n then
@@ -156,22 +155,24 @@ function dispatch()
 	
 	-- Init template engine
 	local tpl = require("luci.template")
-	tpl.viewns.translate   = function(...) return require("luci.i18n").translate(...) end
-	tpl.viewns.controller  = luci.http.dispatcher()
-	tpl.viewns.uploadctrl  = luci.http.dispatcher_upload() -- DEPRECATED
-	tpl.viewns.media       = luci.config.main.mediaurlbase
-	tpl.viewns.resource    = luci.config.main.resourcebase
-	tpl.viewns.REQUEST_URI = luci.http.env.SCRIPT_NAME .. (luci.http.env.PATH_INFO or "")
+	local viewns = {}
+	tpl.context.viewns = viewns
+	viewns.write       = luci.http.write
+	viewns.translate   = function(...) return require("luci.i18n").translate(...) end
+	viewns.controller  = luci.http.getenv("SCRIPT_NAME")
+	viewns.media       = luci.config.main.mediaurlbase
+	viewns.resource    = luci.config.main.resourcebase
+	viewns.REQUEST_URI = luci.http.getenv("SCRIPT_NAME") .. (luci.http.getenv("PATH_INFO") or "")
 	
 
 	if c and type(c.target) == "function" then
-		dispatched = c
-		stat, mod = pcall(require, c.module)
+		context.dispatched = c
+		stat, mod = luci.util.copcall(require, c.module)
 		if stat then
 			luci.util.updfenv(c.target, mod)
 		end
 		
-		stat, err = pcall(c.target)
+		stat, err = luci.util.copcall(c.target)
 		if not stat then
 			error500(err)
 		end
@@ -182,21 +183,20 @@ end
 
 -- Generates the dispatching tree
 function createindex()
-	index = {}
 	local path = luci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
 	
-	if pcall(require, "luci.fastindex") then
+	if luci.util.copcall(require, "luci.fastindex") then
 		createindex_fastindex(path, suff)
 	else
 		createindex_plain(path, suff)
 	end
-	
-	built_index = true
 end
 
 -- Uses fastindex to create the dispatching tree
-function createindex_fastindex(path, suffix)	
+function createindex_fastindex(path, suffix)
+	index = {}
+		
 	if not fi then
 		fi = luci.fastindex.new("index")
 		fi.add(path .. "*" .. suffix)
@@ -212,9 +212,7 @@ end
 -- Calls the index function of all available controllers
 -- Fallback for transition purposes / Leave it in as long as it works otherwise throw it away
 function createindex_plain(path, suffix)
-	if built_index then
-		return
-	end
+	index = {}
 
 	local cache = nil 
 	
@@ -246,7 +244,7 @@ function createindex_plain(path, suffix)
 		end
 		
 		if not cache or stime > ctime then 
-			stat, mod = pcall(require, module)
+			stat, mod = luci.util.copcall(require, module)
 	
 			if stat and mod and type(mod.index) == "function" then
 				index[module] = mod.index
@@ -263,10 +261,11 @@ end
 
 -- Creates the dispatching tree from the index
 function createtree()
-	if not built_index then
+	if not index then
 		createindex()
 	end
 	
+	context.tree = {nodes={}}
 	require("luci.i18n")
 		
 	-- Load default translation
@@ -283,14 +282,12 @@ function createtree()
 		scope._NAME = k
 		setfenv(v, scope)
 		
-		local stat, err = pcall(v)
+		local stat, err = luci.util.copcall(v)
 		if not stat then
 			error500(err)	
 			os.exit(1)
 		end
 	end
-	
-	built_tree = true
 end
 
 -- Reassigns a node to another position
@@ -302,7 +299,7 @@ function assign(path, clone, title, order)
 	obj.title = title
 	obj.order = order
 	
-	local c = tree
+	local c = context.tree
 	for k, v in ipairs(clone) do
 		if not c.nodes[v] then
 			c.nodes[v] = {nodes={}}
@@ -330,8 +327,7 @@ end
 
 -- Fetch a dispatching node
 function node(...)
-	local c = tree
-
+	local c = context.tree
 	arg.n = nil
 	if arg[1] then
 		if type(arg[1]) == "table" then
@@ -357,8 +353,7 @@ end
 function alias(...)
 	local req = arg
 	return function()
-		request = req
-		dispatch()
+		dispatch(req)
 	end
 end
 
@@ -366,19 +361,20 @@ function rewrite(n, ...)
 	local req = arg
 	return function()
 		for i=1,n do 
-			table.remove(request, 1)
+			table.remove(context.path, 1)
 		end
 		
 		for i,r in ipairs(req) do
-			table.insert(request, i, r)
+			table.insert(context.path, i, r)
 		end
 		
 		dispatch()
 	end
 end
 
-function call(name)
-	return function() getfenv()[name]() end
+function call(name, ...)
+	local argv = {...}
+	return function() return getfenv()[name](unpack(argv)) end
 end
 
 function template(name)
@@ -391,13 +387,13 @@ function cbi(model)
 	require("luci.template")
 
 	return function()
-		local stat, res = pcall(luci.cbi.load, model)
+		local stat, res = luci.util.copcall(luci.cbi.load, model)
 		if not stat then
 			error500(res)
 			return true
 		end
 
-		local stat, err = pcall(res.parse, res)
+		local stat, err = luci.util.copcall(res.parse, res)
 		if not stat then
 			error500(err)
 			return true

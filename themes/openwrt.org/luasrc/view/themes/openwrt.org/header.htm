@@ -1,11 +1,11 @@
 <%
 require("luci.sys")
 local load1, load5, load15 = luci.sys.loadavg()
-local request  = require("luci.dispatcher").request
+local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
-local node     = luci.dispatcher.dispatched 
+local node     = luci.dispatcher.context.dispatched 
 
 local c = tree
 for i,r in ipairs(request) do

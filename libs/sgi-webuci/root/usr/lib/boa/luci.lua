@@ -60,6 +60,5 @@ function handle_req(context)
 	env.SERVER_ADDR     = context.server_addr
 	env.SCRIPT_NAME     = env.REQUEST_URI:sub(1, #env.REQUEST_URI - #env.PATH_INFO)
 
-	luci.sgi.webuci.initenv(env, vars)
-	luci.dispatcher.httpdispatch()
+	luci.sgi.webuci.run(env, vars)
 end

@@ -36,7 +36,7 @@ function class(base)
 		setmetatable(inst, {__index = class})
 		
 		if inst.__init__ then
-			local stat, err = pcall(inst.__init__, inst, ...)
+			local stat, err = copcall(inst.__init__, inst, ...)
 			if not stat then
 				error(err)
 			end
@@ -152,6 +152,12 @@ function pcdata(value)
 end
 
 
+-- Returns an error message to stdout
+function perror(obj)
+	io.stderr:write(tostring(obj) .. "\n")
+end
+
+
 -- Resets the scope of f doing a shallow copy of its scope into a new table
 function resfenv(f)
 	setfenv(f, clone(getfenv(f)))
@@ -255,6 +261,34 @@ function strip_bytecode(dump)
 end
 
 
+-- Creates a new threadlocal store
+function threadlocal()
+	local tbl = {}
+	
+	local function get(self, key)
+		local c = coroutine.running()
+		local thread = coxpt[c] or c or 0
+		if not rawget(self, thread) then
+			rawset(self, thread, {})
+		end
+		return rawget(self, thread)[key]
+	end
+		
+	local function set(self, key, value)
+		local c = coroutine.running()
+		local thread = coxpt[c] or c or 0
+		if not rawget(self, thread) then
+			rawset(self, thread, {})
+		end
+		rawget(self, thread)[key] = value
+	end
+	
+	setmetatable(tbl, {__index = get, __newindex = set})
+	
+	return tbl
+end
+
+
 -- Removes whitespace from beginning and end of a string
 function trim(str)
 	local s = str:gsub("^%s*(.-)%s*$", "%1")
@@ -354,4 +388,47 @@ end
 -- Return key, value pairs sorted by values
 function vspairs(t)
 	return _sortiter( t, function (a,b) return t[a] < t[b] end )
+end
+
+
+-- Coroutine safe xpcall and pcall versions modified for Luci
+-- original version:
+-- coxpcall 1.13 - Copyright 2005 - Kepler Project (www.keplerproject.org)
+local performResume, handleReturnValue
+local oldpcall, oldxpcall = pcall, xpcall
+coxpt = {}
+
+function handleReturnValue(err, co, status, ...)
+    if not status then
+        return false, err(debug.traceback(co, (...)), ...)
+    end
+    if coroutine.status(co) == 'suspended' then
+        return performResume(err, co, coroutine.yield(...))
+    else
+        return true, ...
+    end
+end
+
+function performResume(err, co, ...)
+    return handleReturnValue(err, co, coroutine.resume(co, ...))
+end    
+
+function coxpcall(f, err, ...)
+    local res, co = oldpcall(coroutine.create, f)
+    if not res then
+        local params = {...}
+        local newf = function() return f(unpack(params)) end
+        co = coroutine.create(newf)
+    end
+    local c = coroutine.running()
+    coxpt[co] = coxpt[c] or c or 0
+    return performResume(err, co, ...)
+end
+
+local function id(trace, ...)
+  return ...
+end
+
+function copcall(f, ...)
+    return coxpcall(f, id, ...)
 end

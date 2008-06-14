@@ -28,12 +28,140 @@ limitations under the License.
 ]]--
 
 module("luci.http", package.seeall)
+require("luci.util")
+context = luci.util.threadlocal()
 
-if ENV and ENV.HASERLVER then
-	require("luci.sgi.haserl")
-elseif webuci then
-	require("luci.sgi.webuci")
+
+Request = luci.util.class()
+function Request.__init__(self)
+	self.headers = {}
+	self.request = {}
+	self.uploads = {}
+	self.env = {}
+	self.data = ""
 end
+
+function Request.formvalue(self, name, default)
+	return self.request[name] or default
+end
+
+function Request.formvalues(self)
+	return self.request
+end
+
+function Request.formvaluetable(self, prefix)
+	local vals = {}
+	prefix = prefix and prefix .. "." or "."
+	
+	for k, v in pairs(self.request) do
+		if k:find(prefix, 1, true) == 1 then
+			vals[k:sub(#prefix + 1)] = v
+		end
+	end
+	
+	return vals
+end
+
+function Request.getenv(self, name)
+	return self.env[name]
+end
+
+function Request.upload(self, name)
+	return self.uploads[name]
+end
+
+
+function close()
+	if not context.eoh then
+		context.eoh = true
+		coroutine.yield(3)
+	end
+	
+	if not context.closed then
+		context.closed = true
+		coroutine.yield(5)
+	end
+end
+
+function formvalue(...)
+	return context.request:formvalue(...)
+end
+
+function formvalues(...)
+	return context.request:formvalues(...)
+end
+
+function formvaluetable(...)
+	return context.request:formvaluetable(...)
+end
+
+function getenv(...)
+	return context.request:getenv(...)
+end
+
+function header(key, value)
+	if not context.status then
+		status()
+	end
+	if not context.headers then
+		context.headers = {}
+	end
+	context.headers[key:lower()] = value
+	coroutine.yield(2, key, value)
+end
+
+function prepare_content(mime)
+	header("Content-Type", mime)
+end
+
+function status(code, message)
+	code = code or 200
+	message = message or "OK"
+	context.status = code
+	coroutine.yield(1, code, message)
+end
+
+function write(content)
+	if not content or #content == 0 then
+		return
+	end
+	if not context.eoh then
+		if not context.status then
+			status()
+		end
+		if not context.headers or not context.headers["content-type"] then
+			header("Content-Type", "text/html; charset=utf-8")
+		end
+		
+		context.eoh = true
+		coroutine.yield(3)
+	end
+	coroutine.yield(4, content)
+end
+
+
+function basic_auth(realm, errorpage)
+	header("Status", "401 Unauthorized")
+	header("WWW-Authenticate", string.format('Basic realm="%s"', realm or ""))
+	
+	if errorpage then
+		errorpage()
+	end
+	
+	close()
+end
+
+function redirect(url)
+	header("Status", "302 Found")
+	header("Location", url)
+	close()
+end
+
+function upload(...)
+	return context.request:upload(...)
+end
+
+
 
 function build_querystring(table)
 	local s="?"

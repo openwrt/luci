@@ -44,9 +44,10 @@ compiler_mode = luci.config.template.compiler_mode or "memory"
 
 
 -- Define the namespace for template modules
+context = luci.util.threadlocal()
+
 viewns = {
-	write      = io.write,
-	include    = function(name) Template(name):render(getfenv(2)) end,	
+	include    = function(name) Template(name):render(getfenv(2)) end,
 }
 
 -- Compiles a given template into an executable Lua module
@@ -113,7 +114,7 @@ end
 -- Oldstyle render shortcut
 function render(name, scope, ...)
 	scope = scope or getfenv(2)
-	local s, t = pcall(Template, name)
+	local s, t = luci.util.copcall(Template, name)
 	if not s then
 		error(t)
 	else
@@ -141,9 +142,10 @@ function Template.__init__(self, name)
 	self.viewns = {}
 	
 	-- Copy over from general namespace
-	for k, v in pairs(viewns) do
-		self.viewns[k] = v
-	end	
+	luci.util.update(self.viewns, viewns)
+	if context.viewns then
+		luci.util.update(self.viewns, context.viewns)
+	end
 	
 	-- If we have a cached template, skip compiling and loading
 	if self.template then

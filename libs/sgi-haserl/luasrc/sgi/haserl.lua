@@ -24,80 +24,49 @@ limitations under the License.
 
 ]]--
 module("luci.sgi.haserl", package.seeall)
-require("luci.fs")
+require("luci.http")
+require("luci.util")
+require("luci.dispatcher")
 
--- Environment Table
-luci.http.env = ENV
-
--- Enforces user authentification
-function luci.http.basic_auth(verify_callback, realm)
-	-- Dummy for Haserl
-	return true
-end
-
--- Returns the main dispatcher URL
-function luci.http.dispatcher()
-	return luci.http.env.SCRIPT_NAME or ""
-end
-
--- Returns the upload dispatcher URL
-function luci.http.dispatcher_upload()
-	return luci.http.dispatcher() .. "-upload"
-end
-
--- Returns a table of all COOKIE, GET and POST Parameters
-function luci.http.formvalues()
-	return FORM
-end
-
--- Gets form value from key
-function luci.http.formvalue(key, default)
-	local c = luci.http.formvalues()
+function run()
+	local r = luci.http.Request()
+	r.env = ENV
+	r.request = normalize_table(FORM)
 	
-	for match in key:gmatch("[%w-_]+") do
-		c = c[match]
-		if c == nil then
-			return default
+	local x = coroutine.create(luci.dispatcher.httpdispatch)
+	while coroutine.status(x) ~= "dead" do
+		local res, id, data1, data2 = coroutine.resume(x, r)
+		
+		if not res then
+			print("Status: 500 Internal Server Error")
+			print("Content-Type: text/plain\n")
+			print(id)
+			break;
+		end
+		
+		if id == 1 then
+			io.write("Status: " .. tostring(data1) .. " " .. data2 .. "\n")
+		elseif id == 2 then
+			io.write(data1 .. ": " .. data2 .. "\n")
+		elseif id == 3 then
+			io.write("\n")
+		elseif id == 4 then
+			io.write(data1)
+		end
+	end
+end
+
+function normalize_table(table, prefix)
+	prefix = prefix and prefix .. "." or ""
+	local new = {}
+	
+	for k,v in pairs(table) do
+		if type(v) == "table" and #v == 0 then
+			luci.util.update(new, normalize_table(v, prefix .. k))
+		else
+			new[prefix .. k] = v
 		end
 	end
 	
-	return c
-end
-
--- Gets a table of values with a certain prefix
-function luci.http.formvaluetable(prefix)
-	return luci.http.formvalue(prefix, {})
-end
-
--- Sends a custom HTTP-Header
-function luci.http.header(key, value)
-	print(key .. ": " .. value)
-end
-
--- Set Content-Type
-function luci.http.prepare_content(type)
-	print("Content-Type: "..type.."\n")
-end
-
--- Asks the browser to redirect to "url"
-function luci.http.redirect(url)
-	luci.http.status(302, "Found")
-	luci.http.header("Location", url)
-	print()
-end
-
--- Returns the path of an uploaded file
--- WARNING! File uploads can be easily spoofed! Do additional sanity checks!
-function luci.http.upload(name)
-	local fpath = luci.http.formvalue(name)
-	local fname = luci.http.formvalue(name .. "_name")
-	
-	if fpath and fname and luci.fs.isfile(fpath) then
-		return fpath
-	end
-end
-
--- Sets HTTP-Status-Header
-function luci.http.status(code, message)
-	print("Status: " .. tostring(code) .. " " .. message)
+	return new
 end

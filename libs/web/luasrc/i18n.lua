@@ -30,6 +30,8 @@ require("luci.sys")
 table   = {}
 i18ndir = luci.sys.libpath() .. "/i18n/"
 loaded  = {}
+context = luci.util.threadlocal()
+default = "en"
 
 -- Clears the translation table
 function clear()
@@ -37,13 +39,17 @@ function clear()
 end
 
 -- Loads a translation and copies its data into the global translation table
-function load(file, force)
-	if force or not loaded[file] then
-		local f = loadfile(i18ndir..file..".lua") or loadfile(i18ndir..file)
+function load(file, lang, force)
+	lang = lang or ""
+	if force or not loaded[lang] or not loaded[lang][file] then
+		local f = loadfile(i18ndir .. file .. "." .. lang .. ".lua")
+		 or loadfile(i18ndir .. file .. "." .. lang)
 		if f then
-			setfenv(f, table)
+			table[lang] = table[lang] or {}
+			setfenv(f, table[lang])
 			f()
-			loaded[file] = true
+			loaded[lang] = loaded[lang] or {}
+			loaded[lang][file] = true
 			return true
 		else
 			return false
@@ -55,13 +61,20 @@ end
 
 -- Same as load but autocompletes the filename with .LANG from config.lang
 function loadc(file, force)
-	load(file .. ".en", force)
-	return load(file .. "." .. require("luci.config").main.lang, force)
+	load(file, default, force)
+	return load(file, context.lang, force)
+end
+
+-- Sets the context language
+function setlanguage(lang)
+	context.lang = lang
 end
 
 -- Returns the i18n-value defined by "key" or if there is no such: "default"
 function translate(key, default)
-	return table[key] or default
+	return (table[context.lang] and table[context.lang][key])
+		or (table[default] and table[default][key])
+		or default
 end
 
 -- Translate shourtcut with sprintf/string.format inclusion

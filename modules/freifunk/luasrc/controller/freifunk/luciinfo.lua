@@ -22,8 +22,8 @@ function action_index()
 	luci.http.prepare_content("text/plain")
 	
 	-- General
-	print("luciinfo.api=1")
-	print("luciinfo.version=" .. tostring(require("luci").__version__))
+	luci.http.write("luciinfo.api=1\n")
+	luci.http.write("luciinfo.version=" .. tostring(require("luci").__version__) .. "\n")
 	
 	-- Sysinfo
 	local s, m, r = luci.sys.sysinfo()
@@ -31,14 +31,14 @@ function action_index()
 	dr = dr and luci.sys.net.hexip4(dr.Gateway) or ""
 	local l1, l5, l15 = luci.sys.loadavg()
 	
-	print("sysinfo.system=" .. sanitize(s))
-	print("sysinfo.cpu=" .. sanitize(m))
-	print("sysinfo.ram=" .. sanitize(r))
-	print("sysinfo.hostname=" .. sanitize(luci.sys.hostname()))
-	print("sysinfo.load1=" .. tostring(l1))
-	print("sysinfo.load5=" .. tostring(l5))
-	print("sysinfo.load15=" .. tostring(l15))
-	print("sysinfo.defaultgw=" .. dr)
+	luci.http.write("sysinfo.system=" .. sanitize(s) .. "\n")
+	luci.http.write("sysinfo.cpu=" .. sanitize(m) .. "\n")
+	luci.http.write("sysinfo.ram=" .. sanitize(r) .. "\n")
+	luci.http.write("sysinfo.hostname=" .. sanitize(luci.sys.hostname()) .. "\n")
+	luci.http.write("sysinfo.load1=" .. tostring(l1) .. "\n")
+	luci.http.write("sysinfo.load5=" .. tostring(l5) .. "\n")
+	luci.http.write("sysinfo.load15=" .. tostring(l15) .. "\n")
+	luci.http.write("sysinfo.defaultgw=" .. dr .. "\n")
 
 	
 	-- Freifunk
@@ -46,7 +46,7 @@ function action_index()
 	for k, v in pairs(ff) do
 			for i, j in pairs(v) do
 				if i:sub(1, 1) ~= "." then
-					print("freifunk." .. k .. "." .. i .. "=" .. j)
+					luci.http.write("freifunk." .. k .. "." .. i .. "=" .. j .. "\n")
 				end
 			end
 	end

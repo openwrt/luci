@@ -32,7 +32,7 @@ hostcopy:
 	mkdir -p host
 	for i in $(MODULES); do cp -a $$i/dist/* host/ -R 2>/dev/null || true; done
 	rm -f host/luci
-	ln -s .$(LUCI_INSTALLDIR) host/luci
+	ln -s .$(LUCI_MODULEDIR) host/luci
 
 run: host
 	libs/sgi-webuci/host/buildconfig.sh `pwd`/host  > host/etc/boa/boa.conf

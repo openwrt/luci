@@ -4,7 +4,7 @@
 <p><%:a_s_flash_upgrade1%></p>
 <br />
 <% if sysupgrade and not ret then %>
-<form method="post" action="<%=uploadctrl%><%=luci.http.env.PATH_INFO%>" enctype="multipart/form-data">
+<form method="post" action="<%=luci.http.getenv("REQUEST_URI")%>" enctype="multipart/form-data">
 	<div class="cbi-section-node">
 		<div class="cbi-value clear">
 			<div class="cbi-value-title left"><%:a_s_flash_fwimage%></div>

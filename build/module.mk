@@ -12,9 +12,11 @@ compile:
 clean: luaclean
 
 luasource:
-	mkdir -p dist$(LUCI_INSTALLDIR)
+	mkdir -p dist$(LUA_MODULEDIR)
+	mkdir -p dist$(LUCI_MODULEDIR)
 	cp -a root/* dist -R 2>/dev/null || true
-	cp -a luasrc/* dist$(LUCI_INSTALLDIR) -R 2>/dev/null || true
+	cp -a luasrc/* dist$(LUCI_MODULEDIR) -R 2>/dev/null || true
+	cp -a lua/* dist$(LUA_MODULEDIR) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf; done  
 	
 luacompile: luasource

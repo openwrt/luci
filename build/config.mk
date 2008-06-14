@@ -1,4 +1,9 @@
 LUAC = luac
 LUAC_OPTIONS = -s
-LUCI_INSTALLDIR = /usr/lib/lua/luci
+
+LUA_MODULEDIR = /usr/lib/lua
+LUA_LIBRARYDIR = /usr/lib/lua
+
+LUCI_MODULEDIR = $(LUA_MODULEDIR)/luci
+LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
 
