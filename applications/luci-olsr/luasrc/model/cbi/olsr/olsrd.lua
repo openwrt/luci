@@ -91,4 +91,26 @@ for k, v in pairs(luci.fs.dir("/usr/lib")) do
 	end
 end
 
+
+for i, sect in ipairs({ "Hna4", "Hna6" }) do
+	hna = m:section(TypedSection, sect)
+	hna.addremove = true
+	hna.anonymous = true
+
+	net = hna:option(Value, "NetAddr")
+	msk = hna:option(Value, "Prefix")
+end
+
+
+ipc = m:section(NamedSection, "IpcConnect")
+conns = ipc:option(Value, "MaxConnections")
+conns.isInteger = true
+
+nets  = ipc:option(Value, "Net")
+nets.optional = true
+
+hosts = ipc:option(Value, "Host")
+hosts.optional = true
+
+
 return m
