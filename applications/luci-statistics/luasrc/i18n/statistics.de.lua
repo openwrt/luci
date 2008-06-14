@@ -51,16 +51,18 @@ stat_load      = "Systemlast"
 
 --
 -- diagram translations
+-- Notice: diagram translations have to be in Latin1 encoding because
+--         rrdtool can't handle UTF-8 !
 --
 
-stat_dg_title_wireless__signal_noise = "%H: Drahtlos - Signal-Noise-Verh√§ltnis"
+stat_dg_title_wireless__signal_noise = "%H: Drahtlos - Signal-Noise-Verh‰ltnis"
 stat_dg_label_wireless__signal_noise = "dBm"
 stat_ds_signal_noise = "Noise-Level"
-stat_ds_signal_power = "Signalst√§rke"
+stat_ds_signal_power = "Signalst‰rke"
 
-stat_dg_title_wireless__signal_quality = "%H: Drahtlos - Signalqualit√§t"
+stat_dg_title_wireless__signal_quality = "%H: Drahtlos - Signalqualit‰t"
 stat_dg_label_wireless__signal_quality = "n"
-stat_ds_signal_quality = "Signalqualit√§t"
+stat_ds_signal_quality = "Signalqualit‰t"
 
 stat_dg_title_ping = "%H: ICMP Antwortzeiten"
 stat_dg_label_ping = "ms"
@@ -104,7 +106,8 @@ stat_ds_ps_cputime__user = "User"
 
 stat_dg_title_processes__ps_count = "%H: Prozess %pi - Threads und Prozesse"
 stat_dg_label_processes__ps_count = "Anzahl"
-stat_ds_ps_count = "%ds"
+stat_ds_ps_count__threads   = "Threads"
+stat_ds_ps_count__processes = "Prozesse"
 
 stat_dg_title_processes__ps_pagefaults = "%H: Prozess %pi - Speicherzugriffsfehler"
 stat_dg_label_processes__ps_pagefaults = "Zugriffsfehler"
@@ -130,7 +133,7 @@ stat_ds_tcp_connections = "%di"
 
 stat_dg_title_df	= "%H: Speicherverbrauch auf %di"
 stat_dg_label_df	= "Bytes"
-stat_ds_df__free	= "verf√ºgbar"
+stat_ds_df__free	= "verf¸gbar"
 stat_ds_df__used	= "belegt   "
 
 stat_dg_title_irq	= "%H: Interrupts"
