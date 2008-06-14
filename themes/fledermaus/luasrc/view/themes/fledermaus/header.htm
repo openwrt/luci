@@ -75,7 +75,7 @@ local function submenu(prefix, node)
 	<% for j, v in pairs(index) do 
 		local nnode = node.nodes[v.name]
 		local href = controller .. prefix .. v.name
-		href = (v.query) and href .. luci.http.build_querystring(v.query) or href
+		href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 		%>
 		<li>
 			<span<% if nnode._menu_selected then %> class="yellowtext"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
