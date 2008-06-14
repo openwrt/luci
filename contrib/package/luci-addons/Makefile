@@ -26,9 +26,11 @@ define Package/luci-addons/install
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_DIR) $(1)/etc/crontabs
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_DIR) $(1)/etc/init.d
 
 	$(INSTALL_BIN) ./dist/usr/bin/run-parts $(1)/usr/bin
 	$(INSTALL_BIN) ./dist/sbin/luci-flash $(1)/sbin
+	$(INSTALL_BIN) ./dist/etc/init.d/luci-fixtime $(1)/etc/init.d
 	
 	$(CP) ./dist/etc/crontabs/root $(1)/etc/crontabs/root
 	$(CP) ./dist/etc/hotplug.d/iface/20-aliases $(1)/etc/hotplug.d/iface/20-aliases

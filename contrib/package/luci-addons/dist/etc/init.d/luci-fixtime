@@ -1,0 +1,10 @@
+#!/bin/sh /etc/rc.common
+START=5
+
+start() {
+	cat <<'	EOF' | lua -l luci.fs -l luci.sys -
+		if (os.time() < 1000000000) then
+        		os.execute('date -s ' .. os.date('%m%d%H%M%Y', luci.fs.mtime(luci.sys.libpath())))
+		end
+	EOF
+}
