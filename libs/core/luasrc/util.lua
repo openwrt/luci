@@ -269,7 +269,7 @@ function threadlocal()
 		local c = coroutine.running()
 		local thread = coxpt[c] or c or 0
 		if not rawget(self, thread) then
-			rawset(self, thread, {})
+			return nil
 		end
 		return rawget(self, thread)[key]
 	end
