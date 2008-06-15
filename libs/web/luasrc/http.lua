@@ -38,47 +38,51 @@ Request = luci.util.class()
 function Request.__init__(self, env, instream, errstream)
 	self.input = instream
 	self.error = errstream
-
-	-- Formdata tables
-	self.get = {}
-	self.post = {}
 	
+	-- Provide readline function
+	self.inputreader = self.input.readline
+	 or self.input.read and function() return self.input:read() end
+	 or self.input.receive and function() return self.input:receive() end
+	 or function() return nil end
+
 	-- File handler
 	self.filehandler = function() end
 	
-	-- Environment table
-	self.env = env
+	-- HTTP-Message table
+	self.message = {
+		env = env,
+		headers = {},
+		params = luci.http.protocol.urldecode_params("?"..env.QUERY_STRING),
+	}
 	
-	setmetatable(self.get, {__index =
+	setmetatable(self.message.params, {__index =
 		function(tbl, key)
-			tbl = luci.http.protocol.urldecode_params(self.env.QUERY_STRING)
+			luci.http.protocol.parse_message_body(
+			 self.inputreader,
+			 self.message,
+			 self.filehandler
+			)
+			
 			setmetatable(tbl, nil)
 			return rawget(tbl, key)
-		end })  
-		
-	setmetatable(self.post, {__index =
-		function(tbl, key)
-			tbl = luci.http.protocol.
-			setmetatable(tbl, nil)
-			return rawget(tbl, key)
-		end })  
+		end
+	})
 end
 
 function Request.formvalue(self, name, default)
-	return tostring(self.post[name] or self.get[name] or default)
+	if name then
+		return self.message.params[name] and tostring(self.message.params[name]) or default
+	else
+		return self.message.params
+	end
 end
 
 function Request.formvaluetable(self, prefix)
 	local vals = {}
 	prefix = prefix and prefix .. "." or "."
 	
-	for k, v in pairs(self.getvalue()) do
-		if k:find(prefix, 1, true) == 1 then
-			vals[k:sub(#prefix + 1)] = tostring(v)
-		end
-	end
-	
-	for k, v in pairs(self.postvalue()) do
+	local void = self.message.params[nil]
+	for k, v in pairs(self.message.params) do
 		if k:find(prefix, 1, true) == 1 then
 			vals[k:sub(#prefix + 1)] = tostring(v)
 		end
@@ -88,17 +92,7 @@ function Request.formvaluetable(self, prefix)
 end
 
 function Request.getenv(self, name)
-	return name and self.env[name] or self.env
-end
-
-function Request.getvalue(self, name)
-	local void = self.get[nil]
-	return name and self.get[name] or self.get
-end
-
-function Request.postvalue(self, name)
-	local void = self.post[nil]
-	return name and self.post[name] or self.post
+	return name and self.message.env[name] or self.message.env
 end
 
 function Request.setfilehandler(self, callback)
@@ -212,20 +206,3 @@ end
 
 urldecode = luci.http.protocol.urldecode
 urlencode = luci.http.protocol.urlencode
---[[
-function urldecode(str)
-	str = str:gsub("+", " ")
-	str = str:gsub("%%(%x%x)",
-		function(h) return string.char(tonumber(h,16)) end)
-	str = str:gsub("\r\n", "\n")
-	return str	
-end
-
-function urlencode(str)
-	str = str:gsub("\n", "\r\n")
-	str = str:gsub("([^%w ])",
-		function (c) return string.format ("%%%02X", string.byte(c)) end)
-	str = str:gsub(" ", "+")
-	return str	
-end
-]]--

@@ -75,6 +75,9 @@ function flash(image, kpattern)
 	return os.execute(cmd)
 end
 
+-- Returns the enivornment
+getenv = posix.getenv
+
 -- Returns the hostname
 function hostname()
 	return io.lines("/proc/sys/kernel/hostname")()

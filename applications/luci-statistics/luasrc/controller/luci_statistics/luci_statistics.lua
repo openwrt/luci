@@ -80,7 +80,7 @@ function index()
 	      page.setuser  = "nobody"
 	      page.setgroup = "nogroup"
 
-	local vars = luci.http.getvalue()
+	local vars = luci.http.formvalue()
 	local span = vars.timespan or nil
 
 	for i, plugin in luci.util.vspairs( tree:plugins() ) do
@@ -148,7 +148,7 @@ function statistics_render()
 	require("luci.template")
 	require("luci.model.uci")
 
-	local vars  = luci.http.getvalue()
+	local vars  = luci.http.formvalue()
 	local req   = luci.dispatcher.context.request
 	local path  = luci.dispatcher.context.dispatched.path
 	local uci   = luci.model.uci

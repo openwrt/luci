@@ -370,9 +370,6 @@ function parse_message_header( data )
 
 			message.headers = hdrs
 
-			-- Get content
-			local clen = ( hdrs['Content-Length'] or HTTP_MAX_CONTENT ) + 0
-
 			-- Process get parameters
 			if ( method == "get" or method == "post" ) and
 			   message.request_uri:match("?")
@@ -421,25 +418,24 @@ end
 function parse_message_body( reader, message, filecb )
 
 	if type(message) == "table" then
+		local env = message.env
 
-		local hdrs = message.headers
-
+		local clen = ( env.CONTENT_LENGTH or HTTP_MAX_CONTENT ) + 0
+		
 		-- Process post method
-		if message.request_method == "post" and hdrs['Content-Type'] then
-
+		if env.REQUEST_METHOD:lower() == "post" and env.CONTENT_TYPE then
 			-- Is it multipart/form-data ?
-			if hdrs['Content-Type']:match("^multipart/form%-data") then
+			if env.CONTENT_TYPE:match("^multipart/form%-data") then
 				for k, v in pairs( mimedecode(
 					reader,
-					hdrs['Content-Type']:match("boundary=(.+)"),
+					env.CONTENT_TYPE:match("boundary=(.+)"),
 					filecb
 				) ) do
 					message.params[k] = v
 				end
 
-			-- Is it x-www-urlencoded?
-			elseif hdrs['Content-Type'] == 'application/x-www-urlencoded' then
-
+			-- Is it x-www-form-urlencoded?
+			elseif env.CONTENT_TYPE:match('^application/x%-www%-form%-urlencoded') then
 				-- XXX: readline isn't the best solution here
 				for chunk in reader do
 					for k, v in pairs( urldecode_params( chunk ) ) do
@@ -458,7 +454,6 @@ function parse_message_body( reader, message, filecb )
 			-- If a file callback is given then feed it line by line, else
 			-- store whole buffer in message.content
 			else
-
 				for chunk in reader do
 
 					-- We have a callback, feed it.

@@ -84,7 +84,7 @@ end
 function httpdispatch(request)
 	luci.http.context.request = request
 	context.request = {}
-	local pathinfo = request.env.PATH_INFO or ""
+	local pathinfo = request:getenv("PATH_INFO") or ""
 
 	for node in pathinfo:gmatch("[^/]+") do
 		table.insert(context.request, node)
