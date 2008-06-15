@@ -153,7 +153,7 @@ endef
 define Package/luci-ff-halle
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-haserl +luci-app-splash +luci-app-olsr \
+   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
@@ -170,7 +170,7 @@ endef
 define Package/luci-ff-leipzig
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-haserl +luci-app-splash +luci-app-olsr \
+   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
@@ -187,7 +187,7 @@ endef
 define Package/luci-ff-hannover
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-haserl +luci-app-splash +luci-app-olsr \
+   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
    +luci-theme-fledermaus \
    +luci-i18n-german \
    +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
@@ -312,6 +312,16 @@ endef
 
 ### Server Gateway Interfaces ###
 
+define Package/luci-sgi-cgi
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-web
+  TITLE:=SGI for CGI
+endef
+
+define Package/luci-sgi-cgi/install
+	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
+endef
+
 define Package/luci-sgi-haserl
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-web +haserl-lua
@@ -428,6 +438,9 @@ ifneq ($(CONFIG_PACKAGE_luci-app-statistics),)
 	PKG_SELECTED_MODULES+=applications/luci-statistics
 endif
 
+ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
+	PKG_SELECTED_MODULES+=libs/sgi-cgi
+endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-haserl),)
 	PKG_SELECTED_MODULES+=libs/sgi-haserl
 endif
@@ -473,6 +486,7 @@ $(eval $(call BuildPackage,luci-app-qos))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 
+$(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-haserl))
 $(eval $(call BuildPackage,luci-sgi-webuci))
 
