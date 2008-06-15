@@ -360,8 +360,12 @@ function parse_message( data, filecb )
 			local clen = ( hdrs['Content-Length'] or HTTP_MAX_CONTENT ) + 0
 
 			-- Process get parameters
-			if method == "get" or method == "post" then
+			if ( method == "get" or method == "post" ) and
+			   message.request_uri:match("?")
+			then
 				message.params = urldecode_params( message.request_uri )
+			else
+				message.params = { }
 			end
 
 			-- Process post method
