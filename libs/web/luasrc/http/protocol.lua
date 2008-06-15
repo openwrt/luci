@@ -327,6 +327,20 @@ end
 -- Parse a http message
 function parse_message( data, filecb )
 
+	local reader  = _linereader( data )
+	local message = parse_message_header( reader )
+
+	if message then
+		parse_message_body( reader, message, filecb )
+	end
+
+	return message
+end
+
+
+-- Parse a http message header
+function parse_message_header( data )
+
 	-- Create a line reader
 	local reader  = _linereader( data )
 	local message = { }
@@ -368,71 +382,6 @@ function parse_message( data, filecb )
 				message.params = { }
 			end
 
-			-- Process post method
-			if method == "post" and hdrs['Content-Type'] then
-
-				-- Is it multipart/form-data ?
-				if hdrs['Content-Type']:match("^multipart/form%-data") then
-					for k, v in pairs( mimedecode(
-						reader,
-						hdrs['Content-Type']:match("boundary=(.+)"),
-						filecb
-					) ) do
-						message.params[k] = v
-					end
-
-				-- Is it x-www-urlencoded?
-				elseif hdrs['Content-Type'] == 'application/x-www-urlencoded' then
-
-					-- XXX: readline isn't the best solution here
-					for chunk in reader do
-						for k, v in pairs( urldecode_params( chunk ) ) do
-							message.params[k] = v
-						end
-
-						-- XXX: unreliable (undefined line length)
-						if clen + chunk:len() >= HTTP_MAX_CONTENT then
-							break
-						end
-
-						clen = clen + chunk:len()
-					end
-
-				-- Unhandled encoding
-				-- If a file callback is given then feed it line by line, else
-				-- store whole buffer in message.content
-				else
-
-					for chunk in reader do
-
-						-- We have a callback, feed it.
-						if type(filecb) == "function" then
-
-							filecb( "_post", nil, chunk, false )
-
-						-- Append to .content buffer.
-						else
-							message.content = 
-								type(message.content) == "string"
-									and message.content .. chunk
-									or chunk
-						end
-
-						-- XXX: unreliable
-						if clen + chunk:len() >= HTTP_MAX_CONTENT then
-							break
-						end
-
-						clen = clen + chunk:len()
-					end
-
-					-- Send eof to callback
-					if type(filecb) == "function" then
-						filecb( "_post", nil, "", true )
-					end
-				end
-			end
-
 			-- Populate common environment variables
 			message.env = {
 				CONTENT_LENGTH    = hdrs['Content-Length'];
@@ -466,6 +415,82 @@ function parse_message( data, filecb )
 		end
 	end
 end
+
+
+-- Parse a http message body
+function parse_message_body( reader, message, filecb )
+
+	if type(message) == "table" then
+
+		local hdrs = message.headers
+
+		-- Process post method
+		if message.request_method == "post" and hdrs['Content-Type'] then
+
+			-- Is it multipart/form-data ?
+			if hdrs['Content-Type']:match("^multipart/form%-data") then
+				for k, v in pairs( mimedecode(
+					reader,
+					hdrs['Content-Type']:match("boundary=(.+)"),
+					filecb
+				) ) do
+					message.params[k] = v
+				end
+
+			-- Is it x-www-urlencoded?
+			elseif hdrs['Content-Type'] == 'application/x-www-urlencoded' then
+
+				-- XXX: readline isn't the best solution here
+				for chunk in reader do
+					for k, v in pairs( urldecode_params( chunk ) ) do
+						message.params[k] = v
+					end
+
+					-- XXX: unreliable (undefined line length)
+					if clen + chunk:len() >= HTTP_MAX_CONTENT then
+						break
+					end
+
+					clen = clen + chunk:len()
+				end
+
+			-- Unhandled encoding
+			-- If a file callback is given then feed it line by line, else
+			-- store whole buffer in message.content
+			else
+
+				for chunk in reader do
+
+					-- We have a callback, feed it.
+					if type(filecb) == "function" then
+
+						filecb( "_post", nil, chunk, false )
+
+					-- Append to .content buffer.
+					else
+						message.content = 
+							type(message.content) == "string"
+								and message.content .. chunk
+								or chunk
+					end
+
+					-- XXX: unreliable
+					if clen + chunk:len() >= HTTP_MAX_CONTENT then
+						break
+					end
+
+					clen = clen + chunk:len()
+				end
+
+				-- Send eof to callback
+				if type(filecb) == "function" then
+					filecb( "_post", nil, "", true )
+				end
+			end
+		end
+	end
+end
+
 
 function _linereader( obj )
 
