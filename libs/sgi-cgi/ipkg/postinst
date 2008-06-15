@@ -1,0 +1,11 @@
+#!/bin/sh
+[ -f "${IPKG_INSTROOT}/etc/httpd.conf" ] && { 
+	PATTERNS='/cgi-bin/luci/admin:root:$p$root'
+
+	for i in $PATTERNS
+	do
+		grep "$i" ${IPKG_INSTROOT}/etc/httpd.conf >/dev/null 2>/dev/null || echo "$i" >> ${IPKG_INSTROOT}/etc/httpd.conf
+	done 
+
+	[ -n "${IPKG_INSTROOT}" ] || /etc/init.d/httpd restart
+}

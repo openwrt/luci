@@ -1,4 +1,0 @@
-#!/usr/bin/haserl --shell=luac --upload-limit=16384
--- This is a bit hacky: remove -upload from SCRIPT_NAME
-ENV.SCRIPT_NAME = ENV.SCRIPT_NAME:sub(1, #ENV.SCRIPT_NAME - 7)
-dofile("luci")

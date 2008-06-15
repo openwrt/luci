@@ -322,17 +322,6 @@ define Package/luci-sgi-cgi/install
 	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
 endef
 
-define Package/luci-sgi-haserl
-  $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-web +haserl-lua
-  TITLE:=SGI for Haserl
-endef
-
-define Package/luci-sgi-haserl/install
-	$(call Package/luci/install/template,$(1),libs/sgi-haserl)
-endef
-
-
 define Package/luci-sgi-webuci
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-web
@@ -441,9 +430,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
 endif
-ifneq ($(CONFIG_PACKAGE_luci-sgi-haserl),)
-	PKG_SELECTED_MODULES+=libs/sgi-haserl
-endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
 	PKG_SELECTED_MODULES+=libs/sgi-webuci
 endif
@@ -487,7 +473,6 @@ $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
-$(eval $(call BuildPackage,luci-sgi-haserl))
 $(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-fledermaus))
