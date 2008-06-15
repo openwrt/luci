@@ -29,9 +29,9 @@ require("luci.util")
 require("luci.dispatcher")
 
 function run(env, vars)
-	local r = luci.http.Request()
-	r.env = env
-	r.request = vars
+	local r = luci.http.Request(env, nil, io.stderr)
+	r.get = vars
+	r.post = r.get
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
 	

@@ -28,34 +28,59 @@ limitations under the License.
 ]]--
 
 module("luci.http", package.seeall)
+require("luci.http.protocol")
 require("luci.util")
+
 context = luci.util.threadlocal()
 
 
 Request = luci.util.class()
-function Request.__init__(self)
-	self.headers = {}
-	self.request = {}
-	self.uploads = {}
-	self.env = {}
-	self.data = ""
+function Request.__init__(self, env, instream, errstream)
+	self.input = instream
+	self.error = errstream
+
+	-- Formdata tables
+	self.get = {}
+	self.post = {}
+	
+	-- File handler
+	self.filehandler = function() end
+	
+	-- Environment table
+	self.env = env
+	
+	setmetatable(self.get, {__index =
+		function(tbl, key)
+			tbl = luci.http.protocol.urldecode_params(self.env.QUERY_STRING)
+			setmetatable(tbl, nil)
+			return rawget(tbl, key)
+		end })  
+		
+	setmetatable(self.post, {__index =
+		function(tbl, key)
+			tbl = luci.http.protocol.
+			setmetatable(tbl, nil)
+			return rawget(tbl, key)
+		end })  
 end
 
 function Request.formvalue(self, name, default)
-	return self.request[name] or default
-end
-
-function Request.formvalues(self)
-	return self.request
+	return tostring(self.post[name] or self.get[name] or default)
 end
 
 function Request.formvaluetable(self, prefix)
 	local vals = {}
 	prefix = prefix and prefix .. "." or "."
 	
-	for k, v in pairs(self.request) do
+	for k, v in pairs(self.getvalue()) do
 		if k:find(prefix, 1, true) == 1 then
-			vals[k:sub(#prefix + 1)] = v
+			vals[k:sub(#prefix + 1)] = tostring(v)
+		end
+	end
+	
+	for k, v in pairs(self.postvalue()) do
+		if k:find(prefix, 1, true) == 1 then
+			vals[k:sub(#prefix + 1)] = tostring(v)
 		end
 	end
 	
@@ -63,11 +88,21 @@ function Request.formvaluetable(self, prefix)
 end
 
 function Request.getenv(self, name)
-	return self.env[name]
+	return name and self.env[name] or self.env
 end
 
-function Request.upload(self, name)
-	return self.uploads[name]
+function Request.getvalue(self, name)
+	local void = self.get[nil]
+	return name and self.get[name] or self.get
+end
+
+function Request.postvalue(self, name)
+	local void = self.post[nil]
+	return name and self.post[name] or self.post
+end
+
+function Request.setfilehandler(self, callback)
+	self.filehandler = callback
 end
 
 
@@ -87,16 +122,24 @@ function formvalue(...)
 	return context.request:formvalue(...)
 end
 
-function formvalues(...)
-	return context.request:formvalues(...)
-end
-
 function formvaluetable(...)
 	return context.request:formvaluetable(...)
 end
 
+function getvalue(...)
+	return context.request:getvalue(...)
+end
+
+function postvalue(...)
+	return context.request:postvalue(...)
+end
+
 function getenv(...)
 	return context.request:getenv(...)
+end
+
+function setfilehandler(...)
+	return context.request:setfilehandler(...)
 end
 
 function header(key, value)
@@ -157,22 +200,19 @@ function redirect(url)
 	close()
 end
 
-function upload(...)
-	return context.request:upload(...)
-end
-
-
-
 function build_querystring(table)
 	local s="?"
 	
 	for k, v in pairs(table) do
-		s = s .. k .. "=" .. v .. "&"
+		s = s .. urlencode(k) .. "=" .. urlencode(v) .. "&"
 	end
 	
 	return s
 end
 
+urldecode = luci.http.protocol.urldecode
+urlencode = luci.http.protocol.urlencode
+--[[
 function urldecode(str)
 	str = str:gsub("+", " ")
 	str = str:gsub("%%(%x%x)",
@@ -188,3 +228,4 @@ function urlencode(str)
 	str = str:gsub(" ", "+")
 	return str	
 end
+]]--

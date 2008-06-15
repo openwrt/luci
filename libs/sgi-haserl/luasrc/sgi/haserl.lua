@@ -29,9 +29,9 @@ require("luci.util")
 require("luci.dispatcher")
 
 function run()
-	local r = luci.http.Request()
-	r.env = ENV
-	r.request = normalize_table(FORM)
+	local r = luci.http.Request(ENV, nil, io.stderr)
+	r.get = normalize_table(FORM)
+	r.post = r.get
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
 	while coroutine.status(x) ~= "dead" do
