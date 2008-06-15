@@ -21,7 +21,7 @@ require("luci.util")
 HTTP_MAX_CONTENT     = 1048576		-- 1 MB
 HTTP_DEFAULT_CTYPE   = "text/html"	-- default content type
 HTTP_DEFAULT_VERSION = "1.0"		-- HTTP default version
-
+HTTP_DEFAULT_LINEBUF = 1024 * 4		-- Read buffer size
 
 -- Decode an urlencoded string.
 -- Returns the decoded value.
@@ -116,7 +116,7 @@ function mimedecode( data, boundary, filecb )
 	local params = { }
 
 	-- create a line reader
-	local reader = _linereader( data )
+	local reader = _linereader( data, HTTP_DEFAULT_LINEBUF )
 
 	-- state variables
 	local in_part = false
@@ -129,9 +129,8 @@ function mimedecode( data, boundary, filecb )
 	local field
 	local clen = 0
 
-
 	-- try to read all mime parts
-	for line in reader do
+	for line, eol in reader do
 
 		-- update content length
 		clen = clen + line:len()
@@ -327,7 +326,7 @@ end
 -- Parse a http message
 function parse_message( data, filecb )
 
-	local reader  = _linereader( data )
+	local reader  = _linereader( data, HTTP_DEFAULT_LINEBUF )
 	local message = parse_message_header( reader )
 
 	if message then
@@ -342,7 +341,7 @@ end
 function parse_message_header( data )
 
 	-- Create a line reader
-	local reader  = _linereader( data )
+	local reader  = _linereader( data, HTTP_DEFAULT_LINEBUF )
 	local message = { }
 
 	-- Try to extract magic
@@ -487,42 +486,72 @@ function parse_message_body( reader, message, filecb )
 end
 
 
-function _linereader( obj )
+function _linereader( obj, bufsz )
+
+	bufsz = ( bufsz and bufsz >= 256 ) and bufsz or 256
+
+	local __read = function()  return nil end
+	local __eof  = function(x) return type(x) ~= "string" or #x == 0 end
+
+	local _pos = 1
+	local _buf = ""
+	local _eof = nil
 
 	-- object is string
 	if type(obj) == "string" then
 
-		return obj:gmatch( "[^\r\n]*\r?\n" )
+		__read = function() return obj:sub( _pos, _pos + bufsz - #_buf - 1 ) end
+
+	-- object implements a receive() or read() function
+	elseif type(obj) == "userdata" and ( type(obj.receive) == "function" or type(obj.read) == "function" ) then
+
+		if type(obj.read) == "function" then
+			__read = function() return obj:read( bufsz ) end
+		else
+			__read = function() return obj:receive( bufsz ) end
+		end
 
 	-- object is a function
 	elseif type(obj) == "function" then
 
 		return obj
 
-	-- object is a table and implements a readline() function
-	elseif type(obj) == "table" and type(obj.readline) == "function" then
-
-		return obj.readline
-
-	-- object is a table and has a lines property
-	elseif type(obj) == "table" and obj.lines then
-
-		-- decide wheather to use "lines" as function or table
-		local _lns = ( type(obj.lines) == "function" ) and obj.lines() or obj.lines
-		local _pos = 1
-		
-		return function()
-			if _pos <= #_lns then
-				_pos = _pos + 1
-				return _lns[_pos]
-			end
-		end
-
 	-- no usable data type
 	else
 
 		-- dummy iterator
-		return function()
+		return __read
+	end
+
+
+	-- generic block to line algorithm
+	return function()
+		if not _eof then
+			local buffer = __read()
+
+			if __eof( buffer ) then
+				buffer = ""
+			end
+
+			_pos   = _pos + #buffer
+			buffer = _buf .. buffer
+
+			local crlf, endpos = buffer:find("\r?\n")
+
+
+			if crlf then
+				_buf = buffer:sub( endpos + 1, #buffer )
+				return buffer:sub( 1, endpos ), true
+			else
+				-- check for eof
+				_eof = __eof( buffer )
+
+				-- clear overflow buffer
+				_buf = ""
+
+				return buffer, false
+			end
+		else
 			return nil
 		end
 	end
