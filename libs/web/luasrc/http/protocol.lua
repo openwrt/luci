@@ -339,7 +339,8 @@ function parse_message( data, filecb )
 	if method then
 
 		message.request_method = method
-		message.status         = arg2 and arg1 or 0
+		message.status_code    = arg2 and arg1 or 200
+		message.status_message = arg2 or nil
 		message.request_uri    = arg2 and nil or arg1
 
 		if method == "response" then
