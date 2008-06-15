@@ -52,7 +52,7 @@ function Request.__init__(self, env, instream, errstream)
 	self.message = {
 		env = env,
 		headers = {},
-		params = luci.http.protocol.urldecode_params("?"..env.QUERY_STRING),
+		params = luci.http.protocol.urldecode_params("?"..(env.QUERY_STRING or "")),
 	}
 	
 	setmetatable(self.message.params, {__index =
