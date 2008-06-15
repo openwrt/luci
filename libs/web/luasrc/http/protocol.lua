@@ -520,9 +520,9 @@ function _linereader( obj, bufsz )
 	elseif type(obj) == "userdata" and ( type(obj.receive) == "function" or type(obj.read) == "function" ) then
 
 		if type(obj.read) == "function" then
-			__read = function() return obj:read( bufsz ) end
+			__read = function() return obj:read( bufsz - #_buf ) end
 		else
-			__read = function() return obj:receive( bufsz ) end
+			__read = function() return obj:receive( bufsz - #_buf ) end
 		end
 
 	-- object is a function
