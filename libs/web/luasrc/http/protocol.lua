@@ -16,7 +16,6 @@ $Id$
 module("luci.http.protocol", package.seeall)
 
 require("luci.util")
-require("luci.bits")
 
 
 HTTP_MAX_CONTENT     = 1048576		-- 1 MB
@@ -29,7 +28,7 @@ HTTP_DEFAULT_VERSION = "1.0"		-- HTTP default version
 function urldecode( str )
 
 	local function __chrdec( hex )
-		return string.char( luci.bits.Hex2Dec( hex ) )
+		return string.char( tonumber( hex, 16 ) )
 	end
 
 	if type(str) == "string" then
