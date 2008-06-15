@@ -18,10 +18,12 @@ module("luci.http.protocol", package.seeall)
 require("luci.util")
 
 
-HTTP_MAX_CONTENT     = 1048576		-- 1 MB
+HTTP_MAX_CONTENT     = 1024^2		-- 1 MB maximum content size
+HTTP_MAX_READBUF     = 1024		-- 1 kB read buffer size
+
 HTTP_DEFAULT_CTYPE   = "text/html"	-- default content type
 HTTP_DEFAULT_VERSION = "1.0"		-- HTTP default version
-HTTP_DEFAULT_LINEBUF = 1024 * 4		-- Read buffer size
+
 
 -- Decode an urlencoded string.
 -- Returns the decoded value.
@@ -116,7 +118,7 @@ function mimedecode( data, boundary, filecb )
 	local params = { }
 
 	-- create a line reader
-	local reader = _linereader( data, HTTP_DEFAULT_LINEBUF )
+	local reader = _linereader( data, HTTP_MAX_READBUF )
 
 	-- state variables
 	local in_part = false
@@ -326,7 +328,7 @@ end
 -- Parse a http message
 function parse_message( data, filecb )
 
-	local reader  = _linereader( data, HTTP_DEFAULT_LINEBUF )
+	local reader  = _linereader( data, HTTP_MAX_READBUF )
 	local message = parse_message_header( reader )
 
 	if message then
@@ -341,7 +343,7 @@ end
 function parse_message_header( data )
 
 	-- Create a line reader
-	local reader  = _linereader( data, HTTP_DEFAULT_LINEBUF )
+	local reader  = _linereader( data, HTTP_MAX_READBUF )
 	local message = { }
 
 	-- Try to extract magic
@@ -423,8 +425,11 @@ function parse_message_body( reader, message, filecb )
 		
 		-- Process post method
 		if env.REQUEST_METHOD:lower() == "post" and env.CONTENT_TYPE then
+
 			-- Is it multipart/form-data ?
 			if env.CONTENT_TYPE:match("^multipart/form%-data") then
+				
+				-- Read multipart/mime data
 				for k, v in pairs( mimedecode(
 					reader,
 					env.CONTENT_TYPE:match("boundary=(.+)"),
@@ -435,25 +440,35 @@ function parse_message_body( reader, message, filecb )
 
 			-- Is it x-www-form-urlencoded?
 			elseif env.CONTENT_TYPE:match('^application/x%-www%-form%-urlencoded') then
-				-- XXX: readline isn't the best solution here
-				for chunk in reader do
-					for k, v in pairs( urldecode_params( chunk ) ) do
-						message.params[k] = v
-					end
 
-					-- XXX: unreliable (undefined line length)
-					if clen + chunk:len() >= HTTP_MAX_CONTENT then
+				-- Read post data
+				local post_data = ""
+
+				for chunk, eol in reader do
+
+					post_data = post_data .. chunk
+
+					-- Abort on eol or if maximum allowed size or content length is reached
+					if eol or #post_data >= HTTP_MAX_CONTENT or #post_data > clen then
 						break
 					end
+				end
 
-					clen = clen + chunk:len()
+				-- Parse params
+				for k, v in pairs( urldecode_params( post_data ) ) do
+					message.params[k] = v
 				end
 
 			-- Unhandled encoding
 			-- If a file callback is given then feed it line by line, else
 			-- store whole buffer in message.content
 			else
+
+				local len = 0
+
 				for chunk in reader do
+
+					len = len + #chunk
 
 					-- We have a callback, feed it.
 					if type(filecb) == "function" then
@@ -468,12 +483,10 @@ function parse_message_body( reader, message, filecb )
 								or chunk
 					end
 
-					-- XXX: unreliable
-					if clen + chunk:len() >= HTTP_MAX_CONTENT then
+					-- Abort if maximum allowed size or content length is reached
+					if len >= HTTP_MAX_CONTENT or len >= clen then
 						break
 					end
-
-					clen = clen + chunk:len()
 				end
 
 				-- Send eof to callback
@@ -486,6 +499,7 @@ function parse_message_body( reader, message, filecb )
 end
 
 
+-- Wrap given object into a line read iterator
 function _linereader( obj, bufsz )
 
 	bufsz = ( bufsz and bufsz >= 256 ) and bufsz or 256
