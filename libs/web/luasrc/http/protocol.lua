@@ -517,7 +517,7 @@ function _linereader( obj, bufsz )
 		__read = function() return obj:sub( _pos, _pos + bufsz - #_buf - 1 ) end
 
 	-- object implements a receive() or read() function
-	elseif type(obj) == "userdata" and ( type(obj.receive) == "function" or type(obj.read) == "function" ) then
+	elseif (type(obj) == "userdata" or type(obj) == "table") and ( type(obj.receive) == "function" or type(obj.read) == "function" ) then
 
 		if type(obj.read) == "function" then
 			__read = function() return obj:read( bufsz - #_buf ) end
