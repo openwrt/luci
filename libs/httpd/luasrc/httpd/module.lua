@@ -92,13 +92,13 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 	
 	
 	-- Print status and headers
-	sinkout("HTTP/1.1 " .. response.status .. " " .. statusmsg[response.status] .. "\n")
+	sinkout("HTTP/1.1 " .. response.status .. " " .. statusmsg[response.status] .. "\r\n")
 	for k, v in pairs(response.headers) do
-		sinkout(k .. ": " .. v .. "\n")
+		sinkout(k .. ": " .. v .. "\r\n")
 	end
 	
 	-- End of Headers
-	sinkout("\n")
+	sinkout("\r\n")
 	
 	-- Pump content
 	if sourceout then
