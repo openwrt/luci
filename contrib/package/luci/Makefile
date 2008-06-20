@@ -132,9 +132,19 @@ define Package/luci-fastindex/install
 endef
 
 
+define Package/luci-http
+  $(call Package/luci/libtemplate)
+  TITLE:=HTTP Protocol implementation
+endef
+
+define Package/luci-http/install
+	$(call Package/luci/install/template,$(1),libs/http)
+endef
+
+
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-addons +luci-uci
+  DEPENDS+=+luci-http +luci-addons +luci-uci
   TITLE:=MVC Webframework
 endef
 
@@ -384,6 +394,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-fastindex),)
 	PKG_SELECTED_MODULES+=libs/fastindex
 endif
+ifneq ($(CONFIG_PACKAGE_luci-http),)
+	PKG_SELECTED_MODULES+=libs/http
+endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
 	PKG_SELECTED_MODULES+=libs/uci
 endif
@@ -455,6 +468,7 @@ MAKE_FLAGS += MODULES="$(PKG_SELECTED_MODULES)" LUA_TARGET="$(LUA_TARGET)" CFLAG
 $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-cbi))
 $(eval $(call BuildPackage,luci-fastindex))
+$(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-web))
 
