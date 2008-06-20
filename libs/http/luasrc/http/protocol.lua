@@ -378,8 +378,8 @@ process_states['urldecode-init'] = function( msg, chunk, filecb )
 	if chunk ~= nil then
 
 		-- Check for Content-Length
-		if msg.headers['Content-Length'] then
-			msg.content_length = tonumber(msg.headers['Content-Length'])
+		if msg.env.CONTENT_LENGTH then
+			msg.content_length = tonumber(msg.env.CONTENT_LENGTH)
 
 			if msg.content_length <= HTTP_MAX_CONTENT then
 				-- Initialize buffer
@@ -404,7 +404,6 @@ end
 
 -- Process urldecoding stream, read and validate parameter key
 process_states['urldecode-key'] = function( msg, chunk, filecb )
-
 	if chunk ~= nil then
 
 		-- Prevent oversized requests
@@ -436,6 +435,11 @@ process_states['urldecode-key'] = function( msg, chunk, filecb )
 				else
 					msg._urldeccallback = function( chunk, eof )
 						msg.params[key] = msg.params[key] .. chunk
+						
+						-- FIXME: Use a filter
+						if eof then
+							msg.params[key] = urldecode( msg.params[key] )
+						end
 					end
 				end
 
@@ -520,9 +524,9 @@ end
 function mimedecode_message_body( source, msg, filecb )
 
 	-- Find mime boundary
-	if msg and msg.headers['Content-Type'] then
+	if msg and msg.env.CONTENT_TYPE then
 
-		local bound = msg.headers['Content-Type']:match("^multipart/form%-data; boundary=(.+)")
+		local bound = msg.env.CONTENT_TYPE:match("^multipart/form%-data; boundary=(.+)")
 
 		if bound then
 			msg.mime_boundary = bound
@@ -666,7 +670,8 @@ function parse_message_header( source )
 				REQUEST_METHOD    = msg.request_method:upper();
 				REQUEST_URI       = msg.request_uri;
 				SCRIPT_NAME       = msg.request_uri:gsub("?.+$","");
-				SCRIPT_FILENAME   = ""		-- XXX implement me
+				SCRIPT_FILENAME   = "";		-- XXX implement me
+				SERVER_PROTOCOL   = "HTTP/" .. msg.http_version
 			}
 
 			-- Populate HTTP_* environment variables
@@ -707,8 +712,8 @@ function parse_message_body( source, msg, filecb )
 	elseif msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
 	       msg.env.CONTENT_TYPE == "application/x-www-form-urlencoded"
 	then
-
 		return urldecode_message_body( source, msg, filecb )
+		
 
 	-- Unhandled encoding
 	-- If a file callback is given then feed it line by line, else

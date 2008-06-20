@@ -281,6 +281,13 @@ function threadlocal()
 			rawset(self, thread, {})
 		end
 		rawget(self, thread)[key] = value
+		
+		-- Avoid memory leaks by removing abandoned stores
+		for k, v in pairs(self) do
+			if type(k) == "thread" and coroutine.status(k) == "dead" then
+				rawset(self, k, nil)
+			end
+		end
 	end
 	
 	setmetatable(tbl, {__index = get, __newindex = set})

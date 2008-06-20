@@ -24,12 +24,17 @@ limitations under the License.
 
 ]]--
 module("luci.sgi.cgi", package.seeall)
+require("ltn12")
 require("luci.http")
 require("luci.sys")
 require("luci.dispatcher")
 
 function run()
-	local r = luci.http.Request(luci.sys.getenv(), io.stdin, io.stderr)
+	local r = luci.http.Request(
+		luci.sys.getenv(),
+		ltn12.source.file(io.stdin),
+		ltn12.sink.file(io.stderr)
+	)
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
 	

@@ -24,12 +24,18 @@ limitations under the License.
 
 ]]--
 module("luci.sgi.webuci", package.seeall)
+require("ltn12")
 require("luci.http")
 require("luci.util")
 require("luci.dispatcher")
 
 function run(env, vars)
-	local r = luci.http.Request(env, {}, io.stderr)
+	local r = luci.http.Request(
+		env,
+		ltn12.source.empty(),
+		ltn12.sink.file(io.stderr)
+	)
+	
 	r.message.params = vars
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)

@@ -28,6 +28,7 @@ limitations under the License.
 ]]--
 
 module("luci.http", package.seeall)
+require("ltn12")
 require("luci.http.protocol")
 require("luci.util")
 
@@ -35,15 +36,10 @@ context = luci.util.threadlocal()
 
 
 Request = luci.util.class()
-function Request.__init__(self, env, instream, errstream)
-	self.input = instream
-	self.error = errstream
-	
-	-- Provide readline function
-	self.inputreader = self.input.readline
-	 or self.input.read and function() return self.input:read() end
-	 or self.input.receive and function() return self.input:receive() end
-	 or function() return nil end
+function Request.__init__(self, env, sourcein, sinkerr)
+	self.input = sourcein
+	self.error = sinkerr
+
 
 	-- File handler
 	self.filehandler = function() end
@@ -52,13 +48,13 @@ function Request.__init__(self, env, instream, errstream)
 	self.message = {
 		env = env,
 		headers = {},
-		params = luci.http.protocol.urldecode_params("?"..(env.QUERY_STRING or "")),
+		params = luci.http.protocol.urldecode_params(env.QUERY_STRING or ""),
 	}
 	
 	setmetatable(self.message.params, {__index =
 		function(tbl, key)
 			luci.http.protocol.parse_message_body(
-			 self.inputreader,
+			 self.input,
 			 self.message,
 			 self.filehandler
 			)

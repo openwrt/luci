@@ -24,14 +24,17 @@ limitations under the License.
 
 ]]--
 module("luci.sgi.wsapi", package.seeall)
+require("ltn12")
 require("luci.http")
 require("luci.dispatcher")
 require("luci.http.protocol")
 
 function run(wsapi_env)
-	local r = luci.http.Request(wsapi_env, wsapi_env.input, wsapi_env.error)
-	r.postds = function() return wsapi.request.parse_post_data(wsapi_env) end
-	r.getds  = function() return wsapi.request.parse_qs(wsapi_env.QUERY_STRING) end
+	local r = luci.http.Request(
+		wsapi_env,
+		ltn12.source.file(wsapi_env.input),
+		ltn12.sink.file(wsapi_env.error)
+	)
 		
 	local res, id, data1, data2 = true, 0, nil, nil
 	local headers = {}
