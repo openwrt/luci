@@ -15,27 +15,31 @@ $Id$
 
 require("ltn12")
 require("socket")
-
 require("luci.util")
-require("luci.http.protocol")
-require("luci.httpd.server")
 
 
-local srv  = luci.httpd.server
-local host = "0.0.0.0"
-local port = 50000
+Daemon = luci.util.class()
 
+function Daemon.__init__(self, threadlimit)
+	self.reading = {}
+	self.running = {}
+	self.handler = {}
+	self.threadlimit = threadlimit
+end
 
-server = socket.bind(host, port)
-server:settimeout( 0, "t" )
+function Daemon.register(self, socket, clhandler, errhandler)
+	table.insert( self.reading, socket )
+	self.handler[socket] = { clhandler = clhandler, errhandler = errhandler }
+end
 
-reading = { server }
-running = { }
+function Daemon.run(self)
+	while true do
+		self:step()
+	end
+end
 
-
-while true do
-
-	local input = socket.select( reading, nil, 0.1 )
+function Daemon.step(self)	
+	local input = socket.select( self.reading, nil, 0 )
 
 	-- accept new connections
 	for i, connection in ipairs(input) do
@@ -43,25 +47,29 @@ while true do
 		local sock = connection:accept()
 
 		-- check capacity
-		if #running < srv.MAX_CLIENTS then
+		if self.threadlimit and #running < self.threadlimit then
 
-			table.insert( running, {
-				coroutine.create( srv.client_handler ),
+			table.insert( self.running, {
+				coroutine.create( self.handler[connection].clhandler ),
 				sock
 			} )
 
 		-- reject client
 		else
-			srv.error503( sock )
+			if self.handler[connection].errhandler then
+				self.handler[connection].errhandler( sock )
+			end
+			
+			sock:close()
 		end
 	end
 
 	-- create client handler
-	for i, client in ipairs( running ) do
+	for i, client in ipairs( self.running ) do
 
 		-- reap dead clients
 		if coroutine.status( client[1] ) == "dead" then
-			table.remove( running, i )
+			table.remove( self.running, i )
 		end
 
 		coroutine.resume( client[1], client[2] )

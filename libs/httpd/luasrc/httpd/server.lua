@@ -14,13 +14,58 @@ $Id$
 ]]--
 
 module("luci.httpd.server", package.seeall)
+require("luci.util")
 
-
-MAX_CLIENTS  = 15
 READ_BUFSIZE = 1024
 
+VHost = luci.util.class()
 
-function error400( client, msg )
+function VHost.__init__(self, handler)
+	self.handler = handler
+	self.dhandler = {}
+end
+
+function VHost.process(self, ...)
+	-- TODO: Dispatch handler
+end
+
+function VHost.sethandler(self, handler, match)
+	if match then
+		self.dhandler[match] = handler
+	else
+		self.handler = handler
+	end
+end
+
+
+
+Server = luci.util.class()
+
+function Server.__init__(self, ip, port, base)
+	self.socket = socket.bind(ip, port)
+	self.socket:settimeout(0, "t")
+	self.clhandler = client_handler
+	self.errhandler = error503
+	self.host = nil
+	self.vhosts = {}
+	
+	-- Clone another server
+	if base then
+		getmetatable(self).__index = base 
+	end
+end
+
+-- Sets a vhost
+function Server.setvhost(self, vhost, name)
+	if name then
+		self.vhosts[name] = vhost
+	else
+		self.host = vhost
+	end
+end
+
+
+function Server.error400(self, client, msg)
 	client:send( "HTTP/1.0 400 Bad request\r\n" )
 	client:send( "Content-Type: text/plain\r\n\r\n" )
 
@@ -31,15 +76,18 @@ function error400( client, msg )
 	client:close()
 end
 
-function error503( client )
+function Server.error503(self, client)
 	client:send( "HTTP/1.0 503 Server unavailable\r\n" )
 	client:send( "Content-Type: text/plain\r\n\r\n" )
 	client:send( "There are too many clients connected, try again later\r\n" )
-	client:close()
+end
+
+function Server.process(self, ...)
+	-- TODO: Dispatch vhost
 end
 
 
-function client_handler(client)
+function Server.client_handler(self, client)
 
 	client:settimeout( 0 )
 
@@ -114,12 +162,12 @@ function client_handler(client)
 		luci.util.dumptable( message )
 
 		if not s and e then
-			error400( client, e )
+			self:error400( client, e )
 		end
 	else
-		error400( client, err )
+		self:error400( client, err )
 	end
 
 	-- send response
-	error400( client, "Dummy response" )
+	self:error400( client, "Dummy response" )
 end

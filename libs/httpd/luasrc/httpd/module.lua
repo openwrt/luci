@@ -13,6 +13,7 @@ $Id$
 ]]--
 module("luci.httpd.module", package.seeall)
 require("luci.util")
+require("luci.http.protocol")
 require("ltn12")
 
 
@@ -90,7 +91,7 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 		end
 	end
 	
-	luci.http.protocol.push_response(request,response, sourceout, sinkout, sinkerr) 
+	luci.http.protocol.push_response(request, response, sourceout, sinkout, sinkerr) 
 end
 
 
