@@ -119,7 +119,7 @@ end
 -- Handler Response 
 Response = luci.util.class()
 
-function Response.__init__(self, request, status, headers)
+function Response.__init__(self, status, headers)
 	self.status = tonumber(status) or 200
 	self.headers = (type(headers) == "table") and headers or {}
 end
