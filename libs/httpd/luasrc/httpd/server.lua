@@ -98,6 +98,16 @@ function client_handler(client)
 	local message, err = luci.http.protocol.parse_message_header( line_source )
 
 	if message then
+
+		-- If we have a HTTP/1.1 client and an Expect: 100-continue header then
+		-- respond with HTTP 100 Continue message
+		if message.http_version == 1.1 and message.headers['Expect'] and
+			message.headers['Expect'] == '100-continue'
+		then
+			client:send("HTTP/1.1 100 Continue\r\n\r\n")
+		end
+
+
 		local s, e = luci.http.protocol.parse_message_body( block_source, message )
 
 		-- XXX: debug

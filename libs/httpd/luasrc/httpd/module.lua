@@ -90,20 +90,7 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 		end
 	end
 	
-	
-	-- Print status and headers
-	sinkout("HTTP/1.1 " .. response.status .. " " .. statusmsg[response.status] .. "\r\n")
-	for k, v in pairs(response.headers) do
-		sinkout(k .. ": " .. v .. "\r\n")
-	end
-	
-	-- End of Headers
-	sinkout("\r\n")
-	
-	-- Pump content
-	if sourceout then
-		ltn12.pump.all(sourceout, sinkout)
-	end
+	luci.http.push_response(request, status, response, sourceout, sinkout, sinkerr) 
 end
 
 
@@ -132,7 +119,7 @@ end
 -- Handler Response 
 Response = luci.util.class()
 
-function Response.__init__(self, status, headers)
+function Response.__init__(self, request, status, headers)
 	self.status = tonumber(status) or 200
 	self.headers = (type(headers) == "table") and headers or {}
 end
