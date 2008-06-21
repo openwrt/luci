@@ -90,7 +90,7 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 		end
 	end
 	
-	luci.http.push_response(request, status, response, sourceout, sinkout, sinkerr) 
+	luci.http.protocol.push_response(request,response, sourceout, sinkout, sinkerr) 
 end
 
 
