@@ -17,6 +17,7 @@ module("luci.http.protocol", package.seeall)
 
 require("ltn12")
 require("luci.util")
+require("luci.http.protocol.filter")
 
 HTTP_MAX_CONTENT      = 1024*4		-- 4 kB maximum content size
 HTTP_URLENC_MAXKEYLEN = 1024		-- maximum allowd size of urlencoded parameter names
@@ -127,7 +128,7 @@ process_states['magic'] = function( msg, chunk )
 			msg.type           = "request"
 			msg.request_method = method:lower()
 			msg.request_uri    = uri
-			msg.http_version   = http_ver
+			msg.http_version   = tonumber( http_ver )
 			msg.headers        = { }
 
 			-- We're done, next state is header parsing
@@ -146,7 +147,7 @@ process_states['magic'] = function( msg, chunk )
 				msg.type           = "response"
 				msg.status_code    = code
 				msg.status_message = message
-				msg.http_version   = http_ver
+				msg.http_version   = tonumber( http_ver )
 				msg.headers        = { }
 
 				-- We're done, next state is header parsing
@@ -435,7 +436,7 @@ process_states['urldecode-key'] = function( msg, chunk, filecb )
 				else
 					msg._urldeccallback = function( chunk, eof )
 						msg.params[key] = msg.params[key] .. chunk
-						
+
 						-- FIXME: Use a filter
 						if eof then
 							msg.params[key] = urldecode( msg.params[key] )
@@ -701,6 +702,18 @@ end
 -- Parse a http message body
 function parse_message_body( source, msg, filecb )
 
+	-- Install an additional filter if we're operating on chunked transfer
+	-- coding and client is HTTP/1.1 capable
+	if msg.http_version == 1.1 and
+	   msg.headers['Transfer-Encoding'] and
+	   msg.headers['Transfer-Encoding']:find("chunked")
+	then
+		source = ltn12.source.chain(
+			source, luci.http.protocol.filter.decode_chunked
+		)
+	end
+
+
 	-- Is it multipart/mime ?
 	if msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
 	   msg.env.CONTENT_TYPE:match("^multipart/form%-data")
@@ -713,7 +726,7 @@ function parse_message_body( source, msg, filecb )
 	       msg.env.CONTENT_TYPE == "application/x-www-form-urlencoded"
 	then
 		return urldecode_message_body( source, msg, filecb )
-		
+
 
 	-- Unhandled encoding
 	-- If a file callback is given then feed it line by line, else
@@ -721,7 +734,6 @@ function parse_message_body( source, msg, filecb )
 	else
 
 		local sink
-		local length = 0
 
 		-- If we have a file callback then feed it
 		if type(filecb) == "function" then
@@ -733,7 +745,7 @@ function parse_message_body( source, msg, filecb )
 			msg.content_length = 0
 
 			sink = function( chunk )
-				if ( msg.content_length ) + #chunk <= HTTP_MAX_CONTENT then
+				if ( msg.content_length + #chunk ) <= HTTP_MAX_CONTENT then
 
 					msg.content        = msg.content        .. chunk
 					msg.content_length = msg.content_length + #chunk
