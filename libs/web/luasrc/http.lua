@@ -89,7 +89,11 @@ function Request.formvaluetable(self, prefix)
 end
 
 function Request.getenv(self, name)
-	return name and self.message.env[name] or self.message.env
+	if name then
+		return self.message.env[name]
+	else
+		return self.message.env
+	end
 end
 
 function Request.setfilehandler(self, callback)
