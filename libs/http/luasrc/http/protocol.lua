@@ -500,8 +500,7 @@ process_states['urldecode-value'] = function( msg, chunk, filecb )
 			-- We're somewhere within a data section and our buffer is full
 			if #buffer > #chunk then
 				-- Flush buffered data
-				-- Send EOF if chunk is empty
-				msg._urldeccallback( buffer:sub( 1, #buffer - #chunk ), ( #chunk == 0 ) )
+				msg._urldeccallback( buffer:sub( 1, #buffer - #chunk ), false )
 
 				-- Store new data
 				msg._urldeclength = msg._urldeclength + #buffer - #chunk
@@ -516,7 +515,9 @@ process_states['urldecode-value'] = function( msg, chunk, filecb )
 			return true
 		end
 	else
-		return nil, "Unexpected EOF"
+		-- Send EOF
+		msg._urldeccallback( "", true )
+		return false
 	end
 end
 
@@ -729,7 +730,7 @@ function parse_message_body( source, msg, filecb )
 
 
 	-- Unhandled encoding
-	-- If a file callback is given then feed it line by line, else
+	-- If a file callback is given then feed it chunk by chunk, else
 	-- store whole buffer in message.content
 	else
 
