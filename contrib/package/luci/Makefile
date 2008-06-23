@@ -43,6 +43,12 @@ define Package/luci/fftemplate
   DEPENDS:=+luci-mod-freifunk
 endef
 
+define Package/luci/httpdtemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=LuCI - Non-Forking HTTP-Daemon (EXPERIMENTAL)
+  DEPENDS:=+luci-httpd
+endef
+
 define Package/luci/i18ntemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI - Translations
@@ -154,6 +160,20 @@ endef
 
 define Package/luci-web/install
 	$(call Package/luci/install/template,$(1),libs/web)
+endef
+
+
+
+### HTTPD ###
+
+define Package/luci-httpd
+  $(call Package/luci/httpdtemplate)
+  DEPENDS:=+luci-http +luasocket
+  TITLE:=Server Core
+endef
+
+define Package/luci-httpd/install
+	$(call Package/luci/install/template,$(1),libs/httpd)
 endef
 
 
@@ -332,6 +352,16 @@ define Package/luci-sgi-cgi/install
 	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
 endef
 
+define Package/luci-sgi-luci
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-web +luci-httpd
+  TITLE:=SGI for LuCI HTTPD
+endef
+
+define Package/luci-sgi-luci/install
+	$(call Package/luci/install/template,$(1),libs/sgi-luci)
+endef
+
 define Package/luci-sgi-webuci
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-web
@@ -404,6 +434,10 @@ ifneq ($(CONFIG_PACKAGE_luci-web),)
 	PKG_SELECTED_MODULES+=libs/web
 endif
 
+ifneq ($(CONFIG_PACKAGE_luci-httpd),)
+	PKG_SELECTED_MODULES+=libs/httpd
+endif
+
 ifneq ($(CONFIG_PACKAGE_luci-ff-halle),)
 	PKG_SELECTED_MODULES+=applications/community-halle
 endif
@@ -443,6 +477,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
 endif
+ifneq ($(CONFIG_PACKAGE_luci-sgi-luci),)
+	PKG_SELECTED_MODULES+=libs/sgi-luci
+endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
 	PKG_SELECTED_MODULES+=libs/sgi-webuci
 endif
@@ -472,6 +509,8 @@ $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-web))
 
+$(eval $(call BuildPackage,luci-httpd))
+
 $(eval $(call BuildPackage,luci-ff-halle))
 $(eval $(call BuildPackage,luci-ff-leipzig))
 $(eval $(call BuildPackage,luci-ff-hannover))
@@ -487,6 +526,7 @@ $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
+$(eval $(call BuildPackage,luci-sgi-luci))
 $(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-fledermaus))
