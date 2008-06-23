@@ -128,15 +128,12 @@ Template = luci.util.class()
 
 -- Shared template cache to store templates in to avoid unnecessary reloading
 Template.cache = {}
+setmetatable(Template.cache, {__mode = "v"})
 
 
 -- Constructor - Reads and compiles the template on-demand
 function Template.__init__(self, name)	
-	if self.cache[name] then
-		self.template = self.cache[name]
-	else
-		self.template = nil
-	end
+	self.template = self.cache[name]
 	
 	-- Create a new namespace for this template
 	self.viewns = {}
