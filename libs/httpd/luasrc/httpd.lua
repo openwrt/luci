@@ -118,10 +118,9 @@ function Daemon.step(self)
 			
 			if self.debug then
 				self:dprint(tostring(client[1]) .. " returned")
-			end
-
-			if not stat and self.debug then
-				self:dprint("Error in " .. tostring(client[1]) .. " " .. err)
+				if not stat then
+					self:dprint("Error in " .. tostring(client[1]) .. " " .. err)
+				end
 			end
 		end
 	end

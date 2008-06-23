@@ -7,6 +7,7 @@ require("luci.httpd.handler.luci")
 DOCROOT = arg[1]
 PORT = 8080
 
+collectgarbage("setpause", 150)
 
 serversocket = luci.httpd.Socket("0.0.0.0", PORT)
 
