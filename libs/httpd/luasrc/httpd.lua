@@ -67,28 +67,36 @@ function Daemon.step(self)
 	for i, connection in ipairs(input) do
 
 		local sock = connection:accept()
-
-		-- check capacity
-		if not self.threadlimit or #self.running < self.threadlimit then
-
-			self:dprint("Accepted incoming connection from " .. sock:getpeername())
-
-			table.insert( self.running, {
-				coroutine.create( self.handler[connection].clhandler ),
-				sock
-			} )
-
-			self:dprint("Created " .. tostring(self.running[#self.running][1]))
-
-		-- reject client
-		else
-			self:dprint("Rejected incoming connection from " .. sock:getpeername())
-
-			if self.handler[connection].errhandler then
-				self.handler[connection].errhandler( sock )
+		
+		if sock then
+			-- check capacity
+			if not self.threadlimit or #self.running < self.threadlimit then
+				
+				if self.debug then
+					self:dprint("Accepted incoming connection from " .. sock:getpeername())
+				end
+	
+				table.insert( self.running, {
+					coroutine.create( self.handler[connection].clhandler ),
+					sock
+				} )
+	
+				if self.debug then
+					self:dprint("Created " .. tostring(self.running[#self.running][1]))
+				end
+	
+			-- reject client
+			else
+				if self.debug then
+					self:dprint("Rejected incoming connection from " .. sock:getpeername())
+				end
+	
+				if self.handler[connection].errhandler then
+					self.handler[connection].errhandler( sock )
+				end
+	
+				sock:close()
 			end
-
-			sock:close()
 		end
 	end
 
@@ -97,16 +105,22 @@ function Daemon.step(self)
 
 		-- reap dead clients
 		if coroutine.status( client[1] ) == "dead" then
-			self:dprint("Completed " .. tostring(client[1]))
+			if self.debug then
+				self:dprint("Completed " .. tostring(client[1]))
+			end
 			table.remove( self.running, i )
 		else
-			self:dprint("Resuming " .. tostring(client[1]))
+			if self.debug then
+				self:dprint("Resuming " .. tostring(client[1]))
+			end
 
 			local stat, err = coroutine.resume( client[1], client[2] )
+			
+			if self.debug then
+				self:dprint(tostring(client[1]) .. " returned")
+			end
 
-			self:dprint(tostring(client[1]) .. " returned")
-
-			if not stat then
+			if not stat and self.debug then
 				self:dprint("Error in " .. tostring(client[1]) .. " " .. err)
 			end
 		end
