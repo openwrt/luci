@@ -34,15 +34,9 @@ end
 
 
 -- Creates a failure reply
-function Handler.failure(self, message)
-	response = {
-		status = 500,
-		headers = {
-			["Content-Type"] = "text/plain"
-		}
-	}
-	
-	sourceout = ltn12.source.string(message)
+function Handler.failure(self, code, message)
+	local response = Response(code, { ["Content-Type"] = "text/plain" })
+	local sourceout = ltn12.source.string(message)
 	
 	return response, sourceout 
 end
@@ -70,12 +64,12 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 	
 	-- Check for any errors
 	if not stat then
-		response, sourceout = self:failure(response)
+		response, sourceout = self:failure(500, response)
 	end
 	
 	-- Check data
 	if not luci.util.instanceof(response, Response) then
-		response, sourceout = self:failure("Core error: Invalid module response!")
+		response, sourceout = self:failure(500, "Core error: Invalid module response!")
 	end
 	
 	-- Process outgoing filters
@@ -132,11 +126,3 @@ end
 function Response.setstatus(self, status)
 	self.status = status
 end
-
-
--- Status codes
-statusmsg = {
-	[200] = "OK",
-	[404] = "Not Found",
-	[500] = "Internal Server Error",
-}

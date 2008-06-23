@@ -12,11 +12,17 @@ function Simple.__init__(self, docroot)
 end
 
 function Simple.handle(self, request, sourcein, sinkerr)
-	local file = self.docroot .. request.env.REQUEST_URI:gsub("../", "")
-	local size = luci.fs.stat(file, "size")
-	if size then
-		return Response(200, {["Content-Length"] = size}), ltn12.source.file(io.open(file))
+	local uri  = request.env.PATH_INFO
+	local file = self.docroot .. uri:gsub("%.%./", "")
+	local stat = luci.fs.stat(file)
+
+	if stat then
+		if stat.type == "regular" then
+			return Response(200, {["Content-Length"] = stat.size}), ltn12.source.file(io.open(file))
+		else
+			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. uri)
+		end
 	else
-		return Response(404)
+		return self:failure(404, "No such file: " .. uri)
 	end
 end

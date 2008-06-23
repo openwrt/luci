@@ -16,7 +16,6 @@ $Id$
 module("luci.http.protocol", package.seeall)
 
 require("ltn12")
-require("luci.util")
 require("luci.http.protocol.filter")
 
 HTTP_MAX_CONTENT      = 1024*4		-- 4 kB maximum content size
@@ -49,7 +48,7 @@ function urldecode_params( url, tbl )
 		url = url:gsub( "^.+%?([^?]+)", "%1" )
 	end
 
-	for i, pair in ipairs(luci.util.split( url, "[&;]+", nil, true )) do
+	for pair in url:gmatch( "[^&;]+" ) do
 
 		-- find key and value
 		local key = urldecode( pair:match("^([^=]+)")     )
@@ -501,7 +500,8 @@ process_states['urldecode-value'] = function( msg, chunk, filecb )
 			-- We're somewhere within a data section and our buffer is full
 			if #buffer > #chunk then
 				-- Flush buffered data
-				msg._urldeccallback( buffer:sub( 1, #buffer - #chunk ), false )
+				-- Send EOF if chunk is empty
+				msg._urldeccallback( buffer:sub( 1, #buffer - #chunk ), ( #chunk == 0 ) )
 
 				-- Store new data
 				msg._urldeclength = msg._urldeclength + #buffer - #chunk
@@ -769,3 +769,34 @@ function parse_message_body( source, msg, filecb )
 		end
 	end
 end
+
+
+-- Push a response to a socket
+function push_response(request, response, sourceout, sinkout, sinkerr)
+	local code = response.status
+	sinkout(request.env.SERVER_PROTOCOL .. " " .. code .. " " .. statusmsg[code] .. "\r\n")
+
+	-- FIXME: Add support for keep-alive
+	response.headers["Connection"] = "close"
+
+	for k,v in pairs(response.headers) do
+		sinkout(k .. ": " .. v .. "\r\n")
+	end
+
+	sinkout("\r\n")
+
+	if sourceout then
+		ltn12.pump.all(sourceout, sinkout)
+	end
+end
+
+
+-- Status codes
+statusmsg = {
+	[200] = "OK",
+	[400] = "Bad Request",
+	[403] = "Forbidden",
+	[404] = "Not Found",
+	[500] = "Internal Server Error",
+	[503] = "Server Unavailable",
+}

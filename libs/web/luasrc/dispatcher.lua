@@ -267,7 +267,7 @@ function createtree()
 	luci.i18n.loadc("default")
 	
 	local scope = luci.util.clone(_G)
-	for k,v in pairs(_M) do
+	for k,v in pairs(luci.dispatcher) do
 		if type(v) == "function" then
 			scope[k] = v
 		end
@@ -276,10 +276,10 @@ function createtree()
 	for k, v in pairs(index) do
 		scope._NAME = k
 		setfenv(v, scope)
-		
+
 		local stat, err = luci.util.copcall(v)
 		if not stat then
-			error500(err)	
+			error500("createtree failed: " .. k .. ": " .. err)
 			os.exit(1)
 		end
 	end

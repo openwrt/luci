@@ -13,23 +13,41 @@ $Id$
 
 ]]--
 
-require("ltn12")
+module("luci.httpd", package.seeall)
 require("socket")
 require("luci.util")
+
+function Socket(ip, port)
+	local sock, err = socket.bind( ip, port )
+
+	if sock then
+		sock:settimeout( 0, "t" )
+	end
+
+	return sock, err
+end
 
 
 Daemon = luci.util.class()
 
-function Daemon.__init__(self, threadlimit)
+function Daemon.__init__(self, threadlimit, timeout)
 	self.reading = {}
 	self.running = {}
 	self.handler = {}
+	self.debug   = false
 	self.threadlimit = threadlimit
+	self.timeout = timeout or 0.1
 end
 
-function Daemon.register(self, socket, clhandler, errhandler)
-	table.insert( self.reading, socket )
-	self.handler[socket] = { clhandler = clhandler, errhandler = errhandler }
+function Daemon.dprint(self, msg)
+	if self.debug then
+		io.stderr:write("[daemon] " .. msg .. "\n")
+	end
+end
+
+function Daemon.register(self, sock, clhandler, errhandler)
+	table.insert( self.reading, sock )
+	self.handler[sock] = { clhandler = clhandler, errhandler = errhandler }
 end
 
 function Daemon.run(self)
@@ -39,7 +57,11 @@ function Daemon.run(self)
 end
 
 function Daemon.step(self)	
-	local input = socket.select( self.reading, nil, 0 )
+	local input, output, err = socket.select( self.reading, nil, 0 )
+
+	if err == "timeout" and #self.running == 0 then
+		socket.sleep(self.timeout)
+	end
 
 	-- accept new connections
 	for i, connection in ipairs(input) do
@@ -47,19 +69,25 @@ function Daemon.step(self)
 		local sock = connection:accept()
 
 		-- check capacity
-		if self.threadlimit and #running < self.threadlimit then
+		if not self.threadlimit or #self.running < self.threadlimit then
+
+			self:dprint("Accepted incoming connection from " .. sock:getpeername())
 
 			table.insert( self.running, {
 				coroutine.create( self.handler[connection].clhandler ),
 				sock
 			} )
 
+			self:dprint("Created " .. tostring(self.running[#self.running][1]))
+
 		-- reject client
 		else
+			self:dprint("Rejected incoming connection from " .. sock:getpeername())
+
 			if self.handler[connection].errhandler then
 				self.handler[connection].errhandler( sock )
 			end
-			
+
 			sock:close()
 		end
 	end
@@ -69,9 +97,18 @@ function Daemon.step(self)
 
 		-- reap dead clients
 		if coroutine.status( client[1] ) == "dead" then
+			self:dprint("Completed " .. tostring(client[1]))
 			table.remove( self.running, i )
-		end
+		else
+			self:dprint("Resuming " .. tostring(client[1]))
 
-		coroutine.resume( client[1], client[2] )
+			local stat, err = coroutine.resume( client[1], client[2] )
+
+			self:dprint(tostring(client[1]) .. " returned")
+
+			if not stat then
+				self:dprint("Error in " .. tostring(client[1]) .. " " .. err)
+			end
+		end
 	end
 end

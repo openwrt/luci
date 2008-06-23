@@ -53,13 +53,14 @@ function Request.__init__(self, env, sourcein, sinkerr)
 	
 	setmetatable(self.message.params, {__index =
 		function(tbl, key)
+			setmetatable(tbl, nil)
+
 			luci.http.protocol.parse_message_body(
 			 self.input,
 			 self.message,
 			 self.filehandler
 			)
-			
-			setmetatable(tbl, nil)
+
 			return rawget(tbl, key)
 		end
 	})

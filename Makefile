@@ -34,9 +34,19 @@ hostcopy:
 	rm -f host/luci
 	ln -s .$(LUCI_MODULEDIR) host/luci
 
-run: host
+runboa: host
 	libs/sgi-webuci/host/buildconfig.sh `pwd`/host  > host/etc/boa/boa.conf
 	./host/usr/bin/boa -c ./host/etc/boa -d
 
+runluci: luahost
+	libs/httpd/host/runluci host$(HTDOCS)
+
 hostclean: clean
 	rm -rf host
+
+run:
+	#	make run is deprecated			#
+	#	Please use:				#
+	#						#
+	#	make runluci to use LuCI HTTPD		#
+	#	make runboa  to use Boa / Webuci	#
