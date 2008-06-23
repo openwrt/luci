@@ -281,16 +281,9 @@ function threadlocal()
 			rawset(self, thread, {})
 		end
 		rawget(self, thread)[key] = value
-		
-		-- Avoid memory leaks by removing abandoned stores
-		for k, v in pairs(self) do
-			if type(k) == "thread" and coroutine.status(k) == "dead" then
-				rawset(self, k, nil)
-			end
-		end
 	end
 	
-	setmetatable(tbl, {__index = get, __newindex = set})
+	setmetatable(tbl, {__index = get, __newindex = set, __mode = "k"})
 	
 	return tbl
 end
@@ -404,6 +397,7 @@ end
 local performResume, handleReturnValue
 local oldpcall, oldxpcall = pcall, xpcall
 coxpt = {}
+setmetatable(coxpt, {__mode = "kv"})
 
 function handleReturnValue(err, co, status, ...)
     if not status then
@@ -429,6 +423,7 @@ function coxpcall(f, err, ...)
     end
     local c = coroutine.running()
     coxpt[co] = coxpt[c] or c or 0
+    
     return performResume(err, co, ...)
 end
 
