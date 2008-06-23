@@ -124,7 +124,7 @@ function Server.create_client_sources(self, client)
 				or  "Unexpected EOF"
 
 		-- Line ok
-		elseif chunk ~= nil
+		elseif chunk ~= nil then
 
 			-- Strip trailing CR
 			chunk = chunk:gsub("\r$","")
