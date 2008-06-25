@@ -48,13 +48,16 @@ function Thread.receive(self, ...)
 	local chunk, err, part
 	self.waiting = true
 	
-	repeat
-		coroutine.yield()
+	while true do
 		chunk, err, part = self.socket:receive(...)
-	until err ~= "timeout"
-	
-	self.waiting = false
-	return chunk, err, part
+		
+		if err ~= "timeout" then
+			self.waiting = false
+			return chunk, err, part
+		end
+		
+		coroutine.yield()
+	end
 end
 
 function Thread.resume(self, ...)
