@@ -98,7 +98,7 @@ end
 function Daemon.kill_timedout(self)
 	local now = os.time()
 	
-	for k, v in pairs(self.threads) do
+	for sock, thread in pairs(self.threads) do
 		if os.difftime(now, thread:touched()) > self.timeout then
 			self.threads[sock] = nil
 			self.threadc = self.threadc - 1

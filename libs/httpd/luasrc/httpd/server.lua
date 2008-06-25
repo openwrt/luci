@@ -109,7 +109,9 @@ function Server.process( self, thread )
 
 	-- Setup sockets and sources
 	local client = thread.socket
+	
 	client:settimeout( 0 )
+	
 	local sourcein  = ltn12.source.empty()
 	local sourcehdr = luci.http.protocol.header_source( thread )
 	local sinkerr   = ltn12.sink.file( io.stderr )
