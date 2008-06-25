@@ -61,8 +61,8 @@ function Thread.resume(self, ...)
 	return coroutine.resume(self.routine, self, ...)
 end
 
-function Thread.status(self)
-	return coroutine.status(self.routine)
+function Thread.isdead(self)
+	return coroutine.status(self.routine) == "dead"
 end
 
 function Thread.touch(self)
@@ -84,6 +84,27 @@ function Daemon.__init__(self, threadlimit, waittime, timeout)
 	self.threadlimit = threadlimit
 	self.waittime = waittime or 0.1
 	self.timeout  = timeout or 90
+end
+
+function Daemon.remove_dead(self, thread)
+	if self.debug then
+		self:dprint("Completed " .. tostring(thread))
+	end
+	thread.socket:close()
+	self.threadc = self.threadc - 1
+	self.threads[thread.socket] = nil
+end
+
+function Daemon.kill_timedout(self)
+	local now = os.time()
+	
+	for k, v in pairs(self.threads) do
+		if os.difftime(now, thread:touched()) > self.timeout then
+			self.threads[sock] = nil
+			self.threadc = self.threadc - 1
+			sock:close()
+		end
+	end
 end
 
 function Daemon.dprint(self, msg)
@@ -130,6 +151,8 @@ function Daemon.step(self)
 	
 			-- reject client
 			else
+				self:kill_timedout()
+			
 				if self.debug then
 					self:dprint("Rejected incoming connection from " .. sock:getpeername())
 				end
@@ -144,35 +167,23 @@ function Daemon.step(self)
 	end
 
 	-- create client handler
-	for sock, thread in pairs( self.threads ) do
-		local now = os.time()
-
-		-- reap dead clients
-		if thread:status() == "dead" then
-			if self.debug then
-				self:dprint("Completed " .. tostring(thread))
-			end
-			sock:close()
-			self.threadc = self.threadc - 1
-			self.threads[sock] = nil
-			
-		elseif os.difftime(now, thread:touched()) > self.timeout then
-			self.threads[sock] = nil
-			sock:close()
+	for sock, thread in pairs( self.threads ) do		
 		-- resume working threads
-		elseif not thread:iswaiting() then
+		if not thread:iswaiting() then
 			if self.debug then
 				self:dprint("Resuming " .. tostring(thread))
 			end
 
 			local stat, err = thread:resume()
-			if stat then
+			if stat and not thread:isdead() then
 				thread:touch()
 				if not thread:iswaiting() then
 					working = true
 				else
 					table.insert(self.waiting, sock)
 				end
+			else
+				self:remove_dead(thread)
 			end
 			
 			if self.debug then
@@ -187,24 +198,30 @@ function Daemon.step(self)
 	-- check for data on waiting threads
 	input, output, err = socket.select( self.waiting, nil, 0 )
 	
-	for i, sock in ipairs(input) do		
-		self.threads[sock]:resume()
-		self.threads[sock]:touch()
-		
-		if not self.threads[sock]:iswaiting() then
-			for i, s in ipairs(self.waiting) do
-				if s == sock then
-					table.remove(self.waiting, i)
-					break
+	for i, sock in ipairs(input) do	
+		local thread = self.threads[sock]
+		thread:resume()
+		if thread:isdead() then
+			self:remove_dead(thread)
+		else
+			thread:touch()
+			
+			if not thread:iswaiting() then
+				for i, s in ipairs(self.waiting) do
+					if s == sock then
+						table.remove(self.waiting, i)
+						break
+					end
 				end
-			end
-			if not working then
-				working = true
+				if not working then
+					working = true
+				end
 			end
 		end
 	end
 	
 	if err == "timeout" and not working then
+		self:kill_timedout()
 		socket.sleep(self.waittime)
 	end
 end

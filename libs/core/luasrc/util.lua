@@ -87,9 +87,9 @@ end
 
 -- Checks whether a table has an object "value" in it
 function contains(table, value)
-	for k,v in pairs(table) do
+	for k, v in pairs(table) do
 		if value == v then
-			return true
+			return k
 		end
 	end
 	return false
