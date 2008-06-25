@@ -36,8 +36,8 @@ function Thread.__init__(self, socket, func)
 	self.waiting = false
 end
 
-function Thread.getidletime(self)
-	return os.difftime(os.time(), self.stamp)
+function Thread.touched(self)
+	return self.stamp
 end
 
 function Thread.iswaiting(self)
@@ -71,7 +71,7 @@ end
 
 Daemon = luci.util.class()
 
-function Daemon.__init__(self, threadlimit, timeout)
+function Daemon.__init__(self, threadlimit, waittime, timeout)
 	self.reading = {}
 	self.threads = {}
 	self.handler = {}
@@ -82,7 +82,8 @@ function Daemon.__init__(self, threadlimit, timeout)
 	
 	self.debug   = false
 	self.threadlimit = threadlimit
-	self.timeout = timeout or 0.1
+	self.waittime = waittime or 0.1
+	self.timeout  = timeout or 90
 end
 
 function Daemon.dprint(self, msg)
@@ -144,6 +145,7 @@ function Daemon.step(self)
 
 	-- create client handler
 	for sock, thread in pairs( self.threads ) do
+		local now = os.time()
 
 		-- reap dead clients
 		if thread:status() == "dead" then
@@ -153,6 +155,10 @@ function Daemon.step(self)
 			sock:close()
 			self.threadc = self.threadc - 1
 			self.threads[sock] = nil
+			
+		elseif os.difftime(now, thread:touched()) > self.timeout then
+			self.threads[sock] = nil
+			sock:close()
 		-- resume working threads
 		elseif not thread:iswaiting() then
 			if self.debug then
@@ -199,6 +205,6 @@ function Daemon.step(self)
 	end
 	
 	if err == "timeout" and not working then
-		socket.sleep(self.timeout)
+		socket.sleep(self.waittime)
 	end
 end
