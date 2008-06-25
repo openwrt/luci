@@ -40,7 +40,7 @@ local fi
 
 -- Builds a URL
 function build_url(...)
-	return luci.http.dispatcher() .. "/" .. table.concat(arg, "/")
+	return luci.http.getenv("SCRIPT_NAME") .. "/" .. table.concat(arg, "/")
 end
 
 -- Prints an error message or renders the "error401" template if available
