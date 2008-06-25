@@ -1,4 +1,20 @@
+--[[
+
+HTTP server implementation for LuCI - luci handler
+(c) 2008 Steven Barth <steven@midlink.org>     
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+]]--
+
 module("luci.httpd.handler.luci", package.seeall)
+
 require("luci.dispatcher")
 require("luci.http")
 require("ltn12")
@@ -40,7 +56,7 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 			status = 500
 			headers["Content-Type"] = "text/plain"
 			local err = {id}
-			return status, headers, function() local x = table.remove(err) return x end
+			return Response( status, headers ), function() return table.remove(err) end
 		end
 		
 		if id == 1 then

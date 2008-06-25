@@ -2,6 +2,7 @@
 
 HTTP server implementation for LuCI - helper class
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
