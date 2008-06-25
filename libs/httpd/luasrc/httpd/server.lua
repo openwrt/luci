@@ -119,8 +119,6 @@ function Server.process( self, thread )
 	local reading = { client }
 
 	local message, err
-
-	socket.sleep(5)
 	
 	repeat
 		-- parse headers
@@ -130,8 +128,6 @@ function Server.process( self, thread )
 			self:error( client, 400, err )
 			break
 		end	
-		
-		coroutine.yield()
 		
 		-- keep-alive
 		if message.http_version == 1.1 then
@@ -176,8 +172,6 @@ function Server.process( self, thread )
 			break;
 		end
 		
-		coroutine.yield()
-		
 		local response, sourceout = host:process(
 			message, sourcein, sinkerr,
 			client, io.stderr 
@@ -185,8 +179,6 @@ function Server.process( self, thread )
 		if not response then
 			self:error( client, 500, "Error processing handler" )
 		end
-		
-		coroutine.yield()
 		
 		-- Post process response
 		local sinkmode = close and "close-when-done" or "keep-open"
