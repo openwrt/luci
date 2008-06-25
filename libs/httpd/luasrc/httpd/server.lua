@@ -90,7 +90,7 @@ end
 function Server.error(self, socket, code, msg)
 	hcode = tostring(code)
 	
-	socket:send( "HTTP/1.1 " .. hcode .. " " ..
+	socket:send( "HTTP/1.0 " .. hcode .. " " ..
 	 luci.http.protocol.statusmsg[code] .. "\r\n" )
 	socket:send( "Connection: close\r\n" )
 	socket:send( "Content-Type: text/plain\r\n\r\n" )
