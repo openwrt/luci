@@ -11,18 +11,28 @@ function Simple.__init__(self, docroot)
 	self.docroot = docroot
 end
 
-function Simple.handle(self, request, sourcein, sinkerr)
-	local uri  = request.env.PATH_INFO
+function Simple.getfile(self, uri)
 	local file = self.docroot .. uri:gsub("%.%./", "")
 	local stat = luci.fs.stat(file)
+	
+	return file, stat
+end
+
+function Simple.handle_get(self, request, sourcein, sinkerr)
+	local file, stat = self:getfile(request.env.PATH_INFO)
 
 	if stat then
 		if stat.type == "regular" then
 			return Response(200, {["Content-Length"] = stat.size}), ltn12.source.file(io.open(file))
 		else
-			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. uri)
+			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. request.env.PATH_INFO)
 		end
 	else
 		return self:failure(404, "No such file: " .. uri)
 	end
+end
+
+function Simple.handle_head(self, ...)
+	local response, sourceout = self:handle_get(...)
+	return response
 end

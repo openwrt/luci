@@ -7,9 +7,6 @@ HTTP-Header manipulator and form variable preprocessor
 FileId:
 $Id$
 
-ToDo:
-- Cookie handling
-
 License:
 Copyright 2008 Steven Barth <steven@midlink.org>
 
@@ -51,22 +48,14 @@ function Request.__init__(self, env, sourcein, sinkerr)
 		params = luci.http.protocol.urldecode_params(env.QUERY_STRING or ""),
 	}
 	
-	setmetatable(self.message.params, {__index =
-		function(tbl, key)
-			setmetatable(tbl, nil)
-
-			luci.http.protocol.parse_message_body(
-			 self.input,
-			 self.message,
-			 self.filehandler
-			)
-
-			return rawget(tbl, key)
-		end
-	})
+	self.parsed_input = false
 end
 
 function Request.formvalue(self, name, default)
+	if not self.parsed_input then
+		self:_parse_input()
+	end
+	
 	if name then
 		return self.message.params[name] and tostring(self.message.params[name]) or default
 	else
@@ -78,6 +67,10 @@ function Request.formvaluetable(self, prefix)
 	local vals = {}
 	prefix = prefix and prefix .. "." or "."
 	
+	if not self.parsed_input then
+		self:_parse_input()
+	end
+	
 	local void = self.message.params[nil]
 	for k, v in pairs(self.message.params) do
 		if k:find(prefix, 1, true) == 1 then
@@ -86,6 +79,13 @@ function Request.formvaluetable(self, prefix)
 	end
 	
 	return vals
+end
+
+function Request.getcookie(self, name)
+  local c = string.gsub(";" .. (self:getenv("HTTP_COOKIE") or "") .. ";", "%s*;%s*", ";")
+  local p = ";" .. name .. "=(.-);"
+  local i, j, value = cookies:find(p)
+  return value and urldecode(value)
 end
 
 function Request.getenv(self, name)
@@ -98,6 +98,15 @@ end
 
 function Request.setfilehandler(self, callback)
 	self.filehandler = callback
+end
+
+function Request._parse_input(self)
+	luci.http.protocol.parse_message_body(
+		 self.input,
+		 self.message,
+		 self.filehandler
+	)
+	self.parsed_input = true
 end
 
 
@@ -175,18 +184,6 @@ function write(content)
 		coroutine.yield(3)
 	end
 	coroutine.yield(4, content)
-end
-
-
-function basic_auth(realm, errorpage)
-	header("Status", "401 Unauthorized")
-	header("WWW-Authenticate", string.format('Basic realm="%s"', realm or ""))
-	
-	if errorpage then
-		errorpage()
-	end
-	
-	close()
 end
 
 function redirect(url)

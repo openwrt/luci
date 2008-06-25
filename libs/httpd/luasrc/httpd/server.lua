@@ -14,6 +14,8 @@ $Id$
 ]]--
 
 module("luci.httpd.server", package.seeall)
+require("socket")
+require("socket.http")
 require("luci.util")
 
 READ_BUFSIZE = 1024
@@ -26,7 +28,7 @@ function VHost.__init__(self, handler)
 	self.dhandler = {}
 end
 
-function VHost.process(self, request, sourcein, sinkout, sinkerr)
+function VHost.process(self, request, sourcein, sinkerr, ...)
 	local handler = self.handler
 
 	local uri = request.env.REQUEST_URI:match("^([^?]*)")
@@ -47,10 +49,7 @@ function VHost.process(self, request, sourcein, sinkout, sinkerr)
 	end
 
 	if handler then
-		handler:process(request, sourcein, sinkout, sinkerr)
-		return true
-	else
-		return false
+		return handler:process(request, sourcein, sinkerr, ...)
 	end
 end
 
@@ -69,8 +68,6 @@ end
 Server = luci.util.class()
 
 function Server.__init__(self, host)
-	self.clhandler = client_handler
-	self.errhandler = error503
 	self.host = host
 	self.vhosts = {}
 end
@@ -86,129 +83,153 @@ end
 
 function Server.create_daemon_handlers(self)
 	return function(...) return self:process(...) end,
-		function(...) return self:error503(...) end
-end
-
-function Server.create_client_sources(self, client)
-	-- Create LTN12 block source
-	local block_source = function()
-
-		-- Yielding here may cause chaos in coroutine based modules, be careful
-		-- coroutine.yield()
-
-		local chunk, err, part = client:receive( READ_BUFSIZE )
-
-		if chunk == nil and err == "timeout" then
-			return part
-		elseif chunk ~= nil then
-			return chunk
-		else
-			return nil, err
-		end
-
-	end
-
-
-	-- Create LTN12 line source
-	local line_source = ltn12.source.simplify( function()
-
-		coroutine.yield()
-
-		local chunk, err, part = client:receive("*l")
-
-		-- Line too long
-		if chunk == nil and err ~= "timeout" then
-
-			return nil, part
-				and "Line exceeds maximum allowed length["..part.."]"
-				or  "Unexpected EOF"
-
-		-- Line ok
-		elseif chunk ~= nil then
-
-			-- Strip trailing CR
-			chunk = chunk:gsub("\r$","")
-
-			-- We got end of headers, switch to dummy source
-			if #chunk == 0 then
-				return "", function()
-					return nil
-				end
-			else
-				return chunk, nil
-			end
-		end
-	end )
-
-	return block_source, line_source
+		function(...) return self:error_overload(...) end
 end
 
 
-function Server.error400(self, socket, msg)
-	socket:send( "HTTP/1.0 400 Bad request\r\n" )
+function Server.error(self, socket, code, msg)
+	hcode = tostring(code)
+	
+	socket:send( "HTTP/1.1 " .. hcode .. " " ..
+	 luci.http.protocol.statusmsg[code] .. "\r\n" )
+	socket:send( "Connection: close\r\n" )
 	socket:send( "Content-Type: text/plain\r\n\r\n" )
 
 	if msg then
-		socket:send( msg .. "\r\n" )
+		socket:send( "HTTP-Error " .. code .. ": " .. msg .. "\r\n" )
 	end
-
-	socket:close()
 end
 
-function Server.error500(self, socket, msg)
-	socket:send( "HTTP/1.0 500 Internal Server Error\r\n" )
-	socket:send( "Content-Type: text/plain\r\n\r\n" )
-
-	if msg then
-		socket:send( msg .. "\r\n" )
-	end
-
-	socket:close()
-end
-
-function Server.error503(self, socket)
-	socket:send( "HTTP/1.0 503 Server unavailable\r\n" )
-	socket:send( "Content-Type: text/plain\r\n\r\n" )
-	socket:send( "There are too many clients connected, try again later\r\n" )
-	socket:close()
+function Server.error_overload(self, socket)
+	self:error(socket, 503, "Too many simultaneous connections")
 end
 
 
-function Server.process(self, client)
+function Server.process( self, thread )
 
+	-- Setup sockets and sources
+	local client = thread.socket
 	client:settimeout( 0 )
-	local sourcein, sourcehdr = self:create_client_sources(client)
-	local sinkerr = ltn12.sink.file(io.stderr)
+	local sourcein  = ltn12.source.empty()
+	local sourcehdr = luci.http.protocol.header_source( thread )
+	local sinkerr   = ltn12.sink.file( io.stderr )
+	
+	local close = false
+	
+	local reading = { client }
 
-	-- FIXME: Add keep-alive support
-	local sinkout = socket.sink("close-when-done", client)
+	local message, err
 
-	coroutine.yield()
+	socket.sleep(5)
+	
+	repeat
+		-- parse headers
+		message, err = luci.http.protocol.parse_message_header( sourcehdr )
 
-	-- parse headers
-	local message, err = luci.http.protocol.parse_message_header( sourcehdr )
-
-	if message then
-		-- If we have a HTTP/1.1 client and an Expect: 100-continue header then
-		-- respond with HTTP 100 Continue message
-		if message.http_version == 1.1 and message.headers['Expect'] and
-			message.headers['Expect'] == '100-continue'
-		then
-			client:send("HTTP/1.1 100 Continue\r\n\r\n")
+		if not message then
+			self:error( client, 400, err )
+			break
+		end	
+		
+		coroutine.yield()
+		
+		-- keep-alive
+		if message.http_version == 1.1 then
+			close = (message.env.HTTP_CONNECTION == "close")
+		else
+			close = not message.env.HTTP_CONNECTION or message.env.HTTP_CONNECTION == "close"
 		end
+	
+		if message.request_method == "get" or message.request_method == "head" then
+			-- Be happy
+			
+		elseif message.request_method == "post" then
+			-- If we have a HTTP/1.1 client and an Expect: 100-continue header then
+			-- respond with HTTP 100 Continue message
+			if message.http_version == 1.1 and message.headers['Expect'] and
+				message.headers['Expect'] == '100-continue'
+			then
+				client:send("HTTP/1.1 100 Continue\r\n\r\n")
+			end
+			
+			if message.headers['Transfer-Encoding'] and
+			 message.headers['Transfer-Encoding'] ~= "identity" then
+				sourcein = socket.source("http-chunked", thread)
+			elseif message.env.CONTENT_LENGTH then
+				sourcein = socket.source("by-length", thread,
+				 tonumber(message.env.CONTENT_LENGTH))
+			else
+				self:error( client, 411, luci.http.protocol.statusmsg[411] )
+				break;
+			end
+			
+		else
+			self:error( client, 405, luci.http.protocol.statusmsg[405] )
+			break;
+			
+		end
+
 
 		local host = self.vhosts[message.env.HTTP_HOST] or self.host
-		if host then
-			if host:process(message, sourcein, sinkout, sinkerr) then
-				sinkout()
-			else
-				self:error500( client, "No suitable path handler found" )
-			end
-		else
-			self:error500( client, "No suitable host handler found" )
+		if not host then
+			self:error( client, 500, "Unable to find matching host" )
+			break;
 		end
-	else
-		self:error400( client, err )
-		return nil
-	end
+		
+		coroutine.yield()
+		
+		local response, sourceout = host:process(
+			message, sourcein, sinkerr,
+			client, io.stderr 
+		)
+		if not response then
+			self:error( client, 500, "Error processing handler" )
+		end
+		
+		coroutine.yield()
+		
+		-- Post process response
+		local sinkmode = close and "close-when-done" or "keep-open"
+		
+		if sourceout then
+			if not response.headers["Content-Length"] then
+				if message.http_version == 1.1 then
+					response.headers["Transfer-Encoding"] = "chunked"
+					sinkmode = "http-chunked"
+				else
+					close = true
+					sinkmode = "close-when-done"
+				end
+			end
+		end
+		
+		if close then
+			response.headers["Connection"] = "close"
+		end
+		
+		
+		local sinkout = socket.sink(sinkmode, client)
+		
+		local header =
+			message.env.SERVER_PROTOCOL .. " " ..
+			tostring(response.status) .. " " ..
+			luci.http.protocol.statusmsg[response.status] .. "\r\n"
+
+		
+		for k,v in pairs(response.headers) do
+			header = header .. k .. ": " .. v .. "\r\n"
+		end
+		
+		client:send(header .. "\r\n")
+		
+		if sourceout then
+			local eof = false
+			repeat
+				coroutine.yield()
+				eof = not ltn12.pump.step(sourceout, sinkout)
+			until eof
+		end
+	until close
+	
+	client:close()
 end

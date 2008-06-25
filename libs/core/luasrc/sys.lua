@@ -134,6 +134,23 @@ function syslog()
 end
 
 
+-- Generates a random key of length BYTES
+function uniqueid(bytes)
+	local fp    = io.open("/dev/urandom")
+	local chunk = { fp:read(bytes):byte(1, bytes) }
+	fp:close()
+	
+	local hex = ""
+	
+	local pattern = "%02X" 
+	for i, byte in ipairs(chunk) do
+		hex = hex .. pattern:format(byte)
+	end
+	
+	return hex
+end
+
+
 group = {}
 group.getgroup = posix.getgroup
 

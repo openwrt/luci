@@ -10,7 +10,16 @@ function Luci.__init__(self)
 	luci.httpd.module.Handler.__init__(self)
 end
 
-function Luci.handle(self, request, sourcein, sinkerr)	
+function Luci.handle_head(self, ...)
+	local response, sourceout = self:handle_get(...)
+	return response
+end
+
+function Luci.handle_post(self, ...)
+	return self:handle_get(...)
+end
+
+function Luci.handle_get(self, request, sourcein, sinkerr)	
 	local r = luci.http.Request(
 		request.env,
 		sourcein,
@@ -22,7 +31,7 @@ function Luci.handle(self, request, sourcein, sinkerr)
 	local status = 200
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
-	while id < 3 do
+	while not id or id < 3 do
 		coroutine.yield()
 		
 		res, id, data1, data2 = coroutine.resume(x, r)
@@ -45,6 +54,8 @@ function Luci.handle(self, request, sourcein, sinkerr)
 		local res, id, data = coroutine.resume(x)
 		if not res then
 			return nil, id
+		elseif not id then
+			return true
 		elseif id == 5 then
 			return nil
 		else

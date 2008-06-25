@@ -24,6 +24,7 @@ Handler = luci.util.class()
 -- Constructor
 function Handler.__init__(self)
 	self.filters = {}
+	self.handler = {}
 end
 
 
@@ -41,9 +42,10 @@ function Handler.failure(self, code, message)
 	return response, sourceout 
 end
 
-
 -- Processes a request
-function Handler.process(self, request, sourcein, sinkout, sinkerr)
+function Handler.process(self, request, sourcein, sinkerr, ...)
+	local stat, response, sourceout
+
 	-- Process incoming filters
 	for i, f in ipairs(self.filters) do
 		local i = f:get("input")
@@ -57,14 +59,20 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 		end
 	end
 	
-	-- Run the handler
-	local stat, response, sourceout = luci.util.copcall(
-		self.handle, self, request, sourcein, sinkerr
-	)
+	-- Detect request Method
+	local hname = "handle_" .. request.request_method
+	if self[hname] then
+		-- Run the handler
+		stat, response, sourceout = luci.util.copcall(
+			self[hname], self, request, sourcein, sinkerr, ...
+		)
 	
-	-- Check for any errors
-	if not stat then
-		response, sourceout = self:failure(500, response)
+		-- Check for any errors
+		if not stat then
+			response, sourceout = self:failure(500, response)
+		end
+	else
+		response, sourceout = self:failure(405, luci.http.protocol.statusmsg[405])
 	end
 	
 	-- Check data
@@ -85,7 +93,7 @@ function Handler.process(self, request, sourcein, sinkout, sinkerr)
 		end
 	end
 	
-	luci.http.protocol.push_response(request, response, sourceout, sinkout, sinkerr) 
+	return response, sourceout
 end
 
 

@@ -114,9 +114,13 @@ local process_states = { }
 -- Extract "magic", the first line of a http message.
 -- Extracts the message type ("get", "post" or "response"), the requested uri
 -- or the status code if the line descripes a http response.
-process_states['magic'] = function( msg, chunk )
+process_states['magic'] = function( msg, chunk, err )
 
 	if chunk ~= nil then
+		-- ignore empty lines before request
+		if #chunk == 0 then
+			return true, nil
+		end
 
 		-- Is it a request?
 		local method, uri, http_ver = chunk:match("^([A-Z]+) ([^ ]+) HTTP/([01]%.[019])$")
@@ -156,7 +160,7 @@ process_states['magic'] = function( msg, chunk )
 			end
 		end
 	end
-
+	
 	-- Can't handle it
 	return nil, "Invalid HTTP message magic"
 end
@@ -522,6 +526,34 @@ process_states['urldecode-value'] = function( msg, chunk, filecb )
 end
 
 
+-- Creates a header source from a given socket
+function header_source( sock )
+	return ltn12.source.simplify( function()
+
+		local chunk, err, part = sock:receive("*l")
+
+		-- Line too long
+		if chunk == nil then 
+			if err ~= "timeout" then
+				return nil, part
+					and "Line exceeds maximum allowed length["..part.."]"
+					or  "Unexpected EOF"
+			else
+				return nil, err
+			end
+
+		-- Line ok
+		elseif chunk ~= nil then
+
+			-- Strip trailing CR
+			chunk = chunk:gsub("\r$","")
+
+			return chunk, nil
+		end
+	end )
+end
+
+
 -- Decode MIME encoded data.
 function mimedecode_message_body( source, msg, filecb )
 
@@ -617,20 +649,6 @@ function urldecode_message_body( source, msg )
 end
 
 
--- Parse a http message
-function parse_message( data, filecb )
-
-	local reader  = _linereader( data, HTTP_MAX_READBUF )
-	local message = parse_message_header( reader )
-
-	if message then
-		parse_message_body( reader, message, filecb )
-	end
-
-	return message
-end
-
-
 -- Parse a http message header
 function parse_message_header( source )
 
@@ -673,7 +691,7 @@ function parse_message_header( source )
 				REQUEST_URI       = msg.request_uri;
 				SCRIPT_NAME       = msg.request_uri:gsub("?.+$","");
 				SCRIPT_FILENAME   = "";		-- XXX implement me
-				SERVER_PROTOCOL   = "HTTP/" .. msg.http_version
+				SERVER_PROTOCOL   = "HTTP/" .. string.format("%.1f", msg.http_version)
 			}
 
 			-- Populate HTTP_* environment variables
@@ -702,19 +720,6 @@ end
 
 -- Parse a http message body
 function parse_message_body( source, msg, filecb )
-
-	-- Install an additional filter if we're operating on chunked transfer
-	-- coding and client is HTTP/1.1 capable
-	if msg.http_version == 1.1 and
-	   msg.headers['Transfer-Encoding'] and
-	   msg.headers['Transfer-Encoding']:find("chunked")
-	then
-		source = ltn12.source.chain(
-			source, luci.http.protocol.filter.decode_chunked
-		)
-	end
-
-
 	-- Is it multipart/mime ?
 	if msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
 	   msg.env.CONTENT_TYPE:match("^multipart/form%-data")
@@ -771,33 +776,14 @@ function parse_message_body( source, msg, filecb )
 	end
 end
 
-
--- Push a response to a socket
-function push_response(request, response, sourceout, sinkout, sinkerr)
-	local code = response.status
-	sinkout(request.env.SERVER_PROTOCOL .. " " .. code .. " " .. statusmsg[code] .. "\r\n")
-
-	-- FIXME: Add support for keep-alive
-	response.headers["Connection"] = "close"
-
-	for k,v in pairs(response.headers) do
-		sinkout(k .. ": " .. v .. "\r\n")
-	end
-
-	sinkout("\r\n")
-
-	if sourceout then
-		ltn12.pump.all(sourceout, sinkout)
-	end
-end
-
-
 -- Status codes
 statusmsg = {
 	[200] = "OK",
 	[400] = "Bad Request",
 	[403] = "Forbidden",
 	[404] = "Not Found",
+	[405] = "Method Not Allowed",
+	[411] = "Length Required",
 	[500] = "Internal Server Error",
 	[503] = "Server Unavailable",
 }
