@@ -55,18 +55,6 @@ function corecv(socket, ...)
 	end
 end
 
-function h(sock)
-	local sink = socket.sink("close-when-done", sock)
-	local f = ltn12.source.file(io.open("/home/steven/workspace/ffluci/host/www/luci-static/openwrt.org/cascade.css"))
-	local s = luci.fs.stat("/home/steven/workspace/ffluci/host/www/luci-static/openwrt.org/cascade.css", "size")
-	sink("HTTP/1.1 200 OK\r\nContent-Length: " ..s.."\r\nConnection: close\r\n\r\n")
-	repeat
-		coroutine.yield()
-		eof = not ltn12.pump.step(f, sink)
-	until eof
-end
-
-
 function register(socket, s_clhandler, s_errhandler)
 	table.insert(reading, socket)
 	clhandler[socket] = s_clhandler
