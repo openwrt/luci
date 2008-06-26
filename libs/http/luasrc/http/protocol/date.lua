@@ -192,7 +192,7 @@ function to_http(time)
 	return os.date( "%a, %d %b %Y %H:%M:%S GMT", time )
 end
 
--- Compare to dates
+-- Compare two dates
 function compare(d1, d2)
 
 	if d1:match("[^0-9]") then d1 = to_unix(d1) end
