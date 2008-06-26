@@ -15,6 +15,9 @@ $Id$
 
 module("luci.http.protocol.mime", package.seeall)
 
+require("luci.util")
+
+
 -- MIME mapping
 MIME_TYPES = {
     ["txt"]   = "text/plain";
