@@ -27,7 +27,7 @@ vhost:set_handler("/luci", lucihandler)
 io.stderr:write("Starting LuCI HTTPD on port " .. PORT .. "...\n")
 io.stderr:write("Point your browser to http://localhost:" .. PORT .. "/luci\n")
 
-daemon = luci.httpd.Daemon()
+--daemon = luci.httpd.Daemon()
 --daemon.debug = true
-daemon:register(serversocket, server:create_daemon_handlers())
-daemon:run()
+luci.httpd.register(serversocket, server:create_daemon_handlers())
+luci.httpd.run()

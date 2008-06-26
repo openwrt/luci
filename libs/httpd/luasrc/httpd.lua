@@ -2,6 +2,7 @@
 
 HTTP server implementation for LuCI - core
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +16,19 @@ $Id$
 
 module("luci.httpd", package.seeall)
 require("socket")
-require("luci.util")
+
+THREAD_IDLEWAIT = 0.01
+THREAD_TIMEOUT  = 90
+THREAD_LIMIT    = nil
+
+local reading   = {}
+local clhandler = {}
+local erhandler = {}
+
+local threadc = 0
+local threads = {}
+local threadm = {}
+local threadi = {}
 
 function Socket(ip, port)
 	local sock, err = socket.bind( ip, port )
@@ -27,204 +40,77 @@ function Socket(ip, port)
 	return sock, err
 end
 
-Thread = luci.util.class()
+function corecv(socket, ...)
+	threadi[socket] = true
 
-function Thread.__init__(self, socket, func)
-	self.socket  = socket
-	self.routine = coroutine.create(func)
-	self.stamp   = os.time()
-	self.waiting = false
-end
-
-function Thread.touched(self)
-	return self.stamp
-end
-
-function Thread.iswaiting(self)
-	return self.waiting
-end
-
-function Thread.receive(self, ...)
-	local chunk, err, part
-	self.waiting = true
-	
 	while true do
-		chunk, err, part = self.socket:receive(...)
-		
+		local chunk, err, part = socket:receive(...)
+
 		if err ~= "timeout" then
-			self.waiting = false
+			threadi[socket] = false
 			return chunk, err, part
 		end
-		
+ 
 		coroutine.yield()
 	end
 end
 
-function Thread.resume(self, ...)
-	return coroutine.resume(self.routine, self, ...)
+function h(sock)
+	local sink = socket.sink("close-when-done", sock)
+	local f = ltn12.source.file(io.open("/home/steven/workspace/ffluci/host/www/luci-static/openwrt.org/cascade.css"))
+	local s = luci.fs.stat("/home/steven/workspace/ffluci/host/www/luci-static/openwrt.org/cascade.css", "size")
+	sink("HTTP/1.1 200 OK\r\nContent-Length: " ..s.."\r\nConnection: close\r\n\r\n")
+	repeat
+		coroutine.yield()
+		eof = not ltn12.pump.step(f, sink)
+	until eof
 end
 
-function Thread.isdead(self)
-	return coroutine.status(self.routine) == "dead"
+
+function register(socket, s_clhandler, s_errhandler)
+	table.insert(reading, socket)
+	clhandler[socket] = s_clhandler
+	erhandler[socket] = s_errhandler
 end
 
-function Thread.touch(self)
-	self.stamp = os.time()
-end
-
-Daemon = luci.util.class()
-
-function Daemon.__init__(self, threadlimit, waittime, timeout)
-	self.reading = {}
-	self.threads = {}
-	self.handler = {}
-	self.waiting = {}
-	self.threadc = 0
-	
-	setmetatable(self.waiting, {__mode = "v"})
-	
-	self.debug   = false
-	self.threadlimit = threadlimit
-	self.waittime = waittime or 0.1
-	self.timeout  = timeout or 90
-end
-
-function Daemon.remove_dead(self, thread)
-	if self.debug then
-		self:dprint("Completed " .. tostring(thread))
-	end
-	thread.socket:close()
-	self.threadc = self.threadc - 1
-	self.threads[thread.socket] = nil
-end
-
-function Daemon.kill_timedout(self)
-	local now = os.time()
-	
-	for sock, thread in pairs(self.threads) do
-		if os.difftime(now, thread:touched()) > self.timeout then
-			self.threads[sock] = nil
-			self.threadc = self.threadc - 1
-			sock:close()
-		end
-	end
-end
-
-function Daemon.dprint(self, msg)
-	if self.debug then
-		io.stderr:write("[daemon] " .. msg .. "\n")
-	end
-end
-
-function Daemon.register(self, sock, clhandler, errhandler)
-	table.insert( self.reading, sock )
-	self.handler[sock] = { clhandler = clhandler, errhandler = errhandler }
-end
-
-function Daemon.run(self)
+function run()
 	while true do
-		self:step()
+		step()
 	end
 end
 
-function Daemon.step(self)	
-	local input, output, err = socket.select( self.reading, nil, 0 )
-	local working = false
-
-	-- accept new connections
-	for i, connection in ipairs(input) do
-
-		local sock = connection:accept()
+function step()
+	local idle = true
 		
-		if sock then
-			-- check capacity
-			if not self.threadlimit or self.threadc < self.threadlimit then
-				
-				if self.debug then
-					self:dprint("Accepted incoming connection from " .. sock:getpeername())
-				end
-				
-				local t = Thread(sock, self.handler[connection].clhandler)
-				self.threads[sock] = t
-				self.threadc = self.threadc + 1
-	
-				if self.debug then
-					self:dprint("Created " .. tostring(t))
-				end
-	
-			-- reject client
-			else
-				self:kill_timedout()
-			
-				if self.debug then
-					self:dprint("Rejected incoming connection from " .. sock:getpeername())
-				end
-	
-				if self.handler[connection].errhandler then
-					self.handler[connection].errhandler( sock )
-				end
-	
-				sock:close()
-			end
-		end
-	end
-
-	-- create client handler
-	for sock, thread in pairs( self.threads ) do		
-		-- resume working threads
-		if not thread:iswaiting() then
-			if self.debug then
-				self:dprint("Resuming " .. tostring(thread))
-			end
-
-			local stat, err = thread:resume()
-			if stat and not thread:isdead() then
-				thread:touch()
-				if not thread:iswaiting() then
-					working = true
-				else
-					table.insert(self.waiting, sock)
-				end
-			else
-				self:remove_dead(thread)
-			end
-			
-			if self.debug then
-				self:dprint(tostring(thread) .. " returned")
-				if not stat then
-					self:dprint("Error in " .. tostring(thread) .. " " .. err)
-				end
+	if not THREAD_LIMIT or threadc < THREAD_LIMIT then
+		local now = os.time()
+		for i, server in ipairs(reading) do
+			local client = server:accept()
+			if client then
+				threadm[client] = now
+				threadc = threadc + 1
+				threads[client] = coroutine.create(clhandler[server])
 			end
 		end
 	end
 	
-	-- check for data on waiting threads
-	input, output, err = socket.select( self.waiting, nil, 0 )
-	
-	for i, sock in ipairs(input) do	
-		local thread = self.threads[sock]
-		thread:resume()
-		if thread:isdead() then
-			self:remove_dead(thread)
-		else
-			thread:touch()
-			
-			if not thread:iswaiting() then
-				for i, s in ipairs(self.waiting) do
-					if s == sock then
-						table.remove(self.waiting, i)
-						break
-					end
-				end
-				if not working then
-					working = true
-				end
-			end
+	for client, thread in pairs(threads) do
+		coroutine.resume(thread, client)
+		local now = os.time()
+		if coroutine.status(thread) == "dead" then
+			threads[client] = nil
+			threadc = threadc - 1
+		elseif threadm[client] and threadm[client] + THREAD_TIMEOUT < now then
+			threads[client] = nil
+			threadc = threadc - 1	
+			client:close()
+		elseif not threadi[client] then 
+			threadm[client] = now
+			idle = false
 		end
 	end
 	
-	if err == "timeout" and not working then
-		self:kill_timedout()
-		socket.sleep(self.waittime)
+	if idle then
+		socket.sleep(THREAD_IDLEWAIT)
 	end
 end

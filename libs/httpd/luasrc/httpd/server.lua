@@ -106,10 +106,12 @@ function Server.error_overload(self, socket)
 end
 
 
-function Server.process( self, thread )
+function Server.process( self, client )
 
 	-- Setup sockets and sources
-	local client = thread.socket
+	local thread = {
+		receive = function(self, ...) return luci.httpd.corecv(client, ...) end
+	}
 	
 	client:settimeout( 0 )
 	
