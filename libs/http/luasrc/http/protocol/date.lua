@@ -151,8 +151,6 @@ end
 -- Convert a HTTP date to unixtime
 function to_unix(date)
 
-	print("D: "..date)
-
 	local wd, day, mon, yr, hr, min, sec, tz = date:match(
 		"([A-Z][a-z][a-z]), ([0-9]+) " ..
 		"([A-Z][a-z][a-z]) ([0-9]+) " ..
@@ -160,10 +158,7 @@ function to_unix(date)
 		"([A-Z0-9%+%-]+)"
 	)
 
-	print(day .. " | " .. mon .. " | " .. yr .. " | " .. tz)
-
 	if day and mon and yr and hr and min and sec then
-
 		-- find month
 		local month = 1
 		for i = 1, 12 do
