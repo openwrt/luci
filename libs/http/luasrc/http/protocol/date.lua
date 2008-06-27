@@ -15,10 +15,6 @@ $Id$
 
 module("luci.http.protocol.date", package.seeall)
 
-local ucache = { }
-local hcache = { }
-
-
 MONTHS = {
 	"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
 	"Sep", "Oct", "Nov", "Dec"
@@ -155,46 +151,40 @@ end
 -- Convert a HTTP date to unixtime
 function to_unix(date)
 
-	if not ucache[date] then
-		local wd, day, mon, yr, hr, min, sec, tz = date:match(
-			"([A-Z][a-z][a-z]), ([0-9]+) " ..
-			"([A-Z][a-z][a-z]) ([0-9]+) " ..
-			"([0-9]+):([0-9]+):([0-9]+) " ..
-			"([A-Z0-9%+%-]+)"
-		)
+	local wd, day, mon, yr, hr, min, sec, tz = date:match(
+		"([A-Z][a-z][a-z]), ([0-9]+) " ..
+		"([A-Z][a-z][a-z]) ([0-9]+) " ..
+		"([0-9]+):([0-9]+):([0-9]+) " ..
+		"([A-Z0-9%+%-]+)"
+	)
 
-		if day and mon and yr and hr and min and sec then
-			-- find month
-			local month = 1
-			for i = 1, 12 do
-				if MONTHS[i] == mon then
-					month = i
-					break
-				end
+	if day and mon and yr and hr and min and sec then
+		-- find month
+		local month = 1
+		for i = 1, 12 do
+			if MONTHS[i] == mon then
+				month = i
+				break
 			end
-
-			-- convert to epoch time
-			ucache[date] = tz_offset(tz) + os.time( {
-				year  = yr,
-				month = month,
-				day   = day,
-				hour  = hr,
-				min   = min,
-				sec   = sec
-			} )
 		end
+
+		-- convert to epoch time
+		return tz_offset(tz) + os.time( {
+			year  = yr,
+			month = month,
+			day   = day,
+			hour  = hr,
+			min   = min,
+			sec   = sec
+		} )
 	end
 
-	return ucache[date] or 0
+	return 0
 end
 
 -- Convert a unixtime to HTTP date
 function to_http(time)
-	if not hcache[time] then
-		hcache[time] = os.date( "%a, %d %b %Y %H:%M:%S GMT", time )
-	end
-
-	return hcache[time]
+	return os.date( "%a, %d %b %Y %H:%M:%S GMT", time )
 end
 
 -- Compare two dates
