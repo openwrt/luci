@@ -58,6 +58,7 @@ function if_modified_since( req, stat )
 
 		return false, 304, {
 			["ETag"]          = mk_etag( stat );
+			["Date"]          = date.to_http( os.time() );
 			["Last-Modified"] = date.to_http( stat.mtime )
 		}
 	end
@@ -79,6 +80,7 @@ function if_none_match( req, stat )
 				then
 					return false, 304, {
 						["ETag"]          = mk_etag( stat );
+						["Date"]          = date.to_http( os.time() );
 						["Last-Modified"] = date.to_http( stat.mtime )
 					}
 				else
