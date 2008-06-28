@@ -39,6 +39,8 @@ function run(env, vars)
 	r.message.params = vars
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
+	local status = ""
+	local headers = {}
 	
 	while coroutine.status(x) ~= "dead" do
 		local res, id, data1, data2 = coroutine.resume(x, r)
@@ -51,11 +53,15 @@ function run(env, vars)
 		end
 		
 		if id == 1 then
-			io.write(env.SERVER_PROTOCOL .. " " .. tostring(data1) .. " " .. data2 .. "\n")
+			status = env.SERVER_PROTOCOL .. " " .. tostring(data1) .. " " .. data2 .. "\r\n"
 		elseif id == 2 then
-			io.write(data1 .. ": " .. data2 .. "\n")
+			headers[data1] = data2
 		elseif id == 3 then
-			io.write("\n")
+			io.write(status)
+			for k, v in pairs(headers) do
+				io.write(k .. ": " .. v .. "\r\n")
+			end
+			io.write("\r\n")
 		elseif id == 4 then
 			io.write(data1)
 		end

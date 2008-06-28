@@ -49,11 +49,11 @@ function run()
 		end
 
 		if id == 1 then
-			io.write("Status: " .. tostring(data1) .. " " .. data2 .. "\n")
+			io.write("Status: " .. tostring(data1) .. " " .. data2 .. "\r\n")
 		elseif id == 2 then
-			io.write(data1 .. ": " .. data2 .. "\n")
+			io.write(data1 .. ": " .. data2 .. "\r\n")
 		elseif id == 3 then
-			io.write("\n")
+			io.write("\r\n")
 		elseif id == 4 then
 			io.write(data1)
 		end
