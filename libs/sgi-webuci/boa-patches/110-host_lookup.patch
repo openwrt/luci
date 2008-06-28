@@ -1,0 +1,22 @@
+Index: boa-0.94.13/src/config.c
+===================================================================
+--- boa-0.94.13.orig/src/config.c	2008-06-29 00:55:19.000000000 +0200
++++ boa-0.94.13/src/config.c	2008-06-29 00:59:08.000000000 +0200
+@@ -273,12 +273,12 @@
+         }
+ 
+         he = gethostbyname(temp_name);
+-        if (he == NULL) {
+-            perror("gethostbyname:");
+-            exit(1);
+-        }
++        if (he && he->h_name)
++            server_name = he->h_name;
++        else
++            server_name = "OpenWrt";
+ 
+-        server_name = strdup(he->h_name);
++        server_name = strdup(server_name);
+         if (server_name == NULL) {
+             perror("strdup:");
+             exit(1);
