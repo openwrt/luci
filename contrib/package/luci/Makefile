@@ -1,26 +1,44 @@
 include $(TOPDIR)/rules.mk
 
 PKG_BRANCH:=trunk
-PKG_SOURCE_URL:=https://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
-PKG_REV:=$(shell LC_ALL=C svn info ${PKG_SOURCE_URL} | sed -ne's/^Last Changed Rev: //p')
+
+ifeq ($(DUMP),)
+  USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
+endif
 
 PKG_NAME:=luci
-PKG_VERSION:=0.7+svn$(PKG_REV)
 PKG_RELEASE:=1
 
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
-PKG_SOURCE_PROTO:=svn
-PKG_SOURCE_VERSION:=$(PKG_REV)
+ifeq ($(USELOCAL),1)
+  PKG_VERSION:=0.7+svn
+else
+  PKG_SOURCE_URL:=https://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
+  ifeq ($(DUMP),)
+    PKG_REV:=$(shell LC_ALL=C svn info ${PKG_SOURCE_URL} | sed -ne's/^Last Changed Rev: //p')
+    PKG_VERSION:=0.7+svn$(PKG_REV)
+  endif
+  PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+  PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
+  PKG_SOURCE_PROTO:=svn
+  PKG_SOURCE_VERSION:=$(PKG_REV)
+endif
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_BUILD_DEPENDS:=libnotimpl
 LUA_TARGET:=source
 PKG_SELECTED_MODULES:=
 
 
 include $(INCLUDE_DIR)/package.mk
+
+ifeq ($(USELOCAL),1)
+  define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	$(TAR) c -C ../../../ . --exclude=.pc --exclude='boa-0*' --exclude=.svn --exclude=.git | tar x -C $(PKG_BUILD_DIR)/
+  endef
+endif
 
 define Build/Configure
 endef
@@ -101,7 +119,7 @@ define Package/luci-core/config
 endef
 
 ifneq ($(CONFIG_PACKAGE_luci-core_compile),)
-	LUA_TARGET:=compile
+  LUA_TARGET:=compile
 endif
 
 
@@ -499,7 +517,13 @@ ifneq ($(CONFIG_PACKAGE_luci-i18n-english),)
 endif
 
 
-MAKE_FLAGS += MODULES="$(PKG_SELECTED_MODULES)" LUA_TARGET="$(LUA_TARGET)" CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" LDFLAGS="$(TARGET_LDFLAGS)"
+MAKE_FLAGS += \
+	MODULES="$(PKG_SELECTED_MODULES)" \
+	LUA_TARGET="$(LUA_TARGET)" \
+	LUA_SHLIBS="-llua -lm" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
+	OS="Linux"
 
 
 $(eval $(call BuildPackage,luci-core))
