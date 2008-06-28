@@ -72,20 +72,16 @@ function Simple.handle_get(self, request, sourcein, sinkerr)
 								}
 							), ltn12.source.file(io.open(file))
 						else
-							return Response( code, hdrs or { } ),
-								ltn12.source.empty()
+							return Response( code, hdrs or { } )
 						end
 					else
-						return Response( code, hdrs or { } ),
-							ltn12.source.empty()
+						return Response( code, hdrs or { } )
 					end
 				else
-					return Response( code, hdrs or { } ),
-						ltn12.source.empty()
+					return Response( code, hdrs or { } )
 				end
 			else
-				return Response( code, hdrs or { } ),
-					ltn12.source.empty()
+				return Response( code, hdrs or { } )
 			end
 		else
 			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. file)

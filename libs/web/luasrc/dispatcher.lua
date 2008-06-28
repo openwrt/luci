@@ -283,6 +283,7 @@ function createtree()
 		local stat, err = luci.util.copcall(v)
 		if not stat then
 			error500("createtree failed: " .. k .. ": " .. err)
+			luci.http.close()
 			os.exit(1)
 		end
 	end
