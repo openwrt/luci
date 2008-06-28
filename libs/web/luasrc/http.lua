@@ -51,13 +51,13 @@ function Request.__init__(self, env, sourcein, sinkerr)
 	self.parsed_input = false
 end
 
-function Request.formvalue(self, name, default)
+function Request.formvalue(self, name)
 	if not self.parsed_input then
 		self:_parse_input()
 	end
 	
 	if name then
-		return self.message.params[name] and tostring(self.message.params[name]) or default
+		return self.message.params[name]
 	else
 		return self.message.params
 	end
@@ -84,7 +84,7 @@ end
 function Request.getcookie(self, name)
   local c = string.gsub(";" .. (self:getenv("HTTP_COOKIE") or "") .. ";", "%s*;%s*", ";")
   local p = ";" .. name .. "=(.-);"
-  local i, j, value = cookies:find(p)
+  local i, j, value = c:find(p)
   return value and urldecode(value)
 end
 
@@ -130,6 +130,10 @@ function formvaluetable(...)
 	return context.request:formvaluetable(...)
 end
 
+function getcookie(...)
+	return context.request:getcookie(...)
+end
+
 function getvalue(...)
 	return context.request:getvalue(...)
 end
@@ -147,9 +151,6 @@ function setfilehandler(...)
 end
 
 function header(key, value)
-	if not context.status then
-		status()
-	end
 	if not context.headers then
 		context.headers = {}
 	end
@@ -187,7 +188,7 @@ function write(content)
 end
 
 function redirect(url)
-	header("Status", "302 Found")
+	status(302, "Found")
 	header("Location", url)
 	close()
 end

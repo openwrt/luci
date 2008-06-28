@@ -71,10 +71,10 @@ function setlanguage(lang)
 end
 
 -- Returns the i18n-value defined by "key" or if there is no such: "default"
-function translate(key, default)
+function translate(key, def)
 	return (table[context.lang] and table[context.lang][key])
 		or (table[default] and table[default][key])
-		or default
+		or def
 end
 
 -- Translate shourtcut with sprintf/string.format inclusion

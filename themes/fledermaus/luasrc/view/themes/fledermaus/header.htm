@@ -26,7 +26,7 @@ require("luci.http").prepare_content("text/html")
 	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
 	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
-	<title>LuCI - Lua Configuration Interface - <%=node.title%></title>
+	<title>LuCI - Lua Configuration Interface - <%=(node and node.title)%></title>
 </head>
 <body>
 <div id="header">

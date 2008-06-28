@@ -40,6 +40,8 @@ ipaddress = "IP-Adresse"
 
 legend = "Legende"
 library = "Bibliothek"
+load = "Last"
+login = "Anmelden"
 
 key = "Schlüssel"
 

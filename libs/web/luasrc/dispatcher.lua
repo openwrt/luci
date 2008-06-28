@@ -43,18 +43,6 @@ function build_url(...)
 	return luci.http.getenv("SCRIPT_NAME") .. "/" .. table.concat(arg, "/")
 end
 
--- Prints an error message or renders the "error401" template if available
-function error401(message)
-	message = message or "Unauthorized"
-
-	require("luci.template")
-	if not luci.util.copcall(luci.template.render, "error401") then
-		luci.http.prepare_content("text/plain")
-		luci.http.write(message)
-	end
-	return false
-end
-
 -- Sends a 404 error code and renders the "error404" template if available
 function error404(message)
 	luci.http.status(404, "Not Found")
@@ -78,6 +66,25 @@ function error500(message)
 		luci.http.write(message)
 	end
 	return false
+end
+
+-- Renders an authorization form
+function sysauth(default)
+	local user = luci.http.formvalue("username")
+	local pass = luci.http.formvalue("password")
+	
+	if user and luci.sys.user.checkpasswd(user, pass) then
+		local sid = luci.sys.uniqueid(16)
+		luci.http.header("Set-Cookie", "sysauth=" .. sid)
+		luci.sauth.write(sid, user)
+		return true
+	else
+		require("luci.i18n")
+		require("luci.template")
+		context.path = {}
+		luci.template.render("sysauth", {duser=default, fuser=user})
+		return false
+	end
 end
 
 -- Creates a request object for dispatching
@@ -119,33 +126,8 @@ function dispatch(request)
 		end
 	end
 
-	if track.sysauth then
-		local accs = track.sysauth
-		accs = (type(accs) == "string") and {accs} or accs
-		
-		--[[
-		local function sysauth(user, password)
-			return (luci.util.contains(accs, user)
-				and luci.sys.user.checkpasswd(user, password)) 
-		end
-		
-		if not luci.http.basic_auth(sysauth) then
-			error401()
-			return
-		end
-		]]--
-	end
-
 	if track.i18n then
 		require("luci.i18n").loadc(track.i18n)
-	end
-
-	if track.setgroup then
-		luci.sys.process.setgroup(track.setgroup)
-	end
-
-	if track.setuser then
-		luci.sys.process.setuser(track.setuser)
 	end
 	
 	-- Init template engine
@@ -159,6 +141,27 @@ function dispatch(request)
 	viewns.resource    = luci.config.main.resourcebase
 	viewns.REQUEST_URI = luci.http.getenv("SCRIPT_NAME") .. (luci.http.getenv("PATH_INFO") or "")
 	
+	if track.sysauth then
+		require("luci.sauth")
+		local def  = (type(track.sysauth) == "string") and track.sysauth
+		local accs = def and {track.sysauth} or track.sysauth
+		local user = luci.sauth.read(luci.http.getcookie("sysauth"))
+		
+		
+		if not luci.util.contains(accs, user) then
+			if not sysauth(def) then
+				return
+			end
+		end
+	end
+
+	if track.setgroup then
+		luci.sys.process.setgroup(track.setgroup)
+	end
+
+	if track.setuser then
+		luci.sys.process.setuser(track.setuser)
+	end
 
 	if c and type(c.target) == "function" then
 		context.dispatched = c

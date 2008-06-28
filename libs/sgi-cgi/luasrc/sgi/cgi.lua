@@ -47,7 +47,7 @@ function run()
 			print(id)
 			break;
 		end
-		
+
 		if id == 1 then
 			io.write("Status: " .. tostring(data1) .. " " .. data2 .. "\n")
 		elseif id == 2 then

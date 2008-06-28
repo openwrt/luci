@@ -19,7 +19,7 @@ require("luci.config")
 
 luci.config.sauth = luci.config.sauth or {}
 sessionpath = luci.config.sauth.sessionpath
-sessiontime = luci.config.sauth.sessiontime
+sessiontime = tonumber(luci.config.sauth.sessiontime)
 
 
 function clean()
@@ -30,7 +30,7 @@ function clean()
 		return nil
 	end
 	
-	for i, file in files do
+	for i, file in pairs(files) do
 		local fname = sessionpath .. "/" .. file
 		local stat = luci.fs.stat(fname)
 		if stat and stat.type == "regular" and stat.atime + sessiontime < now then
@@ -41,11 +41,14 @@ end
 
 function prepare()
 	luci.fs.mkdir(sessionpath)
-	luci.fs.chmod(sessionpath, "a-rwx,u+rw")
+	luci.fs.chmod(sessionpath, "a-rwx,u+rwx")
 end
 
 function read(id)
-	cleansessions()
+	if not id then
+		return
+	end
+	clean()
 	return luci.fs.readfile(sessionpath .. "/" .. id)
 end
 

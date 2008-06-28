@@ -35,10 +35,14 @@ hostcopy:
 	ln -s .$(LUCI_MODULEDIR) host/luci
 
 runboa: host
+	export LUA_PATH="`pwd`/host$(LUCI_MODULEDIR);;"
+	export LUA_CPATH="`pwd`/host$(LUCI_LIBRARYDIR);;"
 	libs/sgi-webuci/host/buildconfig.sh `pwd`/host  > host/etc/boa/boa.conf
 	./host/usr/bin/boa -c ./host/etc/boa -d
 
 runluci: luahost
+	export LUA_PATH="`pwd`/host$(LUCI_MODULEDIR);;"
+	export LUA_CPATH="`pwd`/host$(LUCI_LIBRARYDIR);;"
 	libs/httpd/host/runluci host$(HTDOCS)
 
 hostclean: clean

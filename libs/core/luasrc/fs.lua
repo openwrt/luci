@@ -28,6 +28,9 @@ module("luci.fs", package.seeall)
 
 require("posix")
 
+-- Access
+access = posix.access
+
 -- Glob
 glob = posix.glob
 

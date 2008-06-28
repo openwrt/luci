@@ -1,0 +1,26 @@
+<%+header%>
+<% luci.i18n.loadc("sysauth") %>
+<h1><%:sysauth_head%></h1>
+<p><%:sysauth_prompt%></p>
+<% if fuser then %>
+<div class="error"><%:sysauth_failed%></div>
+<br />
+<% end %>
+<form method="post" action="<%=REQUEST_URI%>">
+		<div class="cbi-section-node">
+			<div class="cbi-value">
+				<div class="cbi-value-title"><%:username%></div>
+				<div class="cbi-value-field"><input type="text" name="username" value="<%=duser%>" /></div>
+			</div>
+			<div class="cbi-value">
+				<div class="cbi-value-title"><%:password%></div>
+				<div class="cbi-value-field"><input type="password" name="password" /></div>
+			</div>
+			<br />
+			<div>
+				<input type="submit" value="<%:login%>" />
+				<input type="reset" value="<%:reset%>" />
+			</div>
+		</div>
+</form>
+<%+footer%>

@@ -46,6 +46,7 @@ key = "Key"
 language = "Language"
 limit = "Limit"
 load = "Load"
+login = "Login"
 
 macaddress = "MAC-Address"
 manpage = "see '%s' manpage"
