@@ -1,7 +1,8 @@
 --[[
 
-HTTP server implementation for LuCI - luci handler
+HTTP server implementation for LuCI - file handler
 (c) 2008 Steven Barth <steven@midlink.org>
+(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -83,6 +84,77 @@ function Simple.handle_get(self, request, sourcein, sinkerr)
 			else
 				return Response( code, hdrs or { } )
 			end
+
+		elseif stat.type == "directory" then
+
+			local ruri = request.request_uri:gsub("/$","")
+			local root = self.docroot:gsub("/$","")
+
+			-- check for index files
+			local index_candidates = {
+				"index.html", "index.htm", "default.html", "default.htm",
+				"index.txt", "default.txt"
+			}
+
+			-- try to find an index file and redirect to it
+			for i, candidate in ipairs( index_candidates ) do
+				local istat = luci.fs.stat(
+					root .. "/" .. ruri .. "/" .. candidate
+				)
+
+				if istat ~= nil and istat.type == "regular" then
+					return Response( 301, {
+						["Location"] = ruri .. "/" .. candidate
+					} ), ltn12.source.empty()
+				end
+			end
+
+
+			local html = string.format(
+				'<?xml version="1.0" encoding="UTF-8"?>\n' ..
+				'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" '  ..
+					'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n' ..
+				'<html xmlns="http://www.w3.org/1999/xhtml" '                ..
+					'xml:lang="en" lang="en">\n'                             ..
+				'<head>\n'                                                   ..
+				'<title>Index of %s</title>\n'                               ..
+				'</head><body><h1>Index of %s</h1><hr /><ul>',
+					file, file
+			)
+
+			for i, e in luci.util.vspairs( luci.fs.dir( file ) ) do
+
+				if e ~= '.' then
+					local estat = luci.fs.stat( file .. "/" .. e )
+
+					if estat.type == "directory" then
+						html = html .. string.format(
+							'<li><p><a href="%s/%s/">%s/</a> '                         ..
+							'<small>(directory)</small><br />'                              ..
+							'<small>Changed: %s</small></li>',
+								ruri, e, e,
+								self.date.to_http( estat.mtime )
+						)
+					else
+						html = html .. string.format(
+							'<li><p><a href="%s/%s">%s</a> '                         ..
+							'<small>(%s)</small><br />'                              ..
+							'<small>Size: %i Bytes | Changed: %s</small></li>',
+								ruri, e, e, self.mime.to_mime( e ),
+								estat.size, self.date.to_http( estat.mtime )
+						)
+					end
+				end
+			end
+
+			html = html .. '</ul><hr /></body></html>'
+
+			return Response(
+				200, {
+					["Date"]         = self.date.to_http( os.time() );
+					["Content-Type"] = "text/html";
+				}
+			), ltn12.source.string(html)
 		else
 			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. file)
 		end
