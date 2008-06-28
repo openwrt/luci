@@ -20,6 +20,7 @@ require("socket.http")
 require("luci.util")
 
 READ_BUFSIZE = 1024
+VERSION = 0.2
 
 
 VHost = luci.util.class()
@@ -211,6 +212,8 @@ function Server.process( self, client )
 			message.env.SERVER_PROTOCOL .. " " ..
 			tostring(response.status) .. " " ..
 			luci.http.protocol.statusmsg[response.status] .. "\r\n"
+
+		header = header .. "Server: LuCI HTTPd/" .. tostring(VERSION) .. "\r\n"
 
 		
 		for k,v in pairs(response.headers) do
