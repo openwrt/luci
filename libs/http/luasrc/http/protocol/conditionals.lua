@@ -21,7 +21,7 @@ local date = require("luci.http.protocol.date")
 -- 14.19 / ETag
 function mk_etag( stat )
 	if stat ~= nil then
-		return string.format( "%x-%x-%x", stat.ino, stat.size, stat.mtime )
+		return string.format( '"%x-%x-%x"', stat.ino, stat.size, stat.mtime )
 	end
 end
 
@@ -56,7 +56,10 @@ function if_modified_since( req, stat )
 			return true
 		end
 
-		return false, 304
+		return false, 304, {
+			["ETag"]          = mk_etag( stat );
+			["Last-Modified"] = date.to_http( stat.mtime )
+		}
 	end
 
 	return true
@@ -74,10 +77,10 @@ function if_none_match( req, stat )
 				if req.request_method == "get"  or
 				   req.request_method == "head"
 				then
-					h['ETag']          = mk_etag( stat )
-					h['Last-Modified'] = date.to_http( stat.mtime )
-
-					return false, 304
+					return false, 304, {
+						["ETag"]          = mk_etag( stat );
+						["Last-Modified"] = date.to_http( stat.mtime )
+					}
 				else
 					return false, 412
 				end

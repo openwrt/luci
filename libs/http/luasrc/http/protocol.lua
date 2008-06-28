@@ -160,7 +160,7 @@ process_states['magic'] = function( msg, chunk, err )
 			end
 		end
 	end
-	
+
 	-- Can't handle it
 	return nil, "Invalid HTTP message magic"
 end
@@ -533,7 +533,7 @@ function header_source( sock )
 		local chunk, err, part = sock:receive("*l")
 
 		-- Line too long
-		if chunk == nil then 
+		if chunk == nil then
 			if err ~= "timeout" then
 				return nil, part
 					and "Line exceeds maximum allowed length["..part.."]"
@@ -779,11 +779,13 @@ end
 -- Status codes
 statusmsg = {
 	[200] = "OK",
+	[304] = "Not Modified",
 	[400] = "Bad Request",
 	[403] = "Forbidden",
 	[404] = "Not Found",
 	[405] = "Method Not Allowed",
 	[411] = "Length Required",
+	[412] = "Precondition Failed",
 	[500] = "Internal Server Error",
 	[503] = "Server Unavailable",
 }

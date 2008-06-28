@@ -31,10 +31,11 @@ function Simple.__init__(self, docroot, dirlist)
 	self.dirlist = dirlist and true or false
 	self.mime    = luci.http.protocol.mime
 	self.date    = luci.http.protocol.date
+	self.cond    = luci.http.protocol.conditionals
 end
 
 function Simple.getfile(self, uri)
-	local file = self.docroot .. uri:gsub("%.%./", "")
+	local file = self.docroot .. uri:gsub("%.%./+", "")
 	local stat = luci.fs.stat(file)
 
 	return file, stat
@@ -47,18 +48,45 @@ function Simple.handle_get(self, request, sourcein, sinkerr)
 		if stat.type == "regular" then
 
 			-- Generate Entity Tag
-			local etag = luci.http.protocol.conditionals.mk_etag( stat )
+			local etag = self.cond.mk_etag( stat )
 
-			-- Send Response
-			return Response(
-				200, {
-					["Date"]           = self.date.to_http( os.time() );
-					["Last-Modified"]  = self.date.to_http( stat.mtime );
-					["Content-Type"]   = self.mime.to_mime( file );
-					["Content-Length"] = stat.size;
-					["ETag"]           = etag;
-				}
-			), ltn12.source.file(io.open(file))
+			-- Check conditionals
+			local ok, code, hdrs
+
+			ok, code, hdrs = self.cond.if_modified_since( request, stat )
+			if ok then
+				ok, code, hdrs = self.cond.if_match( request, stat )
+				if ok then
+					ok, code, hdrs = self.cond.if_unmodified_since( request, stat )
+					if ok then
+						ok, code, hdrs = self.cond.if_none_match( request, stat )
+						if ok then
+							-- Send Response
+							return Response(
+								200, {
+									["Date"]           = self.date.to_http( os.time() );
+									["Last-Modified"]  = self.date.to_http( stat.mtime );
+									["Content-Type"]   = self.mime.to_mime( file );
+									["Content-Length"] = stat.size;
+									["ETag"]           = etag;
+								}
+							), ltn12.source.file(io.open(file))
+						else
+							return Response( code, hdrs or { } ),
+								ltn12.source.empty()
+						end
+					else
+						return Response( code, hdrs or { } ),
+							ltn12.source.empty()
+					end
+				else
+					return Response( code, hdrs or { } ),
+						ltn12.source.empty()
+				end
+			else
+				return Response( code, hdrs or { } ),
+					ltn12.source.empty()
+			end
 		else
 			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. file)
 		end
