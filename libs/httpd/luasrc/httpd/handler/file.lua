@@ -117,9 +117,9 @@ function Simple.handle_get(self, request, sourcein, sinkerr)
 				'<html xmlns="http://www.w3.org/1999/xhtml" '                ..
 					'xml:lang="en" lang="en">\n'                             ..
 				'<head>\n'                                                   ..
-				'<title>Index of %s</title>\n'                               ..
-				'</head><body><h1>Index of %s</h1><hr /><ul>',
-					file, file
+				'<title>Index of %s/</title>\n'                               ..
+				'</head><body><h1>Index of %s/</h1><hr /><ul>',
+					ruri, ruri
 			)
 
 			for i, e in luci.util.vspairs( luci.fs.dir( file ) ) do
