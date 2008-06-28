@@ -18,6 +18,7 @@ module("luci.httpd.handler.file", package.seeall)
 require("luci.httpd.module")
 require("luci.http.protocol.date")
 require("luci.http.protocol.mime")
+require("luci.http.protocol.conditionals")
 require("luci.fs")
 require("ltn12")
 
@@ -39,28 +40,23 @@ function Simple.getfile(self, uri)
 	return file, stat
 end
 
-
-function Simple._mk_etag(self, stat)
-	return string.format( "%x-%x-%x", stat.ino, stat.size, stat.mtime )
-end
-
-function Simple._cmp_etag(self, stat, etag)
-	return ( self:_mk_etag(stat) == etag )
-end
-
-
 function Simple.handle_get(self, request, sourcein, sinkerr)
 	local file, stat = self:getfile(request.env.PATH_INFO)
 
 	if stat then
 		if stat.type == "regular" then
+
+			-- Generate Entity Tag
+			local etag = luci.http.protocol.conditionals.mk_etag( stat )
+
+			-- Send Response
 			return Response(
 				200, {
 					["Date"]           = self.date.to_http( os.time() );
 					["Last-Modified"]  = self.date.to_http( stat.mtime );
 					["Content-Type"]   = self.mime.to_mime( file );
 					["Content-Length"] = stat.size;
-					["ETag"]           = self:_mk_etag( stat );
+					["ETag"]           = etag;
 				}
 			), ltn12.source.file(io.open(file))
 		else
