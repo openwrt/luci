@@ -295,7 +295,7 @@ function user.checkpasswd(username, password)
 		if account.passwd == "!" then
 			return true
 		else
-			return (account.passwd == posix.crypt(account.passwd, password))
+			return (account.passwd == posix.crypt(password, account.passwd))
 		end
 	end
 end
