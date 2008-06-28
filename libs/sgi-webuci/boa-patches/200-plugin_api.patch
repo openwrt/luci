@@ -1,7 +1,7 @@
 Index: boa-0.94.13/src/list.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ boa-0.94.13/src/list.h	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/list.h	2008-06-15 23:21:11.000000000 +0200
 @@ -0,0 +1,601 @@
 +#ifndef _LINUX_LIST_H
 +#define _LINUX_LIST_H
@@ -607,8 +607,8 @@ Index: boa-0.94.13/src/list.h
 Index: boa-0.94.13/src/plugin.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ boa-0.94.13/src/plugin.c	2008-05-27 19:28:21.000000000 +0200
-@@ -0,0 +1,189 @@
++++ boa-0.94.13/src/plugin.c	2008-06-29 00:39:43.000000000 +0200
+@@ -0,0 +1,190 @@
 +/*
 + * Simple plugin API for boa
 + * Copyright (C) 2008 John Crispin <blogic@openwrt.org>
@@ -732,7 +732,7 @@ Index: boa-0.94.13/src/plugin.c
 +
 +	p = plugin_lookup(req);
 +	if (!p)
-+		return 0;
++		return 1;
 +
 +	return plugin_run(req, p);
 +}
@@ -746,7 +746,7 @@ Index: boa-0.94.13/src/plugin.c
 +	if (p[strlen(p) - 1] == '/')
 +		return;
 +
-+	dl = dlopen(p, RTLD_NOW);
++	dl = dlopen(p, RTLD_NOW | RTLD_GLOBAL);
 +	if (!dl) {
 +		fprintf(stderr, "Unable to load plugin '%s': %d\n", p, dlerror());
 +		return;
@@ -795,13 +795,14 @@ Index: boa-0.94.13/src/plugin.c
 +		plugin_load(g.gl_pathv[i], path);
 +
 +	globfree(&g);
++	return 1;
 +}
 +
 +
 Index: boa-0.94.13/src/request.c
 ===================================================================
 --- boa-0.94.13.orig/src/request.c	2002-07-24 05:03:59.000000000 +0200
-+++ boa-0.94.13/src/request.c	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/request.c	2008-06-15 23:21:11.000000000 +0200
 @@ -50,6 +50,7 @@
          dequeue(&request_free, request_free); /* dequeue the head */
      } else {
@@ -854,7 +855,7 @@ Index: boa-0.94.13/src/request.c
 Index: boa-0.94.13/src/Makefile.in
 ===================================================================
 --- boa-0.94.13.orig/src/Makefile.in	2002-03-24 23:20:19.000000000 +0100
-+++ boa-0.94.13/src/Makefile.in	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/Makefile.in	2008-06-15 23:21:11.000000000 +0200
 @@ -20,7 +20,7 @@
  srcdir = @srcdir@
  VPATH = @srcdir@:@srcdir@/../extras
@@ -877,7 +878,7 @@ Index: boa-0.94.13/src/Makefile.in
 Index: boa-0.94.13/src/boa.h
 ===================================================================
 --- boa-0.94.13.orig/src/boa.h	2002-07-26 05:03:44.000000000 +0200
-+++ boa-0.94.13/src/boa.h	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/boa.h	2008-06-15 23:21:11.000000000 +0200
 @@ -37,6 +37,7 @@
  #include <fcntl.h>
  #include <limits.h>             /* OPEN_MAX */
@@ -907,7 +908,7 @@ Index: boa-0.94.13/src/boa.h
 Index: boa-0.94.13/src/config.c
 ===================================================================
 --- boa-0.94.13.orig/src/config.c	2002-07-26 05:04:29.000000000 +0200
-+++ boa-0.94.13/src/config.c	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/config.c	2008-06-15 23:21:11.000000000 +0200
 @@ -61,6 +61,7 @@
  char *error_log_name;
  char *access_log_name;
@@ -950,7 +951,7 @@ Index: boa-0.94.13/src/config.c
 Index: boa-0.94.13/src/alias.c
 ===================================================================
 --- boa-0.94.13.orig/src/alias.c	2002-07-28 04:46:52.000000000 +0200
-+++ boa-0.94.13/src/alias.c	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/alias.c	2008-06-15 23:21:11.000000000 +0200
 @@ -213,6 +213,7 @@
      uri_len = strlen(req->request_uri);
  
@@ -980,7 +981,7 @@ Index: boa-0.94.13/src/alias.c
 Index: boa-0.94.13/src/globals.h
 ===================================================================
 --- boa-0.94.13.orig/src/globals.h	2002-07-24 05:03:59.000000000 +0200
-+++ boa-0.94.13/src/globals.h	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/globals.h	2008-06-15 23:21:11.000000000 +0200
 @@ -47,6 +47,7 @@
  struct request {                /* pending requests */
      int fd;                     /* client's socket fd */
@@ -1000,7 +1001,7 @@ Index: boa-0.94.13/src/globals.h
 Index: boa-0.94.13/src/read.c
 ===================================================================
 --- boa-0.94.13.orig/src/read.c	2002-03-18 02:53:48.000000000 +0100
-+++ boa-0.94.13/src/read.c	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/read.c	2008-06-15 23:21:11.000000000 +0200
 @@ -338,8 +338,11 @@
  
      if (bytes_to_write == 0) {  /* nothing left in buffer to write */
@@ -1018,7 +1019,7 @@ Index: boa-0.94.13/src/read.c
 Index: boa-0.94.13/src/boa-plugin.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ boa-0.94.13/src/boa-plugin.h	2008-05-27 19:28:21.000000000 +0200
++++ boa-0.94.13/src/boa-plugin.h	2008-06-15 23:21:11.000000000 +0200
 @@ -0,0 +1,67 @@
 +#ifndef _HTTPD_PLUGIN_H__
 +#define _HTTPD_PLUGIN_H__
