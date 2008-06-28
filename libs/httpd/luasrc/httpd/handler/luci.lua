@@ -66,12 +66,7 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 			headers[data1] = data2
 		end
 	end
-<<<<<<< HEAD:libs/httpd/luasrc/httpd/handler/luci.lua
 
-=======
-	
-	
->>>>>>> * libs/httpd: Added Cache-Control header to LuCI:libs/httpd/luasrc/httpd/handler/luci.lua
 	local function iter()
 		local res, id, data = coroutine.resume(x)
 		if not res then
