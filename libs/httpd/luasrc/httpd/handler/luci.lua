@@ -18,7 +18,7 @@ module("luci.httpd.handler.luci", package.seeall)
 require("luci.dispatcher")
 require("luci.http")
 require("luci.http.protocol.date")
-require("ltn12")
+local ltn12 = require("luci.ltn12")
 
 Luci = luci.util.class(luci.httpd.module.Handler)
 Response = luci.httpd.module.Response

@@ -14,7 +14,7 @@ $Id$
 module("luci.httpd.module", package.seeall)
 require("luci.util")
 require("luci.http.protocol")
-require("ltn12")
+local ltn12 = require("luci.ltn12")
 
 
 

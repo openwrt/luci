@@ -25,7 +25,7 @@ limitations under the License.
 ]]--
 
 module("luci.http", package.seeall)
-require("ltn12")
+local ltn12 = require("luci.ltn12")
 require("luci.http.protocol")
 require("luci.util")
 

@@ -15,7 +15,7 @@ $Id$
 
 module("luci.http.protocol", package.seeall)
 
-require("ltn12")
+local ltn12 = require("luci.ltn12")
 require("luci.http.protocol.filter")
 
 HTTP_MAX_CONTENT      = 1024*4		-- 4 kB maximum content size

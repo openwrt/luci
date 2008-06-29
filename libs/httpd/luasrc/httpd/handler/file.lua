@@ -21,7 +21,7 @@ require("luci.http.protocol.date")
 require("luci.http.protocol.mime")
 require("luci.http.protocol.conditionals")
 require("luci.fs")
-require("ltn12")
+local ltn12 = require("luci.ltn12")
 
 Simple = luci.util.class(luci.httpd.module.Handler)
 Response = luci.httpd.module.Response

@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 module("luci.sgi.wsapi", package.seeall)
-require("ltn12")
+local ltn12 = require("luci.ltn12")
 require("luci.http")
 require("luci.dispatcher")
 require("luci.http.protocol")

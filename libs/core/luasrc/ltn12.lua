@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.
 local string = require("string")
 local table = require("table")
 local base = _G
-module("ltn12")
+module("luci.ltn12")
 
 filter = {}
 source = {}
