@@ -112,7 +112,10 @@ function Server.process( self, client )
 	-- Setup sockets and sources
 	local thread = {
 		receive = function(self, ...) return luci.httpd.corecv(client, ...) end,
-		send = function(self, ...) return luci.httpd.cosend(client, ...) end
+		send = function(self, ...) return luci.httpd.cosend(client, ...) end,
+		close = function(self, ...) return client:close(...) end,
+		getfd = function(self, ...) return client:getfd(...) end,
+		dirty = function(self, ...) return client:dirty(...) end
 	}
 	
 	client:settimeout( 0 )
@@ -132,7 +135,7 @@ function Server.process( self, client )
 		message, err = luci.http.protocol.parse_message_header( sourcehdr )
 
 		if not message then
-			self:error( client, 400, err )
+			self:error( thread, 400, err )
 			break
 		end	
 		
@@ -152,7 +155,7 @@ function Server.process( self, client )
 			if message.http_version == 1.1 and message.headers['Expect'] and
 				message.headers['Expect'] == '100-continue'
 			then
-				client:send("HTTP/1.1 100 Continue\r\n\r\n")
+				thread:send("HTTP/1.1 100 Continue\r\n\r\n")
 			end
 			
 			if message.headers['Transfer-Encoding'] and
@@ -162,12 +165,12 @@ function Server.process( self, client )
 				sourcein = socket.source("by-length", thread,
 				 tonumber(message.env.CONTENT_LENGTH))
 			else
-				self:error( client, 411, luci.http.protocol.statusmsg[411] )
+				self:error( thread, 411, luci.http.protocol.statusmsg[411] )
 				break;
 			end
 			
 		else
-			self:error( client, 405, luci.http.protocol.statusmsg[405] )
+			self:error( thread, 405, luci.http.protocol.statusmsg[405] )
 			break;
 			
 		end
@@ -175,7 +178,7 @@ function Server.process( self, client )
 
 		local host = self.vhosts[message.env.HTTP_HOST] or self.host
 		if not host then
-			self:error( client, 500, "Unable to find matching host" )
+			self:error( thread, 500, "Unable to find matching host" )
 			break;
 		end
 		
@@ -184,7 +187,7 @@ function Server.process( self, client )
 			client, io.stderr 
 		)
 		if not response then
-			self:error( client, 500, "Error processing handler" )
+			self:error( thread, 500, "Error processing handler" )
 		end
 		
 		-- Post process response
@@ -221,8 +224,8 @@ function Server.process( self, client )
 			header = header .. k .. ": " .. v .. "\r\n"
 		end
 		
-		client:send(header .. "\r\n")
-		
+		thread:send(header .. "\r\n")
+
 		if sourceout then
 			local eof = false
 			repeat
