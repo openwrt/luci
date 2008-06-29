@@ -66,7 +66,7 @@ function cosend(socket, chunk, i, ...)
 			threadi[socket] = false
 			return stat, err, sent
 		else
-			i = sent and (sent + 1) or 1 
+			i = sent and (sent + 1) or i
 		end
  
 		coroutine.yield()
