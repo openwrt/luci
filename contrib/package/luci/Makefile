@@ -36,7 +36,11 @@ include $(INCLUDE_DIR)/package.mk
 ifeq ($(USELOCAL),1)
   define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	$(TAR) c -C ../../../ . --exclude=.pc --exclude='boa-0*' --exclude=.svn --exclude=.git --exclude='*.o' | tar x -C $(PKG_BUILD_DIR)/
+	$(TAR) c -C ../../../ . \
+		--exclude=.pc --exclude=.svn --exclude=.git \
+		--exclude='boa-0*' --exclude='*.o' --exclude='*.so' \
+		--exclude=dist | \
+			tar x -C $(PKG_BUILD_DIR)/
   endef
 endif
 
