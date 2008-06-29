@@ -62,8 +62,8 @@ start() {
 	iptables -t nat -A luci_splash_leases -j DROP
 	
 	### Start the splash httpd
-	httpd -c /etc/luci_splash_httpd.conf -p 8082 -h /usr/lib/luci-splash/htdocs
-	
+	start-stop-daemon -S -b -q -x /usr/bin/luci-splashd
+
 	### Hook in the chain
 	iptables -t nat -A prerouting_rule -j luci_splash
 }

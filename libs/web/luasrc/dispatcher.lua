@@ -314,7 +314,7 @@ end
 
 -- Shortcut for creating a dispatching node
 function entry(path, target, title, order)
-	local c = node(path)
+	local c = node(unpack(path))
 	
 	c.target = target
 	c.title  = title
@@ -328,11 +328,6 @@ end
 function node(...)
 	local c = context.tree
 	arg.n = nil
-	if arg[1] then
-		if type(arg[1]) == "table" then
-			arg = arg[1]
-		end
-	end
 
 	for k,v in ipairs(arg) do
 		if not c.nodes[v] then

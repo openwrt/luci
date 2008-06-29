@@ -1,0 +1,20 @@
+#!/usr/bin/lua
+require("socket")
+
+local server = socket.bind("0.0.0.0", arg[1] or 8082)
+server:settimeout(0, "t")
+
+while true do
+	local client = server:accept()
+	
+	if client then
+		client:settimeout(1)
+		local srv = client:getsockname()
+		client:receive()
+		client:send("HTTP/1.0 302 Found\r\nLocation: http://" .. srv ..
+		 (arg[2] or "/luci/splash") .. "\r\n\r\n")
+		client:close() 
+	else
+		socket.sleep(0.1)
+	end
+end

@@ -334,7 +334,7 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+iptables-mod-nat +iptables-mod-ipopt
+  DEPENDS+=+luasocket +iptables-mod-nat +iptables-mod-ipopt
   TITLE:=Freifunk DHCP-Splash application
 endef
 
