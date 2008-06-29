@@ -40,6 +40,7 @@ ipaddress = "IP-Address"
 
 legend = "Legend"
 library = "Library"
+logout = "Logout"
 
 key = "Key"
 

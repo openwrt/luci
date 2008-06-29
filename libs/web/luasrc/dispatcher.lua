@@ -75,7 +75,7 @@ function sysauth(default)
 	
 	if user and luci.sys.user.checkpasswd(user, pass) then
 		local sid = luci.sys.uniqueid(16)
-		luci.http.header("Set-Cookie", "sysauth=" .. sid)
+		luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
 		luci.sauth.write(sid, user)
 		return true
 	else
@@ -291,7 +291,7 @@ end
 
 -- Reassigns a node to another position
 function assign(path, clone, title, order)
-	local obj  = node(path)
+	local obj  = node(unpack(path))
 	obj.nodes  = nil
 	obj.module = nil
 	

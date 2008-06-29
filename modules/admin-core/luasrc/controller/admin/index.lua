@@ -40,5 +40,10 @@ function index()
 	page.target = cbi("admin_index/luci")
 	page.title  = i18n("a_i_ui", "Oberfläche")
 	
-	
+	entry({"admin", "logout"}, call("action_logout"), i18n("logout"))
+end
+
+function action_logout()
+	luci.http.header("Set-Cookie", "sysauth=; path=/")
+	luci.http.redirect(luci.dispatcher.build_url())
 end

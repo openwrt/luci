@@ -42,6 +42,7 @@ legend = "Legende"
 library = "Bibliothek"
 load = "Last"
 login = "Anmelden"
+logout = "Abmelden"
 
 key = "Schlüssel"
 
