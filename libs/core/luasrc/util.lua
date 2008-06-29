@@ -234,7 +234,7 @@ function strip_bytecode(dump)
 				offset = offset + size + subint(dump, offset, size)
 			elseif t == 3 then
 				offset = offset + num
-			elseif t == 254 then
+			elseif t == 254 or t == 9 then
 				offset = offset + lnum
 			end
 		end
