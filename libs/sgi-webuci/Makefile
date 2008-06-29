@@ -24,7 +24,7 @@ $(BOA_DIR)/.prepared: $(BOA_FILE)
 $(BOA_DIR)/.patched: $(BOA_DIR)/.prepared $(BOA_PATCHDIR)/series
 	(cd $(BOA_DIR); \
 		if [ -x "$$(which quilt 2>/dev/null)" ]; then \
-			quilt push -a; \
+			[ "$$(quilt top 2>/dev/null)" = "$$(tail -n1 patches/series)" ] || quilt push -a; \
 		else \
 			cat patches/*.patch | patch -p1; \
 		fi; \
