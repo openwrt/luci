@@ -607,8 +607,8 @@ Index: boa-0.94.13/src/list.h
 Index: boa-0.94.13/src/plugin.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ boa-0.94.13/src/plugin.c	2008-06-29 01:22:01.000000000 +0200
-@@ -0,0 +1,190 @@
++++ boa-0.94.13/src/plugin.c	2008-06-29 02:02:42.000000000 +0200
+@@ -0,0 +1,191 @@
 +/*
 + * Simple plugin API for boa
 + * Copyright (C) 2008 John Crispin <blogic@openwrt.org>
@@ -674,6 +674,7 @@ Index: boa-0.94.13/src/plugin.c
 +	ctx.query_string = req->query_string;
 +	ctx.remote_addr = req->remote_ip_addr;
 +	ctx.remote_port = req->remote_port;
++	ctx.cookie = req->cookie;
 +	if (req->method == M_POST) {
 +		if (req->content_type)
 +			ctx.content_type = req->content_type;
@@ -802,7 +803,7 @@ Index: boa-0.94.13/src/plugin.c
 Index: boa-0.94.13/src/request.c
 ===================================================================
 --- boa-0.94.13.orig/src/request.c	2008-06-29 01:11:52.000000000 +0200
-+++ boa-0.94.13/src/request.c	2008-06-29 01:12:36.000000000 +0200
++++ boa-0.94.13/src/request.c	2008-06-29 01:49:46.000000000 +0200
 @@ -50,6 +50,7 @@
          dequeue(&request_free, request_free); /* dequeue the head */
      } else {
@@ -852,6 +853,15 @@ Index: boa-0.94.13/src/request.c
  
      if (req->is_cgi) {
          return init_cgi(req);
+@@ -698,6 +716,8 @@
+         req->header_user_agent = value;
+         if (!add_cgi_env(req, "USER_AGENT", value, 1))
+             return 0;
++	} else if (!memcmp(line, "COOKIE", 7)) {
++		req->cookie = value;
+     } else {
+         if (!add_cgi_env(req, line, value, 1))
+             return 0;
 Index: boa-0.94.13/src/Makefile.in
 ===================================================================
 --- boa-0.94.13.orig/src/Makefile.in	2008-06-29 01:11:52.000000000 +0200
@@ -981,7 +991,7 @@ Index: boa-0.94.13/src/alias.c
 Index: boa-0.94.13/src/globals.h
 ===================================================================
 --- boa-0.94.13.orig/src/globals.h	2008-06-29 01:11:52.000000000 +0200
-+++ boa-0.94.13/src/globals.h	2008-06-29 01:12:36.000000000 +0200
++++ boa-0.94.13/src/globals.h	2008-06-29 01:47:25.000000000 +0200
 @@ -47,6 +47,7 @@
  struct request {                /* pending requests */
      int fd;                     /* client's socket fd */
@@ -998,6 +1008,14 @@ Index: boa-0.94.13/src/globals.h
  
      char *path_info;            /* env variable */
      char *path_translated;      /* env variable */
+@@ -99,6 +101,7 @@
+     char *query_string;         /* env variable */
+     char *content_type;         /* env variable */
+     char *content_length;       /* env variable */
++	char *cookie;               /* env variable */
+ 
+     struct mmap_entry *mmap_entry_var;
+ 
 Index: boa-0.94.13/src/read.c
 ===================================================================
 --- boa-0.94.13.orig/src/read.c	2008-06-29 01:11:52.000000000 +0200
@@ -1019,8 +1037,8 @@ Index: boa-0.94.13/src/read.c
 Index: boa-0.94.13/src/boa-plugin.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ boa-0.94.13/src/boa-plugin.h	2008-06-29 01:12:36.000000000 +0200
-@@ -0,0 +1,67 @@
++++ boa-0.94.13/src/boa-plugin.h	2008-06-29 02:02:27.000000000 +0200
+@@ -0,0 +1,68 @@
 +#ifndef _HTTPD_PLUGIN_H__
 +#define _HTTPD_PLUGIN_H__
 +
@@ -1047,6 +1065,7 @@ Index: boa-0.94.13/src/boa-plugin.h
 +	char *content_type;
 +	char *content_length;
 +	char *http_accept;
++	char *cookie;
 +
 +	void *priv;
 +};

@@ -58,6 +58,7 @@ function handle_req(context)
 	env.PATH_INFO       = context.uri
 	env.REMOTE_PORT     = context.remote_port
 	env.SERVER_ADDR     = context.server_addr
+	env.HTTP_COOKIE     = context.cookie
 	env.SCRIPT_NAME     = env.REQUEST_URI:sub(1, #env.REQUEST_URI - #env.PATH_INFO)
 
 	luci.sgi.webuci.run(env, vars)

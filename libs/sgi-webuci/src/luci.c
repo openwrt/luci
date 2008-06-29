@@ -160,6 +160,7 @@ static int luci_handle_req(struct httpd_plugin *p, struct http_context *ctx)
 
 	/* convert http_context data structure to lua table */
 #define PUSH(x)	pushvar(#x, ctx->x)
+	PUSH(cookie);
 	PUSH(request_method);
 	PUSH(server_addr);
 	PUSH(server_proto);
