@@ -111,7 +111,8 @@ function Server.process( self, client )
 
 	-- Setup sockets and sources
 	local thread = {
-		receive = function(self, ...) return luci.httpd.corecv(client, ...) end
+		receive = function(self, ...) return luci.httpd.corecv(client, ...) end,
+		send = function(self, ...) return luci.httpd.cosend(client, ...) end
 	}
 	
 	client:settimeout( 0 )
@@ -206,7 +207,7 @@ function Server.process( self, client )
 		end
 		
 		
-		local sinkout = socket.sink(sinkmode, client)
+		local sinkout = socket.sink(sinkmode, thread)
 		
 		local header =
 			message.env.SERVER_PROTOCOL .. " " ..

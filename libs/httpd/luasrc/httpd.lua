@@ -55,6 +55,24 @@ function corecv(socket, ...)
 	end
 end
 
+function cosend(socket, chunk, i, ...)
+	threadi[socket] = true
+	i = i or 1
+
+	while true do
+		local stat, err, sent = socket:send(chunk, i, ...)
+
+		if err ~= "timeout" then
+			threadi[socket] = false
+			return stat, err, sent
+		else
+			i = sent and (sent + 1) or 1 
+		end
+ 
+		coroutine.yield()
+	end
+end
+
 function register(socket, s_clhandler, s_errhandler)
 	table.insert(reading, socket)
 	clhandler[socket] = s_clhandler
