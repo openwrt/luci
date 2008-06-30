@@ -137,49 +137,54 @@ function Simple.handle_get(self, request, sourcein, sinkerr)
 
 			local entries = luci.fs.dir( file )
 
-			for i, e in luci.util.spairs(
-				entries, function(a,b)
-					if entries[a] == '..' then
-						return true
-					elseif entries[b] == '..' then
-						return false
-					else
-						return ( entries[a] < entries[b] )
+			if type(entries) == "table" then
+				for i, e in luci.util.spairs(
+					entries, function(a,b)
+						if entries[a] == '..' then
+							return true
+						elseif entries[b] == '..' then
+							return false
+						else
+							return ( entries[a] < entries[b] )
+						end
 					end
-				end
-			) do
-				if e ~= '.' and ( e == '..' or e:sub(1,1) ~= '.' ) then
-					local estat = luci.fs.stat( file .. "/" .. e )
+				) do
+					if e ~= '.' and ( e == '..' or e:sub(1,1) ~= '.' ) then
+						local estat = luci.fs.stat( file .. "/" .. e )
 
-					if estat.type == "directory" then
-						html = html .. string.format(
-							'<li><p><a href="%s/%s/">%s/</a> '               ..
-							'<small>(directory)</small><br />'               ..
-							'<small>Changed: %s</small></li>',
-								ruri, self.proto.urlencode( e ), e,
-								self.date.to_http( estat.mtime )
-						)
-					else
-						html = html .. string.format(
-							'<li><p><a href="%s/%s">%s</a> '                 ..
-							'<small>(%s)</small><br />'                      ..
-							'<small>Size: %i Bytes | Changed: %s</small></li>',
-								ruri, self.proto.urlencode( e ), e,
-								self.mime.to_mime( e ),
-								estat.size, self.date.to_http( estat.mtime )
-						)
+						if estat.type == "directory" then
+							html = html .. string.format(
+								'<li><p><a href="%s/%s/">%s/</a> '           ..
+								'<small>(directory)</small><br />'           ..
+								'<small>Changed: %s</small></li>',
+									ruri, self.proto.urlencode( e ), e,
+									self.date.to_http( estat.mtime )
+							)
+						else
+							html = html .. string.format(
+								'<li><p><a href="%s/%s">%s</a> '             ..
+								'<small>(%s)</small><br />'                  ..
+								'<small>Size: %i Bytes | '                   ..
+									'Changed: %s</small></li>',
+									ruri, self.proto.urlencode( e ), e,
+									self.mime.to_mime( e ),
+									estat.size, self.date.to_http( estat.mtime )
+							)
+						end
 					end
 				end
+
+				html = html .. '</ul><hr /></body></html>'
+
+				return Response(
+					200, {
+						["Date"]         = self.date.to_http( os.time() );
+						["Content-Type"] = "text/html; charset=ISO-8859-15";
+					}
+				), ltn12.source.string(html)
+			else
+				return self:failure(403, "Permission denied")
 			end
-
-			html = html .. '</ul><hr /></body></html>'
-
-			return Response(
-				200, {
-					["Date"]         = self.date.to_http( os.time() );
-					["Content-Type"] = "text/html; charset=ISO-8859-15";
-				}
-			), ltn12.source.string(html)
 		else
 			return self:failure(403, "Unable to transmit " .. stat.type .. " " .. file)
 		end
