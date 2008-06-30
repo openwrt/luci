@@ -16,7 +16,6 @@ $Id$
 module("luci.http.protocol", package.seeall)
 
 local ltn12 = require("luci.ltn12")
-require("luci.http.protocol.filter")
 
 HTTP_MAX_CONTENT      = 1024*4		-- 4 kB maximum content size
 HTTP_URLENC_MAXKEYLEN = 1024		-- maximum allowd size of urlencoded parameter names
@@ -31,7 +30,7 @@ function urldecode( str )
 	end
 
 	if type(str) == "string" then
-		str = str:gsub( "+", " " ):gsub( "%%([a-fA-F0-9][a-fA-F0-9])", __chrdec )
+		str = str:gsub( "%%([a-fA-F0-9][a-fA-F0-9])", __chrdec )
 	end
 
 	return str
@@ -84,7 +83,7 @@ function urlencode( str )
 
 	if type(str) == "string" then
 		str = str:gsub(
-			"([^a-zA-Z0-9$_%-%.+!*'(),])",
+			"([^a-zA-Z0-9$_%-%.%+!*'(),])",
 			__chrenc
 		)
 	end
