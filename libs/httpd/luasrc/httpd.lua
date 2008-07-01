@@ -92,7 +92,6 @@ function run()
 end
 
 function step()
-	print(collectgarbage("count"))
 	local idle = true
 	if not THREAD_LIMIT or threadc < THREAD_LIMIT then
 		local now = os.time()
