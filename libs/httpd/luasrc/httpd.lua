@@ -30,6 +30,12 @@ local threads = {}
 local threadm = {}
 local threadi = {}
 
+local _meta = {__mode = "k"}
+setmetatable(threads, _meta)
+setmetatable(threadm, _meta)
+setmetatable(threadi, _meta)
+
+
 function Socket(ip, port)
 	local sock, err = socket.bind( ip, port )
 
@@ -86,6 +92,7 @@ function run()
 end
 
 function step()
+	print(collectgarbage("count"))
 	local idle = true
 	if not THREAD_LIMIT or threadc < THREAD_LIMIT then
 		local now = os.time()
@@ -103,10 +110,7 @@ function step()
 		coroutine.resume(thread, client)
 		local now = os.time()
 		if coroutine.status(thread) == "dead" then
-			threads[client] = nil
 			threadc = threadc - 1
-			threadm[client] = nil
-			threadi[client] = nil
 		elseif threadm[client] and threadm[client] + THREAD_TIMEOUT < now then
 			threads[client] = nil
 			threadc = threadc - 1	
