@@ -87,7 +87,6 @@ end
 
 function step()
 	local idle = true
-		
 	if not THREAD_LIMIT or threadc < THREAD_LIMIT then
 		local now = os.time()
 		for i, server in ipairs(reading) do
@@ -106,6 +105,8 @@ function step()
 		if coroutine.status(thread) == "dead" then
 			threads[client] = nil
 			threadc = threadc - 1
+			threadm[client] = nil
+			threadi[client] = nil
 		elseif threadm[client] and threadm[client] + THREAD_TIMEOUT < now then
 			threads[client] = nil
 			threadc = threadc - 1	
