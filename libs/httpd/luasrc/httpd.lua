@@ -31,7 +31,6 @@ local threadm = {}
 local threadi = {}
 
 local _meta = {__mode = "k"}
-setmetatable(threads, _meta)
 setmetatable(threadm, _meta)
 setmetatable(threadi, _meta)
 
@@ -110,6 +109,7 @@ function step()
 		local now = os.time()
 		if coroutine.status(thread) == "dead" then
 			threadc = threadc - 1
+			threads[client] = nil
 		elseif threadm[client] and threadm[client] + THREAD_TIMEOUT < now then
 			threads[client] = nil
 			threadc = threadc - 1	
@@ -121,6 +121,7 @@ function step()
 	end
 	
 	if idle then
+		collectgarbage()
 		socket.sleep(THREAD_IDLEWAIT)
 	end
 end
