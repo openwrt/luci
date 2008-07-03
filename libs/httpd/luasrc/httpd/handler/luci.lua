@@ -23,12 +23,16 @@ local ltn12 = require("luci.ltn12")
 Luci = luci.util.class(luci.httpd.module.Handler)
 Response = luci.httpd.module.Response
 
-function Luci.__init__(self)
+function Luci.__init__(self, limit)
 	luci.httpd.module.Handler.__init__(self)
+	self.limit = limit or 5
+	self.running = {}
+	setmetatable(self.running, {__mode = "v"})
 end
 
 function Luci.handle_head(self, ...)
 	local response, sourceout = self:handle_get(...)
+	self.running = self.running - 1
 	return response
 end
 
@@ -37,6 +41,11 @@ function Luci.handle_post(self, ...)
 end
 
 function Luci.handle_get(self, request, sourcein, sinkerr)
+	if self.limit and #self.running >= self.limit then
+		return self:failure(503, "Overload")
+	end
+	table.insert(self.running, coroutine.running())
+	
 	local r = luci.http.Request(
 		request.env,
 		sourcein,
@@ -57,6 +66,7 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 			status = 500
 			headers["Content-Type"] = "text/plain"
 			local err = {id}
+			self.running = self.running - 1
 			return Response( status, headers ), function() return table.remove(err) end
 		end
 
