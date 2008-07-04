@@ -535,7 +535,7 @@ function header_source( sock )
 		if chunk == nil then
 			if err ~= "timeout" then
 				return nil, part
-					and "Line exceeds maximum allowed length["..part.."]"
+					and "Line exceeds maximum allowed length"
 					or  "Unexpected EOF"
 			else
 				return nil, err

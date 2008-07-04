@@ -5,7 +5,7 @@ Description:
 Server Gateway Interface for Webuci
 
 FileId:
-$Id: webuci.lua 2027 2008-05-07 21:16:35Z Cyrus $
+$Id$
 
 License:
 Copyright 2008 Steven Barth <steven@midlink.org>
