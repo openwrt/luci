@@ -65,7 +65,11 @@ network:value("")
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
-			network:value(section[".name"])
+			if section.type and section.type == "bridge" then
+				network:value("br-"..section[".name"],section[".name"])
+			else
+				network:value(section[".name"])
+			end
 		end
 	end)
 
