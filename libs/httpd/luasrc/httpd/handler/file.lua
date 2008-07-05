@@ -44,7 +44,7 @@ function Simple.getfile(self, uri)
 end
 
 function Simple.handle_get(self, request, sourcein, sinkerr)
-	local file, stat = self:getfile( self.proto.urldecode( request.env.PATH_INFO ) )
+	local file, stat = self:getfile( self.proto.urldecode( request.env.PATH_INFO, true ) )
 
 	if stat then
 		if stat.type == "regular" then
@@ -95,7 +95,7 @@ function Simple.handle_get(self, request, sourcein, sinkerr)
 		elseif stat.type == "directory" then
 
 			local ruri = request.request_uri:gsub("/$","")
-			local duri = self.proto.urldecode( ruri )
+			local duri = self.proto.urldecode( ruri, true )
 			local root = self.docroot:gsub("/$","")
 
 			-- check for index files

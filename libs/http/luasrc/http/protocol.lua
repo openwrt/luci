@@ -23,14 +23,17 @@ HTTP_URLENC_MAXKEYLEN = 1024		-- maximum allowd size of urlencoded parameter nam
 
 -- Decode an urlencoded string.
 -- Returns the decoded value.
-function urldecode( str )
+function urldecode( str, no_plus )
 
 	local function __chrdec( hex )
 		return string.char( tonumber( hex, 16 ) )
 	end
 
 	if type(str) == "string" then
-		str = str:gsub( "+", " " )
+		if not no_plus then
+			str = str:gsub( "+", " " )
+		end
+
 		str = str:gsub( "%%([a-fA-F0-9][a-fA-F0-9])", __chrdec )
 	end
 
