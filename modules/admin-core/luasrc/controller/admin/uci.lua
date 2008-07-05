@@ -14,9 +14,12 @@ $Id$
 module("luci.controller.admin.uci", package.seeall)
 
 function index()
-	node("admin", "uci", "changes").target = call("action_changes")
-	node("admin", "uci", "revert").target  = call("action_revert")
-	node("admin", "uci", "apply").target   = call("action_apply")
+	local i18n = luci.i18n.translate
+	
+	entry({"admin", "uci"}, nil, i18n("config"))
+	entry({"admin", "uci", "changes"}, call("action_changes"), i18n("changes"))
+	entry({"admin", "uci", "revert"}, call("action_revert"), i18n("revert"))
+	entry({"admin", "uci", "apply"}, call("action_apply"), i18n("apply"))
 end
 
 function convert_changes(changes)

@@ -66,7 +66,9 @@ local function submenu(prefix, node)
 	end
 	local index = {}	
 	for k, n in pairs(node.nodes) do
-		table.insert(index, {name=k, order=n.order or 100})
+		if n.title and n.target then
+			table.insert(index, {name=k, order=n.order or 100})
+		end
 	end
 		
 	table.sort(index, function(a, b) return a.order < b.order end)
@@ -96,7 +98,7 @@ if cattree and cattree.nodes then
 
 	for i, k in ipairs(index) do
 		node = cattree.nodes[k.name]
-		if node.title then
+		if node.title and node.target then
 			local href = controller.."/"..category.."/"..k.name
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
 			<div<% if node._menu_selected then %> class="blacktext"<%end%>><a href="<%=href%>"><%=node.title%></a>			
