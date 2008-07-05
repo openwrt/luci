@@ -186,8 +186,12 @@ function split(str, pat, max, regex)
 	
 	repeat
 		local s, e = str:find(pat, c, not regex)
-		table.insert(t, str:sub(c, s and s - 1))
 		max = max - 1
+		if s and max < 0 then
+			table.insert(t, str:sub(c))
+		else
+			table.insert(t, str:sub(c, s and s - 1))
+		end
 		c = e and e + 1 or #str + 1
 	until not s or max < 0
 	
