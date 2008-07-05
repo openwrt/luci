@@ -30,6 +30,7 @@ function urldecode( str )
 	end
 
 	if type(str) == "string" then
+		str = str:gsub( "+", " " )
 		str = str:gsub( "%%([a-fA-F0-9][a-fA-F0-9])", __chrdec )
 	end
 
