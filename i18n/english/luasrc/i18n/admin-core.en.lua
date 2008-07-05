@@ -3,8 +3,8 @@ uci_reverted = "The following changes have been reverted"
 
 a_i_ui = "User Interface"
 
-c_lucidesc = [[LuCI is a free Lua library with integrated MVC-Webframework and webinterface for embedded devices,
-aspecially routers that run OpenWRT. Luci is licensed under the Apache-License.]]
+c_lucidesc = [[LuCI is a collection of free Lua software including an MVC-Webframework and webinterface for embedded devices.
+Luci is licensed under the Apache-License.]]
 c_projecthome = "Project Homepage"
 c_leaddev = "Lead Development"
 c_contributors = "Contributing Developers"
