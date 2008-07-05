@@ -11,6 +11,9 @@
 <th>ETX</th>
 </tr>
 <% for k, link in ipairs(links) do 
+	if link.Linkcost then
+		link.LinkQuality, link.NLQ, link.ETX = link.Linkcost:match("(.*)/(.*)\t(.*)")
+	end
 	local color = "#bb3333"
 	
 	link.ETX = tonumber(link.ETX)

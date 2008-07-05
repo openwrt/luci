@@ -157,11 +157,12 @@ function fetch_txtinfo(otable)
 		local lines = luci.util.split(tbl, "\n")
 		local name  = table.remove(lines, 1):sub(8)
 		local keys  = luci.util.split(table.remove(lines, 1), "\t")
+		local split = #keys - 1
 		
 		data[name] = {}
 		
 		for j, line in ipairs(lines) do
-			local fields = luci.util.split(line, "\t")
+			local fields = luci.util.split(line, "\t", split)
 			data[name][j] = {}
 			for k, key in pairs(keys) do
 				data[name][j][key] = fields[k] 
