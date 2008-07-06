@@ -366,7 +366,6 @@ endef
 
 define Package/luci-sgi-cgi
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-web
   TITLE:=SGI for CGI
 endef
 
@@ -376,7 +375,7 @@ endef
 
 define Package/luci-sgi-luci
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-web +luci-httpd
+  DEPENDS+=+luci-httpd
   TITLE:=SGI for LuCI HTTPD
 endef
 
@@ -386,7 +385,6 @@ endef
 
 define Package/luci-sgi-webuci
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-web
   TITLE:=SGI for Webuci
 endef
 
