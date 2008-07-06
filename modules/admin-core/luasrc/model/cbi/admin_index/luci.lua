@@ -18,8 +18,12 @@ m = Map("luci", translate("webui"), translate("a_i_luci1",
 c = m:section(NamedSection, "main", "core", translate("general"))
 
 l = c:option(ListValue, "lang", translate("language"))
+
+local i18ndir = luci.i18n.i18ndir .. "default."
 for k, v in pairs(luci.config.languages) do
-	if k:sub(1, 1) ~= "." then
+	if k:sub(1, 1) ~= "." 
+	 and (luci.fs.isfile(i18ndir .. k .. ".lua") 
+	  or luci.fs.isfile(i18ndir .. k)) then
 		l:value(k, v)
 	end
 end
