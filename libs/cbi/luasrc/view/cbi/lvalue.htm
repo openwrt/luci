@@ -9,7 +9,8 @@
 	local c = 0;
 	for i, key in pairs(self.keylist) do
 	c = c + 1%>
-								<%=self.vallist[i]%><input type="radio" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == key then %> checked="checked"<% end %> value="<%=key%>" />
+								<input type="radio" id="cbid.<%=self.config.."."..section.."."..self.option%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == key then %> checked="checked"<% end %> value="<%=key%>" />
+								<label for="cbid.<%=self.config.."."..section.."."..self.option%>"><%=self.vallist[i]%></label><br />
 <% if c == self.size then c = 0 %><br />
 <% end end %>
 <% end %>
