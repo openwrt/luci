@@ -427,7 +427,7 @@ endef
 
 define Package/luci-i18n-english
   $(call Package/luci/i18ntemplate)
-  TITLE:=English (incomplete)
+  TITLE:=English
 endef
 
 define Package/luci-i18n-english/install
