@@ -30,19 +30,19 @@ require("luci.http").prepare_content("text/html")
 </head>
 <body>
 <div id="header">
-	<div class="whitetext smalltext bold right">
+	<div class="info whitetext smalltext bold right">
 	<%=luci.config.brand.firmware%><br />
 	<%=luci.config.brand.distro%><br />
 	<%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
 	<%:hostname%>: <%=luci.sys.hostname()%> 
 	</div>
-	<div>
+	<div class="title">
 		<span class="headertitle"><%=luci.config.brand.title%></span><br />
 		<span class="whitetext bold"><%=luci.config.brand.subtitle%></span>
 	</div>
 </div>
 
-<div class="separator black whitetext bold">
+<div class="pathbar separator black whitetext bold">
 <%:path%>: <% 
 local c = tree
 local url = controller
@@ -56,9 +56,7 @@ end
 %>
 </div>
 
-<div id="page">
-<div id="columns"><div id="columnswrapper">
-	<div class="sidebar left">
+<div class="mainmenu">
 <%
 local function submenu(prefix, node)
 	if not node._menu_selected or not node.nodes then
@@ -80,7 +78,7 @@ local function submenu(prefix, node)
 		href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 		%>
 		<li>
-			<span<% if nnode._menu_selected then %> class="blacktext"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
+			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
 			<% submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
 	<% end %>
@@ -101,7 +99,7 @@ if cattree and cattree.nodes then
 		if node.title and node.target then
 			local href = controller.."/"..category.."/"..k.name
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
-			<div<% if node._menu_selected then %> class="blacktext"<%end%>><a href="<%=href%>"><%=node.title%></a>			
+			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>			
 				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
 			</div>
 <%		end
@@ -109,16 +107,16 @@ if cattree and cattree.nodes then
 end
 %>		
 	</div>
-	<div class="sidebar right">
-		<div><%:webui%>
-			<ul><%
-				for k,node in pairs(tree.nodes) do
-					if node.title then %>
-						<li<% if request[1] == k then %> class="blacktext"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
-<%					end
-				end%>
-			</ul>
-		</div>
+	<div class="modemenu">
+		<ul><%
+			for k,node in pairs(tree.nodes) do
+				if node.title then %>
+					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
+<%				end
+			end%>
+		</ul>
+	</div>
+	<div class="sidebar">
 		<%
 			if "admin" == request[1] then
 				local ucic = 0
@@ -130,7 +128,7 @@ end
 					end
 				end
 		%>
-		<div><%:config%>
+		<div>
 			<ul>
 			<% if ucic > 0 then %>
 				<li><a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a></li>
