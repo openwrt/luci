@@ -67,6 +67,13 @@ function section(config, type, name, values)
 	return stat and name
 end
 
+function get_statevalue(...)
+	set_savedir(savedir_state)
+	local result = get(...)
+	set_savedir(savedir_default)
+	return result
+end
+
 function tset(config, section, values)
 	local stat = true
 	for k, v in pairs(values) do
