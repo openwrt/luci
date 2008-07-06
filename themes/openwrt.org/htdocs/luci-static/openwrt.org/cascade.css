@@ -15,6 +15,10 @@ body {
 	line-height: 100%;
 }
 
+div#content ul {
+	margin-left: 2em;
+}
+
 .clear {
 	clear: both;
 	height: 1px;
@@ -50,10 +54,13 @@ body {
 .mainmenu {
 	float: left;
 	width: 100%;
-/*	height: 2em;*/
-	min-height: 1.5em;
+	min-height: 1.8em;
 	background: #000000;
 	color: #ffffff;
+}
+
+* html .mainmenu {
+	height: 1.8em;
 }
 
 .mainmenu div {
@@ -190,11 +197,19 @@ body {
 }
 
 .cbi-section {
-	margin: 0 1em;
+	margin-bottom: 0.5em;
+	padding: 0.5em 1em;
+	border: 1px dotted #555555;
+	background-color: #ffffff;
 }
 
 .cbi-section h2 {
-	margin: 0.5em 0 0.5em -0.5em !important;
+	margin: 0em 0 0.5em -0.5em !important;
+}
+
+.cbi-section h3 {
+	height:	1.2em;
+	margin-top: -1.2em;
 }
 
 .cbi-section-descr {
@@ -247,6 +262,58 @@ table.smalltext tr td {
 	padding: 0 0.25em;
 	border-top: 1px solid #666666;
 	border-left: 1px solid #666666;
+}
+
+div.cbi-value {
+	clear: left;
+	border-bottom: 1px dotted #AAAAAA;
+}
+
+div.cbi-value:last-child {
+	border: none;
+}
+
+div.cbi-value-title {
+	width: 30%;
+	float: left;
+	margin: 0.5em 0;
+}
+
+div.cbi-value-field {
+	width: 68%;
+	float: left;
+	margin: 0.5em 0;
+}
+
+div.cbi-value-description {
+	font-size: 90%;
+}
+
+div.cbi-section-create {
+	clear: left;
+}
+
+div.cbi-map-descr {
+	margin-bottom: 1em;
+}
+
+div.cbi-optionals {
+	margin: 0.5em 0;
+}
+
+div.cbi-section-remove input {
+	border-color: #AAAAAA;
+	border-bottom: none;
+}
+
+div.cbi-section-node {
+	border: 1px solid #AAAAAA;
+	padding: 0.25em;
+	padding-bottom: 0;
+}
+
+.right {
+	text-align: right;
 }
 
 .luci {
