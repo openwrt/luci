@@ -43,7 +43,6 @@ function load(file, lang, force)
 	lang = lang or ""
 	if force or not loaded[lang] or not loaded[lang][file] then
 		local f = loadfile(i18ndir .. file .. "." .. lang .. ".lua")
-		 or loadfile(i18ndir .. file .. "." .. lang)
 		if f then
 			table[lang] = table[lang] or {}
 			setfenv(f, table[lang])
