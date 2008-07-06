@@ -59,7 +59,7 @@ end
 <div class="mainmenu">
 <%
 local function submenu(prefix, node)
-	if not node._menu_selected or not node.nodes then
+	if not node.nodes then
 		return false
 	end
 	local index = {}	
