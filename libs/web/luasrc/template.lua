@@ -53,9 +53,11 @@ viewns = {
 -- Compiles a given template into an executable Lua module
 function compile(template)	
 	-- Search all <% %> expressions (remember: Lua table indexes begin with #1)
-	local function expr_add(command)
+	local function expr_add(ws1, skip1, command, skip2, ws2)
 		table.insert(expr, command)
-		return "<%" .. tostring(#expr) .. "%>"
+		return ( skip1 and "" or ws1 ) .. 
+		       "<%" .. tostring(#expr) .. "%>" ..
+		       ( skip2 and "" or ws2 )
 	end
 	
 	-- As "expr" should be local, we have to assign it to the "expr_add" scope 
@@ -63,7 +65,7 @@ function compile(template)
 	luci.util.extfenv(expr_add, "expr", expr)
 	
 	-- Save all expressiosn to table "expr"
-	template = template:gsub("<%%(.-)%%>", expr_add)
+	template = template:gsub("(%s*)<%%(%-?)(.-)(%-?)%%>(%s*)", expr_add)
 	
 	local function sanitize(s)
 		s = luci.util.escape(s)
