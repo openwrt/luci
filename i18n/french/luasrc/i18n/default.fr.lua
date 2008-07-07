@@ -1,0 +1,96 @@
+about = "A propos"
+add = "Ajouter"
+all = "tous"
+administration = "Administration"
+apply = "Appliquer"
+
+changes = "Changements"
+channel = "Canal"
+code = "Code"
+config = "Configuration"
+configfile = "Fichier de configuration"
+confirmation = "Confirmation"
+
+delete = "Effacer"
+descr = "Description"
+design = "Conception"
+device = "Equipement"
+devices = "Equipements"
+disable = "désactiver"
+distance = "Distance"
+dnsserver = "Serveur DNS"
+
+enable = "activer"
+encryption = "Chiffrement"
+error = "Erreur"
+
+filesystem = "Système de fichiers"
+filter = "Filtrer"
+
+gateway = "Passerelle"
+general = "Général"
+
+hostname = "Nom d'hôte"
+
+install = "Installer"
+installed = "installé"
+interface = "Interface"
+interfaces = "Interfaces"
+ipaddress = "Addresse IP"
+
+legend = "Légende"
+library = "Bibliothèque"
+logout = "Déconnexion"
+
+key = "Clé"
+
+language = "Langue"
+limit = "Limite"
+load = "Charger"
+login = "Connexion"
+
+macaddress = "Adresse MAC"
+manpage = "voir la page de man de '%s'"
+metric = "Metrique"
+mode = "Mode"
+
+name = "Nom"
+netmask = "Masque réseau"
+network = "Réseau"
+networks = "Réseaux"
+notinstalled = "pas installé"
+
+ok = "OK"
+options = "Options"
+overview = "Vue d'ensemble"
+
+packagemanager = "Gestionnaire de paquets"
+password = "Mot de passe"
+path = "Chemin"
+port = "Port"
+protocol = "Protocole"
+
+reboot = "Redémarrage"
+reset = "Remise à zéro"
+revert = "Revenir"
+
+save = "Sauvegarder"
+services = "Services"
+settings = "Réglages"
+start = "Démarrer"
+static = "statique"
+statistics = "Statistiques"
+syslog = "Journal système"
+system = "Système"
+
+target = "Cible"
+timezone = "Fuseau horaire"
+type = "Type"
+
+username = "Nom d'utilisateur"
+unknownerror = "Erreur inconnue"
+
+version = "Version"
+
+webui = "IU Web"
+wifi = "Wi-Fi"

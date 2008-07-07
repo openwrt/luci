@@ -433,6 +433,17 @@ define Package/luci-i18n-english/install
 endef
 
 
+define Package/luci-i18n-french
+  $(call Package/luci/i18ntemplate)
+  TITLE:=French
+endef
+
+define Package/luci-i18n-french/install
+	$(call Package/luci/install/template,$(1),i18n/french)
+endef
+
+
+
 
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
@@ -514,8 +525,11 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-german),)
 	PKG_SELECTED_MODULES+=i18n/german
 endif
-ifneq ($(CONFIG_PACKAGE_luci-i18n-english),)
+ifneq ($(CONFIG_Pfrenchluci-i18n-english),)
 	PKG_SELECTED_MODULES+=i18n/english
+endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-french),)
+	PKG_SELECTED_MODULES+=i18n/french
 endif
 
 
@@ -560,3 +574,4 @@ $(eval $(call BuildPackage,luci-theme-openwrt))
 
 $(eval $(call BuildPackage,luci-i18n-german))
 $(eval $(call BuildPackage,luci-i18n-english))
+$(eval $(call BuildPackage,luci-i18n-french))
