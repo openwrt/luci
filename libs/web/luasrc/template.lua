@@ -102,6 +102,8 @@ function compile(template)
 			end
 		elseif p == "=" then
 			re = r_pexec:format(v:sub(2))
+		elseif p == "#" then
+			re = ""
 		else
 			re = r_exec:format(v)
 		end
