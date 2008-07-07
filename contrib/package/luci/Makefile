@@ -572,6 +572,7 @@ $(eval $(call BuildPackage,luci-httpd))
 $(eval $(call BuildPackage,luci-ff-halle))
 $(eval $(call BuildPackage,luci-ff-leipzig))
 $(eval $(call BuildPackage,luci-ff-hannover))
+$(eval $(call BuildPackage,luci-ff-berlin))
 
 $(eval $(call BuildPackage,luci-mod-admin-core))
 $(eval $(call BuildPackage,luci-mod-freifunk))
