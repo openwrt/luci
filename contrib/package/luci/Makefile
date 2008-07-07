@@ -525,7 +525,7 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-german),)
 	PKG_SELECTED_MODULES+=i18n/german
 endif
-ifneq ($(CONFIG_Pfrenchluci-i18n-english),)
+ifneq ($(CONFIG_PACKAGE_luci-i18n-english),)
 	PKG_SELECTED_MODULES+=i18n/english
 endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-french),)
