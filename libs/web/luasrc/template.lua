@@ -55,9 +55,9 @@ function compile(template)
 	-- Search all <% %> expressions (remember: Lua table indexes begin with #1)
 	local function expr_add(ws1, skip1, command, skip2, ws2)
 		table.insert(expr, command)
-		return ( skip1 and "" or ws1 ) .. 
+		return ( #skip1 > 0 and "" or ws1 ) .. 
 		       "<%" .. tostring(#expr) .. "%>" ..
-		       ( skip2 and "" or ws2 )
+		       ( #skip2 > 0 and "" or ws2 )
 	end
 	
 	-- As "expr" should be local, we have to assign it to the "expr_add" scope 
