@@ -28,6 +28,10 @@ div#content ul {
 	display: none;
 }
 
+.error {
+	color: #ff0000;
+}
+
 #header {
 	min-height: 98px;
 	background-image: url(header.jpg);
@@ -51,9 +55,16 @@ div#content ul {
 	display: none;
 }
 
+.menubar {
+	width: 100%;
+	min-height: 1.8em;
+	background: #000000;
+	color: #ffffff;
+}
+
 .mainmenu {
 	float: left;
-	width: 100%;
+	width: auto;
 	min-height: 1.8em;
 	background: #000000;
 	color: #ffffff;
@@ -65,7 +76,6 @@ div#content ul {
 
 .mainmenu div {
 	float: left;
-	/*display: inline;*/
 }
 
 .mainmenu div ul {
@@ -85,7 +95,6 @@ div#content ul {
 }
 
 .mainmenu ul li > ul {
-/*	display: none;*/
 	left: 100%;
 	margin-top: -1.8em;
 	border-width: 1px;
@@ -95,7 +104,6 @@ div#content ul {
 .mainmenu a {
 	display: block;
 	padding: 0.5em;
-	/*width: */
 	color: #ffffff;
 	text-decoration: none;
 	font-size: 80%;
@@ -110,7 +118,6 @@ div#content ul {
 .mainmenu li:hover > span > a,
 .mainmenu div:hover > a {
 	font-weight: bold;
-/*	color: #ffffff;*/
 }
 
 .modemenu a:hover,
@@ -127,10 +134,7 @@ div#content ul {
 }
 
 .modemenu ul {
-	float: right;
-	/*max-width: 45%;*/
-	width: 45%;
-	margin-top: -1.8em;
+	width: auto;
 	background: #000000;
 	color: #ffffff;
 	list-style-type: none;
@@ -141,25 +145,23 @@ div#content ul {
 }
 
 .sidebar {
-/*	display: none;*/
-/*	float: right;*/
-	position: fixed;
-	bottom: 0.5em;
+	position: absolute;
+	top: -50px;
 	right: 0;
-	width: 19%;
+	width: 18%;
 	color: #888888;
 	text-align: center;
 	font-size: 100%;
 	font-weight: bold;
+	z-index: -1;
 }
 
 .sidebar ul {
-	float: right;
 	width: 100%;
-	margin-top: 0.5em;
+	margin-top: 16em;
 	list-style-type: none;
 	color: #ffffff;
-	text-align: right;
+	text-align: left;
 	font-size: 80%;
 	font-size: normal;
 }
@@ -167,7 +169,6 @@ div#content ul {
 #content {
 	clear: both;
 	width: 60%;
-	/*margin: 2.25em 20% 0 20%;*/
 	margin: 0 auto;
 	padding: 0.5em;
 	background: #f5f5f5;
@@ -192,7 +193,6 @@ div#content ul {
 }
 
 #content p {
-/*	margin: 1em;*/
 	margin-bottom: 1em;
 }
 
@@ -208,8 +208,8 @@ div#content ul {
 }
 
 .cbi-section h3 {
-	height:	1.2em;
-	margin-top: -1.2em;
+	height:	1em;
+	font-size: 120%;
 }
 
 .cbi-section-descr {
@@ -225,13 +225,19 @@ label {
 select,
 input,
 textarea {
-	background: #dddddd;
+	background: #eeeeee;
 	color: #000000;
 	border: 1px solid #000000;
 }
 
+input:focus,
+textarea:focus {
+	background: #ffffff;
+}
+
 select,
-input[type=text] {
+input[type=text],
+input[type=password] {
 	width: 20em;
 }
 
@@ -251,6 +257,7 @@ table.smalltext {
 	border-top: 1px solid #666666;
 	border-right: 1px solid #666666;
 	border-bottom: 1px solid #666666;
+	font-size: 90%;
 }
 
 table.smalltext tr th {
@@ -266,23 +273,27 @@ table.smalltext tr td {
 
 div.cbi-value {
 	clear: left;
-	border-bottom: 1px dotted #AAAAAA;
+	padding: 0.25em;
+	border-bottom: 1px dotted #bbbbbb;
+}
+
+div.cbi-value:hover {
+	background: #f8f8f8;
 }
 
 div.cbi-value:last-child {
 	border: none;
 }
 
-div.cbi-value-title {
-	width: 30%;
+.cbi-value-title {
 	float: left;
-	margin: 0.5em 0;
+	width: 30%;
+	margin: 0.25em 0;
 }
 
 div.cbi-value-field {
 	width: 68%;
-	float: left;
-	margin: 0.5em 0;
+	margin: 0.25em 0 0.25em 30%;
 }
 
 div.cbi-value-description {
@@ -299,16 +310,21 @@ div.cbi-map-descr {
 
 div.cbi-optionals {
 	margin: 0.5em 0;
+	padding: 0 0.25em;
+}
+
+div.cbi-section-remove {
+	float: right;
 }
 
 div.cbi-section-remove input {
-	border-color: #AAAAAA;
+	border-color: #bbbbbb;
 	border-bottom: none;
 }
 
 div.cbi-section-node {
-	border: 1px solid #AAAAAA;
-	padding: 0.25em;
+	clear: both;
+	border: 1px dotted #bbbbbb;
 	padding-bottom: 0;
 }
 

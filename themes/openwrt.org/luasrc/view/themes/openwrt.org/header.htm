@@ -56,7 +56,8 @@ end
 %>
 </div>
 
-<div class="mainmenu">
+<div class="menubar">
+	<div class="mainmenu">
 <%
 local function submenu(prefix, node)
 	if not node.nodes then
@@ -116,29 +117,31 @@ end
 			end%>
 		</ul>
 	</div>
-	<div class="sidebar">
-		<%
-			if "admin" == request[1] then
-				local ucic = 0
-				for i, j in pairs(require("luci.model.uci").changes()) do
-					for k, l in pairs(j) do
-						for m, n in pairs(l) do
-							ucic = ucic + 1;
-						end
+	<br class="clear" />
+</div>
+<div class="sidebar">
+	<%
+		if "admin" == request[1] then
+			local ucic = 0
+			for i, j in pairs(require("luci.model.uci").changes()) do
+				for k, l in pairs(j) do
+					for m, n in pairs(l) do
+						ucic = ucic + 1;
 					end
 				end
-		%>
-		<div>
-			<ul>
-			<% if ucic > 0 then %>
-				<li><a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a></li>
-				<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
-				<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
-			<% else %>
-				<li><%:changes%>: 0</li>
-			<% end %>
-			</ul>
-		</div>
+			end
+	%>
+	<div>
+		<ul>
+		<% if ucic > 0 then %>
+			<li><a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a></li>
+			<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
+			<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
+		<% else %>
+			<li><%:changes%>: 0</li>
 		<% end %>
+		</ul>
 	</div>
-	<div id="content">
+	<% end %>
+</div>
+<div id="content">
