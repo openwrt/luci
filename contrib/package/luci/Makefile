@@ -253,6 +253,21 @@ define Package/luci-ff-hannover/install
 endef
 
 
+define Package/luci-ff-berlin
+  $(call Package/luci/fftemplate)
+  DEPENDS+= \
+   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
+   +luci-theme-fledermaus \
+   +luci-i18n-german \
+   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
+  TITLE:=Freifunk Berlin Community Meta-Package
+endef
+
+define Package/luci-ff-berlin/install
+	$(call Package/luci/install/template,$(1),applications/community-berlin)
+endef
+
+
 ### Modules ###
 
 define Package/luci-mod-admin-core
@@ -477,6 +492,9 @@ ifneq ($(CONFIG_PACKAGE_luci-ff-leipzig),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-ff-hannover),)
 	PKG_SELECTED_MODULES+=applications/community-hannover
+endif
+ifneq ($(CONFIG_PACKAGE_luci-ff-berlin),)
+	PKG_SELECTED_MODULES+=applications/community-berlin
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-mod-admin-core),)
