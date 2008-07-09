@@ -44,6 +44,14 @@ lql:value("0", translate("disable"))
 lql:value("1", translate("olsr_general_linkqualitylevel_1"))
 lql:value("2", translate("olsr_general_linkqualitylevel_2"))
 
+s:option(Value, "LinkQualityAging").optional = true
+
+lqa = s:option(ListValue, "LinkQualityAlgorithm")
+lqa.optional = true
+lqa:value("etx_fpm", translate("olsr_etx_fpm"))
+lqa:value("etx_float", translate("olsr_etx_float"))
+lqa:value("etx_ff", translate("olsr_etx_ff"))
+
 lqfish = s:option(Flag, "LinkQualityFishEye")
 
 s:option(Value, "LinkQualityWinSize")
@@ -53,6 +61,22 @@ s:option(Value, "LinkQualityDijkstraLimit")
 hyst = s:option(Flag, "UseHysteresis")
 hyst.enabled = "yes"
 hyst.disabled = "no"
+
+fib = s:option(ListValue, "FIBMetric")
+fib.optional = true
+fib:value("flat")
+fib:value("correct")
+fib:value("approx")
+
+clrscr = s:option(Flag, "ClearScreen")
+clrscr.enabled = "yes"
+clrscr.disabled = "no"
+
+willingness = s:option(ListValue, "Willingness")
+for i=0,7 do
+	willingness:value(i)
+end
+
 
 
 i = m:section(TypedSection, "Interface", translate("interfaces"))
@@ -69,6 +93,7 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
+i:option(Value, "Ip4Broadcast")
 i:option(Value, "HelloInterval")
 i:option(Value, "HelloValidityTime")
 i:option(Value, "TcInterval")
