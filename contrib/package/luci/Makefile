@@ -267,6 +267,19 @@ define Package/luci-ff-berlin/install
 	$(call Package/luci/install/template,$(1),applications/community-berlin)
 endef
 
+define Package/luci-ff-augsburg
+  $(call Package/luci/fftemplate)
+  DEPENDS+= \
+   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
+   +luci-theme-fledermaus \
+   +luci-i18n-german \
+   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
+  TITLE:=Freifunk Augsburg Community Meta-Package
+endef
+
+define Package/luci-ff-augsburg/install
+        $(call Package/luci/install/template,$(1),applications/community-augsburg)
+endef
 
 ### Modules ###
 
@@ -496,6 +509,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-ff-berlin),)
 	PKG_SELECTED_MODULES+=applications/community-berlin
 endif
+ifneq ($(CONFIG_PACKAGE_luci-ff-augsburg),)
+        PKG_SELECTED_MODULES+=applications/community-augsburg
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-mod-admin-core),)
 	PKG_SELECTED_MODULES+=modules/admin-core
@@ -573,6 +589,7 @@ $(eval $(call BuildPackage,luci-ff-halle))
 $(eval $(call BuildPackage,luci-ff-leipzig))
 $(eval $(call BuildPackage,luci-ff-hannover))
 $(eval $(call BuildPackage,luci-ff-berlin))
+$(eval $(call BuildPackage,luci-ff-augsburg))
 
 $(eval $(call BuildPackage,luci-mod-admin-core))
 $(eval $(call BuildPackage,luci-mod-freifunk))
