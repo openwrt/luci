@@ -16,38 +16,60 @@ $Id$
 					<h2><%=self.title%></h2>
 					<div class="cbi-section-descr"><%=self.description%></div>
 					<div class="cbi-section-node">
-						<div class="cbi-section-row">
-<% for i, k in pairs(self.children) do %>
-						<div class="cbi-section-row-head"><%=k.title%></div>			
-<% end %>
-						</div>
-						<div class="cbi-section-row">
-<% for i, k in pairs(self.children) do %>
-						<div class="cbi-section-row-descr"><%=k.description%></div>			
-<% end %>
-						</div>
-<% for i, k in ipairs(self:cfgsections()) do%>
-						<% if not self.anonymous then %><h3 class="table-cell"><%=k%></h3><% end %>
-<%
-section = k 
-scope = {valueheader = "cbi/tiny_valueheader", valuefooter = "cbi/tiny_valuefooter"}
-%>
-<div class="cbi-section-row" id="cbi-<%=self.config%>-<%=section%>">
-<%+cbi/ucisection%>
-						<% if self.addremove then %><div class="cbi-section-remove table-cell">
-							<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="X" />
-						</div><% end %>
-</div>
-<% end %>
-<% if self.addremove then %>
-					<div class="cbi-section-create">
-						<% if self.anonymous then %>
-							<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
-						<% else %>
-							<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-							<input type="submit" value="<%:cbi_add%>" />
-						<% end %><% if self.err_invalid then %><div class="cbi-error"><%:cbi_invalid%></div><% end %>
+						<%- local count = 0 -%>
+						<table class="cbi-section-table">
+							<tr class="cbi-section-table-titles">
+							<%- for i, k in pairs(self.children) do -%>
+								<th class="cbi-section-table-cell"><%=k.title%></th>
+							<%- count = count + 1; end; if self.addremove then -%>
+								<th class="cbi-section-table-cell">&nbsp;</th>
+							<%- count = count + 1; end -%>
+							</tr>
+							<tr class="cbi-section-table-descr">
+							<%- for i, k in pairs(self.children) do -%>
+								<th class="cbi-section-table-cell"><%=k.description%></th>
+							<%- end; if self.addremove then -%>
+								<th class="cbi-section-table-cell">&nbsp;</th>
+							<%- end -%>
+							</tr>
+							<%- for i, k in ipairs(self:cfgsections()) do
+									if not self.anonymous then
+							-%>
+							<tr class="cbi-section-table-title">
+								<th colspan="<%=count%>"><h3><%=k%></h3></th>
+							</tr>
+							<%- 	end
+									section = k
+									scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
+							-%>
+							<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
+								<%-+cbi/ucisection-%>
+								<%- if self.addremove then -%>
+									<td class="cbi-section-table-cell">
+										<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="X" />
+									</td>
+								<%- end -%>
+							</tr>
+							<%- end -%>
+
+							<%- if self.addremove then -%>
+							<tr class="cbi-section-table-row">
+								<td colspan="<%=count%>" class="cbi-section-table-optionals">
+									<div class="cbi-section-create">
+										<% if self.anonymous then %>
+											<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
+										<% else %>
+											<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+											<input type="submit" value="<%:cbi_add%>" />
+										<% end %>
+
+										<% if self.err_invalid then %>
+											<div class="cbi-error"><%:cbi_invalid%></div>
+										<% end %>
+									</div>
+								</td>
+							</tr>
+							<%- end -%>
+						</table>
 					</div>
-					</div>
-<% end %>
 				</div>

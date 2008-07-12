@@ -15,6 +15,11 @@ body {
 	line-height: 100%;
 }
 
+code {
+	font-family: monospace;
+	white-space: pre;
+}
+
 div#content ul {
 	margin-left: 2em;
 }
@@ -76,6 +81,10 @@ div#content ul {
 
 .mainmenu div {
 	float: left;
+}
+
+.mainmenu li {
+	white-space: nowrap;
 }
 
 .mainmenu div ul {
@@ -142,28 +151,6 @@ div#content ul {
 
 .modemenu li {
 	float: right;
-}
-
-.sidebar {
-	position: absolute;
-	top: -50px;
-	right: 0;
-	width: 18%;
-	color: #888888;
-	text-align: center;
-	font-size: 100%;
-	font-weight: bold;
-	z-index: -1;
-}
-
-.sidebar ul {
-	width: 100%;
-	margin-top: 16em;
-	list-style-type: none;
-	color: #ffffff;
-	text-align: left;
-	font-size: 80%;
-	font-size: normal;
 }
 
 #content {
@@ -239,6 +226,12 @@ select,
 input[type=text],
 input[type=password] {
 	width: 20em;
+}
+
+td select,
+td input[type=text],
+td input[type=password] {
+	width: 99%;
 }
 
 textarea {
@@ -328,6 +321,26 @@ div.cbi-section-node {
 	padding-bottom: 0;
 }
 
+table.cbi-section-table {
+	width: 100%;
+	font-size: 95%;
+}
+
+table.cbi-section-table th,
+table.cbi-section-table td {
+	text-align: center;
+}
+
+tr.cbi-section-table-descr th {
+	font-weight: normal;
+	font-size: 90%;
+}
+
+td.cbi-section-table-optionals {
+	text-align: left !important;
+	padding-top: 1em;
+}
+
 .right {
 	text-align: right;
 }
@@ -344,5 +357,3 @@ div.cbi-section-node {
 	text-decoration: none;
 	font-size: 70%;
 }
-
-

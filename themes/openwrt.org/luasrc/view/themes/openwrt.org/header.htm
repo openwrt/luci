@@ -19,11 +19,11 @@ local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
-local node     = luci.dispatcher.context.dispatched 
+local node     = luci.dispatcher.context.dispatched
 
 local c = tree
 for i,r in ipairs(request) do
-	if c.nodes and c.nodes[r] then 
+	if c.nodes and c.nodes[r] then
 		c = c.nodes[r]
 		c._menu_selected = true
 	end
@@ -48,7 +48,7 @@ require("luci.http").prepare_content("text/html")
 	<%=luci.config.brand.firmware%><br />
 	<%=luci.config.brand.distro%><br />
 	<%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
-	<%:hostname%>: <%=luci.sys.hostname()%> 
+	<%:hostname%>: <%=luci.sys.hostname()%>
 	</div>
 	<div class="title">
 		<span class="headertitle"><%=luci.config.brand.title%></span><br />
@@ -57,7 +57,7 @@ require("luci.http").prepare_content("text/html")
 </div>
 
 <div class="pathbar separator black whitetext bold">
-<%:path%>: <% 
+<%:path%>: <%
 local c = tree
 local url = controller
 for k,v in pairs(request) do
@@ -77,17 +77,17 @@ local function submenu(prefix, node)
 	if not node.nodes then
 		return false
 	end
-	local index = {}	
+	local index = {}
 	for k, n in pairs(node.nodes) do
 		if n.title and n.target then
 			table.insert(index, {name=k, order=n.order or 100})
 		end
 	end
-		
+
 	table.sort(index, function(a, b) return a.order < b.order end)
 %>
 	<ul>
-	<% for j, v in pairs(index) do 
+	<% for j, v in pairs(index) do
 		local nnode = node.nodes[v.name]
 		local href = controller .. prefix .. v.name
 		href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
@@ -97,16 +97,16 @@ local function submenu(prefix, node)
 			<% submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
 	<% end %>
-		</ul> 
-<%	 
+	</ul>
+<%
 end
 
 if cattree and cattree.nodes then
-	local index = {}	
+	local index = {}
 	for k, node in pairs(cattree.nodes) do
 		table.insert(index, {name=k, order=node.order or 100})
 	end
-	
+
 	table.sort(index, function(a, b) return a.order < b.order end)
 
 	for i, k in ipairs(index) do
@@ -114,13 +114,13 @@ if cattree and cattree.nodes then
 		if node.title and node.target then
 			local href = controller.."/"..category.."/"..k.name
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
-			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>			
+			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>
 				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
 			</div>
 <%		end
 	end
 end
-%>		
+%>
 	</div>
 	<div class="modemenu">
 		<ul><%
@@ -130,32 +130,33 @@ end
 <%				end
 			end%>
 		</ul>
-	</div>
-	<br class="clear" />
-</div>
-<div class="sidebar">
-	<%
-		if "admin" == request[1] then
-			local ucic = 0
-			for i, j in pairs(require("luci.model.uci").changes()) do
-				for k, l in pairs(j) do
-					for m, n in pairs(l) do
-						ucic = ucic + 1;
+
+		<%
+			if "admin" == request[1] then
+				local ucic = 0
+				for i, j in pairs(require("luci.model.uci").changes()) do
+					for k, l in pairs(j) do
+						for m, n in pairs(l) do
+							ucic = ucic + 1;
+						end
 					end
 				end
-			end
-	%>
-	<div>
-		<ul>
-		<% if ucic > 0 then %>
-			<li><a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a></li>
-			<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
-			<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
-		<% else %>
-			<li><%:changes%>: 0</li>
+		%>
+		<div class="mainmenu" style="float:right; margin-right:2em">
+			<div>
+				<% if ucic > 0 then %>
+				<a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a>
+				<ul>
+					<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
+					<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
+				</ul>
+				<% else %>
+				<a href="#"><%:changes%>: 0</a>
+				<% end %>
+			</div>
+		</div>
 		<% end %>
-		</ul>
 	</div>
-	<% end %>
+	<br class="clear" />
 </div>
 <div id="content">
