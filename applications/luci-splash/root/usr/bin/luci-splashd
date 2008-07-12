@@ -1,5 +1,8 @@
 #!/usr/bin/lua
 require("socket")
+require("luci.model.uci")
+
+luci.model.uci.set_savedir(luci.model.uci.savedir_state)
 
 local server = socket.bind("0.0.0.0", arg[1] or 8082)
 server:settimeout(0, "t")
@@ -9,7 +12,19 @@ while true do
 	
 	if client then
 		client:settimeout(1)
-		local srv = client:getsockname()
+		local ip = client:getpeername()
+		local srv
+		luci.model.uci.foreach("network", "interface",
+			function (section)
+			    if section.ipaddr then
+			        local p = luci.sys.net.mask4prefix(section.netmask)
+			        if luci.sys.net.belongs(ip, section.ipaddr, p) then
+			            srv = section.ipaddr
+			            return
+			        end
+			    end
+			end)
+
 		client:receive()
 		client:send("HTTP/1.0 302 Found\r\nLocation: http://" .. srv ..
 		 (arg[2] or "/luci/splash") .. "\r\n\r\n")
