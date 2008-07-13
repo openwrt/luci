@@ -32,7 +32,9 @@ end
 require("luci.i18n").loadc("default")
 
 require("luci.http").prepare_content("text/html")
-%><?xml version="1.0" encoding="utf-8"?>
+-%>
+
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -41,8 +43,25 @@ require("luci.http").prepare_content("text/html")
 	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
 	<title>LuCI - Lua Configuration Interface - <%=(node and node.title)%></title>
+
+	<!--[if lt IE 7]>
+		<script type="text/javascript">
+			function setup_hover() {
+				function ie_hover(e) {
+					e.onmouseover = function() { this.className = "hover" }
+					e.onmouseout  = function() { this.className = null    }
+				}
+
+				var lis  = document.getElementById("mainmenu").getElementsByTagName("LI");
+				var divs = document.getElementById("mainmenu").getElementsByTagName("DIV");
+				
+				for( var i = 0; i < lis.length;  i++ ) ie_hover( lis[i]  );
+				for( var i = 0; i < divs.length; i++ ) ie_hover( divs[i] );
+			}
+		</script>
+	<![endif]-->
 </head>
-<body>
+<body onload="window.setup_hover && setup_hover()">
 <div id="header">
 	<div class="info whitetext smalltext bold right">
 	<%=luci.config.brand.firmware%><br />
@@ -71,20 +90,24 @@ end
 </div>
 
 <div class="menubar">
-	<div class="mainmenu">
+	<div id="mainmenu" class="mainmenu">
 <%
 local function submenu(prefix, node)
 	if not node.nodes then
 		return false
 	end
 	local index = {}
+	local count = 0
 	for k, n in pairs(node.nodes) do
 		if n.title and n.target then
 			table.insert(index, {name=k, order=n.order or 100})
+			count = count + 1
 		end
 	end
 
 	table.sort(index, function(a, b) return a.order < b.order end)
+
+	if count > 0 then
 %>
 	<ul>
 	<% for j, v in pairs(index) do
@@ -99,6 +122,7 @@ local function submenu(prefix, node)
 	<% end %>
 	</ul>
 <%
+	end
 end
 
 if cattree and cattree.nodes then
@@ -130,33 +154,34 @@ end
 <%				end
 			end%>
 		</ul>
+	</div>
 
-		<%
-			if "admin" == request[1] then
-				local ucic = 0
-				for i, j in pairs(require("luci.model.uci").changes()) do
-					for k, l in pairs(j) do
-						for m, n in pairs(l) do
-							ucic = ucic + 1;
-						end
+	<%
+		if "admin" == request[1] then
+			local ucic = 0
+			for i, j in pairs(require("luci.model.uci").changes()) do
+				for k, l in pairs(j) do
+					for m, n in pairs(l) do
+						ucic = ucic + 1;
 					end
 				end
-		%>
-		<div class="mainmenu" style="float:right; margin-right:2em">
-			<div>
-				<% if ucic > 0 then %>
-				<a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a>
-				<ul>
-					<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
-					<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
-				</ul>
-				<% else %>
-				<a href="#"><%:changes%>: 0</a>
-				<% end %>
-			</div>
+			end
+	%>
+	<div class="mainmenu" style="float:right; margin-right:2em">
+		<div>
+			<% if ucic > 0 then %>
+			<a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a>
+			<ul>
+				<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
+				<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
+			</ul>
+			<% else %>
+			<a href="#"><%:changes%>: 0</a>
+			<% end %>
 		</div>
-		<% end %>
 	</div>
+	<% end %>
+
 	<br class="clear" />
 </div>
 <div id="content">

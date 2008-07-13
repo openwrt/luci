@@ -357,3 +357,49 @@ td.cbi-section-table-optionals {
 	text-decoration: none;
 	font-size: 70%;
 }
+
+
+/* obligatory IE6 Voodoo Code */
+* html body {
+	behavior:url(/luci/csshover_htc/void.htc);
+	padding-left: 50% !important;
+}
+
+* html div#header {
+	margin-left: -100% !important;
+}
+
+* html div.menubar {
+	margin-left: -100% !important;
+	width: 200% !important;
+}
+
+* html div#content {
+	margin-left: -60% !important;
+	width: 120% !important;
+}
+
+* html div.mainmenu div.hover ul,
+* html div.mainmenu div li.hover ul,
+* html div.mainmenu div li li.hover ul,
+* html div.mainmenu div li li li.hover ul,
+* html div.mainmenu div li li li li.hover ul {
+	display: block !important;
+	margin-left: 3em;
+}
+
+* html div.mainmenu div.hover ul {
+	margin-left: 0;
+}
+
+* html div.mainmenu .hover ul ul,
+* html div.mainmenu .hover ul ul ul,
+* html div.mainmenu .hover ul ul ul ul,
+* html div.mainmenu .hover ul ul ul ul ul {
+	display: none !important;
+}
+
+* html div.mainmenu li {
+	height: 1em !important;
+	width: 10em !important;
+}
