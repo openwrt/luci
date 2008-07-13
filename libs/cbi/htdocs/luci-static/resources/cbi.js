@@ -26,11 +26,7 @@ function cbi_d_update(target) {
 	if (t && t.value && cbi_d[target][t.value]) {
 		for (var i=0; i<cbi_d[target][t.value].length; i++) {			
 			var y = document.getElementById(cbi_d[target][t.value][i])
-			if (!y.value) {	
-				y.style.display = "table-row";
-			} else {
-				y.style.display = "block";
-			}
+			y.style.display = "block";
 		}
 	}
 }
