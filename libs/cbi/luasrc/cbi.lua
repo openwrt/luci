@@ -729,21 +729,15 @@ function MultiValue.valuelist(self, section)
 end
 
 function MultiValue.validate(self, val)
-	if not(type(val) == "string") then
-		return nil
-	end
+	val = (type(val) == "table") and val or {val} 
 
-	local result = ""
+	local result
 
-	for value in val:gmatch("[^\n]+") do
+	for i, value in ipairs(val) do
 		if luci.util.contains(self.keylist, value) then
-			result = result .. self.delimiter .. value
+			result = result and (result .. self.delimiter .. value) or value
 		end
 	end
 
-	if result:len() > 0 then
-		return result:sub(self.delimiter:len() + 1)
-	else
-		return nil
-	end
+	return result
 end
