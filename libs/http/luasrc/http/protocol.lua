@@ -466,7 +466,6 @@ process_states['urldecode-key'] = function( msg, chunk, filecb )
 				local key = urldecode( buffer:sub( 1, spos - 1 ) )
 
 				-- Prepare buffers
-				msg.params[key]		= ""
 				msg._urldeclength   = msg._urldeclength + epos
 				msg._urldecbuffer   = buffer:sub( epos + 1, #buffer )
 
