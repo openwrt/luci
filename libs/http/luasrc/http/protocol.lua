@@ -111,6 +111,42 @@ function urlencode_params( tbl )
 end
 
 
+-- Parameter helper
+local function __initval( tbl, key )
+	local multival = ( key:sub( #key - 1, #key ) == "[]" )
+
+	if multival then
+		if type(tbl[key]) == "table" then
+			table.insert( tbl[key], "" )
+		else
+			tbl[key] = { "" }
+		end
+	else
+		tbl[key] = ""
+	end
+
+	return multival
+end
+
+local function __appendval( tbl, key, multival, chunk )
+	if multival then
+		tbl[key][#tbl[key]] = tbl[key][#tbl[key]] .. chunk
+	else
+		tbl[key] = tbl[key] .. chunk
+	end
+end
+
+local function __finishval( tbl, key, multival, handler )
+	if handler then
+		if multival then
+			tbl[key][#tbl[key]] = handler( tbl[key][#tbl[key]] )
+		else
+			tbl[key] = handler( tbl[key] )
+		end
+	end
+end
+
+
 -- Table of our process states
 local process_states = { }
 
@@ -285,9 +321,9 @@ process_states['mime-headers'] = function( msg, chunk, filecb )
 
 					-- Treat as form field
 					else
-						msg.params[field] = ""
+						local mv = __initval( msg.params, field )
 						msg._mimecallback = function(chunk,eof)
-							msg.params[field] = msg.params[field] .. chunk
+							__appendval( msg.params, field, mv, chunk )
 						end
 					end
 
@@ -440,12 +476,13 @@ process_states['urldecode-key'] = function( msg, chunk, filecb )
 						filecb( field, chunk, eof )
 					end
 				else
+					local mv = __initval( msg.params, key )
 					msg._urldeccallback = function( chunk, eof )
-						msg.params[key] = msg.params[key] .. chunk
+						__appendval( msg.params, key, mv, chunk )
 
 						-- FIXME: Use a filter
 						if eof then
-							msg.params[key] = urldecode( msg.params[key] )
+							__finishval( msg.params, key, mv, urldecode )
 						end
 					end
 				end
