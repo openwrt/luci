@@ -316,7 +316,7 @@ process_states['mime-headers'] = function( msg, chunk, filecb )
 					-- Treat as form field
 					else
 						__initval( msg.params, field )
-						
+
 						msg._mimecallback = function(chunk,eof)
 							__appendval( msg.params, field, chunk )
 						end
@@ -622,7 +622,7 @@ function mimedecode_message_body( source, msg, filecb )
 
 		-- XXX: we schould propably keep the maximum buffer size in sync with
 		--      the blocksize of our original source... but doesn't really matter
-		if msg._mimebuffer ~= null and #msg._mimebuffer > 256 then
+		if msg._mimebuffer ~= nil and #msg._mimebuffer > 256 then
 			return ""
 		else
 			return source()
@@ -660,7 +660,7 @@ function urldecode_message_body( source, msg )
 	-- Create a throttling LTN12 source
 	-- See explaination in mimedecode_message_body().
 	local tsrc = function()
-		if msg._urldecbuffer ~= null and #msg._urldecbuffer > 0 then
+		if msg._urldecbuffer ~= nil and #msg._urldecbuffer > 0 then
 			return ""
 		else
 			return source()
