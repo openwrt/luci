@@ -17,7 +17,7 @@ local v = self:valuelist(section)
 %>
 <%+cbi/valueheader%>
 <% if self.widget == "select" then %>
-								<select multiple="multiple" name="cbid.<%=self.config.."."..section.."."..self.option%>[]"<% if self.size then %> size="<%=self.size%>"<% end %>>
+								<select multiple="multiple" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self.size then %> size="<%=self.size%>"<% end %>>
 <%for i, key in pairs(self.keylist) do %>
 									<option<% if luci.util.contains(v, key) then %> selected="selected"<% end %> value="<%=key%>"><%=self.vallist[i]%></option>
 <% end %>
