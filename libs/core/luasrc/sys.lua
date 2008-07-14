@@ -110,22 +110,29 @@ function sysinfo()
 	local c2 = "uname -m 2>/dev/null"
 	local c3 = "cat /proc/cpuinfo|grep model\\ name|cut -d: -f2 2>/dev/null"
 	local c4 = "cat /proc/cpuinfo|grep cpu\\ model|cut -d: -f2 2>/dev/null"
-	local c5 = "cat /proc/meminfo|grep MemTotal|cut -d: -f2 2>/dev/null"
+	local c5 = "cat /proc/meminfo|grep MemTotal|awk {' print $2 '} 2>/dev/null"
+	local c6 = "cat /proc/meminfo|grep ^Cached|awk {' print $2 '} 2>/dev/null"
+	local c7 = "cat /proc/meminfo|grep MemFree|awk {' print $2 '} 2>/dev/null"
+	local c8 = "cat /proc/meminfo|grep Buffers|awk {' print $2 '} 2>/dev/null"
 	
-	local s = luci.util.trim(exec(c1))
-	local m = ""
-	local r = ""
-	
-	if s == "" then
-		s = luci.util.trim(exec(c2))
-		m = luci.util.trim(exec(c3))
+	local system = luci.util.trim(exec(c1))
+	local model = ""              
+	local memtotal = luci.util.trim(exec(c5))
+	local memcached = luci.util.trim(exec(c6))
+	local memfree = luci.util.trim(exec(c7))
+	local membuffers = luci.util.trim(exec(c8))
+	local perc_memfree = math.floor((memfree/memtotal)*100)
+	local perc_membuffers = math.floor((membuffers/memtotal)*100)
+	local perc_memcached = math.floor((memcached/memtotal)*100)
+
+	if system == "" then
+		system = luci.util.trim(exec(c2))
+		model = luci.util.trim(exec(c3))
 	else
-		m = luci.util.trim(exec(c4))
+		model = luci.util.trim(exec(c4))
 	end
-	
-	r = luci.util.trim(exec(c5))
-	
-	return s, m, r
+
+	return system, model, memtotal, memcached, membuffers, memfree, perc_memfree, perc_membuffers, perc_memcached
 end
 
 -- Reads the syslog

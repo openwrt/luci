@@ -67,7 +67,8 @@ end
 function action_status()
 	local data = {}
 	
-	data.s, data.m, data.r = luci.sys.sysinfo()
+	data.system, data.model, data.memtotal, data.memcached, data.membuffers, data.memfree, data.perc_memfree, data.perc_membuffers, data.perc_memcached = luci.sys.sysinfo()
+
 	
 	data.wifi = luci.sys.wifi.getiwconfig()
 	
