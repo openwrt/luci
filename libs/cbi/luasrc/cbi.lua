@@ -57,14 +57,16 @@ function load(cbimap)
 	luci.util.extfenv(func, "translate", luci.i18n.translate)
 	luci.util.extfenv(func, "translatef", luci.i18n.translatef)
 
-	local map = func()
+	local maps = {func()}
 
-	if not instanceof(map, Map) then
-		error("CBI map returns no valid map object!")
-		return nil
+	for i, map in ipairs(maps) do
+		if not instanceof(map, Map) then
+			error("CBI map returns no valid map object!")
+			return nil
+		end
 	end
 
-	return map
+	return maps
 end
 
 -- Node pseudo abstract class

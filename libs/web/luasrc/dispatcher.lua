@@ -381,20 +381,24 @@ function cbi(model)
 	require("luci.template")
 
 	return function()
-		local stat, res = luci.util.copcall(luci.cbi.load, model)
+		local stat, maps = luci.util.copcall(luci.cbi.load, model)
 		if not stat then
-			error500(res)
+			error500(maps)
 			return true
 		end
 
-		local stat, err = luci.util.copcall(res.parse, res)
-		if not stat then
-			error500(err)
-			return true
+		for i, res in ipairs(maps) do
+			local stat, err = luci.util.copcall(res.parse, res)
+			if not stat then
+				error500(err)
+				return true
+			end
 		end
 
 		luci.template.render("cbi/header")
-		res:render()
+		for i, res in ipairs(maps) do
+			res:render()
+		end
 		luci.template.render("cbi/footer")
 	end
 end
