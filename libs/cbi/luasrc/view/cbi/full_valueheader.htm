@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-						<div class="cbi-value" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
-							<label for="cbid.<%=self.config.."."..section.."."..self.option%>" class="cbi-value-title"><%=self.title%></label>
-							<div class="cbi-value-field">
+
+<div class="cbi-value" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
+	<label class="cbi-value-title"<%= attr("for", cbid) %>><%=self.title%></label>
+		<div class="cbi-value-field">

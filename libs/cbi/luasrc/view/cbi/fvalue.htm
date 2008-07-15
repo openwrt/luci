@@ -13,5 +13,5 @@ $Id$
 
 -%>
 <%+cbi/valueheader%>
-								<input onchange="cbi_d_update(this.id)" type="checkbox" id="cbid.<%=self.config.."."..section.."."..self.option%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if self:cfgvalue(section) == self.enabled then %> checked="checked"<% end %> value="1" />
+	<input onchange="cbi_d_update(this.id)" type="checkbox"<%= attr("id", cbid) .. attr("name", cbid) .. ifattr(self:cfgvalue(section) == self.enabled, "checked", "checked") %> value="1" />
 <%+cbi/valuefooter%>

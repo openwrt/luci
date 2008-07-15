@@ -13,5 +13,5 @@ $Id$
 
 -%>
 <%+cbi/valueheader%>
-								<input type="text" onchange="cbi_d_update(this.id)" <% if self.size then %>size="<%=self.size%>" <% end %><% if self.maxlength then %>maxlength="<%=self.maxlength%>" <% end %>name="cbid.<%=self.config.."."..section.."."..self.option%>" id="cbid.<%=self.config.."."..section.."."..self.option%>" value="<%=self:cfgvalue(section)%>" />
+	<input type="text" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. attr("value", self:cfgvalue(section)) .. ifattr(self.size, "size") .. ifattr(self.maxlength, "maxlength") %> />
 <%+cbi/valuefooter%>

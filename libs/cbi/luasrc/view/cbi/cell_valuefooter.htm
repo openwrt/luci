@@ -13,15 +13,15 @@ $Id$
 
 -%>
 
-	<%- if self.tag_invalid[section] then -%>
+	<% if self.tag_invalid[section] then -%>
 		<div class="cbi-error"><%:cbi_invalid%></div>
-	<%- end -%>
+	<%- end %>
 </td>
 
-<%- if #self.deps > 0 then -%>
+<% if #self.deps > 0 then -%>
 	<script type="text/javascript">
 		<% for j, d in ipairs(self.deps) do -%>
 			cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");
 		<%- end %>
 	</script>
-<%- end -%>
+<%- end %>

@@ -12,10 +12,11 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+
 <%+header%>
-		<form method="post" action="<%=luci.http.getenv("REQUEST_URI")%>">
-			<div>
-				<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-				<input type="hidden" name="cbi.submit" value="1" />
-				<input type="submit" value="<%:save%>" class="hidden" />
-			</div>
+<form method="post" action="<%=luci.http.getenv("REQUEST_URI")%>">
+	<div>
+		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+		<input type="hidden" name="cbi.submit" value="1" />
+		<input type="submit" value="<%:save%>" class="hidden" />
+	</div>

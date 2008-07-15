@@ -316,7 +316,7 @@ NamedSection = class(AbstractSection)
 function NamedSection.__init__(self, map, section, type, ...)
 	AbstractSection.__init__(self, map, type, ...)
 	Node._i18n(self, map.config, section, nil, ...)
-	
+
 	self.template = "cbi/nsection"
 	self.section = section
 	self.addremove = false
@@ -378,7 +378,7 @@ function TypedSection.cfgsections(self)
 		function (section)
 			if self:checkscope(section[".name"]) then
 				table.insert(sections, section[".name"])
-			end 
+			end
 		end)
 
 	return sections
@@ -554,7 +554,25 @@ function AbstractValue.render(self, s, scope)
 	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
 		scope.section = s
-		
+		scope.cbid    = "cbid." .. self.config ..
+		                "."     .. s           ..
+						"."     .. self.option
+
+		scope.ifattr = function(cond,key,val)
+			if cond then
+				return string.format(
+					' %s="%s"', tostring(key),
+					tostring( val or scope[key] or self[key] or "" )
+				)
+			else
+				return ''
+			end
+		end
+
+		scope.attr = function(...)
+			return scope.ifattr( true, ... )
+		end
+
 		Node.render(self, scope)
 	end
 end
@@ -731,7 +749,7 @@ function MultiValue.valuelist(self, section)
 end
 
 function MultiValue.validate(self, val)
-	val = (type(val) == "table") and val or {val} 
+	val = (type(val) == "table") and val or {val}
 
 	local result
 
