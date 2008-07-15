@@ -286,7 +286,7 @@ endef
 define Package/luci-mod-admin-core
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt +luci-i18n-english
-  TITLE:=Administration module
+  TITLE:=Administration core module
 endef
 
 define Package/luci-mod-admin-core/install
@@ -294,9 +294,31 @@ define Package/luci-mod-admin-core/install
 endef
 
 
+define Package/luci-mod-admin-mini
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core
+  TITLE:=Simplified Administration module
+endef
+
+define Package/luci-mod-admin-mini/install
+	$(call Package/luci/install/template,$(1),modules/admin-mini)
+endef
+
+
+define Package/luci-mod-admin-full
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core
+  TITLE:=Full featured Administration module
+endef
+
+define Package/luci-mod-admin-full/install
+	$(call Package/luci/install/template,$(1),modules/admin-full)
+endef
+
+
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-mod-admin-core
+  DEPENDS:=+luci-mod-admin-full
   TITLE:=LuCI Freifunk module
 endef
 
@@ -325,7 +347,7 @@ endef
 
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core
+  DEPENDS+=+luci-mod-admin-full
   TITLE:=Firewall and Portforwarding application
 endef
 
@@ -340,7 +362,7 @@ endef
 
 define Package/luci-app-olsr
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +olsrd-mod-txtinfo
+  DEPENDS+=+luci-mod-admin-full +olsrd-mod-txtinfo
   TITLE:=OLSR configuration and status module
 endef
 
@@ -351,7 +373,7 @@ endef
 
 define Package/luci-app-qos
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +qos-scripts
+  DEPENDS+=+luci-mod-admin-full +qos-scripts
   TITLE:=Quality of Service configuration module
 endef
 
@@ -377,7 +399,7 @@ endef
 
 define Package/luci-app-statistics
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +collectd +collectd-mod-rrdtool1 +rrdtool1
+  DEPENDS+=+luci-mod-admin-full +collectd +collectd-mod-rrdtool1 +rrdtool1
   TITLE:=LuCI Statistics Application
 endef
 
@@ -516,6 +538,12 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-mod-admin-core),)
 	PKG_SELECTED_MODULES+=modules/admin-core
 endif
+ifneq ($(CONFIG_PACKAGE_luci-mod-admin-mini),)
+	PKG_SELECTED_MODULES+=modules/admin-mini
+endif
+ifneq ($(CONFIG_PACKAGE_luci-mod-admin-full),)
+	PKG_SELECTED_MODULES+=modules/admin-full
+endif
 ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
 	PKG_SELECTED_MODULES+=modules/freifunk
 endif
@@ -592,6 +620,8 @@ $(eval $(call BuildPackage,luci-ff-berlin))
 $(eval $(call BuildPackage,luci-ff-augsburg))
 
 $(eval $(call BuildPackage,luci-mod-admin-core))
+#$(eval $(call BuildPackage,luci-mod-admin-mini))
+$(eval $(call BuildPackage,luci-mod-admin-full))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
