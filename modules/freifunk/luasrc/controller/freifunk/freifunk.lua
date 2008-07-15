@@ -17,6 +17,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	local page  = node()
+	page.lock   = true
 	page.target = alias("freifunk")
 
 	local page    = node("freifunk")

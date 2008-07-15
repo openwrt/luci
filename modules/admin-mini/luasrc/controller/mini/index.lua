@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,36 +12,28 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-module("luci.controller.admin.index", package.seeall)
+
+module("luci.controller.mini.index", package.seeall)
 
 function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
 
 	local root = node()
-	if not root.target then
-		root.target = alias("admin")
+	if not root.lock then
+		root.target = alias("mini")
 	end
 	
 	entry({"about"}, template("about")).i18n = "admin-core"
 	
-	local page   = node("admin")
-	page.target  = alias("admin", "index")
-	page.title   = i18n("administration", "Administration")
-	page.order   = 10
+	local page   = entry({"mini"}, alias("mini", "index"), i18n("mini", "Mini"), 10)
 	page.i18n    = "admin-core"
 	page.sysauth = "root"
+	page.ucidata = true
 	
-	local page  = node("admin", "index")
-	page.target = template("admin_index/index")
-	page.title  = i18n("overview", "Übersicht")
-	page.order  = 10
-	
-	local page  = node("admin", "index", "luci")
-	page.target = cbi("admin_index/luci")
-	page.title  = i18n("a_i_ui", "Oberfläche")
-	
-	entry({"admin", "logout"}, call("action_logout"), i18n("logout"))
+	entry({"mini", "index"}, template("mini/index"), i18n("overview"), 10)
+	entry({"mini", "index", "luci"}, cbi("mini/luci"), i18n("settings"), 10)
+	entry({"mini", "index", "logout"}, call("action_logout"), i18n("logout"))
 end
 
 function action_logout()

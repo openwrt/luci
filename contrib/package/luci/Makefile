@@ -297,7 +297,7 @@ endef
 define Package/luci-mod-admin-mini
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-mod-admin-core
-  TITLE:=Simplified Administration module
+  TITLE:=Simplified Administration module (INCOMPLETE)
 endef
 
 define Package/luci-mod-admin-mini/install
@@ -620,7 +620,7 @@ $(eval $(call BuildPackage,luci-ff-berlin))
 $(eval $(call BuildPackage,luci-ff-augsburg))
 
 $(eval $(call BuildPackage,luci-mod-admin-core))
-#$(eval $(call BuildPackage,luci-mod-admin-mini))
+$(eval $(call BuildPackage,luci-mod-admin-mini))
 $(eval $(call BuildPackage,luci-mod-admin-full))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 
