@@ -24,3 +24,7 @@ start() {
 	
 	test -f /etc/ethers.local && cat /etc/ethers.local >> /var/etc/ethers
 }
+
+stop() {
+	test -f /var/etc/ethers && rm -f /var/etc/ethers
+}

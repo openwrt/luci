@@ -23,14 +23,15 @@ config event uci_oncommit
 	option wireless	"/etc/init.d/network restart"
 	option olsr	"/etc/init.d/olsrd restart"
 	option dhcp	"/etc/init.d/dnsmasq restart"
-	option luci_fw  "/etc/init.d/luci_fw restart"
  	option dropbear "/etc/init.d/dropbear restart"
  	option httpd	"/etc/init.d/httpd restart"
  	option fstab	"/etc/init.d/fstab restart"
 	option qos	"/etc/init.d/qos restart"
+	option luci_fw  "/etc/init.d/luci_fw restart"
+	option luci_ethers "/etc/init.d/luci_ethers restart; /etc/init.d/dnsmasq restart"
 	option luci_splash "/etc/init.d/luci_splash restart"
 	option freifunk "/etc/init.d/luci_freifunk restart"
-        
+
 config internal languages
 	option de "Deutsch"
 	option en "English"
