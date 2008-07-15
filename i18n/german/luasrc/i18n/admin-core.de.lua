@@ -10,6 +10,7 @@ a_i_i_team = [[Das LuCI-Team]]
 a_i_keepflash = [[Zu übernehmende Dateien bei Firmwareupgrade]]
 a_i_keepflash1 = [[Die folgenden Dateien und Verzeichnisse werden beim Aktualisieren der Firmware
 über die Oberfläche automatisch in die neue Firmware übernommen.]]
+a_i_luci1 = "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden."
 a_i_ucicommit = [[UCI-Befehle beim Anwenden]]
 a_i_ucicommit1 = [[Beim Anwenden
 der Konfiguration aus der Oberflächliche heraus können automatisch die relevanten Dienste neugestart werden,

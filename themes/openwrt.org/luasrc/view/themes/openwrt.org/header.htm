@@ -157,7 +157,7 @@ end
 	</div>
 
 	<%
-		if "admin" == request[1] then
+		if tree.nodes[category].ucidata then
 			local ucic = 0
 			for i, j in pairs(require("luci.model.uci").changes()) do
 				for k, l in pairs(j) do
@@ -170,10 +170,10 @@ end
 	<div class="mainmenu" style="float:right; margin-right:2em">
 		<div>
 			<% if ucic > 0 then %>
-			<a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a>
+			<a href="<%=controller%>/<%=category%>/uci/changes"><%:changes%>: <%=ucic%></a>
 			<ul>
-				<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
-				<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
+				<li><a href="<%=controller%>/<%=category%>/uci/apply"><%:apply%></a></li>
+				<li><a href="<%=controller%>/<%=category%>/uci/revert"><%:revert%></a></li>
 			</ul>
 			<% else %>
 			<a href="#"><%:changes%>: 0</a>
