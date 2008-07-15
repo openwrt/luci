@@ -26,8 +26,8 @@ local v = self:valuelist(section)
 	local c = 0;
 	for i, key in pairs(self.keylist) do
 	c = c + 1%>
-								<input type="checkbox" id="cbid.<%=self.config.."."..section.."."..self.option%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if luci.util.contains(v, key) then %> checked="checked"<% end %> value="<%=key%>" />
-								<label for="cbid.<%=self.config.."."..section.."."..self.option%>"><%=self.vallist[i]%></label><br />
+								<input type="checkbox" id="cbid.<%=self.config.."."..section.."."..self.option.."."..i%>" name="cbid.<%=self.config.."."..section.."."..self.option%>"<% if luci.util.contains(v, key) then %> checked="checked"<% end %> value="<%=key%>" />
+								<label for="cbid.<%=self.config.."."..section.."."..self.option.."."..i%>"><%=self.vallist[i]%></label><br />
 <% if c == self.size then c = 0 %><br />
 <% end end %>
 <% end %>
