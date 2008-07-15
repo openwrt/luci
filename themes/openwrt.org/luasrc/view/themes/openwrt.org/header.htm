@@ -157,7 +157,7 @@ end
 	</div>
 
 	<%
-		if tree.nodes[category].ucidata then
+		if tree.nodes[category] and tree.nodes[category].ucidata then
 			local ucic = 0
 			for i, j in pairs(require("luci.model.uci").changes()) do
 				for k, l in pairs(j) do
