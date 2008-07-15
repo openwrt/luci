@@ -1,0 +1,26 @@
+#!/bin/sh /etc/rc.common
+START=59
+
+apply_lease() {
+	local cfg="$1"
+
+	config_get macaddr "$cfg" macaddr
+	config_get ipaddr  "$cfg" ipaddr
+
+	[ -n "$macaddr" -a -n "$ipaddr" ] || return 0
+	
+	echo "$macaddr $ipaddr" >> /var/etc/ethers
+}
+
+start() {
+	if [ ! -L /etc/ethers ]; then
+		test -f /etc/ethers && mv /etc/ethers /etc/ethers.local
+		test -d /var/etc || mkdir -p /var/etc
+		ln -s /var/etc/ethers /etc/ethers
+	fi
+	
+	config_load luci_ethers
+	config_foreach apply_lease static_lease
+	
+	test -f /etc/ethers.local && cat /etc/ethers.local >> /var/etc/ethers
+}
