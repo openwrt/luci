@@ -17,9 +17,9 @@ m = Map("network", "Network")
 s = m:section(NamedSection, "lan", "interface", "Local Network")
 s:option(Value, "ipaddr", translate("ipaddress"))
 s:option(Value, "netmask", translate("netmask"))
-gw = s:option(Value, "gateway", translate("gateway"))
+gw = s:option(Value, "gateway", translate("gateway") .. translate("cbi_optional"))
 gw.rmempty = true
-dns = s:option(Value, "dns", translate("dnsserver"))
+dns = s:option(Value, "dns", translate("dnsserver") .. translate("cbi_optional"))
 dns.rmempty = true
 
 
@@ -53,13 +53,13 @@ pwd = s:option(Value, "password", translate("password"))
 pwd:depends("proto", "pppoe")
 pwd:depends("proto", "pptp")
 
-kea = s:option(Value, "keepalive", "Keep-Alive")
+kea = s:option(Value, "keepalive", "Keep-Alive" .. translate("cbi_optional"))
 kea:depends("proto", "pppoe")
 kea:depends("proto", "pptp")
 kea.rmempty = true
 
 
-cod = s:option(Value, "demand", "Dial on Demand")
+cod = s:option(Value, "demand", "Dial on Demand" .. translate("cbi_optional"))
 cod:depends("proto", "pppoe")
 cod:depends("proto", "pptp")
 cod.rmempty = true
@@ -68,7 +68,7 @@ srv = s:option(Value, "server", "PPTP-Server")
 srv:depends("proto", "pptp")
 srv.rmempty = true
 
-mtu = s:option(Value, "mtu", "MTU")
+mtu = s:option(Value, "mtu", "MTU" .. translate("cbi_optional"))
 mtu:depends("proto", "static")
 mtu:depends("proto", "dhcp")
 mtu:depends("proto", "pppoe")

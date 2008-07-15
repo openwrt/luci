@@ -49,5 +49,16 @@ for i, line in pairs(luci.sys.execl("dnsmasq --help dhcp")) do
 	k, v = line:match("([^ ]+) +([^ ]+)")
 	s:option(Value, "dhcp"..k, v).optional = true
 end
+
+m2 = Map("luci_ethers", translate("luci_ethers"))
+
+s = m2:section(TypedSection, "static_lease", "")
+s.addremove = true
+s.anonymous = true
+s.template = "cbi/tblsection"
+
+s:option(Value, "macaddr", translate("macaddress"))
+s:option(Value, "ipaddr", translate("ipaddress"))
+
 	
-return m
+return m, m2

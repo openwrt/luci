@@ -216,6 +216,8 @@ iwscan_noise = [[Rausch]]
 iwscan_signal = [[Signal]]
 link = [[Verb.]]
 
+luci_ethers = "Statische Einträge"
+
 network_interface_demand = [[Automatische Trennung]]
 network_interface_demand_desc = [[Zeit nach der die Verbindung bei Inaktivität getrennt wird]]
 network_interface_keepalive = [[Keep-Alive]]

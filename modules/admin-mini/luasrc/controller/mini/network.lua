@@ -20,4 +20,5 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"mini", "network"}, cbi("mini-network/basic"), i18n("network"))
+	entry({"mini", "network", "dhcp"}, cbi("mini-network/dhcp"), "DHCP")
 end
