@@ -87,8 +87,10 @@ target = "Target"
 timezone = "Timezone"
 type = "Type"
 
-username = "Username"
 unknownerror = "Unknown Error"
+unsavedchanges = "Unsaved Changes"
+username = "Username"
+
 
 version = "Version"
 

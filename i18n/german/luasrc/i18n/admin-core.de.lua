@@ -93,6 +93,7 @@ a_s_packages_upgrade = [[Installierte Pakete aktualisieren]]
 a_s_reboot1 = [[Startet das Betriebssystem des Routers neu.]]
 a_s_reboot_do = [[Neustart durchführen]]
 a_s_reboot_running = [[Bitte warten: Neustart wird durchgeführt...]]
+a_s_reboot_u = "Warnung: Es gibt ungespeicherte Änderungen, die beim Neustart verloren gehen!"
 a_s_sshkeys = [[SSH-Schlüssel]]
 a_s_sshkeys1 = [[Hier können öffentliche SSH-Schlüssel (einer pro Zeile)
  zur Authentifizierung abgelegt werden.]]

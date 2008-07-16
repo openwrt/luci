@@ -91,7 +91,7 @@ end
 
 <div class="menubar">
 	<div id="mainmenu" class="mainmenu">
-<%
+<%-
 local function submenu(prefix, node)
 	if not node.nodes then
 		return false
@@ -110,7 +110,7 @@ local function submenu(prefix, node)
 	if count > 0 then
 %>
 	<ul>
-	<% for j, v in pairs(index) do
+	<%- for j, v in pairs(index) do
 		if #v.name > 0 then
 			local nnode = node.nodes[v.name]
 			local href = controller .. prefix .. v.name
@@ -118,12 +118,12 @@ local function submenu(prefix, node)
 		%>
 		<li>
 			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
-			<% submenu(prefix .. v.name .. "/", nnode) %>
+			<%- submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
-		<% end %>
-	<% end %>
+		<%- end %>
+	<%- end %>
 	</ul>
-<%
+<%-
 	end
 end
 
@@ -172,7 +172,7 @@ end
 	<div class="mainmenu" style="float:right; margin-right:2em">
 		<div>
 			<% if ucic > 0 then %>
-			<a href="<%=controller%>/<%=category%>/uci/changes"><%:changes%>: <%=ucic%></a>
+			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:unsavedchanges%>: <%=ucic%></a>
 			<ul>
 				<li><a href="<%=controller%>/<%=category%>/uci/apply"><%:apply%></a></li>
 				<li><a href="<%=controller%>/<%=category%>/uci/revert"><%:revert%></a></li>

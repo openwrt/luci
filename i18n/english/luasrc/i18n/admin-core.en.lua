@@ -97,6 +97,7 @@ a_s_flash_upgrade1 = "Replaces the installed firmware with a new one. The firmwa
 a_s_reboot1 = "Reboots the operating system of your device"
 a_s_reboot_do = "Perform reboot"
 a_s_reboot_running = "Please wait: Device rebooting..."
+a_s_reboot_u = "Warning: There are unsaved changes that will be lost while rebooting!"
 
 a_srv_http = "HTTP-Server"
 a_srv_ssh = "SSH-Server"
