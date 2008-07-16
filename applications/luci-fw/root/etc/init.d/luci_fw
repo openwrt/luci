@@ -15,6 +15,8 @@ apply_portfw() {
 	[ -n "$ifname" ] || return 0
 	[ -n "$to" ] || return 0
 
+	dport=$(echo $dport | sed -e 's/-/:/')
+
 	ports=$(echo $to | cut -sd: -f2)
 	if [ -n "$ports" ]; then
 		ports="--dport $(echo $ports | sed -e 's/-/:/')"

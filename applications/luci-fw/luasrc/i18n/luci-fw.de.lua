@@ -27,9 +27,9 @@ fw_portfw1 = [[Portweiterleitungen ermöglichen es interne
 Netzwerkdienste von einem anderen externen Netzwerk aus erreichbar zu machen.]]
 lucifw_portfw_iface_desc = "Externe Schnittstelle"
 lucifw_portfw_dport = "Externer Port"
-lucifw_portfw_dport_desc = "Port[:Endport]"
+lucifw_portfw_dport_desc = "Einzelner Port oder Erster Port-Letzter Port"
 lucifw_portfw_to = "Interne Adresse"
-lucifw_portfw_to_desc = "IP-Adresse[:Zielport[-Zielendport]]"
+lucifw_portfw_to_desc = "IP, IP:Port oder IP:Erster Port-Letzter Port"
 
 fw_routing1 = [[An dieser Stelle wird festlegt, welcher Netzverkehr zwischen einzelnen
 Schnittstellen erlaubt werden soll. Es werden jeweils nur neue Verbindungen

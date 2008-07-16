@@ -26,7 +26,7 @@ function index()
 	
 	entry({"about"}, template("about")).i18n = "admin-core"
 	
-	local page   = entry({"mini"}, alias("mini", "index"), i18n("mini", "Mini"), 10)
+	local page   = entry({"mini"}, alias("mini", "index"), i18n("essentials", "Essentials"), 10)
 	page.i18n    = "admin-core"
 	page.sysauth = "root"
 	page.ucidata = true

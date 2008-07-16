@@ -26,9 +26,9 @@ fw_portfw1 = [[Port forwarding allows to provide network services
 in the internal network to an external network.]]
 lucifw_portfw_iface_desc = "External interface"
 lucifw_portfw_dport = "External port"
-lucifw_portfw_dport_desc = "Port[:last port]"
+lucifw_portfw_dport_desc = "single port or first port-last port"
 lucifw_portfw_to = "Internal address"
-lucifw_portfw_to_desc = "IP-address[:target port[-last port]]"
+lucifw_portfw_to_desc = "IP, IP:port or IP:first port-last port"
 
 fw_routing1 = [[Here you can specify which network traffic is allowed to flow between network interfaces.
 Only new connections will be matched. Packets belonging to already open connections are automatically allowed
