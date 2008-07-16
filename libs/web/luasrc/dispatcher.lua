@@ -324,6 +324,20 @@ function entry(path, target, title, order)
 	return c
 end
 
+-- Checks whether a node exists
+function registered(...)
+	local c = context.tree
+
+	for k,v in ipairs(arg) do
+		if not c.nodes[v] then
+			return false
+		end
+
+		c = c.nodes[v]
+	end
+	return true
+end
+
 -- Fetch a dispatching node
 function node(...)
 	local c = context.tree
