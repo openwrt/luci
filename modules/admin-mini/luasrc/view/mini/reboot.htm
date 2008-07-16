@@ -25,7 +25,7 @@ if c and next(c) then
 end
 if not reboot then 
 -%>
-<p><a href="<%=controller%>/admin/system/reboot?reboot=1"><%:a_s_reboot_do%></a></p>
+<p><a href="<%=REQUEST_URI%>?reboot=1"><%:a_s_reboot_do%></a></p>
 <%- else -%>
 <p><%:a_s_reboot_running%></p>
 <script type="text/javascript">setTimeout("location='<%=controller%>/admin'", 60000)</script>

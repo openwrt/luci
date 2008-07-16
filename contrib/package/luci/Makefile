@@ -61,7 +61,7 @@ endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI - Freifunk Support
+  SUBMENU:=LuCI - Freifunk Support (GERMAN ONLY)
   DEPENDS:=+luci-mod-freifunk
 endef
 

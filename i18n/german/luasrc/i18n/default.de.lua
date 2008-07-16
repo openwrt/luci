@@ -4,6 +4,8 @@ all = "alle"
 administration = "Administration"
 apply = "Anwenden"
 
+basicsettings = "Grundeinstellungen"
+
 changes = "Änderungen"
 channel = "Kanal"
 code = "Code"
