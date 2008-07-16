@@ -661,7 +661,7 @@ function urldecode_message_body( source, msg )
 	-- Create a throttling LTN12 source
 	-- See explaination in mimedecode_message_body().
 	local tsrc = function()
-		if msg._urldecbuffer ~= nil and #msg._urldecbuffer > TSRC_BLOCKSIZE then
+		if msg._urldecbuffer ~= nil and #msg._urldecbuffer > 0 then
 			return ""
 		else
 			return source()

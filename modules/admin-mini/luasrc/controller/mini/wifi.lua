@@ -12,14 +12,11 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-
-module("luci.controller.mini.network", package.seeall)
+module("luci.controller.mini.wifi", package.seeall)
 
 function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
 
-	entry({"mini", "network"}, alias("mini", "network", "basic"), i18n("network"), 20)
-	entry({"mini", "network", "basic"}, cbi("mini/network"), i18n("basicsettings"), 10)
-	entry({"mini", "network", "dhcp"}, cbi("mini/dhcp"), "DHCP", 20)
+	entry({"mini", "wifi"}, cbi("mini/wifi"), i18n("wifi", "Drahtlos"), 30)
 end

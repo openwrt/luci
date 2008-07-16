@@ -14,7 +14,7 @@ $Id$
 ]]--
 m = Map("network", "Network")
 
-s = m:section(NamedSection, "lan", "interface", "Local Network")
+s = m:section(NamedSection, "lan", "interface", translate("m_n_local"))
 s:option(Value, "ipaddr", translate("ipaddress"))
 s:option(Value, "netmask", translate("netmask"))
 gw = s:option(Value, "gateway", translate("gateway") .. translate("cbi_optional"))
@@ -23,7 +23,7 @@ dns = s:option(Value, "dns", translate("dnsserver") .. translate("cbi_optional")
 dns.rmempty = true
 
 
-s = m:section(NamedSection, "wan", "interface", "Internet Connection")
+s = m:section(NamedSection, "wan", "interface", translate("m_n_inet"))
 p = s:option(ListValue, "proto", translate("protocol"))
 p:value("none", "disabled")
 p:value("static", translate("manual", "manual"))
@@ -67,13 +67,6 @@ cod.rmempty = true
 srv = s:option(Value, "server", "PPTP-Server")
 srv:depends("proto", "pptp")
 srv.rmempty = true
-
-mtu = s:option(Value, "mtu", "MTU" .. translate("cbi_optional"))
-mtu:depends("proto", "static")
-mtu:depends("proto", "dhcp")
-mtu:depends("proto", "pppoe")
-mtu:depends("proto", "pptp")
-mtu.rmempty = true
 
 
 

@@ -356,10 +356,9 @@ function NamedSection.parse(self)
 				return
 			end
 		else           -- Create and apply default values
-			if luci.http.formvalue("cbi.cns."..path) and self:create(s) then
-				for k,v in pairs(self.children) do
-					v:write(s, v.default)
-				end
+			if luci.http.formvalue("cbi.cns."..path) then
+				self:create(s)
+				return
 			end
 		end
 	end
@@ -641,10 +640,6 @@ end
 
 function DummyValue.parse(self)
 
-end
-
-function DummyValue.render(self, s)
-	luci.template.render(self.template, {self=self, section=s})
 end
 
 

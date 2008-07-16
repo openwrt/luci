@@ -231,3 +231,6 @@ a_n_routes1 = [[With Static Routes you can specify through which
 interface and gateway a certain host or network can be reached.]]
 a_n_r_target1 = "host-IP or network"
 a_n_r_netmask1 = "if target is a network"
+
+m_n_local = "Local Network"
+m_n_inet  = "Internet Connection"

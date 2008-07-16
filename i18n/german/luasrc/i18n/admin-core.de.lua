@@ -113,6 +113,7 @@ a_st_i_status1 = [[Hier finden sich Informationen über den aktuellen Status des
 Prozessortakt, Speicherauslastung und Netzwerkschnittstellen.]]
 a_st_i_status2 = [[Zusätzlich können hier Protokolldaten, des Kernels und diverser Systemdienste eingesehen werden,
 um deren Zustand zu kontrollieren.]]
+a_w_devices1 = "An dieser Stelle können eingebaute WLAN-Geräte konfiguriert werden."
 a_w_apisolation = [[AP-Isolation]]
 a_w_apisolation1 = [[Unterbindet Client-Client-Verkehr]]
 a_w_athburst = [[Atheros-Frameburst]]
@@ -244,3 +245,5 @@ texteditor = [[Texteditor]]
 uci_applied = [[Die folgenden Änderungen wurden übernommen]]
 uci_reverted = [[Die folgenden Änderungen wurden verworfen]]
 
+m_n_local = "Lokales Netz"
+m_n_inet  = "Internetverbindung"
