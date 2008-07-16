@@ -197,13 +197,30 @@ end
 
 function action_upgrade()
 	require("luci.model.uci")
+
 	local ret  = nil
 	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
-	
-	local image   = luci.http.upload("image")
+	local tmpfile = "/tmp/firmware.img"
+
+	local file
+	luci.http.setfilehandler(
+		function(meta, chunk, eof)
+			if not file then
+				file = io.open(tmpfile, "w")
+			end
+			if chunk then
+				file:write(chunk)
+			end
+			if eof then
+				file:close()
+			end
+		end
+	)
+
+	local fname   = luci.http.formvalue("image")
 	local keepcfg = luci.http.formvalue("keepcfg")
-	
-	if plat and image then
+
+	if plat and fname then
 		local kpattern = nil
 		if keepcfg then
 			local files = luci.model.uci.get_all("luci", "flash_keep")
@@ -214,8 +231,8 @@ function action_upgrade()
 				end
 			end
 		end
-		ret = luci.sys.flash(image, kpattern)
+		ret = luci.sys.flash(tmpfile, kpattern)
 	end
-	
+
 	luci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret})
 end

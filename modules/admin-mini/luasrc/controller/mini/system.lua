@@ -20,7 +20,9 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"mini", "system"}, call("action_reboot"), i18n("system"))
-	entry({"mini", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 10)
+	entry({"admin", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw"), 10)
+	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 20)
+	entry({"mini", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 30)
 end
 
 function action_reboot()
@@ -29,4 +31,62 @@ function action_reboot()
 	if reboot then
 		luci.sys.reboot()
 	end
+end
+
+function action_upgrade()
+	require("luci.model.uci")
+
+	local ret  = nil
+	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
+	local tmpfile = "/tmp/firmware.img"
+
+	local file
+	luci.http.setfilehandler(
+		function(meta, chunk, eof)
+			if not file then
+				file = io.open(tmpfile, "w")
+			end
+			if chunk then
+				file:write(chunk)
+			end
+			if eof then
+				file:close()
+			end
+		end
+	)
+
+	local fname   = luci.http.formvalue("image")
+	local keepcfg = luci.http.formvalue("keepcfg")
+
+	if plat and fname then
+		local kpattern = nil
+		if keepcfg then
+			local files = luci.model.uci.get_all("luci", "flash_keep")
+			if files.luci and files.luci.flash_keep then
+				kpattern = ""
+				for k,v in pairs(files.luci.flash_keep) do
+					kpattern = kpattern .. " " ..  v
+				end
+			end
+		end
+		ret = luci.sys.flash(tmpfile, kpattern)
+	end
+
+	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret})
+end
+
+function action_passwd()
+	local p1 = luci.http.formvalue("pwd1")
+	local p2 = luci.http.formvalue("pwd2")
+	local stat = nil
+
+	if p1 or p2 then
+		if p1 == p2 then
+			stat = luci.sys.user.setpasswd("root", p1)
+		else
+			stat = 10
+		end
+	end
+
+	luci.template.render("mini/passwd", {stat=stat})
 end

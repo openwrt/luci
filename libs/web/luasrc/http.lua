@@ -51,8 +51,8 @@ function Request.__init__(self, env, sourcein, sinkerr)
 	self.parsed_input = false
 end
 
-function Request.formvalue(self, name)
-	if not self.parsed_input then
+function Request.formvalue(self, name, noparse)
+	if not noparse and not self.parsed_input then
 		self:_parse_input()
 	end
 	

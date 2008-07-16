@@ -80,7 +80,7 @@ function index()
 	      page.setuser  = "nobody"
 	      page.setgroup = "nogroup"
 
-	local vars = luci.http.formvalue()
+	local vars = luci.http.formvalue(nil, true)
 	local span = vars.timespan or nil
 
 	for i, plugin in luci.util.vspairs( tree:plugins() ) do

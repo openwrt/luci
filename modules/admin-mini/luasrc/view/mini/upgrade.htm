@@ -1,0 +1,47 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+<%+header%>
+<h1><%:system%></h1>
+<h2><%:a_s_flash%></h2>
+<p><%:a_s_flash_upgrade1%></p>
+<br />
+<% if sysupgrade and not ret then %>
+<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+	<div class="cbi-section-node">
+		<div class="cbi-value clear">
+			<div class="cbi-value-title left"><%:a_s_flash_fwimage%></div>
+			<div class="cbi-value-field"><input type="file" size="30" name="image" /></div>
+		</div>
+		<br />
+		<div class="cbi-value clear">
+			<input type="checkbox" name="keepcfg" value="1" checked="checked" />
+			<span class="bold"><%:a_s_flash_keepcfg%></span>
+		</div>
+		<br />
+		<div>
+			<input type="submit" value="<%:a_s_flash_fwupgrade%>" />
+		</div>
+	</div>
+</form>
+<% elseif ret then %>
+	<% if ret == 0 then %>
+<div class="ok"><%:a_s_flash_flashed%></div>
+	<% else %>
+<div class="error"><%:a_s_flash_flasherr%>! (<%:code%> <%=ret%>)</div>	
+	<% end %>
+<% else %>
+<div class="error"><%:a_s_flash_notimplemented%></div>
+<% end %>
+<%+footer%>
