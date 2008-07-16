@@ -15,7 +15,7 @@ $Id$
 <%+header%>
 <h1><%:olsr_routes%></h1>
 <br />
-<table cellspacing="0" cellpadding="6">
+<table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
 <th><%:destination%></th>
 <th><%:gateway%></th>
@@ -42,7 +42,7 @@ $Id$
 <td><%=route.Gateway%></td>
 <td><%=route.Interface%></td>
 <td><%=route.Metric%></td>
-<td style="background-color:<%=color%>"><%=route.ETX%></td>
+<td style="background-color:<%=color%>"><%=string.format("%%.3f", tonumber(route.ETX) or 0)%></td>
 </tr>
 <% end %>
 </table>

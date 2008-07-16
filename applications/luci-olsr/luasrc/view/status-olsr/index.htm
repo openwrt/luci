@@ -16,7 +16,7 @@ $Id$
 <h1><%:olsr_links%></h1>
 <p><%:olsr_links1%></p>
 <br />
-<table cellspacing="0" cellpadding="6">
+<table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
 <th><%:destination%></th>
 <th><%:local%></th>
@@ -30,7 +30,7 @@ $Id$
 	end
 	local color = "#bb3333"
 	
-	link.ETX = tonumber(link.ETX)
+	link.ETX = tonumber(link.ETX) or 0
 	if link.ETX == 0 then
 		color = "#bb3333"
 	elseif link.ETX < 4 then
@@ -46,7 +46,7 @@ $Id$
 <td><%=link["Local IP"]%></td>
 <td><%=link.LinkQuality%></td>
 <td><%=link.NLQ%></td>
-<td style="background-color:<%=color%>"><%=link.ETX%></td>
+<td style="background-color:<%=color%>"><%=string.format("%%.3f", link.ETX)%></td>
 </tr>
 <% end %>
 </table>

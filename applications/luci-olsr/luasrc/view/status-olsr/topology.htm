@@ -15,7 +15,7 @@ $Id$
 <%+header%>
 <h1><%:olsr_topology%></h1>
 <br />
-<table cellspacing="0" cellpadding="6">
+<table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
 <th><%:destination%></th>
 <th><%:olsr_lasthop%></th>
@@ -33,7 +33,7 @@ $Id$
 <td><a href="http://<%=route["Last hop IP"]%>"><%=route["Last hop IP"]%></a></td>
 <td><%=route.LQ%></td>
 <td><%=route.ILQ%></td>
-<td><%=route.ETX%></td>
+<td><%=string.format("%%.3f", tonumber(route.ETX) or 0)%></td>
 </tr>
 <% end %>
 </table>
