@@ -304,7 +304,14 @@ end
 
 -- Creates the section
 function AbstractSection.create(self, section)
-	local stat = self.map:set(section, nil, self.sectiontype)
+	local stat
+	
+	if section then
+		stat = self.map:set(section, nil, self.sectiontype)
+	else
+		section = self.map:add(self.sectiontype)
+		stat = section
+	end
 
 	if stat then
 		for k,v in pairs(self.children) do
@@ -397,12 +404,6 @@ function TypedSection.cfgsections(self)
 		end)
 
 	return sections
-end
-
--- Creates a new section of this type with the given name (or anonymous)
-function TypedSection.create(self, name)
-	name = name or self.map:add(self.sectiontype)
-	AbstractSection.create(self, name)
 end
 
 -- Limits scope to sections that have certain option => value pairs
