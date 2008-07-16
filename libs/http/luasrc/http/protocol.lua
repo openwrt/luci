@@ -19,6 +19,7 @@ local ltn12 = require("luci.ltn12")
 
 HTTP_MAX_CONTENT      = 1024*4		-- 4 kB maximum content size
 HTTP_URLENC_MAXKEYLEN = 1024		-- maximum allowd size of urlencoded parameter names
+TSRC_BLOCKSIZE        = 2048		-- target block size for throttling sources
 
 
 -- Decode an urlencoded string.
@@ -622,7 +623,7 @@ function mimedecode_message_body( source, msg, filecb )
 
 		-- XXX: we schould propably keep the maximum buffer size in sync with
 		--      the blocksize of our original source... but doesn't really matter
-		if msg._mimebuffer ~= nil and #msg._mimebuffer > 256 then
+		if msg._mimebuffer ~= nil and #msg._mimebuffer > TSRC_BLOCKSIZE then
 			return ""
 		else
 			return source()
@@ -660,7 +661,7 @@ function urldecode_message_body( source, msg )
 	-- Create a throttling LTN12 source
 	-- See explaination in mimedecode_message_body().
 	local tsrc = function()
-		if msg._urldecbuffer ~= nil and #msg._urldecbuffer > 0 then
+		if msg._urldecbuffer ~= nil and #msg._urldecbuffer > TSRC_BLOCKSIZE then
 			return ""
 		else
 			return source()
