@@ -14,7 +14,7 @@ a_i_i_hello = "Hello!"
 a_i_i_admin1 = "This is the administration area of LuCI."
 a_i_i_admin2 = "LuCI is a free, flexible, and user friendly graphical interface for configuring OpenWRT Kamikaze."
 a_i_i_admin3 = "On the following pages you can adjust all important settings of your router."
-a_i_i_admin4 = "You will find a navigation leading to the different configuration pages on the left side."
+a_i_i_admin4 = [[Notice: In LuCI changes have to be confirmed by clicking Changes - Apply before being applied.]]
 a_i_i_admin5 = [[As we are always want to improve this interface we are looking forward
 to your feedback and suggestions.]]
 a_i_i_admin6 = "And now have fun with your router!"
