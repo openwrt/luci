@@ -169,22 +169,31 @@ function status(code, message)
 	coroutine.yield(1, code, message)
 end
 
-function write(content)
-	if not content or #content == 0 then
-		return
-	end
-	if not context.eoh then
-		if not context.status then
-			status()
+function write(content, src_err)
+	if not content then
+		if src_err then
+			error(src_err)
+		else
+			close()
 		end
-		if not context.headers or not context.headers["content-type"] then
-			header("Content-Type", "text/html; charset=utf-8")
+		return true
+	elseif #content == 0 then
+		return true
+	else
+		if not context.eoh then
+			if not context.status then
+				status()
+			end
+			if not context.headers or not context.headers["content-type"] then
+				header("Content-Type", "text/html; charset=utf-8")
+			end
+			
+			context.eoh = true
+			coroutine.yield(3)
 		end
-		
-		context.eoh = true
-		coroutine.yield(3)
+		coroutine.yield(4, content)
+		return true
 	end
-	coroutine.yield(4, content)
 end
 
 function redirect(url)
