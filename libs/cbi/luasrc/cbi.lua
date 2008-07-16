@@ -214,6 +214,7 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.map = map
 	self.config = map.config
 	self.optionals = {}
+	self.defaults = {}
 
 	self.optional = true
 	self.addremove = false
@@ -303,7 +304,21 @@ end
 
 -- Creates the section
 function AbstractSection.create(self, section)
-	return self.map:set(section, nil, self.sectiontype)
+	local stat = self.map:set(section, nil, self.sectiontype)
+
+	if stat then
+		for k,v in pairs(self.children) do
+			if v.default then
+				self.map:set(section, v.option, v.default)
+			end
+		end
+
+		for k,v in pairs(self.defaults) do
+			self.map:set(section, k, v)
+		end
+	end
+
+	return stat
 end
 
 
@@ -386,17 +401,8 @@ end
 
 -- Creates a new section of this type with the given name (or anonymous)
 function TypedSection.create(self, name)
-	if name then
-		self.map:set(name, nil, self.sectiontype)
-	else
-		name = self.map:add(self.sectiontype)
-	end
-
-	for k,v in pairs(self.children) do
-		if v.default then
-			self.map:set(name, v.option, v.default)
-		end
-	end
+	name = name or self.map:add(self.sectiontype)
+	AbstractSection.create(self, name)
 end
 
 -- Limits scope to sections that have certain option => value pairs
