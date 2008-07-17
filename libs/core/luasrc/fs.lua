@@ -36,9 +36,7 @@ glob = posix.glob
 
 -- Checks whether a file exists
 function isfile(filename)
-	local fp = io.open(filename, "r")
-	if fp then fp:close() end
-	return fp ~= nil
+	return posix.stat(filename, "type") == "regular"
 end
 
 -- Returns the content of file
