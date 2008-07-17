@@ -1,8 +1,6 @@
-Index: luaposix-5.1.2/lposix.c
-===================================================================
---- luaposix-5.1.2.orig/lposix.c	2008-06-02 17:35:21.000000000 +0200
-+++ luaposix-5.1.2/lposix.c	2008-06-02 17:35:26.000000000 +0200
-@@ -1006,6 +1006,29 @@
+--- a/lposix.c
++++ b/lposix.c
+@@ -1016,6 +1016,29 @@
  }
  #endif
  
@@ -32,7 +30,7 @@ Index: luaposix-5.1.2/lposix.c
  static const luaL_reg R[] =
  {
  	{"access",		Paccess},
-@@ -1013,6 +1036,7 @@
+@@ -1023,6 +1046,7 @@
  	{"chdir",		Pchdir},
  	{"chmod",		Pchmod},
  	{"chown",		Pchown},
@@ -40,10 +38,8 @@ Index: luaposix-5.1.2/lposix.c
  	{"ctermid",		Pctermid},
  	{"dirname",		Pdirname},
  	{"dir",			Pdir},
-Index: luaposix-5.1.2/Makefile
-===================================================================
---- luaposix-5.1.2.orig/Makefile	2008-06-02 17:35:26.000000000 +0200
-+++ luaposix-5.1.2/Makefile	2008-06-02 17:35:18.000000000 +0200
+--- a/Makefile
++++ b/Makefile
 @@ -37,8 +37,10 @@
  OS=$(shell uname)
  ifeq ($(OS),Darwin)

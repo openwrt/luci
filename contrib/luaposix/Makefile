@@ -1,8 +1,8 @@
 include ../../build/config.mk
 include ../../build/gccconfig.mk
 
-LUAPOSIX_VERSION = 5.1.2
-LUAPOSIX_SITE = http://luaforge.net/frs/download.php/3063/
+LUAPOSIX_VERSION = 5.1.3
+LUAPOSIX_SITE = http://luaforge.net/frs/download.php/3449/
 LUAPOSIX_DIR = luaposix-$(LUAPOSIX_VERSION)
 LUAPOSIX_FILE = $(LUAPOSIX_DIR).tar.gz
 LUAPOSIX_URL = $(LUAPOSIX_SITE)/$(LUAPOSIX_FILE)
