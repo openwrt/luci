@@ -19,7 +19,7 @@ config extern flash_keep
 	option firewall	"/etc/firewall.user"
 
 config event uci_oncommit
-	option network	"/etc/init.d/network restart"
+	option network	"/etc/init.d/network restart; /etc/init.d/dnsmasq restart"
 	option wireless	"/etc/init.d/network restart"
 	option olsr	"/etc/init.d/olsrd restart"
 	option dhcp	"/etc/init.d/dnsmasq restart"
@@ -31,6 +31,7 @@ config event uci_oncommit
 	option luci_ethers "/etc/init.d/luci_ethers restart; /etc/init.d/dnsmasq restart"
 	option luci_splash "/etc/init.d/luci_splash restart"
 	option freifunk "/etc/init.d/luci_freifunk restart"
+	option upnpd "/etc/init.d/miniupnpd enabled && /etc/init.d/miniupnpd restart || /etc/init.d/miniupnpd stop"
 
 config internal languages
 	option de "Deutsch"

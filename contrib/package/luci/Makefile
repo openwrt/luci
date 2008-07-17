@@ -411,6 +411,16 @@ define Package/luci-app-statistics/install
 	$(call Package/luci/install/template,$(1),applications/luci-statistics)
 endef
 
+define Package/luci-app-upnp
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core +miniupnpd
+  TITLE:=Universal Plug & Play configuration module
+endef
+
+define Package/luci-app-upnp/install
+	$(call Package/luci/install/template,$(1),applications/luci-upnp)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -566,6 +576,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-statistics),)
 	PKG_SELECTED_MODULES+=applications/luci-statistics
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-upnp),)
+	PKG_SELECTED_MODULES+=applications/luci-upnp
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
@@ -630,6 +643,7 @@ $(eval $(call BuildPackage,luci-app-olsr))
 $(eval $(call BuildPackage,luci-app-qos))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
+$(eval $(call BuildPackage,luci-app-upnp))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
