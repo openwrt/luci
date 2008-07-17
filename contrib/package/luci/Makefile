@@ -411,6 +411,7 @@ define Package/luci-app-statistics/install
 	$(call Package/luci/install/template,$(1),applications/luci-statistics)
 endef
 
+
 define Package/luci-app-upnp
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-mod-admin-core +miniupnpd
@@ -419,6 +420,17 @@ endef
 
 define Package/luci-app-upnp/install
 	$(call Package/luci/install/template,$(1),applications/luci-upnp)
+endef
+
+
+define Package/luci-app-ntpc
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core +ntpclient
+  TITLE:=NTP time synchronisation client configuration
+endef
+
+define Package/luci-app-ntpc/install
+	$(call Package/luci/install/template,$(1),applications/luci-ntpc)
 endef
 
 
@@ -579,6 +591,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-upnp),)
 	PKG_SELECTED_MODULES+=applications/luci-upnp
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-ntpc),)
+	PKG_SELECTED_MODULES+=applications/luci-ntpc
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
@@ -644,6 +659,7 @@ $(eval $(call BuildPackage,luci-app-qos))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 $(eval $(call BuildPackage,luci-app-upnp))
+$(eval $(call BuildPackage,luci-app-ntpc))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))

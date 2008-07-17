@@ -1,0 +1,5 @@
+ntpc = "Zeitsynchronisation"
+ntpc_desc = "Synchronisiert die Systemzeit über Internetzeitserver"
+ntpc_timeserver = "Zeitserver"
+ntpc_count = "Anzahl der Zeitmessungen"
+ntpc_count_desc = "0 = unendlich"
