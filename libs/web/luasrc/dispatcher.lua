@@ -141,6 +141,14 @@ function dispatch(request)
 	viewns.resource    = luci.config.main.resourcebase
 	viewns.REQUEST_URI = luci.http.getenv("SCRIPT_NAME") .. (luci.http.getenv("PATH_INFO") or "")
 	
+	if track.dependent then
+		local stat, err = pcall(assert, not track.auto)
+		if not stat then
+			error500(err)
+			return
+		end
+	end
+	
 	if track.sysauth then
 		require("luci.sauth")
 		local def  = (type(track.sysauth) == "string") and track.sysauth
@@ -324,20 +332,6 @@ function entry(path, target, title, order)
 	return c
 end
 
--- Checks whether a node exists
-function registered(...)
-	local c = context.tree
-
-	for k,v in ipairs(arg) do
-		if not c.nodes[v] then
-			return false
-		end
-
-		c = c.nodes[v]
-	end
-	return true
-end
-
 -- Fetch a dispatching node
 function node(...)
 	local c = context.tree
@@ -345,7 +339,7 @@ function node(...)
 
 	for k,v in ipairs(arg) do
 		if not c.nodes[v] then
-			c.nodes[v] = {nodes={}}
+			c.nodes[v] = {nodes={}, auto=true}
 		end
 
 		c = c.nodes[v]
@@ -353,6 +347,7 @@ function node(...)
 
 	c.module = getfenv(2)._NAME
 	c.path = arg
+	c.auto = nil
 
 	return c
 end

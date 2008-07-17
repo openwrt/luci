@@ -347,7 +347,7 @@ endef
 
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-full
+  DEPENDS+=+luci-mod-admin-core
   TITLE:=Firewall and Portforwarding application
 endef
 
@@ -373,7 +373,7 @@ endef
 
 define Package/luci-app-qos
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-full +qos-scripts
+  DEPENDS+=+luci-mod-admin-core +qos-scripts
   TITLE:=Quality of Service configuration module
 endef
 

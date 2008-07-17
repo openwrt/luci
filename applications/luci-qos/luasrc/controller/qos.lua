@@ -18,5 +18,12 @@ function index()
 		return
 	end
 	
-	entry({"admin", "network", "qos"}, cbi("qos/qos"), "QoS").i18n = "qos"
+	local page = entry({"admin", "network", "qos"}, cbi("qos/qos"), "QoS")
+	page.i18n = "qos"
+	page.dependent = true
+	
+	
+	local page = entry({"mini", "network", "qos"}, cbi("qos/qosmini"), "QoS")
+	page.i18n = "qos"
+	page.dependent = true
 end

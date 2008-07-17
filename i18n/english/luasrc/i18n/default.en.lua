@@ -77,6 +77,7 @@ reset = "Reset"
 revert = "Revert"
 
 save = "Save"
+service = "Service"
 services = "Services"
 settings = "Settings"
 start = "Start"

@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,20 +14,11 @@ $Id$
 ]]--
 m = Map("qos")
 
-s = m:section(TypedSection, "interface", translate("interfaces"))
-s.addremove = true
+s = m:section(NamedSection, "wan", "interface", translate("m_n_inet"))
 
-s:option(Flag, "enabled", translate("enable"))
-
-c = s:option(ListValue, "classgroup")
-c:value("Default", "standard")
-c.default = "Default"
-
-s:option(Flag, "overhead")
-
-s:option(Value, "download", nil, "kb/s")
-
-s:option(Value, "upload", nil, "kb/s")
+s:option(Flag, "enabled", translate("qos"))
+s:option(Value, "download", translate("qos_interface_download"), "kb/s")
+s:option(Value, "upload", translate("qos_interface_upload"), "kb/s")
 
 s = m:section(TypedSection, "classify")
 
