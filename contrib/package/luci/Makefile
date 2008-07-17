@@ -426,11 +426,22 @@ endef
 define Package/luci-app-ntpc
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-mod-admin-core +ntpclient
-  TITLE:=NTP time synchronisation client configuration
+  TITLE:=NTP time synchronisation client configuration module
 endef
 
 define Package/luci-app-ntpc/install
 	$(call Package/luci/install/template,$(1),applications/luci-ntpc)
+endef
+
+
+define Package/luci-app-ddns
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-mod-admin-core +ddns-scripts
+  TITLE:=Dynamic DNS configuration module
+endef
+
+define Package/luci-app-ddns/install
+	$(call Package/luci/install/template,$(1),applications/luci-ddns)
 endef
 
 
@@ -594,6 +605,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-ntpc),)
 	PKG_SELECTED_MODULES+=applications/luci-ntpc
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-ddns),)
+	PKG_SELECTED_MODULES+=applications/luci-ddns
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
@@ -660,6 +674,7 @@ $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
+$(eval $(call BuildPackage,luci-app-ddns))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
