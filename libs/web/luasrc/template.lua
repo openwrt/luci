@@ -93,6 +93,7 @@ function compile(template)
 	-- Parse the expressions
 	for k,v in pairs(expr) do
 		local p = v:sub(1, 1)
+		v = v:gsub("%%", "%%%%")
 		local re = nil
 		if p == "+" then
 			re = r_include:format(sanitize(string.sub(v, 2)))
