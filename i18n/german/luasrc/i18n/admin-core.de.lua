@@ -141,6 +141,10 @@ Die Unterstützung von virtuellen Adaptern ermöglicht auch den Einsatz als Wire
 mehreren Netzwerken gleichzeitig auf einem Gerät.]]
 a_w_wifi3 = [[Es werden Managed, Client, Ad-Hoc und WDS-Modus unterstützt sowie WPA und WPA2-Verschlüsselung zur gesicherten
 Kommunikation.]]
+a_w_ap = "Access Point"
+a_w_adhoc = "Ad-Hoc"
+a_w_client = "Client"
+a_w_wds = "WDS"
 accept = [[Annehmen]]
 aliases = [[Aliasse]]
 bitrate = [[Bitrate]]
@@ -247,3 +251,11 @@ uci_reverted = [[Die folgenden Änderungen wurden verworfen]]
 
 m_n_local = "Lokales Netz"
 m_n_inet  = "Internetverbindung"
+m_n_route = "Weiterleiten"
+m_n_bridge = "Überbrücken"
+
+m_w_ap = "Anbieten (Access Point)"
+m_w_adhoc = "Unabhängig (Ad-Hoc)"
+m_w_client = "Einklinken (Client)"
+m_w_wds = "Verteilen (WDS)"
+m_w_clientmode = "Verbindungsmodus"

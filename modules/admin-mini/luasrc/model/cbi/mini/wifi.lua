@@ -50,19 +50,26 @@ else
 end
 
 mode = s:option(ListValue, "mode", translate("mode"))
-mode:value("ap", "Access Point")
-mode:value("adhoc", "Ad-Hoc")
-mode:value("sta", "Client")
+mode:value("ap", translate("m_w_ap"))
+mode:value("adhoc", translate("m_w_adhoc"))
+mode:value("sta", translate("m_w_client"))
 
 function mode.write(self, section, value)
 	if value == "sta" then
+		-- ToDo: Move this away
+		if not luci.model.uci.get("network", "wan") then
+			luci.model.uci.set("network", "wan", "interface")
+			luci.model.uci.set("network", "wan", "proto", "none")
+		end
+
 		luci.model.uci.set("network", "wan", "type", "bridge")
-		luci.model.uci.set("wireless", section, "network", "wan")
+		luci.model.uci.save("network")
+
+		self.map:set(section, "network", "wan")
 	else
-		luci.model.uci.delete("network", "wan", "type")
-		luci.model.uci.set("wireless", section, "network", "lan")
+		self.map:set(section, "network", "lan")
 	end
-	luci.model.uci.save("network")
+
 	return ListValue.write(self, section, value)
 end
 

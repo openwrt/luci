@@ -35,10 +35,10 @@ luci.model.uci.foreach("network", "interface",
 	end)
 
 mode = s:option(ListValue, "mode", translate("mode"))
-mode:value("ap", "Access Point")
-mode:value("adhoc", "Ad-Hoc")
-mode:value("sta", "Client")
-mode:value("wds", "WDS")
+mode:value("ap", translate("a_w_ap"))
+mode:value("adhoc", translate("a_w_adhoc"))
+mode:value("sta", translate("a_w_client"))
+mode:value("wds", translate("a_w_wds"))
 
 s:option(Value, "bssid", "BSSID").optional = true
 
