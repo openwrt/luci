@@ -311,7 +311,7 @@ function mimedecode_message_body( src, msg, filecb )
 
 		tlen = tlen + ( chunk and #chunk or 0 )
 
-		if msg.env.CONTENT_LENGTH and tlen > msg.env.CONTENT_LENGTH then
+		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) then
 			return nil, "Message body size exceeds Content-Length"
 		end
 
@@ -413,7 +413,7 @@ function urldecode_message_body( src, msg )
 
 		tlen = tlen + ( chunk and #chunk or 0 )
 
-		if msg.env.CONTENT_LENGTH and tlen > msg.env.CONTENT_LENGTH then
+		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) then
 			return nil, "Message body size exceeds Content-Length"
 		elseif tlen > HTTP_MAX_CONTENT then
 			return nil, "Message body size exceeds maximum allowed length"
@@ -490,7 +490,7 @@ function parse_message_header( source )
 
 			-- Populate common environment variables
 			msg.env = {
-				CONTENT_LENGTH    = tonumber(msg.headers['Content-Length']);
+				CONTENT_LENGTH    = msg.headers['Content-Length'];
 				CONTENT_TYPE      = msg.headers['Content-Type'];
 				REQUEST_METHOD    = msg.request_method:upper();
 				REQUEST_URI       = msg.request_uri;
