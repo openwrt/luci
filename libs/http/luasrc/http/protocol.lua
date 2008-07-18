@@ -455,12 +455,19 @@ function mimedecode_message_body( src, msg, filecb )
 	end
 
 
-	local field  = { headers = { } }
+	local tlen   = 0
 	local inhdr  = false
+	local field  = nil
 	local store  = nil
 	local lchunk = nil
 
 	local function snk( chunk )
+
+		tlen = tlen + ( chunk and #chunk or 0 )
+
+		if msg.env.CONTENT_LENGTH and tlen > msg.env.CONTENT_LENGTH then
+			return nil, "Message body size exceeds Content-Length"
+		end
 
 		if chunk and not lchunk then
 			lchunk = "\r\n" .. chunk
@@ -524,7 +531,11 @@ function mimedecode_message_body( src, msg, filecb )
 					lchunk = data:sub( #data - 78 + 1, #data )
 					data   = data:sub( 1, #data - 78 )
 
-					store( field.headers, data )
+					if store and field and field.name then
+						store( field.headers, data )
+					else
+						return nil, "Invalid MIME section header"
+					end
 				else
 					lchunk, data = data, nil
 				end
@@ -620,7 +631,7 @@ function parse_message_header( source )
 
 			-- Populate common environment variables
 			msg.env = {
-				CONTENT_LENGTH    = msg.headers['Content-Length'];
+				CONTENT_LENGTH    = tonumber(msg.headers['Content-Length']);
 				CONTENT_TYPE      = msg.headers['Content-Type'];
 				REQUEST_METHOD    = msg.request_method:upper();
 				REQUEST_URI       = msg.request_uri;
