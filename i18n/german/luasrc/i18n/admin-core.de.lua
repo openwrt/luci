@@ -266,3 +266,11 @@ system_system_logsize = "Größe des Systemprotokollpuffers"
 system_system_logip = "Externer Systemprotokollserver"
 system_system_conloglevel = "Protokollausgabelevel"
 system_system_conloglevel_desc = "Level auf der Konsole ausgegebener Meldungen"
+
+m_i_processor = "Prozessor"
+m_i_memory = "Hauptspeicher"
+m_i_systemtime = "Lokale Zeit"
+m_i_uptime = "Laufzeit"
+
+m_n_d_firstaddress = "Erste vergebene Adresse"
+m_n_d_numleases = "Anzahl vergebener Adressen"

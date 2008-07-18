@@ -22,15 +22,15 @@ s.anonymous = true
 s:depends("interface", "lan")
 
 enable = s:option(ListValue, "ignore", "", "")
-enable:value(0, "enabled")
-enable:value(1, "disabled")
+enable:value(0, translate("enable"))
+enable:value(1, translate("disable"))
 
-start = s:option(Value, "start", "First address")
+start = s:option(Value, "start", translate("m_n_d_firstaddress"))
 start.rmempty = true
 start:depends("ignore", "0")
 
 
-limit = s:option(Value, "limit", "Number of leases", "")
+limit = s:option(Value, "limit", translate("m_n_d_numleases"), "")
 limit:depends("ignore", "0")
 
 function limit.cfgvalue(self, section)

@@ -252,3 +252,11 @@ system_system_logsize = "System log buffer size"
 system_system_logip = "External system log server"
 system_system_conloglevel = "Log output level"
 system_system_conloglevel_desc = "Level of log messages on the console"
+
+m_i_processor = "Processor"
+m_i_memory = "Memory"
+m_i_systemtime = "Local Time"
+m_i_uptime = "Uptime"
+
+m_n_d_firstaddress = "First leased address"
+m_n_d_numleases = "Number of leasesed addresses"

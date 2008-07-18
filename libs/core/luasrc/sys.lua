@@ -158,6 +158,13 @@ function uniqueid(bytes)
 end
 
 
+-- Returns uptime stats
+function uptime()
+	local loadavg = io.lines("/proc/uptime")()
+	return loadavg:match("^(.-) (.-)$")
+end
+
+
 group = {}
 group.getgroup = posix.getgroup
 
