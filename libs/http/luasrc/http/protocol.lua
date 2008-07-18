@@ -17,10 +17,7 @@ module("luci.http.protocol", package.seeall)
 
 local ltn12 = require("luci.ltn12")
 
-HTTP_MAX_CONTENT      = 1024*4		-- 4 kB maximum content size
-HTTP_URLENC_MAXKEYLEN = 1024		-- maximum allowd size of urlencoded parameter names
-TSRC_BLOCKSIZE        = 2048		-- target block size for throttling sources
-
+HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
 
 -- Decode an urlencoded string.
 -- Returns the decoded value.
@@ -229,157 +226,6 @@ process_states['headers'] = function( msg, chunk )
 end
 
 
--- Init urldecoding stream
-process_states['urldecode-init'] = function( msg, chunk, filecb )
-
-	if chunk ~= nil then
-
-		-- Check for Content-Length
-		if msg.env.CONTENT_LENGTH then
-			msg.content_length = tonumber(msg.env.CONTENT_LENGTH)
-
-			if msg.content_length <= HTTP_MAX_CONTENT then
-				-- Initialize buffer
-				msg._urldecbuffer = chunk
-				msg._urldeclength = 0
-
-				-- Switch to urldecode-key state
-				return true, function(chunk)
-					return process_states['urldecode-key']( msg, chunk, filecb )
-				end
-			else
-				return nil, "Request exceeds maximum allowed size"
-			end
-		else
-			return nil, "Missing Content-Length header"
-		end
-	else
-		return nil, "Unexpected EOF"
-	end
-end
-
-
--- Process urldecoding stream, read and validate parameter key
-process_states['urldecode-key'] = function( msg, chunk, filecb )
-	if chunk ~= nil then
-
-		-- Prevent oversized requests
-		if msg._urldeclength >= msg.content_length then
-			return nil, "Request exceeds maximum allowed size"
-		end
-
-		-- Combine look-behind buffer with current chunk
-		local buffer = msg._urldecbuffer .. chunk
-		local spos, epos = buffer:find("=")
-
-		-- Found param
-		if spos then
-
-			-- Check that key doesn't exceed maximum allowed key length
-			if ( spos - 1 ) <= HTTP_URLENC_MAXKEYLEN then
-				local key = urldecode( buffer:sub( 1, spos - 1 ) )
-
-				-- Prepare buffers
-				msg._urldeclength   = msg._urldeclength + epos
-				msg._urldecbuffer   = buffer:sub( epos + 1, #buffer )
-
-				-- Use file callback or store values inside msg.params
-				if filecb then
-					msg._urldeccallback = function( chunk, eof )
-						filecb( field, chunk, eof )
-					end
-				else
-					__initval( msg.params, key )
-
-					msg._urldeccallback = function( chunk, eof )
-						__appendval( msg.params, key, chunk )
-
-						-- FIXME: Use a filter
-						if eof then
-							__finishval( msg.params, key, urldecode )
-						end
-					end
-				end
-
-				-- Proceed with urldecode-value state
-				return true, function( chunk )
-					return process_states['urldecode-value']( msg, chunk, filecb )
-				end
-			else
-				return nil, "POST parameter exceeds maximum allowed length"
-			end
-		else
-			return nil, "POST data exceeds maximum allowed length"
-		end
-	else
-		return nil, "Unexpected EOF"
-	end
-end
-
-
--- Process urldecoding stream, read parameter value
-process_states['urldecode-value'] = function( msg, chunk, filecb )
-
-	if chunk ~= nil then
-
-		-- Combine look-behind buffer with current chunk
-		local buffer = msg._urldecbuffer .. chunk
-
-		-- Check for EOF
-		if #buffer == 0 then
-			-- Compare processed length
-			if msg._urldeclength == msg.content_length then
-				-- Cleanup
-				msg._urldeclength   = nil
-				msg._urldecbuffer   = nil
-				msg._urldeccallback = nil
-
-				-- We won't accept data anymore
-				return false
-			else
-				return nil, "Content-Length mismatch"
-			end
-		end
-
-		-- Check for end of value
-		local spos, epos = buffer:find("[&;]")
-		if spos then
-
-			-- Flush buffer, send eof
-			msg._urldeccallback( buffer:sub( 1, spos - 1 ), true )
-			msg._urldecbuffer = buffer:sub( epos + 1, #buffer )
-			msg._urldeclength = msg._urldeclength + epos
-
-			-- Back to urldecode-key state
-			return true, function( chunk )
-				return process_states['urldecode-key']( msg, chunk, filecb )
-			end
-		else
-			-- We're somewhere within a data section and our buffer is full
-			if #buffer > #chunk then
-				-- Flush buffered data
-				msg._urldeccallback( buffer:sub( 1, #buffer - #chunk ), false )
-
-				-- Store new data
-				msg._urldeclength = msg._urldeclength + #buffer - #chunk
-				msg._urldecbuffer = buffer:sub( #buffer - #chunk + 1, #buffer )
-
-			-- Buffer is not full yet, append new data
-			else
-				msg._urldecbuffer = buffer
-			end
-
-			-- Keep feeding me
-			return true
-		end
-	else
-		-- Send EOF
-		msg._urldeccallback( "", true )
-		return false
-	end
-end
-
-
 -- Creates a header source from a given socket
 function header_source( sock )
 	return ltn12.source.simplify( function()
@@ -532,7 +378,7 @@ function mimedecode_message_body( src, msg, filecb )
 					data   = data:sub( 1, #data - 78 )
 
 					if store and field and field.name then
-						store( field.headers, data )
+						store( field.headers, data, false )
 					else
 						return nil, "Invalid MIME section header"
 					end
@@ -544,7 +390,7 @@ function mimedecode_message_body( src, msg, filecb )
 					lchunk, eof = parse_headers( data, field )
 					inhdr = not eof
 				else
-					store( field.headers, lchunk )
+					store( field.headers, lchunk, false )
 					lchunk, chunk = chunk, nil
 				end
 			end
@@ -558,40 +404,53 @@ end
 
 
 -- Decode urlencoded data.
-function urldecode_message_body( source, msg )
+function urldecode_message_body( src, msg )
 
-	-- Create an initial LTN12 sink
-	-- Return the initial state.
-	local sink = ltn12.sink.simplify(
-		function( chunk )
-			return process_states['urldecode-init']( msg, chunk )
-		end
-	)
+	local tlen   = 0
+	local lchunk = nil
 
-	-- Create a throttling LTN12 source
-	-- See explaination in mimedecode_message_body().
-	local tsrc = function()
-		if msg._urldecbuffer ~= nil and #msg._urldecbuffer > 0 then
-			return ""
-		else
-			return source()
+	local function snk( chunk )
+
+		tlen = tlen + ( chunk and #chunk or 0 )
+
+		if msg.env.CONTENT_LENGTH and tlen > msg.env.CONTENT_LENGTH then
+			return nil, "Message body size exceeds Content-Length"
+		elseif tlen > HTTP_MAX_CONTENT then
+			return nil, "Message body size exceeds maximum allowed length"
 		end
+
+		if not lchunk and chunk then
+			lchunk = chunk
+
+		elseif lchunk then
+			local data = lchunk .. ( chunk or "&" )
+			local spos, epos
+
+			repeat
+				spos, epos = data:find("^.-[;&]")
+
+				if spos then
+					local pair = data:sub( spos, epos - 1 )
+					local key  = pair:match("^(.-)=")
+					local val  = pair:match("=(.*)$")
+
+					if key and #key > 0 then
+						__initval( msg.params, key )
+						__appendval( msg.params, key, val )
+						__finishval( msg.params, key, urldecode )
+					end
+
+					data = data:sub( epos + 1, #data )
+				end
+			until not spos
+
+			lchunk = data
+		end
+
+		return true
 	end
 
-	-- Pump input data...
-	while true do
-		-- get data
-		local ok, err = ltn12.pump.step( tsrc, sink )
-
-		-- step
-		if not ok and err then
-			return nil, err
-
-		-- eof
-		elseif not ok then
-			return true
-		end
-	end
+	return luci.ltn12.pump.all( src, snk )
 end
 
 
