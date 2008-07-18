@@ -50,6 +50,7 @@ a_s_changepw = [[Passwort ändern]]
 a_s_changepw1 = [[Ändert das Passwort des Systemverwalters (Benutzer "root")]]
 a_s_changepw_changed = [[Passwort erfolgreich geändert]]
 a_s_changepw_nomatch = [[Passwörter stimmen nicht überein]]
+a_s_desc = "An dieser Stelle können Grundeinstellungen des Systems wie Hostname oder Zeitzone vorgenommen werden."
 a_s_flash = [[Upgrade]]
 a_s_flash_flashed = [[Flashvorgang erfolgreich. Router startet neu...]]
 a_s_flash_flasherr = [[Flashvorgang fehlgeschlagen]]
@@ -259,3 +260,9 @@ m_w_adhoc = "Unabhängig (Ad-Hoc)"
 m_w_client = "Einklinken (Client)"
 m_w_wds = "Verteilen (WDS)"
 m_w_clientmode = "Verbindungsmodus"
+
+
+system_system_logsize = "Größe des Systemprotokollpuffers"
+system_system_logip = "Externer Systemprotokollserver"
+system_system_conloglevel = "Protokollausgabelevel"
+system_system_conloglevel_desc = "Level auf der Konsole ausgegebener Meldungen"

@@ -19,7 +19,7 @@ function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
 
-	entry({"mini", "system"}, call("action_reboot"), i18n("system"))
+	entry({"mini", "system"}, cbi("mini/system"), i18n("system"))
 	entry({"mini", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw"), 10)
 	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 90)
 	entry({"mini", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 100)

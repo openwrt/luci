@@ -33,7 +33,4 @@ for k, offset in luci.util.vspairs(luci.http.protocol.date.TZ) do
 	tz:value(ptz, dtz)
 end
 
-s:option(Value, "log_size", nil, "kiB").optional = true
-s:option(Value, "log_ip").optional = true
-s:option(Value, "conloglevel").optional = true
 return m
