@@ -229,188 +229,6 @@ process_states['headers'] = function( msg, chunk )
 end
 
 
--- Find first MIME boundary
-process_states['mime-init'] = function( msg, chunk, filecb )
-
-	if chunk ~= nil then
-		if #chunk >= #msg.mime_boundary + 2 then
-			local boundary = chunk:sub( 1, #msg.mime_boundary + 4 )
-
-			if boundary == "--" .. msg.mime_boundary .. "\r\n" then
-
-				-- Store remaining data in buffer
-				msg._mimebuffer = chunk:sub( #msg.mime_boundary + 5, #chunk )
-
-				-- Switch to header processing state
-				return true, function( chunk )
-					return process_states['mime-headers']( msg, chunk, filecb )
-				end
-			else
-				return nil, "Invalid MIME boundary"
-			end
-		else
-			return true
-		end
-	else
-		return nil, "Unexpected EOF"
-	end
-end
-
-
--- Read MIME part headers
-process_states['mime-headers'] = function( msg, chunk, filecb )
-
-	if chunk ~= nil then
-
-		-- Combine look-behind buffer with current chunk
-		chunk = msg._mimebuffer .. chunk
-
-		if not msg._mimeheaders then
-			msg._mimeheaders = { }
-		end
-
-		local function __storehdr( k, v )
-			msg._mimeheaders[k] = v
-			return ""
-		end
-
-		-- Read all header lines
-		local ok, count = 1, 0
-		while ok > 0 do
-			chunk, ok = chunk:gsub( "^([A-Z][A-Za-z0-9%-_]+): +([^\r\n]+)\r\n", __storehdr )
-			count = count + ok
-		end
-
-		-- Headers processed, check for empty line
-		chunk, ok = chunk:gsub( "^\r\n", "" )
-
-		-- Store remaining buffer contents
-		msg._mimebuffer = chunk
-
-		-- End of headers
-		if ok > 0 then
-
-			-- When no Content-Type header is given assume text/plain
-			if not msg._mimeheaders['Content-Type'] then
-				msg._mimeheaders['Content-Type'] = 'text/plain'
-			end
-
-			-- Check Content-Disposition
-			if msg._mimeheaders['Content-Disposition'] then
-				-- Check for "form-data" token
-				if msg._mimeheaders['Content-Disposition']:match("^form%-data; ") then
-					-- Check for field name, filename
-					local field = msg._mimeheaders['Content-Disposition']:match('name="(.-)"')
-					local file  = msg._mimeheaders['Content-Disposition']:match('filename="(.+)"$')
-
-					-- Is a file field and we have a callback
-					if file and filecb then
-						msg.params[field] = file
-						msg._mimecallback = function(chunk,eof)
-							filecb( {
-								name    = field;
-								file    = file;
-								headers = msg._mimeheaders
-							}, chunk, eof )
-						end
-
-					-- Treat as form field
-					else
-						__initval( msg.params, field )
-
-						msg._mimecallback = function(chunk,eof)
-							__appendval( msg.params, field, chunk )
-						end
-					end
-
-					-- Header was valid, continue with mime-data
-					return true, function( chunk )
-						return process_states['mime-data']( msg, chunk, filecb )
-					end
-				else
-					-- Unknown Content-Disposition, abort
-					return nil, "Unexpected Content-Disposition MIME section header"
-				end
-			else
-				-- Content-Disposition is required, abort without
-				return nil, "Missing Content-Disposition MIME section header"
-			end
-
-		-- We parsed no headers yet and buffer is almost empty
-		elseif count > 0 or #chunk < 128 then
-			-- Keep feeding me with chunks
-			return true, nil
-		end
-
-		-- Buffer looks like garbage
-		return nil, "Malformed MIME section header"
-	else
-		return nil, "Unexpected EOF"
-	end
-end
-
-
--- Read MIME part data
-process_states['mime-data'] = function( msg, chunk, filecb )
-
-	if chunk ~= nil then
-
-		-- Combine look-behind buffer with current chunk
-		local buffer = msg._mimebuffer .. chunk
-
-		-- Look for MIME boundary
-		local spos, epos = buffer:find( "\r\n--" .. msg.mime_boundary .. "\r\n", 1, true )
-
-		if spos then
-			-- Content data
-			msg._mimecallback( buffer:sub( 1, spos - 1 ), true )
-
-			-- Store remainder
-			msg._mimebuffer = buffer:sub( epos + 1, #buffer )
-
-			-- Next state is mime-header processing
-			return true, function( chunk )
-				return process_states['mime-headers']( msg, chunk, filecb )
-			end
-		else
-			-- Look for EOF?
-			local spos, epos = buffer:find( "\r\n--" .. msg.mime_boundary .. "--\r\n", 1, true )
-
-			if spos then
-				-- Content data
-				msg._mimecallback( buffer:sub( 1, spos - 1 ), true )
-
-				-- We processed the final MIME boundary, cleanup
-				msg._mimebuffer   = nil
-				msg._mimeheaders  = nil
-				msg._mimecallback = nil
-
-				-- We won't accept data anymore
-				return false
-			else
-				-- We're somewhere within a data section and our buffer is full
-				if #buffer > #chunk then
-					-- Flush buffered data
-					msg._mimecallback( buffer:sub( 1, #buffer - #chunk ), false )
-
-					-- Store new data
-					msg._mimebuffer = buffer:sub( #buffer - #chunk + 1, #buffer )
-
-				-- Buffer is not full yet, append new data
-				else
-					msg._mimebuffer = buffer
-				end
-
-				-- Keep feeding me
-				return true
-			end
-		end
-	else
-		return nil, "Unexpected EOF"
-	end
-end
-
-
 -- Init urldecoding stream
 process_states['urldecode-init'] = function( msg, chunk, filecb )
 
@@ -591,59 +409,140 @@ end
 
 
 -- Decode MIME encoded data.
-function mimedecode_message_body( source, msg, filecb )
+function mimedecode_message_body( src, msg, filecb )
 
-	-- Find mime boundary
 	if msg and msg.env.CONTENT_TYPE then
-
-		local bound = msg.env.CONTENT_TYPE:match("^multipart/form%-data; boundary=(.+)")
-
-		if bound then
-			msg.mime_boundary = bound
-		else
-			return nil, "No MIME boundary found or invalid content type given"
-		end
+		msg.mime_boundary = msg.env.CONTENT_TYPE:match("^multipart/form%-data; boundary=(.+)$")
 	end
 
-	-- Create an initial LTN12 sink
-	-- The whole MIME parsing process is implemented as fancy sink, sinks replace themself
-	-- depending on current processing state (init, header, data). Return the initial state.
-	local sink = ltn12.sink.simplify(
-		function( chunk )
-			return process_states['mime-init']( msg, chunk, filecb )
-		end
-	)
-
-	-- Create a throttling LTN12 source
-	-- Frequent state switching in the mime parsing process leads to unwanted buffer aggregation.
-	-- This source checks wheather there's still data in our internal read buffer and returns an
-	-- empty string if there's already enough data in the processing queue. If the internal buffer
-	-- runs empty we're calling the original source to get the next chunk of data.
-	local tsrc = function()
-
-		-- XXX: we schould propably keep the maximum buffer size in sync with
-		--      the blocksize of our original source... but doesn't really matter
-		if msg._mimebuffer ~= nil and #msg._mimebuffer > TSRC_BLOCKSIZE then
-			return ""
-		else
-			return source()
-		end
+	if not msg.mime_boundary then
+		return nil, "Invalid Content-Type found"
 	end
 
-	-- Pump input data...
-	while true do
-		-- get data
-		local ok, err = ltn12.pump.step( tsrc, sink )
 
-		-- error
-		if not ok and err then
-			return nil, err
+	local function parse_headers( chunk, field )
 
-		-- eof
-		elseif not ok then
-			return true
+		local stat
+		repeat
+			chunk, stat = chunk:gsub(
+				"^([A-Z][A-Za-z0-9%-_]+): +([^\r\n]+)\r\n",
+				function(k,v)
+					field.headers[k] = v
+					return ""
+				end
+			)
+		until stat == 0
+
+		chunk, stat = chunk:gsub("^\r\n","")
+
+		-- End of headers
+		if stat > 0 then
+			if field.headers["Content-Disposition"] then
+				if field.headers["Content-Disposition"]:match("^form%-data; ") then
+					field.name = field.headers["Content-Disposition"]:match('name="(.-)"')
+					field.file = field.headers["Content-Disposition"]:match('filename="(.+)"$')
+				end
+			end
+
+			if not field.headers["Content-Type"] then
+				field.headers["Content-Type"] = "text/plain"
+			end
+
+			return chunk, true
 		end
+
+		return chunk, false
 	end
+
+
+	local field  = { headers = { } }
+	local inhdr  = false
+	local store  = nil
+	local lchunk = nil
+
+	local function snk( chunk )
+
+		if chunk and not lchunk then
+			lchunk = "\r\n" .. chunk
+
+		elseif lchunk then
+			local data = lchunk .. ( chunk or "" )
+			local spos, epos, found
+
+			repeat
+				spos, epos = data:find( "\r\n--" .. msg.mime_boundary .. "\r\n", 1, true )
+
+				if not spos then
+					spos, epos = data:find( "\r\n--" .. msg.mime_boundary .. "--\r\n", 1, true )
+				end
+
+
+				if spos then
+					local predata = data:sub( 1, spos - 1 )
+
+					if hdr then
+						predata, eof = parse_headers( predata, field )
+
+						if not eof then
+							return nil, "Invalid MIME section header"
+						end
+
+						if not field.name then
+							return nil, "Invalid Content-Disposition header"
+						end
+					end
+
+					if store then
+						store( field.headers, predata, true )
+					end
+
+
+					field = { headers = { } }
+					found = found or true
+
+					data, eof = parse_headers( data:sub( epos + 1, #data ), field )
+					inhdr = not eof
+
+					if eof then
+						if field.file and filecb then
+							msg.params[field.name] = field.file
+							store = filecb
+						else
+							__initval( msg.params, field.name )
+
+							store = function( hdr, buf, eof )
+								__appendval( msg.params, field.name, buf )
+							end
+						end
+					end
+				end
+			until not spos
+
+
+			if found then
+				if #data > 78 then
+					lchunk = data:sub( #data - 78 + 1, #data )
+					data   = data:sub( 1, #data - 78 )
+
+					store( field.headers, data )
+				else
+					lchunk, data = data, nil
+				end
+			else
+				if inhdr then
+					lchunk, eof = parse_headers( data, field )
+					inhdr = not eof
+				else
+					store( field.headers, lchunk )
+					lchunk, chunk = chunk, nil
+				end
+			end
+		end
+
+		return true
+	end
+
+	return luci.ltn12.pump.all( src, snk )
 end
 
 
