@@ -286,7 +286,7 @@ endef
 define Package/luci-mod-admin-core
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt +luci-i18n-english
-  TITLE:=Administration core module
+  TITLE:=Web UI Core Module
 endef
 
 define Package/luci-mod-admin-core/install
@@ -297,7 +297,7 @@ endef
 define Package/luci-mod-admin-mini
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-mod-admin-core
-  TITLE:=Simplified Administration module (INCOMPLETE)
+  TITLE:=LuCI Essentials - casual user's interface
 endef
 
 define Package/luci-mod-admin-mini/install
@@ -308,7 +308,7 @@ endef
 define Package/luci-mod-admin-full
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-mod-admin-core
-  TITLE:=Full featured Administration module
+  TITLE:=LuCI Administration - power user's interface
 endef
 
 define Package/luci-mod-admin-full/install
