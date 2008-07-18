@@ -480,7 +480,7 @@ function mimedecode_message_body( src, msg, filecb )
 				if spos then
 					local predata = data:sub( 1, spos - 1 )
 
-					if hdr then
+					if inhdr then
 						predata, eof = parse_headers( predata, field )
 
 						if not eof then
