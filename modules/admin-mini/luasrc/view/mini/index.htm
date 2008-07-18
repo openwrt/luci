@@ -12,7 +12,8 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-<%
+<%+header%>
+<%-
 local system, model, memtotal = luci.sys.sysinfo()
 
 local uptime = luci.sys.uptime()
@@ -27,7 +28,6 @@ local utsecs = uptime % 60
 
 local iwconfig = luci.sys.wifi.getiwconfig()
 -%>
-<%+header%>
 <h1><%:a_i_i_hello%></h1>
 <p><%:a_i_i_admin1%></p>
 <p><%:a_i_i_admin2%><br />
