@@ -263,3 +263,12 @@ m_n_d_numleases = "Number of leased addresses"
 
 routingtable = "Routing table"
 wlanscan = "Wifi scan"
+
+frequency = "Frequency"
+power = "Power"
+noise = "Noise"
+signal = "Signal"
+link = "Link"
+frag = "Frag."
+rts = "RTS"
+bitrate = "Bitrate"
