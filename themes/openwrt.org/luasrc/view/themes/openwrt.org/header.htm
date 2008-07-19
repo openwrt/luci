@@ -20,6 +20,7 @@ local category = request[1]
 local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
 local node     = luci.dispatcher.context.dispatched
+local hostname = luci.sys.hostname()
 
 local c = tree
 for i,r in ipairs(request) do
@@ -42,7 +43,7 @@ require("luci.http").prepare_content("text/html")
 	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
 	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
-	<title>LuCI - Lua Configuration Interface - <%=(node and node.title)%></title>
+	<title><%=hostname%> - <%=(node and node.title)%> - LuCI</title>
 
 	<!--[if lt IE 7]>
 		<script type="text/javascript">
@@ -67,7 +68,7 @@ require("luci.http").prepare_content("text/html")
 	<%=luci.config.brand.firmware%><br />
 	<%=luci.config.brand.distro%><br />
 	<%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
-	<%:hostname%>: <%=luci.sys.hostname()%>
+	<%:hostname%>: <%=hostname%>
 	</div>
 	<div class="title">
 		<span class="headertitle"><%=luci.config.brand.title%></span><br />
