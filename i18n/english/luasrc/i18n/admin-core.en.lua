@@ -272,3 +272,7 @@ link = "Link"
 frag = "Frag."
 rts = "RTS"
 bitrate = "Bitrate"
+
+m_n_keepalive = "automatically reconnect"
+m_n_dialondemand = "disconnect when idle for"
+m_n_pptp_server = "PPTP-Server"

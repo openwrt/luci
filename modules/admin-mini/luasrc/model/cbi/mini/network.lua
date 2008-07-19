@@ -53,18 +53,19 @@ pwd = s:option(Value, "password", translate("password"))
 pwd:depends("proto", "pppoe")
 pwd:depends("proto", "pptp")
 
-kea = s:option(Value, "keepalive", "Keep-Alive" .. translate("cbi_optional"))
+kea = s:option(Flag, "keepalive", translate("m_n_keepalive"))
 kea:depends("proto", "pppoe")
 kea:depends("proto", "pptp")
 kea.rmempty = true
+kea.enabled = "10"
 
 
-cod = s:option(Value, "demand", "Dial on Demand" .. translate("cbi_optional"))
+cod = s:option(Value, "demand", translate("m_n_dialondemand"), "s")
 cod:depends("proto", "pppoe")
 cod:depends("proto", "pptp")
 cod.rmempty = true
 
-srv = s:option(Value, "server", "PPTP-Server")
+srv = s:option(Value, "server", translate("m_n_pptp_server"))
 srv:depends("proto", "pptp")
 srv.rmempty = true
 

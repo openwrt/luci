@@ -277,3 +277,8 @@ m_n_d_numleases = "Anzahl vergebener Adressen"
 
 routingtable = "Routingtabelle"
 wlanscan = "WLAN-Scan"
+
+
+m_n_keepalive = "automatisch neu verbinden"
+m_n_dialondemand = "trennen bei Inaktivität nach"
+m_n_pptp_server = "PPTP-Server"
