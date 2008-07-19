@@ -187,6 +187,10 @@ function write(content, src_err)
 			if not context.headers or not context.headers["content-type"] then
 				header("Content-Type", "text/html; charset=utf-8")
 			end
+			if not context.headers["cache-control"] then
+				header("Cache-Control", "no-cache")
+			end
+			
 			
 			context.eoh = true
 			coroutine.yield(3)
