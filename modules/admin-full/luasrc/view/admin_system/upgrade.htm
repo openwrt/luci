@@ -18,21 +18,17 @@ $Id$
 <p><%:a_s_flash_upgrade1%></p>
 <br />
 <% if sysupgrade and not ret then %>
-<form method="post" action="<%=luci.http.getenv("REQUEST_URI")%>" enctype="multipart/form-data">
-	<div class="cbi-section-node">
-		<div class="cbi-value clear">
-			<div class="cbi-value-title left"><%:a_s_flash_fwimage%></div>
-			<div class="cbi-value-field"><input type="file" size="30" name="image" /></div>
-		</div>
+<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+	<div class="left"><%:a_s_flash_fwimage%>:</div>
+	<div>
+		<input type="file" size="30" name="image" />
 		<br />
-		<div class="cbi-value clear">
-			<input type="checkbox" name="keepcfg" value="1" checked="checked" />
-			<span class="bold"><%:a_s_flash_keepcfg%></span>
-		</div>
 		<br />
-		<div>
-			<input type="submit" value="<%:a_s_flash_fwupgrade%>" />
-		</div>
+		<input type="checkbox" name="keepcfg" value="1" checked="checked" />
+		<span class="bold"><%:a_s_flash_keepcfg%></span>
+	</div>
+	<div>
+		<input type="submit" value="<%:a_s_flash_fwupgrade%>" />
 	</div>
 </form>
 <% elseif ret then %>
