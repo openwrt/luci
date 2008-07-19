@@ -20,6 +20,8 @@ luasource:
 	cp -a lua/* dist$(LUA_MODULEDIR) -R 2>/dev/null || true
 	cp -a htdocs/* dist$(HTDOCS) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf; done
+
+luastrip: luasource
 	for i in $$(find dist -type f -name '*.lua'); do perl -e 'undef $$/; open( F, "< $$ARGV[0]" ) || die $$!; $$src = <F>; close F; $$src =~ s/--\[\[.*?\]\](--)?//gs; $$src =~ s/^\s*--.*?\n//gm; open( F, "> $$ARGV[0]" ) || die $$!; print F $$src; close F' $$i; done
 
 luacompile: luasource

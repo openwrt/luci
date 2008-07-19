@@ -38,6 +38,8 @@ compile: $(LUAPOSIX_DIR)/.patched
 	cp $(LUAPOSIX_DIR)/posix.so dist$(LUA_LIBRARYDIR)
 
 luasource:
+luastrip:
+luacompile:
 compile-all: compile
 
 clean:
