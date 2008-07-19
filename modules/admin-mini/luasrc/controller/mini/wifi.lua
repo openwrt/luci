@@ -18,6 +18,7 @@ function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
 
-	entry({"mini", "wifi"}, cbi("mini/wifi"), i18n("wifi"), 30)
+	entry({"mini", "wifi"}, alias("mini", "wifi", "index"), i18n("wifi"), 30)
+	entry({"mini", "wifi", "index"}, cbi("mini/wifi"), i18n("general"), 1)
 	entry({"mini", "wifi", "scan"}, template("mini/iwscan"), i18n("wlanscan"), 10)
 end

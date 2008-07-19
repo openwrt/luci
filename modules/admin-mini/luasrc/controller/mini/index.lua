@@ -31,7 +31,8 @@ function index()
 	page.sysauth = "root"
 	page.ucidata = true
 	
-	entry({"mini", "index"}, template("mini/index"), i18n("overview"), 10)
+	entry({"mini", "index"}, alias("mini", "index", "index"), i18n("overview"), 10)
+	entry({"mini", "index", "index"}, template("mini/index"), i18n("general"), 1)
 	entry({"mini", "index", "luci"}, cbi("mini/luci"), i18n("settings"), 10)
 	entry({"mini", "index", "logout"}, call("action_logout"), i18n("logout"))
 end
