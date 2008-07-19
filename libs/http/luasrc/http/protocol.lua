@@ -397,7 +397,7 @@ function mimedecode_message_body( src, msg, filecb )
 		return true
 	end
 
-	return luci.ltn12.pump.all( src, snk )
+	return ltn12.pump.all( src, snk )
 end
 
 
@@ -448,7 +448,7 @@ function urldecode_message_body( src, msg )
 		return true
 	end
 
-	return luci.ltn12.pump.all( src, snk )
+	return ltn12.pump.all( src, snk )
 end
 
 
