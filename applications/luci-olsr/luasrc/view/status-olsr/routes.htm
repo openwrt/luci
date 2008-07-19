@@ -42,7 +42,7 @@ $Id$
 <td><%=route.Gateway%></td>
 <td><%=route.Interface%></td>
 <td><%=route.Metric%></td>
-<td style="background-color:<%=color%>"><%=string.format("%%.3f", tonumber(route.ETX) or 0)%></td>
+<td style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
 </tr>
 <% end %>
 </table>
