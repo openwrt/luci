@@ -260,3 +260,6 @@ m_i_uptime = "Uptime"
 
 m_n_d_firstaddress = "First leased address"
 m_n_d_numleases = "Number of leasesed addresses"
+
+routingtable = "Routing table"
+wlanscan = "Wifi scan"

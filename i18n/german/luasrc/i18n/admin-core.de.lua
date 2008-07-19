@@ -274,3 +274,6 @@ m_i_uptime = "Laufzeit"
 
 m_n_d_firstaddress = "Erste vergebene Adresse"
 m_n_d_numleases = "Anzahl vergebener Adressen"
+
+routingtable = "Routingtabelle"
+wlanscan = "WLAN-Scan"
