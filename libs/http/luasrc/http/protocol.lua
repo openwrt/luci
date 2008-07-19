@@ -266,6 +266,12 @@ function mimedecode_message_body( src, msg, filecb )
 	end
 
 
+	local tlen   = 0
+	local inhdr  = false
+	local field  = nil
+	local store  = nil
+	local lchunk = nil
+
 	local function parse_headers( chunk, field )
 
 		local stat
@@ -294,24 +300,32 @@ function mimedecode_message_body( src, msg, filecb )
 				field.headers["Content-Type"] = "text/plain"
 			end
 
+			if field.name and field.file and filecb then
+				__initval( msg.params, field.name )
+				__appendval( msg.params, field.name, field.file )
+
+				store = filecb
+			elseif field.name then
+				__initval( msg.params, field.name )
+
+				store = function( hdr, buf, eof )
+					__appendval( msg.params, field.name, buf )
+				end
+			else
+				store = nil
+			end
+
 			return chunk, true
 		end
 
 		return chunk, false
 	end
 
-
-	local tlen   = 0
-	local inhdr  = false
-	local field  = nil
-	local store  = nil
-	local lchunk = nil
-
 	local function snk( chunk )
 
 		tlen = tlen + ( chunk and #chunk or 0 )
 
-		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) then
+		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) + 2 then
 			return nil, "Message body size exceeds Content-Length"
 		end
 
@@ -338,9 +352,7 @@ function mimedecode_message_body( src, msg, filecb )
 
 						if not eof then
 							return nil, "Invalid MIME section header"
-						end
-
-						if not field.name then
+						elseif not field.name then
 							return nil, "Invalid Content-Disposition header"
 						end
 					end
@@ -355,29 +367,15 @@ function mimedecode_message_body( src, msg, filecb )
 
 					data, eof = parse_headers( data:sub( epos + 1, #data ), field )
 					inhdr = not eof
-
-					if eof then
-						if field.file and filecb then
-							msg.params[field.name] = field.file
-							store = filecb
-						else
-							__initval( msg.params, field.name )
-
-							store = function( hdr, buf, eof )
-								__appendval( msg.params, field.name, buf )
-							end
-						end
-					end
 				end
 			until not spos
-
 
 			if found then
 				if #data > 78 then
 					lchunk = data:sub( #data - 78 + 1, #data )
 					data   = data:sub( 1, #data - 78 )
 
-					if store and field and field.name then
+					if store then
 						store( field.headers, data, false )
 					else
 						return nil, "Invalid MIME section header"
@@ -413,7 +411,7 @@ function urldecode_message_body( src, msg )
 
 		tlen = tlen + ( chunk and #chunk or 0 )
 
-		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) then
+		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) + 2 then
 			return nil, "Message body size exceeds Content-Length"
 		elseif tlen > HTTP_MAX_CONTENT then
 			return nil, "Message body size exceeds maximum allowed length"
