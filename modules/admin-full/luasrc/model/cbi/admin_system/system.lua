@@ -23,8 +23,8 @@ s:option(Value, "hostname", translate("hostname"))
 tz = s:option(ListValue, "timezone", translate("timezone"))
 for k, offset in luci.util.vspairs(luci.http.protocol.date.TZ) do
 	local zone = k:upper()	
-	local osgn = (offset > 0 and "+" or "")
-	local ohrs = math.floor(offset / 3600)
+	local osgn = (offset > 0 and "" or "+")
+	local ohrs = math.floor(-offset / 3600)
 	local omin = (offset % 3600) / 60
 	
 	local ptz = zone .. osgn .. (ohrs ~= 0 and ohrs or "") .. (omin ~= 0 and ":" .. omin or "")
