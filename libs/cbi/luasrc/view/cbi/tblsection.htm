@@ -13,6 +13,7 @@ $Id$
 
 -%>
 
+<!-- tblsection -->
 <div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 	<h2><%=self.title%></h2>
 	<div class="cbi-section-descr"><%=self.description%></div>
@@ -35,8 +36,6 @@ $Id$
 			</tr>
 			<%- local isempty = true
 			    for i, k in ipairs(self:cfgsections()) do
-			    		isempty = false
-
 					if not self.anonymous then
 			-%>
 			<tr class="cbi-section-table-title">
@@ -44,6 +43,7 @@ $Id$
 			</tr>
 			<%- 	end
 					section = k
+					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
 			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
@@ -55,10 +55,10 @@ $Id$
 				<%- end -%>
 			</tr>
 			<%- end -%>
-			
+
 			<%- if isempty then -%>
 			<tr class="cbi-section-table-row">
-				<td colspan="<%=count%>"><em><%:cbi_sectempty%></em></td>
+				<td colspan="<%=count%>"><em><br /><%:cbi_sectempty%></em></td>
 			</tr>
 			<%- end -%>
 
@@ -83,3 +83,4 @@ $Id$
 		</table>
 	</div>
 </div>
+<!-- /tblsection -->

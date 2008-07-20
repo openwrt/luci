@@ -12,8 +12,5 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-<% if valuefooter then
-	include(valuefooter)
-else
-	include("cbi/full_valuefooter")
-end %>
+
+<% include( valuefooter or "cbi/full_valuefooter" ) %>

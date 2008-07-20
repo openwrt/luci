@@ -191,17 +191,27 @@ div#content ul {
 	background-color: #ffffff;
 }
 
+.cbi-section legend {
+	font-size: 110%;
+	font-weight: bold;
+	height: 1em;
+	padding: 0 0.25em;
+	color: #555555;
+}
+
 .cbi-section h2 {
 	margin: 0em 0 0.5em -0.5em !important;
 }
 
 .cbi-section h3 {
-	height:	1em;
-	font-size: 120%;
+	height:	1.5em;
+	font-size: 90%;
+	color: #555555;
 }
 
 .cbi-section-descr {
 	margin-bottom: 0.5em;
+	font-size: 95%;
 }
 
 input[type=submit],
@@ -302,6 +312,14 @@ div.cbi-value-description {
 	font-size: 90%;
 }
 
+div.cbi-value-field > div.cbi-value-description {
+	display: none;
+}
+
+div.cbi-value:hover div.cbi-value-field > div.cbi-value-description {
+	display: block;
+}
+
 div.cbi-section-create {
 	clear: left;
 }
@@ -324,7 +342,7 @@ div.cbi-section-remove input {
 	border-bottom: none;
 }
 
-div.cbi-section-node {
+.cbi-section-node {
 	clear: both;
 	border: 1px dotted #bbbbbb;
 	padding-bottom: 0;
@@ -448,4 +466,3 @@ td.cbi-section-table-optionals {
 * html div.cbi-value-description {
 	margin-left: 40%;
 }
-

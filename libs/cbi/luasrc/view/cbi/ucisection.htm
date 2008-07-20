@@ -22,9 +22,9 @@ $Id$
 		<% else %>
 		<select name="cbi.opt.<%=self.config%>.<%=section%>">
 			<option><%:cbi_addopt%></option>
-			<% for key, val in pairs(self.optionals[section]) do %>
+			<% for key, val in pairs(self.optionals[section]) do -%>
 				<option id="cbi-<%=self.config.."-"..section.."-"..val.option%>" value="<%=val.option%>"><%=val.title%></option>
-			<% end %>
+			<%- end %>
 		</select>
 		<script type="text/javascript"><% for key, val in pairs(self.optionals[section]) do %>
 			<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..section.."-"..val.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");

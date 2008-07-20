@@ -14,8 +14,10 @@ $Id$
 -%>
 
 <% if self:cfgvalue(self.section) then section = self.section %>
-	<div class="cbi-section" id="cbi-<%=self.config%>-<%=section%>">
-		<h2><%=self.title%></h2>
+	<fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=section%>">
+		<% if self.title and #self.title > 0 then -%>
+			<legend><%=self.title%></legend>
+		<%- end %>
 		<div class="cbi-section-descr"><%=self.description%></div>
 		<% if self.addremove then -%>
 			<div class="cbi-section-remove right">
@@ -26,11 +28,14 @@ $Id$
 			<%+cbi/ucisection%>
 		</div>
 		<br />
-	</div>
+	</fieldset>
 <% elseif self.addremove then %>
-	<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
-		<h2><%=self.title%></h2>
+	<fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.section%>">
+		<% if self.title and #self.title > 0 then -%>
+			<legend><%=self.title%></legend>
+		<%- end %>
 		<div class="cbi-section-descr"><%=self.description%></div>
 		<input type="submit" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:cbi_add%>" />
-	</div>
+	</fieldset>
 <% end %>
+<!-- /nsection -->

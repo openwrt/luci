@@ -12,8 +12,5 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-<% if valueheader then
-	include(valueheader)
-else
-	include("cbi/full_valueheader")
-end %>
+
+<% include( valueheader or "cbi/full_valueheader" ) %>
