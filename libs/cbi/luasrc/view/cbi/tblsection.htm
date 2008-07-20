@@ -33,7 +33,10 @@ $Id$
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- end -%>
 			</tr>
-			<%- for i, k in ipairs(self:cfgsections()) do
+			<%- local isempty = true
+			    for i, k in ipairs(self:cfgsections()) do
+			    		isempty = false
+
 					if not self.anonymous then
 			-%>
 			<tr class="cbi-section-table-title">
@@ -47,9 +50,15 @@ $Id$
 				<%-+cbi/ucisection-%>
 				<%- if self.addremove then -%>
 					<td class="cbi-section-table-cell">
-						<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="X" />
+						<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="X" title="<%:delete%>" />
 					</td>
 				<%- end -%>
+			</tr>
+			<%- end -%>
+			
+			<%- if isempty then -%>
+			<tr class="cbi-section-table-row">
+				<td colspan="<%=count%>"><em><%:cbi_sectempty%></em></td>
 			</tr>
 			<%- end -%>
 
