@@ -35,7 +35,7 @@ module("luci.util", package.seeall)
 -- Creates a new class object which can be instantiated by calling itself.
 -- Any class functions or shared parameters can be attached to this object.
 -- Attaching a table to the class object makes this table shared between
--- all instances of this class. For object paramters use the __init__ function.
+-- all instances of this class. For object parameters use the __init__ function.
 -- Classes can inherit member functions and values from a base class.
 -- Class can be instantiated by calling them. All parameters will be passed
 -- to the __init__ function of this class - if such a function exists.
@@ -94,24 +94,33 @@ end
 -- Scope manipulation routines
 --
 
---- Resets the scope of f doing a shallow copy of its scope into a new table
--- (ToDo: @param and @return)
+--- Replace a function scope with a shallow copy of itself
+-- This is useful if you want to get rid of several unwanted side effects
+-- while changing the scope of a certain Lua function.
+-- @param f		Lua function
 function resfenv(f)
 	setfenv(f, clone(getfenv(f)))
 end
 
---- Store given object associated with given key in the scope associated with
--- the given identifier.
--- @param f		Value containing the scope identifier
+--- Store given object associated with given key in the scope of a function
+-- @param f		Lua function
 -- @param key	String value containg the key of the object to store
 -- @param obj	Object to store in the scope
+-- @see updfenv
+-- @see resfenv
 -- @return		Always nil
 function extfenv(f, key, obj)
 	local scope = getfenv(f)
 	scope[key] = obj
 end
 
---- Updates the scope of f with "extscope" (ToDo: docu)
+--- Extend the scope of a function with the contents of a table
+-- @param f		Lua function
+-- @param key	String value containg the key of the object to store
+-- @param obj	Object to store in the scope
+-- @see extfenv
+-- @see resfenv
+-- @return		Always nil
 function updfenv(f, extscope)
 	update(getfenv(f), extscope)
 end
@@ -155,7 +164,7 @@ end
 -- @param obj	Value to write to stderr
 -- @return		Boolean indicating wheather the write operation was successful
 function perror(obj)
-	io.stderr:write(tostring(obj) .. "\n")
+	return io.stderr:write(tostring(obj) .. "\n")
 end
 
 --- Recursively dumps a table to stdout, useful for testing and debugging.
@@ -510,7 +519,16 @@ local oldpcall, oldxpcall = pcall, xpcall
 coxpt = {}
 setmetatable(coxpt, {__mode = "kv"})
 
---- (ToDo: docu)
+-- Identity function for copcall
+local function copcall_id(trace, ...)
+  return ...
+end
+
+--- This is a coroutine-safe drop-in replacement for Lua's "xpcall"-function
+-- @param f	Lua function to be called protected
+-- @param err Custom error handler
+-- @param ... parameters passed to the function
+-- @return	a boolean whether the function call succeeded and the return values of either the function or the error handler
 function coxpcall(f, err, ...)
 	local res, co = oldpcall(coroutine.create, f)
 	if not res then
@@ -524,17 +542,15 @@ function coxpcall(f, err, ...)
 	return performResume(err, co, ...)
 end
 
---- (ToDo: docu)
+--- This is a coroutine-safe drop-in replacement for Lua's "pcall"-function
+-- @param f	Lua function to be called protected
+-- @param ... parameters passed to the function
+-- @return	a boolean whether the function call succeeded and the returns values of the function or the error object
 function copcall(f, ...)
-	return coxpcall(f, id, ...)
+	return coxpcall(f, copcall_id, ...)
 end
 
---- (ToDo: docu)
-local function id(trace, ...)
-  return ...
-end
-
---- (ToDo: docu)
+-- Handle return value of protected call
 function handleReturnValue(err, co, status, ...)
 	if not status then
 		return false, err(debug.traceback(co, (...)), ...)
@@ -546,7 +562,7 @@ function handleReturnValue(err, co, status, ...)
 	end
 end
 
---- (ToDo: docu)
+-- Resume execution of protected function call
 function performResume(err, co, ...)
 	return handleReturnValue(err, co, coroutine.resume(co, ...))
 end
