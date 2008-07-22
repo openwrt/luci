@@ -13,14 +13,21 @@ $Id$
 
 ]]--
 
+--- LuCI http protocol class.
+-- This class contains several functions useful for http message- and content
+-- decoding and to retrive form data from raw http messages.
 module("luci.http.protocol", package.seeall)
 
 local ltn12 = require("luci.ltn12")
 
 HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
 
--- Decode an urlencoded string.
--- Returns the decoded value.
+--- Decode an urlencoded string - optionally without decoding
+-- the "+" sign to " " - and return the decoded string.
+-- @param str		Input string in x-www-urlencoded format
+-- @param no_plus	Don't decode "+" signs to spaces
+-- @return			The decoded string
+-- @see				urlencode
 function urldecode( str, no_plus )
 
 	local function __chrdec( hex )
@@ -38,9 +45,15 @@ function urldecode( str, no_plus )
 	return str
 end
 
-
--- Extract and split urlencoded data pairs, separated bei either "&" or ";" from given url.
--- Returns a table value with urldecoded values.
+--- Extract and split urlencoded data pairs, separated bei either "&" or ";"
+-- from given url or string. Returns a table with urldecoded values.
+-- Simple parameters are stored as string values associated with the parameter
+-- name within the table. Parameters with multiple values are stored as array
+-- containing the corresponding values.
+-- @param url	The url or string which contains x-www-urlencoded form data
+-- @param tbl	Use the given table for storing values (optional)
+-- @return		Table containing the urldecoded parameters
+-- @see			urlencode_params
 function urldecode_params( url, tbl )
 
 	local params = tbl or { }
@@ -72,9 +85,10 @@ function urldecode_params( url, tbl )
 	return params
 end
 
-
--- Encode given string in urlencoded format.
--- Returns the encoded string.
+--- Encode given string to x-www-urlencoded format.
+-- @param str	String to encode
+-- @return		String containing the encoded data
+-- @see			urldecode
 function urlencode( str )
 
 	local function __chrenc( chr )
@@ -93,23 +107,36 @@ function urlencode( str )
 	return str
 end
 
-
--- Encode given table to urlencoded string.
--- Returns the encoded string.
+--- Encode each key-value-pair in given table to x-www-urlencoded format,
+-- separated by "&". Tables are encoded as parameters with multiple values by
+-- repeating the parameter name with each value.
+-- @param tbl	Table with the values
+-- @return		String containing encoded values
+-- @see			urldecode_params
 function urlencode_params( tbl )
 	local enc = ""
 
 	for k, v in pairs(tbl) do
-		enc = enc .. ( enc and "&" or "" ) ..
-			urlencode(k) .. "="  ..
-			urlencode(v)
+		if type(v) == "table" then
+			for i, v2 in ipairs(v) do
+				enc = enc .. ( #enc > 0 and "&" or "" ) ..
+					urlencode(k) .. "=" .. urlencode(v2)
+			end
+		else
+			enc = enc .. ( #enc > 0 and "&" or "" ) ..
+				urlencode(k) .. "=" .. urlencode(v)
+		end
 	end
 
 	return enc
 end
 
-
--- Parameter helper
+--- (Internal function)
+-- Initialize given parameter and coerce string into table when the parameter
+-- already exists.
+-- @param tbl	Table where parameter should be created
+-- @param key	Parameter name
+-- @return		Always nil
 local function __initval( tbl, key )
 	if tbl[key] == nil then
 		tbl[key] = ""
@@ -120,6 +147,14 @@ local function __initval( tbl, key )
 	end
 end
 
+--- (Internal function)
+-- Append given data to given parameter, either by extending the string value
+-- or by appending it to the last string in the parameter's value table.
+-- @param tbl	Table containing the previously initialized parameter value
+-- @param key	Parameter name
+-- @param chunk	String containing the data to append
+-- @return		Always nil
+-- @see			__initval
 local function __appendval( tbl, key, chunk )
 	if type(tbl[key]) == "table" then
 		tbl[key][#tbl[key]] = tbl[key][#tbl[key]] .. chunk
@@ -128,6 +163,16 @@ local function __appendval( tbl, key, chunk )
 	end
 end
 
+--- (Internal function)
+-- Finish the value of given parameter, either by transforming the string value
+-- or - in the case of multi value parameters - the last element in the
+-- associated values table.
+-- @param tbl		Table containing the previously initialized parameter value
+-- @param key		Parameter name
+-- @param handler	Function which transforms the parameter value
+-- @return			Always nil
+-- @see				__initval
+-- @see				__appendval
 local function __finishval( tbl, key, handler )
 	if handler then
 		if type(tbl[key]) == "table" then
@@ -226,7 +271,10 @@ process_states['headers'] = function( msg, chunk )
 end
 
 
--- Creates a header source from a given socket
+--- Creates a ltn12 source from the given socket. The source will return it's
+-- data line by line with the trailing \r\n stripped of.
+-- @param sock	Readable network socket
+-- @return		Ltn12 source function
 function header_source( sock )
 	return ltn12.source.simplify( function()
 
@@ -253,8 +301,23 @@ function header_source( sock )
 	end )
 end
 
-
--- Decode MIME encoded data.
+--- Decode a mime encoded http message body with multipart/form-data
+-- Content-Type. Stores all extracted data associated with its parameter name
+-- in the params table withing the given message object. Multiple parameter
+-- values are stored as tables, ordinary ones as strings.
+-- If an optional file callback function is given then it is feeded with the
+-- file contents chunk by chunk and only the extracted file name is stored
+-- within the params table. The callback function will be called subsequently
+-- with three arguments:
+--  o Table containing the mime headers of the corresponding section
+--  o String value containing a chunk of the file data
+--  o Boolean which indicates wheather the current chunk is the last one (eof)
+-- @param src		Ltn12 source function
+-- @param msg		HTTP message object
+-- @param filecb	File callback function (optional)
+-- @return			Value indicating successful operation (not nil means "ok")
+-- @return			String containing the error if unsuccessful
+-- @see				parse_message_header
 function mimedecode_message_body( src, msg, filecb )
 
 	if msg and msg.env.CONTENT_TYPE then
@@ -400,8 +463,15 @@ function mimedecode_message_body( src, msg, filecb )
 	return ltn12.pump.all( src, snk )
 end
 
-
--- Decode urlencoded data.
+--- Decode an urlencoded http message body with application/x-www-urlencoded
+-- Content-Type. Stores all extracted data associated with its parameter name
+-- in the params table withing the given message object. Multiple parameter
+-- values are stored as tables, ordinary ones as strings.
+-- @param src	Ltn12 source function
+-- @param msg	HTTP message object
+-- @return		Value indicating successful operation (not nil means "ok")
+-- @return		String containing the error if unsuccessful
+-- @see			parse_message_header
 function urldecode_message_body( src, msg )
 
 	local tlen   = 0
@@ -451,9 +521,13 @@ function urldecode_message_body( src, msg )
 	return ltn12.pump.all( src, snk )
 end
 
-
--- Parse a http message header
-function parse_message_header( source )
+--- Try to extract an http message header including information like protocol
+-- version, message headers and resulting CGI environment variables from the
+-- given ltn12 source.
+-- @param src	Ltn12 source function
+-- @return		HTTP message object
+-- @see			parse_message_body
+function parse_message_header( src )
 
 	local ok   = true
 	local msg  = { }
@@ -468,7 +542,7 @@ function parse_message_header( source )
 	while ok do
 
 		-- get data
-		ok, err = ltn12.pump.step( source, sink )
+		ok, err = ltn12.pump.step( src, sink )
 
 		-- error
 		if not ok and err then
@@ -520,21 +594,32 @@ function parse_message_header( source )
 	return msg
 end
 
-
--- Parse a http message body
-function parse_message_body( source, msg, filecb )
+--- Try to extract and decode a http message body from the given ltn12 source.
+-- This function will examine the Content-Type within the given message object
+-- to select the appropriate content decoder.
+-- Currently the application/x-www-urlencoded and application/form-data
+-- mime types are supported. If the encountered content encoding can't be
+-- handled then the whole message body will be stored unaltered as "content"
+-- property within the given message object.
+-- @param src		Ltn12 source function
+-- @param msg		HTTP message object
+-- @param filecb	File data callback (optional, see mimedecode_message_body())
+-- @return			Value indicating successful operation (not nil means "ok")
+-- @return			String containing the error if unsuccessful
+-- @see				parse_message_header
+function parse_message_body( src, msg, filecb )
 	-- Is it multipart/mime ?
 	if msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
 	   msg.env.CONTENT_TYPE:match("^multipart/form%-data")
 	then
 
-		return mimedecode_message_body( source, msg, filecb )
+		return mimedecode_message_body( src, msg, filecb )
 
 	-- Is it application/x-www-form-urlencoded ?
 	elseif msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
 	       msg.env.CONTENT_TYPE == "application/x-www-form-urlencoded"
 	then
-		return urldecode_message_body( source, msg, filecb )
+		return urldecode_message_body( src, msg, filecb )
 
 
 	-- Unhandled encoding
@@ -568,7 +653,7 @@ function parse_message_body( source, msg, filecb )
 
 		-- Pump data...
 		while true do
-			local ok, err = ltn12.pump.step( source, sink )
+			local ok, err = ltn12.pump.step( src, sink )
 
 			if not ok and err then
 				return nil, err
@@ -576,10 +661,13 @@ function parse_message_body( source, msg, filecb )
 				return true
 			end
 		end
+
+		return true
 	end
 end
 
--- Status codes
+--- Table containing human readable messages for several http status codes.
+-- @class table
 statusmsg = {
 	[200] = "OK",
 	[301] = "Moved Permanently",

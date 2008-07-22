@@ -13,19 +13,30 @@ $Id$
 
 ]]--
 
+--- LuCI http protocol implementation - HTTP/1.1 bits.
+-- This class provides basic ETag handling and implements most of the
+-- conditional HTTP/1.1 headers specified in RFC2616 Sct. 14.24 - 14.28 .
 module("luci.http.protocol.conditionals", package.seeall)
 
 local date = require("luci.http.protocol.date")
 
 
--- 14.19 / ETag
+--- Implement 14.19 / ETag.
+-- @param stat	A file.stat structure
+-- @return		String containing the generated tag suitable for ETag headers
 function mk_etag( stat )
 	if stat ~= nil then
 		return string.format( '"%x-%x-%x"', stat.ino, stat.size, stat.mtime )
 	end
 end
 
--- 14.24 / If-Match
+--- 14.24 / If-Match
+-- Test whether the given message object contains an "If-Match" header and
+-- compare it against the given stat object.
+-- @param req	HTTP request message object
+-- @param stat	A file.stat object
+-- @return		Boolean indicating wheather the precondition is ok
+-- @return		Alternative status code if the precondition failed
 function if_match( req, stat )
 	local h    = req.headers
 	local etag = mk_etag( stat )
@@ -44,7 +55,14 @@ function if_match( req, stat )
 	return true
 end
 
--- 14.25 / If-Modified-Since
+--- 14.25 / If-Modified-Since
+-- Test whether the given message object contains an "If-Modified-Since" header
+-- and compare it against the given stat object.
+-- @param req	HTTP request message object
+-- @param stat	A file.stat object
+-- @return		Boolean indicating wheather the precondition is ok
+-- @return		Alternative status code if the precondition failed
+-- @return		Table containing extra HTTP headers if the precondition failed
 function if_modified_since( req, stat )
 	local h = req.headers
 
@@ -66,7 +84,14 @@ function if_modified_since( req, stat )
 	return true
 end
 
--- 14.26 / If-None-Match
+--- 14.26 / If-None-Match
+-- Test whether the given message object contains an "If-None-Match" header and
+-- compare it against the given stat object.
+-- @param req	HTTP request message object
+-- @param stat	A file.stat object
+-- @return		Boolean indicating wheather the precondition is ok
+-- @return		Alternative status code if the precondition failed
+-- @return		Table containing extra HTTP headers if the precondition failed
 function if_none_match( req, stat )
 	local h    = req.headers
 	local etag = mk_etag( stat )
@@ -94,12 +119,25 @@ function if_none_match( req, stat )
 end
 
 -- 14.27 / If-Range
+-- The If-Range header is currently not implemented due to the lack of general
+-- byte range stuff in luci.http.protocol . This function will always return
+-- false, 412 to indicate a failed precondition.
+-- @param req	HTTP request message object
+-- @param stat	A file.stat object
+-- @return		Boolean indicating wheather the precondition is ok
+-- @return		Alternative status code if the precondition failed
 function if_range( req, stat )
 	-- Sorry, no subranges (yet)
 	return false, 412
 end
 
 -- 14.28 / If-Unmodified-Since
+-- Test whether the given message object contains an "If-Unmodified-Since"
+-- header and compare it against the given stat object.
+-- @param req	HTTP request message object
+-- @param stat	A file.stat object
+-- @return		Boolean indicating wheather the precondition is ok
+-- @return		Alternative status code if the precondition failed
 function if_unmodified_since( req, stat )
 	local h = req.headers
 
