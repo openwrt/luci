@@ -27,7 +27,20 @@ limitations under the License.
 module("luci.util", package.seeall)
 
 
--- Lua simplified Python-style OO class support emulation
+--- Creates a Class object (Python-style object model)
+-- Creates a new class object which can be instantiated by calling itself.
+-- Any class functions or shared parameters can be attached to this object.
+-- Attaching a table to the class object makes this table shared between
+-- all instances of this class. For object paramters use the __init__ function.
+-- Classes can inherit member functions and values from a base class.
+-- Class can be instantiated by calling them. All parameters will be passed
+-- to the __init__ function of this class - if such a function exists.
+-- The __init__ function must be used to set any object parameters that are not shared
+-- with other objects of this class. Any return values will be ignored.
+-- @see instanceof
+-- @see clone
+-- @param base the base class to inherit from (optional)
+-- @return class object
 function class(base)
 	local class = {}
 	
