@@ -2,54 +2,33 @@
 /*
  * Copyright (c) 2007 Tim Kelly/Dialectronics
  *
- * Permission is hereby granted, free of charge, to any person obtaining 
- * a copy of this software and associated documentation files (the 
- * "Software"),  to deal in the Software without restriction, including 
- * without limitation the rights to use, copy, modify, merge, publish, 
- * distribute, sublicense, and/or sell copies of the Software, and to permit 
- * persons to whom the Software is furnished to do so, subject to the 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"),  to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to permit
+ * persons to whom the Software is furnished to do so, subject to the
  * following conditions:
  *
- * The above copyright notice and this permission notice shall be 
+ * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
- * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
  * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
---]]
-
---[[
-/*
- * Copyright (c) 2007 Tim Kelly/Dialectronics
- *
- * Permission is hereby granted, free of charge, to any person obtaining 
- * a copy of this software and associated documentation files (the 
- * "Software"),  to deal in the Software without restriction, including 
- * without limitation the rights to use, copy, modify, merge, publish, 
- * distribute, sublicense, and/or sell copies of the Software, and to permit 
- * persons to whom the Software is furnished to do so, subject to the 
- * following conditions:
- *
- * The above copyright notice and this permission notice shall be 
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
- * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
- * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+	Modifications and documentation for LuCI made by
+		Steven Barth <steven@midlink.org> and
+		Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 --]]
 
+--- LuCI number conversation and bit manipulation functions.
 module("luci.bits", package.seeall);
 
 local hex2bin = {
@@ -64,14 +43,12 @@ local hex2bin = {
 	["8"] = "1000",
 	["9"] = "1001",
 	["a"] = "1010",
-        ["b"] = "1011",
-        ["c"] = "1100",
-        ["d"] = "1101",
-        ["e"] = "1110",
-        ["f"] = "1111"
-	}
-
-
+    ["b"] = "1011",
+    ["c"] = "1100",
+    ["d"] = "1101",
+    ["e"] = "1110",
+    ["f"] = "1111"
+}
 
 local bin2hex = {
 	["0000"] = "0",
@@ -85,51 +62,21 @@ local bin2hex = {
 	["1000"] = "8",
 	["1001"] = "9",
 	["1010"] = "A",
-        ["1011"] = "B",
-        ["1100"] = "C",
-        ["1101"] = "D",
-        ["1110"] = "E",
-        ["1111"] = "F"
-	}
+    ["1011"] = "B",
+    ["1100"] = "C",
+    ["1101"] = "D",
+    ["1110"] = "E",
+    ["1111"] = "F"
+}
 
---[[
-local dec2hex = {
-	["0"] = "0",
-	["1"] = "1",
-	["2"] = "2",
-	["3"] = "3",
-	["4"] = "4",
-	["5"] = "5",
-	["6"] = "6",
-	["7"] = "7",
-	["8"] = "8",
-	["9"] = "9",
-	["10"] = "A",
-	["11"] = "B",
-	["12"] = "C",
-	["13"] = "D",
-	["14"] = "E",
-	["15"] = "F"
-	}
---]]
-
-
--- These functions are big-endian and take up to 32 bits
-
--- Hex2Bin
--- Bin2Hex
--- Hex2Dec
--- Dec2Hex
--- Bin2Dec
--- Dec2Bin
-
-
+--- Convert hexadecimal to binary number.
+-- This function is big endian and can take up to 32 bits.
+-- @param s	String containing hex value
+-- @return	String containing binary value
 function Hex2Bin(s)
 
--- s	-> hexadecimal string
-
-local ret = ""
-local i = 0
+	local ret = ""
+	local i = 0
 
 
 	for i in string.gfind(s, ".") do
@@ -142,20 +89,21 @@ local i = 0
 	return ret
 end
 
-
+--- Convert binary to hexadecimal number.
+-- This function is big endian and can take up to 32 bits.
+-- @param s	String containing binary value
+-- @return	String containing hex value
 function Bin2Hex(s)
 
--- s 	-> binary string
+	local l = 0
+	local h = ""
+	local b = ""
+	local rem
 
-local l = 0
-local h = ""
-local b = ""
-local rem
-
-l = string.len(s)
-rem = l % 4
-l = l-1
-h = ""
+	l = string.len(s)
+	rem = l % 4
+	l = l-1
+	h = ""
 
 	-- need to prepend zeros to eliminate mod 4
 	if (rem > 0) then
@@ -171,14 +119,15 @@ h = ""
 
 end
 
-
+--- Convert binary to decimal number.
+-- This function is big endian and can take up to 32 bits.
+-- @param s	String containing binary value
+-- @return	String containing decimal value
 function Bin2Dec(s)
 
--- s	-> binary string
-
-local num = 0
-local ex = string.len(s) - 1
-local l = 0
+	local num = 0
+	local ex = string.len(s) - 1
+	local l = 0
 
 	l = ex + 1
 	for i = 1, l do
@@ -193,14 +142,14 @@ local l = 0
 
 end
 
-
-
+--- Convert decimal to binary number.
+-- This function is big endian and can take up to 32 bits.
+-- @param s		String or number containing decimal value
+-- @param num	Pad binary number to num bits
+-- @return		String containing binary value
 function Dec2Bin(s, num)
 
--- s	-> Base10 string
--- num  -> string length to extend to
-
-local n
+	local n
 
 	if (num == nil) then
 		n = 0
@@ -220,24 +169,23 @@ local n
 
 end
 
-
-
-
+--- Convert hexadecimal to decimal number.
+-- This function is big endian and can take up to 32 bits.
+-- @param s	String containing hex value
+-- @return	String containing decimal value
 function Hex2Dec(s)
 
--- s	-> hexadecimal string
-
-local s = Hex2Bin(s)
+	local s = Hex2Bin(s)
 
 	return Bin2Dec(s)
 
 end
 
-
-
+--- Convert decimal to hexadecimal number.
+-- This function is big endian and can take up to 32 bits.
+-- @param s	String containing decimal value
+-- @return	String containing hex value
 function Dec2Hex(s)
-
--- s	-> Base10 string
 
 	s = string.format("%x", s)
 
@@ -246,32 +194,18 @@ function Dec2Hex(s)
 end
 
 
-
-
--- These functions are big-endian and will extend to 32 bits
-
--- BMAnd
--- BMNAnd
--- BMOr
--- BMXOr
--- BMNot
-
-
+--- Apply bitmask to value using bitwise And.
+-- This function is big endian and will extend the values to 32 bits.
+-- @param v	String containing hex value to be masked
+-- @param m	String containing hex value of mask
+-- @return	String containing hex value of masked value
 function BMAnd(v, m)
 
--- v	-> hex string to be masked
--- m	-> hex string mask
+	local bv = Hex2Bin(v)
+	local bm = Hex2Bin(m)
 
--- s	-> hex string as masked
-
--- bv	-> binary string of v
--- bm	-> binary string mask
-
-local bv = Hex2Bin(v)
-local bm = Hex2Bin(m)
-
-local i = 0
-local s = ""
+	local i = 0
+	local s = ""
 
 	while (string.len(bv) < 32) do
 		bv = "0000"..bv
@@ -301,22 +235,18 @@ local s = ""
 
 end
 
-
+--- Apply bitmask to value using bitwise Nand.
+-- This function is big endian and will extend the values to 32 bits.
+-- @param v	String containing hex value to be masked
+-- @param m	String containing hex value of mask
+-- @return	String containing hex value of masked value
 function BMNAnd(v, m)
 
--- v	-> hex string to be masked
--- m	-> hex string mask
+	local bv = Hex2Bin(v)
+	local bm = Hex2Bin(m)
 
--- s	-> hex string as masked
-
--- bv	-> binary string of v
--- bm	-> binary string mask
-
-local bv = Hex2Bin(v)
-local bm = Hex2Bin(m)
-
-local i = 0
-local s = ""
+	local i = 0
+	local s = ""
 
 	while (string.len(bv) < 32) do
 		bv = "0000"..bv
@@ -346,23 +276,18 @@ local s = ""
 
 end
 
-
-
+--- Apply bitmask to value using bitwise Or.
+-- This function is big endian and will extend the values to 32 bits.
+-- @param v	String containing hex value to be masked
+-- @param m	String containing hex value of mask
+-- @return	String containing hex value of masked value
 function BMOr(v, m)
 
--- v	-> hex string to be masked
--- m	-> hex string mask
+	local bv = Hex2Bin(v)
+	local bm = Hex2Bin(m)
 
--- s	-> hex string as masked
-
--- bv	-> binary string of v
--- bm	-> binary string mask
-
-local bv = Hex2Bin(v)
-local bm = Hex2Bin(m)
-
-local i = 0
-local s = ""
+	local i = 0
+	local s = ""
 
 	while (string.len(bv) < 32) do
 		bv = "0000"..bv
@@ -389,21 +314,18 @@ local s = ""
 
 end
 
+--- Apply bitmask to value using bitwise Xor.
+-- This function is big endian and will extend the values to 32 bits.
+-- @param v	String containing hex value to be masked
+-- @param m	String containing hex value of mask
+-- @return	String containing hex value of masked value
 function BMXOr(v, m)
 
--- v	-> hex string to be masked
--- m	-> hex string mask
+	local bv = Hex2Bin(v)
+	local bm = Hex2Bin(m)
 
--- s	-> hex string as masked
-
--- bv	-> binary string of v
--- bm	-> binary string mask
-
-local bv = Hex2Bin(v)
-local bm = Hex2Bin(m)
-
-local i = 0
-local s = ""
+	local i = 0
+	local s = ""
 
 	while (string.len(bv) < 32) do
 		bv = "0000"..bv
@@ -439,22 +361,18 @@ local s = ""
 
 end
 
-
+--- Apply bitmask to value using bitwise Not.
+-- This function is big endian and will extend the values to 32 bits.
+-- @param v	String containing hex value to be masked
+-- @param m	String containing hex value of mask
+-- @return	String containing hex value of masked value
 function BMNot(v, m)
 
--- v	-> hex string to be masked
--- m	-> hex string mask
+	local bv = Hex2Bin(v)
+	local bm = Hex2Bin(m)
 
--- s	-> hex string as masked
-
--- bv	-> binary string of v
--- bm	-> binary string mask
-
-local bv = Hex2Bin(v)
-local bm = Hex2Bin(m)
-
-local i = 0
-local s = ""
+	local i = 0
+	local s = ""
 
 	while (string.len(bv) < 32) do
 		bv = "0000"..bv
@@ -488,21 +406,14 @@ local s = ""
 end
 
 
--- these functions shift right and left, adding zeros to lost or gained bits
--- returned values are 32 bits long
-
--- BShRight(v, nb)
--- BShLeft(v, nb)
-
-
+--- Perform righthand bit shifting on value.
+-- This function pads the shifted value with zeroes and will extend to 32 bits.
+-- @param v		String containing hex value to be shifted
+-- @param nb	Number of bits to shift right
+-- @return		String containing hex value of shifted value
 function BShRight(v, nb)
 
--- v	-> hexstring value to be shifted
--- nb	-> number of bits to shift to the right
-
--- s	-> binary string of v
-
-local s = Hex2Bin(v)
+	local s = Hex2Bin(v)
 
 	while (string.len(s) < 32) do
 		s = "0000"..s
@@ -518,14 +429,14 @@ local s = Hex2Bin(v)
 
 end
 
+--- Perform lefthand bit shifting on value.
+-- This function pads the shifted value with zeroes and extend to 32 bits.
+-- @param v		String containing hex value to be shifted
+-- @param nb	Number of bits to shift left
+-- @return		String containing hex value of shifted value
 function BShLeft(v, nb)
 
--- v	-> hexstring value to be shifted
--- nb	-> number of bits to shift to the right
-
--- s	-> binary string of v
-
-local s = Hex2Bin(v)
+	local s = Hex2Bin(v)
 
 	while (string.len(s) < 32) do
 		s = "0000"..s
