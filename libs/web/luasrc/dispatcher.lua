@@ -256,7 +256,7 @@ function createindex_plain(path, suffix)
 				index[module] = mod.index
 				
 				if cache then
-					luci.fs.writefile(cachefile, luci.util.dump(mod.index))
+					luci.fs.writefile(cachefile, luci.util.get_bytecode(mod.index))
 				end
 			end
 		else

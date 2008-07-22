@@ -180,7 +180,7 @@ function Template.__init__(self, name)
 			if source then
 				local compiled, err = compile(source)
 				
-				luci.fs.writefile(compiledfile, luci.util.dump(compiled))
+				luci.fs.writefile(compiledfile, luci.util.get_bytecode(compiled))
 				self.template = compiled
 			end
 		else

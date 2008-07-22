@@ -12,9 +12,9 @@ Copyright 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,8 +24,12 @@ limitations under the License.
 
 ]]--
 
+-- LuCI utility functions.
 module("luci.util", package.seeall)
 
+--
+-- Class helper routines
+--
 
 --- Creates a Class object (Python-style object model)
 -- Creates a new class object which can be instantiated by calling itself.
@@ -37,86 +41,127 @@ module("luci.util", package.seeall)
 -- to the __init__ function of this class - if such a function exists.
 -- The __init__ function must be used to set any object parameters that are not shared
 -- with other objects of this class. Any return values will be ignored.
--- @see instanceof
--- @see clone
--- @param base the base class to inherit from (optional)
--- @return class object
+-- @param base	The base class to inherit from (optional)
+-- @return		A class object
+-- @see			instanceof
+-- @see			clone
 function class(base)
 	local class = {}
-	
+
 	local create = function(class, ...)
 		local inst = {}
 		setmetatable(inst, {__index = class})
-		
+
 		if inst.__init__ then
 			local stat, err = copcall(inst.__init__, inst, ...)
 			if not stat then
 				error(err)
 			end
 		end
-		
+
 		return inst
 	end
-	
+
 	local classmeta = {__call = create}
-	
+
 	if base then
 		classmeta.__index = base
 	end
-	
+
 	setmetatable(class, classmeta)
 	return class
 end
 
-
--- Clones an object (deep on-demand)
-function clone(object, deep)
-	local copy = {}
-	
-	for k, v in pairs(object) do
-		if deep and type(v) == "table" then
-			v = clone(v, deep)
+--- Test whether the given object is an instance of the given class.
+-- @param object	Object instance
+-- @param class		Class object to test against
+-- @return			Boolean indicating wheather the object is an instance
+-- @see				class
+-- @see				clone
+function instanceof(object, class)
+	local meta = getmetatable(object)
+	while meta and meta.__index do
+		if meta.__index == class then
+			return true
 		end
-		copy[k] = v
-	end
-	
-	setmetatable(copy, getmetatable(object))
-	
-	return copy
-end
-
-
--- Combines two or more numerically indexed tables into one
-function combine(...)
-	local result = {}
-	for i, a in ipairs(arg) do
-		for j, v in ipairs(a) do
-			table.insert(result, v)
-		end
-	end
-	return result
-end
-
-
--- Checks whether a table has an object "value" in it
-function contains(table, value)
-	for k, v in pairs(table) do
-		if value == v then
-			return k
-		end
+		meta = getmetatable(meta.__index)
 	end
 	return false
 end
 
 
--- Dumps and strips a Lua-Function
-function dump(f)
-	local d = string.dump(f)
-	return d and strip_bytecode(d)
+--
+-- Scope manipulation routines
+--
+
+--- Resets the scope of f doing a shallow copy of its scope into a new table
+-- (ToDo: @param and @return)
+function resfenv(f)
+	setfenv(f, clone(getfenv(f)))
+end
+
+--- Store given object associated with given key in the scope associated with
+-- the given identifier.
+-- @param f		Value containing the scope identifier
+-- @param key	String value containg the key of the object to store
+-- @param obj	Object to store in the scope
+-- @return		Always nil
+function extfenv(f, key, obj)
+	local scope = getfenv(f)
+	scope[key] = obj
+end
+
+--- Updates the scope of f with "extscope" (ToDo: docu)
+function updfenv(f, extscope)
+	update(getfenv(f), extscope)
+end
+
+--- Create a new or get an already existing thread local store associated with
+-- the current active coroutine. A thread local store is private a table object
+-- whose values can't be accessed from outside of the running coroutine.
+-- @return	Table value representing the corresponding thread local store
+function threadlocal()
+	local tbl = {}
+
+	local function get(self, key)
+		local c = coroutine.running()
+		local thread = coxpt[c] or c or 0
+		if not rawget(self, thread) then
+			return nil
+		end
+		return rawget(self, thread)[key]
+	end
+
+	local function set(self, key, value)
+		local c = coroutine.running()
+		local thread = coxpt[c] or c or 0
+		if not rawget(self, thread) then
+			rawset(self, thread, {})
+		end
+		rawget(self, thread)[key] = value
+	end
+
+	setmetatable(tbl, {__index = get, __newindex = set, __mode = "k"})
+
+	return tbl
 end
 
 
--- Dumps a table to stdout (useful for testing and debugging)
+--
+-- Debugging routines
+--
+
+--- Write given object to stderr.
+-- @param obj	Value to write to stderr
+-- @return		Boolean indicating wheather the write operation was successful
+function perror(obj)
+	io.stderr:write(tostring(obj) .. "\n")
+end
+
+--- Recursively dumps a table to stdout, useful for testing and debugging.
+-- @param t	Table value to dump
+-- @param i	Number of tabs to prepend to each line
+-- @return	Always nil
 function dumptable(t, i)
 	i = i or 0
 	for k,v in pairs(t) do
@@ -128,75 +173,60 @@ function dumptable(t, i)
 end
 
 
--- Escapes all occurences of c in s
+--
+-- String and data manipulation routines
+--
+
+--- Escapes all occurences of the given character in given string.
+-- @param s	String value containing unescaped characters
+-- @param c	String value with character to escape (optional, defaults to "\")
+-- @return	String value with each occurence of character escaped with "\"
 function escape(s, c)
 	c = c or "\\"
 	return s:gsub(c, "\\" .. c)
 end
 
-
--- Populate obj in the scope of f as key 
-function extfenv(f, key, obj)
-	local scope = getfenv(f)
-	scope[key] = obj
-end
-
-
--- Checks whether an object is an instanceof class
-function instanceof(object, class)
-	local meta = getmetatable(object)
-    while meta and meta.__index do 
-    	if meta.__index == class then
-    		return true
-    	end
-        meta = getmetatable(meta.__index)
-    end
-    return false	
-end
-
-
--- Creates valid XML PCDATA from a string
+--- Create valid XML PCDATA from given string.
+-- @param value	String value containing the data to escape
+-- @return		String value containing the escaped data
 function pcdata(value)
-	value = value:gsub("&", "&amp;")	
+	value = value:gsub("&", "&amp;")
 	value = value:gsub('"', "&quot;")
 	value = value:gsub("'", "&apos;")
-	value = value:gsub("<", "&lt;")	
+	value = value:gsub("<", "&lt;")
 	return value:gsub(">", "&gt;")
 end
 
-
--- Returns an error message to stdout
-function perror(obj)
-	io.stderr:write(tostring(obj) .. "\n")
-end
-
-
--- Resets the scope of f doing a shallow copy of its scope into a new table
-function resfenv(f)
-	setfenv(f, clone(getfenv(f)))
-end 
-
-
--- Splits a string into an array
+--- Splits given string on a defined seperator sequence and return a table
+-- containing the resulting substrings. The optional max parameter specifies
+-- the number of bytes to process, regardless of the actual length of the given
+-- string. The optional last parameter, regex, sepcifies wheather the separator
+-- sequence is interpreted as regular expression.
+-- @param str		String value containing the data to split up
+-- @param pat		String with separator pattern (optional, defaults to "\n")
+-- @param max		Num of bytes to process (optional, default is string length)
+-- @param regexp	Boolean indicating wheather to interprete the separator
+--					pattern as regular expression (optional, default is false)
+-- @return			Table containing the resulting substrings
 function split(str, pat, max, regex)
 	pat = pat or "\n"
 	max = max or #str
-	
+
 	local t = {}
 	local c = 1
-	
+
 	if #str == 0 then
 		return {""}
 	end
-	
+
 	if #pat == 0 then
 		return nil
 	end
-	
+
 	if max == 0 then
 		return str
 	end
-	
+
 	repeat
 		local s, e = str:find(pat, c, not regex)
 		max = max - 1
@@ -207,171 +237,222 @@ function split(str, pat, max, regex)
 		end
 		c = e and e + 1 or #str + 1
 	until not s or max < 0
-	
+
 	return t
 end
 
+--- Remove leading and trailing whitespace from given string value.
+-- @param str	String value containing whitespace padded data
+-- @return		String value with leading and trailing space removed
+function trim(str)
+	local s = str:gsub("^%s*(.-)%s*$", "%1")
+	return s
+end
 
--- Strips lua bytecode
--- Original version by Peter Cawley (http://lua-users.org/lists/lua-l/2008-02/msg01158.html)
-function strip_bytecode(dump)
-	local version, format, endian, int, size, ins, num, lnum = dump:byte(5, 12)
+--- Parse certain units from the given string and return the canonical integer
+-- value or 0 if the unit is unknown. Upper- or lowercase is irrelevant.
+-- Recognized units are:
+--	o "y"	- one year   (60*60*24*366)
+--  o "m"	- one month  (60*60*24*31)
+--  o "w"	- one week   (60*60*24*7)
+--  o "d"	- one day    (60*60*24)
+--  o "h"	- one hour	 (60*60)
+--  o "min"	- one minute (60)
+--  o "kb"  - one kilobyte (1024)
+--  o "mb"	- one megabyte (1024*1024)
+--  o "gb"	- one gigabyte (1024*1024*1024)
+--  o "kib" - one si kilobyte (1000)
+--  o "mib"	- one si megabyte (1000*1000)
+--  o "gib"	- one si gigabyte (1000*1000*1000)
+-- @param ustr	String containing a numerical value with trailing unit
+-- @return		Number containing the canonical value
+function parse_units(ustr)
+
+	local val = 0
+
+	-- unit map
+	local map = {
+		-- date stuff
+		y   = 60 * 60 * 24 * 366,
+		m   = 60 * 60 * 24 * 31,
+		w   = 60 * 60 * 24 * 7,
+		d   = 60 * 60 * 24,
+		h   = 60 * 60,
+		min = 60,
+
+		-- storage sizes
+		kb  = 1024,
+		mb  = 1024 * 1024,
+		gb  = 1024 * 1024 * 1024,
+
+		-- storage sizes (si)
+		kib = 1000,
+		mib = 1000 * 1000,
+		gib = 1000 * 1000 * 1000
+	}
+
+	-- parse input string
+	for spec in ustr:lower():gmatch("[0-9%.]+[a-zA-Z]*") do
+
+		local num = spec:gsub("[^0-9%.]+$","")
+		local spn = spec:gsub("^[0-9%.]+", "")
+
+		if map[spn] or map[spn:sub(1,1)] then
+			val = val + num * ( map[spn] or map[spn:sub(1,1)] )
+		else
+			val = val + num
+		end
+	end
+
+
+	return val
+end
+
+--- Combines two or more numerically indexed tables into one.
+-- @param tbl1	Table value to combine
+-- @param tbl2	Table value to combine
+-- @param tblN	More values to combine
+-- @return		Table value containing all values of given tables
+function combine(...)
+	local result = {}
+	for i, a in ipairs(arg) do
+		for j, v in ipairs(a) do
+			table.insert(result, v)
+		end
+	end
+	return result
+end
+
+--- Checks whether the given table contains the given value.
+-- @param table	Table value
+-- @param value	Value to search within the given table
+-- @return		Boolean indicating wheather the given value occurs within table
+function contains(table, value)
+	for k, v in pairs(table) do
+		if value == v then
+			return k
+		end
+	end
+	return false
+end
+
+--- Update values in given table with the values from the second given table.
+-- Both table are - in fact - merged together.
+-- @param t			Table which should be updated
+-- @param updates	Table containing the values to update
+-- @return			Always nil
+function update(t, updates)
+	for k, v in pairs(updates) do
+		t[k] = v
+	end
+end
+
+--- Clones the given object and return it's copy.
+-- @param object	Table value to clone
+-- @param deep		Boolean indicating wheather to do recursive cloning
+-- @return			Cloned table value
+function clone(object, deep)
+	local copy = {}
+
+	for k, v in pairs(object) do
+		if deep and type(v) == "table" then
+			v = clone(v, deep)
+		end
+		copy[k] = v
+	end
+
+	setmetatable(copy, getmetatable(object))
+
+	return copy
+end
+
+
+--
+-- Byte code manipulation routines
+--
+
+--- Return the current runtime bytecode of the given function. The byte code
+-- will be stripped before it is returned.
+-- @param f	Function value to return as bytecode
+-- @return	String value containing the bytecode of the given function
+function get_bytecode(f)
+	local d = string.dump(f)
+	return d and strip_bytecode(d)
+end
+
+--- Strips unnescessary lua bytecode from given string. Information like line
+-- numbers and debugging numbers will be discarded. Original version by
+-- Peter Cawley (http://lua-users.org/lists/lua-l/2008-02/msg01158.html)
+-- @param code	String value containing the original lua byte code
+-- @return		String value containing the stripped lua byte code
+function strip_bytecode(code)
+	local version, format, endian, int, size, ins, num, lnum = code:byte(5, 12)
 	local subint
 	if endian == 1 then
-		subint = function(dump, i, l)
+		subint = function(code, i, l)
 			local val = 0
 			for n = l, 1, -1 do
-				val = val * 256 + dump:byte(i + n - 1)
+				val = val * 256 + code:byte(i + n - 1)
 			end
 			return val, i + l
 		end
 	else
-		subint = function(dump, i, l)
+		subint = function(code, i, l)
 			local val = 0
 			for n = 1, l, 1 do
-				val = val * 256 + dump:byte(i + n - 1)
+				val = val * 256 + code:byte(i + n - 1)
 			end
 			return val, i + l
 		end
 	end
-    
+
 	local strip_function
-	strip_function = function(dump)
-		local count, offset = subint(dump, 1, size)
+	strip_function = function(code)
+		local count, offset = subint(code, 1, size)
 		local stripped, dirty = string.rep("\0", size), offset + count
 		offset = offset + count + int * 2 + 4
-		offset = offset + int + subint(dump, offset, int) * ins
-		count, offset = subint(dump, offset, int)
+		offset = offset + int + subint(code, offset, int) * ins
+		count, offset = subint(code, offset, int)
 		for n = 1, count do
 			local t
-			t, offset = subint(dump, offset, 1)
+			t, offset = subint(code, offset, 1)
 			if t == 1 then
 				offset = offset + 1
 			elseif t == 4 then
-				offset = offset + size + subint(dump, offset, size)
+				offset = offset + size + subint(code, offset, size)
 			elseif t == 3 then
 				offset = offset + num
 			elseif t == 254 or t == 9 then
 				offset = offset + lnum
 			end
 		end
-		count, offset = subint(dump, offset, int)
-		stripped = stripped .. dump:sub(dirty, offset - 1)
+		count, offset = subint(code, offset, int)
+		stripped = stripped .. code:sub(dirty, offset - 1)
 		for n = 1, count do
-			local proto, off = strip_function(dump:sub(offset, -1))
+			local proto, off = strip_function(code:sub(offset, -1))
 			stripped, offset = stripped .. proto, offset + off - 1
 		end
-		offset = offset + subint(dump, offset, int) * int + int
-		count, offset = subint(dump, offset, int)
+		offset = offset + subint(code, offset, int) * int + int
+		count, offset = subint(code, offset, int)
 		for n = 1, count do
-			offset = offset + subint(dump, offset, size) + size + int * 2
+			offset = offset + subint(code, offset, size) + size + int * 2
 		end
-		count, offset = subint(dump, offset, int)
+		count, offset = subint(code, offset, int)
 		for n = 1, count do
-			offset = offset + subint(dump, offset, size) + size
+			offset = offset + subint(code, offset, size) + size
 		end
 		stripped = stripped .. string.rep("\0", int * 3)
 		return stripped, offset
 	end
-	
-	return dump:sub(1,12) .. strip_function(dump:sub(13,-1))
+
+	return code:sub(1,12) .. strip_function(code:sub(13,-1))
 end
 
 
--- Creates a new threadlocal store
-function threadlocal()
-	local tbl = {}
-	
-	local function get(self, key)
-		local c = coroutine.running()
-		local thread = coxpt[c] or c or 0
-		if not rawget(self, thread) then
-			return nil
-		end
-		return rawget(self, thread)[key]
-	end
-		
-	local function set(self, key, value)
-		local c = coroutine.running()
-		local thread = coxpt[c] or c or 0
-		if not rawget(self, thread) then
-			rawset(self, thread, {})
-		end
-		rawget(self, thread)[key] = value
-	end
-	
-	setmetatable(tbl, {__index = get, __newindex = set, __mode = "k"})
-	
-	return tbl
-end
+--
+-- Sorting iterator functions
+--
 
-
--- Removes whitespace from beginning and end of a string
-function trim(str)
-	local s = str:gsub("^%s*(.-)%s*$", "%1")
-	return s
-end
-
-
--- Updates given table with new values
-function update(t, updates)
-	for k, v in pairs(updates) do
-		t[k] = v
-	end	
-end
-
-
--- Updates the scope of f with "extscope"
-function updfenv(f, extscope)
-	update(getfenv(f), extscope)
-end
-
-
--- Parse units from a string and return integer value
-function parse_units(ustr)
-
-        local val = 0
-
-        -- unit map
-        local map = {
-                -- date stuff
-                y   = 60 * 60 * 24 * 366,
-                m   = 60 * 60 * 24 * 31,
-                w   = 60 * 60 * 24 * 7,
-                d   = 60 * 60 * 24,
-                h   = 60 * 60,
-		min = 60,
-
-                -- storage sizes
-                kb  = 1024,
-                mb  = 1024 * 1024,
-                gb  = 1024 * 1024 * 1024,
-
-                -- storage sizes (si)
-                kib = 1000,
-                mib = 1000 * 1000,
-                gib = 1000 * 1000 * 1000
-        }
-
-        -- parse input string
-        for spec in ustr:lower():gmatch("[0-9%.]+[a-zA-Z]*") do
-
-                local num = spec:gsub("[^0-9%.]+$","")
-                local spn = spec:gsub("^[0-9%.]+", "")
-
-                if map[spn] or map[spn:sub(1,1)] then
-                        val = val + num * ( map[spn] or map[spn:sub(1,1)] )
-                else
-                        val = val + num
-                end
-        end
-
-
-	return val
-end
-
-
--- Provide various sorting iterators
 function _sortiter( t, f )
 	local keys = { }
 
@@ -392,62 +473,80 @@ function _sortiter( t, f )
 	end
 end
 
--- Return key, value pairs sorted by provided callback function
+--- Return a key, value iterator which returns the values sorted according to
+-- the provided callback function.
+-- @param t	The table to iterate
+-- @param f A callback function to decide the order of elements
+-- @return	Function value containing the corresponding iterator
 function spairs(t,f)
-	return _sortiter( t, f )					
+	return _sortiter( t, f )
 end
 
--- Return key, value pairs sorted by keys
+--- Return a key, value iterator for the given table.
+-- The table pairs are sorted by key.
+-- @param t	The table to iterate
+-- @return	Function value containing the corresponding iterator
 function kspairs(t)
 	return _sortiter( t )
 end
 
--- Return key, value pairs sorted by values
+--- Return a key, value iterator for the given table.
+-- The table pairs are sorted by value.
+-- @param t	The table to iterate
+-- @return	Function value containing the corresponding iterator
 function vspairs(t)
 	return _sortiter( t, function (a,b) return t[a] < t[b] end )
 end
 
 
+--
 -- Coroutine safe xpcall and pcall versions modified for Luci
 -- original version:
 -- coxpcall 1.13 - Copyright 2005 - Kepler Project (www.keplerproject.org)
+--
+
 local performResume, handleReturnValue
 local oldpcall, oldxpcall = pcall, xpcall
 coxpt = {}
 setmetatable(coxpt, {__mode = "kv"})
 
-function handleReturnValue(err, co, status, ...)
-    if not status then
-        return false, err(debug.traceback(co, (...)), ...)
-    end
-    if coroutine.status(co) == 'suspended' then
-        return performResume(err, co, coroutine.yield(...))
-    else
-        return true, ...
-    end
-end
-
-function performResume(err, co, ...)
-    return handleReturnValue(err, co, coroutine.resume(co, ...))
-end    
-
+--- (ToDo: docu)
 function coxpcall(f, err, ...)
-    local res, co = oldpcall(coroutine.create, f)
-    if not res then
-        local params = {...}
-        local newf = function() return f(unpack(params)) end
-        co = coroutine.create(newf)
-    end
-    local c = coroutine.running()
-    coxpt[co] = coxpt[c] or c or 0
-    
-    return performResume(err, co, ...)
+	local res, co = oldpcall(coroutine.create, f)
+	if not res then
+		local params = {...}
+		local newf = function() return f(unpack(params)) end
+		co = coroutine.create(newf)
+	end
+	local c = coroutine.running()
+	coxpt[co] = coxpt[c] or c or 0
+
+	return performResume(err, co, ...)
 end
 
+--- (ToDo: docu)
+function copcall(f, ...)
+	return coxpcall(f, id, ...)
+end
+
+--- (ToDo: docu)
 local function id(trace, ...)
   return ...
 end
 
-function copcall(f, ...)
-    return coxpcall(f, id, ...)
+--- (ToDo: docu)
+function handleReturnValue(err, co, status, ...)
+	if not status then
+		return false, err(debug.traceback(co, (...)), ...)
+	end
+	if coroutine.status(co) == 'suspended' then
+		return performResume(err, co, coroutine.yield(...))
+	else
+		return true, ...
+	end
+end
+
+--- (ToDo: docu)
+function performResume(err, co, ...)
+	return handleReturnValue(err, co, coroutine.resume(co, ...))
 end
