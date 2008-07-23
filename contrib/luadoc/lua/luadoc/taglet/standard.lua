@@ -4,7 +4,7 @@
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
 local io = require "io"
-local lfs = require "lfs"
+local posix = require "posix"
 local luadoc = require "luadoc"
 local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
@@ -433,14 +433,14 @@ end
 -- @return table with documentation
 
 function directory (path, doc)
-	for f in lfs.dir(path) do
+	for f in posix.files(path) do
 		local fullpath = path .. "/" .. f
-		local attr = lfs.attributes(fullpath)
+		local attr = posix.stat(fullpath)
 		assert(attr, string.format("error stating file `%s'", fullpath))
 		
-		if attr.mode == "file" then
+		if attr.type == "regular" then
 			doc = file(fullpath, doc)
-		elseif attr.mode == "directory" and f ~= "." and f ~= ".." then
+		elseif attr.type == "directory" and f ~= "." and f ~= ".." then
 			doc = directory(fullpath, doc)
 		end
 	end
@@ -475,12 +475,12 @@ function start (files, doc)
 	assert(doc.modules, "undefined `modules' field")
 	
 	table.foreachi(files, function (_, path)
-		local attr = lfs.attributes(path)
+		local attr = posix.stat(path)
 		assert(attr, string.format("error stating path `%s'", path))
 		
-		if attr.mode == "file" then
+		if attr.type == "regular" then
 			doc = file(path, doc)
-		elseif attr.mode == "directory" then
+		elseif attr.type == "directory" then
 			doc = directory(path, doc)
 		end
 	end)

@@ -14,7 +14,7 @@
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
 local io = require"io"
-local lfs = require "lfs"
+local posix = require "posix"
 local lp = require "luadoc.lp"
 local luadoc = require"luadoc"
 local package = package
@@ -220,7 +220,7 @@ function start (doc)
 	if (#doc.files > 0 or #doc.modules > 0) and (not options.noindexpage) then
 		local filename = options.output_dir.."index.html"
 		logger:info(string.format("generating file `%s'", filename))
-		local f = lfs.open(filename, "w")
+		local f = posix.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
 		include("index.lp", { doc = doc })
@@ -235,7 +235,7 @@ function start (doc)
 			local filename = out_module(modulename)
 			logger:info(string.format("generating file `%s'", filename))
 			
-			local f = lfs.open(filename, "w")
+			local f = posix.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
 			include("module.lp", { doc = doc, module_doc = module_doc })
@@ -251,7 +251,7 @@ function start (doc)
 			local filename = out_file(file_doc.name)
 			logger:info(string.format("generating file `%s'", filename))
 			
-			local f = lfs.open(filename, "w")
+			local f = posix.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
 			include("file.lp", { doc = doc, file_doc = file_doc} )
@@ -260,7 +260,7 @@ function start (doc)
 	end
 	
 	-- copy extra files
-	local f = lfs.open(options.output_dir.."luadoc.css", "w")
+	local f = posix.open(options.output_dir.."luadoc.css", "w")
 	io.output(f)
 	include("luadoc.css")
 	f:close()

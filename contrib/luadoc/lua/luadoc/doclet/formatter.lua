@@ -41,7 +41,7 @@ function start (doc)
 		luadoc.logger:info(string.format("generating file `%s'", filename))
 
 		-- TODO: confirm file overwrite
-		local f = lfs.open(filename, "w")
+		local f = posix.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 
 		for _, block in ipairs(file_doc.doc) do

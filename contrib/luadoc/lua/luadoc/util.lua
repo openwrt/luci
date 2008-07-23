@@ -3,7 +3,7 @@
 -- @release $Id: util.lua,v 1.16 2008/02/17 06:42:51 jasonsantos Exp $
 -------------------------------------------------------------------------------
 
-local lfs = require "lfs"
+local posix = require "posix"
 local type, table, string, io, assert, tostring, setmetatable, pcall = type, table, string, io, assert, tostring, setmetatable, pcall
 
 -------------------------------------------------------------------------------
@@ -144,14 +144,14 @@ end
 -- @param mode mode of opening
 -- @return file handle
 
-function lfs.open (filename, mode)
+function posix.open (filename, mode)
 	local f = io.open(filename, mode)
 	if f == nil then
 		filename = string.gsub(filename, "\\", "/")
 		local dir = ""
 		for d in string.gfind(filename, ".-/") do
 			dir = dir .. d
-			lfs.mkdir(dir)
+			posix.mkdir(dir)
 		end
 		f = io.open(filename, mode)
 	end
