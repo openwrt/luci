@@ -55,6 +55,7 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 	local res, id, data1, data2 = true, 0, nil, nil
 	local headers = {}
 	local status = 200
+	local active = true
 
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
 	while not id or id < 3 do
@@ -81,9 +82,10 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 		local res, id, data = coroutine.resume(x)
 		if not res then
 			return nil, id
-		elseif not id then
+		elseif not id or not active then
 			return true
 		elseif id == 5 then
+			active = false
 			return true
 		elseif id == 4 then
 			return data

@@ -41,6 +41,8 @@ function run(wsapi_env)
 	local status = 200
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
+	local active = true
+	
 	while id < 3 do
 		res, id, data1, data2 = coroutine.resume(x, r)
 		
@@ -60,9 +62,12 @@ function run(wsapi_env)
 	
 	local function iter()
 		local res, id, data = coroutine.resume(x)
-		if id == 4 then
+		if id == 4 and active then
 			return data
 		elseif id == 5 then
+			active = false
+			return ""
+		else
 			return ""
 		end
 		if coroutine.status(x) == "dead" then

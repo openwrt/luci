@@ -38,6 +38,7 @@ function run()
 	
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
 	local hcache = ""
+	local active = true
 	
 	while coroutine.status(x) ~= "dead" do
 		local res, id, data1, data2 = coroutine.resume(x, r)
@@ -49,16 +50,19 @@ function run()
 			break;
 		end
 
-		if id == 1 then
-			io.write("Status: " .. tostring(data1) .. " " .. data2 .. "\r\n")
-		elseif id == 2 then
-			hcache = hcache .. data1 .. ": " .. data2 .. "\r\n"
-		elseif id == 3 then
-			io.write(hcache)
-			io.write("\r\n")
-		elseif id == 4 then
-			io.write(data1)
+		if active then
+			if id == 1 then
+				io.write("Status: " .. tostring(data1) .. " " .. data2 .. "\r\n")
+			elseif id == 2 then
+				hcache = hcache .. data1 .. ": " .. data2 .. "\r\n"
+			elseif id == 3 then
+				io.write(hcache)
+				io.write("\r\n")
+			elseif id == 4 then
+				io.write(data1)
+			elseif id == 5 then
+				active = false
+			end
 		end
-		
 	end
 end
