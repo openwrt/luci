@@ -192,14 +192,16 @@ stat = posix.stat
 -- @return		Number containing the os specific errno on error
 chmod = posix.chmod
 
---- Create a hardlink from given file to specified target file path.
--- @class		function
--- @name		link
--- @param path1	String containing the source path of a file to hardlink
--- @param path2	String containing the destination path for the link
--- @return		Number with the return code, 0 on sucess or nil on error
--- @return		String containing the error description on error
--- @return		Number containing the os specific errno on error
+--- Create a hard- or symlink from given file (or directory) to specified target
+-- file (or directory) path.
+-- @class			function
+-- @name			link
+-- @param path1		String containing the source path to link
+-- @param path2		String containing the destination path for the link
+-- @param symlink	Boolean indicating wheather to create a symlink (optional)
+-- @return			Number with the return code, 0 on sucess or nil on error
+-- @return			String containing the error description on error
+-- @return			Number containing the os specific errno on error
 link = posix.link
 
 --- Remove the given file.
