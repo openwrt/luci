@@ -84,9 +84,12 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 		elseif not id then
 			return true
 		elseif id == 5 then
-			return nil
-		else
+			return true
+		elseif id == 4 then
 			return data
+		end
+		if coroutine.status(x) == "dead" then
+			return nil
 		end
 	end
 

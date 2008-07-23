@@ -59,11 +59,14 @@ function run(wsapi_env)
 	end
 	
 	local function iter()
-		local res, id, data1, data2 = coroutine.resume(x)
-		if not res or id == 5 then
+		local res, id, data = coroutine.resume(x)
+		if id == 4 then
+			return data
+		elseif id == 5 then
+			return ""
+		end
+		if coroutine.status(x) == "dead" then
 			return nil
-		else
-			return data1
 		end
 	end
 	
