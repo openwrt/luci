@@ -519,7 +519,7 @@ local oldpcall, oldxpcall = pcall, xpcall
 coxpt = {}
 setmetatable(coxpt, {__mode = "kv"})
 
---- Identity function for copcall
+-- Identity function for copcall
 local function copcall_id(trace, ...)
   return ...
 end
@@ -552,7 +552,7 @@ function copcall(f, ...)
 	return coxpcall(f, copcall_id, ...)
 end
 
---- Handle return value of protected call
+-- Handle return value of protected call
 function handleReturnValue(err, co, status, ...)
 	if not status then
 		return false, err(debug.traceback(co, (...)), ...)
@@ -564,7 +564,7 @@ function handleReturnValue(err, co, status, ...)
 	end
 end
 
---- Resume execution of protected function call
+-- Resume execution of protected function call
 function performResume(err, co, ...)
 	return handleReturnValue(err, co, coroutine.resume(co, ...))
 end
