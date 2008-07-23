@@ -24,22 +24,41 @@ limitations under the License.
 
 ]]--
 
+--- LuCI filesystem library.
 module("luci.fs", package.seeall)
 
 require("posix")
 
--- Access
+--- Test for file access permission on given path.
+-- @class		function
+-- @name		access
+-- @param str	String value containing the path
+-- @return		Number containing the return code, 0 on sucess or nil on error
+-- @return		String containing the error description (if any)
+-- @return		Number containing the os specific errno (if any)
 access = posix.access
 
--- Glob
+--- Evaluate given shell glob pattern and return a table containing all matching
+-- file and directory entries.
+-- @class			function
+-- @name			glob
+-- @param filename	String containing the path of the file to read
+-- @return			Table containing file and directory entries or nil if no matches
+-- @return			String containing the error description (if no matches)
+-- @return			Number containing the os specific errno (if no matches)
 glob = posix.glob
 
--- Checks whether a file exists
+--- Checks wheather the given path exists and points to a regular file.
+-- @param filename	String containing the path of the file to read
+-- @return			Boolean indicating wheather given path points to regular file
 function isfile(filename)
 	return posix.stat(filename, "type") == "regular"
 end
 
--- Returns the content of file
+--- Read the whole content of the given file into memory.
+-- @param filename	String containing the path of the file to read
+-- @return			String containing the file contents or nil on error
+-- @return			String containing the error message on error
 function readfile(filename)
 	local fp, err = io.open(filename)
 
@@ -52,7 +71,11 @@ function readfile(filename)
 	return data
 end
 
--- Writes given data to a file
+--- Write the contents of given string to given file.
+-- @param filename	String containing the path of the file to read
+-- @param data		String containing the data to write
+-- @return			Boolean containing true on success or nil on error
+-- @return			String containing the error message on error
 function writefile(filename, data)
 	local fp, err = io.open(filename, "w")
 
@@ -66,21 +89,48 @@ function writefile(filename, data)
 	return true
 end
 
--- Returns the file modification date/time of "path"
+--- Get the last modification time of given file path in Unix epoch format.
+-- @param path	String containing the path of the file or directory to read
+-- @return		Number containing the epoch time or nil on error
+-- @return		String containing the error description (if any)
+-- @return		Number containing the os specific errno (if any)
 function mtime(path)
 	return posix.stat(path, "mtime")
 end
 
--- basename wrapper
+--- Return the last element - usually the filename - from the given path with
+-- the directory component stripped.
+-- @class		function
+-- @name		basename
+-- @param path	String containing the path to strip
+-- @return		String containing the base name of given path
+-- @see			dirname
 basename = posix.basename
 
--- dirname wrapper
+--- Return the directory component of the given path with the last element
+-- stripped of.
+-- @class		function
+-- @name		dirname
+-- @param path	String containing the path to strip
+-- @return		String containing the directory component of given path
+-- @see			basename
 dirname = posix.dirname
 
--- dir wrapper
+--- Return a table containing all entries of the specified directory.
+-- @class		function
+-- @name		dir
+-- @param path	String containing the path of the directory to scan
+-- @return		Table containing file and directory entries or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
 dir = posix.dir
 
--- wrapper for posix.mkdir
+--- Create a new directory, recursively on demand.
+-- @param path		String with the name or path of the directory to create
+-- @param recursive	Create multiple directory levels (optional, default is true)
+-- @return			Number with the return code, 0 on sucess or nil on error
+-- @return			String containing the error description on error
+-- @return			Number containing the os specific errno on error
 function mkdir(path, recursive)
 	if recursive then
 		local base = "."
@@ -114,17 +164,49 @@ function mkdir(path, recursive)
 	end
 end
 
--- Alias for posix.rmdir
+--- Remove the given empty directory.
+-- @class		function
+-- @name		rmdir
+-- @param path	String containing the path of the directory to remove
+-- @return		Number with the return code, 0 on sucess or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
 rmdir = posix.rmdir
 
--- Alias for posix.stat
+--- Get information about given file or directory.
+-- @class		function
+-- @name		stat
+-- @param path	String containing the path of the directory to query
+-- @return		Table containing file or directory properties or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
 stat = posix.stat
 
--- Alias for posix.chmod
+--- Set permissions on given file or directory.
+-- @class		function
+-- @name		chmod
+-- @param path	String containing the path of the directory
+-- @param perm	String containing the permissions to set ([ugoa][+-][rwx])
+-- @return		Number with the return code, 0 on sucess or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
 chmod = posix.chmod
 
--- Alias for posix.link
+--- Create a hardlink from given file to specified target file path.
+-- @class		function
+-- @name		link
+-- @param path1	String containing the source path of a file to hardlink
+-- @param path2	String containing the destination path for the link
+-- @return		Number with the return code, 0 on sucess or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
 link = posix.link
 
--- Alias for posix.unlink
+--- Remove the given file.
+-- @class		function
+-- @name		unlink
+-- @param path	String containing the path of the file to remove
+-- @return		Number with the return code, 0 on sucess or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
 unlink = posix.unlink

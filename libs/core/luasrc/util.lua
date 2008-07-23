@@ -94,7 +94,7 @@ end
 -- Scope manipulation routines
 --
 
---- Replace a function scope with a shallow copy of itself
+--- Replace a function scope with a shallow copy of itself.
 -- This is useful if you want to get rid of several unwanted side effects
 -- while changing the scope of a certain Lua function.
 -- @param f		Lua function
@@ -102,13 +102,13 @@ function resfenv(f)
 	setfenv(f, clone(getfenv(f)))
 end
 
---- Store given object associated with given key in the scope of a function
+--- Store given object associated with given key in the scope of a function.
 -- @param f		Lua function
 -- @param key	String value containg the key of the object to store
 -- @param obj	Object to store in the scope
+-- @return		Always nil
 -- @see updfenv
 -- @see resfenv
--- @return		Always nil
 function extfenv(f, key, obj)
 	local scope = getfenv(f)
 	scope[key] = obj
@@ -118,9 +118,9 @@ end
 -- @param f		Lua function
 -- @param key	String value containg the key of the object to store
 -- @param obj	Object to store in the scope
+-- @return		Always nil
 -- @see extfenv
 -- @see resfenv
--- @return		Always nil
 function updfenv(f, extscope)
 	update(getfenv(f), extscope)
 end
@@ -519,16 +519,17 @@ local oldpcall, oldxpcall = pcall, xpcall
 coxpt = {}
 setmetatable(coxpt, {__mode = "kv"})
 
--- Identity function for copcall
+--- Identity function for copcall
 local function copcall_id(trace, ...)
   return ...
 end
 
 --- This is a coroutine-safe drop-in replacement for Lua's "xpcall"-function
--- @param f	Lua function to be called protected
--- @param err Custom error handler
--- @param ... parameters passed to the function
--- @return	a boolean whether the function call succeeded and the return values of either the function or the error handler
+-- @param f		Lua function to be called protected
+-- @param err	Custom error handler
+-- @param ...	Parameters passed to the function
+-- @return		A boolean whether the function call succeeded and the return
+--				values of either the function or the error handler
 function coxpcall(f, err, ...)
 	local res, co = oldpcall(coroutine.create, f)
 	if not res then
@@ -543,14 +544,15 @@ function coxpcall(f, err, ...)
 end
 
 --- This is a coroutine-safe drop-in replacement for Lua's "pcall"-function
--- @param f	Lua function to be called protected
--- @param ... parameters passed to the function
--- @return	a boolean whether the function call succeeded and the returns values of the function or the error object
+-- @param f		Lua function to be called protected
+-- @param ...	Parameters passed to the function
+-- @return		A boolean whether the function call succeeded and the returns
+--				values of the function or the error object
 function copcall(f, ...)
 	return coxpcall(f, copcall_id, ...)
 end
 
--- Handle return value of protected call
+--- Handle return value of protected call
 function handleReturnValue(err, co, status, ...)
 	if not status then
 		return false, err(debug.traceback(co, (...)), ...)
@@ -562,7 +564,7 @@ function handleReturnValue(err, co, status, ...)
 	end
 end
 
--- Resume execution of protected function call
+--- Resume execution of protected function call
 function performResume(err, co, ...)
 	return handleReturnValue(err, co, coroutine.resume(co, ...))
 end
