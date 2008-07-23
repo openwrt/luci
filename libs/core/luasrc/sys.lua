@@ -71,7 +71,7 @@ function execl(command)
 end
 
 --- Invoke the luci-flash executable to write an image to the flash memory.
--- @param kpattern	kpattern (ToDo: clearify this)
+-- @param kpattern	Pattern of files to keep over flash process
 -- @return			Return value of os.execute()
 function flash(image, kpattern)
 	local cmd = "luci-flash "
@@ -202,9 +202,14 @@ function uptime()
 	return loadavg:match("^(.-) (.-)$")
 end
 
---- Get group information
--- @return	Group (ToDo: clearify)
+--- LuCI system utilities / POSIX user group related functions.
+-- @class	module
+-- @name	luci.sys.group
 group = {}
+
+--- Returns information about a POSIX user group.
+-- @param group Group ID or name of a system user group
+-- @return	Table with information about the requested group
 group.getgroup = posix.getgroup
 
 
