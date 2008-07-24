@@ -36,6 +36,11 @@ confdir_default = "/etc/config"
 
 savedir_state = "/var/state"
 
+--- Delete all sections of a given type that match certain criteria.
+-- @param config		UCI config
+-- @param type			UCI section type
+-- @param comparator	Function that will be called for each section and
+-- returns a boolean whether to delete the current section (optional)
 function delete_all(config, type, comparator)
 	local del = {}
 	local function helper (section)
@@ -51,6 +56,12 @@ function delete_all(config, type, comparator)
 	end
 end
 
+--- Create a new section and initialize it with data.
+-- @param config	UCI config
+-- @param type		UCI section type
+-- @param name		UCI section name (optional)
+-- @param values	Table of key - value pairs to initialize the section with
+-- @return			Name of created section
 function section(config, type, name, values)
 	local stat = true
 	if name then
@@ -67,6 +78,10 @@ function section(config, type, name, values)
 	return stat and name
 end
 
+--- Get a certain state value.
+-- @param ...	Parameters passed to function get
+-- @return		UCI value
+-- @see			get
 function get_statevalue(...)
 	set_savedir(savedir_state)
 	local result = get(...)
@@ -74,6 +89,10 @@ function get_statevalue(...)
 	return result
 end
 
+--- Updated the data of a section using data from a table.
+-- @param config	UCI config
+-- @param section	UCI section name (optional)
+-- @param values	Table of key - value pairs to update the section with
 function tset(config, section, values)
 	local stat = true
 	for k, v in pairs(values) do
@@ -82,3 +101,107 @@ function tset(config, section, values)
 		end
 	end
 end
+
+
+--- Add an anonymous section.
+-- @class function
+-- @name add
+-- @param config	UCI config
+-- @param type		UCI section type
+-- @return			Name of created section
+
+--- Get a table of unsaved changes.
+-- @class function
+-- @name changes
+-- @param config	UCI config
+-- @return			Table of changes
+
+--- Commit unsaved changes.
+-- @class function
+-- @name commit
+-- @param config	UCI config
+-- @return			Boolean whether operation succeeded
+-- @see revert
+
+--- Deletes a section or an option.
+-- @class function
+-- @name delete
+-- @param config	UCI config
+-- @param section	UCI section name
+-- @param option	UCI option (optional)
+-- @return			Boolean whether operation succeeded
+
+--- Call a function for every section of a certain type.
+-- @class function
+-- @name foreach
+-- @param config	UCI config
+-- @param type		UCI section type
+-- @param callback	Function to be called
+-- @return			Boolean whether operation succeeded
+
+--- Get a section type or an option
+-- @class function
+-- @name get
+-- @param config	UCI config
+-- @param section	UCI section name
+-- @param option	UCI option (optional)
+-- @return			UCI value
+
+--- Get all sections of a config or all values of a section.
+-- @class function
+-- @name get_all
+-- @param config	UCI config
+-- @param section	UCI section name (optional)
+-- @return			Table of UCI sections or table of UCI values
+
+--- Manually load a config.
+-- @class function
+-- @name load
+-- @param config	UCI config
+-- @return			Boolean whether operation succeeded
+-- @see save
+-- @see unload
+
+--- Revert unsaved changes.
+-- @class function
+-- @name revert
+-- @param config	UCI config
+-- @return			Boolean whether operation succeeded
+-- @see commit
+
+--- Saves changes made to a config to make them committable.
+-- @class function
+-- @name save
+-- @param config	UCI config
+-- @return			Boolean whether operation succeeded
+-- @see load
+-- @see unload
+
+--- Set a value or create a named section.
+-- @class function
+-- @name set
+-- @param config	UCI config
+-- @param section	UCI section name
+-- @param option	UCI option or UCI section type
+-- @param value		UCI value or nil if you want to create a section
+-- @return			Boolean whether operation succeeded
+
+--- Set the configuration directory.
+-- @class function
+-- @name set_confdir
+-- @param directory	UCI configuration directory
+-- @return			Boolean whether operation succeeded
+
+--- Set the directory for uncommited changes.
+-- @class function
+-- @name set_savedir
+-- @param directory	UCI changes directory
+-- @return			Boolean whether operation succeeded
+
+--- Discard changes made to a config.
+-- @class function
+-- @name unload
+-- @param config	UCI config
+-- @return			Boolean whether operation succeeded
+-- @see load
+-- @see save
