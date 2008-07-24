@@ -1,0 +1,85 @@
+#################################################################
+# In order to enable dynamic dns you need at least one section,
+# and in that seciton the "enabled" option must be set to one
+# 
+# Each section represents an update to a different service
+#
+# You specify your domain name, your username and your password
+# with the optins "domain", "username" and "password" respectively
+#
+# Next you need to specify the name of the service you are 
+# connecting to "eg. dyndns.org".  The format of the update
+# urls for several different dynamic dns services is specified
+# in the /usr/lib/ddns/services file.  This list is hardly complete
+# as there are many, many different dynamic dns services.  If your
+# service is on the list you can merely specify it with the 
+# "service_name" option.  Otherwise you will need to determine
+# the format of the url to update with.  You can either add an
+# entry to the /usr/lib/ddns/services file or specify this with
+# the "update_url" option.
+#
+# We also need to specify the source of the ip address to associate with
+# your domain.  The "ip_source" option can be "network", "interface"
+# or "web", with "network" as the default.  
+#
+# If "ip_source" is "network" you specify a network section in your 
+# /etc/network config file (e.g. "wan", which is the default) with
+# the "ip_network" option.  If you specify "wan", you will update
+# with whatever the ip for your wan is.
+# 
+# If "ip_source" is "interface" you specify a hardware interface 
+# (e.g. "eth1") and whatever the current ip of this interface is
+# will be associated with the domain when an update is performed.
+#
+# The last possibility is that "ip_source" is "web", which means
+# that in order to obtain our ip address we will connect to a 
+# website, and the first valid ip address listed on that page
+# will be assumed to be ours.  If you are behind another firewall
+# this is the best option since none of the local networks or 
+# interfaces will have the external ip.  The website to connect
+# to is specified by the "ip_url" option.  You may specify multiple
+# urls in the option, separated by whitespace.
+#
+# Finally we need to specify how often to check whether we need
+# to check whether the ip address has changed (and if so update
+# it) and how often we need to force an update ( many services
+# will expire your domain if you don't connect and do an update
+# every so often).  Use the "check_interval" to specify how
+# often to check whether an update is necessary, and the 
+# "force_interval" option to specify how often to force an
+# update.  Specify the units for these values with the "check_unit"
+# and the "force_unit" options.  Units can be "days", "hours",
+# "minutes" or "seconds".  The default force_unit is hours and the
+# default check_unit is seconds.  The default check_interval is
+# 600 seconds, or ten minutes.  The default force_interval is 
+# 72 hours or 3 days.
+#
+#
+#########################################################
+
+config service "myddns"
+	option enabled		"0"
+
+	option service_name	"dyndns.org"
+	option domain		"mypersonaldomain.dyndns.org"
+	option username		"myusername"
+	option password		"mypassword"
+
+	option ip_source	"network" 
+	option ip_network	"wan"
+	
+
+	option force_interval	"72"
+	option force_unit	"hours"
+	option check_interval	"10"
+	option check_unit	"minutes"
+
+	#option ip_source	"interface"
+	#option ip_interface	"eth0.1"
+
+	#option ip_source	"web"
+	#option ip_url		"http://www.whatismyip.com/automation/n09230945.asp"
+
+	#option update_url	"http://[USERNAME]:[PASSWORD]@members.dyndns.org/nic/update?hostname=[DOMAIN]&myip=[IP]"
+
+

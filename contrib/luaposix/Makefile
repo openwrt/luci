@@ -10,6 +10,8 @@ LUAPOSIX_PATCHDIR = patches
 
 all: compile
 
+include ../../build/module.mk
+
 $(LUAPOSIX_FILE):
 	wget -O $@ $(LUAPOSIX_URL) || rm -f $@
 

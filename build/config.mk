@@ -1,5 +1,6 @@
 LUAC = luac
 LUAC_OPTIONS = -s
+LUA_TARGET = source
 
 LUA_MODULEDIR = /usr/lib/lua
 LUA_LIBRARYDIR = /usr/lib/lua

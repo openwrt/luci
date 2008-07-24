@@ -20,12 +20,13 @@ function init(path)
 
 	require("luci.dispatcher")
 	require("luci.sgi.webuci")
-	require("uci")
+	require("luci.model.uci")
 
 	if (root ~= '/') then
 		-- Entering dummy mode
-		uci.set_savedir(root..'/tmp/.uci')
-		uci.set_confdir(root..'/etc/config')
+		luci.model.uci.confdir_default = root .. '/etc/config'
+		luci.model.uci.savedir_state   = root .. '/var/state'
+		uci.set_confdir(luci.model.uci.confdir_default)
 		
 		luci.sys.hostname = function() return "" end
 		luci.sys.loadavg  = function() return 0,0,0,0,0 end
@@ -35,12 +36,11 @@ function init(path)
 		
 		luci.sys.net.arptable		= function() return {} end
 		luci.sys.net.devices		= function() return {} end
-		luci.sys.net.routes			= function() return {} end
+		luci.sys.net.routes		= function() return {} end
 		luci.sys.wifi.getiwconfig	= function() return {} end
 		luci.sys.wifi.iwscan		= function() return {} end
 		
 		luci.sys.user.checkpasswd   = function() return true end
-		luci.http.basic_auth = function() return true end
 	end
 end
 

@@ -4,18 +4,24 @@ require("luci.httpd.server")
 require("luci.httpd.handler.file")
 require("luci.httpd.handler.luci")
 
-DOCROOT = arg[1]
+SYSROOT = arg[1]
+DOCROOT = SYSROOT .. arg[2]
 PORT = 8080
 
 collectgarbage("setpause", 150)
 
 serversocket = luci.httpd.Socket("0.0.0.0", PORT)
 
-
 server  = luci.httpd.server.Server()
 vhost   = luci.httpd.server.VHost()
 
 server:set_default_vhost(vhost)
+
+if pcall(require, "uci") and pcall(require, "luci.model.uci") then
+	luci.model.uci.confdir_default = SYSROOT .. luci.model.uci.confdir_default
+	luci.model.uci.savedir_state   = SYSROOT .. luci.model.uci.savedir_state
+	luci.model.uci.set_confdir(luci.model.uci.confdir_default)
+end
 
 
 filehandler = luci.httpd.handler.file.Simple(DOCROOT)

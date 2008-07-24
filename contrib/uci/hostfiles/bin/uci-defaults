@@ -1,0 +1,7 @@
+#!/bin/sh
+for i in $(find $(dirname $0)/../etc/uci-defaults -type f -not -name "$2")
+do 
+	[ -f $i ] && { 
+		bash $i; rm $i
+	}
+done

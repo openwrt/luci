@@ -1,0 +1,13 @@
+config wifi-device  wifi0
+	option type     atheros
+	option channel  auto
+
+	# REMOVE THIS LINE TO ENABLE WIFI:
+	option disabled 1
+
+config wifi-iface
+	option device	wifi0
+	option network	lan
+	option mode	ap
+	option ssid	OpenWrt
+	option encryption none

@@ -1,0 +1,27 @@
+#### VLAN configuration 
+config switch eth0
+	option vlan0	"0 1 2 3 5*"
+	option vlan1	"4 5"
+
+
+#### Loopback configuration
+config interface loopback
+	option ifname	"lo"
+	option proto	static
+	option ipaddr	127.0.0.1
+	option netmask	255.0.0.0
+
+
+#### LAN configuration
+config interface lan
+	option type 	bridge
+	option ifname	"eth0.0"
+	option proto	static
+	option ipaddr	192.168.1.1
+	option netmask	255.255.255.0
+
+
+#### WAN configuration
+config interface	wan
+	option ifname	"eth0.1"
+	option proto	dhcp
