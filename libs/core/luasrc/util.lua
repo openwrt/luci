@@ -75,7 +75,7 @@ end
 --- Test whether the given object is an instance of the given class.
 -- @param object	Object instance
 -- @param class		Class object to test against
--- @return			Boolean indicating wheather the object is an instance
+-- @return			Boolean indicating whether the object is an instance
 -- @see				class
 -- @see				clone
 function instanceof(object, class)
@@ -162,7 +162,7 @@ end
 
 --- Write given object to stderr.
 -- @param obj	Value to write to stderr
--- @return		Boolean indicating wheather the write operation was successful
+-- @return		Boolean indicating whether the write operation was successful
 function perror(obj)
 	return io.stderr:write(tostring(obj) .. "\n")
 end
@@ -209,12 +209,12 @@ end
 --- Splits given string on a defined seperator sequence and return a table
 -- containing the resulting substrings. The optional max parameter specifies
 -- the number of bytes to process, regardless of the actual length of the given
--- string. The optional last parameter, regex, sepcifies wheather the separator
+-- string. The optional last parameter, regex, sepcifies whether the separator
 -- sequence is interpreted as regular expression.
 -- @param str		String value containing the data to split up
 -- @param pat		String with separator pattern (optional, defaults to "\n")
 -- @param max		Num of bytes to process (optional, default is string length)
--- @param regexp	Boolean indicating wheather to interprete the separator
+-- @param regexp	Boolean indicating whether to interprete the separator
 --					pattern as regular expression (optional, default is false)
 -- @return			Table containing the resulting substrings
 function split(str, pat, max, regex)
@@ -335,7 +335,7 @@ end
 --- Checks whether the given table contains the given value.
 -- @param table	Table value
 -- @param value	Value to search within the given table
--- @return		Boolean indicating wheather the given value occurs within table
+-- @return		Boolean indicating whether the given value occurs within table
 function contains(table, value)
 	for k, v in pairs(table) do
 		if value == v then
@@ -358,7 +358,7 @@ end
 
 --- Clones the given object and return it's copy.
 -- @param object	Table value to clone
--- @param deep		Boolean indicating wheather to do recursive cloning
+-- @param deep		Boolean indicating whether to do recursive cloning
 -- @return			Cloned table value
 function clone(object, deep)
 	local copy = {}
@@ -375,18 +375,80 @@ function clone(object, deep)
 	return copy
 end
 
+-- Test whether the given table value is a numerically indexed table.
+function _is_numeric_table(t)
+	local k = pairs(t)(t)
+	return ( tonumber(k) ~= nil )
+end
+
+-- Serialize the contents of a table value.
+function _serialize_table(t)
+	local data = ""
+	if _is_numeric_table(t) then
+		for i, v in ipairs(t) do
+			v = serialize_data(v)
+			data = data .. ( #data > 0 and ", " or "" ) .. v
+		end
+	else
+		for k, v in pairs(t) do
+			k = serialize_data(k)
+			v = serialize_data(v)
+			data = data .. ( #data > 0 and "; " or "" ) ..
+				'[' .. k .. '] = ' .. v
+		end
+	end
+	return data
+end
+
+--- Recursively serialize given data to lua code, suitable for restoring
+-- with loadstring().
+-- @param val	Value containing the data to serialize
+-- @return		String value containing the serialized code
+-- @see			restore_data
+-- @see			get_bytecode
+function serialize_data(val)
+	if val == nil then
+		return "nil"
+	elseif type(val) == "number" then
+		return tostring(val)
+	elseif type(val) == "string" then
+		val = val:gsub("\\", "\\\\")
+				 :gsub("\r", "\\r")
+				 :gsub("\n", "\\n")
+				 :gsub('"','\\"')
+		return '"' .. val .. '"'
+	elseif type(val) == "table" then
+		return "{ " .. _serialize_table(val) .. " }"
+	else
+		return '"[unhandled data type:' .. type(val) .. ']"'
+	end
+end
+
+--- Restore data previously serialized with serialize_data().
+-- @param str	String containing the data to restore
+-- @return		Value containing the restored data structure
+-- @see			serialize_data
+-- @see			get_bytecode
+function restore_data(str)
+	return loadstring("return " .. str)()
+end
+
 
 --
 -- Byte code manipulation routines
 --
 
---- Return the current runtime bytecode of the given function. The byte code
--- will be stripped before it is returned.
--- @param f	Function value to return as bytecode
--- @return	String value containing the bytecode of the given function
-function get_bytecode(f)
-	local d = string.dump(f)
-	return d and strip_bytecode(d)
+--- Return the current runtime bytecode of the given data. The byte code
+-- will be stripped before it is returned if the given value is a function.
+-- @param val	Function value to return as bytecode
+-- @return		String value containing the bytecode of the given function
+function get_bytecode(val)
+	if type(val) == "function" then
+		local code = string.dump(val)
+		return code and strip_bytecode(code)
+	else
+		return string.dump( loadstring( "return " .. serialize_data(val) ) )
+	end
 end
 
 --- Strips unnescessary lua bytecode from given string. Information like line
