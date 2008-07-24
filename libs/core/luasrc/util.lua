@@ -440,8 +440,8 @@ end
 
 --- Return the current runtime bytecode of the given data. The byte code
 -- will be stripped before it is returned if the given value is a function.
--- @param val	Function value to return as bytecode
--- @return		String value containing the bytecode of the given function
+-- @param val	Value to return as bytecode
+-- @return		String value containing the bytecode of the given data
 function get_bytecode(val)
 	if type(val) == "function" then
 		local code = string.dump(val)
