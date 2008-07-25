@@ -58,15 +58,20 @@ function mode.write(self, section, value)
 	if value == "sta" then
 		-- ToDo: Move this away
 		if not luci.model.uci.get("network", "wan") then
-			luci.model.uci.set("network", "wan", "interface")
 			luci.model.uci.set("network", "wan", "proto", "none")
+			luci.model.uci.set("network", "wan", "ifname", " ")
 		end
 
-		luci.model.uci.set("network", "wan", "type", "bridge")
+		luci.model.uci.set("network", "wan", "_ifname", luci.model.uci.get("network", "wan", "ifname") or " ")
+		luci.model.uci.set("network", "wan", "ifname", " ")
 		luci.model.uci.save("network")
+		luci.model.uci.unload("network")
 
 		self.map:set(section, "network", "wan")
 	else
+		if luci.model.uci.get("network", "wan", "_ifname") then
+			luci.model.uci.set("network", "wan", "ifname", luci.model.uci.get("network", "wan", "_ifname"))
+		end
 		self.map:set(section, "network", "lan")
 	end
 
