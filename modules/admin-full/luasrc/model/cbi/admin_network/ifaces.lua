@@ -28,7 +28,7 @@ br = s:option(Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"
 br.enabled = "bridge"
 br.rmempty = true
 
-s:option(Value, "ifname", translate("interface"))
+s:option(Value, "ifname", translate("interface")).rmempty = true
 
 s:option(Value, "ipaddr", translate("ipaddress"))
 
