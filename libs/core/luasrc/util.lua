@@ -24,15 +24,15 @@ limitations under the License.
 
 ]]--
 
--- LuCI utility functions.
+--- LuCI utility functions.
 module("luci.util", package.seeall)
 
 --
 -- Class helper routines
 --
 
---- Creates a Class object (Python-style object model)
--- Creates a new class object which can be instantiated by calling itself.
+--- Create a Class object (Python-style object model).
+-- The class object can be instantiated by calling itself.
 -- Any class functions or shared parameters can be attached to this object.
 -- Attaching a table to the class object makes this table shared between
 -- all instances of this class. For object parameters use the __init__ function.
@@ -186,10 +186,10 @@ end
 -- String and data manipulation routines
 --
 
---- Escapes all occurences of the given character in given string.
+--- Escapes all occurrences of the given character in given string.
 -- @param s	String value containing unescaped characters
 -- @param c	String value with character to escape (optional, defaults to "\")
--- @return	String value with each occurence of character escaped with "\"
+-- @return	String value with each occurrence of character escaped with "\"
 function escape(s, c)
 	c = c or "\\"
 	return s:gsub(c, "\\" .. c)
@@ -206,15 +206,15 @@ function pcdata(value)
 	return value:gsub(">", "&gt;")
 end
 
---- Splits given string on a defined seperator sequence and return a table
+--- Splits given string on a defined separator sequence and return a table
 -- containing the resulting substrings. The optional max parameter specifies
 -- the number of bytes to process, regardless of the actual length of the given
--- string. The optional last parameter, regex, sepcifies whether the separator
+-- string. The optional last parameter, regex, specifies whether the separator
 -- sequence is interpreted as regular expression.
 -- @param str		String value containing the data to split up
 -- @param pat		String with separator pattern (optional, defaults to "\n")
--- @param max		Num of bytes to process (optional, default is string length)
--- @param regexp	Boolean indicating whether to interprete the separator
+-- @param max		Maximum times to split (optional)
+-- @param regex 	Boolean indicating whether to interpret the separator
 --					pattern as regular expression (optional, default is false)
 -- @return			Table containing the resulting substrings
 function split(str, pat, max, regex)
@@ -259,7 +259,7 @@ function trim(str)
 end
 
 --- Parse certain units from the given string and return the canonical integer
--- value or 0 if the unit is unknown. Upper- or lowercase is irrelevant.
+-- value or 0 if the unit is unknown. Upper- or lower case is irrelevant.
 -- Recognized units are:
 --	o "y"	- one year   (60*60*24*366)
 --  o "m"	- one month  (60*60*24*31)
