@@ -24,6 +24,7 @@ limitations under the License.
 
 ]]--
 
+--- LuCI Web Framework high-level HTTP functions.
 module("luci.http", package.seeall)
 local ltn12 = require("luci.ltn12")
 require("luci.http.protocol")

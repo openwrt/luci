@@ -28,7 +28,7 @@
 
 --]]
 
---- LuCI number conversation and bit manipulation functions.
+--- LuCI number conversion and bit manipulation functions.
 module("luci.bits", package.seeall);
 
 local hex2bin = {

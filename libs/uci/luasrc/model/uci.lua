@@ -29,6 +29,7 @@ local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
 local table = table
 
+--- LuCI UCI model library.
 module("luci.model.uci", function(m) setmetatable(m, {__index = uci}) end)
 
 savedir_default = "/tmp/.uci"
