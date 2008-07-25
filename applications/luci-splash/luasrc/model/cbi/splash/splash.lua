@@ -7,6 +7,7 @@ s = m:section(NamedSection, "general", "core", "Allgemein")
 s:option(Value, "leasetime", "Freigabezeit", "h")
 
 s = m:section(TypedSection, "iface", "Schnittstellen")
+s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
@@ -19,11 +20,13 @@ luci.model.uci.foreach("network", "interface",
 	end)
 
 s = m:section(TypedSection, "whitelist", "Automatische Freigabe")
+s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 s:option(Value, "mac", "MAC-Adresse")
 
 s = m:section(TypedSection, "blacklist", "Automatische Sperrung")
+s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 s:option(Value, "mac", "MAC-Adresse")
