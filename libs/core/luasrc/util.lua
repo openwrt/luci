@@ -417,6 +417,8 @@ function serialize_data(val)
 				 :gsub("\n", "\\n")
 				 :gsub('"','\\"')
 		return '"' .. val .. '"'
+	elseif type(val) == "boolean" then
+		return val and "true" or "false"
 	elseif type(val) == "table" then
 		return "{ " .. _serialize_table(val) .. " }"
 	else
