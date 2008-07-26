@@ -55,31 +55,31 @@ define Package/luci/libtemplate
   TITLE:=LuCI - Lua Configuration Interface
   URL:=http://luci.freifunk-halle.net/
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
-  SUBMENU:=LuCI - Libraries
+  SUBMENU:=LuCI Libraries
   DEPENDS:=+luci-core
 endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI - Freifunk Support (GERMAN ONLY)
+  SUBMENU:=LuCI Freifunk Support (GERMAN ONLY)
   DEPENDS:=+luci-mod-freifunk
 endef
 
 define Package/luci/httpdtemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI - Non-Forking HTTP-Daemon (EXPERIMENTAL)
+  SUBMENU:=LuCI Non-Forking HTTP-Daemon (EXPERIMENTAL)
   DEPENDS:=+luci-httpd
 endef
 
 define Package/luci/i18ntemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI - Translations
+  SUBMENU:=LuCI Translations
   DEPENDS:=+luci-web
 endef
 
 define Package/luci/thtemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI - Themes
+  SUBMENU:=LuCI Themes
   DEPENDS:=+luci-web
 endef
 
