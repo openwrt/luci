@@ -375,27 +375,14 @@ function clone(object, deep)
 	return copy
 end
 
--- Test whether the given table value is a numerically indexed table.
-function _is_numeric_table(t)
-	local k = pairs(t)(t)
-	return ( tonumber(k) ~= nil )
-end
-
 -- Serialize the contents of a table value.
 function _serialize_table(t)
 	local data = ""
-	if _is_numeric_table(t) then
-		for i, v in ipairs(t) do
-			v = serialize_data(v)
-			data = data .. ( #data > 0 and ", " or "" ) .. v
-		end
-	else
-		for k, v in pairs(t) do
-			k = serialize_data(k)
-			v = serialize_data(v)
-			data = data .. ( #data > 0 and "; " or "" ) ..
-				'[' .. k .. '] = ' .. v
-		end
+	for k, v in pairs(t) do
+		k = serialize_data(k)
+		v = serialize_data(v)
+		data = data .. ( #data > 0 and ", " or "" ) ..
+			'[' .. k .. '] = ' .. v
 	end
 	return data
 end
@@ -410,15 +397,13 @@ function serialize_data(val)
 	if val == nil then
 		return "nil"
 	elseif type(val) == "number" then
-		return tostring(val)
+		return val
 	elseif type(val) == "string" then
-		val = val:gsub("\\", "\\\\")
-				 :gsub("\r", "\\r")
-				 :gsub("\n", "\\n")
-				 :gsub('"','\\"')
-		return '"' .. val .. '"'
+		return string.format("%q", val)
 	elseif type(val) == "boolean" then
 		return val and "true" or "false"
+	elseif type(val) == "function" then
+		return string.format("loadstring(%q)", get_bytecode(val))
 	elseif type(val) == "table" then
 		return "{ " .. _serialize_table(val) .. " }"
 	else

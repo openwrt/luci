@@ -68,10 +68,8 @@ function compile(template)
 	template = template:gsub("(%s*)<%%(%-?)(.-)(%-?)%%>(%s*)", expr_add)
 	
 	local function sanitize(s)
-		s = luci.util.escape(s)
-		s = luci.util.escape(s, "'")
-		s = luci.util.escape(s, "\n")
-		return s
+		s = string.format("%q", s)
+		return s:sub(2, #s-1)
 	end
 	
 	-- Escape and sanitize all the template (all non-expressions)

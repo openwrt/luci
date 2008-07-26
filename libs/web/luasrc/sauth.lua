@@ -14,6 +14,7 @@ $Id$
 ]]--
 module("luci.sauth", package.seeall)
 require("luci.fs")
+require("luci.util")
 require("luci.config")
 
 
