@@ -62,7 +62,10 @@ function mode.write(self, section, value)
 			luci.model.uci.set("network", "wan", "ifname", " ")
 		end
 
-		luci.model.uci.set("network", "wan", "_ifname", luci.model.uci.get("network", "wan", "ifname") or " ")
+		local oldif = luci.model.uci.get("network", "wan", "ifname")
+		if oldif and oldif ~= " " then
+			luci.model.uci.set("network", "wan", "_ifname", oldif)
+		end
 		luci.model.uci.set("network", "wan", "ifname", " ")
 		luci.model.uci.save("network")
 		luci.model.uci.unload("network")
