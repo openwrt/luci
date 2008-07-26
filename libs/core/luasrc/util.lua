@@ -441,16 +441,19 @@ end
 --
 
 --- Return the current runtime bytecode of the given data. The byte code
--- will be stripped before it is returned if the given value is a function.
+-- will be stripped before it is returned.
 -- @param val	Value to return as bytecode
 -- @return		String value containing the bytecode of the given data
 function get_bytecode(val)
+	local code
+
 	if type(val) == "function" then
-		local code = string.dump(val)
-		return code and strip_bytecode(code)
+		code = string.dump(val)
 	else
-		return string.dump( loadstring( "return " .. serialize_data(val) ) )
+		code = string.dump( loadstring( "return " .. serialize_data(val) ) )
 	end
+
+	return code and strip_bytecode(code)
 end
 
 --- Strips unnescessary lua bytecode from given string. Information like line
