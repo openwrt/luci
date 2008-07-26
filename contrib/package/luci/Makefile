@@ -27,7 +27,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_BUILD_DEPENDS:=libnotimpl
-LUA_TARGET:=strip
+LUA_TARGET:=source
 PKG_SELECTED_MODULES:=
 
 
@@ -85,7 +85,7 @@ endef
 
 define Package/luci/webtemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI - Webinterface Components
+  SUBMENU:=LuCI Components
 endef
 
 
@@ -111,19 +111,26 @@ endef
 define Package/luci-core/config
        choice
                prompt "Build Target"
-               default PACKAGE_luci-core_compile
+               default PACKAGE_luci-core_source
 
        config PACKAGE_luci-core_compile
-               bool "Production"
+               bool "Precompiled"
+               
+       config PACKAGE_luci-core_stripped
+               bool "Stripped"
 
        config PACKAGE_luci-core_source
-               bool "Debug"
+               bool "Full Source"
 
        endchoice
 endef
 
 ifneq ($(CONFIG_PACKAGE_luci-core_compile),)
   LUA_TARGET:=compile
+endif
+
+ifneq ($(CONFIG_PACKAGE_luci-core_stripped),)
+  LUA_TARGET:=strip
 endif
 
 
@@ -283,42 +290,42 @@ endef
 
 ### Modules ###
 
-define Package/luci-mod-admin-core
+define Package/luci-admin-core
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt +luci-i18n-english
   TITLE:=Web UI Core Module
 endef
 
-define Package/luci-mod-admin-core/install
+define Package/luci-admin-core/install
 	$(call Package/luci/install/template,$(1),modules/admin-core)
 endef
 
 
-define Package/luci-mod-admin-mini
+define Package/luci-admin-mini
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core
+  DEPENDS+=+luci-admin-core
   TITLE:=LuCI Essentials - casual user's interface
 endef
 
-define Package/luci-mod-admin-mini/install
+define Package/luci-admin-mini/install
 	$(call Package/luci/install/template,$(1),modules/admin-mini)
 endef
 
 
-define Package/luci-mod-admin-full
+define Package/luci-admin-full
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core
+  DEPENDS+=+luci-admin-core
   TITLE:=LuCI Administration - power user's interface
 endef
 
-define Package/luci-mod-admin-full/install
+define Package/luci-admin-full/install
 	$(call Package/luci/install/template,$(1),modules/admin-full)
 endef
 
 
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-mod-admin-full
+  DEPENDS:=+luci-admin-full
   TITLE:=LuCI Freifunk module
 endef
 
@@ -347,7 +354,7 @@ endef
 
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core
+  DEPENDS+=+luci-admin-core
   TITLE:=Firewall and Portforwarding application
 endef
 
@@ -362,7 +369,7 @@ endef
 
 define Package/luci-app-olsr
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-full +olsrd-mod-txtinfo
+  DEPENDS+=+luci-admin-full +olsrd-mod-txtinfo
   TITLE:=OLSR configuration and status module
 endef
 
@@ -373,7 +380,7 @@ endef
 
 define Package/luci-app-qos
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +qos-scripts
+  DEPENDS+=+luci-admin-core +qos-scripts
   TITLE:=Quality of Service configuration module
 endef
 
@@ -399,7 +406,7 @@ endef
 
 define Package/luci-app-statistics
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-full +collectd +collectd-mod-rrdtool1 +rrdtool1
+  DEPENDS+=+luci-admin-full +collectd +collectd-mod-rrdtool1 +rrdtool1
   TITLE:=LuCI Statistics Application
 endef
 
@@ -414,7 +421,7 @@ endef
 
 define Package/luci-app-upnp
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +miniupnpd
+  DEPENDS+=+luci-admin-core +miniupnpd
   TITLE:=Universal Plug & Play configuration module
 endef
 
@@ -425,7 +432,7 @@ endef
 
 define Package/luci-app-ntpc
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +ntpclient
+  DEPENDS+=+luci-admin-core +ntpclient
   TITLE:=NTP time synchronisation client configuration module
 endef
 
@@ -436,7 +443,7 @@ endef
 
 define Package/luci-app-ddns
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-mod-admin-core +ddns-scripts
+  DEPENDS+=+luci-admin-core +ddns-scripts
   TITLE:=Dynamic DNS configuration module
 endef
 
@@ -568,13 +575,13 @@ ifneq ($(CONFIG_PACKAGE_luci-ff-augsburg),)
         PKG_SELECTED_MODULES+=applications/community-augsburg
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-mod-admin-core),)
+ifneq ($(CONFIG_PACKAGE_luci-admin-core),)
 	PKG_SELECTED_MODULES+=modules/admin-core
 endif
-ifneq ($(CONFIG_PACKAGE_luci-mod-admin-mini),)
+ifneq ($(CONFIG_PACKAGE_luci-admin-mini),)
 	PKG_SELECTED_MODULES+=modules/admin-mini
 endif
-ifneq ($(CONFIG_PACKAGE_luci-mod-admin-full),)
+ifneq ($(CONFIG_PACKAGE_luci-admin-full),)
 	PKG_SELECTED_MODULES+=modules/admin-full
 endif
 ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
@@ -661,9 +668,9 @@ $(eval $(call BuildPackage,luci-ff-hannover))
 $(eval $(call BuildPackage,luci-ff-berlin))
 $(eval $(call BuildPackage,luci-ff-augsburg))
 
-$(eval $(call BuildPackage,luci-mod-admin-core))
-$(eval $(call BuildPackage,luci-mod-admin-mini))
-$(eval $(call BuildPackage,luci-mod-admin-full))
+$(eval $(call BuildPackage,luci-admin-core))
+$(eval $(call BuildPackage,luci-admin-mini))
+$(eval $(call BuildPackage,luci-admin-full))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
