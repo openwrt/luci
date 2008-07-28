@@ -375,6 +375,19 @@ function clone(object, deep)
 	return copy
 end
 
+
+--- Create a dynamic table which automatically creates subtables.
+-- @return	Dynamic Table
+function create_dtable()
+        return setmetatable({}, { __index =
+                function(tbl, key)
+                        return rawget(tbl, key)
+                         or rawget(rawset(tbl, key, create_dtable()), key)
+                end
+        })
+end
+
+
 -- Serialize the contents of a table value.
 function _serialize_table(t)
 	local data = ""
