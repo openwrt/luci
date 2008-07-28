@@ -378,11 +378,11 @@ end
 
 --- Create a dynamic table which automatically creates subtables.
 -- @return	Dynamic Table
-function create_dtable()
+function dtable()
         return setmetatable({}, { __index =
                 function(tbl, key)
                         return rawget(tbl, key)
-                         or rawget(rawset(tbl, key, create_dtable()), key)
+                         or rawget(rawset(tbl, key, dtable()), key)
                 end
         })
 end
