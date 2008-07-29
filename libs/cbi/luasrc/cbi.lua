@@ -154,6 +154,9 @@ end
 function Map.parse(self, ...)
 	Node.parse(self, ...)
 	uci.save(self.config)
+	if luci.http.formvalue("cbi.apply") then
+		uci.commit(self.config)
+	end
 	uci.unload(self.config)
 end
 
