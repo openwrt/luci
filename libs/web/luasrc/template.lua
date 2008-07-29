@@ -23,6 +23,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
+
+--- LuCI template library.
 module("luci.template", package.seeall)
 
 require("luci.config")
@@ -50,9 +52,11 @@ viewns = {
 	include    = function(name) Template(name):render(getfenv(2)) end,
 }
 
--- Compiles a given template into an executable Lua module
+--- Manually  compile a given template into an executable Lua function
+-- @param template	LuCI template
+-- @return 			Lua template function
 function compile(template)	
-	-- Search all <% %> expressions (remember: Lua table indexes begin with #1)
+	-- Search all <% %> expressions
 	local function expr_add(ws1, skip1, command, skip2, ws2)
 		table.insert(expr, command)
 		return ( #skip1 > 0 and "" or ws1 ) .. 
@@ -114,7 +118,9 @@ function compile(template)
 	return loadstring(template)
 end
 
--- Oldstyle render shortcut
+--- Render a certain template.
+-- @param name		Template name
+-- @param scope		Scope to assign to template
 function render(name, scope, ...)
 	scope = scope or getfenv(2)
 	local s, t = luci.util.copcall(Template, name)

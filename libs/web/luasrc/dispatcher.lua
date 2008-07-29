@@ -23,6 +23,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
+
+--- LuCI web dispatcher.
 module("luci.dispatcher", package.seeall)
 require("luci.init")
 require("luci.http")
@@ -38,12 +40,16 @@ local index = nil
 local fi
 
 
--- Builds a URL
+--- Build the URL relative to the server webroot from given virtual path.
+-- @param ...	Virtual path
+-- @return 		Relative URL
 function build_url(...)
 	return luci.http.getenv("SCRIPT_NAME") .. "/" .. table.concat(arg, "/")
 end
 
--- Sends a 404 error code and renders the "error404" template if available
+--- Send a 404 error code and render the "error404" template if available.
+-- @param message	Custom error message (optional)
+-- @return			false
 function error404(message)
 	luci.http.status(404, "Not Found")
 	message = message or "Not Found"
@@ -56,7 +62,9 @@ function error404(message)
 	return false
 end
 
--- Sends a 500 error code and renders the "error500" template if available
+--- Send a 500 error code and render the "error500" template if available.
+-- @param message	Custom error message (optional)#
+-- @return			false
 function error500(message)
 	luci.http.status(500, "Internal Server Error")
 
@@ -68,7 +76,9 @@ function error500(message)
 	return false
 end
 
--- Renders an authorization form
+--- Render and evaluate the system authentication login form.
+-- @param default	Default username
+-- @return			Authentication status
 function sysauth(default)
 	local user = luci.http.formvalue("username")
 	local pass = luci.http.formvalue("password")
@@ -87,7 +97,8 @@ function sysauth(default)
 	end
 end
 
--- Creates a request object for dispatching
+--- Dispatch an HTTP request.
+-- @param request	LuCI HTTP Request object
 function httpdispatch(request)
 	luci.http.context.request = request
 	context.request = {}
@@ -101,7 +112,8 @@ function httpdispatch(request)
 	luci.http.close()
 end
 
--- Dispatches a request
+--- Dispatches a LuCI virtual path.
+-- @param request	Virtual path
 function dispatch(request)
 	context.path = request
 	
@@ -187,7 +199,7 @@ function dispatch(request)
 	end
 end
 
--- Generates the dispatching tree
+--- Generate the dispatching index using the best possible strategy.
 function createindex()
 	local path = luci.sys.libpath() .. "/controller/"
 	local suff = ".lua"
@@ -199,7 +211,9 @@ function createindex()
 	end
 end
 
--- Uses fastindex to create the dispatching tree
+--- Generate the dispatching index using the fastindex C-indexer.
+-- @param path		Controller base directory
+-- @param suffix	Controller file suffix
 function createindex_fastindex(path, suffix)
 	index = {}
 		
@@ -215,8 +229,9 @@ function createindex_fastindex(path, suffix)
 	end
 end
 
--- Calls the index function of all available controllers
--- Fallback for transition purposes / Leave it in as long as it works otherwise throw it away
+--- Generate the dispatching index using the native file-cache based strategy.
+-- @param path		Controller base directory
+-- @param suffix	Controller file suffix
 function createindex_plain(path, suffix)
 	index = {}
 
@@ -265,7 +280,8 @@ function createindex_plain(path, suffix)
 	end
 end
 
--- Creates the dispatching tree from the index
+--- Create the dispatching tree from the index.
+-- Build the index before if it does not exist yet.
 function createtree()
 	if not index then
 		createindex()
@@ -297,7 +313,12 @@ function createtree()
 	end
 end
 
--- Reassigns a node to another position
+--- Clone a node of the dispatching tree to another position.
+-- @param	path	Virtual path destination
+-- @param	clone	Virtual path source
+-- @param	title	Destination node title (optional)
+-- @param	order	Destination node order value (optional)
+-- @return			Dispatching tree node
 function assign(path, clone, title, order)
 	local obj  = node(unpack(path))
 	obj.nodes  = nil
@@ -320,7 +341,12 @@ function assign(path, clone, title, order)
 	return obj
 end
 
--- Shortcut for creating a dispatching node
+--- Create a new dispatching node and define common parameters.
+-- @param	path	Virtual path
+-- @param	target	Target function to call when dispatched. 
+-- @param	title	Destination node title
+-- @param	order	Destination node order value (optional)
+-- @return			Dispatching tree node
 function entry(path, target, title, order)
 	local c = node(unpack(path))
 	
@@ -332,7 +358,9 @@ function entry(path, target, title, order)
 	return c
 end
 
--- Fetch a dispatching node
+--- Fetch or create a new dispatching node.
+-- @param	...		Virtual path
+-- @return			Dispatching tree node
 function node(...)
 	local c = context.tree
 	arg.n = nil
@@ -353,6 +381,9 @@ function node(...)
 end
 
 -- Subdispatchers --
+
+--- Create a redirect to another dispatching node.
+-- @param	...		Virtual path destination
 function alias(...)
 	local req = arg
 	return function()
@@ -360,6 +391,9 @@ function alias(...)
 	end
 end
 
+--- Rewrite the first x path values of the request.
+-- @param	n		Number of path values to replace
+-- @param	...		Virtual path to replace removed path values with
 function rewrite(n, ...)
 	local req = arg
 	return function()
@@ -375,16 +409,23 @@ function rewrite(n, ...)
 	end
 end
 
+--- Create a function-call dispatching target.
+-- @param	nane	Target function of local controller 
+-- @param	...		Additional parameters passed to the function
 function call(name, ...)
 	local argv = {...}
 	return function() return getfenv()[name](unpack(argv)) end
 end
 
+--- Create a template render dispatching target.
+-- @param	nane	Template to be rendered
 function template(name)
 	require("luci.template")
 	return function() luci.template.render(name) end
 end
 
+--- Create a CBI model dispatching target.
+-- @param	model	CBI model tpo be rendered
 function cbi(model)
 	require("luci.cbi")
 	require("luci.template")

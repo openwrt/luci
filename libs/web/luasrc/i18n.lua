@@ -24,6 +24,7 @@ limitations under the License.
 
 ]]--
 
+--- LuCI translation library.
 module("luci.i18n", package.seeall)
 require("luci.sys")
 
@@ -33,12 +34,16 @@ loaded  = {}
 context = luci.util.threadlocal()
 default = "en"
 
--- Clears the translation table
+--- Clear the translation table.
 function clear()
 	table = {}
 end
 
--- Loads a translation and copies its data into the global translation table
+--- Load a translation and copy its data into the translation table.
+-- @param file	Language file
+-- @param lang	Two-letter language code
+-- @param force	Force reload even if already loaded (optional)
+-- @return		Success status
 function load(file, lang, force)
 	lang = lang or ""
 	if force or not loaded[lang] or not loaded[lang][file] then
@@ -58,25 +63,36 @@ function load(file, lang, force)
 	end
 end
 
--- Same as load but autocompletes the filename with .LANG from config.lang
+--- Load a translation file using the default translation language.
+-- Alternatively load the translation of the fallback language.
+-- @param file	Language file
+-- @param force	Force reload even if already loaded (optional)
 function loadc(file, force)
 	load(file, default, force)
 	return load(file, context.lang, force)
 end
 
--- Sets the context language
+--- Set the context default translation language.
+-- @param lang	Two-letter language code
 function setlanguage(lang)
 	context.lang = lang
 end
 
--- Returns the i18n-value defined by "key" or if there is no such: "default"
+--- Return the translated value for a specific translation key.
+-- @param key	Translation key
+-- @param def	Default translation
+-- @return		Translated string
 function translate(key, def)
 	return (table[context.lang] and table[context.lang][key])
 		or (table[default] and table[default][key])
 		or def
 end
 
--- Translate shourtcut with sprintf/string.format inclusion
+--- Return the translated value for a specific translation key and use it as sprintf pattern.
+-- @param key		Translation key
+-- @param default	Default translation
+-- @param ...		Format parameters
+-- @return			Translated and formatted string
 function translatef(key, default, ...)
 	return translate(key, default):format(...)
 end

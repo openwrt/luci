@@ -12,6 +12,8 @@ You may obtain a copy of the License at
 $Id$
 
 ]]--
+
+--- LuCI session library.
 module("luci.sauth", package.seeall)
 require("luci.fs")
 require("luci.util")
@@ -22,7 +24,7 @@ luci.config.sauth = luci.config.sauth or {}
 sessionpath = luci.config.sauth.sessionpath
 sessiontime = tonumber(luci.config.sauth.sessiontime)
 
-
+--- Manually clean up expired sessions.
 function clean()
 	local now   = os.time()
 	local files = luci.fs.dir(sessionpath)
@@ -40,11 +42,15 @@ function clean()
 	end
 end
 
+--- Prepare session storage by creating the session directory.
 function prepare()
 	luci.fs.mkdir(sessionpath)
 	luci.fs.chmod(sessionpath, "a-rwx,u+rwx")
 end
 
+--- Read a session and return its content.
+-- @param id	Session identifier
+-- @return		Session data
 function read(id)
 	if not id then
 		return
@@ -53,6 +59,10 @@ function read(id)
 	return luci.fs.readfile(sessionpath .. "/" .. id)
 end
 
+
+--- Write session data to a session file.
+-- @param id	Session identifier
+-- @param data	Session data
 function write(id, data)
 	if not luci.fs.stat(sessionpath) then
 		prepare()
