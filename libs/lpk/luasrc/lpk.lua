@@ -31,7 +31,7 @@ else
 			os.exit(task.register.error or 1)
 		end
 	else
-		luci.util.perror(error .. "\n")
+		luci.util.perror((error or "Unknown Error") .. "\n")
 		luci.lpk.util.splash()
 		os.exit(1)
 	end		

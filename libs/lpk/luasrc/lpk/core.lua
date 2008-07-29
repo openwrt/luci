@@ -22,6 +22,10 @@ function Task.rollback(self)
 	end
 	
 	local state = table.remove(self.done)
+	if not state.rollback then
+		return true
+	end
+	
 	local ret, err = pcall(state.rollback, state, self.register)
 	
 	if ret then
@@ -33,7 +37,7 @@ end
 
 function Task.step(self)
 	local state = table.remove(self.work)
-	local ret, next = pcall(state.process, state, self.register)
+	local ret, next = pcall(state.process, self.register)
 	
 	if ret then
 		if next then
@@ -42,7 +46,8 @@ function Task.step(self)
 				table.insert(self.work, state)
 				table.insert(self.work, nstate)
 			else
-				self.register.error = "Unknown state: " .. next
+				self.register.error = 2
+				self.register.errstr = "Unknown state: " .. next
 				return false
 			end
 		else
@@ -98,5 +103,5 @@ function Machine.task(self, name, ...)
 	
 	local register = {}
 	
-	return start:entry(register) and Task(self, register, start)
+	return start.entry(register, ...) and Task(self, register, start)
 end 
