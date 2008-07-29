@@ -18,6 +18,7 @@ luabuild:
 	for i in $(MODULES); do make -C$$i lua$(LUA_TARGET); done
 
 clean:
+	rm -rf docs
 	for i in $(MODULES); do make -C$$i clean; done
 
 
@@ -57,6 +58,9 @@ runshell: hostenv
 
 hostclean: clean
 	rm -rf host
+
+apidocs: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "build/makedocs.sh host/luci/ docs"
 
 run:
 	#	make run is deprecated				#

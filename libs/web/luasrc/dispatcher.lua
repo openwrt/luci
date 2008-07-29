@@ -410,7 +410,7 @@ function rewrite(n, ...)
 end
 
 --- Create a function-call dispatching target.
--- @param	nane	Target function of local controller 
+-- @param	name	Target function of local controller 
 -- @param	...		Additional parameters passed to the function
 function call(name, ...)
 	local argv = {...}
@@ -418,7 +418,7 @@ function call(name, ...)
 end
 
 --- Create a template render dispatching target.
--- @param	nane	Template to be rendered
+-- @param	name	Template to be rendered
 function template(name)
 	require("luci.template")
 	return function() luci.template.render(name) end

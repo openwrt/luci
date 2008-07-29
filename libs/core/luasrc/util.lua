@@ -320,7 +320,7 @@ end
 --- Combines two or more numerically indexed tables into one.
 -- @param tbl1	Table value to combine
 -- @param tbl2	Table value to combine
--- @param tblN	More values to combine
+-- @param ...	More tables to combine
 -- @return		Table value containing all values of given tables
 function combine(...)
 	local result = {}
