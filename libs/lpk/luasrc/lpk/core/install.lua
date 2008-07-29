@@ -7,9 +7,9 @@ end
 
 function process(register)
 	register.sometext = "Test"
-	if not register.retreived then
-		print("Step down to retreive")
-		return "retreive"
+	if not register.retrieved then
+		print("Step down to retrieve")
+		return "retrieve"
 	else
 		print("Coming up again")
 	end
