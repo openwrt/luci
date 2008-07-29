@@ -68,9 +68,12 @@ function Task.perform(self)
 			stat, err = self:rollback()
 		until not stat
 		
-		assert(not err, "Machine broken!")
+		if err then
+			self.register.errstr = err
+			self.register.error = 2
+		end
 		
-		return false, self.register.error
+		return false
 	end	
 end
 
@@ -89,15 +92,11 @@ end
 function Machine.task(self, name, ...)
 	local start = self:state(name)
 	
-	if not start or not start.entry then
-		error("No such command: " .. name)
+	if type(start) ~= "table" or not start.entry then
+		return false, "No such command: " .. name
 	end
 	
 	local register = {}
 	
-	if start:entry(register) then
-		return Task(self, register, start)
-	else
-		return nil, register.error
-	end
+	return start:entry(register) and Task(self, register, start)
 end 

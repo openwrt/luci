@@ -37,3 +37,23 @@ function getopt( arg, options )
 	end
 	return tab, args
 end
+
+function splash()
+	require("luci.lpk")
+	luci.util.perror(string.format("%s v%s\n%s",
+	 luci.lpk.__appname__, luci.lpk.__version__, luci.lpk.__cpyrght__))
+	luci.util.perror([[
+	
+Usage:
+ lpk [options] <command> [arguments]
+ lpk [options] install|remove pkg1 [pkg2] [...] [pkgn]
+
+Commands:
+ install	-	Install packages
+ remove		-	Remove packages
+ purge		-	Remove packages and their configuration files
+ 
+Options:
+ --force-depends	-	Ignore unresolvable dependencies
+]])
+end
