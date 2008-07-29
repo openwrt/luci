@@ -174,10 +174,7 @@ end
 		<div>
 			<% if ucic > 0 then %>
 			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:unsavedchanges%>: <%=ucic%></a>
-			<ul>
-				<li><a href="<%=controller%>/<%=category%>/uci/apply"><%:apply%></a></li>
-				<li><a href="<%=controller%>/<%=category%>/uci/revert"><%:revert%></a></li>
-			</ul>
+			<% submenu(category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
 			<% else %>
 			<a href="#"><%:changes%>: 0</a>
 			<% end %>

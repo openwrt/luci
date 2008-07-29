@@ -17,9 +17,10 @@ function index()
 	local i18n = luci.i18n.translate
 	
 	entry({"admin", "uci"}, nil, i18n("config"))
-	entry({"admin", "uci", "changes"}, call("action_changes"), i18n("changes"))
-	entry({"admin", "uci", "revert"}, call("action_revert"), i18n("revert"))
-	entry({"admin", "uci", "apply"}, call("action_apply"), i18n("apply"))
+	entry({"admin", "uci", "changes"}, call("action_changes"), i18n("changes"), 40)
+	entry({"admin", "uci", "revert"}, call("action_revert"), i18n("revert"), 30)
+	entry({"admin", "uci", "apply"}, call("action_apply"), i18n("apply"), 20)
+	entry({"admin", "uci", "saveapply"}, call("action_apply"), i18n("saveapply"), 10)
 end
 
 function convert_changes(changes)
@@ -52,6 +53,7 @@ function action_changes()
 end
 
 function action_apply()
+	local path = luci.dispatcher.context.path
 	local changes = luci.model.uci.changes()
 	local output  = ""
 	
@@ -62,9 +64,11 @@ function action_apply()
 		-- Collect files to be applied and commit changes
 		for r, tbl in pairs(changes) do
 			if r then
-				luci.model.uci.load(r)
-				luci.model.uci.commit(r)
-				luci.model.uci.unload(r)
+				if path[#path] ~= "apply" then
+					luci.model.uci.load(r)
+					luci.model.uci.commit(r)
+					luci.model.uci.unload(r)
+				end
 				if luci.config.uci_oncommit and luci.config.uci_oncommit[r] then
 					run[luci.config.uci_oncommit[r]] = true
 				end

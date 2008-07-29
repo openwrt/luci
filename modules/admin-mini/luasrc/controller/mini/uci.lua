@@ -18,9 +18,9 @@ function index()
 	local i18n = luci.i18n.translate
 	
 	entry({"mini", "uci"}, nil, i18n("config"))
-	entry({"mini", "uci", "changes"}, call("action_changes"), i18n("changes"))
-	entry({"mini", "uci", "revert"}, call("action_revert"), i18n("revert"))
-	entry({"mini", "uci", "apply"}, call("action_apply"), i18n("apply"))
+	entry({"mini", "uci", "changes"}, call("action_changes"), i18n("changes"), 30)
+	entry({"mini", "uci", "revert"}, call("action_revert"), i18n("revert"), 20)
+	entry({"mini", "uci", "apply"}, call("action_apply"), i18n("saveapply"), 10)
 end
 
 function convert_changes(changes)

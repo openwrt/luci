@@ -146,15 +146,13 @@ end
 				end
 		%>
 		<div><%:config%>
-			<ul>
 			<% if ucic > 0 then %>
-				<li><a href="<%=controller%>/admin/uci/changes"><%:changes%>: <%=ucic%></a></li>
-				<li><a href="<%=controller%>/admin/uci/apply"><%:apply%></a></li>
-				<li><a href="<%=controller%>/admin/uci/revert"><%:revert%></a></li>
+				<% submenu(category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
 			<% else %>
-				<li><%:changes%>: 0</li>
+				<ul>
+					<li><%:changes%>: 0</li>
+				</ul>
 			<% end %>
-			</ul>
 		</div>
 		<% end %>
 	</div>

@@ -78,6 +78,7 @@ reset = "Zurücksetzen"
 revert = "Verwerfen"
 
 save = "Speichern"
+saveapply = "Speichern & Anwenden"
 service = "Dienst"
 services = "Dienste"
 settings = "Einstellungen"
