@@ -147,7 +147,7 @@ end
 		%>
 		<div><%:config%>
 			<% if ucic > 0 then %>
-				<% submenu(category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
+				<% submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
 			<% else %>
 				<ul>
 					<li><%:changes%>: 0</li>
