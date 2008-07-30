@@ -13,6 +13,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 m = Map("wireless", translate("wifi"), translate("a_w_devices1"))
+m:chain("network")
 
 s = m:section(TypedSection, "wifi-device", translate("devices"))
 
@@ -67,8 +68,6 @@ function mode.write(self, section, value)
 			luci.model.uci.set("network", "wan", "_ifname", oldif)
 		end
 		luci.model.uci.set("network", "wan", "ifname", " ")
-		luci.model.uci.save("network")
-		luci.model.uci.unload("network")
 
 		self.map:set(section, "network", "wan")
 	else

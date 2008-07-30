@@ -144,20 +144,44 @@ function Map.__init__(self, config, ...)
 	Node._i18n(self, config, nil, nil, ...)
 
 	self.config = config
+	self.parsechain = {self.config}
 	self.template = "cbi/map"
 	if not uci.load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
 end
 
+
+-- Chain foreign config
+function Map.chain(self, config)
+	table.insert(self.parsechain, config)
+end
+
 -- Use optimized UCI writing
 function Map.parse(self, ...)
 	Node.parse(self, ...)
-	uci.save(self.config)
-	if luci.http.formvalue("cbi.apply") then
-		uci.commit(self.config)
+	for i, config in ipairs(self.parsechain) do
+		uci.save(config)
 	end
-	uci.unload(self.config)
+	if luci.http.formvalue("cbi.apply") then
+		for i, config in ipairs(self.parsechain) do
+			uci.commit(config)
+			if luci.config.uci_oncommit and luci.config.uci_oncommit[config] then
+				luci.sys.exec(luci.config.uci_oncommit[config])
+			end
+
+			-- Refresh data because commit changes section names
+			uci.unload(config)
+			uci.load(config)
+		end
+
+		-- Reparse sections
+		Node.parse(self, ...)
+
+	end
+	for i, config in ipairs(self.parsechain) do
+		uci.unload(config)
+	end
 end
 
 -- Creates a child section
