@@ -80,17 +80,17 @@ function compile(template)
 	template = sanitize(template)
 
 	-- Template module header/footer declaration
-	local header = "write('"
-	local footer = "')"
+	local header = 'write("'
+	local footer = '")'
 	
 	template = header .. template .. footer
 	
 	-- Replacements
-	local r_include = "')\ninclude('%s')\nwrite('"
-	local r_i18n    = "'..translate('%1','%2')..'"
-	local r_i18n2    = "'..translate('%1', '')..'"
-	local r_pexec   = "'..(%s or '')..'"
-	local r_exec    = "')\n%s\nwrite('"
+	local r_include = '")\ninclude("%s")\nwrite("'
+	local r_i18n    = '"..translate("%1","%2").."'
+	local r_i18n2    = '"..translate("%1", "").."'
+	local r_pexec   = '"..(%s or "").."'
+	local r_exec    = '")\n%s\nwrite("'
 	
 	-- Parse the expressions
 	for k,v in pairs(expr) do
