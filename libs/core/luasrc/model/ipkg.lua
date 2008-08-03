@@ -28,8 +28,9 @@ limitations under the License.
 module("luci.model.ipkg", package.seeall)
 require("luci.sys")
 require("luci.util")
+require("luci.fs")
 
-ipkg = "ipkg"
+ipkg = luci.fs.access("/bin/opkg") and "opkg" or "ipkg"
 
 -- Returns repository information
 function info(pkg)
