@@ -12,6 +12,7 @@ while [ -n "$1" ]; do
         case "$1" in
                 -k)
                 		shift
+				export SAVE_CONFIG=1
                 		export KEEP_PATTERN="$1"
                 ;;
                 -*)
