@@ -24,8 +24,10 @@ $Id$
 		<input type="file" size="30" name="image" />
 		<br />
 		<br />
+		<% if keep_avail then -%>
 		<input type="checkbox" name="keepcfg" value="1" checked="checked" />
 		<span class="bold"><%:a_s_flash_keepcfg%></span>
+		<% end -%>
 	</div>
 	<div>
 		<input type="submit" value="<%:a_s_flash_fwupgrade%>" />

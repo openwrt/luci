@@ -28,7 +28,7 @@ function index()
 end
 
 function action_backup()
-	local reset_avail = luci.sys.exec([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
+	local reset_avail = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 	local restore_cmd = "gunzip | tar -xC/ >/dev/null 2>&1"
 	local backup_cmd  = "tar -c %s | gzip 2>/dev/null"
 	
@@ -81,7 +81,10 @@ function action_upgrade()
 
 	local ret  = nil
 	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
+	local broadcom = os.execute('grep brcm_ /lib/upgrade/platform.sh >/dev/null 2>&1') == 0
 	local tmpfile = "/tmp/firmware.img"
+	
+	local keep_avail = not broadcom
 
 	local file
 	luci.http.setfilehandler(
@@ -99,13 +102,13 @@ function action_upgrade()
 	)
 
 	local fname   = luci.http.formvalue("image")
-	local keepcfg = luci.http.formvalue("keepcfg")
+	local keepcfg = keep_avail and luci.http.formvalue("keepcfg")
 
 	if plat and fname then
 		ret = luci.sys.flash(tmpfile, keepcfg and _keep_pattern())
 	end
 
-	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret})
+	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
 end
 
 function action_passwd()
