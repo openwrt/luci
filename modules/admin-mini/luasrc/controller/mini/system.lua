@@ -22,8 +22,50 @@ function index()
 	entry({"mini", "system"}, alias("mini", "system", "index"), i18n("system"), 40)
 	entry({"mini", "system", "index"}, cbi("mini/system"), i18n("general"), 1)
 	entry({"mini", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw"), 10)
+	entry({"mini", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 80)
 	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 90)
 	entry({"mini", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 100)
+end
+
+function action_backup()
+	local reset_avail = luci.sys.exec([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
+	local restore_cmd = "gunzip | tar -xC/ >/dev/null 2>&1"
+	local backup_cmd  = "tar -c %s | gzip 2>/dev/null"
+	
+	local restore_fpi 
+	luci.http.setfilehandler(
+		function(meta, chunk, eof)
+			if not restore_fpi then
+				restore_fpi = io.popen(restore_cmd, "w")
+			end
+			if chunk then
+				restore_fpi:write(chunk)
+			end
+			if eof then
+				restore_fpi:close()
+			end
+		end
+	)
+		  
+	local upload = luci.http.formvalue("archive")
+	local backup = luci.http.formvalue("backup")
+	local reset  = reset_avail and luci.http.formvalue("reset")
+	
+	if upload and #upload > 0 then
+		luci.template.render("mini/applyreboot")
+		luci.sys.reboot()
+	elseif backup then
+		luci.util.perror(backup_cmd:format(_keep_pattern()))
+		local backup_fpi = io.popen(backup_cmd:format(_keep_pattern()), "r")
+		luci.http.header('Content-Disposition', 'attachment; filename="backup.tar.gz"')
+		luci.http.prepare_content("application/x-targz")
+		luci.ltn12.pump.all(luci.ltn12.source.file(backup_fpi), luci.http.write)
+	elseif reset then
+		luci.template.render("mini/applyreboot")
+		luci.sys.exec("mtd -r erase rootfs_data")
+	else
+		luci.template.render("mini/backup", {reset_avail = reset_avail})
+	end
 end
 
 function action_reboot()
@@ -60,17 +102,7 @@ function action_upgrade()
 	local keepcfg = luci.http.formvalue("keepcfg")
 
 	if plat and fname then
-		local kpattern = nil
-		if keepcfg then
-			local files = luci.model.uci.get_all("luci", "flash_keep")
-			if files.luci and files.luci.flash_keep then
-				kpattern = ""
-				for k,v in pairs(files.luci.flash_keep) do
-					kpattern = kpattern .. " " ..  v
-				end
-			end
-		end
-		ret = luci.sys.flash(tmpfile, kpattern)
+		ret = luci.sys.flash(tmpfile, keepcfg and _keep_pattern())
 	end
 
 	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret})
@@ -90,4 +122,16 @@ function action_passwd()
 	end
 
 	luci.template.render("mini/passwd", {stat=stat})
+end
+
+function _keep_pattern()
+	local kpattern = ""
+	local files = luci.model.uci.get_all("luci", "flash_keep")
+	if files then
+		kpattern = ""
+		for k,v in pairs(files) do
+			kpattern = kpattern .. " " ..  v
+		end
+	end
+	return kpattern
 end

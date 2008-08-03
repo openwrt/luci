@@ -100,6 +100,18 @@ a_s_reboot_do = "Perform reboot"
 a_s_reboot_running = "Please wait: Device rebooting..."
 a_s_reboot_u = "Warning: There are unsaved changes that will be lost while rebooting!"
 
+a_s_applyreboot1 = "Changes applied."
+
+a_s_backup = "Backup / Restore"
+a_s_backup_backup = "Create backup"
+a_s_backup_archive = "Backup Archive"
+a_s_backup_reset = "Reset router to defaults"
+a_s_backup_reset1 = "Proceed reverting all settings and resetting to firmware defaults?"
+a_s_backup_restore = "Restore backup"
+a_s_backup1 = [[Here you can backup and restore your router configuration
+and - if possible - reset the router to the default settings.]]
+
+
 a_srv_http = "HTTP-Server"
 a_srv_ssh = "SSH-Server"
 

@@ -282,3 +282,14 @@ wlanscan = "WLAN-Scan"
 m_n_keepalive = "automatisch neu verbinden"
 m_n_dialondemand = "trennen bei Inaktivität nach"
 m_n_pptp_server = "PPTP-Server"
+
+a_s_applyreboot1 = "Änderungen angewandt."
+
+a_s_backup = "Sichern / Wiederherstellen"
+a_s_backup_backup = "Sicherung erstellen"
+a_s_backup_archive = "Sicherungsarchiv"
+a_s_backup_reset = "Grundeinstellungen wiederherstellen"
+a_s_backup_reset1 = "Alle aktuellen Einstellungen verwerfen und Grundeinstellungen wiederherstellen?"
+a_s_backup_restore = "Sicherung wiederherstellen"
+a_s_backup1 = [[Auf dieser Seite können Sicherungen der Konfiguration erstellt und eingespielt werden
+und - wenn möglich - die Grundeinstellungen wiederhergestellt werden.]]
