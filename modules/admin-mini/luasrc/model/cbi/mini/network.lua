@@ -16,7 +16,12 @@ m = Map("network", "Network")
 
 s = m:section(NamedSection, "lan", "interface", translate("m_n_local"))
 s:option(Value, "ipaddr", translate("ipaddress"))
-s:option(Value, "netmask", translate("netmask"))
+
+nm = s:option(Value, "netmask", translate("netmask"))
+nm:value("255.255.255.0")
+nm:value("255.255.0.0")
+nm:value("255.0.0.0")
+
 gw = s:option(Value, "gateway", translate("gateway") .. translate("cbi_optional"))
 gw.rmempty = true
 dns = s:option(Value, "dns", translate("dnsserver") .. translate("cbi_optional"))

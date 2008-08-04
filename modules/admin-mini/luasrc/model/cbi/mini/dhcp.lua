@@ -59,7 +59,12 @@ s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 
-s:option(Value, "macaddr", translate("macaddress"))
-s:option(Value, "ipaddr", translate("ipaddress"))
+mac = s:option(Value, "macaddr", translate("macaddress"))
+ip = s:option(Value, "ipaddr", translate("ipaddress"))
+for i, dataset in ipairs(luci.sys.net.arptable()) do
+	ip:value(dataset["IP address"])
+	mac:value(dataset["HW address"],
+	 dataset["HW address"] .. " (" .. dataset["IP address"] .. ")")
+end
 
 return m, m2
