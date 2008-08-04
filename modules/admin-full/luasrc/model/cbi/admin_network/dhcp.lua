@@ -24,6 +24,7 @@ iface = s:option(ListValue, "interface", translate("interface"))
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
+			iface.default = iface.default or section[".name"]
 			iface:value(section[".name"])
 			s:depends("interface", section[".name"])
 		end
