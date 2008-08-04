@@ -14,4 +14,17 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 	<input type="text" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. attr("value", self:cfgvalue(section)) .. ifattr(self.size, "size") .. ifattr(self.maxlength, "maxlength") %> />
+	<% if #self.keylist > 0 then -%>
+	<script type="text/javascript">
+		cbi_combobox_init('<%=cbid%>', {
+		<%-
+			for i, k in ipairs(self.keylist) do
+		-%>
+			<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>,
+		<%-
+			end
+		-%>
+		}, '<%:cbi_select%>', '<%:cbi_manual%>');
+	</script>
+	<% end -%>
 <%+cbi/valuefooter%>

@@ -595,7 +595,10 @@ function AbstractValue.render(self, s, scope)
 			if cond then
 				return string.format(
 					' %s="%s"', tostring(key),
-					tostring( val or scope[key] or self[key] or "" )
+					tostring( val
+					 or scope[key]
+					 or (type(self[key]) ~= "function" and self[key])
+					 or "" )
 				)
 			else
 				return ''
@@ -642,17 +645,14 @@ Value = class(AbstractValue)
 function Value.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/value"
-
-	self.maxlength  = nil
+	self.keylist = {}
+	self.vallist = {}
 end
 
--- This validation is a bit more complex
-function Value.validate(self, val)
-	if self.maxlength and tostring(val):len() > self.maxlength then
-		val = nil
-	end
-
-	return val
+function Value.value(self, key, val)
+	val = val or key
+	table.insert(self.keylist, tostring(key))
+	table.insert(self.vallist, tostring(val))
 end
 
 
