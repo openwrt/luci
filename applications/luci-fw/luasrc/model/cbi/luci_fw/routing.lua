@@ -11,26 +11,20 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("luci_fw", translate("fw_routing"), translate("fw_routing1"))
+m = Map("firewall", translate("fw_forwarding"), translate("fw_forwarding1"))
 
-s = m:section(TypedSection, "routing", "")
+s = m:section(TypedSection, "forwarding", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "iface")
-oface = s:option(ListValue, "oface")
+iface = s:option(ListValue, "src")
+oface = s:option(ListValue, "dest")
 
-luci.model.uci.foreach("network", "interface",
+luci.model.uci.foreach("firewall", "zone",
 	function (section)
-		if section[".name"] ~= "loopback" then
-			iface:value(section[".name"])
-			oface:value(section[".name"])
-		end
+			iface:value(section.name)
+			oface:value(section.name)
 	end)
-
-s:option(Flag, "fwd", "FWD").rmempty = true
-s:option(Flag, "nat", "NAT").rmempty = true
-s:option(Flag, "bidi", "<->").rmempty = true
 
 return m

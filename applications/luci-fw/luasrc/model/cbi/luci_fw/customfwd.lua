@@ -11,34 +11,26 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("firewall", translate("fw_rules"), translate("fw_rules1"))
+require("luci.sys")
+m = Map("firewall", translate("fw_portfw"), translate("fw_portfw1"))
 
-s = m:section(TypedSection, "rule", "")
+
+s = m:section(TypedSection, "redirect", "")
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "src")
-iface:value("")
-iface.rmempty = true
+name = s:option(Value, "_name", translate("name"))
+name.rmempty = true
+name.size = 10
 
-oface = s:option(ListValue, "dest")
-oface.optional = true
-
+iface = s:option(ListValue, "src", translate("fw_zone"))
+iface.default = "wan"
 luci.model.uci.foreach("firewall", "zone",
 	function (section)
 		iface:value(section.name)
-		oface:value(section.name)
 	end)
-
-proto = s:option(ListValue, "proto", translate("protocol"))
-proto.optional = true
-proto:value("")
-proto:value("tcp", "TCP")
-proto:value("udp", "UDP")
-proto:value("icmp", "ICMP")
-
+	
 s:option(Value, "src_ip").optional = true
-s:option(Value, "dest_ip").optional = true
 s:option(Value, "src_mac").optional = true
 
 sport = s:option(Value, "src_port")
@@ -46,16 +38,25 @@ sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 
-dport = s:option(Value, "dest_port")
+proto = s:option(ListValue, "proto", translate("protocol"))
+proto.optional = true
+proto:value("")
+proto:value("tcp", "TCP")
+proto:value("udp", "UDP")
+
+dport = s:option(Value, "src_dport")
+dport.size = 5
 dport.optional = true
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 
-jump = s:option(ListValue, "target")
-jump.rmempty = true
-jump:value("DROP", translate("fw_drop"))
-jump:value("ACCEPT", translate("fw_accept"))
-jump:value("REJECT", translate("fw_reject"))
+to = s:option(Value, "dest_ip")
+for i, dataset in ipairs(luci.sys.net.arptable()) do
+	to:value(dataset["IP address"])
+end
 
+toport = s:option(Value, "dest_port")
+toport.optional = true
+toport.size = 5
 
 return m

@@ -12,29 +12,37 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
-m = Map("luci_fw", translate("fw_portfw"), translate("fw_portfw1"))
+m = Map("firewall", translate("fw_portfw"), translate("fw_portfw1"))
 
-s = m:section(TypedSection, "portfw", "")
+
+s = m:section(TypedSection, "redirect", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "iface", translate("interface"))
+name = s:option(Value, "_name", translate("name"), translate("cbi_optional"))
+name.size = 10
+
+iface = s:option(ListValue, "src", translate("fw_zone"))
 iface.default = "wan"
-luci.model.uci.foreach("network", "interface",
+luci.model.uci.foreach("firewall", "zone",
 	function (section)
-		if section[".name"] ~= "loopback" then
-			iface:value(section[".name"])
-		end
+		iface:value(section.name)
 	end)
 
 proto = s:option(ListValue, "proto", translate("protocol"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
-proto:value("tcpudp", "TCP + UDP")
 
-dport = s:option(Value, "dport")
+dport = s:option(Value, "src_dport")
+dport.size = 5
 
-to = s:option(Value, "to")
+to = s:option(Value, "dest_ip")
+for i, dataset in ipairs(luci.sys.net.arptable()) do
+	to:value(dataset["IP address"])
+end
+
+toport = s:option(Value, "dest_port")
+toport.size = 5
 
 return m
