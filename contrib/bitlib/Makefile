@@ -17,16 +17,13 @@ $(BITLIB_FILE):
 $(BITLIB_DIR)/.prepared: $(BITLIB_FILE)
 	rm -rf $(BITLIB_DIR)
 	tar xvfz $(BITLIB_FILE)
+	test -f $(BITLIB_DIR)/config.h || cp $(BITLIB_DIR)/config.h.in $(BITLIB_DIR)/config.h
 	touch $@
 
-$(BITLIB_DIR)/.configured: $(BITLIB_DIR)/.prepared
-	( cd $(BITLIB_DIR); ./configure )
-	touch $@
-
-compile: $(BITLIB_DIR)/.configured
-	$(MAKE) -C $(BITLIB_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(LUA_CFLAGS)" LDFLAGS="$(LDFLAGS) $(LUA_SHLIBS)" OS="$(OS)"
+compile: $(BITLIB_DIR)/.prepared
 	mkdir -p dist$(LUA_LIBRARYDIR)
-	cp $(BITLIB_DIR)/.libs/bit.so.0.0.0 dist$(LUA_LIBRARYDIR)/bit.so
+	$(COMPILE) -DHAVE_CONFIG_H -I$(BITLIB_DIR) -O2 -c $(BITLIB_DIR)/lbitlib.c $(FPIC) $(LUA_CFLAGS) -o $(BITLIB_DIR)/lbitlib.o
+	$(LINK) $(SHLIB_FLAGS) $(LDFLAGS) $(BITLIB_DIR)/lbitlib.o $(LUA_SHLIBS) -lm -ldl -o dist$(LUA_LIBRARYDIR)/bit.so
 
 luasource:
 luastrip:
