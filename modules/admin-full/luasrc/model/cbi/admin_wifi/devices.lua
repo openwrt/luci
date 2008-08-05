@@ -21,6 +21,10 @@ en = s:option(Flag, "disabled", translate("enable"))
 en.enabled = "0"
 en.disabled = "1"
 
+function en.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "0"
+end
+
 t = s:option(ListValue, "type", translate("type"))
 t:value("broadcom")
 t:value("atheros")
