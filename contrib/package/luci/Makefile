@@ -61,8 +61,8 @@ endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Freifunk Support (GERMAN ONLY)
-  DEPENDS:=+luci-mod-freifunk
+  SUBMENU:=LuCI Freifunk Support (CURRENTLY BROKEN)
+  DEPENDS:=+luci-mod-freifunk @BROKEN
 endef
 
 define Package/luci/httpdtemplate
@@ -325,7 +325,7 @@ endef
 
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-admin-full
+  DEPENDS:=+luci-admin-full @BROKEN
   TITLE:=LuCI Freifunk module
 endef
 
@@ -365,7 +365,7 @@ endef
 
 define Package/luci-app-olsr
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +olsrd-mod-txtinfo
+  DEPENDS+=+luci-admin-full +olsrd +olsrd-mod-txtinfo
   TITLE:=OLSR configuration and status module
 endef
 
@@ -387,7 +387,7 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+luasocket +iptables-mod-nat +iptables-mod-ipopt
+  DEPENDS+=+luasocket +firewall
   TITLE:=Freifunk DHCP-Splash application
 endef
 
@@ -481,7 +481,7 @@ endef
 ### Themes ###
 define Package/luci-theme-fledermaus
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-web
+  DEPENDS:=+luci-web @BROKEN
   TITLE:=Fledermaus Theme
 endef
 
