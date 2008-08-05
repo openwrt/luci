@@ -8,10 +8,14 @@ iface_add() {
 	[ -n "$zone" ] || return 0
 	
 	config_get gw "$cfg" gateway
-	[ -n "$zone" ] || return 0
+	[ -n "$gw" ] || return 0
 	
 	iptables -t nat -A zone_$zone_prerouting -j luci_splash_portal
-	iptables -t nat -A luci_splash_portal -d "$gw" -p tcp -m multiport --dports 22,80,443 -j RETURN
+	
+	for i in $gw
+	do
+		iptables -t nat -A luci_splash_portal -d "$i" -p tcp -m multiport --dports 22,80,443 -j RETURN
+	done
 }
 
 blacklist_add() {
