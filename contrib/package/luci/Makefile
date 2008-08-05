@@ -358,10 +358,6 @@ define Package/luci-app-firewall
   TITLE:=Firewall and Portforwarding application
 endef
 
-define Package/luci-app-firewall/conffiles
-/etc/config/luci_fw
-endef
-
 define Package/luci-app-firewall/install
 	$(call Package/luci/install/template,$(1),applications/luci-fw)
 endef
