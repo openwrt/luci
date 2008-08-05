@@ -10,7 +10,7 @@ iface_add() {
 	config_get gw "$cfg" gateway
 	[ -n "$gw" ] || return 0
 	
-	iptables -t nat -A zone_$zone_prerouting -j luci_splash_portal
+	iptables -t nat -A zone_${zone}_prerouting -j luci_splash_portal
 	
 	for i in $gw
 	do
