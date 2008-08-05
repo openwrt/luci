@@ -108,7 +108,7 @@ function cbi_combobox(id, values, def, man) {
 
 function cbi_combobox_init(id, values, def, man) {
 	var obj = document.getElementById(id)
-	cbi_bind(obj, "change", function() {
+	cbi_bind(obj, "blur", function() {
 		cbi_combobox(id, values, def, man)
 	})
 	cbi_combobox(id, values, def, man)
