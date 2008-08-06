@@ -23,7 +23,12 @@ p:value("pppoe", "PPPoE")
 p:value("pptp", "PPTP")
 p.default = "pppoe"
 
-s:option(Value, "ifname", translate("interface"))
+ifname = s:option(Value, "ifname", translate("interface"))
+for i,d in ipairs(luci.sys.net.devices()) do
+	if d ~= "lo" then
+		ifname:value(d)
+	end
+end
 
 s:option(Value, "username", translate("username"))
 s:option(Value, "password", translate("password"))
@@ -34,7 +39,7 @@ s:option(Value, "demand").optional = true
 
 srv = s:option(Value, "server")
 srv:depends("proto", "pptp")
-srv.optional = true
+srv.rmempty = true
 
 mtu = s:option(Value, "mtu", "MTU")
 mtu.optional = true

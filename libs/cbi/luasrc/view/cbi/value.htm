@@ -24,7 +24,9 @@ $Id$
 		<%-
 			end
 		-%>
-		}, '<%:cbi_select%>', '<%:cbi_manual%>');
+		}, '<%- if not self.rmempty and not self.optional then -%>
+			<%-:cbi_select-%>
+		<%- end -%>', '<%:cbi_manual%>');
 	</script>
 	<% end -%>
 <%+cbi/valuefooter%>

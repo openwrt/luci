@@ -28,11 +28,21 @@ br = s:option(Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"
 br.enabled = "bridge"
 br.rmempty = true
 
-s:option(Value, "ifname", translate("interface")).rmempty = true
+ifname = s:option(Value, "ifname", translate("interface"))
+ifname.rmempty = true
+for i,d in ipairs(luci.sys.net.devices()) do
+	if d ~= "lo" then
+		ifname:value(d)
+	end
+end
 
 s:option(Value, "ipaddr", translate("ipaddress"))
 
-s:option(Value, "netmask", translate("netmask")):depends("proto", "static")
+nm = s:option(Value, "netmask", translate("netmask"))
+nm:depends("proto", "static")
+nm:value("255.255.255.0")
+nm:value("255.255.0.0")
+nm:value("255.0.0.0")
 
 gw = s:option(Value, "gateway", translate("gateway"))
 gw:depends("proto", "static")

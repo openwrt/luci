@@ -226,9 +226,9 @@ link = [[Verb.]]
 luci_ethers = "Statische Einträge"
 
 network_interface_demand = [[Automatische Trennung]]
-network_interface_demand_desc = [[Zeit nach der die Verbindung bei Inaktivität getrennt wird]]
+network_interface_demand_desc = [[Zeit (in s) nach der die Verbindung bei Inaktivität getrennt wird]]
 network_interface_keepalive = [[Keep-Alive]]
-network_interface_keepalive_desc = [[Bei einer Verbindungstrennung automatisch neu verbinden]]
+network_interface_keepalive_desc = [[Anzahl fehlgeschlagener Verbindungstests nach der automatisch neu verbunden wird]]
 network_interface_server = [[PPTP-Server]]
 network_switch_desc = [[Die zu einem VLAN gehörenden Schnittstellen
 werden durch Leerzeichen getrennt. Die Schnittstelle mit der höchsten Nummer (meistens 5) bildet

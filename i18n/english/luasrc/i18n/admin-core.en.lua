@@ -239,9 +239,9 @@ a_n_ptp1 = [[Point-to-Point connections with PPPoE or PPTP are often used to con
 over DSL or similar technologies to an internet access point.]]
 network_interface_server = "PPTP-Server"
 network_interface_demand = "Automatic Disconnect"
-network_interface_demand_desc = "Time after which an unused connection will be closed"
+network_interface_demand_desc = "Time (in s) after which an unused connection will be closed"
 network_interface_keepalive = "Keep-Alive"
-network_interface_keepalive_desc = "Reconnect lost connections"
+network_interface_keepalive_desc = "Number of failed connection tests to initiate automatic reconnect"
 
 a_n_routes = "Static Routes"
 a_n_routes1 = [[With Static Routes you can specify through which
