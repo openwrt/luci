@@ -20,7 +20,6 @@ $Id$
 ]]--
 
 module("luci.sys.iptparser", package.seeall)
-require("luci.sys")
 require("luci.util")
 
 
@@ -180,7 +179,7 @@ function IptParser._parse_rules( self )
 
 	for i, tbl in ipairs({ "filter", "nat", "mangle" }) do
 
-		for i, rule in ipairs(luci.sys.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
+		for i, rule in ipairs(luci.util.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
 
 			if rule:find( "Chain " ) == 1 then
 		

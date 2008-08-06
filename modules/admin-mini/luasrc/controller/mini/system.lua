@@ -62,7 +62,7 @@ function action_backup()
 		luci.ltn12.pump.all(luci.ltn12.source.file(backup_fpi), luci.http.write)
 	elseif reset then
 		luci.template.render("mini/applyreboot")
-		luci.sys.exec("mtd -r erase rootfs_data")
+		luci.util.exec("mtd -r erase rootfs_data")
 	else
 		luci.template.render("mini/backup", {reset_avail = reset_avail})
 	end

@@ -31,41 +31,6 @@ require("luci.bits")
 require("luci.util")
 require("luci.fs")
 
---- Test whether the current system is operating in big endian mode.
--- @return	Boolean value indicating whether system is big endian
-function bigendian()
-	return string.byte(string.dump(function() end), 7) == 0
-end
-
---- Execute given commandline and gather stdout.
--- @param command	String containing command to execute
--- @return			String containing the command's stdout
-function exec(command)
-	local pp   = io.popen(command)
-	local data = pp:read("*a")
-	pp:close()
-
-	return data
-end
-
---- Execute given commandline and gather stdout.
--- @param command	String containing the command to execute
--- @return			Table containing the command's stdout splitted up in lines
-function execl(command)
-	local pp   = io.popen(command)
-	local line = ""
-	local data = {}
-
-	while true do
-		line = pp:read()
-		if (line == nil) then break end
-		table.insert(data, line)
-	end
-	pp:close()
-
-	return data
-end
-
 --- Invoke the luci-flash executable to write an image to the flash memory.
 -- @param kpattern	Pattern of files to keep over flash process
 -- @return			Return value of os.execute()
@@ -97,10 +62,12 @@ function hostname()
 end
 
 --- Returns the contents of a documented referred by an URL.
--- @param url	The URL to retrieve
+-- @param url	 The URL to retrieve
+-- @param stream Return a stream instead of a buffer
 -- @return		String containing the contents of given the URL
-function httpget(url)
-	return exec("wget -qO- '"..url:gsub("'", "").."'")
+function httpget(url, stream)
+	local source = stream and io.open or luci.util.exec
+	return source("wget -qO- '"..url:gsub("'", "").."'")
 end
 
 --- Returns the absolute path to LuCI base directory.
@@ -146,21 +113,21 @@ function sysinfo()
 	local c7 = "cat /proc/meminfo|grep MemFree|awk {' print $2 '} 2>/dev/null"
 	local c8 = "cat /proc/meminfo|grep Buffers|awk {' print $2 '} 2>/dev/null"
 
-	local system = luci.util.trim(exec(c1))
+	local system = luci.util.trim(luci.util.exec(c1))
 	local model = ""
-	local memtotal = luci.util.trim(exec(c5))
-	local memcached = luci.util.trim(exec(c6))
-	local memfree = luci.util.trim(exec(c7))
-	local membuffers = luci.util.trim(exec(c8))
+	local memtotal = luci.util.trim(luci.util.exec(c5))
+	local memcached = luci.util.trim(luci.util.exec(c6))
+	local memfree = luci.util.trim(luci.util.exec(c7))
+	local membuffers = luci.util.trim(luci.util.exec(c8))
 	local perc_memfree = math.floor((memfree/memtotal)*100)
 	local perc_membuffers = math.floor((membuffers/memtotal)*100)
 	local perc_memcached = math.floor((memcached/memtotal)*100)
 
 	if system == "" then
-		system = luci.util.trim(exec(c2))
-		model = luci.util.trim(exec(c3))
+		system = luci.util.trim(luci.util.exec(c2))
+		model = luci.util.trim(luci.util.exec(c3))
 	else
-		model = luci.util.trim(exec(c4))
+		model = luci.util.trim(luci.util.exec(c4))
 	end
 
 	return system, model, memtotal, memcached, membuffers, memfree, perc_memfree, perc_membuffers, perc_memcached
@@ -169,7 +136,7 @@ end
 --- Retrieves the output of the "logread" command.
 -- @return	String containing the current log buffer
 function syslog()
-	return exec("logread")
+	return luci.util.exec("logread")
 end
 
 --- Generates a random id with specified length.
@@ -305,7 +272,7 @@ function net.hexip4(hex, be)
 		return nil
 	end
 
-	be = be or bigendian()
+	be = be or luci.util.bigendian()
 
 	local hexdec = luci.bits.Hex2Dec
 
@@ -442,7 +409,7 @@ wifi = {}
 --- Get iwconfig output for all wireless devices.
 -- @return	Table of tables containing the iwconfing output for each wifi device
 function wifi.getiwconfig()
-	local cnt = exec("/usr/sbin/iwconfig 2>/dev/null")
+	local cnt = luci.util.exec("/usr/sbin/iwconfig 2>/dev/null")
 	local iwc = {}
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n\n")) do
@@ -459,7 +426,7 @@ end
 --- Get iwlist scan output from all wireless devices.
 -- @return	Table of tables contaiing all scan results
 function wifi.iwscan()
-	local cnt = exec("iwlist scan 2>/dev/null")
+	local cnt = luci.util.exec("iwlist scan 2>/dev/null")
 	local iws = {}
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n\n")) do

@@ -13,6 +13,7 @@ $Id$
 ]]--
 require("luci.model.uci")
 require("luci.sys")
+require("luci.util")
 
 m = Map("dhcp", "DHCP")
 
@@ -46,7 +47,7 @@ s:option(Value, "netmask", translate("netmask")).optional = true
 
 s:option(Flag, "force").optional = true
 
-for i, line in pairs(luci.sys.execl("dnsmasq --help dhcp")) do
+for i, line in pairs(luci.util.execl("dnsmasq --help dhcp")) do
 	k, v = line:match("([^ ]+) +([^ ]+)")
 	s:option(Value, "dhcp"..k, v).optional = true
 end

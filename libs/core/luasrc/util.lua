@@ -574,6 +574,45 @@ end
 
 
 --
+-- System utility functions
+--
+
+--- Test whether the current system is operating in big endian mode.
+-- @return	Boolean value indicating whether system is big endian
+function bigendian()
+	return string.byte(string.dump(function() end), 7) == 0
+end
+
+--- Execute given commandline and gather stdout.
+-- @param command	String containing command to execute
+-- @return			String containing the command's stdout
+function exec(command)
+	local pp   = io.popen(command)
+	local data = pp:read("*a")
+	pp:close()
+
+	return data
+end
+
+--- Execute given commandline and gather stdout.
+-- @param command	String containing the command to execute
+-- @return			Table containing the command's stdout splitted up in lines
+function execl(command)
+	local pp   = io.popen(command)
+	local line = ""
+	local data = {}
+
+	while true do
+		line = pp:read()
+		if (line == nil) then break end
+		table.insert(data, line)
+	end
+	pp:close()
+
+	return data
+end
+
+--
 -- Coroutine safe xpcall and pcall versions modified for Luci
 -- original version:
 -- coxpcall 1.13 - Copyright 2005 - Kepler Project (www.keplerproject.org)

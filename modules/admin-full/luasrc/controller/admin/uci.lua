@@ -77,7 +77,7 @@ function action_apply()
 		
 		-- Search for post-commit commands
 		for cmd, i in pairs(run) do
-			output = output .. cmd .. ":" .. luci.sys.exec(cmd) .. "\n"
+			output = output .. cmd .. ":" .. luci.util.exec(cmd) .. "\n"
 		end
 	end
 	

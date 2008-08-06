@@ -26,7 +26,6 @@ limitations under the License.
 
 ]]--
 module("luci.model.ipkg", package.seeall)
-require("luci.sys")
 require("luci.util")
 require("luci.fs")
 
@@ -89,7 +88,7 @@ function _lookup(act, pkg)
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
 	
-	return _parselist(luci.sys.exec(cmd .. " 2>/dev/null"))
+	return _parselist(luci.util.exec(cmd .. " 2>/dev/null"))
 end
 
 -- Internal parser function

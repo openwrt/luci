@@ -33,7 +33,7 @@ t:value("prism2")
 --[[
 require("luci.sys")
 local c = ". /etc/functions.sh;for i in /lib/wifi/*;do . $i;done;echo $DRIVERS"
-for driver in luci.sys.execl(c)[1]:gmatch("[^ ]+") do
+for driver in luci.util.execl(c)[1]:gmatch("[^ ]+") do
 	t:value(driver)
 end
 ]]--

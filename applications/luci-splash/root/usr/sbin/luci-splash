@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 
 require("luci.http")
-require("luci.sys")
+require("luci.util")
 require("luci.model.uci")
 
 -- Init state session
@@ -140,7 +140,7 @@ end
 function listrules()
 	local cmd = "iptables -t nat -L luci_splash_leases | grep RETURN |"
 	cmd = cmd .. "egrep -io [0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+"
-	return luci.util.split(luci.sys.exec(cmd))
+	return luci.util.split(luci.util.exec(cmd))
 end
 
 

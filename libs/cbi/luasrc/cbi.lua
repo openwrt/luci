@@ -167,7 +167,7 @@ function Map.parse(self, ...)
 		for i, config in ipairs(self.parsechain) do
 			uci.commit(config)
 			if luci.config.uci_oncommit and luci.config.uci_oncommit[config] then
-				luci.sys.exec(luci.config.uci_oncommit[config])
+				luci.util.exec(luci.config.uci_oncommit[config])
 			end
 
 			-- Refresh data because commit changes section names
