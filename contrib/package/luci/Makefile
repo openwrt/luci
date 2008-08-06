@@ -187,9 +187,19 @@ define Package/luci-ipkg/install
 endef
 
 
+define Package/luci-sys
+  $(call Package/luci/libtemplate)
+  TITLE:=LuCI Linux/POSIX system library
+endef
+
+define Package/luci-sys/install
+	$(call Package/luci/install/template,$(1),libs/sys)
+endef
+
+
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-addons +luci-uci +luci-sgi-cgi
+  DEPENDS+=+luci-http +luci-sys +luci-addons +luci-uci +luci-sgi-cgi
   TITLE:=MVC Webframework
 endef
 
@@ -560,6 +570,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
 	PKG_SELECTED_MODULES+=libs/uci
 endif
+ifneq ($(CONFIG_PACKAGE_luci-sys),)
+	PKG_SELECTED_MODULES+=libs/sys
+endif
 ifneq ($(CONFIG_PACKAGE_luci-web),)
 	PKG_SELECTED_MODULES+=libs/web
 endif
@@ -668,6 +681,7 @@ $(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-uci))
+$(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
 
 $(eval $(call BuildPackage,luci-httpd))
