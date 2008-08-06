@@ -31,14 +31,10 @@ require("luci.bits")
 require("luci.util")
 require("luci.fs")
 
---- Test wheather the current system is operating in big endian mode.
--- @return	Boolean value indicating wheather system is big endian
+--- Test whether the current system is operating in big endian mode.
+-- @return	Boolean value indicating whether system is big endian
 function bigendian()
-	local fp = io.open("/bin/sh")
-	fp:seek("set", 5)
-	local be = (fp:read(1):byte() ~= 1)
-	fp:close()
-	return be
+	return string.byte(string.dump(function() end), 7) == 0
 end
 
 --- Execute given commandline and gather stdout.
