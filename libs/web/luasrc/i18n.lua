@@ -26,10 +26,10 @@ limitations under the License.
 
 --- LuCI translation library.
 module("luci.i18n", package.seeall)
-require("luci.sys")
+require("luci.util")
 
 table   = {}
-i18ndir = luci.sys.libpath() .. "/i18n/"
+i18ndir = luci.util.libpath() .. "/i18n/"
 loaded  = {}
 context = luci.util.threadlocal()
 default = "en"

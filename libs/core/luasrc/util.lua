@@ -612,6 +612,13 @@ function execl(command)
 	return data
 end
 
+--- Returns the absolute path to LuCI base directory.
+-- @return		String containing the directory path
+function libpath()
+	return luci.fs.dirname(require("luci.debug").__file__)
+end
+
+
 --
 -- Coroutine safe xpcall and pcall versions modified for Luci
 -- original version:

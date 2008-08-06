@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 
---- LuCI system utilities.
+--- LuCI Linux and POSIX system utilities.
 module("luci.sys", package.seeall)
 require("posix")
 require("luci.bits")
@@ -68,12 +68,6 @@ end
 function httpget(url, stream)
 	local source = stream and io.open or luci.util.exec
 	return source("wget -qO- '"..url:gsub("'", "").."'")
-end
-
---- Returns the absolute path to LuCI base directory.
--- @return		String containing the directory path
-function libpath()
-	return luci.fs.dirname(require("luci.debug").__file__)
 end
 
 --- Returns the system load average values.

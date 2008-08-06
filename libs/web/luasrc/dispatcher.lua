@@ -201,7 +201,7 @@ end
 
 --- Generate the dispatching index using the best possible strategy.
 function createindex()
-	local path = luci.sys.libpath() .. "/controller/"
+	local path = luci.util.libpath() .. "/controller/"
 	local suff = ".lua"
 	
 	if luci.util.copcall(require, "luci.fastindex") then

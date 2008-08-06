@@ -41,9 +41,9 @@ function load(cbimap)
 	require("luci.fs")
 	require("luci.i18n")
 	require("luci.config")
-	require("luci.sys")
+	require("luci.util")
 
-	local cbidir = luci.sys.libpath() .. "/model/cbi/"
+	local cbidir = luci.util.libpath() .. "/model/cbi/"
 	local func, err = loadfile(cbidir..cbimap..".lua")
 
 	if not func then

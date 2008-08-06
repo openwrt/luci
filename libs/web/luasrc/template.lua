@@ -30,12 +30,13 @@ module("luci.template", package.seeall)
 require("luci.config")
 require("luci.util")
 require("luci.fs")
+require("luci.sys")
 require("luci.http")
 
 luci.config.template = luci.config.template or {}
 
-viewdir    = luci.config.template.viewdir or luci.sys.libpath() .. "/view"
-compiledir = luci.config.template.compiledir or luci.sys.libpath() .. "/view"
+viewdir    = luci.config.template.viewdir or luci.util.libpath() .. "/view"
+compiledir = luci.config.template.compiledir or luci.util.libpath() .. "/view"
 
 
 -- Compile modes:
