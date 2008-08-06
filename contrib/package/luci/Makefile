@@ -61,7 +61,7 @@ endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Freifunk Support (CURRENTLY BROKEN)
+  SUBMENU:=LuCI Freifunk Support (PARTLY BROKEN)
   DEPENDS:=+luci-mod-freifunk @BROKEN
 endef
 
@@ -325,7 +325,7 @@ endef
 
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-admin-full @BROKEN
+  DEPENDS:=+luci-admin-full
   TITLE:=LuCI Freifunk module
 endef
 
@@ -481,7 +481,7 @@ endef
 ### Themes ###
 define Package/luci-theme-fledermaus
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-web @BROKEN
+  DEPENDS:=+luci-web
   TITLE:=Fledermaus Theme
 endef
 
