@@ -177,6 +177,16 @@ define Package/luci-http/install
 endef
 
 
+define Package/luci-ipkg
+  $(call Package/luci/libtemplate)
+  TITLE:=LuCI IPKG/OPKG call abstraction library 
+endef
+
+define Package/luci-ipkg/install
+	$(call Package/luci/install/template,$(1),libs/ipkg)
+endef
+
+
 define Package/luci-web
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-http +luci-addons +luci-uci +luci-sgi-cgi
@@ -314,7 +324,7 @@ endef
 
 define Package/luci-admin-full
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core
+  DEPENDS+=+luci-admin-core +luci-ipkg
   TITLE:=LuCI Administration - power user's interface
 endef
 
@@ -544,6 +554,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-http),)
 	PKG_SELECTED_MODULES+=libs/http
 endif
+ifneq ($(CONFIG_PACKAGE_luci-ipkg),)
+	PKG_SELECTED_MODULES+=libs/ipkg
+endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
 	PKG_SELECTED_MODULES+=libs/uci
 endif
@@ -653,6 +666,7 @@ $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-cbi))
 $(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
+$(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-web))
 
