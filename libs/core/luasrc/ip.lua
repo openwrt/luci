@@ -74,11 +74,15 @@ ntohs = htons
 ntohl = htonl
 
 
-function IPv4(address)
+function IPv4(address, netmask)
+	address = address or "0.0.0.0/0"
+
 	local data = {}
 	local prefix = address:match("/(.+)")
 
-	if prefix then
+	if netmask then
+		prefix = IPv4():prefix(netmask)
+	elseif prefix then
 		address = address:gsub("/.+","")
 		prefix = tonumber(prefix)
 		if not prefix or prefix < 0 or prefix > 32 then return nil end
@@ -86,7 +90,7 @@ function IPv4(address)
 		prefix = 32
 	end
 
-	local b1, b2, b3, b4 = address:match("(%d+)%.(%d+)%.(%d+)%.(%d+)")
+	local b1, b2, b3, b4 = address:match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
 
 	b1 = tonumber(b1)
 	b2 = tonumber(b2)
@@ -106,11 +110,15 @@ function IPv4(address)
 	end
 end
 
-function IPv6(address)
+function IPv6(address, netmask)
+	address = address or "::/0"
+
 	local data = {}
 	local prefix = address:match("/(.+)")
 
-	if prefix then
+	if netmask then
+		prefix = IPv6():prefix(netmask)
+	elseif prefix then
 		address = address:gsub("/.+","")
 		prefix = tonumber(prefix)
 		if not prefix or prefix < 0 or prefix > 128 then return nil end
@@ -238,8 +246,31 @@ function cidr.equal( self, addr )
 	return true
 end
 
-function cidr.prefix( self )
-	return self[3]
+function cidr.prefix( self, mask )
+	local prefix = self[3]
+
+	if mask then
+		prefix = 0
+
+		local obj = self:is4() and IPv4(mask) or IPv6(mask)
+		if not obj then
+			return nil
+		end
+
+		for i, block in ipairs(obj[2]) do
+			local pos = bit.lshift(1, 15)
+			for i=15, 0, -1 do
+				if bit.band(block, pos) == pos then
+					prefix = prefix + 1
+				else
+					return prefix
+				end
+				pos = bit.rshift(pos, 1)
+			end
+		end
+	end
+
+	return prefix
 end
 
 function cidr.network( self )
