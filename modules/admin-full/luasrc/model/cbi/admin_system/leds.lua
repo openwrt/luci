@@ -15,7 +15,6 @@ m = Map("system", translate("leds"), translate("leds_desc"))
 
 local sysfs_path = "/sys/class/leds/"
 local leds = {}
-leds[1] = "moep"
 
 if luci.fs.access(sysfs_path) then
 	for k, v in pairs(luci.fs.dir(sysfs_path)) do
@@ -53,8 +52,7 @@ s:option(Flag, "default").rmempty = true
 
 trigger = s:option(ListValue, "trigger")
 
---local triggers = luci.fs.readfile(sysfs_path .. leds[1] .. "/trigger")
-triggers = "[none] netdev heartbeat default-on timer"
+local triggers = luci.fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
 	trigger:value(t, translate("system_led_trigger_" .. t:gsub("-", "")))
 end 
