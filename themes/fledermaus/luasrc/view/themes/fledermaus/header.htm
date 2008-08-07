@@ -39,7 +39,7 @@ require("luci.http").prepare_content("text/html")
 <head>
 	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
 	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
-	<meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
 	<title><%= hostname .. ( (node and node.title) and ' - ' .. node.title or '') %> - LuCI</title>
 </head>
