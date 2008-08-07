@@ -77,11 +77,13 @@ ntohl = htonl
 function IPv4(address, netmask)
 	address = address or "0.0.0.0/0"
 
+	local obj = __bless({ FAMILY_INET4 })
+
 	local data = {}
 	local prefix = address:match("/(.+)")
 
 	if netmask then
-		prefix = IPv4():prefix(netmask)
+		prefix = obj:prefix(netmask)
 	elseif prefix then
 		address = address:gsub("/.+","")
 		prefix = tonumber(prefix)
@@ -100,24 +102,25 @@ function IPv4(address, netmask)
 	if b1 and b1 <= 255 and
 	   b2 and b2 <= 255 and
 	   b3 and b3 <= 255 and
-	   b4 and b4 <= 255
+	   b4 and b4 <= 255 and
+	   prefix
 	then
-		return __bless({
-			FAMILY_INET4,
-			{ b1 * 256 + b2, b3 * 256 + b4 },
-			prefix
-		})
+		table.insert(obj, { b1 * 256 + b2, b3 * 256 + b4 })
+		table.insert(obj, prefix)
+		return obj
 	end
 end
 
 function IPv6(address, netmask)
 	address = address or "::/0"
 
+	local obj = __bless({ FAMILY_INET6 })
+
 	local data = {}
 	local prefix = address:match("/(.+)")
 
 	if netmask then
-		prefix = IPv6():prefix(netmask)
+		prefix = obj:prefix(netmask)
 	elseif prefix then
 		address = address:gsub("/.+","")
 		prefix = tonumber(prefix)
@@ -180,8 +183,10 @@ function IPv6(address, netmask)
 		end
 	end
 
-	if #data == 8 then
-		return __bless({ FAMILY_INET6, data, prefix })
+	if #data == 8 and prefix then
+		table.insert(obj, data)
+		table.insert(obj, prefix)
+		return obj
 	end
 end
 
@@ -251,8 +256,9 @@ function cidr.prefix( self, mask )
 
 	if mask then
 		prefix = 0
-
+		local stop = false
 		local obj = self:is4() and IPv4(mask) or IPv6(mask)
+
 		if not obj then
 			return nil
 		end
@@ -261,9 +267,13 @@ function cidr.prefix( self, mask )
 			local pos = bit.lshift(1, 15)
 			for i=15, 0, -1 do
 				if bit.band(block, pos) == pos then
-					prefix = prefix + 1
+					if not stop then
+						prefix = prefix + 1
+					else
+						return nil
+					end
 				else
-					return prefix
+					stop = true
 				end
 				pos = bit.rshift(pos, 1)
 			end
