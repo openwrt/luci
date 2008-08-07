@@ -11,13 +11,24 @@ s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "zone", "Firewallzone")
+zone = s:option(ListValue, "zone", "Firewallzone")
 luci.model.uci.foreach("firewall", "zone",
 	function (section)
-		iface:value(section.name)
+		zone:value(section.name)
 	end)
 	
-gateway = s:option(Value, "gateway", "Gateway")
+iface = s:option(ListValue, "network", "Netzwerk")
+luci.model.uci.foreach("network", "interface",
+	function (section)
+		if section[".name"] ~= "loopback" then
+			iface:value(section[".name"])
+		end
+	end)
+	
+luci.model.uci.foreach("network", "alias",
+	function (section)
+		iface:value(section[".name"])
+	end)
 
 s = m:section(TypedSection, "whitelist", "Automatische Freigabe")
 s.template = "cbi/tblsection"

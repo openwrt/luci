@@ -487,7 +487,7 @@ end
 -- Verifies scope of sections
 function TypedSection.checkscope(self, section)
 	-- Check if we are not excluded
-	if self.filter and not self.filter(section) then
+	if self.filter and not self:filter(section) then
 		return nil
 	end
 

@@ -13,13 +13,13 @@ $Id$
 ]]--
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
-s = m:section(TypedSection, "interface", "")
-function s.filter(section)
-	return section ~= "loopback" and (not arg or #arg == 0 or
-	 luci.util.contains(arg, section))
+s = m:section(TypedSection, "interface", translate("interfaces"))
+function s.filter(self, section)
+	return section ~= "loopback" and
+	 (not arg or not arg[1] or arg[1] == section)
 end
 
-if not arg or #arg == 0 then
+if not arg or not arg[1] then
 	s.addremove = true
 end
 s:depends("proto", "static")
@@ -42,6 +42,7 @@ for i,d in ipairs(luci.sys.net.devices()) do
 	end
 end
 
+
 ipaddr = s:option(Value, "ipaddr", translate("ipaddress"))
 ipaddr.rmempty = true
 ipaddr:depends("proto", "static")
@@ -57,13 +58,17 @@ gw = s:option(Value, "gateway", translate("gateway"))
 gw:depends("proto", "static")
 gw.rmempty = true
 
+bcast = s:option(Value, "bcast", translate("broadcast"))
+bcast:depends("proto", "static")
+bcast.optional = true
+
 ip6addr = s:option(Value, "ip6addr", translate("ip6address"), translate("cidr6"))
-ip6addr.rmempty = true
+ip6addr.optional = true
 ip6addr:depends("proto", "static")
 
 ip6gw = s:option(Value, "ip6gw", translate("gateway6"))
 ip6gw:depends("proto", "static")
-ip6gw.rmempty = true
+ip6gw.optional = true
 
 dns = s:option(Value, "dns", translate("dnsserver"))
 dns:depends("proto", "static")
@@ -75,5 +80,52 @@ mtu.isinteger = true
 
 mac = s:option(Value, "macaddr", translate("macaddress"))
 mac.optional = true
+
+
+
+
+s2 = m:section(TypedSection, "alias", translate("aliases"))
+s2.addremove = true
+
+if arg and arg[1] and luci.model.uci.get("network", arg[1]) then
+	s2:depends("interface", arg[1])
+	s2.defaults.interface = arg[1]
+else
+	parent = s2:option(ListValue, "interface", translate("interface"))
+	luci.model.uci.foreach("network", "interface",
+		function (section)
+			if section[".name"] ~= "loopback" then
+				parent:value(section[".name"])
+			end
+		end
+	)
+end
+
+
+s2.defaults.proto = "static"
+
+ipaddr = s2:option(Value, "ipaddr", translate("ipaddress"))
+ipaddr.rmempty = true
+
+nm = s2:option(Value, "netmask", translate("netmask"))
+nm.rmempty = true
+nm:value("255.255.255.0")
+nm:value("255.255.0.0")
+nm:value("255.0.0.0")
+
+gw = s2:option(Value, "gateway", translate("gateway"))
+gw.rmempty = true
+
+bcast = s2:option(Value, "bcast", translate("broadcast"))
+bcast.optional = true
+
+ip6addr = s2:option(Value, "ip6addr", translate("ip6address"), translate("cidr6"))
+ip6addr.optional = true
+
+ip6gw = s2:option(Value, "ip6gw", translate("gateway6"))
+ip6gw.optional = true
+
+dns = s2:option(Value, "dns", translate("dnsserver"))
+dns.optional = true
 
 return m

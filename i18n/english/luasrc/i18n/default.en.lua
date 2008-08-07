@@ -5,6 +5,7 @@ administration = "Administration"
 apply = "Apply"
 
 basicsettings = "Basic Settings"
+broadcast = "Broadcast"
 
 changes = "Changes"
 channel = "Channel"

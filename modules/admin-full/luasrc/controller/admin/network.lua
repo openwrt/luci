@@ -38,7 +38,8 @@ function index()
 		function (section)
 			local ifc = section[".name"]
 			if ifc ~= "loopback" then
-				entry({"admin", "network", "ifaces", ifc}, page.target, ifc)
+				entry({"admin", "network", "ifaces", ifc},
+				 page.target, ifc:upper())
 			end
 		end
 	)

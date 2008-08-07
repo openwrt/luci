@@ -7,15 +7,20 @@ iface_add() {
 	config_get zone "$cfg" zone
 	[ -n "$zone" ] || return 0
 	
-	config_get gw "$cfg" gateway
-	[ -n "$gw" ] || return 0
+	config_get net "$cfg" network
+	[ -n "$net" ] || return 0
 	
-	iptables -t nat -A zone_${zone}_prerouting -j luci_splash_portal
+	config_get ipaddr "$net" ipaddr
+	[ -n "$ipaddr" ] || return 0
 	
-	for i in $gw
-	do
-		iptables -t nat -A luci_splash_portal -d "$i" -p tcp -m multiport --dports 22,80,443 -j RETURN
-	done
+	config_get netmask "$net" netmask
+	[ -n "$netmask" ] || return 0
+	
+	eval "$(ipcalc.sh $ipaddr $netmask)"
+	
+	iptables -t nat -A zone_${zone}_prerouting -s "$NETWORK/$PREFIX" -p ! tcp -j luci_splash_portal
+	iptables -t nat -A zone_${zone}_prerouting -s "$NETWORK/$PREFIX" -d ! "$ipaddr" -j luci_splash_portal
+	iptables -t nat -A zone_${zone}_prerouting -s "$NETWORK/$PREFIX" -d "$ipaddr" -p tcp -m multiport ! --dport 22,80,443 -j luci_splash_portal
 }
 
 blacklist_add() {

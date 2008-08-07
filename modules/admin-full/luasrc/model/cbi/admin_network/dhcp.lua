@@ -31,6 +31,12 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
+luci.model.uci.foreach("network", "alias",
+	function (section)
+		iface:value(section[".name"])
+		s:depends("interface", section[".name"])
+	end)
+
 s:option(Value, "start", translate("start")).rmempty = true
 
 s:option(Value, "limit", translate("limit")).rmempty = true
