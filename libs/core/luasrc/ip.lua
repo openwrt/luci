@@ -321,8 +321,10 @@ function cidr.mask( self, bits )
 end
 
 function cidr.contains( self, addr )
-	if self:mask() <= addr:mask() then
-		return self:mask(addr:prefix()) == addr:mask()
+	local mask1 = self:mask()
+	local mask2 = addr:mask()
+	if mask1 <= mask2 then
+		return self:mask(addr:prefix()) == mask2
 	end
 
 	return false
