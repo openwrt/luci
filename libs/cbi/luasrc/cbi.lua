@@ -37,7 +37,7 @@ local instanceof = luci.util.instanceof
 
 
 -- Loads a CBI map from given file, creating an environment and returns it
-function load(cbimap)
+function load(cbimap, ...)
 	require("luci.fs")
 	require("luci.i18n")
 	require("luci.config")
@@ -56,6 +56,7 @@ function load(cbimap)
 	luci.util.updfenv(func, luci.cbi)
 	luci.util.extfenv(func, "translate", luci.i18n.translate)
 	luci.util.extfenv(func, "translatef", luci.i18n.translatef)
+	luci.util.extfenv(func, "arg", {...})
 
 	local maps = {func()}
 
@@ -414,7 +415,6 @@ function TypedSection.__init__(self, map, type, ...)
 
 	self.template  = "cbi/tsection"
 	self.deps = {}
-	self.excludes = {}
 
 	self.anonymous = false
 end
@@ -435,11 +435,6 @@ end
 -- Limits scope to sections that have certain option => value pairs
 function TypedSection.depends(self, option, value)
 	table.insert(self.deps, {option=option, value=value})
-end
-
--- Excludes several sections by name
-function TypedSection.exclude(self, field)
-	self.excludes[field] = true
 end
 
 function TypedSection.parse(self)
@@ -492,7 +487,7 @@ end
 -- Verifies scope of sections
 function TypedSection.checkscope(self, section)
 	-- Check if we are not excluded
-	if self.excludes[section] then
+	if self.filter and not self.filter(section) then
 		return nil
 	end
 

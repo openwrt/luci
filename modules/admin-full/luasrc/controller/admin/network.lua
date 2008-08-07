@@ -15,6 +15,7 @@ module("luci.controller.admin.network", package.seeall)
 
 function index()
 	require("luci.i18n")
+	require("luci.model.uci")
 	local i18n = luci.i18n.translate
 
 	local page  = node("admin", "network")
@@ -31,7 +32,18 @@ function index()
 	page.target = cbi("admin_network/ifaces")
 	page.title  = i18n("interfaces", "Schnittstellen")
 	page.order  = 20
-	
+	page.leaf   = true
+
+	luci.model.uci.foreach("network", "interface",
+		function (section)
+			local ifc = section[".name"]
+			if ifc ~= "loopback" then
+				entry({"admin", "network", "ifaces", ifc}, page.target, ifc)
+			end
+		end
+	)
+
+
 	local page  = node("admin", "network", "dhcp")
 	page.target = cbi("admin_network/dhcp")
 	page.title  = "DHCP"

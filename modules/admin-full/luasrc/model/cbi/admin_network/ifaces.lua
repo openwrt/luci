@@ -14,8 +14,14 @@ $Id$
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
 s = m:section(TypedSection, "interface", "")
-s.addremove = true
-s:exclude("loopback")
+function s.filter(section)
+	return section ~= "loopback" and (not arg or #arg == 0 or
+	 luci.util.contains(arg, section))
+end
+
+if not arg or #arg == 0 then
+	s.addremove = true
+end
 s:depends("proto", "static")
 s:depends("proto", "dhcp")
 

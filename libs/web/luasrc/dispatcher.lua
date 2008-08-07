@@ -126,15 +126,24 @@ function dispatch(request)
 	
 	local c = context.tree
 	local track = {}
+	local args = {}
+	local n
 
 	for i, s in ipairs(request) do
 		c = c.nodes[s]
+		n = i
 		if not c or c.leaf then
 			break
 		end
 
 		for k, v in pairs(c) do
 			track[k] = v
+		end
+	end
+
+	if c and c.leaf then
+		for j=n+1, #request do
+			table.insert(args, request[j])
 		end
 	end
 
@@ -190,7 +199,7 @@ function dispatch(request)
 			luci.util.updfenv(c.target, mod)
 		end
 		
-		stat, err = luci.util.copcall(c.target)
+		stat, err = luci.util.copcall(c.target, unpack(args))
 		if not stat then
 			error500(err)
 		end
@@ -430,8 +439,8 @@ function cbi(model)
 	require("luci.cbi")
 	require("luci.template")
 
-	return function()
-		local stat, maps = luci.util.copcall(luci.cbi.load, model)
+	return function(...)
+		local stat, maps = luci.util.copcall(luci.cbi.load, model, ...)
 		if not stat then
 			error500(maps)
 			return true
