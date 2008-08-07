@@ -303,5 +303,5 @@ function cidr.add( self, amount )
 		end
 	end
 
-	return __bless({ self[1], data, self:is4() and 32 and 128 })
+	return __bless({ self[1], data, self[3] })
 end
