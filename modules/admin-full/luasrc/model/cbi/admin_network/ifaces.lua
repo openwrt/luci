@@ -36,9 +36,12 @@ for i,d in ipairs(luci.sys.net.devices()) do
 	end
 end
 
-s:option(Value, "ipaddr", translate("ipaddress"))
+ipaddr = s:option(Value, "ipaddr", translate("ipaddress"))
+ipaddr.rmempty = true
+ipaddr:depends("proto", "static")
 
 nm = s:option(Value, "netmask", translate("netmask"))
+nm.rmempty = true
 nm:depends("proto", "static")
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
@@ -47,6 +50,14 @@ nm:value("255.0.0.0")
 gw = s:option(Value, "gateway", translate("gateway"))
 gw:depends("proto", "static")
 gw.rmempty = true
+
+ip6addr = s:option(Value, "ip6addr", translate("ip6address"), translate("cidr6"))
+ip6addr.rmempty = true
+ip6addr:depends("proto", "static")
+
+ip6gw = s:option(Value, "ip6gw", translate("gateway6"))
+ip6gw:depends("proto", "static")
+ip6gw.rmempty = true
 
 dns = s:option(Value, "dns", translate("dnsserver"))
 dns:depends("proto", "static")
