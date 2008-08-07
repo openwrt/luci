@@ -13,25 +13,58 @@ $Id$
 ]]--
 m = Map("system", translate("leds"), translate("leds_desc"))
 
+local sysfs_path = "/sys/class/leds/"
+local leds = {}
+leds[1] = "moep"
+
+if luci.fs.access(sysfs_path) then
+	for k, v in pairs(luci.fs.dir(sysfs_path)) do
+		if v ~= "." and v ~= ".." then
+			table.insert(leds, v)
+		end
+	end
+end
+
+if #leds == 0 then
+	return m
+end
+
+
 s = m:section(TypedSection, "led", "")
 s.anonymous = true
 s.addremove = true
 
+function s.parse(self, ...)
+	TypedSection.parse(self, ...)
+	os.execute("/etc/init.d/led enable")
+end
+
 
 s:option(Value, "name")
 
+
 sysfs = s:option(ListValue, "sysfs")
-for k, v in pairs(luci.fs.dir("/sys/class/leds/")) do
-	if v ~= "." and v ~= ".." then
-		sysfs:value(v)
-	end
+for k, v in ipairs(leds) do
+	sysfs:value(v)
 end
 
 s:option(Flag, "default").rmempty = true
 
-trigger = s:option(Value, "trigger")
-trigger.rmempty = true
-trigger:value("netdev")
+
+trigger = s:option(ListValue, "trigger")
+
+--local triggers = luci.fs.readfile(sysfs_path .. leds[1] .. "/trigger")
+triggers = "[none] netdev heartbeat default-on timer"
+for t in triggers:gmatch("[%w-]+") do
+	trigger:value(t, translate("system_led_trigger_" .. t:gsub("-", "")))
+end 
+
+
+delayon = s:option(Value, "delayon")
+delayon:depends("trigger", "timer")
+
+delayoff = s:option(Value, "delayoff")
+delayoff:depends("trigger", "timer")
 
 
 dev = s:option(ListValue, "dev")
@@ -44,7 +77,12 @@ for k, v in pairs(luci.sys.net.devices()) do
 	end
 end
 
-mode = s:option(Value, "mode")
+
+mode = s:option(MultiValue, "mode")
 mode.rmempty = true
-mode:value("link")
 mode:depends("trigger", "netdev")
+mode:value("link", translate("system_led_mode_link"))
+mode:value("tx", translate("system_led_mode_tx"))
+mode:value("rx", translate("system_led_mode_rx"))
+
+return m
