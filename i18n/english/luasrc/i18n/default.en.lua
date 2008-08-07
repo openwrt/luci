@@ -5,7 +5,7 @@ administration = "Administration"
 apply = "Apply"
 
 basicsettings = "Basic Settings"
-broadcast = "Broadcast"
+broadcast = "IPv4-Broadcast"
 
 changes = "Changes"
 channel = "Channel"
