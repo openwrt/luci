@@ -360,6 +360,7 @@ function cidr.mask( self, bits )
 end
 
 function cidr.contains( self, addr )
+	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
 	local mask1 = self:mask()
 	local mask2 = addr:mask()
 	if mask1 <= mask2 then
