@@ -1,5 +1,6 @@
 about = "Über"
 add = "Hinzufügen"
+aliases = "Aliasse"
 all = "alle"
 administration = "Administration"
 apply = "Anwenden"
