@@ -46,6 +46,14 @@ local function __mask16(bits)
 	)
 end
 
+local function __length(family)
+	if family == FAMILY_INET4 then
+		return 32
+	else
+		return 128
+	end
+end
+
 -- htons(), htonl(), ntohs(), ntohl()
 
 function htons(x)
@@ -190,6 +198,35 @@ function IPv6(address, netmask)
 	end
 end
 
+function Hex( hex, prefix, family, swap )
+	family = ( family ~= nil ) and family or FAMILY_INET4
+	swap   = ( swap   == nil ) and true   or swap
+	prefix = prefix or __length(family)
+
+	local len  = __length(family)
+	local tmp  = ""
+	local data = { }
+
+	for i = 1, (len/4) - #hex do tmp = tmp .. '0' end
+
+	if swap and LITTLE_ENDIAN then
+		for i = #hex, 1, -2 do tmp = tmp .. hex:sub( i - 1, i ) end
+	end
+
+	hex = tmp
+
+	for i = 1, ( len / 4 ), 4 do
+		local n = tonumber( hex:sub( i, i+3 ), 16 )
+		if n then
+			table.insert( data, n )
+		else
+			return nil
+		end
+	end
+
+	return __bless({ family, data, len })
+end
+
 
 cidr = luci.util.class()
 
@@ -296,11 +333,11 @@ function cidr.network( self )
 		table.insert( data, 0 )
 	end
 
-	return __bless({ self[1], data, self:is4() and 32 or 128 })
+	return __bless({ self[1], data, __length(self[1]) })
 end
 
 function cidr.host( self )
-	return __bless({ self[1], data, self:is4() and 32 or 128 })
+	return __bless({ self[1], data, __length(self[1]) })
 end
 
 function cidr.mask( self, bits )
@@ -317,7 +354,7 @@ function cidr.mask( self, bits )
 		table.insert( data, 0 )
 	end
 
-	return __bless({ self[1], data, self:is4() and 32 or 128 })
+	return __bless({ self[1], data, __length(self[1]) })
 end
 
 function cidr.contains( self, addr )
