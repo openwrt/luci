@@ -382,8 +382,10 @@ function cidr.add( self, amount )
 		local add = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
 		if ( data[pos] + add ) > 0xFFFF then
 			data[pos] = ( data[pos] + add ) % 0xFFFF
-			if pos > 2 then
+			if pos > 1 then
 				data[pos-1] = data[pos-1] + ( add - data[pos] )
+			else
+				return nil
 			end
 		else
 			data[pos] = data[pos] + add
