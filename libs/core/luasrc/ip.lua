@@ -89,6 +89,8 @@ function htonl(x)
 end
 
 --- Convert given short value to host byte order on little endian hosts
+-- @class	function
+-- @name	ntohs
 -- @param x	Unsigned integer value between 0x0000 and 0xFFFF
 -- @return	Byte-swapped value
 -- @see		htonl
@@ -96,6 +98,8 @@ end
 ntohs = htons
 
 --- Convert given short value to host byte order on little endian hosts
+-- @class	function
+-- @name	ntohl
 -- @param x	Unsigned integer value between 0x00000000 and 0xFFFFFFFF
 -- @return	Byte-swapped value
 -- @see		htons
@@ -244,7 +248,7 @@ end
 -- @param hex		String containing hex encoded value
 -- @param prefix	Prefix length of CIDR instance (optional, default is 32/128)
 -- @param family	Address family, either luci.ip.FAMILY_INET4 or FAMILY_INET6
--- @param swap		Bool indicating weather to swap byteorder on low endian host
+-- @param swap		Bool indicating whether to swap byteorder on low endian host
 -- @return			luci.ip.cidr instance or nil if given value was invalid
 -- @see				IPv4
 -- @see				IPv6
@@ -285,14 +289,14 @@ end
 -- @name	luci.ip.cidr
 cidr = luci.util.class()
 
---- Test weather the instance is a IPv4 address.
+--- Test whether the instance is a IPv4 address.
 -- @return	Boolean indicating a IPv4 address type
 -- @see		is6
 function cidr.is4( self )
 	return self[1] == FAMILY_INET4
 end
 
---- Test weather the instance is a IPv6 address.
+--- Test whether the instance is a IPv6 address.
 -- @return	Boolean indicating a IPv6 address type
 -- @see		is4
 function cidr.is6( self )
@@ -323,11 +327,11 @@ function cidr.string( self )
 	return str
 end
 
---- Test weather the value of the instance is lower then the given address.
+--- Test whether the value of the instance is lower then the given address.
 -- This function will throw an exception if the given address has a different
 -- family than this instance.
 -- @param addr	A luci.ip.cidr instance to compare against
--- @return		Boolean indicating weather this instance is lower
+-- @return		Boolean indicating whether this instance is lower
 -- @see			higher
 -- @see			equal
 function cidr.lower( self, addr )
@@ -340,11 +344,11 @@ function cidr.lower( self, addr )
 	return false
 end
 
---- Test weather the value of the instance is higher then the given address.
+--- Test whether the value of the instance is higher then the given address.
 -- This function will throw an exception if the given address has a different
 -- family than this instance.
 -- @param addr	A luci.ip.cidr instance to compare against
--- @return		Boolean indicating weather this instance is higher
+-- @return		Boolean indicating whether this instance is higher
 -- @see			lower
 -- @see			equal
 function cidr.higher( self, addr )
@@ -357,11 +361,11 @@ function cidr.higher( self, addr )
 	return false
 end
 
---- Test weather the value of the instance is uequal to the given address.
+--- Test whether the value of the instance is uequal to the given address.
 -- This function will throw an exception if the given address is a different
 -- family than this instance.
 -- @param addr	A luci.ip.cidr instance to compare against
--- @return		Boolean indicating weather this instance is equal
+-- @return		Boolean indicating whether this instance is equal
 -- @see			lower
 -- @see			higher
 function cidr.equal( self, addr )
@@ -466,9 +470,9 @@ function cidr.mask( self, bits )
 	return __bless({ self[1], data, __length(self[1]) })
 end
 
---- Test weather this instance fully contains the given CIDR instance.
+--- Test whether this instance fully contains the given CIDR instance.
 -- @param addr	CIDR instance to test against
--- @return		Boolean indicating weather this instance contains the given CIDR
+-- @return		Boolean indicating whether this instance contains the given CIDR
 function cidr.contains( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
 
