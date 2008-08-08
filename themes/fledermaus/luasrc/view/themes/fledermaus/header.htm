@@ -19,21 +19,23 @@ local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
-local node     = luci.dispatcher.context.dispatched 
+local node     = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
 
 local c = tree
 for i,r in ipairs(request) do
-	if c.nodes and c.nodes[r] then 
+	if c.nodes and c.nodes[r] then
 		c = c.nodes[r]
 		c._menu_selected = true
 	end
 end
 
 require("luci.i18n").loadc("default")
-
 require("luci.http").prepare_content("text/html")
-%><?xml version="1.0" encoding="utf-8"?>
+
+-%>
+
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -42,24 +44,32 @@ require("luci.http").prepare_content("text/html")
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
 	<title><%= hostname .. ( (node and node.title) and ' - ' .. node.title or '') %> - LuCI</title>
-</head>
-<body>
-<div id="header">
-	<div class="headerlogo left"><img src="<%=media%>/logo.png" alt="<%=luci.config.brand.title%>" /></div>
-	<div class="whitetext smalltext right">
-	<%=luci.config.brand.firmware%><br />
-	<%=luci.config.brand.distro%><br />
-	<%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
-	<%:hostname%>: <%=hostname%>
-	</div>
-	<div>
-		<span class="headertitle"><%=luci.config.brand.title%></span><br />
-		<span class="whitetext bold"><%=luci.config.brand.subtitle%></span>
-	</div>
-</div>
 
-<div class="separator yellow bold">
-<%:path%>: <% 
+	<!--[if lt IE 7]>
+		<script type="text/javascript">
+			function setup_hover() {
+				function ie_hover(e) {
+					e.onmouseover = function() { this.className = "hover" }
+					e.onmouseout  = function() { this.className = null    }
+				}
+
+				var lis  = document.getElementById("mainmenu").getElementsByTagName("LI");
+				var divs = document.getElementById("mainmenu").getElementsByTagName("DIV");
+				
+				for( var i = 0; i < lis.length;  i++ ) ie_hover( lis[i]  );
+				for( var i = 0; i < divs.length; i++ ) ie_hover( divs[i] );
+			}
+		</script>
+	<![endif]-->
+</head>
+<body onload="window.setup_hover && setup_hover()">
+<div id="header"><div id="header2">
+	<span id="header3">freifunk kamikaze</span><br />
+	<span id="header4">now with even more bats and stuff</span>
+</div></div>
+
+<div class="pathbar separator black whitetext bold">
+<%:path%>: <%
 local c = tree
 local url = controller
 for k,v in pairs(request) do
@@ -72,43 +82,50 @@ end
 %>
 </div>
 
-<div id="columns"><div id="columnswrapper">
-	<div class="sidebar left">
-<%
+<div class="menubar">
+	<div id="mainmenu" class="mainmenu">
+<%-
 local function submenu(prefix, node)
-	if not node._menu_selected or not node.nodes then
+	if not node.nodes then
 		return false
 	end
-	local index = {}	
+	local index = {}
+	local count = 0
 	for k, n in pairs(node.nodes) do
 		if n.title and n.target then
 			table.insert(index, {name=k, order=n.order or 100})
+			count = count + 1
 		end
 	end
-		
+
 	table.sort(index, function(a, b) return a.order < b.order end)
+
+	if count > 0 then
 %>
 	<ul>
-	<% for j, v in pairs(index) do 
-		local nnode = node.nodes[v.name]
-		local href = controller .. prefix .. v.name
-		href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
+	<%- for j, v in pairs(index) do
+		if #v.name > 0 then
+			local nnode = node.nodes[v.name]
+			local href = controller .. prefix .. v.name
+			href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 		%>
 		<li>
-			<span<% if nnode._menu_selected then %> class="yellowtext"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
-			<% submenu(prefix .. v.name .. "/", nnode) %>
+			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
+			<%- submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
-	<% end %>
-		</ul> 
-<%	 
+		<%- end %>
+	<%- end %>
+	</ul>
+<%-
+	end
 end
 
 if cattree and cattree.nodes then
-	local index = {}	
+	local index = {}
 	for k, node in pairs(cattree.nodes) do
 		table.insert(index, {name=k, order=node.order or 100})
 	end
-	
+
 	table.sort(index, function(a, b) return a.order < b.order end)
 
 	for i, k in ipairs(index) do
@@ -116,44 +133,47 @@ if cattree and cattree.nodes then
 		if node.title and node.target then
 			local href = controller.."/"..category.."/"..k.name
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
-			<div<% if node._menu_selected then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=category%>/<%=k.name%>"><%=node.title%></a>			
+			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>
 				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
 			</div>
 <%		end
 	end
 end
-%>		
+%>
 	</div>
-	<div class="sidebar right">
-		<div><%:webui%>
-			<ul><%
-				for k,node in pairs(tree.nodes) do
-					if node.title then %>
-						<li<% if request[1] == k then %> class="yellowtext"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
-<%					end
-				end%>
-			</ul>
-		</div>
-		<%
-			if "admin" == request[1] then
-				local ucic = 0
-				for i, j in pairs(require("luci.model.uci").changes()) do
-					for k, l in pairs(j) do
-						for m, n in pairs(l) do
-							ucic = ucic + 1;
-						end
+	<div class="modemenu">
+		<ul><%
+			for k,node in pairs(tree.nodes) do
+				if node.title then %>
+					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
+<%				end
+			end%>
+		</ul>
+	</div>
+
+	<%
+		if tree.nodes[category] and tree.nodes[category].ucidata then
+			local ucic = 0
+			for i, j in pairs(require("luci.model.uci").changes()) do
+				for k, l in pairs(j) do
+					for m, n in pairs(l) do
+						ucic = ucic + 1;
 					end
 				end
-		%>
-		<div><%:config%>
+			end
+	%>
+	<div class="mainmenu" style="float:right; margin-right:2em">
+		<div>
 			<% if ucic > 0 then %>
-				<% submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
+			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:unsavedchanges%>: <%=ucic%></a>
+			<% submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
 			<% else %>
-				<ul>
-					<li><%:changes%>: 0</li>
-				</ul>
+			<a href="#"><%:changes%>: 0</a>
 			<% end %>
 		</div>
-		<% end %>
 	</div>
-	<div id="content">
+	<% end %>
+
+	<br class="clear" />
+</div>
+<div id="content">
