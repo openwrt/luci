@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 
 require("socket")
-require("luci.sys")
+require("luci.ip")
 require("luci.model.uci")
 
 luci.model.uci.set_savedir(luci.model.uci.savedir_state)
@@ -14,13 +14,13 @@ while true do
 	
 	if client then
 		client:settimeout(1)
-		local ip = client:getpeername()
 		local srv
+		local ip = luci.ip.IPv4(client:getpeername())
 		luci.model.uci.foreach("network", "interface",
 			function (section)
 			    if section.ipaddr then
-			        local p = luci.sys.net.mask4prefix(section.netmask)
-			        if luci.sys.net.belongs(ip, section.ipaddr, p) then
+			        local net = luci.ip.IPv4(section.ipaddr, section.netmask)
+			        if ip and net and net:contains(ip) then
 			            srv = section.ipaddr
 			            return
 			        end

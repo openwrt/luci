@@ -30,9 +30,9 @@ local routes = luci.sys.net.routes()
 for i, r in pairs(routes) do
 %>
 <tr>
-<td><%=luci.sys.net.hexip4(r.Destination)%></td>
-<td><%=luci.sys.net.hexip4(r.Mask)%></td>
-<td><%=luci.sys.net.hexip4(r.Gateway)%></td>
+<td><%=luci.ip.Hex(r.Destination, 32):string()%></td>
+<td><%=luci.ip.Hex(r.Mask, 32):string()%></td>
+<td><%=luci.ip.Hex(r.Gateway, 32):string()%></td>
 <td><%=r.Metric%></td>
 <td><%=r.Iface%></td>
 </tr>

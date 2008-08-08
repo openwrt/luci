@@ -88,7 +88,7 @@ $Id$
 for i, rt in pairs(routes) do
 %>
 <tr>
-<td><%=luci.sys.net.hexip4(rt.Gateway)%></th>
+<td><%=luci.ip.Hex(rt.Gateway, 32):string()%></th>
 <td><%=rt.Metric%></th>
 <td><%=rt.Iface%></th>
 </tr>

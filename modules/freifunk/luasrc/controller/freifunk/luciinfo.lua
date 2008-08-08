@@ -28,7 +28,7 @@ function action_index()
 	-- Sysinfo
 	local s, m, r = luci.sys.sysinfo()
 	local dr = luci.sys.net.defaultroute()
-	dr = dr and luci.sys.net.hexip4(dr.Gateway) or ""
+	dr = dr and luci.ip.Hex(dr.Gateway, 32, luci.ip.FAMILY_INET4):string()
 	local l1, l5, l15 = luci.sys.loadavg()
 	
 	luci.http.write("sysinfo.system=" .. sanitize(s) .. "\n")
@@ -38,7 +38,7 @@ function action_index()
 	luci.http.write("sysinfo.load1=" .. tostring(l1) .. "\n")
 	luci.http.write("sysinfo.load5=" .. tostring(l5) .. "\n")
 	luci.http.write("sysinfo.load15=" .. tostring(l15) .. "\n")
-	luci.http.write("sysinfo.defaultgw=" .. dr .. "\n")
+	luci.http.write("sysinfo.defaultgw=" .. dr or "" .. "\n")
 
 	
 	-- Freifunk

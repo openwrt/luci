@@ -30,6 +30,7 @@ require("posix")
 require("luci.bits")
 require("luci.util")
 require("luci.fs")
+require("luci.ip")
 
 --- Invoke the luci-flash executable to write an image to the flash memory.
 -- @param kpattern	Pattern of files to keep over flash process
@@ -183,15 +184,6 @@ function net.arptable()
 	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+")
 end
 
---- Test whether an IP-Adress belongs to a certain net.
--- @param ip		IPv4 address to test
--- @param ipnet		IPv4 network address of the net range to compare against
--- @param prefix	Network prefix of the net range to compare against
--- @return			Boolean indicating wheather the ip is within the range
-function net.belongs(ip, ipnet, prefix)
-	return (net.ip4bin(ip):sub(1, prefix) == net.ip4bin(ipnet):sub(1, prefix))
-end
-
 --- Determine the current default route.
 -- @return	Table with the properties of the current default route.
 --			The following fields are defined:
@@ -235,19 +227,6 @@ function net.ip4mac(ip)
 	return mac
 end
 
---- Calculate the prefix from a given netmask.
--- @param mask	IPv4 net mask
--- @return		Number containing the corresponding numerical prefix
-function net.mask4prefix(mask)
-	local bin = net.ip4bin(mask)
-
-	if not bin then
-		return nil
-	end
-
-	return #luci.util.split(bin, "1")-1
-end
-
 --- Returns the current kernel routing table entries.
 -- @return	Table of tables with properties of the corresponding routes.
 --			The following fields are defined for route entry tables:
@@ -257,54 +236,6 @@ function net.routes()
 	return _parse_delimited_table(io.lines("/proc/net/route"))
 end
 
---- Convert hexadecimal 32 bit value to IPv4 address.
--- @param hex	String containing the hexadecimal value
--- @param be	Boolean indicating wheather the given value is big endian
--- @return		String containing the corresponding IP4 address
-function net.hexip4(hex, be)
-	if #hex ~= 8 then
-		return nil
-	end
-
-	be = be or luci.util.bigendian()
-
-	local hexdec = luci.bits.Hex2Dec
-
-	local ip = ""
-	if be then
-		ip = ip .. tostring(hexdec(hex:sub(1,2))) .. "."
-		ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
-		ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."
-		ip = ip .. tostring(hexdec(hex:sub(7,8)))
-	else
-		ip = ip .. tostring(hexdec(hex:sub(7,8))) .. "."
-		ip = ip .. tostring(hexdec(hex:sub(5,6))) .. "."
-		ip = ip .. tostring(hexdec(hex:sub(3,4))) .. "."
-		ip = ip .. tostring(hexdec(hex:sub(1,2)))
-	end
-
-	return ip
-end
-
---- Convert given IPv4 address to binary value.
--- @param ip	String containing a IPv4 address
--- @return		String containing corresponding binary value
-function net.ip4bin(ip)
-	local parts = luci.util.split(ip, '.')
-	if #parts ~= 4 then
-		return nil
-	end
-
-	local decbin = luci.bits.Dec2Bin
-
-	local bin = ""
-	bin = bin .. decbin(parts[1], 8)
-	bin = bin .. decbin(parts[2], 8)
-	bin = bin .. decbin(parts[3], 8)
-	bin = bin .. decbin(parts[4], 8)
-
-	return bin
-end
 
 --- Tests whether the given host responds to ping probes.
 -- @param host	String containing a hostname or IPv4 address
