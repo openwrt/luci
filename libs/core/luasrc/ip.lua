@@ -211,6 +211,8 @@ function Hex( hex, prefix, family, swap )
 
 	if swap and LITTLE_ENDIAN then
 		for i = #hex, 1, -2 do tmp = tmp .. hex:sub( i - 1, i ) end
+	else
+		tmp = tmp .. hex
 	end
 
 	hex = tmp
