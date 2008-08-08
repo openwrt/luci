@@ -333,7 +333,7 @@ function cidr.network( self, bits )
 	if #data < #self[2] then
 		table.insert( data, bit.band( self[2][1+#data], __mask16(bits) ) )
 
-		for i = #data, #self[2] do
+		for i = #data + 1, #self[2] do
 			table.insert( data, 0 )
 		end
 	end
