@@ -322,17 +322,20 @@ function cidr.prefix( self, mask )
 	return prefix
 end
 
-function cidr.network( self )
+function cidr.network( self, bits )
 	local data = { }
+	bits = bits or self[3]
 
-	for i = 1, math.floor( self[3] / 16 ) do
+	for i = 1, math.floor( bits / 16 ) do
 		table.insert( data, self[2][i] )
 	end
 
-	table.insert( data, bit.band( self[2][1+#data], __mask16(self[3]) ) )
+	if #data < #self[2] then
+		table.insert( data, bit.band( self[2][1+#data], __mask16(bits) ) )
 
-	for i = #data, #self[2] do
-		table.insert( data, 0 )
+		for i = #data, #self[2] do
+			table.insert( data, 0 )
+		end
 	end
 
 	return __bless({ self[1], data, __length(self[1]) })
@@ -350,10 +353,12 @@ function cidr.mask( self, bits )
 		table.insert( data, 0xFFFF )
 	end
 
-	table.insert( data, __mask16(bits) )
+	if #data < #self[2] then
+		table.insert( data, __mask16(bits) )
 
-	for i = #data + 1, #self[2] do
-		table.insert( data, 0 )
+		for i = #data + 1, #self[2] do
+			table.insert( data, 0 )
+		end
 	end
 
 	return __bless({ self[1], data, __length(self[1]) })
@@ -361,10 +366,9 @@ end
 
 function cidr.contains( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
-	local mask1 = self:prefix()
-	local mask2 = addr:prefix()
-	if mask1 <= mask2 then
-		return self:mask(addr:prefix()) == mask2
+
+	if self:prefix() <= addr:prefix() then
+		return self:network() == addr:network(self:prefix())
 	end
 
 	return false
