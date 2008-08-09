@@ -21,6 +21,9 @@ $Id$
 	<% if self.tag_invalid[section] then -%>
 		<div class="cbi-error"><%:cbi_invalid%></div>
 	<%- end %>
+	<% if self.tag_missing[section] then -%>
+		<div class="cbi-error"><%:cbi_missing%></div>
+	<%- end %>
 </div>
 
 <% if #self.deps > 0 then -%>

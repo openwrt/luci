@@ -1,6 +1,7 @@
 cbi_add = "Add entry"
 cbi_del = "Remove entry"
 cbi_invalid = "Error: Invalid input value"
+cbi_missing = "Error: This field is mandatory"
 cbi_addopt = "-- Additional Field --"
 cbi_optional = " (optional)"
 cbi_sectempty = "This section contains no values yet"

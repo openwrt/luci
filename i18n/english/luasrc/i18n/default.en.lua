@@ -89,6 +89,7 @@ settings = "Settings"
 start = "Start"
 static = "static"
 statistics = "Statistics"
+submit = "Submit"
 syslog = "System Log"
 system = "System"
 

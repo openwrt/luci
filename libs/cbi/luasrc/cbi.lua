@@ -35,6 +35,9 @@ local uci        = luci.model.uci
 local class      = luci.util.class
 local instanceof = luci.util.instanceof
 
+FORM_NODATA  =  0
+FORM_VALID   =  1
+FORM_INVALID = -1
 
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap, ...)
@@ -61,7 +64,7 @@ function load(cbimap, ...)
 	local maps = {func()}
 
 	for i, map in ipairs(maps) do
-		if not instanceof(map, Map) then
+		if not instanceof(map, Node) then
 			error("CBI map returns no valid map object!")
 			return nil
 		end
@@ -229,6 +232,68 @@ function Map.get(self, section, option)
 		return uci.get_all(self.config, section)
 	end
 end
+
+
+--[[
+SimpleForm - A Simple non-UCI form
+]]--
+SimpleForm = class(Node)
+
+function SimpleForm.__init__(self, config, title, description, data)
+	Node.__init__(self, title, description)
+	self.config = config
+	self.data = data or {}
+	self.template = "cbi/simpleform"
+	self.dorender = true
+end
+
+function SimpleForm.parse(self, ...)
+	Node.parse(self, 1, ...)
+		
+	local valid = true
+	for i, v in ipairs(self.children) do
+		valid = valid and not v.tag_missing[1] and not v.tag_invalid[1]
+	end
+	
+	local state = 
+		not luci.http.formvalue("cbi.submit") and 0
+		or valid and 1
+		or -1
+
+	self.dorender = self:handle(state)
+end
+
+function SimpleForm.render(self, ...)
+	if self.dorender then
+		Node.render(self, ...)
+	end
+end
+
+-- Creates a child section
+function SimpleForm.field(self, class, ...)
+	if instanceof(class, AbstractValue) then
+		local obj  = class(self, ...)
+		self:append(obj)
+		return obj
+	else
+		error("class must be a descendent of AbstractValue")
+	end
+end
+
+function SimpleForm.set(self, section, option, value)
+	self.data[option] = value
+end
+
+
+function SimpleForm.del(self, section, option)
+	self.data[option] = nil
+end
+
+
+function SimpleForm.get(self, section, option)
+	return self.data[option]
+end
+
 
 
 --[[
@@ -534,12 +599,13 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.map    = map
 	self.config = map.config
 	self.tag_invalid = {}
+	self.tag_missing = {}
 	self.deps = {}
 
-	self.rmempty  = false
-	self.default  = nil
-	self.size     = nil
-	self.optional = false
+	self.rmempty   = false
+	self.default   = nil
+	self.size      = nil
+	self.optional  = false
 end
 
 -- Add a dependencie to another section field
@@ -559,11 +625,20 @@ function AbstractValue.formvalue(self, section)
 	return luci.http.formvalue(key)
 end
 
+function AbstractValue.additional(self, value)
+	self.optional = value
+end
+
+function AbstractValue.mandatory(self, value)
+	self.rmempty = not value
+end
+
 function AbstractValue.parse(self, section)
 	local fvalue = self:formvalue(section)
+	local cvalue = self:cfgvalue(section)
 
 	if fvalue and fvalue ~= "" then -- If we have a form value, write it to UCI
-		fvalue = self:validate(fvalue)
+		fvalue = self:transform(self:validate(fvalue))
 		if not fvalue then
 			self.tag_invalid[section] = true
 		end
@@ -573,6 +648,8 @@ function AbstractValue.parse(self, section)
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
 			self:remove(section)
+		elseif not fvalue or fvalue ~= cvalue then
+			self.tag_missing[section] = true
 		end
 	end
 end
@@ -617,6 +694,9 @@ end
 function AbstractValue.validate(self, value)
 	return value
 end
+
+AbstractValue.transform = AbstractValue.validate
+
 
 -- Write to UCI
 function AbstractValue.write(self, section, value)

@@ -461,3 +461,32 @@ function cbi(model)
 		luci.template.render("cbi/footer")
 	end
 end
+
+--- Create a CBI form model dispatching target.
+-- @param	model	CBI form model tpo be rendered
+function form(model)
+	require("luci.cbi")
+	require("luci.template")
+
+	return function(...)
+		local stat, maps = luci.util.copcall(luci.cbi.load, model, ...)
+		if not stat then
+			error500(maps)
+			return true
+		end
+
+		for i, res in ipairs(maps) do
+			local stat, err = luci.util.copcall(res.parse, res)
+			if not stat then
+				error500(err)
+				return true
+			end
+		end
+
+		luci.template.render("header")
+		for i, res in ipairs(maps) do
+			res:render()
+		end
+		luci.template.render("footer")
+	end
+end

@@ -90,6 +90,7 @@ settings = "Einstellungen"
 start = "Start"
 static = "statisch"
 statistics = "Statistiken"
+submit = "Absenden"
 syslog = "Systemprotokoll"
 system = "System"
 
