@@ -100,7 +100,7 @@ endef
 
 define Package/luci-core
   $(call Package/luci/libtemplate)
-  DEPENDS:=+lua +luaposix
+  DEPENDS:=+lua +luaposix +bitlib
   TITLE:=LuCI core libraries
 endef
 
