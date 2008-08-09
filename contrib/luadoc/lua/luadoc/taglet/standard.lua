@@ -73,12 +73,12 @@ end
 -- Checks if the line contains a module definition.
 -- @param line string with line text
 -- @param currentmodule module already found, if any
--- @return the name of the defined module, or nil if there is no module 
+-- @return the name of the defined module, or nil if there is no module
 -- definition
 
 local function check_module (line, currentmodule)
 	line = util.trim(line)
-	
+
 	-- module"x.y"
 	-- module'x.y'
 	-- module[[x.y]]
@@ -97,9 +97,9 @@ local function check_module (line, currentmodule)
 end
 
 -------------------------------------------------------------------------------
--- Extracts summary information from a description. The first sentence of each 
--- doc comment should be a summary sentence, containing a concise but complete 
--- description of the item. It is important to write crisp and informative 
+-- Extracts summary information from a description. The first sentence of each
+-- doc comment should be a summary sentence, containing a concise but complete
+-- description of the item. It is important to write crisp and informative
 -- initial sentences that can stand on their own
 -- @param description text with item description
 -- @return summary string or nil if description is nil
@@ -107,16 +107,16 @@ end
 local function parse_summary (description)
 	-- summary is never nil...
 	description = description or ""
-	
+
 	-- append an " " at the end to make the pattern work in all cases
 	description = description.." "
 
-	-- read until the first period followed by a space or tab	
+	-- read until the first period followed by a space or tab
 	local summary = string.match(description, "(.-%.)[%s\t]")
-	
+
 	-- if pattern did not find the first sentence, summary is the whole description
 	summary = summary or description
-	
+
 	return summary
 end
 
@@ -151,7 +151,7 @@ end
 -- @param block block with comment field
 -- @return block parameter
 
-local function parse_comment (block, first_line)
+local function parse_comment (block, first_line, modulename)
 
 	-- get the first non-empty line of code
 	local code = table.foreachi(block.code, function(_, line)
@@ -167,7 +167,7 @@ local function parse_comment (block, first_line)
 			return line
 		end
 	end)
-	
+
 	-- parse first line of code
 	if code ~= nil then
 		local func_info = check_function(code)
@@ -192,16 +192,16 @@ local function parse_comment (block, first_line)
 	-- parse @ tags
 	local currenttag = "description"
 	local currenttext
-	
+
 	table.foreachi(block.comment, function (_, line)
 		line = util.trim_comment(line)
-		
+
 		local r, _, tag, text = string.find(line, "@([_%w%.]+)%s+(.*)")
 		if r ~= nil then
 			-- found new tag, add previous one, and start a new one
 			-- TODO: what to do with invalid tags? issue an error? or log a warning?
 			tags.handle(currenttag, block, currenttext)
-			
+
 			currenttag = tag
 			currenttext = text
 		else
@@ -214,8 +214,12 @@ local function parse_comment (block, first_line)
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
 	assert(string.sub(block.description, 1, 1) ~= " ", string.format("`%s'", block.description))
-	
-	return block
+
+	if block.name and block.class == "module" then
+		modulename = block.name
+	end
+
+	return block, modulename
 end
 
 -------------------------------------------------------------------------------
@@ -239,9 +243,9 @@ local function parse_block (f, line, modulename, first)
 			-- reached end of comment, read the code below it
 			-- TODO: allow empty lines
 			line, block.code, modulename = parse_code(f, line, modulename)
-			
+
 			-- parse information in block comment
-			block = parse_comment(block, first)
+			block, modulename = parse_comment(block, first, modulename)
 
 			return line, block, modulename
 		else
@@ -250,10 +254,10 @@ local function parse_block (f, line, modulename, first)
 		end
 	end
 	-- reached end of file
-	
+
 	-- parse information in block comment
-	block = parse_comment(block, first)
-	
+	block, modulename = parse_comment(block, first, modulename)
+
 	return line, block, modulename
 end
 
@@ -263,58 +267,78 @@ end
 -- @param doc table with documentation
 -- @return table with documentation
 
-function parse_file (filepath, doc)
-	local blocks = {}
-	local modulename = nil
-	
+function parse_file (filepath, doc, handle, prev_line, prev_block, prev_modname)
+	local blocks = { prev_block }
+	local modulename = prev_modname
+
 	-- read each line
-	local f = io.open(filepath, "r")
+	local f = handle or io.open(filepath, "r")
 	local i = 1
-	local line = f:read()
+	local line = prev_line or f:read()
 	local first = true
 	while line ~= nil do
+
 		if string.find(line, "^[\t ]*%-%-%-") then
 			-- reached a luadoc block
-			local block
-			line, block, modulename = parse_block(f, line, modulename, first)
-			table.insert(blocks, block)
+			local block, newmodname
+			line, block, newmodname = parse_block(f, line, modulename, first)
+
+			if modulename and newmodname and newmodname ~= modulename then
+				doc = parse_file( nil, doc, f, line, block, newmodname )
+			else
+				table.insert(blocks, block)
+				modulename = newmodname
+			end
 		else
 			-- look for a module definition
-			modulename = check_module(line, modulename)
-			
+			local newmodname = check_module(line, modulename)
+
+			if modulename and newmodname and newmodname ~= modulename then
+				parse_file( nil, doc, f )
+			else
+				modulename = newmodname
+			end
+
 			-- TODO: keep beginning of file somewhere
-			
+
 			line = f:read()
 		end
 		first = false
 		i = i + 1
 	end
-	f:close()
-	-- store blocks in file hierarchy
-	assert(doc.files[filepath] == nil, string.format("doc for file `%s' already defined", filepath))
-	table.insert(doc.files, filepath)
-	doc.files[filepath] = {
-		type = "file",
-		name = filepath,
-		doc = blocks,
---		functions = class_iterator(blocks, "function"),
---		tables = class_iterator(blocks, "table"),
-	}
---
-	local first = doc.files[filepath].doc[1]
-	if first and modulename then
-		doc.files[filepath].author = first.author
-		doc.files[filepath].copyright = first.copyright
-		doc.files[filepath].description = first.description
-		doc.files[filepath].release = first.release
-		doc.files[filepath].summary = first.summary
+
+	if not handle then
+		f:close()
+	end
+
+	if filepath then
+		-- store blocks in file hierarchy
+		assert(doc.files[filepath] == nil, string.format("doc for file `%s' already defined", filepath))
+		table.insert(doc.files, filepath)
+		doc.files[filepath] = {
+			type = "file",
+			name = filepath,
+			doc = blocks,
+	--		functions = class_iterator(blocks, "function"),
+	--		tables = class_iterator(blocks, "table"),
+		}
+	--
+		local first = doc.files[filepath].doc[1]
+		if first and modulename then
+			doc.files[filepath].author = first.author
+			doc.files[filepath].copyright = first.copyright
+			doc.files[filepath].description = first.description
+			doc.files[filepath].release = first.release
+			doc.files[filepath].summary = first.summary
+		end
 	end
 
 	-- if module definition is found, store in module hierarchy
 	if modulename ~= nil then
 		if modulename == "..." then
-				modulename = string.gsub (filepath, "%.lua$", "")
-				modulename = string.gsub (modulename, "/", ".")
+			assert( filepath, "Can't determine name for virtual module from filepatch" )
+			modulename = string.gsub (filepath, "%.lua$", "")
+			modulename = string.gsub (modulename, "/", ".")
 		end
 		if doc.modules[modulename] ~= nil then
 			-- module is already defined, just add the blocks
@@ -336,14 +360,14 @@ function parse_file (filepath, doc)
 				release = first and first.release,
 				summary = "",
 			}
-			
+
 			-- find module description
 			for m in class_iterator(blocks, "module")() do
 				doc.modules[modulename].description = util.concat(
-					doc.modules[modulename].description, 
+					doc.modules[modulename].description,
 					m.description)
 				doc.modules[modulename].summary = util.concat(
-					doc.modules[modulename].summary, 
+					doc.modules[modulename].summary,
 					m.summary)
 				if m.author then
 					doc.modules[modulename].author = m.author
@@ -361,7 +385,7 @@ function parse_file (filepath, doc)
 			doc.modules[modulename].description = doc.modules[modulename].description or (first and first.description) or ""
 			doc.modules[modulename].summary = doc.modules[modulename].summary or (first and first.summary) or ""
 		end
-		
+
 		-- make functions table
 		doc.modules[modulename].functions = {}
 		for f in class_iterator(blocks, "function")() do
@@ -370,7 +394,7 @@ function parse_file (filepath, doc)
 				doc.modules[modulename].functions[f.name] = f
 			end
 		end
-		
+
 		-- make tables table
 		doc.modules[modulename].tables = {}
 		for t in class_iterator(blocks, "table")() do
@@ -380,30 +404,32 @@ function parse_file (filepath, doc)
 			end
 		end
 	end
-	
-	-- make functions table
-	doc.files[filepath].functions = {}
-	for f in class_iterator(blocks, "function")() do
-		if f and f.name then
-			table.insert(doc.files[filepath].functions, f.name)
-			doc.files[filepath].functions[f.name] = f
+
+	if filepath then
+		-- make functions table
+		doc.files[filepath].functions = {}
+		for f in class_iterator(blocks, "function")() do
+			if f and f.name then
+				table.insert(doc.files[filepath].functions, f.name)
+				doc.files[filepath].functions[f.name] = f
+			end
+		end
+
+		-- make tables table
+		doc.files[filepath].tables = {}
+		for t in class_iterator(blocks, "table")() do
+			if t and t.name then
+				table.insert(doc.files[filepath].tables, t.name)
+				doc.files[filepath].tables[t.name] = t
+			end
 		end
 	end
-	
-	-- make tables table
-	doc.files[filepath].tables = {}
-	for t in class_iterator(blocks, "table")() do
-		if t and t.name then
-			table.insert(doc.files[filepath].tables, t.name)
-			doc.files[filepath].tables[t.name] = t
-		end
-	end
-	
+
 	return doc
 end
 
 -------------------------------------------------------------------------------
--- Checks if the file is terminated by ".lua" or ".luadoc" and calls the 
+-- Checks if the file is terminated by ".lua" or ".luadoc" and calls the
 -- function that does the actual parsing
 -- @param filepath full path of the file to parse
 -- @param doc table with documentation
@@ -417,12 +443,12 @@ function file (filepath, doc)
 			return true
 		end
 	end)
-	
+
 	if valid then
 		logger:info(string.format("processing file `%s'", filepath))
 		doc = parse_file(filepath, doc)
 	end
-	
+
 	return doc
 end
 
@@ -437,7 +463,7 @@ function directory (path, doc)
 		local fullpath = path .. "/" .. f
 		local attr = posix.stat(fullpath)
 		assert(attr, string.format("error stating file `%s'", fullpath))
-		
+
 		if attr.type == "regular" then
 			doc = file(fullpath, doc)
 		elseif attr.type == "directory" and f ~= "." and f ~= ".." then
@@ -465,7 +491,7 @@ end
 
 function start (files, doc)
 	assert(files, "file list not specified")
-	
+
 	-- Create an empty document, or use the given one
 	doc = doc or {
 		files = {},
@@ -473,18 +499,18 @@ function start (files, doc)
 	}
 	assert(doc.files, "undefined `files' field")
 	assert(doc.modules, "undefined `modules' field")
-	
+
 	table.foreachi(files, function (_, path)
 		local attr = posix.stat(path)
 		assert(attr, string.format("error stating path `%s'", path))
-		
+
 		if attr.type == "regular" then
 			doc = file(path, doc)
 		elseif attr.type == "directory" then
 			doc = directory(path, doc)
 		end
 	end)
-	
+
 	-- order arrays alphabetically
 	recsort(doc.files)
 	recsort(doc.modules)
