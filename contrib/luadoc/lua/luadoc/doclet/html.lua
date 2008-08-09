@@ -20,7 +20,6 @@ local luadoc = require"luadoc"
 local package = package
 local string = require"string"
 local table = require"table"
-local luciutil = require "luci.util"
 
 module "luadoc.doclet.html"
 
@@ -137,8 +136,6 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 	assert(doc)
 	from = from or ""
 	kind = kind or "functions"
-
-	--luciutil.dumptable( module_doc )
 
 	if file_doc then
 		for _, func_name in pairs(file_doc[kind]) do
