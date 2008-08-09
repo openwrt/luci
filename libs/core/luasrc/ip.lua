@@ -414,7 +414,8 @@ function cidr.equal( self, addr )
 end
 
 --- Return the prefix length of this CIDR instance.
--- @return	Prefix length in bit
+-- @param mask	Override instance prefix with given netmask (optional)
+-- @return		Prefix length in bit
 function cidr.prefix( self, mask )
 	local prefix = self[3]
 
