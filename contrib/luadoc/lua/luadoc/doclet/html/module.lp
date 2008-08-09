@@ -45,6 +45,19 @@
 <p><small><b>Release:</b> <%=module_doc.release%></small></p>
 <%end%>
 
+<%if #module_doc.constants > 0 then %>
+<h2>Constants</h2>
+<table class="function_list">
+<%for _, const_name in ipairs(module_doc.constants) do
+  local const_data = module_doc.constants[const_name]%>
+	<tr>
+	<td class="name" nowrap><code><%=const_data.private and "local " or ""%><%=(const_name:gsub(".+%.",""))%></code></td>
+	<td class="summary"><%=const_data.summary%></td>
+	</tr>
+<%end%>
+</table>
+<%end%>
+
 <%if #module_doc.functions > 0 then %>
 <h2>Functions</h2>
 <table class="function_list">
@@ -75,7 +88,6 @@
 <br/>
 <br/>
 
-
 <%if #module_doc.functions > 0 then%>
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
@@ -84,7 +96,6 @@
 <%end%>
 </dl>
 <%end%>
-
 
 <%if #module_doc.tables > 0 then%>
 <h2><a name="tables"></a>Tables</h2>

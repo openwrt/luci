@@ -96,6 +96,38 @@ local function check_module (line, currentmodule)
 	return currentmodule
 end
 
+-- Patterns for constant recognition
+local constant_patterns = {
+	"^()%s*([A-Z][A-Z0-9_]*)%s*=",
+	"^%s*(local%s)%s*([A-Z][A-Z0-9_]*)%s*=",
+}
+
+-------------------------------------------------------------------------------
+-- Checks if the line contains a constant definition
+-- @param line string with line text
+-- @return constant information or nil if no constant definition found
+
+local function check_constant (line)
+	line = util.trim(line)
+
+	local info = table.foreachi(constant_patterns, function (_, pattern)
+		local r, _, l, id = string.find(line, pattern)
+		if r ~= nil then
+			return {
+				name = id,
+				private = (l == "local"),
+			}
+		end
+	end)
+
+	-- TODO: remove these assert's?
+	if info ~= nil then
+		assert(info.name, "constant name undefined")
+	end
+
+	return info
+end
+
 -------------------------------------------------------------------------------
 -- Extracts summary information from a description. The first sentence of each
 -- doc comment should be a summary sentence, containing a concise but complete
@@ -172,11 +204,16 @@ local function parse_comment (block, first_line, modulename)
 	if code ~= nil then
 		local func_info = check_function(code)
 		local module_name = check_module(code)
+		local const_info = check_constant(code)
 		if func_info then
 			block.class = "function"
 			block.name = func_info.name
 			block.param = func_info.param
 			block.private = func_info.private
+		elseif const_info then
+			block.class = "constant"
+			block.name = const_info.name
+			block.private = const_info.private
 		elseif module_name then
 			block.class = "module"
 			block.name = module_name
@@ -401,6 +438,15 @@ function parse_file (filepath, doc, handle, prev_line, prev_block, prev_modname)
 			if t and t.name then
 				table.insert(doc.modules[modulename].tables, t.name)
 				doc.modules[modulename].tables[t.name] = t
+			end
+		end
+
+		-- make constants table
+		doc.modules[modulename].constants = {}
+		for c in class_iterator(blocks, "constant")() do
+			if c and c.name then
+				table.insert(doc.modules[modulename].constants, c.name)
+				doc.modules[modulename].constants[c.name] = c
 			end
 		end
 	end
