@@ -41,20 +41,48 @@ local function __bless(x)
 	} )
 end
 
-local function __mask16(bits)
-	return bit.lshift(
-		bit.rshift( 0xFFFF, 16 - bits % 16 ),
-		16 - bits % 16
-	)
+local function __array16( x, family )
+	local list
+
+	if type(x) == "number" then
+		list = { bit.rshift(x, 16), bit.band(x, 0xFFFF) }
+
+	elseif type(x) == "string" then
+		if x:find(":") then x = IPv6(x) else x = IPv4(x) end
+		if x then
+			assert( x[1] == family, "Can't mix IPv4 and IPv6 addresses" )
+			list = { unpack(x[2]) }
+		end
+
+	elseif type(x) == "table" and type(x[2]) == "table" then
+		assert( x[1] == family, "Can't mix IPv4 and IPv6 addresses" )
+		list = { unpack(x[2]) }
+
+	elseif type(x) == "table" then
+		list = x
+	end
+
+	assert( list, "Invalid operand" )
+
+	return list
 end
 
-local function __length(family)
-	if family == FAMILY_INET4 then
-		return 32
-	else
-		return 128
-	end
+local function __mask16(bits)
+	return bit.lshift( bit.rshift( 0xFFFF, 16 - bits % 16 ), 16 - bits % 16 )
 end
+
+local function __not16(bits)
+	return bit.band( bit.bnot( __mask16(bits) ), 0xFFFF )
+end
+
+local function __maxlen(family)
+	return ( family == FAMILY_INET4 ) and 32 or 128
+end
+
+local function __sublen(family)
+	return ( family == FAMILY_INET4 ) and 30 or 127
+end
+
 
 --- Convert given short value to network byte order on little endian hosts
 -- @param x	Unsigned integer value between 0x0000 and 0xFFFF
@@ -255,9 +283,9 @@ end
 function Hex( hex, prefix, family, swap )
 	family = ( family ~= nil ) and family or FAMILY_INET4
 	swap   = ( swap   == nil ) and true   or swap
-	prefix = prefix or __length(family)
+	prefix = prefix or __maxlen(family)
 
-	local len  = __length(family)
+	local len  = __maxlen(family)
 	local tmp  = ""
 	local data = { }
 
@@ -417,6 +445,7 @@ end
 -- @param bits	Override prefix length of this instance (optional)
 -- @return		CIDR instance containing the network address
 -- @see			host
+-- @see			broadcast
 -- @see			mask
 function cidr.network( self, bits )
 	local data = { }
@@ -434,16 +463,17 @@ function cidr.network( self, bits )
 		end
 	end
 
-	return __bless({ self[1], data, __length(self[1]) })
+	return __bless({ self[1], data, __maxlen(self[1]) })
 end
 
 --- Return a corresponding CIDR representing the host address of this
 -- instance. This is intended to extract the host address from larger subnet.
 -- @return		CIDR instance containing the network address
 -- @see			network
+-- @see			broadcast
 -- @see			mask
 function cidr.host( self )
-	return __bless({ self[1], data, __length(self[1]) })
+	return __bless({ self[1], data, __maxlen(self[1]) })
 end
 
 --- Return a corresponding CIDR representing the netmask of this instance.
@@ -451,6 +481,7 @@ end
 -- @return		CIDR instance containing the netmask
 -- @see			network
 -- @see			host
+-- @see			broadcast
 function cidr.mask( self, bits )
 	local data = { }
 	bits = bits or self[3]
@@ -467,7 +498,28 @@ function cidr.mask( self, bits )
 		end
 	end
 
-	return __bless({ self[1], data, __length(self[1]) })
+	return __bless({ self[1], data, __maxlen(self[1]) })
+end
+
+--- Return CIDR containing the broadcast address of this instance.
+-- @param bits	Override prefix length of this instance (optional)
+-- @return		CIDR instance containing the netmask, always nil for IPv6
+-- @see			network
+-- @see			host
+-- @see			mask
+function cidr.broadcast( self )
+	-- IPv6 has no broadcast addresses (XXX: assert() instead?)
+	if self[1] == FAMILY_INET4 then
+		local data   = { unpack(self[2]) }
+		local offset = math.floor( self[3] / 16 ) + 1
+
+		if offset <= #data then
+			data[offset] = bit.bor( data[offset], __not16(self[3]) )
+			for i = offset + 1, #data do data[i] = 0xFFFF end
+
+			return __bless({ self[1], data, __maxlen(self[1]) })
+		end
+	end
 end
 
 --- Test whether this instance fully contains the given CIDR instance.
@@ -485,50 +537,95 @@ end
 
 --- Add specified amount of hosts to this instance.
 -- @param amount	Number of hosts to add to this instance
+-- @param inplace	Boolen indicating whether to alter values inplace (optional)
 -- @return			CIDR representing the new address or nil on overflow error
 -- @see				sub
-function cidr.add( self, amount )
-	local shorts = { bit.rshift(amount, 16), bit.band(amount, 0xFFFF) }
+function cidr.add( self, amount, inplace )
 	local data   = { unpack(self[2]) }
+	local shorts = __array16( amount, self[1] )
 
-	for pos = #data, 1, -1 do
-		local add = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
-		if ( data[pos] + add ) > 0xFFFF then
-			data[pos] = ( data[pos] + add ) % 0xFFFF
-			if pos > 1 then
-				data[pos-1] = data[pos-1] + ( add - data[pos] )
+	if shorts then
+		for pos = #data, 1, -1 do
+			local add = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
+			if ( data[pos] + add ) > 0xFFFF then
+				data[pos] = ( data[pos] + add ) % 0xFFFF
+				if pos > 1 then
+					data[pos-1] = data[pos-1] + ( add - data[pos] )
+				else
+					return nil
+				end
 			else
-				return nil
+				data[pos] = data[pos] + add
 			end
-		else
-			data[pos] = data[pos] + add
 		end
 	end
 
-	return __bless({ self[1], data, self[3] })
+	if inplace then
+		self[2] = data
+		return self
+	else
+		return __bless({ self[1], data, self[3] })
+	end
 end
 
 --- Substract specified amount of hosts from this instance.
 -- @param amount	Number of hosts to substract from this instance
+-- @param inplace	Boolen indicating whether to alter values inplace (optional)
 -- @return			CIDR representing the new address or nil on underflow error
 -- @see				add
-function cidr.sub( self, amount )
-	local shorts = { bit.rshift(amount, 16), bit.band(amount, 0xFFFF) }
+function cidr.sub( self, amount, inplace )
 	local data   = { unpack(self[2]) }
+	local shorts = __array16( amount, self[1] )
 
-	for pos = #data, 1, -1 do
-		local sub = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
-		if ( data[pos] - sub ) < 0 then
-			data[pos] = ( sub - data[pos] ) % 0xFFFF
-			if pos > 1 then
-				data[pos-1] = data[pos-1] - ( sub + data[pos] )
+	if shorts then
+		for pos = #data, 1, -1 do
+			local sub = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
+			if ( data[pos] - sub ) < 0 then
+				data[pos] = ( sub - data[pos] ) % 0xFFFF
+				if pos > 1 then
+					data[pos-1] = data[pos-1] - ( sub + data[pos] )
+				else
+					return nil
+				end
 			else
-				return nil
+				data[pos] = data[pos] - sub
 			end
-		else
-			data[pos] = data[pos] - sub
 		end
 	end
 
-	return __bless({ self[1], data, self[3] })
+	if inplace then
+		self[2] = data
+		return self
+	else
+		return __bless({ self[1], data, self[3] })
+	end
+end
+
+--- Return CIDR containing the lowest available host address within this subnet.
+-- @return		CIDR containing the host address, nil if subnet is too small
+-- @see			maxhost
+function cidr.minhost( self )
+	if self[3] <= __sublen(self[1]) then
+		-- 1st is Network Address in IPv4 and Subnet-Router Anycast Adresse in IPv6
+		return self:network():add(1, true)
+	end
+end
+
+--- Return CIDR containing the highest available host address within the subnet.
+-- @return		CIDR containing the host address, nil if subnet is too small
+-- @see			minhost
+function cidr.maxhost( self )
+	if self[3] <= __sublen(self[1]) then
+		local data   = { unpack(self[2]) }
+		local offset = math.floor( self[3] / 16 ) + 1
+
+		data[offset] = bit.bor( data[offset], __not16(self[3]) )
+		for i = offset + 1, #data do data[i] = 0xFFFF end
+		data = __bless({ self[1], data, __maxlen(self[1]) })
+
+		-- Last address in reserved for Broadcast Address in IPv4
+		if data[1] == FAMILY_INET4 then data:sub(1, true) end
+
+		return data
+	end
 end
