@@ -502,7 +502,6 @@ function cidr.mask( self, bits )
 end
 
 --- Return CIDR containing the broadcast address of this instance.
--- @param bits	Override prefix length of this instance (optional)
 -- @return		CIDR instance containing the netmask, always nil for IPv6
 -- @see			network
 -- @see			host
