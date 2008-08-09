@@ -55,7 +55,7 @@ local function check_function (line)
 			return {
 				name = id,
 				private = (l == "local"),
-				param = util.split("%s*,%s*", param),
+				param = { } --util.split("%s*,%s*", param),
 			}
 		end
 	end)
