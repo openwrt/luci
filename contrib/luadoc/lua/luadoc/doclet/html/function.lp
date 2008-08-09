@@ -8,7 +8,7 @@ else
 end
 %>
 
-<dt><%=func.private and "local " or ""%><a name="<%=func.name%>"></a><strong><%=func.name%></strong>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
+<dt><%=func.private and "local " or ""%><a name="<%=func.name%>"></a><strong><%=(oop and func.name:gsub("%.",":") or func.name:gsub(".+%.",""))%></strong>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
 <dd>
 <%=func.description or ""%>
 
@@ -56,9 +56,9 @@ end
 <ul>
 	<%for i = 1, #func.see do%>
 	<li><a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from)%>">
-		<%=func.see[i]%>
+		<%=(oop and func.see[i]:gsub("%.",":") or func.see[i]:gsub(".+%.",""))%>
 	</a>
 	<%end%>
-</ul>
+</ul
 <%end%>
 </dd>

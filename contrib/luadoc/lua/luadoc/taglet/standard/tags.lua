@@ -23,10 +23,16 @@ local function author (tag, block, text)
 end
 
 -------------------------------------------------------------------------------
--- Set the class of a comment block. Classes can be "module", "function", 
+-- Set the class of a comment block. Classes can be "module", "function",
 -- "table". The first two classes are automatic, extracted from the source code
 
 local function class (tag, block, text)
+	block[tag] = text
+end
+
+-------------------------------------------------------------------------------
+
+local function cstyle (tag, block, text)
 	block[tag] = text
 end
 
@@ -52,7 +58,7 @@ local function field (tag, block, text)
 
 	local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
 	assert(name, "field name not defined")
-	
+
 	table.insert(block[tag], name)
 	block[tag][name] = desc
 end
@@ -65,7 +71,7 @@ local function name (tag, block, text)
 	if block[tag] and block[tag] ~= text then
 		luadoc.logger:error(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
 	end
-	
+
 	block[tag] = text
 end
 
@@ -120,12 +126,12 @@ end
 local function see (tag, block, text)
 	-- see is always an array
 	block[tag] = block[tag] or {}
-	
+
 	-- remove trailing "."
 	text = string.gsub(text, "(.*)%.$", "%1")
-	
-	local s = util.split("%s*,%s*", text)			
-	
+
+	local s = util.split("%s*,%s*", text)
+
 	table.foreachi(s, function (_, v)
 		table.insert(block[tag], v)
 	end)
@@ -149,6 +155,7 @@ end
 local handlers = {}
 handlers["author"] = author
 handlers["class"] = class
+handlers["cstyle"] = cstyle
 handlers["copyright"] = copyright
 handlers["description"] = description
 handlers["field"] = field

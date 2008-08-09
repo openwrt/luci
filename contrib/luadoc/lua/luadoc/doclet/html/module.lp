@@ -20,12 +20,13 @@
 
 <div id="navigation">
 <%=luadoc.doclet.html.include("menu.lp", { doc=doc, module_doc=module_doc })%>
+<% oop = ( module_doc.doc[1].cstyle == "instance" ) and true or false %>
 
 </div><!-- id="navigation" -->
 
 <div id="content">
 
-<h1>Module <code><%=module_doc.name%></code></h1>
+<h1><%=( oop and "Object Instance" or "Class" )%> <code><%=module_doc.name%></code></h1>
 
 <p><%=module_doc.description%></p>
 <%if module_doc.author then%>
@@ -44,13 +45,13 @@
 <p><small><b>Release:</b> <%=module_doc.release%></small></p>
 <%end%>
 
-<%if #module_doc.functions > 0 then%>
+<%if #module_doc.functions > 0 then %>
 <h2>Functions</h2>
 <table class="function_list">
 <%for _, func_name in ipairs(module_doc.functions) do
   local func_data = module_doc.functions[func_name]%>
 	<tr>
-	<td class="name" nowrap><%=func_data.private and "local " or ""%><a href="#<%=func_name%>"><%=func_name%></a>&nbsp;(<%=table.concat(module_doc.functions[func_name].param, ", ")%>)</td>
+	<td class="name" nowrap><%=func_data.private and "local " or ""%><a href="#<%=func_name%>"><%=(oop and func_name:gsub("%.",":") or func_name:gsub(".+%.",""))%></a>&nbsp;(<%=table.concat(module_doc.functions[func_name].param, ", ")%>)</td>
 	<td class="summary"><%=module_doc.functions[func_name].summary%></td>
 	</tr>
 <%end%>
@@ -79,7 +80,7 @@
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
 <%for _, func_name in ipairs(module_doc.functions) do%>
-<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=module_doc.functions[func_name] })%>
+<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=module_doc.functions[func_name], oop=oop })%>
 <%end%>
 </dl>
 <%end%>
@@ -103,6 +104,6 @@
 	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
 </div> <!-- id="about" -->
 
-</div> <!-- id="container" -->	
+</div> <!-- id="container" -->
 </body>
 </html>
