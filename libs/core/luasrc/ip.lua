@@ -551,19 +551,17 @@ function cidr.add( self, amount, inplace )
 	local data   = { unpack(self[2]) }
 	local shorts = __array16( amount, self[1] )
 
-	if shorts then
-		for pos = #data, 1, -1 do
-			local add = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
-			if ( data[pos] + add ) > 0xFFFF then
-				data[pos] = ( data[pos] + add ) % 0xFFFF
-				if pos > 1 then
-					data[pos-1] = data[pos-1] + ( add - data[pos] )
-				else
-					return nil
-				end
+	for pos = #data, 1, -1 do
+		local add = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
+		if ( data[pos] + add ) > 0xFFFF then
+			data[pos] = ( data[pos] + add ) % 0xFFFF
+			if pos > 1 then
+				data[pos-1] = data[pos-1] + ( add - data[pos] )
 			else
-				data[pos] = data[pos] + add
+				return nil
 			end
+		else
+			data[pos] = data[pos] + add
 		end
 	end
 
@@ -584,19 +582,17 @@ function cidr.sub( self, amount, inplace )
 	local data   = { unpack(self[2]) }
 	local shorts = __array16( amount, self[1] )
 
-	if shorts then
-		for pos = #data, 1, -1 do
-			local sub = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
-			if ( data[pos] - sub ) < 0 then
-				data[pos] = ( sub - data[pos] ) % 0xFFFF
-				if pos > 1 then
-					data[pos-1] = data[pos-1] - ( sub + data[pos] )
-				else
-					return nil
-				end
+	for pos = #data, 1, -1 do
+		local sub = ( #shorts > 0 ) and table.remove( shorts, #shorts ) or 0
+		if ( data[pos] - sub ) < 0 then
+			data[pos] = ( sub - data[pos] ) % 0xFFFF
+			if pos > 1 then
+				data[pos-1] = data[pos-1] - ( sub + data[pos] )
 			else
-				data[pos] = data[pos] - sub
+				return nil
 			end
+		else
+			data[pos] = data[pos] - sub
 		end
 	end
 
