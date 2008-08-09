@@ -20,10 +20,16 @@ module( "luci.ip", package.seeall )
 require("bit")
 require("luci.util")
 
+--- Boolean; true if system is little endian
 LITTLE_ENDIAN = not luci.util.bigendian()
+
+--- Boolean; true if system is big endian
 BIG_ENDIAN    = not LITTLE_ENDIAN
 
+--- Specifier for IPv4 address family
 FAMILY_INET4  = 0x04
+
+--- Specifier for IPv6 address family
 FAMILY_INET6  = 0x06
 
 
@@ -314,19 +320,20 @@ end
 
 --- LuCI IP Library / CIDR instances
 -- @class	module
+-- @cstyle	instance
 -- @name	luci.ip.cidr
 cidr = luci.util.class()
 
 --- Test whether the instance is a IPv4 address.
 -- @return	Boolean indicating a IPv4 address type
--- @see		is6
+-- @see		cidr.is6
 function cidr.is4( self )
 	return self[1] == FAMILY_INET4
 end
 
 --- Test whether the instance is a IPv6 address.
 -- @return	Boolean indicating a IPv6 address type
--- @see		is4
+-- @see		cidr.is4
 function cidr.is6( self )
 	return self[1] == FAMILY_INET6
 end
@@ -360,8 +367,8 @@ end
 -- family than this instance.
 -- @param addr	A luci.ip.cidr instance to compare against
 -- @return		Boolean indicating whether this instance is lower
--- @see			higher
--- @see			equal
+-- @see			cidr.higher
+-- @see			cidr.equal
 function cidr.lower( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
 	for i = 1, #self[2] do
@@ -377,8 +384,8 @@ end
 -- family than this instance.
 -- @param addr	A luci.ip.cidr instance to compare against
 -- @return		Boolean indicating whether this instance is higher
--- @see			lower
--- @see			equal
+-- @see			cidr.lower
+-- @see			cidr.equal
 function cidr.higher( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
 	for i = 1, #self[2] do
@@ -389,13 +396,13 @@ function cidr.higher( self, addr )
 	return false
 end
 
---- Test whether the value of the instance is uequal to the given address.
+--- Test whether the value of the instance is equal to the given address.
 -- This function will throw an exception if the given address is a different
 -- family than this instance.
 -- @param addr	A luci.ip.cidr instance to compare against
 -- @return		Boolean indicating whether this instance is equal
--- @see			lower
--- @see			higher
+-- @see			cidr.lower
+-- @see			cidr.higher
 function cidr.equal( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
 	for i = 1, #self[2] do
@@ -444,9 +451,9 @@ end
 -- instance.
 -- @param bits	Override prefix length of this instance (optional)
 -- @return		CIDR instance containing the network address
--- @see			host
--- @see			broadcast
--- @see			mask
+-- @see			cidr.host
+-- @see			cidr.broadcast
+-- @see			cidr.mask
 function cidr.network( self, bits )
 	local data = { }
 	bits = bits or self[3]
@@ -469,9 +476,9 @@ end
 --- Return a corresponding CIDR representing the host address of this
 -- instance. This is intended to extract the host address from larger subnet.
 -- @return		CIDR instance containing the network address
--- @see			network
--- @see			broadcast
--- @see			mask
+-- @see			cidr.network
+-- @see			cidr.broadcast
+-- @see			cidr.mask
 function cidr.host( self )
 	return __bless({ self[1], data, __maxlen(self[1]) })
 end
@@ -479,9 +486,9 @@ end
 --- Return a corresponding CIDR representing the netmask of this instance.
 -- @param bits	Override prefix length of this instance (optional)
 -- @return		CIDR instance containing the netmask
--- @see			network
--- @see			host
--- @see			broadcast
+-- @see			cidr.network
+-- @see			cidr.host
+-- @see			cidr.broadcast
 function cidr.mask( self, bits )
 	local data = { }
 	bits = bits or self[3]
@@ -503,9 +510,9 @@ end
 
 --- Return CIDR containing the broadcast address of this instance.
 -- @return		CIDR instance containing the netmask, always nil for IPv6
--- @see			network
--- @see			host
--- @see			mask
+-- @see			cidr.network
+-- @see			cidr.host
+-- @see			cidr.mask
 function cidr.broadcast( self )
 	-- IPv6 has no broadcast addresses (XXX: assert() instead?)
 	if self[1] == FAMILY_INET4 then
@@ -538,7 +545,7 @@ end
 -- @param amount	Number of hosts to add to this instance
 -- @param inplace	Boolen indicating whether to alter values inplace (optional)
 -- @return			CIDR representing the new address or nil on overflow error
--- @see				sub
+-- @see				cidr.sub
 function cidr.add( self, amount, inplace )
 	local data   = { unpack(self[2]) }
 	local shorts = __array16( amount, self[1] )
@@ -571,7 +578,7 @@ end
 -- @param amount	Number of hosts to substract from this instance
 -- @param inplace	Boolen indicating whether to alter values inplace (optional)
 -- @return			CIDR representing the new address or nil on underflow error
--- @see				add
+-- @see				cidr.add
 function cidr.sub( self, amount, inplace )
 	local data   = { unpack(self[2]) }
 	local shorts = __array16( amount, self[1] )
@@ -602,7 +609,7 @@ end
 
 --- Return CIDR containing the lowest available host address within this subnet.
 -- @return		CIDR containing the host address, nil if subnet is too small
--- @see			maxhost
+-- @see			cidr.maxhost
 function cidr.minhost( self )
 	if self[3] <= __sublen(self[1]) then
 		-- 1st is Network Address in IPv4 and Subnet-Router Anycast Adresse in IPv6
@@ -612,7 +619,7 @@ end
 
 --- Return CIDR containing the highest available host address within the subnet.
 -- @return		CIDR containing the host address, nil if subnet is too small
--- @see			minhost
+-- @see			cidr.minhost
 function cidr.maxhost( self )
 	if self[3] <= __sublen(self[1]) then
 		local data   = { unpack(self[2]) }
