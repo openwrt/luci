@@ -30,6 +30,7 @@ function index()
 	page.order   = 10
 	page.i18n    = "admin-core"
 	page.sysauth = "root"
+	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
 	
 	local page  = node("admin", "index")

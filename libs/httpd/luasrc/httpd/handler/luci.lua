@@ -32,7 +32,6 @@ end
 
 function Luci.handle_head(self, ...)
 	local response, sourceout = self:handle_get(...)
-	self.running = self.running - 1
 	return response
 end
 
@@ -67,7 +66,6 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 			status = 500
 			headers["Content-Type"] = "text/plain"
 			local err = {id}
-			self.running = self.running - 1
 			return Response( status, headers ), function() return table.remove(err) end
 		end
 

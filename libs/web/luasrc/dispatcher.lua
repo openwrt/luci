@@ -33,6 +33,8 @@ require("luci.fs")
 
 context = luci.util.threadlocal()
 
+authenticator = {}
+
 -- Index table
 local index = nil
 
@@ -76,25 +78,20 @@ function error500(message)
 	return false
 end
 
---- Render and evaluate the system authentication login form.
--- @param default	Default username
--- @return			Authentication status
-function sysauth(default)
+function authenticator.htmlauth(validator, default)
 	local user = luci.http.formvalue("username")
 	local pass = luci.http.formvalue("password")
 	
-	if user and luci.sys.user.checkpasswd(user, pass) then
-		local sid = luci.sys.uniqueid(16)
-		luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-		luci.sauth.write(sid, user)
-		return true
-	else
-		require("luci.i18n")
-		require("luci.template")
-		context.path = {}
-		luci.template.render("sysauth", {duser=default, fuser=user})
-		return false
+	if user and validator(user, pass) then
+		return user
 	end
+	
+	require("luci.i18n")
+	require("luci.template")
+	context.path = {}
+	luci.template.render("sysauth", {duser=default, fuser=user})
+	return false
+	
 end
 
 --- Dispatch an HTTP request.
@@ -172,13 +169,23 @@ function dispatch(request)
 	
 	if track.sysauth then
 		require("luci.sauth")
+		local authen = authenticator[track.sysauth_authenticator]
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
 		local user = luci.sauth.read(luci.http.getcookie("sysauth"))
 		
-		
 		if not luci.util.contains(accs, user) then
-			if not sysauth(def) then
+			if authen then
+				local user = authen(luci.sys.user.checkpasswd, def)
+				if not user or not luci.util.contains(accs, user) then
+					return
+				else
+					local sid = luci.sys.uniqueid(16)
+					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
+					luci.sauth.write(sid, user)
+				end
+			else
+				luci.http.status(403, "Forbidden")
 				return
 			end
 		end

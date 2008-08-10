@@ -295,10 +295,7 @@ user.getuser = posix.getpasswd
 function user.checkpasswd(username, password)
 	local account = user.getuser(username)
 
-	-- FIXME: detect testing environment
-	if luci.fs.stat("/etc/shadow") and not luci.fs.access("/etc/shadow", "r") then
-		return true
-	elseif account then
+	if account then
 		if account.passwd == "!" then
 			return true
 		else

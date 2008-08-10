@@ -23,6 +23,9 @@ if pcall(require, "uci") and pcall(require, "luci.model.uci") then
 	luci.model.uci.set_confdir(luci.model.uci.confdir_default)
 end
 
+require("luci.sys")
+luci.sys.user.checkpasswd = function() return true end
+
 
 filehandler = luci.httpd.handler.file.Simple(DOCROOT)
 vhost:set_default_handler(filehandler)

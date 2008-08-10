@@ -29,6 +29,7 @@ function index()
 	local page   = entry({"mini"}, alias("mini", "index"), i18n("essentials", "Essentials"), 10)
 	page.i18n    = "admin-core"
 	page.sysauth = "root"
+	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
 	
 	entry({"mini", "index"}, alias("mini", "index", "index"), i18n("overview"), 10)
