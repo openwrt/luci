@@ -188,6 +188,9 @@ function dispatch(request)
 				luci.http.status(403, "Forbidden")
 				return
 			end
+		else
+			luci.http.status(403, "Forbidden")
+			return
 		end
 	end
 
