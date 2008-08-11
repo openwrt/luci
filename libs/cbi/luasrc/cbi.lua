@@ -649,7 +649,7 @@ function AbstractValue.parse(self, section)
 		if self.rmempty or self.optional then
 			self:remove(section)
 		elseif not fvalue or fvalue ~= cvalue then
-			self.tag_missing[section] = true
+			--self.tag_missing[section] = true
 		end
 	end
 end

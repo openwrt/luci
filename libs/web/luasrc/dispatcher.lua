@@ -172,7 +172,8 @@ function dispatch(request)
 		local authen = authenticator[track.sysauth_authenticator]
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
-		local sess = luci.http.getcookie("sysauth"):match("^[A-F0-9]+$")
+		local sess = luci.http.getcookie("sysauth")
+		sess = sess and sess:match("^[A-F0-9]+$")
 		local user = luci.sauth.read(sess)
 		
 		if not luci.util.contains(accs, user) then
