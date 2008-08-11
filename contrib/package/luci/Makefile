@@ -468,6 +468,17 @@ define Package/luci-app-ddns/install
 endef
 
 
+define Package/luci-app-samba
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +samba
+  TITLE:=Network Shares - Samba SMB/CIFS module
+endef
+
+define Package/luci-app-samba/install
+	$(call Package/luci/install/template,$(1),applications/luci-samba)
+endef
+
+
 ### Server Gateway Interfaces ###
 
 define Package/luci-sgi-cgi
@@ -637,6 +648,10 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-ddns),)
 	PKG_SELECTED_MODULES+=applications/luci-ddns
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-samba),)
+	PKG_SELECTED_MODULES+=applications/luci-samba
+endif
+
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
@@ -706,6 +721,7 @@ $(eval $(call BuildPackage,luci-app-statistics))
 $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))
+$(eval $(call BuildPackage,luci-app-samba))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
