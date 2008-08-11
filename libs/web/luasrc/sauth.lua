@@ -45,14 +45,16 @@ end
 --- Prepare session storage by creating the session directory.
 function prepare()
 	luci.fs.mkdir(sessionpath)
-	luci.fs.chmod(sessionpath, "a-rwx,u+rwx")
+	if not luci.fs.chmod(sessionpath, "a-rwx,u+rwx") then
+		error("Security Exception: Session path is not sane!")
+	end
 end
 
 --- Read a session and return its content.
 -- @param id	Session identifier
 -- @return		Session data
 function read(id)
-	if not id then
+	if not id or not sane() then
 		return
 	end
 	clean()
@@ -60,11 +62,18 @@ function read(id)
 end
 
 
+--- Check whether Session environment is sane.
+-- @return Boolean status
+function sane()
+	return luci.fs.stat(sessionpath, "mode") == "rwx------"
+end
+
+
 --- Write session data to a session file.
 -- @param id	Session identifier
 -- @param data	Session data
 function write(id, data)
-	if not luci.fs.stat(sessionpath) then
+	if not sane() then
 		prepare()
 	end
 	luci.fs.writefile(sessionpath .. "/" .. id, data)
