@@ -13,7 +13,17 @@ $Id$
 ]]--
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
+arg = arg or {}
+
 s = m:section(TypedSection, "interface", translate("interfaces"))
+function s.create(self, section)
+	local stat = TypedSection.create(self, section)
+	if stat then
+		arg = {section or stat}
+	end
+	return stat
+end
+
 function s.filter(self, section)
 	return section ~= "loopback" and
 	 (not arg or not arg[1] or arg[1] == section)
@@ -87,7 +97,7 @@ mac.optional = true
 s2 = m:section(TypedSection, "alias", translate("aliases"))
 s2.addremove = true
 
-if arg and arg[1] and luci.model.uci.get("network", arg[1]) then
+if arg and arg[1] then
 	s2:depends("interface", arg[1])
 	s2.defaults.interface = arg[1]
 else
