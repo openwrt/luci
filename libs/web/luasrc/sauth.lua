@@ -46,7 +46,9 @@ end
 --- Prepare session storage by creating the session directory.
 function prepare()
 	luci.fs.mkdir(sessionpath)
-	if not luci.fs.chmod(sessionpath, "a-rwx,u+rwx") then
+	luci.fs.chmod(sessionpath, "a-rwx,u+rwx")
+	 
+	if not sane() then
 		error("Security Exception: Session path is not sane!")
 	end
 end
