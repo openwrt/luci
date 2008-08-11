@@ -529,6 +529,16 @@ define Package/luci-theme-openwrt/install
 	$(call Package/luci/install/template,$(1),themes/openwrt.org)
 endef
 
+define Package/luci-theme-openwrtlight
+  $(call Package/luci/thtemplate)
+  TITLE:=OpenWRT.org - light variant without images
+endef
+
+define Package/luci-theme-openwrtlight/install
+	$(call Package/luci/install/template,$(1),themes/openwrt-light)
+endef
+
+
 ### Translations ###
 define Package/luci-i18n-german
   $(call Package/luci/i18ntemplate)
@@ -669,6 +679,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
+ifneq ($(CONFIG_PACKAGE_luci-theme-openwrtlight),)
+	PKG_SELECTED_MODULES+=themes/openwrt-light
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-i18n-german),)
 	PKG_SELECTED_MODULES+=i18n/german
@@ -729,6 +742,7 @@ $(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-fledermaus))
 $(eval $(call BuildPackage,luci-theme-openwrt))
+$(eval $(call BuildPackage,luci-theme-openwrtlight))
 
 $(eval $(call BuildPackage,luci-i18n-german))
 $(eval $(call BuildPackage,luci-i18n-english))
