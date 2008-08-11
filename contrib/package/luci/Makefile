@@ -470,7 +470,7 @@ endef
 
 define Package/luci-app-samba
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +samba
+  DEPENDS+=+luci-admin-full +samba3
   TITLE:=Network Shares - Samba SMB/CIFS module
 endef
 
