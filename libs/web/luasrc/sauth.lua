@@ -17,6 +17,7 @@ $Id$
 module("luci.sauth", package.seeall)
 require("luci.fs")
 require("luci.util")
+require("luci.sys")
 require("luci.config")
 
 
@@ -65,7 +66,8 @@ end
 --- Check whether Session environment is sane.
 -- @return Boolean status
 function sane()
-	return luci.fs.stat(sessionpath, "mode") == "rwx------"
+	return luci.sys.process.info("uid") == luci.fs.stat(sessionpath, "uid")
+	 and luci.fs.stat(sessionpath, "mode") == "rwx------"
 end
 
 
