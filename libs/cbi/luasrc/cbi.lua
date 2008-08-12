@@ -39,6 +39,9 @@ FORM_NODATA  =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
 
+CREATE_PREFIX = "cbi.cts."
+REMOVE_PREFIX = "cbi.rts."
+
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap, ...)
 	require("luci.fs")
@@ -231,6 +234,11 @@ function Map.get(self, section, option)
 	else
 		return uci.get_all(self.config, section)
 	end
+end
+
+-- UCI stateget
+function Map.stateget(self, section, option)
+	return uci.get_statevalue(self.config, section, option)
 end
 
 
@@ -505,7 +513,7 @@ end
 function TypedSection.parse(self)
 	if self.addremove then
 		-- Create
-		local crval = "cbi.cts." .. self.config .. "." .. self.sectiontype
+		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
 		local name  = luci.http.formvalue(crval)
 		if self.anonymous then
 			if name then
@@ -531,7 +539,7 @@ function TypedSection.parse(self)
 		end
 
 		-- Remove
-		crval = "cbi.rts." .. self.config
+		crval = REMOVE_PREFIX .. self.config
 		name = luci.http.formvaluetable(crval)
 		for k,v in pairs(name) do
 			if self:cfgvalue(k) and self:checkscope(k) then
@@ -606,6 +614,7 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
+	self.stateful  = false
 end
 
 -- Add a dependencie to another section field
@@ -687,7 +696,9 @@ end
 
 -- Return the UCI value of this object
 function AbstractValue.cfgvalue(self, section)
-	return self.map:get(section, self.option)
+	return self.stateful
+	 and self.map:stateget(section, self.option)
+	 or  self.map:get(section, self.option)
 end
 
 -- Validate the form value
