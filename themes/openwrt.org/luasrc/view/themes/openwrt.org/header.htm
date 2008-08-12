@@ -94,7 +94,7 @@ end
 	<div id="mainmenu" class="mainmenu">
 <%-
 local function submenu(prefix, node)
-	if not node.nodes then
+	if not node.nodes and not node.hidden then
 		return false
 	end
 	local index = {}
@@ -138,7 +138,7 @@ if cattree and cattree.nodes then
 
 	for i, k in ipairs(index) do
 		node = cattree.nodes[k.name]
-		if node.title and node.target then
+		if node.title and node.target and not node.hidden then
 			local href = controller.."/"..category.."/"..k.name
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
 			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>
@@ -152,7 +152,7 @@ end
 	<div class="modemenu">
 		<ul><%
 			for k,node in pairs(tree.nodes) do
-				if node.title then %>
+				if node.title and not node.hidden then %>
 					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
 <%				end
 			end%>
