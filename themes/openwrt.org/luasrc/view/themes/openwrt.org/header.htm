@@ -94,7 +94,7 @@ end
 	<div id="mainmenu" class="mainmenu">
 <%-
 local function submenu(prefix, node)
-	if not node.nodes and not node.hidden then
+	if not node.nodes or node.hidden then
 		return false
 	end
 	local index = {}
