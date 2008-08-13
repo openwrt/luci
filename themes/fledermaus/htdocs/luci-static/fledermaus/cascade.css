@@ -223,6 +223,7 @@ div#content ul {
 
 input[type=submit],
 input[type=reset],
+input[type=image],
 label {
 	cursor: pointer;
 }
@@ -232,11 +233,21 @@ input,
 textarea {
 	background: #eeeeee;
 	color: #000000;
-	border: 1px solid #000000;
+	border-width: 1px;
+	border-color: #000000;
 }
 
+input[type=image] {
+	border: none;
+}
+
+
 input:focus,
-textarea:focus {
+input:hover,
+select:focus,
+select:hover,
+textarea:focus,
+textarea:hover {
 	background: #f2f3f9;
 }
 
@@ -252,10 +263,36 @@ td input[type=password] {
 	width: 99%;
 }
 
-button.clean {
-	cursor: pointer;
-	border: none;
-	background-color: inherit;
+input.cbi-button {
+	padding-left: 17px;
+	padding-right: 1px;
+}
+
+input.cbi-button-add {
+	background: transparent url('../resources/cbi/add.gif') no-repeat scroll 1px center;
+}
+
+input.cbi-button-fieldadd {
+	background: transparent url(../resources/cbi/fieldadd.gif) no-repeat scroll 1px center;
+}
+
+input.cbi-button-reset {
+	background: transparent url('../resources/cbi/reset.gif') no-repeat scroll 1px center;
+}
+
+input.cbi-button-save {
+	background: transparent url('../resources/cbi/save.gif') no-repeat scroll 1px center;
+}
+
+input.cbi-button-apply {
+	background: transparent url('../resources/cbi/apply.gif') no-repeat scroll 1px center;
+}
+
+div.cbi-section-remove input {
+	background: transparent url('../resources/cbi/remove.gif') no-repeat scroll 1px center;
+	padding-left: 17px;
+	padding-right: 1px;
+	border-bottom: none;
 }
 
 textarea {
@@ -297,9 +334,18 @@ table.smalltext tr td {
 	border-left: 1px solid #666666;
 }
 
+.cbi-rowstyle-1 {
+	background-color: #eeeeff;
+}
+
+.cbi-rowstyle-2 {
+
+}
+
 div.cbi-value {
 	clear: left;
-	padding: 0.25em;
+	vertical-align: middle;
+	padding-left: 0.25em;
 	border-bottom: 1px dotted #bbbbbb;
 }
 
@@ -314,7 +360,6 @@ div.cbi-value:last-child {
 .cbi-value-title {
 	float: left;
 	width: 40%;
-	margin: 0.25em 0;
 }
 
 div.cbi-value-field {
@@ -351,15 +396,14 @@ div.cbi-section-remove {
 	float: right;
 }
 
-div.cbi-section-remove input {
-	border-color: #bbbbbb;
-	border-bottom: none;
-}
-
 .cbi-section-node {
 	clear: both;
 	border: 1px dotted #bbbbbb;
 	padding-bottom: 0;
+}
+
+.cbi-section-node div.cbi-section-table-row {
+	margin: 0.25em;
 }
 
 table.cbi-section-table {
@@ -382,6 +426,16 @@ td.cbi-section-table-optionals {
 	padding-top: 1em;
 }
 
+.cbi-value-helpicon img {
+	vertical-align: bottom;
+}
+
+div.cbi-error {
+	font-size: 95%;
+	font-weight: bold;
+	color: #FF0000;
+}
+
 .right {
 	text-align: right;
 }
@@ -401,6 +455,13 @@ td.cbi-section-table-optionals {
 
 .inline {
 	display: inline;
+}
+
+.error500 {
+	white-space: normal;
+	border: 1px dotted #FF0000;
+	background-color: #FFFFFF;
+	padding: 0.5em;
 }
 
 #memorybar {
