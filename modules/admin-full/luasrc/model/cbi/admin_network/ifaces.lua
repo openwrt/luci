@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 arg[1] = arg[1] or ""
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
@@ -37,6 +38,42 @@ for i,d in ipairs(luci.sys.net.devices()) do
 	end
 end
 
+local zones = luci.tools.webadmin.network_get_zones(arg[1])
+if zones and #zones == 0 then
+	m:chain("firewall")
+	
+	fwzone = s:option(Value, "_fwzone", 
+		translate("network_interface_fwzone"),
+		translate("network_interface_fwzone_desc"))
+	fwzone.rmempty = true
+	fwzone:value("", "- " .. translate("none") .. " -")
+	fwzone:value(arg[1])
+	luci.model.uci.foreach("firewall", "zone",
+		function (section)
+			fwzone:value(section.name)
+		end
+	)
+	
+	function fwzone.write(self, section, value)	
+		local zone = luci.tools.webadmin.firewall_find_zone(value)
+		local stat
+		
+		if not zone then
+			stat = luci.model.uci.section("firewall", "zone", nil, {
+				name = value,
+				network = section
+			})
+		else
+			local net = luci.model.uci.get("firewall", zone, "network")
+			net = (net or value) .. " " .. section
+			stat = luci.model.uci.set("firewall", zone, "network", net)
+		end
+		
+		if stat then
+			self.render = function() end
+		end
+	end
+end
 
 ipaddr = s:option(Value, "ipaddr", translate("ipaddress"))
 ipaddr.rmempty = true
@@ -79,24 +116,30 @@ mac.optional = true
 user = s:option(Value, "username", translate("username"))
 user.rmempty = true
 user:depends("proto", "pptp")
-user:depends("proto", "ppoe")
+user:depends("proto", "pppoe")
 
 pass = s:option(Value, "password", translate("password"))
 pass.rmempty = true
 pass:depends("proto", "pptp")
-pass:depends("proto", "ppoe")
+pass:depends("proto", "pppoe")
 
-ka = s:option(Value, "keepalive")
+ka = s:option(Value, "keepalive",
+ translate("network_interface_keepalive"),
+ translate("network_interface_keepalive_desc")
+)
 ka.rmempty = true
 ka:depends("proto", "pptp")
-ka:depends("proto", "ppoe")
+ka:depends("proto", "pppoe")
 
-demand = s:option(Value, "demand")
+demand = s:option(Value, "demand", 
+ translate("network_interface_demand"),
+ translate("network_interface_demand_desc")
+)
 demand.rmempty = true
 demand:depends("proto", "pptp")
-demand:depends("proto", "ppoe")
+demand:depends("proto", "pppoe")
 
-srv = s:option(Value, "server")
+srv = s:option(Value, "server", translate("network_interface_server"))
 srv:depends("proto", "pptp")
 srv.rmempty = true
 

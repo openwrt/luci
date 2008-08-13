@@ -16,12 +16,12 @@ require("luci.sys")
 require("luci.tools.webadmin")
 
 
-m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
+m = Map("network", translate("interfaces"))
 
 local created
 local netstat = luci.sys.net.deviceinfo()
 
-s = m:section(TypedSection, "interface", translate("interfaces"))
+s = m:section(TypedSection, "interface", "")
 s.addremove = true
 s.extedit   = luci.http.getenv("REQUEST_URI") .. "/%s"
 s.template  = "cbi/tblsection"
@@ -50,6 +50,9 @@ function up.write(self, section, value)
 	os.execute(call .. " " .. section)
 end
 
+ifname = s:option(DummyValue, "ifname", translate("device"))
+ifname.stateful = true
+
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:stateget(section, "ifname") or ""
@@ -57,17 +60,14 @@ function hwaddr.cfgvalue(self, section)
 end
 
 
-ipaddr = s:option(DummyValue, "ipaddr")
+ipaddr = s:option(DummyValue, "ipaddr", translate("addresses"))
 
 function ipaddr.cfgvalue(self, section)
-	local ip = self.map:stateget(section, "ipaddr")
-	local nm = self.map:stateget(section, "netmask")
-	
-	local parsed = ip and luci.ip.IPv4(ip, nm)
-	return parsed and parsed:string() or ""
+	local addr = luci.tools.webadmin.network_get_addresses(section)
+	return table.concat(addr, ", ")
 end
 
-txrx = s:option(DummyValue, "_rx", "TX / RX")
+txrx = s:option(DummyValue, "_txrx")
 
 function txrx.cfgvalue(self, section)
 	local ix = self.map:stateget(section, "ifname")
@@ -81,7 +81,7 @@ function txrx.cfgvalue(self, section)
 	return string.format("%s / %s", tx, rx)
 end
 
-errors = s:option(DummyValue, "_err", "Errors", "TX / RX")
+errors = s:option(DummyValue, "_err")
 
 function errors.cfgvalue(self, section)
 	local ix = self.map:stateget(section, "ifname")

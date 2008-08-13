@@ -26,12 +26,12 @@ function index()
 	local page  = node("admin", "network", "vlan")
 	page.target = cbi("admin_network/vlan")
 	page.title  = i18n("a_n_switch", "Switch")
-	page.order  = 10
+	page.order  = 20
 	
 	local page  = node("admin", "network", "network")
 	page.target = cbi("admin_network/network")
 	page.title  = i18n("interfaces", "Schnittstellen")
-	page.order  = 20
+	page.order  = 10
 	luci.model.uci.foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]

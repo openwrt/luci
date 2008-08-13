@@ -101,6 +101,7 @@ function tset(config, section, values)
 			stat = stat and set(config, section, k, v)
 		end
 	end
+	return stat
 end
 
 

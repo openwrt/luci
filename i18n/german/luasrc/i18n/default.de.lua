@@ -68,6 +68,7 @@ name = "Name"
 netmask = "IPv4-Netzmaske"
 network = "Netzwerk"
 networks = "Netzwerke"
+none = "keine"
 notinstalled = "nicht installiert"
 
 ok = "OK"
