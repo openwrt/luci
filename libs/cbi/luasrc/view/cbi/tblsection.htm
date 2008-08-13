@@ -21,36 +21,52 @@ $Id$
 		<%- local count = 0 -%>
 		<table class="cbi-section-table">
 			<tr class="cbi-section-table-titles">
+			<%- if not self.anonymous then -%>
+				<th>&nbsp;</th>
+			<%- end -%>
 			<%- for i, k in pairs(self.children) do -%>
 				<th class="cbi-section-table-cell"><%=k.title%></th>
+			<%- count = count + 1; end; if self.extedit then -%>
+				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- count = count + 1; end; if self.addremove then -%>
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- count = count + 1; end -%>
 			</tr>
 			<tr class="cbi-section-table-descr">
+			<%- if not self.anonymous then -%>
+				<th>&nbsp;</th>
+			<%- end -%>
 			<%- for i, k in pairs(self.children) do -%>
 				<th class="cbi-section-table-cell"><%=k.description%></th>
+			<%- end; if self.extedit then -%>
+				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- end; if self.addremove then -%>
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- end -%>
 			</tr>
 			<%- local isempty = true
 			    for i, k in ipairs(self:cfgsections()) do
-					if not self.anonymous then
-			-%>
-			<tr class="cbi-section-table-title">
-				<th colspan="<%=count%>"><h3><%=k%></h3></th>
-			</tr>
-			<%- 	end
 					section = k
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
 			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
+				<% if not self.anonymous then -%>
+					<th><h3><%=k%></h3></th>
+				<%- end %>
 				<%-+cbi/ucisection-%>
+				<%- if self.extedit or self.addremove then -%>
+					<td class="cbi-section-table-cell">
+						<%- if self.extedit then -%>
+							<a href="<%=self.extedit:format(section)%>"><img style="border: none" src="<%=resource%>/cbi/edit.gif" alt="<%:edit%>" /></a>
+						<%- end; if self.addremove then %>
+							<button class="clean" type="submit" value="1" name="cbi.rts.<%=self.config%>.<%=k%>" title="<%:delete%>"><img src="<%=resource%>/cbi/remove.gif" alt="<%:delete%>" /></button>
+						<%- end -%>
+					</td>
+				<%- end -%>
 				<%- if self.addremove then -%>
 					<td class="cbi-section-table-cell">
-						<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="X" title="<%:delete%>" />
+						
 					</td>
 				<%- end -%>
 			</tr>
@@ -61,9 +77,10 @@ $Id$
 				<td colspan="<%=count%>"><em><br /><%:cbi_sectempty%></em></td>
 			</tr>
 			<%- end -%>
-
+		</table>
 			<%- if self.addremove then -%>
-			<tr class="cbi-section-table-row">
+			<br />
+			<div class="cbi-section-table-row">
 				<td colspan="<%=count%>" class="cbi-section-table-optionals">
 					<div class="cbi-section-create">
 						<% if self.anonymous then %>
@@ -78,9 +95,8 @@ $Id$
 						<% end %>
 					</div>
 				</td>
-			</tr>
+			</div>
 			<%- end -%>
-		</table>
 	</div>
 </div>
 <!-- /tblsection -->

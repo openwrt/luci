@@ -25,6 +25,7 @@ disable = "disable"
 distance = "Distance"
 dnsserver = "DNS-Server"
 
+edit = "Edit"
 enable = "enable"
 encryption = "Encryption"
 error = "Error"

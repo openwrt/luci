@@ -25,6 +25,7 @@ disable = "deaktivieren"
 distance = "Distanz"
 dnsserver = "DNS-Server"
 
+edit = "Bearbeiten"
 enable = "aktivieren"
 encryption = "Verschlüsselung"
 error = "Fehler"

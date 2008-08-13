@@ -212,6 +212,21 @@ function net.devices()
 	return devices
 end
 
+
+--- Return information about available network interfaces.
+-- @return	Table containing all current interface names and their information
+function net.deviceinfo()
+	local devices = {}
+	for line in io.lines("/proc/net/dev") do
+		local name, data = line:match("^ *(.-): *(.*)$")
+		if name and data then
+			devices[name] = luci.util.split(data, " +", nil, true)
+		end
+	end
+	return devices
+end
+
+
 -- Determine the MAC address belonging to the given IP address.
 -- @param ip	IPv4 address
 -- @return		String containing the MAC address or nil if it cannot be found

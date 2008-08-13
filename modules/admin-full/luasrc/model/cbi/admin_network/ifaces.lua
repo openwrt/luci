@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,33 +12,18 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+arg[1] = arg[1] or ""
+
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
-arg = arg or {}
-
-s = m:section(TypedSection, "interface", translate("interfaces"))
-function s.create(self, section)
-	local stat = TypedSection.create(self, section)
-	if stat then
-		arg = {section or stat}
-	end
-	return stat
-end
-
-function s.filter(self, section)
-	return section ~= "loopback" and
-	 (not arg or not arg[1] or arg[1] == section)
-end
-
-if not arg or not arg[1] then
-	s.addremove = true
-end
-s:depends("proto", "static")
-s:depends("proto", "dhcp")
+s = m:section(NamedSection, arg[1], "interface", translate("interfaces"))
+s.addremove = true
 
 p = s:option(ListValue, "proto", translate("protocol"))
 p:value("static", translate("static"))
 p:value("dhcp", "DHCP")
+p:value("pppoe", "PPPoE")
+p:value("pptp", "PPTP")
 p.default = "static"
 
 br = s:option(Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"))
@@ -91,25 +77,38 @@ mtu.isinteger = true
 mac = s:option(Value, "macaddr", translate("macaddress"))
 mac.optional = true
 
+user = s:option(Value, "username", translate("username"))
+user.rmempty = true
+user:depends("proto", "pptp")
+user:depends("proto", "ppoe")
+
+pass = s:option(Value, "password", translate("password"))
+pass.rmempty = true
+pass:depends("proto", "pptp")
+pass:depends("proto", "ppoe")
+
+ka = s:option(Value, "keepalive")
+ka.rmempty = true
+ka:depends("proto", "pptp")
+ka:depends("proto", "ppoe")
+
+demand = s:option(Value, "demand")
+demand.rmempty = true
+demand:depends("proto", "pptp")
+demand:depends("proto", "ppoe")
+
+srv = s:option(Value, "server")
+srv:depends("proto", "pptp")
+srv.rmempty = true
+
 
 
 
 s2 = m:section(TypedSection, "alias", translate("aliases"))
 s2.addremove = true
 
-if arg and arg[1] then
-	s2:depends("interface", arg[1])
-	s2.defaults.interface = arg[1]
-else
-	parent = s2:option(ListValue, "interface", translate("interface"))
-	luci.model.uci.foreach("network", "interface",
-		function (section)
-			if section[".name"] ~= "loopback" then
-				parent:value(section[".name"])
-			end
-		end
-	)
-end
+s2:depends("interface", arg[1])
+s2.defaults.interface = arg[1]
 
 
 s2.defaults.proto = "static"

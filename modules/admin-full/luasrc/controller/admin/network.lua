@@ -28,35 +28,32 @@ function index()
 	page.title  = i18n("a_n_switch", "Switch")
 	page.order  = 10
 	
-	local page  = node("admin", "network", "ifaces")
-	page.target = cbi("admin_network/ifaces")
+	local page  = node("admin", "network", "network")
+	page.target = cbi("admin_network/network")
 	page.title  = i18n("interfaces", "Schnittstellen")
 	page.order  = 20
-	page.leaf   = true
-
 	luci.model.uci.foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
 			if ifc ~= "loopback" then
-				entry({"admin", "network", "ifaces", ifc},
-				 page.target, ifc:upper())
+				entry({"admin", "network", "network", ifc},
+				 alias("admin", "network", "ifaces", ifc),
+				 ifc:upper())
 			end
 		end
 	)
-
+	
+	local page  = node("admin", "network", "ifaces")
+	page.target = cbi("admin_network/ifaces")
+	page.leaf   = true
 
 	local page  = node("admin", "network", "dhcp")
 	page.target = cbi("admin_network/dhcp")
 	page.title  = "DHCP"
 	page.order  = 30
 	
-	local page  = node("admin", "network", "ptp")
-	page.target = cbi("admin_network/ptp")
-	page.title  = "PPPoE / PPTP"
-	page.order  = 40
-	
 	local page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
 	page.title  = i18n("a_n_routes", "Routen")
-	page.order  = 50
+	page.order  = 40
 end
