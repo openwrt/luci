@@ -110,3 +110,4 @@ version = "Version"
 
 webui = "Weboberfläche"
 wifi = "Drahtlos"
+zone = "Zone"

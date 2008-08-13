@@ -110,3 +110,4 @@ version = "Version"
 
 webui = "Web UI"
 wifi = "Wifi"
+zone = "Zone"

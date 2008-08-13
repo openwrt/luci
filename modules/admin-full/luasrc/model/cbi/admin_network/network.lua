@@ -53,6 +53,15 @@ end
 ifname = s:option(DummyValue, "ifname", translate("device"))
 ifname.stateful = true
 
+if luci.model.uci.load("firewall") then
+	zone = s:option(DummyValue, "_zone", translate("zone"))
+
+	function zone.cfgvalue(self, section)
+		local zones = luci.tools.webadmin.network_get_zones(section)
+		return zones and table.concat(zones, ", ") or "-"
+	end
+end
+
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:stateget(section, "ifname") or ""
