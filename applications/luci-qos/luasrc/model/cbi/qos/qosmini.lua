@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 m = Map("qos")
 
 s = m:section(NamedSection, "wan", "interface", translate("m_n_inet"))
@@ -21,6 +22,7 @@ s:option(Value, "download", translate("qos_interface_download"), "kb/s")
 s:option(Value, "upload", translate("qos_interface_upload"), "kb/s")
 
 s = m:section(TypedSection, "classify")
+s.template = "cbi/tblsection"
 
 s.anonymous = true
 s.addremove = true
@@ -32,12 +34,19 @@ t:value("Normal", translate("qos_normal"))
 t:value("Bulk", translate("qos_bulk"))
 t.default = "Normal"
 
-s:option(Value, "srchost").optional = true
-s:option(Value, "dsthost").optional = true
+srch = s:option(Value, "srchost")
+srch.rmempty = true
+srch:value("", translate("all"))
+luci.tools.webadmin.cbi_add_knownips(srch)
+
+dsth = s:option(Value, "dsthost")
+dsth.rmempty = true
+dsth:value("", translate("all"))
+luci.tools.webadmin.cbi_add_knownips(dsth)
 
 l7 = s:option(ListValue, "layer7", translate("service"))
-l7.optional = true
-l7:value("")
+l7.rmempty = true
+l7:value("", translate("all"))
 local pats = luci.fs.dir("/etc/l7-protocols")
 if pats then
 	for i,f in ipairs(pats) do
@@ -48,23 +57,24 @@ if pats then
 end
 
 p2p = s:option(ListValue, "ipp2p", "P2P")
-p2p:value("")
+p2p:value("", "-")
 p2p:value("all", translate("all"))
 p2p:value("bit", "BitTorrent")
 p2p:value("dc", "DirectConnect")
 p2p:value("edk", "eDonkey")
 p2p:value("gnu", "Gnutella")
 p2p:value("kazaa", "Kazaa")
-p2p.optional = true
+p2p.rmempty = true
 
 p = s:option(ListValue, "proto", translate("protocol"))
-p:value("")
+p:value("", translate("all"))
 p:value("tcp", "TCP")
 p:value("udp", "UDP")
 p:value("icmp", "ICMP")
-p.optional = true
+p.rmempty = true
 
-s:option(Value, "ports", translate("port")).optional = true
-s:option(Value, "portrange").optional = true
+ports = s:option(Value, "ports", translate("ports"))
+ports.rmempty = true
+ports:value("", translate("all"))
 
 return m

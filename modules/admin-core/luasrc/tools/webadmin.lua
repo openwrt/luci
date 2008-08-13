@@ -15,6 +15,7 @@ $Id$
 
 module("luci.tools.webadmin", package.seeall)
 require("luci.model.uci")
+require("luci.sys")
 
 function byte_format(byte)
 	local suff = {"B", "KB", "MB", "GB", "TB"}
@@ -35,4 +36,10 @@ function cbi_add_networks(field)
 			end
 		end
 	)
+end
+
+function cbi_add_knownips(field)
+	for i, dataset in ipairs(luci.sys.net.arptable()) do
+		field:value(dataset["IP address"])
+	end
 end

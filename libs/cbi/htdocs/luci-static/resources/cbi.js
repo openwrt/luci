@@ -63,17 +63,19 @@ function cbi_combobox(id, values, def, man) {
 	var sel = document.createElement("select");
 	obj.parentNode.appendChild(sel);
 
-	if (obj.value == "") {
-		var optdef = document.createElement("option");
-		optdef.value = "";
-		optdef.appendChild(document.createTextNode(def));
-		sel.appendChild(optdef);
-	} else if (!values[obj.value]) {
-		var opt = document.createElement("option");
-		opt.value = obj.value;
-		opt.selected = "selected";
-		opt.appendChild(document.createTextNode(obj.value));
-		sel.appendChild(opt);	
+	if (!values[obj.value]) {
+		if (obj.value == "") {
+			var optdef = document.createElement("option");
+			optdef.value = "";
+			optdef.appendChild(document.createTextNode(def));
+			sel.appendChild(optdef);
+		} else {
+			var opt = document.createElement("option");
+			opt.value = obj.value;
+			opt.selected = "selected";
+			opt.appendChild(document.createTextNode(obj.value));
+			sel.appendChild(opt);
+		}
 	}
 
 	for (var i in values) {
@@ -107,9 +109,9 @@ function cbi_combobox(id, values, def, man) {
 }
 
 function cbi_combobox_init(id, values, def, man) {
-	var obj = document.getElementById(id)
+	var obj = document.getElementById(id);
 	cbi_bind(obj, "blur", function() {
 		cbi_combobox(id, values, def, man)
-	})
-	cbi_combobox(id, values, def, man)
+	});
+	cbi_combobox(id, values, def, man);
 }
