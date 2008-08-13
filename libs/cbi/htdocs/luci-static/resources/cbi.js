@@ -98,12 +98,12 @@ function cbi_combobox(id, values, def, man) {
 	obj.style.display = "none";
 
 	cbi_bind(sel, "change", function() {
-		obj.value = sel.options[sel.selectedIndex].value;
-
 		if (sel.selectedIndex == sel.options.length - 1) {
 			obj.style.display = "inline";
 			sel.parentNode.removeChild(sel);
 			obj.focus();
+		} else {
+			obj.value = sel.options[sel.selectedIndex].value;
 		}
 	})
 }

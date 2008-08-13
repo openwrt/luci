@@ -31,9 +31,9 @@ end
 			<%- if not self.anonymous then -%>
 				<th>&nbsp;</th>
 			<%- end -%>
-			<%- for i, k in pairs(self.children) do -%>
+			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell"><%=k.title%></th>
-			<%- count = count + 1; end; if self.extedit or self.addremove then -%>
+			<%- count = count + 1; end; end; if self.extedit or self.addremove then -%>
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- count = count + 1; end -%>
 			</tr>
@@ -41,9 +41,9 @@ end
 			<%- if not self.anonymous then -%>
 				<th>&nbsp;</th>
 			<%- end -%>
-			<%- for i, k in pairs(self.children) do -%>
+			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell"><%=k.description%></th>
-			<%- end; if self.extedit or self.addremove then -%>
+			<%- end; end; if self.extedit or self.addremove then -%>
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- end -%>
 			</tr>
@@ -57,7 +57,16 @@ end
 				<% if not self.anonymous then -%>
 					<th><h3><%=k%></h3></th>
 				<%- end %>
-				<%-+cbi/ucisection-%>
+
+
+				<%-
+					for k, node in ipairs(self.children) do
+						if not node.optional then
+							node:render(section, scope or {})
+						end
+					end
+				-%>
+
 				<%- if self.extedit or self.addremove then -%>
 					<td class="cbi-section-table-cell">
 						<%- if self.extedit then -%>
