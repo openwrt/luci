@@ -12,6 +12,13 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+<%-
+local rowcnt = 1
+function rowstyle()
+	rowcnt = rowcnt + 1
+	return (rowcnt % 2) + 1
+end
+-%>
 
 <!-- tblsection -->
 <div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
@@ -26,9 +33,7 @@ $Id$
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do -%>
 				<th class="cbi-section-table-cell"><%=k.title%></th>
-			<%- count = count + 1; end; if self.extedit then -%>
-				<th class="cbi-section-table-cell">&nbsp;</th>
-			<%- count = count + 1; end; if self.addremove then -%>
+			<%- count = count + 1; end; if self.extedit or self.addremove then -%>
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- count = count + 1; end -%>
 			</tr>
@@ -38,9 +43,7 @@ $Id$
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do -%>
 				<th class="cbi-section-table-cell"><%=k.description%></th>
-			<%- end; if self.extedit then -%>
-				<th class="cbi-section-table-cell">&nbsp;</th>
-			<%- end; if self.addremove then -%>
+			<%- end; if self.extedit or self.addremove then -%>
 				<th class="cbi-section-table-cell">&nbsp;</th>
 			<%- end -%>
 			</tr>
@@ -50,7 +53,7 @@ $Id$
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
-			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
+			<tr class="cbi-section-table-row<% if self.extedit then %> cbi-rowstyle-<%=rowstyle()%><% end %>" id="cbi-<%=self.config%>-<%=section%>">
 				<% if not self.anonymous then -%>
 					<th><h3><%=k%></h3></th>
 				<%- end %>
@@ -60,13 +63,8 @@ $Id$
 						<%- if self.extedit then -%>
 							<a href="<%=self.extedit:format(section)%>"><img style="border: none" src="<%=resource%>/cbi/edit.gif" alt="<%:edit%>" /></a>
 						<%- end; if self.addremove then %>
-							<button class="clean" type="submit" value="1" name="cbi.rts.<%=self.config%>.<%=k%>" title="<%:delete%>"><img src="<%=resource%>/cbi/remove.gif" alt="<%:delete%>" /></button>
+							<input type="image" value="<%:cbi_del%>" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:cbi_del%>" title="<%:cbi_del%>" src="<%=resource%>/cbi/remove.gif" />
 						<%- end -%>
-					</td>
-				<%- end -%>
-				<%- if self.addremove then -%>
-					<td class="cbi-section-table-cell">
-						
 					</td>
 				<%- end -%>
 			</tr>
@@ -84,10 +82,10 @@ $Id$
 				<td colspan="<%=count%>" class="cbi-section-table-optionals">
 					<div class="cbi-section-create">
 						<% if self.anonymous then %>
-							<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
+							<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" title="<%:cbi_add%>" />
 						<% else %>
 							<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-							<input type="submit" value="<%:cbi_add%>" />
+							<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" title="<%:cbi_add%>" />
 						<% end %>
 
 						<% if self.err_invalid then %>

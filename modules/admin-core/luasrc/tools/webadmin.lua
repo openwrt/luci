@@ -14,6 +14,18 @@ $Id$
 ]]--
 
 module("luci.tools.webadmin", package.seeall)
+require("luci.model.uci")
+
+function byte_format(byte)
+	local suff = {"B", "KB", "MB", "GB", "TB"}
+	for i=1, 5 do
+		if byte > 1024 and i < 5 then
+			byte = byte / 1024
+		else
+			return string.format("%.2f %s", byte, suff[i]) 
+		end 
+	end
+end
 
 function cbi_add_networks(field)
 	luci.model.uci.foreach("network", "interface",

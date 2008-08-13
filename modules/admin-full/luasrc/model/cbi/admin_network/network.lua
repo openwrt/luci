@@ -13,6 +13,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
+require("luci.tools.webadmin")
 
 
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
@@ -49,11 +50,14 @@ function up.write(self, section, value)
 	os.execute(call .. " " .. section)
 end
 
-ipaddr = s:option(DummyValue, "ipaddr", translate("ipaddress"))
-ipaddr.stateful = true
+hwaddr = s:option(DummyValue, "_hwaddr")
+function hwaddr.cfgvalue(self, section)
+	local ix = self.map:stateget(section, "ifname") or ""
+	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address") or "n/a"
+end
 
-ip6addr = s:option(DummyValue, "ip6addr", translate("ip6address"))
-ip6addr.stateful = true
+
+ipaddr = s:option(DummyValue, "ipaddr")
 
 function ipaddr.cfgvalue(self, section)
 	local ip = self.map:stateget(section, "ipaddr")
@@ -63,20 +67,32 @@ function ipaddr.cfgvalue(self, section)
 	return parsed and parsed:string() or ""
 end
 
-rx = s:option(DummyValue, "_rx")
+txrx = s:option(DummyValue, "_rx", "TX / RX")
 
-function rx.cfgvalue(self, section)
+function txrx.cfgvalue(self, section)
 	local ix = self.map:stateget(section, "ifname")
-	local bt = netstat and netstat[ix] and netstat[ix][1]
-	return bt and string.format("%.2f MB", tonumber(bt) / 1024 / 1024)
+	
+	local rx = netstat and netstat[ix] and netstat[ix][1]
+	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
+	
+	local tx = netstat and netstat[ix] and netstat[ix][9]
+	tx = tx and luci.tools.webadmin.byte_format(tonumber(tx)) or "-"
+	
+	return string.format("%s / %s", tx, rx)
 end
 
-tx = s:option(DummyValue, "_tx")
+errors = s:option(DummyValue, "_err", "Errors", "TX / RX")
 
-function tx.cfgvalue(self, section)
+function errors.cfgvalue(self, section)
 	local ix = self.map:stateget(section, "ifname")
-	local bt = netstat and netstat[ix] and netstat[ix][9]
-	return bt and string.format("%.2f MB", tonumber(bt) / 1024 / 1024)
+	
+	local rx = netstat and netstat[ix] and netstat[ix][3]
+	local tx = netstat and netstat[ix] and netstat[ix][11]
+	
+	rx = rx and tostring(rx) or "-"
+	tx = tx and tostring(tx) or "-"
+	
+	return string.format("%s / %s", tx, rx)
 end
 
 return m

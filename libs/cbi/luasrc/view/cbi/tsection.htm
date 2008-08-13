@@ -43,10 +43,10 @@ $Id$
 	<% if self.addremove then -%>
 		<div class="cbi-section-create">
 			<% if self.anonymous then -%>
-				<input type="submit" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
+				<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
 			<%- else -%>
 				<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-				<input type="submit" value="<%:cbi_add%>" />
+				<input type="submit" class="cbi-button cbi-button-add" value="<%:cbi_add%>" />
 			<%- end %>
 
 			<% if self.err_invalid then -%>

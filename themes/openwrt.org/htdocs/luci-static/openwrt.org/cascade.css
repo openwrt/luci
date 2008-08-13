@@ -216,20 +216,31 @@ div#content ul {
 
 input[type=submit],
 input[type=reset],
+input[type=image],
 label {
 	cursor: pointer;
 }
+
 
 select,
 input,
 textarea {
 	background: #eeeeee;
 	color: #000000;
-	border: 1px solid #000000;
+	border-width: 1px;
+	border-color: #000000;
+}
+
+input[type=image] {
+	border: none;
 }
 
 input:focus,
-textarea:focus {
+input:hover,
+select:focus,
+select:hover,
+textarea:focus,
+textarea:hover {
 	background: #ffffff;
 }
 
@@ -245,10 +256,40 @@ td input[type=password] {
 	width: 99%;
 }
 
-button.clean {
-	cursor: pointer;
-	border: none;
-	background-color: inherit;
+input.cbi-button {
+	padding-left: 17px;
+}
+
+input.cbi-button-add {
+	background: url('../resources/cbi/add.gif') 1px 1px;
+	background-repeat: no-repeat;
+}
+
+input.cbi-button-fieldadd {
+	background: url('../resources/cbi/fieldadd.gif') 1px 1px;
+	background-repeat: no-repeat;
+}
+
+input.cbi-button-reset {
+	background: url('../resources/cbi/reset.gif') 1px 1px;
+	background-repeat: no-repeat;
+}
+
+input.cbi-button-save {
+	background: url('../resources/cbi/save.gif') 1px 1px;
+	background-repeat: no-repeat;
+}
+
+input.cbi-button-apply {
+	background: url('../resources/cbi/apply.gif') 1px 1px;
+	background-repeat: no-repeat;
+}
+
+div.cbi-section-remove input {
+	background: url('../resources/cbi/remove.gif') 1px 1px;
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	border-bottom: none;
 }
 
 textarea {
@@ -288,6 +329,14 @@ table.smalltext tr td {
 	padding: 0 0.25em;
 	border-top: 1px solid #666666;
 	border-left: 1px solid #666666;
+}
+
+.cbi-rowstyle-1 {
+	background-color: #eeeeff;
+}
+
+.cbi-rowstyle-2 {
+
 }
 
 div.cbi-value {
@@ -342,11 +391,6 @@ div.cbi-optionals {
 
 div.cbi-section-remove {
 	float: right;
-}
-
-div.cbi-section-remove input {
-	border-color: #bbbbbb;
-	border-bottom: none;
 }
 
 .cbi-section-node {
