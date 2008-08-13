@@ -52,6 +52,9 @@ end
 ipaddr = s:option(DummyValue, "ipaddr", translate("ipaddress"))
 ipaddr.stateful = true
 
+ip6addr = s:option(DummyValue, "ip6addr", translate("ip6address"))
+ip6addr.stateful = true
+
 function ipaddr.cfgvalue(self, section)
 	local ip = self.map:stateget(section, "ipaddr")
 	local nm = self.map:stateget(section, "netmask")

@@ -13,10 +13,9 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 arg[1] = arg[1] or ""
-
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
-s = m:section(NamedSection, arg[1], "interface", translate("interfaces"))
+s = m:section(NamedSection, arg[1], "interface")
 s.addremove = true
 
 p = s:option(ListValue, "proto", translate("protocol"))
