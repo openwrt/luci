@@ -39,12 +39,12 @@ end
 			</tr>
 			<tr class="cbi-section-table-descr">
 			<%- if not self.anonymous then -%>
-				<th>&nbsp;</th>
+				<th></th>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell"><%=k.description%></th>
 			<%- end; end; if self.extedit or self.addremove then -%>
-				<th class="cbi-section-table-cell">&nbsp;</th>
+				<th class="cbi-section-table-cell"></th>
 			<%- end -%>
 			</tr>
 			<%- local isempty = true
@@ -86,7 +86,6 @@ end
 			<%- end -%>
 		</table>
 			<%- if self.addremove then -%>
-			<br />
 			<div class="cbi-section-table-row">
 				<td colspan="<%=count%>" class="cbi-section-table-optionals">
 					<div class="cbi-section-create">
