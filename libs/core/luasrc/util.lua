@@ -594,9 +594,24 @@ function exec(command)
 	return data
 end
 
---- Execute given commandline and gather stdout.
+--- Return a line-buffered iterator over the output of given command.
 -- @param command	String containing the command to execute
--- @return			Table containing the command's stdout splitted up in lines
+-- @return			Iterator
+function execi(command)
+	local pp = io.popen(command)
+
+	return pp and function()
+		local line = pp:read()
+		
+		if not line then
+			pp:close()
+		end
+		
+		return line
+	end
+end
+
+-- Deprecated
 function execl(command)
 	local pp   = io.popen(command)
 	local line = ""
