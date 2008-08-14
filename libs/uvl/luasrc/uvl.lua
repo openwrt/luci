@@ -151,8 +151,6 @@ end
 -- Process all given parts and construct validation tree
 function UVL._read_scheme_parts( self, scheme, schemes )
 
-	local stbl = { }
-
 	-- helper function to construct identifiers for given elements
 	local function _id( c, t )
 		if c == TYPE_SECTION then
@@ -205,29 +203,29 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				local r = _ref( TYPE_SECTION, v )
 
-				stbl.packages[r[1]] =
-					stbl.packages[r[1]] or {
+				self.packages[r[1]] =
+					self.packages[r[1]] or {
 						["sections"]  = { };
 						["variables"] = { };
 					}
 
-				local p = stbl.packages[r[1]]
+				local p = self.packages[r[1]]
 					  p.sections[v.name]  = p.sections[v.name]  or { }
 					  p.variables[v.name] = p.variables[v.name] or { }
 
 				local s = p.sections[v.name]
 
-				for k, v in pairs(v) do
+				for k, v2 in pairs(v) do
 					if k ~= "name" and k ~= "package" and k:sub(1,1) ~= "." then
 						if k:match("^depends") then
 							s["depends"] = _assert(
-								self:_read_depency( v, s["depends"] ),
+								self:_read_depency( v2, s["depends"] ),
 								"Section '%s' in scheme '%s' has malformed " ..
 								"depency specification in '%s'",
-								v.name, scheme, k
+								v.name or '<nil>', scheme or '<nil>', k
 							)
 						else
-							s[k] = v
+							s[k] = v2
 						end
 					end
 				end
@@ -244,7 +242,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				local r = _ref( TYPE_VARIABLE, v )
 
-				local p = _assert( stbl.packages[r[1]],
+				local p = _assert( self.packages[r[1]],
 					"Variable '%s' in scheme '%s' references unknown package '%s'",
 					v.name, scheme, r[1] )
 
@@ -290,7 +288,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				local r = _ref( TYPE_ENUM, v )
 
-				local p = _assert( stbl.packages[r[1]],
+				local p = _assert( self.packages[r[1]],
 					"Enum '%s' in scheme '%s' references unknown package '%s'",
 					v.value, scheme, r[1] )
 
@@ -326,21 +324,21 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		end
 	end
 
-	return stbl
+	return self
 end
 
 -- Read a depency specification
 function UVL._read_depency( self, value, deps )
-	local parts     = luci.util.split( value, "%s*;%s*" )
+	local parts     = luci.util.split( value, "%s*,%s*", nil, true )
 	local condition = { }
 
 	for i, val in ipairs(parts) do
-		local k, v = unpack(luci.util.split( val, "%s*=%s*" ))
+		local k, v = unpack(luci.util.split( val, "%s*=%s*", nil, true ))
 
 		if k and (
-			k:match("^%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+$")
+			k:match("^%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+$") or
 			k:match("^%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+$") or
-			k:match("^%$?[a-zA-Z0-9_]+$") or
+			k:match("^%$?[a-zA-Z0-9_]+$")
 		) then
 			condition[k] = v or true
 		else
