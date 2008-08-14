@@ -21,8 +21,8 @@ end
 -%>
 
 <!-- tblsection -->
-<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
-	<h2><%=self.title%></h2>
+<fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
+	<legend><%=self.title%></legend>
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
 		<%- local count = 0 -%>
@@ -104,5 +104,5 @@ end
 			</div>
 			<%- end -%>
 	</div>
-</div>
+</fieldset>
 <!-- /tblsection -->

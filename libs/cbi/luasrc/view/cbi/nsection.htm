@@ -18,7 +18,9 @@ $Id$
 		<% if self.title and #self.title > 0 then -%>
 			<legend><%=self.title%></legend>
 		<%- end %>
-		<div class="cbi-section-descr"><%=self.description%></div>
+		<% if self.description and #self.description > 0 then -%>
+			<div class="cbi-section-descr"><%=self.description%></div>
+		<%- end %>
 		<% if self.addremove then -%>
 			<div class="cbi-section-remove right">
 				<input type="submit" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:cbi_del%>" />

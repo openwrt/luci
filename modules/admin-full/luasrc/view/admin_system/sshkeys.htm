@@ -12,28 +12,28 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+
 <%+header%>
-<h1><%:system%></h1>
-<h2><%:a_s_sshkeys%></h2>
-
-<br />
-
-<div><%:a_s_sshkeys1%></div>
-
-<br />
 
 <form method="post" action="<%=controller%>/admin/system/sshkeys">
-	<div class="cbi-section-node" style="width: 100%">
-		<div class="cbi-value">
-			<div class="cbi-value-field">
-				<textarea style="width: 100%" rows="10" name="data"><%=cnt%></textarea>
-			</div>
+	<div class="cbi-map">
+		<h1><%:a_s_sshkeys%></h1>
+		<div class="cbi-map-descr">
+			<%:a_s_sshkeys1%>
 		</div>
+		<fieldset class="cbi-section">
+			<legend><%:a_s_sshkeys%></legend>
+			<textarea style="width: 100%" rows="10" name="data" wrap="off"><%=cnt%></textarea>
+			<% if msg then -%>
+				<div class="cbi-error"><%:error%>: <%=msg%></div>
+			<% end %>
+		</fieldset>
 	</div>
+
 	<div>
-		<input type="submit" value="<%:save%>" />
-		<input type="reset" value="<%:reset%>" />
+		<input type="submit" value="<%:save%>" class="cbi-button cbi-button-save" />
+		<input type="reset" value="<%:reset%>" class="cbi-button cbi-button-reset" />
 	</div>
-	<% if msg then %><br /><div class="error"><%:error%>: <%=msg%></div><% end %>
 </form>
+
 <%+footer%>
