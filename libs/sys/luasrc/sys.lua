@@ -45,6 +45,36 @@ function flash(image, kpattern)
 	return os.execute(cmd)
 end
 
+--- Retrieve information about currently mounted file systems.
+-- @return 	Table containing mount information
+function mounts()
+	local data = {}
+	local k = {"fs", "blocks", "used", "available", "percent", "mountpoint"}
+	local ps = luci.util.execi("df")
+	
+	if not ps then
+		return
+	else
+		ps()
+	end
+	
+	for line in ps do
+		local row = {}
+		
+		local j = 1
+		for value in line:gmatch("[^%s]+") do
+			row[k[j]] = value
+			j = j + 1
+		end
+		
+		if row[k[1]] then
+			table.insert(data, row)
+		end
+	end
+	
+	return data
+end
+
 --- Retrieve environment variables. If no variable is given then a table
 -- containing the whole environment is returned otherwise this function returns
 -- the corresponding string value for the given name or nil if no such variable
