@@ -17,17 +17,7 @@ m = Map("ntpclient", translate("ntpc"), translate("ntpc_desc"))
 
 s = m:section(TypedSection, "ntpclient", translate("general"))
 s.anonymous = true
-
-iface = s:option(ListValue, "iface", translate("ntpc_iface"), translate("ntpc_iface_desc"))
-luci.tools.webadmin.cbi_add_networks(iface)
-
 s:option(Value, "interval", translate("ntpc_interval"))
-s:option(Value, "count", translate("ntpc_count"), translate("ntpc_count_desc"))
-
-
-s2 = m:section(TypedSection, "ntpdrift", translate("ntpc_drift"))
-s2.anonymous = true
-s2:option(Value, "freq", translate("ntpc_drift_freq"))
 
 
 s3 = m:section(TypedSection, "ntpserver", translate("ntpc_timeserver"))
