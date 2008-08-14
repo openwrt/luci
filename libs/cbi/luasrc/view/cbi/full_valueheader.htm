@@ -14,5 +14,9 @@ $Id$
 -%>
 
 <div class="cbi-value" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
-	<label class="cbi-value-title"<%= attr("for", cbid) %>><%=self.title%></label>
+	<label class="cbi-value-title"<%= attr("for", cbid) %>>
+	<%- if self.titleref then -%><a class="cbi-title-ref" href="<%=self.titleref%>"><%- end -%>
+		<%-=self.title-%>
+	<%- if self.titleref then -%></a><%- end -%>
+	</label>
 		<div class="cbi-value-field">
