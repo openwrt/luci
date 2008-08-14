@@ -16,16 +16,15 @@ $Id$
 module("luci.statistics.rrdtool.colors", package.seeall)
 
 require("luci.util")
-require("luci.bits")
 
 
 Instance = luci.util.class()
 
 function Instance.from_string( self, s )
 	return {
-		luci.bits.Hex2Dec(s:sub(1,2)),
-		luci.bits.Hex2Dec(s:sub(3,4)),
-		luci.bits.Hex2Dec(s:sub(5,6))
+		tonumber(s:sub(1,2), 16),
+		tonumber(s:sub(3,4), 16),
+		tonumber(s:sub(5,6), 16)
 	}
 end
 

@@ -27,7 +27,6 @@ limitations under the License.
 --- LuCI Linux and POSIX system utilities.
 module("luci.sys", package.seeall)
 require("posix")
-require("luci.bits")
 require("luci.util")
 require("luci.fs")
 require("luci.ip")
