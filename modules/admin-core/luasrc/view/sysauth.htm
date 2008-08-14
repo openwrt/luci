@@ -14,27 +14,36 @@ $Id$
 -%>
 <%+header%>
 <% luci.i18n.loadc("sysauth") %>
-<h1><%:sysauth_head%></h1>
-<p><%:sysauth_prompt%></p>
-<% if fuser then %>
-<div class="error"><%:sysauth_failed%></div>
-<br />
-<% end %>
+
 <form method="post" action="<%=REQUEST_URI%>">
-		<div class="cbi-section-node">
-			<div class="cbi-value">
-				<div class="cbi-value-title"><%:username%></div>
-				<div class="cbi-value-field"><input class="cbi-input-user" type="text" name="username" value="<%=duser%>" /></div>
-			</div>
-			<div class="cbi-value">
-				<div class="cbi-value-title"><%:password%></div>
-				<div class="cbi-value-field"><input class="cbi-input-key" type="password" name="password" /></div>
-			</div>
+	<div class="cbi-map">
+		<h1><%:sysauth_head%></h1>
+		<div class="cbi-map-descr">
+			<%:sysauth_prompt%>
+			<%- if fuser then %>
+			<div class="error"><%:sysauth_failed%></div>
 			<br />
-			<div>
-				<input type="submit" class="cbi-button cbi-button-apply" value="<%:login%>" />
-				<input type="reset" class="cbi-button cbi-button-reset" value="<%:reset%>" />
-			</div>
+			<% end -%>
 		</div>
+		<fieldset class="cbi-section"><fieldset class="cbi-section-node">
+			<div class="cbi-value">
+				<label class="cbi-value-title"><%:username%></label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-user" type="text" name="username" value="<%=duser%>" />
+				</div>
+			</div>
+			<div class="cbi-value">
+				<label class="cbi-value-title"><%:password%></label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-key" type="password" name="password" />
+				</div>
+			</div>
+		</fieldset></fieldset>
+	</div>
+
+	<div>
+		<input type="submit" value="<%:login%>" class="cbi-button cbi-button-apply" />
+		<input type="reset" value="<%:reset%>" class="cbi-button cbi-button-reset" />
+	</div>
 </form>
 <%+footer%>

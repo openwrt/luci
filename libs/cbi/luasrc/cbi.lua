@@ -268,7 +268,7 @@ function SimpleForm.parse(self, ...)
 		or valid and 1
 		or -1
 
-	self.dorender = self:handle(state)
+	self.dorender = self:handle(state, self.data)
 end
 
 function SimpleForm.render(self, ...)

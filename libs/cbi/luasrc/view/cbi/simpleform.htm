@@ -17,7 +17,6 @@ $Id$
 	<div>
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />
-		<input type="submit" value="<%:save%>" class="hidden" />
 	</div>
 	<div class="cbi-map" id="cbi-<%=self.config%>">
 		<h1><%=self.title%></h1>
@@ -32,12 +31,12 @@ $Id$
 	</div>
 	<div>
 <%- if self.submit ~= false then %>
-		<input type="submit" value="
+		<input class="cbi-button-save" type="submit" value="
 	<%- if not self.submit then -%><%-:submit-%><%-else-%><%=self.submit%><%end%>
 	" />
 <% end %>
 <%- if self.reset ~= false then %>
-		<input type="reset" value="
+		<input class="cbi-button-reset" type="reset" value="
 	<%- if not self.reset then -%><%-:reset-%><%-else-%><%=self.reset%><%end%>
 	" />
 <% end %>

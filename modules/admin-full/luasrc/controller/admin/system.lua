@@ -21,7 +21,7 @@ function index()
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("a_s_packages"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, call("action_ipkg"), i18n("a_s_p_ipkg"))
 	entry({"admin", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw"), 20)
-	entry({"admin", "system", "sshkeys"}, call("action_sshkeys"), i18n("a_s_sshkeys"), 30)
+	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("a_s_sshkeys"), 30)
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("system"), 40)
 	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("a_s_fstab"), 50)
 	entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("leds", "LEDs"), 60)
@@ -218,24 +218,6 @@ function action_reboot()
 	if reboot then
 		luci.sys.reboot()
 	end
-end
-
-function action_sshkeys()
-	local file = "/etc/dropbear/authorized_keys"
-	local data = luci.http.formvalue("data")
-	local stat = nil
-	local err  = nil
-	
-	if data then
-		stat, err = luci.fs.writefile(file, data)
-	end	
-	
-	local cnt  = luci.fs.readfile(file)	
-	if cnt then
-		cnt = luci.util.pcdata(cnt)
-	end
-	
-	luci.template.render("admin_system/sshkeys", {cnt=cnt, msg=err})	
 end
 
 function action_upgrade()
