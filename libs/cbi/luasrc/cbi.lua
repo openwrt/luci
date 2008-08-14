@@ -287,6 +287,7 @@ end
 function SimpleForm.field(self, class, ...)
 	if instanceof(class, AbstractValue) then
 		local obj  = class(self, ...)
+		obj.track_missing = true
 		self:append(obj)
 		return obj
 	else
@@ -616,6 +617,7 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.tag_missing = {}
 	self.deps = {}
 
+	self.track_missing = false
 	self.rmempty   = false
 	self.default   = nil
 	self.size      = nil
@@ -657,14 +659,14 @@ function AbstractValue.parse(self, section)
 		if not fvalue then
 			self.tag_invalid[section] = true
 		end
-		if fvalue and not (fvalue == self:cfgvalue(section)) then
+		if fvalue and not (fvalue == cvalue) then
 			self:write(section, fvalue)
 		end
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
 			self:remove(section)
-		elseif not fvalue or fvalue ~= cvalue then
-			--self.tag_missing[section] = true
+		elseif self.track_missing and not fvalue or fvalue ~= cvalue then
+			self.tag_missing[section] = true
 		end
 	end
 end

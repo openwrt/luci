@@ -29,6 +29,12 @@ $Id$
 		</fieldset>
 		<br />
 	</div>
+<%- if self.message then %>
+	<div><%=self.message%></div>
+<%- end %>
+<%- if self.errmessage then %>
+	<div class="error"><%=self.errmessage%></div>
+<%- end %>	
 	<div>
 <%- if self.submit ~= false then %>
 		<input class="cbi-button-save" type="submit" value="

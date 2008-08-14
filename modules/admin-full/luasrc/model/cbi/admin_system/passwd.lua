@@ -27,16 +27,15 @@ end
 function f.handle(self, state, data)
 	if state == FORM_VALID then
 		local stat = luci.sys.user.setpasswd("root", data.pw1) == 0
-		local x = f:field(DummyValue, "_stat")
 		
 		if stat then
-			x.value = translate("a_s_changepw_changed")
+			f.message = translate("a_s_changepw_changed")
 		else
-			x.value = translate("unknownerror")
+			f.errmessage = translate("unknownerror")
 		end
 		
-		pw1.render = function() end
-		pw2.render = pw1.render
+		data.pw1 = nil
+		data.pw2 = nil
 	end
 	return true
 end
