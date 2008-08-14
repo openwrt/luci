@@ -19,7 +19,7 @@ function index()
 	
 	entry({"admin", "system"}, template("admin_system/index"), i18n("system"), 30)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("a_s_packages"), 10)
-	entry({"admin", "system", "packages", "ipkg"}, call("action_ipkg"), i18n("a_s_p_ipkg"))
+	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"), i18n("a_s_p_ipkg"))
 	entry({"admin", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw"), 20)
 	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("a_s_sshkeys"), 30)
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("system"), 40)
@@ -28,48 +28,6 @@ function index()
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 70)
 	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 80)
 	entry({"admin", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 90)
-end
-
-function action_editor()
-	local file = luci.http.formvalue("file", "")
-	local data = luci.http.formvalue("data")
-	local err  = nil
-	local msg  = nil
-	local stat = true
-	
-	if file and data then
-		stat, err = luci.fs.writefile(file, data)
-	end
-	
-	if not stat then
-		err = luci.util.split(err, " ")
-		table.remove(err, 1)
-		msg = table.concat(err, " ")
-	end
-	
-	local cnt, err = luci.fs.readfile(file)
-	if cnt then
-		cnt = luci.util.pcdata(cnt)
-	end
-	luci.template.render("admin_system/editor", {fn=file, cnt=cnt, msg=msg})	
-end
-
-function action_ipkg()
-	local file = "/etc/ipkg.conf"
-	local data = luci.http.formvalue("data")
-	local stat = nil
-	local err  = nil
-	
-	if data then
-		stat, err = luci.fs.writefile(file, data)
-	end	
-	
-	local cnt  = luci.fs.readfile(file)	
-	if cnt then
-		cnt = luci.util.pcdata(cnt)
-	end
-	
-	luci.template.render("admin_system/ipkg", {cnt=cnt, msg=err})	
 end
 
 function action_packages()

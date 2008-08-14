@@ -12,29 +12,7 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-<%+header%>
-<h1><%:system%></h1>
-<h2><%:a_s_p_ipkg%></h2>
-
-<br />
-
-<div><strong><%:a_s_p_ipkg_pkglists%>:</strong><code>src <em>Name</em> <em>URL</em></code></div>
-<div><strong><%:a_s_p_ipkg_targets%>:</strong><code>dest <em>Name</em> <em>Pfad</em></code></div>
-
-<br />
-
-<form method="post" action="<%=REQUEST_URI%>">
-	<div class="cbi-section-node" style="width: 100%">
-		<div class="cbi-value">
-			<div class="cbi-value-field">
-				<textarea style="width: 100%" rows="10" name="data"><%=cnt%></textarea>
-			</div>
-		</div>
-	</div>
-	<div>
-		<input type="submit" value="<%:save%>" />
-		<input type="reset" value="<%:reset%>" />
-	</div>
-	<% if msg then %><br /><div class="error"><%:error%>: <%=msg%></div><% end %>
-</form>
-<%+footer%>
+<ul>
+<li><strong><%:a_s_p_ipkg_pkglists%>:</strong> <code>src <em>Name</em> <em>URL</em></code></li>
+<li><strong><%:a_s_p_ipkg_targets%>:</strong> <code>dest <em>Name</em> <em>Pfad</em></code></li>
+</ul>

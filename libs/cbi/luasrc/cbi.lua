@@ -140,6 +140,10 @@ function Template.__init__(self, template)
 	self.template = template
 end
 
+function Template.render(self)
+	luci.template.render(self.template, {self=self})
+end
+
 
 --[[
 Map - A map describing a configuration file
@@ -260,7 +264,9 @@ function SimpleForm.parse(self, ...)
 		
 	local valid = true
 	for i, v in ipairs(self.children) do
-		valid = valid and not v.tag_missing[1] and not v.tag_invalid[1]
+		valid = valid 
+		 and (not v.tag_missing or not v.tag_missing[1])
+		 and (not v.tag_invalid or not v.tag_invalid[1])
 	end
 	
 	local state = 
