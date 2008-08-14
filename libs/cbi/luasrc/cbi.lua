@@ -653,7 +653,7 @@ function AbstractValue.parse(self, section)
 	local cvalue = self:cfgvalue(section)
 
 	if fvalue and fvalue ~= "" then -- If we have a form value, write it to UCI
-		fvalue = self:transform(self:validate(fvalue))
+		fvalue = self:transform(self:validate(fvalue, section))
 		if not fvalue then
 			self.tag_invalid[section] = true
 		end
