@@ -54,6 +54,14 @@ function index()
 	
 	local page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
-	page.title  = i18n("a_n_routes", "Routen")
+	page.title  = i18n("a_n_routes")
 	page.order  = 40
+	page.leaf   = true
+	
+	entry(
+	 {"admin", "network", "routes", "static"},
+	 function() end,
+	 i18n("a_n_routes_static")
+	)
+
 end

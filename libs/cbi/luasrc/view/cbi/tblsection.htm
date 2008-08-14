@@ -59,7 +59,7 @@ end
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
-			<tr class="cbi-section-table-row<% if self.extedit then %> cbi-rowstyle-<%=rowstyle()%><% end %>" id="cbi-<%=self.config%>-<%=section%>">
+			<tr class="cbi-section-table-row<% if self.extedit or self.rowcolors then %> cbi-rowstyle-<%=rowstyle()%><% end %>" id="cbi-<%=self.config%>-<%=section%>">
 				<% if not self.anonymous then -%>
 					<th><h3><%=k%></h3></th>
 				<%- end %>

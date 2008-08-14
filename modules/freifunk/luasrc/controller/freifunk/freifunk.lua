@@ -45,7 +45,6 @@ function index()
 	page.setuser  = false
 	page.setgroup = false
 	
-	assign({"freifunk", "status", "routes"}, {"admin", "status", "routes"}, "Routingtabelle", 10)
 	assign({"freifunk", "status", "iwscan"}, {"admin", "status", "iwscan"}, "WLAN-Scan", 20)
 	
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)

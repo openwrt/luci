@@ -11,20 +11,64 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 m = Map("network", translate("a_n_routes"), translate("a_n_routes1"))
 
-s = m:section(TypedSection, "route", "")
+if not arg or not arg[1] then
+	local routes = luci.sys.net.routes()
+	
+	v = m:section(TypedSection, "_virtual", translate("a_n_routes_kernel4"))
+	v.anonymous = true
+	v.rowcolors = true
+	v.template  = "cbi/tblsection"
+	
+	function v.cfgsections(self)
+		local sections = {}
+		for i=1,#routes do
+			table.insert(sections, i)
+		end
+		return sections
+	end
+	
+	net = v:option(DummyValue, "iface", translate("network"))
+	function net.cfgvalue(self, section)
+		return luci.tools.webadmin.iface_get_network(routes[section].Iface)
+		 or routes[section].Iface
+	end
+	
+	target  = v:option(DummyValue, "target", translate("target"))
+	function target.cfgvalue(self, section)
+		return luci.ip.Hex(routes[section].Destination, 32):string()
+	end
+	
+	netmask = v:option(DummyValue, "netmask", translate("netmask"))
+	function netmask.cfgvalue(self, section)
+		return luci.ip.Hex(routes[section].Mask, 32):string()
+	end
+	
+	gateway = v:option(DummyValue, "gateway", translate("gateway"))
+	function gateway.cfgvalue(self, section)
+		return luci.ip.Hex(routes[section].Gateway, 32):string()
+	end
+	
+	metric = v:option(DummyValue, "metric", translate("metric"))
+	function metric.cfgvalue(self, section)
+		return routes[section].Metric
+	end
+end
+
+
+s = m:section(TypedSection, "route", translate("a_n_routes_static"))
 s.addremove = true
 s.anonymous = true
 s.template  = "cbi/tblsection"
 
 iface = s:option(ListValue, "interface", translate("interface"))
-luci.model.uci.foreach("network", "interface",
-	function (section)
-		if section[".name"] ~= "loopback" then
-			iface:value(section[".name"])
-		end
-	end)
+luci.tools.webadmin.cbi_add_networks(iface)
+
+if not arg or not arg[1] then
+	net.titleref = iface.titleref
+end
 
 s:option(Value, "target", translate("target"), translate("a_n_r_target1"))
 

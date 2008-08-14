@@ -117,3 +117,21 @@ function firewall_find_zone(name)
 	
 	return find
 end
+
+function iface_get_network(iface)
+	local net
+	
+	luci.model.uci.foreach("network", "interface",
+		function (section)
+			local ifname = luci.model.uci.get_statevalue(
+				"network", section[".name"], "ifname"
+			)
+			
+			if iface == ifname then
+				net = section[".name"]
+			end
+		end
+	)
+	
+	return net
+end

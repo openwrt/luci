@@ -28,10 +28,12 @@ a_n_ptp1 = [[Punkt-zu-Punkt Verbindungen
 Verbindung zum Internetgateway eines Internetzugangsanbieters aufzubauen.]]
 a_n_r_netmask1 = [[falls Ziel ein Netzwerk ist]]
 a_n_r_target1 = [[Host-IP oder Netzwerk]]
-a_n_routes = [[Statische Routen]]
-a_n_routes1 = [[Statische Routen geben an,
+a_n_routes = [[Routen]]
+a_n_routes1 = [[Routen geben an,
 über welche Schnittstelle und welches Gateway ein bestimmter Host
 oder ein bestimmtes Netzwerk erreicht werden kann.]]
+a_n_routes_static = [[Statische Routen]]
+a_n_routes_kernel4 = [[Kernel IPv4-Routen]]
 a_n_switch = [[Switch]]
 a_n_switch1 = [[Die Netzwerkschnittstellen am Router
 können zu verschienden VLANs zusammengefasst werden, in denen Geräte miteinander direkt
