@@ -16,7 +16,7 @@ m = Map("network", translate("a_n_switch"), translate("a_n_switch1"))
 s = m:section(TypedSection, "switch", "")
 
 for i = 0, 15 do
-	s:option(Value, "vlan"..i, "vlan"..i).optional = true
+	s:option(Value, "vlan"..i, "ethX."..i).optional = true
 end
 
 return m
