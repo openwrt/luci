@@ -80,6 +80,10 @@ a_s_sshkeys1 = "Here you can paste public SSH-Keys (one per line) for SSH public
 a_s_fstab_mountpoints = "Mount Points"
 a_s_fstab_mountpoints1 = "Mount Points define at which point a memory device will be attached to the filesystem"
 
+a_s_fstab_active = "Mounted file systems"
+a_s_fstab_used = "Used"
+a_s_fstab_avail = "Available"
+
 a_s_fstab_mountpoint = "Mount Point"
 a_s_fstab_device1 = "The device file of the memory or partition (e.g. /dev/sda1)"
 a_s_fstab_fs1 = "The filesystem that was used to format the memory (e.g. ext3)"

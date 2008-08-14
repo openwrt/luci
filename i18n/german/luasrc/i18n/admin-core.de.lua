@@ -63,6 +63,9 @@ a_s_flash_notimplemented = [[Diese Funktion steht leider (noch) nicht zur Verfü
 a_s_flash_upgrade1 = [[Ersetzt die installierte Firmware (das Betriebssystem des Routers) durch ein neues.
 Das Format der Firmware ist plattformabhängig.]]
 a_s_fstab = [[Einhängepunkte]]
+a_s_fstab_active = "Eingehängte Dateisysteme"
+a_s_fstab_used = "Benutzt"
+a_s_fstab_avail = "Verfügbar"
 a_s_fstab_device1 = [[Die Gerätedatei des Speichers oder der Partition (z.B.: /dev/sda)]]
 a_s_fstab_fs1 = [[Das Dateisystem mit dem der Speicher formatiert ist (z.B.: ext3)]]
 a_s_fstab_mountpoint = [[Einhängepunkt]]
