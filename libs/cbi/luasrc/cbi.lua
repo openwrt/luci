@@ -876,3 +876,14 @@ function MultiValue.validate(self, val)
 
 	return result
 end
+
+--[[
+TextValue - A multi-line value
+	rows:	Rows
+]]--
+TextValue = class(AbstractValue)
+
+function TextValue.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template  = "cbi/tvalue"
+end
