@@ -39,40 +39,46 @@ for i,d in ipairs(luci.sys.net.devices()) do
 end
 
 local zones = luci.tools.webadmin.network_get_zones(arg[1])
-if zones and #zones == 0 then
-	m:chain("firewall")
-	
-	fwzone = s:option(Value, "_fwzone", 
-		translate("network_interface_fwzone"),
-		translate("network_interface_fwzone_desc"))
-	fwzone.rmempty = true
-	fwzone:value("", "- " .. translate("none") .. " -")
-	fwzone:value(arg[1])
-	luci.model.uci.foreach("firewall", "zone",
-		function (section)
-			fwzone:value(section.name)
-		end
-	)
-	
-	function fwzone.write(self, section, value)	
-		local zone = luci.tools.webadmin.firewall_find_zone(value)
-		local stat
+if zones then 
+	if #zones == 0 then
+		m:chain("firewall")
 		
-		if not zone then
-			stat = luci.model.uci.section("firewall", "zone", nil, {
-				name = value,
-				network = section
-			})
-		else
-			local net = luci.model.uci.get("firewall", zone, "network")
-			net = (net or value) .. " " .. section
-			stat = luci.model.uci.set("firewall", zone, "network", net)
-		end
+		fwzone = s:option(Value, "_fwzone", 
+			translate("network_interface_fwzone"),
+			translate("network_interface_fwzone_desc"))
+		fwzone.rmempty = true
+		fwzone:value("", "- " .. translate("none") .. " -")
+		fwzone:value(arg[1])
+		luci.model.uci.foreach("firewall", "zone",
+			function (section)
+				fwzone:value(section.name)
+			end
+		)
 		
-		if stat then
-			self.render = function() end
+		function fwzone.write(self, section, value)	
+			local zone = luci.tools.webadmin.firewall_find_zone(value)
+			local stat
+			
+			if not zone then
+				stat = luci.model.uci.section("firewall", "zone", nil, {
+					name = value,
+					network = section
+				})
+			else
+				local net = luci.model.uci.get("firewall", zone, "network")
+				net = (net or value) .. " " .. section
+				stat = luci.model.uci.set("firewall", zone, "network", net)
+			end
+			
+			if stat then
+				self.render = function() end
+			end
 		end
+	else
+		fwzone = s:option(DummyValue, "_fwzone", translate("zone"))
+		fwzone.value = table.concat(zones, ", ")
 	end
+	fwzone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
 end
 
 ipaddr = s:option(Value, "ipaddr", translate("ipaddress"))
