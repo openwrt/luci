@@ -260,7 +260,9 @@ function SimpleForm.__init__(self, config, title, description, data)
 end
 
 function SimpleForm.parse(self, ...)
-	Node.parse(self, 1, ...)
+	if luci.http.formvalue("cbi.submit") then
+		Node.parse(self, 1, ...)
+	end
 		
 	local valid = true
 	for i, v in ipairs(self.children) do
