@@ -33,7 +33,7 @@ a_n_routes1 = [[Routen geben an,
 über welche Schnittstelle und welches Gateway ein bestimmter Host
 oder ein bestimmtes Netzwerk erreicht werden kann.]]
 a_n_routes_static = [[Statische Routen]]
-a_n_routes_kernel4 = [[Kernel IPv4-Routen]]
+a_n_routes_kernel4 = [[Aktive IPv4-Routen]]
 a_n_switch = [[Switch]]
 a_n_switch1 = [[Die Netzwerkschnittstellen am Router
 können zu verschienden VLANs zusammengefasst werden, in denen Geräte miteinander direkt

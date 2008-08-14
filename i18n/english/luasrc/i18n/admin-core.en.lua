@@ -248,7 +248,7 @@ network_interface_keepalive_desc = "Number of failed connection tests to initiat
 a_n_routes1 = [[Routes specify over which
 interface and gateway a certain host or network can be reached.]]
 a_n_routes_static = [[Static Routes]]
-a_n_routes_kernel4 = [[Kernel IPv4-Routes]]
+a_n_routes_kernel4 = [[Active IPv4-Routes]]
 a_n_r_target1 = "host-IP or network"
 a_n_r_netmask1 = "if target is a network"
 
