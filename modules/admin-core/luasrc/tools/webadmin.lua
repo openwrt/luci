@@ -76,6 +76,7 @@ function cbi_add_networks(field)
 			end
 		end
 	)
+	field.titleref = luci.dispatcher.build_url("admin", "network", "network")
 end
 
 function cbi_add_knownips(field)

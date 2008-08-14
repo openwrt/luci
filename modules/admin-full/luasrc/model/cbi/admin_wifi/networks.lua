@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 m = Map("wireless", translate("networks"), translate("a_w_networks1"))
 
 s = m:section(TypedSection, "wifi-iface", "")
@@ -27,12 +28,7 @@ luci.model.uci.foreach("wireless", "wifi-device",
 
 network = s:option(ListValue, "network", translate("network"), translate("a_w_network1"))
 network:value("")
-luci.model.uci.foreach("network", "interface",
-	function (section)
-		if section[".name"] ~= "loopback" then
-			network:value(section[".name"])
-		end
-	end)
+luci.tools.webadmin.cbi_add_networks(network)
 
 mode = s:option(ListValue, "mode", translate("mode"))
 mode:value("ap", translate("a_w_ap"))

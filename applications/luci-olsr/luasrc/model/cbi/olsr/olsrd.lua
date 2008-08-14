@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 require("luci.fs")
 
 m = Map("olsr", "OLSR")
@@ -85,13 +86,7 @@ i.addremove = true
 i.dynamic = true
 
 network = i:option(ListValue, "Interface", translate("network"))
-network:value("")
-luci.model.uci.foreach("network", "interface",
-	function (section)
-		if section[".name"] ~= "loopback" then
-			network:value(section[".name"])
-		end
-	end)
+luci.tools.webadmin.cbi_add_networks(network)
 
 i:option(Value, "Ip4Broadcast")
 i:option(Value, "HelloInterval")

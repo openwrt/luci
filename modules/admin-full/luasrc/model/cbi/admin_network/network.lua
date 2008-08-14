@@ -52,9 +52,11 @@ end
 
 ifname = s:option(DummyValue, "ifname", translate("device"))
 ifname.stateful = true
+ifname.titleref = luci.dispatcher.build_url("admin", "network", "vlan")
 
 if luci.model.uci.load("firewall") then
 	zone = s:option(DummyValue, "_zone", translate("zone"))
+	zone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
 
 	function zone.cfgvalue(self, section)
 		local zones = luci.tools.webadmin.network_get_zones(section)

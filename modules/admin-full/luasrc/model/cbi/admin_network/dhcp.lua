@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 require("luci.model.uci")
 require("luci.sys")
 require("luci.util")
@@ -22,11 +23,12 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "interface", translate("interface"))
+luci.tools.webadmin.cbi_add_networks(iface)
+
 luci.model.uci.foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
 			iface.default = iface.default or section[".name"]
-			iface:value(section[".name"])
 			s:depends("interface", section[".name"])
 		end
 	end)

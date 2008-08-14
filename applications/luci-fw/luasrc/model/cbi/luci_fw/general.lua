@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 m = Map("firewall", translate("fw_fw"), translate("fw_fw1"))
 
 s = m:section(TypedSection, "defaults")
@@ -52,12 +53,7 @@ s:option(Flag, "masq")
 net = s:option(MultiValue, "network")
 net.widget = "select"
 net.rmempty = true
-luci.model.uci.foreach("network", "interface",
-	function (section)
-		if section[".name"] ~= "loopback" then
-			net:value(section[".name"])
-		end
-	end)
+luci.tools.webadmin.cbi_add_networks(net)
 	
 function net.cfgvalue(self, section)
 	local value = MultiValue.cfgvalue(self, section)

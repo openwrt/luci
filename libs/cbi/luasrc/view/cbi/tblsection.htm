@@ -35,7 +35,7 @@ end
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell">
-				<%- if k.titleref then -%><a class="cbi-title-ref" href="<%=k.titleref%>"><%- end -%>
+				<%- if k.titleref then -%><a title="<%=self.titledesc or translate('cbi_gorel')%>" class="cbi-title-ref" href="<%=k.titleref%>"><%- end -%>
 					<%-=k.title-%>
 				<%- if k.titleref then -%></a><%- end -%>
 				</th>

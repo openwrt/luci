@@ -13,7 +13,7 @@ $Id$
 
 -%>
 <%+cbi/valueheader%>
-	<textarea onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. ifattr(self.size, "cols") .. ifattr(self.rows, "rows") %>>
+	<textarea onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. ifattr(self.size, "cols") .. ifattr(self.rows, "rows") .. ifattr(self.wrap, "wrap") %>>
 	<%-=luci.util.pcdata(self:cfgvalue(section))-%>
 	</textarea>
 <%+cbi/valuefooter%>

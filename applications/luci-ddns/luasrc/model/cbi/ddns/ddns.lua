@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
 m = Map("ddns", translate("ddns"), translate("ddns_desc"))
 
 s = m:section(TypedSection, "service", "")
@@ -40,12 +41,7 @@ src:value("web", "URL")
 iface = s:option(ListValue, "ip_network", translate("network"))
 iface:depends("ip_source", "network")
 iface.rmempty = true
-luci.model.uci.foreach("network", "interface",
-	function (section)
-		if section[".name"] ~= "loopback" then
-			iface:value(section[".name"])
-		end
-	end)
+luci.tools.webadmin.cbi_add_networks(iface)
 
 iface = s:option(ListValue, "ip_interface", translate("interface"))
 iface:depends("ip_source", "interface")
