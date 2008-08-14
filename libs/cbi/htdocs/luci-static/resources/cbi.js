@@ -7,7 +7,16 @@ function cbi_d_add(field, target, value) {
 	if (!cbi_d[target][value]) {
 		cbi_d[target][value] = [];
 	}
-	cbi_d[target][value].push(field);
+	
+	var obj = document.getElementById(field);
+	if (obj) {
+		var entry = {
+			"node": obj,
+			"parent": obj.parentNode,
+			"next": obj.nextSibling	
+		} 
+		cbi_d[target][value].unshift(entry);
+	}
 }
 
 function cbi_d_update(target) {
@@ -17,16 +26,34 @@ function cbi_d_update(target) {
 	
 	for (var x in cbi_d[target]) {
 		for (var i=0; i<cbi_d[target][x].length; i++) {	
-			var y = document.getElementById(cbi_d[target][x][i])	
-			y.style.display = "none";
+			var entry = cbi_d[target][x][i];
+			if (entry.node.parentNode) {
+				entry.parent.removeChild(entry.node)
+			}
 		}
 	}
 	
 	var t = document.getElementById(target);
-	if (t && t.value && cbi_d[target][t.value]) {
-		for (var i=0; i<cbi_d[target][t.value].length; i++) {			
-			var y = document.getElementById(cbi_d[target][t.value][i])
-			y.style.display = "block";
+	var value
+	
+	if (!t || !t.value) {
+		value = "";
+	} else {
+		value = t.value;
+		
+		if (t.type == "checkbox") {
+			value = t.checked ? value : "";
+		}
+	}
+	
+	if (cbi_d[target][value]) {
+		for (var i=0; i<cbi_d[target][value].length; i++) {		
+			var entry = cbi_d[target][value][i];
+			if (!entry.next) {
+				entry.parent.appendChild(entry.node);
+			} else {
+				entry.parent.insertBefore(entry.node, entry.next);
+			}
 		}
 	}
 }

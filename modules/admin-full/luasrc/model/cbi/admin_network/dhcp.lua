@@ -47,7 +47,8 @@ s:option(Flag, "dynamicdhcp").rmempty = true
 
 s:option(Value, "name", translate("name")).optional = true
 
-s:option(Flag, "ignore").optional = true
+ignore = s:option(Flag, "ignore")
+ignore.optional = true
 
 s:option(Value, "netmask", translate("netmask")).optional = true
 
@@ -57,6 +58,14 @@ for i, line in pairs(luci.util.execl("dnsmasq --help dhcp")) do
 	k, v = line:match("([^ ]+) +([^ ]+)")
 	s:option(Value, "dhcp"..k, v).optional = true
 end
+
+
+for i, n in ipairs(s.children) do
+	if n ~= iface and n ~= ignore then
+		n:depends("ignore", "")
+	end
+end
+
 
 m2 = Map("luci_ethers", translate("luci_ethers"))
 

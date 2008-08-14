@@ -145,6 +145,8 @@ Kommunikation.]]
 a_w_ap = "Access Point"
 a_w_adhoc = "Ad-Hoc"
 a_w_client = "Client"
+a_w_ahdemo = "Pseudo Ad-Hoc (ahdemo)"
+a_w_monitor = "Monitor"
 a_w_wds = "WDS"
 accept = [[Annehmen]]
 aliases = [[Aliasse]]

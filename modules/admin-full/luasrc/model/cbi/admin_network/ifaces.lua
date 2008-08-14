@@ -113,6 +113,11 @@ mtu.isinteger = true
 mac = s:option(Value, "macaddr", translate("macaddress"))
 mac.optional = true
 
+
+srv = s:option(Value, "server", translate("network_interface_server"))
+srv:depends("proto", "pptp")
+srv.rmempty = true
+
 user = s:option(Value, "username", translate("username"))
 user.rmempty = true
 user:depends("proto", "pptp")
@@ -138,10 +143,6 @@ demand = s:option(Value, "demand",
 demand.rmempty = true
 demand:depends("proto", "pptp")
 demand:depends("proto", "pppoe")
-
-srv = s:option(Value, "server", translate("network_interface_server"))
-srv:depends("proto", "pptp")
-srv.rmempty = true
 
 
 
