@@ -16,12 +16,12 @@ $Id$
 <%+cbi/valueheader%>
 <% if self.value then
 	if type(self.value) == "function" then %>
-	<%=self:value(section)%>
+	<%=luci.util.pcdata(self:value(section))%>
 <% else %>
-	<%=self.value%>
+	<%=luci.util.pcdata(self.value)%>
 <%	end
 else %>
-	<%=self:cfgvalue(section)%>
+	<%=luci.util.pcdata(self:cfgvalue(section))%>
 <% end %>
 &nbsp;
 <%+cbi/valuefooter%>
