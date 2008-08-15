@@ -16,28 +16,11 @@ m = Map("fstab", translate("a_s_fstab"))
 
 local mounts = luci.sys.mounts()
 
-v = m:section(TypedSection, "_virtual", translate("a_s_fstab_active"))
-v.anonymous = true
-v.rowcolors = true
-v.template  = "cbi/tblsection"
-
-function v.cfgsections(self)
-	local sections = {}
-	for i=1,#mounts do
-		table.insert(sections, i)
-	end
-	return sections
-end
+v = m:section(Table, mounts, translate("a_s_fstab_active"))
 
 fs = v:option(DummyValue, "fs", translate("filesystem"))
-function fs.cfgvalue(self, section)
-	return mounts[section].fs
-end
 
 mp = v:option(DummyValue, "mountpoint", translate("a_s_fstab_mountpoint"))
-function mp.cfgvalue(self, section)
-	return mounts[section].mountpoint
-end
 
 avail = v:option(DummyValue, "avail", translate("a_s_fstab_avail"))
 function avail.cfgvalue(self, section)

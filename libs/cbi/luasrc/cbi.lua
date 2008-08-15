@@ -492,6 +492,8 @@ function Table.__init__(self, form, data, ...)
 	
 	AbstractSection.__init__(self, datasource, "table", ...)
 	self.template = "cbi/tblsection"
+	self.rowcolors = true
+	self.anonymous = true
 end
 
 function Table.cfgsections(self)

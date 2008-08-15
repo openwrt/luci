@@ -17,18 +17,7 @@ m = Map("network", translate("a_n_routes"), translate("a_n_routes1"))
 if not arg or not arg[1] then
 	local routes = luci.sys.net.routes()
 	
-	v = m:section(TypedSection, "_virtual", translate("a_n_routes_kernel4"))
-	v.anonymous = true
-	v.rowcolors = true
-	v.template  = "cbi/tblsection"
-	
-	function v.cfgsections(self)
-		local sections = {}
-		for i=1,#routes do
-			table.insert(sections, i)
-		end
-		return sections
-	end
+	v = m:section(Table, routes, translate("a_n_routes_kernel4"))
 	
 	net = v:option(DummyValue, "iface", translate("network"))
 	function net.cfgvalue(self, section)
@@ -51,10 +40,7 @@ if not arg or not arg[1] then
 		return luci.ip.Hex(routes[section].Gateway, 32):string()
 	end
 	
-	metric = v:option(DummyValue, "metric", translate("metric"))
-	function metric.cfgvalue(self, section)
-		return routes[section].Metric
-	end
+	metric = v:option(DummyValue, "Metric", translate("metric"))
 end
 
 

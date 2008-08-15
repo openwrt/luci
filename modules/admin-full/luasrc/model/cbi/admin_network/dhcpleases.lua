@@ -31,9 +31,6 @@ end
 
 if leases then
 	v = m2:section(Table, leases, translate("dhcp_leases_active"))
-	v.anonymous = true
-	v.rowcolors = true
-	
 	ip = v:option(DummyValue, 3, translate("ipaddress"))
 	
 	mac  = v:option(DummyValue, 2, translate("macaddress"))
