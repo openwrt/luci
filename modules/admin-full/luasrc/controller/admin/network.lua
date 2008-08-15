@@ -20,12 +20,12 @@ function index()
 
 	local page  = node("admin", "network")
 	page.target = template("admin_network/index")
-	page.title  = i18n("network", "Netzwerk")  
+	page.title  = i18n("network")  
 	page.order  = 50
 	
 	local page  = node("admin", "network", "vlan")
 	page.target = cbi("admin_network/vlan")
-	page.title  = i18n("a_n_switch", "Switch")
+	page.title  = i18n("a_n_switch")
 	page.order  = 20
 	
 	local page  = node("admin", "network", "network")
@@ -51,6 +51,12 @@ function index()
 	page.target = cbi("admin_network/dhcp")
 	page.title  = "DHCP"
 	page.order  = 30
+	
+	entry(
+	 {"admin", "network", "dhcp", "leases"},
+	 cbi("admin_network/dhcpleases"),
+	 i18n("dhcp_leases")
+	) 
 	
 	local page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")

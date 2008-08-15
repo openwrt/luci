@@ -230,7 +230,10 @@ iwscan_noise = [[Rausch]]
 iwscan_signal = [[Signal]]
 link = [[Verb.]]
 
+dhcp_leases = "Zuweisungen"
 luci_ethers = "Statische Einträge"
+dhcp_timeremain = "Verbleibende Gültigkeit"
+dhcp_leases_active = "Aktive Zuweisungen"
 
 network_interface_demand = [[Automatische Trennung]]
 network_interface_demand_desc = [[Zeit (in s) nach der die Verbindung bei Inaktivität getrennt wird]]

@@ -238,7 +238,10 @@ dhcp_dhcp_force = "Force"
 dhcp_dhcp_start_desc = "first address (last octet)"
 dhcp_dhcp_limit_desc = "number of leased addresses -1"
 
+dhcp_leases = "Leases"
 luci_ethers = "Static Leases"
+dhcp_timeremain = "Leasetime remaining"
+dhcp_leases_active = "Active Leases"
 
 a_n_ptp = "Point-to-Point Connections"
 a_n_ptp1 = [[Point-to-Point connections with PPPoE or PPTP are often used to connect a device

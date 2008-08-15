@@ -29,6 +29,33 @@ function byte_format(byte)
 	end
 end
 
+function date_format(secs)
+	local suff = {"min", "h", "d"}
+	local mins = 0
+	local hour = 0
+	local days = 0
+	if secs > 60 then
+		mins = math.floor(secs / 60)
+		secs = secs % 60
+	end
+	
+	if mins > 60 then
+		hour = math.floor(mins / 60)
+		mins = mins % 60
+	end
+	
+	if hour > 24 then
+		days = math.floor(hours / 24)
+		hour = hour % 24
+	end
+	
+	if days > 0 then
+		return string.format("%dd %02dh %02dmin %02ds", days, hour, mins, secs)
+	else
+		return string.format("%02dh %02dmin %02ds", hour, mins, secs)
+	end
+end
+
 function network_get_addresses(net)
 	local addr = {}
 	local ipv4 = luci.model.uci.get_statevalue("network", net, "ipaddr")
