@@ -82,7 +82,7 @@ local iwconfig = luci.sys.wifi.getiwconfig()
 <%- end %>
 
 
-<%- if luci.model.uci.get_statevalue("network", "lan", "up") == "1" then %>
+<%- if luci.model.uci.get_statevalue("network", "wan", "up") == "1" then %>
 <br />
 <h2><%:m_n_inet%></h2>
 <table cellspacing="0" cellpadding="6" class="smalltext">
