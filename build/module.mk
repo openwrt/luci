@@ -1,15 +1,23 @@
+MAKEPATH:=$(dir $(lastword $(MAKEFILE_LIST)))
+-include $(MAKEPATH)config.mk
+-include $(MAKEPATH)gccconfig.mk
+
 .PHONY: all build compile luacompile luasource clean luaclean
 
 all: build
 
 build: luabuild gccbuild
 
-luabuild: lua$(LUA_TARGET)
+luabuild: lua$(LUA_TARGET) i18n
 
 gccbuild: compile
 compile:
 
 clean: luaclean
+
+i18n: luasource
+	[ -n "$(XSLTPROC)" ] && for i in dist$(LUCI_MODULEDIR)/i18n/*.xml; do [ -f "$$i" ]\
+	&& { $(XSLTPROC) $(MAKEPATH)i18n-lua-xhtml1.xsl $$i > $${i/.xml/.lua}; rm $$i; }; done || true
 
 luasource:
 	mkdir -p dist$(LUA_MODULEDIR)
@@ -19,7 +27,8 @@ luasource:
 	cp -a luasrc/* dist$(LUCI_MODULEDIR) -R 2>/dev/null || true
 	cp -a lua/* dist$(LUA_MODULEDIR) -R 2>/dev/null || true
 	cp -a htdocs/* dist$(HTDOCS) -R 2>/dev/null || true
-	for i in $$(find dist -name .svn); do rm $$i -rf; done
+	for i in $$(find dist -name .svn); do rm $$i -rf || true; done
+
 
 luastrip: luasource
 	for i in $$(find dist -type f -name '*.lua'); do perl -e 'undef $$/; open( F, "< $$ARGV[0]" ) || die $$!; $$src = <F>; close F; $$src =~ s/--\[\[.*?\]\](--)?//gs; $$src =~ s/^\s*--.*?\n//gm; open( F, "> $$ARGV[0]" ) || die $$!; print F $$src; close F' $$i; done

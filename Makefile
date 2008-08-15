@@ -15,7 +15,7 @@ gccbuild:
 	for i in $(MODULES); do make -C$$i compile; done	
 
 luabuild:
-	for i in $(MODULES); do make -C$$i lua$(LUA_TARGET); done
+	for i in $(MODULES); do make -C$$i luabuild; done
 
 clean:
 	rm -rf docs
