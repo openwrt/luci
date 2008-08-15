@@ -21,12 +21,7 @@ $Id$
 	<div class="cbi-map" id="cbi-<%=self.config%>">
 		<h1><%=self.title%></h1>
 		<div class="cbi-map-descr"><%=self.description%></div>
-		<fieldset class="cbi-section">
-			<div class="cbi-section-node">
-				<% self:render_children(1, scope or {}) %>
-			</div>
-			<br />
-		</fieldset>
+		<% self:render_children() %>
 		<br />
 	</div>
 <%- if self.message then %>

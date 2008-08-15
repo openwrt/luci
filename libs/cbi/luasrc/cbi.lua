@@ -247,6 +247,15 @@ end
 
 
 --[[
+Page - A simple node
+]]--
+
+Page = class(Node)
+Page.__init__ = Node.__init__
+Page.parse    = function() end
+
+
+--[[
 SimpleForm - A Simple non-UCI form
 ]]--
 SimpleForm = class(Node)
@@ -265,10 +274,12 @@ function SimpleForm.parse(self, ...)
 	end
 		
 	local valid = true
-	for i, v in ipairs(self.children) do
-		valid = valid 
-		 and (not v.tag_missing or not v.tag_missing[1])
-		 and (not v.tag_invalid or not v.tag_invalid[1])
+	for k, j in ipairs(self.children) do 
+		for i, v in ipairs(j.children) do
+			valid = valid 
+			 and (not v.tag_missing or not v.tag_missing[1])
+			 and (not v.tag_invalid or not v.tag_invalid[1])
+		end
 	end
 	
 	local state = 
@@ -276,7 +287,7 @@ function SimpleForm.parse(self, ...)
 		or valid and 1
 		or -1
 
-	self.dorender = self:handle(state, self.data)
+	self.dorender = self:handle(state, self.data) ~= false
 end
 
 function SimpleForm.render(self, ...)
@@ -285,12 +296,33 @@ function SimpleForm.render(self, ...)
 	end
 end
 
--- Creates a child section
+function SimpleForm.section(self, class, ...)
+	if instanceof(class, AbstractSection) then
+		local obj  = class(self, ...)
+		self:append(obj)
+		return obj
+	else
+		error("class must be a descendent of AbstractSection")
+	end
+end
+
+-- Creates a child field
 function SimpleForm.field(self, class, ...)
+	local section
+	for k, v in ipairs(self.children) do
+		if instanceof(v, SimpleSection) then
+			section = v
+			break
+		end
+	end
+	if not section then
+		section = self:section(SimpleSection)
+	end
+	
 	if instanceof(class, AbstractValue) then
 		local obj  = class(self, ...)
 		obj.track_missing = true
-		self:append(obj)
+		section:append(obj)
 		return obj
 	else
 		error("class must be a descendent of AbstractValue")
@@ -436,6 +468,14 @@ function AbstractSection.create(self, section)
 	end
 
 	return stat
+end
+
+
+SimpleSection = class(AbstractSection)
+
+function SimpleSection.__init__(self, form, ...)
+	AbstractSection.__init__(self, form, nil, ...)
+	self.template = "cbi/nullsection"
 end
 
 

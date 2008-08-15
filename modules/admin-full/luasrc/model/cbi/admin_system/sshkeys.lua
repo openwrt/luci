@@ -17,6 +17,7 @@ local keyfile = "/etc/dropbear/authorized_keys"
 f = SimpleForm("sshkeys", translate("a_s_sshkeys"), translate("a_s_sshkeys1"))
 
 t = f:field(TextValue, "keys")
+t.rmempty = true
 t.rows = 10
 function t.cfgvalue()
 	return luci.fs.readfile(keyfile) or ""
@@ -24,7 +25,7 @@ end
 
 function f.handle(self, state, data)
 	if state == FORM_VALID then
-		if (luci.fs.readfile(keyfile) or "") ~= data.keys then
+		if data.keys then
 			luci.fs.writefile(keyfile, data.keys)
 		end
 	end
