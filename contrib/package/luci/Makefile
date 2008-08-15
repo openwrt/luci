@@ -407,7 +407,7 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+luasocket +firewall
+  DEPENDS+=+luasocket +luci-app-firewall
   TITLE:=Freifunk DHCP-Splash application
 endef
 
