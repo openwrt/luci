@@ -479,6 +479,30 @@ function SimpleSection.__init__(self, form, ...)
 end
 
 
+Table = class(AbstractSection)
+
+function Table.__init__(self, form, data, ...)
+	local datasource = {}
+	self.data = data
+	
+	function datasource.get(self, section, option)
+		return data[option]
+	end
+	
+	AbstractSection.__init__(self, datasource, nil, ...)
+end
+
+function Table.cfgsections(self)
+	local sections = {}
+	
+	for i, v in pairs(self.data) do
+		table.insert(sections, i)
+	end
+	
+	return sections
+end
+
+
 
 --[[
 NamedSection - A fixed configuration section defined by its name
@@ -707,7 +731,7 @@ function AbstractValue.parse(self, section)
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
 			self:remove(section)
-		elseif self.track_missing and not fvalue or fvalue ~= cvalue then
+		elseif self.track_missing and (not fvalue or fvalue ~= cvalue) then
 			self.tag_missing[section] = true
 		end
 	end
@@ -726,10 +750,10 @@ function AbstractValue.render(self, s, scope)
 			if cond then
 				return string.format(
 					' %s="%s"', tostring(key),
-					tostring( val
+					luci.util.pcdata(tostring( val
 					 or scope[key]
 					 or (type(self[key]) ~= "function" and self[key])
-					 or "" )
+					 or "" ))
 				)
 			else
 				return ''

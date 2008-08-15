@@ -34,7 +34,7 @@ $Id$
 %>
 <tr>
 <td><%=iface%></td>
-<td><%=cell.ESSID%></td>
+<td><%=luci.util.pcdata(cell.ESSID)%></td>
 <td><%=cell.Address%></td>
 <td><%=cell.Mode%></td>
 <td><%=(cell.Channel or cell.Frequency or "")%></td>

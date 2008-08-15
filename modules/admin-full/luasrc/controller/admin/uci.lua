@@ -34,7 +34,7 @@ function convert_changes(changes)
 					val = ""
 				else
 					str = ""
-					val = "="..v
+					val = "="..luci.util.pcdata(v)
 				end
 				str = r.."."..s
 				if o ~= ".type" then
