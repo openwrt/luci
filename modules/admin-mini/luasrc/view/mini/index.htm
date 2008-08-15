@@ -66,7 +66,6 @@ local iwconfig = luci.sys.wifi.getiwconfig()
 </table>
 
 
-<%- if luci.model.uci.get_statevalue("network", "lan", "up") == "1" then %>
 <br />
 <h2><%:m_n_local%></h2>
 <table cellspacing="0" cellpadding="6" class="smalltext">
@@ -79,10 +78,8 @@ local iwconfig = luci.sys.wifi.getiwconfig()
     <td><%=luci.model.uci.get_statevalue("network", "lan", "netmask")%></td>
   </tr>
 </table>
-<%- end %>
 
 
-<%- if luci.model.uci.get_statevalue("network", "wan", "up") == "1" then %>
 <br />
 <h2><%:m_n_inet%></h2>
 <table cellspacing="0" cellpadding="6" class="smalltext">
@@ -95,7 +92,6 @@ local iwconfig = luci.sys.wifi.getiwconfig()
     <td><%=luci.model.uci.get_statevalue("network", "wan", "netmask")%></td>
   </tr>
 </table>
-<%- end %>
 
 <%- if next(iwconfig) then %> 
 <h2><%:wifi%></h2>
