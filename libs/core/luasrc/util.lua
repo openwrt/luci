@@ -199,6 +199,8 @@ end
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
 function pcdata(value)
+	if not value then return end
+	value = tostring(value)
 	value = value:gsub("&", "&amp;")
 	value = value:gsub('"', "&quot;")
 	value = value:gsub("'", "&apos;")

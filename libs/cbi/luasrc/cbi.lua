@@ -92,10 +92,10 @@ function Node._i18n(self, config, section, option, title, description)
 	-- i18n loaded?
 	if type(luci.i18n) == "table" then
 
-		local key = config:gsub("[^%w]+", "")
+		local key = config and config:gsub("[^%w]+", "") or ""
 
 		if section then	key = key .. "_" .. section:lower():gsub("[^%w]+", "") end
-		if option  then key = key .. "_" .. option:lower():gsub("[^%w]+", "")  end
+		if option  then key = key .. "_" .. tostring(option):lower():gsub("[^%w]+", "")  end
 
 		self.title = title or luci.i18n.translate( key, option or section or config )
 		self.description = description or luci.i18n.translate( key .. "_desc", "" )
@@ -483,13 +483,15 @@ Table = class(AbstractSection)
 
 function Table.__init__(self, form, data, ...)
 	local datasource = {}
+	datasource.config = "table"
 	self.data = data
 	
 	function datasource.get(self, section, option)
-		return data[option]
+		return data[section][option]
 	end
 	
-	AbstractSection.__init__(self, datasource, nil, ...)
+	AbstractSection.__init__(self, datasource, "table", ...)
+	self.template = "cbi/tblsection"
 end
 
 function Table.cfgsections(self)

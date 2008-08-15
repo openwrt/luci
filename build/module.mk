@@ -8,16 +8,16 @@ all: build
 
 build: luabuild gccbuild
 
-luabuild: lua$(LUA_TARGET) i18n
+luabuild: i18n lua$(LUA_TARGET)
 
 gccbuild: compile
 compile:
 
 clean: luaclean
 
-i18n: luasource
-	[ -n "$(XSLTPROC)" ] && for i in dist$(LUCI_MODULEDIR)/i18n/*.xml; do [ -f "$$i" ]\
-	&& { $(XSLTPROC) $(MAKEPATH)i18n-lua-xhtml1.xsl $$i > $${i/.xml/.lua}; rm $$i; }; done || true
+i18n:
+	[ -n "$(XSLTPROC)" ] && for i in luasrc/i18n/*.xml; do [ -f "$$i" ]\
+	&& $(XSLTPROC) $(MAKEPATH)i18n-lua-xhtml1.xsl $$i > $${i/.xml/.lua}; done || true
 
 luasource:
 	mkdir -p dist$(LUA_MODULEDIR)
@@ -28,6 +28,7 @@ luasource:
 	cp -a lua/* dist$(LUA_MODULEDIR) -R 2>/dev/null || true
 	cp -a htdocs/* dist$(HTDOCS) -R 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm $$i -rf || true; done
+	for i in dist$(LUCI_MODULEDIR)/i18n/*.xml; do [ -f "$$i" ] && rm $$i; done || true
 
 
 luastrip: luasource

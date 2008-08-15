@@ -30,33 +30,19 @@ if leasefp then
 end
 
 if leases then
-	v = m2:section(TypedSection, "_virtual", translate("dhcp_leases_active"))
+	v = m2:section(Table, leases, translate("dhcp_leases_active"))
 	v.anonymous = true
 	v.rowcolors = true
-	v.template  = "cbi/tblsection"
 	
-	function v.cfgsections(self)
-		local sections = {}
-		for i=1,#leases do
-			table.insert(sections, i)
-		end
-		return sections
-	end
+	ip = v:option(DummyValue, 3, translate("ipaddress"))
 	
-	ip = v:option(DummyValue, "ip", translate("ipaddress"))
-	function ip.cfgvalue(self, section)
-		return leases[section][3]
-	end
+	mac  = v:option(DummyValue, 2, translate("macaddress"))
 	
-	mac  = v:option(DummyValue, "mac", translate("macaddress"))
-	function mac.cfgvalue(self, section)
-		return leases[section][2]
-	end
-	
-	ltime = v:option(DummyValue, "time", translate("dhcp_timeremain"))
-	function ltime.cfgvalue(self, section)
+	ltime = v:option(DummyValue, 1, translate("dhcp_timeremain"))
+	function ltime.cfgvalue(self, ...)
+		local value = DummyValue.cfgvalue(self, ...)
 		return luci.tools.webadmin.date_format(
-		 os.difftime(tonumber(leases[section][1]), os.time())
+		 os.difftime(tonumber(value), os.time())
 		)
 	end
 end
