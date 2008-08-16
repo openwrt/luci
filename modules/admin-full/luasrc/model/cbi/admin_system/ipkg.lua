@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-local ipkgfile = "/etc/ipkg.conf" 
+local ipkgfile = "/etc/opkg.conf" 
 
 f = SimpleForm("ipkgconf", translate("a_s_p_ipkg"))
 
