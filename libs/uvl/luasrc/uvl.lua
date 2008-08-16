@@ -71,6 +71,7 @@ function UVL.validate( self, config )
 
 	self.uci.set_confdir( self.uci.confdir_default )
 	self.uci.load( config )
+	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
 
@@ -110,6 +111,7 @@ end
 function UVL.validate_section( self, config, section )
 	self.uci.set_confdir( self.uci.confdir_default )
 	self.uci.load( config )
+	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
 	if co[section] then
@@ -125,6 +127,7 @@ end
 function UVL.validate_option( self, config, section, option )
 	self.uci.set_confdir( self.uci.confdir_default )
 	self.uci.load( config )
+	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
 	if co[section] and co[section][option] then
