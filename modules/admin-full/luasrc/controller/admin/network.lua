@@ -19,7 +19,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	local page  = node("admin", "network")
-	page.target = template("admin_network/index")
+	page.target = alias("admin", "network", "network")
 	page.title  = i18n("network")  
 	page.order  = 50
 	

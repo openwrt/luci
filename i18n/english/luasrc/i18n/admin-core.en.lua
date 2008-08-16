@@ -272,3 +272,7 @@ process_mem = "Memory usage (%)"
 process_hup = "Hang Up"
 process_term = "Terminate"
 process_kill = "Kill"
+
+mem_cached = "cached"
+mem_buffered = "buffered"
+mem_free = "free"

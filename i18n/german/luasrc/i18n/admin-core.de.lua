@@ -347,3 +347,7 @@ process_mem = "Speichernutzung (%)"
 process_hup = "Auflegen"
 process_term = "Beenden"
 process_kill = "Töten"
+
+mem_cached = "gecached"
+mem_buffered = "gepuffert"
+mem_free = "frei"

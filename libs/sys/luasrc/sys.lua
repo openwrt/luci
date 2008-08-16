@@ -124,9 +124,6 @@ end
 -- @return	String containing the memory used for caching in kB
 -- @return	String containing the memory used for buffering in kB
 -- @return	String containing the free memory amount in kB
--- @return	Number containing free memory in percent
--- @return	Number containing buffer memory in percent
--- @return	Number containing cache memory in percent
 function sysinfo()
 	local c1 = "cat /proc/cpuinfo|grep system\\ typ|cut -d: -f2 2>/dev/null"
 	local c2 = "uname -m 2>/dev/null"
@@ -139,13 +136,10 @@ function sysinfo()
 
 	local system = luci.util.trim(luci.util.exec(c1))
 	local model = ""
-	local memtotal = luci.util.trim(luci.util.exec(c5))
-	local memcached = luci.util.trim(luci.util.exec(c6))
-	local memfree = luci.util.trim(luci.util.exec(c7))
-	local membuffers = luci.util.trim(luci.util.exec(c8))
-	local perc_memfree = math.floor((memfree/memtotal)*100)
-	local perc_membuffers = math.floor((membuffers/memtotal)*100)
-	local perc_memcached = math.floor((memcached/memtotal)*100)
+	local memtotal = tonumber(luci.util.trim(luci.util.exec(c5)))
+	local memcached = tonumber(luci.util.trim(luci.util.exec(c6)))
+	local memfree = tonumber(luci.util.trim(luci.util.exec(c7)))
+	local membuffers = tonumber(luci.util.trim(luci.util.exec(c8)))
 
 	if system == "" then
 		system = luci.util.trim(luci.util.exec(c2))
@@ -154,7 +148,7 @@ function sysinfo()
 		model = luci.util.trim(luci.util.exec(c4))
 	end
 
-	return system, model, memtotal, memcached, membuffers, memfree, perc_memfree, perc_membuffers, perc_memcached
+	return system, model, memtotal, memcached, membuffers, memfree
 end
 
 --- Retrieves the output of the "logread" command.
