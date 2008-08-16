@@ -20,6 +20,8 @@ require("luci.fs")
 require("luci.util")
 require("luci.model.uci")
 require("luci.uvl.datatypes")
+--require("luci.uvl.validation")
+require("luci.uvl.dependencies")
 
 TYPE_SECTION  = 0x01
 TYPE_VARIABLE = 0x02
@@ -27,6 +29,7 @@ TYPE_ENUM     = 0x03
 
 
 local default_schemedir = "/etc/scheme"
+
 local function _assert( condition, fmt, ... )
 	if not condition then
 		return assert( nil, string.format( fmt, ... ) )
@@ -41,27 +44,71 @@ function UVL.__init__( self, schemedir )
 
 	self.schemedir	= schemedir or default_schemedir
 	self.packages	= { }
+	self.beenthere  = { }
 	self.uci		= luci.model.uci
 	self.datatypes  = luci.uvl.datatypes
 end
+
+
+function UVL._scheme_section( self, uci, c, s )
+	if self.packages[c] and uci[s] then
+		return self.packages[c].sections[uci[s][".type"]]
+	end
+end
+
+function UVL._scheme_option( self, uci, c, s, o )
+	if self.packages[c] and uci[s] and uci[s][o] then
+		return self.packages[c].variables[uci[s][".type"]][o]
+	elseif self.packages[c] and self.packages[c].variables[s] then
+		return self.packages[c].variables[s][o]
+	end
+end
+
+function UVL._keys( self, tbl )
+	local keys = { }
+	if tbl then
+		for k, _ in luci.util.kspairs(tbl) do
+			table.insert( keys, k )
+		end
+	end
+	return keys
+end
+
 
 --- Validate given configuration.
 -- @param config	Name of the configuration to validate
 -- @param scheme	Scheme to validate against (optional)
 -- @return			Boolean indicating weather the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate( self, config, scheme )
+function UVL.validate( self, config )
 
-	if not scheme then
-		return false, "No scheme found"
+	self.uci.set_confdir( self.uci.confdir_default )
+	self.uci.load( config )
+
+	local co = self.uci.get_all( config )
+
+	local function _uci_foreach( type, func )
+		for k, v in pairs(co) do
+			if co[k]['.type'] == type then
+				func( k, v )
+			end
+		end
 	end
 
-	for k, v in pairs( config ) do
-		local ok, err = self:validate_section( config, k, scheme )
+	luci.util.dumptable(co)
 
-		if not ok then
-			return ok, err
-		end
+
+
+	for k, v in pairs( self.packages[config].sections ) do
+		_uci_foreach( k,
+			function(s)
+				local ok, err = self:validate_section( config, s, co )
+
+				if not ok then
+					return ok, err
+				end
+			end
+		)
 	end
 
 	return true, nil
@@ -73,18 +120,50 @@ end
 -- @param scheme	Scheme to validate against
 -- @return			Boolean indicating weather the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_section( self, config, section, scheme )
+function UVL.validate_section( self, config, section, co, nodeps )
 
-	if not scheme then
-		return false, "No scheme found"
+	if not co then
+		self.uci.set_confdir( self.uci.confdir_default )
+		self.uci.load( config )
+		co = uci.get_all( config )
 	end
 
-	for k, v in pairs( config[section] ) do
-		local ok, err = self:validate_option( config, section, k, scheme )
+	local cs     = co[section]
+	local scheme = self:_scheme_section( co, config, section )
 
-		if not ok then
-			return ok, err
+	if cs then
+		--luci.util.dumptable(cs)
+
+
+		for k, v in pairs(self.packages[config].variables[cs[".type"]]) do
+			if k:sub(1,1) ~= "." then
+				local ok, err = self:validate_option( config, section, k, co, false, cs[".type"] )
+
+				if not ok then
+					print("ERR", err)
+					return ok, err
+				end
+			end
 		end
+
+		--local dep_ok = nodeps or luci.uvl.dependencies.check_dependency( self, co, config, section )
+		--print( "DEP: ", dep_ok )
+
+		--print( "Validate section: ", config .. '.' .. section, nodeps and '(without depencies)' or '' )
+
+		local ok, err = luci.uvl.dependencies.check_dependency(
+			self, co, config, section, nil, true, cs[".type"]
+		)
+
+		if ok then
+			--print("Validated section!\n\n")
+			return true
+		else
+			print("ERR", "All possible dependencies failed. (Last error was: " .. err .. ")")
+			return false, "All possible dependencies failed"
+		end
+	else
+		print( "Error, scheme section '" .. section .. "' not found in data" )
 	end
 
 	return true, nil
@@ -97,34 +176,57 @@ end
 -- @param scheme	Scheme to validate against
 -- @return			Boolean indicating weather the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_option( self, config, section, option, scheme )
+function UVL.validate_option( self, config, section, option, co, nodeps, section2 )
 
-	if type(config) == "string" then
-		config = { ["variables"] = { [section] = { [option] = config } } }
+	if not co then
+		self.uci.set_confdir( self.uci.confdir_default )
+		self.uci.load( config )
+		co = uci.get_all( config )
 	end
 
-	if not scheme then
-		return false, "No scheme found"
+	local cs = co[section]
+	local sv = self:_scheme_option( co, config, section, option ) or
+		self:_scheme_option( co, config, section2, option )
+
+	--print("VOPT", config, section, option )
+
+	if not sv then
+		return false, "Requested option '" ..
+			config .. '.' .. ( section or section2 ) .. '.' .. option ..
+			"' not found in scheme"
 	end
 
-	local sv = scheme.variables[section]
-	if not sv then return false, "Requested section not found in scheme" end
-
-	sv = sv[option]
-	if not sv then return false, "Requested option not found in scheme" end
-
-	if not ( config[section] and config[section][option] ) and sv.required then
-		return false, "Mandatory variable doesn't have a value"
+	if sv.required and not cs[option] then
+		return false, "Mandatory variable '" ..
+			config .. '.' .. section .. '.' .. option ..
+			"' doesn't have a value"
 	end
 
-	if sv.type then
-		if self.datatypes[sv.type] then
-			if not self.datatypes[sv.type]( config[section][option] ) then
-				return false, "Value of given option doesn't validate"
+	if sv.type == "enum" and cs[option] then
+		if not sv.values or not sv.values[cs[option]] then
+			return false, "Value '" .. ( cs[option] or '<nil>' ) .. "' of given option '" ..
+				config .. "." .. section .. "." .. option ..
+				"' is not defined in enum { " ..
+				table.concat(self:_keys(sv.values),", ") .. " }"
+		end
+	end
+
+	if sv.datatype and cs[option] then
+		if self.datatypes[sv.datatype] then
+			if not self.datatypes[sv.datatype]( cs[option] ) then
+				return false, "Value '" .. ( cs[option] or '<nil>' ) .. "' of given option '" ..
+					config .. "." .. ( section or section2 ) .. "." .. option ..
+					"' doesn't validate as datatype '" .. sv.datatype .. "'"
 			end
 		else
-			return false, "Unknown datatype '" .. sv.type .. "' encountered"
+			return false, "Unknown datatype '" .. sv.datatype .. "' encountered"
 		end
+	end
+
+	if not nodeps then
+		return luci.uvl.dependencies.check_dependency(
+			self, co, config, section, option, nil, section2
+		)
 	end
 
 	return true, nil
@@ -238,7 +340,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		for k, v in pairs( conf ) do
 			if v['.type'] == "variable" then
 
-				_req( TYPE_VARIABLE, v, { "name", "type", "section" } )
+				_req( TYPE_VARIABLE, v, { "name", "section" } )
 
 				local r = _ref( TYPE_VARIABLE, v )
 
