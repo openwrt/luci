@@ -86,7 +86,7 @@ function action_packages()
 	
 	
 	-- Package info
-	local info = luci.model.ipkg.info("*"..query.."*")
+	local info = luci.model.ipkg.info(query and "*"..query.."*")
 	info = info or {}
 	local pkgs = {}
 	
