@@ -27,6 +27,9 @@ TYPE_SECTION  = 0x01
 TYPE_VARIABLE = 0x02
 TYPE_ENUM     = 0x03
 
+STRICT_UNKNOWN_SECTIONS = true
+STRICT_UNKNOWN_OPTIONS  = true
+
 
 local default_schemedir = "/etc/scheme"
 
@@ -41,7 +44,6 @@ end
 UVL = luci.util.class()
 
 function UVL.__init__( self, schemedir )
-
 	self.schemedir	= schemedir or default_schemedir
 	self.packages	= { }
 	self.beenthere  = { }
@@ -88,27 +90,33 @@ function UVL.validate( self, config )
 	local co = self.uci.get_all( config )
 
 	local function _uci_foreach( type, func )
+		local ok, err
 		for k, v in pairs(co) do
 			if co[k]['.type'] == type then
-				func( k, v )
+				ok, err = func( k, v )
+				if not ok then break end
 			end
 		end
+		return ok, err
 	end
 
-	luci.util.dumptable(co)
-
-
-
 	for k, v in pairs( self.packages[config].sections ) do
-		_uci_foreach( k,
+		local ok, err = _uci_foreach( k,
 			function(s)
-				local ok, err = self:validate_section( config, s, co )
-
-				if not ok then
-					return ok, err
-				end
+				local sect = luci.uvl.section( self, co, k, config, s )
+				return self:_validate_section( sect )
 			end
 		)
+		if not ok then return false, err end
+	end
+
+	if STRICT_UNKNOWN_SECTIONS then
+		for k, v in pairs(co) do
+			if not self.beenthere[config..'.'..k] then
+				return false, "Section '" .. config .. '.' .. co[k]['.type'] ..
+					"' not found in scheme"
+			end
+		end
 	end
 
 	return true, nil
@@ -120,50 +128,36 @@ end
 -- @param scheme	Scheme to validate against
 -- @return			Boolean indicating weather the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_section( self, config, section, co, nodeps )
+function UVL._validate_section( self, section )
 
-	if not co then
-		self.uci.set_confdir( self.uci.confdir_default )
-		self.uci.load( config )
-		co = uci.get_all( config )
-	end
+	if section:values() then
 
-	local cs     = co[section]
-	local scheme = self:_scheme_section( co, config, section )
+		for _, v in ipairs(section:variables()) do
+			local ok, err = self:_validate_option( v )
 
-	if cs then
-		--luci.util.dumptable(cs)
-
-
-		for k, v in pairs(self.packages[config].variables[cs[".type"]]) do
-			if k:sub(1,1) ~= "." then
-				local ok, err = self:validate_option( config, section, k, co, false, cs[".type"] )
-
-				if not ok then
-					print("ERR", err)
-					return ok, err
-				end
+			if not ok then
+				return ok, err
 			end
 		end
 
-		--local dep_ok = nodeps or luci.uvl.dependencies.check_dependency( self, co, config, section )
-		--print( "DEP: ", dep_ok )
+		local ok, err = luci.uvl.dependencies.check( self, section )
 
-		--print( "Validate section: ", config .. '.' .. section, nodeps and '(without depencies)' or '' )
-
-		local ok, err = luci.uvl.dependencies.check_dependency(
-			self, co, config, section, nil, true, cs[".type"]
-		)
-
-		if ok then
-			--print("Validated section!\n\n")
-			return true
-		else
-			print("ERR", "All possible dependencies failed. (Last error was: " .. err .. ")")
+		if not ok then
 			return false, "All possible dependencies failed"
 		end
 	else
-		print( "Error, scheme section '" .. section .. "' not found in data" )
+		print( "Error, scheme section '" .. section:sid() .. "' not found in data" )
+	end
+
+	if STRICT_UNKNOWN_OPTIONS and not section:section().dynamic then
+		for k, v in pairs(section:values()) do
+			if k:sub(1,1) ~= "." and not self.beenthere[
+				section:cid() .. '.' .. k
+			] then
+				return false, "Option '" .. section:sid() .. '.' .. k ..
+					"' not found in scheme"
+			end
+		end
 	end
 
 	return true, nil
@@ -176,57 +170,46 @@ end
 -- @param scheme	Scheme to validate against
 -- @return			Boolean indicating weather the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_option( self, config, section, option, co, nodeps, section2 )
+function UVL._validate_option( self, option, nodeps )
 
-	if not co then
-		self.uci.set_confdir( self.uci.confdir_default )
-		self.uci.load( config )
-		co = uci.get_all( config )
-	end
-
-	local cs = co[section]
-	local sv = self:_scheme_option( co, config, section, option ) or
-		self:_scheme_option( co, config, section2, option )
-
-	--print("VOPT", config, section, option )
-
-	if not sv then
-		return false, "Requested option '" ..
-			config .. '.' .. ( section or section2 ) .. '.' .. option ..
+	if not option:option() then
+		return false, "Requested option '" .. option:sid() ..
 			"' not found in scheme"
 	end
 
-	if sv.required and not cs[option] then
-		return false, "Mandatory variable '" ..
-			config .. '.' .. section .. '.' .. option ..
+	if option:option().required and not option:value() then
+		return false, "Mandatory variable '" .. option:cid() ..
 			"' doesn't have a value"
 	end
 
-	if sv.type == "enum" and cs[option] then
-		if not sv.values or not sv.values[cs[option]] then
-			return false, "Value '" .. ( cs[option] or '<nil>' ) .. "' of given option '" ..
-				config .. "." .. section .. "." .. option ..
+	if option:option().type == "enum" and option:value() then
+		if not option:option().values or
+		   not option:option().values[option:value()]
+		then
+			return false, "Value '" .. ( option:value() or '<nil>' ) ..
+				"' of given option '" .. option:cid() ..
 				"' is not defined in enum { " ..
-				table.concat(self:_keys(sv.values),", ") .. " }"
+				table.concat(self:_keys(option:option().values),", ") ..
+				" }"
 		end
 	end
 
-	if sv.datatype and cs[option] then
-		if self.datatypes[sv.datatype] then
-			if not self.datatypes[sv.datatype]( cs[option] ) then
-				return false, "Value '" .. ( cs[option] or '<nil>' ) .. "' of given option '" ..
-					config .. "." .. ( section or section2 ) .. "." .. option ..
-					"' doesn't validate as datatype '" .. sv.datatype .. "'"
+	if option:option().datatype and option:value() then
+		if self.datatypes[option:option().datatype] then
+			if not self.datatypes[option:option().datatype](option:value()) then
+				return false, "Value '" .. ( option:value() or '<nil>' ) ..
+					"' of given option '" .. option:cid() ..
+					"' doesn't validate as datatype '" ..
+					option:option().datatype .. "'"
 			end
 		else
-			return false, "Unknown datatype '" .. sv.datatype .. "' encountered"
+			return false, "Unknown datatype '" ..
+				option:option().datatype .. "' encountered"
 		end
 	end
 
 	if not nodeps then
-		return luci.uvl.dependencies.check_dependency(
-			self, co, config, section, option, nil, section2
-		)
+		return luci.uvl.dependencies.check( self, option )
 	end
 
 	return true, nil
@@ -321,9 +304,9 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 					if k ~= "name" and k ~= "package" and k:sub(1,1) ~= "." then
 						if k:match("^depends") then
 							s["depends"] = _assert(
-								self:_read_depency( v2, s["depends"] ),
+								self:_read_dependency( v2, s["depends"] ),
 								"Section '%s' in scheme '%s' has malformed " ..
-								"depency specification in '%s'",
+								"dependency specification in '%s'",
 								v.name or '<nil>', scheme or '<nil>', k
 							)
 						else
@@ -360,9 +343,9 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 					if k ~= "name" and k ~= "section" and k:sub(1,1) ~= "." then
 						if k:match("^depends") then
 							t["depends"] = _assert(
-								self:_read_depency( v, t["depends"] ),
+								self:_read_dependency( v, t["depends"] ),
 								"Variable '%s' in scheme '%s' has malformed " ..
-								"depency specification in '%s'",
+								"dependency specification in '%s'",
 								v.name, scheme, k
 							)
 						elseif k:match("^validator") then
@@ -429,8 +412,8 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 	return self
 end
 
--- Read a depency specification
-function UVL._read_depency( self, value, deps )
+-- Read a dependency specification
+function UVL._read_dependency( self, value, deps )
 	local parts     = luci.util.split( value, "%s*,%s*", nil, true )
 	local condition = { }
 
@@ -487,7 +470,7 @@ function UVL._resolve_function( self, value )
 		if stat and mod then
 			for j=i+1, #path-1 do
 				if not type(mod) == "table" then
-					break;
+					break
 				end
 				mod = mod[path[j]]
 				if not mod then
@@ -500,4 +483,81 @@ function UVL._resolve_function( self, value )
 			end
 		end
 	end
+end
+
+
+section = luci.util.class()
+
+function section.__init__(self, scheme, co, st, c, s)
+	self.csection = co[s]
+	self.ssection = scheme.packages[c].sections[st]
+	self.cref     = { c, s }
+	self.sref     = { c, st }
+	self.scheme   = scheme
+	self.config   = co
+	self.type     = luci.uvl.TYPE_SECTION
+end
+
+function section.cid(self)
+	return ( self.cref[1] or '?' ) .. '.' .. ( self.cref[2] or '?' )
+end
+
+function section.sid(self)
+	return ( self.sref[1] or '?' ) .. '.' .. ( self.sref[2] or '?' )
+end
+
+function section.values(self)
+	return self.csection
+end
+
+function section.section(self)
+	return self.ssection
+end
+
+function section.variables(self)
+	local v = { }
+	if self.scheme.packages[self.sref[1]].variables[self.sref[2]] then
+		for o, _ in pairs(
+			self.scheme.packages[self.sref[1]].variables[self.sref[2]]
+		) do
+			table.insert( v, luci.uvl.option(
+				self.scheme, self.config, self.sref[2],
+				self.cref[1], self.cref[2], o
+			) )
+		end
+	end
+	return v
+end
+
+
+option = luci.util.class()
+
+function option.__init__(self, scheme, co, st, c, s, o)
+	self.coption = co[s] and co[s][o] or nil
+	self.soption = scheme.packages[c].variables[st][o]
+	self.cref    = { c, s, o }
+	self.sref    = { c, st, o }
+	self.scheme  = scheme
+	self.config  = co
+	self.type    = luci.uvl.TYPE_OPTION
+end
+
+function option.cid(self)
+	return ( self.cref[1] or '?' ) .. '.' ..
+		   ( self.cref[2] or '?' ) .. '.' ..
+		   ( self.cref[3] or '?' )
+end
+
+function option.sid(self)
+	return ( self.sref[1] or '?' ) .. '.' ..
+		   ( self.sref[2] or '?' ) .. '.' ..
+		   ( self.sref[3] or '?' )
+end
+
+function option.value(self)
+	return self.coption
+end
+
+function option.option(self)
+	return self.soption
 end
