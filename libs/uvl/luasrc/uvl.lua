@@ -51,21 +51,6 @@ function UVL.__init__( self, schemedir )
 	self.datatypes  = luci.uvl.datatypes
 end
 
-
-function UVL._scheme_section( self, uci, c, s )
-	if self.packages[c] and uci[s] then
-		return self.packages[c].sections[uci[s][".type"]]
-	end
-end
-
-function UVL._scheme_option( self, uci, c, s, o )
-	if self.packages[c] and uci[s] and uci[s][o] then
-		return self.packages[c].variables[uci[s][".type"]][o]
-	elseif self.packages[c] and self.packages[c].variables[s] then
-		return self.packages[c].variables[s][o]
-	end
-end
-
 function UVL._keys( self, tbl )
 	local keys = { }
 	if tbl then
@@ -122,6 +107,37 @@ function UVL.validate( self, config )
 	return true, nil
 end
 
+function UVL.validate_section( self, config, section )
+	self.uci.set_confdir( self.uci.confdir_default )
+	self.uci.load( config )
+
+	local co = self.uci.get_all( config )
+	if co[section] then
+		return self:_validate_section( luci.uvl.section(
+			self, co, co[section]['.type'], config, section
+		) )
+	else
+		return false, "Section '" .. config .. '.' .. section ..
+			"' not found in config. Nothing to do."
+	end
+end
+
+function UVL.validate_option( self, config, section, option )
+	self.uci.set_confdir( self.uci.confdir_default )
+	self.uci.load( config )
+
+	local co = self.uci.get_all( config )
+	if co[section] and co[section][option] then
+		return self:_validate_option( luci.uvl.option(
+			self, co, co[section]['.type'], config, section, option
+		) )
+	else
+		return false, "Option '" ..
+			config .. '.' .. section .. '.' .. option ..
+			"' not found in config. Nothing to do."
+	end
+end
+
 --- Validate given section of given configuration.
 -- @param config	Name of the configuration to validate
 -- @param section	Key of the section to validate
@@ -172,44 +188,50 @@ end
 -- @return			String containing the reason for errors (if any)
 function UVL._validate_option( self, option, nodeps )
 
-	if not option:option() then
+	if not option:option() and
+	   not ( option:section() and option:section().dynamic )
+	then
 		return false, "Requested option '" .. option:sid() ..
 			"' not found in scheme"
 	end
 
-	if option:option().required and not option:value() then
-		return false, "Mandatory variable '" .. option:cid() ..
-			"' doesn't have a value"
-	end
-
-	if option:option().type == "enum" and option:value() then
-		if not option:option().values or
-		   not option:option().values[option:value()]
-		then
-			return false, "Value '" .. ( option:value() or '<nil>' ) ..
-				"' of given option '" .. option:cid() ..
-				"' is not defined in enum { " ..
-				table.concat(self:_keys(option:option().values),", ") ..
-				" }"
+	if option:option() then
+		if option:option().required and not option:value() then
+			return false, "Mandatory variable '" .. option:cid() ..
+				"' doesn't have a value"
 		end
-	end
 
-	if option:option().datatype and option:value() then
-		if self.datatypes[option:option().datatype] then
-			if not self.datatypes[option:option().datatype](option:value()) then
+		if option:option().type == "enum" and option:value() then
+			if not option:option().values or
+			   not option:option().values[option:value()]
+			then
 				return false, "Value '" .. ( option:value() or '<nil>' ) ..
 					"' of given option '" .. option:cid() ..
-					"' doesn't validate as datatype '" ..
-					option:option().datatype .. "'"
+					"' is not defined in enum { " ..
+					table.concat(self:_keys(option:option().values),", ") ..
+					" }"
 			end
-		else
-			return false, "Unknown datatype '" ..
-				option:option().datatype .. "' encountered"
 		end
-	end
 
-	if not nodeps then
-		return luci.uvl.dependencies.check( self, option )
+		if option:option().datatype and option:value() then
+			if self.datatypes[option:option().datatype] then
+				if not self.datatypes[option:option().datatype](
+					option:value()
+				) then
+					return false, "Value '" .. ( option:value() or '<nil>' ) ..
+						"' of given option '" .. option:cid() ..
+						"' doesn't validate as datatype '" ..
+						option:option().datatype .. "'"
+				end
+			else
+				return false, "Unknown datatype '" ..
+					option:option().datatype .. "' encountered"
+			end
+		end
+
+		if not nodeps then
+			return luci.uvl.dependencies.check( self, option )
+		end
 	end
 
 	return true, nil
@@ -560,4 +582,8 @@ end
 
 function option.option(self)
 	return self.soption
+end
+
+function option.section(self)
+	return self.scheme.packages[self.sref[1]].sections[self.sref[2]]
 end
