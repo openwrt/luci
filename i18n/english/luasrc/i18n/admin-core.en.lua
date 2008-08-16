@@ -34,7 +34,8 @@ routes_metric = [[Metric]]
 a_s_desc = [[Here you can configure the basic aspects of your device like its hostname or the timezone.]]
 a_s_packages = [[Software]]
 a_s_changepw = [[Admin Password]]
-a_s_p_ipkg = [[<abbr title="Itsy Package Management System">IPKG</abbr>-Configuration]]
+--a_s_p_ipkg = [[<abbr title="Itsy Package Management System">IPKG</abbr>-Configuration]]
+a_s_p_ipkg = [[IPKG-Configuration]]
 a_s_sshkeys = [[<abbr title="Secure Shell">SSH</abbr>-Keys]]
 a_s_fstab = [[Mount Points]]
 a_s_flash = [[Flash Firmware]]
@@ -260,3 +261,14 @@ network_interface_err = [[Errors]]
 network_interface_err_desc = [[TX / RX]]
 network_interface_fwzone = [[Create / Assign firewall-zone]]
 network_interface_fwzone_desc = [[This interface does not belong to any firewall zone yet.]]
+
+process_head = "Processes"
+process_descr = "This list gives an overview over currently running system processes and their status."
+process_pid = "PID"
+process_owner = "Owner"
+process_command = "Command"
+process_cpu = "CPU usage (%)"
+process_mem = "Memory usage (%)"
+process_hup = "Hang Up"
+process_term = "Terminate"
+process_kill = "Kill"

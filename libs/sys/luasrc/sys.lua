@@ -298,6 +298,46 @@ process = {}
 -- @return	Number containing the current pid
 process.info = posix.getpid
 
+--- Retrieve information about currently running processes.
+-- @return 	Table containing process information
+function process.list()
+	local data = {}
+	local k
+	local ps = luci.util.execi("top -bn1")
+	
+	if not ps then
+		return
+	end
+	
+	while true do
+		local line = ps()
+		if not line then
+			return
+		end
+		
+		k = luci.util.split(luci.util.trim(line), "%s+", nil, true)
+		if k[1] == "PID" then
+			break
+		end
+	end
+	
+	for line in ps do
+		local row = {}
+		
+		line = luci.util.trim(line)
+		for i, value in ipairs(luci.util.split(line, "%s+", #k-1, true)) do
+			row[k[i]] = value
+		end
+		
+		local pid = tonumber(row[k[1]])
+		if pid then
+			data[pid] = row
+		end
+	end
+	
+	return data
+end
+
 --- Set the gid of a process identified by given pid.
 -- @param pid	Number containing the process id
 -- @param gid	Number containing the Unix group id
@@ -317,6 +357,13 @@ end
 function process.setuser(pid, uid)
 	return posix.setpid("u", pid, uid)
 end
+
+--- Send a signal to a process identified by given pid.
+-- @param pid	Number containing the process id
+-- @param sig	Signal to send (default: 15 [SIGTERM])
+-- @return		Boolean indicating successful operation
+-- @return		Number containing the error code if failed
+process.signal = posix.kill
 
 
 --- LuCI system utilities / user related functions.

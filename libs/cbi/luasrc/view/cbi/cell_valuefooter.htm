@@ -13,8 +13,12 @@ $Id$
 
 -%>
 
-	<% if self.tag_invalid[section] then -%>
+	<% if self.tag_error[section] then -%>
+		<div class="cbi-error"><%=self.tag_error[section]%></div>
+	<%- elseif self.tag_invalid[section] then -%>
 		<div class="cbi-error"><%:cbi_invalid%></div>
+	<%- elseif self.tag_missing[section] then -%>
+		<div class="cbi-error"><%:cbi_missing%></div>
 	<%- end %>
 </td>
 

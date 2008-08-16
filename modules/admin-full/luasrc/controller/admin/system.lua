@@ -23,6 +23,7 @@ function index()
 	entry({"admin", "system", "passwd"}, form("admin_system/passwd"), i18n("a_s_changepw"), 20)
 	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("a_s_sshkeys"), 30)
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("system"), 40)
+	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("process_head"), 45)
 	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("a_s_fstab"), 50)
 	entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("leds", "LEDs"), 60)
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 70)
@@ -85,7 +86,7 @@ function action_packages()
 	
 	
 	-- Package info
-	local info = luci.model.ipkg.info(query)
+	local info = luci.model.ipkg.info("*"..query.."*")
 	info = info or {}
 	local pkgs = {}
 	

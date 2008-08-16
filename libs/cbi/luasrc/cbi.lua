@@ -287,7 +287,7 @@ function SimpleForm.parse(self, ...)
 		or valid and 1
 		or -1
 
-	self.dorender = self:handle(state, self.data) ~= false
+	self.dorender = not self.handle or self:handle(state, self.data) ~= false
 end
 
 function SimpleForm.render(self, ...)
@@ -487,7 +487,11 @@ function Table.__init__(self, form, data, ...)
 	self.data = data
 	
 	function datasource.get(self, section, option)
-		return data[section][option]
+		return data[section] and data[section][option]
+	end
+	
+	function datasource.del(...)
+		return true
 	end
 	
 	AbstractSection.__init__(self, datasource, "table", ...)
@@ -496,10 +500,18 @@ function Table.__init__(self, form, data, ...)
 	self.anonymous = true
 end
 
+function Table.parse(self)
+	for i, k in ipairs(self:cfgsections()) do
+		if luci.http.formvalue("cbi.submit") then
+			Node.parse(self, k)
+		end
+	end
+end
+
 function Table.cfgsections(self)
 	local sections = {}
 	
-	for i, v in pairs(self.data) do
+	for i, v in luci.util.kspairs(self.data) do
 		table.insert(sections, i)
 	end
 	
@@ -685,6 +697,7 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.config = map.config
 	self.tag_invalid = {}
 	self.tag_missing = {}
+	self.tag_error = {}
 	self.deps = {}
 
 	self.track_missing = false
@@ -700,6 +713,11 @@ function AbstractValue.depends(self, field, value)
 	table.insert(self.deps, {field=field, value=value})
 end
 
+-- Generates the unique CBID
+function AbstractValue.cbid(self, section)
+	return "cbid."..self.map.config.."."..section.."."..self.option
+end
+
 -- Return whether this object should be created
 function AbstractValue.formcreated(self, section)
 	local key = "cbi.opt."..self.config.."."..section
@@ -708,8 +726,7 @@ end
 
 -- Returns the formvalue for this object
 function AbstractValue.formvalue(self, section)
-	local key = "cbid."..self.map.config.."."..section.."."..self.option
-	return luci.http.formvalue(key)
+	return luci.http.formvalue(self:cbid(section))
 end
 
 function AbstractValue.additional(self, value)
@@ -746,9 +763,7 @@ function AbstractValue.render(self, s, scope)
 	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
 		scope.section = s
-		scope.cbid    = "cbid." .. self.config ..
-		                "."     .. s           ..
-						"."     .. self.option
+		scope.cbid    = self:cbid(s)
 
 		scope.ifattr = function(cond,key,val)
 			if cond then
@@ -964,4 +979,16 @@ TextValue = class(AbstractValue)
 function TextValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/tvalue"
+end
+
+--[[
+Button
+]]--
+Button = class(AbstractValue)
+
+function Button.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template  = "cbi/button"
+	self.inputstyle = nil
+	self.rmempty = true
 end
