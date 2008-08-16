@@ -17,6 +17,8 @@ m = Map("ntpclient", translate("ntpc"), translate("ntpc_desc"))
 s = m:section(TypedSection, "ntpclient", translate("general"))
 s.anonymous = true
 
+s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
+
 s:option(Value, "interval", translate("ntpc_interval"))
 s:option(Value, "count", translate("ntpc_count"), translate("ntpc_count_desc"))
 
