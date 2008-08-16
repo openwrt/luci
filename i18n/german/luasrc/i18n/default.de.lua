@@ -18,7 +18,7 @@ configfile = "Konfigurationsdatei"
 confirmation = "Bestätigung"
 
 delete = "Löschen"
-descr = "Beschriebung"
+descr = "Beschreibung"
 design = "Design"
 device = "Gerät"
 devices = "Geräte"

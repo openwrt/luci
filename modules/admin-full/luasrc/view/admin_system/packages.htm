@@ -12,6 +12,13 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+<%-
+local rowcnt = 1
+function rowstyle()
+	rowcnt = rowcnt + 1
+	return (rowcnt % 2) + 1
+end
+-%>
 <%+header%>
 <h1><%:system%></h1>
 <h2><%:a_s_packages%></h2>
@@ -36,56 +43,57 @@ $Id$
 <br />
 <% end %>
 
-<div>
-<a href="<%=controller%>/admin/system/packages/ipkg"><%:a_s_packages_ipkg%></a><br />
-<a href="<%=controller%>/admin/system/packages?update=1"><%:a_s_packages_updatelist%></a><br />
-<a href="<%=controller%>/admin/system/packages?upgrade=1"><%:a_s_packages_upgrade%></a>
-</div>
-
-<br />
-<br />
-
-<form method="post" action="<%=controller%>/admin/system/packages">
-	<div>
-		<span class="bold"><%:a_s_packages_installurl%>:</span><br />
-		<input type="text" name="url" size="30" value="" />
-		<input type="submit" name="submit" value="<%:ok%>" />
+<form method="post" action="<%=REQUEST_URI%>">
+	<div class="cbi-map">
+		<fieldset class="cbi-section">
+			<ul>
+				<li><a href="<%=REQUEST_URI%>/ipkg"><%:a_s_packages_ipkg%></a></li>
+				<li><a href="<%=REQUEST_URI%>?update=1"><%:a_s_packages_updatelist%></a></li>
+				<li><a href="<%=REQUEST_URI%>?upgrade=1"><%:a_s_packages_upgrade%></a></li>
+			</ul>
+			<br />
+			<fieldset class="cbi-section-node">
+			<div class="cbi-value">
+				<label class="cbi-value-title"><%:a_s_packages_installurl%>:</label>
+				<div class="cbi-value-field">
+					<input type="text" name="url" size="30" value="" />
+					<input class="cbi-input-save" type="submit" name="submit" value="<%:ok%>" />
+				</div>
+			</div>
+		
+			<div class="cbi-value">
+				<label class="cbi-value-title"><%:filter%>:</label>
+				<div class="cbi-value-field">
+					<input type="text" name="query" size="20" value="<%=query%>" />
+					<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
+				</div>
+			</div>
+			
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%:a_s_packages_name%></th>
+					<th class="cbi-section-table-cell"><%:version%></th>
+					<th class="cbi-section-table-cell"><%:install%></th>
+					<th class="cbi-section-table-cell"><%:delete%></th>
+					<th class="cbi-section-table-cell"><%:descr%></th>
+				</tr>
+				<% for k, pkg in pairs(pkgs) do %>	
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+					<td><%=pkg.Package%></td>
+					<td><%=pkg.Version%></td>
+					<td><% if not pkg.Status or not pkg.Status.installed then %><input type="checkbox" name="install.<%=pkg.Package%>" value="1" /><% else %><%:installed%><% end %></td>
+					<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:notinstalled%><% end %></td>
+					<td><%=pkg.Description%></td>
+				</tr>
+				<% end %>
+			</table>
+			
+			<br />
+			
+			<div style="text-align: right">
+				<input type="submit" class="cbi-input-apply" name="submit" value="<%:a_s_packages_do%>" />
+			</div>
+		</fieldset></fieldset>
 	</div>
-	
-	<br />
-	<br />
-
-	<div>
-		<span class="bold"><%:filter%>:</span>
-		<input type="text" name="query" size="20" value="<%=query%>" />
-		<input type="submit" name="search" value="<%:a_s_packages_search%>" />
-		<input type="submit" name="submit" value="<%:a_s_packages_do%>" />
-	</div>
-	
-	<br />
-	<br />
-	
-	<div>
-	<table style="font-size: 0.8em">
-		<tr>
-			<th><%:a_s_packages_name%></th>
-			<th><%:version%></th>
-			<th><%:install%></th>
-			<th><%:delete%></th>
-			<th><%:descr%></th>
-		</tr>
-		<% for k, pkg in pairs(pkgs) do %>	
-		<tr>
-			<td><%=pkg.Package%></td>
-			<td><%=pkg.Version%></td>
-			<td><% if not pkg.Status or not pkg.Status.installed then %><input type="checkbox" name="install.<%=pkg.Package%>" value="1" /><% else %><%:installed%><% end %></td>
-			<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:notinstalled%><% end %></td>
-			<td><%=pkg.Description%></td>
-		</tr>
-		<% end %>
-	</table>
-	</div>
-	<br />
-	<input type="submit" name="submit" value="<%:a_s_packages_do%>" />
 </form>
 <%+footer%>
