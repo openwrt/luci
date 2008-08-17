@@ -212,3 +212,12 @@ link = posix.link
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
 unlink = posix.unlink
+
+--- Retrieve target of given symlink.
+-- @class		function
+-- @name		readlink
+-- @param path	String containing the path of the symlink to read
+-- @return		String containing the link target or nil on error
+-- @return		String containing the error description on error
+-- @return		Number containing the os specific errno on error
+readlink = posix.readlink
