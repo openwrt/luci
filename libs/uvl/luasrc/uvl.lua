@@ -19,6 +19,7 @@ module( "luci.uvl", package.seeall )
 require("luci.fs")
 require("luci.util")
 require("luci.model.uci")
+require("luci.uvl.loghelper")
 require("luci.uvl.datatypes")
 --require("luci.uvl.validation")
 require("luci.uvl.dependencies")
@@ -48,17 +49,8 @@ function UVL.__init__( self, schemedir )
 	self.packages	= { }
 	self.beenthere  = { }
 	self.uci		= luci.model.uci
+	self.log        = luci.uvl.loghelper
 	self.datatypes  = luci.uvl.datatypes
-end
-
-function UVL._keys( self, tbl )
-	local keys = { }
-	if tbl then
-		for k, _ in luci.util.kspairs(tbl) do
-			table.insert( keys, k )
-		end
-	end
-	return keys
 end
 
 
@@ -68,24 +60,29 @@ end
 -- @return			Boolean indicating weather the given config validates
 -- @return			String containing the reason for errors (if any)
 function UVL.validate( self, config )
-
 	self.uci.load_config( config )
 	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
+	local sc = { }
 
 	local function _uci_foreach( type, func )
 		local ok, err
 		for k, v in pairs(co) do
 			if co[k]['.type'] == type then
+				sc[type] = sc[type] + 1
 				ok, err = func( k, v )
-				if not ok then break end
+				if not ok then
+					err = self.log.config_error( config, err )
+					break
+				end
 			end
 		end
 		return ok, err
 	end
 
 	for k, v in pairs( self.packages[config].sections ) do
+		sc[k] = 0
 		local ok, err = _uci_foreach( k,
 			function(s)
 				local sect = luci.uvl.section( self, co, k, config, s )
@@ -98,9 +95,22 @@ function UVL.validate( self, config )
 	if STRICT_UNKNOWN_SECTIONS then
 		for k, v in pairs(co) do
 			if not self.beenthere[config..'.'..k] then
-				return false, "Section '" .. config .. '.' .. co[k]['.type'] ..
-					"' not found in scheme"
+				return false, self.log.config_error( config,
+					"Section '" .. config .. '.' .. co[k]['.type'] ..
+					"' not found in scheme" )
 			end
+		end
+	end
+
+	for _, k in ipairs(luci.util.keys(sc)) do
+		local s = self.packages[config].sections[k]
+
+		if s.required and sc[k] == 0 then
+			return false, self.log.config_error( config,
+				'Required section "' .. k .. '" not found in config' )
+		elseif s.unique and sc[k] > 1 then
+			return false, self.log.config_error( config,
+				'Unique section "' .. k .. '" occurs multiple times in config' )
 		end
 	end
 
@@ -152,14 +162,14 @@ function UVL._validate_section( self, section )
 			local ok, err = self:_validate_option( v )
 
 			if not ok then
-				return ok, err
+				return ok, self.log.section_error( section, err )
 			end
 		end
 
 		local ok, err = luci.uvl.dependencies.check( self, section )
 
 		if not ok then
-			return false, "All possible dependencies failed"
+			return false, err
 		end
 	else
 		print( "Error, scheme section '" .. section:sid() .. "' not found in data" )
@@ -191,7 +201,7 @@ function UVL._validate_option( self, option, nodeps )
 	if not option:option() and
 	   not ( option:section() and option:section().dynamic )
 	then
-		return false, "Requested option '" .. option:sid() ..
+		return false, "Option '" .. option:cid() ..
 			"' not found in scheme"
 	end
 
@@ -208,7 +218,7 @@ function UVL._validate_option( self, option, nodeps )
 				return false, "Value '" .. ( option:value() or '<nil>' ) ..
 					"' of given option '" .. option:cid() ..
 					"' is not defined in enum { " ..
-					table.concat(self:_keys(option:option().values),", ") ..
+					table.concat(luci.util.keys(option:option().values),", ") ..
 					" }"
 			end
 		end
@@ -301,6 +311,11 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		return r
 	end
 
+	-- helper function to read bools
+	local function _bool( v )
+		return ( v == "true" or v == "yes" or v == "on" or v == "1" )
+	end
+
 	-- Step 1: get all sections
 	for i, conf in ipairs( schemes ) do
 		for k, v in pairs( conf ) do
@@ -331,6 +346,8 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 								"dependency specification in '%s'",
 								v.name or '<nil>', scheme or '<nil>', k
 							)
+						elseif k == "dynamic" or k == "unique" or k == "required" then
+							s[k] = _bool(v2)
 						else
 							s[k] = v2
 						end
@@ -361,27 +378,31 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				local t = s[v.name]
 
-				for k, v in pairs(v) do
+				for k, v2 in pairs(v) do
 					if k ~= "name" and k ~= "section" and k:sub(1,1) ~= "." then
 						if k:match("^depends") then
 							t["depends"] = _assert(
-								self:_read_dependency( v, t["depends"] ),
-								"Variable '%s' in scheme '%s' has malformed " ..
-								"dependency specification in '%s'",
-								v.name, scheme, k
+								self:_read_dependency( v2, t["depends"] ),
+								'Invalid reference "%s" in "%s.%s.%s"',
+								v2, v.name, scheme, k
 							)
 						elseif k:match("^validator") then
 							t["validators"] = _assert(
-								self:_read_validator( v, t["validators"] ),
+								self:_read_validator( v2, t["validators"] ),
 								"Variable '%s' in scheme '%s' has malformed " ..
 								"validator specification in '%s'",
 								v.name, scheme, k
 							)
+						elseif k == "required" then
+							t[k] = _bool(v2)
 						else
-							t[k] = v
+							t[k] = v2
 						end
 					end
 				end
+
+				t.type     = t.type     or "variable"
+				t.required = t.required or false
 			end
 		end
 	end

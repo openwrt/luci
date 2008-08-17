@@ -61,7 +61,10 @@ function check( self, object, nodeps )
 
 	if item.depends then
 		local ok = false
-		local valid, err
+		local valid, err = false,
+			string.format( 'In dependency check for %s "%s":',
+				( object.type == luci.uvl.TYPE_SECTION and "section" or "option" ),
+				object:cid() )
 
 		for _, dep in ipairs(item.depends) do
 			local subcondition = true
@@ -82,23 +85,21 @@ function check( self, object, nodeps )
 					ref[1], ref[2], ref[3]
 				)
 
-				valid, err = self:_validate_option( option, true )
+				valid, err2 = self:_validate_option( option, true )
 				if valid then
 					if not (
 						( type(v) == "boolean" and object.config[ref[2]][ref[3]] ) or
 						( ref[3] and object.config[ref[2]][ref[3]] ) == v
 					) then
 						subcondition = false
-						err = type(v) ~= "boolean"
-							and "Option '" .. table.concat( ref, "." ) ..
-								"' doesn't match requested value '" .. v .. '"'
-							or  "Option '" .. table.concat( ref, "." ) ..
-								"' has no value"
-
+						err = err .. "\n" ..
+							self.log.dump_dependency( dep, ref, v )
 						break
 					end
 				else
 					subcondition = false
+					err = err .. "\n" ..
+						self.log.dump_dependency( dep, ref, nil, err2 )
 					break
 				end
 			end
