@@ -61,6 +61,7 @@ local options, arguments = getopt( arg )
 
 if #arguments == 0 or options.help then
 	print([=[
+
 uvl - UCI Validation Layer
 $Id: uvl.lua 2873 2008-08-17 21:43:56Z jow $
 (c) 2008 Jo-Philipp Wich, Steven Barth
@@ -84,8 +85,7 @@ Options:
 		Don't treat options found in config but not in scheme as error.
 
 	--no-strict-validators
-		Don't invalidate config if an external validators fails.
-
+		Don't invalidate config if an external validator fails.
 	]=])
 	os.exit(255)
 else
