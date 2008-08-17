@@ -75,11 +75,27 @@ function UVL.__init__( self, schemedir )
 end
 
 
+--- Validate given configuration, section or option.
+-- @param config	Name of the configuration to validate
+-- @param section	Name of the section to validate (optional)
+-- @param option	Name of the option to validate (optional)
+-- @return			Boolean indicating whether the given config validates
+-- @return			String containing the reason for errors (if any)
+function UVL.validate( self, config, section, option )
+	if config and section and option then
+		return self:validate_option( config, section, option )
+	elseif config and section then
+		return self:validate_section( config, section )
+	elseif config then
+		return self:validate_config( config )
+	end
+end
+
 --- Validate given configuration.
 -- @param config	Name of the configuration to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate( self, config )
+function UVL.validate_config( self, config )
 
 	if not self.packages[config] then
 		local ok, err = pcall( self.read_scheme, self, config )
