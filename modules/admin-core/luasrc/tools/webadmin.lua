@@ -45,7 +45,7 @@ function date_format(secs)
 	end
 	
 	if hour > 24 then
-		days = math.floor(hours / 24)
+		days = math.floor(hour / 24)
 		hour = hour % 24
 	end
 	
