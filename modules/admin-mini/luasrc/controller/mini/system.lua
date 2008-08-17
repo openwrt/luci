@@ -21,7 +21,7 @@ function index()
 
 	entry({"mini", "system"}, alias("mini", "system", "index"), i18n("system"), 40)
 	entry({"mini", "system", "index"}, cbi("mini/system"), i18n("general"), 1)
-	entry({"mini", "system", "passwd"}, call("action_passwd"), i18n("a_s_changepw"), 10)
+	entry({"mini", "system", "passwd"}, form("mini/passwd"), i18n("a_s_changepw"), 10)
 	entry({"mini", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 80)
 	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 90)
 	entry({"mini", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 100)
@@ -109,22 +109,6 @@ function action_upgrade()
 	end
 
 	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
-end
-
-function action_passwd()
-	local p1 = luci.http.formvalue("pwd1")
-	local p2 = luci.http.formvalue("pwd2")
-	local stat = nil
-
-	if p1 or p2 then
-		if p1 == p2 then
-			stat = luci.sys.user.setpasswd("root", p1)
-		else
-			stat = 10
-		end
-	end
-
-	luci.template.render("mini/passwd", {stat=stat})
 end
 
 function _keep_pattern()
