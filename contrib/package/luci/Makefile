@@ -562,13 +562,22 @@ endef
 
 define Package/luci-i18n-french
   $(call Package/luci/i18ntemplate)
-  TITLE:=French
+  TITLE:=French (by Florian Fainelli)
 endef
 
 define Package/luci-i18n-french/install
 	$(call Package/luci/install/template,$(1),i18n/french)
 endef
 
+
+define Package/luci-i18n-russian
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Russian (by Skryabin Dmitry)
+endef
+
+define Package/luci-i18n-russian/install
+	$(call Package/luci/install/template,$(1),i18n/russian)
+endef
 
 
 
@@ -692,6 +701,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-french),)
 	PKG_SELECTED_MODULES+=i18n/french
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-russian),)
+	PKG_SELECTED_MODULES+=i18n/russian
+endif
 
 
 MAKE_FLAGS += \
@@ -747,3 +759,4 @@ $(eval $(call BuildPackage,luci-theme-openwrtlight))
 $(eval $(call BuildPackage,luci-i18n-german))
 $(eval $(call BuildPackage,luci-i18n-english))
 $(eval $(call BuildPackage,luci-i18n-french))
+$(eval $(call BuildPackage,luci-i18n-russian))
