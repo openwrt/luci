@@ -16,15 +16,6 @@ $Id$
 
 module( "luci.uvl.dependencies", package.seeall )
 
-local function _assert( condition, fmt, ... )
-	if not condition then
-		return assert( nil, string.format( fmt, ... ) )
-	else
-		return condition
-	end
-end
-
-
 function _parse_reference( r, c, s, o )
 	local ref  = { }
 	local vars = {

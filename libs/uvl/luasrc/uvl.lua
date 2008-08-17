@@ -21,15 +21,16 @@ require("luci.util")
 require("luci.model.uci")
 require("luci.uvl.loghelper")
 require("luci.uvl.datatypes")
---require("luci.uvl.validation")
+require("luci.uvl.validation")
 require("luci.uvl.dependencies")
 
 TYPE_SECTION  = 0x01
 TYPE_VARIABLE = 0x02
 TYPE_ENUM     = 0x03
 
-STRICT_UNKNOWN_SECTIONS = true
-STRICT_UNKNOWN_OPTIONS  = true
+STRICT_UNKNOWN_SECTIONS    = true
+STRICT_UNKNOWN_OPTIONS     = true
+STRICT_EXTERNAL_VALIDATORS = true
 
 
 local default_schemedir = "/etc/scheme"
@@ -242,6 +243,11 @@ function UVL._validate_option( self, option, nodeps )
 		if not nodeps then
 			return luci.uvl.dependencies.check( self, option )
 		end
+
+		local ok, err = luci.uvl.validation.check( self, option )
+		if not ok and STRICT_EXTERNAL_VALIDATORS then
+			return false, self.log.validator_error( option, err )
+		end
 	end
 
 	return true, nil
@@ -353,6 +359,10 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 						end
 					end
 				end
+
+				s.dynamic  = s.dynamic  or false
+				s.unique   = s.unique   or false
+				s.required = s.required or false
 			end
 		end
 	end
@@ -402,6 +412,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 				end
 
 				t.type     = t.type     or "variable"
+				t.datatype = t.datatype or "string"
 				t.required = t.required or false
 			end
 		end
@@ -485,22 +496,24 @@ end
 
 -- Read a validator specification
 function UVL._read_validator( self, value, validators )
-	local validator
+	if value then
+		local validator
 
-	if value and value:match("/") and self.datatypes.file(value) then
-		validator = value
-	else
-		validator = self:_resolve_function( value )
-	end
-
-	if validator then
-		if not validators then
-			validators = { validator }
-		else
-			table.insert( validators, validator )
+		if value:match("^exec:") then
+			validator = value:gsub("^exec:","")
+		elseif value:match("^lua:") then
+			validator = self:_resolve_function( (value:gsub("^lua:","") ) )
 		end
 
-		return validators
+		if validator then
+			if not validators then
+				validators = { validator }
+			else
+				table.insert( validators, validator )
+			end
+
+			return validators
+		end
 	end
 end
 

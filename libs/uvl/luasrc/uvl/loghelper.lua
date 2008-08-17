@@ -30,6 +30,13 @@ function section_error( section, message )
 	)
 end
 
+function validator_error( option, message )
+	return string.format(
+		'External validator in option "%s" failed:\n%s',
+			option:cid(), message or "Unknown error"
+	)
+end
+
 function dump_dependency( dep, ref, v, e )
 	local str = nil
 
@@ -46,7 +53,7 @@ function dump_dependency( dep, ref, v, e )
 
 	str = string.format(
 		'%s) failed:\n\t%s',
-		str, e or string.format(
+		str, e and e:gsub("\n","\n\t") or string.format(
 			'Option "%s" %s',
 			table.concat( ref, "." ), (
 				type(v) == "boolean"
