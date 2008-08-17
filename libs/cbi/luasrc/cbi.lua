@@ -710,7 +710,15 @@ end
 
 -- Add a dependencie to another section field
 function AbstractValue.depends(self, field, value)
-	table.insert(self.deps, {field=field, value=value})
+	local deps
+	if type(field) == "string" then
+		deps = {}
+	 	deps[field] = value
+	else
+		deps = field
+	end
+	
+	table.insert(self.deps, {deps=deps, add=""})
 end
 
 -- Generates the unique CBID
@@ -897,10 +905,14 @@ function ListValue.__init__(self, ...)
 	self.widget = "select"
 end
 
-function ListValue.value(self, key, val)
+function ListValue.value(self, key, val, ...)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val))
+	
+	for i, deps in ipairs({...}) do
+		table.insert(self.deps, {add = "-"..key, deps=deps})
+	end
 end
 
 function ListValue.validate(self, val)

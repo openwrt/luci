@@ -27,8 +27,17 @@ $Id$
 			<%- end %>
 		</select>
 		<script type="text/javascript"><% for key, val in pairs(self.optionals[section]) do %>
-			<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do %>cbi_d_add("cbi-<%=self.config.."-"..section.."-"..val.option%>", "cbid.<%=self.config.."."..section.."."..d.field%>", "<%=d.value%>");
-		<% end %><% end %>
+			<% if #val.deps > 0 then %><% for j, d in ipairs(val.deps) do -%>
+			cbi_d_add("cbi-<%=self.config.."-"..section.."-"..val.option..d.add%>", {
+		<%-
+			for k,v in pairs(d.deps) do
+		-%>
+			<%-=string.format('"cbid.%s.%s.%s"', self.config, section, k) .. ":" .. string.format("%q", v)-%>,
+		<%-
+			end
+		-%>
+			});
+		<%- end %><% end %>
 		<% end %></script>
 	<% end %>
 		<input type="submit" class="cbi-button cbi-button-fieldadd" value="<%:add%>" />

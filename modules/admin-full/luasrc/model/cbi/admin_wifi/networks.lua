@@ -49,28 +49,70 @@ s:option(Flag, "bursting", translate("a_w_athburst")).optional = true
 encr = s:option(ListValue, "encryption", translate("encryption"))
 encr:value("none", "keine")
 encr:value("wep", "WEP")
-encr:value("psk", "WPA-PSK")
-encr:value("wpa", "WPA-Radius")
-encr:value("psk2", "WPA2-PSK")
-encr:value("wpa2", "WPA2-Radius")
-
-key = s:option(Value, "key", translate("key"))
-key:depends("encryption", "wep")
-key:depends("encryption", "psk")
-key:depends("encryption", "wpa")
-key:depends("encryption", "psk2")
-key:depends("encryption", "wpa2")
-key.rmempty = true
+encr:value("PSK", "WPA-PSK")
+encr:value("WPA", "WPA-EAP", {mode="ap"}, {mode="sta"})
+encr:value("PSK2", "WPA2-PSK")
+encr:value("WPA2", "WPA2-EAP", {mode="ap"}, {mode="sta"})
+encr:depends("mode", "ap")
+encr:depends("mode", "sta")
+encr:depends("mode", "wds")
 
 server = s:option(Value, "server", translate("a_w_radiussrv"))
-server:depends("encryption", "wpa")
-server:depends("encryption", "wpa2")
+server:depends({mode="ap", encryption="WPA"})
+server:depends({mode="ap", encryption="WPA2"})
 server.rmempty = true
 
 port = s:option(Value, "port", translate("a_w_radiusport"))
-port:depends("encryption", "wpa")
-port:depends("encryption", "wpa2")
+port:depends({mode="ap", encryption="WPA"})
+port:depends({mode="ap", encryption="WPA2"})
 port.rmempty = true
+
+key = s:option(Value, "key", translate("key"))
+key:depends("encryption", "wep")
+key:depends("encryption", "PSK")
+key:depends({mode="ap", encryption="WPA"})
+key:depends("encryption", "PSK2")
+key:depends({mode="ap", encryption="WPA2"})
+key.rmempty = true
+
+nasid = s:option(Value, "nasid", translate("a_w_nasid"))
+nasid:depends({mode="ap", encryption="WPA"})
+nasid:depends({mode="ap", encryption="WPA2"})
+nasid.rmempty = true
+
+eaptype = s:option(ListValue, "eap_type", translate("a_w_eaptype"))
+eaptype:value("TLS")
+eaptype:value("PEAP")
+eaptype:depends({mode="sta", encryption="WPA"})
+eaptype:depends({mode="sta", encryption="WPA2"})
+
+cacert = s:option(Value, "ca_cert", translate("a_w_cacert"))
+cacert:depends({mode="sta", encryption="WPA"})
+cacert:depends({mode="sta", encryption="WPA2"})
+
+privkey = s:option(Value, "priv_key", translate("a_w_tlsprivkey"))
+privkey:depends({mode="sta", eap_type="TLS", encryption="WPA2"})
+privkey:depends({mode="sta", eap_type="TLS", encryption="WPA"})
+
+privkeypwd = s:option(Value, "priv_key_pwd", translate("a_w_tlsprivkeypwd"))
+privkeypwd:depends({mode="sta", eap_type="TLS", encryption="WPA2"})
+privkeypwd:depends({mode="sta", eap_type="TLS", encryption="WPA"})
+
+
+auth = s:option(Value, "auth", translate("a_w_peapauth"))
+auth:depends({mode="sta", eap_type="PEAP", encryption="WPA2"})
+auth:depends({mode="sta", eap_type="PEAP", encryption="WPA"})
+
+identity = s:option(Value, "identity", translate("a_w_peapidentity"))
+identity:depends({mode="sta", eap_type="PEAP", encryption="WPA2"})
+identity:depends({mode="sta", eap_type="PEAP", encryption="WPA"})
+
+password = s:option(Value, "password", translate("a_w_peappassword"))
+password:depends({mode="sta", eap_type="PEAP", encryption="WPA2"})
+password:depends({mode="sta", eap_type="PEAP", encryption="WPA"})
+
+
+
 
 s:option(Flag, "isolate", translate("a_w_apisolation"), translate("a_w_apisolation1")).optional = true
 

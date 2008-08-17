@@ -279,3 +279,12 @@ mem_free = "free"
 
 a_s_crontab = "Scheduled Tasks"
 a_s_crontab1 = "This is the system crontab in which scheduled tasks can be defined."
+
+a_w_nasid = "NAS ID"
+a_w_cacert = "Path to CA-Certificate"
+a_w_eaptype = "EAP-Method"
+a_w_tlsprivkey = "Path to Private Key"
+a_w_tlsprivkeypwd = "Password of Private Key"
+a_w_peapauth = "PEAP-Authentication"
+a_w_peapidentity = "PEAP-Identity"
+a_w_peappassword = "PEAP-Password"

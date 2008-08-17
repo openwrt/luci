@@ -1,38 +1,30 @@
-var cbi_d = {};
+var cbi_d = [];
 
-function cbi_d_add(field, target, value) {
-	if (!cbi_d[target]) {
-		cbi_d[target] = {};
-	}
-	if (!cbi_d[target][value]) {
-		cbi_d[target][value] = [];
-	}
-	
+function cbi_d_add(field, dep) {	
 	var obj = document.getElementById(field);
 	if (obj) {
-		var entry = {
-			"node": obj,
-			"parent": obj.parentNode,
-			"next": obj.nextSibling	
-		} 
-		cbi_d[target][value].unshift(entry);
+		var entry
+		for (var i=0; i<cbi_d.length; i++) {
+			if (cbi_d[i].id == field) {
+				entry = cbi_d[i];
+				break;
+			}
+		}
+		if (!entry) {
+			entry = {
+				"id": field,
+				"node": obj,
+				"parent": obj.parentNode,
+				"next": obj.nextSibling,
+				"deps": []
+			};
+			cbi_d.unshift(entry);
+		}	
+		entry.deps.push(dep)
 	}
 }
 
-function cbi_d_update(target) {
-	if (!cbi_d[target]) {
-		return;
-	}
-	
-	for (var x in cbi_d[target]) {
-		for (var i=0; i<cbi_d[target][x].length; i++) {	
-			var entry = cbi_d[target][x][i];
-			if (entry.node.parentNode) {
-				entry.parent.removeChild(entry.node)
-			}
-		}
-	}
-	
+function cbi_d_value(target) {
 	var t = document.getElementById(target);
 	var value
 	
@@ -46,21 +38,39 @@ function cbi_d_update(target) {
 		}
 	}
 	
-	if (cbi_d[target][value]) {
-		for (var i=0; i<cbi_d[target][value].length; i++) {		
-			var entry = cbi_d[target][value][i];
+	return value
+}
+
+function cbi_d_check(deps) {
+	for (var i=0; i<deps.length; i++) {
+		var istat = true
+		for (var j in deps[i]) {
+			istat = (istat && cbi_d_value(j) == deps[i][j])
+		}
+		if (istat) {
+			return true
+		}
+	}		
+}
+
+function cbi_d_update() {
+	var state = false;
+	for (var i=0; i<cbi_d.length; i++) {
+		var entry = cbi_d[i];
+		if (entry.node.parentNode && !cbi_d_check(entry.deps)) {
+			entry.parent.removeChild(entry.node);
+			state = (state || !entry.node.parentNode)
+		} else if (!entry.node.parentNode && cbi_d_check(entry.deps)) {
 			if (!entry.next) {
 				entry.parent.appendChild(entry.node);
 			} else {
 				entry.parent.insertBefore(entry.node, entry.next);
-			}
+			}		
+			state = (state || entry.node.parentNode)
 		}
 	}
-}
-
-function cbi_d_init() {
-	for (var x in cbi_d) {
-		cbi_d_update(x);
+	if (state) {
+		cbi_d_update();
 	}
 }
 

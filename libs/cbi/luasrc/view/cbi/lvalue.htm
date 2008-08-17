@@ -16,7 +16,7 @@ $Id$
 <% if self.widget == "select" then %>
 	<select onchange="cbi_d_update(this.id)"<%= attr("id", cbid) .. attr("name", cbid) .. ifattr(self.size, "size") %>>
 	<% for i, key in pairs(self.keylist) do -%>
-		<option<%= attr("value", key) .. ifattr(self:cfgvalue(section) == key, "selected", "selected") %>><%=luci.util.pcdata(self.vallist[i])%></option>
+		<option id="cbi-<%=self.config.."-"..section.."-"..self.option.."-"..key%>"<%= attr("value", key) .. ifattr(self:cfgvalue(section) == key, "selected", "selected") %>><%=luci.util.pcdata(self.vallist[i])%></option>
 	<%- end %>
 	</select>
 <% elseif self.widget == "radio" then

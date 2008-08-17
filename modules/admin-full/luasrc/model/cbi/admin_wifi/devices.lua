@@ -25,18 +25,7 @@ function en.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "0"
 end
 
-t = s:option(ListValue, "type", translate("type"))
-t:value("broadcom")
-t:value("atheros")
-t:value("mac80211")
-t:value("prism2")
---[[
-require("luci.sys")
-local c = ". /etc/functions.sh;for i in /lib/wifi/*;do . $i;done;echo $DRIVERS"
-for driver in luci.util.execl(c)[1]:gmatch("[^ ]+") do
-	t:value(driver)
-end
-]]--
+t = s:option(DummyValue, "type", translate("type"))
 
 mode = s:option(ListValue, "mode", translate("mode"))
 mode:value("", "standard")
