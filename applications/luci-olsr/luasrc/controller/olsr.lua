@@ -45,15 +45,18 @@ function action_index()
 	end
 	
 	local function compare(a, b)
-		if tonumber(a.ETX) == 0 then
+		local c = tonumber(a.ETX)
+		local d = tonumber(b.ETX)
+		
+		if not c or c == 0 then
 			return false
 		end
 		
-		if tonumber(b.ETX) == 0 then
+		if not d or d == 0 then
 			return true
 		end
 		
-		return tonumber(a.ETX) < tonumber(b.ETX)
+		return c < d
 	end
 	
 	table.sort(data.Links, compare)
@@ -70,15 +73,18 @@ function action_routes()
 	end
 	
 	local function compare(a, b)
-		if tonumber(a.ETX) == 0 then
+		local c = tonumber(a.ETX)
+		local d = tonumber(b.ETX)
+		
+		if not c or c == 0 then
 			return false
 		end
 		
-		if tonumber(b.ETX) == 0 then
+		if not d or d == 0 then
 			return true
 		end
 		
-		return tonumber(a.ETX) < tonumber(b.ETX)
+		return c < d
 	end
 	
 	table.sort(data.Routes, compare)
