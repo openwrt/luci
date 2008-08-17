@@ -161,7 +161,9 @@ end
 	<%
 		if tree.nodes[category] and tree.nodes[category].ucidata then
 			local ucic = 0
-			for i, j in pairs(require("luci.model.uci").changes()) do
+			require("luci.model.uci")
+			luci.model.uci.set_savedir(luci.model.uci.savedir_default)
+			for i, j in pairs(luci.model.uci.changes()) do
 				for k, l in pairs(j) do
 					for m, n in pairs(l) do
 						ucic = ucic + 1;

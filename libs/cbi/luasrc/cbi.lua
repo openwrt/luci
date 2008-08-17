@@ -157,7 +157,7 @@ function Map.__init__(self, config, ...)
 	self.config = config
 	self.parsechain = {self.config}
 	self.template = "cbi/map"
-	if not uci.load(self.config) then
+	if not uci.load_config(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
 end
@@ -170,9 +170,16 @@ end
 
 -- Use optimized UCI writing
 function Map.parse(self, ...)
+	if self.stateful then
+		uci.load_state(self.config)
+	else
+		uci.load_config(self.config)
+	end
+	
 	Node.parse(self, ...)
+	
 	for i, config in ipairs(self.parsechain) do
-		uci.save(config)
+		uci.save_config(config)
 	end
 	if luci.http.formvalue("cbi.apply") then
 		for i, config in ipairs(self.parsechain) do
@@ -182,8 +189,7 @@ function Map.parse(self, ...)
 			end
 
 			-- Refresh data because commit changes section names
-			uci.unload(config)
-			uci.load(config)
+			uci.load_config(config)
 		end
 
 		-- Reparse sections
@@ -238,11 +244,6 @@ function Map.get(self, section, option)
 	else
 		return uci.get_all(self.config, section)
 	end
-end
-
--- UCI stateget
-function Map.stateget(self, section, option)
-	return uci.get_statevalue(self.config, section, option)
 end
 
 
@@ -705,7 +706,6 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
-	self.stateful  = false
 end
 
 -- Add a dependencie to another section field
@@ -789,9 +789,7 @@ end
 
 -- Return the UCI value of this object
 function AbstractValue.cfgvalue(self, section)
-	return self.stateful
-	 and self.map:stateget(section, self.option)
-	 or  self.map:get(section, self.option)
+	return self.map:get(section, self.option)
 end
 
 -- Validate the form value

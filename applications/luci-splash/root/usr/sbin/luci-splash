@@ -5,7 +5,7 @@ require("luci.util")
 require("luci.model.uci")
 
 -- Init state session
-luci.model.uci.set_savedir(luci.model.uci.savedir_state)
+luci.model.uci.load_state("luci_splash")
 local uci = luci.model.uci
 
 
@@ -66,7 +66,7 @@ function add_lease(mac)
 	})
 	add_rule(mac)
 	
-	uci.save()
+	uci.save_state("luci_splash")
 end
 
 
@@ -87,7 +87,7 @@ function remove_lease(mac)
 		uci.delete("luci_splash", j)
 	end
 		
-	uci.save()
+	uci.save_state("luci_splash")
 end
 
 
@@ -156,7 +156,7 @@ function sync()
 	local leasetime = tonumber(uci.get("luci_splash", "general", "leasetime")) * 3600
 	
 	-- Clean state file
-	uci.load("luci_splash")
+	uci.load_state("luci_splash")
 	uci.revert("luci_splash")
 	
 	
@@ -185,7 +185,7 @@ function sync()
 		end
 	end
 	
-	uci.save("luci_splash")
+	uci.save_state("luci_splash")
 end
 
 main(arg)

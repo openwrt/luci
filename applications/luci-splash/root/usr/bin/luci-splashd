@@ -4,7 +4,7 @@ require("socket")
 require("luci.ip")
 require("luci.model.uci")
 
-luci.model.uci.set_savedir(luci.model.uci.savedir_state)
+luci.model.uci.load_state("network")
 
 local server = socket.bind("0.0.0.0", arg[1] or 8082)
 server:settimeout(0, "t")

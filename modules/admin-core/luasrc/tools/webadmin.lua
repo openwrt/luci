@@ -57,10 +57,11 @@ function date_format(secs)
 end
 
 function network_get_addresses(net)
+	luci.model.uci.load_state("network")
 	local addr = {}
-	local ipv4 = luci.model.uci.get_statevalue("network", net, "ipaddr")
-	local mav4 = luci.model.uci.get_statevalue("network", net, "netmask")
-	local ipv6 = luci.model.uci.get_statevalue("network", net, "ip6addr")
+	local ipv4 = luci.model.uci.get("network", net, "ipaddr")
+	local mav4 = luci.model.uci.get("network", net, "netmask")
+	local ipv6 = luci.model.uci.get("network", net, "ip6addr")
 	
 	if ipv4 and mav4 then
 		ipv4 = luci.ip.IPv4(ipv4, mav4)
@@ -113,7 +114,7 @@ function cbi_add_knownips(field)
 end
 
 function network_get_zones(net)
-	if not luci.model.uci.load("firewall") then
+	if not luci.model.uci.load_state("firewall") then
 		return nil
 	end
 	
@@ -146,11 +147,12 @@ function firewall_find_zone(name)
 end
 
 function iface_get_network(iface)
+	luci.model.uci.load_state("network")
 	local net
 	
 	luci.model.uci.foreach("network", "interface",
 		function (section)
-			local ifname = luci.model.uci.get_statevalue(
+			local ifname = luci.model.uci.get(
 				"network", section[".name"], "ifname"
 			)
 			

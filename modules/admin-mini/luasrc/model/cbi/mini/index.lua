@@ -47,6 +47,7 @@ f:field(DummyValue, "_uptime", translate("m_i_uptime")).value =
  
  
 m = Map("network", translate("interfaces"))
+m.stateful = true
 local netstat = luci.sys.net.deviceinfo()
 
 m.parse = function() end
@@ -60,21 +61,20 @@ end
 
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
-	local ix = self.map:stateget(section, "ifname") or ""
+	local ix = self.map:get(section, "ifname") or ""
 	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address") or "n/a"
 end
 
 
-ipaddr = s:option(DummyValue, "ipaddr", translate("ipaddress"))
-ipaddr.stateful = true
+s:option(DummyValue, "ipaddr", translate("ipaddress"))
 
-ipaddr = s:option(DummyValue, "netmask", translate("netmask"))
-ipaddr.stateful = true
+s:option(DummyValue, "netmask", translate("netmask"))
+
 
 txrx = s:option(DummyValue, "_txrx")
 
 function txrx.cfgvalue(self, section)
-	local ix = self.map:stateget(section, "ifname")
+	local ix = self.map:get(section, "ifname")
 	
 	local rx = netstat and netstat[ix] and netstat[ix][1]
 	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
@@ -88,7 +88,7 @@ end
 errors = s:option(DummyValue, "_err")
 
 function errors.cfgvalue(self, section)
-	local ix = self.map:stateget(section, "ifname")
+	local ix = self.map:get(section, "ifname")
 	
 	local rx = netstat and netstat[ix] and netstat[ix][3]
 	local tx = netstat and netstat[ix] and netstat[ix][11]

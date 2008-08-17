@@ -65,7 +65,7 @@ function action_apply()
 		for r, tbl in pairs(changes) do
 			if r then
 				if path[#path] ~= "apply" then
-					luci.model.uci.load(r)
+					luci.model.uci.load_config(r)
 					luci.model.uci.commit(r)
 					luci.model.uci.unload(r)
 				end
@@ -93,7 +93,7 @@ function action_revert()
 		
 		-- Collect files to be reverted
 		for r, tbl in pairs(changes) do
-			luci.model.uci.load(r)
+			luci.model.uci.load_config(r)
 			luci.model.uci.revert(r)
 			luci.model.uci.unload(r)
 		end

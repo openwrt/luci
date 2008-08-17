@@ -69,8 +69,7 @@ end
 -- @return			String containing the reason for errors (if any)
 function UVL.validate( self, config )
 
-	self.uci.set_confdir( self.uci.confdir_default )
-	self.uci.load( config )
+	self.uci.load_config( config )
 	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
@@ -109,8 +108,7 @@ function UVL.validate( self, config )
 end
 
 function UVL.validate_section( self, config, section )
-	self.uci.set_confdir( self.uci.confdir_default )
-	self.uci.load( config )
+	self.uci.load_config( config )
 	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
@@ -125,8 +123,7 @@ function UVL.validate_section( self, config, section )
 end
 
 function UVL.validate_option( self, config, section, option )
-	self.uci.set_confdir( self.uci.confdir_default )
-	self.uci.load( config )
+	self.uci.load_config( config )
 	self.beenthere = { }
 
 	local co = self.uci.get_all( config )

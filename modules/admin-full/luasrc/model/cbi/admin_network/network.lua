@@ -17,6 +17,7 @@ require("luci.tools.webadmin")
 
 
 m = Map("network", translate("interfaces"))
+m.stateful = true
 
 local created
 local netstat = luci.sys.net.deviceinfo()
@@ -44,14 +45,12 @@ function s.parse(self, ...)
 end
 
 up = s:option(Flag, "up")
-up.stateful = true
 function up.write(self, section, value)
 	local call = value == "1" and "ifdown" or "ifup"
 	os.execute(call .. " " .. section)
 end
 
 ifname = s:option(DummyValue, "ifname", translate("device"))
-ifname.stateful = true
 ifname.titleref = luci.dispatcher.build_url("admin", "network", "vlan")
 
 if luci.model.uci.load("firewall") then
@@ -66,7 +65,7 @@ end
 
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
-	local ix = self.map:stateget(section, "ifname") or ""
+	local ix = self.map:get(section, "ifname") or ""
 	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address") or "n/a"
 end
 
@@ -81,7 +80,7 @@ end
 txrx = s:option(DummyValue, "_txrx")
 
 function txrx.cfgvalue(self, section)
-	local ix = self.map:stateget(section, "ifname")
+	local ix = self.map:get(section, "ifname")
 	
 	local rx = netstat and netstat[ix] and netstat[ix][1]
 	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
@@ -95,7 +94,7 @@ end
 errors = s:option(DummyValue, "_err")
 
 function errors.cfgvalue(self, section)
-	local ix = self.map:stateget(section, "ifname")
+	local ix = self.map:get(section, "ifname")
 	
 	local rx = netstat and netstat[ix] and netstat[ix][3]
 	local tx = netstat and netstat[ix] and netstat[ix][11]

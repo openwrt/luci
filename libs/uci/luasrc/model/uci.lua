@@ -79,15 +79,46 @@ function section(config, type, name, values)
 	return stat and name
 end
 
---- Get a certain state value.
--- @param ...	Parameters passed to function get
--- @return		UCI value
--- @see			get
-function get_statevalue(...)
-	set_savedir(savedir_state)
-	local result = get(...)
+--- Savely load the configuration.
+-- @param config	Configuration to load
+-- @return			Sucess status
+-- @see				load_state
+-- @see				load
+function load_config(...)
+	set_confdir(confdir_default)
 	set_savedir(savedir_default)
-	return result
+	return load(...)
+end
+
+--- Savely load state values.
+-- @param config	Configuration to load
+-- @return			Sucess status
+-- @see				load_config
+-- @see				load
+function load_state(config)
+	set_confdir(confdir_default)
+	set_savedir(savedir_state)
+	return load(config)
+end
+
+--- Save changes to config values.
+-- @param config	Configuration to save
+-- @return			Sucess status
+-- @see				save_state
+-- @see				save
+function save_config(config)
+	set_savedir(savedir_default)
+	return save(config)
+end
+
+--- Save changes to state values.
+-- @param config	Configuration to save
+-- @return			Sucess status
+-- @see				save_config
+-- @see				save
+function save_state(config)
+	set_savedir(savedir_state)
+	return save(config)
 end
 
 --- Updated the data of a section using data from a table.
@@ -157,10 +188,13 @@ end
 -- @return			Table of UCI sections or table of UCI values
 
 --- Manually load a config.
+-- Warning: This function is unsave! You should use load_config or load_state if possible.
 -- @class function
 -- @name load
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
+-- @see load_config
+-- @see load_state
 -- @see save
 -- @see unload
 
@@ -180,6 +214,7 @@ end
 -- @see unload
 
 --- Set a value or create a named section.
+-- Warning: This function is unsave! You should use save_config or save_state if possible.
 -- @class function
 -- @name set
 -- @param config	UCI config
