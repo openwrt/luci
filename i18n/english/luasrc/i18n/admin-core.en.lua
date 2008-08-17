@@ -276,3 +276,6 @@ process_kill = "Kill"
 mem_cached = "cached"
 mem_buffered = "buffered"
 mem_free = "free"
+
+a_s_crontab = "Scheduled Tasks"
+a_s_crontab1 = "This is the system crontab in which scheduled tasks can be defined."

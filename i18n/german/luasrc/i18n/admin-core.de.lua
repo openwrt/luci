@@ -351,3 +351,8 @@ process_kill = "Töten"
 mem_cached = "gecached"
 mem_buffered = "gepuffert"
 mem_free = "frei"
+
+a_s_crontab = "Geplante Aufgaben"
+a_s_crontab1 = "Dies ist die System-Crontab in der geplante Aufgaben definiert werden können."
+
+a_w_nasid = "NAS ID"
