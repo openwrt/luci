@@ -68,7 +68,8 @@ $Id: uvl.lua 2873 2008-08-17 21:43:56Z jow $
 
 Usage:
 	uvl --help
-	uvl [--silent] [--no-strict-sections] [--no-strict-options]
+	uvl [--silent] [--schemedir=DIR]
+		[--no-strict-sections] [--no-strict-options]
 		[--no-strict-validators] config[.section[.option]]
 
 Options:
@@ -77,6 +78,9 @@ Options:
 
 	--silent
 		Don't produce any output.
+
+	--schemedir=DIR
+		Use DIR as scheme directory.
 
 	--no-strict-sections
 		Don't treat sections found in config but not in scheme as error.
@@ -96,7 +100,10 @@ else
 	luci.uvl.STRICT_EXTERNAL_VALIDATORS =
 		( options['no-strict-validators'] and false or true )
 
-	local uvl = luci.uvl.UVL( options['schemedir'] )
+	local uvl = luci.uvl.UVL(
+		type(options.schemedir) == "string" and options.schemedir or nil
+	)
+	
 	local cso = luci.util.split( arguments[1], "." )
 	local ok, err = uvl:validate( unpack(cso) )
 
