@@ -358,6 +358,19 @@ function update(t, updates)
 	end
 end
 
+--- Retrieve all keys of given associative table.
+-- @param t	Table to extract keys from
+-- @return	Sorted table containing the keys
+function keys(t)
+	local keys = { }
+	if t then
+		for k, _ in kspairs(t) do
+			table.insert( keys, k )
+		end
+	end
+	return keys
+end
+
 --- Clones the given object and return it's copy.
 -- @param object	Table value to clone
 -- @param deep		Boolean indicating whether to do recursive cloning
