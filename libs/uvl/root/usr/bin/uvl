@@ -1,0 +1,116 @@
+--[[
+
+UCI Validation Layer - Command Line Utility
+(c) 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008 Steven Barth <steven@midlink.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: uvl.lua 2873 2008-08-17 21:43:56Z jow $
+
+]]--
+
+require("luci.uvl")
+require("luci.util")
+
+
+function getopt( arg, options )
+	options = options or ""
+	local tab = {}
+	local args = {}
+	for k, v in ipairs(arg) do
+		if v:sub(1, 2) == "--" then
+			local x = v:find( "=", 1, true )
+			if x then
+				tab[ v:sub( 3, x-1 ) ] = v:sub( x+1 )
+			else
+			    tab[ v:sub( 3 ) ] = true
+			end
+		elseif v:sub( 1, 1 ) == "-" then
+			local y = 2
+			local l = #v
+			local jopt
+			while ( y <= l ) do
+				jopt = v:sub( y, y )
+				if options:find( jopt, 1, true ) then
+					if y < l then
+						tab[ jopt ] = v:sub( y+1 )
+						y = l
+					else
+						tab[ jopt ] = arg[ k + 1 ]
+						arg[ k + 1 ] = ""
+					end
+				else
+					tab[ jopt ] = true
+				end
+				y = y + 1
+			end
+	    elseif #v > 0 then
+	    	table.insert(args, v)
+	    end
+	end
+	return tab, args
+end
+
+local options, arguments = getopt( arg )
+
+if #arguments == 0 or options.help then
+	print([=[
+uvl - UCI Validation Layer
+$Id: uvl.lua 2873 2008-08-17 21:43:56Z jow $
+(c) 2008 Jo-Philipp Wich, Steven Barth
+
+Usage:
+	uvl --help
+	uvl [--silent] [--no-strict-sections] [--no-strict-options]
+		[--no-strict-validators] config[.section[.option]]
+
+Options:
+	--help
+		Display this help message.
+
+	--silent
+		Don't produce any output.
+
+	--no-strict-sections
+		Don't treat sections found in config but not in scheme as error.
+
+	--no-strict-options
+		Don't treat options found in config but not in scheme as error.
+
+	--no-strict-validators
+		Don't invalidate config if an external validators fails.
+
+	]=])
+	os.exit(255)
+else
+	luci.uvl.STRICT_UNKNOWN_SECTIONS =
+		( options['no-strict-sections'] and false or true )
+	luci.uvl.STRICT_UNKNOWN_OPTIONS =
+		( options['no-strict-options'] and false or true )
+	luci.uvl.STRICT_EXTERNAL_VALIDATORS =
+		( options['no-strict-validators'] and false or true )
+
+	local uvl = luci.uvl.UVL( options['schemedir'] )
+	local cso = luci.util.split( arguments[1], "." )
+	local ok, err = uvl:validate( unpack(cso) )
+
+	if ok then
+		if not options.silent then
+			print( string.format(
+				'%s "%s.%s.%s" validates fine!',
+					( #cso == 1 and "Config" or
+						( #cso == 2 and "Section" or "Option" ) ),
+					cso[1], cso[2], cso[3]
+			) )
+		end
+		os.exit( 0 )
+	else
+		if not options.silent then print( err ) end
+		os.exit( 1 )
+	end
+end
