@@ -24,9 +24,6 @@ $Id$
 <th>ETX</th>
 </tr>
 <% for k, route in ipairs(routes) do 
-	if route.Linkcost then
-		route.LQ, route.ILQ, route.ETX = route.Linkcost:match("(.*)/(.*)\t(.*)")
-	end
 %>
 <tr>
 <td><a href="http://<%=route["Destination IP"]%>"><%=route["Destination IP"]%></a></td>

@@ -156,11 +156,11 @@ function fetch_txtinfo(otable)
 	
 	local data = {}
 	
-	local tables = luci.util.split(luci.util.trim(rawdata), "\n\n")
+	local tables = luci.util.split(luci.util.trim(rawdata), "\r?\n\r?\n", nil, true)
 	
 
 	for i, tbl in ipairs(tables) do
-		local lines = luci.util.split(tbl, "\n")
+		local lines = luci.util.split(tbl, "\r?\n", nil, true)
 		local name  = table.remove(lines, 1):sub(8)
 		local keys  = luci.util.split(table.remove(lines, 1), "\t")
 		local split = #keys - 1
@@ -178,7 +178,7 @@ function fetch_txtinfo(otable)
 				data[name][j].LinkQuality,
 				data[name][j].NLQ,
 				data[name][j].ETX =
-				 data[name][j].Linkcost:match("(.*)/(.*)\t(.*)")
+				 data[name][j].Linkcost:match("([%w.]+)/([%w.]+)[%s]+([%w.]+)")
 			end
 		end
 	end
