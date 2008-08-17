@@ -167,6 +167,13 @@ function fetch_txtinfo(otable)
 			for k, key in pairs(keys) do
 				data[name][j][key] = fields[k] 
 			end
+			
+			if data[name][j].Linkcost then
+				data[name][j].LinkQuality,
+				data[name][j].NLQ,
+				data[name][j].ETX =
+				 data[name][j].Linkcost:match("(.*)/(.*)\t(.*)")
+			end
 		end
 	end
 	
