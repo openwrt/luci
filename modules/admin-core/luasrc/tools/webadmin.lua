@@ -35,7 +35,7 @@ function date_format(secs)
 	local hour = 0
 	local days = 0
 	
-	secs = math.floor(tonumber(secs))
+	secs = math.floor(secs)
 	if secs > 60 then
 		mins = math.floor(secs / 60)
 		secs = secs % 60
@@ -52,9 +52,9 @@ function date_format(secs)
 	end
 	
 	if days > 0 then
-		return string.format("%dd %02dh %02dmin %02ds", days, hour, mins, secs)
+		return string.format("%.0fd %02.0fh %02.0fmin %02.0fs", days, hour, mins, secs)
 	else
-		return string.format("%02dh %02dmin %02ds", hour, mins, secs)
+		return string.format("%02.0fh %02.0fmin %02.0fs", hour, mins, secs)
 	end
 end
 
