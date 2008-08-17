@@ -34,6 +34,8 @@ function date_format(secs)
 	local mins = 0
 	local hour = 0
 	local days = 0
+	
+	secs = math.floor(tonumber(secs))
 	if secs > 60 then
 		mins = math.floor(secs / 60)
 		secs = secs % 60
