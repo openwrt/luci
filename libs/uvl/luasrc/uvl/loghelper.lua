@@ -37,6 +37,13 @@ function validator_error( option, message )
 	)
 end
 
+function scheme_error( scheme, message )
+	return string.format(
+		'Error while loading scheme "%s":\n%s',
+			scheme, message:gsub("^.-:.-: ","")
+	)
+end
+
 function dump_dependency( dep, ref, v, e )
 	local str = nil
 

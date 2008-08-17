@@ -14,6 +14,11 @@ $Id$
 
 ]]--
 
+
+--- UVL - UCI Validation Layer
+-- @class	module
+-- @cstyle	instance
+
 module( "luci.uvl", package.seeall )
 
 require("luci.fs")
@@ -24,12 +29,21 @@ require("luci.uvl.datatypes")
 require("luci.uvl.validation")
 require("luci.uvl.dependencies")
 
+
 TYPE_SECTION  = 0x01
 TYPE_VARIABLE = 0x02
 TYPE_ENUM     = 0x03
 
+--- Boolean; default true;
+-- treat sections found in config but not in scheme as error
 STRICT_UNKNOWN_SECTIONS    = true
+
+--- Boolean; default true;
+-- treat options found in config but not in scheme as error
 STRICT_UNKNOWN_OPTIONS     = true
+
+--- Boolean; default true;
+-- treat failed external validators as error
 STRICT_EXTERNAL_VALIDATORS = true
 
 
@@ -43,6 +57,12 @@ local function _assert( condition, fmt, ... )
 	end
 end
 
+
+--- Object constructor
+-- @class			function
+-- @name			UVL
+-- @param schemedir	Path to the scheme directory (optional)
+-- @return			Instance object
 UVL = luci.util.class()
 
 function UVL.__init__( self, schemedir )
@@ -57,10 +77,17 @@ end
 
 --- Validate given configuration.
 -- @param config	Name of the configuration to validate
--- @param scheme	Scheme to validate against (optional)
--- @return			Boolean indicating weather the given config validates
+-- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
 function UVL.validate( self, config )
+
+	if not self.packages[config] then
+		local ok, err = pcall( self.read_scheme, self, config )
+		if not ok then
+			return false, self.log.scheme_error( config, err )
+		end
+	end
+
 	self.uci.load_config( config )
 	self.beenthere = { }
 
@@ -118,7 +145,20 @@ function UVL.validate( self, config )
 	return true, nil
 end
 
+--- Validate given config section.
+-- @param config	Name of the configuration to validate
+-- @param section	Name of the section to validate
+-- @return			Boolean indicating whether the given config validates
+-- @return			String containing the reason for errors (if any)
 function UVL.validate_section( self, config, section )
+
+	if not self.packages[config] then
+		local ok, err = pcall( self.read_scheme, self, config )
+		if not ok then
+			return false, self.log.scheme_error( config, err )
+		end
+	end
+
 	self.uci.load_config( config )
 	self.beenthere = { }
 
@@ -133,7 +173,21 @@ function UVL.validate_section( self, config, section )
 	end
 end
 
+--- Validate given config option.
+-- @param config	Name of the configuration to validate
+-- @param section	Name of the section to validate
+-- @param option	Name of the option to validate
+-- @return			Boolean indicating whether the given config validates
+-- @return			String containing the reason for errors (if any)
 function UVL.validate_option( self, config, section, option )
+
+	if not self.packages[config] then
+		local ok, err = pcall( self.read_scheme, self, config )
+		if not ok then
+			return false, self.log.scheme_error( config, err )
+		end
+	end
+
 	self.uci.load_config( config )
 	self.beenthere = { }
 
@@ -149,12 +203,7 @@ function UVL.validate_option( self, config, section, option )
 	end
 end
 
---- Validate given section of given configuration.
--- @param config	Name of the configuration to validate
--- @param section	Key of the section to validate
--- @param scheme	Scheme to validate against
--- @return			Boolean indicating weather the given config validates
--- @return			String containing the reason for errors (if any)
+
 function UVL._validate_section( self, section )
 
 	if section:values() then
@@ -190,13 +239,6 @@ function UVL._validate_section( self, section )
 	return true, nil
 end
 
---- Validate given option within section of given configuration.
--- @param config	Name of the configuration to validate
--- @param section	Key of the section to validate
--- @param option	Name of the option to validate
--- @param scheme	Scheme to validate against
--- @return			Boolean indicating weather the given config validates
--- @return			String containing the reason for errors (if any)
 function UVL._validate_option( self, option, nodeps )
 
 	if not option:option() and
@@ -253,22 +295,31 @@ function UVL._validate_option( self, option, nodeps )
 	return true, nil
 end
 
---- Find all parts of given scheme and construct validation tree
+--- Find all parts of given scheme and construct validation tree.
+-- This is normally done on demand, so you don't have to call this function
+-- by yourself.
 -- @param scheme	Name of the scheme to parse
--- @return			Parsed scheme
 function UVL.read_scheme( self, scheme )
 	local schemes = { }
+	local files = luci.fs.glob(self.schemedir .. '/*/' .. scheme)
 
-	for i, file in ipairs( luci.fs.glob(self.schemedir .. '/*/' .. scheme) ) do
-		_assert( luci.fs.access(file), "Can't access file '%s'", file )
+	if files then
+		for i, file in ipairs( files ) do
+			_assert( luci.fs.access(file), "Can't access file '%s'", file )
 
-		self.uci.set_confdir( luci.fs.dirname(file) )
-		self.uci.load( luci.fs.basename(file) )
+			self.uci.set_confdir( luci.fs.dirname(file) )
+			self.uci.load( luci.fs.basename(file) )
 
-		table.insert( schemes, self.uci.get_all( luci.fs.basename(file) ) )
+			table.insert( schemes, self.uci.get_all( luci.fs.basename(file) ) )
+		end
+
+		return self:_read_scheme_parts( scheme, schemes )
+	else
+		error(
+			'Can\'t find scheme "' .. scheme ..
+			'" in "' .. self.schemedir .. '"'
+		)
 	end
-
-	return self:_read_scheme_parts( scheme, schemes )
 end
 
 -- Process all given parts and construct validation tree
@@ -542,6 +593,20 @@ function UVL._resolve_function( self, value )
 end
 
 
+--- Object representation of a scheme/config section.
+-- @class	module
+-- @cstyle	instance
+-- @name	luci.uvl.section
+
+--- Section instance constructor.
+-- @class			function
+-- @name			section
+-- @param scheme	Scheme instance
+-- @param co		Configuration data
+-- @param st		Section type
+-- @param c			Configuration name
+-- @param s			Section name
+-- @return			Section instance
 section = luci.util.class()
 
 function section.__init__(self, scheme, co, st, c, s)
@@ -554,22 +619,32 @@ function section.__init__(self, scheme, co, st, c, s)
 	self.type     = luci.uvl.TYPE_SECTION
 end
 
+--- Get the config path of this section.
+-- @return	String containing the identifier
 function section.cid(self)
 	return ( self.cref[1] or '?' ) .. '.' .. ( self.cref[2] or '?' )
 end
 
+--- Get the scheme path of this section.
+-- @return	String containing the identifier
 function section.sid(self)
 	return ( self.sref[1] or '?' ) .. '.' .. ( self.sref[2] or '?' )
 end
 
+--- Get all configuration values within this section.
+-- @return	Table containing the values
 function section.values(self)
 	return self.csection
 end
 
+--- Get the associated section information in scheme.
+-- @return	Table containing the scheme properties
 function section.section(self)
 	return self.ssection
 end
 
+--- Get all option objects associated with this section.
+-- @return	Table containing all associated luci.uvl.option instances
 function section.variables(self)
 	local v = { }
 	if self.scheme.packages[self.sref[1]].variables[self.sref[2]] then
@@ -586,6 +661,21 @@ function section.variables(self)
 end
 
 
+--- Object representation of a scheme/config option.
+-- @class	module
+-- @cstyle	instance
+-- @name	luci.uvl.option
+
+--- Section instance constructor.
+-- @class			function
+-- @name			option
+-- @param scheme	Scheme instance
+-- @param co		Configuration data
+-- @param st		Section type
+-- @param c			Configuration name
+-- @param s			Section name
+-- @param o			Option name
+-- @return			Option instance
 option = luci.util.class()
 
 function option.__init__(self, scheme, co, st, c, s, o)
@@ -598,26 +688,36 @@ function option.__init__(self, scheme, co, st, c, s, o)
 	self.type    = luci.uvl.TYPE_OPTION
 end
 
+--- Get the config path of this option.
+-- @return	String containing the identifier
 function option.cid(self)
 	return ( self.cref[1] or '?' ) .. '.' ..
 		   ( self.cref[2] or '?' ) .. '.' ..
 		   ( self.cref[3] or '?' )
 end
 
+--- Get the scheme path of this option.
+-- @return	String containing the identifier
 function option.sid(self)
 	return ( self.sref[1] or '?' ) .. '.' ..
 		   ( self.sref[2] or '?' ) .. '.' ..
 		   ( self.sref[3] or '?' )
 end
 
+--- Get the value of this option.
+-- @return	The associated configuration value
 function option.value(self)
 	return self.coption
 end
 
+--- Get the associated option information in scheme.
+-- @return	Table containing the scheme properties
 function option.option(self)
 	return self.soption
 end
 
+--- Get the associated section information in scheme.
+-- @return	Table containing the scheme properties
 function option.section(self)
 	return self.scheme.packages[self.sref[1]].sections[self.sref[2]]
 end
