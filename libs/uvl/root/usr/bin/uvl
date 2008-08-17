@@ -103,17 +103,17 @@ else
 	local uvl = luci.uvl.UVL(
 		type(options.schemedir) == "string" and options.schemedir or nil
 	)
-	
+
 	local cso = luci.util.split( arguments[1], "." )
 	local ok, err = uvl:validate( unpack(cso) )
 
 	if ok then
 		if not options.silent then
 			print( string.format(
-				'%s "%s.%s.%s" validates fine!',
+				'%s "%s" validates fine!',
 					( #cso == 1 and "Config" or
 						( #cso == 2 and "Section" or "Option" ) ),
-					cso[1], cso[2], cso[3]
+					table.concat(cso, ".")
 			) )
 		end
 		os.exit( 0 )

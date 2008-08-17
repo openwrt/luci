@@ -110,6 +110,10 @@ function UVL.validate_config( self, config )
 	local co = self.uci.get_all( config )
 	local sc = { }
 
+	if not co then
+		return false, 'Unable to load configuration "' .. config .. '"'
+	end
+
 	local function _uci_foreach( type, func )
 		local ok, err
 		for k, v in pairs(co) do
@@ -179,6 +183,11 @@ function UVL.validate_section( self, config, section )
 	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
+
+	if not co then
+		return false, 'Unable to load configuration "' .. config .. '"'
+	end
+
 	if co[section] then
 		return self:_validate_section( luci.uvl.section(
 			self, co, co[section]['.type'], config, section
@@ -208,6 +217,11 @@ function UVL.validate_option( self, config, section, option )
 	self.beenthere = { }
 
 	local co = self.uci.get_all( config )
+
+	if not co then
+		return false, 'Unable to load configuration "' .. config .. '"'
+	end
+
 	if co[section] and co[section][option] then
 		return self:_validate_option( luci.uvl.option(
 			self, co, co[section]['.type'], config, section, option
