@@ -104,7 +104,7 @@ define Package/luci-core
   TITLE:=LuCI core libraries
 endef
 
-define Package/luci-core/install		
+define Package/luci-core/install
 	$(call Package/luci/install/template,$(1),libs/core)
 endef
 
@@ -115,7 +115,7 @@ define Package/luci-core/config
 
        config PACKAGE_luci-core_compile
                bool "Precompiled"
-               
+
        config PACKAGE_luci-core_stripped
                bool "Stripped"
 
@@ -179,7 +179,7 @@ endef
 
 define Package/luci-ipkg
   $(call Package/luci/libtemplate)
-  TITLE:=LuCI IPKG/OPKG call abstraction library 
+  TITLE:=LuCI IPKG/OPKG call abstraction library
 endef
 
 define Package/luci-ipkg/install
@@ -209,6 +209,17 @@ endef
 
 define Package/luci-web/install
 	$(call Package/luci/install/template,$(1),libs/web)
+endef
+
+
+define Package/luci-uvl
+  $(call Package/luci/libtemplate)
+  DEPENDS+=+luci-sys +luci-uci +luci-core
+  TITLE:=UVL - UCI Validation Layer
+endef
+
+define Package/luci-uvl/install
+	$(call Package/luci/install/template,$(1),libs/uvl)
 endef
 
 
@@ -606,6 +617,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-web),)
 	PKG_SELECTED_MODULES+=libs/web
 endif
+ifneq ($(CONFIG_PACKAGE_luci-uvl),)
+	PKG_SELECTED_MODULES+=libs/uvl
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-httpd),)
 	PKG_SELECTED_MODULES+=libs/httpd
@@ -723,6 +737,7 @@ $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
+$(eval $(call BuildPackage,luci-uvl))
 
 $(eval $(call BuildPackage,luci-httpd))
 
