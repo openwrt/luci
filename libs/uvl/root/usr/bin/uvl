@@ -69,8 +69,8 @@ $Id$
 Usage:
 	uvl --help
 	uvl [--silent] [--schemedir=DIR]
-		[--no-strict-sections] [--no-strict-options]
-		[--no-strict-validators] config[.section[.option]]
+		[--no-strict-sections] [--no-strict-options] [--no-strict-validators]
+		[--no-strict-lists] config[.section[.option]]
 
 Options:
 	--help
@@ -90,6 +90,9 @@ Options:
 
 	--no-strict-validators
 		Don't invalidate config if an external validator fails.
+
+	--no-strict-lists
+		Don't invalidate lists that are stored options.
 	]=])
 	os.exit(255)
 else
@@ -99,6 +102,8 @@ else
 		( options['no-strict-options'] and false or true )
 	luci.uvl.STRICT_EXTERNAL_VALIDATORS =
 		( options['no-strict-validators'] and false or true )
+	luci.uvl.STRICT_LIST_TYPE =
+		( options['no-strict-lists'] and false or true )
 
 	local uvl = luci.uvl.UVL(
 		type(options.schemedir) == "string" and options.schemedir or nil

@@ -46,6 +46,10 @@ STRICT_UNKNOWN_OPTIONS     = true
 -- treat failed external validators as error
 STRICT_EXTERNAL_VALIDATORS = true
 
+--- Boolean; default true;
+-- treat list values stored as options like errors
+STRICT_LIST_TYPE           = true
+
 
 local default_schemedir = "/etc/scheme"
 
@@ -193,8 +197,8 @@ function UVL.validate_section( self, config, section )
 			self, co, co[section]['.type'], config, section
 		) )
 	else
-		return false, "Section '" .. config .. '.' .. section ..
-			"' not found in config. Nothing to do."
+		return false, 'Section "' .. config .. '.' .. section ..
+			'" not found in config. Nothing to do.'
 	end
 end
 
@@ -227,9 +231,9 @@ function UVL.validate_option( self, config, section, option )
 			self, co, co[section]['.type'], config, section, option
 		) )
 	else
-		return false, "Option '" ..
+		return false, 'Option "' ..
 			config .. '.' .. section .. '.' .. option ..
-			"' not found in config. Nothing to do."
+			'" not found in config. Nothing to do.'
 	end
 end
 
@@ -252,7 +256,7 @@ function UVL._validate_section( self, section )
 			return false, err
 		end
 	else
-		print( "Error, scheme section '" .. section:sid() .. "' not found in data" )
+		return false, 'Option "' .. section:sid() .. '" not found in config'
 	end
 
 	if STRICT_UNKNOWN_OPTIONS and not section:section().dynamic then
@@ -271,44 +275,45 @@ end
 
 function UVL._validate_option( self, option, nodeps )
 
-	if not option:option() and
-	   not ( option:section() and option:section().dynamic )
-	then
-		return false, "Option '" .. option:cid() ..
-			"' not found in scheme"
-	end
+	local item = option:option()
+	local val  = option:value()
 
-	if option:option() then
-		if option:option().required and not option:value() then
-			return false, "Mandatory variable '" .. option:cid() ..
-				"' doesn't have a value"
+	if not item and not ( option:section() and option:section().dynamic ) then
+		return false, 'Option "' .. option:cid() ..
+			'" not found in scheme'
+
+	elseif item then
+		if item.required and not val then
+			return false, 'Mandatory variable "' .. option:cid() ..
+				'" does not have a value'
 		end
 
-		if option:option().type == "enum" and option:value() then
-			if not option:option().values or
-			   not option:option().values[option:value()]
-			then
-				return false, "Value '" .. ( option:value() or '<nil>' ) ..
-					"' of given option '" .. option:cid() ..
-					"' is not defined in enum { " ..
-					table.concat(luci.util.keys(option:option().values),", ") ..
-					" }"
+		if item.type == "enum" and val then
+			if not item.values or not item.values[val] then
+				return false, 'Value "' .. ( val or '<nil>' ) ..
+					'" of given option "' .. option:cid() ..
+					'" is not defined in enum { ' ..
+						table.concat( luci.util.keys(item.values), ", " ) ..
+					' }'
+			end
+		elseif item.type == "list" and val then
+			if type(val) ~= "table" and STRICT_LIST_TYPE then
+				return false, 'Option "' .. option:cid() ..
+					'" is defined as list but stored as plain value'
 			end
 		end
 
-		if option:option().datatype and option:value() then
-			if self.datatypes[option:option().datatype] then
-				if not self.datatypes[option:option().datatype](
-					option:value()
-				) then
-					return false, "Value '" .. ( option:value() or '<nil>' ) ..
-						"' of given option '" .. option:cid() ..
-						"' doesn't validate as datatype '" ..
-						option:option().datatype .. "'"
+		if item.datatype and val then
+			if self.datatypes[item.datatype] then
+				if not self.datatypes[item.datatype]( val ) then
+					return false, 'Value "' .. ( val or '<nil>' ) ..
+						'" of given option "' .. option:cid() ..
+						'" does not validate as datatype "' ..
+						item.datatype .. '"'
 				end
 			else
-				return false, "Unknown datatype '" ..
-					option:option().datatype .. "' encountered"
+				return false, 'Unknown datatype "' ..
+					item.datatype .. '" encountered'
 			end
 		end
 
@@ -346,7 +351,7 @@ function UVL.read_scheme( self, scheme )
 		return self:_read_scheme_parts( scheme, schemes )
 	else
 		error(
-			'Can\'t find scheme "' .. scheme ..
+			'Can not find scheme "' .. scheme ..
 			'" in "' .. self.schemedir .. '"'
 		)
 	end
@@ -426,7 +431,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				for k, v2 in pairs(v) do
 					if k ~= "name" and k ~= "package" and k:sub(1,1) ~= "." then
-						if k:match("^depends") then
+						if k == "depends" then
 							s["depends"] = _assert(
 								self:_read_dependency( v2, s["depends"] ),
 								'Section "%s" in scheme "%s" has malformed ' ..
@@ -471,13 +476,13 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				for k, v2 in pairs(v) do
 					if k ~= "name" and k ~= "section" and k:sub(1,1) ~= "." then
-						if k:match("^depends") then
+						if k == "depends" then
 							t["depends"] = _assert(
 								self:_read_dependency( v2, t["depends"] ),
 								'Invalid reference "%s" in "%s.%s.%s"',
 								v2, v.name, scheme, k
 							)
-						elseif k:match("^validator") then
+						elseif k == "validator" then
 							t["validators"] = _assert(
 								self:_read_validator( v2, t["validators"] ),
 								'Variable "%s" in scheme "%s" has malformed ' ..
@@ -507,7 +512,6 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 				_req( TYPE_ENUM, v, { "value", "variable" } )
 
 				local r = _ref( TYPE_ENUM, v )
-
 				local p = _assert( self.packages[r[1]],
 					'Enum "%s" in scheme "%s" references unknown package "%s"',
 					v.value, scheme, r[1] )
@@ -548,53 +552,63 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 end
 
 -- Read a dependency specification
-function UVL._read_dependency( self, value, deps )
-	local parts     = luci.util.split( value, "%s*,%s*", nil, true )
-	local condition = { }
+function UVL._read_dependency( self, values, deps )
+	local expr = "%$?[a-zA-Z0-9_]+"
+	if values then
+		values = ( type(values) == "table" and values or { values } )
+		for _, value in ipairs(values) do
+			local parts     = luci.util.split( value, "%s*,%s*", nil, true )
+			local condition = { }
+			for i, val in ipairs(parts) do
+				local k, v = unpack(luci.util.split(val, "%s*=%s*", nil, true))
 
-	for i, val in ipairs(parts) do
-		local k, v = unpack(luci.util.split( val, "%s*=%s*", nil, true ))
+				if k and (
+					k:match("^"..expr.."%."..expr.."%."..expr.."$") or
+					k:match("^"..expr.."%."..expr.."$") or
+					k:match("^"..expr.."$")
+				) then
+					condition[k] = v or true
+				else
+					return nil
+				end
+			end
 
-		if k and (
-			k:match("^%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+$") or
-			k:match("^%$?[a-zA-Z0-9_]+%.%$?[a-zA-Z0-9_]+$") or
-			k:match("^%$?[a-zA-Z0-9_]+$")
-		) then
-			condition[k] = v or true
-		else
-			return nil
+			if not deps then
+				deps = { condition }
+			else
+				table.insert( deps, condition )
+			end
 		end
-	end
-
-	if not deps then
-		deps = { condition }
-	else
-		table.insert( deps, condition )
 	end
 
 	return deps
 end
 
 -- Read a validator specification
-function UVL._read_validator( self, value, validators )
-	if value then
-		local validator
+function UVL._read_validator( self, values, validators )
+	if values then
+		values = ( type(values) == "table" and values or { values } )
+		for _, value in ipairs(values) do
+			local validator
 
-		if value:match("^exec:") then
-			validator = value:gsub("^exec:","")
-		elseif value:match("^lua:") then
-			validator = self:_resolve_function( (value:gsub("^lua:","") ) )
-		end
-
-		if validator then
-			if not validators then
-				validators = { validator }
-			else
-				table.insert( validators, validator )
+			if value:match("^exec:") then
+				validator = value:gsub("^exec:","")
+			elseif value:match("^lua:") then
+				validator = self:_resolve_function( (value:gsub("^lua:","") ) )
 			end
 
-			return validators
+			if validator then
+				if not validators then
+					validators = { validator }
+				else
+					table.insert( validators, validator )
+				end
+			else
+				return nil
+			end
 		end
+
+		return validators
 	end
 end
 
