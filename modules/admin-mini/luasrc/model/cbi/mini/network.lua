@@ -12,7 +12,64 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("network", "Network")
+m0 = Map("network", translate("network"))
+m0.stateful = true
+local netstat = luci.sys.net.deviceinfo()
+
+m0.parse = function() end
+
+s = m0:section(TypedSection, "interface", translate("status"))
+s.template = "cbi/tblsection"
+s.rowcolors = true
+
+function s.filter(self, section)
+	return section ~= "loopback" and section
+end
+
+hwaddr = s:option(DummyValue, "_hwaddr")
+function hwaddr.cfgvalue(self, section)
+	local ix = self.map:get(section, "ifname") or ""
+	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address") or "n/a"
+end
+
+
+s:option(DummyValue, "ipaddr", translate("ipaddress"))
+
+s:option(DummyValue, "netmask", translate("netmask"))
+
+
+txrx = s:option(DummyValue, "_txrx")
+
+function txrx.cfgvalue(self, section)
+	local ix = self.map:get(section, "ifname")
+	
+	local rx = netstat and netstat[ix] and netstat[ix][1]
+	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
+	
+	local tx = netstat and netstat[ix] and netstat[ix][9]
+	tx = tx and luci.tools.webadmin.byte_format(tonumber(tx)) or "-"
+	
+	return string.format("%s / %s", tx, rx)
+end
+
+errors = s:option(DummyValue, "_err")
+
+function errors.cfgvalue(self, section)
+	local ix = self.map:get(section, "ifname")
+	
+	local rx = netstat and netstat[ix] and netstat[ix][3]
+	local tx = netstat and netstat[ix] and netstat[ix][11]
+	
+	rx = rx and tostring(rx) or "-"
+	tx = tx and tostring(tx) or "-"
+	
+	return string.format("%s / %s", tx, rx)
+end
+
+
+
+
+m = Map("network", "")
 
 s = m:section(NamedSection, "lan", "interface", translate("m_n_local"))
 s:option(Value, "ipaddr", translate("ipaddress"))
@@ -76,4 +133,4 @@ srv.rmempty = true
 
 
 
-return m
+return m0, m
