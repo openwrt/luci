@@ -15,21 +15,27 @@ $Id$
 require("luci.tools.webadmin")
 require("luci.sys")
 
-m0 = Map("network", translate("network"))
-m0.stateful = true
+luci.model.uci.load_state("network")
+local wireless = luci.model.uci.get_all("network")
+luci.model.uci.unload("network")
+
 local netstat = luci.sys.net.deviceinfo()
+local ifaces = {}
 
-m0.parse = function() end
-
-s = m0:section(TypedSection, "interface", translate("status"))
-s.template = "cbi/tblsection"
-s.rowcolors = true
-
-function s.filter(self, section)
-	return section ~= "loopback" and section
+for k, v in pairs(wireless) do
+	if v[".type"] == "interface" and k ~= "loopback" then
+		table.insert(ifaces, v)
+	end
 end
 
-hwaddr = s:option(DummyValue, "_hwaddr")
+m = Map("network", translate("network"))
+s = m:section(Table, ifaces, translate("status"))
+s.parse = function() end
+
+s:option(DummyValue, ".name", translate("network"))
+
+hwaddr = s:option(DummyValue, "_hwaddr",
+ translate("network_interface_hwaddr"), translate("network_interface_hwaddr_desc"))
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
 	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address") or "n/a"
@@ -41,7 +47,8 @@ s:option(DummyValue, "ipaddr", translate("ipaddress"))
 s:option(DummyValue, "netmask", translate("netmask"))
 
 
-txrx = s:option(DummyValue, "_txrx")
+txrx = s:option(DummyValue, "_txrx",
+ translate("network_interface_txrx"), translate("network_interface_txrx_desc"))
 
 function txrx.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
@@ -55,7 +62,8 @@ function txrx.cfgvalue(self, section)
 	return string.format("%s / %s", tx, rx)
 end
 
-errors = s:option(DummyValue, "_err")
+errors = s:option(DummyValue, "_err",
+ translate("network_interface_err"), translate("network_interface_err_desc"))
 
 function errors.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
@@ -70,9 +78,6 @@ function errors.cfgvalue(self, section)
 end
 
 
-
-
-m = Map("network", "")
 
 s = m:section(NamedSection, "lan", "interface", translate("m_n_local"))
 s:option(Value, "ipaddr", translate("ipaddress"))
@@ -136,4 +141,4 @@ srv.rmempty = true
 
 
 
-return m0, m
+return m
