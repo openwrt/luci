@@ -12,14 +12,120 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
+-- Data init --
+
+luci.model.uci.load_state("wireless")
+local wireless = luci.model.uci.get_all("wireless")
+luci.model.uci.unload("wireless")
+
+local wifidata = luci.sys.wifi.getiwconfig()
+local ifaces = {}
+
+for k, v in pairs(wireless) do
+	if v[".type"] == "wifi-iface" then
+		table.insert(ifaces, v)
+	end
+end
+
+
+-- Main Map --
+
 m = Map("wireless", translate("wifi"), translate("a_w_devices1"))
 m:chain("network")
+
+
+-- Status Table --
+s = m:section(Table, ifaces, translate("networks"))
+
+link = s:option(DummyValue, "_link", translate("link"))
+function link.cfgvalue(self, section)
+	local ifname = self.map:get(section, "ifname")
+	return wifidata[ifname] and wifidata[ifname]["Link Quality"] or "-"
+end
+
+essid = s:option(DummyValue, "ssid", "ESSID")
+
+bssid = s:option(DummyValue, "_bsiid", "BSSID")
+function bssid.cfgvalue(self, section)
+	local ifname = self.map:get(section, "ifname")
+	return (wifidata[ifname] and (wifidata[ifname].Cell 
+	 or wifidata[ifname]["Access Point"])) or "-"
+end
+
+channel = s:option(DummyValue, "channel", translate("channel"))
+function channel.cfgvalue(self, section)
+	return wireless[self.map:get(section, "device")].channel
+end
+
+protocol = s:option(DummyValue, "_mode", translate("protocol"))
+function protocol.cfgvalue(self, section)
+	return "802." .. wireless[self.map:get(section, "device")].mode
+end
+
+mode = s:option(DummyValue, "mode", translate("mode"))
+encryption = s:option(DummyValue, "encryption", translate("iwscan_encr"))
+
+power = s:option(DummyValue, "_power", translate("power"))
+function power.cfgvalue(self, section)
+	local ifname = self.map:get(section, "ifname")
+	return wifidata[ifname] and wifidata[ifname]["Tx-Power"] or "-"
+end
+
+scan = s:option(Button, "_scan", translate("scan"))
+scan.inputstyle = "find"
+
+function scan.cfgvalue(self, section)
+	return self.map:get(section, "ifname") or false
+end
+
+-- WLAN-Scan-Table --
+
+t2 = m:section(Table, {}, translate("iwscan"), translate("iwscan1"))
+
+function scan.write(self, section)
+	t2.render = t2._render
+	local ifname = self.map:get(section, "ifname")
+	luci.util.update(t2.data, luci.sys.wifi.iwscan(ifname))
+end
+
+t2._render = t2.render
+t2.render = function() end
+
+t2:option(DummyValue, "Quality", translate("iwscan_link"))
+essid = t2:option(DummyValue, "ESSID", "ESSID")
+function essid.cfgvalue(self, section)
+	return luci.util.pcdata(self.map:get(section, "ESSID"))
+end
+
+t2:option(DummyValue, "Address", "BSSID")
+t2:option(DummyValue, "Mode", translate("mode"))
+chan = t2:option(DummyValue, "channel", translate("channel"))
+function chan.cfgvalue(self, section)
+	return self.map:get(section, "Channel")
+	    or self.map:get(section, "Frequency")
+	    or "-"
+end 
+
+t2:option(DummyValue, "Encryption key", translate("iwscan_encr"))
+
+t2:option(DummyValue, "Signal level", translate("iwscan_signal"))
+
+t2:option(DummyValue, "Noise level", translate("iwscan_noise"))
+
+
+-- Config Section --
 
 s = m:section(TypedSection, "wifi-device", translate("devices"))
 
 en = s:option(Flag, "disabled", translate("enable"))
 en.enabled = "0"
 en.disabled = "1"
+
+function en.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "0"
+end
+
 
 mode = s:option(ListValue, "mode", translate("mode"))
 mode:value("", "standard")

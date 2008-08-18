@@ -19,7 +19,6 @@ function index()
 
 	entry({"admin", "status"}, template("admin_status/index"), i18n("status", "Status"), 20)
 	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "Systemprotokoll"))
-	entry({"admin", "status", "iwscan"}, template("admin_status/iwscan"), i18n("wlanscan"), 20)
 end
 
 function action_syslog()

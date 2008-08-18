@@ -99,7 +99,4 @@ function errors.cfgvalue(self, section)
 	return string.format("%s / %s", tx, rx)
 end
 
-
- 
-w2 = Template("mini/index2")
-return w, f, m, w2
+return w, f, m
