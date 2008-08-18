@@ -28,6 +28,23 @@ function index()
 	page.title  = i18n("a_n_switch")
 	page.order  = 20
 	
+	local page  = node("admin", "network", "wireless")
+	page.target = form("admin_network/wireless")
+	page.title  = i18n("wifi")
+	page.order  = 15
+	luci.model.uci.foreach("wireless", "wifi-device",
+		function (section)
+			local ifc = section[".name"]
+				entry({"admin", "network", "wireless", ifc},
+				 alias("admin", "network", "wifi", ifc),
+				 ifc:upper())
+		end
+	)
+	
+	local page  = node("admin", "network", "wifi")
+	page.target = cbi("admin_network/wifi")
+	page.leaf   = true
+	
 	local page  = node("admin", "network", "network")
 	page.target = cbi("admin_network/network")
 	page.title  = i18n("interfaces", "Schnittstellen")

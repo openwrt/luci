@@ -88,6 +88,7 @@ revert = "Verwerfen"
 
 save = "Speichern"
 saveapply = "Speichern & Anwenden"
+scan = "Scan"
 service = "Dienst"
 services = "Dienste"
 settings = "Einstellungen"

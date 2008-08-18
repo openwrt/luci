@@ -363,3 +363,5 @@ a_w_tlsprivkeypwd = "Passwort des Privaten Schlüssels"
 a_w_peapauth = "PEAP-Authentifizierung"
 a_w_peapidentity = "PEAP-Identitäz"
 a_w_peappassword = "PEAP-Passwort"
+
+a_w_create = "Netzwerk anlegen"

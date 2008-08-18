@@ -12,19 +12,59 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.tools.webadmin")
+arg[1] = arg[1] or ""
+
 m = Map("wireless", translate("networks"), translate("a_w_networks1"))
 
-s = m:section(TypedSection, "wifi-iface", "")
+s = m:section(NamedSection, arg[1], "wifi-device", translate("device") .. " " .. arg[1])
+--s.addremove = true
+
+en = s:option(Flag, "disabled", translate("enable"))
+en.enabled = "0"
+en.disabled = "1"
+
+function en.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "0"
+end
+
+t = s:option(DummyValue, "type", translate("type"))
+
+mode = s:option(ListValue, "mode", translate("mode"))
+mode:value("", "standard")
+mode:value("11b", "802.11b")
+mode:value("11g", "802.11g")
+mode:value("11a", "802.11a")
+mode:value("11bg", "802.11b+g")
+mode.rmempty = true
+
+s:option(Value, "channel", translate("a_w_channel"))
+
+s:option(Value, "txantenna", translate("a_w_txantenna")).optional = true
+
+s:option(Value, "rxantenna", translate("a_w_rxantenna")).optional = true
+
+s:option(Value, "distance", translate("distance"),
+	translate("a_w_distance1")).optional = true
+
+s:option(Value, "diversity", translate("a_w_diversity")):depends("type", "atheros")
+	
+country = s:option(Value, "country", translate("a_w_countrycode"))
+country.optional = true
+country:depends("type", "broadcom")
+
+maxassoc = s:option(Value, "maxassoc", translate("a_w_connlimit"))
+maxassoc:depends("type", "broadcom")
+maxassoc.optional = true
+
+
+
+s = m:section(TypedSection, "wifi-iface", translate("interfaces"))
 s.addremove = true
 s.anonymous = true
+s:depends("device", arg[1])
+s.defaults.device = arg[1]
 
 s:option(Value, "ssid", translate("a_w_netid")).maxlength = 32
-
-device = s:option(ListValue, "device", translate("device"))
-luci.model.uci.foreach("wireless", "wifi-device",
-	function (section)
-		device:value(section[".name"])
-	end)
 
 network = s:option(ListValue, "network", translate("network"), translate("a_w_network1"))
 network:value("")

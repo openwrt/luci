@@ -76,7 +76,13 @@ end
 				<%- if self.extedit or self.addremove then -%>
 					<td class="cbi-section-table-cell">
 						<%- if self.extedit then -%>
-							<a href="<%=self.extedit:format(section)%>" title="<%:edit%>"><img style="border: none" src="<%=resource%>/cbi/edit.gif" alt="<%:edit%>" /></a>
+							<a href="
+							<%- if type(self.extedit) == "string" then -%>
+								<%=self.extedit:format(section)%>
+							<%- elseif type(self.extedit) == "function" then -%>
+								<%=self:extedit(section)%>
+							<%- end -%>
+							" title="<%:edit%>"><img style="border: none" src="<%=resource%>/cbi/edit.gif" alt="<%:edit%>" /></a>
 						<%- end; if self.addremove then %>
 							<input type="image" value="<%:cbi_del%>" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:cbi_del%>" title="<%:cbi_del%>" src="<%=resource%>/cbi/remove.gif" />
 						<%- end -%>

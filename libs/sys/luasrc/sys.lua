@@ -432,8 +432,9 @@ end
 
 --- Get iwlist scan output from all wireless devices.
 -- @return	Table of tables contaiing all scan results
-function wifi.iwscan()
-	local cnt = luci.util.exec("iwlist scan 2>/dev/null")
+function wifi.iwscan(iface)
+	local siface = iface or ""
+	local cnt = luci.util.exec("iwlist "..siface.." scan 2>/dev/null")
 	local iws = {}
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n\n")) do
@@ -451,7 +452,7 @@ function wifi.iwscan()
 		end
 	end
 
-	return iws
+	return iface and (iws[iface] or {}) or iws
 end
 
 
