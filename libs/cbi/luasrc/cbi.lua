@@ -162,6 +162,15 @@ function Map.__init__(self, config, ...)
 	end
 end
 
+function Map.render(self, ...)
+	if self.stateful then
+		uci.load_state(self.config)
+	else
+		uci.load_config(self.config)
+	end
+	Node.render(self, ...)
+end
+
 
 -- Chain foreign config
 function Map.chain(self, config)

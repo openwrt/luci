@@ -46,7 +46,7 @@ end
 
 up = s:option(Flag, "up")
 function up.write(self, section, value)
-	local call = value == "1" and "ifdown" or "ifup"
+	local call = value == "1" and "ifup" or "ifdown"
 	os.execute(call .. " " .. section)
 end
 
@@ -66,7 +66,10 @@ end
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
-	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address") or "n/a"
+	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address")
+	 or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
+	 or "n/a"
+	 
 end
 
 
