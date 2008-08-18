@@ -374,7 +374,6 @@ endef
 
 define Package/luci-app-ffwizard-leipzig
   $(call Package/luci/fftemplate)
-  DEPENDS+=+luci-app-firewall
   TITLE:=Freifunk Leipzig configuration wizard
 endef
 
