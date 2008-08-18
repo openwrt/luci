@@ -367,6 +367,7 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.config = map.config
 	self.optionals = {}
 	self.defaults = {}
+	self.cast = "string"
 
 	self.optional = true
 	self.addremove = false
@@ -446,7 +447,16 @@ end
 
 -- Returns the section's UCI table
 function AbstractSection.cfgvalue(self, section)
-	return self.map:get(section)
+	local value = self.map:get(section)
+	if not self.cast or self.cast == type(value) then
+		return value
+	elseif self.cast == "string" then
+		if type(value) == "table" then
+			return value[1]
+		end
+	elseif self.cast == "table" then
+		return {value}
+	end
 end
 
 -- Removes the section
@@ -988,6 +998,60 @@ function MultiValue.validate(self, val)
 
 	return result
 end
+
+
+StaticList = class(MultiValue)
+
+function StaticList.__init__(self, ...)
+	MultiValue.__init__(self, ...)
+	self.cast = "table"
+	self.valuelist = self.cfgvalue
+end
+
+function StaticList.validate(self, value)
+	value = (type(value) == "table") and value or {value}
+
+	local valid = {}
+	for i, v in ipairs(value) do
+		if luci.util.contains(self.valuelist, v) then
+			table.insert(valid, v)
+		end
+	end
+	return valid
+end
+
+
+DynamicList = class(AbstractValue)
+
+function DynamicList.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template  = "cbi/dynlist"
+	self.cast = "table"
+	
+	self.keylist = {}
+	self.vallist = {}
+end
+
+function DynamicList.value(self, key, val)
+	val = val or key
+	table.insert(self.keylist, tostring(key))
+	table.insert(self.vallist, tostring(val))
+end
+
+function DynamicList.validate(self, value, section)
+	value = (type(value) == "table") and value or {value}
+	
+	local valid = {}
+	for i, v in ipairs(value) do
+		if v and #v > 0 and
+		 not luci.http.formvalue("cbi.rle."..section.."."..self.option.."."..i) then
+			table.insert(valid, v)
+		end
+	end
+	
+	return valid
+end
+
 
 --[[
 TextValue - A multi-line value
