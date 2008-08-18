@@ -12,9 +12,9 @@ Copyright 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,9 +49,9 @@ function delete_all(config, type, comparator)
 				table.insert(del, section[".name"])
 			end
 	end
-	
+
 	foreach(config, type, helper)
-	
+
 	for i, j in ipairs(del) do
 		delete(config, j)
 	end
@@ -71,11 +71,11 @@ function section(config, type, name, values)
 		name = add(config, type)
 		stat = name and true
 	end
-	
+
 	if stat and values then
 		stat = tset(config, name, values)
 	end
-	
+
 	return stat and name
 end
 
@@ -133,6 +133,36 @@ function tset(config, section, values)
 		end
 	end
 	return stat
+end
+
+--- Get an option or list and return values as table.
+-- @param config	UCI config
+-- @param section	UCI section name
+-- @param option	UCI option
+-- @return			UCI value
+function get_list(config, section, option)
+	if config and section and option then
+		local val = get(config, section, option)
+		return ( type(val) == "table" and val or { val } )
+	end
+	return nil
+end
+
+--- Set given values as list.
+-- Warning: This function is unsave! You should use save_config or save_state if possible.
+-- @param config	UCI config
+-- @param section	UCI section name
+-- @param option	UCI option
+-- @param value		UCI value
+-- @return			Boolean whether operation succeeded
+function set_list(config, section, option, value)
+	if config and section and option then
+		return set(
+			config, section, option,
+			( type(value) == "table" and value or { value } )
+		)
+	end
+	return false
 end
 
 
