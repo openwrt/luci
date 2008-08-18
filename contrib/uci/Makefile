@@ -6,11 +6,12 @@ include ../../build/gccconfig.mk
 #UCI_DIR = uci-$(UCI_VERSION)
 #UCI_FILE = $(UCI_DIR).tar.gz
 #UCI_URL = $(UCI_SITE)/$(UCI_FILE)
+UCI_GITREV = 28d2cc2adde3f9ec077a77cf363045a17f116032
 UCI_VERSION = 0.4.8+git20080818-1
 UCI_SITE = http://nbd.name
 UCI_DIR = uci.git
-UCI_FILE = 672d68a8765c242dd939a31b520acbe1c9c1d7c2.tar.gz
-UCI_URL = $(UCI_SITE)/gitweb.cgi?p=uci.git;a=snapshot;h=672d68a8765c242dd939a31b520acbe1c9c1d7c2
+UCI_FILE = $(UCI_GITREV).tar.gz
+UCI_URL = $(UCI_SITE)/gitweb.cgi?p=uci.git;a=snapshot;h=$(UCI_GITREV)
 
 all: compile
 
