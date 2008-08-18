@@ -359,15 +359,15 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 	local function _id( c, t )
 		if c == TYPE_SECTION then
 			return string.format(
-				"section '%s.%s'",
+				'section "%s.%s"',
 					scheme, t.name or '?' )
 		elseif c == TYPE_VARIABLE then
 			return string.format(
-				"variable '%s.%s.%s'",
+				'variable "%s.%s.%s"',
 					scheme, t.section or '?.?', t.name or '?' )
 		elseif c == TYPE_ENUM then
 			return string.format(
-				"enum '%s.%s.%s'",
+				'enum "%s.%s.%s"',
 					scheme, t.variable or '?.?.?', t.value or '?' )
 		end
 	end
@@ -375,7 +375,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 	-- helper function to check for required fields
 	local function _req( c, t, r )
 		for i, v in ipairs(r) do
-			_assert( t[v], "Missing required field '%s' in %s", v, _id(c, t) )
+			_assert( t[v], 'Missing required field "%s" in %s', v, _id(c, t) )
 		end
 	end
 
@@ -393,7 +393,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		local r = luci.util.split( t[k], "." )
 		r[1] = ( #r[1] > 0 and r[1] or scheme )
 
-		_assert( #r == c, "Malformed %s reference in %s", k, _id(c, t) )
+		_assert( #r == c, 'Malformed %s reference in %s', k, _id(c, t) )
 
 		return r
 	end
@@ -429,8 +429,8 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 						if k:match("^depends") then
 							s["depends"] = _assert(
 								self:_read_dependency( v2, s["depends"] ),
-								"Section '%s' in scheme '%s' has malformed " ..
-								"dependency specification in '%s'",
+								'Section "%s" in scheme "%s" has malformed ' ..
+								'dependency specification in "%s"',
 								v.name or '<nil>', scheme or '<nil>', k
 							)
 						elseif k == "dynamic" or k == "unique" or k == "required" then
@@ -458,11 +458,11 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 				local r = _ref( TYPE_VARIABLE, v )
 
 				local p = _assert( self.packages[r[1]],
-					"Variable '%s' in scheme '%s' references unknown package '%s'",
+					'Variable "%s" in scheme "%s" references unknown package "%s"',
 					v.name, scheme, r[1] )
 
 				local s = _assert( p.variables[r[2]],
-					"Variable '%s' in scheme '%s' references unknown section '%s'",
+					'Variable "%s" in scheme "%s" references unknown section "%s"',
 					v.name, scheme, r[2] )
 
 				s[v.name] = s[v.name] or { }
@@ -480,8 +480,8 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 						elseif k:match("^validator") then
 							t["validators"] = _assert(
 								self:_read_validator( v2, t["validators"] ),
-								"Variable '%s' in scheme '%s' has malformed " ..
-								"validator specification in '%s'",
+								'Variable "%s" in scheme "%s" has malformed ' ..
+								'validator specification in "%s"',
 								v.name, scheme, k
 							)
 						elseif k == "required" then
@@ -509,21 +509,21 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 				local r = _ref( TYPE_ENUM, v )
 
 				local p = _assert( self.packages[r[1]],
-					"Enum '%s' in scheme '%s' references unknown package '%s'",
+					'Enum "%s" in scheme "%s" references unknown package "%s"',
 					v.value, scheme, r[1] )
 
 				local s = _assert( p.variables[r[2]],
-					"Enum '%s' in scheme '%s' references unknown section '%s'",
+					'Enum "%s" in scheme "%s" references unknown section "%s"',
 					v.value, scheme, r[2] )
 
 				local t = _assert( s[r[3]],
-					"Enum '%s' in scheme '%s', section '%s' references " ..
-					"unknown variable '%s'",
+					'Enum "%s" in scheme "%s", section "%s" references ' ..
+					'unknown variable "%s"',
 					v.value, scheme, r[2], r[3] )
 
 				_assert( t.type == "enum",
-					"Enum '%s' in scheme '%s', section '%s' references " ..
-					"variable '%s' with non enum type '%s'",
+					'Enum "%s" in scheme "%s", section "%s" references ' ..
+					'variable "%s" with non enum type "%s"',
 					v.value, scheme, r[2], r[3], t.type )
 
 				if not t.values then
@@ -534,8 +534,8 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				if v.default then
 					_assert( not t.default,
-						"Enum '%s' in scheme '%s', section '%s' redeclares " ..
-						"the default value of variable '%s'",
+						'Enum "%s" in scheme "%s", section "%s" redeclares ' ..
+						'the default value of variable "%s"',
 						v.value, scheme, r[2], v.variable )
 
 					t.default = v.value
