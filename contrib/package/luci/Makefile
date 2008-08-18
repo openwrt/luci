@@ -384,7 +384,7 @@ endef
 
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +firewall
+  DEPENDS+=+luci-admin-core
   TITLE:=Firewall and Portforwarding application
 endef
 
