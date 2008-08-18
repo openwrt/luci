@@ -60,7 +60,8 @@ end
 
 protocol = s:option(DummyValue, "_mode", translate("protocol"))
 function protocol.cfgvalue(self, section)
-	return "802." .. wireless[self.map:get(section, "device")].mode
+	local mode = wireless[self.map:get(section, "device")].mode
+	return mode and "802." .. mode
 end
 
 mode = s:option(DummyValue, "mode", translate("mode"))

@@ -12,6 +12,9 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+require("luci.tools.webadmin")
+require("luci.sys")
+
 m0 = Map("network", translate("network"))
 m0.stateful = true
 local netstat = luci.sys.net.deviceinfo()
