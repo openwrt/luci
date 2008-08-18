@@ -305,11 +305,15 @@ function UVL._validate_option( self, option, nodeps )
 
 		if item.datatype and val then
 			if self.datatypes[item.datatype] then
-				if not self.datatypes[item.datatype]( val ) then
-					return false, 'Value "' .. ( val or '<nil>' ) ..
-						'" of given option "' .. option:cid() ..
-						'" does not validate as datatype "' ..
-						item.datatype .. '"'
+				val = ( type(val) == "table" and val or { val } )
+				for i, v in ipairs(val) do
+					if not self.datatypes[item.datatype]( v ) then
+						return false, 'Value' .. ( #val>1 and ' #'..i or '' ) ..
+							' "' .. ( v or '<nil>' ) ..
+							'" of given option "' .. option:cid() ..
+							'" does not validate as datatype "' ..
+							item.datatype .. '"'
+					end
 				end
 			else
 				return false, 'Unknown datatype "' ..
