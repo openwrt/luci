@@ -17,7 +17,7 @@ clean: luaclean
 
 i18n:
 	[ -n "$(XSLTPROC)" ] && for i in luasrc/i18n/*.xml; do [ -f "$$i" ]\
-	&& $(XSLTPROC) $(MAKEPATH)i18n-lua-xhtml1.xsl $$i > $${i/.xml/.lua}; done || true
+	&& $(XSLTPROC) $(MAKEPATH)i18n-lua-xhtml1.xsl $$i > $${i%%[.]xml}.lua; done || true
 
 luasource:
 	mkdir -p dist$(LUA_MODULEDIR)
