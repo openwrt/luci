@@ -116,6 +116,7 @@ for i, sect in ipairs({ "Hna4", "Hna6" }) do
 	hna = m:section(TypedSection, sect)
 	hna.addremove = true
 	hna.anonymous = true
+	hna.template  = "cbi/tblsection"
 
 	net = hna:option(Value, "NetAddr")
 	msk = hna:option(Value, "Prefix")
