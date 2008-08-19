@@ -136,8 +136,10 @@ mode:value("11a", "802.11a")
 mode:value("11bg", "802.11b+g")
 mode.rmempty = true
 
-s:option(Value, "channel", translate("a_w_channel"))
-
+ch = s:option(Value, "channel", translate("a_w_channel"))
+for i=1, 14 do
+	ch:value(i, i .. " (2.4 GHz)")
+end
 
 
 s = m:section(TypedSection, "wifi-iface", translate("m_n_local"))

@@ -37,7 +37,20 @@ mode:value("11a", "802.11a")
 mode:value("11bg", "802.11b+g")
 mode.rmempty = true
 
-s:option(Value, "channel", translate("a_w_channel"))
+ch = s:option(Value, "channel", translate("a_w_channel"))
+for i=1, 14 do
+	ch:value(i, i .. " (2.4 GHz)")
+end
+for i=36, 64, 4 do
+	ch:value(i, i .. " (5 GHz)")
+end
+for i=100, 140, 4 do
+	ch:value(i, i .. " (5 GHz)")
+end
+ch:value(147, 147 .. " (5 GHz)")
+ch:value(151, 151 .. " (5 GHz)")
+ch:value(155, 155 .. " (5 GHz)")
+ch:value(167, 167 .. " (5 GHz)")
 
 s:option(Value, "txantenna", translate("a_w_txantenna")).optional = true
 
