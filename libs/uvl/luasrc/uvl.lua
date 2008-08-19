@@ -51,7 +51,7 @@ STRICT_EXTERNAL_VALIDATORS = true
 STRICT_LIST_TYPE           = true
 
 
-local default_schemedir = "/etc/scheme"
+local default_schemedir = "/lib/uci/schema"
 
 local function _assert( condition, fmt, ... )
 	if not condition then
