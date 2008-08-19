@@ -26,7 +26,12 @@ $Id$
 		-%>
 		}, '<%- if not self.rmempty and not self.optional then -%>
 			<%-:cbi_select-%>
-		<%- end -%>', '<%:cbi_manual%>');
+		<%- end -%>', '
+		<%- if self.combobox_manual then -%>
+			<%-=self.combobox_manual-%>
+		<%- else -%>
+			<%-:cbi_manual-%>
+		<%- end -%>');
 	</script>
 	<% end -%>
 <%+cbi/valuefooter%>

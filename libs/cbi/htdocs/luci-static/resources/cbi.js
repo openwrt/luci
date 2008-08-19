@@ -98,7 +98,11 @@ function cbi_bind(obj, type, callback, mode) {
 function cbi_combobox(id, values, def, man) {
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
-	obj.parentNode.appendChild(sel);
+	if (obj.nextSibling) {
+		obj.parentNode.insertBefore(sel, obj.nextSibling);	
+	} else {
+		obj.parentNode.appendChild(sel);
+	}
 
 	if (!values[obj.value]) {
 		if (obj.value == "") {

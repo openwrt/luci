@@ -132,6 +132,7 @@ a_w_diversity = [[Diversität]]
 a_w_hideessid = [[ESSID verstecken]]
 a_w_netid = [[Netzkennung (ESSID)]]
 a_w_network1 = [[WLAN-Netz zu Netzwerk hinzufügen]]
+a_w_netmanual = [[ - Neues Netzwerk erstellen - ]]
 a_w_networks1 = [[Pro WLAN-Gerät können mehrere Netze bereitgestellt werden.
 Es sollte beachtet werden, dass es hardware- / treiberspezifische Einschränkungen gibt.
 So kann pro WLAN-Gerät in der Regel entweder 1 Ad-Hoc-Zugang ODER bis zu 3 Access-Point und 1 Client-Zugang

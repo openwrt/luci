@@ -15,9 +15,12 @@ $Id$
 require("luci.sys")
 require("luci.tools.webadmin")
 
+luci.model.uci.load_state("network")
+local netstate = luci.model.uci.get_all("network")
+luci.model.uci.unload("network")
+
 
 m = Map("network", translate("interfaces"))
-m.stateful = true
 
 local created
 local netstat = luci.sys.net.deviceinfo()
@@ -45,12 +48,25 @@ function s.parse(self, ...)
 end
 
 up = s:option(Flag, "up")
+function up.cfgvalue(self, section)
+	return netstate[section] and netstate[section].up or "0"
+end
+
 function up.write(self, section, value)
-	local call = value == "1" and "ifup" or "ifdown"
-	os.execute(call .. " " .. section)
+	local call
+	if value == "1" then
+		call = "ifup"
+	elseif value == "0" then
+		call = "ifdown"
+	end
+	os.execute(call .. " " .. section .. " >/dev/null 2>&1")
 end
 
 ifname = s:option(DummyValue, "ifname", translate("device"))
+function ifname.cfgvalue(self, section)
+	return netstate[section] and netstate[section].ifname
+end
+
 ifname.titleref = luci.dispatcher.build_url("admin", "network", "vlan")
 
 if luci.model.uci.load("firewall") then
@@ -74,7 +90,6 @@ end
 
 
 ipaddr = s:option(DummyValue, "ipaddr", translate("addresses"))
-
 function ipaddr.cfgvalue(self, section)
 	local addr = luci.tools.webadmin.network_get_addresses(section)
 	return table.concat(addr, ", ")

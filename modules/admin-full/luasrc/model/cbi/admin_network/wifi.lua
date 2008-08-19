@@ -66,9 +66,23 @@ s.defaults.device = arg[1]
 
 s:option(Value, "ssid", translate("a_w_netid")).maxlength = 32
 
-network = s:option(ListValue, "network", translate("network"), translate("a_w_network1"))
+network = s:option(Value, "network", translate("network"), translate("a_w_network1"))
+network.rmempty = true
 network:value("")
+network.combobox_manual = translate("a_w_netmanual")
 luci.tools.webadmin.cbi_add_networks(network)
+
+function network.write(self, section, value)	
+	if not luci.model.uci.get("network", value) then 
+		m:chain("network")
+		luci.model.uci.set("network", value, "interface")
+		Value.write(self, section, value)
+	else
+		if luci.model.uci.get("network", value) == "interface" then
+			Value.write(self, section, value)
+		end
+	end
+end
 
 mode = s:option(ListValue, "mode", translate("mode"))
 mode:value("ap", translate("a_w_ap"))

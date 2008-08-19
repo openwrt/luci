@@ -16,13 +16,13 @@ require("luci.tools.webadmin")
 require("luci.sys")
 
 luci.model.uci.load_state("network")
-local wireless = luci.model.uci.get_all("network")
+local network = luci.model.uci.get_all("network")
 luci.model.uci.unload("network")
 
 local netstat = luci.sys.net.deviceinfo()
 local ifaces = {}
 
-for k, v in pairs(wireless) do
+for k, v in pairs(network) do
 	if v[".type"] == "interface" and k ~= "loopback" then
 		table.insert(ifaces, v)
 	end
