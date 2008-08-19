@@ -49,6 +49,7 @@ if zones then
 		fwzone.rmempty = true
 		fwzone:value("", "- " .. translate("none") .. " -")
 		fwzone:value(arg[1])
+		luci.model.uci.load_config("firewall")
 		luci.model.uci.foreach("firewall", "zone",
 			function (section)
 				fwzone:value(section.name)
@@ -79,6 +80,7 @@ if zones then
 		fwzone.value = table.concat(zones, ", ")
 	end
 	fwzone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
+	luci.model.uci.unload("firewall")
 end
 
 ipaddr = s:option(Value, "ipaddr", translate("ipaddress"))
