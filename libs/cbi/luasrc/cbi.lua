@@ -367,7 +367,6 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.config = map.config
 	self.optionals = {}
 	self.defaults = {}
-	self.cast = "string"
 
 	self.optional = true
 	self.addremove = false
@@ -447,16 +446,7 @@ end
 
 -- Returns the section's UCI table
 function AbstractSection.cfgvalue(self, section)
-	local value = self.map:get(section)
-	if not self.cast or self.cast == type(value) then
-		return value
-	elseif self.cast == "string" then
-		if type(value) == "table" then
-			return value[1]
-		end
-	elseif self.cast == "table" then
-		return {value}
-	end
+	return self.map:get(section)
 end
 
 -- Removes the section
@@ -651,6 +641,9 @@ function TypedSection.parse(self)
 		crval = REMOVE_PREFIX .. self.config
 		name = luci.http.formvaluetable(crval)
 		for k,v in pairs(name) do
+			luci.util.perror(k)
+			luci.util.perror(self:cfgvalue(k))
+			luci.util.perror(self:checkscope(k))
 			if self:cfgvalue(k) and self:checkscope(k) then
 				self:remove(k)
 			end
@@ -719,6 +712,7 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.tag_missing = {}
 	self.tag_error = {}
 	self.deps = {}
+	self.cast = "string"
 
 	self.track_missing = false
 	self.rmempty   = false
@@ -816,7 +810,16 @@ end
 
 -- Return the UCI value of this object
 function AbstractValue.cfgvalue(self, section)
-	return self.map:get(section, self.option)
+	local value = self.map:get(section, self.option)
+	if not self.cast or self.cast == type(value) then
+		return value
+	elseif self.cast == "string" then
+		if type(value) == "table" then
+			return value[1]
+		end
+	elseif self.cast == "table" then
+		return {value}
+	end
 end
 
 -- Validate the form value
