@@ -1,17 +1,16 @@
 include ../../build/config.mk
 include ../../build/gccconfig.mk
 
-#UCI_VERSION = 0.4.8
-#UCI_SITE = http://mirror2.openwrt.org/sources
-#UCI_DIR = uci-$(UCI_VERSION)
-#UCI_FILE = $(UCI_DIR).tar.gz
-#UCI_URL = $(UCI_SITE)/$(UCI_FILE)
-UCI_GITREV = e1738122f616e3dce498598d55f84fa8a7e2263b
-UCI_VERSION = 0.4.8+git20080818-1
-UCI_SITE = http://nbd.name
-UCI_DIR = uci.git
-UCI_FILE = $(UCI_GITREV).tar.gz
-UCI_URL = $(UCI_SITE)/gitweb.cgi?p=uci.git;a=snapshot;h=$(UCI_GITREV)
+UCI_VERSION = 0.5.0
+UCI_SITE = http://mirror2.openwrt.org/sources
+UCI_DIR = uci-$(UCI_VERSION)
+UCI_FILE = $(UCI_DIR).tar.gz
+UCI_URL = $(UCI_SITE)/$(UCI_FILE)
+#UCI_GITREV = e1738122f616e3dce498598d55f84fa8a7e2263b
+#UCI_SITE = http://nbd.name
+#UCI_DIR = uci.git
+#UCI_FILE = $(UCI_GITREV).tar.gz
+#UCI_URL = $(UCI_SITE)/gitweb.cgi?p=uci.git;a=snapshot;h=$(UCI_GITREV)
 
 all: compile
 
