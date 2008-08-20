@@ -26,6 +26,7 @@ limitations under the License.
 
 --- LuCI web dispatcher.
 module("luci.dispatcher", package.seeall)
+require("luci.util")
 require("luci.init")
 require("luci.http")
 require("luci.sys")
@@ -154,6 +155,7 @@ function dispatch(request)
 	tpl.context.viewns = viewns
 	viewns.write       = luci.http.write
 	viewns.translate   = function(...) return require("luci.i18n").translate(...) end
+	viewns.striptags   = luci.util.striptags
 	viewns.controller  = luci.http.getenv("SCRIPT_NAME")
 	viewns.media       = luci.config.main.mediaurlbase
 	viewns.resource    = luci.config.main.resourcebase
