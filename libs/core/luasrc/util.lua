@@ -212,7 +212,7 @@ end
 -- @param value	String containing the HTML text
 -- @return	String with HTML tags stripped of
 function striptags(s)
-	return (s:gsub("</?[A-Za-z][A-Za-z0-9:_%-]*[^>]*>", " "):gsub("%s+", " "))
+	return pcdata(s:gsub("</?[A-Za-z][A-Za-z0-9:_%-]*[^>]*>", " "):gsub("%s+", " "))
 end
 
 --- Splits given string on a defined separator sequence and return a table
