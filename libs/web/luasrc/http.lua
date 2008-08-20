@@ -211,6 +211,7 @@ function write(content, src_err)
 			end
 			if not context.headers["cache-control"] then
 				header("Cache-Control", "no-cache")
+				header("Expires", "0")
 			end
 			
 			
