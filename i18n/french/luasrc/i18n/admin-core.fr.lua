@@ -1,231 +1,69 @@
-uci_applied = "Les changements suivants ont été appliqués"
-uci_reverted = "Les changements suivants ont été annulés"
-
-a_i_ui = "Interface utilisateur"
-
-c_lucidesc = [[LuCI est une suite logicielle d'applications Lua software incluant un MVC-Webframework et une interface web pour équipements embarqués.
-Luci est sous license Apache.]]
-c_projecthome = "Page d'accueil du projet"
-c_leaddev = "Développeurs principaux"
-c_contributors = "Contributeurs"
-c_thanksto = "Merci à"
-
-a_i_i_hello = "Bonjour !"
-a_i_i_admin1 = "Voici la page d'administration de LuCI."
-a_i_i_admin2 = "LuCI est une interface graphique libre, flexible, et user friendly pour configurer OpenWRT Kamikaze."
-a_i_i_admin3 = "Dans les pages suivantes vous pouvez ajuster tous les réglages importants de votre routeur."
-a_i_i_admin4 = "Vous trouverez une page de navigation sur le côté gauche permettant d'accèder aux différentes pages de configuration."
-a_i_i_admin5 = [[Nous souhaitons améliorer l'interface de manière permanente, vos retours et suggestions sont primordiaux.]]
-a_i_i_admin6 = "Et maintenant que la fête commence !"
-a_i_i_team   = "L'équipe LuCI"
-
-a_i_luci1 = "Ici, vous pouvez personnaliser les réglages et les fonctionnalités de LuCI."
-a_i_ucicommit = "Actions post-changements"
-a_i_ucicommit1 = [[Ces commandes seront executées automatiquement lorsqu'une configuration UCI est appliquée, les changement prenant
-effet immédiatement.]]
-a_i_keepflash = "Fichiers à conserver lors d'une mise à jour du firmware"
-a_i_keepflash1 = "Lors d'une nouvelle installation, ces fichiers seront ajoutés à la nouvelle installation."
-
-a_st_i_status1 = [[Ici, vous trouverez des informations sur l'état actuel du système comme la fréquence processeur, utilisation mémoire et
-trafic réseau.]]
-a_st_i_status2 = [[Les journaux des services ou du noyau peuvent être vus ici afin d'obtenir un aperçu de leur état.]]
-
-iwscan = "Scan WLAN"
-iwscan1 = "Réseaux Wi-Fi dans votre environnement"
-iwscan_encr = "Chiffrement"
-iwscan_link = "Lien"
-iwscan_signal = "Signal"
-iwscan_noise = "Bruit"
-
-routes = "Routes"
-routes_netmask = "Masque réseau"
-routes_gateway = "Passerelle"
-routes_metric = "Metrique"
-
-a_s_packages = "Software"
-a_s_changepw = "Mot de passe administrateur"
-a_s_p_ipkg = "Configuration IPKG"
-a_s_sshkeys = "Clés SSH"
-a_s_fstab = "Points de montage"
-a_s_flash = "Mise à jour firmware"
-
-a_s_i_system1 = [[Changements en rapport avec le système, son identification
-le logiciel/matériel installé, l'authentification ou points de montage.]]
-a_s_i_system2 = [[Ces réglages définissent la base de votre système.]]
-a_s_i_system3 = [[Soyez vigilent car un mauvais réglage peut empêcher votre équipement de démarrer,
-ou vous empêcher de vous y connecter.]]
-
-a_s_packages_do = "Accomplir les actions"
-a_s_packages_install = "Installer"
-a_s_packages_installurl = "Télécharge et installe le paquet"
-a_s_packages_ipkg = "Editer la liste des paquets et le répertoire de destination"
-a_s_packages_name = "Nom du paquet"
-a_s_packages_remove = "Désinstaller"
-a_s_packages_search = "Trouver un paquet"
-a_s_packages_update = "Liste des paquets mise à jour"
-a_s_packages_updatelist = "Mettre à jour la liste des paquets"
-a_s_packages_upgrade = "Mettre à jour les paquets installés"
-
-a_s_p_ipkg_pkglists = "Listes de paquets"
-a_s_p_ipkg_targets = "Répertoires de destination"
-
-a_s_changepw1 = "Changer le mot de passe du système (Utilisateur \"root\")"
-a_s_changepw_changed = "Mot de passe changé avec succès"
-a_s_changepw_nomatch = "Erreur: les mots de passe ne correspondent pas"
-
-a_s_sshkeys1 = "Vous pouvez copier ici des clés SSH publiques (une par ligne) pour une authentification SSH sur clés publiques."
-
-a_s_fstab_mountpoints = "Points de montage"
-a_s_fstab_mountpoints1 = "Les points de montage définissent l'attachement d'un périphérique au système de fichier."
-
-a_s_fstab_mountpoint = "Point de montage"
-a_s_fstab_device1 = "Le périphérique de bloc contenant la partition (ex : /dev/sda1)"
-a_s_fstab_fs1 = "Le système de fichiers utilisé pour formatter le support de stockage (ex : ext3)"
-a_s_fstab_swap1 = [[Si la mémoire physique n'est pas en quantité suffisante, les données inutilisées peuvent être
-temporairement transférée sur une partition d'échange, relevant la quantité de RAM disponible.
-Ce processus est lent car la mémoire d'échange ne peut être accédée aux taux de transfert
-de la RAM.]]
-
-a_s_flash_flashed = "Firmware installé avec succès. Rédémarrage..."
-a_s_flash_flasherr = "Programme lors de la programmation"
-a_s_flash_fwimage = "Image firmware"
-a_s_flash_fwupgrade = "Mise à jour firmware"
-a_s_flash_keepcfg = "Conserver les fichiers de configuration"
-a_s_flash_notimplemented = "Désolé, cette fonction n'est pas (encore) disponible pour votre plateforme."
-a_s_flash_upgrade1 = "Remplace les fichiers existants par les nouveaux. Le format du firmware est dépendant de la plateforme."
-
-a_s_reboot1 = "Rédmarrage du système d'exploitation de votre équipement"
-a_s_reboot_do = "Rédémarrer"
-a_s_reboot_running = "Patientez s'il vous plaît: équipement en cours de rédémarrage..."
-
-a_srv_http = "Serveur HTTP"
-a_srv_ssh = "Serveur SSH"
-
-a_srv_services1 = "Les services et démons accomplissent certaines tâches sur votre équipement."
-a_srv_services2 = [[La plupart d'entre eux sont des serveurs réseaux, qui vous offrent certains services comme
-un accès shell, accéder à des pages comme LuCI, faire du routage mesh, envoyer des e-mails ...]]
-
-a_srv_http1 = "Un serveur web léger qui peut être utilisé pour LuCI."
-a_srv_http_authrealm = "Domaine d'authentification"
-a_srv_http_authrealm1 = "Le domaine qui sera affiché lors de la fenêtre d'authentification."
-a_srv_http_config1 = "fichier de configuration par défaut : /etc/httpd.conf"
-a_srv_http_root = "Page racine"
-
-a_srv_dropbear1 = "Dropbear est un serveur SSH et intègre un serveur SCP"
-a_srv_d_pwauth = "Authentification par mot de passe"
-a_srv_d_pwauth1 = "Autoriser l'authentification SSH par mot de passe"
-
-a_w_wifi1 = [[Dans cette page vous trouverez des options de configuration pour les réseau sans-fils.]]
-a_w_wifi2 = [[Vous pouvez facilement installer un périphérique 802.11a/b/g/n dans votre réseau physique existant
-et utiliser la gestion des interfaces virtuelles pour créer des répéteurs sans-fils ou fournir plusieurs
-réseaux avec un seul équipement.]]
-a_w_wifi3 = [[Les modes Point d'accès, Station, Ad-Hoc et WDS couplés aux chiffrements WPA et WPA2
-sont gérés.]] 
-
-a_w_devices1 = "Ici vous pouvez configurer les équipements Wi-Fi installés."
-a_w_channel  = "Canal"
-a_w_txantenna = "Antenne transmission"
-a_w_rxantenna = "Antenne réception"
-a_w_distance1 = "Distance vers la station la plus éloignée (m)" 
-a_w_diversity = "Diversité"
-a_w_countrycode = "Code pays"
-a_w_connlimit = "Limite de connexion"
-
-a_w_networks1 = [[Vous pouvez faire fonctionner plusieurs réseaux Wi-Fi sur un seul équipement.
-Il existe des limitations matérielles et liées au pilote. En général vous pouvez faire fonctionner simultanément
-1 réseau Ad-Hoc et 3 points d'accès simultanément.]]
-a_w_netid = "Nom du réseau (ESSID)"
-a_w_network1 = "Ajouter ce réseau Wi-Fi au réseau physique"
-a_w_txpwr = "Puissance d'émission"
-a_w_brcmburst = "Technologie Broadcom Frameburst"
-a_w_athburst = "Technologie Atheros Frameburst"
-a_w_radiussrv = "Serveur Radius"
-a_w_radiusport = "Port Radius"
-a_w_apisolation = "Isolation AP"
-a_w_apisolation1 = "Empêche la communication directe Client à Client"
-a_w_hideessid = "Cacher le ESSID"
-
-dhcp_desc = "Dnsmasq est un serveur DHCP combiné à un requêteur DNS pour les pare-feu NAT"
-dhcp_dnsmasq_domainneeded = "Domain requis"
-dhcp_dnsmasq_domainneeded_desc = "Ne pas transmettre de requêtes DNS sans nom DNS"
-dhcp_dnsmasq_authoritative = "Authoritaire"
-dhcp_dnsmasq_authoritative_desc = "C'est le seul serveur DHCP sur le réseau local"
-dhcp_dnsmasq_boguspriv = "Filtrer les requêtes privées"
-dhcp_dnsmasq_boguspriv_desc = "Ne pas transmettre les requêtes de recherche inverse pour les réseaux locaux"
-dhcp_dnsmasq_filterwin2k = "Filtrer les requêtes inutiles"
-dhcp_dnsmasq_filterwin2k_desc = "filtre les requêtes inutiles émises par les systèmes Windows"
-dhcp_dnsmasq_localisequeries = "Localiser les requêtes"
-dhcp_dnsmasq_localisequeries_desc = "localiser la réponse suivant l'émetteur de la requête"
-dhcp_dnsmasq_local = "Serveur local"
-dhcp_dnsmasq_domain = "Domaine local"
-dhcp_dnsmasq_expandhosts = "Etendre le nom d'hôte"
-dhcp_dnsmasq_expandhosts_desc = "concatène le nom de domaine aux noms d'hôtes"
-dhcp_dnsmasq_nonegcache = "ne pas mettre en cache les requêtes négatives"
-dhcp_dnsmasq_nonegcache_desc = "empêche la mise en cache de requêtes DNS erronnées"
-dhcp_dnsmasq_readethers = "Utiliser /etc/ethers"
-dhcp_dnsmasq_readethers_desc = "Lire /etc/ethers pour configurer le serveur DHCP" 
-dhcp_dnsmasq_leasefile = "Fichier de baux"
-dhcp_dnsmasq_leasefile_desc = "fichier dans lequel les baux DHCP seront stockés"
-dhcp_dnsmasq_resolvfile = "Fichier de résolution"
-dhcp_dnsmasq_resolvfile_desc = "fichier de résolution local"
-dhcp_dnsmasq_nohosts = "Ignorer /etc/hosts"
-dhcp_dnsmasq_strictorder = "Ordre stricte"
-dhcp_dnsmasq_strictorder_desc = "Les serveurs DNS du fichier de résolution seront interrogés dans l'ordre"
-dhcp_dnsmasq_logqueries = "Journaliser les requêtes"
-dhcp_dnsmasq_noresolv = "Ignorer le fichier de résolution"
-dhcp_dnsmasq_dnsforwardmax = "Requêtes concurrentes maximum"
-dhcp_dnsmasq_port = "Port DNS"
-dhcp_dnsmasq_ednspacket_max = "taille maximum du paquet. EDNS.0 "
-dhcp_dnsmasq_dhcpleasemax = "baux maximum"
-dhcp_dnsmasq_addnhosts = "fichiers de noms d'hôtes supplémentaires"
-dhcp_dnsmasq_queryport = "port de requête"
-
-a_n_switch = "Switch"
-a_n_routes = "Routes"
-
-a_network1 = "Dans cette section vous trouverez tous les réglages relatifs au réseau."
-a_network2 = "Sur la plupart des routeurs, les ports des switchs peuvent être configurés et séparés en plusieurs VLANs."
-a_network3 = "Les réglages des interfaces et du PPPoE / PPTP vous permettent une configuration personalisée du réseau."
-a_network4 = "Les équipements utilisant DHCP dans votre réseau local peuvent être configurés automatique pour l'accès au réseau."
-a_network5 = "Le pare-feu et la redirection de ports peuvent être utilisés pour fournir un service interne à un réseau extérieur."
-
-a_n_switch1 = [[Les ports de votre routeur peuvent être configurés pour combiner plusieurs VLANs
-dans lesquels les machines connectées peuvent dialoguer directement l'une avec l'autre.
-Les VLANs sont souvent utilisés pour séparer différences sous-réseaux.
-Bien souvent il y a un port d'uplink pour une connexion vers un réseau plus vaste, comme internet
-et les autres ports sont réservés au réseau local.]]
-network_switch_desc = [[Les ports appartenant à un VLAN sont séparés par des espaces.
-Le port ayant le numéro le plus élevé (5 en général) est souvent connecté à l'interface interne du routeur.
-Les équipements avec 5 ports ont souvent leur port 0 comme port d'uplink par défaut.]]
-
-a_n_ifaces1 = [[Dans cette page vous pourrez configurer les interfaces réseaux.
-Vous pouvez bridger différentes interfaces en cochantt le champ "bridger les interfaces"
-et en saisissant les noms des interfaces réseau séparées par des espaces
-Vous pouvez aussi utiliser la notation VLAN, INTERFACE.VLANNB (ex : eth0.1).]]
-a_n_i_bridge = "Bridger les interfaces"
-a_n_i_bridge1 = "créer un bridge entre plusieurs interfaces"
-
-dhcp_desc = [[Avec DHCP, les machines connectées au réseau peuvent recevoir leurs réglages
-réseau directement (adresse IP, masque de réseau, serveur DNS, ...)]]
-dhcp_dhcp_leasetime = "Durée du bail"
-dhcp_dhcp_dynamicdhcp = "DHCP dynamique"
-dhcp_dhcp_ignore = "Ignorer l'interface"
-dhcp_dhcp_ignore_desc = "désactiver DHCP sur cette interface"
-dhcp_dhcp_force = "Forcer"
-dhcp_dhcp_start_desc = "première addresse (dernier octet)"
-dhcp_dhcp_limit_desc = "nombre d'adresses disponibles - 1"
-
-a_n_ptp = "Connexions Point-à-Point"
-a_n_ptp1 = [[Les connexions Point-à-Point en PPPoE ou PPTP sont souvent utilisées pour
-connecter un équipement à internet sur du DSL ou une technologie similaire.]]
-network_interface_server = "Serveur PPTP"
-network_interface_demand = "Déconnexion automatique"
-network_interface_demand_desc = "Délai d'inactivité à partir duquel la connexion est coupée"
-network_interface_keepalive = "Maintenir la connexion"
-network_interface_keepalive_desc = "Reconnexion si la connexion est perdue"
-
-a_n_routes = "Routes stattiques"
-a_n_routes1 = [[Avec les routes statiques vous pouvez spécifier
-à travers quelle interface ou passerelle un réseau peut être contacté.]]
-a_n_r_target1 = "adresse IP ou réseau"
-a_n_r_netmask1 = "si la destination est un réseau"
+a_i_ui = [[Interface utilisateur]]
+c_projecthome = [[Page d&#39;accueil du projet]]
+c_contributors = [[Contributeurs]]
+a_i_i_hello = [[Bonjour !]]
+a_i_i_admin1 = [[Voici la page d&#39;administration de LuCI.]]
+a_i_i_admin2 = [[LuCI est une interface graphique libre, flexible, et user friendly pour configurer OpenWRT Kamikaze.]]
+a_i_ucicommit = [[Actions post-changements]]
+iwscan = [[Scan WLAN]]
+iwscan_encr = [[Chiffrement]]
+iwscan_link = [[Lien]]
+iwscan_signal = [[Signal]]
+iwscan_noise = [[Bruit]]
+routes = [[Routes]]
+routes_gateway = [[Passerelle]]
+routes_metric = [[Metrique]]
+a_s_packages = [[Software]]
+a_s_changepw = [[Mot de passe administrateur]]
+a_s_p_ipkg = [[Configuration IPKG]]
+a_s_fstab = [[Points de montage]]
+a_s_packages_do = [[Accomplir les actions]]
+a_s_packages_install = [[Installer]]
+a_s_packages_name = [[Nom du paquet]]
+a_s_packages_search = [[Trouver un paquet]]
+a_s_p_ipkg_pkglists = [[Listes de paquets]]
+a_s_changepw_nomatch = [[Erreur: les mots de passe ne correspondent pas]]
+a_s_fstab_mountpoints = [[Points de montage]]
+a_s_fstab_mountpoint = [[Point de montage]]
+a_s_flash_flasherr = [[Programme lors de la programmation]]
+a_s_flash_fwimage = [[Image firmware]]
+a_s_flash_keepcfg = [[Conserver les fichiers de configuration]]
+a_srv_http = [[Serveur HTTP]]
+a_srv_ssh = [[Serveur SSH]]
+a_srv_http_authrealm = [[Domaine d&#39;authentification]]
+a_srv_http_root = [[Page racine]]
+a_srv_d_pwauth = [[Authentification par mot de passe]]
+a_srv_d_pwauth1 = [[Autoriser l&#39;authentification SSH par mot de passe]]
+a_w_channel = [[Canal]]
+a_w_txantenna = [[Antenne transmission]]
+a_w_countrycode = [[Code pays]]
+a_w_connlimit = [[Limite de connexion]]
+a_w_brcmburst = [[Technologie Broadcom Frameburst]]
+a_w_athburst = [[Technologie Atheros Frameburst]]
+a_w_radiussrv = [[Serveur Radius]]
+a_w_radiusport = [[Port Radius]]
+a_w_apisolation = [[Isolation AP]]
+a_w_hideessid = [[Cacher le ESSID]]
+dhcp_dnsmasq_domainneeded = [[Domain requis]]
+dhcp_dnsmasq_authoritative = [[Authoritaire]]
+dhcp_dnsmasq_local = [[Serveur local]]
+dhcp_dnsmasq_domain = [[Domaine local]]
+dhcp_dnsmasq_readethers = [[Utiliser /etc/ethers]]
+dhcp_dnsmasq_readethers_desc = [[Lire /etc/ethers pour configurer le serveur DHCP]]
+dhcp_dnsmasq_leasefile = [[Fichier de baux]]
+dhcp_dnsmasq_nohosts = [[Ignorer /etc/hosts]]
+dhcp_dnsmasq_strictorder = [[Ordre stricte]]
+dhcp_dnsmasq_port = [[Port DNS]]
+dhcp_dnsmasq_ednspacket_max = [[taille maximum du paquet. EDNS.0 ]]
+dhcp_dnsmasq_dhcpleasemax = [[baux maximum]]
+a_n_switch = [[Switch]]
+a_n_routes = [[Routes]]
+a_n_i_bridge = [[Bridger les interfaces]]
+dhcp_dhcp_dynamicdhcp = [[DHCP dynamique]]
+dhcp_dhcp_ignore = [[Ignorer l&#39;interface]]
+dhcp_dhcp_force = [[Forcer]]
+dhcp_dhcp_limit_desc = [[nombre d&#39;adresses disponibles - 1]]
+network_interface_server = [[Serveur PPTP]]
+network_interface_keepalive = [[Maintenir la connexion]]
+network_interface_keepalive_desc = [[Reconnexion si la connexion est perdue]]
+a_n_routes_desc = [[Routes stattiques]]

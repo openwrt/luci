@@ -31,12 +31,12 @@ for i,r in ipairs(request) do
 end
 
 require("luci.i18n").loadc("default")
-require("luci.http").prepare_content("text/html")
+require("luci.http").prepare_content("application/xhtml+xml")
 
 -%>
 
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0//EN" "http://www.w3.org/TR/xhtml10/DTD/xhtml10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />

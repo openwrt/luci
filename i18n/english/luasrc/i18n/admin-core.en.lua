@@ -10,7 +10,7 @@ a_i_i_hello = [[Hello!]]
 a_i_i_admin1 = [[This is the administration area of <abbr title="Lua Configuration Interface">LuCI</abbr>.]]
 a_i_i_admin2 = [[<abbr title="Lua Configuration Interface">LuCI</abbr> is a free, flexible, and user friendly graphical interface for configuring OpenWRT Kamikaze.]]
 a_i_i_admin3 = [[On the following pages you can adjust all important settings of your router.]]
-a_i_i_admin4 = [[Notice: In <abbr title="Lua Configuration Interface">LuCI</abbr> changes have to be confirmed by clicking Changes - Save & Apply before being applied.]]
+a_i_i_admin4 = [[Notice: In <abbr title="Lua Configuration Interface">LuCI</abbr> changes have to be confirmed by clicking Changes - Save &amp; Apply before being applied.]]
 a_i_i_admin5 = [[As we are always want to improve this interface we are looking forward to your feedback and suggestions.]]
 a_i_i_admin6 = [[And now have fun with your router!]]
 a_i_i_team = [[The <abbr title="Lua Configuration Interface">LuCI</abbr> Team]]
@@ -34,7 +34,6 @@ routes_metric = [[Metric]]
 a_s_desc = [[Here you can configure the basic aspects of your device like its hostname or the timezone.]]
 a_s_packages = [[Software]]
 a_s_changepw = [[Admin Password]]
---a_s_p_ipkg = [[<abbr title="Itsy Package Management System">IPKG</abbr>-Configuration]]
 a_s_p_ipkg = [[IPKG-Configuration]]
 a_s_sshkeys = [[<abbr title="Secure Shell">SSH</abbr>-Keys]]
 a_s_fstab = [[Mount Points]]
@@ -98,7 +97,7 @@ a_srv_http_root = [[Document root]]
 a_srv_dropbear1 = [[Dropbear offers <abbr title="Secure Shell">SSH</abbr> network shell access and an integrated <abbr title="Secure Copy">SCP</abbr> server]]
 a_srv_d_pwauth = [[Password authentication]]
 a_srv_d_pwauth1 = [[Allow <abbr title="Secure Shell">SSH</abbr> password authentication]]
-a_w_channel  = "Channel"
+a_w_channel = [[Channel]]
 a_w_wifi1 = [[On this pages you find confiugration options for <abbr title="Wireless Local Area Network">WLAN</abbr> based wireless networks.]]
 a_w_wifi2 = [[You can easily integrate your 802.11a/b/g/n-devices into your physical network and use the virtual adapter support to build wireless repeaters or offer several networks with one device.]]
 a_w_wifi3 = [[There is support for Managed, Client, Ad-Hoc and <abbr title="Wireless Distribution System">WDS</abbr> operating modes as well as <abbr title="Wi-Fi Protected Access">WPA</abbr> and <abbr title="Wi-Fi Protected Access 2">WPA2</abbr> encryption for secure communnication.]]
@@ -163,9 +162,6 @@ dhcp_dnsmasq_addnhosts = [[additional hostfile]]
 dhcp_dnsmasq_queryport = [[query port]]
 a_n_switch = [[Switch]]
 a_n_routes = [[Routes]]
-a_n_routes1 = [[Routes specify over which
-interface and gateway a certain host or network can be reached.]]
-
 a_network1 = [[In this area you find all network-related settings.]]
 a_network2 = [[On most routers the network switch can be freely configured and splitted up into several <abbr title="Virtual Local Area Network">VLAN</abbr>s.]]
 a_network3 = [[Interfaces and <abbr title="Point-to-Point Protocol over Ethernet">PPPoE</abbr> / <abbr title="Point-to-Point Tunneling Protocol">PPTP</abbr>-Settings allow a custom organisation of the network and connections to other networks like the internet.]]
@@ -200,7 +196,7 @@ a_n_routes_static = [[Static Routes]]
 a_n_routes_kernel4 = [[Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes]]
 a_n_r_target1 = [[host-<abbr title="Internet Protocol Address">IP</abbr> or network]]
 a_n_r_netmask1 = [[if target is a network]]
-m_n_inet  = "Internet Connection"
+m_n_inet = [[Internet Connection]]
 m_n_local = [[Local Network]]
 m_n_route = [[Route]]
 m_n_brdige = [[Bridge]]
@@ -262,32 +258,27 @@ network_interface_err = [[Errors]]
 network_interface_err_desc = [[TX / RX]]
 network_interface_fwzone = [[Create / Assign firewall-zone]]
 network_interface_fwzone_desc = [[This interface does not belong to any firewall zone yet.]]
-
-process_head = "Processes"
-process_descr = "This list gives an overview over currently running system processes and their status."
-process_pid = "PID"
-process_owner = "Owner"
-process_command = "Command"
-process_cpu = "CPU usage (%)"
-process_mem = "Memory usage (%)"
-process_hup = "Hang Up"
-process_term = "Terminate"
-process_kill = "Kill"
-
-mem_cached = "cached"
-mem_buffered = "buffered"
-mem_free = "free"
-
-a_s_crontab = "Scheduled Tasks"
-a_s_crontab1 = "This is the system crontab in which scheduled tasks can be defined."
-
-a_w_nasid = "NAS ID"
-a_w_cacert = "Path to CA-Certificate"
-a_w_eaptype = "EAP-Method"
-a_w_tlsprivkey = "Path to Private Key"
-a_w_tlsprivkeypwd = "Password of Private Key"
-a_w_peapauth = "PEAP-Authentication"
-a_w_peapidentity = "PEAP-Identity"
-a_w_peappassword = "PEAP-Password"
-
-a_w_create = "Create Network"
+process_head = [[Processes]]
+process_descr = [[This list gives an overview over currently running system processes and their status.]]
+process_pid = [[PID]]
+process_owner = [[Owner]]
+process_command = [[Command]]
+process_cpu = [[CPU usage (%)]]
+process_mem = [[Memory usage (%)]]
+process_hup = [[Hang Up]]
+process_term = [[Terminate]]
+process_kill = [[Kill]]
+mem_cached = [[cached]]
+mem_buffered = [[buffered]]
+mem_free = [[free]]
+a_s_crontab = [[Scheduled Tasks]]
+a_s_crontab1 = [[This is the system crontab in which scheduled tasks can be defined.]]
+a_w_nasid = [[NAS ID]]
+a_w_cacert = [[Path to CA-Certificate]]
+a_w_eaptype = [[EAP-Method]]
+a_w_tlsprivkey = [[Path to Private Key]]
+a_w_tlsprivkeypwd = [[Password of Private Key]]
+a_w_peapauth = [[PEAP-Authentication]]
+a_w_peapidentity = [[PEAP-Identity]]
+a_w_peappassword = [[PEAP-Password]]
+a_w_create = [[Create Network]]
