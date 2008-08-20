@@ -19,7 +19,7 @@ local v = self:valuelist(section)
 <% if self.widget == "select" then %>
 	<select multiple="multiple"<%= attr("name", cbid) .. ifattr(self.size, "size") %>>
 	<% for i, key in pairs(self.keylist) do -%>
-		<option<%= attr("value", key) .. ifattr(luci.util.contains(v, key), "selected", "selected") %>><%=self.vallist[i]%></option>
+		<option<%= attr("value", key) .. ifattr(luci.util.contains(v, key), "selected", "selected") %>><%=striptags(self.vallist[i])%></option>
 	<%- end %>
 	</select>
 <% elseif self.widget == "checkbox" then
