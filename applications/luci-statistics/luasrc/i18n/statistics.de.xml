@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<i18n:msgs xmlns:i18n="http://luci.freifunk-halle.net/2008/i18n#" xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+
+
+
+
+
+
+<i18n:msg xml:id="stat_statistics">Statistiken</i18n:msg>
+<i18n:msg xml:id="stat_systemplugins">Systemplugins</i18n:msg>
+<i18n:msg xml:id="stat_networkplugins">Netzwerkplugins</i18n:msg>
+<i18n:msg xml:id="stat_outputplugins">Ausgabeplugins</i18n:msg>
+<i18n:msg xml:id="stat_showtimespan">Zeitspanne zeigen &#187;</i18n:msg>
+<i18n:msg xml:id="stat_graphs">Diagramme</i18n:msg>
+
+
+
+<i18n:msg xml:id="stat_collectd">Collectd</i18n:msg>
+<i18n:msg xml:id="stat_cpu">Prozessor</i18n:msg>
+<i18n:msg xml:id="stat_ping">Ping</i18n:msg>
+<i18n:msg xml:id="stat_iptables">Firewall</i18n:msg>
+<i18n:msg xml:id="stat_netlink">Netlink</i18n:msg>
+<i18n:msg xml:id="stat_processes">Prozesse</i18n:msg>
+<i18n:msg xml:id="stat_wireless">Drahtlos</i18n:msg>
+<i18n:msg xml:id="stat_tcpconns">TCP-Verbindungen</i18n:msg>
+<i18n:msg xml:id="stat_interface">Schnittstellen</i18n:msg>
+<i18n:msg xml:id="stat_df">Plattenspeicher</i18n:msg>
+<i18n:msg xml:id="stat_irq">Interrupts</i18n:msg>
+<i18n:msg xml:id="stat_disk">Plattenauslastung</i18n:msg>
+<i18n:msg xml:id="stat_exec">Exec</i18n:msg>
+<i18n:msg xml:id="stat_rrdtool">RRDTool</i18n:msg>
+<i18n:msg xml:id="stat_network">Netzwerk</i18n:msg>
+<i18n:msg xml:id="stat_csv">CSV Ausgabe</i18n:msg>
+<i18n:msg xml:id="stat_load">Systemlast</i18n:msg>
+
+
+
+<i18n:msg xml:id="stat_dg_label_wireless__signal_noise">dBm</i18n:msg>
+<i18n:msg xml:id="stat_ds_signal_noise">Noise-Level</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_label_wireless__signal_quality">n</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_ping">%H: ICMP Antwortzeiten</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_ping">ms</i18n:msg>
+<i18n:msg xml:id="stat_ds_ping">%di</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_iptables__ipt_packets">%H: Firewall - Verarbeitete Pakete</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_iptables__ipt_packets">Pakete/s</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_netlink__if_octets">%H: Netlink - Transfer auf %pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_netlink__if_octets">Bytes/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_octets">Bytes (%ds)</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_netlink__if_packets">%H: Netlink - Pakete auf %pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_netlink__if_packets">Pakete/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_packets">Verarbeitet (%ds)</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_dropped">Verworfen   (%ds)</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_errors">Fehler      (%ds)</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_netlink__if_multicast">%H: Netlink - Multicast auf %pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_netlink__if_multicast">Pakete/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_multicast">Pakete</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_netlink__if_collisions">%H: Netlink - Kollisionen auf %pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_netlink__if_collisions">Kollisionen/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_collisions">Kollisionen</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_netlink__if_tx_errors">%H: Netlink - Fehler auf %pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_netlink__if_tx_errors">Fehler/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_tx_errors">%di</i18n:msg>
+<i18n:msg xml:id="stat_ds_if_rx_errors">%di</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_processes">%H: Prozesse</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_processes">Prozesse/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_state">%di</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_processes__ps_cputime">%H: Prozess %pi - Verbrauchte CPU Zeit</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_processes__ps_cputime">Jiffies</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_cputime__syst">System</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_cputime__user">User</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_processes__ps_count">%H: Prozess %pi - Threads und Prozesse</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_processes__ps_count">Anzahl</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_count__threads">Threads</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_count__processes">Prozesse</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_processes__ps_pagefaults">%H: Prozess %pi - Speicherzugriffsfehler</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_processes__ps_pagefaults">Zugriffsfehler</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_pagefaults">Zugriffsfehler</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_processes__ps_rss">%H: Process %pi - Virtueller Speicher</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_processes__ps_rss">Bytes</i18n:msg>
+<i18n:msg xml:id="stat_ds_ps_rss">virtueller Speicher</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_cpu">%H: Auslastung auf Prozessor #%pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_cpu">%</i18n:msg>
+<i18n:msg xml:id="stat_ds_cpu">%di</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_interface__if_octets">%H: Transfer auf %di</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_interface__if_octets">Bytes/s</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_interface__if_packets">%H: Pakete auf %di</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_interface__if_packets">Pakete/s</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_tcpconns">%H: TCP-Verbindungen auf Port %pi</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_tcpconns">Verbindungen/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_tcp_connections">%di</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_df">%H: Speicherverbrauch auf %di</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_df">Bytes</i18n:msg>
+<i18n:msg xml:id="stat_ds_df__used">belegt   </i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_irq">%H: Interrupts</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_irq">Aufrufe/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_irq">IRQ %di</i18n:msg>
+
+<i18n:msg xml:id="stat_dg_title_load">%H: Systemlast</i18n:msg>
+<i18n:msg xml:id="stat_dg_label_load">Last</i18n:msg>
+<i18n:msg xml:id="stat_ds_load__shortterm">1 Minute</i18n:msg>
+<i18n:msg xml:id="stat_ds_load__midterm">5 Minuten</i18n:msg>
+<i18n:msg xml:id="stat_ds_load__longterm">15 Minuten</i18n:msg>
+
+
+
+<i18n:msg xml:id="lucistatistics">Statistiken</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectd">Collectd Einstellungen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectd_hostname">Hostname</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_basedir">Basisverzeichnis</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_include">Verzeichnis für Unterkonfigurationen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_plugindir">Verzeichnis für Collectd-Plugins</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_pidfile">Pfad zu PID-Datei</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_typesdb">Dataset-Definitionen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_interval">Daten-Sammelintervall</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_interval_desc">Sekunden</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_readthreads">Anzahl paralleler Sammelprozesse</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_fqdnlookup">automatisch vollen Hostnamen herausfinden</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdcpu">CPU Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdcpu_desc">Das CPU-Plugin sammelt grundlegende Statistiken über die Prozessorauslastung.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdcpu_enable">Plugin aktivieren</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdcsv">CSV Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdcsv_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdcsv_datadir">Speicherverzeichnis für die CSV-Dateien</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdcsv_storerates">Werte nicht absolut sondern als Raten speichern</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectddf">DF Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_desc">Das DF-Plugin sammelt Statistiken über den Speicherverbrauch auf verschiedenen Geräten, Mount-Punkten oder Dateisystemtypen.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_devices">Geräte überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_devices_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_mountpoints">Mount-Punkte überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_mountpoints_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_fstypes">Datesystemtypen überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_fstypes_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddf_ignoreselected">Alle außer Ausgewählte überwachen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectddisk">Disk Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddisk_desc">Das Disk-Plugin sammelt detaillierte Statistiken über die Auslastung auf ausgewählten Festplatten und Partitionen.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddisk_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddisk_disks">Geräte und Partitionen überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddisk_disks_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddisk_ignoreselected">Alle außer Ausgewählte überwachen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectddns">DNS Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddns_desc">Das DNS-Plugin sammelt detaillierte Statistiken über DNS-bezogenen Verkehr auf ausgewählten Schnittstellen.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddns_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddns_interfaces">Schnittstellen überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddns_interfaces_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddns_ignoresources">Quelladressen ignorieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectddns_ignoresources_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdemail">E-Mail Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdemail_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_socketfile">Dateipfad des Unix-Sockets</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_socketgroup">Gruppenbesitzer festlegen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_socketgroup_desc">Gruppenname</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_socketperms">Dateiberechtigungen des Unix-Sockets</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_socketperms_desc">oktal</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_maxconns">Maximale Anzahl erlaubter Verbindungen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdexec">Exec Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdexec_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecinput">Kommando zum Werte einlesen hinzufügen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdexecinput_cmdline">Kommandozeile</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecinput_cmduser">Als Benutzer ausführen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecinput_cmdgroup">Als Gruppe ausführen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecnotify">Benachrichtigungskommando hinzufügen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdexecnotify_cmdline">Kommandozeile</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecnotify_cmduser">Als Benutzer ausführen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecnotify_cmdgroup">Als Gruppe ausführen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdinterface">Interface Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdinterface_desc">Das Interface-Plugin sammelt allgemeine Verkehrsstatistiken auf ausgewählten Schnittstellen.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdinterface_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdinterface_interfaces">Schnittstellen überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdinterface_interfaces_desc">Strg gedrückt halten um mehrere Schnittstellen zu wählen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdinterface_ignoreselected">Alle außer Ausgewählte überwachen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdiptables">Iptables Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdiptables_enable">Plugin aktivieren</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch">Auswahlregel hinzufügen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_name">Name der Regel</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_name_desc">max. 16 Buchstaben</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_table">Tabelle</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_chain">Kette (Chain)</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_target">Aktion (Target)</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_protocol">Netzwerkprotokoll</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_source">Quell-IP-Bereich</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_source_desc">CIDR-Notation</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_destination">Ziel-IP-Bereich</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_destination_desc">CIDR-Notation</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_inputif">eingehende Schnittstelle</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_inputif_desc">z.B. br-lan</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_outputif">ausgehende Schnittstelle</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_outputif_desc">z.B. br-ff</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_options">Optionen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_options_desc">z.B. reject-with tcp-reset</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdirq">IRQ Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdirq_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdirq_irqs">Interrups überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdirq_irqs_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdirq_ignoreselected">Alle außer Ausgewählte überwachen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdload">Load Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdload_enable">Plugin aktivieren</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdnetlink">Netlink Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdnetlink_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_interfaces">Schnittstellen einfach überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_interfaces_desc">Strg gedrückt halten um mehrere zu wählen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_verboseinterfaces">Schnittstellen detailliert überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_verboseinterfaces_desc">Strg gedrückt halten um mehrere zu wählen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_qdiscs">Queue Discipline überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_qdiscs_desc">Strg gedrückt halten um mehrere zu wählen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_classes">Shapingklassen überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_classes_desc">Strg gedrückt halten um mehrere zu wählen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_filters">Filterklassen überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_filters_desc">Strg gedrückt halten um mehrere zu wählen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdnetwork">Network Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdnetwork_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworklisten">Listen-Schnittstelle</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworklisten_desc">Diese Sektion legt fest auf welchen Schnittstellen Collectd auf eingehende Verbindungen wartet.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworklisten_host">Listen-Host</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworklisten_host_desc">Host-, IP- oder IPv6-Adresse</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworklisten_port">Listen-Port</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworklisten_port_desc">0 - 65535</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworkserver">Server-Schnittstellen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworkserver_desc">Diese Sektion legt fest zu welchen Collectd-Servern die lokal gesammelten Daten gesendet werden.</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworkserver_host">Server-Host</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworkserver_host_desc">Host-, IP- oder IPv6-Adresse</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworkserver_port">Server-Port</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetworkserver_port_desc">0 - 65535</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetwork_timetolive">TTL für Netzwerkpakete</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetwork_timetolive_desc">0 - 255</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetwork_forward">Weiterleitung zwischen Listen- und Server-Adressen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetwork_cacheflush">Cache-Leerungsintervall</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetwork_cacheflush_desc">Sekunden</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdping">Ping Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdping_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdping_hosts">Hosts überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdping_hosts_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdping_ttl">TTL für Ping Pakete</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdping_ttl_desc">0 - 255</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdProzesse">Prozesse Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdProzesse_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdProzesse_processes">Prozesse überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdProzesse_processes_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdrrdtool">RRDTool Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_datadir">Speicherverzeichnis</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_stepsize">RRD Schrittintervall</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_stepsize_desc">Sekunden</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_heartbeat">RRD Heartbeatintervall</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_heartbeat_desc">Sekunden</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_rrasingle">Nur 'average' RRAs erzeugen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_rrasingle_desc">reduziert die RRD Größe</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_rratimespans">gespeicherte Zeitspannen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_rratimespans_desc">mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_rrarows">Spalten pro RRA</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_xff">RRD XFiles Faktor</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_cachetimeout">Zwischenspeicherzeit für gesammelte Daten</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_cachetimeout_desc">Sekunden</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_cacheflush">Leerungsintervall für Zwischenspeicher</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_cacheflush_desc">Sekunden</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdtcpconns">TCPConns Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_listeningports">Alle durch lokale Dienste genutzten Ports überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_localports">lokale Ports überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_localports_desc">0 - 65535; mehrere mit Leerzeichen trennen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_remoteports">entfernte Ports überwachen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_remoteports_desc">0 - 65535; mehrere mit Leerzeichen trennen</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdunixsock">Unixsock Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdunixsock_enable">Plugin aktivieren</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdunixsock_socketfile">Dateipfad des Unix-Sockets</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdunixsock_socketgroup">Gruppenbesitzer festlegen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdunixsock_socketgroup_desc">Gruppenname</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdunixsock_socketperms">Dateiberechtigungen des Unix-Sockets</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdunixsock_socketperms_desc">oktal</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdwireless">Wireless Plugin Konfiguration</i18n:msg>
+
+<i18n:msg xml:id="lucistatistics_collectdwireless_enable">Plugin aktivieren</i18n:msg>
+
+
+</i18n:msgs>
