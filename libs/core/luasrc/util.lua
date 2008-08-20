@@ -208,6 +208,13 @@ function pcdata(value)
 	return value:gsub(">", "&gt;")
 end
 
+--- Strip HTML tags from given string.
+-- @param value	String containing the HTML text
+-- @return	String with HTML tags stripped of
+function striptags(s)
+	return (s:gsub("</?[A-Za-z][A-Za-z0-9:_%-]*[^>]*>", " "):gsub("%s+", " "))
+end
+
 --- Splits given string on a defined separator sequence and return a table
 -- containing the resulting substrings. The optional max parameter specifies
 -- the number of bytes to process, regardless of the actual length of the given
