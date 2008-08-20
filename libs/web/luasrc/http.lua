@@ -172,6 +172,13 @@ end
 --- Set the mime type of following content data.
 -- @param mime	Mimetype of following content
 function prepare_content(mime)
+	if mime == "application/xhtml+xml" then
+		if not getenv("HTTP_ACCEPT") or
+		  not getenv("HTTP_ACCEPT"):find("application/xhtml+xml", nil, true) then
+			mime = "text/html; charset=UTF-8"
+		end
+		header("Vary", "Accept")
+	end
 	header("Content-Type", mime)
 end
 
