@@ -54,7 +54,7 @@ olsr_hna4_netaddr_desc = "ipv4 address"
 olsr_hna4_prefix  = "Netmask"
 olsr_hna4_prefix_desc = "ipv4 address"
 
-olsr_hna4 = "IPv6 HNA-Announcements"
+olsr_hna6 = "IPv6 HNA-Announcements"
 olsr_hna6_desc = "Hna6-entries are used to announce local ipv6 host- and net-routes within the mesh-network"
 olsr_hna6_netaddr = "Network-Address"
 olsr_hna6_netaddr_desc = "ipv6 address"
