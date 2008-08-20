@@ -27,7 +27,7 @@ local netstat = luci.sys.net.deviceinfo()
 
 s = m:section(TypedSection, "interface", "")
 s.addremove = true
-s.extedit   = luci.http.getenv("REQUEST_URI") .. "/%s"
+s.extedit   = luci.dispatcher.build_url("admin", "network", "network") .. "/%s"
 s.template  = "cbi/tblsection"
 
 function s.filter(self, section)
@@ -43,7 +43,8 @@ end
 function s.parse(self, ...)
 	TypedSection.parse(self, ...)
 	if created then
-		luci.http.redirect(luci.http.getenv("REQUEST_URI") .. "/" .. created)
+		luci.http.redirect(luci.dispatcher.build_url("admin", "network", "network")
+		 .. "/" .. created)
 	end
 end
 
