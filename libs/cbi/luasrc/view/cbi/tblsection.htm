@@ -31,7 +31,7 @@ end
 		<table class="cbi-section-table">
 			<tr class="cbi-section-table-titles">
 			<%- if not self.anonymous then -%>
-				<th>&nbsp;</th>
+				<th>&#160;</th>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell">
@@ -40,7 +40,7 @@ end
 				<%- if k.titleref then -%></a><%- end -%>
 				</th>
 			<%- count = count + 1; end; end; if self.extedit or self.addremove then -%>
-				<th class="cbi-section-table-cell">&nbsp;</th>
+				<th class="cbi-section-table-cell">&#160;</th>
 			<%- count = count + 1; end -%>
 			</tr>
 			<tr class="cbi-section-table-descr">
