@@ -189,7 +189,6 @@ function dispatch(request)
 			if authen then
 				local user = authen(luci.sys.user.checkpasswd, def)
 				if not user or not luci.util.contains(accs, user) then
-					luci.http.status(403, "Forbidden")
 					return
 				else
 					local sid = luci.sys.uniqueid(16)
