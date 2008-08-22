@@ -125,17 +125,22 @@ function dispatch(request)
 	local c = context.tree
 	local track = {}
 	local args = {}
+	context.args = context.path
 	local n
 
 	for i, s in ipairs(request) do
 		c = c.nodes[s]
 		n = i
-		if not c or c.leaf then
+		if not c then
 			break
 		end
 
 		for k, v in pairs(c) do
 			track[k] = v
+		end
+		
+		if c.leaf then
+			break
 		end
 	end
 
@@ -184,6 +189,7 @@ function dispatch(request)
 			if authen then
 				local user = authen(luci.sys.user.checkpasswd, def)
 				if not user or not luci.util.contains(accs, user) then
+					luci.http.status(403, "Forbidden")
 					return
 				else
 					local sid = luci.sys.uniqueid(16)
