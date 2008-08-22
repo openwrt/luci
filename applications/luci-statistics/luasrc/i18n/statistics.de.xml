@@ -2,22 +2,12 @@
 
 <i18n:msgs xmlns:i18n="http://luci.freifunk-halle.net/2008/i18n#" xmlns="http://www.w3.org/1999/xhtml">
 
-
-
-
-
-
-
-
-
 <i18n:msg xml:id="stat_statistics">Statistiken</i18n:msg>
 <i18n:msg xml:id="stat_systemplugins">Systemplugins</i18n:msg>
 <i18n:msg xml:id="stat_networkplugins">Netzwerkplugins</i18n:msg>
 <i18n:msg xml:id="stat_outputplugins">Ausgabeplugins</i18n:msg>
 <i18n:msg xml:id="stat_showtimespan">Zeitspanne zeigen &#187;</i18n:msg>
 <i18n:msg xml:id="stat_graphs">Diagramme</i18n:msg>
-
-
 
 <i18n:msg xml:id="stat_collectd">Collectd</i18n:msg>
 <i18n:msg xml:id="stat_cpu">Prozessor</i18n:msg>
@@ -37,12 +27,14 @@
 <i18n:msg xml:id="stat_csv">CSV Ausgabe</i18n:msg>
 <i18n:msg xml:id="stat_load">Systemlast</i18n:msg>
 
-
-
+<i18n:msg xml:id="stat_dg_title_wireless__signal_noise">%H: Drahtlos - Signal-Noise-Verh�ltnis</i18n:msg>
 <i18n:msg xml:id="stat_dg_label_wireless__signal_noise">dBm</i18n:msg>
 <i18n:msg xml:id="stat_ds_signal_noise">Noise-Level</i18n:msg>
+<i18n:msg xml:id="stat_ds_signal_power">Signalst�rke</i18n:msg>
 
+<i18n:msg xml:id="stat_dg_title_wireless__signal_quality">%H: Drahtlos - Signalqualit�t</i18n:msg>
 <i18n:msg xml:id="stat_dg_label_wireless__signal_quality">n</i18n:msg>
+<i18n:msg xml:id="stat_ds_signal_quality">Signalqualit�t</i18n:msg>
 
 <i18n:msg xml:id="stat_dg_title_ping">%H: ICMP Antwortzeiten</i18n:msg>
 <i18n:msg xml:id="stat_dg_label_ping">ms</i18n:msg>
@@ -50,6 +42,7 @@
 
 <i18n:msg xml:id="stat_dg_title_iptables__ipt_packets">%H: Firewall - Verarbeitete Pakete</i18n:msg>
 <i18n:msg xml:id="stat_dg_label_iptables__ipt_packets">Pakete/s</i18n:msg>
+<i18n:msg xml:id="stat_ds_ipt_packets">Kette "%di"</i18n:msg>
 
 <i18n:msg xml:id="stat_dg_title_netlink__if_octets">%H: Netlink - Transfer auf %pi</i18n:msg>
 <i18n:msg xml:id="stat_dg_label_netlink__if_octets">Bytes/s</i18n:msg>
@@ -112,6 +105,7 @@
 
 <i18n:msg xml:id="stat_dg_title_df">%H: Speicherverbrauch auf %di</i18n:msg>
 <i18n:msg xml:id="stat_dg_label_df">Bytes</i18n:msg>
+<i18n:msg xml:id="stat_ds_df__free">verf�gbar</i18n:msg>
 <i18n:msg xml:id="stat_ds_df__used">belegt   </i18n:msg>
 
 <i18n:msg xml:id="stat_dg_title_irq">%H: Interrupts</i18n:msg>
@@ -124,11 +118,10 @@
 <i18n:msg xml:id="stat_ds_load__midterm">5 Minuten</i18n:msg>
 <i18n:msg xml:id="stat_ds_load__longterm">15 Minuten</i18n:msg>
 
-
-
 <i18n:msg xml:id="lucistatistics">Statistiken</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectd">Collectd Einstellungen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectd_desc">Collectd ist ein schlankes Dienstprogramm zum Sammeln von Systemdaten aus verschiedenen Quellen mittels diverser Plugins. Auf dieser Seite können generelle Einstellungen für den Collectd-Daemon vorgenommen werden.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectd_hostname">Hostname</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectd_basedir">Basisverzeichnis</i18n:msg>
@@ -146,6 +139,7 @@
 <i18n:msg xml:id="lucistatistics_collectdcpu_enable">Plugin aktivieren</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdcsv">CSV Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdcsv_desc">Das CSV-Plugin speichert die gesammelten Daten im CSV-Format, geeignet für die Weiterverarbeitung durch externe Programme.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdcsv_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdcsv_datadir">Speicherverzeichnis für die CSV-Dateien</i18n:msg>
@@ -178,6 +172,7 @@
 <i18n:msg xml:id="lucistatistics_collectddns_ignoresources_desc">mehrere mit Leerzeichen trennen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdemail">E-Mail Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdemail_desc">Das E-Mail Plugin erstellt einen Unix-Socket welcher benutzt werden kann um E-Mail-Statistiken an den laufenden Collectd-Daemon zu übermitteln. Dieses Plugin ist primär für die Verwendung zusammen mit Mail::SpamAssasin::Plugin::Collectd gedacht, kann aber auch anderweitig verwendet werden.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdemail_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdemail_socketfile">Dateipfad des Unix-Sockets</i18n:msg>
@@ -188,14 +183,17 @@
 <i18n:msg xml:id="lucistatistics_collectdemail_maxconns">Maximale Anzahl erlaubter Verbindungen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdexec">Exec Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexec_desc">Das Exec-Plugin startet externe Kommandos um Werte einzulesen oder um Benachrichtigungen auszulösen falls bestimmte Grenzwerte erreicht werden.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdexec_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdexecinput">Kommando zum Werte einlesen hinzufügen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecinput_desc">Hier können externe Kommandos definiert werden, welche durch Collectd gestartet werden um Statistik-Werte einzulesen. Die Werte werden dabei vom STDOUT des aufgerufenen Programmes gelesen.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdexecinput_cmdline">Kommandozeile</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdexecinput_cmduser">Als Benutzer ausführen</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdexecinput_cmdgroup">Als Gruppe ausführen</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdexecnotify">Benachrichtigungskommando hinzufügen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdexecnotify_desc">Hier können externe Kommandos definiert werden, welche durch Collectd gestartet werden sobald konfigurierte Grenzwerte erreicht werden. Die Werte welche die Benachrichtigung ausgelöst haben werden dabei an den STDIN des aufgerufenen Programmes übergeben.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdexecnotify_cmdline">Kommandozeile</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdexecnotify_cmduser">Als Benutzer ausführen</i18n:msg>
@@ -209,10 +207,12 @@
 <i18n:msg xml:id="lucistatistics_collectdinterface_ignoreselected">Alle außer Ausgewählte überwachen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdiptables">Iptables Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptables_desc">Das Iptables-Plugin überwacht ausgewählte Firewall-Regeln und sammelt Werte über die Anzahl der verarbeiteten Pakete und Bytes.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdiptables_enable">Plugin aktivieren</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdiptablesmatch">Auswahlregel hinzufügen</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdiptablesmatch_desc">Hier werden die Kriterien festgelegt nach welchen die zu überwachenden Firewall-Regeln ausgewählt werden.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdiptablesmatch_name">Name der Regel</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdiptablesmatch_name_desc">max. 16 Buchstaben</i18n:msg>
@@ -232,6 +232,7 @@
 <i18n:msg xml:id="lucistatistics_collectdiptablesmatch_options_desc">z.B. reject-with tcp-reset</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdirq">IRQ Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdirq_desc">Das IRQ-Plugin überwacht die Anzahl der Aufrufe pro Sekunde für jeden ausgewählten Interrupt. Wird kein Interrupt ausgewählt überwacht das Plugin alle im System vorhandenen Interrupts.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdirq_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdirq_irqs">Interrups überwachen</i18n:msg>
@@ -239,10 +240,12 @@
 <i18n:msg xml:id="lucistatistics_collectdirq_ignoreselected">Alle außer Ausgewählte überwachen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdload">Load Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdload_desc">Das Load-Plugin sammelt Informationen über die allgemeine Systemlast.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdload_enable">Plugin aktivieren</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdnetlink">Netlink Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetlink_desc">Das Netlink-Plugin sammelt erweiterte QoS-Informationen wie QDisc-, Class- und Filter-Statistiken auf ausgewählten Schnittstellen.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdnetlink_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdnetlink_interfaces">Schnittstellen einfach überwachen</i18n:msg>
@@ -257,6 +260,7 @@
 <i18n:msg xml:id="lucistatistics_collectdnetlink_filters_desc">Strg gedrückt halten um mehrere zu wählen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdnetwork">Network Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdnetwork_desc">Das Network-Plugin ermöglicht die netzwerkgestützte Kommunikation zwischen verschiedenen Collectd-Instanzen. Collectd kann gleichzeitig im Server- und Client-Modus betrieben werden. Im Client-Modus werden lokal gesammelte Daten an einen Collectd-Server übermittelt, im Server-Modus empfängt die lokale Instanz Daten von anderen Installationen.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdnetwork_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdnetworklisten">Listen-Schnittstelle</i18n:msg>
@@ -278,6 +282,7 @@
 <i18n:msg xml:id="lucistatistics_collectdnetwork_cacheflush_desc">Sekunden</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdping">Ping Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdping_desc">Das Ping-Plugin sendet ICMP-Echo-Requests an ausgewählte Hosts und misst die Antwortzeiten für jede Adresse.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdping_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdping_hosts">Hosts überwachen</i18n:msg>
@@ -286,12 +291,14 @@
 <i18n:msg xml:id="lucistatistics_collectdping_ttl_desc">0 - 255</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdProzesse">Prozesse Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdProzesse_desc">Das Prozess-Plugin sammelt Informationen wie CPU-Zeit, Speicherzugriffsfehler und Speicherverbrauch ausgewählter Prozesse.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdProzesse_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdProzesse_processes">Prozesse überwachen</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdProzesse_processes_desc">mehrere mit Leerzeichen trennen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdrrdtool">RRDTool Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdrrdtool_desc">Das RRDTool-Plugin speichert die gesammelten Daten in sogenannten RRD-Datenbanken, der Grundlage für die Diagramm-Bilder.<br /><br /><strong>Warnung: Falsche Werte resultieren in einem sehr hohen Speicherverbrauch im temporären Verzeichnis. Das kann das Gerät unbrauchbar machen, da Systemspeicher für den regulären Betrieb fehlt!</strong></i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdrrdtool_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdrrdtool_datadir">Speicherverzeichnis</i18n:msg>
@@ -311,6 +318,7 @@
 <i18n:msg xml:id="lucistatistics_collectdrrdtool_cacheflush_desc">Sekunden</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdtcpconns">TCPConns Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdtcpconns_desc">Das TCPConns-Plugin sammelt Informationen über offene TCP-Verbindungen auf ausgewählten Ports.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdtcpconns_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdtcpconns_listeningports">Alle durch lokale Dienste genutzten Ports überwachen</i18n:msg>
@@ -320,6 +328,7 @@
 <i18n:msg xml:id="lucistatistics_collectdtcpconns_remoteports_desc">0 - 65535; mehrere mit Leerzeichen trennen</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdunixsock">Unixsock Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdunixsock_desc">Das Unixsock-Plugin erstellt einen Unix-Socket über welchen gesammelte Werte aus der laufenden Collectd-Instanz ausgelesen werden können.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdunixsock_enable">Plugin aktivieren</i18n:msg>
 <i18n:msg xml:id="lucistatistics_collectdunixsock_socketfile">Dateipfad des Unix-Sockets</i18n:msg>
@@ -329,8 +338,8 @@
 <i18n:msg xml:id="lucistatistics_collectdunixsock_socketperms_desc">oktal</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdwireless">Wireless Plugin Konfiguration</i18n:msg>
+<i18n:msg xml:id="lucistatistics_collectdwireless_desc">Das Wireless-Plugin sammelt Statistiken über die drahtlose Signalstärke, den Störpegel und die Signalqualität.</i18n:msg>
 
 <i18n:msg xml:id="lucistatistics_collectdwireless_enable">Plugin aktivieren</i18n:msg>
-
 
 </i18n:msgs>
