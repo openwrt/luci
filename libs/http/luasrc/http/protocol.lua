@@ -638,16 +638,17 @@ function parse_message_body( src, msg, filecb )
 			msg.content = ""
 			msg.content_length = 0
 
-			sink = function( chunk )
-				if ( msg.content_length + #chunk ) <= HTTP_MAX_CONTENT then
-
-					msg.content        = msg.content        .. chunk
-					msg.content_length = msg.content_length + #chunk
-
-					return true
-				else
-					return nil, "POST data exceeds maximum allowed length"
+			sink = function( chunk, err )
+				if chunk then
+					if ( msg.content_length + #chunk ) <= HTTP_MAX_CONTENT then
+						msg.content        = msg.content        .. chunk
+						msg.content_length = msg.content_length + #chunk
+						return true
+					else
+						return nil, "POST data exceeds maximum allowed length"
+					end
 				end
+				return true
 			end
 		end
 
