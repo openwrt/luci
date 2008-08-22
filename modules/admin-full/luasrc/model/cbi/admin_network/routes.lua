@@ -47,6 +47,12 @@ end
 s = m:section(TypedSection, "route", translate("a_n_routes_static"))
 s.addremove = true
 s.anonymous = true
+
+function s.render(...)
+	luci.model.uci.load_config("network")
+	TypedSection.render(...)
+end
+
 s.template  = "cbi/tblsection"
 
 iface = s:option(ListValue, "interface", translate("interface"))
