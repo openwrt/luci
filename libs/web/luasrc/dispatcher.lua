@@ -171,7 +171,9 @@ function dispatch(request)
 	
 	if track.sysauth then
 		require("luci.sauth")
-		local authen = authenticator[track.sysauth_authenticator]
+		local authen = type(track.sysauth_authenticator) == "function"
+		 and track.sysauth_authenticator
+		 or authenticator[track.sysauth_authenticator]
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
 		local sess = luci.http.getcookie("sysauth")

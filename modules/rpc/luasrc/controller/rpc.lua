@@ -14,18 +14,31 @@ $Id$
 ]]--
 module("luci.controller.rpc", package.seeall)
 
-function index()	
-	entry({"rpc", "uci"}, call("rpc_uci")).sysauth = "root"
-	entry({"rpc", "auth"}, call("rpc_auth"))
+function index()
+	local authenticator = function(validator)
+		require "luci.jsonrpc"
+		require "luci.http"
+		luci.http.setfilehandler()
+		
+		local loginstat
+		
+		local server = {}
+		server.login = function(...)
+			loginstat = validator(...)
+			return loginstat
+		end
+		
+		luci.http.prepare_content("application/json")
+		luci.http.write(luci.jsonrpc.handle(server, luci.http.content()))
+		
+		return loginstat
+	end
+	
+	uci = entry({"rpc", "uci"}, call("rpc_uci"))
+	uci.sysauth = "root"
+	uci.sysauth_authenticator = authenticator
 end
 
-function rpc_proxy(tbl, jsonrpc, method, params, id)
-	local res = {luci.util.copcall(tbl[function], ...)}
-	local stat = table.remove(res, 1)
-	
-	if not stat then
-		return nil, {code=-32602, message="Invalid params.", data=table.remove(res, 1)} 
-	else
-		return res, nil
-	end
+function rpc_uci()
+	luci.http.write("HELLO THAR!")
 end
