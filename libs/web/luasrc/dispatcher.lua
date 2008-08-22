@@ -79,7 +79,7 @@ function error500(message)
 	return false
 end
 
-function authenticator.htmlauth(validator, default)
+function authenticator.htmlauth(validator, accs, default)
 	local user = luci.http.formvalue("username")
 	local pass = luci.http.formvalue("password")
 	
@@ -125,7 +125,7 @@ function dispatch(request)
 	local c = context.tree
 	local track = {}
 	local args = {}
-	context.args = context.path
+	context.args = args
 	local n
 
 	for i, s in ipairs(request) do
@@ -187,7 +187,7 @@ function dispatch(request)
 		
 		if not luci.util.contains(accs, user) then
 			if authen then
-				local user = authen(luci.sys.user.checkpasswd, def)
+				local user = authen(luci.sys.user.checkpasswd, accs, def)
 				if not user or not luci.util.contains(accs, user) then
 					return
 				else

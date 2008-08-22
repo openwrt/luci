@@ -14,9 +14,10 @@ $Id$
 ]]--
 
 module("luci.jsonrpc", package.seeall)
+require "luci.json"
 
 function resolve(mod, method)
-	local path = luci.util.split(value, ".")
+	local path = luci.util.split(method, ".")
 	
 	for j=1, #path-1 do
 		if not type(mod) == "table" then
@@ -43,7 +44,7 @@ function handle(tbl, rawdata)
 		 and (not json.params or type(json.params) == "table") then
 			if tbl[json.method] then
 				response = reply(json.jsonrpc, json.id,
-				 proxy(resolve(tbl, json.method), unpack(json.params)))
+				 proxy(resolve(tbl, json.method), unpack(json.params or {})))
 			else
 		 		response = reply(json.jsonrpc, json.id,
 			 	 nil, {code=-32601, message="Method not found."})
@@ -75,12 +76,16 @@ function reply(jsonrpc, id, res, err)
 end
 
 function proxy(method, ...)
-	local res = {luci.util.copcall(method, unpack(params))}
+	local res = {luci.util.copcall(method, ...)}
 	local stat = table.remove(res, 1)
 	
 	if not stat then
 		return nil, {code=-32602, message="Invalid params.", data=table.remove(res, 1)} 
 	else
-		return (#res <= 1) and res[1] or res
+		if #res <= 1 then
+			return res[1] or luci.json.Null
+		else
+			return res
+		end
 	end
 end
