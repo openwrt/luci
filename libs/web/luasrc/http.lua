@@ -81,6 +81,14 @@ function Request.formvaluetable(self, prefix)
 	return vals
 end
 
+function Request.content(self)
+	if not self.parsed_input then
+		self:_parse_input()
+	end
+	
+	return self.message.content, self.message.content_length
+end
+
 function Request.getcookie(self, name)
   local c = string.gsub(";" .. (self:getenv("HTTP_COOKIE") or "") .. ";", "%s*;%s*", ";")
   local p = ";" .. name .. "=(.-);"
@@ -120,6 +128,13 @@ function close()
 		context.closed = true
 		coroutine.yield(5)
 	end
+end
+
+--- Return the request content if the request was of unknown type.
+-- @return	HTTP request body
+-- @return	HTTP request body length
+function content()
+	return context.request:content()
 end
 
 --- Get a certain HTTP input value or a table of all input values.
