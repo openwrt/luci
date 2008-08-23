@@ -164,7 +164,7 @@ function dispatch(request)
 	viewns.controller  = luci.http.getenv("SCRIPT_NAME")
 	viewns.media       = luci.config.main.mediaurlbase
 	viewns.resource    = luci.config.main.resourcebase
-	viewns.REQUEST_URI = luci.http.getenv("SCRIPT_NAME") .. (luci.http.getenv("PATH_INFO") or "")
+	viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	
 	if track.dependent then
 		local stat, err = pcall(assert, not track.auto)
