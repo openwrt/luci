@@ -122,12 +122,9 @@ function UVL.get_dependencies( self, config, section, option )
 				if r then
 					sdeps[r] = v
 				else
-					return nil, string.format(
-						'Ambiguous dependency reference "%s" for object ' ..
-						'"%s.%s%s" given',
-							k, config.name, section,
-							option and '.' .. option or ''
-					)
+					return nil,
+						'Ambiguous dependency reference "%s" for object "%s" given'
+							%{ k, self.log.id( config.name, section, option ) }
 				end
 			end
 			table.insert( deps, sdeps )
@@ -172,7 +169,7 @@ function UVL.validate_config( self, config )
 	local sc = { }
 
 	if not co then
-		return false, 'Unable to load configuration "' .. config .. '"'
+		return false, 'Unable to load configuration "%s"' % config
 	end
 
 	local function _uci_foreach( type, func )
@@ -205,8 +202,8 @@ function UVL.validate_config( self, config )
 		for k, v in pairs(co) do
 			if not self.beenthere[config..'.'..k] then
 				return false, self.log.config_error( config,
-					"Section '" .. config .. '.' .. co[k]['.type'] ..
-					"' not found in scheme" )
+					'Section "%s" not found in scheme'
+						% self.log.id( config, co[k]['.type'] ) )
 			end
 		end
 	end
@@ -216,10 +213,10 @@ function UVL.validate_config( self, config )
 
 		if s.required and sc[k] == 0 then
 			return false, self.log.config_error( config,
-				'Required section "' .. k .. '" not found in config' )
+				'Required section "%s" not found in config' % k )
 		elseif s.unique and sc[k] > 1 then
 			return false, self.log.config_error( config,
-				'Unique section "' .. k .. '" occurs multiple times in config' )
+				'Unique section "%s" occurs multiple times in config' % k )
 		end
 	end
 
@@ -246,7 +243,7 @@ function UVL.validate_section( self, config, section )
 	local co = self.uci.get_all( config )
 
 	if not co then
-		return false, 'Unable to load configuration "' .. config .. '"'
+		return false, 'Unable to load configuration "%s"' % config
 	end
 
 	if co[section] then
@@ -254,8 +251,8 @@ function UVL.validate_section( self, config, section )
 			self, co, co[section]['.type'], config, section
 		) )
 	else
-		return false, 'Section "' .. config .. '.' .. section ..
-			'" not found in config. Nothing to do.'
+		return false, 'Section "%s" not found in config. Nothing to do.'
+			% self.log.id( config, section )
 	end
 end
 
@@ -280,7 +277,7 @@ function UVL.validate_option( self, config, section, option )
 	local co = self.uci.get_all( config )
 
 	if not co then
-		return false, 'Unable to load configuration "' .. config .. '"'
+		return false, 'Unable to load configuration "%s"' % config
 	end
 
 	if co[section] and co[section][option] then
@@ -288,9 +285,8 @@ function UVL.validate_option( self, config, section, option )
 			self, co, co[section]['.type'], config, section, option
 		) )
 	else
-		return false, 'Option "' ..
-			config .. '.' .. section .. '.' .. option ..
-			'" not found in config. Nothing to do.'
+		return false, 'Option "%s" not found in config. Nothing to do.'
+			% self.log.id( config, section, option )
 	end
 end
 
@@ -302,8 +298,8 @@ function UVL._validate_section( self, section )
 		   section:values()['.anonymous'] == true
 		then
 			return false, self.log.section_error( section,
-				'The section of type "' .. section:sid() .. '" is stored ' ..
-				'anonymously in config but must be named' )
+				'The section of type "%s" is stored anonymously in config but must be named'
+					% section:sid() )
 		end
 
 		for _, v in ipairs(section:variables()) do
@@ -320,7 +316,7 @@ function UVL._validate_section( self, section )
 			return false, err
 		end
 	else
-		return false, 'Option "' .. section:sid() .. '" not found in config'
+		return false, 'Option "%s" not found in config' % section:sid()
 	end
 
 	if STRICT_UNKNOWN_OPTIONS and not section:section().dynamic then
@@ -328,8 +324,8 @@ function UVL._validate_section( self, section )
 			if k:sub(1,1) ~= "." and not self.beenthere[
 				section:cid() .. '.' .. k
 			] then
-				return false, "Option '" .. section:sid() .. '.' .. k ..
-					"' not found in scheme"
+				return false, 'Option "%s" not found in scheme'
+					% self.log.id( unpack(section:sid()), k )
 			end
 		end
 	end
@@ -343,27 +339,26 @@ function UVL._validate_option( self, option, nodeps )
 	local val  = option:value()
 
 	if not item and not ( option:section() and option:section().dynamic ) then
-		return false, 'Option "' .. option:cid() ..
-			'" not found in scheme'
+		return false, 'Option "%s" not found in scheme' % option:cid()
 
 	elseif item then
 		if item.required and not val then
-			return false, 'Mandatory variable "' .. option:cid() ..
-				'" does not have a value'
+			return false, 'Mandatory variable "%s" does not have a value'
+				% option:cid()
 		end
 
 		if item.type == "enum" and val then
 			if not item.values or not item.values[val] then
-				return false, 'Value "' .. ( val or '<nil>' ) ..
-					'" of given option "' .. option:cid() ..
-					'" is not defined in enum { ' ..
-						table.concat( luci.util.keys(item.values), ", " ) ..
-					' }'
+				return false,
+					'Value "%s" of given option "%s" is not defined in enum { %s }'
+						%{ val or '<nil>', option:cid(),
+						   table.concat( luci.util.keys(item.values), ", " ) }
 			end
 		elseif item.type == "list" and val then
 			if type(val) ~= "table" and STRICT_LIST_TYPE then
-				return false, 'Option "' .. option:cid() ..
-					'" is defined as list but stored as plain value'
+				return false,
+					'Option "%s" is defined as list but stored as plain value'
+						% option:cid()
 			end
 		end
 
@@ -372,16 +367,15 @@ function UVL._validate_option( self, option, nodeps )
 				val = ( type(val) == "table" and val or { val } )
 				for i, v in ipairs(val) do
 					if not self.datatypes[item.datatype]( v ) then
-						return false, 'Value' .. ( #val>1 and ' #'..i or '' ) ..
-							' "' .. ( v or '<nil>' ) ..
-							'" of given option "' .. option:cid() ..
-							'" does not validate as datatype "' ..
-							item.datatype .. '"'
+						return false,
+							'Value%s "%s" of given option "%s" does not validate as datatype "%s"'
+								%{ ( #val>1 and ' #' .. i or '' ), v,
+								   option:cid(), item.datatype }
 					end
 				end
 			else
-				return false, 'Unknown datatype "' ..
-					item.datatype .. '" encountered'
+				return false, 'Unknown datatype "%s" encountered'
+					% item.datatype
 			end
 		end
 
@@ -418,10 +412,7 @@ function UVL.read_scheme( self, scheme )
 
 		return self:_read_scheme_parts( scheme, schemes )
 	else
-		error(
-			'Can not find scheme "' .. scheme ..
-			'" in "' .. self.schemedir .. '"'
-		)
+		error( 'Can not find scheme "%s" in "%s"' %{ scheme, self.schemedir } )
 	end
 end
 
