@@ -325,7 +325,7 @@ function UVL._validate_section( self, section )
 				section:cid() .. '.' .. k
 			] then
 				return false, 'Option "%s" not found in scheme'
-					% self.log.id( unpack(section:sid()), k )
+					% self.log.id( section:sid(), k )
 			end
 		end
 	end
