@@ -77,6 +77,21 @@ function load(cbimap, ...)
 	return maps
 end
 
+
+function _uvl_strip_remote_dependencies(deps)
+	local clean = {}
+	
+	for k, v in pairs(deps) do
+		k = k:gsub("%$config%.%$section%.", "")
+		if k:match("^[%w_]+$") then
+			clean[k] = v
+		end
+	end
+	
+	return clean
+end
+
+
 -- Node pseudo abstract class
 Node = class()
 
@@ -164,6 +179,15 @@ function Map.__init__(self, config, ...)
 
 	self.validator = luci.uvl.UVL()
 	self.scheme = self.validator:get_scheme(self.config)
+end
+
+function Map.get_scheme(self, sectiontype, option)
+	if not option then
+		return self.scheme and self.scheme.sections[sectiontype]
+	else
+		return self.scheme and self.scheme.variables[sectiontype]
+		 and self.scheme.variables[sectiontype][option]
+	end
 end
 
 function Map.render(self, ...)
@@ -379,15 +403,32 @@ end
 
 -- Appends a new option
 function AbstractSection.option(self, class, option, ...)
+	-- Autodetect form UVL
+	if not class or type(class) == "boolean"
+	 and self.map:get_scheme(self.sectiontype, option) then
+		local vs = self.map:get_scheme(self.sectiontype, option)
+		if vs.type == "boolean" then
+			class = "Flag"
+		elseif vs.type == "list" then
+			class = "DynamicList"
+		elseif vs.type == "enum" or vs.type == "reference" then
+			class = "ListValue"
+		else
+			class = "Value"
+		end
+	end
+	
 	if instanceof(class, AbstractValue) then
-		local obj  = class(self.map, option, ...)
+		local obj  = class(self.map, self, option, ...)
 
 		Node._i18n(obj, self.config, self.section or self.sectiontype, option, ...)
 
 		self:append(obj)
 		return obj
+	elseif not class or type(class) == "boolean" then
+		error("No valid class was given and autodetection failed.")
 	else
-		error("class must be a descendent of AbstractValue")
+		error("class must be a descendant of AbstractValue")
 	end
 end
 
@@ -547,10 +588,12 @@ function NamedSection.__init__(self, map, section, stype, ...)
 	self.addremove = false
 
 	-- Use defaults from UVL
-	if self.map.scheme and self.map.scheme.sections[self.sectiontype] then
-		local vs = self.map.scheme.sections[self.sectiontype]
+	if not self.override_scheme and self.map:get_scheme(self.sectiontype) then
+		local vs = self.map:get_scheme(self.sectiontype)
 		self.addremove = not vs.unique and not vs.required
 		self.dynamic   = vs.dynamic
+		self.title       = self.title or vs.title
+		self.description = self.description or vs.descr
 	end
 
 	self.template = "cbi/nsection"
@@ -603,11 +646,13 @@ function TypedSection.__init__(self, map, type, ...)
 	self.anonymous = false
 
 	-- Use defaults from UVL
-	if self.map.scheme and self.map.scheme.sections[self.sectiontype] then
-		local vs = self.map.scheme.sections[self.sectiontype]
+	if not self.override_scheme and self.map:get_scheme(self.sectiontype) then
+		local vs = self.map:get_scheme(self.sectiontype)
 		self.addremove = not vs.unique and not vs.required
 		self.dynamic   = vs.dynamic
 		self.anonymous = not vs.named
+		self.title       = self.title or vs.title
+		self.description = self.description or vs.descr
 	end
 end
 
@@ -723,11 +768,12 @@ AbstractValue - An abstract Value Type
 ]]--
 AbstractValue = class(Node)
 
-function AbstractValue.__init__(self, map, option, ...)
+function AbstractValue.__init__(self, map, section, option, ...)
 	Node.__init__(self, ...)
-	self.option = option
-	self.map    = map
-	self.config = map.config
+	self.section = section
+	self.option  = option
+	self.map     = map
+	self.config  = map.config
 	self.tag_invalid = {}
 	self.tag_missing = {}
 	self.tag_error = {}
@@ -739,6 +785,31 @@ function AbstractValue.__init__(self, map, option, ...)
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
+	
+	-- Use defaults from UVL
+	if not self.override_scheme
+	 and self.map:get_scheme(self.section.sectiontype, self.option) then
+		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
+		self.rmempty     = not vs.required
+		self.cast        = (vs.type == "list") and "list" or "string"
+		self.title       = self.title or vs.title
+		self.description = self.description or vs.descr
+		
+		if vs.depends and not self.override_dependencies then
+			for i, deps in ipairs(vs.depends) do
+				deps = _uvl_strip_remote_dependencies(deps)
+				if next(deps) then
+					self:depends(deps)
+				end
+			end
+		end
+		
+		if self.value and vs.values and not self.override_values then
+			for k, v in pairs(vs.values) do
+				self:value(k, v)
+			end
+		end
+	end
 end
 
 -- Add a dependencie to another section field
@@ -887,8 +958,8 @@ end
 -- DummyValue - This does nothing except being there
 DummyValue = class(AbstractValue)
 
-function DummyValue.__init__(self, map, ...)
-	AbstractValue.__init__(self, map, ...)
+function DummyValue.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
 	self.template = "cbi/dvalue"
 	self.value = nil
 end
