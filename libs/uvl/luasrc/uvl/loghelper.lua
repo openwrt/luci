@@ -76,6 +76,6 @@ function id( c, s, o )
 	if type(c) == "table" then
 		c, s, o = unpack(c)
 	end
-	
+
 	return c .. ( s and '.' .. s or '' ) .. ( o and '.' .. o or '' )
 end

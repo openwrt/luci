@@ -347,11 +347,11 @@ function UVL._validate_option( self, option, nodeps )
 				% option:cid()
 		end
 
-		if item.type == "enum" and val then
+		if ( item.type == "reference" or item.type == "enum" ) and val then
 			if not item.values or not item.values[val] then
 				return false,
-					'Value "%s" of given option "%s" is not defined in enum { %s }'
-						%{ val or '<nil>', option:cid(),
+					'Value "%s" of given option "%s" is not defined in %s { %s }'
+						%{ val or '<nil>', option:cid(), item.type,
 						   table.concat( luci.util.keys(item.values), ", " ) }
 			end
 		elseif item.type == "list" and val then
@@ -552,10 +552,20 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 								'validator specification in "%s"',
 								v.name, scheme, k
 							)
+						elseif k == "valueof" then
+							local values, err = self:_read_reference( v2 )
+
+							_assert( values,
+								'Variable "%s" in scheme "%s" has invalid ' ..
+								'reference specification:\n%s',
+									v.name, scheme, err )
+
+							t.type   = "reference"
+							t.values = values
 						elseif k == "required" then
 							t[k] = _bool(v2)
 						else
-							t[k] = v2
+							t[k] = t[k] or v2
 						end
 					end
 				end
@@ -673,6 +683,44 @@ function UVL._read_validator( self, values, validators )
 
 		return validators
 	end
+end
+
+-- Read a reference specification (XXX: We should validate external configs too...)
+function UVL._read_reference( self, values )
+	local val = { }
+	values = ( type(values) == "table" and values or { values } )
+
+	for _, value in ipairs(values) do
+		local ref = luci.util.split(value, ".")
+
+		if #ref == 2 or #ref == 3 then
+			self.uci.load_config(ref[1])
+			local co = self.uci.get_all(ref[1])
+
+			if not co then
+				return nil, 'Can not load config "%s" for reference "%s"'
+					%{ ref[1], value }
+			end
+
+			for k, v in pairs(co) do
+				if v['.type'] == ref[2] then
+					if #ref == 2 then
+						if v['.anonymous'] == true then
+							return nil, 'Illegal reference "%s" to an anonymous section'
+								% value
+						end
+						table.insert( val, k )
+					elseif v[ref[3]] then
+						table.insert( val, v[ref[3]] )
+					end
+				end
+			end
+		else
+			return nil, 'Malformed reference "%s"' % value
+		end
+	end
+
+	return val, nil
 end
 
 -- Resolve given path
