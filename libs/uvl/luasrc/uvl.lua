@@ -74,10 +74,67 @@ function UVL.__init__( self, schemedir )
 	self.packages	= { }
 	self.beenthere  = { }
 	self.uci		= luci.model.uci
+	self.dep		= luci.uvl.dependencies
 	self.log        = luci.uvl.loghelper
 	self.datatypes  = luci.uvl.datatypes
 end
 
+
+--- Parse given scheme and return the scheme tree.
+-- @param scheme	Name of the scheme to parse
+-- @return			Table containing the parsed scheme or nil on error
+-- @return			String containing the reason for errors (if any)
+function UVL.get_scheme( self, scheme )
+	if not self.packages[scheme] then
+		local ok, err = pcall( self.read_scheme, self, scheme )
+		if not ok then
+			return nil, self.log.scheme_error( scheme, err )
+		end
+	end
+	return self.packages[scheme], nil
+end
+
+--- Return a table containing the dependencies of specified section or option.
+-- @param config	Name of the configuration or parsed scheme object
+-- @param section	Type of the section
+-- @param option	Name of the option (optional)
+-- @return			Table containing the dependencies or nil on error
+-- @return			String containing the reason for errors (if any)
+function UVL.get_dependencies( self, config, section, option )
+	config = ( type(config) == "string" and self:get_scheme(config) or config )
+
+	local deps = { }
+	local dt
+
+	if not config.sections[section] then return deps end
+
+	if option and config.variables[section][option] then
+		dt = config.variables[section][option].depends
+	else
+		dt = config.sections[section].depends
+	end
+
+	if dt then
+		for _, d in ipairs(dt) do
+			local sdeps = { }
+			for k, v in pairs(d) do
+				local r = self.dep._parse_reference( k )
+				if r then
+					sdeps[r] = v
+				else
+					return nil, string.format(
+						'Ambiguous dependency reference "%s" for object ' ..
+						'"%s.%s%s" given',
+							k, config.name, section,
+							option and '.' .. option or ''
+					)
+				end
+			end
+			table.insert( deps, sdeps )
+		end
+	end
+	return deps
+end
 
 --- Validate given configuration, section or option.
 -- @param config	Name of the configuration to validate
@@ -423,6 +480,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 				self.packages[r[1]] =
 					self.packages[r[1]] or {
+						["name"]      = r[1];
 						["sections"]  = { };
 						["variables"] = { };
 					}
