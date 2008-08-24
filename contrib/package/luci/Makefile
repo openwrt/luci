@@ -137,7 +137,7 @@ endif
 ### Libraries ###
 define Package/luci-cbi
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-web
+  DEPENDS+=+luci-web +luci-uvl +luci-uci
   TITLE:=Configuration Binding Interface
 endef
 

@@ -30,6 +30,7 @@ require("luci.template")
 require("luci.util")
 require("luci.http")
 require("luci.model.uci")
+require("luci.uvl")
 
 local uci        = luci.model.uci
 local class      = luci.util.class
@@ -160,6 +161,9 @@ function Map.__init__(self, config, ...)
 	if not uci.load_config(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
+
+	self.validator = luci.uvl.UVL()
+	self.scheme = self.validator:get_scheme(self.config)
 end
 
 function Map.render(self, ...)
@@ -535,13 +539,22 @@ NamedSection - A fixed configuration section defined by its name
 ]]--
 NamedSection = class(AbstractSection)
 
-function NamedSection.__init__(self, map, section, type, ...)
-	AbstractSection.__init__(self, map, type, ...)
+function NamedSection.__init__(self, map, section, stype, ...)
+	AbstractSection.__init__(self, map, stype, ...)
 	Node._i18n(self, map.config, section, nil, ...)
+
+	-- Defaults
+	self.addremove = false
+
+	-- Use defaults from UVL
+	if self.map.scheme and self.map.scheme.sections[self.sectiontype] then
+		local vs = self.map.scheme.sections[self.sectiontype]
+		self.addremove = not vs.unique and not vs.required
+		self.dynamic   = vs.dynamic
+	end
 
 	self.template = "cbi/nsection"
 	self.section = section
-	self.addremove = false
 end
 
 function NamedSection.parse(self)
@@ -587,8 +600,15 @@ function TypedSection.__init__(self, map, type, ...)
 
 	self.template  = "cbi/tsection"
 	self.deps = {}
-
 	self.anonymous = false
+
+	-- Use defaults from UVL
+	if self.map.scheme and self.map.scheme.sections[self.sectiontype] then
+		local vs = self.map.scheme.sections[self.sectiontype]
+		self.addremove = not vs.unique and not vs.required
+		self.dynamic   = vs.dynamic
+		self.anonymous = not vs.named
+	end
 end
 
 -- Return all matching UCI sections for this TypedSection
