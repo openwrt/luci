@@ -40,6 +40,8 @@ FORM_NODATA  =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
 
+AUTO = true
+
 CREATE_PREFIX = "cbi.cts."
 REMOVE_PREFIX = "cbi.rts."
 
@@ -83,7 +85,7 @@ function _uvl_strip_remote_dependencies(deps)
 	
 	for k, v in pairs(deps) do
 		k = k:gsub("%$config%.%$section%.", "")
-		if k:match("^[%w_]+$") then
+		if k:match("^[%w_]+$") and type(v) == "string" then
 			clean[k] = v
 		end
 	end
@@ -403,18 +405,17 @@ end
 
 -- Appends a new option
 function AbstractSection.option(self, class, option, ...)
-	-- Autodetect form UVL
-	if not class or type(class) == "boolean"
-	 and self.map:get_scheme(self.sectiontype, option) then
+	-- Autodetect from UVL
+	if class == true and self.map:get_scheme(self.sectiontype, option) then
 		local vs = self.map:get_scheme(self.sectiontype, option)
 		if vs.type == "boolean" then
-			class = "Flag"
+			class = Flag
 		elseif vs.type == "list" then
-			class = "DynamicList"
+			class = DynamicList
 		elseif vs.type == "enum" or vs.type == "reference" then
-			class = "ListValue"
+			class = ListValue
 		else
-			class = "Value"
+			class = Value
 		end
 	end
 	
@@ -425,7 +426,7 @@ function AbstractSection.option(self, class, option, ...)
 
 		self:append(obj)
 		return obj
-	elseif not class or type(class) == "boolean" then
+	elseif class == true then
 		error("No valid class was given and autodetection failed.")
 	else
 		error("class must be a descendant of AbstractValue")
@@ -803,12 +804,6 @@ function AbstractValue.__init__(self, map, section, option, ...)
 				end
 			end
 		end
-		
-		if self.value and vs.values and not self.override_values then
-			for k, v in pairs(vs.values) do
-				self:value(k, v)
-			end
-		end
 	end
 end
 
@@ -1012,11 +1007,24 @@ ListValue = class(AbstractValue)
 function ListValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/lvalue"
+	
 	self.keylist = {}
 	self.vallist = {}
-
 	self.size   = 1
 	self.widget = "select"
+	
+	if not self.override_scheme
+	 and self.map:get_scheme(self.section.sectiontype, self.option) then	
+		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
+		if self.value and vs.values and not self.override_values then
+			if self.rmempty or self.optional then
+				self:value("")
+			end
+			for k, v in pairs(vs.values) do
+				self:value(k, v)
+			end
+		end
+	end
 end
 
 function ListValue.value(self, key, val, ...)
@@ -1049,6 +1057,7 @@ MultiValue = class(AbstractValue)
 function MultiValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template = "cbi/mvalue"
+
 	self.keylist = {}
 	self.vallist = {}
 
@@ -1101,6 +1110,16 @@ function StaticList.__init__(self, ...)
 	MultiValue.__init__(self, ...)
 	self.cast = "table"
 	self.valuelist = self.cfgvalue
+
+	if not self.override_scheme 
+	 and self.map:get_scheme(self.section.sectiontype, self.option) then	
+		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
+		if self.value and vs.values and not self.override_values then
+			for k, v in pairs(vs.values) do
+				self:value(k, v)
+			end
+		end
+	end
 end
 
 function StaticList.validate(self, value)
@@ -1122,7 +1141,6 @@ function DynamicList.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/dynlist"
 	self.cast = "table"
-	
 	self.keylist = {}
 	self.vallist = {}
 end
