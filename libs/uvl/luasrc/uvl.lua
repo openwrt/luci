@@ -709,9 +709,9 @@ function UVL._read_reference( self, values )
 							return nil, 'Illegal reference "%s" to an anonymous section'
 								% value
 						end
-						table.insert( val, k )
+						val[k] = k	-- XXX: title/description would be nice
 					elseif v[ref[3]] then
-						table.insert( val, v[ref[3]] )
+						val[v[ref[3]]] = v[ref[3]]  -- XXX: dito
 					end
 				end
 			end
