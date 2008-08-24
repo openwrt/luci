@@ -28,6 +28,20 @@ limitations under the License.
 module("luci.util", package.seeall)
 
 --
+-- Pythonic string formatting extension
+--
+getmetatable("").__mod = function(a, b)
+	if not b then
+		return a
+	elseif type(b) == "table" then
+		return a:format(unpack(b))
+	else
+		return a:format(b)
+	end
+end
+
+
+--
 -- Class helper routines
 --
 
