@@ -298,6 +298,13 @@ end
 function UVL._validate_section( self, section )
 
 	if section:values() then
+		if section:section().named == true and
+		   section:values()['.anonymous'] == true
+		then
+			return false, self.log.section_error( section,
+				'The section of type "' .. section:sid() .. '" is stored ' ..
+				'anonymously in config but must be named' )
+		end
 
 		for _, v in ipairs(section:variables()) do
 			local ok, err = self:_validate_option( v )
@@ -500,7 +507,9 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 								'dependency specification in "%s"',
 								v.name or '<nil>', scheme or '<nil>', k
 							)
-						elseif k == "dynamic" or k == "unique" or k == "required" then
+						elseif k == "dynamic" or k == "unique" or
+						       k == "required" or k == "named"
+						then
 							s[k] = _bool(v2)
 						else
 							s[k] = v2
@@ -511,6 +520,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 				s.dynamic  = s.dynamic  or false
 				s.unique   = s.unique   or false
 				s.required = s.required or false
+				s.named    = s.named    or false
 			end
 		end
 	end
