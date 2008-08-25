@@ -352,7 +352,7 @@ function UVL._validate_option( self, option, nodeps )
 				return false,
 					'Value "%s" of given option "%s" is not defined in %s { %s }'
 						%{ val or '<nil>', option:cid(), item.type,
-						   table.concat( luci.util.keys(item.values), ", " ) }
+						   table.concat( luci.util.keys(item.values or {}), ", " ) }
 			end
 		elseif item.type == "list" and val then
 			if type(val) ~= "table" and STRICT_LIST_TYPE then
@@ -609,6 +609,10 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 					t.values[v.value] = v.title or v.value
 				end
 
+				if not t.enum_depends then
+					t.enum_depends = { }
+				end
+
 				if v.default then
 					_assert( not t.default,
 						'Enum "%s" in scheme "%s", section "%s" redeclares ' ..
@@ -616,6 +620,16 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 						v.value, scheme, r[2], v.variable )
 
 					t.default = v.value
+				end
+
+				if v.depends then
+					t.enum_depends[v.value] = _assert(
+						self:_read_dependency(
+							v.depends, t.enum_depends[v.value]
+						),
+						'Invalid reference "%s" in "%s.%s.%s.%s"',
+						v.depends, scheme, r[2], r[3], v.value
+					)
 				end
 			end
 		end

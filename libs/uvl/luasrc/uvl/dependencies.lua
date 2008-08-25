@@ -113,5 +113,58 @@ function check( self, object, nodeps )
 		return false, err
 	end
 
+	if item.type == "enum" and item.enum_depends[object:value()] then
+		local ok = false
+		local valid, err = false,
+			string.format( 'In dependency check for enum value "%s.%s":',
+				object:cid(), object:value() )
+
+		for _, dep in ipairs(item.enum_depends[object:value()]) do
+			local subcondition = true
+			for k, v in pairs(dep) do
+				-- XXX: better error
+				local ref = _parse_reference( k, unpack(object.cref) )
+
+				if not ref then
+					return false, "Ambiguous dependency reference '" .. k ..
+						"' for enum '" .. object:sid() .. "." ..
+						object:value() .. "' given"
+				end
+
+				local option = luci.uvl.option(
+					self, object.config,
+					object.config[ref[2]]
+						and object.config[ref[2]]['.type']
+						or  object.sref[2],
+					ref[1], ref[2], ref[3]
+				)
+
+				valid, err2 = self:_validate_option( option, true )
+				if valid then
+					if not (
+						( type(v) == "boolean" and object.config[ref[2]][ref[3]] ) or
+						( ref[3] and object.config[ref[2]][ref[3]] ) == v
+					) then
+						subcondition = false
+						err = err .. "\n" ..
+							self.log.dump_dependency( dep, ref, v )
+						break
+					end
+				else
+					subcondition = false
+					err = err .. "\n" ..
+						self.log.dump_dependency( dep, ref, nil, err2 )
+					break
+				end
+			end
+
+			if subcondition then
+				return true
+			end
+		end
+
+		return false, err
+	end
+
 	return true
 end
