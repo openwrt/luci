@@ -82,14 +82,14 @@ end
 
 function _uvl_strip_remote_dependencies(deps)
 	local clean = {}
-	
+
 	for k, v in pairs(deps) do
 		k = k:gsub("%$config%.%$section%.", "")
 		if k:match("^[%w_]+$") and type(v) == "string" then
 			clean[k] = v
 		end
 	end
-	
+
 	return clean
 end
 
@@ -214,9 +214,9 @@ function Map.parse(self, ...)
 	else
 		uci.load_config(self.config)
 	end
-	
+
 	Node.parse(self, ...)
-	
+
 	for i, config in ipairs(self.parsechain) do
 		uci.save_config(config)
 	end
@@ -312,17 +312,17 @@ function SimpleForm.parse(self, ...)
 	if luci.http.formvalue("cbi.submit") then
 		Node.parse(self, 1, ...)
 	end
-		
+
 	local valid = true
-	for k, j in ipairs(self.children) do 
+	for k, j in ipairs(self.children) do
 		for i, v in ipairs(j.children) do
-			valid = valid 
+			valid = valid
 			 and (not v.tag_missing or not v.tag_missing[1])
 			 and (not v.tag_invalid or not v.tag_invalid[1])
 		end
 	end
-	
-	local state = 
+
+	local state =
 		not luci.http.formvalue("cbi.submit") and 0
 		or valid and 1
 		or -1
@@ -358,7 +358,7 @@ function SimpleForm.field(self, class, ...)
 	if not section then
 		section = self:section(SimpleSection)
 	end
-	
+
 	if instanceof(class, AbstractValue) then
 		local obj  = class(self, ...)
 		obj.track_missing = true
@@ -381,6 +381,11 @@ end
 
 function SimpleForm.get(self, section, option)
 	return self.data[option]
+end
+
+
+function SimpleForm.get_scheme()
+	return nil
 end
 
 
@@ -418,7 +423,7 @@ function AbstractSection.option(self, class, option, ...)
 			class = Value
 		end
 	end
-	
+
 	if instanceof(class, AbstractValue) then
 		local obj  = class(self.map, self, option, ...)
 
@@ -503,7 +508,7 @@ end
 -- Creates the section
 function AbstractSection.create(self, section)
 	local stat
-	
+
 	if section then
 		stat = self.map:set(section, nil, self.sectiontype)
 	else
@@ -541,15 +546,19 @@ function Table.__init__(self, form, data, ...)
 	local datasource = {}
 	datasource.config = "table"
 	self.data = data
-	
+
 	function datasource.get(self, section, option)
 		return data[section] and data[section][option]
 	end
-	
+
 	function datasource.del(...)
 		return true
 	end
-	
+
+	function datasource.get_scheme()
+		return nil
+	end
+
 	AbstractSection.__init__(self, datasource, "table", ...)
 	self.template = "cbi/tblsection"
 	self.rowcolors = true
@@ -566,11 +575,11 @@ end
 
 function Table.cfgsections(self)
 	local sections = {}
-	
+
 	for i, v in luci.util.kspairs(self.data) do
 		table.insert(sections, i)
 	end
-	
+
 	return sections
 end
 
@@ -786,7 +795,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
-	
+
 	-- Use defaults from UVL
 	if not self.override_scheme
 	 and self.map:get_scheme(self.section.sectiontype, self.option) then
@@ -795,7 +804,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 		self.cast        = (vs.type == "list") and "list" or "string"
 		self.title       = self.title or vs.title
 		self.description = self.description or vs.descr
-		
+
 		if vs.depends and not self.override_dependencies then
 			for i, deps in ipairs(vs.depends) do
 				deps = _uvl_strip_remote_dependencies(deps)
@@ -816,7 +825,7 @@ function AbstractValue.depends(self, field, value)
 	else
 		deps = field
 	end
-	
+
 	table.insert(self.deps, {deps=deps, add=""})
 end
 
@@ -1007,14 +1016,14 @@ ListValue = class(AbstractValue)
 function ListValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/lvalue"
-	
+
 	self.keylist = {}
 	self.vallist = {}
 	self.size   = 1
 	self.widget = "select"
-	
+
 	if not self.override_scheme
-	 and self.map:get_scheme(self.section.sectiontype, self.option) then	
+	 and self.map:get_scheme(self.section.sectiontype, self.option) then
 		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
 		if self.value and vs.values and not self.override_values then
 			if self.rmempty or self.optional then
@@ -1031,7 +1040,7 @@ function ListValue.value(self, key, val, ...)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val))
-	
+
 	for i, deps in ipairs({...}) do
 		table.insert(self.deps, {add = "-"..key, deps=deps})
 	end
@@ -1111,8 +1120,8 @@ function StaticList.__init__(self, ...)
 	self.cast = "table"
 	self.valuelist = self.cfgvalue
 
-	if not self.override_scheme 
-	 and self.map:get_scheme(self.section.sectiontype, self.option) then	
+	if not self.override_scheme
+	 and self.map:get_scheme(self.section.sectiontype, self.option) then
 		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
 		if self.value and vs.values and not self.override_values then
 			for k, v in pairs(vs.values) do
@@ -1153,7 +1162,7 @@ end
 
 function DynamicList.validate(self, value, section)
 	value = (type(value) == "table") and value or {value}
-	
+
 	local valid = {}
 	for i, v in ipairs(value) do
 		if v and #v > 0 and
@@ -1161,7 +1170,7 @@ function DynamicList.validate(self, value, section)
 			table.insert(valid, v)
 		end
 	end
-	
+
 	return valid
 end
 
