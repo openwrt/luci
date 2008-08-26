@@ -25,7 +25,7 @@ name.size = 10
 
 iface = s:option(ListValue, "src", translate("fw_zone"))
 iface.default = "wan"
-luci.model.uci.foreach("firewall", "zone",
+luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
 		iface:value(section.name)
 	end)

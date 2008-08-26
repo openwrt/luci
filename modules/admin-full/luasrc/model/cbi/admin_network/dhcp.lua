@@ -24,7 +24,8 @@ s.anonymous = true
 iface = s:option(ListValue, "interface", translate("interface"))
 luci.tools.webadmin.cbi_add_networks(iface)
 
-luci.model.uci.foreach("network", "interface",
+local uci = luci.model.uci.cursor()
+uci:foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
 			iface.default = iface.default or section[".name"]
@@ -32,7 +33,7 @@ luci.model.uci.foreach("network", "interface",
 		end
 	end)
 
-luci.model.uci.foreach("network", "alias",
+uci:foreach("network", "alias",
 	function (section)
 		iface:value(section[".name"])
 		s:depends("interface", section[".name"])

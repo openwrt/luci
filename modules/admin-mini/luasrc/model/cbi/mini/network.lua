@@ -15,9 +15,7 @@ $Id$
 require("luci.tools.webadmin")
 require("luci.sys")
 
-luci.model.uci.load_state("network")
-local network = luci.model.uci.get_all("network")
-luci.model.uci.unload("network")
+local network = luci.model.uci.cursor_state():get_all("network")
 
 local netstat = luci.sys.net.deviceinfo()
 local ifaces = {}

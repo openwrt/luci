@@ -48,12 +48,13 @@ function convert_changes(changes)
 end
 
 function action_changes()
-	local changes = convert_changes(luci.model.uci.changes())
+	local changes = convert_changes(luci.model.uci.cursor():changes())
 	luci.template.render("mini/uci_changes", {changes=changes})
 end
 
 function action_apply()
-	local changes = luci.model.uci.changes()
+	local uci = luci.model.uci.cursor()
+	local changes = uci:changes()
 	local output  = ""
 	
 	if changes then
@@ -63,9 +64,9 @@ function action_apply()
 		-- Collect files to be applied and commit changes
 		for r, tbl in pairs(changes) do
 			if r then
-				luci.model.uci.load_config(r)
-				luci.model.uci.commit(r)
-				luci.model.uci.unload(r)
+				uci:load(r)
+				uci:commit(r)
+				uci:unload(r)
 				if luci.config.uci_oncommit and luci.config.uci_oncommit[r] then
 					run[luci.config.uci_oncommit[r]] = true
 				end
@@ -84,15 +85,16 @@ end
 
 
 function action_revert()
-	local changes = luci.model.uci.changes()
+	local uci = luci.model.uci.cursor()
+	local changes = uci:changes()
 	if changes then
 		local revert = {}
 		
 		-- Collect files to be reverted
 		for r, tbl in pairs(changes) do
-			luci.model.uci.load_config(r)
-			luci.model.uci.revert(r)
-			luci.model.uci.unload(r)
+			uci:load(r)
+			uci:revert(r)
+			uci:unload(r)
 		end
 	end
 	

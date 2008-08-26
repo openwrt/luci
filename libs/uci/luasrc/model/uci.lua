@@ -29,20 +29,26 @@ local table = require "table"
 
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
-local require = require
+local require, getmetatable = require, getmetatable
 
 --- LuCI UCI model library.
-module("luci.model.uci", function(m) setmetatable(m, {__index = uci}) end)
+module("luci.model.uci")
 
-savedir_default = "/tmp/.uci"
-confdir_default = "/etc/config"
+cursor = uci.cursor
+APIVERSION = uci.APIVERSION
 
-savedir_state = "/var/state"
+--- Creates a new statevalue cursor
+-- @return UCI cursor
+function cursor_state()
+	return cursor(nil, "/var/state")
+end
 
+--- UCI-Cursor
+local Cursor = getmetatable(cursor())
 
 --- Applies the new config
 -- @param config		UCI config
-function apply(config)
+function Cursor.apply(self, config)
 	local conf = require "luci.config"
 	return conf.uci_oncommit[config] and os.execute(conf.uci_oncommit[config])
 end
@@ -52,18 +58,18 @@ end
 -- @param type			UCI section type
 -- @param comparator	Function that will be called for each section and
 -- returns a boolean whether to delete the current section (optional)
-function delete_all(config, type, comparator)
+function Cursor.delete_all(self, config, type, comparator)
 	local del = {}
 	local function helper (section)
-			if not comparator or comparator(section) then
-				table.insert(del, section[".name"])
-			end
+		if not comparator or comparator(section) then
+			table.insert(del, section[".name"])
+		end
 	end
 
-	foreach(config, type, helper)
+	self:foreach(config, type, helper)
 
 	for i, j in ipairs(del) do
-		delete(config, j)
+		self:delete(config, j)
 	end
 end
 
@@ -73,73 +79,31 @@ end
 -- @param name		UCI section name (optional)
 -- @param values	Table of key - value pairs to initialize the section with
 -- @return			Name of created section
-function section(config, type, name, values)
+function Cursor.section(self, config, type, name, values)
 	local stat = true
 	if name then
-		stat = set(config, name, type)
+		stat = self:set(config, name, type)
 	else
-		name = add(config, type)
+		name = self:add(config, type)
 		stat = name and true
 	end
 
 	if stat and values then
-		stat = tset(config, name, values)
+		stat = self:tset(config, name, values)
 	end
 
 	return stat and name
-end
-
---- Savely load the configuration.
--- @param config	Configuration to load
--- @return			Sucess status
--- @see				load_state
--- @see				load
-function load_config(...)
-	set_confdir(confdir_default)
-	set_savedir(savedir_default)
-	return load(...)
-end
-
---- Savely load state values.
--- @param config	Configuration to load
--- @return			Sucess status
--- @see				load_config
--- @see				load
-function load_state(config)
-	set_confdir(confdir_default)
-	set_savedir(savedir_state)
-	return load(config)
-end
-
---- Save changes to config values.
--- @param config	Configuration to save
--- @return			Sucess status
--- @see				save_state
--- @see				save
-function save_config(config)
-	set_savedir(savedir_default)
-	return save(config)
-end
-
---- Save changes to state values.
--- @param config	Configuration to save
--- @return			Sucess status
--- @see				save_config
--- @see				save
-function save_state(config)
-	set_savedir(savedir_state)
-	return save(config)
 end
 
 --- Updated the data of a section using data from a table.
 -- @param config	UCI config
 -- @param section	UCI section name (optional)
 -- @param values	Table of key - value pairs to update the section with
-function tset(config, section, values)
+function Cursor.tset(self, config, section, values)
 	local stat = true
 	for k, v in pairs(values) do
 		if k:sub(1, 1) ~= "." then
-			stat = stat and set(config, section, k, v)
+			stat = stat and self:set(config, section, k, v)
 		end
 	end
 	return stat
@@ -150,9 +114,9 @@ end
 -- @param section	UCI section name
 -- @param option	UCI option
 -- @return			UCI value
-function get_list(config, section, option)
+function Cursor.get_list(self, config, section, option)
 	if config and section and option then
-		local val = get(config, section, option)
+		local val = self:get(config, section, option)
 		return ( type(val) == "table" and val or { val } )
 	end
 	return nil
@@ -164,9 +128,9 @@ end
 -- @param option	UCI option
 -- @param value		UCI value
 -- @return			Boolean whether operation succeeded
-function set_list(config, section, option, value)
+function Cursor.set_list(self, config, section, option, value)
 	if config and section and option then
-		return set(
+		return self:set(
 			config, section, option,
 			( type(value) == "table" and value or { value } )
 		)
@@ -177,27 +141,27 @@ end
 
 --- Add an anonymous section.
 -- @class function
--- @name add
+-- @name Cursor.add
 -- @param config	UCI config
 -- @param type		UCI section type
 -- @return			Name of created section
 
 --- Get a table of unsaved changes.
 -- @class function
--- @name changes
+-- @name Cursor.changes
 -- @param config	UCI config
 -- @return			Table of changes
 
 --- Commit unsaved changes.
 -- @class function
--- @name commit
+-- @name Cursor.commit
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see revert
 
 --- Deletes a section or an option.
 -- @class function
--- @name delete
+-- @name Cursor.delete
 -- @param config	UCI config
 -- @param section	UCI section name
 -- @param option	UCI option (optional)
@@ -205,7 +169,7 @@ end
 
 --- Call a function for every section of a certain type.
 -- @class function
--- @name foreach
+-- @name Cursor.foreach
 -- @param config	UCI config
 -- @param type		UCI section type
 -- @param callback	Function to be called
@@ -213,7 +177,7 @@ end
 
 --- Get a section type or an option
 -- @class function
--- @name get
+-- @name Cursor.get
 -- @param config	UCI config
 -- @param section	UCI section name
 -- @param option	UCI option (optional)
@@ -221,7 +185,7 @@ end
 
 --- Get all sections of a config or all values of a section.
 -- @class function
--- @name get_all
+-- @name Cursor.get_all
 -- @param config	UCI config
 -- @param section	UCI section name (optional)
 -- @return			Table of UCI sections or table of UCI values
@@ -229,7 +193,7 @@ end
 --- Manually load a config.
 -- Warning: This function is unsave! You should use load_config or load_state if possible.
 -- @class function
--- @name load
+-- @name Cursor.load
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see load_config
@@ -239,14 +203,14 @@ end
 
 --- Revert unsaved changes.
 -- @class function
--- @name revert
+-- @name Cursor.revert
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see commit
 
 --- Saves changes made to a config to make them committable.
 -- @class function
--- @name save
+-- @name Cursor.save
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see load
@@ -254,28 +218,38 @@ end
 
 --- Set a value or create a named section.
 -- @class function
--- @name set
+-- @name Cursor.set
 -- @param config	UCI config
 -- @param section	UCI section name
 -- @param option	UCI option or UCI section type
 -- @param value		UCI value or nil if you want to create a section
 -- @return			Boolean whether operation succeeded
 
+--- Get the configuration directory.
+-- @class function
+-- @name Cursor.get_confdir
+-- @return			Configuration directory
+
+--- Get the directory for uncomitted changes.
+-- @class function
+-- @name Cursor.get_savedir
+-- @return			Save directory
+
 --- Set the configuration directory.
 -- @class function
--- @name set_confdir
+-- @name Cursor.set_confdir
 -- @param directory	UCI configuration directory
 -- @return			Boolean whether operation succeeded
 
 --- Set the directory for uncommited changes.
 -- @class function
--- @name set_savedir
+-- @name Cursor.set_savedir
 -- @param directory	UCI changes directory
 -- @return			Boolean whether operation succeeded
 
 --- Discard changes made to a config.
 -- @class function
--- @name unload
+-- @name Cursor.unload
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see load

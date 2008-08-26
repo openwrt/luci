@@ -13,7 +13,7 @@ $Id$
 
 -%>
 <%+header%>
-<% local ff = luci.model.uci.get_all("freifunk") %>
+<% local ff = luci.model.uci.cursor():get_all("freifunk") %>
 <h1><%:hellonet%> <%=ff.community.name%>!</h1>
 <p><%:public1%><br />
 <%:public2%><%=luci.sys.hostname()%>. <%:public3%>

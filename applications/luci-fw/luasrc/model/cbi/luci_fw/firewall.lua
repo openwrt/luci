@@ -24,7 +24,7 @@ iface.rmempty = true
 oface = s:option(ListValue, "dest")
 oface.optional = true
 
-luci.model.uci.foreach("firewall", "zone",
+luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
 		iface:value(section.name)
 		oface:value(section.name)

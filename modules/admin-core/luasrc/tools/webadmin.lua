@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 module("luci.tools.webadmin", package.seeall)
-require("luci.model.uci")
+local uci = require("luci.model.uci")
 require("luci.sys")
 require("luci.ip")
 
@@ -59,11 +59,12 @@ function date_format(secs)
 end
 
 function network_get_addresses(net)
-	luci.model.uci.load_state("network")
+	local state = uci.cursor_state()
+	state:load("network")
 	local addr = {}
-	local ipv4 = luci.model.uci.get("network", net, "ipaddr")
-	local mav4 = luci.model.uci.get("network", net, "netmask")
-	local ipv6 = luci.model.uci.get("network", net, "ip6addr")
+	local ipv4 = state:get("network", net, "ipaddr")
+	local mav4 = state:get("network", net, "netmask")
+	local ipv6 = state:get("network", net, "ip6addr")
 	
 	if ipv4 and mav4 then
 		ipv4 = luci.ip.IPv4(ipv4, mav4)
@@ -77,7 +78,7 @@ function network_get_addresses(net)
 		table.insert(addr, ipv6)
 	end
 	
-	luci.model.uci.foreach("network", "alias",
+	state:foreach("network", "alias",
 		function (section)
 			if section.interface == net then
 				if section.ipaddr and section.netmask then
@@ -99,7 +100,7 @@ function network_get_addresses(net)
 end
 
 function cbi_add_networks(field)
-	luci.model.uci.foreach("network", "interface",
+	uci.cursor():foreach("network", "interface",
 		function (section)
 			if section[".name"] ~= "loopback" then
 				field:value(section[".name"])
@@ -116,13 +117,14 @@ function cbi_add_knownips(field)
 end
 
 function network_get_zones(net)
-	if not luci.model.uci.load_state("firewall") then
+	local state = uci.cursor_state()
+	if not state:load("firewall") then
 		return nil
 	end
 	
 	local zones = {}
 	
-	luci.model.uci.foreach("firewall", "zone", 
+	state:foreach("firewall", "zone", 
 		function (section)
 			local znet = section.network or section.name
 			if luci.util.contains(luci.util.split(znet, " "), net) then
@@ -137,7 +139,7 @@ end
 function firewall_find_zone(name)
 	local find
 	
-	luci.model.uci.foreach("firewall", "zone", 
+	luci.model.uci.cursor():foreach("firewall", "zone", 
 		function (section)
 			if section.name == name then
 				find = section[".name"]
@@ -149,12 +151,13 @@ function firewall_find_zone(name)
 end
 
 function iface_get_network(iface)
-	luci.model.uci.load_state("network")
+	local state = uci.cursor_state()
+	state:load("network")
 	local net
 	
-	luci.model.uci.foreach("network", "interface",
+	state:foreach("network", "interface",
 		function (section)
-			local ifname = luci.model.uci.get(
+			local ifname = state:get(
 				"network", section[".name"], "ifname"
 			)
 			

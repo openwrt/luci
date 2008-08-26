@@ -21,7 +21,7 @@ s.anonymous = true
 iface = s:option(ListValue, "src")
 oface = s:option(ListValue, "dest")
 
-luci.model.uci.foreach("firewall", "zone",
+luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
 			iface:value(section.name)
 			oface:value(section.name)

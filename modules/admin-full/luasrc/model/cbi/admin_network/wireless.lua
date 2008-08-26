@@ -15,10 +15,7 @@ $Id$
 require("luci.sys")
 require("luci.tools.webadmin")
 
-luci.model.uci.load_state("wireless")
-local wireless = luci.model.uci.get_all("wireless")
-luci.model.uci.unload("wireless")
-
+local wireless = luci.model.uci.cursor_state():get_all("wireless")
 local wifidata = luci.sys.wifi.getiwconfig()
 local ifaces = {}
 
@@ -123,9 +120,10 @@ for k, v in pairs(wireless) do
 end
 
 function create.write(self, section, value)
-	luci.model.uci.load_config("wireless")
-	luci.model.uci.section("wireless", "wifi-iface", nil, {device=value})
-	luci.model.uci.save_config("wireless")
+	local uci = luci.model.uci.cursor()
+	uci:load("wireless")
+	uci:section("wireless", "wifi-iface", nil, {device=value})
+	uci:save("wireless")
 	luci.http.redirect(luci.http.getenv("REQUEST_URI") .. "/" .. value)
 end
 

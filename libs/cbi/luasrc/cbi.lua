@@ -175,7 +175,8 @@ function Map.__init__(self, config, ...)
 	self.config = config
 	self.parsechain = {self.config}
 	self.template = "cbi/map"
-	if not uci.load_config(self.config) then
+	self.uci = uci.cursor()
+	if not self.uci:load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
 
@@ -192,15 +193,6 @@ function Map.get_scheme(self, sectiontype, option)
 	end
 end
 
-function Map.render(self, ...)
-	if self.stateful then
-		uci.load_state(self.config)
-	else
-		uci.load_config(self.config)
-	end
-	Node.render(self, ...)
-end
-
 
 -- Chain foreign config
 function Map.chain(self, config)
@@ -209,26 +201,18 @@ end
 
 -- Use optimized UCI writing
 function Map.parse(self, ...)
-	if self.stateful then
-		uci.load_state(self.config)
-	else
-		uci.load_config(self.config)
-	end
-
 	Node.parse(self, ...)
 
 	for i, config in ipairs(self.parsechain) do
-		uci.save_config(config)
+		self.uci:save(config)
 	end
 	if luci.http.formvalue("cbi.apply") then
 		for i, config in ipairs(self.parsechain) do
-			uci.commit(config)
-			if luci.config.uci_oncommit and luci.config.uci_oncommit[config] then
-				luci.util.exec(luci.config.uci_oncommit[config])
-			end
+			self.uci:commit(config)
+			self.uci:apply(config)
 
 			-- Refresh data because commit changes section names
-			uci.load_config(config)
+			self.uci:load(config)
 		end
 
 		-- Reparse sections
@@ -236,7 +220,7 @@ function Map.parse(self, ...)
 
 	end
 	for i, config in ipairs(self.parsechain) do
-		uci.unload(config)
+		self.uci:unload(config)
 	end
 end
 
@@ -253,35 +237,35 @@ end
 
 -- UCI add
 function Map.add(self, sectiontype)
-	return uci.add(self.config, sectiontype)
+	return self.uci:add(self.config, sectiontype)
 end
 
 -- UCI set
 function Map.set(self, section, option, value)
 	if option then
-		return uci.set(self.config, section, option, value)
+		return self.uci:set(self.config, section, option, value)
 	else
-		return uci.set(self.config, section, value)
+		return self.uci:set(self.config, section, value)
 	end
 end
 
 -- UCI del
 function Map.del(self, section, option)
 	if option then
-		return uci.delete(self.config, section, option)
+		return self.uci:delete(self.config, section, option)
 	else
-		return uci.delete(self.config, section)
+		return self.uci:delete(self.config, section)
 	end
 end
 
 -- UCI get
 function Map.get(self, section, option)
 	if not section then
-		return uci.get_all(self.config)
+		return self.uci:get_all(self.config)
 	elseif option then
-		return uci.get(self.config, section, option)
+		return self.uci:get(self.config, section, option)
 	else
-		return uci.get_all(self.config, section)
+		return self.uci:get_all(self.config, section)
 	end
 end
 
@@ -669,7 +653,7 @@ end
 -- Return all matching UCI sections for this TypedSection
 function TypedSection.cfgsections(self)
 	local sections = {}
-	uci.foreach(self.map.config, self.sectiontype,
+	self.map.uci:foreach(self.map.config, self.sectiontype,
 		function (section)
 			if self:checkscope(section[".name"]) then
 				table.insert(sections, section[".name"])
@@ -706,7 +690,7 @@ function TypedSection.parse(self)
 					self.err_invalid = true
 				end
 
-				if name and name:len() > 0 then
+				if name and #name > 0 then
 					self:create(name)
 				end
 			end
@@ -716,9 +700,6 @@ function TypedSection.parse(self)
 		crval = REMOVE_PREFIX .. self.config
 		name = luci.http.formvaluetable(crval)
 		for k,v in pairs(name) do
-			luci.util.perror(k)
-			luci.util.perror(self:cfgvalue(k))
-			luci.util.perror(self:checkscope(k))
 			if self:cfgvalue(k) and self:checkscope(k) then
 				self:remove(k)
 			end

@@ -16,7 +16,7 @@ require("luci.tools.webadmin")
 m2 = Map("luci_ethers", translate("dhcp_leases"))
 
 local leasefn, leasefp, leases
-luci.model.uci.foreach("dhcp", "dnsmasq",
+luci.model.uci.cursor():foreach("dhcp", "dnsmasq",
  function(section)
  	leasefn = section.leasefile
  end

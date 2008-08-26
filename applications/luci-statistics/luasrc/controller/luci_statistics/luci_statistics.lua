@@ -151,9 +151,9 @@ function statistics_render()
 	local vars  = luci.http.formvalue()
 	local req   = luci.dispatcher.context.request
 	local path  = luci.dispatcher.context.dispatched.path
-	local uci   = luci.model.uci
-	local spans = luci.util.split( uci.get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
-	local span  = vars.timespan or uci.get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
+	local uci   = luci.model.uci.cursor()
+	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
+	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
 	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
 
 	local plugin, instances

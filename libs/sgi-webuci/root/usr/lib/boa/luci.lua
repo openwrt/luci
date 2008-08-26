@@ -24,9 +24,9 @@ function init(path)
 
 	if (root ~= '/') then
 		-- Entering dummy mode
-		luci.model.uci.confdir_default = root .. '/etc/config'
-		luci.model.uci.savedir_state   = root .. '/var/state'
-		uci.set_confdir(luci.model.uci.confdir_default)
+		luci.model.uci.cursor = function(config, ...)
+			return uci.cursor(config or root .. "/etc/config", ...)
+    	end
 		
 		luci.sys.hostname = function() return "" end
 		luci.sys.loadavg  = function() return 0,0,0,0,0 end

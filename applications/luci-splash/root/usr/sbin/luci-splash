@@ -5,8 +5,7 @@ require("luci.util")
 require("luci.model.uci")
 
 -- Init state session
-luci.model.uci.load_state("luci_splash")
-local uci = luci.model.uci
+local uci = luci.model.uci.cursor_state()
 
 
 function main(argv)
@@ -60,13 +59,13 @@ end
 
 -- Add a lease to state and invoke add_rule
 function add_lease(mac)
-	uci.section("luci_splash", "lease", nil, {
+	uci:section("luci_splash", "lease", nil, {
 		mac = mac,
 		start = os.time()
 	})
 	add_rule(mac)
 	
-	uci.save_state("luci_splash")
+	uci:save("luci_splash")
 end
 
 
@@ -75,7 +74,7 @@ function remove_lease(mac)
 	mac = mac:lower()
 	local del = {}
 
-	uci.foreach("luci_splash", "lease",
+	uci:foreach("luci_splash", "lease",
 		function (section)
 			if section.mac:lower() == mac then
 				table.insert(del, section[".name"])
@@ -84,10 +83,10 @@ function remove_lease(mac)
 		
 	for i,j in ipairs(del) do
 		remove_rule(j)
-		uci.delete("luci_splash", j)
+		uci:delete("luci_splash", j)
 	end
 		
-	uci.save_state("luci_splash")
+	uci:save("luci_splash")
 end
 
 
@@ -108,7 +107,7 @@ function haslease(mac)
 	mac = mac:lower()
 	local stat = false
 	
-	uci.foreach("luci_splash", "lease",
+	uci:foreach("luci_splash", "lease",
 		function (section)
 			if section.mac:lower() == mac then
 				stat = true
@@ -124,7 +123,7 @@ end
 function iswhitelisted(mac)
 	mac = mac:lower()
 	
-	uci.foreach("luci_splash", "whitelist",
+	uci:foreach("luci_splash", "whitelist",
 		function (section)
 			if section.mac:lower() == mac then
 				stat = true
@@ -150,14 +149,14 @@ function sync()
 	local time = os.time()
 	
 	-- Current leases in state files
-	local leases = uci.get_all("luci_splash")
+	local leases = uci:get_all("luci_splash")
 	
 	-- Convert leasetime to seconds
-	local leasetime = tonumber(uci.get("luci_splash", "general", "leasetime")) * 3600
+	local leasetime = tonumber(uci:get("luci_splash", "general", "leasetime")) * 3600
 	
 	-- Clean state file
-	uci.load_state("luci_splash")
-	uci.revert("luci_splash")
+	uci:load("luci_splash")
+	uci:revert("luci_splash")
 	
 	
 	-- For all leases
@@ -168,7 +167,7 @@ function sync()
 				remove_rule(v.mac)
 			else
 				-- Rewrite state
-				uci.section("luci_splash", "lease", nil, {		
+				uci:section("luci_splash", "lease", nil, {		
 					mac = v.mac,
 					start = v.start
 				})
@@ -185,7 +184,7 @@ function sync()
 		end
 	end
 	
-	uci.save_state("luci_splash")
+	uci:save("luci_splash")
 end
 
 main(arg)

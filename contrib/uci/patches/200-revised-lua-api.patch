@@ -1,7 +1,7 @@
 Index: uci.git/lua/uci.c
 ===================================================================
 --- uci.git.orig/lua/uci.c	2008-08-26 12:31:34.000000000 +0200
-+++ uci.git/lua/uci.c	2008-08-26 21:09:10.000000000 +0200
++++ uci.git/lua/uci.c	2008-08-27 00:30:46.000000000 +0200
 @@ -25,6 +25,7 @@
  #include <uci.h>
  
@@ -244,7 +244,19 @@ Index: uci.git/lua/uci.c
  		goto error;
  
  	uci_lookup_ptr(ctx, &ptr, NULL, false);
-@@ -323,7 +372,7 @@
+@@ -297,6 +346,11 @@
+ 		goto error;
+ 	}
+ 
++	if (!(ptr.flags & UCI_LOOKUP_COMPLETE)) {
++		err = UCI_ERR_NOTFOUND;
++		goto error;
++	}
++
+ 	err = UCI_OK;
+ 	e = ptr.last;
+ 	switch(e->type) {
+@@ -323,7 +377,7 @@
  	switch(err) {
  	default:
  		ctx->err = err;
@@ -253,7 +265,7 @@ Index: uci.git/lua/uci.c
  		/* fall through */
  	case UCI_ERR_NOTFOUND:
  		lua_pushnil(L);
-@@ -348,6 +397,7 @@
+@@ -348,6 +402,7 @@
  static int
  uci_lua_add(lua_State *L)
  {
@@ -261,7 +273,7 @@ Index: uci.git/lua/uci.c
  	struct uci_section *s = NULL;
  	struct uci_package *p;
  	const char *package;
-@@ -355,9 +405,9 @@
+@@ -355,9 +410,9 @@
  	const char *name = NULL;
  
  	do {
@@ -274,7 +286,7 @@ Index: uci.git/lua/uci.c
  		if (!p)
  			break;
  
-@@ -374,11 +424,12 @@
+@@ -374,11 +429,12 @@
  static int
  uci_lua_delete(lua_State *L)
  {
@@ -288,7 +300,7 @@ Index: uci.git/lua/uci.c
  		goto error;
  
  	err = uci_delete(ctx, &ptr);
-@@ -387,7 +438,7 @@
+@@ -387,7 +443,7 @@
  	if (s)
  		free(s);
  	if (err)
@@ -297,7 +309,7 @@ Index: uci.git/lua/uci.c
  	lua_pushboolean(L, (err == 0));
  	return 1;
  }
-@@ -395,6 +446,7 @@
+@@ -395,6 +451,7 @@
  static int
  uci_lua_set(lua_State *L)
  {
@@ -305,7 +317,7 @@ Index: uci.git/lua/uci.c
  	bool istable = false;
  	struct uci_ptr ptr;
  	int err = UCI_ERR_MEM;
-@@ -402,14 +454,14 @@
+@@ -402,14 +459,14 @@
  	int i, nargs;
  
  	nargs = lua_gettop(L);
@@ -323,7 +335,7 @@ Index: uci.git/lua/uci.c
  		/* Format: uci.set("p", "s", "o", "v") */
  		if (lua_istable(L, nargs)) {
  			if (lua_objlen(L, nargs) < 1)
-@@ -422,7 +474,7 @@
+@@ -422,7 +479,7 @@
  			ptr.value = luaL_checkstring(L, nargs);
  		}
  		break;
@@ -332,7 +344,7 @@ Index: uci.git/lua/uci.c
  		/* Format: uci.set("p", "s", "v") */
  		ptr.value = ptr.option;
  		ptr.option = NULL;
-@@ -433,17 +485,23 @@
+@@ -433,17 +490,23 @@
  	}
  
  	err = uci_lookup_ptr(ctx, &ptr, NULL, false);
@@ -359,7 +371,7 @@ Index: uci.git/lua/uci.c
  
  	if (istable) {
  		for (i = 2; i <= lua_objlen(L, nargs); i++) {
-@@ -458,7 +516,7 @@
+@@ -458,7 +521,7 @@
  
  error:
  	if (err)
@@ -368,7 +380,7 @@ Index: uci.git/lua/uci.c
  	lua_pushboolean(L, (err == 0));
  	return 1;
  }
-@@ -472,6 +530,7 @@
+@@ -472,6 +535,7 @@
  static int
  uci_lua_package_cmd(lua_State *L, enum pkg_cmd cmd)
  {
@@ -376,7 +388,7 @@ Index: uci.git/lua/uci.c
  	struct uci_element *e, *tmp;
  	struct uci_ptr ptr;
  	char *s = NULL;
-@@ -479,10 +538,10 @@
+@@ -479,10 +543,10 @@
  	int nargs;
  
  	nargs = lua_gettop(L);
@@ -389,7 +401,7 @@ Index: uci.git/lua/uci.c
  		goto err;
  
  	uci_lookup_ptr(ctx, &ptr, NULL, false);
-@@ -562,16 +621,16 @@
+@@ -562,16 +626,16 @@
  }
  
  static void
@@ -409,7 +421,7 @@ Index: uci.git/lua/uci.c
  		if (!p)
  			return;
  	}
-@@ -596,6 +655,7 @@
+@@ -596,6 +660,7 @@
  static int
  uci_lua_changes(lua_State *L)
  {
@@ -417,7 +429,7 @@ Index: uci.git/lua/uci.c
  	const char *package = NULL;
  	char **config = NULL;
  	int nargs;
-@@ -603,9 +663,9 @@
+@@ -603,9 +668,9 @@
  
  	nargs = lua_gettop(L);
  	switch(nargs) {
@@ -429,7 +441,7 @@ Index: uci.git/lua/uci.c
  		break;
  	default:
  		luaL_error(L, "invalid argument count");
-@@ -613,13 +673,13 @@
+@@ -613,13 +678,13 @@
  
  	lua_newtable(L);
  	if (package) {
@@ -445,7 +457,7 @@ Index: uci.git/lua/uci.c
  		}
  	}
  
-@@ -628,29 +688,53 @@
+@@ -628,29 +693,53 @@
  }
  
  static int
@@ -502,7 +514,7 @@ Index: uci.git/lua/uci.c
  	{ "load", uci_lua_load },
  	{ "unload", uci_lua_unload },
  	{ "get", uci_lua_get },
-@@ -663,25 +747,33 @@
+@@ -663,25 +752,33 @@
  	{ "revert", uci_lua_revert },
  	{ "changes", uci_lua_changes },
  	{ "foreach", uci_lua_foreach },

@@ -15,7 +15,7 @@ module("luci.controller.admin.network", package.seeall)
 
 function index()
 	require("luci.i18n")
-	require("luci.model.uci")
+	local uci = require("luci.model.uci").cursor()
 	local i18n = luci.i18n.translate
 
 	local page  = node("admin", "network")
@@ -32,7 +32,7 @@ function index()
 	page.target = form("admin_network/wireless")
 	page.title  = i18n("wifi")
 	page.order  = 15
-	luci.model.uci.foreach("wireless", "wifi-device",
+	uci:foreach("wireless", "wifi-device",
 		function (section)
 			local ifc = section[".name"]
 				entry({"admin", "network", "wireless", ifc},
@@ -49,7 +49,7 @@ function index()
 	page.target = cbi("admin_network/network")
 	page.title  = i18n("interfaces", "Schnittstellen")
 	page.order  = 10
-	luci.model.uci.foreach("network", "interface",
+	uci:foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
 			if ifc ~= "loopback" then

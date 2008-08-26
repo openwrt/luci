@@ -18,9 +18,9 @@ vhost   = luci.httpd.server.VHost()
 server:set_default_vhost(vhost)
 
 if pcall(require, "uci") and pcall(require, "luci.model.uci") then
-	luci.model.uci.confdir_default = SYSROOT .. luci.model.uci.confdir_default
-	luci.model.uci.savedir_state   = SYSROOT .. luci.model.uci.savedir_state
-	luci.model.uci.set_confdir(luci.model.uci.confdir_default)
+	luci.model.uci.cursor = function(config, ...)
+		return uci.cursor(config or SYSROOT .. "/etc/config", ...)
+	end
 end
 
 require("luci.sys")

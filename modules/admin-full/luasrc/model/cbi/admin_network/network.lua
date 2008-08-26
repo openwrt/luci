@@ -15,11 +15,7 @@ $Id$
 require("luci.sys")
 require("luci.tools.webadmin")
 
-luci.model.uci.load_state("network")
-local netstate = luci.model.uci.get_all("network")
-luci.model.uci.unload("network")
-
-
+local netstate = luci.model.uci.cursor_state():get_all("network")
 m = Map("network", translate("interfaces"))
 
 local created
@@ -70,7 +66,8 @@ end
 
 ifname.titleref = luci.dispatcher.build_url("admin", "network", "vlan")
 
-if luci.model.uci.load("firewall") then
+
+if luci.model.uci.cursor():load("firewall") then
 	zone = s:option(DummyValue, "_zone", translate("zone"))
 	zone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
 

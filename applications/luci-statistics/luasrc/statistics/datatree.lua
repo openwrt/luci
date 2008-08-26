@@ -18,8 +18,8 @@ module("luci.statistics.datatree", package.seeall)
 local util = require("luci.util")
 local sys  = require("luci.sys")
 local fs   = require("luci.fs")
-local uci  = require("luci.model.uci")
-local sections = uci.get_all( "luci_statistics" )
+local uci  = require("luci.model.uci").cursor()
+local sections = uci:get_all( "luci_statistics" )
 
 
 Instance = util.class()

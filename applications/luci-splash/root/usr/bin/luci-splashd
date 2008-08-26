@@ -4,7 +4,8 @@ require("socket")
 require("luci.ip")
 require("luci.model.uci")
 
-luci.model.uci.load_state("network")
+local uci = luci.model.uci.cursor_state()
+uci:load("network")
 
 local server = socket.bind("0.0.0.0", arg[1] or 8082)
 server:settimeout(0, "t")
@@ -16,7 +17,7 @@ while true do
 		client:settimeout(1)
 		local srv
 		local ip = luci.ip.IPv4(client:getpeername())
-		luci.model.uci.foreach("network", "interface",
+		uci:foreach("network", "interface",
 			function (section)
 			    if section.ipaddr then
 			        local net = luci.ip.IPv4(section.ipaddr, section.netmask)

@@ -15,10 +15,7 @@ $Id$
 
 -- Data init --
 
-luci.model.uci.load_state("wireless")
-local wireless = luci.model.uci.get_all("wireless")
-luci.model.uci.unload("wireless")
-
+local wireless = luci.model.uci.cursor_state():get_all("wireless")
 local wifidata = luci.sys.wifi.getiwconfig()
 local ifaces = {}
 
@@ -148,7 +145,7 @@ s.anonymous = true
 s:option(Value, "ssid", translate("a_w_netid")).maxlength = 32
 
 local devs = {}
-luci.model.uci.foreach("wireless", "wifi-device",
+luci.model.uci.cursor():foreach("wireless", "wifi-device",
 	function (section)
 		table.insert(devs, section[".name"])
 	end)
@@ -167,21 +164,21 @@ mode:value("sta", translate("m_w_client"))
 function mode.write(self, section, value)
 	if value == "sta" then
 		-- ToDo: Move this away
-		if not luci.model.uci.get("network", "wan") then
-			luci.model.uci.set("network", "wan", "proto", "none")
-			luci.model.uci.set("network", "wan", "ifname", " ")
+		if not m.uci:get("network", "wan") then
+			m.uci:set("network", "wan", "proto", "none")
+			m.uci:set("network", "wan", "ifname", " ")
 		end
 
-		local oldif = luci.model.uci.get("network", "wan", "ifname")
+		local oldif = m.uci:get("network", "wan", "ifname")
 		if oldif and oldif ~= " " then
-			luci.model.uci.set("network", "wan", "_ifname", oldif)
+			m.uci:set("network", "wan", "_ifname", oldif)
 		end
-		luci.model.uci.set("network", "wan", "ifname", " ")
+		m.uci:set("network", "wan", "ifname", " ")
 
 		self.map:set(section, "network", "wan")
 	else
-		if luci.model.uci.get("network", "wan", "_ifname") then
-			luci.model.uci.set("network", "wan", "ifname", luci.model.uci.get("network", "wan", "_ifname"))
+		if m.uci:get("network", "wan", "_ifname") then
+			m.uci:set("network", "wan", "ifname", m.uci:get("network", "wan", "_ifname"))
 		end
 		self.map:set(section, "network", "lan")
 	end

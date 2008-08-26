@@ -13,7 +13,7 @@ $Id$
 
 -%>
 <%+header%>
-<% local contact = luci.model.uci.get_all("freifunk", "contact") %>
+<% local contact = luci.model.uci.cursor():get_all("freifunk", "contact") %>
 <h1><%:contact%></h1>
 <table cellspacing="0" cellpadding="6">
 	<tr><th><%:nickname%>:</th><td><%=contact.nickname%></td></tr>

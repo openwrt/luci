@@ -28,6 +28,6 @@ limitations under the License.
 module("luci.config",
 	function(m)
 		if pcall(require, "luci.model.uci") then
-			setmetatable(m, {__index = luci.model.uci.get_all("luci")})
+			setmetatable(m, {__index = luci.model.uci.cursor():get_all("luci")})
 		end
 	end)

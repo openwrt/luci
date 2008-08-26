@@ -216,7 +216,7 @@ end
 
 function _keep_pattern()
 	local kpattern = ""
-	local files = luci.model.uci.get_all("luci", "flash_keep")
+	local files = luci.model.uci.cursor():get_all("luci", "flash_keep")
 	if files then
 		kpattern = ""
 		for k,v in pairs(files) do
