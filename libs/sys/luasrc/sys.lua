@@ -24,14 +24,26 @@ limitations under the License.
 
 ]]--
 
+
+local io    = require "io"
+local os    = require "os"
+local posix = require "posix"
+local table = require "table"
+
+local luci  = {}
+luci.util   = require "luci.util"
+luci.fs     = require "luci.fs"
+luci.ip     = require "luci.ip"
+
+local tonumber, ipairs, pairs = tonumber, ipairs, pairs
+
+
 --- LuCI Linux and POSIX system utilities.
-module("luci.sys", package.seeall)
-require("posix")
-require("luci.util")
-require("luci.fs")
-require("luci.ip")
+module "luci.sys"
+
 
 --- Invoke the luci-flash executable to write an image to the flash memory.
+-- @param image		Local path or URL to image file
 -- @param kpattern	Pattern of files to keep over flash process
 -- @return			Return value of os.execute()
 function flash(image, kpattern)

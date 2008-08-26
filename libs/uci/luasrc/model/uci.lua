@@ -23,11 +23,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-local uci  = require("uci")
-local util = require("luci.util")
+local uci   = require "uci"
+local util  = require "luci.util"
+local table = require "table"
+
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
-local table = table
+local require = require
 
 --- LuCI UCI model library.
 module("luci.model.uci", function(m) setmetatable(m, {__index = uci}) end)
@@ -36,6 +38,14 @@ savedir_default = "/tmp/.uci"
 confdir_default = "/etc/config"
 
 savedir_state = "/var/state"
+
+
+--- Applies the new config
+-- @param config		UCI config
+function apply(config)
+	local conf = require "luci.config"
+	return conf.uci_oncommit[config] and os.execute(conf.uci_oncommit[config])
+end
 
 --- Delete all sections of a given type that match certain criteria.
 -- @param config		UCI config
@@ -149,7 +159,6 @@ function get_list(config, section, option)
 end
 
 --- Set given values as list.
--- Warning: This function is unsave! You should use save_config or save_state if possible.
 -- @param config	UCI config
 -- @param section	UCI section name
 -- @param option	UCI option
@@ -244,7 +253,6 @@ end
 -- @see unload
 
 --- Set a value or create a named section.
--- Warning: This function is unsave! You should use save_config or save_state if possible.
 -- @class function
 -- @name set
 -- @param config	UCI config

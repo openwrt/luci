@@ -1,519 +1,319 @@
 --[[
+LuCI - Lua Configuration Interface
 
- JSON Encoder and Parser for Lua 5.1
- 
- Copyright � 2007 Shaun Brown (http://www.chipmunkav.com).
- All Rights Reserved.
- 
- Permission is hereby granted, free of charge, to any person 
- obtaining a copy of this software to deal in the Software without 
- restriction, including without limitation the rights to use, 
- copy, modify, merge, publish, distribute, sublicense, and/or 
- sell copies of the Software, and to permit persons to whom the 
- Software is furnished to do so, subject to the following conditions:
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
- The above copyright notice and this permission notice shall be 
- included in all copies or substantial portions of the Software.
- If you find this software useful please give www.chipmunkav.com a mention.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
- ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
- CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
- CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+http://www.apache.org/licenses/LICENSE-2.0
 
- Usage:
+$Id$
+]]--
 
- -- Lua script:
- local t = { 
-	["name1"] = "value1",
-	["name2"] = {1, false, true, 23.54, "a \021 string"},
-	name3 = Json.Null() 
- }
+local util      = require "luci.util"
+local ltn12     = require "luci.ltn12"
+local table     = require "table"
+local coroutine = require "coroutine"
 
- local json = Json.Encode (t)
- print (json) 
- --> {"name1":"value1","name3":null,"name2":[1,false,true,23.54,"a \u0015 string"]}
+local assert    = assert
+local tonumber  = tonumber
+local error     = error
 
- local t = Json.Decode(json)
- print(t.name2[4])
- --> 23.54
- 
- Notes:
- 1) Encodable Lua types: string, number, boolean, table, nil
- 2) Use Json.Null() to insert a null value into a Json object
- 3) All control chars are encoded to \uXXXX format eg "\021" encodes to "\u0015"
- 4) All Json \uXXXX chars are decoded to chars (0-255 byte range only)
- 5) Json single line // and /* */ block comments are discarded during decoding
- 6) Numerically indexed Lua arrays are encoded to Json Lists eg [1,2,3]
- 7) Lua dictionary tables are converted to Json objects eg {"one":1,"two":2}
- 8) Json nulls are decoded to Lua nil and treated by Lua in the normal way
+module "luci.json"
 
---]]
-
-local string = string
-local math = math
-local table = table
-local error = error
-local tonumber = tonumber
-local tostring = tostring
-local type = type
-local setmetatable = setmetatable
-local pairs = pairs
-local ipairs = ipairs
-local assert = assert
-local Chipmunk = Chipmunk
-
-module("luci.json")
-
-local StringBuilder = {
-	buffer = {}
-}
-
-function StringBuilder:New()
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.buffer = {}
-	return o
+--- Null replacement function
+-- @return null
+function null()
+	return null
 end
 
-function StringBuilder:Append(s)
-	self.buffer[#self.buffer+1] = s
-end
+Decoder = util.class()
 
-function StringBuilder:ToString()
-	return table.concat(self.buffer)
-end
-
-local JsonWriter = {
-	backslashes = {
-		['\b'] = "\\b",
-		['\t'] = "\\t",	
-		['\n'] = "\\n", 
-		['\f'] = "\\f",
-		['\r'] = "\\r", 
-		['"']  = "\\\"", 
-		['\\'] = "\\\\", 
-		['/']  = "\\/"
-	}
-}
-
-function JsonWriter:New()
-	local o = {}
-	o.writer = StringBuilder:New()
-	setmetatable(o, self)
-	self.__index = self
-	return o
-end
-
-function JsonWriter:Append(s)
-	self.writer:Append(s)
-end
-
-function JsonWriter:ToString()
-	return self.writer:ToString()
-end
-
-function JsonWriter:Write(o)
-	local t = type(o)
-	if t == "nil" then
-		self:WriteNil()
-	elseif t == "boolean" then
-		self:WriteString(o)
-	elseif t == "number" then
-		self:WriteString(o)
-	elseif t == "string" then
-		self:ParseString(o)
-	elseif t == "table" then
-		self:WriteTable(o)
-	elseif t == "function" then
-		self:WriteFunction(o)
-	elseif t == "thread" then
-		self:WriteError(o)
-	elseif t == "userdata" then
-		self:WriteError(o)
+--- Create an LTN12 sink from the decoder object
+-- @return LTN12 sink
+function Decoder.sink(self)
+	local sink = coroutine.create(self.dispatch)
+	return function(...)
+		return coroutine.resume(sink, self, ...)
 	end
 end
 
-function JsonWriter:WriteNil()
-	self:Append("null")
+
+--- Get the decoded data packets
+-- @return Decoded data
+function Decoder.get(self)
+	return self.data
 end
 
-function JsonWriter:WriteString(o)
-	self:Append(tostring(o))
-end
 
-function JsonWriter:ParseString(s)
-	self:Append('"')
-	self:Append(string.gsub(s, "[%z%c\\\"/]", function(n)
-		local c = self.backslashes[n]
-		if c then return c end
-		return string.format("\\u%.4X", string.byte(n))
-	end))
-	self:Append('"')
-end
-
-function JsonWriter:IsArray(t)
-	local count = 0
-	local isindex = function(k) 
-		if type(k) == "number" and k > 0 then
-			if math.floor(k) == k then
-				return true
-			end
+function Decoder.dispatch(self, chunk, src_err, strict)
+	local robject, object
+	 
+	while chunk do
+		if #chunk < 1 then
+			chunk = self:fetch()
 		end
-		return false
-	end
-	for k,v in pairs(t) do
-		if not isindex(k) then
-			return false, '{', '}'
-		else
-			count = math.max(count, k)
-		end
-	end
-	return true, '[', ']', count
-end
-
-function JsonWriter:WriteTable(t)
-	local ba, st, et, n = self:IsArray(t)
-	self:Append(st)	
-	if ba then		
-		for i = 1, n do
-			self:Write(t[i])
-			if i < n then
-				self:Append(',')
-			end
-		end
-	else
-		local first = true;
-		for k, v in pairs(t) do
-			if not first then
-				self:Append(',')
-			end
-			first = false;			
-			self:ParseString(k)
-			self:Append(':')
-			self:Write(v)			
-		end
-	end
-	self:Append(et)
-end
-
-function JsonWriter:WriteError(o)
-	error(string.format(
-		"Encoding of %s unsupported", 
-		tostring(o)))
-end
-
-function JsonWriter:WriteFunction(o)
-	if o == Null then 
-		self:WriteNil()
-	else
-		self:WriteError(o)
-	end
-end
-
-local StringReader = {
-	s = "",
-	i = 0
-}
-
-function StringReader:New(s)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.s = s or o.s
-	return o	
-end
-
-function StringReader:Peek()
-	local i = self.i + 1
-	if i <= #self.s then
-		return string.sub(self.s, i, i)
-	end
-	return nil
-end
-
-function StringReader:Next()
-	self.i = self.i+1
-	if self.i <= #self.s then
-		return string.sub(self.s, self.i, self.i)
-	end
-	return nil
-end
-
-function StringReader:All()
-	return self.s
-end
-
-local JsonReader = {
-	escapes = {
-		['t'] = '\t',
-		['n'] = '\n',
-		['f'] = '\f',
-		['r'] = '\r',
-		['b'] = '\b',
-	}
-}
-
-function JsonReader:New(s)
-	local o = {}
-	o.reader = StringReader:New(s)
-	setmetatable(o, self)
-	self.__index = self
-	return o;
-end
-
-function JsonReader:Read()
-	self:SkipWhiteSpace()
-	local peek = self:Peek()
-	if peek == nil then
-		error(string.format(
-			"Nil string: '%s'", 
-			self:All()))
-	elseif peek == '{' then
-		return self:ReadObject()
-	elseif peek == '[' then
-		return self:ReadArray()
-	elseif peek == '"' then
-		return self:ReadString()
-	elseif string.find(peek, "[%+%-%d]") then
-		return self:ReadNumber()
-	elseif peek == 't' then
-		return self:ReadTrue()
-	elseif peek == 'f' then
-		return self:ReadFalse()
-	elseif peek == 'n' then
-		return self:ReadNull()
-	elseif peek == '/' then
-		self:ReadComment()
-		return self:Read()
-	else
-		error(string.format(
-			"Invalid input: '%s'", 
-			self:All()))
-	end
-end
 		
-function JsonReader:ReadTrue()
-	self:TestReservedWord{'t','r','u','e'}
-	return true
-end
-
-function JsonReader:ReadFalse()
-	self:TestReservedWord{'f','a','l','s','e'}
-	return false
-end
-
-function JsonReader:ReadNull()
-	self:TestReservedWord{'n','u','l','l'}
-	return nil
-end
-
-function JsonReader:TestReservedWord(t)
-	for i, v in ipairs(t) do
-		if self:Next() ~= v then
-			 error(string.format(
-				"Error reading '%s': %s", 
-				table.concat(t), 
-				self:All()))
+		assert(not strict or chunk, "Unexpected EOS")
+		if not chunk then
+			break
 		end
-	end
-end
-
-function JsonReader:ReadNumber()
-        local result = self:Next()
-        local peek = self:Peek()
-        while peek ~= nil and string.find(
-		peek, 
-		"[%+%-%d%.eE]") do
-            result = result .. self:Next()
-            peek = self:Peek()
-	end
-	result = tonumber(result)
-	if result == nil then
-	        error(string.format(
-			"Invalid number: '%s'", 
-			result))
-	else
-		return result
-	end
-end
-
-function JsonReader:ReadString()
-	local result = ""
-	assert(self:Next() == '"')
-        while self:Peek() ~= '"' do
-		local ch = self:Next()
-		if ch == '\\' then
-			ch = self:Next()
-			if self.escapes[ch] then
-				ch = self.escapes[ch]
+		
+		local parser = nil
+		local char   = chunk:sub(1, 1)
+		
+		if char == '"' then
+			parser = self.parse_string
+		elseif char == 't' then
+			parser = self.parse_true
+		elseif char == 'f' then
+			parser = self.parse_false
+		elseif char == 'n' then
+			parser = self.parse_null
+		elseif char == '[' then
+			parser = self.parse_array
+		elseif char == '{' then
+			parser = self.parse_object
+		elseif char:match("%s") then
+			parser = self.parse_space
+		elseif char:match("[0-9-]") then
+			parser = self.parse_number
+		end
+		
+		if parser then
+			chunk, robject = parser(self, chunk)
+			
+			if robject ~= nil then
+				assert(object == nil, "Scope violation: Too many objects")
+				object = robject
 			end
-		end
-                result = result .. ch
-	end
-        assert(self:Next() == '"')
-	local fromunicode = function(m)
-		return string.char(tonumber(m, 16))
-	end
-	return string.gsub(
-		result, 
-		"u%x%x(%x%x)", 
-		fromunicode)
-end
-
-function JsonReader:ReadComment()
-        assert(self:Next() == '/')
-        local second = self:Next()
-        if second == '/' then
-            self:ReadSingleLineComment()
-        elseif second == '*' then
-            self:ReadBlockComment()
-        else
-            error(string.format(
-		"Invalid comment: %s", 
-		self:All()))
-	end
-end
-
-function JsonReader:ReadBlockComment()
-	local done = false
-	while not done do
-		local ch = self:Next()		
-		if ch == '*' and self:Peek() == '/' then
-			done = true
-                end
-		if not done and 
-			ch == '/' and 
-			self:Peek() == "*" then
-                    error(string.format(
-			"Invalid comment: %s, '/*' illegal.",  
-			self:All()))
-		end
-	end
-	self:Next()
-end
-
-function JsonReader:ReadSingleLineComment()
-	local ch = self:Next()
-	while ch ~= '\r' and ch ~= '\n' do
-		ch = self:Next()
-	end
-end
-
-function JsonReader:ReadArray()
-	local result = {}
-	assert(self:Next() == '[')
-	self:SkipWhiteSpace()
-	local done = false
-	if self:Peek() == ']' then
-		done = true;
-	end
-	while not done do
-		local item = self:Read()
-		result[#result+1] = item
-		self:SkipWhiteSpace()
-		if self:Peek() == ']' then
-			done = true
-		end
-		if not done then
-			local ch = self:Next()
-			if ch ~= ',' then
-				error(string.format(
-					"Invalid array: '%s' due to: '%s'", 
-					self:All(), ch))
+			
+			if strict and object ~= nil then
+				return chunk, object
 			end
-		end
-	end
-	assert(']' == self:Next())
-	return result
-end
-
-function JsonReader:ReadObject()
-	local result = {}
-	assert(self:Next() == '{')
-	self:SkipWhiteSpace()
-	local done = false
-	if self:Peek() == '}' then
-		done = true
-	end
-	while not done do
-		local key = self:Read()
-		if type(key) ~= "string" then
-			error(string.format(
-				"Invalid non-string object key: %s", 
-				key))
-		end
-		self:SkipWhiteSpace()
-		local ch = self:Next()
-		if ch ~= ':' then
-			error(string.format(
-				"Invalid object: '%s' due to: '%s'", 
-				self:All(), 
-				ch))
-		end
-		self:SkipWhiteSpace()
-		local val = self:Read()
-		result[key] = val
-		self:SkipWhiteSpace()
-		if self:Peek() == '}' then
-			done = true
-		end
-		if not done then
-			ch = self:Next()
-                	if ch ~= ',' then
-				error(string.format(
-					"Invalid array: '%s' near: '%s'", 
-					self:All(), 
-					ch))
-			end
-		end
-	end
-	assert(self:Next() == "}")
-	return result
-end
-
-function JsonReader:SkipWhiteSpace()
-	local p = self:Peek()
-	while p ~= nil and string.find(p, "[%s/]") do
-		if p == '/' then
-			self:ReadComment()
 		else
-			self:Next()
+			error("Unexpected char '%s'" % char)
 		end
-		p = self:Peek()
+	end
+	
+	assert(not src_err, src_err)
+	assert(object ~= nil, "Unexpected EOS")
+	
+	self.data = object
+	return chunk, object
+end
+
+
+function Decoder.fetch(self)
+	local tself, chunk, src_err = coroutine.yield()
+	assert(chunk or not src_err, src_err)
+	return chunk
+end
+
+
+function Decoder.fetch_atleast(self, chunk, bytes)
+	while #chunk < bytes do
+		local nchunk = self:fetch()
+		assert(nchunk, "Unexpected EOS")
+		chunk = chunk .. nchunk
+	end
+	
+	return chunk
+end
+
+
+function Decoder.fetch_until(self, chunk, pattern)
+	local start = chunk:find(pattern)
+
+	while not start do
+		local nchunk = self:fetch()
+		assert(nchunk, "Unexpected EOS")
+		chunk = chunk .. nchunk
+		start = chunk:find(pattern)
+	end
+
+	return chunk, start
+end
+
+
+function Decoder.parse_space(self, chunk)
+	local start = chunk:find("[^%s]")
+	
+	while not start do
+		chunk = self:fetch()
+		if not chunk then
+			return nil
+		end
+		start = chunk:find("[^%s]")
+	end
+	
+	return chunk:sub(start)
+end
+
+
+function Decoder.parse_literal(self, chunk, literal, value)
+	chunk = self:fetch_atleast(chunk, #literal)	
+	assert(chunk:sub(1, #literal) == literal, "Invalid character sequence")
+	return chunk:sub(#literal + 1), value
+end
+
+
+function Decoder.parse_null(self, chunk)
+	return self:parse_literal(chunk, "null", null)
+end
+
+
+function Decoder.parse_true(self, chunk)
+	return self:parse_literal(chunk, "true", true)
+end
+
+
+function Decoder.parse_false(self, chunk)
+	return self:parse_literal(chunk, "false", false)
+end
+
+
+function Decoder.parse_number(self, chunk)
+	local chunk, start = self:fetch_until(chunk, "[^0-9eE.+-]")
+	local number = tonumber(chunk:sub(1, start - 1))
+	assert(number, "Invalid number specification")
+	return chunk:sub(start), number
+end
+
+
+function Decoder.parse_string(self, chunk)
+	local str = ""
+	local object = nil
+	assert(chunk:sub(1, 1) == '"', 'Expected "')
+	chunk = chunk:sub(2)
+
+	while true do
+		local spos = chunk:find('[\\"]')
+		if spos then
+			str = str .. chunk:sub(1, spos - 1)
+			
+			local char = chunk:sub(spos, spos)
+			if char == '"' then				-- String end
+				chunk = chunk:sub(spos + 1)
+				break
+			elseif char == "\\" then 		-- Escape sequence
+				chunk, object = self:parse_escape(chunk:sub(spos))
+				str = str .. object
+			end
+		else
+			str = str .. chunk
+			chunk = self:fetch()
+			assert(chunk, "Unexpected EOS while parsing a string")		
+		end
+	end
+
+	return chunk, str
+end
+
+
+function Decoder.parse_escape(self, chunk)
+	local str = ""
+	chunk = self:fetch_atleast(chunk:sub(2), 1)
+	local char = chunk:sub(1, 1)
+	chunk = chunk:sub(2)
+	
+	if char == '"' then
+		return chunk, '"'
+	elseif char == "\\" then
+		return chunk, "\\"
+	elseif char == "/" then
+		return chunk, "/"
+	elseif char == "b" then
+		return chunk, "\b"
+	elseif char == "f" then
+		return chunk, "\f"
+	elseif char == "n" then
+		return chunk, "\n"
+	elseif char == "r" then
+		return chunk, "\r"
+	elseif char == "t" then
+		return chunk, "\t"
+	elseif char == "u" then
+		chunk = self:fetch_atleast(chunk, 4)
+		local s1, s2 = chunk:sub(1, 4):match("^([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])$")
+		assert(s1 and s2, "Invalid Unicode character 'U+%s%s'" % {s1, s2})
+		s1, s2 = tonumber(s1, 16), tonumber(s2, 16)
+		
+		-- ToDo: Unicode support
+		return chunk:sub(5), s1 == 0 and s2 or ""
+	else
+		error("Unexpected escaping sequence '\\%s'" % char)
 	end
 end
 
-function JsonReader:Peek()
-	return self.reader:Peek()
+
+function Decoder.parse_array(self, chunk)
+	chunk = chunk:sub(2)
+	local array = {}
+	
+	local chunk, object = self:parse_delimiter(chunk, "%]")
+	
+	if object then
+		return chunk, array
+	end
+	
+	repeat
+		chunk, object = self:dispatch(chunk, nil, true)
+		table.insert(array, object)
+		
+		chunk, object = self:parse_delimiter(chunk, ",%]")
+		assert(object, "Delimiter expected")
+	until object == "]"
+
+	return chunk, array
 end
 
-function JsonReader:Next()
-	return self.reader:Next()
+
+function Decoder.parse_object(self, chunk)
+	chunk = chunk:sub(2)
+	local array = {}
+	local name
+
+	local chunk, object = self:parse_delimiter(chunk, "}")
+
+	if object then
+		return chunk, array
+	end
+
+	repeat
+		chunk = self:parse_space(chunk)
+		assert(chunk, "Unexpected EOS")
+		
+		chunk, name   = self:parse_string(chunk)
+		
+		chunk, object = self:parse_delimiter(chunk, ":")
+		assert(object, "Separator expected")
+		
+		chunk, object = self:dispatch(chunk, nil, true)
+		array[name] = object
+
+		chunk, object = self:parse_delimiter(chunk, ",}")
+		assert(object, "Delimiter expected")
+	until object == "}"
+
+	return chunk, array
 end
 
-function JsonReader:All()
-	return self.reader:All()
-end
 
-function Encode(o)
-	local writer = JsonWriter:New()
-	writer:Write(o)
-	return writer:ToString()
-end
-
-function Decode(s)
-	local reader = JsonReader:New(s)
-	local object = reader:Read()
-	reader:SkipWhiteSpace()
-	assert(reader:Peek() == nil, "Invalid characters after JSON body")
-	return object
-end
-
-function Null()
-	return Null
+function Decoder.parse_delimiter(self, chunk, delimiter)
+	while true do
+		chunk = self:fetch_atleast(chunk, 1)
+		local char = chunk:sub(1, 1)
+		if char:match("%s") then
+			chunk = self:parse_space(chunk)
+			assert(chunk, "Unexpected EOS")
+		elseif char:match("[%s]" % delimiter) then
+			return chunk:sub(2), char
+		else
+			return chunk, nil
+		end
+	end
 end

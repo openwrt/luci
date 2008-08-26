@@ -24,10 +24,12 @@ limitations under the License.
 
 ]]--
 
---- LuCI filesystem library.
-module("luci.fs", package.seeall)
+local posix = require "posix"
+local io    = require "io"
+local type  = type
 
-require("posix")
+--- LuCI filesystem library.
+module "luci.fs"
 
 --- Test for file access permission on given path.
 -- @class		function

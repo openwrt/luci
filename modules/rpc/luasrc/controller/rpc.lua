@@ -12,15 +12,20 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-module("luci.controller.rpc", package.seeall)
+
+local require = require
+local pairs = pairs
+local print = print
+
+module "luci.controller.rpc"
 
 function index()
 	local function authenticator(validator, accs)
-		local args = luci.dispatcher.context.args
-		if args and #args > 0 then
-			local user = luci.sauth.read(args[1])
+		local auth = luci.http.formvalue("auth", true)
+		if auth then
+			local user = luci.sauth.read(auth)
 			if user and luci.util.contains(accs, user) then
-				return user
+				return user, auth
 			end
 		end
 		luci.http.status(403, "Forbidden")
@@ -29,16 +34,25 @@ function index()
 	uci = entry({"rpc", "uci"}, call("rpc_uci"))
 	uci.sysauth = "root"
 	uci.sysauth_authenticator = authenticator
-	uci.leaf = true
+	
+	fs = entry({"rpc", "fs"}, call("rpc_fs"))
+	fs.sysauth = "root"
+	fs.sysauth_authenticator = authenticator
+
+	fs = entry({"rpc", "sys"}, call("rpc_sys"))
+	fs.sysauth = "root"
+	fs.sysauth_authenticator = authenticator
 	
 	uci = entry({"rpc", "auth"}, call("rpc_auth"))
 end
 
 function rpc_auth()
-	require "luci.jsonrpc"
-	require "luci.sauth"
+	local jsonrpc = require "luci.jsonrpc"
+	local sauth   = require "luci.sauth"
+	local http    = require "luci.http"
+	local sys     = require "luci.sys"
 	
-	luci.http.setfilehandler()
+	http.setfilehandler()
 	
 	local loginstat
 	
@@ -46,21 +60,45 @@ function rpc_auth()
 	server.login = function(user, pass)
 		local sid
 		
-		if luci.sys.user.checkpasswd(user, pass) then
-			sid = luci.sys.uniqueid(16)
-			luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-			luci.sauth.write(sid, user)
+		if sys.user.checkpasswd(user, pass) then
+			sid = sys.uniqueid(16)
+			http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
+			sauth.write(sid, user)
 		end
 		
 		return sid
 	end
 	
-	luci.http.prepare_content("application/json")
-	luci.http.write(luci.jsonrpc.handle(server, luci.http.content()))
-	
-	return loginstat
+	http.prepare_content("application/json")
+	http.write(jsonrpc.handle(server, http.content()))
 end
 
 function rpc_uci()
+	local uci     = require "luci.controller.rpc.uci"
+	local jsonrpc = require "luci.jsonrpc"
+	local http    = require "luci.http"
 	
+	http.setfilehandler()
+	http.prepare_content("application/json")
+	http.write(jsonrpc.handle(uci, http.content()))
+end
+
+function rpc_fs()
+	local fs      = require "luci.fs"
+	local jsonrpc = require "luci.jsonrpc"
+	local http    = require "luci.http"
+	
+	http.setfilehandler()
+	http.prepare_content("application/json")
+	http.write(jsonrpc.handle(fs, http.content()))
+end
+
+function rpc_sys()
+	local sys     = require "luci.sys"
+	local jsonrpc = require "luci.jsonrpc"
+	local http    = require "luci.http"
+	
+	http.setfilehandler()
+	http.prepare_content("application/json")
+	http.write(jsonrpc.handle(sys, http.content()))
 end

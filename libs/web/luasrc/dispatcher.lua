@@ -187,13 +187,15 @@ function dispatch(request)
 		
 		if not luci.util.contains(accs, user) then
 			if authen then
-				local user = authen(luci.sys.user.checkpasswd, accs, def)
+				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
 				if not user or not luci.util.contains(accs, user) then
 					return
 				else
-					local sid = luci.sys.uniqueid(16)
+					local sid = sess or luci.sys.uniqueid(16)
 					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-					luci.sauth.write(sid, user)
+					if not sess then
+						luci.sauth.write(sid, user)
+					end
 				end
 			else
 				luci.http.status(403, "Forbidden")

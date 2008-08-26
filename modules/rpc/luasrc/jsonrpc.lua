@@ -23,12 +23,12 @@ function resolve(mod, method)
 		if not type(mod) == "table" then
 			break
 		end
-		mod = mod[path[j]]
+		mod = rawget(mod, path[j])
 		if not mod then
 			break
 		end
 	end
-	mod = type(mod) == "table" and mod[path[#path]] or nil
+	mod = type(mod) == "table" and rawget(mod, path[#path]) or nil
 	if type(mod) == "function" then
 		return mod
 	end
