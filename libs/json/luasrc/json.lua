@@ -11,16 +11,49 @@ You may obtain a copy of the License at
 http://www.apache.org/licenses/LICENSE-2.0
 
 $Id$
+
+Decoder:
+	Info:
+		null will be decoded to luci.json.null if first parameter of Decoder() is true
+	
+	Example:
+		decoder = luci.json.Decoder()
+		luci.ltn12.pump.all(luci.ltn12.source.string("decodableJSON"), decoder:sink())
+		luci.util.dumptable(decoder:get())
+		
+	Known issues:
+		does not support unicode conversion \uXXYY with XX != 00 will be ignored
+		
+			
+Encoder:
+	Info:
+		Accepts numbers, strings, nil, booleans as they are
+		Accepts luci.json.null as replacement for nil
+		Accepts full associative and full numerically indexed tables
+		Mixed tables will loose their associative values during conversion
+		Iterator functions will be encoded as an array of their return values
+		Non-iterator functions will probably corrupt the encoder
+	
+	Example:
+		encoder = luci.json.Encoder(encodableData)
+		luci.ltn12.pump.all(encoder:source(), luci.ltn12.sink.file(io.open("someFile", w)))
 ]]--
 
 local util      = require "luci.util"
-local ltn12     = require "luci.ltn12"
 local table     = require "table"
+local string    = require "string"
 local coroutine = require "coroutine"
 
 local assert    = assert
 local tonumber  = tonumber
+local tostring  = tostring
 local error     = error
+local type	    = type
+local pairs	    = pairs
+local ipairs    = ipairs
+local next      = next
+
+local getmetatable = getmetatable
 
 module "luci.json"
 
@@ -30,9 +63,161 @@ function null()
 	return null
 end
 
+
+Encoder = util.class()
+
+--- Creates a new Encoder.
+-- @param data			Data to be encoded.
+-- @param buffersize	Buffersize of returned data.
+-- @param fastescape	Use non-standard escaping (don't escape control chars) 
+function Encoder.__init__(self, data, buffersize, fastescape)
+	self.data = data
+	self.buffersize = buffersize or 512
+	self.buffer = ""
+	self.fastescape = fastescape
+	
+	getmetatable(self).__call = Encoder.source
+end
+
+--- Create an LTN12 source from the encoder object
+-- @return LTN12 source
+function Encoder.source(self)
+	local source = coroutine.create(self.dispatch)
+	return function()
+		local res, data = coroutine.resume(source, self, self.data, true)
+		if res then
+			return data
+		else
+			return nil, data
+		end
+	end	
+end
+
+function Encoder.dispatch(self, data, start)
+	local parser = self.parsers[type(data)]
+	
+	parser(self, data)
+	
+	if start then
+		if #self.buffer > 0 then
+			coroutine.yield(self.buffer)
+		end
+		
+		coroutine.yield()
+	end
+end
+
+function Encoder.put(self, chunk)
+	if self.buffersize < 2 then
+		corountine.yield(chunk)
+	else
+		if #self.buffer + #chunk > self.buffersize then
+			local written = 0
+			local fbuffer = self.buffersize - #self.buffer
+
+			coroutine.yield(self.buffer .. chunk:sub(written + 1, fbuffer))
+			written = fbuffer
+			
+			while #chunk - written > self.buffersize do
+				fbuffer = written + self.buffersize
+				coroutine.yield(chunk:sub(written + 1, fbuffer))
+				written = fbuffer
+			end 
+			
+			self.buffer = chunk:sub(written + 1)
+		else
+			self.buffer = self.buffer .. chunk
+		end
+	end
+end
+
+function Encoder.parse_nil(self)
+	self:put("null")
+end
+
+function Encoder.parse_bool(self, obj)
+	self:put(obj and "true" or "false")
+end
+
+function Encoder.parse_number(self, obj)
+	self:put(tostring(obj))
+end
+
+function Encoder.parse_string(self, obj)
+	if self.fastescape then
+		self:put('"' .. obj:gsub('\\', '\\\\'):gsub('"', '\\"') .. '"')
+	else
+		self:put('"' ..
+			obj:gsub('[%c\\"]',
+				function(char)
+					return '\\u00%02x' % char:byte()
+				end
+			)
+		.. '"')
+	end
+end
+
+function Encoder.parse_iter(self, obj)
+	if obj == null then
+		return self:put("null")
+	end
+
+	if type(obj) == "table" and (#obj == 0 and next(obj)) then
+		self:put("{")
+		local first = true
+		
+		for key, entry in pairs(obj) do
+			first = first or self:put(",")
+			first = first and false
+			self:parse_string(tostring(key))
+			self:put(":")
+			self:dispatch(entry)
+		end
+		
+		self:put("}") 		
+	else
+		self:put("[")
+		local first = true
+		
+		if type(obj) == "table" then
+			for i, entry in pairs(obj) do
+				first = first or self:put(",")
+				first = first and nil
+				self:dispatch(entry)
+			end
+		else
+			for entry in obj do
+				first = first or self:put(",")
+				first = first and nil
+				self:dispatch(entry)
+			end		
+		end
+		
+		self:put("]") 	
+	end
+end
+
+Encoder.parsers = {
+	['nil']      = Encoder.parse_nil,
+	['table']    = Encoder.parse_iter,
+	['number']   = Encoder.parse_number,
+	['string']   = Encoder.parse_string,
+	['boolean']  = Encoder.parse_bool,
+	['function'] = Encoder.parse_iter
+} 
+
+
+
 Decoder = util.class()
 
---- Create an LTN12 sink from the decoder object
+--- Create a new Decoder object.
+-- @param customnull User luci.json.null instead of nil
+function Decoder.__init__(self, customnull)
+	self.cnull = customnull
+	getmetatable(self).__call = Decoder.sink
+end
+
+--- Create an LTN12 sink from the decoder object.
 -- @return LTN12 sink
 function Decoder.sink(self)
 	local sink = coroutine.create(self.dispatch)
@@ -48,62 +233,41 @@ function Decoder.get(self)
 	return self.data
 end
 
-
 function Decoder.dispatch(self, chunk, src_err, strict)
 	local robject, object
+	local oset = false
 	 
 	while chunk do
-		if #chunk < 1 then
+		while chunk and #chunk < 1 do
 			chunk = self:fetch()
 		end
 		
 		assert(not strict or chunk, "Unexpected EOS")
-		if not chunk then
-			break
-		end
+		if not chunk then break end
 		
-		local parser = nil
 		local char   = chunk:sub(1, 1)
+		local parser = self.parsers[char]
+		 or (char:match("%s")     and self.parse_space)
+		 or (char:match("[0-9-]") and self.parse_number)
+		 or error("Unexpected char '%s'" % char)
 		
-		if char == '"' then
-			parser = self.parse_string
-		elseif char == 't' then
-			parser = self.parse_true
-		elseif char == 'f' then
-			parser = self.parse_false
-		elseif char == 'n' then
-			parser = self.parse_null
-		elseif char == '[' then
-			parser = self.parse_array
-		elseif char == '{' then
-			parser = self.parse_object
-		elseif char:match("%s") then
-			parser = self.parse_space
-		elseif char:match("[0-9-]") then
-			parser = self.parse_number
-		end
+		chunk, robject = parser(self, chunk)
 		
-		if parser then
-			chunk, robject = parser(self, chunk)
-			
-			if robject ~= nil then
-				assert(object == nil, "Scope violation: Too many objects")
-				object = robject
-			end
-			
-			if strict and object ~= nil then
+		if parser ~= self.parse_space then
+			assert(not oset, "Scope violation: Too many objects")
+			object = robject
+			oset = true
+		
+			if strict then
 				return chunk, object
 			end
-		else
-			error("Unexpected char '%s'" % char)
 		end
 	end
 	
 	assert(not src_err, src_err)
-	assert(object ~= nil, "Unexpected EOS")
+	assert(oset, "Unexpected EOS")
 	
 	self.data = object
-	return chunk, object
 end
 
 
@@ -162,7 +326,7 @@ end
 
 
 function Decoder.parse_null(self, chunk)
-	return self:parse_literal(chunk, "null", null)
+	return self:parse_literal(chunk, "null", self.cnull and null)
 end
 
 
@@ -224,6 +388,14 @@ function Decoder.parse_escape(self, chunk)
 		return chunk, '"'
 	elseif char == "\\" then
 		return chunk, "\\"
+	elseif char == "u" then
+		chunk = self:fetch_atleast(chunk, 4)
+		local s1, s2 = chunk:sub(1, 2), chunk:sub(3, 4)
+		s1, s2 = tonumber(s1, 16), tonumber(s2, 16)
+		assert(s1 and s2, "Invalid Unicode character")
+		
+		-- ToDo: Unicode support
+		return chunk:sub(5), s1 == 0 and string.char(s2) or ""
 	elseif char == "/" then
 		return chunk, "/"
 	elseif char == "b" then
@@ -236,14 +408,6 @@ function Decoder.parse_escape(self, chunk)
 		return chunk, "\r"
 	elseif char == "t" then
 		return chunk, "\t"
-	elseif char == "u" then
-		chunk = self:fetch_atleast(chunk, 4)
-		local s1, s2 = chunk:sub(1, 4):match("^([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])$")
-		assert(s1 and s2, "Invalid Unicode character 'U+%s%s'" % {s1, s2})
-		s1, s2 = tonumber(s1, 16), tonumber(s2, 16)
-		
-		-- ToDo: Unicode support
-		return chunk:sub(5), s1 == 0 and s2 or ""
 	else
 		error("Unexpected escaping sequence '\\%s'" % char)
 	end
@@ -253,6 +417,7 @@ end
 function Decoder.parse_array(self, chunk)
 	chunk = chunk:sub(2)
 	local array = {}
+	local nextp = 1
 	
 	local chunk, object = self:parse_delimiter(chunk, "%]")
 	
@@ -262,7 +427,8 @@ function Decoder.parse_array(self, chunk)
 	
 	repeat
 		chunk, object = self:dispatch(chunk, nil, true)
-		table.insert(array, object)
+		table.insert(array, nextp, object)
+		nextp = nextp + 1
 		
 		chunk, object = self:parse_delimiter(chunk, ",%]")
 		assert(object, "Delimiter expected")
@@ -317,3 +483,13 @@ function Decoder.parse_delimiter(self, chunk, delimiter)
 		end
 	end
 end
+
+
+Decoder.parsers = { 
+	['"'] = Decoder.parse_string,
+	['t'] = Decoder.parse_true,
+	['f'] = Decoder.parse_false,
+	['n'] = Decoder.parse_null,
+	['['] = Decoder.parse_array,
+	['{'] = Decoder.parse_object
+}

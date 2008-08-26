@@ -34,8 +34,10 @@ function resolve(mod, method)
 	end
 end
 
-function handle(tbl, rawdata)
-	local stat, json = luci.util.copcall(luci.json.Decode, rawdata)
+function handle(tbl, rawsource, ...)
+	local decoder = luci.json.Decoder()
+	local stat = luci.ltn12.pump.all(rawsource, decoder:sink())
+	local json = decoder:get()
 	local response
 	local success = false
 	
@@ -54,22 +56,22 @@ function handle(tbl, rawdata)
 			 nil, {code=-32600, message="Invalid request."})
 		end
 	else
-		response = reply(json.jsonrpc, nil,
+		response = reply("2.0", nil,
 		 nil, {code=-32700, message="Parse error."})
 	end
 
-	return luci.json.Encode(response)
+	return luci.json.Encoder(response, ...):source()
 end
 
 function reply(jsonrpc, id, res, err)
 	require "luci.json"
-	id = id or luci.json.Null
+	id = id or luci.json.null
 	
 	-- 1.0 compatibility
 	if jsonrpc ~= "2.0" then
 		jsonrpc = nil
-		res = res or luci.json.Null
-		err = err or luci.json.Null
+		res = res or luci.json.null
+		err = err or luci.json.null
 	end
 	
 	return {id=id, result=res, error=err, jsonrpc=jsonrpc}
@@ -83,7 +85,7 @@ function proxy(method, ...)
 		return nil, {code=-32602, message="Invalid params.", data=table.remove(res, 1)} 
 	else
 		if #res <= 1 then
-			return res[1] or luci.json.Null
+			return res[1] or luci.json.null
 		else
 			return res
 		end

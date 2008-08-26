@@ -197,6 +197,12 @@ function prepare_content(mime)
 	header("Content-Type", mime)
 end
 
+--- Get the RAW HTTP input source
+-- @return	HTTP LTN12 source
+function source()
+	return context.request.input
+end
+
 --- Set the HTTP status code and status message.
 -- @param code		Status code
 -- @param message	Status message

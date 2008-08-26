@@ -187,6 +187,16 @@ define Package/luci-ipkg/install
 endef
 
 
+define Package/luci-json
+  $(call Package/luci/libtemplate)
+  TITLE:=LuCI JSON Library
+endef
+
+define Package/luci-json/install
+	$(call Package/luci/install/template,$(1),libs/json)
+endef
+
+
 define Package/luci-sys
   $(call Package/luci/libtemplate)
   TITLE:=LuCI Linux/POSIX system library
@@ -351,6 +361,17 @@ endef
 
 define Package/luci-admin-full/install
 	$(call Package/luci/install/template,$(1),modules/admin-full)
+endef
+
+
+define Package/luci-admin-rpc
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-json
+  TITLE:=LuCI RPC - JSON-RPC API
+endef
+
+define Package/luci-admin-rpc/install
+	$(call Package/luci/install/template,$(1),modules/rpc)
 endef
 
 
@@ -607,6 +628,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-ipkg),)
 	PKG_SELECTED_MODULES+=libs/ipkg
 endif
+ifneq ($(CONFIG_PACKAGE_luci-json),)
+	PKG_SELECTED_MODULES+=libs/json
+endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
 	PKG_SELECTED_MODULES+=libs/uci
 endif
@@ -648,6 +672,9 @@ ifneq ($(CONFIG_PACKAGE_luci-admin-mini),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-admin-full),)
 	PKG_SELECTED_MODULES+=modules/admin-full
+endif
+ifneq ($(CONFIG_PACKAGE_luci-admin-rpc),)
+	PKG_SELECTED_MODULES+=modules/rpc
 endif
 ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
 	PKG_SELECTED_MODULES+=modules/freifunk
@@ -733,6 +760,7 @@ $(eval $(call BuildPackage,luci-cbi))
 $(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-ipkg))
+$(eval $(call BuildPackage,luci-json))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
@@ -749,6 +777,7 @@ $(eval $(call BuildPackage,luci-ff-augsburg))
 $(eval $(call BuildPackage,luci-admin-core))
 $(eval $(call BuildPackage,luci-admin-mini))
 $(eval $(call BuildPackage,luci-admin-full))
+$(eval $(call BuildPackage,luci-admin-rpc))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
