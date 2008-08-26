@@ -1030,7 +1030,11 @@ function ListValue.__init__(self, ...)
 				self:value("")
 			end
 			for k, v in pairs(vs.values) do
-				self:value(k, v)
+				local deps = {}
+				if vs.enum_depends and vs.enum_depends[k] then
+					deps = _uvl_strip_remote_dependencies(vs.enum_depends[k])
+				end
+				self:value(k, v, unpack(deps))
 			end
 		end
 	end
