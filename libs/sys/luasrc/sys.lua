@@ -106,10 +106,16 @@ end
 --- Returns the contents of a documented referred by an URL.
 -- @param url	 The URL to retrieve
 -- @param stream Return a stream instead of a buffer
+-- @param target Directly write to target file name
 -- @return		String containing the contents of given the URL
-function httpget(url, stream)
-	local source = stream and io.open or luci.util.exec
-	return source("wget -qO- '"..url:gsub("'", "").."'")
+function httpget(url, stream, target)
+	if not target then
+		local source = stream and io.open or luci.util.exec
+		return source("wget -qO- '"..url:gsub("'", "").."'")
+	else
+		return os.execute("wget -qO '%s' '%s'" %
+			{target:gsub("'", ""), url:gsub("'", "")})
+	end
 end
 
 --- Returns the system load average values.
