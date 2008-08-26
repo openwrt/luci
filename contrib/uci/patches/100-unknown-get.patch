@@ -1,0 +1,22 @@
+Index: uci.git/list.c
+===================================================================
+--- uci.git.orig/list.c	2008-08-26 12:31:34.000000000 +0200
++++ uci.git/list.c	2008-08-26 21:09:10.000000000 +0200
+@@ -398,7 +398,7 @@
+ 		e = uci_lookup_list(&ptr->p->sections, ptr->section);
+ 
+ 	if (!e)
+-		goto abort;
++		goto notfound;
+ 
+ 	ptr->last = e;
+ 	ptr->s = uci_to_section(e);
+@@ -406,7 +406,7 @@
+ 	if (ptr->option) {
+ 		e = uci_lookup_list(&ptr->s->options, ptr->option);
+ 		if (!e)
+-			goto abort;
++			goto notfound;
+ 
+ 		ptr->o = uci_to_option(e);
+ 		ptr->last = e;

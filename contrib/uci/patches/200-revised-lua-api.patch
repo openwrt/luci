@@ -1,0 +1,550 @@
+Index: uci.git/lua/uci.c
+===================================================================
+--- uci.git.orig/lua/uci.c	2008-08-26 12:31:34.000000000 +0200
++++ uci.git/lua/uci.c	2008-08-26 21:09:10.000000000 +0200
+@@ -25,6 +25,7 @@
+ #include <uci.h>
+ 
+ #define MODNAME        "uci"
++#define CURSOR_META    "uci.cursor.meta"
+ //#define DEBUG 1
+ 
+ #ifdef DEBUG
+@@ -33,7 +34,6 @@
+ #define DPRINTF(...) do {} while (0)
+ #endif
+ 
+-static struct uci_context *ctx = NULL;
+ enum autoload {
+ 	AUTOLOAD_OFF = 0,
+ 	AUTOLOAD_ON = 1,
+@@ -41,7 +41,7 @@
+ };
+ 
+ static struct uci_package *
+-find_package(lua_State *L, const char *str, enum autoload al)
++find_package(lua_State *L, struct uci_context *ctx, const char *str, enum autoload al)
+ {
+ 	struct uci_package *p = NULL;
+ 	struct uci_element *e;
+@@ -70,17 +70,8 @@
+ 		uci_load(ctx, name, &p);
+ 	else if (al) {
+ 		do {
+-			lua_getfield(L, LUA_GLOBALSINDEX, "uci");
+-			lua_getfield(L, -1, "autoload");
+-			if (!lua_isboolean(L, -1))
+-				break;
+-
+-			if (!lua_toboolean(L, -1))
+-				break;
+-
+ 			uci_load(ctx, name, &p);
+ 		} while (0);
+-		lua_pop(L, 2);
+ 	}
+ 
+ done:
+@@ -89,9 +80,9 @@
+ 	return p;
+ }
+ 
+-static void uci_lua_perror(lua_State *L, char *name)
++static void uci_lua_perror(lua_State *L, struct uci_context *ctx, char *name)
+ {
+-	lua_getfield(L, LUA_GLOBALSINDEX, "uci");
++	lua_getfield(L, LUA_GLOBALSINDEX, MODNAME);
+ 	lua_getfield(L, -1, "warn");
+ 	if (!lua_isboolean(L, -1))
+ 		goto done;
+@@ -103,33 +94,33 @@
+ }
+ 
+ static int
+-lookup_args(lua_State *L, struct uci_ptr *ptr, char **buf)
++lookup_args(lua_State *L, struct uci_context *ctx, struct uci_ptr *ptr, char **buf)
+ {
+ 	char *s = NULL;
+ 	int n;
+ 
+ 	n = lua_gettop(L);
+-	luaL_checkstring(L, 1);
+-	s = strdup(lua_tostring(L, 1));
++	luaL_checkstring(L, 2);
++	s = strdup(lua_tostring(L, 2));
+ 	if (!s)
+ 		goto error;
+ 
+ 	memset(ptr, 0, sizeof(struct uci_ptr));
+-	if (!find_package(L, s, AUTOLOAD_ON))
++	if (!find_package(L, ctx, s, AUTOLOAD_ON))
+ 		goto error;
+ 
+ 	switch (n) {
++	case 5:
+ 	case 4:
+-	case 3:
+-		ptr->option = luaL_checkstring(L, 3);
++		ptr->option = luaL_checkstring(L, 4);
+ 		/* fall through */
+-	case 2:
+-		ptr->section = luaL_checkstring(L, 2);
+-		ptr->package = luaL_checkstring(L, 1);
++	case 3:
++		ptr->section = luaL_checkstring(L, 3);
++		ptr->package = luaL_checkstring(L, 2);
+ 		if (uci_lookup_ptr(ctx, ptr, NULL, false) != UCI_OK)
+ 			goto error;
+ 		break;
+-	case 1:
++	case 2:
+ 		if (uci_lookup_ptr(ctx, ptr, s, false) != UCI_OK)
+ 			goto error;
+ 		break;
+@@ -202,15 +193,70 @@
+ 	}
+ }
+ 
++static struct uci_context**
++uci_lua_context(lua_State *L, int index)
++{
++	struct uci_context **u = (struct uci_context **)luaL_checkudata(L, index, CURSOR_META);
++	luaL_argcheck(L, *u, index, "UCI cursor expected");
++	return u;
++}
++
++
++static int
++uci_lua_cursor(lua_State *L)
++{
++	int argc = lua_gettop(L);
++
++	/* create userdata object */
++	struct uci_context **u = (struct uci_context **)lua_newuserdata(L, sizeof(struct uci_context *));
++
++	/* set metatable for userdata */
++	luaL_getmetatable(L, CURSOR_META);
++	lua_setmetatable(L, -2);
++
++	/* initialize context */
++	*u = uci_alloc_context();
++	if (*u == NULL) {
++		luaL_error(L, "Cannot allocate UCI context");
++	}
++
++	if (argc == 2 && lua_isnoneornil(L, 2) == 0) {
++		if (uci_set_savedir(*u, luaL_checkstring(L, 2)) != 0) {
++			luaL_error(L, "Unable to set savedir");
++		}
++	}
++
++	if (argc >= 1 && lua_isnoneornil(L, 1) == 0) {
++		if (uci_set_confdir(*u, luaL_checkstring(L, 1)) != 0) {
++			luaL_error(L, "Unable to set confdir");
++		}
++	}
++
++	return 1;
++}
++
++static int
++uci_lua_gc (lua_State *L) {
++	struct uci_context **u = (struct uci_context **)luaL_checkudata(L, 1, CURSOR_META);
++
++	if (*u) {
++		uci_free_context(*u);
++		*u = NULL;
++	}
++
++	return 0;
++}
++
+ static int
+ uci_lua_unload(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_package *p;
+ 	const char *s;
+ 
+-	luaL_checkstring(L, 1);
++	luaL_checkstring(L, 2);
+ 	s = lua_tostring(L, -1);
+-	p = find_package(L, s, AUTOLOAD_OFF);
++	p = find_package(L, ctx, s, AUTOLOAD_OFF);
+ 	if (p) {
+ 		uci_unload(ctx, p);
+ 		lua_pushboolean(L, 1);
+@@ -223,6 +269,7 @@
+ static int
+ uci_lua_load(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_package *p = NULL;
+ 	const char *s;
+ 
+@@ -231,7 +278,7 @@
+ 	s = lua_tostring(L, -1);
+ 
+ 	if (uci_load(ctx, s, &p)) {
+-		uci_lua_perror(L, "uci.load");
++		uci_lua_perror(L, ctx, "uci.load");
+ 		lua_pushboolean(L, 0);
+ 	} else {
+ 		lua_pushboolean(L, 1);
+@@ -244,22 +291,23 @@
+ static int
+ uci_lua_foreach(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_package *p;
+ 	struct uci_element *e;
+ 	const char *package, *type;
+ 	bool ret = false;
+ 
+-	package = luaL_checkstring(L, 1);
++	package = luaL_checkstring(L, 2);
+ 
+-	if (lua_isnil(L, 2))
++	if (lua_isnil(L, 3))
+ 		type = NULL;
+ 	else
+-		type = luaL_checkstring(L, 2);
++		type = luaL_checkstring(L, 3);
+ 
+-	if (!lua_isfunction(L, 3) || !package)
++	if (!lua_isfunction(L, 4) || !package)
+ 		luaL_error(L, "Invalid argument");
+ 
+-	p = find_package(L, package, AUTOLOAD_ON);
++	p = find_package(L, ctx, package, AUTOLOAD_ON);
+ 	if (!p)
+ 		goto done;
+ 
+@@ -269,7 +317,7 @@
+ 		if (type && (strcmp(s->type, type) != 0))
+ 			continue;
+ 
+-		lua_pushvalue(L, 3); /* iterator function */
++		lua_pushvalue(L, 4); /* iterator function */
+ 		uci_push_section(L, s);
+ 		if (lua_pcall(L, 1, 0, 0) == 0)
+ 			ret = true;
+@@ -283,12 +331,13 @@
+ static int
+ uci_lua_get_any(lua_State *L, bool all)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_element *e = NULL;
+ 	struct uci_ptr ptr;
+ 	char *s = NULL;
+ 	int err = UCI_ERR_NOTFOUND;
+ 
+-	if (lookup_args(L, &ptr, &s))
++	if (lookup_args(L, ctx, &ptr, &s))
+ 		goto error;
+ 
+ 	uci_lookup_ptr(ctx, &ptr, NULL, false);
+@@ -323,7 +372,7 @@
+ 	switch(err) {
+ 	default:
+ 		ctx->err = err;
+-		uci_lua_perror(L, "uci.get");
++		uci_lua_perror(L, ctx, "uci.get");
+ 		/* fall through */
+ 	case UCI_ERR_NOTFOUND:
+ 		lua_pushnil(L);
+@@ -348,6 +397,7 @@
+ static int
+ uci_lua_add(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_section *s = NULL;
+ 	struct uci_package *p;
+ 	const char *package;
+@@ -355,9 +405,9 @@
+ 	const char *name = NULL;
+ 
+ 	do {
+-		package = luaL_checkstring(L, 1);
+-		type = luaL_checkstring(L, 2);
+-		p = find_package(L, package, AUTOLOAD_ON);
++		package = luaL_checkstring(L, 2);
++		type = luaL_checkstring(L, 3);
++		p = find_package(L, ctx, package, AUTOLOAD_ON);
+ 		if (!p)
+ 			break;
+ 
+@@ -374,11 +424,12 @@
+ static int
+ uci_lua_delete(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_ptr ptr;
+ 	char *s = NULL;
+ 	int err = UCI_ERR_NOTFOUND;
+ 
+-	if (lookup_args(L, &ptr, &s))
++	if (lookup_args(L, ctx, &ptr, &s))
+ 		goto error;
+ 
+ 	err = uci_delete(ctx, &ptr);
+@@ -387,7 +438,7 @@
+ 	if (s)
+ 		free(s);
+ 	if (err)
+-		uci_lua_perror(L, "uci.delete");
++		uci_lua_perror(L, ctx, "uci.delete");
+ 	lua_pushboolean(L, (err == 0));
+ 	return 1;
+ }
+@@ -395,6 +446,7 @@
+ static int
+ uci_lua_set(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	bool istable = false;
+ 	struct uci_ptr ptr;
+ 	int err = UCI_ERR_MEM;
+@@ -402,14 +454,14 @@
+ 	int i, nargs;
+ 
+ 	nargs = lua_gettop(L);
+-	if (lookup_args(L, &ptr, &s))
++	if (lookup_args(L, ctx, &ptr, &s))
+ 		goto error;
+ 
+ 	switch(nargs) {
+-	case 1:
++	case 2:
+ 		/* Format: uci.set("p.s.o=v") or uci.set("p.s=v") */
+ 		break;
+-	case 4:
++	case 5:
+ 		/* Format: uci.set("p", "s", "o", "v") */
+ 		if (lua_istable(L, nargs)) {
+ 			if (lua_objlen(L, nargs) < 1)
+@@ -422,7 +474,7 @@
+ 			ptr.value = luaL_checkstring(L, nargs);
+ 		}
+ 		break;
+-	case 3:
++	case 4:
+ 		/* Format: uci.set("p", "s", "v") */
+ 		ptr.value = ptr.option;
+ 		ptr.option = NULL;
+@@ -433,17 +485,23 @@
+ 	}
+ 
+ 	err = uci_lookup_ptr(ctx, &ptr, NULL, false);
+-	if (err)
++	if (err) {
+ 		goto error;
++	}
+ 
+-	if ((ptr.s == NULL) || (ptr.value == NULL)) {
++	/* TODO: IMPROVE CHECK
++	 * unable to create named section with original check
++	 * therefore temporarily added: && (nargs != 4)
++	 */
++	if (((ptr.s == NULL) && (nargs != 4)) || (ptr.value == NULL)) {
+ 		err = UCI_ERR_INVAL;
+ 		goto error;
+ 	}
+ 
+ 	err = uci_set(ctx, &ptr);
+-	if (err)
++	if (err) {
+ 		goto error;
++	}
+ 
+ 	if (istable) {
+ 		for (i = 2; i <= lua_objlen(L, nargs); i++) {
+@@ -458,7 +516,7 @@
+ 
+ error:
+ 	if (err)
+-		uci_lua_perror(L, "uci.set");
++		uci_lua_perror(L, ctx, "uci.set");
+ 	lua_pushboolean(L, (err == 0));
+ 	return 1;
+ }
+@@ -472,6 +530,7 @@
+ static int
+ uci_lua_package_cmd(lua_State *L, enum pkg_cmd cmd)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	struct uci_element *e, *tmp;
+ 	struct uci_ptr ptr;
+ 	char *s = NULL;
+@@ -479,10 +538,10 @@
+ 	int nargs;
+ 
+ 	nargs = lua_gettop(L);
+-	if ((cmd != CMD_REVERT) && (nargs > 1))
++	if ((cmd != CMD_REVERT) && (nargs > 2))
+ 		goto err;
+ 
+-	if (lookup_args(L, &ptr, &s))
++	if (lookup_args(L, ctx, &ptr, &s))
+ 		goto err;
+ 
+ 	uci_lookup_ptr(ctx, &ptr, NULL, false);
+@@ -562,16 +621,16 @@
+ }
+ 
+ static void
+-uci_lua_changes_pkg(lua_State *L, const char *package)
++uci_lua_changes_pkg(lua_State *L, struct uci_context *ctx, const char *package)
+ {
+ 	struct uci_package *p = NULL;
+ 	struct uci_element *e;
+ 	bool autoload = false;
+ 
+-	p = find_package(L, package, AUTOLOAD_OFF);
++	p = find_package(L, ctx, package, AUTOLOAD_OFF);
+ 	if (!p) {
+ 		autoload = true;
+-		p = find_package(L, package, AUTOLOAD_FORCE);
++		p = find_package(L, ctx, package, AUTOLOAD_FORCE);
+ 		if (!p)
+ 			return;
+ 	}
+@@ -596,6 +655,7 @@
+ static int
+ uci_lua_changes(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	const char *package = NULL;
+ 	char **config = NULL;
+ 	int nargs;
+@@ -603,9 +663,9 @@
+ 
+ 	nargs = lua_gettop(L);
+ 	switch(nargs) {
++	case 2:
++		package = luaL_checkstring(L, 2);
+ 	case 1:
+-		package = luaL_checkstring(L, 1);
+-	case 0:
+ 		break;
+ 	default:
+ 		luaL_error(L, "invalid argument count");
+@@ -613,13 +673,13 @@
+ 
+ 	lua_newtable(L);
+ 	if (package) {
+-		uci_lua_changes_pkg(L, package);
++		uci_lua_changes_pkg(L, ctx, package);
+ 	} else {
+ 		if (uci_list_configs(ctx, &config) != 0)
+ 			goto done;
+ 
+ 		for(i = 0; config[i] != NULL; i++) {
+-			uci_lua_changes_pkg(L, config[i]);
++			uci_lua_changes_pkg(L, ctx, config[i]);
+ 		}
+ 	}
+ 
+@@ -628,29 +688,53 @@
+ }
+ 
+ static int
++uci_lua_get_confdir(lua_State *L)
++{
++	struct uci_context *ctx = *uci_lua_context(L, 1);
++	lua_pushstring(L, ctx->confdir);
++	return 1;
++}
++
++static int
+ uci_lua_set_confdir(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	int ret;
+ 
+-	luaL_checkstring(L, 1);
++	luaL_checkstring(L, 2);
+ 	ret = uci_set_confdir(ctx, lua_tostring(L, -1));
+ 	lua_pushboolean(L, (ret == 0));
+ 	return 1;
+ }
+ 
+ static int
++uci_lua_get_savedir(lua_State *L)
++{
++	struct uci_context *ctx = *uci_lua_context(L, 1);
++	lua_pushstring(L, ctx->savedir);
++	return 1;
++}
++
++static int
+ uci_lua_set_savedir(lua_State *L)
+ {
++	struct uci_context *ctx = *uci_lua_context(L, 1);
+ 	int ret;
+ 
+-	luaL_checkstring(L, 1);
++	luaL_checkstring(L, 2);
+ 	ret = uci_set_savedir(ctx, lua_tostring(L, -1));
+ 	lua_pushboolean(L, (ret == 0));
+ 
+ 	return 1;
+ }
+ 
+-static const luaL_Reg uci[] = {
++static const luaL_Reg uci_module[] = {
++	{ "cursor", uci_lua_cursor },
++	{ NULL, NULL },
++};
++
++static const luaL_Reg uci_cursor[] = {
++	{ "__gc", uci_lua_gc },
+ 	{ "load", uci_lua_load },
+ 	{ "unload", uci_lua_unload },
+ 	{ "get", uci_lua_get },
+@@ -663,25 +747,33 @@
+ 	{ "revert", uci_lua_revert },
+ 	{ "changes", uci_lua_changes },
+ 	{ "foreach", uci_lua_foreach },
++	{ "get_confdir", uci_lua_get_confdir },
++	{ "get_savedir", uci_lua_get_savedir },
+ 	{ "set_confdir", uci_lua_set_confdir },
+ 	{ "set_savedir", uci_lua_set_savedir },
+ 	{ NULL, NULL },
+ };
+ 
+-
+ int
+ luaopen_uci(lua_State *L)
+ {
+-	ctx = uci_alloc_context();
+-	if (!ctx)
+-		luaL_error(L, "Cannot allocate UCI context\n");
+-	luaL_register(L, MODNAME, uci);
+-
+-	/* enable autoload by default */
+-	lua_getfield(L, LUA_GLOBALSINDEX, "uci");
+-	lua_pushboolean(L, 1);
+-	lua_setfield(L, -2, "autoload");
+-	lua_pop(L, 1);
++	/* Create metatable */
++	luaL_newmetatable(L, CURSOR_META);
+ 
+-	return 0;
++	/* metatable.__index = metatable */
++    lua_pushstring(L, "__index");
++    lua_pushvalue(L, -2);
++    lua_settable(L, -3);
++
++    /* fill and drop metatable */
++    luaL_register(L, NULL, uci_cursor);
++    lua_pop(L, 1);
++
++    /* register module table */
++	luaL_register(L, MODNAME, uci_module);
++	lua_pushliteral(L, "APIVERSION");
++	lua_pushinteger(L, 2);
++	lua_settable(L, -3);
++
++	return 1;
+ }
