@@ -102,7 +102,7 @@ define Package/luci-core
   $(call Package/luci/libtemplate)
   DEPENDS:=+lua +luaposix +bitlib
   TITLE:=LuCI core libraries
-  SUBMENU:=!!! OMG! DISABLE LIBRARIES -> libuci-lua !!! DO IT NOW !!!
+  SUBMENU:=!!! DISABLE Libraries -> libuci-lua !!! IT WILL BREAK LUCI !!!
 endef
 
 define Package/luci-core/install
