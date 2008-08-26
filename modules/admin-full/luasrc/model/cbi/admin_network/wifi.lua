@@ -86,7 +86,7 @@ network.combobox_manual = translate("a_w_netmanual")
 luci.tools.webadmin.cbi_add_networks(network)
 
 function network.write(self, section, value)	
-	if not m:uci.get("network", value) then 
+	if not m.uci:get("network", value) then 
 		m:chain("network")
 		m.uci:set("network", value, "interface")
 		Value.write(self, section, value)

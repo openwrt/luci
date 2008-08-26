@@ -148,7 +148,7 @@ endef
 
 define Package/luci-uci
   $(call Package/luci/libtemplate)
-  DEPENDS+=+libuci
+  DEPENDS+=+libuci @!PACKAGE_libuci-lua
   TITLE:=High-Level UCI API
 endef
 
