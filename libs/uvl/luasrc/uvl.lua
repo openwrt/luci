@@ -971,7 +971,7 @@ section = luci.util.class(uvlitem)
 
 function section.__init__(self, scheme, co, c, s)
 	self.cref = { c, s }
-	self.sref = { c, co[s] and co[s]['.type'] or s }
+	self.sref = { c, co and co[s] and co[s]['.type'] or s }
 	self.c    = co
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_SECTION
@@ -1022,7 +1022,7 @@ option = luci.util.class(uvlitem)
 
 function option.__init__(self, scheme, co, c, s, o)
 	self.cref = { c, s, o }
-	self.sref = { c, co[s] and co[s]['.type'] or s, o }
+	self.sref = { c, co and co[s] and co[s]['.type'] or s, o }
 	self.c    = co
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_OPTION
@@ -1071,7 +1071,7 @@ enum = luci.util.class(option)
 
 function enum.__init__(self, scheme, co, c, s, o, v)
 	self.cref = { c, s, o, v }
-	self.sref = { c, co[s] and co[s]['.type'] or s, o, v }
+	self.sref = { c, co and co[s] and co[s]['.type'] or s, o, v }
 	self.c    = co
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_ENUM

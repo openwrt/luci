@@ -18,7 +18,7 @@ module( "luci.uvl.errors", package.seeall )
 require("luci.util")
 
 ERRCODES = {
-	{ 'UCILOAD', 		'Unable to load config "%p"' },
+	{ 'UCILOAD', 		'Unable to load config "%p" (syntax error or file not found)' },
 
 	{ 'SCHEME',			'Error in scheme "%p":\n%c' },
 	{ 'CONFIG',  		'Error in config "%p":\n%c' },
