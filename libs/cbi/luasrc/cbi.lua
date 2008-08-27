@@ -343,7 +343,7 @@ function SimpleForm.field(self, class, ...)
 	end
 
 	if instanceof(class, AbstractValue) then
-		local obj  = class(self, ...)
+		local obj  = class(self, section, ...)
 		obj.track_missing = true
 		section:append(obj)
 		return obj
