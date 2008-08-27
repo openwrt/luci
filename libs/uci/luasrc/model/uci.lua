@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 local os    = require "os"
-local uci   = require "uci2"
+local uci   = require "uci"
 local util  = require "luci.util"
 local table = require "table"
 

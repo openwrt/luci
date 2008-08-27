@@ -148,14 +148,12 @@ endef
 
 define Package/luci-uci
   $(call Package/luci/libtemplate)
-  DEPENDS+=+libuci
+  DEPENDS+=+libuci-lua
   TITLE:=High-Level UCI API
 endef
 
 define Package/luci-uci/install
 	$(call Package/luci/install/template,$(1),libs/uci)
-	$(INSTALL_DIR) $(1)/usr/lib/lua
-	$(CP) $(PKG_BUILD_DIR)/contrib/uci/dist/usr/lib/lua/uci2.so $(1)/usr/lib/lua
 endef
 
 
@@ -634,7 +632,7 @@ ifneq ($(CONFIG_PACKAGE_luci-json),)
 	PKG_SELECTED_MODULES+=libs/json
 endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
-	PKG_SELECTED_MODULES+=libs/uci contrib/uci
+	PKG_SELECTED_MODULES+=libs/uci
 endif
 ifneq ($(CONFIG_PACKAGE_luci-sys),)
 	PKG_SELECTED_MODULES+=libs/sys
