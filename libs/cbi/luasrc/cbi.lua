@@ -29,10 +29,9 @@ module("luci.cbi", package.seeall)
 require("luci.template")
 require("luci.util")
 require("luci.http")
-require("luci.model.uci")
 require("luci.uvl")
 
-local uci        = luci.model.uci
+local uci        = require("luci.model.uci")
 local class      = luci.util.class
 local instanceof = luci.util.instanceof
 

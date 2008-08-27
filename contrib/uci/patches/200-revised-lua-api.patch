@@ -1,12 +1,14 @@
 Index: uci.git/lua/uci.c
 ===================================================================
 --- uci.git.orig/lua/uci.c	2008-08-26 12:31:34.000000000 +0200
-+++ uci.git/lua/uci.c	2008-08-27 00:30:46.000000000 +0200
-@@ -25,6 +25,7 @@
++++ uci.git/lua/uci.c	2008-08-27 10:27:29.000000000 +0200
+@@ -24,7 +24,8 @@
+ #include <lauxlib.h>
  #include <uci.h>
  
- #define MODNAME        "uci"
-+#define CURSOR_META    "uci.cursor.meta"
+-#define MODNAME        "uci"
++#define MODNAME        "uci2"
++#define CURSOR_META    "uci2.cursor.meta"
  //#define DEBUG 1
  
  #ifdef DEBUG
@@ -286,7 +288,7 @@ Index: uci.git/lua/uci.c
  		if (!p)
  			break;
  
-@@ -374,11 +429,12 @@
+@@ -374,11 +429,11 @@
  static int
  uci_lua_delete(lua_State *L)
  {
@@ -294,13 +296,13 @@ Index: uci.git/lua/uci.c
  	struct uci_ptr ptr;
  	char *s = NULL;
  	int err = UCI_ERR_NOTFOUND;
- 
+-
 -	if (lookup_args(L, &ptr, &s))
 +	if (lookup_args(L, ctx, &ptr, &s))
  		goto error;
  
  	err = uci_delete(ctx, &ptr);
-@@ -387,7 +443,7 @@
+@@ -387,7 +442,7 @@
  	if (s)
  		free(s);
  	if (err)
@@ -309,7 +311,7 @@ Index: uci.git/lua/uci.c
  	lua_pushboolean(L, (err == 0));
  	return 1;
  }
-@@ -395,6 +451,7 @@
+@@ -395,6 +450,7 @@
  static int
  uci_lua_set(lua_State *L)
  {
@@ -317,7 +319,7 @@ Index: uci.git/lua/uci.c
  	bool istable = false;
  	struct uci_ptr ptr;
  	int err = UCI_ERR_MEM;
-@@ -402,14 +459,14 @@
+@@ -402,14 +458,14 @@
  	int i, nargs;
  
  	nargs = lua_gettop(L);
@@ -335,7 +337,7 @@ Index: uci.git/lua/uci.c
  		/* Format: uci.set("p", "s", "o", "v") */
  		if (lua_istable(L, nargs)) {
  			if (lua_objlen(L, nargs) < 1)
-@@ -422,7 +479,7 @@
+@@ -422,7 +478,7 @@
  			ptr.value = luaL_checkstring(L, nargs);
  		}
  		break;
@@ -344,7 +346,7 @@ Index: uci.git/lua/uci.c
  		/* Format: uci.set("p", "s", "v") */
  		ptr.value = ptr.option;
  		ptr.option = NULL;
-@@ -433,17 +490,23 @@
+@@ -433,17 +489,23 @@
  	}
  
  	err = uci_lookup_ptr(ctx, &ptr, NULL, false);
@@ -371,7 +373,7 @@ Index: uci.git/lua/uci.c
  
  	if (istable) {
  		for (i = 2; i <= lua_objlen(L, nargs); i++) {
-@@ -458,7 +521,7 @@
+@@ -458,7 +520,7 @@
  
  error:
  	if (err)
@@ -380,7 +382,7 @@ Index: uci.git/lua/uci.c
  	lua_pushboolean(L, (err == 0));
  	return 1;
  }
-@@ -472,6 +535,7 @@
+@@ -472,6 +534,7 @@
  static int
  uci_lua_package_cmd(lua_State *L, enum pkg_cmd cmd)
  {
@@ -388,7 +390,7 @@ Index: uci.git/lua/uci.c
  	struct uci_element *e, *tmp;
  	struct uci_ptr ptr;
  	char *s = NULL;
-@@ -479,10 +543,10 @@
+@@ -479,10 +542,10 @@
  	int nargs;
  
  	nargs = lua_gettop(L);
@@ -401,7 +403,7 @@ Index: uci.git/lua/uci.c
  		goto err;
  
  	uci_lookup_ptr(ctx, &ptr, NULL, false);
-@@ -562,16 +626,16 @@
+@@ -562,16 +625,16 @@
  }
  
  static void
@@ -421,7 +423,7 @@ Index: uci.git/lua/uci.c
  		if (!p)
  			return;
  	}
-@@ -596,6 +660,7 @@
+@@ -596,6 +659,7 @@
  static int
  uci_lua_changes(lua_State *L)
  {
@@ -429,7 +431,7 @@ Index: uci.git/lua/uci.c
  	const char *package = NULL;
  	char **config = NULL;
  	int nargs;
-@@ -603,9 +668,9 @@
+@@ -603,9 +667,9 @@
  
  	nargs = lua_gettop(L);
  	switch(nargs) {
@@ -441,7 +443,7 @@ Index: uci.git/lua/uci.c
  		break;
  	default:
  		luaL_error(L, "invalid argument count");
-@@ -613,13 +678,13 @@
+@@ -613,13 +677,13 @@
  
  	lua_newtable(L);
  	if (package) {
@@ -457,7 +459,7 @@ Index: uci.git/lua/uci.c
  		}
  	}
  
-@@ -628,29 +693,53 @@
+@@ -628,29 +692,53 @@
  }
  
  static int
@@ -514,7 +516,7 @@ Index: uci.git/lua/uci.c
  	{ "load", uci_lua_load },
  	{ "unload", uci_lua_unload },
  	{ "get", uci_lua_get },
-@@ -663,25 +752,33 @@
+@@ -663,25 +751,33 @@
  	{ "revert", uci_lua_revert },
  	{ "changes", uci_lua_changes },
  	{ "foreach", uci_lua_foreach },
@@ -527,7 +529,8 @@ Index: uci.git/lua/uci.c
  
 -
  int
- luaopen_uci(lua_State *L)
+-luaopen_uci(lua_State *L)
++luaopen_uci2(lua_State *L)
  {
 -	ctx = uci_alloc_context();
 -	if (!ctx)

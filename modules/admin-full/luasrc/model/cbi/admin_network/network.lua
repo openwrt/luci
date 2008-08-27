@@ -39,6 +39,7 @@ end
 function s.parse(self, ...)
 	TypedSection.parse(self, ...)
 	if created then
+		m.uci:save("network")
 		luci.http.redirect(luci.dispatcher.build_url("admin", "network", "network")
 		 .. "/" .. created)
 	end

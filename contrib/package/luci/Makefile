@@ -102,7 +102,6 @@ define Package/luci-core
   $(call Package/luci/libtemplate)
   DEPENDS:=+lua +luaposix +bitlib
   TITLE:=LuCI core libraries
-  SUBMENU:=!!! DISABLE Libraries -> libuci-lua !!! IT WILL BREAK LUCI !!!
 endef
 
 define Package/luci-core/install
@@ -149,14 +148,14 @@ endef
 
 define Package/luci-uci
   $(call Package/luci/libtemplate)
-  DEPENDS+=+libuci @!PACKAGE_libuci-lua
+  DEPENDS+=+libuci
   TITLE:=High-Level UCI API
 endef
 
 define Package/luci-uci/install
 	$(call Package/luci/install/template,$(1),libs/uci)
 	$(INSTALL_DIR) $(1)/usr/lib/lua
-	$(CP) $(PKG_BUILD_DIR)/contrib/uci/dist/usr/lib/lua/uci.so $(1)/usr/lib/lua
+	$(CP) $(PKG_BUILD_DIR)/contrib/uci/dist/usr/lib/lua/uci2.so $(1)/usr/lib/lua
 endef
 
 

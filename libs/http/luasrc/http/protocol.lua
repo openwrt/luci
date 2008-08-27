@@ -672,6 +672,7 @@ end
 statusmsg = {
 	[200] = "OK",
 	[301] = "Moved Permanently",
+	[302] = "Found",
 	[304] = "Not Modified",
 	[400] = "Bad Request",
 	[403] = "Forbidden",

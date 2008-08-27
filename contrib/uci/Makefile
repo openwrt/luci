@@ -53,7 +53,7 @@ compile: $(UCI_DIR)/.patched
 	$(MAKE) -C $(UCI_DIR) install DESTDIR=../dist prefix=/usr
 	$(MAKE) -C $(UCI_DIR)/lua CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" OS="$(OS)"
 	$(MAKE) -C $(UCI_DIR)/lua install DESTDIR=../../dist luadir=$(LUA_LIBRARYDIR)
-
+	mv dist$(LUA_LIBRARYDIR)/uci.so dist$(LUA_LIBRARYDIR)/uci2.so
 
 compile-all: compile
 

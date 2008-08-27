@@ -23,7 +23,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
-local uci   = require "uci"
+local uci   = require "uci2"
 local util  = require "luci.util"
 local table = require "table"
 

@@ -93,9 +93,5 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 		end
 	end
 
-	headers["Expires"] = luci.http.protocol.date.to_http( os.time() )
-	headers["Date"]    = headers["Expires"]
-	headers["Cache-Control"] = "no-cache"
-
 	return Response(status, headers), iter
 end
