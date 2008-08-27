@@ -1,5 +1,5 @@
 --[[
-LuCI - UCI mpdel
+LuCI - UCI model
 
 Description:
 Generalized UCI model
@@ -23,9 +23,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
+local os    = require "os"
 local uci   = require "uci2"
 local util  = require "luci.util"
 local table = require "table"
+
 
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
