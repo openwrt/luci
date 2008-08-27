@@ -84,7 +84,7 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 			return true
 		elseif id == 5 then
 			active = false
-			return true
+			return nil
 		elseif id == 4 then
 			return data
 		end

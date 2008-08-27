@@ -121,7 +121,6 @@ function step()
 	end
 	
 	if idle then
-		collectgarbage()
 		socket.sleep(THREAD_IDLEWAIT)
 	end
 end
