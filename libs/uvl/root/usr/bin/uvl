@@ -123,7 +123,7 @@ else
 		end
 		os.exit( 0 )
 	else
-		if not options.silent then print( err ) end
+		if not options.silent then print( err and err:string() or "Unknown error" ) end
 		os.exit( 1 )
 	end
 end

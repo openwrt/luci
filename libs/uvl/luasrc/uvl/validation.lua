@@ -19,6 +19,7 @@ module( "luci.uvl.validation", package.seeall )
 require("luci.fs")
 require("luci.sys")
 
+local ERR = luci.uvl.errors
 
 function _exec( bin, args )
 	local cmd, output = "", nil
@@ -39,13 +40,13 @@ function _exec( bin, args )
 end
 
 function check( self, object )
-	local item = object:option()
-
-	if item.validators then
-		for _, val in ipairs(item.validators) do
+	if object:scheme('validators') then
+		for _, val in ipairs(object:scheme('validators')) do
 			local ok, err = false, nil
 			local args = {
-				item.type, unpack(object.cref), item.datatype, object:value()
+				object:scheme('type'),
+				object.cref[1], object.cref[2], object.cref[3],
+				object:scheme('datatype'), object:value()
 			}
 
 			if type(val) == "function" then
@@ -56,7 +57,7 @@ function check( self, object )
 			end
 
 			if not ok then
-				return false, err
+				return false, ERR.SME_ERRVAL(object, {tostring(val), err})
 			end
 		end
 	end
