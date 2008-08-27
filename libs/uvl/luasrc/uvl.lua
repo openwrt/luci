@@ -110,7 +110,7 @@ end
 -- @param config	Name of the configuration to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_config( self, config )
+function UVL.validate_config( self, config, uci )
 
 	if not self.packages[config] then
 		local ok, err = self:read_scheme(config)
@@ -119,7 +119,7 @@ function UVL.validate_config( self, config )
 		end
 	end
 
-	local co = luci.uvl.config( self, config )
+	local co = luci.uvl.config( self, uci or config, uci and config )
 	local sc = { }
 
 	self.beenthere = { }
@@ -173,7 +173,7 @@ end
 -- @param section	Name of the section to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_section( self, config, section )
+function UVL.validate_section( self, config, section, uci )
 
 	if not self.packages[config] then
 		local ok, err = self:read_scheme( config )
@@ -182,7 +182,7 @@ function UVL.validate_section( self, config, section )
 		end
 	end
 
-	local co = luci.uvl.config( self, config )
+	local co = luci.uvl.config( self, uci or config, uci and config )
 	local so = co:section( section )
 
 	self.beenthere = { }
@@ -204,7 +204,7 @@ end
 -- @param option	Name of the option to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_option( self, config, section, option )
+function UVL.validate_option( self, config, section, option, uci )
 
 	if not self.packages[config] then
 		local ok, err = self:read_scheme( config )
@@ -213,7 +213,7 @@ function UVL.validate_option( self, config, section, option )
 		end
 	end
 
-	local co = luci.uvl.config( self, config )
+	local co = luci.uvl.config( self, uci or config, uci and config )
 	local so = co:section( section )
 	local oo = so:option( option )
 
