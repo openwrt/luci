@@ -2,12 +2,12 @@ include ../../build/config.mk
 include ../../build/gccconfig.mk
 
 UCI_VERSION  = 0.6.0
-UCI_APPEND   = +luci1
+UCI_APPEND   = +luci2
 #UCI_SITE    = http://mirror2.openwrt.org/sources
 #UCI_DIR     = uci-$(UCI_VERSION)
 #UCI_FILE    = $(UCI_DIR).tar.gz
 #UCI_URL     = $(UCI_SITE)/$(UCI_FILE)
-UCI_GITREV   = 12c5b22102873e303e540f886489831461d54ea9
+UCI_GITREV   = a5256582f5a554c0cbcf45d19bb751e60ea42ce9
 UCI_SITE     = http://nbd.name
 UCI_DIR      = uci.git
 UCI_FILE     = uci-$(UCI_VERSION)$(UCI_APPEND).tar.gz
