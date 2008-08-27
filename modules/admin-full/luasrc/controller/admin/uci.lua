@@ -54,9 +54,10 @@ end
 
 function action_apply()
 	local path = luci.dispatcher.context.path
-	local changes = luci.model.uci.changes()
+	
 	local output  = ""
 	local uci = luci.model.uci.cursor()
+	local changes = uci:changes()
 	
 	if changes then
 		local com = {}
