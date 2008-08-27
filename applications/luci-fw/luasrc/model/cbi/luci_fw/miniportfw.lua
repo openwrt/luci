@@ -26,7 +26,7 @@ s.anonymous = true
 name = s:option(Value, "_name", translate("name"), translate("cbi_optional"))
 name.size = 10
 
-proto = s:option(ListValue, "protocol", translate("protocol"))
+proto = s:option(ListValue, "proto", translate("protocol"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 
