@@ -64,7 +64,7 @@
 <%for _, func_name in ipairs(module_doc.functions) do
   local func_data = module_doc.functions[func_name]%>
 	<tr>
-	<td class="name" nowrap><%=func_data.private and "local " or ""%><a href="#<%=func_name%>"><%=(oop and func_name:gsub("%.",":") or func_name:gsub(".+%.",""))%></a>&nbsp;(<%=table.concat(module_doc.functions[func_name].param, ", ")%>)</td>
+	<td class="name" nowrap><%=func_data.private and "local " or ""%><a href="#<%=func_name%>"><%=(oop and func_name:gsub("%.",":") or func_name:gsub(".+%.",""))%></a>&nbsp;(<%=table.concat(module_doc.functions[func_name].param or {}, ", ")%>)</td>
 	<td class="summary"><%=module_doc.functions[func_name].summary%></td>
 	</tr>
 <%end%>
