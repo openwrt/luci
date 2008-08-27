@@ -64,11 +64,13 @@ ERRCODES = {
 	{ 'DEP_BADENUM',	'In dependency check for enum value "%i":\n%c' }
 }
 
--- build error constants
+-- build error constants and instance constructors
 for i, v in ipairs(ERRCODES) do
 	luci.uvl.errors[v[1]] = function(...)
 		return error(i, ...)
 	end
+
+	luci.uvl.errors['ERR_'..v[1]] = i
 end
 
 
