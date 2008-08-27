@@ -55,6 +55,7 @@ local next      = next
 
 local getmetatable = getmetatable
 
+--- LuCI JSON-Library
 module "luci.json"
 
 --- Null replacement function
@@ -63,12 +64,15 @@ function null()
 	return null
 end
 
-
+--- JSON-Encoder
+-- @class	module
+-- @cstyle	instance
+-- @name	luci.json.Encoder
 Encoder = util.class()
 
 --- Creates a new Encoder.
--- @param data			Data to be encoded.
--- @param buffersize	Buffersize of returned data.
+-- @param data			Lua-Object to be encoded.
+-- @param buffersize	Blocksize of returned data source.
 -- @param fastescape	Use non-standard escaping (don't escape control chars) 
 function Encoder.__init__(self, data, buffersize, fastescape)
 	self.data = data
@@ -79,7 +83,7 @@ function Encoder.__init__(self, data, buffersize, fastescape)
 	getmetatable(self).__call = Encoder.source
 end
 
---- Create an LTN12 source from the encoder object
+--- Create an LTN12 source providing the encoded JSON-Data.
 -- @return LTN12 source
 function Encoder.source(self)
 	local source = coroutine.create(self.dispatch)
@@ -207,17 +211,20 @@ Encoder.parsers = {
 } 
 
 
-
+--- JSON-Decoder
+-- @class	module
+-- @cstyle	instance
+-- @name	luci.json.Decoder
 Decoder = util.class()
 
 --- Create a new Decoder object.
--- @param customnull User luci.json.null instead of nil
+-- @param customnull Use luci.json.null instead of nil
 function Decoder.__init__(self, customnull)
 	self.cnull = customnull
 	getmetatable(self).__call = Decoder.sink
 end
 
---- Create an LTN12 sink from the decoder object.
+--- Create an LTN12 sink from the decoder object which accepts the JSON-Data.
 -- @return LTN12 sink
 function Decoder.sink(self)
 	local sink = coroutine.create(self.dispatch)
@@ -227,7 +234,7 @@ function Decoder.sink(self)
 end
 
 
---- Get the decoded data packets
+--- Get the decoded data packets after the rawdata has been sent to the sink.
 -- @return Decoded data
 function Decoder.get(self)
 	return self.data
