@@ -78,6 +78,7 @@ end
 
 
 s = m:section(NamedSection, "lan", "interface", translate("m_n_local"))
+s.addremove = false
 s:option(Value, "ipaddr", translate("ipaddress"))
 
 nm = s:option(Value, "netmask", translate("netmask"))
@@ -92,6 +93,7 @@ dns.rmempty = true
 
 
 s = m:section(NamedSection, "wan", "interface", translate("m_n_inet"))
+s.addremove = false
 p = s:option(ListValue, "proto", translate("protocol"))
 p:value("none", "disabled")
 p:value("static", translate("manual", "manual"))
