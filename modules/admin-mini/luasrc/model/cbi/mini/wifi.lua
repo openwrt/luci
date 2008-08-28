@@ -93,7 +93,7 @@ t2.render = function() end
 t2:option(DummyValue, "Quality", translate("iwscan_link"))
 essid = t2:option(DummyValue, "ESSID", "ESSID")
 function essid.cfgvalue(self, section)
-	return luci.util.pcdata(self.map:get(section, "ESSID"))
+	return self.map:get(section, "ESSID")
 end
 
 t2:option(DummyValue, "Address", "BSSID")
@@ -190,9 +190,9 @@ encr = s:option(ListValue, "encryption", translate("encryption"))
 encr:value("none", "keine")
 encr:value("wep", "WEP")
 encr:value("psk", "WPA-PSK")
-encr:value("wpa", "WPA-Radius")
+encr:value("wpa", "WPA-Radius", {mode="ap"})
 encr:value("psk2", "WPA2-PSK")
-encr:value("wpa2", "WPA2-Radius")
+encr:value("wpa2", "WPA2-Radius", {mode="ap"})
 
 key = s:option(Value, "key", translate("key"))
 key:depends("encryption", "wep")
