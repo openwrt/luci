@@ -36,16 +36,24 @@ local require, getmetatable = require, getmetatable
 --- LuCI UCI model library.
 module("luci.model.uci")
 
+--- Create a new UCI-Cursor.
+-- @class function
+-- @name cursor
+-- @return	UCI-Cursor
 cursor = uci.cursor
+
 APIVERSION = uci.APIVERSION
 
---- Creates a new statevalue cursor
+--- Create a new Cursor initialized to the state directory.
 -- @return UCI cursor
 function cursor_state()
 	return cursor(nil, "/var/state")
 end
 
 --- UCI-Cursor
+-- @class	module
+-- @cstyle	instance
+-- @name	luci.model.uci.Cursor
 local Cursor = getmetatable(cursor())
 
 --- Applies the new config
@@ -159,7 +167,7 @@ end
 -- @name Cursor.commit
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
--- @see revert
+-- @see Cursor.revert
 
 --- Deletes a section or an option.
 -- @class function
@@ -193,30 +201,27 @@ end
 -- @return			Table of UCI sections or table of UCI values
 
 --- Manually load a config.
--- Warning: This function is unsave! You should use load_config or load_state if possible.
 -- @class function
 -- @name Cursor.load
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
--- @see load_config
--- @see load_state
--- @see save
--- @see unload
+-- @see Cursor.save
+-- @see Cursor.unload
 
 --- Revert unsaved changes.
 -- @class function
 -- @name Cursor.revert
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
--- @see commit
+-- @see Cursor.commit
 
 --- Saves changes made to a config to make them committable.
 -- @class function
 -- @name Cursor.save
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
--- @see load
--- @see unload
+-- @see Cursor.load
+-- @see Cursor.unload
 
 --- Set a value or create a named section.
 -- @class function
@@ -254,5 +259,5 @@ end
 -- @name Cursor.unload
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
--- @see load
--- @see save
+-- @see Cursor.load
+-- @see Cursor.save
