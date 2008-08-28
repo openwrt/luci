@@ -437,11 +437,17 @@ function _serialize_table(t, seen)
 	seen[t] = true
 	
 	local data = ""
+	for i = 1, #t do
+		local v = serialize_data(t[i], seen)
+		data = data .. ( #data > 0 and ", " or "" ) .. v
+	end
 	for k, v in pairs(t) do
-		k = serialize_data(k, seen)
-		v = serialize_data(v, seen)
-		data = data .. ( #data > 0 and ", " or "" ) ..
-			'[' .. k .. '] = ' .. v
+		if type(k) ~= "number" then
+			k = serialize_data(k, seen)
+			v = serialize_data(v, seen)
+			data = data .. ( #data > 0 and ", " or "" ) ..
+				'[' .. k .. '] = ' .. v
+		end
 	end
 	return data
 end
