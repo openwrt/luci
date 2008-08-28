@@ -345,7 +345,7 @@ endef
 define Package/luci-admin-mini
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-admin-core
-  TITLE:=LuCI Essentials - casual user's interface
+  TITLE:=LuCI Essentials - stripped down - optimized for user-friendliness
 endef
 
 define Package/luci-admin-mini/install
@@ -356,7 +356,7 @@ endef
 define Package/luci-admin-full
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-admin-core +luci-ipkg
-  TITLE:=LuCI Administration - power user's interface
+  TITLE:=LuCI Administration - full featured - optimized for full control
 endef
 
 define Package/luci-admin-full/install
