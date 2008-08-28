@@ -18,13 +18,13 @@ module( "luci.uvl.errors", package.seeall )
 require("luci.util")
 
 ERRCODES = {
-	{ 'UCILOAD', 		'Unable to load config "%p" (syntax error or file not found)' },
+	{ 'UCILOAD', 		'Unable to load config "%p": %1' },
 
 	{ 'SCHEME',			'Error in scheme "%p":\n%c' },
 	{ 'CONFIG',  		'Error in config "%p":\n%c' },
 	{ 'SECTION',		'Error in section "%p.%s":\n%c' },
 	{ 'OPTION',			'Error in option "%p.%s.%o":\n%c' },
-	{ 'REFERENCE',		'Option "%p.%s.%o" has invalid reference specification "%1":\n%c' },
+	{ 'REFERENCE',		'Option "%p.%s.%o" has invalid reference specification %1:\n%c' },
 	{ 'DEPENDENCY',		'In dependency check for %t "%i":\n%c' },
 
 	{ 'SME_FIND',		'Can not find scheme "%p" in "%1"' },

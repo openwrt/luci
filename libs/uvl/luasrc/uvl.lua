@@ -125,7 +125,7 @@ function UVL.validate_config( self, config, uci )
 	self.beenthere = { }
 
 	if not co:config() then
-		return false, ERR.UCILOAD(co)
+		return false, co:errors()
 	end
 
 	local function _uci_foreach( type, func )
@@ -188,7 +188,7 @@ function UVL.validate_section( self, config, section, uci )
 	self.beenthere = { }
 
 	if not co:config() then
-		return false, ERR.UCILOAD(co)
+		return false, co:errors()
 	end
 
 	if so:config() then
@@ -217,8 +217,8 @@ function UVL.validate_option( self, config, section, option, uci )
 	local so = co:section( section )
 	local oo = so:option( option )
 
-	if not co then
-		return false, oerr:child(ERR.UCILOAD(config))
+	if not co:config() then
+		return false, co:errors()
 	end
 
 	if so:config() and oo:config() then
@@ -347,10 +347,10 @@ function UVL.read_scheme( self, scheme )
 			local uci = luci.model.uci.cursor()
 			      uci:set_confdir( luci.fs.dirname(file) )
 
-			local sd = uci:get_all( luci.fs.basename(file) )
+			local sd, err = uci:get_all( luci.fs.basename(file) )
 
 			if not sd then
-				return false, ERR.UCILOAD(so)
+				return false, ERR.UCILOAD(so, err)
 			end
 
 			table.insert( schemes, sd )
@@ -677,7 +677,7 @@ function UVL._read_reference( self, values )
 
 		if #ref == 2 or #ref == 3 then
 			local co = luci.uvl.config( self, ref[1] )
-			if not co:config() then return false, ERR.UCILOAD(ref[1]) end
+			if not co:config() then return false, co:errors() end
 
 			for k, v in pairs(co:config()) do
 				if v['.type'] == ref[2] then
@@ -825,6 +825,18 @@ function uvlitem.parent(self)
 	end
 end
 
+function uvlitem._loadconf(self, co, c)
+	if not co then
+		local uci, err = luci.model.uci.cursor(), nil
+		co, err = uci:get_all(c)
+
+		if err then
+			self:error(ERR.UCILOAD(self, err))
+		end
+	end
+	return co
+end
+
 
 --- Object representation of a scheme.
 -- @class	scheme
@@ -845,14 +857,9 @@ function scheme.__init__(self, scheme, co, c)
 		c, co = co, nil
 	end
 
-	if not co then
-		local uci = luci.model.uci.cursor()
-		co = uci:get_all(c)
-	end
-
 	self.cref = { c }
 	self.sref = { c }
-	self.c    = co
+	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_SCHEME
 end
@@ -917,14 +924,9 @@ function config.__init__(self, scheme, co, c)
 		c, co = co, nil
 	end
 
-	if not co then
-		local uci = luci.model.uci.cursor()
-		co = uci:get_all(c)
-	end
-
 	self.cref = { c }
 	self.sref = { c }
-	self.c    = co
+	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_CONFIG
 end
@@ -972,7 +974,7 @@ section = luci.util.class(uvlitem)
 function section.__init__(self, scheme, co, c, s)
 	self.cref = { c, s }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s }
-	self.c    = co
+	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_SECTION
 end
@@ -1023,7 +1025,7 @@ option = luci.util.class(uvlitem)
 function option.__init__(self, scheme, co, c, s, o)
 	self.cref = { c, s, o }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o }
-	self.c    = co
+	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_OPTION
 end
@@ -1072,7 +1074,7 @@ enum = luci.util.class(option)
 function enum.__init__(self, scheme, co, c, s, o, v)
 	self.cref = { c, s, o, v }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o, v }
-	self.c    = co
+	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
 	self.t    = luci.uvl.TYPE_ENUM
 end
