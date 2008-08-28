@@ -183,18 +183,18 @@ end
 
 --- Recursively dumps a table to stdout, useful for testing and debugging.
 -- @param t	Table value to dump
--- @param i	Number of tabs to prepend to each line
+-- @param maxdepth	Maximum depth
 -- @return	Always nil
-function dumptable(t, i, seen)
+function dumptable(t, maxdepth, i, seen)
 	i = i or 0
 	seen = seen or setmetatable({}, {__mode="k"})
 	
 	for k,v in pairs(t) do
 		perror(string.rep("\t", i) .. tostring(k) .. "\t" .. tostring(v))
-		if type(v) == "table" then
+		if type(v) == "table" and i < maxdepth then
 			if not seen[v] then
 				seen[v] = true
-				dumptable(v, i+1, seen)
+				dumptable(v, maxdepth, i+1, seen)
 			else
 				perror(string.rep("\t", i) .. "*** RECURSION ***")
 			end
