@@ -1012,7 +1012,9 @@ function ListValue.__init__(self, ...)
 			for k, v in pairs(vs.values) do
 				local deps = {}
 				if vs.enum_depends and vs.enum_depends[k] then
-					deps = _uvl_strip_remote_dependencies(vs.enum_depends[k])
+					for i, dep in ipairs(vs.enum_depends[k]) do
+						table.insert(deps, _uvl_strip_remote_dependencies(dep))
+					end
 				end
 				self:value(k, v, unpack(deps))
 			end
