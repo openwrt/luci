@@ -191,7 +191,7 @@ function dumptable(t, maxdepth, i, seen)
 	
 	for k,v in pairs(t) do
 		perror(string.rep("\t", i) .. tostring(k) .. "\t" .. tostring(v))
-		if type(v) == "table" and i < maxdepth then
+		if type(v) == "table" and (not maxdepth or i < maxdepth) then
 			if not seen[v] then
 				seen[v] = true
 				dumptable(v, maxdepth, i+1, seen)
