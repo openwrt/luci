@@ -456,7 +456,7 @@ function _serialize_table(t, seen)
 		idata = idata .. ( #idata > 0 and ", " or "" ) .. v
 	end		
 
-	return idata .. ( #data > 0 and ", " or "" ) .. data
+	return idata .. ( #data > 0 and #idata > 0 and ", " or "" ) .. data
 end
 
 --- Recursively serialize given data to lua code, suitable for restoring
