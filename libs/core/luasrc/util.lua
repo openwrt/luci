@@ -436,20 +436,27 @@ function _serialize_table(t, seen)
 	assert(not seen[t], "Recursion detected.")
 	seen[t] = true
 	
-	local data = ""
-	for i = 1, #t do
-		local v = serialize_data(t[i], seen)
-		data = data .. ( #data > 0 and ", " or "" ) .. v
-	end
+	local data  = ""
+	local idata = ""
+	local ilen  = 0
+
 	for k, v in pairs(t) do
-		if type(k) ~= "number" then
+		if type(k) ~= "number" or k < 1 or math.floor(k) ~= k or ( k - #t ) > 3 then
 			k = serialize_data(k, seen)
 			v = serialize_data(v, seen)
 			data = data .. ( #data > 0 and ", " or "" ) ..
 				'[' .. k .. '] = ' .. v
+		elseif k > ilen then
+			ilen = k
 		end
 	end
-	return data
+
+	for i = 1, ilen do
+		local v = serialize_data(t[i], seen)
+		idata = idata .. ( #idata > 0 and ", " or "" ) .. v
+	end		
+
+	return idata .. ( #data > 0 and ", " or "" ) .. data
 end
 
 --- Recursively serialize given data to lua code, suitable for restoring
