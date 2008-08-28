@@ -72,8 +72,8 @@ function check( self, object, nodeps )
 
 	local derr = ERR.DEPENDENCY(object)
 
-	if not self.beenthere[object:cid()] then
-		self.beenthere[object:cid()] = true
+	if not self.depseen[object:cid()] then
+		self.depseen[object:cid()] = true
 	else
 		return false, derr:child(ERR.DEP_RECURSIVE(object))
 	end

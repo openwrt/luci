@@ -70,6 +70,7 @@ function UVL.__init__( self, schemedir )
 	self.schemedir	= schemedir or default_schemedir
 	self.packages	= { }
 	self.beenthere  = { }
+	self.depseen    = { }
 	self.uci		= luci.model.uci
 	self.err		= luci.uvl.errors
 	self.dep		= luci.uvl.dependencies
@@ -124,6 +125,7 @@ function UVL.validate_config( self, config, uci )
 	local sc = { }
 
 	self.beenthere = { }
+	self.depseen   = { }
 
 	if not co:config() then
 		return false, co:errors()
@@ -187,6 +189,7 @@ function UVL.validate_section( self, config, section, uci )
 	local so = co:section( section )
 
 	self.beenthere = { }
+	self.depseen   = { }
 
 	if not co:config() then
 		return false, co:errors()
@@ -232,6 +235,8 @@ end
 
 function UVL._validate_section( self, section )
 
+	self.beenthere[section:cid()] = true
+
 	if section:config() then
 		if section:scheme('named') == true and
 		   section:config('.anonymous') == true
@@ -267,6 +272,8 @@ function UVL._validate_section( self, section )
 end
 
 function UVL._validate_option( self, option, nodeps )
+
+	self.beenthere[option:cid()] = true
 
 	if not option:scheme() and not option:parent():scheme('dynamic') then
 		return false, option:error(ERR.OPT_UNKNOWN(option))
