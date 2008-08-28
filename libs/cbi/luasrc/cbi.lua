@@ -1065,7 +1065,8 @@ function ListValue.__init__(self, ...)
 			end
 			for k, v in pairs(vs.values) do
 				local deps = {}
-				if vs.enum_depends and vs.enum_depends[k] then
+				if not self.override_dependencies
+				 and vs.enum_depends and vs.enum_depends[k] then
 					for i, dep in ipairs(vs.enum_depends[k]) do
 						table.insert(deps, _uvl_strip_remote_dependencies(dep))
 					end
@@ -1077,6 +1078,10 @@ function ListValue.__init__(self, ...)
 end
 
 function ListValue.value(self, key, val, ...)
+	if luci.util.contains(self.keylist, key) then
+		return
+	end
+
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val))
@@ -1123,6 +1128,10 @@ function MultiValue.render(self, ...)
 end
 
 function MultiValue.value(self, key, val)
+	if luci.util.contains(self.keylist, key) then
+		return
+	end
+
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val))
