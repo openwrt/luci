@@ -616,6 +616,13 @@ function NamedSection.parse(self)
 		AbstractSection.parse_dynamic(self, s)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, s)
+			
+			if not self.override_scheme and self.map.scheme then
+				local co = self.map:get()
+				local stat, err = self.map.validator:validate_section(self.config, s, co)
+				luci.http.prepare_content("text/html")
+				luci.util.dumptable(err)
+			end
 		end
 		AbstractSection.parse_optionals(self, s)
 	end
@@ -705,10 +712,17 @@ function TypedSection.parse(self)
 		end
 	end
 
+	local co
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, k)
+			
+			if not self.override_scheme and self.map.scheme then
+				co = co or self.map:get()
+				local stat, err = self.map.uvl:validate_section(self.config, k, co)
+				luci.util.perror(err)
+			end
 		end
 		AbstractSection.parse_optionals(self, k)
 	end

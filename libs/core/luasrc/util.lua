@@ -185,12 +185,19 @@ end
 -- @param t	Table value to dump
 -- @param i	Number of tabs to prepend to each line
 -- @return	Always nil
-function dumptable(t, i)
+function dumptable(t, i, seen)
 	i = i or 0
+	seen = seen or setmetatable({}, {__mode="k"})
+	
 	for k,v in pairs(t) do
-		print(string.rep("\t", i) .. tostring(k), tostring(v))
+		perror(string.rep("\t", i) .. tostring(k), tostring(v))
 		if type(v) == "table" then
-			dumptable(v, i+1)
+			if not seen[v] then
+				seen[v] = true
+				dumptable(v, i+1, seen)
+			else
+				perror(string.rep("\t", i) .. "*** RECURSION ***")
+			end
 		end
 	end
 end
@@ -425,11 +432,14 @@ end
 
 
 -- Serialize the contents of a table value.
-function _serialize_table(t)
+function _serialize_table(t, seen)
+	assert(not seen[t], "Recursion detected.")
+	seen[t] = true
+	
 	local data = ""
 	for k, v in pairs(t) do
-		k = serialize_data(k)
-		v = serialize_data(v)
+		k = serialize_data(k, seen)
+		v = serialize_data(v, seen)
 		data = data .. ( #data > 0 and ", " or "" ) ..
 			'[' .. k .. '] = ' .. v
 	end
@@ -442,7 +452,9 @@ end
 -- @return		String value containing the serialized code
 -- @see			restore_data
 -- @see			get_bytecode
-function serialize_data(val)
+function serialize_data(val, seen)
+	seen = seen or setmetatable({}, {__mode="k"})
+	
 	if val == nil then
 		return "nil"
 	elseif type(val) == "number" then
@@ -454,7 +466,7 @@ function serialize_data(val)
 	elseif type(val) == "function" then
 		return string.format("loadstring(%q)", get_bytecode(val))
 	elseif type(val) == "table" then
-		return "{ " .. _serialize_table(val) .. " }"
+		return "{ " .. _serialize_table(val, seen) .. " }"
 	else
 		return '"[unhandled data type:' .. type(val) .. ']"'
 	end
