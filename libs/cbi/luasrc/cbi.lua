@@ -175,12 +175,14 @@ function Map.__init__(self, config, ...)
 	self.parsechain = {self.config}
 	self.template = "cbi/map"
 	self.uci = uci.cursor()
+	self.save = true
 	if not self.uci:load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
 
 	self.validator = luci.uvl.UVL()
 	self.scheme = self.validator:get_scheme(self.config)
+	
 end
 
 function Map.get_scheme(self, sectiontype, option)
@@ -202,24 +204,26 @@ end
 function Map.parse(self, ...)
 	Node.parse(self, ...)
 
-	for i, config in ipairs(self.parsechain) do
-		self.uci:save(config)
-	end
-	if luci.http.formvalue("cbi.apply") then
+	if self.save then
 		for i, config in ipairs(self.parsechain) do
-			self.uci:commit(config)
-			self.uci:apply(config)
-
-			-- Refresh data because commit changes section names
-			self.uci:load(config)
+			self.uci:save(config)
 		end
-
-		-- Reparse sections
-		Node.parse(self, ...)
-
-	end
-	for i, config in ipairs(self.parsechain) do
-		self.uci:unload(config)
+		if luci.http.formvalue("cbi.apply") then
+			for i, config in ipairs(self.parsechain) do
+				self.uci:commit(config)
+				self.uci:apply(config)
+	
+				-- Refresh data because commit changes section names
+				self.uci:load(config)
+			end
+	
+			-- Reparse sections
+			Node.parse(self, ...)
+	
+		end
+		for i, config in ipairs(self.parsechain) do
+			self.uci:unload(config)
+		end
 	end
 end
 
@@ -385,6 +389,10 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.config = map.config
 	self.optionals = {}
 	self.defaults = {}
+	self.fields = {}
+	self.tag_error = {}
+	self.tag_invalid = {}
+	self.tag_deperror = {}
 
 	self.optional = true
 	self.addremove = false
@@ -413,6 +421,7 @@ function AbstractSection.option(self, class, option, ...)
 		Node._i18n(obj, self.config, self.section or self.sectiontype, option, ...)
 
 		self:append(obj)
+		self.fields[option] = obj
 		return obj
 	elseif class == true then
 		error("No valid class was given and autodetection failed.")
@@ -576,7 +585,7 @@ NamedSection = class(AbstractSection)
 function NamedSection.__init__(self, map, section, stype, ...)
 	AbstractSection.__init__(self, map, stype, ...)
 	Node._i18n(self, map.config, section, nil, ...)
-
+	
 	-- Defaults
 	self.addremove = false
 
@@ -596,7 +605,6 @@ end
 function NamedSection.parse(self)
 	local s = self.section
 	local active = self:cfgvalue(s)
-
 
 	if self.addremove then
 		local path = self.config.."."..s
@@ -620,8 +628,23 @@ function NamedSection.parse(self)
 			if not self.override_scheme and self.map.scheme then
 				local co = self.map:get()
 				local stat, err = self.map.validator:validate_section(self.config, s, co)
-				luci.http.prepare_content("text/html")
-				luci.util.dumptable(err)
+				if err then
+					self.map.save = false
+					if err.code == luci.uvl.errors.ERR_DEPENDENCY then
+						self.tag_deperror[s] = true
+					else
+						self.tag_invalid[s] = true
+					end
+					for i, v in ipairs(err.childs) do
+						if v.option and self.fields[v.option] then
+							if v.code == luci.uvl.errors.ERR_DEPENDENCY then
+								self.fields[v.option].tag_reqerror[s] = true
+							elseif v.code == luci.uvl.errors.ERR_OPTION then
+								self.fields[v.option].tag_invalid[s] = true
+							end
+						end
+					end
+				end
 			end
 		end
 		AbstractSection.parse_optionals(self, s)
@@ -719,9 +742,25 @@ function TypedSection.parse(self)
 			Node.parse(self, k)
 			
 			if not self.override_scheme and self.map.scheme then
-				co = co or self.map:get()
-				local stat, err = self.map.uvl:validate_section(self.config, k, co)
-				luci.util.perror(err)
+				local co = self.map:get()
+				local stat, err = self.map.validator:validate_section(self.config, k, co)
+				if err then
+					self.map.save = false
+					if err.code == luci.uvl.errors.ERR_DEPENDENCY then
+						self.tag_deperror[k] = true
+					else
+						self.tag_invalid[k] = true
+					end
+					for i, v in ipairs(err.childs) do
+						if v.option and self.fields[v.option] then
+							if v.code == luci.uvl.errors.ERR_DEPENDENCY then
+								self.fields[v.option].tag_reqerror[k] = true
+							elseif v.code == luci.uvl.errors.ERR_OPTION then
+								self.fields[v.option].tag_invalid[k] = true
+							end
+						end
+					end
+				end
 			end
 		end
 		AbstractSection.parse_optionals(self, k)
@@ -780,6 +819,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.config  = map.config
 	self.tag_invalid = {}
 	self.tag_missing = {}
+	self.tag_reqerror = {}
 	self.tag_error = {}
 	self.deps = {}
 	self.cast = "string"

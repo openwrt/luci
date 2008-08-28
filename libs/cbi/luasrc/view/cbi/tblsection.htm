@@ -89,6 +89,19 @@ end
 					</td>
 				<%- end -%>
 			</tr>
+			<% if self.tag_deperror[section] or self.tag_invalid[section] or self.tag_error[section] then %>
+				<tr class="cbi-section-table-row">
+					<td colspan="<%=count%>">
+				<%- if self.tag_deperror[section] then -%>
+					<div class="cbi-error"><%:cbi_deperror%></div>
+				<%- elseif self.tag_invalid[section] then -%>
+					<div class="cbi-error"><%:cbi_invalid_section%></div>
+				<%- elseif self.tag_error[section] then -%>
+					<div class="cbi-error"><%=self.tag_error[section]%></div>
+				<%- end -%>
+					</td>
+				</tr>
+			<% end %>
 			<%- end -%>
 
 			<%- if isempty then -%>
