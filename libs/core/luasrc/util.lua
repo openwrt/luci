@@ -190,7 +190,7 @@ function dumptable(t, i, seen)
 	seen = seen or setmetatable({}, {__mode="k"})
 	
 	for k,v in pairs(t) do
-		perror(string.rep("\t", i) .. tostring(k), tostring(v))
+		perror(string.rep("\t", i) .. tostring(k) .. "\t" .. tostring(v))
 		if type(v) == "table" then
 			if not seen[v] then
 				seen[v] = true
