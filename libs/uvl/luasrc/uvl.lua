@@ -55,6 +55,7 @@ STRICT_LIST_TYPE           = true
 
 
 local default_schemedir = "/lib/uci/schema"
+local default_savedir = "/tmp/.uvl"
 local ERR = luci.uvl.errors
 
 
@@ -344,8 +345,7 @@ function UVL.read_scheme( self, scheme )
 				return so:error(ERR.SME_READ(so,file))
 			end
 
-			local uci = luci.model.uci.cursor()
-			      uci:set_confdir( luci.fs.dirname(file) )
+			local uci = luci.model.uci.cursor( luci.fs.dirname(file), default_savedir )
 
 			local sd, err = uci:get_all( luci.fs.basename(file) )
 
