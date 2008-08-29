@@ -309,6 +309,8 @@ end
 process = {}
 
 --- Get the current process id.
+-- @class function
+-- @name  process.info
 -- @return	Number containing the current pid
 process.info = posix.getpid
 
@@ -373,6 +375,8 @@ function process.setuser(pid, uid)
 end
 
 --- Send a signal to a process identified by given pid.
+-- @class function
+-- @name  process.signal
 -- @param pid	Number containing the process id
 -- @param sig	Signal to send (default: 15 [SIGTERM])
 -- @return		Boolean indicating successful operation
