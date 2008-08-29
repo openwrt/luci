@@ -33,21 +33,25 @@ function index()
 		luci.http.status(403, "Forbidden")
 	end
 	
-	uci = entry({"rpc", "uci"}, call("rpc_uci"))
-	uci.sysauth = "root"
-	uci.sysauth_authenticator = authenticator
+	if pcall(require, "luci.model.uci") then
+		uci = entry({"rpc", "uci"}, call("rpc_uci"))
+		uci.sysauth = "root"
+		uci.sysauth_authenticator = authenticator
+	end
 	
 	fs = entry({"rpc", "fs"}, call("rpc_fs"))
 	fs.sysauth = "root"
 	fs.sysauth_authenticator = authenticator
 
-	fs = entry({"rpc", "sys"}, call("rpc_sys"))
-	fs.sysauth = "root"
-	fs.sysauth_authenticator = authenticator
+	sys = entry({"rpc", "sys"}, call("rpc_sys"))
+	sys.sysauth = "root"
+	sys.sysauth_authenticator = authenticator
 	
-	fs = entry({"rpc", "ipkg"}, call("rpc_ipkg"))
-	fs.sysauth = "root"
-	fs.sysauth_authenticator = authenticator
+	if pcall(require, "luci.model.ipkg") then
+		fs = entry({"rpc", "ipkg"}, call("rpc_ipkg"))
+		fs.sysauth = "root"
+		fs.sysauth_authenticator = authenticator
+	end
 	
 	uci = entry({"rpc", "auth"}, call("rpc_auth"))
 end

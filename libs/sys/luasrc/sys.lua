@@ -207,6 +207,8 @@ end
 group = {}
 
 --- Returns information about a POSIX user group.
+-- @class function
+-- @name		getgroup
 -- @param group Group ID or name of a system user group
 -- @return	Table with information about the requested group
 group.getgroup = posix.getgroup
