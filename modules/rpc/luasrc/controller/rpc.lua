@@ -33,11 +33,9 @@ function index()
 		luci.http.status(403, "Forbidden")
 	end
 	
-	if pcall(require, "luci.model.uci") then
-		uci = entry({"rpc", "uci"}, call("rpc_uci"))
-		uci.sysauth = "root"
-		uci.sysauth_authenticator = authenticator
-	end
+	uci = entry({"rpc", "uci"}, call("rpc_uci"))
+	uci.sysauth = "root"
+	uci.sysauth_authenticator = authenticator
 	
 	fs = entry({"rpc", "fs"}, call("rpc_fs"))
 	fs.sysauth = "root"
@@ -46,12 +44,10 @@ function index()
 	sys = entry({"rpc", "sys"}, call("rpc_sys"))
 	sys.sysauth = "root"
 	sys.sysauth_authenticator = authenticator
-	
-	if pcall(require, "luci.model.ipkg") then
-		fs = entry({"rpc", "ipkg"}, call("rpc_ipkg"))
-		fs.sysauth = "root"
-		fs.sysauth_authenticator = authenticator
-	end
+
+	ipkg = entry({"rpc", "ipkg"}, call("rpc_ipkg"))
+	ipkg.sysauth = "root"
+	ipkg.sysauth_authenticator = authenticator
 	
 	uci = entry({"rpc", "auth"}, call("rpc_auth"))
 end
@@ -85,6 +81,10 @@ function rpc_auth()
 end
 
 function rpc_uci()
+	if not pcall(require, "luci.model.uci") then
+		luci.http.status(404, "Not Found")
+		return nil
+	end
 	local uci     = require "luci.controller.rpc.uci"
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
@@ -145,6 +145,10 @@ function rpc_sys()
 end
 
 function rpc_ipkg()
+	if not pcall(require, "luci.model.ipkg") then
+		luci.http.status(404, "Not Found")
+		return nil
+	end
 	local ipkg    = require "luci.model.ipkg"
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
