@@ -44,9 +44,10 @@ function handle(tbl, rawsource, ...)
 	if stat then
 		if type(json.method) == "string"
 		 and (not json.params or type(json.params) == "table") then
-			if tbl[json.method] then
+			local method = resolve(tbl, json.method)
+			if method then
 				response = reply(json.jsonrpc, json.id,
-				 proxy(resolve(tbl, json.method), unpack(json.params or {})))
+				 proxy(method, unpack(json.params or {})))
 			else
 		 		response = reply(json.jsonrpc, json.id,
 			 	 nil, {code=-32601, message="Method not found."})

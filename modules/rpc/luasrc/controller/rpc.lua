@@ -16,6 +16,8 @@ $Id$
 local require = require
 local pairs = pairs
 local print = print
+local pcall = pcall
+local table = table
 
 module "luci.controller.rpc"
 
@@ -86,30 +88,42 @@ end
 
 function rpc_fs()
 	local util    = require "luci.util"
-	local fs      = util.clone(require "luci.fs")
+	local io      = require "io"
+	local fs2     = util.clone(require "luci.fs")
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local ltn12   = require "luci.ltn12"
-	
-	function fs.readfile(filename)
-		if not pcall(require, "mime") then
+
+	function fs2.readfile(filename)
+		local stat, mime = pcall(require, "mime")
+		if not stat then
 			error("Base64 support not available. Please install LuaSocket.")
 		end
-		
-		return ltn12.source.chain(ltn12.source.file(filename), mime.encode("base64"))
+
+		local fp = io.open(filename)
+		if not fp then
+			return nil
+		end
+
+		local output = {}
+		local sink = ltn12.sink.table(output)
+		local source = ltn12.source.chain(ltn12.source.file(fp), mime.encode("base64"))
+		return ltn12.pump.all(source, sink) and table.concat(output)
 	end
 	
-	function fs.writefile(filename, data)
-		if not pcall(require, "mime") then
+	function fs2.writefile(filename, data)
+		local stat, mime = pcall(require, "mime")
+		if not stat then
 			error("Base64 support not available. Please install LuaSocket.")
 		end
-	
-		local sink = ltn12.sink.chain(mime.decode("base64"), ltn12.sink.file(filename))
-		return ltn12.pump.all(ltn12.source.string(data), sink)
+
+		local  file = io.open(filename, "w")
+		local  sink = file and ltn12.sink.chain(mime.decode("base64"), ltn12.sink.file(file))
+		return sink and ltn12.pump.all(ltn12.source.string(data), sink) or false
 	end
 	
 	http.prepare_content("application/json")
-	ltn12.pump.all(jsonrpc.handle(fs, http.source()), http.write)
+	ltn12.pump.all(jsonrpc.handle(fs2, http.source()), http.write)
 end
 
 function rpc_sys()
