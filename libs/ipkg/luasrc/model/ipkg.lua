@@ -70,7 +70,7 @@ local function _parselist(rawdata)
 					data[val] = c
 				elseif key == "Status" then
 					c.Status = {}
-					for i, j in pairs(luci.util.split(val, " ")) do
+					for i, j in pairs(util.split(val, " ")) do
 						c.Status[j] = true
 					end
 				else
