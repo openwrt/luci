@@ -56,6 +56,7 @@ local next      = next
 local getmetatable = getmetatable
 
 --- LuCI JSON-Library
+-- @cstyle	instance
 module "luci.json"
 
 --- Null replacement function
@@ -64,16 +65,15 @@ function null()
 	return null
 end
 
---- JSON-Encoder
--- @class	module
--- @cstyle	instance
--- @name	luci.json.Encoder
-Encoder = util.class()
-
---- Creates a new Encoder.
+--- Create a new JSON-Encoder.
+-- @class	function
+-- @name	Encoder
 -- @param data			Lua-Object to be encoded.
 -- @param buffersize	Blocksize of returned data source.
 -- @param fastescape	Use non-standard escaping (don't escape control chars) 
+-- @return JSON-Encoder
+Encoder = util.class()
+
 function Encoder.__init__(self, data, buffersize, fastescape)
 	self.data = data
 	self.buffersize = buffersize or 512
@@ -184,10 +184,10 @@ function Encoder.parse_iter(self, obj)
 		local first = true
 		
 		if type(obj) == "table" then
-			for i, entry in pairs(obj) do
+			for i=1, #obj do
 				first = first or self:put(",")
 				first = first and nil
-				self:dispatch(entry)
+				self:dispatch(obj[i])
 			end
 		else
 			for entry in obj do
@@ -211,14 +211,13 @@ Encoder.parsers = {
 } 
 
 
---- JSON-Decoder
--- @class	module
--- @cstyle	instance
--- @name	luci.json.Decoder
+--- Create a new JSON-Decoder.
+-- @class	function
+-- @name	Decoder
+-- @param customnull Use luci.json.null instead of nil for decoding null
+-- @return JSON-Decoder
 Decoder = util.class()
 
---- Create a new Decoder object.
--- @param customnull Use luci.json.null instead of nil
 function Decoder.__init__(self, customnull)
 	self.cnull = customnull
 	getmetatable(self).__call = Decoder.sink
