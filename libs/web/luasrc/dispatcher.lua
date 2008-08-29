@@ -449,17 +449,19 @@ end
 --- Create a template render dispatching target.
 -- @param	name	Template to be rendered
 function template(name)
-	require("luci.template")
-	return function() luci.template.render(name) end
+	return function()
+		require("luci.template")
+		luci.template.render(name)
+	end
 end
 
 --- Create a CBI model dispatching target.
 -- @param	model	CBI model tpo be rendered
 function cbi(model)
-	require("luci.cbi")
-	require("luci.template")
-
 	return function(...)
+		require("luci.cbi")
+		require("luci.template")
+
 		local stat, maps = luci.util.copcall(luci.cbi.load, model, ...)
 		if not stat then
 			error500(maps)
@@ -485,10 +487,10 @@ end
 --- Create a CBI form model dispatching target.
 -- @param	model	CBI form model tpo be rendered
 function form(model)
-	require("luci.cbi")
-	require("luci.template")
-
 	return function(...)
+		require("luci.cbi")
+		require("luci.template")
+
 		local stat, maps = luci.util.copcall(luci.cbi.load, model, ...)
 		if not stat then
 			error500(maps)
