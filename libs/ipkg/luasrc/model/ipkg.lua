@@ -1,75 +1,33 @@
 --[[
-LuCI - IPKG wrapper library
+LuCI - Lua Configuration Interface
 
-Description:
-Wrapper for the ipkg Package manager
-
-Any return value of false or nil can be interpreted as an error
-
-FileId:
-$Id$
-
-License:
-Copyright 2008 Steven Barth <steven@midlink.org>
+(c) 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 
+http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
+$Id$
 ]]--
-module("luci.model.ipkg", package.seeall)
-require("luci.util")
-require("luci.fs")
 
-ipkg = luci.fs.access("/bin/opkg") and "opkg" or "ipkg"
+local os   = require "os"
+local util = require "luci.util"
 
--- Returns repository information
-function info(pkg)
-	return _lookup("info", pkg)
-end
+local type  = type
+local pairs = pairs
+local error = error
 
--- Returns a table with status information
-function status(pkg)
-	return _lookup("status", pkg)
-end
+local ipkg = "opkg"
 
--- Installs packages
-function install(...)
-	return _action("install", ...)
-end
-
--- Returns whether a package is installed
-function installed(pkg, ...)
-	local p = status(...)[pkg]
-	return (p and p.Status and p.Status.installed)
-end
-
--- Removes packages
-function remove(...)
-	return _action("remove", ...)
-end
-
--- Updates package lists
-function update()
-	return _action("update")
-end
-
--- Upgrades installed packages
-function upgrade()
-	return _action("upgrade")
-end
+--- LuCI IPKG/OPKG call abstraction library
+module "luci.model.ipkg"
 
 
 -- Internal action function
-function _action(cmd, ...)
+local function _action(cmd, ...)
 	local pkg = ""
 	arg.n = nil
 	for k, v in pairs(arg) do
@@ -81,39 +39,29 @@ function _action(cmd, ...)
 	return (r == 0), r	
 end
 
--- Internal lookup function
-function _lookup(act, pkg)
-	local cmd = ipkg .. " " .. act
-	if pkg then
-		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
-	end
-	
-	return _parselist(luci.util.exec(cmd .. " 2>/dev/null"))
-end
-
 -- Internal parser function
-function _parselist(rawdata)	
+local function _parselist(rawdata)	
 	if type(rawdata) ~= "string" then
 		error("IPKG: Invalid rawdata given")
 	end
 	
-	rawdata = luci.util.split(rawdata) 
+	rawdata = util.split(rawdata) 
 	local data = {}
 	local c = {}
 	local l = nil
 	
 	for k, line in pairs(rawdata) do
 		if line:sub(1, 1) ~= " " then
-			local split = luci.util.split(line, ":", 1)
+			local split = util.split(line, ":", 1)
 			local key = nil
 			local val = nil
 			
 			if split[1] then
-				key = luci.util.trim(split[1])
+				key = util.trim(split[1])
 			end
 			
 			if split[2] then
-				val = luci.util.trim(split[2])
+				val = util.trim(split[2])
 			end
 			
 			if key and val then
@@ -138,3 +86,67 @@ function _parselist(rawdata)
 	
 	return data
 end
+
+-- Internal lookup function
+local function _lookup(act, pkg)
+	local cmd = ipkg .. " " .. act
+	if pkg then
+		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
+	end
+	
+	return _parselist(util.exec(cmd .. " 2>/dev/null"))
+end
+
+
+--- Return information about installed and available packages.
+-- @param pkg Limit output to a (set of) packages
+-- @return Table containing package information
+function info(pkg)
+	return _lookup("info", pkg)
+end
+
+--- Return the package status of one or more packages.
+-- @param pkg Limit output to a (set of) packages
+-- @return Table containing package status information
+function status(pkg)
+	return _lookup("status", pkg)
+end
+
+--- Install one or more packages.
+-- @param ... List of packages to install
+-- @return Boolean indicating the status of the action
+-- @return IPKG return code
+function install(...)
+	return _action("install", ...)
+end
+
+--- Determine whether a given package is installed.
+-- @param pkg Package
+-- @return Boolean
+function installed(pkg)
+	local p = status(pkg)[pkg]
+	return (p and p.Status and p.Status.installed)
+end
+
+--- Remove one or more packages.
+-- @param ... List of packages to install
+-- @return Boolean indicating the status of the action
+-- @return IPKG return code
+function remove(...)
+	return _action("remove", ...)
+end
+
+--- Update package lists.
+-- @return Boolean indicating the status of the action
+-- @return IPKG return code
+function update()
+	return _action("update")
+end
+
+--- Upgrades all installed packages.
+-- @return Boolean indicating the status of the action
+-- @return IPKG return code
+function upgrade()
+	return _action("upgrade")
+end
+

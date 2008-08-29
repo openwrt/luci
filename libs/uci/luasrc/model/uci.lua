@@ -34,6 +34,7 @@ local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
 local require, getmetatable = require, getmetatable
 
 --- LuCI UCI model library.
+-- @cstyle	instance
 module("luci.model.uci")
 
 --- Create a new UCI-Cursor.
@@ -50,10 +51,7 @@ function cursor_state()
 	return cursor(nil, "/var/state")
 end
 
---- UCI-Cursor
--- @class	module
--- @cstyle	instance
--- @name	luci.model.uci.Cursor
+
 local Cursor = getmetatable(cursor())
 
 --- Applies the new config
