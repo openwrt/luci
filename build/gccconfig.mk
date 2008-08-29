@@ -18,5 +18,5 @@ ifeq ($(OS),Darwin)
 else
   SHLIB_FLAGS = -shared
 endif
-LINK = $(CC)
+LINK = $(CC) $(LDFLAGS)
 
