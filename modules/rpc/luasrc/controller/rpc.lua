@@ -36,20 +36,24 @@ function index()
 	uci = entry({"rpc", "uci"}, call("rpc_uci"))
 	uci.sysauth = "root"
 	uci.sysauth_authenticator = authenticator
+	uci.notemplate = true
 	
 	fs = entry({"rpc", "fs"}, call("rpc_fs"))
 	fs.sysauth = "root"
 	fs.sysauth_authenticator = authenticator
+	fs.notemplate = true
 
 	sys = entry({"rpc", "sys"}, call("rpc_sys"))
 	sys.sysauth = "root"
 	sys.sysauth_authenticator = authenticator
+	sys.notemplate = true
 
 	ipkg = entry({"rpc", "ipkg"}, call("rpc_ipkg"))
 	ipkg.sysauth = "root"
 	ipkg.sysauth_authenticator = authenticator
+	ipkg.notemplate = true
 	
-	uci = entry({"rpc", "auth"}, call("rpc_auth"))
+	entry({"rpc", "auth"}, call("rpc_auth")).notemplate = true
 end
 
 function rpc_auth()

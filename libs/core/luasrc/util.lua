@@ -24,8 +24,21 @@ limitations under the License.
 
 ]]--
 
+local io = require "io"
+local table = require "table"
+local debug = require "debug"
+local string = require "string"
+local coroutine = require "coroutine"
+
+local getmetatable, setmetatable = getmetatable, setmetatable
+local getfenv, setfenv = getfenv, setfenv
+local rawget, rawset, unpack = rawget, rawset, unpack
+local tostring, type, assert = tostring, type, assert 
+local ipairs, pairs, loadstring = ipairs, pairs, loadstring
+local require, pcall, xpcall = require, pcall, xpcall
+
 --- LuCI utility functions.
-module("luci.util", package.seeall)
+module "luci.util"
 
 --
 -- Pythonic string formatting extension
@@ -63,14 +76,10 @@ function class(base)
 	local class = {}
 
 	local create = function(class, ...)
-		local inst = {}
-		setmetatable(inst, {__index = class})
+		local inst = setmetatable({}, {__index = class})
 
 		if inst.__init__ then
-			local stat, err = copcall(inst.__init__, inst, ...)
-			if not stat then
-				error(err)
-			end
+			inst:__init__(...)
 		end
 
 		return inst
@@ -284,8 +293,7 @@ end
 -- @param str	String value containing whitespace padded data
 -- @return		String value with leading and trailing space removed
 function trim(str)
-	local s = str:gsub("^%s*(.-)%s*$", "%1")
-	return s
+	return (str:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 --- Parse certain units from the given string and return the canonical integer
@@ -413,9 +421,7 @@ function clone(object, deep)
 		copy[k] = v
 	end
 
-	setmetatable(copy, getmetatable(object))
-
-	return copy
+	return setmetatable(copy, getmetatable(object))
 end
 
 
@@ -473,11 +479,11 @@ function serialize_data(val, seen)
 	elseif type(val) == "number" then
 		return val
 	elseif type(val) == "string" then
-		return string.format("%q", val)
+		return "%q" % val
 	elseif type(val) == "boolean" then
 		return val and "true" or "false"
 	elseif type(val) == "function" then
-		return string.format("loadstring(%q)", get_bytecode(val))
+		return "loadstring(%q)" % get_bytecode(val)
 	elseif type(val) == "table" then
 		return "{ " .. _serialize_table(val, seen) .. " }"
 	else
@@ -691,7 +697,7 @@ end
 --- Returns the absolute path to LuCI base directory.
 -- @return		String containing the directory path
 function libpath()
-	return luci.fs.dirname(require("luci.debug").__file__)
+	return require "luci.fs".dirname(require "luci.debug".__file__)
 end
 
 

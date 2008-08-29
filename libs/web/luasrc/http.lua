@@ -24,15 +24,20 @@ limitations under the License.
 
 ]]--
 
+local ltn12 = require "luci.ltn12"
+local proto = require "luci.http.protocol"
+local util  = require "luci.util"
+local string = require "string"
+local coroutine = require "coroutine"
+
+local pairs, tostring, error = pairs, tostring, error
+
 --- LuCI Web Framework high-level HTTP functions.
-module("luci.http", package.seeall)
-local ltn12 = require("luci.ltn12")
-require("luci.http.protocol")
-require("luci.util")
+module "luci.http"
 
-context = luci.util.threadlocal()
+context = util.threadlocal()
 
-Request = luci.util.class()
+Request = util.class()
 function Request.__init__(self, env, sourcein, sinkerr)
 	self.input = sourcein
 	self.error = sinkerr
@@ -45,7 +50,7 @@ function Request.__init__(self, env, sourcein, sinkerr)
 	self.message = {
 		env = env,
 		headers = {},
-		params = luci.http.protocol.urldecode_params(env.QUERY_STRING or ""),
+		params = protocol.urldecode_params(env.QUERY_STRING or ""),
 	}
 	
 	self.parsed_input = false
@@ -109,7 +114,7 @@ function Request.setfilehandler(self, callback)
 end
 
 function Request._parse_input(self)
-	luci.http.protocol.parse_message_body(
+	protocol.parse_message_body(
 		 self.input,
 		 self.message,
 		 self.filehandler
@@ -277,10 +282,10 @@ end
 -- @param no_plus	Don't decode + to " "
 -- @return			URL-decoded string
 -- @see urlencode
-urldecode = luci.http.protocol.urldecode
+urldecode = protocol.urldecode
 
 --- Return the URL-encoded equivalent of a string.
 -- @param str		Source string
 -- @return			URL-encoded string
 -- @see urldecode
-urlencode = luci.http.protocol.urlencode
+urlencode = protocol.urlencode

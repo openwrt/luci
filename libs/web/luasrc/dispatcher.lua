@@ -25,13 +25,13 @@ limitations under the License.
 ]]--
 
 --- LuCI web dispatcher.
-module("luci.dispatcher", package.seeall)
-require("luci.util")
-require("luci.init")
-require("luci.http")
-require("luci.sys")
-require("luci.fs")
+local fs = require "luci.fs"
+local sys = require "luci.sys"
+local init = require "luci.init"
+local util = require "luci.util"
+local http = require "luci.http"
 
+module("luci.dispatcher", package.seeall)
 context = luci.util.threadlocal()
 
 authenticator = {}
@@ -106,23 +106,28 @@ function httpdispatch(request)
 		table.insert(context.request, node)
 	end
 
-	dispatch(context.request)
+	local stat, err = util.copcall(dispatch, context.request)
+	if not stat then
+		error500(err)
+	end
+	
 	luci.http.close()
 end
 
 --- Dispatches a LuCI virtual path.
 -- @param request	Virtual path
 function dispatch(request)
-	context.path = request
+	local ctx = context
+	ctx.path = request
 	
-	require("luci.i18n")
-	luci.i18n.setlanguage(require("luci.config").main.lang)
+	require "luci.i18n".setlanguage(require "luci.config".main.lang)
 	
-	if not context.tree then
-		createtree()
+	local c = ctx.tree
+	local stat
+	if not c then
+		c = createtree()
 	end
 	
-	local c = context.tree
 	local track = {}
 	local args = {}
 	context.args = args
@@ -135,9 +140,7 @@ function dispatch(request)
 			break
 		end
 
-		for k, v in pairs(c) do
-			track[k] = v
-		end
+		util.update(track, c)
 		
 		if c.leaf then
 			break
@@ -155,46 +158,44 @@ function dispatch(request)
 	end
 	
 	-- Init template engine
-	local tpl = require("luci.template")
-	local viewns = {}
-	tpl.context.viewns = viewns
-	viewns.write       = luci.http.write
-	viewns.translate   = function(...) return require("luci.i18n").translate(...) end
-	viewns.striptags   = luci.util.striptags
-	viewns.controller  = luci.http.getenv("SCRIPT_NAME")
-	viewns.media       = luci.config.main.mediaurlbase
-	viewns.resource    = luci.config.main.resourcebase
-	viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
-	
-	if track.dependent then
-		local stat, err = pcall(assert, not track.auto)
-		if not stat then
-			error500(err)
-			return
-		end
+	if not track.notemplate then
+		local tpl = require("luci.template")
+		local viewns = {}
+		tpl.context.viewns = viewns
+		viewns.write       = luci.http.write
+		viewns.translate   = function(...) return require("luci.i18n").translate(...) end
+		viewns.striptags   = util.striptags
+		viewns.controller  = luci.http.getenv("SCRIPT_NAME")
+		viewns.media       = luci.config.main.mediaurlbase
+		viewns.resource    = luci.config.main.resourcebase
+		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
 	
+	assert(not track.dependent or not track.auto, "Access Violation")
+	
 	if track.sysauth then
-		require("luci.sauth")
+		local sauth = require "luci.sauth"
+		
 		local authen = type(track.sysauth_authenticator) == "function"
 		 and track.sysauth_authenticator
 		 or authenticator[track.sysauth_authenticator]
+		 
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
 		local sess = luci.http.getcookie("sysauth")
 		sess = sess and sess:match("^[A-F0-9]+$")
-		local user = luci.sauth.read(sess)
+		local user = sauth.read(sess)
 		
-		if not luci.util.contains(accs, user) then
+		if not util.contains(accs, user) then
 			if authen then
 				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
-				if not user or not luci.util.contains(accs, user) then
+				if not user or not util.contains(accs, user) then
 					return
 				else
 					local sid = sess or luci.sys.uniqueid(16)
 					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
 					if not sess then
-						luci.sauth.write(sid, user)
+						sauth.write(sid, user)
 					end
 				end
 			else
@@ -214,15 +215,12 @@ function dispatch(request)
 
 	if c and type(c.target) == "function" then
 		context.dispatched = c
-		stat, mod = luci.util.copcall(require, c.module)
-		if stat then
-			luci.util.updfenv(c.target, mod)
-		end
 		
-		stat, err = luci.util.copcall(c.target, unpack(args))
-		if not stat then
-			error500(err)
-		end
+		util.copcall(function()
+			util.updfenv(c.target, require(c.module))
+		end)
+		
+		c.target(unpack(args))
 	else
 		error404()
 	end
@@ -262,50 +260,33 @@ end
 -- @param path		Controller base directory
 -- @param suffix	Controller file suffix
 function createindex_plain(path, suffix)
+	if indexcache then
+		local cachedate = fs.mtime(indexcache)
+		if cachedate and cachedate > fs.mtime(path) then
+			index = loadfile(indexcache)()
+			return index
+		end 		
+	end
+	
 	index = {}
 
-	local cache = nil 
-	
-	local controllers = luci.util.combine(
+	local controllers = util.combine(
 		luci.fs.glob(path .. "*" .. suffix) or {},
 		luci.fs.glob(path .. "*/*" .. suffix) or {}
 	)
-	
-	if indexcache then
-		cache = luci.fs.mtime(indexcache)
-		
-		if not cache then
-			luci.fs.mkdir(indexcache)
-			luci.fs.chmod(indexcache, "a=,u=rwx")
-			cache = luci.fs.mtime(indexcache)
-		end
-	end
 
 	for i,c in ipairs(controllers) do
 		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
-		local cachefile
-		local stime
-		local ctime
+		local mod = require(module)
+		local idx = mod.index
 		
-		if cache then
-			cachefile = indexcache .. "/" .. module
-			stime = luci.fs.mtime(c) or 0
-			ctime = luci.fs.mtime(cachefile) or 0
+		if type(idx) == "function" then
+			index[module] = idx
 		end
-		
-		if not cache or stime > ctime then 
-			stat, mod = luci.util.copcall(require, module)
+	end
 	
-			if stat and mod and type(mod.index) == "function" then
-				index[module] = mod.index
-				
-				if cache then
-					luci.fs.writefile(cachefile, luci.util.get_bytecode(mod.index))
-				end
-			end
-		else
-			index[module] = loadfile(cachefile)
-		end
+	if indexcache then
+		fs.writefile(indexcache, util.get_bytecode(index))
 	end
 end
 
@@ -316,14 +297,17 @@ function createtree()
 		createindex()
 	end
 	
-	context.tree = {nodes={}}
-	require("luci.i18n")
-		
-	-- Load default translation
-	luci.i18n.loadc("default")
+	local ctx  = context
+	local tree = {nodes={}}
 	
-	local scope = luci.util.clone(_G)
-	for k,v in pairs(luci.dispatcher) do
+	ctx.treecache = setmetatable({}, {__mode="v"})
+	ctx.tree = tree
+	
+	-- Load default translation
+	require "luci.i18n".loadc("default")
+	
+	local scope = setmetatable({}, {__index = _G})
+	for k,v in pairs(_M) do
 		if type(v) == "function" then
 			scope[k] = v
 		end
@@ -332,14 +316,10 @@ function createtree()
 	for k, v in pairs(index) do
 		scope._NAME = k
 		setfenv(v, scope)
-
-		local stat, err = luci.util.copcall(v)
-		if not stat then
-			error500("createtree failed: " .. k .. ": " .. err)
-			luci.http.close()
-			os.exit(1)
-		end
+		v()
 	end
+	
+	return tree
 end
 
 --- Clone a node of the dispatching tree to another position.
@@ -391,22 +371,36 @@ end
 -- @param	...		Virtual path
 -- @return			Dispatching tree node
 function node(...)
-	local c = context.tree
-	arg.n = nil
-
-	for k,v in ipairs(arg) do
-		if not c.nodes[v] then
-			c.nodes[v] = {nodes={}, auto=true}
-		end
-
-		c = c.nodes[v]
-	end
+	local c = _create_node(arg)
 
 	c.module = getfenv(2)._NAME
 	c.path = arg
 	c.auto = nil
 
 	return c
+end
+
+function _create_node(path, cache)
+	if #path == 0 then
+		return context.tree
+	end
+	
+	cache = cache or context.treecache
+	local name = table.concat(path, ".")
+	local c = cache[name]
+	
+	if not c then
+		local last = table.remove(path)
+		c = _create_node(path, cache)
+		
+		local new = {nodes={}, auto=true}
+		c.nodes[last] = new
+		cache[name] = new
+		
+		return new
+	else
+		return c
+	end
 end
 
 -- Subdispatchers --
