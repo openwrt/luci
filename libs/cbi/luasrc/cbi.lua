@@ -699,35 +699,9 @@ end
 
 function TypedSection.parse(self)
 	if self.addremove then
-		-- Create
-		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
-		local name  = luci.http.formvalue(crval)
-		if self.anonymous then
-			if name then
-				self:create()
-			end
-		else
-			if name then
-				-- Ignore if it already exists
-				if self:cfgvalue(name) then
-					name = nil;
-				end
-
-				name = self:checkscope(name)
-
-				if not name then
-					self.err_invalid = true
-				end
-
-				if name and #name > 0 then
-					self:create(name)
-				end
-			end
-		end
-
 		-- Remove
-		crval = REMOVE_PREFIX .. self.config
-		name = luci.http.formvaluetable(crval)
+		local crval = REMOVE_PREFIX .. self.config
+		local name = luci.http.formvaluetable(crval)
 		for k,v in pairs(name) do
 			if self:cfgvalue(k) and self:checkscope(k) then
 				self:remove(k)
@@ -764,6 +738,34 @@ function TypedSection.parse(self)
 			end
 		end
 		AbstractSection.parse_optionals(self, k)
+	end
+
+	if self.addremove then
+		-- Create
+		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
+		local name  = luci.http.formvalue(crval)
+		if self.anonymous then
+			if name then
+				self:create()
+			end
+		else
+			if name then
+				-- Ignore if it already exists
+				if self:cfgvalue(name) then
+					name = nil;
+				end
+
+				name = self:checkscope(name)
+
+				if not name then
+					self.err_invalid = true
+				end
+
+				if name and #name > 0 then
+					self:create(name)
+				end
+			end
+		end
 	end
 end
 
