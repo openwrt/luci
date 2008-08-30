@@ -629,7 +629,7 @@ function NamedSection.parse(self)
 				local co = self.map:get()
 				local stat, err = self.map.validator:validate_section(self.config, s, co)
 				if err then
-					self.map.save = false
+					--self.map.save = false
 					if err.code == luci.uvl.errors.ERR_DEPENDENCY then
 						self.tag_deperror[s] = true
 					else
@@ -745,7 +745,7 @@ function TypedSection.parse(self)
 				local co = self.map:get()
 				local stat, err = self.map.validator:validate_section(self.config, k, co)
 				if err then
-					self.map.save = false
+					--self.map.save = false
 					if err.code == luci.uvl.errors.ERR_DEPENDENCY then
 						self.tag_deperror[k] = true
 					else
