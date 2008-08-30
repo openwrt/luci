@@ -78,8 +78,37 @@ function load(cbimap, ...)
 	return maps
 end
 
+local function _uvl_validate_section(node, name)
+	local co = node.map:get()
+	luci.uvl.STRICT_UNKNOWN_OPTIONS = false
+	local stat, err = node.map.validator:validate_section(node.config, name, co)
+	if err then
+		node.map.save = false
+		if err.code == luci.uvl.errors.ERR_DEPENDENCY then
+			node.tag_deperror[name] = true
+		else
+			node.tag_invalid[name] = true
+		end
+		for i, v in ipairs(err.childs) do
+			if v.option and node.fields[v.option] then
+				if v.code == luci.uvl.errors.ERR_OPTION then
+					local subcode = v.childs and v.childs[1] and v.childs[1].code
+					if subcode == luci.uvl.errors.ERR_DEPENDENCY then
+						node.fields[v.option].tag_reqerror[name] = true
+					elseif subcode == luci.uvl.errors.ERR_OPT_REQUIRED then
+						node.fields[v.option].tag_missing[name] = true
+						node.tag_deperror[name] = true
+					else
+						node.fields[v.option].tag_invalid[name] = true
+					end
+				end
+			end
+		end
+	end
 
-function _uvl_strip_remote_dependencies(deps)
+end
+
+local function _uvl_strip_remote_dependencies(deps)
 	local clean = {}
 
 	for k, v in pairs(deps) do
@@ -626,25 +655,7 @@ function NamedSection.parse(self)
 			Node.parse(self, s)
 			
 			if not self.override_scheme and self.map.scheme then
-				local co = self.map:get()
-				local stat, err = self.map.validator:validate_section(self.config, s, co)
-				if err then
-					--self.map.save = false
-					if err.code == luci.uvl.errors.ERR_DEPENDENCY then
-						self.tag_deperror[s] = true
-					else
-						self.tag_invalid[s] = true
-					end
-					for i, v in ipairs(err.childs) do
-						if v.option and self.fields[v.option] then
-							if v.code == luci.uvl.errors.ERR_DEPENDENCY then
-								self.fields[v.option].tag_reqerror[s] = true
-							elseif v.code == luci.uvl.errors.ERR_OPTION then
-								self.fields[v.option].tag_invalid[s] = true
-							end
-						end
-					end
-				end
+				_uvl_validate_section(self, s)
 			end
 		end
 		AbstractSection.parse_optionals(self, s)
@@ -716,25 +727,7 @@ function TypedSection.parse(self)
 			Node.parse(self, k)
 			
 			if not self.override_scheme and self.map.scheme then
-				local co = self.map:get()
-				local stat, err = self.map.validator:validate_section(self.config, k, co)
-				if err then
-					--self.map.save = false
-					if err.code == luci.uvl.errors.ERR_DEPENDENCY then
-						self.tag_deperror[k] = true
-					else
-						self.tag_invalid[k] = true
-					end
-					for i, v in ipairs(err.childs) do
-						if v.option and self.fields[v.option] then
-							if v.code == luci.uvl.errors.ERR_DEPENDENCY then
-								self.fields[v.option].tag_reqerror[k] = true
-							elseif v.code == luci.uvl.errors.ERR_OPTION then
-								self.fields[v.option].tag_invalid[k] = true
-							end
-						end
-					end
-				end
+				_uvl_validate_section(self, k)
 			end
 		end
 		AbstractSection.parse_optionals(self, k)
