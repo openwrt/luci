@@ -80,7 +80,10 @@ end
 
 local function _uvl_validate_section(node, name)
 	local co = node.map:get()
+
 	luci.uvl.STRICT_UNKNOWN_OPTIONS = false
+	luci.uvl.STRICT_UNKNOWN_SECTIONS = false
+
 	local stat, err = node.map.validator:validate_section(node.config, name, co)
 	if err then
 		node.map.save = false
