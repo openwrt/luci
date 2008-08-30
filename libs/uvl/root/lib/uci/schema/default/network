@@ -1,0 +1,77 @@
+package network
+
+config section
+	option name	'interface'
+	option title	'Network interface definition'
+	option package	'network'
+	list   depends	'proto=static, ipaddr, netmask'
+	list   depends	'proto=pppoe, username, password'
+	list   depends	'proto=pptp, username, password, server'
+	list   depends	'proto=dhcp'
+	option named	true
+	option required	true
+
+config variable
+	option name	'ifname'
+	option title	'Physical interface name'
+	option section	'network.interface'
+	option required	true
+
+config variable
+	option name	'ipaddr'
+	option title	'IPv4 host address'
+	option section	'network.interface'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'netmask'
+	option title	'IPv4 network mask'
+	option section	'network.interface'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'proto'
+	option title	'Option proto'
+	option section	'network.interface'
+	option type		'enum'
+	option required	true
+
+config enum
+	option variable	'network.interface.proto'
+	option value	'dhcp'
+	option title	'Retrieve IP address via DHCP'
+
+config enum
+	option variable	'network.interface.proto'
+	option value	'pptp'
+	option title	'Interface is a PPTP tunnel endpoint'
+
+config enum
+	option variable	'network.interface.proto'
+	option value	'static'
+	option title	'Interface has static network configuration'
+
+config enum
+	option variable	'network.interface.proto'
+	option value	'pppoe'
+	option title	'Retrieve IP address via PPPoE'
+
+config variable
+	option name	'type'
+	option title	'Option type'
+	option section	'network.interface'
+	option type	'enum'
+
+config enum
+	option variable	'network.interface.type'
+	option value	'bridge'
+	option title	'This is a bridge interface'
+
+
+config section
+	option name	'switch'
+	option title	'Section switch'
+	option package	'network'
+	option named	true
+	option dynamic	true
+	option required	true

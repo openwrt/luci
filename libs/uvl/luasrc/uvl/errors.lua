@@ -22,8 +22,8 @@ ERRCODES = {
 
 	{ 'SCHEME',			'Error in scheme "%p":\n%c' },
 	{ 'CONFIG',  		'Error in config "%p":\n%c' },
-	{ 'SECTION',		'Error in section "%p.%s":\n%c' },
-	{ 'OPTION',			'Error in option "%p.%s.%o":\n%c' },
+	{ 'SECTION',		'Error in section "%i" (%I):\n%c' },
+	{ 'OPTION',			'Error in option "%i" (%I):\n%c' },
 	{ 'REFERENCE',		'Option "%p.%s.%o" has invalid reference specification %1:\n%c' },
 	{ 'DEPENDENCY',		'In dependency check for %t "%i":\n%c' },
 
@@ -43,16 +43,16 @@ ERRCODES = {
 	{ 'SME_EBADTYPE',	'Enum "%v" in scheme "%p" references non-enum option "%p.%s.%o"' },
 	{ 'SME_EBADDEF',	'Enum "%v" in scheme "%p" redeclares the default value of "%p.%s.%o"' },
 
-	{ 'SECT_UNKNOWN',	'Section "%p.%s" not found in scheme' },
+	{ 'SECT_UNKNOWN',	'Section "%i" (%I) not found in scheme' },
 	{ 'SECT_REQUIRED',	'Required section "%p.%S" not found in config' },
 	{ 'SECT_UNIQUE',	'Unique section "%p.%S" occurs multiple times in config' },
 	{ 'SECT_NAMED', 	'The section of type "%p.%S" is stored anonymously in config but must be named' },
 	{ 'SECT_NOTFOUND',	'Section "%p.%s" not found in config' },
 
-	{ 'OPT_UNKNOWN',	'Option "%1" not found in scheme' },
+	{ 'OPT_UNKNOWN',	'Option "%i" (%I) not found in scheme' },
 	{ 'OPT_REQUIRED',	'Required option "%i" has no value' },
-	{ 'OPT_BADVALUE', 	'Value "%1" of option "%i" is not defined in %t { %2 }' },
-	{ 'OPT_INVVALUE',	'Value "%1" of given option "%i" does not validate as datatype "%2"' },
+	{ 'OPT_BADVALUE', 	'Value "%v" of option "%i" is not defined in enum %1' },
+	{ 'OPT_INVVALUE',	'Value "%v" of given option "%i" does not validate as datatype "%1"' },
 	{ 'OPT_NOTLIST',	'Option "%i" is defined as list but stored as plain value' },
 	{ 'OPT_DATATYPE',	'Option "%i" has unknown datatype "%1"' },
 	{ 'OPT_NOTFOUND',	'Option "%p.%s.%o" not found in config' },
@@ -145,4 +145,17 @@ function error.sid(self)
 		( self.stype   and '.' .. self.stype   or '' ) ..
 		( self.option  and '.' .. self.option  or '' ) ..
 		( self.value   and '.' .. self.value   or '' )
+end
+
+function error.is(self, code)
+	if self.code == code then
+		return true
+	elseif self.childs then
+		for _, c in ipairs(self.childs) do
+			if c:is(code) then
+				return true
+			end
+		end
+	end
+	return false
 end

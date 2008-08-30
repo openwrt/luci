@@ -246,7 +246,12 @@ function UVL._validate_section( self, section )
 
 		for _, v in ipairs(section:variables()) do
 			local ok, err = self:_validate_option( v )
-			if not ok then
+			if not ok and (
+				v:scheme('required') or v:scheme('type') == "enum" or (
+					not err:is(ERR.ERR_DEP_NOTEQUAL) and
+					not err:is(ERR.ERR_DEP_NOVALUE)
+				)
+			) then
 				section:error(err)
 			end
 		end
@@ -263,7 +268,7 @@ function UVL._validate_section( self, section )
 		for k, v in pairs(section:config()) do
 			local oo = section:option(k)
 			if k:sub(1,1) ~= "." and not self.beenthere[oo:cid()] then
-				section:error(ERR.OPT_NOTFOUND(oo))
+				section:error(ERR.OPT_UNKNOWN(oo))
 			end
 		end
 	end
@@ -292,9 +297,9 @@ function UVL._validate_option( self, option, nodeps )
 				   not option:scheme('values')[val]
 				then
 					return false, option:error( ERR.OPT_BADVALUE(
-						option, { val, table.concat(
-							luci.util.keys(option:scheme('values') or {}), ", "
-						) }
+						option, luci.util.serialize_data(
+							luci.util.keys(option:scheme('values') or {})
+						)
 					) )
 				end
 			elseif option:scheme('type') == "list" then
@@ -309,7 +314,7 @@ function UVL._validate_option( self, option, nodeps )
 					for i, v in ipairs(val) do
 						if not self.datatypes[dt]( v ) then
 							return false, option:error(
-								ERR.OPT_INVVALUE(option, {v, dt})
+								ERR.OPT_INVVALUE(option, dt)
 							)
 						end
 					end
