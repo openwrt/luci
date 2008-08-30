@@ -27,7 +27,8 @@ function en.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "0"
 end
 
-t = s:option(DummyValue, "type", translate("type"))
+s:option(DummyValue, "type", translate("type"))
+local hwtype = m:get(arg[1], "type")
 
 mode = s:option(ListValue, "mode", translate("mode"))
 mode:value("", "standard")
@@ -35,6 +36,14 @@ mode:value("11b", "802.11b")
 mode:value("11g", "802.11g")
 mode:value("11a", "802.11a")
 mode:value("11bg", "802.11b+g")
+
+if hwtype == "atheros" then
+	mode:value("11gdt", "802.11adt")
+	mode:value("11adt", "802.11adt")
+	mode:value("fh", "fh")
+end
+
+
 mode.rmempty = true
 
 ch = s:option(Value, "channel", translate("a_w_channel"))
@@ -71,6 +80,8 @@ maxassoc.optional = true
 
 
 
+----------------------- Interface -----------------------
+
 s = m:section(TypedSection, "wifi-iface", translate("interfaces"))
 s.addremove = true
 s.anonymous = true
@@ -102,8 +113,15 @@ mode:value("ap", translate("a_w_ap"))
 mode:value("adhoc", translate("a_w_adhoc"))
 mode:value("ahdemo", translate("a_w_ahdemo"))
 mode:value("sta", translate("a_w_client"))
-mode:value("wds", translate("a_w_wds"))
 mode:value("monitor", translate("a_w_monitor"))
+
+if hwtype ~= "atheros" then
+	mode:value("wds", translate("a_w_wds"))
+end
+
+if hwtype == "atheros" then
+	s:option(Flag, "wds", translate("a_w_wds"))
+end
 
 s:option(Value, "bssid", "BSSID").optional = true
 
