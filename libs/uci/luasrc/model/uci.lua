@@ -58,7 +58,8 @@ local Cursor = getmetatable(cursor())
 -- @param config		UCI config
 function Cursor.apply(self, config)
 	local conf = require "luci.config"
-	return conf.uci_oncommit[config] and os.execute(conf.uci_oncommit[config])
+	return conf.uci_oncommit[config] and
+	 os.execute(conf.uci_oncommit[config] .. " >/dev/null 2>&1")
 end
 
 --- Delete all sections of a given type that match certain criteria.
