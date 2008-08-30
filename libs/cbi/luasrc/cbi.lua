@@ -94,16 +94,13 @@ local function _uvl_validate_section(node, name)
 		end
 		for i, v in ipairs(err.childs) do
 			if v.option and node.fields[v.option] then
-				if v:is(luci.uvl.errors.ERR_OPTION) then
-					local suberr = v.childs and v.childs[1]
-					if suberr:is(luci.uvl.errors.ERR_DEPENDENCY) then
-						node.fields[v.option].tag_reqerror[name] = true
-					elseif suberr:is(luci.uvl.errors.ERR_OPT_REQUIRED) then
-						node.fields[v.option].tag_missing[name] = true
-						node.tag_deperror[name] = true
-					else
-						node.fields[v.option].tag_invalid[name] = true
-					end
+				if v:is(luci.uvl.errors.ERR_DEPENDENCY) then
+					node.fields[v.option].tag_reqerror[name] = true
+				elseif v:is(luci.uvl.errors.ERR_OPT_REQUIRED) then
+					node.fields[v.option].tag_missing[name] = true
+					node.tag_deperror[name] = true
+				elseif v:is(luci.uvl.errors.ERR_OPTION) then
+					node.fields[v.option].tag_invalid[name] = true
 				end
 			end
 		end
