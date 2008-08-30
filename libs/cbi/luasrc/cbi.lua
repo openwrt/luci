@@ -735,11 +735,12 @@ function TypedSection.parse(self)
 
 	if self.addremove then
 		-- Create
+		local created
 		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
 		local name  = luci.http.formvalue(crval)
 		if self.anonymous then
 			if name then
-				self:create()
+				created = self:create()
 			end
 		else
 			if name then
@@ -755,9 +756,13 @@ function TypedSection.parse(self)
 				end
 
 				if name and #name > 0 then
-					self:create(name)
+					created = self:create(name) and name
 				end
 			end
+		end
+
+		if created then
+			AbstractSection.parse_optionals(self, created)
 		end
 	end
 end
