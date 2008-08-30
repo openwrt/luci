@@ -1,0 +1,22 @@
+package httpd
+
+config section
+	option name	'httpd'
+	option title	'General httpd settings'
+	option package	'httpd'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'home'
+	option title	'Docroot directory'
+	option section	'httpd.httpd'
+	option datatype	'directory'
+	option required	true
+
+config variable
+	option name	'port'
+	option title	'Listening port'
+	option section	'httpd.httpd'
+	option datatype	'integer'
+	option required true

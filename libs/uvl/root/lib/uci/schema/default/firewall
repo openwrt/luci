@@ -1,0 +1,88 @@
+package firewall
+
+config section
+	option name	'defaults'
+	option title	'Global firewall defaults'
+	option package	'firewall'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'forward'
+	option title	'Action for forwarded traffic'
+	option section	'firewall.defaults'
+	option required	true
+
+config variable
+	option name	'input'
+	option title	'Action for incoming traffic'
+	option section	'firewall.defaults'
+	option required	true
+
+config variable
+	option name	'output'
+	option title	'Action for outgoing traffic'
+	option section	'firewall.defaults'
+	option required	true
+
+config variable
+	option name	'syn_flood'
+	option title	'Enable syn-flood protection'
+	option section	'firewall.defaults'
+	option datatype	'boolean'
+
+
+config section
+	option name	'forwarding'
+	option title	'Firewall traffic forwarding rules'
+	option package	'firewall'
+
+config variable
+	option name	'src'
+	option title	'Source zone'
+	option section	'firewall.forwarding'
+	option valueof	'firewall.zone.name'
+	option required	true
+
+config variable
+	option name	'dest'
+	option title	'Destination zone'
+	option section	'firewall.forwarding'
+	option valueof	'firewall.zone.name'
+	option required	true
+
+
+config section
+	option name	'zone'
+	option title	'Firewall zones'
+	option package	'firewall'
+
+config variable
+	option name	'name'
+	option title	'Name of this firewall zone'
+	option section	'firewall.zone'
+	option required	true
+
+config variable
+	option name	'forward'
+	option title	'Zone specific action for forwarded traffic'
+	option section	'firewall.zone'
+	option required	true
+
+config variable
+	option name	'input'
+	option title	'Zone specific action for incoming traffic'
+	option section	'firewall.zone'
+	option required	true
+
+config variable
+	option name	'output'
+	option title	'Zone specific action for outgoing traffic'
+	option section	'firewall.zone'
+	option required	true
+
+config variable
+	option name	'masq'
+	option title	'Enable masquerading for outgoing zone traffic'
+	option section	'firewall.zone'
+	option datatype	'boolean'

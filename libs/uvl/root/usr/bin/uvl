@@ -57,9 +57,90 @@ function getopt( arg, options )
 	return tab, args
 end
 
+function genspec(conf)
+	require("luci.model.uci")
+	require("luci.uvl.datatypes")
+
+	local uci     = luci.model.uci.cursor()
+	local ok, err = uci:load(conf)
+
+	if not ok then
+		print("Can not load config:", err)
+		os.exit(1)
+	else
+		local function _guess_datatype(v)
+			if type(v) == "table" then v = v[1] end
+
+			for _, type in ipairs({
+				"boolean", "integer", "float", "ip4addr", "ip6addr",
+				"macaddr", "directory", "file"
+			}) do
+				if luci.uvl.datatypes[type](v) then
+					return type
+				end
+			end
+			return "string"
+		end
+
+
+		local co = uci:get_all(conf)
+		local ct = { }
+		local ca = { }
+		local so = { }
+		local to = { }
+
+		-- count section types
+		for _, section in pairs(co) do
+			ct[section['.type']] = ( ct[section['.type']] or 0 ) + 1
+			ca[section['.type']] = section['.anonymous']
+			so[section['.type']] = so[section['.type']] or { }
+			to[section['.type']] = to[section['.type']] or { }
+
+			for option, value in pairs(section) do
+				if option:sub(1,1) ~= "." then
+					so[section['.type']][option] = _guess_datatype(value)
+					to[section['.type']][option] = ( type(value) == "table" and "list" or "variable" )
+				end
+			end
+		end
+
+		-- package name
+		print( "package %s" % conf )
+
+		-- write section schemes
+		for type, count in luci.util.kspairs(ct) do
+			print( "\nconfig section" )
+			print( "\toption name	'%s'" % type )
+			print( "\toption title	'Section %s'" % type )
+			print( "\toption package	'%s'"% conf )
+			print( "\toption named	%s" % ( ca[type] and 'false' or 'true' ) )
+			print( "\toption unique	%s" % ( ct[type] > 1 and 'false' or ( ca[type] and 'false' or 'true' ) ) )
+			print( "\toption dynamic	false" )
+			print( "\toption required	false" )
+
+			-- write option schemes
+			for opt, val in luci.util.kspairs(so[type]) do
+				print( "\nconfig variable" )
+				print( "\toption name	'%s'" % opt )
+				print( "\toption title	'Option %s'" % opt )
+				print( "\toption section	'%s.%s'" %{ conf, type } )
+				print( "\toption datatype	'%s'" % so[type][opt] )
+
+				if to[type][opt] ~= "variable" then
+					print( "\toption type	'%s'" % to[type][opt] )
+				end
+			end
+
+			print("")
+		end
+
+	end
+end
+
+
 local options, arguments = getopt( arg )
 
-if #arguments == 0 or options.help then
+if #arguments ~= 2 or options.help then
 	print([=[
 
 uvl - UCI Validation Layer
@@ -70,7 +151,7 @@ Usage:
 	uvl --help
 	uvl [--silent] [--schemedir=DIR]
 		[--no-strict-sections] [--no-strict-options] [--no-strict-validators]
-		[--no-strict-lists] config[.section[.option]]
+		[--no-strict-lists] {verify|genspec} config[.section[.option]]
 
 Options:
 	--help
@@ -93,9 +174,16 @@ Options:
 
 	--no-strict-lists
 		Don't invalidate lists that are stored options.
+
+Actions:
+	verify
+		Validate given configuration, section or option.
+
+	genspec
+		Generate a scheme skeleton from given configuration.
 	]=])
 	os.exit(255)
-else
+elseif arguments[1] == "verify" then
 	luci.uvl.STRICT_UNKNOWN_SECTIONS =
 		( options['no-strict-sections'] and false or true )
 	luci.uvl.STRICT_UNKNOWN_OPTIONS =
@@ -109,7 +197,7 @@ else
 		type(options.schemedir) == "string" and options.schemedir or nil
 	)
 
-	local cso = luci.util.split( arguments[1], "." )
+	local cso = luci.util.split( arguments[2], "." )
 	local ok, err = uvl:validate( unpack(cso) )
 
 	if ok then
@@ -126,4 +214,6 @@ else
 		if not options.silent then print( err and err:string() or "Unknown error" ) end
 		os.exit( 1 )
 	end
+else
+	genspec( arguments[2] )
 end

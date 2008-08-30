@@ -1,0 +1,21 @@
+package system
+
+config section
+	option name	'system'
+	option title	'General system configuration'
+	option package	'system'
+	option unique	true
+	option required true
+
+config variable
+	option name	'hostname'
+	option title	'Local hostname'
+	option section	'system.system'
+	option datatype	'hostname'
+	option required	true
+
+config variable
+	option name	'timezone'
+	option title	'Option timezone'
+	option section	'system.system'
+	option required	true
