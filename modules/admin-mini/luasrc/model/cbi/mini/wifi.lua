@@ -15,8 +15,10 @@ $Id$
 
 -- Data init --
 
-local wireless = luci.model.uci.cursor_state():get_all("wireless")
+local wlcursor = luci.model.uci.cursor_state()
+local wireless = wlcursor:get_all("wireless")
 local wifidata = luci.sys.wifi.getiwconfig()
+local wifidevs = {}
 local ifaces = {}
 
 for k, v in pairs(wireless) do
@@ -24,6 +26,11 @@ for k, v in pairs(wireless) do
 		table.insert(ifaces, v)
 	end
 end
+
+wlcursor:foreach("wireless", "wifi-device",
+	function(section)
+		table.insert(wifidevs, section[".name"])
+	end)
 
 
 -- Main Map --
@@ -112,9 +119,14 @@ t2:option(DummyValue, "Signal level", translate("iwscan_signal"))
 t2:option(DummyValue, "Noise level", translate("iwscan_noise"))
 
 
+
+if #wifidevs < 1 then
+	return m
+end
+
 -- Config Section --
 
-s = m:section(TypedSection, "wifi-device", translate("devices"))
+s = m:section(NamedSection, wifidevs[1], "wifi-device", translate("devices"))
 
 en = s:option(Flag, "disabled", translate("enable"))
 en.enabled = "0"
@@ -125,13 +137,18 @@ function en.cfgvalue(self, section)
 end
 
 
-mode = s:option(ListValue, "mode", translate("mode"))
-mode:value("", "standard")
-mode:value("11b", "802.11b")
-mode:value("11g", "802.11g")
-mode:value("11a", "802.11a")
-mode:value("11bg", "802.11b+g")
-mode.rmempty = true
+local hwtype = m:get(wifidevs[1], "type")
+
+if hwtype == "atheros" then
+	mode = s:option(ListValue, "mode", translate("mode"))
+	mode:value("", "auto")
+	mode:value("11b", "802.11b")
+	mode:value("11g", "802.11g")
+	mode:value("11a", "802.11a")
+	mode:value("11bg", "802.11b+g")
+	mode.rmempty = true
+end
+
 
 ch = s:option(Value, "channel", translate("a_w_channel"))
 for i=1, 14 do
@@ -142,7 +159,9 @@ end
 s = m:section(TypedSection, "wifi-iface", translate("m_n_local"))
 s.anonymous = true
 
-s:option(Value, "ssid", translate("a_w_netid")).maxlength = 32
+s:option(Value, "ssid", translate("a_w_netid"))
+
+bssid = s:option(Value, "bssid", translate("wifi_bssid"))
 
 local devs = {}
 luci.model.uci.cursor():foreach("wireless", "wifi-device",
@@ -212,12 +231,24 @@ port:depends("encryption", "wpa")
 port:depends("encryption", "wpa2")
 port.rmempty = true
 
-iso = s:option(Flag, "isolate", translate("a_w_apisolation"), translate("a_w_apisolation1"))
-iso.rmempty = true
-iso:depends("mode", "ap")
 
-hide = s:option(Flag, "hidden", translate("a_w_hideessid"))
-hide.rmempty = true
-hide:depends("mode", "ap")
+if hwtype == "atheros" or hwtype == "broadcom" then
+	iso = s:option(Flag, "isolate", translate("a_w_apisolation"), translate("a_w_apisolation1"))
+	iso.rmempty = true
+	iso:depends("mode", "ap")
+	
+	hide = s:option(Flag, "hidden", translate("a_w_hideessid"))
+	hide.rmempty = true
+	hide:depends("mode", "ap")
+end
+
+if hwtype == "mac80211" or hwtype == "atheros" then
+	bssid:depends({mode="adhoc"})
+end
+
+if hwtype == "broadcom" then
+	bssid:depends({mode="wds"})
+end
+
 
 return m

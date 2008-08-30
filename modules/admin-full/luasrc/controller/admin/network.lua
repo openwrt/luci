@@ -31,19 +31,21 @@ function index()
 	local page  = node("admin", "network", "wireless")
 	page.target = form("admin_network/wireless")
 	page.title  = i18n("wifi")
+	page.i18n   = "wifi"
 	page.order  = 15
 	uci:foreach("wireless", "wifi-device",
 		function (section)
 			local ifc = section[".name"]
 				entry({"admin", "network", "wireless", ifc},
 				 alias("admin", "network", "wifi", ifc),
-				 ifc:upper())
+				 ifc:upper()).i18n = "wifi"
 		end
 	)
 	
 	local page  = node("admin", "network", "wifi")
 	page.target = cbi("admin_network/wifi")
 	page.leaf   = true
+	page.i18n = "wifi"
 	
 	local page  = node("admin", "network", "network")
 	page.target = cbi("admin_network/network")
