@@ -144,6 +144,7 @@ setmetatable(Template.cache, {__mode = "v"})
 -- Constructor - Reads and compiles the template on-demand
 function Template.__init__(self, name)	
 	self.template = self.cache[name]
+	self.name = name
 	
 	-- Create a new namespace for this template
 	self.viewns = {}
@@ -226,7 +227,10 @@ function Template.render(self, scope)
 	luci.util.updfenv(self.template, self.viewns)
 	
 	-- Now finally render the thing
-	self.template()
+	local stat, err = luci.util.copcall(self.template)
+	if not stat then
+		error("Error in template %s: %s" % {self.name, err})
+	end
 	
 	-- Reset environment
 	setfenv(self.template, oldfenv)
