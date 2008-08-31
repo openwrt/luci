@@ -26,7 +26,7 @@ ERRCODES = {
 	{ 'CONFIG',  		'Error in config "%p":\n%c' },
 	{ 'SECTION',		'Error in section "%i" (%I):\n%c' },
 	{ 'OPTION',			'Error in option "%i" (%I):\n%c' },
-	{ 'REFERENCE',		'Option "%p.%s.%o" has invalid reference specification %1:\n%c' },
+	{ 'REFERENCE',		'Option "%i" has invalid reference specification %1:\n%c' },
 	{ 'DEPENDENCY',		'In dependency check for %t "%i":\n%c' },
 
 	{ 'SME_FIND',		'Can not find scheme "%p" in "%1"' },
@@ -42,8 +42,8 @@ ERRCODES = {
 	{ 'SME_EBADPACK',	'Enum "%v" in scheme "%p" references unknown package "%1"' },
 	{ 'SME_EBADSECT',	'Enum "%v" in scheme "%p" references unknown section "%1"' },
 	{ 'SME_EBADOPT',	'Enum "%v" in scheme "%p" references unknown option "%1"'  },
-	{ 'SME_EBADTYPE',	'Enum "%v" in scheme "%p" references non-enum option "%p.%s.%o"' },
-	{ 'SME_EBADDEF',	'Enum "%v" in scheme "%p" redeclares the default value of "%p.%s.%o"' },
+	{ 'SME_EBADTYPE',	'Enum "%v" in scheme "%p" references non-enum option "%I"' },
+	{ 'SME_EBADDEF',	'Enum "%v" in scheme "%p" redeclares the default value of "%I"' },
 
 	{ 'SECT_UNKNOWN',	'Section "%i" (%I) not found in scheme' },
 	{ 'SECT_REQUIRED',	'Required section "%p.%S" not found in config' },
