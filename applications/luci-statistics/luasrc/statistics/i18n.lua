@@ -26,6 +26,7 @@ function Instance.__init__( self, graph )
 	self.i18n  = luci.i18n
 	self.graph = graph
 
+	self.i18n.loadc("rrdtool")
 	self.i18n.loadc("statistics")
 end
 
@@ -56,7 +57,7 @@ function Instance.title( self, plugin, pinst, dtype, dinst )
 		)
 	)
 
-	return self:_subst( title, { 
+	return self:_subst( title, {
 		plugin = plugin,
 		pinst  = pinst,
 		dtype  = dtype,
@@ -81,7 +82,7 @@ function Instance.label( self, plugin, pinst, dtype, dinst )
 		)
 	)
 
-	return self:_subst( label, { 
+	return self:_subst( label, {
 		plugin = plugin,
 		pinst  = pinst,
 		dtype  = dtype,
@@ -106,7 +107,7 @@ function Instance.ds( self, source )
 		)
 	)
 
-	return self:_subst( label, { 
+	return self:_subst( label, {
 		dtype = source.type,
 		dinst = source.instance,
 		dsrc  = source.ds

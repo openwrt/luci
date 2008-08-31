@@ -22,7 +22,8 @@ function index()
 	require("luci.i18n")
 	require("luci.statistics.datatree")
 
-	-- load language file
+	-- load language files
+	luci.i18n.loadc("rrdtool")
 	luci.i18n.loadc("statistics")
 
 	-- get rrd data tree
