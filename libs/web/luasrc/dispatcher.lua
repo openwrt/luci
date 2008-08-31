@@ -307,7 +307,7 @@ function createtree()
 	require "luci.i18n".loadc("default")
 	
 	local scope = setmetatable({}, {__index = _G})
-	for k,v in pairs(_M) do
+	for k,v in pairs(luci.dispatcher) do
 		if type(v) == "function" then
 			scope[k] = v
 		end
