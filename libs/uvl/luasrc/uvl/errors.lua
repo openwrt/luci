@@ -15,7 +15,9 @@ $Id$
 ]]--
 
 module( "luci.uvl.errors", package.seeall )
+
 require("luci.util")
+
 
 ERRCODES = {
 	{ 'UCILOAD', 		'Unable to load config "%p": %1' },
@@ -74,6 +76,15 @@ for i, v in ipairs(ERRCODES) do
 end
 
 
+function i18n(key, def)
+	if luci.i18n then
+		return luci.i18n.translate(key,def)
+	else
+		return def
+	end
+end
+
+
 error = luci.util.class()
 
 function error.__init__(self, code, pso, args)
@@ -85,6 +96,7 @@ function error.__init__(self, code, pso, args)
 		self.stype = pso.sref[2]
 		self.package, self.section, self.option, self.value = unpack(pso.cref)
 		self.object = pso
+		self.value  = self.value or ( pso.value and pso:value() )
 	else
 		pso = ( type(pso) == "table" and pso or { pso } )
 
@@ -108,7 +120,11 @@ end
 
 function error.string(self,pad)
 	pad = pad or "  "
-	local str = ERRCODES[self.code][2]
+
+	local str = i18n(
+		'uvl_err_%s' % string.lower(ERRCODES[self.code][1]),
+		ERRCODES[self.code][2]
+	)
 		:gsub("\n", "\n"..pad)
 		:gsub("%%i", self:cid())
 		:gsub("%%I", self:sid())
@@ -119,7 +135,7 @@ function error.string(self,pad)
 		:gsub("%%v", self.value   or '<nil>')
 		:gsub("%%t", self.object and self.object:type()  or '<nil>' )
 		:gsub("%%T", self.object and self.object:title() or '<nil>' )
-		:gsub("%%([1-9])", function(n) error(n) return self.args[tonumber(n)] or '<nil>' end)
+		:gsub("%%([1-9])", function(n) return self.args[tonumber(n)] or '<nil>' end)
 		:gsub("%%c",
 			function()
 				local s = ""
