@@ -211,24 +211,24 @@ encr:value("wep", "WEP")
 encr:value("psk", "WPA-PSK")
 encr:value("wpa", "WPA-Radius", {mode="ap"})
 encr:value("psk2", "WPA2-PSK")
-encr:value("wpa2", "WPA2-Radius", {mode="ap"})
+encr:value("wpa2i", "WPA2-Radius", {mode="ap"})
 
 key = s:option(Value, "key", translate("key"))
 key:depends("encryption", "wep")
 key:depends("encryption", "psk")
 key:depends("encryption", "wpa")
 key:depends("encryption", "psk2")
-key:depends("encryption", "wpa2")
+key:depends("encryption", "wpa2i")
 key.rmempty = true
 
 server = s:option(Value, "server", translate("a_w_radiussrv"))
 server:depends("encryption", "wpa")
-server:depends("encryption", "wpa2")
+server:depends("encryption", "wpa2i")
 server.rmempty = true
 
 port = s:option(Value, "port", translate("a_w_radiusport"))
 port:depends("encryption", "wpa")
-port:depends("encryption", "wpa2")
+port:depends("encryption", "wpa2i")
 port.rmempty = true
 
 
