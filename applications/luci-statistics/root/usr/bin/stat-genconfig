@@ -224,19 +224,19 @@ function _string( s, n, nopad )
 	if s then
 		if s:find("[^%d]") then
 			if not s:find("[^%w]") then
-				str = pad .. n .. " " .. s
+				str = pad .. n .. " " .. luci.util.trim(s)
 			else
-				str = pad .. n .. ' "' .. s .. '"'
+				str = pad .. n .. ' "' .. luci.util.trim(s) .. '"'
 			end
 		else
-			str = pad .. n .. " " .. s
+			str = pad .. n .. " " .. luci.util.trim(s)
 		end
 
 		str = str .. "\n"
 	end
 
 	return str
-end		
+end
 
 
 plugins = {
@@ -252,7 +252,7 @@ plugins = {
 		{ }
 	},
 
-	csv	= { 
+	csv	= {
 		{ "DataDir" },
 		{ "StoreRates" },
 		{ }
