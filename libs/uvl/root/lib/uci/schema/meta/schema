@@ -1,0 +1,310 @@
+# UVL - Reference-Spec
+# This is a meta scheme defining the format of uci schemes.
+# Note that this spec is overly strict, it requires that the "depends",
+# "valueof" and "validator" fields are of type list but if only one value is
+# given, the notation as "option" is allowed too.
+# $Id$
+
+package schema
+
+#-------------------------------------------------------------------------------
+# Central section definition
+#
+#	config section
+#		option ...
+#-------------------------------------------------------------------------------
+
+# Section definition (schema.@section)
+config section
+	option name		'section'
+	option title	'Definition of uci section'
+	option package	'schema'
+	option required	false
+	option named	false
+	option unique	false
+	option dynamic	false
+
+# Section name (schema.@section.name)
+config variable
+	option name		'name'
+	option title	'Name of the defined section'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'string'
+	option required	true
+
+# Section package (schema.@section.package)
+config variable
+	option name		'package'
+	option title	'Parent package of the defined section'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'string'
+	option required	true
+
+# Section title (schema.@section.title)
+config variable
+	option name		'title'
+	option title	'Title of the defined section'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Section description (schema.@section.description)
+config variable
+	option name		'description'
+	option title	'Description of the defined section'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Section dependencies (schema.@section.depends)
+config variable
+	option name		'depends'
+	option title	'List of dependencies within and between defined sections'
+	option section  'schema.section'
+	option type		'list'
+	option datatype	'string'
+	option required	false
+
+# Section required flag (schema.@section.required)
+config variable
+	option name		'required'
+	option title	'Specify whether at least one instance of this section type must be defined in config'
+	option section  'schema.section'
+	option type		'variable'
+	option datatype	'boolean'
+	option required	false
+
+# Section unique flag (schema.@section.unique)
+config variable
+	option name		'unique'
+	option title	'Specify whether only one instance of this section type is allowed in config'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'boolean'
+	option required	false
+
+# Section named flag (schema.@section.named)
+config variable
+	option name		'named'
+	option title	'Specify whether sections of this type must have a name set (are not anonymous)'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'boolean'
+	option required	false
+
+# Section dynamic flag (schema.@section.dynamic)
+config variable
+	option name		'dynamic'
+	option title	'Specify whether sections of this type may contain arbitary, not specified options'
+	option section	'schema.section'
+	option type		'variable'
+	option datatype	'boolean'
+	option required	false
+
+
+#-------------------------------------------------------------------------------
+# Central variable definition
+#
+#	config variable
+#		option ...
+#-------------------------------------------------------------------------------
+
+# Variable definition (schema.@variable)
+config section
+	option name		'variable'
+	option title	'Definition of uci variable'
+	option package	'schema'
+	option required	false
+	option named	false
+	option unique	false
+	option dynamic	false
+
+# Variable name (schema.@variable.name)
+config variable
+	option name		'name'
+	option title	'Name of the defined variable'
+	option section	'schema.variable'
+	option type		'variable'
+	option datatype	'string'
+	option required	true
+
+# Variable section (schema.@variable.section)
+config variable
+	option name		'section'
+	option title	'Parent section of the defined variable'
+	option section	'schema.variable'
+	option type		'variable'
+	option datatype	'string'
+	option required	true
+
+# Variable title (schema.@variable.title)
+config variable
+	option name		'title'
+	option title	'Title of the defined variable'
+	option section	'schema.variable'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Variable description (schema.@variable.description)
+config variable
+	option name		'description'
+	option title	'Description of the defined variable'
+	option section	'schema.variable'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Variable dependencies (schema.@variable.depends)
+config variable
+	option name		'depends'
+	option title	'List of dependencies between defined variables'
+	option section  'schema.variable'
+	option type		'list'
+	option datatype	'string'
+	option required	false
+
+# Variable required flag (schema.@variable.required)
+config variable
+	option name		'required'
+	option title	'Specify whether this variable must be set in config'
+	option section  'schema.variable'
+	option type		'variable'
+	option datatype	'boolean'
+	option required	false
+
+# Variable type (schema.@variable.type)
+config variable
+	option name		'type'
+	option title	'Type of this variable'
+	option section	'schema.variable'
+	option type		'enum'
+	option datatype	'string'
+	option required	false
+
+# Plain variable type (schema.@variable.type=variable)
+config enum
+	option value	'variable'
+	option title	'This is a plain variable'
+	option variable	'schema.variable.type'
+
+# Enum variable type (schema.@variable.type=enum)
+config enum
+	option value	'enum'
+	option title	'This is a enum variable'
+	option variable	'schema.variable.type'
+
+# List variable type (schema.@variable.type=list)
+config enum
+	option value	'list'
+	option title	'This is a list variable'
+	option variable	'schema.variable.type'
+
+# Reference variable type (schema.@variable.type=reference)
+config enum
+	option value	'reference'
+	option title	'This is a reference (valueof) variable'
+	option variable	'schema.variable.type'
+
+# Variable datatype (schema.@variable.datatype)
+config variable
+	option name		'datatype'
+	option title	'Datatype of this variable'
+	option section	'schema.variable'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Variable validators (schema.@variable.validator)
+config variable
+	option name		'validator'
+	option title	'Datatype of this variable'
+	option section	'schema.variable'
+	option type		'list'
+	option datatype	'string'
+	option required	false
+
+# Variable value references (schema.@variable.valueof)
+config variable
+	option name		'valueof'
+	option title	'Reference to section or option to read values from'
+	option section	'schema.variable'
+	option type		'list'
+	option datatype	'string'
+	option required	false
+
+
+#-------------------------------------------------------------------------------
+# Central enum definition
+#
+#	config enum
+#		option ...
+#-------------------------------------------------------------------------------
+
+# Enum definition (schema.@enum)
+config section
+	option name		'enum'
+	option title	'Definition of uci enum value'
+	option package	'schema'
+	option required	false
+	option named	false
+	option unique	false
+	option dynamic	false
+
+# Enum value (schema.@enum.value)
+config variable
+	option name		'name'
+	option title	'Name of the defined variable'
+	option section	'schema.enum'
+	option type		'variable'
+	option datatype	'string'
+	option required	true
+
+# Enum variable (schema.@enum.variable)
+config variable
+	option name		'variable'
+	option title	'Parent variable of the defined enum value'
+	option section	'schema.enum'
+	option type		'variable'
+	option datatype	'string'
+	option required	true
+
+# Enum value title (schema.@enum.title)
+config variable
+	option name		'title'
+	option title	'Title of the defined enum value'
+	option section	'schema.enum'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Enum value description (schema.@enum.description)
+config variable
+	option name		'description'
+	option title	'Description of the defined enum value'
+	option section	'schema.enum'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Enum value dependencies (schema.@enum.depends)
+config variable
+	option name		'depends'
+	option title	'List of dependencies on defined variables'
+	option section  'schema.enum'
+	option type		'list'
+	option datatype	'string'
+	option required	false
+
+# Enum value default flag (schema.@enum.default)
+config variable
+	option name		'default'
+	option title	'Specify whether this value is the default value of the parent enum'
+	option section  'schema.enum'
+	option type		'variable'
+	option datatype	'boolean'
+	option required	false
