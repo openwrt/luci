@@ -139,7 +139,7 @@ Template.cache = setmetatable({}, {__mode = "v"})
 
 
 -- Constructor - Reads and compiles the template on-demand
-function Template.__init__(self, name)	
+function Template.__init__(self, name, srcfile, comfile)	
 	local function _encode_filename(str)
 
 		local function __chrenc( chr )
@@ -177,8 +177,8 @@ function Template.__init__(self, name)
 	local cdir = compiledir .. "/" .. sys.process.info("uid")
 	
 	-- Compile and build
-	local sourcefile   = viewdir    .. "/" .. name .. ".htm"
-	local compiledfile = cdir .. "/" .. _encode_filename(name) .. ".lua"
+	local sourcefile   = srcfile or (viewdir    .. "/" .. name .. ".htm")
+	local compiledfile = comfile or (cdir .. "/" .. _encode_filename(name) .. ".lua")
 	local err	
 	
 	if compiler_mode == "file" then
