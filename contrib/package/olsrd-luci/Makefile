@@ -141,7 +141,7 @@ define Package/olsrd-luci/install
 	$(INSTALL_DIR) $(1)/lib/config
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/olsrd-luci $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/olsrd $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/etc/init.d/olsrd $(1)/etc/init.d/
 	$(INSTALL_CONF) ./files/etc/config/olsr $(1)/etc/config/
 	$(INSTALL_DATA) ./files/lib/config/olsr.lua $(1)/lib/config/
