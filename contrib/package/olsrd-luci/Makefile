@@ -1,0 +1,223 @@
+# 
+# Copyright (C) 2008 Freifunk Leipzig
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=olsrd-luci
+PKG_VERSION:=0.5.6-rc7
+PKG_RELEASE:=1
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
+PKG_MD5SUM:=10fbf796792d51eda735d171b6c86941
+
+include $(INCLUDE_DIR)/package.mk
+
+
+define Package/olsrd-luci/common_info
+	SECTION:=net
+	CATEGORY:=Network
+	TITLE:=OLSR - Optimized Link State Routing Daemon
+	URL:=http://www.olsr.org/
+	MAINTAINER:=Jo-Philipp Wich <xm@leipzig.freifunk.net>
+endef
+
+define Package/olsrd-luci
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	DEPENDS:=+libpthread
+endef
+
+define Package/olsrd-luci-mod-arprefresh
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - ARP Refresh Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-dot-draw
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Dot Draw Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-bmf
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Basic Multicast Forwarding Plugin
+	DEPENDS:=olsrd-luci +kmod-tun
+endef 
+
+define Package/olsrd-luci-mod-dyn-gw
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Dynamic Gateway Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-dyn-gw-plain
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Dynamic Gateway Plugin (Plain Version)
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-httpinfo
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - HTTP/HTML Info Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-nameservice
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Hostname Propagation Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-secure
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Security Extensions Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-txtinfo
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - HTTP/Plaintext Info Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-pgraph
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - PGraph Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-quagga
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Quagga Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Package/olsrd-luci-mod-tas
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Tiny Application Server Plugin
+	DEPENDS:=olsrd-luci
+endef
+
+define Build/Compile
+	$(MAKE) -C "$(PKG_BUILD_DIR)" olsrd-luci libs \
+		$(TARGET_CONFIGURE_OPTS) \
+		NODEBUG=1 \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		OS="linux" \
+		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+		LIBDIR="$(PKG_INSTALL_DIR)/usr/lib" \
+		SBINDIR="$(PKG_INSTALL_DIR)/usr/sbin/" \
+		ETCDIR="$(PKG_INSTALL_DIR)/etc" \
+		MANDIR="$(PKG_INSTALL_DIR)/usr/share/man" \
+		STRIP="true" \
+		INSTALL_LIB="true" \
+		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo pgraph quagga tas"
+endef
+
+define Package/olsrd-luci/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/lib/config
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/olsrd-luci $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/etc/init.d/olsrd-luci $(1)/etc/init.d/
+	$(INSTALL_CONF) ./files/etc/config/olsr $(1)/etc/config/
+	$(INSTALL_DATA) ./files/lib/config/olsr.lua $(1)/lib/config/
+endef
+
+define Package/olsrd-luci-mod-arprefresh/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/arprefresh/olsrd-luci_arprefresh.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-dot-draw/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dot_draw/olsrd-luci_dot_draw.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-bmf/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/bmf/olsrd-luci_bmf.so.* $(1)/usr/lib/
+endef 
+
+define Package/olsrd-luci-mod-dyn-gw/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw/olsrd-luci_dyn_gw.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-dyn-gw-plain/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw_plain/olsrd-luci_dyn_gw_plain.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-httpinfo/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/httpinfo/olsrd-luci_httpinfo.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-nameservice/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/nameservice/olsrd-luci_nameservice.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-secure/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/secure/olsrd-luci_secure.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-txtinfo/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/txtinfo/olsrd-luci_txtinfo.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-pgraph/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/pgraph/olsrd-luci_pgraph.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-quagga/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/quagga/olsrd-luci_quagga.so.* $(1)/usr/lib/
+endef
+
+define Package/olsrd-luci-mod-tas/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/tas/olsrd-luci_tas.so.* $(1)/usr/lib/
+endef
+
+
+$(eval $(call BuildPackage,olsrd-luci))
+$(eval $(call BuildPackage,olsrd-luci-mod-arprefresh))
+$(eval $(call BuildPackage,olsrd-luci-mod-dot-draw))
+$(eval $(call BuildPackage,olsrd-luci-mod-bmf))
+$(eval $(call BuildPackage,olsrd-luci-mod-dyn-gw))
+$(eval $(call BuildPackage,olsrd-luci-mod-dyn-gw-plain))
+$(eval $(call BuildPackage,olsrd-luci-mod-httpinfo))
+$(eval $(call BuildPackage,olsrd-luci-mod-nameservice))
+$(eval $(call BuildPackage,olsrd-luci-mod-secure))
+$(eval $(call BuildPackage,olsrd-luci-mod-txtinfo))
+$(eval $(call BuildPackage,olsrd-luci-mod-pgraph))
+$(eval $(call BuildPackage,olsrd-luci-mod-quagga))
+$(eval $(call BuildPackage,olsrd-luci-mod-tas))
+
