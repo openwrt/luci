@@ -35,7 +35,7 @@ local require, getmetatable = require, getmetatable
 
 --- LuCI UCI model library.
 -- @cstyle	instance
-module("luci.model.uci")
+module "luci.model.uci"
 
 --- Create a new UCI-Cursor.
 -- @class function
@@ -145,6 +145,22 @@ function Cursor.set_list(self, config, section, option, value)
 		)
 	end
 	return false
+end
+
+
+Cursor._changes = Cursor.changes
+function Cursor.changes(self, config)
+	if config then
+		return Cursor._changes(self, config)
+	else
+		local changes = {}
+		for k,v in pairs(require "luci.fs".dir(self:get_savedir())) do
+			if v ~= "." and v ~= ".." then
+				util.update(changes, Cursor._changes(self, v))
+			end
+		end
+		return changes
+	end
 end
 
 
