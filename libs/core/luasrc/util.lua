@@ -25,6 +25,7 @@ limitations under the License.
 ]]--
 
 local io = require "io"
+local math = require "math"
 local table = require "table"
 local debug = require "debug"
 local string = require "string"
