@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2008 Freifunk Leipzig
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=olsrd-luci
+PKG_BASENAME:=olsrd
+PKG_NAME:=$(PKG_BASENAME)-luci
 PKG_VERSION:=0.5.6-rc7
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
 PKG_MD5SUM:=10fbf796792d51eda735d171b6c86941
 
@@ -54,7 +55,7 @@ define Package/olsrd-luci-mod-bmf
 	MENU:=1
 	TITLE:=OLSR - Basic Multicast Forwarding Plugin
 	DEPENDS:=olsrd-luci +kmod-tun
-endef 
+endef
 
 define Package/olsrd-luci-mod-dyn-gw
 	$(call Package/olsrd-luci/common_info)
@@ -120,7 +121,7 @@ define Package/olsrd-luci-mod-tas
 endef
 
 define Build/Compile
-	$(MAKE) -C "$(PKG_BUILD_DIR)" olsrd-luci libs \
+	$(MAKE) -C "$(PKG_BUILD_DIR)" olsrd libs \
 		$(TARGET_CONFIGURE_OPTS) \
 		NODEBUG=1 \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -141,69 +142,69 @@ define Package/olsrd-luci/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/olsrd-luci $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/etc/init.d/olsrd-luci $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/etc/init.d/olsrd $(1)/etc/init.d/
 	$(INSTALL_CONF) ./files/etc/config/olsr $(1)/etc/config/
 	$(INSTALL_DATA) ./files/lib/config/olsr.lua $(1)/lib/config/
 endef
 
 define Package/olsrd-luci-mod-arprefresh/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/arprefresh/olsrd-luci_arprefresh.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/arprefresh/olsrd_arprefresh.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-dot-draw/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dot_draw/olsrd-luci_dot_draw.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dot_draw/olsrd_dot_draw.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-bmf/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/bmf/olsrd-luci_bmf.so.* $(1)/usr/lib/
-endef 
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/bmf/olsrd_bmf.so.* $(1)/usr/lib/
+endef
 
 define Package/olsrd-luci-mod-dyn-gw/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw/olsrd-luci_dyn_gw.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw/olsrd_dyn_gw.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-dyn-gw-plain/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw_plain/olsrd-luci_dyn_gw_plain.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw_plain/olsrd_dyn_gw_plain.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-httpinfo/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/httpinfo/olsrd-luci_httpinfo.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/httpinfo/olsrd_httpinfo.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-nameservice/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/nameservice/olsrd-luci_nameservice.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/nameservice/olsrd_nameservice.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-secure/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/secure/olsrd-luci_secure.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/secure/olsrd_secure.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-txtinfo/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/txtinfo/olsrd-luci_txtinfo.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/txtinfo/olsrd_txtinfo.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-pgraph/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/pgraph/olsrd-luci_pgraph.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/pgraph/olsrd_pgraph.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-quagga/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/quagga/olsrd-luci_quagga.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/quagga/olsrd_quagga.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-tas/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/tas/olsrd-luci_tas.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/tas/olsrd_tas.so.* $(1)/usr/lib/
 endef
 
 
@@ -220,4 +221,3 @@ $(eval $(call BuildPackage,olsrd-luci-mod-txtinfo))
 $(eval $(call BuildPackage,olsrd-luci-mod-pgraph))
 $(eval $(call BuildPackage,olsrd-luci-mod-quagga))
 $(eval $(call BuildPackage,olsrd-luci-mod-tas))
-
