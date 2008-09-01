@@ -1,4 +1,4 @@
-uvc_streamer = [[Webcam Stream]]
-settings = [[Konfiguration]]
-resolution = [[Auflösung]]
 framespersecond = [[Bilder pro Sekunde]]
+resolution = [[AuflÃ¶sung]]
+settings = [[Konfiguration]]
+uvc_streamer = [[Webcam Stream]]
