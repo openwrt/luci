@@ -1,6 +1,8 @@
 #!/usr/bin/lua
 local util = require "luci.util"
 
+assert(arg[1])
+
 local x = {}
 local f = loadfile(arg[1])
 setfenv(f, x)
@@ -12,7 +14,7 @@ print '<i18n:msgs xmlns:i18n="http://luci.freifunk-halle.net/2008/i18n#" xmlns="
 print ''
 
 for k, v in util.kspairs(x) do
-	print ('<i18n:msg xml:id="%s">%s</i18n:msg>' % {k, util.pcdata(v)})
+	print ('<i18n:msg xml:id="%s">%s</i18n:msg>' % {k, v})
 end
 
 print ''
