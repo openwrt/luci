@@ -15,6 +15,7 @@ $Id$
 
 ]]--
 
+require("luci.fs")
 require("luci.util")
 require("luci.model.uci")
 
@@ -57,7 +58,7 @@ local function _section(sect,sval,parstr)
 
 	if sval then
 		rv = rv .. "}\n"
-	end	
+	end
 
 	return rv
 end
@@ -118,7 +119,9 @@ print( _section("general") )
 -- plugin config sections
 for k, v in luci.util.spairs(conf) do
 	if conf[k][".type"] == "LoadPlugin" then
-		print( _section( k, "Library", "PlParam" ) )
+		if v.Library and luci.fs.access("/usr/lib/"..v.Library) then
+			print( _section( k, "Library", "PlParam" ) )
+		end
 	end
 end
 
