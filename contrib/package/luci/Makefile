@@ -510,6 +510,18 @@ define Package/luci-app-samba/install
 endef
 
 
+define Package/luci-app-uvc_streamer
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +uvc-streamer
+  TITLE:=Webcam Streaming - UVC-Streamer module
+endef
+
+define Package/luci-app-uvc_streamer/install
+        $(call Package/luci/install/template,$(1),applications/luci-uvc_streamer)
+endef
+
+
+
 ### Server Gateway Interfaces ###
 
 define Package/luci-sgi-cgi
@@ -710,6 +722,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-samba),)
 	PKG_SELECTED_MODULES+=applications/luci-samba
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-uvc_streamer),)
+	PKG_SELECTED_MODULES+=applications/luci-uvc_streamer
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -790,6 +805,7 @@ $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))
 $(eval $(call BuildPackage,luci-app-samba))
+$(eval $(call BuildPackage,luci-app-uvc_streamer))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
