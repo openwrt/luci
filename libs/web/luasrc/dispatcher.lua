@@ -263,6 +263,13 @@ function createindex_plain(path, suffix)
 	if indexcache then
 		local cachedate = fs.mtime(indexcache)
 		if cachedate and cachedate > fs.mtime(path) then
+
+			assert(
+				sys.process.info("uid") == fs.stat(indexcache, "uid")
+				and fs.stat(indexcache, "mode") == "rw-------",
+				"Fatal: Indexcache is not sane!"
+			)
+
 			index = loadfile(indexcache)()
 			return index
 		end 		
@@ -287,6 +294,7 @@ function createindex_plain(path, suffix)
 	
 	if indexcache then
 		fs.writefile(indexcache, util.get_bytecode(index))
+		fs.chmod(indexcache, "a-rwx,u+rw")
 	end
 end
 

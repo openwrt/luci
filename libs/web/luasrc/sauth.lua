@@ -57,7 +57,7 @@ end
 -- @param id	Session identifier
 -- @return		Session data
 function read(id)
-	if not id or not sane() then
+	if not id or not sane(sessionpath .. "/" .. id) then
 		return
 	end
 	clean()
@@ -67,9 +67,11 @@ end
 
 --- Check whether Session environment is sane.
 -- @return Boolean status
-function sane()
-	return luci.sys.process.info("uid") == luci.fs.stat(sessionpath, "uid")
-	 and luci.fs.stat(sessionpath, "mode") == "rwx------"
+function sane(file)
+	return luci.sys.process.info("uid")
+			== luci.fs.stat(file or sessionpath, "uid")
+		and luci.fs.stat(file or sessionpath, "mode")
+			== (file and "rw-------" or "rwx------")
 end
 
 
