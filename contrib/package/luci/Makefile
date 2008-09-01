@@ -257,7 +257,7 @@ define Package/luci-ff-halle
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
-   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
+   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Halle Community Meta-Package
 endef
@@ -274,7 +274,7 @@ define Package/luci-ff-leipzig
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
-   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice \
+   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
    +kmod-tun +ip
   TITLE:=Freifunk Leipzig Community Meta-Package
 endef
@@ -290,7 +290,7 @@ define Package/luci-ff-hannover
    +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
    +luci-theme-fledermaus \
    +luci-i18n-german \
-   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
+   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
   TITLE:=Freifunk Hannover Community Meta-Package
   URL:=http://www.freifunk-hannover.de/
   MAINTAINER:=Mickey Knox <mickey-at-netfreaks-dot-org>
@@ -307,7 +307,7 @@ define Package/luci-ff-berlin
    +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
    +luci-theme-fledermaus \
    +luci-i18n-german \
-   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
+   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
   TITLE:=Freifunk Berlin Community Meta-Package
 endef
 
@@ -321,7 +321,7 @@ define Package/luci-ff-augsburg
    +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
    +luci-theme-fledermaus \
    +luci-i18n-german \
-   +olsrd +olsrd-mod-dyn-gw +olsrd-mod-txtinfo +olsrd-mod-nameservice
+   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
   TITLE:=Freifunk Augsburg Community Meta-Package
 endef
 
@@ -416,7 +416,7 @@ endef
 
 define Package/luci-app-olsr
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +olsrd +olsrd-mod-txtinfo
+  DEPENDS+=+luci-admin-full +olsrd-luci +olsrd-luci-mod-txtinfo
   TITLE:=OLSR configuration and status module
 endef
 
