@@ -24,8 +24,11 @@ limitations under the License.
 
 ]]--
 
-local posix = require "posix"
 local io    = require "io"
+local os	= require "os"
+local ltn12 = require "ltn12"
+local posix = require "posix"
+
 local type  = type
 
 --- LuCI filesystem library.
@@ -89,6 +92,25 @@ function writefile(filename, data)
 	fp:close()
 
 	return true
+end
+
+--- Copies a file.
+-- @param source	Source file
+-- @param dest		Destination
+-- @return			Boolean containing true on success or nil on error
+function copy(source, dest)
+	return ltn12.pump.all(
+		ltn12.source.file(io.open(source)),
+		ltn12.sink.file(io.open(dest, "w"))
+	)
+end
+
+--- Renames a file.
+-- @param source	Source file
+-- @param dest		Destination
+-- @return			Boolean containing true on success or nil on error
+function rename(source, dest)
+	return os.rename(source, dest)
 end
 
 --- Get the last modification time of given file path in Unix epoch format.
