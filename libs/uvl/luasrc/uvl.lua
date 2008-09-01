@@ -777,9 +777,10 @@ function uvlitem.config(self, opt)
 	local c
 
 	if #self.cref == 4 or #self.cref == 3 then
-		c = self.c[self.cref[2]][self.cref[3]]
+		c = self.c and self.c[self.cref[2]] or nil
+		c = c      and c[self.cref[3]]      or nil
 	elseif #self.cref == 2 then
-		c = self.c[self.cref[2]]
+		c = self.c and self.c[self.cref[2]] or nil
 	else
 		c = self.c
 	end
