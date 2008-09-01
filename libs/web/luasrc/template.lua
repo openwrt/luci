@@ -24,30 +24,36 @@ limitations under the License.
 
 ]]--
 
+local fs = require"luci.fs"
+local sys = require "luci.sys"
+local util = require "luci.util"
+local table = require "table"
+local string = require "string"
+local config = require "luci.config"
+local coroutine = require "coroutine"
+
+local tostring, pairs, loadstring = tostring, pairs, loadstring
+local setmetatable, loadfile = setmetatable, loadfile
+local getfenv, setfenv = getfenv, setfenv
+local assert, type, error = assert, type, error
+
 --- LuCI template library.
-module("luci.template", package.seeall)
+module "luci.template"
 
-require("luci.config")
-require("luci.util")
-require("luci.fs")
-require("luci.sys")
-require("luci.http")
+config.template = config.template or {}
 
-luci.config.template = luci.config.template or {}
-
-viewdir    = luci.config.template.viewdir or luci.util.libpath() .. "/view"
-compiledir = luci.config.template.compiledir or luci.util.libpath() .. "/view"
+viewdir    = config.template.viewdir or util.libpath() .. "/view"
+compiledir = config.template.compiledir or util.libpath() .. "/view"
 
 
 -- Compile modes:
--- none:	Never compile, only use precompiled data from files
 -- memory:	Always compile, do not save compiled files, ignore precompiled 
 -- file:	Compile on demand, save compiled files, update precompiled
-compiler_mode = luci.config.template.compiler_mode or "memory"
+compiler_mode = config.template.compiler_mode or "memory"
 
 
 -- Define the namespace for template modules
-context = luci.util.threadlocal()
+context = util.threadlocal()
 
 viewns = {
 	include    = function(name) Template(name):render(getfenv(2)) end,
@@ -57,6 +63,8 @@ viewns = {
 -- @param template	LuCI template
 -- @return 			Lua template function
 function compile(template)	
+	local expr = {}
+
 	-- Search all <% %> expressions
 	local function expr_add(ws1, skip1, command, skip2, ws2)
 		table.insert(expr, command)
@@ -65,15 +73,11 @@ function compile(template)
 		       ( #skip2 > 0 and "" or ws2 )
 	end
 	
-	-- As "expr" should be local, we have to assign it to the "expr_add" scope 
-	local expr = {}
-	luci.util.extfenv(expr_add, "expr", expr)
-	
 	-- Save all expressiosn to table "expr"
 	template = template:gsub("(%s*)<%%(%-?)(.-)(%-?)%%>(%s*)", expr_add)
 	
 	local function sanitize(s)
-		s = string.format("%q", s)
+		s = "%q" % s
 		return s:sub(2, #s-1)
 	end
 	
@@ -121,38 +125,47 @@ end
 
 --- Render a certain template.
 -- @param name		Template name
--- @param scope		Scope to assign to template
-function render(name, scope, ...)
-	scope = scope or getfenv(2)
-	local s, t = luci.util.copcall(Template, name)
-	if not s then
-		error(t)
-	else
-		t:render(scope, ...)
-	end
+-- @param scope		Scope to assign to template (optional)
+function render(name, scope)
+	return Template(name):render(scope or getfenv(2))
 end
 
 
 -- Template class
-Template = luci.util.class()
+Template = util.class()
 
 -- Shared template cache to store templates in to avoid unnecessary reloading
-Template.cache = {}
-setmetatable(Template.cache, {__mode = "v"})
+Template.cache = setmetatable({}, {__mode = "v"})
 
 
 -- Constructor - Reads and compiles the template on-demand
 function Template.__init__(self, name)	
+	local function _encode_filename(str)
+
+		local function __chrenc( chr )
+			return "%%%02x" % string.byte( chr )
+		end
+
+		if type(str) == "string" then
+			str = str:gsub(
+				"([^a-zA-Z0-9$_%-%.%+!*'(),])",
+				__chrenc
+			)
+		end
+
+		return str
+	end
+
 	self.template = self.cache[name]
 	self.name = name
 	
 	-- Create a new namespace for this template
-	self.viewns = {}
+	self.viewns = {sink=self.sink}
 	
 	-- Copy over from general namespace
-	luci.util.update(self.viewns, viewns)
+	util.update(self.viewns, viewns)
 	if context.viewns then
-		luci.util.update(self.viewns, context.viewns)
+		util.update(self.viewns, context.viewns)
 	end
 	
 	-- If we have a cached template, skip compiling and loading
@@ -161,44 +174,47 @@ function Template.__init__(self, name)
 	end
 	
 	-- Enforce cache security
-	local cdir = compiledir .. "/" .. luci.sys.process.info("uid")
+	local cdir = compiledir .. "/" .. sys.process.info("uid")
 	
 	-- Compile and build
 	local sourcefile   = viewdir    .. "/" .. name .. ".htm"
-	local compiledfile = cdir .. "/" .. luci.http.urlencode(name) .. ".lua"
+	local compiledfile = cdir .. "/" .. _encode_filename(name) .. ".lua"
 	local err	
 	
 	if compiler_mode == "file" then
-		local tplmt = luci.fs.mtime(sourcefile)
-		local commt = luci.fs.mtime(compiledfile)
+		local tplmt = fs.mtime(sourcefile)
+		local commt = fs.mtime(compiledfile)
 		
-		if not luci.fs.mtime(cdir) then
-			luci.fs.mkdir(cdir, true)
-			luci.fs.chmod(luci.fs.dirname(cdir), "a+rxw")
+		if not fs.mtime(cdir) then
+			fs.mkdir(cdir, true)
+			fs.chmod(fs.dirname(cdir), "a+rxw")
 		end
 				
 		-- Build if there is no compiled file or if compiled file is outdated
 		if ((commt == nil) and not (tplmt == nil))
 		or (not (commt == nil) and not (tplmt == nil) and commt < tplmt) then
 			local source
-			source, err = luci.fs.readfile(sourcefile)
+			source, err = fs.readfile(sourcefile)
 			
 			if source then
 				local compiled, err = compile(source)
 				
-				luci.fs.writefile(compiledfile, luci.util.get_bytecode(compiled))
+				fs.writefile(compiledfile, util.get_bytecode(compiled))
+				fs.chmod(compiledfile, "a-rwx,u+rw")
 				self.template = compiled
 			end
 		else
+			assert(
+				sys.process.info("uid") == fs.stat(compiledfile, "uid")
+				and fs.stat(compiledfile, "mode") == "rw-------",
+				"Fatal: Cachefile is not sane!"
+			)
 			self.template, err = loadfile(compiledfile)
 		end
 		
-	elseif compiler_mode == "none" then
-		self.template, err = loadfile(self.compiledfile)
-		
 	elseif compiler_mode == "memory" then
 		local source
-		source, err = luci.fs.readfile(sourcefile)
+		source, err = fs.readfile(sourcefile)
 		if source then
 			self.template, err = compile(source)
 		end
@@ -222,14 +238,15 @@ function Template.render(self, scope)
 	local oldfenv = getfenv(self.template)
 	
 	-- Put our predefined objects in the scope of the template
-	luci.util.resfenv(self.template)
-	luci.util.updfenv(self.template, scope)
-	luci.util.updfenv(self.template, self.viewns)
+	util.resfenv(self.template)
+	util.updfenv(self.template, scope)
+	util.updfenv(self.template, self.viewns)
 	
 	-- Now finally render the thing
-	local stat, err = luci.util.copcall(self.template)
+	local stat, err = util.copcall(self.template)
 	if not stat then
-		error("Error in template %s: %s" % {self.name, err})
+		setfenv(self.template, oldfenv)
+		error("Error in template %s: %s" % {self.name, chunk})
 	end
 	
 	-- Reset environment
