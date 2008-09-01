@@ -53,10 +53,7 @@ function load(cbimap, ...)
 
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
 	local func, err = loadfile(cbidir..cbimap..".lua")
-
-	if not func then
-		return nil
-	end
+	assert(func, err)
 
 	luci.i18n.loadc("cbi")
 
