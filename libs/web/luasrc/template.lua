@@ -246,7 +246,7 @@ function Template.render(self, scope)
 	local stat, err = util.copcall(self.template)
 	if not stat then
 		setfenv(self.template, oldfenv)
-		error("Error in template %s: %s" % {self.name, chunk})
+		error("Error in template %s: %s" % {self.name, err})
 	end
 	
 	-- Reset environment
