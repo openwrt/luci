@@ -25,8 +25,8 @@ limitations under the License.
 ]]--
 
 local io    = require "io"
-local os	= require "os"
-local ltn12 = require "ltn12"
+local os    = require "os"
+local ltn12 = require "luci.ltn12"
 local posix = require "posix"
 
 local type  = type
