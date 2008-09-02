@@ -41,6 +41,7 @@ local tonumber, ipairs, pairs = tonumber, ipairs, pairs
 --- LuCI Linux and POSIX system utilities.
 module "luci.sys"
 
+exec = luci.util.exec
 
 --- Invoke the luci-flash executable to write an image to the flash memory.
 -- @param image		Local path or URL to image file
