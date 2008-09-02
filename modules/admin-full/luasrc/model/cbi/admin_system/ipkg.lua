@@ -27,7 +27,7 @@ f:append(Template("admin_system/ipkg"))
 function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if (luci.fs.readfile(ipkgfile) or "") ~= data.lines then
-			luci.fs.writefile(ipkgfile, data.keys)
+			luci.fs.writefile(ipkgfile, data.lines)
 		end
 	end
 	return true
