@@ -17,11 +17,12 @@ vhost   = luci.httpd.server.VHost()
 
 server:set_default_vhost(vhost)
 
-if pcall(require, "uci2") and pcall(require, "luci.model.uci") then
-	luci.model.uci.cursor = function(config, save)
-		return uci2.cursor(config or SYSROOT .. "/etc/config", save or SYSROOT .. "/tmp/.uci")
+pcall(function()
+	require "uci"
+	require "luci.model.uci".cursor = function(config, save)
+		return uci.cursor(config or SYSROOT .. "/etc/config", save or SYSROOT .. "/tmp/.uci")
 	end
-end
+end)
 
 require("luci.sys")
 luci.sys.user.checkpasswd = function() return true end

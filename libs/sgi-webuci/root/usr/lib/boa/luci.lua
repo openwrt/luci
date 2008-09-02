@@ -25,7 +25,7 @@ function init(path)
 	if (root ~= '/') then
 		-- Entering dummy mode
 		luci.model.uci.cursor = function(config, ...)
-			return uci2.cursor(config or root .. "/etc/config", ...)
+			return uci.cursor(config or root .. "/etc/config", ...)
 	    	end
 		
 		luci.sys.hostname = function() return "" end
