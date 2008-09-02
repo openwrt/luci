@@ -419,6 +419,26 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 
 	local ok, err
 
+	-- Step 0: get package meta information
+	for i, conf in ipairs( schemes ) do
+		for k, v in pairs( conf ) do
+			if v['.type'] == 'package' then
+				self.packages[scheme:sid()] =
+					self.packages[scheme:sid()] or {
+						["name"]      = scheme:sid();
+						["sections"]  = { };
+						["variables"] = { };
+					}
+
+				for k, v2 in pairs(v) do
+					if k == "title" or k == "description" then
+						self.packages[scheme:sid()][k] = v2
+					end
+				end
+			end
+		end
+	end
+
 	-- Step 1: get all sections
 	for i, conf in ipairs( schemes ) do
 		for k, v in pairs( conf ) do
