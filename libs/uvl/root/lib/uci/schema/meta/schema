@@ -8,6 +8,42 @@
 package schema
 
 #-------------------------------------------------------------------------------
+# Central package definition
+#
+#	config package
+#		option ...
+#-------------------------------------------------------------------------------
+
+# Section definition (schema.@package)
+config section
+	option name		'package'
+	option title	'Definition of uci package'
+	option package	'schema'
+	option required	false
+	option named	false
+	option unique	true
+	option dynamic	false
+
+# Section title (schema.@package.title)
+config variable
+	option name		'title'
+	option title	'Title of the defined package'
+	option section	'schema.package'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+# Section description (schema.@package.description)
+config variable
+	option name		'description'
+	option title	'Description of the defined package'
+	option section	'schema.package'
+	option type		'variable'
+	option datatype	'string'
+	option required	false
+
+
+#-------------------------------------------------------------------------------
 # Central section definition
 #
 #	config section
