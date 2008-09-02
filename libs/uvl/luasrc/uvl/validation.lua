@@ -43,10 +43,14 @@ function check( self, object )
 	if object:scheme('validators') then
 		for _, val in ipairs(object:scheme('validators')) do
 			local ok, err = false, nil
+
+			local values = object:value()
+			      values = type(values) == "table" and values or { values }
+
 			local args = {
-				object:scheme('type'),
-				object.cref[1], object.cref[2], object.cref[3],
-				object:scheme('datatype'), object:value()
+				object:scheme('type'), object:scheme('datatype'),
+				object.cref[1], object.cref[2], object.cref[3] or '',
+				unpack(values)
 			}
 
 			if type(val) == "function" then

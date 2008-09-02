@@ -33,9 +33,8 @@ require("luci.uvl.dependencies")
 TYPE_SCHEME   = 0x00
 TYPE_CONFIG   = 0x01
 TYPE_SECTION  = 0x02
-TYPE_VARIABLE = 0x03
-TYPE_OPTION   = 0x04
-TYPE_ENUM     = 0x05
+TYPE_OPTION   = 0x03
+TYPE_ENUM     = 0x04
 
 --- Boolean; default true;
 -- treat sections found in config but not in scheme as error
@@ -306,7 +305,9 @@ function UVL._validate_option( self, option, nodeps )
 				if type(val) ~= "table" and STRICT_LIST_TYPE then
 					return false, option:error(ERR.OPT_NOTLIST(option))
 				end
-			elseif option:scheme('datatype') then
+			end
+
+			if option:scheme('datatype') then
 				local dt = option:scheme('datatype')
 
 				if self.datatypes[dt] then
@@ -378,10 +379,20 @@ end
 function UVL._read_scheme_parts( self, scheme, schemes )
 
 	-- helper function to check for required fields
-	local function _req( c, t, r )
+	local function _req( t, n, c, r )
 		for i, v in ipairs(r) do
-			if not t[v] then
-				return false, ERR.SME_REQFLD({c,t}, v)
+			if not c[v] then
+				local p, o = scheme:sid(), nil
+
+				if t == TYPE_SECTION then
+					o = section( scheme, nil, p, n )
+				elseif t == TYPE_OPTION then
+					o = option( scheme, nil, p, '(nil)', n )
+				elseif t == TYPE_ENUM then
+					o = enum( scheme, nil, p, '(nil)', '(nil)', n )
+				end
+
+				return false, ERR.SME_REQFLD(o,v)
 			end
 		end
 		return true
@@ -393,7 +404,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		if c == TYPE_SECTION then
 			k = "package"
 			n = 1
-		elseif c == TYPE_VARIABLE then
+		elseif c == TYPE_OPTION then
 			k = "section"
 			n = 2
 		elseif c == TYPE_ENUM then
@@ -444,7 +455,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		for k, v in pairs( conf ) do
 			if v['.type'] == 'section' then
 
-				ok, err = _req( TYPE_SECTION, v, { "name", "package" } )
+				ok, err = _req( TYPE_SECTION, k, v, { "name", "package" } )
 				if err then return false, scheme:error(err) end
 
 				local r, err = _ref( TYPE_SECTION, v )
@@ -496,10 +507,10 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		for k, v in pairs( conf ) do
 			if v['.type'] == "variable" then
 
-				ok, err = _req( TYPE_VARIABLE, v, { "name", "section" } )
+				ok, err = _req( TYPE_OPTION, k, v, { "name", "section" } )
 				if err then return false, scheme:error(err) end
 
-				local r, err = _ref( TYPE_VARIABLE, v )
+				local r, err = _ref( TYPE_OPTION, v )
 				if err then return false, scheme:error(err) end
 
 				local p = self.packages[r[1]]
@@ -567,7 +578,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 		for k, v in pairs( conf ) do
 			if v['.type'] == "enum" then
 
-				ok, err = _req( TYPE_ENUM, v, { "value", "variable" } )
+				ok, err = _req( TYPE_ENUM, k, v, { "value", "variable" } )
 				if err then return false, scheme:error(err) end
 
 				local r, err = _ref( TYPE_ENUM, v )
@@ -682,6 +693,25 @@ function UVL._read_validator( self, values, validators )
 				validator = value:gsub("^exec:","")
 			elseif value:match("^lua:") then
 				validator = self:_resolve_function( (value:gsub("^lua:","") ) )
+			elseif value:match("^regexp:") then
+				local pattern = value:gsub("^regexp:","")
+				validator = function( type, dtype, pack, sect, optn, ... )
+					local values = { ... }
+					for _, v in ipairs(values) do
+						local ok, match =
+							luci.util.copcall( string.match, v, pattern )
+
+						if not ok then
+							return false, match
+						elseif not match then
+							return false,
+								'Value "%s" does not match pattern "%s"' % {
+									v, pattern
+								}
+						end
+					end
+					return true
+				end
 			end
 
 			if validator then
@@ -774,16 +804,19 @@ function uvlitem.scheme(self, opt)
 	local s
 
 	if #self.sref == 4 or #self.sref == 3 then
-		s = self.s
-			.packages[self.sref[1]]
-			.variables[self.sref[2]][self.sref[3]]
+		s = self.s and self.s.packages
+		s = s      and s[self.sref[1]]
+		s = s      and s.variables
+		s = s      and s[self.sref[2]]
+		s = s      and s[self.sref[3]]
 	elseif #self.sref == 2 then
-		s = self.s
-			.packages[self.sref[1]]
-			.sections[self.sref[2]]
+		s = self.s and self.s.packages
+		s = s      and s[self.sref[1]]
+		s = s      and s.sections
+		s = s      and s[self.sref[2]]
 	else
-		s = self.s
-			.packages[self.sref[1]]
+		s = self.s and self.s.packages
+		s = s      and s[self.sref[1]]
 	end
 
 	if s and opt then

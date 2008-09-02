@@ -38,7 +38,7 @@ config variable
 	option name		'description'
 	option title	'Description of the defined package'
 	option section	'schema.package'
-	option type		'variable'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -92,7 +92,7 @@ config variable
 	option name		'description'
 	option title	'Description of the defined section'
 	option section	'schema.section'
-	option type		'variable'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -101,7 +101,7 @@ config variable
 	option name		'depends'
 	option title	'List of dependencies within and between defined sections'
 	option section  'schema.section'
-	option type		'list'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -191,7 +191,7 @@ config variable
 	option name		'description'
 	option title	'Description of the defined variable'
 	option section	'schema.variable'
-	option type		'variable'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -200,7 +200,7 @@ config variable
 	option name		'depends'
 	option title	'List of dependencies between defined variables'
 	option section  'schema.variable'
-	option type		'list'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -240,6 +240,12 @@ config enum
 	option title	'This is a list variable'
 	option variable	'schema.variable.type'
 
+# List-or-Option variable type (schema.@variable.type=lazylist)
+config enum
+	option value	'lazylist'
+	option title	'This is a list or option variable'
+	option variable	'schema.variable.type'
+
 # Reference variable type (schema.@variable.type=reference)
 config enum
 	option value	'reference'
@@ -260,7 +266,7 @@ config variable
 	option name		'validator'
 	option title	'Datatype of this variable'
 	option section	'schema.variable'
-	option type		'list'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -269,7 +275,7 @@ config variable
 	option name		'valueof'
 	option title	'Reference to section or option to read values from'
 	option section	'schema.variable'
-	option type		'list'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -323,7 +329,7 @@ config variable
 	option name		'description'
 	option title	'Description of the defined enum value'
 	option section	'schema.enum'
-	option type		'variable'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
@@ -332,7 +338,7 @@ config variable
 	option name		'depends'
 	option title	'List of dependencies on defined variables'
 	option section  'schema.enum'
-	option type		'list'
+	option type		'lazylist'
 	option datatype	'string'
 	option required	false
 
