@@ -29,6 +29,7 @@ name.size = 10
 proto = s:option(ListValue, "proto", translate("protocol"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
+proto:value("tcpudp", "TCP+UDP")
 
 dport = s:option(Value, "src_dport")
 dport.size = 5

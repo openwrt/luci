@@ -46,11 +46,13 @@ sport = s:option(Value, "src_port")
 sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
+sport:depends("proto", "tcpudp")
 
 dport = s:option(Value, "dest_port")
 dport.optional = true
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
+dport:depends("proto", "tcpudp")
 
 jump = s:option(ListValue, "target")
 jump.rmempty = true

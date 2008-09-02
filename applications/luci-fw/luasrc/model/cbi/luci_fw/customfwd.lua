@@ -25,7 +25,7 @@ name.size = 10
 
 iface = s:option(ListValue, "src", translate("fw_zone"))
 iface.default = "wan"
-luci.model.uci.foreach("firewall", "zone",
+luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
 		iface:value(section.name)
 	end)
@@ -37,18 +37,21 @@ sport = s:option(Value, "src_port")
 sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
+sport:depends("proto", "tcpudp")
 
 proto = s:option(ListValue, "proto", translate("protocol"))
 proto.optional = true
 proto:value("")
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
+proto:value("tcpudp", "TCP+UDP")
 
 dport = s:option(Value, "src_dport")
 dport.size = 5
 dport.optional = true
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
+dport:depends("proto", "tcpudp")
 
 to = s:option(Value, "dest_ip")
 for i, dataset in ipairs(luci.sys.net.arptable()) do
