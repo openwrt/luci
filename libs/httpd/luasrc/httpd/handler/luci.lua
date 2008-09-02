@@ -41,7 +41,15 @@ end
 
 function Luci.handle_get(self, request, sourcein, sinkerr)
 	if self.limit and #self.running >= self.limit then
-		return self:failure(503, "Overload")
+		for k, v in ipairs(self.running) do
+			if coroutine.status(v) == "dead" then
+				collectgarbage()
+				break
+			end
+		end
+		if #self.running >= self.limit then	
+			return self:failure(503, "Overload")
+		end
 	end
 	table.insert(self.running, coroutine.running())
 	
@@ -84,6 +92,10 @@ function Luci.handle_get(self, request, sourcein, sinkerr)
 			return true
 		elseif id == 5 then
 			active = false
+
+			while (coroutine.resume(x)) do
+			end
+
 			return nil
 		elseif id == 4 then
 			return data
