@@ -36,48 +36,57 @@ SUCH DAMAGE.
 		<xsl:if test="translate(substring(@xml:id, 0, 2), 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', '') = ''">
 			<xsl:if test="@xml:id != 'and' and @xml:id != 'break' and @xml:id != 'do' and @xml:id != 'else' and @xml:id != 'elseif' and @xml:id != 'end' and @xml:id != 'false' and @xml:id != 'for' and @xml:id != 'function' and @xml:id != 'if' and @xml:id != 'in' and @xml:id != 'local' and @xml:id != 'nil' and @xml:id != 'not' and @xml:id != 'or' and @xml:id != 'repeat' and @xml:id != 'return' and @xml:id != 'then' and @xml:id != 'true' and @xml:id != 'until' and @xml:id != 'while'">
 				<xsl:value-of select="@xml:id"/>
-				<xsl:text> = [[</xsl:text>
-				<xsl:apply-templates select="node()"/>
-				<xsl:text>]]&#10;</xsl:text>
+				<xsl:text> = '</xsl:text>
+				<xsl:choose>
+					<xsl:when test="@method = 'text'">
+						<xsl:call-template name="escape-lua">
+							<xsl:with-param name="string" select="."/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="node()" mode="xhtml"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>'&#10;</xsl:text>
 			</xsl:if>
 		</xsl:if>
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="h:*" priority="-1">
+<xsl:template match="h:*" priority="-1" mode="xhtml">
 	<xsl:text>&lt;</xsl:text>
 	<xsl:value-of select="local-name(.)"/>
-	<xsl:apply-templates select="@*"/>
+	<xsl:apply-templates select="@*" mode="xhtml"/>
 	<xsl:text>&gt;</xsl:text>
-	<xsl:apply-templates/>
+	<xsl:apply-templates mode="xhtml"/>
 	<xsl:text>&lt;/</xsl:text>
 	<xsl:value-of select="local-name(.)"/>
 	<xsl:text>&gt;</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" priority="-2">
+<xsl:template match="*" priority="-2" mode="xhtml">
 	<xsl:text>&lt;span class=&quot;</xsl:text>
 	<xsl:value-of select="local-name(.)"/>
 	<xsl:text>&quot;</xsl:text>
-	<xsl:apply-templates select="@*"/>
+	<xsl:apply-templates select="@*" mode="xhtml"/>
 	<xsl:text>&gt;</xsl:text>
-	<xsl:apply-templates/>
+	<xsl:apply-templates mode="xhtml"/>
 	<xsl:text>&lt;/span&gt;</xsl:text>
 </xsl:template>
 
-<xsl:template match="h:br">
+<xsl:template match="h:br" mode="xhtml">
 	<xsl:text>&lt;br</xsl:text>
-	<xsl:apply-templates select="@*"/>
+	<xsl:apply-templates select="@*" mode="xhtml"/>
 	<xsl:text> /&gt;</xsl:text>
 </xsl:template>
 
-<xsl:template match="h:img">
+<xsl:template match="h:img" mode="xhtml">
 	<xsl:text>&lt;img</xsl:text>
-	<xsl:apply-templates select="@*"/>
+	<xsl:apply-templates select="@*" mode="xhtml"/>
 	<xsl:text> /&gt;</xsl:text>
 </xsl:template>
 
-<xsl:template match="@*" priority="-1">
+<xsl:template match="@*" priority="-1" mode="xhtml">
 	<xsl:if test="namespace-uri(.) = '' and local-name(.) != 'lang' or namespace-uri(.) = 'http://www.w3.org/XML/1998/namespace'">
 		<xsl:if test="namespace-uri(..) = 'http://www.w3.org/1999/xhtml' or local-name(.) != 'class'">
 			<xsl:text> </xsl:text>
@@ -97,7 +106,7 @@ SUCH DAMAGE.
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="@xml:lang">
+<xsl:template match="@xml:lang" mode="xhtml">
 	<xsl:variable name="escaped">
 		<xsl:call-template name="escape-lua-xhtml1">
 			<xsl:with-param name="string" select="."/>
@@ -111,7 +120,7 @@ SUCH DAMAGE.
 	<xsl:text>&quot;</xsl:text>
 </xsl:template>
 
-<xsl:template match="text()" priority="-1">
+<xsl:template match="text()" priority="-1" mode="xhtml">
 	<xsl:variable name="escaped">
 		<xsl:call-template name="escape-lua-xhtml1">
 			<xsl:with-param name="string" select="."/>
@@ -157,6 +166,43 @@ SUCH DAMAGE.
 	</xsl:call-template>
 </xsl:template>
 
+<xsl:template name="escape-lua">
+	<xsl:param name="string"/>
+	<xsl:variable name="escaped">
+		<xsl:call-template name="replace">
+			<xsl:with-param name="string" select="$string"/>
+			<xsl:with-param name="search" select="'\'"/>
+			<xsl:with-param name="replace" select="'\\'"/>
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:variable name="escaped1">
+		<xsl:call-template name="replace">
+			<xsl:with-param name="string" select="$escaped"/>
+			<xsl:with-param name="search" select="'&#10;'"/>
+			<xsl:with-param name="replace" select="'\n'"/>
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:variable name="escaped2">
+		<xsl:call-template name="replace">
+			<xsl:with-param name="string" select="$escaped1"/>
+			<xsl:with-param name="search" select="'&#13;'"/>
+			<xsl:with-param name="replace" select="'\r'"/>
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:variable name="escaped3">
+		<xsl:call-template name="replace">
+			<xsl:with-param name="string" select="$escaped2"/>
+			<xsl:with-param name="search" select="'&quot;'"/>
+			<xsl:with-param name="replace" select="'\&quot;'"/>
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:call-template name="replace">
+		<xsl:with-param name="string" select="$escaped3"/>
+		<xsl:with-param name="search" select='"&#39;"'/>
+		<xsl:with-param name="replace" select='"\&#39;"'/>
+	</xsl:call-template>
+</xsl:template>
+
 <xsl:template name="escape-lua-xhtml1">
 	<xsl:param name="string"/>
 	<xsl:variable name="escaped">
@@ -164,24 +210,8 @@ SUCH DAMAGE.
 			<xsl:with-param name="string" select="$string"/>
 		</xsl:call-template>
 	</xsl:variable>
-	<xsl:variable name="escaped1">
-		<xsl:call-template name="replace">
-			<xsl:with-param name="string" select="$escaped"/>
-			<xsl:with-param name="search" select="'='"/>
-			<xsl:with-param name="replace" select="'&amp;#61;'"/>
-		</xsl:call-template>
-	</xsl:variable>
-	<xsl:variable name="escaped2">
-		<xsl:call-template name="replace">
-			<xsl:with-param name="string" select="$escaped1"/>
-			<xsl:with-param name="search" select="'['"/>
-			<xsl:with-param name="replace" select="'&amp;#91;'"/>
-		</xsl:call-template>
-	</xsl:variable>
-	<xsl:call-template name="replace">
-		<xsl:with-param name="string" select="$escaped2"/>
-		<xsl:with-param name="search" select="']'"/>
-		<xsl:with-param name="replace" select="'&amp;#93;'"/>
+	<xsl:call-template name="escape-lua">
+		<xsl:with-param name="string" select="$escaped"/>
 	</xsl:call-template>
 </xsl:template>
 
