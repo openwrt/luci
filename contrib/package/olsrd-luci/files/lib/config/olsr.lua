@@ -19,7 +19,8 @@ require("luci.fs")
 require("luci.util")
 require("luci.model.uci")
 
-local conf = luci.model.uci.get_all("olsr")
+local uci  = luci.model.uci.cursor()
+local conf = uci:get_all("olsr")
 
 local function _value(val)
 	if val:match("^[0-9%. \t]+$") or val == "yes" or val == "no" then
@@ -34,7 +35,11 @@ local function _section(sect,sval,parstr)
 	local pad = ""
 
 	if sval then
-		rv  = string.format( '%s "%s"\n{\n', conf[sect][".type"], conf[sect][sval] )
+		if sval == "Interface" then
+			rv = string.format( 'Interface "%s"\n{\n', uci:get("network",conf[sect][sval],"ifname") )
+		else
+			rv  = string.format( '%s "%s"\n{\n', conf[sect][".type"], conf[sect][sval] )
+		end
 		pad = "\t"
 	end
 
