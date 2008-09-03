@@ -321,7 +321,7 @@ function UVL._validate_option( self, option, nodeps )
 					for i, v in ipairs(val) do
 						if not self.datatypes[dt]( v ) then
 							return false, option:error(
-								ERR.OPT_INVVALUE(option, dt)
+								ERR.OPT_INVVALUE(option, { v, dt })
 							)
 						end
 					end
