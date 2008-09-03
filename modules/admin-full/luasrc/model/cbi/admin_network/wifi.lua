@@ -232,7 +232,7 @@ end
 ------------------- WiFI-Encryption -------------------
 
 encr = s:option(ListValue, "encryption", translate("encryption"))
-encr:value("none", "keine")
+encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
 encr:value("psk", "WPA-PSK")
 encr:value("psk2", "WPA2-PSK")
