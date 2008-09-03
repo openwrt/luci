@@ -28,6 +28,12 @@ config variable
 	option datatype	'macaddr'
 
 config variable
+	option name	'mtu'
+	option title	'MTU'
+	option section	'network.interface'
+	option datatype	'uint'
+
+config variable
 	option name	'ipaddr'
 	option title	'IPv4 host address'
 	option section	'network.interface'
@@ -70,12 +76,6 @@ config variable
 	option datatype	'ipaddr'
 
 config variable
-	option name	'mtu'
-	option title	'MTU'
-	option section	'network.interface'
-	option datatype	'uint'
-
-config variable
 	option name	'keepalive'
 	option title	'Number of connection failures before reconnect (PPTP)'
 	option section	'network.interface'
@@ -86,6 +86,24 @@ config variable
 	option title	'Number of seconds to wait before closing the connection due to inactivity (PPTP)'
 	option section	'network.interface'
 	option datatype	'uint'
+
+config variable
+	option name	'username'
+	option title	'PPTP username'
+	option section	'network.interface'
+	option datatype	'string'
+
+config variable
+	option name	'password'
+	option title	'PPTP password'
+	option section	'network.interface'
+	option datatype	'string'
+
+config variable
+	option name	'server'
+	option title	'PPTP server'
+	option section	'network.interface'
+	option datatype	'ipaddr'
 
 config variable
 	option name	'proto'
@@ -133,9 +151,6 @@ config section
 	option package	'network'
 	list   depends	'proto=static, ipaddr, netmask'
 	list   depends	'proto=static, ip6addr'
-	list   depends	'proto=pppoe, username, password'
-	list   depends	'proto=pptp, username, password, server'
-	list   depends	'proto=dhcp'
 	option named	true
 
 config variable
