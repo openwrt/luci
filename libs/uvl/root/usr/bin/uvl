@@ -185,13 +185,13 @@ Actions:
 	os.exit(255)
 elseif arguments[1] == "verify" then
 	luci.uvl.STRICT_UNKNOWN_SECTIONS =
-		( options['no-strict-sections'] and false or true )
+		( not options['no-strict-sections'] and true or false )
 	luci.uvl.STRICT_UNKNOWN_OPTIONS =
-		( options['no-strict-options'] and false or true )
+		( not options['no-strict-options'] and true or false )
 	luci.uvl.STRICT_EXTERNAL_VALIDATORS =
-		( options['no-strict-validators'] and false or true )
+		( not options['no-strict-validators'] and true or false )
 	luci.uvl.STRICT_LIST_TYPE =
-		( options['no-strict-lists'] and false or true )
+		( not options['no-strict-lists'] and true or false )
 
 	local uvl = luci.uvl.UVL(
 		type(options.schemedir) == "string" and options.schemedir or nil

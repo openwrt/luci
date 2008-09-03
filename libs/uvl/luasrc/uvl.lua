@@ -280,7 +280,11 @@ function UVL._validate_option( self, option, nodeps )
 	self.beenthere[option:cid()] = true
 
 	if not option:scheme() and not option:parent():scheme('dynamic') then
-		return false, option:error(ERR.OPT_UNKNOWN(option))
+		if STRICT_UNKNOWN_OPTIONS then
+			return false, option:error(ERR.OPT_UNKNOWN(option))
+		else
+			return true
+		end
 
 	elseif option:scheme() then
 		if option:scheme('required') and not option:value() then
