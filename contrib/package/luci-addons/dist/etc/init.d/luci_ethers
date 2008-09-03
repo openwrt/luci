@@ -15,9 +15,10 @@ apply_lease() {
 start() {
 	if [ ! -L /etc/ethers ]; then
 		test -f /etc/ethers && mv /etc/ethers /etc/ethers.local
-		test -d /var/etc || mkdir -p /var/etc
 		ln -s /var/etc/ethers /etc/ethers
 	fi
+
+	test -d /var/etc || mkdir -p /var/etc
 	
 	config_load luci_ethers
 	config_foreach apply_lease static_lease
