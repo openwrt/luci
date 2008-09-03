@@ -109,8 +109,7 @@ config variable
 	option name	'src'
 	option title	'Source zone'
 	option section	'firewall.rule'
-	list   valueof	'firewall.zone'
-	list   valueof	'firewall.zone.network'
+	option valueof	'firewall.zone.name'
 
 config variable
 	option name	'src_ip'
@@ -134,8 +133,7 @@ config variable
 	option name	'dest'
 	option title	'Destination zone'
 	option section	'firewall.rule'
-	list   valueof	'firewall.zone'
-	list   valueof	'firewall.zone.network'
+	option valueof	'firewall.zone.name'
 
 config variable
 	option name	'dest_ip'
@@ -173,8 +171,7 @@ config variable
 	option name	'src'
 	option title	'Source zone'
 	option section	'firewall.redirect'
-	list   valueof	'firewall.zone'
-	list   valueof	'firewall.zone.network'
+	option valueof	'firewall.zone.name'
 
 config variable
 	option name	'src_ip'
@@ -204,8 +201,7 @@ config variable
 	option name	'dest'
 	option title	'Destination zone'
 	option section	'firewall.redirect'
-	list   valueof	'firewall.zone'
-	list   valueof	'firewall.zone.network'
+	option valueof	'firewall.zone.name'
 
 config variable
 	option name	'dest_ip'
