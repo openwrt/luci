@@ -64,6 +64,13 @@ config variable
 	option required	true
 
 config variable
+	option name	'network'
+	option title	'Associated network of this firewall zone'
+	option section	'firewall.zone'
+#	option valueof	'network.interface'
+#	option type	'lazylist'
+
+config variable
 	option name	'forward'
 	option title	'Zone specific action for forwarded traffic'
 	option section	'firewall.zone'
