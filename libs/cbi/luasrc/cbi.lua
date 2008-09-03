@@ -52,7 +52,7 @@ function load(cbimap, ...)
 	require("luci.util")
 
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
-	local func, err = loadfile(cbidir..cbimap..".lua")
+	local func, err = loadfile(cbimap) or loadfile(cbidir..cbimap..".lua")
 	assert(func, err)
 
 	luci.i18n.loadc("cbi")
@@ -711,6 +711,9 @@ function TypedSection.parse(self)
 		local crval = REMOVE_PREFIX .. self.config
 		local name = luci.http.formvaluetable(crval)
 		for k,v in pairs(name) do
+			if k:sub(-2) == ".x" then
+				k = k:sub(1, #k - 2)
+			end
 			if self:cfgvalue(k) and self:checkscope(k) then
 				self:remove(k)
 			end
@@ -1211,8 +1214,9 @@ function DynamicList.validate(self, value, section)
 
 	local valid = {}
 	for i, v in ipairs(value) do
-		if v and #v > 0 and
-		 not luci.http.formvalue("cbi.rle."..section.."."..self.option.."."..i) then
+		if v and #v > 0
+		 and not luci.http.formvalue("cbi.rle."..section.."."..self.option.."."..i)
+		 and not luci.http.formvalue("cbi.rle."..section.."."..self.option.."."..i..".x") then
 			table.insert(valid, v)
 		end
 	end
