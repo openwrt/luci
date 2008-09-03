@@ -111,6 +111,10 @@ function hostname( val )
 	return false
 end
 
+function host( val )
+	return hostname(val) or ipaddr(val)
+end
+
 function string( val )
 	return true		-- Everything qualifies as valid string
 end

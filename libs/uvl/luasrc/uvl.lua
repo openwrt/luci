@@ -296,14 +296,16 @@ function UVL._validate_option( self, option, nodeps )
 			if option:scheme('type') == "reference" or
 			   option:scheme('type') == "enum"
 			then
-				if not option:scheme('values') or
-				   not option:scheme('values')[val]
-				then
-					return false, option:error( ERR.OPT_BADVALUE(
-						option, luci.util.serialize_data(
-							luci.util.keys(option:scheme('values') or {})
-						)
-					) )
+				local scheme_values = option:scheme('values') or { }
+				local config_values = ( type(val) == "table" and val or { val } )
+				for _, v in ipairs(config_values) do
+					if not scheme_values[v] then
+						return false, option:error( ERR.OPT_BADVALUE(
+							option, { v, luci.util.serialize_data(
+								luci.util.keys(scheme_values)
+							) }
+						) )
+					end
 				end
 			elseif option:scheme('type') == "list" then
 				if type(val) ~= "table" and STRICT_LIST_TYPE then
@@ -1103,7 +1105,11 @@ end
 --- Get the value of this option.
 -- @return	The associated configuration value
 function option.value(self)
-	return self:config()
+	local v = self:config()
+	if v and self:scheme('multival') then
+		v = luci.util.split( v, "%s+", nil, true )
+	end
+	return v
 end
 
 --- Get the associated section information in scheme.
