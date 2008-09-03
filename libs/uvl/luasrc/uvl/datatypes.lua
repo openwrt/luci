@@ -31,6 +31,15 @@ function boolean( val )
 	return false
 end
 
+function uint( val )
+	local n = tonumber(val)
+	if n ~= nil and math.floor(n) == n and n >= 0 then
+		return true
+	end
+
+	return false
+end
+
 function integer( val )
 	local n = tonumber(val)
 	if n ~= nil and math.floor(n) == n then
@@ -42,6 +51,10 @@ end
 
 function float( val )
 	return ( tonumber(val) ~= nil )
+end
+
+function ipaddr( val )
+	return ip4addr(val) or ip6addr(val)
 end
 
 function ip4addr( val )

@@ -8,6 +8,7 @@ config section
 	option title	'Network interface definition'
 	option package	'network'
 	list   depends	'proto=static, ipaddr, netmask'
+	list   depends	'proto=static, ip6addr'
 	list   depends	'proto=pppoe, username, password'
 	list   depends	'proto=pptp, username, password, server'
 	list   depends	'proto=dhcp'
@@ -21,6 +22,12 @@ config variable
 	option required	true
 
 config variable
+	option name	'macaddr'
+	option title	'Interface MAC address'
+	option section	'network.interface'
+	option datatype	'macaddr'
+
+config variable
 	option name	'ipaddr'
 	option title	'IPv4 host address'
 	option section	'network.interface'
@@ -31,6 +38,54 @@ config variable
 	option title	'IPv4 network mask'
 	option section	'network.interface'
 	option datatype	'ip4addr'
+
+config variable
+	option name	'gateway'
+	option title	'IPv4 gateway'
+	option section	'network.interface'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'bcast'
+	option title	'IPv4 broadcast address'
+	option section	'network.interface'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'ip6addr'
+	option title	'IPv6 address (CIDR)'
+	option section	'network.interface'
+	option datatype	'ip6addr'
+
+config variable
+	option name	'ip6gw'
+	option title	'IPv6 gateway'
+	option section	'network.interface'
+	option datatype	'ip6addr'
+
+config variable
+	option name	'dns'
+	option title	'DNS server (IPv4 or IPv6)'
+	option section	'network.interface'
+	option datatype	'ipaddr'
+
+config variable
+	option name	'mtu'
+	option title	'MTU'
+	option section	'network.interface'
+	option datatype	'uint'
+
+config variable
+	option name	'keepalive'
+	option title	'Number of connection failures before reconnect (PPTP)'
+	option section	'network.interface'
+	option datatype	'uint'
+
+config variable
+	option name	'demand'
+	option title	'Number of seconds to wait before closing the connection due to inactivity (PPTP)'
+	option section	'network.interface'
+	option datatype	'uint'
 
 config variable
 	option name	'proto'
@@ -69,6 +124,81 @@ config enum
 	option variable	'network.interface.type'
 	option value	'bridge'
 	option title	'This is a bridge interface'
+
+
+
+config section
+	option name	'alias'
+	option title	'Alias interface definition'
+	option package	'network'
+	list   depends	'proto=static, ipaddr, netmask'
+	list   depends	'proto=static, ip6addr'
+	list   depends	'proto=pppoe, username, password'
+	list   depends	'proto=pptp, username, password, server'
+	list   depends	'proto=dhcp'
+	option named	true
+
+config variable
+	option name	'interface'
+	option title	'Parent interface name'
+	option section	'network.alias'
+	option valueof  'network.interface'
+	option required	true
+
+config variable
+	option name	'ipaddr'
+	option title	'IPv4 host address'
+	option section	'network.alias'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'netmask'
+	option title	'IPv4 network mask'
+	option section	'network.alias'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'gateway'
+	option title	'IPv4 gateway'
+	option section	'network.alias'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'bcast'
+	option title	'IPv4 broadcast address'
+	option section	'network.alias'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'ip6addr'
+	option title	'IPv6 address (CIDR)'
+	option section	'network.alias'
+	option datatype	'ip6addr'
+
+config variable
+	option name	'ip6gw'
+	option title	'IPv6 gateway'
+	option section	'network.alias'
+	option datatype	'ip6addr'
+
+config variable
+	option name	'dns'
+	option title	'DNS server (IPv4 or IPv6)'
+	option section	'network.alias'
+	option datatype	'ipaddr'
+
+config variable
+	option name	'proto'
+	option title	'Alias interface protocol'
+	option section	'network.alias'
+	option type		'enum'
+	option required	true
+
+config enum
+	option variable	'network.alias.proto'
+	option value	'static'
+	option title	'Interface has static network configuration'
+
 
 
 config section
