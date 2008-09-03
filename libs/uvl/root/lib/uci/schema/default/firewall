@@ -1,58 +1,6 @@
 package firewall
 
 config section
-	option name	'defaults'
-	option title	'Global firewall defaults'
-	option package	'firewall'
-	option unique	true
-	option required	true
-
-config variable
-	option name	'forward'
-	option title	'Action for forwarded traffic'
-	option section	'firewall.defaults'
-	option required	true
-
-config variable
-	option name	'input'
-	option title	'Action for incoming traffic'
-	option section	'firewall.defaults'
-	option required	true
-
-config variable
-	option name	'output'
-	option title	'Action for outgoing traffic'
-	option section	'firewall.defaults'
-	option required	true
-
-config variable
-	option name	'syn_flood'
-	option title	'Enable syn-flood protection'
-	option section	'firewall.defaults'
-	option datatype	'boolean'
-
-
-config section
-	option name	'forwarding'
-	option title	'Firewall traffic forwarding rules'
-	option package	'firewall'
-
-config variable
-	option name	'src'
-	option title	'Source zone'
-	option section	'firewall.forwarding'
-	option valueof	'firewall.zone.name'
-	option required	true
-
-config variable
-	option name	'dest'
-	option title	'Destination zone'
-	option section	'firewall.forwarding'
-	option valueof	'firewall.zone.name'
-	option required	true
-
-
-config section
 	option name	'zone'
 	option title	'Firewall zones'
 	option package	'firewall'
@@ -93,3 +41,199 @@ config variable
 	option title	'Enable masquerading for outgoing zone traffic'
 	option section	'firewall.zone'
 	option datatype	'boolean'
+
+
+
+config section
+	option name	'defaults'
+	option title	'Global firewall defaults'
+	option package	'firewall'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'forward'
+	option title	'Action for forwarded traffic'
+	option section	'firewall.defaults'
+	option required	true
+
+config variable
+	option name	'input'
+	option title	'Action for incoming traffic'
+	option section	'firewall.defaults'
+	option required	true
+
+config variable
+	option name	'output'
+	option title	'Action for outgoing traffic'
+	option section	'firewall.defaults'
+	option required	true
+
+config variable
+	option name	'syn_flood'
+	option title	'Enable syn-flood protection'
+	option section	'firewall.defaults'
+	option datatype	'boolean'
+
+
+
+config section
+	option name	'forwarding'
+	option title	'Firewall traffic forwarding rules'
+	option package	'firewall'
+
+config variable
+	option name	'src'
+	option title	'Source zone'
+	option section	'firewall.forwarding'
+	option valueof	'firewall.zone.name'
+	option required	true
+
+config variable
+	option name	'dest'
+	option title	'Destination zone'
+	option section	'firewall.forwarding'
+	option valueof	'firewall.zone.name'
+	option required	true
+
+
+
+config section
+	option name	'rule'
+	option title	'Custom rule specification'
+	option package	'firewall'
+	list   depends	'target, src'
+	list   depends	'target, dest'
+
+config variable
+	option name	'src'
+	option title	'Source zone'
+	option section	'firewall.rule'
+	list   valueof	'firewall.zone'
+	list   valueof	'firewall.zone.network'
+
+config variable
+	option name	'src_ip'
+	option title	'Source IP address'
+	option section	'firewall.rule'
+	option datatype	'ipaddr'
+
+config variable
+	option name	'src_port'
+	option title	'Source port'
+	option section	'firewall.rule'
+	option datatype	'uint'
+
+config variable
+	option name	'src_mac'
+	option title	'Source MAC address'
+	option section	'firewall.rule'
+	option datatype	'macaddr'
+
+config variable
+	option name	'dest'
+	option title	'Destination zone'
+	option section	'firewall.rule'
+	list   valueof	'firewall.zone'
+	list   valueof	'firewall.zone.network'
+
+config variable
+	option name	'dest_ip'
+	option title	'Destination IP address'
+	option section	'firewall.rule'
+	option datatype	'ipaddr'
+
+config variable
+	option name	'dest_port'
+	option title	'Destination port'
+	option section	'firewall.rule'
+	option datatype	'uint'
+
+config variable
+	option name	'proto'
+	option title	'Protocol'
+	option section	'firewall.rule'
+	option datatype	'string'
+
+config variable
+	option name	'target'
+	option title	'Option target'
+	option section	'firewall.rule'
+	option datatype	'string'
+	option required	true
+
+
+
+config section
+	option name	'redirect'
+	option title	'Traffic redirection rule definition'
+	option package	'firewall'
+
+config variable
+	option name	'src'
+	option title	'Source zone'
+	option section	'firewall.redirect'
+	list   valueof	'firewall.zone'
+	list   valueof	'firewall.zone.network'
+
+config variable
+	option name	'src_ip'
+	option title	'Source IP address'
+	option section	'firewall.redirect'
+	option datatype	'ipaddr'
+
+config variable
+	option name	'src_port'
+	option title	'Source port'
+	option section	'firewall.redirect'
+	option datatype	'uint'
+
+config variable
+	option name	'src_dport'
+	option title	'Source destination port'
+	option section	'firewall.redirect'
+	option datatype	'uint'
+
+config variable
+	option name	'src_mac'
+	option title	'Option src_mac'
+	option section	'firewall.redirect'
+	option datatype	'macaddr'
+
+config variable
+	option name	'dest'
+	option title	'Destination zone'
+	option section	'firewall.redirect'
+	list   valueof	'firewall.zone'
+	list   valueof	'firewall.zone.network'
+
+config variable
+	option name	'dest_ip'
+	option title	'Destination IP address'
+	option section	'firewall.redirect'
+	option datatype	'ipaddr'
+
+config variable
+	option name	'dest_port'
+	option title	'Destination port'
+	option section	'firewall.redirect'
+	option datatype	'uint'
+
+config variable
+	option name	'proto'
+	option title	'Protocol'
+	option section	'firewall.redirect'
+	option datatype	'string'
+
+
+
+config section
+	option name	'include'
+	option title	'User defined config includes'
+	option package	'firewall'
+
+config variable
+	option name	'path'
+	option title	'Path to the include file'
+	option section	'firewall.include'
+	option datatype	'file'
