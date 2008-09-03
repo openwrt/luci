@@ -139,7 +139,7 @@ Template.cache = setmetatable({}, {__mode = "v"})
 
 
 -- Constructor - Reads and compiles the template on-demand
-function Template.__init__(self, name, srcfile, comfile)	
+function Template.__init__(self, name)	
 	local function _encode_filename(str)
 
 		local function __chrenc( chr )
@@ -177,24 +177,25 @@ function Template.__init__(self, name, srcfile, comfile)
 	local cdir = compiledir .. "/" .. sys.process.info("uid")
 	
 	-- Compile and build
-	local sourcefile   = srcfile or (viewdir    .. "/" .. name .. ".htm")
-	local compiledfile = comfile or (cdir .. "/" .. _encode_filename(name) .. ".lua")
+	local sourcefile   = viewdir    .. "/" .. name
+	local compiledfile = cdir .. "/" .. _encode_filename(name) .. ".lua"
 	local err	
 	
 	if compiler_mode == "file" then
-		local tplmt = fs.mtime(sourcefile)
+		local tplmt = fs.mtime(sourcefile) or fs.mtime(sourcefile .. ".htm")
 		local commt = fs.mtime(compiledfile)
 		
 		if not fs.mtime(cdir) then
 			fs.mkdir(cdir, true)
 			fs.chmod(fs.dirname(cdir), "a+rxw")
 		end
+		
+		assert(tplmt or commt, "No such template: " .. name)
 				
 		-- Build if there is no compiled file or if compiled file is outdated
-		if ((commt == nil) and not (tplmt == nil))
-		or (not (commt == nil) and not (tplmt == nil) and commt < tplmt) then
+		if not commt or (commt	and tplmt and commt < tplmt) then
 			local source
-			source, err = fs.readfile(sourcefile)
+			source, err = fs.readfile(sourcefile) or fs.readfile(sourcefile .. ".htm")
 			
 			if source then
 				local compiled, err = compile(source)
@@ -214,7 +215,7 @@ function Template.__init__(self, name, srcfile, comfile)
 		
 	elseif compiler_mode == "memory" then
 		local source
-		source, err = fs.readfile(sourcefile)
+		source, err = fs.readfile(sourcefile) or fs.readfile(sourcefile .. ".htm")
 		if source then
 			self.template, err = compile(source)
 		end
