@@ -351,7 +351,8 @@ end
 -- This is normally done on demand, so you don't have to call this function
 -- by yourself.
 -- @param scheme	Name of the scheme to parse
-function UVL.read_scheme( self, scheme )
+-- @param alias		Create an alias for the loaded scheme
+function UVL.read_scheme( self, scheme, alias )
 
 	local so = luci.uvl.scheme( self, scheme )
 
@@ -375,7 +376,9 @@ function UVL.read_scheme( self, scheme )
 			table.insert( schemes, sd )
 		end
 
-		return self:_read_scheme_parts( so, schemes )
+		local ok, err = self:_read_scheme_parts( so, schemes )
+		if ok and alias then self.packages[alias] = self.packages[scheme] end
+		return ok, err
 	else
 		return false, so:error(ERR.SME_FIND(so, self.schemedir))
 	end

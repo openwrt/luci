@@ -149,9 +149,9 @@ $Id$
 
 Usage:
 	uvl --help
-	uvl [--silent] [--schemedir=DIR]
-		[--no-strict-sections] [--no-strict-options] [--no-strict-validators]
-		[--no-strict-lists] {verify|genspec} config[.section[.option]]
+	uvl [--silent] [--schemedir=DIR] [--configdir=DIR] [--no-strict-sections] \
+		[--no-strict-options] [--no-strict-validators] [--no-strict-lists] \
+		{verify|verify-scheme|genspec} config[.section[.option]]
 
 Options:
 	--help
@@ -162,6 +162,9 @@ Options:
 
 	--schemedir=DIR
 		Use DIR as scheme directory.
+
+	--configdir=DIR
+		Use DIR as config directory.
 
 	--no-strict-sections
 		Don't treat sections found in config but not in scheme as error.
@@ -179,11 +182,14 @@ Actions:
 	verify
 		Validate given configuration, section or option.
 
+	verify-scheme
+		Validate given scheme against the reference meta scheme.
+
 	genspec
 		Generate a scheme skeleton from given configuration.
 	]=])
 	os.exit(255)
-elseif arguments[1] == "verify" then
+elseif arguments[1] == "verify" or arguments[1] == "verify-scheme" then
 	luci.uvl.STRICT_UNKNOWN_SECTIONS =
 		( not options['no-strict-sections'] and true or false )
 	luci.uvl.STRICT_UNKNOWN_OPTIONS =
@@ -194,18 +200,33 @@ elseif arguments[1] == "verify" then
 		( not options['no-strict-lists'] and true or false )
 
 	local uvl = luci.uvl.UVL(
-		type(options.schemedir) == "string" and options.schemedir or nil
+		type(options.schemedir) == "string" and options.schemedir
 	)
 
 	local cso = luci.util.split( arguments[2], "." )
-	local ok, err = uvl:validate( unpack(cso) )
+	local ok, err
+
+	if arguments[1] == "verify-scheme" then
+		uvl:read_scheme( 'schema', cso[1] )
+
+		local uci = uvl.uci.cursor(
+			type(options.configdir) == "string"
+				and options.configdir or uvl.schemedir .. '/default'
+		)
+
+		ok, err = uvl:validate_config( cso[1], uci:get_all(cso[1]) )
+		if err then err.code = luci.uvl.errors.ERR_SCHEME end
+	else
+		ok, err = uvl:validate( unpack(cso) )
+	end
 
 	if ok then
 		if not options.silent then
 			print( string.format(
 				'%s "%s" validates fine!',
-					( #cso == 1 and "Config" or
-						( #cso == 2 and "Section" or "Option" ) ),
+					( arguments[1] == "verify-scheme" and "Scheme" or
+						( #cso == 1 and "Config" or
+							( #cso == 2 and "Section" or "Option" ) ) ),
 					table.concat(cso, ".")
 			) )
 		end

@@ -22,9 +22,9 @@ require("luci.util")
 
 
 function boolean( val )
-	if val == "1" or val == "yes" or val == "on" then
+	if val == "1" or val == "yes" or val == "on" or val == "true" then
 		return true
-	elseif val == "0" or val == "no" or val == "off" then
+	elseif val == "0" or val == "no" or val == "off" or val == "false" then
 		return true
 	end
 
