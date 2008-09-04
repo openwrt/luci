@@ -12,6 +12,21 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.tools.webadmin")
+
+local fs = require "luci.fs"
+local devices = {}
+luci.util.update(devices, fs.glob("/dev/sd*") or {})
+luci.util.update(devices, fs.glob("/dev/hd*") or {})
+luci.util.update(devices, fs.glob("/dev/scd*") or {})
+luci.util.update(devices, fs.glob("/dev/mmc*") or {})
+
+local size = {}
+for i, dev in ipairs(devices) do
+	local s = tonumber((luci.fs.readfile("/sys/class/block/%s/size" % dev:sub(6))))
+	size[dev] = s and math.floor(s / 2048)
+end
+
+
 m = Map("fstab", translate("a_s_fstab"))
 
 local mounts = luci.sys.mounts()
@@ -47,7 +62,11 @@ mount.addremove = true
 mount.template = "cbi/tblsection"
 
 mount:option(Flag, "enabled", translate("enable"))
-mount:option(Value, "device", translate("device"), translate("a_s_fstab_device1"))
+dev = mount:option(Value, "device", translate("device"), translate("a_s_fstab_device1"))
+for i, d in ipairs(devices) do
+	dev:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
+end
+
 mount:option(Value, "target", translate("a_s_fstab_mountpoint"))
 mount:option(Value, "fstype", translate("filesystem"), translate("a_s_fstab_fs1"))
 mount:option(Value, "options", translate("options"), translatef("manpage", "siehe '%s' manpage", "mount"))
@@ -59,6 +78,9 @@ swap.addremove = true
 swap.template = "cbi/tblsection"
 
 swap:option(Flag, "enabled", translate("enable"))
-swap:option(Value, "device", translate("device"), translate("a_s_fstab_device1"))
+dev = swap:option(Value, "device", translate("device"), translate("a_s_fstab_device1"))
+for i, d in ipairs(devices) do
+	dev:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
+end
 
 return m
