@@ -26,7 +26,20 @@ $Id$
 <% if self.optionals[section] and #self.optionals[section] > 0 or self.dynamic then %>
 	<div class="cbi-optionals">
 		<% if self.dynamic then %>
-			<input type="text" name="cbi.opt.<%=self.config%>.<%=section%>" />
+			<input type="text" id="cbi.opt.<%=self.config%>.<%=section%>" name="cbi.opt.<%=self.config%>.<%=section%>" />
+			<% if self.optionals[section] and #self.optionals[section] > 0 then %>
+			<script type="text/javascript">
+				cbi_combobox_init('cbi.opt.<%=self.config%>.<%=section%>', {
+				<%-
+					for i, val in pairs(self.optionals[section]) do
+				-%>
+					<%-=string.format("%q", striptags(val.title)) .. ":" .. string.format("%q", val.option)-%>,
+				<%-
+					end
+				-%>
+				}, '', '<%-:cbi_manual-%>');
+			</script>
+			<% end %>
 		<% else %>
 		<select name="cbi.opt.<%=self.config%>.<%=section%>">
 			<option><%:cbi_addopt%></option>
