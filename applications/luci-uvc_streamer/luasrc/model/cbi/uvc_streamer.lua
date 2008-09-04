@@ -1,4 +1,4 @@
-m = Map("uvc-streamer", translate("uvc_streamer"))
+m = Map("uvc-streamer", translate("uvc_streamer"), translate("uvc_streamer_desc"))
 
 s = m:section(TypedSection, "uvc-streamer", translate("settings"))
 s.addremove = false
