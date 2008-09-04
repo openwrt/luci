@@ -69,7 +69,21 @@ end
 -- returns a boolean whether to delete the current section (optional)
 function Cursor.delete_all(self, config, type, comparator)
 	local del = {}
+	
+	if type(comparator) == "table" then
+		local tbl = comparator
+		comparator = function(section)
+			for k, v in pairs(tbl) do
+				if not section[k] == v then
+					return false
+				end
+			end 
+			return true
+		end
+	end
+	
 	local function helper (section)
+
 		if not comparator or comparator(section) then
 			table.insert(del, section[".name"])
 		end
