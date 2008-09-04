@@ -83,6 +83,20 @@ function ip6prefix( val )
 	return ( val and val >= 0 and val <= 128 )
 end
 
+function port( val )
+	val = tonumber(val)
+	return ( val and val >= 1 and val <= 65535 )
+end
+
+function portrange( val )
+	local p1, p2 = val:match("^(%d+)%-(%d+)$")
+	if p1 and p2 and port(p1) and port(p2) then
+		return true
+	else
+		return port(val)
+	end
+end
+
 function macaddr( val )
 	if val and val:match(
 		"^[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+:" ..
