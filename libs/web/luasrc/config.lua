@@ -34,5 +34,5 @@ local require = require
 module "luci.config"
 
 pcall(function()
-	util.update(_M, require "luci.model.uci".cursor():get_all("luci"))
+	setmetatable(_M, {__index=require "luci.model.uci".cursor():get_all("luci")})
 end)
