@@ -110,28 +110,8 @@ local function _uvl_validate_section(node, name)
 	local stat, err = node.map.validator:validate_section(node.config, name, co)
 	if err then
 		node.map.save = false
-
 		tag_fields(err)
 		tag_section(err)
---[[
-		if err:is(luci.uvl.errors.ERR_DEPENDENCY) then
-			node.tag_deperror[name] = err:string()
-		else
-			node.tag_invalid[name] = err:string()
-		end
-		for i, v in ipairs(err.childs) do
-			if v.option and node.fields[v.option] then
-				if v:is(luci.uvl.errors.ERR_DEPENDENCY) then
-					node.fields[v.option].tag_deperror[name] = v:string()
-				elseif v:is(luci.uvl.errors.ERR_OPT_REQUIRED) then
-					node.fields[v.option].tag_missing[name] = v:string()
-					node.tag_reqerror[name] = v:string()
-				elseif v:is(luci.uvl.errors.ERR_OPTION) then
-					node.fields[v.option].tag_invalid[name] = v:string()
-				end
-			end
-		end
-]]
 	end
 
 end
