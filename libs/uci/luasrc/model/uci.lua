@@ -31,7 +31,7 @@ local table = require "table"
 
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
-local require, getmetatable = require, getmetatable
+local require, getmetatable, type = require, getmetatable, type
 
 --- LuCI UCI model library.
 -- @cstyle	instance
@@ -67,7 +67,7 @@ end
 -- @param type			UCI section type
 -- @param comparator	Function that will be called for each section and
 -- returns a boolean whether to delete the current section (optional)
-function Cursor.delete_all(self, config, type, comparator)
+function Cursor.delete_all(self, config, stype, comparator)
 	local del = {}
 	
 	if type(comparator) == "table" then
@@ -89,7 +89,7 @@ function Cursor.delete_all(self, config, type, comparator)
 		end
 	end
 
-	self:foreach(config, type, helper)
+	self:foreach(config, stype, helper)
 
 	for i, j in ipairs(del) do
 		self:delete(config, j)
