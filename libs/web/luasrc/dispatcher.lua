@@ -325,12 +325,7 @@ function createtree()
 	-- Load default translation
 	require "luci.i18n".loadc("default")
 	
-	local scope = setmetatable({}, {__index = _G})
-	for k,v in pairs(luci.dispatcher) do
-		if type(v) == "function" then
-			scope[k] = v
-		end
-	end
+	local scope = setmetatable({}, {__index = luci.dispatcher})
 
 	for k, v in pairs(index) do
 		scope._NAME = k
