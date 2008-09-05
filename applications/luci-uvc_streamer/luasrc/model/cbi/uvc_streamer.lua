@@ -21,6 +21,9 @@ local port
 uci:foreach( "uvc_streamer", "uvc_streamer",
 	function(section) port = port or tonumber(section.port) end )
 
+addr = addr or "192.168.1.1"
+port = port or 8080
+
 m = Map("uvc_streamer", translate("uvc_streamer"),
 	translatef("uvc_streamer_desc", nil, addr, port, addr, port))
 
