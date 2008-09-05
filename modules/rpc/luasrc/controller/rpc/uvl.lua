@@ -13,7 +13,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 $Id$
 ]]--
 
-local uvl   = require "luci.model.uvl".UVL()
+local uvl   = require "luci.uvl".UVL()
 local table = require "table"
 
 module "luci.controller.rpc.uvl"
