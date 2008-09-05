@@ -464,18 +464,10 @@ function cbi(model)
 		require("luci.cbi")
 		require("luci.template")
 
-		local stat, maps = luci.util.copcall(luci.cbi.load, model, ...)
-		if not stat then
-			error500(maps)
-			return true
-		end
+		maps = luci.cbi.load(model, ...)
 
 		for i, res in ipairs(maps) do
-			local stat, err = luci.util.copcall(res.parse, res)
-			if not stat then
-				error500(err)
-				return true
-			end
+			res:parse()
 		end
 
 		luci.template.render("cbi/header")
@@ -493,18 +485,10 @@ function form(model)
 		require("luci.cbi")
 		require("luci.template")
 
-		local stat, maps = luci.util.copcall(luci.cbi.load, model, ...)
-		if not stat then
-			error500(maps)
-			return true
-		end
+		maps = luci.cbi.load(model, ...)
 
 		for i, res in ipairs(maps) do
-			local stat, err = luci.util.copcall(res.parse, res)
-			if not stat then
-				error500(err)
-				return true
-			end
+			res:parse()
 		end
 
 		luci.template.render("header")
