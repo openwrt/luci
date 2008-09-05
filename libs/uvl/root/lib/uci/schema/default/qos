@@ -123,17 +123,13 @@ config variable
 	option title	'Option target'
 	option section	'qos.default'
 	option valueof	'qos.class'
+	option required true
 
 
 config section
 	option name	'classify'
 	option title	'QoS classification rule'
 	option package	'qos'
-	list   depends	'target, ipp2p'
-	list   depends  'target, layer7'
-	list   depends  'target, ports'
-	list   depends  'target, proto'
-	list   depends	'target, tcpflags'
 
 config variable
 	option name	'ipp2p'
@@ -165,18 +161,13 @@ config variable
 	option title	'QoS target class'
 	option section	'qos.classify'
 	option valueof	'qos.class'
+	option required true
 
 
 config section
 	option name	'reclassify'
 	option title	'QoS reclassification rule'
 	option package	'qos'
-	list   depends	'target, ipp2p'
-	list   depends  'target, layer7'
-	list   depends  'target, ports'
-	list   depends  'target, proto'
-	list   depends	'target, pktsize'
-	list   depends	'target, tcpflags'
 
 config variable
 	option name	'mark'
@@ -204,3 +195,4 @@ config variable
 	option title	'QoS classification target'
 	option section	'qos.reclassify'
 	option valueof	'qos.class'
+	option required true
