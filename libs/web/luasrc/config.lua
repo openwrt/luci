@@ -25,14 +25,9 @@ limitations under the License.
 
 ]]--
 
-local util = require "luci.util"
-
-local pcall = pcall
-local require = require
-
-
-module "luci.config"
-
-pcall(function()
-	setmetatable(_M, {__index=require "luci.model.uci".cursor():get_all("luci")})
-end)
+module("luci.config",
+		function(m)
+			if pcall(require, "luci.model.uci") then
+				setmetatable(m, {__index = luci.model.uci.cursor():get_all("luci")})
+			end
+		end)
