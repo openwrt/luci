@@ -33,27 +33,17 @@ function index()
 		luci.http.status(403, "Forbidden")
 	end
 	
-	uci = entry({"rpc", "uci"}, call("rpc_uci"))
-	uci.sysauth = "root"
-	uci.sysauth_authenticator = authenticator
-	uci.notemplate = true
+	local rpc = node("rpc")
+	rpc.sysauth = "root"
+	rpc.sysauth_authenticator = authenticator
+	rpc.notemplate = true
 	
-	fs = entry({"rpc", "fs"}, call("rpc_fs"))
-	fs.sysauth = "root"
-	fs.sysauth_authenticator = authenticator
-	fs.notemplate = true
-
-	sys = entry({"rpc", "sys"}, call("rpc_sys"))
-	sys.sysauth = "root"
-	sys.sysauth_authenticator = authenticator
-	sys.notemplate = true
-
-	ipkg = entry({"rpc", "ipkg"}, call("rpc_ipkg"))
-	ipkg.sysauth = "root"
-	ipkg.sysauth_authenticator = authenticator
-	ipkg.notemplate = true
-	
-	entry({"rpc", "auth"}, call("rpc_auth")).notemplate = true
+	entry({"rpc", "uci"}, call("rpc_uci"))
+	entry({"rpc", "uvl"}, call("rpc_uvl"))
+	entry({"rpc", "fs"}, call("rpc_fs"))
+	entry({"rpc", "sys"}, call("rpc_sys"))
+	entry({"rpc", "ipkg"}, call("rpc_ipkg"))
+	entry({"rpc", "auth"}, call("rpc_auth")).sysauth = false
 end
 
 function rpc_auth()
@@ -62,8 +52,6 @@ function rpc_auth()
 	local http    = require "luci.http"
 	local sys     = require "luci.sys"
 	local ltn12   = require "luci.ltn12"
-	
-	http.setfilehandler()
 	
 	local loginstat
 	
@@ -96,6 +84,20 @@ function rpc_uci()
 	
 	http.prepare_content("application/json")
 	ltn12.pump.all(jsonrpc.handle(uci, http.source()), http.write)
+end
+
+function rpc_uvl()
+	if not pcall(require, "luci.uvl") then
+		luci.http.status(404, "Not Found")
+		return nil
+	end
+	local uvl     = require "luci.controller.rpc.uvl"
+	local jsonrpc = require "luci.jsonrpc"
+	local http    = require "luci.http"
+	local ltn12   = require "luci.ltn12"
+
+	http.prepare_content("application/json")
+	ltn12.pump.all(jsonrpc.handle(uvl, http.source()), http.write)
 end
 
 function rpc_fs()
