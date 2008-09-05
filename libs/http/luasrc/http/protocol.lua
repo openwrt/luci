@@ -500,7 +500,7 @@ function urldecode_message_body( src, msg )
 				if spos then
 					local pair = data:sub( spos, epos - 1 )
 					local key  = pair:match("^(.-)=")
-					local val  = pair:match("=(.*)$")
+					local val  = pair:match("=([^%s]*)%s*$")
 
 					if key and #key > 0 then
 						__initval( msg.params, key )
