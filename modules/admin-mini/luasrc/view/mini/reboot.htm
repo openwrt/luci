@@ -17,7 +17,7 @@ $Id$
 <h2><%:reboot%></h2>
 <p><%:a_s_reboot1%></p>
 <%-
-local c = require("luci.model.uci").changes()
+local c = require("luci.model.uci").cursor():changes()
 if c and next(c) then
 -%>
 	<p class="warning"><%:a_s_reboot_u%></p> 
