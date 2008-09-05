@@ -16,7 +16,7 @@ $Id$
 local uvl   = require "luci.uvl".UVL()
 local table = require "table"
 
-module "luci.controller.rpc.uvl"
+module "luci.jsonrpcbind.uvl"
 _M, _PACKAGE, _NAME = nil, nil, nil
 
 

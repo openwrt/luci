@@ -18,7 +18,7 @@ local ucis  = require "luci.model.uci".cursor_state()
 local table = require "table"
 
 
-module "luci.controller.rpc.uci"
+module "luci.jsonrpcbind.uci"
 _M, _PACKAGE, _NAME = nil, nil, nil
 
 function add(config, ...)
