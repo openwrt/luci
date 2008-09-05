@@ -28,6 +28,7 @@ local io = require "io"
 local math = require "math"
 local table = require "table"
 local debug = require "debug"
+local ldebug = require "luci.debug"
 local string = require "string"
 local coroutine = require "coroutine"
 
@@ -667,7 +668,7 @@ end
 --- Returns the absolute path to LuCI base directory.
 -- @return		String containing the directory path
 function libpath()
-	return require "luci.fs".dirname(require "luci.debug".__file__)
+	return require "luci.fs".dirname(ldebug.__file__)
 end
 
 
