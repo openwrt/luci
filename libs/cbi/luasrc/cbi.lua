@@ -47,7 +47,7 @@ REMOVE_PREFIX = "cbi.rts."
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap, ...)
 	require("luci.fs")
-	require("luci.i18n")
+	local i18n = require "luci.i18n"
 	require("luci.config")
 	require("luci.util")
 
@@ -57,11 +57,16 @@ function load(cbimap, ...)
 
 	luci.i18n.loadc("cbi")
 
-	luci.util.resfenv(func)
-	luci.util.updfenv(func, luci.cbi)
-	luci.util.extfenv(func, "translate", luci.i18n.translate)
-	luci.util.extfenv(func, "translatef", luci.i18n.translatef)
-	luci.util.extfenv(func, "arg", {...})
+	local env = {
+		translate=i18n.translate,
+		translatef=i18n.translatef,
+	 	arg={...}
+	}
+	
+	setfenv(func, setmetatable(env, {__index =
+		function(tbl, key)
+			return rawget(tbl, key) or _M[key] or _G[key]
+		end}))
 
 	local maps = {func()}
 
