@@ -25,17 +25,17 @@ function get_scheme(...)
 end
 
 function validate(...)
-	return uvl:validate(...)
+	return {uvl:validate(...)}
 end
 
 function validate_config(...)
-	return uvl:validate_config(...)
+	return {uvl:validate_config(...)}
 end
 
 function validate_section(...)
-	return uvl:validate_section(...)
+	return {uvl:validate_section(...)}
 end
 
 function validate_option(...)
-	return uvl:validate_option(...)
+	return {uvl:validate_option(...)}
 end
