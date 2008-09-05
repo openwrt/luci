@@ -41,6 +41,20 @@ local tonumber, ipairs, pairs = tonumber, ipairs, pairs
 --- LuCI Linux and POSIX system utilities.
 module "luci.sys"
 
+--- Execute a given shell command and return the error code
+-- @class		function
+-- @name		call
+-- @param 		...		Command to call
+-- @return		Error code of the command
+function call(...)
+	return os.execute(...) / 256
+end
+
+--- Execute a given shell command and capture its standard output
+-- @class		function
+-- @name		exec
+-- @param command	Command to call
+-- @return			String containg the return the output of the command
 exec = luci.util.exec
 
 --- Invoke the luci-flash executable to write an image to the flash memory.
