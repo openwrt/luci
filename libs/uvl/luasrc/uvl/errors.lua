@@ -54,7 +54,7 @@ ERRCODES = {
 	{ 'OPT_UNKNOWN',	'Option "%i" (%I) not found in scheme' },
 	{ 'OPT_REQUIRED',	'Required option "%i" has no value' },
 	{ 'OPT_BADVALUE', 	'Value "%1" of option "%i" is not defined in enum %2' },
-	{ 'OPT_INVVALUE',	'Value "%1" of given option "%i" does not validate as datatype "%2"' },
+	{ 'OPT_INVVALUE',	'Value "%1" of option "%i" does not validate as datatype "%2"' },
 	{ 'OPT_NOTLIST',	'Option "%i" is defined as list but stored as plain value' },
 	{ 'OPT_DATATYPE',	'Option "%i" has unknown datatype "%1"' },
 	{ 'OPT_NOTFOUND',	'Option "%p.%s.%o" not found in config' },
