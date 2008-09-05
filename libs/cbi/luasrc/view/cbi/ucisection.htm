@@ -15,12 +15,10 @@ $Id$
 
 <% self:render_children(section, scope or {}) %>
 
-<% if self.tag_deperror[section] then -%>
-	<div class="cbi-error"><%:cbi_deperror%></div>
-<% elseif self.tag_invalid[section] then -%>
-	<div class="cbi-error"><%:cbi_invalid_section%></div>
-<%- elseif self.tag_error[section] then -%>
-	<div class="cbi-error"><%=self.tag_error[section]%></div>
+<% if self.error then -%>
+	<div class="cbi-section-error">
+		<ul><% for _, e in ipairs(self.error) do %><li><%=luci.util.pcdata(e):gsub("\n","<br />")%></li><% end %></ul>
+	</div>
 <%- end %>
 
 <% if self.optionals[section] and #self.optionals[section] > 0 or self.dynamic then %>

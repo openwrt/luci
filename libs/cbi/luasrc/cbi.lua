@@ -56,13 +56,14 @@ function load(cbimap, ...)
 	assert(func, err)
 
 	luci.i18n.loadc("cbi")
+	luci.i18n.loadc("uvl")
 
 	local env = {
 		translate=i18n.translate,
 		translatef=i18n.translatef,
 	 	arg={...}
 	}
-	
+
 	setfenv(func, setmetatable(env, {__index =
 		function(tbl, key)
 			return rawget(tbl, key) or _M[key] or _G[key]
@@ -86,26 +87,51 @@ local function _uvl_validate_section(node, name)
 	luci.uvl.STRICT_UNKNOWN_OPTIONS = false
 	luci.uvl.STRICT_UNKNOWN_SECTIONS = false
 
+	local function tag_fields(e)
+		if e.option and node.fields[e.option] then
+			node.fields[e.option].error = e
+		elseif e.childs then
+			for _, c in ipairs(e.childs) do tag_fields(c) end
+		end
+	end
+
+	local function tag_section(e)
+		local s = { }
+		for _, c in ipairs(e.childs) do
+			if c.childs and not c:is(luci.uvl.errors.ERR_DEPENDENCY) then
+				table.insert( s, c.childs[1]:string() )
+			else
+				table.insert( s, c:string() )
+			end
+		end
+		if #s > 0 then node.error = s end
+	end
+
 	local stat, err = node.map.validator:validate_section(node.config, name, co)
 	if err then
 		node.map.save = false
+
+		tag_fields(err)
+		tag_section(err)
+--[[
 		if err:is(luci.uvl.errors.ERR_DEPENDENCY) then
-			node.tag_deperror[name] = true
+			node.tag_deperror[name] = err:string()
 		else
-			node.tag_invalid[name] = true
+			node.tag_invalid[name] = err:string()
 		end
 		for i, v in ipairs(err.childs) do
 			if v.option and node.fields[v.option] then
 				if v:is(luci.uvl.errors.ERR_DEPENDENCY) then
-					node.fields[v.option].tag_reqerror[name] = true
+					node.fields[v.option].tag_deperror[name] = v:string()
 				elseif v:is(luci.uvl.errors.ERR_OPT_REQUIRED) then
-					node.fields[v.option].tag_missing[name] = true
-					node.tag_deperror[name] = true
+					node.fields[v.option].tag_missing[name] = v:string()
+					node.tag_reqerror[name] = v:string()
 				elseif v:is(luci.uvl.errors.ERR_OPTION) then
-					node.fields[v.option].tag_invalid[name] = true
+					node.fields[v.option].tag_invalid[name] = v:string()
 				end
 			end
 		end
+]]
 	end
 
 end
@@ -213,7 +239,7 @@ function Map.__init__(self, config, ...)
 
 	self.validator = luci.uvl.UVL()
 	self.scheme = self.validator:get_scheme(self.config)
-	
+
 end
 
 function Map.get_scheme(self, sectiontype, option)
@@ -243,14 +269,14 @@ function Map.parse(self, ...)
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 				self.uci:apply(config)
-	
+
 				-- Refresh data because commit changes section names
 				self.uci:load(config)
 			end
-	
+
 			-- Reparse sections
 			Node.parse(self, ...)
-	
+
 		end
 		for i, config in ipairs(self.parsechain) do
 			self.uci:unload(config)
@@ -616,7 +642,7 @@ NamedSection = class(AbstractSection)
 function NamedSection.__init__(self, map, section, stype, ...)
 	AbstractSection.__init__(self, map, stype, ...)
 	Node._i18n(self, map.config, section, nil, ...)
-	
+
 	-- Defaults
 	self.addremove = false
 
@@ -655,7 +681,7 @@ function NamedSection.parse(self)
 		AbstractSection.parse_dynamic(self, s)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, s)
-			
+
 			if not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, s)
 			end
@@ -730,7 +756,7 @@ function TypedSection.parse(self)
 		AbstractSection.parse_dynamic(self, k)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, k)
-			
+
 			if not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, k)
 			end

@@ -25,17 +25,6 @@ $Id$
 	<%- if self.title and #self.title > 0 then -%>
 	</div>
 	<%- end -%>
-
-	<% if self.tag_error[section] then -%>
-		<div class="cbi-error"><%=self.tag_error[section]%></div>
-	<%- elseif self.tag_reqerror[section] then -%>
-		<div class="cbi-error"><%:cbi_reqerror%></div>
-	<%- elseif self.tag_invalid[section] then -%>
-		<div class="cbi-error"><%:cbi_invalid%></div>
-	<%- elseif self.tag_missing[section] then -%>
-		<div class="cbi-error"><%:cbi_missing%></div>
-	<%- end %>
-
 </div>
 
 <% if #self.deps > 0 then -%>
