@@ -355,32 +355,43 @@ end
 function UVL.read_scheme( self, scheme, alias )
 
 	local so = luci.uvl.scheme( self, scheme )
+	local bc = "%s/bytecode/%s.lua" %{ self.schemedir, scheme }
 
-	local schemes = { }
-	local files = luci.fs.glob(self.schemedir .. '/*/' .. scheme)
+	if not luci.fs.access(bc) then
+		local schemes = { }
+		local files = luci.fs.glob(self.schemedir .. '/*/' .. scheme)
 
-	if files then
-		for i, file in ipairs( files ) do
-			if not luci.fs.access(file) then
-				return so:error(ERR.SME_READ(so,file))
+		if files then
+			for i, file in ipairs( files ) do
+				if not luci.fs.access(file) then
+					return false, so:error(ERR.SME_READ(so,file))
+				end
+
+				local uci = luci.model.uci.cursor( luci.fs.dirname(file), default_savedir )
+
+				local sd, err = uci:get_all( luci.fs.basename(file) )
+
+				if not sd then
+					return false, ERR.UCILOAD(so, err)
+				end
+
+				table.insert( schemes, sd )
 			end
 
-			local uci = luci.model.uci.cursor( luci.fs.dirname(file), default_savedir )
-
-			local sd, err = uci:get_all( luci.fs.basename(file) )
-
-			if not sd then
-				return false, ERR.UCILOAD(so, err)
-			end
-
-			table.insert( schemes, sd )
+			local ok, err = self:_read_scheme_parts( so, schemes )
+			if ok and alias then self.packages[alias] = self.packages[scheme] end
+			return ok, err
+		else
+			return false, so:error(ERR.SME_FIND(so, self.schemedir))
 		end
-
-		local ok, err = self:_read_scheme_parts( so, schemes )
-		if ok and alias then self.packages[alias] = self.packages[scheme] end
-		return ok, err
 	else
-		return false, so:error(ERR.SME_FIND(so, self.schemedir))
+		local sc = loadfile(bc)
+		if sc then
+			self.packages[scheme] = sc()
+			return true
+		else
+			return false, so:error(ERR.SME_READ(so,file))
+		end	 
 	end
 end
 
