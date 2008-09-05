@@ -77,7 +77,7 @@ function rpc_uci()
 		luci.http.status(404, "Not Found")
 		return nil
 	end
-	local uci     = require "luci.controller.rpc.uci"
+	local uci     = require "luci.jsonrpcbind.uci"
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local ltn12   = require "luci.ltn12"
@@ -91,7 +91,7 @@ function rpc_uvl()
 		luci.http.status(404, "Not Found")
 		return nil
 	end
-	local uvl     = require "luci.controller.rpc.uvl"
+	local uvl     = require "luci.jsonrpcbind.uvl"
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local ltn12   = require "luci.ltn12"
