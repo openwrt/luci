@@ -57,8 +57,11 @@ end
 -- @param id	Session identifier
 -- @return		Session data
 function read(id)
+	if not id then
+		return
+	end
 	clean()
-	if not id or not sane(sessionpath .. "/" .. id) then
+	if not sane(sessionpath .. "/" .. id) then
 		return
 	end
 	return luci.fs.readfile(sessionpath .. "/" .. id)
