@@ -1,6 +1,30 @@
-m = Map("uvc-streamer", translate("uvc_streamer"), translate("uvc_streamer_desc"))
+--[[
 
-s = m:section(TypedSection, "uvc-streamer", translate("settings"))
+LuCI UVC Streamer
+(c) 2008 Yanira <forum-2008@email.de>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+]]--
+
+-- find current lan address and port of first uvc_streamer config section
+local uci  = luci.model.uci.cursor_state()
+local addr = uci:get("network", "lan", "ipaddr")
+local port
+
+uci:foreach( "uvc_streamer", "uvc_streamer",
+	function(section) port = port or tonumber(section.port) end )
+
+m = Map("uvc_streamer", translate("uvc_streamer"),
+	translatef("uvc_streamer_desc", nil, addr, port, addr, port))
+
+s = m:section(TypedSection, "uvc_streamer", translate("settings"))
 s.addremove = false
 s.anonymous = true
 
