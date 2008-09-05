@@ -838,6 +838,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 		self.cast        = (vs.type == "list") and "list" or "string"
 		self.title       = self.title or vs.title
 		self.description = self.description or vs.descr
+		self.default	 = vs.default
 
 		if vs.depends and not self.override_dependencies then
 			for i, deps in ipairs(vs.depends) do
