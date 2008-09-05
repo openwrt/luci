@@ -34,7 +34,7 @@ local coroutine = require "coroutine"
 
 local tostring, pairs, loadstring = tostring, pairs, loadstring
 local setmetatable, loadfile = setmetatable, loadfile
-local getfenv, setfenv = getfenv, setfenv
+local getfenv, setfenv, rawget = getfenv, setfenv, rawget
 local assert, type, error = assert, type, error
 
 --- LuCI template library.
@@ -54,10 +54,6 @@ compiler_mode = config.template.compiler_mode or "memory"
 
 -- Define the namespace for template modules
 context = util.threadlocal()
-
-viewns = {
-	include    = function(name) Template(name):render(getfenv(2)) end,
-}
 
 --- Manually  compile a given template into an executable Lua function
 -- @param template	LuCI template
@@ -160,13 +156,7 @@ function Template.__init__(self, name)
 	self.name = name
 	
 	-- Create a new namespace for this template
-	self.viewns = {sink=self.sink}
-	
-	-- Copy over from general namespace
-	util.update(self.viewns, viewns)
-	if context.viewns then
-		util.update(self.viewns, context.viewns)
-	end
+	self.viewns = context.viewns
 	
 	-- If we have a cached template, skip compiling and loading
 	if self.template then
@@ -235,21 +225,15 @@ end
 function Template.render(self, scope)
 	scope = scope or getfenv(2)
 	
-	-- Save old environment
-	local oldfenv = getfenv(self.template)
-	
 	-- Put our predefined objects in the scope of the template
-	util.resfenv(self.template)
-	util.updfenv(self.template, scope)
-	util.updfenv(self.template, self.viewns)
+	setfenv(self.template, setmetatable({}, {__index =
+		function(tbl, key)
+			return rawget(tbl, key) or self.viewns[key] or scope[key]
+		end}))
 	
 	-- Now finally render the thing
 	local stat, err = util.copcall(self.template)
 	if not stat then
-		setfenv(self.template, oldfenv)
 		error("Error in template %s: %s" % {self.name, err})
 	end
-	
-	-- Reset environment
-	setfenv(self.template, oldfenv)
 end
