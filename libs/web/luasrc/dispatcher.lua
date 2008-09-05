@@ -160,9 +160,10 @@ function dispatch(request)
 	-- Init template engine
 	if not track.notemplate then
 		local tpl = require("luci.template")
-		local viewns = {}
+		local viewns = setmetatable({}, {__index=_G})
 		tpl.context.viewns = viewns
 		viewns.write       = luci.http.write
+		viewns.include     = function(name) tpl.Template(name):render(getfenv(2)) end
 		viewns.translate   = function(...) return require("luci.i18n").translate(...) end
 		viewns.striptags   = util.striptags
 		viewns.controller  = luci.http.getenv("SCRIPT_NAME")
@@ -219,7 +220,15 @@ function dispatch(request)
 		context.dispatched = c
 		
 		util.copcall(function()
-			util.updfenv(c.target, require(c.module))
+			local oldenv = getfenv(c.target)
+			local module = require(c.module)
+			local env = setmetatable({}, {__index=
+				
+			function(tbl, key)
+				return rawget(tbl, key) or module[key] or oldenv[key] 
+			end})
+
+			setfenv(c.target, env)
 		end)
 		
 		c.target(unpack(args))
