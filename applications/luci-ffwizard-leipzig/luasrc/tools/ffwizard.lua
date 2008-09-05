@@ -18,6 +18,7 @@ local uci = require "luci.model.uci"
 local util = require "luci.util"
 local table = require "table"
 
+local type = type
 
 module "luci.tools.ffwizard"
 
@@ -39,11 +40,14 @@ function network_remove_interface(iface)
 	local aliases = {iface}
 	cursor:foreach("network", "alias", 
 		function(section)
-			table.insert(aliases, section[".name"])
+			if section.interface == iface then
+				table.insert(aliases, section[".name"])
+			end
 		end)
 	
 	-- Delete Aliases and Routes
-	cursor:delete_all("network", nil, {interface=iface})
+	cursor:delete_all("network", "route", {interface=iface})
+	cursor:delete_all("network", "alias", {interface=iface})
 	
 	-- Delete DHCP sections
 	cursor:delete_all("dhcp", "dhcp",

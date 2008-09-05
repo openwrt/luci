@@ -141,8 +141,11 @@ function main.write(self, section, value)
 	
 	
 	-- Cleanup
+	luci.util.perror("1")
 	tools.wifi_delete_ifaces(device)
+	luci.util.perror("2")
 	tools.network_remove_interface(device)
+	luci.util.perror("3")
 	tools.firewall_zone_remove_interface("freifunk", device)
 		
 	
