@@ -171,6 +171,7 @@ function dispatch(request)
 		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
 	
+	track.dependent = (track.dependent ~= false)
 	assert(not track.dependent or not track.auto, "Access Violation")
 	
 	if track.sysauth then
