@@ -112,11 +112,14 @@ function httpdispatch(request)
 	end
 	
 	luci.http.close()
+
+	--context._disable_memtrace()
 end
 
 --- Dispatches a LuCI virtual path.
 -- @param request	Virtual path
 function dispatch(request)
+	--context._disable_memtrace = require "luci.debug".trap_memtrace()
 	local ctx = context
 	ctx.path = request
 	
