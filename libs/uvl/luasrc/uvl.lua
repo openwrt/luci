@@ -390,7 +390,7 @@ function UVL.read_scheme( self, scheme, alias )
 			self.packages[scheme] = sc()
 			return true
 		else
-			return false, so:error(ERR.SME_READ(so,file))
+			return false, so:error(ERR.SME_READ(so,bc))
 		end	 
 	end
 end
