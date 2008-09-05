@@ -23,7 +23,7 @@ require("luci.config")
 
 luci.config.sauth = luci.config.sauth or {}
 sessionpath = luci.config.sauth.sessionpath
-sessiontime = tonumber(luci.config.sauth.sessiontime)
+sessiontime = tonumber(luci.config.sauth.sessiontime) or 15 * 60
 
 --- Manually clean up expired sessions.
 function clean()
@@ -57,10 +57,10 @@ end
 -- @param id	Session identifier
 -- @return		Session data
 function read(id)
+	clean()
 	if not id or not sane(sessionpath .. "/" .. id) then
 		return
 	end
-	clean()
 	return luci.fs.readfile(sessionpath .. "/" .. id)
 end
 

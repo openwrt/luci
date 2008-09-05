@@ -182,7 +182,7 @@ function dispatch(request)
 		 
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
-		local sess = luci.http.getcookie("sysauth")
+		local sess = ctx.authsession or luci.http.getcookie("sysauth")
 		sess = sess and sess:match("^[A-F0-9]+$")
 		local user = sauth.read(sess)
 		
@@ -197,6 +197,7 @@ function dispatch(request)
 					if not sess then
 						sauth.write(sid, user)
 					end
+					ctx.authsession = sid
 				end
 			else
 				luci.http.status(403, "Forbidden")
