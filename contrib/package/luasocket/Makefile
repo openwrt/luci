@@ -30,7 +30,7 @@ define Build/Compile
 	$(call Build/Compile/Default)
 endef
 
-MAKE_FLAGS += CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -pedantic -Wall -fpic" LDFLAGS="$(TARGET_LDFLAGS) -shared -fpic"
+MAKE_FLAGS += LD="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -pedantic -Wall -fpic" LDFLAGS="$(TARGET_LDFLAGS) -shared -fpic"
 
 define Package/luasocket/install
 	$(MAKE) -C$(PKG_BUILD_DIR) install INSTALL_TOP_SHARE=$(1)/usr/lib/lua INSTALL_TOP_LIB=$(1)/usr/lib/lua
