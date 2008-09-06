@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_BRANCH:=trunk
+PKG_BRANCH:=branches/luci-0.8
 
 ifeq ($(DUMP),)
   USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
@@ -10,12 +10,12 @@ PKG_NAME:=luci
 PKG_RELEASE:=1
 
 ifeq ($(USELOCAL),1)
-  PKG_VERSION:=0.7+svn
+  PKG_VERSION:=0.8+svn
 else
   PKG_SOURCE_URL:=http://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
     PKG_REV:=$(shell LC_ALL=C svn info ${PKG_SOURCE_URL} | sed -ne's/^Last Changed Rev: //p')
-    PKG_VERSION:=0.7+svn$(PKG_REV)
+    PKG_VERSION:=0.8+svn$(PKG_REV)
   endif
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
@@ -68,7 +68,7 @@ endef
 define Package/luci/httpdtemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI Non-Forking HTTP-Daemon (EXPERIMENTAL)
-  DEPENDS:=+luci-httpd
+  DEPENDS:=+luci-httpd @BROKEN
 endef
 
 define Package/luci/i18ntemplate
@@ -377,7 +377,7 @@ endef
 
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-admin-full
+  DEPENDS:=+luci-admin-full @BROKEN
   TITLE:=LuCI Freifunk module
 endef
 
@@ -535,7 +535,7 @@ endef
 
 define Package/luci-sgi-luci
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-httpd
+  DEPENDS+=+luci-httpd @BROKEN
   TITLE:=SGI for LuCI HTTPD
 endef
 
@@ -545,7 +545,7 @@ endef
 
 define Package/luci-sgi-webuci
   $(call Package/luci/libtemplate)
-  TITLE:=SGI for Webuci
+  TITLE:=SGI for Webuci @BROKEN
 endef
 
 define Package/luci-sgi-webuci/install
@@ -555,7 +555,7 @@ endef
 ### Themes ###
 define Package/luci-theme-fledermaus
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-web
+  DEPENDS:=+luci-web @BROKEN
   TITLE:=Fledermaus Theme
 endef
 
