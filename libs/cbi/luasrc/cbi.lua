@@ -89,7 +89,11 @@ local function _uvl_validate_section(node, name)
 
 	local function tag_fields(e)
 		if e.option and node.fields[e.option] then
-			node.fields[e.option].error = e
+			if node.fields[e.option].error then
+				node.fields[e.option].error[name] = e
+			else
+				node.fields[e.option].error = { [name] = e }
+			end
 		elseif e.childs then
 			for _, c in ipairs(e.childs) do tag_fields(c) end
 		end
@@ -104,7 +108,13 @@ local function _uvl_validate_section(node, name)
 				table.insert( s, c:string() )
 			end
 		end
-		if #s > 0 then node.error = s end
+		if #s > 0 then
+			if node.error then
+				node.error[name] = s
+			else
+				node.error = { [name] = s }
+			end
+		end
 	end
 
 	local stat, err = node.map.validator:validate_section(node.config, name, co)
