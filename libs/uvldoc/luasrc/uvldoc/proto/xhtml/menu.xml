@@ -1,0 +1,7 @@
+<h2>LuCI UVLDoc</h2>
+<ul>
+<li><a href="<%=self:_index_filename()%>">Index</a></li>
+<% for k, v in luci.util.kspairs(self.schemes) do %>
+<li><a href="<%=self:_scheme_filename(k)%>"><%=k%></a></li>
+<% end %>
+</ul>
