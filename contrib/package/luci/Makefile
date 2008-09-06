@@ -59,18 +59,6 @@ define Package/luci/libtemplate
   DEPENDS:=+luci-core
 endef
 
-define Package/luci/fftemplate
-  $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Freifunk Support (PARTLY BROKEN)
-  DEPENDS:=+luci-mod-freifunk @BROKEN
-endef
-
-define Package/luci/httpdtemplate
-  $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Non-Forking HTTP-Daemon (EXPERIMENTAL)
-  DEPENDS:=+luci-httpd @BROKEN
-endef
-
 define Package/luci/i18ntemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI Translations
@@ -233,102 +221,6 @@ define Package/luci-uvl/install
 endef
 
 
-
-### HTTPD ###
-
-define Package/luci-httpd
-  $(call Package/luci/httpdtemplate)
-  DEPENDS:=+luci-http +luasocket
-  TITLE:=Server Core
-endef
-
-define Package/luci-httpd/install
-	$(call Package/luci/install/template,$(1),libs/httpd)
-endef
-
-
-
-### Community Packages ###
-
-define Package/luci-ff-halle
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-app-ffwizard-leipzig \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
-   +kmod-tun +ip
-  TITLE:=Freifunk Halle Community Meta-Package
-endef
-
-define Package/luci-ff-halle/install
-	$(call Package/luci/install/template,$(1),applications/community-halle)
-endef
-
-
-define Package/luci-ff-leipzig
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-app-ffwizard-leipzig \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
-   +kmod-tun +ip
-  TITLE:=Freifunk Leipzig Community Meta-Package
-endef
-
-define Package/luci-ff-leipzig/install
-	$(call Package/luci/install/template,$(1),applications/community-leipzig)
-endef
-
-
-define Package/luci-ff-hannover
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
-  TITLE:=Freifunk Hannover Community Meta-Package
-  URL:=http://www.freifunk-hannover.de/
-  MAINTAINER:=Mickey Knox <mickey-at-netfreaks-dot-org>
-endef
-
-define Package/luci-ff-hannover/install
-	$(call Package/luci/install/template,$(1),applications/community-hannover)
-endef
-
-
-define Package/luci-ff-berlin
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
-  TITLE:=Freifunk Berlin Community Meta-Package
-endef
-
-define Package/luci-ff-berlin/install
-	$(call Package/luci/install/template,$(1),applications/community-berlin)
-endef
-
-define Package/luci-ff-augsburg
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
-  TITLE:=Freifunk Augsburg Community Meta-Package
-endef
-
-define Package/luci-ff-augsburg/install
-        $(call Package/luci/install/template,$(1),applications/community-augsburg)
-endef
-
 ### Modules ###
 
 define Package/luci-admin-core
@@ -375,33 +267,7 @@ define Package/luci-admin-rpc/install
 endef
 
 
-define Package/luci-mod-freifunk
-  $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-admin-full @BROKEN
-  TITLE:=LuCI Freifunk module
-endef
-
-define Package/luci-mod-freifunk/conffiles
-/etc/config/freifunk
-endef
-
-define Package/luci-mod-freifunk/install
-	$(call Package/luci/install/template,$(1),modules/freifunk)
-endef
-
-
-
 ### Applications ###
-
-define Package/luci-app-ffwizard-leipzig
-  $(call Package/luci/fftemplate)
-  TITLE:=Freifunk Leipzig configuration wizard
-endef
-
-define Package/luci-app-ffwizard-leipzig/install
-	$(call Package/luci/install/template,$(1),applications/luci-ffwizard-leipzig)
-endef
-
 
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
@@ -433,21 +299,6 @@ endef
 
 define Package/luci-app-qos/install
 	$(call Package/luci/install/template,$(1),applications/luci-qos)
-endef
-
-
-define Package/luci-app-splash
-  $(call Package/luci/fftemplate)
-  DEPENDS+=+luasocket
-  TITLE:=Freifunk DHCP-Splash application
-endef
-
-define Package/luci-app-splash/conffiles
-/etc/config/luci_splash
-endef
-
-define Package/luci-app-splash/install
-	$(call Package/luci/install/template,$(1),applications/luci-splash)
 endef
 
 
@@ -533,36 +384,8 @@ define Package/luci-sgi-cgi/install
 	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
 endef
 
-define Package/luci-sgi-luci
-  $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-httpd @BROKEN
-  TITLE:=SGI for LuCI HTTPD
-endef
-
-define Package/luci-sgi-luci/install
-	$(call Package/luci/install/template,$(1),libs/sgi-luci)
-endef
-
-define Package/luci-sgi-webuci
-  $(call Package/luci/libtemplate)
-  TITLE:=SGI for Webuci @BROKEN
-endef
-
-define Package/luci-sgi-webuci/install
-	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
-endef
 
 ### Themes ###
-define Package/luci-theme-fledermaus
-  $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-web @BROKEN
-  TITLE:=Fledermaus Theme
-endef
-
-define Package/luci-theme-fledermaus/install
-	$(call Package/luci/install/template,$(1),themes/fledermaus)
-endef
-
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWRT.org (default)
@@ -656,26 +479,6 @@ ifneq ($(CONFIG_PACKAGE_luci-uvl),)
 	PKG_SELECTED_MODULES+=libs/uvl
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-httpd),)
-	PKG_SELECTED_MODULES+=libs/httpd
-endif
-
-ifneq ($(CONFIG_PACKAGE_luci-ff-halle),)
-	PKG_SELECTED_MODULES+=applications/community-halle
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-leipzig),)
-	PKG_SELECTED_MODULES+=applications/community-leipzig
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-hannover),)
-	PKG_SELECTED_MODULES+=applications/community-hannover
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-berlin),)
-	PKG_SELECTED_MODULES+=applications/community-berlin
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-augsburg),)
-        PKG_SELECTED_MODULES+=applications/community-augsburg
-endif
-
 ifneq ($(CONFIG_PACKAGE_luci-admin-core),)
 	PKG_SELECTED_MODULES+=modules/admin-core
 endif
@@ -688,13 +491,7 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-admin-rpc),)
 	PKG_SELECTED_MODULES+=modules/rpc
 endif
-ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
-	PKG_SELECTED_MODULES+=modules/freifunk
-endif
 
-ifneq ($(CONFIG_PACKAGE_luci-app-ffwizard-leipzig),)
-	PKG_SELECTED_MODULES+=applications/luci-ffwizard-leipzig
-endif
 ifneq ($(CONFIG_PACKAGE_luci-app-firewall),)
 	PKG_SELECTED_MODULES+=applications/luci-fw
 endif
@@ -703,9 +500,6 @@ ifneq ($(CONFIG_PACKAGE_luci-app-olsr),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-app-qos),)
 	PKG_SELECTED_MODULES+=applications/luci-qos
-endif
-ifneq ($(CONFIG_PACKAGE_luci-app-splash),)
-	PKG_SELECTED_MODULES+=applications/luci-splash
 endif
 ifneq ($(CONFIG_PACKAGE_luci-app-statistics),)
 	PKG_SELECTED_MODULES+=applications/luci-statistics
@@ -730,16 +524,7 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
 endif
-ifneq ($(CONFIG_PACKAGE_luci-sgi-luci),)
-	PKG_SELECTED_MODULES+=libs/sgi-luci
-endif
-ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
-	PKG_SELECTED_MODULES+=libs/sgi-webuci
-endif
 
-ifneq ($(CONFIG_PACKAGE_luci-theme-fledermaus),)
-	PKG_SELECTED_MODULES+=themes/fledermaus
-endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
@@ -781,25 +566,14 @@ $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
 $(eval $(call BuildPackage,luci-uvl))
 
-$(eval $(call BuildPackage,luci-httpd))
-
-$(eval $(call BuildPackage,luci-ff-halle))
-$(eval $(call BuildPackage,luci-ff-leipzig))
-$(eval $(call BuildPackage,luci-ff-hannover))
-$(eval $(call BuildPackage,luci-ff-berlin))
-$(eval $(call BuildPackage,luci-ff-augsburg))
-
 $(eval $(call BuildPackage,luci-admin-core))
 $(eval $(call BuildPackage,luci-admin-mini))
 $(eval $(call BuildPackage,luci-admin-full))
 $(eval $(call BuildPackage,luci-admin-rpc))
-$(eval $(call BuildPackage,luci-mod-freifunk))
 
-$(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))
 $(eval $(call BuildPackage,luci-app-olsr))
 $(eval $(call BuildPackage,luci-app-qos))
-$(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
 $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
@@ -808,10 +582,7 @@ $(eval $(call BuildPackage,luci-app-samba))
 $(eval $(call BuildPackage,luci-app-uvc_streamer))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
-$(eval $(call BuildPackage,luci-sgi-luci))
-$(eval $(call BuildPackage,luci-sgi-webuci))
 
-$(eval $(call BuildPackage,luci-theme-fledermaus))
 $(eval $(call BuildPackage,luci-theme-openwrt))
 $(eval $(call BuildPackage,luci-theme-openwrtlight))
 
