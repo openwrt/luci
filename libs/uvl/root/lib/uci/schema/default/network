@@ -218,6 +218,40 @@ config enum
 
 
 config section
+	option name	'route'
+	option title	'Static route definition'
+	option package	'network'
+
+config variable
+	option name	'interface'
+	option title	'Interface for the route'
+	option section	'network.route'
+	option valueof  'network.interface'
+	option required	true
+
+config variable
+	option name	'target'
+	option title	'Target IPv4 host or net address'
+	option section	'network.route'
+	option datatype	'ip4addr'
+	option required	true
+
+config variable
+	option name	'netmask'
+	option title	'Target IPv4 netmask (for subnet routes)'
+	option section	'network.route'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'gateway'
+	option title	'IPv4 gateway address'
+	option section	'network.route'
+	option datatype	'ip4addr'
+	option required	true
+
+
+
+config section
 	option name	'switch'
 	option title	'Section switch'
 	option package	'network'
