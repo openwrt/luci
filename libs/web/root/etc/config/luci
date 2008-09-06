@@ -29,6 +29,7 @@ config event uci_oncommit
 	option qos			"/sbin/luci-reload qos"
 	option system		"/sbin/luci-reload led"
 	option firewall		"/sbin/luci-reload firewall luci_splash"
+	option luci_hosts	"/sbin/luci-reload luci_hosts dnsmasq"
 	option luci_ethers	"/sbin/luci-reload luci_ethers dnsmasq"
 	option luci_splash	"/sbin/luci-reload firewall luci_splash"
 	option upnpd		"/etc/init.d/miniupnpd enabled && /sbin/luci-reload miniupnpd || /etc/init.d/miniupnpd stop"
