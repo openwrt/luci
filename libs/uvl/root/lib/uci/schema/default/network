@@ -114,6 +114,11 @@ config variable
 
 config enum
 	option variable	'network.interface.proto'
+	option value	'none'
+	option title	'Disabled'
+
+config enum
+	option variable	'network.interface.proto'
 	option value	'dhcp'
 	option title	'Retrieve IP address via DHCP'
 	option default	true
