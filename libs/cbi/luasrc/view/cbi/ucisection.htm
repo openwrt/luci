@@ -15,9 +15,9 @@ $Id$
 
 <% self:render_children(section, scope or {}) %>
 
-<% if self.error then -%>
+<% if self.error and self.error[section] then -%>
 	<div class="cbi-section-error">
-		<ul><% for _, e in ipairs(self.error) do %><li><%=luci.util.pcdata(e):gsub("\n","<br />")%></li><% end %></ul>
+		<ul><% for _, e in ipairs(self.error[section]) do %><li><%=luci.util.pcdata(e):gsub("\n","<br />")%></li><% end %></ul>
 	</div>
 <%- end %>
 

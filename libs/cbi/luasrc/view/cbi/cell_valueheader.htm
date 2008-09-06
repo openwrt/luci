@@ -13,4 +13,4 @@ $Id$
 
 -%>
 
-<td class="cbi-value-field<% if self.error then %> cbi-value-error<% end %>" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
+<td class="cbi-value-field<% if self.error and self.error[section] then %> cbi-value-error<% end %>" id="cbi-<%=self.config.."-"..section.."-"..self.option%>">
