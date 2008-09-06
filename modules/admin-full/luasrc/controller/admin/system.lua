@@ -214,7 +214,6 @@ function action_upgrade()
 	end
 
 	luci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
-	luci.sys.reboot()
 end
 
 function _keep_pattern()
