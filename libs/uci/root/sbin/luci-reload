@@ -12,14 +12,14 @@ apply_config() {
 reload_exec() {
 	[ -x $2 ] && {
 		echo "Reloading $1... "
-		$2 >/dev/null 2>&1 && echo "done." || echo "failed!"
+		$2 >/dev/null 2>&1 || echo "!!! Failed to reload $1 !!!"
 	}
 }
 
 reload_init() {
 	[ -x /etc/init.d/$2 ] && /etc/init.d/$2 enabled && {
 		echo "Reloading $1... "
-		/etc/init.d/$2 reload >/dev/null 2>&1 && echo "done." || echo "failed!" 
+		/etc/init.d/$2 reload >/dev/null 2>&1 || echo "!!! Failed to reload $1 !!!"
 	}
 }
 
@@ -27,5 +27,6 @@ config_load ucitrack
 
 for i in $*
 do
-	config_foreach apply_config $i
+	config_foreach apply_config $i $i
+	echo "done."
 done
