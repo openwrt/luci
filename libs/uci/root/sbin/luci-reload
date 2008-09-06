@@ -11,14 +11,14 @@ apply_config() {
 
 reload_exec() {
 	[ -x $2 ] && {
-		echo -n "Reloading $1... "
+		echo "Reloading $1... "
 		$2 >/dev/null 2>&1 && echo "done." || echo "failed!"
 	}
 }
 
 reload_init() {
 	[ -x /etc/init.d/$2 ] && /etc/init.d/$2 enabled && {
-		echo -n "Reloading $1... "
+		echo "Reloading $1... "
 		/etc/init.d/$2 reload >/dev/null 2>&1 && echo "done." || echo "failed!" 
 	}
 }
