@@ -1,0 +1,21 @@
+package luci_hosts
+
+config section
+	option name	'host'
+	option title	'Host entry definition'
+	option package	'luci_hosts'
+
+config variable
+	option name	'hostname'
+	option title	'Hostname'
+	option section	'luci_hosts.host'
+	option datatype	'hostname'
+	option required	true
+
+config variable
+	option name	'ipaddr'
+	option title	'IP address'
+	option section	'luci_hosts.host'
+	option datatype	'ipaddr'
+	option required	true
+
