@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-addons
-PKG_VERSION:=0.2
+PKG_VERSION:=0.3
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -33,8 +33,10 @@ define Package/luci-addons/install
 	$(INSTALL_BIN) ./dist/sbin/luci-reload $(1)/sbin
 	$(INSTALL_BIN) ./dist/etc/init.d/luci_fixtime $(1)/etc/init.d
 	$(INSTALL_BIN) ./dist/etc/init.d/luci_ethers $(1)/etc/init.d
+	$(INSTALL_BIN) ./dist/etc/init.d/luci_hosts $(1)/etc/init.d
 
 	$(INSTALL_CONF) ./dist/etc/config/luci_ethers $(1)/etc/config
+	$(INSTALL_CONF) ./dist/etc/config/luci_hosts $(1)/etc/config
 
 	$(CP) ./dist/etc/crontabs/root $(1)/etc/crontabs/root
 endef
