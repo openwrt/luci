@@ -1,9 +1,0 @@
-#!/bin/sh
-
-for i in $*
-do
-	[ -x /etc/init.d/$i ] && {
-		echo -n "Reloading $i... "
-		/etc/init.d/$i restart >/dev/null 2>&1 && echo "done." || echo "failed!" 
-	}
-done

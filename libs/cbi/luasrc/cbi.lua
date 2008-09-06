@@ -248,11 +248,11 @@ function Map.parse(self, ...)
 		if luci.http.formvalue("cbi.apply") then
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
-				self.uci:apply(config)
 
 				-- Refresh data because commit changes section names
 				self.uci:load(config)
 			end
+			self.uci:apply(self.parsechain)
 
 			-- Reparse sections
 			Node.parse(self, ...)
