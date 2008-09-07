@@ -1119,7 +1119,7 @@ end
 --- Get the value of this option.
 -- @return	The associated configuration value
 function option.value(self)
-	local v = self:config()
+	local v = self:config() or self:scheme('default')
 	if v and self:scheme('multival') then
 		v = luci.util.split( v, "%s+", nil, true )
 	end
