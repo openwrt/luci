@@ -391,7 +391,7 @@ function UVL.read_scheme( self, scheme, alias )
 			return true
 		else
 			return false, so:error(ERR.SME_READ(so,bc))
-		end	 
+		end
 	end
 end
 
@@ -630,7 +630,7 @@ function UVL._read_scheme_parts( self, scheme, schemes )
 				local oo = so:option(r[3])
 				local eo = oo:enum(v.value)
 
-				if t.type ~= "enum" then
+				if t.type ~= "enum" and t.type ~= "reference" then
 					return false, scheme:error(ERR.SME_EBADTYPE(eo))
 				end
 
