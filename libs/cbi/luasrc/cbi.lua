@@ -1227,7 +1227,7 @@ function StaticList.validate(self, value)
 
 	local valid = {}
 	for i, v in ipairs(value) do
-		if luci.util.contains(self.valuelist, v) then
+		if luci.util.contains(self.vallist, v) then
 			table.insert(valid, v)
 		end
 	end
