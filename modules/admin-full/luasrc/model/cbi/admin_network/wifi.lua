@@ -163,6 +163,7 @@ if hwtype == "atheros" then
 	wds = s:option(Flag, "wds", translate("a_w_wds"))
 	wds:depends({mode="ap"})
 	wds:depends({mode="sta"})
+	wds.rmempty = true
 	wdssep = s:option(Flag, "wdssep", translate("wifi_wdssep"))
 	wdssep:depends({mode="ap", wds="1"})
 	wdssep.optional = true
@@ -232,14 +233,42 @@ end
 ------------------- WiFI-Encryption -------------------
 
 encr = s:option(ListValue, "encryption", translate("encryption"))
+encr:depends({mode="ap"})
+encr:depends({mode="sta"})
+encr:depends({mode="adhoc"})
+encr:depends({mode="ahdemo"})
+encr:depends({mode="wds"})
+
 encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
-encr:value("psk", "WPA-PSK")
-encr:value("psk2", "WPA2-PSK")
 
 if hwtype == "atheros" or hwtype == "mac80211" then
-	encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"})
-	encr:value("wpa2i", "WPA2-EAP", {mode="ap"}, {mode="sta"})
+	local supplicant = luci.fs.mtime("/usr/sbin/wpa_supplicant")
+	local hostapd = luci.fs.mtime("/usr/sbin/hostapd")
+	
+	if hostapd and supplicant then
+		encr:value("psk", "WPA-PSK")
+		encr:value("psk2", "WPA2-PSK")
+		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"})
+		encr:value("wpa2i", "WPA2-EAP", {mode="ap"}, {mode="sta"})
+	elseif hostapd and not supplicant then
+		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
+		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
+		encr:value("wpa", "WPA-EAP", {mode="ap"})
+		encr:value("wpa2i", "WPA2-EAP", {mode="ap"})
+		encr.description = translate("wifi_wpareq")
+	elseif not hostapd and supplicant then
+		encr:value("psk", "WPA-PSK", {mode="sta"})
+		encr:value("psk2", "WPA2-PSK", {mode="sta"})
+		encr:value("wpa", "WPA-EAP", {mode="sta"})
+		encr:value("wpa2i", "WPA2-EAP", {mode="sta"})	
+		encr.description = translate("wifi_wpareq")
+	else
+		encr.description = translate("wifi_wpareq")
+	end
+elseif hwtype == "broadcom" then
+	encr:value("psk", "WPA-PSK")
+	encr:value("psk2", "WPA2-PSK")
 end
 
 encr:depends("mode", "ap")
