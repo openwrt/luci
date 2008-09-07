@@ -689,7 +689,7 @@ function NamedSection.parse(self, novld)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, s)
 
-			if not novld not self.override_scheme and self.map.scheme then
+			if not novld and not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, s)
 			end
 		end
