@@ -104,6 +104,12 @@ config section
 	option package	'firewall'
 	list   depends	'target, src'
 	list   depends	'target, dest'
+	list   depends	'target, src_ip'
+	list   depends	'target, src_port'
+	list   depends	'target, src_mac'
+	list   depends	'target, dest_ip'
+	list   depends	'target, dest_port'
+	list   depends	'target, proto'
 
 config variable
 	option name	'src'
