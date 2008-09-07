@@ -33,6 +33,8 @@ end
 function s.create(self, section)
 	if TypedSection.create(self, section) then
 		created = section
+	else
+		self.invalid_cts = true
 	end
 end
 
