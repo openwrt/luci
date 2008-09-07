@@ -21,6 +21,6 @@ function index()
 
 	entry({"mini", "network"}, alias("mini", "network", "index"), i18n("network"), 20)
 	entry({"mini", "network", "index"}, cbi("mini/network"), i18n("general"), 1)
-	entry({"mini", "network", "wifi"}, cbi("mini/wifi"), i18n("wifi"), 10)
+	entry({"mini", "network", "wifi"}, cbi("mini/wifi"), i18n("wifi"), 10).i18n="wifi"
 	entry({"mini", "network", "dhcp"}, cbi("mini/dhcp"), "DHCP", 20)
 end
