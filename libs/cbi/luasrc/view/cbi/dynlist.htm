@@ -14,7 +14,7 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 <%
-	local vals = self:cfgvalue(section)
+	local vals = self:cfgvalue(section) or {}
 	for i=1, #vals + 1 do
 		local val = vals[i]
 %>

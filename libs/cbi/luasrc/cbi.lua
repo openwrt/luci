@@ -933,7 +933,7 @@ function AbstractValue.parse(self, section)
 	local fvalue = self:formvalue(section)
 	local cvalue = self:cfgvalue(section)
 
-	if fvalue and fvalue ~= "" then -- If we have a form value, write it to UCI
+	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
 		fvalue = self:transform(self:validate(fvalue, section))
 		if not fvalue then
 			self.tag_invalid[section] = true
@@ -983,7 +983,9 @@ end
 -- Return the UCI value of this object
 function AbstractValue.cfgvalue(self, section)
 	local value = self.map:get(section, self.option)
-	if not self.cast or self.cast == type(value) then
+	if not value then
+		return nil
+	elseif not self.cast or self.cast == type(value) then
 		return value
 	elseif self.cast == "string" then
 		if type(value) == "table" then
@@ -1251,7 +1253,8 @@ function DynamicList.value(self, key, val)
 	table.insert(self.vallist, tostring(val))
 end
 
-function DynamicList.validate(self, value, section)
+function DynamicList.formvalue(self, section)
+	local value = AbstractValue.formvalue(self, section)
 	value = (type(value) == "table") and value or {value}
 
 	local valid = {}

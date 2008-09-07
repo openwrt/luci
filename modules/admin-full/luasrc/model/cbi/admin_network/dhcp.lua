@@ -56,10 +56,7 @@ s:option(Value, "netmask", translate("netmask")).optional = true
 
 s:option(Flag, "force").optional = true
 
-for i, line in pairs(luci.util.execl("dnsmasq --help dhcp")) do
-	k, v = line:match("([^ ]+) +([^ ]+)")
-	s:option(Value, "dhcp"..k, v).optional = true
-end
+s:option(DynamicList, "dhcp_option").optional = true
 
 
 for i, n in ipairs(s.children) do
