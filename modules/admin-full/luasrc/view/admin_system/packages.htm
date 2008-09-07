@@ -60,7 +60,7 @@ end
 					<input class="cbi-input-save" type="submit" name="submit" value="<%:ok%>" />
 				</div>
 			</div>
-		
+
 			<div class="cbi-value">
 				<label class="cbi-value-title"><%:filter%>:</label>
 				<div class="cbi-value-field">
@@ -68,7 +68,7 @@ end
 					<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
 				</div>
 			</div>
-			
+
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
 					<th class="cbi-section-table-cell"><%:a_s_packages_name%></th>
@@ -77,19 +77,19 @@ end
 					<th class="cbi-section-table-cell"><%:delete%></th>
 					<th class="cbi-section-table-cell"><%:descr%></th>
 				</tr>
-				<% for k, pkg in pairs(pkgs) do %>	
+				<% for k, pkg in pairs(pkgs) do %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td><%=pkg.Package%></td>
-					<td><%=pkg.Version%></td>
+					<td><%=luci.util.pcdata(pkg.Package)%></td>
+					<td><%=luci.util.pcdata(pkg.Version)%></td>
 					<td><% if not pkg.Status or not pkg.Status.installed then %><input type="checkbox" name="install.<%=pkg.Package%>" value="1" /><% else %><%:installed%><% end %></td>
 					<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:notinstalled%><% end %></td>
-					<td><%=pkg.Description%></td>
+					<td><%=luci.util.pcdata(pkg.Description)%></td>
 				</tr>
 				<% end %>
 			</table>
-			
+
 			<br />
-			
+
 			<div style="text-align: right">
 				<input type="submit" class="cbi-input-apply" name="submit" value="<%:a_s_packages_do%>" />
 			</div>
