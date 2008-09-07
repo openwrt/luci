@@ -249,8 +249,8 @@ function Map.chain(self, config)
 end
 
 -- Use optimized UCI writing
-function Map.parse(self, ...)
-	Node.parse(self, ...)
+function Map.parse(self)
+	Node.parse(self)
 
 	if self.save then
 		for i, config in ipairs(self.parsechain) do
@@ -273,7 +273,7 @@ function Map.parse(self, ...)
 			end
 
 			-- Reparse sections
-			Node.parse(self, ...)
+			Node.parse(self, true)
 
 		end
 		for i, config in ipairs(self.parsechain) do
@@ -666,7 +666,7 @@ function NamedSection.__init__(self, map, section, stype, ...)
 	self.section = section
 end
 
-function NamedSection.parse(self)
+function NamedSection.parse(self, novld)
 	local s = self.section
 	local active = self:cfgvalue(s)
 
@@ -689,7 +689,7 @@ function NamedSection.parse(self)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, s)
 
-			if not self.override_scheme and self.map.scheme then
+			if not novld and not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, s)
 			end
 		end
@@ -743,7 +743,7 @@ function TypedSection.depends(self, option, value)
 	table.insert(self.deps, {option=option, value=value})
 end
 
-function TypedSection.parse(self)
+function TypedSection.parse(self, novld)
 	if self.addremove then
 		-- Remove
 		local crval = REMOVE_PREFIX .. self.config
@@ -764,7 +764,7 @@ function TypedSection.parse(self)
 		if luci.http.formvalue("cbi.submit") then
 			Node.parse(self, k)
 
-			if not self.override_scheme and self.map.scheme then
+			if not novld and not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, k)
 			end
 		end
