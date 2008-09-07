@@ -18,24 +18,6 @@ config extern flash_keep
 	option httpd	"/etc/httpd.conf"
 	option firewall	"/etc/firewall.user"
 
-config event uci_oncommit
-	option network		"/sbin/luci-reload network firewall dnsmasq luci_splash"
-	option wireless		"/sbin/luci-reload network firewall dnsmasq luci_splash"
-	option olsr			"/sbin/luci-reload olsrd"
-	option dhcp			"/sbin/luci-reload dnsmasq"
-	option dropbear		"/sbin/luci-reload dropbear"
-	option httpd		"/sbin/luci-reload httpd"
-	option fstab		"/sbin/luci-reload fstab"
-	option qos			"/sbin/luci-reload qos"
-	option system		"/sbin/luci-reload led"
-	option firewall		"/sbin/luci-reload firewall luci_splash"
-	option luci_hosts	"/sbin/luci-reload luci_hosts dnsmasq"
-	option luci_ethers	"/sbin/luci-reload luci_ethers dnsmasq"
-	option luci_splash	"/sbin/luci-reload firewall luci_splash"
-	option upnpd		"/etc/init.d/miniupnpd enabled && /sbin/luci-reload miniupnpd || /etc/init.d/miniupnpd stop"
-	option ntpclient	"/sbin/luci-reload ntpclient"
-	option samba		"/sbin/luci-reload samba"
-
 config internal languages
 	
 config internal sauth

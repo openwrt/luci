@@ -105,7 +105,9 @@ function action_upgrade()
 	local keepcfg = keep_avail and luci.http.formvalue("keepcfg")
 
 	if plat and fname then
-		ret = luci.sys.flash(tmpfile, keepcfg and _keep_pattern())
+		ret = function()
+			return luci.sys.flash(tmpfile, keepcfg and _keep_pattern())
+		end
 	end
 
 	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})

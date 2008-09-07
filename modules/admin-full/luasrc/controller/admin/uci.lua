@@ -24,27 +24,23 @@ function index()
 end
 
 function convert_changes(changes)
-	local ret = {}
+	local util = require "luci.util"
+	
+	local ret
 	for r, tbl in pairs(changes) do
 		for s, os in pairs(tbl) do
 			for o, v in pairs(os) do
-				local val, str
-				if (v == "") then
-					str = "-"
-					val = ""
-				else
-					str = ""
-					val = "="..luci.util.pcdata(v)
-				end
-				str = r.."."..s
-				if o ~= ".type" then
-					str = str.."."..o
-				end
-				table.insert(ret, str..val)
+				ret = (ret and ret.."\n" or "") .. "%s%s.%s%s%s" % {
+					v == "" and "-" or "",
+					r,
+					s,
+					o ~= ".type" and "."..o or "",
+					v ~= "" and "="..util.pcdata(v) or ""
+				}
 			end
 		end
 	end
-	return table.concat(ret, "\n")
+	return ret
 end
 
 function action_changes()
@@ -54,52 +50,38 @@ end
 
 function action_apply()
 	local path = luci.dispatcher.context.path
-	
-	local output  = ""
 	local uci = luci.model.uci.cursor()
 	local changes = uci:changes()
-	
-	if changes then
-		local com = {}
-		local run = {}
-		
-		-- Collect files to be applied and commit changes
-		for r, tbl in pairs(changes) do
-			if r then
-				if path[#path] ~= "apply" then
-					uci:load(r)
-					uci:commit(r)
-					uci:unload(r)
-				end
-				if luci.config.uci_oncommit and luci.config.uci_oncommit[r] then
-					run[luci.config.uci_oncommit[r]] = true
-				end
-			end
-		end
-		
-		-- Search for post-commit commands
-		for cmd, i in pairs(run) do
-			output = output .. cmd .. ":\n" .. luci.util.exec(cmd) .. "\n"
+	local reload = {}
+
+	-- Collect files to be applied and commit changes
+	for r, tbl in pairs(changes) do
+		table.insert(reload, r)
+		if path[#path] ~= "apply" then
+			uci:load(r)
+			uci:commit(r)
+			uci:unload(r)
 		end
 	end
 	
+	local function _reload()
+		local cmd = uci:apply(reload, true)
+		return io.popen(cmd)
+	end
 	
-	luci.template.render("admin_uci/apply", {changes=convert_changes(changes), output=output})
+	luci.template.render("admin_uci/apply", {changes=convert_changes(changes), reload=_reload})
 end
 
 
 function action_revert()
 	local uci = luci.model.uci.cursor()
 	local changes = uci:changes()
-	if changes then
-		local revert = {}
-		
-		-- Collect files to be reverted
-		for r, tbl in pairs(changes) do
-			uci:load(r)
-			uci:revert(r)
-			uci:unload(r)
-		end
+
+	-- Collect files to be reverted
+	for r, tbl in pairs(changes) do
+		uci:load(r)
+		uci:revert(r)
+		uci:unload(r)
 	end
 	
 	luci.template.render("admin_uci/revert", {changes=convert_changes(changes)})

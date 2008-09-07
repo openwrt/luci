@@ -16,5 +16,14 @@ $Id$
 <h1><%:config%></h1>
 <p><%:uci_applied%>:</p>
 <code><%=(changes or "-")%>
-<%=output%></code>
+
+<%
+local fp = reload()
+local line = fp:read()
+while line do 
+	write(line.."\n")
+	line = fp:read()
+end
+fp:close()
+%></code>
 <%+footer%>

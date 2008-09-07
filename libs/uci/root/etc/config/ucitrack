@@ -1,0 +1,50 @@
+config network
+	option init network
+	list affects dhcp
+	
+config wireless
+	list affects network
+	
+config firewall
+	option init firewall
+	list affects luci-splash
+	list affects qos
+	
+config olsr
+	option init olsrd
+
+config dhcp
+	option init dnsmasq
+	
+config dropbear
+	option init dropbear
+	
+config httpd
+	option init httpd
+	
+config fstab
+	option init fstab
+	
+config qos
+	option init qos
+	
+config system
+	option init led
+	
+config luci_ethers
+	option init luci_ethers
+
+config luci_hosts
+	option init luci_hosts
+	
+config luci_splash
+	option init luci_splash
+	
+config upnpd
+	option init miniupnpd
+	
+config ntpclient
+	option init ntpclient
+	
+config samba
+	option init samba

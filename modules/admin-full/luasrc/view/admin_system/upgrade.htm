@@ -34,7 +34,13 @@ $Id$
 	</div>
 </form>
 <% elseif ret then %>
-	<% if ret == 0 then %>
+	<p><%:a_s_flash_received%></p>
+	<p><%:a_s_flash_inprogress%></p>
+	
+<!-- <%=string.rep(" ", 2048)%> -->
+	<% %>
+	<% local ret = ret() 
+	if ret == 0 then %>
 <div class="ok"><%:a_s_flash_flashed%></div>
 	<% else %>
 <div class="error"><%:a_s_flash_flasherr%>! (<%:code%> <%=ret%>)</div>	
@@ -43,3 +49,4 @@ $Id$
 <div class="error"><%:a_s_flash_notimplemented%></div>
 <% end %>
 <%+footer%>
+<% if ret == 0 then luci.sys.reboot() end %>

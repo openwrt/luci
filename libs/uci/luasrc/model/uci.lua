@@ -54,13 +54,16 @@ end
 
 local Cursor = getmetatable(cursor())
 
---- Applies the new config
--- @param config		UCI config
-function Cursor.apply(self, config)
-	local conf = require "luci.config"
-	return conf.uci_oncommit[config] and
-	 os.execute(conf.uci_oncommit[config] .. " >/dev/null 2>&1")
+--- Applies UCI configuration changes
+-- @param configlist		List of UCI configurations
+-- @param command			Don't apply only return the command
+function Cursor.apply(self, configlist, command)
+	configlist = self:_affected(configlist)
+	local reloadcmd = "/sbin/luci-reload " .. table.concat(configlist, " ")
+	
+	return command and reloadcmd or os.execute(reloadcmd .. " >/dev/null 2>&1")
 end
+
 
 --- Delete all sections of a given type that match certain criteria.
 -- @param config		UCI config
@@ -177,6 +180,51 @@ function Cursor.changes(self, config)
 		end)
 		return changes
 	end
+end
+
+
+-- Return a list of initscripts affected by configuration changes.
+function Cursor._affected(self, configlist)
+	configlist = type(configlist) == "table" and configlist or {configlist}
+
+	local c = cursor()
+	c:load("ucitrack")
+
+	-- Resolve dependencies
+	local reloadlist = {}
+
+	local function _resolve_deps(name)
+		local reload = {name}
+		local deps = {}
+	
+		c:foreach("ucitrack", name,
+			function(section)
+				if section.affects then
+					for i, aff in ipairs(section.affects) do
+						table.insert(deps, aff)
+					end
+				end
+			end)
+		
+		for i, dep in ipairs(deps) do
+			for j, add in ipairs(_resolve_deps(dep)) do
+				table.insert(reload, add)
+			end
+		end
+		
+		return reload
+	end
+	
+	-- Collect initscripts
+	for j, config in ipairs(configlist) do
+		for i, e in ipairs(_resolve_deps(config)) do
+			if not util.contains(reloadlist, e) then
+				table.insert(reloadlist, e)
+			end
+		end
+	end
+	
+	return reloadlist
 end
 
 

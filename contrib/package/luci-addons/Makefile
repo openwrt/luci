@@ -30,7 +30,6 @@ define Package/luci-addons/install
 
 	$(INSTALL_BIN) ./dist/usr/bin/run-parts $(1)/usr/bin
 	$(INSTALL_BIN) ./dist/sbin/luci-flash $(1)/sbin
-	$(INSTALL_BIN) ./dist/sbin/luci-reload $(1)/sbin
 	$(INSTALL_BIN) ./dist/etc/init.d/luci_fixtime $(1)/etc/init.d
 	$(INSTALL_BIN) ./dist/etc/init.d/luci_ethers $(1)/etc/init.d
 	$(INSTALL_BIN) ./dist/etc/init.d/luci_hosts $(1)/etc/init.d

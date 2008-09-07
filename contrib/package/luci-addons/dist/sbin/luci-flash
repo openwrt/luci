@@ -85,5 +85,9 @@ done
 [ -n "$sysupgrade_init_conffiles" ] && do_save_conffiles
 run_hooks "" $sysupgrade_pre_upgrade
 
+ask_bool() {
+	false
+}
+
 v "Switching to ramdisk..."
 run_ramfs '. /etc/functions.sh; include /lib/upgrade; do_upgrade'

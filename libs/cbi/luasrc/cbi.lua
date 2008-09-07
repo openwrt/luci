@@ -221,6 +221,7 @@ function Map.__init__(self, config, ...)
 	self.config = config
 	self.parsechain = {self.config}
 	self.template = "cbi/map"
+	self.apply_on_parse = nil
 	self.uci = uci.cursor()
 	self.save = true
 	if not self.uci:load(self.config) then
@@ -258,10 +259,17 @@ function Map.parse(self, ...)
 		if luci.http.formvalue("cbi.apply") then
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
-				self.uci:apply(config)
 
 				-- Refresh data because commit changes section names
 				self.uci:load(config)
+			end
+			if self.apply_on_parse then
+				self.uci:apply(self.parsechain)
+			else
+				self._apply = function()
+					local cmd = self.uci:apply(self.parsechain, true)
+					return io.popen(cmd)
+				end
 			end
 
 			-- Reparse sections
@@ -271,6 +279,15 @@ function Map.parse(self, ...)
 		for i, config in ipairs(self.parsechain) do
 			self.uci:unload(config)
 		end
+	end
+end
+
+function Map.render(self, ...)
+	Node.render(self, ...)
+	if self._apply then
+		local fp = self._apply()
+		fp:read("*a")
+		fp:close()
 	end
 end
 
