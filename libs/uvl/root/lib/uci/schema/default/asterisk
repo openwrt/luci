@@ -1,0 +1,3625 @@
+# Asterisk UCI Scheme
+# (c) 2008 FrogOnWheels
+# $Id$
+
+package asterisk
+
+config section
+	option name	'asterisk'
+	option title	'Asterisk General Options'
+	option package	'asterisk'
+	option named	false
+	option unique	true
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'debug'
+	option title	'Debug Level'
+	option section	'asterisk.asterisk'
+	option datatype	'integer'
+
+config variable
+	option name	'verbose'
+	option title	'Verbose Level'
+	option section	'asterisk.asterisk'
+	option datatype	'integer'
+
+config variable
+	option name	'zone'
+	option title	'Time Zone'
+	option section	'asterisk.asterisk'
+	option datatype	'string'
+
+config variable
+	option name	'highpriority'
+	option title	'High Priority'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'initcrypto'
+	option title	'Initialise Crypto'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'nocolor'
+	option title	'Disable console colors'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'dontwarn'
+	option title	'Disable some warnings'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'dumpcore'
+	option title	'Dump core on crash'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'internal_timing'
+	option title	'Use Internal Timing'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'systemname'
+	option title	'Prefix UniquID with system name'
+	option section	'asterisk.asterisk'
+	option datatype	'string'
+
+config variable
+	option name	'maxcalls'
+	option title	'Maximum number of calls allowed'
+	option section	'asterisk.asterisk'
+	option datatype	'integer'
+
+config variable
+	option name	'maxload'
+	option title	'Maximum load to stop accepting new calls'
+	option section	'asterisk.asterisk'
+	option datatype	'float'
+
+config variable
+	option name	'cache_record_files'
+	option title	'Cache recorded sound files during recording'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'record_cache_dir'
+	option title	'Sound files Cache directory'
+	option section	'asterisk.asterisk'
+	option datatype	'directory'
+	option depends 	'cache_record_files=true'
+
+config variable
+	option name	'transmit_silence_during_record'
+	option title	'Transmit SLINEAR silence while recording a channel'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'transcode_via_sln'
+	option title	'Build transcode paths via SLINEAR, not directly'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'runuser'
+	option title	'The User to run as'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'rungroup'
+	option title	'The Group to run as'
+	option section	'asterisk.asterisk'
+	option datatype	'boolean'
+
+config variable
+	option name	'spooldir'
+	option title	'Voicemail Spool directory'
+	option section	'asterisk.asterisk'
+	option datatype	'directory'
+
+config variable
+	option name	'logdir'
+	option title	'Log directory'
+	option section	'asterisk.asterisk'
+	option datatype	'directory'
+
+config variable
+	option name	'agidir'
+	option title	'AGI directory'
+	option section	'asterisk.asterisk'
+	option datatype	'directory'
+
+
+config section
+	option name	'module'
+	option title	'Modules'
+	option package	'asterisk'
+	option named	false
+	option unique	true
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'chan_iax2'
+	option title	'Option chan_iax2'
+	option section	'asterisk.module'
+	option datatype	'boolean'
+
+config variable
+	option name	'res_odbc'
+	option title	'ODBC Resource'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_odbc'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_odbc'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_odbc'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_config_odbc'
+	option title	'ODBC Config Resource'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_config_odbc'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_config_odbc'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_config_odbc'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_config_mysql'
+	option title	'MySQL Config Resource'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_config_mysql'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_config_mysql'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_config_mysql'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_crypto'
+	option title	'Cryptographic Digital Signatures'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_crypto'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_crypto'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_crypto'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_features'
+	option title	'Call Parking Resource'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_features'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_features'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_features'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_indications'
+	option title	'Indications Configuration'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_indications'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_indications'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_indications'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_monitor'
+	option title	'Call Monitoring Resource'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_monitor'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_monitor'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_monitor'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'cdr_csv'
+	option title	'Comma Separated Values CDR Backend'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.cdr_csv'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.cdr_csv'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.cdr_csv'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'cdr_custom'
+	option title	'Customizable Comma Separated Values CDR Backend'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.cdr_custom'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.cdr_custom'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.cdr_custom'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'cdr_manager'
+	option title	'Asterisk Call Manager CDR Backend'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.cdr_manager'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.cdr_manager'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.cdr_manager'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'cdr_mysql'
+	option title	'MySQL CDR Backend'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.cdr_mysql'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.cdr_mysql'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.cdr_mysql'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'cdr_pgsql'
+	option title	'PostgreSQL CDR Backend'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.cdr_pgsql'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.cdr_pgsql'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.cdr_pgsql'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'cdr_sqlite'
+	option title	'SQLite CDR Backend'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.cdr_sqlite'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.cdr_sqlite'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.cdr_sqlite'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'chan_alsa'
+	option title	'Channel driver for GTalk'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.chan_alsa'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.chan_alsa'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.chan_alsa'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'chan_agent'
+	option title	'Agent Proxy Channel'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.chan_agent'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.chan_agent'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.chan_agent'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'chan_gtalk'
+	option title	'Channel driver for GTalk'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.chan_gtalk'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.chan_gtalk'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.chan_gtalk'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'chan_iax2'
+	option title	'Inter Asterisk eXchange (Ver 2)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.chan_iax2'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.chan_iax2'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.chan_iax2'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'chan_local'
+	option title	'Local Proxy Channel'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.chan_local'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.chan_local'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.chan_local'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'chan_sip'
+	option title	'Session Initiation Protocol (SIP)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.chan_sip'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.chan_sip'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.chan_sip'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_a_mu'
+	option title	'A-law and Mulaw direct Coder/Decoder'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_a_mu'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_a_mu'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_a_mu'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_adpcm'
+	option title	'Adaptive Differential PCM Coder/Decoder'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_adpcm'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_adpcm'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_adpcm'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_alaw'
+	option title	'A-law Coder/Decoder'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_alaw'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_alaw'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_alaw'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_g726'
+	option title	'ITU G.726-32kbps G726 Transcoder'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_g726'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_g726'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_g726'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_gsm'
+	option title	'GSM/PCM16 (signed linear) Codec Translation'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_gsm'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_gsm'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_gsm'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_ulaw'
+	option title	'Mu-law Coder/Decoder'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_ulaw'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_ulaw'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_ulaw'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'codec_speex'
+	option title	'Speex/PCM16 (signed linear) Codec Translator'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.codec_speex'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.codec_speex'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.codec_speex'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_au'
+	option title	'Sun Microsystems AU format (signed linear)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_au'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_au'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_au'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_g723'
+	option title	'G.723.1 Simple Timestamp File Format'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_g723'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_g723'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_g723'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_g726'
+	option title	'Raw G.726 (16/24/32/40kbps) data'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_g726'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_g726'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_g726'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_g729'
+	option title	'Raw G729 data'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_g729'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_g729'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_g729'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_gsm'
+	option title	'Raw GSM data'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_gsm'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_gsm'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_gsm'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_h263'
+	option title	'Raw h263 data'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_h263'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_h263'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_h263'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_jpeg'
+	option title	'JPEG (Joint Picture Experts Group) Image'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_jpeg'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_jpeg'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_jpeg'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_pcm'
+	option title	'Raw uLaw 8khz Audio support (PCM)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_pcm'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_pcm'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_pcm'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_pcm_alaw'
+	option title	'load => .so ; Raw aLaw 8khz PCM Audio support'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_pcm_alaw'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_pcm_alaw'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_pcm_alaw'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_sln'
+	option title	'Raw Signed Linear Audio support (SLN)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_sln'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_sln'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_sln'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_vox'
+	option title	'Dialogic VOX (ADPCM) File Format'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_vox'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_vox'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_vox'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_wav'
+	option title	'Microsoft WAV format (8000hz Signed Line'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_wav'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_wav'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_wav'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'format_wav_gsm'
+	option title	'Microsoft WAV format (Proprietary GSM)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.format_wav_gsm'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.format_wav_gsm'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.format_wav_gsm'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_alarmreceiver'
+	option title	'Alarm Receiver Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_alarmreceiver'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_alarmreceiver'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_alarmreceiver'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_authenticate'
+	option title	'Authentication Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_authenticate'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_authenticate'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_authenticate'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_cdr'
+	option title	'Make sure asterisk doesn''t save CDR'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_cdr'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_cdr'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_cdr'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_chanisavail'
+	option title	'Check if channel is available'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_chanisavail'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_chanisavail'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_chanisavail'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_chanspy'
+	option title	'Listen in on any channel'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_chanspy'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_chanspy'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_chanspy'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_controlplayback'
+	option title	'Control Playback Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_controlplayback'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_controlplayback'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_controlplayback'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_cut'
+	option title	'Cuts up variables'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_cut'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_cut'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_cut'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_db'
+	option title	'Database access functions'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_db'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_db'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_db'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_dial'
+	option title	'Dialing Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_dial'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_dial'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_dial'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_dictate'
+	option title	'Virtual Dictation Machine Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_dictate'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_dictate'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_dictate'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_directory'
+	option title	'Extension Directory'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_directory'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_directory'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_directory'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_directed_pickup'
+	option title	'Directed Call Pickup Support'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_directed_pickup'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_directed_pickup'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_directed_pickup'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_disa'
+	option title	'DISA (Direct Inward System Access) Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_disa'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_disa'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_disa'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_dumpchan'
+	option title	'Dump channel variables Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_dumpchan'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_dumpchan'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_dumpchan'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_echo'
+	option title	'Simple Echo Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_echo'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_echo'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_echo'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_enumlookup'
+	option title	'ENUM Lookup'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_enumlookup'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_enumlookup'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_enumlookup'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_eval'
+	option title	'Reevaluates strings'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_eval'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_eval'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_eval'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_exec'
+	option title	'Executes applications'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_exec'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_exec'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_exec'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_externalivr'
+	option title	'External IVR application interface'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_externalivr'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_externalivr'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_externalivr'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_forkcdr'
+	option title	'Fork The CDR into 2 seperate entities'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_forkcdr'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_forkcdr'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_forkcdr'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_getcpeid'
+	option title	'Get ADSI CPE ID'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_getcpeid'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_getcpeid'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_getcpeid'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_groupcount'
+	option title	'Group Management Routines'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_groupcount'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_groupcount'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_groupcount'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_ices'
+	option title	'Encode and Stream via icecast and ices'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_ices'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_ices'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_ices'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_image'
+	option title	'Image Transmission Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_image'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_image'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_image'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_lookupblacklist'
+	option title	'Look up Caller*ID name/number from black'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_lookupblacklist'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_lookupblacklist'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_lookupblacklist'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_lookupcidname'
+	option title	'Look up CallerID Name from local databas'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_lookupcidname'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_lookupcidname'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_lookupcidname'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_macro'
+	option title	'Extension Macros'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_macro'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_macro'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_macro'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_math'
+	option title	'A simple math Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_math'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_math'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_math'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_md5'
+	option title	'MD5 checksum Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_md5'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_md5'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_md5'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_milliwatt'
+	option title	'Digital Milliwatt (mu-law) Test Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_milliwatt'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_milliwatt'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_milliwatt'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_mixmonitor'
+	option title	'Record a call and mix the audio during the recording'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_mixmonitor'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_mixmonitor'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_mixmonitor'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_parkandannounce'
+	option title	'Call Parking and Announce Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_parkandannounce'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_parkandannounce'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_parkandannounce'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_playback'
+	option title	'Trivial Playback Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_playback'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_playback'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_playback'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_privacy'
+	option title	'Require phone number to be entered'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_privacy'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_privacy'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_privacy'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_queue'
+	option title	'True Call Queueing'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_queue'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_queue'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_queue'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_random'
+	option title	'Random goto'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_random'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_random'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_random'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_read'
+	option title	'Read Variable Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_read'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_read'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_read'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_readfile'
+	option title	'Read in a file'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_readfile'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_readfile'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_readfile'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_realtime'
+	option title	'Realtime Data Lookup/Rewrite'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_realtime'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_realtime'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_realtime'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_record'
+	option title	'Trivial Record Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_record'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_record'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_record'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_sayunixtime'
+	option title	'Say time'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_sayunixtime'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_sayunixtime'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_sayunixtime'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_senddtmf'
+	option title	'Send DTMF digits Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_senddtmf'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_senddtmf'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_senddtmf'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_sendtext'
+	option title	'Send Text Applications'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_sendtext'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_sendtext'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_sendtext'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_setcallerid'
+	option title	'Set CallerID Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_setcallerid'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_setcallerid'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_setcallerid'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_setcdruserfield'
+	option title	'CDR user field apps'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_setcdruserfield'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_setcdruserfield'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_setcdruserfield'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_setcidname'
+	option title	'load => .so ; Set CallerID Name'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_setcidname'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_setcidname'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_setcidname'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_setcidnum'
+	option title	'load => .so ; Set CallerID Number'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_setcidnum'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_setcidnum'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_setcidnum'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_setrdnis'
+	option title	'Set RDNIS Number'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_setrdnis'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_setrdnis'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_setrdnis'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_settransfercapability'
+	option title	'Set ISDN Transfer Capability'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_settransfercapability'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_settransfercapability'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_settransfercapability'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_sms'
+	option title	'SMS/PSTN handler'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_sms'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_sms'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_sms'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_softhangup'
+	option title	'Hangs up the requested channel'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_softhangup'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_softhangup'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_softhangup'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_stack'
+	option title	'Stack Routines'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_stack'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_stack'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_stack'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_system'
+	option title	'Generic System() application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_system'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_system'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_system'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_talkdetect'
+	option title	'Playback with Talk Detection'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_talkdetect'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_talkdetect'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_talkdetect'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_test'
+	option title	'Interface Test Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_test'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_test'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_test'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_transfer'
+	option title	'Transfer'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_transfer'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_transfer'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_transfer'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_txtcidname'
+	option title	'TXTCIDName'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_txtcidname'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_txtcidname'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_txtcidname'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_url'
+	option title	'Send URL Applications'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_url'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_url'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_url'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_userevent'
+	option title	'Custom User Event Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_userevent'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_userevent'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_userevent'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_verbose'
+	option title	'Send verbose output'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_verbose'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_verbose'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_verbose'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_waitforring'
+	option title	'Waits until first ring after time'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_waitforring'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_waitforring'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_waitforring'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_waitforsilence'
+	option title	'Wait For Silence Application'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_waitforsilence'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_waitforsilence'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_waitforsilence'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_while'
+	option title	'While Loops and Conditional Execution'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_while'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_while'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_while'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'func_callerid'
+	option title	'Caller ID related dialplan functions'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.func_callerid'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.func_callerid'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.func_callerid'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'func_enum'
+	option title	'ENUM Functions'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.func_enum'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.func_enum'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.func_enum'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'func_uri'
+	option title	'URI encoding / decoding functions'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.func_uri'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.func_uri'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.func_uri'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_ael'
+	option title	'Asterisk Extension Language Compiler'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_ael'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_ael'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_ael'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_config'
+	option title	'Text Extension Configuration'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_config'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_config'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_config'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_functions'
+	option title	'load => .so ; Builtin dialplan functions'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_functions'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_functions'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_functions'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_loopback'
+	option title	'Loopback Switch'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_loopback'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_loopback'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_loopback'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_realtime'
+	option title	'Realtime Switch'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_realtime'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_realtime'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_realtime'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_spool'
+	option title	'Outgoing Spool Support'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_spool'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_spool'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_spool'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'pbx_wilcalu'
+	option title	'Wil Cal U (Auto Dialer)'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.pbx_wilcalu'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.pbx_wilcalu'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.pbx_wilcalu'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_smdi'
+	option title	'SMDI Module'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_smdi'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_smdi'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_smdi'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_snmp'
+	option title	'SNMP Module'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_snmp'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_snmp'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_snmp'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_config_pgsql'
+	option title	'PGSQL Module'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_config_pgsql'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_config_pgsql'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_config_pgsql'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'app_voicemail'
+	option title	'Voicemail'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.app_voicemail'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.app_voicemail'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.app_voicemail'
+	option value	'auto'
+	option title	'Load as Required'
+
+config variable
+	option name	'res_musiconhold'
+	option title	'Music On Hold Resource'
+	option section	'asterisk.module'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.module.res_musiconhold'
+	option value	'yes'
+	option title	'Load'
+
+config enum
+	option variable 'asterisk.module.res_musiconhold'
+	option value	'no'
+	option title	'Do Not Load'
+
+config enum
+	option variable 'asterisk.module.res_musiconhold'
+	option value	'auto'
+	option title	'Load as Required'
+
+
+config section
+	option name	'sipgeneral'
+	option title	'Section sipgeneral'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'allow'
+	option title	'Allow codecs'
+	option section	'asterisk.sipgeneral'
+	option type	'enum'
+	option multival	'true'
+
+config enum
+	option variable 'asterisk.sipgeneral.allow'
+	option value	'ulaw'
+	option title	'ulaw'
+
+config enum
+	option variable 'asterisk.sipgeneral.allow'
+	option value	'alaw'
+	option title	'alaw'
+
+config enum
+	option variable 'asterisk.sipgeneral.allow'
+	option value	'gsm'
+	option title	'gsm'
+
+config enum
+	option variable 'asterisk.sipgeneral.allow'
+	option value	'g726'
+	option title	'g726'
+
+config variable
+	option name	'port'
+	option title	'SIP Port'
+	option section	'asterisk.sipgeneral'
+	option datatype	'port'
+
+config variable
+	option name	'realm'
+	option title	'SIP realm'
+	option section	'asterisk.sipgeneral'
+	option datatype	'domain'
+
+
+config section
+	option name	'sip'
+	option title	'SIP Connection'
+	option package	'asterisk'
+	option named	true
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'type'
+	option title	'Client Type'
+	option section	'asterisk.sip'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.sip.type'
+	option value	'friend'
+	option title	'Friend (outbound/inbound)'
+
+config enum
+	option variable 'asterisk.sip.type'
+	option value	'user'
+	option title	'User (inbound - authenticate by "from")'
+
+config enum
+	option variable 'asterisk.sip.type'
+	option value	'peer'
+	option title	'Peer (outbound - match by host)'
+
+config variable
+	option name	'timeout'
+	option title	'Dial Timeout (sec)'
+	option section	'asterisk.sip'
+	option datatype	'integer'
+
+config variable
+	option name	'extension'
+	option title	'Add as Extension'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'prefix'
+	option title	'Dial Prefix (for external line)'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'internationalprefix'
+	option title	'International Dial Prefix'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'alwaysinternational'
+	option title	'Always Dial International'
+	option section	'asterisk.sip'
+	option datatype	'boolean'
+
+config variable
+	option name	'countrycode'
+	option title	'Country Code for connection'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+
+config variable
+	option name	'canreinvite'
+	option title	'Reinvite/redirect media connections'
+	option section	'asterisk.sip'
+	option type	'enum'
+
+config enum
+	option variable	'asterisk.sip.canreinvite'
+	option value	'yes'
+	option title	'Yes'
+
+config enum
+	option variable	'asterisk.sip.canreinvite'
+	option value	'nonat'
+	option title	'Yes when not behind NAT'
+
+config enum
+	option variable	'asterisk.sip.canreinvite'
+	option value	'update'
+	option title	'Use UPDATE rather than INVITE for path redirection'
+
+config enum
+	option variable	'asterisk.sip.canreinvite'
+	option value	'no'
+	option title	'No'
+
+config variable
+	option name	'context'
+	option title	'Context to use'
+	option section	'asterisk.sip'
+	option datatype	'string'
+	option valueof	'asterisk.dialplan'
+	option valueof	'asterisk.dialzone'
+
+config variable
+	option name	'dtmfmode'
+	option title	'DTMF mode'
+	option section	'asterisk.sip'
+	option type	'enum'
+
+config enum
+	option variable	'asterisk.sip.dtmfmode'
+	option value	'info'
+	option title	'Use RFC2833 or INFO for the BudgeTone'
+
+config enum
+	option variable	'asterisk.sip.dtmfmode'
+	option value	'rfc2833'
+	option title	'Use RFC2833 for the BudgeTone'
+
+config enum
+	option variable	'asterisk.sip.dtmfmode'
+	option value	'inband'
+	option title	'Use Inband (only with ulaw/alaw)'
+
+config variable
+	option name	'fromdomain'
+	option title	'Primary domain identity for From: headers'
+	option section	'asterisk.sip'
+	option datatype	'hostname'
+
+config variable
+	option name	'fromuser'
+	option title	'From user (required by many SIP providers)'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'host'
+	option title	'Host name (or blank)'
+	option section	'asterisk.sip'
+	option datatype	'hostname'
+
+config variable
+	option name	'incoming'
+	option title	'Ring on incoming dialplan contexts'
+	option section	'asterisk.sip'
+	option datatype	'string'
+	option type	'lazylist'
+
+config variable
+	option name	'insecure'
+	option title	'Allow Insecure for'
+	option section	'asterisk.sip'
+	option datatype	'string'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.sip.insecure'
+	option value	'port'
+	option title	'Allow mismatched port number'
+
+config enum
+	option variable 'asterisk.sip.insecure'
+	option value	'invite'
+	option title	'Do not require auth of incoming INVITE'
+
+config enum
+	option variable 'asterisk.sip.insecure'
+	option value	'port,invite'
+	option title	'Allow mismatched port and Do not require auth of incoming INVITE'
+
+config variable
+	option name	'mailbox'
+	option title	'Mailbox for MWI'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'nat'
+	option title	'NAT between phone and Asterisk'
+	option section	'asterisk.sip'
+	option datatype	'boolean'
+
+config variable
+	option name	'pedantic'
+	option title	'Check tags in headers'
+	option section	'asterisk.sip'
+	option datatype	'boolean'
+
+config variable
+	option name	'port'
+	option title	'SIP Port'
+	option section	'asterisk.sip'
+	option datatype	'port'
+
+config variable
+	option name	'qualify'
+	option title	'Reply Timeout (ms) for down connection'
+	option section	'asterisk.sip'
+	option datatype	'integer'
+
+config variable
+	option name	'register'
+	option title	'Register connection'
+	option section	'asterisk.sip'
+	option datatype	'boolean'
+
+config variable
+	option name	'username'
+	option title	'Username'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'secret'
+	option title	'Secret'
+	option section	'asterisk.sip'
+	option datatype	'string'
+
+config variable
+	option name	'selfmailbox'
+	option title	'Dial own extension for mailbox'
+	option section	'asterisk.sip'
+	option datatype	'boolean'
+
+
+config section
+	option name	'iax'
+	option title	'SIP Connection'
+	option package	'asterisk'
+	option named	true
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'type'
+	option title	'Option type'
+	option section	'asterisk.iax'
+	option datatype	'string'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.iax.type'
+	option value	'friend'
+	option title	'Friend (outbound/inbound)'
+
+config enum
+	option variable 'asterisk.iax.type'
+	option value	'user'
+	option title	'User (inbound - authenticate by "from")'
+
+config enum
+	option variable 'asterisk.iax.type'
+	option value	'peer'
+	option title	'Peer (outbound - match by host)'
+
+config variable
+	option name	'extension'
+	option title	'Add as Extension'
+	option section	'asterisk.iax'
+	option datatype	'string'
+
+config variable
+	option name	'timeout'
+	option title	'Dial Timeout (sec)'
+	option section	'asterisk.iax'
+	option datatype	'integer'
+
+config variable
+	option name	'prefix'
+	option title	'Dial Prefix (for external line)'
+	option section	'asterisk.iax'
+	option datatype	'string'
+
+config variable
+	option name	'internationalprefix'
+	option title	'International Dial Prefix'
+	option section	'asterisk.iax'
+	option datatype	'string'
+
+config variable
+	option name	'alwaysinternational'
+	option title	'Always Dial International'
+	option section	'asterisk.iax'
+	option datatype	'boolean'
+
+config variable
+	option name	'countrycode'
+	option title	'Country Code for connection'
+	option section	'asterisk.iax'
+	option datatype	'string'
+
+config variable
+	option name	'context'
+	option title	'Context to use'
+	option section	'asterisk.iax'
+	option datatype	'string'
+	option valueof	'asterisk.dialplan'
+	option valueof	'asterisk.dialzone'
+
+config variable
+	option name	'host'
+	option title	'Host name (or blank)'
+	option section	'asterisk.iax'
+	option datatype	'hostname'
+
+config variable
+	option name	'secret'
+	option title	'Secret'
+	option section	'asterisk.iax'
+	option datatype	'string'
+
+config variable
+	option name	'username'
+	option title	'User name'
+	option section	'asterisk.iax'
+	option datatype	'string'
+
+
+config section
+	option name	'iaxgeneral'
+	option title	'IAX General Options'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'allow'
+	option title	'Allow Codecs'
+	option section	'asterisk.iaxgeneral'
+	option datatype	'string'
+	option type	'enum'
+	option multival	'true'
+
+config enum
+	option variable 'asterisk.iaxgeneral.allow'
+	option value	'alaw'
+	option title	'alaw'
+
+config enum
+	option variable 'asterisk.iaxgeneral.allow'
+	option value	'gsm'
+	option title	'gsm'
+
+config enum
+	option variable 'asterisk.iaxgeneral.allow'
+	option value	'g726'
+	option title	'g726'
+
+config variable
+	option name	'canreinvite'
+	option title	'Reinvite/redirect media connections'
+	option section	'asterisk.iaxgeneral'
+	option type	'enum'
+
+config enum
+	option variable	'asterisk.iaxgeneral.canreinvite'
+	option value	'yes'
+	option title	'Yes'
+
+config enum
+	option variable	'asterisk.iaxgeneral.canreinvite'
+	option value	'nonat'
+	option title	'Yes when not behind NAT'
+
+config enum
+	option variable	'asterisk.iaxgeneral.canreinvite'
+	option value	'update'
+	option title	'Use UPDATE rather than INVITE for path redirection'
+
+config enum
+	option variable	'asterisk.iaxgeneral.canreinvite'
+	option value	'no'
+	option title	'No'
+
+config variable
+	option name	'static'
+	option title	'Static'
+	option section	'asterisk.iaxgeneral'
+	option datatype	'boolean'
+
+config variable
+	option name	'writeprotect'
+	option title	'Write Protect'
+	option section	'asterisk.iaxgeneral'
+	option datatype	'boolean'
+
+
+config section
+	option name	'dialplangeneral'
+	option title	'Dialplan General Options'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'allowtransfer'
+	option title	'Allow transfer'
+	option section	'asterisk.dialplangeneral'
+	option datatype	'boolean'
+
+config variable
+	option name	'canreinvite'
+	option title	'Reinvite/redirect media connections'
+	option section	'asterisk.dialplangeneral'
+	option type	'enum'
+
+config enum
+	option variable	'asterisk.dialplangeneral.canreinvite'
+	option value	'yes'
+	option title	'Yes'
+
+config enum
+	option variable	'asterisk.dialplangeneral.canreinvite'
+	option value	'nonat'
+	option title	'Yes when not behind NAT'
+
+config enum
+	option variable	'asterisk.dialplangeneral.canreinvite'
+	option value	'update'
+	option title	'Use UPDATE rather than INVITE for path redirection'
+
+config enum
+	option variable	'asterisk.dialplangeneral.canreinvite'
+	option value	'no'
+	option title	'No'
+
+config variable
+	option name	'clearglobalvars'
+	option title	'Clear global vars'
+	option section	'asterisk.dialplangeneral'
+	option datatype	'boolean'
+
+
+config section
+	option name	'dialplan'
+	option title	'Section dialplan'
+	option package	'asterisk'
+	option named	true
+	option unique	false
+	option dynamic	true
+	option required	false
+
+config variable
+	option name	'include'
+	option title	'Option include'
+	option section	'asterisk.dialplan'
+	option datatype	'string'
+	option valueof	'asterisk.dialplan'
+	option valueof	'asterisk.dialzone'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.dialplan.include'
+	option value	'extensions'
+	option title	'Extensions'
+
+config section
+	option name	'dialplanvoice'
+	option title	'Dialplan Voicemail'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config section
+	option name	'dialplanexten'
+	option title	'Dialplan Extension'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config section
+	option name	'dialplanmeetme'
+	option title	'Dialplan Conference'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config section
+	option name	'dialplansaytime'
+	option title	'Dialplan Time'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config section
+	option name	'dialplangoto'
+	option title	'Dialplan Goto'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+
+config section
+	option name	'dialzone'
+	option title	'Dial Zones for Dialplan'
+	option package	'asterisk'
+	option named	true
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'addprefix'
+	option title	'Prefix to add matching dialplans'
+	option section	'asterisk.dialzone'
+	option datatype	'integer'
+
+config variable
+	option name	'localprefix'
+	option title	'Prefix (0) to add/remove to/from international numbers'
+	option section	'asterisk.dialzone'
+	option datatype	'string'
+
+config variable
+	option name	'match'
+	option title	'Match plan'
+	option section	'asterisk.dialzone'
+	option datatype	'string'
+
+config variable
+	option name	'international'
+	option title	'Match International prefix'
+	option section	'asterisk.dialzone'
+	option datatype	'string'
+	option type	'lazylist'
+
+config variable
+	option name	'localzone'
+	option title	'Dialzone for international numbers matched as local'
+	option section	'asterisk.dialzone'
+	option datatype	'string'
+	option valueof	'asterisk.dialplan'
+	option valueof	'asterisk.dialzone'
+
+config variable
+	option name	'uses'
+	option title	'Connection to use'
+	option section	'asterisk.dialzone'
+	option datatype	'string'
+
+
+config section
+	option name	'featurepark'
+	option title	'Parking Feature'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'parkenabled'
+	option title	'Enable Parking'
+	option section	'asterisk.featurepark'
+	option datatype	'boolean'
+
+config variable
+	option name	'adsipark'
+	option title	'ADSI Park'
+	option section	'asterisk.featurepark'
+	option datatype	'boolean'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'atxfernoanswertimeout'
+	option title	'Attended transfer timeout (sec)'
+	option section	'asterisk.featurepark'
+	option datatype	'integer'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'automon'
+	option title	'One touch record key'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'context'
+	option title	'Name of call context for parking'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'courtesytone'
+	option title	'Sound file to play to parked caller'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'featuredigittimeout'
+	option title	'Max time (ms) between digits for feature activation'
+	option section	'asterisk.featurepark'
+	option datatype	'integer'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'findslot'
+	option title	'Method to Find Parking slot'
+	option section	'asterisk.featurepark'
+	option type	'enum'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config enum
+	option variable 'asterisk.featurepark.findslot'
+	option value	'first'
+	option title	'First available slot'
+
+config enum
+	option variable 'asterisk.featurepark.findslot'
+	option value	'next'
+	option title	'Next free parking space'
+
+config variable
+	option name	'parkedmusicclass'
+	option title	'Music on Hold class for the parked channel'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option valueof	'asterisk.moh'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'parkedplay'
+	option title	'Play courtesy tone to'
+	option section	'asterisk.featurepark'
+	option type	'enum'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config enum
+	option variable 'asterisk.featurepark.parkedplay'
+	option value	'caller'
+	option title	'Caller'
+
+config enum
+	option variable 'asterisk.featurepark.parkedplay'
+	option value	'parked'
+	option title	'Parked user'
+
+config enum
+	option variable 'asterisk.featurepark.parkedplay'
+	option value	'both'
+	option title	'Both'
+
+config variable
+	option name	'parkext'
+	option title	'Extension to dial to park'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'parkingtime'
+	option title	'Parking time (secs)'
+	option section	'asterisk.featurepark'
+	option datatype	'integer'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'parkpos'
+	option title	'Range of extensions for call parking'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'pickupexten'
+	option title	'Pickup extension'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'transferdigittimeout'
+	option title	'Seconds to wait bewteen digits when transferring'
+	option section	'asterisk.featurepark'
+	option datatype	'integer'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'xferfailsound'
+	option title	'sound when attended transfer is complete'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+config variable
+	option name	'xfersound'
+	option title	'Sound when attended transfer fails'
+	option section	'asterisk.featurepark'
+	option datatype	'string'
+	option depends 	'asterisk.featurepark.parkenabled=true'
+
+
+config section
+	option name	'featuremap'
+	option title	'Feature Key maps'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'blindxfer'
+	option title	'Blind transfer key'
+	option section	'asterisk.featuremap'
+	option datatype	'string'
+
+config variable
+	option name	'disconnect'
+	option title	'Key to Disconnect call'
+	option section	'asterisk.featuremap'
+	option datatype	'string'
+
+config variable
+	option name	'atxfer'
+	option title	'Attended transfer key'
+	option section	'asterisk.featuremap'
+	option datatype	'string'
+
+config variable
+	option name	'parkcall'
+	option title	'Key to Park call'
+	option section	'asterisk.featuremap'
+	option datatype	'string'
+
+
+config section
+	option name	'hardwarereboot'
+	option title	'Reload Hardware Config'
+	option package	'asterisk'
+	option named	true
+	option unique	true
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'method'
+	option title	'Reboot Method'
+	option section	'asterisk.hardwarereboot'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.hardwarereboot.method'
+	option value	'web'
+	option title	'Web URL (wget)'
+
+config enum
+	option variable 'asterisk.hardwarereboot.method'
+	option value	'system'
+	option title	'program to run'
+
+config variable
+	option name	'param'
+	option title	'Parameter'
+	option section	'asterisk.hardwarereboot'
+	option datatype	'string'
+
+
+config section
+	option name	'meetmegeneral'
+	option title	'Meetme Conference General Options'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'audiobuffers'
+	option title	'Number of 20ms audio buffers to be used'
+	option section	'asterisk.meetmegeneral'
+	option datatype	'integer'
+
+
+config section
+	option name	'meetme'
+	option title	'Meetme Conference'
+	option package	'asterisk'
+	option named	true
+	option unique	true
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'adminpin'
+	option title	'Admin PIN'
+	option section	'asterisk.meetme'
+	option datatype	'string'
+
+config variable
+	option name	'pin'
+	option title	'Meeting PIN'
+	option section	'asterisk.meetme'
+	option datatype	'string'
+
+
+config section
+	option name	'moh'
+	option title	'Music On Hold'
+	option package	'asterisk'
+	option named	true
+	option unique	true
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'directory'
+	option title	'Directory of Music'
+	option section	'asterisk.moh'
+	option datatype	'directory'
+
+config variable
+	option name	'mode'
+	option title	'Option mode'
+	option section	'asterisk.moh'
+	option type	'enum'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'system'
+	option title	'program to run'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'files'
+	option title	'Read files from directory'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'quietmp3'
+	option title	'Quite MP3'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'mp3'
+	option title 	'Loud MP3'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'mp3nb'
+	option title	'unbuffered MP3'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'quietmp3nb'
+	option title	'Quiet Unbuffered MP3'
+
+config enum
+	option variable 'asterisk.moh.mode'
+	option value	'custom'
+	option title	'Run a custom application'
+
+config variable
+	option name	'application'
+	option title	'Application'
+	option section	'asterisk.moh'
+	option datatype	'string'
+	option depends 	'asterisk.moh.mode=custom'
+
+config variable
+	option name	'random'
+	option title	'Random Play'
+	option section	'asterisk.moh'
+	option datatype	'boolean'
+
+
+config section
+	option name	'voicegeneral'
+	option title	'Voicemail general options'
+	option package	'asterisk'
+	option named	false
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'serveremail'
+	option title	'From Email address of server'
+	option section	'asterisk.voicegeneral'
+	option datatype	'string'
+
+
+config section
+	option name	'voicemail'
+	option title	'Voice Mail boxes'
+	option package	'asterisk'
+	option named	true
+	option unique	true
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'email'
+	option title	'Email'
+	option section	'asterisk.voicemail'
+	option datatype	'string'
+
+config variable
+	option name	'attach'
+	option title	'Email contains attachment'
+	option section	'asterisk.voicemail'
+	option datatype	'boolean'
+
+config variable
+	option name	'name'
+	option title	'Display Name'
+	option section	'asterisk.voicemail'
+	option datatype	'string'
+
+config variable
+	option name	'password'
+	option title	'Password'
+	option section	'asterisk.voicemail'
+	option datatype	'string'
+
+config variable
+	option name	'zone'
+	option title	'Voice zone'
+	option section	'asterisk.voicemail'
+	option datatype	'string'
+	option valueof	'asterisk.voicezone'
+
+
+config section
+	option name	'voicezone'
+	option title	'Voice Zone settings'
+	option package	'asterisk'
+	option named	true
+	option unique	false
+	option dynamic	false
+	option required	false
+
+config variable
+	option name	'message'
+	option title	'Message Format'
+	option section	'asterisk.voicezone'
+	option datatype	'string'
+
+config variable
+	option name	'zone'
+	option title	'Time Zone'
+	option section	'asterisk.voicezone'
+	option datatype	'string'
