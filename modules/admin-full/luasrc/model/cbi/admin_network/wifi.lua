@@ -237,6 +237,7 @@ encr:depends({mode="ap"})
 encr:depends({mode="sta"})
 encr:depends({mode="adhoc"})
 encr:depends({mode="ahdemo"})
+encr:depends({mode="wds"})
 
 encr:value("none", "No Encryption")
 encr:value("wep", "WEP")

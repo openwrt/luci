@@ -216,8 +216,8 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK")
 		encr:value("psk2", "WPA2-PSK")
-		encr:value("wpa", "WPA-EAP", {mode="ap"})
-		encr:value("wpa2i", "WPA2-EAP", {mode="ap"})
+		encr:value("wpa", "WPA-Radius", {mode="ap"})
+		encr:value("wpa2i", "WPA2-Radius", {mode="ap"})
 	elseif hostapd and not supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"})
