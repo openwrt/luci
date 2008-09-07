@@ -566,7 +566,7 @@ function AbstractSection.create(self, section)
 	local stat
 
 	if section then
-		stat = self.map:set(section, nil, self.sectiontype)
+		stat = section:match("^%w+$") and self.map:set(section, nil, self.sectiontype)
 	else
 		section = self.map:add(self.sectiontype)
 		stat = section
@@ -795,6 +795,9 @@ function TypedSection.parse(self, novld)
 
 				if name and #name > 0 then
 					created = self:create(name) and name
+					if not created then
+						self.invalid_cts = true
+					end
 				end
 			end
 		end
