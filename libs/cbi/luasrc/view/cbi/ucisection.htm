@@ -31,7 +31,7 @@ $Id$
 				<%-
 					for i, val in pairs(self.optionals[section]) do
 				-%>
-					<%-=string.format("%q", striptags(val.title)) .. ":" .. string.format("%q", val.option)-%>,
+					<%-=string.format("%q", val.option) .. ":" .. string.format("%q", striptags(val.title))-%>,
 				<%-
 					end
 				-%>
