@@ -13,7 +13,7 @@ $Id$
 
 -%>
 <%
-local v = self:valuelist(section)
+local v = self:valuelist(section) or {}
 %>
 <%+cbi/valueheader%>
 <% if self.widget == "select" then %>

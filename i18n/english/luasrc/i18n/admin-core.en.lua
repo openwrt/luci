@@ -182,6 +182,8 @@ dhcp_dhcp_ignore_desc = 'disable <abbr title="Dynamic Host Configuration Protoco
 dhcp_dhcp_force = 'Force'
 dhcp_dhcp_start_desc = 'first address (last octet)'
 dhcp_dhcp_limit_desc = 'number of leased addresses -1'
+dhcp_dhcp_dhcpoption = 'DHCP-Options'
+dhcp_dhcp_dhcpoption_desc = 'See &quot;dnsmasq --help dhcp&quot; for a list of available options.'
 dhcp_leases = 'Leases'
 luci_ethers = 'Static Leases'
 dhcp_timeremain = 'Leasetime remaining'
