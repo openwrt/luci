@@ -21,6 +21,11 @@ define Package/luci-addons
   URL:=http://luci.freifunk-halle.net
 endef
 
+define Package/luci-addons/conffiles
+/etc/config/luci_hosts
+/etc/config/luci_ethers
+endef
+
 define Package/luci-addons/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/sbin
