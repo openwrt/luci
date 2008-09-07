@@ -813,7 +813,17 @@ end
 uvlitem = luci.util.class()
 
 function uvlitem.cid(self)
-	return table.concat( self.cref, '.' )
+	if #self.cref == 1 then
+		return self.cref[1]
+	else
+		local r = { unpack(self.cref) }
+		local c = self.c
+		if c and c[r[2]] and c[r[2]]['.anonymous'] and c[r[2]]['.index'] then
+			r[2] = '@' .. c[r[2]]['.type'] ..
+			       '[' .. tostring(c[r[2]]['.index']) .. ']'
+		end
+		return table.concat( r, '.' )
+	end
 end
 
 function uvlitem.sid(self)
