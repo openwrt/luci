@@ -916,7 +916,8 @@ uvlitem._ucicache = {}
 function uvlitem._loadconf(self, co, c)
 	co = co or self._ucicache[c]
 	if not co then
-		local co, err = cursor:get_all(c)
+		local err
+		co, err = cursor:get_all(c)
 
 		if err then
 			self:error(ERR.UCILOAD(self, err))
