@@ -835,12 +835,12 @@ function uvlitem.scheme(self, opt)
 	local s = self._scheme
 
 	if not s then
-		s = self.s and self.s.packages and s[self.sref[1]]
-		if #self.sref > 1 then
-			s = s and s.sections and s[self.sref[2]]
-		end
-		if #self.sref > 2 then
-			s = s and s[self.sref[2]] and s[self.sref[3]]
+		s = self.s and self.s.packages and self.s.packages[self.sref[1]]
+		if #self.sref == 2 then
+			s = s and s.sections and s.sections[self.sref[2]]
+		elseif #self.sref > 2 then
+			s = s and s.variables and s.variables[self.sref[2]]
+				and s.variables[self.sref[2]][self.sref[3]]
 		end
 		self._scheme = s
 	end
