@@ -23,12 +23,13 @@ module( "luci.uvl", package.seeall )
 
 require("luci.fs")
 require("luci.util")
-require("luci.model.uci")
+local uci = require("luci.model.uci")
 require("luci.uvl.errors")
 require("luci.uvl.datatypes")
 require("luci.uvl.validation")
 require("luci.uvl.dependencies")
 
+local cursor = uci.cursor()
 
 TYPE_SCHEME   = 0x00
 TYPE_CONFIG   = 0x01
@@ -831,48 +832,37 @@ function uvlitem.sid(self)
 end
 
 function uvlitem.scheme(self, opt)
-	local s
+	local s = self._scheme
 
-	if #self.sref == 4 or #self.sref == 3 then
-		s = self.s and self.s.packages
-		s = s      and s[self.sref[1]]
-		s = s      and s.variables
-		s = s      and s[self.sref[2]]
-		s = s      and s[self.sref[3]]
-	elseif #self.sref == 2 then
-		s = self.s and self.s.packages
-		s = s      and s[self.sref[1]]
-		s = s      and s.sections
-		s = s      and s[self.sref[2]]
-	else
-		s = self.s and self.s.packages
-		s = s      and s[self.sref[1]]
+	if not s then
+		s = self.s and self.s.packages and s[self.sref[1]]
+		if #self.sref > 1 then
+			s = s and s.sections and s[self.sref[2]]
+		end
+		if #self.sref > 2 then
+			s = s and s[self.sref[2]] and s[self.sref[3]]
+		end
+		self._scheme = s
 	end
 
-	if s and opt then
-		return s[opt]
-	elseif s then
-		return s
-	end
+	return opt and (s and s[opt]) or s
 end
 
 function uvlitem.config(self, opt)
-	local c
+	local c = self._config
 
-	if #self.cref == 4 or #self.cref == 3 then
-		c = self.c and self.c[self.cref[2]] or nil
-		c = c      and c[self.cref[3]]      or nil
-	elseif #self.cref == 2 then
-		c = self.c and self.c[self.cref[2]] or nil
-	else
+	if not c then
 		c = self.c
+		if #self.cref > 1 then
+			c = c and self.c[self.cref[2]]
+		end
+		if #self.cref > 2 then
+			c = c and c[self.cref[3]]
+		end		
+		self._config = c
 	end
 
-	if c and opt then
-		return c[opt]
-	elseif c then
-		return c
-	end
+	return opt and (c and c[opt]) or c
 end
 
 function uvlitem.title(self)
@@ -881,15 +871,14 @@ function uvlitem.title(self)
 end
 
 function uvlitem.type(self)
-	if self.t == luci.uvl.TYPE_CONFIG then
-		return 'config'
-	elseif self.t == luci.uvl.TYPE_SECTION then
-		return 'section'
-	elseif self.t == luci.uvl.TYPE_OPTION then
-		return 'option'
-	elseif self.t == luci.uvl.TYPE_ENUM then
-		return 'enum'
-	end
+	local _t = {
+		[TYPE_CONFIG] = 'config',
+		[TYPE_SECTION] = 'section',
+		[TYPE_OPTION] = 'option',
+		[TYPE_ENUM] = 'enum'
+	}
+
+	return _t[self.t]
 end
 
 function uvlitem.error(self, ...)
@@ -913,22 +902,27 @@ function uvlitem.parent(self)
 	if self.p then
 		return self.p
 	elseif #self.cref == 3 or #self.cref == 4 then
-		return luci.uvl.section( self.s, self.c, self.cref[1], self.cref[2] )
+		return section( self.s, self.c, self.cref[1], self.cref[2] )
 	elseif #self.cref == 2 then
-		return luci.uvl.config( self.s, self.c, self.cref[1] )
+		return config( self.s, self.c, self.cref[1] )
 	else
 		return nil
 	end
 end
 
+-- Shared cache
+uvlitem._ucicache = {}
+
 function uvlitem._loadconf(self, co, c)
+	co = co or self._ucicache[c]
 	if not co then
-		local uci, err = luci.model.uci.cursor(), nil
-		co, err = uci:get_all(c)
+		local co, err = cursor:get_all(c)
 
 		if err then
 			self:error(ERR.UCILOAD(self, err))
 		end
+		
+		self._ucicache[c] = co
 	end
 	return co
 end
@@ -957,7 +951,7 @@ function scheme.__init__(self, scheme, co, c)
 	self.sref = { c }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_SCHEME
+	self.t    = TYPE_SCHEME
 end
 
 --- Add an error to scheme.
@@ -970,7 +964,7 @@ end
 --- Get an associated config object.
 -- @return	Config instance
 function scheme.config(self)
-	local co = luci.uvl.config( self.s, self.cref[1] )
+	local co = config( self.s, self.cref[1] )
 	      co.p = self
 
 	return co
@@ -982,7 +976,7 @@ function scheme.sections(self)
 	local v = { }
 	if self.s.packages[self.sref[1]].sections then
 		for o, _ in pairs( self.s.packages[self.sref[1]].sections ) do
-			table.insert( v, luci.uvl.option(
+			table.insert( v, option(
 				self.s, self.c, self.cref[1], self.cref[2], o
 			) )
 		end
@@ -994,7 +988,7 @@ end
 -- @param s	Section to select
 -- @return	Section instance
 function scheme.section(self, s)
-	local so = luci.uvl.section( self.s, self.c, self.cref[1], s )
+	local so = section( self.s, self.c, self.cref[1], s )
 	      so.p = self
 
 	return so
@@ -1024,7 +1018,7 @@ function config.__init__(self, scheme, co, c)
 	self.sref = { c }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_CONFIG
+	self.t    = TYPE_CONFIG
 end
 
 --- Get all section objects associated with this config.
@@ -1072,7 +1066,7 @@ function section.__init__(self, scheme, co, c, s)
 	self.sref = { c, co and co[s] and co[s]['.type'] or s }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_SECTION
+	self.t    = TYPE_SECTION
 end
 
 --- Get all option objects associated with this section.
@@ -1123,7 +1117,7 @@ function option.__init__(self, scheme, co, c, s, o)
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_OPTION
+	self.t    = TYPE_OPTION
 end
 
 --- Get the value of this option.
@@ -1176,5 +1170,5 @@ function enum.__init__(self, scheme, co, c, s, o, v)
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o, v }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_ENUM
+	self.t    = TYPE_ENUM
 end

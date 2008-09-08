@@ -21,31 +21,20 @@ local ERR = luci.uvl.errors
 function _parse_reference( r, c, s, o )
 	local ref  = { }
 	local vars = {
-		config  = ( c or '$config'  ),
-		section = ( s or '$section' ),
-		option  = ( o or '$option'  )
+		config  = c,
+		section = s,
+		option  = o
 	}
 
-	for i, v in ipairs(luci.util.split(r,".")) do
-		table.insert(ref, (v:gsub( "%$(.+)", function(n) return vars[n] end )))
+	for v in r:gmatch("[^.]+") do
+		table.insert(ref, (v:gsub( "%$(.+)", vars )))
 	end
-
-	if c or s then
-		if #ref == 1 and c and s then
-			ref = { c, s, ref[1] }
-		elseif #ref == 2 and c then
-			ref = { c, unpack(ref) }
-		elseif #ref ~= 3 then
-			ref = nil
-		end
-	else
-		if #ref == 1 then
-			ref = { '$config', '$section', ref[1] }
-		elseif #ref == 2 then
-			ref = { '$config', unpack(ref) }
-		elseif #ref ~= 3 then
-			ref = nil
-		end
+	
+	if #ref < 2 then
+		table.insert(ref, 1, s or '$section')
+	end
+	if #ref < 3 then
+		table.insert(ref, 1, c or '$config')
 	end
 
 	return ref
