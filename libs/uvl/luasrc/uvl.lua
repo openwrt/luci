@@ -19,22 +19,28 @@ $Id$
 -- @class	module
 -- @cstyle	instance
 
-module( "luci.uvl", package.seeall )
+local fs = require "luci.fs"
+local uci = require "luci.model.uci"
+local util = require "luci.util"
+local table = require "table"
+local string = require "string"
 
-require("luci.fs")
-require("luci.util")
-require("luci.model.uci")
-require("luci.uvl.errors")
-require("luci.uvl.datatypes")
-require("luci.uvl.validation")
-require("luci.uvl.dependencies")
+local require, pcall, ipairs, pairs = require, pcall, ipairs, pairs
+local type, error, tonumber, tostring = type, error, tonumber, tostring
+local unpack = unpack
 
+module "luci.uvl"
 
-TYPE_SCHEME   = 0x00
-TYPE_CONFIG   = 0x01
-TYPE_SECTION  = 0x02
-TYPE_OPTION   = 0x03
-TYPE_ENUM     = 0x04
+local ERR = require "luci.uvl.errors"
+local datatypes = require "luci.uvl.datatypes"
+local validation = require "luci.uvl.validation"
+local dependencies = require "luci.uvl.dependencies"
+
+local TYPE_SCHEME   = 0x00
+local TYPE_CONFIG   = 0x01
+local TYPE_SECTION  = 0x02
+local TYPE_OPTION   = 0x03
+local TYPE_ENUM     = 0x04
 
 --- Boolean; default true;
 -- treat sections found in config but not in scheme as error
@@ -55,7 +61,6 @@ STRICT_LIST_TYPE           = true
 
 local default_schemedir = "/lib/uci/schema"
 local default_savedir = "/tmp/.uvl"
-local ERR = luci.uvl.errors
 
 
 --- Object constructor
@@ -63,17 +68,17 @@ local ERR = luci.uvl.errors
 -- @name			UVL
 -- @param schemedir	Path to the scheme directory (optional)
 -- @return			Instance object
-UVL = luci.util.class()
+UVL = util.class()
 
 function UVL.__init__( self, schemedir )
 	self.schemedir	= schemedir or default_schemedir
 	self.packages	= { }
 	self.beenthere  = { }
 	self.depseen    = { }
-	self.uci		= luci.model.uci
-	self.err		= luci.uvl.errors
-	self.dep		= luci.uvl.dependencies
-	self.datatypes  = luci.uvl.datatypes
+	self.uci		= uci
+	self.err		= ERR
+	self.dep		= dependencies
+	self.datatypes  = datatypes
 end
 
 
@@ -108,19 +113,19 @@ function UVL.validate( self, config, section, option )
 end
 
 --- Validate given configuration.
--- @param config	Name of the configuration to validate
+-- @param cfg	Name of the configuration to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_config( self, config, uci )
+function UVL.validate_config( self, cfg, uci )
 
-	if not self.packages[config] then
-		local ok, err = self:read_scheme(config)
+	if not self.packages[cfg] then
+		local ok, err = self:read_scheme(cfg)
 		if not ok then
 			return false, err
 		end
 	end
 
-	local co = luci.uvl.config( self, uci or config, uci and config )
+	local co = config( self, uci or cfg, uci and cfg )
 	local sc = { }
 
 	self.beenthere = { }
@@ -140,7 +145,7 @@ function UVL.validate_config( self, config, uci )
 		end
 	end
 
-	for k, v in pairs( self.packages[config].sections ) do
+	for k, v in pairs( self.packages[cfg].sections ) do
 		sc[k] = 0
 		_uci_foreach( k,
 			function(s)
@@ -158,7 +163,7 @@ function UVL.validate_config( self, config, uci )
 		end
 	end
 
-	for _, k in ipairs(luci.util.keys(sc)) do
+	for _, k in ipairs(util.keys(sc)) do
 		local so = co:section(k)
 		if so:scheme('required') and sc[k] == 0 then
 			co:error(ERR.SECT_REQUIRED(so))
@@ -175,16 +180,16 @@ end
 -- @param section	Name of the section to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_section( self, config, section, uci )
+function UVL.validate_section( self, cfg, section, uci )
 
-	if not self.packages[config] then
-		local ok, err = self:read_scheme( config )
+	if not self.packages[cfg] then
+		local ok, err = self:read_scheme( cfg )
 		if not ok then
 			return false, err
 		end
 	end
 
-	local co = luci.uvl.config( self, uci or config, uci and config )
+	local co = config( self, uci or cfg, uci and cfg )
 	local so = co:section( section )
 
 	self.beenthere = { }
@@ -207,16 +212,16 @@ end
 -- @param option	Name of the option to validate
 -- @return			Boolean indicating whether the given config validates
 -- @return			String containing the reason for errors (if any)
-function UVL.validate_option( self, config, section, option, uci )
+function UVL.validate_option( self, cfg, section, option, uci )
 
-	if not self.packages[config] then
-		local ok, err = self:read_scheme( config )
+	if not self.packages[cfg] then
+		local ok, err = self:read_scheme( cfg )
 		if not ok then
 			return false, err
 		end
 	end
 
-	local co = luci.uvl.config( self, uci or config, uci and config )
+	local co = config( self, uci or cfg, uci and cfg )
 	local so = co:section( section )
 	local oo = so:option( option )
 
@@ -255,7 +260,7 @@ function UVL._validate_section( self, section )
 			end
 		end
 
-		local ok, err = luci.uvl.dependencies.check( self, section )
+		local ok, err = dependencies.check( self, section )
 		if not ok then
 			section:error(err)
 		end
@@ -301,8 +306,8 @@ function UVL._validate_option( self, option, nodeps )
 				for _, v in ipairs(config_values) do
 					if not scheme_values[v] then
 						return false, option:error( ERR.OPT_BADVALUE(
-							option, { v, luci.util.serialize_data(
-								luci.util.keys(scheme_values)
+							option, { v, util.serialize_data(
+								util.keys(scheme_values)
 							) }
 						) )
 					end
@@ -332,13 +337,13 @@ function UVL._validate_option( self, option, nodeps )
 		end
 
 		if not nodeps then
-			local ok, err = luci.uvl.dependencies.check( self, option )
+			local ok, err = dependencies.check( self, option )
 			if not ok then
 				option:error(err)
 			end
 		end
 
-		local ok, err = luci.uvl.validation.check( self, option )
+		local ok, err = validation.check( self, option )
 		if not ok and STRICT_EXTERNAL_VALIDATORS then
 			return false, option:error(err)
 		end
@@ -350,27 +355,26 @@ end
 --- Find all parts of given scheme and construct validation tree.
 -- This is normally done on demand, so you don't have to call this function
 -- by yourself.
--- @param scheme	Name of the scheme to parse
+-- @param shm	Name of the scheme to parse
 -- @param alias		Create an alias for the loaded scheme
-function UVL.read_scheme( self, scheme, alias )
+function UVL.read_scheme( self, shm, alias )
 
-	local so = luci.uvl.scheme( self, scheme )
-	local bc = "%s/bytecode/%s.lua" %{ self.schemedir, scheme }
+	local so = scheme( self, shm )
+	local bc = "%s/bytecode/%s.lua" %{ self.schemedir, shm }
 
-	if not luci.fs.access(bc) then
-		local schemes = { }
-		local files = luci.fs.glob(self.schemedir .. '/*/' .. scheme)
+	if not fs.access(bc) then
+		local files = fs.glob(self.schemedir .. '/*/' .. shm)
 
 		if files then
 			local ok, err
 			for i, file in ipairs( files ) do
-				if not luci.fs.access(file) then
+				if not fs.access(file) then
 					return false, so:error(ERR.SME_READ(so,file))
 				end
 
-				local uci = luci.model.uci.cursor( luci.fs.dirname(file), default_savedir )
+				local uci = uci.cursor( fs.dirname(file), default_savedir )
 
-				local sname = luci.fs.basename(file)
+				local sname = fs.basename(file)
 				local sd, err = uci:load( sname )
 
 				if not sd then
@@ -394,7 +398,7 @@ function UVL.read_scheme( self, scheme, alias )
 				end)
 			end
 
-			if ok and alias then self.packages[alias] = self.packages[scheme] end
+			if ok and alias then self.packages[alias] = self.packages[shm] end
 			return ok and self, err
 		else
 			return false, so:error(ERR.SME_FIND(so, self.schemedir))
@@ -402,7 +406,7 @@ function UVL.read_scheme( self, scheme, alias )
 	else
 		local sc = loadfile(bc)
 		if sc then
-			self.packages[scheme] = sc()
+			self.packages[shm] = sc()
 			return true
 		else
 			return false, so:error(ERR.SME_READ(so,bc))
@@ -502,7 +506,7 @@ function UVL._parse_section(self, scheme, k, v)
 				s.depends = self:_read_dependency( v2, s.depends )
 				if not s.depends then
 					return false, scheme:error(
-						ERR.SME_BADDEP(so, luci.util.serialize_data(s.depends))
+						ERR.SME_BADDEP(so, util.serialize_data(s.depends))
 					)
 				end
 			elseif k == "dynamic" or k == "unique" or
@@ -556,21 +560,21 @@ function UVL._parse_var(self, scheme, k, v)
 				t.depends = self:_read_dependency( v2, t.depends )
 				if not t.depends then
 					error(scheme:error(so:error(
-						ERR.SME_BADDEP(to, luci.util.serialize_data(v2))
+						ERR.SME_BADDEP(to, util.serialize_data(v2))
 					)))
 				end
 			elseif k == "validator" then
 				t.validators = self:_read_validator( v2, t.validators )
 				if not t.validators then
 					error(scheme:error(so:error(
-						ERR.SME_BADVAL(to, luci.util.serialize_data(v2))
+						ERR.SME_BADVAL(to, util.serialize_data(v2))
 					)))
 				end
 			elseif k == "valueof" then
 				local values, err = self:_read_reference( v2 )
 				if err then
 					error(scheme:error(so:error(
-						ERR.REFERENCE(to, luci.util.serialize_data(v2)):child(err)
+						ERR.REFERENCE(to, util.serialize_data(v2)):child(err)
 					)))
 				end
 				t.type   = "reference"
@@ -650,7 +654,7 @@ function UVL._parse_enum(self, scheme, k, v)
 
 		if not t.enum_depends[v.value] then
 			error(scheme:error(so:error(oo:error(
-				ERR.SME_BADDEP(eo, luci.util.serialize_data(v.depends))
+				ERR.SME_BADDEP(eo, util.serialize_data(v.depends))
 			))))
 		end
 	end
@@ -662,10 +666,10 @@ function UVL._read_dependency( self, values, deps )
 	if values then
 		values = ( type(values) == "table" and values or { values } )
 		for _, value in ipairs(values) do
-			local parts     = luci.util.split( value, "%s*,%s*", nil, true )
+			local parts     = util.split( value, "%s*,%s*", nil, true )
 			local condition = { }
 			for i, val in ipairs(parts) do
-				local k, v = unpack(luci.util.split(val, "%s*=%s*", nil, true))
+				local k, v = unpack(util.split(val, "%s*=%s*", nil, true))
 
 				if k and (
 					k:match("^"..expr.."%."..expr.."%."..expr.."$") or
@@ -681,7 +685,7 @@ function UVL._read_dependency( self, values, deps )
 			if not deps then
 				deps = { condition }
 			else
-				table.insert( deps, condition )
+				deps[#deps+1] = condition
 			end
 		end
 	end
@@ -706,7 +710,7 @@ function UVL._read_validator( self, values, validators )
 					local values = { ... }
 					for _, v in ipairs(values) do
 						local ok, match =
-							luci.util.copcall( string.match, v, pattern )
+							pcall( string.match, v, pattern )
 
 						if not ok then
 							return false, match
@@ -725,7 +729,7 @@ function UVL._read_validator( self, values, validators )
 				if not validators then
 					validators = { validator }
 				else
-					table.insert( validators, validator )
+					validators[#validators+1] = validator
 				end
 			else
 				return nil
@@ -742,10 +746,10 @@ function UVL._read_reference( self, values )
 	values = ( type(values) == "table" and values or { values } )
 
 	for _, value in ipairs(values) do
-		local ref = luci.util.split(value, ".")
+		local ref = util.split(value, ".")
 
 		if #ref == 2 or #ref == 3 then
-			local co = luci.uvl.config( self, ref[1] )
+			local co = config( self, ref[1] )
 			if not co:config() then return false, co:errors() end
 
 			for k, v in pairs(co:config()) do
@@ -770,10 +774,10 @@ end
 
 -- Resolve given path
 function UVL._resolve_function( self, value )
-	local path = luci.util.split(value, ".")
+	local path = util.split(value, ".")
 
 	for i=1, #path-1 do
-		local stat, mod = luci.util.copcall(
+		local stat, mod = pcall(
 			require, table.concat(path, ".", 1, i)
 		)
 
@@ -797,7 +801,7 @@ end
 
 
 --- Object representation of an uvl item - base class.
-uvlitem = luci.util.class()
+uvlitem = util.class()
 
 function uvlitem.cid(self)
 	if #self.cref == 1 then
@@ -859,13 +863,13 @@ function uvlitem.title(self)
 end
 
 function uvlitem.type(self)
-	if self.t == luci.uvl.TYPE_CONFIG then
+	if self.t == TYPE_CONFIG then
 		return 'config'
-	elseif self.t == luci.uvl.TYPE_SECTION then
+	elseif self.t == TYPE_SECTION then
 		return 'section'
-	elseif self.t == luci.uvl.TYPE_OPTION then
+	elseif self.t == TYPE_OPTION then
 		return 'option'
-	elseif self.t == luci.uvl.TYPE_ENUM then
+	elseif self.t == TYPE_ENUM then
 		return 'enum'
 	end
 end
@@ -891,22 +895,25 @@ function uvlitem.parent(self)
 	if self.p then
 		return self.p
 	elseif #self.cref == 3 or #self.cref == 4 then
-		return luci.uvl.section( self.s, self.c, self.cref[1], self.cref[2] )
+		return section( self.s, self.c, self.cref[1], self.cref[2] )
 	elseif #self.cref == 2 then
-		return luci.uvl.config( self.s, self.c, self.cref[1] )
+		return config( self.s, self.c, self.cref[1] )
 	else
 		return nil
 	end
 end
 
 function uvlitem._loadconf(self, co, c)
+	co = co or self._configcache
 	if not co then
-		local uci, err = luci.model.uci.cursor(), nil
-		co, err = uci:get_all(c)
+		local err
+		co, err = uci.cursor():get_all(c)
 
 		if err then
 			self:error(ERR.UCILOAD(self, err))
 		end
+		
+		self._configcache = co
 	end
 	return co
 end
@@ -924,7 +931,7 @@ end
 -- @param co		Configuration data
 -- @param c			Configuration name
 -- @return			Config instance
-scheme = luci.util.class(uvlitem)
+scheme = util.class(uvlitem)
 
 function scheme.__init__(self, scheme, co, c)
 	if not c then
@@ -935,7 +942,7 @@ function scheme.__init__(self, scheme, co, c)
 	self.sref = { c }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_SCHEME
+	self.t    = TYPE_SCHEME
 end
 
 --- Add an error to scheme.
@@ -948,7 +955,7 @@ end
 --- Get an associated config object.
 -- @return	Config instance
 function scheme.config(self)
-	local co = luci.uvl.config( self.s, self.cref[1] )
+	local co = config( self.s, self.cref[1] )
 	      co.p = self
 
 	return co
@@ -960,9 +967,9 @@ function scheme.sections(self)
 	local v = { }
 	if self.s.packages[self.sref[1]].sections then
 		for o, _ in pairs( self.s.packages[self.sref[1]].sections ) do
-			table.insert( v, luci.uvl.option(
+			v[#v+1] = option(
 				self.s, self.c, self.cref[1], self.cref[2], o
-			) )
+			)
 		end
 	end
 	return v
@@ -972,7 +979,7 @@ end
 -- @param s	Section to select
 -- @return	Section instance
 function scheme.section(self, s)
-	local so = luci.uvl.section( self.s, self.c, self.cref[1], s )
+	local so = section( self.s, self.c, self.cref[1], s )
 	      so.p = self
 
 	return so
@@ -991,7 +998,7 @@ end
 -- @param co		Configuration data
 -- @param c			Configuration name
 -- @return			Config instance
-config = luci.util.class(uvlitem)
+config = util.class(uvlitem)
 
 function config.__init__(self, scheme, co, c)
 	if not c then
@@ -1002,7 +1009,7 @@ function config.__init__(self, scheme, co, c)
 	self.sref = { c }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_CONFIG
+	self.t    = TYPE_CONFIG
 end
 
 --- Get all section objects associated with this config.
@@ -1011,9 +1018,9 @@ function config.sections(self)
 	local v = { }
 	if self.s.packages[self.sref[1]].sections then
 		for o, _ in pairs( self.s.packages[self.sref[1]].sections ) do
-			table.insert( v, luci.uvl.option(
+			v[#v+1] = option(
 				self.s, self.c, self.cref[1], self.cref[2], o
-			) )
+			)
 		end
 	end
 	return v
@@ -1023,7 +1030,7 @@ end
 -- @param s	Section to select
 -- @return	Section instance
 function config.section(self, s)
-	local so = luci.uvl.section( self.s, self.c, self.cref[1], s )
+	local so = section( self.s, self.c, self.cref[1], s )
 	      so.p = self
 
 	return so
@@ -1043,14 +1050,14 @@ end
 -- @param c			Configuration name
 -- @param s			Section name
 -- @return			Section instance
-section = luci.util.class(uvlitem)
+section = util.class(uvlitem)
 
 function section.__init__(self, scheme, co, c, s)
 	self.cref = { c, s }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_SECTION
+	self.t    = TYPE_SECTION
 end
 
 --- Get all option objects associated with this section.
@@ -1061,9 +1068,9 @@ function section.variables(self)
 		for o, _ in pairs(
 			self.s.packages[self.sref[1]].variables[self.sref[2]]
 		) do
-			table.insert( v, luci.uvl.option(
+			v[#v+1] = option(
 				self.s, self.c, self.cref[1], self.cref[2], o
-			) )
+			)
 		end
 	end
 	return v
@@ -1073,7 +1080,7 @@ end
 -- @param o	Option to select
 -- @return	Option instance
 function section.option(self, o)
-	local oo = luci.uvl.option( self.s, self.c, self.cref[1], self.cref[2], o )
+	local oo = option( self.s, self.c, self.cref[1], self.cref[2], o )
 	      oo.p = self
 
 	return oo
@@ -1094,14 +1101,14 @@ end
 -- @param s			Section name
 -- @param o			Option name
 -- @return			Option instance
-option = luci.util.class(uvlitem)
+option = util.class(uvlitem)
 
 function option.__init__(self, scheme, co, c, s, o)
 	self.cref = { c, s, o }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_OPTION
+	self.t    = TYPE_OPTION
 end
 
 --- Get the value of this option.
@@ -1109,7 +1116,7 @@ end
 function option.value(self)
 	local v = self:config() or self:scheme('default')
 	if v and self:scheme('multival') then
-		v = luci.util.split( v, "%s+", nil, true )
+		v = util.split( v, "%s+", nil, true )
 	end
 	return v
 end
@@ -1147,12 +1154,12 @@ end
 -- @param o			Enum name
 -- @param v			Enum value
 -- @return			Enum value instance
-enum = luci.util.class(option)
+enum = util.class(option)
 
 function enum.__init__(self, scheme, co, c, s, o, v)
 	self.cref = { c, s, o, v }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o, v }
 	self.c    = self:_loadconf(co, c)
 	self.s    = scheme
-	self.t    = luci.uvl.TYPE_ENUM
+	self.t    = TYPE_ENUM
 end
