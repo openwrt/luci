@@ -14,26 +14,28 @@ $Id$
 
 ]]--
 
-module( "luci.uvl.validation", package.seeall )
+local os = require "os"
+local fs = require "luci.fs"
+local sys = require "luci.sys"
+local ERR = require "luci.uvl.errors"
 
-require("luci.fs")
-require("luci.sys")
+local ipairs, unpack, type, tostring = ipairs, unpack, type, tostring
 
-local ERR = luci.uvl.errors
+module "luci.uvl.validation"
 
 function _exec( bin, args )
 	local cmd, output = "", nil
 
 	for _, v in ipairs({ bin, unpack(args) }) do
-		cmd = cmd .. string.format("%q ",v):gsub("([%$`])","\\%1")
+		cmd = cmd .. ("%q " % v):gsub("([%$`])","\\%1")
 	end
 
-	local tmpfile = "/tmp/uvl" .. luci.sys.uniqueid(8)
+	local tmpfile = "/tmp/uvl" .. sys.uniqueid(8)
 	local retval  = os.execute( cmd .. " 1>" .. tmpfile .. " 2>" .. tmpfile )
 
-	if luci.fs.access(tmpfile) then
-		output = luci.fs.readfile(tmpfile)
-		luci.fs.unlink(tmpfile)
+	if fs.access(tmpfile) then
+		output = fs.readfile(tmpfile)
+		fs.unlink(tmpfile)
 	end
 
 	return retval, output
