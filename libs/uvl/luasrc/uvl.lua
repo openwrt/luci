@@ -668,7 +668,7 @@ function UVL._read_dependency( self, values, deps )
 		for _, value in ipairs(values) do
 			local condition = { }
 			for val in value:gmatch("[^%s,]+") do
-				local k, v = val:match("([^%s]+)%s*=%s*([^%s]*)")
+				local k, v = val:match("([^%s]+)%s*=*%s*([^%s]*)")
 
 				if k and (
 					k:match("^"..expr.."%."..expr.."%."..expr.."$") or
