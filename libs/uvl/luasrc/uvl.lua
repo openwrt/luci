@@ -362,6 +362,7 @@ function UVL.read_scheme( self, scheme, alias )
 		local files = luci.fs.glob(self.schemedir .. '/*/' .. scheme)
 
 		if files then
+			local ok, err
 			for i, file in ipairs( files ) do
 				if not luci.fs.access(file) then
 					return false, so:error(ERR.SME_READ(so,file))
@@ -369,18 +370,32 @@ function UVL.read_scheme( self, scheme, alias )
 
 				local uci = luci.model.uci.cursor( luci.fs.dirname(file), default_savedir )
 
-				local sd, err = uci:get_all( luci.fs.basename(file) )
+				local sname = luci.fs.basename(file)
+				local sd, err = uci:load( sname )
 
 				if not sd then
 					return false, ERR.UCILOAD(so, err)
 				end
 
-				table.insert( schemes, sd )
+				ok, err = pcall(function()
+					uci:foreach(sname, "package", function(s)
+						self:_parse_package(so, s[".name"], s)
+					end)
+					uci:foreach(sname, "section", function(s)
+						self:_parse_section(so, s[".name"], s)
+					end)
+					uci:foreach(sname, "variable", function(s)
+						self:_parse_var(so, s[".name"], s)
+					end)
+					uci:foreach(sname, "enum", function(s)
+						self:_parse_enum(so, s[".name"], s)
+					end)
+
+				end)
 			end
 
-			local ok, err = self:_read_scheme_parts( so, schemes )
 			if ok and alias then self.packages[alias] = self.packages[scheme] end
-			return ok, err
+			return ok and self, err
 		else
 			return false, so:error(ERR.SME_FIND(so, self.schemedir))
 		end
@@ -395,278 +410,248 @@ function UVL.read_scheme( self, scheme, alias )
 	end
 end
 
--- Process all given parts and construct validation tree
-function UVL._read_scheme_parts( self, scheme, schemes )
+-- helper function to check for required fields
+local function _req( t, n, c, r )
+	for i, v in ipairs(r) do
+		if not c[v] then
+			local p, o = scheme:sid(), nil
 
-	-- helper function to check for required fields
-	local function _req( t, n, c, r )
-		for i, v in ipairs(r) do
-			if not c[v] then
-				local p, o = scheme:sid(), nil
-
-				if t == TYPE_SECTION then
-					o = section( scheme, nil, p, n )
-				elseif t == TYPE_OPTION then
-					o = option( scheme, nil, p, '(nil)', n )
-				elseif t == TYPE_ENUM then
-					o = enum( scheme, nil, p, '(nil)', '(nil)', n )
-				end
-
-				return false, ERR.SME_REQFLD(o,v)
+			if t == TYPE_SECTION then
+				o = section( scheme, nil, p, n )
+			elseif t == TYPE_OPTION then
+				o = option( scheme, nil, p, '(nil)', n )
+			elseif t == TYPE_ENUM then
+				o = enum( scheme, nil, p, '(nil)', '(nil)', n )
 			end
+
+			return false, ERR.SME_REQFLD(o,v)
 		end
-		return true
+	end
+	return true
+end
+
+-- helper function to validate references
+local function _ref( c, t )
+	local k, n
+	if c == TYPE_SECTION then
+		k = "package"
+		n = 1
+	elseif c == TYPE_OPTION then
+		k = "section"
+		n = 2
+	elseif c == TYPE_ENUM then
+		k = "variable"
+		n = 3
 	end
 
-	-- helper function to validate references
-	local function _ref( c, t )
-		local k, n
-		if c == TYPE_SECTION then
-			k = "package"
-			n = 1
-		elseif c == TYPE_OPTION then
-			k = "section"
-			n = 2
-		elseif c == TYPE_ENUM then
-			k = "variable"
-			n = 3
-		end
+	local r = luci.util.split( t[k], "." )
+	r[1] = ( #r[1] > 0 and r[1] or scheme:sid() )
 
-		local r = luci.util.split( t[k], "." )
-		r[1] = ( #r[1] > 0 and r[1] or scheme:sid() )
-
-		if #r ~= n then
-			return false, ERR.SME_BADREF(scheme, k)
-		end
-
-		return r
+	if #r ~= n then
+		return false, ERR.SME_BADREF(scheme, k)
 	end
 
-	-- helper function to read bools
-	local function _bool( v )
-		return ( v == "true" or v == "yes" or v == "on" or v == "1" )
-	end
+	return r
+end
 
+-- helper function to read bools
+local function _bool( v )
+	return ( v == "true" or v == "yes" or v == "on" or v == "1" )
+end
 
-	local ok, err
+-- Step 0: get package meta information
+function UVL._parse_package(self, scheme, k, v)
+	local sid = scheme:sid()
+	local pkg = self.packages[sid] or {
+		["name"]      = sid;
+		["sections"]  = { };
+		["variables"] = { };
+	}
 
-	-- Step 0: get package meta information
-	for i, conf in ipairs( schemes ) do
-		for k, v in pairs( conf ) do
-			if v['.type'] == 'package' then
-				self.packages[scheme:sid()] =
-					self.packages[scheme:sid()] or {
-						["name"]      = scheme:sid();
-						["sections"]  = { };
-						["variables"] = { };
-					}
+	pkg.title = v.title
+	pkg.description = v.description
 
-				for k, v2 in pairs(v) do
-					if k == "title" or k == "description" then
-						self.packages[scheme:sid()][k] = v2
-					end
+	self.packages[sid] = pkg
+end
+
+-- Step 1: get all sections
+function UVL._parse_section(self, scheme, k, v)
+	local ok, err = _req( TYPE_SECTION, k, v, { "name", "package" } )
+	if err then error(scheme:error(err)) end
+
+	local r, err = _ref( TYPE_SECTION, v )
+	if err then error(scheme:error(err)) end
+
+	local p = self.packages[r[1]] or {
+		["name"]      = r[1];
+		["sections"]  = { };
+		["variables"] = { };
+	}
+	p.sections[v.name]  = p.sections[v.name]  or { }
+	p.variables[v.name] = p.variables[v.name] or { }
+	self.packages[r[1]] = p
+
+	local s  = p.sections[v.name]
+	local so = scheme:section(v.name)
+
+	for k, v2 in pairs(v) do
+		if k ~= "name" and k ~= "package" and k:sub(1,1) ~= "." then
+			if k == "depends" then
+				s.depends = self:_read_dependency( v2, s.depends )
+				if not s.depends then
+					return false, scheme:error(
+						ERR.SME_BADDEP(so, luci.util.serialize_data(s.depends))
+					)
 				end
-			end
-		end
-	end
-
-	-- Step 1: get all sections
-	for i, conf in ipairs( schemes ) do
-		for k, v in pairs( conf ) do
-			if v['.type'] == 'section' then
-
-				ok, err = _req( TYPE_SECTION, k, v, { "name", "package" } )
-				if err then return false, scheme:error(err) end
-
-				local r, err = _ref( TYPE_SECTION, v )
-				if err then return false, scheme:error(err) end
-
-				self.packages[r[1]] =
-					self.packages[r[1]] or {
-						["name"]      = r[1];
-						["sections"]  = { };
-						["variables"] = { };
-					}
-
-				local p = self.packages[r[1]]
-					  p.sections[v.name]  = p.sections[v.name]  or { }
-					  p.variables[v.name] = p.variables[v.name] or { }
-
-				local s  = p.sections[v.name]
-				local so = scheme:section(v.name)
-
-				for k, v2 in pairs(v) do
-					if k ~= "name" and k ~= "package" and k:sub(1,1) ~= "." then
-						if k == "depends" then
-							s.depends = self:_read_dependency( v2, s.depends )
-							if not s.depends then
-								return false, scheme:error(
-									ERR.SME_BADDEP(so, luci.util.serialize_data(s.depends))
-								)
-							end
-						elseif k == "dynamic" or k == "unique" or
-						       k == "required" or k == "named"
-						then
-							s[k] = _bool(v2)
-						else
-							s[k] = v2
-						end
-					end
-				end
-
-				s.dynamic  = s.dynamic  or false
-				s.unique   = s.unique   or false
-				s.required = s.required or false
-				s.named    = s.named    or false
+			elseif k == "dynamic" or k == "unique" or
+			       k == "required" or k == "named"
+			then
+				s[k] = _bool(v2)
+			else
+				s[k] = v2
 			end
 		end
 	end
+
+	s.dynamic  = s.dynamic  or false
+	s.unique   = s.unique   or false
+	s.required = s.required or false
+	s.named    = s.named    or false
+end
+
 
 	-- Step 2: get all variables
-	for i, conf in ipairs( schemes ) do
-		for k, v in pairs( conf ) do
-			if v['.type'] == "variable" then
+function UVL._parse_var(self, scheme, k, v)
+	local ok, err = _req( TYPE_OPTION, k, v, { "name", "section" } )
+	if err then error(scheme:error(err)) end
 
-				ok, err = _req( TYPE_OPTION, k, v, { "name", "section" } )
-				if err then return false, scheme:error(err) end
+	local r, err = _ref( TYPE_OPTION, v )
+	if err then error(scheme:error(err)) end
 
-				local r, err = _ref( TYPE_OPTION, v )
-				if err then return false, scheme:error(err) end
+	local p = self.packages[r[1]]
+	if not p then
+		error(scheme:error(
+			ERR.SME_VBADPACK({scheme:sid(), '', v.name}, r[1])
+		))
+	end
 
-				local p = self.packages[r[1]]
-				if not p then
-					return false, scheme:error(
-						ERR.SME_VBADPACK({scheme:sid(), '', v.name}, r[1])
-					)
+	local s = p.variables[r[2]]
+	if not s then
+		error(scheme:error(
+			ERR.SME_VBADSECT({scheme:sid(), '', v.name}, r[2])
+		))
+	end
+
+	s[v.name] = s[v.name] or { }
+
+	local t  = s[v.name]
+	local so = scheme:section(r[2])
+	local to = so:option(v.name)
+
+	for k, v2 in pairs(v) do
+		if k ~= "name" and k ~= "section" and k:sub(1,1) ~= "." then
+			if k == "depends" then
+				t.depends = self:_read_dependency( v2, t.depends )
+				if not t.depends then
+					error(scheme:error(so:error(
+						ERR.SME_BADDEP(to, luci.util.serialize_data(v2))
+					)))
 				end
-
-				local s = p.variables[r[2]]
-				if not s then
-					return false, scheme:error(
-						ERR.SME_VBADSECT({scheme:sid(), '', v.name}, r[2])
-					)
+			elseif k == "validator" then
+				t.validators = self:_read_validator( v2, t.validators )
+				if not t.validators then
+					error(scheme:error(so:error(
+						ERR.SME_BADVAL(to, luci.util.serialize_data(v2))
+					)))
 				end
-
-				s[v.name] = s[v.name] or { }
-
-				local t  = s[v.name]
-				local so = scheme:section(r[2])
-				local to = so:option(v.name)
-
-				for k, v2 in pairs(v) do
-					if k ~= "name" and k ~= "section" and k:sub(1,1) ~= "." then
-						if k == "depends" then
-							t.depends = self:_read_dependency( v2, t.depends )
-							if not t.depends then
-								return false, scheme:error(so:error(
-									ERR.SME_BADDEP(to, luci.util.serialize_data(v2))
-								))
-							end
-						elseif k == "validator" then
-							t.validators = self:_read_validator( v2, t.validators )
-							if not t.validators then
-								return false, scheme:error(so:error(
-									ERR.SME_BADVAL(to, luci.util.serialize_data(v2))
-								))
-							end
-						elseif k == "valueof" then
-							local values, err = self:_read_reference( v2 )
-							if err then
-								return false, scheme:error(so:error(
-									ERR.REFERENCE(to, luci.util.serialize_data(v2)):child(err)
-								))
-							end
-							t.type   = "reference"
-							t.values = values
-						elseif k == "required" then
-							t[k] = _bool(v2)
-						else
-							t[k] = t[k] or v2
-						end
-					end
+			elseif k == "valueof" then
+				local values, err = self:_read_reference( v2 )
+				if err then
+					error(scheme:error(so:error(
+						ERR.REFERENCE(to, luci.util.serialize_data(v2)):child(err)
+					)))
 				end
-
-				t.type     = t.type     or "variable"
-				t.datatype = t.datatype or "string"
-				t.required = t.required or false
+				t.type   = "reference"
+				t.values = values
+			elseif k == "required" then
+				t[k] = _bool(v2)
+			else
+				t[k] = t[k] or v2
 			end
 		end
 	end
 
-	-- Step 3: get all enums
-	for i, conf in ipairs( schemes ) do
-		for k, v in pairs( conf ) do
-			if v['.type'] == "enum" then
+	t.type     = t.type     or "variable"
+	t.datatype = t.datatype or "string"
+	t.required = t.required or false
+end
 
-				ok, err = _req( TYPE_ENUM, k, v, { "value", "variable" } )
-				if err then return false, scheme:error(err) end
+-- Step 3: get all enums
+function UVL._parse_enum(self, scheme, k, v)
+	local ok, err = _req( TYPE_ENUM, k, v, { "value", "variable" } )
+	if err then error(scheme:error(err)) end
 
-				local r, err = _ref( TYPE_ENUM, v )
-				if err then return false, scheme:error(err) end
+	local r, err = _ref( TYPE_ENUM, v )
+	if err then error(scheme:error(err)) end
 
-				local p = self.packages[r[1]]
-				if not p then
-					return false, scheme:error(
-						ERR.SME_EBADPACK({scheme:sid(), '', '', v.value}, r[1])
-					)
-				end
-
-				local s = p.variables[r[2]]
-				if not s then
-					return false, scheme:error(
-						ERR.SME_EBADSECT({scheme:sid(), '', '', v.value}, r[2])
-					)
-				end
-
-				local t = s[r[3]]
-				if not t then
-					return false, scheme:error(
-						ERR.SME_EBADOPT({scheme:sid(), '', '', v.value}, r[3])
-					)
-				end
-
-
-				local so = scheme:section(r[2])
-				local oo = so:option(r[3])
-				local eo = oo:enum(v.value)
-
-				if t.type ~= "enum" and t.type ~= "reference" then
-					return false, scheme:error(ERR.SME_EBADTYPE(eo))
-				end
-
-				if not t.values then
-					t.values = { [v.value] = v.title or v.value }
-				else
-					t.values[v.value] = v.title or v.value
-				end
-
-				if not t.enum_depends then
-					t.enum_depends = { }
-				end
-
-				if v.default then
-					if t.default then
-						return false, scheme:error(ERR.SME_EBADDEF(eo))
-					end
-					t.default = v.value
-				end
-
-				if v.depends then
-					t.enum_depends[v.value] = self:_read_dependency(
-						v.depends, t.enum_depends[v.value]
-					)
-
-					if not t.enum_depends[v.value] then
-						return false, scheme:error(so:error(oo:error(
-							ERR.SME_BADDEP(eo, luci.util.serialize_data(v.depends))
-						)))
-					end
-				end
-			end
-		end
+	local p = self.packages[r[1]]
+	if not p then
+		error(scheme:error(
+			ERR.SME_EBADPACK({scheme:sid(), '', '', v.value}, r[1])
+		))
 	end
 
-	return self
+	local s = p.variables[r[2]]
+	if not s then
+		error(scheme:error(
+			ERR.SME_EBADSECT({scheme:sid(), '', '', v.value}, r[2])
+		))
+	end
+
+	local t = s[r[3]]
+	if not t then
+		error(scheme:error(
+			ERR.SME_EBADOPT({scheme:sid(), '', '', v.value}, r[3])
+		))
+	end
+
+
+	local so = scheme:section(r[2])
+	local oo = so:option(r[3])
+	local eo = oo:enum(v.value)
+
+	if t.type ~= "enum" and t.type ~= "reference" then
+		error(scheme:error(ERR.SME_EBADTYPE(eo)))
+	end
+
+	if not t.values then
+		t.values = { [v.value] = v.title or v.value }
+	else
+		t.values[v.value] = v.title or v.value
+	end
+
+	if not t.enum_depends then
+		t.enum_depends = { }
+	end
+
+	if v.default then
+		if t.default then
+			error(scheme:error(ERR.SME_EBADDEF(eo)))
+		end
+		t.default = v.value
+	end
+
+	if v.depends then
+		t.enum_depends[v.value] = self:_read_dependency(
+			v.depends, t.enum_depends[v.value]
+		)
+
+		if not t.enum_depends[v.value] then
+			error(scheme:error(so:error(oo:error(
+				ERR.SME_BADDEP(eo, luci.util.serialize_data(v.depends))
+			))))
+		end
+	end
 end
 
 -- Read a dependency specification
