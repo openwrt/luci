@@ -666,10 +666,9 @@ function UVL._read_dependency( self, values, deps )
 	if values then
 		values = ( type(values) == "table" and values or { values } )
 		for _, value in ipairs(values) do
-			local parts     = util.split( value, "%s*,%s*", nil, true )
 			local condition = { }
-			for i, val in ipairs(parts) do
-				local k, v = unpack(util.split(val, "%s*=%s*", nil, true))
+			for val in value:gmatch("[^%s,]+") do
+				local k, v = val:match("([^%s]+)%s*=%s*([^%s]+)")
 
 				if k and (
 					k:match("^"..expr.."%."..expr.."%."..expr.."$") or
