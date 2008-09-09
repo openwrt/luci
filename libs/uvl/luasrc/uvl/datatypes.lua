@@ -29,6 +29,8 @@ function boolean( val )
 		return true
 	elseif val == "0" or val == "no" or val == "off" or val == "false" then
 		return true
+	elseif val == "" or val == nil then
+		return true
 	end
 
 	return false
