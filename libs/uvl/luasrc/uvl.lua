@@ -432,7 +432,7 @@ end
 
 -- helper function to validate references
 local function _ref( c, t )
-	local k, n
+	local r, k, n = {}
 	if c == TYPE_SECTION then
 		k = "package"
 		n = 1
@@ -444,7 +444,9 @@ local function _ref( c, t )
 		n = 3
 	end
 
-	local r = luci.util.split( t[k], "." )
+	for o in t[k]:gmatch("[^.]+") do
+		r[#r+1] = o
+	end
 	r[1] = ( #r[1] > 0 and r[1] or scheme:sid() )
 
 	if #r ~= n then
@@ -816,22 +818,15 @@ function uvlitem.sid(self)
 end
 
 function uvlitem.scheme(self, opt)
-	local s
-
+	local s = self.s and self.s.packages
+	s = s      and s[self.sref[1]]
 	if #self.sref == 4 or #self.sref == 3 then
-		s = self.s and self.s.packages
-		s = s      and s[self.sref[1]]
 		s = s      and s.variables
 		s = s      and s[self.sref[2]]
 		s = s      and s[self.sref[3]]
 	elseif #self.sref == 2 then
-		s = self.s and self.s.packages
-		s = s      and s[self.sref[1]]
 		s = s      and s.sections
 		s = s      and s[self.sref[2]]
-	else
-		s = self.s and self.s.packages
-		s = s      and s[self.sref[1]]
 	end
 
 	if s and opt then
@@ -842,16 +837,14 @@ function uvlitem.scheme(self, opt)
 end
 
 function uvlitem.config(self, opt)
-	local c
+	local c = self.c
 
-	if #self.cref == 4 or #self.cref == 3 then
-		c = self.c and self.c[self.cref[2]] or nil
-		c = c      and c[self.cref[3]]      or nil
-	elseif #self.cref == 2 then
-		c = self.c and self.c[self.cref[2]] or nil
-	else
-		c = self.c
-	end
+	if #self.cref >= 2 and #self.cref <= 4 then
+		c = c and self.c[self.cref[2]] or nil
+		if #self.cref >= 3 then
+			c = c and c[self.cref[3]] or nil
+		end
+	end	
 
 	if c and opt then
 		return c[opt]
