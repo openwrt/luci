@@ -249,9 +249,9 @@ function split(str, pat, max, regex)
 		local s, e = str:find(pat, c, not regex)
 		max = max - 1
 		if s and max < 0 then
-			table.insert(t, str:sub(c))
+			t[#t+1] = str:sub(c)
 		else
-			table.insert(t, str:sub(c, s and s - 1))
+			t[#t+1] = str:sub(c, s and s - 1)
 		end
 		c = e and e + 1 or #str + 1
 	until not s or max < 0
@@ -334,7 +334,7 @@ function combine(...)
 	local result = {}
 	for i, a in ipairs(arg) do
 		for j, v in ipairs(a) do
-			table.insert(result, v)
+			result[#result+1] = v
 		end
 	end
 	return result
@@ -371,7 +371,7 @@ function keys(t)
 	local keys = { }
 	if t then
 		for k, _ in kspairs(t) do
-			table.insert( keys, k )
+			keys[#keys+1] = k
 		end
 	end
 	return keys
@@ -568,7 +568,7 @@ function _sortiter( t, f )
 	local keys = { }
 
 	for k, v in pairs(t) do
-		table.insert( keys, k )
+		keys[#keys+1] = k
 	end
 
 	local _pos = 0
@@ -657,7 +657,7 @@ function execl(command)
 	while true do
 		line = pp:read()
 		if (line == nil) then break end
-		table.insert(data, line)
+		data[#data+1] = line
 	end
 	pp:close()
 

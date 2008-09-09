@@ -63,7 +63,7 @@ function compile(template)
 
 	-- Search all <% %> expressions
 	local function expr_add(ws1, skip1, command, skip2, ws2)
-		table.insert(expr, command)
+		expr[#expr+1] = command
 		return ( #skip1 > 0 and "" or ws1 ) .. 
 		       "<%" .. tostring(#expr) .. "%>" ..
 		       ( #skip2 > 0 and "" or ws2 )

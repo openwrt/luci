@@ -88,7 +88,7 @@ function Cursor.delete_all(self, config, stype, comparator)
 	local function helper (section)
 
 		if not comparator or comparator(section) then
-			table.insert(del, section[".name"])
+			del[#del+1] = section[".name"]
 		end
 	end
 
@@ -201,14 +201,14 @@ function Cursor._affected(self, configlist)
 			function(section)
 				if section.affects then
 					for i, aff in ipairs(section.affects) do
-						table.insert(deps, aff)
+						deps[#deps+1] = aff
 					end
 				end
 			end)
 		
 		for i, dep in ipairs(deps) do
 			for j, add in ipairs(_resolve_deps(dep)) do
-				table.insert(reload, add)
+				reload[#reload+1] = add
 			end
 		end
 		
@@ -219,7 +219,7 @@ function Cursor._affected(self, configlist)
 	for j, config in ipairs(configlist) do
 		for i, e in ipairs(_resolve_deps(config)) do
 			if not util.contains(reloadlist, e) then
-				table.insert(reloadlist, e)
+				reloadlist[#reloadlist+1] = e
 			end
 		end
 	end
