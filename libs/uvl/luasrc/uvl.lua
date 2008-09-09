@@ -27,7 +27,7 @@ local string = require "string"
 
 local require, pcall, ipairs, pairs = require, pcall, ipairs, pairs
 local type, error, tonumber, tostring = type, error, tonumber, tostring
-local unpack = unpack
+local unpack, loadfile = unpack, loadfile
 
 module "luci.uvl"
 
