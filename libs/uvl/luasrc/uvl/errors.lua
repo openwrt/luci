@@ -121,7 +121,7 @@ function error.child(self, err)
 	if not self.childs then
 		self.childs = { err }
 	else
-		table.insert( self.childs, err )
+		self.childs[#self.childs+1] = err
 	end
 	return self
 end
