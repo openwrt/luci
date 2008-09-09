@@ -1,7 +1,20 @@
 <h2>LuCI UVLDoc</h2>
 <ul>
-<li><a href="<%=self:_index_filename()%>">Index</a></li>
+<li<%-if not scheme then%> class="menu-active"<%-end-%>>
+	<a href="<%=self:_index_filename()%>">Index</a>
+</li>
 <% for k, v in luci.util.kspairs(self.schemes) do %>
-<li><a href="<%=self:_scheme_filename(k)%>"><%=k%></a></li>
+<li<%-if scheme == k then%> class="menu-active"<%-end-%>>
+	<a href="<%=self:_scheme_filename(k)%>"><%=k%></a>
+	<%-if scheme == k then-%>
+	<ul>
+	<%-for k2, v2 in luci.util.kspairs(v.sections) do-%>
+		<li>
+			<a href="<%=self:_section_filename(k, k2)%>"><%=k2%></a>
+		</li>
+	<%-end-%>
+	</ul>
+	<%-end-%>
+</li>
 <% end %>
 </ul>
