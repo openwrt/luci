@@ -579,6 +579,7 @@ function UVL._parse_var(self, scheme, k, v)
 				end
 				t.type   = "reference"
 				t.values = values
+				t.valueof = type(v2) == "table" and v2 or {v2}
 			elseif k == "required" then
 				t[k] = _bool(v2)
 			else
