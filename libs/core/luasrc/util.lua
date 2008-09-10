@@ -194,13 +194,13 @@ end
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
 function pcdata(value)
-	if not value then return end
-	value = tostring(value)
-	value = value:gsub("&", "&amp;")
-	value = value:gsub('"', "&quot;")
-	value = value:gsub("'", "&apos;")
-	value = value:gsub("<", "&lt;")
-	return value:gsub(">", "&gt;")
+	return value and tostring(value):gsub("[&\"'<>]", {
+		["&"] = "&amp;",
+		['"'] = "&quot;",
+		["'"] = "&apos;",
+		["<"] = "&lt;",
+		[">"] = "&gt;"
+	})
 end
 
 --- Strip HTML tags from given string.
@@ -567,13 +567,12 @@ function _sortiter( t, f )
 	end
 
 	local _pos = 0
-	local _len = table.getn( keys )
 
 	table.sort( keys, f )
 
 	return function()
 		_pos = _pos + 1
-		if _pos <= _len then
+		if _pos <= #keys then
 			return keys[_pos], t[keys[_pos]]
 		end
 	end
