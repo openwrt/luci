@@ -20,7 +20,9 @@ $(BITLIB_DIR)/.prepared: $(BITLIB_FILE)
 	test -f $(BITLIB_DIR)/config.h || cp $(BITLIB_DIR)/config.h.in $(BITLIB_DIR)/config.h
 	touch $@
 
-compile: $(BITLIB_DIR)/.prepared
+compile: $(BITLIB_DIR)/.prepared dist$(LUA_LIBRARYDIR)/bit.so
+
+dist$(LUA_LIBRARYDIR)/bit.so:
 	mkdir -p dist$(LUA_LIBRARYDIR)
 	$(COMPILE) -DHAVE_CONFIG_H -I$(BITLIB_DIR) -O2 -c $(BITLIB_DIR)/lbitlib.c $(FPIC) $(LUA_CFLAGS) -o $(BITLIB_DIR)/lbitlib.o
 	$(LINK) $(SHLIB_FLAGS) $(LDFLAGS) $(BITLIB_DIR)/lbitlib.o $(LUA_SHLIBS) -lm -ldl -o dist$(LUA_LIBRARYDIR)/bit.so
