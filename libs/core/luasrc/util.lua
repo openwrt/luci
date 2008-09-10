@@ -59,6 +59,17 @@ end
 -- Class helper routines
 --
 
+-- Instantiates a class
+local function _instantiate(class, ...)
+	local inst = setmetatable({}, {__index = class})
+
+	if inst.__init__ then
+		inst:__init__(...)
+	end
+
+	return inst
+end
+
 --- Create a Class object (Python-style object model).
 -- The class object can be instantiated by calling itself.
 -- Any class functions or shared parameters can be attached to this object.
@@ -74,26 +85,10 @@ end
 -- @see			instanceof
 -- @see			clone
 function class(base)
-	local class = {}
-
-	local create = function(class, ...)
-		local inst = setmetatable({}, {__index = class})
-
-		if inst.__init__ then
-			inst:__init__(...)
-		end
-
-		return inst
-	end
-
-	local classmeta = {__call = create}
-
-	if base then
-		classmeta.__index = base
-	end
-
-	setmetatable(class, classmeta)
-	return class
+	return setmetatable({}, {
+		__call  = _instantiate,
+		__index = base
+	})
 end
 
 --- Test whether the given object is an instance of the given class.
