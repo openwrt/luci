@@ -1,0 +1,76 @@
+package samba
+
+config package
+	option title 'Samba CIFS/SMB Daemon'
+
+config section
+	option name 'samba'
+	option package 'samba'
+	option title 'General Settings'
+	option unique true
+	option required true
+
+config variable
+	option name 'name'
+	option section 'samba.samba'
+	option title 'Hostname'
+	option datatype host
+	option required true
+
+config variable
+	option name 'description'
+	option section 'samba.samba'
+	option title 'Description'
+
+config variable
+	option name 'workgroup'
+	option section 'samba.samba'
+	option title 'Workgroup'
+	option required true
+
+config variable
+	option name 'homes'
+	option section 'samba.samba'
+	option title 'Share home-directories'
+	option description 'System users can reach their home directories via network shares.'
+	option datatype boolean
+
+config section
+	option name 'sambashare'
+	option package 'samba'
+	option title 'Shared Directories'
+
+config variable
+	option name 'name'
+	option section 'samba.sambashare'
+	option title 'Name'
+	option required true
+
+config variable
+	option name 'users'
+	option section 'samba.sambashare'
+	option title 'Allowed Users'
+
+config variable
+	option name 'read_only'
+	option section 'samba.sambashare'
+	option title 'Read Only'
+	option datatype boolean
+
+config variable
+	option name 'guest_ok'
+	option section 'samba.sambashare'
+	option title 'Allow Guests'
+	option datatype boolean
+
+config variable
+	option name 'create_mask'
+	option section 'samba.sambashare'
+	option title 'Create Mask'
+	option description 'Mask for new files'
+
+config variable
+	option name 'dir_mask'
+	option section 'samba.sambashare'
+	option title 'Directory Mask'
+	option description 'Mask for new directories'

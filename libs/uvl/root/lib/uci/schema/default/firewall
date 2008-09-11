@@ -1,5 +1,8 @@
 package firewall
 
+config package
+	option title 'Firewall configuration'
+
 config section
 	option name	'zone'
 	option title	'Firewall zones'
@@ -7,13 +10,13 @@ config section
 
 config variable
 	option name	'name'
-	option title	'Name of this firewall zone'
+	option title	'Name'
 	option section	'firewall.zone'
 	option required	true
 
 config variable
 	option name	'network'
-	option title	'Associated network of this firewall zone'
+	option title	'Networks belonging to this zone'
 	option section	'firewall.zone'
 	option valueof	'network.interface'
 	option multival	true
@@ -79,7 +82,7 @@ config variable
 
 config section
 	option name	'forwarding'
-	option title	'Firewall traffic forwarding rules'
+	option title	'Forwarding rules'
 	option package	'firewall'
 
 config variable
@@ -100,7 +103,7 @@ config variable
 
 config section
 	option name	'rule'
-	option title	'Custom rule specification'
+	option title	'Custom rules'
 	option package	'firewall'
 	list   depends	'target, src'
 	list   depends	'target, dest'
@@ -169,7 +172,7 @@ config variable
 
 config section
 	option name	'redirect'
-	option title	'Traffic redirection rule definition'
+	option title	'Redirection rules'
 	option package	'firewall'
 
 config variable
