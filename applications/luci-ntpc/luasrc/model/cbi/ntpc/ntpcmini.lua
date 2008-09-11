@@ -20,7 +20,7 @@ s.anonymous = true
 
 s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
 
-s:option(Value, "interval", translate("ntpc_interval"))
+s:option(Value, "interval", translate("ntpc_interval")).rmempty = true
 
 
 s3 = m:section(TypedSection, "ntpserver", translate("ntpc_timeserver"))

@@ -19,13 +19,13 @@ s.anonymous = true
 
 s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
 
-s:option(Value, "interval", translate("ntpc_interval"))
-s:option(Value, "count", translate("ntpc_count"), translate("ntpc_count_desc"))
+s:option(Value, "interval", translate("ntpc_interval")).rmempty = true
+s:option(Value, "count", translate("ntpc_count"), translate("ntpc_count_desc")).rmempty = true
 
 
 s2 = m:section(TypedSection, "ntpdrift", translate("ntpc_drift"))
 s2.anonymous = true
-s2:option(Value, "freq", translate("ntpc_drift_freq"))
+s2:option(Value, "freq", translate("ntpc_drift_freq")).rmempty = true
 
 
 s3 = m:section(TypedSection, "ntpserver", translate("ntpc_timeserver"))
