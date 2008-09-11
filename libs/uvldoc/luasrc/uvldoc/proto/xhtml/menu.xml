@@ -1,5 +1,5 @@
-<h2>LuCI UVLDoc</h2>
-<ul>
+<h2 class="menu-title">LuCI UVLDoc</h2>
+<ul class="menu-index">
 <li<%-if not scheme then%> class="menu-active"<%-end-%>>
 	<a href="<%=self:_index_filename()%>">Index</a>
 </li>
@@ -8,13 +8,11 @@
 	<a href="<%=self:_scheme_filename(k)%>"><%=k%></a>
 	<%-if scheme == k then-%>
 	<ul>
-	<%-for k2, v2 in luci.util.kspairs(v.sections) do-%>
-		<li>
-			<a href="<%=self:_section_filename(k, k2)%>"><%=k2%></a>
-		</li>
-	<%-end-%>
+		<%-for k2, v2 in luci.util.kspairs(v.sections) do%>
+		<li><a href="<%=self:_section_filename(k, k2)%>"><%=k2%></a></li>
+		<%end-%>
 	</ul>
-	<%-end-%>
+	<%-end%>
 </li>
-<% end %>
+<%-end%>
 </ul>

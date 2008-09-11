@@ -20,7 +20,7 @@ local util = require "luci.util"
 local ltn12 = require "luci.ltn12"
 local template = require "luci.template"
 
-local ipairs, getfenv, pairs, require = ipairs, getfenv, pairs, require
+local ipairs, getfenv, pairs, require, unpack = ipairs, getfenv, pairs, require, unpack
 local luci = luci
 
 module "luci.uvldoc.renderer"
@@ -28,7 +28,7 @@ module "luci.uvldoc.renderer"
 
 Generator = util.class()
 
-function Generator.__init__(self, schemes, output)
+function Generator.__init__(self, schemes, output, uvlpath)
 	self.names   = schemes
 	self.output  = output or "doc"
 	self.schemes = {}
@@ -55,6 +55,9 @@ function Generator.make(self)
 	template.viewdir = self.sourcedir
 	template.context.viewns = {
 		include = function(name) template.Template(name):render(getfenv(2)) end,
+		pairs = pairs,
+		ipairs = ipairs,
+		unpack = unpack,
 		luci = luci,
 		require = require
 	}
@@ -108,5 +111,14 @@ function Generator._scheme_filename(self, scheme)
 end
 
 function Generator._section_filename(self, scheme, section)
-	return "section.%s.%s%s" % {scheme, section, self.extension}
+	if self.schemes[scheme] and self.schemes[scheme].sections[section] then
+		return "section.%s.%s%s" % {scheme, section, self.extension}
+	end
+end
+
+function Generator._variable_target(self, scheme, section, variable)
+	if self.schemes[scheme] and self.schemes[scheme].variables[section] and
+	 self.schemes[scheme].variables[section][variable] then
+		return "section.%s.%s%s#variable.%s" % {scheme, section, self.extension, variable}
+	end
 end

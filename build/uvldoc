@@ -1,0 +1,24 @@
+#!/usr/bin/env lua
+local fs = require "luci.fs"
+local util = require "luci.util"
+local uvldoc = require "luci.uvldoc.renderer"
+
+pcall(function()
+	require "uci"
+	require "luci.model.uci".cursor = function(config, save)
+		return uci.cursor(config or arg[1] .. "/etc/config", save or arg[1] .. "/tmp/.uci")
+	end
+end)
+
+local schemes = {}
+if not arg[4] or #arg[4] == 0 then
+	for i, name in ipairs(fs.dir(arg[2].."/default/")) do
+		if name ~= "." and name ~= ".." then
+			schemes[#schemes+1] = name
+		end
+	end
+else
+	schemes = util.split(arg[4], "[,;%s]+", nil, true)
+end
+
+uvldoc.Generator(schemes, arg[3], arg[2]):make()
