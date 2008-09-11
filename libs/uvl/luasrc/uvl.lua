@@ -663,20 +663,20 @@ end
 
 -- Read a dependency specification
 function UVL._read_dependency( self, values, deps )
-	local expr = "%$?[a-zA-Z0-9_]+"
+	local expr = "%$?[%w_]+"
 	if values then
 		values = ( type(values) == "table" and values or { values } )
 		for _, value in ipairs(values) do
 			local condition = { }
-			for val in value:gmatch("[^%s,]+") do
-				local k, v = val:match("([^%s=]+)%s*=*%s*([^%s]*)")
+			for val in value:gmatch("[^,]+") do
+				local k, e, v = val:match("%s*([%w$_.]+)%s*(=?)%s*(.*)")
 
 				if k and (
 					k:match("^"..expr.."%."..expr.."%."..expr.."$") or
 					k:match("^"..expr.."%."..expr.."$") or
 					k:match("^"..expr.."$")
 				) then
-					condition[k] = v or true
+					condition[k] = (e == '=') and v or true
 				else
 					return nil
 				end
