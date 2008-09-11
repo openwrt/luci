@@ -74,7 +74,7 @@ for i, sec in pairs(map.children) do if util.instanceof(sec, cbi.TypedSection) t
 		end
 		
 		if util.instanceof(opt, cbi.Flag) then
-			print ("	option type boolean")
+			print ("	option datatype boolean")
 		elseif util.instanceof(opt, cbi.DynamicList) then
 			print ("	option type list")
 		elseif util.instanceof(opt, cbi.ListValue) then
