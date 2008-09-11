@@ -18,16 +18,16 @@ local uci  = luci.model.uci.cursor_state()
 local addr = uci:get("network", "lan", "ipaddr")
 local port
 
-uci:foreach( "uvc_streamer", "uvc_streamer",
+uci:foreach( "uvc-streamer", "uvc-streamer",
 	function(section) port = port or tonumber(section.port) end )
 
 addr = addr or "192.168.1.1"
 port = port or 8080
 
-m = Map("uvc_streamer", translate("uvc_streamer"),
+m = Map("uvc-streamer", translate("uvc_streamer"),
 	translatef("uvc_streamer_desc", nil, addr, port, addr, port))
 
-s = m:section(TypedSection, "uvc_streamer", translate("settings"))
+s = m:section(TypedSection, "uvc-streamer", translate("settings"))
 s.addremove = false
 s.anonymous = true
 
