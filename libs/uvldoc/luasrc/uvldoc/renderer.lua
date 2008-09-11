@@ -48,7 +48,7 @@ function Generator.make(self)
 	fs.mkdir(self.output)
 
 	for i, file in ipairs(self.additionals) do
-		fs.copy(self.sourcedir .. file, self.output)
+		fs.copy(self.sourcedir .. file, self.output .. "/" .. file)
 	end
 
 	template.compiler_mode = "memory"

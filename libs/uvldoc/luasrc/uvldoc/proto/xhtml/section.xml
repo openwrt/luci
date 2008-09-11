@@ -1,6 +1,35 @@
+<%- title = scheme .. "." .. type -%> 
 <%+header.xml%>
 <%
 local table = require "table"
+
+types = {
+	list = "List",
+	variable = "Variable",
+	lazylist = "Mixed",
+	enum = "Enumerator",
+	reference = "Reference"
+}
+
+datatypes = {
+	boolean = "Boolean",
+	string = "String",
+	uint = "Unsigned Integer",
+	integer = "Integer",
+	float = "Real Number",
+	ipaddr = "IP-Address",
+	ip4addr = "IPv4-Address",
+	ip6addr = "IPv6-Address",
+	ip4prefix = "IPv4-Prefix",
+	ip6prefix = "IPv6-Prefix",
+	hostname = "Hostname",
+	host = "Host (Hostname or IP-Address)",
+	directory = "Filesystem path (to directory)",
+	file = "Filesystem path (to file)",
+	macaddr = "MAC-Address",
+	port = "Port",
+	portrange = "Single Port or Portrange (First-Last)"
+}
 
 function _parse_ref( r )
 	local k, v, h = r:match("([^.]+)%.([^.]+)%.([^.]+)")
@@ -39,10 +68,11 @@ function _parse_dep( r, c, s, o )
 end
 
 %>
+<a name="top" />
 <h1 class="section-title"><%=scheme-%>
-<%-if package.title then%>: <%=package.title%><%end%></h1>
+<%-if package.title then%><dfn> - <%=package.title%></dfn><%end%></h1>
 <h2 class="section-subtitle"><%=type-%>
-<%-if section.title then%>: <%=section.title%><%end%></h2>
+<%-if section.title then%><dfn> - <%=section.title%></dfn><%end%></h2>
 <div class="section-description"><%=section.description%></div>
 
 <h3 class="section-attributes">Attributes:</h3>
@@ -74,7 +104,7 @@ if section.named then %>
 			local t = _parse_dep(k2, scheme, type)
 		%>
 			<% if nf then %>and<% end %>
-			<%if t then%><a href="<%=t%>"><%end%><%=k2%><%if t then%></a><%end%><%if v~="" then%>=<%=v%><%end%>
+			<%if t then%><a href="<%=t%>"><%end%><%=k2%><%if t then%></a><%end%><%if v~=true then%>=<%=v%><%end%>
 		<% nf = true
 			end %>
 		</li>
@@ -82,19 +112,19 @@ if section.named then %>
 	</ul>
 <% end %>
 
-<h3 class="section-variables">Options:</h3>
+<h3 class="section-variables">Overview:</h3>
 <table class="section-variables-index">
 <% for k, v in luci.util.kspairs(package.variables[type]) do 
 if v.required then%>
 <tr class="section-variable-required">
-	<td><a href="#variable.<%=k%>"><%=k%></a></td>
+	<th><a href="#variable.<%=k%>"><%=k%></a></th>
 	<td><%=v.title%></td>
 </tr>
 <% end end
 for k, v in luci.util.kspairs(package.variables[type]) do 
 if not v.required then%>
 <tr class="section-variable-mixed">
-	<td><a href="#variable.<%=k%>"><%=k%></a></td>
+	<th><a href="#variable.<%=k%>"><%=k%></a></th>
 	<td><%=v.title%></td>
 </tr>
 <% end end %>
@@ -110,15 +140,19 @@ if (i==0) == v.required then
 <div class="variable-documentation">
 	<a name="variable.<%=k%>" />
 	<h4 class="variable-title"><%=k-%>
-	<%-if v.title then%>: <%=v.title%><%end%></h4>
+	<%-if v.title then%><dfn> - <%=v.title%></dfn><%end%></h4>
 	<div class="variable-description"><%=v.description%></div>
+	<div class="variable-declaration">
 	<h5 class="variable-attributes">Attributes:</h5>
 	<ul class="varaible-attributes-index">
 	<% if v.required then %>
 		<li class="variable-attribute-required"><strong>required</strong></li>
 	<% end %>
-		<li class="variable-attribute-type"><strong>Type:</strong> <%=v.type%></li>
-		<li class="variable-attribute-datatype"><strong>Datatype:</strong> <%=v.datatype%></li>
+		<li class="variable-attribute-type"><strong>Type:</strong> <%=types[v.type] or v.type%></li>
+		<li class="variable-attribute-datatype"><strong>Datatype:</strong> <%=datatypes[v.datatype] or v.datatype%></li>
+	<% if v.multival then %>
+		<li class="variable-attribute-multiple"><strong>multiple values:</strong> space-separated</li>
+	<% end %>
 	</ul>
 	<% if v.depends then %>
 		<h5 class="variable-depends">Dependencies (one of):</h5>
@@ -130,7 +164,7 @@ if (i==0) == v.required then
 				local t = _parse_dep(k2, scheme, type, k)
 			%>
 				<% if nf then %>and<% end %>
-				<%if t then%><a href="<%=t%>"><%end%><%=k2%><%if t then%></a><%end%><%if v~="" then%>=<%=v%><%end%>
+				<%if t then%><a href="<%=t%>"><%end%><%=k2%><%if t then%></a><%end%><%if v~=true then%>=<%=v%><%end%>
 			<% nf = true
 			end %>
 			</li>
@@ -157,6 +191,8 @@ if (i==0) == v.required then
 			<% end %>
 		</ul>
 	<% end %>
+	</div>
+	<a href="#top">&#8657;</a>
 </div>
 <% end end end -%>
 <%+footer.xml%>
