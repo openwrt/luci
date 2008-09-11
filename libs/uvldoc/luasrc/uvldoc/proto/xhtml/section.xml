@@ -112,7 +112,7 @@ if section.named then %>
 	</ul>
 <% end %>
 
-<h3 class="section-variables">Overview:</h3>
+<h3 class="section-variables">Variable Overview:</h3>
 <table class="section-variables-index">
 <% for k, v in luci.util.kspairs(package.variables[type]) do 
 if v.required then%>
@@ -141,8 +141,8 @@ if (i==0) == v.required then
 	<a name="variable.<%=k%>" />
 	<h4 class="variable-title"><%=k-%>
 	<%-if v.title then%><dfn> - <%=v.title%></dfn><%end%></h4>
-	<div class="variable-description"><%=v.description%></div>
 	<div class="variable-declaration">
+	<div class="variable-description"><%=v.description%></div>
 	<h5 class="variable-attributes">Attributes:</h5>
 	<ul class="varaible-attributes-index">
 	<% if v.required then %>
