@@ -213,6 +213,7 @@ function action_upgrade()
 		end
 	end
 
+	luci.http.prepare_content("text/html")
 	luci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
 end
 
