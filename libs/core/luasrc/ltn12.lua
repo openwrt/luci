@@ -190,7 +190,7 @@ function source.rewind(src)
             if not chunk then return src()
             else return chunk end
         else
-            table.insert(t, chunk)
+            t[#t+1] = chunk
         end
     end
 end
@@ -277,7 +277,7 @@ end
 function sink.table(t)
     t = t or {}
     local f = function(chunk, err)
-        if chunk then table.insert(t, chunk) end
+        if chunk then t[#t+1] = chunk end
         return 1
     end
     return f, t

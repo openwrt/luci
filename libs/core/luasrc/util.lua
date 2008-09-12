@@ -60,6 +60,17 @@ end
 -- Class helper routines
 --
 
+-- Instantiates a class
+local function _instantiate(class, ...)
+	local inst = setmetatable({}, {__index = class})
+
+	if inst.__init__ then
+		inst:__init__(...)
+	end
+
+	return inst
+end
+
 --- Create a Class object (Python-style object model).
 -- The class object can be instantiated by calling itself.
 -- Any class functions or shared parameters can be attached to this object.
@@ -75,26 +86,10 @@ end
 -- @see			instanceof
 -- @see			clone
 function class(base)
-	local class = {}
-
-	local create = function(class, ...)
-		local inst = setmetatable({}, {__index = class})
-
-		if inst.__init__ then
-			inst:__init__(...)
-		end
-
-		return inst
-	end
-
-	local classmeta = {__call = create}
-
-	if base then
-		classmeta.__index = base
-	end
-
-	setmetatable(class, classmeta)
-	return class
+	return setmetatable({}, {
+		__call  = _instantiate,
+		__index = base
+	})
 end
 
 --- Test whether the given object is an instance of the given class.
@@ -200,13 +195,13 @@ end
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
 function pcdata(value)
-	if not value then return end
-	value = tostring(value)
-	value = value:gsub("&", "&amp;")
-	value = value:gsub('"', "&quot;")
-	value = value:gsub("'", "&apos;")
-	value = value:gsub("<", "&lt;")
-	return value:gsub(">", "&gt;")
+	return value and tostring(value):gsub("[&\"'<>]", {
+		["&"] = "&amp;",
+		['"'] = "&quot;",
+		["'"] = "&apos;",
+		["<"] = "&lt;",
+		[">"] = "&gt;"
+	})
 end
 
 --- Strip HTML tags from given string.
@@ -250,9 +245,9 @@ function split(str, pat, max, regex)
 		local s, e = str:find(pat, c, not regex)
 		max = max - 1
 		if s and max < 0 then
-			table.insert(t, str:sub(c))
+			t[#t+1] = str:sub(c)
 		else
-			table.insert(t, str:sub(c, s and s - 1))
+			t[#t+1] = str:sub(c, s and s - 1)
 		end
 		c = e and e + 1 or #str + 1
 	until not s or max < 0
@@ -335,7 +330,7 @@ function combine(...)
 	local result = {}
 	for i, a in ipairs(arg) do
 		for j, v in ipairs(a) do
-			table.insert(result, v)
+			result[#result+1] = v
 		end
 	end
 	return result
@@ -372,7 +367,7 @@ function keys(t)
 	local keys = { }
 	if t then
 		for k, _ in kspairs(t) do
-			table.insert( keys, k )
+			keys[#keys+1] = k
 		end
 	end
 	return keys
@@ -569,17 +564,16 @@ function _sortiter( t, f )
 	local keys = { }
 
 	for k, v in pairs(t) do
-		table.insert( keys, k )
+		keys[#keys+1] = k
 	end
 
 	local _pos = 0
-	local _len = table.getn( keys )
 
 	table.sort( keys, f )
 
 	return function()
 		_pos = _pos + 1
-		if _pos <= _len then
+		if _pos <= #keys then
 			return keys[_pos], t[keys[_pos]]
 		end
 	end
@@ -658,7 +652,7 @@ function execl(command)
 	while true do
 		line = pp:read()
 		if (line == nil) then break end
-		table.insert(data, line)
+		data[#data+1] = line
 	end
 	pp:close()
 
