@@ -77,12 +77,12 @@ function flash(image, kpattern)
 		return false, line
 	else
 		line = fp:read()
-		if line == "Performing system upgrade" then
+		if line == "Performing system upgrade..." then
 			return true
 		end
 		
 		line = fp:read()
-		if line == "Performing system upgrade" then
+		if line == "Performing system upgrade..." then
 			return true
 		end
 		
