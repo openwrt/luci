@@ -67,7 +67,7 @@ function flash(image, kpattern)
 	if kpattern then
 		cmd = cmd .. "-k '" .. kpattern:gsub("'", "") .. "' "
 	end
-	cmd = cmd .. "'" .. image:gsub("'", "") .. "' 2>/dev/null"
+	cmd = cmd .. "'" .. image:gsub("'", "") .. "' 2>/dev/null &"
 
 	local fp = io.popen(cmd)
 	fp:setvbuf("no")
@@ -78,18 +78,8 @@ function flash(image, kpattern)
 		fp:close()
 		return false, line
 	else
-		line = fp:read()
-		if line == "Performing system upgrade..." then
-			return true
-		end
-		
-		line = fp:read()
-		if line == "Performing system upgrade..." then
-			return true
-		end
-		
 		fp:close()
-		return false, line
+		return true
 	end
 end
 
