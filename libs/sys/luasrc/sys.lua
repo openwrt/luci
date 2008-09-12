@@ -70,6 +70,8 @@ function flash(image, kpattern)
 	cmd = cmd .. "'" .. image:gsub("'", "") .. "' 2>/dev/null"
 
 	local fp = io.popen(cmd)
+	fp:setvbuf("no")
+	
 	local line = fp:read()
 	
 	if line == "Invalid image type" then
