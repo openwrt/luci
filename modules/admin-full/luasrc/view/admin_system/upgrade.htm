@@ -17,7 +17,7 @@ $Id$
 <h2><%:a_s_flash%></h2>
 <p><%:a_s_flash_upgrade1%></p>
 <br />
-<% if sysupgrade and ret == nil then %>
+<% if sysupgrade and not ret then %>
 <form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
 	<div class="left"><%:a_s_flash_fwimage%>:</div>
 	<div>
@@ -33,14 +33,20 @@ $Id$
 		<input type="submit" value="<%:a_s_flash_fwupgrade%>" />
 	</div>
 </form>
-<% elseif ret ~= nil then %>
-	<% if ret then %>
-<p><%:a_s_flash_received%></p>
-<p><%:a_s_flash_inprogress%></p>
+<% elseif ret then %>
+	<p><%:a_s_flash_received%></p>
+	<p><%:a_s_flash_inprogress%></p>
+	
+<!-- <%=string.rep(" ", 2048)%> -->
+	<% %>
+	<% local ret = ret() 
+	if ret == 0 then %>
+<div class="ok"><%:a_s_flash_flashed%></div>
 	<% else %>
-<div class="error"><%:a_s_flash_flasherr%>! (<%=err%>)</div>	
+<div class="error"><%:a_s_flash_flasherr%>! (<%:code%> <%=ret%>)</div>	
 	<% end %>
 <% else %>
 <div class="error"><%:a_s_flash_notimplemented%></div>
 <% end %>
 <%+footer%>
+<% if ret == 0 then luci.sys.reboot() end %>

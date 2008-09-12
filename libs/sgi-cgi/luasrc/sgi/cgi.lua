@@ -61,7 +61,6 @@ function run()
 			elseif id == 4 then
 				io.write(data1)
 			elseif id == 5 then
-				io.close()
 				active = false
 			end
 		end

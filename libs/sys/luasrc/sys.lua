@@ -60,27 +60,15 @@ exec = luci.util.exec
 --- Invoke the luci-flash executable to write an image to the flash memory.
 -- @param image		Local path or URL to image file
 -- @param kpattern	Pattern of files to keep over flash process
--- @return			boolean indicating status
--- @return			error message if any
+-- @return			Return value of os.execute()
 function flash(image, kpattern)
 	local cmd = "luci-flash "
 	if kpattern then
 		cmd = cmd .. "-k '" .. kpattern:gsub("'", "") .. "' "
 	end
-	cmd = cmd .. "'" .. image:gsub("'", "") .. "' 2>/dev/null &"
+	cmd = cmd .. "'" .. image:gsub("'", "") .. "' >/dev/null 2>&1"
 
-	local fp = io.popen(cmd)
-	fp:setvbuf("no")
-	
-	local line = fp:read()
-	
-	if line == "Invalid image type" then
-		fp:close()
-		return false, line
-	else
-		fp:close()
-		return true
-	end
+	return os.execute(cmd)
 end
 
 --- Retrieve information about currently mounted file systems.
