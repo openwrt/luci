@@ -141,6 +141,7 @@ local hwtype = m:get(wifidevs[1], "type")
 
 if hwtype == "atheros" then
 	mode = s:option(ListValue, "mode", translate("mode"))
+	mode.override_values = true
 	mode:value("", "auto")
 	mode:value("11b", "802.11b")
 	mode:value("11g", "802.11g")
@@ -206,6 +207,7 @@ function mode.write(self, section, value)
 end
 
 encr = s:option(ListValue, "encryption", translate("encryption"))
+encr.override_values = true
 encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
 

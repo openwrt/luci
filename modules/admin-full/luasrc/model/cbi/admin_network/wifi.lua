@@ -236,6 +236,7 @@ end
 ------------------- WiFI-Encryption -------------------
 
 encr = s:option(ListValue, "encryption", translate("encryption"))
+encr.override_values = true
 encr:depends({mode="ap"})
 encr:depends({mode="sta"})
 encr:depends({mode="adhoc"})

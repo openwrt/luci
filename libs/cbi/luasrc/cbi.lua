@@ -75,6 +75,8 @@ function load(cbimap, ...)
 		if not instanceof(map, Node) then
 			error("CBI map returns no valid map object!")
 			return nil
+		else
+			map:prepare()
 		end
 	end
 
@@ -163,6 +165,13 @@ function Node._i18n(self, config, section, option, title, description)
 
 		self.title = title or luci.i18n.translate( key, option or section or config )
 		self.description = description or luci.i18n.translate( key .. "_desc", "" )
+	end
+end
+
+-- Prepare nodes
+function Node.prepare(self, ...)
+	for k, child in ipairs(self.children) do
+		child:prepare(...)
 	end
 end
 
@@ -870,7 +879,9 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
+end
 
+function AbstractValue.prepare(self)
 	-- Use defaults from UVL
 	if not self.override_scheme
 	 and self.map:get_scheme(self.section.sectiontype, self.option) then
@@ -1099,23 +1110,23 @@ function ListValue.__init__(self, ...)
 	self.vallist = {}
 	self.size   = 1
 	self.widget = "select"
+end
 
+function ListValue.prepare(self, ...)
+	AbstractValue.prepare(self, ...)
 	if not self.override_scheme
 	 and self.map:get_scheme(self.section.sectiontype, self.option) then
 		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
-		if self.value and vs.values and not self.override_values then
-			if self.rmempty or self.optional then
-				self:value("")
-			end
-			for k, v in pairs(vs.values) do
+		if self.value and vs.valuelist and not self.override_values then
+			for k, v in ipairs(vs.valuelist) do
 				local deps = {}
 				if not self.override_dependencies
-				 and vs.enum_depends and vs.enum_depends[k] then
-					for i, dep in ipairs(vs.enum_depends[k]) do
+				 and vs.enum_depends and vs.enum_depends[v.value] then
+					for i, dep in ipairs(vs.enum_depends[v.value]) do
 						table.insert(deps, _uvl_strip_remote_dependencies(dep))
 					end
 				end
-				self:value(k, v, unpack(deps))
+				self:value(v.value, v.title or v.value, unpack(deps))
 			end
 		end
 	end
