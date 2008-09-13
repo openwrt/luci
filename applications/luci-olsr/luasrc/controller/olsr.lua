@@ -43,10 +43,24 @@ function index()
 		cbi("olsr/olsrdhna"), "HNA Announcements"
 	).i18n = "olsr"
 
-	entry(
+	oplg = entry(
 		{"admin", "services", "olsrd", "plugins"},
 		cbi("olsr/olsrdplugins"), "Plugins"
-	).i18n = "olsr"
+	)
+	oplg.i18n = "olsr"
+	oplg.leaf = true
+
+	local uci = require("luci.model.uci").cursor()
+	uci:foreach("olsrd", "LoadPlugin",
+		function (section)
+			local lib = section.library
+			entry(
+				{"admin", "services", "olsrd", "plugins", lib },
+				cbi("olsr/olsrdplugins"),
+				nil --'Plugin "%s"' % lib:gsub("^olsrd_",""):gsub("%.so.+$","")
+			)
+		end
+	)
 end
 
 function action_index()

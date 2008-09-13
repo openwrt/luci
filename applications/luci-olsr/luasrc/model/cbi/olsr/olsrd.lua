@@ -11,8 +11,8 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 require("luci.tools.webadmin")
-require("luci.fs")
 
 m = Map("olsrd", "OLSR")
 
@@ -97,9 +97,9 @@ i.anonymous = true
 i.addremove = true
 i.dynamic = true
 
-ign = i:option(Flag, "ignore")
-ign.enabled  = "1"
-ign.disabled = "0"
+ign = i:option(Flag, "ignore", "Enable")
+ign.enabled  = "0"
+ign.disabled = "1"
 
 network = i:option(ListValue, "interface", translate("network"))
 luci.tools.webadmin.cbi_add_networks(network)
