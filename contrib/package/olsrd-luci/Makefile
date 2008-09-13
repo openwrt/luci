@@ -36,6 +36,10 @@ define Package/olsrd-luci
 	DEPENDS:=+libpthread
 endef
 
+define Package/olsrd-luci/conffiles
+/etc/config/olsrd
+endef
+
 define Package/olsrd-luci-mod-arprefresh
 	$(call Package/olsrd-luci/common_info)
 	MENU:=1
