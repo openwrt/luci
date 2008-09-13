@@ -26,11 +26,11 @@ $Id$
 <% for k, route in ipairs(routes) do 
 %>
 <tr>
-<td><a href="http://<%=route["Destination IP"]%>"><%=route["Destination IP"]%></a></td>
+<td><a href="http://<%=route["Dest. IP"]%>"><%=route["Dest. IP"]%></a></td>
 <td><a href="http://<%=route["Last hop IP"]%>"><%=route["Last hop IP"]%></a></td>
 <td><%=route.LQ%></td>
-<td><%=route.ILQ%></td>
-<td><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
+<td><%=route.NLQ%></td>
+<td><%=string.format("%.3f", tonumber(route.Cost) or 0)%></td>
 </tr>
 <% end %>
 </table>

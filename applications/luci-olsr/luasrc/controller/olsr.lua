@@ -72,8 +72,8 @@ function action_index()
 	end
 
 	local function compare(a, b)
-		local c = tonumber(a.ETX)
-		local d = tonumber(b.ETX)
+		local c = tonumber(a.Cost)
+		local d = tonumber(b.Cost)
 
 		if not c or c == 0 then
 			return false
@@ -128,7 +128,7 @@ function action_topology()
 	end
 
 	local function compare(a, b)
-		return a["Destination IP"] < b["Destination IP"]
+		return a["Dest. IP"] < b["Dest. IP"]
 	end
 
 	table.sort(data.Topology, compare)
@@ -145,7 +145,7 @@ function action_hna()
 	end
 
 	local function compare(a, b)
-		return a.Network < b.Network
+		return a.Destination < b.Destination
 	end
 
 	table.sort(data.HNA, compare)
@@ -162,7 +162,7 @@ function action_mid()
 	end
 
 	local function compare(a, b)
-		return a.IP < b.IP
+		return a["IP address"] < b["IP address"]
 	end
 
 	table.sort(data.MID, compare)
