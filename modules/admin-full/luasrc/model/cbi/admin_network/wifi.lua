@@ -64,13 +64,13 @@ if hwtype == "atheros" then
 	mode:value("11gdt", "802.11adt")
 	mode:value("11adt", "802.11adt")
 	mode:value("fh", translate("wifi_fh"))
-	
+
 	s:option(Flag, "diversity", translate("wifi_diversity"))
 	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
 	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
 	s:option(Value, "distance", translate("wifi_distance"),
 		translate("wifi_distance_desc")).optional = true
-	
+
 	--s:option(Flag, "nosbeacon", translate("wifi_nosbeacon")).optional = true
 end
 
@@ -87,15 +87,15 @@ if hwtype == "broadcom" then
 	ml = s:option(Value, "maclist", translate("wifi_maclist"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
-	
+
 	s:option(Value, "txant", translate("wifi_txantenna")).optional = true
 	s:option(Value, "rxant", translate("wifi_rxantenna")).optional = true
-	
+
 	s:option(Flag, "frameburst", translate("wifi_bursting")).optional = true
-	
+
 	s:option(Value, "distance", translate("wifi_distance")).optional = true
 	--s:option(Value, "slottime", translate("wifi_slottime")).optional = true
-	
+
 	s:option(Value, "country", translate("wifi_country")).optional = true
 	s:option(Value, "maxassoc", translate("wifi_maxassoc")).optional = true
 end
@@ -117,8 +117,11 @@ network:value("")
 network.combobox_manual = translate("a_w_netmanual")
 luci.tools.webadmin.cbi_add_networks(network)
 
-function network.write(self, section, value)	
-	if not m.uci:get("network", value) then 
+function network.write(self, section, value)
+	if not m.uci:get("network", value) then
+		-- avoid "value not defined in enum" because network is not known yet
+		s.override_scheme = true
+		
 		m:chain("network")
 		m.uci:set("network", value, "interface")
 		Value.write(self, section, value)
@@ -143,7 +146,7 @@ bssid = s:option(Value, "bssid", translate("wifi_bssid"))
 if hwtype == "mac80211" then
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
-	
+
 	s:option(Value, "txpower", translate("a_w_txpwr"), "dbm").rmempty = true
 	s:option(Value, "frag", translate("wifi_frag")).optional = true
 	s:option(Value, "rts", translate("wifi_rts")).optional = true
@@ -153,13 +156,13 @@ end
 
 -------------------- Madwifi Interface ----------------------
 
-if hwtype == "atheros" then	
+if hwtype == "atheros" then
 	mode:value("ahdemo", translate("a_w_ahdemo"))
 	mode:value("monitor", translate("a_w_monitor"))
-	
+
 	bssid:depends({mode="adhoc"})
 	bssid:depends({mode="ahdemo"})
-	
+
 	wds = s:option(Flag, "wds", translate("a_w_wds"))
 	wds:depends({mode="ap"})
 	wds:depends({mode="sta"})
@@ -167,7 +170,7 @@ if hwtype == "atheros" then
 	wdssep = s:option(Flag, "wdssep", translate("wifi_wdssep"))
 	wdssep:depends({mode="ap", wds="1"})
 	wdssep.optional = true
-	
+
 	s:option(Flag, "doth", "802.11h").optional = true
 	s:option(Value, "txpower", translate("a_w_txpwr"), "dbm").rmempty = true
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
@@ -180,7 +183,7 @@ if hwtype == "atheros" then
 	isolate:depends({mode="ap"})
 	isolate.optional = true
 	s:option(Flag, "bgscan", translate("wifi_bgscan")).optional = true
-	
+
 	mp = s:option(ListValue, "macpolicy", translate("wifi_macpolicy"))
 	mp.optional = true
 	mp:value("")
@@ -189,7 +192,7 @@ if hwtype == "atheros" then
 	ml = s:option(Value, "maclist", translate("wifi_maclist"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
-	
+
 	s:option(Value, "rate", translate("wifi_rate")).optional = true
 	s:option(Value, "mcast_rate", translate("wifi_mcast_rate")).optional = true
 	s:option(Value, "frag", translate("wifi_frag")).optional = true
@@ -197,11 +200,11 @@ if hwtype == "atheros" then
 	s:option(Value, "minrate", translate("wifi_minrate")).optional = true
 	s:option(Value, "maxrate", translate("wifi_maxrate")).optional = true
 	s:option(Flag, "compression", translate("wifi_compression")).optional = true
-	
+
 	s:option(Flag, "bursting", translate("wifi_bursting")).optional = true
 	s:option(Flag, "turbo", translate("wifi_turbo")).optional = true
 	s:option(Value, "ff", translate("wifi_ff")).optional = true
-	
+
 	s:option(Flag, "wmm", translate("wifi_wmm")).optional = true
 	s:option(Flag, "xr", translate("wifi_xr")).optional = true
 	s:option(Flag, "ar", translate("wifi_ar")).optional = true
@@ -213,18 +216,18 @@ end
 if hwtype == "broadcom" then
 	mode:value("wds", translate("a_w_wds"))
 	mode:value("monitor", translate("a_w_monitor"))
-	
+
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
 	hidden:depends({mode="wds"})
 	hidden.optional = true
-	
+
 	isolate = s:option(Flag, "isolate", translate("wifi_isolate"),
 	 translate("wifi_isolate_desc"))
 	isolate:depends({mode="ap"})
 	isolate.optional = true
-	
+
 	bssid:depends({mode="wds"})
 end
 
@@ -245,7 +248,7 @@ encr:value("wep", "WEP")
 if hwtype == "atheros" or hwtype == "mac80211" then
 	local supplicant = luci.fs.mtime("/usr/sbin/wpa_supplicant")
 	local hostapd = luci.fs.mtime("/usr/sbin/hostapd")
-	
+
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK")
 		encr:value("psk2", "WPA2-PSK")
@@ -261,7 +264,7 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 		encr:value("psk", "WPA-PSK", {mode="sta"})
 		encr:value("psk2", "WPA2-PSK", {mode="sta"})
 		encr:value("wpa", "WPA-EAP", {mode="sta"})
-		encr:value("wpa2i", "WPA2-EAP", {mode="sta"})	
+		encr:value("wpa2i", "WPA2-EAP", {mode="sta"})
 		encr.description = translate("wifi_wpareq")
 	else
 		encr.description = translate("wifi_wpareq")
@@ -298,34 +301,34 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2i"})
 	nasid.rmempty = true
-	
+
 	eaptype = s:option(ListValue, "eap_type", translate("a_w_eaptype"))
 	eaptype:value("TLS")
 	eaptype:value("PEAP")
 	eaptype:depends({mode="sta", encryption="wpa"})
 	eaptype:depends({mode="sta", encryption="wpa2i"})
-	
+
 	cacert = s:option(Value, "ca_cert", translate("a_w_cacert"))
 	cacert:depends({mode="sta", encryption="wpa"})
 	cacert:depends({mode="sta", encryption="wpa2i"})
-	
+
 	privkey = s:option(Value, "priv_key", translate("a_w_tlsprivkey"))
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa2i"})
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa"})
-	
+
 	privkeypwd = s:option(Value, "priv_key_pwd", translate("a_w_tlsprivkeypwd"))
 	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa2i"})
 	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa"})
-	
-	
+
+
 	auth = s:option(Value, "auth", translate("a_w_peapauth"))
 	auth:depends({mode="sta", eap_type="PEAP", encryption="wpa2i"})
 	auth:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
-	
+
 	identity = s:option(Value, "identity", translate("a_w_peapidentity"))
 	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa2i"})
 	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
-	
+
 	password = s:option(Value, "password", translate("a_w_peappassword"))
 	password:depends({mode="sta", eap_type="PEAP", encryption="wpa2i"})
 	password:depends({mode="sta", eap_type="PEAP", encryption="wpa"})

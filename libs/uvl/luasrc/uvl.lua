@@ -334,12 +334,12 @@ function UVL._validate_option( self, option, nodeps )
 					return false, option:error(ERR.OPT_DATATYPE(option, dt))
 				end
 			end
-		end
 
-		if not nodeps then
-			local ok, err = dependencies.check( self, option )
-			if not ok then
-				option:error(err)
+			if not nodeps then
+				local ok, err = dependencies.check( self, option )
+				if not ok then
+					option:error(err)
+				end
 			end
 		end
 
@@ -848,7 +848,7 @@ function uvlitem.config(self, opt)
 		if #self.cref >= 3 then
 			c = c and c[self.cref[3]] or nil
 		end
-	end	
+	end
 
 	if c and opt then
 		return c[opt]
@@ -912,7 +912,7 @@ function uvlitem._loadconf(self, co, c)
 		if err then
 			self:error(ERR.UCILOAD(self, err))
 		end
-		
+
 		self._configcache = co
 	end
 	return co

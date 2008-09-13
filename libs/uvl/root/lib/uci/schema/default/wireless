@@ -31,7 +31,6 @@ config variable
 	option name 'mode'
 	option section 'wireless.wifi-device'
 	option title 'Mode (atheros)'
-	option required true
 	option type enum
 	list depends type=atheros
 
@@ -378,7 +377,7 @@ config variable
 	option title 'Encryption'
 	option description 'WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP and ad-hoc mode) to be installed.'
 	option type enum
-	
+
 config enum
 	option variable 'wireless.wifi-iface.encryption'
 	option value 'none'
