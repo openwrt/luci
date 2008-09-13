@@ -633,8 +633,10 @@ function UVL._parse_enum(self, scheme, k, v)
 
 	if not t.values then
 		t.values = { [v.value] = v.title or v.value }
+		t.valuelist = { {value = v.value, title = v.title} }
 	else
 		t.values[v.value] = v.title or v.value
+		t.valuelist[#t.valuelist + 1] = {value = v.value, title = v.title}
 	end
 
 	if not t.enum_depends then
