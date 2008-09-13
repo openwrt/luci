@@ -178,6 +178,7 @@ function main.write(self, section, value)
 	
 	-- Crate network interface
 	local netconfig = _strip_internals(uci:get_all("freifunk", "interface"))
+	netconfig.proto = "static"
 	netconfig.ipaddr = ip
 	uci:section("network", "interface", device, netconfig)
 	

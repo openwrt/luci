@@ -88,7 +88,8 @@ function firewall_zone_add_interface(name, interface)
 	local cursor = uci.cursor()
 	local zone = firewall_find_zone(name)
 	local net = cursor:get("firewall", zone, "network")
-	cursor:set("firewall", zone, "network", (net or name .. " ") .. interface)
+	local old = net or (cursor:get("network", name) and name)
+	cursor:set("firewall", zone, "network", (old and old .. " " or "") .. interface)
 	cursor:save("firewall")
 end
 
