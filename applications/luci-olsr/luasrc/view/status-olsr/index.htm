@@ -27,23 +27,23 @@ $Id$
 <% for k, link in ipairs(links) do 
 	local color = "#bb3333"
 	
-	link.ETX = tonumber(link.ETX) or 0
-	if link.ETX == 0 then
+	link.Cost = tonumber(link.Cost) or 0
+	if link.Cost == 0 then
 		color = "#bb3333"
-	elseif link.ETX < 4 then
+	elseif link.Cost < 4 then
 		color = "#00cc00"
-	elseif link.ETX < 10 then
+	elseif link.Cost < 10 then
 		color = "#ffcb05"
-	elseif link.ETX < 100 then
+	elseif link.Cost < 100 then
 		color = "#ff6600"
 	end
 %>
 <tr>
-<td><a href="http://<%=link["remote IP"]%>"><%=link["remote IP"]%></a></td>
+<td><a href="http://<%=link["Remote IP"]%>"><%=link["Remote IP"]%></a></td>
 <td><%=link["Local IP"]%></td>
-<td><%=link.LinkQuality%></td>
+<td><%=link.LQ%></td>
 <td><%=link.NLQ%></td>
-<td style="background-color:<%=color%>"><%=string.format("%.3f", link.ETX)%></td>
+<td style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
 </tr>
 <% end %>
 </table>

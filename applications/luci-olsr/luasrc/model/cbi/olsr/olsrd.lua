@@ -11,22 +11,85 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 require("luci.tools.webadmin")
-require("luci.fs")
 
-m = Map("olsr", "OLSR")
+m = Map("olsrd", "OLSR")
 
-s = m:section(NamedSection, "general", "olsr")
+s = m:section(TypedSection, "olsrd", translate("olsr_general"))
 s.dynamic = true
+s.anonymous = true
 
 debug = s:option(ListValue, "DebugLevel")
 for i=0, 9 do
 	debug:value(i)
 end
+debug.optional = true
 
 ipv = s:option(ListValue, "IpVersion")
 ipv:value("4", "IPv4")
 ipv:value("6", "IPv6")
+
+noint = s:option(Flag, "AllowNoInt")
+noint.enabled = "yes"
+noint.disabled = "no"
+noint.optional = true
+
+s:option(Value, "Pollrate").optional = true
+
+tcr = s:option(ListValue, "TcRedundancy")
+tcr:value("0", translate("olsr_general_tcredundancy_0"))
+tcr:value("1", translate("olsr_general_tcredundancy_1"))
+tcr:value("2", translate("olsr_general_tcredundancy_2"))
+tcr.optional = true
+
+s:option(Value, "MprCoverage").optional = true
+
+lql = s:option(ListValue, "LinkQualityLevel")
+lql:value("0", translate("disable"))
+lql:value("1", translate("olsr_general_linkqualitylevel_1"))
+lql:value("2", translate("olsr_general_linkqualitylevel_2"))
+lql.optional = true
+
+s:option(Value, "LinkQualityAging").optional = true
+
+lqa = s:option(ListValue, "LinkQualityAlgorithm")
+lqa.optional = true
+lqa:value("etx_fpm", translate("olsr_etx_fpm"))
+lqa:value("etx_float", translate("olsr_etx_float"))
+lqa:value("etx_ff", translate("olsr_etx_ff"))
+lqa.optional = true
+
+lqfish = s:option(Flag, "LinkQualityFishEye")
+lqfish.optional = true
+
+s:option(Value, "LinkQualityWinSize").optional = true
+
+s:option(Value, "LinkQualityDijkstraLimit").optional = true
+
+hyst = s:option(Flag, "UseHysteresis")
+hyst.enabled = "yes"
+hyst.disabled = "no"
+hyst.optional = true
+
+fib = s:option(ListValue, "FIBMetric")
+fib.optional = true
+fib:value("flat")
+fib:value("correct")
+fib:value("approx")
+fib.optional = true
+
+clrscr = s:option(Flag, "ClearScreen")
+clrscr.enabled = "yes"
+clrscr.disabled = "no"
+clrscr.optional = true
+
+willingness = s:option(ListValue, "Willingness")
+for i=0,7 do
+	willingness:value(i)
+end
+willingness.optional = true
+
 
 
 i = m:section(TypedSection, "Interface", translate("interfaces"))
@@ -34,45 +97,30 @@ i.anonymous = true
 i.addremove = true
 i.dynamic = true
 
-network = i:option(ListValue, "Interface", translate("network"))
+ign = i:option(Flag, "ignore", "Enable")
+ign.enabled  = "0"
+ign.disabled = "1"
+
+network = i:option(ListValue, "interface", translate("network"))
 luci.tools.webadmin.cbi_add_networks(network)
 
-i:option(Value, "Ip4Broadcast")
-i:option(Value, "HelloInterval")
-i:option(Value, "HelloValidityTime")
-i:option(Value, "TcInterval")
-i:option(Value, "TcValidityTime")
-i:option(Value, "MidInterval")
-i:option(Value, "MidValidityTime")
-i:option(Value, "HnaInterval")
-i:option(Value, "HnaValidityTime")
+i:option(Value, "Ip4Broadcast").optional = true
+i:option(Value, "HelloInterval").optional = true
+i:option(Value, "HelloValidityTime").optional = true
+i:option(Value, "TcInterval").optional = true
+i:option(Value, "TcValidityTime").optional = true
+i:option(Value, "MidInterval").optional = true
+i:option(Value, "MidValidityTime").optional = true
+i:option(Value, "HnaInterval").optional = true
+i:option(Value, "HnaValidityTime").optional = true
+
+adc = i:option(Flag, "AutoDetectChanges")
+adc.enabled  = "yes"
+adc.disabled = "no"
+adc.optional = true
 
 
-p = m:section(TypedSection, "LoadPlugin")
-p.addremove = true
-p.dynamic = true
-
-lib = p:option(ListValue, "Library", translate("library"))
-lib:value("")
-for k, v in pairs(luci.fs.dir("/usr/lib")) do
-	if v:sub(1, 6) == "olsrd_" then
-		lib:value(v)
-	end
-end
-
-
-for i, sect in ipairs({ "Hna4", "Hna6" }) do
-	hna = m:section(TypedSection, sect)
-	hna.addremove = true
-	hna.anonymous = true
-	hna.template  = "cbi/tblsection"
-
-	net = hna:option(Value, "NetAddr")
-	msk = hna:option(Value, "Prefix")
-end
-
-
-ipc = m:section(NamedSection, "IpcConnect")
+ipc = m:section(TypedSection, "IpcConnect")
 conns = ipc:option(Value, "MaxConnections")
 conns.isInteger = true
 

@@ -39,7 +39,7 @@ $Id$
 %>
 <tr>
 <td><%=route.Destination%></td>
-<td><%=route.Gateway%></td>
+<td><%=route["Gateway IP"]%></td>
 <td><%=route.Interface%></td>
 <td><%=route.Metric%></td>
 <td style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
