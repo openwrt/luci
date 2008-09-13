@@ -1,0 +1,22 @@
+config 'olsrd'
+	option 'IpVersion' '4'
+	option 'FIBMetric' 'flat'
+	option 'LinkQualityAlgorithm' 'etx_ff'
+
+config 'Interface'
+	option 'interface' 'ff'
+	option 'Ip4Broadcast' '255.255.255.255'
+
+config 'LoadPlugin'
+	option 'library' 'olsrd_dyn_gw.so.0.4'
+	option 'Ping' '141.1.1.1'
+#	option 'HNA' '192.168.80.0 255.255.255.0'
+	option 'Interval' '60'
+
+config 'LoadPlugin'
+	option 'library' 'olsrd_nameservice.so.0.3'
+	option 'name' 'luci-node.olsr'
+
+config 'LoadPlugin'
+	option 'library' 'olsrd_txtinfo.so.0.1'
+	option 'accept' '127.0.0.1'

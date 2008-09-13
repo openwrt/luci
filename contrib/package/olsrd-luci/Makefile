@@ -12,7 +12,7 @@ include $(TOPDIR)/rules.mk
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
 PKG_VERSION:=0.5.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
@@ -34,6 +34,10 @@ define Package/olsrd-luci
 	$(call Package/olsrd-luci/common_info)
 	MENU:=1
 	DEPENDS:=+libpthread
+endef
+
+define Package/olsrd-luci/conffiles
+/etc/config/olsrd
 endef
 
 define Package/olsrd-luci-mod-arprefresh
@@ -138,73 +142,71 @@ endef
 
 define Package/olsrd-luci/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_DIR) $(1)/lib/config
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/olsrd $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/etc/init.d/olsrd $(1)/etc/init.d/
-	$(INSTALL_CONF) ./files/etc/config/olsr $(1)/etc/config/
-	$(INSTALL_DATA) ./files/lib/config/olsr.lua $(1)/lib/config/
+	$(INSTALL_CONF) ./files/etc/config/olsrd $(1)/etc/config/
 endef
 
 define Package/olsrd-luci-mod-arprefresh/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/arprefresh/olsrd_arprefresh.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/arprefresh/olsrd_arprefresh.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-dot-draw/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dot_draw/olsrd_dot_draw.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/dot_draw/olsrd_dot_draw.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-bmf/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/bmf/olsrd_bmf.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/bmf/olsrd_bmf.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-dyn-gw/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw/olsrd_dyn_gw.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/dyn_gw/olsrd_dyn_gw.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-dyn-gw-plain/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/dyn_gw_plain/olsrd_dyn_gw_plain.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/dyn_gw_plain/olsrd_dyn_gw_plain.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-httpinfo/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/httpinfo/olsrd_httpinfo.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/httpinfo/olsrd_httpinfo.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-nameservice/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/nameservice/olsrd_nameservice.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/nameservice/olsrd_nameservice.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-secure/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/secure/olsrd_secure.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/secure/olsrd_secure.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-txtinfo/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/txtinfo/olsrd_txtinfo.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/txtinfo/olsrd_txtinfo.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-pgraph/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/pgraph/olsrd_pgraph.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/pgraph/olsrd_pgraph.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-quagga/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/quagga/olsrd_quagga.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/quagga/olsrd_quagga.so.* $(1)/usr/lib/
 endef
 
 define Package/olsrd-luci-mod-tas/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/tas/olsrd_tas.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/tas/olsrd_tas.so.* $(1)/usr/lib/
 endef
 
 
