@@ -25,6 +25,7 @@ p.anonymous = true
 ign = p:option(Flag, "ignore")
 ign.enabled  = "1"
 ign.disabled = "0"
+ign.optional = true
 
 lib = p:option(ListValue, "library", translate("library"))
 lib:value("")
@@ -41,19 +42,34 @@ local function Range(x,y)
 end
 
 local function Cidr2IpMask(val)
-	local cidr = luci.ip.IPv4(val) or luci.ip.IPv6(val)
-	if not cidr then return val else return cidr end
+	if val then
+		for i = 1, #val do
+			local cidr = luci.ip.IPv4(val[i]) or luci.ip.IPv6(val[i])
+			if cidr then
+				val[i] = cidr:network():string() .. " " .. cidr:mask():string()
+			end
+		end
+		return val
+	end
 end
 
 local function IpMask2Cidr(val)
-	local ip, mask = val:gmatch("([^%s+])%s+([^%s+])")
-	local cidr
-	if ip and mask and ip:match(":") then
-		cidr = luci.ip.IPv6(ip, mask)
-	elseif ip and mask then
-		cidr = luci.ip.IPv4(ip, mask)
+	if val then
+		for i = 1, #val do
+			local ip, mask = val[i]:gmatch("([^%s+])%s+([^%s+])")()
+			local cidr
+			if ip and mask and ip:match(":") then
+				cidr = luci.ip.IPv6(ip, mask)
+			elseif ip and mask then
+				cidr = luci.ip.IPv4(ip, mask)
+			end
+
+			if cidr then
+				val[i] = cidr:string()
+			end
+		end
+		return val
 	end
-	if not cidr then return val else return cidr end
 end
 
 
@@ -66,19 +82,19 @@ local knownPlParams = {
 		{ ListValue, 	"BmfMechanism",			{ "UnicastPromiscuous", "Broadcast" } },
 		{ Value, 		"BroadcastRetransmitCount",	"2" },
 		{ Value, 		"FanOutLimit",			"4" },
-		{ DynamicList,	"NonOlsrIf",			"eth1" },
+		{ DynamicList,	"NonOlsrIf",			"eth1" }
 	},
 
 	["olsrd_dyn_gw.so.0.4"] = {
 		{ Value,		"Interval",				"40" },
 		{ DynamicList,  "Ping",					"141.1.1.1" },
-		{ DynamicList,	"HNA",					"192.168.80.0/24", Cidr2IpMask, IpMask2Cidr }
+		{ DynamicList,	"HNA",					"192.168.80.0/24", IpMask2Cidr, Cidr2IpMask }
 	},
 
 	["olsrd_httpinfo.so.0.1"] = {
 		{ Value,		"port",					"80" },
 		{ DynamicList,	"Host",					"163.24.87.3" },
-		{ DynamicList,	"Net",					"0.0.0.0/0", Cidr2IpMask, IpMask2Cidr },
+		{ DynamicList,	"Net",					"0.0.0.0/0", IpMask2Cidr, Cidr2IpMask }
 	},
 
 	["olsrd_nameservice.so.0.2"] = {
@@ -164,6 +180,9 @@ for plugin, options in pairs(knownPlParams) do
 				function field.formvalue(self, section)
 					return cbi2uci(otype.formvalue(self, section))
 				end
+			end
+			if otype == DynamicList then
+				field:value( default )
 			end
 			field.default = default
 			field:depends({ library = plugin })

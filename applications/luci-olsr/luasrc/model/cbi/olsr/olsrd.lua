@@ -120,7 +120,7 @@ adc.disabled = "no"
 adc.optional = true
 
 
-ipc = m:section(NamedSection, "IpcConnect")
+ipc = m:section(TypedSection, "IpcConnect")
 conns = ipc:option(Value, "MaxConnections")
 conns.isInteger = true
 
