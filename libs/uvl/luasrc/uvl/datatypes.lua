@@ -14,17 +14,22 @@ $Id$
 
 ]]--
 
-module( "luci.uvl.datatypes", package.seeall )
+local fs = require "luci.fs"
+local ip = require "luci.ip"
+local math = require "math"
+local util = require "luci.util"
 
-require("luci.fs")
-require("luci.ip")
-require("luci.util")
+local tonumber = tonumber
+
+module "luci.uvl.datatypes"
 
 
 function boolean( val )
 	if val == "1" or val == "yes" or val == "on" or val == "true" then
 		return true
 	elseif val == "0" or val == "no" or val == "off" or val == "false" then
+		return true
+	elseif val == "" or val == nil then
 		return true
 	end
 
@@ -59,7 +64,7 @@ end
 
 function ip4addr( val )
 	if val then
-		return luci.ip.IPv4(val) and true or false
+		return ip.IPv4(val) and true or false
 	end
 
 	return false
@@ -72,7 +77,7 @@ end
 
 function ip6addr( val )
 	if val then
-		return luci.ip.IPv6(val) and true or false
+		return ip.IPv6(val) and true or false
 	end
 
 	return false
@@ -102,7 +107,7 @@ function macaddr( val )
 		"^[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+:" ..
 		 "[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+$"
 	) then
-		local parts = luci.util.split( val, ":" )
+		local parts = util.split( val, ":" )
 
 		for i = 1,6 do
 			parts[i] = tonumber( parts[i], 16 )
@@ -134,7 +139,7 @@ function string( val )
 end
 
 function directory( val, seen )
-	local s = luci.fs.stat( val )
+	local s = fs.stat( val )
 	seen = seen or { }
 
 	if s and not seen[s.ino] then
@@ -142,7 +147,7 @@ function directory( val, seen )
 		if s.type == "directory" then
 			return true
 		elseif s.type == "link" then
-			return directory( luci.fs.readlink(val), seen )
+			return directory( fs.readlink(val), seen )
 		end
 	end
 
@@ -150,7 +155,7 @@ function directory( val, seen )
 end
 
 function file( val, seen )
-	local s = luci.fs.stat( val )
+	local s = fs.stat( val )
 	seen = seen or { }
 
 	if s and not seen[s.ino] then
@@ -158,7 +163,7 @@ function file( val, seen )
 		if s.type == "regular" then
 			return true
 		elseif s.type == "link" then
-			return file( luci.fs.readlink(val), seen )
+			return file( fs.readlink(val), seen )
 		end
 	end
 

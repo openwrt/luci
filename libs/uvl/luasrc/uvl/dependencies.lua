@@ -14,38 +14,35 @@ $Id$
 
 ]]--
 
-module( "luci.uvl.dependencies", package.seeall )
+local uvl = require "luci.uvl"
+local ERR = require "luci.uvl.errors"
+local util = require "luci.util"
+local table = require "table"
 
-local ERR = luci.uvl.errors
+local type, unpack = type, unpack
+local ipairs, pairs = ipairs, pairs
+
+module "luci.uvl.dependencies"
+
+
 
 function _parse_reference( r, c, s, o )
 	local ref  = { }
 	local vars = {
-		config  = ( c or '$config'  ),
-		section = ( s or '$section' ),
-		option  = ( o or '$option'  )
+		config  = c,
+		section = s,
+		option  = o
 	}
 
-	for i, v in ipairs(luci.util.split(r,".")) do
-		table.insert(ref, (v:gsub( "%$(.+)", function(n) return vars[n] end )))
+	for v in r:gmatch("[^.]+") do
+		ref[#ref+1] = (v:gsub( "%$(.+)", vars ))
 	end
-
-	if c or s then
-		if #ref == 1 and c and s then
-			ref = { c, s, ref[1] }
-		elseif #ref == 2 and c then
-			ref = { c, unpack(ref) }
-		elseif #ref ~= 3 then
-			ref = nil
-		end
-	else
-		if #ref == 1 then
-			ref = { '$config', '$section', ref[1] }
-		elseif #ref == 2 then
-			ref = { '$config', unpack(ref) }
-		elseif #ref ~= 3 then
-			ref = nil
-		end
+	
+	if #ref < 2 then
+		table.insert(ref, 1, s or '$section')
+	end
+	if #ref < 3 then
+		table.insert(ref, 1, c or '$config')
 	end
 
 	return ref
@@ -54,7 +51,7 @@ end
 function _serialize_dependency( dep, v )
 	local str
 
-	for k, v in luci.util.spairs( dep,
+	for k, v in util.spairs( dep,
 		function(a,b)
 			a = ( type(dep[a]) ~= "boolean" and "_" or "" ) .. a
 			b = ( type(dep[b]) ~= "boolean" and "_" or "" ) .. b
@@ -92,7 +89,7 @@ function check( self, object, nodeps )
 					return false, derr:child(ERR.SME_BADDEP(object,k))
 				end
 
-				local option = luci.uvl.option( self, object.c, unpack(ref) )
+				local option = uvl.option( self, object.c, unpack(ref) )
 
 				valid, err = self:_validate_option( option, true )
 				if valid then

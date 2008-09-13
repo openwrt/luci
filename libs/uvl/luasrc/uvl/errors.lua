@@ -14,10 +14,18 @@ $Id$
 
 ]]--
 
-module( "luci.uvl.errors", package.seeall )
+local uci = require "luci.model.uci"
+local uvl = require "luci.uvl"
+local util = require "luci.util"
+local string = require "string"
 
-require("luci.util")
+local ipairs, error, type = ipairs, error, type 
+local tonumber, unpack = tonumber, unpack
 
+
+local luci = luci
+
+module "luci.uvl.errors"
 
 ERRCODES = {
 	{ 'UCILOAD', 		'Unable to load config "%p": %1' },
@@ -68,11 +76,11 @@ ERRCODES = {
 
 -- build error constants and instance constructors
 for i, v in ipairs(ERRCODES) do
-	luci.uvl.errors[v[1]] = function(...)
+	_M[v[1]] = function(...)
 		return error(i, ...)
 	end
 
-	luci.uvl.errors['ERR_'..v[1]] = i
+	_M['ERR_'..v[1]] = i
 end
 
 
@@ -85,14 +93,14 @@ function i18n(key, def)
 end
 
 
-error = luci.util.class()
+error = util.class()
 
 function error.__init__(self, code, pso, args)
 
 	self.code = code
 	self.args = ( type(args) == "table" and args or { args } )
 
-	if luci.util.instanceof( pso, luci.uvl.uvlitem ) then
+	if util.instanceof( pso, uvl.uvlitem ) then
 		self.stype = pso.sref[2]
 		self.package, self.section, self.option, self.value = unpack(pso.cref)
 		self.object = pso
@@ -101,7 +109,7 @@ function error.__init__(self, code, pso, args)
 		pso = ( type(pso) == "table" and pso or { pso } )
 
 		if pso[2] then
-			local uci = luci.model.uci.cursor()
+			local uci = uci.cursor()
 			self.stype = uci:get(pso[1], pso[2]) or pso[2]
 		end
 
@@ -113,7 +121,7 @@ function error.child(self, err)
 	if not self.childs then
 		self.childs = { err }
 	else
-		table.insert( self.childs, err )
+		self.childs[#self.childs+1] = err
 	end
 	return self
 end
