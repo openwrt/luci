@@ -97,7 +97,7 @@ local knownPlParams = {
 		{ DynamicList,	"Net",					"0.0.0.0/0", IpMask2Cidr, Cidr2IpMask }
 	},
 
-	["olsrd_nameservice.so.0.2"] = {
+	["olsrd_nameservice.so.0.3"] = {
 		{ DynamicList,	"name",					"my-name.mesh" },
 		{ DynamicList,	"hosts",				"1.2.3.4 name-for-other-interface.mesh" },
 		{ Value,		"suffix",				".olsr" },
@@ -162,6 +162,7 @@ for plugin, options in pairs(knownPlParams) do
 				bool.enabled  = "true"
 				bool.disabled = "false"
 			end
+			bool.optional = true
 			bool.default = default
 			bool:depends({ library = plugin })
 		else
@@ -184,6 +185,7 @@ for plugin, options in pairs(knownPlParams) do
 			if otype == DynamicList then
 				field:value( default )
 			end
+			field.optional = true
 			field.default = default
 			field:depends({ library = plugin })
 		end
