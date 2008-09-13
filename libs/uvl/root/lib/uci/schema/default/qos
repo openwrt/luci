@@ -1,5 +1,8 @@
 package qos
 
+config package
+	option title 'Network quality of service'
+
 config section
 	option name	'interface'
 	option title	'QoS interface section'
@@ -11,7 +14,6 @@ config variable
 	option name	'enabled'
 	option title	'Enable QoS on this interface'
 	option section	'qos.interface'
-	option datatype	'boolean'
 
 config variable
 	option name	'overhead'

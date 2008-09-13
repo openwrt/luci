@@ -1,5 +1,8 @@
 package httpd
 
+config package
+	option title 'Busybox HTTPd configuration'
+
 config section
 	option name	'httpd'
 	option title	'General httpd settings'
@@ -9,7 +12,7 @@ config section
 
 config variable
 	option name	'home'
-	option title	'Docroot directory'
+	option title	'Document root'
 	option section	'httpd.httpd'
 	option datatype	'directory'
 	option required	true
@@ -20,3 +23,16 @@ config variable
 	option section	'httpd.httpd'
 	option datatype	'integer'
 	option required true
+
+config variable
+	option name	'c_file'
+	option title	'Configuration file'
+	option section	'httpd.httpd'
+	option datatype	'file'
+
+config variable
+	option name	'realm'
+	option title	'Authentication Realm'
+	option description 'Realm shown on login prompt'
+	option section	'httpd.httpd'
+

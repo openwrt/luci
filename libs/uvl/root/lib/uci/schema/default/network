@@ -1,11 +1,11 @@
 package network
 
 config package
-	option title	'Network Configuration'
+	option title	'Network configuration'
 
 config section
 	option name	'interface'
-	option title	'Network interface definition'
+	option title	'Network interface'
 	option package	'network'
 	list   depends	'proto=static, ipaddr, netmask'
 	list   depends	'proto=static, ip6addr'
@@ -18,7 +18,7 @@ config section
 
 config variable
 	option name	'ifname'
-	option title	'Physical interface name'
+	option title	'Physical interface'
 	option section	'network.interface'
 	option required	true
 
@@ -75,40 +75,52 @@ config variable
 	option title	'DNS server (IPv4 or IPv6)'
 	option section	'network.interface'
 	option datatype	'ipaddr'
+	option multival true
 
 config variable
 	option name	'keepalive'
-	option title	'Number of connection failures before reconnect (PPTP)'
+	option title	'keep-alive'
+	option descriptions	'Number of connection failures before reconnect'
 	option section	'network.interface'
 	option datatype	'uint'
+	list depends	proto=pppoe
+	list depends	proto=pptp
 
 config variable
 	option name	'demand'
-	option title	'Number of seconds to wait before closing the connection due to inactivity (PPTP)'
+	option title	'Dial on-demand'
+	option description	'Number of seconds to wait before closing the connection due to inactivity'
 	option section	'network.interface'
 	option datatype	'uint'
+	list depends	proto=pppoe
+	list depends	proto=pptp
 
 config variable
 	option name	'username'
-	option title	'PPTP username'
+	option title	'Username'
 	option section	'network.interface'
 	option datatype	'string'
+	list depends	proto=pppoe
+	list depends	proto=pptp
 
 config variable
 	option name	'password'
-	option title	'PPTP password'
+	option title	'Password'
 	option section	'network.interface'
 	option datatype	'string'
+	list depends	proto=pppoe
+	list depends	proto=pptp
 
 config variable
 	option name	'server'
 	option title	'PPTP server'
 	option section	'network.interface'
 	option datatype	'ipaddr'
+	list depends	proto=pptp
 
 config variable
 	option name	'proto'
-	option title	'Option proto'
+	option title	'Protocol'
 	option section	'network.interface'
 	option type		'enum'
 	option required	true
@@ -162,7 +174,7 @@ config section
 
 config variable
 	option name	'interface'
-	option title	'Parent interface name'
+	option title	'Parent interface'
 	option section	'network.alias'
 	option valueof  'network.interface'
 	option required	true
@@ -211,7 +223,7 @@ config variable
 
 config variable
 	option name	'proto'
-	option title	'Alias interface protocol'
+	option title	'Protocol'
 	option section	'network.alias'
 	option type		'enum'
 	option required	true
@@ -230,27 +242,27 @@ config section
 
 config variable
 	option name	'interface'
-	option title	'Interface for the route'
+	option title	'Interface'
 	option section	'network.route'
 	option valueof  'network.interface'
 	option required	true
 
 config variable
 	option name	'target'
-	option title	'Target IPv4 host or net address'
+	option title	'Target IPv4 host or network'
 	option section	'network.route'
 	option datatype	'ip4addr'
 	option required	true
 
 config variable
 	option name	'netmask'
-	option title	'Target IPv4 netmask (for subnet routes)'
+	option title	'Target IPv4 netmask'
 	option section	'network.route'
 	option datatype	'ip4addr'
 
 config variable
 	option name	'gateway'
-	option title	'IPv4 gateway address'
+	option title	'IPv4 gateway'
 	option section	'network.route'
 	option datatype	'ip4addr'
 	option required	true

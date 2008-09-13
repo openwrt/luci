@@ -1,0 +1,41 @@
+#package uvc-streamer
+
+config package
+	option title 'UVC-Streamer webcam streaming configuration'
+
+config section
+	option name 'uvc-streamer'
+	option package 'uvc-streamer'
+	option title 'Settings'
+	option unique true
+	option required true
+
+config variable
+	option name 'enabled'
+	option section 'uvc-streamer.uvc-streamer'
+	option title 'Enable'
+	option required true
+	option datatype boolean
+
+config variable
+	option name 'device'
+	option section 'uvc-streamer.uvc-streamer'
+	option title 'Device'
+
+config variable
+	option name 'resolution'
+	option section 'uvc-streamer.uvc-streamer'
+	option title 'Resolution'
+	option required true
+
+config variable
+	option name 'framespersecond'
+	option section 'uvc-streamer.uvc-streamer'
+	option title 'Frames per second'
+	option datatype uint
+
+config variable
+	option name 'port'
+	option section 'uvc-streamer.uvc-streamer'
+	option title 'Port'
+	option datatype port
