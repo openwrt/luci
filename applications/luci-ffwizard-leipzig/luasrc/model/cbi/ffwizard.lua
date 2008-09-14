@@ -36,8 +36,12 @@ main = f:field(Flag, "wifi", "Freifunkzugang einrichten")
 net = f:field(Value, "net", "Freifunknetz")
 net.rmempty = true
 net:depends("wifi", "1")
+net:value("104.0", "Berlin (104.0)")
+net:value("104.59", "Leisnig/Gadow/div. (104.59)")
 net:value("104.61", "Leipzig (104.61)")
 net:value("104.62", "Halle (104.62)")
+net:value("191.161", "Augsburg (191.161)")
+
 function net.cfgvalue(self, section)
 	return uci:get("freifunk", "wizard", "net")
 end
