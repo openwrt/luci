@@ -16,25 +16,25 @@ config settings wizard
 	    
 
 config fw_rule http
-	option source freifunk
+	option src freifunk
 	option target ACCEPT
 	option proto  tcp
 	option dest_port 80
 	
 config fw_rule https
-	option source freifunk
+	option src freifunk
 	option target ACCEPT
 	option proto  tcp
 	option dest_port 443
 	 
 config fw_rule ssh
-	option source freifunk
+	option src freifunk
 	option target ACCEPT
 	option proto  tcp
 	option dest_port 22
 
 config fw_rule olsr
-	option source freifunk
+	option src freifunk
 	option target ACCEPT
 	option proto  udp
 	option dest_port 698

@@ -77,7 +77,7 @@ function Cursor.delete_all(self, config, stype, comparator)
 		local tbl = comparator
 		comparator = function(section)
 			for k, v in pairs(tbl) do
-				if not section[k] == v then
+				if section[k] ~= v then
 					return false
 				end
 			end 
