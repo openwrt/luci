@@ -562,12 +562,12 @@ start() {
 	[ -z "$OLSRD_CONFIG_FILE" ] && return 1
 
 	### start olsrd
-	start-stop-daemon -b -m -p $PID -x $BIN -S -- -f $CONF -nofork
+	start-stop-daemon -q -b -m -p $PID -x $BIN -S -- -f $CONF -nofork
 }
 
 stop() {
 	### stop olsrd
-	start-stop-daemon -q -p $PID -a ${BIN##*/} -K
+	start-stop-daemon -q -p $PID -x $BIN -K
 }
 
 restart() {
