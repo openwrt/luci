@@ -872,10 +872,10 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.tag_reqerror = {}
 	self.tag_error = {}
 	self.deps = {}
-	self.cast = "string"
+	--self.cast = "string"
 
 	self.track_missing = false
-	self.rmempty   = false
+	--self.rmempty   = false
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
@@ -886,11 +886,17 @@ function AbstractValue.prepare(self)
 	if not self.override_scheme
 	 and self.map:get_scheme(self.section.sectiontype, self.option) then
 		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
-		self.rmempty     = not vs.required
-		self.cast        = (vs.type == "list") and "list" or "string"
+		if self.rmempty == nil then
+			self.rmempty = not vs.required
+		end
+		if self.cast == nil then
+			self.cast = (vs.type == "list") and "list" or "string"
+		end
 		self.title       = self.title or vs.title
 		self.description = self.description or vs.descr
-		self.default	 = vs.default
+		if self.default == nil then
+			self.default = vs.default
+		end
 
 		if vs.depends and not self.override_dependencies then
 			for i, deps in ipairs(vs.depends) do
@@ -901,6 +907,8 @@ function AbstractValue.prepare(self)
 			end
 		end
 	end
+
+	self.cast = self.cast or "string"
 end
 
 -- Add a dependencie to another section field
