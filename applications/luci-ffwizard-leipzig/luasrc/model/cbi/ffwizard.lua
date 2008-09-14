@@ -156,6 +156,7 @@ function main.write(self, section, value)
 	-- Create wifi iface
 	local ifconfig = _strip_internals(uci:get_all("freifunk", "wifi_iface"))
 	ifconfig.device = device
+	ifconfig.network = device
 	uci:section("wireless", "wifi-iface", nil, ifconfig)
 	
 	-- Save wifi
