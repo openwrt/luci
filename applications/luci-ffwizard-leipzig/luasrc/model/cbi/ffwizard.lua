@@ -52,7 +52,7 @@ subnet.rmempty = true
 subnet:depends("wifi", "1")
 for i=0, 255 do
 	subnet:value(i)
-end 
+end
 function subnet.cfgvalue(self, section)
 	return uci:get("freifunk", "wizard", "subnet")
 end
@@ -114,14 +114,14 @@ function main.write(self, section, value)
 	if value == "0" then
 		return
 	end
-	
+
 	local device = dev:formvalue(section)
 
 	-- Collect IP-Address
 	local inet = net:formvalue(section)
 	local isubnet = subnet:formvalue(section)
 	local inode = node:formvalue(section)
-	
+
 	-- Invalidate fields
 	if not inet then
 		net.tag_missing[section] = true
@@ -132,14 +132,14 @@ function main.write(self, section, value)
 	if not inode then
 		node.tag_missing[section] = true
 	end
-	
+
 	if not inet or not isubnet or not inode then
 		return
 	end
-	
+
 	local ip = "%s.%s.%s" % {inet, isubnet, inode}
-	
-	
+
+
 	-- Cleanup
 	luci.util.perror("1")
 	tools.wifi_delete_ifaces(device)
@@ -147,44 +147,44 @@ function main.write(self, section, value)
 	tools.network_remove_interface(device)
 	luci.util.perror("3")
 	tools.firewall_zone_remove_interface("freifunk", device)
-		
-	
+
+
 	-- Tune wifi device
 	local devconfig = _strip_internals(uci:get_all("freifunk", "wifi_device"))
 	uci:tset("wireless", device, devconfig)
-	
+
 	-- Create wifi iface
 	local ifconfig = _strip_internals(uci:get_all("freifunk", "wifi_iface"))
 	ifconfig.device = device
 	ifconfig.network = device
 	uci:section("wireless", "wifi-iface", nil, ifconfig)
-	
+
 	-- Save wifi
-	uci:save("wireless")	
-	
+	uci:save("wireless")
+
 	-- Create firewall zone and add default rules (first time)
 	local newzone = tools.firewall_create_zone("freifunk", "DROP", "ACCEPT", "DROP", true)
 	if newzone then
 		uci:foreach("freifunk", "fw_forwarding", function(section)
 			uci:section("firewall", "forwarding", nil, _strip_internals(section))
 		end)
-		
+
 		uci:foreach("freifunk", "fw_rule", function(section)
 			uci:section("firewall", "rule", nil, _strip_internals(section))
 		end)
-		
+
 		uci:save("firewall")
 	end
-	
-	
+
+
 	-- Crate network interface
 	local netconfig = _strip_internals(uci:get_all("freifunk", "interface"))
 	netconfig.proto = "static"
 	netconfig.ipaddr = ip
 	uci:section("network", "interface", device, netconfig)
-	
+
 	uci:save("network")
-	
+
 	tools.firewall_zone_add_interface("freifunk", device)
 end
 
@@ -193,17 +193,18 @@ function olsr.write(self, section, value)
 	if value == "0" then
 		return
 	end
-	
+
 	local device = dev:formvalue(section)
-	
+
 	-- Delete old interface
 	uci:delete_all("freifunk", "Interface", {Interface=device})
-	
+
 	-- Write new interface
 	local olsrbase = _strip_internals(uci:get_all("freifunk", "olsr_interface"))
-	olsrbase.Interface = device
-	uci:section("olsr", "Interface", nil, olsrbase)
-	uci:save("olsr")
+	olsrbase.interface = device
+	olsrbase.ignore    = "0"
+	uci:section("olsrd", "Interface", nil, olsrbase)
+	uci:save("olsrd")
 end
 
 
@@ -211,9 +212,9 @@ function share.write(self, section, value)
 	if value == "maybe" then
 		return
 	end
-	
+
 	uci:delete_all("firewall", "forwarding", {src="freifunk", dest="wan"})
-	
+
 	if value == "yes" then
 		uci:section("firewall", "forwarding", nil, {src="freifunk", dest="wan"})
 	end
@@ -225,25 +226,25 @@ function client.write(self, section, value)
 	if value == "0" then
 		return
 	end
-	
+
 	local device = dev:formvalue(section)
 
 	-- Collect IP-Address
 	local inet = net:formvalue(section)
 	local isubnet = subnet:formvalue(section)
 	local inode = node:formvalue(section)
-	
+
 	if not inet or not isubnet or not inode then
 		return
 	end
-	
-	local dhcpbeg = 48 + tonumber(inode) * 4 
+
+	local dhcpbeg = 48 + tonumber(inode) * 4
 	local dclient = "%s.%s.%s" % {inet:gsub("^[0-9]+", "10"), isubnet, dhcpbeg}
 	local limit = dhcpbeg < 252 and 3 or 2
-	
+
 	-- Delete old alias
 	uci:delete("network", device .. "dhcp")
-	
+
 	-- Create alias
 	local aliasbase = _strip_internals(uci:get_all("freifunk", "alias"))
 	aliasbase.interface = device
@@ -251,8 +252,8 @@ function client.write(self, section, value)
 	aliasbase.proto = "static"
 	uci:section("network", "alias", device .. "dhcp", aliasbase)
 	uci:save("network")
-	
-	
+
+
 	-- Create dhcp
 	local dhcpbase = _strip_internals(uci:get_all("freifunk", "dhcp"))
 	dhcpbase.interface = device .. "dhcp"
@@ -261,11 +262,11 @@ function client.write(self, section, value)
 
 	uci:section("dhcp", "dhcp", device .. "dhcp", dhcpbase)
 	uci:save("dhcp")
-	
-	
+
+
 	-- Delete old splash
 	uci:delete_all("luci_splash", "iface", {net=device, zone="freifunk"})
-	
+
 	-- Register splash
 	uci:section("luci_splash", "iface", nil, {net=device, zone="freifunk"})
 	uci:save("luci_splash")
