@@ -1,32 +1,28 @@
+config settings wizard
 config public contact
-	option nickname
-	option name
-	option mail
-	option phone
-	option location
-	option geo
-	option note
+	option nickname ''
+	option name ''
+	option mail ''
+	option phone ''
+	option location ''
+	option note ''
 
 config public community
-    option name     "Freifunk Halle"
-    option homepage http://halle.freifunk.net
-    option realm    netz.freifunk-halle.net
-    
-config settings wizard
-	    
+	option name 'Freifunk'
+	option homepage 'http://freifunk.net'
 
 config fw_rule http
 	option src freifunk
 	option target ACCEPT
 	option proto  tcp
 	option dest_port 80
-	
+
 config fw_rule https
 	option src freifunk
 	option target ACCEPT
 	option proto  tcp
 	option dest_port 443
-	 
+
 config fw_rule ssh
 	option src freifunk
 	option target ACCEPT
@@ -38,12 +34,11 @@ config fw_rule olsr
 	option target ACCEPT
 	option proto  udp
 	option dest_port 698
-	
+
 config fw_forwarding lan
 	option src lan
 	option dest freifunk
 
-    
 
 config defaults wifi_device
     option channel   1
@@ -53,17 +48,16 @@ config defaults wifi_device
     option rxant 1
     option diversity 0
     option disabled 0
-    
+
 
 config defaults wifi_iface
     option mode		adhoc
-    option ssid     halle.freifunk.net
     option bssid    02:CA:FF:EE:BA:BE
     option txpower  10
     option rts		2347
     option frag		512
-    
-    
+
+
 config defaults interface
     option netmask  255.0.0.0
     option dns      "88.198.178.18 141.54.1.1 212.204.49.83 208.67.220.220 208.67.222.222"
@@ -71,12 +65,12 @@ config defaults interface
 
 config defaults alias
 	option netmask	255.255.255.0 
-	
-	
+
+
 config defaults dhcp
 	option leasetime 30m
-	
-	
+
+
 config defaults olsr_interface
 	option	HelloInterval 6.0
 	option	HelloValidityTime 108.0
@@ -86,3 +80,34 @@ config defaults olsr_interface
 	option	MidValidityTime 324.0
 	option	HnaInterval 18.0
 	option	HnaValidityTime 108.0
+
+
+config community leipzig
+	option name "Freifunk Leipzig (104.61)"
+	option homepage http://leipzig.freifunk.net
+	option ssid "leipzig.freifunk.net"
+	option prefix "104.61"
+
+config community halle
+	option name "Freifunk Halle (104.62)"
+	option homepage http://halle.freifunk.net
+	option ssid "halle.freifunk.net"
+	option prefix "104.62"
+
+config community l59
+	option name "Leisnig, Gadow, ... (104.59)"
+	option homepage http://freifunk.net
+	option ssid "start.freifunk.net"
+	option prefix "104.59"
+
+config community berlin
+	option name "Freifunk Berlin (104)"
+	option homepage http://berlin.freifunk.net
+	option ssid "olsr.freifunk.net"
+	option prefix "104"
+
+config community augsburg
+	option name "Freifunk Augsburg (191.161)"
+	option homepage http://augsburg.freifunk.net
+	option ssid "augsburg.freifunk.net"
+	option prefix "191.161"

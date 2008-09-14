@@ -1,12 +1,7 @@
 #!/bin/sh
 uci batch <<-EOF
-        set freifunk.community.name='Freifunk Leipzig'
-        set freifunk.community.homepage=http://leipzig.freifunk.net
-        set freifunk.community.realm=db.leipzig.freifunk.net
-        set freifunk.wifi_iface.ssid=leipzig.freifunk.net
         set luci.main.mediaurlbase=/luci-static/fledermaus
         set luci.main.lang=de
-        commit freifunk
         commit luci
 EOF
 	

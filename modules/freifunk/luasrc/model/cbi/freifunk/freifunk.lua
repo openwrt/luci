@@ -18,6 +18,7 @@ für die lokale Freifunkgemeinschaft. Diese Werte wirken sich NICHT auf die Konf
 des Routers aus, sondern definieren nur die Vorgaben für den Freifunkassistenten.]])
 c:option(Value, "name", "Gemeinschaft")
 c:option(Value, "homepage", "Webseite")
-c:option(Value, "realm", "Realm")
+c:option(Value, "ssid", "ESSID")
+c:option(Value, "prefix", "Netzprefix")
 
 return m

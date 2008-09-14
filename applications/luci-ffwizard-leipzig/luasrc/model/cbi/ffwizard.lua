@@ -36,11 +36,9 @@ main = f:field(Flag, "wifi", "Freifunkzugang einrichten")
 net = f:field(Value, "net", "Freifunknetz")
 net.rmempty = true
 net:depends("wifi", "1")
-net:value("104.0", "Berlin (104.0)")
-net:value("104.59", "Leisnig/Gadow/div. (104.59)")
-net:value("104.61", "Leipzig (104.61)")
-net:value("104.62", "Halle (104.62)")
-net:value("191.161", "Augsburg (191.161)")
+uci:foreach("freifunk", "community", function(s)
+	net:value(s[".name"], s.name)
+end)
 
 function net.cfgvalue(self, section)
 	return uci:get("freifunk", "wizard", "net")
@@ -51,12 +49,9 @@ function net.write(self, section, value)
 end
 
 
-subnet = f:field(ListValue, "subnet", "Subnetz (Projekt)")
+subnet = f:field(Value, "subnet", "Subnetz (Projekt)")
 subnet.rmempty = true
 subnet:depends("wifi", "1")
-for i=0, 255 do
-	subnet:value(i)
-end
 function subnet.cfgvalue(self, section)
 	return uci:get("freifunk", "wizard", "subnet")
 end
@@ -120,6 +115,7 @@ function main.write(self, section, value)
 	end
 
 	local device = dev:formvalue(section)
+	local community
 
 	-- Collect IP-Address
 	local inet = net:formvalue(section)
@@ -129,6 +125,9 @@ function main.write(self, section, value)
 	-- Invalidate fields
 	if not inet then
 		net.tag_missing[section] = true
+	else
+		community = inet
+		inet = uci:get("freifunk", community, "prefix") or inet
 	end
 	if not isubnet then
 		subnet.tag_missing[section] = true
@@ -145,13 +144,14 @@ function main.write(self, section, value)
 
 
 	-- Cleanup
-	luci.util.perror("1")
 	tools.wifi_delete_ifaces(device)
-	luci.util.perror("2")
 	tools.network_remove_interface(device)
-	luci.util.perror("3")
 	tools.firewall_zone_remove_interface("freifunk", device)
-
+	
+	-- Tune community settings
+	if community then
+		uci:tset("freifunk", "community", uci:get_all("freifunk", community))
+	end
 
 	-- Tune wifi device
 	local devconfig = _strip_internals(uci:get_all("freifunk", "wifi_device"))
@@ -161,6 +161,7 @@ function main.write(self, section, value)
 	local ifconfig = _strip_internals(uci:get_all("freifunk", "wifi_iface"))
 	ifconfig.device = device
 	ifconfig.network = device
+	ifconfig.ssid = uci:get("freifunk", community, "ssid")
 	uci:section("wireless", "wifi-iface", nil, ifconfig)
 
 	-- Save wifi
@@ -241,6 +242,8 @@ function client.write(self, section, value)
 	if not inet or not isubnet or not inode then
 		return
 	end
+	
+	inet = uci:get("freifunk", inet, "prefix") or inet
 
 	local dhcpbeg = 48 + tonumber(inode) * 4
 	local dclient = "%s.%s.%s" % {inet:gsub("^[0-9]+", "10"), isubnet, dhcpbeg}
@@ -266,6 +269,21 @@ function client.write(self, section, value)
 
 	uci:section("dhcp", "dhcp", device .. "dhcp", dhcpbase)
 	uci:save("dhcp")
+	
+	uci:delete_all("firewall", "rule", {
+		src="freifunk",
+		proto="udp",
+		src_port="68",
+		dest_port="67"
+	})
+	uci:section("firewall", "rule", nil, {
+		src="freifunk",
+		proto="udp",
+		src_port="68",
+		dest_port="67",
+		target="ACCEPT"
+	})
+	
 
 
 	-- Delete old splash

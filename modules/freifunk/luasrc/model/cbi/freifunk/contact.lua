@@ -20,7 +20,12 @@ c:option(Value, "name", translate("name"))
 c:option(Value, "mail", translate("mail"), translate("mail1"))
 c:option(Value, "phone", translate("phone"))
 c:option(Value, "location", translate("location"))
-c:option(Value, "geo", translate("coord"), translate("coord1"))
 c:option(Value, "note", translate("note"))
 
-return m
+m2 = Map("system", translate("geo"))
+
+s = m2:section(TypedSection, "system", "")
+s:option(Value, "latitude", translate("latitude", "Breite")).rmempty = true
+s:option(Value, "longitude", translate("longitude", "Länge")).rmempty = true
+
+return m, m2
