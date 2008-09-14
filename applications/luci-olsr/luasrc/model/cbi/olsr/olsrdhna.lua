@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-mh = Map("olsrd", "OLSR - HNA Announcements")
+mh = Map("olsrd", translate("olsrd_hna", "OLSR - HNA-Ankündigungen"))
 
 for i, sect in ipairs({ "Hna4", "Hna6" }) do
 	hna = mh:section(TypedSection, sect)

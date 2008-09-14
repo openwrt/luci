@@ -13,20 +13,20 @@ $Id$
 
 -%>
 <%+header%>
-<h1><%:olsr_links%></h1>
-<p><%:olsr_links1%></p>
+<h1><%:olsrd_links%></h1>
+<p><%:olsrd_links_desc%></p>
 <br />
 <table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
-<th><%:destination%></th>
-<th><%:local%></th>
+<th><%:olsrd_neighbour_ip%></th>
+<th><%:olsrd_local_ip%></th>
 <th>LQ</th>
 <th>NLQ</th>
 <th>ETX</th>
 </tr>
-<% for k, link in ipairs(links) do 
+<% for k, link in ipairs(links) do
 	local color = "#bb3333"
-	
+
 	link.Cost = tonumber(link.Cost) or 0
 	if link.Cost == 0 then
 		color = "#bb3333"
@@ -50,8 +50,8 @@ $Id$
 <br />
 <h3><%:legend%>:</h3>
 <ul>
-<li><strong>LQ: </strong><%:olsrlinks_lq1%></li>
-<li><strong>NLQ: </strong><%:olsrlinks_nlq1%></li>
-<li><strong>ETX: </strong><%:olsrlinks_etx1%></li>
+<li><strong>LQ: </strong><%:olsrd_links_lq_desc%></li>
+<li><strong>NLQ: </strong><%:olsrd_links_nlq_desc%></li>
+<li><strong>ETX: </strong><%:olsrd_links_etx_desc%></li>
 </ul>
 <%+footer%>

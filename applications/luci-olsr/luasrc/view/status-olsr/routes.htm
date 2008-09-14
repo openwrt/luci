@@ -13,19 +13,20 @@ $Id$
 
 -%>
 <%+header%>
-<h1><%:olsr_routes%></h1>
+<h1><%:olsrd_routes%></h1>
+<p><%:olsrd_routes_desc%></p>
 <br />
 <table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
-<th><%:destination%></th>
-<th><%:gateway%></th>
+<th><%:olsrd_network%></th>
+<th><%:olsrd_gateway%></th>
 <th><%:interface%></th>
 <th><%:metric%></th>
 <th>ETX</th>
 </tr>
-<% for k, route in ipairs(routes) do 
+<% for k, route in ipairs(routes) do
 	local color = "#bb3333"
-	
+
 	route.ETX = tonumber(route.ETX)
 	if route.ETX == 0 then
 		color = "#bb3333"

@@ -17,7 +17,7 @@ require("luci.ip")
 
 
 if arg[1] then
-	mp = Map("olsrd", "OLSR - Plugins")
+	mp = Map("olsrd", translate("olsrd_plugins", "OLSR - Plugins"))
 
 	p = mp:section(TypedSection, "LoadPlugin")
 	p:depends("library", arg[1])
