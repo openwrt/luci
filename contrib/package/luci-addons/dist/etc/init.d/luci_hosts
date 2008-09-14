@@ -23,8 +23,12 @@ start() {
 	
 	config_load luci_hosts
 	config_foreach apply_host host
+	
+	return 0
 }
 
 stop() {
 	test -f /var/etc/hosts && rm -f /var/etc/hosts
+	
+	return 0
 }
