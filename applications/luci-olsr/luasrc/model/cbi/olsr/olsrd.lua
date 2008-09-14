@@ -121,6 +121,8 @@ adc.optional = true
 
 
 ipc = m:section(TypedSection, "IpcConnect")
+ipc.anonymous = true
+
 conns = ipc:option(Value, "MaxConnections")
 conns.isInteger = true
 
