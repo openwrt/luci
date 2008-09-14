@@ -39,13 +39,12 @@ function index()
 	
 	
 	local page  = node("freifunk", "status")
-	page.target = call("action_status")
+	page.target = form("freifunk/public_status")
 	page.title  = "Status"
 	page.order  = 20
+	page.i18n   = "admin-core"
 	page.setuser  = false
 	page.setgroup = false
-	
-	assign({"freifunk", "status", "iwscan"}, {"admin", "status", "iwscan"}, "WLAN-Scan", 20)
 	
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 	
