@@ -14,9 +14,9 @@ $Id$
 
 require("luci.tools.webadmin")
 
-m = Map("olsrd", "OLSR")
+m = Map("olsrd", translate("olsrd", "OLSR Daemon"))
 
-s = m:section(TypedSection, "olsrd", translate("olsr_general"))
+s = m:section(TypedSection, "olsrd", translate("olsrd_general"))
 s.dynamic = true
 s.anonymous = true
 
@@ -38,26 +38,26 @@ noint.optional = true
 s:option(Value, "Pollrate").optional = true
 
 tcr = s:option(ListValue, "TcRedundancy")
-tcr:value("0", translate("olsr_general_tcredundancy_0"))
-tcr:value("1", translate("olsr_general_tcredundancy_1"))
-tcr:value("2", translate("olsr_general_tcredundancy_2"))
+tcr:value("0", translate("olsrd_olsrd_tcredundancy_0"))
+tcr:value("1", translate("olsrd_olsrd_tcredundancy_1"))
+tcr:value("2", translate("olsrd_olsrd_tcredundancy_2"))
 tcr.optional = true
 
 s:option(Value, "MprCoverage").optional = true
 
 lql = s:option(ListValue, "LinkQualityLevel")
 lql:value("0", translate("disable"))
-lql:value("1", translate("olsr_general_linkqualitylevel_1"))
-lql:value("2", translate("olsr_general_linkqualitylevel_2"))
+lql:value("1", translate("olsrd_olsrd_linkqualitylevel_1"))
+lql:value("2", translate("olsrd_olsrd_linkqualitylevel_2"))
 lql.optional = true
 
 s:option(Value, "LinkQualityAging").optional = true
 
 lqa = s:option(ListValue, "LinkQualityAlgorithm")
 lqa.optional = true
-lqa:value("etx_fpm", translate("olsr_etx_fpm"))
-lqa:value("etx_float", translate("olsr_etx_float"))
-lqa:value("etx_ff", translate("olsr_etx_ff"))
+lqa:value("etx_fpm", translate("olsrd_etx_fpm"))
+lqa:value("etx_float", translate("olsrd_etx_float"))
+lqa:value("etx_ff", translate("olsrd_etx_ff"))
 lqa.optional = true
 
 lqfish = s:option(Flag, "LinkQualityFishEye")
