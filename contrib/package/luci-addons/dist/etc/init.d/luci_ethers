@@ -24,8 +24,12 @@ start() {
 	config_foreach apply_lease static_lease
 	
 	test -f /etc/ethers.local && cat /etc/ethers.local >> /var/etc/ethers
+	
+	return 0
 }
 
 stop() {
 	test -f /var/etc/ethers && rm -f /var/etc/ethers
+	
+	return 0
 }
