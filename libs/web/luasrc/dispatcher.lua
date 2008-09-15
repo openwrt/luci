@@ -352,17 +352,8 @@ function assign(path, clone, title, order)
 	
 	obj.title = title
 	obj.order = order
-	
-	local c = context.tree
-	for k, v in ipairs(clone) do
-		if not c.nodes[v] then
-			c.nodes[v] = {nodes={}}
-		end
 
-		c = c.nodes[v]
-	end
-	
-	setmetatable(obj, {__index = c})
+	setmetatable(obj, {__index = _create_node(clone)})
 	
 	return obj
 end
@@ -388,7 +379,7 @@ end
 -- @param	...		Virtual path
 -- @return			Dispatching tree node
 function node(...)
-	local c = _create_node(arg)
+	local c = _create_node({...})
 
 	c.module = getfenv(2)._NAME
 	c.path = arg
