@@ -34,6 +34,7 @@ hostcopy:
 	for i in $(MODULES); do cp -a $$i/hostfiles/* host/ -R 2>/dev/null || true; done
 	rm -f host/luci
 	ln -s .$(LUCI_MODULEDIR) host/luci
+	rm -rf /tmp/luci-* || true
 
 hostenv: host ucidefaults
 
