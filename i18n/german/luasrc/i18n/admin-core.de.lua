@@ -181,7 +181,6 @@ dhcp_dnsmasq_strictorder_desc = 'DNS-Server werden strikt der Reihenfolge in der
 file = 'Datei'
 frag = 'Frag.'
 frequency = 'Frequenz'
-hellonet = 'Hallo und willkommen im Netz von'
 iface = 'Schnittstelle'
 iwscan = 'WLAN-Scan'
 iwscan1 = 'Drahtlosnetzwerke in der lokalen Umgebung des Routers:'
