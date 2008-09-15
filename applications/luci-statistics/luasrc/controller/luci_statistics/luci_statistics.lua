@@ -151,7 +151,7 @@ function statistics_render()
 
 	local vars  = luci.http.formvalue()
 	local req   = luci.dispatcher.context.request
-	local path  = luci.dispatcher.context.dispatched.path
+	local path  = luci.dispatcher.context.path
 	local uci   = luci.model.uci.cursor()
 	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
@@ -161,10 +161,10 @@ function statistics_render()
 	local images = { }
 
 	-- find requested plugin and instance
-        for i, p in ipairs( luci.dispatcher.context.dispatched.path ) do
-                if luci.dispatcher.context.dispatched.path[i] == "graph" then
-                        plugin    = luci.dispatcher.context.dispatched.path[i+1]
-                        instances = { luci.dispatcher.context.dispatched.path[i+2] }
+        for i, p in ipairs( luci.dispatcher.context.path ) do
+                if luci.dispatcher.context.path[i] == "graph" then
+                        plugin    = luci.dispatcher.context.path[i+1]
+                        instances = { luci.dispatcher.context.path[i+2] }
                 end
         end
 
