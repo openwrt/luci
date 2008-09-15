@@ -32,7 +32,7 @@ function cache_ondemand(...)
 end
 
 function cache_enable(cachepath, mode)
-	cachepath = cachepath or "/tmp/.luciccache"
+	cachepath = cachepath or "/tmp/luci-modulecache"
 	mode = mode or "r--r--r--"
 
 	local loader = package.loaders[2]

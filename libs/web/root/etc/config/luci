@@ -21,7 +21,7 @@ config extern flash_keep
 config internal languages
 	
 config internal sauth
-	option sessionpath "/tmp/.lucisessions"
+	option sessionpath "/tmp/luci-sessions"
 	option sessiontime 3600
 	
 config internal ccache
@@ -29,6 +29,6 @@ config internal ccache
 
 config internal template
 	option compiler_mode file
-	option compiledir "/tmp/.lucitplcache"
+	option compiledir "/tmp/luci-templatecache"
 		
 config internal themes
