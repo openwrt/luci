@@ -52,12 +52,14 @@ function index()
 		assign({"freifunk", "statistics"}, {"admin", "statistics", "graph"}, i18n("stat_statistics", "Statistiken"), 40)
 	end
 	
-	local page  = node("admin", "index", "freifunk")
+	assign({"mini", "freifunk"}, {"admin", "freifunk"}, "Freifunk", 15)
+	entry({"admin", "freifunk"}, alias("admin", "freifunk", "index"), "Freifunk", 15)
+	local page  = node("admin", "freifunk", "index")
 	page.target = cbi("freifunk/freifunk")
 	page.title  = "Freifunk"
 	page.order  = 30
 	
-	local page  = node("admin", "index", "contact")
+	local page  = node("admin", "freifunk", "contact")
 	page.target = cbi("freifunk/contact")
 	page.title  = "Kontakt"
 	page.order  = 40

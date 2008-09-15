@@ -61,7 +61,7 @@ endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Freifunk Support
+  SUBMENU:=LuCI Freifunk Support (GERMAN ONLY)
   DEPENDS:=+luci-mod-freifunk
 endef
 
@@ -250,7 +250,7 @@ endef
 
 ### Community Packages ###
 
-define Package/luci-ff-halle
+define Package/luci-freifunk-community
   $(call Package/luci/fftemplate)
   DEPENDS+= \
    +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
@@ -259,74 +259,11 @@ define Package/luci-ff-halle
    +luci-i18n-german \
    +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
    +kmod-tun +ip
-  TITLE:=Freifunk Halle Community Meta-Package
+  TITLE:=Freifunk Community Meta-Package
 endef
 
-define Package/luci-ff-halle/install
-	$(call Package/luci/install/template,$(1),applications/community-halle)
-endef
-
-
-define Package/luci-ff-leipzig
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-app-ffwizard-leipzig \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
-   +kmod-tun +ip
-  TITLE:=Freifunk Leipzig Community Meta-Package
-endef
-
-define Package/luci-ff-leipzig/install
-	$(call Package/luci/install/template,$(1),applications/community-leipzig)
-endef
-
-
-define Package/luci-ff-hannover
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
-  TITLE:=Freifunk Hannover Community Meta-Package
-  URL:=http://www.freifunk-hannover.de/
-  MAINTAINER:=Mickey Knox <mickey-at-netfreaks-dot-org>
-endef
-
-define Package/luci-ff-hannover/install
-	$(call Package/luci/install/template,$(1),applications/community-hannover)
-endef
-
-
-define Package/luci-ff-berlin
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
-  TITLE:=Freifunk Berlin Community Meta-Package
-endef
-
-define Package/luci-ff-berlin/install
-	$(call Package/luci/install/template,$(1),applications/community-berlin)
-endef
-
-define Package/luci-ff-augsburg
-  $(call Package/luci/fftemplate)
-  DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
-   +luci-theme-fledermaus \
-   +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice
-  TITLE:=Freifunk Augsburg Community Meta-Package
-endef
-
-define Package/luci-ff-augsburg/install
-        $(call Package/luci/install/template,$(1),applications/community-augsburg)
+define Package/luci-freifunk-community/install
+	$(call Package/luci/install/template,$(1),applications/freifunk-community)
 endef
 
 ### Modules ###
@@ -660,22 +597,6 @@ ifneq ($(CONFIG_PACKAGE_luci-httpd),)
 	PKG_SELECTED_MODULES+=libs/httpd
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-ff-halle),)
-	PKG_SELECTED_MODULES+=applications/community-halle
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-leipzig),)
-	PKG_SELECTED_MODULES+=applications/community-leipzig
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-hannover),)
-	PKG_SELECTED_MODULES+=applications/community-hannover
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-berlin),)
-	PKG_SELECTED_MODULES+=applications/community-berlin
-endif
-ifneq ($(CONFIG_PACKAGE_luci-ff-augsburg),)
-        PKG_SELECTED_MODULES+=applications/community-augsburg
-endif
-
 ifneq ($(CONFIG_PACKAGE_luci-admin-core),)
 	PKG_SELECTED_MODULES+=modules/admin-core
 endif
@@ -690,6 +611,10 @@ ifneq ($(CONFIG_PACKAGE_luci-admin-rpc),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
 	PKG_SELECTED_MODULES+=modules/freifunk
+endif
+
+ifneq ($(CONFIG_PACKAGE_luci-freifunk-community),)
+	PKG_SELECTED_MODULES+=applications/luci-freifunk-community
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-app-ffwizard-leipzig),)
@@ -783,17 +708,13 @@ $(eval $(call BuildPackage,luci-uvl))
 
 $(eval $(call BuildPackage,luci-httpd))
 
-$(eval $(call BuildPackage,luci-ff-halle))
-$(eval $(call BuildPackage,luci-ff-leipzig))
-$(eval $(call BuildPackage,luci-ff-hannover))
-$(eval $(call BuildPackage,luci-ff-berlin))
-$(eval $(call BuildPackage,luci-ff-augsburg))
-
 $(eval $(call BuildPackage,luci-admin-core))
 $(eval $(call BuildPackage,luci-admin-mini))
 $(eval $(call BuildPackage,luci-admin-full))
 $(eval $(call BuildPackage,luci-admin-rpc))
 $(eval $(call BuildPackage,luci-mod-freifunk))
+
+$(eval $(call BuildPackage,luci-freifunk-community))
 
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
 $(eval $(call BuildPackage,luci-app-firewall))

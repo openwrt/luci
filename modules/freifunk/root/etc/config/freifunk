@@ -83,31 +83,40 @@ config defaults olsr_interface
 
 
 config community leipzig
-	option name "Freifunk Leipzig (104.61)"
+	option name "Freifunk Leipzig"
 	option homepage http://leipzig.freifunk.net
 	option ssid "leipzig.freifunk.net"
 	option prefix "104.61"
 
 config community halle
-	option name "Freifunk Halle (104.62)"
+	option name "Freifunk Halle"
 	option homepage http://halle.freifunk.net
 	option ssid "halle.freifunk.net"
 	option prefix "104.62"
 
 config community l59
-	option name "Leisnig, Gadow, ... (104.59)"
+	option name "Freifunk L59"
 	option homepage http://freifunk.net
 	option ssid "start.freifunk.net"
 	option prefix "104.59"
 
 config community berlin
-	option name "Freifunk Berlin (104)"
+	option name "Freifunk Berlin"
 	option homepage http://berlin.freifunk.net
 	option ssid "olsr.freifunk.net"
 	option prefix "104"
+	option external freifunk_berlin
+	
+config community hannover
+	option name "Freifunk Hannover"
+	option homepage http://hannover.freifunk.net
+	option ssid "hannover.freifunk.net"
+	option prefix "10.2"
+	option external freifunk_hannover
 
 config community augsburg
-	option name "Freifunk Augsburg (191.161)"
+	option name "Freifunk Augsburg"
 	option homepage http://augsburg.freifunk.net
 	option ssid "augsburg.freifunk.net"
 	option prefix "191.161"
+	option external freifunk_augsburg
