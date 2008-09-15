@@ -230,7 +230,7 @@ function olsr.write(self, section, value)
 	local external  = community and uci:get("freifunk", community, "external") or ""
 
 	-- Delete old interface
-	uci:delete_all("freifunk", "Interface", {Interface=device})
+	uci:delete_all("freifunk", "Interface", {interface=device})
 
 	-- Write new interface
 	local olsrbase = uci:get_all("freifunk", "olsr_interface")
