@@ -614,7 +614,7 @@ ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-freifunk-community),)
-	PKG_SELECTED_MODULES+=applications/luci-freifunk-community
+	PKG_SELECTED_MODULES+=applications/freifunk-community
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-app-ffwizard-leipzig),)
