@@ -16,9 +16,9 @@ $Id$
 <% local ff = luci.model.uci.cursor():get_all("freifunk") %>
 <h1><%:ff_hellonet%> <%=ff.community.name or 'Freifunk Deutschland'%>!</h1>
 <p><%:ff_public1%><br />
-<%:ff_public2%><%=luci.sys.hostname()%>. <%:ff_public3%>
-<a href="<%=controller%>/public/index/contact"><%=ff.contact.nickname or 'anonym'%></a>.</p>
+<%:ff_public2%> <%=luci.sys.hostname()%>. <%:ff_public3%>
+<a href="<%=controller%>/public/index/contact"> <%=ff.contact.nickname%></a>.</p>
 <p><%:ff_public4%> <a href="http://freifunk.net">Freifunk.net</a>.<br />
 <%:ff_public5%> <a href="<%=ff.community.homepage or 'http//freifunk.net'%>"><%=ff.community.name or 'Freifunk'%></a>.</p>
-<p><strong><%:note%></strong>: <%:ff_public6%></p>
+<p><strong><%:ff_note%></strong>: <%:ff_public6%></p>
 <%+footer%>
