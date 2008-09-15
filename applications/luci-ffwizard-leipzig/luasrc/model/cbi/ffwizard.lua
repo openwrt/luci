@@ -162,7 +162,7 @@ function main.write(self, section, value)
 	tools.wifi_delete_ifaces(device)
 	tools.network_remove_interface(device)
 	tools.firewall_zone_remove_interface("freifunk", device)
-	
+
 	-- Tune community settings
 	if community then
 		uci:tset("freifunk", "community", uci:get_all("freifunk", community))
@@ -225,12 +225,12 @@ function olsr.write(self, section, value)
 
 
 	local device = dev:formvalue(section)
-	
+
 	local community = net:formvalue(section)
 	local external  = community and uci:get("freifunk", community, "external") or ""
 
 	-- Delete old interface
-	uci:delete_all("freifunk", "Interface", {interface=device})
+	uci:delete_all("olsrd", "Interface", {interface=device})
 
 	-- Write new interface
 	local olsrbase = uci:get_all("freifunk", "olsr_interface")
@@ -297,7 +297,7 @@ function client.write(self, section, value)
 
 	uci:section("dhcp", "dhcp", device .. "dhcp", dhcpbase)
 	uci:save("dhcp")
-	
+
 	uci:delete_all("firewall", "rule", {
 		src="freifunk",
 		proto="udp",
@@ -311,7 +311,7 @@ function client.write(self, section, value)
 		dest_port="67",
 		target="ACCEPT"
 	})
-	
+
 
 
 	-- Delete old splash
