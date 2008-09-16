@@ -164,7 +164,7 @@ function main.write(self, section, value)
 	tools.firewall_zone_remove_interface("freifunk", device)
 
 	-- Tune community settings
-	if community then
+	if community and uci:get("freifunk", community) then
 		uci:tset("freifunk", "community", uci:get_all("freifunk", community))
 	end
 
