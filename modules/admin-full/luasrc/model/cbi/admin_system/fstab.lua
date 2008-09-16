@@ -48,7 +48,7 @@ end
 
 used = v:option(DummyValue, "used", translate("a_s_fstab_used"))
 function used.cfgvalue(self, section)
-	return mounts[section].percent .. " (" ..
+	return ( mounts[section].percent or "0%" ) .. " (" ..
 	luci.tools.webadmin.byte_format(
 		( tonumber(mounts[section].used) or 0 ) * 1024
 	) .. ")"
