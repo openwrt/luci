@@ -29,7 +29,7 @@ gcchost: gccbuild hostcopy
 luahost: luabuild hostcopy
 
 hostcopy: 
-	mkdir -p host
+	mkdir -p host/tmp
 	for i in $(MODULES); do cp -a $$i/dist/* host/ -R 2>/dev/null || true; done
 	for i in $(MODULES); do cp -a $$i/hostfiles/* host/ -R 2>/dev/null || true; done
 	rm -f host/luci
