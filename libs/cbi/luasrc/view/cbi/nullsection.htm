@@ -16,7 +16,7 @@ $Id$
 			<% if self.title and #self.title > 0 then -%>
 				<legend><%=self.title%></legend>
 			<%- end %>
-			<div class="cbi-section-node">
+			<div class="cbi-section-node" id="cbi-<%=self.config%>-<%=tostring(self):sub(8)%>">
 				<% self:render_children(1, scope or {}) %>
 			</div>
 			<br />
