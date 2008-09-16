@@ -40,9 +40,9 @@ mp = v:option(DummyValue, "mountpoint", translate("a_s_fstab_mountpoint"))
 avail = v:option(DummyValue, "avail", translate("a_s_fstab_avail"))
 function avail.cfgvalue(self, section)
 	return luci.tools.webadmin.byte_format(
-	 tonumber(mounts[section].available) * 1024
+		( tonumber(mounts[section].available) or 0 ) * 1024
 	) .. " / " .. luci.tools.webadmin.byte_format(
-	 tonumber(mounts[section].blocks) * 1024
+		( tonumber(mounts[section].blocks) or 0 ) * 1024
 	)
 end
 
@@ -50,7 +50,7 @@ used = v:option(DummyValue, "used", translate("a_s_fstab_used"))
 function used.cfgvalue(self, section)
 	return mounts[section].percent .. " (" ..
 	luci.tools.webadmin.byte_format(
-	 tonumber(mounts[section].used) * 1024
+		( tonumber(mounts[section].used) or 0 ) * 1024
 	) .. ")"
 end
 
