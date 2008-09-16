@@ -134,6 +134,7 @@ end
 
 
 mode = s:option(ListValue, "mode", translate("mode"))
+mode.override_values = true
 mode:value("ap", translate("a_w_ap"))
 mode:value("adhoc", translate("a_w_adhoc"))
 mode:value("sta", translate("a_w_client"))
