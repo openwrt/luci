@@ -372,6 +372,16 @@ define Package/luci-app-uvc_streamer/install
 endef
 
 
+define Package/luci-app-p910nd
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +p910nd
+  TITLE:=p910nd - Printer server module
+endef
+
+define Package/luci-app-p910nd/install
+        $(call Package/luci/install/template,$(1),applications/luci-p910nd)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -519,6 +529,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-uvc_streamer),)
 	PKG_SELECTED_MODULES+=applications/luci-uvc_streamer
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-p910nd),)
+        PKG_SELECTED_MODULES+=applications/luci-p910nd
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -580,6 +593,7 @@ $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))
 $(eval $(call BuildPackage,luci-app-samba))
 $(eval $(call BuildPackage,luci-app-uvc_streamer))
+$(eval $(call BuildPackage,luci-app-p910nd))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 
