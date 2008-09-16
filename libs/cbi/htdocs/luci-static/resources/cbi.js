@@ -1,6 +1,6 @@
 var cbi_d = [];
 
-function cbi_d_add(field, dep) {	
+function cbi_d_add(field, dep, next) {
 	var obj = document.getElementById(field);
 	if (obj) {
 		var entry
@@ -12,10 +12,10 @@ function cbi_d_add(field, dep) {
 		}
 		if (!entry) {
 			entry = {
-				"id": field,
 				"node": obj,
-				"parent": obj.parentNode,
-				"next": obj.nextSibling,
+				"id": field,
+				"parent": obj.parentNode.id,
+				"next": next,
 				"deps": []
 			};
 			cbi_d.unshift(entry);
@@ -57,16 +57,20 @@ function cbi_d_update() {
 	var state = false;
 	for (var i=0; i<cbi_d.length; i++) {
 		var entry = cbi_d[i];
-		if (entry.node.parentNode && !cbi_d_check(entry.deps)) {
-			entry.parent.removeChild(entry.node);
-			state = (state || !entry.node.parentNode)
-		} else if (!entry.node.parentNode && cbi_d_check(entry.deps)) {
-			if (!entry.next) {
-				entry.parent.appendChild(entry.node);
+		var next  = document.getElementById(entry.next)
+		var node  = document.getElementById(entry.id)
+		var parent = document.getElementById(entry.parent)
+
+		if (node && node.parentNode && !cbi_d_check(entry.deps)) {
+			node.parentNode.removeChild(node);
+			state = (state || !node.parentNode)
+		} else if ((!node || !node.parentNode) && cbi_d_check(entry.deps)) {
+			if (!next) {
+				parent.appendChild(entry.node);
 			} else {
-				entry.parent.insertBefore(entry.node, entry.next);
+				next.parentNode.insertBefore(entry.node, next);
 			}		
-			state = (state || entry.node.parentNode)
+			state = (state || (node && node.parentNode))
 		}
 	}
 	if (state) {

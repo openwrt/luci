@@ -12,6 +12,8 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+</div>
+<div id="cbip-<%=self.config.."-"..section.."-"..self.option%>"></div>
 </td>
 
 <% if #self.deps > 0 then -%>
@@ -26,7 +28,7 @@ $Id$
 		<%-
 			end
 		-%>
-			});
+			}, "cbip-<%=self.config.."-"..section.."-"..self.option%>");
 		<%- end %>
 	</script>
 <%- end %>
