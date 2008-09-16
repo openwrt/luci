@@ -21,7 +21,8 @@ $Id$
 		<%-
 			for k,v in pairs(d.deps) do
 		-%>
-			<%-=string.format('"cbid.%s.%s.%s"', self.config, section, k) .. ":" .. string.format("%q", v)-%>,
+			<%-=string.format('"cbid.%s.%s.%s"', self.config, section, k) .. ":" .. string.format("%q", v)-%>
+			<%-if next(d.deps, k) then-%>,<%-end-%>
 		<%-
 			end
 		-%>

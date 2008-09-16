@@ -30,7 +30,8 @@ $Id$
 			<%-
 				for i, k in ipairs(self.keylist) do
 			-%>
-				<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>,
+				<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>
+				<%-if i<#self.keylist then-%>,<%-end-%>
 			<%-
 				end
 			-%>
