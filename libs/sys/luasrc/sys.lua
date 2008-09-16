@@ -77,27 +77,44 @@ function mounts()
 	local data = {}
 	local k = {"fs", "blocks", "used", "available", "percent", "mountpoint"}
 	local ps = luci.util.execi("df")
-	
+
 	if not ps then
 		return
 	else
 		ps()
 	end
-	
+
 	for line in ps do
 		local row = {}
-		
+
 		local j = 1
 		for value in line:gmatch("[^%s]+") do
 			row[k[j]] = value
 			j = j + 1
 		end
-		
+
 		if row[k[1]] then
+
+			-- this is a rather ugly workaround to cope with wrapped lines in
+			-- the df output:
+			--
+			--	/dev/scsi/host0/bus0/target0/lun0/part3
+			--                   114382024  93566472  15005244  86% /mnt/usb
+			--
+
+			if not row[k[2]] then
+				j = 2
+				line = ps()
+				for value in line:gmatch("[^%s]+") do
+					row[k[j]] = value
+					j = j + 1
+				end
+			end
+
 			table.insert(data, row)
 		end
 	end
-	
+
 	return data
 end
 
@@ -335,37 +352,37 @@ function process.list()
 	local data = {}
 	local k
 	local ps = luci.util.execi("top -bn1")
-	
+
 	if not ps then
 		return
 	end
-	
+
 	while true do
 		local line = ps()
 		if not line then
 			return
 		end
-		
+
 		k = luci.util.split(luci.util.trim(line), "%s+", nil, true)
 		if k[1] == "PID" then
 			break
 		end
 	end
-	
+
 	for line in ps do
 		local row = {}
-		
+
 		line = luci.util.trim(line)
 		for i, value in ipairs(luci.util.split(line, "%s+", #k-1, true)) do
 			row[k[i]] = value
 		end
-		
+
 		local pid = tonumber(row[k[1]])
 		if pid then
 			data[pid] = row
 		end
 	end
-	
+
 	return data
 end
 
