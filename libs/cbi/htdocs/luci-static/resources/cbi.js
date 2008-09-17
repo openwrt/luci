@@ -24,11 +24,13 @@ function cbi_d_add(field, dep, next) {
 	}
 }
 
-function cbi_d_value(target) {
+function cbi_d_checkvalue(target, ref) {
 	var t = document.getElementById(target);
 	var value
 	
-	if (!t || !t.value) {
+	if (!t) {
+		return true
+	} else if (!t.value) {
 		value = "";
 	} else {
 		value = t.value;
@@ -38,14 +40,14 @@ function cbi_d_value(target) {
 		}
 	}
 	
-	return value
+	return (value == ref)
 }
 
 function cbi_d_check(deps) {
 	for (var i=0; i<deps.length; i++) {
 		var istat = true
 		for (var j in deps[i]) {
-			istat = (istat && cbi_d_value(j) == deps[i][j])
+			istat = (istat && cbi_d_checkvalue(j, deps[i][j]))
 		}
 		if (istat) {
 			return true
