@@ -119,7 +119,7 @@ config variable
 config variable
 	option name 'dnsforwardmax'
 	option section 'dhcp.dnsmasq'
-	option title 'concurrent queries' 
+	option title 'concurrent queries'
 	option datatype uint
 
 config variable
@@ -222,4 +222,4 @@ config variable
 	option section 'dhcp.dhcp'
 	option title 'DHCP-Options'
 	option description 'See "dnsmasq --help dhcp" for a list of available options.'
-	option type list
+	option type lazylist
