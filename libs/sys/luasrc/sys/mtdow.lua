@@ -159,16 +159,16 @@ end
 
 function Writer._find_mtdblock(self, mtdname)
 	local k
-	local prefix = "/dev/mtdblock"
+	local prefix = "/dev/mtd"
 	prefix = prefix .. (fs.stat(prefix) and "/" or "")
 	
 	for l in io.lines("/proc/mtd") do
-		local k = l:match('([%w-_]+):.*-"%s"' % mtdname)
+		local k = l:match('mtd([%%w-_]+):.*"%s"' % mtdname)
 		if k then return prefix..k end
 	end
 end
 
-function Write._write_emulated(self, devicename, imagestream, appendfile)
+function Writer._write_emulated(self, devicename, imagestream, appendfile)
 	local stat = (self:_write_memory(device, imagestream) == 0)
 	stat = stat and (self:_refresh_block("rootfs") == 0)
 	local squash = self:_find_mtdblock("rootfs_data")
@@ -189,39 +189,34 @@ function Writer._write_memory(self, devicename, imagestream)
 end
 
 function Writer._write_combined(self, devicename, imagestream, appendfile)
-	assert(fs.copy(self.MTD, self.SAFEMTD), ERROR_INTERNAL)
-	assert(posix.mkfifo(self.IMAGEFIFO), ERROR_RESOURCE)
-	
-	local imagefifo = io.open(self.IMAGEFIFO, "w")
-	
-	assert(imagefifo, ERROR_RESOURCE)
-	
 	local imageproc = posix.fork()
 	assert(imageproc ~= -1, ERROR_RESOURCE)
 	if imageproc == 0 then
+		fs.unlink(self.IMAGEFIFO)
+		assert(posix.mkfifo(self.IMAGEFIFO), ERROR_RESOURCE)
+		local imagefifo = io.open(self.IMAGEFIFO, "w")
+		assert(imagefifo, ERROR_RESOURCE)
 		ltn12.pump.all(imagestream, ltn12.sink.file(imagefifo))
 		os.exit(0)
 	end
 	
 	return os.execute( 
 		"%s -j '%s' write '%s' '%s'" % {
-			self.SAFEMTD, appendfile, devicename, self.IMAGEFIFO
+			self.MTD, appendfile, self.IMAGEFIFO, devicename
 		}
 	)
 end
 
 function Writer._refresh_block(self, devicename)
-	assert(fs.copy(self.MTD, self.SAFEMTD), ERROR_INTERNAL)
-	return os.execute("%s refresh '%s'" % {self.SAFEMTD, devicename})
+	return os.execute("%s refresh '%s'" % {self.MTD, devicename})
 end
 
 function Writer._append(self, devicename, appendfile, erase)
-	assert(fs.copy(self.MTD, self.SAFEMTD), ERROR_INTERNAL)
 	erase = erase and ("-e '%s' " % devicename) or ''
 	
 	return os.execute( 
 		"%s %s jffs2write '%s' '%s'" % {
-			self.SAFEMTD, erase, appendfile, devicename
+			self.MTD, erase, appendfile, devicename
 		}
 	)
 end
