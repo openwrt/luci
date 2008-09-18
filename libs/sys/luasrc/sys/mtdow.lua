@@ -24,9 +24,17 @@ local type, assert, error = type, assert, error
 
 module "luci.sys.mtdow"
 
-local WRITE_IMAGE = 0
-local WRITE_COMBINED = 1
-local WRITE_EMULATED = 2
+WRITE_IMAGE = 0
+WRITE_COMBINED = 1
+WRITE_EMULATED = 2
+
+ERROR_INTERNAL = 1
+ERROR_NOTFOUND = 2
+ERROR_RESOURCE = 3
+ERROR_NODETECT = 4
+ERROR_NOTAVAIL = 5
+ERROR_NOSTREAM = 6
+ERROR_INVMAGIC = 7
 
 Writer = util.class()
 
@@ -40,9 +48,18 @@ EmulatedWriter.blocks = {
 	}
 }
 
+function EmulatedWriter.write_block(self, name, imagestream, appendpattern)
+	if appendpattern then
+		os.execute("grep rootfs /proc/mtd >/dev/null || "
+			.. "{ echo /dev/hda2,65536,rootfs > "
+			.. "/sys/module/block2mtd/parameters/block2mtd }")
+	end
+	return Writer.write_block(self, name, imagestream, appendpattern)
+end
+
 -- Broadcom
-TRXWriter = util.class(Writer)
-TRXWriter.blocks = {
+CFEWriter = util.class(Writer)
+CFEWriter.blocks = {
 	image = {
 		magic = {"4844", "5735"},
 		device = "linux",
@@ -72,14 +89,32 @@ RedWriter.blocks = {
 	} 
 }
 
-function EmulatedWriter.write_block(self, name, imagestream, appendpattern)
-	if appendpattern then
-		os.execute("grep rootfs /proc/mtd >/dev/null || "
-			.. "{ echo /dev/hda2,65536,rootfs > "
-			.. "/sys/module/block2mtd/parameters/block2mtd }")
+-- Auto Detect
+function native_writer()
+	local w = Writer()
+	
+	-- Detect amd64 / x86
+	local x86 = {"x86_64", "i386", "i486", "i586", "i686"}
+	if util.contains(x86, posix.uname("%m")) then
+		return EmulatedWriter()
 	end
-	return Writer.write_block(self, name, imagestream, appendpattern)
+	
+	-- Detect CFE
+	if w:_find_mtdblock("cfe") and w:_find_mtdblock("linux") then
+		return CFEWriter()
+	end
+	
+	-- Detect Redboot
+	if w:_find_mtdblock("RedBoot") and w:_find_mtdblock("vmlinux.bin.l7") then
+		return RedWriter()
+	end
+	
+	-- Detect MagicBox
+	if fs.readfile("/proc/cpuinfo"):find("MagicBox") then
+	 	return CommonWriter() 
+	end
 end
+
 
 
 Writer.MTD = "/sbin/mtd"
@@ -87,15 +122,15 @@ Writer.SAFEMTD = "/tmp/mtd"
 Writer.IMAGEFIFO = "/tmp/mtdimage.fifo"
 
 function Writer.write_block(self, name, imagestream, appendfile)
-	assert(self.blocks[name], "Undefined block: " % name)
+	assert(self.blocks[name], ERROR_NOTFOUND)
 	local block = self.blocks[name]
 	local device = block.device
 	device = fs.stat(device) and device or self:_find_mtdblock(device)
-	assert(device, "Unable to determine device file")
+	assert(device, ERROR_NODETECT)
 	if block.magic then
 		imagestream = self:_check_magic(imagestream, block.magic)
 	end
-	assert(imagestream, "Invalid image file")
+	assert(imagestream, ERROR_INVMAGIC)
 	
 	if appendfile then
 		if block.write == WRITE_COMBINED then
@@ -103,7 +138,7 @@ function Writer.write_block(self, name, imagestream, appendfile)
 		elseif block.write == WRITE_EMULATED then
 			return (self:_write_emulated(device, imagestream, appendfile) == 0)
 		else
-			error("Appending is not supported for selected platform.")
+			error(ERROR_NOTAVAIL)
 		end
 	else
 		return (self:_write_memory(device, imagestream) == 0)
@@ -114,7 +149,7 @@ function Writer._check_magic(self, imagestream, magic)
 	magic = type(magic) == "table" and magic or {magic}
 	
 	local block = imagestream()
-	assert(block, "Invalid image stream")
+	assert(block, ERROR_NOSTREAM)
 	local cm = "%x%x" % {block:byte(1), block:byte(2)}
 	
 	if util.contains(magic, cm) then
@@ -154,15 +189,15 @@ function Writer._write_memory(self, devicename, imagestream)
 end
 
 function Writer._write_combined(self, devicename, imagestream, appendfile)
-	assert(fs.copy(self.MTD, self.SAFEMTD), "Unable to copy mtd writer")
-	assert(posix.mkfifo(self.IMAGEFIFO), "Unable to create image pipe")
+	assert(fs.copy(self.MTD, self.SAFEMTD), ERROR_INTERNAL)
+	assert(posix.mkfifo(self.IMAGEFIFO), ERROR_RESOURCE)
 	
 	local imagefifo = io.open(self.IMAGEFIFO, "w")
 	
-	assert(imagefifo, "Unable to open image pipe")
+	assert(imagefifo, ERROR_RESOURCE)
 	
 	local imageproc = posix.fork()
-	assert(imageproc ~= -1, "Unable to fork()")
+	assert(imageproc ~= -1, ERROR_RESOURCE)
 	if imageproc == 0 then
 		ltn12.pump.all(imagestream, ltn12.sink.file(imagefifo))
 		os.exit(0)
@@ -176,12 +211,12 @@ function Writer._write_combined(self, devicename, imagestream, appendfile)
 end
 
 function Writer._refresh_block(self, devicename)
-	assert(fs.copy(self.MTD, self.SAFEMTD), "Unable to copy mtd writer")
+	assert(fs.copy(self.MTD, self.SAFEMTD), ERROR_INTERNAL)
 	return os.execute("%s refresh '%s'" % {self.SAFEMTD, devicename})
 end
 
 function Writer._append(self, devicename, appendfile, erase)
-	assert(fs.copy(self.MTD, self.SAFEMTD), "Unable to copy mtd writer")
+	assert(fs.copy(self.MTD, self.SAFEMTD), ERROR_INTERNAL)
 	erase = erase and ("-e '%s' " % devicename) or ''
 	
 	return os.execute( 
