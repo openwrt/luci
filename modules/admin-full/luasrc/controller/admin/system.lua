@@ -181,92 +181,50 @@ end
 
 function action_upgrade()
 	require("luci.model.uci")
-	local mtdow = require "luci.sys.mtdow"
-	local writer = mtdow.native_writer()
-	local blocks = writer and writer.blocks
-	local ltn12 = require "luci.ltn12"
-	local uploads = {}
-	local flash = {}
-	
-	writer.COPY[#writer.COPY + 1] = "/sbin/reboot"
 
 	local ret
-	local filepat = "/tmp/mtdblock.%s"
-	local kfile = "/tmp/mtdappend.tgz"
+	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
+	local tmpfile = "/tmp/firmware.img"
+	local broadcom = os.execute('grep brcm_ /lib/upgrade/platform.sh >/dev/null 2>&1') == 0
+	 
+	local keep_avail = not broadcom
 
-	local keep_avail = false
-	if blocks then
-		for k, block in pairs(blocks) do
-			if block.write ~= mtdow.WRITE_IMAGE then
-				keep_avail = true
-			end
-		end
-	end
-
+	local file
 	luci.http.setfilehandler(
 		function(meta, chunk, eof)
-			if not meta or not blocks or not blocks[meta.name] then
-				return
-			end
-			if not uploads[meta.name] then
-				uploads[meta.name] = io.open(filepat % meta.name, "w")
+			if not file then
+				file = io.open(tmpfile, "w")
 			end
 			if chunk then
-				uploads[meta.name]:write(chunk)
+				file:write(chunk)
 			end
 			if eof then
-				uploads[meta.name]:close()
-				uploads[meta.name] = filepat % meta.name
+				file:close()
 			end
 		end
 	)
 
-	luci.http.formvalue() -- Parse uploads
+	local fname   = luci.http.formvalue("image")
 	local keepcfg = keep_avail and luci.http.formvalue("keepcfg")
-	
-	local function _kfile()
-		luci.fs.unlink(kfile)
-		
-		local kpattern = ""
-		local files = luci.model.uci.cursor():get_all("luci", "flash_keep")
-		if files then
-			kpattern = ""
-			for k, v in pairs(files) do
-				if k:sub(1,1) ~= "." and luci.fs.glob(v) then
-					kpattern = kpattern .. " '" ..  v .. "'"
-				end
-			end
+
+	if plat and fname then
+		ret = function()
+			return luci.sys.flash(tmpfile, keepcfg and _keep_pattern())
 		end
-		
-		local stat = os.execute("tar czf '%s' %s >/dev/null 2>&1" % {kfile, kpattern})
-		return stat == 0 and kfile
 	end
 
-	for name, file in pairs(uploads) do
-		local e = {name=name, func=function()
-			local imgstream = ltn12.source.file(io.open(file))
-			local kf = blocks[name].write ~= mtdow.WRITE_IMAGE
-			 and keepcfg and _kfile()
-			return pcall(writer.write_block, writer, 
-				name, imgstream, kf)
-		end}
-		
-		if blocks[name].system then
-			flash[#flash+1] = e
-		else
-			table.insert(flash, 1, e)
-		end
-	end
-	
-	local reboot = {}
+	luci.http.prepare_content("text/html")
+	luci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
+end
 
-	luci.template.render("admin_system/upgrade", {blocks=blocks,
-		flash=flash, keep_avail=keep_avail, reboot=reboot})
-	if reboot.exec then
-		local pid = posix.fork()
-		if pid == 0 then
-			posix.sleep(1)
-			posix.exec("/tmp/reboot")
+function _keep_pattern()
+	local kpattern = ""
+	local files = luci.model.uci.cursor():get_all("luci", "flash_keep")
+	if files then
+		kpattern = ""
+		for k,v in pairs(files) do
+			kpattern = kpattern .. " " ..  v
 		end
 	end
+	return kpattern
 end
