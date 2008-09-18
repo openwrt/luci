@@ -63,7 +63,7 @@ CFEWriter.blocks = {
 	image = {
 		magic = {"4844", "5735"},
 		device = "linux",
-		write = WRITE_COMBINED
+		write = WRITE_IMAGE
 	}
 }
 
@@ -181,11 +181,22 @@ function Writer._write_emulated(self, devicename, imagestream, appendfile)
 end
 
 function Writer._write_memory(self, devicename, imagestream)
-	local devicestream = ltn12.sink.file(io.open(devicename, "w"))
-	local stat, err = ltn12.pump.all(imagestream, devicestream)
-	if stat then
-		return os.execute("sync")
+	local imageproc = posix.fork()
+	assert(imageproc ~= -1, ERROR_RESOURCE)
+	if imageproc == 0 then
+		fs.unlink(self.IMAGEFIFO)
+		assert(posix.mkfifo(self.IMAGEFIFO), ERROR_RESOURCE)
+		local imagefifo = io.open(self.IMAGEFIFO, "w")
+		assert(imagefifo, ERROR_RESOURCE)
+		ltn12.pump.all(imagestream, ltn12.sink.file(imagefifo))
+		os.exit(0)
 	end
+	
+	return os.execute( 
+		"%s write '%s' '%s'" % {
+		self.MTD, self.IMAGEFIFO, devicename
+		}
+	)	
 end
 
 function Writer._write_combined(self, devicename, imagestream, appendfile)
