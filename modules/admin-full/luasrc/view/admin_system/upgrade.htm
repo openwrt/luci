@@ -17,12 +17,13 @@ $Id$
 <h2><%:a_s_flash%></h2>
 <p><%:a_s_flash_upgrade1%></p>
 <br />
-<% if sysupgrade and not ret then %>
+<% if next(blocks) and not next(flash) then %>
 <form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
 	<div class="left"><%:a_s_flash_fwimage%>:</div>
 	<div>
-		<input type="file" size="30" name="image" />
-		<br />
+		<% for name, v in pairs(blocks) do %>
+			<%=name%>: <input type="file" size="30" name="<%=name%>" /><br />
+		<% end %>
 		<br />
 		<% if keep_avail then -%>
 		<input type="checkbox" name="keepcfg" value="1" checked="checked" />
@@ -33,20 +34,23 @@ $Id$
 		<input type="submit" value="<%:a_s_flash_fwupgrade%>" />
 	</div>
 </form>
-<% elseif ret then %>
+<% elseif next(flash) then %>
 	<p><%:a_s_flash_received%></p>
-	<p><%:a_s_flash_inprogress%></p>
 	
-<!-- <%=string.rep(" ", 2048)%> -->
-	<% %>
-	<% local ret = ret() 
-	if ret == 0 then %>
-<div class="ok"><%:a_s_flash_flashed%></div>
-	<% else %>
-<div class="error"><%:a_s_flash_flasherr%>! (<%:code%> <%=ret%>)</div>	
+	<% reboot.exec = false
+	for name, func in pairs(flash) do %>
+		<%:a_s_flash_inprogress%> <%=name%>...
+		<%=string.rep(" ", 2048)%>
+		<%
+		 local stat, code = func()
+		 reboot.exec = reboot.exec or stat 
+		if stat and code then %>
+			<%:a_s_flash_flashed%><br />
+		<% else %>
+			<%:a_s_flash_flasherr%>! (<%:code%> <%=code%>)<br />	
+		<% end %>
 	<% end %>
 <% else %>
 <div class="error"><%:a_s_flash_notimplemented%></div>
 <% end %>
 <%+footer%>
-<% if ret == 0 then luci.sys.reboot() end %>

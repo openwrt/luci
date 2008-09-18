@@ -44,7 +44,7 @@ EmulatedWriter.blocks = {
 	image = {
 		magic = "eb48",
 		device = "/dev/hda",
-		write = WRITE_SEPARATELY
+		write = WRITE_EMULATED
 	}
 }
 
@@ -193,7 +193,7 @@ function Writer._write_memory(self, devicename, imagestream)
 	end
 	
 	return os.execute( 
-		"%s write '%s' '%s'" % {
+		"%s write '%s' '%s' >/dev/null 2>&1" % {
 		self.MTD, self.IMAGEFIFO, devicename
 		}
 	)	
@@ -212,21 +212,21 @@ function Writer._write_combined(self, devicename, imagestream, appendfile)
 	end
 	
 	return os.execute( 
-		"%s -j '%s' write '%s' '%s'" % {
+		"%s -j '%s' write '%s' '%s' >/dev/null 2>&1" % {
 			self.MTD, appendfile, self.IMAGEFIFO, devicename
 		}
 	)
 end
 
 function Writer._refresh_block(self, devicename)
-	return os.execute("%s refresh '%s'" % {self.MTD, devicename})
+	return os.execute("%s refresh '%s' >/dev/null 2>&1" % {self.MTD, devicename})
 end
 
 function Writer._append(self, devicename, appendfile, erase)
 	erase = erase and ("-e '%s' " % devicename) or ''
 	
 	return os.execute( 
-		"%s %s jffs2write '%s' '%s'" % {
+		"%s %s jffs2write '%s' '%s' >/dev/null 2>&1" % {
 			self.MTD, erase, appendfile, devicename
 		}
 	)
