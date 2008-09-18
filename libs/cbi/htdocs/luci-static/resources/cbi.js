@@ -102,8 +102,14 @@ function cbi_bind(obj, type, callback, mode) {
 }
 
 function cbi_combobox(id, values, def, man) {
+	var selid = "cbi.combobox." + id
+	if (document.getElementById(selid)) {
+		return
+	}
+
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
+	sel.id = selid
 	if (obj.nextSibling) {
 		obj.parentNode.insertBefore(sel, obj.nextSibling);	
 	} else {
