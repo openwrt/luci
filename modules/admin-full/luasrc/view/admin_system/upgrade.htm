@@ -38,16 +38,21 @@ $Id$
 	<p><%:a_s_flash_received%></p>
 	
 	<% reboot.exec = false
-	for name, func in pairs(flash) do %>
+	for i, entry in ipairs(flash) do 
+		local name, func = entry.name, entry.func %>
 		<%:a_s_flash_inprogress%> <%=name%>...
-		<%=string.rep(" ", 2048)%>
+		<%=string.rep(" ", 32*1024)%>
 		<%
 		 local stat, code = func()
 		 reboot.exec = reboot.exec or stat 
 		if stat and code then %>
-			<%:a_s_flash_flashed%><br />
+			<%:ok%><br />
 		<% else %>
 			<%:a_s_flash_flasherr%>! (<%:code%> <%=code%>)<br />	
+		<% end %>
+		<% if reboot.exec then %>
+			<br />
+			<div><%:a_s_flash_flashed%></div>
 		<% end %>
 	<% end %>
 <% else %>

@@ -187,6 +187,8 @@ function action_upgrade()
 	local ltn12 = require "luci.ltn12"
 	local uploads = {}
 	local flash = {}
+	
+	writer.COPY[#writer.COPY + 1] = "/sbin/reboot"
 
 	local ret
 	local filepat = "/tmp/mtdblock.%s"
@@ -195,8 +197,7 @@ function action_upgrade()
 	local keep_avail = false
 	if blocks then
 		for k, block in pairs(blocks) do
-			if block.write == mtdow.WRITE_COMBINED 
-			or block.write == mtdow.WRITE_EMULATED then
+			if block.write ~= mtdow.WRITE_IMAGE then
 				keep_avail = true
 			end
 		end
@@ -242,10 +243,18 @@ function action_upgrade()
 	end
 
 	for name, file in pairs(uploads) do
-		flash[name] = function()
+		local e = {name=name, func=function()
 			local imgstream = ltn12.source.file(io.open(file))
+			local kf = blocks[name].write ~= mtdow.WRITE_IMAGE
+			 and keepcfg and _kfile()
 			return pcall(writer.write_block, writer, 
-				name, imgstream, keepcfg and _kfile())
+				name, imgstream, kf)
+		end}
+		
+		if blocks[name].system then
+			flash[#flash+1] = e
+		else
+			table.insert(flash, 1, e)
 		end
 	end
 	
@@ -256,8 +265,8 @@ function action_upgrade()
 	if reboot.exec then
 		local pid = posix.fork()
 		if pid == 0 then
-			os.execute("sleep 1")
-			posix.execp("reboot")
+			posix.sleep(1)
+			posix.exec("/tmp/reboot")
 		end
 	end
 end

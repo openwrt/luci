@@ -20,7 +20,7 @@ local util = require "luci.util"
 local ltn12 = require "luci.ltn12"
 local posix = require "posix"
 
-local type, assert, error = type, assert, error
+local type, assert, error, ipairs = type, assert, error, ipairs
 
 module "luci.sys.mtdow"
 
@@ -63,7 +63,8 @@ CFEWriter.blocks = {
 	image = {
 		magic = {"4844", "5735"},
 		device = "linux",
-		write = WRITE_IMAGE
+		write = WRITE_IMAGE,
+		system = true
 	}
 }
 
@@ -72,7 +73,8 @@ CommonWriter = util.class(Writer)
 CommonWriter.blocks = {
 	image = {
 		device = "linux",
-		write = WRITE_COMBINED
+		write = WRITE_COMBINED,
+		system = true
 	}
 }
 
@@ -85,7 +87,8 @@ RedWriter.blocks = {
 	},
 	rootfs = {
 		device = "rootfs",
-		write = WRITE_COMBINED
+		write = WRITE_COMBINED,
+		system = true
 	} 
 }
 
@@ -117,9 +120,10 @@ end
 
 
 
-Writer.MTD = "/sbin/mtd"
-Writer.SAFEMTD = "/tmp/mtd"
+Writer.COPY = {"/sbin/mtd"}
+Writer.MTD = "/tmp/mtd"
 Writer.IMAGEFIFO = "/tmp/mtdimage.fifo"
+
 
 function Writer.write_block(self, name, imagestream, appendfile)
 	assert(self.blocks[name], ERROR_NOTFOUND)
@@ -132,6 +136,8 @@ function Writer.write_block(self, name, imagestream, appendfile)
 	end
 	assert(imagestream, ERROR_INVMAGIC)
 	
+	self:_prepare_env()
+	
 	if appendfile then
 		if block.write == WRITE_COMBINED then
 			return (self:_write_combined(device, imagestream, appendfile) == 0)
@@ -143,6 +149,21 @@ function Writer.write_block(self, name, imagestream, appendfile)
 	else
 		return (self:_write_memory(device, imagestream) == 0)
 	end
+end
+
+function Writer._prepare_env(self)
+	if self._prepared then
+		return
+	end
+	
+	for k, app in ipairs(self.COPY) do
+		local target = "/tmp/"..fs.basename(app)
+		fs.unlink(target)
+		fs.copy(app, target)
+		fs.chmod(target, "rwx------")
+	end
+	
+	self._prepared = true
 end
 
 function Writer._check_magic(self, imagestream, magic)
