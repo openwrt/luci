@@ -12,7 +12,7 @@ include $(TOPDIR)/rules.mk
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
 PKG_VERSION:=0.5.6
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
@@ -123,6 +123,8 @@ define Package/olsrd-luci-mod-tas
 	TITLE:=OLSR - Tiny Application Server Plugin
 	DEPENDS:=olsrd-luci
 endef
+
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" olsrd libs \
