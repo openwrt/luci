@@ -12,7 +12,8 @@ PKG_VERSION:=25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3065
+PKG_SOURCE_URL:=http://dev.luci.freifunk-halle.net/sources/\
+		http://luaforge.net/frs/download.php/3065
 PKG_MD5SUM:=18f124c80c685f2269296a7172e600fe
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)

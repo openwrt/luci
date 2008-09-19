@@ -2,7 +2,7 @@ include ../../build/config.mk
 include ../../build/gccconfig.mk
 
 LUASOCKET_VERSION = 2.0.2
-LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664/
+LUASOCKET_SITE = http://dev.luci.freifunk-halle.net/sources/
 LUASOCKET_DIR = luasocket-$(LUASOCKET_VERSION)
 LUASOCKET_FILE = $(LUASOCKET_DIR).tar.gz
 LUASOCKET_URL = $(LUASOCKET_SITE)/$(LUASOCKET_FILE)
