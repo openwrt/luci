@@ -2,7 +2,7 @@ include ../../build/config.mk
 include ../../build/gccconfig.mk
 
 BITLIB_VERSION = 25
-BITLIB_SITE = http://luaforge.net/frs/download.php/3065/
+BITLIB_SITE = http://dev.luci.freifunk-halle.net/sources/
 BITLIB_DIR = bitlib-$(BITLIB_VERSION)
 BITLIB_FILE = $(BITLIB_DIR).tar.gz
 BITLIB_URL = $(BITLIB_SITE)/$(BITLIB_FILE)
