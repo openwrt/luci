@@ -433,7 +433,6 @@ olsrd_write_loadplugin() {
 			fi
 
 			config_get latlon_file "$cfg" latlon_file
-			[ -z "$latlon_file" ] && config_set "$cfg" latlon_file '/var/run/latlon.js'
 		;;
 	esac
 
