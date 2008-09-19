@@ -104,19 +104,19 @@ config variable
 	list depends type=broadcom
 
 config variable
-	option name 'macpolicy'
+	option name 'macfilter'
 	option section 'wireless.wifi-device'
 	option title 'MAC-Address Filter (broadcom)'
 	option type enum
 	list depends type=broadcom
 
 config enum
-	option variable 'wireless.wifi-device.macpolicy'
+	option variable 'wireless.wifi-device.macfilter'
 	option value 'deny'
 	option title 'Allow listed only'
 
 config enum
-	option variable 'wireless.wifi-device.macpolicy'
+	option variable 'wireless.wifi-device.macfilter'
 	option value 'allow'
 	option title 'Allow all except listed'
 
@@ -124,9 +124,9 @@ config variable
 	option name 'maclist'
 	option section 'wireless.wifi-device'
 	option title 'MAC-List (broadcom)'
-	list depends 'type=broadcom, macpolicy=allow'
-	list depends 'type=broadcom, macpolicy=deny'
-	option multival true
+	list depends 'type=broadcom, macfilter=allow'
+	list depends 'type=broadcom, macfilter=deny'
+	option type lazylist
 	option datatype macaddr
 
 config variable
@@ -308,6 +308,8 @@ config variable
 	option title 'MAC-List (atheros)'
 	list depends 'macpolicy=allow'
 	list depends 'macpolicy=deny'
+	option type lazylist
+	option datatype macaddr
 
 config variable
 	option name 'rate'
