@@ -79,14 +79,14 @@ end
 ------------------- Broadcom Device ------------------
 
 if hwtype == "broadcom" then
-	mp = s:option(ListValue, "macpolicy", translate("wifi_macpolicy"))
+	mp = s:option(ListValue, "macfilter", translate("wifi_macpolicy"))
 	mp.optional = true
 	mp:value("")
 	mp:value("deny", translate("wifi_whitelist"))
 	mp:value("allow", translate("wifi_blacklist"))
-	ml = s:option(Value, "maclist", translate("wifi_maclist"))
-	ml:depends({macpolicy="allow"})
-	ml:depends({macpolicy="deny"})
+	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
+	ml:depends({macfilter="allow"})
+	ml:depends({macfilter="deny"})
 
 	s:option(Value, "txant", translate("wifi_txantenna")).optional = true
 	s:option(Value, "rxant", translate("wifi_rxantenna")).optional = true
@@ -190,7 +190,7 @@ if hwtype == "atheros" then
 	mp:value("")
 	mp:value("deny", translate("wifi_whitelist"))
 	mp:value("allow", translate("wifi_blacklist"))
-	ml = s:option(Value, "maclist", translate("wifi_maclist"))
+	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 
