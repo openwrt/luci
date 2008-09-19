@@ -68,7 +68,7 @@ a_s_fstab_fs1 = 'The filesystem that was used to format the memory (<abbr title=
 a_s_fstab_swap1 = 'If your physical memory is insufficient unused data can be temporarily swapped to a swap-device resulting in a higher amount of usable <abbr title="Random Access Memory">RAM</abbr>. Be aware that swapping data is a very slow process as the swap-device cannot be accessed with the high datarates of the <abbr title="Random Access Memory">RAM</abbr>.'
 a_s_flash_flashed = 'Firmware successfully flashed. Rebooting device...'
 a_s_flash_flasherr = 'Failed to flash'
-a_s_flash_fwimage = 'Firmwareimage'
+a_s_flash_fwimage = 'Firmware image'
 a_s_flash_received = 'Image received. About to start flashing process. DO NOT POWER OFF THE DEVICE!'
 a_s_flash_inprogress = 'Writing firmware...'
 a_s_flash_fwupgrade = 'Flash Firmware'
