@@ -1011,7 +1011,7 @@ function AbstractValue.cfgvalue(self, section)
 			return value[1]
 		end
 	elseif self.cast == "table" then
-		return {value}
+		return luci.util.split(value, "%s+", nil, true)
 	end
 end
 
@@ -1063,6 +1063,20 @@ function DummyValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template = "cbi/dvalue"
 	self.value = nil
+end
+
+function DummyValue.cfgvalue(self, section)
+	local value
+	if self.value then
+		if type(self.value) == "function" then
+			value = self:value(section)
+		else
+			value = self.value
+		end
+	else
+		value = AbstractValue.cfgvalue(self, section)
+	end
+	return value
 end
 
 function DummyValue.parse(self)

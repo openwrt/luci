@@ -26,11 +26,9 @@ function cbi_d_add(field, dep, next) {
 
 function cbi_d_checkvalue(target, ref) {
 	var t = document.getElementById(target);
-	var value
+	var value;
 	
-	if (!t) {
-		return true
-	} else if (!t.value) {
+	if (!t || !t.value) {
 		value = "";
 	} else {
 		value = t.value;
