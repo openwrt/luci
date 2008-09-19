@@ -118,8 +118,10 @@ function _keep_pattern()
 	local files = luci.model.uci.cursor():get_all("luci", "flash_keep")
 	if files then
 		kpattern = ""
-		for k,v in pairs(files) do
-			kpattern = kpattern .. " " ..  v
+		for k, v in pairs(files) do
+			if k:sub(1,1) ~= "." and luci.fs.glob(v) then
+				kpattern = kpattern .. " " ..  v
+			end
 		end
 	end
 	return kpattern
