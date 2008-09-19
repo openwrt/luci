@@ -421,7 +421,7 @@ function mimedecode_message_body( src, msg, filecb )
 					end
 
 					if store then
-						store( field.headers, predata, true )
+						store( field, predata, true )
 					end
 
 
@@ -439,7 +439,7 @@ function mimedecode_message_body( src, msg, filecb )
 					data   = data:sub( 1, #data - 78 )
 
 					if store then
-						store( field.headers, data, false )
+						store( field, data, false )
 					else
 						return nil, "Invalid MIME section header"
 					end
@@ -451,7 +451,7 @@ function mimedecode_message_body( src, msg, filecb )
 					lchunk, eof = parse_headers( data, field )
 					inhdr = not eof
 				else
-					store( field.headers, lchunk, false )
+					store( field, lchunk, false )
 					lchunk, chunk = chunk, nil
 				end
 			end
