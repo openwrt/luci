@@ -78,26 +78,13 @@ end
 client = f:field(Flag, "client", "WLAN-DHCP anbieten")
 client:depends("wifi", "1")
 client.rmempty = true
-function client.cfgvalue(self, section)
-	return uci:get("freifunk", "wizard", "client")
-end
-function client.write(self, section, value)
-	uci:set("freifunk", "wizard", "client", value)
-	uci:save("freifunk")
-end
 
 
 olsr = f:field(Flag, "olsr", "OLSR einrichten")
+olsr.rmempty = true
 
 share = f:field(Flag, "sharenet", "Eigenen Internetzugang freigeben")
 share.rmempty = true
-function share.cfgvalue(self, section)
-	return uci:get("freifunk", "wizard", "sharenet")
-end
-function share.write(self, section, value)
-	uci:set("freifunk", "wizard", "sharenet", value)
-	uci:save("freifunk")
-end
 
 
 
