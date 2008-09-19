@@ -309,7 +309,7 @@ end
 -- file contents chunk by chunk and only the extracted file name is stored
 -- within the params table. The callback function will be called subsequently
 -- with three arguments:
---  o Table containing the mime headers of the corresponding section
+--  o Table containing decoded (name, file) and raw (headers) mime header data
 --  o String value containing a chunk of the file data
 --  o Boolean which indicates wheather the current chunk is the last one (eof)
 -- @param src		Ltn12 source function
