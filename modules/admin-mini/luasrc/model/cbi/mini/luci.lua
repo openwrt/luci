@@ -15,6 +15,13 @@ $Id$
 require("luci.config")
 m = Map("luci", translate("webui"), translate("a_i_luci1"))
 
+-- force reload of global luci config namespace to reflect the changes
+function m.commit_handler(self)
+	package.loaded["luci.config"] = nil
+	require("luci.config")
+end
+
+
 c = m:section(NamedSection, "main", "core", translate("general"))
 
 l = c:option(ListValue, "lang", translate("language"))

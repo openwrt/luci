@@ -288,6 +288,9 @@ function Map.parse(self)
 		for i, config in ipairs(self.parsechain) do
 			self.uci:unload(config)
 		end
+		if type(self.commit_handler) == "function" then
+			self:commit_handler()
+		end
 	end
 end
 
