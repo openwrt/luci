@@ -20,8 +20,8 @@ for i, sect in ipairs({ "Hna4", "Hna6" }) do
 	hna.anonymous = true
 	hna.template  = "cbi/tblsection"
 
-	net = hna:option(Value, "NetAddr")
-	msk = hna:option(Value, "Prefix")
+	net = hna:option(Value, "netaddr")
+	msk = hna:option(Value, "netmask")
 end
 
 return mh
