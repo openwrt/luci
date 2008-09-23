@@ -1,0 +1,330 @@
+package chillispot
+
+config section
+	option name	'general'
+	option title	'Section general'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'debug'
+	option title	'Option debug'
+	option section	'chillispot.general'
+	option datatype	'boolean'
+
+config variable
+	option name	'interval'
+	option title	'Option interval'
+	option section	'chillispot.general'
+	option datatype	'uint'
+
+config variable
+	option name	'pidfile'
+	option title	'Option pidfile'
+	option section	'chillispot.general'
+	option datatype	'string'
+
+config variable
+	option name	'statedir'
+	option title	'Option statedir'
+	option section	'chillispot.general'
+	option datatype	'directory'
+
+
+config section
+	option name	'tun'
+	option title	'Section tun'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'net'
+	option title	'Option net'
+	option section	'chillispot.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'statip'
+	option title	'Option statip'
+	option section	'chillispot.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'dynip'
+	option title	'Option dynip'
+	option section	'chillispot.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'dns1'
+	option title	'Option dns1'
+	option section	'chillispot.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'dns2'
+	option title	'Option dns2'
+	option section	'chillispot.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'domain'
+	option title	'Option domain'
+	option section	'chillispot.tun'
+	option datatype	'string'
+
+config variable
+	option name	'ipdown'
+	option title	'Option ipdown'
+	option section	'chillispot.tun'
+	option datatype	'file'
+
+config variable
+	option name	'ipup'
+	option title	'Option ipup'
+	option section	'chillispot.tun'
+	option datatype	'file'
+
+config variable
+	option name	'condown'
+	option title	'Option condown'
+	option section	'chillispot.tun'
+	option datatype	'file'
+
+config variable
+	option name	'conup'
+	option title	'Option conup'
+	option section	'chillispot.tun'
+	option datatype	'file'
+
+
+config section
+	option name	'dhcp'
+	option title	'Section dhcp'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'dhcpif'
+	option title	'Option dhcpif'
+	option section	'chillispot.dhcp'
+	option datatype	'string'
+
+config variable
+	option name	'dhcpmac'
+	option title	'Option dhcpmac'
+	option section	'chillispot.dhcp'
+	option datatype	'macaddr'
+
+config variable
+	option name	'lease'
+	option title	'Option lease'
+	option section	'chillispot.dhcp'
+	option datatype	'uint'
+
+
+config section
+	option name	'macauth'
+	option title	'Section macauth'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'macauth'
+	option title	'Option macauth'
+	option section	'chillispot.macauth'
+	option datatype	'boolean'
+
+config variable
+	option name	'macallowed'
+	option title	'Option macallowed'
+	option section	'chillispot.macauth'
+	option datatype	'string'
+	option type	'lazylist'
+
+config variable
+	option name	'macpasswd'
+	option title	'Option macpasswd'
+	option section	'chillispot.macauth'
+	option datatype	'string'
+
+config variable
+	option name	'macsuffix'
+	option title	'Option macsuffix'
+	option section	'chillispot.macauth'
+	option datatype	'string'
+
+
+config section
+	option name	'radius'
+	option title	'Section radius'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'radiusacctport'
+	option title	'Option radiusacctport'
+	option section	'chillispot.radius'
+	option datatype	'port'
+
+config variable
+	option name	'radiusauthport'
+	option title	'Option radiusauthport'
+	option section	'chillispot.radius'
+	option datatype	'port'
+
+config variable
+	option name	'radiuscalled'
+	option title	'Option radiuscalled'
+	option section	'chillispot.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiuslisten'
+	option title	'Option radiuslisten'
+	option section	'chillispot.radius'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'radiuslocationid'
+	option title	'Option radiuslocationid'
+	option section	'chillispot.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiuslocationname'
+	option title	'Option radiuslocationname'
+	option section	'chillispot.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiusnasid'
+	option title	'Option radiusnasid'
+	option section	'chillispot.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiusnasip'
+	option title	'Option radiusnasip'
+	option section	'chillispot.radius'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'radiussecret'
+	option title	'Option radiussecret'
+	option section	'chillispot.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiusserver1'
+	option title	'Option radiusserver1'
+	option section	'chillispot.radius'
+	option datatype	'host'
+
+config variable
+	option name	'radiusserver2'
+	option title	'Option radiusserver2'
+	option section	'chillispot.radius'
+	option datatype	'host'
+
+
+config section
+	option name	'proxy'
+	option title	'Section proxy'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'proxyclient'
+	option title	'Option proxyclient'
+	option section	'chillispot.proxy'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'proxylisten'
+	option title	'Option proxylisten'
+	option section	'chillispot.proxy'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'proxyport'
+	option title	'Option proxyport'
+	option section	'chillispot.proxy'
+	option datatype	'port'
+
+config variable
+	option name	'proxysecret'
+	option title	'Option proxysecret'
+	option section	'chillispot.proxy'
+	option datatype	'string'
+
+
+config section
+	option name	'remoteconfig'
+	option title	'Section remoteconfig'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'confpassword'
+	option title	'Option confpassword'
+	option section	'chillispot.remoteconfig'
+	option datatype	'string'
+
+config variable
+	option name	'confusername'
+	option title	'Option confusername'
+	option section	'chillispot.remoteconfig'
+	option datatype	'string'
+
+
+config section
+	option name	'uam'
+	option title	'Section uam'
+	option package	'chillispot'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'uamallowed'
+	option title	'Option uamallowed'
+	option section	'chillispot.uam'
+	option datatype	'host'
+	option type	'list'
+
+config variable
+	option name	'uamhomepage'
+	option title	'Option uamhomepage'
+	option section	'chillispot.uam'
+	option datatype	'string'
+
+config variable
+	option name	'uamlisten'
+	option title	'Option uamlisten'
+	option section	'chillispot.uam'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'uamport'
+	option title	'Option uamport'
+	option section	'chillispot.uam'
+	option datatype	'port'
+
+config variable
+	option name	'uamsecret'
+	option title	'Option uamsecret'
+	option section	'chillispot.uam'
+	option datatype	'string'
+
+config variable
+	option name	'uamserver'
+	option title	'Option uamserver'
+	option section	'chillispot.uam'
+	option datatype	'string'
