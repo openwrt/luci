@@ -15,6 +15,7 @@ m = Map("httpd", "Busybox HTTPd", translate("a_srv_http1"))
 
 s = m:section(TypedSection, "httpd", "")
 s.anonymous = true
+s.addremove = true
 
 port = s:option(Value, "port", translate("port"))
 port.isinteger = true
