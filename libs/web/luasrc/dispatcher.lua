@@ -82,17 +82,17 @@ end
 function authenticator.htmlauth(validator, accs, default)
 	local user = luci.http.formvalue("username")
 	local pass = luci.http.formvalue("password")
-	
+
 	if user and validator(user, pass) then
 		return user
 	end
-	
+
 	require("luci.i18n")
 	require("luci.template")
 	context.path = {}
 	luci.template.render("sysauth", {duser=default, fuser=user})
 	return false
-	
+
 end
 
 --- Dispatch an HTTP request.
@@ -110,7 +110,7 @@ function httpdispatch(request)
 	if not stat then
 		error500(err)
 	end
-	
+
 	luci.http.close()
 
 	--context._disable_memtrace()
@@ -122,15 +122,15 @@ function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace()
 	local ctx = context
 	ctx.path = request
-	
+
 	require "luci.i18n".setlanguage(require "luci.config".main.lang)
-	
+
 	local c = ctx.tree
 	local stat
 	if not c then
 		c = createtree()
 	end
-	
+
 	local track = {}
 	local args = {}
 	context.args = args
@@ -144,7 +144,7 @@ function dispatch(request)
 		end
 
 		util.update(track, c)
-		
+
 		if c.leaf then
 			break
 		end
@@ -159,7 +159,7 @@ function dispatch(request)
 	if track.i18n then
 		require("luci.i18n").loadc(track.i18n)
 	end
-	
+
 	-- Init template engine
 	if not track.notemplate then
 		local tpl = require("luci.template")
@@ -174,23 +174,23 @@ function dispatch(request)
 		viewns.resource    = luci.config.main.resourcebase
 		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
-	
+
 	track.dependent = (track.dependent ~= false)
 	assert(not track.dependent or not track.auto, "Access Violation")
-	
+
 	if track.sysauth then
 		local sauth = require "luci.sauth"
-		
+
 		local authen = type(track.sysauth_authenticator) == "function"
 		 and track.sysauth_authenticator
 		 or authenticator[track.sysauth_authenticator]
-		 
+
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
 		local sess = ctx.authsession or luci.http.getcookie("sysauth")
 		sess = sess and sess:match("^[A-F0-9]+$")
 		local user = sauth.read(sess)
-		
+
 		if not util.contains(accs, user) then
 			if authen then
 				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
@@ -221,19 +221,19 @@ function dispatch(request)
 
 	if c and type(c.target) == "function" then
 		context.dispatched = c
-		
+
 		util.copcall(function()
 			local oldenv = getfenv(c.target)
 			local module = require(c.module)
 			local env = setmetatable({}, {__index=
-				
+
 			function(tbl, key)
-				return rawget(tbl, key) or module[key] or oldenv[key] 
+				return rawget(tbl, key) or module[key] or oldenv[key]
 			end})
 
 			setfenv(c.target, env)
 		end)
-		
+
 		c.target(unpack(args))
 	else
 		error404()
@@ -244,7 +244,7 @@ end
 function createindex()
 	local path = luci.util.libpath() .. "/controller/"
 	local suff = ".lua"
-	
+
 	if luci.util.copcall(require, "luci.fastindex") then
 		createindex_fastindex(path, suff)
 	else
@@ -257,14 +257,14 @@ end
 -- @param suffix	Controller file suffix
 function createindex_fastindex(path, suffix)
 	index = {}
-		
+
 	if not fi then
 		fi = luci.fastindex.new("index")
 		fi.add(path .. "*" .. suffix)
 		fi.add(path .. "*/*" .. suffix)
 	end
 	fi.scan()
-	
+
 	for k, v in pairs(fi.indexes) do
 		index[v[2]] = v[1]
 	end
@@ -286,9 +286,9 @@ function createindex_plain(path, suffix)
 
 			index = loadfile(indexcache)()
 			return index
-		end 		
+		end
 	end
-	
+
 	index = {}
 
 	local controllers = util.combine(
@@ -300,12 +300,12 @@ function createindex_plain(path, suffix)
 		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
 		local mod = require(module)
 		local idx = mod.index
-		
+
 		if type(idx) == "function" then
 			index[module] = idx
 		end
 	end
-	
+
 	if indexcache then
 		fs.writefile(indexcache, util.get_bytecode(index))
 		fs.chmod(indexcache, "a-rwx,u+rw")
@@ -318,16 +318,16 @@ function createtree()
 	if not index then
 		createindex()
 	end
-	
+
 	local ctx  = context
 	local tree = {nodes={}}
-	
+
 	ctx.treecache = setmetatable({}, {__mode="v"})
 	ctx.tree = tree
-	
+
 	-- Load default translation
 	require "luci.i18n".loadc("default")
-	
+
 	local scope = setmetatable({}, {__index = luci.dispatcher})
 
 	for k, v in pairs(index) do
@@ -335,7 +335,7 @@ function createtree()
 		setfenv(v, scope)
 		v()
 	end
-	
+
 	return tree
 end
 
@@ -349,24 +349,24 @@ function assign(path, clone, title, order)
 	local obj  = node(unpack(path))
 	obj.nodes  = nil
 	obj.module = nil
-	
+
 	obj.title = title
 	obj.order = order
 
 	setmetatable(obj, {__index = _create_node(clone)})
-	
+
 	return obj
 end
 
 --- Create a new dispatching node and define common parameters.
 -- @param	path	Virtual path
--- @param	target	Target function to call when dispatched. 
+-- @param	target	Target function to call when dispatched.
 -- @param	title	Destination node title
 -- @param	order	Destination node order value (optional)
 -- @return			Dispatching tree node
 function entry(path, target, title, order)
 	local c = node(unpack(path))
-	
+
 	c.target = target
 	c.title  = title
 	c.order  = order
@@ -392,19 +392,19 @@ function _create_node(path, cache)
 	if #path == 0 then
 		return context.tree
 	end
-	
+
 	cache = cache or context.treecache
 	local name = table.concat(path, ".")
 	local c = cache[name]
-	
+
 	if not c then
 		local last = table.remove(path)
 		c = _create_node(path, cache)
-		
+
 		local new = {nodes={}, auto=true}
 		c.nodes[last] = new
 		cache[name] = new
-		
+
 		return new
 	else
 		return c
@@ -428,20 +428,20 @@ end
 function rewrite(n, ...)
 	local req = arg
 	return function()
-		for i=1,n do 
+		for i=1,n do
 			table.remove(context.path, 1)
 		end
-		
+
 		for i,r in ipairs(req) do
 			table.insert(context.path, i, r)
 		end
-		
+
 		dispatch()
 	end
 end
 
 --- Create a function-call dispatching target.
--- @param	name	Target function of local controller 
+-- @param	name	Target function of local controller
 -- @param	...		Additional parameters passed to the function
 function call(name, ...)
 	local argv = {...}
@@ -465,6 +465,63 @@ function cbi(model)
 		require("luci.template")
 
 		maps = luci.cbi.load(model, ...)
+
+		local uploads    = { }
+		local has_upload = false
+
+		for _, map in ipairs(maps) do
+			if map.upload_fields then
+				has_upload = true
+				for _, field in ipairs(map.upload_fields) do
+					uploads[
+						field.config .. '.' ..
+						field.section.sectiontype .. '.' ..
+						field.option
+					] = true
+				end
+			end
+		end
+
+		if has_upload then
+			local uci = luci.model.uci.cursor()
+			local prm = luci.http.context.request.message.params
+			local fd, cbid
+
+			luci.http.setfilehandler(
+				function( field, chunk, eof )
+					if not field then return end
+					if field.name and not cbid then
+						local c, s, o = field.name:gmatch(
+							"cbid%.([^%.]+)%.([^%.]+)%.([^%.]+)"
+						)()
+
+						if c and s and o then
+							local t = uci:get( c, s )
+							if t and uploads[c.."."..t.."."..o] then
+								local path = "/lib/uci/upload/"..field.name
+								fd = io.open(path, "w")
+								if fd then
+									cbid = field.name
+									prm[cbid] = path
+							--	else
+							--		io.stderr:write("E: " .. err .. "\n")
+								end
+							end
+						end
+					end
+
+					if field.name == cbid and fd then
+						fd:write(chunk)
+					end
+
+					if eof and fd then
+						fd:close()
+						fd   = nil
+						cbid = nil
+					end
+				end
+			)
+		end
 
 		for i, res in ipairs(maps) do
 			res:parse()

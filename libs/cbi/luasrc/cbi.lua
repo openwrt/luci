@@ -30,6 +30,7 @@ require("luci.template")
 require("luci.util")
 require("luci.http")
 require("luci.uvl")
+require("luci.fs")
 
 local uci        = require("luci.model.uci")
 local class      = luci.util.class
@@ -1327,4 +1328,45 @@ function Button.__init__(self, ...)
 	self.template  = "cbi/button"
 	self.inputstyle = nil
 	self.rmempty = true
+end
+
+
+FileUpload = class(AbstractValue)
+
+function FileUpload.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template = "cbi/upload"
+	if not self.map.upload_fields then
+		self.map.upload_fields = { self }
+	else
+		self.map.upload_fields[#self.map.upload_fields+1] = self
+	end
+end
+
+function FileUpload.cfgvalue(self, section)
+	local val = AbstractValue.cfgvalue(self, section)
+	if val and luci.fs.access(val) then
+		return val
+	end
+	return nil
+end
+
+function FileUpload.formvalue(self, section)
+	local val = AbstractValue.formvalue(self, section)
+	if val then
+		if not luci.http.formvalue("cbi.rlf."..section.."."..self.option) and
+		   not luci.http.formvalue("cbi.rlf."..section.."."..self.option..".x")
+		then
+			return val
+		end
+		luci.fs.unlink(val)
+		self.value = nil
+	end
+	return nil
+end
+
+function FileUpload.remove(self, section)
+	local val = AbstractValue.formvalue(self, section)
+	if val and luci.fs.access(val) then luci.fs.unlink(val) end
+	return AbstractValue.remove(self, section)
 end
