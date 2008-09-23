@@ -229,6 +229,11 @@ define Package/luci-admin-core
   TITLE:=Web UI Core Module
 endef
 
+define Package/luci-admin-core/conffiles
+/etc/config/luci_hosts
+/etc/config/luci_ethers
+endef
+
 define Package/luci-admin-core/install
 	$(call Package/luci/install/template,$(1),modules/admin-core)
 endef
