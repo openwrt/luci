@@ -466,63 +466,6 @@ function cbi(model)
 
 		maps = luci.cbi.load(model, ...)
 
-		local uploads    = { }
-		local has_upload = false
-
-		for _, map in ipairs(maps) do
-			if map.upload_fields then
-				has_upload = true
-				for _, field in ipairs(map.upload_fields) do
-					uploads[
-						field.config .. '.' ..
-						field.section.sectiontype .. '.' ..
-						field.option
-					] = true
-				end
-			end
-		end
-
-		if has_upload then
-			local uci = luci.model.uci.cursor()
-			local prm = luci.http.context.request.message.params
-			local fd, cbid
-
-			luci.http.setfilehandler(
-				function( field, chunk, eof )
-					if not field then return end
-					if field.name and not cbid then
-						local c, s, o = field.name:gmatch(
-							"cbid%.([^%.]+)%.([^%.]+)%.([^%.]+)"
-						)()
-
-						if c and s and o then
-							local t = uci:get( c, s )
-							if t and uploads[c.."."..t.."."..o] then
-								local path = "/lib/uci/upload/"..field.name
-								fd = io.open(path, "w")
-								if fd then
-									cbid = field.name
-									prm[cbid] = path
-							--	else
-							--		io.stderr:write("E: " .. err .. "\n")
-								end
-							end
-						end
-					end
-
-					if field.name == cbid and fd then
-						fd:write(chunk)
-					end
-
-					if eof and fd then
-						fd:close()
-						fd   = nil
-						cbid = nil
-					end
-				end
-			)
-		end
-
 		for i, res in ipairs(maps) do
 			res:parse()
 		end
