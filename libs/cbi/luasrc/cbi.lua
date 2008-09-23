@@ -121,7 +121,6 @@ function load(cbimap, ...)
 				end
 
 				if field.name == cbid and fd then
-					io.stderr:write("*** CHUNK:"..tostring(#chunk).." ***\n")
 					fd:write(chunk)
 				end
 
