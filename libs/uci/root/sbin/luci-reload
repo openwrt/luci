@@ -4,22 +4,25 @@
 apply_config() {
 	config_get init "$1" init
 	config_get exec "$1" exec
+	config_get test "$1" test
 	
-	[ -n "$init" ] && reload_init "$2" "$init"
-	[ -n "$exec" ] && reload_exec "$2" "$exec"
+	[ -n "$init" ] && reload_init "$2" "$init" "$test"
+	[ -n "$exec" ] && reload_exec "$2" "$exec" "$test"
 }
 
 reload_exec() {
 	[ -x $2 ] && {
 		echo "Reloading $1... "
-		$2 >/dev/null 2>&1 || echo "!!! Failed to reload $1 !!!"
+		$2 >/dev/null 2>&1
+		[ -n "$3" -a "$?" != "$3" ] && echo '!!! Failed to reload' $1 '!!!'
 	}
 }
 
 reload_init() {
 	[ -x /etc/init.d/$2 ] && /etc/init.d/$2 enabled && {
 		echo "Reloading $1... "
-		/etc/init.d/$2 reload >/dev/null 2>&1 || echo "!!! Failed to reload $1 !!!"
+		/etc/init.d/$2 reload >/dev/null 2>&1
+		[ -n "$3" -a "$?" != "$3" ] && echo '!!! Failed to reload' $1 '!!!'
 	}
 }
 
