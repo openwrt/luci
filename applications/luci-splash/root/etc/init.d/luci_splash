@@ -61,6 +61,11 @@ start() {
 	iptables -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
 	iptables -t nat -A luci_splash_leases -j DROP
 	
+	### Add crontab entry
+	grep luci-splash /var/spool/cron/crontabs/root >/dev/null 2>&1 || {
+		echo '*/5 * * * * 	/usr/sbin/luci-splash sync' >> /var/spool/cron/crontabs/root
+	}
+
 	### Start the splash httpd
 	start-stop-daemon -S -b -q -x /usr/bin/luci-splashd
 }
@@ -75,5 +80,8 @@ stop() {
 	iptables -t nat -X luci_splash_leases
 	iptables -t nat -X luci_splash_portal
 	iptables -t nat -X luci_splash
+
+	### Stop the splash httpd
+	start-stop-daemon -K -q -x /usr/bin/luci-splashd
 }
 
