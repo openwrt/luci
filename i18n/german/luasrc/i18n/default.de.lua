@@ -1,3 +1,6 @@
+skiplink1 = 'Zur Navigation springen'
+skiplink2 = 'Zum Inhalt springen'
+navigation = 'Navigation'
 about = 'Über'
 add = 'Hinzufügen'
 addresses = 'Adressen'
