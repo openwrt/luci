@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-START=60
+START=59
 
 apply_host() {
 	local cfg="$1"
@@ -8,7 +8,7 @@ apply_host() {
 	config_get ipaddr   "$cfg" ipaddr
 
 	[ -n "$hostname" -a -n "$ipaddr" ] || return 0
-	
+
 	echo "$ipaddr $hostname" >> /var/etc/hosts
 }
 
@@ -20,15 +20,15 @@ start() {
 
 	test -d /var/etc || mkdir -p /var/etc
 	test -f /etc/hosts.local && cat /etc/hosts.local >> /var/etc/hosts
-	
+
 	config_load luci_hosts
 	config_foreach apply_host host
-	
+
 	return 0
 }
 
 stop() {
 	test -f /var/etc/hosts && rm -f /var/etc/hosts
-	
+
 	return 0
 }
