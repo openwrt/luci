@@ -16,7 +16,7 @@ $Id$
 require("luci.sys")
 require("luci.ip")
 
-m = Map("chillispot")
+m = Map("coovachilli")
 
 -- tun
 s1 = m:section(TypedSection, "tun")

@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 
-m = Map("chillispot")
+m = Map("coovachilli")
 
 -- general
 s1 = m:section(TypedSection, "general")

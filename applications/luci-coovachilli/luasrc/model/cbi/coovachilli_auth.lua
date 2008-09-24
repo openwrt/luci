@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 
-m = Map("chillispot")
+m = Map("coovachilli")
 
 -- uam config
 s1 = m:section(TypedSection, "uam")

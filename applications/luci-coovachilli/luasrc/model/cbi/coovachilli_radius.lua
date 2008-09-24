@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 
-m = Map("chillispot")
+m = Map("coovachilli")
 
 -- radius server
 s1 = m:section(TypedSection, "radius")
