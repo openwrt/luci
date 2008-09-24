@@ -25,6 +25,7 @@ p[2] = s:option(ListValue, "output")
 p[3] = s:option(ListValue, "forward")
 
 for i, v in ipairs(p) do
+	v:value("REJECT", translate("fw_reject"))
 	v:value("DROP", translate("fw_drop"))
 	v:value("ACCEPT", translate("fw_accept"))
 end
@@ -44,6 +45,7 @@ p[2] = s:option(ListValue, "output")
 p[3] = s:option(ListValue, "forward")
 
 for i, v in ipairs(p) do
+	v:value("REJECT", translate("fw_reject"))
 	v:value("DROP", translate("fw_drop"))
 	v:value("ACCEPT", translate("fw_accept"))
 end
