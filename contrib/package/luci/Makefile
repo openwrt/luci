@@ -388,6 +388,17 @@ define Package/luci-app-p910nd/install
 endef
 
 
+define Package/luci-app-ushare
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +ushare
+  TITLE:=ushare - UPnP A/V & DLNA Media Server
+endef
+
+define Package/luci-app-ushare/install
+        $(call Package/luci/install/template,$(1),applications/luci-ushare)
+endef
+
+
 ### Server Gateway Interfaces ###
 
 define Package/luci-sgi-cgi
@@ -537,6 +548,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-p910nd),)
         PKG_SELECTED_MODULES+=applications/luci-p910nd
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-ushare),)
+        PKG_SELECTED_MODULES+=applications/luci-ushare
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -599,6 +613,7 @@ $(eval $(call BuildPackage,luci-app-ddns))
 $(eval $(call BuildPackage,luci-app-samba))
 $(eval $(call BuildPackage,luci-app-uvc_streamer))
 $(eval $(call BuildPackage,luci-app-p910nd))
+$(eval $(call BuildPackage,luci-app-ushare))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 

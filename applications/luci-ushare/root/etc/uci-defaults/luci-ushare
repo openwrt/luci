@@ -1,0 +1,7 @@
+#!/bin/sh
+
+uci batch <<-EOF
+	add ucitrack ushare
+	set ucitrack.@ushare[-1].init=ushare
+	commit ucitrack
+EOF
