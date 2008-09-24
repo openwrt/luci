@@ -126,21 +126,29 @@ ul.dropdowns li ul {
 	position: absolute;
 	z-index: 1000;
 	top: auto;
+	min-width: 10em;
+}
+
+* html ul.dropdowns li ul {
 	width: 10em;
 }
 
 ul.dropdowns li li {
-	clear: both;
+	float: none;
 	position: relative;
+}
+
+* html ul.dropdowns li li {
+	clear: both;
+	float: left;
+}
+
+* html ul.dropdowns li li {
 	width: 100%;
 }
 
 ul.dropdowns li a {
 	display: block;
-}
-
-ul.dropdowns li>a {
-	overflow: hidden;
 }
 
 * html ul.dropdowns li li a {
@@ -155,7 +163,7 @@ ul.dropdowns li ul,
 ul.dropdowns li.over ul ul,
 ul.dropdowns li.focus ul ul,
 ul.dropdowns li:hover ul ul {
-	left: -1000px;
+	left: -3000px;
 }
 
 ul.dropdowns li.over ul,
@@ -240,33 +248,32 @@ html #menubar a:visited.warning {
 	font-weight: bold;
 }
 
-.lang_ru #submenu_admin_index {
-	width: 15.5em;
-}
+.lang_ru #submenu_admin_index { min-width: 15.5em; }
+* html .lang_ru #submenu_admin_index { width: 15.5em; }
 
-.lang_ru #submenu_admin_status {
-	width: 10.5em;
-}
+.lang_ru #submenu_admin_status { min-width: 10.5em; }
+* html .lang_ru #submenu_admin_status { width: 10.5em; }
 
-.lang_de #submenu_admin_system {
-	width: 13.3em;
-}
+.lang_de #submenu_admin_system { min-width: 13.3em; }
+* html .lang_de #submenu_admin_system { width: 13.3em; }
 
-.lang_fr #submenu_admin_system {
-	width: 14.5em;
-}
+.lang_fr #submenu_admin_system { min-width: 14.5em; }
+* html .lang_fr #submenu_admin_system { width: 14.5em; }
 
-.lang_ru #submenu_admin_system {
-	width: 18em;
-}
+.lang_ru #submenu_admin_system { min-width: 18em; }
+* html .lang_ru #submenu_admin_system { width: 18em; }
 
-.lang_ru #submenu_admin_network_routes {
-	width: 15.3em;
-}
+#submenu_admin_services_chillispot { min-width: 15.5em; }
+* html #submenu_admin_services_chillispot { width: 15.5em; }
 
-.lang_de #submenu_admin_network_firewall {
-	width: 12em;
-}
+.lang_ru #submenu_admin_network_routes { min-width: 15.3em; }
+* html .lang_ru #submenu_admin_network_routes { width: 15.3em; }
+
+#submenu_admin_network_firewall { min-width: 14em; }
+* html #submenu_admin_network_firewall { width: 14em; }
+
+.lang_de #submenu_admin_network_firewall { min-width: 16.5em; }
+* html .lang_de #submenu_admin_network_firewall { width: 16.5em; }
 
 #modemenu {
 	width: auto;
