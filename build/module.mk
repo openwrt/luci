@@ -23,11 +23,11 @@ luasource:
 	mkdir -p dist$(LUA_MODULEDIR)
 	mkdir -p dist$(LUCI_MODULEDIR)
 	mkdir -p dist$(HTDOCS)
-	cp -a root/* dist -R 2>/dev/null || true
-	cp -a luasrc/* dist$(LUCI_MODULEDIR) -R 2>/dev/null || true
-	cp -a lua/* dist$(LUA_MODULEDIR) -R 2>/dev/null || true
-	cp -a htdocs/* dist$(HTDOCS) -R 2>/dev/null || true
-	for i in $$(find dist -name .svn); do rm $$i -rf || true; done
+	cp -pR root/* dist 2>/dev/null || true
+	cp -pR luasrc/* dist$(LUCI_MODULEDIR) 2>/dev/null || true
+	cp -pR lua/* dist$(LUA_MODULEDIR) 2>/dev/null || true
+	cp -pR htdocs/* dist$(HTDOCS) 2>/dev/null || true
+	for i in $$(find dist -name .svn); do rm -rf $$i || true; done
 	for i in dist$(LUCI_MODULEDIR)/i18n/*.xml; do [ -f "$$i" ] && rm $$i; done || true
 
 
