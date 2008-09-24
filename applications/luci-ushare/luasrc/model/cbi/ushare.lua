@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 m = Map("ushare", translate("ushare"),
-	translatef("ushare_desc"))
+	translate("ushare_desc"))
 
 s = m:section(TypedSection, "ushare", translate("settings"))
 s.addremove = false
@@ -32,6 +32,10 @@ for _, nif in ipairs(luci.sys.net.devices()) do
 end 
 
 s:option(Value, "content_directories", translate("content_directories"))
+
+s:option(Flag, "disable_webif", translate("disable_webif"))
+
+s:option(Flag, "disable_telnet", translate("disable_telnet"))
 
 s:option(Value, "options", translate("options"))
 
