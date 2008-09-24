@@ -18,9 +18,9 @@ function index()
 	require("luci.i18n")
 	local i18n = luci.i18n.translate
 
-	entry( { "admin", "services", "chillispot" },            cbi("chillispot"),         i18n("chillispot", "ChilliSpot"),                           90)
-	entry( { "admin", "services", "chillispot", "network" }, cbi("chillispot_network"), i18n("chillispot_network", "Network Configuration"),        10)
-	entry( { "admin", "services", "chillispot", "radius"  }, cbi("chillispot_radius"),  i18n("chillispot_radius",  "UAM and Radius Configuration"), 20)
-	entry( { "admin", "services", "chillispot", "macauth" }, cbi("chillispot_macauth"), i18n("chillispot_macauth", "MAC Authentication"),           30)
+	entry( { "admin", "services", "chillispot" },            cbi("chillispot"),         i18n("chillispot",         "ChilliSpot"),                 90)
+	entry( { "admin", "services", "chillispot", "network" }, cbi("chillispot_network"), i18n("chillispot_network", "Network Configuration"),      10)
+	entry( { "admin", "services", "chillispot", "radius"  }, cbi("chillispot_radius"),  i18n("chillispot_radius",  "Radius Configuration"),       20)
+	entry( { "admin", "services", "chillispot", "auth"    }, cbi("chillispot_auth"),    i18n("chillispot_auth",    "UAM and MAC Authentication"), 30)
 
 end

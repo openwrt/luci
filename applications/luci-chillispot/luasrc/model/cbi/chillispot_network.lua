@@ -22,6 +22,10 @@ m = Map("chillispot")
 s1 = m:section(TypedSection, "tun")
 s1.anonymous = true
 
+s1:option( Flag, "usetap" )
+s1:option( Value, "tundev" ).optional = true
+s1:option( Value, "txqlen" ).optional = true
+
 net = s1:option( Value, "net" )
 for _, route in ipairs(luci.sys.net.routes()) do
 	if route.Iface ~= "lo" and route.Mask ~= "FFFFFFFF" then
@@ -60,6 +64,8 @@ end
 
 s2:option( Value, "dhcpmac" ).optional = true
 s2:option( Value, "lease" ).optional = true
+s2:option( Value, "dhcpstart" ).optional = true
+s2:option( Value, "dhcpend" ).optional = true
 
 
 return m

@@ -24,6 +24,8 @@ s1:option( Flag, "debug" )
 s1:option( Value, "interval" )
 s1:option( Value, "pidfile" ).optional = true
 s1:option( Value, "statedir" ).optional = true
+s1:option( Value, "cmdsock" ).optional = true
+s1:option( Value, "logfacility" ).optional = true
 
 -- remote config management
 s2 = m:section(TypedSection, "remoteconfig")
