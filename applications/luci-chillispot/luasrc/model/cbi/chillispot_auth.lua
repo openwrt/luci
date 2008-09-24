@@ -53,24 +53,24 @@ s1:option( Value, "nasmac" ).optional = true
 s1:option( Value, "wwwdir" ).optional = true
 s1:option( Value, "wwwbin" ).optional = true
 
-s:option( Value, "localusers" ).optional = true
-s:option( Value, "postauthproxy" ).optional = true
-s:option( Value, "postauthproxyport" ).optional = true
-s:option( Value, "locationname" ).optional = true
+s1:option( Value, "localusers" ).optional = true
+s1:option( Value, "postauthproxy" ).optional = true
+s1:option( Value, "postauthproxyport" ).optional = true
+s1:option( Value, "locationname" ).optional = true
 
 
 -- mac authentication
-s = m:section(TypedSection, "macauth")
-s.anonymous = true
+s2 = m:section(TypedSection, "macauth")
+s2.anonymous = true
 
-s:option( Flag, "macauth" )
-s:option( Flag, "macallowlocal" )
-s:option( DynamicList, "macallowed" )
+s2:option( Flag, "macauth" )
+s2:option( Flag, "macallowlocal" )
+s2:option( DynamicList, "macallowed" )
 
-pw = s:option( Value, "macpasswd" )
+pw = s2:option( Value, "macpasswd" )
 pw.optional = true
 pw.password = true
 
-s:option( Value, "macsuffix" ).optional = true
+s2:option( Value, "macsuffix" ).optional = true
 
 return m
