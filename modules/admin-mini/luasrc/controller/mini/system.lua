@@ -82,9 +82,7 @@ function action_upgrade()
 	local ret  = nil
 	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
 	local tmpfile = "/tmp/firmware.img"
-	local broadcom = os.execute('grep brcm_ /lib/upgrade/platform.sh >/dev/null 2>&1') == 0
-	 
-	local keep_avail = not broadcom
+	local keep_avail = true
 
 	local file
 	luci.http.setfilehandler(
