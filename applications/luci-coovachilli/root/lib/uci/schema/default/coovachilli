@@ -236,8 +236,8 @@ config variable
 
 config section
 	option name	'radius'
-	option title	'Section radius'
-	option description	''
+	option title	'RADIUS configuration'
+	option description	'RADIUS configuration'
 	option package	'coovachilli'
 	option unique	true
 	option required	true
@@ -250,16 +250,44 @@ config variable
 	option datatype	'boolean'
 
 config variable
+	option name	'radiusoriginalurl'
+	option title	'Send RADIUS VSA'
+	option description	'Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'swapoctets'
+	option title	'Swap octets'
+	option description	'Swap the meaning of "input octets" and "output octets" as it related to RADIUS attribtues'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'openidauth'
+	option title	'Allow OpenID authentication'
+	option description	'Allows OpenID authentication by sending ChilliSpot-Config=allow-openidauth in RADIUS Access-Requests'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'wpaguests'
+	option title	'Allow WPA guests'
+	option description	'Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-guests in RADIUS Access-Requests'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
 	option name	'radiusacctport'
-	option title	'Option radiusacctport'
-	option description	''
+	option title	'RADIUS accounting port'
+	option description	'The UDP port number to use for radius accounting requests (default 1813)'
 	option section	'coovachilli.radius'
 	option datatype	'port'
 
 config variable
 	option name	'radiusauthport'
-	option title	'Option radiusauthport'
-	option description	''
+	option title	'RADIUS authentication port'
+	option description	'The UDP port number to use for radius authentication requests (default 1812)'
 	option section	'coovachilli.radius'
 	option datatype	'port'
 
@@ -272,29 +300,29 @@ config variable
 
 config variable
 	option name	'radiuslisten'
-	option title	'Option radiuslisten'
-	option description	''
+	option title	'RADIUS listen address'
+	option description	'Local interface IP address to use for the radius interface'
 	option section	'coovachilli.radius'
 	option datatype	'ip4addr'
 
 config variable
 	option name	'radiuslocationid'
-	option title	'Option radiuslocationid'
-	option description	''
+	option title	'RADIUS location ID'
+	option description	'WISPr Location ID'
 	option section	'coovachilli.radius'
 	option datatype	'string'
 
 config variable
 	option name	'radiuslocationname'
-	option title	'Option radiuslocationname'
-	option description	''
+	option title	'RADIUS location name'
+	option description	'WISPr Location Name'
 	option section	'coovachilli.radius'
 	option datatype	'string'
 
 config variable
 	option name	'radiusnasid'
-	option title	'Option radiusnasid'
-	option description	''
+	option title	'NAS ID'
+	option description	'Network access server identifier'
 	option section	'coovachilli.radius'
 	option datatype	'string'
 
@@ -306,84 +334,110 @@ config variable
 	option datatype	'ip4addr'
 
 config variable
+	option name	'radiusnasporttype'
+	option title	'NAS port type'
+	option description	'Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)'
+	option section	'coovachilli.radius'
+	option datatype	'port'
+
+config variable
 	option name	'radiussecret'
-	option title	'Option radiussecret'
-	option description	''
+	option title	'RADIUS secret'
+	option description	'Radius shared secret for both servers'
 	option section	'coovachilli.radius'
 	option datatype	'string'
 
 config variable
 	option name	'radiusserver1'
-	option title	'Option radiusserver1'
-	option description	''
+	option title	'RADIUS server 1'
+	option description	'The IP address of radius server 1'
 	option section	'coovachilli.radius'
 	option datatype	'host'
 
 config variable
 	option name	'radiusserver2'
-	option title	'Option radiusserver2'
-	option description	''
+	option title	'RADIUS server 2'
+	option description	'The IP address of radius server 2'
 	option section	'coovachilli.radius'
 	option datatype	'host'
+
+config variable
+	option name	'nasip'
+	option title	'NAS IP'
+	option description	'Value to use in RADIUS NAS-IP-Address attribute'
+	option section	'coovachilli.radius'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'nasmac'
+	option title	'NAS MAC'
+	option description	'MAC address value to use in RADIUS Called-Station-ID attribute'
+	option section	'coovachilli.radius'
+	option datatype	'macaddr'
+
+config variable
+	option name	'adminuser'
+	option title	'Admin user'
+	option description	'User-name to use for Administrative-User authentication in order to pick up chilli configurations and establish a device "system" session'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'adminpasswd'
+	option title	'Admin password'
+	option description	'Password to use for Administrative-User authentication in order to pick up chilli configurations and establish a device "system" session'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'coaport'
+	option title	'RADIUS disconnect port'
+	option description	'UDP port to listen to for accepting radius disconnect requests'
+	option section	'coovachilli.radius'
+	option datatype	'port'
+
+config variable
+	option name	'coanoipcheck'
+	option title	'Do not check disconnection requests'
+	option description	'Do not check the source IP address of radius disconnect requests'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
 
 
 config section
 	option name	'proxy'
-	option title	'Section proxy'
-	option description	''
+	option title	'RADIUS proxy settings'
+	option description	'RADIUS proxy settings'
 	option package	'coovachilli'
 	option unique	true
 	option required	true
 
 config variable
 	option name	'proxyclient'
-	option title	'Option proxyclient'
-	option description	''
+	option title	'Proxy client'
+	option description	'IP address from which radius requests are accepted. If omitted the server will not accept radius requests'
 	option section	'coovachilli.proxy'
-	option datatype	'ip4addr'
+	option datatype	'host'
 
 config variable
 	option name	'proxylisten'
-	option title	'Option proxylisten'
-	option description	''
+	option title	'Proxy listen address'
+	option description	'Local interface IP address to use for accepting radius requests'
 	option section	'coovachilli.proxy'
-	option datatype	'ip4addr'
+	option datatype	'host'
 
 config variable
 	option name	'proxyport'
-	option title	'Option proxyport'
-	option description	''
+	option title	'Proxy port'
+	option description	'UDP Port to listen to for accepting radius requests'
 	option section	'coovachilli.proxy'
 	option datatype	'port'
 
 config variable
 	option name	'proxysecret'
-	option title	'Option proxysecret'
-	option description	''
+	option title	'Proxy secret'
+	option description	'Radius shared secret for clients'
 	option section	'coovachilli.proxy'
-	option datatype	'string'
-
-
-config section
-	option name	'remoteconfig'
-	option title	'Section remoteconfig'
-	option description	''
-	option package	'coovachilli'
-	option unique	true
-	option required	true
-
-config variable
-	option name	'confpassword'
-	option title	'Option confpassword'
-	option description	''
-	option section	'coovachilli.remoteconfig'
-	option datatype	'string'
-
-config variable
-	option name	'confusername'
-	option title	'Option confusername'
-	option description	''
-	option section	'coovachilli.remoteconfig'
 	option datatype	'string'
 
 
