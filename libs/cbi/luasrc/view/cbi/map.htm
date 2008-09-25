@@ -16,19 +16,21 @@ $Id$
 <div class="cbi-map" id="cbi-<%=self.config%>">
 	<h1><%=self.title%></h1>
 	<div class="cbi-map-descr"><%=self.description%></div>
-	<%- if self._apply then -%><code><%:cbi_applying%>:
-	
-<% 
-			local fp = self._apply()
-			self._apply = nil
-			local line = fp:read()
-			while line do
-				write(line.."\n")
-				line = fp:read()
-			end
-			fp:close()
-		-%>
-	</code><%- end -%>
+	<%- if self._apply then -%>
+		<fieldset class="cbi-section">
+			<legend><%:cbi_applying%></legend>
+			<ul class="cbi-apply"><%-
+				local fp = self._apply()
+				self._apply = nil
+				local line = fp:read()
+				while line do
+					write("<li>" .. luci.util.pcdata(line) .. "</li>\n")
+					line = fp:read()
+				end
+				fp:close()
+			-%></ul>
+		</fieldset>
+	<%- end -%>
 	<%- self:render_children() %>
 	<br />
 </div>
