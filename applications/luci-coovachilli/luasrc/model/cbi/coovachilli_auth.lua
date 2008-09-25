@@ -23,13 +23,13 @@ s1.anonymous = true
 s1:option( Value, "uamserver" )
 s1:option( Value, "uamsecret" ).password = true
 
-s1:option( Flag, "uamanyip" )
 s1:option( Flag, "uamanydns" )
-s1:option( Flag, "dnsparanoia" )
 s1:option( Flag, "nouamsuccess" )
 s1:option( Flag, "nouamwispr" )
-s1:option( Flag, "usestatusfile" )
 s1:option( Flag, "chillixml" )
+s1:option( Flag, "uamanyip" ).optional = true
+s1:option( Flag, "dnsparanoia" ).optional = true
+s1:option( Flag, "usestatusfile" ).optional = true
 
 s1:option( Value, "uamhomepage" ).optional = true
 s1:option( Value, "uamlisten" ).optional = true

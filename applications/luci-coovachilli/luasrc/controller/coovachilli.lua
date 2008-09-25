@@ -18,7 +18,7 @@ function index()
 	require("luci.i18n")
 	local i18n = luci.i18n.translate
 
-	entry( { "admin", "services", "coovachilli" },            cbi("coovachilli"),         i18n("coovachilli",         "CoovaChilli"),                90)
+	entry( { "admin", "services", "coovachilli" },            cbi("coovachilli"),         i18n("coovachilli",         "CoovaChilli"),                90).i18n = "coovachilli"
 	entry( { "admin", "services", "coovachilli", "network" }, cbi("coovachilli_network"), i18n("coovachilli_network", "Network Configuration"),      10)
 	entry( { "admin", "services", "coovachilli", "radius"  }, cbi("coovachilli_radius"),  i18n("coovachilli_radius",  "Radius Configuration"),       20)
 	entry( { "admin", "services", "coovachilli", "auth"    }, cbi("coovachilli_auth"),    i18n("coovachilli_auth",    "UAM and MAC Authentication"), 30)
