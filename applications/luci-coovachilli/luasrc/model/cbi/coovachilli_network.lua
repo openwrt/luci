@@ -67,5 +67,7 @@ s2:option( Value, "lease" ).optional = true
 s2:option( Value, "dhcpstart" ).optional = true
 s2:option( Value, "dhcpend" ).optional = true
 
+s2:option( Flag, "eapolenable" )
+
 
 return m

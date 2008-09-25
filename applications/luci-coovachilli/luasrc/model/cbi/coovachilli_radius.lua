@@ -52,8 +52,6 @@ s1:option( Flag, "acctupdate" )
 s1:option( Value, "coaport" ).optional = true
 s1:option( Flag, "coanoipcheck" )
 
-s1:option( Flag, "eapolenable" ).optional = true
-
 
 -- radius proxy
 s2 = m:section(TypedSection, "proxy")
