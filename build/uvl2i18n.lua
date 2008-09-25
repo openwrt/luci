@@ -8,7 +8,7 @@ require("luci.uvl")
 local shm = luci.uvl.UVL():get_scheme(arg[1])
 
 for s, o in luci.util.kspairs(shm.sections) do
-	print( string.format( '%s_%s = %q', shm.name, s:gsub("_",""), o.title ) )
+	print( string.format( '%s_%s = %q', shm.name, s:gsub("_",""), o.title or s ) )
 
 	if o.description and #o.description > 0 then
 		print( string.format(
@@ -18,7 +18,7 @@ for s, o in luci.util.kspairs(shm.sections) do
 
 	for v, o in luci.util.kspairs(shm.variables[s]) do
 		print( string.format(
-			'%s_%s_%s = %q', shm.name, s:gsub("_",""), v:gsub("_",""), o.title
+			'%s_%s_%s = %q', shm.name, s:gsub("_",""), v:gsub("_",""), o.title or v
 		) )
 
 		if o.description and #o.description > 0 then
