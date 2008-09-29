@@ -163,6 +163,18 @@ function dispatch(request)
 	-- Init template engine
 	if not track.notemplate then
 		local tpl = require("luci.template")
+		local media = luci.config.main.mediaurlbase
+		if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
+			media = nil
+			for name, theme in pairs(luci.config.themes) do
+				if name:sub(1,1) ~= "." and pcall(tpl.Template,
+				 "themes/%s/header" % fs.basename(theme)) then
+					media = theme
+				end
+			end
+			assert(media, "No valid theme found")
+		end
+
 		local viewns = setmetatable({}, {__index=_G})
 		tpl.context.viewns = viewns
 		viewns.write       = luci.http.write
@@ -170,7 +182,7 @@ function dispatch(request)
 		viewns.translate   = function(...) return require("luci.i18n").translate(...) end
 		viewns.striptags   = util.striptags
 		viewns.controller  = luci.http.getenv("SCRIPT_NAME")
-		viewns.media       = luci.config.main.mediaurlbase
+		viewns.media       = media
 		viewns.resource    = luci.config.main.resourcebase
 		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
