@@ -438,18 +438,18 @@ function user.checkpasswd(username, password)
 
 	if account then
 		local pwd = account.passwd
-		if pwd == "!" then
-			return true
-		elseif pwd == "x" then
-			pwd = nil
+		local shadowpw
+		if #pwd == 1 then
 			for l in io.lines("/etc/shadow") do
-				pwd = l:match("^%s:([^:]+)" % username)
-				if pwd then
+				shadowpw = l:match("^%s:([^:]+)" % username)
+				if shadowpw then
+					pwd = shadowpw
 					break
 				end
 			end
-			if not pwd then
-				return nil, "No shadow password for " .. username
+
+			if pwd == "!" then
+				return true
 			end
 		end
 
