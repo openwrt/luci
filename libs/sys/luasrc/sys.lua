@@ -437,11 +437,23 @@ function user.checkpasswd(username, password)
 	local account = user.getuser(username)
 
 	if account then
-		if account.passwd == "!" then
+		local pwd = account.passwd
+		if pwd == "!" then
 			return true
-		else
-			return (account.passwd == posix.crypt(password, account.passwd))
+		elseif pwd == "x" then
+			pwd = nil
+			for l in io.lines("/etc/shadow") do
+				pwd = l:match("^%s:([^:]+)" % username)
+				if pwd then
+					break
+				end
+			end
+			if not pwd then
+				return nil, "No shadow password for " .. username
+			end
 		end
+
+		return (pwd == posix.crypt(password, pwd))
 	end
 end
 
