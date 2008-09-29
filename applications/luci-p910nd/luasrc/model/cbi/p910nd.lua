@@ -22,7 +22,7 @@ s = m:section(TypedSection, "p910nd", translate("settings", "settings"))
 s.addremove = true
 s.anonymous = true
 
-s:option(Flag, "enabled", translate("enabled"))
+s:option(Flag, "enabled", translate("enable"))
 
 s:option(Value, "device", translate("device", "Device")).rmempty = true
 
