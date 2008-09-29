@@ -526,6 +526,28 @@ define Package/luci-theme-fledermaus/install
 	$(call Package/luci/install/template,$(1),themes/fledermaus)
 endef
 
+define Package/luci-theme-freifunk
+  $(call Package/luci/thtemplate)
+  DEPENDS:=+luci-web
+  MAINTAINER:=Stefan Pirwitz <stefan-at-freifunk-bno-dot-de>
+  TITLE:=alternative Freifunk Theme
+endef
+
+define Package/luci-theme-freifunk/install
+        $(call Package/luci/install/template,$(1),themes/freifunk)
+endef
+
+define Package/luci-theme-freifunk-bno
+  $(call Package/luci/thtemplate)
+  DEPENDS:=+luci-web
+  MAINTAINER:=Stefan Pirwitz <stefan-at-freifunk-bno-dot-de>
+  TITLE:=Freifunk Berlin Nordost Theme
+endef
+
+define Package/luci-theme-freifunk-bno/install
+	$(call Package/luci/install/template,$(1),themes/freifunk-bno)
+endef
+
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWRT.org (default)
@@ -706,6 +728,12 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-fledermaus),)
 	PKG_SELECTED_MODULES+=themes/fledermaus
 endif
+ifneq ($(CONFIG_PACKAGE_luci-theme-freifunk-bno),)
+	PKG_SELECTED_MODULES+=themes/freifunk-bno
+endif
+ifneq ($(CONFIG_PACKAGE_luci-theme-freifunk),)
+	PKG_SELECTED_MODULES+=themes/freifunk
+endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
@@ -779,6 +807,8 @@ $(eval $(call BuildPackage,luci-sgi-luci))
 $(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-fledermaus))
+$(eval $(call BuildPackage,luci-theme-freifunk))
+$(eval $(call BuildPackage,luci-theme-freifunk-bno))
 $(eval $(call BuildPackage,luci-theme-openwrt))
 $(eval $(call BuildPackage,luci-theme-openwrtlight))
 
