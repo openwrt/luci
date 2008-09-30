@@ -43,7 +43,7 @@ $Id$
 		<select id="cbi.opt.<%=self.config%>.<%=section%>" name="cbi.opt.<%=self.config%>.<%=section%>">
 			<option><%:cbi_addopt%></option>
 			<% for key, val in pairs(self.optionals[section]) do -%>
-				<option id="cbid-<%=self.config.."-"..section.."-"..val.option%>" value="<%=val.option%>"><%=striptags(val.title)%></option>
+				<option id="cbi-<%=self.config.."-"..section.."-"..val.option%>" value="<%=val.option%>"><%=striptags(val.title)%></option>
 			<%- end %>
 		</select>
 		<script type="text/javascript"><% for key, val in pairs(self.optionals[section]) do %>
