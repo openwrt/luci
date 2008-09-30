@@ -18,10 +18,10 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "src")
-iface:value("")
 iface.rmempty = true
 
 oface = s:option(ListValue, "dest")
+oface:value("")
 oface.optional = true
 
 luci.model.uci.cursor():foreach("firewall", "zone",
@@ -56,6 +56,7 @@ dport:depends("proto", "tcpudp")
 
 jump = s:option(ListValue, "target")
 jump.rmempty = true
+jump.default = "ACCEPT"
 jump:value("DROP", translate("fw_drop"))
 jump:value("ACCEPT", translate("fw_accept"))
 jump:value("REJECT", translate("fw_reject"))
