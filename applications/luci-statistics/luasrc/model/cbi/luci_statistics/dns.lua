@@ -26,13 +26,15 @@ enable = s:option( Flag, "enable" )
 enable.default = 0
 
 -- collectd_dns.interfaces (Interface)
-interfaces = s:option( ListValue, "Interfaces" )
+interfaces = s:option( MultiValue, "Interfaces" )
+interfaces.widget = "select"
+interfaces.size   = 5
 interfaces:depends( "enable", 1 )
 interfaces:value("any")
 for k, v in pairs(luci.sys.net.devices()) do
-	interfaces:value(v)
+        interfaces:value(v)
 end
-
+         
 -- collectd_dns.ignoresources (IgnoreSource)
 ignoresources = s:option( Value, "IgnoreSources" )
 ignoresources.default = "127.0.0.1"
