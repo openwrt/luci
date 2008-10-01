@@ -440,11 +440,17 @@ function user.checkpasswd(username, password)
 		local pwd = account.passwd
 		local shadowpw
 		if #pwd == 1 then
-			for l in io.lines("/etc/shadow") do
-				shadowpw = l:match("^%s:([^:]+)" % username)
-				if shadowpw then
-					pwd = shadowpw
-					break
+			if luci.fs.stat("/etc/shadow") then
+				if not pcall(function()
+					for l in io.lines("/etc/shadow") do
+						shadowpw = l:match("^%s:([^:]+)" % username)
+						if shadowpw then
+							pwd = shadowpw
+							break
+						end
+					end
+				end) then
+					return nil, "Unable to access shadow-file"
 				end
 			end
 
