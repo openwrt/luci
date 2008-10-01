@@ -530,6 +530,56 @@ function wifi.iwscan(iface)
 end
 
 
+--- LuCI system utilities / init related functions.
+-- @class	module
+-- @name	luci.sys.init
+init = {}
+init.dir = "/etc/init.d/"
+
+--- Get the names of all installed init scripts
+-- @return	Table containing the names of all inistalled init scripts
+function init.names()
+	local names = { }
+	for _, name in ipairs(luci.fs.glob(init.dir.."*")) do
+		names[#names+1] = luci.fs.basename(name)
+	end
+	return names
+end
+
+--- Test whether the given init script is enabled
+-- @return	Boolean indicating whether init is enabled
+function init.enabled(name)
+	if luci.fs.access(init.dir..name) then
+		return ( call(init.dir..name.." enabled") == 0 )
+	end
+	return false
+end
+
+--- Get the index of he given init script
+-- @return	Numeric index value
+function init.index(name)
+	if luci.fs.access(init.dir..name) then
+		return call("source "..init.dir..name.." && exit $START")
+	end
+end
+
+--- Enable the given init script
+-- @return	Boolean indicating success
+function init.enable(name)
+	if luci.fs.access(init.dir..name) then
+		return ( call(init.dir..name.." enable") == 0 )
+	end
+end
+
+--- Disable the given init script
+-- @return	Boolean indicating success
+function init.enable(name)
+	if luci.fs.access(init.dir..name) then
+		return ( call(init.dir..name.." disable") == 0 )
+	end
+end
+
+
 -- Internal functions
 
 function _parse_delimited_table(iter, delimiter)
