@@ -13,6 +13,8 @@ $Id$
 
 ]]--
 
+require("luci.fs")
+
 m = Map("hd-idle", translate("hd_idle"), translate("hd_idle_desc"))
 
 s = m:section(TypedSection, "hd-idle", translate("settings"))
@@ -21,7 +23,10 @@ s.anonymous = true
 
 s:option(Flag, "enabled", translate("enabled", "Enable"))
 
-s:option(Value, "disk", translate("disk")).rmempty = true
+disk = s:option(Value, "disk", translate("disk")).rmempty = true
+for _, dev in ipairs(luci.fs.glob("/dev/[sh]d[a-z]")) do
+	disk:value(luci.fs.basename(dev))
+end
 
 s:option(Value, "idle_time_interval", translate("idle_time_interval")).default = 10
 s.rmempty = true
