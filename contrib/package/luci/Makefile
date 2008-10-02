@@ -494,6 +494,16 @@ define Package/luci-app-hd_idle/install
         $(call Package/luci/install/template,$(1),applications/luci-hd_idle)
 endef
 
+define Package/luci-app-tinyproxy
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +tinyproxy
+  TITLE:=Tinyproxy - HTTP(S)-Proxy
+endef
+
+define Package/luci-app-tinyproxy/install
+        $(call Package/luci/install/template,$(1),applications/luci-tinyproxy)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -726,6 +736,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-hd_idle),)
        PKG_SELECTED_MODULES+=applications/luci-hd_idle
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-tinyproxy),)
+       PKG_SELECTED_MODULES+=applications/luci-tinyproxy
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -815,6 +828,7 @@ $(eval $(call BuildPackage,luci-app-uvc_streamer))
 $(eval $(call BuildPackage,luci-app-p910nd))
 $(eval $(call BuildPackage,luci-app-ushare))
 $(eval $(call BuildPackage,luci-app-hd_idle))
+$(eval $(call BuildPackage,luci-app-tinyproxy))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
