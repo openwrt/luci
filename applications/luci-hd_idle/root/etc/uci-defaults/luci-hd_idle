@@ -1,0 +1,7 @@
+#!/bin/sh
+
+uci batch <<-EOF
+       add ucitrack hd-idle
+       set ucitrack.@hd-idle[-1].init=hd-idle
+       commit ucitrack
+EOF
