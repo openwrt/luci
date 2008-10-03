@@ -20,7 +20,7 @@ m = Map("firewall", translate("fw_redirect"), translate("fw_redirect_desc"))
 s = m:section(NamedSection, arg[1], "redirect", "")
 s.anonymous = true
 
-back = s:option(DummyValue, translate("overview"))
+back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "redirection")
 

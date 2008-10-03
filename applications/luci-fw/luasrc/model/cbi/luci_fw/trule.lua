@@ -17,7 +17,7 @@ m = Map("firewall", translate("firewall_rule"), translate("firewall_rule_desc"))
 s = m:section(NamedSection, arg[1], "rule", "")
 s.anonymous = true
 
-back = s:option(DummyValue, translate("overview"))
+back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "traffic")
 
