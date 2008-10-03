@@ -30,7 +30,6 @@ s:option(Value, "StatFile").optional = true
 s:option(Flag, "Syslog").optional = true
 f = s:option(Value, "Logfile")
 f.optional = true
-f:depends({Syslog = ""})
 
 l = s:option(ListValue, "LogLevel")
 l.optional = true
