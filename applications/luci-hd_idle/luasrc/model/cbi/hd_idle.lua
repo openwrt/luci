@@ -18,7 +18,6 @@ require("luci.fs")
 m = Map("hd-idle", translate("hd_idle"), translate("hd_idle_desc"))
 
 s = m:section(TypedSection, "hd-idle", translate("settings"))
-s.addremove = true
 s.anonymous = true
 
 s:option(Flag, "enabled", translate("enable", "Enable"))
