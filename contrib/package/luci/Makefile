@@ -398,6 +398,16 @@ define Package/luci-app-ushare/install
         $(call Package/luci/install/template,$(1),applications/luci-ushare)
 endef
 
+define Package/luci-app-hd_idle
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +hd-idle
+  TITLE:=hd-idle
+endef
+
+define Package/luci-app-hd_idle/install
+        $(call Package/luci/install/template,$(1),applications/luci-hd_idle)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -551,6 +561,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-ushare),)
         PKG_SELECTED_MODULES+=applications/luci-ushare
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-hd_idle),)
+       PKG_SELECTED_MODULES+=applications/luci-hd_idle
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -614,6 +627,7 @@ $(eval $(call BuildPackage,luci-app-samba))
 $(eval $(call BuildPackage,luci-app-uvc_streamer))
 $(eval $(call BuildPackage,luci-app-p910nd))
 $(eval $(call BuildPackage,luci-app-ushare))
+$(eval $(call BuildPackage,luci-app-hd_idle))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 

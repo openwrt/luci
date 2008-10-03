@@ -1,0 +1,7 @@
+disk = 'Disk'
+enable_debug = 'Enable debug'
+hd_idle = 'hd-idle'
+hd_idle_desc = 'hd-idle is a utility program for spinning-down external disks after a period of idle time.'
+idle_time_interval = 'Idle-Time'
+idle_time_unit = 'Idle-Time unit'
+settings = 'Settings'

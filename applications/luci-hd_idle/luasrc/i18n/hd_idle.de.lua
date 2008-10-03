@@ -1,0 +1,7 @@
+disk = 'Festplatte'
+enable_debug = 'Debug-Ausgaben aktivieren'
+hd_idle = 'hd-idle'
+hd_idle_desc = 'hd-idle ist ein Hilfsprogramm um externe Festplatten nach einer festgelegten Leerlaufzeit herunter zu fahren.'
+idle_time_interval = 'Leerlaufzeit'
+idle_time_unit = 'Leerlaufzeiteinheit'
+settings = 'Einstellungen'
