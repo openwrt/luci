@@ -21,7 +21,7 @@ s = m:section(TypedSection, "hd-idle", translate("settings"))
 s.addremove = true
 s.anonymous = true
 
-s:option(Flag, "enabled", translate("enabled", "Enable"))
+s:option(Flag, "enabled", translate("enable", "Enable"))
 
 disk = s:option(Value, "disk", translate("disk"))
 disk.rmempty = true
