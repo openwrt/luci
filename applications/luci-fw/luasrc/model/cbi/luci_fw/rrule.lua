@@ -12,11 +12,12 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
-m = Map("firewall", translate("fw_portfw"), translate("fw_portfw1"))
+arg[1] = arg[1] or ""
+
+m = Map("firewall", translate("fw_redirect"), translate("fw_redirect_desc"))
 
 
-s = m:section(TypedSection, "redirect", "")
-s.addremove = true
+s = m:section(NamedSection, arg[1], "redirect", "")
 s.anonymous = true
 
 name = s:option(Value, "_name", translate("name"))
@@ -30,10 +31,10 @@ luci.model.uci.cursor():foreach("firewall", "zone",
 		iface:value(section.name)
 	end)
 	
-s:option(Value, "src_ip").optional = true
-s:option(Value, "src_mac").optional = true
+s:option(Value, "src_ip", translate("firewall_redirect_srcip")).optional = true
+s:option(Value, "src_mac", translate("firewall_redirect_srcmac")).optional = true
 
-sport = s:option(Value, "src_port")
+sport = s:option(Value, "src_port", translate("firewall_redirect_srcport"))
 sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
@@ -46,19 +47,19 @@ proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP+UDP")
 
-dport = s:option(Value, "src_dport")
+dport = s:option(Value, "src_dport", translate("firewall_redirect_srcdport"))
 dport.size = 5
 dport.optional = true
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")
 
-to = s:option(Value, "dest_ip")
+to = s:option(Value, "dest_ip", translate("firewall_redirect_destip"))
 for i, dataset in ipairs(luci.sys.net.arptable()) do
 	to:value(dataset["IP address"])
 end
 
-toport = s:option(Value, "dest_port")
+toport = s:option(Value, "dest_port", translate("firewall_redirect_destport"))
 toport.optional = true
 toport.size = 5
 

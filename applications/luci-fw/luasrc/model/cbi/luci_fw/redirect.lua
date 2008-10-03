@@ -12,13 +12,14 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
-m = Map("firewall", translate("fw_portfw"), translate("fw_portfw1"))
+m = Map("firewall", translate("fw_redirect"), translate("fw_redirect_desc"))
 
 
 s = m:section(TypedSection, "redirect", "")
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
+s.extedit   = luci.dispatcher.build_url("admin", "network", "firewall", "redirect", "%s")
 
 name = s:option(Value, "_name", translate("name"), translate("cbi_optional"))
 name.size = 10
