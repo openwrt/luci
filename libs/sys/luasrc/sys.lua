@@ -547,7 +547,8 @@ function init.names()
 end
 
 --- Test whether the given init script is enabled
--- @return	Boolean indicating whether init is enabled
+-- @param name	Name of the init script
+-- @return		Boolean indicating whether init is enabled
 function init.enabled(name)
 	if luci.fs.access(init.dir..name) then
 		return ( call(init.dir..name.." enabled") == 0 )
@@ -556,7 +557,8 @@ function init.enabled(name)
 end
 
 --- Get the index of he given init script
--- @return	Numeric index value
+-- @param name	Name of the init script
+-- @return		Numeric index value
 function init.index(name)
 	if luci.fs.access(init.dir..name) then
 		return call("source "..init.dir..name.." && exit $START")
@@ -564,7 +566,8 @@ function init.index(name)
 end
 
 --- Enable the given init script
--- @return	Boolean indicating success
+-- @param name	Name of the init script
+-- @return		Boolean indicating success
 function init.enable(name)
 	if luci.fs.access(init.dir..name) then
 		return ( call(init.dir..name.." enable") == 0 )
@@ -572,7 +575,8 @@ function init.enable(name)
 end
 
 --- Disable the given init script
--- @return	Boolean indicating success
+-- @param name	Name of the init script
+-- @return		Boolean indicating success
 function init.disable(name)
 	if luci.fs.access(init.dir..name) then
 		return ( call(init.dir..name.." disable") == 0 )
