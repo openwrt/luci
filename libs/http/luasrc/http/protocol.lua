@@ -131,7 +131,7 @@ function urlencode_params( tbl )
 	return enc
 end
 
---- (Internal function)
+-- (Internal function)
 -- Initialize given parameter and coerce string into table when the parameter
 -- already exists.
 -- @param tbl	Table where parameter should be created
@@ -147,7 +147,7 @@ local function __initval( tbl, key )
 	end
 end
 
---- (Internal function)
+-- (Internal function)
 -- Append given data to given parameter, either by extending the string value
 -- or by appending it to the last string in the parameter's value table.
 -- @param tbl	Table containing the previously initialized parameter value
@@ -163,7 +163,7 @@ local function __appendval( tbl, key, chunk )
 	end
 end
 
---- (Internal function)
+-- (Internal function)
 -- Finish the value of given parameter, either by transforming the string value
 -- or - in the case of multi value parameters - the last element in the
 -- associated values table.
