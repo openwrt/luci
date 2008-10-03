@@ -19,6 +19,10 @@ m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 s = m:section(NamedSection, arg[1], "interface")
 s.addremove = true
 
+back = s:option(DummyValue, "_overview", translate("overview"))
+back.value = ""
+back.titleref = luci.dispatcher.build_url("admin", "network", "network")
+
 p = s:option(ListValue, "proto", translate("protocol"))
 p:value("static", translate("static"))
 p:value("dhcp", "DHCP")

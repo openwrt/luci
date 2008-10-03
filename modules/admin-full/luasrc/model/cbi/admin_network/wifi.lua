@@ -19,6 +19,11 @@ m = Map("wireless", translate("networks"), translate("a_w_networks1"))
 s = m:section(NamedSection, arg[1], "wifi-device", translate("device") .. " " .. arg[1])
 --s.addremove = true
 
+back = s:option(DummyValue, "_overview", translate("overview"))
+back.value = ""
+back.titleref = luci.dispatcher.build_url("admin", "network", "wireless")
+
+
 en = s:option(Flag, "disabled", translate("enable"))
 en.enabled = "0"
 en.disabled = "1"
