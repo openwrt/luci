@@ -573,7 +573,7 @@ end
 
 --- Disable the given init script
 -- @return	Boolean indicating success
-function init.enable(name)
+function init.disable(name)
 	if luci.fs.access(init.dir..name) then
 		return ( call(init.dir..name.." disable") == 0 )
 	end
