@@ -19,7 +19,7 @@ function index()
 		return
 	end
 
-	local page = entry({"admin", "system", "init"}, form("init/init"), translate("initmgr", "Init Scripts"))
+	local page = entry({"admin", "system", "init"}, form("init/init"), luci.i18n.translate("initmgr", "Init Scripts"))
 	page.i18n = "initmgr"
 	page.dependent = true
 end
