@@ -23,7 +23,8 @@ s.anonymous = true
 
 s:option(Flag, "enabled", translate("enabled", "Enable"))
 
-disk = s:option(Value, "disk", translate("disk")).rmempty = true
+disk = s:option(Value, "disk", translate("disk"))
+disk.rmempty = true
 for _, dev in ipairs(luci.fs.glob("/dev/[sh]d[a-z]")) do
 	disk:value(luci.fs.basename(dev))
 end
