@@ -67,7 +67,7 @@ end
 dest = s:option(DummyValue, "dest", translate("fw_dest"))
 function dest.cfgvalue(self, s)
 	return "%s:%s:%s" % {
-		self.map:get(s, "dest") or "*",
+		self.map:get(s, "dest") or translate("device", "device"),
 		self.map:get(s, "dest_ip") or "0.0.0.0/0",
 		self.map:get(s, "dest_port") or "*"
 	} 
