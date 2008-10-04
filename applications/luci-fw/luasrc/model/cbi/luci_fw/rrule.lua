@@ -19,6 +19,7 @@ m = Map("firewall", translate("fw_redirect"), translate("fw_redirect_desc"))
 
 s = m:section(NamedSection, arg[1], "redirect", "")
 s.anonymous = true
+s.addremove = false
 
 back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""

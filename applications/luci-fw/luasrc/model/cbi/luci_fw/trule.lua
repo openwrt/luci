@@ -16,6 +16,7 @@ m = Map("firewall", translate("firewall_rule"), translate("firewall_rule_desc"))
 
 s = m:section(NamedSection, arg[1], "rule", "")
 s.anonymous = true
+s.addremove = false
 
 back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
