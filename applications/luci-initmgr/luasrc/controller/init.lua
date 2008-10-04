@@ -19,7 +19,11 @@ function index()
 		return
 	end
 
-	local page = entry({"admin", "system", "init"}, form("init/init"), luci.i18n.translate("initmgr", "Init Scripts"))
-	page.i18n = "initmgr"
-	page.dependent = true
+	require("luci.i18n")
+	luci.i18n.loadc("initmgr")
+
+	entry(
+		{"admin", "system", "init"}, form("init/init"),
+		luci.i18n.translate("initmgr", "Init Scripts")
+	).i18n = "initmgr"
 end
