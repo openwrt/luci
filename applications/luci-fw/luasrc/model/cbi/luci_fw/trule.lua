@@ -25,12 +25,12 @@ back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "traff
 name = s:option(Value, "_name", translate("name")..translate("cbi_optional"))
 name.rmempty = true
 
-iface = s:option(ListValue, "src", translate("firewall_rule_src"))
+iface = s:option(ListValue, "src", translate("fw_src"))
 iface.rmempty = true
 
-oface = s:option(ListValue, "dest", translate("firewall_rule_dest"))
-oface:value("")
-oface.optional = true
+oface = s:option(ListValue, "dest", translate("fw_dest"))
+oface:value("", translate("device", "device"))
+oface.rmempty = true
 
 luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
