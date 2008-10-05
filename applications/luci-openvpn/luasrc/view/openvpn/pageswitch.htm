@@ -1,0 +1,36 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: value.htm 3333 2008-09-16 10:08:20Z Cyrus $
+
+-%>
+
+<fieldset class="cbi-section">
+	<legend>
+		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn")%>"><%:openvpn_overview Overview%></a> &raquo;
+		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", self.instance)%>"><%=self.instance%></a>
+	</legend>
+
+	<ul><% for _, c in ipairs(self.categories) do %>
+		<li><%=c[1]%><ul><li>
+			<% for i, s in ipairs(c[2]) do %>
+				<% if s == self.csection then %>
+					<strong><%=translate("openvpn_%s" % s, s)%></strong>
+				<% else %>
+					<a href="<%=luci.dispatcher.build_url(
+						"admin", "services", "openvpn", c[1], s, self.instance
+					)%>"><%=translate("openvpn_%s" % s, s)%></a>
+				<% end %>
+				<% if next(c[2], i) then %>|<% end %>
+			<% end %>
+		</li></ul></li>
+	<% end %></ul>
+</fieldset>

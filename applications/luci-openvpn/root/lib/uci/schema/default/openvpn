@@ -1,0 +1,299 @@
+mode m
+Set OpenVPN major mode
+
+local host
+Local host name or IP address for bind
+
+remote host [port]
+Remote host name or IP address
+
+remote-random
+When multiple --remote address/ports are specified, initially randomize the order of the list as a kind of basic load-balancing measure
+
+proto p
+Use protocol p for communicating with remote host
+
+connect-retry n
+For --proto tcp-client, take n as the number of seconds to wait between connection retries (default=5)
+
+connect-retry-max n
+For --proto tcp-client, take n as the number of retries of connection attempt (default=infinite)
+
+auto-proxy
+Try to sense HTTP or SOCKS proxy settings automatically
+
+http-proxy server port [authfile|'auto'] [auth-method]
+Connect to remote host through an HTTP proxy at address server and port port
+
+http-proxy-retry
+Retry indefinitely on HTTP proxy errors
+
+http-proxy-timeout n
+Set proxy timeout to n seconds, default=5
+
+http-proxy-option type [parm]
+Set extended HTTP proxy options
+
+socks-proxy server [port]
+Connect to remote host through a Socks5 proxy at address server and port port (default=1080)
+
+socks-proxy-retry
+Retry indefinitely on Socks proxy errors
+
+resolv-retry n
+If hostname resolve fails for --remote, retry resolve for n seconds before failing
+
+float
+Allow remote peer to change its IP address and/or port number, such as due to DHCP (this is the default if --remote is not used)
+
+ipchange cmd
+Execute shell command cmd when our remote ip-address is initially authenticated or changes
+
+port port
+TCP/UDP port number for both local and remote
+
+lport port
+TCP/UDP port number for bind
+
+rport port
+TCP/UDP port number for remote
+
+bind
+Bind to local address and port
+
+nobind
+Do not bind to local address and port
+
+dev tunX | tapX | null
+TUN/TAP virtual network device ( X can be omitted for a dynamic device
+
+dev-type device-type
+Which device type are we using? device-type should be tun or tap
+
+topology mode
+Configure virtual addressing topology when running in --dev tun mode
+
+tun-ipv6
+Build a tun link capable of forwarding IPv6 traffic
+
+dev-node node
+Explicitly set the device node rather than using /dev/net/tun, /dev/tun, /dev/tap, etc
+
+lladdr address
+Specify the link layer address, more commonly known as the MAC address
+
+iproute cmd
+Set alternate command to execute instead of default iproute2 command
+
+ifconfig l rn
+Set TUN/TAP adapter parameters
+
+ifconfig-noexec
+Don't actually execute ifconfig/netsh commands, instead pass --ifconfig parameters to scripts using environmental variables
+
+ifconfig-nowarn
+Don't output an options consistency check warning if the --ifconfig option on this side of the connection doesn't match the remote side
+
+route network/IP [netmask] [gateway] [metric]
+Add route to routing table after connection is established
+
+route-gateway gw
+Specify a default gateway gw for use with --route
+
+route-metric m
+Specify a default metric m for use with --route
+
+route-delay [n] [w]
+Delay n seconds (default=0) after connection establishment, before adding routes
+
+route-up cmd
+Execute shell command cmd after routes are added, subject to --route-delay
+
+route-noexec
+Don't add or remove routes automatically
+
+route-nopull
+When used with --client or --pull, accept options pushed by server EXCEPT for routes
+
+redirect-gateway flags...
+(Experimental) Automatically execute routing commands to cause all outgoing IP traffic to be redirected over the VPN
+
+link-mtu n
+Sets an upper bound on the size of UDP packets which are sent between OpenVPN peers
+
+tun-mtu n
+Take the TUN device MTU to be n and derive the link MTU from it (default=1500)
+
+tun-mtu-extra n
+Assume that the TUN/TAP device might return as many as n bytes more than the --tun-mtu size on read
+
+mtu-disc type
+Should we do Path MTU discovery on TCP/UDP channel? Only supported on OSes such as Linux that supports the necessary system call to set
+
+mtu-test
+To empirically measure MTU on connection startup, add the --mtu-test option to your configuration
+
+fragment max
+Enable internal datagram fragmentation so that no UDP datagrams are sent which are larger than max bytes
+
+mssfix max
+Announce to TCP sessions running over the tunnel that they should limit their send packet sizes such that after OpenVPN has encapsulated them, the resulting UDP packet size that OpenVPN sends to its peer will not exceed max bytes
+
+sndbuf size
+Set the TCP/UDP socket send buffer size
+
+rcvbuf size
+Set the TCP/UDP socket receive buffer size
+
+socket-flags flags...
+Apply the given flags to the OpenVPN transport socket
+
+txqueuelen n
+(Linux only) Set the TX queue length on the TUN/TAP interface
+
+shaper n
+Limit bandwidth of outgoing tunnel data to n bytes per second on the TCP/UDP port
+
+inactive n [bytes]
+Causes OpenVPN to exit after n seconds of inactivity on the TUN/TAP device
+
+ping n
+Ping remote over the TCP/UDP control channel if no packets have been sent for at least n seconds (specify --ping on both peers to cause ping packets to be sent in both directions since OpenVPN ping packets are not echoed like IP ping packets)
+
+ping-exit n
+Causes OpenVPN to exit after n seconds pass without reception of a ping or other packet from remote
+
+ping-restart n
+Similar to --ping-exit, but trigger a SIGUSR1 restart after n seconds pass without reception of a ping or other packet from remote
+
+keepalive n m
+A helper directive designed to simplify the expression of --ping and --ping-restart in server mode configurations
+
+ping-timer-rem
+Run the --ping-exit / --ping-restart timer only if we have a remote address
+
+persist-tun
+Don't close and reopen TUN/TAP device or run up/down scripts across SIGUSR1 or --ping-restart restarts
+
+persist-key
+Don't re-read key files across SIGUSR1 or --ping-restart
+
+persist-local-ip
+Preserve initially resolved local IP address and port number across SIGUSR1 or --ping-restart restarts
+
+persist-remote-ip
+Preserve most recently authenticated remote IP address and port number across SIGUSR1 or --ping-restart restarts
+
+mlock
+Disable paging by calling the POSIX mlockall function
+
+up cmd
+Shell command to run after successful TUN/TAP device open (pre --user UID change)
+
+up-delay
+Delay TUN/TAP open and possible --up script execution until after TCP/UDP connection establishment with peer
+
+down cmd
+Shell command to run after TUN/TAP device close (post --user UID change and/or --chroot )
+
+down-pre
+Call --down cmd/script before, rather than after, TUN/TAP close
+
+up-restart
+Enable the --up and --down scripts to be called for restarts as well as initial program start
+
+setenv name value
+Set a custom environmental variable name=value to pass to script
+
+setenv-safe name value
+Set a custom environmental variable OPENVPN_name=value to pass to script
+
+disable-occ
+Don't output a warning message if option inconsistencies are detected between peers
+
+user user
+Change the user ID of the OpenVPN process to user after initialization, dropping privileges in the process
+
+group group
+Similar to the --user option, this option changes the group ID of the OpenVPN process to group after initialization
+
+cd dir
+Change directory to dir prior to reading any files such as configuration files, key files, scripts, etc
+
+chroot dir
+Chroot to dir after initialization
+
+#daemon [progname]
+#Become a daemon after all initialization functions are completed
+
+#syslog [progname]
+#Direct log output to system logger, but do not become a daemon
+
+passtos
+Set the TOS field of the tunnel packet to what the payload's TOS is
+
+inetd [wait|nowait] [progname]
+Use this option when OpenVPN is being run from the inetd or xinetd(8) server
+
+log file
+Output logging messages to file, including output to stdout/stderr which is generated by called scripts
+
+log-append file
+Append logging messages to file
+
+suppress-timestamps
+Avoid writing timestamps to log messages, even when they otherwise would be prepended
+
+writepid file
+Write OpenVPN's main process ID to file
+
+nice n
+Change process priority after initialization ( n greater than 0 is lower priority, n less than zero is higher priority)
+
+fast-io
+(Experimental) Optimize TUN/TAP/UDP I/O writes by avoiding a call to poll/epoll/select prior to the write operation
+
+echo [parms...]
+Echo parms to log output
+
+remap-usr1 signal
+Control whether internally or externally generated SIGUSR1 signals are remapped to SIGHUP (restart without persisting state) or SIGTERM (exit)
+
+verb n
+Set output verbosity to n (default=1)
+
+status file [n]
+Write operational status to file every n seconds
+
+status-version [n]
+Choose the status file format version number
+
+mute n
+Log at most n consecutive messages in the same category
+
+comp-lzo [mode]
+Use fast LZO compression -- may add up to 1 byte per packet for incompressible data
+
+comp-noadapt
+When used in conjunction with --comp-lzo, this option will disable OpenVPN's adaptive compression algorithm
+
+management IP port [pw-file]
+Enable a TCP server on IP:port to handle daemon management functions
+
+management-query-passwords
+Query management channel for private key password and --auth-user-pass username/password
+
+management-forget-disconnect
+Make OpenVPN forget passwords when management session disconnects
+
+management-hold
+Start OpenVPN in a hibernating state, until a client of the management interface explicitly starts it with the hold release command
+
+management-signal
+Send SIGUSR1 signal to OpenVPN if management session disconnects
+
+management-log-cache n
+Cache the most recent n lines of log file history for usage by the management channel
+
+plugin module-pathname [init-string]
+Load plug-in module from the file module-pathname, passing init-string as an argument to the module initialization function
