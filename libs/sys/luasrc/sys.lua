@@ -559,7 +559,7 @@ end
 -- @return	Numeric index value
 function init.index(name)
 	if luci.fs.access(init.dir..name) then
-		return call("source "..init.dir..name.." && exit $START")
+		return call("source "..init.dir..name.."; exit $START")
 	end
 end
 
@@ -567,7 +567,7 @@ end
 -- @return	Boolean indicating success
 function init.enable(name)
 	if luci.fs.access(init.dir..name) then
-		return ( call(init.dir..name.." enable") == 0 )
+		return ( call(init.dir..name.." enable") == 1 )
 	end
 end
 

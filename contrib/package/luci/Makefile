@@ -418,6 +418,16 @@ define Package/luci-app-tinyproxy/install
         $(call Package/luci/install/template,$(1),applications/luci-tinyproxy)
 endef
 
+define Package/luci-app-initmgr
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full
+  TITLE:=LuCI Initscript Management
+endef
+
+define Package/luci-app-initmgr/install
+        $(call Package/luci/install/template,$(1),applications/luci-initmgr)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -587,6 +597,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-tinyproxy),)
        PKG_SELECTED_MODULES+=applications/luci-tinyproxy
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-initmgr),)
+       PKG_SELECTED_MODULES+=applications/luci-initmgr
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -655,6 +668,7 @@ $(eval $(call BuildPackage,luci-app-p910nd))
 $(eval $(call BuildPackage,luci-app-ushare))
 $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
+$(eval $(call BuildPackage,luci-app-initmgr))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 
