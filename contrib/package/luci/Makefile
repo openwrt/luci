@@ -492,6 +492,16 @@ define Package/luci-i18n-russian/install
 endef
 
 
+define Package/luci-i18n-portuguese_brazilian
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Portuguese (Brazilian) (by Carlos Cesario)
+endef
+
+define Package/luci-i18n-portuguese_brazilian/install
+	$(call Package/luci/install/template,$(1),i18n/portuguese_brazilian)
+endef
+
+
 
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
@@ -602,6 +612,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-russian),)
 	PKG_SELECTED_MODULES+=i18n/russian
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-portuguese_brazilian),)
+	PKG_SELECTED_MODULES+=i18n/portuguese_brazilian
+endif
 
 
 MAKE_FLAGS += \
@@ -652,3 +665,4 @@ $(eval $(call BuildPackage,luci-i18n-german))
 $(eval $(call BuildPackage,luci-i18n-english))
 $(eval $(call BuildPackage,luci-i18n-french))
 $(eval $(call BuildPackage,luci-i18n-russian))
+$(eval $(call BuildPackage,luci-i18n-portuguese_brazilian))
