@@ -19,7 +19,7 @@ function cbi_d_add(field, dep, next) {
 				"deps": []
 			};
 			cbi_d.unshift(entry);
-		}	
+		}
 		entry.deps.push(dep)
 	}
 }
@@ -27,17 +27,17 @@ function cbi_d_add(field, dep, next) {
 function cbi_d_checkvalue(target, ref) {
 	var t = document.getElementById(target);
 	var value;
-	
+
 	if (!t || !t.value) {
 		value = "";
 	} else {
 		value = t.value;
-		
+
 		if (t.type == "checkbox") {
 			value = t.checked ? value : "";
 		}
 	}
-	
+
 	return (value == ref)
 }
 
@@ -50,7 +50,7 @@ function cbi_d_check(deps) {
 		if (istat) {
 			return true
 		}
-	}		
+	}
 }
 
 function cbi_d_update() {
@@ -69,7 +69,7 @@ function cbi_d_update() {
 				parent.appendChild(entry.node);
 			} else {
 				next.parentNode.insertBefore(entry.node, next);
-			}		
+			}
 			state = (state || (node && node.parentNode))
 		}
 	}
@@ -100,16 +100,17 @@ function cbi_bind(obj, type, callback, mode) {
 }
 
 function cbi_combobox(id, values, def, man) {
-	var selid = "cbi.combobox." + id
+	var selid = "cbi.combobox." + id;
 	if (document.getElementById(selid)) {
 		return
 	}
 
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
-	sel.id = selid
+	sel.id = selid;
+	sel.className = 'cbi-input-select';
 	if (obj.nextSibling) {
-		obj.parentNode.insertBefore(sel, obj.nextSibling);	
+		obj.parentNode.insertBefore(sel, obj.nextSibling);
 	} else {
 		obj.parentNode.appendChild(sel);
 	}
