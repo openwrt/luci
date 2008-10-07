@@ -1,0 +1,15 @@
+Index: boa-0.94.13/src/request.c
+===================================================================
+--- boa-0.94.13.orig/src/request.c	2008-06-29 01:11:52.000000000 +0200
++++ boa-0.94.13/src/request.c	2008-10-07 18:10:59.000000000 +0200
+@@ -281,6 +281,10 @@
+     if (req->script_name)
+         free(req->script_name);
+ 
++#ifdef ACCEPT_ON
++    req->accept[0] = '\0';
++#endif
++
+     if ((req->keepalive == KA_ACTIVE) &&
+         (req->response_status < 500) && req->kacount > 0) {
+         int bytes_to_move;
