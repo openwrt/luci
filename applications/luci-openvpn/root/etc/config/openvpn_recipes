@@ -62,7 +62,7 @@ config openvpn_recipe client_tun
 #
 # Multi-client ethernet bridge server
 #
-config openvpn_recipe server_tun
+config openvpn_recipe server_tap_bridge
 	option _description	"Server configuration for an ethernet bridge VPN"
 	option _role		"server"
 	option dev			"tap"
@@ -79,7 +79,7 @@ config openvpn_recipe server_tun
 #
 # Ethernet bridge client
 #
-config openvpn_recipe client_tun
+config openvpn_recipe client_tap_bridge
 	option _description	"Client configuration for an ethernet bridge VPN"
 	option _role		"client"
 	option client		"1"
