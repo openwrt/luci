@@ -49,7 +49,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <script type="text/javascript" src="<%=media%>/Dropdowns.js"></script>
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 </head>
-<body class="lang_<%=luci.config.main.lang%>">
+<body class="lang_<%=luci.i18n.context.lang%>">
 
 <p class="skiplink">
 <span id="skiplink1"><a href="#navigation"><%:skiplink1 Skip to navigation%></a></span>

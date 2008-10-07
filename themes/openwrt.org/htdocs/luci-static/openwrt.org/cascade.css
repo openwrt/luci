@@ -2,6 +2,7 @@
 
 @media all {
 
+html,
 body {
 	background-color: #4a6b7c;
 	background-image: url(bg.jpg);
@@ -9,8 +10,11 @@ body {
 	background-attachment: fixed;
 	background-repeat: repeat-x;
 	color: #ffffff;
+}
+
+body {
 	font-family: Verdana, Arial, sans-serif;
-	font-size: 100%;
+	font-size: 101%;
 	line-height: 100%;
 }
 
@@ -49,6 +53,7 @@ code {
 
 .warning {
 	color: red;
+	background-color: white;
 	font-weight: bold;
 }
 
@@ -70,6 +75,7 @@ code {
 
 .error {
 	color: #ff0000;
+	background-color: white;
 }
 
 #header {
@@ -78,6 +84,7 @@ code {
 	background-repeat: no-repeat;
 	background-position: left center;
 	background-color: #557788;
+	color: #ffffff;
 	text-align: right;
 }
 
@@ -197,6 +204,11 @@ ul.dropdowns ul ul ul li:hover ul {
 	color: #ffffff;
 }
 
+#menubar .warning {
+	color: red;
+	background-color: #557788;
+}
+
 #menubar ul.dropdowns {
 	min-height: 1.8em;
 	background: #000000;
@@ -217,6 +229,7 @@ ul.dropdowns ul ul ul li:hover ul {
 
 html #menubar a:link,
 html #menubar a:visited {
+	position: relative;
 	display: block;
 	padding: 0.5em;
 	background: #000000;
@@ -260,6 +273,21 @@ html #menubar a:visited.warning {
 	font-weight: bold;
 }
 
+.lang_de #submenu_mini_system { min-width: 13.3em; }
+* html .lang_de #submenu_mini_system { width: 13.3em; }
+
+.lang_pt-br #submenu_mini_network { min-width: 14em; }
+* html .lang_pt-br #submenu_mini_network { width: 14em; }
+
+.lang_pt-br #submenu_mini_system { min-width: 11.5em; }
+* html .lang_pt-br #submenu_mini_system { width: 11.5em; }
+
+.lang_ru #submenu_mini_system { min-width: 18em; }
+* html .lang_ru #submenu_mini_system { width: 18em; }
+
+.lang_pt-br #submenu_admin_index { min-width: 11em; }
+* html .lang_pt-br #submenu_admin_index { width: 11em; }
+
 .lang_ru #submenu_admin_index { min-width: 15.5em; }
 * html .lang_ru #submenu_admin_index { width: 15.5em; }
 
@@ -272,11 +300,17 @@ html #menubar a:visited.warning {
 .lang_fr #submenu_admin_system { min-width: 14.5em; }
 * html .lang_fr #submenu_admin_system { width: 14.5em; }
 
+.lang_pt-br #submenu_admin_system { min-width: 11.5em; }
+* html .lang_pt-br #submenu_admin_system { width: 11.5em; }
+
 .lang_ru #submenu_admin_system { min-width: 18em; }
 * html .lang_ru #submenu_admin_system { width: 18em; }
 
 #submenu_admin_services_chillispot { min-width: 15.5em; }
 * html #submenu_admin_services_chillispot { width: 15.5em; }
+
+#submenu_admin_services_coovachilli { min-width: 15em; }
+* html #submenu_admin_services_coovachilli { width: 15em; }
 
 .lang_ru #submenu_admin_network_routes { min-width: 15.3em; }
 * html .lang_ru #submenu_admin_network_routes { width: 15.3em; }
@@ -286,6 +320,9 @@ html #menubar a:visited.warning {
 
 .lang_de #submenu_admin_network_firewall { min-width: 16.5em; }
 * html .lang_de #submenu_admin_network_firewall { width: 16.5em; }
+
+.lang_pt-br #submenu_admin_network_firewall { min-width: 15em; }
+* html .lang_pt-br #submenu_admin_network_firewall { width: 15em; }
 
 #modemenu {
 	width: auto;
@@ -326,13 +363,13 @@ html #menubar a:visited.warning {
 	font-size: 80%;
 }
 
-#maincontent h1 {
+#maincontent h2 {
 	margin: 0.25em 0 0.5em 0;
 	font-size: 150%;
 	font-weight: normal;
 }
 
-#maincontent h2 {
+#maincontent h3 {
 	margin: 0.5em 0;
 	font-size: 120%;
 	font-weight: normal;
@@ -348,6 +385,7 @@ html #menubar a:visited.warning {
 	padding: 0.5em 1em;
 	border: 1px dotted #555555;
 	background-color: #ffffff;
+	color: #000000;
 }
 
 .cbi-section legend {
@@ -355,6 +393,17 @@ html #menubar a:visited.warning {
 	font-weight: bold;
 	height: 1em;
 	padding: 0 0.25em;
+	background-color: transparent;
+	color: #555555;
+}
+
+*+html .cbi-section legend {
+	background-color: #ffffff;
+	color: #555555;
+}
+
+* html .cbi-section legend {
+	background-color: #ffffff;
 	color: #555555;
 }
 
@@ -365,6 +414,7 @@ html #menubar a:visited.warning {
 .cbi-section h3 {
 	height:	1.5em;
 	font-size: 90%;
+	background-color: #ffffff;
 	color: #555555;
 }
 
@@ -387,8 +437,7 @@ ul.cbi-apply {
 
 input[type=submit],
 input[type=reset],
-input[type=image],
-label {
+input[type=image] {
 	cursor: pointer;
 }
 
@@ -413,6 +462,7 @@ select:hover,
 textarea:focus,
 textarea:hover {
 	background-color: #ffffff;
+	color: #000000;
 }
 
 select,
@@ -430,24 +480,28 @@ td input[type=password] {
 input.cbi-input-user {
 	background: url('../resources/cbi/user.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 }
 
 input.cbi-input-key {
 	background: url('../resources/cbi/key.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 }
 
 input.cbi-input-find {
 	background: url('../resources/cbi/find.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 }
 
 input.cbi-input-reload {
 	background: url('../resources/cbi/reload.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 }
 
@@ -455,6 +509,7 @@ input.cbi-input-add,
 input.cbi-button-add {
 	background: url('../resources/cbi/add.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
 }
@@ -463,6 +518,7 @@ input.cbi-input-fieldadd,
 input.cbi-button-fieldadd {
 	background: url(../resources/cbi/fieldadd.gif) no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
 }
@@ -471,6 +527,7 @@ input.cbi-input-reset,
 input.cbi-button-reset {
 	background: url('../resources/cbi/reset.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
 }
@@ -479,6 +536,7 @@ input.cbi-input-save,
 input.cbi-button-save {
 	background: url('../resources/cbi/save.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
 }
@@ -487,6 +545,7 @@ input.cbi-input-apply,
 input.cbi-button-apply {
 	background: url('../resources/cbi/apply.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
 }
@@ -495,6 +554,7 @@ input.cbi-input-remove,
 div.cbi-section-remove input {
 	background: url('../resources/cbi/remove.gif') no-repeat scroll 1px center;
 	background-color: inherit;
+	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
 }
@@ -516,6 +576,7 @@ form > div > input[type=reset] {
 
 table.smalltext {
 	background: #f5f5f5;
+	color: #000000;
 	border-top: 1px solid #666666;
 	border-right: 1px solid #666666;
 	border-bottom: 1px solid #666666;
@@ -528,6 +589,7 @@ table.smalltext {
 
 table.smalltext tr:hover td {
 	background-color: #bbddee;
+	color: #000000;
 }
 
 table.smalltext tr th {
@@ -542,12 +604,18 @@ table.smalltext tr td {
 	border-left: 1px solid #666666;
 }
 
-.cbi-rowstyle-1 {
+table.cbi-section-table .cbi-rowstyle-1,
+table.cbi-section-table .cbi-rowstyle-1 * {
 	background-color: #eeeeff;
+	color: #000000;
+}
+
+.cbi-section .cbi-rowstyle-1 h3 {
+	background-color: #eeeeff;
+	color: #555555;
 }
 
 .cbi-rowstyle-2 {
-
 }
 
 div.cbi-value {
@@ -559,10 +627,7 @@ div.cbi-value {
 
 div.cbi-value:hover {
 	background: #f8f8f8;
-}
-
-div.cbi-value:last-child {
-	border: none;
+	color: #000000;
 }
 
 .cbi-value-title {
@@ -572,7 +637,8 @@ div.cbi-value:last-child {
 
 div.cbi-value-field {
 	width: 58%;
-	margin: 0.25em 0 0.25em 40%;
+	margin-left: 40%;
+	padding: 0.25em 0;
 }
 
 div.cbi-value-description {
@@ -590,8 +656,8 @@ div.cbi-map-descr {
 }
 
 div.cbi-optionals {
-	margin: 0.5em 0;
-	padding: 0 0.25em;
+	padding: 0.25em;
+	border-bottom: 1px dotted #bbbbbb;
 }
 
 div.cbi-section-remove {
@@ -600,8 +666,16 @@ div.cbi-section-remove {
 
 .cbi-section-node {
 	clear: both;
-	border: 1px dotted #bbbbbb;
+	border-top: 1px dotted #bbbbbb;
+	border-left: 1px dotted #bbbbbb;
+	border-right: 1px dotted #bbbbbb;
+	border-bottom: none;
 	padding-bottom: 0;
+}
+
+.cbi-section-node table div {
+	padding-bottom: 0;
+	border-bottom: none;
 }
 
 .cbi-section-node div.cbi-section-table-row {
@@ -635,21 +709,23 @@ td.cbi-section-table-optionals {
 div.cbi-error {
 	font-size: 95%;
 	font-weight: bold;
-	color: #FF0000;
+	color: #ff0000;
+	background-color: #ffffff;
 }
 
 td.cbi-value-error {
-	border-color: red !important;
+	border-color: red;
 }
 
 .cbi-value-error input,
 .cbi-value-error select {
-	color: red !important;
-	background-color: #FFCCCC;
+	color: red;
+	background-color: #ffcccc;
 }
 
 .cbi-section-error {
 	color: red;
+	background-color: white;
 	font-size: 95%;
 	border: 1px dotted red;
 	margin: 3px;
@@ -669,6 +745,7 @@ td.cbi-value-error {
 
 .luci a:link,
 .luci a:visited {
+	background-color: transparent;
 	color: #666666;
 	text-decoration: none;
 	font-size: 70%;
@@ -680,34 +757,39 @@ td.cbi-value-error {
 
 .error500 {
 	white-space: normal;
-	border: 1px dotted #FF0000;
-	background-color: #FFFFFF;
+	border: 1px dotted #ff0000;
+	background-color: #ffffff;
+	color: #000000;
 	padding: 0.5em;
 }
 
 #memorybar {
-	width:200px;
-	height:8px;
-	border:1px solid #bbb;
-	background-color:red
+	width: 200px;
+	height: 8px;
+	border: 1px solid #bbb;
+	color: black;
+	background-color: red;
 }
 
 #memfree, #membuffers, #memcached {
-	float:right;
-	border:1px solid #bbb;
-	height:6px;
+	float: right;
+	border: 1px solid #bbb;
+	height: 6px;
 }
 
 #memfree {
 	background-color: green;
+	color: black;
 }
 
 #membuffers {
 	background-color: yellow;
+	color: black;
 }
 
 #memcached {
-	background-color: orange;
+	background-color: #ffa500;
+	color: black;
 }
 
 
