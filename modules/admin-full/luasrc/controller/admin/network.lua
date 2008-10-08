@@ -94,4 +94,11 @@ function index()
 	 i18n("a_n_routes_static")
 	)
 
+	entry(
+		{"admin", "network", "conntrack"},
+		form("admin_network/conntrack"),
+		i18n("a_n_conntrack"),
+		60
+	)
+
 end
