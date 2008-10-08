@@ -41,28 +41,17 @@ end
 
 -- Internal parser function
 local function _parselist(rawdata)	
-	if type(rawdata) ~= "string" then
+	if type(rawdata) ~= "function" then
 		error("IPKG: Invalid rawdata given")
 	end
 	
-	rawdata = util.split(rawdata) 
 	local data = {}
 	local c = {}
 	local l = nil
 	
-	for k, line in pairs(rawdata) do
+	for line in rawdata do
 		if line:sub(1, 1) ~= " " then
-			local split = util.split(line, ":", 1)
-			local key = nil
-			local val = nil
-			
-			if split[1] then
-				key = util.trim(split[1])
-			end
-			
-			if split[2] then
-				val = util.trim(split[2])
-			end
+			local key, val = line:match("(.-): ?(.*)%s*")
 			
 			if key and val then
 				if key == "Package" then
@@ -70,7 +59,7 @@ local function _parselist(rawdata)
 					data[val] = c
 				elseif key == "Status" then
 					c.Status = {}
-					for i, j in pairs(util.split(val, " ")) do
+					for j in val:gmatch("([^ ]+)") do
 						c.Status[j] = true
 					end
 				else
@@ -80,7 +69,7 @@ local function _parselist(rawdata)
 			end
 		else
 			-- Multi-line field
-			c[l] = c[l] .. "\n" .. line:sub(2)
+			c[l] = c[l] .. "\n" .. line
 		end
 	end
 	
@@ -94,7 +83,7 @@ local function _lookup(act, pkg)
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
 	
-	return _parselist(util.exec(cmd .. " 2>/dev/null"))
+	return _parselist(util.execi(cmd .. " 2>/dev/null"))
 end
 
 
