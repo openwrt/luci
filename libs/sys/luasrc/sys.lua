@@ -264,7 +264,7 @@ end
 function net.conntrack()
 	local connt = {}
 	if luci.fs.access("/proc/net/nf_conntrack") then
-		for line in io.lines("/tmp/nf_conntrack") do
+		for line in io.lines("/proc/net/nf_conntrack") do
 			local entry = _parse_mixed_record(line, " +")
 			entry.layer3 = entry[1]
 			entry.layer4 = entry[2]
