@@ -163,6 +163,8 @@ dhcp_dnsmasq_dhcpleasemax = '<abbr title="maximal">max.</abbr> <abbr title="Dyna
 dhcp_dnsmasq_addnhosts = 'additional hostfile'
 dhcp_dnsmasq_queryport = 'query port'
 a_n_switch = 'Switch'
+a_n_conntrack = 'Active Connections'
+a_n_conntrack_desc = 'This page gives an overview over currently active network connections.'
 a_n_routes = 'Routes'
 a_network1 = 'In this area you find all network-related settings.'
 a_network2 = 'On most routers the network switch can be freely configured and splitted up into several <abbr title="Virtual Local Area Network">VLAN</abbr>s.'

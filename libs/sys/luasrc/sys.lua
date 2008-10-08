@@ -259,6 +259,38 @@ function net.arptable()
 	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+")
 end
 
+--- Returns conntrack information
+-- @return	Table with the currently tracked IP connections
+function net.conntrack()
+	local connt = {}
+	if luci.fs.access("/proc/net/nf_conntrack") then
+		for line in io.lines("/proc/net/nf_conntrack") do
+			local entry = _parse_mixed_record(line, " +")
+			entry.layer3 = entry[1]
+			entry.layer4 = entry[2]
+			for i=1, #entry do
+				entry[i] = nil
+			end
+
+			connt[#connt+1] = entry
+		end
+	elseif luci.fs.access("/proc/net/ip_conntrack") then
+		for line in io.lines("/proc/net/nf_conntrack") do
+			local entry = _parse_mixed_record(line, " +")
+			entry.layer3 = "ipv4"
+			entry.layer4 = entry[1]
+			for i=1, #entry do
+				entry[i] = nil
+			end
+
+			connt[#connt+1] = entry
+		end
+	else
+		return nil
+	end
+	return connt
+end
+
 --- Determine the current default route.
 -- @return	Table with the properties of the current default route.
 --			The following fields are defined:
@@ -610,11 +642,12 @@ function _parse_delimited_table(iter, delimiter)
 	return data
 end
 
-function _parse_mixed_record(cnt)
+function _parse_mixed_record(cnt, delimiter)
+	delimiter = delimiter or "  "
 	local data = {}
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n")) do
-    	for j, f in pairs(luci.util.split(luci.util.trim(l), "  ")) do
+		for j, f in pairs(luci.util.split(luci.util.trim(l), delimiter, nil, true)) do
         	local k, x, v = f:match('([^%s][^:=]+) *([:=]*) *"*([^\n"]*)"*')
 
             if k then
