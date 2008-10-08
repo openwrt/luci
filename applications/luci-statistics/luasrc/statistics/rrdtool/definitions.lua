@@ -297,14 +297,14 @@ function Instance.__init__( self, ... )
 			"LINE1:rsp_avg#" .. self.palette.FullGreen .. ":Responses",
 			"GPRINT:rsp_avg:AVERAGE:%5.1lf%s Avg,",
 			"GPRINT:rsp_max:MAX:%5.1lf%s Max,",
-			"GPRINT:rsp_avg:LAST:%5.1lf%s Last\\l",
-			"GPRINT:rsp_avg_sum:LAST:(ca. %5.1lf%sB Total)",
+			"GPRINT:rsp_avg:LAST:%5.1lf%s Last",
+			"GPRINT:rsp_avg_sum:LAST:(ca. %5.1lf%sB Total)\\l",
 			"LINE1:qry_avg#" .. self.palette.FullBlue .. ":Queries  ",
-			#"GPRINT:qry_min:MIN:%5.1lf %s Min,",
+			"GPRINT:qry_min:MIN:%5.1lf %s Min,",
 			"GPRINT:qry_avg:AVERAGE:%5.1lf%s Avg,",
 			"GPRINT:qry_max:MAX:%5.1lf%s Max,",
-			"GPRINT:qry_avg:LAST:%5.1lf%s Last\\l",
-			"GPRINT:qry_avg_sum:LAST:(ca. %5.1lf%sB Total)"
+			"GPRINT:qry_avg:LAST:%5.1lf%s Last",
+			"GPRINT:qry_avg_sum:LAST:(ca. %5.1lf%sB Total)\\l"
 		},
 
 		dns_opcode = {
