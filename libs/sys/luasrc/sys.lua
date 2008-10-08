@@ -275,7 +275,7 @@ function net.conntrack()
 			connt[#connt+1] = entry
 		end
 	elseif luci.fs.access("/proc/net/ip_conntrack") then
-		for line in io.lines("/proc/net/nf_conntrack") do
+		for line in io.lines("/proc/net/ip_conntrack") do
 			local entry = _parse_mixed_record(line, " +")
 			entry.layer3 = "ipv4"
 			entry.layer4 = entry[1]
