@@ -9,28 +9,31 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: value.htm 3333 2008-09-16 10:08:20Z Cyrus $
+$Id$
 
 -%>
 
 <fieldset class="cbi-section">
 	<legend>
 		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn")%>"><%:openvpn_overview Overview%></a> &raquo;
-		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", self.instance)%>"><%=self.instance%></a>
+		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", self.mode, self.instance)%>"><%=self.instance%></a>
 	</legend>
 
-	<ul><% for _, c in ipairs(self.categories) do %>
-		<li><%=c[1]%><ul><li>
-			<% for i, s in ipairs(c[2]) do %>
-				<% if s == self.csection then %>
-					<strong><%=translate("openvpn_%s" % s, s)%></strong>
-				<% else %>
-					<a href="<%=luci.dispatcher.build_url(
-						"admin", "services", "openvpn", c[1], s, self.instance
-					)%>"><%=translate("openvpn_%s" % s, s)%></a>
-				<% end %>
-				<% if next(c[2], i) then %>|<% end %>
+	<% if self.mode == "basic" then %>
+		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "advanced", self.instance)%>"><%:openvpn_switch_advanced Switch to advanced configuration &raquo;%></a>
+	<% else %>
+		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "basic", self.instance)%>"><%:openvpn_switch_basic &laquo; Switch to basic configuration%></a>
+		<hr style="margin:0.5em 0" />
+		<%:openvpn_confcategory Configuration category%>:
+		<% for i, c in ipairs(self.categories) do %>
+			<% if c == self.category then %>
+				<strong><%=translate("openvpn_%s" % c, c)%></strong>
+			<% else %>
+				<a href="<%=luci.dispatcher.build_url(
+					"admin", "services", "openvpn", "advanced", self.instance, c
+				)%>"><%=translate("openvpn_%s" % c, c)%></a>
 			<% end %>
-		</li></ul></li>
-	<% end %></ul>
+			<% if next(self.categories, i) then %>|<% end %>
+		<% end %>
+	<% end %>
 </fieldset>
