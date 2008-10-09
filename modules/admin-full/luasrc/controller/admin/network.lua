@@ -22,6 +22,7 @@ function index()
 	page.target = alias("admin", "network", "network")
 	page.title  = i18n("network")
 	page.order  = 50
+	page.index  = true
 
 	local page  = node("admin", "network", "vlan")
 	page.target = cbi("admin_network/vlan")
@@ -33,6 +34,7 @@ function index()
 	page.title  = i18n("wifi")
 	page.i18n   = "wifi"
 	page.order  = 15
+	page.subindex = true
 	uci:foreach("wireless", "wifi-device",
 		function (section)
 			local ifc = section[".name"]
@@ -51,6 +53,7 @@ function index()
 	page.target = cbi("admin_network/network")
 	page.title  = i18n("interfaces", "Schnittstellen")
 	page.order  = 10
+	page.subindex = true
 	uci:foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
@@ -70,6 +73,7 @@ function index()
 	page.target = cbi("admin_network/dhcp")
 	page.title  = "DHCP"
 	page.order  = 30
+	page.subindex = true
 
 	entry(
 	 {"admin", "network", "dhcp", "leases"},

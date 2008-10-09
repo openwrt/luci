@@ -19,6 +19,8 @@ function index()
 	local page  = node()
 	page.lock   = true
 	page.target = alias("freifunk")
+	page.subindex = true
+	page.index = false
 
 	local page    = node("freifunk")
 	page.title    = "Freifunk"
@@ -27,11 +29,13 @@ function index()
 	page.setuser  = "nobody"
 	page.setgroup = "nogroup"
 	page.i18n     = "freifunk"
+	page.index    = true
 	
 	local page  = node("freifunk", "index")
 	page.target = template("freifunk/index")
 	page.title  = "Übersicht"
 	page.order  = 10
+	page.indexignore = true
 	
 	local page  = node("freifunk", "index", "contact")
 	page.target = template("freifunk/contact")

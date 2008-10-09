@@ -12,6 +12,7 @@ function index()
 	page.target = call("action_index")
 	page.title  = "OLSR"
 	page.i18n   = "olsr"
+	page.subindex = true
 
 	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
@@ -33,15 +34,17 @@ function index()
 	page.title  = "MID"
 	page.order  = 50
 
-	entry(
+	local ol = entry(
 		{"admin", "services", "olsrd"},
 		cbi("olsr/olsrd"), "OLSR"
-	).i18n = "olsr"
+	)
+	ol.i18n = "olsr"
+	ol.subindex = true
 
 	entry(
 		{"admin", "services", "olsrd", "hna"},
 		cbi("olsr/olsrdhna"), "HNA Announcements"
-	).i18n = "olsr"
+	)
 
 	oplg = entry(
 		{"admin", "services", "olsrd", "plugins"},
@@ -49,6 +52,7 @@ function index()
 	)
 	oplg.i18n = "olsr"
 	oplg.leaf = true
+	oplg.subindex = true
 
 	local uci = require("luci.model.uci").cursor()
 	uci:foreach("olsrd", "LoadPlugin",

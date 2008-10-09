@@ -26,6 +26,7 @@ function index()
 	page.target = template("admin_services/index")
 	page.title  = i18n("services", "Dienste")  
 	page.order  = 40
+	page.index  = true
 	
 	local page  = node("admin", "services", "httpd")
 	page.target = cbi("admin_services/httpd")
