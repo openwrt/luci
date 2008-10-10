@@ -167,3 +167,13 @@ function cbi_combobox_init(id, values, def, man) {
 	});
 	cbi_combobox(id, values, def, man);
 }
+
+function cbi_filebrowser(id, url, defpath) {
+	var field   = document.getElementById(id);
+	var browser = window.open(
+		url + ( field.value || defpath || '' ) + '?field=' + id,
+		"luci_filebrowser", "width=300,height=400,left=100,top=200,scrollbars=yes"
+	);
+
+	browser.focus();
+}

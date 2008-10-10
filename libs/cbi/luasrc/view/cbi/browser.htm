@@ -1,0 +1,23 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%
+	local t = require("luci.tools.webadmin")
+	local v = self:cfgvalue(section)
+-%>
+<%+cbi/valueheader%>
+	<input class="cbi-input-text" type="text"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
+	<input class="cbi-input-image" type="image" value="<%:cbi_browser%>" onclick="cbi_filebrowser('<%=cbid%>','<%=luci.dispatcher.build_url("admin", "filebrowser")%>'<%=self.default_path and ", '"..self.default_path.."'"%>);return false" alt="<%:cbi_browser%>" title="<%:cbi_browser%>" src="<%=resource%>/cbi/folder.png" style="vertical-align:bottom" />
+<%+cbi/valuefooter%>

@@ -1395,6 +1395,12 @@ function FileUpload.__init__(self, ...)
 	end
 end
 
+function FileUpload.formcreated(self, section)
+	return AbstractValue.formcreated(self, section) or
+		luci.http.formvalue("cbi.rlf."..section.."."..self.option) or
+		luci.http.formvalue("cbi.rlf."..section.."."..self.option..".x")
+end
+
 function FileUpload.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
 	if val and luci.fs.access(val) then
@@ -1421,4 +1427,12 @@ function FileUpload.remove(self, section)
 	local val = AbstractValue.formvalue(self, section)
 	if val and luci.fs.access(val) then luci.fs.unlink(val) end
 	return AbstractValue.remove(self, section)
+end
+
+
+FileBrowser = class(AbstractValue)
+
+function FileBrowser.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template = "cbi/browser"
 end
