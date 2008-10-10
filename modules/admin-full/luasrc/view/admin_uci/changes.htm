@@ -13,6 +13,11 @@ $Id$
 
 -%>
 <%+header%>
+<div>
+<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+<br />
+<br />
+</div>
 <h2><a id="content" name="content"><%:config%></a></h2>
 <h3><%:changes%></h3>
 <code><%=changes%></code>
@@ -26,4 +31,9 @@ $Id$
 <form class="inline" method="get" action="<%=controller%>/admin/uci/revert">
 	<input type="submit" value="<%:revert%>" />
 </form>
+
+<div>
+<br />
+<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+</div>
 <%+footer%>

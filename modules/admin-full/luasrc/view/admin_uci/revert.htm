@@ -13,7 +13,17 @@ $Id$
 
 -%>
 <%+header%>
+<div>
+<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+<br />
+<br />
+</div>
 <h2><a id="content" name="content"><%:config%></a></h2>
 <p><%:uci_reverted%>:</p>
 <code><%=(changes or "-")%></code>
+<div>
+<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+<br />
+<br />
+</div>
 <%+footer%>
