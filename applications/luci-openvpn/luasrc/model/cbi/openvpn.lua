@@ -20,8 +20,8 @@ require("luci.model.uci")
 
 local uci = luci.model.uci.cursor()
 
-local m = Map("openvpn")
-local s = m:section( TypedSection, "openvpn" )
+local m = Map("openvpn", translate("openvpn"))
+local s = m:section( TypedSection, "openvpn", translate("openvpn_overview"), translate("openvpn_overview_desc") )
 s.template = "cbi/tblsection"
 s.template_addremove = "openvpn/cbi-select-input-add"
 s.addremove = true
@@ -70,26 +70,28 @@ function s.create(self, name)
 end
 
 
-s:option( Flag, "enable" )
+s:option( Flag, "enable", translate("openvpn_enable") )
 
-local active = s:option( DummyValue, "_active" )
+local active = s:option( DummyValue, "_active", translate("openvpn_active") )
 function active.cfgvalue(self, section)
 	if luci.fs.isfile("/var/run/openvpn_%s.pid" % section) then
 		local pid = io.lines("/var/run/openvpn_%s.pid" % section)()
 		if pid and #pid > 0 and tonumber(pid) ~= nil then
-			return (luci.sys.process.signal(pid, 0)) and "yes (" .. pid .. ")" or "no"
+			return (luci.sys.process.signal(pid, 0))
+				and translatef("openvpn_active_yes", pid)
+				or  translate("openvpn_active_no")
 		end
 	end
-	return "no"
+	return translate("openvpn_active_no")
 end
 
-local port = s:option( DummyValue, "port" )
+local port = s:option( DummyValue, "port", translate("openvpn_port") )
 function port.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
 	return val or "1194"
 end
 
-local proto = s:option( DummyValue, "proto" )
+local proto = s:option( DummyValue, "proto", translate("openvpn_proto") )
 function proto.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
 	return val or "udp"

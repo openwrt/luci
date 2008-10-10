@@ -230,7 +230,11 @@ s.anonymous = true
 
 
 for _, option in ipairs(params) do
-	local o = s:option(option[1], option[2])
+	local o = s:option(
+		option[1], option[2],
+		translate("openvpn_param_%s" % option[2]),
+		translate("openvpn_param_%s_desc" % option[2])
+	)
 
 	if option[1] == DummyValue then
 		o.value = option[3]

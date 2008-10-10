@@ -61,7 +61,12 @@ p.instance = arg[1]
 local s = m:section( NamedSection, arg[1], "openvpn" )
 
 for _, option in ipairs(basicParams) do
-	local o = s:option(option[1], option[2])
+	local o = s:option(
+		option[1], option[2],
+		translate("openvpn_param_%s" % option[2]),
+		translate("openvpn_param_%s_desc" % option[2])
+	)
+	
 	o.optional = true
 
 	if option[1] == DummyValue then
