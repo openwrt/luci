@@ -161,7 +161,7 @@ function dispatch(request)
 	end
 
 	-- Init template engine
-	if not track.notemplate then
+	if (c and c.index) or not track.notemplate then
 		local tpl = require("luci.template")
 		local media = luci.config.main.mediaurlbase
 		if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
@@ -183,6 +183,7 @@ function dispatch(request)
 		viewns.striptags   = util.striptags
 		viewns.controller  = luci.http.getenv("SCRIPT_NAME")
 		viewns.media       = media
+		viewns.theme       = fs.basename(media)
 		viewns.resource    = luci.config.main.resourcebase
 		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
@@ -229,6 +230,13 @@ function dispatch(request)
 
 	if track.setuser then
 		luci.sys.process.setuser(track.setuser)
+	end
+
+	if c and c.index then
+		local tpl = require "luci.template"
+		if util.copcall(tpl.render, "indexer") then
+			return true
+		end
 	end
 
 	if c and type(c.target) == "function" then
