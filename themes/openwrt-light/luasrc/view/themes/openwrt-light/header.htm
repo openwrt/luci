@@ -55,7 +55,7 @@ require("luci.http").prepare_content("text/html")
 
 				var lis  = document.getElementById("mainmenu").getElementsByTagName("LI");
 				var divs = document.getElementById("mainmenu").getElementsByTagName("DIV");
-				
+
 				for( var i = 0; i < lis.length;  i++ ) ie_hover( lis[i]  );
 				for( var i = 0; i < divs.length; i++ ) ie_hover( divs[i] );
 			}
@@ -117,7 +117,7 @@ local function submenu(prefix, node)
 			href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 		%>
 		<li>
-			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=href%>"><%=nnode.title%></a></span>
+			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=luci.util.pcdata(href)%>"><%=nnode.title%></a></span>
 			<%- submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
 		<%- end %>
