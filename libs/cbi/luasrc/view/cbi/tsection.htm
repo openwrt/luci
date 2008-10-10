@@ -41,6 +41,7 @@ $Id$
 	<%- end %>
 
 	<% if self.addremove then -%>
+		<% if self.template_addremove then include(self.template_addremove) else -%>
 		<div class="cbi-section-create">
 			<% if self.anonymous then -%>
 				<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
@@ -53,5 +54,6 @@ $Id$
 				<%- end %>
 			<%- end %>
 		</div>
+		<%- end %>
 	<%- end %>
 </fieldset>
