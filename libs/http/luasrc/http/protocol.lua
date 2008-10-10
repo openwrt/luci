@@ -568,7 +568,9 @@ function parse_message_header( src )
 				REQUEST_URI       = msg.request_uri;
 				SCRIPT_NAME       = msg.request_uri:gsub("?.+$","");
 				SCRIPT_FILENAME   = "";		-- XXX implement me
-				SERVER_PROTOCOL   = "HTTP/" .. string.format("%.1f", msg.http_version)
+				SERVER_PROTOCOL   = "HTTP/" .. string.format("%.1f", msg.http_version);
+				QUERY_STRING      = msg.request_uri:match("?")
+					and msg.request_uri:gsub("^.+?","") or ""
 			}
 
 			-- Populate HTTP_* environment variables
