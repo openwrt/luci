@@ -232,16 +232,20 @@ function dispatch(request)
 		luci.sys.process.setuser(track.setuser)
 	end
 
+	if c and (c.index or type(c.target) == "function") then
+		ctx.dispatched = c
+		ctx.requested = ctx.requested or ctx.dispatched
+	end
+
 	if c and c.index then
 		local tpl = require "luci.template"
-		if util.copcall(tpl.render, "indexer") then
+
+		if util.copcall(tpl.render, "indexer", {}) then
 			return true
 		end
 	end
 
 	if c and type(c.target) == "function" then
-		context.dispatched = c
-
 		util.copcall(function()
 			local oldenv = getfenv(c.target)
 			local module = require(c.module)
