@@ -187,21 +187,21 @@ connect = s:option(Value, "connect",
  translate("network_interface_connect"),
  translate("network_interface_connect_desc")
 )
-connect.rmempty = true
+connect.optional = true
 connect:depends("proto", "ppp")
 
 disconnect = s:option(Value, "disconnect",
  translate("network_interface_disconnect"),
  translate("network_interface_disconnect_desc")
 )
-disconnect.rmempty = true
+disconnect.optional = true
 disconnect:depends("proto", "ppp")
 
 pppd_options = s:option(Value, "pppd_options",
  translate("network_interface_pppd_options"),
  translate("network_interface_pppd_options_desc")
 )
-pppd_options.rmempty = true
+pppd_options.optional = true
 pppd_options:depends("proto", "ppp")
 
 
