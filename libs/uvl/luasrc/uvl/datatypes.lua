@@ -169,3 +169,19 @@ function file( val, seen )
 
 	return false
 end
+
+function device( val, seen )
+	local s = fs.stat( val )
+	seen = seen or { }
+
+	if s and not seen[s.ino] then
+		seen[s.ino] = true
+		if s.type == "character device" or s.type == "block device" then
+			return true
+		elseif s.type == "link" then
+			return device( fs.readlink(val), seen )
+		end
+	end
+
+	return false
+end

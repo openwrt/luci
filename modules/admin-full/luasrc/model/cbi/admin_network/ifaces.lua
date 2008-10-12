@@ -27,6 +27,7 @@ p = s:option(ListValue, "proto", translate("protocol"))
 p:value("static", translate("static"))
 p:value("dhcp", "DHCP")
 p:value("pppoe", "PPPoE")
+p:value("ppp", "PPP")
 p:value("pptp", "PPTP")
 p.default = "static"
 
@@ -43,11 +44,11 @@ for i,d in ipairs(luci.sys.net.devices()) do
 end
 
 local zones = luci.tools.webadmin.network_get_zones(arg[1])
-if zones then 
+if zones then
 	if #zones == 0 then
 		m:chain("firewall")
-		
-		fwzone = s:option(Value, "_fwzone", 
+
+		fwzone = s:option(Value, "_fwzone",
 			translate("network_interface_fwzone"),
 			translate("network_interface_fwzone_desc"))
 		fwzone.rmempty = true
@@ -59,11 +60,11 @@ if zones then
 				fwzone:value(section.name)
 			end
 		)
-		
-		function fwzone.write(self, section, value)	
+
+		function fwzone.write(self, section, value)
 			local zone = luci.tools.webadmin.firewall_find_zone(value)
 			local stat
-			
+
 			if not zone then
 				stat = m.uci:section("firewall", "zone", nil, {
 					name = value,
@@ -74,7 +75,7 @@ if zones then
 				net = (net or value) .. " " .. section
 				stat = m.uci:set("firewall", zone, "network", net)
 			end
-			
+
 			if stat then
 				self.render = function() end
 			end
@@ -134,11 +135,13 @@ user = s:option(Value, "username", translate("username"))
 user.rmempty = true
 user:depends("proto", "pptp")
 user:depends("proto", "pppoe")
+user:depends("proto", "ppp")
 
 pass = s:option(Value, "password", translate("password"))
 pass.rmempty = true
 pass:depends("proto", "pptp")
 pass:depends("proto", "pppoe")
+pass:depends("proto", "ppp")
 
 ka = s:option(Value, "keepalive",
  translate("network_interface_keepalive"),
@@ -147,16 +150,59 @@ ka = s:option(Value, "keepalive",
 ka.rmempty = true
 ka:depends("proto", "pptp")
 ka:depends("proto", "pppoe")
+ka:depends("proto", "ppp")
 
-demand = s:option(Value, "demand", 
+demand = s:option(Value, "demand",
  translate("network_interface_demand"),
  translate("network_interface_demand_desc")
 )
 demand.rmempty = true
 demand:depends("proto", "pptp")
 demand:depends("proto", "pppoe")
+demand:depends("proto", "ppp")
 
+device = s:option(Value, "device",
+ translate("network_interface_device"),
+ translate("network_interface_device_desc")
+)
+device.rmempty = true
+device:depends("proto", "ppp")
 
+defaultroute = s:option(Flag, "defaultroute",
+ translate("network_interface_defaultroute"),
+ translate("network_interface_defaultroute_desc")
+)
+defaultroute:depends("proto", "ppp")
+
+peerdns = s:option(Flag, "peerdns",
+ translate("network_interface_peerdns"),
+ translate("network_interface_peerdns_desc")
+)
+peerdns:depends("proto", "ppp")
+
+ipv6 = s:option(Flag, "ipv6", translate("network_interface_ipv6") )
+ipv6:depends("proto", "ppp")
+
+connect = s:option(Value, "connect",
+ translate("network_interface_connect"),
+ translate("network_interface_connect_desc")
+)
+connect.optional = true
+connect:depends("proto", "ppp")
+
+disconnect = s:option(Value, "disconnect",
+ translate("network_interface_disconnect"),
+ translate("network_interface_disconnect_desc")
+)
+disconnect.optional = true
+disconnect:depends("proto", "ppp")
+
+pppd_options = s:option(Value, "pppd_options",
+ translate("network_interface_pppd_options"),
+ translate("network_interface_pppd_options_desc")
+)
+pppd_options.optional = true
+pppd_options:depends("proto", "ppp")
 
 
 s2 = m:section(TypedSection, "alias", translate("aliases"))
