@@ -35,7 +35,7 @@ luci.util   = require "luci.util"
 luci.fs     = require "luci.fs"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs = tonumber, ipairs, pairs
+local tonumber, ipairs, pairs, pcall = tonumber, ipairs, pairs, pcall
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -491,8 +491,12 @@ function user.checkpasswd(username, password)
 			end
 		end
 
-		return (pwd == posix.crypt(password, pwd))
+		if pwd and #pwd > 0 and password and #password > 0 then
+			return (pwd == posix.crypt(password, pwd))
+		end
 	end
+
+	return false
 end
 
 --- Change the password of given user.
