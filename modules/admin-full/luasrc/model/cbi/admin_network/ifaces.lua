@@ -165,7 +165,7 @@ ka = s:option(Value, "keepalive",
  translate("network_interface_keepalive"),
  translate("network_interface_keepalive_desc")
 )
-ka.rmempty = true
+ka.optional = true
 ka:depends("proto", "pptp")
 ka:depends("proto", "pppoe")
 ka:depends("proto", "ppp")
@@ -175,7 +175,7 @@ demand = s:option(Value, "demand",
  translate("network_interface_demand"),
  translate("network_interface_demand_desc")
 )
-demand.rmempty = true
+demand.optional = true
 demand:depends("proto", "pptp")
 demand:depends("proto", "pppoe")
 demand:depends("proto", "ppp")
