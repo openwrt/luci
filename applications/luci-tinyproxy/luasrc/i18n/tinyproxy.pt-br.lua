@@ -1,5 +1,5 @@
 tinyproxy = 'Tinyproxy'
-tinyproxy_desc = 'Tinyproxy é um pequeno e rápido Proxy-HTTP(S) sem cache caching'
+tinyproxy_desc = 'Tinyproxy é um pequeno e rápido Proxy-HTTP(S) sem suporte à cache'
 tinyproxy_tinyproxy_allow = 'Permitir acesso de'
 tinyproxy_tinyproxy_anonymous = 'Cabeçalhos permitidos para proxy anônimo'
 tinyproxy_tinyproxy_bind = 'Associar o tráfego de saída ao endereço'
