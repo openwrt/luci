@@ -11,6 +11,7 @@ config section
 	list   depends	'proto=static, ip6addr'
 	list   depends	'proto=pppoe, username, password'
 	list   depends	'proto=ppp, device'
+	list   depends	'proto=3g, device'
 	list   depends	'proto=pptp, username, password, server'
 	list   depends	'proto=dhcp'
 	list   depends	'proto=none'
@@ -86,6 +87,7 @@ config variable
 	list   depends	'proto=pppoe'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'demand'
@@ -96,6 +98,7 @@ config variable
 	list   depends	'proto=pppoe'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'username'
@@ -105,6 +108,7 @@ config variable
 	list   depends	'proto=pppoe'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'password'
@@ -114,6 +118,7 @@ config variable
 	list   depends	'proto=pppoe'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'server'
@@ -128,6 +133,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'device'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'defaultroute'
@@ -135,6 +141,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'boolean'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'peerdns'
@@ -142,6 +149,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'boolean'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'ipv6'
@@ -149,6 +157,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'boolean'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'connect'
@@ -156,6 +165,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'file'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'disconnect'
@@ -163,6 +173,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'file'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
 
 config variable
 	option name	'pppd_options'
@@ -170,6 +181,52 @@ config variable
 	option section	'network.interface'
 	option datatype	'string'
 	list   depends	'proto=ppp'
+	list   depends	'proto=3g'
+
+config variable
+	option name	'maxwait'
+	option title	'Setup wait time'
+	option description	'Number of seconds to wait for the device to become ready'
+	option section	'network.interface'
+	option datatype	'uint'
+	list   depends	'proto=3g'
+
+config variable
+	option name	'apn'
+	option title	'Access point (APN)'
+	option section	'network.interface'
+	option datatype	'string'
+	list   depends	'proto=3g'
+
+config variable
+	option name	'pincode'
+	option title	'PIN code'
+	option section	'network.interface'
+	option datatype	'uint'
+	list   depends	'proto=3g'
+
+config variable
+	option name	'service'
+	option title	'Service type'
+	option section	'network.interface'
+	option type		'enum'
+	option required	'true'
+	list   depends	'proto=3g'
+
+config enum
+	option variable	'network.interface.service'
+	option value	'umts'
+	option title	'UMTS/GPRS'
+
+config enum
+	option variable	'network.interface.service'
+	option value	'cdma'
+	option title	'CDMA'
+
+config enum
+	option variable	'network.interface.service'
+	option value	'evdo'
+	option title	'EV-DO'
 
 config variable
 	option name	'proto'
@@ -208,6 +265,11 @@ config enum
 	option variable	'network.interface.proto'
 	option value	'ppp'
 	option title	'Interface is a PPP connection'
+
+config enum
+	option variable	'network.interface.proto'
+	option value	'3g'
+	option title	'3G UMTS/GPRS connection'
 
 config variable
 	option name	'type'

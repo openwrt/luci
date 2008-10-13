@@ -28,6 +28,7 @@ p:value("static", translate("static"))
 p:value("dhcp", "DHCP")
 p:value("pppoe", "PPPoE")
 p:value("ppp", "PPP")
+p:value("3g", "UMTS/3G")
 p:value("pptp", "PPTP")
 p.default = "static"
 
@@ -131,17 +132,34 @@ srv = s:option(Value, "server", translate("network_interface_server"))
 srv:depends("proto", "pptp")
 srv.rmempty = true
 
+service = s:option(ListValue, "service", translate("network_interface_service"))
+service:value("umts", "UMTS/GPRS")
+service:value("cdma", "CDMA")
+service:value("evdo", "EV-DO")
+service:depends("proto", "3g")
+
+apn = s:option(Value, "apn", translate("network_interface_apn"))
+apn:depends("proto", "3g")
+
+pincode = s:option(Value, "pincode",
+ translate("network_interface_pincode"),
+ translate("network_interface_pincode_desc")
+)
+pincode:depends("proto", "3g")
+
 user = s:option(Value, "username", translate("username"))
 user.rmempty = true
 user:depends("proto", "pptp")
 user:depends("proto", "pppoe")
 user:depends("proto", "ppp")
+user:depends("proto", "3g")
 
 pass = s:option(Value, "password", translate("password"))
 pass.rmempty = true
 pass:depends("proto", "pptp")
 pass:depends("proto", "pppoe")
 pass:depends("proto", "ppp")
+pass:depends("proto", "3g")
 
 ka = s:option(Value, "keepalive",
  translate("network_interface_keepalive"),
@@ -151,6 +169,7 @@ ka.rmempty = true
 ka:depends("proto", "pptp")
 ka:depends("proto", "pppoe")
 ka:depends("proto", "ppp")
+ka:depends("proto", "3g")
 
 demand = s:option(Value, "demand",
  translate("network_interface_demand"),
@@ -160,19 +179,21 @@ demand.rmempty = true
 demand:depends("proto", "pptp")
 demand:depends("proto", "pppoe")
 demand:depends("proto", "ppp")
+demand:depends("proto", "3g")
 
 device = s:option(Value, "device",
  translate("network_interface_device"),
  translate("network_interface_device_desc")
 )
-device.rmempty = true
 device:depends("proto", "ppp")
+device:depends("proto", "3g")
 
 defaultroute = s:option(Flag, "defaultroute",
  translate("network_interface_defaultroute"),
  translate("network_interface_defaultroute_desc")
 )
 defaultroute:depends("proto", "ppp")
+defaultroute:depends("proto", "3g")
 
 peerdns = s:option(Flag, "peerdns",
  translate("network_interface_peerdns"),
@@ -182,6 +203,7 @@ peerdns:depends("proto", "ppp")
 
 ipv6 = s:option(Flag, "ipv6", translate("network_interface_ipv6") )
 ipv6:depends("proto", "ppp")
+--ipv6:depends("proto", "3g")
 
 connect = s:option(Value, "connect",
  translate("network_interface_connect"),
@@ -189,6 +211,7 @@ connect = s:option(Value, "connect",
 )
 connect.optional = true
 connect:depends("proto", "ppp")
+connect:depends("proto", "3g")
 
 disconnect = s:option(Value, "disconnect",
  translate("network_interface_disconnect"),
@@ -196,6 +219,7 @@ disconnect = s:option(Value, "disconnect",
 )
 disconnect.optional = true
 disconnect:depends("proto", "ppp")
+disconnect:depends("proto", "3g")
 
 pppd_options = s:option(Value, "pppd_options",
  translate("network_interface_pppd_options"),
@@ -203,6 +227,14 @@ pppd_options = s:option(Value, "pppd_options",
 )
 pppd_options.optional = true
 pppd_options:depends("proto", "ppp")
+pppd_options:depends("proto", "3g")
+
+maxwait = s:option(Value, "maxwait",
+ translate("network_interface_maxwait"),
+ translate("network_interface_maxwait_desc")
+)
+maxwait.optional = true
+maxwait:depends("proto", "3g")
 
 
 s2 = m:section(TypedSection, "alias", translate("aliases"))
