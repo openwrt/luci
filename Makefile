@@ -39,7 +39,7 @@ hostcopy:
 hostenv: host ucidefaults
 
 ucidefaults:
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-community-*"
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-freifunk-*"
 
 runboa: hostenv
 	libs/sgi-webuci/host/buildconfig.sh $(realpath host) > host/etc/boa/boa.conf
