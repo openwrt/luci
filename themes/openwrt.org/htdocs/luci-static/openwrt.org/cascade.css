@@ -574,6 +574,11 @@ form > div > input[type=reset] {
 	margin-left: 0.5em;
 }
 
+table td,
+table th {
+	color: #000000;
+}
+
 table.smalltext {
 	background: #f5f5f5;
 	color: #000000;
@@ -616,6 +621,7 @@ table.cbi-section-table .cbi-rowstyle-1 * {
 }
 
 .cbi-rowstyle-2 {
+	color: #000000;
 }
 
 div.cbi-value {
@@ -814,7 +820,31 @@ td.cbi-value-error {
 }
 
 * html div.cbi-value-description {
-	margin-left: 40%;
+	width: auto !important;
+}
+
+* html div.cbi-value-field {
+	margin-left: 0 !important;
+	width: 100% !important;
+}
+
+* html .cbi-input-text,
+* html .cbi-input-user,
+* html .cbi-input-select,
+* html .cbi-input-password {
+	width: 50% !important;
+}
+
+* html div.cbi-page-actions {
+	text-align: right !important;
+}
+
+* html div.cbi-section-create {
+	border-bottom: 1px dotted #bbbbbb !important;
+}
+
+* html div.cbi-section-create .cbi-button {
+	margin: 0.5em !important;
 }
 
 }
