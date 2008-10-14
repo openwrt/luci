@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_BRANCH:=tags/0.8.0
+PKG_BRANCH:=tags/0.8.1
 
 ifeq ($(DUMP),)
   USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
@@ -15,7 +15,7 @@ else
   PKG_SOURCE_URL:=http://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
     PKG_REV:=HEAD
-    PKG_VERSION:=0.8.0
+    PKG_VERSION:=0.8.1
   endif
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
