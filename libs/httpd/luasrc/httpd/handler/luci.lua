@@ -27,7 +27,7 @@ function Luci.__init__(self, limit)
 	luci.httpd.module.Handler.__init__(self)
 	self.limit = limit or 5
 	self.running = {}
-	setmetatable(self.running, {__mode = "v"})
+	setmetatable(self.running, {__mode = "k"})
 end
 
 function Luci.handle_head(self, ...)
@@ -40,19 +40,31 @@ function Luci.handle_post(self, ...)
 end
 
 function Luci.handle_get(self, request, sourcein, sinkerr)
-	if self.limit and #self.running >= self.limit then
+	local reaped  = false
+	local running = 0
+
+	for _, v in pairs(self.running) do
+		if v then running = running + 1 end
+	end
+
+	if self.limit and running >= self.limit then
 		for k, v in ipairs(self.running) do
-			if coroutine.status(v) == "dead" then
-				collectgarbage()
-				break
+			if coroutine.status(k) == "dead" then
+				self.running[k] = nil
+				running = running - 1
+				reaped  = true
 			end
 		end
-		if #self.running >= self.limit then	
-			return self:failure(503, "Overload")
+
+		if reaped then collectgarbage() end
+
+		if running >= self.limit then
+			return self:failure(503, "Overload %i/%i" % { running, self.limit } )
 		end
 	end
-	table.insert(self.running, coroutine.running())
-	
+
+	self.running[coroutine.running()] = true
+
 	local r = luci.http.Request(
 		request.env,
 		sourcein,
