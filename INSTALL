@@ -9,7 +9,7 @@ TOC:
 	1. Change to your OpenWRT buildroot
 
 	2. Add the following line to your OpenWRT feeds.conf:
-		src-svn luci https://dev.leipzig.freifunk.net/svn/ff-luci/trunk/contrib/package
+		src-svn luci https://svn.luci.subsignal.org/luci/trunk/contrib/package
 		
 	3. Run ./scripts/feeds update
 	
@@ -21,7 +21,7 @@ TOC:
 2. Kamikaze Packages
 	1.	cd to the "package" directory of your kamikaze buildroot
 	
-	3.	Type: ln -s /path/to/ff-luci/contrib/package/* ./
+	3.	Type: ln -s /path/to/luci/contrib/package/* ./
 	
 	4.	cd to your kamikaze build root and type: make menuconfig
 		You will find luci in the menu "Administration"
