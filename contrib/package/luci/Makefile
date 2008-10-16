@@ -12,7 +12,7 @@ PKG_RELEASE:=1
 ifeq ($(USELOCAL),1)
   PKG_VERSION:=0.8+svn
 else
-  PKG_SOURCE_URL:=http://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
+  PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
     PKG_REV:=HEAD
     PKG_VERSION:=0.8.1
