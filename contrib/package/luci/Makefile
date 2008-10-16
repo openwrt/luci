@@ -12,7 +12,7 @@ PKG_RELEASE:=1
 ifeq ($(USELOCAL),1)
   PKG_VERSION:=0.9+svn
 else
-  PKG_SOURCE_URL:=http://dev.leipzig.freifunk.net/svn/ff-luci/$(PKG_BRANCH)
+  PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
     PKG_REV:=$(shell LC_ALL=C svn info ${PKG_SOURCE_URL} | sed -ne's/^Last Changed Rev: //p')
     PKG_VERSION:=0.9+svn$(PKG_REV)
