@@ -265,9 +265,9 @@ function net.conntrack()
 	local connt = {}
 	if luci.fs.access("/proc/net/nf_conntrack") then
 		for line in io.lines("/proc/net/nf_conntrack") do
-			local entry = _parse_mixed_record(line, " +")
-			entry.layer3 = entry[1]
-			entry.layer4 = entry[2]
+			local entry, flags = _parse_mixed_record(line, " +")
+			entry.layer3 = flags[1]
+			entry.layer4 = flags[2]
 			for i=1, #entry do
 				entry[i] = nil
 			end
@@ -276,9 +276,9 @@ function net.conntrack()
 		end
 	elseif luci.fs.access("/proc/net/ip_conntrack") then
 		for line in io.lines("/proc/net/ip_conntrack") do
-			local entry = _parse_mixed_record(line, " +")
+			local entry, flags = _parse_mixed_record(line, " +")
 			entry.layer3 = "ipv4"
-			entry.layer4 = entry[1]
+			entry.layer4 = flags[1]
 			for i=1, #entry do
 				entry[i] = nil
 			end
@@ -533,7 +533,11 @@ function wifi.getiwconfig()
 		local k = l:match("^(.-) ")
 		l = l:gsub("^(.-) +", "", 1)
 		if k then
-			iwc[k] = _parse_mixed_record(l)
+			local entry, flags = _parse_mixed_record(l)
+			if entry then
+				entry.flags = flags
+			end
+			iwc[k] = entry
 		end
 	end
 
@@ -557,7 +561,11 @@ function wifi.iwscan(iface)
 				c = c:gsub("^(.-)- ", "", 1)
 				c = luci.util.split(c, "\n", 7)
 				c = table.concat(c, "\n", 1)
-				table.insert(iws[k], _parse_mixed_record(c))
+				local entry, flags = _parse_mixed_record(c)
+				if entry then
+					entry.flags = flags
+				end
+				table.insert(iws[k], entry)
 			end
 		end
 	end
@@ -653,6 +661,7 @@ end
 function _parse_mixed_record(cnt, delimiter)
 	delimiter = delimiter or "  "
 	local data = {}
+	local flags = {}
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n")) do
 		for j, f in pairs(luci.util.split(luci.util.trim(l), delimiter, nil, true)) do
@@ -660,7 +669,7 @@ function _parse_mixed_record(cnt, delimiter)
 
             if k then
 				if x == "" then
-					table.insert(data, k)
+					table.insert(flags, k)
 				else
             		data[k] = v
 				end
@@ -668,5 +677,5 @@ function _parse_mixed_record(cnt, delimiter)
     	end
 	end
 
-    return data
+    return data, flags
 end
