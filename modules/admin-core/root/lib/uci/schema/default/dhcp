@@ -82,14 +82,12 @@ config variable
 	option section 'dhcp.dnsmasq'
 	option title 'Leasefile'
 	option description 'file where given DHCP-leases will be stored'
-	option datatype file
 
 config variable
 	option name 'resolvfile'
 	option section 'dhcp.dnsmasq'
 	option title 'Resolvfile'
 	option description 'local DNS file'
-	option datatype file
 
 config variable
 	option name 'nohosts'
@@ -151,6 +149,23 @@ config variable
 	option section 'dhcp.dnsmasq'
 	option title 'query port'
 	option datatype port
+
+config variable
+	option name 'enable_tftp'
+	option section 'dhcp.dnsmasq'
+	option title 'Enable builtin TFTP-Server'
+	option datatype boolean
+
+config variable
+	option name 'tftp_root'
+	option section 'dhcp.dnsmasq'
+	option title 'TFTP-Server root directory'
+	option datatype directory
+
+config variable
+	option name 'dhcp_boot'
+	option section 'dhcp.dnsmasq'
+	option title 'DHCP Boot image'
 
 
 config section

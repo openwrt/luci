@@ -38,5 +38,8 @@ s:option(Value, "ednspacket_max").optional = true
 s:option(Value, "dhcpleasemax").optional = true
 s:option(Value, "addnhosts").optional = true
 s:option(Value, "queryport").optional = true
+s:option(Flag, "enable_tftp").optional = true
+s:option(Value, "tftp_root").optional = true
+s:option(Value, "dhcp_boot").optional = true
 
 return m
