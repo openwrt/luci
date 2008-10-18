@@ -1,0 +1,30 @@
+<%+header%>
+
+<!--[if IE]><script type="text/javascript" src="<%=resource%>/livestats/ExCanvas.js"></script><![endif]-->
+<script type="text/javascript" src="<%=resource%>/livestats/MochiKit.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/JsonRpc.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/PlotKit.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/GraphRPC.js"></script>
+
+<script type="text/javascript">
+	function initGraphs() {
+		var rpc = new GraphRPC(
+			document.getElementById('live_graphs'),
+			'<%=luci.dispatcher.build_url('rpc', 'sys')%>', 'wifi.getiwconfig',
+			1500,
+
+			// Data sources
+			[ "Noise level", null, "Signal level", null ],
+
+			// Graph layout options
+			{ yAxis: [ 0, 150 ], title: 'Wifi Interface "%s": Signal and Noise',
+			  padding: { left: 40, right: 10, top: 10, bottom: 20 } }
+		);
+	}
+
+	MochiKit.DOM.addLoadEvent(initGraphs);
+</script>
+
+<div id="live_graphs"></div>
+
+<%+footer%>

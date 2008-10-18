@@ -1,0 +1,54 @@
+<%+header%>
+
+<!--[if IE]><script type="text/javascript" src="<%=resource%>/livestats/ExCanvas.js"></script><![endif]-->
+<script type="text/javascript" src="<%=resource%>/livestats/MochiKit.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/JsonRpc.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/PlotKit.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/GraphRPC.js"></script>
+
+<%
+	local interfaces = { }
+	local uci = luci.model.uci.cursor_state()
+
+	uci:foreach("network", "interface",
+		function(s)
+			if s.ifname ~= "lo" then
+				table.insert( interfaces,
+					"'" .. ( s.ifname or s['.name'] ) .. "'"
+				)
+			end
+		end
+	)
+-%>
+
+<script type="text/javascript">
+	function initGraphs() {
+		var rpc = new GraphRPC(
+			document.getElementById('live_graphs'),
+			'<%=luci.dispatcher.build_url('rpc', 'sys')%>', 'net.deviceinfo',
+			2000,
+
+			// Data sources
+			[ "1", "received Bytes/s", "9", "transmitted Bytes/s" ],
+
+			// Graph layout options
+			{ shouldFill: false, strokeColor: null,
+			  strokeColorTransform: "asFillColor",
+			  title: 'Traffic on interface "%s"',
+			  separateDS: true, strokeWidth: 0.5, height: 140,
+			  padding: { left: 70, right: 10, top: 10, bottom: 20 },
+			  instances: [ <%=table.concat(interfaces, ", ") %> ] },
+
+			// transform function
+			function(thisval, lastval) {
+				return ( ( thisval - lastval ) / 2 );
+			}
+		);
+	}
+
+	MochiKit.DOM.addLoadEvent(initGraphs);
+</script>
+
+<div id="live_graphs"></div>
+
+<%+footer%>

@@ -1,0 +1,44 @@
+<%+header%>
+
+<!--[if IE]><script type="text/javascript" src="<%=resource%>/livestats/ExCanvas.js"></script><![endif]-->
+<script type="text/javascript" src="<%=resource%>/livestats/MochiKit.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/JsonRpc.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/PlotKit.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/GraphRPC.js"></script>
+
+<script type="text/javascript">
+	PlotKit.Base.baseColors = function () {
+	   var hexColor = MochiKit.Color.Color.fromHexString;
+	   return [hexColor("#ff0000"),
+			   hexColor("#ff6000"),
+			   hexColor("#fff000"),
+			   hexColor("#00ff00"),
+			   hexColor("#00ff77"),
+			   hexColor("#0090ff"),
+			   hexColor("#000000")];
+	};
+
+	function initGraphs() {
+		var rpc = new GraphRPC(
+			document.getElementById('live_graphs'),
+			'<%=luci.dispatcher.build_url('rpc', 'sys')%>', 'loadavg',
+			2000,
+
+			// Data sources
+			[ "1", "1 Minute Load", "2", "5 Minutes Load", "3", "15 Minutes Load" ],
+
+			// Graph layout options
+			{ shouldFill: false, strokeColor: null,
+			  strokeColorTransform: "asFillColor",
+			  title: 'Average Load', strokeWidth: 1,
+			  padding: { left: 70, right: 10, top: 10, bottom: 20 },
+			  instances: [ false ] }
+		);
+	}
+
+	MochiKit.DOM.addLoadEvent(initGraphs);
+</script>
+
+<div id="live_graphs"></div>
+
+<%+footer%>

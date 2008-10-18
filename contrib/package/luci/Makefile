@@ -514,6 +514,16 @@ define Package/luci-app-initmgr/install
         $(call Package/luci/install/template,$(1),applications/luci-initmgr)
 endef
 
+define Package/luci-app-livestats
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +luci-admin-rpc
+  TITLE:=LuCI Realtime Statistics (Experimental)
+endef
+
+define Package/luci-app-livestats/install
+        $(call Package/luci/install/template,$(1),applications/luci-livestats)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -843,6 +853,7 @@ $(eval $(call BuildPackage,luci-app-ushare))
 $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
+$(eval $(call BuildPackage,luci-app-livestats))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
