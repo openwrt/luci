@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: openvpn.lua 3549 2008-10-09 22:24:21Z jow $
+$Id$
 ]]--
 
 module("luci.controller.livestats", package.seeall)
