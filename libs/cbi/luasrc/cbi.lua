@@ -342,7 +342,7 @@ function Map.parse(self)
 			self.uci:unload(config)
 		end
 		if type(self.commit_handler) == "function" then
-			self:commit_handler()
+			self:commit_handler(luci.http.formvalue("cbi.submit"))
 		end
 	end
 end
