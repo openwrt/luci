@@ -762,6 +762,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-initmgr),)
        PKG_SELECTED_MODULES+=applications/luci-initmgr
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-livestats),)
+       PKG_SELECTED_MODULES+=applications/luci-livestats
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
