@@ -25,14 +25,14 @@
 			2000,
 
 			// Data sources
-			[ "1", "1 Minute Load", "2", "5 Minutes Load", "3", "15 Minutes Load" ],
+			[ 0, "1 Minute Load", 1, "5 Minutes Load", 2, "15 Minutes Load" ],
 
 			// Graph layout options
-			{ shouldFill: false, strokeColor: null,
+			{ shouldFill: false, drawBackground: false, strokeColor: null,
 			  strokeColorTransform: "asFillColor",
 			  title: 'Average Load', strokeWidth: 1,
 			  padding: { left: 70, right: 10, top: 10, bottom: 20 },
-			  instances: [ false ] }
+			  instances: [ false ], yAxis: [ 0, 2 ] }
 		);
 	}
 

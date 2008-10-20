@@ -25,7 +25,6 @@ function Graph(container, id, options, transform) {
 }
 
 Graph.prototype.addDataset = function(name, ds) {
-	if( window.console ) console.debug("AddDataset: " + name);
 	if( !this.layout ) {
 		this.layout = new PlotKit.Layout( this.type, this.options );
 	}
@@ -41,7 +40,6 @@ Graph.prototype.addDataset = function(name, ds) {
 }
 
 Graph.prototype.updateDataset = function(name, value) {
-	if( window.console ) console.debug("UpdateDataset: " + name + " " + value);
 	if( this.dataset[name] ) {
 		var ds = this.dataset[name];
 
@@ -140,39 +138,37 @@ GraphRPC.prototype.dispatchResponse = function(response) {
 					this.graphs[gid].updateDataset(
 						name, instance
 							? response[instance][this.ds[i]]
-							: response[parseInt(this.ds[i])]
+							: response[this.ds[i]]
 					);
 					this.graphs[gid].redraw();
 				}
 			}
 		}
 		else {
-			if( !this.graphs[instance] ) {
-				this.graphs[instance] = new Graph(
-					this.container, instance, this.options, this.transform
+			var gid = instance || 'livegraph';
+			if( !this.graphs[gid] ) {
+				this.graphs[gid] = new Graph(
+					this.container, gid, this.options, this.transform
 				);
-				if( window.console ) console.debug("NG: " + instance);
 
 				for( var i = 0; i < this.ds.length; i += 2 ) {
 					var name = this.ds[i+1] || this.ds[i];
-					if( window.console ) console.debug("ADS: " + name);
-					this.graphs[instance].addDataset(name);
+					this.graphs[gid].addDataset(name);
 				}
 
-				this.graphs[instance].draw();
+				this.graphs[gid].draw();
 			}
 			else {
 				for( var i = 0; i < this.ds.length; i += 2 ) {
 					var name = this.ds[i+1] || this.ds[i];
-					if( window.console ) console.debug("UDS: " + name + " " + response[instance][this.ds[i]]);
-					this.graphs[instance].updateDataset(
+					this.graphs[gid].updateDataset(
 						name, instance
 							? response[instance][this.ds[i]]
-							: response[parseInt(this.ds[i])]
+							: response[this.ds[i]]
 					);
 				}
 
-				this.graphs[instance].redraw();
+				this.graphs[gid].redraw();
 			}
 		}
 	}
