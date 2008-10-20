@@ -108,7 +108,7 @@ end
 
 		<%- if self.addremove then -%>
 			<% if self.template_addremove then include(self.template_addremove) else -%>
-			<div class="cbi-section-create">
+			<div class="cbi-section-create cbi-tblsection-create">
 				<% if self.anonymous then %>
 					<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" title="<%:cbi_add%>" />
 				<% else %>
