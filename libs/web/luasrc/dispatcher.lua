@@ -487,13 +487,20 @@ function cbi(model)
 	return function(...)
 		require("luci.cbi")
 		require("luci.template")
+		local http = require "luci.http"
 
 		maps = luci.cbi.load(model, ...)
 
+		local state = nil
+
 		for i, res in ipairs(maps) do
-			res:parse()
+			local cstate = res:parse()
+			if not state or cstate < state then
+				state = cstate
+			end
 		end
 
+		http.header("X-CBI-State", state or 0)
 		luci.template.render("cbi/header")
 		for i, res in ipairs(maps) do
 			res:render()
@@ -508,13 +515,20 @@ function form(model)
 	return function(...)
 		require("luci.cbi")
 		require("luci.template")
+		local http = require "luci.http"
 
 		maps = luci.cbi.load(model, ...)
 
+		local state = nil
+
 		for i, res in ipairs(maps) do
-			res:parse()
+			local cstate = res:parse()
+			if not state or cstate < state then
+				state = cstate
+			end
 		end
 
+		http.header("X-CBI-State", state or 0)
 		luci.template.render("header")
 		for i, res in ipairs(maps) do
 			res:render()

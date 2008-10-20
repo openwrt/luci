@@ -39,6 +39,7 @@ local instanceof = luci.util.instanceof
 FORM_NODATA  =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
+FORM_CHANGED =  2
 
 AUTO = true
 
@@ -304,6 +305,9 @@ function Map.get_scheme(self, sectiontype, option)
 	end
 end
 
+function Map.submitstate(self)
+	return luci.http.formvalue("cbi.submit")
+end
 
 -- Chain foreign config
 function Map.chain(self, config)
@@ -342,8 +346,18 @@ function Map.parse(self)
 			self.uci:unload(config)
 		end
 		if type(self.commit_handler) == "function" then
-			self:commit_handler(luci.http.formvalue("cbi.submit"))
+			self:commit_handler(self:submitstate())
 		end
+	end
+
+	if self:submitstate() then
+		if self.save then
+			return self.changed and FORM_CHANGED or FORM_VALID
+		else
+			return FORM_INVALID
+		end
+	else
+		return FORM_NODATA
 	end
 end
 
@@ -439,17 +453,22 @@ function SimpleForm.parse(self, ...)
 	end
 
 	local state =
-		not luci.http.formvalue("cbi.submit") and 0
-		or valid and 1
-		or -1
+		not self:submitstate() and FORM_NODATA
+		or valid and FORM_VALID
+		or FORM_INVALID
 
 	self.dorender = not self.handle or self:handle(state, self.data) ~= false
+	return state
 end
 
 function SimpleForm.render(self, ...)
 	if self.dorender then
 		Node.render(self, ...)
 	end
+end
+
+function SimpleForm.submitstate(self)
+	return luci.http.formvalue("cbi.submit")
 end
 
 function SimpleForm.section(self, class, ...)
@@ -688,7 +707,7 @@ end
 
 function Table.parse(self)
 	for i, k in ipairs(self:cfgsections()) do
-		if luci.http.formvalue("cbi.submit") then
+		if self.map:submitstate() then
 			Node.parse(self, k)
 		end
 	end
@@ -751,7 +770,7 @@ function NamedSection.parse(self, novld)
 
 	if active then
 		AbstractSection.parse_dynamic(self, s)
-		if luci.http.formvalue("cbi.submit") then
+		if self.map:submitstate() then
 			Node.parse(self, s)
 
 			if not novld and not self.override_scheme and self.map.scheme then
@@ -826,7 +845,7 @@ function TypedSection.parse(self, novld)
 	local co
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
-		if luci.http.formvalue("cbi.submit") then
+		if self.map:submitstate() then
 			Node.parse(self, k)
 
 			if not novld and not self.override_scheme and self.map.scheme then
