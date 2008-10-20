@@ -619,7 +619,7 @@ function parse_message_body( src, msg, filecb )
 
 	-- Is it application/x-www-form-urlencoded ?
 	elseif msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
-	       msg.env.CONTENT_TYPE == "application/x-www-form-urlencoded"
+	       msg.env.CONTENT_TYPE:match("^application/x%-www%-form%-urlencoded")
 	then
 		return urldecode_message_body( src, msg, filecb )
 
