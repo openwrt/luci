@@ -46,9 +46,9 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
-<script type="text/javascript" src="<%=media%>/VarType.js"></script>
-<script type="text/javascript" src="<%=media%>/XHTML1.js"></script>
-<script type="text/javascript" src="<%=media%>/Dropdowns.js"></script>
+<script type="text/javascript" src="<%=resource%>/VarType.js"></script>
+<script type="text/javascript" src="<%=resource%>/XHTML1.js"></script>
+<script type="text/javascript" src="<%=resource%>/Dropdowns.js"></script>
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">

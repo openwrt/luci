@@ -556,6 +556,16 @@ define Package/luci-sgi-webuci/install
 endef
 
 ### Themes ###
+define Package/luci-theme-base
+  $(call Package/luci/thtemplate)
+  DEPENDS:=+luci-web
+  TITLE:=Common base for all themes
+endef
+
+define Package/luci-theme-base/install
+	$(call Package/luci/install/template,$(1),themes/base)
+endef
+
 define Package/luci-theme-fledermaus
   $(call Package/luci/fftemplate)
   DEPENDS:=+luci-web
@@ -591,6 +601,7 @@ endef
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWRT.org (default)
+  DEPENDS:=+luci-theme-base
 endef
 
 define Package/luci-theme-openwrt/install
@@ -600,6 +611,7 @@ endef
 define Package/luci-theme-openwrtlight
   $(call Package/luci/thtemplate)
   TITLE:=OpenWRT.org - light variant without images
+  DEPENDS:=+luci-theme-base
 endef
 
 define Package/luci-theme-openwrtlight/install
@@ -777,6 +789,9 @@ ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
 	PKG_SELECTED_MODULES+=libs/sgi-webuci
 endif
 
+ifneq ($(CONFIG_PACKAGE_luci-theme-base),)
+	PKG_SELECTED_MODULES+=themes/base
+endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-fledermaus),)
 	PKG_SELECTED_MODULES+=themes/fledermaus
 endif
@@ -862,6 +877,7 @@ $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
 $(eval $(call BuildPackage,luci-sgi-webuci))
 
+$(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-fledermaus))
 $(eval $(call BuildPackage,luci-theme-freifunk))
 $(eval $(call BuildPackage,luci-theme-freifunk-bno))
