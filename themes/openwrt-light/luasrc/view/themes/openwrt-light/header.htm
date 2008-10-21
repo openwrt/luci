@@ -31,69 +31,48 @@ for i,r in ipairs(request) do
 end
 
 require("luci.i18n").loadc("default")
-require("luci.http").prepare_content("text/html")
+require("luci.http").prepare_content("application/xhtml+xml")
 
 -%>
 
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%=luci.i18n.context.lang%>" lang="<%=luci.i18n.context.lang%>">
 <head>
-	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
-	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
-	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
-	<meta http-equiv="content-script-type" content="text/javascript" />
-	<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
-
-	<!--[if lt IE 7]>
-		<script type="text/javascript">
-			function setup_hover() {
-				function ie_hover(e) {
-					e.onmouseover = function() { this.className = "hover" }
-					e.onmouseout  = function() { this.className = null    }
-				}
-
-				var lis  = document.getElementById("mainmenu").getElementsByTagName("LI");
-				var divs = document.getElementById("mainmenu").getElementsByTagName("DIV");
-
-				for( var i = 0; i < lis.length;  i++ ) ie_hover( lis[i]  );
-				for( var i = 0; i < divs.length; i++ ) ie_hover( divs[i] );
-			}
-		</script>
-	<![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie6.css" /><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
+<% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
+<% end -%>
+<script type="text/javascript" src="<%=resource%>/VarType.js"></script>
+<script type="text/javascript" src="<%=resource%>/XHTML1.js"></script>
+<script type="text/javascript" src="<%=resource%>/Dropdowns.js"></script>
+<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 </head>
-<body onload="window.setup_hover && setup_hover()">
+<body class="lang_<%=luci.i18n.context.lang%>">
+
+<p class="skiplink">
+<span id="skiplink1"><a href="#navigation"><%:skiplink1 Skip to navigation%></a></span>
+<span id="skiplink2"><a href="#content"><%:skiplink2 Skip to content%></a></span>
+</p>
+
 <div id="header">
-	<div class="info whitetext smalltext bold right">
-		<%=luci.config.brand.firmware%> (<%=luci.config.brand.distro%>) |
-		<%:load%>: <%=load1%> <%=load5%> <%=load15%> |
-		<%:hostname%>: <%=hostname%>
-	</div>
-	<div class="title">
-		<span class="headertitle"><%=luci.config.brand.title%></span><br />
-		<span class="whitetext bold"><%=luci.config.brand.subtitle%></span>
-	</div>
+<h1><%=luci.config.brand.firmware%></h1>
+<p>
+(<%=luci.config.brand.distro%>) |
+<%:load%>: <%=load1%> <%=load5%> <%=load15%> |
+<%:hostname%>: <%=hostname%>
+</p>
 </div>
 
-<div class="pathbar separator black whitetext bold">
-<%:path%>: <%
-local c = tree
-local url = controller
-for k,v in pairs(request) do
-	if c.nodes and c.nodes[v] then
-		c = c.nodes[v]
-		url = url .. "/" .. v
-	%><a href="<%=url%>"><%=c.title or v%></a> <% if k ~= #request then %>&#187; <% end
-	end
-end
-%>
-</div>
-
-<div class="menubar">
-	<div id="mainmenu" class="mainmenu">
+<div id="menubar">
+<h2 class="navigation"><a id="navigation" name="navigation"><%:navigation Navigation%></a></h2>
+<ul id="mainmenu" class="dropdowns">
 <%-
 local function submenu(prefix, node)
-	if node.hidden or not node.nodes then
+	if not node.nodes or node.hidden then
 		return false
 	end
 	local index = {}
@@ -109,21 +88,23 @@ local function submenu(prefix, node)
 
 	if count > 0 then
 %>
-	<ul>
-	<%- for j, v in pairs(index) do
-		if not v.hidden and #v.name > 0 then
-			local nnode = node.nodes[v.name]
-			local href = controller .. prefix .. v.name
-			href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
-		%>
-		<li>
-			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=luci.util.pcdata(href)%>"><%=nnode.title%></a></span>
-			<%- submenu(prefix .. v.name .. "/", nnode) %>
-		</li>
-		<%- end %>
-	<%- end %>
-	</ul>
+<ul id="submenu_<%=string.gsub(string.gsub(prefix, "/", "_"), "^_(.-)_$", "%1")%>">
 <%-
+		for j, v in pairs(index) do
+			if #v.name > 0 then
+				local nnode = node.nodes[v.name]
+				local href = controller .. prefix .. v.name .. "/"
+				href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
+%>
+<li><a<% if nnode._menu_selected then %> class="active"<%end%> href="<%=luci.util.pcdata(href)%>"><%=nnode.title%></a><%-
+submenu(prefix .. v.name .. "/", nnode)
+%></li>
+<%-
+			end
+		end
+%>
+</ul>
+<%
 	end
 end
 
@@ -137,50 +118,46 @@ if cattree and cattree.nodes then
 
 	for i, k in ipairs(index) do
 		node = cattree.nodes[k.name]
-		if not node.hidden and node.title and node.target then
-			local href = controller.."/"..category.."/"..k.name
-			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
-			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>
-				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
-			</div>
-<%		end
+		if node.title and node.target and not node.hidden then
+			local href = controller.."/"..category.."/"..k.name.."/"
+			href = (k.query) and href .. luci.http.build_querystring(k.query) or href
+%>
+<li><a<% if node._menu_selected then %> class="preactive"<%end%> href="<%=href%>"><%=node.title%></a><%
+submenu("/" .. category .. "/" .. k.name .. "/", node)
+%></li><% end
 	end
 end
 %>
-	</div>
-	<div class="modemenu">
-		<ul><%
-			for k,node in pairs(tree.nodes) do
-				if node.title and not node.hidden then %>
-					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
-<%				end
-			end%>
-		</ul>
-	</div>
+</ul>
 
-	<%
-		if tree.nodes[category] and tree.nodes[category].ucidata then
-			local ucic = 0
-			for i, j in pairs(require("luci.model.uci").cursor():changes()) do
-				for k, l in pairs(j) do
-					for m, n in pairs(l) do
-						ucic = ucic + 1;
-					end
-				end
+<ul id="modemenu"><%
+for k,node in pairs(tree.nodes) do
+	if node.title and not node.hidden then %>
+<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=node.title%></a></li><%
+	end
+end
+%>
+</ul>
+
+<%
+if tree.nodes[category] and tree.nodes[category].ucidata then
+	local ucic = 0
+	for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+		for k, l in pairs(j) do
+			for m, n in pairs(l) do
+				ucic = ucic + 1;
 			end
-	%>
-	<div class="mainmenu" style="float:right; margin-right:2em">
-		<div>
-			<% if ucic > 0 then %>
-			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:unsavedchanges%>: <%=ucic%></a>
-			<% submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
-			<% else %>
-			<a href="#"><%:changes%>: 0</a>
-			<% end %>
-		</div>
-	</div>
-	<% end %>
+		end
+	end
+-%>
+<ul id="savemenu" class="dropdowns">
+<li><% if ucic > 0 then %><a class="warning" href="<%=controller%>/<%=category%>/uci/changes/"><%:unsavedchanges%>: <%=ucic%></a><%
+submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"])
+else -%>
+<a href="#"><%:changes%>: 0</a><% end -%>
+</li>
+</ul><% end %>
 
-	<br class="clear" />
+<div class="clear"></div>
 </div>
 <div id="maincontent">
