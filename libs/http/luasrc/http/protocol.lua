@@ -563,7 +563,7 @@ function parse_message_header( src )
 			-- Populate common environment variables
 			msg.env = {
 				CONTENT_LENGTH    = msg.headers['Content-Length'];
-				CONTENT_TYPE      = msg.headers['Content-Type'];
+				CONTENT_TYPE      = msg.headers['Content-Type'] or msg.headers['Content-type'];
 				REQUEST_METHOD    = msg.request_method:upper();
 				REQUEST_URI       = msg.request_uri;
 				SCRIPT_NAME       = msg.request_uri:gsub("?.+$","");
