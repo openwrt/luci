@@ -442,9 +442,20 @@ endef
 
 
 ### Themes ###
+define Package/luci-theme-base
+  $(call Package/luci/thtemplate)
+  DEPENDS:=+luci-web
+  TITLE:=Common base for all themes
+endef
+
+define Package/luci-theme-base/install
+	$(call Package/luci/install/template,$(1),themes/base)
+endef
+
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWRT.org (default)
+  DEPENDS:=+luci-theme-base
 endef
 
 define Package/luci-theme-openwrt/install
@@ -454,6 +465,7 @@ endef
 define Package/luci-theme-openwrtlight
   $(call Package/luci/thtemplate)
   TITLE:=OpenWRT.org - light variant without images
+  DEPENDS:=+luci-theme-base
 endef
 
 define Package/luci-theme-openwrtlight/install
@@ -606,6 +618,10 @@ ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
 endif
 
+
+ifneq ($(CONFIG_PACKAGE_luci-theme-base),)
+	PKG_SELECTED_MODULES+=themes/base
+endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
@@ -672,6 +688,7 @@ $(eval $(call BuildPackage,luci-app-initmgr))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 
+$(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-openwrt))
 $(eval $(call BuildPackage,luci-theme-openwrtlight))
 

@@ -106,24 +106,22 @@ end
 			</div>
 		<% end %>
 
-			<%- if self.addremove then -%>
-			<div class="cbi-section-table-row">
-				<td colspan="<%=count%>" class="cbi-section-table-optionals">
-					<div class="cbi-section-create">
-						<% if self.anonymous then %>
-							<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" title="<%:cbi_add%>" />
-						<% else %>
-							<% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
-							<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-							<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" title="<%:cbi_add%>" />
-							<% if self.invalid_cts then -%>
-								<br /><%:cbi_invalid%></div>
-							<%- end %>
-						<% end %>
-					</div>
-				</td>
+		<%- if self.addremove then -%>
+			<% if self.template_addremove then include(self.template_addremove) else -%>
+			<div class="cbi-section-create cbi-tblsection-create">
+				<% if self.anonymous then %>
+					<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" title="<%:cbi_add%>" />
+				<% else %>
+					<% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
+					<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+					<input class="cbi-button cbi-button-add" type="submit" value="<%:cbi_add%>" title="<%:cbi_add%>" />
+					<% if self.invalid_cts then -%>
+						<br /><%:cbi_invalid%></div>
+					<%- end %>
+				<% end %>
 			</div>
-			<%- end -%>
+			<%- end %>
+		<%- end -%>
 	</div>
 </fieldset>
 <!-- /tblsection -->
