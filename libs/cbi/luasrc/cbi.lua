@@ -690,6 +690,10 @@ function Table.__init__(self, form, data, ...)
 	function datasource.get(self, section, option)
 		return data[section] and data[section][option]
 	end
+	
+	function datasource.submitstate(self)
+		return luci.http.formvalue("cbi.submit")
+	end
 
 	function datasource.del(...)
 		return true
