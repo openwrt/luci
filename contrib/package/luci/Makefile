@@ -524,6 +524,15 @@ define Package/luci-app-livestats/install
         $(call Package/luci/install/template,$(1),applications/luci-livestats)
 endef
 
+define Package/luci-app-asterisk
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for Asterisk PBX (Incomplete)
+endef
+
+define Package/luci-app-asterisk/install
+        $(call Package/luci/install/template,$(1),applications/luci-asterisk)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -777,6 +786,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-livestats),)
        PKG_SELECTED_MODULES+=applications/luci-livestats
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-asterisk),)
+       PKG_SELECTED_MODULES+=applications/luci-asterisk
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -872,6 +884,7 @@ $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
 $(eval $(call BuildPackage,luci-app-livestats))
+$(eval $(call BuildPackage,luci-app-asterisk))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
