@@ -12,8 +12,16 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 require("luci.tools.webadmin")
 arg[1] = arg[1] or ""
+
+local has_3g    = luci.fs.mtime("/usr/bin/gcom")
+local has_pptp  = luci.fs.mtime("/usr/sbin/pptp")
+local has_pppd  = luci.fs.mtime("/usr/sbin/pppd")
+local has_pppoe = luci.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")
+local has_pppoa = luci.fs.glob("/usr/lib/pppd/*/pppoatm.so")
+
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
 s = m:section(NamedSection, arg[1], "interface")
@@ -24,13 +32,19 @@ back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "network")
 
 p = s:option(ListValue, "proto", translate("protocol"))
+p.override_scheme = true
+p.default = "static"
 p:value("static", translate("static"))
 p:value("dhcp", "DHCP")
-p:value("pppoe", "PPPoE")
-p:value("ppp", "PPP")
-p:value("3g", "UMTS/3G")
-p:value("pptp", "PPTP")
-p.default = "static"
+if has_pppd  then p:value("ppp",   "PPP")     end
+if has_pppoe then p:value("pppoe", "PPPoE")   end
+if has_pppoa then p:value("pppoa", "PPPoA")   end
+if has_3g    then p:value("3g",    "UMTS/3G") end
+if has_pptp  then p:value("pptp",  "PPTP")    end
+
+if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
+	p.description = translate("network_interface_prereq")
+end
 
 br = s:option(Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"))
 br.enabled = "bridge"
