@@ -31,7 +31,9 @@ svc:value("freedns.afraid.org")
 
 s:option(Value, "domain", translate("hostname")).rmempty = true
 s:option(Value, "username", translate("username")).rmempty = true
-s:option(Value, "password", translate("password")).rmempty = true
+pw = s:option(Value, "password", translate("password"))
+pw.rmempty = true
+pw.password = true
 
 src = s:option(ListValue, "ip_source")
 src:value("network", translate("network"))
