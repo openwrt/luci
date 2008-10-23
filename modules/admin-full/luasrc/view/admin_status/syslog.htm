@@ -15,5 +15,7 @@ $Id$
 <%+header%>
 <h2><a id="content" name="content"><%:status%></a></h2>
 <h3><%:syslog%></h3>
-<code><%=luci.util.pcdata(syslog)%></code>
+<div id="content_syslog">
+<textarea readonly="readonly" wrap="off" id="syslog"><%=luci.util.pcdata(syslog)%></textarea>
+</div>
 <%+footer%>
