@@ -170,6 +170,7 @@ user:depends("proto", "3g")
 
 pass = s:option(Value, "password", translate("password"))
 pass.rmempty = true
+pass.password = true
 pass:depends("proto", "pptp")
 pass:depends("proto", "pppoe")
 pass:depends("proto", "ppp")
