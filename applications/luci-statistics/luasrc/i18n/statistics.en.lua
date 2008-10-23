@@ -1,4 +1,5 @@
 stat_statistics = 'Statistics'
+stat_desc = 'The statistics package is based on <a href="http://collectd.org/index.shtml">Collectd</a> and uses <a href="http://oss.oetiker.ch/rrdtool/">RRD Tool</a> to render diagram images from collected data.'
 stat_systemplugins = 'System plugins'
 stat_networkplugins = 'Network plugins'
 stat_outputplugins = 'Output plugins'
