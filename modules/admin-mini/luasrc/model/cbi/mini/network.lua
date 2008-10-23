@@ -12,8 +12,13 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 require("luci.tools.webadmin")
 require("luci.sys")
+require("luci.fs")
+
+local has_pptp  = luci.fs.mtime("/usr/sbin/pptp")
+local has_pppoe = luci.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")
 
 local network = luci.model.uci.cursor_state():get_all("network")
 
@@ -52,13 +57,13 @@ txrx = s:option(DummyValue, "_txrx",
 
 function txrx.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
-	
+
 	local rx = netstat and netstat[ix] and netstat[ix][1]
 	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
-	
+
 	local tx = netstat and netstat[ix] and netstat[ix][9]
 	tx = tx and luci.tools.webadmin.byte_format(tonumber(tx)) or "-"
-	
+
 	return string.format("%s / %s", tx, rx)
 end
 
@@ -67,13 +72,13 @@ errors = s:option(DummyValue, "_err",
 
 function errors.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
-	
+
 	local rx = netstat and netstat[ix] and netstat[ix][3]
 	local tx = netstat and netstat[ix] and netstat[ix][11]
-	
+
 	rx = rx and tostring(rx) or "-"
 	tx = tx and tostring(tx) or "-"
-	
+
 	return string.format("%s / %s", tx, rx)
 end
 
@@ -97,11 +102,17 @@ dns.rmempty = true
 s = m:section(NamedSection, "wan", "interface", translate("m_n_inet"))
 s.addremove = false
 p = s:option(ListValue, "proto", translate("protocol"))
+p.override_values = true
 p:value("none", "disabled")
 p:value("static", translate("manual", "manual"))
 p:value("dhcp", translate("automatic", "automatic"))
-p:value("pppoe", "PPPoE")
-p:value("pptp", "PPTP")
+if has_pppoe then p:value("pppoe", "PPPoE") end
+if has_pptp  then p:value("pptp",  "PPTP")  end
+
+if not ( has_pppoe and has_pptp ) then
+	p.description = translate("network_interface_prereq_mini")
+end
+
 
 ip = s:option(Value, "ipaddr", translate("ipaddress"))
 ip:depends("proto", "static")
@@ -122,6 +133,7 @@ usr:depends("proto", "pppoe")
 usr:depends("proto", "pptp")
 
 pwd = s:option(Value, "password", translate("password"))
+pwd.password = true
 pwd:depends("proto", "pppoe")
 pwd:depends("proto", "pptp")
 
