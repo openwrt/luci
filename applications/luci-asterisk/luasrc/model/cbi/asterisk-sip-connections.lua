@@ -28,8 +28,10 @@ canreinvite:value("update", "Use UPDATE rather than INVITE for path redirection"
 canreinvite:value("no", "No")
 canreinvite.optional = true
 
-context = sip:option(Value, "context", "", "")
-context.optional = true
+context = sip:option(ListValue, "context", "Context to use", "")
+context.titleref = luci.dispatcher.build_url( "admin", "services", "asterisk", "dialplans" )
+cbimap.uci:foreach( "asterisk", "dialplan", function(s) context:value(s['.name']) end )
+cbimap.uci:foreach( "asterisk", "dialzone", function(s) context:value(s['.name']) end )
 
 countrycode = sip:option(Value, "countrycode", "Country Code for connection", "")
 countrycode.optional = true

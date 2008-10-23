@@ -21,8 +21,10 @@ iax.addremove = true
 alwaysinternational = iax:option(Flag, "alwaysinternational", "Always Dial International", "")
 alwaysinternational.optional = true
 
-context = iax:option(Value, "context", "", "")
-context.optional = true
+context = iax:option(ListValue, "context", "Context to use", "")
+context.titleref = luci.dispatcher.build_url( "admin", "services", "asterisk", "dialplans" )
+cbimap.uci:foreach( "asterisk", "dialplan", function(s) context:value(s['.name']) end )
+cbimap.uci:foreach( "asterisk", "dialzone", function(s) context:value(s['.name']) end )
 
 countrycode = iax:option(Value, "countrycode", "Country Code for connection", "")
 countrycode.optional = true

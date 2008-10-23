@@ -19,9 +19,9 @@ dialplan = cbimap:section(TypedSection, "dialplan", "Section dialplan", "")
 dialplan.addremove = true
 dialplan.dynamic = true
 
-include = dialplan:option(Value, "include", "", "")
-include.rmempty = true
-
+include = dialplan:option(MultiValue, "include", "Include zones and plans", "")
+cbimap.uci:foreach( "asterisk", "dialplan", function(s) include:value(s['.name']) end )
+cbimap.uci:foreach( "asterisk", "dialzone", function(s) include:value(s['.name']) end )
 
 dialplanexten = cbimap:section(TypedSection, "dialplanexten", "Dialplan Extension", "")
 dialplanexten.anonymous = true
@@ -73,24 +73,30 @@ dialplanvoice.dynamic = true
 
 dialzone = cbimap:section(TypedSection, "dialzone", "Dial Zones for Dialplan", "")
 dialzone.addremove = true
+dialzone.template = "cbi/tblsection"
 
 addprefix = dialzone:option(Value, "addprefix", "Prefix to add matching dialplans", "")
 addprefix.rmempty = true
 
-international = dialzone:option(DynamicList, "international", "Match International prefix", "")
+--international = dialzone:option(DynamicList, "international", "Match International prefix", "")
+international = dialzone:option(Value, "international", "Match International prefix", "")
 international.rmempty = true
 
-localprefix = dialzone:option(Value, "localprefix", "Prefix (0) to add/remove to/from international numbers", "")
+localprefix = dialzone:option(Value, "localprefix", "Prefix (0) to add/remove to/from intl. numbers", "")
 localprefix.rmempty = true
 
-localzone = dialzone:option(Value, "localzone", "", "")
-localzone.rmempty = true
+localzone = dialzone:option(Value, "localzone", "Dialzone for intl. numbers matched as local", "")
+localzone.titleref = luci.dispatcher.build_url( "admin", "services", "asterisk", "dialplans" )
+cbimap.uci:foreach( "asterisk", "dialplan", function(s) localzone:value(s['.name']) end )
+cbimap.uci:foreach( "asterisk", "dialzone", function(s) localzone:value(s['.name']) end )
 
 match = dialzone:option(Value, "match", "Match plan", "")
 match.rmempty = true
 
-uses = dialzone:option(Value, "uses", "Connection to use", "")
-uses.rmempty = true
+uses = dialzone:option(ListValue, "uses", "Connection to use", "")
+uses.titleref = luci.dispatcher.build_url( "admin", "services", "asterisk", "sip-conns" )
+cbimap.uci:foreach( "asterisk", "sip", function(s) uses:value('SIP/'..s['.name']) end )
+cbimap.uci:foreach( "asterisk", "iax", function(s) uses:value('IAX/'..s['.name']) end )
 
 
 return cbimap

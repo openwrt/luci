@@ -15,21 +15,19 @@ $Id$
 
 cbimap = Map("asterisk", "asterisk", "")
 
-meetme = cbimap:section(TypedSection, "meetme", "Meetme Conference", "")
-
-adminpin = meetme:option(Value, "adminpin", "Admin PIN", "")
-adminpin.rmempty = true
-
-pin = meetme:option(Value, "pin", "Meeting PIN", "")
-pin.rmempty = true
-
-
 meetmegeneral = cbimap:section(TypedSection, "meetmegeneral", "Meetme Conference General Options", "")
-meetmegeneral.anonymous = true
-meetmegeneral.addremove = true
 
 audiobuffers = meetmegeneral:option(Value, "audiobuffers", "Number of 20ms audio buffers to be used", "")
-audiobuffers.rmempty = true
+
+
+meetme = cbimap:section(TypedSection, "meetme", "Meetme Conference", "")
+meetme.addremove = true
+
+adminpin = meetme:option(Value, "adminpin", "Admin PIN", "")
+adminpin.password = true
+
+pin = meetme:option(Value, "pin", "Meeting PIN", "")
+pin.password = true
 
 
 return cbimap

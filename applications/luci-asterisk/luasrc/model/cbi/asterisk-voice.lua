@@ -16,14 +16,12 @@ $Id$
 cbimap = Map("asterisk", "asterisk", "")
 
 voicegeneral = cbimap:section(TypedSection, "voicegeneral", "Voicemail general options", "")
-voicegeneral.anonymous = true
-voicegeneral.addremove = true
 
 serveremail = voicegeneral:option(Value, "serveremail", "From Email address of server", "")
-serveremail.rmempty = true
 
 
 voicemail = cbimap:section(TypedSection, "voicemail", "Voice Mail boxes", "")
+voicemail.addremove = true
 
 attach = voicemail:option(Flag, "attach", "Email contains attachment", "")
 attach.rmempty = true
@@ -37,8 +35,8 @@ name.rmempty = true
 password = voicemail:option(Value, "password", "Password", "")
 password.rmempty = true
 
-zone = voicemail:option(Value, "zone", "", "")
-zone.rmempty = true
+zone = voicemail:option(ListValue, "zone", "Voice Zone", "")
+cbimap.uci:foreach( "asterisk", "voicezone", function(s) zone:value(s['.name']) end )
 
 
 voicezone = cbimap:section(TypedSection, "voicezone", "Voice Zone settings", "")

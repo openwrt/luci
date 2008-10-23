@@ -157,7 +157,7 @@ config 'dialplangeneral'
 	option 'allowtransfer' 'no'
 
 config 'dialplan' 'internal'
-	option 'include' 'localcall,interstate,smartnumber,emergency,extensions'
+	option 'include' 'localcall interstate smartnumber emergency extensions'
 
 config 'dialplanvoice'
 	option 'dialplan' 'internal'
@@ -180,7 +180,7 @@ config 'dialplanmeetme'
 	option 'room' ''
 
 config 'dialplan' 'localinternational'
-	option 'include' 'mobile,interstate'
+	option 'include' 'mobile interstate'
 
 config 'dialzone' 'interstate'
 	option 'uses' 'SIP/providerphone'
