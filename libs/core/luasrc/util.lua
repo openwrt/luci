@@ -34,7 +34,7 @@ local coroutine = require "coroutine"
 
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
-local tostring, type, assert = tostring, type, assert 
+local tostring, type, assert = tostring, type, assert
 local ipairs, pairs, loadstring = ipairs, pairs, loadstring
 local require, pcall, xpcall = require, pcall, xpcall
 
@@ -162,7 +162,7 @@ end
 function dumptable(t, maxdepth, i, seen)
 	i = i or 0
 	seen = seen or setmetatable({}, {__mode="k"})
-	
+
 	for k,v in pairs(t) do
 		perror(string.rep("\t", i) .. tostring(k) .. "\t" .. tostring(v))
 		if type(v) == "table" and (not maxdepth or i < maxdepth) then
@@ -195,11 +195,11 @@ end
 -- @return		String value containing the escaped data
 function pcdata(value)
 	return value and tostring(value):gsub("[&\"'<>]", {
-		["&"] = "&amp;",
-		['"'] = "&quot;",
-		["'"] = "&apos;",
-		["<"] = "&lt;",
-		[">"] = "&gt;"
+		["&"] = "&#38;",
+		['"'] = "&#34;",
+		["'"] = "&#39;",
+		["<"] = "&#60;",
+		[">"] = "&#62;"
 	})
 end
 
@@ -406,7 +406,7 @@ end
 function _serialize_table(t, seen)
 	assert(not seen[t], "Recursion detected.")
 	seen[t] = true
-	
+
 	local data  = ""
 	local idata = ""
 	local ilen  = 0
@@ -425,7 +425,7 @@ function _serialize_table(t, seen)
 	for i = 1, ilen do
 		local v = serialize_data(t[i], seen)
 		idata = idata .. ( #idata > 0 and ", " or "" ) .. v
-	end		
+	end
 
 	return idata .. ( #data > 0 and #idata > 0 and ", " or "" ) .. data
 end
@@ -438,7 +438,7 @@ end
 -- @see			get_bytecode
 function serialize_data(val, seen)
 	seen = seen or setmetatable({}, {__mode="k"})
-	
+
 	if val == nil then
 		return "nil"
 	elseif type(val) == "number" then
@@ -633,11 +633,11 @@ function execi(command)
 
 	return pp and function()
 		local line = pp:read()
-		
+
 		if not line then
 			pp:close()
 		end
-		
+
 		return line
 	end
 end
