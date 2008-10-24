@@ -131,7 +131,6 @@ ip6gw:depends("proto", "static")
 ip6gw.optional = true
 
 dns = s:option(Value, "dns", translate("dnsserver"))
-dns:depends("proto", "static")
 dns.optional = true
 
 mtu = s:option(Value, "mtu", "MTU")
