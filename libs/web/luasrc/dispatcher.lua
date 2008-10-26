@@ -469,7 +469,13 @@ end
 -- @param	...		Additional parameters passed to the function
 function call(name, ...)
 	local argv = {...}
-	return function() return getfenv()[name](unpack(argv)) end
+	return function(...)
+		if #argv > 0 then 
+			return getfenv()[name](unpack(argv), ...)
+		else
+			return getfenv()[name](...)
+		end
+	end
 end
 
 --- Create a template render dispatching target.
