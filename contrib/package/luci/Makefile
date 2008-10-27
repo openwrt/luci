@@ -463,6 +463,17 @@ define Package/luci-app-uvc_streamer/install
 endef
 
 
+define Package/luci-app-mmc_over_gpio
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-full +kmod-mmc-over-gpio
+  TITLE:=mmc_over_gpio
+endef
+
+define Package/luci-app-mmc_over_gpio/install
+        $(call Package/luci/install/template,$(1),applications/luci-mmc_over_gpio)
+endef
+
+
 define Package/luci-app-p910nd
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-admin-full +p910nd
@@ -768,6 +779,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-uvc_streamer),)
 	PKG_SELECTED_MODULES+=applications/luci-uvc_streamer
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-mmc_over_gpio),)
+        PKG_SELECTED_MODULES+=applications/luci-mmc_over_gpio
+endif
 ifneq ($(CONFIG_PACKAGE_luci-app-p910nd),)
         PKG_SELECTED_MODULES+=applications/luci-p910nd
 endif
@@ -878,6 +892,7 @@ $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))
 $(eval $(call BuildPackage,luci-app-samba))
 $(eval $(call BuildPackage,luci-app-uvc_streamer))
+$(eval $(call BuildPackage,luci-app-mmc_over_gpio))
 $(eval $(call BuildPackage,luci-app-p910nd))
 $(eval $(call BuildPackage,luci-app-ushare))
 $(eval $(call BuildPackage,luci-app-hd_idle))
