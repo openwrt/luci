@@ -36,7 +36,7 @@ $(BOA_DIR)/.configured: $(BOA_DIR)/.patched
 	touch $@
 
 boa-compile: $(BOA_DIR)/.configured
-	$(MAKE) -C $(BOA_DIR)/src CC=$(CC) CFLAGS="$(CFLAGS) -DINET6 -DACCEPT_ON"
+	$(MAKE) -C $(BOA_DIR)/src CC=$(CC) CFLAGS="$(CFLAGS) -DINET6 -DACCEPT_ON -DWHEN_DOES_THIS_APPLY"
 
 %.o: %.c
 	$(COMPILE) $(LUA_CFLAGS) -I$(BOA_DIR)/src $(FPIC) -c -o $@ $< 
