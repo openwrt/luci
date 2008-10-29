@@ -94,11 +94,17 @@ function config_exec( c )
 		for key, type in pairs({ Exec="collectd_exec_input", NotificationExec="collectd_exec_notify" }) do
 			if sections[s][".type"] == type then
 
-				cmd   = sections[s].cmdline
-				user  = sections[s].cmduser  or "nobody"
-				group = sections[s].cmdgroup or "nogroup"
+				cmd = sections[s].cmdline
 
-				str = str .. "\t" .. key .. " " .. user .. ":" .. group .. ' "' .. cmd .. "\"\n"
+                if cmd then
+                    cmd   = cmd:gsub("^%s+", ""):gsub("%s+$", "")
+                    user  = sections[s].cmduser  or "nobody"
+                    group = sections[s].cmdgroup
+
+                    str = str .. "\t" .. key .. ' "' ..
+                        user .. ( group and ":" .. group or "" ) .. '" "' ..
+                        cmd:gsub('%s+', '" "') .. '"\n'
+                end
 			end
 		end
 	end
