@@ -454,7 +454,7 @@ endef
 
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
-  TITLE:=OpenWRT.org (default)
+  TITLE:=OpenWrt.org (default)
   DEPENDS:=+luci-theme-base
 endef
 
@@ -464,7 +464,7 @@ endef
 
 define Package/luci-theme-openwrtlight
   $(call Package/luci/thtemplate)
-  TITLE:=OpenWRT.org - light variant without images
+  TITLE:=OpenWrt.org - light variant without images
   DEPENDS:=+luci-theme-base
 endef
 
