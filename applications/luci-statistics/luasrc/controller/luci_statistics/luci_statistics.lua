@@ -50,8 +50,12 @@ function index()
 	}
 
 	-- create toplevel menu nodes
-	entry({"admin", "statistics"},             call("statistics_index"),        _i18n("statistics"), 80).i18n = "statistics"
-	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _i18n("collectd"),   10)
+	local st = entry({"admin", "statistics"},             call("statistics_index"),        _i18n("statistics"), 80)
+	st.i18n = "statistics"
+	st.index = true
+	
+	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _i18n("collectd"),   10).subindex = true
+	
 
 	-- populate collectd plugin menu
 	local index = 1
@@ -61,7 +65,7 @@ function index()
 			call( "statistics_" .. section .. "plugins" ),
 			_i18n( section .. "plugins" ),
 			index * 10
-		)
+		).index = true
 
 		for j, plugin in luci.util.vspairs( plugins ) do
 			_entry(
