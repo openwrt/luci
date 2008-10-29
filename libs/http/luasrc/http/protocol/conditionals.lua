@@ -118,7 +118,7 @@ function if_none_match( req, stat )
 	return true
 end
 
--- 14.27 / If-Range
+--- 14.27 / If-Range
 -- The If-Range header is currently not implemented due to the lack of general
 -- byte range stuff in luci.http.protocol . This function will always return
 -- false, 412 to indicate a failed precondition.
@@ -131,7 +131,7 @@ function if_range( req, stat )
 	return false, 412
 end
 
--- 14.28 / If-Unmodified-Since
+--- 14.28 / If-Unmodified-Since
 -- Test whether the given message object contains an "If-Unmodified-Since"
 -- header and compare it against the given stat object.
 -- @param req	HTTP request message object

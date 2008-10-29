@@ -30,6 +30,7 @@ require("luci.template")
 require("luci.util")
 require("luci.http")
 require("luci.uvl")
+require("luci.fs")
 
 local uci        = require("luci.model.uci")
 local class      = luci.util.class
@@ -38,6 +39,7 @@ local instanceof = luci.util.instanceof
 FORM_NODATA  =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
+FORM_CHANGED =  2
 
 AUTO = true
 
@@ -51,6 +53,7 @@ function load(cbimap, ...)
 	require("luci.config")
 	require("luci.util")
 
+	local upldir = "/lib/uci/upload/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
 	local func, err = loadfile(cbimap) or loadfile(cbidir..cbimap..".lua")
 	assert(func, err)
@@ -69,7 +72,9 @@ function load(cbimap, ...)
 			return rawget(tbl, key) or _M[key] or _G[key]
 		end}))
 
-	local maps = {func()}
+	local maps       = { func() }
+	local uploads    = { }
+	local has_upload = false
 
 	for i, map in ipairs(maps) do
 		if not instanceof(map, Node) then
@@ -77,7 +82,56 @@ function load(cbimap, ...)
 			return nil
 		else
 			map:prepare()
+			if map.upload_fields then
+				has_upload = true
+				for _, field in ipairs(map.upload_fields) do
+					uploads[
+						field.config .. '.' ..
+						field.section.sectiontype .. '.' ..
+						field.option
+					] = true
+				end
+			end
 		end
+	end
+
+	if has_upload then
+		local uci = luci.model.uci.cursor()
+		local prm = luci.http.context.request.message.params
+		local fd, cbid
+
+		luci.http.setfilehandler(
+			function( field, chunk, eof )
+				if not field then return end
+				if field.name and not cbid then
+					local c, s, o = field.name:gmatch(
+						"cbid%.([^%.]+)%.([^%.]+)%.([^%.]+)"
+					)()
+
+					if c and s and o then
+						local t = uci:get( c, s )
+						if t and uploads[c.."."..t.."."..o] then
+							local path = upldir .. field.name
+							fd = io.open(path, "w")
+							if fd then
+								cbid = field.name
+								prm[cbid] = path
+							end
+						end
+					end
+				end
+
+				if field.name == cbid and fd then
+					fd:write(chunk)
+				end
+
+				if eof and fd then
+					fd:close()
+					fd   = nil
+					cbid = nil
+				end
+			end
+		)
 	end
 
 	return maps
@@ -251,6 +305,9 @@ function Map.get_scheme(self, sectiontype, option)
 	end
 end
 
+function Map.submitstate(self)
+	return luci.http.formvalue("cbi.submit")
+end
 
 -- Chain foreign config
 function Map.chain(self, config)
@@ -288,6 +345,19 @@ function Map.parse(self)
 		for i, config in ipairs(self.parsechain) do
 			self.uci:unload(config)
 		end
+		if type(self.commit_handler) == "function" then
+			self:commit_handler(self:submitstate())
+		end
+	end
+
+	if self:submitstate() then
+		if self.save then
+			return self.changed and FORM_CHANGED or FORM_VALID
+		else
+			return FORM_INVALID
+		end
+	else
+		return FORM_NODATA
 	end
 end
 
@@ -383,17 +453,22 @@ function SimpleForm.parse(self, ...)
 	end
 
 	local state =
-		not luci.http.formvalue("cbi.submit") and 0
-		or valid and 1
-		or -1
+		not self:submitstate() and FORM_NODATA
+		or valid and FORM_VALID
+		or FORM_INVALID
 
 	self.dorender = not self.handle or self:handle(state, self.data) ~= false
+	return state
 end
 
 function SimpleForm.render(self, ...)
 	if self.dorender then
 		Node.render(self, ...)
 	end
+end
+
+function SimpleForm.submitstate(self)
+	return luci.http.formvalue("cbi.submit")
 end
 
 function SimpleForm.section(self, class, ...)
@@ -615,6 +690,10 @@ function Table.__init__(self, form, data, ...)
 	function datasource.get(self, section, option)
 		return data[section] and data[section][option]
 	end
+	
+	function datasource.submitstate(self)
+		return luci.http.formvalue("cbi.submit")
+	end
 
 	function datasource.del(...)
 		return true
@@ -632,7 +711,7 @@ end
 
 function Table.parse(self)
 	for i, k in ipairs(self:cfgsections()) do
-		if luci.http.formvalue("cbi.submit") then
+		if self.map:submitstate() then
 			Node.parse(self, k)
 		end
 	end
@@ -695,7 +774,7 @@ function NamedSection.parse(self, novld)
 
 	if active then
 		AbstractSection.parse_dynamic(self, s)
-		if luci.http.formvalue("cbi.submit") then
+		if self.map:submitstate() then
 			Node.parse(self, s)
 
 			if not novld and not self.override_scheme and self.map.scheme then
@@ -770,7 +849,7 @@ function TypedSection.parse(self, novld)
 	local co
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
-		if luci.http.formvalue("cbi.submit") then
+		if self.map:submitstate() then
 			Node.parse(self, k)
 
 			if not novld and not self.override_scheme and self.map.scheme then
@@ -1324,4 +1403,59 @@ function Button.__init__(self, ...)
 	self.template  = "cbi/button"
 	self.inputstyle = nil
 	self.rmempty = true
+end
+
+
+FileUpload = class(AbstractValue)
+
+function FileUpload.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template = "cbi/upload"
+	if not self.map.upload_fields then
+		self.map.upload_fields = { self }
+	else
+		self.map.upload_fields[#self.map.upload_fields+1] = self
+	end
+end
+
+function FileUpload.formcreated(self, section)
+	return AbstractValue.formcreated(self, section) or
+		luci.http.formvalue("cbi.rlf."..section.."."..self.option) or
+		luci.http.formvalue("cbi.rlf."..section.."."..self.option..".x")
+end
+
+function FileUpload.cfgvalue(self, section)
+	local val = AbstractValue.cfgvalue(self, section)
+	if val and luci.fs.access(val) then
+		return val
+	end
+	return nil
+end
+
+function FileUpload.formvalue(self, section)
+	local val = AbstractValue.formvalue(self, section)
+	if val then
+		if not luci.http.formvalue("cbi.rlf."..section.."."..self.option) and
+		   not luci.http.formvalue("cbi.rlf."..section.."."..self.option..".x")
+		then
+			return val
+		end
+		luci.fs.unlink(val)
+		self.value = nil
+	end
+	return nil
+end
+
+function FileUpload.remove(self, section)
+	local val = AbstractValue.formvalue(self, section)
+	if val and luci.fs.access(val) then luci.fs.unlink(val) end
+	return AbstractValue.remove(self, section)
+end
+
+
+FileBrowser = class(AbstractValue)
+
+function FileBrowser.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template = "cbi/browser"
 end

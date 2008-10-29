@@ -12,9 +12,9 @@ Copyright 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,7 +45,7 @@ end
 -- @param force	Force reload even if already loaded (optional)
 -- @return		Success status
 function load(file, lang, force)
-	lang = lang or ""
+	lang = lang and lang:gsub("_", "-") or ""
 	if force or not loaded[lang] or not loaded[lang][file] then
 		local f = loadfile(i18ndir .. file .. "." .. lang .. ".lua")
 		if f then
@@ -75,7 +75,7 @@ end
 --- Set the context default translation language.
 -- @param lang	Two-letter language code
 function setlanguage(lang)
-	context.lang = lang
+	context.lang = lang:gsub("_", "-")
 end
 
 --- Return the translated value for a specific translation key.

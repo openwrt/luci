@@ -33,7 +33,6 @@ local string = require "string"
 local coroutine = require "coroutine"
 
 local getmetatable, setmetatable = getmetatable, setmetatable
-local getfenv, setfenv = getfenv, setfenv
 local rawget, rawset, unpack = rawget, rawset, unpack
 local tostring, type, assert = tostring, type, assert
 local ipairs, pairs, loadstring = ipairs, pairs, loadstring

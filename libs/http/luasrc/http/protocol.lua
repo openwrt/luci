@@ -131,7 +131,7 @@ function urlencode_params( tbl )
 	return enc
 end
 
---- (Internal function)
+-- (Internal function)
 -- Initialize given parameter and coerce string into table when the parameter
 -- already exists.
 -- @param tbl	Table where parameter should be created
@@ -147,7 +147,7 @@ local function __initval( tbl, key )
 	end
 end
 
---- (Internal function)
+-- (Internal function)
 -- Append given data to given parameter, either by extending the string value
 -- or by appending it to the last string in the parameter's value table.
 -- @param tbl	Table containing the previously initialized parameter value
@@ -163,7 +163,7 @@ local function __appendval( tbl, key, chunk )
 	end
 end
 
---- (Internal function)
+-- (Internal function)
 -- Finish the value of given parameter, either by transforming the string value
 -- or - in the case of multi value parameters - the last element in the
 -- associated values table.
@@ -563,12 +563,14 @@ function parse_message_header( src )
 			-- Populate common environment variables
 			msg.env = {
 				CONTENT_LENGTH    = msg.headers['Content-Length'];
-				CONTENT_TYPE      = msg.headers['Content-Type'];
+				CONTENT_TYPE      = msg.headers['Content-Type'] or msg.headers['Content-type'];
 				REQUEST_METHOD    = msg.request_method:upper();
 				REQUEST_URI       = msg.request_uri;
 				SCRIPT_NAME       = msg.request_uri:gsub("?.+$","");
 				SCRIPT_FILENAME   = "";		-- XXX implement me
-				SERVER_PROTOCOL   = "HTTP/" .. string.format("%.1f", msg.http_version)
+				SERVER_PROTOCOL   = "HTTP/" .. string.format("%.1f", msg.http_version);
+				QUERY_STRING      = msg.request_uri:match("?")
+					and msg.request_uri:gsub("^.+?","") or ""
 			}
 
 			-- Populate HTTP_* environment variables
@@ -617,7 +619,7 @@ function parse_message_body( src, msg, filecb )
 
 	-- Is it application/x-www-form-urlencoded ?
 	elseif msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
-	       msg.env.CONTENT_TYPE == "application/x-www-form-urlencoded"
+	       msg.env.CONTENT_TYPE:match("^application/x%-www%-form%-urlencoded")
 	then
 		return urldecode_message_body( src, msg, filecb )
 
