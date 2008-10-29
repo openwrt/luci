@@ -17,7 +17,7 @@ $Id$
 
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
-		<h1><%:sysauth_head%></h1>
+		<h2><a id="content" name="content"><%:sysauth_head%></a></h2>
 		<div class="cbi-map-descr">
 			<%:sysauth_prompt%>
 			<%- if fuser then %>
@@ -35,7 +35,7 @@ $Id$
 			<div class="cbi-value">
 				<label class="cbi-value-title"><%:password%></label>
 				<div class="cbi-value-field">
-					<input class="cbi-input-key" type="password" name="password" />
+					<input class="cbi-input-password" type="password" name="password" />
 				</div>
 			</div>
 		</fieldset></fieldset>
