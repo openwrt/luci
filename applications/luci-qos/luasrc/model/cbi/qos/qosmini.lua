@@ -75,6 +75,6 @@ p.rmempty = true
 
 ports = s:option(Value, "ports", translate("ports"))
 ports.rmempty = true
-ports:value("", translate("all"))
+ports:value("", translate("allf", translate("all")))
 
 return m
