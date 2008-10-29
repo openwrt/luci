@@ -13,14 +13,27 @@ $Id$
 
 -%>
 <%+header%>
+<div>
+<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+<br />
+<br />
+</div>
 <h2><a id="content" name="content"><%:config%></a></h2>
 <h3><%:changes%></h3>
 <code><%=changes%></code>
 <br /><br />
-<form class="inline" method="get" action="<%=controller%>/mini/uci/apply">
+<form class="inline" method="get" action="<%=controller%>/admin/uci/apply">
 	<input type="submit" value="<%:apply%>" />
 </form>
-<form class="inline" method="get" action="<%=controller%>/mini/uci/revert">
+<form class="inline" method="get" action="<%=controller%>/admin/uci/saveapply">
+	<input type="submit" value="<%:saveapply%>" />
+</form>
+<form class="inline" method="get" action="<%=controller%>/admin/uci/revert">
 	<input type="submit" value="<%:revert%>" />
 </form>
+
+<div>
+<br />
+<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+</div>
 <%+footer%>

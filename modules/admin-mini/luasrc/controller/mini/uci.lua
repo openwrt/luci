@@ -16,11 +16,13 @@ module("luci.controller.mini.uci", package.seeall)
 
 function index()
 	local i18n = luci.i18n.translate
+	local redir = luci.http.formvalue("redir", true) or 
+	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
 	
 	entry({"mini", "uci"}, nil, i18n("config"))
-	entry({"mini", "uci", "changes"}, call("action_changes"), i18n("changes"), 30)
-	entry({"mini", "uci", "revert"}, call("action_revert"), i18n("revert"), 20)
-	entry({"mini", "uci", "saveapply"}, call("action_apply"), i18n("saveapply"), 10)
+	entry({"mini", "uci", "changes"}, call("action_changes"), i18n("changes"), 30).query = {redir=redir}
+	entry({"mini", "uci", "revert"}, call("action_revert"), i18n("revert"), 20).query = {redir=redir}
+	entry({"mini", "uci", "saveapply"}, call("action_apply"), i18n("saveapply"), 10).query = {redir=redir}
 end
 
 function convert_changes(changes)
