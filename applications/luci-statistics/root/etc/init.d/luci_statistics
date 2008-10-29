@@ -17,6 +17,9 @@ start() {
 		imagepath="$(uci get luci_statistics.rrdtool.image_path)"
 		ln -s ${imagepath:-/tmp/rrdimg}/ /www/rrdimg
 	fi
+
+    ### flush LuCI index cache
+    test -f /var/luci-indexcache && rm /var/luci-indexcache
 }
 
 restart() {

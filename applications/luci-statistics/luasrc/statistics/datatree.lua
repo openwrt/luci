@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+		http://www.apache.org/licenses/LICENSE-2.0
 
 $Id$
 
@@ -19,7 +19,7 @@ local util = require("luci.util")
 local sys  = require("luci.sys")
 local fs   = require("luci.fs")
 local uci  = require("luci.model.uci").cursor()
-local sections = uci:get_all( "luci_statistics" )
+local sections = uci:get_all("luci_statistics")
 
 
 Instance = util.class()
@@ -59,13 +59,25 @@ function Instance._notzero( self, table )
 end
 
 function Instance._scan( self )
-	local dir = fs.dir( self._libdir )
-	if not dir then
+	local dirs = fs.dir( self:_mkpath() )
+	if not dirs then
 		return
 	end
-	for i, plugin in ipairs( dir ) do
-		if plugin:match("%w+.so") then
-			self._plugins[ plugin:gsub(".so", "") ] = { }
+
+--	for i, plugin in ipairs( dirs ) do
+--		if plugin:match("%w+.so") then
+--			self._plugins[ plugin:gsub("%.so$", "") ] = { }
+--		end
+--	end
+
+	for _, dir in ipairs(dirs) do
+		if dir ~= "." and dir ~= ".." and
+		   fs.stat(self:_mkpath(dir)).type == "directory"
+		then
+			local plugin = dir:gsub("%-.+$", "")
+			if not self._plugins[plugin] then
+				self._plugins[plugin] = { }
+			end
 		end
 	end
 

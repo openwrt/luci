@@ -9,7 +9,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+		http://www.apache.org/licenses/LICENSE-2.0
 
 $Id$
 
@@ -96,15 +96,15 @@ function config_exec( c )
 
 				cmd = sections[s].cmdline
 
-                if cmd then
-                    cmd   = cmd:gsub("^%s+", ""):gsub("%s+$", "")
-                    user  = sections[s].cmduser  or "nobody"
-                    group = sections[s].cmdgroup
+				if cmd then
+					cmd   = cmd:gsub("^%s+", ""):gsub("%s+$", "")
+					user  = sections[s].cmduser  or "nobody"
+					group = sections[s].cmdgroup
 
-                    str = str .. "\t" .. key .. ' "' ..
-                        user .. ( group and ":" .. group or "" ) .. '" "' ..
-                        cmd:gsub('%s+', '" "') .. '"\n'
-                end
+					str = str .. "\t" .. key .. ' "' ..
+						user .. ( group and ":" .. group or "" ) .. '" "' ..
+						cmd:gsub('%s+', '" "') .. '"\n'
+				end
 			end
 		end
 	end
@@ -162,9 +162,9 @@ function config_network( c )
 						str = str .. "\t" .. key .. " " .. host .. "\n"
 					end
 				end
-                        end
-                end
-        end
+						end
+				end
+		end
 
 	return str .. _string( c["TimeToLive"], "TimeToLive" )
 		   .. _string( c["CacheFlush"], "CacheFlush" )
