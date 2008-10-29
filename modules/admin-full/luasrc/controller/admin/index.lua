@@ -20,6 +20,7 @@ function index()
 	local root = node()
 	if not root.target then
 		root.target = alias("admin")
+		root.index = true
 	end
 	
 	entry({"about"}, template("about")).i18n = "admin-core"
@@ -32,11 +33,13 @@ function index()
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
+	page.index = true
 	
 	local page  = node("admin", "index")
 	page.target = template("admin_index/index")
 	page.title  = i18n("overview", "Übersicht")
 	page.order  = 10
+	page.index = true
 	
 	local page  = node("admin", "index", "luci")
 	page.target = cbi("admin_index/luci")

@@ -17,7 +17,7 @@ function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
 	
-	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("system"), 30)
+	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("system"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("system"), 1)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("a_s_packages"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"), i18n("a_s_p_ipkg"))
@@ -211,6 +211,7 @@ function action_upgrade()
 		end
 	end
 
+	luci.http.prepare_content("text/html")
 	luci.template.render("admin_system/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
 end
 

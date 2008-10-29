@@ -22,6 +22,7 @@ function index()
 	local root = node()
 	if not root.lock then
 		root.target = alias("mini")
+		root.index = true
 	end
 	
 	entry({"about"}, template("about")).i18n = "admin-core"
@@ -31,9 +32,10 @@ function index()
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
+	page.index = true
 	
-	entry({"mini", "index"}, alias("mini", "index", "index"), i18n("overview"), 10)
-	entry({"mini", "index", "index"}, form("mini/index"), i18n("general"), 1)
+	entry({"mini", "index"}, alias("mini", "index", "index"), i18n("overview"), 10).index = true
+	entry({"mini", "index", "index"}, form("mini/index"), i18n("general"), 1).ignoreindex = true
 	entry({"mini", "index", "luci"}, cbi("mini/luci"), i18n("settings"), 10)
 	entry({"mini", "index", "logout"}, call("action_logout"), i18n("logout"))
 end

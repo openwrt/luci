@@ -25,6 +25,7 @@ s = m:section(TypedSection, "interface", "")
 s.addremove = true
 s.extedit   = luci.dispatcher.build_url("admin", "network", "network") .. "/%s"
 s.template  = "cbi/tblsection"
+s.override_scheme = true
 
 function s.filter(self, section)
 	return section ~= "loopback" and section
@@ -86,7 +87,7 @@ function hwaddr.cfgvalue(self, section)
 	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address")
 	 or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
 	 or "n/a"
-	 
+
 end
 
 
@@ -100,13 +101,13 @@ txrx = s:option(DummyValue, "_txrx")
 
 function txrx.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
-	
+
 	local rx = netstat and netstat[ix] and netstat[ix][1]
 	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
-	
+
 	local tx = netstat and netstat[ix] and netstat[ix][9]
 	tx = tx and luci.tools.webadmin.byte_format(tonumber(tx)) or "-"
-	
+
 	return string.format("%s / %s", tx, rx)
 end
 
@@ -114,13 +115,13 @@ errors = s:option(DummyValue, "_err")
 
 function errors.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
-	
+
 	local rx = netstat and netstat[ix] and netstat[ix][3]
 	local tx = netstat and netstat[ix] and netstat[ix][11]
-	
+
 	rx = rx and tostring(rx) or "-"
 	tx = tx and tostring(tx) or "-"
-	
+
 	return string.format("%s / %s", tx, rx)
 end
 

@@ -12,8 +12,15 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.config")
-m = Map("luci", translate("webui"), translate("a_i_luci1", 
+m = Map("luci", translate("webui"), translate("a_i_luci1",
  "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden."))
+
+-- force reload of global luci config namespace to reflect the changes
+function m.commit_handler(self)
+	package.loaded["luci.config"] = nil
+	require("luci.config")
+end
+
 
 c = m:section(NamedSection, "main", "core", translate("general"))
 
@@ -21,7 +28,7 @@ l = c:option(ListValue, "lang", translate("language"))
 
 local i18ndir = luci.i18n.i18ndir .. "default."
 for k, v in pairs(luci.config.languages) do
-	if k:sub(1, 1) ~= "." and luci.fs.isfile(i18ndir .. k .. ".lua") then
+	if k:sub(1, 1) ~= "." and luci.fs.isfile(i18ndir .. k:gsub("_", "-") .. ".lua") then
 		l:value(k, v)
 	end
 end

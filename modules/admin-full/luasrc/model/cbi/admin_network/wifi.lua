@@ -126,7 +126,7 @@ function network.write(self, section, value)
 	if not m.uci:get("network", value) then
 		-- avoid "value not defined in enum" because network is not known yet
 		s.override_scheme = true
-		
+
 		m:chain("network")
 		m.uci:set("network", value, "interface")
 		Value.write(self, section, value)
@@ -315,11 +315,11 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 	eaptype:depends({mode="sta", encryption="wpa"})
 	eaptype:depends({mode="sta", encryption="wpa2i"})
 
-	cacert = s:option(Value, "ca_cert", translate("a_w_cacert"))
+	cacert = s:option(FileUpload, "ca_cert", translate("a_w_cacert"))
 	cacert:depends({mode="sta", encryption="wpa"})
 	cacert:depends({mode="sta", encryption="wpa2i"})
 
-	privkey = s:option(Value, "priv_key", translate("a_w_tlsprivkey"))
+	privkey = s:option(FileUpload, "priv_key", translate("a_w_tlsprivkey"))
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa2i"})
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa"})
 

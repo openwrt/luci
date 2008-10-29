@@ -19,7 +19,7 @@ function index()
 	luci.i18n.loadc("admin-core")
 	local i18n = luci.i18n.translate
 
-	entry({"mini", "system"}, alias("mini", "system", "index"), i18n("system"), 40)
+	entry({"mini", "system"}, alias("mini", "system", "index"), i18n("system"), 40).index = true
 	entry({"mini", "system", "index"}, cbi("mini/system"), i18n("general"), 1)
 	entry({"mini", "system", "passwd"}, form("mini/passwd"), i18n("a_s_changepw"), 10)
 	entry({"mini", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 80)
@@ -108,6 +108,7 @@ function action_upgrade()
 		end
 	end
 
+	luci.http.prepare_content("text/html")
 	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
 end
 
