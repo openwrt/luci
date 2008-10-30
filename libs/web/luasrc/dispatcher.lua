@@ -517,11 +517,11 @@ function cbi(model)
 		end
 
 		http.header("X-CBI-State", state or 0)
-		luci.template.render("cbi/header")
+		luci.template.render("cbi/header", {state = state})
 		for i, res in ipairs(maps) do
 			res:render()
 		end
-		luci.template.render("cbi/footer")
+		luci.template.render("cbi/footer", {state = state})
 	end
 end
 
