@@ -440,8 +440,12 @@ end
 --- Create a redirect to another dispatching node.
 -- @param	...		Virtual path destination
 function alias(...)
-	local req = arg
-	return function()
+	local req = {...}
+	return function(...)
+		for _, r in ipairs({...}) do
+			req[#req+1] = r
+		end
+
 		dispatch(req)
 	end
 end
@@ -450,17 +454,23 @@ end
 -- @param	n		Number of path values to replace
 -- @param	...		Virtual path to replace removed path values with
 function rewrite(n, ...)
-	local req = arg
-	return function()
+	local req = {...}
+	return function(...)
+		local dispatched = util.clone(context.dispatched)
+
 		for i=1,n do
-			table.remove(context.path, 1)
+			table.remove(dispatched, 1)
 		end
 
-		for i,r in ipairs(req) do
-			table.insert(context.path, i, r)
+		for i, r in ipairs(req) do
+			table.insert(dispatched, i, r)
 		end
 
-		dispatch()
+		for _, r in ipairs({...}) do
+			dispatched[#dispatched+1] = r
+		end
+
+		dispatch(dispatched)
 	end
 end
 
