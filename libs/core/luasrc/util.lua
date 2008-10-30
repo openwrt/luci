@@ -320,16 +320,20 @@ function parse_units(ustr)
 	return val
 end
 
---- Combines two or more numerically indexed tables into one.
+--- Combines two or more numerically indexed tables and single objects into one table.
 -- @param tbl1	Table value to combine
 -- @param tbl2	Table value to combine
 -- @param ...	More tables to combine
 -- @return		Table value containing all values of given tables
 function combine(...)
 	local result = {}
-	for i, a in ipairs(arg) do
-		for j, v in ipairs(a) do
-			result[#result+1] = v
+	for i, a in ipairs({...}) do
+		if type(a) == "table" then
+			for j, v in ipairs(a) do
+				result[#result+1] = v
+			end
+		else
+			result[#result+1] = a
 		end
 	end
 	return result
