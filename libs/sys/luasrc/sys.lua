@@ -175,27 +175,21 @@ end
 -- @return	String containing the memory used for buffering in kB
 -- @return	String containing the free memory amount in kB
 function sysinfo()
-	local c1 = "cat /proc/cpuinfo|grep system\\ typ|cut -d: -f2 2>/dev/null"
-	local c2 = "uname -m 2>/dev/null"
-	local c3 = "cat /proc/cpuinfo|grep model\\ name|cut -d: -f2 2>/dev/null"
-	local c4 = "cat /proc/cpuinfo|grep cpu\\ model|cut -d: -f2 2>/dev/null"
-	local c5 = "cat /proc/meminfo|grep MemTotal|awk {' print $2 '} 2>/dev/null"
-	local c6 = "cat /proc/meminfo|grep ^Cached|awk {' print $2 '} 2>/dev/null"
-	local c7 = "cat /proc/meminfo|grep MemFree|awk {' print $2 '} 2>/dev/null"
-	local c8 = "cat /proc/meminfo|grep Buffers|awk {' print $2 '} 2>/dev/null"
+	local cpuinfo = luci.fs.readfile("/proc/cpuinfo")
+	local meminfo = luci.fs.readfile("/proc/meminfo")
 
-	local system = luci.util.trim(luci.util.exec(c1))
+	local system = cpuinfo:match("system typ.-:%s*([^\n]+)")
 	local model = ""
-	local memtotal = tonumber(luci.util.trim(luci.util.exec(c5)))
-	local memcached = tonumber(luci.util.trim(luci.util.exec(c6)))
-	local memfree = tonumber(luci.util.trim(luci.util.exec(c7)))
-	local membuffers = tonumber(luci.util.trim(luci.util.exec(c8)))
+	local memtotal = tonumber(meminfo:match("MemTotal:%s*(%d+)"))
+	local memcached = tonumber(meminfo:match("\nCached:%s*(%d+)"))
+	local memfree = tonumber(meminfo:match("MemFree:%s*(%d+)"))
+	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
 
-	if system == "" then
-		system = luci.util.trim(luci.util.exec(c2))
-		model = luci.util.trim(luci.util.exec(c3))
+	if not system then
+		system = posix.uname("%m")
+		model = cpuinfo:match("model name.-:%s*([^\n]+)")
 	else
-		model = luci.util.trim(luci.util.exec(c4))
+		model = cpuinfo:match("cpu model.-:%s*([^\n]+)")
 	end
 
 	return system, model, memtotal, memcached, membuffers, memfree
