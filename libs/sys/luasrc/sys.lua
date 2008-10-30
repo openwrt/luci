@@ -132,7 +132,7 @@ getenv = posix.getenv
 --- Determine the current hostname.
 -- @return		String containing the system hostname
 function hostname()
-	return io.lines("/proc/sys/kernel/hostname")()
+	return posix.uname("%n")
 end
 
 --- Returns the contents of a documented referred by an URL.
