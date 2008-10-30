@@ -13,7 +13,7 @@ $Id$
 
 -%>
 
-		<% if #self.description > 0 then -%>
+		<% if self.description and #self.description > 0 then -%>
 			<% if not luci.util.instanceof( self, luci.cbi.Flag ) then -%>
 				<br />
 			<%- end %>
