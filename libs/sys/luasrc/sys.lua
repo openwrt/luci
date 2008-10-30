@@ -142,7 +142,7 @@ end
 -- @return		String containing the contents of given the URL
 function httpget(url, stream, target)
 	if not target then
-		local source = stream and io.open or luci.util.exec
+		local source = stream and io.popen or luci.util.exec
 		return source("wget -qO- '"..url:gsub("'", "").."'")
 	else
 		return os.execute("wget -qO '%s' '%s'" %
