@@ -320,23 +320,30 @@ function parse_units(ustr)
 	return val
 end
 
+--- Appends numerically indexed tables or single objects to a given table.
+-- @param src	Target table
+-- @param ...	Objects to insert
+-- @return		Target table
+function append(src, ...)
+	for i, a in ipairs({...}) do
+		if type(a) == "table" then
+			for j, v in ipairs(a) do
+				src[#src+1] = v
+			end
+		else
+			src[#src+1] = a
+		end
+	end
+	return src
+end
+
 --- Combines two or more numerically indexed tables and single objects into one table.
 -- @param tbl1	Table value to combine
 -- @param tbl2	Table value to combine
 -- @param ...	More tables to combine
 -- @return		Table value containing all values of given tables
 function combine(...)
-	local result = {}
-	for i, a in ipairs({...}) do
-		if type(a) == "table" then
-			for j, v in ipairs(a) do
-				result[#result+1] = v
-			end
-		else
-			result[#result+1] = a
-		end
-	end
-	return result
+	return append({}, ...)
 end
 
 --- Checks whether the given table contains the given value.
