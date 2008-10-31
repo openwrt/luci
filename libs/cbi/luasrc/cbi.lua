@@ -322,7 +322,7 @@ function Map.parse(self)
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
-		if luci.http.formvalue("cbi.apply") then
+		if self:submitstate() and (self.autoapply or luci.http.formvalue("cbi.apply")) then
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 

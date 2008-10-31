@@ -18,7 +18,7 @@ function index()
 	table.insert(nodes, entry({"admin", "network", "firewall", "redirect"}, cbi("luci_fw/rrule")))
 	nodes[#nodes].leaf = true
 	
-	table.insert(nodes, entry({"mini", "network", "portfw"}, cbi("luci_fw/miniportfw"), i18n("fw_portfw", "Portweiterleitung"), 70))
+	table.insert(nodes, entry({"mini", "network", "portfw"}, cbi("luci_fw/miniportfw", {autoapply=true}), i18n("fw_portfw", "Portweiterleitung"), 70))
 	
 	for i,n in ipairs(nodes) do
 		n.i18n = "luci-fw"
