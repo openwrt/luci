@@ -159,6 +159,7 @@ end
 
 s = m:section(TypedSection, "wifi-iface", translate("m_n_local"))
 s.anonymous = true
+s.addremove = false
 
 s:option(Value, "ssid", translate("a_w_netid"))
 
