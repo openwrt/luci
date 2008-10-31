@@ -499,7 +499,8 @@ end
 
 --- Create a CBI model dispatching target.
 -- @param	model	CBI model tpo be rendered
-function cbi(model)
+function cbi(model, config)
+	config = config or {}
 	return function(...)
 		require("luci.cbi")
 		require("luci.template")
@@ -510,6 +511,9 @@ function cbi(model)
 		local state = nil
 
 		for i, res in ipairs(maps) do
+			if config.autoapply then
+				res.autoapply = config.autoapply
+			end
 			local cstate = res:parse()
 			if not state or cstate < state then
 				state = cstate
@@ -521,7 +525,7 @@ function cbi(model)
 		for i, res in ipairs(maps) do
 			res:render()
 		end
-		luci.template.render("cbi/footer", {state = state})
+		luci.template.render("cbi/footer", {state = state, autoapply = config.autoapply})
 	end
 end
 

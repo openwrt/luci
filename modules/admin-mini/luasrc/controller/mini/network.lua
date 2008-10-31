@@ -20,7 +20,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"mini", "network"}, alias("mini", "network", "index"), i18n("network"), 20).index = true
-	entry({"mini", "network", "index"}, cbi("mini/network"), i18n("general"), 1)
-	entry({"mini", "network", "wifi"}, cbi("mini/wifi"), i18n("wifi"), 10).i18n="wifi"
-	entry({"mini", "network", "dhcp"}, cbi("mini/dhcp"), "DHCP", 20)
+	entry({"mini", "network", "index"}, cbi("mini/network", {autoapply=true}), i18n("general"), 1)
+	entry({"mini", "network", "wifi"}, cbi("mini/wifi", {autoapply=true}), i18n("wifi"), 10).i18n="wifi"
+	entry({"mini", "network", "dhcp"}, cbi("mini/dhcp", {autoapply=true}), "DHCP", 20)
 end

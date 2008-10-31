@@ -26,7 +26,7 @@ function index()
 	page.dependent = true
 	
 	
-	local page = entry({"mini", "network", "ddns"}, cbi("ddns/ddnsmini"), luci.i18n.translate("ddns"), 60)
+	local page = entry({"mini", "network", "ddns"}, cbi("ddns/ddnsmini", {autoapply=true}), luci.i18n.translate("ddns"), 60)
 	page.i18n = "ddns"
 	page.dependent = true
 end

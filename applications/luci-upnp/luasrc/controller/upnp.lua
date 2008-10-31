@@ -24,7 +24,7 @@ function index()
 	page.dependent = true
 	
 	
-	local page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini"), "UPNP")
+	local page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini", {autoapply=true}), "UPNP")
 	page.i18n = "upnp"
 	page.dependent = true
 end

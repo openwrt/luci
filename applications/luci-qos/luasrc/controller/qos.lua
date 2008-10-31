@@ -23,7 +23,7 @@ function index()
 	page.dependent = true
 	
 	
-	local page = entry({"mini", "network", "qos"}, cbi("qos/qosmini"), "QoS")
+	local page = entry({"mini", "network", "qos"}, cbi("qos/qosmini", {autoapply=true}), "QoS")
 	page.i18n = "qos"
 	page.dependent = true
 end

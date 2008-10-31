@@ -31,12 +31,11 @@ function index()
 	page.i18n    = "admin-core"
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
-	page.ucidata = true
 	page.index = true
 	
 	entry({"mini", "index"}, alias("mini", "index", "index"), i18n("overview"), 10).index = true
 	entry({"mini", "index", "index"}, form("mini/index"), i18n("general"), 1).ignoreindex = true
-	entry({"mini", "index", "luci"}, cbi("mini/luci"), i18n("settings"), 10)
+	entry({"mini", "index", "luci"}, cbi("mini/luci", {autoapply=true}), i18n("settings"), 10)
 	entry({"mini", "index", "logout"}, call("action_logout"), i18n("logout"))
 end
 

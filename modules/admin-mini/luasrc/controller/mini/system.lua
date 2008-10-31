@@ -20,7 +20,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"mini", "system"}, alias("mini", "system", "index"), i18n("system"), 40).index = true
-	entry({"mini", "system", "index"}, cbi("mini/system"), i18n("general"), 1)
+	entry({"mini", "system", "index"}, cbi("mini/system", {autoapply=true}), i18n("general"), 1)
 	entry({"mini", "system", "passwd"}, form("mini/passwd"), i18n("a_s_changepw"), 10)
 	entry({"mini", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 80)
 	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 90)
