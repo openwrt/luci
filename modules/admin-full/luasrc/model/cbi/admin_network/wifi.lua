@@ -17,7 +17,7 @@ arg[1] = arg[1] or ""
 m = Map("wireless", translate("networks"), translate("a_w_networks1"))
 
 s = m:section(NamedSection, arg[1], "wifi-device", translate("device") .. " " .. arg[1])
---s.addremove = true
+s.addremove = false
 
 back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
