@@ -108,6 +108,7 @@ function httpdispatch(request)
 
 	local stat, err = util.copcall(dispatch, context.request)
 	if not stat then
+		luci.util.perror(err)
 		error500(err)
 	end
 
