@@ -20,6 +20,9 @@ m = Map("dhcp", "DHCP")
 
 s = m:section(TypedSection, "dhcp", "DHCP-Server")
 s.anonymous = true
+s.addremove = false
+s.dynamic = false
+
 s:depends("interface", "lan")
 
 enable = s:option(ListValue, "ignore", translate("enable"), "")
