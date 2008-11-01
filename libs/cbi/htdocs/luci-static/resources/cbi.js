@@ -1,3 +1,18 @@
+/*
+	LuCI - Lua Configuration Interface
+
+	Copyright 2008 Steven Barth <steven@midlink.org>
+	Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	$Id$
+*/
+
 var cbi_d = [];
 
 function cbi_d_add(field, dep, next) {
@@ -176,4 +191,26 @@ function cbi_filebrowser(id, url, defpath) {
 	);
 
 	browser.focus();
+}
+
+//Hijacks the CBI form to send via XHR (requires Prototype)
+function cbi_hijack_forms(layer, win, fail, load) {
+	layer.select('form').each(function(form) {
+		form.observe('submit', function(event) {
+			// Prevent the form from also submitting the regular way
+			event.stop();
+
+			var form = event.element();
+
+			if (load) {
+				load();
+			}
+
+			// Submit via XHR
+			form.request({
+				onSuccess: win,
+				onFailure: fail
+			});
+		});
+	});
 }
