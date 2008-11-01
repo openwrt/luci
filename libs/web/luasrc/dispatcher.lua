@@ -499,7 +499,7 @@ function template(name)
 end
 
 --- Create a CBI model dispatching target.
--- @param	model	CBI model tpo be rendered
+-- @param	model	CBI model to be rendered
 function cbi(model, config)
 	config = config or {}
 	return function(...)
@@ -521,12 +521,16 @@ function cbi(model, config)
 			end
 		end
 
+		local pageaction = true
 		http.header("X-CBI-State", state or 0)
 		luci.template.render("cbi/header", {state = state})
 		for i, res in ipairs(maps) do
 			res:render()
+			if res.pageaction == false then
+				pageaction = false
+			end
 		end
-		luci.template.render("cbi/footer", {state = state, autoapply = config.autoapply})
+		luci.template.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
 	end
 end
 
