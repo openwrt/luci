@@ -40,31 +40,6 @@ function Luci.handle_post(self, ...)
 end
 
 function Luci.handle_get(self, request, sourcein, sinkerr)
-	local reaped  = false
-	local running = 0
-
-	for _, v in pairs(self.running) do
-		if v then running = running + 1 end
-	end
-
-	if self.limit and running >= self.limit then
-		for k, v in ipairs(self.running) do
-			if coroutine.status(k) == "dead" then
-				self.running[k] = nil
-				running = running - 1
-				reaped  = true
-			end
-		end
-
-		if reaped then collectgarbage() end
-
-		if running >= self.limit then
-			return self:failure(503, "Overload %i/%i" % { running, self.limit } )
-		end
-	end
-
-	self.running[coroutine.running()] = true
-
 	local r = luci.http.Request(
 		request.env,
 		sourcein,
