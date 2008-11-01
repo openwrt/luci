@@ -436,6 +436,7 @@ function SimpleForm.__init__(self, config, title, description, data)
 	self.data = data or {}
 	self.template = "cbi/simpleform"
 	self.dorender = true
+	self.pageaction = false
 end
 
 function SimpleForm.parse(self, ...)
