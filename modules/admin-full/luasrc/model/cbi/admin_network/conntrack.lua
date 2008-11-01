@@ -17,7 +17,12 @@ f = SimpleForm("conntrack", translate("a_n_conntrack"), translate("a_n_conntrack
 f.reset = false
 f.submit = false
 
-t = f:section(Table, luci.sys.net.conntrack())
+t = f:section(Table, luci.sys.net.arptable(), "ARP")
+t:option(DummyValue, "IP address", translate("ipaddress"))
+t:option(DummyValue, "HW address", translate("macaddress"))
+t:option(DummyValue, "Device", translate("interface"))
+
+t = f:section(Table, luci.sys.net.conntrack(), translate("a_n_conntrack"))
 l3 = t:option(DummyValue, "layer3", translate("network"))
 function l3.cfgvalue(self, ...)
 	return DummyValue.cfgvalue(self, ...):upper()
