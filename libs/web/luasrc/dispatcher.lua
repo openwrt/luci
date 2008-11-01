@@ -521,6 +521,12 @@ function cbi(model, config)
 			end
 		end
 
+		if config.state_handler then
+			if not config.state_handler(state, maps) then
+				return
+			end
+		end
+
 		local pageaction = true
 		http.header("X-CBI-State", state or 0)
 		luci.template.render("cbi/header", {state = state})

@@ -352,13 +352,15 @@ function Map.parse(self)
 
 	if self:submitstate() then
 		if self.save then
-			return self.changed and FORM_CHANGED or FORM_VALID
+			self.state = self.changed and FORM_CHANGED or FORM_VALID
 		else
-			return FORM_INVALID
+			self.state = FORM_INVALID
 		end
 	else
-		return FORM_NODATA
+		self.state = FORM_NODATA
 	end
+
+	return self.state
 end
 
 function Map.render(self, ...)
