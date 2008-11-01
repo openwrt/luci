@@ -134,7 +134,8 @@ function dispatch(request)
 
 	local track = {}
 	local args = {}
-	context.args = args
+	ctx.args = args
+	ctx.requestargs = ctx.requestargs or args
 	local n
 
 	for i, s in ipairs(request) do
