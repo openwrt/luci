@@ -522,6 +522,11 @@ function cbi(model, config)
 			end
 		end
 
+		if config.on_success_to and state and state > 0 then
+			luci.http.redirect(config.on_success_to)
+			return
+		end
+
 		if config.state_handler then
 			if not config.state_handler(state, maps) then
 				return
