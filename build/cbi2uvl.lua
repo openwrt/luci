@@ -31,6 +31,15 @@ if arg[2] then
 	i18n.load(arg[2], "en")
 end
 
+if arg[3] then
+	pcall(function()
+		require "uci"
+		require "luci.model.uci".cursor = function(config, save)
+			return uci.cursor(config or arg[3] .. "/etc/config", save or arg[3] .. "/tmp/.uci")
+		end
+	end)
+end
+
 local map = cbi.load(arg[1])[1]
 assert(map)
 
@@ -45,7 +54,7 @@ if #map.description > 0 then
 	print ("	option description '%s'" % util.striptags(map.description))
 end
 
-for i, sec in pairs(map.children) do if util.instanceof(sec, cbi.TypedSection) then
+for i, sec in pairs(map.children) do if util.instanceof(sec, cbi.AbstractSection) then
 	print ("\nconfig section")
 	print ("	option name '%s'" % sec.sectiontype)
 	print ("	option package '%s'" % map.config)
