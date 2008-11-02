@@ -335,27 +335,32 @@ function UVL._validate_option( self, option, nodeps )
 				end
 			end
 			
-			if option:scheme('minlength') then
-				if #val < option:scheme('minlength') then
-					return false, option:error(ERR.OPT_RANGE(option))
+			val = ( type(val) == "table" and val or { val } )
+			for _, v in ipairs(val) do
+				if option:scheme('minlength') then
+					if #v < option:scheme('minlength') then
+						return false, option:error(ERR.OPT_RANGE(option))
+					end
 				end
-			end
-			
-			if option:scheme('maxlength') then
-				if #val > option:scheme('maxlength') then
-					return false, option:error(ERR.OPT_RANGE(option))
+				
+				if option:scheme('maxlength') then
+					if #v > option:scheme('maxlength') then
+						return false, option:error(ERR.OPT_RANGE(option))
+					end
 				end
-			end
-			
-			if option:scheme('minimum') then
-				if val < option:scheme('minimum') then
-					return false, option:error(ERR.OPT_RANGE(option))
+				
+				v = tonumber(v)
+				
+				if option:scheme('minimum') then
+					if not v or v < option:scheme('minimum') then
+						return false, option:error(ERR.OPT_RANGE(option))
+					end
 				end
-			end
-			
-			if option:scheme('maximum') then
-				if val > option:scheme('maximum') then
-					return false, option:error(ERR.OPT_RANGE(option))
+				
+				if option:scheme('maximum') then
+					if not v or v > option:scheme('maximum') then
+						return false, option:error(ERR.OPT_RANGE(option))
+					end
 				end
 			end
 
