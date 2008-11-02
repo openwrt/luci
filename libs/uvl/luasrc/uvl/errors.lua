@@ -66,6 +66,7 @@ ERRCODES = {
 	{ 'OPT_NOTLIST',	'Option "%i" is defined as list but stored as plain value' },
 	{ 'OPT_DATATYPE',	'Option "%i" has unknown datatype "%1"' },
 	{ 'OPT_NOTFOUND',	'Option "%p.%s.%o" not found in config' },
+	{ 'OPT_RANGE',		'Option "%p.%s.%o" is not within the specified range' },
 
 	{ 'DEP_NOTEQUAL',	'Dependency (%1) failed:\nOption "%i" is not eqal "%2"' },
 	{ 'DEP_NOVALUE',	'Dependency (%1) failed:\nOption "%i" has no value' },

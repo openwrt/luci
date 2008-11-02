@@ -334,6 +334,30 @@ function UVL._validate_option( self, option, nodeps )
 					return false, option:error(ERR.OPT_DATATYPE(option, dt))
 				end
 			end
+			
+			if option:scheme('minlength') then
+				if #val < option:scheme('minlength') then
+					return false, option:error(ERR.OPT_RANGE(option))
+				end
+			end
+			
+			if option:scheme('maxlength') then
+				if #val > option:scheme('maxlength') then
+					return false, option:error(ERR.OPT_RANGE(option))
+				end
+			end
+			
+			if option:scheme('minimum') then
+				if val < option:scheme('minimum') then
+					return false, option:error(ERR.OPT_RANGE(option))
+				end
+			end
+			
+			if option:scheme('maximum') then
+				if val > option:scheme('maximum') then
+					return false, option:error(ERR.OPT_RANGE(option))
+				end
+			end
 
 			if not nodeps then
 				local ok, err = dependencies.check( self, option )
@@ -582,6 +606,9 @@ function UVL._parse_var(self, scheme, k, v)
 				t.valueof = type(v2) == "table" and v2 or {v2}
 			elseif k == "required" then
 				t[k] = _bool(v2)
+			elseif k == "minlength" or k == "maxlength"
+			 or k == "minimum" or k == "maximum" then
+				t[k] = tonumber(v2)
 			else
 				t[k] = t[k] or v2
 			end
