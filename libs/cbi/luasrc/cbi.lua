@@ -32,11 +32,13 @@ require("luci.http")
 require("luci.uvl")
 require("luci.fs")
 
+--local event      = require "luci.sys.event"
 local uci        = require("luci.model.uci")
 local class      = luci.util.class
 local instanceof = luci.util.instanceof
 
 FORM_NODATA  =  0
+FORM_PROCEED =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
 FORM_CHANGED =  2
@@ -287,6 +289,9 @@ function Map.__init__(self, config, ...)
 	self.apply_on_parse = nil
 	self.uci = uci.cursor()
 	self.save = true
+	
+	self.changed = false
+	
 	if not self.uci:load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
@@ -544,6 +549,7 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.tag_error = {}
 	self.tag_invalid = {}
 	self.tag_deperror = {}
+	self.changed = false
 
 	self.optional = true
 	self.addremove = false
@@ -641,6 +647,12 @@ end
 -- Returns the section's UCI table
 function AbstractSection.cfgvalue(self, section)
 	return self.map:get(section)
+end
+
+-- Push events
+function AbstractSection.push_events(self)
+	--luci.util.append(self.map.events, self.events)
+	self.map.changed = true
 end
 
 -- Removes the section
@@ -785,6 +797,10 @@ function NamedSection.parse(self, novld)
 			end
 		end
 		AbstractSection.parse_optionals(self, s)
+		
+		if self.changed then
+			self:push_events()
+		end
 	end
 end
 
@@ -896,6 +912,10 @@ function TypedSection.parse(self, novld)
 		if created then
 			AbstractSection.parse_optionals(self, created)
 		end
+	end
+
+	if created or self.changed then
+		self:push_events()
 	end
 end
 
@@ -1040,11 +1060,19 @@ function AbstractValue.parse(self, section)
 			self.tag_invalid[section] = true
 		end
 		if fvalue and not (fvalue == cvalue) then
-			self:write(section, fvalue)
+			if self:write(section, fvalue) then
+				-- Push events
+				self.section.changed = true
+				--luci.util.append(self.map.events, self.events)			
+			end
 		end
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
-			self:remove(section)
+			if self:remove(section) then
+				-- Push events
+				self.section.changed = true
+				--luci.util.append(self.map.events, self.events)
+			end
 		elseif self.track_missing and (not fvalue or fvalue ~= cvalue) then
 			self.tag_missing[section] = true
 		end
