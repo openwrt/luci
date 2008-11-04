@@ -1,0 +1,4 @@
+#!/bin/sh
+[ -n "${IPKG_INSTROOT}" ] || {
+	( . /etc/uci-defaults/luci-mmc_over_gpio ) && rm -f /etc/uci-defaults/luci-mmc_over_gpio
+}

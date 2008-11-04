@@ -1,0 +1,7 @@
+#!/bin/sh
+
+uci batch <<-EOF
+	add ucitrack mmc_over_gpio
+	set ucitrack.@mmc_over_gpio[-1].init=mmc_over_gpio
+	commit ucitrack
+EOF
