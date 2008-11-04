@@ -8,7 +8,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+		http://www.apache.org/licenses/LICENSE-2.0
 
 $Id$
 
@@ -292,6 +292,21 @@ function UVL._validate_option( self, option, nodeps )
 		end
 
 	elseif option:scheme() then
+		if not nodeps then
+			local ok, err = dependencies.check( self, option )
+			if not ok then
+				-- XXX: maybe this needs to be more specific
+				if not err:is(ERR.ERR_DEP_NOTEQUAL) and
+				   not err:is(ERR.ERR_DEP_NOVALUE)
+				then
+					option:error(err)
+					return false, option:errors()
+				else
+					return true
+				end
+			end
+		end
+
 		if option:scheme('required') and not option:value() then
 			return false, option:error(ERR.OPT_REQUIRED(option))
 
@@ -334,7 +349,7 @@ function UVL._validate_option( self, option, nodeps )
 					return false, option:error(ERR.OPT_DATATYPE(option, dt))
 				end
 			end
-			
+
 			val = ( type(val) == "table" and val or { val } )
 			for _, v in ipairs(val) do
 				if option:scheme('minlength') then
@@ -342,32 +357,25 @@ function UVL._validate_option( self, option, nodeps )
 						return false, option:error(ERR.OPT_RANGE(option))
 					end
 				end
-				
+
 				if option:scheme('maxlength') then
 					if #v > option:scheme('maxlength') then
 						return false, option:error(ERR.OPT_RANGE(option))
 					end
 				end
-				
+
 				v = tonumber(v)
-				
+
 				if option:scheme('minimum') then
 					if not v or v < option:scheme('minimum') then
 						return false, option:error(ERR.OPT_RANGE(option))
 					end
 				end
-				
+
 				if option:scheme('maximum') then
 					if not v or v > option:scheme('maximum') then
 						return false, option:error(ERR.OPT_RANGE(option))
 					end
-				end
-			end
-
-			if not nodeps then
-				local ok, err = dependencies.check( self, option )
-				if not ok then
-					option:error(err)
 				end
 			end
 		end
@@ -554,8 +562,7 @@ function UVL._parse_section(self, scheme, k, v)
 	s.named    = s.named    or false
 end
 
-
-	-- Step 2: get all variables
+-- Step 2: get all variables
 function UVL._parse_var(self, scheme, k, v)
 	local ok, err = _req( TYPE_OPTION, k, v, { "name", "section" } )
 	if err then error(scheme:error(err)) end
@@ -611,8 +618,9 @@ function UVL._parse_var(self, scheme, k, v)
 				t.valueof = type(v2) == "table" and v2 or {v2}
 			elseif k == "required" then
 				t[k] = _bool(v2)
-			elseif k == "minlength" or k == "maxlength"
-			 or k == "minimum" or k == "maximum" then
+			elseif k == "minlength" or k == "maxlength" or
+                   k == "minimum" or k == "maximum"
+            then
 				t[k] = tonumber(v2)
 			else
 				t[k] = t[k] or v2
@@ -845,7 +853,7 @@ function uvlitem.cid(self)
 		local c = self.c
 		if c and c[r[2]] and c[r[2]]['.anonymous'] and c[r[2]]['.index'] then
 			r[2] = '@' .. c[r[2]]['.type'] ..
-			       '[' .. tostring(c[r[2]]['.index']) .. ']'
+				   '[' .. tostring(c[r[2]]['.index']) .. ']'
 		end
 		return table.concat( r, '.' )
 	end
