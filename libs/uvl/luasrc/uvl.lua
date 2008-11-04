@@ -295,7 +295,11 @@ function UVL._validate_option( self, option, nodeps )
 		if not nodeps then
 			local ok, err = dependencies.check( self, option )
 			if not ok then
-				if not err:is_all(ERR.ERR_DEP_NOTEQUAL,ERR.ERR_DEP_NOVALUE) then
+				if not err:is_all(
+					ERR.ERR_OPT_REQUIRED,
+					ERR.ERR_DEP_NOTEQUAL,
+					ERR.ERR_DEP_NOVALUE
+				) then
 					option:error(err)
 					return false, option:errors()
 				else
@@ -361,16 +365,22 @@ function UVL._validate_option( self, option, nodeps )
 					end
 				end
 
-				v = tonumber(v)
-
+				local w = tonumber(v)
+				
 				if option:scheme('minimum') then
-					if not v or v < option:scheme('minimum') then
+					if not w or w < option:scheme('minimum') then
 						return false, option:error(ERR.OPT_RANGE(option))
 					end
 				end
 
 				if option:scheme('maximum') then
-					if not v or v > option:scheme('maximum') then
+					if not w or w > option:scheme('maximum') then
+						return false, option:error(ERR.OPT_RANGE(option))
+					end
+				end
+
+				if option:scheme('max_nil') then
+					if v and (not w or w > tonumber(option:scheme('max_nil'))) then
 						return false, option:error(ERR.OPT_RANGE(option))
 					end
 				end

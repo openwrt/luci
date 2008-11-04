@@ -193,7 +193,11 @@ function error.is_all(self, ...)
 	else
 		local equal = false
 		for _, c in ipairs(self.childs) do
-			equal = util.contains(codes, c.code)
+			if c.childs then
+				equal = c:is_all(...)
+			else
+				equal = util.contains(codes, c.code)
+			end
 		end
 		return equal
 	end
