@@ -37,7 +37,7 @@ function _parse_reference( r, c, s, o )
 	for v in r:gmatch("[^.]+") do
 		ref[#ref+1] = (v:gsub( "%$(.+)", vars ))
 	end
-	
+
 	if #ref < 2 then
 		table.insert(ref, 1, s or '$section')
 	end
@@ -81,7 +81,11 @@ function check( self, object, nodeps )
 
 		for _, dep in ipairs(object:scheme('depends')) do
 			local subcondition = true
-			for k, v in pairs(dep) do
+			local score        = 0
+
+			for k, v in util.spairs(
+				dep, function(a, b) return type(dep[a]) == "string" end
+			) do
 				-- XXX: better error
 				local ref = _parse_reference( k, unpack(object.cref) )
 
@@ -103,10 +107,13 @@ function check( self, object, nodeps )
 						derr:child(
 							type(v) == "boolean"
 								and ERR.DEP_NOVALUE(option, depstr)
-								or  ERR.DEP_NOTEQUAL(option, {depstr, v})
+								or  ERR.DEP_NOTEQUAL(option, {depstr, v}),
+							score
 						)
 
-						break
+						--break
+					else
+						score = score + ( type(v) == "boolean" and 1 or 10 )
 					end
 				else
 					subcondition = false

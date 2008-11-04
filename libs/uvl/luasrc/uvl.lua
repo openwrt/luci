@@ -295,9 +295,8 @@ function UVL._validate_option( self, option, nodeps )
 		if not nodeps then
 			local ok, err = dependencies.check( self, option )
 			if not ok then
-				-- XXX: maybe this needs to be more specific
-				if not err:is(ERR.ERR_DEP_NOTEQUAL) and
-				   not err:is(ERR.ERR_DEP_NOVALUE)
+				if not err:is_all(ERR.ERR_DEP_NOTEQUAL) and
+				   not err:is_all(ERR.ERR_DEP_NOVALUE)
 				then
 					option:error(err)
 					return false, option:errors()

@@ -19,7 +19,7 @@ local uvl = require "luci.uvl"
 local util = require "luci.util"
 local string = require "string"
 
-local ipairs, error, type = ipairs, error, type 
+local ipairs, error, type = ipairs, error, type
 local tonumber, unpack = tonumber, unpack
 
 
@@ -183,4 +183,16 @@ function error.is(self, code)
 		end
 	end
 	return false
+end
+
+function error.is_all(self, code)
+	if self.code == code then
+		return true
+	else
+		local equal = false
+		for _, c in ipairs(self.childs) do
+			equal = ( c.code == code )
+		end
+		return equal
+	end
 end
