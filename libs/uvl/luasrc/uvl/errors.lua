@@ -185,13 +185,15 @@ function error.is(self, code)
 	return false
 end
 
-function error.is_all(self, code)
-	if self.code == code then
+function error.is_all(self, ...)
+	local codes = { ... }
+
+	if util.contains(codes, self.code) then
 		return true
 	else
 		local equal = false
 		for _, c in ipairs(self.childs) do
-			equal = ( c.code == code )
+			equal = util.contains(codes, c.code)
 		end
 		return equal
 	end
