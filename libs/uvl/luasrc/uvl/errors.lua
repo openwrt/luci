@@ -19,7 +19,7 @@ local uvl = require "luci.uvl"
 local util = require "luci.util"
 local string = require "string"
 
-local ipairs, error, type = ipairs, error, type 
+local ipairs, error, type = ipairs, error, type
 local tonumber, unpack = tonumber, unpack
 
 
@@ -66,6 +66,7 @@ ERRCODES = {
 	{ 'OPT_NOTLIST',	'Option "%i" is defined as list but stored as plain value' },
 	{ 'OPT_DATATYPE',	'Option "%i" has unknown datatype "%1"' },
 	{ 'OPT_NOTFOUND',	'Option "%p.%s.%o" not found in config' },
+	{ 'OPT_RANGE',		'Option "%p.%s.%o" is not within the specified range' },
 
 	{ 'DEP_NOTEQUAL',	'Dependency (%1) failed:\nOption "%i" is not eqal "%2"' },
 	{ 'DEP_NOVALUE',	'Dependency (%1) failed:\nOption "%i" has no value' },
@@ -182,4 +183,18 @@ function error.is(self, code)
 		end
 	end
 	return false
+end
+
+function error.is_all(self, ...)
+	local codes = { ... }
+
+	if util.contains(codes, self.code) then
+		return true
+	else
+		local equal = false
+		for _, c in ipairs(self.childs) do
+			equal = util.contains(codes, c.code)
+		end
+		return equal
+	end
 end
