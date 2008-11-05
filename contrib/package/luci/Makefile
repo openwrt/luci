@@ -547,6 +547,7 @@ endef
 define Package/luci-app-polipo
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for the Polipo Proxy
+  DEPENDS+=+luci-admin-core +polipo
 endef
 
 define Package/luci-app-polipo/install
