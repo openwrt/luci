@@ -1,3 +1,5 @@
 #!/bin/sh
 
-/etc/init.d/olsrd enable
+[ -n "${IPKG_INSTROOT}" ] || {
+	/etc/init.d/olsrd enable
+}

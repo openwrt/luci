@@ -1,7 +1,7 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
 	( . /etc/uci-defaults/luci-statistics ) && rm -f /etc/uci-defaults/luci-statistics
-}
 
-/etc/init.d/luci_statistics enable
-/etc/init.d/collectd enable
+	/etc/init.d/luci_statistics enable
+	/etc/init.d/collectd enable
+}
