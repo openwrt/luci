@@ -300,27 +300,34 @@ end
 -- @param path		Controller base directory
 -- @param suffix	Controller file suffix
 function createindex_plain(path, suffix)
-	if indexcache then
-		local cachedate = fs.mtime(indexcache)
-		if cachedate and cachedate > fs.mtime(path) then
-
-			assert(
-				sys.process.info("uid") == fs.stat(indexcache, "uid")
-				and fs.stat(indexcache, "mode") == "rw-------",
-				"Fatal: Indexcache is not sane!"
-			)
-
-			index = loadfile(indexcache)()
-			return index
-		end
-	end
-
-	index = {}
-
 	local controllers = util.combine(
 		luci.fs.glob(path .. "*" .. suffix) or {},
 		luci.fs.glob(path .. "*/*" .. suffix) or {}
 	)
+
+	if indexcache then
+		local cachedate = fs.mtime(indexcache)
+		if cachedate then
+			local realdate = 0
+			for _, obj in ipairs(controllers) do
+				local omtime = fs.mtime(path .. "/" .. obj)
+				realdate = (omtime and omtime > realdate) and omtime or realdate
+			end
+
+			if cachedate > realdate then
+				assert(
+					sys.process.info("uid") == fs.stat(indexcache, "uid")
+					and fs.stat(indexcache, "mode") == "rw-------",
+					"Fatal: Indexcache is not sane!"
+				)
+
+				index = loadfile(indexcache)()
+				return index
+			end
+		end
+	end
+
+	index = {}
 
 	for i,c in ipairs(controllers) do
 		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
