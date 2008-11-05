@@ -1174,7 +1174,12 @@ function AbstractValue.parse(self, section)
 	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
 		fvalue = self:transform(self:validate(fvalue, section))
 		if not fvalue then
-			self.tag_invalid[section] = true
+			if self.error then
+				self.error[section] = "invalid"
+			else
+				self.error = { [section] = "invalid" }
+			end
+			self.map.save = false
 		end
 		if fvalue and not (fvalue == cvalue) then
 			if self:write(section, fvalue) then
@@ -1190,8 +1195,14 @@ function AbstractValue.parse(self, section)
 				self.section.changed = true
 				--luci.util.append(self.map.events, self.events)
 			end
-		elseif self.track_missing and (not fvalue or fvalue ~= cvalue) then
-			self.tag_missing[section] = true
+		elseif cvalue ~= fvalue then
+			self:write(section, fvalue)
+			if self.error then
+				self.error[section] = "missing"
+			else
+				self.error = { [section] = "missing" }
+			end
+			self.map.save = false
 		end
 	end
 end
