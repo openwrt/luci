@@ -529,6 +529,16 @@ function cbi(model, config)
 			end
 		end
 
+		if config.on_valid_to and state and state > 0 and state < 2 then
+			luci.http.redirect(config.on_valid_to)
+			return
+		end
+
+		if config.on_changed_to and state and state > 1 then
+			luci.http.redirect(config.on_changed_to)
+			return
+		end
+
 		if config.on_success_to and state and state > 0 then
 			luci.http.redirect(config.on_success_to)
 			return
