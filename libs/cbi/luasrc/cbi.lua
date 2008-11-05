@@ -568,6 +568,7 @@ function SimpleForm.parse(self, readinput, ...)
 			valid = valid
 			 and (not v.tag_missing or not v.tag_missing[1])
 			 and (not v.tag_invalid or not v.tag_invalid[1])
+			 and (not v.error)
 		end
 	end
 
