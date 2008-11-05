@@ -544,6 +544,15 @@ define Package/luci-app-asterisk/install
         $(call Package/luci/install/template,$(1),applications/luci-asterisk)
 endef
 
+define Package/luci-app-polipo
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for the Polipo Proxy
+endef
+
+define Package/luci-app-polipo/install
+        $(call Package/luci/install/template,$(1),applications/luci-polipo)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -803,6 +812,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-asterisk),)
        PKG_SELECTED_MODULES+=applications/luci-asterisk
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
+       PKG_SELECTED_MODULES+=applications/luci-polipo
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -900,6 +912,7 @@ $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
 $(eval $(call BuildPackage,luci-app-livestats))
 $(eval $(call BuildPackage,luci-app-asterisk))
+$(eval $(call BuildPackage,luci-app-polipo))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
