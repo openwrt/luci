@@ -248,7 +248,7 @@ process_states['headers'] = function( msg, chunk )
 	if chunk ~= nil then
 
 		-- Look for a valid header format
-		local hdr, val = chunk:match( "^([A-Z][A-Za-z0-9%-_]+): +(.+)$" )
+		local hdr, val = chunk:match( "^([A-Za-z][A-Za-z0-9%-_]+): +(.+)$" )
 
 		if type(hdr) == "string" and hdr:len() > 0 and
 		   type(val) == "string" and val:len() > 0
