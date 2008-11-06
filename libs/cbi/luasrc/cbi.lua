@@ -1197,7 +1197,7 @@ function AbstractValue.parse(self, section)
 				--luci.util.append(self.map.events, self.events)
 			end
 		elseif cvalue ~= fvalue then
-			self:write(section, fvalue)
+			self:write(section, fvalue or "")
 			if self.error then
 				self.error[section] = "missing"
 			else
