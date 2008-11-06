@@ -32,11 +32,13 @@ require("luci.http")
 require("luci.uvl")
 require("luci.fs")
 
+--local event      = require "luci.sys.event"
 local uci        = require("luci.model.uci")
 local class      = luci.util.class
 local instanceof = luci.util.instanceof
 
 FORM_NODATA  =  0
+FORM_PROCEED =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
 FORM_CHANGED =  2
@@ -55,7 +57,14 @@ function load(cbimap, ...)
 
 	local upldir = "/lib/uci/upload/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
-	local func, err = loadfile(cbimap) or loadfile(cbidir..cbimap..".lua")
+	
+	assert(luci.fs.stat(cbimap) or luci.fs.stat(cbidir..cbimap..".lua"), 
+	 "Model not found!")
+	  
+	local func, err = loadfile(cbimap)
+	if not func then
+		func, err = loadfile(cbidir..cbimap..".lua")
+	end
 	assert(func, err)
 
 	luci.i18n.loadc("cbi")
@@ -285,8 +294,13 @@ function Map.__init__(self, config, ...)
 	self.parsechain = {self.config}
 	self.template = "cbi/map"
 	self.apply_on_parse = nil
+	self.readinput = true
+
 	self.uci = uci.cursor()
 	self.save = true
+	
+	self.changed = false
+	
 	if not self.uci:load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
@@ -294,6 +308,14 @@ function Map.__init__(self, config, ...)
 	self.validator = luci.uvl.UVL()
 	self.scheme = self.validator:get_scheme(self.config)
 
+end
+
+function Map.formvalue(self, key)
+	return self.readinput and luci.http.formvalue(key)
+end
+
+function Map.formvaluetable(self, key)
+	return self.readinput and luci.http.formvaluetable(key)
 end
 
 function Map.get_scheme(self, sectiontype, option)
@@ -306,7 +328,7 @@ function Map.get_scheme(self, sectiontype, option)
 end
 
 function Map.submitstate(self)
-	return luci.http.formvalue("cbi.submit")
+	return self:formvalue("cbi.submit")
 end
 
 -- Chain foreign config
@@ -314,9 +336,14 @@ function Map.chain(self, config)
 	table.insert(self.parsechain, config)
 end
 
+function Map.state_handler(self, state)
+	return state
+end
+
 -- Use optimized UCI writing
-function Map.parse(self)
-	Node.parse(self)
+function Map.parse(self, readinput, ...)
+	self.readinput = (readinput ~= false)
+	Node.parse(self, ...)
 
 	if self.save then
 		for i, config in ipairs(self.parsechain) do
@@ -352,13 +379,15 @@ function Map.parse(self)
 
 	if self:submitstate() then
 		if self.save then
-			return self.changed and FORM_CHANGED or FORM_VALID
+			self.state = self.changed and FORM_CHANGED or FORM_VALID
 		else
-			return FORM_INVALID
+			self.state = FORM_INVALID
 		end
 	else
-		return FORM_NODATA
+		self.state = FORM_NODATA
 	end
+
+	return self:state_handler(self.state)
 end
 
 function Map.render(self, ...)
@@ -415,6 +444,90 @@ function Map.get(self, section, option)
 	end
 end
 
+--[[
+Compound - Container
+]]--
+Compound = class(Node)
+
+function Compound.__init__(self, ...)
+	Node.__init__(self)
+	self.children = {...}
+end
+
+function Compound.parse(self, ...)
+	local cstate, state = 0, 0
+	
+	for k, child in ipairs(self.children) do
+		cstate = child:parse(...)
+		state = (not state or cstate < state) and cstate or state
+	end
+	
+	return state
+end
+
+
+--[[
+Delegator - Node controller
+]]--
+Delegator = class(Node)
+function Delegator.__init__(self, ...)
+	Node.__init__(self, ...)
+	self.nodes = {}
+	self.template = "cbi/delegator"
+end
+
+function Delegator.state(self, name, node, transitor)
+	transitor = transitor or self.transistor_linear
+	local state = {node=node, name=name, transitor=transitor}
+	
+	assert(instanceof(node, Node), "Invalid node")
+	assert(not self.nodes[name], "Duplicate entry")
+	
+	self.nodes[name] = state
+	self:append(state)
+	
+	return state
+end
+
+function Delegator.get(self, name)
+	return self.nodes[name]
+end
+
+function Delegator.transistor_linear(self, state, cstate)
+	if cstate > 0 then
+		for i, child in ipairs(self.children) do
+			if state == child then
+				return self.children[i+1]
+			end
+		end
+	else
+		return state
+	end
+end
+
+function Delegator.parse(self, ...)
+	local active = self:getactive()
+	assert(active, "Invalid state")
+	
+	local cstate = active.node:parse()
+	self.active = active.transistor(self, active.node, cstate)
+	
+	if not self.active then
+		return FORM_DONE
+	else
+		self.active:parse(false)
+		return FROM_PROCEED
+	end
+end
+
+function Delegator.render(self, ...)
+	self.active.node:render(...)
+end
+
+function Delegator.getactive(self)
+	return self:get(Map.formvalue(self, "cbi.delegated") 
+		or (self.children[1] and self.children[1].name)) 
+end
 
 --[[
 Page - A simple node
@@ -436,10 +549,16 @@ function SimpleForm.__init__(self, config, title, description, data)
 	self.data = data or {}
 	self.template = "cbi/simpleform"
 	self.dorender = true
+	self.pageaction = false
+	self.readinput = true
 end
 
-function SimpleForm.parse(self, ...)
-	if luci.http.formvalue("cbi.submit") then
+SimpleForm.formvalue = Map.formvalue
+SimpleForm.formvaluetable = Map.formvaluetable
+
+function SimpleForm.parse(self, readinput, ...)
+	self.readinput = (readinput ~= false)
+	if self:submitstate() then
 		Node.parse(self, 1, ...)
 	end
 
@@ -449,6 +568,7 @@ function SimpleForm.parse(self, ...)
 			valid = valid
 			 and (not v.tag_missing or not v.tag_missing[1])
 			 and (not v.tag_invalid or not v.tag_invalid[1])
+			 and (not v.error)
 		end
 	end
 
@@ -468,7 +588,7 @@ function SimpleForm.render(self, ...)
 end
 
 function SimpleForm.submitstate(self)
-	return luci.http.formvalue("cbi.submit")
+	return self:formvalue("cbi.submit")
 end
 
 function SimpleForm.section(self, class, ...)
@@ -541,6 +661,7 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.tag_error = {}
 	self.tag_invalid = {}
 	self.tag_deperror = {}
+	self.changed = false
 
 	self.optional = true
 	self.addremove = false
@@ -586,7 +707,7 @@ function AbstractSection.parse_optionals(self, section)
 
 	self.optionals[section] = {}
 
-	local field = luci.http.formvalue("cbi.opt."..self.config.."."..section)
+	local field = self.map:formvalue("cbi.opt."..self.config.."."..section)
 	for k,v in ipairs(self.children) do
 		if v.optional and not v:cfgvalue(section) then
 			if field == v.option then
@@ -615,7 +736,7 @@ function AbstractSection.parse_dynamic(self, section)
 	end
 
 	local arr  = luci.util.clone(self:cfgvalue(section))
-	local form = luci.http.formvaluetable("cbid."..self.config.."."..section)
+	local form = self.map:formvaluetable("cbid."..self.config.."."..section)
 	for k, v in pairs(form) do
 		arr[k] = v
 	end
@@ -638,6 +759,12 @@ end
 -- Returns the section's UCI table
 function AbstractSection.cfgvalue(self, section)
 	return self.map:get(section)
+end
+
+-- Push events
+function AbstractSection.push_events(self)
+	--luci.util.append(self.map.events, self.events)
+	self.map.changed = true
 end
 
 -- Removes the section
@@ -686,13 +813,17 @@ function Table.__init__(self, form, data, ...)
 	local datasource = {}
 	datasource.config = "table"
 	self.data = data
+	
+	datasource.formvalue = Map.formvalue
+	datasource.formvaluetable = Map.formvaluetable
+	datasource.readinput = true
 
 	function datasource.get(self, section, option)
 		return data[section] and data[section][option]
 	end
 	
 	function datasource.submitstate(self)
-		return luci.http.formvalue("cbi.submit")
+		return Map.formvalue(self, "cbi.submit")
 	end
 
 	function datasource.del(...)
@@ -709,7 +840,8 @@ function Table.__init__(self, form, data, ...)
 	self.anonymous = true
 end
 
-function Table.parse(self)
+function Table.parse(self, readinput)
+	self.map.readinput = (readinput ~= false)
 	for i, k in ipairs(self:cfgsections()) do
 		if self.map:submitstate() then
 			Node.parse(self, k)
@@ -761,11 +893,12 @@ function NamedSection.parse(self, novld)
 	if self.addremove then
 		local path = self.config.."."..s
 		if active then -- Remove the section
-			if luci.http.formvalue("cbi.rns."..path) and self:remove(s) then
+			if self.map:formvalue("cbi.rns."..path) and self:remove(s) then
+				self:push_events()
 				return
 			end
 		else           -- Create and apply default values
-			if luci.http.formvalue("cbi.cns."..path) then
+			if self.map:formvalue("cbi.cns."..path) then
 				self:create(s)
 				return
 			end
@@ -782,6 +915,10 @@ function NamedSection.parse(self, novld)
 			end
 		end
 		AbstractSection.parse_optionals(self, s)
+		
+		if self.changed then
+			self:push_events()
+		end
 	end
 end
 
@@ -835,7 +972,7 @@ function TypedSection.parse(self, novld)
 	if self.addremove then
 		-- Remove
 		local crval = REMOVE_PREFIX .. self.config
-		local name = luci.http.formvaluetable(crval)
+		local name = self.map:formvaluetable(crval)
 		for k,v in pairs(name) do
 			if k:sub(-2) == ".x" then
 				k = k:sub(1, #k - 2)
@@ -850,7 +987,7 @@ function TypedSection.parse(self, novld)
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
 		if self.map:submitstate() then
-			Node.parse(self, k)
+			Node.parse(self, k, novld)
 
 			if not novld and not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, k)
@@ -863,7 +1000,7 @@ function TypedSection.parse(self, novld)
 		-- Create
 		local created
 		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
-		local name  = luci.http.formvalue(crval)
+		local name  = self.map:formvalue(crval)
 		if self.anonymous then
 			if name then
 				created = self:create()
@@ -893,6 +1030,10 @@ function TypedSection.parse(self, novld)
 		if created then
 			AbstractSection.parse_optionals(self, created)
 		end
+	end
+
+	if created or self.changed then
+		self:push_events()
 	end
 end
 
@@ -1011,12 +1152,12 @@ end
 -- Return whether this object should be created
 function AbstractValue.formcreated(self, section)
 	local key = "cbi.opt."..self.config.."."..section
-	return (luci.http.formvalue(key) == self.option)
+	return (self.map:formvalue(key) == self.option)
 end
 
 -- Returns the formvalue for this object
 function AbstractValue.formvalue(self, section)
-	return luci.http.formvalue(self:cbid(section))
+	return self.map:formvalue(self:cbid(section))
 end
 
 function AbstractValue.additional(self, value)
@@ -1027,23 +1168,42 @@ function AbstractValue.mandatory(self, value)
 	self.rmempty = not value
 end
 
-function AbstractValue.parse(self, section)
+function AbstractValue.parse(self, section, novld)
 	local fvalue = self:formvalue(section)
 	local cvalue = self:cfgvalue(section)
 
 	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
 		fvalue = self:transform(self:validate(fvalue, section))
-		if not fvalue then
-			self.tag_invalid[section] = true
+		if not fvalue and not novld then
+			if self.error then
+				self.error[section] = "invalid"
+			else
+				self.error = { [section] = "invalid" }
+			end
+			self.map.save = false
 		end
 		if fvalue and not (fvalue == cvalue) then
-			self:write(section, fvalue)
+			if self:write(section, fvalue) then
+				-- Push events
+				self.section.changed = true
+				--luci.util.append(self.map.events, self.events)			
+			end
 		end
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
-			self:remove(section)
-		elseif self.track_missing and (not fvalue or fvalue ~= cvalue) then
-			self.tag_missing[section] = true
+			if self:remove(section) then
+				-- Push events
+				self.section.changed = true
+				--luci.util.append(self.map.events, self.events)
+			end
+		elseif cvalue ~= fvalue and not novld then
+			self:write(section, fvalue or "")
+			if self.error then
+				self.error[section] = "missing"
+			else
+				self.error = { [section] = "missing" }
+			end
+			self.map.save = false
 		end
 	end
 end
@@ -1372,8 +1532,8 @@ function DynamicList.formvalue(self, section)
 	local valid = {}
 	for i, v in ipairs(value) do
 		if v and #v > 0
-		 and not luci.http.formvalue("cbi.rle."..section.."."..self.option.."."..i)
-		 and not luci.http.formvalue("cbi.rle."..section.."."..self.option.."."..i..".x") then
+		 and not self.map:formvalue("cbi.rle."..section.."."..self.option.."."..i)
+		 and not self.map:formvalue("cbi.rle."..section.."."..self.option.."."..i..".x") then
 			table.insert(valid, v)
 		end
 	end
@@ -1420,8 +1580,8 @@ end
 
 function FileUpload.formcreated(self, section)
 	return AbstractValue.formcreated(self, section) or
-		luci.http.formvalue("cbi.rlf."..section.."."..self.option) or
-		luci.http.formvalue("cbi.rlf."..section.."."..self.option..".x")
+		self.map:formvalue("cbi.rlf."..section.."."..self.option) or
+		self.map:formvalue("cbi.rlf."..section.."."..self.option..".x")
 end
 
 function FileUpload.cfgvalue(self, section)
@@ -1435,8 +1595,8 @@ end
 function FileUpload.formvalue(self, section)
 	local val = AbstractValue.formvalue(self, section)
 	if val then
-		if not luci.http.formvalue("cbi.rlf."..section.."."..self.option) and
-		   not luci.http.formvalue("cbi.rlf."..section.."."..self.option..".x")
+		if not self.map:formvalue("cbi.rlf."..section.."."..self.option) and
+		   not self.map:formvalue("cbi.rlf."..section.."."..self.option..".x")
 		then
 			return val
 		end

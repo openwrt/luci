@@ -11,8 +11,9 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-require("luci.http.protocol.date")
+
 require("luci.sys")
+require("luci.sys.zoneinfo")
 require("luci.tools.webadmin")
 
 
@@ -49,23 +50,24 @@ s:option(DummyValue, "_systime", translate("m_i_systemtime")).value =
 s:option(DummyValue, "_uptime", translate("m_i_uptime")).value = 
  luci.tools.webadmin.date_format(tonumber(uptime))
  
- 
- 
- 
-
 s:option(Value, "hostname", translate("hostname"))
 
-tz = s:option(Value, "timezone", translate("timezone"))
-for k, offset in luci.util.vspairs(luci.http.protocol.date.TZ) do
-	local zone = k:upper()	
-	local osgn = (offset >= 0 and "" or "+")
-	local ohrs = math.floor(-offset / 3600)
-	local omin = (offset % 3600) / 60
-	
-	local ptz = zone .. osgn .. (ohrs ~= 0 and ohrs or "") .. (omin ~= 0 and ":" .. omin or "")
-	local dtz = string.format("%+03d:%02d ", ohrs, omin) .. zone
-	
-	tz:value(ptz, dtz)
+tz = s:option(ListValue, "zonename", translate("timezone"))
+tz:value("UTC")
+
+for i, zone in ipairs(luci.sys.zoneinfo.TZ) do
+        tz:value(zone[1])
+end
+
+function tz.write(self, section, value)
+        local function lookup_zone(title)
+                for _, zone in ipairs(luci.sys.zoneinfo.TZ) do
+                        if zone[1] == title then return zone[2] end
+                end
+        end
+
+        AbstractValue.write(self, section, value)
+        self.map.uci:set("system", section, "timezone", lookup_zone(value) or "GMT0")
 end
 
 return m
