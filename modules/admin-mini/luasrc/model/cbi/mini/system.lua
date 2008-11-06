@@ -55,7 +55,7 @@ s:option(DummyValue, "_uptime", translate("m_i_uptime")).value =
 
 s:option(Value, "hostname", translate("hostname"))
 
-tz = s:option(ListValue, "timezone", translate("timezone"))
+tz = s:option(Value, "timezone", translate("timezone"))
 for k, offset in luci.util.vspairs(luci.http.protocol.date.TZ) do
 	local zone = k:upper()	
 	local osgn = (offset >= 0 and "" or "+")
