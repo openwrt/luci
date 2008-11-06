@@ -987,7 +987,7 @@ function TypedSection.parse(self, novld)
 	for i, k in ipairs(self:cfgsections()) do
 		AbstractSection.parse_dynamic(self, k)
 		if self.map:submitstate() then
-			Node.parse(self, k)
+			Node.parse(self, k, novld)
 
 			if not novld and not self.override_scheme and self.map.scheme then
 				_uvl_validate_section(self, k)
@@ -1168,13 +1168,13 @@ function AbstractValue.mandatory(self, value)
 	self.rmempty = not value
 end
 
-function AbstractValue.parse(self, section)
+function AbstractValue.parse(self, section, novld)
 	local fvalue = self:formvalue(section)
 	local cvalue = self:cfgvalue(section)
 
 	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
 		fvalue = self:transform(self:validate(fvalue, section))
-		if not fvalue then
+		if not fvalue and not novld then
 			if self.error then
 				self.error[section] = "invalid"
 			else
@@ -1196,7 +1196,7 @@ function AbstractValue.parse(self, section)
 				self.section.changed = true
 				--luci.util.append(self.map.events, self.events)
 			end
-		elseif cvalue ~= fvalue then
+		elseif cvalue ~= fvalue and not novld then
 			self:write(section, fvalue or "")
 			if self.error then
 				self.error[section] = "missing"
