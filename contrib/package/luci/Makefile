@@ -428,6 +428,16 @@ define Package/luci-app-initmgr/install
         $(call Package/luci/install/template,$(1),applications/luci-initmgr)
 endef
 
+#define Package/luci-app-polipo
+#  $(call Package/luci/webtemplate)
+#  TITLE:=LuCI Support for the Polipo Proxy
+#  DEPENDS+=+luci-admin-core +polipo
+#endef
+
+#define Package/luci-app-polipo/install
+#        $(call Package/luci/install/template,$(1),applications/luci-polipo)
+#endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -612,6 +622,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-initmgr),)
        PKG_SELECTED_MODULES+=applications/luci-initmgr
 endif
+#ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
+#       PKG_SELECTED_MODULES+=applications/luci-polipo
+#endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -685,6 +698,7 @@ $(eval $(call BuildPackage,luci-app-ushare))
 $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
+#$(eval $(call BuildPackage,luci-app-polipo))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 
