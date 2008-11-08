@@ -29,10 +29,30 @@ require("luci.http")
 require("luci.sys")
 require("luci.dispatcher")
 
+-- Limited source to avoid endless blocking
+local function limitsource(handle, limit)
+	limit = limit or 0
+	local BLOCKSIZE = ltn12.BLOCKSIZE
+
+	return function()
+		if limit < 1 then
+			handle:close()
+			return nil
+		else
+			local read = (limit > BLOCKSIZE) and BLOCKSIZE or limit
+			limit = limit - read
+
+			local chunk = handle:read(read)
+			if not chunk then handle:close() end
+			return chunk
+		end
+	end
+end
+
 function run()
 	local r = luci.http.Request(
 		luci.sys.getenv(),
-		ltn12.source.file(io.stdin),
+		limitsource(io.stdin, tonumber(luci.sys.getenv("CONTENT_LENGTH"))),
 		ltn12.sink.file(io.stderr)
 	)
 	
@@ -61,6 +81,8 @@ function run()
 			elseif id == 4 then
 				io.write(data1)
 			elseif id == 5 then
+				io.flush()
+				io.close()
 				active = false
 			end
 		end
