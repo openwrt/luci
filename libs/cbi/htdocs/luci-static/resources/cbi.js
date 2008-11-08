@@ -195,22 +195,21 @@ function cbi_filebrowser(id, url, defpath) {
 
 //Hijacks the CBI form to send via XHR (requires Prototype)
 function cbi_hijack_forms(layer, win, fail, load) {
-	layer.select('form').each(function(form) {
-		form.observe('submit', function(event) {
+	var forms = layer.getElementsByTagName('form');
+	for (var i=0; i<forms.length; i++) {
+		$(forms[i]).observe('submit', function(event) {
 			// Prevent the form from also submitting the regular way
 			event.stop();
 
-			var form = event.element();
+			// Submit via XHR
+			event.element().request({
+				onSuccess: win,
+				onFailure: fail
+			});
 
 			if (load) {
 				load();
 			}
-
-			// Submit via XHR
-			form.request({
-				onSuccess: win,
-				onFailure: fail
-			});
 		});
-	});
+	}
 }
