@@ -57,7 +57,8 @@ function action_backup()
 	elseif backup then
 		luci.util.perror(backup_cmd:format(_keep_pattern()))
 		local backup_fpi = io.popen(backup_cmd:format(_keep_pattern()), "r")
-		luci.http.header('Content-Disposition', 'attachment; filename="backup.tar.gz"')
+		luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
+			luci.sys.hostname(), os.date("%Y-%m-%d")})
 		luci.http.prepare_content("application/x-targz")
 		luci.ltn12.pump.all(luci.ltn12.source.file(backup_fpi), luci.http.write)
 	elseif reset then
