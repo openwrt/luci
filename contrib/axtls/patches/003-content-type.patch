@@ -1,0 +1,37 @@
+diff -urb axTLS.orig/httpd/axhttp.h axTLS/httpd/axhttp.h
+--- axTLS.orig/httpd/axhttp.h	2008-11-09 00:58:44.000000000 +0000
++++ axTLS/httpd/axhttp.h	2008-11-09 02:33:44.000000000 +0000
+@@ -91,6 +91,7 @@
+     uint8_t is_lua;
+ #endif
+     int content_length;
++    char content_type[MAXREQUESTLENGTH];
+     char remote_addr[MAXREQUESTLENGTH];
+     char uri_request[MAXREQUESTLENGTH];
+     char uri_path_info[MAXREQUESTLENGTH];
+diff -urb axTLS.orig/httpd/proc.c axTLS/httpd/proc.c
+--- axTLS.orig/httpd/proc.c	2008-11-09 00:58:44.000000000 +0000
++++ axTLS/httpd/proc.c	2008-11-09 02:43:32.000000000 +0000
+@@ -129,6 +129,10 @@
+ 
+         my_strncpy(cn->server_name, value, MAXREQUESTLENGTH);
+     } 
++    else if (strcmp(buf, "Content-Type:") == 0 )
++    {
++        my_strncpy(cn->content_type, value, MAXREQUESTLENGTH);
++    }
+     else if (strcmp(buf, "Connection:") == 0 && strcmp(value, "close") == 0) 
+     {
+         cn->close_when_done = 1;
+@@ -673,8 +677,9 @@
+             type = "POST";
+             sprintf(cgienv[cgi_index++], 
+                         "CONTENT_LENGTH=%d", cn->content_length);
+-            strcpy(cgienv[cgi_index++],     /* hard-code? */
+-                        "CONTENT_TYPE=application/x-www-form-urlencoded");
++	    snprintf(cgienv[cgi_index++], MAXREQUESTLENGTH,
++        	    "CONTENT_TYPE=%s", cn->content_type);
++
+             break;
+     }
+ 
