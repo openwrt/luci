@@ -354,9 +354,11 @@ function createtree()
 
 	local ctx  = context
 	local tree = {nodes={}}
+	local modi = {}
 
 	ctx.treecache = setmetatable({}, {__mode="v"})
 	ctx.tree = tree
+	ctx.modifiers = modi
 
 	-- Load default translation
 	require "luci.i18n".loadc("default")
@@ -369,7 +371,28 @@ function createtree()
 		v()
 	end
 
+	local function modisort(a,b)
+		return modi[a].order < modi[b].order
+	end
+
+	for _, v in util.spairs(modi, modisort) do
+		scope._NAME = v.module
+		setfenv(v.func, scope)
+		v.func()
+	end
+
 	return tree
+end
+
+--- Register a tree modifier.
+-- @param	func	Modifier function
+-- @param	order	Modifier order value (optional)
+function modifier(func, order)
+	context.modifiers[#context.modifiers+1] = {
+		func = func,
+		order = order or 0,
+		module = getfenv(2)._NAME
+	}
 end
 
 --- Clone a node of the dispatching tree to another position.
