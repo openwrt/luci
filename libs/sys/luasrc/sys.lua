@@ -188,6 +188,9 @@ function sysinfo()
 	if not system then
 		system = posix.uname("%m")
 		model = cpuinfo:match("model name.-:%s*([^\n]+)")
+		if not model then
+			model = cpuinfo:match("Processor.-:%s*([^\n]+)")
+		end
 	else
 		model = cpuinfo:match("cpu model.-:%s*([^\n]+)")
 	end
