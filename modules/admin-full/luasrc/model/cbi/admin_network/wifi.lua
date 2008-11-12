@@ -34,6 +34,8 @@ end
 
 s:option(DummyValue, "type", translate("type"))
 local hwtype = m:get(arg[1], "type")
+-- NanoFoo
+local nsantenna = m:get(arg[1], "antenna")
 
 ch = s:option(Value, "channel", translate("a_w_channel"))
 for i=1, 14 do
@@ -71,8 +73,17 @@ if hwtype == "atheros" then
 	mode:value("fh", translate("wifi_fh"))
 
 	s:option(Flag, "diversity", translate("wifi_diversity"))
-	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
-	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
+
+	if not nsantenna then
+		s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
+		s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
+	else -- NanoFoo
+		local ant = s:option(ListValue, "antenna", translate("wifi_txantenna"))
+		ant:value("auto")
+		ant:value("vertical")
+		ant:value("horizontal")
+		ant:value("external")
+	end
 	s:option(Value, "distance", translate("wifi_distance"),
 		translate("wifi_distance_desc")).optional = true
 
