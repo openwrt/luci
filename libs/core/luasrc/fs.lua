@@ -110,7 +110,14 @@ end
 -- @param dest		Destination
 -- @return			Boolean containing true on success or nil on error
 function rename(source, dest)
-	return os.rename(source, dest)
+	local stat, err, code = os.rename(source, dest)
+	if code == 18 then
+		stat, err, code = copy(source, dest)
+		if stat then
+			stat, err, code = unlink(source)
+		end
+	end
+	return stat, err, code
 end
 
 --- Get the last modification time of given file path in Unix epoch format.
