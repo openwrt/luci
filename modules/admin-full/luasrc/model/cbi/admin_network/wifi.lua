@@ -225,6 +225,14 @@ if hwtype == "atheros" then
 	s:option(Flag, "wmm", translate("wifi_wmm")).optional = true
 	s:option(Flag, "xr", translate("wifi_xr")).optional = true
 	s:option(Flag, "ar", translate("wifi_ar")).optional = true
+
+	local swm = s:option(Flag, "sw_merge", translate("wifi_nosbeacon"))
+	swm:depends({mode="adhoc"})
+	swm.optional = true
+
+	local nos = s:option(Flag, "nosbeacon", translate("wifi_nosbeacon"))
+	nos:depends({mode="sta"})
+	nos.optional = true
 end
 
 
