@@ -14,6 +14,7 @@ $Id$
 ]]--
 
 local os   = require "os"
+local io   = require "io"
 local util = require "luci.util"
 
 local type  = type
@@ -83,7 +84,15 @@ local function _lookup(act, pkg)
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
 	
-	return _parselist(util.execi(cmd .. " 2>/dev/null"))
+	-- IPKG sometimes kills the whole machine because it sucks
+	-- Therefore we have to use a sucky approach too and use
+	-- tmpfiles instead of directly reading the output
+	local tmpfile = os.tmpname()
+	os.execute(cmd .. (" >%s 2>/dev/null" % tmpfile))
+
+	local data = _parselist(io.lines(tmpfile))
+	os.remove(tmpfile)
+	return data
 end
 
 
