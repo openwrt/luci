@@ -164,25 +164,6 @@ function Cursor.set_list(self, config, section, option, value)
 	return false
 end
 
-
-Cursor._changes = Cursor.changes
-function Cursor.changes(self, config)
-	if config then
-		return Cursor._changes(self, config)
-	else
-		local changes = Cursor._changes(self)
-		util.copcall(function()
-			for k,v in pairs(require "luci.fs".dir(self:get_savedir())) do
-				if v ~= "." and v ~= ".." then
-					util.update(changes, Cursor._changes(self, v))
-				end
-			end
-		end)
-		return changes
-	end
-end
-
-
 -- Return a list of initscripts affected by configuration changes.
 function Cursor._affected(self, configlist)
 	configlist = type(configlist) == "table" and configlist or {configlist}
