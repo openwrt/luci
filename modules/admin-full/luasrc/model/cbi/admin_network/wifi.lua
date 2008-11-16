@@ -106,7 +106,6 @@ if hwtype == "broadcom" then
 
 	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
 	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").optional = true
 
 	s:option(Flag, "frameburst", translate("wifi_bursting")).optional = true
 
@@ -242,6 +241,8 @@ end
 if hwtype == "broadcom" then
 	mode:value("wds", translate("a_w_wds"))
 	mode:value("monitor", translate("a_w_monitor"))
+
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
