@@ -104,8 +104,9 @@ if hwtype == "broadcom" then
 	ml:depends({macfilter="allow"})
 	ml:depends({macfilter="deny"})
 
-	s:option(Value, "txant", translate("wifi_txantenna")).optional = true
-	s:option(Value, "rxant", translate("wifi_rxantenna")).optional = true
+	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
+	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").optional = true
 
 	s:option(Flag, "frameburst", translate("wifi_bursting")).optional = true
 
@@ -164,7 +165,7 @@ if hwtype == "mac80211" then
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
 
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dbm").rmempty = true
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 	s:option(Value, "frag", translate("wifi_frag")).optional = true
 	s:option(Value, "rts", translate("wifi_rts")).optional = true
 end
@@ -189,7 +190,7 @@ if hwtype == "atheros" then
 	wdssep.optional = true
 
 	s:option(Flag, "doth", "802.11h").optional = true
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dbm").rmempty = true
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
