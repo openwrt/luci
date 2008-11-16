@@ -18,10 +18,16 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"admin", "status"}, template("admin_status/index"), i18n("status", "Status"), 20).index = true
-	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "Systemprotokoll"))
+	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "Systemprotokoll"), 1)
+    entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("dmesg", "Kernelprotokoll"), 2)
 end
 
 function action_syslog()
 	local syslog = luci.sys.syslog()
 	luci.template.render("admin_status/syslog", {syslog=syslog})
+end
+
+function action_dmesg()
+	local dmesg = luci.sys.dmesg()
+	luci.template.render("admin_status/dmesg", {dmesg=dmesg})
 end

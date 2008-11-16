@@ -204,6 +204,12 @@ function syslog()
 	return luci.util.exec("logread")
 end
 
+--- Retrieves the output of the "dmesg" command.
+-- @return	String containing the current log buffer
+function dmesg()
+	return luci.util.exec("dmesg")
+end
+
 --- Generates a random id with specified length.
 -- @param bytes	Number of bytes for the unique id
 -- @return		String containing hex encoded id

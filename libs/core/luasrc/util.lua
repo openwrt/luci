@@ -261,6 +261,16 @@ function trim(str)
 	return (str:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+--- Count the occurences of given substring in given string.
+-- @param str		String to search in
+-- @param pattern	String containing pattern to find
+-- @return			Number of found occurences
+function cmatch(str, pat)
+	local count = 0
+	for _ in str:gmatch(pat) do count = count + 1 end
+	return count
+end
+
 --- Parse certain units from the given string and return the canonical integer
 -- value or 0 if the unit is unknown. Upper- or lower case is irrelevant.
 -- Recognized units are:
@@ -319,6 +329,16 @@ function parse_units(ustr)
 
 	return val
 end
+
+-- also register functions above in the central string class for convenience
+string.escape      = escape
+string.pcdata      = pcdata
+string.striptags   = striptags
+string.split       = split
+string.trim        = trim
+string.cmatch      = cmatch
+string.parse_units = parse_units
+
 
 --- Appends numerically indexed tables or single objects to a given table.
 -- @param src	Target table
