@@ -97,14 +97,6 @@ config variable
 	list depends type=broadcom
 
 config variable
-	option name 'txpower'
-	option section 'wireless.wifi-device'
-	option title 'Transmit Power (broadcom)'
-	option description 'dbm'
-	option datatype uint
-	list depends type=broadcom
-
-config variable
 	option name 'distance'
 	option section 'wireless.wifi-device'
 	option title 'Distance Optimization (atheros, broadcom)'
@@ -229,7 +221,7 @@ config variable
 config variable
 	option name 'txpower'
 	option section 'wireless.wifi-iface'
-	option title 'Transmit Power (mac80211, atheros)'
+	option title 'Transmit Power'
 	option description 'dbm'
 	option datatype uint
 
