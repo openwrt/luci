@@ -83,16 +83,26 @@ config variable
 config variable
 	option name 'txantenna'
 	option section 'wireless.wifi-device'
-	option title 'Transmitter Antenna (atheros)'
+	option title 'Transmitter Antenna'
 	option datatype uint
 	list depends type=atheros
+	list depends type=broadcom
 
 config variable
 	option name 'rxantenna'
 	option section 'wireless.wifi-device'
-	option title 'Receiver Antenna (atheros)'
+	option title 'Receiver Antenna'
 	option datatype uint
 	list depends type=atheros
+	list depends type=broadcom
+
+config variable
+	option name 'txpower'
+	option section 'wireless.wifi-device'
+	option title 'Transmit Power (broadcom)'
+	option description 'dbm'
+	option datatype uint
+	list depends type=broadcom
 
 config variable
 	option name 'distance'
@@ -128,20 +138,6 @@ config variable
 	list depends 'type=broadcom, macfilter=deny'
 	option type lazylist
 	option datatype macaddr
-
-config variable
-	option name 'txant'
-	option section 'wireless.wifi-device'
-	option title 'Transmitter Antenna (broadcom)'
-	option datatype uint
-	list depends 'type=broadcom'
-
-config variable
-	option name 'rxant'
-	option section 'wireless.wifi-device'
-	option title 'Receiver Antenna (broadcom)'
-	option datatype uint
-	list depends 'type=broadcom'
 
 config variable
 	option name 'frameburst'
