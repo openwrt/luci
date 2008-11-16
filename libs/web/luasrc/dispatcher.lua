@@ -414,7 +414,6 @@ function node(...)
 	local c = _create_node({...})
 
 	c.module = getfenv(2)._NAME
-	c.path = arg
 	c.auto = nil
 
 	return c
@@ -430,10 +429,11 @@ function _create_node(path, cache)
 	local c = cache[name]
 
 	if not c then
+		local new = {nodes={}, auto=true, path=util.clone(path)}
 		local last = table.remove(path)
+
 		c = _create_node(path, cache)
 
-		local new = {nodes={}, auto=true}
 		c.nodes[last] = new
 		cache[name] = new
 
