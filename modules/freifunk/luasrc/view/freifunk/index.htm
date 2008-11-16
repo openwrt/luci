@@ -17,7 +17,7 @@ $Id$
 <h2><a id="content" name="content"><%:ff_hellonet%> <%=ff.community.name or 'Freifunk Deutschland'%>!</a></h2>
 <p><%:ff_public1%><br />
 <%:ff_public2%> <%=luci.sys.hostname()%>. <%:ff_public3%>
-<a href="<%=controller%>/public/index/contact"> <%=ff.contact.nickname%></a>.</p>
+<a href="<%=luci.dispatcher.build_url("freifunk", "index", "contact")%>"> <%=ff.contact.nickname%></a>.</p>
 <p><%:ff_public4%> <a href="http://freifunk.net">Freifunk.net</a>.<br />
 <%:ff_public5%> <a href="<%=ff.community.homepage or 'http//freifunk.net'%>"><%=ff.community.name or 'Freifunk'%></a>.</p>
 <p><strong><%:ff_note%></strong>: <%:ff_public6%></p>
