@@ -98,8 +98,8 @@ if hwtype == "broadcom" then
 	mp = s:option(ListValue, "macfilter", translate("wifi_macpolicy"))
 	mp.optional = true
 	mp:value("")
-	mp:value("deny", translate("wifi_whitelist"))
-	mp:value("allow", translate("wifi_blacklist"))
+	mp:value("allow", translate("wifi_whitelist"))
+	mp:value("deny", translate("wifi_blacklist"))
 	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
 	ml:depends({macfilter="allow"})
 	ml:depends({macfilter="deny"})
