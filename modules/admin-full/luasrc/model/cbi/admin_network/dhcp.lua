@@ -45,7 +45,11 @@ s:option(Value, "limit", translate("limit")).rmempty = true
 
 s:option(Value, "leasetime").rmempty = true
 
-s:option(Flag, "dynamicdhcp").rmempty = true
+local dd = s:option(Flag, "dynamicdhcp")
+dd.rmempty = false
+function dd.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "1"
+end
 
 s:option(Value, "name", translate("name")).optional = true
 
