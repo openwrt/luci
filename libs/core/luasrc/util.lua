@@ -105,6 +105,7 @@ class = cutil.class
 -- @return			Boolean indicating whether the object is an instance
 -- @see				class
 -- @see				clone
+--[[
 function instanceof(object, class)
 	local meta = getmetatable(object)
 	while meta and meta.__index do
@@ -115,6 +116,8 @@ function instanceof(object, class)
 	end
 	return false
 end
+]]--
+instanceof = cutil.instanceof
 
 
 --
@@ -201,6 +204,7 @@ end
 --- Create valid XML PCDATA from given string.
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
+--[[
 function pcdata(value)
 	return value and tostring(value):gsub("[&\"'<>]", {
 		["&"] = "&#38;",
@@ -210,6 +214,8 @@ function pcdata(value)
 		[">"] = "&#62;"
 	})
 end
+]]--
+pcdata = cutil.pcdata
 
 --- Strip HTML tags from given string.
 -- @param value	String containing the HTML text

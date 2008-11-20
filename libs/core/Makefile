@@ -9,4 +9,4 @@ compile: src/luci_cutil.o
 	$(LINK) $(SHLIB_FLAGS) -o dist$(LUCI_LIBRARYDIR)/cutil.so src/luci_cutil.o
 
 clean: luaclean
-	rm src/*.o
+	rm -f src/*.o
