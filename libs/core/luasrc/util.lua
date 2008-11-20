@@ -31,7 +31,6 @@ local debug = require "debug"
 local ldebug = require "luci.debug"
 local string = require "string"
 local coroutine = require "coroutine"
-local cutil = require "luci.cutil"
 
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
