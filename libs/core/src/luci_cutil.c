@@ -153,23 +153,19 @@ static int luci_pcdata(lua_State *L) {
 		lua_pushnil(L);
 		return 1;
 	}
+	luaL_checkstring(L, 1);
 
 	/* Discard anything else */
 	lua_settop(L, 1);
 
-	/* tostring(obj) */
-	lua_pushvalue(L, lua_upvalueindex(1));
-	lua_insert(L, 1);
-	lua_call(L, 1, 1);
-
 	/* pattern */
-	lua_pushvalue(L, lua_upvalueindex(2));
+	lua_pushvalue(L, lua_upvalueindex(1));
 
 	/* repl */
-	lua_pushvalue(L, lua_upvalueindex(3));
+	lua_pushvalue(L, lua_upvalueindex(2));
 
 	/* get gsub function */
-	lua_getfield(L, -3, "gsub");
+	lua_getfield(L, 1, "gsub");
 	lua_insert(L, 1);
 
 	/* tostring(obj):gsub(pattern, repl) */
@@ -177,12 +173,27 @@ static int luci_pcdata(lua_State *L) {
 	return 1;
 }
 
+/* luci.cutil.trim(str) */
+static int luci_trim(lua_State *L) {
+	luaL_checkstring(L, 1);
+	lua_settop(L, 1);
+
+	/* pattern and repl */
+	lua_pushliteral(L, "^%s*(.-)%s*$");
+	lua_pushliteral(L, "%1");
+
+	/* get str.gsub */
+	lua_getfield(L, 1, "gsub");
+	lua_insert(L, 1);
+
+	/* str.gsub(str, pattern, repl) */
+	lua_call(L, 3, 1);
+	return 1;
+}
+
 
 /* Registration helper for luci.cutil.pcdata */
 static void luci__register_pcdata(lua_State *L) {
-	/* tostring */
-	lua_getfield(L, LUA_GLOBALSINDEX, "tostring");
-
 	/* pattern */
 	lua_pushliteral(L, "[&\"'<>]");
 
@@ -201,7 +212,7 @@ static void luci__register_pcdata(lua_State *L) {
 	lua_setfield(L, -2, ">");
 
 	/* register function */
-	lua_pushcclosure(L, luci_pcdata, 3);
+	lua_pushcclosure(L, luci_pcdata, 2);
 	lua_setfield(L, -2, "pcdata");
 }
 
@@ -209,6 +220,7 @@ static void luci__register_pcdata(lua_State *L) {
 static const luaL_Reg registry[] = {
 		{"class",		luci_class},
 		{"instanceof",	luci_instanceof},
+		{"trim",		luci_trim},
 		{ NULL,			NULL },
 };
 

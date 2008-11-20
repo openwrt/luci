@@ -271,9 +271,12 @@ end
 --- Remove leading and trailing whitespace from given string value.
 -- @param str	String value containing whitespace padded data
 -- @return		String value with leading and trailing space removed
+--[[
 function trim(str)
 	return (str:gsub("^%s*(.-)%s*$", "%1"))
 end
+]]--
+trim = cutil.trim
 
 --- Count the occurences of given substring in given string.
 -- @param str		String to search in
