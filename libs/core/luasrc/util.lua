@@ -31,6 +31,7 @@ local debug = require "debug"
 local ldebug = require "luci.debug"
 local string = require "string"
 local coroutine = require "coroutine"
+local cutil = require "luci.cutil"
 
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
@@ -44,6 +45,7 @@ module "luci.util"
 --
 -- Pythonic string formatting extension
 --
+--[[
 getmetatable("").__mod = function(a, b)
 	if not b then
 		return a
@@ -53,6 +55,7 @@ getmetatable("").__mod = function(a, b)
 		return a:format(b)
 	end
 end
+]]--
 
 
 --
@@ -60,6 +63,7 @@ end
 --
 
 -- Instantiates a class
+--[[
 local function _instantiate(class, ...)
 	local inst = setmetatable({}, {__index = class})
 
@@ -69,6 +73,7 @@ local function _instantiate(class, ...)
 
 	return inst
 end
+]]--
 
 --- Create a Class object (Python-style object model).
 -- The class object can be instantiated by calling itself.
@@ -84,12 +89,15 @@ end
 -- @return		A class object
 -- @see			instanceof
 -- @see			clone
+--[[
 function class(base)
 	return setmetatable({}, {
 		__call  = _instantiate,
 		__index = base
 	})
 end
+]]--
+class = cutil.class
 
 --- Test whether the given object is an instance of the given class.
 -- @param object	Object instance

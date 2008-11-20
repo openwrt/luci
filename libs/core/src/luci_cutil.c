@@ -91,11 +91,13 @@ static int luci__instantiate(lua_State *L) {
 
 /* luci.cutil.class(baseclass) */
 static int luci_class(lua_State *L) {
+	int n = lua_gettop(L);
+
 	/* Create class */
 	lua_newtable(L);
 
 	/* Create metatable and register parent class if any */
-	if (lua_istable(L, 1)) {
+	if (n && lua_istable(L, 1)) {
 		lua_createtable(L, 0, 2);
 		lua_pushvalue(L, 1);
 		lua_setfield(L, -2, "__index");
