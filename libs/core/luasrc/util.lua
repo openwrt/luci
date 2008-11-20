@@ -45,7 +45,6 @@ module "luci.util"
 --
 -- Pythonic string formatting extension
 --
---[[
 getmetatable("").__mod = function(a, b)
 	if not b then
 		return a
@@ -55,7 +54,6 @@ getmetatable("").__mod = function(a, b)
 		return a:format(b)
 	end
 end
-]]--
 
 
 --
@@ -63,7 +61,6 @@ end
 --
 
 -- Instantiates a class
---[[
 local function _instantiate(class, ...)
 	local inst = setmetatable({}, {__index = class})
 
@@ -73,7 +70,6 @@ local function _instantiate(class, ...)
 
 	return inst
 end
-]]--
 
 --- Create a Class object (Python-style object model).
 -- The class object can be instantiated by calling itself.
@@ -89,15 +85,12 @@ end
 -- @return		A class object
 -- @see			instanceof
 -- @see			clone
---[[
 function class(base)
 	return setmetatable({}, {
 		__call  = _instantiate,
 		__index = base
 	})
 end
-]]--
-class = cutil.class
 
 --- Test whether the given object is an instance of the given class.
 -- @param object	Object instance
@@ -105,7 +98,6 @@ class = cutil.class
 -- @return			Boolean indicating whether the object is an instance
 -- @see				class
 -- @see				clone
---[[
 function instanceof(object, class)
 	local meta = getmetatable(object)
 	while meta and meta.__index do
@@ -116,8 +108,6 @@ function instanceof(object, class)
 	end
 	return false
 end
-]]--
-instanceof = cutil.instanceof
 
 
 --
@@ -204,18 +194,17 @@ end
 --- Create valid XML PCDATA from given string.
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
---[[
+local _pcdata_repl = {
+                ["&"] = "&#38;",
+                ['"'] = "&#34;",
+                ["'"] = "&#39;",
+                ["<"] = "&#60;",
+                [">"] = "&#62;"
+}
+
 function pcdata(value)
-	return value and tostring(value):gsub("[&\"'<>]", {
-		["&"] = "&#38;",
-		['"'] = "&#34;",
-		["'"] = "&#39;",
-		["<"] = "&#60;",
-		[">"] = "&#62;"
-	})
+	return value and tostring(value):gsub("[&\"'<>]", _pcdata_repl)
 end
-]]--
-pcdata = cutil.pcdata
 
 --- Strip HTML tags from given string.
 -- @param value	String containing the HTML text
@@ -271,12 +260,9 @@ end
 --- Remove leading and trailing whitespace from given string value.
 -- @param str	String value containing whitespace padded data
 -- @return		String value with leading and trailing space removed
---[[
 function trim(str)
 	return (str:gsub("^%s*(.-)%s*$", "%1"))
 end
-]]--
-trim = cutil.trim
 
 --- Count the occurences of given substring in given string.
 -- @param str		String to search in
