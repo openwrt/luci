@@ -161,7 +161,6 @@ bssid = s:option(Value, "bssid", translate("wifi_bssid"))
 -------------------- MAC80211 Interface ----------------------
 
 if hwtype == "mac80211" then
-	mode:value("ahdemo", translate("a_w_ahdemo"))
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
 
