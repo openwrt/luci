@@ -42,7 +42,7 @@ function Graph.__init__( self, timespan, opts )
 
 	-- options
 	opts.timespan  = timespan       or sections.rrdtool.default_timespan or 900
-	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle ~= "0" )
+	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle == "1" )
 	opts.host      = opts.host      or sections.collectd.Hostname        or luci.sys.hostname()
 	opts.width     = opts.width     or sections.rrdtool.image_width      or 400
 	opts.rrdpath   = opts.rrdpath   or sections.collectd_rrdtool.DataDir or "/tmp/rrd"
