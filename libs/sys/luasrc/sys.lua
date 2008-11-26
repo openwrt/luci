@@ -367,43 +367,42 @@ end
 --			{ "src_ip", "src_prefix", "dst_ip", "dst_prefix", "nexthop_ip",
 --            "metric", "refcount", "usecount", "flags", "device" }
 function net.routes6()
-    local routes = { }
+	local routes = { }
 
-    for line in io.lines("/proc/net/ipv6_route") do
+	for line in io.lines("/proc/net/ipv6_route") do
 
-        local dst_ip, dst_prefix, src_ip, src_prefix, nexthop,
-              metric, refcnt, usecnt, flags, dev = line:match(
-            "([a-f0-9]+) ([a-f0-9]+) " ..
-            "([a-f0-9]+) ([a-f0-9]+) " ..
-            "([a-f0-9]+) ([a-f0-9]+) " ..
-            "(%d+) (%d+) ([^%s]+) +([^%s]+)"
-        )
-        
-        src_ip = luci.ip.Hex(
-            src_ip, tonumber(src_prefix, 16),
-            luci.ip.FAMILY_INET6, false
-        )
+		local dst_ip, dst_prefix, src_ip, src_prefix, nexthop,
+			  metric, refcnt, usecnt, flags, dev = line:match(
+			"([a-f0-9]+) ([a-f0-9]+) " ..
+			"([a-f0-9]+) ([a-f0-9]+) " ..
+			"([a-f0-9]+) ([a-f0-9]+) " ..
+			"(%d+) (%d+) ([^%s]+) +([^%s]+)"
+		)
+		src_ip = luci.ip.Hex(
+			src_ip, tonumber(src_prefix, 16),
+			luci.ip.FAMILY_INET6, false
+		)
 
-        dst_ip = luci.ip.Hex(
-            dst_ip, tonumber(dst_prefix, 16),
-            luci.ip.FAMILY_INET6, false
-        )
+		dst_ip = luci.ip.Hex(
+			dst_ip, tonumber(dst_prefix, 16),
+			luci.ip.FAMILY_INET6, false
+		)
 
-        nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
+		nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
 
-        routes[#routes+1] = {
-            src_ip     = src_ip:host():string(),
-            src_prefix = src_ip:prefix(),
-            dst_ip     = dst_ip:host():string(),
-            dst_prefix = dst_ip:prefix(),
-            nexthop_ip = nexthop:string(),
-            metric     = tonumber(metric, 16),
-            refcount   = tonumber(refcnt),
-            usecount   = tonumber(usecnt),
-            flags      = tonumber(flags), -- hex?
-            device     = dev
-        }
-    end
+		routes[#routes+1] = {
+			src_ip     = src_ip:host():string(),
+			src_prefix = src_ip:prefix(),
+			dst_ip     = dst_ip:host():string(),
+			dst_prefix = dst_ip:prefix(),
+			nexthop_ip = nexthop:string(),
+			metric     = tonumber(metric, 16),
+			refcount   = tonumber(refcnt),
+			usecount   = tonumber(usecnt),
+			flags      = tonumber(flags), -- hex?
+			device     = dev
+		}
+	end
 
 	return routes
 end
