@@ -57,12 +57,7 @@ if not arg or not arg[1] then
 	function target.cfgvalue(self, section)
 		return routes6[section].dst_ip .. "/" .. routes6[section].dst_prefix
 	end
---[[
-	netmask = v:option(DummyValue, "prefix", translate("prefix"))
-	function netmask.cfgvalue(self, section)
-		return luci.ip.Hex(routes6[section].Mask, 32):string()
-	end
-]]
+
 	gateway = v:option(DummyValue, "gateway", translate("gateway6"))
 	function gateway.cfgvalue(self, section)
 		return routes6[section].src_ip .. "/" .. routes6[section].src_prefix
