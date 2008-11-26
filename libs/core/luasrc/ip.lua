@@ -314,7 +314,7 @@ function Hex( hex, prefix, family, swap )
 		end
 	end
 
-	return __bless({ family, data, len })
+	return __bless({ family, data, prefix })
 end
 
 
