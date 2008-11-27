@@ -314,7 +314,7 @@ function Hex( hex, prefix, family, swap )
 		end
 	end
 
-	return __bless({ family, data, len })
+	return __bless({ family, data, prefix })
 end
 
 
@@ -481,7 +481,7 @@ end
 -- @see			cidr.broadcast
 -- @see			cidr.mask
 function cidr.host( self )
-	return __bless({ self[1], data, __maxlen(self[1]) })
+	return __bless({ self[1], self[2], __maxlen(self[1]) })
 end
 
 --- Return a corresponding CIDR representing the netmask of this instance.

@@ -14,14 +14,23 @@ $Id$
 
 mh = Map("olsrd", translate("olsrd_hna", "OLSR - HNA-Ankündigungen"))
 
-for i, sect in ipairs({ "Hna4", "Hna6" }) do
-	hna = mh:section(TypedSection, sect)
-	hna.addremove = true
-	hna.anonymous = true
-	hna.template  = "cbi/tblsection"
 
-	net = hna:option(Value, "netaddr")
-	msk = hna:option(Value, "netmask")
-end
+hna4 = mh:section(TypedSection, "Hna4")
+hna4.addremove = true
+hna4.anonymous = true
+hna4.template  = "cbi/tblsection"
+
+net4 = hna4:option(Value, "netaddr")
+msk4 = hna4:option(Value, "netmask")
+
+
+hna6 = mh:section(TypedSection, "Hna6")
+hna6.addremove = true
+hna6.anonymous = true
+hna6.template  = "cbi/tblsection"
+
+net6 = hna6:option(Value, "netaddr")
+msk6 = hna6:option(Value, "prefix")
+
 
 return mh
