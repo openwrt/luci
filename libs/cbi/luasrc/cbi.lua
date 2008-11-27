@@ -1095,7 +1095,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	--self.cast = "string"
 
 	self.track_missing = false
-	--self.rmempty   = false
+	self.rmempty   = true
 	self.default   = nil
 	self.size      = nil
 	self.optional  = false
@@ -1106,9 +1106,6 @@ function AbstractValue.prepare(self)
 	if not self.override_scheme
 	 and self.map:get_scheme(self.section.sectiontype, self.option) then
 		local vs = self.map:get_scheme(self.section.sectiontype, self.option)
-		if self.rmempty == nil then
-			self.rmempty = not vs.required
-		end
 		if self.cast == nil then
 			self.cast = (vs.type == "list") and "list" or "string"
 		end
