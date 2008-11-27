@@ -70,7 +70,7 @@ if not arg or not arg[1] then
 end
 
 
-s = m:section(TypedSection, "route", translate("a_n_routes_static"))
+s = m:section(TypedSection, "route", translate("a_n_routes_static4"))
 s.addremove = true
 s.anonymous = true
 
