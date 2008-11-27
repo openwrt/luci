@@ -376,8 +376,10 @@ function net.routes6()
 			"([a-f0-9]+) ([a-f0-9]+) " ..
 			"([a-f0-9]+) ([a-f0-9]+) " ..
 			"([a-f0-9]+) ([a-f0-9]+) " ..
-			"(%d+) (%d+) ([^%s]+) +([^%s]+)"
+			"([a-f0-9]+) ([a-f0-9]+) " ..
+            "([^%s]+) +([^%s]+)"
 		)
+
 		src_ip = luci.ip.Hex(
 			src_ip, tonumber(src_prefix, 16),
 			luci.ip.FAMILY_INET6, false
@@ -397,8 +399,8 @@ function net.routes6()
 			dst_prefix = dst_ip:prefix(),
 			nexthop_ip = nexthop:string(),
 			metric     = tonumber(metric, 16),
-			refcount   = tonumber(refcnt),
-			usecount   = tonumber(usecnt),
+			refcount   = tonumber(refcnt, 16),
+			usecount   = tonumber(usecnt, 16),
 			flags      = tonumber(flags), -- hex?
 			device     = dev
 		}
