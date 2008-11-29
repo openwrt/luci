@@ -32,7 +32,7 @@ local util = require "luci.util"
 local http = require "luci.http"
 
 module("luci.dispatcher", package.seeall)
-context = luci.util.threadlocal()
+context = util.threadlocal()
 
 authenticator = {}
 

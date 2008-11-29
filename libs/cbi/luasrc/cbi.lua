@@ -27,15 +27,15 @@ limitations under the License.
 module("luci.cbi", package.seeall)
 
 require("luci.template")
-require("luci.util")
+local util = require("luci.util")
 require("luci.http")
 require("luci.uvl")
 require("luci.fs")
 
 --local event      = require "luci.sys.event"
 local uci        = require("luci.model.uci")
-local class      = luci.util.class
-local instanceof = luci.util.instanceof
+local class      = util.class
+local instanceof = util.instanceof
 
 FORM_NODATA  =  0
 FORM_PROCEED =  0
