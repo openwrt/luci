@@ -114,6 +114,13 @@ i:option(Value, "MidValidityTime").optional = true
 i:option(Value, "HnaInterval").optional = true
 i:option(Value, "HnaValidityTime").optional = true
 
+ip6t = i:option(ListValue, "Ip6AddrType")
+ip6t:value("auto")
+ip6t:value("site-local")
+ip6t:value("unique-local")
+ip6t:value("global")
+ip6t.optional = true
+
 adc = i:option(Flag, "AutoDetectChanges")
 adc.enabled  = "yes"
 adc.disabled = "no"
