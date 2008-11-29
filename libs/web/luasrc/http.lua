@@ -25,7 +25,7 @@ limitations under the License.
 ]]--
 
 local ltn12 = require "luci.ltn12"
-local proto = require "luci.http.protocol"
+local protocol = require "luci.http.protocol"
 local util  = require "luci.util"
 local string = require "string"
 local coroutine = require "coroutine"
