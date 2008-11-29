@@ -12,7 +12,7 @@ include $(TOPDIR)/rules.mk
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
 PKG_VERSION:=0.5.6-r2+hg1724
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_HGREV:=cac1df64dcd5
 PKG_SOURCE:=$(PKG_HGREV).tar.gz
