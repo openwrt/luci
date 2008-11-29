@@ -105,6 +105,15 @@ network = i:option(ListValue, "interface", translate("network"))
 luci.tools.webadmin.cbi_add_networks(network)
 
 i:option(Value, "Ip4Broadcast").optional = true
+
+ip6t = i:option(ListValue, "Ip6AddrType")
+ip6t:value("", translate("cbi_select"))
+ip6t:value("auto")
+ip6t:value("site-local")
+ip6t:value("unique-local")
+ip6t:value("global")
+ip6t.optional = true
+
 i:option(Value, "HelloInterval").optional = true
 i:option(Value, "HelloValidityTime").optional = true
 i:option(Value, "TcInterval").optional = true
@@ -113,13 +122,6 @@ i:option(Value, "MidInterval").optional = true
 i:option(Value, "MidValidityTime").optional = true
 i:option(Value, "HnaInterval").optional = true
 i:option(Value, "HnaValidityTime").optional = true
-
-ip6t = i:option(ListValue, "Ip6AddrType")
-ip6t:value("auto")
-ip6t:value("site-local")
-ip6t:value("unique-local")
-ip6t:value("global")
-ip6t.optional = true
 
 adc = i:option(Flag, "AutoDetectChanges")
 adc.enabled  = "yes"
