@@ -124,7 +124,7 @@ olsrd_write_option() {
 	fi
 
 	if [ "$value" != "${value%%[G-Zg-z_-]*}" ]; then
-		if [ "$value" != "yes" -a "$value" != "no" ]; then
+		if [ "$option" != "Ip6AddrType" -a "$value" != "yes" -a "$value" != "no" ]; then
 			value="\"$value\""
 		fi
 	fi
