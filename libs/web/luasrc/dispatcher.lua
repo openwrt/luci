@@ -391,7 +391,8 @@ function modifier(func, order)
 	context.modifiers[#context.modifiers+1] = {
 		func = func,
 		order = order or 0,
-		module = getfenv(2)._NAME
+		module
+			= getfenv(2)._NAME
 	}
 end
 
