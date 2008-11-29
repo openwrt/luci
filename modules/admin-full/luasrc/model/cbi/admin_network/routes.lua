@@ -21,23 +21,23 @@ if not arg or not arg[1] then
 
 	net = v:option(DummyValue, "iface", translate("network"))
 	function net.cfgvalue(self, section)
-		return luci.tools.webadmin.iface_get_network(routes[section].Iface)
-		 or routes[section].Iface
+		return luci.tools.webadmin.iface_get_network(routes[section].device)
+		 or routes[section].device
 	end
 
 	target  = v:option(DummyValue, "target", translate("target"))
 	function target.cfgvalue(self, section)
-		return luci.ip.Hex(routes[section].Destination, 32):string()
+		return routes[section].dest:network():string()
 	end
 
 	netmask = v:option(DummyValue, "netmask", translate("netmask"))
 	function netmask.cfgvalue(self, section)
-		return luci.ip.Hex(routes[section].Mask, 32):string()
+		return routes[section].dest:mask():string()
 	end
 
 	gateway = v:option(DummyValue, "gateway", translate("gateway"))
 	function gateway.cfgvalue(self, section)
-		return luci.ip.Hex(routes[section].Gateway, 32):string()
+		return routes[section].gateway:string()
 	end
 
 	metric = v:option(DummyValue, "Metric", translate("metric"))
@@ -55,12 +55,12 @@ if not arg or not arg[1] then
 
 	target  = v:option(DummyValue, "target", translate("target"))
 	function target.cfgvalue(self, section)
-		return routes6[section].dst_ip .. "/" .. routes6[section].dst_prefix
+		return routes6[section].dest:string()
 	end
 
 	gateway = v:option(DummyValue, "gateway", translate("gateway6"))
 	function gateway.cfgvalue(self, section)
-		return routes6[section].src_ip .. "/" .. routes6[section].src_prefix
+		return routes6[section].source:string()
 	end
 
 	metric = v:option(DummyValue, "Metric", translate("metric"))

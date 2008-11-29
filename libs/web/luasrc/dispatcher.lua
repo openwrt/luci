@@ -108,6 +108,7 @@ function httpdispatch(request)
 
 	local stat, err = util.copcall(dispatch, context.request)
 	if not stat then
+		luci.util.perror(err)
 		error500(err)
 	end
 
@@ -414,6 +415,7 @@ function node(...)
 	local c = _create_node({...})
 
 	c.module = getfenv(2)._NAME
+	c.path = arg
 	c.auto = nil
 
 	return c
@@ -429,11 +431,10 @@ function _create_node(path, cache)
 	local c = cache[name]
 
 	if not c then
-		local new = {nodes={}, auto=true, path=util.clone(path)}
 		local last = table.remove(path)
-
 		c = _create_node(path, cache)
 
+		local new = {nodes={}, auto=true}
 		c.nodes[last] = new
 		cache[name] = new
 
@@ -506,7 +507,7 @@ function template(name)
 end
 
 --- Create a CBI model dispatching target.
--- @param	model	CBI model tpo be rendered
+-- @param	model	CBI model to be rendered
 function cbi(model, config)
 	config = config or {}
 	return function(...)
@@ -528,12 +529,37 @@ function cbi(model, config)
 			end
 		end
 
+		if config.on_valid_to and state and state > 0 and state < 2 then
+			luci.http.redirect(config.on_valid_to)
+			return
+		end
+
+		if config.on_changed_to and state and state > 1 then
+			luci.http.redirect(config.on_changed_to)
+			return
+		end
+
+		if config.on_success_to and state and state > 0 then
+			luci.http.redirect(config.on_success_to)
+			return
+		end
+
+		if config.state_handler then
+			if not config.state_handler(state, maps) then
+				return
+			end
+		end
+
+		local pageaction = true
 		http.header("X-CBI-State", state or 0)
 		luci.template.render("cbi/header", {state = state})
 		for i, res in ipairs(maps) do
 			res:render()
+			if res.pageaction == false then
+				pageaction = false
+			end
 		end
-		luci.template.render("cbi/footer", {state = state, autoapply = config.autoapply})
+		luci.template.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
 	end
 end
 

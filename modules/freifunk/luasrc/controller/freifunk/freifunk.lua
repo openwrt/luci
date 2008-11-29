@@ -27,60 +27,39 @@ function index()
 	page.setuser  = "nobody"
 	page.setgroup = "nogroup"
 	page.i18n     = "freifunk"
-	
+
 	local page  = node("freifunk", "index")
 	page.target = template("freifunk/index")
 	page.title  = "Übersicht"
 	page.order  = 10
-	
+
 	local page  = node("freifunk", "index", "contact")
 	page.target = template("freifunk/contact")
 	page.title  = "Kontakt"
-	
-	
+
+
 	local page  = node("freifunk", "status")
 	page.target = call("action_status")
 	page.title  = "Status"
 	page.order  = 20
 	page.setuser  = false
 	page.setgroup = false
-	
+
 	assign({"freifunk", "status", "iwscan"}, {"admin", "status", "iwscan"}, "WLAN-Scan", 20)
 	
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
-	
+
 	if luci.fs.isfile("/etc/config/luci_statistics") then
 		assign({"freifunk", "statistics"}, {"admin", "statistics", "graph"}, i18n("stat_statistics", "Statistiken"), 40)
 	end
-	
+
 	local page  = node("admin", "index", "freifunk")
 	page.target = cbi("freifunk/freifunk")
 	page.title  = "Freifunk"
 	page.order  = 30
-	
+
 	local page  = node("admin", "index", "contact")
 	page.target = cbi("freifunk/contact")
 	page.title  = "Kontakt"
 	page.order  = 40
-end
-
-function action_status()
-	local data = {}
-	
-	data.system, data.model, data.memtotal, data.memcached, data.membuffers, data.memfree = luci.sys.sysinfo()
-	data.perc_memfree = math.floor((data.memfree/data.memtotal)*100)
-	data.perc_membuffers = math.floor((data.membuffers/data.memtotal)*100)
-	data.perc_memcached = math.floor((data.memcached/data.memtotal)*100)
-	
-	data.wifi = luci.sys.wifi.getiwconfig()
-	
-	data.routes = {}
-	for i, r in pairs(luci.sys.net.routes()) do
-		if r.Destination == "00000000" then
-			table.insert(data.routes, r)
-		end
-	end
-
-	
-	luci.template.render("public_status/index", data)
 end

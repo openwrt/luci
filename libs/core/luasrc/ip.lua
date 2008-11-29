@@ -227,7 +227,7 @@ function IPv6(address, netmask)
 
 		block = tonumber(address:sub(borderl, borderh - 1), 16)
 		if block and block <= 0xFFFF then
-			table.insert(data, block)
+			data[#data+1] = block
 		else
 			if zeroh or borderh - borderl > 1 then return nil end
 			zeroh = #data + 1
@@ -241,7 +241,7 @@ function IPv6(address, netmask)
 		block = tonumber(chunk, 16)
 		if not block or block > 0xFFFF then return nil end
 
-		table.insert(data, block)
+		data[#data+1] = block
 	elseif #chunk > 4 then
 		if #data == 7 or #chunk > 15 then return nil end
 		borderl = 1
@@ -254,7 +254,7 @@ function IPv6(address, netmask)
 			if not block or block > 255 then return nil end
 
 			if i == 1 or i == 3 then
-				table.insert(data, block * 256)
+				data[#data+1] = block * 256
 			else
 				data[#data] = data[#data] + block
 			end
@@ -308,7 +308,7 @@ function Hex( hex, prefix, family, swap )
 	for i = 1, ( len / 4 ), 4 do
 		local n = tonumber( hex:sub( i, i+3 ), 16 )
 		if n then
-			table.insert( data, n )
+			data[#data+1] = n
 		else
 			return nil
 		end
@@ -421,26 +421,24 @@ function cidr.prefix( self, mask )
 
 	if mask then
 		prefix = 0
+
 		local stop = false
-		local obj = self:is4() and IPv4(mask) or IPv6(mask)
+		local obj = type(mask) ~= "table"
+			and ( self:is4() and IPv4(mask) or IPv6(mask) ) or mask
 
-		if not obj then
-			return nil
-		end
+		if not obj then return nil end
 
-		for i, block in ipairs(obj[2]) do
-			local pos = bit.lshift(1, 15)
-			for i=15, 0, -1 do
-				if bit.band(block, pos) == pos then
-					if not stop then
-						prefix = prefix + 1
-					else
-						return nil
-					end
-				else
-					stop = true
+		for _, word in ipairs(obj[2]) do
+			if word == 0xFFFF then
+				prefix = prefix + 16
+			else
+				local bitmask = bit.lshift(1, 15)
+				while bit.band(word, bitmask) == bitmask do
+					prefix  = prefix + 1
+					bitmask = bit.lshift(1, 15 - (prefix % 16))
 				end
-				pos = bit.rshift(pos, 1)
+
+				break
 			end
 		end
 	end
@@ -460,14 +458,14 @@ function cidr.network( self, bits )
 	bits = bits or self[3]
 
 	for i = 1, math.floor( bits / 16 ) do
-		table.insert( data, self[2][i] )
+		data[#data+1] = self[2][i]
 	end
 
 	if #data < #self[2] then
-		table.insert( data, bit.band( self[2][1+#data], __mask16(bits) ) )
+		data[#data+1] = bit.band( self[2][1+#data], __mask16(bits) )
 
 		for i = #data + 1, #self[2] do
-			table.insert( data, 0 )
+			data[#data+1] = 0
 		end
 	end
 
@@ -495,14 +493,14 @@ function cidr.mask( self, bits )
 	bits = bits or self[3]
 
 	for i = 1, math.floor( bits / 16 ) do
-		table.insert( data, 0xFFFF )
+		data[#data+1] = 0xFFFF
 	end
 
 	if #data < #self[2] then
-		table.insert( data, __mask16(bits) )
+		data[#data+1] = __mask16(bits)
 
 		for i = #data + 1, #self[2] do
-			table.insert( data, 0 )
+			data[#data+1] = 0
 		end
 	end
 
