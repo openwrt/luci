@@ -19,23 +19,23 @@ f:field(DummyValue, "_system", translate("system")).value = system
 f:field(DummyValue, "_cpu", translate("m_i_processor")).value = model
 
 local load1, load5, load15 = luci.sys.loadavg()
-f:field(DummyValue, "_la", translate("load")).value = 
+f:field(DummyValue, "_la", translate("load")).value =
 string.format("%.2f, %.2f, %.2f", load1, load5, load15)
 
-f:field(DummyValue, "_memtotal", translate("m_i_memory")).value = 
+f:field(DummyValue, "_memtotal", translate("m_i_memory")).value =
 string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
 	tonumber(memtotal) / 1024,
 	100 * memcached / memtotal,
 	translate("mem_cached") or "",
 	100 * membuffers / memtotal,
-  translate("mem_buffered") or "",
-  100 * memfree / memtotal,
-  translate("mem_free") or "")
+	translate("mem_buffered") or "",
+	100 * memfree / memtotal,
+	translate("mem_free") or "")
 
 f:field(DummyValue, "_systime", translate("m_i_systemtime")).value =
 os.date("%c")
 
-f:field(DummyValue, "_uptime", translate("m_i_uptime")).value = 
+f:field(DummyValue, "_uptime", translate("m_i_uptime")).value =
 luci.tools.webadmin.date_format(tonumber(uptime))
 
 
@@ -69,7 +69,7 @@ essid = s:option(DummyValue, "ssid", "ESSID")
 bssid = s:option(DummyValue, "_bsiid", "BSSID")
 function bssid.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
-	return (wifidata[ifname] and (wifidata[ifname].Cell 
+	return (wifidata[ifname] and (wifidata[ifname].Cell
 		or wifidata[ifname]["Access Point"])) or "-"
 end
 
@@ -124,7 +124,7 @@ function chan.cfgvalue(self, section)
 	return self.map:get(section, "Channel")
 	or self.map:get(section, "Frequency")
 	or "-"
-end 
+end
 
 t2:option(DummyValue, "Encryption key", translate("iwscan_encr"))
 
@@ -137,37 +137,71 @@ t2:option(DummyValue, "Noise level", translate("iwscan_noise"))
 r = SimpleForm("routes", "Standardrouten")
 r.submit = false
 r.reset = false
+
 local routes = {}
 for i, route in ipairs(luci.sys.net.routes()) do
-	if route.Destination == "00000000" then
+	if route.dest:prefix() == 0 then
 		routes[#routes+1] = route
 	end
 end
-	
+
 v = r:section(Table, routes)
-	
+
 net = v:option(DummyValue, "iface", translate("network"))
 function net.cfgvalue(self, section)
-	return luci.tools.webadmin.iface_get_network(routes[section].Iface)
-	or routes[section].Iface
+	return luci.tools.webadmin.iface_get_network(routes[section].device)
+	or routes[section].device
 end
 
 target  = v:option(DummyValue, "target", translate("target"))
 function target.cfgvalue(self, section)
-	return luci.ip.Hex(routes[section].Destination, 32):string()
+	return routes[section].dest:network():string()
 end
 
 netmask = v:option(DummyValue, "netmask", translate("netmask"))
 function netmask.cfgvalue(self, section)
-	return luci.ip.Hex(routes[section].Mask, 32):string()
+	return routes[section].dest:mask():string()
 end
 
 gateway = v:option(DummyValue, "gateway", translate("gateway"))
 function gateway.cfgvalue(self, section)
-	return luci.ip.Hex(routes[section].Gateway, 32):string()
+	return routes[section].gateway:string()
 end
 
-metric = v:option(DummyValue, "Metric", translate("metric"))
+metric = v:option(DummyValue, "metric", translate("metric"))
+function metric.cfgvalue(self, section)
+	return routes[section].metric
+end
 
+
+local routes6 = {}
+for i, route in ipairs(luci.sys.net.routes6()) do
+	if route.dest:prefix() == 0 then
+		routes6[#routes6+1] = route
+	end
+end
+
+v6 = r:section(Table, routes6)
+
+net = v6:option(DummyValue, "iface", translate("network"))
+function net.cfgvalue(self, section)
+	return luci.tools.webadmin.iface_get_network(routes[section].device)
+	or routes6[section].device
+end
+
+target  = v6:option(DummyValue, "target", translate("target"))
+function target.cfgvalue(self, section)
+	return routes6[section].dest:string()
+end
+
+gateway = v6:option(DummyValue, "gateway6", translate("gateway6"))
+function gateway.cfgvalue(self, section)
+	return routes6[section].source:string()
+end
+
+metric = v6:option(DummyValue, "metric", translate("metric"))
+function metric.cfgvalue(self, section)
+	return string.format("%X", routes6[section].metric)
+end
 
 return f, m, r

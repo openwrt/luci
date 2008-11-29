@@ -294,21 +294,35 @@ function net.conntrack()
 	return connt
 end
 
---- Determine the current default route.
+--- Determine the current IPv4 default route. If multiple default routes exist,
+-- return the one with the lowest metric.
 -- @return	Table with the properties of the current default route.
 --			The following fields are defined:
---			{ "Mask", "RefCnt", "Iface", "Flags", "Window", "IRTT",
---			  "MTU", "Gateway", "Destination", "Metric", "Use" }
+--			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
+--			  "flags", "device" }
 function net.defaultroute()
-	local routes = net.routes()
 	local route = nil
-
-	for i, r in pairs(luci.sys.net.routes()) do
-		if r.Destination == "00000000" and (not route or route.Metric > r.Metric) then
+	for _, r in pairs(net.routes()) do
+		if r.dest:prefix() == 0 and (not route or route.metric > r.metric) then
 			route = r
 		end
 	end
+	return route
+end
 
+--- Determine the current IPv6 default route. If multiple default routes exist,
+-- return the one with the lowest metric.
+-- @return	Table with the properties of the current default route.
+--			The following fields are defined:
+--			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
+--			  "flags", "device" }
+function net.defaultroute6()
+	local route = nil
+	for _, r in pairs(net.routes6()) do
+		if r.dest:prefix() == 0 and (not route or route.metric > r.metric) then
+			route = r
+		end
+	end
 	return route
 end
 
@@ -355,17 +369,49 @@ end
 --- Returns the current kernel routing table entries.
 -- @return	Table of tables with properties of the corresponding routes.
 --			The following fields are defined for route entry tables:
---			{ "Mask", "RefCnt", "Iface", "Flags", "Window", "IRTT",
---			  "MTU", "Gateway", "Destination", "Metric", "Use" }
+--			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
+--			  "flags", "device" }
 function net.routes()
-	return _parse_delimited_table(io.lines("/proc/net/route"))
+	local routes = { }
+
+	for line in io.lines("/proc/net/route") do
+
+		local dev, dst_ip, gateway, flags, refcnt, usecnt, metric,
+			  dst_mask, mtu, win, irtt = line:match(
+			"([^%s]+)\t([A-F0-9]+)\t([A-F0-9]+)\t([A-F0-9]+)\t" ..
+			"(%d+)\t(%d+)\t(%d+)\t([A-F0-9]+)\t(%d+)\t(%d+)\t(%d+)"
+		)
+
+		if dev then
+			gateway  = luci.ip.Hex( gateway,  32, luci.ip.FAMILY_INET4 )
+			dst_mask = luci.ip.Hex( dst_mask, 32, luci.ip.FAMILY_INET4 )
+			dst_ip   = luci.ip.Hex(
+				dst_ip, dst_mask:prefix(dst_mask), luci.ip.FAMILY_INET4
+			)
+
+			routes[#routes+1] = {
+				dest     = dst_ip,
+				gateway  = gateway,
+				metric   = tonumber(metric),
+				refcount = tonumber(refcnt),
+				usecount = tonumber(usecnt),
+				mtu      = tonumber(mtu),
+				window   = tonumber(window),
+				irtt     = tonumber(irtt),
+				flags    = tonumber(flags, 16),
+				device   = dev
+			}
+		end
+	end
+
+	return routes
 end
 
 --- Returns the current ipv6 kernel routing table entries.
 -- @return	Table of tables with properties of the corresponding routes.
 --			The following fields are defined for route entry tables:
---			{ "src_ip", "src_prefix", "dst_ip", "dst_prefix", "nexthop_ip",
---            "metric", "refcount", "usecount", "flags", "device" }
+--			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
+--			  "flags", "device" }
 function net.routes6()
 	local routes = { }
 
@@ -377,32 +423,28 @@ function net.routes6()
 			"([a-f0-9]+) ([a-f0-9]+) " ..
 			"([a-f0-9]+) ([a-f0-9]+) " ..
 			"([a-f0-9]+) ([a-f0-9]+) " ..
-			"([^%s]+) +([^%s]+)"
+			"([a-f0-9]+) +([^%s]+)"
 		)
 
 		src_ip = luci.ip.Hex(
-			src_ip, tonumber(src_prefix, 16),
-			luci.ip.FAMILY_INET6, false
+			src_ip, tonumber(src_prefix, 16), luci.ip.FAMILY_INET6, false
 		)
 
 		dst_ip = luci.ip.Hex(
-			dst_ip, tonumber(dst_prefix, 16),
-			luci.ip.FAMILY_INET6, false
+			dst_ip, tonumber(dst_prefix, 16), luci.ip.FAMILY_INET6, false
 		)
 
 		nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
 
 		routes[#routes+1] = {
-			src_ip     = src_ip:host():string(),
-			src_prefix = src_ip:prefix(),
-			dst_ip     = dst_ip:host():string(),
-			dst_prefix = dst_ip:prefix(),
-			nexthop_ip = nexthop:string(),
-			metric     = tonumber(metric, 16),
-			refcount   = tonumber(refcnt, 16),
-			usecount   = tonumber(usecnt, 16),
-			flags      = tonumber(flags), -- hex?
-			device     = dev
+			source   = src_ip,
+			dest     = dst_ip,
+			nexthop  = nexthop,
+			metric   = tonumber(metric, 16),
+			refcount = tonumber(refcnt, 16),
+			usecount = tonumber(usecnt, 16),
+			flags    = tonumber(flags, 16),
+			device   = dev
 		}
 	end
 
@@ -715,17 +757,17 @@ function _parse_mixed_record(cnt, delimiter)
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n")) do
 		for j, f in pairs(luci.util.split(luci.util.trim(l), delimiter, nil, true)) do
-        	local k, x, v = f:match('([^%s][^:=]+) *([:=]*) *"*([^\n"]*)"*')
+			local k, x, v = f:match('([^%s][^:=]+) *([:=]*) *"*([^\n"]*)"*')
 
-            if k then
+			if k then
 				if x == "" then
 					table.insert(flags, k)
 				else
-            		data[k] = v
+					data[k] = v
 				end
-            end
-    	end
+			end
+		end
 	end
 
-    return data, flags
+	return data, flags
 end
