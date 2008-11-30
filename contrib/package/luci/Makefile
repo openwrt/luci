@@ -880,7 +880,7 @@ endif
 MAKE_FLAGS += \
 	MODULES="$(PKG_SELECTED_MODULES)" \
 	LUA_TARGET="$(LUA_TARGET)" \
-	LUA_SHLIBS="-llua -lm" \
+	LUA_SHLIBS="-llua -lm -ldl -lcrypt" \
 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
 	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
 	OS="Linux"
