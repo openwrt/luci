@@ -22,7 +22,7 @@ t:option(DummyValue, "IP address", translate("ipaddress"))
 t:option(DummyValue, "HW address", translate("macaddress"))
 t:option(DummyValue, "Device", translate("interface"))
 
-t = f:section(Table, luci.sys.net.conntrack(), translate("a_n_conntrack"))
+t = f:section(Table, luci.sys.net.conntrack() or {}, translate("a_n_conntrack"))
 l3 = t:option(DummyValue, "layer3", translate("network"))
 function l3.cfgvalue(self, ...)
 	return DummyValue.cfgvalue(self, ...):upper()
