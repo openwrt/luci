@@ -42,7 +42,10 @@ if not arg or not arg[1] then
 		return routes[section].gateway:string()
 	end
 
-	metric = v:option(DummyValue, "Metric", translate("metric"))
+	metric = v:option(DummyValue, "metric", translate("metric"))
+	function metric.cfgvalue(self, section)
+		return routes[section].metric
+	end
 
 	if routes6 then
 		v = m:section(Table, routes6, translate("a_n_routes_kernel6"))
@@ -63,10 +66,10 @@ if not arg or not arg[1] then
 			return routes6[section].source:string()
 		end
 
-		metric = v:option(DummyValue, "Metric", translate("metric"))
-	    function metric.cfgvalue(self, section)
-	        return string.format( "%08X", routes6[section].metric )
-	    end
+		metric = v:option(DummyValue, "metric", translate("metric"))
+		function metric.cfgvalue(self, section)
+			return string.format( "%08X", routes6[section].metric )
+		end
 	end
 end
 

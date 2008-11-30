@@ -319,14 +319,15 @@ end
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
 function net.defaultroute6()
-	local route = nil
+	local route   = nil
 	local routes6 = net.routes6()
-	if not routes6 then
-		return nil
-	end
-	for _, r in pairs(routes6) do
-		if r.dest:prefix() == 0 and (not route or route.metric > r.metric) then
-			route = r
+	if routes6 then
+		for _, r in pairs(routes6) do
+			if r.dest:prefix() == 0 and
+			   (not route or route.metric > r.metric)
+			then
+				route = r
+			end
 		end
 	end
 	return route
@@ -419,46 +420,44 @@ end
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
 function net.routes6()
-	local routes = { }
+	if luci.fs.access("/proc/net/ipv6_route", "r") then
+		local routes = { }
 
-	if not luci.fs.access("/proc/net/ipv6_route", "r") then
-		return nil
+		for line in io.lines("/proc/net/ipv6_route") do
+
+			local dst_ip, dst_prefix, src_ip, src_prefix, nexthop,
+				  metric, refcnt, usecnt, flags, dev = line:match(
+				"([a-f0-9]+) ([a-f0-9]+) " ..
+				"([a-f0-9]+) ([a-f0-9]+) " ..
+				"([a-f0-9]+) ([a-f0-9]+) " ..
+				"([a-f0-9]+) ([a-f0-9]+) " ..
+				"([a-f0-9]+) +([^%s]+)"
+			)
+
+			src_ip = luci.ip.Hex(
+				src_ip, tonumber(src_prefix, 16), luci.ip.FAMILY_INET6, false
+			)
+
+			dst_ip = luci.ip.Hex(
+				dst_ip, tonumber(dst_prefix, 16), luci.ip.FAMILY_INET6, false
+			)
+
+			nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
+
+			routes[#routes+1] = {
+				source   = src_ip,
+				dest     = dst_ip,
+				nexthop  = nexthop,
+				metric   = tonumber(metric, 16),
+				refcount = tonumber(refcnt, 16),
+				usecount = tonumber(usecnt, 16),
+				flags    = tonumber(flags, 16),
+				device   = dev
+			}
+		end
+
+		return routes
 	end
-
-	for line in io.lines("/proc/net/ipv6_route") do
-
-		local dst_ip, dst_prefix, src_ip, src_prefix, nexthop,
-			  metric, refcnt, usecnt, flags, dev = line:match(
-			"([a-f0-9]+) ([a-f0-9]+) " ..
-			"([a-f0-9]+) ([a-f0-9]+) " ..
-			"([a-f0-9]+) ([a-f0-9]+) " ..
-			"([a-f0-9]+) ([a-f0-9]+) " ..
-			"([a-f0-9]+) +([^%s]+)"
-		)
-
-		src_ip = luci.ip.Hex(
-			src_ip, tonumber(src_prefix, 16), luci.ip.FAMILY_INET6, false
-		)
-
-		dst_ip = luci.ip.Hex(
-			dst_ip, tonumber(dst_prefix, 16), luci.ip.FAMILY_INET6, false
-		)
-
-		nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
-
-		routes[#routes+1] = {
-			source   = src_ip,
-			dest     = dst_ip,
-			nexthop  = nexthop,
-			metric   = tonumber(metric, 16),
-			refcount = tonumber(refcnt, 16),
-			usecount = tonumber(usecnt, 16),
-			flags    = tonumber(flags, 16),
-			device   = dev
-		}
-	end
-
-	return routes
 end
 
 --- Tests whether the given host responds to ping probes.
