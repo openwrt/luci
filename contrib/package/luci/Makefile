@@ -743,7 +743,7 @@ ifneq ($(CONFIG_PACKAGE_luci-uvl),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-httpd),)
-	PKG_SELECTED_MODULES+=libs/httpd
+	PKG_SELECTED_MODULES+=libs/lucittpd
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-admin-core),)
