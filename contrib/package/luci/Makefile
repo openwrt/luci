@@ -67,7 +67,7 @@ endef
 
 define Package/luci/httpdtemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Non-Forking HTTP-Daemon (EXPERIMENTAL)
+  SUBMENU:=LuCIttpd
   DEPENDS:=+luci-httpd
 endef
 
@@ -238,7 +238,7 @@ endef
 
 define Package/luci-httpd
   $(call Package/luci/httpdtemplate)
-  DEPENDS:=+luci-http +luasocket
+  DEPENDS:=+luci-http
   TITLE:=Server Core
 endef
 
@@ -579,7 +579,7 @@ endef
 define Package/luci-sgi-luci
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-httpd
-  TITLE:=SGI for LuCI HTTPD
+  TITLE:=SGI for LuCIttpd
 endef
 
 define Package/luci-sgi-luci/install
