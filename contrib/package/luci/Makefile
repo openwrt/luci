@@ -238,12 +238,12 @@ endef
 
 define Package/luci-httpd
   $(call Package/luci/httpdtemplate)
-  DEPENDS:=+luci-http
+  DEPENDS:=+luci-http +libuci
   TITLE:=Server Core
 endef
 
 define Package/luci-httpd/install
-	$(call Package/luci/install/template,$(1),libs/httpd)
+	$(call Package/luci/install/template,$(1),libs/lucittpd)
 endef
 
 
