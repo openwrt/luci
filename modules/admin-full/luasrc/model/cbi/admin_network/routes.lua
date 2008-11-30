@@ -14,6 +14,8 @@ $Id$
 require("luci.tools.webadmin")
 m = Map("network", translate("a_n_routes"), translate("a_n_routes1"))
 
+local routes6 = luci.sys.net.routes6()
+
 if not arg or not arg[1] then
 	local routes = luci.sys.net.routes()
 
@@ -42,31 +44,30 @@ if not arg or not arg[1] then
 
 	metric = v:option(DummyValue, "Metric", translate("metric"))
 
+	if routes6 then
+		v = m:section(Table, routes6, translate("a_n_routes_kernel6"))
 
-	local routes6 = luci.sys.net.routes6()
+		net = v:option(DummyValue, "iface", translate("network"))
+		function net.cfgvalue(self, section)
+			return luci.tools.webadmin.iface_get_network(routes6[section].device)
+			 or routes6[section].device
+		end
 
-	v = m:section(Table, routes6, translate("a_n_routes_kernel6"))
+		target  = v:option(DummyValue, "target", translate("target"))
+		function target.cfgvalue(self, section)
+			return routes6[section].dest:string()
+		end
 
-	net = v:option(DummyValue, "iface", translate("network"))
-	function net.cfgvalue(self, section)
-		return luci.tools.webadmin.iface_get_network(routes6[section].device)
-		 or routes6[section].device
+		gateway = v:option(DummyValue, "gateway", translate("gateway6"))
+		function gateway.cfgvalue(self, section)
+			return routes6[section].source:string()
+		end
+
+		metric = v:option(DummyValue, "Metric", translate("metric"))
+	    function metric.cfgvalue(self, section)
+	        return string.format( "%08X", routes6[section].metric )
+	    end
 	end
-
-	target  = v:option(DummyValue, "target", translate("target"))
-	function target.cfgvalue(self, section)
-		return routes6[section].dest:string()
-	end
-
-	gateway = v:option(DummyValue, "gateway", translate("gateway6"))
-	function gateway.cfgvalue(self, section)
-		return routes6[section].source:string()
-	end
-
-	metric = v:option(DummyValue, "Metric", translate("metric"))
-    function metric.cfgvalue(self, section)
-        return string.format( "%08X", routes6[section].metric )
-    end
 end
 
 
@@ -89,23 +90,24 @@ s:option(Value, "netmask", translate("netmask"), translate("a_n_r_netmask1")).rm
 
 s:option(Value, "gateway", translate("gateway"))
 
+if routes6 then
+	s = m:section(TypedSection, "route6", translate("a_n_routes_static6"))
+	s.addremove = true
+	s.anonymous = true
 
-s = m:section(TypedSection, "route6", translate("a_n_routes_static6"))
-s.addremove = true
-s.anonymous = true
+	s.template  = "cbi/tblsection"
 
-s.template  = "cbi/tblsection"
+	iface = s:option(ListValue, "interface", translate("interface"))
+	luci.tools.webadmin.cbi_add_networks(iface)
 
-iface = s:option(ListValue, "interface", translate("interface"))
-luci.tools.webadmin.cbi_add_networks(iface)
+	if not arg or not arg[1] then
+		net.titleref = iface.titleref
+	end
 
-if not arg or not arg[1] then
-	net.titleref = iface.titleref
+	s:option(Value, "target", translate("target"), translate("a_n_r_target6"))
+
+	s:option(Value, "gateway", translate("gateway6")).rmempty = true
 end
-
-s:option(Value, "target", translate("target"), translate("a_n_r_target6"))
-
-s:option(Value, "gateway", translate("gateway6")).rmempty = true
 
 
 return m

@@ -320,7 +320,11 @@ end
 --			  "flags", "device" }
 function net.defaultroute6()
 	local route = nil
-	for _, r in pairs(net.routes6()) do
+	local routes6 = net.routes6()
+	if not routes6 then
+		return nil
+	end
+	for _, r in pairs(routes6) do
 		if r.dest:prefix() == 0 and (not route or route.metric > r.metric) then
 			route = r
 		end
@@ -416,6 +420,10 @@ end
 --			  "flags", "device" }
 function net.routes6()
 	local routes = { }
+
+	if not luci.fs.access("/proc/net/ipv6_route", "r") then
+		return nil
+	end
 
 	for line in io.lines("/proc/net/ipv6_route") do
 
