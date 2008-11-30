@@ -266,19 +266,21 @@ end
 -- @return	Table with the currently tracked IP connections
 function net.conntrack()
 	local connt = {}
-	if luci.fs.access("/proc/net/nf_conntrack") then
+	if luci.fs.access("/proc/net/nf_conntrack", "r") then
 		for line in io.lines("/proc/net/nf_conntrack") do
+			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
 			entry.layer3 = flags[1]
-			entry.layer4 = flags[2]
+			entry.layer4 = flags[3]
 			for i=1, #entry do
 				entry[i] = nil
 			end
 
 			connt[#connt+1] = entry
 		end
-	elseif luci.fs.access("/proc/net/ip_conntrack") then
+	elseif luci.fs.access("/proc/net/ip_conntrack", "r") then
 		for line in io.lines("/proc/net/ip_conntrack") do
+			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
 			entry.layer3 = "ipv4"
 			entry.layer4 = flags[1]
@@ -757,7 +759,7 @@ function _parse_mixed_record(cnt, delimiter)
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n")) do
 		for j, f in pairs(luci.util.split(luci.util.trim(l), delimiter, nil, true)) do
-			local k, x, v = f:match('([^%s][^:=]+) *([:=]*) *"*([^\n"]*)"*')
+			local k, x, v = f:match('([^%s][^:=]*) *([:=]*) *"*([^\n"]*)"*')
 
 			if k then
 				if x == "" then
