@@ -345,6 +345,16 @@ define Package/luci-app-ffwizard-leipzig/install
 endef
 
 
+define Package/luci-app-siitwizard
+  $(call Package/luci/fftemplate)
+  TITLE:=SIIT IPv4-over-IPv6 configuration wizard
+endef
+
+define Package/luci-app-siitwizard/install
+	$(call Package/luci/install/template,$(1),applications/luci-siitwizard)
+endef
+
+
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-admin-core
@@ -759,6 +769,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-ffwizard-leipzig),)
 	PKG_SELECTED_MODULES+=applications/luci-ffwizard-leipzig
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-siitwizard),)
+	PKG_SELECTED_MODULES+=applications/luci-siitwizard
+endif
 ifneq ($(CONFIG_PACKAGE_luci-app-firewall),)
 	PKG_SELECTED_MODULES+=applications/luci-fw
 endif
@@ -895,6 +908,7 @@ $(eval $(call BuildPackage,luci-mod-freifunk))
 $(eval $(call BuildPackage,luci-freifunk-community))
 
 $(eval $(call BuildPackage,luci-app-ffwizard-leipzig))
+$(eval $(call BuildPackage,luci-app-siitwizard))
 $(eval $(call BuildPackage,luci-app-firewall))
 $(eval $(call BuildPackage,luci-app-olsr))
 $(eval $(call BuildPackage,luci-app-qos))
