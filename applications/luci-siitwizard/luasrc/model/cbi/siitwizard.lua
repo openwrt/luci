@@ -95,11 +95,11 @@ function mode.write(self, section, value)
 	-- Gateway mode
 	--
 	--	* wan port is dhcp, lan port is 172.23.1.1/24
-    --	* siit0 gets a dummy address: 169.254.42.42
-    --	* wl0 gets an ipv6 address, in this case the fdca:ffee:babe::1:1/64
-    --	* we do a ::ffff:ffff:0/96 route into siit0, so everything from 6mesh goes into translation.
-    --	* an HNA6 of ::ffff:ffff:0:0/96 announces the mapped 0.0.0.0/0 ipv4 space.
-    --	* MTU on WAN, LAN down to 1400, ipv6 headers are slighly larger.
+	--	* siit0 gets a dummy address: 169.254.42.42
+	--	* wl0 gets an ipv6 address, in this case the fdca:ffee:babe::1:1/64
+	--	* we do a ::ffff:ffff:0/96 route into siit0, so everything from 6mesh goes into translation.
+	--	* an HNA6 of ::ffff:ffff:0:0/96 announces the mapped 0.0.0.0/0 ipv4 space.
+	--	* MTU on WAN, LAN down to 1400, ipv6 headers are slighly larger.
 
 	if value == "gateway" then
 
@@ -110,9 +110,9 @@ function mode.write(self, section, value)
 	-- Client mode
 	--
 	--	* 172.23.2.1/24 on its lan, fdca:ffee:babe::1:2 on wl0 and the usual dummy address on siit0.
-    --	* we do a ::ffff:ffff:172.13.2.0/120 to siit0, because in this case, only traffic directed to clients needs to go into translation.
-    --	* same route as HNA6 announcement to catch the traffic out of the mesh.
-    --	* Also, MTU on LAN reduced to 1400.
+	--	* we do a ::ffff:ffff:172.13.2.0/120 to siit0, because in this case, only traffic directed to clients needs to go into translation.
+	--	* same route as HNA6 announcement to catch the traffic out of the mesh.
+	--	* Also, MTU on LAN reduced to 1400.
 
 	else
 		local lan_ip = luci.ip.IPv4(
@@ -156,7 +156,7 @@ function mode.write(self, section, value)
 			if s.interface == device then
 				uci:set("olsrd", s[".name"], "Ip6AddrType", "global")
 			end
-			uci:delete("olsrd", s[".name"], "Ip4Boradcast")
+			uci:delete("olsrd", s[".name"], "Ip4Broadcast")
 		end)
 
 	-- hna6
