@@ -175,33 +175,35 @@ end
 
 
 local routes6 = {}
-for i, route in ipairs(luci.sys.net.routes6()) do
+for i, route in ipairs(luci.sys.net.routes6() or {}) do
 	if route.dest:prefix() == 0 then
 		routes6[#routes6+1] = route
 	end
 end
 
-v6 = r:section(Table, routes6)
+if #routes6 > 0 then
+	v6 = r:section(Table, routes6)
 
-net = v6:option(DummyValue, "iface", translate("network"))
-function net.cfgvalue(self, section)
-	return luci.tools.webadmin.iface_get_network(routes[section].device)
-	or routes6[section].device
-end
+	net = v6:option(DummyValue, "iface", translate("network"))
+	function net.cfgvalue(self, section)
+		return luci.tools.webadmin.iface_get_network(routes[section].device)
+		or routes6[section].device
+	end
 
-target  = v6:option(DummyValue, "target", translate("target"))
-function target.cfgvalue(self, section)
-	return routes6[section].dest:string()
-end
+	target  = v6:option(DummyValue, "target", translate("target"))
+	function target.cfgvalue(self, section)
+		return routes6[section].dest:string()
+	end
 
-gateway = v6:option(DummyValue, "gateway6", translate("gateway6"))
-function gateway.cfgvalue(self, section)
-	return routes6[section].source:string()
-end
+	gateway = v6:option(DummyValue, "gateway6", translate("gateway6"))
+	function gateway.cfgvalue(self, section)
+		return routes6[section].source:string()
+	end
 
-metric = v6:option(DummyValue, "metric", translate("metric"))
-function metric.cfgvalue(self, section)
-	return string.format("%X", routes6[section].metric)
+	metric = v6:option(DummyValue, "metric", translate("metric"))
+	function metric.cfgvalue(self, section)
+		return string.format("%X", routes6[section].metric)
+	end
 end
 
 return f, m, r
