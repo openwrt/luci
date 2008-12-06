@@ -17,114 +17,12 @@ $Id$
 -- This class contains functions to parse, compare and format http dates.
 module("luci.http.protocol.date", package.seeall)
 
+require("luci.sys.zoneinfo")
+
+
 MONTHS = {
 	"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
 	"Sep", "Oct", "Nov", "Dec"
-}
-
---- The "TZ" table contains lowercased timezone names associated with their
--- corresponding time offsets sepcified in seconds.
--- @class table
-TZ = {
-	-- DST zones
-	["brst"]  =   -2*3600;	 -- Brazil Summer Time (East Daylight)
-	["adt"]   =   -3*3600;	 -- Atlantic Daylight
-	["edt"]   =   -4*3600;	 -- Eastern Daylight
-	["cdt"]   =   -5*3600;	 -- Central Daylight
-	["mdt"]   =   -6*3600;	 -- Mountain Daylight
-	["pdt"]   =   -7*3600;	 -- Pacific Daylight
-	["ydt"]   =   -8*3600;	 -- Yukon Daylight
-	["hdt"]   =   -9*3600;	 -- Hawaii Daylight
-	["bst"]   =    1*3600;	 -- British Summer
-	["mest"]  =    2*3600;	 -- Middle European Summer
-	["sst"]   =    2*3600;	 -- Swedish Summer
-	["fst"]   =    2*3600;	 -- French Summer
-	["eest"]  =    3*3600;	 -- Eastern European Summer
-	["cest"]  =    2*3600;	 -- Central European Daylight
-	["wadt"]  =    8*3600;	 -- West Australian Daylight
-	["kdt"]   =   10*3600;	 -- Korean Daylight
-	["eadt"]  =   11*3600;	 -- Eastern Australian Daylight
-	["nzdt"]  =   13*3600;	 -- New Zealand Daylight
-
-	-- zones
-	["gmt"]   =   0;		 -- Greenwich Mean
-	["ut"]    =   0;		 -- Universal (Coordinated)
-	["utc"]   =   0;
-	["wet"]   =   0;		 -- Western European
-	["wat"]   =  -1*3600;	 -- West Africa
-	["azost"] =  -1*3600;	 -- Azores Standard Time
-	["cvt"]   =  -1*3600;	 -- Cape Verde Time
-	["at"]    =  -2*3600;	 -- Azores
-	["fnt"]   =  -2*3600;	 -- Brazil Time (Extreme East - Fernando Noronha)
-	["ndt"]   =  -2*3600+1800;-- Newfoundland Daylight
-	["art"]   =  -3*3600;	 -- Argentina Time
-	["nft"]   =  -3*3600+1800;-- Newfoundland
-	["mnt"]   =  -4*3600;	 -- Brazil Time (West Standard - Manaus)
-	["ewt"]   =  -4*3600;	 -- U.S. Eastern War Time
-	["ast"]   =  -4*3600;	 -- Atlantic Standard
-	["bot"]   =  -4*3600;	 -- Bolivia Time
-	["vet"]   =  -4*3600;	 -- Venezuela Time
-	["est"]   =  -5*3600;	 -- Eastern Standard
-	["cot"]   =  -5*3600;	 -- Colombia Time
-	["act"]   =  -5*3600;	 -- Brazil Time (Extreme West - Acre)
-	["pet"]   =  -5*3600;	 -- Peru Time
-	["cst"]   =  -6*3600;	 -- Central Standard
-	["cest"]  =   2*3600;	 -- Central European Summer
-	["mst"]   =  -7*3600;	 -- Mountain Standard
-	["pst"]   =  -8*3600;	 -- Pacific Standard
-	["yst"]   =  -9*3600;	 -- Yukon Standard
-	["hst"]   = -10*3600;	 -- Hawaii Standard
-	["cat"]   = -10*3600;	 -- Central Alaska
-	["ahst"]  = -10*3600;	 -- Alaska-Hawaii Standard
-	["taht"]  = -10*3600;	 -- Tahiti Time
-	["nt"]    = -11*3600;	 -- Nome
-	["idlw"]  = -12*3600;	 -- International Date Line West
-	["cet"]   =   1*3600;	 -- Central European
-	["mez"]   =   1*3600;	 -- Central European (German)
-	["met"]   =   1*3600;	 -- Middle European
-	["mewt"]  =   1*3600;	 -- Middle European Winter
-	["swt"]   =   1*3600;	 -- Swedish Winter
-	["set"]   =   1*3600;	 -- Seychelles
-	["fwt"]   =   1*3600;	 -- French Winter
-	["west"]  =   1*3600;	 -- Western Europe Summer Time
-	["eet"]   =   2*3600;	 -- Eastern Europe; USSR Zone 1
-	["ukr"]   =   2*3600;	 -- Ukraine
-	["sast"]  =   2*3600;	 -- South Africa Standard Time
-	["bt"]    =   3*3600;	 -- Baghdad; USSR Zone 2
-	["eat"]   =   3*3600;	 -- East Africa Time
-	["irst"]  =   3*3600+1800;-- Iran Standard Time
-	["zp4"]   =   4*3600;	 -- USSR Zone 3
-	["msd"]   =   4*3600;	 -- Moscow Daylight Time
-	["sct"]   =   4*3600;	 -- Seychelles Time
-	["zp5"]   =   5*3600;	 -- USSR Zone 4
-	["azst"]  =   5*3600;	 -- Azerbaijan Summer Time
-	["mvt"]   =   5*3600;	 -- Maldives Time
-	["uzt"]   =   5*3600;	 -- Uzbekistan Time
-	["ist"]   =   5*3600+1800;-- Indian Standard
-	["zp6"]   =   6*3600;	 -- USSR Zone 5
-	["lkt"]   =   6*3600;	 -- Sri Lanka Time
-	["pkst"]  =   6*3600;	 -- Pakistan Summer Time
-	["yekst"] =   6*3600;	 -- Yekaterinburg Summer Time
-	["wast"]  =   7*3600;	 -- West Australian Standard
-	["ict"]   =   7*3600;	 -- Indochina Time
-	["wit"]   =   7*3600;	 -- Western Indonesia Time
-	["cct"]   =   8*3600;	 -- China Coast; USSR Zone 7
-	["wst"]   =   8*3600;	 -- West Australian Standard
-	["hkt"]   =   8*3600;	 -- Hong Kong
-	["bnt"]   =   8*3600;	 -- Brunei Darussalam Time
-	["cit"]   =   8*3600;	 -- Central Indonesia Time
-	["myt"]   =   8*3600;	 -- Malaysia Time
-	["pht"]   =   8*3600;	 -- Philippines Time
-	["sgt"]   =   8*3600;	 -- Singapore Time
-	["jst"]   =   9*3600;	 -- Japan Standard; USSR Zone 8
-	["kst"]   =   9*3600;	 -- Korean Standard
-	["east"]  =  10*3600;	 -- Eastern Australian Standard
-	["gst"]   =  10*3600;	 -- Guam Standard; USSR Zone 9
-	["nct"]   =  11*3600;	 -- New Caledonia Time
-	["nzt"]   =  12*3600;	 -- New Zealand
-	["nzst"]  =  12*3600;	 -- New Zealand Standard
-	["fjt"]   =  12*3600;	 -- Fiji Time
-	["idle"]  =  12*3600;	 -- International Date Line East
 }
 
 --- Return the time offset in seconds between the UTC and given time zone.
@@ -143,8 +41,8 @@ function tz_offset(tz)
 			return s * 60 * ( math.floor( v / 100 ) * 60 + ( v % 100 ) )
 
 		-- lookup symbolic tz
-		elseif TZ[tz:lower()] then
-			return TZ[tz:lower()]
+		elseif luci.sys.zoneinfo.OFFSET[tz:lower()] then
+			return luci.sys.zoneinfo.OFFSET[tz:lower()]
 		end
 
 	end

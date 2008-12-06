@@ -65,4 +65,74 @@ foreach my $zone ( sort keys %TZ ) {
 	printf "\t{ '%s', '%s' },\n", $zone, $TZ{$zone}
 }
 
+print <<HEAD;
+}
+
+OFFSET = {
+HEAD
+
+my %seen;
+foreach my $tz ( sort keys %TZ ) {
+	my $zone = $TZ{$tz};
+
+	if( $zone =~ /^
+		([A-Z]+)
+		(?:
+			( -? \d+ (?: : \d+ )? )
+			(?:
+				([A-Z]+)
+				( -? \d+ (?: : \d+ )? )? 
+			)?
+		)?
+	\b /xo ) {
+		my ( $offset, $s, $h, $m ) = ( 0, 1, 0, 0 );
+		my ( $std, $soffset, $dst, $doffset ) = ( $1, $2, $3, $4 );
+
+		next if $seen{$std}; # and ( !$dst or $seen{$dst} );
+
+		if ( $soffset ) {
+			( $s, $h, $m ) = $soffset =~ /^(-)?(\d+)(?::(\d+))?$/;
+
+			$s = $s ? 1 : -1;
+			$h ||= 0;
+			$m ||= 0;
+
+			$offset  = $s * $h * 60 * 60;
+			$offset += $s * $m * 60;
+
+			printf("\t%-5s = %6d,\t-- %s\n",
+				lc($std), $offset, $std);
+
+			$seen{$std} = 1;
+
+			if( $dst ) {
+				if( $doffset ) {
+					( $s, $h, $m ) = $doffset =~ /^(-)?(\d+)(?::(\d+))?$/;
+
+					$s = $s ? 1 : -1;
+					$h ||= 0;
+					$m ||= 0;
+
+					$offset  = $s * $h * 60 * 60;
+					$offset += $s * $m * 60;
+				} else  {
+					$offset += 60 * 60;
+				}
+
+				printf("\t%-5s = %6d,\t-- %s\n",
+					lc($dst), $offset, $dst);
+	
+				$seen{$dst} = 1;
+			}
+		}
+		else {
+			printf("\t%-5s = %6d,\t-- %s\n",
+				lc($std), $offset, $std);
+
+			$seen{$std} = 1;
+		}
+
+	}
+}
+
 print "}\n";
