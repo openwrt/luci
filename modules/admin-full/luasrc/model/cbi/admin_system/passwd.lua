@@ -16,9 +16,11 @@ f = SimpleForm("password", translate("a_s_changepw"), translate("a_s_changepw1")
 
 pw1 = f:field(Value, "pw1", translate("password"))
 pw1.password = true
+pw1.rmempty = false
 
 pw2 = f:field(Value, "pw2", translate("confirmation"))
 pw2.password = true
+pw2.rmempty = false
 
 function pw2.validate(self, value, section)
 	return pw1:formvalue(section) == value and value
