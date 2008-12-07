@@ -10,7 +10,7 @@ set -e
 
 start() {
 	echo -n "Starting $DESC: $NAME"
-	start-stop-daemon -S -q -x $DAEMON
+	start-stop-daemon -b -S -q -x $DAEMON
 	echo "."
 }
 
