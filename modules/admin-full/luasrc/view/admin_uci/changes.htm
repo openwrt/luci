@@ -12,28 +12,34 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-<%+header%>
-<div>
-<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
-<br />
-<br />
-</div>
-<h2><a id="content" name="content"><%:config%></a></h2>
-<h3><%:changes%></h3>
-<code><%=changes%></code>
-<br /><br />
-<form class="inline" method="get" action="<%=controller%>/admin/uci/apply">
-	<input type="submit" value="<%:apply%>" />
-</form>
-<form class="inline" method="get" action="<%=controller%>/admin/uci/saveapply">
-	<input type="submit" value="<%:saveapply%>" />
-</form>
-<form class="inline" method="get" action="<%=controller%>/admin/uci/revert">
-	<input type="submit" value="<%:revert%>" />
-</form>
 
-<div>
-<br />
-<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
+<%+header%>
+
+<h2><a id="content" name="content"><%:config%></a></h2>
+<p><strong><%:changes%>:</strong></p>
+
+<div class="cbi-section">
+	<code><%=changes%></code>
 </div>
+
+<div class="cbi-page-actions">
+	<div style="float:left">
+		<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
+			<input class="cbi-button" style="float:left; margin:0" type="submit" value="« <%:back%>" />
+		</form>
+	</div>
+
+	<div style="text-align:right">
+		<form class="inline" method="get" action="<%=controller%>/admin/uci/apply">
+			<input class="cbi-button cbi-button-apply" type="submit" value="<%:apply%>" />
+		</form>
+		<form class="inline" method="get" action="<%=controller%>/admin/uci/saveapply">
+			<input class="cbi-button cbi-button-save" type="submit" value="<%:saveapply%>" />
+		</form>
+		<form class="inline" method="get" action="<%=controller%>/admin/uci/revert">
+			<input class="cbi-button cbi-button-reset" type="submit" value="<%:revert%>" />
+		</form>
+	</div>
+</div>
+
 <%+footer%>
