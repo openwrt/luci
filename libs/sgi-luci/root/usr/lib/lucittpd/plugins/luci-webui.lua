@@ -11,6 +11,7 @@ end
 
 -- Register luci
 function register()
-	local lucihnd = require "luci.ttpd.handler.luci"
-	httpd.server:get_default_vhost():set_handler("/luci", lucihnd.Luci())
+	local lucihnd = require "luci.ttpd.handler.luci".Luci()
+	httpd.server:get_default_vhost():set_handler("/luci", lucihnd)
+	httpd.server:get_default_vhost():set_handler("/cgi-bin/luci", lucihnd)
 end

@@ -18,6 +18,7 @@ local pcall, assert = pcall, assert
 
 local os = require "os"
 local io = require "io"
+local uci = require "luci.model.uci"
 local util = require "luci.util"
 local ltn12 = require "luci.ltn12"
 local proto = require "luci.http.protocol"
@@ -91,6 +92,7 @@ end
 Server = util.class()
 
 function Server.__init__(self, host)
+	self.uci = uci.cursor()
 	self.host = host
 	self.vhosts = {}
 	
@@ -329,7 +331,7 @@ function Server.process(self, functions)
 			close = not message.env.HTTP_CONNECTION or message.env.HTTP_CONNECTION == "close"
 		end
 		-- Uncomment this to disable keep-alive
-		-- close = true
+		close = not (self.uci:get("lucittpd", "lucittpd", "keepalive") == "1")
 	
 		if message.request_method == "get" or message.request_method == "head" then
 			-- Be happy
