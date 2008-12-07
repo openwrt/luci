@@ -1,0 +1,8 @@
+livestats_incoming = "incoming"
+livestats_outgoing = "outgoing"
+livestats_traffic = "traffic on"
+livestats_wifi = "signal-to-noise ratio for"
+livestats_loadavg = "load average"
+livestats_stat_wireless = "Realtime Wireless Status"
+livestats_stat_traffic = "Realtime Network Traffic"
+livestats_stat_loadavg = "Realtime System Load"

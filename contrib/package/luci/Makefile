@@ -428,6 +428,16 @@ define Package/luci-app-initmgr/install
         $(call Package/luci/install/template,$(1),applications/luci-initmgr)
 endef
 
+define Package/luci-app-livestats
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-core +luci-admin-rpc
+  TITLE:=LuCI Realtime Statistics
+endef
+
+define Package/luci-app-livestats/install
+        $(call Package/luci/install/template,$(1),applications/luci-livestats)
+endef
+
 #define Package/luci-app-polipo
 #  $(call Package/luci/webtemplate)
 #  TITLE:=LuCI Support for the Polipo Proxy
@@ -622,6 +632,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-initmgr),)
        PKG_SELECTED_MODULES+=applications/luci-initmgr
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-livestats),)
+       PKG_SELECTED_MODULES+=applications/luci-livestats
+endif
 #ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
 #       PKG_SELECTED_MODULES+=applications/luci-polipo
 #endif
@@ -698,6 +711,7 @@ $(eval $(call BuildPackage,luci-app-ushare))
 $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
+$(eval $(call BuildPackage,luci-app-livestats))
 #$(eval $(call BuildPackage,luci-app-polipo))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
