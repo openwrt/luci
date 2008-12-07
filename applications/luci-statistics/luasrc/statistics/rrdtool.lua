@@ -281,22 +281,22 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- don't include MIN if rrasingle is enabled
 		if not self.opts.rrasingle then
-			_tif( _args, "GPRINT:%s_min:MIN:%s Min", source.sname, numfmt )
+			_tif( _args, "GPRINT:%s_min:MIN:\tMin\\: %s", source.sname, numfmt )
 		end
 
 		-- always include AVERAGE
-		_tif( _args, "GPRINT:%s_avg:AVERAGE:%s Avg", source.sname, numfmt )
+		_tif( _args, "GPRINT:%s_avg:AVERAGE:\tAvg\\: %s", source.sname, numfmt )
 
 		-- don't include MAX if rrasingle is enabled
 		if not self.opts.rrasingle then
-			_tif( _args, "GPRINT:%s_max:MAX:%s Max", source.sname, numfmt )
+			_tif( _args, "GPRINT:%s_max:MAX:\tMax\\: %s", source.sname, numfmt )
 		end
 
 		-- include total count if requested else include LAST
 		if source.total then
 			_tif( _args, "GPRINT:%s_avg_sum:LAST:(ca. %s Total)\\l", source.sname, totfmt )
 		else
-			_tif( _args, "GPRINT:%s_avg:LAST:%s Last\\l", source.sname, numfmt )
+			_tif( _args, "GPRINT:%s_avg:LAST:\tLast\\: %s\\l", source.sname, numfmt )
 		end
 	end
 
