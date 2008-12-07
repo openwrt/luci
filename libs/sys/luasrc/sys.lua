@@ -627,7 +627,7 @@ wifi = {}
 --- Get iwconfig output for all wireless devices.
 -- @return	Table of tables containing the iwconfing output for each wifi device
 function wifi.getiwconfig()
-	local cnt = luci.util.exec("/usr/sbin/iwconfig 2>/dev/null")
+	local cnt = luci.util.exec("PATH=/sbin:/usr/sbin iwconfig 2>/dev/null")
 	local iwc = {}
 
 	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n\n")) do
