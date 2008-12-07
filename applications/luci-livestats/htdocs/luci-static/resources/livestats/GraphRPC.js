@@ -1,4 +1,4 @@
-function Graph(container, id, options, transform) {
+function Graph(container, id, options, transform, legend) {
 	if( !options ) options = { };
 
 	this.id        = id;
@@ -7,11 +7,15 @@ function Graph(container, id, options, transform) {
 	this.options   = options;
 	this.transform = transform;
 	this.dataset   = {};
-
+	this.legend    = legend;
+	this.lastvalue = {};
+	
+	var name  = (options.instanceNames && options.instanceNames[id])
+		? options.instanceNames[id] : id;
 	var graph = document.createElement('div');
 	var label = document.createElement('h2');
 		label.innerHTML = options.title
-			? options.title.replace("%s", id ) : id;
+			? options.title.replace("%s", name) : name;
 
 	container.appendChild( label );
 	container.appendChild( graph );
@@ -49,8 +53,9 @@ Graph.prototype.updateDataset = function(name, value) {
 		value = Math.abs( parseFloat(value) || 0 );
 
 		if( this.transform ) {
-			value = ( ds[this.cols-1][1] > 0 )
-				? this.transform(value, ds[this.cols-1][1]) : 0.01;
+			var orgvalue = value;
+			value = (this.lastvalue[name]) ? this.transform(value, this.lastvalue[name]) : 0;
+			this.lastvalue[name] = orgvalue;
 		}
 
 		ds[this.cols-1][1] = value;
@@ -66,6 +71,13 @@ Graph.prototype.draw = function( options ) {
 
 		this.layout.evaluate();
 		this.plotter.render();
+
+		legend_opt = {
+			"legendStyle": 'li'
+		};
+
+		legend = new LegendRenderer(this.legend, this.layout, legend_opt);
+		legend.render();
 	}
 }
 
@@ -78,7 +90,7 @@ Graph.prototype.redraw = function() {
 }
 
 
-function GraphRPC(container, uri, action, interval, datasources, options, transform) {
+function GraphRPC(container, uri, action, interval, datasources, options, transform, legend) {
 	this.ds        = datasources;
 	this.uri       = uri
 	this.action    = action;
@@ -87,6 +99,7 @@ function GraphRPC(container, uri, action, interval, datasources, options, transf
 	this.transform = transform;
 	this.proxy     = new MochiKit.JsonRpc.JsonRpcProxy(uri, [action]);
 	this.graphs    = new Object();
+	this.legend    = legend;
 
 	this.requestData();
 
@@ -126,7 +139,7 @@ GraphRPC.prototype.dispatchResponse = function(response) {
 				if( !this.graphs[gid] ) {
 					this.options.title = otle.replace('%s', instance) + ': ' + name;
 					this.graphs[gid] = new Graph(
-						this.container, gid, this.options, this.transform
+						this.container, gid, this.options, this.transform, this.legend
 					);
 
 					this.graphs[gid].addDataset(name);
@@ -135,10 +148,18 @@ GraphRPC.prototype.dispatchResponse = function(response) {
 				}
 				else
 				{
-					this.graphs[gid].updateDataset(
-						name, instance
+					var datum = null;
+					if (typeof (this.ds[i]) == "function") {
+						datum = this.ds[i](
+							instance ? response[instance] : response
+						);
+					} else {
+						datum = instance
 							? response[instance][this.ds[i]]
 							: response[this.ds[i]]
+					}
+					this.graphs[gid].updateDataset(
+						name, datum
 					);
 					this.graphs[gid].redraw();
 				}
@@ -148,7 +169,7 @@ GraphRPC.prototype.dispatchResponse = function(response) {
 			var gid = instance || 'livegraph';
 			if( !this.graphs[gid] ) {
 				this.graphs[gid] = new Graph(
-					this.container, gid, this.options, this.transform
+					this.container, gid, this.options, this.transform, this.legend
 				);
 
 				for( var i = 0; i < this.ds.length; i += 2 ) {
@@ -161,10 +182,18 @@ GraphRPC.prototype.dispatchResponse = function(response) {
 			else {
 				for( var i = 0; i < this.ds.length; i += 2 ) {
 					var name = this.ds[i+1] || this.ds[i];
-					this.graphs[gid].updateDataset(
-						name, instance
+					var datum = null;
+					if (typeof (this.ds[i]) == "function") {
+						datum = this.ds[i](
+							instance ? response[instance] : response
+						);
+					} else {
+						datum = instance
 							? response[instance][this.ds[i]]
 							: response[this.ds[i]]
+					}
+					this.graphs[gid].updateDataset(
+						name, datum
 					);
 				}
 

@@ -5,19 +5,9 @@
 <script type="text/javascript" src="<%=resource%>/livestats/JsonRpc.js"></script>
 <script type="text/javascript" src="<%=resource%>/livestats/PlotKit.js"></script>
 <script type="text/javascript" src="<%=resource%>/livestats/GraphRPC.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/Legend.js"></script>
 
 <script type="text/javascript">
-	PlotKit.Base.baseColors = function () {
-	   var hexColor = MochiKit.Color.Color.fromHexString;
-	   return [hexColor("#ff0000"),
-			   hexColor("#ff6000"),
-			   hexColor("#fff000"),
-			   hexColor("#00ff00"),
-			   hexColor("#00ff77"),
-			   hexColor("#0090ff"),
-			   hexColor("#000000")];
-	};
-
 	function initGraphs() {
 		var rpc = new GraphRPC(
 			document.getElementById('live_graphs'),
@@ -25,14 +15,14 @@
 			2000,
 
 			// Data sources
-			[ 0, "1 Minute Load", 1, "5 Minutes Load", 2, "15 Minutes Load" ],
+			[ 0, "1 min", 1, "5 min", 2, "15 min" ],
 
 			// Graph layout options
-			{ shouldFill: false, drawBackground: false, strokeColor: null,
-			  strokeColorTransform: "asFillColor",
-			  title: 'Average Load', strokeWidth: 1,
+			{ title: '<%:livestats_loadavg%>', strokeWidth: 2.5, shouldFill: false, strokeColor: null,
 			  padding: { left: 70, right: 10, top: 10, bottom: 20 },
-			  instances: [ false ], yAxis: [ 0, 2 ] }
+			  instances: [ false ],  yAxis: [ 0, 2 ], drawBackground: false },
+			null,
+			'live_graphs'
 		);
 	}
 
@@ -40,5 +30,4 @@
 </script>
 
 <div id="live_graphs"></div>
-
 <%+footer%>

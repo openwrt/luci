@@ -5,6 +5,7 @@
 <script type="text/javascript" src="<%=resource%>/livestats/JsonRpc.js"></script>
 <script type="text/javascript" src="<%=resource%>/livestats/PlotKit.js"></script>
 <script type="text/javascript" src="<%=resource%>/livestats/GraphRPC.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/Legend.js"></script>
 
 <script type="text/javascript">
 	function initGraphs() {
@@ -14,12 +15,23 @@
 			1500,
 
 			// Data sources
-			[ "Noise level", null, "Signal level", null ],
+			[ function(data) {
+				return parseFloat(data["Signal level"])
+				 - parseFloat(data["Noise level"]);
+			}, "S/N (dBm)"],
 
 			// Graph layout options
-			{ drawBackground: false, yAxis: [ 0, 150 ],
-			  title: 'Wifi Interface "%s": Signal and Noise',
-			  padding: { left: 40, right: 10, top: 10, bottom: 20 } }
+			{ drawBackground: false, yAxis: [ 0, 50 ],
+			  title: '<%:livestats_wifi%> %s',
+			  padding: { left: 40, right: 10, top: 10, bottom: 20 },
+			  instanceNames: {
+				<%- for k,v in pairs(luci.sys.wifi.getiwconfig()) do %>
+					<%-="%q:%q," % {k, "%s (%s)" % {k, tostring(v.ESSID)}}-%>
+				<% end %>  
+				"0": ""
+			  }},
+			null,
+			'live_graphs'
 		);
 	}
 

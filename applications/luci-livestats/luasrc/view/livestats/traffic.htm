@@ -5,9 +5,11 @@
 <script type="text/javascript" src="<%=resource%>/livestats/JsonRpc.js"></script>
 <script type="text/javascript" src="<%=resource%>/livestats/PlotKit.js"></script>
 <script type="text/javascript" src="<%=resource%>/livestats/GraphRPC.js"></script>
+<script type="text/javascript" src="<%=resource%>/livestats/Legend.js"></script>
 
 <%
 	local interfaces = { }
+	local ifnames = {}
 	local uci = luci.model.uci.cursor_state()
 
 	uci:foreach("network", "interface",
@@ -16,6 +18,7 @@
 				table.insert( interfaces,
 					"'" .. ( s.ifname or s['.name'] ) .. "'"
 				)
+				ifnames[s.ifname or s['.name']] = s['.name']
 			end
 		end
 	)
@@ -29,20 +32,29 @@
 			2000,
 
 			// Data sources
-			[ "1", "received Bytes/s", "9", "transmitted Bytes/s" ],
+			[ "0", "<%:livestats_incoming%> (kiB/s)", "8", "<%:livestats_outgoing%> (kiB/s)" ],
 
 			// Graph layout options
-			{ shouldFill: true, drawBackground: false, strokeColor: null,
-			  strokeColorTransform: "asFillColor",
-			  title: 'Traffic on interface "%s"',
-			  separateDS: true, strokeWidth: 0.5, height: 140,
-			  padding: { left: 70, right: 10, top: 10, bottom: 20 },
-			  instances: [ <%=table.concat(interfaces, ", ") %> ] },
+			{ 
+			shouldFill: false, 
+			drawBackground: false, 
+			strokeColor: null,
+			title: '<%:livestats_traffic%> %s',
+			strokeWidth: 2.5, height: 140,
+			padding: { left: 70, right: 10, top: 10, bottom: 20 },
+			instances: [ <%=table.concat(interfaces, ", ") %> ],
+			instanceNames: {
+				<%- for iface, network in pairs(ifnames) do %>
+					<%-="%q:%q," % {iface, network}-%>
+				<% end %>
+				"0": ""
+			}},
 
 			// transform function
-			function(thisval, lastval) {
-				return ( ( thisval - lastval ) / 2 );
-			}
+			function (cur, last) {
+				return (cur - last) / 2048;
+			},
+			'live_graphs'
 		);
 	}
 

@@ -537,8 +537,8 @@ endef
 
 define Package/luci-app-livestats
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +luci-admin-rpc
-  TITLE:=LuCI Realtime Statistics (Experimental)
+  DEPENDS+=+luci-admin-core +luci-admin-rpc
+  TITLE:=LuCI Realtime Statistics
 endef
 
 define Package/luci-app-livestats/install
