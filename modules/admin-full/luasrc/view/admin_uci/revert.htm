@@ -12,18 +12,20 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+
 <%+header%>
-<div>
-<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
-<br />
-<br />
-</div>
+
 <h2><a id="content" name="content"><%:config%></a></h2>
-<p><%:uci_reverted%>:</p>
-<code><%=(changes or "-")%></code>
-<div>
-<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
-<br />
-<br />
+<p><strong><%:uci_reverted%>:</strong></p>
+
+<div class="cbi-section">
+	<code><%=(changes or "-")%></code>
 </div>
+
+<div class="cbi-page-actions">
+	<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
+		<input class="cbi-button" style="margin:0" type="submit" value="« <%:back%>" />
+	</form>
+</div>
+
 <%+footer%>

@@ -13,27 +13,30 @@ $Id$
 
 -%>
 <%+header%>
-<div>
-<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
-<br />
-<br />
-</div>
-<h2><a id="content" name="content"><%:config%></a></h2>
-<p><%:uci_applied%>:</p>
-<code><%=(changes or "-")%>
 
-<%
-local fp = reload()
-local line = fp:read()
-while line do 
-	write(line.."\n")
-	line = fp:read()
-end
-fp:close()
-%></code>
-<div>
-<a href="<%=luci.http.formvalue("redir")%>">&lt;&lt; <%:back%></a>
-<br />
-<br />
+<h2><a id="content" name="content"><%:config%></a></h2>
+<p><strong><%:uci_applied%>:</strong></p>
+
+<div class="cbi-section">
+	<code><%=(changes or "-")%></code>
 </div>
+
+<fieldset class="cbi-section">
+	<ul class="cbi-apply"><%-
+		local fp = reload()
+		local line = fp:read()
+		while line do
+			write("<li>" .. luci.util.pcdata(line) .. "</li>\n")
+			line = fp:read()
+		end
+		fp:close()
+	-%></ul>
+</fieldset>
+
+<div class="cbi-page-actions">
+	<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
+		<input class="cbi-button" style="margin:0" type="submit" value="« <%:back%>" />
+	</form>
+</div>
+
 <%+footer%>
