@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_BRANCH:=tags/0.8.1
+PKG_BRANCH:=branches/luci-0.8
 
 ifeq ($(DUMP),)
   USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
@@ -15,7 +15,7 @@ else
   PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
     PKG_REV:=HEAD
-    PKG_VERSION:=0.8.1
+    PKG_VERSION:=0.8.2
   endif
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
@@ -438,15 +438,15 @@ define Package/luci-app-livestats/install
         $(call Package/luci/install/template,$(1),applications/luci-livestats)
 endef
 
-#define Package/luci-app-polipo
-#  $(call Package/luci/webtemplate)
-#  TITLE:=LuCI Support for the Polipo Proxy
-#  DEPENDS+=+luci-admin-core +polipo
-#endef
+define Package/luci-app-polipo
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for the Polipo Proxy
+  DEPENDS+=+luci-admin-core +polipo
+endef
 
-#define Package/luci-app-polipo/install
-#        $(call Package/luci/install/template,$(1),applications/luci-polipo)
-#endef
+define Package/luci-app-polipo/install
+        $(call Package/luci/install/template,$(1),applications/luci-polipo)
+endef
 
 
 ### Server Gateway Interfaces ###
@@ -462,20 +462,20 @@ endef
 
 
 ### Themes ###
-#define Package/luci-theme-base
-#  $(call Package/luci/thtemplate)
-#  DEPENDS:=+luci-web
-#  TITLE:=Common base for all themes
-#endef
-#
-#define Package/luci-theme-base/install
-#	$(call Package/luci/install/template,$(1),themes/base)
-#endef
+define Package/luci-theme-base
+  $(call Package/luci/thtemplate)
+  DEPENDS:=+luci-web
+  TITLE:=Common base for all themes
+endef
+
+define Package/luci-theme-base/install
+	$(call Package/luci/install/template,$(1),themes/base)
+endef
 
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWrt.org (default)
-# DEPENDS:=+luci-theme-base
+  DEPENDS:=+luci-theme-base
 endef
 
 define Package/luci-theme-openwrt/install
@@ -485,7 +485,7 @@ endef
 define Package/luci-theme-openwrtlight
   $(call Package/luci/thtemplate)
   TITLE:=OpenWrt.org - light variant without images
-# DEPENDS:=+luci-theme-base
+  DEPENDS:=+luci-theme-base
 endef
 
 define Package/luci-theme-openwrtlight/install
@@ -635,9 +635,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-livestats),)
        PKG_SELECTED_MODULES+=applications/luci-livestats
 endif
-#ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
-#       PKG_SELECTED_MODULES+=applications/luci-polipo
-#endif
+ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
+       PKG_SELECTED_MODULES+=applications/luci-polipo
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -645,9 +645,9 @@ ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 endif
 
 
-#ifneq ($(CONFIG_PACKAGE_luci-theme-base),)
-#	PKG_SELECTED_MODULES+=themes/base
-#endif
+ifneq ($(CONFIG_PACKAGE_luci-theme-base),)
+	PKG_SELECTED_MODULES+=themes/base
+endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-openwrt),)
 	PKG_SELECTED_MODULES+=themes/openwrt.org
 endif
@@ -712,11 +712,11 @@ $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
 $(eval $(call BuildPackage,luci-app-livestats))
-#$(eval $(call BuildPackage,luci-app-polipo))
+$(eval $(call BuildPackage,luci-app-polipo))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 
-#$(eval $(call BuildPackage,luci-theme-base))
+$(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-openwrt))
 $(eval $(call BuildPackage,luci-theme-openwrtlight))
 
