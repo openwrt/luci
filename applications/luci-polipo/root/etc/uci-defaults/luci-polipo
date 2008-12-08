@@ -1,0 +1,7 @@
+#!/bin/sh
+
+uci batch <<-EOF
+	add ucitrack polipo
+	set ucitrack.@polipo[-1].init=polipo
+	commit ucitrack
+EOF
