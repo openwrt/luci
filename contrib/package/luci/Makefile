@@ -564,6 +564,16 @@ define Package/luci-app-polipo/install
         $(call Package/luci/install/template,$(1),applications/luci-polipo)
 endef
 
+define Package/luci-app-openvpn
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for OpenVPN
+  DEPENDS+=@BROKEN +luci-admin-core +openvpn
+endef
+
+define Package/luci-app-openvpn/install
+        $(call Package/luci/install/template,$(1),applications/luci-openvpn)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -829,6 +839,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
        PKG_SELECTED_MODULES+=applications/luci-polipo
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-openvpn),)
+       PKG_SELECTED_MODULES+=applications/luci-openvpn
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -928,6 +941,7 @@ $(eval $(call BuildPackage,luci-app-initmgr))
 $(eval $(call BuildPackage,luci-app-livestats))
 $(eval $(call BuildPackage,luci-app-asterisk))
 $(eval $(call BuildPackage,luci-app-polipo))
+$(eval $(call BuildPackage,luci-app-openvpn))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
