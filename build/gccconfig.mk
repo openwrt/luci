@@ -1,8 +1,8 @@
 OS ?= $(shell uname)
 
-LUA_SHLIBS = $(shell pkg-config --silence-errors --libs lua5.1)
+LUA_SHLIBS = $(shell pkg-config --silence-errors --libs lua5.1 || pkg-config --silence-errors --libs lua)
 LUA_LIBS = $(if $(LUA_SHLIBS),$(LUA_SHLIBS),$(firstword $(wildcard /usr/lib/liblua.a /usr/local/lib/liblua.a /opt/local/lib/liblua.a)))
-LUA_CFLAGS = $(shell pkg-config --silence-errors --cflags lua5.1)
+LUA_CFLAGS = $(shell pkg-config --silence-errors --cflags lua5.1 || pkg-config --silence-errors --cflags lua)
 
 CC = gcc
 AR = ar
