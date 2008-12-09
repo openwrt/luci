@@ -1,7 +1,5 @@
 #!/bin/sh
 
 [ -n "${IPKG_INSTROOT}" ] || {
-	/etc/init.d/luci_splash enable
-
-	exit 0
+	/etc/init.d/luci_splash enabled || /etc/init.d/luci_splash enable
 }
