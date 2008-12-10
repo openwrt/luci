@@ -1,6 +1,7 @@
 require "luci.sys"
 require "luci.tools.webadmin"
 
+local bit = require "bit"
 local uci = luci.model.uci.cursor_state()
 
 local ffzone = luci.tools.webadmin.firewall_find_zone("freifunk")
@@ -202,7 +203,10 @@ if #routes6 > 0 then
 
 	metric = v6:option(DummyValue, "metric", translate("metric"))
 	function metric.cfgvalue(self, section)
-		return string.format("%X", routes6[section].metric)
+		local metr = routes6[section].metric
+		local lower = bit.band(metr, 0xffff)
+		local higher = bit.rshift(bit.band(metr, 0xffff0000), 16)
+		return "%04X%04X" % {higher, lower}
 	end
 end
 
