@@ -15,6 +15,7 @@ require("luci.tools.webadmin")
 m = Map("network", translate("a_n_routes"), translate("a_n_routes1"))
 
 local routes6 = luci.sys.net.routes6()
+local bit = require "bit"
 
 if not arg or not arg[1] then
 	local routes = luci.sys.net.routes()
@@ -68,7 +69,10 @@ if not arg or not arg[1] then
 
 		metric = v:option(DummyValue, "metric", translate("metric"))
 		function metric.cfgvalue(self, section)
-			return string.format( "%08X", routes6[section].metric )
+			local metr = routes6[section].metric
+			local lower = bit.band(metr, 0xffff)
+			local higher = bit.rshift(bit.band(metr, 0xffff0000), 16)
+			return "%04X%04X" % {higher, lower}
 		end
 	end
 end
