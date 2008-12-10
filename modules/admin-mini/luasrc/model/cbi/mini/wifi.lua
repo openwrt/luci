@@ -89,7 +89,7 @@ end
 t2 = m:section(Table, {}, translate("iwscan"), translate("iwscan1"))
 
 function scan.write(self, section)
-	self.map.autoapply = false
+	m.autoapply = false
 	t2.render = t2._render
 	local ifname = self.map:get(section, "ifname")
 	luci.util.update(t2.data, luci.sys.wifi.iwscan(ifname))
