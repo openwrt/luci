@@ -29,8 +29,9 @@ define Package/libaxtls
 endef
 
 define Package/axhttpd
+  SUBMENU:=Web
   SECTION:=net
-  CATEGORY:=Networking
+  CATEGORY:=Network
   DEPENDS:=+libaxtls
   TITLE:=axTLS embedded http/https server
 endef
