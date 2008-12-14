@@ -16,7 +16,7 @@ compile:
 clean: luaclean
 
 i18n:
-	[ -n "$(XSLTPROC)" ] && for i in luasrc/i18n/*.xml; do [ -f "$$i" ]\
+	[ -n "$(XSLTPROC)" ] && for i in luasrc/i18n/*.xml; do [ "$$i" -nt "$${i%%[.]xml}.lua" ]\
 	&& $(XSLTPROC) $(MAKEPATH)i18n-lua-xhtml1.xsl $$i > $${i%%[.]xml}.lua; done || true
 
 luasource:
