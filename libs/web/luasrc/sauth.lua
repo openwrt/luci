@@ -60,6 +60,9 @@ function read(id)
 	if not id then
 		return
 	end
+	if not id:match("^%w+$") then
+		error("Session ID is not sane!")
+	end
 	clean()
 	if not sane(sessionpath .. "/" .. id) then
 		return
@@ -85,6 +88,19 @@ function write(id, data)
 	if not sane() then
 		prepare()
 	end
+	if not id:match("^%w+$") then
+		error("Session ID is not sane!")
+	end
 	luci.fs.writefile(sessionpath .. "/" .. id, data)
 	luci.fs.chmod(sessionpath .. "/" .. id, "a-rwx,u+rw")
+end
+
+
+--- Kills a session
+-- @param id	Session identifier
+function kill(id)
+	if not id:match("^%w+$") then
+		error("Session ID is not sane!")
+	end
+	luci.fs.unlink(sessionpath .. "/" .. id)
 end
