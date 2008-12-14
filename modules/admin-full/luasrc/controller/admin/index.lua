@@ -49,6 +49,12 @@ function index()
 end
 
 function action_logout()
+	local dsp = require "luci.dispatcher"
+	local sauth = require "luci.sauth"
+	if dsp.context.authsession then
+		sauth.kill(dsp.context.authsession)
+	end
+
 	luci.http.header("Set-Cookie", "sysauth=; path=/")
 	luci.http.redirect(luci.dispatcher.build_url())
 end
