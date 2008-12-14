@@ -47,7 +47,7 @@ local fi
 -- @param ...	Virtual path
 -- @return 		Relative URL
 function build_url(...)
-	return luci.http.getenv("SCRIPT_NAME") .. "/" .. table.concat(arg, "/")
+	return context.scriptname .. "/" .. table.concat(arg, "/")
 end
 
 --- Send a 404 error code and render the "error404" template if available.
@@ -123,6 +123,8 @@ function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace()
 	local ctx = context
 	ctx.path = request
+	ctx.scriptname = luci.http.getenv("SCRIPT_NAME") or ""
+	ctx.urltoken   = ctx.urltoken or {}
 
 	require "luci.i18n".setlanguage(require "luci.config".main.lang)
 
@@ -137,18 +139,32 @@ function dispatch(request)
 	ctx.args = args
 	ctx.requestargs = ctx.requestargs or args
 	local n
+	local t = true
+	local token = ctx.urltoken
+	local preq = {}
 
 	for i, s in ipairs(request) do
-		c = c.nodes[s]
-		n = i
-		if not c then
-			break
+		local tkey, tval
+		if t then
+			tkey, tval = s:match(";(%w+)=(.*)")
 		end
 
-		util.update(track, c)
+		if tkey then
+			token[tkey] = tval
+		else
+			t = false
+			preq[#preq+1] = s
+			c = c.nodes[s]
+			n = i
+			if not c then
+				break
+			end
 
-		if c.leaf then
-			break
+			util.update(track, c)
+
+			if c.leaf then
+				break
+			end
 		end
 	end
 
@@ -157,6 +173,13 @@ function dispatch(request)
 			table.insert(args, request[j])
 		end
 	end
+
+	for k, v in pairs(token) do
+		ctx.scriptname = ctx.scriptname .. "/;" .. k .. "=" ..
+			http.urlencode(v)
+	end
+
+	ctx.path = preq
 
 	if track.i18n then
 		require("luci.i18n").loadc(track.i18n)
@@ -177,17 +200,23 @@ function dispatch(request)
 			assert(media, "No valid theme found")
 		end
 
-		local viewns = setmetatable({}, {__index=_G})
+		local viewns = setmetatable({}, {__index=function(table, key)
+			if key == "controller" then
+				return ctx.scriptname
+			elseif key == "REQUEST_URI" then
+				return ctx.scriptname .. "/" .. table.concat(ctx.requested, "/")
+			else
+				return rawget(table, key) or _G[key]
+			end
+		end})
 		tpl.context.viewns = viewns
 		viewns.write       = luci.http.write
 		viewns.include     = function(name) tpl.Template(name):render(getfenv(2)) end
 		viewns.translate   = function(...) return require("luci.i18n").translate(...) end
 		viewns.striptags   = util.striptags
-		viewns.controller  = luci.http.getenv("SCRIPT_NAME")
 		viewns.media       = media
 		viewns.theme       = fs.basename(media)
 		viewns.resource    = luci.config.main.resourcebase
-		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
 
 	track.dependent = (track.dependent ~= false)
@@ -202,9 +231,22 @@ function dispatch(request)
 
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
-		local sess = ctx.authsession or luci.http.getcookie("sysauth")
-		sess = sess and sess:match("^[A-F0-9]+$")
-		local user = sauth.read(sess)
+		local sess = ctx.authsession
+		local verifytoken = true
+		if not sess then
+			sess = luci.http.getcookie("sysauth")
+			sess = sess and sess:match("^[A-F0-9]+$")
+		end
+
+		local sdat = sauth.read(sess)
+		local user
+
+		if sdat then
+			sdat = loadstring(sdat)()
+			if not verifytoken or ctx.urltoken.stok == sdat.token then
+				user = sdat.user
+			end
+		end
 
 		if not util.contains(accs, user) then
 			if authen then
@@ -215,7 +257,13 @@ function dispatch(request)
 					local sid = sess or luci.sys.uniqueid(16)
 					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
 					if not sess then
-						sauth.write(sid, user)
+						local token = luci.sys.uniqueid(16)
+						sauth.write(sid, util.get_bytecode({
+							user=user,
+							token=token,
+							secret=luci.sys.uniqueid(16)
+						}))
+						ctx.scriptname = ctx.scriptname .. "/;stok="..token
 					end
 					ctx.authsession = sid
 				end
@@ -223,6 +271,8 @@ function dispatch(request)
 				luci.http.status(403, "Forbidden")
 				return
 			end
+		else
+			ctx.authsession = sess
 		end
 	end
 

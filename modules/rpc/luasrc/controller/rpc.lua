@@ -52,20 +52,33 @@ function rpc_auth()
 	local http    = require "luci.http"
 	local sys     = require "luci.sys"
 	local ltn12   = require "luci.ltn12"
+	local util    = require "luci.util"
 	
 	local loginstat
 	
 	local server = {}
-	server.login = function(user, pass)
-		local sid
-		
+	server.challenge = function(user, pass)
+		local sid, token, secret
+
 		if sys.user.checkpasswd(user, pass) then
 			sid = sys.uniqueid(16)
+			token = sys.uniqueid(16)
+			secret = sys.uniqueid(16)
+
 			http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-			sauth.write(sid, user)
+			sauth.write(sid, util.get_bytecode({
+				user=user,
+				token=token,
+				secret=secret
+			}))
 		end
 		
-		return sid
+		return sid and {sid=sid, token=token, secret=secret}
+	end
+
+	server.login = function(...)
+		local challenge = server.challenge(...)
+		return challenge and challenge.sid
 	end
 	
 	http.prepare_content("application/json")
