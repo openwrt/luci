@@ -25,7 +25,8 @@ function index()
 	local function authenticator(validator, accs)
 		local auth = luci.http.formvalue("auth", true)
 		if auth then
-			local user = luci.sauth.read(auth)
+			local sdat = luci.sauth.read(auth)
+			user = loadstring(sdat)().user
 			if user and luci.util.contains(accs, user) then
 				return user, auth
 			end

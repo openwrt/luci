@@ -47,7 +47,12 @@ local fi
 -- @param ...	Virtual path
 -- @return 		Relative URL
 function build_url(...)
-	return context.scriptname .. "/" .. table.concat(arg, "/")
+	local path = {...}
+	local sn = http.getenv("SCRIPT_NAME") or ""
+	for k, v in pairs(context.urltoken) do
+		sn = sn .. "/;" .. k .. "=" .. http.urlencode(v)
+	end
+	return sn .. ((#path > 0) and "/" .. table.concat(path, "/") or "")
 end
 
 --- Send a 404 error code and render the "error404" template if available.
@@ -123,7 +128,6 @@ function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace()
 	local ctx = context
 	ctx.path = request
-	ctx.scriptname = luci.http.getenv("SCRIPT_NAME") or ""
 	ctx.urltoken   = ctx.urltoken or {}
 
 	require "luci.i18n".setlanguage(require "luci.config".main.lang)
@@ -174,11 +178,6 @@ function dispatch(request)
 		end
 	end
 
-	for k, v in pairs(token) do
-		ctx.scriptname = ctx.scriptname .. "/;" .. k .. "=" ..
-			http.urlencode(v)
-	end
-
 	ctx.path = preq
 
 	if track.i18n then
@@ -202,9 +201,9 @@ function dispatch(request)
 
 		local viewns = setmetatable({}, {__index=function(table, key)
 			if key == "controller" then
-				return ctx.scriptname
+				return build_url()
 			elseif key == "REQUEST_URI" then
-				return ctx.scriptname .. "/" .. table.concat(ctx.requested, "/")
+				return build_url(ctx.requested)
 			else
 				return rawget(table, key) or _G[key]
 			end
@@ -232,10 +231,11 @@ function dispatch(request)
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
 		local sess = ctx.authsession
-		local verifytoken = true
+		local verifytoken = false
 		if not sess then
 			sess = luci.http.getcookie("sysauth")
 			sess = sess and sess:match("^[A-F0-9]+$")
+			verifytoken = true
 		end
 
 		local sdat = sauth.read(sess)
@@ -250,12 +250,12 @@ function dispatch(request)
 
 		if not util.contains(accs, user) then
 			if authen then
+				ctx.urltoken.stok = nil
 				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
 				if not user or not util.contains(accs, user) then
 					return
 				else
 					local sid = sess or luci.sys.uniqueid(16)
-					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
 					if not sess then
 						local token = luci.sys.uniqueid(16)
 						sauth.write(sid, util.get_bytecode({
@@ -263,8 +263,9 @@ function dispatch(request)
 							token=token,
 							secret=luci.sys.uniqueid(16)
 						}))
-						ctx.scriptname = ctx.scriptname .. "/;stok="..token
+						ctx.urltoken.stok = token
 					end
+					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
 					ctx.authsession = sid
 				end
 			else

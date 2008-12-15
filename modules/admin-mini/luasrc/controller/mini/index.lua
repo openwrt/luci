@@ -44,8 +44,9 @@ function action_logout()
 	local sauth = require "luci.sauth"
 	if dsp.context.authsession then
 		sauth.kill(dsp.context.authsession)
+		dsp.context.urltoken.stok = nil
 	end
 
-	luci.http.header("Set-Cookie", "sysauth=; path=/")
+	luci.http.header("Set-Cookie", "sysauth=; path=" .. dsp.build_url())
 	luci.http.redirect(luci.dispatcher.build_url())
 end
