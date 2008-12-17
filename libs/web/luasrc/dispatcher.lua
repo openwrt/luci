@@ -203,7 +203,7 @@ function dispatch(request)
 			if key == "controller" then
 				return build_url()
 			elseif key == "REQUEST_URI" then
-				return build_url(ctx.requested)
+				return build_url(unpack(ctx.requested.path))
 			else
 				return rawget(table, key) or _G[key]
 			end
