@@ -348,6 +348,7 @@ endef
 define Package/luci-app-siitwizard
   $(call Package/luci/fftemplate)
   TITLE:=SIIT IPv4-over-IPv6 configuration wizard
+  DEPENDS:=@BROKEN +luci-admin-core
 endef
 
 define Package/luci-app-siitwizard/install
