@@ -61,7 +61,7 @@ endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Freifunk Support (GERMAN ONLY)
+  SUBMENU:=LuCI Freifunk Support
   DEPENDS:=+luci-mod-freifunk
 endef
 
@@ -547,7 +547,8 @@ endef
 
 define Package/luci-app-asterisk
   $(call Package/luci/webtemplate)
-  TITLE:=LuCI Support for Asterisk PBX (Incomplete)
+  TITLE:=LuCI Support for Asterisk PBX
+  DEPENDS+=@BROKEN +luci-admin-core +asterisk14
 endef
 
 define Package/luci-app-asterisk/install
