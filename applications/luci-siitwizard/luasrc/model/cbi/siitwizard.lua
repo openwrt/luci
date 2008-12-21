@@ -31,10 +31,12 @@ uci:foreach("wireless", "wifi-device",
 	end)
 
 lanip = f:field(Value, "ipaddr", "LAN IP Adresse")
-lanip.value = "127.23.1.1"
+lanip.value = "172.23.1.1"
+lanip:depends("mode", "client")
 
 lanmsk = f:field(Value, "netmask", "LAN Netzmaske")
 lanmsk.value = "255.255.0.0"
+lanmsk:depends("mode", "client")
 
 
 -------------------- Control --------------------
