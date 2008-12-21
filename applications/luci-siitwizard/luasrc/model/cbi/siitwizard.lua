@@ -32,11 +32,12 @@ uci:foreach("wireless", "wifi-device",
 
 lanip = f:field(Value, "ipaddr", "LAN IP Adresse")
 lanip.value = "172.23.1.1"
-lanip:depends("mode", "client")
 
-lanmsk = f:field(Value, "netmask", "LAN Netzmaske")
-lanmsk.value = "255.255.0.0"
-lanmsk:depends("mode", "client")
+lanmsk = f:field(Value, "netmask", "Lokale LAN Netzmaske")
+lanmsk.value = "255.255.255.0"
+
+gv4msk = f:field(Value, "netmask", "Globale LAN Netzmaske")
+gv4msk.value = "255.255.0.0"
 
 
 -------------------- Control --------------------
@@ -67,6 +68,17 @@ function f.handle(self, state, data)
 end
 
 function mode.write(self, section, value)
+
+	-- lan interface
+	local lan_net = luci.ip.IPv4(
+		lanip:formvalue(section) or "192.168.1.1",
+		lanmsk:formvalue(section) or "255.255.255.0"
+	)
+
+	local gv4_net = luci.ip.IPv4(
+		lanip:formvalue(section) or "192.168.1.1",
+		gv4msk:formvalue(section) or "255.255.0.0"
+	)
 
 	--
 	-- Configure wifi device
@@ -137,10 +149,29 @@ function mode.write(self, section, value)
 
 	if value == "gateway" then
 
+
+		-- wan mtu
 		uci:set("network", "wan", "mtu", 1400)
+
+		-- lan settings
+		uci:tset("network", "lan", {
+			mtu     = 1400,
+			ipaddr  = lan_net:host():string(),
+			netmask = lan_net:mask():string()
+		})
 
 		-- use full siit subnet
 		siit_route = luci.ip.IPv6(siit_prefix .. "/96")
+
+		-- v4 <-> siit route
+		uci:delete_all("network", "route",
+			function(s) return s.interface == "siit0" end)
+
+		uci:section("network", "route", nil, {
+			interface = "siit0",
+			target    = gv4_net:host():string(),
+			netmask   = gv4_net:mask():string()
+		})
 
 	--
 	-- Client mode
@@ -151,12 +182,8 @@ function mode.write(self, section, value)
 	--	* Also, MTU on LAN reduced to 1400.
 
 	else
-		-- lan interface
-		local lan_net = luci.ip.IPv4(
-			lanip:formvalue(section) or "192.168.1.1",
-			lanmsk:formvalue(section) or "255.255.255.0"
-		)
 
+		-- lan settings
 		uci:tset("network", "lan", {
 			mtu     = 1400,
 			ipaddr  = lan_net:host():string(),
@@ -172,6 +199,8 @@ function mode.write(self, section, value)
 		uci:delete_all("network", "route",
 			function(s) return s.interface == "siit0" end)
 
+		-- XXX: kind of a catch all, gv4_net would be better
+		--      but does not cover non-local v4 space
 		uci:section("network", "route", nil, {
 			interface = "siit0",
 			target    = "0.0.0.0",
@@ -190,7 +219,9 @@ function mode.write(self, section, value)
 	uci:delete_all("firewall", "forwarding",
 		function(s) return (
 			s.src == wifi_device and s.dest == "siit0" or
-			s.dest == wifi_device and s.src == "siit0"
+			s.dest == wifi_device and s.src == "siit0" or
+			s.src == "lan" and s.dest == "siit0" or
+			s.dest == "lan" and s.src == "siit0"
 		) end)
 
 	uci:section("firewall", "zone", "siit0", {
@@ -217,6 +248,16 @@ function mode.write(self, section, value)
 	uci:section("firewall", "forwarding", nil, {
 		src  = "siit0",
 		dest = wifi_device
+	})
+
+	uci:section("firewall", "forwarding", nil, {
+		src  = "lan",
+		dest = "siit0"
+	})
+
+	uci:section("firewall", "forwarding", nil, {
+		src  = "siit0",
+		dest = "lan"
 	})
 
 	-- siit0 interface
