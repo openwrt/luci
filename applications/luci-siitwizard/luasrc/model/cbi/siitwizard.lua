@@ -33,10 +33,10 @@ uci:foreach("wireless", "wifi-device",
 lanip = f:field(Value, "ipaddr", "LAN IP Adresse")
 lanip.value = "172.23.1.1"
 
-lanmsk = f:field(Value, "netmask", "Lokale LAN Netzmaske")
+lanmsk = f:field(Value, "lanmask", "Lokale LAN Netzmaske")
 lanmsk.value = "255.255.255.0"
 
-gv4msk = f:field(Value, "netmask", "Globale LAN Netzmaske")
+gv4msk = f:field(Value, "gv4mask", "Globale LAN Netzmaske")
 gv4msk.value = "255.255.0.0"
 
 
