@@ -21,8 +21,8 @@ f = SimpleForm("siitwizward", "4over6-Assistent",
  "Dieser Assistent unterstüzt bei der Einrichtung von IPv4-over-IPv6 Translation.")
 
 mode = f:field(ListValue, "mode", "Betriebsmodus")
-mode:value("gateway", "Gateway")
 mode:value("client", "Client")
+mode:value("gateway", "Gateway")
 
 dev = f:field(ListValue, "device", "WLAN-Gerät")
 uci:foreach("wireless", "wifi-device",
@@ -168,7 +168,56 @@ function mode.write(self, section, value)
 			siit_prefix .. "/" .. (96 + lan_net:prefix())
 		):add(lan_net[2])
 
+		-- ipv4 <-> siit route
+		uci:delete_all("network", "route",
+			function(s) return s.interface == "siit0" end)
+
+		uci:section("network", "route", nil, {
+			interface = "siit0",
+			target    = "0.0.0.0",
+			netmask   = "0.0.0.0"
+		})
 	end
+
+	-- setup the firewall
+	uci:delete_all("firewall", "zone",
+		function(s) return (
+			s['.name'] == "siit0" or s.name == "siit0" or
+			s.network == "siit0" or	s['.name'] == wifi_device or
+			s.name == wifi_device or s.network == wifi_device
+		) end)
+
+	uci:delete_all("firewall", "forwarding",
+		function(s) return (
+			s.src == wifi_device and s.dest == "siit0" or
+			s.dest == wifi_device and s.src == "siit0"
+		) end)
+
+	uci:section("firewall", "zone", "siit0", {
+		name    = "siit0",
+		network = "siit0",
+		input   = "ACCEPT",
+		output  = "ACCEPT",
+		forward = "ACCEPT"
+	})
+
+	uci:section("firewall", "zone", wifi_device, {
+		name    = wifi_device,
+		network = wifi_device,
+		input   = "ACCEPT",
+		output  = "ACCEPT",
+		forward = "ACCEPT"
+	})
+
+	uci:section("firewall", "forwarding", nil, {
+		src  = wifi_device,
+		dest = "siit0"
+	})
+
+	uci:section("firewall", "forwarding", nil, {
+		src  = "siit0",
+		dest = wifi_device
+	})
 
 	-- siit0 interface
 	uci:delete_all("network", "interface",
@@ -225,6 +274,7 @@ function mode.write(self, section, value)
 	})
 
 	uci:save("wireless")
+	uci:save("firewall")
 	uci:save("network")
 	uci:save("olsrd")
 end
