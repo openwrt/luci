@@ -32,7 +32,7 @@ s = m:section(Table, ifaces, translate("networks"))
 
 function s.extedit(self, section) 
 	local device = self.map:get(section, "device") or ""
-	return luci.http.getenv("REQUEST_URI") .. "/" .. device
+	return  luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path)) .. "/" .. device
 end
 
 link = s:option(DummyValue, "_link", translate("link"))
@@ -124,7 +124,7 @@ function create.write(self, section, value)
 	uci:load("wireless")
 	uci:section("wireless", "wifi-iface", nil, {device=value})
 	uci:save("wireless")
-	luci.http.redirect(luci.http.getenv("REQUEST_URI") .. "/" .. value)
+	luci.http.redirect(luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path)) .. "/" .. value)
 end
 
 function create.cbid(self, section)
