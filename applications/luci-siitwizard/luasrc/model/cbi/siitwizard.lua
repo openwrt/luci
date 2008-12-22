@@ -169,7 +169,7 @@ function mode.write(self, section, value)
 
 		uci:section("network", "route", nil, {
 			interface = "siit0",
-			target    = gv4_net:host():string(),
+			target    = gv4_net:network():string(),
 			netmask   = gv4_net:mask():string()
 		})
 
@@ -313,6 +313,14 @@ function mode.write(self, section, value)
 		netaddr = siit_route:host():string(),
 		prefix  = siit_route:prefix()
 	})
+
+	-- txtinfo v6
+	uci:foreach("olsrd", "LoadPlugin",
+		function(s)
+			if s.library == "olsrd_txtinfo.so.0.1" then
+				uci:set("olsrd", s['.name'], "accept", "::1")
+			end
+		end)
 
 	uci:save("wireless")
 	uci:save("firewall")
