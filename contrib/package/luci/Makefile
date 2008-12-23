@@ -546,16 +546,6 @@ define Package/luci-app-livestats/install
         $(call Package/luci/install/template,$(1),applications/luci-livestats)
 endef
 
-define Package/luci-app-asterisk
-  $(call Package/luci/webtemplate)
-  TITLE:=LuCI Support for Asterisk PBX
-  DEPENDS+=@BROKEN +luci-admin-core +asterisk14
-endef
-
-define Package/luci-app-asterisk/install
-        $(call Package/luci/install/template,$(1),applications/luci-asterisk)
-endef
-
 define Package/luci-app-polipo
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for the Polipo Proxy
@@ -564,16 +554,6 @@ endef
 
 define Package/luci-app-polipo/install
         $(call Package/luci/install/template,$(1),applications/luci-polipo)
-endef
-
-define Package/luci-app-openvpn
-  $(call Package/luci/webtemplate)
-  TITLE:=LuCI Support for OpenVPN
-  DEPENDS+=@BROKEN +luci-admin-core +openvpn
-endef
-
-define Package/luci-app-openvpn/install
-        $(call Package/luci/install/template,$(1),applications/luci-openvpn)
 endef
 
 
@@ -845,14 +825,8 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-livestats),)
        PKG_SELECTED_MODULES+=applications/luci-livestats
 endif
-ifneq ($(CONFIG_PACKAGE_luci-app-asterisk),)
-       PKG_SELECTED_MODULES+=applications/luci-asterisk
-endif
 ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
        PKG_SELECTED_MODULES+=applications/luci-polipo
-endif
-ifneq ($(CONFIG_PACKAGE_luci-app-openvpn),)
-       PKG_SELECTED_MODULES+=applications/luci-openvpn
 endif
 
 
@@ -954,9 +928,7 @@ $(eval $(call BuildPackage,luci-app-hd_idle))
 $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
 $(eval $(call BuildPackage,luci-app-livestats))
-$(eval $(call BuildPackage,luci-app-asterisk))
 $(eval $(call BuildPackage,luci-app-polipo))
-$(eval $(call BuildPackage,luci-app-openvpn))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-luci))
