@@ -28,14 +28,8 @@ s1:option( Value, "txqlen" ).optional = true
 
 net = s1:option( Value, "net" )
 for _, route in ipairs(luci.sys.net.routes()) do
-	if route.Iface ~= "lo" and route.Mask ~= "FFFFFFFF" then
-		local netmask = luci.ip.IPv4(route.Mask)
-		if netmask then
-			local netaddr = luci.ip.IPv4(route.Destination, netmask)
-			if netaddr then
-				net:value( netaddr:string() )
-			end
-		end
+	if route.device ~= "lo" and route.dest:prefix() < 32 then
+		net:value( route.dest:string() )
 	end
 end
 
