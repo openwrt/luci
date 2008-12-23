@@ -32,35 +32,35 @@ end
 -- Deletes a network interface and all occurences of it in firewall zones and dhcp
 function network_remove_interface(iface)
 	local cursor = uci.cursor()
-	
+
 	if not cursor:delete("network", iface) then
 		return false
 	end
 
 	local aliases = {iface}
-	cursor:foreach("network", "alias", 
+	cursor:foreach("network", "alias",
 		function(section)
 			if section.interface == iface then
 				table.insert(aliases, section[".name"])
 			end
 		end)
-	
+
 	-- Delete Aliases and Routes
 	cursor:delete_all("network", "route", {interface=iface})
 	cursor:delete_all("network", "alias", {interface=iface})
-	
+
 	-- Delete DHCP sections
 	cursor:delete_all("dhcp", "dhcp",
 		 function(section)
 		 	return util.contains(aliases, section.interface)
 		 end)
-	
+
 	-- Remove OLSR sections
-	cursor:delete_all("olsr", "Interface", {Interface=iface})
-	
+	cursor:delete_all("olsrd", "Interface", {Interface=iface})
+
 	-- Remove Splash sections
 	cursor:delete_all("luci-splash", "iface", {network=iface})
-	
+
 	cursor:save("network")
 	cursor:save("olsr")
 	cursor:save("dhcp")
@@ -88,7 +88,8 @@ function firewall_zone_add_interface(name, interface)
 	local cursor = uci.cursor()
 	local zone = firewall_find_zone(name)
 	local net = cursor:get("firewall", zone, "network")
-	cursor:set("firewall", zone, "network", (net or name .. " ") .. interface)
+	local old = net or (cursor:get("network", name) and name)
+	cursor:set("firewall", zone, "network", (old and old .. " " or "") .. interface)
 	cursor:save("firewall")
 end
 
@@ -114,14 +115,14 @@ end
 -- Finds the firewall zone with given name
 function firewall_find_zone(name)
 	local find
-	
-	uci.cursor():foreach("firewall", "zone", 
+
+	uci.cursor():foreach("firewall", "zone",
 		function (section)
 			if section.name == name then
 				find = section[".name"]
 			end
 		end)
-		
+
 	return find
 end
 
@@ -134,15 +135,15 @@ function remove_list_entry(value, entry)
 	if type(value) == "nil" then
 		return nil
 	end
-	
+
 	local result = type(value) == "table" and value or util.split(value, " ")
 	local key = util.contains(result, entry)
-	
+
 	while key do
 		table.remove(result, key)
 		key = util.contains(result, entry)
 	end
-	
+
 	result = type(value) == "table" and result or table.concat(result, " ")
-	return result ~= value and result 
+	return result ~= value and result
 end

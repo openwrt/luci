@@ -182,7 +182,14 @@ function fetch_txtinfo(otable)
 	local rawdata = luci.sys.httpget("http://127.0.0.1:2006/"..otable)
 
 	if #rawdata == 0 then
-		return nil
+		if luci.fs.access("/proc/net/ipv6_route", "r") then
+			rawdata = luci.sys.httpget("http://[::1]:2006/"..otable)
+			if #rawdata == 0 then
+				return nil
+			end
+		else
+			return nil
+		end
 	end
 
 	local data = {}

@@ -1,6 +1,6 @@
 include build/config.mk
 
-MODULES = applications/* libs/* modules/* themes/* i18n/* contrib/*
+MODULES = contrib/* applications/* libs/* modules/* themes/* i18n/*
 
 OS:=$(shell uname)
 export OS
@@ -12,7 +12,7 @@ all: build
 build: gccbuild luabuild
 
 gccbuild:
-	for i in $(MODULES); do make -C$$i compile; done	
+	for i in $(MODULES); do make -C$$i compile; done
 
 luabuild:
 	for i in $(MODULES); do make -C$$i luabuild; done
@@ -39,14 +39,14 @@ hostcopy:
 hostenv: host ucidefaults
 
 ucidefaults:
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-community-*"
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-freifunk-*"
 
 runboa: hostenv
 	libs/sgi-webuci/host/buildconfig.sh $(realpath host) > host/etc/boa/boa.conf
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host/usr/bin/boa) -c $(realpath host/etc/boa) -d"
 
 runhttpd: hostenv
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath libs/httpd/host/runluci) $(realpath host) $(HTDOCS)"
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host/usr/bin/lucittpd) $(realpath host)/usr/lib/lucittpd/plugins"
 
 runluci: luahost
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath libs/httpd/host/runluci) $(realpath host) $(HTDOCS)"
@@ -63,11 +63,15 @@ hostclean: clean
 apidocs: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "build/makedocs.sh host/luci/ docs"
 
+uvldocs: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) \
+	"build/uvldoc $(realpath host) $(UVL_SCHEMEDIR) uvldocs $(DOCS)"
+
 run:
 	#	make run is deprecated				#
 	#	Please use:					#
 	#							#
-	#	To run LuCI WebUI using LuCI HTTPD		#
+	#	To run LuCI WebUI using LuCIttpd		#
 	#	make runhttpd					#
 	#							#
 	#	To run LuCI WebUI using Boa/Webuci		#

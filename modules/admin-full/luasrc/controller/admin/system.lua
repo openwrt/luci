@@ -25,7 +25,11 @@ function index()
 	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("a_s_sshkeys"), 30)
 	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("process_head"), 45)
 	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("a_s_fstab"), 50)
-	entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("leds", "LEDs"), 60)
+
+	if luci.fs.isdirectory("/sys/class/leds") then
+		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("leds", "LEDs"), 60)
+	end
+
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 70)
 	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 80)
 	entry({"admin", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 90)

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- Lua Pages Template Preprocessor.
 --
--- @release $Id: lp.lua,v 1.7 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id$
 ----------------------------------------------------------------------------
 
 local assert, error, getfenv, loadstring, setfenv = assert, error, getfenv, loadstring, setfenv

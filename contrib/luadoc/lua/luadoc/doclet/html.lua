@@ -9,7 +9,7 @@
 -- sub-template used by the others.</li>
 -- </ul>
 --
--- @release $Id: html.lua,v 1.29 2007/12/21 17:50:48 tomas Exp $
+-- @release $Id$
 -------------------------------------------------------------------------------
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type

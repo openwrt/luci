@@ -168,7 +168,9 @@ function Server.process( self, client )
 				self:error( thread, 411, luci.http.protocol.statusmsg[411] )
 				break;
 			end
-			
+
+			-- FIXME: Close for POST requests
+			close = true
 		else
 			self:error( thread, 405, luci.http.protocol.statusmsg[405] )
 			break;

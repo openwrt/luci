@@ -67,17 +67,18 @@ TZ = {
 	{ 'America/Anguilla', 'AST4' },
 	{ 'America/Antigua', 'AST4' },
 	{ 'America/Araguaina', 'BRT3' },
-	{ 'America/Argentina/Buenos Aires', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/Catamarca', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/Cordoba', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/Jujuy', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/La Rioja', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/Mendoza', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/Rio Gallegos', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/San Juan', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
+	{ 'America/Argentina/Buenos Aires', 'ART3ARST,M10.3.0/0,M3.3.0/0' },
+	{ 'America/Argentina/Catamarca', 'ART3' },
+	{ 'America/Argentina/Cordoba', 'ART3ARST,M10.3.0/0,M3.3.0/0' },
+	{ 'America/Argentina/Jujuy', 'ART3' },
+	{ 'America/Argentina/La Rioja', 'ART3' },
+	{ 'America/Argentina/Mendoza', 'ART3' },
+	{ 'America/Argentina/Rio Gallegos', 'ART3' },
+	{ 'America/Argentina/Salta', 'ART3' },
+	{ 'America/Argentina/San Juan', 'ART3' },
 	{ 'America/Argentina/San Luis', 'ART3' },
-	{ 'America/Argentina/Tucuman', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
-	{ 'America/Argentina/Ushuaia', 'ART3ARST,M10.1.0/0,M3.3.0/0' },
+	{ 'America/Argentina/Tucuman', 'ART3ARST,M10.3.0/0,M3.3.0/0' },
+	{ 'America/Argentina/Ushuaia', 'ART3' },
 	{ 'America/Aruba', 'AST4' },
 	{ 'America/Asuncion', 'PYT4PYST,M10.3.0/0,M3.2.0/0' },
 	{ 'America/Atikokan', 'EST5' },
@@ -90,7 +91,7 @@ TZ = {
 	{ 'America/Bogota', 'COT5' },
 	{ 'America/Boise', 'MST7MDT,M3.2.0,M11.1.0' },
 	{ 'America/Cambridge Bay', 'MST7MDT,M3.2.0,M11.1.0' },
-	{ 'America/Campo Grande', 'AMT4AMST,M10.2.0/0,M2.3.0/0' },
+	{ 'America/Campo Grande', 'AMT4AMST,M10.3.0/0,M2.3.0/0' },
 	{ 'America/Cancun', 'CST6CDT,M4.1.0,M10.5.0' },
 	{ 'America/Caracas', 'VET4:30' },
 	{ 'America/Cayenne', 'GFT3' },
@@ -98,7 +99,7 @@ TZ = {
 	{ 'America/Chicago', 'CST6CDT,M3.2.0,M11.1.0' },
 	{ 'America/Chihuahua', 'MST7MDT,M4.1.0,M10.5.0' },
 	{ 'America/Costa Rica', 'CST6' },
-	{ 'America/Cuiaba', 'AMT4AMST,M10.2.0/0,M2.3.0/0' },
+	{ 'America/Cuiaba', 'AMT4AMST,M10.3.0/0,M2.3.0/0' },
 	{ 'America/Curacao', 'AST4' },
 	{ 'America/Danmarkshavn', 'GMT0' },
 	{ 'America/Dawson', 'PST8PDT,M3.2.0,M11.1.0' },
@@ -176,7 +177,7 @@ TZ = {
 	{ 'America/Rio Branco', 'AMT4' },
 	{ 'America/Santarem', 'BRT3' },
 	{ 'America/Santo Domingo', 'AST4' },
-	{ 'America/Sao Paulo', 'BRT3BRST,M10.2.0/0,M2.3.0/0' },
+	{ 'America/Sao Paulo', 'BRT3BRST,M10.3.0/0,M2.3.0/0' },
 	{ 'America/Scoresbysund', 'EGT1EGST,M3.5.0/0,M10.5.0/1' },
 	{ 'America/Shiprock', 'MST7MDT,M3.2.0,M11.1.0' },
 	{ 'America/St Barthelemy', 'AST4' },
@@ -224,12 +225,12 @@ TZ = {
 	{ 'Asia/Choibalsan', 'CHOT-8' },
 	{ 'Asia/Chongqing', 'CST-8' },
 	{ 'Asia/Colombo', 'IST-5:30' },
-	{ 'Asia/Damascus', 'EET-2EEST,M4.1.5/0,J274/0' },
+	{ 'Asia/Damascus', 'EET-2EEST,M4.1.5/0,J305/0' },
 	{ 'Asia/Dhaka', 'BDT-6' },
 	{ 'Asia/Dili', 'TLT-9' },
 	{ 'Asia/Dubai', 'GST-4' },
 	{ 'Asia/Dushanbe', 'TJT-5' },
-	{ 'Asia/Gaza', 'EET-2EEST,J91/0,M9.2.4' },
+	{ 'Asia/Gaza', 'EET-2EEST,J91/0,M8.5.4' },
 	{ 'Asia/Harbin', 'CST-8' },
 	{ 'Asia/Ho Chi Minh', 'ICT-7' },
 	{ 'Asia/Hong Kong', 'HKT-8' },
@@ -365,7 +366,7 @@ TZ = {
 	{ 'Indian/Kerguelen', 'TFT-5' },
 	{ 'Indian/Mahe', 'SCT-4' },
 	{ 'Indian/Maldives', 'MVT-5' },
-	{ 'Indian/Mauritius', 'MUT-4' },
+	{ 'Indian/Mauritius', 'MUT-4MUST,M10.5.0,M3.5.0/3' },
 	{ 'Indian/Mayotte', 'EAT-3' },
 	{ 'Indian/Reunion', 'RET-4' },
 	{ 'Pacific/Apia', 'WST11' },
@@ -405,4 +406,167 @@ TZ = {
 	{ 'Pacific/Truk', 'TRUT-10' },
 	{ 'Pacific/Wake', 'WAKT-12' },
 	{ 'Pacific/Wallis', 'WFT-12' },
+}
+
+OFFSET = {
+	gmt   =      0,	-- GMT
+	eat   =  10800,	-- EAT
+	cet   =   3600,	-- CET
+	wat   =   3600,	-- WAT
+	cat   =   7200,	-- CAT
+	wet   =      0,	-- WET
+	sast  =   7200,	-- SAST
+	eet   =   7200,	-- EET
+	hast  = -36000,	-- HAST
+	hadt  = -32400,	-- HADT
+	akst  = -32400,	-- AKST
+	akdt  = -28800,	-- AKDT
+	ast   = -14400,	-- AST
+	brt   = -10800,	-- BRT
+	art   = -10800,	-- ART
+	arst  =  -7200,	-- ARST
+	pyt   = -14400,	-- PYT
+	pyst  = -10800,	-- PYST
+	est   = -18000,	-- EST
+	cst   = -21600,	-- CST
+	amt   = -14400,	-- AMT
+	cot   = -18000,	-- COT
+	mst   = -25200,	-- MST
+	mdt   = -21600,	-- MDT
+	vet   = -16200,	-- VET
+	gft   = -10800,	-- GFT
+	pst   = -28800,	-- PST
+	pdt   = -25200,	-- PDT
+	ect   = -18000,	-- ECT
+	gyt   = -14400,	-- GYT
+	bot   = -14400,	-- BOT
+	pet   = -18000,	-- PET
+	pmst  = -10800,	-- PMST
+	pmdt  =  -7200,	-- PMDT
+	uyt   = -10800,	-- UYT
+	uyst  =  -7200,	-- UYST
+	fnt   =  -7200,	-- FNT
+	srt   = -10800,	-- SRT
+	egt   =  -3600,	-- EGT
+	egst  =      0,	-- EGST
+	nst   = -12600,	-- NST
+	ndt   =  -9000,	-- NDT
+	wst   =  28800,	-- WST
+	davt  =  25200,	-- DAVT
+	ddut  =  36000,	-- DDUT
+	mawt  =  21600,	-- MAWT
+	nzst  =  43200,	-- NZST
+	nzdt  =  46800,	-- NZDT
+	rott  = -10800,	-- ROTT
+	syot  =  10800,	-- SYOT
+	vost  =  21600,	-- VOST
+	almt  =  21600,	-- ALMT
+	anat  =  43200,	-- ANAT
+	anast =  46800,	-- ANAST
+	aqtt  =  18000,	-- AQTT
+	tmt   =  18000,	-- TMT
+	azt   =  14400,	-- AZT
+	azst  =  18000,	-- AZST
+	ict   =  25200,	-- ICT
+	kgt   =  21600,	-- KGT
+	bnt   =  28800,	-- BNT
+	chot  =  28800,	-- CHOT
+	ist   =  19800,	-- IST
+	bdt   =  21600,	-- BDT
+	tlt   =  32400,	-- TLT
+	gst   =  14400,	-- GST
+	tjt   =  18000,	-- TJT
+	hkt   =  28800,	-- HKT
+	hovt  =  25200,	-- HOVT
+	irkt  =  28800,	-- IRKT
+	irkst =  32400,	-- IRKST
+	wit   =  25200,	-- WIT
+	eit   =  32400,	-- EIT
+	aft   =  16200,	-- AFT
+	pett  =  43200,	-- PETT
+	petst =  46800,	-- PETST
+	pkt   =  18000,	-- PKT
+	npt   =  20700,	-- NPT
+	krat  =  25200,	-- KRAT
+	krast =  28800,	-- KRAST
+	myt   =  28800,	-- MYT
+	magt  =  39600,	-- MAGT
+	magst =  43200,	-- MAGST
+	cit   =  28800,	-- CIT
+	pht   =  28800,	-- PHT
+	novt  =  21600,	-- NOVT
+	novst =  25200,	-- NOVST
+	omst  =  21600,	-- OMST
+	omsst =  25200,	-- OMSST
+	orat  =  18000,	-- ORAT
+	kst   =  32400,	-- KST
+	qyzt  =  21600,	-- QYZT
+	mmt   =  23400,	-- MMT
+	sakt  =  36000,	-- SAKT
+	sakst =  39600,	-- SAKST
+	uzt   =  18000,	-- UZT
+	sgt   =  28800,	-- SGT
+	get   =  14400,	-- GET
+	btt   =  21600,	-- BTT
+	jst   =  32400,	-- JST
+	ulat  =  28800,	-- ULAT
+	vlat  =  36000,	-- VLAT
+	vlast =  39600,	-- VLAST
+	yakt  =  32400,	-- YAKT
+	yakst =  36000,	-- YAKST
+	yekt  =  18000,	-- YEKT
+	yekst =  21600,	-- YEKST
+	azot  =  -3600,	-- AZOT
+	azost =      0,	-- AZOST
+	cvt   =  -3600,	-- CVT
+	fkt   = -14400,	-- FKT
+	fkst  = -10800,	-- FKST
+	cwst  =  31500,	-- CWST
+	lhst  =  37800,	-- LHST
+	lhst  =  39600,	-- LHST
+	msk   =  10800,	-- MSK
+	msd   =  14400,	-- MSD
+	samt  =  14400,	-- SAMT
+	samst =  18000,	-- SAMST
+	volt  =  10800,	-- VOLT
+	volst =  14400,	-- VOLST
+	iot   =  21600,	-- IOT
+	cxt   =  25200,	-- CXT
+	cct   =  23400,	-- CCT
+	tft   =  18000,	-- TFT
+	sct   =  14400,	-- SCT
+	mvt   =  18000,	-- MVT
+	mut   =  14400,	-- MUT
+	must  =  18000,	-- MUST
+	ret   =  14400,	-- RET
+	chast =  45900,	-- CHAST
+	chadt =  49500,	-- CHADT
+	vut   =  39600,	-- VUT
+	phot  =  46800,	-- PHOT
+	tkt   = -36000,	-- TKT
+	fjt   =  43200,	-- FJT
+	tvt   =  43200,	-- TVT
+	galt  = -21600,	-- GALT
+	gamt  = -32400,	-- GAMT
+	sbt   =  39600,	-- SBT
+	hst   = -36000,	-- HST
+	lint  =  50400,	-- LINT
+	kost  =  39600,	-- KOST
+	mht   =  43200,	-- MHT
+	mart  = -34200,	-- MART
+	sst   = -39600,	-- SST
+	nrt   =  43200,	-- NRT
+	nut   = -39600,	-- NUT
+	nft   =  41400,	-- NFT
+	nct   =  39600,	-- NCT
+	pwt   =  32400,	-- PWT
+	pont  =  39600,	-- PONT
+	pgt   =  36000,	-- PGT
+	ckt   = -36000,	-- CKT
+	taht  = -36000,	-- TAHT
+	gilt  =  43200,	-- GILT
+	tot   =  46800,	-- TOT
+	trut  =  36000,	-- TRUT
+	wakt  =  43200,	-- WAKT
+	wft   =  43200,	-- WFT
 }

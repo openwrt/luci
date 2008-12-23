@@ -1,6 +1,6 @@
 -----------------------------------------------------------------
 -- LuaDoc debugging facilities.
--- @release $Id: debug.lua,v 1.3 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id$
 -----------------------------------------------------------------
 
 module "luadoc.doclet.debug"

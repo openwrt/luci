@@ -54,10 +54,17 @@ access = posix.access
 glob = posix.glob
 
 --- Checks wheather the given path exists and points to a regular file.
--- @param filename	String containing the path of the file to read
+-- @param filename	String containing the path of the file to test
 -- @return			Boolean indicating wheather given path points to regular file
 function isfile(filename)
 	return posix.stat(filename, "type") == "regular"
+end
+
+--- Checks wheather the given path exists and points to a directory.
+-- @param dirname	String containing the path of the directory to test
+-- @return			Boolean indicating wheather given path points to directory
+function isdirectory(dirname)
+	return posix.stat(dirname, "type") == "directory"
 end
 
 --- Read the whole content of the given file into memory.

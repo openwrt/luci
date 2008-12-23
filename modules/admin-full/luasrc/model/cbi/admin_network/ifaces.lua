@@ -41,6 +41,7 @@ if has_pppoe then p:value("pppoe", "PPPoE")   end
 if has_pppoa then p:value("pppoa", "PPPoA")   end
 if has_3g    then p:value("3g",    "UMTS/3G") end
 if has_pptp  then p:value("pptp",  "PPTP")    end
+p:value("none", translate("none"))
 
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
 	p.description = translate("network_interface_prereq")

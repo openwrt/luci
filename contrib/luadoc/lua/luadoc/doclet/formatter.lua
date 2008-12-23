@@ -3,7 +3,7 @@
 -- (re)write .lua files adding missing standard tags. Texts are formatted to
 -- 80 columns and function parameters are added based on code analysis.
 --
--- @release $Id: formatter.lua,v 1.5 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id$
 -------------------------------------------------------------------------------
 
 local util = require "luadoc.util"

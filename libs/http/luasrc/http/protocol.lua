@@ -673,6 +673,7 @@ end
 -- @class table
 statusmsg = {
 	[200] = "OK",
+	[206] = "Partial Content",
 	[301] = "Moved Permanently",
 	[302] = "Found",
 	[304] = "Not Modified",
@@ -680,8 +681,10 @@ statusmsg = {
 	[403] = "Forbidden",
 	[404] = "Not Found",
 	[405] = "Method Not Allowed",
+	[408] = "Request Time-out",
 	[411] = "Length Required",
 	[412] = "Precondition Failed",
+	[416] = "Requested range not satisfiable",
 	[500] = "Internal Server Error",
 	[503] = "Server Unavailable",
 }

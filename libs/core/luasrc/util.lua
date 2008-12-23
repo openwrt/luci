@@ -193,14 +193,16 @@ end
 --- Create valid XML PCDATA from given string.
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
+local _pcdata_repl = {
+                ["&"] = "&#38;",
+                ['"'] = "&#34;",
+                ["'"] = "&#39;",
+                ["<"] = "&#60;",
+                [">"] = "&#62;"
+}
+
 function pcdata(value)
-	return value and tostring(value):gsub("[&\"'<>]", {
-		["&"] = "&#38;",
-		['"'] = "&#34;",
-		["'"] = "&#39;",
-		["<"] = "&#60;",
-		[">"] = "&#62;"
-	})
+	return value and tostring(value):gsub("[&\"'<>]", _pcdata_repl)
 end
 
 --- Strip HTML tags from given string.

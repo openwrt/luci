@@ -47,7 +47,12 @@ local fi
 -- @param ...	Virtual path
 -- @return 		Relative URL
 function build_url(...)
-	return luci.http.getenv("SCRIPT_NAME") .. "/" .. table.concat(arg, "/")
+	local path = {...}
+	local sn = http.getenv("SCRIPT_NAME") or ""
+	for k, v in pairs(context.urltoken) do
+		sn = sn .. "/;" .. k .. "=" .. http.urlencode(v)
+	end
+	return sn .. ((#path > 0) and "/" .. table.concat(path, "/") or "")
 end
 
 --- Send a 404 error code and render the "error404" template if available.
@@ -123,6 +128,7 @@ function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace()
 	local ctx = context
 	ctx.path = request
+	ctx.urltoken   = ctx.urltoken or {}
 
 	require "luci.i18n".setlanguage(require "luci.config".main.lang)
 
@@ -137,18 +143,32 @@ function dispatch(request)
 	ctx.args = args
 	ctx.requestargs = ctx.requestargs or args
 	local n
+	local t = true
+	local token = ctx.urltoken
+	local preq = {}
 
 	for i, s in ipairs(request) do
-		c = c.nodes[s]
-		n = i
-		if not c then
-			break
+		local tkey, tval
+		if t then
+			tkey, tval = s:match(";(%w+)=(.*)")
 		end
 
-		util.update(track, c)
+		if tkey then
+			token[tkey] = tval
+		else
+			t = false
+			preq[#preq+1] = s
+			c = c.nodes[s]
+			n = i
+			if not c then
+				break
+			end
 
-		if c.leaf then
-			break
+			util.update(track, c)
+
+			if c.leaf then
+				break
+			end
 		end
 	end
 
@@ -157,6 +177,8 @@ function dispatch(request)
 			table.insert(args, request[j])
 		end
 	end
+
+	ctx.path = preq
 
 	if track.i18n then
 		require("luci.i18n").loadc(track.i18n)
@@ -177,17 +199,23 @@ function dispatch(request)
 			assert(media, "No valid theme found")
 		end
 
-		local viewns = setmetatable({}, {__index=_G})
+		local viewns = setmetatable({}, {__index=function(table, key)
+			if key == "controller" then
+				return build_url()
+			elseif key == "REQUEST_URI" then
+				return build_url(unpack(ctx.requested.path))
+			else
+				return rawget(table, key) or _G[key]
+			end
+		end})
 		tpl.context.viewns = viewns
 		viewns.write       = luci.http.write
 		viewns.include     = function(name) tpl.Template(name):render(getfenv(2)) end
 		viewns.translate   = function(...) return require("luci.i18n").translate(...) end
 		viewns.striptags   = util.striptags
-		viewns.controller  = luci.http.getenv("SCRIPT_NAME")
 		viewns.media       = media
 		viewns.theme       = fs.basename(media)
 		viewns.resource    = luci.config.main.resourcebase
-		viewns.REQUEST_URI = (luci.http.getenv("SCRIPT_NAME") or "") .. (luci.http.getenv("PATH_INFO") or "")
 	end
 
 	track.dependent = (track.dependent ~= false)
@@ -202,27 +230,50 @@ function dispatch(request)
 
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
-		local sess = ctx.authsession or luci.http.getcookie("sysauth")
-		sess = sess and sess:match("^[A-F0-9]+$")
-		local user = sauth.read(sess)
+		local sess = ctx.authsession
+		local verifytoken = false
+		if not sess then
+			sess = luci.http.getcookie("sysauth")
+			sess = sess and sess:match("^[A-F0-9]+$")
+			verifytoken = true
+		end
+
+		local sdat = sauth.read(sess)
+		local user
+
+		if sdat then
+			sdat = loadstring(sdat)()
+			if not verifytoken or ctx.urltoken.stok == sdat.token then
+				user = sdat.user
+			end
+		end
 
 		if not util.contains(accs, user) then
 			if authen then
+				ctx.urltoken.stok = nil
 				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
 				if not user or not util.contains(accs, user) then
 					return
 				else
 					local sid = sess or luci.sys.uniqueid(16)
-					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
 					if not sess then
-						sauth.write(sid, user)
+						local token = luci.sys.uniqueid(16)
+						sauth.write(sid, util.get_bytecode({
+							user=user,
+							token=token,
+							secret=luci.sys.uniqueid(16)
+						}))
+						ctx.urltoken.stok = token
 					end
+					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
 					ctx.authsession = sid
 				end
 			else
 				luci.http.status(403, "Forbidden")
 				return
 			end
+		else
+			ctx.authsession = sess
 		end
 	end
 
@@ -354,9 +405,11 @@ function createtree()
 
 	local ctx  = context
 	local tree = {nodes={}}
+	local modi = {}
 
 	ctx.treecache = setmetatable({}, {__mode="v"})
 	ctx.tree = tree
+	ctx.modifiers = modi
 
 	-- Load default translation
 	require "luci.i18n".loadc("default")
@@ -369,7 +422,29 @@ function createtree()
 		v()
 	end
 
+	local function modisort(a,b)
+		return modi[a].order < modi[b].order
+	end
+
+	for _, v in util.spairs(modi, modisort) do
+		scope._NAME = v.module
+		setfenv(v.func, scope)
+		v.func()
+	end
+
 	return tree
+end
+
+--- Register a tree modifier.
+-- @param	func	Modifier function
+-- @param	order	Modifier order value (optional)
+function modifier(func, order)
+	context.modifiers[#context.modifiers+1] = {
+		func = func,
+		order = order or 0,
+		module
+			= getfenv(2)._NAME
+	}
 end
 
 --- Clone a node of the dispatching tree to another position.
@@ -415,7 +490,6 @@ function node(...)
 	local c = _create_node({...})
 
 	c.module = getfenv(2)._NAME
-	c.path = arg
 	c.auto = nil
 
 	return c
@@ -431,10 +505,11 @@ function _create_node(path, cache)
 	local c = cache[name]
 
 	if not c then
+		local new = {nodes={}, auto=true, path=util.clone(path)}
 		local last = table.remove(path)
+
 		c = _create_node(path, cache)
 
-		local new = {nodes={}, auto=true}
 		c.nodes[last] = new
 		cache[name] = new
 

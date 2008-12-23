@@ -25,5 +25,5 @@ limitations under the License.
 ]]--
 module "luci"
 
-__version__ = "0.8"
+__version__ = "0.9"
 __appname__ = "LuCI"
