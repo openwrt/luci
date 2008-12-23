@@ -260,6 +260,15 @@ function mode.write(self, section, value)
 		dest = "lan"
 	})
 
+	-- firewall include
+	uci:delete_all("firewall", "include",
+		function(s) return s.path == "/etc/firewall.user" end)
+
+	uci:section("firewall", "include", nil, {
+		path = "/etc/firewall.user"
+	})
+
+
 	-- siit0 interface
 	uci:delete_all("network", "interface",
 		function(s) return ( s.ifname == "siit0" ) end)
