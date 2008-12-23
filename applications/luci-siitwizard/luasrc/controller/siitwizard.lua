@@ -17,5 +17,5 @@ $Id$
 module "luci.controller.siitwizard"
 
 function index()
-	entry({"admin", "network", "siitwizard"}, form("siitwizard"), "SIIT 4over6 assistent", 50)
+	entry({"admin", "network", "siitwizard"}, form("siitwizard"), "SIIT 4over6 assistent", 99)
 end
