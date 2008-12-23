@@ -1,0 +1,12 @@
+<%+header.xml%>
+<h1 class="index-title">UCI Documentation</h1>
+<h3 class="index-subtitle">Schemes</h3>
+<table class="index">
+<% for k, v in luci.util.kspairs(self.schemes) do %>
+<tr>
+	<th><a href="<%=self:_scheme_filename(k)%>"><%=k%></a></th>
+	<td><%=self.schemes[k].title%></td>
+</tr>
+<% end %>
+</table>
+<%+footer.xml%>

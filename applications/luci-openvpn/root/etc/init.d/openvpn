@@ -1,0 +1,144 @@
+#!/bin/sh /etc/rc.common
+# OpenVPN init script
+# Copyright (C) 2008 Jo-Philipp Wich
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+# $Id$
+
+START=95
+BIN=/usr/sbin/openvpn
+SSD=start-stop-daemon
+
+LIST_SEP="
+"
+
+append_param() {
+	local v="$1"
+	case "$v" in
+		*_*_*_*) v=${v%%_*}-${v#*_}; v=${v%%_*}-${v#*_}; v=${v%%_*}-${v#*_} ;;
+		*_*_*)   v=${v%%_*}-${v#*_}; v=${v%%_*}-${v#*_} ;;
+		*_*)     v=${v%%_*}-${v#*_} ;;
+	esac
+	ARGS="$ARGS --$v"
+	return 0
+}
+
+append_bools() {
+	local p; local v; local s="$1"; shift
+	for p in $*; do
+		config_get_bool v "$s" "$p"
+		[ "$v" == 1 ] && append_param "$p"
+	done
+}
+
+append_params() {
+	local p; local v; local s="$1"; shift
+	for p in $*; do
+		config_get v "$s" "$p"
+		IFS="$LIST_SEP"
+		for v in $v; do
+			[ -n "$v" ] && append_param "$p" && ARGS="$ARGS $v"
+		done
+		unset IFS
+	done
+}
+
+append_params_quoted() {
+	local p; local v; local s="$1"; shift
+	for p in $*; do
+		config_get v "$s" "$p"
+		IFS="$LIST_SEP"
+		for v in $v; do
+			[ -n "$v" ] && append_param "$p" && ARGS="$ARGS '$v'"
+		done
+		unset IFS
+	done
+}
+
+start_service() {
+	local s="$1"
+	local enable=0
+
+	# disabled?
+	config_get_bool enable "$s" enable 0
+	[ "$enable" == 0 ] && return 0
+
+	PID="/var/run/openvpn-$s.pid"
+	ARGS=""
+
+	# append flags
+	append_bools "$s" \
+		auth_nocache ccd_exclusive client client_cert_not_required \
+		client_disconnect client_to_client comp_lzo comp_noadapt disable \
+		disable_occ down_pre duplicate_cn fast_io float http_proxy_retry \
+		ifconfig_noexec ifconfig_nowarn ifconfig_pool_linear management_hold \
+		management_query_passwords mktun mlock mtu_test mute_replay_warnings \
+		nobind no_iv no_replay passtos persist_key persist_local_ip \
+		persist_remote_ip persist_tun ping_timer_rem pull push_reset \
+		remote_random rmtun route_noexec single_session socks_proxy_retry \
+		suppress_timestamps test_crypto tls_client tls_exit tls_server \
+		tun_ipv6 up_delay up_restart username_as_common_name
+
+	# append params
+	append_params "$s" \
+		auth auth_user_pass auth_user_pass_verify bcast_buffers ca cd cert \
+		chroot cipher client_config_dir client_connect config connect_freq \
+		connect_retry crl_verify cryptoapicert dev dev_node dev_type dh down \
+		echo engine explicit_exit_notify fragment group hand_window hash_size \
+		http_proxy http_proxy_option http_proxy_timeout ifconfig ifconfig_pool \
+		ifconfig_pool_persist ifconfig_push inactive ipchange iroute keepalive \
+		key key_method keysize learn_address link_mtu local log log_append \
+		lport management management_log_cache max_clients \
+		max_routes_per_client mode mssfix mtu_disc mute nice ns_cert_type ping \
+		ping_exit ping_restart pkcs12 plugin port proto rcvbuf \
+		redirect_gateway remap_usr1 remote reneg_bytes reneg_pkts reneg_sec \
+		replay_persist replay_window resolv_retry route route_delay \
+		route_gateway route_up rport server server_bridge setenv shaper sndbuf \
+		socks_proxy status status_version syslog tcp_queue_limit tls_auth \
+		tls_cipher tls_remote tls_timeout tls_verify tmp_dir tran_window \
+		tun_mtu tun_mtu_extra txqueuelen up user verb
+
+	# append multi-value params
+	append_params_quoted "$s" \
+		push
+
+
+	[ -n "$ARGS" ] && \
+		eval "$SSD -q -b -m -p $PID -x $BIN -S -- --syslog 'openvpn($s)' $ARGS"
+}
+
+kill_service() {
+	local s="$1"
+	local S="${2:-TERM}"
+	local enable=0
+
+	# disabled?
+	config_get_bool enable "$s" enable 0
+	[ "$enable" == 0 ] && return 0
+
+	PID="/var/run/openvpn-$s.pid"
+
+	$SSD -q -p $PID -x $BIN -K -s $S
+}
+
+hup_service()  { kill_service "$1" HUP;  }
+stop_service() { kill_service "$1" TERM; }
+
+start() {
+	config_load openvpn
+	config_foreach start_service openvpn
+}
+
+stop() {
+	config_load openvpn
+	config_foreach stop_service openvpn
+}
+
+reload() {
+	config_load openvpn
+	config_foreach hup_service openvpn
+}
+
+restart() {
+	stop; sleep 5; start
+}

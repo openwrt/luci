@@ -1,0 +1,642 @@
+package coovachilli
+
+config section
+	option name	'general'
+	option title	'General configuration'
+	option description	'General CoovaChilli settings'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'interval'
+	option title	'Config refresh interval'
+	option description	'Re-read configuration file and do DNS lookups every interval seconds. This has the same effect as sending the HUP signal. If interval is 0 (zero) this feature is disabled. '
+	option section	'coovachilli.general'
+	option datatype	'uint'
+
+config variable
+	option name	'pidfile'
+	option title	'Pid file'
+	option description	'Filename to put the process id'
+	option section	'coovachilli.general'
+	option datatype	'string'
+
+config variable
+	option name	'statedir'
+	option title	'State directory'
+	option description	'Directory of non-volatile data'
+	option section	'coovachilli.general'
+	option datatype	'directory'
+
+config variable
+	option name	'cmdsock'
+	option title	'Command socket'
+	option description	'UNIX socket used for communication with chilli_query'
+	option section	'coovachilli.general'
+	option datatype	'string'
+
+
+config section
+	option name	'tun'
+	option title	'TUN/TAP configuration'
+	option description	'Network/Tun configuration'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'txqlen'
+	option title	'TX queue length'
+	option description	'The TX queue length to set on the TUN/TAP interface'
+	option section	'coovachilli.tun'
+	option datatype	'uint'
+
+config variable
+	option name	'usetap'
+	option title	'Use TAP device'
+	option description	'Use the TAP interface instead of TUN'
+	option section	'coovachilli.tun'
+	option datatype	'boolean'
+
+config variable
+	option name	'tundev'
+	option title	'TUN/TAP device'
+	option description	'The specific device to use for the TUN/TAP interface'
+	option section	'coovachilli.tun'
+	option datatype	'file'
+
+config variable
+	option name	'net'
+	option title	'Uplink subnet'
+	option description	'Network address of the uplink interface (CIDR notation)'
+	option section	'coovachilli.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'statip'
+	option title	'Static IP address pool'
+	option description	'Specifies a pool of static IP addresses'
+	option section	'coovachilli.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'dynip'
+	option title	'Dynamic IP address pool'
+	option description	'Specifies a pool of dynamic IP addresses'
+	option section	'coovachilli.tun'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'dns1'
+	option title	'Primary DNS Server'
+	option description	'Is used to inform the client about the DNS address to use for host name resolution'
+	option section	'coovachilli.tun'
+	option datatype	'host'
+
+config variable
+	option name	'dns2'
+	option title	'Secondary DNS Server'
+	option description	'Is used to inform the client about the DNS address to use for host name resolution'
+	option section	'coovachilli.tun'
+	option datatype	'host'
+
+config variable
+	option name	'domain'
+	option title	'Domain name'
+	option description	'Is used to inform the client about the domain name to use for DNS lookups'
+	option section	'coovachilli.tun'
+	option datatype	'string'
+
+config variable
+	option name	'ipdown'
+	option title	'IP down script'
+	option description	'Script executed after the tun network interface has been taken down'
+	option section	'coovachilli.tun'
+	option datatype	'file'
+
+config variable
+	option name	'ipup'
+	option title	'IP up script'
+	option description	'Script executed after the TUN/TAP network interface has been brought up'
+	option section	'coovachilli.tun'
+	option datatype	'file'
+
+config variable
+	option name	'condown'
+	option title	'Network down script'
+	option description	'Script executed after a session has moved from authorized state to unauthorized'
+	option section	'coovachilli.tun'
+	option datatype	'file'
+
+config variable
+	option name	'conup'
+	option title	'Network up script'
+	option description	'Script executed after the tun network interface has been brought up'
+	option section	'coovachilli.tun'
+	option datatype	'file'
+
+
+config section
+	option name	'dhcp'
+	option title	'DHCP configuration'
+	option description	'Set DHCP options for connecting clients'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'dhcpif'
+	option title	'DHCP interface'
+	option description	'Ethernet interface to listen to for the downlink interface'
+	option section	'coovachilli.dhcp'
+	option datatype	'string'
+	option required	true
+
+config variable
+	option name	'dhcpmac'
+	option title	'Listen MAC address'
+	option description	'MAC address to listen to. If not specified the MAC address of the interface will be used'
+	option section	'coovachilli.dhcp'
+	option datatype	'macaddr'
+
+config variable
+	option name	'lease'
+	option title	'Leasetime'
+	option description	'Use a DHCP lease of seconds (default 600)'
+	option section	'coovachilli.dhcp'
+	option datatype	'uint'
+
+config variable
+	option name	'dhcpstart'
+	option title	'DHCP start number'
+	option description	'Where to start assigning IP addresses (default 10)'
+	option section	'coovachilli.dhcp'
+	option datatype	'uint'
+
+config variable
+	option name	'dhcpend'
+	option title	'DHCP end number'
+	option description	'Where to stop assigning IP addresses (default 254)'
+	option section	'coovachilli.dhcp'
+	option datatype	'uint'
+
+config variable
+	option name	'eapolenable'
+	option title	'Enable IEEE 802.1x'
+	option description	'Enable IEEE 802.1x authentication and listen for EAP requests'
+	option section	'coovachilli.dhcp'
+	option datatype	'boolean'
+
+
+config section
+	option name	'macauth'
+	option title	'MAC configuration'
+	option description	'Configure MAC authentication'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'macauth'
+	option title	'Enable MAC authentification'
+	option description	'Try to authenticate all users based on their mac address alone'
+	option section	'coovachilli.macauth'
+	option datatype	'boolean'
+
+config variable
+	option name	'macallowlocal'
+	option title	'Authenticate locally allowed MACs'
+	option description	'Authenticate allowed MAC addresses without the use of RADIUS'
+	option section	'coovachilli.macauth'
+	option datatype	'boolean'
+
+config variable
+	option name	'macallowed'
+	option title	'Allowed MAC addresses'
+	option description	'List of MAC addresses for which MAC authentication will be performed'
+	option section	'coovachilli.macauth'
+	option datatype	'string'
+	option type	'lazylist'
+
+config variable
+	option name	'macpasswd'
+	option title	'Password'
+	option description	'Password used when performing MAC authentication'
+	option section	'coovachilli.macauth'
+	option datatype	'string'
+
+config variable
+	option name	'macsuffix'
+	option title	'Suffix'
+	option description	'Suffix to add to the MAC address in order to form the User-Name, which is sent to the radius server'
+	option section	'coovachilli.macauth'
+	option datatype	'string'
+
+
+config section
+	option name	'radius'
+	option title	'RADIUS configuration'
+	option description	'RADIUS configuration'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'acctupdate'
+	option title	'Allow session update through RADIUS'
+	option description	'Allow updating of session parameters with RADIUS attributes sent in Accounting-Response'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'radiusoriginalurl'
+	option title	'Send RADIUS VSA'
+	option description	'Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'swapoctets'
+	option title	'Swap octets'
+	option description	'Swap the meaning of "input octets" and "output octets" as it related to RADIUS attribtues'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'openidauth'
+	option title	'Allow OpenID authentication'
+	option description	'Allows OpenID authentication by sending ChilliSpot-Config=allow-openidauth in RADIUS Access-Requests'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'wpaguests'
+	option title	'Allow WPA guests'
+	option description	'Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-guests in RADIUS Access-Requests'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+config variable
+	option name	'radiusacctport'
+	option title	'RADIUS accounting port'
+	option description	'The UDP port number to use for radius accounting requests (default 1813)'
+	option section	'coovachilli.radius'
+	option datatype	'port'
+
+config variable
+	option name	'radiusauthport'
+	option title	'RADIUS authentication port'
+	option description	'The UDP port number to use for radius authentication requests (default 1812)'
+	option section	'coovachilli.radius'
+	option datatype	'port'
+
+config variable
+	option name	'radiuscalled'
+	option title	'Option radiuscalled'
+	option description	''
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiuslisten'
+	option title	'RADIUS listen address'
+	option description	'Local interface IP address to use for the radius interface'
+	option section	'coovachilli.radius'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'radiuslocationid'
+	option title	'RADIUS location ID'
+	option description	'WISPr Location ID'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiuslocationname'
+	option title	'RADIUS location name'
+	option description	'WISPr Location Name'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiusnasid'
+	option title	'NAS ID'
+	option description	'Network access server identifier'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiusnasip'
+	option title	'Option radiusnasip'
+	option description	''
+	option section	'coovachilli.radius'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'radiusnasporttype'
+	option title	'NAS port type'
+	option description	'Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)'
+	option section	'coovachilli.radius'
+	option datatype	'port'
+
+config variable
+	option name	'radiussecret'
+	option title	'RADIUS secret'
+	option description	'Radius shared secret for both servers'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'radiusserver1'
+	option title	'RADIUS server 1'
+	option description	'The IP address of radius server 1'
+	option section	'coovachilli.radius'
+	option datatype	'host'
+
+config variable
+	option name	'radiusserver2'
+	option title	'RADIUS server 2'
+	option description	'The IP address of radius server 2'
+	option section	'coovachilli.radius'
+	option datatype	'host'
+
+config variable
+	option name	'nasip'
+	option title	'NAS IP'
+	option description	'Value to use in RADIUS NAS-IP-Address attribute'
+	option section	'coovachilli.radius'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'nasmac'
+	option title	'NAS MAC'
+	option description	'MAC address value to use in RADIUS Called-Station-ID attribute'
+	option section	'coovachilli.radius'
+	option datatype	'macaddr'
+
+config variable
+	option name	'adminuser'
+	option title	'Admin user'
+	option description	'User-name to use for Administrative-User authentication in order to pick up chilli configurations and establish a device "system" session'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'adminpasswd'
+	option title	'Admin password'
+	option description	'Password to use for Administrative-User authentication in order to pick up chilli configurations and establish a device "system" session'
+	option section	'coovachilli.radius'
+	option datatype	'string'
+
+config variable
+	option name	'coaport'
+	option title	'RADIUS disconnect port'
+	option description	'UDP port to listen to for accepting radius disconnect requests'
+	option section	'coovachilli.radius'
+	option datatype	'port'
+
+config variable
+	option name	'coanoipcheck'
+	option title	'Do not check disconnection requests'
+	option description	'Do not check the source IP address of radius disconnect requests'
+	option section	'coovachilli.radius'
+	option datatype	'boolean'
+
+
+config section
+	option name	'proxy'
+	option title	'RADIUS proxy settings'
+	option description	'RADIUS proxy settings'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'proxyclient'
+	option title	'Proxy client'
+	option description	'IP address from which radius requests are accepted. If omitted the server will not accept radius requests'
+	option section	'coovachilli.proxy'
+	option datatype	'host'
+
+config variable
+	option name	'proxylisten'
+	option title	'Proxy listen address'
+	option description	'Local interface IP address to use for accepting radius requests'
+	option section	'coovachilli.proxy'
+	option datatype	'host'
+
+config variable
+	option name	'proxyport'
+	option title	'Proxy port'
+	option description	'UDP Port to listen to for accepting radius requests'
+	option section	'coovachilli.proxy'
+	option datatype	'port'
+
+config variable
+	option name	'proxysecret'
+	option title	'Proxy secret'
+	option description	'Radius shared secret for clients'
+	option section	'coovachilli.proxy'
+	option datatype	'string'
+
+
+config section
+	option name	'uam'
+	option title	'UAM settings'
+	option description	'Unified Configuration Method settings'
+	option package	'coovachilli'
+	option unique	true
+	option required	true
+
+config variable
+	option name	'uamanydns'
+	option title	'Allow any DNS server'
+	option description	'Allow any DNS server for unauthenticated clients'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'uamanyip'
+	option title	'Allow any IP address'
+	option description	'Allow clients to use any IP settings they wish by spoofing ARP (experimental)'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'dnsparanoia'
+	option title	'Inspect DNS traffic'
+	option description	'Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX records to prevent dns tunnels (experimental)'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'nouamsuccess'
+	option title	'Do not redirect to UAM server'
+	option description	'Do not return to UAM server on login success, just redirect to original URL'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'nouamwispr'
+	option title	'Do not do WISPr'
+	option description	'Do not do any WISPr XML, assume the back-end is doing this instead'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'usestatusfile'
+	option title	'Use status file'
+	option description	'Write the status of clients in a non-volatile state file (experimental)'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'chillixml'
+	option title	'Use Chilli XML'
+	option description	'Return the so-called Chilli XML along with WISPr XML'
+	option section	'coovachilli.uam'
+	option datatype	'boolean'
+
+config variable
+	option name	'uamui'
+	option title	'UAM user interface'
+	option description	'An init.d style program to handle local content on the uamuiport web server'
+	option section	'coovachilli.uam'
+	option datatype	'file'
+
+config variable
+	option name	'uamallowed'
+	option title	'Allowed resources'
+	option description	'List of resources the client can access without first authenticating'
+	option section	'coovachilli.uam'
+	option datatype	'string'
+	option type	'list'
+
+config variable
+	option name	'uamdomain'
+	option title	'Allowed domains'
+	option description	'Defines a list of domain names to automatically add to the walled garden'
+	option section	'coovachilli.uam'
+	option datatype	'string'
+	option type	'list'
+
+config variable
+	option name	'uamhomepage'
+	option title	'UAM homepage'
+	option description	'URL of homepage to redirect unauthenticated users to'
+	option section	'coovachilli.uam'
+	option datatype	'string'
+
+config variable
+	option name	'uamlisten'
+	option title	'UAM listening address'
+	option description	'IP address to listen to for authentication of clients'
+	option section	'coovachilli.uam'
+	option datatype	'host'
+
+config variable
+	option name	'uamport'
+	option title	'UAM listening port'
+	option description	'TCP port to bind to for authenticating clients (default 3990)'
+	option section	'coovachilli.uam'
+	option datatype	'port'
+
+config variable
+	option name	'uamiport'
+	option title	'UAM static content port'
+	option description	'TCP port to bind to for only serving embedded content'
+	option section	'coovachilli.uam'
+	option datatype	'port'
+
+config variable
+	option name	'uamsecret'
+	option title	'UAM secret'
+	option description	'Shared secret between uamserver and chilli'
+	option section	'coovachilli.uam'
+	option datatype	'string'
+	option required	true
+
+config variable
+	option name	'uamserver'
+	option title	'UAM server'
+	option description	'URL of web server to use for authenticating clients'
+	option section	'coovachilli.uam'
+	option datatype	'string'
+
+config variable
+	option name	'uamlogoutip'
+	option title	'UAM logout IP'
+	option description	'Use this IP address to instantly logout a client accessing it (defaults to 1.1.1.1)'
+	option section	'coovachilli.uam'
+	option datatype	'ip4addr'
+
+config variable
+	option name	'wisprlogin'
+	option title	'WISPr login url'
+	option description	'Specific URL to be given in WISPr XML LoginURL'
+	option section	'coovachilli.uam'
+	option datatype	'string'
+
+config variable
+	option name	'defsessiontimeout'
+	option title	'Default session timeout'
+	option description	'Default session timeout unless otherwise set by RADIUS (defaults to 0)'
+	option section	'coovachilli.uam'
+	option datatype	'uint'
+
+config variable
+	option name	'defidletimeout'
+	option title	'Default idle timeout'
+	option description	'Default idle timeout unless otherwise set by RADIUS (defaults to 0)'
+	option section	'coovachilli.uam'
+	option datatype	'uint'
+
+config variable
+	option name	'definteriminterval'
+	option title	'Default interim interval'
+	option description	'Default interim-interval for RADIUS accounting unless otherwise set by RADIUS (defaults to 0)'
+	option section	'coovachilli.uam'
+	option datatype	'uint'
+
+config variable
+	option name	'wwwdir'
+	option title	'Web content directory'
+	option description	'Directory where embedded local web content is placed'
+	option section	'coovachilli.uam'
+	option datatype	'directory'
+
+config variable
+	option name	'wwwbin'
+	option title	'CGI program'
+	option description	'Executable to run as a CGI type program (like haserl) for URLs with extention .chi'
+	option section	'coovachilli.uam'
+	option datatype	'file'
+
+config variable
+	option name	'localusers'
+	option title	'Local users file'
+	option description	'A colon seperated file containing usernames and passwords of locally authenticated users'
+	option section	'coovachilli.uam'
+	option datatype	'file'
+
+config variable
+	option name	'postauthproxy'
+	option title	'Post auth proxy'
+	option description	'Used with postauthproxyport to define a post authentication HTTP proxy server'
+	option section	'coovachilli.uam'
+	option datatype	'file'
+
+config variable
+	option name	'postauthproxyport'
+	option title	'Post auth proxy port'
+	option description	'Used with postauthproxy to define a post authentication HTTP proxy server'
+	option section	'coovachilli.uam'
+	option datatype	'file'
+
+config variable
+	option name	'locationname'
+	option title	'Location name'
+	option description	'Human readable location name used in JSON interface'
+	option section	'coovachilli.uam'
+	option datatype	'file'

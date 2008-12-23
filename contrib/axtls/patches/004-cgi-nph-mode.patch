@@ -1,0 +1,20 @@
+--- axTLS/httpd/proc.c	2008-11-13 14:05:02.000000000 +0100
++++ axTLS.new/httpd/proc.c	2008-11-13 16:07:12.000000000 +0100
+@@ -556,13 +556,13 @@
+     int tmp_stdout;
+ #endif
+ 
+-    snprintf(cgienv[0], MAXREQUESTLENGTH, 
++    if (cn->reqtype == TYPE_HEAD) 
++    {
++        snprintf(cgienv[0], MAXREQUESTLENGTH, 
+             HTTP_VERSION" 200 OK\nServer: %s\n%s",
+             server_version, (cn->reqtype == TYPE_HEAD) ? "\n" : "");
+-    special_write(cn, cgienv[0], strlen(cgienv[0]));
++        special_write(cn, cgienv[0], strlen(cgienv[0]));
+ 
+-    if (cn->reqtype == TYPE_HEAD) 
+-    {
+         removeconnection(cn);
+         return;
+     }

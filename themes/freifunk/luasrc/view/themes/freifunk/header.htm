@@ -1,0 +1,196 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: header.htm 3529 2008-10-07 13:10:24Z jow $
+
+-%>
+<%
+require("luci.sys")
+local load1, load5, load15 = luci.sys.loadavg()
+local request  = require("luci.dispatcher").context.path
+local category = request[1]
+local tree     = luci.dispatcher.node()
+local cattree  = category and luci.dispatcher.node(category)
+local node     = luci.dispatcher.context.dispatched
+local hostname = luci.sys.hostname()
+
+local c = tree
+for i,r in ipairs(request) do
+	if c.nodes and c.nodes[r] then
+		c = c.nodes[r]
+		c._menu_selected = true
+	end
+end
+
+require("luci.i18n").loadc("default")
+require("luci.http").prepare_content("text/html")
+
+-%>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
+	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
+	<link rel="shortcut icon" href="<%=media%>/images/favicon.ico" />
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+	<meta http-equiv="content-script-type" content="text/javascript" />
+	<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
+
+	<!--[if lt IE 7]>
+		<script type="text/javascript">
+			function setup_hover() {
+				function ie_hover(e) {
+					e.onmouseover = function() { this.className = "hover" }
+					e.onmouseout  = function() { this.className = null    }
+				}
+
+				var lis  = document.getElementById("mainmenu").getElementsByTagName("LI");
+				var divs = document.getElementById("mainmenu").getElementsByTagName("DIV");
+
+				for( var i = 0; i < lis.length;  i++ ) ie_hover( lis[i]  );
+				for( var i = 0; i < divs.length; i++ ) ie_hover( divs[i] );
+			}
+		</script>
+	<![endif]-->
+</head>
+<body onload="window.setup_hover && setup_hover()">
+<div id="all">
+<center>
+
+<div id="wrapper">
+<div id="main">
+
+
+<div id="header">
+	<div id="headerleft">
+		<div id="headerright">
+			<div id="headerback">
+	<div id="schriftzug"><img src="<%=media%>/images/schriftzug.png" alt="Freifunk  ueberschrift" name="Freifunk_nordost_ueberschrift" border="0"> </div>
+	<div id="logo"><img src="<%=media%>/images/logo.png" alt="Freifunk logo" name="Freifunk_nordost" border="0"></a></div>
+	<div class="clear"></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="pathbar separator black whitetext bold">
+<%:path%>: <%
+local c = tree
+local url = controller
+for k,v in pairs(request) do
+	if c.nodes and c.nodes[v] then
+		c = c.nodes[v]
+		url = url .. "/" .. v
+	%><a href="<%=url%>"><%=c.title or v%></a> <% if k ~= #request then %>&#187; <% end
+	end
+end
+%>
+</div>
+
+<div class="menubar">
+	<div id="mainmenu" class="mainmenu">
+<%-
+local function submenu(prefix, node)
+	if not node.nodes or node.hidden then
+		return false
+	end
+	local index = {}
+	local count = 0
+	for k, n in pairs(node.nodes) do
+		if n.title and n.target then
+			table.insert(index, {name=k, order=n.order or 100})
+			count = count + 1
+		end
+	end
+
+	table.sort(index, function(a, b) return a.order < b.order end)
+
+	if count > 0 then
+%>
+	<ul>
+	<%- for j, v in pairs(index) do
+		if not v.hidden and #v.name > 0 then
+			local nnode = node.nodes[v.name]
+			local href = controller .. prefix .. v.name
+			href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
+		%>
+		<li>
+			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=luci.util.pcdata(href)%>"><%=nnode.title%></a></span>
+			<%- submenu(prefix .. v.name .. "/", nnode) %>
+		</li>
+		<%- end %>
+	<%- end %>
+	</ul>
+<%-
+	end
+end
+
+if cattree and cattree.nodes then
+	local index = {}
+	for k, node in pairs(cattree.nodes) do
+		table.insert(index, {name=k, order=node.order or 100})
+	end
+
+	table.sort(index, function(a, b) return a.order < b.order end)
+
+	for i, k in ipairs(index) do
+		node = cattree.nodes[k.name]
+		if not node.hidden and node.title and node.target then
+			local href = controller.."/"..category.."/"..k.name
+			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
+			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=node.title%></a>
+				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
+			</div>
+<%		end
+	end
+end
+%>
+	</div>
+	<div class="modemenu">
+		<ul><%
+			for k,node in pairs(tree.nodes) do
+				if node.title and not node.hidden then %>
+					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=node.title%></a></li>
+<%				end
+			end%>
+		</ul>
+	</div>
+
+	<%
+		if tree.nodes[category] and tree.nodes[category].ucidata then
+			local ucic = 0
+
+			for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+				for k, l in pairs(j) do
+					for m, n in pairs(l) do
+						ucic = ucic + 1;
+					end
+				end
+			end
+	%>
+	<div class="mainmenu" style="float:right; margin-right:2em">
+		<div>
+			<% if ucic > 0 then %>
+			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:unsavedchanges%>: <%=ucic%></a>
+			<% submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
+			<% else %>
+			<a href="#"><%:changes%>: 0</a>
+			<% end %>
+		</div>
+	</div>
+	<% end %>
+
+	<br class="clear" />
+</div>
+<div id="maincontent">

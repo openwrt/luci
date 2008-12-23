@@ -1,0 +1,95 @@
+#
+# Routed point-to-point server
+#
+config openvpn_recipe server_tun_ptp
+	option _description	"Simple server configuration for a routed point-to-point VPN"
+	option _role		"server"
+	option dev			"tun"
+	option port			"1194"
+	option ifconfig		"10.0.0.1 10.0.0.2"
+	option secret		"shared-secret.key"
+
+#
+# Routed point-to-point client
+#
+config openvpn_recipe client_tun_ptp
+	option _description	"Simple client configuration for a routed point-to-point VPN"
+	option _role		"client"
+	option dev			"tun"
+	list   remote 		"mypeer.dyndns.org"
+	option port 		"1194"
+	option ifconfig		"10.0.0.2 10.0.0.1"
+	option secret		"shared-secret.key"
+	option nobind		"1"
+
+
+#
+# Routed multi-client server
+#
+config openvpn_recipe server_tun
+	option _description	"Server configuration for a routed multi-client VPN"
+	option _role		"server"
+	option dev			"tun"
+	option port			"1194"
+	option server		"10.0.100.0 255.255.255.0"
+	option ca			"ca.crt"
+	option cert 		"server.crt"
+	option key 			"server.key"
+	option dh 			"dh1024.pem"
+	option client_to_client	"1"
+	option keepalive	"10 120"
+	option comp_lzo		"1"
+
+#
+# Routed client
+#
+config openvpn_recipe client_tun
+	option _description	"Client configuration for a routed multi-client VPN"
+	option _role		"client"
+	option client		"1"
+	option dev 			"tun"
+	list   remote		"vpnserver.example.org 1194"
+	option ca 			"ca.crt"
+	option cert			"my_client.crt"
+	option key 			"my_client.key"
+	option dh 			"dh1024.pem"
+	option ns_cert_type	"server"
+	option keepalive	"10 120"
+	option comp_lzo		"1"
+	option nobind		"1"
+
+
+#
+# Multi-client ethernet bridge server
+#
+config openvpn_recipe server_tap_bridge
+	option _description	"Server configuration for an ethernet bridge VPN"
+	option _role		"server"
+	option dev			"tap"
+	option port			"1194"
+	option server_bridge "192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254"
+	option ca			"ca.crt"
+	option cert 		"server.crt"
+	option key 			"server.key"
+	option dh 			"dh1024.pem"
+	option client_to_client	"1"
+	option keepalive	"10 120"
+	option comp_lzo		"1"
+
+#
+# Ethernet bridge client
+#
+config openvpn_recipe client_tap_bridge
+	option _description	"Client configuration for an ethernet bridge VPN"
+	option _role		"client"
+	option client		"1"
+	option dev 			"tap"
+	list   remote		"vpnserver.example.org 1194"
+	option ca 			"ca.crt"
+	option cert			"my_client.crt"
+	option key 			"my_client.key"
+	option dh 			"dh1024.pem"
+	option ns_cert_type	"server"
+	option keepalive	"10 120"
+	option comp_lzo		"1"
+	option nobind		"1"

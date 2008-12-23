@@ -1,0 +1,7 @@
+#!/bin/sh
+uci batch <<-EOF
+        set luci.main.mediaurlbase=/luci-static/fledermaus
+        set luci.main.lang=de
+        commit luci
+EOF
+	
