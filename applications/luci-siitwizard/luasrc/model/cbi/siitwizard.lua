@@ -275,9 +275,7 @@ function mode.write(self, section, value)
 
 	uci:section("network", "interface", "siit0", {
 		ifname  = "siit0",
-		proto   = "static",
-		ipaddr  = "169.254.42.42",
-		netmask = "255.255.255.0"
+		proto   = "none"
 	})
 
 	-- siit0 route
