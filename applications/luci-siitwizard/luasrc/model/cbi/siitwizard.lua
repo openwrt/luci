@@ -161,6 +161,8 @@ function mode.write(self, section, value)
 	uci:section("wireless", "wifi-iface", nil, {
 		encryption = "none",
 		mode       = "adhoc",
+		txpower    = 10,
+		sw_merge   = 1,
 		network    = wifi_device,
 		device     = wifi_device,
 		ssid       = wifi_essid,
