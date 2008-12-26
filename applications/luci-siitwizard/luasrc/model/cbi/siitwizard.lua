@@ -45,7 +45,6 @@ local ipv4_netsz  = uci:get("siit", "ipv4", "netsize")     or "24"
 -- Find IPv4 allocation pool
 --
 local gv4_net = luci.ip.IPv4(ipv4_pool)
-local lan_net
 
 --
 -- Generate ULA
