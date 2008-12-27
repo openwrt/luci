@@ -65,7 +65,7 @@ f = SimpleForm("siitwizward", "SIIT-Wizzard",
 f:field(DummyValue, "info_ula", "Mesh ULA address").value = ula:string()
 
 f:field(DummyValue, "ipv4_pool", "IPv4 allocation pool").value =
-	"%s (%i hosts)" %{ gv4_net:string(), 2 ^ gv4_net:prefix() - 2 }
+	"%s (%i hosts)" %{ gv4_net:string(), 2 ^ ( 32 - gv4_net:prefix() ) - 2 }
 
 f:field(DummyValue, "ipv4_size", "IPv4 LAN network prefix").value =
 	"%i bit (%i hosts)" %{ ipv4_netsz, 2 ^ ( 32 - ipv4_netsz ) - 2 }
@@ -364,7 +364,9 @@ function mode.write(self, section, value)
 
 	-- lan dns
 	uci:tset("dhcp", "lan", {
-		dhcp_option = "6," .. dns_server
+		dhcp_option = "6," .. dns_server,
+		start       = bit.band(lan_net:minhost():add(1)[2][2], 0xFF),
+		limit       = ( 2 ^ ( 32 - lan_net:prefix() ) ) - 3
 	})
 
 	-- hostname
