@@ -187,7 +187,7 @@ if #routes6 > 0 then
 
 	net = v6:option(DummyValue, "iface", translate("network"))
 	function net.cfgvalue(self, section)
-		return luci.tools.webadmin.iface_get_network(routes[section].device)
+		return luci.tools.webadmin.iface_get_network(routes6[section].device)
 		or routes6[section].device
 	end
 
