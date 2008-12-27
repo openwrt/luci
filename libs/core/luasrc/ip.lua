@@ -65,7 +65,7 @@ local function __array16( x, family )
 		list = { unpack(x[2]) }
 
 	elseif type(x) == "table" then
-		list = x
+		list = { unpack(x) }
 	end
 
 	assert( list, "Invalid operand" )
