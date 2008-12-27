@@ -182,13 +182,14 @@ function mode.write(self, section, value)
 	if value == "gateway" then
 
 		-- wan mtu
-		uci:set("network", "wan", "mtu", 1400)
+		uci:set("network", "wan", "mtu", 1240)
 
 		-- lan settings
 		uci:tset("network", "lan", {
-			mtu     = 1400,
+			mtu     = 1240,
 			ipaddr  = lan_net:host():string(),
-			netmask = lan_net:mask():string()
+			netmask = lan_net:mask():string(),
+			proto   = "static"
 		})
 
 		-- use full siit subnet
@@ -216,7 +217,7 @@ function mode.write(self, section, value)
 
 		-- lan settings
 		uci:tset("network", "lan", {
-			mtu     = 1400,
+			mtu     = 1240,
 			ipaddr  = lan_net:host():string(),
 			netmask = lan_net:mask():string()
 		})
@@ -341,11 +342,7 @@ function mode.write(self, section, value)
 
 	-- hna6
 	uci:delete_all("olsrd", "Hna6",
-		function(s)
-			if s.netaddr and s.prefix then
-				return siit_route:contains(luci.ip.IPv6(s.netaddr.."/"..s.prefix))
-			end
-		end)
+		function(s) return true end)
 
 	uci:section("olsrd", "Hna6", nil, {
 		netaddr = siit_route:host():string(),
