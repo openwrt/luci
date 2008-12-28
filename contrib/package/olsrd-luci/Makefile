@@ -11,19 +11,19 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
-PKG_VERSION:=0.5.6-r3
+PKG_VERSION:=0.5.6-r3+hg2127
 PKG_RELEASE:=1
 
-#PKG_HGREV:=cac1df64dcd5
-#PKG_SOURCE:=$(PKG_HGREV).tar.gz
-#PKG_SOURCE_URL:=http://gredler.at/hg/olsrd-0.5.6/archive
-#PKG_MD5SUM:=95af2d8d6075f74d379b752fb8dda3de
-#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-0-5-6-$(PKG_HGREV)
+PKG_HGREV:=913b11abf7f1
+PKG_SOURCE:=$(PKG_HGREV).tar.gz
+PKG_SOURCE_URL:=http://gredler.at/hg/olsrd/archive
+PKG_MD5SUM:=7cbdbefe66441b70f9b7aec88abb804a
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_HGREV)
 
-PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
-PKG_MD5SUM:=0935688fa0fb5b0e073fe53ec654c5b2
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_VERSION)
+#PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
+#PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
+#PKG_MD5SUM:=0935688fa0fb5b0e073fe53ec654c5b2
+#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -123,13 +123,6 @@ define Package/olsrd-luci-mod-quagga
 	DEPENDS:=olsrd-luci
 endef
 
-define Package/olsrd-luci-mod-tas
-	$(call Package/olsrd-luci/common_info)
-	MENU:=1
-	TITLE:=OLSR - Tiny Application Server Plugin
-	DEPENDS:=olsrd-luci
-endef
-
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
@@ -145,7 +138,7 @@ define Build/Compile
 		MANDIR="$(PKG_INSTALL_DIR)/usr/share/man" \
 		STRIP="true" \
 		INSTALL_LIB="true" \
-		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo pgraph quagga tas"
+		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo pgraph quagga"
 endef
 
 define Package/olsrd-luci/install
@@ -212,11 +205,6 @@ define Package/olsrd-luci-mod-quagga/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/quagga/olsrd_quagga.so.* $(1)/usr/lib/
 endef
 
-define Package/olsrd-luci-mod-tas/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/tas/olsrd_tas.so.* $(1)/usr/lib/
-endef
-
 
 $(eval $(call BuildPackage,olsrd-luci))
 $(eval $(call BuildPackage,olsrd-luci-mod-arprefresh))
@@ -230,4 +218,3 @@ $(eval $(call BuildPackage,olsrd-luci-mod-secure))
 $(eval $(call BuildPackage,olsrd-luci-mod-txtinfo))
 $(eval $(call BuildPackage,olsrd-luci-mod-pgraph))
 $(eval $(call BuildPackage,olsrd-luci-mod-quagga))
-$(eval $(call BuildPackage,olsrd-luci-mod-tas))
