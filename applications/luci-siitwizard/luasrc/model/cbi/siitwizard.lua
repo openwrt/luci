@@ -337,7 +337,7 @@ function mode.write(self, section, value)
 	uci:section("olsrd", "Interface", nil, {
 		ignore      = 0,
 		interface   = wifi_device,
-		Ip6AddrType = "global"
+		Ip6AddrType = "unique-local"
 	})
 
 	-- hna6
