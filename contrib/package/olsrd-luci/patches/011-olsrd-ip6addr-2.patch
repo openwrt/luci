@@ -1,0 +1,20 @@
+diff -urb olsrd-913b11abf7f1.orig/src/unix/ifnet.c olsrd-913b11abf7f1/src/unix/ifnet.c
+--- olsrd-913b11abf7f1.orig/src/unix/ifnet.c	2008-12-29 17:41:41.000000000 +0100
++++ olsrd-913b11abf7f1/src/unix/ifnet.c	2008-12-29 17:43:53.000000000 +0100
+@@ -214,13 +214,13 @@
+     }
+ 
+ #ifdef DEBUG
+-    OLSR_PRINTF(3, "\tAddress: %s\n", ip6_to_string(&buf, &tmp_saddr6.sin6_addr));
++    OLSR_PRINTF(3, "\tAddress: %s\n", ip6_to_string(&buf, &tmp_saddr6));
+ #endif
+ 
+     if (ip6equal(&tmp_saddr6.sin6_addr, &ifp->int6_addr.sin6_addr)) {
+       OLSR_PRINTF(1, "New IP address for %s:\n", ifr.ifr_name);
+-      OLSR_PRINTF(1, "\tOld: %s\n", ip6_to_string(&buf, &ifp->int6_addr.sin6_addr));
+-      OLSR_PRINTF(1, "\tNew: %s\n", ip6_to_string(&buf, &tmp_saddr6.sin6_addr));
++      OLSR_PRINTF(1, "\tOld: %s\n", ip6_to_string(&buf, &ifp->int6_addr));
++      OLSR_PRINTF(1, "\tNew: %s\n", ip6_to_string(&buf, &tmp_saddr6));
+ 
+       /* Check main addr */
+       if (ip6equal(&olsr_cnf->main_addr.v6, &tmp_saddr6.sin6_addr)) {
