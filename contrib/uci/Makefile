@@ -1,7 +1,7 @@
 include ../../build/config.mk
 include ../../build/gccconfig.mk
 
-UCI_VERSION  = 0.7.0
+UCI_VERSION  = 0.7.1
 UCI_SITE    = http://mirror2.openwrt.org/sources
 UCI_DIR     = uci-$(UCI_VERSION)
 UCI_FILE    = $(UCI_DIR).tar.gz
