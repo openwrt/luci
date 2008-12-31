@@ -62,7 +62,7 @@ end
 ------------------- Madwifi Device ------------------
 
 if hwtype == "atheros" then
-	mode = s:option(ListValue, "mode", translate("mode"))
+	mode = s:option(ListValue, "hwmode", translate("mode"))
 	mode:value("", translate("wifi_auto"))
 	mode:value("11b", "802.11b")
 	mode:value("11g", "802.11g")
