@@ -21,6 +21,7 @@ s.anonymous = true
 
 iface = s:option(ListValue, "src", translate("fw_src"))
 oface = s:option(ListValue, "dest", translate("fw_dest"))
+s:option(Flag, "mtu_fix", translate("fw_mtufix"))
 
 luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
