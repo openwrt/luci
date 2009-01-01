@@ -26,6 +26,7 @@ if arg[1] then
 	ign = p:option(Flag, "ignore", "Enable")
 	ign.enabled  = "0"
 	ign.disabled = "1"
+	ign.rmempty  = false
 	function ign.cfgvalue(self, section)
 		return Flag.cfgvalue(self, section) or "0"
 	end
@@ -230,8 +231,9 @@ else
 	end
 
 	ign = t:option( Flag, "ignore", "Enabled" )
-	ign.enabled = "0"
+	ign.enabled  = "0"
 	ign.disabled = "1"
+	ign.rmempty  = false
 	function ign.cfgvalue(self, section)
 		return Flag.cfgvalue(self, section) or "0"
 	end
