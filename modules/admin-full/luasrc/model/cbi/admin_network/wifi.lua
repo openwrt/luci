@@ -72,7 +72,7 @@ if hwtype == "atheros" then
 	mode:value("11adt", "802.11adt")
 	mode:value("fh", translate("wifi_fh"))
 
-	s:option(Flag, "diversity", translate("wifi_diversity"))
+	s:option(Flag, "diversity", translate("wifi_diversity")).rmempty = false
 
 	if not nsantenna then
 		s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
