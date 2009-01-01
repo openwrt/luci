@@ -35,10 +35,12 @@ s:option(Value, "path").titleref = luci.dispatcher.build_url("admin", "system", 
 s:option(Value, "users").rmempty = true
 
 ro = s:option(Flag, "read_only")
+ro.rmempty = false
 ro.enabled = "yes"
 ro.disabled = "no"
 
 go = s:option(Flag, "guest_ok")
+go.rmempty = false
 go.enabled = "yes"
 go.disabled = "no"
 
