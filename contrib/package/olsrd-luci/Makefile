@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 Freifunk Leipzig
+# Copyright (C) 2008-2009 Freifunk Leipzig
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,13 +11,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
-PKG_VERSION:=0.5.6-r3+hg2127
+PKG_VERSION:=0.5.6-r3+hg2131
 PKG_RELEASE:=2
 
-PKG_HGREV:=913b11abf7f1
+PKG_HGREV:=26d021f68c49
 PKG_SOURCE:=$(PKG_HGREV).tar.gz
 PKG_SOURCE_URL:=http://gredler.at/hg/olsrd/archive
-PKG_MD5SUM:=7cbdbefe66441b70f9b7aec88abb804a
+PKG_MD5SUM:=db07cbbdff1c97ff4045cd4f5716be2e
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_BASENAME)-$(PKG_HGREV)
 
 #PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
