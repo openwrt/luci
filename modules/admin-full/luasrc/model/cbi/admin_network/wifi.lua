@@ -234,6 +234,11 @@ if hwtype == "atheros" then
 	local nos = s:option(Flag, "nosbeacon", translate("wifi_nosbeacon"))
 	nos:depends({mode="sta"})
 	nos.optional = true
+
+	local probereq = s:option(Flag, "probereq", translate("wifi_noprobereq"))
+	probereq.optional = true
+	probereq.enabled  = "0"
+	probereq.disabled = "1"
 end
 
 
