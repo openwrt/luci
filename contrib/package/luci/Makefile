@@ -299,7 +299,7 @@ endef
 
 define Package/luci-admin-full
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +luci-ipkg +luci-app-firewall
+  DEPENDS+=+luci-admin-core +luci-ipkg +PACKAGE_luci-admin-full:iptables +PACAKAGE_luci-admin-full:firewall +luci-app-firewall
   TITLE:=LuCI Administration - full-featured for full control
 endef
 
