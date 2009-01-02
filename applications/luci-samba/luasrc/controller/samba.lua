@@ -15,7 +15,7 @@ $Id$
 module("luci.controller.samba", package.seeall)
 
 function index()
-	if not luci.fs.isfile("/etc/config/samba") then
+	if not luci.fs.access("/etc/config/samba") then
 		return
 	end
 	require("luci.i18n")

@@ -17,7 +17,7 @@ module("luci.controller.ddns", package.seeall)
 function index()
 	require("luci.i18n")
 	luci.i18n.loadc("ddns")
-	if not luci.fs.isfile("/etc/config/ddns") then
+	if not luci.fs.access("/etc/config/ddns") then
 		return
 	end
 	

@@ -15,7 +15,7 @@ $Id$
 module("luci.controller.upnp", package.seeall)
 
 function index()
-	if not luci.fs.isfile("/etc/config/upnpd") then
+	if not luci.fs.access("/etc/config/upnpd") then
 		return
 	end
 	

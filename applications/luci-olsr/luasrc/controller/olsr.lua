@@ -1,7 +1,7 @@
 module("luci.controller.olsr", package.seeall)
 
 function index()
-	if not luci.fs.isfile("/etc/config/olsrd") then
+	if not luci.fs.access("/etc/config/olsrd") then
 		return
 	end
 

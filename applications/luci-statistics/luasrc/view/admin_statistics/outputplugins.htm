@@ -23,7 +23,7 @@ and to transmit the data over the network to other collectd instances.%></p>
 <p><%:stat_outputplugins_installed Installed output plugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
-			<% if luci.fs.isfile("/usr/lib/collectd/" .. plugin .. ".so") then %>
+			<% if luci.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>
 				<li><a href="<%=controller%>/admin/statistics/collectd/output/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>

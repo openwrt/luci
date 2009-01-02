@@ -15,7 +15,7 @@ $Id$
 module("luci.controller.tinyproxy", package.seeall)
 
 function index()
-	if not luci.fs.isfile("/etc/config/tinyproxy") then
+	if not luci.fs.access("/etc/config/tinyproxy") then
 		return
 	end
 	
