@@ -18,7 +18,7 @@ module("luci.controller.mmc_over_gpio", package.seeall)
 function index()
        require("luci.i18n")
        luci.i18n.loadc("mmc_over_gpio")
-       if not luci.fs.isfile("/etc/config/mmc_over_gpio") then
+       if not luci.fs.access("/etc/config/mmc_over_gpio") then
                return
        end
 

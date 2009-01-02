@@ -28,7 +28,7 @@ l = c:option(ListValue, "lang", translate("language"))
 
 local i18ndir = luci.i18n.i18ndir .. "default."
 for k, v in pairs(luci.config.languages) do
-	if k:sub(1, 1) ~= "." and luci.fs.isfile(i18ndir .. k:gsub("_", "-") .. ".lua") then
+	if k:sub(1, 1) ~= "." and luci.fs.access(i18ndir .. k:gsub("_", "-") .. ".lua") then
 		l:value(k, v)
 	end
 end

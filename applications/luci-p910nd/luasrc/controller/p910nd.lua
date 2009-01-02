@@ -18,7 +18,7 @@ module("luci.controller.p910nd", package.seeall)
 function index()
        require("luci.i18n")
        luci.i18n.loadc("p910nd")
-       if not luci.fs.isfile("/etc/config/p910nd") then
+       if not luci.fs.access("/etc/config/p910nd") then
                return
        end
 

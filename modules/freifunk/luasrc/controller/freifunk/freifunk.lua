@@ -52,7 +52,7 @@ function index()
 
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 
-	if luci.fs.isfile("/etc/config/luci_statistics") then
+	if luci.fs.access("/etc/config/luci_statistics") then
 		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, i18n("stat_statistics", "Statistiken"), 40)
 	end
 
