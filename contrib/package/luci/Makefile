@@ -299,7 +299,7 @@ endef
 
 define Package/luci-admin-full
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +luci-ipkg +PACKAGE_luci-admin-full:iptables +PACAKAGE_luci-admin-full:firewall +luci-app-firewall
+  DEPENDS+=+luci-admin-core +luci-ipkg +PACKAGE_luci-admin-full:iptables +PACKAGE_luci-admin-full:firewall +luci-app-firewall
   TITLE:=LuCI Administration - full-featured for full control
 endef
 
@@ -632,7 +632,7 @@ define Package/luci-theme-fledermaus/install
 endef
 
 define Package/luci-theme-freifunk
-  $(call Package/luci/thtemplate)
+  $(call Package/luci/fftemplate)
   DEPENDS:=+luci-web
   MAINTAINER:=Stefan Pirwitz <stefan-at-freifunk-bno-dot-de>
   TITLE:=alternative Freifunk Theme
@@ -643,7 +643,7 @@ define Package/luci-theme-freifunk/install
 endef
 
 define Package/luci-theme-freifunk-bno
-  $(call Package/luci/thtemplate)
+  $(call Package/luci/fftemplate)
   DEPENDS:=+luci-web
   MAINTAINER:=Stefan Pirwitz <stefan-at-freifunk-bno-dot-de>
   TITLE:=Freifunk Berlin Nordost Theme
