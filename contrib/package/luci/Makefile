@@ -253,12 +253,14 @@ endef
 define Package/luci-freifunk-community
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash +luci-app-olsr \
+   +luci-sgi-cgi +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-theme-fledermaus \
    +luci-i18n-german \
-   +olsrd-luci +olsrd-luci-mod-dyn-gw +olsrd-luci-mod-txtinfo +olsrd-luci-mod-nameservice \
-   +kmod-tun +ip
+   +PACKAGE_luci-freifunk-community:olsrd-luci +PACKAGE_luci-freifunk-community:olsrd-luci-mod-dyn-gw \
+   +PACKAGE_luci-freifunk-community:olsrd-luci-mod-txtinfo +PACKAGE_luci-freifunk-community:olsrd-luci-mod-nameservice \
+   +PACKAGE_luci-freifunk-community:kmod-tun +PACKAGE_luci-freifunk-community:ip \
+   +luci-app-olsr
   TITLE:=Freifunk Community Meta-Package
 endef
 
@@ -348,7 +350,7 @@ endef
 define Package/luci-app-siitwizard
   $(call Package/luci/fftemplate)
   TITLE:=SIIT IPv4-over-IPv6 configuration wizard
-  DEPENDS:=+luci-admin-core +kmod-siit
+  DEPENDS:=+luci-admin-core +PACKAGE_luci-app-siitwizard:kmod-siit
 endef
 
 define Package/luci-app-siitwizard/install
@@ -358,7 +360,7 @@ endef
 
 define Package/luci-app-firewall
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-firewall:firewall
   TITLE:=Firewall and Portforwarding application
 endef
 
@@ -369,7 +371,7 @@ endef
 
 define Package/luci-app-olsr
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +olsrd-luci +olsrd-luci-mod-txtinfo
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-olsr:olsrd-luci +PACKAGE_luci-app-olsr:olsrd-luci-mod-txtinfo
   TITLE:=OLSR configuration and status module
 endef
 
@@ -380,7 +382,7 @@ endef
 
 define Package/luci-app-qos
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +qos-scripts
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-qos:qos-scripts
   TITLE:=Quality of Service configuration module
 endef
 
@@ -391,7 +393,7 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+luasocket
+  DEPENDS+=+PACKAGE_luci-app-splash:luasocket
   TITLE:=Freifunk DHCP-Splash application
 endef
 
@@ -406,7 +408,8 @@ endef
 
 define Package/luci-app-statistics
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +collectd +collectd-mod-rrdtool1 +rrdtool1
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-statistics:collectd \
+   +PACKAGE_luci-app-statistics:collectd-mod-rrdtool1 +PACKAGE_luci-app-statistics:rrdtool1
   TITLE:=LuCI Statistics Application
 endef
 
@@ -421,7 +424,7 @@ endef
 
 define Package/luci-app-upnp
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +miniupnpd
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-upnp:miniupnpd
   TITLE:=Universal Plug & Play configuration module
 endef
 
@@ -432,7 +435,7 @@ endef
 
 define Package/luci-app-ntpc
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +ntpclient
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-ntpc:ntpclient
   TITLE:=NTP time synchronisation client configuration module
 endef
 
@@ -443,7 +446,7 @@ endef
 
 define Package/luci-app-ddns
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-core +ddns-scripts
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-ddns:ddns-scripts
   TITLE:=Dynamic DNS configuration module
 endef
 
@@ -454,7 +457,7 @@ endef
 
 define Package/luci-app-samba
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +samba3
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-samba:samba3
   TITLE:=Network Shares - Samba SMB/CIFS module
 endef
 
@@ -465,7 +468,7 @@ endef
 
 define Package/luci-app-uvc_streamer
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +uvc-streamer
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-uvc_streamer:uvc-streamer
   TITLE:=Webcam Streaming - UVC-Streamer module
 endef
 
@@ -476,7 +479,7 @@ endef
 
 define Package/luci-app-mmc_over_gpio
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +kmod-mmc-over-gpio
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-mmc_over_gpio:kmod-mmc-over-gpio
   TITLE:=mmc_over_gpio
 endef
 
@@ -487,7 +490,7 @@ endef
 
 define Package/luci-app-p910nd
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +p910nd
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-p910nd:p910nd
   TITLE:=p910nd - Printer server module
 endef
 
@@ -498,7 +501,7 @@ endef
 
 define Package/luci-app-ushare
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +ushare
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-ushare:ushare
   TITLE:=ushare - UPnP A/V & DLNA Media Server
 endef
 
@@ -508,7 +511,7 @@ endef
 
 define Package/luci-app-hd_idle
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +hd-idle
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-hd_idle:hd-idle
   TITLE:=hd-idle
 endef
 
@@ -518,7 +521,7 @@ endef
 
 define Package/luci-app-tinyproxy
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +tinyproxy
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-tinyproxy:tinyproxy
   TITLE:=Tinyproxy - HTTP(S)-Proxy
 endef
 
@@ -549,7 +552,7 @@ endef
 define Package/luci-app-asterisk
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for Asterisk PBX
-  DEPENDS+=@BROKEN +luci-admin-core +asterisk14
+  DEPENDS+=@BROKEN +luci-admin-core +PACKAGE_luci-app-asterisk:asterisk14
 endef
 
 define Package/luci-app-asterisk/install
@@ -559,7 +562,7 @@ endef
 define Package/luci-app-polipo
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for the Polipo Proxy
-  DEPENDS+=+luci-admin-core +polipo
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-polipo:polipo
 endef
 
 define Package/luci-app-polipo/install
@@ -569,7 +572,7 @@ endef
 define Package/luci-app-openvpn
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for OpenVPN
-  DEPENDS+=@BROKEN +luci-admin-core +openvpn
+  DEPENDS+=@BROKEN +luci-admin-core +PACKAGE_luci-app-openvpn:openvpn
 endef
 
 define Package/luci-app-openvpn/install
