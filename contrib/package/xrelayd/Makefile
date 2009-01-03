@@ -19,7 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xrelayd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libxyssl
+  DEPENDS:=@BROKEN +libxyssl
   TITLE:=stunnel replacement based on xyssl
   URL:=http://znerol.ch/
 endef
