@@ -23,7 +23,7 @@ s.addremove = false
 
 back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
-back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "redirection")
+back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "redirect")
 
 name = s:option(Value, "_name", translate("name"))
 name.rmempty = true

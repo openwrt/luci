@@ -28,46 +28,35 @@ function index()
 	page.target = cbi("admin_network/vlan")
 	page.title  = i18n("a_n_switch")
 	page.order  = 20
-
-	local page  = node("admin", "network", "wireless")
-	page.target = form("admin_network/wireless")
-	page.title  = i18n("wifi")
+	
+	local page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wireless"), cbi("admin_network/wifi")), i18n("wifi"), 15)
 	page.i18n   = "wifi"
-	page.order  = 15
+	page.leaf = true
 	page.subindex = true
+	
 	uci:foreach("wireless", "wifi-device",
 		function (section)
 			local ifc = section[".name"]
 				entry({"admin", "network", "wireless", ifc},
-				 alias("admin", "network", "wifi", ifc),
+				 true,
 				 ifc:upper()).i18n = "wifi"
 		end
 	)
-
-	local page  = node("admin", "network", "wifi")
-	page.target = cbi("admin_network/wifi")
+	
+	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("interfaces", "Schnittstellen"), 10)
 	page.leaf   = true
-	page.i18n = "wifi"
-
-	local page  = node("admin", "network", "network")
-	page.target = cbi("admin_network/network")
-	page.title  = i18n("interfaces", "Schnittstellen")
-	page.order  = 10
 	page.subindex = true
+	
 	uci:foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
 			if ifc ~= "loopback" then
 				entry({"admin", "network", "network", ifc},
-				 alias("admin", "network", "ifaces", ifc),
+				 true,
 				 ifc:upper())
 			end
 		end
 	)
-
-	local page  = node("admin", "network", "ifaces")
-	page.target = cbi("admin_network/ifaces")
-	page.leaf   = true
 
 	local page  = node("admin", "network", "dhcp")
 	page.target = cbi("admin_network/dhcp")
