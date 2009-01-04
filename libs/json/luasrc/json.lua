@@ -499,3 +499,40 @@ Decoder.parsers = {
 	['['] = Decoder.parse_array,
 	['{'] = Decoder.parse_object
 }
+
+
+--- Create a new Active JSON-Decoder.
+-- @class	function
+-- @name	ActiveDecoder
+-- @param   customnull	Use luci.json.null instead of nil for decoding null
+-- @return  Active JSON-Decoder
+ActiveDecoder = util.class(Decoder)
+
+function ActiveDecoder.__init__(self, source, customnull)
+	Decoder.__init__(self, customnull)
+	self.source = source
+	self.chunk = nil
+	getmetatable(self).__call = self.get
+end
+
+
+--- Fetches one JSON-object from given source
+-- @return Decoded object
+function ActiveDecoder.get(self)
+	local chunk, src_err, object
+	if not self.chunk then
+		chunk, src_err = self.source()
+	else
+		chunk = self.chunk
+	end
+
+	self.chunk, object = self:dispatch(chunk, src_err, true)
+	return object
+end
+
+
+function ActiveDecoder.fetch(self)
+	local chunk, src_err = self.source()
+	assert(chunk or not src_err, src_err)
+	return chunk
+end
