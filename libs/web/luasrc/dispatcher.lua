@@ -146,6 +146,7 @@ function dispatch(request)
 	local t = true
 	local token = ctx.urltoken
 	local preq = {}
+	local freq = {}
 
 	for i, s in ipairs(request) do
 		local tkey, tval
@@ -158,6 +159,7 @@ function dispatch(request)
 		else
 			t = false
 			preq[#preq+1] = s
+			freq[#freq+1] = s
 			c = c.nodes[s]
 			n = i
 			if not c then
@@ -174,10 +176,12 @@ function dispatch(request)
 
 	if c and c.leaf then
 		for j=n+1, #request do
-			table.insert(args, request[j])
+			args[#args+1] = request[j]
+			freq[#freq+1] = request[j]
 		end
 	end
 
+	ctx.requestpath = freq
 	ctx.path = preq
 
 	if track.i18n then
@@ -203,7 +207,7 @@ function dispatch(request)
 			if key == "controller" then
 				return build_url()
 			elseif key == "REQUEST_URI" then
-				return build_url(unpack(ctx.requested.path))
+				return build_url(unpack(ctx.requestpath))
 			else
 				return rawget(table, key) or _G[key]
 			end
@@ -285,7 +289,16 @@ function dispatch(request)
 		luci.sys.process.setuser(track.setuser)
 	end
 
-	if c and (c.index or type(c.target) == "function") then
+	local target = nil
+	if c then
+		if type(c.target) == "function" then
+			target = c.target
+		elseif type(c.target) == "table" then
+			target = c.target.target
+		end
+	end
+
+	if c and (c.index or type(target) == "function") then
 		ctx.dispatched = c
 		ctx.requested = ctx.requested or ctx.dispatched
 	end
@@ -298,9 +311,9 @@ function dispatch(request)
 		end
 	end
 
-	if c and type(c.target) == "function" then
+	if type(target) == "function" then
 		util.copcall(function()
-			local oldenv = getfenv(c.target)
+			local oldenv = getfenv(target)
 			local module = require(c.module)
 			local env = setmetatable({}, {__index=
 
@@ -308,10 +321,14 @@ function dispatch(request)
 				return rawget(tbl, key) or module[key] or oldenv[key]
 			end})
 
-			setfenv(c.target, env)
+			setfenv(target, env)
 		end)
 
-		c.target(unpack(args))
+		if type(c.target) == "table" then
+			target(c.target, unpack(args))
+		else
+			target(unpack(args))
+		end
 	else
 		error404()
 	end
@@ -558,110 +575,134 @@ function rewrite(n, ...)
 	end
 end
 
+
+local function _call(self, ...)
+	if #self.argv > 0 then 
+		return getfenv()[self.name](unpack(self.argv), ...)
+	else
+		return getfenv()[self.name](...)
+	end
+end
+
 --- Create a function-call dispatching target.
 -- @param	name	Target function of local controller
 -- @param	...		Additional parameters passed to the function
 function call(name, ...)
-	local argv = {...}
-	return function(...)
-		if #argv > 0 then 
-			return getfenv()[name](unpack(argv), ...)
-		else
-			return getfenv()[name](...)
-		end
-	end
+	return {type = "call", argv = {...}, name = name, target = _call}
+end
+
+
+local _template = function(self, ...)
+	require "luci.template".render(self.view)
 end
 
 --- Create a template render dispatching target.
 -- @param	name	Template to be rendered
 function template(name)
-	return function()
-		require("luci.template")
-		luci.template.render(name)
+	return {type = "template", view = name, target = _template}
+end
+
+
+local function _cbi(self, ...)
+	local cbi = require "luci.cbi"
+	local tpl = require "luci.template"
+	local http = require "luci.http"
+
+	local config = self.config or {}
+	local maps = cbi.load(self.model, ...)
+
+	local state = nil
+
+	for i, res in ipairs(maps) do
+		if config.autoapply then
+			res.autoapply = config.autoapply
+		end
+		local cstate = res:parse()
+		if not state or cstate < state then
+			state = cstate
+		end
 	end
+
+	if config.on_valid_to and state and state > 0 and state < 2 then
+		http.redirect(config.on_valid_to)
+		return
+	end
+
+	if config.on_changed_to and state and state > 1 then
+		http.redirect(config.on_changed_to)
+		return
+	end
+
+	if config.on_success_to and state and state > 0 then
+		http.redirect(config.on_success_to)
+		return
+	end
+
+	if config.state_handler then
+		if not config.state_handler(state, maps) then
+			return
+		end
+	end
+
+	local pageaction = true
+	http.header("X-CBI-State", state or 0)
+	tpl.render("cbi/header", {state = state})
+	for i, res in ipairs(maps) do
+		res:render()
+		if res.pageaction == false then
+			pageaction = false
+		end
+	end
+	tpl.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
 end
 
 --- Create a CBI model dispatching target.
 -- @param	model	CBI model to be rendered
 function cbi(model, config)
-	config = config or {}
-	return function(...)
-		require("luci.cbi")
-		require("luci.template")
-		local http = require "luci.http"
+	return {type = "cbi", config = config, model = model, target = _cbi}
+end
 
-		maps = luci.cbi.load(model, ...)
 
-		local state = nil
+local function _arcombine(self, ...)
+	local argv = {...}
+	local target = #argv > 0 and self.targets[2] or self.targets[1]
+	setfenv(target.target, self.env)
+	target:target(unpack(argv))
+end
 
-		for i, res in ipairs(maps) do
-			if config.autoapply then
-				res.autoapply = config.autoapply
-			end
-			local cstate = res:parse()
-			if not state or cstate < state then
-				state = cstate
-			end
+--- Create a combined dispatching target for non argv and argv requests.
+-- @param trg1	Overview Target
+-- @param trg2	Detail Target
+function arcombine(trg1, trg2)
+	return {type = "arcombine", env = getfenv(), target = _arcombine, targets = {trg1, trg2}}
+end
+
+
+local function _form(self, ...)
+	local cbi = require "luci.cbi"
+	local tpl = require "luci.template"
+	local http = require "luci.http"
+
+	local maps = luci.cbi.load(self.model, ...)
+	local state = nil
+
+	for i, res in ipairs(maps) do
+		local cstate = res:parse()
+		if not state or cstate < state then
+			state = cstate
 		end
-
-		if config.on_valid_to and state and state > 0 and state < 2 then
-			luci.http.redirect(config.on_valid_to)
-			return
-		end
-
-		if config.on_changed_to and state and state > 1 then
-			luci.http.redirect(config.on_changed_to)
-			return
-		end
-
-		if config.on_success_to and state and state > 0 then
-			luci.http.redirect(config.on_success_to)
-			return
-		end
-
-		if config.state_handler then
-			if not config.state_handler(state, maps) then
-				return
-			end
-		end
-
-		local pageaction = true
-		http.header("X-CBI-State", state or 0)
-		luci.template.render("cbi/header", {state = state})
-		for i, res in ipairs(maps) do
-			res:render()
-			if res.pageaction == false then
-				pageaction = false
-			end
-		end
-		luci.template.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
 	end
+
+	http.header("X-CBI-State", state or 0)
+	tpl.render("header")
+	for i, res in ipairs(maps) do
+		res:render()
+	end
+	tpl.render("footer")
 end
 
 --- Create a CBI form model dispatching target.
 -- @param	model	CBI form model tpo be rendered
 function form(model)
-	return function(...)
-		require("luci.cbi")
-		require("luci.template")
-		local http = require "luci.http"
-
-		maps = luci.cbi.load(model, ...)
-
-		local state = nil
-
-		for i, res in ipairs(maps) do
-			local cstate = res:parse()
-			if not state or cstate < state then
-				state = cstate
-			end
-		end
-
-		http.header("X-CBI-State", state or 0)
-		luci.template.render("header")
-		for i, res in ipairs(maps) do
-			res:render()
-		end
-		luci.template.render("footer")
-	end
+	return {type = "cbi", model = model, target = _form}
 end
