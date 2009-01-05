@@ -131,6 +131,7 @@ s = m:section(NamedSection, wifidevs[1], "wifi-device", translate("devices"))
 s.addremove = false
 
 en = s:option(Flag, "disabled", translate("enable"))
+en.rmempty = false
 en.enabled = "0"
 en.disabled = "1"
 
