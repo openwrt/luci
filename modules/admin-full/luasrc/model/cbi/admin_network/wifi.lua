@@ -27,6 +27,7 @@ back.titleref = luci.dispatcher.build_url("admin", "network", "wireless")
 en = s:option(Flag, "disabled", translate("enable"))
 en.enabled = "0"
 en.disabled = "1"
+en.rmempty = false
 
 function en.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "0"
