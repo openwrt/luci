@@ -1,0 +1,23 @@
+diff -Nru asterisk-1.4.22.org/acinclude.m4 asterisk-1.4.22/acinclude.m4
+--- asterisk-1.4.22.org/acinclude.m4	2008-07-22 22:49:41.000000000 +0200
++++ asterisk-1.4.22/acinclude.m4	2008-11-29 15:06:28.000000000 +0100
+@@ -588,6 +588,7 @@
+ 				;;
+ 		esac
+ 		AC_MSG_RESULT(${OPENH323_BUILD})
++		OPENH323_SUFFIX="n_s"
+ 
+ 		AC_SUBST([OPENH323_SUFFIX])
+ 		AC_SUBST([OPENH323_BUILD])
+diff -Nru asterisk-1.4.22.org/configure.ac asterisk-1.4.22/configure.ac
+--- asterisk-1.4.22.org/configure.ac	2008-09-08 18:26:00.000000000 +0200
++++ asterisk-1.4.22/configure.ac	2008-11-29 15:06:28.000000000 +0100
+@@ -1259,7 +1259,7 @@
+ 	if test "${HAS_PWLIB:-unset}" != "unset"; then
+ 		AST_CHECK_OPENH323_PLATFORM()
+ 
+-		PLATFORM_PWLIB="pt_${PWLIB_PLATFORM}_r"
++		PLATFORM_PWLIB="pt_${PWLIB_PLATFORM}_r_s"
+ 
+ 		AST_CHECK_PWLIB_BUILD([PWLib], [PWLIB],
+ 			[Define if your system has the PWLib libraries.],

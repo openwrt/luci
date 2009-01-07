@@ -1,0 +1,12 @@
+diff -Nru asterisk-1.4.22.org/main/Makefile asterisk-1.4.22/main/Makefile
+--- asterisk-1.4.22.org/main/Makefile	2008-07-18 18:15:41.000000000 +0200
++++ asterisk-1.4.22/main/Makefile	2008-11-29 14:58:13.000000000 +0100
+@@ -144,7 +144,7 @@
+ ifneq ($(findstring chan_h323,$(MENUSELECT_CHANNELS)),)
+ 	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS)
+ else
+-	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS)
++	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS)
+ endif
+ 	$(CMD_PREFIX) $(ASTTOPDIR)/build_tools/strip_nonapi $@ || rm $@
+ 

@@ -1,0 +1,107 @@
+#!/bin/sh
+# Meetme.conf (conference)
+
+ast_add_conf meetme
+init_meetmeconf() {
+	ast_add_reload meetme
+	ast_enable_type meetmegeneral
+	ast_enable_type meetme
+	ast_enable_type dialplanmeetme
+}
+create_meetmeconf() {
+	file=${DEST_DIR}/meetme.conf
+	get_checksum meetme_conf $file
+	logdebug 1 "Creating meetme rooms: ${meetme_rooms}"
+	local isempty=1
+	if [ -z ${meetme_rooms} ] ; then
+		rm -f $file
+		isempty=2
+	else
+		echo "${asteriskuci_gen}${N}[general]" > $file
+		if [ ! -z ${meetme_audiobuffers} ] ; then
+			echo "audiobuffers=${meetme_audiobuffers}" >> $file
+		fi
+		echo "${N}[rooms]" >> $file
+		for i in ${meetme_rooms} ; do
+			for j in pin adminpin room ; do
+				eval meetme_$j=\${meetme_room_${i}_${j}}
+			done
+			if [ -z "${meetme_room}" ] ; then
+				meetme_room=$i
+			fi
+			local line="conf => ${meetme_room}"
+			if [ -z ${meetme_adminpin} ] ; then
+				if [ ! -z ${meetme_pin} ] ; then
+					line="${line},${meetme_pin}"
+				fi
+			else
+				line="${line},${meetme_pin},${meetme_adminpin}"
+			fi
+			echo "$line" >> $file
+		done
+	fi
+	check_checksum "$meetme_conf" "$file" || ast_meetme_restart=$isempty
+}
+
+handle_meetmegeneral() {
+	option_cb() {
+		case $1 in
+			audiobuffers)
+				meetme_audiobuffers="$2" ;;
+			*) logerror "Invalid meetme general option $1"
+		esac
+	}
+}
+
+handle_meetme() {
+	logdebug 2 "Add meetme room $1"
+	meetme_room="$1"
+	append meetme_rooms "$1" " "
+	enable_module app_meetme
+	option_cb() {
+		case $1 in
+			pin|adminpin|room)
+				logdebug 3 "Meetme option ${meetme_room}/${1}=$2"
+				eval meetme_room_${meetme_room}_${1}="$2" ;;
+			*) logerror "Invalid meetme option for $meetme_room : $1"
+		esac
+	}
+}
+
+handle_dialplanmeetme() {
+	check_add dialplanmeetme
+	option_cb() {
+		case $1 in
+			dialplan|extension|room)
+				eval "dial_meetme_$1=\"$2\""
+		esac
+	}
+}
+
+check_add_dialplanmeetme() {
+	if [ ! -z "${dial_meetme_extension}" ] ; then
+		local ext="exten => ${dial_meetme_extension},"
+
+		[ -z "${dial_meetme_dialplan}" ] && dial_meetme_dialplan=extensions
+		check_add_context ${dial_meetme_dialplan}
+		append dialplan_context_${dial_meetme_dialplan} "${ext}1,MeetMe(${dial_meetme_room})" "${N}"
+		append dialplan_context_${dial_meetme_dialplan} "${ext}n,HangUp" "${N}"
+	fi
+	for i in dialplan extension room ; do
+		eval "unset dial_meetme_$i"
+	done
+}
+
+add_dialplan_meetme() {
+	local context=$1
+	logdebug 1 "Adding Dialplan meetme $1 $2"
+	check_add_context "$context"
+	local ext="exten => $2,"
+	append dialplan_context_${context} "${ext}1,MeetMe($3)" "${N}"
+	append dialplan_context_${context} "${ext}n,HangUp" "${N}"
+}
+
+reload_meetme() astcmd "module reload app_meetme.so"
+unload_meetme() astcmd "module unload app_meetme.so"
+
+# vim: ts=2 sw=2 noet foldmethod=indent

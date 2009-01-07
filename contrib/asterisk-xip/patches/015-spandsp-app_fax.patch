@@ -1,0 +1,875 @@
+diff -Nru asterisk-1.4.22.org/apps/app_rxfax.c asterisk-1.4.22/apps/app_rxfax.c
+--- asterisk-1.4.22.org/apps/app_rxfax.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.4.22/apps/app_rxfax.c	2008-11-29 15:02:27.000000000 +0100
+@@ -0,0 +1,376 @@
++/*
++ * Asterisk -- A telephony toolkit for Linux.
++ *
++ * Trivial application to receive a TIFF FAX file
++ * 
++ * Copyright (C) 2003, Steve Underwood
++ *
++ * Steve Underwood <steveu@coppice.org>
++ *
++ * This program is free software, distributed under the terms of
++ * the GNU General Public License
++ */
++
++/*** MODULEINFO
++         <depend>spandsp</depend>
++***/
++ 
++#include "asterisk.h"
++
++ASTERISK_FILE_VERSION(__FILE__, "$Revision:$")
++
++#include <string.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <inttypes.h>
++#include <pthread.h>
++#include <errno.h>
++#include <tiffio.h>
++
++#include <spandsp.h>
++
++#include "asterisk/lock.h"
++#include "asterisk/file.h"
++#include "asterisk/logger.h"
++#include "asterisk/channel.h"
++#include "asterisk/pbx.h"
++#include "asterisk/module.h"
++#include "asterisk/translate.h"
++#include "asterisk/dsp.h"
++#include "asterisk/manager.h"
++
++static char *app = "RxFAX";
++
++static char *synopsis = "Receive a FAX to a file";
++
++static char *descrip = 
++"  RxFAX(filename[|caller][|debug]): Receives a FAX from the channel into the\n"
++"given filename. If the file exists it will be overwritten. The file\n"
++"should be in TIFF/F format.\n"
++"The \"caller\" option makes the application behave as a calling machine,\n"
++"rather than the answering machine. The default behaviour is to behave as\n"
++"an answering machine.\n"
++"Uses LOCALSTATIONID to identify itself to the remote end.\n"
++"     LOCALHEADERINFO to generate a header line on each page.\n"
++"Sets REMOTESTATIONID to the sender CSID.\n"
++"     FAXPAGES to the number of pages received.\n"
++"     FAXBITRATE to the transmition rate.\n"
++"     FAXRESOLUTION to the resolution.\n"
++"Returns -1 when the user hangs up.\n"
++"Returns 0 otherwise.\n";
++
++#define MAX_BLOCK_SIZE 240
++
++static void span_message(int level, const char *msg)
++{
++    int ast_level;
++    
++    if (level == SPAN_LOG_WARNING)
++        ast_level = __LOG_WARNING;
++    else if (level == SPAN_LOG_WARNING)
++        ast_level = __LOG_WARNING;
++    else
++        ast_level = __LOG_DEBUG;
++    ast_log(ast_level, __FILE__, __LINE__, __PRETTY_FUNCTION__, msg);
++}
++/*- End of function --------------------------------------------------------*/
++
++static void t30_flush(t30_state_t *s, int which)
++{
++    /* TODO: */
++}
++/*- End of function --------------------------------------------------------*/
++
++static void phase_e_handler(t30_state_t *s, void *user_data, int result)
++{
++    struct ast_channel *chan;
++    t30_stats_t t;
++    char local_ident[21];
++    char far_ident[21];
++    char buf[11];
++    
++    chan = (struct ast_channel *) user_data;
++    if (result == T30_ERR_OK)
++    {
++        t30_get_transfer_statistics(s, &t);
++        t30_get_far_ident(s, far_ident);
++        t30_get_local_ident(s, local_ident);
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++        ast_log(LOG_DEBUG, "Fax successfully received.\n");
++        ast_log(LOG_DEBUG, "Remote station id: %s\n", far_ident);
++        ast_log(LOG_DEBUG, "Local station id:  %s\n", local_ident);
++        ast_log(LOG_DEBUG, "Pages transferred: %i\n", t.pages_transferred);
++        ast_log(LOG_DEBUG, "Image resolution:  %i x %i\n", t.x_resolution, t.y_resolution);
++        ast_log(LOG_DEBUG, "Transfer Rate:     %i\n", t.bit_rate);
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++        manager_event(EVENT_FLAG_CALL,
++                      "FaxReceived", "Channel: %s\nExten: %s\nCallerID: %s\nRemoteStationID: %s\nLocalStationID: %s\nPagesTransferred: %i\nResolution: %i\nTransferRate: %i\nFileName: %s\n",
++                      chan->name,
++                      chan->exten,
++                      (chan->cid.cid_num)  ?  chan->cid.cid_num  :  "",
++                      far_ident,
++                      local_ident,
++                      t.pages_transferred,
++                      t.y_resolution,
++                      t.bit_rate,
++                      s->rx_file);
++        pbx_builtin_setvar_helper(chan, "REMOTESTATIONID", far_ident);
++        snprintf(buf, sizeof(buf), "%i", t.pages_transferred);
++        pbx_builtin_setvar_helper(chan, "FAXPAGES", buf);
++        snprintf(buf, sizeof(buf), "%i", t.y_resolution);
++        pbx_builtin_setvar_helper(chan, "FAXRESOLUTION", buf);
++        snprintf(buf, sizeof(buf), "%i", t.bit_rate);
++        pbx_builtin_setvar_helper(chan, "FAXBITRATE", buf);
++    }
++    else
++    {
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++        ast_log(LOG_DEBUG, "Fax receive not successful - result (%d) %s.\n", result, t30_completion_code_to_str(result));
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++    }
++}
++/*- End of function --------------------------------------------------------*/
++
++static void phase_d_handler(t30_state_t *s, void *user_data, int result)
++{
++    struct ast_channel *chan;
++    t30_stats_t t;
++    
++    chan = (struct ast_channel *) user_data;
++    if (result)
++    {
++        t30_get_transfer_statistics(s, &t);
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++        ast_log(LOG_DEBUG, "Pages transferred:  %i\n", t.pages_transferred);
++        ast_log(LOG_DEBUG, "Image size:         %i x %i\n", t.width, t.length);
++        ast_log(LOG_DEBUG, "Image resolution    %i x %i\n", t.x_resolution, t.y_resolution);
++        ast_log(LOG_DEBUG, "Transfer Rate:      %i\n", t.bit_rate);
++        ast_log(LOG_DEBUG, "Bad rows            %i\n", t.bad_rows);
++        ast_log(LOG_DEBUG, "Longest bad row run %i\n", t.longest_bad_row_run);
++        ast_log(LOG_DEBUG, "Compression type    %i\n", t.encoding);
++        ast_log(LOG_DEBUG, "Image size (bytes)  %i\n", t.image_size);
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++    }
++}
++/*- End of function --------------------------------------------------------*/
++
++static int rxfax_exec(struct ast_channel *chan, void *data)
++{
++    int res = 0;
++    char template_file[256];
++    char target_file[256];
++    char *s;
++    char *t;
++    char *v;
++    const char *x;
++    int option;
++    int len;
++    int i;
++    fax_state_t fax;
++    int calling_party;
++    int verbose;
++    int samples;
++
++    struct ast_module_user *u;
++    struct ast_frame *inf = NULL;
++    struct ast_frame outf;
++
++    int original_read_fmt;
++    int original_write_fmt;
++    
++    uint8_t __buf[sizeof(uint16_t)*MAX_BLOCK_SIZE + 2*AST_FRIENDLY_OFFSET];
++    uint8_t *buf = __buf + AST_FRIENDLY_OFFSET;
++
++    if (chan == NULL)
++    {
++        ast_log(LOG_WARNING, "Fax receive channel is NULL. Giving up.\n");
++        return -1;
++    }
++
++    span_set_message_handler(span_message);
++
++    /* The next few lines of code parse out the filename and header from the input string */
++    if (data == NULL)
++    {
++        /* No data implies no filename or anything is present */
++        ast_log(LOG_WARNING, "Rxfax requires an argument (filename)\n");
++        return -1;
++    }
++    
++    calling_party = FALSE;
++    verbose = FALSE;
++    target_file[0] = '\0';
++
++    for (option = 0, v = s = data;  v;  option++, s++)
++    {
++        t = s;
++        v = strchr(s, '|');
++        s = (v)  ?  v  :  s + strlen(s);
++        strncpy((char *) buf, t, s - t);
++        buf[s - t] = '\0';
++        if (option == 0)
++        {
++            /* The first option is always the file name */
++            len = s - t;
++            if (len > 255)
++                len = 255;
++            strncpy(target_file, t, len);
++            target_file[len] = '\0';
++            /* Allow the use of %d in the file name for a wild card of sorts, to
++               create a new file with the specified name scheme */
++            if ((x = strchr(target_file, '%'))  &&  x[1] == 'd')
++            {
++                strcpy(template_file, target_file);
++                i = 0;
++                do
++                {
++                    snprintf(target_file, 256, template_file, 1);
++                    i++;
++                }
++                while (ast_fileexists(target_file, "", chan->language) != -1);
++            }
++        }
++        else if (strncmp("caller", t, s - t) == 0)
++        {
++            calling_party = TRUE;
++        }
++        else if (strncmp("debug", t, s - t) == 0)
++        {
++            verbose = TRUE;
++        }
++    }
++
++    /* Done parsing */
++
++    u = ast_module_user_add(chan);
++
++    if (chan->_state != AST_STATE_UP)
++    {
++        /* Shouldn't need this, but checking to see if channel is already answered
++         * Theoretically asterisk should already have answered before running the app */
++        res = ast_answer(chan);
++    }
++    
++    if (!res)
++    {
++        original_read_fmt = chan->readformat;
++        if (original_read_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_read_format(chan, AST_FORMAT_SLINEAR);
++            if (res < 0)
++            {
++                ast_log(LOG_WARNING, "Unable to set to linear read mode, giving up\n");
++                return -1;
++            }
++        }
++        original_write_fmt = chan->writeformat;
++        if (original_write_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_write_format(chan, AST_FORMAT_SLINEAR);
++            if (res < 0)
++            {
++                ast_log(LOG_WARNING, "Unable to set to linear write mode, giving up\n");
++                res = ast_set_read_format(chan, original_read_fmt);
++                if (res)
++                    ast_log(LOG_WARNING, "Unable to restore read format on '%s'\n", chan->name);
++                return -1;
++            }
++        }
++        fax_init(&fax, calling_party);
++        if (verbose)
++            fax.logging.level = SPAN_LOG_SHOW_SEVERITY | SPAN_LOG_SHOW_PROTOCOL | SPAN_LOG_FLOW;
++        x = pbx_builtin_getvar_helper(chan, "LOCALSTATIONID");
++        if (x  &&  x[0])
++            t30_set_local_ident(&fax.t30_state, x);
++        x = pbx_builtin_getvar_helper(chan, "LOCALHEADERINFO");
++        if (x  &&  x[0])
++            t30_set_header_info(&fax.t30_state, x);
++        t30_set_rx_file(&fax.t30_state, target_file, -1);
++        //t30_set_phase_b_handler(&fax.t30_state, phase_b_handler, chan);
++        t30_set_phase_d_handler(&fax.t30_state, phase_d_handler, chan);
++        t30_set_phase_e_handler(&fax.t30_state, phase_e_handler, chan);
++        t30_set_ecm_capability(&fax.t30_state, TRUE);
++        t30_set_supported_compressions(&fax.t30_state, T30_SUPPORT_T4_1D_COMPRESSION | T30_SUPPORT_T4_2D_COMPRESSION | T30_SUPPORT_T6_COMPRESSION);
++        while (ast_waitfor(chan, -1) > -1)
++        {
++            inf = ast_read(chan);
++            if (inf == NULL)
++            {
++                res = -1;
++                break;
++            }
++            if (inf->frametype == AST_FRAME_VOICE)
++            {
++                if (fax_rx(&fax, inf->data, inf->samples))
++                    break;
++                samples = (inf->samples <= MAX_BLOCK_SIZE)  ?  inf->samples  :  MAX_BLOCK_SIZE;
++                len = fax_tx(&fax, (int16_t *) &buf[AST_FRIENDLY_OFFSET], samples);
++                if (len)
++                {
++                    memset(&outf, 0, sizeof(outf));
++                    outf.frametype = AST_FRAME_VOICE;
++                    outf.subclass = AST_FORMAT_SLINEAR;
++                    outf.datalen = len*sizeof(int16_t);
++                    outf.samples = len;
++                    outf.data = &buf[AST_FRIENDLY_OFFSET];
++                    outf.offset = AST_FRIENDLY_OFFSET;
++                    outf.src = "RxFAX";
++                    if (ast_write(chan, &outf) < 0)
++                    {
++                        ast_log(LOG_WARNING, "Unable to write frame to channel; %s\n", strerror(errno));
++                        break;
++                    }
++                }
++            }
++            ast_frfree(inf);
++        }
++        if (inf == NULL)
++        {
++            ast_log(LOG_DEBUG, "Got hangup\n");
++            res = -1;
++        }
++        if (original_read_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_read_format(chan, original_read_fmt);
++            if (res)
++                ast_log(LOG_WARNING, "Unable to restore read format on '%s'\n", chan->name);
++        }
++        if (original_write_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_write_format(chan, original_write_fmt);
++            if (res)
++                ast_log(LOG_WARNING, "Unable to restore write format on '%s'\n", chan->name);
++        }
++        t30_terminate(&fax.t30_state);
++    }
++    else
++    {
++        ast_log(LOG_WARNING, "Could not answer channel '%s'\n", chan->name);
++    }
++    ast_module_user_remove(u);
++    return res;
++}
++/*- End of function --------------------------------------------------------*/
++
++static int unload_module(void)
++{
++	int res;
++
++	ast_module_user_hangup_all();
++
++	res = ast_unregister_application(app);	
++	
++
++	return res;
++}
++/*- End of function --------------------------------------------------------*/
++
++static int load_module(void)
++{
++	return ast_register_application(app, rxfax_exec, synopsis, descrip);
++}
++/*- End of function --------------------------------------------------------*/
++
++AST_MODULE_INFO_STANDARD(ASTERISK_GPL_KEY, "Trivial FAX Receive Application");
++
++/*- End of file ------------------------------------------------------------*/
+diff -Nru asterisk-1.4.22.org/apps/app_txfax.c asterisk-1.4.22/apps/app_txfax.c
+--- asterisk-1.4.22.org/apps/app_txfax.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.4.22/apps/app_txfax.c	2008-11-29 15:02:27.000000000 +0100
+@@ -0,0 +1,303 @@
++/*
++ * Asterisk -- A telephony toolkit for Linux.
++ *
++ * Trivial application to send a TIFF file as a FAX
++ * 
++ * Copyright (C) 2003, Steve Underwood
++ *
++ * Steve Underwood <steveu@coppice.org>
++ *
++ * This program is free software, distributed under the terms of
++ * the GNU General Public License
++ */
++
++/*** MODULEINFO
++         <depend>spandsp</depend>
++***/
++ 
++#include "asterisk.h"
++
++ASTERISK_FILE_VERSION(__FILE__, "$Revision:$")
++
++#include <string.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <inttypes.h>
++#include <pthread.h>
++#include <errno.h>
++#include <tiffio.h>
++
++#include <spandsp.h>
++
++#include "asterisk/lock.h"
++#include "asterisk/file.h"
++#include "asterisk/logger.h"
++#include "asterisk/channel.h"
++#include "asterisk/pbx.h"
++#include "asterisk/module.h"
++#include "asterisk/translate.h"
++
++static char *app = "TxFAX";
++
++static char *synopsis = "Send a FAX file";
++
++static char *descrip = 
++"  TxFAX(filename[|caller][|debug]):  Send a given TIFF file to the channel as a FAX.\n"
++"The \"caller\" option makes the application behave as a calling machine,\n"
++"rather than the answering machine. The default behaviour is to behave as\n"
++"an answering machine.\n"
++"Uses LOCALSTATIONID to identify itself to the remote end.\n"
++"     LOCALHEADERINFO to generate a header line on each page.\n"
++"Sets REMOTESTATIONID to the receiver CSID.\n"
++"Returns -1 when the user hangs up, or if the file does not exist.\n"
++"Returns 0 otherwise.\n";
++
++#define MAX_BLOCK_SIZE 240
++
++static void span_message(int level, const char *msg)
++{
++    int ast_level;
++    
++    if (level == SPAN_LOG_WARNING)
++        ast_level = __LOG_WARNING;
++    else if (level == SPAN_LOG_WARNING)
++        ast_level = __LOG_WARNING;
++    else
++        ast_level = __LOG_DEBUG;
++    ast_log(ast_level, __FILE__, __LINE__, __PRETTY_FUNCTION__, msg);
++}
++/*- End of function --------------------------------------------------------*/
++
++#if 0
++static void t30_flush(t30_state_t *s, int which)
++{
++    /* TODO: */
++}
++/*- End of function --------------------------------------------------------*/
++#endif
++
++static void phase_e_handler(t30_state_t *s, void *user_data, int result)
++{
++    struct ast_channel *chan;
++    char far_ident[21];
++    
++    chan = (struct ast_channel *) user_data;
++    if (result == T30_ERR_OK)
++    {
++        t30_get_far_ident(s, far_ident);
++        pbx_builtin_setvar_helper(chan, "REMOTESTATIONID", far_ident);
++    }
++    else
++    {
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++        ast_log(LOG_DEBUG, "Fax send not successful - result (%d) %s.\n", result, t30_completion_code_to_str(result));
++        ast_log(LOG_DEBUG, "==============================================================================\n");
++    }
++}
++/*- End of function --------------------------------------------------------*/
++
++static int txfax_exec(struct ast_channel *chan, void *data)
++{
++    int res = 0;
++    char source_file[256];
++    char *s;
++    char *t;
++    char *v;
++    const char *x;
++    int option;
++    int len;
++    fax_state_t fax;
++    int calling_party;
++    int verbose;
++    int samples;
++    
++    struct ast_module_user *u;
++    struct ast_frame *inf = NULL;
++    struct ast_frame outf;
++
++    int original_read_fmt;
++    int original_write_fmt;
++    
++    uint8_t __buf[sizeof(uint16_t)*MAX_BLOCK_SIZE + 2*AST_FRIENDLY_OFFSET];
++    uint8_t *buf = __buf + AST_FRIENDLY_OFFSET;
++
++    if (chan == NULL)
++    {
++        ast_log(LOG_WARNING, "Fax transmit channel is NULL. Giving up.\n");
++        return -1;
++    }
++
++    span_set_message_handler(span_message);
++
++    /* The next few lines of code parse out the filename and header from the input string */
++    if (data == NULL)
++    {
++        /* No data implies no filename or anything is present */
++        ast_log(LOG_WARNING, "Txfax requires an argument (filename)\n");
++        return -1;
++    }
++    
++    calling_party = FALSE;
++    verbose = FALSE;
++    source_file[0] = '\0'; 
++
++    for (option = 0, v = s = data;  v;  option++, s++)
++    {
++        t = s;
++        v = strchr(s, '|');
++        s = (v)  ?  v  :  s + strlen(s);
++        strncpy((char *) buf, t, s - t);
++        buf[s - t] = '\0';
++        if (option == 0)
++        {
++            /* The first option is always the file name */
++            len = s - t;
++            if (len > 255)
++                len = 255;
++            strncpy(source_file, t, len);
++            source_file[len] = '\0';
++        }
++        else if (strncmp("caller", t, s - t) == 0)
++        {
++            calling_party = TRUE;
++        }
++        else if (strncmp("debug", t, s - t) == 0)
++        {
++            verbose = TRUE;
++        }
++    }
++
++    /* Done parsing */
++
++    u = ast_module_user_add(chan);
++
++    if (chan->_state != AST_STATE_UP)
++    {
++        /* Shouldn't need this, but checking to see if channel is already answered
++         * Theoretically asterisk should already have answered before running the app */
++        res = ast_answer(chan);
++    }
++    
++    if (!res)
++    {
++        original_read_fmt = chan->readformat;
++        if (original_read_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_read_format(chan, AST_FORMAT_SLINEAR);
++            if (res < 0)
++            {
++                ast_log(LOG_WARNING, "Unable to set to linear read mode, giving up\n");
++                return -1;
++            }
++        }
++        original_write_fmt = chan->writeformat;
++        if (original_write_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_write_format(chan, AST_FORMAT_SLINEAR);
++            if (res < 0)
++            {
++                ast_log(LOG_WARNING, "Unable to set to linear write mode, giving up\n");
++                res = ast_set_read_format(chan, original_read_fmt);
++                if (res)
++                    ast_log(LOG_WARNING, "Unable to restore read format on '%s'\n", chan->name);
++                return -1;
++            }
++        }
++        fax_init(&fax, calling_party);
++        if (verbose)
++	    fax.logging.level = SPAN_LOG_SHOW_SEVERITY | SPAN_LOG_SHOW_PROTOCOL | SPAN_LOG_FLOW;
++
++        x = pbx_builtin_getvar_helper(chan, "LOCALSTATIONID");
++        if (x  &&  x[0])
++            t30_set_local_ident(&fax.t30_state, x);
++        x = pbx_builtin_getvar_helper(chan, "LOCALHEADERINFO");
++        if (x  &&  x[0])
++            t30_set_header_info(&fax.t30_state, x);
++        t30_set_tx_file(&fax.t30_state, source_file, -1, -1);
++        //t30_set_phase_b_handler(&fax.t30_state, phase_b_handler, chan);
++        //t30_set_phase_d_handler(&fax.t30_state, phase_d_handler, chan);
++        t30_set_phase_e_handler(&fax.t30_state, phase_e_handler, chan);
++        t30_set_ecm_capability(&fax.t30_state, TRUE);
++        t30_set_supported_compressions(&fax.t30_state, T30_SUPPORT_T4_1D_COMPRESSION | T30_SUPPORT_T4_2D_COMPRESSION | T30_SUPPORT_T6_COMPRESSION);
++        while (ast_waitfor(chan, -1) > -1)
++        {
++            inf = ast_read(chan);
++            if (inf == NULL)
++            {
++                res = -1;
++                break;
++            }
++            if (inf->frametype == AST_FRAME_VOICE)
++            {
++                if (fax_rx(&fax, inf->data, inf->samples))
++                    break;
++                samples = (inf->samples <= MAX_BLOCK_SIZE)  ?  inf->samples  :  MAX_BLOCK_SIZE;
++                len = fax_tx(&fax, (int16_t *) &buf[AST_FRIENDLY_OFFSET], samples);
++                if (len)
++                {
++                    memset(&outf, 0, sizeof(outf));
++                    outf.frametype = AST_FRAME_VOICE;
++                    outf.subclass = AST_FORMAT_SLINEAR;
++                    outf.datalen = len*sizeof(int16_t);
++                    outf.samples = len;
++                    outf.data = &buf[AST_FRIENDLY_OFFSET];
++                    outf.offset = AST_FRIENDLY_OFFSET;
++                    if (ast_write(chan, &outf) < 0)
++                    {
++                        ast_log(LOG_WARNING, "Unable to write frame to channel; %s\n", strerror(errno));
++                        break;
++                    }
++                }
++            }
++            ast_frfree(inf);
++        }
++        if (inf == NULL)
++        {
++            ast_log(LOG_DEBUG, "Got hangup\n");
++            res = -1;
++        }
++        if (original_read_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_read_format(chan, original_read_fmt);
++            if (res)
++                ast_log(LOG_WARNING, "Unable to restore read format on '%s'\n", chan->name);
++        }
++        if (original_write_fmt != AST_FORMAT_SLINEAR)
++        {
++            res = ast_set_write_format(chan, original_write_fmt);
++            if (res)
++                ast_log(LOG_WARNING, "Unable to restore write format on '%s'\n", chan->name);
++        }
++        t30_terminate(&fax.t30_state);
++    }
++    else
++    {
++        ast_log(LOG_WARNING, "Could not answer channel '%s'\n", chan->name);
++    }
++    ast_module_user_remove(u);
++    return res;
++}
++/*- End of function --------------------------------------------------------*/
++
++static int unload_module(void)
++{
++	int res;
++
++	ast_module_user_hangup_all();
++
++	res = ast_unregister_application(app);	
++	
++
++	return res;
++}
++/*- End of function --------------------------------------------------------*/
++
++static int load_module(void)
++{
++    return ast_register_application(app, txfax_exec, synopsis, descrip);
++}
++/*- End of function --------------------------------------------------------*/
++
++AST_MODULE_INFO_STANDARD(ASTERISK_GPL_KEY, "Trivial FAX Transmit Application");
++
++/*- End of file ------------------------------------------------------------*/
+diff -Nru asterisk-1.4.22.org/build_tools/menuselect-deps.in asterisk-1.4.22/build_tools/menuselect-deps.in
+--- asterisk-1.4.22.org/build_tools/menuselect-deps.in	2008-08-14 04:02:15.000000000 +0200
++++ asterisk-1.4.22/build_tools/menuselect-deps.in	2008-11-29 15:02:27.000000000 +0100
+@@ -23,6 +23,7 @@
+ POPT=@PBX_POPT@
+ PRI=@PBX_PRI@
+ RADIUS=@PBX_RADIUS@
++SPANDSP=@PBX_SPANDSP@
+ SPEEX=@PBX_SPEEX@
+ SPEEXDSP=@PBX_SPEEXDSP@
+ SPEEX_PREPROCESS=@PBX_SPEEX_PREPROCESS@
+diff -Nru asterisk-1.4.22.org/configure.ac asterisk-1.4.22/configure.ac
+--- asterisk-1.4.22.org/configure.ac	2008-09-08 18:26:00.000000000 +0200
++++ asterisk-1.4.22/configure.ac	2008-11-29 15:02:27.000000000 +0100
+@@ -201,6 +201,7 @@
+ AST_EXT_LIB_SETUP([PWLIB], [PWlib], [pwlib])
+ AST_EXT_LIB_SETUP([OPENH323], [OpenH323], [h323])
+ AST_EXT_LIB_SETUP([RADIUS], [Radius Client], [radius])
++AST_EXT_LIB_SETUP([SPANDSP], [spandsp Library], [spandsp])
+ AST_EXT_LIB_SETUP([SPEEX], [Speex], [speex])
+ AST_EXT_LIB_SETUP([SPEEXDSP], [Speexdsp], [speexdsp])
+ AST_EXT_LIB_SETUP([SQLITE], [SQLite], [sqlite])
+@@ -1302,6 +1303,8 @@
+ 
+ AST_EXT_LIB_CHECK([RADIUS], [radiusclient-ng], [rc_read_config], [radiusclient-ng.h])
+ 
++AST_EXT_LIB_CHECK([SPANDSP], [spandsp], [fax_init], [spandsp.h], [-ltiff -ljpeg -lz])
++
+ AST_EXT_LIB_CHECK([SPEEX], [speex], [speex_encode], [speex/speex.h], [-lm])
+ 
+ # See if the main speex library contains the preprocess functions
+diff -Nru asterisk-1.4.22.org/include/asterisk/plc.h asterisk-1.4.22/include/asterisk/plc.h
+--- asterisk-1.4.22.org/include/asterisk/plc.h	2006-06-14 16:12:56.000000000 +0200
++++ asterisk-1.4.22/include/asterisk/plc.h	2008-11-29 15:02:27.000000000 +0100
+@@ -1,18 +1,17 @@
+-/*! \file
+- * \brief SpanDSP - a series of DSP components for telephony
++/*
++ * SpanDSP - a series of DSP components for telephony
+  *
+  * plc.h
+  *
+- * \author Steve Underwood <steveu@coppice.org>
++ * Written by Steve Underwood <steveu@coppice.org>
+  *
+  * Copyright (C) 2004 Steve Underwood
+  *
+  * All rights reserved.
+  *
+  * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
++ * it under the terms of the GNU General Public License version 2, as
++ * published by the Free Software Foundation.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+@@ -23,37 +22,36 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+- * This version may be optionally licenced under the GNU LGPL licence.
+- *
+- * A license has been granted to Digium (via disclaimer) for the use of
+- * this code.
++ * $Id: plc.h,v 1.15 2007/04/08 08:16:18 steveu Exp $
+  */
+ 
++/*! \file */
+ 
+-#if !defined(_PLC_H_)
+-#define _PLC_H_
+-
+-#ifdef SOLARIS
+-#include <sys/int_types.h>
+-#else
+-#if defined(__OpenBSD__) || defined( __FreeBSD__)
+-#include <inttypes.h>
+-#else
+-#include <stdint.h>
+-#endif
+-#endif
++#if !defined(_SPANDSP_PLC_H_)
++#define _SPANDSP_PLC_H_
+ 
+ /*! \page plc_page Packet loss concealment
+ \section plc_page_sec_1 What does it do?
+-The packet loss concealment module provides a suitable synthetic fill-in signal,
+-to minimise the audible effect of lost packets in VoIP applications. It is not
+-tied to any particular codec, and could be used with almost any codec which does not
++The packet loss concealment module provides a synthetic fill-in signal, to minimise
++the audible effect of lost packets in VoIP applications. It is not tied to any
++particular codec, and could be used with almost any codec which does not
+ specify its own procedure for packet loss concealment.
+ 
+-Where a codec specific concealment procedure exists, the algorithm is usually built
++Where a codec specific concealment procedure exists, that algorithm is usually built
+ around knowledge of the characteristics of the particular codec. It will, therefore,
+ generally give better results for that particular codec than this generic concealer will.
+ 
++The PLC code implements an algorithm similar to the one described in Appendix 1 of G.711.
++However, the G.711 algorithm is optimised for 10ms packets. Few people use such small
++packets. 20ms is a much more common value, and longer packets are also quite common. The
++algorithm has been adjusted with this in mind. Also, the G.711 approach causes an
++algorithmic delay, and requires significant buffer manipulation when there is no packet
++loss. The algorithm used here avoids this. It causes no delay, and achieves comparable
++quality with normal speech.
++
++Note that both this algorithm, and the one in G.711 are optimised for speech. For most kinds
++of music a much slower decay on bursts of lost packets give better results.
++
+ \section plc_page_sec_2 How does it work?
+ While good packets are being received, the plc_rx() routine keeps a record of the trailing
+ section of the known speech signal. If a packet is missed, plc_fillin() is called to produce
+@@ -83,7 +81,7 @@
+   correct steadily fall. Therefore, the volume of the synthesized signal is made to decay
+   linearly, such that after 50ms of missing audio it is reduced to silence.
+ 
+-- When real speech resumes, an extra 1/4 pitch period of sythetic speech is blended with the
++- When real speech resumes, an extra 1/4 pitch period of synthetic speech is blended with the
+   start of the real speech. If the erasure is small, this smoothes the transition. If the erasure
+   is long, and the synthetic signal has faded to zero, the blending softens the start up of the
+   real signal, avoiding a kind of "click" or "pop" effect that might occur with a sudden onset.
+@@ -110,6 +108,9 @@
+     the pitch assessment. */
+ #define PLC_HISTORY_LEN         (CORRELATION_SPAN + PLC_PITCH_MIN)
+ 
++/*!
++    The generic packet loss concealer context.
++*/
+ typedef struct
+ {
+     /*! Consecutive erased samples */
+@@ -127,12 +128,13 @@
+ } plc_state_t;
+ 
+ 
+-#ifdef __cplusplus
+-extern "C" {
++#if defined(__cplusplus)
++extern "C"
++{
+ #endif
+ 
+-/*! Process a block of received audio samples.
+-    \brief Process a block of received audio samples.
++/*! Process a block of received audio samples for PLC.
++    \brief Process a block of received audio samples for PLC.
+     \param s The packet loss concealer context.
+     \param amp The audio sample buffer.
+     \param len The number of samples in the buffer.
+@@ -147,13 +149,18 @@
+     \return The number of samples synthesized. */
+ int plc_fillin(plc_state_t *s, int16_t amp[], int len);
+ 
+-/*! Process a block of received V.29 modem audio samples.
+-    \brief Process a block of received V.29 modem audio samples.
++/*! Initialise a packet loss concealer context.
++    \brief Initialise a PLC context.
+     \param s The packet loss concealer context.
+-    \return A pointer to the he packet loss concealer context. */
++    \return A pointer to the the packet loss concealer context. */
+ plc_state_t *plc_init(plc_state_t *s);
+ 
+-#ifdef __cplusplus
++/*! Free a packet loss concealer context.
++    \param s The packet loss concealer context.
++    \return 0 for OK. */
++int plc_release(plc_state_t *s);
++
++#if defined(__cplusplus)
+ }
+ #endif
+ 
+diff -Nru asterisk-1.4.22.org/makeopts.in asterisk-1.4.22/makeopts.in
+--- asterisk-1.4.22.org/makeopts.in	2008-06-12 21:08:20.000000000 +0200
++++ asterisk-1.4.22/makeopts.in	2008-11-29 15:02:27.000000000 +0100
+@@ -138,6 +138,9 @@
+ RADIUS_INCLUDE=@RADIUS_INCLUDE@
+ RADIUS_LIB=@RADIUS_LIB@
+ 
++SPANDSP_INCLUDE=@SPANDSP_INCLUDE@
++SPANDSP_LIB=@SPANDSP_LIB@
++
+ SPEEX_INCLUDE=@SPEEX_INCLUDE@
+ SPEEX_LIB=@SPEEX_LIB@
+ 

@@ -1,0 +1,119 @@
+#!/bin/sh
+#
+# Author: Michael Geddes  <michael at frog dot wheelycreek dot net>
+# Copyright 2008 Michael Geddes
+# Licensed under GPL
+
+ast_add_module lastcall
+
+init_lastcall() {
+ #
+ ast_enable_type calllist
+ ast_enable_type calllistdefault
+}
+
+check_add_calllist() {
+	local context=${opt_calllist_zonename}
+	if [ ! -z "$context" ] ; then
+		logdebug 1 "Adding calllist context ${context}"
+		[ -z $opt_calllist_dialplan ] && opt_calllist_dialplan=${opt_calllist_general_dialplan}
+		[ -z $opt_calllist_dialplan ] && opt_calllist_dialplan=extensions
+		[ -z $opt_calllist_listname ] && opt_calllist_listname=lastcall
+		[ -z $opt_calllist_length ] && opt_calllist_length=${opt_calllist_general_length}
+		[ -z $opt_calllist_length ] && opt_calllist_length=10
+		[ -z $opt_calllist_dialcontext ] && opt_calllist_dialcontext=${opt_calllist_general_dialcontext}
+		[ -z $opt_calllist_dialcontext ] && opt_calllist_dialcontext=default
+		[ -z $opt_calllist_calltype ] && opt_calllist_calltype=macro
+		
+		[ -z ${opt_calllist_extension} ] \
+			|| add_dialplan_lastcall ${opt_calllist_dialplan} "${opt_calllist_extension}" "${opt_calllist_listname}" "${opt_calllist_length}" "${opt_calllist_tagname}" "${opt_calllist_dialcontext}"
+		enable_lastcall
+		add_section_lastcall ${context} "${opt_calllist_listname}" "${opt_calllist_length}" "${opt_calllist_calltype}"
+	fi
+	for i in  zonename extension dialplan length listname ; do
+		eval "unset opt_calllist_${i}"
+	done
+}
+
+add_section_lastcall() {
+	local context=$1
+	local name=$2
+	local queuelen=$3
+	local calltype=$4
+
+	[ "${calltype}" = "macro" ]  && context=macro-${1}
+
+	if check_add_context ${context} ; then
+		local ext="exten => s,"
+		case "${calltype}" in
+			gosub)
+				enable_module app_stack
+				append_dialplan_context ${context}  "${ext}1,Macro(lastcallstore,\${EXTEN},${name},${queuelen})"
+				append_dialplan_context ${context}  "${ext}n,Return" ;;
+			gosub_s)
+				enable_module app_stack
+				append_dialplan_context ${context}  "${ext}1,Macro(lastcallstore,\${ARG1},${name},${queuelen})"
+				append_dialplan_context ${context}  "${ext}n,Return" ;;
+			macro)
+				enable_module app_macro
+				append_dialplan_context ${context}  "${ext}1,Macro(lastcallstore,\${ARG1},${name},${queuelen})" ;;
+		esac
+	else
+		logerror "Lastcall section ${context} already added"
+	fi
+}
+
+handle_calllist() {
+	check_add calllist
+	logdebug 2 "Loading Call List: ${opt_calllist_zonename}"
+	opt_calllist_zonename=$1
+	option_cb() {
+		case "$1" in
+			extension|dialplan|length|listname|calllist|tagname|dialcontext|calltype)
+				logdebug 1 "Setting opt_calllist_$1=\"${2}\""
+				eval "opt_calllist_${1}=\"${2}\"" ;;
+			*)
+				logerror "Unknown option $1 in calllist ${opt_calllist_zonename}" ;;
+		esac
+	}
+}
+
+handle_calllistdefault() {
+	logdebug 2 "Loading Call List General options"
+	option_cb() {
+		case $1 in
+			dialplan|length|dialcontext)
+				eval "opt_calllist_general_${1}=\"${2}\"" ;;
+			*) logerror "Unknown option $1 in calllistdefault" ;;
+		esac
+	}
+}
+
+add_dialplan_lastcall(){
+	local context=$1
+	logdebug 1 "Adding Dialplan lastcall $1 $2"
+	check_add_context "$context"
+	enable_lastcall
+	local queue=$3
+	local len=$4
+	local tag=$5
+	local dialcontext=$6
+	[ "${queue}" == lastcall ] && queue=
+	append dialplan_context_${context} "exten => $2,1,Macro(lastcallapp,${queue},${len},${dialcontext},${tag})" "${N}"
+}
+
+enable_lastcall() {
+	if [ "${dialplan_do_add_lastcall}" != "1" ] ; then
+		logdebug 2 "Enabling lastcall"
+		append dialplan_globals "LASTCALLZONE=\"${asterisk_zone}\"" "$N"
+		append_include "macros/lastcall.conf"
+		dialplan_do_add_lastcall=1
+		enable_module app_macro
+		enable_module func_callerid
+		enable_module app_sayunixtime
+		enable_module app_playback
+		enable_module func_db
+		enable_format gsm
+	fi
+}
+# vim: ts=2 sw=2 noet foldmethod=indent

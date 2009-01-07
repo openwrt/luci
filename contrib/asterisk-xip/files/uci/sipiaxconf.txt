@@ -1,0 +1,114 @@
+
+target (SIP|IAX)_{name}  - Handle options for outgoing dialing
+	timeout            - Timeout for dialing out with this target
+	prefix             - Prefix required to dial out on this target
+	internationalprefix- Prefix required to dial internation on this target
+	alwaysinternational- True if this target always requires internation prefix
+	countrycode        - Default International country code for this target
+
+sipgeneral
+sip [sip_]{name}
+	type               - Type of sip connection - very important.
+	register           - Set to yes to register
+	registerextension  - 'Extension' to use in register string in place of username
+
+
+	extension          - Extension to use for this phone (doesn't have to be unique)
+	selfmailbox        - Set to yes to have dialing own extensions go to mailbox
+	incoming (list)    - Specify the incoming context for ringing
+
+	timeout            - Timeout for dialing out with this target
+	prefix             - Prefix required to dial out on this target
+	internationalprefix- Prefix required to dial internation on this target
+	alwaysinternational- True if this target always requires internation prefix
+	countrycode        - Default International country code for this target
+
+	rtpstart           - rtp.conf option
+	rtpend             - rtp.conf option
+	rtpdtmftimeout     - rtp.conf option dtmftimeout
+	rtcpinterval       - rtp.conf option
+	rtpchecksums       - rtp.conf option
+
+
+iaxgeneral
+iax [iax_]{name}
+	extension Extensions to use for this phone 
+
+	selfmailbox        - Set to yes to have dialing own extensions go to mailbox
+	incoming (list)    - Specify the incoming context for ringing
+
+	timeout            - Timeout for dialing out with this target
+	prefix             - Prefix required to dial out on this target
+	internationalprefix- Prefix required to dial internation on this target
+	alwaysinternational- True if this target always requires internation prefix
+	countrycode        - Default International country code for this target
+
+General asterisk options - see asterisk doco
+
+Options          |Type    |sip    |sip  |iax    |iax
+                 |        |general|     |general|
+-----------------+--------+-------+-----+-------+-----
+writeprotect      Integer  no      no    yes     yes
+static            Integer  no      no    yes     yes
+port              Integer  yes     yes   no      no
+maxexpirey        Integer  yes     yes   no      no
+rtptimeout        Integer  yes     yes   no      no
+rtpholdtimeout    Integer  yes     yes   no      no
+defaultexpirey    Integer  yes     yes   no      no
+registertimeout   Integer  yes     yes   no      no
+registerattempts  Integer  yes     yes   no      no
+call-limit        Integer  yes     yes   no      no
+# ip addr
+bindaddr          IP Addr  yes     yes   no      no
+externip          IP Addr  yes     yes   no      no
+localnet          Net/mask yes     yes   no      no
+permit            Net/mask no      yes   no      no
+deny              Net/mask no      yes   no      no
+realm             Domain   yes     yes   no      no
+domain            Domain   yes     yes   no      no
+context           context  yes     yes   yes     yes
+notifymimetype    Mimetype yes     yes   no      no
+canreinvite       Yes/No   yes     yes   yes     yes
+nat               Yes/No   yes     yes   no      no
+allowoverlap      Yes/No   yes     yes   no      no
+allowsubscribe    Yes/No   yes     yes   no      no
+allowtransfer     Yes/No   yes     yes   no      no
+videosupport      Yes/No   yes     yes   no      no
+pedantic          Yes/No   no      yes   no      no
+trustrpid,        Yes/No   no      yes   no      no
+promiscredir      Yes/No   no      yes   no      no
+useclientcode     Yes/No   no      yes   no      no
+dtmfmode          Enum     yes     yes   no      no
+type              Enum     no      yes   no      yes
+insecure          Enum     no      yes   no      no
+callingpres       Enum     no      yes   no      no
+progressinband    Enum     no      yes   no      no
+allow             List     yes     yes   yes     yes
+disallow          List     yes     yes   yes     yes
+register          Register yes     yes   no      no
+username          String   no      yes   no      yes
+secret            String   no      yes   no      yes
+md5secret         String   no      yes   no      yes
+host              String   no      yes   no      yes
+mailbox           String   no      yes   no      yes
+auth              String   no      no    no      yes
+callgroup         String   no      yes   no      no
+pickupgroup       String   no      yes   no      no
+language          String   no      yes   no      no
+accountcode       String   no      yes   no      no
+setvar            String   no      yes   no      no
+callerid          String   no      yes   no      no
+amaflags          String   no      yes   no      no
+subscribecontext  String   no      yes   no      no
+maxcallbitrate    String   no      yes   no      no
+rfc2833compensate String   no      yes   no      no
+mailbox           String   no      yes   no      no
+template          String   no      peer  no      no
+fromdomain        String   no      peer  no      no
+regexten          String   no      peer  no      no
+fromuser          String   no      peer  no      no
+qualify           String   no      peer  no      no
+defaultip         String   no      peer  no      no
+sendrpid          String   no      peer  no      no
+outboundproxy     String   no      peer  no      no
+

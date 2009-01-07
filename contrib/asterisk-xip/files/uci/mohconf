@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# Music on Hold
+
+ast_add_conf moh
+init_mohconf() {
+	ast_add_reload moh
+	ast_enable_type moh
+	ast_enable_type musiconhold
+}
+
+
+handle_musiconhold() handle_moh "$1"
+
+moh_list="name"
+moh_optlist="mode directory random application format"
+
+valid_moh() {
+	is_in_list $1 ${moh_list} ${moh_optlist}
+	return $?
+}
+
+handle_moh() {
+	check_add moh
+	moh_context=$1
+	logdebug 1 "Loading MOH context: ${moh_context}"
+
+	enable_module res_musiconhold
+
+	option_cb() {
+		if valid_moh $1 $2 ; then
+			eval "moh_var_${1}=\"$2\""
+		else
+			logerror "Invalid music-on-hold option for ${moh_context} : $1"
+		fi
+	}
+}
+
+check_add_moh() {
+	if [ ! -z "${moh_var_directory}" ] ; then
+		[ -z "${moh_var_name}" ] && moh_var_name=default
+		[ -z "${moh_var_mode}" ] && moh_var_mode=files
+		append moh_lines "[${moh_var_name}]" "${N}${N}"
+
+		for i in ${moh_optlist} ; do
+			eval "local curopt=\"\${moh_var_$i}\""
+			[ -z "${curopt}" ] || append moh_lines "$i=${curopt}" "${N}"
+		done
+	fi
+	for i in ${moh_list} ${moh_optlist} ; do
+		eval "unset moh_var_$i"
+	done
+}
+
+create_mohconf() {
+	file=${DEST_DIR}/musiconhold.conf
+	get_checksum moh_conf $file
+	local isempty=1
+	if [ -z "${moh_lines}" ] ; then
+		isempty=2
+		rm -f $file
+	else
+		echo "${asteriskuci_gen}" > $file
+		echo "${moh_lines}" >> $file
+		unset moh_lines
+	fi
+	check_checksum "$moh_conf" "$file"  || ast_moh_restart=$isempty
+}
+
+reload_moh() astcmd "moh reload"
+unload_moh() astcmd "module unload res_musiconhold.so"
+
+
+# vim: ts=2 sw=2 noet foldmethod=indent

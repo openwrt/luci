@@ -1,0 +1,12 @@
+diff -Nru asterisk-1.4.22.org/Makefile asterisk-1.4.22/Makefile
+--- asterisk-1.4.22.org/Makefile	2008-09-08 22:15:42.000000000 +0200
++++ asterisk-1.4.22/Makefile	2008-11-29 15:05:12.000000000 +0100
+@@ -215,7 +215,7 @@
+ endif
+ 
+ ifneq ($(PROC),ultrasparc)
+-  ASTCFLAGS+=$(shell if $(CC) -march=$(PROC) -S -o /dev/null -xc /dev/null >/dev/null 2>&1; then echo "-march=$(PROC)"; fi)
++  #ASTCFLAGS+=$(shell if $(CC) -march=$(PROC) -S -o /dev/null -xc /dev/null >/dev/null 2>&1; then echo "-march=$(PROC)"; fi)
+ endif
+ 
+ ifeq ($(PROC),ppc)

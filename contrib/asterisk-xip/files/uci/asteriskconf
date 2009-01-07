@@ -1,0 +1,144 @@
+#!/bin/sh
+
+# Asterisk.conf
+
+init_asteriskconf() {
+
+	ast_add_reload dialplan
+	ast_enable_type asterisk
+	ast_enable_type setglobal
+	ast_enable_type include
+	# ast_enable_type hardware
+	ast_enable_type hardwarereboot
+
+
+	asterisk_zone="Australia/Perth"
+	asterisk_spooldir="${DEST}/var/spool/asterisk"
+	asterisk_logdir="${DEST}/var/log/asterisk"
+	asterisk_agidir="${DEST}/usr/lib/asterisk/agi-bin"
+	return 0
+}
+
+asterisk_option_list="verbose debug quiet dontwarn timestamp execincludes \
+highpriority initcrypto nocolor dumpcore languageprefix internal_timing \
+systemname maxcalls maxload cache_record_files record_cache_dir \
+transmit_silence_during_record transcode_via_sln runuser rungroup"
+asterisk_path_list="spooldir logdir agidir"
+
+valid_asterisk_option() {
+	is_in_list $1 ${asterisk_option_list} ${asterisk_path_list} zone 
+	return $?
+}
+
+create_asteriskconf() {
+	# echo ${DEST_DIR}
+	file=${DEST_DIR}/asterisk.conf
+	get_checksum asterisk_conf $file
+
+	echo "${asteriskuci_gen}${N}[directories]
+astetcdir => ${DEST_DIR}
+astmoddir => ${DEST}/usr/lib/asterisk/modules
+astvarlibdir => ${DEST}/usr/lib/asterisk
+astdatadir => ${DEST}/usr/lib/asterisk
+astrundir => /var/run" > $file
+	for i in ${asterisk_path_list} ; do
+		eval "value=\"\${asterisk_$i}\""
+		if [ ! -z $value ] ; then
+			echo "ast$i => $value" >> $file
+		fi
+	done
+	echo "${N}[options]" >> $file
+
+	for i in ${asterisk_option_list} ; do
+		eval "value=\"\${asterisk_$i}\""
+		if [ ! -z $value ] ; then
+			echo "$i => $value" >> $file
+		fi
+	done
+
+	echo "${N}; Changing the following lines may compromise your security.
+[files]
+astctlpermissions = 0660
+astctlowner = root
+astctlgroup = nogroup
+astctl = asterisk.ctl " >> $file
+	check_checksum "$asterisk_conf" "$file"  || ast_restart=1
+
+}
+
+handle_asterisk() {
+	option_cb() {
+		case $1 in
+			zone)
+				asterisk_zone="$2";;
+			*)
+				if valid_asterisk_option $1 $2 ; then
+					eval "asterisk_${1}=\"$2\""
+				else
+					logerror "Invalid Asterisk option: $1"
+				fi
+		esac
+	}
+}
+
+handle_include(){
+	option_cb() {
+		case $1 in
+			dialplan|dialplan_ITEM*)
+				append dialplan_includes "#include <$2>" "${N}"
+			;;
+			dialplan_COUNT) ;;
+			*) logerror "Invalid option \"$1\" for include" ;;
+		esac
+	}
+}
+
+handle_setglobal() {
+	option_cb() {
+		case $1 in
+			set_COUNT) ;;
+			set|set_ITEM*)
+				if [ "${2%=*}" == "${2}" ] ; then
+					logerror "SetGlobal option \"$2\" not of the form VARIABLE=Value"
+				else
+					append dialplan_globals "" "${N}"
+				fi ;;
+			*) logerror "Invalid option \"$1\" for setglobal" ;;
+		esac
+	}
+}
+
+handle_hardwarereboot() handle_hardware reboot
+
+# Handle hardware options (reboot) for Softphones
+handle_hardware() {
+	case $1 in
+		reboot)
+			hardware_method=
+			hardware_param=
+			option_cb() {
+				case $1 in
+					method)
+						hardware_method="$2";;
+					param)
+						case ${hardware_method} in
+							web) append hardware_reboots "wget -q $2 -O - >&- 2>&-" "${N}" ;;
+							system) append hardware_reboots "$2 >&- 2>&-" "${N}" ;; 
+							*) logerror "Invalid Hardware reboot method: ${hardware_method}"
+						esac
+				esac
+
+			}
+		;;
+		*) logerror "Invalid Hardware option: $1"
+	esac
+}
+
+reboot_hardware() {
+	cd /tmp
+	eval ${hardware_reboots}
+}
+
+
+
+# vim: ts=2 sw=2 noet foldmethod=indent

@@ -1,0 +1,48 @@
+#!/bin/sh
+
+ast_add_module clock
+
+init_clock() {
+	ast_enable_type dialplanclock
+}
+
+add_dialplan_talkclock() {
+	local context=$1
+	local zone=${asterisk_zone}
+	[ ! -z "$3" ] && zone="$3"
+	local date_format="$4"
+	local time_format="$5"
+	logdebug 1 "Adding Dialplan talking clock $1 $2"
+	check_add_context "$context"
+	local ext="exten => $2,"
+	if [ "${dialplan_add_include_clock}" != 1 ] ; then
+		dialplan_add_include_clock=1
+		enable_format gsm
+		enable_module app_sayunixtime
+		append_include "macros/clock.conf"
+	fi
+	append dialplan_context_${context} "${ext}1,Macro(talkingclock,${time_format},${date_format},${zone})" "${N}"
+}
+
+handle_dialplanclock() {
+	check_add dialplanclock
+	option_cb() {
+		case $1 in
+			dialplan|extension|zone|timeformat|dateformat)
+				eval "dial_clock_$1=\"$2\"" ;;
+		esac
+	}
+}
+
+check_add_dialplanclock() {
+	if [ ! -z "${dial_clock_extension}" ] ; then
+		[ -z ${dial_clock_dialplan} ] && dial_clock_dialplan=default
+		add_dialplan_talkclock "${dial_clock_dialplan}" "${dial_clock_extension}" \
+	 		"${dial_clock_zone}"  "${dial_clock_dateformat}" "${dial_clock_timeformat}"
+	fi
+	for i in dialplan extension zone timeformat dateformat ; do
+		eval "unset dial_clock_$i"
+	done
+}
+
+# vim: ts=2 sw=2 noet foldmethod=indent
