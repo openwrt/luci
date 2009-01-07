@@ -552,7 +552,7 @@ endef
 define Package/luci-app-asterisk
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for Asterisk PBX
-  DEPENDS+=@BROKEN +luci-admin-core +PACKAGE_luci-app-asterisk:asterisk14-xip
+  DEPENDS+=@BROKEN +luci-admin-core +PACKAGE_luci-app-asterisk:asterisk14-xip-core
 endef
 
 define Package/luci-app-asterisk/install
