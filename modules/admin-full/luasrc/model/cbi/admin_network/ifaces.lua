@@ -216,12 +216,20 @@ if has_pppd or has_3g then
 	)
 	defaultroute:depends("proto", "ppp")
 	defaultroute:depends("proto", "3g")
+	defaultroute.rmempty = false
+	function defaultroute.cfgvalue(...)
+		return ( AbstractValue.cfgvalue(...) or '1' )
+	end
 
 	peerdns = s:option(Flag, "peerdns",
 	 translate("network_interface_peerdns"),
 	 translate("network_interface_peerdns_desc")
 	)
 	peerdns:depends("proto", "ppp")
+	peerdns.rmempty = false
+	function peerdns.cfgvalue(...)
+		return ( AbstractValue.cfgvalue(...) or '1' )
+	end
 
 	ipv6 = s:option(Flag, "ipv6", translate("network_interface_ipv6") )
 	ipv6:depends("proto", "ppp")
