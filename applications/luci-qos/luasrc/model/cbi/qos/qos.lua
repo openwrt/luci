@@ -73,7 +73,7 @@ p2p:value("gnu", "Gnutella")
 p2p:value("kazaa", "Kazaa")
 p2p.rmempty = true
 
-p = s:option(ListValue, "proto", translate("protocol"))
+p = s:option(Value, "proto", translate("protocol"))
 p:value("", translate("all"))
 p:value("tcp", "TCP")
 p:value("udp", "UDP")
