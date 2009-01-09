@@ -172,6 +172,12 @@ function cbi_combobox(id, values, def, man) {
 		} else {
 			obj.value = sel.options[sel.selectedIndex].value;
 		}
+
+		try {
+			cbi_d_update();
+		} catch (e) {
+			//Do nothing
+		}
 	})
 }
 
