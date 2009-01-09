@@ -40,7 +40,6 @@ s:option(Value, "src_ip", translate("firewall_redirect_srcip")).optional = true
 s:option(Value, "src_mac", translate("firewall_redirect_srcmac")).optional = true
 
 sport = s:option(Value, "src_port", translate("firewall_redirect_srcport"))
-sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
@@ -54,7 +53,6 @@ proto:value("tcpudp", "TCP+UDP")
 
 dport = s:option(Value, "src_dport", translate("firewall_redirect_srcdport"))
 dport.size = 5
-dport.optional = true
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")

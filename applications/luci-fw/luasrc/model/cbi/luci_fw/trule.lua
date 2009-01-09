@@ -52,13 +52,11 @@ s:option(Value, "dest_ip", translate("firewall_rule_destip")).optional = true
 s:option(Value, "src_mac", translate("firewall_rule_srcmac")).optional = true
 
 sport = s:option(Value, "src_port", translate("firewall_rule_srcport"))
-sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
 
 dport = s:option(Value, "dest_port", translate("firewall_rule_destport"))
-dport.optional = true
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")
