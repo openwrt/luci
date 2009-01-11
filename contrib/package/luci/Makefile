@@ -321,7 +321,7 @@ endef
 
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-admin-full
+  DEPENDS:=+luci-admin-full +luci-json
   TITLE:=LuCI Freifunk module
 endef
 
