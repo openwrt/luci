@@ -46,7 +46,7 @@ reload_uci() {
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	case ${ENABLE_ASTERISK-no} in
+	case ${ENABLE_ASTERISK:-no} in
 		uci)  start_uci ;;
 		yes)
 			[ -d /var/run ] || mkdir -p /var/run
