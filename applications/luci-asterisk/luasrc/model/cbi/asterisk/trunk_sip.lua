@@ -16,19 +16,54 @@ $Id$
 local ast = require("luci.asterisk")
 
 --
--- Specific SIP trunk
+-- SIP trunk info
 --
-if arg[1] then
+if arg[2] == "info" then
+	form = SimpleForm("asterisk", "SIP Trunk Information")
+	form.reset  = false
+	form.submit = "Back to overview"
+
+	local info, keys = ast.sip.peer(arg[1])
+	local data = { }
+
+	for _, key in ipairs(keys) do
+		data[#data+1] = {
+			key = key,
+			val = type(info[key]) == "boolean"
+				and ( info[key] and "yes" or "no" )
+				or  ( info[key] == nil or #info[key] == 0 )
+					and "(none)"
+					or  tostring(info[key])
+		}
+	end
+
+	itbl = form:section(Table, data, "SIP Trunk %q" % arg[1])
+	itbl:option(DummyValue, "key", "Key")
+	itbl:option(DummyValue, "val", "Value")
+
+	function itbl.parse(...)
+		luci.http.redirect(
+			luci.dispatcher.build_url("admin", "asterisk", "trunks")
+		)
+	end
+
+	return form
+
+--
+-- SIP trunk config
+--
+elseif arg[1] then
 	cbimap = Map("asterisk", "Edit SIP Trunk")
 
 	peer = cbimap:section(NamedSection, arg[1])
 	peer.hidden = {
-		type = "peer"
+		type    = "peer",
+		qualify = "yes",
 	}
 
 	back = peer:option(DummyValue, "_overview", "Back to trunk overview")
 	back.value = ""
-	back.titleref = luci.dispatcher.build_url("admin", "asterisk", "trunks", "sip")
+	back.titleref = luci.dispatcher.build_url("admin", "asterisk", "trunks")
 
 	sipdomain = peer:option(Value, "host", "SIP Domain")
 	sipport   = peer:option(Value, "port", "SIP Port")
@@ -42,6 +77,9 @@ if arg[1] then
 	password  = peer:option(Value, "secret", "Authorization Password")
 	password.password = true
 
+	outboundproxy = peer:option(Value, "outboundproxy", "Outbound Proxy")
+	outboundport  = peer:option(Value, "outboundproxyport", "Outbound Proxy Port")
+
 	register = peer:option(Flag, "register", "Register with peer")
 	register.enabled  = "yes"
 	register.disabled = "no"
@@ -50,69 +88,13 @@ if arg[1] then
 	regext:depends({register="yes"})
 
 	didval = peer:option(ListValue, "_did", "Number of assigned DID numbers")
+	didval:value("", "(none)")
 	for i=1,24 do didval:value(i) end
 
-	return cbimap
-
---
--- Trunk overview
---
-else
-	cbimap = Map("asterisk", "asterisk", "")
-
-	local sip_peers = { }
-	cbimap.uci:foreach("asterisk", "sip",
-		function(s)
-			if s.type == "peer" then
-				s.name = s['.name']
-				s.info = ast.sip.peer(s.name)
-				sip_peers[s.name] = s
-			end
-		end)
-
-
-	sip_table = cbimap:section(Table, sip_peers, "SIP Trunks")
-	sip_table.template = "cbi/tblsection"
-	sip_table.extedit  = luci.dispatcher.build_url("admin", "asterisk", "trunks", "sip", "%s")
-
-	name = sip_table:option(DummyValue, "name")
-	user = sip_table:option(DummyValue, "username")
-
-	host = sip_table:option(DummyValue, "host")
-	function host.cfgvalue(self, s)
-		if sip_peers[s].info.address then
-			return "%s:%i" %{ sip_peers[s].info.address, sip_peers[s].info.port }
-		else
-			return "n/a"
-		end
-	end
-
-	context = sip_table:option(DummyValue, "context")
-	context.href = luci.dispatcher.build_url("admin", "asterisk", "dialplan")
-
-	nat = sip_table:option(DummyValue, "nat")
-	function nat.cfgvalue(self, s)
-		return sip_peers[s].info.Nat or "none"
-	end
-
-	online = sip_table:option(DummyValue, "online")
-	function online.cfgvalue(self, s)
-		if sip_peers[s].info.online == nil then
-			return "n/a"
-		else
-			return sip_peers[s].info.online
-				and "yes" or "no (%s)" % sip_peers[s].info.Status:lower()
-		end
-	end
-
-	delay = sip_table:option(DummyValue, "delay")
-	function delay.cfgvalue(self, s)
-		if sip_peers[s].info.online then
-			return "%i ms" % sip_peers[s].info.delay
-		else
-			return "n/a"
-		end
-	end
+	dialplan = peer:option(ListValue, "context", "Dialplan Context")
+	dialplan:value("", "(default)")
+	cbimap.uci:foreach("asterisk", "dialplan",
+		function(s) dialplan:value(s['.name']) end)
 
 	return cbimap
 end

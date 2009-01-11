@@ -40,9 +40,14 @@ function index()
 		cbi("asterisk-mod-res-feature"), "Feature Module Configuration", 9 )
 
 
-	entry({"admin", "asterisk"},                   cbi("asterisk/main"),       "Asterisk", 99).i18n = "asterisk"
-	entry({"admin", "asterisk", "trunks"},         cbi("asterisk/trunks"),     "Trunks",    1)
-	entry({"admin", "asterisk", "trunks", "sip"},  cbi("asterisk/trunk_sip"),  "SIP",       1).leaf = true
+	entry({"admin", "asterisk"},                    cbi("asterisk/main"),        "Asterisk",  99).i18n = "asterisk"
+
+	entry({"admin", "asterisk", "phones"},          cbi("asterisk/phones"),      "Phones",     1)
+	entry({"admin", "asterisk", "phones", "sip"},   cbi("asterisk/phone_sip"),   nil,          1).leaf = true
+	entry({"admin", "asterisk", "phones", "exten"}, cbi("asterisk/phone_exten"), "Extensions", 2).leaf = true
+
+	entry({"admin", "asterisk", "trunks"},          cbi("asterisk/trunks"),      "Trunks",     2)
+	entry({"admin", "asterisk", "trunks", "sip"},   cbi("asterisk/trunk_sip"),   nil,          1).leaf = true
 
 
 end

@@ -15,13 +15,13 @@ $Id$
 
 local ast = require("luci.asterisk")
 
-cbimap = Map("asterisk", "Registered Trunks")
+cbimap = Map("asterisk", "Registered Phones")
 cbimap.pageaction = false
 
 local sip_peers = { }
 cbimap.uci:foreach("asterisk", "sip",
 	function(s)
-		if s.type == "peer" then
+		if s.type ~= "peer" then
 			s.name = s['.name']
 			s.info = ast.sip.peer(s.name)
 			sip_peers[s.name] = s
@@ -29,21 +29,21 @@ cbimap.uci:foreach("asterisk", "sip",
 	end)
 
 
-sip_table = cbimap:section(TypedSection, "sip", "SIP Trunks")
+sip_table = cbimap:section(TypedSection, "sip", "SIP Phones")
 sip_table.template  = "cbi/tblsection"
-sip_table.extedit   = luci.dispatcher.build_url("admin", "asterisk", "trunks", "sip", "%s")
+sip_table.extedit   = luci.dispatcher.build_url("admin", "asterisk", "phones", "sip", "%s")
 sip_table.addremove = true
 
 sip_table.hidden = {
-	type    = "peer",
-	qualify = "yes"
+	type        = "friend",
+	qualify     = "yes",
+	host        = "dynamic",
+	nat         = "no",
+	canreinvite = "no"
 }
 
 function sip_table.filter(self, s)
-	return s and (
-		cbimap.uci:get("asterisk", s, "type") == "peer" or
-		cbimap.uci:get("asterisk", s, "type") == nil
-	)
+	return s and cbimap.uci:get("asterisk", s, "type") ~= "peer"
 end
 
 function sip_table.create(self, section)
@@ -59,13 +59,17 @@ function sip_table.parse(self, ...)
 	if created then
 		cbimap.uci:save("asterisk")
 		luci.http.redirect(luci.dispatcher.build_url(
-			"admin", "asterisk", "trunks", "sip", created
+			"admin", "asterisk", "phones", "sip", created
 		))
 	end
 end
 
 
 user = sip_table:option(DummyValue, "username")
+function user.cfgvalue(self, s)
+	return sip_peers[s] and sip_peers[s].callerid or
+		AbstractValue.cfgvalue(self, s)
+end
 
 host = sip_table:option(DummyValue, "host")
 function host.cfgvalue(self, s)
@@ -78,9 +82,6 @@ end
 
 context = sip_table:option(DummyValue, "context")
 context.href = luci.dispatcher.build_url("admin", "asterisk", "dialplan")
-function context.cfgvalue(...)
-	return AbstractValue.cfgvalue(...) or "(default)"
-end
 
 nat = sip_table:option(DummyValue, "nat")
 function nat.cfgvalue(self, s)
@@ -93,7 +94,7 @@ function online.cfgvalue(self, s)
 		return "n/a"
 	else
 		return sip_peers[s] and sip_peers[s].info.online
-			and "yes" or "no (%s)" %{
+			and "yes" or "no (%s)" % {
 				sip_peers[s] and sip_peers[s].info.Status:lower() or "unknown"
 			}
 	end
@@ -111,7 +112,7 @@ end
 info = sip_table:option(Button, "_info", "Info")
 function info.write(self, s)
 	luci.http.redirect(luci.dispatcher.build_url(
-		"admin", "asterisk", "trunks", "sip", s, "info"
+		"admin", "asterisk", "phones", "sip", s, "info"
 	))
 end
 
