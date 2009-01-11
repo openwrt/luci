@@ -13,6 +13,16 @@ $Id$
 
 -%>
 
+<%-
+	if type(self.hidden) == "table" then
+		for k, v in pairs(self.hidden) do
+-%>
+	<input type="hidden" name="cbid.<%=self.config%>.<%=section%>.<%=k%>" value="<%=luci.util.pcdata(v)%>" />
+<%-
+		end
+	end
+%>
+
 <% self:render_children(section, scope or {}) %>
 
 <% if self.error and self.error[section] then -%>
