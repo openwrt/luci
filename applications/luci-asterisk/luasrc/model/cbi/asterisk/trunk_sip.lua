@@ -42,9 +42,9 @@ if arg[1] then
 	password  = peer:option(Value, "secret", "Authorization Password")
 	password.password = true
 
-	register = peer:option(ListValue, "register", "Register with peer")
-	register:value("yes", "on")
-	register:value("no", "off")
+	register = peer:option(Flag, "register", "Register with peer")
+	register.enabled  = "yes"
+	register.disabled = "no"
 
 	regext = peer:option(Value, "registerextension", "Extension to register (optional)")
 	regext:depends({register="yes"})
