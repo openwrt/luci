@@ -34,6 +34,10 @@ if arg[1] then
 	sipport   = peer:option(Value, "port", "SIP Port")
 	sipport.default = 5060
 
+	sipnat    = peer:option(Flag, "nat", "NAT between this device and provider")
+	sipnat.enabled  = "yes"
+	sipnat.disabled = "no"
+
 	username  = peer:option(Value, "username", "Authorization ID")
 	password  = peer:option(Value, "secret", "Authorization Password")
 	password.password = true
@@ -96,7 +100,8 @@ else
 		if sip_peers[s].info.online == nil then
 			return "n/a"
 		else
-			return sip_peers[s].info.online and "yes" or "no"
+			return sip_peers[s].info.online
+				and "yes" or "no (%s)" % sip_peers[s].info.Status:lower()
 		end
 	end
 

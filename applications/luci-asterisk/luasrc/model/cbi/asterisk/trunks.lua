@@ -57,7 +57,8 @@ function online.cfgvalue(self, s)
 	if sip_peers[s].info.online == nil then
 		return "n/a"
 	else
-		return sip_peers[s].info.online and "yes" or "no"
+		return sip_peers[s].info.online
+			and "yes" or "no (%s)" % sip_peers[s].info.Status:lower()
 	end
 end
 
