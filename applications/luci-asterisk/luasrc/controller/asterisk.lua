@@ -39,4 +39,10 @@ function index()
 	entry({"admin", "services", "asterisk", "mod", "res", "feature"},
 		cbi("asterisk-mod-res-feature"), "Feature Module Configuration", 9 )
 
+
+	entry({"admin", "asterisk"},                   cbi("asterisk/main"),       "Asterisk", 99).i18n = "asterisk"
+	entry({"admin", "asterisk", "trunks"},         cbi("asterisk/trunks"),     "Trunks",    1)
+	entry({"admin", "asterisk", "trunks", "sip"},  cbi("asterisk/trunk_sip"),  "SIP",       1).leaf = true
+
+
 end
