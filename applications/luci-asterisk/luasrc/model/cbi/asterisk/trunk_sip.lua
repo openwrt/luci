@@ -21,12 +21,32 @@ local ast = require("luci.asterisk")
 if arg[1] then
 	cbimap = Map("asterisk", "Edit SIP Trunk")
 
-	peer = cbimap:section(NamedSection, arg[1], "Foo")
+	peer = cbimap:section(NamedSection, arg[1])
+	peer.hidden = {
+		type = "peer"
+	}
 
-	name = peer:option(DummyValue, "username")
+	back = peer:option(DummyValue, "_overview", "Back to trunk overview")
+	back.value = ""
+	back.titleref = luci.dispatcher.build_url("admin", "asterisk", "trunks", "sip")
 
-	outproxy = peer:option(Value, "outboundproxy")
-	
+	sipdomain = peer:option(Value, "host", "SIP Domain")
+	sipport   = peer:option(Value, "port", "SIP Port")
+	sipport.default = 5060
+
+	username  = peer:option(Value, "username", "Authorization ID")
+	password  = peer:option(Value, "secret", "Authorization Password")
+	password.password = true
+
+	register = peer:option(ListValue, "register", "Register with peer")
+	register:value("yes", "on")
+	register:value("no", "off")
+
+	regext = peer:option(Value, "registerextension", "Extension to register (optional)")
+	regext:depends({register="yes"})
+
+	didval = peer:option(ListValue, "_did", "Number of assigned DID numbers")
+	for i=1,24 do didval:value(i) end
 
 	return cbimap
 
