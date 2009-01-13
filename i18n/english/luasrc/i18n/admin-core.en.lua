@@ -11,7 +11,7 @@ a_i_i_admin1 = 'This is the administration area of <abbr title="Lua Configuratio
 a_i_i_admin2 = '<abbr title="Lua Configuration Interface">LuCI</abbr> is a free, flexible, and user friendly graphical interface for configuring OpenWrt Kamikaze.'
 a_i_i_admin3 = 'On the following pages you can adjust all important settings of your router.'
 a_i_i_admin4 = 'Notice: In <abbr title="Lua Configuration Interface">LuCI</abbr> changes have to be confirmed by clicking Changes - Save &amp; Apply before being applied.'
-a_i_i_admin5 = 'As we are always want to improve this interface we are looking forward to your feedback and suggestions.'
+a_i_i_admin5 = 'As we always want to improve this interface we are looking forward to your feedback and suggestions.'
 a_i_i_admin6 = 'And now have fun with your router!'
 a_i_i_team = 'The <abbr title="Lua Configuration Interface">LuCI</abbr> Team'
 a_i_luci1 = 'Here you can customize the settings and the functionality of <abbr title="Lua Configuration Interface">LuCI</abbr>.'
