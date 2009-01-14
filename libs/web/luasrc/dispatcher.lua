@@ -130,7 +130,18 @@ function dispatch(request)
 	ctx.path = request
 	ctx.urltoken   = ctx.urltoken or {}
 
-	require "luci.i18n".setlanguage(require "luci.config".main.lang)
+	local conf = require "luci.config"
+	local lang = conf.main.lang
+	if lang == "auto" then
+		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
+		for lpat in aclang:gmatch("[%w]+") do
+			if conf.languages[lpat] then
+				lang = lpat
+				break
+			end
+		end
+        end
+	require "luci.i18n".setlanguage(lang)
 
 	local c = ctx.tree
 	local stat
