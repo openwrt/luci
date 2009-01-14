@@ -46,9 +46,11 @@ reload_uci() {
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	case ${ENABLE_ASTERISK:-no} in
+	case ${ENABLE_ASTERISK-no} in
 		uci)  start_uci ;;
 		yes)
+			# Handle zappseudo in the wrong place.
+			[ -e /dev/zappseudo ] && [ ! -d /dev/zap -o ! -e /dev/zap/pseudo ] && mkdir -p /dev/zap && ln -s /dev/zappseudo /dev/zap/pseudo
 			[ -d /var/run ] || mkdir -p /var/run
 			[ -d $DEST/var/log/asterisk ] || mkdir -p $DEST/var/log/asterisk
 			[ -d $DEST/var/spool/asterisk ] || mkdir -p $DEST/var/spool/asterisk
