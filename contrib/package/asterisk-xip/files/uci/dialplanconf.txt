@@ -21,7 +21,7 @@ dialplangeneral
 	internationalout
 
 dialplan {name} 	- Define a dialplan context
-	include
+	include (list)
 	#=mailbox|voice|meetme|saytime|clock
 
 dialplanexten  - Add number to Dialplan for ringing an extension
@@ -35,7 +35,9 @@ dialplanexten  - Add number to Dialplan for ringing an extension
 	answerfirst  - Answer before dialing
 
 dialplangoto
-			dialplan|extension|target)
+	dialplan     - Dialplan to add to
+	extension    - Number to dial
+	target       - Goto  Target
 
 dialplansaytime
 	dialplan     - Dialplan to add to
@@ -52,8 +54,11 @@ dialzone {name} - Outgoing zone.
 	addprefix     - Prexix required to dial out.
 	localprefix   - Prefix for a local call
 
-inzone
-	TODO
+inzone {name}
+	include (list) - Other zones to include
+	match (list)  - Number to match
+	caller (list) - Caller number to match
+	goto          - Forward to zone.
 
 incominggeneral
 	allowtransfer  - Default Allow transfers for Dial()
@@ -61,9 +66,9 @@ incominggeneral
 	answerfirst    - Default value for incoming calls
 	mailbox        - Default global mailbox for incoming calls
 	lastcall       - Subroutine Context to store Last incoming call
-	lastcalltype   - Method for calling lastcall (default goto) goto|gosub|macro|start
+	lastcalltype   - Method for calling lastcall (default macro) goto|gosub|macro|start
 	missed         - Subroutine context to store last missed call dialplan context
-	missedtype     - Method for calling 'missed' context  goto|gosub|macro|start
+	missedtype     - Method for calling 'missed' context  macro|gosub|macro|start
 
 incoming {name} - Incoming zone
 	allowtransfer    - Allow transfers for Dialed extension
@@ -78,7 +83,7 @@ incoming {name} - Incoming zone
 	aftertimeout     - Target macro/goto once the timeout has past, before voicemail
 	aftertimeouttype - Type of the target (macro|start|goto)
 	lastcall         - Subroutine Context to store Last incoming call
-	lastcalltype     - Method for calling lastcall (default goto) goto|gosub|macro|start
+	lastcalltype     - Method for calling lastcall (default macro) goto|gosub|macro|start
 	missed           - Subroutine context to store last missed call dialplan context
 	missedtype       - Method for calling 'missed' context  goto|gosub|macro|start
 
