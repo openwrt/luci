@@ -293,6 +293,7 @@ reload_asterisk() {
 		( sleep 5; reboot_hardware ) &
 	fi
 }
+
 startup_asterisk() {
 	DEST="${1%/}"
 	DEFAULT=$DEST/etc/default/asterisk
@@ -302,6 +303,7 @@ startup_asterisk() {
 	[ -d ${asterisk_spooldir} ] || mkdir -p ${asterisk_spooldir}
 	[ -d /var/spool/asterisk ] || mkdir -p /var/spool/asterisk
 	[ -h $DEST/usr/lib/asterisk/astdb ] || ln -sf /var/spool/asterisk/astdb $DEST/usr/lib/asterisk/astdb
+	[ -e /dev/zappseudo ] && [ ! -d /dev/zap -o ! -e /dev/zap/pseudo ] && mkdir -p /dev/zap && ln -s /dev/zappseudo /dev/zap/pseudo
 
 	$DEST/usr/sbin/asterisk -C /tmp/asterisk/asterisk.conf $UCIOPTIONS -f 2>&1 > ${asterisk_logdir}/asterisk_proc &
 	# Wait a bit then reboot the hardware
@@ -353,6 +355,8 @@ reload_uci_asterisk() {
 	DEFAULT=$DEST/etc/default/asterisk
 
 	if [ -r /var/run/asterisk.ctl ] ; then
+
+		[ -e /dev/zappseudo ] && [ ! -d /dev/zap -o ! -e /dev/zap/pseudo ] && mkdir -p /dev/zap && ln -s /dev/zappseudo /dev/zap/pseudo
 		if setup_asterisk "$DEST" ; then
 			# Selective reload modules.
 			reload_asterisk
