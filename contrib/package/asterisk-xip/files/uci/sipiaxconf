@@ -28,10 +28,11 @@ add_incoming() {
 # Add to internal extensions
 add_extension() {
 	logdebug 1 "Adding $1/$2 extension to $3"
-	(eval [ -z "\${dialplan_ext_$2}" ] )\
-		&& append dialplan_exts "$3" " "
+	eval "local ext=\"\${dialplan_ext_$3}\""
+	[ -z "${ext}" ] && append dialplan_exts "$3" " "
 	local lower=`echo $1|tr [A-Z] [a-z]`
-	eval "${lower}_last_extension=\"$3\""
+	eval "local ext=\"\${${lower}_last_extension}\""
+	[ -z "${ext}" ] && eval "${lower}_last_extension=\"$3\""
 	append dialplan_ext_$3 $1/${2} "&"
 }
 
@@ -40,6 +41,7 @@ check_append_local() {
 	logdebug 3 "added local context for ${1}"
 	eval "local isadded=\"\${dialplan_add_local_${extension}-0}\""
 	if [ "$isadded" != "1" ] ; then
+		logdebug 3 "Not added before - adding"
 		eval "dialplan_add_local_${extension}=1"
 		append dialplan_locals "$extension"
 		eval  "dialplan_local_${1}_context=\"${2}\""
@@ -64,12 +66,12 @@ append_dialplan_locals(){
 			#add_dialplan_goto ${newcontext} _[0-9#*+]. ${x_last_context}
 			# add_dialplan_include ${newcontext}  ${x_last_context}
 
-			append_dialplan_context ${newcontext} "exten => _.,1,Set(CALLERID(num)=${extension})"
+			append_dialplan_context ${newcontext} "exten => ${match_all},1,Set(CALLERID(num)=${extension})"
 			if [ ! -z "${x_mailbox}" ] ; then
 				[ "${x_selfmailbox}" = "yes" ] && append_dialplan_context ${newcontext} "exten => ${extension},2,VoiceMailMain(${x_mailbox})"
 				[ ! -z "${dialplan_voiceboxext}" ]  && append_dialplan_context ${newcontext} "exten => ${dialplan_voiceboxext},2,VoiceMailMain(${x_mailbox})"
 			fi
-			append_dialplan_context ${newcontext} "exten => _.,2,Goto(${x_context},\${EXTEN},1)"
+			append_dialplan_context ${newcontext} "exten => ${match_all},2,Goto(${x_context},\${EXTEN},1)"
 		fi
 	done
 }
@@ -464,9 +466,9 @@ handle_iaxgeneral() {
 
 handle_iax() {
 	check_add iaxitems
-	append iax_sections "[$1]" "$N$N"
 	iax_type=peer
 	iax_sectionname="${1#iax_}"
+	append iax_sections "[${iax_sectionname}]" "$N$N"
 	iax_last_context=-
 	iax_selfmailbox=no
 	enable_module chan_iax2
@@ -475,20 +477,16 @@ handle_iax() {
 			type)
 				iax_type=$2
 				append iax_sections "type=$2" "$N" ;;
-			allow_LENGTH) ;;
+			allow_LENGTH|incoming_LENGTH) ;;
 			allow|allow_ITEM*)
 				split_append iax_sections allow= "$2" "${N}" enable_format ;;
-			extension)
-				logdebug 1 "Adding IAX extension $2 for $iax_sectionname"
-				eval [ -z "\${dialplan_ext_$2}" ] && dialplan_exts="${dialplan_exts} $2"
-				iax_last_extension="$2"
-				append dialplan_ext_$2 "IAX2/${iax_sectionname}" "&" ;;
-			extension)    add_extension IAX ${iax_sectionname} "$2" ;;
+			extension_LENGTH) ;;
+			extension|extension_ITEM*)    add_extension IAX ${iax_sectionname} "$2" ;;
 			context)
 				eval iax_last_context="$2" ;;
 			selfmailbox)
 				eval iax_selfmailbox="$2" ;;
-			incoming)
+			incoming|incoming_ITEM*)
 				add_incoming IAX ${iax_sectionname} "$3" ;;
 			timeout|prefix|internationalprefix|alwaysinternational|countrycode)
 				eval "target_$1_IAX_${sectionname}=\"$2\"" ;;
