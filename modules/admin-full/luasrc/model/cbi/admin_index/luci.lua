@@ -25,6 +25,7 @@ end
 c = m:section(NamedSection, "main", "core", translate("general"))
 
 l = c:option(ListValue, "lang", translate("language"))
+l:value("auto")
 
 local i18ndir = luci.i18n.i18ndir .. "default."
 for k, v in pairs(luci.config.languages) do
