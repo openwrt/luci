@@ -25,6 +25,8 @@ init_dialplanconf() {
 	return 0
 }
 
+match_all="_[0-9*+#]."
+
 dialplangeneral_list="static writeprotect canreinvite clearglobalvars"
 dialplangeneral_list_ex="lastdialed lastdialedtype voiceboxext answerfirst dialtimeout allowtransfer international internationalout"
 
@@ -137,25 +139,73 @@ add_dialplan_goto() {
 	append dialplan_context_${context} "exten => $2,1,Goto($3,\${EXTEN},1)" "${N}"
 }
 
-handle_inzone() {
-	# TODO - Incoming zones.
-	return 0
+dialplan_inzone_list="match caller goto"
+
+valid_dialplan_inzone() {
+	is_in_list $1 ${valid_inzone_list}
+	return $?
 }
 
-#generate_inzone() {
-	#[local_Vista]
-	#exten => _X.,1,Ringing()
-	#exten => _X.,n,Dial(SIP/Nokia,5)
-	#exten => _X.,n,Answer
-	#exten => _X.,n,wait(1)
-	#exten => _X.,n,Set(EXITCONTEXT=xyzzy)
-	#exten => _X.,n,Dial(SIP/Nokia,15,rd)
-	#exten => _X.,n,Hangup
-	#[xyzzy]
-	#exten => 1,1,Noop(xyzzy)
-	#exten => 1,n,SayAlpha(b)
-	#exten => 1,n,Hangup
-#}
+check_append_inzone() {
+	local context="${1}"
+	eval "local isadded=\"\${dialplan_add_inzone_${context}-0}\""
+	if [ "$isadded" != "1" ] ; then
+		eval "dialplan_add_inzone_${check}=1"
+		append inzone_contexts "$context"
+		return 0
+	else
+		return 1
+	fi
+}
+
+handle_inzone() {
+
+	context_name=${1}
+	check_append_inzone ${context_name}
+
+	option_cb(){
+		case $1 in
+			goto)       eval "inzone_${context_name}_goto=\"\$2\"" ;;
+			match_ITEM*|match)   append inzone_${context_name}_match "$2" " " ;;
+			caller_ITEM*|caller) append inzone_${context_name}_caller "$2" " " ;;
+			include_ITEM*|include) append inzone_${context_name}_include "$2" " " ;;
+			match_LENGTH|caller_LENGTH|include_LENGTH) ;;
+			*) logerror "Invalid Dialplan inzone option: $1" ;;
+		esac
+	}
+}
+
+
+append_dialplan_inzone() {
+	local file=$1
+	for context in ${inzone_contexts} ; do
+		for i in goto match caller include ; do
+			eval "iz_$i=\"\${inzone_${context}_${i}}\""
+		done
+		if [ -z "${iz_goto}" ] ; then
+			logerror "Missing goto for inzone: ${context}"
+		elif [ -z "${iz_match}" -a -z "${iz_caller}" ] ; then
+			logerror "Missing match for inzone: ${context}"
+		else
+			echo "${N}[${context}]" >> ${file}
+			for curmatch in ${iz_include} ; do
+				echo "include => ${curmatch}" >> $file
+			done
+
+			local gotoline="Goto(${iz_goto},\${EXTEN},1)"
+			[ -z "${iz_match}" ] && iz_match=${match_all}
+			for curmatch in ${iz_match} ; do
+				if [ -z "${iz_caller}" ] ; then
+					echo "exten => ${curmatch},1,${gotoline}" >> $file
+				else
+					for curcaller in ${iz_caller} ; do
+						echo "exten => ${curmatch}/${curcaller},1,${gotoline}" >> $file
+					done
+				fi
+			done
+		fi
+	done
+}
 
 append_dialplan_dialzone()  {
 	local file=$1
@@ -199,24 +249,25 @@ append_dialplan_dialzone()  {
 		if [ ! -z "${diallist}" ] ; then
 			logdebug 2 "International: ${diallist}"
 			while [ ! -z "$diallist" ] ; do
-				cur=${diallist%%,*}
-				nvar=${diallist#*,}
+				cur="${diallist%%,*}"
+				nvar="${diallist#*,}"
 
-				local curlen=`expr length ${cur}`
+				local curlen=`expr length "${cur}"`
 				if [ "$alwaysinternational" = "yes" ]  ; then
 					echo "exten => _${cur},1,Goto(${dialz}_dial,${addprefix}\${EXTEN:${curlen}},1)" >> $file
 				else
 					echo "exten => _${cur}.,1,Goto(${zonename}_check,${addprefix}\${EXTEN:${curlen}},1)" >> $file
 				fi
 				[ "$nvar" == "$diallist" ] && break
-				diallist=${nvar}
+				diallist="${nvar}"
 			done
 
 			if [ "$alwaysinternational" != "yes" ]  ; then
+				logdebug 2 "Not Always International:"
 				# Check for local country code
 				echo "[${zonename}_check]" >> $file
 
-				local locallen=`expr length ${countrycode}`
+				local locallen=`expr length "${countrycode}"`
 				echo "exten => _${countrycode}X.,1,Goto(${localzone-default},${localprefix-0}\${EXTEN:${locallen}},1)" >> $file
 				echo "exten => _X.,1,Goto(${dialz}_dial,${internationalprefix}\${EXTEN},1)" >> $file
 			fi
@@ -269,7 +320,7 @@ append_dialplan_dialzone_out(){
 				local lastparam="\${EXTEN}"
 				local lastmacro=${lastdialed}
 				local lastmacrotype=${lastdialedtype}
-				[ -z ${lastdialedtype} ]  && lastdialedtype=goto
+				[ -z ${lastdialedtype} ]  && lastdialedtype=macro
 
 				local jumpmacroline=
 				gen_jumpmacro jumpmacroline "${ext}${en}" "" "${lastmacrotype}" "${lastmacro}" "${lastparam}"
@@ -375,7 +426,7 @@ append_dialplan_incoming(){
 			enable_module func_callerid
 			local lastparam="\${CALLERID(num)}"
 			local lastmacrotype="${iz_lastcalltype}"
-			[ -z "${iz_lastcalltype}" ] && lastmacrotype=goto
+			[ -z "${iz_lastcalltype}" ] && lastmacrotype=macro
 			local lastmacro=${iz_lastcall}
 			append_jumpmacro "${context}" "${ext}${item}" "" "${lastmacrotype}" "${lastmacro}" "${lastparam}"
 			item="n,"
@@ -383,7 +434,7 @@ append_dialplan_incoming(){
 		if [ ! -z "${iz_missed}" ] ; then
 			enable_module func_callerid
 			local missedparam="\${CALLERID(num)}"
-			[ -z "${iz_missedtype}" ] && iz_missedtype=goto
+			[ -z "${iz_missedtype}" ] && iz_missedtype=macro
 
 			append_dialplan_context ${context}  "${ext}${item}Set(lcsMissed=\${CALLERID(num)})"
 			item="n,"
@@ -504,7 +555,10 @@ create_dialplanconf() {
 
 	append_dialplan_extensions "$file"
 
+	append_dialplan_inzone "$file"
+
 	append_dialplan_incoming "$file"
+
 
 	# append_dialplan_lastcall "$file"
 
