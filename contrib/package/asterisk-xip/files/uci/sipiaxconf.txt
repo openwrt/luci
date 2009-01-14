@@ -13,7 +13,7 @@ sip [sip_]{name}
 	registerextension  - 'Extension' to use in register string in place of username
 
 
-	extension          - Extension to use for this phone (doesn't have to be unique)
+	extension (list)   - Extension to use for this phone (doesn't have to be unique). First one is used to set the incoming callerid.
 	selfmailbox        - Set to yes to have dialing own extensions go to mailbox
 	incoming (list)    - Specify the incoming context for ringing
 
@@ -32,7 +32,7 @@ sip [sip_]{name}
 
 iaxgeneral
 iax [iax_]{name}
-	extension Extensions to use for this phone 
+	extension (list)   - Extension to use for this phone (doesn't have to be unique). First one is used to set the incoming callerid.
 
 	selfmailbox        - Set to yes to have dialing own extensions go to mailbox
 	incoming (list)    - Specify the incoming context for ringing
