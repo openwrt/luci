@@ -54,21 +54,24 @@ check_add_voicebox() {
 		[ -z ${voicebox_tz} ] && voicebox_tz=homeloc
 		[ -z ${voicebox_name} ] && voicebox_name=OpenWRT
 
+		logdebug 1 "Adding in order options"
 		for i in password name email pager ; do
 			eval "local value=\"\${voicebox_$i}\""
 			line="${line}${value},"
 		done
 
 		# Then add named options.
+		logdebug 2 "Adding in named options"
 		for i in ${voicebox_listopt} ; do
 			eval val=\${voicebox_$i}
-			[ -z ${val} ] || append  line "$i=$val" \|
+			[ -z "${val}" ] || append  line "$i=$val" \|
 		done
 
+		logdebug 2 "Check for empty"
 		# Check if the current voicebox context has anything
-		eval local cur=\${voicebox_section_$voicebox_context}
+		eval local cur="\${voicebox_section_$voicebox_context}"
 		# if not add it to the list of contexts used
-		[ -z $cur ] && append voice_contextlist "${voicebox_context}" " "
+		[ -z "$cur" ] && append voice_contextlist "${voicebox_context}" " "
 
 		# Then add the voicebox line to the context
 		logdebug 4 "Add Voicebox $line to ${voicebox_context}"
@@ -124,8 +127,8 @@ handle_voicegeneral() {
 
 handle_voicemail() {
 	check_add voicebox
-	voicebox_context=${1%[-_]*}
-	if [ ${voicebox_context} == $1 ] ; then
+	voicebox_context="${1%[-_]*}"
+	if [ "${voicebox_context}" == "$1" ] ; then
 		voicebox_context=default
 	fi
 	voicebox_number=${1#*[-_]}
@@ -134,7 +137,7 @@ handle_voicemail() {
 			zone) voicebox_tz="$2" ;;
 			*)
 				if valid_voicebox $1 $2 ; then
-					eval voicebox_$1="$2"
+					eval "voicebox_$1=\"$2\""
 				else
 					logerror "Invalid voicebox option: $1"
 				fi
