@@ -12,10 +12,12 @@ sip [sip_]{name}
 	register           - Set to yes to register
 	registerextension  - 'Extension' to use in register string in place of username
 
-
 	extension (list)   - Extension to use for this phone (doesn't have to be unique). First one is used to set the incoming callerid.
 	selfmailbox        - Set to yes to have dialing own extensions go to mailbox
 	incoming (list)    - Specify the incoming context for ringing
+
+	domain (list)      - List of valid doamins to match
+	localnet (list)    - List of nets considered local (and therefor require no NAT)
 
 	timeout            - Timeout for dialing out with this target
 	prefix             - Prefix required to dial out on this target
