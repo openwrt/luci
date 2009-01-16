@@ -22,14 +22,13 @@ function t.cfgvalue()
 	return luci.fs.readfile(ipkgfile) or ""
 end
 
+function t.write(self, section, data)
+	return luci.fs.writefile(ipkgfile, data)
+end
+
 f:append(Template("admin_system/ipkg"))
 
 function f.handle(self, state, data)
-	if state == FORM_VALID then
-		if (luci.fs.readfile(ipkgfile) or "") ~= data.lines then
-			luci.fs.writefile(ipkgfile, data.lines)
-		end
-	end
 	return true
 end
 
