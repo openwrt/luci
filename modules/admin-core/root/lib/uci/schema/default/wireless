@@ -281,6 +281,24 @@ config variable
 	option datatype boolean
 
 config variable
+	option name 'sw_merge'
+	option section 'wireless.wifi-iface'
+	option title 'Disable Ad-Hoc HW beacon timer (atheros)'
+	option datatype boolean
+
+config variable
+	option name 'nosbeacon'
+	option section 'wireless.wifi-iface'
+	option title 'Disable station HW beacon timer (atheros)'
+	option datatype boolean
+
+config variable
+	option name 'probereq'
+	option section 'wireless.wifi-iface'
+	option title 'Disable probe responses (atheros)'
+	option datatype boolean
+
+config variable
 	option name 'macpolicy'
 	option section 'wireless.wifi-iface'
 	option title 'MAC-Address Filter (atheros)'
