@@ -217,6 +217,7 @@ append_dialplan_dialzone()  {
 		echo "${N}[${zonename}]" >> $file
 		eval "dialz=\${dzone_match_use_${zonename}-}"
 
+		logdebug 3 "Find international options for zone ${zonename} from ${dialz}"
 		for v in prefix internationalprefix alwaysinternational countrycode ; do
 			eval "local $v=\${target_${v}_${dialz}:-}"
 			eval logdebug 3 "\"${v} = '\${$v}'\""
@@ -251,6 +252,7 @@ append_dialplan_dialzone()  {
 			while [ ! -z "$diallist" ] ; do
 				cur="${diallist%%,*}"
 				nvar="${diallist#*,}"
+				logdebug 4 "Adding international ${cur}"
 
 				local curlen=`expr length "${cur}"`
 				if [ "$alwaysinternational" = "yes" ]  ; then
@@ -637,7 +639,19 @@ handle_dialplanexten() {
 check_add_dialplanexten() {
 	if [ ! -z "${dial_exten_dialplan}" -a ! -z "${dial_exten_extension}" ] ; then
 
-		local dialtarget=${dial_exten_type}/${dial_exten_dialextension+@}${dial_exten_dialextension}${dial_exten_target}
+		local dialext_type=
+		local dialext_ext=
+		if ! split_targettype dialext_type dialext_ext "${dial_exten_target}" ; then
+			if [ -z "${dial_exten_type}" ] ; then
+				logerror "No extension type specified for ${dial_exten_dialplan} ${dial_exten_extension}"
+				return 1
+			fi
+			dialext_type="${dial_exten_type}"
+			dialext_ext="${dial_exten_target}"
+		fi
+
+
+		local dialtarget="${dialext_type}/${dialexten_ext}${dial_exten_dialextension+/}${dial_exten_dialextension}"
 
 		check_add_context ${dial_exten_dialplan}
 		add_dialplan_exten "${dial_exten_dialplan}" "${dial_exten_extension}" \
@@ -691,8 +705,9 @@ handle_dialzone() {
 		logdebug 2 "Dialzone $1/$2"
 		case $1  in
 			uses)
-				local areatype=${2%[-/]*}
-				local areaname=${2#*[-/]}
+				local areatype=
+				local areaname=
+				split_targettype areatype areaname "$2"
 				logdebug 3 "Added: $areatype $areaname"
 				eval "local isadded=\"\${dzone_${areatype}_${areaname}-0}\""
 				if [ "${isadded}" != "1" ] ; then
@@ -768,6 +783,49 @@ handle_incominggeneral() {
 	}
 }
 
+add_incoming_context() {
+	local context=$1
+	eval "local added=\${dialplan_incoming_${context}_added}"
+	if [ "${added}" != "1" ] ; then
+		append dialplan_extensions_incoming "${context}" " "
+		eval "dialplan_incoming_${context}_added=1"
+	fi
+
+}
+
+# Add to incoming ringing
+add_incoming() {
+	local rhs="$3"
+	
+	while [ ! -z "$rhs" ] ; do
+		cur=${rhs%%,*}
+		nvar=${rhs#*,}
+		add_incoming_context ${cur}
+		append dialplan_incoming_${cur} "$1/$2" "&" 
+		[ "$nvar" == "$rhs" ] && break
+		rhs=${nvar}
+	done
+}
+
+to_upper() {
+	eval "$1=`echo \"$2\"|tr [a-z] [A-Z]`"
+}
+to_lower() {
+	eval "$1=`echo \"$2\"|tr [A-Z] [a-z]`"
+}
+
+split_targettype() { # TYPE target inputEntry
+	local l_targettype="${3%[-_/]*}"
+	if [ "${l_targettype}" == "$3" ] ; then
+		return 1
+	fi
+	local l_targetname="${3#*[-_/]}"
+	to_upper "$1" "${l_targettype}"
+	eval "$2=\"${l_targetname}\""
+	return 0
+}
+
+
 handle_incoming() {
 	incoming_context=$1
 	incoming_list=
@@ -785,9 +843,15 @@ handle_incoming() {
 				eval "incoming_${incoming_context}_${1}=\"$2\""
 				;;
 			target|target_ITEM*)
-				append dialplan_incoming_${incoming_context} "$2" "&"
+				local targettype=
+				local targetname=
+				if split_targettype targettype targetname "${2}" ; then
+					append dialplan_incoming_${incoming_context} "${targettype}/${targetname}" "&"
+				else
+					logerror "No target type specified for target=$2 in ${incoming_context}"
+				fi
 				;;
-			target_COUNT) ;;
+			target_COUNT|member_COUNT) ;;
 			*) logerror "Invalid option $1 in incoming" ;;
 		esac
 	}
