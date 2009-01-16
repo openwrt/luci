@@ -322,3 +322,4 @@ hostnames = 'Hostnames'
 hostnames_entries = 'Host entries'
 hostnames_hostname = 'Hostname'
 hostnames_address = 'IP address'
+luci_components = "LuCI Components"

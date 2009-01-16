@@ -40,12 +40,18 @@ function index()
 	page.title  = i18n("overview", "Übersicht")
 	page.order  = 10
 	page.index = true
-	
+
 	local page  = node("admin", "index", "luci")
 	page.target = cbi("admin_index/luci")
 	page.title  = i18n("a_i_ui", "Oberfläche")
-	
-	entry({"admin", "index", "logout"}, call("action_logout"), i18n("logout"))
+	page.order  = 10
+
+	entry({"admin", "index", "components"}, call("redir_components"), i18n("luci_components", "LuCI Components"), 20)
+	entry({"admin", "index", "logout"}, call("action_logout"), i18n("logout"), 90)
+end
+
+function redir_components()
+	luci.http.redirect(luci.dispatcher.build_url("admin", "system", "packages")..'?update=1&query=luci')
 end
 
 function action_logout()
