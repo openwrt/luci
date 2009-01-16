@@ -78,6 +78,12 @@ config variable
 	option section	'firewall.defaults'
 	option datatype	'boolean'
 
+config variable
+	option name	'drop_invalid'
+	option title	'Do not drop packages with state invalid'
+	option section	'firewall.defaults'
+	option datatype	'boolean'
+
 
 
 config section
@@ -98,6 +104,12 @@ config variable
 	option section	'firewall.forwarding'
 	option valueof	'firewall.zone.name'
 	option required	true
+
+config variable
+	option name	'mtu_fix'
+	option title	'Fixup MTU of outgoing packages'
+	option section	'firewall.forwarding'
+	option datatype	'boolean'
 
 
 
