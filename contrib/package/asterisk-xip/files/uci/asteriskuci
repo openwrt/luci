@@ -38,14 +38,14 @@ is_in_list(){
 	return 1
 }
 
-split_append() {
+split_append() { # {list} {prefix} {item} {func call}
 	local lhs="$2"
 	local rhs="$3"
 	
 	while [ ! -z "$rhs" ] ; do
 		cur=${rhs%%,*}
 		nvar=${rhs#*,}
-		[ -z $4 ] || eval "$4 ${cur}"
+		[ -z "$5" ] || eval "$5 ${cur}"
 		append $1 "${lhs}${cur}" "$4"
 		[ "$nvar" == "$rhs" ] && break
 		rhs=${nvar}
