@@ -338,3 +338,4 @@ hostnames = 'Rechnernamen'
 hostnames_entries = 'Host-Einträge'
 hostnames_hostname = 'Rechnername'
 hostnames_address = 'IP-Adresse'
+luci_components = "LuCI Komponenten"
