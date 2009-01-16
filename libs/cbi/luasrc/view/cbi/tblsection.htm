@@ -31,7 +31,11 @@ end
 		<table class="cbi-section-table">
 			<tr class="cbi-section-table-titles">
 			<%- if not self.anonymous then -%>
-				<th>&#160;</th>
+				<%- if self.sectionhead then -%>
+					<th class="cbi-section-table-cell"><%=self.sectionhead%></th>
+				<%- else -%>
+					<th>&#160;</th>
+				<%- end -%>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell">
@@ -45,7 +49,11 @@ end
 			</tr>
 			<tr class="cbi-section-table-descr">
 			<%- if not self.anonymous then -%>
-				<th></th>
+				<%- if self.sectiondesc then -%>
+					<th class="cbi-section-table-cell"><%=self.sectiondesc%></th>
+				<%- else -%>
+					<th></th>
+				<%- end -%>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell"><%=k.description%></th>

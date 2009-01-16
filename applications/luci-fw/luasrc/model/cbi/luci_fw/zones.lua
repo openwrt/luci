@@ -19,6 +19,12 @@ s.anonymous = true
 
 s:option(Flag, "syn_flood")
 
+local di = s:option(Flag, "drop_invalid", translate("fw_dropinvalid"))
+di.rmempty = false
+function di.cfgvalue(...)
+	return AbstractValue.cfgvalue(...) or "1"
+end
+
 p = {}
 p[1] = s:option(ListValue, "input")
 p[2] = s:option(ListValue, "output")
@@ -56,7 +62,7 @@ net = s:option(MultiValue, "network")
 net.widget = "select"
 net.rmempty = true
 luci.tools.webadmin.cbi_add_networks(net)
-	
+
 function net.cfgvalue(self, section)
 	local value = MultiValue.cfgvalue(self, section)
 	return value or name:cfgvalue(section)
