@@ -1,30 +1,6 @@
 #!/bin/sh
 # Sip / IAX extensions
 
-add_incoming_context() {
-	local context=$1
-	eval "local added=\${dialplan_incoming_${context}_added}"
-	if [ "${added}" != "1" ] ; then
-		append dialplan_extensions_incoming "${context}" " "
-		eval "dialplan_incoming_${context}_added=1"
-	fi
-
-}
-
-# Add to incoming ringing
-add_incoming() {
-	local rhs="$3"
-	
-	while [ ! -z "$rhs" ] ; do
-		cur=${rhs%%,*}
-		nvar=${rhs#*,}
-		add_incoming_context ${cur}
-		append dialplan_incoming_${cur} "$1/$2" "&" 
-		[ "$nvar" == "$rhs" ] && break
-		rhs=${nvar}
-	done
-}
-
 # Add to internal extensions
 add_extension() {
 	logdebug 1 "Adding $1/$2 extension to $3"
@@ -263,8 +239,9 @@ init_sipconf() {
 	sip_opt_realm=asterisk
 	config_get LAN_MASK lan netmask
 	config_get LAN_IP lan ipaddr
-	LAN_NET=$(/bin/ipcalc.sh $LAN_IP $LAN_MASK | grep NETWORK | cut -d= -f2)
-	sip_opt_localnet=$LAN_NET/$LAN_MASK
+	local LAN_NET=$(/bin/ipcalc.sh $LAN_IP $LAN_MASK | grep NETWORK | cut -d= -f2)
+	sip_opt_localnet_def=$LAN_NET/$LAN_MASK
+	sip_opt_localip=${LAN_IP}
 
 	# default to ulaw only
 	sip_opt_allow=
@@ -276,7 +253,7 @@ init_sipconf() {
 }
 
 sip_list="port bindaddr context maxexpirey defaultexpirey notifymimetype \
-rtptimeout rtpholdtimeout realm domain localnet externip"
+rtptimeout rtpholdtimeout realm externip"
 
 create_sipconf() {
 
@@ -289,18 +266,20 @@ create_sipconf() {
 		rm -f $file
 		isempty=2
 	else
-		[ -z "${sip_opt_domain}" ]  && sip_opt_domain=${sip_opt_realm}
+		[ -z "${sip_opt_domain}" ]  && sip_opt_domain="domain=${sip_opt_realm}"
 
 		echo "${asteriskuci_gen}[general]" > $file
+		echo "${sip_opt_domain}" >> "$file"
+		echo "domain=${sip_opt_localip}" >> "$file"
 		for i in ${sip_list} ; do
 			eval value=\$sip_opt_$i
 			[ ! -z "$value" ] && ( echo "$i=$value" >> $file )
 		done
+		[ -z "${sip_opt_localnet}" ] && sip_opt_localnet="localnet=${sip_opt_localnet_def}"
+		echo "${sip_opt_localnet}" >> "${file}"
 		echo "disallow=all" >> $file
 		local rhs="${sip_opt_allow}"
-		if [ -z "$rhs" ] ; then
-			rhs=ulaw
-		fi
+		[ -z "$rhs" ] && rhs=ulaw
 		while [ ! -z "$rhs" ] ; do
 			cur=${rhs%%,*}
 			nvar=${rhs#*,}
@@ -320,23 +299,23 @@ create_sipconf() {
 
 handle_sipgeneral() {
 	option_cb(){
-		if valid_sipiax_option globalsip $1 $2 ; then
-			case "$1" in
-				host)
-					if  [ -z "$2" ] ; then
-						sip_opt_host=dynamic
-					else
-						sip_opt_host="$2"
-					fi ;;
-				allow_LENGTH) ;;
-				allow|allow_ITEM*)
-					append sip_opt_allow "$2" "," ;;
-				*) eval "sip_opt_$1=\"\$2\"" ;;
-			esac
-		elif valid_rtp_option $1 $2 ; then
-			eval "rtp_opt_$1=\"\$2\""
-		else
-			logerror "Invalid SIP global option: $1"
+		if [ "${1%_LENGTH}" = "${1}" ] ; then
+			local opt=${1%_ITEM*}
+			logdebug 4 "SipGeneral option ${opt} $2"
+			if valid_sipiax_option globalsip ${opt} "$2" ; then
+				case "${opt}" in
+					host) sip_opt_host="$2"
+						[ -z "${sip_opt_host}" ] && sip_opt_host=dynamic ;;
+					allow)    append sip_opt_allow "$2" "," ;;
+					domain)   split_append sip_opt_domain domain= "$2" "${N}"  ;;
+					localnet) split_append sip_opt_localnet localnet= "$2" "${N}" ;;
+					*) eval "sip_opt_$1=\"\$2\"" ;;
+				esac
+			elif valid_rtp_option $1 "$2" ; then
+				eval "rtp_opt_$1=\"\$2\""
+			else
+				logerror "Invalid SIP global option: $1"
+			fi
 		fi
 	}
 }
@@ -357,13 +336,11 @@ handle_sip() {
 			type) sip_type=$2
 				append sip_sections "$1=$2" "$N"
 				;;
-			register)
-				if [ "$2" == "yes" ]; then
-					sip_doregister=1
-				fi ;;
+			register) [ "$2" == "yes" ] && sip_doregister=1 ;;
 			registerextension) eval sip_last_$1="$2";;
 			allow|allow_ITEM*) split_append sip_sections allow= "$2" "${N}" enable_format ;;
 			extension|extension_ITEM*)    add_extension SIP ${sip_sectionname} "$2" ;;
+
 			context)      sip_last_context="$2" ;;
 			selfmailbox)  sip_selfmailbox="$2" ;;
 			incoming|incoming_ITEM*)
@@ -371,13 +348,14 @@ handle_sip() {
 			timeout|prefix|internationalprefix|alwaysinternational|countrycode)
 				eval "target_$1_SIP_${sectionname}=\"$2\""
 			;;
-			allow_LENGTH|incoming_LENGTH|extension_LENGTH) ;;
+			*_LENGTH) ;;
 			*)
 				eval sip_last_$1="$2"
-				if valid_sipiax_option ${sip_type}sip $1 $2 ; then
-					append sip_sections "$1=$2" "$N"
+				local opt=${1%_ITEM*}
+				if valid_sipiax_option ${sip_type}sip ${opt} $2 ; then
+					append sip_sections "${opt}=$2" "$N"
 				else
-					logerror "Invalid SIP option for ${sip_type}: $1"
+					logerror "Invalid SIP option for ${sip_type}: ${opt}"
 				fi
 		esac
 	}
@@ -487,7 +465,7 @@ handle_iax() {
 			selfmailbox)
 				eval iax_selfmailbox="$2" ;;
 			incoming|incoming_ITEM*)
-				add_incoming IAX ${iax_sectionname} "$3" ;;
+				add_incoming IAX ${iax_sectionname} "$2" ;;
 			timeout|prefix|internationalprefix|alwaysinternational|countrycode)
 				eval "target_$1_IAX_${sectionname}=\"$2\"" ;;
 			*)
@@ -509,33 +487,28 @@ unload_iax() astcmd "unload chan_iax2.so"
 
 handle_target() {
 	# Target name
-	targettype=${1%[-_]*}
-	if [ ${targettype} == $1 ] ; then
-		logerror "No target type specified (SIP-$1 IAX-$1)"
-		return 1
+	if split_targettype targettype targetname "${1}" ; then
+		logdebug 4 "Handle target ${targettype}/${targetname} - ${1}"
+		handle_dialtarget "${targettype}" "${targetname}"
+	else
+		logerror "No target type specified for target $1"
 	fi
-	targetname=${1#*[-_]}
-
-	case $targettype in
-		[Ss][Ii][Pp])  handle_dialtarget SIP $targetname ;;
-		[Ii][Aa][Xx])  handle_dialtarget IAX $targetname ;;
-		*) logerror "Invalid target type specified: $targettype"
-	esac
 }
 
 # Set up options sip/iax targets for outgoing sip/iax
 handle_dialtarget() {
 	# Dialzone target option
-	areatype=$1
-	areaname=$2
-	logdebug 1 "Dialzone Target for ${areatype}/${areaname}"
+	dt_areatype="$1"
+	dt_areaname="$2"
+	logdebug 1 "Dialzone Target for ${dt_areatype}/${dt_areaname}"
 	option_cb(){
+		logdebug 3 "Option $1='$2' for dialzone target"
 		case $1 in
 			timeout|prefix|internationalprefix|alwaysinternational|countrycode)
-				eval target_$1_${areatype}_${areaname}=$2 
+				eval "target_$1_${dt_areatype}_${dt_areaname}=\"$2\""
 			;;
 			*) 
-				logerror "Invalid target for $areatype/$areaname: ${1}"
+				logerror "Invalid target for ${dt_areatype}/${dt_areaname}: ${1}"
 		esac
 	}
 }
