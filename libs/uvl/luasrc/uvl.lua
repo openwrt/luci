@@ -70,8 +70,9 @@ local default_savedir = "/tmp/.uvl"
 -- @return			Instance object
 UVL = util.class()
 
-function UVL.__init__( self, schemedir )
+function UVL.__init__( self, schemedir, configdir )
 	self.schemedir	= schemedir or default_schemedir
+	self.configdir	= configdir
 	self.packages	= { }
 	self.beenthere  = { }
 	self.depseen    = { }
@@ -946,11 +947,11 @@ function uvlitem.parent(self)
 	end
 end
 
-function uvlitem._loadconf(self, co, c)
+function uvlitem._loadconf(self, co, c, configdir)
 	co = co or self._configcache
 	if not co then
 		local err
-		co, err = uci.cursor():get_all(c)
+		co, err = uci.cursor(configdir):get_all(c)
 
 		if err then
 			self:error(ERR.UCILOAD(self, err))
@@ -983,7 +984,7 @@ function scheme.__init__(self, scheme, co, c)
 
 	self.cref = { c }
 	self.sref = { c }
-	self.c    = self:_loadconf(co, c)
+	self.c    = self:_loadconf(co, c, scheme.configdir)
 	self.s    = scheme
 	self.t    = TYPE_SCHEME
 end
@@ -1047,10 +1048,9 @@ function config.__init__(self, scheme, co, c)
 	if not c then
 		c, co = co, nil
 	end
-
 	self.cref = { c }
 	self.sref = { c }
-	self.c    = self:_loadconf(co, c)
+	self.c    = self:_loadconf(co, c, scheme.configdir)
 	self.s    = scheme
 	self.t    = TYPE_CONFIG
 end
@@ -1098,7 +1098,7 @@ section = util.class(uvlitem)
 function section.__init__(self, scheme, co, c, s)
 	self.cref = { c, s }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s }
-	self.c    = self:_loadconf(co, c)
+	self.c    = self:_loadconf(co, c, scheme.configdir)
 	self.s    = scheme
 	self.t    = TYPE_SECTION
 end
@@ -1149,7 +1149,7 @@ option = util.class(uvlitem)
 function option.__init__(self, scheme, co, c, s, o)
 	self.cref = { c, s, o }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o }
-	self.c    = self:_loadconf(co, c)
+	self.c    = self:_loadconf(co, c, scheme.configdir)
 	self.s    = scheme
 	self.t    = TYPE_OPTION
 end
@@ -1202,7 +1202,7 @@ enum = util.class(option)
 function enum.__init__(self, scheme, co, c, s, o, v)
 	self.cref = { c, s, o, v }
 	self.sref = { c, co and co[s] and co[s]['.type'] or s, o, v }
-	self.c    = self:_loadconf(co, c)
+	self.c    = self:_loadconf(co, c, scheme.configdir)
 	self.s    = scheme
 	self.t    = TYPE_ENUM
 end
