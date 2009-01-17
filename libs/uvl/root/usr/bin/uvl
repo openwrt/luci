@@ -200,7 +200,8 @@ elseif arguments[1] == "verify" or arguments[1] == "verify-scheme" then
 		( not options['no-strict-lists'] and true or false )
 
 	local uvl = luci.uvl.UVL(
-		type(options.schemedir) == "string" and options.schemedir
+		type(options.schemedir) == "string" and options.schemedir,
+		type(options.configdir) == "string" and options.configdir
 	)
 
 	local cso = luci.util.split( arguments[2], "." )
