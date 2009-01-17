@@ -106,6 +106,11 @@ endef
 
 define Package/luci-core/install
 	$(call Package/luci/install/template,$(1),libs/core)
+	$(PKG_BUILD_DIR)/build/mkversion.sh $(1)/usr/lib/lua/luci/version.lua \
+		"OpenWrt Firmware" \
+		"$(OPENWRTVERSION)" \
+		"$(PKG_BRANCH)" \
+		"$(PKG_VERSION)"
 endef
 
 define Package/luci-core/config
