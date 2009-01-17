@@ -105,7 +105,9 @@ add_dialplan_lastcall(){
 enable_lastcall() {
 	if [ "${dialplan_do_add_lastcall}" != "1" ] ; then
 		logdebug 2 "Enabling lastcall"
+		
 		append dialplan_globals "LASTCALLZONE=\"${asterisk_zone}\"" "$N"
+		[ -z "${DEST}" ] || append dialplan_globals "LASTCALL_DIR=${DEST}/etc/asterisk/directory" "$N"
 		append_include "macros/lastcall.conf"
 		dialplan_do_add_lastcall=1
 		enable_module app_macro
