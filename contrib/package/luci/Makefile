@@ -283,6 +283,7 @@ endef
 
 define Package/luci-admin-core/install
 	$(call Package/luci/install/template,$(1),modules/admin-core)
+	touch $(1)/etc/init.d/luci_fixtime || true
 endef
 
 

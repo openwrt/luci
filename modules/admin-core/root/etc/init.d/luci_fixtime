@@ -5,7 +5,7 @@ START=05
 start() {
 	cat <<'	EOF' | lua -l luci.fs -l luci.util -
 		if (os.time() < 1000000000) then
-        		os.execute('date -s ' .. os.date('%m%d%H%M%Y', luci.fs.mtime(luci.util.libpath())))
+			os.execute('date -s ' .. os.date('%m%d%H%M%Y', luci.fs.mtime("/etc/init.d/luci_fixtime")))
 		end
 	EOF
 }
