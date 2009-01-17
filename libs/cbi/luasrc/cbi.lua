@@ -769,6 +769,7 @@ end
 
 -- Removes the section
 function AbstractSection.remove(self, section)
+	self.map.autoapply = false
 	return self.map:del(section)
 end
 
@@ -794,6 +795,8 @@ function AbstractSection.create(self, section)
 			self.map:set(section, k, v)
 		end
 	end
+
+	self.map.autoapply = false
 
 	return stat
 end
