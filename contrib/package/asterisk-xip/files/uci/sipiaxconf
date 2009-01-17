@@ -23,6 +23,7 @@ check_append_local() {
 		eval  "dialplan_local_${1}_context=\"${2}\""
 		eval  "dialplan_local_${1}_selfmailbox=\"${3}\""
 		eval  "dialplan_local_${1}_mailbox=\"${4}\""
+		eval  "dialplan_local_${1}_displayname=\"${5}\""
 		return 0
 	else
 		return 1
@@ -31,7 +32,7 @@ check_append_local() {
 append_dialplan_locals(){
 	for i in ${dialplan_locals} ; do
 		local extension=$i
-		for x in context selfmailbox mailbox ; do
+		for x in context selfmailbox mailbox displayname ; do
 			eval "x_${x}=\${dialplan_local_${i}_${x}}"
 		done
 		local newcontext=local_${extension}
@@ -43,6 +44,7 @@ append_dialplan_locals(){
 			# add_dialplan_include ${newcontext}  ${x_last_context}
 
 			append_dialplan_context ${newcontext} "exten => ${match_all},1,Set(CALLERID(num)=${extension})"
+			[ -z "${x_displayname}" ] || append_dialplan_context ${newcontext} "exten => ${match_all},1,Set(CALLERID(name)=${x_displayname})"
 			if [ ! -z "${x_mailbox}" ] ; then
 				[ "${x_selfmailbox}" = "yes" ] && append_dialplan_context ${newcontext} "exten => ${extension},2,VoiceMailMain(${x_mailbox})"
 				[ ! -z "${dialplan_voiceboxext}" ]  && append_dialplan_context ${newcontext} "exten => ${dialplan_voiceboxext},2,VoiceMailMain(${x_mailbox})"
@@ -72,14 +74,14 @@ check_add_iaxitems() {
 
 do_check_add_items(){
 
-	for i in type last_host last_context selfmailbox last_extension last_mailbox ; do
+	for i in type last_host last_context selfmailbox last_extension last_mailbox last_displayname ; do
 		eval "x_${i}=\"\${${1}_${i}-}\""
 	done
 
 	if [ ! -z "${x_last_context}" ] ; then
 		if [ ! -z "${x_last_extension}" ] ; then
 			[ "${x_last_context}" = "-" ] && eval "x_last_context=\"\${${1}_opt_context}\""
-			check_append_local "${x_last_extension}" "${x_last_context}" "${x_selfmailbox}" "${x_last_mailbox}"
+			check_append_local "${x_last_extension}" "${x_last_context}" "${x_selfmailbox}" "${x_last_mailbox}" "${x_last_displayname}"
 			x_last_context=local_${x_last_extension}
 		fi
 		if [ "${x_last_context}" != "-" ] ; then
@@ -91,7 +93,8 @@ do_check_add_items(){
 	fi
 
 	for i in last_username last_fromdomain last_secret last_username \
-		sectionname last_fromuser last_context last_extension last_mailbox last_type last_host ; do
+		sectionname last_fromuser last_context last_extension last_mailbox \
+		last_type last_host last_displayname ; do
 		eval unset $1_$i
 	done
 
@@ -337,7 +340,7 @@ handle_sip() {
 				append sip_sections "$1=$2" "$N"
 				;;
 			register) [ "$2" == "yes" ] && sip_doregister=1 ;;
-			registerextension) eval sip_last_$1="$2";;
+			registerextension|displayname) eval sip_last_$1="$2";;
 			allow|allow_ITEM*) split_append sip_sections allow= "$2" "${N}" enable_format ;;
 			extension|extension_ITEM*)    add_extension SIP ${sip_sectionname} "$2" ;;
 
@@ -460,6 +463,7 @@ handle_iax() {
 				split_append iax_sections allow= "$2" "${N}" enable_format ;;
 			extension_LENGTH) ;;
 			extension|extension_ITEM*)    add_extension IAX ${iax_sectionname} "$2" ;;
+			displayname) eval iax_last_$1="$2";;
 			context)
 				eval iax_last_context="$2" ;;
 			selfmailbox)
