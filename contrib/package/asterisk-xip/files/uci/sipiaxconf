@@ -44,12 +44,16 @@ append_dialplan_locals(){
 			# add_dialplan_include ${newcontext}  ${x_last_context}
 
 			append_dialplan_context ${newcontext} "exten => ${match_all},1,Set(CALLERID(num)=${extension})"
-			[ -z "${x_displayname}" ] || append_dialplan_context ${newcontext} "exten => ${match_all},1,Set(CALLERID(name)=${x_displayname})"
-			if [ ! -z "${x_mailbox}" ] ; then
-				[ "${x_selfmailbox}" = "yes" ] && append_dialplan_context ${newcontext} "exten => ${extension},2,VoiceMailMain(${x_mailbox})"
-				[ ! -z "${dialplan_voiceboxext}" ]  && append_dialplan_context ${newcontext} "exten => ${dialplan_voiceboxext},2,VoiceMailMain(${x_mailbox})"
+			local next=2
+			if [ ! -z "${x_displayname}" ] ; then
+				append_dialplan_context ${newcontext} "exten => ${match_all},2,Set(CALLERID(name)=${x_displayname})"
+				local next=3
 			fi
-			append_dialplan_context ${newcontext} "exten => ${match_all},2,Goto(${x_context},\${EXTEN},1)"
+			if [ ! -z "${x_mailbox}" ] ; then
+				[ "${x_selfmailbox}" = "yes" ] && append_dialplan_context ${newcontext} "exten => ${extension},${next},VoiceMailMain(${x_mailbox})"
+				[ ! -z "${dialplan_voiceboxext}" ]  && append_dialplan_context ${newcontext} "exten => ${dialplan_voiceboxext},${next},VoiceMailMain(${x_mailbox})"
+			fi
+			append_dialplan_context ${newcontext} "exten => ${match_all},${next},Goto(${x_context},\${EXTEN},1)"
 		fi
 	done
 }
