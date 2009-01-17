@@ -20,7 +20,7 @@ function index()
 	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("system"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("system"), 1)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("a_s_packages"), 10)
-	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"), i18n("a_s_p_ipkg"))
+	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
 	entry({"admin", "system", "passwd"}, form("admin_system/passwd"), i18n("a_s_changepw"), 20)
 	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("a_s_sshkeys"), 30)
 	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("process_head"), 45)
