@@ -66,11 +66,11 @@ end
 p2p = s:option(ListValue, "ipp2p", "P2P")
 p2p:value("", "-")
 p2p:value("all", translate("all"))
-p2p:value("bit", "BitTorrent")
-p2p:value("dc", "DirectConnect")
-p2p:value("edk", "eDonkey")
-p2p:value("gnu", "Gnutella")
-p2p:value("kazaa", "Kazaa")
+p2p:value("bit", "BIT")
+p2p:value("dc", "DC")
+p2p:value("edk", "EDK")
+p2p:value("gnu", "GNU")
+p2p:value("kazaa", "KAZ")
 p2p.rmempty = true
 
 p = s:option(Value, "proto", translate("protocol"))
@@ -83,5 +83,7 @@ p.rmempty = true
 ports = s:option(Value, "ports", translate("ports"))
 ports.rmempty = true
 ports:value("", translate("allf", translate("all")))
+
+bytes = s:option(Value, "connbytes", translate("qos_connbytes"))
 
 return m
