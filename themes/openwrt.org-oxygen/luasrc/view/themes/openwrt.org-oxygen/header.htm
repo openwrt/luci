@@ -61,9 +61,9 @@ require("luci.http").prepare_content("application/xhtml+xml")
 </p>
 
 <div id="header">
-<h1><%=luci.config.brand.firmware%></h1>
+<h1><%=luci.version.distname%></h1>
 <p>
-<%=luci.config.brand.distro%><br />
+<%=luci.version.distversion%><br />
 <%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
 <%:hostname%>: <%=hostname%>
 </p>
