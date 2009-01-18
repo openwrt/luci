@@ -1206,7 +1206,11 @@ endef
 
 define Package/asterisk14-xip-core/postinst
 #!/bin/sh
-ROOT=`echo $${PKG_ROOT} | sed 's:[\/]:\\\&:g' -`
+if [ -z "${IPKG_INSTROOT}" ] ; then
+  ROOT=/
+else
+  ROOT=`echo $${PKG_ROOT} | sed 's:[\/]:\\\&:g' -`
+fi
 /bin/sed -i 's/\ \/etc/\ '$${ROOT}'etc/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
 /bin/sed -i 's/\ \/var\/spool/\ '$${ROOT}'var\/spool/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
 /bin/sed -i 's/\ \/var\/log/\ '$${ROOT}'var\/log/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
@@ -1222,12 +1226,15 @@ ln -s ../../../usr/lib/asterisk/uci/lastcall      25-lastcall
 ln -s ../../../usr/lib/asterisk/uci/meetmeconf    30-meetme
 ln -s ../../../usr/lib/asterisk/uci/sipiaxconf    35-sipiax
 ln -s ../../../usr/lib/asterisk/uci/talkclock     40-talkclock
+ln -s ../../../usr/lib/asterisk/uci/voicemenu     45-voicemenu
 endef
 
 define Package/asterisk14-xip/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk
 endef
 
 define Package/asterisk14-xip-mini/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk
 endef
 
 define Package/asterisk14-xip-app-meetme/conffiles
