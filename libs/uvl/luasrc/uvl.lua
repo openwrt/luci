@@ -67,6 +67,7 @@ local default_savedir = "/tmp/.uvl"
 -- @class			function
 -- @name			UVL
 -- @param schemedir	Path to the scheme directory (optional)
+-- @param configdir	Override config directory (optional)
 -- @return			Instance object
 UVL = util.class()
 
