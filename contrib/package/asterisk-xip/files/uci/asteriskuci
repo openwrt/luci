@@ -76,7 +76,10 @@ check_checksum() {
 # Add config module to initialise list
 ast_add_conf() append asterisk_conf_list $1 " "
 # Add module to initialise list
-ast_add_module() append asterisk_module_list $1 " "
+ast_add_module() {
+	append asterisk_module_list $1 " "
+	eval "createdialplan_$1() return 0"
+}
 # Add to 'reload' list.
 ast_add_reload() append asterisk_load_list $1 " "
 
@@ -201,6 +204,11 @@ setup_asterisk() {
 		for i in ${asterisk_conf_list} ; do
 			logdebug 1 "Create $i config"
 			eval "create_${i}conf"
+		done
+
+		for i in ${asterisk_module_list} ; do
+			logdebug 1 "Create Dialplan for module $i"
+			eval "createdialplan_${i}"
 		done
 		create_dialplanconf
 		create_moduleconf
