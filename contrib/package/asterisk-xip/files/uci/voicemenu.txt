@@ -1,0 +1,19 @@
+
+config voicemenu autoattendmenu
+  option greeting greet/autogreet
+  option timeoutlen 5
+  option timeoutsmax 3
+  option invalidmax 3
+  option includelocal  extensions
+
+config voiceoption
+  option voicemenu autoattendmenu
+  option digit  1
+  option menu  misc/press&digit/1&digit/for&misc/operator
+  option dial SIP/101
+
+config voiceoption
+  option voicemenu autoattendmenu
+  option digit 2
+  option menu  misc/press&digit/2&digit/for&misc/sales
+  option goto salesmenu
