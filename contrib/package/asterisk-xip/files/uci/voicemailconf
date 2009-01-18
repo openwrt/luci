@@ -166,6 +166,7 @@ handle_voicezone() {
 	voicezone_name=$1
 	option_cb() {
 		case $1 in
+			name) voicezone_name="$2" ;;
 			zone) voicezone_zone="$2" ;;
 			message) voicezone_message="$2" ;;
 			*) logerror "Invalid voicezone option: $1"
