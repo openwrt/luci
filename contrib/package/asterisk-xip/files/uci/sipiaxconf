@@ -356,6 +356,7 @@ handle_sip() {
 				eval "target_$1_SIP_${sectionname}=\"$2\""
 			;;
 			*_LENGTH) ;;
+			_*) ;;
 			*)
 				eval sip_last_$1="$2"
 				local opt=${1%_ITEM*}
