@@ -60,7 +60,7 @@ local Cursor = getmetatable(cursor())
 function Cursor.apply(self, configlist, command)
 	configlist = self:_affected(configlist)
 	local reloadcmd = "/sbin/luci-reload " .. table.concat(configlist, " ")
-	
+
 	return command and reloadcmd or os.execute(reloadcmd .. " >/dev/null 2>&1")
 end
 
@@ -72,7 +72,7 @@ end
 -- returns a boolean whether to delete the current section (optional)
 function Cursor.delete_all(self, config, stype, comparator)
 	local del = {}
-	
+
 	if type(comparator) == "table" then
 		local tbl = comparator
 		comparator = function(section)
@@ -80,11 +80,11 @@ function Cursor.delete_all(self, config, stype, comparator)
 				if section[k] ~= v then
 					return false
 				end
-			end 
+			end
 			return true
 		end
 	end
-	
+
 	local function helper (section)
 
 		if not comparator or comparator(section) then
@@ -135,6 +135,16 @@ function Cursor.tset(self, config, section, values)
 	return stat
 end
 
+--- Get a boolean option and return it's value as true or false.
+-- @param config	UCI config
+-- @param section	UCI section name
+-- @param option	UCI option
+-- @return			Boolean
+function Cursor.get_bool(self, ...)
+	local val = self:get(...)
+	return ( val == "1" or val == "true" or val == "yes" or val == "on" )
+end
+
 --- Get an option or list and return values as table.
 -- @param config	UCI config
 -- @param section	UCI section name
@@ -177,7 +187,7 @@ function Cursor._affected(self, configlist)
 	local function _resolve_deps(name)
 		local reload = {name}
 		local deps = {}
-	
+
 		c:foreach("ucitrack", name,
 			function(section)
 				if section.affects then
@@ -186,16 +196,16 @@ function Cursor._affected(self, configlist)
 					end
 				end
 			end)
-		
+
 		for i, dep in ipairs(deps) do
 			for j, add in ipairs(_resolve_deps(dep)) do
 				reload[#reload+1] = add
 			end
 		end
-		
+
 		return reload
 	end
-	
+
 	-- Collect initscripts
 	for j, config in ipairs(configlist) do
 		for i, e in ipairs(_resolve_deps(config)) do
@@ -204,7 +214,7 @@ function Cursor._affected(self, configlist)
 			end
 		end
 	end
-	
+
 	return reloadlist
 end
 
