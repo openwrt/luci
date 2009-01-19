@@ -187,9 +187,29 @@ function main.write(self, section, value)
 		uci:foreach(external, "fw_rule", function(section)
 			uci:section("firewall", "rule", nil, section)
 		end)
-
-		uci:save("firewall")
 	end
+
+	-- Enforce firewall include
+	local has_include = false
+	uci:foreach("firewall", "include",
+		function(section)
+			if section.path == "/etc/firewall.freifunk" then
+				has_include = true
+			end
+		end)
+
+	if not has_include then
+		uci:section("firewall", "include", nil,
+			{ path = "/etc/firewall.freifunk" })
+	end
+
+	-- Allow state: invalid packets
+	uci:foreach("firewall", "defaults",
+		function(section)
+			uci:set("firewall", section[".name"], "drop_invalid", "0")
+		end)
+
+	uci:save("firewall")
 
 
 	-- Crate network interface
