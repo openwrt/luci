@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# DISA - Directed Inwards System Application
+
+ast_add_module disaconf
+
+init_disaconf() {
+	ast_enable_type disa
+	ast_enable_type disaentry
+}
+
+check_append_disa() {
+	local context="${1}"
+	eval "local isadded=\"\${dialplan_add_disa_${context}-0}\""
+	if [ "$isadded" != "1" ] ; then
+		eval "dialplan_add_disa_${context}=1"
+		append disa_contexts "$context"
+		return 0
+	else
+		return 1
+	fi
+}
+
+handle_disa(){
+	opt_disa_context="$1"
+
+	check_append_disa "$1"
+
+	option_cb() {
+		case "$1" in
+			context|mailbox|passcode|timeout)
+				eval "opt_disa_${opt_disa_context}_$1=\"\$2\"" ;;
+			_*) ;;
+			*) logerror "Invalid DISA option in ${opt_disa_context}: $1" ;;
+		esac
+	}
+}
+
+disaoption_list="disa context mailbox passcode callerid"
+
+check_add_disaentry() {
+	if [ ! -z "${last_disa_disa}" ] ; then
+		if [ -z "${last_disa_passcode}" ] ; then
+			logerror "Passcode required in DisaEntry for ${last_disa_disa}"
+		else
+			logdebug 3 "Adding DisaEntry to ${last_disa_disa}"
+			[ -z "${last_disa_context}" ] && eval "last_disa_context=\"\${opt_disa_${last_disa_disa}_context}\""
+			[ -z "${last_disa_mailbox}" ] && eval "last_disa_mailbox=\"\${opt_disa_${last_disa_disa}_mailbox}\""
+			local line=
+			[ -z "${last_disa_mailbox}" ] || line="|${last_disa_mailbox}"
+			[ -z "${line}" -a -z "${last_disa_callerid}" ] || line="|${last_disa_callerid}${line}"
+			[ -z "${line}" -a -z "${last_disa_context}" ] || line="|${last_disa_context}${line}"
+			line="${last_disa_passcode}${line}"
+			append opt_disa_${last_disa_disa}_list "${line}" "${N}"
+		fi
+	fi
+	for i in ${disaoption_list} ; do
+		eval "unset last_disa_$i"
+	done
+}
+
+handle_disaentry() {
+	check_add disaentry
+	option_cb() {
+		case "$1" in
+			disa|context|mailbox|passcode|callerid)
+				eval "last_disa_$1=\"\$2\"" ;;
+			_*) ;;
+			*) logerror "Invalid DISAEntry option in ${last_disa_context-<unknown>}: $1" ;;
+		esac
+	}
+}
+
+createdialplan_disaconf() {
+	if [ ! -z "${disa_contexts}" ] ; then
+		enable_module app_disa
+		for disactx in ${disa_contexts} ; do
+			logdebug 3 "Adding DISA context ${disactx}"
+			if check_add_context ${disactx} ; then
+				eval "local disa_list=\"\${opt_disa_${disactx}_list}\""
+				eval "local disa_timeout=\"\${opt_disa_${disactx}_timeout}\""
+				local nn=1
+				if [ ! -z "${disa_timeout}" ] ; then
+					logdebug 3 "Adding timeout to ${disactx}"
+					enable_module func_timeout
+					append_dialplan_context ${disactx} "exten => s,1,SET(TIMEOUT(response)=${disa_timeout})"
+					nn=n
+				fi
+				if [ -z "${disa_list}" ] ; then
+					logdebug 3 "No list in ${disactx}"
+					eval "local disa_mailbox=\"\${opt_disa_${disactx}_mailbox}\""
+					eval "local disa_context=\"\${opt_disa_${disactx}_context}\""
+					eval "local disa_passcode=\"\${opt_disa_${disactx}_passcode}\""
+					if [ ! -z ${disa_mailbox} ] ; then
+						disa_list="${disa_passcode}|${disa_context}||${disa_mailbox}"
+					else
+						append_dialplan_context ${disactx} "exten => s,${nn},DISA(${disa_passcode},${disa_context})"
+					fi
+				fi
+				if [ ! -z "${disa_list}" ] ; then
+					logdebug 3 "Output list to file in ${disactx}"
+					logdebug 4 "list: ${disa_list}"
+					local file="${DEST_DIR}/disa_${disactx}.txt"
+					echo "${asteriskuci_gen}${disa_list}" > "$file"
+
+					append_dialplan_context ${disactx} "exten => s,${nn},DISA(${file})"
+				fi
+				append_dialplan_context ${disactx} "exten => t,1,Hangup"
+			fi
+		done
+	fi
+}
+
