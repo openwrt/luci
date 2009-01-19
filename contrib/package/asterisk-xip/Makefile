@@ -822,6 +822,7 @@ Channel functions
   func_channel
   app_softhangup
   app_directed_pickup Pickup a (specific) ringing extensions
+  app_pickup2  Extended pickup
 endef
 
 define Package/asterisk14-xip-debug
@@ -1227,6 +1228,7 @@ ln -s ../../../usr/lib/asterisk/uci/meetmeconf    30-meetme
 ln -s ../../../usr/lib/asterisk/uci/sipiaxconf    35-sipiax
 ln -s ../../../usr/lib/asterisk/uci/talkclock     40-talkclock
 ln -s ../../../usr/lib/asterisk/uci/voicemenu     45-voicemenu
+ln -s ../../../usr/lib/asterisk/uci/disaconf      50-disaconf
 endef
 
 define Package/asterisk14-xip/install
@@ -1756,7 +1758,7 @@ endef
 
 define Package/asterisk14-xip-channel/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	for f in app_chanisavail app_channelredirect app_chanspy func_channel app_softhangup app_directed_pickup ; do \
+	for f in app_chanisavail app_channelredirect app_chanspy func_channel app_softhangup app_directed_pickup app_pickup2 ; do \
 	  $(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/$$$$f.so $(1)/usr/lib/asterisk/modules/ ; \
 	done
 endef
