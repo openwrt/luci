@@ -136,6 +136,15 @@ function mtime(path)
 	return posix.stat(path, "mtime")
 end
 
+--- Set the last modification time  of given file path in Unix epoch format.
+-- @param path	String containing the path of the file or directory to read
+-- @param mtime	Last modification timestamp
+-- @param atime Last accessed timestamp
+-- @return		0 in case of success nil on error
+-- @return		String containing the error description (if any)
+-- @return		Number containing the os specific errno (if any)
+utime = posix.utime
+
 --- Return the last element - usually the filename - from the given path with
 -- the directory component stripped.
 -- @class		function
