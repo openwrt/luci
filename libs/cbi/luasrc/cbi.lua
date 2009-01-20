@@ -1264,13 +1264,6 @@ AbstractValue.transform = AbstractValue.validate
 
 -- Write to UCI
 function AbstractValue.write(self, section, value)
-	-- Work around a bug in libuci-lua;
-	-- list values are not overwritten but appended, resolve this
-	-- by removing the value before
-	if type(value) == "table" then
-		self.map:del(section, self.option)
-	end
-
 	return self.map:set(section, self.option, value)
 end
 
