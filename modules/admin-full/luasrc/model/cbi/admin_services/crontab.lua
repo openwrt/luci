@@ -26,7 +26,7 @@ end
 function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.crons then
-			luci.fs.writefile(cronfile, data.crons)
+			luci.fs.writefile(cronfile, data.crons:gsub("\r\n", "\n"))
 		end
 	end
 	return true
