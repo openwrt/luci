@@ -26,7 +26,7 @@ end
 function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.keys then
-			luci.fs.writefile(keyfile, data.keys)
+			luci.fs.writefile(keyfile, data.keys:gsub("\r\n", "\n"))
 		end
 	end
 	return true

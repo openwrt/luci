@@ -23,7 +23,7 @@ function t.cfgvalue()
 end
 
 function t.write(self, section, data)
-	return luci.fs.writefile(ipkgfile, data)
+	return luci.fs.writefile(ipkgfile, data:gsub("\r\n", "\n"))
 end
 
 f:append(Template("admin_system/ipkg"))
