@@ -57,10 +57,10 @@ function load(cbimap, ...)
 
 	local upldir = "/lib/uci/upload/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
-	
-	assert(luci.fs.stat(cbimap) or luci.fs.stat(cbidir..cbimap..".lua"), 
+
+	assert(luci.fs.stat(cbimap) or luci.fs.stat(cbidir..cbimap..".lua"),
 	 "Model not found!")
-	  
+
 	local func, err = loadfile(cbimap)
 	if not func then
 		func, err = loadfile(cbidir..cbimap..".lua")
@@ -298,9 +298,9 @@ function Map.__init__(self, config, ...)
 
 	self.uci = uci.cursor()
 	self.save = true
-	
+
 	self.changed = false
-	
+
 	if not self.uci:load(self.config) then
 		error("Unable to read UCI data: " .. self.config)
 	end
@@ -456,12 +456,12 @@ end
 
 function Compound.parse(self, ...)
 	local cstate, state = 0, 0
-	
+
 	for k, child in ipairs(self.children) do
 		cstate = child:parse(...)
 		state = (not state or cstate < state) and cstate or state
 	end
-	
+
 	return state
 end
 
@@ -479,13 +479,13 @@ end
 function Delegator.state(self, name, node, transitor)
 	transitor = transitor or self.transistor_linear
 	local state = {node=node, name=name, transitor=transitor}
-	
+
 	assert(instanceof(node, Node), "Invalid node")
 	assert(not self.nodes[name], "Duplicate entry")
-	
+
 	self.nodes[name] = state
 	self:append(state)
-	
+
 	return state
 end
 
@@ -508,10 +508,10 @@ end
 function Delegator.parse(self, ...)
 	local active = self:getactive()
 	assert(active, "Invalid state")
-	
+
 	local cstate = active.node:parse()
 	self.active = active.transistor(self, active.node, cstate)
-	
+
 	if not self.active then
 		return FORM_DONE
 	else
@@ -525,8 +525,8 @@ function Delegator.render(self, ...)
 end
 
 function Delegator.getactive(self)
-	return self:get(Map.formvalue(self, "cbi.delegated") 
-		or (self.children[1] and self.children[1].name)) 
+	return self:get(Map.formvalue(self, "cbi.delegated")
+		or (self.children[1] and self.children[1].name))
 end
 
 --[[
@@ -816,7 +816,7 @@ function Table.__init__(self, form, data, ...)
 	local datasource = {}
 	datasource.config = "table"
 	self.data = data
-	
+
 	datasource.formvalue = Map.formvalue
 	datasource.formvaluetable = Map.formvaluetable
 	datasource.readinput = true
@@ -824,7 +824,7 @@ function Table.__init__(self, form, data, ...)
 	function datasource.get(self, section, option)
 		return data[section] and data[section][option]
 	end
-	
+
 	function datasource.submitstate(self)
 		return Map.formvalue(self, "cbi.submit")
 	end
@@ -918,7 +918,7 @@ function NamedSection.parse(self, novld)
 			end
 		end
 		AbstractSection.parse_optionals(self, s)
-		
+
 		if self.changed then
 			self:push_events()
 		end
@@ -1186,7 +1186,7 @@ function AbstractValue.parse(self, section, novld)
 			if self:write(section, fvalue) then
 				-- Push events
 				self.section.changed = true
-				--luci.util.append(self.map.events, self.events)			
+				--luci.util.append(self.map.events, self.events)
 			end
 		end
 	else							-- Unset the UCI or error
@@ -1264,6 +1264,13 @@ AbstractValue.transform = AbstractValue.validate
 
 -- Write to UCI
 function AbstractValue.write(self, section, value)
+	-- Work around a bug in libuci-lua;
+	-- list values are not overwritten but appended, resolve this
+	-- by removing the value before
+	if type(value) == "table" then
+		self.map:del(section, self.option)
+	end
+
 	return self.map:set(section, self.option, value)
 end
 
@@ -1501,7 +1508,7 @@ function StaticList.validate(self, value)
 
 	local valid = {}
 	for i, v in ipairs(value) do
-		if luci.util.contains(self.vallist, v) then
+		if luci.util.contains(self.keylist, v) then
 			table.insert(valid, v)
 		end
 	end
