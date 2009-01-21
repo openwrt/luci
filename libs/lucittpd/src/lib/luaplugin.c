@@ -215,7 +215,7 @@ load_module(struct luaplugin_ctx *ctx, struct luaplugin_entry *e)
 		if (lua_isstring(L, -1))
 			err = lua_tostring(L, -1);
 
-		fprintf(stderr, err);
+		fprintf(stderr, "%s", err);
 	}
 }
 
@@ -318,7 +318,7 @@ luaplugin_call(struct luaplugin_entry *e, int narg)
 	ret = lua_pcall(L, narg, 0, 0);
 
 	if (ret != 0) {
-		fprintf(stderr, lua_tostring(L, -1));
+		fprintf(stderr, "%s", lua_tostring(L, -1));
 	}
 
 done:

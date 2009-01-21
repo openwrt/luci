@@ -39,7 +39,7 @@ void log_printf(char *fmt, ...)
 	va_end(ap);
 
 	if(daemonize)
-		syslog(10, p);
+		syslog(10, "%s", p);
 	else
-		printf(p);
+		printf("%s", p);
 }
