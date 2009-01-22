@@ -11,13 +11,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
-PKG_VERSION:=0.5.6-r3+hg2131
-PKG_RELEASE:=2
+PKG_VERSION:=0.5.6-r3+hg2227
+PKG_RELEASE:=1
 
-PKG_HGREV:=26d021f68c49
+PKG_HGREV:=a7316f987848
 PKG_SOURCE:=$(PKG_HGREV).tar.gz
 PKG_SOURCE_URL:=http://gredler.at/hg/olsrd/archive
-PKG_MD5SUM:=db07cbbdff1c97ff4045cd4f5716be2e
+PKG_MD5SUM:=b228b5452af158cd4313f9ed416d9c84
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_HGREV)
 PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
@@ -35,7 +35,7 @@ define Package/olsrd-luci/common_info
 	CATEGORY:=Network
 	TITLE:=OLSR - Optimized Link State Routing Daemon
 	URL:=http://www.olsr.org/
-	MAINTAINER:=Jo-Philipp Wich <xm@leipzig.freifunk.net>
+	MAINTAINER:=Jo-Philipp Wich <xm@subsignal.org>
 endef
 
 define Package/olsrd-luci
