@@ -18,6 +18,7 @@ $Id$
 local uci = require "luci.model.uci".cursor()
 local tools = require "luci.tools.ffwizard"
 local util = require "luci.util"
+local sys = require "luci.sys"
 
 
 -------------------- View --------------------
@@ -222,7 +223,7 @@ function main.write(self, section, value)
 	uci:save("firewall")
 
 
-	-- Crate network interface
+	-- Create network interface
 	local netconfig = uci:get_all("freifunk", "interface")
 	util.update(netconfig, uci:get_all(external, "interface") or {})
 	netconfig.proto = "static"
@@ -232,6 +233,21 @@ function main.write(self, section, value)
 	uci:save("network")
 
 	tools.firewall_zone_add_interface("freifunk", device)
+
+
+	-- Set hostname
+	local new_hostname = ip:gsub("%.", "-")
+	local old_hostname = sys.hostname()
+
+	if old_hostname == "OpenWrt" or old_hostname:match("^%d+-%d+-%d+-%d+$") then
+		uci:foreach("system", "system",
+			function(s)
+				uci:set("system", s['.name'], "hostname", new_hostname)
+			end)
+
+		luci.fs.writefile( "/proc/sys/kernel/hostname", new_hostname.."\n" )
+		uci:save("system")
+	end
 end
 
 
@@ -245,6 +261,19 @@ function olsr.write(self, section, value)
 
 	local community = net:formvalue(section)
 	local external  = community and uci:get("freifunk", community, "external") or ""
+
+	-- Configure nameservice
+	local hostname
+	uci:foreach("system", "system", function(s) hostname = s.hostname end)
+
+	if hostname then
+		uci:foreach("olsrd", "LoadPlugin",
+			function(s)
+				if s.library == "olsrd_nameservice.so.0.3" then
+					uci:set("olsrd", s['.name'], "name", hostname)
+				end
+			end)
+	end
 
 	-- Delete old interface
 	uci:delete_all("olsrd", "Interface", {interface=device})
