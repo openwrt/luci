@@ -25,6 +25,7 @@ function e.cfgvalue(self, section)
 	return (os.execute("/etc/init.d/miniupnpd enabled") == 0) and "1" or "0"
 end
 
+s:option(Flag, "secure_mode").rmempty = true
 s:option(Flag, "log_output").rmempty = true
 s:option(Value, "download").rmempty = true
 s:option(Value, "upload").rmempty = true
