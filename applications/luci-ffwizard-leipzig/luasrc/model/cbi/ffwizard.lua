@@ -172,7 +172,7 @@ function main.write(self, section, value)
 	uci:save("wireless")
 
 	-- Create firewall zone and add default rules (first time)
-	local newzone = tools.firewall_create_zone("freifunk", "DROP", "ACCEPT", "DROP", true)
+	local newzone = tools.firewall_create_zone("freifunk", "REJECT", "ACCEPT", "REJECT", true)
 	if newzone then
 		uci:foreach("freifunk", "fw_forwarding", function(section)
 			uci:section("firewall", "forwarding", nil, section)
