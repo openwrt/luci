@@ -5,7 +5,9 @@
 START=99
 
 boot() {
-	echo "*/5 * * * *	killall -HUP dnsmasq" >> /etc/crontabs/root
+	grep -q 'killall -HUP dnsmasq' /etc/crontabs/root || {
+		echo "*/5 * * * *	killall -HUP dnsmasq" >> /etc/crontabs/root
+	}
 
 	[ -f /etc/rc.local ] && . /etc/rc.local
 }
