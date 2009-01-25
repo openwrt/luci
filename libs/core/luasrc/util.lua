@@ -196,12 +196,13 @@ end
 local function _pcdata_repl(c)
 	local i = string.byte(c)
 
-	if ( i >= 0x00 and i <= 0x08 ) or
-	   ( i >= 0x0B and i <= 0x0C ) or
-	   ( i >= 0x0E and i <= 0x0F ) or
-	   ( i >= 0x26 and i <= 0x27 ) or
-	   ( i == 0x7F ) or ( i == 0x22 ) or
-	   ( i == 0x3C ) or ( i == 0x3E )
+	if ( i >= 0x00 and i <= 0x08 ) or ( i >= 0x0B and i <= 0x0C ) or
+	   ( i >= 0x0E and i <= 0x1F ) or ( i == 0x7F )
+	then
+		return ""
+		
+	elseif ( i == 0x26 ) or ( i == 0x27 ) or ( i == 0x22 ) or
+	       ( i == 0x3C ) or ( i == 0x3E )
 	then
 		return string.format("&#%i;", i)
 	end
