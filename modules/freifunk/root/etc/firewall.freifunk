@@ -48,4 +48,6 @@ apply_nat_fix() {
 	(ACTION="ifup" INTERFACE="$1" . /etc/hotplug.d/iface/22-firewall-nat-fix )
 }
 
+uci_set_state firewall core loaded 1
+config_foreach fw_addif interface
 config_foreach apply_nat_fix interface
