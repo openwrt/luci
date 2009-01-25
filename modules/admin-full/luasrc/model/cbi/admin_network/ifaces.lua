@@ -165,11 +165,12 @@ if has_3g then
 	pincode:depends("proto", "3g")
 end
 
-if has_pppd or has_pppoe or has_3g or has_pptp then
+if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	user = s:option(Value, "username", translate("username"))
 	user.rmempty = true
 	user:depends("proto", "pptp")
 	user:depends("proto", "pppoe")
+	user:depends("proto", "pppoa")
 	user:depends("proto", "ppp")
 	user:depends("proto", "3g")
 
@@ -178,6 +179,7 @@ if has_pppd or has_pppoe or has_3g or has_pptp then
 	pass.password = true
 	pass:depends("proto", "pptp")
 	pass:depends("proto", "pppoe")
+	pass:depends("proto", "pppoa")
 	pass:depends("proto", "ppp")
 	pass:depends("proto", "3g")
 
@@ -188,6 +190,7 @@ if has_pppd or has_pppoe or has_3g or has_pptp then
 	ka.optional = true
 	ka:depends("proto", "pptp")
 	ka:depends("proto", "pppoe")
+	ka:depends("proto", "pppoa")
 	ka:depends("proto", "ppp")
 	ka:depends("proto", "3g")
 
@@ -198,11 +201,29 @@ if has_pppd or has_pppoe or has_3g or has_pptp then
 	demand.optional = true
 	demand:depends("proto", "pptp")
 	demand:depends("proto", "pppoe")
+	demand:depends("proto", "pppoa")
 	demand:depends("proto", "ppp")
 	demand:depends("proto", "3g")
 end
 
-if has_pppd or has_3g then
+if has_pppoa then
+	encaps = s:option(ListValue, "encaps", translate("network_interface_encaps"))
+	encaps.optional = false
+	encaps:depends("proto", "pppoa")
+	encaps:value("", translate("cbi_select"))
+	encaps:value("vc", "VC")
+	encaps:value("llc", "LLC")
+
+	vpi = s:option(Value, "vpi", "VPI")
+	vpi.optional = false
+	vpi:depends("proto", "pppoa")
+
+	vci = s:option(Value, "vci", "VCI")
+	vci.optional = false
+	vci:depends("proto", "pppoa")
+end
+
+if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	device = s:option(Value, "device",
 	 translate("network_interface_device"),
 	 translate("network_interface_device_desc")
@@ -215,6 +236,9 @@ if has_pppd or has_3g then
 	 translate("network_interface_defaultroute_desc")
 	)
 	defaultroute:depends("proto", "ppp")
+	defaultroute:depends("proto", "pppoa")
+	defaultroute:depends("proto", "pppoe")
+	defaultroute:depends("proto", "pptp")
 	defaultroute:depends("proto", "3g")
 	defaultroute.rmempty = false
 	function defaultroute.cfgvalue(...)
@@ -226,6 +250,10 @@ if has_pppd or has_3g then
 	 translate("network_interface_peerdns_desc")
 	)
 	peerdns:depends("proto", "ppp")
+	peerdns:depends("proto", "pppoa")
+	peerdns:depends("proto", "pppoe")
+	peerdns:depends("proto", "pptp")
+	peerdns:depends("proto", "3g")
 	peerdns.rmempty = false
 	function peerdns.cfgvalue(...)
 		return ( AbstractValue.cfgvalue(...) or '1' )
@@ -233,7 +261,10 @@ if has_pppd or has_3g then
 
 	ipv6 = s:option(Flag, "ipv6", translate("network_interface_ipv6") )
 	ipv6:depends("proto", "ppp")
-	--ipv6:depends("proto", "3g")
+	ipv6:depends("proto", "pppoa")
+	ipv6:depends("proto", "pppoe")
+	ipv6:depends("proto", "pptp")
+	ipv6:depends("proto", "3g")
 
 	connect = s:option(Value, "connect",
 	 translate("network_interface_connect"),
@@ -241,6 +272,9 @@ if has_pppd or has_3g then
 	)
 	connect.optional = true
 	connect:depends("proto", "ppp")
+	connect:depends("proto", "pppoe")
+	connect:depends("proto", "pppoa")
+	connect:depends("proto", "pptp")
 	connect:depends("proto", "3g")
 
 	disconnect = s:option(Value, "disconnect",
@@ -249,6 +283,9 @@ if has_pppd or has_3g then
 	)
 	disconnect.optional = true
 	disconnect:depends("proto", "ppp")
+	disconnect:depends("proto", "pppoe")
+	disconnect:depends("proto", "pppoa")
+	disconnect:depends("proto", "pptp")
 	disconnect:depends("proto", "3g")
 
 	pppd_options = s:option(Value, "pppd_options",
@@ -257,6 +294,9 @@ if has_pppd or has_3g then
 	)
 	pppd_options.optional = true
 	pppd_options:depends("proto", "ppp")
+	pppd_options:depends("proto", "pppoa")
+	pppd_options:depends("proto", "pppoe")
+	pppd_options:depends("proto", "pptp")
 	pppd_options:depends("proto", "3g")
 
 	maxwait = s:option(Value, "maxwait",
