@@ -1,0 +1,61 @@
+. /lib/firewall/uci_firewall.sh
+unset ZONE
+config_get ifname $INTERFACE ifname
+[ "$ifname" == "lo" ] && exit 0
+
+load_zones() {
+	local name
+	local network
+	config_get name $1 name
+	config_get network $1 network
+	[ -z "$network" ] && network=$name
+	for n in $network; do
+		[ "$n" = "$INTERFACE" ] && ZONE="$ZONE $name"
+	done
+}
+
+config_foreach load_zones zone
+
+[ -z "$ZONE" ] && exit 0
+
+natfix_addr_add() {
+	local network=$1
+	local iface=$2
+
+	config_get parent "$1" interface
+	[ "$network" != "$INTERFACE" -a "$parent" != "$INTERFACE" ] && return 0
+
+	config_get ipaddr "$network" ipaddr
+	[ -n "$ipaddr" ] || return 0
+	config_get netmask "$network" netmask
+	[ -n "$netmask" ] || return 0
+	eval "$(ipcalc.sh $ipaddr $netmask)"
+
+	logger -t firewall.freifunk "adding nat rule for $iface($NETWORK/$PREFIX)"
+	iptables -t nat -A "natfix_$iface" -s "$NETWORK/$PREFIX" -d "$NETWORK/$PREFIX" -j ACCEPT
+}
+
+[ ifup = "$ACTION" ] && {
+	iptables -t nat -N "natfix_$ifname"
+	natfix_addr_add "$INTERFACE" "$ifname"
+	config_foreach natfix_addr_add alias "$ifname"
+
+	for z in $ZONE; do
+		local loaded
+		config_get loaded core loaded
+		[ -n "$loaded" ] && {
+			logger -t firewall.freifunk "applying nat rules on zone $z"
+			iptables -t nat -I "zone_${z}_nat" 1 -o "$ifname" -j "natfix_$ifname"
+		}
+	done
+}
+
+[ ifdown = "$ACTION" ] && {
+	for z in $ZONE; do
+		local up
+		config_get up $z up
+		iptables -t nat -D "zone_${z}_nat" -o "$ifname" -j "natfix_$ifname" 2>/dev/null
+	done
+	iptables -t nat -F "natfix_$ifname" 2>/dev/null
+	iptables -t nat -X "natfix_$ifname" 2>/dev/null
+}
