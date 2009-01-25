@@ -216,6 +216,7 @@ define Package/luci-web
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-http +luci-sys +luci-uci +luci-sgi-cgi
   TITLE:=MVC Webframework
+  $(call Config,luci.main.lang,string,en,Default Language)
 endef
 
 define Package/luci-web/conffiles
