@@ -47,7 +47,10 @@ local wifidata = luci.sys.wifi.getiwconfig()
 local ifaces = {}
 
 for k, v in pairs(wireless) do
-	if v[".type"] == "wifi-iface" and luci.util.contains(ffwifs, v.device) then
+	if v[".type"] == "wifi-iface" and (
+		luci.util.contains(ffwifs, v.device) or
+		( #ffwifs == 0 and (not v.encryption or v.encryption == "none") ) )
+	then
 		table.insert(ifaces, v)
 	end
 end
