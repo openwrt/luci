@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Freifunk Init
+# $Id$
+
+START=99
+
+boot() {
+	echo "*/5 * * * *	killall -HUP dnsmasq" >> /etc/crontabs/root
+
+	[ -f /etc/rc.local ] && . /etc/rc.local
+}
