@@ -25,7 +25,7 @@ function e.cfgvalue(self, section)
 	return (os.execute("/etc/init.d/miniupnpd enabled") == 0) and "1" or "0"
 end
 
-s:option(Value, "download", nil, "kb/s").rmempty = true
-s:option(Value, "upload", nil, "kb/s").rmempty = true
+s:option(Value, "download", nil, "kByte/s").rmempty = true
+s:option(Value, "upload", nil, "kByte/s").rmempty = true
 
 return m
