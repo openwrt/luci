@@ -256,6 +256,12 @@ function olsr.write(self, section, value)
 	olsrbase.ignore    = "0"
 	uci:section("olsrd", "Interface", nil, olsrbase)
 	uci:save("olsrd")
+
+	-- Import hosts
+	uci:foreach("dhcp", "dnsmasq", function(s)
+		uci:set("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
+	end)
+	uci:save("dhcp")
 end
 
 
