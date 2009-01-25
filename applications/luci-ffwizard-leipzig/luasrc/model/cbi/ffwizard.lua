@@ -209,6 +209,16 @@ function main.write(self, section, value)
 			uci:set("firewall", section[".name"], "drop_invalid", "0")
 		end)
 
+	-- Prepare advanced config
+	local has_advanced = false
+	uci:foreach("firewall", "advanced",
+		function(section) has_advanced = true end)
+
+	if not has_advanced then
+		uci:section("firewall", "advanced", nil,
+			{ tcp_ecn = "0" })
+	end
+
 	uci:save("firewall")
 
 
