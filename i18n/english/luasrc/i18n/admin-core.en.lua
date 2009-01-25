@@ -227,6 +227,8 @@ network_interface_pincode_desc = 'Make sure that you provide the correct pin cod
 network_interface_service = 'Service type'
 network_interface_maxwait = 'Setup wait time'
 network_interface_maxwait_desc = 'Seconds to wait for the modem to become ready before attempting to connect'
+network_interface_encaps = 'PPPoA Encapsulation'
+
 a_n_r_routes1 = 'Routes specify over which interface and gateway a certain host or network can be reached.'
 a_n_routes_static = 'Static Routes'
 a_n_routes_static4 = 'Static IPv4 Routes'

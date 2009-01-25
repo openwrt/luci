@@ -10,6 +10,7 @@ config section
 	list   depends	'proto=static, ipaddr, netmask'
 	list   depends	'proto=static, ip6addr'
 	list   depends	'proto=pppoe, username, password'
+	list   depends  'proto=pppoa, username, password, encaps, vpi, vci'
 	list   depends	'proto=ppp, device'
 	list   depends	'proto=3g, device'
 	list   depends	'proto=pptp, username, password, server'
@@ -88,6 +89,7 @@ config variable
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
 	list   depends	'proto=3g'
+	list   depends  'proto=pppoa'
 
 config variable
 	option name	'demand'
@@ -96,6 +98,7 @@ config variable
 	option section	'network.interface'
 	option datatype	'uint'
 	list   depends	'proto=pppoe'
+	list   depends  'proto=pppoa'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
 	list   depends	'proto=3g'
@@ -105,6 +108,7 @@ config variable
 	option title	'Username'
 	option section	'network.interface'
 	option datatype	'string'
+	list   depends  'proto=pppoa'
 	list   depends	'proto=pppoe'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
@@ -116,9 +120,41 @@ config variable
 	option section	'network.interface'
 	option datatype	'string'
 	list   depends	'proto=pppoe'
+	list   depends  'proto=pppoa'
 	list   depends	'proto=pptp'
 	list   depends	'proto=ppp'
 	list   depends	'proto=3g'
+
+config variable
+	option name     'encaps'
+	option title    'PPPoA encapsulation mode'
+	option section  'network.interface'
+	option type     'enum'
+	list   depends  'proto=pppoa'
+
+config enum
+	option variable 'network.interface.encaps'
+	option value    'vc'
+	option title    'VC'
+
+config enum
+	option variable 'network.interface.encaps'
+	option value    'llc'
+	option title    'LLC'
+
+config variable
+	option name     'vpi'
+	option title	'PPPoA VPI'
+	option section  'network.interface'
+	option datatype 'uint'
+	list   depends  'proto=pppoa'
+
+config variable
+	option name     'vci'
+	option title    'PPPoA VCI'
+	option section  'network.interface'
+	option datatype 'uint'
+	list   depends  'proto=pppoa'
 
 config variable
 	option name	'server'
@@ -141,6 +177,9 @@ config variable
 	option section	'network.interface'
 	option datatype	'boolean'
 	list   depends	'proto=ppp'
+	list   depends  'proto=pppoa'
+        list   depends  'proto=pppoe'
+	list   depends  'proto=pptp'
 	list   depends	'proto=3g'
 
 config variable
@@ -149,6 +188,9 @@ config variable
 	option section	'network.interface'
 	option datatype	'boolean'
 	list   depends	'proto=ppp'
+	list   depends  'proto=pppoe'
+	list   depends  'proto=pppoa'
+	list   depends  'proto=pptp'
 	list   depends	'proto=3g'
 
 config variable
@@ -157,6 +199,9 @@ config variable
 	option section	'network.interface'
 	option datatype	'boolean'
 	list   depends	'proto=ppp'
+	list   depends  'proto=pppoe'
+	list   depends  'proto=pppoa'
+	list   depends  'proto=pptp'
 	list   depends	'proto=3g'
 
 config variable
@@ -165,6 +210,9 @@ config variable
 	option section	'network.interface'
 	option datatype	'file'
 	list   depends	'proto=ppp'
+	list   depends  'proto=pppoe'
+	list   depends	'proto=pppoa'
+	list   depends  'proto=pptp'
 	list   depends	'proto=3g'
 
 config variable
@@ -173,6 +221,9 @@ config variable
 	option section	'network.interface'
 	option datatype	'file'
 	list   depends	'proto=ppp'
+	list   depends  'proto=pppoe'
+	list   depends  'proto=pppoa'
+	list   depends  'proto=pptp'
 	list   depends	'proto=3g'
 
 config variable
@@ -181,6 +232,9 @@ config variable
 	option section	'network.interface'
 	option datatype	'string'
 	list   depends	'proto=ppp'
+	list   depends  'proto=pppoe'
+	list   depends  'proto=pppoa'
+	list   depends  'proto=pptp'
 	list   depends	'proto=3g'
 
 config variable
@@ -259,6 +313,11 @@ config enum
 	option variable	'network.interface.proto'
 	option value	'pppoe'
 	option title	'Interface is a PPPoE connection'
+
+config enum
+	option variable	'network.interface.proto'
+	option value	'pppoa'
+	option title	'Interface is a PPPoA connection'
 
 config enum
 	option variable	'network.interface.proto'
