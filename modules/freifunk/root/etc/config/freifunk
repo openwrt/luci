@@ -11,6 +11,11 @@ config public community
 	option name 'Freifunk'
 	option homepage 'http://freifunk.net'
 
+config fw_rule icmp
+	option src freifunk
+	option target ACCEPT
+	option proto  icmp
+
 config fw_rule http
 	option src freifunk
 	option target ACCEPT
