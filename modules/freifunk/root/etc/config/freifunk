@@ -46,10 +46,8 @@ config fw_forwarding fffwd
 
 config defaults wifi_device
     option channel   1
-    option txantenna 1
-    option rxantenna 1
-    option diversity 0
-    option disabled 0
+    option diversity 1
+    option disabled  0
 
 
 config defaults wifi_iface
@@ -67,7 +65,7 @@ config defaults interface
 
 
 config defaults alias
-	option netmask	255.255.255.0 
+	option netmask	255.255.255.0
 
 
 config defaults dhcp
@@ -109,7 +107,7 @@ config community berlin
 	option ssid "olsr.freifunk.net"
 	option prefix "104"
 	option external freifunk_berlin
-	
+
 config community hannover
 	option name "Freifunk Hannover"
 	option homepage http://hannover.freifunk.net
