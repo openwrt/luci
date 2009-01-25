@@ -27,7 +27,7 @@ end
 
 s:option(Flag, "secure_mode").rmempty = true
 s:option(Flag, "log_output").rmempty = true
-s:option(Value, "download", nil, "kb/s").rmempty = true
-s:option(Value, "upload", nil, "kb/s").rmempty = true
+s:option(Value, "download", nil, "kByte/s").rmempty = true
+s:option(Value, "upload", nil, "kByte/s").rmempty = true
 
 return m
