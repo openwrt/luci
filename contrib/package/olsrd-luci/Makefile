@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 Freifunk Leipzig
+# Copyright (C) 2008-2009 Freifunk Leipzig
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,21 +11,21 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
-PKG_VERSION:=0.5.6-r3
-PKG_RELEASE:=1
+PKG_VERSION:=0.5.6-r3+hg2227
+PKG_RELEASE:=2
 
-#PKG_HGREV:=cac1df64dcd5
-#PKG_SOURCE:=$(PKG_HGREV).tar.gz
-#PKG_SOURCE_URL:=http://gredler.at/hg/olsrd-0.5.6/archive
-#PKG_MD5SUM:=95af2d8d6075f74d379b752fb8dda3de
-#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_HGREV)
-#PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
+PKG_HGREV:=a7316f987848
+PKG_SOURCE:=$(PKG_HGREV).tar.gz
+PKG_SOURCE_URL:=http://gredler.at/hg/olsrd/archive
+PKG_MD5SUM:=b228b5452af158cd4313f9ed416d9c84
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_HGREV)
+PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
-PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
-PKG_MD5SUM:=0935688fa0fb5b0e073fe53ec654c5b2
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xjf $(DL_DIR)/$(PKG_SOURCE)
+#PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).tar.bz2
+#PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
+#PKG_MD5SUM:=0935688fa0fb5b0e073fe53ec654c5b2
+#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+#PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xjf $(DL_DIR)/$(PKG_SOURCE)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,7 +35,7 @@ define Package/olsrd-luci/common_info
 	CATEGORY:=Network
 	TITLE:=OLSR - Optimized Link State Routing Daemon
 	URL:=http://www.olsr.org/
-	MAINTAINER:=Jo-Philipp Wich <xm@leipzig.freifunk.net>
+	MAINTAINER:=Jo-Philipp Wich <xm@subsignal.org>
 endef
 
 define Package/olsrd-luci
@@ -111,24 +111,10 @@ define Package/olsrd-luci-mod-txtinfo
 	DEPENDS:=olsrd-luci
 endef
 
-define Package/olsrd-luci-mod-pgraph
-	$(call Package/olsrd-luci/common_info)
-	MENU:=1
-	TITLE:=OLSR - PGraph Plugin
-	DEPENDS:=olsrd-luci
-endef
-
 define Package/olsrd-luci-mod-quagga
 	$(call Package/olsrd-luci/common_info)
 	MENU:=1
 	TITLE:=OLSR - Quagga Plugin
-	DEPENDS:=olsrd-luci
-endef
-
-define Package/olsrd-luci-mod-tas
-	$(call Package/olsrd-luci/common_info)
-	MENU:=1
-	TITLE:=OLSR - Tiny Application Server Plugin
 	DEPENDS:=olsrd-luci
 endef
 
@@ -147,7 +133,7 @@ define Build/Compile
 		MANDIR="$(PKG_INSTALL_DIR)/usr/share/man" \
 		STRIP="true" \
 		INSTALL_LIB="true" \
-		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo pgraph quagga tas"
+		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo quagga"
 endef
 
 define Package/olsrd-luci/install
@@ -204,19 +190,9 @@ define Package/olsrd-luci-mod-txtinfo/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/txtinfo/olsrd_txtinfo.so.* $(1)/usr/lib/
 endef
 
-define Package/olsrd-luci-mod-pgraph/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/pgraph/olsrd_pgraph.so.* $(1)/usr/lib/
-endef
-
 define Package/olsrd-luci-mod-quagga/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/quagga/olsrd_quagga.so.* $(1)/usr/lib/
-endef
-
-define Package/olsrd-luci-mod-tas/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/tas/olsrd_tas.so.* $(1)/usr/lib/
 endef
 
 
@@ -230,6 +206,4 @@ $(eval $(call BuildPackage,olsrd-luci-mod-httpinfo))
 $(eval $(call BuildPackage,olsrd-luci-mod-nameservice))
 $(eval $(call BuildPackage,olsrd-luci-mod-secure))
 $(eval $(call BuildPackage,olsrd-luci-mod-txtinfo))
-$(eval $(call BuildPackage,olsrd-luci-mod-pgraph))
 $(eval $(call BuildPackage,olsrd-luci-mod-quagga))
-$(eval $(call BuildPackage,olsrd-luci-mod-tas))
