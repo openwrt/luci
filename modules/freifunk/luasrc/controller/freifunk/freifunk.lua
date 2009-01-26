@@ -128,6 +128,7 @@ function jsonstatus()
 	local http = require "luci.http"
 	local json = require "luci.json"
 	local ltn12 = require "luci.ltn12"
+	local version = require "luci.version"
 	local webadmin = require "luci.tools.webadmin"
 
 	local cursor = uci.cursor_state()
@@ -146,7 +147,12 @@ function jsonstatus()
 		hostname = sys.hostname()
 	}
 
-	root.brand = cursor:get_all("luci", "brand")
+	root.firmware = {
+		luciname=version.luciname,
+		luciversion=version.luciversion,
+		distname=version.distname,
+		distversion=version.distversion
+	}
 
 	root.freifunk = {}
 	cursor:foreach("freifunk", "public", function(s)
