@@ -22,5 +22,6 @@ port.isinteger = true
 pwauth = s:option(Flag, "PasswordAuth", translate("a_srv_d_pwauth"), translate("a_srv_d_pwauth1"))
 pwauth.enabled = 'on'
 pwauth.disabled = 'off'
+pwauth.rmempty = false
 
 return m
