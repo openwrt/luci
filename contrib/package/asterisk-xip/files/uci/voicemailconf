@@ -46,13 +46,13 @@ valid_voicebox() {
 }
 
 check_add_voicebox() {
-	if [ ! -z ${voicebox_number} ] ; then
+	if [ ! -z "${voicebox_number}" ] ; then
 		[ -z "${voicebox_context}" ] && voicebox_context=default
 		logdebug 1 "Adding Voicebox ${voicebox_number} in ${voicebox_context}"
 		# Construct the voicebox line
 		local line="$voicebox_number => "
-		[ -z ${voicebox_tz} ] && voicebox_tz=homeloc
-		[ -z ${voicebox_name} ] && voicebox_name=OpenWRT
+		[ -z "${voicebox_tz}" ] && voicebox_tz=homeloc
+		[ -z "${voicebox_name}" ] && voicebox_name=OpenWRT
 
 		logdebug 1 "Adding in order options"
 		for i in password name email pager ; do
@@ -90,7 +90,7 @@ create_voicemailconf() {
 	get_checksum voicemail_conf $file
 
 	local isempty=1
-	if [ -z ${voice_contextlist} ] ; then
+	if [ -z "${voice_contextlist}" ] ; then
 		local isempty=2
 		rm -f $file
 	else
@@ -188,8 +188,8 @@ handle_dialplanvoice() {
 check_add_dialplanvoice() {
 	if [ ! -z "${dial_voice_dialplan}" -a ! -z "${dial_voice_extension}" ] ; then
 		local ext="exten => ${dial_voice_extension},"
-		[ -z ${dial_voice_voicebox} ] && dial_voice_voicebox=default
-		if [ -z ${dial_voice_voicebox} ] ; then
+		[ -z "${dial_voice_voicebox}" ] && dial_voice_voicebox=default
+		if [ -z "${dial_voice_voicebox}" ] ; then
 			logerror "Expecting voicebox for ${dial_voice_dialplan}/${dial_voice_extension}"
 		else
 			check_add_context ${dial_voice_dialplan}
@@ -202,6 +202,13 @@ check_add_dialplanvoice() {
 		eval "unset dial_voice_$i"
 	done
 }
+
+enable_voicemail() {
+	enable_module res_adsi
+	enable_module app_voicemail
+	enable_format gsm
+}
+
 
 add_dialplan_voice() {
 	local context=$1
