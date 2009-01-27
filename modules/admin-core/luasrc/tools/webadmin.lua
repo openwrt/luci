@@ -66,7 +66,9 @@ function network_get_addresses(net)
 	local mav4 = state:get("network", net, "netmask")
 	local ipv6 = state:get("network", net, "ip6addr")
 	
-	if ipv4 and mav4 and #ipv4 > 0 and #mav4 > 0 then
+	if ipv4 and #ipv4 > 0 then
+		if mav4 and #mav4 == 0 then mav4 = nil end
+
 		ipv4 = luci.ip.IPv4(ipv4, mav4)
 		
 		if ipv4 then 
