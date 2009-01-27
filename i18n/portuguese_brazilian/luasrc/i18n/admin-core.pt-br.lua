@@ -323,3 +323,5 @@ hostnames_entries = 'Entrada do Host'
 hostnames_hostname = 'Hostname'
 hostnames_address = 'Endereço de IP'
 network_interface_encaps = 'PPPoA Encapsulation'
+m_n_mssfix = "Clamp Segment Size"
+m_n_mssfix_desc = "Fixes problems with unreachable websites, submitting forms or other unexpected behaviour for some ISPs."

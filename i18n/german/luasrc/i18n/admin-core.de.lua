@@ -341,3 +341,5 @@ hostnames_entries = 'Host-Einträge'
 hostnames_hostname = 'Rechnername'
 hostnames_address = 'IP-Adresse'
 luci_components = "LuCI Komponenten"
+m_n_mssfix = "Segmentgrößen Clamping"
+m_n_mssfix_desc = "Behebt Probleme bei nicht erreichbaren Webseiten, Absenden von Formularen oder anderes unerwartetes Verhalten für einige ISPs."

@@ -265,3 +265,5 @@ network_interface_err_desc = 'Перед. / Получ.'
 network_interface_fwzone = 'Создать / Добавить Файрвол-зону'
 network_interface_fwzone_desc = 'Этот интерфейс не принадлежит ни к одной Файрвол-зоне.'
 network_interface_encaps = 'PPPoA Encapsulation'
+m_n_mssfix = "Clamp Segment Size"
+m_n_mssfix_desc = "Fixes problems with unreachable websites, submitting forms or other unexpected behaviour for some ISPs."
