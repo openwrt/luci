@@ -108,6 +108,7 @@ enable_lastcall() {
 		
 		append dialplan_globals "LASTCALLZONE=\"${asterisk_zone}\"" "$N"
 		[ -z "${DEST}" ] || append dialplan_globals "LASTCALL_DIR=${DEST}/etc/asterisk/directory" "$N"
+		append_include "macros/tagnumber.conf"
 		append_include "macros/lastcall.conf"
 		dialplan_do_add_lastcall=1
 		enable_module app_macro
