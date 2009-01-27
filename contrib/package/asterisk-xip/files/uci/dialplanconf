@@ -26,6 +26,7 @@ init_dialplanconf() {
 }
 
 match_all="_[0-9*+#]."
+match_all_s="_[0-9*+#s]."
 
 dialplangeneral_list="static writeprotect canreinvite clearglobalvars"
 dialplangeneral_list_ex="lastdialed lastdialedtype voiceboxext answerfirst dialtimeout allowtransfer international internationalout"
@@ -59,14 +60,6 @@ append_dialplan_context() {
 }
 
 reload_dialplan() astcmd "dialplan reload"
-
-# Voicemail
-
-enable_voicemail() {
-	enable_module res_adsi
-	enable_module app_voicemail
-	enable_format gsm
-}
 
 add_dialplan_exten() {
 	local context=$1
@@ -170,6 +163,7 @@ handle_inzone() {
 			caller_ITEM*|caller) append inzone_${context_name}_caller "$2" " " ;;
 			include_ITEM*|include) append inzone_${context_name}_include "$2" " " ;;
 			match_LENGTH|caller_LENGTH|include_LENGTH) ;;
+			_*) ;;
 			*) logerror "Invalid Dialplan inzone option: $1" ;;
 		esac
 	}
@@ -601,6 +595,7 @@ handle_dialplan(){
 		case $1 in
 			include_LENGTH) ;;
 			include|include_ITEM*) add_dialplan_include ${context_name} $2 ;;
+			_*) ;;
 			*)
 				lhs=$1
 				logdebug 4 "Add extension $lhs"
@@ -851,7 +846,7 @@ handle_incoming() {
 					logerror "No target type specified for target=$2 in ${incoming_context}"
 				fi
 				;;
-			target_COUNT|member_COUNT) ;;
+			target_LENGTH|member_LENGTH) ;;
 			*) logerror "Invalid option $1 in incoming" ;;
 		esac
 	}
