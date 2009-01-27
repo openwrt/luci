@@ -1,0 +1,133 @@
+#!/bin/bash
+# Queues.conf
+
+ast_add_conf queue
+
+init_queueconf() {
+	ast_add_reload queue
+
+	ast_enable_type callqueue
+	ast_enable_type callqueuegeneral
+}
+
+create_queueconf() { 
+	# Construct the file
+	file=${DEST_DIR}/queues.conf
+	get_checksum queue_conf $file
+	local isempty=1
+	logdebug 0 "Generating Queues.conf: ${callqueue_contexts}"
+	if [ -z "${callqueue_contexts}" ] ; then
+		isempty=2
+		rm -f $file
+	else
+		logdebug 0 "General section"
+		echo "${asteriskuci_gen}[general]" > "$file"
+		[ -z "${callqueue_gen_autofill}" ] && callqueue_gen_autofill=yes
+		for i in ${callqueuegeneral_list} ; do
+			local opt=${i//-/}
+			eval "local val=\"\${callqueue_gen_${opt}}\""
+			[ -z "${val}" ] || echo "${i}=${val}" >> "$file"
+		done
+
+		logdebug 0 "Add queues"
+		for i in ${callqueue_contexts} ; do
+			eval "local queuename=\${callqueue_opt_${i}_name}"
+			logdebug 0 "Add queue ${queuename}"
+			echo "${N}[${queuename}]" >> "$file"
+			local queueopts=
+			local has_moh=0
+			for j in ${callqueue_list} ; do
+				local opt=${j//-/}
+				eval "local val=\"\${callqueue_opt_${i}_${opt}}\""
+				if [ ! -z "${val}" ]; then
+					echo "${j}=${val}" >> "$file"
+					case "${opt}" in
+						musicclass) has_moh=1
+					esac
+				fi
+			done
+
+			eval "local memberlist=\"\${callqueue_opt_${i}_members}\""
+			for j in ${memberlist} ; do
+				echo "member => ${j}" >> "$file"
+			done
+
+			[ "${has_moh}" = 0 ] && queueopts=${queueopts}r
+			eval "local queuetimeout=\"\${callqueue_opt_${i}_queuetimeout}\""
+			if [ "${queuetimeout-0}" = 0 ] ; then
+				queuetimeout=
+			else
+				queueopts=${queueopts}n
+			fi
+
+			# Now add call dialplan
+			if check_add_context "${i}" ; then
+				append_dialplan_context "${i}" "exten = ${match_all_s},1,Queue(${queuename}|${queueopts}|||${queuetimeout})"
+				#TODO Add voicemail? fallthrough option?
+			fi
+
+		done
+	fi
+
+	check_checksum "$queue_conf" "$file" || ast_queue_restart=$isempty
+}
+
+reload_queue() astcmd "module reload app_queue.so"
+unload_queue() astcmd "module unload app_queue.so"
+
+
+callqueuegeneral_list="persistentmembers autofill monitor-type"
+valid_callqueuegeneral() {
+	is_in_list $1 ${callqueuegeneral_list//-/}
+	return $?
+}
+
+handle_callqueue_general() {
+	option_cb() {
+		if valid_callqueuegeneral "$1" ; then
+			eval "callqueue_gen_$1=\"\${2}\""
+		else
+			[ "${1:0:1}" = "_" ] || logerror "Invalid callqueuegeneral option: $1"
+		fi
+	}
+}
+
+callqueue_list="musicclass announce strategy context timeout wrapuptime \
+autofill maxlen announce-holdtime announce-frequency periodic-announce-frequency ringinuse"
+
+valid_callqueue() {
+	is_in_list $1 ${callqueue_list//-/} queuetimeout
+	return $?
+}
+
+handle_callqueue() {
+	cur_context="$1"
+	callqueue_opt_name="$1" # Name in queue.conf
+	[ -z "${callqueue_contexts}" ] && enable_module app_queue
+	append "callqueue_contexts" "$1" " "
+
+	option_cb() {
+		case "$1" in
+		name) eval "callqueue_opt_${cur_context}_name=\"\$2\"" ;;
+		member|member_ITEM*)
+			local member_type=
+			local member_ext=
+			if ! split_targettype member_type member_ext "${2}" ; then
+				logerror "No extension type specified for queue ${cur_context} member ${2}"
+			else
+				append callqueue_opt_${cur_context}_members "${member_type}/${member_ext}" " "
+			fi
+		;;
+		member_LENGTH) ;;
+		_*) ;; # ignore
+		*)
+			if valid_callqueue "$1" ; then
+				eval "callqueue_opt_${cur_context}_$1=\"\${2}\""
+			else
+				logerror "Invalid callqueue option: $1"
+			fi ;;
+		esac
+	}
+}
+
+

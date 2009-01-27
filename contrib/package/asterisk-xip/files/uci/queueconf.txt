@@ -1,0 +1,30 @@
+callqueuegeneral
+persistentmembers = yes
+autofill = yes - Probably set this on.
+monitortype = MixMonitor
+
+callqueue {context}
+	name  - queue name (default to same as context)
+	queuetimeout - Timeout of the queue
+	member (list) - list of members.
+	musicclass  - Class of moh to use (or blank for ringing)
+	announce = queue-markq (announce to agent)
+	strategy -  
+		ringall - ring all available channels until one answers (default)
+		roundrobin - take turns ringing each available interface 
+		leastrecent - ring interface which was least recently called by this queue
+		fewestcalls - ring the one with fewest completed calls from this queue
+		random - ring random interface
+		rrmemory - round robin with memory, remember where we left off last ring pass
+
+	context = qoutcon (single digit numbers)
+	timeout = 15   - Ringing timeout
+	wrapuptime=15  - time allowed after hangup of call
+	autofill=yes - Probably set this on.
+	maxlen = 0 - Maximum queue length (0 for unlimited)
+	announceholdtime = yes|no|once   ; Should we include estimated hold time in position announcements?
+	announcefrequency - How often to announce queue position and/or estimated 
+	;periodicannounce-frequency=60
+	; ringinuse = no  ; ring if known to be in use
+
+	;member => Zap/1
