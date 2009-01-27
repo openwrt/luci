@@ -329,3 +329,5 @@ hostnames_entries = 'Host entries'
 hostnames_hostname = 'Hostname'
 hostnames_address = 'IP address'
 luci_components = "LuCI Components"
+m_n_mssfix = "Clamp Segment Size"
+m_n_mssfix_desc = "Fixes problems with unreachable websites, submitting forms or other unexpected behaviour for some ISPs."
