@@ -1,0 +1,34 @@
+
+voicegeneral - General options for voicemail
+	format           - Formats to store mail in (Default wav49|gsm|wav) - once set do NOT change this.
+	maxlogins        - Number of failed login attempts allowed
+	maxmsg           - Maximum numer of messages per folder
+	sendvoicemail    - Allow Sending of voicemail from VoiceMailMain
+	serveremail      - Who the notifications should be 'FROM:'
+	attach           - Attach voicemail to the email as an attachment
+	skipms           - Milliseconds to skip forward/back for rew/ff in message playback
+	maxsilence       - Seconds of silence before recoring ends.
+	silencethreshold - What is considered silence - the lower the more sensitive
+	emaildateformat  - Date format on outgoing mails (see strftime).
+	maxmessage       - Maximum length of voicemail in seconds
+	minmessage       - Minimum length of voicemail in seconds
+	maxgreet         - Maximum length of greetings in seconds
+
+voicemail - Add a voicemail box.
+	context          - 'Voicemail context' for this entry (default 'default')
+	number           - Number of voicemail box
+	name             - Name of owner (default OpenWRT)
+	zone             - Timezone for voicebox (default homeloc)
+	password         - Passcode for box
+	email            - Email address of owner
+	page             - Pager number of owner.
+
+voicezone - Add a Timezone definition
+	zone             - Name of timezone (from tzdata) to use
+	message          - Date time message to use
+
+dialplanvoice - Add extension to pick up voicemail
+	dialplan         - Dialplan context to add the extension to
+	extension        - Extension to add
+	voicecontext     - voicebox context (default 'default')
+	voicebox         - Which voicebox to open
