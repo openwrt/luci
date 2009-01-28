@@ -16,6 +16,8 @@ m = Map("upnpd", translate("upnpd"), translate("upnpd_desc"))
 
 s = m:section(NamedSection, "config", "upnpd", "")
 e = s:option(Flag, "enabled", translate("enable"))
+e.rmempty = false
+
 function e.write(self, section, value)
 	local cmd = (value == "1") and "enable" or "disable"
 	os.execute("/etc/init.d/miniupnpd " .. cmd)
