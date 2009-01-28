@@ -20,6 +20,9 @@ e.rmempty = false
 
 function e.write(self, section, value)
 	local cmd = (value == "1") and "enable" or "disable"
+	if value ~= "1" then
+		os.execute("/etc/init.d/miniupnpd stop")
+	end
 	os.execute("/etc/init.d/miniupnpd " .. cmd)
 end
 
