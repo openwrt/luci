@@ -36,6 +36,7 @@ s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 s.extedit   = luci.dispatcher.build_url("admin", "network", "firewall", "rule", "%s")
+s.defaults.target = "ACCEPT"
 
 local created = nil
 
