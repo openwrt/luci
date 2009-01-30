@@ -296,11 +296,14 @@ end
 
 function share.write(self, section, value)
 	uci:delete_all("firewall", "forwarding", {src="freifunk", dest="wan"})
+	uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_dyn_gw_plain.so.0.4"})
 
 	if value == "1" then
 		uci:section("firewall", "forwarding", nil, {src="freifunk", dest="wan"})
+		uci:section("olsrd", "LoadPlugin", nil, {library="olsrd_dyn_gw_plain.so.0.4"})
 	end
 	uci:save("firewall")
+	uci:save("olsrd")
 end
 
 
