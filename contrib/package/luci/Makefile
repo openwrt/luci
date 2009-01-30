@@ -261,7 +261,6 @@ define Package/luci-freifunk-community
   DEPENDS+= \
    +luci-sgi-cgi +luci-app-splash \
    +luci-app-ffwizard-leipzig \
-   +luci-theme-fledermaus \
    +luci-i18n-german \
    +PACKAGE_luci-freifunk-community:olsrd-luci +PACKAGE_luci-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
    +PACKAGE_luci-freifunk-community:olsrd-luci-mod-txtinfo +PACKAGE_luci-freifunk-community:olsrd-luci-mod-nameservice \
