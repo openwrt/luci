@@ -39,7 +39,7 @@ luci.model.uci.cursor():foreach("firewall", "zone",
 s:option(Value, "src_ip", translate("firewall_redirect_srcip")).optional = true
 s:option(Value, "src_mac", translate("firewall_redirect_srcmac")).optional = true
 
-sport = s:option(Value, "src_port", translate("firewall_redirect_srcport"))
+sport = s:option(Value, "src_port", translate("firewall_rule_srcport"))
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
