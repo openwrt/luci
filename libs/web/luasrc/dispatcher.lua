@@ -134,7 +134,8 @@ function dispatch(request)
 	local lang = conf.main.lang
 	if lang == "auto" then
 		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
-		for lpat in aclang:gmatch("[%w]+") do
+		for lpat in aclang:gmatch("[%w-]+") do
+			lpat = lpat and lpat:gsub("-", "_")
 			if conf.languages[lpat] then
 				lang = lpat
 				break
