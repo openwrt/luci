@@ -343,3 +343,4 @@ hostnames_address = 'IP-Adresse'
 luci_components = "LuCI Komponenten"
 m_n_mssfix = "Segmentgrößen Clamping"
 m_n_mssfix_desc = "Behebt Probleme bei nicht erreichbaren Webseiten, Absenden von Formularen oder anderes unerwartetes Verhalten für einige ISPs."
+dhcp_desc = 'Mit <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> können Netzwerkteilnehmer automatisch Einstellungen wie <abbr title="Internet Protocol">IP</abbr>-Adresse, Präfix, <abbr title="Domain Name System">DNS</abbr>-Server, usw. beziehen.'
