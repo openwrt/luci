@@ -19,4 +19,6 @@ boot() {
 			test -f "$file" && . "$file"
 		done
 	}
+
+	killall -HUP crond 2>/dev/null || /etc/init.d/cron start
 }
