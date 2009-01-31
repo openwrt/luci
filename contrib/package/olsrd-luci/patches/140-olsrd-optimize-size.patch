@@ -1,0 +1,2139 @@
+diff -Nur olsrd-0.5.6-r3.orig/lib/bmf/src/NetworkInterfaces.c olsrd-0.5.6-r3/lib/bmf/src/NetworkInterfaces.c
+--- olsrd-0.5.6-r3.orig/lib/bmf/src/NetworkInterfaces.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/lib/bmf/src/NetworkInterfaces.c	2008-12-03 10:01:07.000000000 +0100
+@@ -544,7 +544,9 @@
+           OLSR_PRINTF(9, "%s: ----> Not forwarding to %s: no link found\n", PLUGIN_NAME_SHORT,
+                       olsr_ip_to_string(&buf, &walker->neighbor_iface_addr));
+         } else {
++#ifndef DEBUG
+           struct interface *bestIntf = if_ifwithaddr(&bestLinkToNeighbor->local_iface_addr);
++#endif
+ 
+           OLSR_PRINTF(9, "%s: ----> Not forwarding to %s: \"%s\" gives a better link to this neighbor, costing %5.2f\n",
+                       PLUGIN_NAME_SHORT, olsr_ip_to_string(&buf, &walker->neighbor_iface_addr), bestIntf->int_name,
+diff -Nur olsrd-0.5.6-r3.orig/lib/httpinfo/Makefile olsrd-0.5.6-r3/lib/httpinfo/Makefile
+--- olsrd-0.5.6-r3.orig/lib/httpinfo/Makefile	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/lib/httpinfo/Makefile	2008-12-03 10:01:07.000000000 +0100
+@@ -47,7 +47,11 @@
+ CPPFLAGS +=	-DADMIN_INTERFACE
+ endif
+ 
++ifdef SVEN_OLA_UNBLOAT
++	CFLAGS += -DSVEN_OLA
++else
+ OBJS += $(TOPDIR)/src/cfgparser/cfgfile_gen.o
++endif
+ 
+ default_target: $(PLUGIN_FULLNAME)
+ ifdef ADMIN_INTERFACE
+diff -Nur olsrd-0.5.6-r3.orig/lib/httpinfo/src/olsrd_httpinfo.c olsrd-0.5.6-r3/lib/httpinfo/src/olsrd_httpinfo.c
+--- olsrd-0.5.6-r3.orig/lib/httpinfo/src/olsrd_httpinfo.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/lib/httpinfo/src/olsrd_httpinfo.c	2008-12-03 10:01:07.000000000 +0100
+@@ -67,7 +67,9 @@
+ 
+ #include "olsrd_httpinfo.h"
+ #include "admin_interface.h"
++#ifndef SVEN_OLA_UNBLOAT
+ #include "gfx.h"
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ #ifdef OS
+ #undef OS
+@@ -181,7 +183,9 @@
+ 
+ static int build_about_body(char *, olsr_u32_t);
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ static int build_cfgfile_body(char *, olsr_u32_t);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ static int check_allowed_ip(const struct allowed_net *const allowed_nets, const union olsr_ip_addr *const addr);
+ 
+@@ -217,10 +221,13 @@
+   {"Admin", "admin", build_admin_body, OLSR_TRUE},
+ #endif
+   {"About", "about", build_about_body, OLSR_TRUE},
++#ifndef SVEN_OLA_UNBLOAT
+   {"FOO", "cfgfile", build_cfgfile_body, OLSR_FALSE},
++#endif /* SVEN_OLA_UNBLOAT */
+   {NULL, NULL, NULL, OLSR_FALSE}
+ };
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ static const struct static_bin_file_entry static_bin_files[] = {
+   {"favicon.ico", favicon_ico, sizeof(favicon_ico)}
+   ,
+@@ -230,6 +237,7 @@
+   ,
+   {NULL, NULL, 0}
+ };
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ static const struct static_txt_file_entry static_txt_files[] = {
+   {"httpinfo.css", httpinfo_css},
+@@ -408,6 +416,7 @@
+   } else if (!strcmp(req_type, "GET")) {
+     int i = 0;
+ 
++#ifndef SVEN_OLA_UNBLOAT
+     for (i = 0; static_bin_files[i].filename; i++) {
+       if (FILENREQ_MATCH(filename, static_bin_files[i].filename)) {
+         break;
+@@ -423,6 +432,7 @@
+     }
+ 
+     i = 0;
++#endif /* SVEN_OLA_UNBLOAT */
+     while (static_txt_files[i].filename) {
+       if (FILENREQ_MATCH(filename, static_txt_files[i].filename)) {
+         break;
+@@ -462,16 +472,22 @@
+         snprintf(&body[size], sizeof(body) - size,
+                  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n" "<head>\n"
+                  "<meta http-equiv=\"Content-type\" content=\"text/html; charset=ISO-8859-1\">\n"
+-                 "<title>olsr.org httpinfo plugin</title>\n" "<link rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n"
++                 "<title>olsr.org httpinfo plugin</title>\n"
++#ifndef SVEN_OLA_UNBLOAT
++                 "<link rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n"
+                  "<link rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n"
++#endif /* SVEN_OLA_UNBLOAT */
+                  "<link rel=\"stylesheet\" type=\"text/css\" href=\"httpinfo.css\">\n" "</head>\n"
+                  "<body bgcolor=\"#ffffff\" text=\"#000000\">\n"
++#ifndef SVEN_OLA_UNBLOAT
+                  "<table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"%d\">\n"
+                  "<tbody><tr bgcolor=\"#ffffff\">\n" "<td align=\"left\" height=\"69\" valign=\"middle\" width=\"80%%\">\n"
+                  "<font color=\"black\" face=\"timesroman\" size=\"6\">&nbsp;&nbsp;&nbsp;<a href=\"http://www.olsr.org/\">olsr.org OLSR daemon</a></font></td>\n"
+                  "<td align=\"right\" height=\"69\" valign=\"middle\" width=\"20%%\">\n"
+                  "<a href=\"http://www.olsr.org/\"><img border=\"0\" src=\"/logo.gif\" alt=\"olsrd logo\"></a></td>\n" "</tr>\n"
+-                 "</tbody>\n" "</table>\n", FRAMEWIDTH);
++                 "</tbody>\n" "</table>\n", FRAMEWIDTH
++#endif /* SVEN_OLA_UNBLOAT */
++        );
+ 
+       size += build_tabs(&body[size], sizeof(body) - size, i);
+       size += build_frame(&body[size], sizeof(body) - size, "Current Routes", "routes", FRAMEWIDTH, tab_entries[i].build_body_cb);
+@@ -855,7 +871,7 @@
+       size += snprintf(&buf[size], bufsize - size, "<tr><td colspan=\"3\">Status: DOWN</td></tr>\n");
+       continue;
+     }
+-
++#ifndef SVEN_OLA_UNBLOAT
+     if (olsr_cnf->ip_version == AF_INET) {
+       struct ipaddr_str addrbuf, maskbuf, bcastbuf;
+       size +=
+@@ -868,6 +884,7 @@
+         snprintf(&buf[size], bufsize - size, "<tr>\n" "<td>IP: %s</td>\n" "<td>MCAST: %s</td>\n" "<td></td>\n" "</tr>\n",
+                  ip6_to_string(&addrbuf, &rifs->int6_addr.sin6_addr), ip6_to_string(&maskbuf, &rifs->int6_multaddr.sin6_addr));
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+     size +=
+       snprintf(&buf[size], bufsize - size, "<tr>\n" "<td>MTU: %d</td>\n" "<td>WLAN: %s</td>\n" "<td>STATUS: UP</td>\n" "</tr>\n",
+                rifs->int_mtu, rifs->is_wireless ? "Yes" : "No");
+@@ -1116,6 +1133,7 @@
+                   build_host);
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ static int
+ build_cfgfile_body(char *buf, olsr_u32_t bufsize)
+ {
+@@ -1150,6 +1168,7 @@
+ #endif
+   return size;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ static int
+ check_allowed_ip(const struct allowed_net *const allowed_nets, const union olsr_ip_addr *const addr)
+diff -Nur olsrd-0.5.6-r3.orig/lib/nameservice/src/nameservice.c olsrd-0.5.6-r3/lib/nameservice/src/nameservice.c
+--- olsrd-0.5.6-r3.orig/lib/nameservice/src/nameservice.c	2008-12-03 10:01:07.000000000 +0100
++++ olsrd-0.5.6-r3/lib/nameservice/src/nameservice.c	2008-12-03 10:10:52.000000000 +0100
+@@ -65,6 +65,11 @@
+ #include "mapwrite.h"
+ #include "compat.h"
+ 
++#ifdef SVEN_OLA_UNBLOAT
++#undef OLSR_PRINTF
++#define OLSR_PRINTF(...)
++#endif /* SVEN_OLA_UNBLOAT */
++
+ /* config parameters */
+ static char my_hosts_file[MAX_FILE + 1];
+ static char my_sighup_pid_file[MAX_FILE + 1];
+@@ -73,12 +78,16 @@
+ static char my_suffix[MAX_SUFFIX];
+ static int my_interval = EMISSION_INTERVAL;
+ static double my_timeout = NAME_VALID_TIME;
++#ifndef SVEN_OLA_UNBLOAT
+ static char my_resolv_file[MAX_FILE + 1];
++#endif /* SVEN_OLA_UNBLOAT */
+ static char my_services_file[MAX_FILE + 1];
+ static char my_macs_file[MAX_FILE + 1];
++#ifndef SVEN_OLA_UNBLOAT
+ static char my_name_change_script[MAX_FILE + 1];
+ static char my_services_change_script[MAX_FILE + 1];
+ static char my_macs_change_script[MAX_FILE + 1];
++#endif
+ static char latlon_in_file[MAX_FILE + 1];
+ static char my_latlon_file[MAX_FILE + 1];
+ float my_lat = 0.0, my_lon = 0.0;
+@@ -102,9 +111,11 @@
+ static struct name_entry *my_macs = NULL;
+ static olsr_bool mac_table_changed = OLSR_TRUE;
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ static struct list_node forwarder_list[HASHSIZE];
+ static struct name_entry *my_forwarders = NULL;
+ static olsr_bool forwarder_table_changed = OLSR_TRUE;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ struct list_node latlon_list[HASHSIZE];
+ static olsr_bool latlon_table_changed = OLSR_TRUE;
+@@ -138,7 +149,9 @@
+   GetWindowsDirectory(my_hosts_file, MAX_FILE - 12);
+   GetWindowsDirectory(my_services_file, MAX_FILE - 12);
+   GetWindowsDirectory(my_macs_file, MAX_FILE - 12);
++#ifndef SVEN_OLA_UNBLOAT
+   GetWindowsDirectory(my_resolv_file, MAX_FILE - 12);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   len = strlen(my_hosts_file);
+   if (my_hosts_file[len - 1] != '\\')
+@@ -155,15 +168,19 @@
+     strscat(my_macs_file, "\\", sizeof(my_macs_file));
+   strscat(my_macs_file, "macs_olsr", sizeof(my_macs_file));
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   len = strlen(my_resolv_file);
+   if (my_resolv_file[len - 1] != '\\')
+     strscat(my_resolv_file, "\\", sizeof(my_resolv_file));
+   strscat(my_resolv_file, "resolvconf_olsr", sizeof(my_resolv_file));
++#endif /* SVEN_OLA_UNBLOAT */
+ #else
+   strscpy(my_hosts_file, "/var/run/hosts_olsr", sizeof(my_hosts_file));
+   strscpy(my_services_file, "/var/run/services_olsr", sizeof(my_services_file));
+   strscpy(my_macs_file, "/var/run/macs_olsr", sizeof(my_macs_file));
++#ifndef SVEN_OLA_UNBLOAT
+   strscpy(my_resolv_file, "/var/run/resolvconf_olsr", sizeof(my_resolv_file));
++#endif /* SVEN_OLA_UNBLOAT */
+   *my_sighup_pid_file = 0;
+ #endif
+ 
+@@ -171,14 +188,18 @@
+   my_add_hosts[0] = '\0';
+   my_latlon_file[0] = '\0';
+   latlon_in_file[0] = '\0';
++#ifndef SVEN_OLA_UNBLOAT
+   my_name_change_script[0] = '\0';
+   my_services_change_script[0] = '\0';
+   my_macs_change_script[0] = '\0';
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   /* init the lists heads */
+   for (i = 0; i < HASHSIZE; i++) {
+     list_head_init(&name_list[i]);
++#ifndef SVEN_OLA_UNBLOAT
+     list_head_init(&forwarder_list[i]);
++#endif /* SVEN_OLA_UNBLOAT */
+     list_head_init(&service_list[i]);
+     list_head_init(&mac_list[i]);
+     list_head_init(&latlon_list[i]);
+@@ -186,6 +207,7 @@
+ 
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ static int
+ set_nameservice_server(const char *value, void *data, set_plugin_parameter_addon addon)
+ {
+@@ -204,6 +226,7 @@
+   }
+   return 1;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ static int
+ set_nameservice_name(const char *value, void *data, set_plugin_parameter_addon addon)
+@@ -253,10 +276,12 @@
+   { .name = "timeout",                .set_plugin_parameter = &set_nameservice_float,  .data = &my_timeout },
+   { .name = "sighup-pid-file",        .set_plugin_parameter = &set_plugin_string,      .data = &my_sighup_pid_file,        .addon = {sizeof(my_sighup_pid_file)} },
+   { .name = "hosts-file",             .set_plugin_parameter = &set_plugin_string,      .data = &my_hosts_file,             .addon = {sizeof(my_hosts_file)} },
++#ifndef SVEN_OLA_UNBLOAT
+   { .name = "name-change-script",     .set_plugin_parameter = &set_plugin_string,      .data = &my_name_change_script,     .addon = {sizeof(my_name_change_script)} },
+   { .name = "services-change-script", .set_plugin_parameter = &set_plugin_string,      .data = &my_services_change_script, .addon = {sizeof(my_services_change_script)} },
+   { .name = "macs-change-script",     .set_plugin_parameter = &set_plugin_string,      .data = &my_macs_change_script,     .addon = {sizeof(my_macs_change_script)} },
+   { .name = "resolv-file",            .set_plugin_parameter = &set_plugin_string,      .data = &my_resolv_file,            .addon = {sizeof(my_resolv_file)} },
++#endif /* SVEN_OLA_UNBLOAT */
+   { .name = "suffix",                 .set_plugin_parameter = &set_plugin_string,      .data = &my_suffix,                 .addon = {sizeof(my_suffix)} },
+   { .name = "add-hosts",              .set_plugin_parameter = &set_plugin_string,      .data = &my_add_hosts,              .addon = {sizeof(my_add_hosts)} },
+   { .name = "services-file",          .set_plugin_parameter = &set_plugin_string,      .data = &my_services_file,          .addon = {sizeof(my_services_file)} },
+@@ -265,7 +290,9 @@
+   { .name = "lon",                    .set_plugin_parameter = &set_nameservice_float,  .data = &my_lon },
+   { .name = "latlon-file",            .set_plugin_parameter = &set_plugin_string,      .data = &my_latlon_file,            .addon = {sizeof(my_latlon_file)} },
+   { .name = "latlon-infile",          .set_plugin_parameter = &set_plugin_string,      .data = &latlon_in_file,            .addon = {sizeof(latlon_in_file)} },
++#ifndef SVEN_OLA_UNBLOAT
+   { .name = "dns-server",             .set_plugin_parameter = &set_nameservice_server, .data = &my_forwarders,             .addon = {NAME_FORWARDER} },
++#endif /* SVEN_OLA_UNBLOAT */
+   { .name = "name",                   .set_plugin_parameter = &set_nameservice_name,   .data = &my_names,                  .addon = {NAME_HOST} },
+   { .name = "service",                .set_plugin_parameter = &set_nameservice_name,   .data = &my_services,               .addon = {NAME_SERVICE} },
+   { .name = "mac",                    .set_plugin_parameter = &set_nameservice_name,   .data = &my_macs,                   .addon = {NAME_MACADDR} },
+@@ -381,16 +408,20 @@
+       name->ip = olsr_cnf->main_addr;
+     }
+   }
++#ifndef SVEN_OLA_UNBLOAT
+   for (name = my_forwarders; name != NULL; name = name->next) {
+     if (name->ip.v4.s_addr == 0) {
+       OLSR_PRINTF(2, "NAME PLUGIN: insert main addr for name %s \n", name->name);
+       name->ip = olsr_cnf->main_addr;
+     }
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   //check if entries I want to announce myself are valid and allowed
+   my_names = remove_nonvalid_names_from_list(my_names, NAME_HOST);
++#ifndef SVEN_OLA_UNBLOAT
+   my_forwarders = remove_nonvalid_names_from_list(my_forwarders, NAME_FORWARDER);
++#endif /* SVEN_OLA_UNBLOAT */
+   my_services = remove_nonvalid_names_from_list(my_services, NAME_SERVICE);
+   my_macs = remove_nonvalid_names_from_list(my_macs, NAME_MACADDR);
+ 
+@@ -463,12 +494,16 @@
+   free_name_entry_list(&my_names);
+   free_name_entry_list(&my_services);
+   free_name_entry_list(&my_macs);
++#ifndef SVEN_OLA_UNBLOAT
+   free_name_entry_list(&my_forwarders);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   free_all_list_entries(name_list);
+   free_all_list_entries(service_list);
+   free_all_list_entries(mac_list);
++#ifndef SVEN_OLA_UNBLOAT
+   free_all_list_entries(forwarder_list);
++#endif /* SVEN_OLA_UNBLOAT */
+   free_all_list_entries(latlon_list);
+ 
+   olsr_stop_timer(write_file_timer);
+@@ -511,7 +546,9 @@
+ {
+   write_file_timer = NULL;
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   write_resolv_file();             /* if forwarder_table_changed */
++#endif /* SVEN_OLA_UNBLOAT */
+   write_hosts_file();              /* if name_table_changed */
+   write_services_file(OLSR_FALSE); /* if service_table_changed */
+   write_services_file(OLSR_TRUE);  /* if mac_table_changed */
+@@ -693,11 +730,13 @@
+     pos = create_packet((struct name *)pos, my_name);
+     i++;
+   }
++#ifndef SVEN_OLA_UNBLOAT
+   // forwarders
+   for (my_name = my_forwarders; my_name != NULL; my_name = my_name->next) {
+     pos = create_packet((struct name *)pos, my_name);
+     i++;
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+   // services
+   for (my_name = my_services; my_name != NULL; my_name = my_name->next) {
+     pos = create_packet((struct name *)pos, my_name);
+@@ -880,9 +919,11 @@
+     case NAME_HOST:
+       insert_new_name_in_list(originator, name_list, from_packet, &name_table_changed, vtime);
+       break;
++#ifndef SVEN_OLA_UNBLOAT
+     case NAME_FORWARDER:
+       insert_new_name_in_list(originator, forwarder_list, from_packet, &forwarder_table_changed, vtime);
+       break;
++#endif /* SVEN_OLA_UNBLOAT */
+     case NAME_SERVICE:
+       insert_new_name_in_list(originator, service_list, from_packet, &service_table_changed, vtime);
+       break;
+@@ -901,9 +942,11 @@
+     pos += sizeof(struct name);
+     pos += 1 + ((ntohs(from_packet->len) - 1) | 3);
+   }
++#ifdef DEBUG
+   if (i != 0)
+     OLSR_PRINTF(4, "NAME PLUGIN: Lost %d entries in received packet due to length inconsistency (%s)\n", i,
+                 olsr_ip_to_string(&strbuf, originator));
++#endif
+ }
+ 
+ /**
+@@ -1120,6 +1163,7 @@
+ #endif
+   name_table_changed = OLSR_FALSE;
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   // Executes my_name_change_script after writing the hosts file
+   if (my_name_change_script[0] != '\0') {
+     if (system(my_name_change_script) != -1) {
+@@ -1128,6 +1172,7 @@
+       OLSR_PRINTF(2, "NAME PLUGIN: WARNING! Failed to execute %s on hosts change\n", my_name_change_script);
+     }
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+ }
+ 
+ /**
+@@ -1193,6 +1238,7 @@
+ 
+   fclose(file);
+   if (writemacs) {
++#ifndef SVEN_OLA_UNBLOAT
+     // Executes my_macs_change_script after writing the macs file
+     if (my_macs_change_script[0] != '\0') {
+       if (system(my_macs_change_script) != -1) {
+@@ -1201,9 +1247,11 @@
+         OLSR_PRINTF(2, "NAME PLUGIN: WARNING! Failed to execute %s on mac change\n", my_macs_change_script);
+       }
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+     mac_table_changed = OLSR_FALSE;
+   }
+   else {
++#ifndef SVEN_OLA_UNBLOAT
+     // Executes my_services_change_script after writing the services file
+     if (my_services_change_script[0] != '\0') {
+       if (system(my_services_change_script) != -1) {
+@@ -1212,6 +1260,7 @@
+         OLSR_PRINTF(2, "NAME PLUGIN: WARNING! Failed to execute %s on service change\n", my_services_change_script);
+       }
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+     service_table_changed = OLSR_FALSE;
+   }
+ }
+@@ -1222,6 +1271,7 @@
+  * fresh entries are at the beginning of the array and
+  * the best entry is at the end of the array.
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ static void
+ select_best_nameserver(struct rt_entry **rt)
+ {
+@@ -1253,11 +1303,13 @@
+     }
+   }
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  * write the 3 best upstream DNS servers to resolv.conf file
+  * best means the 3 with the best etx value in routing table
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ write_resolv_file(void)
+ {
+@@ -1341,6 +1393,7 @@
+   fclose(resolv);
+   forwarder_table_changed = OLSR_FALSE;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  * completely free a list of name_entries
+@@ -1359,9 +1412,11 @@
+     case NAME_HOST:
+       name_table_changed = OLSR_TRUE;
+       break;
++#ifndef SVEN_OLA_UNBLOAT
+     case NAME_FORWARDER:
+       forwarder_table_changed = OLSR_TRUE;
+       break;
++#endif /* SVEN_OLA_UNBLOAT */
+     case NAME_SERVICE:
+       service_table_changed = OLSR_TRUE;
+       break;
+@@ -1459,8 +1514,14 @@
+    * these are then used by allowed_hostname_or_ip_in_service
+    * see regexec(3) for more infos */
+   if (!is_service_wellformed(service_line)) {
++#ifdef SVEN_OLA_UNBLOAT
++    olsr_printf(1, "NAME PLUGIN: %s: Not 'x://y:z/|tcp|Text'\n", service_line);
++#endif /* SVEN_OLA_UNBLOAT */
+     return OLSR_FALSE;
+   } else if (!allowed_hostname_or_ip_in_service(service_line, &(regmatch_t_service[1]))) {
++#ifdef SVEN_OLA_UNBLOAT
++    olsr_printf(1, "NAME PLUGIN: %s: IP/Addr not yours and not HNA\n", service_line);
++#endif /* SVEN_OLA_UNBLOAT */
+     return OLSR_FALSE;
+   }
+ 
+diff -Nur olsrd-0.5.6-r3.orig/Makefile.inc olsrd-0.5.6-r3/Makefile.inc
+--- olsrd-0.5.6-r3.orig/Makefile.inc	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/Makefile.inc	2008-12-03 10:01:07.000000000 +0100
+@@ -204,6 +204,10 @@
+ $(warning Use CPPFLAGS instead of DEFINES for -D)
+ endif
+ 
++ifeq ($(SVEN_OLA_UNBLOAT),1)
++CPPFLAGS += -DSVEN_OLA_UNBLOAT -DNODEBUG
++endif
++
+ TAGFILE ?=	src/TAGS
+ 
+ help:
+diff -Nur olsrd-0.5.6-r3.orig/src/apm.h olsrd-0.5.6-r3/src/apm.h
+--- olsrd-0.5.6-r3.orig/src/apm.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/apm.h	2008-12-03 10:01:07.000000000 +0100
+@@ -41,6 +41,7 @@
+ 
+ #ifndef _OLSR_APM
+ #define _OLSR_APM
++#ifndef SVEN_OLA_UNBLOAT
+ 
+ /*
+  * Interface to OS dependent power management information
+@@ -69,6 +70,7 @@
+ int apm_read(struct olsr_apm_info *);
+ 
+ #endif
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/cfgparser/local.mk olsrd-0.5.6-r3/src/cfgparser/local.mk
+--- olsrd-0.5.6-r3.orig/src/cfgparser/local.mk	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/cfgparser/local.mk	2008-12-03 10:01:07.000000000 +0100
+@@ -41,8 +41,13 @@
+ C=$(if $(CFGDIR),$(CFGDIR)/)
+ 
+ # add the variables as we may have others already there
++ifeq ($(SVEN_OLA_UNBLOAT),1)
++SRCS += $(foreach file,olsrd_conf oparse oscan,$(C)$(file).c)
++OBJS += $(foreach file,olsrd_conf oparse oscan,$(C)$(file).o)
++else
+ SRCS += $(foreach file,olsrd_conf oparse oscan cfgfile_gen,$(C)$(file).c)
+ OBJS += $(foreach file,olsrd_conf oparse oscan cfgfile_gen,$(C)$(file).o)
++endif
+ HDRS += $(foreach file,olsrd_conf oparse,$(C)$(file).h)
+ 
+ $(C)oscan.c: $(C)oscan.lex $(C)Makefile
+diff -Nur olsrd-0.5.6-r3.orig/src/cfgparser/olsrd_conf.c olsrd-0.5.6-r3/src/cfgparser/olsrd_conf.c
+--- olsrd-0.5.6-r3.orig/src/cfgparser/olsrd_conf.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/cfgparser/olsrd_conf.c	2008-12-03 10:01:07.000000000 +0100
+@@ -81,11 +81,13 @@
+   }
+ 
+   if ((cnf = olsrd_parse_cnf(argv[1])) != NULL) {
++#ifndef SVEN_OLA_UNBLOAT
+     if ((argc > 2) && (!strcmp(argv[2], "-print"))) {
+       olsrd_print_cnf(cnf);
+       olsrd_write_cnf(cnf, "./out.conf");
+     } else
+       printf("Use -print to view parsed values\n");
++#endif /* SVEN_OLA_UNBLOAT */
+     printf("Configfile parsed OK\n");
+   } else {
+     printf("Failed parsing \"%s\"\n", argv[1]);
+@@ -152,7 +154,9 @@
+     /* set various stuff */
+     in->configured = OLSR_FALSE;
+     in->interf = NULL;
++#ifndef SVEN_OLA_UNBLOAT
+     in->host_emul = OLSR_FALSE;
++#endif /* SVEN_OLA_UNBLOAT */
+   }
+   return olsr_cnf;
+ }
+@@ -389,7 +393,9 @@
+ 
+   cnf->debug_level = DEF_DEBUGLVL;
+   cnf->no_fork = OLSR_FALSE;
++#ifndef SVEN_OLA_UNBLOAT
+   cnf->host_emul = OLSR_FALSE;
++#endif /* SVEN_OLA_UNBLOAT */
+   cnf->ip_version = AF_INET;
+   cnf->ipsize = sizeof(struct in_addr);
+   cnf->maxplen = 32;
+@@ -398,7 +404,9 @@
+   cnf->rttable = 254;
+   cnf->rttable_default = 0;
+   cnf->willingness_auto = DEF_WILL_AUTO;
++#ifndef SVEN_OLA_UNBLOAT
+   cnf->ipc_connections = DEF_IPC_CONNECTIONS;
++#endif /* SVEN_OLA_UNBLOAT */
+   cnf->fib_metric = DEF_FIB_METRIC;
+ 
+   cnf->use_hysteresis = DEF_USE_HYST;
+@@ -477,6 +485,7 @@
+ 
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsrd_print_cnf(struct olsrd_config *cnf)
+ {
+@@ -613,6 +622,7 @@
+     }
+   }
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ #if defined WIN32
+ struct ioinfo {
+diff -Nur olsrd-0.5.6-r3.orig/src/cfgparser/oparse.y olsrd-0.5.6-r3/src/cfgparser/oparse.y
+--- olsrd-0.5.6-r3.orig/src/cfgparser/oparse.y	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/cfgparser/oparse.y	2008-12-03 10:01:07.000000000 +0100
+@@ -176,7 +176,6 @@
+ %token TOK_RTTABLE
+ %token TOK_RTTABLE_DEFAULT
+ %token TOK_WILLINGNESS
+-%token TOK_IPCCON
+ %token TOK_FIBMETRIC
+ %token TOK_USEHYST
+ %token TOK_HYSTSCALE
+@@ -199,7 +198,6 @@
+ 
+ %token TOK_HOSTLABEL
+ %token TOK_NETLABEL
+-%token TOK_MAXIPC
+ 
+ %token TOK_IP4BROADCAST
+ %token TOK_IP6ADDRTYPE
+@@ -258,7 +256,6 @@
+ 
+ block:      TOK_HNA4 hna4body
+           | TOK_HNA6 hna6body
+-          | TOK_IPCCON ipcbody
+           | ifblock ifbody
+           | plblock plbody
+ ;
+@@ -283,18 +280,6 @@
+          | ihna6entry
+ ;
+ 
+-ipcbody:    TOK_OPEN ipcstmts TOK_CLOSE
+-;
+-
+-ipcstmts: | ipcstmts ipcstmt
+-;
+-
+-ipcstmt:  vcomment
+-          | imaxipc
+-          | ipchost
+-          | ipcnet
+-;
+-
+ ifblock:   ifstart ifnicks
+ ;
+ 
+@@ -335,77 +320,6 @@
+           | vcomment
+ ;
+ 
+-imaxipc: TOK_MAXIPC TOK_INTEGER
+-{
+-  olsr_cnf->ipc_connections = $2->integer;
+-  free($2);
+-}
+-;
+-
+-ipchost: TOK_HOSTLABEL TOK_IP4_ADDR
+-{
+-  union olsr_ip_addr ipaddr;
+-  PARSER_DEBUG_PRINTF("\tIPC host: %s\n", $2->string);
+-  
+-  if (inet_aton($2->string, &ipaddr.v4) == 0) {
+-    fprintf(stderr, "Failed converting IP address IPC %s\n", $2->string);
+-    YYABORT;
+-  }
+-
+-  ip_prefix_list_add(&olsr_cnf->ipc_nets, &ipaddr, olsr_cnf->maxplen);
+-
+-  free($2->string);
+-  free($2);
+-}
+-;
+-
+-ipcnet: TOK_NETLABEL TOK_IP4_ADDR TOK_IP4_ADDR
+-{
+-  union olsr_ip_addr ipaddr, netmask;
+-
+-  PARSER_DEBUG_PRINTF("\tIPC net: %s/%s\n", $2->string, $3->string);
+-  
+-  if (inet_pton(AF_INET, $2->string, &ipaddr.v4) == 0) {
+-    fprintf(stderr, "Failed converting IP net IPC %s\n", $2->string);
+-    YYABORT;
+-  }
+-
+-  if (inet_pton(AF_INET, $3->string, &netmask.v4) == 0) {
+-    fprintf(stderr, "Failed converting IP mask IPC %s\n", $3->string);
+-    YYABORT;
+-  }
+-
+-  ip_prefix_list_add(&olsr_cnf->ipc_nets, &ipaddr, olsr_netmask_to_prefix(&netmask));
+-
+-  free($2->string);
+-  free($2);
+-  free($3->string);
+-  free($3);
+-}
+-        |       TOK_NETLABEL TOK_IP4_ADDR TOK_SLASH TOK_INTEGER
+-{
+-  union olsr_ip_addr ipaddr;
+-
+-  PARSER_DEBUG_PRINTF("\tIPC net: %s/%s\n", $2->string, $3->string);
+-  
+-  if (inet_pton(AF_INET, $2->string, &ipaddr.v4) == 0) {
+-    fprintf(stderr, "Failed converting IP net IPC %s\n", $2->string);
+-    YYABORT;
+-  }
+-
+-  if ($4->integer > olsr_cnf->maxplen) {
+-    fprintf(stderr, "ipcnet: Prefix len %u > %d is not allowed!\n", $4->integer, olsr_cnf->maxplen);
+-    YYABORT;
+-  }
+-
+-  ip_prefix_list_add(&olsr_cnf->ipc_nets, &ipaddr, $4->integer);
+-
+-  free($2->string);
+-  free($2);
+-  free($4);
+-}
+-;
+-
+ iifweight:       TOK_IFWEIGHT TOK_INTEGER
+ {
+   int ifcnt = ifs_in_curr_cfg;
+diff -Nur olsrd-0.5.6-r3.orig/src/cfgparser/oscan.lex olsrd-0.5.6-r3/src/cfgparser/oscan.lex
+--- olsrd-0.5.6-r3.orig/src/cfgparser/oscan.lex	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/cfgparser/oscan.lex	2008-12-03 10:01:07.000000000 +0100
+@@ -253,11 +253,6 @@
+     return TOK_NETLABEL;
+ }
+ 
+-"MaxConnections" {
+-    yylval = NULL;
+-    return TOK_MAXIPC;
+-}
+-
+ "DebugLevel" {
+     yylval = NULL;
+     return TOK_DEBUGLEVEL;
+@@ -323,11 +318,6 @@
+     return TOK_WILLINGNESS;
+ }
+ 
+-"IpcConnect" {
+-    yylval = NULL;
+-    return TOK_IPCCON;
+-}
+-
+ "FIBMetric" {
+     yylval = NULL;
+     return TOK_FIBMETRIC;
+diff -Nur olsrd-0.5.6-r3.orig/src/defs.h olsrd-0.5.6-r3/src/defs.h
+--- olsrd-0.5.6-r3.orig/src/defs.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/defs.h	2008-12-03 10:01:07.000000000 +0100
+@@ -190,6 +190,8 @@
+  */
+ unsigned long olsr_times(void);
+ 
++#ifndef SVEN_OLA_UNBLOAT
++
+ /*
+  *IPC functions
+  *These are moved to a plugin soon
+@@ -207,6 +209,7 @@
+ int ipc_output(struct olsr *);
+ 
+ #endif
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/duplicate_set.c olsrd-0.5.6-r3/src/duplicate_set.c
+--- olsrd-0.5.6-r3.orig/src/duplicate_set.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/duplicate_set.c	2008-12-03 10:01:07.000000000 +0100
+@@ -174,6 +174,7 @@
+   return OLSR_FALSE;            /* no duplicate */
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsr_print_duplicate_table(void)
+ {
+@@ -192,6 +193,7 @@
+   } OLSR_FOR_ALL_DUP_ENTRIES_END(entry);
+ #endif
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/hna_set.c olsrd-0.5.6-r3/src/hna_set.c
+--- olsrd-0.5.6-r3.orig/src/hna_set.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/hna_set.c	2008-12-03 10:01:07.000000000 +0100
+@@ -279,6 +279,7 @@
+  *
+  *@return nada
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsr_print_hna_set(void)
+ {
+@@ -320,6 +321,7 @@
+   }
+ #endif
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  *Process incoming HNA message.
+diff -Nur olsrd-0.5.6-r3.orig/src/interfaces.c olsrd-0.5.6-r3/src/interfaces.c
+--- olsrd-0.5.6-r3.orig/src/interfaces.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/interfaces.c	2008-12-03 10:01:07.000000000 +0100
+@@ -93,12 +93,16 @@
+   OLSR_PRINTF(1, "\n ---- Interface configuration ---- \n\n");
+   /* Run trough all interfaces immedeatly */
+   for (tmp_if = olsr_cnf->interfaces; tmp_if != NULL; tmp_if = tmp_if->next) {
++#ifndef SVEN_OLA_UNBLOAT
+     if (!tmp_if->host_emul) {
+       if (!olsr_cnf->host_emul) /* XXX: TEMPORARY! */
++#endif /* SVEN_OLA_UNBLOAT */
+         chk_if_up(tmp_if, 1);
++#ifndef SVEN_OLA_UNBLOAT
+     } else {
+       add_hemu_if(tmp_if);
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+   }
+ 
+   /* Kick a periodic timer for the network interface update function */
+@@ -244,7 +248,11 @@
+  *@return nada
+  */
+ struct olsr_if *
++#ifdef SVEN_OLA_UNBLOAT
++queue_if(const char *name)
++#else                                  /* SVEN_OLA_UNBLOAT */
+ queue_if(const char *name, int hemu)
++#endif                                 /* SVEN_OLA_UNBLOAT */
+ {
+   struct olsr_if *interf_n = olsr_cnf->interfaces;
+   size_t name_size;
+@@ -268,7 +276,9 @@
+   interf_n->interf = NULL;
+   interf_n->configured = 0;
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   interf_n->host_emul = hemu ? OLSR_TRUE : OLSR_FALSE;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   strscpy(interf_n->name, name, name_size);
+   interf_n->next = olsr_cnf->interfaces;
+diff -Nur olsrd-0.5.6-r3.orig/src/interfaces.h olsrd-0.5.6-r3/src/interfaces.h
+--- olsrd-0.5.6-r3.orig/src/interfaces.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/interfaces.h	2008-12-03 10:01:07.000000000 +0100
+@@ -196,7 +196,12 @@
+ 
+ struct interface *if_ifwithindex(const int if_index);
+ 
+-struct olsr_if *queue_if(const char *, int);
++struct olsr_if *
++#ifdef SVEN_OLA_UNBLOAT
++  queue_if(const char *);
++#else                                  /* SVEN_OLA_UNBLOAT */
++  queue_if(const char *, int);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ int add_ifchgf(int (*f) (struct interface *, int));
+ 
+diff -Nur olsrd-0.5.6-r3.orig/src/ipcalc.c olsrd-0.5.6-r3/src/ipcalc.c
+--- olsrd-0.5.6-r3.orig/src/ipcalc.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/ipcalc.c	2008-12-03 10:01:07.000000000 +0100
+@@ -122,6 +122,7 @@
+   return prefix;
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ const char *
+ olsr_ip_prefix_to_string(const struct olsr_ip_prefix *prefix)
+ {
+@@ -148,6 +149,7 @@
+   }
+   return rv;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /* see if the ipaddr is in the net. That is equivalent to the fact that the net part
+  * of both are equal. So we must compare the first <prefixlen> bits.
+diff -Nur olsrd-0.5.6-r3.orig/src/ipcalc.h olsrd-0.5.6-r3/src/ipcalc.h
+--- olsrd-0.5.6-r3.orig/src/ipcalc.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/ipcalc.h	2008-12-03 10:01:07.000000000 +0100
+@@ -146,7 +146,9 @@
+   return inet_ntop(olsr_cnf->ip_version, addr, buf->buf, sizeof(buf->buf));
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ const char *olsr_ip_prefix_to_string(const struct olsr_ip_prefix *prefix);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ static INLINE const char *
+ sockaddr4_to_string(struct ipaddr_str *const buf, const struct sockaddr *const addr)
+diff -Nur olsrd-0.5.6-r3.orig/src/ipc_frontend.c olsrd-0.5.6-r3/src/ipc_frontend.c
+--- olsrd-0.5.6-r3.orig/src/ipc_frontend.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/ipc_frontend.c	2008-12-03 10:01:07.000000000 +0100
+@@ -46,6 +46,7 @@
+  *
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #include "ipc_frontend.h"
+ #include "link_set.h"
+ #include "olsr.h"
+@@ -423,6 +424,7 @@
+ 
+   return 1;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/ipc_frontend.h olsrd-0.5.6-r3/src/ipc_frontend.h
+--- olsrd-0.5.6-r3.orig/src/ipc_frontend.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/ipc_frontend.h	2008-12-03 10:01:07.000000000 +0100
+@@ -48,6 +48,7 @@
+ 
+ #ifndef _OLSR_IPC
+ #define _OLSR_IPC
++#ifndef SVEN_OLA_UNBLOAT
+ 
+ #include <sys/types.h>
+ #include <netinet/in.h>
+@@ -103,6 +104,7 @@
+ int ipc_route_send_rtentry(const union olsr_ip_addr *, const union olsr_ip_addr *, int, int, const char *);
+ 
+ #endif
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/link_set.c olsrd-0.5.6-r3/src/link_set.c
+--- olsrd-0.5.6-r3.orig/src/link_set.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/link_set.c	2008-12-03 10:01:07.000000000 +0100
+@@ -746,6 +746,7 @@
+   return ret;
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsr_print_link_set(void)
+ {
+@@ -767,6 +768,7 @@
+   } OLSR_FOR_ALL_LINK_ENTRIES_END(walker);
+ #endif
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * called for every LQ HELLO message.
+diff -Nur olsrd-0.5.6-r3.orig/src/linux/apm.c olsrd-0.5.6-r3/src/linux/apm.c
+--- olsrd-0.5.6-r3.orig/src/linux/apm.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/linux/apm.c	2008-12-03 10:01:07.000000000 +0100
+@@ -44,6 +44,7 @@
+  * Acpi-Power Enlightenment epplet
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #include "apm.h"
+ #include "defs.h"
+ #include <stdio.h>
+@@ -348,6 +349,7 @@
+   /* No battery found */
+   return -1;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/linux/kernel_routes.c olsrd-0.5.6-r3/src/linux/kernel_routes.c
+--- olsrd-0.5.6-r3.orig/src/linux/kernel_routes.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/linux/kernel_routes.c	2008-12-03 10:01:07.000000000 +0100
+@@ -144,10 +144,12 @@
+         h = NLMSG_NEXT(h, ret);
+       }
+     }
++#ifndef SVEN_OLA_UNBLOAT
+     if (0 <= ret && olsr_cnf->ipc_connections > 0) {
+       ipc_route_send_rtentry(&rt->rt_dst.prefix, &nexthop->gateway, metric, RTM_NEWROUTE == cmd,
+                              if_ifwithindex_name(nexthop->iif_index));
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+   }
+   return ret;
+ }
+diff -Nur olsrd-0.5.6-r3.orig/src/linux/net.c olsrd-0.5.6-r3/src/linux/net.c
+--- olsrd-0.5.6-r3.orig/src/linux/net.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/linux/net.c	2008-12-03 10:01:07.000000000 +0100
+@@ -69,8 +69,10 @@
+ #define SIOCGIWRATE	0x8B21  /* get default bit rate (bps) */
+ 
+ /* The original state of the IP forwarding proc entry */
++#ifndef SVEN_OLA_UNBLOAT
+ static char orig_fwd_state;
+ static char orig_global_redirect_state;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  *Bind a socket to a device
+@@ -91,6 +93,8 @@
+   return setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE, dev_name, strlen(dev_name) + 1);
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
++
+ /**
+  *Enable IP forwarding.
+  *Just writing "1" to the /proc/sys/net/ipv4/ip_forward
+@@ -110,6 +114,9 @@
+   const char *const procfile = version == AF_INET ? "/proc/sys/net/ipv4/ip_forward" : "/proc/sys/net/ipv6/conf/all/forwarding";
+ 
+   if ((proc_fwd = fopen(procfile, "r")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     /* IPv4 */
+     if (version == AF_INET)
+       fprintf(stderr,
+@@ -122,6 +129,7 @@
+               procfile);
+ 
+     sleep(3);
++#endif
+     return 0;
+   }
+ 
+@@ -131,9 +139,13 @@
+     OLSR_PRINTF(3, "\nIP forwarding is enabled on this system\n");
+   } else {
+     if ((proc_fwd = fopen(procfile, "w")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++      perror(procfile);
++#else
+       fprintf(stderr, "Could not open %s for writing!\n", procfile);
+       fprintf(stderr, "I will continue(in 3 sec) - but you should mannually ensure that IP forwarding is enabeled!\n\n");
+       sleep(3);
++#endif
+       return 0;
+     } else {
+       syslog(LOG_INFO, "Writing \"1\" to %s\n", procfile);
+@@ -154,11 +166,15 @@
+     return -1;
+ 
+   if ((proc_redirect = fopen(procfile, "r")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     fprintf(stderr,
+             "WARNING! Could not open the %s file to check/disable ICMP redirects!\nAre you using the procfile filesystem?\nDoes your system support IPv4?\nI will continue(in 3 sec) - but you should mannually ensure that ICMP redirects are disabled!\n\n",
+             procfile);
+ 
+     sleep(3);
++#endif
+     return -1;
+   }
+   orig_global_redirect_state = fgetc(proc_redirect);
+@@ -168,9 +184,13 @@
+     return 0;
+ 
+   if ((proc_redirect = fopen(procfile, "w")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     fprintf(stderr, "Could not open %s for writing!\n", procfile);
+     fprintf(stderr, "I will continue(in 3 sec) - but you should mannually ensure that ICMP redirect is disabeled!\n\n");
+     sleep(3);
++#endif
+     return 0;
+   }
+   syslog(LOG_INFO, "Writing \"0\" to %s", procfile);
+@@ -196,19 +216,27 @@
+   snprintf(procfile, sizeof(procfile), REDIRECT_PROC, if_name);
+ 
+   if ((proc_redirect = fopen(procfile, "r")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     fprintf(stderr,
+             "WARNING! Could not open the %s file to check/disable ICMP redirects!\nAre you using the procfile filesystem?\nDoes your system support IPv4?\nI will continue(in 3 sec) - but you should mannually ensure that ICMP redirects are disabled!\n\n",
+             procfile);
+     sleep(3);
++#endif
+     return 0;
+   }
+   iface->nic_state.redirect = fgetc(proc_redirect);
+   fclose(proc_redirect);
+ 
+   if ((proc_redirect = fopen(procfile, "w")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     fprintf(stderr, "Could not open %s for writing!\n", procfile);
+     fprintf(stderr, "I will continue(in 3 sec) - but you should mannually ensure that ICMP redirect is disabeled!\n\n");
+     sleep(3);
++#endif
+     return 0;
+   }
+   syslog(LOG_INFO, "Writing \"0\" to %s", procfile);
+@@ -234,20 +262,28 @@
+   sprintf(procfile, SPOOF_PROC, if_name);
+ 
+   if ((proc_spoof = fopen(procfile, "r")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     fprintf(stderr,
+             "WARNING! Could not open the %s file to check/disable the IP spoof filter!\nAre you using the procfile filesystem?\nDoes your system support IPv4?\nI will continue(in 3 sec) - but you should mannually ensure that IP spoof filtering is disabled!\n\n",
+             procfile);
+ 
+     sleep(3);
++#endif
+     return 0;
+   }
+   iface->nic_state.spoof = fgetc(proc_spoof);
+   fclose(proc_spoof);
+ 
+   if ((proc_spoof = fopen(procfile, "w")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++    perror(procfile);
++#else
+     fprintf(stderr, "Could not open %s for writing!\n", procfile);
+     fprintf(stderr, "I will continue(in 3 sec) - but you should mannually ensure that IP spoof filtering is disabeled!\n\n");
+     sleep(3);
++#endif
+     return 0;
+   }
+   syslog(LOG_INFO, "Writing \"0\" to %s", procfile);
+@@ -272,7 +308,11 @@
+     FILE *proc_fd;
+ 
+     if ((proc_fd = fopen(procfile, "w")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++      perror(procfile);
++#else
+       fprintf(stderr, "Could not open %s for writing!\nSettings not restored!\n", procfile);
++#endif
+     } else {
+       syslog(LOG_INFO, "Resetting %s to %c\n", procfile, orig_fwd_state);
+       fputc(orig_fwd_state, proc_fd);
+@@ -287,7 +327,11 @@
+       FILE *proc_fd;
+ 
+       if ((proc_fd = fopen(procfile, "w")) == NULL) {
++#ifdef SVEN_OLA_UNBLOAT_OLD
++        perror(procfile);
++#else
+         fprintf(stderr, "Could not open %s for writing!\nSettings not restored!\n", procfile);
++#endif
+       } else {
+         syslog(LOG_INFO, "Resetting %s to %c\n", procfile, orig_global_redirect_state);
+         fputc(orig_global_redirect_state, proc_fd);
+@@ -311,7 +355,11 @@
+     snprintf(procfile, sizeof(procfile), REDIRECT_PROC, ifs->int_name);
+ 
+     if ((proc_fd = fopen(procfile, "w")) == NULL)
++#ifdef SVEN_OLA_UNBLOAT_OLD
++      perror(procfile);
++#else
+       fprintf(stderr, "Could not open %s for writing!\nSettings not restored!\n", procfile);
++#endif
+     else {
+       syslog(LOG_INFO, "Resetting %s to %c\n", procfile, ifs->nic_state.redirect);
+ 
+@@ -324,7 +372,11 @@
+     /* Generate the procfile name */
+     sprintf(procfile, SPOOF_PROC, ifs->int_name);
+     if ((proc_fd = fopen(procfile, "w")) == NULL)
++#ifdef SVEN_OLA_UNBLOAT_OLD
++      perror(procfile);
++#else
+       fprintf(stderr, "Could not open %s for writing!\nSettings not restored!\n", procfile);
++#endif
+     else {
+       syslog(LOG_INFO, "Resetting %s to %c\n", procfile, ifs->nic_state.spoof);
+ 
+@@ -372,6 +424,8 @@
+   return sock;
+ }
+ 
++#endif /* SVEN_OLA_UNBLOAT */
++
+ /**
+  *Creates a nonblocking broadcast socket.
+  *@param sa sockaddr struct. Used for bind(2).
+diff -Nur olsrd-0.5.6-r3.orig/src/lq_plugin.c olsrd-0.5.6-r3/src/lq_plugin.c
+--- olsrd-0.5.6-r3.orig/src/lq_plugin.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/lq_plugin.c	2008-12-03 10:01:07.000000000 +0100
+@@ -67,12 +67,18 @@
+ init_lq_handler_tree(void)
+ {
+   avl_init(&lq_handler_tree, &avl_strcasecmp);
++#ifndef SVEN_OLA_UNBLOAT
+   register_lq_handler(&lq_etx_float_handler, LQ_ALGORITHM_ETX_FLOAT_NAME);
+   register_lq_handler(&lq_etx_fpm_handler, LQ_ALGORITHM_ETX_FPM_NAME);
++#endif /* SVEN_OLA_UNBLOAT */
+   register_lq_handler(&lq_etx_ff_handler, LQ_ALGORITHM_ETX_FF_NAME);
++#ifndef SVEN_OLA_UNBLOAT
+   if (activate_lq_handler(olsr_cnf->lq_algorithm)) {
+     activate_lq_handler(LQ_ALGORITHM_ETX_FPM_NAME);
+   }
++#else /* SVEN_OLA_UNBLOAT */
++  activate_lq_handler(LQ_ALGORITHM_ETX_FF_NAME);
++#endif /* SVEN_OLA_UNBLOAT */
+ }
+ 
+ /*
+@@ -417,7 +423,11 @@
+  * @return pointer to hello_neighbor
+  */
+ struct hello_neighbor *
++#ifndef SVEN_OLA_UNBLOAT
+ olsr_malloc_hello_neighbor(const char *id)
++#else                                  /* SVEN_OLA_UNBLOAT */
++olsr_malloc_hello_neighbor(const char *id __attribute__ ((unused)))
++#endif /* SVEN_OLA_UNBLOAT */
+ {
+   struct hello_neighbor *h;
+ 
+@@ -439,7 +449,11 @@
+  * @return pointer to tc_mpr_addr
+  */
+ struct tc_mpr_addr *
++#ifndef SVEN_OLA_UNBLOAT
+ olsr_malloc_tc_mpr_addr(const char *id)
++#else                                  /* SVEN_OLA_UNBLOAT */
++olsr_malloc_tc_mpr_addr(const char *id __attribute__ ((unused)))
++#endif /* SVEN_OLA_UNBLOAT */
+ {
+   struct tc_mpr_addr *t;
+ 
+@@ -461,7 +475,11 @@
+  * @return pointer to lq_hello_neighbor
+  */
+ struct lq_hello_neighbor *
++#ifndef SVEN_OLA_UNBLOAT
+ olsr_malloc_lq_hello_neighbor(const char *id)
++#else                                  /* SVEN_OLA_UNBLOAT */
++olsr_malloc_lq_hello_neighbor(const char *id __attribute__ ((unused)))
++#endif /* SVEN_OLA_UNBLOAT */
+ {
+   struct lq_hello_neighbor *h;
+ 
+@@ -483,7 +501,11 @@
+  * @return pointer to link_entry
+  */
+ struct link_entry *
++#ifndef SVEN_OLA_UNBLOAT
+ olsr_malloc_link_entry(const char *id)
++#else                                  /* SVEN_OLA_UNBLOAT */
++olsr_malloc_link_entry(const char *id __attribute__ ((unused)))
++#endif /* SVEN_OLA_UNBLOAT */
+ {
+   struct link_entry *h;
+ 
+diff -Nur olsrd-0.5.6-r3.orig/src/lq_plugin_default_float.c olsrd-0.5.6-r3/src/lq_plugin_default_float.c
+--- olsrd-0.5.6-r3.orig/src/lq_plugin_default_float.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/lq_plugin_default_float.c	2008-12-03 10:01:07.000000000 +0100
+@@ -39,6 +39,7 @@
+  *
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #include "tc_set.h"
+ #include "link_set.h"
+ #include "olsr_spf.h"
+@@ -223,6 +224,7 @@
+ 
+   return buffer->buf;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/lq_plugin_default_float.h olsrd-0.5.6-r3/src/lq_plugin_default_float.h
+--- olsrd-0.5.6-r3.orig/src/lq_plugin_default_float.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/lq_plugin_default_float.h	2008-12-03 10:01:07.000000000 +0100
+@@ -39,6 +39,7 @@
+  *
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #ifndef LQ_PLUGIN_DEFAULT_H_
+ #define LQ_PLUGIN_DEFAULT_H_
+ 
+@@ -77,6 +78,7 @@
+ extern struct lq_handler lq_etx_float_handler;
+ 
+ #endif /*LQ_PLUGIN_DEFAULT_H_ */
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/lq_plugin_default_fpm.c olsrd-0.5.6-r3/src/lq_plugin_default_fpm.c
+--- olsrd-0.5.6-r3.orig/src/lq_plugin_default_fpm.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/lq_plugin_default_fpm.c	2008-12-03 10:01:07.000000000 +0100
+@@ -39,6 +39,7 @@
+  *
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #include "tc_set.h"
+ #include "link_set.h"
+ #include "lq_plugin.h"
+@@ -235,6 +236,7 @@
+   snprintf(buffer->buf, sizeof(buffer->buf), "%.3f", (float)(cost) / LQ_FPM_LINKCOST_MULTIPLIER);
+   return buffer->buf;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/lq_plugin_default_fpm.h olsrd-0.5.6-r3/src/lq_plugin_default_fpm.h
+--- olsrd-0.5.6-r3.orig/src/lq_plugin_default_fpm.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/lq_plugin_default_fpm.h	2008-12-03 10:01:07.000000000 +0100
+@@ -39,6 +39,7 @@
+  *
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #ifndef LQ_ETX_FPM_
+ #define LQ_ETX_FPM_
+ 
+@@ -83,6 +84,7 @@
+ extern struct lq_handler lq_etx_fpm_handler;
+ 
+ #endif /*LQ_ETX_FPM_ */
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/main.c olsrd-0.5.6-r3/src/main.c
+--- olsrd-0.5.6-r3.orig/src/main.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/main.c	2008-12-03 10:01:07.000000000 +0100
+@@ -243,13 +243,17 @@
+   /*
+    * Print configuration
+    */
++#ifndef SVEN_OLA_UNBLOAT
+   if (olsr_cnf->debug_level > 1) {
+     olsrd_print_cnf(olsr_cnf);
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+ #ifndef WIN32
++#ifndef SVEN_OLA_UNBLOAT
+   /* Disable redirects globally */
+   disable_redirects_global(olsr_cnf->ip_version);
+ #endif
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   /*
+    * socket for ioctl calls
+@@ -285,7 +289,9 @@
+   /*
+    *enable ip forwarding on host
+    */
++#ifndef SVEN_OLA_UNBLOAT
+   enable_ip_forwarding(olsr_cnf->ip_version);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   /* Initialize parser */
+   olsr_init_parser();
+@@ -303,6 +309,7 @@
+    *Set up willingness/APM
+    */
+   if (olsr_cnf->willingness_auto) {
++#ifndef SVEN_OLA_UNBLOAT
+     if (apm_init() < 0) {
+       OLSR_PRINTF(1, "Could not read APM info - setting default willingness(%d)\n", WILL_DEFAULT);
+ 
+@@ -311,10 +318,13 @@
+       olsr_cnf->willingness_auto = 0;
+       olsr_cnf->willingness = WILL_DEFAULT;
+     } else {
++#endif /* SVEN_OLA_UNBLOAT */
+       olsr_cnf->willingness = olsr_calculate_willingness();
+ 
+       OLSR_PRINTF(1, "Willingness set to %d - next update in %.1f secs\n", olsr_cnf->willingness, olsr_cnf->will_int);
++#ifndef SVEN_OLA_UNBLOAT
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+   }
+ 
+   /* Initialize net */
+@@ -342,9 +352,11 @@
+ 
+   /* Initialize the IPC socket */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   if (olsr_cnf->ipc_connections > 0) {
+     ipc_init();
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+   /* Initialisation of different tables to be used. */
+   olsr_init_tables();
+ 
+@@ -450,9 +462,11 @@
+   OLSR_PRINTF(1, "Closing sockets...\n");
+ 
+   /* front-end IPC socket */
++#ifndef SVEN_OLA_UNBLOAT
+   if (olsr_cnf->ipc_connections > 0) {
+     shutdown_ipc();
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   /* OLSR sockets */
+   for (ifn = ifnet; ifn; ifn = ifn->int_next)
+@@ -462,7 +476,9 @@
+   olsr_close_plugins();
+ 
+   /* Reset network settings */
++#ifndef SVEN_OLA_UNBLOAT
+   restore_settings(olsr_cnf->ip_version);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   /* ioctl socket */
+   close(olsr_cnf->ioctl_s);
+@@ -498,7 +514,11 @@
+           "usage: olsrd [-f <configfile>] [ -i interface1 interface2 ... ]\n"
+           "  [-d <debug_level>] [-ipv6] [-multi <IPv6 multicast address>]\n"
+           "  [-lql <LQ level>] [-lqw <LQ winsize>] [-lqnt <nat threshold>]\n"
++#ifdef SVEN_OLA_UNBLOAT
++          "  [-bcast <broadcastaddr>] [-delgw] (Note: no -ipc,-dispin,-dispout)\n"
++#else /* SVEN_OLA_UNBLOAT */
+           "  [-bcast <broadcastaddr>] [-ipc] [-dispin] [-dispout] [-delgw]\n"
++#endif /* SVEN_OLA_UNBLOAT */
+           "  [-hint <hello interval (secs)>] [-tcint <tc interval (secs)>]\n"
+           "  [-midint <mid interval (secs)>] [-hnaint <hna interval (secs)>]\n"
+           "  [-T <Polling Rate (secs)>] [-nofork] [-hemu <ip_address>]\n" "  [-lql <LQ level>] [-lqa <LQ aging factor>]\n");
+@@ -662,12 +682,20 @@
+         olsr_exit(__func__, EXIT_FAILURE);
+       }
+       printf("Queuing if %s\n", *argv);
++#ifdef SVEN_OLA_UNBLOAT
++      queue_if(*argv);
++#else /* SVEN_OLA_UNBLOAT */
+       queue_if(*argv, OLSR_FALSE);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+       while ((argc - 1) && (argv[1][0] != '-')) {
+         NEXT_ARG;
+         printf("Queuing if %s\n", *argv);
++#ifdef SVEN_OLA_UNBLOAT
++        queue_if(*argv);
++#else /* SVEN_OLA_UNBLOAT */
+         queue_if(*argv, OLSR_FALSE);
++#endif /* SVEN_OLA_UNBLOAT */
+       }
+ 
+       continue;
+@@ -729,7 +757,7 @@
+       sscanf(*argv, "%f", &cnf->pollrate);
+       continue;
+     }
+-
++#ifndef SVEN_OLA_UNBLOAT
+     /*
+      * Should we display the contents of packages beeing sent?
+      */
+@@ -753,6 +781,7 @@
+       cnf->ipc_connections = 1;
+       continue;
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+     /*
+      * IPv6 multicast addr
+@@ -770,7 +799,7 @@
+ 
+       continue;
+     }
+-
++#ifndef SVEN_OLA_UNBLOAT
+     /*
+      * Host emulation
+      */
+@@ -798,6 +827,7 @@
+ 
+       continue;
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+     /*
+      * Delete possible default GWs
+diff -Nur olsrd-0.5.6-r3.orig/src/neighbor_table.c olsrd-0.5.6-r3/src/neighbor_table.c
+--- olsrd-0.5.6-r3.orig/src/neighbor_table.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/neighbor_table.c	2008-12-03 10:01:07.000000000 +0100
+@@ -362,6 +362,7 @@
+  *
+  *@return nada
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsr_print_neighbor_table(void)
+ {
+@@ -391,6 +392,7 @@
+   }
+ #endif
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/net_olsr.c olsrd-0.5.6-r3/src/net_olsr.c
+--- olsrd-0.5.6-r3.orig/src/net_olsr.c	2008-12-03 10:01:07.000000000 +0100
++++ olsrd-0.5.6-r3/src/net_olsr.c	2008-12-03 10:01:07.000000000 +0100
+@@ -44,7 +44,9 @@
+ #include "log.h"
+ #include "olsr.h"
+ #include "net_os.h"
++#ifndef SVEN_OLA_UNBLOAT
+ #include "print_packet.h"
++#endif /* SVEN_OLA_UNBLOAT */
+ #include "link_set.h"
+ #include "lq_packet.h"
+ 
+@@ -385,8 +387,10 @@
+    *if the -dispout option was given
+    *we print the content of the packets
+    */
++#ifndef SVEN_OLA_UNBLOAT
+   if (disp_pack_out)
+     print_olsr_serialized_packet(stdout, (union olsr_packet *)ifp->netbuf.buff, ifp->netbuf.pending, &ifp->ip_addr);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   if (olsr_cnf->ip_version == AF_INET) {
+     /* IP version 4 */
+@@ -400,12 +404,16 @@
+     /* IP version 6 */
+     if (olsr_sendto(ifp->olsr_socket, ifp->netbuf.buff, ifp->netbuf.pending, MSG_DONTROUTE, (struct sockaddr *)sin6, sizeof(*sin6))
+         < 0) {
++#ifndef SVEN_OLA_UNBLOAT
+       struct ipaddr_str buf;
++#endif /* SVEN_OLA_UNBLOAT */
+       perror("sendto(v6)");
+       olsr_syslog(OLSR_LOG_ERR, "OLSR: sendto IPv6 %m");
++#ifndef SVEN_OLA_UNBLOAT
+       fprintf(stderr, "Socket: %d interface: %d\n", ifp->olsr_socket, ifp->if_index);
+       fprintf(stderr, "To: %s (size: %u)\n", ip6_to_string(&buf, &sin6->sin6_addr), (unsigned int)sizeof(*sin6));
+       fprintf(stderr, "Outputsize: %d\n", ifp->netbuf.pending);
++#endif /* SVEN_OLA_UNBLOAT */
+       retval = -1;
+     }
+   }
+diff -Nur olsrd-0.5.6-r3.orig/src/olsr.c olsrd-0.5.6-r3/src/olsr.c
+--- olsrd-0.5.6-r3.orig/src/olsr.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/olsr.c	2008-12-03 10:01:07.000000000 +0100
+@@ -149,7 +149,9 @@
+     return;
+ 
+   if (olsr_cnf->debug_level > 0 && olsr_cnf->clear_screen && isatty(1)) {
++#ifndef SVEN_OLA_UNBLOAT
+     clear_console();
++#endif /* SVEN_OLA_UNBLOAT */
+     printf("       *** %s (%s on %s) ***\n", olsrd_version, build_date, build_host);
+   }
+ 
+@@ -165,7 +167,7 @@
+   if (changes_neighborhood || changes_topology || changes_hna) {
+     olsr_calculate_routing_table();
+   }
+-
++#ifndef SVEN_OLA_UNBLOAT
+   if (olsr_cnf->debug_level > 0) {
+     if (olsr_cnf->debug_level > 2) {
+       olsr_print_mid_set();
+@@ -184,6 +186,7 @@
+     olsr_print_tc_table();
+ #endif
+   }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   for (tmp_pc_list = pcf_list; tmp_pc_list != NULL; tmp_pc_list = tmp_pc_list->next) {
+     tmp_pc_list->function(changes_neighborhood, changes_topology, changes_hna);
+@@ -415,12 +418,15 @@
+ olsr_u8_t
+ olsr_calculate_willingness(void)
+ {
++#ifndef SVEN_OLA_UNBLOAT
+   struct olsr_apm_info ainfo;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   /* If fixed willingness */
+   if (!olsr_cnf->willingness_auto)
+     return olsr_cnf->willingness;
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   if (apm_read(&ainfo) < 1)
+     return WILL_DEFAULT;
+ 
+@@ -437,8 +443,12 @@
+    * 26% > juice will: 1
+    */
+   return (ainfo.battery_percentage / 26);
++#else /* SVEN_OLA_UNBLOAT */
++  return WILL_DEFAULT;
++#endif /* SVEN_OLA_UNBLOAT */
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ const char *
+ olsr_msgtype_to_string(olsr_u8_t msgtype)
+ {
+@@ -508,6 +518,7 @@
+   snprintf(type, sizeof(type), "UNKNOWN(%d)", status);
+   return type;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  *Termination function to be called whenever a error occures
+@@ -536,6 +547,7 @@
+  *
+  * @return a void pointer to the memory allocated
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ void *
+ olsr_malloc(size_t size, const char *id)
+ {
+@@ -560,6 +572,7 @@
+ 
+   return ptr;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  *Wrapper for printf that prints to a specific
+diff -Nur olsrd-0.5.6-r3.orig/src/olsr_cfg.h olsrd-0.5.6-r3/src/olsr_cfg.h
+--- olsrd-0.5.6-r3.orig/src/olsr_cfg.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/olsr_cfg.h	2008-12-03 10:01:07.000000000 +0100
+@@ -140,8 +140,10 @@
+   char *name;
+   char *config;
+   olsr_bool configured;
++#ifndef SVEN_OLA_UNBLOAT
+   olsr_bool host_emul;
+   union olsr_ip_addr hemu_ip;
++#endif                                 /* SVEN_OLA_UNBLOAT */
+   struct interface *interf;
+   struct if_config_options *cnf;
+   struct olsr_if *next;
+@@ -183,7 +185,9 @@
+ struct olsrd_config {
+   int debug_level;
+   olsr_bool no_fork;
++#ifndef SVEN_OLA_UNBLOAT
+   olsr_bool host_emul;
++#endif                                 /* SVEN_OLA_UNBLOAT */
+   int ip_version;
+   olsr_bool allow_no_interfaces;
+   olsr_u16_t tos;
+@@ -191,13 +195,17 @@
+   olsr_u8_t rttable_default;
+   olsr_u8_t willingness;
+   olsr_bool willingness_auto;
++#ifndef SVEN_OLA_UNBLOAT
+   int ipc_connections;
++#endif                                 /* SVEN_OLA_UNBLOAT */
+   olsr_bool use_hysteresis;
+   olsr_fib_metric_options fib_metric;
+   struct hyst_param hysteresis_param;
+   struct plugin_entry *plugins;
+   struct ip_prefix_list *hna_entries;
++#ifndef SVEN_OLA_UNBLOAT
+   struct ip_prefix_list *ipc_nets;
++#endif                                 /* SVEN_OLA_UNBLOAT */
+   struct olsr_if *interfaces;
+   float pollrate;
+   float nic_chgs_pollrate;
+@@ -257,7 +265,9 @@
+ 
+   void olsrd_free_cnf(struct olsrd_config *);
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   void olsrd_print_cnf(struct olsrd_config *);
++#endif                                 /* SVEN_OLA_UNBLOAT */
+ 
+   int olsrd_write_cnf(struct olsrd_config *, const char *);
+ 
+diff -Nur olsrd-0.5.6-r3.orig/src/olsr.h olsrd-0.5.6-r3/src/olsr.h
+--- olsrd-0.5.6-r3.orig/src/olsr.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/olsr.h	2008-12-03 10:01:07.000000000 +0100
+@@ -72,15 +72,21 @@
+ 
+ olsr_u8_t olsr_calculate_willingness(void);
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ const char *olsr_msgtype_to_string(olsr_u8_t);
+ 
+ const char *olsr_link_to_string(olsr_u8_t);
+ 
+ const char *olsr_status_to_string(olsr_u8_t);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ void olsr_exit(const char *, int);
+ 
++#ifdef SVEN_OLA_UNBLOAT
++#define olsr_malloc(size, msg) calloc(1, size)
++#else /* SVEN_OLA_UNBLOAT */
+ void *olsr_malloc(size_t, const char *);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ int olsr_printf(int, const char *, ...) __attribute__ ((format(printf, 2, 3)));
+ 
+diff -Nur olsrd-0.5.6-r3.orig/src/parser.c olsrd-0.5.6-r3/src/parser.c
+--- olsrd-0.5.6-r3.orig/src/parser.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/parser.c	2008-12-03 10:01:07.000000000 +0100
+@@ -51,7 +51,9 @@
+ #include "rebuild_packet.h"
+ #include "net_os.h"
+ #include "log.h"
++#ifndef SVEN_OLA_UNBLOAT
+ #include "print_packet.h"
++#endif /* SVEN_OLA_UNBLOAT */
+ #include "net_olsr.h"
+ 
+ #ifdef WIN32
+@@ -280,8 +282,10 @@
+   //printf("Message from %s\n\n", olsr_ip_to_string(&buf, from_addr));
+ 
+   /* Display packet */
++#ifndef SVEN_OLA_UNBLOAT
+   if (disp_pack_in)
+     print_olsr_serialized_packet(stdout, (union olsr_packet *)olsr, size, from_addr);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   if (olsr_cnf->ip_version == AF_INET)
+     msgsize = ntohs(m->v4.olsr_msgsize);
+diff -Nur olsrd-0.5.6-r3.orig/src/print_packet.c olsrd-0.5.6-r3/src/print_packet.c
+--- olsrd-0.5.6-r3.orig/src/print_packet.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/print_packet.c	2008-12-03 10:01:07.000000000 +0100
+@@ -39,6 +39,7 @@
+  *
+  */
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ #include "print_packet.h"
+ #include "ipcalc.h"
+ #include "mantissa.h"
+@@ -339,6 +340,7 @@
+     remsize -= olsr_cnf->ipsize;
+   }
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/process_routes.c olsrd-0.5.6-r3/src/process_routes.c
+--- olsrd-0.5.6-r3.orig/src/process_routes.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/process_routes.c	2008-12-03 10:01:07.000000000 +0100
+@@ -159,6 +159,7 @@
+ static void
+ olsr_delete_kernel_route(struct rt_entry *rt)
+ {
++#ifndef SVEN_OLA_UNBLOAT
+   if (!olsr_cnf->host_emul) {
+     olsr_16_t error = olsr_cnf->ip_version == AF_INET ? olsr_delroute_function(rt) : olsr_delroute6_function(rt);
+ 
+@@ -170,6 +171,12 @@
+       olsr_syslog(OLSR_LOG_ERR, "Delete route %s: %s", routestr, err_msg);
+     }
+   }
++#else /* SVEN_OLA_UNBLOAT */
++  olsr_16_t error = olsr_cnf->ip_version == AF_INET ? olsr_delroute_function(rt) : olsr_delroute6_function(rt);
++  if (0 > error) {
++    olsr_syslog(OLSR_LOG_ERR, "Delete route: %s", strerror(errno));
++  }
++#endif /* SVEN_OLA_UNBLOAT */
+ }
+ 
+ /**
+@@ -181,6 +188,7 @@
+ olsr_add_kernel_route(struct rt_entry *rt)
+ {
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   if (!olsr_cnf->host_emul) {
+     olsr_16_t error = (olsr_cnf->ip_version == AF_INET) ? olsr_addroute_function(rt) : olsr_addroute6_function(rt);
+ 
+@@ -199,6 +207,14 @@
+       rt->rt_metric = rt->rt_best->rtp_metric;
+     }
+   }
++#else /* SVEN_OLA_UNBLOAT */
++  olsr_16_t error = olsr_cnf->ip_version == AF_INET ? olsr_addroute_function(rt) : olsr_addroute6_function(rt);
++  if (0 > error) {
++    olsr_syslog(OLSR_LOG_ERR, "Add route: %s", strerror(errno));
++  } else {
++    rt->rt_nexthop = rt->rt_best->rtp_nexthop;
++  }
++#endif /* SVEN_OLA_UNBLOAT */
+ }
+ 
+ /**
+@@ -385,7 +401,7 @@
+   /* route additions */
+   olsr_add_kernel_routes(&add_kernel_list);
+ 
+-#if DEBUG
++#ifdef DEBUG
+   olsr_print_routing_table(&routingtree);
+ #endif
+ }
+diff -Nur olsrd-0.5.6-r3.orig/src/rebuild_packet.c olsrd-0.5.6-r3/src/rebuild_packet.c
+--- olsrd-0.5.6-r3.orig/src/rebuild_packet.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/rebuild_packet.c	2008-12-03 10:01:07.000000000 +0100
+@@ -60,7 +60,11 @@
+ mid_chgestruct(struct mid_message *mmsg, const union olsr_message *m)
+ {
+   int i;
++#ifndef SVEN_OLA_UNBLOAT
+   struct mid_alias *alias, *alias_tmp;
++#else /* SVEN_OLA_UNBLOAT */
++  struct mid_alias *alias;
++#endif /* SVEN_OLA_UNBLOAT */
+   int no_aliases;
+ 
+   /* Checking if everything is ok */
+@@ -100,6 +104,7 @@
+       maddr++;
+     }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+     if (olsr_cnf->debug_level > 1) {
+       struct ipaddr_str buf;
+       OLSR_PRINTF(3, "Alias list for %s: ", olsr_ip_to_string(&buf, &mmsg->mid_origaddr));
+@@ -111,6 +116,7 @@
+       }
+       OLSR_PRINTF(3, "\n");
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+   } else {
+     /* IPv6 */
+     const struct midaddr6 *maddr6 = m->v6.message.mid.mid_addr;
+@@ -144,6 +150,7 @@
+       maddr6++;
+     }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+     if (olsr_cnf->debug_level > 1) {
+       struct ipaddr_str buf;
+       OLSR_PRINTF(3, "Alias list for %s", ip6_to_string(&buf, &mmsg->mid_origaddr.v6));
+@@ -156,6 +163,7 @@
+       }
+       OLSR_PRINTF(3, "\n");
+     }
++#endif /* SVEN_OLA_UNBLOAT */
+   }
+ 
+ }
+diff -Nur olsrd-0.5.6-r3.orig/src/routing_table.c olsrd-0.5.6-r3/src/routing_table.c
+--- olsrd-0.5.6-r3.orig/src/routing_table.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/routing_table.c	2008-12-03 10:01:07.000000000 +0100
+@@ -623,6 +623,7 @@
+ /**
+  * format a route entry into a buffer
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ char *
+ olsr_rt_to_string(const struct rt_entry *rt)
+ {
+@@ -654,11 +655,13 @@
+ 
+   return buff;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  * Print the routingtree to STDOUT
+  *
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsr_print_routing_table(struct avl_tree *tree)
+ {
+@@ -692,6 +695,7 @@
+ #endif
+   tree = NULL;                  /* squelch compiler warnings */
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/routing_table.h olsrd-0.5.6-r3/src/routing_table.h
+--- olsrd-0.5.6-r3.orig/src/routing_table.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/routing_table.h	2008-12-03 10:01:07.000000000 +0100
+@@ -210,9 +210,11 @@
+ olsr_bool olsr_cmp_rt(const struct rt_entry *, const struct rt_entry *);
+ olsr_u8_t olsr_fib_metric(const struct rt_metric *);
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ char *olsr_rt_to_string(const struct rt_entry *);
+ char *olsr_rtp_to_string(const struct rt_path *);
+ void olsr_print_routing_table(struct avl_tree *);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ const struct rt_nexthop *olsr_get_nh(const struct rt_entry *);
+ 
+diff -Nur olsrd-0.5.6-r3.orig/src/tc_set.c olsrd-0.5.6-r3/src/tc_set.c
+--- olsrd-0.5.6-r3.orig/src/tc_set.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/tc_set.c	2008-12-03 10:01:07.000000000 +0100
+@@ -336,6 +336,7 @@
+ /**
+  * Format tc_edge contents into a buffer.
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ char *
+ olsr_tc_edge_to_string(struct tc_edge_entry *tc_edge)
+ {
+@@ -350,6 +351,7 @@
+ 
+   return buf;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /**
+  * Wrapper for the timer callback.
+@@ -685,6 +687,7 @@
+ /**
+  * Print the topology table to stdout
+  */
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ olsr_print_tc_table(void)
+ {
+@@ -710,6 +713,7 @@
+   } OLSR_FOR_ALL_TC_ENTRIES_END(tc);
+ #endif
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * calculate the border IPs of a tc edge set according to the border flags
+diff -Nur olsrd-0.5.6-r3.orig/src/tc_set.h olsrd-0.5.6-r3/src/tc_set.h
+--- olsrd-0.5.6-r3.orig/src/tc_set.h	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/tc_set.h	2008-12-03 10:01:07.000000000 +0100
+@@ -157,7 +157,9 @@
+ 
+ /* tc_edge_entry manipulation */
+ olsr_bool olsr_delete_outdated_tc_edges(struct tc_entry *);
++#ifndef SVEN_OLA_UNBLOAT
+ char *olsr_tc_edge_to_string(struct tc_edge_entry *);
++#endif /* SVEN_OLA_UNBLOAT */
+ struct tc_edge_entry *olsr_lookup_tc_edge(struct tc_entry *, union olsr_ip_addr *);
+ struct tc_edge_entry *olsr_add_tc_edge_entry(struct tc_entry *, union olsr_ip_addr *, olsr_u16_t);
+ void olsr_delete_tc_entry(struct tc_entry *);
+diff -Nur olsrd-0.5.6-r3.orig/src/two_hop_neighbor_table.c olsrd-0.5.6-r3/src/two_hop_neighbor_table.c
+--- olsrd-0.5.6-r3.orig/src/two_hop_neighbor_table.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/two_hop_neighbor_table.c	2008-12-03 10:01:07.000000000 +0100
+@@ -203,6 +203,8 @@
+   return NULL;
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
++
+ /**
+  *Print the two hop neighbor table to STDOUT.
+  *
+@@ -240,6 +242,7 @@
+   }
+ #endif
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:
+diff -Nur olsrd-0.5.6-r3.orig/src/unix/ifnet.c olsrd-0.5.6-r3/src/unix/ifnet.c
+--- olsrd-0.5.6-r3.orig/src/unix/ifnet.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/unix/ifnet.c	2008-12-03 10:01:07.000000000 +0100
+@@ -70,6 +70,8 @@
+ 
+ #define BUFSPACE  (127*1024)    /* max. input buffer size to request */
+ 
++#ifndef SVEN_OLA_UNBLOAT
++
+ int
+ set_flag(char *ifname, short flag __attribute__ ((unused)))
+ {
+@@ -100,6 +102,8 @@
+ 
+ }
+ 
++#endif /* SVEN_OLA_UNBLOAT */
++
+ void
+ check_interface_updates(void *foo __attribute__ ((unused)))
+ {
+@@ -110,11 +114,13 @@
+ #endif
+ 
+   for (tmp_if = olsr_cnf->interfaces; tmp_if != NULL; tmp_if = tmp_if->next) {
++#ifndef SVEN_OLA_UNBLOAT
+     if (tmp_if->host_emul)
+       continue;
+ 
+     if (olsr_cnf->host_emul)    /* XXX: TEMPORARY! */
+       continue;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+     if (!tmp_if->cnf->autodetect_chg) {
+ #ifdef DEBUG
+@@ -154,8 +160,10 @@
+   OLSR_PRINTF(3, "Checking if %s is set down or changed\n", iface->name);
+ #endif
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   if (iface->host_emul)
+     return -1;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   ifp = iface->interf;
+ 
+@@ -279,7 +287,9 @@
+   } else
+     /* IP version 4 */
+   {
++#ifndef SVEN_OLA_UNBLOAT
+     struct ipaddr_str buf;
++#endif /* SVEN_OLA_UNBLOAT */
+     /* Check interface address (IPv4) */
+     if (ioctl(olsr_cnf->ioctl_s, SIOCGIFADDR, &ifr) < 0) {
+       OLSR_PRINTF(1, "\tCould not get address of interface - removing it\n");
+@@ -301,7 +311,9 @@
+ 
+       if (memcmp(&olsr_cnf->main_addr, &ifp->ip_addr, olsr_cnf->ipsize) == 0) {
+         OLSR_PRINTF(1, "New main address: %s\n", sockaddr4_to_string(&buf, &ifr.ifr_addr));
++#ifndef SVEN_OLA_UNBLOAT
+         olsr_syslog(OLSR_LOG_INFO, "New main address: %s\n", sockaddr4_to_string(&buf, &ifr.ifr_addr));
++#endif /* SVEN_OLA_UNBLOAT */
+         memcpy(&olsr_cnf->main_addr, &((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr, olsr_cnf->ipsize);
+       }
+ 
+@@ -363,7 +375,9 @@
+ 
+ remove_interface:
+   OLSR_PRINTF(1, "Removing interface %s\n", iface->name);
++#ifndef SVEN_OLA_UNBLOAT
+   olsr_syslog(OLSR_LOG_INFO, "Removing interface %s\n", iface->name);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   olsr_delete_link_entry_by_ip(&ifp->ip_addr);
+ 
+@@ -393,10 +407,14 @@
+       memset(&olsr_cnf->main_addr, 0, olsr_cnf->ipsize);
+       OLSR_PRINTF(1, "No more interfaces...\n");
+     } else {
++#if !defined(SVEN_OLA_UNBLOAT)
+       struct ipaddr_str buf;
++#endif /* SVEN_OLA_UNBLOAT */
+       olsr_cnf->main_addr = ifnet->ip_addr;
+       OLSR_PRINTF(1, "New main address: %s\n", olsr_ip_to_string(&buf, &olsr_cnf->main_addr));
++#ifndef SVEN_OLA_UNBLOAT
+       olsr_syslog(OLSR_LOG_INFO, "New main address: %s\n", olsr_ip_to_string(&buf, &olsr_cnf->main_addr));
++#endif /* SVEN_OLA_UNBLOAT */
+     }
+   }
+ 
+@@ -420,7 +438,9 @@
+ 
+   if ((ifnet == NULL) && (!olsr_cnf->allow_no_interfaces)) {
+     OLSR_PRINTF(1, "No more active interfaces - exiting.\n");
++#ifndef SVEN_OLA_UNBLOAT
+     olsr_syslog(OLSR_LOG_INFO, "No more active interfaces - exiting.\n");
++#endif /* SVEN_OLA_UNBLOAT */
+     olsr_cnf->exit_value = EXIT_FAILURE;
+     kill(getpid(), SIGINT);
+   }
+@@ -429,6 +449,8 @@
+ 
+ }
+ 
++#ifndef SVEN_OLA_UNBLOAT
++
+ /**
+  * Initializes the special interface used in
+  * host-client emulation
+@@ -578,6 +600,7 @@
+ 
+   return 1;
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ static char basenamestr[32];
+ static const char *if_basename(const char *name);
+@@ -613,8 +636,10 @@
+   int tos_bits = IPTOS_TOS(olsr_cnf->tos);
+ #endif
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   if (iface->host_emul)
+     return -1;
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   memset(&ifr, 0, sizeof(struct ifreq));
+   memset(&ifs, 0, sizeof(struct interface));
+@@ -721,11 +746,13 @@
+       ifs.int_broadaddr = *(struct sockaddr_in *)&ifr.ifr_broadaddr;
+     }
+ 
++#ifndef SVEN_OLA_UNBLOAT
+     /* Deactivate IP spoof filter */
+     deactivate_spoof(if_basename(ifr.ifr_name), &ifs, olsr_cnf->ip_version);
+ 
+     /* Disable ICMP redirects */
+     disable_redirects(if_basename(ifr.ifr_name), &ifs, olsr_cnf->ip_version);
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+   }
+ 
+@@ -755,7 +782,9 @@
+ 
+   OLSR_PRINTF(1, "\tMTU - IPhdr: %d\n", ifs.int_mtu);
+ 
++#ifndef SVEN_OLA_UNBLOAT
+   olsr_syslog(OLSR_LOG_INFO, "Adding interface %s\n", iface->name);
++#endif /* SVEN_OLA_UNBLOAT */
+   OLSR_PRINTF(1, "\tIndex %d\n", ifs.if_index);
+ 
+   if (olsr_cnf->ip_version == AF_INET) {
+@@ -860,10 +889,14 @@
+    */
+   memset(&null_addr, 0, olsr_cnf->ipsize);
+   if (ipequal(&null_addr, &olsr_cnf->main_addr)) {
++#ifndef SVEN_OLA_UNBLOAT
+     struct ipaddr_str buf;
++#endif
+     olsr_cnf->main_addr = ifp->ip_addr;
+     OLSR_PRINTF(1, "New main address: %s\n", olsr_ip_to_string(&buf, &olsr_cnf->main_addr));
++#ifndef SVEN_OLA_UNBLOAT
+     olsr_syslog(OLSR_LOG_INFO, "New main address: %s\n", olsr_ip_to_string(&buf, &olsr_cnf->main_addr));
++#endif /* SVEN_OLA_UNBLOAT */
+   }
+ 
+   /*
+diff -Nur olsrd-0.5.6-r3.orig/src/unix/misc.c olsrd-0.5.6-r3/src/unix/misc.c
+--- olsrd-0.5.6-r3.orig/src/unix/misc.c	2008-12-02 11:50:01.000000000 +0100
++++ olsrd-0.5.6-r3/src/unix/misc.c	2008-12-03 10:01:07.000000000 +0100
+@@ -44,6 +44,7 @@
+ #include "misc.h"
+ #include "olsr_types.h"
+ 
++#ifndef SVEN_OLA_UNBLOAT
+ void
+ clear_console(void)
+ {
+@@ -69,6 +70,7 @@
+ 
+   fflush(stdout);
+ }
++#endif /* SVEN_OLA_UNBLOAT */
+ 
+ /*
+  * Local Variables:

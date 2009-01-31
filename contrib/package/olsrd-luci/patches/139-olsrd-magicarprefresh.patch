@@ -1,0 +1,45 @@
+diff -Nur olsrd-0.5.6-r2.orig/lib/arprefresh/src/olsrd_arprefresh.c olsrd-0.5.6-r2/lib/arprefresh/src/olsrd_arprefresh.c
+--- olsrd-0.5.6-r2.orig/lib/arprefresh/src/olsrd_arprefresh.c	2008-11-26 10:54:16.000000000 +0100
++++ olsrd-0.5.6-r2/lib/arprefresh/src/olsrd_arprefresh.c	2008-11-26 10:56:15.000000000 +0100
+@@ -34,6 +34,8 @@
+  * Plugin to refresh the local ARP cache from received OLSR broadcasts
+  */
+ 
++#undef ARPREFRESH_DEBUG
++
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -46,6 +48,9 @@
+ #include <netinet/ip.h>
+ #include <netinet/udp.h>
+ #include <netpacket/packet.h>
++#ifdef ARPREFRESH_DEBUG
++#include <arpa/inet.h>
++#endif
+ #include <linux/types.h>
+ #include <linux/filter.h>
+ 
+@@ -53,7 +58,6 @@
+ #include "kernel_routes.h"
+ #include "scheduler.h"
+ 
+-#undef ARPREFRESH_DEBUG
+ #define PLUGIN_INTERFACE_VERSION 5
+ 
+ /****************************************************************************
+@@ -128,7 +132,13 @@
+       memcpy(&req.in_pa.sin_addr, &buf.ip.saddr, sizeof(buf.ip.saddr));
+       req.arp.arp_ha.sa_family = AF_LOCAL;
+       memcpy(&req.arp.arp_ha.sa_data, &buf.eth.h_source, sizeof(buf.eth.h_source));
+-      req.arp.arp_flags = ATF_COM;
++      /*
++       * Currently, temp arp entries work partially under linux-2.6 (the entries
++       * are timed out after a short period, not after the default 5 minutes. Under
++       * linux 2.4 this does not work. The ATF_MAGIC triggers a hack in the Freifunk
++       * firmware's kernel. ATF_MACIG seem not to be used anywhere...
++       */
++      req.arp.arp_flags = ATF_COM | ATF_MAGIC;
+       if_indextoname(from.sll_ifindex, req.arp.arp_dev);
+ #ifdef ARPREFRESH_DEBUG
+       {
