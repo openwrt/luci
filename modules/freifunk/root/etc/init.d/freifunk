@@ -9,9 +9,9 @@ boot() {
 		echo "*/5 * * * *	killall -HUP dnsmasq" >> /etc/crontabs/root
 	}
 
-	grep -q '/usr/sbin/ff_olsr_test_gw' /etc/crontabs/root || {
-		echo "* * * * *		/usr/sbin/ff_olsr_test_gw" >> /etc/crontabs/root
-	}
+#	grep -q '/usr/sbin/ff_olsr_test_gw' /etc/crontabs/root || {
+#		echo "* * * * *		/usr/sbin/ff_olsr_test_gw" >> /etc/crontabs/root
+#	}
 
 	[ -f /etc/rc.local ] && . /etc/rc.local
 	[ -d /etc/rc.local.d ] && {
