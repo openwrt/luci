@@ -53,6 +53,9 @@ ch:value(151, 151 .. " (5 GHz)")
 ch:value(155, 155 .. " (5 GHz)")
 ch:value(167, 167 .. " (5 GHz)")
 
+s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+
+
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
@@ -166,7 +169,6 @@ if hwtype == "mac80211" then
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
 
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 	s:option(Value, "frag", translate("wifi_frag")).optional = true
 	s:option(Value, "rts", translate("wifi_rts")).optional = true
 end
@@ -191,7 +193,6 @@ if hwtype == "atheros" then
 	wdssep.optional = true
 
 	s:option(Flag, "doth", "802.11h").optional = true
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
@@ -248,8 +249,6 @@ end
 if hwtype == "broadcom" then
 	mode:value("wds", translate("a_w_wds"))
 	mode:value("monitor", translate("a_w_monitor"))
-
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})

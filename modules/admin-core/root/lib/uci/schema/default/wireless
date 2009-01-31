@@ -81,6 +81,13 @@ config variable
 	list depends type=atheros
 
 config variable
+	option name 'txpower'
+	option section 'wireless.wifi-device'
+	option title 'Transmit Power'
+	option description 'dbm'
+	option datatype uint
+
+config variable
 	option name 'txantenna'
 	option section 'wireless.wifi-device'
 	option title 'Transmitter Antenna'
@@ -216,7 +223,7 @@ config enum
 config variable
 	option name 'bssid'
 	option section 'wireless.wifi-iface'
-	option title BSSID
+	option title 'BSSID'
 
 config variable
 	option name 'txpower'
