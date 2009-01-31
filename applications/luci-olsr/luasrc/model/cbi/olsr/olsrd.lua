@@ -128,7 +128,7 @@ adc.enabled  = "yes"
 adc.disabled = "no"
 adc.optional = true
 
-
+--[[
 ipc = m:section(TypedSection, "IpcConnect")
 ipc.anonymous = true
 
@@ -140,6 +140,6 @@ nets.optional = true
 
 hosts = ipc:option(Value, "Host")
 hosts.optional = true
-
+]]
 
 return m
