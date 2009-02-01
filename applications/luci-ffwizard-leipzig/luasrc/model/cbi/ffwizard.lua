@@ -245,7 +245,7 @@ function main.write(self, section, value)
 				uci:set("system", s['.name'], "hostname", new_hostname)
 			end)
 
-		luci.fs.writefile( "/proc/sys/kernel/hostname", new_hostname.."\n" )
+		sys.hostname(new_hostname)
 		uci:save("system")
 	end
 end
