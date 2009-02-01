@@ -129,10 +129,16 @@ end
 -- @return		Table containing all variables if no variable name is given
 getenv = posix.getenv
 
---- Determine the current hostname.
+--- Get or set the current hostname.
+-- @param		String containing a new hostname to set (optional)
 -- @return		String containing the system hostname
-function hostname()
-	return posix.uname("%n")
+function hostname(newname)
+	if type(newname) == "string" and #newname > 0 then
+		luci.fs.writefile( "/proc/sys/kernel/hostname", newname .. "\n" )
+		return newname
+	else
+		return posix.uname("%n")
+	end
 end
 
 --- Returns the contents of a documented referred by an URL.

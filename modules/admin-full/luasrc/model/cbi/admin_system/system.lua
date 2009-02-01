@@ -28,10 +28,10 @@ s:option(DummyValue, "_system", translate("system")).value = system
 s:option(DummyValue, "_cpu", translate("m_i_processor")).value = model
 
 local load1, load5, load15 = luci.sys.loadavg()
-s:option(DummyValue, "_la", translate("load")).value = 
+s:option(DummyValue, "_la", translate("load")).value =
  string.format("%.2f, %.2f, %.2f", load1, load5, load15)
- 
-s:option(DummyValue, "_memtotal", translate("m_i_memory")).value = 
+
+s:option(DummyValue, "_memtotal", translate("m_i_memory")).value =
  string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
   tonumber(memtotal) / 1024,
   100 * memcached / memtotal,
@@ -43,11 +43,17 @@ s:option(DummyValue, "_memtotal", translate("m_i_memory")).value =
 
 s:option(DummyValue, "_systime", translate("m_i_systemtime")).value =
  os.date("%c")
- 
-s:option(DummyValue, "_uptime", translate("m_i_uptime")).value = 
+
+s:option(DummyValue, "_uptime", translate("m_i_uptime")).value =
  luci.tools.webadmin.date_format(tonumber(uptime))
 
-s:option(Value, "hostname", translate("hostname"))
+hn = s:option(Value, "hostname", translate("hostname"))
+
+function hn.write(self, section, value)
+	Value.write(self, section, value)
+	luci.sys.hostname(value)
+end
+
 
 tz = s:option(ListValue, "zonename", translate("timezone"))
 tz:value("UTC")
