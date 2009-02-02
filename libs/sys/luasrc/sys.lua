@@ -35,7 +35,8 @@ luci.util   = require "luci.util"
 luci.fs     = require "luci.fs"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall = tonumber, ipairs, pairs, pcall
+local tonumber, ipairs, pairs, pcall, type =
+	tonumber, ipairs, pairs, pcall, type
 
 
 --- LuCI Linux and POSIX system utilities.
