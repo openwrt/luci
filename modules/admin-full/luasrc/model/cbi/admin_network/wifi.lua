@@ -262,6 +262,7 @@ if hwtype == "broadcom" then
 	isolate.optional = true
 
 	bssid:depends({mode="wds"})
+	bssid:depends({mode="adhoc"})
 end
 
 
