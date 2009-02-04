@@ -15,6 +15,13 @@ $Id$
 
 -- Data init --
 
+local uci = luci.model.uci.cursor()
+if not uci:get("network", "wan") then
+	uci:section("network", "interface", "wan", {proto="none", ifname=" "})
+	uci:save("network")
+	uci:commit("network")
+end
+
 local wlcursor = luci.model.uci.cursor_state()
 local wireless = wlcursor:get_all("wireless")
 local wifidata = luci.sys.wifi.getiwconfig()
@@ -188,12 +195,6 @@ mode:value("sta", translate("m_w_client"))
 
 function mode.write(self, section, value)
 	if value == "sta" then
-		-- ToDo: Move this away
-		if not m.uci:get("network", "wan") then
-			m.uci:set("network", "wan", "proto", "none")
-			m.uci:set("network", "wan", "ifname", " ")
-		end
-
 		local oldif = m.uci:get("network", "wan", "ifname")
 		if oldif and oldif ~= " " then
 			m.uci:set("network", "wan", "_ifname", oldif)
