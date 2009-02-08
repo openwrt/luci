@@ -19,11 +19,8 @@
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <errno.h>
 #include "nixio.h"
 
@@ -109,7 +106,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	nixio_open_sockopt(L);
 	nixio_open_bind(L);
 	nixio_open_address(L);
-	nixio_open_select(L);
+	nixio_open_poll(L);
 
 	/* module version */
 	lua_pushnumber(L, VERSION);

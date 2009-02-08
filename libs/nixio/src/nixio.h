@@ -24,7 +24,7 @@ void nixio_open_socket(lua_State *L);
 void nixio_open_sockopt(lua_State *L);
 void nixio_open_bind(lua_State *L);
 void nixio_open_address(lua_State *L);
-void nixio_open_select(lua_State *L);
+void nixio_open_poll(lua_State *L);
 
 /* Method functions */
 
