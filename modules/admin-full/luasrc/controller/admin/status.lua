@@ -20,8 +20,8 @@ function index()
 	entry({"admin", "status"}, template("admin_status/index"), i18n("status", "Status"), 20).index = true
 	entry({"admin", "status", "interfaces"}, template("admin_status/interfaces"), i18n("interfaces", "Interfaces"), 1)
 	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("a_s_ipt", "Firewall"), 2)
-	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "Systemprotokoll"), 3)
-	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("dmesg", "Kernelprotokoll"), 4)
+	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "System Log"), 3)
+	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("dmesg", "Kernel Log"), 4)
 
 end
 

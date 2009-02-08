@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
-Copyright 2009 Steven Barth <steven@midlink.org>
-Copyright 2009 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2009 Steven Barth <steven@midlink.org>
+Copyright 2008-2009 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -54,84 +54,79 @@ $Id$
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
 		<fieldset class="cbi-section">
-			<fieldset class="cbi-section-node">
-				<h3><%:a_s_ipt_actions Actions%></h3>
-				<ul>
-					<li><a href="<%=REQUEST_URI%>?zero=1"><%:a_s_ipt_reset Reset Counters%></a></li>
-					<li><a href="<%=REQUEST_URI%>?restart=1"><%:a_s_ipt_restart Restart Firewall%></a></li>
-				</ul>
-			</fieldset>
-			<br />
+			<h3><%:a_s_ipt_actions Actions%></h3>
+			<ul>
+				<li><a href="<%=REQUEST_URI%>?zero=1"><%:a_s_ipt_reset Reset Counters%></a></li>
+				<li><a href="<%=REQUEST_URI%>?restart=1"><%:a_s_ipt_restart Restart Firewall%></a></li>
+			</ul>
+			<br /><br />
 
-			<fieldset class="cbi-section-node">
-				<% for _, tbl in ipairs({"Filter", "NAT", "Mangle"}) do chaincnt = 0 %>
-					<h3><%:a_s_ipt_table Table%>: <%=tbl%></h3>
-					<table class="cbi-section-table" style="font-size:90%">
-						<% for _, chain in ipairs(ipt:chains(tbl)) do
-							rowcnt    = 0
-							chaincnt  = chaincnt + 1
-							chaininfo = ipt:chain(tbl, chain)
-						%>
-							<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-								<th class="cbi-section-table-cell" style="text-align:left" colspan="11">
-									<br /><a name="rule_<%=tbl:lower()%>_<%=chain%>"></a>
-									<%:a_s_ipt_chain Chain%> <em><%=chain%></em>
-									(<%- if chaininfo.policy then -%>
-										<%:a_s_ipt_policy Policy%>: <em><%=chaininfo.policy%></em>, <%:a_s_ipt_packets Packets%>: <%=chaininfo.packets%>, <%:a_s_ipt_bytes Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
-									<%- else -%>
-										<%:a_s_ipt_references References%>: <%=chaininfo.references-%>
-									<%- end -%>)
-								</th>
-							</tr>
-							<tr class="cbi-section-table-descr">
-								<th class="cbi-section-table-cell"><%:a_s_ipt_rulenum Rule #%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_packets Pkts.%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_bytes Traffic%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_target Target%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_proto Prot.%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_flags Flags%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_inputif In%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_outputif Out%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_source Source%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_destination Destination%></th>
-								<th class="cbi-section-table-cell"><%:a_s_ipt_options Options%></th>
-							</tr>
+			<% for _, tbl in ipairs({"Filter", "NAT", "Mangle"}) do chaincnt = 0 %>
+				<h3><%:a_s_ipt_table Table%>: <%=tbl%></h3>
+				<table class="cbi-section-table" style="font-size:90%">
+					<% for _, chain in ipairs(ipt:chains(tbl)) do
+						rowcnt    = 0
+						chaincnt  = chaincnt + 1
+						chaininfo = ipt:chain(tbl, chain)
+					%>
+						<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
+							<th class="cbi-section-table-cell" style="text-align:left" colspan="11">
+								<br /><a name="rule_<%=tbl:lower()%>_<%=chain%>"></a>
+								<%:a_s_ipt_chain Chain%> <em><%=chain%></em>
+								(<%- if chaininfo.policy then -%>
+									<%:a_s_ipt_policy Policy%>: <em><%=chaininfo.policy%></em>, <%:a_s_ipt_packets Packets%>: <%=chaininfo.packets%>, <%:a_s_ipt_bytes Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
+								<%- else -%>
+									<%:a_s_ipt_references References%>: <%=chaininfo.references-%>
+								<%- end -%>)
+							</th>
+						</tr>
+						<tr class="cbi-section-table-descr">
+							<th class="cbi-section-table-cell"><%:a_s_ipt_rulenum Rule #%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_packets Pkts.%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_bytes Traffic%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_target Target%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_proto Prot.%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_flags Flags%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_inputif In%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_outputif Out%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_source Source%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_destination Destination%></th>
+							<th class="cbi-section-table-cell"><%:a_s_ipt_options Options%></th>
+						</tr>
 
-							<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
-								<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-									<td><%=rule.index%></td>
-									<td><%=rule.packets%></td>
-									<td><%=wba.byte_format(rule.bytes)%></td>
-									<td><%=link_target(tbl, rule.target)%></td>
-									<td><%=rule.protocol%></td>
-									<td><%=rule.flags%></td>
-									<td><%=link_iface(rule.inputif)%></td>
-									<td><%=link_iface(rule.outputif)%></td>
-									<td><%=rule.source%></td>
-									<td><%=rule.destination%></td>
-									<td><small><%=#rule.options > 0 and table.concat(rule.options, " ") or "-"%></small></td>
-								</tr>
-							<% end %>
-
-							<% if rowcnt == 1 then %>
-								<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-									<td colspan="11"><em><%:a_s_ipt_norules No rules in this chain%></em></td>
-								</tr>
-							<% end %>
-						<% end %>
-
-						<% if chaincnt == 0 then %>
-							<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-								<td colspan="11"><em><%:a_s_ipt_nochains No chains in this table%></em></td>
+						<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
+							<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+								<td><%=rule.index%></td>
+								<td><%=rule.packets%></td>
+								<td><%=wba.byte_format(rule.bytes)%></td>
+								<td><%=link_target(tbl, rule.target)%></td>
+								<td><%=rule.protocol%></td>
+								<td><%=rule.flags%></td>
+								<td><%=link_iface(rule.inputif)%></td>
+								<td><%=link_iface(rule.outputif)%></td>
+								<td><%=rule.source%></td>
+								<td><%=rule.destination%></td>
+								<td><small><%=#rule.options > 0 and table.concat(rule.options, " ") or "-"%></small></td>
 							</tr>
 						<% end %>
-					</table>
-					<br /><br />
-				<% end %>
-			</fieldset>
+
+						<% if rowcnt == 1 then %>
+							<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
+								<td colspan="11"><em><%:a_s_ipt_norules No rules in this chain%></em></td>
+							</tr>
+						<% end %>
+					<% end %>
+
+					<% if chaincnt == 0 then %>
+						<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
+							<td colspan="11"><em><%:a_s_ipt_nochains No chains in this table%></em></td>
+						</tr>
+					<% end %>
+				</table>
+				<br /><br />
+			<% end %>
 		</fieldset>
 	</div>
 </form>
 
 <%+footer%>
-<% if ret == 0 then luci.sys.reboot() end %>
