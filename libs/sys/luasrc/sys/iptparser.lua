@@ -1,8 +1,8 @@
 --[[
 
 Iptables parser and query library
-(c) 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-(c) 2008 Steven Barth <steven@midlink.org>
+(c) 2008-2009 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008-2009 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -216,7 +216,7 @@ function IptParser._parse_rules( self )
 			else
 				if rule:find("%d") == 1 then
 
-					local rule_partmays   = luci.util.split( rule, "%s+", nil, true )
+					local rule_parts   = luci.util.split( rule, "%s+", nil, true )
 					local rule_details = { }
 
 					rule_details["table"]       = tbl
