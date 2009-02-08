@@ -1,7 +1,8 @@
 --[[
-LuCI - Iptables parser and query library
 
-Copyright 2008 Jo-Philipp Wich <freifunk@wwsnet.net>
+Iptables parser and query library
+(c) 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -9,27 +10,24 @@ You may obtain a copy of the License at
 
         http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
 $Id$
 
 ]]--
 
-module("luci.sys.iptparser", package.seeall)
-require("luci.util")
+local luci  = {}
+luci.util   = require "luci.util"
+luci.sys    = require "luci.sys"
+luci.ip     = require "luci.ip"
 
+--- LuCI iptables parser and query library
+-- @cstyle	instance
+module("luci.sys.iptparser")
 
+--- Create a new iptables parser object.
+-- @class	function
+-- @name	IptParser
+-- @return	IptParser instance
 IptParser = luci.util.class()
-
---[[
-IptParser.__init__( ... )
-
-The class constructor, initializes the internal lookup table.
-]]--
 
 function IptParser.__init__( self, ... )
 	self._rules = { }
@@ -37,60 +35,73 @@ function IptParser.__init__( self, ... )
 	self:_parse_rules()
 end
 
-
---[[
-IptParser.find( args )
-
-Find all firewall rules that match the given criteria. Expects a table with search criteria as only argument.
-If args is nil or an empty table then all rules will be returned.
-
-The following keys in the args table are recognized:
-
- - table	Match rules that are located within the given table
- - chain	Match rules that are located within the given chain
- - target	Match rules with the given target
- - protocol	Match rules that match the given protocol, rules with protocol "all" are always matched
- - source	Match rules with the given source, rules with source "0.0.0.0/0" are always matched
- - destination	Match rules with the given destination, rules with destination "0.0.0.0/0" are always matched
- - inputif	Match rules with the given input interface, rules with input interface "*" (=all) are always matched
- - outputif	Match rules with the given output interface, rules with output interface "*" (=all) are always matched
- - flags	Match rules that match the given flags, current supported values are "-f" (--fragment) and "!f" (! --fragment)
- - options	Match rules containing all given options
-
-The return value is a list of tables representing the matched rules.
-Each rule table contains the following fields:
-
- - index	The index number of the rule
- - table	The table where the rule is located, can be one of "filter", "nat" or "mangle"
- - chain	The chain where the rule is located, e.g. "INPUT" or "postrouting_wan"
- - target	The rule target, e.g. "REJECT" or "DROP"
- - protocol	The matching protocols, e.g. "all" or "tcp"
- - flags	Special rule options ("--", "-f" or "!f")
- - inputif	Input interface of the rule, e.g. "eth0.0" or "*" for all interfaces
- - outputif	Output interface of the rule, e.g. "eth0.0" or "*" for all interfaces
- - source	The source ip range, e.g. "0.0.0.0/0"
- - destination	The destination ip range, e.g. "0.0.0.0/0"
- - options	A list of specific options of the rule, e.g. { "reject-with", "tcp-reset" }
- - packets	The number of packets matched by the rule
- - bytes	The number of total bytes matched by the rule
-
-Example:
-
-ip = luci.sys.iptparser.IptParser()
-result = ip.find( {
-	target="REJECT",
-	protocol="tcp",
-	options={ "reject-with", "tcp-reset" }
-} )
-
-This will match all rules with target "-j REJECT", protocol "-p tcp" (or "-p all") and the option "--reject-with tcp-reset".
-
-]]--
-
+--- Find all firewall rules that match the given criteria. Expects a table with
+-- search criteria as only argument. If args is nil or an empty table then all
+-- rules will be returned.
+--
+-- The following keys in the args table are recognized:
+-- <ul>
+--  <li> table		 - Match rules that are located within the given table
+--  <li> chain		 - Match rules that are located within the given chain
+--  <li> target		 - Match rules with the given target
+--  <li> protocol	 - Match rules that match the given protocol, rules with
+-- 						protocol "all" are always matched
+--  <li> source		 - Match rules with the given source, rules with source
+-- 						"0.0.0.0/0" are always matched
+--  <li> destination - Match rules with the given destination, rules with
+-- 						destination "0.0.0.0/0" are always matched
+--  <li> inputif	 - Match rules with the given input interface, rules
+-- 						with input	interface "*" (=all) are always matched
+--  <li> outputif	 - Match rules with the given output interface, rules
+-- 						with output	interface "*" (=all) are always matched
+--  <li> flags		 - Match rules that match the given flags, current
+-- 						supported values are "-f" (--fragment)
+--						and "!f" (! --fragment)
+--  <li> options	 - Match rules containing all given options
+-- </ul>
+-- The return value is a list of tables representing the matched rules.
+-- Each rule table contains the following fields:
+-- <ul>
+--  <li> index		 - The index number of the rule
+--  <li> table		 - The table where the rule is located, can be one
+--	 					of "filter", "nat" or "mangle"
+--  <li> chain		 - The chain where the rule is located, e.g. "INPUT"
+-- 						or "postrouting_wan"
+--  <li> target		 - The rule target, e.g. "REJECT" or "DROP"
+--  <li> protocol		The matching protocols, e.g. "all" or "tcp"
+--  <li> flags		 - Special rule options ("--", "-f" or "!f")
+--  <li> inputif	 - Input interface of the rule, e.g. "eth0.0"
+-- 						or "*" for all interfaces
+--  <li> outputif	 - Output interface of the rule,e.g. "eth0.0"
+-- 						or "*" for all interfaces
+--  <li> source		 - The source ip range, e.g. "0.0.0.0/0"
+--  <li> destination - The destination ip range, e.g. "0.0.0.0/0"
+--  <li> options	 - A list of specific options of the rule,
+-- 						e.g. { "reject-with", "tcp-reset" }
+--  <li> packets	 - The number of packets matched by the rule
+--  <li> bytes		 - The number of total bytes matched by the rule
+-- </ul>
+-- Example:
+-- <pre>
+-- ip = luci.sys.iptparser.IptParser()
+-- result = ip.find( {
+-- 	target="REJECT",
+-- 	protocol="tcp",
+-- 	options={ "reject-with", "tcp-reset" }
+-- } )
+-- </pre>
+-- This will match all rules with target "-j REJECT",
+-- protocol "-p tcp" (or "-p all")
+-- and the option "--reject-with tcp-reset".
+-- @params args		Table containing the search arguments (optional)
+-- @return			Table of matching rule tables
 function IptParser.find( self, args )
 
 	local args = args or { }
 	local rv   = { }
+
+	args.source      = args.source      and luci.ip.IPv4(args.source)
+	args.destination = args.destination and luci.ip.IPv4(args.destination)
 
 	for i, rule in ipairs(self._rules) do
 		local match = true
@@ -101,50 +112,73 @@ function IptParser.find( self, args )
 		end
 
 		-- match chain
-		if not ( match == true and ( not args.chain or args.chain == rule.chain ) ) then
+		if not ( match == true and (
+			not args.chain or args.chain == rule.chain
+		) ) then
 			match = false
 		end
 
 		-- match target
-		if not ( match == true and ( not args.target or args.target == rule.target ) ) then
+		if not ( match == true and (
+			not args.target or args.target:upper() == rule.target
+		) ) then
 			match = false
 		end
 
 		-- match protocol
-		if not ( match == true and ( not args.protocol or rule.protocol == "all" or args.protocol == rule.protocol ) ) then
-			match = false
-		end
-		
-		-- match source (XXX: implement ipcalc stuff so that 192.168.1.0/24 matches 0.0.0.0/0 etc.)
-		if not ( match == true and ( not args.source or rule.source == "0.0.0.0/0" or rule.source == args.source ) ) then
+		if not ( match == true and (
+			not args.protocol or rule.protocol == "all" or
+			args.protocol:lower() == rule.protocol
+		) ) then
 			match = false
 		end
 
-		-- match destination (XXX: implement ipcalc stuff so that 192.168.1.0/24 matches 0.0.0.0/0 etc.)
-		if not ( match == true and ( not args.destination or rule.destination == "0.0.0.0/0" or rule.destination == args.destination ) ) then
+		-- match source
+		if not ( match == true and (
+			not args.source or rule.source == "0.0.0.0/0" or
+			luci.ip.IPv4(rule.source):contains(args.source)
+		) ) then
+			match = false
+		end
+
+		-- match destination
+		if not ( match == true and (
+			not args.destination or rule.destination == "0.0.0.0/0" or
+			luci.ip.IPv4(rule.destination):contains(args.destination)
+		) ) then
 			match = false
 		end
 
 		-- match input interface
-		if not ( match == true and ( not args.inputif or rule.inputif == "*" or args.inputif == rule.inputif ) ) then
+		if not ( match == true and (
+			not args.inputif or rule.inputif == "*" or
+			args.inputif == rule.inputif
+		) ) then
 			match = false
 		end
 
 		-- match output interface
-		if not ( match == true and ( not args.outputif or rule.outputif == "*" or args.outputif == rule.outputif ) ) then
+		if not ( match == true and (
+			not args.outputif or rule.outputif == "*" or
+			args.outputif == rule.outputif
+		) ) then
 			match = false
 		end
 
 		-- match flags (the "opt" column)
-		if not ( match == true and ( not args.flags or rule.flags == args.flags ) ) then
+		if not ( match == true and (
+			not args.flags or rule.flags == args.flags
+		) ) then
 			match = false
 		end
 
 		-- match specific options
-		if not ( match == true and ( not args.options or self:_match_options( rule.options, args.options ) ) ) then
+		if not ( match == true and (
+			not args.options or
+			self:_match_options( rule.options, args.options )
+		) ) then
 			match = false
 		end
-
 
 		-- insert match
 		if match == true then
@@ -156,12 +190,9 @@ function IptParser.find( self, args )
 end
 
 
---[[
-IptParser.resync()
-
-Rebuild the internal lookup table, for example when rules have changed through external commands.
-]]--
-
+--- Rebuild the internal lookup table, for example when rules have changed
+-- through external commands.
+-- @return	nothing
 function IptParser.resync( self )
 	self._rules = { }
 	self._chain = nil
@@ -169,12 +200,7 @@ function IptParser.resync( self )
 end
 
 
---[[
-IptParser._parse_rules()
-
-[internal] Parse iptables output from all tables.
-]]--
-
+-- [internal] Parse iptables output from all tables.
 function IptParser._parse_rules( self )
 
 	for i, tbl in ipairs({ "filter", "nat", "mangle" }) do
@@ -182,13 +208,13 @@ function IptParser._parse_rules( self )
 		for i, rule in ipairs(luci.util.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
 
 			if rule:find( "Chain " ) == 1 then
-		
+
 				self._chain = rule:gsub("Chain ([^%s]*) .*", "%1")
 
 			else
 				if rule:find("%d") == 1 then
 
-					local rule_parts   = luci.util.split( rule, "%s+", nil, true )
+					local rule_partmays   = luci.util.split( rule, "%s+", nil, true )
 					local rule_details = { }
 
 					rule_details["table"]       = tbl
@@ -205,7 +231,7 @@ function IptParser._parse_rules( self )
 					rule_details["destination"] = rule_parts[10]
 					rule_details["options"]     = { }
 
-					for i = 11, #rule_parts - 1 do 
+					for i = 11, #rule_parts - 1 do
 						rule_details["options"][i-10] = rule_parts[i]
 					end
 
@@ -219,12 +245,8 @@ function IptParser._parse_rules( self )
 end
 
 
---[[
-IptParser._match_options( optlist1, optlist2 )
-
-[internal] Return true if optlist1 contains all elements of optlist2. Return false in all other cases.
-]]--
-
+-- [internal] Return true if optlist1 contains all elements of optlist 2.
+--            Return false in all other cases.
 function IptParser._match_options( self, o1, o2 )
 
 	-- construct a hashtable of first options list to speed up lookups
