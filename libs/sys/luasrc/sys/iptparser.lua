@@ -19,6 +19,8 @@ luci.util   = require "luci.util"
 luci.sys    = require "luci.sys"
 luci.ip     = require "luci.ip"
 
+local tonumber, ipairs = tonumber, ipairs
+
 --- LuCI iptables parser and query library
 -- @cstyle	instance
 module("luci.sys.iptparser")
@@ -182,7 +184,7 @@ function IptParser.find( self, args )
 
 		-- insert match
 		if match == true then
-			table.insert( rv, rule )
+			rv[#rv+1] = rule
 		end
 	end
 
@@ -235,7 +237,7 @@ function IptParser._parse_rules( self )
 						rule_details["options"][i-10] = rule_parts[i]
 					end
 
-					table.insert( self._rules, rule_details )
+					self._rules[#self._rules+1] = rule_details
 				end
 			end
 		end
