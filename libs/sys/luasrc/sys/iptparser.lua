@@ -32,8 +32,8 @@ module("luci.sys.iptparser")
 IptParser = luci.util.class()
 
 function IptParser.__init__( self, ... )
-	self._rules = { }
-	self._chain = nil
+	self._rules  = { }
+	self._chains = { }
 	self:_parse_rules()
 end
 
@@ -109,7 +109,7 @@ function IptParser.find( self, args )
 		local match = true
 
 		-- match table
-		if not ( not args.table or args.table == rule.table ) then
+		if not ( not args.table or args.table:lower() == rule.table ) then
 			match = false
 		end
 
@@ -202,16 +202,76 @@ function IptParser.resync( self )
 end
 
 
+--- Find the names of all chains within the given table name.
+-- @param table	String containing the table name
+-- @return		Table of chain names in the order they occur.
+function IptParser.chains( self, table )
+	local lookup = { }
+	local chains = { }
+	for _, r in ipairs(self:find({table=table})) do
+		if not lookup[r.chain] then
+			lookup[r.chain]   = true
+			chains[#chains+1] = r.chain
+		end
+	end
+	return chains
+end
+
+
+--- Return the given firewall chain within the given table name.
+-- @param table	String containing the table name
+-- @param chain	String containing the chain name
+-- @return		Table containing the fields "policy", "packets", "bytes"
+--				and "rules". The "rules" field is a table of rule tables.
+function IptParser.chain( self, table, chain )
+	return self._chains[table:lower()] and self._chains[table:lower()][chain]
+end
+
+
+--- Test whether the given target points to a custom chain.
+-- @param target	String containing the target action
+-- @return			Boolean indicating whether target is a custom chain.
+function IptParser.is_custom_target( self, target )
+	for _, r in ipairs(self._rules) do
+		if r.chain == target then
+			return true
+		end
+	end
+	return false
+end
+
+
 -- [internal] Parse iptables output from all tables.
 function IptParser._parse_rules( self )
 
 	for i, tbl in ipairs({ "filter", "nat", "mangle" }) do
 
+		self._chains[tbl] = { }
+
 		for i, rule in ipairs(luci.util.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
 
 			if rule:find( "Chain " ) == 1 then
 
-				self._chain = rule:gsub("Chain ([^%s]*) .*", "%1")
+				local crefs
+				local cname, cpol, cpkt, cbytes = rule:match(
+					"Chain ([^%s]*) %(policy (%w+) " ..
+					"(%d+) packets, (%d+) bytes%)"
+				)
+
+				if not cname then
+					cname, crefs = rule:match(
+						"Chain ([^%s]*) %((%d+) references%)"
+					)
+				end
+
+				self._chain = cname
+				self._chains[tbl][cname] = {
+					policy     = cpol,
+					packets    = tonumber(cpkt or 0),
+					bytes      = tonumber(cbytes or 0),
+					references = tonumber(crefs or 0),
+					rules      = { }
+				}
 
 			else
 				if rule:find("%d") == 1 then
@@ -238,6 +298,10 @@ function IptParser._parse_rules( self )
 					end
 
 					self._rules[#self._rules+1] = rule_details
+
+					self._chains[tbl][self._chain].rules[
+						#self._chains[tbl][self._chain].rules + 1
+					] = rule_details
 				end
 			end
 		end
