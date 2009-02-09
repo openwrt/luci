@@ -12,4 +12,10 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-<% include("themes/" .. theme .. "/header") %>
+
+<%
+	if not luci.dispatcher.context.template_header_sent then
+		include("themes/" .. theme .. "/header")
+		luci.dispatcher.context.template_header_sent = true
+	end
+%>
