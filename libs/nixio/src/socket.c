@@ -43,8 +43,8 @@ static int nixio_socket(lua_State *L) {
 		sock->domain = AF_INET6;
 	} else if (!strcmp(domain, "unix")) {
 		sock->domain = AF_UNIX;
-	} else if (!strcmp(domain, "packet")) {
-		sock->domain = AF_PACKET;
+	/*} else if (!strcmp(domain, "packet")) {
+		sock->domain = AF_PACKET;*/
 	} else {
 		return luaL_argerror(L, 1,
 		 "supported values: inet, inet6, unix, packet"

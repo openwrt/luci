@@ -2,6 +2,7 @@
 #define NIXIO_H_
 
 #define NIXIO_META "nixio.socket"
+#define NIXIO_BUFFERSIZE 8096
 
 struct nixio_socket {
 	int fd;
@@ -25,6 +26,7 @@ void nixio_open_sockopt(lua_State *L);
 void nixio_open_bind(lua_State *L);
 void nixio_open_address(lua_State *L);
 void nixio_open_poll(lua_State *L);
+void nixio_open_io(lua_State *L);
 
 /* Method functions */
 
