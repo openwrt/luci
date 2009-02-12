@@ -16,9 +16,7 @@
  *  limitations under the License.
  */
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "nixio.h"
 #include <poll.h>
 #include <time.h>
 #include <errno.h>

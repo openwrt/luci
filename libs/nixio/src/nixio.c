@@ -16,13 +16,10 @@
  *  limitations under the License.
  */
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "nixio.h"
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include "nixio.h"
 
 #define VERSION 0.1
 
@@ -52,6 +49,12 @@ nixio_sock* nixio__checksock(lua_State *L) {
     return sock;
 }
 
+FILE* nixio__checkfile(lua_State *L) {
+	FILE **fpp = (FILE**)luaL_checkudata(L, 1, NIXIO_FILE_META);
+	luaL_argcheck(L, *fpp, 1, "invalid file object");
+	return *fpp;
+}
+
 /* read fd from nixio_sock object */
 int nixio__checksockfd(lua_State *L) {
 	return nixio__checksock(L)->fd;
@@ -67,15 +70,16 @@ int nixio__checkfd(lua_State *L, int ud) {
 int nixio__tofd(lua_State *L, int ud) {
 	void *udata = lua_touserdata(L, ud);
 	int fd = -1;
-	if (udata && lua_getmetatable(L, ud)) {
+	if (lua_getmetatable(L, ud)) {
 		luaL_getmetatable(L, NIXIO_META);
+		luaL_getmetatable(L, NIXIO_FILE_META);
 		luaL_getmetatable(L, LUA_FILEHANDLE);
-		if (lua_rawequal(L, -2, -3)) {
+		if (lua_rawequal(L, -3, -4)) {
 			fd = ((nixio_sock*)udata)->fd;
-		} else if (lua_rawequal(L, -1, -3)) {
-			fd = fileno(*((FILE **)udata));
+		} else if (lua_rawequal(L, -2, -4) || lua_rawequal(L, -1, -4)) {
+			fd = (*((FILE **)udata)) ? fileno(*((FILE **)udata)) : -1;
 		}
-		lua_pop(L, 3);
+		lua_pop(L, 4);
 	}
 	return fd;
 }
@@ -90,24 +94,26 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	/* create metatable */
 	luaL_newmetatable(L, NIXIO_META);
 
-	/* method table */
-	lua_newtable(L);
+	/* metatable.__index = metatable */
 	lua_pushvalue(L, -1);
-
-	/* metatable.__index = M */
-	lua_setfield(L, -3, "__index");
-	lua_remove(L, -2);
+	lua_setfield(L, -2, "__index");
 
 	/* register module */
 	luaL_register(L, "nixio", R);
 
+	/* register metatable as socket_meta */
+	lua_pushvalue(L, -2);
+	lua_setfield(L, -2, "socket_meta");
+
 	/* register methods */
+	nixio_open_file(L);
 	nixio_open_socket(L);
 	nixio_open_sockopt(L);
 	nixio_open_bind(L);
 	nixio_open_address(L);
 	nixio_open_poll(L);
 	nixio_open_io(L);
+	nixio_open_splice(L);
 
 	/* module version */
 	lua_pushnumber(L, VERSION);

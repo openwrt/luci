@@ -16,9 +16,7 @@
  *  limitations under the License.
  */
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "nixio.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -181,7 +179,7 @@ void nixio_open_sockopt(lua_State *L) {
 	luaL_register(L, NULL, M);
 	lua_pop(L, 1);
 
-	luaL_getmetatable(L, LUA_FILEHANDLE);
+	luaL_getmetatable(L, NIXIO_FILE_META);
 	lua_pushcfunction(L, nixio_sock_setblocking);
 	lua_setfield(L, -2, "setblocking");
 	lua_pop(L, 1);

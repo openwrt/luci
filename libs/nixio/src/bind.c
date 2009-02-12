@@ -16,9 +16,7 @@
  *  limitations under the License.
  */
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "nixio.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
