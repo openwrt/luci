@@ -26,7 +26,11 @@
 
 /* pushes nil, error number and errstring on the stack */
 int nixio__perror(lua_State *L) {
-    lua_pushnil(L);
+	if (errno == EAGAIN) {
+		lua_pushboolean(L, 0);
+	} else {
+		lua_pushnil(L);
+	}
     lua_pushinteger(L, errno);
     lua_pushstring(L, strerror(errno));
     return 3;

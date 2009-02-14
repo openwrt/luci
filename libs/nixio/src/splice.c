@@ -20,6 +20,7 @@
 
 #include "nixio.h"
 #include <fcntl.h>
+#include <sys/sendfile.h>
 
 /* guess what sucks... */
 #ifdef __UCLIBC__
@@ -29,8 +30,7 @@ ssize_t splice(int __fdin, __off64_t *__offin, int __fdout,
         __off64_t *__offout, size_t __len, unsigned int __flags) {
 	return syscall(__NR_splice, __fdin, __offin, __fdout, __offout, __len, __flags);
 }
-#endif
-
+#endif /* __UCLIBC__ */
 
 /**
  * Checks whether a flag is set in the table and translates it into a bitmap
@@ -60,6 +60,9 @@ static int nixio_splice_flags(lua_State *L) {
 	return 1;
 }
 
+/**
+ * splice(fd_in, fd_out, length, flags)
+ */
 static int nixio_splice(lua_State *L) {
 	int fd_in = nixio__checkfd(L, 1);
 	int fd_out = nixio__checkfd(L, 2);
@@ -77,12 +80,29 @@ static int nixio_splice(lua_State *L) {
 	return 1;
 }
 
+/**
+ * sendfile(outfd, infd, length)
+ */
+static int nixio_sendfile(lua_State *L) {
+	int sockfd = nixio__checksockfd(L);
+	int infd = nixio__checkfd(L, 2);
+	size_t len = luaL_checkinteger(L, 3);
 
+	long spliced = sendfile(sockfd, infd, NULL, len);
+
+	if (spliced < 0) {
+		return nixio__perror(L);
+	}
+
+	lua_pushnumber(L, spliced);
+	return 1;
+}
 
 /* module table */
 static const luaL_reg R[] = {
 	{"splice",			nixio_splice},
 	{"splice_flags",	nixio_splice_flags},
+	{"sendfile",		nixio_sendfile},
 	{NULL,			NULL}
 };
 
