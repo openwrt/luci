@@ -76,7 +76,8 @@ static int nixio_file_write(lua_State *L) {
 	if (written < 0) {
 		return nixio__perror(L);
 	} else {
-		return written;
+		lua_pushnumber(L, written);
+		return 1;
 	}
 }
 

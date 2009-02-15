@@ -21,11 +21,13 @@ module "nixio.util"
 local BUFFERSIZE = 8096
 local socket = nixio.socket_meta
 
-function socket.readall(self, len)
+function socket.recvall(self, len)
 	local block, code, msg = self:recv(len)
 
 	if not block then
 		return "", code, msg, len
+	elseif #block == 0 then
+		return "", nil, nil, len
 	end
 
 	local data, total = {block}, #block
@@ -35,6 +37,8 @@ function socket.readall(self, len)
 
 		if not block then
 			return data, code, msg, len - #data
+		elseif #block == 0 then
+			return data, nil, nil, len - #data
 		end
 
 		data[#data+1], total = block, total + #block
@@ -66,11 +70,12 @@ end
 function socket.linesource(self, limit)
 	limit = limit or BUFFERSIZE
 	local buffer = ""
+	local bpos = 0
 	return function(flush)
-		local bpos, line, endp, _ = 0
+		local line, endp, _
 		
 		if flush then
-			line = buffer
+			line = buffer:sub(bpos + 1)
 			buffer = ""
 			return line
 		end
