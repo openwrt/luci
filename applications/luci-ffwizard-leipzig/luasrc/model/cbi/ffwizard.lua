@@ -356,6 +356,17 @@ function client.write(self, section, value)
 	uci:delete_all("firewall", "rule", {
 		src="freifunk",
 		proto="udp",
+		dest_port="53"
+	})
+	uci:section("firewall", "rule", nil, {
+		src="freifunk",
+		proto="udp",
+		src_port="53",
+		target="ACCEPT"
+	})
+	uci:delete_all("firewall", "rule", {
+		src="freifunk",
+		proto="udp",
 		src_port="68",
 		dest_port="67"
 	})
