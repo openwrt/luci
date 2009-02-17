@@ -74,12 +74,14 @@ end
 -- @param message	Custom error message (optional)#
 -- @return			false
 function error500(message)
-	luci.http.status(500, "Internal Server Error")
-
-	require("luci.template")
-	if not luci.util.copcall(luci.template.render, "error500", {message=message}) then
-		luci.http.prepare_content("text/plain")
-		luci.http.write(message)
+	if not context.template_header_sent then
+		luci.http.status(500, "Internal Server Error")
+	else
+		require("luci.template")
+		if not luci.util.copcall(luci.template.render, "error500", {message=message}) then
+			luci.http.prepare_content("text/plain")
+			luci.http.write(message)
+		end
 	end
 	return false
 end
@@ -589,7 +591,7 @@ end
 
 
 local function _call(self, ...)
-	if #self.argv > 0 then 
+	if #self.argv > 0 then
 		return getfenv()[self.name](unpack(self.argv), ...)
 	else
 		return getfenv()[self.name](...)
