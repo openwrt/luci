@@ -21,7 +21,7 @@ local type  = type
 local pairs = pairs
 local error = error
 
-local ipkg = "opkg"
+local ipkg = "opkg -force-defaults"
 
 --- LuCI IPKG/OPKG call abstraction library
 module "luci.model.ipkg"
@@ -34,26 +34,26 @@ local function _action(cmd, ...)
 	for k, v in pairs(arg) do
 		pkg = pkg .. " '" .. v:gsub("'", "") .. "'"
 	end
-	
+
 	local c = ipkg.." "..cmd.." "..pkg.." >/dev/null 2>&1"
 	local r = os.execute(c)
-	return (r == 0), r	
+	return (r == 0), r
 end
 
 -- Internal parser function
-local function _parselist(rawdata)	
+local function _parselist(rawdata)
 	if type(rawdata) ~= "function" then
 		error("IPKG: Invalid rawdata given")
 	end
-	
+
 	local data = {}
 	local c = {}
 	local l = nil
-	
+
 	for line in rawdata do
 		if line:sub(1, 1) ~= " " then
 			local key, val = line:match("(.-): ?(.*)%s*")
-			
+
 			if key and val then
 				if key == "Package" then
 					c = {Package = val}
@@ -73,7 +73,7 @@ local function _parselist(rawdata)
 			c[l] = c[l] .. "\n" .. line
 		end
 	end
-	
+
 	return data
 end
 
@@ -83,7 +83,7 @@ local function _lookup(act, pkg)
 	if pkg then
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
-	
+
 	-- IPKG sometimes kills the whole machine because it sucks
 	-- Therefore we have to use a sucky approach too and use
 	-- tmpfiles instead of directly reading the output
@@ -147,4 +147,3 @@ end
 function upgrade()
 	return _action("upgrade")
 end
-
