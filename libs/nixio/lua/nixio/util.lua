@@ -77,11 +77,12 @@ function socket.linesource(self, limit)
 		if flush then
 			line = buffer:sub(bpos + 1)
 			buffer = ""
+			bpos = 0
 			return line
 		end
 
 		while not line do
-			_, endp, line = buffer:find("^(.-)\r?\n", bpos + 1)
+			_, endp, line = buffer:find("(.-)\r?\n", bpos + 1)
 			if line then
 				bpos = endp
 				return line
@@ -89,12 +90,42 @@ function socket.linesource(self, limit)
 				local newblock, code = self:recv(limit + bpos - #buffer)
 				if not newblock then
 					return nil, code
+				elseif #newblock == 0 then
+					return nil
 				end
 				buffer = buffer:sub(bpos + 1) .. newblock
 				bpos = 0
 			else
 				return nil, 0
 			end
+		end
+	end
+end
+
+function socket.blocksource(self, bs, limit)
+	bs = bs or BUFFERSIZE
+	return function()
+		local toread = bs
+		if limit then
+			if limit < 1 then
+				return nil
+			elseif limit < toread then
+				toread = limit
+			end
+		end
+
+		local block, code, msg = self:recv(toread)
+
+		if not block then
+			return nil, code
+		elseif #block == 0 then
+			return nil
+		else
+			if limit then
+				limit = limit - #block
+			end
+
+			return block
 		end
 	end
 end

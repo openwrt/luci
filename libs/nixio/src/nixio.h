@@ -6,6 +6,10 @@
 #define NIXIO_BUFFERSIZE 8096
 #define _FILE_OFFSET_BITS 64
 
+#define NIXIO_PUSH_CONSTANT(x) \
+	lua_pushinteger(L, x); \
+	lua_setfield(L, -2, #x);
+
 /* uClibc: broken as always */
 #define _LARGEFILE_SOURCE
 

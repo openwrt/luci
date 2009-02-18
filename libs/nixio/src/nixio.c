@@ -123,6 +123,18 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	lua_pushnumber(L, VERSION);
 	lua_setfield(L, -2, "version");
 
+	/* some constants */
+	lua_createtable(L, 0, 1);
+
+	NIXIO_PUSH_CONSTANT(EACCES);
+	NIXIO_PUSH_CONSTANT(ENOSYS);
+	NIXIO_PUSH_CONSTANT(EINVAL);
+	NIXIO_PUSH_CONSTANT(EWOULDBLOCK);
+	NIXIO_PUSH_CONSTANT(EAGAIN);
+	NIXIO_PUSH_CONSTANT(ENOMEM);
+
+	lua_setfield(L, -2, "const");
+
 	/* remove meta table */
 	lua_remove(L, -2);
 
