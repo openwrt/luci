@@ -16,7 +16,7 @@ while true do
 	if client then
 		client:settimeout(1)
 		local srv
-		local ip = luci.ip.IPv4(client:getpeername())
+		local ip = luci.ip.IPv4((client:getpeername()))
 		uci:foreach("network", "interface",
 			function (section)
 			    if section.ipaddr then
