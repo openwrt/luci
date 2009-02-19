@@ -16,17 +16,21 @@ while true do
 	if client then
 		client:settimeout(1)
 		local srv
-		local ip = luci.ip.IPv4((client:getpeername()))
-		uci:foreach("network", "interface",
-			function (section)
-			    if section.ipaddr then
-			        local net = luci.ip.IPv4(section.ipaddr, section.netmask)
-			        if ip and net and net:contains(ip) then
-			            srv = section.ipaddr
-			            return
-			        end
-			    end
-			end)
+		print (client:getpeername())
+		local ip  = luci.ip.IPv4((client:getpeername()))
+
+		local function find_srv(section)
+			if section.ipaddr then
+				local net = luci.ip.IPv4(section.ipaddr, section.netmask)
+				if ip and net and net:contains(ip) then
+					srv = section.ipaddr
+					return
+				end
+			end
+		end
+		
+		uci:foreach("network", "interface", find_srv)
+		uci:foreach("network", "alias", find_srv)
 
 		client:receive()
 		client:send("HTTP/1.0 302 Found\r\nLocation: http://" .. srv ..
