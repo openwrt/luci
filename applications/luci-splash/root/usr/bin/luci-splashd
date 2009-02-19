@@ -16,7 +16,6 @@ while true do
 	if client then
 		client:settimeout(1)
 		local srv
-		print (client:getpeername())
 		local ip  = luci.ip.IPv4((client:getpeername()))
 
 		local function find_srv(section)
