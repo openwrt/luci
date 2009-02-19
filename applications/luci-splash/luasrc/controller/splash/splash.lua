@@ -4,8 +4,8 @@ function index()
 	entry({"admin", "services", "splash"}, cbi("splash/splash"), "Client-Splash")
 
 	node("splash").target = call("action_dispatch")
-	node("splash", "splash", "activate").target = call("action_activate")
-	node("splash", "splash", "splash").target   = template("splash_splash/splash")
+	node("splash", "activate").target = call("action_activate")
+	node("splash", "splash").target   = template("splash_splash/splash")
 end
 
 function action_dispatch()
@@ -14,7 +14,7 @@ function action_dispatch()
 	if #mac > 0 and ( status == "whitelisted" or status == "lease" ) then
 		luci.http.redirect(luci.dispatcher.build_url())
 	else
-		luci.http.redirect(luci.dispatcher.build_url("splash", "splash", "splash"))
+		luci.http.redirect(luci.dispatcher.build_url("splash", "splash"))
 	end
 end
 
