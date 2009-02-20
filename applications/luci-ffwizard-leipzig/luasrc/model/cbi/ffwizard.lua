@@ -217,7 +217,7 @@ function main.write(self, section, value)
 
 	if not has_advanced then
 		uci:section("firewall", "advanced", nil,
-			{ tcp_ecn = "0" })
+			{ tcp_ecn = "0", ip_conntrack_max = "8192", tcp_westwood = "1" })
 	end
 
 	uci:save("firewall")
