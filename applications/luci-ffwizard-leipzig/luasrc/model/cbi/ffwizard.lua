@@ -392,10 +392,10 @@ function client.write(self, section, value)
 
 
 	-- Delete old splash
-	uci:delete_all("luci_splash", "iface", {net=device, zone="freifunk"})
+	uci:delete_all("luci_splash", "iface", {network=device.."dhcp", zone="freifunk"})
 
 	-- Register splash
-	uci:section("luci_splash", "iface", nil, {net=device, zone="freifunk"})
+	uci:section("luci_splash", "iface", nil, {network=device.."dhcp", zone="freifunk"})
 	uci:save("luci_splash")
 end
 
