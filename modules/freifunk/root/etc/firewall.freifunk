@@ -13,6 +13,8 @@ apply_advanced() {
 	local accept_source_route
 
 	config_get_bool tcp_ecn $1 tcp_ecn 1
+	config_get ip_conntrack_max $1 ip_conntrack_max
+	config_get_bool tcp_westwood $1 tcp_westwood 0
 	config_get_bool tcp_window_scaling $1 tcp_window_scaling 1
 	config_get_bool accept_redirects $1 accept_redirects 0
 	config_get_bool accept_source_route $1 accept_source_route 0
@@ -24,6 +26,8 @@ apply_advanced() {
 
 	sysctl -w net.ipv4.tcp_ecn=$tcp_ecn >/dev/null
 	sysctl -w net.ipv4.tcp_window_scaling=$tcp_window_scaling >/dev/null
+	sysctl -w net.ipv4.tcp_westwood=$tcp_westwood >/dev/null
+	sysctl -w net.ipv4.ip_conntrack_max=$ip_conntrack_max >/dev/null
 
 	for f in /proc/sys/net/ipv4/conf/*/accept_redirects; do
 		echo $accept_redirects > $f
@@ -51,3 +55,5 @@ apply_nat_fix() {
 uci_set_state firewall core loaded 1
 config_foreach fw_addif interface
 config_foreach apply_nat_fix interface
+
+[ -x /etc/init.d/luci_splash ] && /etc/init.d/luci_splash start
