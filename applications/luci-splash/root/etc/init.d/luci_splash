@@ -25,6 +25,12 @@ iface_add() {
 	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -d "$ipaddr" -p tcp -m multiport ! --dport 22,80,443 -j luci_splash_portal
 }
 
+iface_del() {
+	config_get zone "$1" zone                                                                
+	[ -n "$zone" ] || return 0
+	while iptables -t nat -D prerouting_${zone} -j luci_splash_prerouting 2>&-; do :; done
+}
+
 blacklist_add() {
 	local cfg="$1"
 	
@@ -37,6 +43,11 @@ whitelist_add() {
 	
 	config_get mac "$cfg" mac
 	[ -n "$mac" ] && iptables -t nat -I luci_splash_leases -m mac --mac-source "$mac" -j RETURN
+}
+
+boot() {
+	### We are started by the firewall include
+	exit 0
 }
 
 start() {
@@ -73,12 +84,6 @@ start() {
 
 	### Start the splash httpd
 	start-stop-daemon -S -m -p /var/run/luci-splashd.pid -b -q -x /usr/bin/luci-splashd
-}
-
-iface_del() {
-	config_get zone "$1" zone                                                                
-	[ -n "$zone" ] || return 0
-	while iptables -t nat -D prerouting_${zone} -j luci_splash_prerouting 2>&-; do :; done
 }
 
 stop() {
