@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
 START=70
+EXTRA_COMMANDS=clear_leases
 
 iface_add() {
 	local cfg="$1"
@@ -28,14 +29,14 @@ blacklist_add() {
 	local cfg="$1"
 	
 	config_get mac "$cfg" mac
-	[ -n "$mac" ] && iptables -t nat -A luci_splash_portal -m mac --mac-source "$mac" -j DROP
+	[ -n "$mac" ] && iptables -t nat -I luci_splash_leases -m mac --mac-source "$mac" -j DROP
 }
 
 whitelist_add() {
 	local cfg="$1"
 	
 	config_get mac "$cfg" mac
-	[ -n "$mac" ] && iptables -t nat -A luci_splash_portal -m mac --mac-source "$mac" -j RETURN
+	[ -n "$mac" ] && iptables -t nat -I luci_splash_leases -m mac --mac-source "$mac" -j RETURN
 }
 
 start() {
@@ -52,9 +53,12 @@ start() {
 	### Build the main and portal rule
 	config_foreach blacklist_add blacklist
 	config_foreach whitelist_add whitelist
+	config_foreach whitelist_add lease
 	config_foreach iface_add iface
 	
 	### Build the portal rule
+	iptables -t nat -A luci_splash_portal -p udp --dport 33434:33523 -j RETURN
+	iptables -t nat -A luci_splash_portal -p icmp -j RETURN
 	iptables -t nat -A luci_splash_portal -p udp --dport 53 -j RETURN
 	iptables -t nat -A luci_splash_portal -j luci_splash_leases
 	
@@ -74,7 +78,7 @@ start() {
 iface_del() {
 	config_get zone "$1" zone                                                                
 	[ -n "$zone" ] || return 0
-	iptables -t nat -D prerouting_${zone} -j luci_splash_prerouting
+	while iptables -t nat -D prerouting_${zone} -j luci_splash_prerouting 2>&-; do :; done
 }
 
 stop() {
@@ -94,5 +98,14 @@ stop() {
 
 	### Stop the splash httpd
 	start-stop-daemon -K -q -x /usr/bin/luci-splashd
+	
+	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
+}
+
+	
+clear_leases() {
+	stop
+	while uci -P /var/state del luci_splash.@lease[0] 2>&-;do :; done
+	start
 }
 
