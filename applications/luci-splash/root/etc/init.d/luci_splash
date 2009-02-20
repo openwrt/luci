@@ -17,10 +17,11 @@ iface_add() {
 	[ -n "$netmask" ] || return 0
 	
 	eval "$(ipcalc.sh $ipaddr $netmask)"
-	
-	iptables -t nat -A zone_${zone}_prerouting -s "$NETWORK/$PREFIX" -p ! tcp -j luci_splash_portal
-	iptables -t nat -A zone_${zone}_prerouting -s "$NETWORK/$PREFIX" -d ! "$ipaddr" -j luci_splash_portal
-	iptables -t nat -A zone_${zone}_prerouting -s "$NETWORK/$PREFIX" -d "$ipaddr" -p tcp -m multiport ! --dport 22,80,443 -j luci_splash_portal
+
+	iptables -t nat -A prerouting_${zone} -j luci_splash_prerouting
+	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -p ! tcp -j luci_splash_portal
+	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -d ! "$ipaddr" -j luci_splash_portal
+	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -d "$ipaddr" -p tcp -m multiport ! --dport 22,80,443 -j luci_splash_portal
 }
 
 blacklist_add() {
@@ -44,9 +45,9 @@ start() {
 	config_load luci_splash
 	
 	### Create subchains
-	iptables -t nat -N luci_splash
 	iptables -t nat -N luci_splash_portal
 	iptables -t nat -N luci_splash_leases
+	iptables -t nat -N luci_splash_prerouting
 	
 	### Build the main and portal rule
 	config_foreach blacklist_add blacklist
@@ -70,16 +71,26 @@ start() {
 	start-stop-daemon -S -b -q -x /usr/bin/luci-splashd
 }
 
-stop() {	
+iface_del() {
+	config_get zone "$1" zone                                                                
+	[ -n "$zone" ] || return 0
+	iptables -t nat -D prerouting_${zone} -j luci_splash_prerouting
+}
+
+stop() {
+	### Clear interface rules
+	config_load luci_splash
+	config_foreach iface_del iface
+        
 	### Clear subchains
 	iptables -t nat -F luci_splash_leases
 	iptables -t nat -F luci_splash_portal
-	iptables -t nat -F luci_splash	
+	iptables -t nat -F luci_splash_prerouting
 	
 	### Delete subchains
 	iptables -t nat -X luci_splash_leases
 	iptables -t nat -X luci_splash_portal
-	iptables -t nat -X luci_splash
+	iptables -t nat -X luci_splash_prerouting
 
 	### Stop the splash httpd
 	start-stop-daemon -K -q -x /usr/bin/luci-splashd
