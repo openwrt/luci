@@ -32,7 +32,7 @@ function Generator.__init__(self, schemes, output, uvlpath)
 	self.names   = schemes
 	self.output  = output or "doc"
 	self.schemes = {}
-	self.uvl     = uvl.UVL()
+	self.uvl     = uvl.UVL(uvlpath)
 	
 	self.extension = ".xml"
 	self.additionals = {"uvldoc.css"}
