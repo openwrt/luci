@@ -72,7 +72,7 @@ start() {
 	}
 
 	### Start the splash httpd
-	start-stop-daemon -S -b -q -x /usr/bin/luci-splashd
+	start-stop-daemon -S -m -p /var/run/luci-splashd.pid -b -q -x /usr/bin/luci-splashd
 }
 
 iface_del() {
@@ -97,7 +97,7 @@ stop() {
 	iptables -t nat -X luci_splash_prerouting
 
 	### Stop the splash httpd
-	start-stop-daemon -K -q -x /usr/bin/luci-splashd
+	start-stop-daemon -K -p /var/run/luci-splashd.pid -s KILL -q
 	
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
 }
