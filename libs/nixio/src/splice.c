@@ -25,10 +25,22 @@
 /* guess what sucks... */
 #ifdef __UCLIBC__
 #include <unistd.h>
+#include <errno.h>
 #include <sys/syscall.h>
 ssize_t splice(int __fdin, __off64_t *__offin, int __fdout,
         __off64_t *__offout, size_t __len, unsigned int __flags) {
+#ifdef __NR_splice
 	return syscall(__NR_splice, __fdin, __offin, __fdout, __offout, __len, __flags);
+#else
+	(void)__fdin;
+	(void)__offin;
+	(void)__fdout;
+	(void)__offout;
+	(void)__len;
+	(void)__flags;
+	errno = ENOSYS;
+	return -1;
+#endif
 }
 #endif /* __UCLIBC__ */
 
