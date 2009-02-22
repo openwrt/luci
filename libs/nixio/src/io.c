@@ -36,8 +36,8 @@ static int nixio_sock__sendto(lua_State *L, int to) {
 	socklen_t alen = 0;
 
 	if (to) {
-		const char *address = luaL_checklstring(L, 2, NULL);
-		uint16_t port = (uint16_t)luaL_checkinteger(L, 3);
+		const char *address = luaL_checklstring(L, 3, NULL);
+		uint16_t port = (uint16_t)luaL_checkinteger(L, 4);
 		struct sockaddr_storage addrstor;
 		addr = (struct sockaddr*)&addrstor;
 		if (sock->domain == AF_INET) {
@@ -65,7 +65,7 @@ static int nixio_sock__sendto(lua_State *L, int to) {
 	do {
 		sent = sendto(sock->fd, data, len, 0, addr, alen);
 	} while(sent == -1 && errno == EINTR);
-	if (len >= 0) {
+	if (sent >= 0) {
 		lua_pushinteger(L, sent);
 		return 1;
 	} else {

@@ -20,6 +20,7 @@ module "nixio.util"
 
 local BUFFERSIZE = 8096
 local socket = nixio.socket_meta
+local tls_socket = nixio.tls_socket_meta
 
 function socket.recvall(self, len)
 	local block, code, msg = self:recv(len)
@@ -46,6 +47,7 @@ function socket.recvall(self, len)
 
 	return (#data > 1 and table.concat(data) or data[1]), nil, nil, 0
 end
+tls_socket.recvall = socket.recvall
 
 function socket.sendall(self, data)
 	local total, block = 0
@@ -66,6 +68,7 @@ function socket.sendall(self, data)
 	
 	return total + sent, nil, nil, ""
 end
+tls_socket.sendall = socket.sendall
 
 function socket.linesource(self, limit)
 	limit = limit or BUFFERSIZE
@@ -101,6 +104,7 @@ function socket.linesource(self, limit)
 		end
 	end
 end
+tls_socket.linesource = socket.linesource
 
 function socket.blocksource(self, bs, limit)
 	bs = bs or BUFFERSIZE
@@ -129,3 +133,4 @@ function socket.blocksource(self, bs, limit)
 		end
 	end
 end
+tls_socket.blocksource = socket.blocksource

@@ -33,7 +33,11 @@ static int nixio_file(lua_State *L) {
 		return nixio__perror(L);
 	}
 
-	FILE **udata = lua_newuserdata(L, sizeof(FILE**));
+	FILE **udata = lua_newuserdata(L, sizeof(FILE*));
+	if (!udata) {
+		return luaL_error(L, "out of memory");
+	}
+
 	*udata = file;
 
 	luaL_getmetatable(L, NIXIO_FILE_META);
@@ -50,7 +54,11 @@ static int nixio_pipe(lua_State *L) {
 	}
 
 	luaL_getmetatable(L, NIXIO_FILE_META);
-	udata = lua_newuserdata(L, sizeof(FILE**));
+	udata = lua_newuserdata(L, sizeof(FILE*));
+	if (!udata) {
+		return luaL_error(L, "out of memory");
+	}
+
 	if (!(*udata = fdopen(pipefd[0], "r"))) {
 		return nixio__perror(L);
 	}

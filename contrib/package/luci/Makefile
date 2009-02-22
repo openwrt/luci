@@ -202,6 +202,16 @@ define Package/luci-json/install
 endef
 
 
+define Package/luci-nixio
+  $(call Package/luci/libtemplate)
+  TITLE:=NIXIO Socket Library
+endef
+
+define Package/luci-nixio/install
+	$(call Package/luci/install/template,$(1),libs/nixio)
+endef
+
+
 define Package/luci-sys
   $(call Package/luci/libtemplate)
   TITLE:=LuCI Linux/POSIX system library
@@ -764,6 +774,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-json),)
 	PKG_SELECTED_MODULES+=libs/json
 endif
+ifneq ($(CONFIG_PACKAGE_luci-nixio),)
+	PKG_SELECTED_MODULES+=libs/nixio
+endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
 	PKG_SELECTED_MODULES+=libs/uci
 endif
@@ -933,6 +946,7 @@ $(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
+$(eval $(call BuildPackage,luci-nixio))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))

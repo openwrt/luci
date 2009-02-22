@@ -118,6 +118,8 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	nixio_open_poll(L);
 	nixio_open_io(L);
 	nixio_open_splice(L);
+	nixio_open_tls_context(L);
+	nixio_open_tls_socket(L);
 
 	/* module version */
 	lua_pushnumber(L, VERSION);

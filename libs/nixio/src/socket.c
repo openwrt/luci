@@ -34,6 +34,9 @@ static int nixio_socket(lua_State *L) {
 	const char *proto  = lua_tolstring(L, 3, NULL);
 
 	nixio_sock *sock = lua_newuserdata(L, sizeof(nixio_sock));
+	if (!sock) {
+		return luaL_error(L, "out of memory");
+	}
 
 	if (!strcmp(domain, "inet")) {
 		sock->domain = AF_INET;
@@ -142,17 +145,12 @@ static const luaL_reg R[] = {
 static const luaL_reg M[] = {
 	{"close",		nixio_sock_close},
 	{"shutdown",	nixio_sock_shutdown},
+	{"__gc",		nixio_sock__gc},
+	{"__tostring",	nixio_sock__tostring},
 	{NULL,			NULL}
 };
 
 void nixio_open_socket(lua_State *L) {
-	luaL_getmetatable(L, NIXIO_META);
-	lua_pushcfunction(L, nixio_sock__gc);
-	lua_setfield(L, -2, "__gc");
-	lua_pushcfunction(L, nixio_sock__tostring);
-	lua_setfield(L, -2, "__tostring");
-	lua_pop(L, 1);
-
 	luaL_register(L, NULL, R);
 
 	lua_pushvalue(L, -2);

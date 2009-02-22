@@ -3,6 +3,8 @@
 
 #define NIXIO_META "nixio.socket"
 #define NIXIO_FILE_META "nixio.file"
+#define NIXIO_TLS_CTX_META "nixio.tls.ctx"
+#define NIXIO_TLS_SOCK_META "nixio.tls.sock"
 #define NIXIO_BUFFERSIZE 8096
 #define _FILE_OFFSET_BITS 64
 
@@ -43,6 +45,8 @@ void nixio_open_address(lua_State *L);
 void nixio_open_poll(lua_State *L);
 void nixio_open_io(lua_State *L);
 void nixio_open_splice(lua_State *L);
+void nixio_open_tls_context(lua_State *L);
+void nixio_open_tls_socket(lua_State *L);
 
 /* Method functions */
 
