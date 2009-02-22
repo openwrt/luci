@@ -1,0 +1,31 @@
+asn1.o: asn1.c os_port.h ../crypto/crypto.h ../config/config.h \
+  ../ssl/os_port.h ../crypto/bigint_impl.h ../crypto/bigint.h \
+  ../crypto/crypto.h crypto_misc.h ../crypto/bigint.h
+gen_cert.o: gen_cert.c ../config/config.h ssl.h tls1.h version.h \
+  ../crypto/crypto.h ../ssl/os_port.h ../crypto/bigint_impl.h \
+  ../crypto/bigint.h ../crypto/crypto.h os_port.h crypto_misc.h \
+  ../crypto/bigint.h
+loader.o: loader.c ssl.h tls1.h version.h ../crypto/crypto.h \
+  ../config/config.h ../ssl/os_port.h ../crypto/bigint_impl.h \
+  ../crypto/bigint.h ../crypto/crypto.h os_port.h crypto_misc.h \
+  ../crypto/bigint.h private_key.h
+openssl.o: openssl.c ../config/config.h
+os_port.o: os_port.c os_port.h
+p12.o: p12.c ssl.h tls1.h version.h ../crypto/crypto.h ../config/config.h \
+  ../ssl/os_port.h ../crypto/bigint_impl.h ../crypto/bigint.h \
+  ../crypto/crypto.h os_port.h crypto_misc.h ../crypto/bigint.h
+tls1.o: tls1.c ssl.h tls1.h version.h ../crypto/crypto.h \
+  ../config/config.h ../ssl/os_port.h ../crypto/bigint_impl.h \
+  ../crypto/bigint.h ../crypto/crypto.h os_port.h crypto_misc.h \
+  ../crypto/bigint.h
+tls1_clnt.o: tls1_clnt.c ssl.h tls1.h version.h ../crypto/crypto.h \
+  ../config/config.h ../ssl/os_port.h ../crypto/bigint_impl.h \
+  ../crypto/bigint.h ../crypto/crypto.h os_port.h crypto_misc.h \
+  ../crypto/bigint.h
+tls1_svr.o: tls1_svr.c ssl.h tls1.h version.h ../crypto/crypto.h \
+  ../config/config.h ../ssl/os_port.h ../crypto/bigint_impl.h \
+  ../crypto/bigint.h ../crypto/crypto.h os_port.h crypto_misc.h \
+  ../crypto/bigint.h
+x509.o: x509.c os_port.h crypto_misc.h ../crypto/crypto.h \
+  ../config/config.h ../ssl/os_port.h ../crypto/bigint_impl.h \
+  ../crypto/bigint.h ../crypto/crypto.h ../crypto/bigint.h

@@ -40,9 +40,9 @@ compile: $(NIXIO_OBJ)
 	mkdir -p dist$(LUA_LIBRARYDIR)
 	cp src/nixio.so dist$(LUA_LIBRARYDIR)/nixio.so
 
-$(AXTLS_DIR)/.prepared: $(AXTLS_FILE)
-	rm -rf $(AXTLS_DIR)
-	tar xvfz $(AXTLS_FILE)
+$(AXTLS_DIR)/.prepared:
+	#rm -rf $(AXTLS_DIR)
+	#tar xvfz $(AXTLS_FILE)
 	cp axtls-config/{.config,config.h} $(AXTLS_DIR)/config
 	touch $@
 
@@ -52,4 +52,4 @@ src/libaxtls.a: $(AXTLS_DIR)/.prepared
 
 clean: luaclean
 	rm -f src/*.o src/*.so src/*.a
-	rm -rf $(AXTLS_DIR)
+	rm -f $(AXTLS_DIR)/.prepared
