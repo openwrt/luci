@@ -16,12 +16,8 @@
  *  limitations under the License.
  */
 
-#include "nixio.h"
-#include "string.h"
-
-#ifndef WITHOUT_OPENSSL
-#include <openssl/ssl.h>
-#endif
+#include "nixio-tls.h"
+#include <string.h>
 
 static SSL_CTX* nixio__checktlsctx(lua_State *L) {
 	SSL_CTX **ctx = (SSL_CTX **)luaL_checkudata(L, 1, NIXIO_TLS_CTX_META);
@@ -78,21 +74,22 @@ static int nixio_tls_ctx_create(lua_State *L) {
 	SSL_CTX *ctx = nixio__checktlsctx(L);
 	int fd = nixio__checkfd(L, 2);
 
-	SSL **sock = lua_newuserdata(L, sizeof(SSL *));
+	nixio_tls_sock *sock = lua_newuserdata(L, sizeof(nixio_tls_sock));
 	if (!sock) {
 		return luaL_error(L, "out of memory");
 	}
+	memset(sock, 0, sizeof(nixio_tls_sock));
 
 	/* create userdata */
 	luaL_getmetatable(L, NIXIO_TLS_SOCK_META);
 	lua_setmetatable(L, -2);
 
-	*sock = SSL_new(ctx);
-	if (!(*sock)) {
+	sock->socket = SSL_new(ctx);
+	if (!sock->socket) {
 		return nixio__tls_perror(L, 0);
 	}
 
-	if (SSL_set_fd(*sock, fd) != 1) {
+	if (SSL_set_fd(sock->socket, fd) != 1) {
 		return nixio__tls_perror(L, 0);
 	}
 

@@ -16,12 +16,9 @@
  *  limitations under the License.
  */
 
-#include "nixio.h"
-#include "string.h"
-
-#ifndef WITHOUT_OPENSSL
-#include <openssl/ssl.h>
-#endif
+#include "nixio-tls.h"
+#include <string.h>
+#include <stdlib.h>
 
 static int nixio__tls_sock_perror(lua_State *L, SSL *sock, int code) {
 	lua_pushnil(L);
@@ -40,9 +37,9 @@ static int nixio__tls_sock_pstatus(lua_State *L, SSL *sock, int code) {
 }
 
 static SSL* nixio__checktlssock(lua_State *L) {
-	SSL **sock = (SSL **)luaL_checkudata(L, 1, NIXIO_TLS_SOCK_META);
-	luaL_argcheck(L, *sock, 1, "invalid context");
-	return *sock;
+	nixio_tls_sock *sock = luaL_checkudata(L, 1, NIXIO_TLS_SOCK_META);
+	luaL_argcheck(L, sock->socket, 1, "invalid context");
+	return sock->socket;
 }
 
 static int nixio_tls_sock_recv(lua_State *L) {
@@ -53,7 +50,9 @@ static int nixio_tls_sock_recv(lua_State *L) {
 
 	/* We limit the readsize to NIXIO_BUFFERSIZE */
 	req = (req > NIXIO_BUFFERSIZE) ? NIXIO_BUFFERSIZE : req;
+
 #ifndef WITH_AXTLS
+
 	char buffer[NIXIO_BUFFERSIZE];
 	int readc = SSL_read(sock, buffer, req);
 
@@ -63,69 +62,85 @@ static int nixio_tls_sock_recv(lua_State *L) {
 		lua_pushlstring(L, buffer, readc);
 		return 1;
 	}
+
 #else
+
 	if (!req) {
 		lua_pushliteral(L, "");
 		return 1;
 	}
 
+	nixio_tls_sock *t = lua_touserdata(L, 1);
+
 	/* AXTLS doesn't handle buffering for us, so we have to hack around*/
-	int buflen = 0;
-	lua_getmetatable(L, 1);
-	lua_getfield(L, -1, "_axbuffer");
-
-	if (lua_isstring(L, -1)) {
-		buflen = lua_objlen(L, -1);
-	}
-
-	if (req < buflen) {
-		const char *axbuf = lua_tostring(L, -1);
-		lua_pushlstring(L, axbuf, req);
-		lua_pushlstring(L, axbuf + req, buflen - req);
-		lua_setfield(L, -4, "_axbuffer");
+	if (req < t->pbufsiz) {
+		lua_pushlstring(L, t->pbufpos, req);
+		t->pbufpos += req;
+		t->pbufsiz -= req;
 		return 1;
 	} else {
-		if (!lua_isstring(L, -1)) {
-			lua_pop(L, 1);
-			lua_pushliteral(L, "");
-		}
-
 		char *axbuf;
 		int axread;
 
 		/* while handshake pending */
 		while ((axread = ssl_read(sock, (uint8_t**)&axbuf)) == SSL_OK);
 
+		if (t->pbufsiz) {
+			lua_pushlstring(L, t->pbufpos, t->pbufsiz);
+		}
+
 		if (axread < 0) {
 			/* There is an error */
+			free(t->pbuffer);
+			t->pbuffer = t->pbufpos = NULL;
+			t->pbufsiz = 0;
 
 			if (axread != SSL_ERROR_CONN_LOST) {
-				lua_pushliteral(L, "");
-				lua_setfield(L, -3, "_axbuffer");
 				return nixio__tls_sock_perror(L, sock, axread);
 			} else {
-				lua_pushliteral(L, "");
+				if (!t->pbufsiz) {
+					lua_pushliteral(L, "");
+				}
 			}
 		} else {
-			int stillwant = req - buflen;
+			int stillwant = req - t->pbufsiz;
 			if (stillwant < axread) {
 				/* we got more data than we need */
 				lua_pushlstring(L, axbuf, stillwant);
-				lua_concat(L, 2);
+				if(t->pbufsiz) {
+					lua_concat(L, 2);
+				}
 
 				/* remaining data goes into the buffer */
-				lua_pushlstring(L, axbuf + stillwant, axread - stillwant);
+				t->pbufpos = t->pbuffer;
+				t->pbufsiz = axread - stillwant;
+				t->pbuffer = realloc(t->pbuffer, t->pbufsiz);
+				if (!t->pbuffer) {
+					free(t->pbufpos);
+					t->pbufpos = NULL;
+					t->pbufsiz = 0;
+					return luaL_error(L, "out of memory");
+				}
+
+				t->pbufpos = t->pbuffer;
+				memcpy(t->pbufpos, axbuf + stillwant, t->pbufsiz);
 			} else {
 				lua_pushlstring(L, axbuf, axread);
-				lua_concat(L, 2);
-				lua_pushliteral(L, "");
+				if(t->pbufsiz) {
+					lua_concat(L, 2);
+				}
+
+				/* free buffer */
+				free(t->pbuffer);
+				t->pbuffer = t->pbufpos = NULL;
+				t->pbufsiz = 0;
 			}
 		}
-		lua_setfield(L, -3, "_axbuffer");
 		return 1;
 	}
 
-#endif
+#endif /* WITH_AXTLS */
+
 }
 
 static int nixio_tls_sock_send(lua_State *L) {
@@ -158,10 +173,13 @@ static int nixio_tls_sock_shutdown(lua_State *L) {
 }
 
 static int nixio_tls_sock__gc(lua_State *L) {
-	SSL **sock = (SSL **)luaL_checkudata(L, 1, NIXIO_TLS_SOCK_META);
-	if (*sock) {
-		SSL_free(*sock);
-		*sock = NULL;
+	nixio_tls_sock *sock = luaL_checkudata(L, 1, NIXIO_TLS_SOCK_META);
+	if (sock->socket) {
+		SSL_free(sock->socket);
+		sock->socket = NULL;
+#ifdef WITH_AXTLS
+		free(sock->pbuffer);
+#endif
 	}
 	return 0;
 }

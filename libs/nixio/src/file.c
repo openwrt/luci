@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/file.h>
 
 
 static int nixio_file(lua_State *L) {
@@ -155,6 +156,29 @@ static int nixio_file_flush(lua_State *L) {
 	return nixio__pstatus(L, !fflush(f));
 }
 
+static int nixio_file_lock(lua_State *L) {
+	int fd = fileno(nixio__checkfile(L));
+
+	const int j = lua_gettop(L);
+	int flags = 0;
+	for (int i=2; i<=j; i++) {
+		const char *flag = luaL_checkstring(L, i);
+		if (!strcmp(flag, "sh")) {
+			flags |= LOCK_SH;
+		} else if (!strcmp(flag, "ex")) {
+			flags |= LOCK_EX;
+		} else if (!strcmp(flag, "un")) {
+			flags |= LOCK_UN;
+		} else if (!strcmp(flag, "nb")) {
+			flags |= LOCK_NB;
+		} else {
+			return luaL_argerror(L, i, "supported values: sh, ex, un, nb");
+		}
+	}
+
+	return nixio__pstatus(L, flock(fd, flags));
+}
+
 static int nixio_file_close(lua_State *L) {
 	FILE **fpp = (FILE**)luaL_checkudata(L, 1, NIXIO_FILE_META);
 	luaL_argcheck(L, *fpp, 1, "invalid file object");
@@ -187,6 +211,7 @@ static const luaL_reg M[] = {
 	{"tell",		nixio_file_tell},
 	{"seek",		nixio_file_seek},
 	{"flush",		nixio_file_flush},
+	{"lock",		nixio_file_lock},
 	{"close",		nixio_file_close},
 	{"__gc",		nixio_file__gc},
 	{"__tostring",	nixio_file__tostring},

@@ -3,8 +3,6 @@
 
 #define NIXIO_META "nixio.socket"
 #define NIXIO_FILE_META "nixio.file"
-#define NIXIO_TLS_CTX_META "nixio.tls.ctx"
-#define NIXIO_TLS_SOCK_META "nixio.tls.sock"
 #define NIXIO_BUFFERSIZE 8096
 #define _FILE_OFFSET_BITS 64
 
@@ -19,14 +17,12 @@
 #include <lualib.h>
 #include <lauxlib.h>
 
-struct nixio_socket {
+typedef struct nixio_socket {
 	int fd;
 	int domain;
 	int type;
 	int protocol;
-};
-
-typedef struct nixio_socket nixio_sock;
+} nixio_sock;
 
 int nixio__perror(lua_State *L);
 int nixio__pstatus(lua_State *L, int condition);
