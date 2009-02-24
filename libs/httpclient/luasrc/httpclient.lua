@@ -110,11 +110,11 @@ function request_raw(uri, options)
 		return nil, -1, "unable to parse URI"
 	end
 	
-	if pr ~= "http" then
+	if pr ~= "http" and pr ~= "https" then
 		return nil, -2, "protocol not supported"
 	end
 	
-	port = #port > 0 and port or "80"
+	port = #port > 0 and port or (pr == "https" and "443" or "80")
 	path = #path > 0 and path or "/"
 	
 	options.depth = options.depth or 10
@@ -135,6 +135,15 @@ function request_raw(uri, options)
 	sock:setsockopt("socket", "sndtimeo", options.sndtimeo or 15)
 	sock:setsockopt("socket", "rcvtimeo", options.rcvtimeo or 15)
 	
+	if pr == "https" then
+		local tls = options.tls_context or nixio.tls()
+		sock = tls:create(sock)
+		local stat, code, error = sock:connect()
+		if not stat then
+			return stat, code, error
+		end
+	end
+
 	-- Pre assemble fixes	
 	if protocol == "HTTP/1.1" then
 		headers.Host = headers.Host or host

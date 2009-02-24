@@ -74,6 +74,7 @@ static int nixio_tls_ctx_create(lua_State *L) {
 	SSL_CTX *ctx = nixio__checktlsctx(L);
 	int fd = nixio__checkfd(L, 2);
 
+	lua_createtable(L, 0, 3);
 	nixio_tls_sock *sock = lua_newuserdata(L, sizeof(nixio_tls_sock));
 	if (!sock) {
 		return luaL_error(L, "out of memory");
@@ -82,7 +83,8 @@ static int nixio_tls_ctx_create(lua_State *L) {
 
 	/* create userdata */
 	luaL_getmetatable(L, NIXIO_TLS_SOCK_META);
-	lua_setmetatable(L, -2);
+	lua_pushvalue(L, -1);
+	lua_setmetatable(L, -3);
 
 	sock->socket = SSL_new(ctx);
 	if (!sock->socket) {
@@ -92,6 +94,16 @@ static int nixio_tls_ctx_create(lua_State *L) {
 	if (SSL_set_fd(sock->socket, fd) != 1) {
 		return nixio__tls_perror(L, 0);
 	}
+
+	/* save context and socket to prevent GC from collecting them */
+	lua_setmetatable(L, -3);
+	lua_setfield(L, -2, "connection");
+
+	lua_pushvalue(L, 1);
+	lua_setfield(L, -2, "context");
+
+	lua_pushvalue(L, 2);
+	lua_setfield(L, -2, "socket");
 
 	return 1;
 }

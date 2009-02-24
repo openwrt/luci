@@ -22,9 +22,8 @@
 
 static int nixio__tls_sock_perror(lua_State *L, SSL *sock, int code) {
 	lua_pushnil(L);
-	lua_pushinteger(L, code);
 	lua_pushinteger(L, SSL_get_error(sock, code));
-	return 3;
+	return 2;
 }
 
 static int nixio__tls_sock_pstatus(lua_State *L, SSL *sock, int code) {
@@ -37,6 +36,10 @@ static int nixio__tls_sock_pstatus(lua_State *L, SSL *sock, int code) {
 }
 
 static SSL* nixio__checktlssock(lua_State *L) {
+	if (lua_istable(L, 1)) {
+		lua_getfield(L, 1, "connection");
+		lua_replace(L, 1);
+	}
 	nixio_tls_sock *sock = luaL_checkudata(L, 1, NIXIO_TLS_SOCK_META);
 	luaL_argcheck(L, sock->socket, 1, "invalid context");
 	return sock->socket;
@@ -186,7 +189,7 @@ static int nixio_tls_sock__gc(lua_State *L) {
 
 static int nixio_tls_sock__tostring(lua_State *L) {
 	SSL *sock = nixio__checktlssock(L);
-	lua_pushfstring(L, "nixio TLS socket: %p", sock);
+	lua_pushfstring(L, "nixio TLS connection: %p", sock);
 	return 1;
 }
 

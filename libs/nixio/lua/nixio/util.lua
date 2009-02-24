@@ -14,13 +14,23 @@ $Id$
 
 local table = require "table"
 local nixio = require "nixio"
-local setmetatable, assert = setmetatable, assert
+local getmetatable, assert = getmetatable, assert
 
 module "nixio.util"
 
 local BUFFERSIZE = 8096
 local socket = nixio.socket_meta
 local tls_socket = nixio.tls_socket_meta
+
+function socket.is_socket(self)
+	return (getmetatable(self) == socket)
+end
+tls_socket.is_socket = socket.is_socket
+
+function socket.is_tls_socket(self)
+	return (getmetatable(self) == tls_socket)
+end
+tls_socket.is_tls_socket = socket.is_tls_socket
 
 function socket.recvall(self, len)
 	local block, code, msg = self:recv(len)
@@ -134,3 +144,8 @@ function socket.blocksource(self, bs, limit)
 	end
 end
 tls_socket.blocksource = socket.blocksource
+
+function tls_socket.close(self)
+	self:shutdown()
+	return self.socket:close()
+end

@@ -264,7 +264,7 @@ int SSL_CTX_set_cipher_list(SSL_CTX *s, const char *str)
 int SSL_get_error(const SSL *ssl, int ret)
 {
     ssl_display_error(ret);
-    return 0;   /* TODO: return proper return code */
+    return ret;   /* TODO: return proper return code */
 }
 
 void SSL_CTX_set_options(SSL_CTX *ssl_ctx, int option) {}
