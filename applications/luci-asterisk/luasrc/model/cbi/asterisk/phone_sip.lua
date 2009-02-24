@@ -15,6 +15,47 @@ $Id$
 
 local ast = require("luci.asterisk")
 
+local function find_outgoing_contexts(uci)
+	local c = { }
+	local h = { }
+
+	uci:foreach("asterisk", "dialplan",
+		function(s)
+			if not h[s['.name']] then
+				c[#c+1] = { s['.name'], "Dialplan: %s" % s['.name'] }
+				h[s['.name']] = true
+			end
+		end)
+
+	uci:foreach("asterisk", "dialzone",
+		function(s)
+			if not h[s['.name']] then
+				c[#c+1] = { s['.name'], "Dialzone: %s" % s['.name'] }
+				h[s['.name']] = true
+			end
+		end)
+
+	return c
+end
+
+local function find_incoming_contexts(uci)
+	local c = { }
+	local h = { }
+
+	uci:foreach("asterisk", "sip",
+		function(s)
+			if s.context and not h[s.context] and
+			   uci:get_bool("asterisk", s['.name'], "provider")
+			then
+				c[#c+1] = { s.context, "Incoming: %s" % s['.name'] or s.context }
+				h[s.context] = true
+			end
+		end)
+
+	return c
+end
+
+
 --
 -- SIP phone info
 --
@@ -68,6 +109,13 @@ elseif arg[1] then
 	back.value = ""
 	back.titleref = luci.dispatcher.build_url("admin", "asterisk", "phones")
 
+	active = peer:option(Flag, "disable", "Account enabled")
+	active.enabled  = "yes"
+	active.disabled = "no"
+	function active.cfgvalue(...)
+		return AbstractValue.cfgvalue(...) or "yes"
+	end
+
 	exten = peer:option(Value, "extension", "Extension Number")
 	cbimap.uci:foreach("asterisk", "dialplanexten",
 		function(s)
@@ -82,13 +130,6 @@ elseif arg[1] then
 	username  = peer:option(Value, "username", "Authorization ID")
 	password  = peer:option(Value, "secret", "Authorization Password")
 	password.password = true
-
-	active = peer:option(Flag, "disable", "Active")
-	active.enabled  = "yes"
-	active.disabled = "no"
-	function active.cfgvalue(...)
-		return AbstractValue.cfgvalue(...) or "yes"
-	end
 
 	regtimeout = peer:option(Value, "registertimeout", "Registration Time Value")
 	function regtimeout.cfgvalue(...)
@@ -106,8 +147,18 @@ elseif arg[1] then
 	linekey:value("call", "Call Appearance")
 
 	dialplan = peer:option(ListValue, "context", "Dialplan Context")
-	cbimap.uci:foreach("asterisk", "dialplan",
-		function(s) dialplan:value(s['.name']) end)
+	for _, v in ipairs(find_outgoing_contexts(cbimap.uci)) do
+		dialplan:value(unpack(v))
+	end
+
+	incoming = peer:option(StaticList, "incoming", "Receive incoming calls from")
+	for _, v in ipairs(find_incoming_contexts(cbimap.uci)) do
+		incoming:value(unpack(v))
+	end
+
+	--function incoming.cfgvalue(...)
+		--error(table.concat(MultiValue.cfgvalue(...),"."))
+	--end
 
 	return cbimap
 end

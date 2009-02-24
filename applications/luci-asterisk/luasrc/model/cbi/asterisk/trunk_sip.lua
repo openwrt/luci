@@ -67,11 +67,9 @@ elseif arg[1] then
 
 	sipdomain = peer:option(Value, "host", "SIP Domain")
 	sipport   = peer:option(Value, "port", "SIP Port")
-	sipport.default = 5060
-
-	sipnat    = peer:option(Flag, "nat", "NAT between this device and provider")
-	sipnat.enabled  = "yes"
-	sipnat.disabled = "no"
+	function sipport.cfgvalue(...)
+		return AbstractValue.cfgvalue(...) or "5060"
+	end
 
 	username  = peer:option(Value, "username", "Authorization ID")
 	password  = peer:option(Value, "secret", "Authorization Password")
@@ -85,14 +83,14 @@ elseif arg[1] then
 	register.disabled = "no"
 
 	regext = peer:option(Value, "registerextension", "Extension to register (optional)")
-	regext:depends({register="yes"})
+	regext:depends({register="1"})
 
 	didval = peer:option(ListValue, "_did", "Number of assigned DID numbers")
 	didval:value("", "(none)")
 	for i=1,24 do didval:value(i) end
 
 	dialplan = peer:option(ListValue, "context", "Dialplan Context")
-	dialplan:value("", "(default)")
+	dialplan:value(arg[1] .. "_inbound", "(default)")
 	cbimap.uci:foreach("asterisk", "dialplan",
 		function(s) dialplan:value(s['.name']) end)
 

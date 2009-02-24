@@ -1,0 +1,171 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%+header%>
+
+<%
+	local uci = luci.model.uci.cursor_state()
+
+	function find_rules(plan)
+		local r = { }
+		if plan and plan.include then
+			local i = luci.util.split(plan.include, "%s+", nil, true)
+			for _, i in ipairs(i) do
+				i = uci:get("asterisk", "dialzone", i)
+				if i then
+					r[#r+1] = i
+				end
+			end
+		end
+		return r
+	end
+
+	dp_lookup_table = { }
+
+	function dialplan_lookup(s)
+		if not dp_lookup_table[s['.name']] then
+			s.childs  = { }
+			s.matches = type(s.match) == "table" and s.match or { s.match }
+			s.name, s.type = s['.name'], s['.type']
+			s['.name'], s['.type'] = nil, nil
+			dp_lookup_table[s.name] = s
+		end
+	end
+
+	uci:foreach("asterisk", "dialplan", dialplan_lookup)
+	uci:foreach("asterisk", "dialzone", dialplan_lookup)
+
+	for k, p in pairs(dp_lookup_table) do
+		if p.include then
+			local i = type(p.include) == "string"
+				and luci.util.split(p.include, "%s+", nil, true) or p.include
+
+			for _, i in ipairs(i) do
+				i = dp_lookup_table[i]
+				if i then
+					p.childs[#p.childs+1] = i
+					i.parent = p
+				end
+			end
+		end
+	end
+
+	function digit_pattern(s)
+		return "<code style='padding: 2px; border:1px solid #CCCCCC; background-color: #FFFFFF'>%s</code>" % s
+	end
+
+	function rowstyle(i)
+		return "cbi-rowstyle-%i" %{
+			( i % 2 ) == 0 and 2 or 1
+		}
+	end
+
+	function link_trunks(s)
+		local l = { }
+		for s in s:gmatch("(%S+)") do
+			if s:match("^[sS][iI][pP]/") then
+				l[#l+1] = '<a href="%s">%s</a>' %{
+					luci.dispatcher.build_url("admin", "asterisk", "trunks",
+						"sip", (s:gsub("^.+/",""))),
+					(s:gsub("^.+/","SIP: "))
+				}
+			end
+		end
+		return '<small>%s</small>' % table.concat(l, ", ")
+	end
+%>
+
+
+<form method="post" action="<%=luci.dispatcher.build_url("admin", "asterisk", "dialplans")%>" enctype="multipart/form-data">
+	<div>
+		<script type="text/javascript" src="/luci-static/resources/cbi.js"></script>
+		<input type="hidden" name="cbi.submit" value="1" />
+		<input type="submit" value="Save" class="hidden" />
+	</div>
+
+<div class="cbi-map" id="cbi-asterisk">
+	<h2><a id="content" name="content">Outgoing Call Routing</a></h2>
+	<div class="cbi-map-descr"></div><!-- tblsection -->
+<fieldset class="cbi-section" id="cbi-asterisk-sip">
+	<!--<legend>Dialplans</legend>-->
+	<div class="cbi-section-descr"></div>
+
+
+
+
+
+	<% for name, plan in luci.util.kspairs(dp_lookup_table) do
+		if plan.type == "dialplan" then %>
+	<div class="cbi-section-node">
+		<table class="cbi-section-table">
+			<tr class="cbi-section-table-titles">
+				<th style="text-align: left; padding: 3px" class="cbi-section-table-cell" colspan="5">
+					<big>&nbsp;Dialplan <em><%=name%></em></big>
+				</th>
+			</tr>
+
+			<tr class="cbi-section-table-descr">
+				<th style="width: 5%; text-align:right" class="cbi-section-table-cell">Prepend</th>
+				<th style="width: 20%; text-align:left" class="cbi-section-table-cell">- Match</th>
+				<th style="text-align:left" class="cbi-section-table-cell">Trunk</th>
+				<th style="width: 40%; text-align:left" class="cbi-section-table-cell">Description</th>
+				<th style="width: 4%; text-align:left" class="cbi-section-table-cell"></th>
+			</tr>
+
+			<% for i, rule in pairs(plan.childs) do
+				if rule.type == "dialzone" then %>
+			<tr class="cbi-section-table-row <%=rowstyle(i)%>">
+				<td style="text-align:right" class="cbi-value-field">
+					<% for _ in ipairs(rule.matches) do %>
+						<%=rule.addprefix and digit_pattern(rule.addprefix)%>&nbsp;<br />
+					<% end %>
+				</td>
+				<td style="text-align:left" class="cbi-value-field">
+					<% for _, m in ipairs(rule.matches) do %>
+						<%=rule.localprefix and "%s " % digit_pattern(rule.localprefix)%>
+						<%=digit_pattern(m)%><br />
+					<% end %>
+				</td>
+				<td style="text-align:left" class="cbi-value-field">
+					<%=rule.uses and link_trunks(rule.uses)%>
+				</td>
+				<td style="text-align:left" class="cbi-value-field">
+					<%=rule.description or rule.name%>
+				</td>
+				<td style="text-align:left" class="cbi-value-field">
+					<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans', 'out', rule.name)%>">
+						<img style="border:none" alt="Edit entry" title="Edit entry" src="/luci-static/resources/cbi/edit.gif" />
+					</a>
+					<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delete=<%=rule.name%>">
+						<img style="border:none" alt="Delete entry" title="Delete entry" src="/luci-static/resources/cbi/remove.gif" />
+					</a>
+				</td>
+			</tr>
+			<% end end %>
+		</table>
+
+		<div class="cbi-section-create cbi-tblsection-create">
+			<input type="text" class="cbi-section-create-name" name="create_entry.<%=name%>"/>
+			<input type="submit" class="cbi-button cbi-button-add" value="Add entry" title="Add entry"/>
+		</div>
+	</div>
+	<br />
+	<% end end %>
+
+	</fieldset>
+</div>
+</form>
+<div class="clear"></div>
+<%+footer%>
