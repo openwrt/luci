@@ -513,6 +513,14 @@ function entry(path, target, title, order)
 	return c
 end
 
+--- Fetch or create a dispatching node without setting the target module or
+-- enabling the node.
+-- @param	...		Virtual path
+-- @return			Dispatching tree node
+function get(...)
+	return _create_node({...})
+end
+
 --- Fetch or create a new dispatching node.
 -- @param	...		Virtual path
 -- @return			Dispatching tree node
