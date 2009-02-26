@@ -66,6 +66,7 @@ function error404(message)
 	if not luci.util.copcall(luci.template.render, "error404") then
 		luci.http.prepare_content("text/plain")
 		luci.http.write(message)
+		luci.util.perror(message)
 	end
 	return false
 end
@@ -113,11 +114,9 @@ function httpdispatch(request)
 		table.insert(context.request, node)
 	end
 
-	local stat, err = util.copcall(dispatch, context.request)
-	if not stat then
-		luci.util.perror(err)
-		error500(err)
-	end
+	local stat, err = util.coxpcall(function()
+		dispatch(context.request)
+	end, error500)
 
 	luci.http.close()
 
