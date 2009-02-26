@@ -55,7 +55,6 @@ ch:value(167, 167 .. " (5 GHz)")
 
 s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
-
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
@@ -165,6 +164,10 @@ bssid = s:option(Value, "bssid", translate("wifi_bssid"))
 -------------------- MAC80211 Interface ----------------------
 
 if hwtype == "mac80211" then
+	if luci.fs.mtime("/usr/sbin/iw") then
+		mode:value("mesh", "802.11s")
+	end
+
 	mode:value("ahdemo", translate("a_w_ahdemo"))
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
@@ -276,6 +279,7 @@ encr:depends({mode="sta"})
 encr:depends({mode="adhoc"})
 encr:depends({mode="ahdemo"})
 encr:depends({mode="wds"})
+encr:depends({mode="mesh"})
 
 encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
