@@ -20,6 +20,7 @@
 
 #include "nixio.h"
 #include <fcntl.h>
+#include <string.h>
 #include <sys/sendfile.h>
 
 /* guess what sucks... */
@@ -45,28 +46,24 @@ ssize_t splice(int __fdin, __off64_t *__offin, int __fdout,
 #endif /* __UCLIBC__ */
 
 /**
- * Checks whether a flag is set in the table and translates it into a bitmap
- */
-static void nixio_splice_flags__w(lua_State *L, int *m, int f, const char *t) {
-	lua_pushstring(L, t);
-	lua_rawget(L, -2);
-	if (lua_toboolean(L, -1)) {
-		*m |= f;
-	}
-	lua_pop(L, 1);
-}
-
-/**
- * Translate integer to poll flags and vice versa
+ * Translate splice flags to integer
  */
 static int nixio_splice_flags(lua_State *L) {
+	const int j = lua_gettop(L);
 	int flags = 0;
-
-	luaL_checktype(L, 1, LUA_TTABLE);
-	lua_settop(L, 1);
-	nixio_splice_flags__w(L, &flags, SPLICE_F_MOVE, "move");
-	nixio_splice_flags__w(L, &flags, SPLICE_F_NONBLOCK, "nonblock");
-	nixio_splice_flags__w(L, &flags, SPLICE_F_MORE, "more");
+	for (int i=1; i<=j; i++) {
+		const char *flag = luaL_checkstring(L, i);
+		if (!strcmp(flag, "move")) {
+			flags |= SPLICE_F_MOVE;
+		} else if (!strcmp(flag, "nonblock")) {
+			flags |= SPLICE_F_NONBLOCK;
+		} else if (!strcmp(flag, "more")) {
+			flags |= SPLICE_F_MORE;
+		} else {
+			return luaL_argerror(L, i, "supported values: "
+			 "move, nonblock, more");
+		}
+	}
 	lua_pushinteger(L, flags);
 
 	return 1;

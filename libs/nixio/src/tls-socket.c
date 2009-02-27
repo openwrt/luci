@@ -96,13 +96,15 @@ static int nixio_tls_sock_recv(lua_State *L) {
 			/* There is an error */
 			free(t->pbuffer);
 			t->pbuffer = t->pbufpos = NULL;
-			t->pbufsiz = 0;
 
 			if (axread != SSL_ERROR_CONN_LOST) {
+				t->pbufsiz = 0;
 				return nixio__tls_sock_perror(L, sock, axread);
 			} else {
 				if (!t->pbufsiz) {
 					lua_pushliteral(L, "");
+				} else {
+					t->pbufsiz = 0;
 				}
 			}
 		} else {
@@ -198,6 +200,8 @@ static int nixio_tls_sock__tostring(lua_State *L) {
 static const luaL_reg M[] = {
 	{"recv", 		nixio_tls_sock_recv},
 	{"send", 		nixio_tls_sock_send},
+	{"read", 		nixio_tls_sock_recv},
+	{"write", 		nixio_tls_sock_send},
 	{"accept",	 	nixio_tls_sock_accept},
 	{"connect", 	nixio_tls_sock_connect},
 	{"shutdown", 	nixio_tls_sock_shutdown},
@@ -213,5 +217,5 @@ void nixio_open_tls_socket(lua_State *L) {
 	luaL_register(L, NULL, M);
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
-	lua_setfield(L, -2, "tls_socket_meta");
+	lua_setfield(L, -2, "meta_tls_socket");
 }

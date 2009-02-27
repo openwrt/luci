@@ -14,26 +14,31 @@ $Id$
 
 local table = require "table"
 local nixio = require "nixio"
-local getmetatable, assert = getmetatable, assert
+local getmetatable, assert, pairs = getmetatable, assert, pairs
 
 module "nixio.util"
 
 local BUFFERSIZE = 8096
-local socket = nixio.socket_meta
-local tls_socket = nixio.tls_socket_meta
+local socket = nixio.meta_socket
+local tls_socket = nixio.meta_tls_socket
+local file = nixio.meta_file
 
-function socket.is_socket(self)
+local meta = {}
+
+function meta.is_socket(self)
 	return (getmetatable(self) == socket)
 end
-tls_socket.is_socket = socket.is_socket
 
-function socket.is_tls_socket(self)
+function meta.is_tls_socket(self)
 	return (getmetatable(self) == tls_socket)
 end
-tls_socket.is_tls_socket = socket.is_tls_socket
 
-function socket.recvall(self, len)
-	local block, code, msg = self:recv(len)
+function meta.is_file(self)
+	return (getmetatable(self) == file)
+end
+
+function meta.readall(self, len)
+	local block, code, msg = self:read(len)
 
 	if not block then
 		return "", code, msg, len
@@ -44,7 +49,7 @@ function socket.recvall(self, len)
 	local data, total = {block}, #block
 
 	while len > total do
-		block, code, msg = self:recv(len - total)
+		block, code, msg = self:read(len - total)
 
 		if not block then
 			return data, code, msg, len - #data
@@ -57,11 +62,11 @@ function socket.recvall(self, len)
 
 	return (#data > 1 and table.concat(data) or data[1]), nil, nil, 0
 end
-tls_socket.recvall = socket.recvall
+meta.recvall = meta.readall
 
-function socket.sendall(self, data)
+function meta.writeall(self, data)
 	local total, block = 0
-	local sent, code, msg = self:send(data)
+	local sent, code, msg = self:write(data)
 
 	if not sent then
 		return total, code, msg, data
@@ -69,7 +74,7 @@ function socket.sendall(self, data)
 
 	while sent < #data do
 		block, total = data:sub(sent + 1), total + sent
-		sent, code, msg = self:send(block)
+		sent, code, msg = self:write(block)
 		
 		if not sent then
 			return total, code, msg, block
@@ -78,9 +83,9 @@ function socket.sendall(self, data)
 	
 	return total + sent, nil, nil, ""
 end
-tls_socket.sendall = socket.sendall
+meta.sendall = meta.writeall
 
-function socket.linesource(self, limit)
+function meta.linesource(self, limit)
 	limit = limit or BUFFERSIZE
 	local buffer = ""
 	local bpos = 0
@@ -100,7 +105,7 @@ function socket.linesource(self, limit)
 				bpos = endp
 				return line
 			elseif #buffer < limit + bpos then
-				local newblock, code = self:recv(limit + bpos - #buffer)
+				local newblock, code = self:read(limit + bpos - #buffer)
 				if not newblock then
 					return nil, code
 				elseif #newblock == 0 then
@@ -114,9 +119,8 @@ function socket.linesource(self, limit)
 		end
 	end
 end
-tls_socket.linesource = socket.linesource
 
-function socket.blocksource(self, bs, limit)
+function meta.blocksource(self, bs, limit)
 	bs = bs or BUFFERSIZE
 	return function()
 		local toread = bs
@@ -128,7 +132,7 @@ function socket.blocksource(self, bs, limit)
 			end
 		end
 
-		local block, code, msg = self:recv(toread)
+		local block, code, msg = self:read(toread)
 
 		if not block then
 			return nil, code
@@ -143,9 +147,25 @@ function socket.blocksource(self, bs, limit)
 		end
 	end
 end
-tls_socket.blocksource = socket.blocksource
+
+function meta.sink(self, close)
+	return function(chunk, src_err)
+		if not chunk and not src_err and close then
+			self:close()
+		elseif chunk and #chunk > 0 then
+			return self:writeall(chunk)
+		end
+		return true
+	end
+end
 
 function tls_socket.close(self)
 	self:shutdown()
 	return self.socket:close()
+end
+
+for k, v in pairs(meta) do
+	file[k] = v
+	socket[k] = v
+	tls_socket[k] = v
 end

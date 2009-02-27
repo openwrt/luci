@@ -1,5 +1,5 @@
 --[[
-LuCI - Lua Configuration Interface
+LuCI - Lua Development Framework
 
 Copyright 2009 Steven Barth <steven@midlink.org>
 
@@ -19,8 +19,9 @@ local ltn12 = require "luci.ltn12"
 local util = require "luci.util"
 local table = require "table"
 local http = require "luci.http.protocol"
+local date = require "luci.http.protocol.date"
 
-local type, pairs, tonumber, print = type, pairs, tonumber, print
+local type, pairs, ipairs, tonumber = type, pairs, ipairs, tonumber
 
 module "luci.httpclient"
 
@@ -93,7 +94,7 @@ function request_to_source(uri, options)
 		return nil, status, response
 	end
 	
-	if response["Transfer-Encoding"] == "chunked" then
+	if response.headers["Transfer-Encoding"] == "chunked" then
 		return chunksource(sock, buffer)
 	else
 		return ltn12.source.cat(ltn12.source.string(buffer), sock:blocksource())
@@ -114,7 +115,7 @@ function request_raw(uri, options)
 		return nil, -2, "protocol not supported"
 	end
 	
-	port = #port > 0 and port or (pr == "https" and "443" or "80")
+	port = #port > 0 and port or (pr == "https" and 443 or 80)
 	path = #path > 0 and path or "/"
 	
 	options.depth = options.depth or 10
@@ -163,10 +164,28 @@ function request_raw(uri, options)
 	local message = {method .. " " .. path .. " " .. protocol}
 	
 	for k, v in pairs(headers) do
-		if v then
+		if type(v) == "string" then
 			message[#message+1] = k .. ": " .. v
+		elseif type(v) == "table" then
+			for i, j in ipairs(v) do
+				message[#message+1] = k .. ": " .. j
+			end
 		end
 	end
+	
+	if options.cookies then
+		for _, c in ipairs(options.cookies) do
+			local cdo = c.flags.domain
+			local cpa = c.flags.path
+			if   (cdo == host or cdo == "."..host or host:sub(-#cdo) == cdo) 
+			 and (cpa == "/" or cpa .. "/" == path:sub(#cpa+1))
+			 and (not c.flags.secure or pr == "https")
+			then
+				message[#message+1] = "Cookie: " .. c.key .. "=" .. c.value
+			end 
+		end
+	end
+	
 	message[#message+1] = ""
 	message[#message+1] = ""
 	
@@ -191,13 +210,19 @@ function request_raw(uri, options)
 		return nil, -3, "invalid response magic: " .. line
 	end
 	
-	local response = {Status=line}
+	local response = {status = line, headers = {}, code = 0, cookies = {}}
 	
 	line = linesrc()
 	while line and line ~= "" do
 		local key, val = line:match("^([%w-]+)%s?:%s?(.*)")
 		if key and key ~= "Status" then
-			response[key] = val
+			if type(response[key]) == "string" then
+				response.headers[key] = {response.headers[key], val}
+			elseif type(response[key]) == "table" then
+				response.headers[key][#response.headers[key]+1] = val
+			else
+				response.headers[key] = val
+			end
 		end
 		line = linesrc()
 	end
@@ -206,11 +231,54 @@ function request_raw(uri, options)
 		return nil, -4, "protocol error"
 	end
 	
+	-- Parse cookies
+	if response.headers["Set-Cookie"] then
+		local cookies = response.headers["Set-Cookie"]
+		for _, c in ipairs(type(cookies) == "table" and cookies or {cookies}) do
+			local cobj = cookie_parse(c)
+			cobj.flags.path = cobj.flags.path or path:match("(/.*)/?[^/]*")
+			if not cobj.flags.domain or cobj.flags.domain == "" then
+				cobj.flags.domain = host
+				response.cookies[#response.cookies+1] = cobj
+			else
+				local hprt, cprt = {}, {}
+				
+				-- Split hostnames and save them in reverse order
+				for part in host:gmatch("[^.]*") do
+					table.insert(hprt, 1, part)
+				end
+				for part in cobj.flags.domain:gmatch("[^.]*") do
+					table.insert(cprt, 1, part)
+				end
+				
+				local valid = true
+				for i, part in ipairs(cprt) do
+					-- If parts are different and no wildcard
+					if hprt[i] ~= part and #part ~= 0 then
+						valid = false
+						break
+					-- Wildcard on invalid position
+					elseif hprt[i] ~= part and #part == 0 then
+						if i ~= #cprt or (#hprt ~= i and #hprt+1 ~= i) then
+							valid = false
+							break
+						end
+					end
+				end
+				-- No TLD cookies
+				if valid and #cprt > 1 and #cprt[2] > 0 then
+					response.cookies[#response.cookies+1] = cobj
+				end
+			end
+		end
+	end
+	
 	-- Follow 
-	local code = tonumber(status)
-	if code and options.depth > 0 then
-		if code == 301 or code == 302 or code == 307 and response.Location then
-			local nexturi = response.Location
+	response.code = tonumber(status)
+	if response.code and options.depth > 0 then
+		if response.code == 301 or response.code == 302 or response.code == 307
+		 and response.headers.Location then
+			local nexturi = response.headers.Location
 			if not nexturi:find("https?://") then
 				nexturi = pr .. "://" .. host .. ":" .. port .. nexturi
 			end
@@ -222,5 +290,36 @@ function request_raw(uri, options)
 		end
 	end
 	
-	return code, response, linesrc(true), sock
+	return response.code, response, linesrc(true), sock
+end
+
+function cookie_parse(cookiestr)
+	local key, val, flags = cookiestr:match("%s?([^=;]+)=?([^;]*)(.*)")
+	if not key then
+		return nil
+	end
+
+	local cookie = {key = key, value = val, flags = {}}
+	for fkey, fval in flags:gmatch(";%s?([^=;]+)=?([^;]*)") do
+		fkey = fkey:lower()
+		if fkey == "expires" then
+			fval = date.to_unix(fval:gsub("%-", " "))
+		end
+		cookie.flags[fkey] = fval
+	end
+
+	return cookie
+end
+
+function cookie_create(cookie)
+	local cookiedata = {cookie.key .. "=" .. cookie.value}
+
+	for k, v in pairs(cookie.flags) do
+		if k == "expires" then
+			v = date.to_http(v):gsub(", (%w+) (%w+) (%w+) ", ", %1-%2-%3 ")
+		end
+		cookiedata[#cookiedata+1] = k .. ((#v > 0) and ("=" .. v) or "")
+	end
+
+	return table.concat(cookiedata, "; ")
 end

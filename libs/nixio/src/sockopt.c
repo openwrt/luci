@@ -30,6 +30,7 @@
  */
 static int nixio_sock_setblocking(lua_State *L) {
 	int fd = nixio__checkfd(L, 1);
+	luaL_checkany(L, 2);
 	int set = lua_toboolean(L, 2);
 	int flags = fcntl(fd, F_GETFL);
 
@@ -37,7 +38,7 @@ static int nixio_sock_setblocking(lua_State *L) {
 		return nixio__perror(L);
 	}
 
-	if (set) {
+	if (!set) {
 		flags |= O_NONBLOCK;
 	} else {
 		flags &= ~O_NONBLOCK;

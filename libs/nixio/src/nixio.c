@@ -107,7 +107,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 
 	/* register metatable as socket_meta */
 	lua_pushvalue(L, -2);
-	lua_setfield(L, -2, "socket_meta");
+	lua_setfield(L, -2, "meta_socket");
 
 	/* register methods */
 	nixio_open_file(L);
@@ -126,7 +126,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	lua_setfield(L, -2, "version");
 
 	/* some constants */
-	lua_createtable(L, 0, 1);
+	lua_createtable(L, 0, 7);
 
 	NIXIO_PUSH_CONSTANT(EACCES);
 	NIXIO_PUSH_CONSTANT(ENOSYS);
@@ -134,6 +134,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	NIXIO_PUSH_CONSTANT(EWOULDBLOCK);
 	NIXIO_PUSH_CONSTANT(EAGAIN);
 	NIXIO_PUSH_CONSTANT(ENOMEM);
+	NIXIO_PUSH_CONSTANT(ENOENT);
 
 	lua_setfield(L, -2, "const");
 

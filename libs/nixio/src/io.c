@@ -169,6 +169,8 @@ static const luaL_reg M[] = {
 	{"sendto",	nixio_sock_sendto},
 	{"recv",	nixio_sock_recv},
 	{"recvfrom",nixio_sock_recvfrom},
+	{"write",	nixio_sock_send},
+	{"read",	nixio_sock_recv},
 	{NULL,			NULL}
 };
 

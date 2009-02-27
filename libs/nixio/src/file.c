@@ -78,50 +78,43 @@ static int nixio_pipe(lua_State *L) {
 }
 
 static int nixio_file_write(lua_State *L) {
-	FILE *fp = nixio__checkfile(L);
-	size_t len, written;
+	int fd = nixio__checkfd(L, 1);
+	size_t len;
+	ssize_t sent;
 	const char *data = luaL_checklstring(L, 2, &len);
-	written = fwrite(data, sizeof(char), len, fp);
-	if (written < 0) {
+
+	do {
+		sent = write(fd, data, len);
+	} while(sent == -1 && errno == EINTR);
+	if (sent >= 0) {
+		lua_pushinteger(L, sent);
+		return 1;
+	} else {
+		return nixio__perror(L);
+	}
+}
+
+static int nixio_file_read(lua_State *L) {
+	int fd = nixio__checkfd(L, 1);
+	char buffer[NIXIO_BUFFERSIZE];
+	int req = luaL_checkinteger(L, 2);
+	int readc;
+
+	/* We limit the readsize to NIXIO_BUFFERSIZE */
+	req = (req > NIXIO_BUFFERSIZE) ? NIXIO_BUFFERSIZE : req;
+
+	do {
+		readc = read(fd, buffer, req);
+	} while (readc == -1 && errno == EINTR);
+
+	if (readc < 0) {
 		return nixio__perror(L);
 	} else {
-		lua_pushnumber(L, written);
+		lua_pushlstring(L, buffer, readc);
 		return 1;
 	}
 }
 
-
-/* Some code borrowed from Lua 5.1.4 liolib.c */
-static int nixio_file_read(lua_State *L) {
-	FILE *f = nixio__checkfile(L);
-	size_t n = (size_t)luaL_checkinteger(L, 2);
-	luaL_argcheck(L, 2, n >= 0, "invalid length");
-
-	if (n == 0) {
-		if (feof(f)) {
-			return 0;
-		} else {
-			lua_pushliteral(L, "");
-			return 1;
-		}
-	}
-
-	size_t rlen;  /* how much to read */
-	size_t nr;  /* number of chars actually read */
-	luaL_Buffer b;
-	luaL_buffinit(L, &b);
-	rlen = LUAL_BUFFERSIZE;  /* try to read that much each time */
-
-	do {
-		char *p = luaL_prepbuffer(&b);
-		if (rlen > n) rlen = n;  /* cannot read more than asked */
-			nr = fread(p, sizeof(char), rlen, f);
-			luaL_addsize(&b, nr);
-			n -= nr;  /* still have to read `n' chars */
-	} while (n > 0 && nr == rlen);  /* until end of count or eof */
-	luaL_pushresult(&b);  /* close buffer */
-	return (n == 0 || lua_objlen(L, -1) > 0);
-}
 
 static int nixio_file_seek(lua_State *L) {
 	FILE *f = nixio__checkfile(L);
@@ -176,7 +169,7 @@ static int nixio_file_lock(lua_State *L) {
 		}
 	}
 
-	return nixio__pstatus(L, flock(fd, flags));
+	return nixio__pstatus(L, !flock(fd, flags));
 }
 
 static int nixio_file_close(lua_State *L) {
@@ -232,5 +225,5 @@ void nixio_open_file(lua_State *L) {
 	luaL_register(L, NULL, M);
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
-	lua_pop(L, 1);
+	lua_setfield(L, -2, "meta_file");
 }

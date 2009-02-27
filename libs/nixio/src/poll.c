@@ -20,6 +20,7 @@
 #include <poll.h>
 #include <time.h>
 #include <errno.h>
+#include <string.h>
 #include <stdlib.h>
 #include "nixio.h"
 
@@ -49,18 +50,6 @@ static int nixio_nanosleep(lua_State *L) {
 }
 
 /**
- * Checks whether a flag is set in the table and translates it into a bitmap
- */
-static void nixio_poll_flags__w(lua_State *L, int *map, int f, const char *t) {
-	lua_pushstring(L, t);
-	lua_rawget(L, -2);
-	if (lua_toboolean(L, -1)) {
-		*map |= f;
-	}
-	lua_pop(L, 1);
-}
-
-/**
  * Checks whether a flag is set in the bitmap and sets the matching table value
  */
 static void nixio_poll_flags__r(lua_State *L, int *map, int f, const char *t) {
@@ -78,17 +67,7 @@ static void nixio_poll_flags__r(lua_State *L, int *map, int f, const char *t) {
  */
 static int nixio_poll_flags(lua_State *L) {
 	int flags;
-	if (lua_istable(L, 1)) {
-		lua_settop(L, 1);
-		flags = 0;
-		nixio_poll_flags__w(L, &flags, POLLIN, "in");
-		nixio_poll_flags__w(L, &flags, POLLPRI, "pri");
-		nixio_poll_flags__w(L, &flags, POLLOUT, "out");
-		nixio_poll_flags__w(L, &flags, POLLERR, "err");
-		nixio_poll_flags__w(L, &flags, POLLHUP, "hup");
-		nixio_poll_flags__w(L, &flags, POLLNVAL, "nval");
-		lua_pushinteger(L, flags);
-	} else {
+	if (lua_isnumber(L, 1)) {
 		flags = luaL_checkinteger(L, 1);
 		lua_newtable(L);
 		nixio_poll_flags__r(L, &flags, POLLIN, "in");
@@ -97,6 +76,29 @@ static int nixio_poll_flags(lua_State *L) {
 		nixio_poll_flags__r(L, &flags, POLLERR, "err");
 		nixio_poll_flags__r(L, &flags, POLLHUP, "hup");
 		nixio_poll_flags__r(L, &flags, POLLNVAL, "nval");
+	 } else {
+		flags = 0;
+		const int j = lua_gettop(L);
+		for (int i=1; i<=j; i++) {
+			const char *flag = luaL_checkstring(L, i);
+			if (!strcmp(flag, "in")) {
+				flags |= POLLIN;
+			} else if (!strcmp(flag, "pri")) {
+				flags |= POLLPRI;
+			} else if (!strcmp(flag, "out")) {
+				flags |= POLLOUT;
+			} else if (!strcmp(flag, "err")) {
+				flags |= POLLERR;
+			} else if (!strcmp(flag, "hup")) {
+				flags |= POLLHUP;
+			} else if (!strcmp(flag, "nval")) {
+				flags |= POLLNVAL;
+			} else {
+				return luaL_argerror(L, i,
+				 "supported values: in, pri, out, err, hup, nval");
+			}
+		}
+		lua_pushinteger(L, flags);
 	}
 	return 1;
 }
