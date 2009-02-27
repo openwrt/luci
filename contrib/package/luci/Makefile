@@ -182,6 +182,17 @@ define Package/luci-http/install
 endef
 
 
+define Package/luci-httpclient
+  $(call Package/luci/libtemplate)
+  TITLE:=HTTP(S) client library
+  DEPENDS+=+luci-http +luci-nixio
+endef
+
+define Package/luci-httpclient/install
+	$(call Package/luci/install/template,$(1),libs/httpclient)
+endef
+
+
 define Package/luci-ipkg
   $(call Package/luci/libtemplate)
   TITLE:=LuCI IPKG/OPKG call abstraction library
@@ -768,6 +779,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-http),)
 	PKG_SELECTED_MODULES+=libs/http
 endif
+ifneq ($(CONFIG_PACKAGE_luci-httpclient),)
+	PKG_SELECTED_MODULES+=libs/httpclient
+endif
 ifneq ($(CONFIG_PACKAGE_luci-ipkg),)
 	PKG_SELECTED_MODULES+=libs/ipkg
 endif
@@ -944,6 +958,7 @@ $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-cbi))
 $(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
+$(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
 $(eval $(call BuildPackage,luci-nixio))
