@@ -21,12 +21,13 @@
 #include "nixio.h"
 #include <fcntl.h>
 #include <string.h>
+#include <errno.h>
+#include <unistd.h>
 #include <sys/sendfile.h>
 
 /* guess what sucks... */
 #ifdef __UCLIBC__
 #include <unistd.h>
-#include <errno.h>
 #include <sys/syscall.h>
 ssize_t splice(int __fdin, __off64_t *__offin, int __fdout,
         __off64_t *__offout, size_t __len, unsigned int __flags) {
@@ -77,15 +78,23 @@ static int nixio_splice(lua_State *L) {
 	int fd_out = nixio__checkfd(L, 2);
 	size_t len = luaL_checkinteger(L, 3);
 	int flags = luaL_optinteger(L, 4, 0);
+	long spliced;
 
-
-	long spliced = splice(fd_in, NULL, fd_out, NULL, len, flags);
+	do {
+		spliced = splice(fd_in, NULL, fd_out, NULL, len, flags);
+	} while (spliced == -1 && errno == EINTR);
 
 	if (spliced < 0) {
 		return nixio__perror(L);
 	}
 
 	lua_pushnumber(L, spliced);
+	return 1;
+}
+
+static int nixio_splice_avail(lua_State *L) {
+	splice(-1, 0, -1, 0, 0, 0);
+	lua_pushboolean(L, errno != ENOSYS);
 	return 1;
 }
 
@@ -111,6 +120,7 @@ static int nixio_sendfile(lua_State *L) {
 static const luaL_reg R[] = {
 	{"splice",			nixio_splice},
 	{"splice_flags",	nixio_splice_flags},
+	{"splice_avail",	nixio_splice_avail},
 	{"sendfile",		nixio_sendfile},
 	{NULL,			NULL}
 };

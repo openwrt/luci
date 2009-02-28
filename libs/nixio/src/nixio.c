@@ -88,8 +88,14 @@ int nixio__tofd(lua_State *L, int ud) {
 	return fd;
 }
 
+static int nixio_strerror(lua_State *L) {
+	lua_pushstring(L, strerror(luaL_checkinteger(L, 1)));
+	return 1;
+}
+
 /* object table */
 static const luaL_reg R[] = {
+	{"strerror",	nixio_strerror},
 	{NULL,			NULL}
 };
 
