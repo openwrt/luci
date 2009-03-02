@@ -164,7 +164,7 @@ function request_raw(uri, options)
 	local message = {(options.method or "GET") .. " " .. path .. " " .. protocol}
 	
 	for k, v in pairs(headers) do
-		if type(v) == "string" then
+		if type(v) == "string" or type(v) == "number" then
 			message[#message+1] = k .. ": " .. v
 		elseif type(v) == "table" then
 			for i, j in ipairs(v) do
