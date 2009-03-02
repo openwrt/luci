@@ -152,12 +152,12 @@ function request_raw(uri, options)
 	
 	if type(options.body) == "table" then
 		options.body = http.urlencode_params(options.body)
-		headers["Content-Type"] = headers["Content-Type"] or 
-			"application/x-www-form-urlencoded"
 	end
 
 	if type(options.body) == "string" then
 		headers["Content-Length"] = headers["Content-Length"] or #options.body
+		headers["Content-Type"] = headers["Content-Type"] or
+			"application/x-www-form-urlencoded"
 	end
 	
 	-- Assemble message
