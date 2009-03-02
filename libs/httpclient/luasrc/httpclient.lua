@@ -121,7 +121,6 @@ function request_raw(uri, options)
 	options.depth = options.depth or 10
 	local headers = options.headers or {}
 	local protocol = options.protocol or "HTTP/1.1"
-	local method  = options.method or "GET"
 	headers["User-Agent"] = headers["User-Agent"] or "LuCI httpclient 0.1"
 	
 	if headers.Connection == nil then
@@ -158,10 +157,11 @@ function request_raw(uri, options)
 		headers["Content-Length"] = headers["Content-Length"] or #options.body
 		headers["Content-Type"] = headers["Content-Type"] or
 			"application/x-www-form-urlencoded"
+		options.method = options.method or "POST"
 	end
 	
 	-- Assemble message
-	local message = {method .. " " .. path .. " " .. protocol}
+	local message = {(options.method or "GET") .. " " .. path .. " " .. protocol}
 	
 	for k, v in pairs(headers) do
 		if type(v) == "string" then
