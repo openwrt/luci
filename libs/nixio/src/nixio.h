@@ -30,7 +30,6 @@ nixio_sock* nixio__checksock(lua_State *L);
 int nixio__checksockfd(lua_State *L);
 int nixio__checkfd(lua_State *L, int ud);
 int nixio__tofd(lua_State *L, int ud);
-FILE* nixio__checkfile(lua_State *L);
 
 /* Module functions */
 void nixio_open_file(lua_State *L);
@@ -41,6 +40,7 @@ void nixio_open_address(lua_State *L);
 void nixio_open_poll(lua_State *L);
 void nixio_open_io(lua_State *L);
 void nixio_open_splice(lua_State *L);
+void nixio_open_process(lua_State *L);
 void nixio_open_tls_context(lua_State *L);
 void nixio_open_tls_socket(lua_State *L);
 

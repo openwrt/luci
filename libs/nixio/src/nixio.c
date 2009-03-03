@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <signal.h>
 
 #define VERSION 0.1
 
@@ -53,12 +54,6 @@ nixio_sock* nixio__checksock(lua_State *L) {
     return sock;
 }
 
-FILE* nixio__checkfile(lua_State *L) {
-	FILE **fpp = (FILE**)luaL_checkudata(L, 1, NIXIO_FILE_META);
-	luaL_argcheck(L, *fpp, 1, "invalid file object");
-	return *fpp;
-}
-
 /* read fd from nixio_sock object */
 int nixio__checksockfd(lua_State *L) {
 	return nixio__checksock(L)->fd;
@@ -80,7 +75,9 @@ int nixio__tofd(lua_State *L, int ud) {
 		luaL_getmetatable(L, LUA_FILEHANDLE);
 		if (lua_rawequal(L, -3, -4)) {
 			fd = ((nixio_sock*)udata)->fd;
-		} else if (lua_rawequal(L, -2, -4) || lua_rawequal(L, -1, -4)) {
+		} else if (lua_rawequal(L, -2, -4)) {
+			fd = *((int*)udata);
+		} else if (lua_rawequal(L, -1, -4)) {
 			fd = (*((FILE **)udata)) ? fileno(*((FILE **)udata)) : -1;
 		}
 		lua_pop(L, 4);
@@ -124,6 +121,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	nixio_open_poll(L);
 	nixio_open_io(L);
 	nixio_open_splice(L);
+	nixio_open_process(L);
 	nixio_open_tls_context(L);
 	nixio_open_tls_socket(L);
 
@@ -132,7 +130,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	lua_setfield(L, -2, "version");
 
 	/* some constants */
-	lua_createtable(L, 0, 7);
+	lua_createtable(L, 0, 11);
 
 	NIXIO_PUSH_CONSTANT(EACCES);
 	NIXIO_PUSH_CONSTANT(ENOSYS);
@@ -141,6 +139,10 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	NIXIO_PUSH_CONSTANT(EAGAIN);
 	NIXIO_PUSH_CONSTANT(ENOMEM);
 	NIXIO_PUSH_CONSTANT(ENOENT);
+	NIXIO_PUSH_CONSTANT(SIGALRM);
+	NIXIO_PUSH_CONSTANT(SIGINT);
+	NIXIO_PUSH_CONSTANT(SIGTERM);
+	NIXIO_PUSH_CONSTANT(SIGKILL);
 
 	lua_setfield(L, -2, "const");
 

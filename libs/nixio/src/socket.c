@@ -91,8 +91,14 @@ static int nixio_socket(lua_State *L) {
 static int nixio_sock_close(lua_State *L) {
 	nixio_sock *sock = nixio__checksock(L);
 	int sockfd = sock->fd;
+	int res;
 	sock->fd = -1;
-	return nixio__pstatus(L, !close(sockfd));
+
+	do {
+		res = close(sockfd);
+	} while (res == -1 && errno == EINTR);
+
+	return nixio__pstatus(L, !res);
 }
 
 /**
@@ -100,8 +106,11 @@ static int nixio_sock_close(lua_State *L) {
  */
 static int nixio_sock__gc(lua_State *L) {
 	nixio_sock *sock = (nixio_sock*)luaL_checkudata(L, 1, NIXIO_META);
+	int res;
 	if (sock && sock->fd != -1) {
-		close(sock->fd);
+		do {
+			res = close(sock->fd);
+		} while (res == -1 && errno == EINTR);
 	}
 	return 0;
 }

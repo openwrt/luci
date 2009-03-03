@@ -24,6 +24,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <errno.h>
 #include "nixio.h"
 
 /**
@@ -77,7 +78,7 @@ static int nixio__bind_connect(lua_State *L, int do_bind) {
 
 	/* create socket object */
 	nixio_sock *sock = lua_newuserdata(L, sizeof(nixio_sock));
-	int status = -1;
+	int status = -1, clstat;
 
 	for (rp = result; rp != NULL; rp = rp->ai_next) {
 		sock->fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
@@ -88,7 +89,9 @@ static int nixio__bind_connect(lua_State *L, int do_bind) {
 		if (do_bind) {
 			status = bind(sock->fd, rp->ai_addr, rp->ai_addrlen);
 		} else {
-			status = connect(sock->fd, rp->ai_addr, rp->ai_addrlen);
+			do {
+				status = connect(sock->fd, rp->ai_addr, rp->ai_addrlen);
+			} while (status == -1 && errno == EINTR);
 		}
 
 		/* on success */
@@ -99,7 +102,9 @@ static int nixio__bind_connect(lua_State *L, int do_bind) {
 			break;
 		}
 
-		close(sock->fd);
+		do {
+			clstat = close(sock->fd);
+		} while (clstat == -1 && errno == EINTR);
 	}
 
 	freeaddrinfo(result);
@@ -166,7 +171,9 @@ static int nixio_sock__bind_connect(lua_State *L, int do_bind) {
 			if (do_bind) {
 				status = bind(sock->fd, rp->ai_addr, rp->ai_addrlen);
 			} else {
-				status = connect(sock->fd, rp->ai_addr, rp->ai_addrlen);
+				do {
+					status = connect(sock->fd, rp->ai_addr, rp->ai_addrlen);
+				} while (status == -1 && errno == EINTR);
 			}
 
 			/* on success */
@@ -188,7 +195,10 @@ static int nixio_sock__bind_connect(lua_State *L, int do_bind) {
 		if (do_bind) {
 			status = bind(sock->fd, (struct sockaddr*)&addr, sizeof(addr));
 		} else {
-			status = connect(sock->fd, (struct sockaddr*)&addr, sizeof(addr));
+			do {
+				status = connect(sock->fd, (struct sockaddr*)&addr,
+						sizeof(addr));
+			} while (status == -1 && errno == EINTR);
 		}
 	} else {
 		return luaL_error(L, "not supported");
@@ -229,8 +239,11 @@ static int nixio_sock_accept(lua_State *L) {
 	char ipaddr[INET6_ADDRSTRLEN];
 	void *binaddr;
 	uint16_t port;
+	int newfd;
 
-	int newfd = accept(sock->fd, (struct sockaddr *)&addr, &addrlen);
+	do {
+		newfd = accept(sock->fd, (struct sockaddr *)&addr, &addrlen);
+	} while (newfd == -1 && errno == EINTR);
 	if (newfd < 0) {
 		return nixio__perror(L);
 	}

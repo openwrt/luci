@@ -36,6 +36,7 @@
  * port is.
  */
 
+#include "nixio.h"
 #include "config.h"
 
 #define WITH_AXTLS						1

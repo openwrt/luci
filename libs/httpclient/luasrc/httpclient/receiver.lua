@@ -23,19 +23,14 @@ module "luci.httpclient.receiver"
 
 local function prepare_fd(target)
 	-- Open fd for appending
-	local file, code, msg = nixio.open(target, "r+")
-	if not file and code == nixio.const.ENOENT then
-		file, code, msg = nixio.open(target, "w")
-		if file then
-			file:flush()
-		end
-	end
+	local oflags = nixio.open_flags("wronly", "creat")
+	local file, code, msg = nixio.open(target, oflags)
 	if not file then
 		return file, code, msg
 	end
 	
 	-- Acquire lock
-	local stat, code, msg = file:lock("ex", "nb")
+	local stat, code, msg = file:lock("tlock")
 	if not stat then
 		return stat, code, msg
 	end

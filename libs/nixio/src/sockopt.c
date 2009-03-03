@@ -25,6 +25,7 @@
 #include <fcntl.h>
 #include "nixio.h"
 
+
 /**
  * setblocking()
  */
@@ -142,9 +143,9 @@ static int nixio__getsetsockopt(lua_State *L, int set) {
 			return luaL_error(L, "not a TCP socket");
 		}
 		if (!strcmp(option, "cork")) {
-			return nixio__gso_int(L, sock->fd, SOL_TCP, TCP_CORK, set);
+			return nixio__gso_int(L, sock->fd, IPPROTO_TCP, TCP_CORK, set);
 		} else if (!strcmp(option, "nodelay")) {
-			return nixio__gso_int(L, sock->fd, SOL_TCP, TCP_NODELAY, set);
+			return nixio__gso_int(L, sock->fd, IPPROTO_TCP, TCP_NODELAY, set);
 		} else {
 			return luaL_argerror(L, 3, "supported values: cork, nodelay");
 		}
