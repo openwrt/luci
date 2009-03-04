@@ -39,6 +39,8 @@ src/tls-socket.o: $(TLS_DEPENDS) src/tls-socket.c
 	
 src/openssl-compat.o: src/libaxtls.a src/openssl-compat.c
 	$(COMPILE) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) $(TLS_CFLAGS) -c -o $@ src/openssl-compat.c
+	mkdir -p dist
+	cp -pR axtls-root/* dist/
 	
 
 compile: $(NIXIO_OBJ)

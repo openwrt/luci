@@ -1,0 +1,20 @@
+#!/usr/bin/lua
+local nixio = require "nixio"
+local posix
+local defkey = nixio.meta_tls_context.tls_defaultkey
+if not defkey or io.open(defkey) then
+	os.exit(0)
+end
+
+if os.execute("which openssl") then
+	io.stderr:write("Warning: OpenSSL detected "..
+	"but it looks like nixio was linked against axtls\n")
+	os.execute("umask 0077;openssl genrsa -out '" .. defkey .. "' 2048")
+elseif os.execute("which dropbearkey && which dropbearconvert") then
+	os.execute("dropbearkey -t rsa -s 2048 -f /tmp/dbkey.rsa")
+	os.execute("umask 0077;dropbearconvert dropbear openssh /tmp/dbkey.rsa '"..defkey.."'")
+	os.remove("/tmp/dbkey.rsa")
+else
+	io.stderr:write("No key generators available! Giving up.")
+	os.exit(1)
+end

@@ -213,14 +213,38 @@ define Package/luci-json/install
 endef
 
 
+
+NIXIO_TLS:=axtls
+
 define Package/luci-nixio
   $(call Package/luci/libtemplate)
   TITLE:=NIXIO Socket Library
+  DEPENDS:=
 endef
 
 define Package/luci-nixio/install
 	$(call Package/luci/install/template,$(1),libs/nixio)
 endef
+
+define Package/luci-nixio/config
+	choice
+		prompt "TLS Provider"
+		default PACKAGE_luci-nixio_axtls
+
+		config PACKAGE_luci-nixio_axtls
+			bool "Builtin (axTLS)"
+			select PACKAGE_dropbear
+			select PACKAGE_dropbearconvert
+
+		config PACKAGE_luci-nixio_openssl
+			bool "OpenSSL"
+			select PACKAGE_libopenssl
+	endchoice
+endef
+
+ifneq ($(CONFIG_PACKAGE_luci-nixio_openssl),)
+  NIXIO_TLS:=openssl
+endif
 
 
 define Package/luci-sys
@@ -951,7 +975,7 @@ MAKE_FLAGS += \
 	LUA_SHLIBS="-llua -lm -ldl -lcrypt" \
 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
 	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
-	OS="Linux"
+	NIXIO_TLS="$(NIXIO_TLS)" OS="Linux"
 
 
 $(eval $(call BuildPackage,luci-core))
