@@ -220,6 +220,11 @@ config enum
 	option value 'wds'
 	option title 'WDS'
 
+config enum
+	option variable 'wireless.wifi-iface.mode'
+	option value 'mesh'
+	option title 'Mesh (802.11s)'
+
 config variable
 	option name 'bssid'
 	option section 'wireless.wifi-iface'
@@ -453,6 +458,8 @@ config variable
 	list depends 'encryption=wpa,mode=ap'
 	list depends 'encryption=psk2'
 	list depends 'encryption=wpa2i,mode=ap'
+	list depends 'encryption=psk+psk2'
+	list depends 'encryption=mixed'
 
 config variable
 	option name 'nasid'

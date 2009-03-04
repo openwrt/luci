@@ -60,7 +60,7 @@ essid = s:option(DummyValue, "ssid", "ESSID")
 bssid = s:option(DummyValue, "_bsiid", "BSSID")
 function bssid.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
-	return (wifidata[ifname] and (wifidata[ifname].Cell 
+	return (wifidata[ifname] and (wifidata[ifname].Cell
 	 or wifidata[ifname]["Access Point"])) or "-"
 end
 
@@ -118,7 +118,7 @@ function chan.cfgvalue(self, section)
 	return self.map:get(section, "Channel")
 	    or self.map:get(section, "Frequency")
 	    or "-"
-end 
+end
 
 t2:option(DummyValue, "Encryption key", translate("iwscan_encr"))
 
@@ -180,7 +180,7 @@ luci.model.uci.cursor():foreach("wireless", "wifi-device",
 	function (section)
 		table.insert(devs, section[".name"])
 	end)
-	
+
 if #devs > 1 then
 	device = s:option(DummyValue, "device", translate("device"))
 else
@@ -224,17 +224,20 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK")
 		encr:value("psk2", "WPA2-PSK")
+		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
 		encr:value("wpa", "WPA-Radius", {mode="ap"})
 		encr:value("wpa2i", "WPA2-Radius", {mode="ap"})
 	elseif hostapd and not supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"})
+		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"})
 		encr:value("wpa", "WPA-Radius", {mode="ap"})
 		encr:value("wpa2i", "WPA2-Radius", {mode="ap"})
 		encr.description = translate("wifi_wpareq")
 	elseif not hostapd and supplicant then
 		encr:value("psk", "WPA-PSK", {mode="sta"})
 		encr:value("psk2", "WPA2-PSK", {mode="sta"})
+		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
 		encr.description = translate("wifi_wpareq")
 	else
 		encr.description = translate("wifi_wpareq")
@@ -242,6 +245,7 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 elseif hwtype == "broadcom" then
 	encr:value("psk", "WPA-PSK")
 	encr:value("psk2", "WPA2-PSK")
+	encr:value("psk+psk2", "WPA-PSK/WPA2-PSK Mixed Mode")
 end
 
 key = s:option(Value, "key", translate("key"))
@@ -267,7 +271,7 @@ if hwtype == "atheros" or hwtype == "broadcom" then
 	iso = s:option(Flag, "isolate", translate("a_w_apisolation"), translate("a_w_apisolation1"))
 	iso.rmempty = true
 	iso:depends("mode", "ap")
-	
+
 	hide = s:option(Flag, "hidden", translate("a_w_hideessid"))
 	hide.rmempty = true
 	hide:depends("mode", "ap")
