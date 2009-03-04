@@ -1,4 +1,4 @@
 #!/bin/sh
-[ -n "${IPKG_INSTROOT}" -a -f "/etc/uci-defaults/nixio" ] || {
+[ -z "${IPKG_INSTROOT}" -a -f "/etc/uci-defaults/nixio" ] && {
 	( . /etc/uci-defaults/nixio ) && rm -f /etc/uci-defaults/nixio
 }
