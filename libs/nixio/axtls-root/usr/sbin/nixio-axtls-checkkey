@@ -6,11 +6,11 @@ if not defkey or io.open(defkey) then
 	os.exit(0)
 end
 
-if os.execute("which openssl") then
+if os.execute("which openssl >/dev/null") == 0 then
 	io.stderr:write("Warning: OpenSSL detected "..
 	"but it looks like nixio was linked against axtls\n")
 	os.execute("umask 0077;openssl genrsa -out '" .. defkey .. "' 2048")
-elseif os.execute("which dropbearkey && which dropbearconvert") then
+elseif os.execute("which dropbearkey >/dev/null && which dropbearconvert >/dev/null") == 0 then
 	os.execute("dropbearkey -t rsa -s 2048 -f /tmp/dbkey.rsa")
 	os.execute("umask 0077;dropbearconvert dropbear openssh /tmp/dbkey.rsa '"..defkey.."'")
 	os.remove("/tmp/dbkey.rsa")
