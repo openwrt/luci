@@ -453,6 +453,8 @@ config variable
 	option name 'key'
 	option section 'wireless.wifi-iface'
 	option title 'Key'
+	option minlength 8
+	option maxlength 63
 	list depends 'encryption=wep'
 	list depends 'encryption=psk'
 	list depends 'encryption=wpa,mode=ap'
