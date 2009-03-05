@@ -17,10 +17,13 @@
  */
 
 #include "nixio.h"
+#include <pwd.h>
+#include <grp.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 
 static int nixio_fork(lua_State *L) {
 	pid_t pid = fork();
@@ -81,12 +84,66 @@ static int nixio_kill(lua_State *L) {
 	return nixio__pstatus(L, !kill(luaL_checkint(L, 1), luaL_checkint(L, 2)));
 }
 
+static int nixio_getpid(lua_State *L) {
+	lua_pushinteger(L, getpid());
+	return 1;
+}
+
+static int nixio_getppid(lua_State *L) {
+	lua_pushinteger(L, getppid());
+	return 1;
+}
+
+static int nixio_getuid(lua_State *L) {
+	lua_pushinteger(L, getuid());
+	return 1;
+}
+
+static int nixio_getgid(lua_State *L) {
+	lua_pushinteger(L, getgid());
+	return 1;
+}
+
+static int nixio_setgid(lua_State *L) {
+	gid_t gid;
+	if (lua_isstring(L, 1)) {
+		struct group *g = getgrnam(lua_tostring(L, 1));
+		gid = (!g) ? -1 : g->gr_gid;
+	} else if (lua_isnumber(L, 1)) {
+		gid = lua_tointeger(L, 1);
+	} else {
+		return luaL_argerror(L, 1, "supported values: <groupname>, <gid>");
+	}
+
+	return nixio__pstatus(L, !setgid(gid));
+}
+
+static int nixio_setuid(lua_State *L) {
+	uid_t uid;
+	if (lua_isstring(L, 1)) {
+		struct passwd *p = getpwnam(lua_tostring(L, 1));
+		uid = (!p) ? -1 : p->pw_uid;
+	} else if (lua_isnumber(L, 1)) {
+		uid = lua_tointeger(L, 1);
+	} else {
+		return luaL_argerror(L, 1, "supported values: <username>, <uid>");
+	}
+
+	return nixio__pstatus(L, !setuid(uid));
+}
+
 
 /* module table */
 static const luaL_reg R[] = {
 	{"fork",		nixio_fork},
 	{"wait",		nixio_wait},
 	{"kill",		nixio_kill},
+	{"getpid",		nixio_getpid},
+	{"getppid",		nixio_getppid},
+	{"getuid",		nixio_getuid},
+	{"getgid",		nixio_getgid},
+	{"setuid",		nixio_setuid},
+	{"setgid",		nixio_setgid},
 	{NULL,			NULL}
 };
 
