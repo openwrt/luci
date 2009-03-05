@@ -463,7 +463,7 @@ define Package/luci-app-statistics
    +PACKAGE_luci-app-statistics:rrdtool1 \
    +PACKAGE_luci-app-statistics:collectd-mod-rrdtool1 \
    +PACKAGE_luci-app-statistics:collectd-mod-wireless \
-   +PACKAGE_luci-app-statistics:collectd-mod-interfaces \
+   +PACKAGE_luci-app-statistics:collectd-mod-interface \
    +PACKAGE_luci-app-statistics:collectd-mod-load
   TITLE:=LuCI Statistics Application
 endef
