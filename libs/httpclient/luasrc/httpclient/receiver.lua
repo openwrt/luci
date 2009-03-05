@@ -203,7 +203,11 @@ function request_to_file(uri, target, options, cbs)
 	end
 	
 	if cbs.on_header then
-		cbs.on_header(file, code, resp)
+		if cbs.on_header(file, code, resp) == false then
+			file:close()
+			sock:close()
+			return true
+		end
 	end
 
 	local chunked = resp.headers["Transfer-Encoding"] == "chunked"
