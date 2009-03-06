@@ -151,6 +151,9 @@ end
 function meta.sink(self, close)
 	return function(chunk, src_err)
 		if not chunk and not src_err and close then
+			if self.shutdown then
+				self:shutdown()
+			end
 			self:close()
 		elseif chunk and #chunk > 0 then
 			return self:writeall(chunk)
@@ -160,7 +163,6 @@ function meta.sink(self, close)
 end
 
 function tls_socket.close(self)
-	self:shutdown()
 	return self.socket:close()
 end
 
