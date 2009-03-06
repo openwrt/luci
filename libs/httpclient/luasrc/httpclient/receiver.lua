@@ -203,10 +203,11 @@ function request_to_file(uri, target, options, cbs)
 	end
 	
 	if cbs.on_header then
-		if cbs.on_header(file, code, resp) == false then
+		local stat = {cbs.on_header(file, code, resp)}
+		if stat[1] == false then
 			file:close()
 			sock:close()
-			return true
+			return true, nil, nil, unpack(stat, 2)
 		end
 	end
 
