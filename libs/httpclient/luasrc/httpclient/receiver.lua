@@ -207,7 +207,7 @@ function request_to_file(uri, target, options, cbs)
 		if stat[1] == false then
 			file:close()
 			sock:close()
-			return false, nil, nil, unpack(stat, 2)
+			return false, unpack(stat, 2)
 		end
 	end
 
