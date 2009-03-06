@@ -22,7 +22,7 @@ define Package/luaxyssl
   SUBMENU:=LUA
   TITLE:=xyssl-Bindings for Lua
   URL:=http://code.google.com/p/luaxyssl
-  DEPENDS:=+liblua +libxyssl
+  DEPENDS:=@BROKEN +liblua +libxyssl
 endef
 
 define Build/Configure
