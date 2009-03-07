@@ -639,7 +639,7 @@ local function _cbi(self, ...)
 			res.autoapply = config.autoapply
 		end
 		local cstate = res:parse()
-		if not state or cstate < state then
+		if cstate and not state or cstate < state then
 			state = cstate
 		end
 	end
@@ -709,7 +709,7 @@ local function _form(self, ...)
 
 	for i, res in ipairs(maps) do
 		local cstate = res:parse()
-		if not state or cstate < state then
+		if cstate and not state or cstate < state then
 			state = cstate
 		end
 	end
