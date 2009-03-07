@@ -66,7 +66,6 @@ function error404(message)
 	if not luci.util.copcall(luci.template.render, "error404") then
 		luci.http.prepare_content("text/plain")
 		luci.http.write(message)
-		luci.util.perror(message)
 	end
 	return false
 end
@@ -75,6 +74,7 @@ end
 -- @param message	Custom error message (optional)#
 -- @return			false
 function error500(message)
+	luci.util.perror(message)
 	if not context.template_header_sent then
 		luci.http.status(500, "Internal Server Error")
 	else
