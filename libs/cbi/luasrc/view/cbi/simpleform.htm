@@ -12,12 +12,13 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
-
+<% if not self.embedded then %>
 <form method="post" action="<%=REQUEST_URI%>">
 	<div>
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />
 	</div>
+<% end %>
 	<div class="cbi-map" id="cbi-<%=self.config%>">
 		<h2><a id="content" name="content"><%=self.title%></a></h2>
 		<div class="cbi-map-descr"><%=self.description%></div>
@@ -30,6 +31,7 @@ $Id$
 <%- if self.errmessage then %>
 	<div class="error"><%=self.errmessage%></div>
 <%- end %>	
+<% if not self.embedded then %>
 	<div>
 <%- if self.submit ~= false then %>
 		<input class="cbi-button-save" type="submit" value="
@@ -44,3 +46,4 @@ $Id$
 		<script type="text/javascript">cbi_d_update();</script>
 	</div>
 </form>
+<% end %>

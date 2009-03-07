@@ -644,6 +644,13 @@ function SimpleForm.get_scheme()
 end
 
 
+Form = class(SimpleForm)
+
+function Form.__init__(self, ...)
+	SimpleForm.__init__(self, ...)
+	self.embedded = true
+end
+
 
 --[[
 AbstractSection
@@ -814,15 +821,16 @@ Table = class(AbstractSection)
 
 function Table.__init__(self, form, data, ...)
 	local datasource = {}
+	local tself = self
 	datasource.config = "table"
-	self.data = data
+	self.data = data or {}
 
 	datasource.formvalue = Map.formvalue
 	datasource.formvaluetable = Map.formvaluetable
 	datasource.readinput = true
 
 	function datasource.get(self, section, option)
-		return data[section] and data[section][option]
+		return tself.data[section] and tself.data[section][option]
 	end
 
 	function datasource.submitstate(self)
@@ -860,6 +868,10 @@ function Table.cfgsections(self)
 	end
 
 	return sections
+end
+
+function Table.update(self, data)
+	self.data = data
 end
 
 
