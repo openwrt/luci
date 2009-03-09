@@ -5,7 +5,8 @@ include ../../build/gccconfig.mk
 AXTLS_VERSION = 1.2.1
 AXTLS_DIR     = axTLS
 AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VERSION).tar.gz
-NIXIO_TLS    ?= axtls
+NIXIO_TLS    ?= openssl
+NIXIO_LDFLAGS =
 
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
 	    src/poll.o src/io.o src/file.o src/splice.o src/process.o \
@@ -13,14 +14,19 @@ NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
 
 ifeq ($(NIXIO_TLS),axtls)
 	TLS_CFLAGS = -IaxTLS/{ssl,crypto,config} -include src/openssl-compat.h
-	TLS_LDFLAGS =
 	TLS_DEPENDS = src/openssl-compat.o
 	NIXIO_OBJ += src/openssl-compat.o src/libaxtls.a
 endif
 
 ifeq ($(NIXIO_TLS),openssl)
-	TLS_LDFLAGS = -lssl
+	NIXIO_LDFLAGS += -lssl
 endif
+
+
+ifeq ($(OS),SunOS)
+	NIXIO_LDFLAGS += -lsocket -lnsl -lsendfile
+endif
+
 
 %.o: %.c
 	$(COMPILE) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $< 
@@ -38,7 +44,7 @@ src/openssl-compat.o: src/libaxtls.a src/openssl-compat.c
 	
 
 compile: $(NIXIO_OBJ)
-	$(LINK) $(SHLIB_FLAGS) $(TLS_LDFLAGS) -o src/nixio.so $(NIXIO_OBJ)
+	$(LINK) $(SHLIB_FLAGS) $(NIXIO_LDFLAGS) -o src/nixio.so $(NIXIO_OBJ)
 	mkdir -p dist$(LUA_LIBRARYDIR)
 	cp src/nixio.so dist$(LUA_LIBRARYDIR)/nixio.so
 
@@ -49,7 +55,7 @@ $(AXTLS_DIR)/.prepared:
 	touch $@
 
 src/libaxtls.a: $(AXTLS_DIR)/.prepared
-	$(MAKE) -C $(AXTLS_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
+	$(MAKE) -C $(AXTLS_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) '-Dalloca(size)=__builtin_alloca(size)' -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
 	cp -p $(AXTLS_DIR)/_stage/libaxtls.a src
 
 clean: luaclean
