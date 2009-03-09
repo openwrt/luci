@@ -577,7 +577,12 @@ function SimpleForm.parse(self, readinput, ...)
 		or valid and FORM_VALID
 		or FORM_INVALID
 
-	self.dorender = not self.handle or self:handle(state, self.data) ~= false
+	self.dorender = not self.handle
+	if self.handle then
+		local nrender, nstate = self:handle(state, self.data)
+		self.dorender = self.dorender or (nrender ~= false)
+		state = nstate or state
+	end
 	return state
 end
 
