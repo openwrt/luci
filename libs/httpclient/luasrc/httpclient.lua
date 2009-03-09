@@ -22,6 +22,7 @@ local http = require "luci.http.protocol"
 local date = require "luci.http.protocol.date"
 
 local type, pairs, ipairs, tonumber = type, pairs, ipairs, tonumber
+local unpack = unpack
 
 module "luci.httpclient"
 
@@ -160,6 +161,10 @@ function request_raw(uri, options)
 		options.method = options.method or "POST"
 	end
 	
+	if type(options.body) == "function" then
+		options.method = options.method or "POST"
+	end
+
 	-- Assemble message
 	local message = {(options.method or "GET") .. " " .. path .. " " .. protocol}
 	
@@ -194,6 +199,12 @@ function request_raw(uri, options)
 	
 	if type(options.body) == "string" then
 		sock:sendall(options.body)
+	elseif type(options.body) == "function" then
+		local res = {options.body(sock)}
+		if not res[1] then
+			sock:close()
+			return unpack(res)
+		end
 	end
 	
 	-- Create source and fetch response
@@ -201,12 +212,14 @@ function request_raw(uri, options)
 	local line, code, error = linesrc()
 	
 	if not line then
+		sock:close()
 		return nil, code, error
 	end
 	
-	local protocol, status, msg = line:match("^(HTTP/[0-9.]+) ([0-9]+) (.*)")
+	local protocol, status, msg = line:match("^([%w./]+) ([0-9]+) (.*)")
 	
 	if not protocol then
+		sock:close()
 		return nil, -3, "invalid response magic: " .. line
 	end
 	
@@ -228,6 +241,7 @@ function request_raw(uri, options)
 	end
 	
 	if not line then
+		sock:close()
 		return nil, -4, "protocol error"
 	end
 	
