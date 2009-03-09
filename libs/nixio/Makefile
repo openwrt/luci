@@ -6,8 +6,6 @@ AXTLS_VERSION = 1.2.1
 AXTLS_DIR     = axTLS
 AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VERSION).tar.gz
 NIXIO_TLS    ?= axtls
-EXTRA_CFLAGS  = -std=c99
-NIXIO_CFLAGS  = -D_XOPEN_SOURCE=500
 
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
 	    src/poll.o src/io.o src/file.o src/splice.o src/process.o \
@@ -22,10 +20,6 @@ endif
 
 ifeq ($(NIXIO_TLS),openssl)
 	TLS_LDFLAGS = -lssl
-endif
-
-ifeq ($(OS),Linux)
-	NIXIO_CFLAGS = -D_GNU_SOURCE
 endif
 
 %.o: %.c
@@ -55,7 +49,7 @@ $(AXTLS_DIR)/.prepared:
 	touch $@
 
 src/libaxtls.a: $(AXTLS_DIR)/.prepared
-	$(MAKE) -C $(AXTLS_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) '-Dalloca(size)=__builtin_alloca(size)' -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
+	$(MAKE) -C $(AXTLS_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
 	cp -p $(AXTLS_DIR)/_stage/libaxtls.a src
 
 clean: luaclean

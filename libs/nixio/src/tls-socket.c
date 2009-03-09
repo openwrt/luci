@@ -82,11 +82,11 @@ static int nixio_tls_sock_recv(lua_State *L) {
 		t->pbufsiz -= req;
 		return 1;
 	} else {
-		char *axbuf;
-		int axread;
+		uint8_t *axbuf;
+		size_t axread;
 
 		/* while handshake pending */
-		while ((axread = ssl_read(sock, (uint8_t**)&axbuf)) == SSL_OK);
+		while ((axread = ssl_read(sock, &axbuf)) == SSL_OK);
 
 		if (t->pbufsiz) {
 			lua_pushlstring(L, t->pbufpos, t->pbufsiz);
@@ -111,7 +111,7 @@ static int nixio_tls_sock_recv(lua_State *L) {
 			int stillwant = req - t->pbufsiz;
 			if (stillwant < axread) {
 				/* we got more data than we need */
-				lua_pushlstring(L, axbuf, stillwant);
+				lua_pushlstring(L, (char *)axbuf, stillwant);
 				if(t->pbufsiz) {
 					lua_concat(L, 2);
 				}
@@ -130,7 +130,7 @@ static int nixio_tls_sock_recv(lua_State *L) {
 				t->pbufpos = t->pbuffer;
 				memcpy(t->pbufpos, axbuf + stillwant, t->pbufsiz);
 			} else {
-				lua_pushlstring(L, axbuf, axread);
+				lua_pushlstring(L, (char *)axbuf, axread);
 				if(t->pbufsiz) {
 					lua_concat(L, 2);
 				}

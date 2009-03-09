@@ -24,6 +24,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <signal.h>
 
 static int nixio_fork(lua_State *L) {
 	pid_t pid = fork();

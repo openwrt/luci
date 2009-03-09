@@ -23,6 +23,7 @@
 #include <sys/time.h>
 #include <string.h>
 #include <fcntl.h>
+#include <errno.h>
 #include "nixio.h"
 
 
@@ -124,7 +125,11 @@ static int nixio__getsetsockopt(lua_State *L, int set) {
 		} else if (!strcmp(option, "sndbuf")) {
 			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_SNDBUF, set);
 		} else if (!strcmp(option, "priority")) {
+#ifdef SO_PRIORITY
 			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_PRIORITY, set);
+#else
+			return nixio__pstatus(L, !(errno = ENOPROTOOPT));
+#endif
 		} else if (!strcmp(option, "broadcast")) {
 			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_BROADCAST, set);
 		} else if (!strcmp(option, "linger")) {
