@@ -16,6 +16,10 @@
  *  limitations under the License.
  */
 
+#ifdef __linux__
+#define _GNU_SOURCE
+#endif
+
 #include "nixio.h"
 #include <fcntl.h>
 #include <string.h>
