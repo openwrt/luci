@@ -36,6 +36,19 @@ static int nixio_fork(lua_State *L) {
 	}
 }
 
+static int nixio_signal(lua_State *L) {
+	int sig = luaL_checkinteger(L, 1);
+	const char *val = luaL_checkstring(L, 2);
+
+	if (!strcmp(val, "ign") || !strcmp(val, "ignore")) {
+		return nixio__pstatus(L, signal(sig, SIG_IGN) != SIG_ERR);
+	} else if (!strcmp(val, "dfl") || !strcmp(val, "default")) {
+		return nixio__pstatus(L, signal(sig, SIG_DFL) != SIG_ERR);
+	} else {
+		return luaL_argerror(L, 2, "supported values: ign, dfl");
+	}
+}
+
 static int nixio_wait(lua_State *L) {
 	pid_t pidin = luaL_optinteger(L, 1, -1), pidout;
 	int options = 0, status;
@@ -148,6 +161,7 @@ static const luaL_reg R[] = {
 	{"getgid",		nixio_getgid},
 	{"setuid",		nixio_setuid},
 	{"setgid",		nixio_setgid},
+	{"signal",		nixio_signal},
 	{NULL,			NULL}
 };
 
