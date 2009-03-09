@@ -17,7 +17,7 @@ local nixio = require "nixio"
 local httpc = require "luci.httpclient"
 local ltn12 = require "luci.ltn12"
 
-local print, tonumber, require = print, tonumber, require
+local print, tonumber, require, unpack = print, tonumber, require, unpack
 
 module "luci.httpclient.receiver"
 

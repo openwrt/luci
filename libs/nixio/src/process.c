@@ -59,7 +59,10 @@ static int nixio_wait(lua_State *L) {
 		pidout = waitpid(pidin, &status, options);
 	} while (pidout == -1 && errno == EINTR);
 
-	if (pidout == -1) {
+	if (pidout == 0) {
+		lua_pushboolean(L, 0);
+		return 1;
+	} else if (pidout == -1) {
 		return nixio__perror(L);
 	} else {
 		lua_pushinteger(L, pidout);
