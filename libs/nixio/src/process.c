@@ -149,12 +149,27 @@ static int nixio_setuid(lua_State *L) {
 	return nixio__pstatus(L, !setuid(uid));
 }
 
+static int nixio_nice(lua_State *L) {
+	int nval = luaL_checkint(L, 1);
+
+	errno = 0;
+	nval = nice(nval);
+
+	if (nval == -1 && errno) {
+		return nixio__perror(L);
+	} else {
+		lua_pushinteger(L, nval);
+		return 1;
+	}
+}
+
 
 /* module table */
 static const luaL_reg R[] = {
 	{"fork",		nixio_fork},
 	{"wait",		nixio_wait},
 	{"kill",		nixio_kill},
+	{"nice",		nixio_nice},
 	{"getpid",		nixio_getpid},
 	{"getppid",		nixio_getppid},
 	{"getuid",		nixio_getuid},
