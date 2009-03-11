@@ -17,6 +17,7 @@ $Id$
 module("luci.asterisk", package.seeall)
 
 local _io  = require("io")
+local uci  = require("luci.model.uci").cursor()
 local sys  = require("luci.sys")
 local util = require("luci.util")
 
@@ -195,4 +196,125 @@ function sip.peer(peer)
 	end
 
 	return info, keys
+end
+
+
+--- LuCI Asterisk - Internal helpers
+-- @type module
+tools = luci.util.class()
+
+--- Convert given value to a list of tokens. Split by white space.
+-- @param val	String or table value
+-- @return		Table containing tokens
+function tools.parse_list(v)
+	local tokens = { }
+
+	v = type(v) == "table" and v or { v }
+	for _, v in ipairs(v) do
+		if type(v) == "string" then
+			for v in v:gmatch("(%S+)") do
+				tokens[#tokens+1] = v
+			end
+		end
+	end
+
+	return tokens
+end
+
+--- Convert given list to a collection of hyperlinks
+-- @param list	Table of tokens
+-- @param url	String pattern or callback function to construct urls (optional)
+-- @param sep	String containing the seperator (optional, default is ", ")
+-- @return		String containing the html fragment
+function tools.hyperlinks(list, url, sep)
+	local html
+
+	local function mkurl(p, t)
+		if type(p) == "string" then
+			return p:format(t)
+		elseif type(p) == "function" then
+			return p(t)
+		else
+			return '#'
+		end
+	end
+
+	list = list or { }
+	url  = url  or "%s"
+	sep  = sep  or ", "
+
+	for _, token in ipairs(list) do
+		html = ( html and html .. sep or '' ) ..
+			'<a href="%s">%s</a>' %{ mkurl(url, token), token }
+	end
+
+	return html or ''
+end
+
+
+--- LuCI Asterisk - Dialzone
+-- @type	module
+dialzone = luci.util.class()
+
+--- Parse a dialzone section
+-- @param zone	Table containing the zone info
+-- @return		Table with parsed information
+function dialzone.parse(z)
+	if z['.name'] then
+		return {
+			trunks		= tools.parse_list(z.uses),
+			name    	= z['.name'],
+			description	= z.description or z['.name'],
+			addprefix	= z.addprefix,
+			matches		= tools.parse_list(z.match),
+			intlmatches	= tools.parse_list(z.international),
+			countrycode	= z.countrycode,
+			localzone	= z.localzone,
+			localprefix	= z.localprefix
+		}
+	end
+end
+
+--- Get a list of known dial zones
+-- @return		Associative table of zones and table of zone names
+function dialzone.zones()
+	local zones  = { }
+	local znames = { }
+	uci:foreach("asterisk", "dialzone",
+		function(z)
+			zones[z['.name']] = dialzone.parse(z)
+			znames[#znames+1] = z['.name']
+		end)
+	return zones, znames
+end
+
+--- Get a specific dial zone
+-- @param name	Name of the dial zone
+-- @return		Table containing zone information
+function dialzone.zone(n)
+	local zone
+	uci:foreach("asterisk", "dialzone",
+		function(z)
+			if z['.name'] == n then
+				zone = dialzone.parse(z)
+			end
+		end)
+	return zone
+end
+
+--- Find uci section hash for given zone number
+-- @param idx	Zone number
+-- @return		String containing the uci hash pointing to the section
+function dialzone.ucisection(i)
+	local hash
+	local index = 1
+	i = tonumber(i)
+	uci:foreach("asterisk", "dialzone",
+		function(z)
+			if not hash and index == i then
+				hash = z['.name']
+			end
+			index = index + 1
+		end)
+	return hash
 end

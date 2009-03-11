@@ -52,6 +52,7 @@ function index()
 	--entry({"admin", "asterisk", "dialplans"},			cbi("asterisk/dialplans"),   "Call Routing", 3)
 	entry({"admin", "asterisk", "dialplans"},			call("handle_dialplan"),     "Call Routing", 3)
 	entry({"admin", "asterisk", "dialplans", "out"},	cbi("asterisk/dialplan_out"),     nil,            1).leaf = true
+	entry({"admin", "asterisk", "dialplans", "zones"},	cbi("asterisk/dialzones"),		"Dial Zones",	2).leaf = true
 
 end
 
