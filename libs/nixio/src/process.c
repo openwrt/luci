@@ -163,6 +163,17 @@ static int nixio_nice(lua_State *L) {
 	}
 }
 
+static int nixio_setsid(lua_State *L) {
+	pid_t pid = setsid();
+
+	if (pid == -1) {
+		return nixio__perror(L);
+	} else {
+		lua_pushinteger(L, pid);
+		return 1;
+	}
+}
+
 
 /* module table */
 static const luaL_reg R[] = {
@@ -176,6 +187,7 @@ static const luaL_reg R[] = {
 	{"getgid",		nixio_getgid},
 	{"setuid",		nixio_setuid},
 	{"setgid",		nixio_setgid},
+	{"setsid",		nixio_setsid},
 	{"signal",		nixio_signal},
 	{NULL,			NULL}
 };
