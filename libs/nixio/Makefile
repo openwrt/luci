@@ -13,7 +13,7 @@ NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
 	    src/tls-context.o src/tls-socket.o
 
 ifeq ($(NIXIO_TLS),axtls)
-	TLS_CFLAGS = -IaxTLS/{ssl,crypto,config} -include src/openssl-compat.h
+	TLS_CFLAGS = -IaxTLS/ssl -IaxTLS/crypto -IaxTLS/config -include src/openssl-compat.h
 	TLS_DEPENDS = src/openssl-compat.o
 	NIXIO_OBJ += src/openssl-compat.o src/libaxtls.a
 endif
@@ -51,7 +51,7 @@ compile: $(NIXIO_OBJ)
 $(AXTLS_DIR)/.prepared:
 	#rm -rf $(AXTLS_DIR)
 	#tar xvfz $(AXTLS_FILE)
-	cp axtls-config/{.config,config.h} $(AXTLS_DIR)/config
+	cp axtls-config/.config axtls-config/config.h $(AXTLS_DIR)/config
 	touch $@
 
 src/libaxtls.a: $(AXTLS_DIR)/.prepared

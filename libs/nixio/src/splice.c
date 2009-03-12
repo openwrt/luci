@@ -25,6 +25,7 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/param.h>
 
 #ifndef BSD
 #include <sys/sendfile.h>
