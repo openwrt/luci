@@ -17,6 +17,7 @@
  */
 
 #include "nixio.h"
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -148,7 +149,11 @@ static int nixio__getsetsockopt(lua_State *L, int set) {
 			return luaL_error(L, "not a TCP socket");
 		}
 		if (!strcmp(option, "cork")) {
+#ifdef TCP_CORK
 			return nixio__gso_int(L, sock->fd, IPPROTO_TCP, TCP_CORK, set);
+#else
+			return nixio__pstatus(L, !(errno = ENOPROTOOPT));
+#endif
 		} else if (!strcmp(option, "nodelay")) {
 			return nixio__gso_int(L, sock->fd, IPPROTO_TCP, TCP_NODELAY, set);
 		} else {
