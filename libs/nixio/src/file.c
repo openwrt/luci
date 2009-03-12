@@ -25,6 +25,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/param.h>
 
 
 static int nixio_open(lua_State *L) {
@@ -209,8 +210,12 @@ static int nixio_file_tell(lua_State *L) {
 
 static int nixio_file_sync(lua_State *L) {
 	int fd = nixio__checkfd(L, 1);
+#ifndef BSD
 	int meta = lua_toboolean(L, 2);
 	return nixio__pstatus(L, (meta) ? !fsync(fd) : !fdatasync(fd));
+#else
+	return nixio__pstatus(L, !fsync(fd));
+#endif
 }
 
 static int nixio_file_lock(lua_State *L) {

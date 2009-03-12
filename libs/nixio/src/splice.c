@@ -25,7 +25,14 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+
+#ifndef BSD
 #include <sys/sendfile.h>
+#else
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/uio.h>
+#endif
 
 #ifdef _GNU_SOURCE
 
@@ -102,15 +109,31 @@ static int nixio_splice_flags(lua_State *L) {
  * sendfile(outfd, infd, length)
  */
 static int nixio_sendfile(lua_State *L) {
-	int sockfd = nixio__checksockfd(L);
+	int sock = nixio__checksockfd(L);
 	int infd = nixio__checkfd(L, 2);
 	size_t len = luaL_checkinteger(L, 3);
+	off_t spliced;
 
-	long spliced = sendfile(sockfd, infd, NULL, len);
+#ifndef BSD
+	do {
+		spliced = sendfile(sock, infd, NULL, len);
+	} while (spliced == -1 && errno == EINTR);
 
-	if (spliced < 0) {
+	if (spliced == -1) {
 		return nixio__perror(L);
 	}
+#else
+	int r;
+	const off_t offset = lseek(infd, 0, SEEK_CUR);
+
+	do {
+		r = sendfile(infd, sock, offset, len, NULL, &spliced, 0);
+	} while (r == -1 && errno == EINTR);
+
+	if (r == -1) {
+		return nixio__perror(L);
+	}
+#endif
 
 	lua_pushnumber(L, spliced);
 	return 1;
