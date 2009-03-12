@@ -174,6 +174,10 @@ static int nixio_setsid(lua_State *L) {
 	}
 }
 
+static int nixio_chdir(lua_State *L) {
+	return nixio__pstatus(L, !chdir(luaL_checkstring(L, 1)));
+}
+
 
 /* module table */
 static const luaL_reg R[] = {
@@ -181,6 +185,7 @@ static const luaL_reg R[] = {
 	{"wait",		nixio_wait},
 	{"kill",		nixio_kill},
 	{"nice",		nixio_nice},
+	{"chdir",		nixio_chdir},
 	{"getpid",		nixio_getpid},
 	{"getppid",		nixio_getppid},
 	{"getuid",		nixio_getuid},
