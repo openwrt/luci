@@ -223,7 +223,9 @@ function request_raw(uri, options)
 		return nil, -3, "invalid response magic: " .. line
 	end
 	
-	local response = {status = line, headers = {}, code = 0, cookies = {}}
+	local response = {
+		status = line, headers = {}, code = 0, cookies = {}, uri = uri
+	}
 	
 	line = linesrc()
 	while line and line ~= "" do
@@ -292,15 +294,18 @@ function request_raw(uri, options)
 	if response.code and options.depth > 0 then
 		if response.code == 301 or response.code == 302 or response.code == 307
 		 and response.headers.Location then
-			local nexturi = response.headers.Location
-			if not nexturi:find("https?://") then
-				nexturi = pr .. "://" .. host .. ":" .. port .. nexturi
+			local nuri = response.headers.Location or response.headers.location
+			if not nuri then
+				return nil, -5, "invalid reference"
+			end
+			if not nuri:find("https?://") then
+				nuri = pr .. "://" .. host .. ":" .. port .. nuri
 			end
 			
 			options.depth = options.depth - 1
 			sock:close()
 			
-			return request_raw(nexturi, options)
+			return request_raw(nuri, options)
 		end
 	end
 	
