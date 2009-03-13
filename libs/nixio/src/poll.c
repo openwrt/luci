@@ -143,7 +143,9 @@ static int nixio_poll(lua_State *L) {
 		lua_pop(L, 3);
 	}
 
-	status = poll(fds, (nfds_t)len, timeout);
+	do {
+		status = poll(fds, (nfds_t)len, timeout);
+	} while (status == -1 && errno == EINTR);
 
 	if (status < 1) {
 		free(fds);
