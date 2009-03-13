@@ -108,6 +108,8 @@ static int nixio__gso_timev(lua_State *L, int fd, int level, int opt, int set) {
 	return nixio__perror(L);
 }
 
+#ifdef SO_BINDTODEVICE
+
 static int nixio__gso_b(lua_State *L, int fd, int level, int opt, int set) {
 	if (!set) {
 		socklen_t optlen = IFNAMSIZ;
@@ -127,6 +129,8 @@ static int nixio__gso_b(lua_State *L, int fd, int level, int opt, int set) {
 	}
 	return nixio__perror(L);
 }
+
+#endif /* SO_BINDTODEVICE */
 
 /**
  * get/setsockopt() helper
@@ -156,6 +160,10 @@ static int nixio__getsetsockopt(lua_State *L, int set) {
 			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_BROADCAST, set);
 		} else if (!strcmp(option, "dontroute")) {
 			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_DONTROUTE, set);
+		} else if (!strcmp(option, "error")) {
+			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_ERROR, set);
+		} else if (!strcmp(option, "oobinline")) {
+			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_OOBINLINE, set);
 		} else if (!strcmp(option, "linger")) {
 			return nixio__gso_ling(L, sock->fd, SOL_SOCKET, SO_LINGER, set);
 		} else if (!strcmp(option, "sndtimeo")) {
@@ -163,11 +171,15 @@ static int nixio__getsetsockopt(lua_State *L, int set) {
 		} else if (!strcmp(option, "rcvtimeo")) {
 			return nixio__gso_timev(L, sock->fd, SOL_SOCKET, SO_RCVTIMEO, set);
 		} else if (!strcmp(option, "bindtodevice")) {
+#ifdef SO_BINDTODEVICE
 			return nixio__gso_b(L, sock->fd, SOL_SOCKET, SO_BINDTODEVICE, set);
+#else
+			return nixio__pstatus(L, !(errno = ENOPROTOOPT));
+#endif
 		} else {
 			return luaL_argerror(L, 3, "supported values: keepalive, reuseaddr,"
 			 " sndbuf, rcvbuf, priority, broadcast, linger, sndtimeo, rcvtimeo,"
-			 " dontroute, bindtodevice"
+			 " dontroute, bindtodevice, error, oobinline"
 			);
 		}
 	} else if (!strcmp(level, "tcp")) {
