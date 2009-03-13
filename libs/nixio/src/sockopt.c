@@ -21,6 +21,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <net/if.h>
 #include <sys/time.h>
 #include <string.h>
 #include <fcntl.h>
@@ -107,6 +108,26 @@ static int nixio__gso_timev(lua_State *L, int fd, int level, int opt, int set) {
 	return nixio__perror(L);
 }
 
+static int nixio__gso_b(lua_State *L, int fd, int level, int opt, int set) {
+	if (!set) {
+		socklen_t optlen = IFNAMSIZ;
+		char ifname[IFNAMSIZ];
+		if (!getsockopt(fd, level, opt, ifname, &optlen)) {
+			lua_pushlstring(L, ifname, optlen);
+			return 1;
+		}
+	} else {
+		size_t valuelen;
+		const char *value = luaL_checklstring(L, set, &valuelen);
+		luaL_argcheck(L, valuelen <= IFNAMSIZ, set, "invalid interface name");
+		if (!setsockopt(fd, level, opt, value, valuelen)) {
+			lua_pushboolean(L, 1);
+			return 1;
+		}
+	}
+	return nixio__perror(L);
+}
+
 /**
  * get/setsockopt() helper
  */
@@ -133,15 +154,20 @@ static int nixio__getsetsockopt(lua_State *L, int set) {
 #endif
 		} else if (!strcmp(option, "broadcast")) {
 			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_BROADCAST, set);
+		} else if (!strcmp(option, "dontroute")) {
+			return nixio__gso_int(L, sock->fd, SOL_SOCKET, SO_DONTROUTE, set);
 		} else if (!strcmp(option, "linger")) {
 			return nixio__gso_ling(L, sock->fd, SOL_SOCKET, SO_LINGER, set);
 		} else if (!strcmp(option, "sndtimeo")) {
 			return nixio__gso_timev(L, sock->fd, SOL_SOCKET, SO_SNDTIMEO, set);
 		} else if (!strcmp(option, "rcvtimeo")) {
 			return nixio__gso_timev(L, sock->fd, SOL_SOCKET, SO_RCVTIMEO, set);
+		} else if (!strcmp(option, "bindtodevice")) {
+			return nixio__gso_b(L, sock->fd, SOL_SOCKET, SO_BINDTODEVICE, set);
 		} else {
 			return luaL_argerror(L, 3, "supported values: keepalive, reuseaddr,"
-			 " sndbuf, rcvbuf, priority, broadcast, linger, sndtimeo, rcvtimeo"
+			 " sndbuf, rcvbuf, priority, broadcast, linger, sndtimeo, rcvtimeo,"
+			 " dontroute, bindtodevice"
 			);
 		}
 	} else if (!strcmp(level, "tcp")) {
