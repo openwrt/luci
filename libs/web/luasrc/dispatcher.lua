@@ -77,6 +77,8 @@ function error500(message)
 	luci.util.perror(message)
 	if not context.template_header_sent then
 		luci.http.status(500, "Internal Server Error")
+		luci.http.prepare_content("text/plain")
+		luci.http.write(message)
 	else
 		require("luci.template")
 		if not luci.util.copcall(luci.template.render, "error500", {message=message}) then
@@ -132,6 +134,9 @@ function dispatch(request)
 	ctx.urltoken   = ctx.urltoken or {}
 
 	local conf = require "luci.config"
+	assert(conf.main,
+		"/etc/config/luci seems to be corrupt, unable to find section 'main'")
+
 	local lang = conf.main.lang
 	if lang == "auto" then
 		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
