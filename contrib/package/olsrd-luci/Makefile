@@ -12,21 +12,21 @@ include $(TOPDIR)/rules.mk
 PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
 PKG_BASEVER:=0.5.6-r3
-PKG_VERSION:=$(PKG_BASEVER)+freifunk
+PKG_VERSION:=$(PKG_BASEVER)+hg1765
 PKG_RELEASE:=1
 
-#PKG_HGREV:=a7316f987848
-#PKG_SOURCE:=$(PKG_HGREV).tar.gz
-#PKG_SOURCE_URL:=http://gredler.at/hg/olsrd/archive
-#PKG_MD5SUM:=b228b5452af158cd4313f9ed416d9c84
-#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_HGREV)
-#PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
+PKG_HGREV:=fc691af9a18d
+PKG_SOURCE:=$(PKG_HGREV).tar.gz
+PKG_SOURCE_URL:=http://gredler.at/hg/olsrd-0.5.6/archive
+PKG_MD5SUM:=17fe345abf208ea1411d0a2041cf3c4e
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_HGREV)
+PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
-PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_BASEVER).tar.bz2
-PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
-PKG_MD5SUM:=0935688fa0fb5b0e073fe53ec654c5b2
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_BASEVER)
-PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xjf $(DL_DIR)/$(PKG_SOURCE)
+#PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_BASEVER).tar.bz2
+#PKG_SOURCE_URL:=http://www.olsr.org/releases/0.5
+#PKG_MD5SUM:=0935688fa0fb5b0e073fe53ec654c5b2
+#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_BASEVER)
+#PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xjf $(DL_DIR)/$(PKG_SOURCE)
 
 include $(INCLUDE_DIR)/package.mk
 
