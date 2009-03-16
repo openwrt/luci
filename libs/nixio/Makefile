@@ -9,7 +9,7 @@ NIXIO_TLS    ?= openssl
 NIXIO_LDFLAGS =
 
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
-	    src/poll.o src/io.o src/file.o src/splice.o src/process.o \
+	    src/poll.o src/io.o src/file.o src/splice.o src/process.o src/syslog.o \
 	    src/tls-context.o src/tls-socket.o
 
 ifeq ($(NIXIO_TLS),axtls)

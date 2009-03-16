@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <signal.h>
 
-#define VERSION 0.1
+#define VERSION 0.2
 
 
 /* pushes nil, error number and errstring on the stack */
@@ -122,6 +122,7 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	nixio_open_io(L);
 	nixio_open_splice(L);
 	nixio_open_process(L);
+	nixio_open_syslog(L);
 	nixio_open_tls_context(L);
 	nixio_open_tls_socket(L);
 

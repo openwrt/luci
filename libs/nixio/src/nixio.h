@@ -41,6 +41,7 @@ void nixio_open_poll(lua_State *L);
 void nixio_open_io(lua_State *L);
 void nixio_open_splice(lua_State *L);
 void nixio_open_process(lua_State *L);
+void nixio_open_syslog(lua_State *L);
 void nixio_open_tls_context(lua_State *L);
 void nixio_open_tls_socket(lua_State *L);
 
