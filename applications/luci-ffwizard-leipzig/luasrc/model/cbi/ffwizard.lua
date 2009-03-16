@@ -284,12 +284,23 @@ function olsr.write(self, section, value)
 	olsrbase.interface = device
 	olsrbase.ignore    = "0"
 	uci:section("olsrd", "Interface", nil, olsrbase)
-	uci:save("olsrd")
+
+	-- Delete old watchdog settings
+	uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_watchdog.so.0.1"})
+
+	-- Write new watchdog settings
+	uci:section("olsrd", "LoadPlugin", nil, {
+		library  = "olsrd_watchdog.so.0.1",
+		file     = "/var/run/olsrd.watchdog",
+		interval = "30"
+	})
 
 	-- Import hosts
 	uci:foreach("dhcp", "dnsmasq", function(s)
 		uci:set("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
 	end)
+
+	uci:save("olsrd")
 	uci:save("dhcp")
 end
 

@@ -13,7 +13,7 @@ PKG_BASENAME:=olsrd
 PKG_NAME:=$(PKG_BASENAME)-luci
 PKG_BASEVER:=0.5.6-r3
 PKG_VERSION:=$(PKG_BASEVER)+hg1765
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_HGREV:=fc691af9a18d
 PKG_SOURCE:=$(PKG_HGREV).tar.gz
@@ -119,13 +119,20 @@ define Package/olsrd-luci-mod-quagga
 	DEPENDS:=olsrd-luci
 endef
 
+define Package/olsrd-luci-mod-watchdog
+	$(call Package/olsrd-luci/common_info)
+	MENU:=1
+	TITLE:=OLSR - Watchdog Plugin
+	DEPENDS:=olsrd-luci
+endef
+
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" olsrd libs \
 		$(TARGET_CONFIGURE_OPTS) \
 		NODEBUG=1 \
-		CFLAGS="$(TARGET_CFLAGS) -DSVEN_OLA_UNBLOAT" \
+		CFLAGS="$(TARGET_CFLAGS) -DSVEN_OLA_UNBLOAT -DNODEBUG" \
 		OS="linux" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		LIBDIR="$(PKG_INSTALL_DIR)/usr/lib" \
@@ -134,7 +141,7 @@ define Build/Compile
 		MANDIR="$(PKG_INSTALL_DIR)/usr/share/man" \
 		STRIP="true" \
 		INSTALL_LIB="true" \
-		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo quagga"
+		SUBDIRS="arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo nameservice secure txtinfo quagga watchdog"
 endef
 
 define Package/olsrd-luci/install
@@ -196,6 +203,11 @@ define Package/olsrd-luci-mod-quagga/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/quagga/olsrd_quagga.so.* $(1)/usr/lib/
 endef
 
+define Package/olsrd-luci-mod-watchdog/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/watchdog/olsrd_watchdog.so.* $(1)/usr/lib/
+endef
+
 
 $(eval $(call BuildPackage,olsrd-luci))
 $(eval $(call BuildPackage,olsrd-luci-mod-arprefresh))
@@ -208,3 +220,4 @@ $(eval $(call BuildPackage,olsrd-luci-mod-nameservice))
 $(eval $(call BuildPackage,olsrd-luci-mod-secure))
 $(eval $(call BuildPackage,olsrd-luci-mod-txtinfo))
 $(eval $(call BuildPackage,olsrd-luci-mod-quagga))
+$(eval $(call BuildPackage,olsrd-luci-mod-watchdog))
