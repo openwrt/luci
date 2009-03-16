@@ -35,7 +35,9 @@ static int nixio_openlog(lua_State *L) {
 		} else if (!strcmp(flag, "pid")) {
 			option |= LOG_PID;
 		} else if (!strcmp(flag, "perror")) {
+#ifdef LOG_PERROR
 			option |= LOG_PERROR;
+#endif
 		} else if (!strcmp(flag, "ndelay")) {
 			option |= LOG_NDELAY;
 		} else if (!strcmp(flag, "odelay")) {
