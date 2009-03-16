@@ -82,7 +82,7 @@ static int nixio__syslogmasg(lua_State *L, int dolog) {
 
 	if (dolog) {
 		const char *msg = luaL_checkstring(L, 2);
-		syslog(priority, msg);
+		syslog(priority, "%s", msg);
 	} else {
 		setlogmask(LOG_UPTO(priority));
 	}
