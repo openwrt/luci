@@ -125,3 +125,5 @@ olsrd_loadplugin_exportroutes = 'Routen nur an Quagga oder auch an Kernel export
 olsrd_loadplugin_localpref = 'Lokale Routen immer bevorzugen'
 olsrd_loadplugin_distance = 'Distanz für exportierte Routen'
 olsrd_loadplugin_keyfile = 'Schlüsseldatei'
+olsrd_loadplugin_file = 'Watchdog Zeitstempeldatei'
+olsrd_loadplugin_interval = 'Aktualisierungsinterval in Sekunden'

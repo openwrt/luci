@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2009 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -131,6 +132,11 @@ if arg[1] then
 
 		["olsrd_txtinfo.so.0.1"] = {
 			{ Value,		"accept",				"10.247.200.4" }
+		},
+
+		["olsrd_watchdog.so.0.1"] = {
+			{ Value,		"file",					"/var/run/olsrd.watchdog" },
+			{ Value,		"interval",				"30" }
 		},
 
 		["olsrd_arprefresh.so.0.1"]		= {},
