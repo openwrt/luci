@@ -25,6 +25,11 @@ AST_BIN   = "/usr/sbin/asterisk"
 AST_FLAGS = "-r -x"
 
 
+--- LuCI Asterisk - Resync uci context
+function uci_resync()
+	uci = luci.model.uci.cursor()
+end
+
 --- LuCI Asterisk io interface
 -- Handles low level io.
 -- @type	module
@@ -317,4 +322,58 @@ function dialzone.ucisection(i)
 			index = index + 1
 		end)
 	return hash
+end
+
+
+--- LuCI Asterisk - Dialplan
+-- @type	module
+dialplan = luci.util.class()
+
+--- Parse a dialplan section
+-- @param plan	Table containing the plan info
+-- @return		Table with parsed information
+function dialplan.parse(z)
+	if z['.name'] then
+		local plan = {
+			zones		= { },
+			name    	= z['.name'],
+			description	= z.description or z['.name']
+		}
+
+		for _, name in ipairs(tools.parse_list(z.include)) do
+			local zone = dialzone.zone(name)
+			if zone then
+				plan.zones[#plan.zones+1] = zone
+			end
+		end
+
+		return plan
+	end
+end
+
+--- Get a list of known dial plans
+-- @return		Associative table of plans and table of plan names
+function dialplan.plans()
+	local plans  = { }
+	local pnames = { }
+	uci:foreach("asterisk", "dialplan",
+		function(p)
+			plans[p['.name']] = dialplan.parse(p)
+			pnames[#pnames+1] = p['.name']
+		end)
+	return plans, pnames
+end
+
+--- Get a specific dial plan
+-- @param name	Name of the dial plan
+-- @return		Table containing plan information
+function dialplan.plan(n)
+	local plan
+	uci:foreach("asterisk", "dialplan",
+		function(p)
+			if p['.name'] == n then
+				plan = dialplan.parse(p)
+			end
+		end)
+	return plan
 end

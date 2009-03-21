@@ -75,6 +75,7 @@ config 'sip' 'PAP2T2'
 	option 'incoming' 'provider_inbound'
 
 config 'sip' 'providerphone'
+	option 'provider' 'yes'
 	option 'type' 'friend'
 	option 'timeout' '55'
 	option 'internationalprefix' '0011'
@@ -188,7 +189,7 @@ config 'dialzone' 'interstate'
 	option 'localprefix' '0'
 
 config 'dialzone' 'mobile'
-	option 'uses' 'SIP/iinetphone'
+	option 'uses' 'SIP/providerphone'
 	option 'match' '04XXXXXXXX'
 	option 'localprefix' '0'
 

@@ -40,76 +40,116 @@ function index()
 		cbi("asterisk-mod-res-feature"), "Feature Module Configuration", 9 )
 
 
-	entry({"admin", "asterisk"},                    	cbi("asterisk/main"),        "Asterisk",  99).i18n = "asterisk"
+	entry({"admin", "asterisk"},                    	cbi("asterisk/main"),        	"Asterisk",  99).i18n = "asterisk"
 
-	entry({"admin", "asterisk", "phones"},          	cbi("asterisk/phones"),      "Phones",       1)
-	entry({"admin", "asterisk", "phones", "sip"},   	cbi("asterisk/phone_sip"),   nil,            1).leaf = true
-	--entry({"admin", "asterisk", "phones", "exten"}, 	cbi("asterisk/phone_exten"), "Extensions",   2).leaf = true
+	entry({"admin", "asterisk", "phones"},          	cbi("asterisk/phones"),      	"Phones",       1)
+	entry({"admin", "asterisk", "phones", "sip"},   	cbi("asterisk/phone_sip"),   	nil,            1).leaf = true
+	--entry({"admin", "asterisk", "phones", "exten"}, 	cbi("asterisk/phone_exten"), 	"Extensions",   2).leaf = true
 
-	entry({"admin", "asterisk", "trunks"},          	cbi("asterisk/trunks"),      "Trunks",       2)
-	entry({"admin", "asterisk", "trunks", "sip"},   	cbi("asterisk/trunk_sip"),   nil,            1).leaf = true
+	entry({"admin", "asterisk", "trunks"},          	cbi("asterisk/trunks"),      	"Trunks",       2)
+	entry({"admin", "asterisk", "trunks", "sip"},   	cbi("asterisk/trunk_sip"),   	nil,            1).leaf = true
 
-	--entry({"admin", "asterisk", "dialplans"},			cbi("asterisk/dialplans"),   "Call Routing", 3)
-	entry({"admin", "asterisk", "dialplans"},			call("handle_dialplan"),     "Call Routing", 3)
-	entry({"admin", "asterisk", "dialplans", "out"},	cbi("asterisk/dialplan_out"),     nil,            1).leaf = true
-	entry({"admin", "asterisk", "dialplans", "zones"},	cbi("asterisk/dialzones"),		"Dial Zones",	2).leaf = true
+	--entry({"admin", "asterisk", "dialplans"},			cbi("asterisk/dialplans"),   	"Call Routing", 3)
+	entry({"admin", "asterisk", "dialplans"},			call("handle_dialplan"),     	"Call Routing", 3)
+	entry({"admin", "asterisk", "dialplans", "out"},	cbi("asterisk/dialplan_out"),	nil,            1).leaf = true
+	entry({"admin", "asterisk", "dialplans", "zones"},	call("handle_dialzones"),		"Dial Zones",	2).leaf = true
 
 end
 
 
 function handle_dialplan()
 	local uci = luci.model.uci.cursor()
+	local ast = require "luci.asterisk"
+	local err = false
 
-	if luci.http.formvalue("delete") then
-		local del = luci.http.formvalue("delete")
-		if #del > 0 and not del:match("[^a-zA-Z0-9_]") then
-			uci:delete("asterisk", del)
-			uci:foreach("asterisk", "dialplan",
-				function(s)
-					if s.include then
-						local inc = type(s.include) == "table" and s.include or
-							luci.util.split(s.include, "%s+", nil, true)
+	for k, v in pairs(luci.http.formvaluetable("delzone")) do
+		local plan = ast.dialplan.plan(k)
+		if #v > 0 and plan then
+			local newinc = { }
 
-						local inc2 = { }
-						for _, v in ipairs(inc) do
-							if v ~= del then
-								inc2[#inc2+1] = v
-							end
-						end
+			for _, z in ipairs(plan.zones) do
+				if z.name ~= v then
+					newinc[#newinc+1] = z.name
+				end
+			end
 
-						uci:set("asterisk", s['.name'], "include", inc2)
-					end
-				end)
+			uci:delete("asterisk", plan.name, "include")
+
+			if #newinc > 0 then
+				uci:set("asterisk", plan.name, "include", newinc)
+			end
 
 			uci:save("asterisk")
-			uci:commit("asterisk")
 		end
 	end
 
-	for k, v in pairs(luci.http.formvaluetable("create_entry")) do
-		if #v > 0 and not v:match("[^a-zA-Z0-9_]") then
-			uci:section("asterisk", "dialzone", v, {
-				context = k
-			} )
+	for k, v in pairs(luci.http.formvaluetable("addzone")) do
+		local plan = ast.dialplan.plan(k)
+		local zone = ast.dialzone.zone(v)
+		if #v > 0 and plan and zone then
+			local newinc = { zone.name }
 
-			local inc = uci:get("asterisk", k, "include")
-			inc = type(inc) == "table" and inc or
-				type(inc) == "string" and #inc > 0 and
-					luci.util.split(inc, "%s+", nil, true) or { }
+			for _, z in ipairs(plan.zones) do
+				newinc[#newinc+1] = z.name
+			end
 
-			inc[#inc+1] = v
+			uci:delete("asterisk", plan.name, "include")
 
-			uci:set("asterisk", k, "include", inc)
+			if #newinc > 0 then
+				uci:set("asterisk", plan.name, "include", newinc)
+			end
+
 			uci:save("asterisk")
-			uci:commit("asterisk")
-
-			luci.http.redirect(luci.dispatcher.build_url(
-				"asterisk", "dialplans", "out", v
-			))
-
-			return
 		end
 	end
 
-	luci.template.render("asterisk/dialplans")
+	local aname = luci.http.formvalue("addplan")
+	if aname and #aname > 0 then
+		if aname:match("^[a-zA-Z0-9_]+$") then
+			uci:section("asterisk", "dialplan", aname, { })
+			uci:save("asterisk")
+		else
+			err = true
+		end
+	end
+
+	local dname = luci.http.formvalue("delplan")
+	if dname and #dname > 0 then
+		if uci:get("asterisk", dname) == "dialplan" then
+			uci:delete("asterisk", dname)
+			uci:save("asterisk")
+		end
+	end
+
+	ast.uci_resync()
+	luci.template.render("asterisk/dialplans", { create_error = err })
+end
+
+function handle_dialzones()
+	local ast = require "luci.asterisk"
+	local uci = luci.model.uci.cursor()
+	local err = false
+
+	if luci.http.formvalue("newzone") then
+		local name = luci.http.formvalue("newzone_name")
+		if name and name:match("^[a-zA-Z0-9_]+$") then
+			uci:section("asterisk", "dialzone", name, {
+				uses  = ast.tools.parse_list(luci.http.formvalue("newzone_uses") or {}),
+				match = ast.tools.parse_list(luci.http.formvalue("newzone_match") or {})
+			})
+			uci:save("asterisk")
+		else
+			err = true
+		end
+	end
+
+	if luci.http.formvalue("delzone") then
+		local name = luci.http.formvalue("delzone")
+		if uci:get("asterisk", name) == "dialzone" then
+			uci:delete("asterisk", name)
+			uci:save("asterisk")
+		end
+	end
+
+	luci.template.render("asterisk/dialzones", { create_error = err })
 end

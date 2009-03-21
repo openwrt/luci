@@ -114,7 +114,7 @@ if arg[1] then
 
 	intl = entry:option(DynamicList, "international", "Intl. prefix matches (optional)")
 
-	trunk = entry:option(ListValue, "uses", "Used trunk")
+	trunk = entry:option(MultiValue, "uses", "Used trunk")
 	for _, v in ipairs(find_trunks(cbimap.uci)) do
 		trunk:value(unpack(v))
 	end
