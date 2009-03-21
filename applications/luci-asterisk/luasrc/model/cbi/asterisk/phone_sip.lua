@@ -27,14 +27,6 @@ local function find_outgoing_contexts(uci)
 			end
 		end)
 
-	uci:foreach("asterisk", "dialzone",
-		function(s)
-			if not h[s['.name']] then
-				c[#c+1] = { s['.name'], "Dialzone: %s" % s['.name'] }
-				h[s['.name']] = true
-			end
-		end)
-
 	return c
 end
 
@@ -146,7 +138,7 @@ elseif arg[1] then
 	linekey:value("trunk", "Trunk Appearance")
 	linekey:value("call", "Call Appearance")
 
-	dialplan = peer:option(ListValue, "context", "Dialplan Context")
+	dialplan = peer:option(ListValue, "context", "Assign Dialplan")
 	for _, v in ipairs(find_outgoing_contexts(cbimap.uci)) do
 		dialplan:value(unpack(v))
 	end
