@@ -69,15 +69,6 @@ end
 
 user = sip_table:option(DummyValue, "username", "Username")
 
-host = sip_table:option(DummyValue, "host", "Hostname")
-function host.cfgvalue(self, s)
-	if sip_peers[s] and sip_peers[s].info.address then
-		return "%s:%i" %{ sip_peers[s].info.address, sip_peers[s].info.port }
-	else
-		return "n/a"
-	end
-end
-
 context = sip_table:option(DummyValue, "context", "Dialplan")
 context.href = luci.dispatcher.build_url("admin", "asterisk", "dialplan")
 function context.cfgvalue(...)
