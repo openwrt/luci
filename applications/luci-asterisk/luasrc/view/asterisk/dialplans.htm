@@ -70,80 +70,80 @@ $Id$
 
 <div class="cbi-map" id="cbi-asterisk">
 	<h2><a id="content" name="content">Outgoing Call Routing</a></h2>
-	<div class="cbi-map-descr"></div><!-- tblsection -->
-<fieldset class="cbi-section" id="cbi-asterisk-sip">
-	<!--<legend>Dialplans</legend>-->
-	<div class="cbi-section-descr">
+	<div class="cbi-map-descr">
 		Here you can manage your dial plans which are used to route outgoing calls from your local extensions.
 	</div>
+	<!-- tblsection -->
+	<fieldset class="cbi-section" id="cbi-asterisk-sip">
+		<!--<legend>Dialplans</legend>-->
+		<div class="cbi-section-descr"></div>
 
-	<% for i, plan in pairs(ast.dialplan.plans()) do %>
-	<div class="cbi-section-node">
-		<table class="cbi-section-table">
-			<tr class="cbi-section-table-titles">
-				<th style="text-align: left; padding: 3px" class="cbi-section-table-cell">
-					<big>Dialplan <em><%=plan.name%></em></big>
-				</th>
-				<td>
-					<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delplan=<%=plan.name%>">
-						<img style="border:none" alt="Remove this dialplan" title="Remove this dialplan" src="/luci-static/resources/cbi/remove.gif" />
-					</a>
-				</td>
-			</tr>
+		<% for i, plan in pairs(ast.dialplan.plans()) do %>
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+						<big>Dialplan <em><%=plan.name%></em></big>
+					</th>
+					<td>
+						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delplan=<%=plan.name%>">
+							<img style="border:none" alt="Remove this dialplan" title="Remove this dialplan" src="/luci-static/resources/cbi/remove.gif" />
+						</a>
+					</td>
+				</tr>
 
-			<!-- dialzones -->
-			<% local zones_used = { } %>
-			<% for i, zone in ipairs(plan.zones) do zones_used[zone.name] = true %>
-			<tr class="cbi-section-table-row <%=rowstyle(i)%>">
-				<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
-					<strong>&#x2514; Dialzone <em><%=zone.name%></em></strong>
-					<p style="padding-left: 1em; margin-bottom:0">
-						Description: <%=zone.description%><br />
-						Lines:
-						<%=ast.tools.hyperlinks(
-							zone.trunks, function(v)
-								return luci.dispatcher.build_url("admin", "asterisk", "trunks", "%s") % v:lower()
-							end
-						)%><br />
-						Matches:
-						<%=format_matches(zone)%>
-					</p>
-				</td>
-				<td style="width:5%" class="cbi-value-field">
-					<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans', 'out', zone.name)%>">
-						<img style="border:none" alt="Edit dialzone" title="Edit dialzone" src="/luci-static/resources/cbi/edit.gif" />
-					</a>
-					<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delzone.<%=plan.name%>=<%=zone.name%>">
-						<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
-					</a>
-				</td>
-			</tr>
-			<% end %>
+				<!-- dialzones -->
+				<% local zones_used = { } %>
+				<% for i, zone in ipairs(plan.zones) do zones_used[zone.name] = true %>
+				<tr class="cbi-section-table-row <%=rowstyle(i)%>">
+					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+						<strong>&#x2514; Dialzone <em><%=zone.name%></em></strong> (<%=zone.description%>)
+						<p style="padding-left: 1em; margin-bottom:0">
+							Lines:
+							<%=ast.tools.hyperlinks(
+								zone.trunks, function(v)
+									return luci.dispatcher.build_url("admin", "asterisk", "trunks", "%s") % v:lower()
+								end
+							)%><br />
+							Matches:
+							<%=format_matches(zone)%>
+						</p>
+					</td>
+					<td style="width:5%" class="cbi-value-field">
+						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans', 'out', zone.name)%>">
+							<img style="border:none" alt="Edit dialzone" title="Edit dialzone" src="/luci-static/resources/cbi/edit.gif" />
+						</a>
+						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delzone.<%=plan.name%>=<%=zone.name%>">
+							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
+						</a>
+					</td>
+				</tr>
+				<% end %>
 
-			<tr class="cbi-section-table-row">
-				<td style="text-align: left; padding: 3px" class="cbi-section-table-cell" colspan="2">
-					<hr style="margin-bottom:0.5em; border-width:0 0 1px 0" />
-					<select style="width:30%" name="addzone.<%=plan.name%>">
-						<option value="">-- Add dialzone --</option>
-						<% for _, zone in pairs(ast.dialzone.zones()) do %>
-							<% if not zones_used[zone.name] then %>
-								<option value="<%=zone.name%>"><%=zone.name%> (<%=zone.description%>)</option>
+				<tr class="cbi-section-table-row">
+					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell" colspan="2">
+						<hr style="margin-bottom:0.5em; border-width:0 0 1px 0" />
+						<select style="width:30%" name="addzone.<%=plan.name%>">
+							<option value="">-- Add dialzone --</option>
+							<% for _, zone in pairs(ast.dialzone.zones()) do %>
+								<% if not zones_used[zone.name] then %>
+									<option value="<%=zone.name%>"><%=zone.name%> (<%=zone.description%>)</option>
+								<% end %>
 							<% end %>
-						<% end %>
-					</select>
-					<input type="submit" class="cbi-button cbi-button-add" value=" &raquo; " title="Add Zone ..."/>
-					&nbsp; &nbsp;
-					<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage dialzones</a>
-				</td>
-			</tr>
-			<!-- /dialzones -->
+						</select>
+						<input type="submit" class="cbi-button cbi-button-add" value=" &raquo; " title="Add Zone ..."/>
+						&nbsp; &nbsp;
+						<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage dialzones</a>
+					</td>
+				</tr>
+				<!-- /dialzones -->
 
-		</table>
+			</table>
 
-		<div class="cbi-section-create cbi-tblsection-create"></div>
-	</div>
-	<br />
-	<% end %>
+			<div class="cbi-section-create cbi-tblsection-create"></div>
+		</div>
+		<br />
+		<% end %>
 
 		<div class="cbi-section-node">
 			<div class="cbi-section-create cbi-tblsection-create" style="padding: 3px">
