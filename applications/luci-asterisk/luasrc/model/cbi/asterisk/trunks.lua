@@ -15,7 +15,7 @@ $Id$
 
 local ast = require("luci.asterisk")
 
-cbimap = Map("asterisk", "Registered Trunks")
+cbimap = Map("asterisk", "Trunks")
 cbimap.pageaction = false
 
 local sip_peers = { }
