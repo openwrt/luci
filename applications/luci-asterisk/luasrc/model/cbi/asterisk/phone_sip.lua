@@ -139,6 +139,7 @@ elseif arg[1] then
 	linekey:value("call", "Call Appearance")
 
 	dialplan = peer:option(ListValue, "context", "Assign Dialplan")
+	dialplan.titleref = luci.dispatcher.build_url("admin", "asterisk", "dialplans")
 	for _, v in ipairs(find_outgoing_contexts(cbimap.uci)) do
 		dialplan:value(unpack(v))
 	end
