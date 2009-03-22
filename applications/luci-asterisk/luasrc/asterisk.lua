@@ -15,6 +15,7 @@ $Id$
 ]]--
 
 module("luci.asterisk", package.seeall)
+require("luci.asterisk.cc_idd")
 
 local _io  = require("io")
 local uci  = require("luci.model.uci").cursor()
@@ -254,6 +255,112 @@ function tools.hyperlinks(list, url, sep)
 	end
 
 	return html or ''
+end
+
+
+--- LuCI Asterisk - International Direct Dialing Prefixes
+-- @type module
+idd = luci.util.class()
+
+--- Lookup the country name for the given IDD code.
+-- @param country	String containing IDD code
+-- @return			String containing the country name
+function idd.country(c)
+	for _, v in ipairs(cc_idd.CC_IDD) do
+		if type(v[3]) == "table" then
+			for _, v2 in ipairs(v[3]) do
+				if v2 == tostring(c) then
+					return v[1]
+				end
+			end
+		elseif v[3] == tostring(c) then
+			return v[1]
+		end
+	end
+end
+
+--- Lookup the country code for the given IDD code.
+-- @param country	String containing IDD code
+-- @return			Table containing the country code(s)
+function idd.cc(c)
+	for _, v in ipairs(cc_idd.CC_IDD) do
+		if type(v[3]) == "table" then
+			for _, v2 in ipairs(v[3]) do
+				if v2 == tostring(c) then
+					return type(v[2]) == "table"
+						and v[2] or { v[2] }
+				end
+			end
+		elseif v[3] == tostring(c) then
+			return type(v[2]) == "table"
+				and v[2] or { v[2] }
+		end
+	end
+end
+
+--- Lookup the IDD code(s) for the given country.
+-- @param idd		String containing the country name
+-- @return			Table containing the IDD code(s)
+function idd.idd(c)
+	for _, v in ipairs(cc_idd.CC_IDD) do
+		if v[1]:lower():match(c:lower()) then
+			return type(v[3]) == "table"
+				and v[3] or { v[3] }
+		end
+	end
+end
+
+
+--- LuCI Asterisk - International Direct Dialing Prefixes
+-- @type module
+cc = luci.util.class()
+
+--- Lookup the country name for the given CC code.
+-- @param country	String containing CC code
+-- @return			String containing the country name
+function cc.country(c)
+	for _, v in ipairs(cc_idd.CC_IDD) do
+		if type(v[2]) == "table" then
+			for _, v2 in ipairs(v[2]) do
+				if v2 == tostring(c) then
+					return v[1]
+				end
+			end
+		elseif v[2] == tostring(c) then
+			return v[1]
+		end
+	end
+end
+
+--- Lookup the international dialing code for the given CC code.
+-- @param cc		String containing CC code
+-- @return			String containing IDD code
+function cc.idd(c)
+	for _, v in ipairs(cc_idd.CC_IDD) do
+		if type(v[2]) == "table" then
+			for _, v2 in ipairs(v[2]) do
+				if v2 == tostring(c) then
+					return type(v[3]) == "table"
+						and v[3] or { v[3] }
+				end
+			end
+		elseif v[2] == tostring(c) then
+			return type(v[3]) == "table"
+				and v[3] or { v[3] }
+		end
+	end
+end
+
+--- Lookup the CC code(s) for the given country.
+-- @param country	String containing the country name
+-- @return			Table containing the CC code(s)
+function cc.cc(c)
+	for _, v in ipairs(cc_idd.CC_IDD) do
+		if v[1]:lower():match(c:lower()) then
+			return type(v[2]) == "table"
+				and v[2] or { v[2] }
+		end
+	end
 end
 
 
