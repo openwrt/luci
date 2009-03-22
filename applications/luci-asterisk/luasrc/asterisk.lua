@@ -311,7 +311,7 @@ function idd.idd(c)
 end
 
 
---- LuCI Asterisk - International Direct Dialing Prefixes
+--- LuCI Asterisk - Country Code Prefixes
 -- @type module
 cc = luci.util.class()
 
