@@ -360,6 +360,7 @@ function client.write(self, section, value)
 	dhcpbase.interface = device .. "dhcp"
 	dhcpbase.start = dhcpbeg
 	dhcpbase.limit = limit
+	dhcpbase.force = 1
 
 	uci:section("dhcp", "dhcp", device .. "dhcp", dhcpbase)
 	uci:save("dhcp")
