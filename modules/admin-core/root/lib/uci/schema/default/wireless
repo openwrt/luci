@@ -430,7 +430,7 @@ config enum
 
 config enum
 	option variable 'wireless.wifi-iface.encryption'
-	option value 'wpa2i'
+	option value 'wpa2'
 	option title 'WPA2-EAP'
 
 config variable
@@ -438,7 +438,7 @@ config variable
 	option section 'wireless.wifi-iface'
 	option title 'RadiusServer'
 	list depends 'encryption=wpa,mode=ap'
-	list depends 'encryption=wpa2i,mode=ap'
+	list depends 'encryption=wpa2,mode=ap'
 	option datatype host
 
 config variable
@@ -446,7 +446,7 @@ config variable
 	option section 'wireless.wifi-iface'
 	option title 'Radius-Port'
 	list depends 'encryption=wpa,mode=ap'
-	list depends 'encryption=wpa2i,mode=ap'
+	list depends 'encryption=wpa2,mode=ap'
 	option datatype port
 
 config variable
@@ -459,7 +459,7 @@ config variable
 	list depends 'encryption=psk'
 	list depends 'encryption=wpa,mode=ap'
 	list depends 'encryption=psk2'
-	list depends 'encryption=wpa2i,mode=ap'
+	list depends 'encryption=wpa2,mode=ap'
 	list depends 'encryption=psk+psk2'
 	list depends 'encryption=mixed'
 
@@ -468,7 +468,7 @@ config variable
 	option section 'wireless.wifi-iface'
 	option title 'NAS ID'
 	list depends 'encryption=wpa,mode=ap'
-	list depends 'encryption=wpa2i,mode=ap'
+	list depends 'encryption=wpa2,mode=ap'
 
 config variable
 	option name 'eap_type'
@@ -476,7 +476,7 @@ config variable
 	option title 'EAP-Method'
 	option type enum
 	list depends 'encryption=wpa,mode=sta'
-	list depends 'encryption=wpa2i,mode=sta'
+	list depends 'encryption=wpa2,mode=sta'
 
 config enum
 	option variable 'wireless.wifi-iface.eap_type'
@@ -485,20 +485,24 @@ config enum
 config enum
 	option variable 'wireless.wifi-iface.eap_type'
 	option value 'PEAP'
+	
+config enum
+	option variable 'wireless.wifi-iface.eap_type'
+	option value 'TTLS'
 
 config variable
 	option name 'ca_cert'
 	option section 'wireless.wifi-iface'
 	option title 'Path to CA-Certificate'
 	list depends 'encryption=wpa,mode=sta'
-	list depends 'encryption=wpa2i,mode=sta'
+	list depends 'encryption=wpa2,mode=sta'
 	option datatype file
 
 config variable
 	option name 'priv_key'
 	option section 'wireless.wifi-iface'
 	option title 'Path to Private Key'
-	list depends 'mode=sta,encryption=wpa2i,eap_type=TLS'
+	list depends 'mode=sta,encryption=wpa2,eap_type=TLS'
 	list depends 'mode=sta,encryption=wpa,eap_type=TLS'
 	option datatype file
 
@@ -507,26 +511,32 @@ config variable
 	option name 'priv_key_pwd'
 	option section 'wireless.wifi-iface'
 	option title 'Password of Private Key'
-	list depends 'mode=sta,encryption=wpa2i,eap_type=TLS'
+	list depends 'mode=sta,encryption=wpa2,eap_type=TLS'
 	list depends 'mode=sta,encryption=wpa,eap_type=TLS'
 
 config variable
 	option name 'auth'
 	option section 'wireless.wifi-iface'
-	option title 'PEAP-Authentication'
-	list depends 'mode=sta,encryption=wpa2i,eap_type=PEAP'
+	option title 'Authentication'
+	list depends 'mode=sta,encryption=wpa2,eap_type=PEAP'
 	list depends 'mode=sta,encryption=wpa,eap_type=PEAP'
+	list depends 'mode=sta,encryption=wpa2,eap_type=TTLS'
+	list depends 'mode=sta,encryption=wpa,eap_type=TTLS'
 
 config variable
 	option name 'identity'
 	option section 'wireless.wifi-iface'
-	option title 'PEAP-Identity'
-	list depends 'mode=sta,encryption=wpa2i,eap_type=PEAP'
+	option title 'Identity'
+	list depends 'mode=sta,encryption=wpa2,eap_type=PEAP'
 	list depends 'mode=sta,encryption=wpa,eap_type=PEAP'
+	list depends 'mode=sta,encryption=wpa2,eap_type=TTLS'
+	list depends 'mode=sta,encryption=wpa,eap_type=TTLS'
 
 config variable
 	option name 'password'
 	option section 'wireless.wifi-iface'
-	option title 'PEAP-Password'
-	list depends 'mode=sta,encryption=wpa2i,eap_type=PEAP'
+	option title 'Password'
+	list depends 'mode=sta,encryption=wpa2,eap_type=PEAP'
 	list depends 'mode=sta,encryption=wpa,eap_type=PEAP'
+	list depends 'mode=sta,encryption=wpa2,eap_type=TTLS'
+	list depends 'mode=sta,encryption=wpa,eap_type=TTLS'

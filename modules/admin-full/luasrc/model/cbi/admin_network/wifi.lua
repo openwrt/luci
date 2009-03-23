@@ -293,20 +293,20 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 		encr:value("psk2", "WPA2-PSK")
 		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
 		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"})
-		encr:value("wpa2i", "WPA2-EAP", {mode="ap"}, {mode="sta"})
+		encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="sta"})
 	elseif hostapd and not supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
 		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
 		encr:value("wpa", "WPA-EAP", {mode="ap"})
-		encr:value("wpa2i", "WPA2-EAP", {mode="ap"})
+		encr:value("wpa2", "WPA2-EAP", {mode="ap"})
 		encr.description = translate("wifi_wpareq")
 	elseif not hostapd and supplicant then
 		encr:value("psk", "WPA-PSK", {mode="sta"})
 		encr:value("psk2", "WPA2-PSK", {mode="sta"})
 		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
 		encr:value("wpa", "WPA-EAP", {mode="sta"})
-		encr:value("wpa2i", "WPA2-EAP", {mode="sta"})
+		encr:value("wpa2", "WPA2-EAP", {mode="sta"})
 		encr.description = translate("wifi_wpareq")
 	else
 		encr.description = translate("wifi_wpareq")
@@ -323,12 +323,12 @@ encr:depends("mode", "wds")
 
 server = s:option(Value, "server", translate("a_w_radiussrv"))
 server:depends({mode="ap", encryption="wpa"})
-server:depends({mode="ap", encryption="wpa2i"})
+server:depends({mode="ap", encryption="wpa2"})
 server.rmempty = true
 
 port = s:option(Value, "port", translate("a_w_radiusport"))
 port:depends({mode="ap", encryption="wpa"})
-port:depends({mode="ap", encryption="wpa2i"})
+port:depends({mode="ap", encryption="wpa2"})
 port.rmempty = true
 
 key = s:option(Value, "key", translate("key"))
@@ -336,45 +336,57 @@ key:depends("encryption", "wep")
 key:depends("encryption", "psk")
 key:depends({mode="ap", encryption="wpa"})
 key:depends("encryption", "psk2")
-key:depends({mode="ap", encryption="wpa2i"})
+key:depends({mode="ap", encryption="wpa2"})
 key.rmempty = true
 
 if hwtype == "atheros" or hwtype == "mac80211" then
 	nasid = s:option(Value, "nasid", translate("a_w_nasid"))
 	nasid:depends({mode="ap", encryption="wpa"})
-	nasid:depends({mode="ap", encryption="wpa2i"})
+	nasid:depends({mode="ap", encryption="wpa2"})
 	nasid.rmempty = true
 
 	eaptype = s:option(ListValue, "eap_type", translate("a_w_eaptype"))
 	eaptype:value("TLS")
+	eaptype:value("TTLS")
 	eaptype:value("PEAP")
 	eaptype:depends({mode="sta", encryption="wpa"})
-	eaptype:depends({mode="sta", encryption="wpa2i"})
+	eaptype:depends({mode="sta", encryption="wpa2"})
 
 	cacert = s:option(FileUpload, "ca_cert", translate("a_w_cacert"))
 	cacert:depends({mode="sta", encryption="wpa"})
-	cacert:depends({mode="sta", encryption="wpa2i"})
+	cacert:depends({mode="sta", encryption="wpa2"})
 
 	privkey = s:option(FileUpload, "priv_key", translate("a_w_tlsprivkey"))
-	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa2i"})
+	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa2"})
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa"})
 
 	privkeypwd = s:option(Value, "priv_key_pwd", translate("a_w_tlsprivkeypwd"))
-	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa2i"})
+	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa2"})
 	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa"})
 
 
 	auth = s:option(Value, "auth", translate("a_w_peapauth"))
-	auth:depends({mode="sta", eap_type="PEAP", encryption="wpa2i"})
+	auth:value("PAP")
+	auth:value("CHAP")
+	auth:value("MSCHAP")
+	auth:value("MSCHAPV2")
+	auth:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
 	auth:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
+	auth:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
+	auth:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
+
 
 	identity = s:option(Value, "identity", translate("a_w_peapidentity"))
-	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa2i"})
+	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
 	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
+	identity:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
+	identity:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
 
 	password = s:option(Value, "password", translate("a_w_peappassword"))
-	password:depends({mode="sta", eap_type="PEAP", encryption="wpa2i"})
+	password:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
 	password:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
+	password:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
+	password:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
 end
 
 
