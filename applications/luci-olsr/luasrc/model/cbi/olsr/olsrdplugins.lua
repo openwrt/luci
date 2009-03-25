@@ -82,7 +82,7 @@ if arg[1] then
 			{ ListValue, 	"BmfMechanism",			{ "UnicastPromiscuous", "Broadcast" } },
 			{ Value, 		"BroadcastRetransmitCount",	"2" },
 			{ Value, 		"FanOutLimit",			"4" },
-			{ DynamicList,	"NonOlsrIf",			"eth1" }
+			{ DynamicList,	"NonOlsrIf",			"br-lan" }
 		},
 
 		["olsrd_dyn_gw.so.0.4"] = {
@@ -137,6 +137,10 @@ if arg[1] then
 		["olsrd_watchdog.so.0.1"] = {
 			{ Value,		"file",					"/var/run/olsrd.watchdog" },
 			{ Value,		"interval",				"30" }
+		},
+
+		["olsrd_mdns.so.1.0.0"] = {
+			{ DynamicList,	"NonOlsrIf",			"br-lan" }
 		},
 
 		["olsrd_arprefresh.so.0.1"]		= {},
