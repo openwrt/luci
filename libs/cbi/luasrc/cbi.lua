@@ -295,6 +295,7 @@ function Map.__init__(self, config, ...)
 	self.template = "cbi/map"
 	self.apply_on_parse = nil
 	self.readinput = true
+	self.proceed = false
 
 	self.uci = uci.cursor()
 	self.save = true
@@ -349,7 +350,7 @@ function Map.parse(self, readinput, ...)
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
-		if self:submitstate() and (self.autoapply or luci.http.formvalue("cbi.apply")) then
+		if self:submitstate() and not self.proceed and (self.autoapply or luci.http.formvalue("cbi.apply")) then
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 
@@ -377,7 +378,9 @@ function Map.parse(self, readinput, ...)
 		end
 	end
 
-	if self:submitstate() then
+	if self.proceed then
+		self.state = FORM_PROCEED
+	elseif self:submitstate() then
 		if self.save then
 			self.state = self.changed and FORM_CHANGED or FORM_VALID
 		else
@@ -725,6 +728,7 @@ function AbstractSection.parse_optionals(self, section)
 			if field == v.option then
 				field = nil
 			else
+				self.map.proceed = true
 				table.insert(self.optionals[section], v)
 			end
 		end
@@ -763,6 +767,7 @@ function AbstractSection.parse_dynamic(self, section)
 		end
 
 		if create and key:sub(1, 1) ~= "." then
+			self.map.proceed = true
 			self:add_dynamic(key, true)
 		end
 	end
@@ -781,7 +786,7 @@ end
 
 -- Removes the section
 function AbstractSection.remove(self, section)
-	self.map.autoapply = false
+	self.map.proceed = true
 	return self.map:del(section)
 end
 
@@ -808,7 +813,7 @@ function AbstractSection.create(self, section)
 		end
 	end
 
-	self.map.autoapply = false
+	self.map.proceed = true
 
 	return stat
 end
@@ -1540,6 +1545,11 @@ function DynamicList.value(self, key, val)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val))
+end
+
+function DynamicList.write(self, ...)
+	self.map.proceed = true
+	return AbstractValue.write(self, ...)
 end
 
 function DynamicList.formvalue(self, section)
