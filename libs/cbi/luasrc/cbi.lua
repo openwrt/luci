@@ -378,13 +378,13 @@ function Map.parse(self, readinput, ...)
 		end
 	end
 
-	if self.proceed then
-		self.state = FORM_PROCEED
-	elseif self:submitstate() then
-		if self.save then
-			self.state = self.changed and FORM_CHANGED or FORM_VALID
-		else
+	if self:submitstate() then
+		if not self.save then
 			self.state = FORM_INVALID
+		elseif self.proceed then
+			self.state = FORM_PROCEED
+		else
+			self.state = self.changed and FORM_CHANGED or FORM_VALID
 		end
 	else
 		self.state = FORM_NODATA
