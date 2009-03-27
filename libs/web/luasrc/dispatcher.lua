@@ -672,14 +672,18 @@ local function _cbi(self, ...)
 
 	local pageaction = true
 	http.header("X-CBI-State", state or 0)
-	tpl.render("cbi/header", {state = state})
+	if not config.noheader then
+		tpl.render("cbi/header", {state = state})
+	end
 	for i, res in ipairs(maps) do
 		res:render()
 		if res.pageaction == false then
 			pageaction = false
 		end
 	end
-	tpl.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
+	if not config.nofooter then
+		tpl.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
+	end
 end
 
 --- Create a CBI model dispatching target.
