@@ -51,84 +51,72 @@ endef
 
 define Package/olsrd-luci-mod-arprefresh
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - ARP Refresh Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-dot-draw
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Dot Draw Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-bmf
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Basic Multicast Forwarding Plugin
 	DEPENDS:=olsrd-luci +kmod-tun
 endef
 
 define Package/olsrd-luci-mod-dyn-gw
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Dynamic Gateway Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-dyn-gw-plain
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Dynamic Gateway Plugin (Plain Version)
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-httpinfo
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - HTTP/HTML Info Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-nameservice
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Hostname Propagation Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-secure
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Security Extensions Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-txtinfo
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - HTTP/Plaintext Info Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-quagga
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Quagga Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-watchdog
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - Watchdog Plugin
 	DEPENDS:=olsrd-luci
 endef
 
 define Package/olsrd-luci-mod-mdns
 	$(call Package/olsrd-luci/common_info)
-	MENU:=1
 	TITLE:=OLSR - mDNS Plugin
 	DEPENDS:=olsrd-luci
 endef
