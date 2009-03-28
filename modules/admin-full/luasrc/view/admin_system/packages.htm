@@ -13,10 +13,23 @@ $Id$
 
 -%>
 <%-
+local bit = require "bit"
 local rowcnt = 1
+
 function rowstyle()
 	rowcnt = rowcnt + 1
 	return (rowcnt % 2) + 1
+end
+
+function opkg_error(code)
+	code = bit.rshift(tonumber(code), 8)
+	return translate(
+		'a_s_packages_code%i' % code,
+		translate(
+			'a_s_packages_code%i' % code,
+			'%s %i' % { translate('code'), code }
+		)
+	)
 end
 -%>
 <%+header%>
@@ -28,16 +41,16 @@ end
 <% if install or remove or update or upgrade then %>
 <div class="code"><strong><%:status%>:</strong><br />
 <% if update then %>
-	<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%:code%> <%=update%>)</span><% end %><br />
+	<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(update)%>)</span><% end %><br />
 <% end %>
 <% if upgrade then%>
-	<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%:code%> <%=upgrade%>)</span><% end %><br />
+	<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
 <% end %>
 <% if install then for k,v in pairs(install) do %>
-	<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%:code%> <%=v%>)</span><% end %><br />
+	<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
 <% end end %>
 <% if remove then for k,v in pairs(remove) do %>
-	<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%:code%> <%=v%>)</span><% end %><br />
+	<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
 <% end end %>
 </div>
 <br />
