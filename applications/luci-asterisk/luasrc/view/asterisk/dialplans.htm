@@ -160,7 +160,7 @@ $Id$
 						Add Dialzone:<br />
 						<select style="width:30%" name="addzone.<%=plan.name%>">
 							<option value="">-- please select --</option>
-							<% for _, zone in pairs(ast.dialzone.zones()) do %>
+							<% for _, zone in luci.util.kspairs(ast.dialzone.zones()) do %>
 								<% if not zones_used[zone.name] then %>
 									<option value="<%=zone.name%>"><%=zone.name%> (<%=zone.description%>)</option>
 								<% end %>
@@ -171,7 +171,7 @@ $Id$
 						Add Voicemailbox:<br />
 						<select style="width:20%" name="addvbox.<%=plan.name%>" onchange="this.form['addvboxext.<%=plan.name%>'].value=this.options[this.selectedIndex].value.split('@')[0]">
 							<option value="">-- please select --</option>
-							<% for ext, box in pairs(ast.voicemail.boxes()) do %>
+							<% for ext, box in luci.util.kspairs(ast.voicemail.boxes()) do %>
 								<% if not boxes_used[box.id] then %>
 									<option value="<%=box.id%>"><%=box.id%> (<%=box.name%>)</option>
 								<% end %>

@@ -40,19 +40,22 @@ function index()
 		cbi("asterisk-mod-res-feature"), "Feature Module Configuration", 9 )
 
 
-	entry({"admin", "asterisk"},                    	cbi("asterisk/main"),        	"Asterisk",  99).i18n = "asterisk"
+	entry({"admin", "asterisk"},                    		cbi("asterisk/main"),        		"Asterisk",  99).i18n = "asterisk"
 
-	entry({"admin", "asterisk", "phones"},          	cbi("asterisk/phones"),      	"Phones",       1)
-	entry({"admin", "asterisk", "phones", "sip"},   	cbi("asterisk/phone_sip"),   	nil,            1).leaf = true
-	--entry({"admin", "asterisk", "phones", "exten"}, 	cbi("asterisk/phone_exten"), 	"Extensions",   2).leaf = true
+	entry({"admin", "asterisk", "phones"},          		cbi("asterisk/phones"),      		"Phones",       1)
+	entry({"admin", "asterisk", "phones", "sip"},   		cbi("asterisk/phone_sip"),   		nil,            1).leaf = true
+	--entry({"admin", "asterisk", "phones", "exten"}, 		cbi("asterisk/phone_exten"), 		"Extensions",   2).leaf = true
 
-	entry({"admin", "asterisk", "trunks"},          	cbi("asterisk/trunks"),      	"Trunks",       2)
-	entry({"admin", "asterisk", "trunks", "sip"},   	cbi("asterisk/trunk_sip"),   	nil,            1).leaf = true
+	entry({"admin", "asterisk", "trunks"},          		cbi("asterisk/trunks"),      		"Trunks",       2)
+	entry({"admin", "asterisk", "trunks", "sip"},   		cbi("asterisk/trunk_sip"),   		nil,            1).leaf = true
 
-	--entry({"admin", "asterisk", "dialplans"},			cbi("asterisk/dialplans"),   	"Call Routing", 3)
-	entry({"admin", "asterisk", "dialplans"},			call("handle_dialplan"),     	"Call Routing", 3)
-	entry({"admin", "asterisk", "dialplans", "out"},	cbi("asterisk/dialplan_out"),	nil,            1).leaf = true
-	entry({"admin", "asterisk", "dialplans", "zones"},	call("handle_dialzones"),		"Dial Zones",	2).leaf = true
+	entry({"admin", "asterisk", "voicemail"},          		cbi("asterisk/voicemail"),      	"Voicemail",    3)
+	entry({"admin", "asterisk", "voicemail", "mailboxes"},	cbi("asterisk/voicemail"),			"Mailboxes",    1)
+	entry({"admin", "asterisk", "voicemail", "settings"},	cbi("asterisk/voicemail_settings"),	"Settings",     2)
+
+	entry({"admin", "asterisk", "dialplans"},				call("handle_dialplan"),     		"Call Routing", 4)
+	entry({"admin", "asterisk", "dialplans", "out"},		cbi("asterisk/dialplan_out"),		nil,            1).leaf = true
+	entry({"admin", "asterisk", "dialplans", "zones"},		call("handle_dialzones"),			"Dial Zones",	2).leaf = true
 
 end
 
