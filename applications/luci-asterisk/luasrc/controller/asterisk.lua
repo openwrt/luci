@@ -103,6 +103,31 @@ function handle_dialplan()
 		end
 	end
 
+	for k, v in pairs(luci.http.formvaluetable("delvbox")) do
+		local plan = ast.dialplan.plan(k)
+		if #v > 0 and plan then
+			uci:delete_all("asterisk", "dialplanvoice",
+				{ extension=v, dialplan=plan.name })
+			uci:save("asterisk")
+		end
+	end
+
+	for k, v in pairs(luci.http.formvaluetable("addvbox")) do
+		local plan = ast.dialplan.plan(k)
+		local vbox = ast.voicemail.box(v)
+		if plan and vbox then
+			local vext = luci.http.formvalue("addvboxext.%s" % plan.name)
+			vext = ( vext and #vext > 0 ) and vext or vbox.number
+			uci:section("asterisk", "dialplanvoice", nil, {
+				dialplan		= plan.name,
+				extension		= vext,
+				voicebox		= vbox.number,
+				voicecontext	= vbox.context
+			})
+			uci:save("asterisk")
+		end
+	end
+
 	local aname = luci.http.formvalue("addplan")
 	if aname and #aname > 0 then
 		if aname:match("^[a-zA-Z0-9_]+$") then

@@ -120,7 +120,10 @@ if arg[1] then
 	end
 
 	aprefix = entry:option(Value, "addprefix", "Add prefix to dial out (optional)")
+	--ast.idd.cbifill(aprefix)
+
 	ccode = entry:option(Value, "countrycode", "Effective countrycode (optional)")
+	ast.cc.cbifill(ccode)
 
 	lzone = entry:option(ListValue, "localzone", "Dialzone for local numbers")
 	lzone:value("", "no special treatment of local numbers")

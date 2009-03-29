@@ -33,6 +33,10 @@ $Id$
 	function format_matches(z)
 		local html = { }
 
+		if type(z) ~= "table" then
+			z = { matches = { z } }
+		end
+
 		if z.localprefix then
 			for _, m in ipairs(z.matches) do
 				html[#html+1] =
@@ -41,7 +45,7 @@ $Id$
 			end
 		end
 
-		if #z.intlmatches > 0 then
+		if z.intlmatches and #z.intlmatches > 0 then
 			for _, i in ipairs(z.intlmatches) do
 				for _, m in ipairs(z.matches) do
 					html[#html+1] = "%s %s" %{
@@ -71,7 +75,10 @@ $Id$
 <div class="cbi-map" id="cbi-asterisk">
 	<h2><a id="content" name="content">Outgoing Call Routing</a></h2>
 	<div class="cbi-map-descr">
-		Here you can manage your dial plans which are used to route outgoing calls from your local extensions.
+		Here you can manage your dial plans which are used to route outgoing calls from your local extensions.<br /><br />
+		Related tasks:<br />
+		<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage dialzones</a> |
+		<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage voicemailboxes</a>
 	</div>
 	<!-- tblsection -->
 	<fieldset class="cbi-section" id="cbi-asterisk-sip">
@@ -93,9 +100,9 @@ $Id$
 				</tr>
 
 				<!-- dialzones -->
-				<% local zones_used = { } %>
+				<% local zones_used = { }; local row = 0 %>
 				<% for i, zone in ipairs(plan.zones) do zones_used[zone.name] = true %>
-				<tr class="cbi-section-table-row <%=rowstyle(i)%>">
+				<tr class="cbi-section-table-row <%=rowstyle(row)%>">
 					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
 						<strong>&#x2514; Dialzone <em><%=zone.name%></em></strong> (<%=zone.description%>)
 						<p style="padding-left: 1em; margin-bottom:0">
@@ -118,25 +125,65 @@ $Id$
 						</a>
 					</td>
 				</tr>
-				<% end %>
+				<% row = row + 1; end %>
+				<!-- /dialzones -->
+
+				<!-- voicemail -->
+				<% local boxes_used = { } %>
+				<% for ext, box in luci.util.kspairs(plan.voicemailboxes) do boxes_used[box.id] = true %>
+				<tr class="cbi-section-table-row <%=rowstyle(row)%>">
+					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+						<strong>&#x2514; Voicemailbox <em><%=box.id%></em></strong> (<%=box.name%>)
+						<p style="padding-left: 1em; margin-bottom:0">
+							Owner: <%=box.name%> |
+							eMail: <%=#box.email > 0 and box.email or 'n/a'%> |
+							Pager: <%=#box.page  > 0 and box.page  or 'n/a'%><br />
+							Matches: <%=format_matches(ext)%>
+						</p>
+					</td>
+					<td style="width:5%" class="cbi-value-field">
+						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans', 'out', box.name)%>">
+							<img style="border:none" alt="Edit dialzone" title="Edit dialzone" src="/luci-static/resources/cbi/edit.gif" />
+						</a>
+						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delvbox.<%=plan.name%>=<%=ext%>">
+							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
+						</a>
+					</td>
+				</tr>
+				<% row = row + 1; end %>
+				<!-- /voicemail -->
 
 				<tr class="cbi-section-table-row">
 					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell" colspan="2">
 						<hr style="margin-bottom:0.5em; border-width:0 0 1px 0" />
+
+						Add Dialzone:<br />
 						<select style="width:30%" name="addzone.<%=plan.name%>">
-							<option value="">-- Add dialzone --</option>
+							<option value="">-- please select --</option>
 							<% for _, zone in pairs(ast.dialzone.zones()) do %>
 								<% if not zones_used[zone.name] then %>
 									<option value="<%=zone.name%>"><%=zone.name%> (<%=zone.description%>)</option>
 								<% end %>
 							<% end %>
 						</select>
-						<input type="submit" class="cbi-button cbi-button-add" value=" &raquo; " title="Add Zone ..."/>
-						&nbsp; &nbsp;
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage dialzones</a>
+						<br /><br />
+
+						Add Voicemailbox:<br />
+						<select style="width:20%" name="addvbox.<%=plan.name%>" onchange="this.form['addvboxext.<%=plan.name%>'].value=this.options[this.selectedIndex].value.split('@')[0]">
+							<option value="">-- please select --</option>
+							<% for ext, box in pairs(ast.voicemail.boxes()) do %>
+								<% if not boxes_used[box.id] then %>
+									<option value="<%=box.id%>"><%=box.id%> (<%=box.name%>)</option>
+								<% end %>
+							<% end %>
+						</select>
+						as extension
+						<input type="text" style="width:5%" name="addvboxext.<%=plan.name%>" />
+						<br /><br />
+
+						<input type="submit" class="cbi-button cbi-button-add" value="Add item &raquo;" title="Add item ..."/>
 					</td>
 				</tr>
-				<!-- /dialzones -->
 
 			</table>
 

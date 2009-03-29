@@ -310,6 +310,46 @@ function idd.idd(c)
 	end
 end
 
+--- Populate given CBI field with IDD codes.
+-- @param field		CBI option object
+-- @return			(nothing)
+function idd.cbifill(o)
+	for i, v in ipairs(cc_idd.CC_IDD) do
+		o:value("_%i" % i, util.pcdata(v[1]))
+	end
+
+	o.formvalue = function(...)
+		local val = luci.cbi.Value.formvalue(...)
+		if val:sub(1,1) == "_" then
+			val = tonumber((val:gsub("^_", "")))
+			if val then
+				return type(cc_idd.CC_IDD[val][3]) == "table"
+					and cc_idd.CC_IDD[val][3] or { cc_idd.CC_IDD[val][3] }
+			end
+		end
+		return val
+	end
+
+	o.cfgvalue = function(...)
+		local val = luci.cbi.Value.cfgvalue(...)
+		if val then
+			val = tools.parse_list(val)
+			for i, v in ipairs(cc_idd.CC_IDD) do
+				if type(v[3]) == "table" then
+					if v[3][1] == val[1] then
+						return "_%i" % i
+					end
+				else
+					if v[3] == val[1] then
+						return "_%i" % i
+					end
+				end
+			end
+		end
+		return val
+	end
+end
+
 
 --- LuCI Asterisk - Country Code Prefixes
 -- @type module
@@ -360,6 +400,46 @@ function cc.cc(c)
 			return type(v[2]) == "table"
 				and v[2] or { v[2] }
 		end
+	end
+end
+
+--- Populate given CBI field with CC codes.
+-- @param field		CBI option object
+-- @return			(nothing)
+function cc.cbifill(o)
+	for i, v in ipairs(cc_idd.CC_IDD) do
+		o:value("_%i" % i, util.pcdata(v[1]))
+	end
+
+	o.formvalue = function(...)
+		local val = luci.cbi.Value.formvalue(...)
+		if val:sub(1,1) == "_" then
+			val = tonumber((val:gsub("^_", "")))
+			if val then
+				return type(cc_idd.CC_IDD[val][2]) == "table"
+					and cc_idd.CC_IDD[val][2] or { cc_idd.CC_IDD[val][2] }
+			end
+		end
+		return val
+	end
+
+	o.cfgvalue = function(...)
+		local val = luci.cbi.Value.cfgvalue(...)
+		if val then
+			val = tools.parse_list(val)
+			for i, v in ipairs(cc_idd.CC_IDD) do
+				if type(v[2]) == "table" then
+					if v[2][1] == val[1] then
+						return "_%i" % i
+					end
+				else
+					if v[2] == val[1] then
+						return "_%i" % i
+					end
+				end
+			end
+		end
+		return val
 	end
 end
 
@@ -432,6 +512,101 @@ function dialzone.ucisection(i)
 end
 
 
+--- LuCI Asterisk - Voicemailbox
+-- @type	module
+voicemail = luci.util.class()
+
+--- Parse a voicemail section
+-- @param zone	Table containing the mailbox info
+-- @return		Table with parsed information
+function voicemail.parse(z)
+	if z.number and #z.number > 0 then
+		local v = {
+			id			= '%s@%s' %{ z.number, z.context or 'default' },
+			number		= z.number,
+			context		= z.context 	or 'default',
+			name		= z.name		or z['.name'] or 'OpenWrt',
+			zone		= z.zone		or 'homeloc',
+			password	= z.password	or '0000',
+			email		= z.email		or '',
+			page		= z.page		or '',
+			dialplans	= { }
+		}
+
+		uci:foreach("asterisk", "dialplanvoice",
+			function(s)
+				if s.dialplan and #s.dialplan > 0 and
+				   s.voicebox == v.number
+				then
+					v.dialplans[#v.dialplans+1] = s.dialplan
+				end
+			end)
+
+		return v
+	end
+end
+
+--- Get a list of known voicemail boxes
+-- @return		Associative table of boxes and table of box numbers
+function voicemail.boxes()
+	local vboxes = { }
+	local vnames = { }
+	uci:foreach("asterisk", "voicemail",
+		function(z)
+			local v = voicemail.parse(z)
+			if v then
+				local n = '%s@%s' %{ v.number, v.context }
+				vboxes[n]  = v
+				vnames[#vnames+1] = n
+			end
+		end)
+	return vboxes, vnames
+end
+
+--- Get a specific voicemailbox
+-- @param number	Number of the voicemailbox
+-- @return			Table containing mailbox information
+function voicemail.box(n)
+	local box
+	n = n:gsub("@.+$","")
+	uci:foreach("asterisk", "voicemail",
+		function(z)
+			if z.number == tostring(n) then
+				box = voicemail.parse(z)
+			end
+		end)
+	return box
+end
+
+--- Find all voicemailboxes within the given dialplan
+-- @param plan	Dialplan name or table
+-- @return		Associative table containing extensions mapped to mailbox info
+function voicemail.in_dialplan(p)
+	local plan  = type(p) == "string" and p or p.name
+	local boxes = { }
+	uci:foreach("asterisk", "dialplanvoice",
+		function(s)
+			if s.extension and #s.extension > 0 and s.dialplan == plan then
+				local box = voicemail.box(s.voicebox)
+				if box then
+					boxes[s.extension] = box
+				end
+			end
+		end)
+	return boxes
+end
+
+--- Remove voicemailbox and associated extensions from config
+-- @param box	Voicemailbox number or table
+-- @return		Boolean indicating success
+function voicemail.remove(v)
+	local box = type(v) == "string" and v or v.number
+	local ok1 = uci:delete_all("asterisk", "voicemail", {number=box})
+	local ok2 = uci:delete_all("asterisk", "dialplanvoice", {voicebox=box})
+	return ( ok1 or ok2 ) and true or false
+end
+
+
 --- LuCI Asterisk - Dialplan
 -- @type	module
 dialplan = luci.util.class()
@@ -447,12 +622,16 @@ function dialplan.parse(z)
 			description	= z.description or z['.name']
 		}
 
+		-- dialzones
 		for _, name in ipairs(tools.parse_list(z.include)) do
 			local zone = dialzone.zone(name)
 			if zone then
 				plan.zones[#plan.zones+1] = zone
 			end
 		end
+
+		-- voicemailboxes
+		plan.voicemailboxes = voicemail.in_dialplan(plan)
 
 		return plan
 	end
