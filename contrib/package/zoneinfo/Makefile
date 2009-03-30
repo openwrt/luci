@@ -11,20 +11,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zoneinfo
-PKG_VERSION:=2008e
-PKG_RELEASE:=1
+PKG_VERSION:=2009c
+PKG_RELEASE:=2
 
 PKG_SOURCE:=tzdata$(PKG_VERSION).tar.gz
 PKG_SOURCE_CODE:=tzcode${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://source.icu-project.org/repos/icu/data/trunk/tzdata/mirror/
-PKG_MD5SUM:=3b4578110a3d193ed9a00d61f27aba28
+PKG_MD5SUM:=ec8fa00a07f3e1d598d5d722cc0ab697
 
 include $(INCLUDE_DIR)/package.mk
 
 define Download/tzcode
    FILE=$(PKG_SOURCE_CODE)
    URL=$(PKG_SOURCE_URL)
-   MD5SUM=12ec2d85324ddcba39db1471a03f486b
+   MD5SUM=5a6aa9cbf477334f31e427cb59adf72f
 endef
 
 $(eval $(call Download,tzcode))
@@ -241,7 +241,6 @@ endef
 
 $(eval $(call BuildPackage,zoneinfo-simple))
 $(eval $(call BuildPackage,zoneinfo-core))
-$(eval $(call BuildPackage,zoneinfo-simple))
 $(eval $(call BuildPackage,zoneinfo-africa))
 $(eval $(call BuildPackage,zoneinfo-northamerica))
 $(eval $(call BuildPackage,zoneinfo-southamerica))
