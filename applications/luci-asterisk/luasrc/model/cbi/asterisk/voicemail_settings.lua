@@ -25,7 +25,8 @@ voicegeneral = cbimap:section(TypedSection, "voicegeneral",
 voicegeneral.anonymous = true
 voicegeneral.addremove = false
 
-format = voicegeneral:option(ListValue, "Storage format")
+format = voicegeneral:option(MultiValue, "Used storage formats")
+format.widget = "checkbox"
 format:value("wav49")
 format:value("gsm")
 format:value("wav")

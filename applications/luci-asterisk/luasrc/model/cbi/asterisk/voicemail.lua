@@ -12,9 +12,6 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-require "luci.sys.zoneinfo"
-
-
 cbimap = Map("asterisk", "Voicemail - Mailboxes")
 
 voicemail = cbimap:section(TypedSection, "voicemail", "Voicemail Boxes")
