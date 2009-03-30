@@ -53,7 +53,11 @@ function index()
 	entry({"admin", "asterisk", "voicemail", "mailboxes"},	cbi("asterisk/voicemail"),			"Mailboxes",    1)
 	entry({"admin", "asterisk", "voicemail", "settings"},	cbi("asterisk/voicemail_settings"),	"Settings",     2)
 
-	entry({"admin", "asterisk", "dialplans"},				call("handle_dialplan"),     		"Call Routing", 4)
+	entry({"admin", "asterisk", "meetme"},          		cbi("asterisk/meetme"),      		"MeetMe",		4)
+	entry({"admin", "asterisk", "meetme", "rooms"},			cbi("asterisk/meetme"),				"Rooms",		1)
+	entry({"admin", "asterisk", "meetme", "settings"},		cbi("asterisk/meetme_settings"),	"Settings",     2)
+
+	entry({"admin", "asterisk", "dialplans"},				call("handle_dialplan"),     		"Call Routing", 5)
 	entry({"admin", "asterisk", "dialplans", "out"},		cbi("asterisk/dialplan_out"),		nil,            1).leaf = true
 	entry({"admin", "asterisk", "dialplans", "zones"},		call("handle_dialzones"),			"Dial Zones",	2).leaf = true
 
@@ -121,6 +125,28 @@ function handle_dialplan()
 				extension		= vext,
 				voicebox		= vbox.number,
 				voicecontext	= vbox.context
+			})
+		end
+	end
+
+	for k, v in pairs(luci.http.formvaluetable("delmeetme")) do
+		local plan = ast.dialplan.plan(k)
+		if #v > 0 and plan then
+			uci:delete_all("asterisk", "dialplanmeetme",
+				{ extension=v, dialplan=plan.name })
+		end
+	end
+
+	for k, v in pairs(luci.http.formvaluetable("addmeetme")) do
+		local plan = ast.dialplan.plan(k)
+		local meetme = ast.meetme.room(v)
+		if plan and meetme then
+			local mext = luci.http.formvalue("addmeetmeext.%s" % plan.name)
+			mext = ( mext and #mext > 0 ) and mext or meetme.room
+			uci:section("asterisk", "dialplanmeetme", nil, {
+				dialplan	= plan.name,
+				extension	= mext,
+				room		= meetme.room
 			})
 		end
 	end

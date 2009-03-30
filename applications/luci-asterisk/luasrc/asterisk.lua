@@ -598,11 +598,102 @@ end
 
 --- Remove voicemailbox and associated extensions from config
 -- @param box	Voicemailbox number or table
+-- @param ctx	UCI context to use (optional)
 -- @return		Boolean indicating success
-function voicemail.remove(v)
+function voicemail.remove(v, ctx)
+	ctx = ctx or uci
 	local box = type(v) == "string" and v or v.number
-	local ok1 = uci:delete_all("asterisk", "voicemail", {number=box})
-	local ok2 = uci:delete_all("asterisk", "dialplanvoice", {voicebox=box})
+	local ok1 = ctx:delete_all("asterisk", "voicemail", {number=box})
+	local ok2 = ctx:delete_all("asterisk", "dialplanvoice", {voicebox=box})
+	return ( ok1 or ok2 ) and true or false
+end
+
+
+--- LuCI Asterisk - MeetMe Conferences
+-- @type	module
+meetme = luci.util.class()
+
+--- Parse a meetme section
+-- @param room	Table containing the room info
+-- @return		Table with parsed information
+function meetme.parse(r)
+	if r.room and #r.room > 0 then
+		local v = {
+			room		= r.room,
+			pin			= r.pin 			or '',
+			adminpin	= r.adminpin		or '',
+			description = r._description	or '',
+			dialplans	= { }
+		}
+
+		uci:foreach("asterisk", "dialplanmeetme",
+			function(s)
+				if s.dialplan and #s.dialplan > 0 and s.room == v.room then
+					v.dialplans[#v.dialplans+1] = s.dialplan
+				end
+			end)
+
+		return v
+	end
+end
+
+--- Get a list of known meetme rooms
+-- @return		Associative table of rooms and table of room numbers
+function meetme.rooms()
+	local mrooms = { }
+	local mnames = { }
+	uci:foreach("asterisk", "meetme",
+		function(r)
+			local v = meetme.parse(r)
+			if v then
+				mrooms[v.room] = v
+				mnames[#mnames+1] = v.room
+			end
+		end)
+	return mrooms, mnames
+end
+
+--- Get a specific meetme room
+-- @param number	Number of the room
+-- @return			Table containing room information
+function meetme.room(n)
+	local room
+	uci:foreach("asterisk", "meetme",
+		function(r)
+			if r.room == tostring(n) then
+				room = meetme.parse(r)
+			end
+		end)
+	return room
+end
+
+--- Find all meetme rooms within the given dialplan
+-- @param plan	Dialplan name or table
+-- @return		Associative table containing extensions mapped to room info
+function meetme.in_dialplan(p)
+	local plan  = type(p) == "string" and p or p.name
+	local rooms = { }
+	uci:foreach("asterisk", "dialplanmeetme",
+		function(s)
+			if s.extension and #s.extension > 0 and s.dialplan == plan then
+				local room = meetme.room(s.room)
+				if room then
+					rooms[s.extension] = room
+				end
+			end
+		end)
+	return rooms
+end
+
+--- Remove meetme room and associated extensions from config
+-- @param room	Voicemailbox number or table
+-- @param ctx	UCI context to use (optional)
+-- @return		Boolean indicating success
+function meetme.remove(v, ctx)
+	ctx = ctx or uci
+	local room = type(v) == "string" and v or v.number
+	local ok1  = ctx:delete_all("asterisk", "meetme", {room=room})
+	local ok2  = ctx:delete_all("asterisk", "dialplanmeetme", {room=room})
 	return ( ok1 or ok2 ) and true or false
 end
 
@@ -632,6 +723,9 @@ function dialplan.parse(z)
 
 		-- voicemailboxes
 		plan.voicemailboxes = voicemail.in_dialplan(plan)
+
+		-- meetme conferences
+		plan.meetmerooms = meetme.in_dialplan(plan)
 
 		return plan
 	end
