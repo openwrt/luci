@@ -12,7 +12,7 @@ init_voicemailconf() {
 	ast_enable_type voicezone
 	ast_enable_type dialplanvoice
 
-	voice_format="wav49|gsm|wav"
+	voice_format=
 	voice_serveremail=
 	voice_attach=no
 	voice_skipms=3000
@@ -94,6 +94,8 @@ create_voicemailconf() {
 		local isempty=2
 		rm -f $file
 	else
+
+		[ -z "${voice_format}" ] && voice_format="wav49|gsm|wav"
 		echo "${asteriskuci_gen}[general]" > $file
 		for i in ${voicegeneral_list} ; do
 			eval value=\${voice_$i}
@@ -117,11 +119,16 @@ create_voicemailconf() {
 
 handle_voicegeneral() {
 	option_cb() {
-		if valid_voicemail $1 $2 ; then
-			eval voice_$1="$2"
-		else
-			logerror "Invalid general voice option: $1"
-		fi
+		case "$1" in
+			format|format_ITEM*) append voice_format "$2" "|" ;;
+			format_LENGTH) ;;
+		  *)
+			if valid_voicemail $1 $2 ; then
+				eval voice_$1="$2"
+			else
+				logerror "Invalid general voice option: $1"
+			fi
+		esac
 	}
 }
 
