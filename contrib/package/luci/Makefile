@@ -213,6 +213,17 @@ define Package/luci-json/install
 endef
 
 
+define Package/luci-luanet
+  $(call Package/luci/libtemplate)
+  TITLE:=luanet
+  DEPENDS+=+libiw
+endef
+
+define Package/luci-luanet/install
+        $(call Package/luci/install/template,$(1),libs/luanet)
+endef
+
+
 
 NIXIO_TLS:=axtls
 
@@ -821,6 +832,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-json),)
 	PKG_SELECTED_MODULES+=libs/json
 endif
+ifneq ($(CONFIG_PACKAGE_luci-luanet),)
+	PKG_SELECTED_MODULES+=libs/luanet
+endif
 ifneq ($(CONFIG_PACKAGE_luci-nixio),)
 	PKG_SELECTED_MODULES+=libs/nixio
 endif
@@ -997,6 +1011,7 @@ $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
+$(eval $(call BuildPackage,luci-luanet))
 $(eval $(call BuildPackage,luci-nixio))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
