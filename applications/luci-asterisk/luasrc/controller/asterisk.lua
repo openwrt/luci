@@ -81,8 +81,6 @@ function handle_dialplan()
 			if #newinc > 0 then
 				uci:set("asterisk", plan.name, "include", newinc)
 			end
-
-			uci:save("asterisk")
 		end
 	end
 
@@ -101,8 +99,6 @@ function handle_dialplan()
 			if #newinc > 0 then
 				uci:set("asterisk", plan.name, "include", newinc)
 			end
-
-			uci:save("asterisk")
 		end
 	end
 
@@ -111,7 +107,6 @@ function handle_dialplan()
 		if #v > 0 and plan then
 			uci:delete_all("asterisk", "dialplanvoice",
 				{ extension=v, dialplan=plan.name })
-			uci:save("asterisk")
 		end
 	end
 
@@ -127,7 +122,6 @@ function handle_dialplan()
 				voicebox		= vbox.number,
 				voicecontext	= vbox.context
 			})
-			uci:save("asterisk")
 		end
 	end
 
@@ -135,7 +129,6 @@ function handle_dialplan()
 	if aname and #aname > 0 then
 		if aname:match("^[a-zA-Z0-9_]+$") then
 			uci:section("asterisk", "dialplan", aname, { })
-			uci:save("asterisk")
 		else
 			err = true
 		end
@@ -145,11 +138,14 @@ function handle_dialplan()
 	if dname and #dname > 0 then
 		if uci:get("asterisk", dname) == "dialplan" then
 			uci:delete("asterisk", dname)
-			uci:save("asterisk")
+			uci:delete_all("asterisk", "dialplanvoice", { dialplan=dname })
+			uci:delete_all("asterisk", "dialplanmeetme", { dialplan=dname })
 		end
 	end
 
+	uci:save("asterisk")
 	ast.uci_resync()
+
 	luci.template.render("asterisk/dialplans", { create_error = err })
 end
 
