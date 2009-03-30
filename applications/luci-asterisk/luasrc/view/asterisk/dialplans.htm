@@ -159,7 +159,8 @@ $Id$
 				<% for ext, room in luci.util.kspairs(plan.meetmerooms) do rooms_used[room.room] = true %>
 				<tr class="cbi-section-table-row <%=rowstyle(row)%>">
 					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
-						<strong>&#x2514; MeetMe Room <em><%=room.room%></em></strong> (<%=room.description%>)
+						<strong>&#x2514; MeetMe Room <em><%=room.room%></em></strong>
+						<% if room.description and #room.description > 0 then %> (<%=room.description%>)<% end %>
 						<p style="padding-left: 1em; margin-bottom:0">
 							Matches: <%=format_matches(ext)%>
 						</p>
@@ -209,7 +210,10 @@ $Id$
 							<option value="">-- please select --</option>
 							<% for ext, room in luci.util.kspairs(ast.meetme.rooms()) do %>
 								<%# if not rooms_used[room.room] then %>
-									<option value="<%=room.room%>"><%=room.room%> (<%=room.description%>)</option>
+									<option value="<%=room.room%>">
+										<%=room.room%>
+										<% if room.description and #room.description > 0 then %>(<%=room.description%>)<% end %>
+									</option>
 								<%# end %>
 							<% end %>
 						</select>
