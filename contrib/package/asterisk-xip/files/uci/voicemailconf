@@ -28,7 +28,7 @@ init_voicemailconf() {
 	return 0
 }
 
-voicegeneral_list="format serveremail attach skipms maxsilence silencethreshold maxlogins emaildateformat sendvoicemail maxmsg maxmessage minmessage maxgreet"
+voicegeneral_list="format emailformat serveremail attach skipms maxsilence silencethreshold maxlogins emaildateformat sendvoicemail maxmsg maxmessage minmessage maxgreet"
 voicegeneral_ext_list=""
 
 valid_voicemail(){
@@ -96,6 +96,14 @@ create_voicemailconf() {
 	else
 
 		[ -z "${voice_format}" ] && voice_format="wav49|gsm|wav"
+		# Make emailformat first in the list
+		if [ ! -z "${voice_emailformat}" ] ; then
+			local newfmt=${voice_emailformat}
+			for i in ${voice_format//|/ } ; do
+				[ "$i" == "${voice_emailformat}" ] || newfmt="${newfmt}|${i}"
+			done
+			voice_format="${newfmt}"
+		fi
 		echo "${asteriskuci_gen}[general]" > $file
 		for i in ${voicegeneral_list} ; do
 			eval value=\${voice_$i}
