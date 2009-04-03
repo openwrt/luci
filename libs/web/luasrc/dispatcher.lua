@@ -640,9 +640,7 @@ local function _cbi(self, ...)
 	local state = nil
 
 	for i, res in ipairs(maps) do
-		if config.autoapply then
-			res.autoapply = config.autoapply
-		end
+		res.flow = config
 		local cstate = res:parse()
 		if cstate and (not state or cstate < state) then
 			state = cstate
@@ -682,7 +680,7 @@ local function _cbi(self, ...)
 		end
 	end
 	if not config.nofooter then
-		tpl.render("cbi/footer", {pageaction=pageaction, state = state, autoapply = config.autoapply})
+		tpl.render("cbi/footer", {flow = config, pageaction=pageaction, state = state, autoapply = config.autoapply})
 	end
 end
 

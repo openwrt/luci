@@ -33,6 +33,9 @@ $Id$
 <%- end %>	
 <% if not self.embedded then %>
 	<div>
+<%- if self.flow.skip then %>
+	<input class="cbi-button cbi-button-skip" type="submit" name="cbi.skip" value="<%:skip Skip%>" />
+<% end %>
 <%- if self.submit ~= false then %>
 		<input class="cbi-button-save" type="submit" value="
 	<%- if not self.submit then -%><%-:submit-%><%-else-%><%=self.submit%><%end-%>

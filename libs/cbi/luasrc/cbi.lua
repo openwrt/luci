@@ -42,6 +42,7 @@ FORM_PROCEED =  0
 FORM_VALID   =  1
 FORM_INVALID = -1
 FORM_CHANGED =  2
+FORM_SKIP    =  4
 
 AUTO = true
 
@@ -344,13 +345,19 @@ end
 -- Use optimized UCI writing
 function Map.parse(self, readinput, ...)
 	self.readinput = (readinput ~= false)
+
+	if self:formvalue("cbi.skip") then
+		self.state = FORM_SKIP
+		return self:state_handler(self.state)
+	end
+
 	Node.parse(self, ...)
 
 	if self.save then
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
-		if self:submitstate() and not self.proceed and (self.autoapply or luci.http.formvalue("cbi.apply")) then
+		if self:submitstate() and not self.proceed and (self.flow.autoapply or luci.http.formvalue("cbi.apply")) then
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 
@@ -561,6 +568,11 @@ SimpleForm.formvaluetable = Map.formvaluetable
 
 function SimpleForm.parse(self, readinput, ...)
 	self.readinput = (readinput ~= false)
+
+	if self:formvalue("cbi.skip") then
+		return FORM_SKIP
+	end
+
 	if self:submitstate() then
 		Node.parse(self, 1, ...)
 	end
