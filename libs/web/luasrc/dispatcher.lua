@@ -355,7 +355,7 @@ end
 --- Generate the dispatching index using the best possible strategy.
 function createindex()
 	local path = luci.util.libpath() .. "/controller/"
-	local suff = ".lua"
+	local suff = { ".lua", ".lua.gz" }
 
 	if luci.util.copcall(require, "luci.fastindex") then
 		createindex_fastindex(path, suff)
@@ -366,14 +366,16 @@ end
 
 --- Generate the dispatching index using the fastindex C-indexer.
 -- @param path		Controller base directory
--- @param suffix	Controller file suffix
-function createindex_fastindex(path, suffix)
+-- @param suffixes	Controller file suffixes
+function createindex_fastindex(path, suffixes)
 	index = {}
 
 	if not fi then
 		fi = luci.fastindex.new("index")
-		fi.add(path .. "*" .. suffix)
-		fi.add(path .. "*/*" .. suffix)
+		for _, suffix in ipairs(suffixes) do
+			fi.add(path .. "*" .. suffix)
+			fi.add(path .. "*/*" .. suffix)
+		end
 	end
 	fi.scan()
 
@@ -384,12 +386,16 @@ end
 
 --- Generate the dispatching index using the native file-cache based strategy.
 -- @param path		Controller base directory
--- @param suffix	Controller file suffix
-function createindex_plain(path, suffix)
-	local controllers = util.combine(
-		luci.fs.glob(path .. "*" .. suffix) or {},
-		luci.fs.glob(path .. "*/*" .. suffix) or {}
-	)
+-- @param suffixes	Controller file suffixes
+function createindex_plain(path, suffixes)
+	local controllers = { }
+	for _, suffix in ipairs(suffixes) do
+		util.combine(
+			controllers,
+			luci.fs.glob(path .. "*" .. suffix) or {},
+			luci.fs.glob(path .. "*/*" .. suffix) or {}
+		)
+	end
 
 	if indexcache then
 		local cachedate = fs.mtime(indexcache)
@@ -416,7 +422,11 @@ function createindex_plain(path, suffix)
 	index = {}
 
 	for i,c in ipairs(controllers) do
-		local module = "luci.controller." .. c:sub(#path+1, #c-#suffix):gsub("/", ".")
+		local module = "luci.controller." .. c:sub(#path+1, #c):gsub("/", ".")
+		for _, suffix in ipairs(suffixes) do
+			module = module:gsub(suffix.."$", "")
+		end
+
 		local mod = require(module)
 		local idx = mod.index
 

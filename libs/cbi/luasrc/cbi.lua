@@ -59,12 +59,15 @@ function load(cbimap, ...)
 	local upldir = "/lib/uci/upload/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
 
-	assert(luci.fs.stat(cbimap) or luci.fs.stat(cbidir..cbimap..".lua"),
-	 "Model not found!")
+	assert(luci.fs.stat(cbimap) or
+		luci.fs.stat(cbidir..cbimap..".lua") or
+		luci.fs.stat(cbidir..cbimap..".lua.gz"),
+			"Model not found!")
 
 	local func, err = loadfile(cbimap)
 	if not func then
-		func, err = loadfile(cbidir..cbimap..".lua")
+		func, err = loadfile(cbidir..cbimap..".lua") or
+			loadfile(cbidir..cbimap..".lua.gz")
 	end
 	assert(func, err)
 
