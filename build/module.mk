@@ -38,7 +38,7 @@ luacompile: luasource
 	for i in $$(find dist -name *.lua -not -name debug.lua); do $(LUAC) $(LUAC_OPTIONS) -o $$i $$i; done
 
 luagzip: luacompile
-	for i in $$(find dist -name *.lua -not -name debug.lua); do gzip -9 $$i; done
+	for i in $$(find dist -name *.lua -not -name debug.lua); do gzip -f9 $$i; done
 
 luaclean:
 	rm -rf dist
