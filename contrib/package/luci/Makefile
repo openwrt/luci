@@ -127,6 +127,9 @@ define Package/luci-core/config
        config PACKAGE_luci-core_source
                bool "Full Source"
 
+       config PACKAGE_luci-core_zipped
+               bool "Precompiled and compressed"
+
        endchoice
 endef
 
@@ -136,6 +139,10 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_luci-core_stripped),)
   LUA_TARGET:=strip
+endif
+
+ifneq ($(CONFIG_PACKAGE_luci-core_zipped),)
+  LUA_TARGET:=gzip
 endif
 
 
