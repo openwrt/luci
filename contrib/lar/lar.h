@@ -1,3 +1,6 @@
+#ifndef __LAR_H
+#define __LAR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -24,6 +27,12 @@ int errno;
 
 #define LAR_FNAME_BUFFER 1024
 #define LAR_FNAME(s) char s[LAR_FNAME_BUFFER]
+
+#ifdef __WIN32__
+#define LAR_DIRSEP	'\\'
+#else
+#define LAR_DIRSEP	'/'
+#endif
 
 
 struct lar_index_item {
@@ -76,3 +85,6 @@ int lar_close( lar_archive *ar );
 lar_archive * lar_find_archive( const char *package );
 
 lar_member * lar_find_member( lar_archive *ar, const char *package );
+
+#endif
+

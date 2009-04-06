@@ -183,7 +183,7 @@ lar_archive * lar_find_archive( const char *package )
 
 	for( len = 0; package[len] != '\0'; len++ )
 	{
-		if( len >= sizeof(buffer) )
+		if( len >= (sizeof(buffer) - 5) )
 			LAR_DIE("Package name exceeds maximum allowed length");
 
 		if( package[len] == '.' ) seg++;
@@ -197,7 +197,7 @@ lar_archive * lar_find_archive( const char *package )
 				if( j < seg ) j++; else break;
 			}
 
-			buffer[i] = ( package[i] == '.' ) ? '/' : package[i];
+			buffer[i] = ( package[i] == '.' ) ? LAR_DIRSEP : package[i];
 		}
 
 		buffer[i+0] = '.'; buffer[i+1] = 'l'; buffer[i+2] = 'a';
@@ -219,7 +219,7 @@ lar_member * lar_find_member( lar_archive *ar, const char *package )
 
 	for( len = 0; package[len] != '\0'; len++ )
 	{
-		if( len >= sizeof(buffer) )
+		if( len >= (sizeof(buffer) - 5) )
 			LAR_DIE("Package name exceeds maximum allowed length");
 
 		buffer[len] = ( package[len] == '.' ) ? '/' : package[len];
