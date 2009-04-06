@@ -33,17 +33,19 @@ int do_print_index( lar_archive *ar )
 int main( int argc, const char* argv[] )
 {
 	lar_archive *ar;
-	
+	int stat = 0;
+
 	if( argv[1] != NULL )
 	{
 		if( (ar = lar_open(argv[1])) != NULL )
 		{
 			if( argv[2] )
-				return do_print_member(ar, argv[2]);
+				stat = do_print_member(ar, argv[2]);
 			else
-				return do_print_index(ar);
+				stat = do_print_index(ar);
 
 			lar_close(ar);
+			return stat;
 		}
 		else
 		{
@@ -51,7 +53,7 @@ int main( int argc, const char* argv[] )
 		}
 	}
 	else
-    {
+	{
 		printf("Usage: lar <archive> [<member>]\n");
 		return 1;
 	}
