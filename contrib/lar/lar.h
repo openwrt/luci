@@ -7,13 +7,12 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <string.h>
+#include <errno.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 
-
-int errno;
 
 #define LAR_DIE(s) \
 	do { \
@@ -82,9 +81,8 @@ lar_archive * lar_open( const char *filename );
 
 int lar_close( lar_archive *ar );
 
-lar_archive * lar_find_archive( const char *package );
+lar_archive * lar_find_archive( const char *package, const char *path );
 
 lar_member * lar_find_member( lar_archive *ar, const char *package );
 
 #endif
-

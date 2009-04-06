@@ -30,13 +30,13 @@ int do_print_index( lar_archive *ar )
 	return 0;
 }
 
-int do_require( const char *package )
+int do_require( const char *package, const char *path )
 {
 	int stat = 1;
 	lar_archive *ar;
 	lar_member *mb;
 
-	if( (ar = lar_find_archive(package)) != NULL )
+	if( (ar = lar_find_archive(package, path)) != NULL )
 	{
 		if( (mb = lar_find_member(ar, package)) != NULL )
 		{
@@ -78,7 +78,7 @@ int main( int argc, const char* argv[] )
 				break;
 
 			case 'r':
-				stat = do_require(argv[2]);
+				stat = do_require(argv[2], argv[3]);
 				break;
 		}
 
@@ -88,7 +88,7 @@ int main( int argc, const char* argv[] )
 	{
 		printf("Usage:\n");
 		printf("\tlar show <archive> [<member>]\n");
-		printf("\tlar require <package>\n");
+		printf("\tlar require <package> [<path>]\n");
 
 		return 1;
 	}

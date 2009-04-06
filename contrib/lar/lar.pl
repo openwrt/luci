@@ -38,10 +38,10 @@ foreach my $file ( @ARGV )
 	}
 }
 
-
+my $count = 1;
 foreach my $file ( @index )
 {
-	warn sprintf "Index: 0x%08X 0x%08X 0x%08X 0x%08X\n", $file->[0], $file->[1], $file->[2], $file->[3];
+	warn sprintf "Index[%4d]: 0x%08X 0x%08X 0x%08X 0x%08X\n", $count++, $file->[0], $file->[1], $file->[2], $file->[3];
 	print pack "NNNNnn", $file->[0], $file->[1], $file->[2], $file->[3], 0x0000, 0x0000;
 }
 

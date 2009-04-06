@@ -46,7 +46,7 @@ lar_index * lar_get_index( lar_archive *ar )
 	idx_map = NULL;
 
 	for( i = 0; i < idx_length; \
-		i += (sizeof(lar_index) - sizeof(char))
+		i += (sizeof(lar_index) - sizeof(char *))
 	) {
 		idx_ptr = (lar_index *)malloc(sizeof(lar_index));
 
@@ -174,16 +174,27 @@ int lar_close( lar_archive *ar )
 	return 0;
 }
 
-lar_archive * lar_find_archive( const char *package )
+lar_archive * lar_find_archive( const char *package, const char *path )
 {
 	int seg = 1;
-	int i, j, len;
+	int len = 0;
+	int pln = 0;
+	int i, j;
 	struct stat s;
 	LAR_FNAME(buffer);
 
+	if( path )
+	{
+		for( pln = 0; path[pln] != '\0'; pln++ )
+			if( pln >= (sizeof(buffer) - 5) )
+				LAR_DIE("Library path exceeds maximum allowed length");
+
+		memcpy(buffer, path, pln);
+	}
+
 	for( len = 0; package[len] != '\0'; len++ )
 	{
-		if( len >= (sizeof(buffer) - 5) )
+		if( len >= (sizeof(buffer) - 5 - pln) )
 			LAR_DIE("Package name exceeds maximum allowed length");
 
 		if( package[len] == '.' ) seg++;
@@ -197,11 +208,11 @@ lar_archive * lar_find_archive( const char *package )
 				if( j < seg ) j++; else break;
 			}
 
-			buffer[i] = ( package[i] == '.' ) ? LAR_DIRSEP : package[i];
+			buffer[pln+i] = ( package[i] == '.' ) ? LAR_DIRSEP : package[i];
 		}
 
-		buffer[i+0] = '.'; buffer[i+1] = 'l'; buffer[i+2] = 'a';
-		buffer[i+3] = 'r'; buffer[i+4] = '\0';
+		buffer[pln+i+0] = '.'; buffer[pln+i+1] = 'l'; buffer[pln+i+2] = 'a';
+		buffer[pln+i+3] = 'r'; buffer[pln+i+4] = '\0';
 
 		if( (stat(buffer, &s) > -1) && (s.st_mode & S_IFREG) )
 			return lar_open(buffer);
