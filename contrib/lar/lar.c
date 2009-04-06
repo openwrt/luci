@@ -46,7 +46,7 @@ lar_index * lar_get_index( lar_archive *ar )
 	idx_map = NULL;
 
 	for( i = 0; i < idx_length; \
-		i += (sizeof(lar_index) - sizeof(char)) 
+		i += (sizeof(lar_index) - sizeof(char))
 	) {
 		idx_ptr = (lar_index *)malloc(sizeof(lar_index));
 
@@ -65,7 +65,7 @@ lar_index * lar_get_index( lar_archive *ar )
 }
 
 uint32_t lar_get_filename( lar_archive *ar,
-	lar_index *idx_ptr, char *filename 
+	lar_index *idx_ptr, char *filename
 ) {
 	if( idx_ptr->nlength >= LAR_FNAME_BUFFER )
 		LAR_DIE("Filename exceeds maximum allowed length");
@@ -111,7 +111,7 @@ lar_member * lar_open_member( lar_archive *ar, const char *name )
 			member->data   = &memberdata[idx_ptr->foffset % pgsz];
 
 			member->mmap   = memberdata;
-			member->mlen   = idx_ptr->flength + ( idx_ptr->foffset % pgsz );			
+			member->mlen   = idx_ptr->flength + ( idx_ptr->foffset % pgsz );
 
 			return member;
 		}
@@ -135,7 +135,7 @@ lar_archive * lar_open( const char *filename )
 	int fd;
 	struct stat as;
 	lar_archive *ar;
-	
+
 	if( stat(filename, &as) == -1 )
 		return NULL;
 
@@ -174,3 +174,49 @@ int lar_close( lar_archive *ar )
 	return 0;
 }
 
+lar_archive * lar_find_archive( const char *package )
+{
+	int seg = 1;
+	int i, j, len;
+	struct stat s;
+	LAR_FNAME(buffer);
+
+	for( len = 0; package[len] != '\0'; len++ )
+		if( package[len] == '.' ) seg++;
+
+	while( seg > 0 )
+	{
+		for( i = 0, j = 1; (i < len) && (j <= seg); i++ )
+		{
+			if( package[i] == '.' ) {
+				if( j < seg ) j++; else break;
+			}
+
+			buffer[i] = ( package[i] == '.' ) ? '/' : package[i];
+		}
+
+		buffer[i+0] = '.'; buffer[i+1] = 'l'; buffer[i+2] = 'a';
+		buffer[i+3] = 'r'; buffer[i+4] = '\0';
+
+		if( (stat(buffer, &s) > -1) && (s.st_mode & S_IFREG) )
+			return lar_open(buffer);
+
+		seg--;
+	}
+
+	return NULL;
+}
+
+lar_member * lar_find_member( lar_archive *ar, const char *package )
+{
+	int len;
+	LAR_FNAME(buffer);
+
+	for( len = 0; package[len] != '\0'; len++ )
+		buffer[len] = ( package[len] == '.' ) ? '/' : package[len];
+
+	buffer[len+0] = '.'; buffer[len+1] = 'l'; buffer[len+2] = 'u';
+	buffer[len+3] = 'a'; buffer[len+4] = '\0';
+
+	return lar_open_member(ar, buffer);
+}

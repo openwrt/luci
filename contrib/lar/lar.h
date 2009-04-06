@@ -73,4 +73,6 @@ lar_archive * lar_open( const char *filename );
 
 int lar_close( lar_archive *ar );
 
+lar_archive * lar_find_archive( const char *package );
 
+lar_member * lar_find_member( lar_archive *ar, const char *package );

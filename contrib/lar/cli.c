@@ -27,7 +27,28 @@ int do_print_index( lar_archive *ar )
 		index = index->next;
 	}
 
-	return 0;	
+	return 0;
+}
+
+int do_require( const char *package )
+{
+	int stat = 1;
+	lar_archive *ar;
+	lar_member *mb;
+
+	if( (ar = lar_find_archive(package)) != NULL )
+	{
+		if( (mb = lar_find_member(ar, package)) != NULL )
+		{
+			write(fileno(stdout), mb->data, mb->length);
+			lar_close_member(mb);
+			stat = 0;
+		}
+
+		lar_close(ar);
+	}
+
+	return stat;
 }
 
 int main( int argc, const char* argv[] )
@@ -37,27 +58,40 @@ int main( int argc, const char* argv[] )
 
 	if( argv[1] != NULL )
 	{
-		if( (ar = lar_open(argv[1])) != NULL )
+		switch(argv[1][0])
 		{
-			if( argv[2] )
-				stat = do_print_member(ar, argv[2]);
-			else
-				stat = do_print_index(ar);
+			case 's':
+				if( (ar = lar_open(argv[2])) != NULL )
+				{
+					if( argv[3] != NULL )
+						stat = do_print_member(ar, argv[3]);
+					else
+						stat = do_print_index(ar);
 
-			lar_close(ar);
-			return stat;
+					lar_close(ar);
+				}
+				else
+				{
+					LAR_DIE("Failed to open archive");
+				}
+
+				break;
+
+			case 'r':
+				stat = do_require(argv[2]);
+				break;
 		}
-		else
-		{
-			LAR_DIE("Failed to open archive");
-		}
+
+		return stat;
 	}
 	else
 	{
-		printf("Usage: lar <archive> [<member>]\n");
+		printf("Usage:\n");
+		printf("\tlar show <archive> [<member>]\n");
+		printf("\tlar require <package>\n");
+
 		return 1;
 	}
 
 	return 0;
 }
-
