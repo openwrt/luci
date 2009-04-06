@@ -182,7 +182,12 @@ lar_archive * lar_find_archive( const char *package )
 	LAR_FNAME(buffer);
 
 	for( len = 0; package[len] != '\0'; len++ )
+	{
+		if( len >= sizeof(buffer) )
+			LAR_DIE("Package name exceeds maximum allowed length");
+
 		if( package[len] == '.' ) seg++;
+	}
 
 	while( seg > 0 )
 	{
@@ -213,7 +218,12 @@ lar_member * lar_find_member( lar_archive *ar, const char *package )
 	LAR_FNAME(buffer);
 
 	for( len = 0; package[len] != '\0'; len++ )
+	{
+		if( len >= sizeof(buffer) )
+			LAR_DIE("Package name exceeds maximum allowed length");
+
 		buffer[len] = ( package[len] == '.' ) ? '/' : package[len];
+	}
 
 	buffer[len+0] = '.'; buffer[len+1] = 'l'; buffer[len+2] = 'u';
 	buffer[len+3] = 'a'; buffer[len+4] = '\0';
