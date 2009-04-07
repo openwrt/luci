@@ -31,7 +31,8 @@ lar_index * lar_get_index( lar_archive *ar )
 	uint32_t i;
 	uint32_t idx_offset;
 	uint32_t idx_length;
-	lar_index *idx_map, *idx_ptr;
+	lar_index *idx_map;
+	lar_index *idx_ptr;
 
 	if( lseek(ar->fd, -(sizeof(idx_offset)), SEEK_END) == -1 )
 		LAR_DIE("Unable to seek to end of archive");
@@ -45,9 +46,7 @@ lar_index * lar_get_index( lar_archive *ar )
 
 	idx_map = NULL;
 
-	for( i = 0; i < idx_length; \
-		i += (sizeof(lar_index) - sizeof(char *))
-	) {
+	for( i = 0; i < idx_length; i += (sizeof(lar_index) - sizeof(char *)) ) {
 		idx_ptr = (lar_index *)malloc(sizeof(lar_index));
 
 		lar_read32(ar->fd, &idx_ptr->noffset);
@@ -64,9 +63,8 @@ lar_index * lar_get_index( lar_archive *ar )
 	return idx_map;
 }
 
-uint32_t lar_get_filename( lar_archive *ar,
-	lar_index *idx_ptr, char *filename
-) {
+uint32_t lar_get_filename( lar_archive *ar, lar_index *idx_ptr, char *filename )
+{
 	if( idx_ptr->nlength >= LAR_FNAME_BUFFER )
 		LAR_DIE("Filename exceeds maximum allowed length");
 
@@ -76,7 +74,7 @@ uint32_t lar_get_filename( lar_archive *ar,
 	if( read(ar->fd, filename, idx_ptr->nlength) < idx_ptr->nlength )
 		LAR_DIE("Unexpected EOF while reading filename");
 
-	filename[idx_ptr->nlength] = 0;
+	filename[idx_ptr->nlength] = '\0';
 
 	return idx_ptr->nlength;
 }
@@ -85,9 +83,10 @@ lar_member * lar_open_member( lar_archive *ar, const char *name )
 {
 	lar_index *idx_ptr = ar->index;
 	lar_member *member;
-	char memberfile[LAR_FNAME_BUFFER];
 	char *memberdata;
-	size_t pgsz  = getpagesize();
+	size_t pgof;
+	size_t pgsz = getpagesize();
+	LAR_FNAME(memberfile);
 
 	while(idx_ptr)
 	{
@@ -95,10 +94,11 @@ lar_member * lar_open_member( lar_archive *ar, const char *name )
 
 		if( !strncmp(memberfile, name, idx_ptr->nlength) )
 		{
+			pgof = ( idx_ptr->foffset % pgsz );
+
 			memberdata = mmap(
-				0, idx_ptr->flength + ( idx_ptr->foffset % pgsz ),
-				PROT_READ, MAP_PRIVATE,	ar->fd,
-				idx_ptr->foffset - ( idx_ptr->foffset % pgsz )
+				0, idx_ptr->flength + pgof, PROT_READ, MAP_PRIVATE,
+				ar->fd, idx_ptr->foffset - pgof
 			);
 
 			if( memberdata == MAP_FAILED )
@@ -108,10 +108,10 @@ lar_member * lar_open_member( lar_archive *ar, const char *name )
 			member->type   = idx_ptr->type;
 			member->flags  = idx_ptr->flags;
 			member->length = idx_ptr->flength;
-			member->data   = &memberdata[idx_ptr->foffset % pgsz];
+			member->data   = &memberdata[pgof];
 
 			member->mmap   = memberdata;
-			member->mlen   = idx_ptr->flength + ( idx_ptr->foffset % pgsz );
+			member->mlen   = idx_ptr->flength + pgof;
 
 			return member;
 		}
@@ -176,10 +176,11 @@ int lar_close( lar_archive *ar )
 
 lar_archive * lar_find_archive( const char *package, const char *path )
 {
-	int seg = 1;
-	int len = 0;
-	int pln = 0;
-	int i, j;
+	uint32_t i;
+	uint32_t j;
+	uint32_t seg = 1;
+	uint32_t len = 0;
+	uint32_t pln = 0;
 	struct stat s;
 	LAR_FNAME(buffer);
 
@@ -211,8 +212,7 @@ lar_archive * lar_find_archive( const char *package, const char *path )
 			buffer[pln+i] = ( package[i] == '.' ) ? LAR_DIRSEP : package[i];
 		}
 
-		buffer[pln+i+0] = '.'; buffer[pln+i+1] = 'l'; buffer[pln+i+2] = 'a';
-		buffer[pln+i+3] = 'r'; buffer[pln+i+4] = '\0';
+		strcpy(&buffer[pln+i], ".lar");
 
 		if( (stat(buffer, &s) > -1) && (s.st_mode & S_IFREG) )
 			return lar_open(buffer);
@@ -236,8 +236,7 @@ lar_member * lar_find_member( lar_archive *ar, const char *package )
 		buffer[len] = ( package[len] == '.' ) ? '/' : package[len];
 	}
 
-	buffer[len+0] = '.'; buffer[len+1] = 'l'; buffer[len+2] = 'u';
-	buffer[len+3] = 'a'; buffer[len+4] = '\0';
+	strcpy(&buffer[len], ".lua");
 
 	return lar_open_member(ar, buffer);
 }
