@@ -390,7 +390,7 @@ end
 function createindex_plain(path, suffixes)
 	local controllers = { }
 	for _, suffix in ipairs(suffixes) do
-		util.combine(
+		controllers = util.combine(
 			controllers,
 			luci.fs.glob(path .. "*" .. suffix) or {},
 			luci.fs.glob(path .. "*/*" .. suffix) or {}
