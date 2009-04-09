@@ -26,8 +26,8 @@
 			  padding: { left: 40, right: 10, top: 10, bottom: 20 },
 			  instanceNames: {
 				<%- for k,v in pairs(luci.sys.wifi.getiwconfig()) do %>
-					<%-="%q:%q," % {k, "%s (%s)" % {k, tostring(v.ESSID)}}-%>
-				<% end %>  
+					<%-="%q:%q," % {k, "%s (%s)" % {k, luci.util.pcdata(tostring(v.ESSID))}}-%>
+				<% end %>
 				"0": ""
 			  }},
 			null,
