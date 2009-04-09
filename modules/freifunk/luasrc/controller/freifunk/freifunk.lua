@@ -41,16 +41,18 @@ function index()
 	page.target = template("freifunk/contact")
 	page.title  = "Kontakt"
 
+	entry({"freifunk", "status"}, alias("freifunk", "status", "status"), "Status", 20)
 
-	local page  = node("freifunk", "status")
+	local page  = node("freifunk", "status", "status")
 	page.target = form("freifunk/public_status")
-	page.title  = "Status"
+	page.title  = i18n("overview")
 	page.order  = 20
 	page.i18n   = "admin-core"
 	page.setuser  = false
 	page.setgroup = false
 
 	entry({"freifunk", "status.json"}, call("jsonstatus"))
+	entry({"freifunk", "status", "zeroes"}, call("zeroes"), "Testdownload") 
 
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 
@@ -118,6 +120,21 @@ local function fetch_olsrd()
 	end
 
 	return data
+end
+
+function zeroes()
+	local string = require "string"
+	local http = require "luci.http"
+	local zeroes = string.rep(string.char(0), 8192)
+	local cnt = 0
+	local lim = 1024 * 1024 * 1024
+	
+	http.prepare_content("application/x-many-zeroes")
+
+	while cnt < lim do
+		http.write(zeroes)
+		cnt = cnt + #zeroes
+	end
 end
 
 function jsonstatus()
