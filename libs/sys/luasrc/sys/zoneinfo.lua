@@ -76,7 +76,7 @@ TZ = {
 	{ 'America/Argentina/Rio Gallegos', 'ART3' },
 	{ 'America/Argentina/Salta', 'ART3' },
 	{ 'America/Argentina/San Juan', 'ART3' },
-	{ 'America/Argentina/San Luis', 'ART3' },
+	{ 'America/Argentina/San Luis', 'WART4WARST,M10.3.0/0,M3.3.0/0' },
 	{ 'America/Argentina/Tucuman', 'ART3ARST,M10.3.0/0,M3.3.0/0' },
 	{ 'America/Argentina/Ushuaia', 'ART3' },
 	{ 'America/Aruba', 'AST4' },
@@ -120,7 +120,7 @@ TZ = {
 	{ 'America/Guayaquil', 'ECT5' },
 	{ 'America/Guyana', 'GYT4' },
 	{ 'America/Halifax', 'AST4ADT,M3.2.0,M11.1.0' },
-	{ 'America/Havana', 'CST5CDT,M3.3.0/0,M10.5.0/1' },
+	{ 'America/Havana', 'CST5CDT,M3.2.0/0,M10.5.0/1' },
 	{ 'America/Hermosillo', 'MST7' },
 	{ 'America/Indiana/Indianapolis', 'EST5EDT,M3.2.0,M11.1.0' },
 	{ 'America/Indiana/Knox', 'CST6CDT,M3.2.0,M11.1.0' },
@@ -224,7 +224,7 @@ TZ = {
 	{ 'Asia/Choibalsan', 'CHOT-8' },
 	{ 'Asia/Chongqing', 'CST-8' },
 	{ 'Asia/Colombo', 'IST-5:30' },
-	{ 'Asia/Damascus', 'EET-2EEST,M4.1.5/0,J305/0' },
+	{ 'Asia/Damascus', 'EET-2EEST,M3.5.5/0,J305/0' },
 	{ 'Asia/Dhaka', 'BDT-6' },
 	{ 'Asia/Dili', 'TLT-9' },
 	{ 'Asia/Dubai', 'GST-4' },
@@ -424,6 +424,8 @@ OFFSET = {
 	brt   = -10800,	-- BRT
 	art   = -10800,	-- ART
 	arst  =  -7200,	-- ARST
+	wart  = -14400,	-- WART
+	warst = -10800,	-- WARST
 	pyt   = -14400,	-- PYT
 	pyst  = -10800,	-- PYST
 	est   = -18000,	-- EST
