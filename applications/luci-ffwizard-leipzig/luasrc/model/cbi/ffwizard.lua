@@ -262,19 +262,6 @@ function olsr.write(self, section, value)
 	local community = net:formvalue(section)
 	local external  = community and uci:get("freifunk", community, "external") or ""
 
-	-- Configure nameservice
-	local hostname
-	uci:foreach("system", "system", function(s) hostname = s.hostname end)
-
-	if hostname then
-		uci:foreach("olsrd", "LoadPlugin",
-			function(s)
-				if s.library == "olsrd_nameservice.so.0.3" then
-					uci:set("olsrd", s['.name'], "name", hostname)
-				end
-			end)
-	end
-
 	-- Delete old interface
 	uci:delete_all("olsrd", "Interface", {interface=device})
 
@@ -401,7 +388,7 @@ function client.write(self, section, value)
 		target="ACCEPT"
 	})
 
-
+	uci:save("firewall")
 
 	-- Delete old splash
 	uci:delete_all("luci_splash", "iface", {network=device.."dhcp", zone="freifunk"})
