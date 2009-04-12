@@ -388,7 +388,7 @@ function client.write(self, section, value)
 		target="ACCEPT"
 	})
 
-
+	uci:save("firewall")
 
 	-- Delete old splash
 	uci:delete_all("luci_splash", "iface", {network=device.."dhcp", zone="freifunk"})
