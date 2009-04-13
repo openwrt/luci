@@ -145,7 +145,7 @@ static int larlib_mkpath( const char *name, const char *path, char *buffer )
 	int nlen = strlen(name);
 	int plen = strlen(path);
 
-	if( (nlen + plen + 1) <= 1024 )
+	if( (nlen + plen + 1) <= LAR_FNAME_BUFFER )
 	{
 		strcpy(buffer, path);
 
@@ -451,10 +451,10 @@ int larlib_findfile( lua_State *L )
 	int i;
 	const char *filename = luaL_checkstring( L, 1 );
 	const char *basepath = luaL_optstring( L, 2, "./" );
-	char filepath[1024];
 	struct stat s;
 	lar_archive *ar;
 	lar_member  *mb;
+	LAR_FNAME(filepath);
 
 	const char *searchpath[3] = { basepath, LUA_LDIR, LUA_CDIR };
 

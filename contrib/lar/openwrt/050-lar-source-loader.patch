@@ -456,7 +456,7 @@ diff -Nbur lua-5.1.4.orig/src/lar.h lua-5.1.4/src/lar.h
 +#endif
 diff -Nbur lua-5.1.4.orig/src/larlib.c lua-5.1.4/src/larlib.c
 --- lua-5.1.4.orig/src/larlib.c	1970-01-01 01:00:00.000000000 +0100
-+++ lua-5.1.4/src/larlib.c	2009-04-13 16:51:15.000000000 +0200
++++ lua-5.1.4/src/larlib.c	2009-04-13 17:24:57.000000000 +0200
 @@ -0,0 +1,540 @@
 +/*
 + * lar - Lua Archive Library
@@ -605,7 +605,7 @@ diff -Nbur lua-5.1.4.orig/src/larlib.c lua-5.1.4/src/larlib.c
 +	int nlen = strlen(name);
 +	int plen = strlen(path);
 +
-+	if( (nlen + plen + 1) <= 1024 )
++	if( (nlen + plen + 1) <= LAR_FNAME_BUFFER )
 +	{
 +		strcpy(buffer, path);
 +
@@ -911,10 +911,10 @@ diff -Nbur lua-5.1.4.orig/src/larlib.c lua-5.1.4/src/larlib.c
 +	int i;
 +	const char *filename = luaL_checkstring( L, 1 );
 +	const char *basepath = luaL_optstring( L, 2, "./" );
-+	char filepath[1024];
 +	struct stat s;
 +	lar_archive *ar;
 +	lar_member  *mb;
++	LAR_FNAME(filepath);
 +
 +	const char *searchpath[3] = { basepath, LUA_LDIR, LUA_CDIR };
 +
