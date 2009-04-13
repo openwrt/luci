@@ -88,12 +88,6 @@ typedef struct lar_index_item lar_index;
 typedef struct lar_member_item lar_member;
 typedef struct lar_archive_handle lar_archive;
 
-/*
-static int lar_read_filenames( lar_archive *ar );
-static int lar_read32( int fd, uint32_t *val );
-static int lar_read16( int fd, uint16_t *val );
-static void lar_md5( char *md5, const char *data, int len );
-*/
 
 lar_index * lar_get_index( lar_archive *ar );
 
