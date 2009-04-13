@@ -2,7 +2,7 @@ GCC     := gcc
 CFLAGS  := -Wall
 LDFLAGS :=
 
-OBJ = cli.o lar.o
+OBJ = cli.o lar.o md5.o
 BIN = lar
 
 cli: $(OBJ)
