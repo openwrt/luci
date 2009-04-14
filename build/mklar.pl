@@ -39,16 +39,7 @@ find( sub {
 	( $File::Find::name =~ m{/luasrc/} ) || return;
 
 	# Skip .svn foo
-	( $File::Find::name !~ m{/\.svn\z} ) || return;
-
-	# Skip non-lua files
-	( $File::Find::name =~ m{\.lua\z} ) || return;
-
-	# Skip i18n files
-	( $File::Find::name !~ m{/i18n/} ) || return;
-	
-	# Exclude cbi models and controllers for now
-	( $File::Find::name !~ m{/controller/} && $File::Find::name !~ m{/model/cbi/} ) || return;
+	( $File::Find::name !~ m{/\.svn\b} ) || return;
 
 	# Exclude luci-statistics and lucittpd for now
 	( $File::Find::name !~ m{/luci-statistics/} && $File::Find::name !~ m{/lucittpd/} ) || return;
@@ -57,7 +48,10 @@ find( sub {
 	my $file = $File::Find::name;
 	$file =~ s{^.+/luasrc/}{luci/};
 
-	if( open F, "< $_" )
+	my $command = ( $File::Find::name =~ m{\.lua\z} && $ENV{LUAC} )
+		? "$ENV{LUAC} -o - $_ |" : "< $_";
+
+	if( open F, $command )
 	{
 		warn sprintf "Member at 0x%08X: %s\n", $offset, $file;
 		push @index, [ ];
@@ -66,7 +60,7 @@ find( sub {
 		my $pad  = 0;
 
 		$index[-1][0] = $offset;
-		
+
 		while( read F, my $buffer, 4096 ) {
 			$size += length $buffer;
 			print $buffer;
@@ -97,16 +91,17 @@ find( sub {
 my $filelist = join("\0", map $_->[4], @index) . "\0";
 my $listsize = length $filelist;
 push @index, [ $offset, $listsize, "", 0xFFFF, undef ];
-warn sprintf "Filelist at 0x%08X\n", $offset;
 
-if( $listsize % 4 )
-{
-	$listsize += ( 4 - ($listsize % 4) );
-	$filelist .= "\0" x ( 4 - ($listsize % 4) );
-}
+warn sprintf "Filelist at 0x%08X, length 0x%08X\n", $offset, $listsize;
 
 print $filelist;
 $offset += $listsize;
+
+if( $listsize % 4 )
+{
+	$offset += ( 4 - ($listsize % 4) );
+	print "\0" x ( 4 - ($listsize % 4) );
+}
 
 
 my $count = 1;
