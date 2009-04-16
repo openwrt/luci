@@ -42,11 +42,12 @@ local basicParams = {
 	{ Flag,			"client_to_client",		0 },
 	{ DynamicList,	"remote",				"vpnserver.example.org" },
 
-	{ Value,		"secret",				"/etc/openvpn/secret.key 1" },
-	{ Value,		"ca",					"/etc/easy-rsa/keys/ca.crt" },
-	{ Value,		"dh",					"/etc/easy-rsa/keys/dh1024.pem" },
-	{ Value,		"cert",					"/etc/easy-rsa/keys/some-client.crt" },
-	{ Value,		"key",					"/etc/easy-rsa/keys/some-client.key" },
+	{ FileUpload,	"secret",				"/etc/openvpn/secret.key 1" },
+	{ FileUpload,	"pkcs12",				"/etc/easy-rsa/keys/some-client.pk12" },
+	{ FileUpload,	"ca",					"/etc/easy-rsa/keys/ca.crt" },
+	{ FileUpload,	"dh",					"/etc/easy-rsa/keys/dh1024.pem" },
+	{ FileUpload,	"cert",					"/etc/easy-rsa/keys/some-client.crt" },
+	{ FileUpload,	"key",					"/etc/easy-rsa/keys/some-client.key" },
 }
 
 
