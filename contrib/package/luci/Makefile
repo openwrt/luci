@@ -340,7 +340,7 @@ endef
 
 define Package/luci-admin-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-web +luci-cbi +luci-theme-openwrt +luci-i18n-english
+  DEPENDS+=+luci-web +luci-cbi +luci-i18n-english
   TITLE:=Web UI Core Module
 endef
 
