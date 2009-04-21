@@ -18,6 +18,8 @@
 
 #include "nixio.h"
 #include <string.h>
+
+#ifndef __WINNT__
 #include <syslog.h>
 
 
@@ -57,7 +59,7 @@ static int nixio_closelog(lua_State *L) {
 	return 0;
 }
 
-static int nixio__syslogmasg(lua_State *L, int dolog) {
+static int nixio__syslogmask(lua_State *L, int dolog) {
 	int priority;
 
 	const char *flag = luaL_checkstring(L, 1);
@@ -92,11 +94,11 @@ static int nixio__syslogmasg(lua_State *L, int dolog) {
 }
 
 static int nixio_setlogmask(lua_State *L) {
-	return nixio__syslogmasg(L, 0);
+	return nixio__syslogmask(L, 0);
 }
 
 static int nixio_syslog(lua_State *L) {
-	return nixio__syslogmasg(L, 1);
+	return nixio__syslogmask(L, 1);
 }
 
 /* module table */
@@ -111,3 +113,10 @@ static const luaL_reg R[] = {
 void nixio_open_syslog(lua_State *L) {
 	luaL_register(L, NULL, R);
 }
+
+#else /* __WINNT__ */
+
+void nixio_open_syslog(lua_State *L) {
+}
+
+#endif /* __WINNT__ */

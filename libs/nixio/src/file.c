@@ -30,12 +30,37 @@
 
 static int nixio_open(lua_State *L) {
 	const char *filename = luaL_checklstring(L, 1, NULL);
-	int flags = luaL_optint(L, 2, O_RDONLY);
-	int mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
+	int flags;
+
+	if (lua_isnoneornil(L, 2)) {
+		flags = O_RDONLY;
+	} else if (lua_isnumber(L, 2)) {
+		flags = lua_tointeger(L, 2);
+	} else if (lua_isstring(L, 2)) {
+		const char *str = lua_tostring(L, 2);
+		if (!strcmp(str, "r")) {
+			flags = O_RDONLY;
+		} else if (!strcmp(str, "r+")) {
+			flags = O_RDWR;
+		} else if (!strcmp(str, "w")) {
+			flags = O_WRONLY | O_CREAT | O_TRUNC;
+		} else if (!strcmp(str, "w+")) {
+			flags = O_RDWR | O_CREAT | O_TRUNC;
+		} else if (!strcmp(str, "a")) {
+			flags = O_WRONLY | O_CREAT | O_APPEND;
+		} else if (!strcmp(str, "a+")) {
+			flags = O_RDWR | O_CREAT | O_APPEND;
+		} else {
+			return luaL_argerror(L, 2, "supported values: r, r+, w, w+, a, a+");
+		}
+	} else {
+		return luaL_argerror(L, 2, "open flags or string expected");
+	}
+
 	int fd;
 
 	do {
-		fd = open(filename, flags, mode);
+		fd = open(filename, flags, nixio__check_mode(L, 3, 0666));
 	} while (fd == -1 && errno == EINTR);
 	if (fd == -1) {
 		return nixio__perror(L);
@@ -66,9 +91,13 @@ static int nixio_open_flags(lua_State *L) {
 		} else if (!strcmp(flag, "excl")) {
 			mode |= O_EXCL;
 		} else if (!strcmp(flag, "nonblock") || !strcmp(flag, "ndelay")) {
+#ifndef __WINNT__
 			mode |= O_NONBLOCK;
+#endif
 		} else if (!strcmp(flag, "sync")) {
+#ifndef __WINNT__
 			mode |= O_SYNC;
+#endif
 		} else if (!strcmp(flag, "trunc")) {
 			mode |= O_TRUNC;
 		} else if (!strcmp(flag, "rdonly")) {
@@ -141,6 +170,23 @@ static int nixio_file_write(lua_State *L) {
 	ssize_t sent;
 	const char *data = luaL_checklstring(L, 2, &len);
 
+	if (lua_gettop(L) > 2) {
+		int offset = luaL_optint(L, 3, 0);
+		if (offset) {
+			if (offset < len) {
+				data += offset;
+				len -= offset;
+			} else {
+				len = 0;
+			}
+		}
+
+		unsigned int wlen = luaL_optint(L, 4, len);
+		if (wlen < len) {
+			len = wlen;
+		}
+	}
+
 	do {
 		sent = write(fd, data, len);
 	} while(sent == -1 && errno == EINTR);
@@ -155,7 +201,7 @@ static int nixio_file_write(lua_State *L) {
 static int nixio_file_read(lua_State *L) {
 	int fd = nixio__checkfd(L, 1);
 	char buffer[NIXIO_BUFFERSIZE];
-	int req = luaL_checkinteger(L, 2);
+	uint req = luaL_checkinteger(L, 2);
 	int readc;
 
 	/* We limit the readsize to NIXIO_BUFFERSIZE */
@@ -208,13 +254,33 @@ static int nixio_file_tell(lua_State *L) {
 	}
 }
 
+static int nixio_file_stat(lua_State *L) {
+	nixio_stat_t buf;
+	if (fstat(nixio__checkfd(L, 1), &buf)) {
+		return nixio__perror(L);
+	} else {
+		nixio__push_stat(L, &buf);
+		if (lua_isstring(L, 2)) {
+			lua_getfield(L, -1, lua_tostring(L, 2));
+		}
+		return 1;
+	}
+}
+
 static int nixio_file_sync(lua_State *L) {
 	int fd = nixio__checkfd(L, 1);
-#ifndef BSD
-	int meta = lua_toboolean(L, 2);
-	return nixio__pstatus(L, (meta) ? !fsync(fd) : !fdatasync(fd));
+	int stat;
+#if (!defined BSD && !defined __WINNT__)
+	int dataonly = lua_toboolean(L, 2);
+	do {
+		stat = (dataonly) ? fdatasync(fd) : fsync(fd);
+	} while (stat == -1 && errno == EINTR);
+	return nixio__pstatus(L, !stat);
 #else
-	return nixio__pstatus(L, !fsync(fd));
+	do {
+		stat = fsync(fd);
+	} while (stat == -1 && errno == EINTR);
+	return nixio__pstatus(L, !stat);
 #endif
 }
 
@@ -282,6 +348,7 @@ static const luaL_reg M[] = {
 	{"read",		nixio_file_read},
 	{"tell",		nixio_file_tell},
 	{"seek",		nixio_file_seek},
+	{"stat",		nixio_file_stat},
 	{"sync",		nixio_file_sync},
 	{"lock",		nixio_file_lock},
 	{"close",		nixio_file_close},
@@ -306,5 +373,26 @@ void nixio_open_file(lua_State *L) {
 	luaL_register(L, NULL, M);
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
+
+	int *uin  = lua_newuserdata(L, sizeof(int));
+	int *uout = lua_newuserdata(L, sizeof(int));
+	int *uerr = lua_newuserdata(L, sizeof(int));
+
+	if (!uin || !uout || !uerr) {
+		luaL_error(L, "out of memory");
+	}
+
+	*uin  = STDIN_FILENO;
+	*uout = STDOUT_FILENO;
+	*uerr = STDERR_FILENO;
+
+	for (int i = -4; i < -1; i++) {
+		lua_pushvalue(L, -4);
+		lua_setmetatable(L, i);
+	}
+
+	lua_setfield(L, -5, "stderr");
+	lua_setfield(L, -4, "stdout");
+	lua_setfield(L, -3, "stdin");
 	lua_setfield(L, -2, "meta_file");
 }

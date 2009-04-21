@@ -17,12 +17,10 @@
  */
 
 #include "nixio.h"
-#include <poll.h>
 #include <time.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include "nixio.h"
 
 
 /**
@@ -71,11 +69,13 @@ static int nixio_poll_flags(lua_State *L) {
 		flags = luaL_checkinteger(L, 1);
 		lua_newtable(L);
 		nixio_poll_flags__r(L, &flags, POLLIN, "in");
-		nixio_poll_flags__r(L, &flags, POLLPRI, "pri");
 		nixio_poll_flags__r(L, &flags, POLLOUT, "out");
 		nixio_poll_flags__r(L, &flags, POLLERR, "err");
+#ifndef __WINNT__
+		nixio_poll_flags__r(L, &flags, POLLPRI, "pri");
 		nixio_poll_flags__r(L, &flags, POLLHUP, "hup");
 		nixio_poll_flags__r(L, &flags, POLLNVAL, "nval");
+#endif
 	 } else {
 		flags = 0;
 		const int j = lua_gettop(L);
@@ -83,16 +83,22 @@ static int nixio_poll_flags(lua_State *L) {
 			const char *flag = luaL_checkstring(L, i);
 			if (!strcmp(flag, "in")) {
 				flags |= POLLIN;
-			} else if (!strcmp(flag, "pri")) {
-				flags |= POLLPRI;
 			} else if (!strcmp(flag, "out")) {
 				flags |= POLLOUT;
 			} else if (!strcmp(flag, "err")) {
 				flags |= POLLERR;
+			} else if (!strcmp(flag, "pri")) {
+#ifndef __WINNT__
+				flags |= POLLPRI;
+#endif
 			} else if (!strcmp(flag, "hup")) {
+#ifndef __WINNT__
 				flags |= POLLHUP;
+#endif
 			} else if (!strcmp(flag, "nval")) {
+#ifndef __WINNT__
 				flags |= POLLNVAL;
+#endif
 			} else {
 				return luaL_argerror(L, i,
 				 "supported values: in, pri, out, err, hup, nval");
@@ -114,11 +120,19 @@ static int nixio_poll(lua_State *L) {
 
 	/* we are being abused as sleep() replacement... */
 	if (lua_isnoneornil(L, 1) || len < 1) {
-		return nixio__pstatus(L, !poll(NULL, 0, timeout));
+		if (!poll(NULL, 0, timeout)) {
+			lua_pushinteger(L, 0);
+			return 1;
+		} else {
+			return nixio__perror(L);
+		}
 	}
 
 	luaL_checktype(L, 1, LUA_TTABLE);
 	struct pollfd *fds = calloc(len, sizeof(struct pollfd));
+	if (!fds) {
+		return luaL_error(L, NIXIO_OOM);
+	}
 
 	for (i = 0; i < len; i++) {
 		lua_rawgeti(L, 1, i+1);
@@ -145,7 +159,11 @@ static int nixio_poll(lua_State *L) {
 
 	status = poll(fds, (nfds_t)len, timeout);
 
-	if (status < 1) {
+	if (status == 0) {
+		free(fds);
+		lua_pushboolean(L, 0);
+		return 1;
+	} else if (status < 0) {
 		free(fds);
 		return nixio__perror(L);
 	}

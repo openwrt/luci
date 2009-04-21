@@ -27,6 +27,9 @@
 #include <unistd.h>
 #include <sys/param.h>
 
+
+#ifndef __WINNT__
+
 #ifndef BSD
 #include <sys/sendfile.h>
 #else
@@ -150,6 +153,14 @@ static const luaL_reg R[] = {
 	{NULL,			NULL}
 };
 
+
 void nixio_open_splice(lua_State *L) {
 	luaL_register(L, NULL, R);
 }
+
+#else /* __WINNT__ */
+
+void nixio_open_splice(lua_State *L) {
+}
+
+#endif /* !__WINNT__ */

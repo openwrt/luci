@@ -18,12 +18,10 @@
 
 #include "nixio.h"
 #include <errno.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
 
 
 /**
@@ -33,34 +31,46 @@ static int nixio_sock__sendto(lua_State *L, int to) {
 	nixio_sock *sock = nixio__checksock(L);
 	struct sockaddr *addr = NULL;
 	socklen_t alen = 0;
+	int argoff = 2;
 
 	if (to) {
-		const char *address = luaL_checklstring(L, 3, NULL);
-		uint16_t port = (uint16_t)luaL_checkinteger(L, 4);
+		argoff += 2;
+		const char *address = luaL_checkstring(L, 3);
 		struct sockaddr_storage addrstor;
 		addr = (struct sockaddr*)&addrstor;
-		if (sock->domain == AF_INET) {
-			struct sockaddr_in *inetaddr = (struct sockaddr_in *)addr;
-			if (inet_pton(sock->domain, address, &inetaddr->sin_addr) < 0) {
-				return luaL_argerror(L, 3, "invalid address");
-			}
-			inetaddr->sin_port = htons(port);
-			alen = sizeof(*inetaddr);
-		} else if (sock->domain == AF_INET6) {
-			struct sockaddr_in6 *inet6addr = (struct sockaddr_in6 *)addr;
-			if (inet_pton(sock->domain, address, &inet6addr->sin6_addr) < 0) {
-				return luaL_argerror(L, 3, "invalid address");
-			}
-			inet6addr->sin6_port = htons(port);
-			alen = sizeof(*inet6addr);
-		} else {
-			return luaL_argerror(L, 1, "supported families: inet, inet6");
+
+		nixio_addr naddr;
+		memset(&naddr, 0, sizeof(naddr));
+		strncpy(naddr.host, address, sizeof(naddr.host) - 1);
+		naddr.port = (uint16_t)luaL_checkinteger(L, 4);
+		naddr.family = sock->domain;
+
+		if (nixio__addr_write(&naddr, addr)) {
+			return nixio__perror_s(L);
 		}
 	}
 
 	size_t len;
 	ssize_t sent;
 	const char *data = luaL_checklstring(L, 2, &len);
+
+	if (lua_gettop(L) > argoff) {
+		int offset = luaL_optint(L, argoff + 1, 0);
+		if (offset) {
+			if (offset < len) {
+				data += offset;
+				len -= offset;
+			} else {
+				len = 0;
+			}
+		}
+
+		unsigned int wlen = luaL_optint(L, argoff + 2, len);
+		if (wlen < len) {
+			len = wlen;
+		}
+	}
+
 	do {
 		sent = sendto(sock->fd, data, len, 0, addr, alen);
 	} while(sent == -1 && errno == EINTR);
@@ -68,7 +78,7 @@ static int nixio_sock__sendto(lua_State *L, int to) {
 		lua_pushinteger(L, sent);
 		return 1;
 	} else {
-		return nixio__perror(L);
+		return nixio__perror_s(L);
 	}
 }
 
@@ -94,7 +104,7 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 	nixio_sock *sock = nixio__checksock(L);
 	char buffer[NIXIO_BUFFERSIZE];
 	struct sockaddr_storage addrobj;
-	int req = luaL_checkinteger(L, 2);
+	uint req = luaL_checkinteger(L, 2);
 	int readc;
 
 	if (from && sock->domain != AF_INET && sock->domain != AF_INET6) {
@@ -111,38 +121,31 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 		readc = recvfrom(sock->fd, buffer, req, 0, addr, &alen);
 	} while (readc == -1 && errno == EINTR);
 
+#ifdef __WINNT__
 	if (readc < 0) {
-		return nixio__perror(L);
+		int e = WSAGetLastError();
+		if (e == WSAECONNRESET || e == WSAECONNABORTED || e == WSAESHUTDOWN) {
+			readc = 0;
+		}
+	}
+#endif
+
+	if (readc < 0) {
+		return nixio__perror_s(L);
 	} else {
 		lua_pushlstring(L, buffer, readc);
 
 		if (!from) {
 			return 1;
 		} else {
-			char ipaddr[INET6_ADDRSTRLEN];
-			void *binaddr;
-			uint16_t port;
-
-			if (addrobj.ss_family == AF_INET) {
-				struct sockaddr_in *inetaddr = (struct sockaddr_in*)addr;
-				port = inetaddr->sin_port;
-				binaddr = &inetaddr->sin_addr;
-			} else if (addrobj.ss_family == AF_INET6) {
-				struct sockaddr_in6 *inet6addr = (struct sockaddr_in6*)addr;
-				port = inet6addr->sin6_port;
-				binaddr = &inet6addr->sin6_addr;
+			nixio_addr naddr;
+			if (!nixio__addr_parse(&naddr, (struct sockaddr *)&addrobj)) {
+				lua_pushstring(L, naddr.host);
+				lua_pushnumber(L, naddr.port);
+				return 3;
 			} else {
-				return luaL_error(L, "unknown address family");
+				return 1;
 			}
-
-			if (!inet_ntop(addrobj.ss_family, binaddr, ipaddr, sizeof(ipaddr))) {
-				return nixio__perror(L);
-			}
-
-			lua_pushstring(L, ipaddr);
-			lua_pushinteger(L, ntohs(port));
-
-			return 3;
 		}
 	}
 }

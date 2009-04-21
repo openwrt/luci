@@ -27,7 +27,7 @@
 
 /* pushes nil, error number and errstring on the stack */
 int nixio__perror(lua_State *L) {
-	if (errno == EAGAIN) {
+	if (errno == EAGAIN || errno == EWOULDBLOCK) {
 		lua_pushboolean(L, 0);
 	} else {
 		lua_pushnil(L);
@@ -85,6 +85,17 @@ int nixio__tofd(lua_State *L, int ud) {
 	return fd;
 }
 
+/* An empty iterator */
+int nixio__nulliter(lua_State *L) {
+	lua_pushnil(L);
+	return 1;
+}
+
+static int nixio_errno(lua_State *L) {
+	lua_pushinteger(L, errno);
+	return 1;
+}
+
 static int nixio_strerror(lua_State *L) {
 	lua_pushstring(L, strerror(luaL_checkinteger(L, 1)));
 	return 1;
@@ -92,12 +103,13 @@ static int nixio_strerror(lua_State *L) {
 
 /* object table */
 static const luaL_reg R[] = {
+	{"errno",		nixio_errno},
 	{"strerror",	nixio_strerror},
 	{NULL,			NULL}
 };
 
 /* entry point */
-LUALIB_API int luaopen_nixio(lua_State *L) {
+NIXIO_API int luaopen_nixio(lua_State *L) {
 	/* create metatable */
 	luaL_newmetatable(L, NIXIO_META);
 
@@ -113,6 +125,9 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	lua_setfield(L, -2, "meta_socket");
 
 	/* register methods */
+#ifdef __WINNT__
+	nixio_open__mingw(L);
+#endif
 	nixio_open_file(L);
 	nixio_open_socket(L);
 	nixio_open_sockopt(L);
@@ -123,6 +138,11 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	nixio_open_splice(L);
 	nixio_open_process(L);
 	nixio_open_syslog(L);
+	nixio_open_bit(L);
+	nixio_open_bin(L);
+	nixio_open_fs(L);
+	nixio_open_user(L);
+	nixio_open_tls_crypto(L);
 	nixio_open_tls_context(L);
 	nixio_open_tls_socket(L);
 
@@ -131,13 +151,21 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	lua_setfield(L, -2, "version");
 
 	/* some constants */
-	lua_createtable(L, 0, 49);
+	lua_newtable(L);
+
+	lua_pushliteral(L, NIXIO_SEP);
+	lua_setfield(L, -2, "sep");
+
+	lua_pushliteral(L, NIXIO_PATHSEP);
+	lua_setfield(L, -2, "pathsep");
+
+	lua_pushinteger(L, NIXIO_BUFFERSIZE);
+	lua_setfield(L, -2, "buffersize");
 
 	NIXIO_PUSH_CONSTANT(EACCES);
 	NIXIO_PUSH_CONSTANT(EINTR);
 	NIXIO_PUSH_CONSTANT(ENOSYS);
 	NIXIO_PUSH_CONSTANT(EINVAL);
-	NIXIO_PUSH_CONSTANT(EWOULDBLOCK);
 	NIXIO_PUSH_CONSTANT(EAGAIN);
 	NIXIO_PUSH_CONSTANT(ENOMEM);
 	NIXIO_PUSH_CONSTANT(ENOENT);
@@ -152,37 +180,51 @@ LUALIB_API int luaopen_nixio(lua_State *L) {
 	NIXIO_PUSH_CONSTANT(EISDIR);
 	NIXIO_PUSH_CONSTANT(EPERM);
 	NIXIO_PUSH_CONSTANT(EEXIST);
-	NIXIO_PUSH_CONSTANT(ELOOP);
 	NIXIO_PUSH_CONSTANT(EMFILE);
 	NIXIO_PUSH_CONSTANT(ENAMETOOLONG);
 	NIXIO_PUSH_CONSTANT(ENFILE);
 	NIXIO_PUSH_CONSTANT(ENODEV);
+	NIXIO_PUSH_CONSTANT(EXDEV);
 	NIXIO_PUSH_CONSTANT(ENOTDIR);
 	NIXIO_PUSH_CONSTANT(ENXIO);
-	NIXIO_PUSH_CONSTANT(EOVERFLOW);
 	NIXIO_PUSH_CONSTANT(EROFS);
+	NIXIO_PUSH_CONSTANT(EBUSY);
+	NIXIO_PUSH_CONSTANT(ESRCH);
+	NIXIO_PUSH_CONSTANT(SIGINT);
+	NIXIO_PUSH_CONSTANT(SIGTERM);
+	NIXIO_PUSH_CONSTANT(SIGSEGV);
+
+#ifndef __WINNT__
+	NIXIO_PUSH_CONSTANT(EWOULDBLOCK);
+	NIXIO_PUSH_CONSTANT(ELOOP);
+	NIXIO_PUSH_CONSTANT(EOVERFLOW);
 	NIXIO_PUSH_CONSTANT(ETXTBSY);
 	NIXIO_PUSH_CONSTANT(EAFNOSUPPORT);
 	NIXIO_PUSH_CONSTANT(ENOBUFS);
 	NIXIO_PUSH_CONSTANT(EPROTONOSUPPORT);
 	NIXIO_PUSH_CONSTANT(ENOPROTOOPT);
-	NIXIO_PUSH_CONSTANT(EBUSY);
-	NIXIO_PUSH_CONSTANT(ESRCH);
+	NIXIO_PUSH_CONSTANT(EADDRINUSE);
+	NIXIO_PUSH_CONSTANT(ENETDOWN);
+	NIXIO_PUSH_CONSTANT(ENETUNREACH);
+
 	NIXIO_PUSH_CONSTANT(SIGALRM);
-	NIXIO_PUSH_CONSTANT(SIGINT);
-	NIXIO_PUSH_CONSTANT(SIGTERM);
 	NIXIO_PUSH_CONSTANT(SIGKILL);
 	NIXIO_PUSH_CONSTANT(SIGHUP);
 	NIXIO_PUSH_CONSTANT(SIGSTOP);
 	NIXIO_PUSH_CONSTANT(SIGCONT);
-	NIXIO_PUSH_CONSTANT(SIGSEGV);
 	NIXIO_PUSH_CONSTANT(SIGCHLD);
 	NIXIO_PUSH_CONSTANT(SIGQUIT);
 	NIXIO_PUSH_CONSTANT(SIGUSR1);
 	NIXIO_PUSH_CONSTANT(SIGUSR2);
 	NIXIO_PUSH_CONSTANT(SIGIO);
 	NIXIO_PUSH_CONSTANT(SIGURG);
+	NIXIO_PUSH_CONSTANT(SIGPIPE);
 
+	lua_pushvalue(L, -1);
+	lua_setfield(L, -3, "const_sock");
+
+	signal(SIGPIPE, SIG_IGN);
+#endif /* !__WINNT__ */
 	lua_setfield(L, -2, "const");
 
 	/* remove meta table */

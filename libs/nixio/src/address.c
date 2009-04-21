@@ -18,15 +18,78 @@
 
 #include "nixio.h"
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
+#include <errno.h>
 #include <string.h>
-#include <netdb.h>
 
 #ifndef NI_MAXHOST
 #define NI_MAXHOST 1025
 #endif
+
+/**
+ * address pushing helper
+ */
+int nixio__addr_parse(nixio_addr *addr, struct sockaddr *saddr) {
+	void *baddr;
+
+	addr->family = saddr->sa_family;
+	if (saddr->sa_family == AF_INET) {
+		struct sockaddr_in *inetaddr = (struct sockaddr_in*)saddr;
+		addr->port = ntohs(inetaddr->sin_port);
+		baddr = &inetaddr->sin_addr;
+	} else if (saddr->sa_family == AF_INET6) {
+		struct sockaddr_in6 *inet6addr = (struct sockaddr_in6*)saddr;
+		addr->port = ntohs(inet6addr->sin6_port);
+		baddr = &inet6addr->sin6_addr;
+	} else {
+		errno = EAFNOSUPPORT;
+		return -1;
+	}
+
+	if (!inet_ntop(saddr->sa_family, baddr, addr->host, sizeof(addr->host))) {
+		return -1;
+	}
+
+	return 0;
+}
+
+/**
+ * address pulling helper
+ */
+int nixio__addr_write(nixio_addr *addr, struct sockaddr *saddr) {
+	if (addr->family == AF_UNSPEC) {
+		if (strchr(addr->host, ':')) {
+			addr->family = AF_INET6;
+		} else {
+			addr->family = AF_INET;
+		}
+	}
+	if (addr->family == AF_INET) {
+		struct sockaddr_in *inetaddr = (struct sockaddr_in *)saddr;
+		memset(inetaddr, 0, sizeof(struct sockaddr_in));
+
+		if (inet_pton(AF_INET, addr->host, &inetaddr->sin_addr) < 1) {
+			return -1;
+		}
+
+		inetaddr->sin_family = AF_INET;
+		inetaddr->sin_port = htons((uint16_t)addr->port);
+		return 0;
+	} else if (addr->family == AF_INET6) {
+		struct sockaddr_in6 *inet6addr = (struct sockaddr_in6 *)saddr;
+		memset(inet6addr, 0, sizeof(struct sockaddr_in6));
+
+		if (inet_pton(AF_INET6, addr->host, &inet6addr->sin6_addr) < 1) {
+			return -1;
+		}
+
+		inet6addr->sin6_family = AF_INET6;
+		inet6addr->sin6_port = htons((uint16_t)addr->port);
+		return 0;
+	} else {
+		errno = EAFNOSUPPORT;
+		return -1;
+	}
+}
 
 
 /**
@@ -70,9 +133,11 @@ static int nixio_getaddrinfo(lua_State *L) {
 
 	for (rp = result; rp != NULL; rp = rp->ai_next) {
 		/* avoid duplicate results */
+#ifndef __WINNT__
 		if (!port && rp->ai_socktype != SOCK_STREAM) {
 			continue;
 		}
+#endif
 
 		if (rp->ai_family == AF_INET || rp->ai_family == AF_INET6) {
 			lua_createtable(L, 0, port ? 4 : 2);
@@ -101,31 +166,18 @@ static int nixio_getaddrinfo(lua_State *L) {
 				lua_setfield(L, -2, "socktype");
 			}
 
-			char ip[INET6_ADDRSTRLEN];
-			void *binaddr = NULL;
-			uint16_t binport = 0;
-
-			if (rp->ai_family == AF_INET) {
-				struct sockaddr_in *v4addr = (struct sockaddr_in*)rp->ai_addr;
-				binport = v4addr->sin_port;
-				binaddr = (void *)&v4addr->sin_addr;
-			} else if (rp->ai_family == AF_INET6) {
-				struct sockaddr_in6 *v6addr = (struct sockaddr_in6*)rp->ai_addr;
-				binport = v6addr->sin6_port;
-				binaddr = (void *)&v6addr->sin6_addr;
-			}
-
-			if (!inet_ntop(rp->ai_family, binaddr, ip, sizeof(ip))) {
+			nixio_addr addr;
+			if (nixio__addr_parse(&addr, rp->ai_addr)) {
 				freeaddrinfo(result);
-				return nixio__perror(L);
+				return nixio__perror_s(L);
 			}
 
 			if (port) {
-				lua_pushinteger(L, ntohs(binport));
+				lua_pushinteger(L, addr.port);
 				lua_setfield(L, -2, "port");
 			}
 
-			lua_pushstring(L, ip);
+			lua_pushstring(L, addr.host);
 			lua_setfield(L, -2, "address");
 			lua_rawseti(L, -2, i++);
 		}
@@ -140,37 +192,29 @@ static int nixio_getaddrinfo(lua_State *L) {
  * getnameinfo(address, family)
  */
 static int nixio_getnameinfo(lua_State *L) {
-	const char *ip = luaL_checklstring(L, 1, NULL);
-	const char *family = luaL_optlstring(L, 2, "inet", NULL);
+	const char *ip = luaL_checkstring(L, 1);
+	const char *family = luaL_optstring(L, 2, NULL);
 	char host[NI_MAXHOST];
 
-	struct sockaddr *addr = NULL;
-	socklen_t alen = 0;
-	int res;
+	struct sockaddr_storage saddr;
+	nixio_addr addr;
+	memset(&addr, 0, sizeof(addr));
+	strncpy(addr.host, ip, sizeof(addr.host) - 1);
 
-	if (!strcmp(family, "inet")) {
-		struct sockaddr_in inetaddr;
-		memset(&inetaddr, 0, sizeof(inetaddr));
-		inetaddr.sin_family = AF_INET;
-		if (inet_pton(AF_INET, ip, &inetaddr.sin_addr) < 1) {
-			return luaL_argerror(L, 1, "invalid address");
-		}
-		alen = sizeof(inetaddr);
-		addr = (struct sockaddr *)&inetaddr;
+	if (!family) {
+		addr.family = AF_UNSPEC;
+	} else if (!strcmp(family, "inet")) {
+		addr.family = AF_INET;
 	} else if (!strcmp(family, "inet6")) {
-		struct sockaddr_in6 inet6addr;
-		memset(&inet6addr, 0, sizeof(inet6addr));
-		inet6addr.sin6_family = AF_INET6;
-		if (inet_pton(AF_INET6, ip, &inet6addr.sin6_addr) < 1) {
-			return luaL_argerror(L, 1, "invalid address");
-		}
-		alen = sizeof(inet6addr);
-		addr = (struct sockaddr *)&inet6addr;
+		addr.family = AF_INET6;
 	} else {
 		return luaL_argerror(L, 2, "supported values: inet, inet6");
 	}
 
-	res = getnameinfo(addr, alen, host, sizeof(host), NULL, 0, NI_NAMEREQD);
+	nixio__addr_write(&addr, (struct sockaddr *)&saddr);
+
+	int res = getnameinfo((struct sockaddr *)&saddr, sizeof(saddr),
+	 host, sizeof(host), NULL, 0, NI_NAMEREQD);
 	if (res) {
 		lua_pushnil(L);
 		lua_pushinteger(L, res);
@@ -183,59 +227,41 @@ static int nixio_getnameinfo(lua_State *L) {
 }
 
 /**
- * getsockname() / getpeername() helper
- */
-static int nixio_sock__getname(lua_State *L, int sock) {
-	int sockfd = nixio__checksockfd(L);
-	struct sockaddr_storage addr;
-	socklen_t addrlen = sizeof(addr);
-	char ipaddr[INET6_ADDRSTRLEN];
-	void *binaddr;
-	uint16_t port;
-
-	if (sock) {
-		if (getsockname(sockfd, (struct sockaddr*)&addr, &addrlen)) {
-			return nixio__perror(L);
-		}
-	} else {
-		if (getpeername(sockfd, (struct sockaddr*)&addr, &addrlen)) {
-			return nixio__perror(L);
-		}
-	}
-
-	if (addr.ss_family == AF_INET) {
-		struct sockaddr_in *inetaddr = (struct sockaddr_in*)&addr;
-		port = inetaddr->sin_port;
-		binaddr = &inetaddr->sin_addr;
-	} else if (addr.ss_family == AF_INET6) {
-		struct sockaddr_in6 *inet6addr = (struct sockaddr_in6*)&addr;
-		port = inet6addr->sin6_port;
-		binaddr = &inet6addr->sin6_addr;
-	} else {
-		return luaL_error(L, "unknown address family");
-	}
-
-	if (!inet_ntop(addr.ss_family, binaddr, ipaddr, sizeof(ipaddr))) {
-		return nixio__perror(L);
-	}
-
-	lua_pushstring(L, ipaddr);
-	lua_pushinteger(L, ntohs(port));
-	return 2;
-}
-
-/**
  * getsockname()
  */
 static int nixio_sock_getsockname(lua_State *L) {
-	return nixio_sock__getname(L, 1);
+	int sockfd = nixio__checksockfd(L);
+	struct sockaddr_storage saddr;
+	socklen_t addrlen = sizeof(saddr);
+	nixio_addr addr;
+
+	if (getsockname(sockfd, (struct sockaddr*)&saddr, &addrlen) ||
+	 nixio__addr_parse(&addr, (struct sockaddr*)&saddr)) {
+		return nixio__perror_s(L);
+	}
+
+	lua_pushstring(L, addr.host);
+	lua_pushnumber(L, addr.port);
+	return 2;
 }
 
 /**
  * getpeername()
  */
 static int nixio_sock_getpeername(lua_State *L) {
-	return nixio_sock__getname(L, 0);
+	int sockfd = nixio__checksockfd(L);
+	struct sockaddr_storage saddr;
+	socklen_t addrlen = sizeof(saddr);
+	nixio_addr addr;
+
+	if (getpeername(sockfd, (struct sockaddr*)&saddr, &addrlen) ||
+	 nixio__addr_parse(&addr, (struct sockaddr*)&saddr)) {
+		return nixio__perror_s(L);
+	}
+
+	lua_pushstring(L, addr.host);
+	lua_pushnumber(L, addr.port);
+	return 2;
 }
 
 

@@ -18,10 +18,19 @@ local getmetatable, assert, pairs = getmetatable, assert, pairs
 
 module "nixio.util"
 
-local BUFFERSIZE = 8096
+local BUFFERSIZE = nixio.const.buffersize
+local ZIOBLKSIZE = 65536
 local socket = nixio.meta_socket
 local tls_socket = nixio.meta_tls_socket
 local file = nixio.meta_file
+
+function consume(iter)
+	local tbl = {}
+	for obj in iter do
+		tbl[#tbl+1] = obj
+	end
+	return tbl
+end
 
 local meta = {}
 
@@ -38,50 +47,53 @@ function meta.is_file(self)
 end
 
 function meta.readall(self, len)
-	local block, code, msg = self:read(len)
+	local block, code, msg = self:read(len or BUFFERSIZE)
 
 	if not block then
-		return "", code, msg, len
+		return nil, code, msg, ""
 	elseif #block == 0 then
-		return "", nil, nil, len
+		return "", nil, nil, ""
 	end
 
 	local data, total = {block}, #block
 
-	while len > total do
-		block, code, msg = self:read(len - total)
+	while not len or len > total do
+		block, code, msg = self:read(len and (len - total) or BUFFERSIZE)
 
 		if not block then
-			return data, code, msg, len - #data
+			return nil, code, msg, table.concat(data)
 		elseif #block == 0 then
-			return data, nil, nil, len - #data
+			break
 		end
 
 		data[#data+1], total = block, total + #block
 	end
 
-	return (#data > 1 and table.concat(data) or data[1]), nil, nil, 0
+	local data = #data > 1 and table.concat(data) or data[1]
+	return data, nil, nil, data
 end
 meta.recvall = meta.readall
 
 function meta.writeall(self, data)
-	local total, block = 0
 	local sent, code, msg = self:write(data)
 
 	if not sent then
-		return total, code, msg, data
+		return nil, code, msg, 0
 	end
 
-	while sent < #data do
-		block, total = data:sub(sent + 1), total + sent
-		sent, code, msg = self:write(block)
-		
+	local total = sent 
+
+	while total < #data do
+		sent, code, msg = self:write(data, total)
+
 		if not sent then
-			return total, code, msg, block
+			return nil, code, msg, total
 		end
+
+		total = total + sent
 	end
 	
-	return total + sent, nil, nil, ""
+	return total, nil, nil, total
 end
 meta.sendall = meta.writeall
 
@@ -105,9 +117,9 @@ function meta.linesource(self, limit)
 				bpos = endp
 				return line
 			elseif #buffer < limit + bpos then
-				local newblock, code = self:read(limit + bpos - #buffer)
+				local newblock, code, msg = self:read(limit + bpos - #buffer)
 				if not newblock then
-					return nil, code
+					return nil, code, msg
 				elseif #newblock == 0 then
 					return nil
 				end
@@ -135,7 +147,7 @@ function meta.blocksource(self, bs, limit)
 		local block, code, msg = self:read(toread)
 
 		if not block then
-			return nil, code
+			return nil, code, msg
 		elseif #block == 0 then
 			return nil
 		else
@@ -160,6 +172,40 @@ function meta.sink(self, close)
 		end
 		return true
 	end
+end
+
+function meta.copy(self, fdout, size)
+	local source = self:blocksource(nil, size)
+	local sink = fdout:sink()
+	local sent, chunk, code, msg = 0
+	
+	repeat
+		chunk, code, msg = source()
+		sink(chunk, code, msg)
+		sent = chunk and (sent + #chunk) or sent
+	until not chunk
+	return not code and sent or nil, code, msg, sent
+end
+
+function meta.copyz(self, fd, size)
+	local sent, lsent, code, msg = 0
+	if self:is_file() then
+		if nixio.sendfile and fd:is_socket() and self:stat("type") == "reg" then
+			repeat
+				lsent, code, msg = nixio.sendfile(fd, self, size or ZIOBLKSIZE)
+				if lsent then
+					sent = sent + lsent
+					size = size and (size - lsent)
+				end
+			until (not lsent or lsent == 0 or (size and size == 0))
+			if lsent or (not lsent and sent == 0 and
+			 code ~= nixio.const.ENOSYS and code ~= nixio.const.EINVAL) then
+				return lsent and sent, code, msg, sent
+			end
+		end 
+	end
+
+	return self:copy(fd, size)
 end
 
 function tls_socket.close(self)

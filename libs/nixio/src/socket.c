@@ -17,12 +17,9 @@
  */
 
 #include "nixio.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include "nixio.h"
 
 
 /**
@@ -79,7 +76,7 @@ static int nixio_socket(lua_State *L) {
 	sock->fd = socket(sock->domain, sock->type, sock->protocol);
 
 	if (sock->fd < 0) {
-		return nixio__perror(L);
+		return nixio__perror_s(L);
 	}
 
 	return 1;
@@ -95,10 +92,14 @@ static int nixio_sock_close(lua_State *L) {
 	sock->fd = -1;
 
 	do {
+#ifndef __WINNT__
 		res = close(sockfd);
+#else
+		res = closesocket(sockfd);
+#endif
 	} while (res == -1 && errno == EINTR);
 
-	return nixio__pstatus(L, !res);
+	return nixio__pstatus_s(L, !res);
 }
 
 /**
@@ -109,7 +110,11 @@ static int nixio_sock__gc(lua_State *L) {
 	int res;
 	if (sock && sock->fd != -1) {
 		do {
+#ifndef __WINNT__
 			res = close(sock->fd);
+#else
+			res = closesocket(sock->fd);
+#endif
 		} while (res == -1 && errno == EINTR);
 	}
 	return 0;
@@ -141,7 +146,7 @@ static int nixio_sock_shutdown(lua_State *L) {
 		return luaL_argerror(L, 2, "supported values: both, read, write");
 	}
 
-	return nixio__pstatus(L, !shutdown(sockfd, how));
+	return nixio__pstatus_s(L, !shutdown(sockfd, how));
 }
 
 /* module table */

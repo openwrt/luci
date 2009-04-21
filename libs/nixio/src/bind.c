@@ -18,14 +18,10 @@
 
 #include "nixio.h"
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/un.h>
 #include <string.h>
 #include <unistd.h>
-#include <netdb.h>
 #include <errno.h>
+
 
 /**
  * connect()/bind() shortcut
@@ -87,6 +83,9 @@ static int nixio__bind_connect(lua_State *L, int do_bind) {
 		}
 
 		if (do_bind) {
+			int one = 1;
+			setsockopt(sock->fd, SOL_SOCKET, SO_REUSEADDR,
+			 (char*)&one, sizeof(one));
 			status = bind(sock->fd, rp->ai_addr, rp->ai_addrlen);
 		} else {
 			do {
@@ -103,7 +102,11 @@ static int nixio__bind_connect(lua_State *L, int do_bind) {
 		}
 
 		do {
+#ifndef __WINNT__
 			clstat = close(sock->fd);
+#else
+			clstat = closesocket(sock->fd);
+#endif
 		} while (clstat == -1 && errno == EINTR);
 	}
 
@@ -111,7 +114,7 @@ static int nixio__bind_connect(lua_State *L, int do_bind) {
 
 	/* on failure */
 	if (status) {
-		return nixio__perror(L);
+		return nixio__perror_s(L);
 	}
 
 	luaL_getmetatable(L, NIXIO_META);
@@ -183,6 +186,7 @@ static int nixio_sock__bind_connect(lua_State *L, int do_bind) {
 		}
 
 		freeaddrinfo(result);
+#ifndef __WINNT__
 	} else if (sock->domain == AF_UNIX) {
 		size_t pathlen;
 		const char *path = luaL_checklstring(L, 2, &pathlen);
@@ -200,10 +204,11 @@ static int nixio_sock__bind_connect(lua_State *L, int do_bind) {
 						sizeof(addr));
 			} while (status == -1 && errno == EINTR);
 		}
+#endif
 	} else {
 		return luaL_error(L, "not supported");
 	}
-	return nixio__pstatus(L, !status);
+	return nixio__pstatus_s(L, !status);
 }
 
 /**
@@ -225,8 +230,8 @@ static int nixio_sock_connect(lua_State *L) {
  */
 static int nixio_sock_listen(lua_State *L) {
 	int sockfd = nixio__checksockfd(L);
-	lua_Integer backlog = luaL_checkinteger(L, 2);
-	return nixio__pstatus(L, !listen(sockfd, backlog));
+	int backlog = luaL_checkinteger(L, 2);
+	return nixio__pstatus_s(L, !listen(sockfd, backlog));
 }
 
 /**
@@ -234,18 +239,16 @@ static int nixio_sock_listen(lua_State *L) {
  */
 static int nixio_sock_accept(lua_State *L) {
 	nixio_sock *sock = nixio__checksock(L);
-	struct sockaddr_storage addr;
-	socklen_t addrlen = sizeof(addr);
-	char ipaddr[INET6_ADDRSTRLEN];
-	void *binaddr;
-	uint16_t port;
+	struct sockaddr_storage saddr;
+	nixio_addr addr;
+	socklen_t saddrlen = sizeof(saddr);
 	int newfd;
 
 	do {
-		newfd = accept(sock->fd, (struct sockaddr *)&addr, &addrlen);
+		newfd = accept(sock->fd, (struct sockaddr *)&saddr, &saddrlen);
 	} while (newfd == -1 && errno == EINTR);
 	if (newfd < 0) {
-		return nixio__perror(L);
+		return nixio__perror_s(L);
 	}
 
 	/* create userdata */
@@ -256,25 +259,13 @@ static int nixio_sock_accept(lua_State *L) {
 	memcpy(clsock, sock, sizeof(clsock));
 	clsock->fd = newfd;
 
-	if (addr.ss_family == AF_INET) {
-		struct sockaddr_in *inetaddr = (struct sockaddr_in*)&addr;
-		port = inetaddr->sin_port;
-		binaddr = &inetaddr->sin_addr;
-	} else if (addr.ss_family == AF_INET6) {
-		struct sockaddr_in6 *inet6addr = (struct sockaddr_in6*)&addr;
-		port = inet6addr->sin6_port;
-		binaddr = &inet6addr->sin6_addr;
+	if (!nixio__addr_parse(&addr, (struct sockaddr *)&saddr)) {
+		lua_pushstring(L, addr.host);
+		lua_pushnumber(L, addr.port);
+		return 3;
 	} else {
-		return luaL_error(L, "unknown address family");
+		return 1;
 	}
-
-	if (!inet_ntop(addr.ss_family, binaddr, ipaddr, sizeof(ipaddr))) {
-		return nixio__perror(L);
-	}
-
-	lua_pushstring(L, ipaddr);
-	lua_pushinteger(L, ntohs(port));
-	return 3;
 }
 
 /* module table */

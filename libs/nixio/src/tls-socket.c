@@ -1,4 +1,4 @@
-/*
+ /*
  * nixio - Linux I/O library for lua
  *
  *   Copyright (C) 2009 Steven Barth <steven@midlink.org>
@@ -65,7 +65,7 @@ static SSL* nixio__checktlssock(lua_State *L) {
 static int nixio_tls_sock_recv(lua_State *L) {
 	SSL *sock = nixio__checktlssock(L);
 	nixio_tls__check_connected(L);
-	int req = luaL_checkinteger(L, 2);
+	uint req = luaL_checkinteger(L, 2);
 
 	luaL_argcheck(L, req >= 0, 2, "out of range");
 
@@ -172,6 +172,24 @@ static int nixio_tls_sock_send(lua_State *L) {
 	size_t len;
 	ssize_t sent;
 	const char *data = luaL_checklstring(L, 2, &len);
+
+	if (lua_gettop(L) > 2) {
+		int offset = luaL_optint(L, 3, 0);
+		if (offset) {
+			if (offset < len) {
+				data += offset;
+				len -= offset;
+			} else {
+				len = 0;
+			}
+		}
+
+		unsigned int wlen = luaL_optint(L, 4, len);
+		if (wlen < len) {
+			len = wlen;
+		}
+	}
+
 	sent = SSL_write(sock, data, len);
 	if (sent > 0) {
 		lua_pushinteger(L, sent);
