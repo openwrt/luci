@@ -82,7 +82,7 @@ int nvram_close(nvram_handle_t *h);
 #define nvram_safe_get(h, name) (nvram_get(h, name) ? : "")
 
 /* Computes a crc8 over the input data. */
-uint8_t hndcrc8 (uint8_t * pdata, uint32_t nbytes, uint8_t crc );
+uint8_t hndcrc8 (const char * pdata, uint32_t nbytes, uint8_t crc );
 
 /* Returns the crc value of the nvram. */
 uint8_t nvram_calc_crc(nvram_header_t * nvh);
@@ -113,12 +113,13 @@ const char * nvram_find_staging(void);
 #define NVRAM_SOFTWARE_VERSION	"1"
 
 /* NVRAM constants */
+#define NVRAM_SPACE			0x8000
+#define NVRAM_START(x)		x - NVRAM_SPACE
 #define NVRAM_MAGIC			0x48534C46	/* 'FLSH' */
 #define NVRAM_CLEAR_MAGIC	0x0
 #define NVRAM_INVALID_MAGIC	0xFFFFFFFF
 #define NVRAM_VERSION		1
 #define NVRAM_HEADER_SIZE	20
-#define NVRAM_SPACE			0x8000
 
 #define NVRAM_MAX_VALUE_LEN 255
 #define NVRAM_MAX_PARAM_LEN 64

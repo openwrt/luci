@@ -89,6 +89,7 @@ int main( int argc, const char *argv[] )
 	int commit = 0;
 	int write = 0;
 	int stat = 1;
+	int done = 0;
 	int i;
 
 	/* Ugly... iterate over arguments to see whether we can expect a write */
@@ -102,42 +103,39 @@ int main( int argc, const char *argv[] )
 		}
 
 
-	if( (nvram = write ? nvram_open_staging() : nvram_open_rdonly()) != NULL )
+	if( (nvram = write ? nvram_open_staging() : nvram_open_rdonly()) != NULL && argc > 1 )
 	{
 		for( i = 1; i < argc; i++ )
 		{
 			if( !strcmp(argv[i], "show") )
 			{
 				stat = do_show(nvram);
+				done++;
 			}
 			else if( !strcmp(argv[i], "get") && ++i < argc )
 			{
 				stat = do_get(nvram, argv[i]);
+				done++;
 			}
 			else if( !strcmp(argv[i], "unset") && ++i < argc )
 			{
 				stat = do_unset(nvram, argv[i]);
+				done++;
 			}
 			else if( !strcmp(argv[i], "set") && ++i < argc )
 			{
 				stat = do_set(nvram, argv[i]);
+				done++;
 			}
 			else if( !strcmp(argv[i], "commit") )
 			{
 				commit = 1;
+				done++;
 			}
 			else
 			{
-				fprintf(stderr,
-					"Usage:\n"
-					"	nvram show\n"
-					"	nvram get variable\n"
-					"	nvram set variable=value [set ...]\n"
-					"	nvram unset variable [unset ...]\n"
-					"	nvram commit\n"
-				);
-
-				return 1;
+				done = 0;
+				break;
 			}
 		}
 
@@ -148,6 +146,32 @@ int main( int argc, const char *argv[] )
 
 		if( commit )
 			stat = staging_to_nvram();
+	}
+
+	if( !nvram )
+	{
+		fprintf(stderr,
+			"Could not open nvram! Possible reasons are:\n"
+			"	- No device found (/proc not mounted or no nvram present)\n"
+			"	- Insufficient permissions to open mtd device\n"
+			"	- Insufficient memory to complete operation\n"
+			"	- Memory mapping failed or not supported\n"
+		);
+
+		stat = 1;
+	}
+	else if( !done )
+	{
+		fprintf(stderr,
+			"Usage:\n"
+			"	nvram show\n"
+			"	nvram get variable\n"
+			"	nvram set variable=value [set ...]\n"
+			"	nvram unset variable [unset ...]\n"
+			"	nvram commit\n"
+		);
+
+		stat = 1;
 	}
 
 	return stat;

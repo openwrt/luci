@@ -14,9 +14,12 @@
 
 #include "nvram.h"
 
-#define TRACE() \
-	printf("%s(%i) in %s()\n", \
-		__FILE__, __LINE__, __FUNCTION__)
+#define TRACE(msg) \
+	printf("%s(%i) in %s(): %s\n", \
+		__FILE__, __LINE__, __FUNCTION__, msg ? msg : "?")
+
+size_t nvram_erase_size = 0;
+
 
 /*
  * -- Helper functions --
@@ -91,18 +94,15 @@ static nvram_tuple_t * _nvram_realloc( nvram_handle_t *h, nvram_tuple_t *t,
 /* (Re)initialize the hash table. */
 static int _nvram_rehash(nvram_handle_t *h)
 {
-	nvram_header_t *header = (nvram_header_t *) &h->mmap[NVRAM_SPACE];
-	char buf[] = "0xXXXXXXXX", *name, *value, *end, *eq;
+	nvram_header_t *header = (nvram_header_t *) &h->mmap[NVRAM_START(nvram_erase_size)];
+	char buf[] = "0xXXXXXXXX", *name, *value, *eq;
 
 	/* (Re)initialize hash table */
 	_nvram_free(h);
 
 	/* Parse and set "name=value\0 ... \0\0" */
 	name = (char *) &header[1];
-	/*
-	end = (char *) header + NVRAM_SPACE - 2;
-	end[0] = end[1] = '\0';
-	*/
+
 	for (; *name; name = value + strlen(value) + 1) {
 		if (!(eq = strchr(name, '=')))
 			break;
@@ -251,7 +251,7 @@ nvram_tuple_t * nvram_getall(nvram_handle_t *h)
 /* Regenerate NVRAM. */
 int nvram_commit(nvram_handle_t *h)
 {
-	nvram_header_t *header = (nvram_header_t *) &h->mmap[NVRAM_SPACE];
+	nvram_header_t *header = (nvram_header_t *) &h->mmap[NVRAM_START(nvram_erase_size)];
 	char *init, *config, *refresh, *ncdl;
 	char *ptr, *end;
 	int i;
@@ -280,6 +280,7 @@ int nvram_commit(nvram_handle_t *h)
 	/* Clear data area */
 	ptr = (char *) header + sizeof(nvram_header_t);
 	memset(ptr, 0xFF, NVRAM_SPACE - sizeof(nvram_header_t));
+	memset(&tmp, 0, sizeof(nvram_header_t));
 
 	/* Leave space for a double NUL at the end */
 	end = (char *) header + NVRAM_SPACE - 2;
@@ -328,15 +329,28 @@ nvram_handle_t * nvram_open(const char *file, int rdonly)
 	nvram_handle_t *h;
 	nvram_header_t *header;
 
+	/* If erase size or file are undefined then try to define them */
+	if( (nvram_erase_size == 0) || (file == NULL) )
+	{
+		/* Finding the mtd will set the appropriate erase size */
+		if( file == NULL )
+			file = nvram_find_mtd();
+		else
+			(void) nvram_find_mtd();
+
+		if( nvram_erase_size == 0 )
+			return NULL;
+	}
+
 	if( (fd = open(file, O_RDWR)) > -1 )
 	{
 		char *mmap_area = (char *) mmap(
-			NULL, 0x10000, PROT_READ | PROT_WRITE,
+			NULL, nvram_erase_size, PROT_READ | PROT_WRITE,
 			( rdonly == NVRAM_RO ) ? MAP_PRIVATE : MAP_SHARED, fd, 0);
 
 		if( mmap_area != MAP_FAILED )
 		{
-			memset(mmap_area, 0xFF, NVRAM_SPACE);
+			memset(mmap_area, 0xFF, NVRAM_START(nvram_erase_size));
 
 			if((h = (nvram_handle_t *) malloc(sizeof(nvram_handle_t))) != NULL)
 			{
@@ -344,9 +358,9 @@ nvram_handle_t * nvram_open(const char *file, int rdonly)
 
 				h->fd     = fd;
 				h->mmap   = mmap_area;
-				h->length = 0x10000;
+				h->length = nvram_erase_size;
 
-				header = (nvram_header_t *) &h->mmap[NVRAM_SPACE];
+				header = (nvram_header_t *) &h->mmap[NVRAM_START(nvram_erase_size)];
 
 				if( header->magic == NVRAM_MAGIC )
 				{
@@ -379,27 +393,30 @@ int nvram_close(nvram_handle_t *h)
 /* Determine NVRAM device node. */
 const char * nvram_find_mtd(void)
 {
-	//return "./samples/nvram.1";
-
 	FILE *fp;
-	int i;
+	int i, esz;
 	char dev[PATH_MAX];
-	char *path;
+	char *path = NULL;
 
-	// "/dev/mtdblock/" + ( 0 < x < 99 ) + "ro" + \0 = 19
+	// "/dev/mtdblock/" + ( 0 < x < 99 ) + \0 = 19
 	if( (path = (char *) malloc(19)) == NULL )
 		return NULL;
 
 	if ((fp = fopen("/proc/mtd", "r"))) {
 		while (fgets(dev, sizeof(dev), fp)) {
-			if (sscanf(dev, "mtd%d:", &i) && strstr(dev, "nvram")) {
-				snprintf(path, 19, "/dev/mtdblock/%d", i);
+			if (strstr(dev, "nvram") && sscanf(dev, "mtd%d: %08x", &i, &esz)) {
+				if( (path = (char *) malloc(19)) != NULL )
+				{
+					nvram_erase_size = esz;
+					snprintf(path, 19, "/dev/mtdblock/%d", i);
+					break;
+				}
 			}
 		}
 		fclose(fp);
 	}
 
-	return (const char *) path;
+	return path;
 }
 
 /* Check NVRAM staging file. */
@@ -419,12 +436,12 @@ const char * nvram_find_staging(void)
 int nvram_to_staging(void)
 {
 	int fdmtd, fdstg, stat;
-	const char *mtd;
-	char buf[0x10000];
+	const char *mtd = nvram_find_mtd();
+	char buf[nvram_erase_size];
 
 	stat = -1;
 
-	if( (mtd = nvram_find_mtd()) != NULL )
+	if( (mtd != NULL) && (nvram_erase_size > 0) )
 	{
 		if( (fdmtd = open(mtd, O_RDONLY)) > -1 )
 		{
@@ -451,12 +468,12 @@ int nvram_to_staging(void)
 int staging_to_nvram(void)
 {
 	int fdmtd, fdstg, stat;
-	const char *mtd;
-	char buf[0x10000];
+	const char *mtd = nvram_find_mtd();
+	char buf[nvram_erase_size];
 
 	stat = -1;
 
-	if( (mtd = nvram_find_mtd()) != NULL )
+	if( (mtd != NULL) && (nvram_erase_size > 0) )
 	{
 		if( (fdstg = open(NVRAM_STAGING, O_RDONLY)) > -1 )
 		{

@@ -58,7 +58,7 @@ static const uint8_t crc8_table[256] = {
 };
 
 uint8_t hndcrc8 (
-	uint8_t * pdata,  /* pointer to array of data to process */
+	const char * pdata,  /* pointer to array of data to process */
 	uint32_t nbytes,  /* number of input data bytes to process */
 	uint8_t crc       /* either CRC8_INIT_VALUE or previous return value */
 ) {
