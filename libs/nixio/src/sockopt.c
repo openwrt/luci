@@ -18,6 +18,10 @@
 
 #include "nixio.h"
 
+#ifndef __WINNT__
+#include <net/if.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/time.h>
 #include <string.h>

@@ -20,6 +20,23 @@ module "nixio"
 -- @param ipaddr	IPv4 or IPv6-Address
 -- @return	FQDN
 
+--- (Linux, BSD) Get a list of available network interfaces and their addresses.
+-- @class function
+-- @name nixio.getifaddrs
+-- @return			Table containing one or more tables containing: <ul>
+-- <li>name = Interface Name</li>
+-- <li>family = ["inet", "inet6", "packet"]</li>
+-- <li>addr = Interface Address (IPv4, IPv6, MAC, ...)</li>
+-- <li>broadaddr = Broadcast Address</li>
+-- <li>dstaddr = Destination Address (Point-to-Point)</li>
+-- <li>netmask = Netmask (if available)</li>
+-- <li>prefix = Prefix (if available)</li>
+-- <li>flags = Table of interface flags (up, multicast, loopback, ...)</li>
+-- <li>data = Statistics (Linux, "packet"-family)</li>
+-- <li>hatype = Hardware Type Identifier (Linix, "packet"-family)</li>
+-- <li>ifindex = Interface Index (Linux, "packet"-family)</li>
+-- </ul>
+
 --- Create a new socket and bind it to a network address.
 -- This function is a shortcut for calling nixio.socket and then bind()
 -- on the socket object.

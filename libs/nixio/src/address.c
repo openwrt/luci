@@ -21,6 +21,40 @@
 #include <errno.h>
 #include <string.h>
 
+#ifdef __linux__
+#include <linux/netdevice.h>
+
+/* struct net_device_stats is buggy on amd64, redefine it */
+struct nixio__nds {
+     uint32_t rx_packets;
+     uint32_t tx_packets;
+     uint32_t rx_bytes;
+     uint32_t tx_bytes;
+     uint32_t rx_errors;
+     uint32_t tx_errors;
+     uint32_t rx_dropped;
+     uint32_t tx_dropped;
+     uint32_t multicast;
+     uint32_t collisions;
+
+     uint32_t rx_length_errors;
+     uint32_t rx_over_errors;
+     uint32_t rx_crc_errors;
+     uint32_t rx_frame_errors;
+     uint32_t rx_fifo_errors;
+     uint32_t rx_missed_errors;
+
+     uint32_t tx_aborted_errors;
+     uint32_t tx_carrier_errors;
+     uint32_t tx_fifo_errors;
+     uint32_t tx_heartbeat_errors;
+     uint32_t tx_window_errors;
+
+     uint32_t rx_compressed;
+     uint32_t tx_compressed;
+};
+#endif
+
 #ifndef NI_MAXHOST
 #define NI_MAXHOST 1025
 #endif
@@ -40,6 +74,20 @@ int nixio__addr_parse(nixio_addr *addr, struct sockaddr *saddr) {
 		struct sockaddr_in6 *inet6addr = (struct sockaddr_in6*)saddr;
 		addr->port = ntohs(inet6addr->sin6_port);
 		baddr = &inet6addr->sin6_addr;
+#ifdef AF_PACKET
+	} else if (saddr->sa_family == AF_PACKET) {
+		struct sockaddr_ll *etheradddr = (struct sockaddr_ll*)saddr;
+		addr->prefix = etheradddr->sll_hatype;
+		addr->port = etheradddr->sll_ifindex;
+		char *c = addr->host;
+		for (size_t i = 0; i < etheradddr->sll_halen; i++) {
+			*c++ = nixio__bin2hex[(etheradddr->sll_addr[i] & 0xf0) >> 4];
+			*c++ = nixio__bin2hex[(etheradddr->sll_addr[i] & 0x0f)];
+			*c++ = ':';
+		}
+		*(c-1) = 0;
+		return 0;
+#endif
 	} else {
 		errno = EAFNOSUPPORT;
 		return -1;
@@ -91,6 +139,39 @@ int nixio__addr_write(nixio_addr *addr, struct sockaddr *saddr) {
 	}
 }
 
+/**
+ * netmask to prefix helper
+ */
+int nixio__addr_prefix(struct sockaddr *saddr) {
+	int prefix = 0;
+	size_t len;
+	uint8_t *addr;
+
+	if (saddr->sa_family == AF_INET) {
+		addr = (uint8_t*)(&((struct sockaddr_in*)saddr)->sin_addr);
+		len = 4;
+	} else if (saddr->sa_family == AF_INET6) {
+		addr = (uint8_t*)(&((struct sockaddr_in6*)saddr)->sin6_addr);
+		len = 16;
+	} else {
+		errno = EAFNOSUPPORT;
+		return -1;
+	}
+
+	for (size_t i = 0; i < len; i++) {
+		if (addr[i] == 0xff) {
+			prefix += 8;
+		} else if (addr[i] == 0x00) {
+			break;
+		} else {
+			for (uint8_t c = addr[i]; c; c <<= 1) {
+				prefix++;
+			}
+		}
+	}
+
+	return prefix;
+}
 
 /**
  * getaddrinfo(host, family, port)
@@ -264,9 +345,146 @@ static int nixio_sock_getpeername(lua_State *L) {
 	return 2;
 }
 
+#if defined(__linux__) || defined(BSD)
+#include <ifaddrs.h>
+
+static int nixio_getifaddrs(lua_State *L) {
+	nixio_addr addr;
+	struct ifaddrs *ifaddr, *c;
+	if (getifaddrs(&ifaddr) == -1) {
+		return nixio__perror(L);
+	}
+
+	lua_newtable(L);
+	unsigned int i = 1;
+
+	for (c = ifaddr; c; c = c->ifa_next) {
+		lua_newtable(L);
+
+		lua_pushstring(L, c->ifa_name);
+		lua_setfield(L, -2, "name");
+
+		lua_createtable(L, 0, 7);
+			lua_pushboolean(L, c->ifa_flags & IFF_UP);
+			lua_setfield(L, -2, "up");
+
+			lua_pushboolean(L, c->ifa_flags & IFF_BROADCAST);
+			lua_setfield(L, -2, "broadcast");
+
+			lua_pushboolean(L, c->ifa_flags & IFF_LOOPBACK);
+			lua_setfield(L, -2, "loopback");
+
+			lua_pushboolean(L, c->ifa_flags & IFF_POINTOPOINT);
+			lua_setfield(L, -2, "pointtopoint");
+
+			lua_pushboolean(L, c->ifa_flags & IFF_NOARP);
+			lua_setfield(L, -2, "noarp");
+
+			lua_pushboolean(L, c->ifa_flags & IFF_PROMISC);
+			lua_setfield(L, -2, "promisc");
+
+			lua_pushboolean(L, c->ifa_flags & IFF_MULTICAST);
+			lua_setfield(L, -2, "multicast");
+		lua_setfield(L, -2, "flags");
+
+		if (c->ifa_addr && !nixio__addr_parse(&addr, c->ifa_addr)) {
+			lua_pushstring(L, addr.host);
+			lua_setfield(L, -2, "addr");
+
+			if (c->ifa_addr->sa_family == AF_INET) {
+				lua_pushliteral(L, "inet");
+			} else if (c->ifa_addr->sa_family == AF_INET6) {
+				lua_pushliteral(L, "inet6");
+#ifdef AF_PACKET
+			} else if (c->ifa_addr->sa_family == AF_PACKET) {
+				lua_pushliteral(L, "packet");
+#endif
+			} else {
+				lua_pushliteral(L, "unknown");
+			}
+			lua_setfield(L, -2, "family");
+
+#ifdef __linux__
+			if (c->ifa_addr->sa_family == AF_PACKET) {
+				lua_pushinteger(L, addr.port);
+				lua_setfield(L, -2, "ifindex");
+
+				lua_pushinteger(L, addr.prefix);
+				lua_setfield(L, -2, "hatype");
+
+				if (c->ifa_data) {
+					lua_createtable(L, 0, 10);
+					struct nixio__nds *stats = c->ifa_data;
+
+					lua_pushnumber(L, stats->rx_packets);
+					lua_setfield(L, -2, "rx_packets");
+
+					lua_pushnumber(L, stats->tx_packets);
+					lua_setfield(L, -2, "tx_packets");
+
+					lua_pushnumber(L, stats->rx_bytes);
+					lua_setfield(L, -2, "rx_bytes");
+
+					lua_pushnumber(L, stats->tx_bytes);
+					lua_setfield(L, -2, "tx_bytes");
+
+					lua_pushnumber(L, stats->rx_errors);
+					lua_setfield(L, -2, "rx_errors");
+
+					lua_pushnumber(L, stats->tx_errors);
+					lua_setfield(L, -2, "tx_errors");
+
+					lua_pushnumber(L, stats->rx_dropped);
+					lua_setfield(L, -2, "rx_dropped");
+
+					lua_pushnumber(L, stats->tx_dropped);
+					lua_setfield(L, -2, "tx_dropped");
+
+					lua_pushnumber(L, stats->multicast);
+					lua_setfield(L, -2, "multicast");
+
+					lua_pushnumber(L, stats->collisions);
+					lua_setfield(L, -2, "collisions");
+				} else {
+					lua_newtable(L);
+				}
+				lua_setfield(L, -2, "data");
+			}
+#endif
+		}
+
+		if (c->ifa_netmask && !nixio__addr_parse(&addr, c->ifa_netmask)) {
+			lua_pushstring(L, addr.host);
+			lua_setfield(L, -2, "netmask");
+
+			lua_pushinteger(L, nixio__addr_prefix(c->ifa_netmask));
+			lua_setfield(L, -2, "prefix");
+		}
+
+		if (c->ifa_broadaddr && !nixio__addr_parse(&addr, c->ifa_broadaddr)) {
+			lua_pushstring(L, addr.host);
+			lua_setfield(L, -2, "broadaddr");
+		}
+
+		if (c->ifa_dstaddr && !nixio__addr_parse(&addr, c->ifa_dstaddr)) {
+			lua_pushstring(L, addr.host);
+			lua_setfield(L, -2, "dstaddr");
+		}
+
+		lua_rawseti(L, -2, i++);
+	}
+
+	freeifaddrs(ifaddr);
+	return 1;
+}
+#endif
+
 
 /* module table */
 static const luaL_reg R[] = {
+#if defined(__linux__) || defined(BSD)
+	{"getifaddrs",	nixio_getifaddrs},
+#endif
 	{"getaddrinfo",	nixio_getaddrinfo},
 	{"getnameinfo",	nixio_getnameinfo},
 	{NULL,			NULL}

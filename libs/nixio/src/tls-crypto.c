@@ -22,10 +22,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-static char nixio__bin2hex[] = {
-'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-};
-
 static int nixio_crypto_hash__init(lua_State *L, int hmac) {
 	const char *type = luaL_checkstring(L, 1);
 	nixio_hash *hash = lua_newuserdata(L, sizeof(nixio_hash));
