@@ -1,0 +1,8 @@
+livestats_incoming = "εισερχόμενα"
+livestats_outgoing = "εξερχόμενα"
+livestats_traffic = "κίνηση σε"
+livestats_wifi = "σηματοθορυβικός λόγος για"
+livestats_loadavg = "μέσος όρος φόρτου"
+livestats_stat_wireless = "Στατιστικά Ασύρματου σε Πραγμ. Χρόνο"
+livestats_stat_traffic = "Κίνηση Δικτύου σε Πραγμ. Χρόνο"
+livestats_stat_loadavg = "Φόρτος Συστήματος σε Πραγμ. Χρόνο"

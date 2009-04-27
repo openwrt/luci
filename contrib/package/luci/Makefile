@@ -817,6 +817,16 @@ define Package/luci-i18n-japanese/install
 	$(call Package/luci/install/template,$(1),i18n/japanese)
 endef
 
+
+define Package/luci-i18n-greek
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Greek (by Vasilis Tsiligiannis)
+endef
+
+define Package/luci-i18n-greek/install
+	$(call Package/luci/install/template,$(1),i18n/greek)
+endef
+
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
@@ -1000,6 +1010,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-japanese),)
 	PKG_SELECTED_MODULES+=i18n/japanese
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-greek),)
+	PKG_SELECTED_MODULES+=i18n/greek
+endif
 
 
 MAKE_FLAGS += \
@@ -1076,3 +1089,4 @@ $(eval $(call BuildPackage,luci-i18n-italian))
 $(eval $(call BuildPackage,luci-i18n-russian))
 $(eval $(call BuildPackage,luci-i18n-portuguese_brazilian))
 $(eval $(call BuildPackage,luci-i18n-japanese))
+$(eval $(call BuildPackage,luci-i18n-greek))
