@@ -713,6 +713,16 @@ define Package/luci-i18n-portuguese_brazilian/install
 endef
 
 
+define Package/luci-i18n-japanese
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Japanese (by Tsukasa Hamano)
+endef
+
+define Package/luci-i18n-japanese/install
+	$(call Package/luci/install/template,$(1),i18n/japanese)
+endef
+
+
 define Package/luci-i18n-greek
   $(call Package/luci/i18ntemplate)
   TITLE:=Greek (by Vasilis Tsiligiannis)
@@ -885,6 +895,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-portuguese_brazilian),)
 	PKG_SELECTED_MODULES+=i18n/portuguese_brazilian
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-japanese),)
+	PKG_SELECTED_MODULES+=i18n/japanese
+endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-greek),)
 	PKG_SELECTED_MODULES+=i18n/greek
 endif
@@ -957,4 +970,5 @@ $(eval $(call BuildPackage,luci-i18n-french))
 $(eval $(call BuildPackage,luci-i18n-italian))
 $(eval $(call BuildPackage,luci-i18n-russian))
 $(eval $(call BuildPackage,luci-i18n-portuguese_brazilian))
+$(eval $(call BuildPackage,luci-i18n-japanese))
 $(eval $(call BuildPackage,luci-i18n-greek))
