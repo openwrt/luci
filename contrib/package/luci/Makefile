@@ -14,8 +14,8 @@ ifeq ($(USELOCAL),1)
 else
   PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
-    PKG_REV:=HEAD
-    PKG_VERSION:=0.8.6
+    PKG_REV:=$(shell LC_ALL=C svn info $(CURDIR) | sed -ne 's/^Revision: //p')
+    PKG_VERSION:=0.8+svn$(PKG_REV)
   endif
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
