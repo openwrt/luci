@@ -76,4 +76,5 @@ end
 s:option(Value, "log_size", nil, "kiB").optional = true
 s:option(Value, "log_ip").optional = true
 s:option(Value, "conloglevel").optional = true
+s:option(Value, "cronloglevel").optional = true
 return m
