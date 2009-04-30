@@ -303,6 +303,9 @@ function request_raw(uri, options)
 			end
 			
 			options.depth = options.depth - 1
+			if options.headers then
+				options.headers.Host = nil
+			end
 			sock:close()
 			
 			return request_raw(nuri, options)
