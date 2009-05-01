@@ -55,28 +55,27 @@ config defaults wifi_device
     option disabled  0
     option txpower   10
 
-
 config defaults wifi_iface
     option mode		adhoc
     option bssid    02:CA:FF:EE:BA:BE
     option sw_merge 1
 
-
 config defaults interface
     option netmask  255.0.0.0
     option dns      "88.198.178.18 141.54.1.1 212.204.49.83 208.67.220.220 208.67.222.222"
 
-
 config defaults alias
 	option netmask	255.255.255.0
-
 
 config defaults dhcp
 	option leasetime 30m
 
-
 config defaults olsr_interface
 	option Ip4Broadcast 255.255.255.255
+
+config defaults time
+	option rdate_servers "128.138.140.44 171.64.7.77 171.64.7.99 81.169.154.44 130.133.1.10"
+
 
 config community leipzig
 	option name "Freifunk Leipzig"
