@@ -18,7 +18,7 @@ boot() {
 	}
 
 	grep -q '/usr/sbin/ff_rdate' /etc/crontabs/root || {
-		echo "0 */4 * * *	/usr/sbin/ff_rdate >> /etc/crontabs/root
+		echo "0 */4 * * *	/usr/sbin/ff_rdate" >> /etc/crontabs/root
 	}
 
 	[ -f /etc/rc.local ] && . /etc/rc.local
