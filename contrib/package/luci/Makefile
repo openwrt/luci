@@ -462,7 +462,7 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+PACKAGE_luci-app-splash:luasocket
+  DEPENDS+=+PACKAGE_luci-app-splash:luci-nixio
   TITLE:=Freifunk DHCP-Splash application
 endef
 

@@ -1,41 +1,20 @@
 #!/usr/bin/lua
 
-require("socket")
-require("luci.ip")
-require("luci.model.uci")
+local nixio = require "nixio"
+local server = nixio.bind(nil, arg[1] or 8082)
+local stat = server:listen(32)
 
-local uci = luci.model.uci.cursor_state()
-uci:load("network")
-
-local server = socket.bind("0.0.0.0", arg[1] or 8082)
-server:settimeout(0, "t")
-
-while true do
+while stat do
 	local client = server:accept()
 	
 	if client then
-		client:settimeout(1)
-		local srv
-		local ip  = luci.ip.IPv4((client:getpeername()))
+		client:setopt("socket", "rcvtimeo", 1)
+		client:setopt("socket", "sndtimeo", 1)
+		local srv = client:getsockname()
 
-		local function find_srv(section)
-			if section.ipaddr then
-				local net = luci.ip.IPv4(section.ipaddr, section.netmask)
-				if ip and net and net:contains(ip) then
-					srv = section.ipaddr
-					return
-				end
-			end
-		end
-		
-		uci:foreach("network", "interface", find_srv)
-		uci:foreach("network", "alias", find_srv)
-
-		client:receive()
-		client:send("HTTP/1.0 302 Found\r\nLocation: http://" .. srv ..
+		client:read(1024)
+		client:writeall("HTTP/1.0 302 Found\r\nLocation: http://" .. srv ..
 		 (arg[2] or "/luci/splash") .. "\r\n\r\n")
 		client:close() 
-	else
-		socket.sleep(0.1)
 	end
 end
