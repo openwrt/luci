@@ -100,6 +100,7 @@ i.dynamic = true
 ign = i:option(Flag, "ignore", "Enable")
 ign.enabled  = "0"
 ign.disabled = "1"
+ign.rmempty = false
 
 network = i:option(ListValue, "interface", translate("network"))
 luci.tools.webadmin.cbi_add_networks(network)
