@@ -1,0 +1,24 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+PID=/var/run/ffwatchd.pid
+BIN=/usr/sbin/ffwatchd
+
+boot()
+{
+	if ! grep -q "$BIN" /etc/crontabs/root 2>/dev/null; then
+		echo "* * * * *	$BIN running || /etc/init.d/freifunk-watchdog restart" >> /etc/crontabs/root
+	fi
+
+	start
+}
+
+start()
+{
+	start-stop-daemon -q -b -m -p $PID -x $BIN -S
+}
+
+stop()
+{
+	start-stop-daemon -q -p $PID -x $BIN -K
+}
