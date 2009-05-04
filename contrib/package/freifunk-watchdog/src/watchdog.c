@@ -111,7 +111,12 @@ static int find_process(const char *name)
 				if( strstr(buffer, cmpname) == buffer )
 				{
 					pid = atoi(entry->d_name);
-					break;
+
+					/* Skip myself ... */
+					if( pid == getpid() )
+						pid = -1;
+					else
+						break;
 				}
 			}
 		}
@@ -339,7 +344,7 @@ int main(int argc, char *argv[])
 	/* Check if watchdog is running ... */
 	if( (argc > 1) && (strcmp(argv[1], "running") == 0) )
 	{
-		return (find_process(BINARY) >= 0);
+		return (find_process(BINARY) == -1);
 	}
 
 	/* Start daemon */
