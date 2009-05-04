@@ -39,6 +39,9 @@
 /* Check interval */
 #define INTERVAL		30
 
+/* Hysteresis */
+#define HYSTERESIS		3
+
 /* How to call myself in the logs */
 #define SYSLOG_IDENT	"Freifunk Watchdog"
 
