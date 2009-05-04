@@ -318,16 +318,18 @@ static int do_daemon(void)
 
 
 		/* Wifi restart required? */
-		if( restart_wifi > 0 )
+		if( restart_wifi >= HYSTERESIS )
 		{
 			restart_wifi = 0;
+			syslog(LOG_WARNING, "Restarting wireless");
 			EXEC(WIFI_ACTION);
 		}
 
 		/* Cron restart required? */
-		if( restart_cron > 0 )
+		if( restart_cron >= HYSTERESIS )
 		{
 			restart_cron = 0;
+			syslog(LOG_WARNING, "Restarting crond process");
 			EXEC(CRON_ACTION);	
 		}
 
