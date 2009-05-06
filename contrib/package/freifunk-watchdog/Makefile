@@ -11,6 +11,7 @@ PKG_NAME:=freifunk-watchdog
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DEPENDS := uci
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -18,6 +19,7 @@ define Package/freifunk-watchdog
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Freifunk Ad-Hoc watchdog daemon
+  DEPENDS:=libuci
 endef
 
 define Package/freifunk-watchdog/description
