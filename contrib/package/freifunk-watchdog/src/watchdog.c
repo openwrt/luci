@@ -69,7 +69,7 @@ static int iw_get_channel(int iwfd, const char *ifname, int *channel)
 		}
 
 		for(i = 0; i < range->num_frequency; i++)
-	    {
+		{
 			cmp_freq = ((double)range->freq[i].m) * pow(10, range->freq[i].e);
 			if( cmp_freq == cur_freq )
 			{
@@ -302,7 +302,7 @@ static int do_daemon(void)
 				}
 
 				/* Check channel */
-				if( channel != curif->channel )
+				else if( channel != curif->channel )
 				{
 					syslog(LOG_WARNING, "Channel mismatch on %s: current=%d wanted=%d",
 						curif->ifname, channel, curif->channel);
