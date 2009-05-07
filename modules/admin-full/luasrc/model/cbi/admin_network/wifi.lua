@@ -226,7 +226,7 @@ if hwtype == "atheros" then
 
 	s:option(Flag, "bursting", translate("wifi_bursting")).optional = true
 	s:option(Flag, "turbo", translate("wifi_turbo")).optional = true
-	s:option(Value, "ff", translate("wifi_ff")).optional = true
+	s:option(Flag, "ff", translate("wifi_ff")).optional = true
 
 	s:option(Flag, "wmm", translate("wifi_wmm")).optional = true
 	s:option(Flag, "xr", translate("wifi_xr")).optional = true
