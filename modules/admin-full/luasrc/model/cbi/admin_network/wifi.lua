@@ -89,6 +89,9 @@ if hwtype == "atheros" then
 	end
 	s:option(Value, "distance", translate("wifi_distance"),
 		translate("wifi_distance_desc")).optional = true
+	s:option(Value, "regdomain", translate("wifi_regdomain")).optional = true
+	s:option(Value, "country", translate("wifi_country")).optional = true
+	s:option(Flag, "outdoor", translate("wifi_outdoor")).optional = true
 
 	--s:option(Flag, "nosbeacon", translate("wifi_nosbeacon")).optional = true
 end

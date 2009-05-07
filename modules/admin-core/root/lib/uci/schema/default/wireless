@@ -146,10 +146,24 @@ config variable
 	list depends 'type=broadcom'
 
 config variable
+	option name 'regdomain'
+	option section 'wireless.wifi-device'
+	option title 'Regulatory Domain'
+	list depends 'type=atheros'
+
+config variable
 	option name 'country'
 	option section 'wireless.wifi-device'
-	option title 'Country Code (broadcom)'
+	option title 'Country Code'
 	list depends 'type=broadcom'
+	list depends 'type=atheros'
+
+config variable
+	option name 'outdoor'
+	option section 'wireless.wifi-device'
+	option title 'Outdoor Channels'
+	option datatype boolean
+	list depends 'type=atheros'
 
 config variable
 	option name 'maxassoc'
