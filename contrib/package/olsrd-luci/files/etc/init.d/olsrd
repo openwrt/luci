@@ -527,6 +527,9 @@ start() {
 		fi
 	fi
 
+	### disable icmp redirects
+	echo 0 > /proc/sys/net/ipv4/conf/all/send_redirects
+
 	SYSTEM_HOSTNAME=
 	SYSTEM_LAT=
 	SYSTEM_LON=
@@ -567,6 +570,9 @@ start() {
 stop() {
 	### stop olsrd
 	start-stop-daemon -q -p $PID -x $BIN -K
+
+	### re-enable icmp redirects
+	echo 1 > /proc/sys/net/ipv4/conf/all/send_redirects
 }
 
 restart() {
