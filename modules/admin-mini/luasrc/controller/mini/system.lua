@@ -23,7 +23,7 @@ function index()
 	entry({"mini", "system", "index"}, cbi("mini/system", {autoapply=true}), i18n("general"), 1)
 	entry({"mini", "system", "passwd"}, form("mini/passwd"), i18n("a_s_changepw"), 10)
 	entry({"mini", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 80)
-	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 90)
+	entry({"mini", "system", "upgrade"}, call("action_upgrade"), i18n("admin_upgrade"), 90)
 	entry({"mini", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 100)
 end
 
@@ -80,37 +80,118 @@ end
 function action_upgrade()
 	require("luci.model.uci")
 
-	local ret  = nil
-	local plat = luci.fs.mtime("/lib/upgrade/platform.sh")
 	local tmpfile = "/tmp/firmware.img"
-	local keep_avail = true
+	
+	local function image_supported()
+		-- XXX: yay...
+		return ( 0 == os.execute(
+			". /etc/functions.sh; " ..
+			"include /lib/upgrade; " ..
+			"platform_check_image %q >/dev/null"
+				% tmpfile
+		) )
+	end
+	
+	local function image_checksum()
+		return (luci.sys.exec("md5sum %q" % tmpfile):match("^([^%s]+)"))
+	end
+	
+	local function storage_size()
+		local size = 0
+		if luci.fs.access("/proc/mtd") then
+			for l in io.lines("/proc/mtd") do
+				local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
+				if n == "linux" then
+					size = tonumber(s, 16)
+					break
+				end
+			end
+		end
+		return size
+	end
 
+
+	-- Install upload handler
 	local file
 	luci.http.setfilehandler(
 		function(meta, chunk, eof)
-			if not file then
+			if not luci.fs.access(tmpfile) and not file and chunk and #chunk > 0 then
 				file = io.open(tmpfile, "w")
 			end
-			if chunk then
+			if file and chunk then
 				file:write(chunk)
 			end
-			if eof then
+			if file and eof then
 				file:close()
 			end
 		end
 	)
 
-	local fname   = luci.http.formvalue("image")
-	local keepcfg = keep_avail and luci.http.formvalue("keepcfg")
 
-	if plat and fname then
-		ret = function()
-			return luci.sys.flash(tmpfile, keepcfg and _keep_pattern())
+	-- Determine state
+	local keep_avail   = true
+	local step         = tonumber(luci.http.formvalue("step") or 1)
+	local has_image    = luci.fs.access(tmpfile)
+	local has_support  = image_supported()
+	local has_platform = luci.fs.access("/lib/upgrade/platform.sh")
+	local has_upload   = luci.http.formvalue("image")
+	
+	-- This does the actual flashing which is invoked inside an iframe
+	-- so don't produce meaningful errors here because the the 
+	-- previous pages should arrange the stuff as required.
+	if step == 4 then
+		if has_platform and has_image and has_support then
+			-- Next line is to bypass luci.http layer
+			luci.http.context.eoh = true
+
+			-- Now invoke sysupgrade
+			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
+			os.execute("/sbin/luci-flash %s %q" %{
+				keepcfg and "-k %q" % _keep_pattern() or "", tmpfile
+			})
+
+			-- Make sure the device is rebooted
+			luci.sys.reboot()
 		end
-	end
 
-	luci.http.prepare_content("text/html")
-	luci.template.render("mini/upgrade", {sysupgrade=plat, ret=ret, keep_avail=keep_avail})
+
+	--
+	-- This is step 1-3, which does the user interaction and
+	-- image upload.
+	--
+
+	-- Step 1: file upload, error on unsupported image format
+	elseif not has_image or not has_support or step == 1 then
+		-- If there is an image but user has requested step 1
+		-- or type is not supported, then remove it.
+		if has_image then
+			luci.fs.unlink(tmpfile)
+		end
+			
+		luci.template.render("admin_system/upgrade", {
+			step=1,
+			bad_image=(has_image and not has_support or false),
+			keepavail=keep_avail,
+			supported=has_platform
+		} )
+
+	-- Step 2: present uploaded file, show checksum, confirmation
+	elseif step == 2 then
+		luci.template.render("admin_system/upgrade", {
+			step=2,
+			checksum=image_checksum(),
+			filesize=luci.fs.stat(tmpfile).size,
+			flashsize=storage_size(),
+			keepconfig=(keep_avail and luci.http.formvalue("keepcfg") == "1")
+		} )
+	
+	-- Step 3: load iframe which calls the actual flash procedure
+	elseif step == 3 then
+		luci.template.render("admin_system/upgrade", {
+			step=3,
+			keepconfig=(keep_avail and luci.http.formvalue("keepcfg") == "1")
+		} )
+	end	
 end
 
 function _keep_pattern()
