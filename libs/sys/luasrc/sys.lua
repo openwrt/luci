@@ -35,7 +35,8 @@ luci.util   = require "luci.util"
 luci.fs     = require "luci.fs"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall = tonumber, ipairs, pairs, pcall
+local tonumber, ipairs, pairs, pcall, type =
+	tonumber, ipairs, pairs, pcall, type
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -129,10 +130,16 @@ end
 -- @return		Table containing all variables if no variable name is given
 getenv = posix.getenv
 
---- Determine the current hostname.
+--- Get or set the current hostname.
+-- @param		String containing a new hostname to set (optional)
 -- @return		String containing the system hostname
-function hostname()
-	return posix.uname("%n")
+function hostname(newname)
+	if type(newname) == "string" and #newname > 0 then
+		luci.fs.writefile( "/proc/sys/kernel/hostname", newname .. "\n" )
+		return newname
+	else
+		return posix.uname("%n")
+	end
 end
 
 --- Returns the contents of a documented referred by an URL.
