@@ -645,7 +645,7 @@ endef
 define Package/luci-app-openvpn
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for OpenVPN
-  DEPENDS+=@BROKEN +luci-admin-core +PACKAGE_luci-app-openvpn:openvpn
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-openvpn:openvpn
 endef
 
 define Package/luci-app-openvpn/install
