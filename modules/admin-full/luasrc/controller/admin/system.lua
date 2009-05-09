@@ -214,6 +214,14 @@ function action_upgrade()
 					break
 				end
 			end
+		elseif luci.fs.access("/proc/partitions") then
+			for l in io.lines("/proc/partitions") do
+				local x, y, b, n = l:match('^%s*(%d+)%s+(%d+)%s+([^%s]+)%s+([^%s]+)')
+				if b and n and not n:match('[0-9]') then
+					size = tonumber(b) * 1024
+					break
+				end
+			end
 		end
 		return size
 	end
