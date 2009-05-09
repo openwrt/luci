@@ -13,6 +13,7 @@
  *
  *   Copyright (C) 2008 John Crispin <blogic@openwrt.org> 
  *   Copyright (C) 2008 Steven Barth <steven@midlink.org>
+ *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
  */
 
 #include <net/if.h>
@@ -825,5 +826,56 @@ realloc:
 		return 1;
 	}
 	free(buffer);
+	return 0;
+}
+
+int iwc_frequencies(lua_State *L)
+{
+	int i;
+	int has_range;
+	char *ifname;
+	struct iw_range range;
+
+	if(lua_gettop(L) != 1)
+	{
+		lua_pushstring(L, "invalid arg list");
+		lua_error(L);
+		return 0;
+	}
+
+	ifname = (char *)lua_tostring (L, 1);
+
+	/* Get range stuff */
+	has_range = (iw_get_range_info(sock_iwconfig, ifname, &range) >= 0);
+
+	/* Check if the interface could support scanning. */
+	if((!has_range) || (range.we_version_compiled < 14))
+	{
+		lua_pushstring(L, "interface does not support frequency enumeration");
+		lua_error(L);
+	}
+	else
+	{
+		lua_newtable(L);
+
+		for(i = 0; i < range.num_frequency; i++)
+		{
+			lua_pushnumber(L, i + 1);
+			lua_newtable(L);
+
+			lua_pushinteger(L, 1);
+			lua_pushinteger(L, (int)range.freq[i].i);
+			lua_settable(L, -3);
+
+			lua_pushinteger(L, 2);
+			lua_pushnumber(L, iw_freq2float(&(range.freq[i])));
+			lua_settable(L, -3);
+
+			lua_settable(L, -3);
+		}
+
+		return 1;
+	}
+
 	return 0;
 }

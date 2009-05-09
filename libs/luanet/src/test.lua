@@ -93,6 +93,15 @@ if scan then
 		end
 	end
 end
+local freq = luanet.iwc_frequencies("wlan0")
+print("\nfrequencies on wlan0")
+if freq then
+	for _,f in ipairs(freq) do
+		print("  channel -> "..f[1])
+		print("  frequency -> "..f[2])
+		print("")
+	end
+end
 
 
 print("\n\n---vlan---\n")

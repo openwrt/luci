@@ -13,6 +13,7 @@
  *
  *   Copyright (C) 2008 John Crispin <blogic@openwrt.org> 
  *   Copyright (C) 2008 Steven Barth <steven@midlink.org>
+ *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
  */
 
 #ifndef _IWCONFIG_H__
@@ -25,4 +26,5 @@ int iwc_set_essid(lua_State *L);
 int iwc_set_mode(lua_State *L);
 int iwc_set_channel(lua_State *L);
 int iwc_scan(lua_State *L);
+int iwc_frequencies(lua_State *L);
 #endif

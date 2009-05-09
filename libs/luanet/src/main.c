@@ -13,6 +13,7 @@
  *
  *   Copyright (C) 2008 John Crispin <blogic@openwrt.org> 
  *   Copyright (C) 2008 Steven Barth <steven@midlink.org>
+ *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
  */
 
 #include <stdio.h>
@@ -63,6 +64,7 @@ static luaL_reg func[] = {
 	{"iwc_set_mode", iwc_set_mode},
 	{"iwc_set_channel", iwc_set_channel},
 	{"iwc_scan", iwc_scan},
+	{"iwc_frequencies", iwc_frequencies},
 	{"vlan_getall", vlan_getall},
 	{"vlan_add", vlan_add},
 	{"vlan_del", vlan_del},
