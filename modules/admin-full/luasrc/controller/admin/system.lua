@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -278,7 +279,8 @@ function action_upgrade()
 		luci.template.render("admin_system/upgrade", {
 			step=1,
 			bad_image=(has_image and not has_support or false),
-			keepavail=keep_avail
+			keepavail=keep_avail,
+			supported=has_platform
 		} )
 
 	-- Step 2: present uploaded file, show checksum, confirmation

@@ -16,12 +16,13 @@ $Id$
 <%+header%>
 
 <h2><a id="content" name="content"><%:system%></a></h2>
-<h3><%:a_s_flash%></h3>
+<h3><%:admin_upgrade Flash Firmware%></h3>
 
 <% if step == 1 then %>
+	<% if supported then %>
 	<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
 	<p>
-		<%:admin_upgrade Upload an OpenWrt image file to reflash the device.%>
+		<%:admin_upgrade_desc Upload an OpenWrt image file to reflash the device.%>
 		<% if bad_image then %>
 			<br /><br />
 			<div class="error"><%:admin_upgrade_badimage The uploaded image file does not
@@ -37,13 +38,18 @@ $Id$
 		<br />
 		<% if keepavail then -%>
 		<input type="checkbox" name="keepcfg" value="1" checked="checked" />
-		<span class="bold"><%:a_s_flash_keepcfg%></span>
+		<span class="bold"><%:admin_upgrade_keepcfg Keep configuration files%></span>
 		<% end -%>
 
 		<br />
 		<input class="cbi-button cbi-button-apply" type="submit" value="<%:admin_upgrade_upload Upload image%>" />
 	</div>
 	</form>
+	<% else %>
+		<div class="error"><%:admin_upgrade_nosupport Sorry.
+			OpenWrt does not support a system upgrade on this platform.<br />
+			You need to manually flash your device. %></div>
+	<% end %>
 <% elseif step == 2 then %>
 	<p>
 		<%:admin_upgrade_uploaded The flash image was uploaded.
@@ -51,7 +57,7 @@ $Id$
 			compare them with the original file to ensure data integrity.<br />
 			Click "Proceed" below to start the flash procedure. %>
 
-		<% if filesize > flashsize then %>
+		<% if flashsize > 0 and filesize > flashsize then %>
 			<br /><br />
 			<div class="error"><%:admin_upgrade_toolarge It appears that you try to
 				flash an image that does not fit in the flash memory, please verify
