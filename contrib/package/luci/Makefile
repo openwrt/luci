@@ -462,7 +462,7 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+PACKAGE_luci-app-splash:luci-nixio
+  DEPENDS+=+PACKAGE_luci-app-splash:luci-nixio +PACKAGE_luci-app-splash:iptables-mod-nat-extra
   TITLE:=Freifunk DHCP-Splash application
 endef
 
