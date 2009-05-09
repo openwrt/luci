@@ -170,6 +170,7 @@ div#maincontent ul {
 
 .mainmenu li {
 	white-space: nowrap;
+	text-align: left;
 }
 
 .mainmenu div ul {
@@ -190,7 +191,7 @@ div#maincontent ul {
 
 .mainmenu ul li > ul {
 	left: 100%;
-	margin-top: -1.8em;
+	margin-top: -1.3em;
 	border-width: 1px;
 }
 
@@ -222,8 +223,8 @@ div#maincontent ul {
 
 .mainmenu li:hover > span > a,
 .mainmenu div:hover > a {
-color: #ffffff;
-background-color: #FFCB05;
+	color: #DC0067;
+	background-color: #FFCB05;
 }
 
 
@@ -234,8 +235,8 @@ background-color: #FFCB05;
 
 .mainmenu a:hover,
 .modemenu a:hover {
-color: #ffffff;
-background-color: #FFCB05;
+	color: #DC0067;
+	background-color: #FFCB05;
 }
 
 .mainmenu div.preactive > a {
@@ -244,7 +245,7 @@ background-color: #FFCB05;
 }
 .mainmenu div.preactive > a:hover,
 .mainmenu div.preactive > a:focus {
-	color: #ffffff;
+	color: #DC0067;
 	font-weight: bold;
 }
 
@@ -269,6 +270,7 @@ background-color: #FFCB05;
 	color: #000000;
 	font-size: 80%;
 	border-top:1px solid #D2A800;
+	text-align:left
 }
 
 #maincontent h2 {
@@ -342,6 +344,12 @@ textarea {
 	border-color: #000000;
 }
 
+textarea#syslog
+{
+width: 98%;
+font-family: monospace;
+
+}
 input[type=image] {
 	border: none;
 }
@@ -520,13 +528,12 @@ div.cbi-value-description {
 }
 
 div.cbi-value-field > div.cbi-value-description {
-	display: none;
+	display: inline;
+	color: #ffe990;
 }
 
 div.cbi-value:hover div.cbi-value-field > div.cbi-value-description {
-	display: block;
-	color: #ffffff;
-	background-color: #FFCB05;
+	color: #000000;
 }
 
 option:active,
