@@ -235,19 +235,22 @@ function main.write(self, section, value)
 	tools.firewall_zone_add_interface("freifunk", device)
 
 
-	-- Set hostname
 	local new_hostname = ip:gsub("%.", "-")
 	local old_hostname = sys.hostname()
 
-	if old_hostname == "OpenWrt" or old_hostname:match("^%d+-%d+-%d+-%d+$") then
-		uci:foreach("system", "system",
-			function(s)
-				uci:set("system", s['.name'], "hostname", new_hostname)
-			end)
+	uci:foreach("system", "system",
+		function(s)
+			-- Make crond silent
+			uci:set("system", s['.name'], "cronloglevel", "10")
 
-		luci.fs.writefile( "/proc/sys/kernel/hostname", new_hostname.."\n" )
-		uci:save("system")
-	end
+			-- Set hostname
+			if old_hostname == "OpenWrt" or old_hostname:match("^%d+-%d+-%d+-%d+$") then
+				uci:set("system", s['.name'], "hostname", new_hostname)
+				sys.hostname(new_hostname)
+			end
+		end)
+
+	uci:save("system")
 end
 
 
