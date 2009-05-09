@@ -32,7 +32,7 @@ function index()
 	end
 
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("a_s_backup"), 70)
-	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("a_s_flash"), 80)
+	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("admin_upgrade"), 80)
 	entry({"admin", "system", "reboot"}, call("action_reboot"), i18n("reboot"), 90)
 end
 
