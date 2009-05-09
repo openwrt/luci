@@ -137,7 +137,7 @@ static int check_uci_update(const char *config, time_t *mtime)
 	struct stat s;
 	char path[128];
 
-	snprintf(path, sizeof(path), "/etc/config/%s", config);
+	snprintf(path, sizeof(path), "/var/state/%s", config);
 	if( stat(path, &s) > -1 )
 	{
 		if( (*mtime == 0) || (s.st_mtime > *mtime) )
@@ -145,20 +145,8 @@ static int check_uci_update(const char *config, time_t *mtime)
 			*mtime = s.st_mtime;
 			return 1;
 		}
-		else
-		{
-			snprintf(path, sizeof(path), "/var/state/%s", config);
-			if( stat(path, &s) > -1 )
-			{
-				if( (*mtime == 0) || (s.st_mtime > *mtime) )
-				{
-					*mtime = s.st_mtime;
-					return 1;
-				}
-			}
 
-			return 0;
-		}
+		return 0;
 	}
 
 	return -1;
