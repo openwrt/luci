@@ -131,6 +131,24 @@ static int find_process(const char *name)
 	return -1;
 }
 
+/* Get the 5 minute load average */
+static double find_loadavg(void)
+{
+	int fd;
+	char buffer[10];
+	double load = 0.00;
+
+	if( (fd = open("/proc/loadavg", O_RDONLY)) > -1 )
+	{
+		if( read(fd, buffer, sizeof(buffer)) == sizeof(buffer) )
+			load = atof(&buffer[5]);
+
+		close(fd);
+	}
+
+	return load;
+}
+
 /* Check if given uci file was updated */
 static int check_uci_update(const char *config, time_t *mtime)
 {
@@ -185,7 +203,7 @@ static void load_wifi_uci_add_iface(const char *section, struct uci_itr_ctx *itr
 				val++;
 			}
 		}
-	
+
 		if( val == 3 )
 		{
 			syslog(LOG_INFO, "Monitoring %s: bssid=%s channel=%d",
@@ -240,6 +258,8 @@ static wifi_tuple_t * load_wifi_uci(wifi_tuple_t *ifs, time_t *modtime)
 static int do_daemon(void)
 {
 	int iwfd;
+	int wdfd;
+	int wdtrigger = 1;
 	int channel;
 	char bssid[18];
 
@@ -248,32 +268,44 @@ static int do_daemon(void)
 
 	int restart_wifi = 0;
 	int restart_cron = 0;
+	int restart_sshd = 0;
+	int loadavg_panic = 0;
 
 	openlog(SYSLOG_IDENT, 0, LOG_DAEMON);
 	//daemon(1, 1);
 
 	if( (iwfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1 )
 	{
-		perror("Can not open wireless control socket");
+		syslog(LOG_ERR, "Can not open wireless control socket: %s",
+			strerror(errno));
+
 		return 1;
+	}
+
+	if( (wdfd = open(WATCH_DEVICE, O_WRONLY)) > -1 )
+	{
+		syslog(LOG_INFO, "Opened %s - polling each %i seconds",
+			WATCH_DEVICE, INTERVAL);
 	}
 
 	while( 1 )
 	{
-		if( (ifs = load_wifi_uci(ifs, &modtime)) == NULL )
-		{
-			printf("Can not load wireless uci. File corrupt?\n");
-			return 1;
-		}
+		/* Check average load */
+		if( find_loadavg() >= LOAD_TRESHOLD )
+			loadavg_panic++;
+		else
+			loadavg_panic = 0;
 
 		/* Check crond */
 		if( find_process("crond") < 0 )
-		{
-			syslog(LOG_WARNING, "The crond process died, restarting");
-			restart_cron++;		
-		}
+			restart_cron++;
+
+		/* Check SSHd */
+		if( find_process("dropbear") < 0 )
+			restart_sshd++;
 
 		/* Check wireless interfaces */
+		ifs = load_wifi_uci(ifs, &modtime);
 		for( curif = ifs; curif; curif = curif->next )
 		{
 			/* Get current channel and bssid */
@@ -300,7 +332,7 @@ static int do_daemon(void)
 			}
 			else
 			{
-				syslog(LOG_WARNING, "Requested interface %s not present", curif->ifname);				
+				syslog(LOG_WARNING, "Requested interface %s not present", curif->ifname);
 			}
 		}
 
@@ -309,7 +341,7 @@ static int do_daemon(void)
 		if( restart_wifi >= HYSTERESIS )
 		{
 			restart_wifi = 0;
-			syslog(LOG_WARNING, "Restarting wireless");
+			syslog(LOG_WARNING, "Channel or BSSID mismatch on wireless interface, restarting");
 			EXEC(WIFI_ACTION);
 		}
 
@@ -317,11 +349,42 @@ static int do_daemon(void)
 		if( restart_cron >= HYSTERESIS )
 		{
 			restart_cron = 0;
-			syslog(LOG_WARNING, "Restarting crond process");
-			EXEC(CRON_ACTION);	
+			syslog(LOG_WARNING, "The cron process died, restarting");
+			EXEC(CRON_ACTION);
 		}
 
+		/* SSHd restart required? */
+		if( restart_sshd >= HYSTERESIS )
+		{
+			restart_sshd = 0;
+			syslog(LOG_WARNING, "The ssh process died, restarting");
+			EXEC(SSHD_ACTION);
+		}
+
+		/* Is there a load problem? */
+		if( loadavg_panic >= HYSTERESIS )
+		{
+			syslog(LOG_EMERG, "Critical system load level, triggering reset!");
+
+			/* Try watchdog, fall back to reboot */
+			if( wdfd > -1 )
+				ioctl(wdfd, WDIOC_SETTIMEOUT, &wdtrigger);
+			else
+				EXEC(LOAD_ACTION);
+		}
+
+		/* Reset watchdog timer */
+		if( wdfd > -1 )
+			write(wdfd, '\0', 1);
+
 		sleep(INTERVAL);
+	}
+
+	if( wdfd > -1 )
+	{
+		syslog(LOG_INFO, "Stopping watchdog timer");
+		write(wdfd, WATCH_SHUTDOWN, 1);
+		close(wdfd);
 	}
 
 	closelog();
