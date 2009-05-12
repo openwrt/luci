@@ -10,6 +10,10 @@ boot()
 		echo "* * * * *	$BIN running || /etc/init.d/freifunk-watchdog restart" >> /etc/crontabs/root
 	fi
 
+	if lsmod | grep -q softdog; then
+		mknod /dev/watchdog c 10 130
+	fi
+
 	start
 }
 
