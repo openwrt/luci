@@ -701,7 +701,7 @@ function wifi.channels(iface)
 		fd:close()
 	end
 
-	if #cns == 0 then
+	if not ((pairs(cns))(cns)) then
 		cns = {
 			2.412, 2.417, 2.422, 2.427, 2.432, 2.437,
 			2.442, 2.447, 2.452, 2.457, 2.462
