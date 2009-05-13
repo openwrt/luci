@@ -78,8 +78,9 @@ start() {
 	iptables -t nat -A luci_splash_leases -j DROP
 	
 	### Add crontab entry
-	grep luci-splash /var/spool/cron/crontabs/root >/dev/null 2>&1 || {
-		echo '*/5 * * * * 	/usr/sbin/luci-splash sync' >> /var/spool/cron/crontabs/root
+	test -f /etc/crontabs/root || touch /etc/crontabs/root
+	grep -q luci-splash /etc/crontabs/root || {
+		echo '*/5 * * * * 	/usr/sbin/luci-splash sync' >> /etc/crontabs/root
 	}
 
 	### Start the splash httpd
