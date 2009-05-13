@@ -60,7 +60,7 @@ $Id$
 		<% if flashsize > 0 and filesize > flashsize then %>
 			<br /><br />
 			<div class="error"><%:admin_upgrade_toolarge It appears that you try to
-				flash an image that does not fit in the flash memory, please verify
+				flash an image that does not fit into the flash memory, please verify
 				the image file! %></div>
 		<% end %>
 
@@ -73,7 +73,7 @@ $Id$
 	
 				if flashsize > 0 then
 					write(luci.i18n.translatef(
-						"admin_upgrade_spaceavil",
+						"admin_upgrade_spaceavail",
 						" (%s available)",
 						w.byte_format(flashsize)
 					))

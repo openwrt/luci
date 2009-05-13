@@ -28,12 +28,12 @@ function index()
 	page.target = cbi("admin_network/vlan")
 	page.title  = i18n("a_n_switch")
 	page.order  = 20
-	
+
 	local page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wireless"), cbi("admin_network/wifi")), i18n("wifi"), 15)
 	page.i18n   = "wifi"
 	page.leaf = true
 	page.subindex = true
-	
+
 	uci:foreach("wireless", "wifi-device",
 		function (section)
 			local ifc = section[".name"]
@@ -42,11 +42,11 @@ function index()
 				 ifc:upper()).i18n = "wifi"
 		end
 	)
-	
+
 	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("interfaces", "Schnittstellen"), 10)
 	page.leaf   = true
 	page.subindex = true
-	
+
 	uci:foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
@@ -77,21 +77,7 @@ function index()
 
 	local page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
-	page.title  = i18n("a_n_routes")
+	page.title  = i18n("a_n_routes_static")
 	page.order  = 50
-	page.leaf   = true
-
-	entry(
-	 {"admin", "network", "routes", "static"},
-	 function() end,
-	 i18n("a_n_routes_static")
-	)
-
-	entry(
-		{"admin", "network", "conntrack"},
-		form("admin_network/conntrack"),
-		i18n("a_n_conntrack"),
-		60
-	)
 
 end
