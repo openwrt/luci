@@ -39,19 +39,9 @@ local hwtype = m:get(arg[1], "type")
 local nsantenna = m:get(arg[1], "antenna")
 
 ch = s:option(Value, "channel", translate("a_w_channel"))
-for i=1, 14 do
-	ch:value(i, i .. " (2.4 GHz)")
+for c, f in luci.util.kspairs(luci.sys.wifi.channels()) do
+	ch:value(c, "%i (%.3f GHz)" %{ c, f })
 end
-for i=36, 64, 4 do
-	ch:value(i, i .. " (5 GHz)")
-end
-for i=100, 140, 4 do
-	ch:value(i, i .. " (5 GHz)")
-end
-ch:value(147, 147 .. " (5 GHz)")
-ch:value(151, 151 .. " (5 GHz)")
-ch:value(155, 155 .. " (5 GHz)")
-ch:value(167, 167 .. " (5 GHz)")
 
 s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 

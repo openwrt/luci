@@ -681,6 +681,36 @@ function wifi.iwscan(iface)
 	return iface and (iws[iface] or {}) or iws
 end
 
+--- Get available channels from given wireless iface.
+-- @param iface	Wireless interface (optional)
+-- @return		Table of available channels
+function wifi.channels(iface)
+	local cmd = "iwlist " .. ( iface or "" ) .. " freq 2>/dev/null"
+	local cns = { }
+
+	local fd = io.popen(cmd)
+	if fd then
+		local ln, c, f
+		repeat
+			ln = fd:read("*l") or ""
+			c, f = ln:match("Channel (%d+) : (%d+%.%d+) GHz")
+			if c and f then
+				cns[tonumber(c)] = tonumber(f)
+			end
+		until not ( #ln > 0 )
+		fd:close()
+	end
+
+	if #cns == 0 then
+		cms = {
+			2.412, 2.417, 2.422, 2.427, 2.432, 2.437,
+			2.442, 2.447, 2.452, 2.457, 2.462
+		}
+	end
+
+	return cns
+end
+
 
 --- LuCI system utilities / init related functions.
 -- @class	module
