@@ -28,6 +28,7 @@
 #include <fcntl.h>
 #include <math.h>
 #include <time.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -59,6 +60,7 @@
 /* Watchdog device */
 #define WATCH_DEVICE	"/dev/watchdog"
 #define WATCH_SHUTDOWN	'V'
+#define WATCH_KEEPALIVE	'\0'
 
 /* System load error action and treshold */
 #define LOAD_TRESHOLD	5.00

@@ -18,6 +18,34 @@
 
 #include "watchdog.h"
 
+/* Global watchdog fd, required by signal handler */
+int wdfd = -1;
+
+/* Watchdog shutdown helper */
+static void shutdown_watchdog(int sig)
+{
+	static int wdelay = 3600;
+	static const char wshutdown = WATCH_SHUTDOWN;
+
+	if( wdfd > -1 )
+	{
+		syslog(LOG_INFO, "Stopping watchdog timer");
+		write(wdfd, &wshutdown, 1);
+
+		/* Older Kamikaze versions are compiled with
+		 * CONFIG_WATCHDOG_NOWAYOUT=y, this can be
+		 * harmful if we're in the middle of an upgrade.
+		 * Increase the watchdog timeout to 3600 seconds
+		 * here to avoid unplanned reboots. */
+		ioctl(wdfd, WDIOC_SETTIMEOUT, &wdelay);
+
+		close(wdfd);
+		wdfd = -1;
+	}
+
+	exit(0);
+}
+
 /* Get BSSID of given interface */
 static int iw_get_bssid(int iwfd, const char *ifname, char *bssid)
 {
@@ -257,11 +285,14 @@ static wifi_tuple_t * load_wifi_uci(wifi_tuple_t *ifs, time_t *modtime)
 /* Daemon implementation */
 static int do_daemon(void)
 {
+	static int wdtrigger = 1;
+	static int wdtimeout = INTERVAL * 2;
+	static const char wdkeepalive = WATCH_KEEPALIVE;
+
 	int iwfd;
-	int wdfd;
-	int wdtrigger = 1;
 	int channel;
 	char bssid[18];
+	struct sigaction sa;
 
 	wifi_tuple_t *ifs = NULL, *curif;
 	time_t modtime = 0;
@@ -284,8 +315,21 @@ static int do_daemon(void)
 
 	if( (wdfd = open(WATCH_DEVICE, O_WRONLY)) > -1 )
 	{
-		syslog(LOG_INFO, "Opened %s - polling each %i seconds",
+		syslog(LOG_INFO, "Opened %s - polling every %i seconds",
 			WATCH_DEVICE, INTERVAL);
+
+		/* Install signal handler to halt watchdog on shutdown */
+		sa.sa_handler = shutdown_watchdog;
+		sa.sa_flags = SA_NOCLDWAIT | SA_RESTART;
+		sigaction(SIGHUP,  &sa, NULL);
+		sigaction(SIGINT,  &sa, NULL);
+		sigaction(SIGPIPE, &sa, NULL);
+		sigaction(SIGTERM, &sa, NULL);
+		sigaction(SIGUSR1, &sa, NULL);
+		sigaction(SIGUSR2, &sa, NULL);
+
+		/* Set watchdog timeout to twice the interval */
+		ioctl(wdfd, WDIOC_SETTIMEOUT, &wdtimeout);
 	}
 
 	while( 1 )
@@ -375,19 +419,14 @@ static int do_daemon(void)
 
 		/* Reset watchdog timer */
 		if( wdfd > -1 )
-			write(wdfd, '\0', 1);
+			write(wdfd, &wdkeepalive, 1);
 
 		sleep(INTERVAL);
 	}
 
-	if( wdfd > -1 )
-	{
-		syslog(LOG_INFO, "Stopping watchdog timer");
-		write(wdfd, WATCH_SHUTDOWN, 1);
-		close(wdfd);
-	}
-
+	shutdown_watchdog(0);
 	closelog();
+
 	return 0;
 }
 
