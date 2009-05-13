@@ -702,7 +702,7 @@ function wifi.channels(iface)
 	end
 
 	if #cns == 0 then
-		cms = {
+		cns = {
 			2.412, 2.417, 2.422, 2.427, 2.432, 2.437,
 			2.442, 2.447, 2.452, 2.457, 2.462
 		}
