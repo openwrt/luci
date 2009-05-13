@@ -47,6 +47,8 @@ define Package/freifunk-watchdog/install
 	$(INSTALL_BIN) ./files/freifunk-watchdog.init $(1)/etc/init.d/freifunk-watchdog
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ffwatchd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/lib/upgrade
+	$(INSTALL_DATA) ./files/sysupgrade.hook $(1)/lib/upgrade/kill-ffwatchd.sh
 endef
 
 $(eval $(call BuildPackage,freifunk-watchdog))
