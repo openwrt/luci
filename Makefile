@@ -66,7 +66,7 @@ uvldocs: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) \
 	"build/uvldoc $(realpath host) $(UVL_SCHEMEDIR) uvldocs $(DOCS)"
 
-po:
+po: host
 	for L in $${LANGUAGE:-$$(find i18n/ -path 'i18n/*/luasrc/i18n/*' -name 'default.*.lua' | \
 	  sed -e 's!.*/default\.\(.*\)\.lua!\1!')}; do \
 	    build/i18n-lua2po.pl . $(realpath host)/po $$L; \
