@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-@ARGV == 3 || die "Usage: $0 <source-dir> <dest-dir> <target-language>\n";
+@ARGV >= 2 || die "Usage: $0 <source-dir> <dest-dir> [<target-language>]\n";
 
 my $source_dir  = shift @ARGV;
 my $target_dir  = shift @ARGV;
@@ -17,13 +17,13 @@ if( ! -d $target_dir )
 my %target_strings;
 
 
-if( open F, "find $source_dir -path '*/luasrc/i18n/*' -name '*.$target_lang.lua' |" )
+if( $target_lang && open F, "find $source_dir -path '*/luasrc/i18n/*' -name '*.$target_lang.lua' |" )
 {
 	while( chomp( my $file = readline F ) )
 	{
 		if( open L, "< $file" )
 		{
-			my ( $basename ) = $file =~ m{.+/([^/]+)\.\w+\.lua$};
+			my ( $basename ) = $file =~ m{.+/([^/]+)\.[\w\-]+\.lua$};
 			$target_strings{$basename} = { };
 
 			while( chomp( my $entry = readline L ) )
@@ -45,6 +45,7 @@ if( open F, "find $source_dir -path '*/luasrc/i18n/*' -name '*.$target_lang.lua'
 				if( $k && $v )
 				{
 					$v =~ s/"/\\"/g;
+					$v =~ s/\\\\"/\\"/g;
 					$target_strings{$basename}{$k} = $v;
 				}
 			}
@@ -59,16 +60,18 @@ if( open F, "find $source_dir -path '*/luasrc/i18n/*' -name '*.$target_lang.lua'
 
 if( open F, "find . -path '*/luasrc/i18n/*' -name '*.$master_lang.lua' |" )
 {
+	my $ext = $target_lang ? "$target_lang.po" : "pot";
+
 	while( chomp( my $file = readline F ) )
 	{
 		if( open L, "< $file" )
 		{
 			my ( $basename ) = $file =~ m{.+/([^/]+)\.\w+\.lua$};
 
-			if( open T, "> $target_dir/$basename.$target_lang.po" )
+			if( open T, "> $target_dir/$basename.$ext" )
 			{
 				printf "Generating %-40s ",
-					"$target_dir/$basename.$target_lang.po";
+					"$target_dir/$basename.$ext";
 		
 				printf T "#  %s.%s.po\n#  generated from %s\n\nmsgid \"\"\n" .
 				         "msgstr \"Content-Type: text/plain; charset=UTF-8\"\n\n",
@@ -93,10 +96,11 @@ if( open F, "find . -path '*/luasrc/i18n/*' -name '*.$master_lang.lua' |" )
 					if( $k && $v )
 					{
 						$v =~ s/"/\\"/g;
+						$v =~ s/\\\\"/\\"/g;
 						printf T "#: %s:%d\n#. \"%s\"\nmsgid \"%s\"\nmsgstr \"%s\"\n\n",
 							$file, $., $v, $k,
 							( $target_strings{$basename} && $target_strings{$basename}{$k} )
-								? $target_strings{$basename}{$k} : $v;
+								? $target_strings{$basename}{$k} : "";
 					}
 				}
 				
