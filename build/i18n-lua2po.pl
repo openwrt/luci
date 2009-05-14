@@ -73,9 +73,9 @@ if( open F, "find . -path '*/luasrc/i18n/*' -name '*.$master_lang.lua' |" )
 				printf "Generating %-40s ",
 					"$target_dir/$basename.$ext";
 		
-				printf T "#  %s.%s.po\n#  generated from %s\n\nmsgid \"\"\n" .
+				printf T "#  %s.%s\n#  generated from %s\n\nmsgid \"\"\n" .
 				         "msgstr \"Content-Type: text/plain; charset=UTF-8\"\n\n",
-					$basename, $target_lang, $file;
+					$basename, $ext, $file;
 		
 				while( chomp( my $entry = readline L ) )
 				{
