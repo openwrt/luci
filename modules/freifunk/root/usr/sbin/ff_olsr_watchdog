@@ -21,7 +21,7 @@ if posix.access("/var/run/olsrd.pid") then
 		local systime = os.time()
 		local wdgtime = tonumber(io.lines(stamp)())
 
-		if not wdgtime or ( systime - wdgtime ) > intv then
+		if not wdgtime or ( systime - wdgtime ) > ( intv * 2 ) then
 			os.execute("logger -t 'OLSR watchdog' 'Process died - restarting!'")
 			os.execute("/etc/init.d/olsrd restart")
 		end
