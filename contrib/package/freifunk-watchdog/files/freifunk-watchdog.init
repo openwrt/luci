@@ -30,4 +30,10 @@ start()
 stop()
 {
 	start-stop-daemon -q -p $PID -x $BIN -K
+
+	if ! /etc/init.d/freifunk-watchdog enabled; then
+		if grep -q "$BIN" /etc/crontabs/root 2>/dev/null; then
+			sed -i -e "\\'$BIN'd" /etc/crontabs/root
+		fi
+	fi
 }
