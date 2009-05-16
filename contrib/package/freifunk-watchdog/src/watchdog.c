@@ -347,10 +347,14 @@ static int do_daemon(void)
 		/* Check crond */
 		if( find_process("crond") < 0 )
 			restart_cron++;
+		else
+			restart_cron = 0;
 
 		/* Check SSHd */
 		if( find_process("dropbear") < 0 )
 			restart_sshd++;
+		else
+			restart_sshd = 0;
 
 		/* Check wireless interfaces */
 		ifs = load_wifi_uci(ifs, &modtime);
