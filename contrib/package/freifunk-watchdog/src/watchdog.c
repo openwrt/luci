@@ -205,44 +205,48 @@ static void load_wifi_uci_add_iface(const char *section, struct uci_itr_ctx *itr
 	const char *ucitmp;
 	int val = 0;
 
-	if( (t = (wifi_tuple_t *)malloc(sizeof(wifi_tuple_t))) != NULL )
+	ucitmp = ucix_get_option(itr->ctx, "wireless", section, "mode");
+	if( ucitmp && !strncmp(ucitmp, "adhoc", 5) )
 	{
-		ucitmp = ucix_get_option(itr->ctx, "wireless", section, "ifname");
-		if(ucitmp)
+		if( (t = (wifi_tuple_t *)malloc(sizeof(wifi_tuple_t))) != NULL )
 		{
-			strncpy(t->ifname, ucitmp, sizeof(t->ifname));
-			val++;
-		}
-
-		ucitmp = ucix_get_option(itr->ctx, "wireless", section, "bssid");
-		if(ucitmp)
-		{
-			strncpy(t->bssid, ucitmp, sizeof(t->bssid));
-			val++;
-		}
-
-		ucitmp = ucix_get_option(itr->ctx, "wireless", section, "device");
-		if(ucitmp)
-		{
-			ucitmp = ucix_get_option(itr->ctx, "wireless", ucitmp, "channel");
+			ucitmp = ucix_get_option(itr->ctx, "wireless", section, "ifname");
 			if(ucitmp)
 			{
-				t->channel = atoi(ucitmp);
+				strncpy(t->ifname, ucitmp, sizeof(t->ifname));
 				val++;
 			}
-		}
 
-		if( val == 3 )
-		{
-			syslog(LOG_INFO, "Monitoring %s: bssid=%s channel=%d",
-				t->ifname, t->bssid, t->channel);
+			ucitmp = ucix_get_option(itr->ctx, "wireless", section, "bssid");
+			if(ucitmp)
+			{
+				strncpy(t->bssid, ucitmp, sizeof(t->bssid));
+				val++;
+			}
 
-			t->next = itr->list;
-			itr->list = t;
-		}
-		else
-		{
-			free(t);
+			ucitmp = ucix_get_option(itr->ctx, "wireless", section, "device");
+			if(ucitmp)
+			{
+				ucitmp = ucix_get_option(itr->ctx, "wireless", ucitmp, "channel");
+				if(ucitmp)
+				{
+					t->channel = atoi(ucitmp);
+					val++;
+				}
+			}
+
+			if( val == 3 )
+			{
+				syslog(LOG_INFO, "Monitoring %s: bssid=%s channel=%d",
+					t->ifname, t->bssid, t->channel);
+
+				t->next = itr->list;
+				itr->list = t;
+			}
+			else
+			{
+				free(t);
+			}
 		}
 	}
 }
