@@ -6,15 +6,20 @@ BIN=/usr/sbin/ffwatchd
 
 boot()
 {
-	if ! grep -q "$BIN" /etc/crontabs/root 2>/dev/null; then
-		echo "* * * * *	$BIN running || /etc/init.d/freifunk-watchdog restart" >> /etc/crontabs/root
-	fi
+	# If watchdog service is enabled, install cronjob, create device node and start daemon
+	if /etc/init.d/freifunk-watchdog enabled 2>/dev/null; then
+		if ! grep -q "$BIN" /etc/crontabs/root 2>/dev/null; then
+			echo "* * * * *	$BIN running || /etc/init.d/freifunk-watchdog restart" >> /etc/crontabs/root
+		fi
 
-	if lsmod | grep -q softdog; then
 		mknod /dev/watchdog c 10 130
-	fi
 
-	start
+		start
+		
+	# If service is disabled, find and remove related cronjob
+	elif grep -q "$BIN" /etc/crontabs/root 2>/dev/null; then
+		sed -i -e "\\'$BIN'd" /etc/crontabs/root
+	fi
 }
 
 start()
