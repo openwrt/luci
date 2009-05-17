@@ -26,6 +26,11 @@ limitations under the License.
 
 local require = require
 
+-- Make sure that bitlib is loaded
+if not _G.bit then
+	_G.bit = require "bit"
+end
+
 module "luci"
 
 local v = require "luci.version"
