@@ -171,6 +171,8 @@ $Id$
 			<% for _, i in ipairs(single_ifs) do
 				dev     = get_ifname(i)
 				vlan    = get_vlan(dev)
+
+				if devinfo and devinfo[dev] then
 			%>
 				<h3><%:a_s_if_interface Interface%> <%=i['.name']%></h3>
 				<p style="font-size:90%;padding-left:1em">
@@ -221,12 +223,14 @@ $Id$
 					<% end %>
 				<%- end -%>
 				<br /></p>
-			<% end %>
+			<% end end %>
 
 
 			<% for _, b in ipairs(bridge_ifs) do
 				br  = get_brinfo(b)
 				dev = br.name
+
+				if devinfo and devinfo[dev] then
 			%>
 				<h3><%:a_s_if_bridge Bridge%> <%=br.name%></h3>
 				<p style="font-size:90%;padding-left:1em">
@@ -294,7 +298,7 @@ $Id$
 					<% end -%><br />
 				<% end %>
 				<br /></p>
-			<% end %>
+			<% end end %>
 		</fieldset>
 	</div>
 </form>
