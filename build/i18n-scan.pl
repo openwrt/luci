@@ -71,11 +71,8 @@ if( open F, "find $ARGV[0] -type f -name '*.htm' -or -name '*.lua' |" )
 					)
 				/$1 || $2/segx
 			) {
-				#$text =~ s/^ .*? (?: (?: translate f? | i18n ) [\s\n]* ( \( ) | ( <%: -? ) ) / $1 || $2 /sex;
-				#warn "T[$text]";
 				my $code;
 
-				reparse:
 				( $code, $text ) = extract_codeblock( $text, '', '^', '()' );
 				if( ! $code ) {
 					( $code, $text ) = extract_codeblock( $text, '', '^', '<>' );
@@ -91,9 +88,6 @@ if( open F, "find $ARGV[0] -type f -name '*.htm' -or -name '*.lua' |" )
 				}
 
 				my ( $k, $v ) = _parse( $code );
-				#warn "M[$code]";
-				#last;
-		
 				if( $k && defined($v) )
 				{
 					if( $v )
