@@ -8,14 +8,13 @@ my $target_lang = shift @ARGV;
 my $master_lang = "en";
 
 
-if( ! -d $target_dir )
+if( ! -d "$target_dir/" . ( $target_lang || 'templates' ) )
 {
-	system('mkdir', '-p', $target_dir);
+	system('mkdir', '-p', "$target_dir/" . ( $target_lang || 'templates' ));
 }
 
 
 my %target_strings;
-
 
 if( $target_lang && open F, "find $source_dir -path '*/luasrc/i18n/*' -name '*.$target_lang.lua' |" )
 {
@@ -60,22 +59,26 @@ if( $target_lang && open F, "find $source_dir -path '*/luasrc/i18n/*' -name '*.$
 
 if( open F, "find . -path '*/luasrc/i18n/*' -name '*.$master_lang.lua' |" )
 {
-	my $ext = $target_lang ? "$target_lang.po" : "pot";
+	my $destfile = sprintf '%s/%s/%%s.%s',
+		$target_dir,
+		$target_lang || 'templates',
+		$target_lang ? 'po' : 'pot'
+	;
 
 	while( chomp( my $file = readline F ) )
 	{
 		if( open L, "< $file" )
 		{
 			my ( $basename ) = $file =~ m{.+/([^/]+)\.\w+\.lua$};
+			my $filename = sprintf $destfile, $basename;
 
-			if( open T, "> $target_dir/$basename.$ext" )
+			if( open T, "> $filename" )
 			{
-				printf "Generating %-40s ",
-					"$target_dir/$basename.$ext";
-		
+				printf "Generating %-40s ", $filename;
+
 				printf T "#  %s.%s\n#  generated from %s\n\nmsgid \"\"\n" .
 				         "msgstr \"Content-Type: text/plain; charset=UTF-8\"\n\n",
-					$basename, $ext, $file;
+					$basename, $target_lang ? 'po' : 'pot', $file;
 		
 				while( chomp( my $entry = readline L ) )
 				{
@@ -97,7 +100,7 @@ if( open F, "find . -path '*/luasrc/i18n/*' -name '*.$master_lang.lua' |" )
 					{
 						$v =~ s/"/\\"/g;
 						$v =~ s/\\\\"/\\"/g;
-						printf T "#: %s:%d\n#. \"%s\"\nmsgid \"%s\"\nmsgstr \"%s\"\n\n",
+						printf T "#: %s:%d\n#. %s\nmsgid \"%s\"\nmsgstr \"%s\"\n\n",
 							$file, $., $v, $k,
 							( $target_strings{$basename} && $target_strings{$basename}{$k} )
 								? $target_strings{$basename}{$k} : "";
