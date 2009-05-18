@@ -25,6 +25,8 @@ c.default = "Default"
 
 s:option(Flag, "overhead")
 
+s:option(Flag, "halfduplex")
+
 s:option(Value, "download", nil, "kb/s")
 
 s:option(Value, "upload", nil, "kb/s")

@@ -1,6 +1,7 @@
 qos = 'Quality of Service'
 qos_interface_classgroup = 'Klassifizierung'
 qos_interface_overhead = 'Overheadberechnung'
+qos_interface_halfduplex = 'Half-duplex'
 qos_interface_download = 'Downlink'
 qos_interface_upload = 'Uplink'
 qos_classify = 'Priorisierung'
