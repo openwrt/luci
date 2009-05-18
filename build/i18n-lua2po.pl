@@ -103,7 +103,7 @@ if( open F, "find . -path '*/luasrc/i18n/*' -name '*.$master_lang.lua' |" )
 						printf T "#: %s:%d\n#. %s\nmsgid \"%s\"\nmsgstr \"%s\"\n\n",
 							$file, $., $v, $k,
 							( $target_strings{$basename} && $target_strings{$basename}{$k} )
-								? $target_strings{$basename}{$k} : "";
+								? $target_strings{$basename}{$k} : $v;
 					}
 				}
 				
