@@ -20,11 +20,14 @@ if( open F, "find $source_dir -type f -name '*.po' |" )
 	{
 		if( open L, "< $file" )
 		{
-			my ( $basename ) = $file =~ m{.+/([^/]+\.[\w\-]+)\.po$};
-
-			if( open D, "> $target_dir/$basename.lua" )
+			my $content = 0;
+			my ( $lang, $basename ) = $file =~ m{.+/(\w+)/([^/]+)\.po$};
+			$lang = lc $lang;
+			$lang =~ s/_/-/g;
+			
+			if( open D, "> $target_dir/$basename.$lang.lua" )
 			{
-				printf "Generating %-40s ", "$target_dir/$basename.lua";
+				printf "Generating %-40s ", "$target_dir/$basename.$lang.lua";
 
 				my ( $k, $v );
 
@@ -44,21 +47,26 @@ if( open F, "find $source_dir -type f -name '*.po' |" )
 					}
 					else
 					{
-						if( $k && defined($v) )
+						if( $k && defined($v) && length($v) > 0 )
 						{
 							$v =~ s/\\(['"\\])/$1/g;
 							$v =~ s/(['\\])/\\$1/g;
 
-							printf D "%s%s='%s'\n", $v ? '' : '--', $k, $v;
+							printf D "%s='%s'\n", $k, $v;
+							$content++;
 						}
 		
 						$k = $v = undef;
 					}
 				}
 
-				print "done\n";
+				print $content ? "done ($content strings)\n" : "empty\n";
 
 				close D;
+
+
+				unlink("$target_dir/$basename.$lang.lua")
+					unless( $content > 0 );
 			}
 
 			close L;

@@ -14,8 +14,12 @@ build: gccbuild luabuild
 gccbuild:
 	for i in $(MODULES); do make -C$$i compile; done
 
-luabuild:
-	for i in $(MODULES); do make -C$$i luabuild; done
+luabuild: i18nbuild
+	for i in $(MODULES); do HOST=$(realpath host) make -C$$i luabuild; done
+
+i18nbuild:
+	mkdir -p host/lua-po
+	./build/i18n-po2lua.pl ./po host/lua-po
 
 clean:
 	rm -rf docs
