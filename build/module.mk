@@ -26,7 +26,7 @@ luasource:
 	for i in $$(find dist -name .svn -or -name .gitignore); do rm -rf $$i || true; done
   ifneq ($(PO),)
 	for file in $(PO); do \
-	  cp $(HOST)/lua-po/$$file.*.lua dist$(LUCI_MODULEDIR)/i18n/; \
+	  cp $(HOST)/lua-po/$$file.$(if $(PO_LANG),$(PO_LANG),*).lua dist$(LUCI_MODULEDIR)/i18n/; \
 	done
   endif
 
