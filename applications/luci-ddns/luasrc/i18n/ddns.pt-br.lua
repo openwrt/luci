@@ -1,8 +1,0 @@
-ddns = 'DNS Dinâmico'
-ddns_desc = 'DNS dinâmico permite que o seu router possa ser encontrado a partir de um hostname fixo, mesmo usando um Endereço-IP dinâmico.'
-ddns_service_ipsource = 'Origem do Endereço-IP'
-ddns_service_checkinterval = 'Verificar a cada mudança de IP'
-ddns_service_checkunit = 'Unidade de tempo para verificação'
-ddns_service_forceinterval = 'Forçar atualização a cada'
-ddns_service_forceunit = 'Unidade de tempo para atualização forçada'
-ddns_service_updateurl = 'URL para atualização customizada'

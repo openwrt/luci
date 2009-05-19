@@ -1,8 +1,0 @@
-ddns = 'Dynamisches DNS'
-ddns_desc = 'Dynamisches DNS erlaubt es, den Router bei dynamischer IP-Adresse über einen festen DNS-Namen zu erreichen.'
-ddns_service_ipsource = 'Quelle der IP-Adresse'
-ddns_service_checkinterval = 'Teste auf neue IP alle'
-ddns_service_checkunit = 'Test-Zeiteinheit'
-ddns_service_forceinterval = 'Erzwinge Aktualisierung alle'
-ddns_service_forceunit = 'Erzwinge-Zeiteinheit'
-ddns_service_updateurl = 'Eigene Update-URL'

@@ -1,8 +1,0 @@
-ddns = 'Dynamic DNS'
-ddns_desc = 'Dynamic DNS allows that your router can be reached with a fixed hostname while having a dynamically changing IP-Address.'
-ddns_service_ipsource = 'Source of IP-Address'
-ddns_service_checkinterval = 'Check for changed IP every'
-ddns_service_checkunit = 'Check-Time unit'
-ddns_service_forceinterval = 'Force update every'
-ddns_service_forceunit = 'Force-Time unit'
-ddns_service_updateurl = 'Custom Update-URL'

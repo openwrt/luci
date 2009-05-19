@@ -1,5 +1,0 @@
-initmgr = 'Initscripts'
-initmgr_desc = 'You can enable or disable installed init scripts here. Changes will applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like &quot;network&quot;, your device might become inaccesable!</strong>'
-initmgr_index = 'Start priority'
-initmgr_name = 'Initscript'
-initmgr_enabled = 'Enable/Disable'

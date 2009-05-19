@@ -1,7 +1,0 @@
-upnpd = 'Universal Plug &amp; Play'
-upnpd_desc = 'UPNP ermöglicht die automatische Konfiguration des Routers durch Clients im lokalen Netzwerk.'
-upnpd_config_desc = 'UPNP sollte nur wenn unbedingt nötig aktiviert werden, da es ein Sicherheitsrisiko für das Netzwerk darstellen kann.'
-upnpd_config_securemode = 'Sicheren Modus aktivieren'
-upnpd_config_logoutput = 'Ausgabe protokollieren'
-upnpd_config_download = 'Downlink'
-upnpd_config_upload = 'Uplink'

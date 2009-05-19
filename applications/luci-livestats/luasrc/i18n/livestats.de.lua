@@ -1,8 +1,0 @@
-livestats_incoming = "eingehend"
-livestats_outgoing = "ausgehend"
-livestats_traffic = "Netzverkehr auf"
-livestats_wifi = "Signal-Rauschabstand für"
-livestats_loadavg = "Durchschnittliche Systemlast"
-livestats_stat_wireless = "Echtzeit-Drahtlosstatus"
-livestats_stat_traffic = "Echtzeit-Netzwerkverkehr"
-livestats_stat_loadavg = "Echtzeit-Systemlast"

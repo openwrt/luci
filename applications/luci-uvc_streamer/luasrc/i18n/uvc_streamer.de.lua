@@ -1,5 +1,0 @@
-framespersecond = 'Bilder pro Sekunde'
-resolution = 'Auflösung'
-settings = 'Konfiguration'
-uvc_streamer = 'Webcam Stream'
-uvc_streamer_desc = 'Linux-UVC Webcam Konfiguration. Im Browser z.B. <a href="http://%s:%i/">http://%s:%i/</a> laden.'
