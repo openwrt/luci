@@ -14,7 +14,7 @@ if( open F, "find $source -type f -name '$pattern' |" )
 		if( -f "$source/templates/$basename.pot" )
 		{
 			printf "Updating %-40s", $file;
-			system("msgmerge", "-U", $file, "$source/templates/$basename.pot");
+			system("msgmerge", "-U", "-N", $file, "$source/templates/$basename.pot");
 		}
 	}
 
