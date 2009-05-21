@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-18 23:12+0200\n"
-"PO-Revision-Date: 2009-05-21 16:38+0200\n"
+"PO-Revision-Date: 2009-05-21 18:02+0200\n"
 "Last-Translator: Jo-Philipp Wich <xm@subsignal.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -719,7 +719,7 @@ msgstr "Administratorschnittstelle aktivieren"
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:118
 #, fuzzy
 msgid "openvpn_param_management_client"
-msgstr "Entfernter Rechnername oder IP-Adresse"
+msgstr "Administratorschnittstelle als TCP-Client verbinden"
 
 #. Query management channel for private key
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:119
@@ -754,156 +754,164 @@ msgstr ""
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:123
 #, fuzzy
 msgid "openvpn_param_management_log_cache"
-msgstr "Entfernter Rechnername oder IP-Adresse"
+msgstr "Anzahl der Zeilen im Protokoll-Zwischenspeicher"
 
 #. Load plug-in module
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:124
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:124
 #, fuzzy
 msgid "openvpn_param_plugin"
-msgstr "Lokaler Rechnername oder IP Adresse"
+msgstr "Plugin-Modul laden"
 
 #. Configure server mode
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:125
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:125
-#, fuzzy
 msgid "openvpn_param_server"
-msgstr "Betriebsmodus"
+msgstr "Server-Modus"
 
 #. Configure server bridge
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:126
+#, fuzzy
 msgid "openvpn_param_server_bridge"
-msgstr ""
+msgstr "Server-zu-Server Netzwerkbrücke"
 
 #. Push options to peer
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:127
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:127
 #, fuzzy
 msgid "openvpn_param_push"
-msgstr "Netzwerkprotokoll"
+msgstr "Optionen an Teilnehmer übertragen"
 
 #. Don't inherit global push options
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:128
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:128
 #, fuzzy
 msgid "openvpn_param_push_reset"
-msgstr "Versuchen, die Proxyeinstellung automatisch beziehen."
+msgstr "Nur teilnehmerspezifische Optionen übertragen"
 
 #. Set aside a pool of subnets
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:129
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:129
-#, fuzzy
 msgid "openvpn_param_ifconfig_pool"
-msgstr "Konfiguration aus einer Datei lesen"
+msgstr "IP-Adressbereich für zu vergebende Subnetze"
 
 #. Use individual addresses rather than /30 subnets
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:130
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:130
 #, fuzzy
 msgid "openvpn_param_ifconfig_pool_linear"
-msgstr "Konfiguration aus einer Datei lesen"
+msgstr "Einzeladressen statt /30 Subnetze vergeben"
 
 #. Persist/unpersist ifconfig-pool
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:131
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:131
 #, fuzzy
 msgid "openvpn_param_ifconfig_pool_persist"
-msgstr "Konfiguration aus einer Datei lesen"
+msgstr "Persistenten IP-Adressbereich nutzen"
 
 #. Push an ifconfig option to remote
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:132
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:132
 #, fuzzy
 msgid "openvpn_param_ifconfig_push"
-msgstr "Konfiguration aus einer Datei lesen"
+msgstr "IP-Adresskonfiguration an Teilnehmer übertragen"
 
 #. Route subnet to client
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:133
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:133
 #, fuzzy
 msgid "openvpn_param_iroute"
-msgstr "Netzwerkprotokoll"
+msgstr "Subnetz an Teilnehmer routen"
 
 #. Client is disabled
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:134
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:134
 #, fuzzy
 msgid "openvpn_param_disable"
-msgstr "Lokaler Rechnername oder IP Adresse"
+msgstr "Teilnehmer-Konto deaktivieren"
 
 #. Don't require client certificate
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:135
+#, fuzzy
 msgid "openvpn_param_client_cert_not_required"
-msgstr ""
+msgstr "Verbindung ohne Teilnehmerzertifikat erlauben"
 
 #. Use username as common name
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:136
+#, fuzzy
 msgid "openvpn_param_username_as_common_name"
-msgstr ""
+msgstr "Benutzernamen als Common-Name benutzen"
 
 #. Script to verify interactive authentication
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:137
+#, fuzzy
 msgid "openvpn_param_auth_user_pass_verify"
-msgstr ""
+msgstr "Shell-Kommando zum Überprüfen der interaktiven Authentifikation"
 
 #. Allow client-to-client traffic
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:138
+#, fuzzy
 msgid "openvpn_param_client_to_client"
-msgstr ""
+msgstr "Netzwerkverkehr zwischen Teilnehmern zulassen"
 
 #. Allow multiple clients with same certificate
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:139
+#, fuzzy
 msgid "openvpn_param_duplicate_cn"
-msgstr ""
+msgstr "Mehrere Teilnehmer mit selbem Zertifikat erlauben"
 
 #. Run script cmd on client connection
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:140
+#, fuzzy
 msgid "openvpn_param_client_connect"
-msgstr ""
+msgstr "Shell-Kommando bei neuer Teilnehmer-Verbindung ausführen"
 
 #. Run script cmd on client disconnection
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:141
+#, fuzzy
 msgid "openvpn_param_client_disconnect"
-msgstr ""
+msgstr "Shell-Kommando beim Trennen von Teilnehmer-Verbindungen ausführen"
 
 #. Directory for custom client config files
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:142
 msgid "openvpn_param_client_config_dir"
-msgstr ""
+msgstr "Verzeichnis für eigene Konfigurationsdateien"
 
 #. Refuse connection if no custom client config
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:143
+#, fuzzy
 msgid "openvpn_param_ccd_exclusive"
-msgstr ""
+msgstr "Teilnehmer-Verbindung verweigern wenn Teilnehmer-Konfiguration fehlt"
 
+# Was soll das eigtl. bedeuten?
 #. Temporary directory for client-connect return file
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:144
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:144
 #, fuzzy
 msgid "openvpn_param_tmp_dir"
-msgstr "Betriebsmodus"
+msgstr "Temporäres Verzeichnis für Teilnehmer-Verbindungen"
 
 #. Set size of real and virtual address hash tables
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:145
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:145
 #, fuzzy
 msgid "openvpn_param_hash_size"
-msgstr "Netzwerkprotokoll"
+msgstr "Größe für interne Adresstabellen"
 
 #. Number of allocated broadcast buffers
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:146
 msgid "openvpn_param_bcast_buffers"
-msgstr ""
+msgstr "Anzahl der benutzten Broadcast-Puffer"
 
 #. Maximum number of queued TCP output packets
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:147
 msgid "openvpn_param_tcp_queue_limit"
-msgstr ""
+msgstr "Maximale Anzahl an TCP-Paketen in der Warteschlange"
 
 #. Script to validate client virtual addresses
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:148
 msgid "openvpn_param_learn_address"
-msgstr ""
+msgstr "Shell-Kommando zum Erlernen neuer Teilnehmer-Adressen"
 
 #. Allowed maximum of new connections
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:149
@@ -922,168 +930,172 @@ msgstr "Betriebsmodus"
 #. Allowed maximum of internal
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:151
 msgid "openvpn_param_max_routes_per_client"
-msgstr ""
+msgstr "Maximal erlaubte Anzahl an Netzwerkrouten pro Teilnehmer"
 
 #. Proxy incoming HTTPS sessions
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:152
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:152
 #, fuzzy
 msgid "openvpn_param_port_share"
-msgstr "Netzwerkprotokoll"
+msgstr "Netzwerk-Port mit HTTPS-Server teilen"
 
 #. Configure client mode
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:153
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:153
-#, fuzzy
 msgid "openvpn_param_client"
-msgstr "Betriebsmodus"
+msgstr "Clientmodus"
 
 #. Authenticate using username/password
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:154
 msgid "openvpn_param_auth_user_pass"
-msgstr ""
+msgstr "Authentifikation mittels Benutzername und Passwort"
 
 #. Accept options pushed from server
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:155
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:155
 #, fuzzy
 msgid "openvpn_param_pull"
-msgstr "Lokaler Rechnername oder IP Adresse"
+msgstr "Vom Server übertragene Optionen lokal akzeptieren"
 
 #. Handling of authentication failures
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:156
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:156
 #, fuzzy
 msgid "openvpn_param_auth_retry"
-msgstr "Versuchen, die Proxyeinstellung automatisch beziehen."
+msgstr "Behandlung von Authentifikationsfehlern"
 
 #. Send notification to peer on disconnect
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:157
 msgid "openvpn_param_explicit_exit_notify"
-msgstr ""
+msgstr "Teilnehmer über Verbindungstrennung informieren"
 
 #. Enable Static Key encryption mode (non-TLS)
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:158
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:158
 #, fuzzy
 msgid "openvpn_param_secret"
-msgstr "Betriebsmodus"
+msgstr "Verschlüsselung mittels statischer Schlüssel (kein TLS)"
 
 #. HMAC authentication for packets
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:159
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:159
 #, fuzzy
 msgid "openvpn_param_auth"
-msgstr "Netzwerkprotokoll"
+msgstr "HMAC-Authentifizierung für Pakete"
 
 #. Encryption cipher for packets
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:160
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:160
 #, fuzzy
 msgid "openvpn_param_cipher"
-msgstr "Betriebsmodus"
+msgstr "Verschlüsselungsalgorithmus für Pakete"
 
 #. Size of cipher key
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:161
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:161
 #, fuzzy
 msgid "openvpn_param_keysize"
-msgstr "Entfernter Rechnername oder IP-Adresse"
+msgstr "Größe des Schlüssels"
 
 #. Enable OpenSSL hardware crypto engines
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:162
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:162
 #, fuzzy
 msgid "openvpn_param_engine"
-msgstr "Betriebsmodus"
+msgstr "OpenSSL-Unterstützung für Kryptographie-Hardware benutzen"
 
 #. Disable replay protection
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:163
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:163
 #, fuzzy
 msgid "openvpn_param_no_replay"
-msgstr "Versuchen, die Proxyeinstellung automatisch beziehen."
+msgstr "\"Replay\"-Schutz deaktivieren"
 
 #. Silence the output of replay warnings
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:164
+#, fuzzy
 msgid "openvpn_param_mute_replay_warnings"
-msgstr ""
+msgstr "\"Replay\"-Warnungen unterdrücken"
 
 #. Replay protection sliding window size
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:165
+#, fuzzy
 msgid "openvpn_param_replay_window"
-msgstr ""
+msgstr "Fenstergröße für \"Replay\"-Schutz"
 
 #. Disable cipher initialisation vector
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:166
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:166
 #, fuzzy
 msgid "openvpn_param_no_iv"
-msgstr "Konfiguration aus einer Datei lesen"
+msgstr "Initialisierungsvektor für Verschlüsselung deaktivieren"
 
 #. Persist replay-protection state
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:167
+#, fuzzy
 msgid "openvpn_param_replay_persist"
-msgstr ""
+msgstr "Persistenter Status für \"Replay\"-Schutz"
 
 #. Run a self-test of crypto features
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:168
 msgid "openvpn_param_test_crypto"
-msgstr ""
+msgstr "Kryptographie-Selbsttest durchführen"
 
 #. Enable TLS and assume server role
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:169
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:169
 #, fuzzy
 msgid "openvpn_param_tls_server"
-msgstr "Betriebsmodus"
+msgstr "TLS im Server-Betriebsmodus aktivieren"
 
 #. Enable TLS and assume client role
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:170
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:170
 #, fuzzy
 msgid "openvpn_param_tls_client"
-msgstr "Betriebsmodus"
+msgstr "TLS im Client-Betriebsmodus aktivieren"
 
 #. Data channel key exchange method
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:171
 msgid "openvpn_param_key_method"
-msgstr ""
+msgstr "Schlüsselaustauschprotokoll für den Datenkanal"
 
 #. Certificate authority
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:172
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:172
 #, fuzzy
 msgid "openvpn_param_ca"
-msgstr "Lokaler Rechnername oder IP Adresse"
+msgstr "Zertifikat der Zertifizierungsstelle"
 
 #. Directory of trusted certificates (CAs and CRLs)
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:173
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:173
 #, fuzzy
 msgid "openvpn_param_capath"
-msgstr "Lokaler Rechnername oder IP Adresse"
+msgstr ""
+"Verzeichnis mit vertrauenswürdigen Zertifizierungsstellen (Schlüssel und "
+"Sperrlisten)"
 
 #. Diffie Hellman parameters
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:174
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:174
 #, fuzzy
 msgid "openvpn_param_dh"
-msgstr "Betriebsmodus"
+msgstr "Diffie-Hellman-Parameter"
 
 #. Local certificate
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:175
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:175
 #, fuzzy
 msgid "openvpn_param_cert"
-msgstr "Entfernter Rechnername oder IP-Adresse"
+msgstr "Lokales Zertifikat"
 
 #. Local private key
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:176
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:176
 #, fuzzy
 msgid "openvpn_param_key"
-msgstr "Betriebsmodus"
+msgstr "Lokaler privater Schlüssel"
 
 #. PKCS#12 file containing keys
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:177
@@ -1148,7 +1160,7 @@ msgstr "Nur eine einzige Verbindung zulassen"
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:186
 #, fuzzy
 msgid "openvpn_param_tls_exit"
-msgstr "Termineren nach fehlgeschlagenem Schlüsselaustausch"
+msgstr "Terminieren nach fehlgeschlagenem Schlüsselaustausch"
 
 #. Additional authentication over TLS
 #: ./applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:187
