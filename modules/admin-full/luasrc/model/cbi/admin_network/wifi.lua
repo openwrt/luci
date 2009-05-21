@@ -39,22 +39,24 @@ local hwtype = m:get(arg[1], "type")
 local nsantenna = m:get(arg[1], "antenna")
 
 ch = s:option(Value, "channel", translate("a_w_channel"))
+ch:value("auto", translate("wifi_auto"))
 for c, f in luci.util.kspairs(luci.sys.wifi.channels()) do
 	ch:value(c, "%i (%.3f GHz)" %{ c, f })
 end
 
-s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
-
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 end
 
 
 ------------------- Madwifi Device ------------------
 
 if hwtype == "atheros" then
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+
 	mode = s:option(ListValue, "mode", translate("mode"))
 	mode:value("", translate("wifi_auto"))
 	mode:value("11b", "802.11b")
@@ -91,6 +93,8 @@ end
 ------------------- Broadcom Device ------------------
 
 if hwtype == "broadcom" then
+	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+
 	mp = s:option(ListValue, "macfilter", translate("wifi_macpolicy"))
 	mp.optional = true
 	mp:value("")
@@ -110,6 +114,16 @@ if hwtype == "broadcom" then
 
 	s:option(Value, "country", translate("wifi_country")).optional = true
 	s:option(Value, "maxassoc", translate("wifi_maxassoc")).optional = true
+end
+
+
+--------------------- HostAP Device ---------------------
+
+if hwtype == "prism2" then
+	s:option(Value, "txpower", translate("a_w_txpwr"), "att units").rmempty = true
+
+	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
+	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
 end
 
 
@@ -262,6 +276,34 @@ if hwtype == "broadcom" then
 end
 
 
+----------------------- HostAP Interface ---------------------
+
+if hwtype == "prism2" then
+	mode:value("wds", translate("a_w_wds"))
+	mode:value("monitor", translate("a_w_monitor"))
+
+	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
+	hidden:depends({mode="ap"})
+	hidden:depends({mode="adhoc"})
+	hidden:depends({mode="wds"})
+	hidden.optional = true
+
+	bssid:depends({mode="sta"})
+	
+	mp = s:option(ListValue, "macpolicy", translate("wifi_macpolicy"))
+	mp.optional = true
+	mp:value("")
+	mp:value("deny", translate("wifi_whitelist"))
+	mp:value("allow", translate("wifi_blacklist"))
+	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
+	ml:depends({macpolicy="allow"})
+	ml:depends({macpolicy="deny"})
+
+	s:option(Value, "rate", translate("wifi_rate")).optional = true
+	s:option(Value, "frag", translate("wifi_frag")).optional = true
+	s:option(Value, "rts", translate("wifi_rts")).optional = true
+end
+
 
 ------------------- WiFI-Encryption -------------------
 
@@ -277,7 +319,7 @@ encr:depends({mode="mesh"})
 encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
 
-if hwtype == "atheros" or hwtype == "mac80211" then
+if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local supplicant = luci.fs.mtime("/usr/sbin/wpa_supplicant")
 	local hostapd = luci.fs.mtime("/usr/sbin/hostapd")
 
@@ -332,7 +374,7 @@ key:depends("encryption", "psk2")
 key:depends({mode="ap", encryption="wpa2"})
 key.rmempty = true
 
-if hwtype == "atheros" or hwtype == "mac80211" then
+if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	nasid = s:option(Value, "nasid", translate("a_w_nasid"))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})

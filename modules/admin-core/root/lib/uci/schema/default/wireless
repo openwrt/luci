@@ -94,6 +94,7 @@ config variable
 	option datatype uint
 	list depends type=atheros
 	list depends type=broadcom
+	list depends type=prism2
 
 config variable
 	option name 'rxantenna'
@@ -102,6 +103,7 @@ config variable
 	option datatype uint
 	list depends type=atheros
 	list depends type=broadcom
+	list depends type=prism2
 
 config variable
 	option name 'distance'
@@ -254,13 +256,13 @@ config variable
 config variable
 	option name 'frag'
 	option section 'wireless.wifi-iface'
-	option title 'Fragmentation Threshold (mac80211, atheros)'
+	option title 'Fragmentation Threshold (mac80211, atheros, prism2)'
 	option datatype uint
 
 config variable
 	option name 'rts'
 	option section 'wireless.wifi-iface'
-	option title 'RTS/CTS Threshold (mac80211, atheros)'
+	option title 'RTS/CTS Threshold (mac80211, atheros, prism2)'
 	option datatype uint
 
 config variable
@@ -287,7 +289,7 @@ config variable
 config variable
 	option name 'hidden'
 	option section 'wireless.wifi-iface'
-	option title 'Hide ESSID (atheros, broadcom)'
+	option title 'Hide ESSID (atheros, broadcom, prism2)'
 	option datatype boolean
 	list depends 'mode=ap'
 	list depends 'mode=adhoc'
@@ -327,7 +329,7 @@ config variable
 config variable
 	option name 'macpolicy'
 	option section 'wireless.wifi-iface'
-	option title 'MAC-Address Filter (atheros)'
+	option title 'MAC-Address Filter (atheros, prism2)'
 	option type enum
 
 config enum
@@ -343,7 +345,7 @@ config enum
 config variable
 	option name 'maclist'
 	option section 'wireless.wifi-iface'
-	option title 'MAC-List (atheros)'
+	option title 'MAC-List (atheros, prism2)'
 	list depends 'macpolicy=allow'
 	list depends 'macpolicy=deny'
 	option type lazylist
@@ -352,7 +354,7 @@ config variable
 config variable
 	option name 'rate'
 	option section 'wireless.wifi-iface'
-	option title 'Transmission Rate (atheros)'
+	option title 'Transmission Rate (atheros, prism2)'
 
 config variable
 	option name 'mcast_rate'
