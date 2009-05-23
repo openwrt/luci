@@ -63,8 +63,8 @@ if hwtype == "atheros" then
 	mode:value("11g", "802.11g")
 	mode:value("11a", "802.11a")
 	mode:value("11bg", "802.11b+g")
-	mode:value("11gdt", "802.11adt")
-	mode:value("11adt", "802.11adt")
+	mode:value("11gst", "802.11g + Turbo")
+	mode:value("11ast", "802.11a + Turbo")
 	mode:value("fh", translate("wifi_fh"))
 
 	s:option(Flag, "diversity", translate("wifi_diversity")).rmempty = false
@@ -289,7 +289,7 @@ if hwtype == "prism2" then
 	hidden.optional = true
 
 	bssid:depends({mode="sta"})
-	
+
 	mp = s:option(ListValue, "macpolicy", translate("wifi_macpolicy"))
 	mp.optional = true
 	mp:value("")
