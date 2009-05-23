@@ -1,0 +1,61 @@
+config lucid main
+	option pollinterval 15000
+	option daemon 1
+	option debug 1
+	list supports tcpserver
+	list supports server
+
+config DirectoryPublisher webroot
+	option name 'Webserver Share'
+	option physical host/www
+	option virtual ''
+	option domain ''
+	list read ':lo'
+	list read ':br-lan'
+	list read 'root'
+	
+config LuciWebPublisher luciweb
+	option name 'LuCI Webapplication'
+	option physical ''
+	list virtual /luci
+	option domain ''
+	list exec ':lo'
+	list exec ':br-lan'
+	list exec 'root'
+	
+config RPCPublisher	mainrpc
+	option namespace 'luci.lucid.rpc'
+	list export system
+	list export ruci
+	list exec ':lo'
+	list exec 'root'
+
+config tcpserver httpd
+	option entrypoint "luci.lucid.http"
+	list supports DirectoryPublisher
+	list supports LuciWebPublisher
+	
+config tcpserver rpcd
+	option entrypoint "luci.lucid.rpc"
+	list supports RPCPublisher
+
+config daemon http
+	option slave httpd
+	list address 8080
+	list publisher webroot
+	list publisher luciweb
+	option enabled 1
+	
+config daemon https
+	option slave httpd
+	list address 4443
+	list publisher webroot
+	list publisher luciweb
+	option enabled 1
+	option encryption enable
+	
+config daemon rpc
+	option slave rpcd
+	list address 12900
+	list publisher mainrpc
+	option enabled 1

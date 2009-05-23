@@ -14,7 +14,7 @@ $Id$
 
 local table = require "table"
 local nixio = require "nixio"
-local getmetatable, assert, pairs = getmetatable, assert, pairs
+local getmetatable, assert, pairs, type = getmetatable, assert, pairs, type
 
 module "nixio.util"
 
@@ -106,7 +106,7 @@ function meta.linesource(self, limit)
 		
 		if flush then
 			line = buffer:sub(bpos + 1)
-			buffer = ""
+			buffer = type(flush) == "string" and flush or ""
 			bpos = 0
 			return line
 		end
@@ -189,8 +189,11 @@ end
 
 function meta.copyz(self, fd, size)
 	local sent, lsent, code, msg = 0
+	local splicable
+
 	if self:is_file() then
-		if nixio.sendfile and fd:is_socket() and self:stat("type") == "reg" then
+		local ftype = self:stat("type")
+		if nixio.sendfile and fd:is_socket() and ftype == "reg" then
 			repeat
 				lsent, code, msg = nixio.sendfile(fd, self, size or ZIOBLKSIZE)
 				if lsent then
@@ -202,7 +205,27 @@ function meta.copyz(self, fd, size)
 			 code ~= nixio.const.ENOSYS and code ~= nixio.const.EINVAL) then
 				return lsent and sent, code, msg, sent
 			end
-		end 
+		elseif nixio.splice and not fd:is_tls_socket() and ftype == "fifo" then 
+			splicable = true
+		end
+	end
+
+	if nixio.splice and fd:is_file() and not splicable then
+		splicable = not self:is_tls_socket() and fd:stat("type") == "fifo"
+	end
+
+	if splicable then
+		repeat
+			lsent, code, msg = nixio.splice(self, fd, size or ZIOBLKSIZE)
+			if lsent then
+				sent = sent + lsent
+				size = size and (size - lsent)
+			end
+		until (not lsent or lsent == 0 or (size and size == 0))
+		if lsent or (not lsent and sent == 0 and
+		 code ~= nixio.const.ENOSYS and code ~= nixio.const.EINVAL) then
+			return lsent and sent, code, msg, sent
+		end		
 	end
 
 	return self:copy(fd, size)
@@ -211,6 +234,24 @@ end
 function tls_socket.close(self)
 	return self.socket:close()
 end
+
+function tls_socket.getsockname(self)
+	return self.socket:getsockname()
+end
+
+function tls_socket.getpeername(self)
+	return self.socket:getpeername()
+end
+
+function tls_socket.getsockopt(self, ...)
+	return self.socket:getsockopt(...)
+end
+tls_socket.getopt = tls_socket.getsockopt
+
+function tls_socket.setsockopt(self, ...)
+	return self.socket:setsockopt(...)
+end
+tls_socket.setopt = tls_socket.setsockopt
 
 for k, v in pairs(meta) do
 	file[k] = v

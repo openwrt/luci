@@ -79,7 +79,7 @@ function copy(src, dest)
 		end
 	elseif stat.type == "lnk" then
 		res, code, msg = nixio.symlink(nixio.readlink(src), dest)
-	else
+	elseif stat.type == "reg" then
 		res, code, msg = datacopy(src, dest)
 	end
 	

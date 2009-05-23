@@ -52,10 +52,11 @@ runboa: hostenv
 runhttpd: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host/usr/bin/lucittpd) $(realpath host)/usr/lib/lucittpd/plugins"
 
-runluci: runhttpd
+runluci: luahost
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath libs/httpd/host/runluci) $(realpath host) $(HTDOCS)"
 
 runlua: hostenv
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) lua
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua -i build/setup.lua"
 
 runshell: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) $$SHELL
