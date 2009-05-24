@@ -7,10 +7,10 @@ BIN=/usr/sbin/olsrd
 CONF=/var/etc/olsrd.conf
 PID=/var/run/olsrd.pid
 
-OLSRD_OLSRD_SCHEMA='ignore:internal config_file:internal DebugLevel=0 IpVersion=4 AllowNoInt:bool=1 Pollrate=0.025 TcRedundancy=2 MprCoverage=3 LinkQualityFishEye=1 LinkQualityDijkstraLimit=0+9.0 FIBMetric=flat ClearScreen:bool=1 Willingness=3 LinkQualityAging=0.1 LinkQualityAlgorithm=etx_fpm'
+OLSRD_OLSRD_SCHEMA='ignore:internal config_file:internal DebugLevel=0 IpVersion=4 AllowNoInt:bool=1 Pollrate=0.025 TcRedundancy=2 MprCoverage=3 LinkQualityFishEye=1 LinkQualityDijkstraLimit=0+9.0 FIBMetric=flat ClearScreen:bool=1 Willingness=3 LinkQualityAging=0.1 LinkQualityAlgorithm=etx_fpm MinTCVTime=500.0'
 OLSRD_IPCCONNECT_SCHEMA='ignore:internal Host:list Net:list2'
 OLSRD_LOADPLUGIN_SCHEMA='ignore:internal library:internal Host:list Net:list2 Ping:list redistribute:list NonOlsrIf:list name:list lat lon latlon_infile HNA:list2 hosts:list2'
-OLSRD_INTERFACE_SCHEMA='ignore:internal interface:internal AutoDetectChanges:bool Ip4Broadcast HelloInterval=5.0 HelloValidityTime=40.0 TcInterval=2.0 TcValidityTime=100.0 MidInterval=18.0 MidValidityTime=324.0 HnaInterval=18.0 HnaValidityTime=108.0'
+OLSRD_INTERFACE_SCHEMA='ignore:internal interface:internal AutoDetectChanges:bool Ip4Broadcast HelloInterval=5.0 HelloValidityTime=40.0 TcInterval=2.0 TcValidityTime=256.0 MidInterval=18.0 MidValidityTime=324.0 HnaInterval=18.0 HnaValidityTime=108.0'
 
 T='	'
 N='
