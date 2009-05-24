@@ -726,6 +726,17 @@ define Package/luci-theme-freifunk-bno/install
 	$(call Package/luci/install/template,$(1),themes/freifunk-bno)
 endef
 
+define Package/luci-theme-freifunk-hannover
+  $(call Package/luci/fftemplate)
+  DEPENDS:=+luci-web
+  MAINTAINER:=Mikolas Bingemer <mickey-at-freifunk-hannover-dot-de>
+  TITLE:=Freifunk Hannover Theme
+endef
+
+define Package/luci-theme-freifunk-hannover/install
+	$(call Package/luci/install/template,$(1),themes/freifunk-hannover)
+endef
+
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWrt.org (default)
@@ -979,6 +990,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-freifunk-bno),)
 	PKG_SELECTED_MODULES+=themes/freifunk-bno
 endif
+ifneq ($(CONFIG_PACKAGE_luci-theme-freifunk-hannover),)
+	PKG_SELECTED_MODULES+=themes/freifunk-hannover
+endif
 ifneq ($(CONFIG_PACKAGE_luci-theme-freifunk),)
 	PKG_SELECTED_MODULES+=themes/freifunk
 endif
@@ -1079,6 +1093,7 @@ $(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-fledermaus))
 $(eval $(call BuildPackage,luci-theme-freifunk))
 $(eval $(call BuildPackage,luci-theme-freifunk-bno))
+$(eval $(call BuildPackage,luci-theme-freifunk-hannover))
 $(eval $(call BuildPackage,luci-theme-openwrt))
 $(eval $(call BuildPackage,luci-theme-openwrtlight))
 
