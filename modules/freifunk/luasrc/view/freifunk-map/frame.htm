@@ -1,0 +1,21 @@
+<%+header%>
+
+<%
+	local has_latlon = false
+	local uci = require "luci.model.uci".cursor()
+	uci:foreach("olsrd", "LoadPlugin", function(s)
+		if s.library == "olsrd_nameservice.so.0.3" and s.latlon_file then
+			has_latlon = true
+		end
+	end)
+%>
+
+<% if has_latlon then %>
+	<iframe style="width:100%; height:640px; border:none" src="<%=luci.dispatcher.build_url("freifunk/map/content")%>"></iframe>
+<% else %>
+	<h2><%:freifunk_map_error Map Error%></h2>
+	<p><%:freifunk_map_nodata The OLSRd service is not configured to capture position data from the network.<br />
+		Please make sure that the nameservice plugin is properly configured and that the <em>latlon_file</em> option is enabled.%></p>
+<% end %>
+
+<%+footer%>
