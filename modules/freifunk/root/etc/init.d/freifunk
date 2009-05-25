@@ -23,6 +23,10 @@ boot() {
 		echo "0 */4 * * *	/usr/sbin/ff_rdate" >> /etc/crontabs/root
 	}
 
+	grep -q '/usr/sbin/ff_mapupdate' /etc/crontabs/root || {
+		echo "17 * * * *	/usr/sbin/ff_mapupdate >> /etc/crontabs/root
+	}
+
 	[ -f /etc/rc.local ] && . /etc/rc.local
 	[ -d /etc/rc.local.d ] && {
 		for file in /etc/rc.local.d/*; do

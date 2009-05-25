@@ -1,0 +1,49 @@
+#!/usr/bin/lua
+
+local uci = require "luci.model.uci"
+local x = uci.cursor()
+
+local update_url = "http://www.layereight.de/freifunkmap.php?update=%.15f,%.15f&olsrip=%s&note=%s&robot=%s"
+local update_all = ( arg[1] and arg[1] == "all" ) and true or false
+
+local file
+x:foreach("olsrd", "LoadPlugin", function(s)
+	if s.library == "olsrd_nameservice.so.0.3" then
+		file = io.open(s.latlon_file)
+	end
+end)
+
+if file then
+	local ln
+	local count = 0
+	while true do
+		ln = file:read("*l")
+		if not ln then break end
+		if update_all and ln:match("^Node%(") then
+			local ip, lat, lon, note = ln:match("Node%('(%S+)',([%d%.]+),([%d%.]+),%d+,'%S+','(%S+)'%)")
+			lat = tonumber(lat)
+			lon = tonumber(lon)
+		
+			if ip and lat ~= 0.0 and lon ~= 0.0 and note then
+				note = note:gsub("[^%w%-%.]+", "_")
+				os.execute("wget -qO/dev/null %q" % string.format(update_url, lat, lon, ip, note, "luci-massupdate"))
+				count = count + 1
+			end
+
+		elseif ln:match("^Self%(") then
+			local ip, lat, lon, note = ln:match("Self%('(%S+)',([%d%.]+),([%d%.]+),%d+,'%S+','(%S+)'%)")
+			lat = tonumber(lat)
+			lot = tonumber(lon)
+			
+			if ip and lat ~= 0.0 and lon ~= 0.0 and note then
+				note = note:gsub("[^%w%-%.]+", "_")
+				os.execute("wget -qO/dev/null %q" % string.format(update_url, lat, lon, ip, note, "luci-selfupdate"))
+				count = count + 1
+			end
+		end
+	end
+
+	os.execute("logger -t 'mapupdate' 'Updated %d entries in freifunk map'" % count)
+
+	file:close()
+end

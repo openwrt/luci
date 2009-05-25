@@ -80,9 +80,14 @@ client = f:field(Flag, "client", "WLAN-DHCP anbieten")
 client:depends("wifi", "1")
 client.rmempty = true
 
-
 olsr = f:field(Flag, "olsr", "OLSR einrichten")
 olsr.rmempty = true
+
+lat = f:field(Value, "lat", "Latitude")
+lat:depends("olsr", "1")
+
+lon = f:field(Value, "lon", "Longitude")
+lon:depends("olsr", "1")
 
 share = f:field(Flag, "sharenet", "Eigenen Internetzugang freigeben")
 share.rmempty = true
@@ -265,6 +270,10 @@ function olsr.write(self, section, value)
 	local community = net:formvalue(section)
 	local external  = community and uci:get("freifunk", community, "external") or ""
 
+	local latval = tonumber(lat:formvalue(section))
+	local lonval = tonumber(lon:formvalue(section))
+
+
 	-- Delete old interface
 	uci:delete_all("olsrd", "Interface", {interface=device})
 
@@ -284,6 +293,29 @@ function olsr.write(self, section, value)
 		file     = "/var/run/olsrd.watchdog",
 		interval = "30"
 	})
+
+	-- Delete old nameservice settings
+	uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_nameservice.so.0.3"})
+
+	-- Write new nameservice settings
+	uci:section("olsrd", "LoadPlugin", nil, {
+		library     = "olsrd_nameservice.so.0.3",
+		latlon_file = "/var/run/latlon.js",
+		lat         = latval and string.format("%.15f", latval) or "",
+		lon         = lonval and string.format("%.15f", lonval) or ""
+	})
+
+	-- Save latlon to system too
+	if latval and lonval then
+		uci:foreach("system", "system", function(s)
+			uci:set("system", s[".name"], "latlon",
+				string.format("%.15f %.15f", latval, lonval))
+		end)
+	else
+		uci:foreach("system", "system", function(s)
+			uci:delete("system", s[".name"], "latlon")
+		end)
+	end
 
 	-- Import hosts
 	uci:foreach("dhcp", "dnsmasq", function(s)
@@ -305,6 +337,7 @@ function share.write(self, section, value)
 	end
 	uci:save("firewall")
 	uci:save("olsrd")
+	uci:save("system")
 end
 
 
