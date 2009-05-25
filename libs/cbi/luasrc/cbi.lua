@@ -301,6 +301,7 @@ function Map.__init__(self, config, ...)
 	self.apply_on_parse = nil
 	self.readinput = true
 	self.proceed = false
+	self.flow = {}
 
 	self.uci = uci.cursor()
 	self.save = true
@@ -506,7 +507,7 @@ function Delegator.set(self, name, node)
 	if type(node) == "table" and getmetatable(node) == nil then
 		node = Compound(unpack(node))
 	end
-	assert(instanceof(node, Compound), "Invalid node")
+	assert(type(node) == "function" or instanceof(node, Compound), "Invalid")
 	assert(not self.nodes[name], "Duplicate entry")
 
 	self.nodes[name] = node
@@ -528,19 +529,43 @@ function Delegator.insert_after(self, name, after)
 	table.insert(self.chain, n, name)
 end
 
+function Delegator.set_route(self, ...)
+	local n, chain, route = 0, self.chain, {...}
+	for i = 1, #chain do
+		if chain[i] == self.current then
+			n = i
+			break
+		end
+	end
+	for i = 1, #route do
+		n = n + 1
+		chain[n] = route[i]
+	end
+	for i = n + 1, #chain do
+		chain[i] = nil
+	end
+end
+
 function Delegator.get(self, name)
 	return self.nodes[name]
 end
 
 function Delegator.parse(self, ...)
 	local newcurrent
-	self.chain = self:get_chain()
-	self.current = self:get_active()
-	self.active = self:get(self.current)
+	self.chain = self.chain or self:get_chain()
+	self.current = self.current or self:get_active()
+	self.active = self.active or self:get(self.current)
 	assert(self.active, "Invalid state")
 	
-	self.active:populate_delegator(self)
-	if self.active:parse() > FORM_PROCEED then
+	local stat = FORM_DONE
+	if type(self.active) ~= "function" then
+		self.active:populate_delegator(self)
+		stat = self.active:parse() 
+	else
+		self:active()
+	end
+
+	if stat > FORM_PROCEED then
 		if Map.formvalue(self, "cbi.delg.back") then
 			newcurrent = self:get_prev(self.current)
 		else
@@ -553,8 +578,12 @@ function Delegator.parse(self, ...)
 	else
 		self.current = newcurrent
 		self.active = self:get(self.current)
-		self.active:parse(false)
-		return FROM_PROCEED
+		if type(self.active) ~= "function" then
+			self.active:parse(false)
+			return FROM_PROCEED
+		else
+			return self:parse(...)
+		end
 	end
 end
 
@@ -783,8 +812,8 @@ function AbstractSection.parse_optionals(self, section)
 		if v.optional and not v:cfgvalue(section) then
 			if field == v.option then
 				field = nil
-			else
 				self.map.proceed = true
+			else
 				table.insert(self.optionals[section], v)
 			end
 		end
