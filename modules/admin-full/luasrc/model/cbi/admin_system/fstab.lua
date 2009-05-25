@@ -61,7 +61,7 @@ mount.anonymous = true
 mount.addremove = true
 mount.template = "cbi/tblsection"
 
-mount:option(Flag, "enabled", translate("enable"))
+mount:option(Flag, "enabled", translate("enable")).rmempty = false
 dev = mount:option(Value, "device", translate("device"), translate("a_s_fstab_device1"))
 for i, d in ipairs(devices) do
 	dev:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
@@ -77,7 +77,7 @@ swap.anonymous = true
 swap.addremove = true
 swap.template = "cbi/tblsection"
 
-swap:option(Flag, "enabled", translate("enable"))
+swap:option(Flag, "enabled", translate("enable")).rmempty = false
 dev = swap:option(Value, "device", translate("device"), translate("a_s_fstab_device1"))
 for i, d in ipairs(devices) do
 	dev:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
