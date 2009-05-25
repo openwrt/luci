@@ -460,7 +460,7 @@ function Server.process(self, client, env)
 					close = true
 				end
 			end
-		elseif message.request_method ~= "head" then
+		elseif message.env.REQUEST_METHOD ~= "HEAD" then
 			headers["Content-Length"] = 0
 		end
 		
