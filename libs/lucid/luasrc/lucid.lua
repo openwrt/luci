@@ -54,7 +54,18 @@ function start()
 		end
 	end
 
+	state:set(UCINAME, "main", "pid", nixio.getpid())
+	state:save(UCINAME)
+
 	run()
+end
+
+function stop()
+	local pid = tonumber(state:get(UCINAME, "main", "pid"))
+	if pid then
+		return nixio.kill(pid, nixio.const.SIGTERM)
+	end
+	return false
 end
 
 function prepare()

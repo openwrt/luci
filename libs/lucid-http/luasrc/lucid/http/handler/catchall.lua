@@ -13,6 +13,7 @@ $Id$
 
 local srv = require "luci.lucid.http.server"
 local proto = require "luci.http.protocol"
+local util = require "luci.util"
 
 module "luci.lucid.http.handler.catchall"
 

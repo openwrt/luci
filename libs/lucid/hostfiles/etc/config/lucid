@@ -59,3 +59,16 @@ config daemon rpc
 	list address 12900
 	list publisher mainrpc
 	option enabled 1
+	
+config 'daemon' 'splashr'
+        option 'slave' 'httpd'
+        list 'address' '8082'
+        list 'publisher' 'splashredir'
+        option 'enabled' '1'
+
+config 'Redirector' 'splashredir'
+        option 'name' 'Splashd'
+        option 'virtual' '/'
+        option 'physical' ':80/luci/splash'
+
+	
