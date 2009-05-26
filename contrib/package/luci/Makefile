@@ -289,7 +289,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid
+  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,en,Default Language)
 endef
@@ -334,7 +334,7 @@ endef
 define Package/luci-freifunk-community
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-lucid +luci-app-splash \
+   +luci-lucid +luci-sgi-cgi +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-i18n-german \
    +PACKAGE_luci-freifunk-community:olsrd-luci +PACKAGE_luci-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
