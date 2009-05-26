@@ -72,7 +72,7 @@ function index()
 	page.title  = "Kontakt"
 	page.order  = 40
 
-	entry({"freifunk", "map"}, template("freifunk-map/frame"), translate("freifunk_map", "Karte"), 50)
+	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("freifunk_map", "Karte"), 50)
 	entry({"freifunk", "map", "content"}, template("freifunk-map/map"), nil, 51)
 end
 
