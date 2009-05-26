@@ -1,0 +1,43 @@
+#!/bin/sh /etc/rc.common
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=lucid
+DESC="LuCId superserver"
+START=49
+
+test -x $DAEMON || exit 0
+set -e
+
+start() {
+	echo -n "Starting $DESC: $NAME"
+	lua -e 'require "luci.lucid".start()'
+	echo "."
+}
+
+stop() {
+	echo -n "Stopping $DESC: $NAME"
+	lua -e 'require "luci.lucid".stop()'
+	echo "."
+}
+
+restart() {
+	# echo -n "Restarting $DESC: $NAME... "
+	# start-stop-daemon -K -s HUP -q -x $DAEMON
+	# echo "done."
+	stop
+	sleep 3
+	start
+}
+
+reload() {
+	#
+	#	If the daemon can reload its config files on the fly
+	#	for example by sending it SIGHUP, do it here.
+	#
+	#	If the daemon responds to changes in its config file
+	#	directly anyway, make this a do-nothing entry.
+	#
+	# echo -n "Reloading $DESC configuration... "
+	# start-stop-daemon -K -s 1 -q -x $DAEMON
+	# echo "done."
+	restart
+}
