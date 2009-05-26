@@ -227,7 +227,7 @@ define Package/luci-luanet
 endef
 
 define Package/luci-luanet/install
-        $(call Package/luci/install/template,$(1),libs/luanet)
+	$(call Package/luci/install/template,$(1),libs/luanet)
 endef
 
 
@@ -238,8 +238,8 @@ define Package/luci-lucid
 endef
 
 define Package/luci-lucid/install
-        $(call Package/luci/install/template,$(1),libs/lucid)
-        $(call Package/luci/install/template,$(1),libs/lucid-http)
+	$(call Package/luci/install/template,$(1),libs/lucid)
+	$(call Package/luci/install/template,$(1),libs/lucid-http)
 endef
 
 
