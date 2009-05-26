@@ -231,6 +231,18 @@ define Package/luci-luanet/install
 endef
 
 
+define Package/luci-lucid
+  $(call Package/luci/libtemplate)
+  TITLE:=LuCId Superserver
+  DEPENDS+=+luci-nixio +luci-http
+endef
+
+define Package/luci-lucid/install
+        $(call Package/luci/install/template,$(1),libs/lucid)
+        $(call Package/luci/install/template,$(1),libs/lucid-http)
+endef
+
+
 
 NIXIO_TLS:=axtls
 
@@ -277,7 +289,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-sgi-cgi
+  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,en,Default Language)
 endef
@@ -322,7 +334,7 @@ endef
 define Package/luci-freifunk-community
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-sgi-cgi +luci-app-splash \
+   +luci-lucid +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-i18n-german \
    +PACKAGE_luci-freifunk-community:olsrd-luci +PACKAGE_luci-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
@@ -664,25 +676,6 @@ define Package/luci-sgi-cgi/install
 	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
 endef
 
-define Package/luci-sgi-luci
-  $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-httpd
-  TITLE:=SGI for LuCIttpd
-endef
-
-define Package/luci-sgi-luci/install
-	$(call Package/luci/install/template,$(1),libs/sgi-luci)
-endef
-
-define Package/luci-sgi-webuci
-  $(call Package/luci/libtemplate)
-  TITLE:=SGI for Webuci
-endef
-
-define Package/luci-sgi-webuci/install
-	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
-endef
-
 ### Themes ###
 define Package/luci-theme-base
   $(call Package/luci/thtemplate)
@@ -862,6 +855,9 @@ ifneq ($(CONFIG_PACKAGE_luci-json),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-luanet),)
 	PKG_SELECTED_MODULES+=libs/luanet
+endif
+ifneq ($(CONFIG_PACKAGE_luci-lucid),)
+	PKG_SELECTED_MODULES+=libs/lucid libs/lucid-http
 endif
 ifneq ($(CONFIG_PACKAGE_luci-nixio),)
 	PKG_SELECTED_MODULES+=libs/nixio
@@ -1046,6 +1042,7 @@ $(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
 $(eval $(call BuildPackage,luci-luanet))
+$(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
@@ -1086,8 +1083,6 @@ $(eval $(call BuildPackage,luci-app-polipo))
 $(eval $(call BuildPackage,luci-app-openvpn))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
-$(eval $(call BuildPackage,luci-sgi-luci))
-$(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-fledermaus))

@@ -47,6 +47,23 @@ whitelist_add() {
 
 boot() {
 	### We are started by the firewall include
+
+	uci get lucid.splashr || {
+uci batch <<EOF
+	set lucid.splashr=daemon
+	set lucid.splashr.slave=httpd
+	add_list lucid.splashr.address=8082
+	add_list lucid.splashr.publisher=splashredir
+	set lucid.splashr.enabled=1
+
+	set lucid.splashredir=Redirector
+	set lucid.splashredir.name=Splashd
+	set lucid.splashredir.virtual='/'
+	set lucid.splashredir.physical=':80/luci/splash'
+
+	commit lucid
+EOF
+	}
 	exit 0
 }
 
@@ -82,9 +99,6 @@ start() {
 	grep -q luci-splash /etc/crontabs/root || {
 		echo '*/5 * * * * 	/usr/sbin/luci-splash sync' >> /etc/crontabs/root
 	}
-
-	### Start the splash httpd
-	start-stop-daemon -S -m -p /var/run/luci-splashd.pid -b -q -x /usr/bin/luci-splashd
 }
 
 stop() {
@@ -101,9 +115,6 @@ stop() {
 	iptables -t nat -X luci_splash_leases
 	iptables -t nat -X luci_splash_portal
 	iptables -t nat -X luci_splash_prerouting
-
-	### Stop the splash httpd
-	start-stop-daemon -K -p /var/run/luci-splashd.pid -s KILL -q
 	
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
 }
