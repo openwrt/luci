@@ -358,8 +358,8 @@ function Server.process(self, client, env)
 	local close = false
 	local stat, code, msg, message, err
 	
-	client:setsockopt("socket", "rcvtimeo", 15)
-	client:setsockopt("socket", "sndtimeo", 15)
+	client:setsockopt("socket", "rcvtimeo", 5)
+	client:setsockopt("socket", "sndtimeo", 5)
 	
 	repeat
 		-- parse headers
