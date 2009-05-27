@@ -29,6 +29,7 @@ config daemon http
 	list address 80
 	list publisher webroot
 	list publisher luciweb
+	option nokeepalive 1
 	option enabled 1
 	
 config daemon https
@@ -36,5 +37,6 @@ config daemon https
 	list address 443
 	list publisher webroot
 	list publisher luciweb
+	option nokeepalive 1
 	option enabled 1
 	option encryption enable
