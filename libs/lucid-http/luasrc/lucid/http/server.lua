@@ -453,7 +453,7 @@ function Server.process(self, client, env)
 				end
 			end
 			if not headers["Content-Length"] then
-				if message.http_version == 1.1 then
+				if message.env.SERVER_PROTOCOL == "HTTP/1.1" then
 					headers["Transfer-Encoding"] = "chunked"
 					sinkout = chunksink(client)
 				else
