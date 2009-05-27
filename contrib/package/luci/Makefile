@@ -831,6 +831,27 @@ define Package/luci-i18n-greek/install
 	$(call Package/luci/install/template,$(1),i18n/greek)
 endef
 
+
+define Package/luci-i18n-catalan
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Catalan (by Eduard Duran)
+endef
+
+define Package/luci-i18n-catalan/install
+	$(call Package/luci/install/template,$(1),i18n/catalan)
+endef
+
+
+define Package/luci-i18n-portuguese
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Portuguese (by Jose Monteiro)
+endef
+
+define Package/luci-i18n-portuguese/install
+	$(call Package/luci/install/template,$(1),i18n/portuguese)
+endef
+
+
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
@@ -1023,6 +1044,12 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-greek),)
 	PKG_SELECTED_MODULES+=i18n/greek
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-catalan),)
+	PKG_SELECTED_MODULES+=i18n/catalan
+endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-portuguese),)
+	PKG_SELECTED_MODULES+=i18n/portuguese
+endif
 
 
 MAKE_FLAGS += \
@@ -1100,3 +1127,5 @@ $(eval $(call BuildPackage,luci-i18n-russian))
 $(eval $(call BuildPackage,luci-i18n-portuguese_brazilian))
 $(eval $(call BuildPackage,luci-i18n-japanese))
 $(eval $(call BuildPackage,luci-i18n-greek))
+$(eval $(call BuildPackage,luci-i18n-catalan))
+$(eval $(call BuildPackage,luci-i18n-portuguese))
