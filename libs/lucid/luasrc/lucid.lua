@@ -176,7 +176,7 @@ end
 
 function create_process(threadcb, waitcb)
 	local threadlimit = tonumber(cursor:get(UCINAME, "main", "threadlimit"))
-	if threadlimit and #tpids >= tcount then
+	if threadlimit and tcount >= threadlimit then
 		nixio.syslog("warning", "Unable to create thread: process limit reached")
 		return nil
 	end
