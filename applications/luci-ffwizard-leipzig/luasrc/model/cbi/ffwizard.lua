@@ -300,6 +300,8 @@ function olsr.write(self, section, value)
 	-- Write new nameservice settings
 	uci:section("olsrd", "LoadPlugin", nil, {
 		library     = "olsrd_nameservice.so.0.3",
+		suffix      = ".olsr",
+		hosts_file  = "/var/etc/hosts.olsr",
 		latlon_file = "/var/run/latlon.js",
 		lat         = latval and string.format("%.15f", latval) or "",
 		lon         = lonval and string.format("%.15f", lonval) or ""
