@@ -222,7 +222,7 @@ void nixio_open_tls_context(lua_State *L) {
 	lua_setfield(L, -2, "__index");
 	luaL_register(L, NULL, CTX_M);
 #ifdef WITH_AXTLS
-    lua_pushliteral(L, "/etc/private.rsa");
+    lua_pushliteral(L, "/etc/axtls.key");
     lua_setfield(L, -2, "tls_defaultkey");
 #endif
 	lua_setfield(L, -2, "meta_tls_context");
