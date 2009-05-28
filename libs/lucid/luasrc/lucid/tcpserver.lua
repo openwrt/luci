@@ -170,7 +170,7 @@ function prepare_socket(family, host, port, opts, backlog)
 end
 
 function prepare_tls(tlskey)
-	local tls = nixio.tls()
+	local tls = nixio.tls("server")
 	if tlskey and cursor:get(UCINAME, tlskey) then
 		local cert = cursor:get(UCINAME, tlskey, "cert")
 		if cert then
