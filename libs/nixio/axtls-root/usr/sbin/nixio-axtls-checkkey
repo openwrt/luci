@@ -1,12 +1,14 @@
 #!/usr/bin/lua
+os.exit(0)	--ToDo
+
 local nixio = require "nixio"
 local fs = require "nixio.fs"
 local posix
 local defkey = nixio.meta_tls_context.tls_defaultkey
 local okey = "646e6b90d1ad02719cb1b221b7ce447a"
 
-if (not defkey or io.open(defkey)) and
-not (nixio.crypto.hash("md5"):update(fs.readfile(defkey)):final()) == okey then
+if not defkey or (io.open(defkey) and
+(nixio.crypto.hash("md5"):update(fs.readfile(defkey)):final()) ~= okey) then
 	os.exit(0)
 end
 
