@@ -28,6 +28,13 @@ ifeq ($(NIXIO_TLS),openssl)
 	NIXIO_LDFLAGS += -lssl
 endif
 
+ifeq ($(NIXIO_TLS),cyassl)
+	NIXIO_LDFLAGS += -lcyassl
+	TLS_DEPENDS = src/cyassl-compat.o
+	TLS_CFLAGS = -include src/cyassl-compat.h
+	NIXIO_OBJ += src/cyassl-compat.o
+endif
+
 
 ifeq ($(OS),SunOS)
 	NIXIO_LDFLAGS += -lsocket -lnsl -lsendfile

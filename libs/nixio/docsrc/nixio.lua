@@ -430,4 +430,5 @@ module "nixio"
 --- Create a new TLS context.
 -- @class function
 -- @name nixio.tls
+-- @param mode TLS-Mode ["client", "server"]
 -- @return TLSContext Object

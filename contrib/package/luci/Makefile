@@ -266,6 +266,10 @@ define Package/luci-nixio/config
 			select PACKAGE_dropbear
 			select PACKAGE_dropbearconvert
 
+		config PACKAGE_luci-nixio_cyassl
+			bool "CyaSSL"
+			select PACKAGE_libcyassl-luci
+
 		config PACKAGE_luci-nixio_openssl
 			bool "OpenSSL"
 			select PACKAGE_libopenssl
@@ -276,6 +280,9 @@ ifneq ($(CONFIG_PACKAGE_luci-nixio_openssl),)
   NIXIO_TLS:=openssl
 endif
 
+ifneq ($(CONFIG_PACKAGE_luci-nixio_cyassl),)
+  NIXIO_TLS:=cyassl
+endif
 
 define Package/luci-sys
   $(call Package/luci/libtemplate)

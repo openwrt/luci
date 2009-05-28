@@ -41,7 +41,7 @@ static int nixio__tls_pstatus(lua_State *L, int code) {
 }
 
 static int nixio_tls_ctx(lua_State * L) {
-	const char *method = luaL_optlstring(L, 1, "tlsv1", NULL);
+	const char *method = luaL_optlstring(L, 1, "client", NULL);
 
 	luaL_getmetatable(L, NIXIO_TLS_CTX_META);
 	SSL_CTX **ctx = lua_newuserdata(L, sizeof(SSL_CTX *));
@@ -52,27 +52,22 @@ static int nixio_tls_ctx(lua_State * L) {
 	/* create userdata */
 	lua_pushvalue(L, -2);
 	lua_setmetatable(L, -2);
-	lua_getfield(L, -1, "tls_defaultkey");
 
-	if (!strcmp(method, "tlsv1")) {
-		*ctx = SSL_CTX_new(TLSv1_method());
-	} else if (!strcmp(method, "sslv23")) {
-		*ctx = SSL_CTX_new(SSLv23_method());
+	if (!strcmp(method, "client")) {
+		*ctx = SSL_CTX_new(TLSv1_client_method());
+	} else if (!strcmp(method, "server")) {
+		*ctx = SSL_CTX_new(TLSv1_server_method());
 	} else {
-		return luaL_argerror(L, 1, "supported values: tlsv1, sslv23");
+		return luaL_argerror(L, 1, "supported values: client, server");
 	}
 
 	if (!(*ctx)) {
 		return luaL_error(L, "unable to create TLS context");
 	}
 
-	const char *autoload = lua_tostring(L, -1);
-	if (autoload) {
-		SSL_CTX_use_PrivateKey_file(*ctx, autoload, SSL_FILETYPE_PEM);
-	}
-	lua_pop(L, 1);
-
-	SSL_CTX_set_options(*ctx, SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3);
+#ifdef WITH_CYASSL
+	SSL_CTX_set_verify(*ctx, SSL_VERIFY_NONE, NULL);
+#endif
 
 	return 1;
 }
@@ -136,13 +131,6 @@ static int nixio_tls_ctx_set_ciphers(lua_State *L) {
 	return nixio__tls_pstatus(L, SSL_CTX_set_cipher_list(ctx, ciphers));
 }
 
-static int nixio_tls_ctx_set_verify_depth(lua_State *L) {
-	SSL_CTX *ctx = nixio__checktlsctx(L);
-	const int depth = luaL_checkinteger(L, 2);
-	SSL_CTX_set_verify_depth(ctx, depth);
-	return 0;
-}
-
 static int nixio_tls_ctx_set_verify(lua_State *L) {
 	SSL_CTX *ctx = nixio__checktlsctx(L);
 	const int j = lua_gettop(L);
@@ -192,7 +180,6 @@ static const luaL_reg CTX_M[] = {
 	{"set_cert",			nixio_tls_ctx_set_cert},
 	{"set_key",				nixio_tls_ctx_set_key},
 	{"set_ciphers",			nixio_tls_ctx_set_ciphers},
-	{"set_verify_depth",	nixio_tls_ctx_set_verify_depth},
 	{"set_verify",			nixio_tls_ctx_set_verify},
 	{"create",				nixio_tls_ctx_create},
 	{"__gc",				nixio_tls_ctx__gc},
@@ -209,10 +196,12 @@ void nixio_open_tls_context(lua_State *L) {
     /* register module functions */
     luaL_register(L, NULL, R);
 
-#ifndef WITH_AXTLS
-    lua_pushliteral(L, "openssl");
-#else
+#if defined (WITH_AXTLS)
     lua_pushliteral(L, "axtls");
+#elif defined (WITH_CYASSL)
+    lua_pushliteral(L, "cyassl");
+#else
+    lua_pushliteral(L, "openssl");
 #endif
     lua_setfield(L, -2, "tls_provider");
 
@@ -221,9 +210,5 @@ void nixio_open_tls_context(lua_State *L) {
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 	luaL_register(L, NULL, CTX_M);
-#ifdef WITH_AXTLS
-    lua_pushliteral(L, "/etc/axtls.key");
-    lua_setfield(L, -2, "tls_defaultkey");
-#endif
 	lua_setfield(L, -2, "meta_tls_context");
 }
