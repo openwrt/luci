@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-19 02:49+0200\n"
-"PO-Revision-Date: 2009-05-19 15:34+0200\n"
-"Last-Translator: Stefan Keks <i18n@freifunk-bno.de>\n"
+"POT-Creation-Date: 2009-05-26 17:57+0200\n"
+"PO-Revision-Date: 2009-05-19 22:37+0200\n"
+"Last-Translator: Holger Holgerson <xm@subsignal.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,17 +19,21 @@ msgstr "Polipo"
 #. On-Disk Cache
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:2
 msgid "polipo_cache"
-msgstr ""
+msgstr "Festplatten-Cache"
 
+# Verteilt? Gemeinsam?
 #. Shared cache
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:3
+#, fuzzy
 msgid "polipo_cache_cacheisshared"
-msgstr ""
+msgstr "Verteilter Cache"
 
+# Klingt komisch
 #. Enable if cache (proxy) is shared by multiple users.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:4
+#, fuzzy
 msgid "polipo_cache_cacheisshared_desc"
-msgstr ""
+msgstr "Cache hat mehrere Benutzer"
 
 #. To enable polipo on-disk cache cleaning (highly recommended), you should add a cron job in Scheduled Tasks services that will execute /usr/sbin/polipo_purge script. For example to perform disk cache cleanup every day at 6:00 in the morning you should add the following line in Scheduled Tasks &quot;0 6 * * *	/usr/sbin/polipo_purge&quot; (without quotes).
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:5
@@ -39,12 +43,15 @@ msgstr ""
 #. Disk cache location
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:6
 msgid "polipo_cache_diskcacheroot"
-msgstr ""
+msgstr "Cache-Verzeichnis"
 
 #. Location where polipo will cache files permanently. Use of external storage devices is recommended, because the cache can grow considerably. Leave it empty to disable on-disk cache.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:7
 msgid "polipo_cache_diskcacheroot_desc"
 msgstr ""
+"Speicherort für permanent gespeicherte Dateien. Es wird die Benutzung von "
+"externen Datenträgern empfohlen, da der Cache sehr groß werden kann. Lassen "
+"Sie diese Option leer um den Cache zu deaktivieren."
 
 #. Truncate cache files size (in bytes)
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:8
@@ -73,8 +80,12 @@ msgstr ""
 
 #. Time after which cached files will be deleted. (default value: 32d)
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:13
+#, fuzzy
 msgid "polipo_cache_diskcacheunlinktime_desc"
 msgstr ""
+"Speicherort für permanent gespeicherte Dateien. Es wird die Benutzung von "
+"externen Datenträgern empfohlen, da der Cache sehr groß werden kann. Lassen "
+"Sie diese Option leer um den Cache zu deaktivieren."
 
 #. Polipo is a small and fast caching web proxy.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:14
