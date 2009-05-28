@@ -71,13 +71,15 @@ end
 -- @param force	Force reload even if already loaded (optional)
 function loadc(file, force)
 	load(file, default, force)
+	if context.parent then load(file, context.parent, force) end
 	return load(file, context.lang, force)
 end
 
 --- Set the context default translation language.
 -- @param lang	Two-letter language code
 function setlanguage(lang)
-	context.lang = lang:gsub("_", "-")
+	context.lang   = lang:gsub("_", "-")
+	context.parent = (context.lang:match("^([a-z][a-z])_"))
 end
 
 --- Return the translated value for a specific translation key.
@@ -86,6 +88,7 @@ end
 -- @return		Translated string
 function translate(key, def)
 	return (table[context.lang] and table[context.lang][key])
+		or (table[context.parent] and table[context.parent][key])
 		or (table[default] and table[default][key])
 		or def
 end
