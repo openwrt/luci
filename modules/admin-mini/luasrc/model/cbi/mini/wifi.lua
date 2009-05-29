@@ -150,7 +150,7 @@ end
 local hwtype = m:get(wifidevs[1], "type")
 
 if hwtype == "atheros" then
-	mode = s:option(ListValue, "mode", translate("mode"))
+	mode = s:option(ListValue, "hwmode", translate("mode"))
 	mode.override_values = true
 	mode:value("", "auto")
 	mode:value("11b", "802.11b")
