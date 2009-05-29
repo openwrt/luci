@@ -442,6 +442,16 @@ config enum
 
 config enum
 	option variable 'wireless.wifi-iface.encryption'
+	option value 'psk+psk2'
+	option title 'WPA-PSK/WPA2-PSK Mixed Mode (nas)'
+
+config enum
+	option variable 'wireless.wifi-iface.encryption'
+	option value 'mixed'
+	option title 'WPA-PSK/WPA2-PSK Mixed Mode (hostapd)'
+
+config enum
+	option variable 'wireless.wifi-iface.encryption'
 	option value 'wpa'
 	option title 'WPA-EAP'
 
