@@ -53,7 +53,7 @@ br.rmempty = true
 
 stp = s:option(Flag, "stp", translate("a_n_i_stp"),
 	translate("a_n_i_stp1", "Enables the Spanning Tree Protocol on this bridge"))
-stp:depends("type", "bridge")
+stp:depends("type", "1")
 stp.rmempty = true
 
 ifname = s:option(Value, "ifname", translate("interface"))
