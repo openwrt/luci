@@ -369,10 +369,13 @@ port.rmempty = true
 key = s:option(Value, "key", translate("key"))
 key:depends("encryption", "wep")
 key:depends("encryption", "psk")
-key:depends({mode="ap", encryption="wpa"})
 key:depends("encryption", "psk2")
+key:depends("encryption", "psk+psk2")
+key:depends("encryption", "mixed")
+key:depends({mode="ap", encryption="wpa"})
 key:depends({mode="ap", encryption="wpa2"})
 key.rmempty = true
+key.password = true
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	nasid = s:option(Value, "nasid", translate("a_w_nasid"))
