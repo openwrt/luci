@@ -65,12 +65,6 @@ define Package/luci/fftemplate
   DEPENDS:=+luci-mod-freifunk
 endef
 
-define Package/luci/httpdtemplate
-  $(call Package/luci/libtemplate)
-  SUBMENU:=LuCIttpd
-  DEPENDS:=+luci-httpd
-endef
-
 define Package/luci/i18ntemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI Translations
@@ -162,16 +156,6 @@ define Package/luci-uci/install
 endef
 
 
-define Package/luci-fastindex
-  $(call Package/luci/libtemplate)
-  TITLE:=Fastindex indexing module
-endef
-
-define Package/luci-fastindex/install
-	$(call Package/luci/install/template,$(1),libs/fastindex)
-endef
-
-
 define Package/luci-http
   $(call Package/luci/libtemplate)
   TITLE:=HTTP Protocol implementation
@@ -235,20 +219,6 @@ endef
 
 define Package/luci-uvl/install
 	$(call Package/luci/install/template,$(1),libs/uvl)
-endef
-
-
-
-### HTTPD ###
-
-define Package/luci-httpd
-  $(call Package/luci/httpdtemplate)
-  DEPENDS:=+luci-http +libuci
-  TITLE:=Server Core
-endef
-
-define Package/luci-httpd/install
-	$(call Package/luci/install/template,$(1),libs/lucittpd)
 endef
 
 
@@ -569,26 +539,9 @@ define Package/luci-sgi-cgi/install
 	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
 endef
 
-define Package/luci-sgi-luci
-  $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-httpd
-  TITLE:=SGI for LuCIttpd
-endef
-
-define Package/luci-sgi-luci/install
-	$(call Package/luci/install/template,$(1),libs/sgi-luci)
-endef
-
-define Package/luci-sgi-webuci
-  $(call Package/luci/libtemplate)
-  TITLE:=SGI for Webuci
-endef
-
-define Package/luci-sgi-webuci/install
-	$(call Package/luci/install/template,$(1),libs/sgi-webuci)
-endef
 
 ### Themes ###
+
 define Package/luci-theme-base
   $(call Package/luci/thtemplate)
   DEPENDS:=+luci-web
@@ -664,6 +617,7 @@ endef
 
 
 ### Translations ###
+
 define Package/luci-i18n-german
   $(call Package/luci/i18ntemplate)
   TITLE:=German
@@ -745,14 +699,12 @@ endef
 
 
 ### Compile ###
+
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
 endif
 ifneq ($(CONFIG_PACKAGE_luci-cbi),)
 	PKG_SELECTED_MODULES+=libs/cbi
-endif
-ifneq ($(CONFIG_PACKAGE_luci-fastindex),)
-	PKG_SELECTED_MODULES+=libs/fastindex
 endif
 ifneq ($(CONFIG_PACKAGE_luci-http),)
 	PKG_SELECTED_MODULES+=libs/http
@@ -774,10 +726,6 @@ ifneq ($(CONFIG_PACKAGE_luci-web),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-uvl),)
 	PKG_SELECTED_MODULES+=libs/uvl
-endif
-
-ifneq ($(CONFIG_PACKAGE_luci-httpd),)
-	PKG_SELECTED_MODULES+=libs/lucittpd
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-admin-core),)
@@ -862,12 +810,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
 endif
-ifneq ($(CONFIG_PACKAGE_luci-sgi-luci),)
-	PKG_SELECTED_MODULES+=libs/sgi-luci
-endif
-ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
-	PKG_SELECTED_MODULES+=libs/sgi-webuci
-endif
 
 ifneq ($(CONFIG_PACKAGE_luci-theme-base),)
 	PKG_SELECTED_MODULES+=themes/base
@@ -928,7 +870,6 @@ MAKE_FLAGS += \
 
 $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-cbi))
-$(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
@@ -936,8 +877,6 @@ $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
 $(eval $(call BuildPackage,luci-uvl))
-
-$(eval $(call BuildPackage,luci-httpd))
 
 $(eval $(call BuildPackage,luci-admin-core))
 $(eval $(call BuildPackage,luci-admin-mini))
@@ -968,8 +907,6 @@ $(eval $(call BuildPackage,luci-app-livestats))
 $(eval $(call BuildPackage,luci-app-polipo))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
-$(eval $(call BuildPackage,luci-sgi-luci))
-$(eval $(call BuildPackage,luci-sgi-webuci))
 
 $(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-fledermaus))
