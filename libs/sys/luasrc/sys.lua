@@ -691,13 +691,14 @@ function wifi.channels(iface)
 	local fd = io.popen(cmd)
 	if fd then
 		local ln, c, f
-		repeat
-			ln = fd:read("*l") or ""
+		while true do
+			ln = fd:read("*l")
+			if not ln then break end
 			c, f = ln:match("Channel (%d+) : (%d+%.%d+) GHz")
 			if c and f then
 				cns[tonumber(c)] = tonumber(f)
 			end
-		until not ( #ln > 0 )
+		end
 		fd:close()
 	end
 
