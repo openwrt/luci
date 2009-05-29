@@ -339,6 +339,13 @@ config enum
 	option variable	'network.interface.type'
 	option value	'bridge'
 	option title	'This is a bridge interface'
+	
+config variable
+	option name	'stp'
+	option title	'Enable STP'
+	option section	'network.interface.stp'
+	option datatype	'boolean'
+	option depends	'type=bridge'
 
 
 
