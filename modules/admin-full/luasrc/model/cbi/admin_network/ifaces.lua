@@ -51,6 +51,11 @@ br = s:option(Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"
 br.enabled = "bridge"
 br.rmempty = true
 
+stp = s:option(Flag, "stp", translate("a_n_i_stp"),
+	translate("a_n_i_stp1", "Enables the Spanning Tree Protocol on this bridge"))
+stp:depends("type", "bridge")
+stp.rmempty = true
+
 ifname = s:option(Value, "ifname", translate("interface"))
 ifname.rmempty = true
 for i,d in ipairs(luci.sys.net.devices()) do

@@ -14,6 +14,8 @@ a_i_ucicommit1 = 'Beim Anwenden der Konfiguration aus der Oberflächliche heraus
 a_i_ui = 'Benutzeroberfläche'
 a_n_i_bridge = 'Netzwerkbrücke'
 a_n_i_bridge1 = 'überbrückt angegebene Schnittstelle(n)'
+a_n_i_stp = '<abbr title="Spanning Tree Protocol">STP</abbr> aktivieren'
+a_n_i_stp1 = 'Aktiviert das Spanning Tree Protokoll auf dieser Netzwerkbrücke'
 a_n_ifaces1 = 'An dieser Stelle können die einzelnen Schnittstellen des Netzwerkes konfiguriert werden. Es können mehrere Schnittstellen zu einer Brücke zusammengefasst werden, indem diese durch Leerzeichen getrennt aufgezählt werden und ein entsprechender Haken im Feld Netzwerkbrücke gesetzt wird. Es können VLANs in der Notation SCHNITTSTELLE.VLANNR (z.B.: eth0.1) verwendet werden.'
 a_n_ptp = 'Punkt-zu-Punkt Verbindungen'
 a_n_ptp1 = 'Punkt-zu-Punkt Verbindungen über PPPoE oder PPTP werden häufig dazu verwendet, um über DSL o.ä. Techniken eine Verbindung zum Internetgateway eines Internetzugangsanbieters aufzubauen.'

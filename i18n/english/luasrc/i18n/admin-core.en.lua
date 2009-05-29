@@ -230,6 +230,8 @@ network_switch_desc = 'Ports belonging to a <abbr title="Virtual Local Area Netw
 a_n_ifaces1 = 'On this page you can configure the network interfaces. You can bridge several interfaces by ticking the &quot;bridge interfaces&quot; field and enter the names of several network interfaces separated by spaces. You can also use <abbr title="Virtual Local Area Network">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title="for example">e.g.</abbr>: <samp>eth0.1</samp>).'
 a_n_i_bridge = 'Bridge interfaces'
 a_n_i_bridge1 = 'creates a bridge over specified interface(s)'
+a_n_i_stp = 'Enable <abbr title="Spanning Tree Protocol">STP</abbr>'
+a_n_i_stp1 = 'Enables the Spanning Tree Protocol on this bridge'
 dhcp_desc = 'With <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> network members can automatically receive their network settings (<abbr title="Internet Protocol">IP</abbr>-address, netmask, <abbr title="Domain Name System">DNS</abbr>-server, ...).'
 dhcp_dhcp_leasetime = 'Leasetime'
 dhcp_dhcp_dynamicdhcp = 'Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'
