@@ -253,10 +253,13 @@ end
 key = s:option(Value, "key", translate("key"))
 key:depends("encryption", "wep")
 key:depends("encryption", "psk")
-key:depends({mode="ap", encryption="wpa"})
 key:depends("encryption", "psk2")
+key:depends("encryption", "psk+psk2")
+key:depends("encryption", "mixed")
+key:depends({mode="ap", encryption="wpa"})
 key:depends({mode="ap", encryption="wpa2"})
 key.rmempty = true
+key.password = true
 
 server = s:option(Value, "server", translate("a_w_radiussrv"))
 server:depends({mode="ap", encryption="wpa"})
@@ -336,6 +339,7 @@ end
 
 if hwtype == "broadcom" then
 	bssid:depends({mode="wds"})
+	bssid:depends({mode="adhoc"})
 end
 
 
