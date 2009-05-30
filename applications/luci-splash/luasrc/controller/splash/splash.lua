@@ -19,7 +19,8 @@ function action_dispatch()
 end
 
 function action_activate()
-	local mac = luci.sys.net.ip4mac(luci.http.getenv("REMOTE_ADDR"))
+	local ip = luci.http.getenv("REMOTE_ADDR") or "127.0.0.1"
+	local mac = luci.sys.net.ip4mac(ip:match("^[\[::ffff:]*(%d+.%d+%.%d+%.%d+)\]*$"))
 	if mac and luci.http.formvalue("accept") then
 		os.execute("luci-splash add "..mac.." >/dev/null 2>&1")
 		luci.http.redirect(luci.model.uci.cursor():get("freifunk", "community", "homepage"))
