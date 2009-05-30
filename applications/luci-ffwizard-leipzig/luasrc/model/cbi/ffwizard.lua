@@ -324,6 +324,9 @@ function olsr.write(self, section, value)
 		uci:set("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
 	end)
 
+	-- Make sure that OLSR is enabled
+	sys.exec("/etc/init.d/olsrd enable")
+
 	uci:save("olsrd")
 	uci:save("dhcp")
 end
@@ -434,6 +437,9 @@ function client.write(self, section, value)
 	-- Register splash
 	uci:section("luci_splash", "iface", nil, {network=device.."dhcp", zone="freifunk"})
 	uci:save("luci_splash")
+	
+	-- Make sure that luci_splash is enabled
+	sys.exec("/etc/init.d/luci_splash enable")
 end
 
 return f
