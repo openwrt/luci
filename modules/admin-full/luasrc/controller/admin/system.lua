@@ -40,6 +40,7 @@ function action_packages()
 	local ipkg = require("luci.model.ipkg")
 	local void = nil
 	local submit = luci.http.formvalue("submit")
+	local changes = false
 	
 	
 	-- Search query
@@ -57,6 +58,7 @@ function action_packages()
 			install = {}
 		end
 		install[url] = 1
+		changes = true
 	end
 	
 	-- Do install
@@ -64,6 +66,7 @@ function action_packages()
 		for k, v in pairs(install) do
 			void, install[k] = ipkg.install(k)
 		end
+		changes = true
 	end
 	
 	
@@ -72,7 +75,8 @@ function action_packages()
 	if remove then	
 		for k, v in pairs(remove) do
 			void, remove[k] = ipkg.remove(k)
-		end	
+		end
+		changes = true
 	end
 	
 	
@@ -116,7 +120,12 @@ function action_packages()
 	end 
 	
 	luci.template.render("admin_system/packages", {pkgs=pkgs, query=query,
-	 install=install, remove=remove, update=update, upgrade=upgrade})	
+	 install=install, remove=remove, update=update, upgrade=upgrade})
+	 
+	-- Remove index cache
+	if changes then
+		luci.fs.unlink("/tmp/luci-indexcache")
+	end	
 end
 
 function action_backup()
