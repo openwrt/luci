@@ -143,16 +143,22 @@ $Id$
 
 	function get_brinfo(s)
 		local b = { }
-		for l in luci.util.execi("brctl show br-%s" % s['.name']) do
+		local m = false
+		for l in luci.util.execi("brctl show") do
 			if not l:match("STP") then
-				local r = luci.util.split(l, "%s+", nil, true)
-				if #r > 2 then
-					b.name    = r[1]
-					b.id      = r[2]
-					b.stp     = r[3] == "yes"
-					b.ifnames = { r[4] }
-				else
-					b.ifnames[#b.ifnames+1] = r[2]
+				if m and l:match("^[a-z]") then
+					break 
+				elseif m or l:match("^br%%-%s" % s['.name']) then
+					m = true
+					local r = luci.util.split(l, "%s+", nil, true)
+					if #r > 2 then
+						b.name    = r[1]
+						b.id      = r[2]
+						b.stp     = r[3] == "yes"
+						b.ifnames = { r[4] }
+					else
+						b.ifnames[#b.ifnames+1] = r[2]
+					end
 				end
 			end
 		end
@@ -228,9 +234,9 @@ $Id$
 
 			<% for _, b in ipairs(bridge_ifs) do
 				br  = get_brinfo(b)
-				dev = br.name
+				dev = br and br.name
 
-				if devinfo and devinfo[dev] then
+				if br and devinfo and devinfo[dev] then
 			%>
 				<h3><%:a_s_if_bridge Bridge%> <%=br.name%></h3>
 				<p style="font-size:90%;padding-left:1em">
