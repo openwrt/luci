@@ -343,13 +343,8 @@ function Server.parse_headers(self, source)
 			break
 		end
 	until false
-
-	if env.REQUEST_URI:find("?") then	
-		env.SCRIPT_NAME, env.QUERY_STRING = env.REQUEST_URI:match("([^%?]*)%?(.*)")
-	else
-		env.SCRIPT_NAME, env.QUERY_STRING = env.REQUEST_URI, nil
-	end
-
+	
+	env.SCRIPT_NAME, env.QUERY_STRING = env.REQUEST_URI:match("([^?]*)%??(.*)")
 	return req
 end
 
