@@ -101,6 +101,9 @@ ign = i:option(Flag, "ignore", "Enable")
 ign.enabled  = "0"
 ign.disabled = "1"
 ign.rmempty = false
+function ign.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "0"
+end
 
 network = i:option(ListValue, "interface", translate("network"))
 luci.tools.webadmin.cbi_add_networks(network)
