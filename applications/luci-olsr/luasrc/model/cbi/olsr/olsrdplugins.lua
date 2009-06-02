@@ -56,7 +56,7 @@ if arg[1] then
 	local function IpMask2Cidr(val)
 		if val then
 			for i = 1, #val do
-				local ip, mask = val[i]:gmatch("([^%s+])%s+([^%s+])")()
+				local ip, mask = val[i]:gmatch("([^%s]+)%s+([^%s]+)")()
 				local cidr
 				if ip and mask and ip:match(":") then
 					cidr = luci.ip.IPv6(ip, mask)
