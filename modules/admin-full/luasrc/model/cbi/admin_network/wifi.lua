@@ -122,6 +122,8 @@ end
 if hwtype == "prism2" then
 	s:option(Value, "txpower", translate("a_w_txpwr"), "att units").rmempty = true
 
+	s:option(Flag, "diversity", translate("wifi_diversity")).rmempty = false
+
 	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
 	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
 end
