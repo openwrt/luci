@@ -233,7 +233,7 @@ endef
 define Package/luci-lucid
   $(call Package/luci/libtemplate)
   TITLE:=LuCId Superserver
-  DEPENDS+=+luci-nixio +luci-http
+  DEPENDS+=+luci-nixio +luci-http +luci-px5g
 endef
 
 define Package/luci-lucid/install
@@ -282,6 +282,18 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-nixio_cyassl),)
   NIXIO_TLS:=cyassl
 endif
+
+
+define Package/luci-px5g
+  $(call Package/luci/libtemplate)
+  TITLE:=PX5G RSA Keymaster
+  DEPENDS:=+luci-nixio
+endef
+
+define Package/luci-px5g/install
+	$(call Package/luci/install/template,$(1),libs/px5g)
+endef
+
 
 define Package/luci-sys
   $(call Package/luci/libtemplate)
@@ -889,6 +901,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-nixio),)
 	PKG_SELECTED_MODULES+=libs/nixio
 endif
+ifneq ($(CONFIG_PACKAGE_luci-px5g),)
+	PKG_SELECTED_MODULES+=libs/px5g
+endif
 ifneq ($(CONFIG_PACKAGE_luci-uci),)
 	PKG_SELECTED_MODULES+=libs/uci
 endif
@@ -1077,6 +1092,7 @@ $(eval $(call BuildPackage,luci-json))
 $(eval $(call BuildPackage,luci-luanet))
 $(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
+$(eval $(call BuildPackage,luci-px5g))
 $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
