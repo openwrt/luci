@@ -54,6 +54,9 @@ function index()
 	entry({"freifunk", "status.json"}, call("jsonstatus"))
 	entry({"freifunk", "status", "zeroes"}, call("zeroes"), "Testdownload") 
 
+	-- XXX: security violation
+	entry({"freifunk", "status", "splash"}, call("splash_status"), "Client-Splash").setuser = "root"
+
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 
 	if luci.fs.access("/etc/config/luci_statistics") then
@@ -209,4 +212,8 @@ function jsonstatus()
 
 	http.prepare_content("application/json")
 	ltn12.pump.all(json.Encoder(root):source(), http.write)
+end
+
+function splash_status()
+	luci.template.render("admin_status/splash", { is_admin = false })
 end
