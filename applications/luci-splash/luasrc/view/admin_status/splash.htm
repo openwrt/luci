@@ -114,19 +114,19 @@ end
 <%+header%>
 
 <div id="cbi-splash-leases" class="cbi-map">
-	<h2><a id="content" name="content">Splash-Leases</a></h2>
+	<h2><a id="content" name="content"><%:ff_splash Client-Splash%></a></h2>
 	<fieldset id="cbi-table-table" class="cbi-section">
-		<legend>Active Leases</legend>
+		<legend><%:ff_splash_clients Active Clients%></legend>
 		<div class="cbi-section-node">
 			<% if is_admin then %><form action="<%=REQUEST_URI%>" method="post"><% end %>
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell">Hostname</th>
-					<th class="cbi-section-table-cell">IP Address</th>
-					<th class="cbi-section-table-cell">MAC Address</th>
-					<th class="cbi-section-table-cell">Time remaining</th>
-					<th class="cbi-section-table-cell">Outgoing traffic</th>
-					<th class="cbi-section-table-cell">Policy</th>
+					<th class="cbi-section-table-cell"><%:ff_splash_hostname Hostname%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_ip IP Address%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_mac MAC Address%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_timeleft Time remaining%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_traffic Outgoing traffic%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_policy Policy%></th>
 				</tr>
 
 				<%-
@@ -144,25 +144,25 @@ end
 							count = count + 1
 				-%>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
-						<td class="cbi-section-table-cell"><%=c.hostname or "<em>unknown</em>"%></td>
-						<td class="cbi-section-table-cell"><%=c.ip or "<em>unknown</em>"%></td>
+						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("ff_splash_unknown", "unknown") .. "</em>"%></td>
+						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("ff_splash_unknown", "unknown") .. "</em>"%></td>
 						<td class="cbi-section-table-cell"><%=showmac(c.mac)%></td>
 						<td class="cbi-section-table-cell"><%=
 							(c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or
-								(c.policy ~= "normal") and "-" or "<em>expired</em>"
+								(c.policy ~= "normal") and "-" or "<em>" .. translate("ff_splash_expired", "expired") .. "</em>"
 						%></td>
 						<td class="cbi-section-table-cell"><%=wat.byte_format(c.bytes)%></td>
 						<td class="cbi-section-table-cell">
 							<% if is_admin then %>
 							<select name="policy.<%=c.mac:lower()%>" style="width:200px">
-								<option value="whitelist"<%=c.policy=="whitelist" and ' selected="selected"'%>>whitelisted</option>
-								<option value="normal"<%=c.policy=="normal" and not c.kicked and ' selected="selected"'%>>splashed</option>
-								<option value="blacklist"<%=c.policy=="blacklist" and ' selected="selected"'%>>blacklisted</option>
+								<option value="whitelist"<%=c.policy=="whitelist" and ' selected="selected"'%>><%:ff_splash_whitelisted whitelisted%></option>
+								<option value="normal"<%=c.policy=="normal" and not c.kicked and ' selected="selected"'%>><%:ff_splash_splashed splashed%></option>
+								<option value="blacklist"<%=c.policy=="blacklist" and ' selected="selected"'%>><%:ff_splash_blacklisted blacklisted%></option>
 								<% if c.policy == "normal" then -%>
-								<option value="kick"<%=c.kicked and ' selected="selected"'%>>temporarily blocked (<%=wat.date_format(c.limit-os.time())%>)</option>
+								<option value="kick"<%=c.kicked and ' selected="selected"'%>><%:ff_splash_tempblock temporarily blocked%> (<%=wat.date_format(c.limit-os.time())%>)</option>
 								<%- end %>
 							</select>
-							<input type="submit" class="cbi-button cbi-button-save" name="save.<%=c.mac:lower()%>" value="Save" />
+							<input type="submit" class="cbi-button cbi-button-save" name="save.<%=c.mac:lower()%>" value="<%:save Save%>" />
 							<% else %>
 							<%=c.policy%>
 							<% end %>
@@ -176,7 +176,7 @@ end
 				-%>
 					<tr class="cbi-section-table-row">
 						<td colspan="7" class="cbi-section-table-cell">
-							<br /><em>No clients connected</em><br />
+							<br /><em><%:ff_splash_noclients No clients connected%></em><br />
 						</td>
 					</tr>
 				<%- end -%>
