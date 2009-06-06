@@ -1,39 +1,35 @@
 #!/usr/bin/lua
 
-require("luci.http")
 require("luci.util")
 require("luci.model.uci")
+require("luci.sys.iptparser")
 
 -- Init state session
 local uci = luci.model.uci.cursor_state()
+local ipt = luci.sys.iptparser.IptParser()
 
 
 function main(argv)
 	local cmd = argv[1]
 	local arg = argv[2]
 	
-	if cmd == "status" then
-		if not arg then
-			os.exit(1)
-		end
-		
-		if iswhitelisted(arg) then
+	if cmd == "status" and arg then
+		if islisted("whitelist", arg) then
 			print("whitelisted")
-			os.exit(0)
+		elseif islisted("blacklist", arg) then
+			print("blacklisted")
+		else		
+			local lease = haslease(arg)
+			if lease and lease.kicked then
+				print("kicked")
+			elseif lease then
+				print("lease")
+			else
+				print("unknown")
+			end
 		end
-		
-		if haslease(arg) then
-			print("lease")
-			os.exit(0)
-		end		
-		
-		print("unknown")
 		os.exit(0)
-	elseif cmd == "add" then
-		if not arg then
-			os.exit(1)
-		end
-		
+	elseif cmd == "add" and arg then
 		if not haslease(arg) then
 			add_lease(arg)
 		else
@@ -41,11 +37,7 @@ function main(argv)
 			os.exit(2)
 		end
 		os.exit(0)
-	elseif cmd == "remove" then
-		if not arg then
-			os.exit(1)
-		end
-		
+	elseif cmd == "remove" and arg then
 		remove_lease(arg)
 		os.exit(0)		
 	elseif cmd == "sync" then
@@ -72,19 +64,10 @@ end
 -- Remove a lease from state and invoke remove_rule
 function remove_lease(mac)
 	mac = mac:lower()
-	local del = {}
+	remove_rule(mac)
 
-	uci:foreach("luci_splash", "lease",
-		function (section)
-			if section.mac:lower() == mac then
-				table.insert(del, section[".name"])
-			end
-		end)
-		
-	for i,j in ipairs(del) do
-		remove_rule(j)
-		uci:delete("luci_splash", j)
-	end
+	uci:delete_all("luci_splash", "lease",
+		function(s) return ( s.mac:lower() == mac ) end)
 		
 	uci:save("luci_splash")
 end
@@ -92,54 +75,76 @@ end
 
 -- Add an iptables rule
 function add_rule(mac)
+	os.execute("iptables -I luci_splash_counter -m mac --mac-source '"..mac.."'")
 	return os.execute("iptables -t nat -I luci_splash_leases -m mac --mac-source '"..mac.."' -j RETURN")
 end
 
 
 -- Remove an iptables rule
 function remove_rule(mac)
-	return os.execute("iptables -t nat -D luci_splash_leases -m mac --mac-source '"..mac.."' -j RETURN")
+	for _, r in ipairs(ipt:find({table="filter", chain="luci_splash_counter"})) do
+		if r.options and #r.options >= 2 and r.options[1] == "MAC" and
+		   r.options[2]:lower() == mac:lower()
+		then
+			os.execute("iptables -D luci_splash_counter -m mac --mac-source %q -j %s"
+				%{ mac, r.target })
+		end
+	end
+
+	for _, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
+		if r.options and #r.options >= 2 and r.options[1] == "MAC" and
+		   r.options[2]:lower() == mac:lower()
+		then
+			os.execute("iptables -t nat -D luci_splash_leases -m mac --mac-source %q -j %s"
+				%{ mac, r.target })
+		end
+	end
+
+	ipt:resync()
 end
 
 
 -- Check whether a MAC-Address is listed in the lease state list
 function haslease(mac)
 	mac = mac:lower()
-	local stat = false
-	
+	local lease = nil
+
 	uci:foreach("luci_splash", "lease",
 		function (section)
 			if section.mac:lower() == mac then
-				stat = true
-				return
+				lease = section
 			end
 		end)
-	
-	return stat
+
+	return lease
 end
 
 
--- Check whether a MAC-Address is whitelisted
-function iswhitelisted(mac)
+-- Check whether a MAC-Address is in given list
+function islisted(what, mac)
 	mac = mac:lower()
-	
-	uci:foreach("luci_splash", "whitelist",
+
+	uci:foreach("luci_splash", what,
 		function (section)
 			if section.mac:lower() == mac then
 				stat = true
 				return
 			end
 		end)
-	
+
 	return false
 end
 
 
 -- Returns a list of MAC-Addresses for which a rule is existing
 function listrules()
-	local cmd = "iptables -t nat -L luci_splash_leases | grep RETURN |"
-	cmd = cmd .. "egrep -io [0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+"
-	return luci.util.split(luci.util.exec(cmd))
+	local macs = { }
+	for i, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
+		if r.options and #r.options >= 2 and r.options[1] == "MAC" then
+			macs[r.options[2]:lower()] = true
+		end
+	end
+	return luci.util.keys(macs)
 end
 
 
@@ -168,11 +173,14 @@ function sync()
 			else
 				-- Rewrite state
 				uci:section("luci_splash", "lease", nil, {		
-					mac = v.mac,
-					start = v.start
+					mac    = v.mac,
+					start  = v.start,
+					kicked = v.kicked
 				})
 				written[v.mac:lower()] = 1
 			end
+		elseif v[".type"] == "whitelist" or v[".type"] == "blacklist" then
+			written[v.mac:lower()] = 1
 		end
 	end
 	

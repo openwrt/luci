@@ -1,0 +1,189 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2009 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%-
+
+local utl = require "luci.util"
+local ipt = require "luci.sys.iptparser".IptParser()
+local uci = require "luci.model.uci".cursor_state()
+local wat = require "luci.tools.webadmin"
+local clients = { }
+local leasetime = tonumber(uci:get("luci_splash", "general", "leasetime") or 1) * 60 * 60
+local leasefile = "/tmp/dhcp.leases"
+
+uci:foreach("dhcp", "dnsmasq",
+	function(s)
+		if s.leasefile then leasefile = s.leasefile end
+	end)
+
+
+uci:foreach("luci_splash", "lease",
+	function(s)
+		if s.start and s.mac then
+			clients[s.mac:lower()] = {
+				start   = tonumber(s.start),
+				limit   = ( tonumber(s.start) + leasetime ),
+				mac     = s.mac:upper(),
+				policy  = "normal",
+				packets = 0,
+				bytes   = 0,
+				kicked  = s.kicked and true or false
+			}
+		end
+	end)
+
+for _, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
+	if r.options and #r.options >= 2 and r.options[1] == "MAC" then
+		if not clients[r.options[2]:lower()] then
+			clients[r.options[2]:lower()] = {
+				start  = 0,
+				limit  = 0,
+				mac    = r.options[2]:upper(),
+				policy = ( r.target == "RETURN" ) and "whitelist" or "blacklist",
+				packets = 0,
+				bytes   = 0
+			}
+		end
+	end
+end
+
+for _, r in ipairs(ipt:find({table="filter", chain="luci_splash_counter"})) do
+	if r.options and #r.options >= 2 and r.options[1] == "MAC" then
+		local c = clients[r.options[2]:lower()]
+		if c and c.packets == 0 then
+			c.bytes   = tonumber(r.bytes)
+			c.packets = tonumber(r.packets)
+		end
+	end
+end
+
+uci:foreach("luci_splash", "whitelist",
+	function(s)
+		if s.mac and clients[s.mac:lower()] then
+			clients[s.mac:lower()].policy="whitelist"
+		end
+	end)
+
+uci:foreach("luci_splash", "blacklist",
+	function(s)
+		if s.mac and clients[s.mac:lower()] then
+			clients[s.mac:lower()].policy=(s.kicked and "kicked" or "blacklist")
+		end
+	end)		
+
+if luci.fs.access(leasefile) then
+	for l in io.lines(leasefile) do
+		local time, mac, ip, name = l:match("^(%d+) (%S+) (%S+) (%S+)")
+		if time and mac and ip then
+			local c = clients[mac:lower()]
+			if c then
+				c.ip = ip
+				c.hostname = ( name ~= "*" ) and name or nil
+			end
+		end
+	end
+end
+
+for i, a in ipairs(luci.sys.net.arptable()) do
+	local c = clients[a["HW address"]:lower()]
+	if c and not c.ip then
+		c.ip = a["IP address"]
+	end
+end
+
+local function showmac(mac)
+	if not is_admin then
+		mac = mac:gsub("(%S%S:%S%S):%S%S:%S%S:(%S%S:%S%S)", "%1:XX:XX:%2")
+	end
+	return mac
+end
+
+-%>
+
+<%+header%>
+
+<div id="cbi-splash-leases" class="cbi-map">
+	<h2><a id="content" name="content"><%:ff_splash Client-Splash%></a></h2>
+	<fieldset id="cbi-table-table" class="cbi-section">
+		<legend><%:ff_splash_clients Active Clients%></legend>
+		<div class="cbi-section-node">
+			<% if is_admin then %><form action="<%=REQUEST_URI%>" method="post"><% end %>
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%:ff_splash_hostname Hostname%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_ip IP Address%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_mac MAC Address%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_timeleft Time remaining%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_traffic Outgoing traffic%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_policy Policy%></th>
+				</tr>
+
+				<%-
+					local count = 0
+					for _, c in utl.spairs(clients,
+						function(a,b)
+							if clients[a].policy == clients[b].policy then
+								return (clients[a].start > clients[b].start)
+							else
+								return (clients[a].policy > clients[b].policy)
+							end
+						end)
+					do
+						if c.ip then
+							count = count + 1
+				-%>
+					<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
+						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("ff_splash_unknown", "unknown") .. "</em>"%></td>
+						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("ff_splash_unknown", "unknown") .. "</em>"%></td>
+						<td class="cbi-section-table-cell"><%=showmac(c.mac)%></td>
+						<td class="cbi-section-table-cell"><%=
+							(c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or
+								(c.policy ~= "normal") and "-" or "<em>" .. translate("ff_splash_expired", "expired") .. "</em>"
+						%></td>
+						<td class="cbi-section-table-cell"><%=wat.byte_format(c.bytes)%></td>
+						<td class="cbi-section-table-cell">
+							<% if is_admin then %>
+							<select name="policy.<%=c.mac:lower()%>" style="width:200px">
+								<option value="whitelist"<%=c.policy=="whitelist" and ' selected="selected"'%>><%:ff_splash_whitelisted whitelisted%></option>
+								<option value="normal"<%=c.policy=="normal" and not c.kicked and ' selected="selected"'%>><%:ff_splash_splashed splashed%></option>
+								<option value="blacklist"<%=c.policy=="blacklist" and ' selected="selected"'%>><%:ff_splash_blacklisted blacklisted%></option>
+								<% if c.policy == "normal" then -%>
+								<option value="kick"<%=c.kicked and ' selected="selected"'%>><%:ff_splash_tempblock temporarily blocked%> (<%=wat.date_format(c.limit-os.time())%>)</option>
+								<%- end %>
+							</select>
+							<input type="submit" class="cbi-button cbi-button-save" name="save.<%=c.mac:lower()%>" value="<%:save Save%>" />
+							<% else %>
+							<%=c.policy%>
+							<% end %>
+						</td>
+					</tr>
+				<%- 
+						end
+					end
+
+					if count == 0 then
+				-%>
+					<tr class="cbi-section-table-row">
+						<td colspan="7" class="cbi-section-table-cell">
+							<br /><em><%:ff_splash_noclients No clients connected%></em><br />
+						</td>
+					</tr>
+				<%- end -%>
+			</table>
+			<% if is_admin then %></form><% end %>
+		</div>
+	</fieldset>
+</div>
+
+<%+footer%>
