@@ -192,7 +192,7 @@ static int nixio_bin_unhexlify(lua_State *L) {
 
 static int nixio_bin_b64encode(lua_State *L) {
 	size_t len, lenout, pad, i;
-	const char *data = luaL_checklstring(L, 1, &len);
+	const uint8_t *data = (const uint8_t*)luaL_checklstring(L, 1, &len);
 
 	lenout = len / 3;
 	lenout *= 4;
@@ -213,7 +213,7 @@ static int nixio_bin_b64encode(lua_State *L) {
 		return luaL_error(L, NIXIO_OOM);
 	}
 
-	char *o = out;
+	uint8_t *o = (uint8_t*)out;
 	for (i = 0; i < len; i += 3) {
 		uint32_t cv = (data[i] << 16) | (data[i+1] << 8) | data[i+2];
 		*(o+3) = nixio__b64encode_tbl[ cv        & 0x3f];
