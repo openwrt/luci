@@ -2,7 +2,8 @@ include ../../build/config.mk
 include ../../build/module.mk
 include ../../build/gccconfig.mk
 
-PX5G_LIB_CFLAGS = -Isrc/ -fvisibility=hidden
+PX5G_LIB_CFLAGS = -Isrc/ -fvisibility=hidden -include src/polarssl/rsa.h \
+	-include src/polarssl/x509.h
 PX5G_OBJ_CFLAGS = -Isrc/
 
 PX5G_LIB = src/library/bignum.o src/library/havege.o src/library/rsa.o \
