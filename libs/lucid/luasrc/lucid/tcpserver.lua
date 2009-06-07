@@ -13,11 +13,13 @@ $Id$
 ]]
 
 local os = require "os"
+local fs = require "nixio.fs"
 local nixio = require "nixio"
 local lucid = require "luci.lucid"
 
 local ipairs, type, require, setmetatable = ipairs, type, require, setmetatable
 local pairs, print, tostring, unpack = pairs, print, tostring, unpack
+local pcall = pcall
 
 module "luci.lucid.tcpserver"
 
@@ -170,22 +172,57 @@ function prepare_socket(family, host, port, opts, backlog)
 end
 
 function prepare_tls(tlskey)
-	local tls = nixio.tls("server")
+	local tls
 	if tlskey and cursor:get(UCINAME, tlskey) then
-		local xtype = cursor:get(UCINAME, tlskey, "type")
+		tls = nixio.tls("server")
+		
+		local make = cursor:get(UCINAME, tlskey, "generate") == "1"
+		local key = cursor:get(UCINAME, tlskey, "key")
+		local xtype = make and "asn1" or cursor:get(UCINAME, tlskey, "type")
 		local cert = cursor:get(UCINAME, tlskey, "cert")
+		local ciphers = cursor:get(UCINAME, tlskey, "ciphers")
+		
+		if make and (not fs.access(key) or not fs.access(cert)) then
+			local CN = cursor:get(UCINAME, tlskey, "CN")
+			local O = cursor:get(UCINAME, tlskey, "O")
+			local bits = 2048
+			
+			local data = {
+				CN = CN or nixio.uname().nodename,
+				O = not O and "LuCId Keymaster" or #O > 0 and O
+			}
+			
+			local stat, px5g = pcall(require, "px5g")
+			if not stat then
+				return nixio.syslog("err", "Unable to load PX5G Keymaster")
+			end
+			
+			nixio.syslog("info", "PX5G: Generating " .. bits .. "b private key") 
+			local rk = px5g.genkey(bits)
+			local keyfile = nixio.open(key, "w", 600)
+			if not rk or not keyfile or not keyfile:writeall(rk:asn1()) then
+				return nixio.syslog("err", "Unable to generate private key")
+			end
+			keyfile:close()
+			
+			nixio.syslog("info", "PX5G: Generating self-signed certificate")
+			if not fs.writefile(cert, rk:create_selfsigned(data,
+					os.time(), os.time() + 3600 * 24 * 366 * 15)) then
+				return nixio.syslog("err", "Unable to generate certificate")
+			end
+		end
+		
 		if cert then
 			if not tls:set_cert(cert, xtype) then
 				nixio.syslog("err", "Unable to load certificate: " .. cert)
 			end
 		end
-		local key = cursor:get(UCINAME, tlskey, "key")
 		if key then
 			if not tls:set_key(key, xtype) then
 				nixio.syslog("err", "Unable to load private key: " .. key)
 			end
 		end
-		local ciphers = cursor:get(UCINAME, tlskey, "ciphers")
+
 		if ciphers then
 			if type(ciphers) == "table" then
 				ciphers = table.concat(ciphers, ":")
