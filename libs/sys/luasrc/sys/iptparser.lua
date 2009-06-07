@@ -19,7 +19,7 @@ luci.util   = require "luci.util"
 luci.sys    = require "luci.sys"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs = tonumber, ipairs
+local tonumber, ipairs, table = tonumber, ipairs, table
 
 --- LuCI iptables parser and query library
 -- @cstyle	instance
@@ -278,6 +278,11 @@ function IptParser._parse_rules( self )
 
 					local rule_parts   = luci.util.split( rule, "%s+", nil, true )
 					local rule_details = { }
+
+					-- cope with rules that have no target assigned
+					if rule:match("^%d+%s+%d+%s+%d+%s%s") then
+						table.insert(rule_parts, 4, nil)
+					end
 
 					rule_details["table"]       = tbl
 					rule_details["chain"]       = self._chain
