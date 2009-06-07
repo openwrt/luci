@@ -12,6 +12,8 @@ ipt_add() {
 }
 
 start() {
+	/etc/init.d/freifunk-p2pblock enabled || return
+
 	if [ ! -s "$LOCK" ]; then
 		logger -s -t "$ME" 'starting p2pblock...'
 		
