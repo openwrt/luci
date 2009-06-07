@@ -75,7 +75,7 @@ end
 
 -- Add an iptables rule
 function add_rule(mac)
-	os.execute("iptables -I luci_splash_counter -m mac --mac-source '"..mac.."'")
+	os.execute("iptables -I luci_splash_counter -m mac --mac-source '"..mac.."' -j RETURN")
 	return os.execute("iptables -t nat -I luci_splash_leases -m mac --mac-source '"..mac.."' -j RETURN")
 end
 
