@@ -56,4 +56,7 @@ uci_set_state firewall core loaded 1
 config_foreach fw_addif interface
 config_foreach apply_nat_fix interface
 
-[ -x /etc/init.d/luci_splash ] && ( sleep 3; /etc/init.d/luci_splash start )&
+[ -x /etc/init.d/luci_splash ] && ( sleep 3; /etc/init.d/luci_splash restart )&
+
+[ -x /etc/init.d/freifunk-p2pblock ] && /etc/init.d/freifunk-p2pblock enabled && \
+	( sleep 3; /etc/init./freifunk-p2pblock restart )&
