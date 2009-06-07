@@ -122,7 +122,7 @@ function IptParser.find( self, args )
 
 		-- match target
 		if not ( match == true and (
-			not args.target or args.target:upper() == rule.target
+			not args.target or args.target == rule.target
 		) ) then
 			match = false
 		end
