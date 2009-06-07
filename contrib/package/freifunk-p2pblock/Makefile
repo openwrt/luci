@@ -40,7 +40,7 @@ define Package/freifunk-p2pblock/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/freifunk-p2pblock.init $(1)/etc/init.d/freifunk-p2pblock
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_BIN) ./files/freifunk-p2pblock.config $(1)/etc/config/freifunk-p2pblock
+	$(INSTALL_DATA) ./files/freifunk-p2pblock.config $(1)/etc/config/freifunk_p2pblock
 endef
 
 $(eval $(call BuildPackage,freifunk-p2pblock))
