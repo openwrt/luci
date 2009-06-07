@@ -99,7 +99,7 @@ $Id$
 								<td><%=rule.index%></td>
 								<td><%=rule.packets%></td>
 								<td><%=wba.byte_format(rule.bytes)%></td>
-								<td><%=link_target(tbl, rule.target)%></td>
+								<td><%=rule.target and link_target(tbl, rule.target) or "-"%></td>
 								<td><%=rule.protocol%></td>
 								<td><%=rule.flags%></td>
 								<td><%=link_iface(rule.inputif)%></td>
