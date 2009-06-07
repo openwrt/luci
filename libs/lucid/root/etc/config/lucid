@@ -39,4 +39,11 @@ config daemon https
 	list publisher luciweb
 	option nokeepalive 1
 	option enabled 1
+	option tls maincert
 	option encryption enable
+
+config tls maincert
+	option key /etc/nixio/rsa_main.der
+	option cert /etc/nixio/cert_main.der
+	option type asn1
+	option generate 1
