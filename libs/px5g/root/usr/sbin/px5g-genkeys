@@ -6,6 +6,7 @@ local px5g = require "px5g"
 local nixio = require "nixio"
 local fs = require "nixio.fs"
 local os = require "os"
+nixio.umask(77)
 
 if not fs.access(certfile) then
 	local key = px5g.genkey(2048)

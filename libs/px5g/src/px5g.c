@@ -85,21 +85,22 @@ static int px5g_rsa_create_selfsigned(lua_State *L) {
 		strftime(tstr, sizeof(tstr), "%F %H:%M:%S", gmtime(&to)),
 	4, "Invalid Time");
 
+	size_t join = 1;
 	lua_pushliteral(L, "");
 	for (int i = 0; i < (sizeof(xfields) / sizeof(*xfields)); i++) {
 		lua_pushstring(L, xfields[i]);
 		lua_rawget(L, 2);
 		if (lua_isstring(L, -1)) {
 			const char *val = lua_tostring(L, -1);
-			luaL_argcheck(L, !strchr(val, '\''), 2, "Invalid Value");
-			lua_pushfstring(L, "%s%s='%s';",
-				lua_tostring(L, -2), xfields[i], val);
+			luaL_argcheck(L, !strchr(val, ';'), 2, "Invalid Value");
+			lua_pushfstring(L, "%s=%s;", xfields[i], val);
 			lua_remove(L, -2);
-			lua_remove(L, -2);
+			join++;
 		} else {
 			lua_pop(L, 1);
 		}
 	}
+	lua_concat(L, join);
 
 	x509_raw cert;
 	x509write_init_raw(&cert);

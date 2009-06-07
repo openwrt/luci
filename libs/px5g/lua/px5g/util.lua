@@ -29,11 +29,16 @@ function der2pem(data, type)
 	local b64 = nixio.bin.b64encode(data)
 	
 	local outdata = {preamble[type]}
-	for i = 1, 64, #b64 + 63 do
+	for i = 1, #b64, 64 do
 		outdata[#outdata + 1] = b64:sub(i, i + 63) 
 	end
 	outdata[#outdata + 1] = postamble[type]
 	outdata[#outdata + 1] = ""
 	
 	return table.concat(outdata, "\n")
+end
+
+function pem2der(data)
+	local b64 = data:gsub({["\n"] = "", ["%-%-%-%-%-.-%-%-%-%-%-"] = ""})
+	return nixio.bin.b64decode(b64)
 end

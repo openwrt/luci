@@ -113,7 +113,22 @@ static int nixio_tls_ctx_create(lua_State *L) {
 static int nixio_tls_ctx_set_cert(lua_State *L) {
 	SSL_CTX *ctx = nixio__checktlsctx(L);
 	const char *cert = luaL_checkstring(L, 2);
-	return nixio__tls_pstatus(L, SSL_CTX_use_certificate_chain_file(ctx, cert));
+	const char *type = luaL_optstring(L, 3, "chain");
+	int ktype;
+
+	if (!strcmp(type, "chain")) {
+		return nixio__tls_pstatus(L,
+				SSL_CTX_use_certificate_chain_file(ctx, cert));
+	} else if (!strcmp(type, "pem")) {
+		ktype = SSL_FILETYPE_PEM;
+	} else if (!strcmp(type, "asn1")) {
+		ktype = SSL_FILETYPE_ASN1;
+	} else {
+		return luaL_argerror(L, 3, "supported values: chain, pem, asn1");
+	}
+
+	return nixio__tls_pstatus(L,
+			SSL_CTX_use_certificate_file(ctx, cert, ktype));
 }
 
 static int nixio_tls_ctx_set_key(lua_State *L) {
