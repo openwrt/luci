@@ -526,6 +526,16 @@ define Package/luci-app-polipo/install
         $(call Package/luci/install/template,$(1),applications/luci-polipo)
 endef
 
+define Package/luci-app-p2pblock
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for the Freifunk P2P-Block addon
+  DEPENDS+=+luci-admin-core +luci-app-firewall +PACKAGE_luci-app-p2pblock:freifunk-p2pblock
+endef
+
+define Package/luci-app-p2pblock/install
+        $(call Package/luci/install/template,$(1),applications/luci-p2pblock)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -804,6 +814,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-polipo),)
        PKG_SELECTED_MODULES+=applications/luci-polipo
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-p2pblock),)
+       PKG_SELECTED_MODULES+=applications/luci-p2pblock
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -904,6 +917,7 @@ $(eval $(call BuildPackage,luci-app-tinyproxy))
 $(eval $(call BuildPackage,luci-app-initmgr))
 $(eval $(call BuildPackage,luci-app-livestats))
 $(eval $(call BuildPackage,luci-app-polipo))
+$(eval $(call BuildPackage,luci-app-p2pblock))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 
