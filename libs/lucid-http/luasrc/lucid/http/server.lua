@@ -432,6 +432,8 @@ function Server.process(self, client, env)
 			else
 				return self:error(client, 411, statusmsg[411])
 			end
+
+			close = true
 		else
 			return self:error(client, 405, statusmsg[405])
 		end
