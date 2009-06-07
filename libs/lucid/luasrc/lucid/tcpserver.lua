@@ -197,7 +197,7 @@ function prepare_tls(tlskey)
 				return nixio.syslog("err", "Unable to load PX5G Keymaster")
 			end
 			
-			nixio.syslog("info", "PX5G: Generating " .. bits .. "b private key") 
+			nixio.syslog("warning", "PX5G: Generating private key")
 			local rk = px5g.genkey(bits)
 			local keyfile = nixio.open(key, "w", 600)
 			if not rk or not keyfile or not keyfile:writeall(rk:asn1()) then
@@ -205,7 +205,7 @@ function prepare_tls(tlskey)
 			end
 			keyfile:close()
 			
-			nixio.syslog("info", "PX5G: Generating self-signed certificate")
+			nixio.syslog("warning", "PX5G: Generating self-signed certificate")
 			if not fs.writefile(cert, rk:create_selfsigned(data,
 					os.time(), os.time() + 3600 * 24 * 366 * 15)) then
 				return nixio.syslog("err", "Unable to generate certificate")
