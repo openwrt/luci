@@ -172,13 +172,18 @@ end
 function prepare_tls(tlskey)
 	local tls = nixio.tls("server")
 	if tlskey and cursor:get(UCINAME, tlskey) then
+		local xtype = cursor:get(UCINAME, tlskey, "type")
 		local cert = cursor:get(UCINAME, tlskey, "cert")
 		if cert then
-			tls:set_cert(cert)
+			if not tls:set_cert(cert, xtype) then
+				nixio.syslog("err", "Unable to load certificate: " .. cert)
+			end
 		end
 		local key = cursor:get(UCINAME, tlskey, "key")
 		if key then
-			tls:set_key(key)
+			if not tls:set_key(key, xtype) then
+				nixio.syslog("err", "Unable to load private key: " .. key)
+			end
 		end
 		local ciphers = cursor:get(UCINAME, tlskey, "ciphers")
 		if ciphers then
