@@ -106,7 +106,7 @@ $Id$
 								<td><%=link_iface(rule.outputif)%></td>
 								<td><%=rule.source%></td>
 								<td><%=rule.destination%></td>
-								<td style="width:30%"><small><%=#rule.options > 0 and table.concat(rule.options, " ") or "-"%></small></td>
+								<td style="width:30%"><small><%=#rule.options > 0 and luci.util.pcdata(table.concat(rule.options, " ")) or "-"%></small></td>
 							</tr>
 						<% end %>
 
