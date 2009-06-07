@@ -27,6 +27,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 LUA_TARGET:=source
+LUCI_CFLAGS:=
 PKG_SELECTED_MODULES:=
 
 
@@ -281,6 +282,7 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_luci-nixio_cyassl),)
   NIXIO_TLS:=cyassl
+  LUCI_CFLAGS+=-I$(STAGING_DIR)/usr/include/cyassl
 endif
 
 
@@ -1077,7 +1079,7 @@ MAKE_FLAGS += \
 	MODULES="$(PKG_SELECTED_MODULES)" \
 	LUA_TARGET="$(LUA_TARGET)" \
 	LUA_SHLIBS="-llua -lm -ldl -lcrypt" \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+	CFLAGS="$(TARGET_CFLAGS) $(LUCI_CFLAGS) -I$(STAGING_DIR)/usr/include" \
 	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
 	NIXIO_TLS="$(NIXIO_TLS)" OS="Linux"
 

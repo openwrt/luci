@@ -43,7 +43,9 @@ CONFIGURE_ARGS += --without-zlib --enable-fastmath
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/ctaocrypt
+	$(INSTALL_DIR) $(1)/usr/include/cyassl
 	$(CP) $(PKG_BUILD_DIR)/ctaocrypt/include/*.h $(1)/usr/include/ctaocrypt
+	$(CP) -R $(PKG_BUILD_DIR)/include/* $(1)/usr/include/cyassl/
 	
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/src/.libs/libcyassl.{a,so*} $(1)/usr/lib/
