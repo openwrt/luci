@@ -91,7 +91,7 @@ $Id$
 							<th class="cbi-section-table-cell"><%:a_s_ipt_outputif Out%></th>
 							<th class="cbi-section-table-cell"><%:a_s_ipt_source Source%></th>
 							<th class="cbi-section-table-cell"><%:a_s_ipt_destination Destination%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_options Options%></th>
+							<th class="cbi-section-table-cell" style="width:30%"><%:a_s_ipt_options Options%></th>
 						</tr>
 
 						<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
@@ -106,7 +106,7 @@ $Id$
 								<td><%=link_iface(rule.outputif)%></td>
 								<td><%=rule.source%></td>
 								<td><%=rule.destination%></td>
-								<td><small><%=#rule.options > 0 and table.concat(rule.options, " ") or "-"%></small></td>
+								<td style="width:30%"><small><%=#rule.options > 0 and table.concat(rule.options, " ") or "-"%></small></td>
 							</tr>
 						<% end %>
 
