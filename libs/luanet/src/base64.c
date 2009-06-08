@@ -70,7 +70,7 @@ int b64_decode(lua_State *L)
     }
 	if(!(dst - out))
 		return 0;
-	 lua_pushstring(L, (char*)out);
+	 lua_pushlstring(L, (char*)out, dst - out);
     return 1;
 }
 
