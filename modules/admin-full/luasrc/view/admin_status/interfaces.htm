@@ -63,7 +63,7 @@ $Id$
 	end
 
 	function get_vlan(i)
-		return i:match("^%w+%.(%d+)$")
+		return i and i:match("^%w+%.(%d+)$")
 	end
 
 	function get_vlan_ports(i)
@@ -178,7 +178,7 @@ $Id$
 				dev     = get_ifname(i)
 				vlan    = get_vlan(dev)
 
-				if devinfo and devinfo[dev] then
+				if dev and devinfo and devinfo[dev] then
 			%>
 				<h3><%:a_s_if_interface Interface%> <%=i['.name']%></h3>
 				<p style="font-size:90%;padding-left:1em">
