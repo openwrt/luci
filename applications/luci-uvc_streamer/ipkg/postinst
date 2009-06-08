@@ -1,4 +1,5 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
-        ( . /etc/uci-defaults/luci-uvc_streamer ) && rm -f /etc/uci-defaults/luci-uvc_streamer
+	( . /etc/uci-defaults/luci-uvc_streamer ) && rm -f /etc/uci-defaults/luci-uvc_streamer
+	/etc/init.d/uvc-streamer enabled || /etc/init.d/uvc-streamer enable
 }

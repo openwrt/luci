@@ -1,4 +1,5 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
 	( . /etc/uci-defaults/luci-ushare ) && rm -f /etc/uci-defaults/luci-ushare
+	/etc/init.d/ushare enabled || /etc/init.d/ushare enable
 }

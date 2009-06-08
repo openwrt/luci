@@ -1,4 +1,5 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
 	( . /etc/uci-defaults/luci-asterisk ) && rm -f /etc/uci-defaults/luci-asterisk
+	/etc/init.d/asterisk enabled || /etc/init.d/asterisk enable
 }
