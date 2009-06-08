@@ -1,4 +1,5 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
-        ( . /etc/uci-defaults/luci-p910nd ) && rm -f /etc/uci-defaults/luci-p910nd
+	( . /etc/uci-defaults/luci-p910nd ) && rm -f /etc/uci-defaults/luci-p910nd
+	/etc/init.d/p910nd enabled || /etc/init.d/p910nd enable
 }

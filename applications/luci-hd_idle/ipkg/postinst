@@ -1,4 +1,5 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
-        ( . /etc/uci-defaults/luci-hd_idle ) && rm -f /etc/uci-defaults/luci-hd_idle
+	( . /etc/uci-defaults/luci-hd_idle ) && rm -f /etc/uci-defaults/luci-hd_idle
+	/etc/init.d/hd-idle enabled || /etc/init.d/hd-idle enable
 }
