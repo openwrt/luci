@@ -205,7 +205,7 @@ function sync()
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
 				-- Remove expired
-				remove_rule(v.mac, v.kicked)
+				remove_rule(v.mac)
 			else
 				-- Rewrite state
 				uci:section("luci_splash", "lease", nil, {		
