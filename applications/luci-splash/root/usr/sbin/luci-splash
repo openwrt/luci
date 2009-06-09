@@ -16,8 +16,8 @@ function main(argv)
 	local cmd = argv[1]
 	local arg = argv[2]
 
-	limit_up = tonumber(uci:get("luci_splash", "general", "limit_up") or 0)
-	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down") or 0)
+	limit_up = tonumber(uci:get("luci_splash", "general", "limit_up")) or 0
+	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down")) or 0
 	
 	uci:foreach("luci_splash", "iface", function(s)
 		if s.network then
