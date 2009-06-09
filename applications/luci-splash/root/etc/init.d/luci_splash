@@ -178,7 +178,7 @@ start() {
 	LIMIT_DOWN_BURST="${LIMIT_DOWN_BURST:-$(($LIMIT_DOWN * 2))}"
 
 	### Load required modules
-	[ "$LIMIT_IP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
+	[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
 		silent insmod cls_fw
 		silent insmod cls_route
 		silent insmod cls_rsvp
