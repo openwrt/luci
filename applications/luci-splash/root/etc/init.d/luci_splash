@@ -108,7 +108,7 @@ qos_iface_add() {
 	# 78 -> upload root qdisc
 	# 79 -> fwmark
 
-	tc qdisc del dev "$iface" root handle 77:
+	silent tc qdisc del dev "$iface" root handle 77:
 
 	if [ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ]; then
 		tc qdisc add dev "$iface" root handle 77: htb
@@ -134,9 +134,9 @@ qos_iface_add() {
 qos_iface_del() {
 	local iface="$1"
 
-	tc qdisc del dev "$iface" root handle 77:
-	tc qdisc del dev "$iface" root handle 78:
-	tc filter del dev "$iface" parent ffff: protocol ip prio 1 handle 79 fw
+	silent tc qdisc del dev "$iface" root handle 77:
+	silent tc qdisc del dev "$iface" root handle 78:
+	silent tc filter del dev "$iface" parent ffff: protocol ip prio 1 handle 79 fw
 }
 
 boot() {
