@@ -8,11 +8,25 @@ require("luci.sys.iptparser")
 local uci = luci.model.uci.cursor_state()
 local ipt = luci.sys.iptparser.IptParser()
 
+local splash_interfaces = { }
+local limit_up = 0
+local limit_down = 0
+local limit_down_burst = 0
 
 function main(argv)
 	local cmd = argv[1]
 	local arg = argv[2]
+
+	limit_up = tonumber(uci:get("luci_splash", "general", "limit_up") or 0)
+	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down") or 0)
+	limit_down_burst = tonumber(uci:get("luci_splash", "general", "limit_down_burst") or limit_down * 2)
 	
+	uci:foreach("luci_splash", "iface", function(s)
+		if s.network then
+			splash_interfaces[#splash_interfaces+1] = uci:get("network", s.network, "ifname")
+		end
+	end)
+
 	if cmd == "status" and arg then
 		if islisted("whitelist", arg) then
 			print("whitelisted")
@@ -75,29 +89,51 @@ end
 
 -- Add an iptables rule
 function add_rule(mac)
-	os.execute("iptables -I luci_splash_counter -m mac --mac-source '"..mac.."' -j RETURN")
-	return os.execute("iptables -t nat -I luci_splash_leases -m mac --mac-source '"..mac.."' -j RETURN")
+	local a, b, c, d, e, f = mac:match("(%w+):(%w+):(%w+):(%w+):(%w+):(%w+)")
+	local mac_pre  = "%s%s" %{ a, b }
+	local mac_post = "%s%s%s%s" %{ c, d, e, f }
+	local handle   = f
+
+	if limit_up > 0 and limit_down > 0 then
+		os.execute("iptables -t mangle -I luci_splash_mark -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+
+		for _, i in ipairs(splash_interfaces) do
+			os.execute("tc filter add dev %q parent 77:0 protocol ip prio 2 " % i .. 
+				"handle ::%q u32 " % handle ..
+				"match u16 0x0800 0xFFFF at -2 match u32 0x%q 0xFFFFFFFF at -12 " % mac_post ..
+				"match u16 0x%q 0xFFFF at -14 flowid 77:10" % mac_pre)
+		end
+	end
+
+	os.execute("iptables -t filter -I luci_splash_counter -m mac --mac-source %q -j RETURN" % mac)
+	return os.execute("iptables -t nat -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
 end
 
 
 -- Remove an iptables rule
 function remove_rule(mac)
-	for _, r in ipairs(ipt:find({table="filter", chain="luci_splash_counter"})) do
-		if r.options and #r.options >= 2 and r.options[1] == "MAC" and
-		   r.options[2]:lower() == mac:lower()
-		then
-			os.execute("iptables -D luci_splash_counter -m mac --mac-source %q -j %s"
-				%{ mac, r.target })
+	local handle = mac:match("%w+:%w+:%w+:%w+:%w+:(%w+)")
+
+	local function ipt_delete_foreach(args)
+		for _, r in ipairs(ipt:find(args)) do
+			if r.options and #r.options >= 2 and r.options[1] == "MAC" and
+			   r.options[2]:lower() == mac:lower()
+			then
+				os.execute("iptables -t %q -D %q -m mac --mac-source %q %s 2>/dev/null"
+					%{ r.table, r.chain, mac,
+						r.target == "MARK" and "-j MARK --set-mark 79" or
+							r.target and "-j %q" % r.target or "" })
+			end
 		end
 	end
 
-	for _, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
-		if r.options and #r.options >= 2 and r.options[1] == "MAC" and
-		   r.options[2]:lower() == mac:lower()
-		then
-			os.execute("iptables -t nat -D luci_splash_leases -m mac --mac-source %q -j %s"
-				%{ mac, r.target })
-		end
+	ipt_delete_foreach({table="filter", chain="luci_splash_counter"})
+	ipt_delete_foreach({table="mangle", chain="luci_splash_mark"})
+	ipt_delete_foreach({table="nat", chain="luci_splash_leases"})
+
+	for _, i in ipairs(splash_interfaces) do
+		os.execute("tc filter del dev %q parent 77:0 protocol ip prio 2 " % i .. 
+			"handle 800::%q u32 2>/dev/null" % handle)
 	end
 
 	ipt:resync()
@@ -169,7 +205,7 @@ function sync()
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
 				-- Remove expired
-				remove_rule(v.mac)
+				remove_rule(v.mac, v.kicked)
 			else
 				-- Rewrite state
 				uci:section("luci_splash", "lease", nil, {		
