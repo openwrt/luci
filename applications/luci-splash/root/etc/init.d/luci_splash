@@ -233,9 +233,6 @@ start() {
 	grep -q luci-splash /etc/crontabs/root || {
 		echo '*/5 * * * * 	/usr/sbin/luci-splash sync' >> /etc/crontabs/root
 	}
-
-	### Start the splash httpd
-	start-stop-daemon -S -m -p /var/run/luci-splashd.pid -b -q -x /usr/bin/luci-splashd
 }
 
 stop() {
@@ -260,9 +257,6 @@ stop() {
 	silent iptables -t nat    -X luci_splash_prerouting
 	silent iptables -t filter -X luci_splash_counter
 	silent iptables -t mangle -X luci_splash_mark
-
-	### Stop the splash httpd
-	start-stop-daemon -K -p /var/run/luci-splashd.pid -s KILL -q
 	
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
 }
