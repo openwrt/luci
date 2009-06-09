@@ -180,21 +180,9 @@ start() {
 	### Load required modules
 	[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
 		silent insmod cls_fw
-		silent insmod cls_route
-		silent insmod cls_rsvp
-		silent insmod cls_rsvp6
-		silent insmod cls_tcindex
 		silent insmod cls_u32
-		silent insmod sch_cbq
-		silent insmod sch_csz
-		silent insmod sch_dsmark
-		silent insmod sch_gred
-		silent insmod sch_hfsc
 		silent insmod sch_htb
 		silent insmod sch_ingress
-		silent insmod sch_red
-		silent insmod sch_tbf
-		silent insmod sch_teql
 	}
 
 	### Create subchains
