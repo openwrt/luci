@@ -11,7 +11,6 @@ local ipt = luci.sys.iptparser.IptParser()
 local splash_interfaces = { }
 local limit_up = 0
 local limit_down = 0
-local limit_down_burst = 0
 
 function main(argv)
 	local cmd = argv[1]
@@ -19,7 +18,6 @@ function main(argv)
 
 	limit_up = tonumber(uci:get("luci_splash", "general", "limit_up") or 0)
 	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down") or 0)
-	limit_down_burst = tonumber(uci:get("luci_splash", "general", "limit_down_burst") or limit_down * 2)
 	
 	uci:foreach("luci_splash", "iface", function(s)
 		if s.network then
