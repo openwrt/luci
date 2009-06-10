@@ -23,6 +23,8 @@ local ZIOBLKSIZE = 65536
 local socket = nixio.meta_socket
 local tls_socket = nixio.meta_tls_socket
 local file = nixio.meta_file
+local uname = nixio.uname()
+local ZBUG = uname.sysname == "Linux" and uname.release:sub(1, 3) == "2.4"
 
 function consume(iter)
 	local tbl = {}
@@ -191,7 +193,7 @@ function meta.copyz(self, fd, size)
 	local sent, lsent, code, msg = 0
 	local splicable
 
-	if self:is_file() then
+	if not ZBUG and self:is_file() then
 		local ftype = self:stat("type")
 		if nixio.sendfile and fd:is_socket() and ftype == "reg" then
 			repeat
