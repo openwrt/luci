@@ -31,7 +31,7 @@ if( open F, "find $source_dir -type f -name '*.po' |" )
 
 				my ( $k, $v );
 
-				while( chomp( my $line = readline L ) )
+				while( chomp( my $line = readline L ) || ( defined($k) && defined($v) ) )
 				{
 					if( $line =~ /^msgid "(.+)"/ )
 					{
