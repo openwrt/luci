@@ -498,7 +498,9 @@ function Server.process(self, client, env)
 
 		if sourceout and stat then
 			if util.instanceof(sourceout, IOResource) then
-				stat, code, msg = sourceout.fd:copyz(client, sourceout.len)
+				-- Jow: copyz() oopses on brcm-2.4, use copy() for now
+				--stat, code, msg = sourceout.fd:copyz(client, sourceout.len)
+				stat, code, msg = sourceout.fd:copy(client, sourceout.len)
 			else
 				stat, msg = ltn12.pump.all(sourceout, sinkout)
 			end
