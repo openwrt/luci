@@ -714,7 +714,7 @@ static int x509write_parse_names(x509_node *node, unsigned char *names)
                   *ST = NULL, *L = NULL, *R = NULL;
     int C_len = 0, CN_len = 0, O_len = 0, OU_len = 0, ST_len = 0,
 		L_len = 0, R_len = 0;
-    int ret, is_tag = 1, is_begin = -1, len = 0;
+    int ret = 0, is_tag = 1, is_begin = -1, len = 0;
 
 
     for (sp = names; ; ++sp) {
