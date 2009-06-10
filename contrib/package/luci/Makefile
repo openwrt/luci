@@ -472,7 +472,8 @@ endef
 
 define Package/luci-app-olsr
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-olsr:olsrd-luci +PACKAGE_luci-app-olsr:olsrd-luci-mod-txtinfo
+  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-olsr:olsrd-luci \
+   +PACKAGE_luci-app-olsr:olsrd-luci-mod-txtinfo
   TITLE:=OLSR configuration and status module
 endef
 
@@ -494,7 +495,10 @@ endef
 
 define Package/luci-app-splash
   $(call Package/luci/fftemplate)
-  DEPENDS+=+PACKAGE_luci-app-splash:luci-nixio +PACKAGE_luci-app-splash:iptables-mod-nat-extra
+  DEPENDS+=+PACKAGE_luci-app-splash:luci-nixio \
+   +PACKAGE_luci-app-splash:tc +PACKAGE_luci-app-splash:kmod-sched \
+   +PACKAGE_luci-app-splash:iptables-mod-nat-extra \
+   +PACKAGE_luci-app-splash:iptables-mod-ipopt
   TITLE:=Freifunk DHCP-Splash application
 endef
 
@@ -687,7 +691,8 @@ endef
 define Package/luci-app-p2pblock
   $(call Package/luci/webtemplate)
   TITLE:=LuCI Support for the Freifunk P2P-Block addon
-  DEPENDS+=+luci-admin-core +luci-app-firewall +PACKAGE_luci-app-p2pblock:freifunk-p2pblock
+  DEPENDS+=+luci-admin-core +luci-app-firewall \
+    +PACKAGE_luci-app-p2pblock:freifunk-p2pblock
 endef
 
 define Package/luci-app-p2pblock/install
