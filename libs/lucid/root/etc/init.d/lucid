@@ -9,7 +9,7 @@ set -e
 
 start() {
 	echo -n "Starting $DESC: $NAME"
-	lua -lluci.lucid -e 'luci.lucid.start()' &
+	lua -lluci.lucid -e 'luci.lucid.start()'
 	echo "."
 }
 
