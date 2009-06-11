@@ -30,6 +30,10 @@ LUA_TARGET:=source
 LUCI_CFLAGS:=
 PKG_SELECTED_MODULES:=
 
+ifeq ($(BOARD),brcm-2.4)
+  MAKE_FLAGS += CRAP="1"
+endif
+
 
 include $(INCLUDE_DIR)/package.mk
 
