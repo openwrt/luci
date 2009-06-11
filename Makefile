@@ -12,7 +12,12 @@ all: build
 build: gccbuild luabuild
 
 gccbuild:
-	for i in $(MODULES); do make -C$$i compile; done
+	for i in $(MODULES); do \
+		make -C$$i compile || { \
+			echo "*** Compilation of $$i failed!"; \
+			exit 1; \
+		}; \
+	done
 
 luabuild: i18nbuild
 	for i in $(MODULES); do HOST=$(realpath host) make -C$$i luabuild; done
