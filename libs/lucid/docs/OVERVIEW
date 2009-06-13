@@ -1,0 +1,75 @@
+					LuCId Network Superserver in Lua
+						
+*** Abstract ***
+LuCId is a network superserver written in Lua based on the nixio POSIX library.
+It supports IPv4, IPv6, TLS, asynchronous and synchronous IO and can be extended
+to handle any kind of IO events on file descriptors. LuCId is also able to
+generate RSA private keys and self-signed certificates on demand if the px5g
+keymaster library is available. Both nixio and px5g are libraries created
+by the LuCI developers. 
+
+
+*** Configuration ***
+LuCId uses the UCI Universal Configuration Interface as configuration backend.
+
+There are 4 types of configuration sections and one named section defined:
+The main section of type "lucid" defines the basic framework parameters of LuCId
+These include:
+	* pollinterval: Internal polling interval
+	* threadlimit: Overall maximum number of child processes
+	* daemonize: Whether to daemonize at startup
+	* debug: Whether to enable debug output in syslog
+
+
+The "tcpserver" section type provides the framework for TCP servers:
+Parameters:
+	* entrypoint: Lua module entrypoint (provides a prepare_daemon function)
+	
+The "daemon" sections define instances of servers.
+Parameters may include:
+	* slave: Server slave
+	* publisher: Publishers to be served by this daemon
+	* enabled: Flag (0/1) whether this daemon should be started
+	* address: List of ports / addresses to be bound too, if applicable
+	* encryption: Flag (disabled/enabled) whether to enforce encryption
+	* tls: Reference to the TLS configuration section to use
+	
+The "...Publisher" sections define services to be published through daemons.
+Publishers definitions should be daemon and protocol independent whenever
+possible. Publishers should also implement access restrictions for certain
+network interfaces and for specified UNIX user accounts.
+Publishers usually define but are not required to use the following Parameters:
+	* name: Published Name
+	* physical: Physical source path
+	* virtual: Virtual resource path
+	* domain: Any kind of domain or realm specification
+	* read: ACL containing entities allowed to read the given resource
+	* write: -"-
+	* exec: -"-
+	
+The "tls" sections describe TLS security specifications for TCP servers.
+Parameters:
+	* key: Private Key file
+	* cert: Certificate file
+	* type: Type of certificate and key files (pem, asn1)
+	* generate: Flag (0/1) to determine whether LuCId should generate
+	keys and self-signed certificates if the certificate is not available and
+	the px5g RSA Keymaster is available 
+	
+
+
+*** Workflow ***
+In the preparation phase LuCId loads its configuration using the specification
+given above and prepares its servers, daemons and publishers. It also allocates
+resources such as binding sockets or preparing encryption credentials.
+If everything could be setup correctly LuCId will daemonize - if requested. If
+any errors occur in the preparation phase, LuCId will write to the system logger
+and exit.
+
+After daemonizing the main process is responsible for keeping a list of
+file descriptors that LuCId is polling regularly to handle incoming data events.
+Data events are for example new TCP connection attempts which could cause the
+superserver to fork a new process and invoke a registered handler.
+
+Whenever a sub-process is about to be generate LuCId checks if given resource
+limits are still met. 

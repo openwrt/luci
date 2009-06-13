@@ -1,0 +1,17 @@
+					LuCId HTTP/1.1 Server Slave
+											
+*** Abstract ***
+The LuCId HTTP-Server Slave is an HTTP/1.1 implementation for the LuCId
+superserver loosely based on the LuCI HTTP stack. It supports keep-alive,
+pipelining, basic authentication, kernel-mode file transfer (sendfile()
+through nixio), address and hostname based virtual hosts, custom 404 pages,
+E-Tags, conditional headers, directory indexing and partial file transfers.
+
+
+*** Workflow ***
+After receiving an incoming connection from LuCId, the slave parses the request
+and prepares the environment for the acion handler. After that the virtual host
+will be dispatched and the request will be passed on to the respective handler.
+The handler will enforce access restrictions if configured and then returns a
+status code a set of response headers, as well as a content resource that will
+be sent to the user.

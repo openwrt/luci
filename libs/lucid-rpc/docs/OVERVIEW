@@ -1,0 +1,19 @@
+					LuCId JSON-RPC Server Slave
+											
+*** Abstract ***
+The LuCId JSON-RPC server slave implements the JSON-RPC 1.0 and 2.0 protocol
+to allow efficient light-weight remote procedure calling.
+It provides notification support and several unofficial protocol extensions such
+as:
+	* Close notifications
+	* Raw TCP switching to transfer BLOBs efficiently
+	* Client notification
+
+
+*** Workflow ***
+After receiving an incoming connection from LuCId, the slave analyses the
+request and passes it to the matching handler. The handler will enforce
+access restriction and deserialize the payload data and invokes the assigned
+Lua function in a protected way. In case of a success the handler will serialize
+the response and send it to the client - otherwise a detailed error message
+will be returned.

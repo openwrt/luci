@@ -28,7 +28,10 @@ local UCINAME = lucid.UCINAME
 
 local tcpsockets = {}
 
-
+--- Prepare a daemon and allocate its resources. (superserver callback)
+-- @param config configuration table
+-- @param server LuCId basemodule
+-- @return binary data
 function prepare_daemon(config, server)
 	nixio.syslog("info", "Preparing TCP-Daemon " .. config[".name"])
 	if type(config.address) ~= "table" then
@@ -104,6 +107,9 @@ function prepare_daemon(config, server)
 	end
 end
 
+--- Accept a new TCP connection. (server callback)
+-- @param polle Poll descriptor
+-- @return handler process id or nil, error code, error message 
 function accept(polle)
 	local socket, host, port = polle.fd:accept()
 	if not socket then
@@ -133,6 +139,13 @@ function accept(polle)
 	return unpack(stat)
 end
 
+--- Prepare a TCP server socket.
+-- @param family protocol family ["inetany", "inet6", "inet"]
+-- @param host host
+-- @param port port
+-- @param opts table of socket options
+-- @param backlog socket backlog
+-- @return socket, final socket family
 function prepare_socket(family, host, port, opts, backlog)
 	nixio.syslog("info", "Preparing socket for port " .. port)
 	backlog = backlog or 1024
@@ -171,6 +184,10 @@ function prepare_socket(family, host, port, opts, backlog)
 	return socket, family
 end
 
+--- Prepare a TLS server context and load keys and certificates.
+-- May invoke px5g to create keys and certificate on demand if available.
+-- @param tlskey TLS configuration identifier
+-- @return TLS server conext or nil
 function prepare_tls(tlskey)
 	local tls
 	if tlskey and cursor:get(UCINAME, tlskey) then
