@@ -28,8 +28,16 @@ local date = require "luci.http.protocol.date"
 local mime = require "luci.http.protocol.mime"
 local cond = require "luci.http.protocol.conditionals"
 
+--- File system handler
+-- @cstyle instance
 module "luci.lucid.http.handler.file"
 
+--- Create a simple file system handler.
+-- @class function
+-- @param name Name
+-- @param docroot Physical Document Root
+-- @param options Options
+-- @return Simple file system handler object
 Simple = util.class(srv.Handler)
 
 function Simple.__init__(self, name, docroot, options)
@@ -42,6 +50,10 @@ function Simple.__init__(self, name, docroot, options)
 	self.error404 = options.error404
 end
 
+--- Parse a range request.
+-- @param request Request object
+-- @param size File size
+-- @return offset, length, range header or boolean status
 function Simple.parse_range(self, request, size)
 	if not request.headers.Range then
 		return true
@@ -75,6 +87,9 @@ function Simple.parse_range(self, request, size)
 	return from, (1 + to - from), range
 end
 
+--- Translate path and return file information.
+-- @param uri Request URI
+-- @return physical file path, file information
 function Simple.getfile(self, uri)
 	if not self.realdocroot then
 		self.realdocroot = fs.realpath(self.docroot)
@@ -86,6 +101,9 @@ function Simple.getfile(self, uri)
 	return file, fs.stat(file)
 end
 
+--- Handle a GET request.
+-- @param request Request object
+-- @return status code, header table, response source
 function Simple.handle_GET(self, request)
 	local file, stat = self:getfile(prot.urldecode(request.env.PATH_INFO, true))
 
@@ -190,7 +208,7 @@ function Simple.handle_GET(self, request)
 					'p { margin:0 }'										..
 					'\n</style></head><body><h1>Index of %s/</h1><hr /><ul>'..
 					'<li><p><a href="%s/../">../</a> '						..
-					'<small>(parent directory)</small><br />'						..
+					'<small>(parent directory)</small><br />'				..
 					'<small></small></li>',
 					duri, duri, ruri 
 			)
@@ -244,6 +262,9 @@ function Simple.handle_GET(self, request)
 	end
 end
 
+--- Handle a HEAD request.
+-- @param request Request object
+-- @return status code, header table, response source
 function Simple.handle_HEAD(self, ...)
 	local stat, head = self:handle_GET(...)
 	return stat, head

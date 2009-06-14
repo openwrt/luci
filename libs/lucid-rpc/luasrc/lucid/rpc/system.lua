@@ -17,8 +17,10 @@ local srv = require "luci.lucid.rpc.server"
 local nixio = require "nixio"
 local lucid = require "luci.lucid"
 
+--- Internal system functions.
 module "luci.lucid.rpc.system"
 
+-- Prepare the RPC module.
 function _factory()
 	local mod = srv.Module("System functions"):register({
 		echo = echo,
@@ -34,15 +36,22 @@ function _factory()
 	return mod
 end
 
-
+--- Simple echo test function.
+-- @param object to be echoed object
+-- @return echo object
 function echo(object)
 	return object
 end
 
+--- Simple void test function.
 function void()
 
 end
 
+--- Accumulate different requests and execute them.
+-- @param session Session object
+-- @param ...
+-- @return overall response object
 function multicall(session, ...)
 	local server, responses, response = session.server, {}, nil
 	for k, req in ipairs({...}) do
@@ -69,6 +78,12 @@ function multicall(session, ...)
 	return responses
 end
 
+--- Create or use a new authentication token.
+-- @param session Session object
+-- @param type Authentication type
+-- @param entity Authentication enttity (username)
+-- @param key Authentication key (password)
+-- @return boolean status
 function authenticate(session, type, entity, key)
 	if not type then
 		session.user = nil

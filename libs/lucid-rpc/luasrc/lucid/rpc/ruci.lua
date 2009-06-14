@@ -16,8 +16,10 @@ local error, type = error, type
 local nixio = require "nixio"
 local srv = require "luci.lucid.rpc.server"
 
+--- Remote UCI functions.
 module "luci.lucid.rpc.ruci"
 
+-- Prepare the remote UCI functions.
 function _factory()
 	local m = srv.Module("Remote UCI API")
 	
@@ -30,16 +32,19 @@ function _factory()
 	return m
 end
 
+-- Get the associate RUCI instance.
 local function getinst(session, name)
 	return session.ruci and session.ruci[name]
 end
 
+-- Set a new RUCI instance.
 local function setinst(session, obj)
 	session.ruci = session.ruci or {}
 	local name = tostring(obj):match("0x([a-z0-9]+)")
 	session.ruci[name] = obj
 	return name
 end
+
 
 local Cursor = getmetatable(uci.cursor())
 
@@ -50,14 +55,28 @@ for name, func in pairs(Cursor) do
 	end
 end
 
+--- Generate a new RUCI cursor.
+-- @param session Session object
+-- @param ... Parameters passed to the UCI constructor
+-- @return RUCI instance
 function cursor(session, ...)
 	return setinst(session, uci.cursor(...))
 end
 
+--- Generate a new RUCI state cursor.
+-- @param session Session object
+-- @param ... Parameters passed to the UCI constructor
+-- @return RUCI instance
 function cursor_state(session, ...)
 	return setinst(session, uci.cursor_state(...))
 end
 
+--- Custom foreach function.
+-- @param session Session object
+-- @param inst RUCI instance
+-- @param config UCI config
+-- @param sectiontype UCI sectiontype
+-- @return section data
 function foreach(session, inst, config, sectiontype)
 	local inst = getinst(session, inst)
 	local secs = {}

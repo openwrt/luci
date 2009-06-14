@@ -17,7 +17,9 @@ local srv = require "luci.lucid.http.server"
 
 module "luci.lucid.http.Redirector"
 
-
+--- Prepare a redirector publisher and assign it to a given Virtual Host.
+-- @param server HTTP daemon object
+-- @param config publisher configuration
 function factory(server, config)
 	config.domain = config.domain or ""
 	local vhost = server:get_vhosts()[config.domain] 

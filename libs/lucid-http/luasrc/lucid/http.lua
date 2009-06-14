@@ -17,6 +17,9 @@ local srv = require "luci.lucid.http.server"
 
 module "luci.lucid.http"
 
+--- Prepare the HTTP-daemon and its associated publishers.
+-- @param publisher Table of publishers
+-- @return factory callback or nil, error message
 function factory(publisher)
 	local server = srv.Server()
 	for _, r in ipairs(publisher) do

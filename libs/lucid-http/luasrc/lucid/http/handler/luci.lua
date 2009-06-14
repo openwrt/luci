@@ -19,8 +19,15 @@ local srv = require "luci.lucid.http.server"
 local coroutine = require "coroutine"
 local type = type
 
+--- LuCI web handler
+-- @cstyle instance
 module "luci.lucid.http.handler.luci"
 
+--- Create a LuCI web handler.
+-- @class function
+-- @param name Name
+-- @param prefix Dispatching prefix
+-- @return LuCI web handler object
 Luci = util.class(srv.Handler)
 
 function Luci.__init__(self, name, prefix)
@@ -28,15 +35,24 @@ function Luci.__init__(self, name, prefix)
 	self.prefix = prefix
 end
 
+--- Handle a HEAD request.
+-- @param request Request object
+-- @return status code, header table, response source
 function Luci.handle_HEAD(self, ...)
 	local stat, head = self:handle_GET(...)
 	return stat, head
 end
 
+--- Handle a POST request.
+-- @param request Request object
+-- @return status code, header table, response source
 function Luci.handle_POST(self, ...)
 	return self:handle_GET(...)
 end
 
+--- Handle a GET request.
+-- @param request Request object
+-- @return status code, header table, response source
 function Luci.handle_GET(self, request, sourcein)
 	local r = http.Request(
 		request.env,

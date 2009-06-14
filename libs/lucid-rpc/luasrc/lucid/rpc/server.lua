@@ -22,6 +22,8 @@ local util = require "luci.util"
 local table = require "table"
 local ltn12 = require "luci.ltn12"
 
+--- RPC daemom.
+-- @cstyle instance
 module "luci.lucid.rpc.server"
 
 RQLIMIT = 32 * nixio.const.buffersize
@@ -48,9 +50,18 @@ ERRMSG = {
 }
 
 
-
+--- Create an RPC method wrapper.
+-- @class function
+-- @param method Lua function
+-- @param description Method description
+-- @return Wrapped RPC method 
 Method = util.class()
 
+--- Create an extended wrapped RPC method.
+-- @class function
+-- @param method Lua function
+-- @param description Method description
+-- @return Wrapped RPC method 
 function Method.extended(...)
 	local m = Method(...)
 	m.call = m.xcall
@@ -62,14 +73,26 @@ function Method.__init__(self, method, description)
 	self.method = method
 end
 
+--- Extended call the associated function.
+-- @param session Session storage
+-- @param argv Request parameters
+-- @return function call response
 function Method.xcall(self, session, argv)
 	return self.method(session, unpack(argv))
 end
 
+--- Standard call the associated function.
+-- @param session Session storage
+-- @param argv Request parameters
+-- @return function call response
 function Method.call(self, session, argv)
 	return self.method(unpack(argv))
 end
 
+--- Process a given request and create a JSON response.
+-- @param session Session storage
+-- @param request Requested method
+-- @param argv Request parameters
 function Method.process(self, session, request, argv)
 	local stat, result = pcall(self.call, self, session, argv)
 	
@@ -84,7 +107,7 @@ function Method.process(self, session, request, argv)
 	end
 end
 
-
+-- Remap IPv6-IPv4-compatibility addresses to IPv4 addresses
 local function remapipv6(adr)
 	local map = "::ffff:"
 	if adr:sub(1, #map) == map then
@@ -94,6 +117,11 @@ local function remapipv6(adr)
 	end 
 end
 
+
+--- Create an RPC module.
+-- @class function
+-- @param description Method description
+-- @return RPC module 
 Module = util.class()
 
 function Module.__init__(self, description)
@@ -101,11 +129,15 @@ function Module.__init__(self, description)
 	self.handler = {}
 end
 
+--- Add a handler.
+-- @param k key
+-- @param v handler
 function Module.add(self, k, v)
 	self.handler[k] = v
 end
 
--- Access Restrictions
+--- Add an access restriction.
+-- @param restriction Restriction specification
 function Module.restrict(self, restriction)
 	if not self.restrictions then
 		self.restrictions = {restriction}
@@ -114,7 +146,9 @@ function Module.restrict(self, restriction)
 	end
 end
 
--- Check restrictions
+--- Enforce access restrictions.
+-- @param request Request object
+-- @return nil or HTTP statuscode, table of headers, response source
 function Module.checkrestricted(self, session, request, argv)
 	if not self.restrictions then
 		return
@@ -149,6 +183,10 @@ function Module.checkrestricted(self, session, request, argv)
 	return {error={code=ERRNO_NOACCESS, message=ERRMSG[ERRNO_NOACCESS]}}
 end
 
+--- Register a handler, submodule or function.
+-- @param m entity
+-- @param descr description
+-- @return Module (self)
 function Module.register(self, m, descr)
 	descr = descr or {}
 	for k, v in pairs(m) do
@@ -164,6 +202,11 @@ function Module.register(self, m, descr)
 	return self
 end
 
+--- Process a request.
+-- @param session Session storage
+-- @param request Request object
+-- @param argv Request parameters
+-- @return JSON response object
 function Module.process(self, session, request, argv)
 	local first, last = request:match("^([^.]+).?(.*)$")
 
@@ -182,21 +225,34 @@ function Module.process(self, session, request, argv)
 end
 
 
-
+--- Create a server object.
+-- @class function
+-- @param root Root module
+-- @return Server object
 Server = util.class()
 
 function Server.__init__(self, root)
 	self.root = root
 end
 
+--- Get the associated root module.
+-- @return Root module
 function Server.get_root(self)
 	return self.root
 end
 
+--- Set a new root module.
+-- @param root Root module
 function Server.set_root(self, root)
 	self.root = root
 end
 
+--- Create a JSON reply.
+-- @param jsonrpc JSON-RPC version
+-- @param id Message id
+-- @param res Result
+-- @param err Error
+-- @reutrn JSON response source
 function Server.reply(self, jsonrpc, id, res, err)
 	id = id or json.null
 	
@@ -212,6 +268,9 @@ function Server.reply(self, jsonrpc, id, res, err)
 		):source()
 end
 
+--- Handle a new client connection.
+-- @param client client socket
+-- @param env superserver environment
 function Server.process(self, client, env)
 	local decoder
 	local sinkout = client:sink()

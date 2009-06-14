@@ -18,6 +18,10 @@ local srv = require "luci.lucid.http.server"
 
 module "luci.lucid.http.LuciWebPublisher"
 
+
+--- Prepare a LuCI web publisher and assign it to a given Virtual Host.
+-- @param server HTTP daemon object
+-- @param config publisher configuration
 function factory(server, config)
 	pcall(function()
 		require "luci.dispatcher"

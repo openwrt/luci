@@ -17,7 +17,9 @@ local srv = require "luci.lucid.rpc.server"
 
 module "luci.lucid.rpc"
 
-
+--- Prepare the RPC-daemon and its associated publishers.
+-- @param publisher Table of publishers
+-- @return factory callback or nil, error message
 function factory(publisher)
 	local root = srv.Module()
 	local server = srv.Server(root)
