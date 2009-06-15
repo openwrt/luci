@@ -37,9 +37,9 @@ define Package/libcyassl-luci/description
 	CyaSSL is an SSL library optimized for small footprint, both on disk and for memory use.
 endef
 
-TARGET_CFLAGS += $(FPIC) -DTFM_NO_ASM
+TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS += --without-zlib --enable-fastmath
+CONFIGURE_ARGS += --without-zlib
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/ctaocrypt

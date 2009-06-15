@@ -59,6 +59,15 @@ ssize_t splice(int __fdin, __off64_t *__offin, int __fdout,
 	return -1;
 #endif
 }
+
+#undef SPLICE_F_MOVE
+#undef SPLICE_F_NONBLOCK
+#undef SPLICE_F_MORE
+
+#define SPLICE_F_MOVE 1
+#define SPLICE_F_NONBLOCK 2
+#define SPLICE_F_MORE 4
+
 #endif /* __UCLIBC__ */
 
 /**
