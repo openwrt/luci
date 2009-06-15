@@ -85,7 +85,7 @@ $(AXTLS_DIR)/.prepared:
 	touch $@
 
 src/libaxtls.a: $(AXTLS_DIR)/.prepared
-	$(MAKE) -C $(AXTLS_DIR) CC=$(CC) CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
+	$(MAKE) -C $(AXTLS_DIR) CC="$(CC)" CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
 	cp -p $(AXTLS_DIR)/_stage/libaxtls.a src
 
 clean: luaclean
