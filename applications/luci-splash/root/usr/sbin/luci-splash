@@ -103,7 +103,7 @@ function add_rule(mac)
 		end
 	end
 
-	os.execute("iptables -t filter -I luci_splash_counter -m mac --mac-source %q -j RETURN" % mac)
+	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
 	return os.execute("iptables -t nat -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
 end
 
@@ -114,20 +114,16 @@ function remove_rule(mac)
 
 	local function ipt_delete_foreach(args)
 		for _, r in ipairs(ipt:find(args)) do
-			if r.options and #r.options >= 2 and r.options[1] == "MAC" and
-			   r.options[2]:lower() == mac:lower()
-			then
-				os.execute("iptables -t %q -D %q -m mac --mac-source %q %s 2>/dev/null"
-					%{ r.table, r.chain, mac,
-						r.target == "MARK" and "-j MARK --set-mark 79" or
-							r.target and "-j %q" % r.target or "" })
-			end
+			os.execute("iptables -t %q -D %q -m mac --mac-source %q %s 2>/dev/null"
+				%{ r.table, r.chain, mac,
+					r.target == "MARK" and "-j MARK --set-mark 79" or
+						r.target and "-j %q" % r.target or "" })
 		end
 	end
 
-	ipt_delete_foreach({table="filter", chain="luci_splash_counter"})
-	ipt_delete_foreach({table="mangle", chain="luci_splash_mark"})
-	ipt_delete_foreach({table="nat", chain="luci_splash_leases"})
+	ipt_delete_foreach({table="filter", chain="luci_splash_filter", options={"MAC", mac:upper()}})
+	ipt_delete_foreach({table="mangle", chain="luci_splash_mark", options={"MAC", mac:upper()}})
+	ipt_delete_foreach({table="nat", chain="luci_splash_leases", options={"MAC", mac:upper()}})
 
 	for _, i in ipairs(splash_interfaces) do
 		os.execute("tc filter del dev %q parent 77:0 protocol ip prio 2 " % i .. 
@@ -173,10 +169,8 @@ end
 -- Returns a list of MAC-Addresses for which a rule is existing
 function listrules()
 	local macs = { }
-	for i, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
-		if r.options and #r.options >= 2 and r.options[1] == "MAC" then
-			macs[r.options[2]:lower()] = true
-		end
+	for i, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases", options={"MAC"}})) do
+		macs[r.options[2]:lower()] = true
 	end
 	return luci.util.keys(macs)
 end

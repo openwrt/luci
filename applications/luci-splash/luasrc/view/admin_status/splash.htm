@@ -58,13 +58,11 @@ for _, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
 	end
 end
 
-for _, r in ipairs(ipt:find({table="filter", chain="luci_splash_counter"})) do
-	if r.options and #r.options >= 2 and r.options[1] == "MAC" then
-		local c = clients[r.options[2]:lower()]
-		if c and c.packets == 0 then
-			c.bytes   = tonumber(r.bytes)
-			c.packets = tonumber(r.packets)
-		end
+for _, r in ipairs(ipt:find({table="filter", chain="luci_splash_filter", options={"MAC"}})) do
+	local c = clients[r.options[2]:lower()]
+	if c and c.packets == 0 then
+		c.bytes   = tonumber(r.bytes)
+		c.packets = tonumber(r.packets)
 	end
 end
 

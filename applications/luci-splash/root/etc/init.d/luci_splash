@@ -28,12 +28,30 @@ iface_add() {
 	config_get netmask "$net" netmask
 	[ -n "$netmask" ] || return 0
 	
+	config_get parentiface "$net" interface
+	[ -n "$parentiface" ] && {
+		config_get parentproto   "$parentiface" proto
+		config_get parentipaddr  "$parentiface" ipaddr
+		config_get parentnetmask "$parentiface" netmask
+	}
+	
 	eval "$(ipcalc.sh $ipaddr $netmask)"
 
 	iptables -t nat -A prerouting_${zone} -j luci_splash_prerouting
-	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -p ! tcp -j luci_splash_portal
-	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -d ! "$ipaddr" -j luci_splash_portal
-	iptables -t nat -A luci_splash_prerouting -s "$NETWORK/$PREFIX" -d "$ipaddr" -p tcp -m multiport ! --dport 22,80,443 -j luci_splash_portal
+	iptables -t nat -A luci_splash_prerouting -j luci_splash_portal
+
+	iptables -t filter -I luci_splash_filter -s "$NETWORK/$PREFIX" -d "$ipaddr/${netmask:-32}" -j RETURN
+	iptables -t nat    -I luci_splash_leases -s "$NETWORK/$PREFIX" -d "$ipaddr/${netmask:-32}" -j RETURN
+
+	[ "$parentproto" = "static" -a -n "$parentipaddr" ] && {
+		iptables -t filter -I luci_splash_filter -s "$NETWORK/$PREFIX" -d "$parentipaddr/${parentnetmask:-32}" -j RETURN
+		iptables -t nat    -I luci_splash_leases -s "$NETWORK/$PREFIX" -d "$parentipaddr/${parentnetmask:-32}" -j RETURN
+	}
+
+	iptables -t filter -A luci_splash_filter -s "$NETWORK/$PREFIX" -p udp --dport 53 -j RETURN
+	iptables -t filter -A luci_splash_filter -s "$NETWORK/$PREFIX" -p tcp --dport 22 -j RETURN    # XXX: ssh really needed?
+	iptables -t filter -A luci_splash_filter -s "$NETWORK/$PREFIX" -p tcp --dport 80 -j RETURN
+	iptables -t filter -A luci_splash_filter -s "$NETWORK/$PREFIX" -j REJECT --reject-with icmp-admin-prohibited
 
 	qos_iface_add "$ifname"
 
@@ -44,10 +62,13 @@ iface_del() {
 	config_get zone "$1" zone                                                                
 	[ -n "$zone" ] || return 0
 
-	config_get ifname "$1" ifname
-	[ -n "$ifname" ] || return 0
-
 	while iptables -t nat -D prerouting_${zone} -j luci_splash_prerouting 2>&-; do :; done
+
+	config_get net "$1" network
+	[ -n "$net" ] || return 0
+
+	config_get ifname "$net" ifname
+	[ -n "$ifname" ] || return 0
 
 	qos_iface_del "$ifname"
 }
@@ -57,8 +78,8 @@ blacklist_add() {
 	
 	config_get mac "$cfg" mac
 	[ -n "$mac" ] && {
-		iptables -t filter -I luci_splash_counter -m mac --mac-source "$mac" -j RETURN
-		iptables -t nat    -I luci_splash_leases  -m mac --mac-source "$mac" -j DROP
+		iptables -t filter -I luci_splash_filter -m mac --mac-source "$mac" -j DROP
+		iptables -t nat    -I luci_splash_leases -m mac --mac-source "$mac" -j DROP
 	}
 }
 
@@ -67,8 +88,8 @@ whitelist_add() {
 	
 	config_get mac "$cfg" mac
 	[ -n "$mac" ] && {
-		iptables -t filter -I luci_splash_counter -m mac --mac-source "$mac" -j RETURN
-		iptables -t nat    -I luci_splash_leases  -m mac --mac-source "$mac" -j RETURN
+		iptables -t filter -I luci_splash_filter -m mac --mac-source "$mac" -j RETURN
+		iptables -t nat    -I luci_splash_leases -m mac --mac-source "$mac" -j RETURN
 	}
 }
 
@@ -89,15 +110,30 @@ lease_add() {
 		local mac_post="$3$4$5$6"
 		local handle="$6"
 
-		iptables -t filter -I luci_splash_counter -m mac --mac-source "$mac" -j RETURN
-		iptables -t mangle -I luci_splash_mark    -m mac --mac-source "$mac" -j MARK --set-mark 79
-		iptables -t nat    -I luci_splash_leases  -m mac --mac-source "$mac" -j "${ban:-RETURN}"
+		iptables -t filter -I luci_splash_filter -m mac --mac-source "$mac" -j RETURN
+		iptables -t nat    -I luci_splash_leases -m mac --mac-source "$mac" -j "${ban:-RETURN}"
 
-		for i in $SPLASH_INTERFACES; do
-			tc filter add dev $i parent 77:0 protocol ip prio 2 handle ::$handle u32 \
-				match u16 0x0800 0xFFFF at -2 match u32 0x$mac_post 0xFFFFFFFF at -12 \
-				match u16 0x$mac_pre 0xFFFF at -14 flowid 77:10
-		done
+		[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
+			iptables -t mangle -I luci_splash_mark -m mac --mac-source "$mac" -j MARK --set-mark 79
+
+			for i in $SPLASH_INTERFACES; do
+				tc filter add dev $i parent 77:0 protocol ip prio 2 handle ::$handle u32 \
+					match u16 0x0800 0xFFFF at -2 match u32 0x$mac_post 0xFFFFFFFF at -12 \
+					match u16 0x$mac_pre 0xFFFF at -14 flowid 77:10
+			done
+		}
+	}
+}
+
+subnet_add() {
+	local cfg="$1"
+	
+	config_get ipaddr  "$cfg" ipaddr
+	config_get netmask "$cfg" netmask
+	
+	[ -n "$ipaddr" ] && {
+		iptables -t filter -I luci_splash_filter -d "$ipaddr/${netmask:-32}" -j RETURN
+		iptables -t nat    -I luci_splash_portal -d "$ipaddr/${netmask:-32}" -j RETURN
 	}
 }
 
@@ -118,7 +154,7 @@ qos_iface_add() {
 
 		# set download limit and burst
 		tc class add dev "$iface" parent 77:1 classid 77:10 htb \
-			rate ${LIMIT_DOWN}kbit ceil ${LIMIT_DOWN_BURST}kbit prio 2
+			rate ${LIMIT_DOWN}kb ceil ${LIMIT_DOWN_BURST}kb prio 2
 
 		tc qdisc add dev "$iface" parent 77:10 handle 78: sfq perturb 10
 
@@ -127,7 +163,7 @@ qos_iface_add() {
 
 		# set client upload speed
 		tc filter add dev "$iface" parent ffff: protocol ip prio 1 \
-			handle 79 fw police rate ${LIMIT_UP}kbit mtu 6k burst 6k drop
+			handle 79 fw police rate ${LIMIT_UP}kb mtu 6k burst 6k drop
 	fi	
 }
 
@@ -186,7 +222,7 @@ start() {
 	}
 
 	### Create subchains
-	iptables -t filter -N luci_splash_counter
+	iptables -t filter -N luci_splash_filter
 	iptables -t nat    -N luci_splash_portal
 	iptables -t nat    -N luci_splash_leases
 	iptables -t nat    -N luci_splash_prerouting
@@ -196,25 +232,28 @@ start() {
 
 	### Build the main and portal rule
 	config_foreach iface_add iface
+	config_foreach subnet_add subnet
 	config_foreach blacklist_add blacklist
 	config_foreach whitelist_add whitelist
 	config_foreach lease_add lease
 	
 	### Build the portal rule
-	iptables -t filter -I INPUT      -j luci_splash_counter
-	iptables -t filter -I FORWARD    -j luci_splash_counter
+	iptables -t filter -I INPUT      -j luci_splash_filter
+	iptables -t filter -I FORWARD    -j luci_splash_filter
 
 	[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && \
 		iptables -t mangle -I PREROUTING -j luci_splash_mark
-	
+
+	### Allow icmp, dns and traceroute
 	iptables -t nat -A luci_splash_portal -p udp --dport 33434:33523 -j RETURN
 	iptables -t nat -A luci_splash_portal -p icmp -j RETURN
 	iptables -t nat -A luci_splash_portal -p udp --dport 53 -j RETURN
+
+	### Redirect the rest into the lease chain
 	iptables -t nat -A luci_splash_portal -j luci_splash_leases
 	
 	### Build the leases rule
 	iptables -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
-	iptables -t nat -A luci_splash_leases -j DROP
 	
 	### Add crontab entry
 	test -f /etc/crontabs/root || touch /etc/crontabs/root
@@ -225,25 +264,27 @@ start() {
 
 stop() {
 	### Clear interface rules
+	include /lib/network
+	scan_interfaces
 	config_load luci_splash
 	config_foreach iface_del iface
 
-	silent iptables -t filter -D INPUT      -j luci_splash_counter
-	silent iptables -t filter -D FORWARD    -j luci_splash_counter
+	silent iptables -t filter -D INPUT      -j luci_splash_filter
+	silent iptables -t filter -D FORWARD    -j luci_splash_filter
 	silent iptables -t mangle -D PREROUTING -j luci_splash_mark
         
 	### Clear subchains
 	silent iptables -t nat    -F luci_splash_leases
 	silent iptables -t nat    -F luci_splash_portal
 	silent iptables -t nat    -F luci_splash_prerouting
-	silent iptables -t filter -F luci_splash_counter
+	silent iptables -t filter -F luci_splash_filter
 	silent iptables -t mangle -F luci_splash_mark
 	
 	### Delete subchains
 	silent iptables -t nat    -X luci_splash_leases
 	silent iptables -t nat    -X luci_splash_portal
 	silent iptables -t nat    -X luci_splash_prerouting
-	silent iptables -t filter -X luci_splash_counter
+	silent iptables -t filter -X luci_splash_filter
 	silent iptables -t mangle -X luci_splash_mark
 	
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
