@@ -14,6 +14,8 @@ $Id$
 local srv = require "luci.lucid.http.server"
 local proto = require "luci.http.protocol"
 local util = require "luci.util"
+local ip = require "luci.ip"
+local ipairs = ipairs
 
 --- Catchall Handler
 -- @cstyle instance
@@ -37,7 +39,21 @@ end
 function Redirect.handle_GET(self, request)
 	local target = self.target
 	local protocol = request.env.HTTPS and "https://" or "http://"
-	local server = request.env.SERVER_ADDR
+	local server
+
+	if request.env.REMOTE_ADDR and not request.env.REMOTE_ADDR:find(":") then
+		local compare = ip.IPv4(request.env.REMOTE_ADDR)
+		for _, iface in ipairs(request.server.interfaces) do
+			if iface.family == "inet" and iface.addr and iface.netmask then
+				if ip.IPv4(iface.addr, iface.netmask):contains(compare) then
+					server = iface.addr
+					break
+				end
+			end
+		end
+	else
+		server = request.env.SERVER_ADDR
+	end
 	if server:find(":") then
 		server = "[" .. server .. "]"
 	end
