@@ -69,12 +69,6 @@ define Package/luci/fftemplate
   DEPENDS:=+luci-mod-freifunk
 endef
 
-define Package/luci/httpdtemplate
-  $(call Package/luci/libtemplate)
-  SUBMENU:=LuCIttpd
-  DEPENDS:=+luci-httpd
-endef
-
 define Package/luci/i18ntemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=LuCI Translations
@@ -335,20 +329,6 @@ endef
 
 define Package/luci-uvl/install
 	$(call Package/luci/install/template,$(1),libs/uvl)
-endef
-
-
-
-### HTTPD ###
-
-define Package/luci-httpd
-  $(call Package/luci/httpdtemplate)
-  DEPENDS:=+luci-http +libuci
-  TITLE:=Server Core
-endef
-
-define Package/luci-httpd/install
-	$(call Package/luci/install/template,$(1),libs/lucittpd)
 endef
 
 
@@ -938,10 +918,6 @@ ifneq ($(CONFIG_PACKAGE_luci-uvl),)
 	PKG_SELECTED_MODULES+=libs/uvl
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-httpd),)
-	PKG_SELECTED_MODULES+=libs/lucittpd
-endif
-
 ifneq ($(CONFIG_PACKAGE_luci-admin-core),)
 	PKG_SELECTED_MODULES+=modules/admin-core
 endif
@@ -1121,8 +1097,6 @@ $(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
 $(eval $(call BuildPackage,luci-uvl))
-
-$(eval $(call BuildPackage,luci-httpd))
 
 $(eval $(call BuildPackage,luci-admin-core))
 $(eval $(call BuildPackage,luci-admin-mini))
