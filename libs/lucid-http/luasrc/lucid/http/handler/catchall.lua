@@ -39,7 +39,7 @@ end
 function Redirect.handle_GET(self, request)
 	local target = self.target
 	local protocol = request.env.HTTPS and "https://" or "http://"
-	local server
+	local server = request.env.SERVER_ADDR
 
 	if request.env.REMOTE_ADDR and not request.env.REMOTE_ADDR:find(":") then
 		local compare = ip.IPv4(request.env.REMOTE_ADDR)
@@ -51,9 +51,8 @@ function Redirect.handle_GET(self, request)
 				end
 			end
 		end
-	else
-		server = request.env.SERVER_ADDR
 	end
+
 	if server:find(":") then
 		server = "[" .. server .. "]"
 	end
