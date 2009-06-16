@@ -37,12 +37,13 @@ endef
 
 define Package/freifunk-firewall/postinst
 #!/bin/sh
-
-if ! grep -q /etc/firewall.freifunk /etc/config/firewall; then
-  uci add firewall include >/dev/null
-  uci set firewall.@include[-1].path=/etc/firewall.freifunk
-  uci commit firewall
-fi
+[ -n "${IPKG_INSTROOT}" ] || {
+  if ! grep -q /etc/firewall.freifunk /etc/config/firewall; then
+    uci add firewall include >/dev/null
+    uci set firewall.@include[-1].path=/etc/firewall.freifunk
+    uci commit firewall
+  fi
+}
 endef
 
 define Package/freifunk-firewall/install
