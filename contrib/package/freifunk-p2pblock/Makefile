@@ -15,8 +15,9 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/freifunk-p2pblock
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=luci
+  CATEGORY:=LuCI
+  SUBMENU:=Freifunk
   TITLE:=Freifunk p2pblock Addon
   DEPENDS:=+iptables-mod-filter +l7-protocols +iptables-mod-conntrack-extra
 endef

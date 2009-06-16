@@ -16,8 +16,9 @@ PKG_BUILD_DEPENDS := uci
 include $(INCLUDE_DIR)/package.mk
 
 define Package/freifunk-watchdog
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=luci
+  CATEGORY:=LuCI
+  SUBMENU:=Freifunk
   TITLE:=Freifunk Ad-Hoc watchdog daemon
   DEPENDS:=libuci
 endef

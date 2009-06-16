@@ -30,10 +30,10 @@ endef
 $(eval $(call Download,tzcode))
 
 define Package/zoneinfo/default
-  SUBMENU:=Zones (ZoneInfo)
+  SUBMENU:=ZoneInfo
   TITLE:=Zone Information
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=luci
+  CATEGORY:=LuCI
 endef
 
 define Package/zoneinfo-core

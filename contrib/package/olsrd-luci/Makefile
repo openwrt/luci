@@ -33,8 +33,9 @@ include $(INCLUDE_DIR)/package.mk
 
 
 define Package/olsrd-luci/common_info
-	SECTION:=net
-	CATEGORY:=Network
+	SECTION:=luci
+	CATEGORY:=LuCI
+	SUBMENU:=Freifunk
 	TITLE:=OLSR - Optimized Link State Routing Daemon
 	URL:=http://www.olsr.org/
 	MAINTAINER:=Jo-Philipp Wich <xm@subsignal.org>
