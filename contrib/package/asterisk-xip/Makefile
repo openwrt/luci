@@ -35,8 +35,9 @@ STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar, \
 
 define Package/asterisk14-xip/Default
   SUBMENU:=asterisk14-xip (Complete Open Source PBX), v1.4.x
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=luci
+  CATEGORY:=LuCI
+  SUBMENU:=Asterisk
   URL:=http://www.asterisk.org/
 endef
 

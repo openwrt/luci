@@ -27,9 +27,9 @@ endef
 
 define Package/libcyassl-luci
   $(call Package/cyassl-luci/Default)
-  SECTION:=libs
-  SUBMENU:=SSL
-  CATEGORY:=Libraries
+  SECTION:=luci
+  CATEGORY:=LuCI
+  SUBMENU:=Libraries
   TITLE+= (library)
 endef
 

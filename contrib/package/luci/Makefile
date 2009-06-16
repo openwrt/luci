@@ -54,36 +54,36 @@ endef
 ### Templates ###
 
 define Package/luci/libtemplate
-  SECTION:=admin
-  CATEGORY:=Administration
+  SECTION:=luci
+  CATEGORY:=LuCI
   TITLE:=LuCI - Lua Configuration Interface
   URL:=http://luci.freifunk-halle.net/
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
-  SUBMENU:=LuCI Libraries
+  SUBMENU:=Libraries
   DEPENDS:=+luci-core
 endef
 
 define Package/luci/fftemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Freifunk Support
+  SUBMENU:=Freifunk
   DEPENDS:=+luci-mod-freifunk
 endef
 
 define Package/luci/i18ntemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Translations
+  SUBMENU:=Translations
   DEPENDS:=+luci-web
 endef
 
 define Package/luci/thtemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Themes
+  SUBMENU:=Themes
   DEPENDS:=+luci-web
 endef
 
 define Package/luci/webtemplate
   $(call Package/luci/libtemplate)
-  SUBMENU:=LuCI Components
+  SUBMENU:=Components
 endef
 
 
@@ -406,7 +406,7 @@ endef
 
 define Package/luci-mod-freifunk
   $(call Package/luci/fftemplate)
-  DEPENDS:=+luci-admin-full +luci-json
+  DEPENDS:=+luci-admin-full +luci-json +PACKAGE_luci-mod-freifunk:freifunk-firewall
   TITLE:=LuCI Freifunk module
 endef
 
