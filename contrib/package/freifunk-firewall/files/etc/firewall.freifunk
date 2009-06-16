@@ -1,0 +1,62 @@
+#!/bin/sh
+# Freifunk Firewall addons
+# $Id: firewall.freifunk 4771 2009-06-07 11:57:52Z jow $
+
+
+#
+# Apply advanced settings
+#
+apply_advanced() {
+	local tcp_ecn
+	local tcp_window_scaling
+	local accept_redirects
+	local accept_source_route
+
+	config_get_bool tcp_ecn $1 tcp_ecn 1
+	config_get ip_conntrack_max $1 ip_conntrack_max
+	config_get_bool tcp_westwood $1 tcp_westwood 0
+	config_get_bool tcp_window_scaling $1 tcp_window_scaling 1
+	config_get_bool accept_redirects $1 accept_redirects 0
+	config_get_bool accept_source_route $1 accept_source_route 0
+
+	logger -t firewall.freifunk "tcp_ecn is $tcp_ecn"
+	logger -t firewall.freifunk "tcp_window_scaling is $tcp_window_scaling"
+	logger -t firewall.freifunk "accept_redirects is $accept_redirects"
+	logger -t firewall.freifunk "accept_source_route is $accept_source_route"
+
+	sysctl -w net.ipv4.tcp_ecn=$tcp_ecn >/dev/null
+	sysctl -w net.ipv4.tcp_window_scaling=$tcp_window_scaling >/dev/null
+	sysctl -w net.ipv4.tcp_westwood=$tcp_westwood >/dev/null
+	sysctl -w net.ipv4.ip_conntrack_max=$ip_conntrack_max >/dev/null
+
+	for f in /proc/sys/net/ipv4/conf/*/accept_redirects; do
+		echo $accept_redirects > $f
+	done
+
+	for f in /proc/sys/net/ipv4/conf/*/accept_source_route; do
+		echo $accept_source_route > $f
+	done
+}
+
+config_foreach apply_advanced advanced
+
+
+#
+# Apply fixes for masquerading rules
+#
+apply_nat_fix() {
+	local up
+	local ifname
+	config_get up $1 up
+	[ -n "$up" ] || return 0
+	(ACTION="ifup" INTERFACE="$1" . /etc/hotplug.d/iface/22-firewall-nat-fix )
+}
+
+uci_set_state firewall core loaded 1
+config_foreach fw_addif interface
+config_foreach apply_nat_fix interface
+
+[ -x /etc/init.d/luci_splash ] && ( sleep 3; /etc/init.d/luci_splash restart )&
+
+[ -x /etc/init.d/freifunk-p2pblock ] && /etc/init.d/freifunk-p2pblock enabled && \
+	( sleep 3; /etc/init.d/freifunk-p2pblock restart )&
