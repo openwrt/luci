@@ -1,0 +1,41 @@
+# Fixup various configurations to remove quirks
+# from former versions.
+
+_log() {
+	logger -t "Config Migration" "$1"
+}
+
+_uci() {
+	uci get "$1" 2>/dev/null
+}
+
+
+# Splash redirector had a wrong virtual url match
+# which resulted in "No such handler"
+
+[ "$(_uci lucid.splashredir.virtual)" == "/" ] && {
+	_log "Fix splash redirector configuration"
+	uci set lucid.splashredir.virtual=''
+	uci commit lucid
+	/etc/init.d/lucid restart
+}
+
+
+# Newer OLSR versions have the MinTCVtime hack active,
+# ensure proper timings or olsrd won't start
+
+FIX=0
+for i in 0 1 2 3 4; do
+	[ -z "$(_uci olsrd.@Interface[$i].TcInterval)" ] && \
+	[ -z "$(_uci olsrd.@Interface[$i].TcValidityTime)" ] || {
+		uci delete olsrd.@Interface[$i].TcInterval
+		uci delete olsrd.@Interface[$i].TcValidityTime
+		FIX=1
+	}
+done
+
+[ "$FIX" == 1 ] && {
+	_log "Fix olsrd configuration for MinTCVTime hack"
+	uci commit olsrd
+	/etc/init.d/olsrd restart
+}
