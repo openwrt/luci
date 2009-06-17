@@ -266,6 +266,9 @@ function action_upgrade()
 	-- previous pages should arrange the stuff as required.
 	if step == 4 then
 		if has_platform and has_image and has_support then
+			-- Mimetype text/plain
+			luci.http.prepare_content("text/plain")
+
 			-- Now invoke sysupgrade
 			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
 			local fd = io.popen("/sbin/luci-flash %s %q" %{
