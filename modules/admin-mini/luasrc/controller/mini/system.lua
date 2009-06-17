@@ -149,14 +149,20 @@ function action_upgrade()
 	-- previous pages should arrange the stuff as required.
 	if step == 4 then
 		if has_platform and has_image and has_support then
-			-- Next line is to bypass luci.http layer
-			luci.http.context.eoh = true
-
 			-- Now invoke sysupgrade
 			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
-			os.execute("/sbin/luci-flash %s %q" %{
+			local fd = io.popen("/sbin/luci-flash %s %q" %{
 				keepcfg and "-k %q" % _keep_pattern() or "", tmpfile
 			})
+
+			if fd then
+				while true do
+					local ln = fd:read("*l")
+					if not ln then break end
+					luci.http.write(ln)
+				end
+				fd:close()
+			end
 
 			-- Make sure the device is rebooted
 			luci.sys.reboot()
