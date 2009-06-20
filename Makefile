@@ -50,15 +50,8 @@ hostenv: host ucidefaults
 ucidefaults:
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-freifunk-*"
 
-runboa: hostenv
-	libs/sgi-webuci/host/buildconfig.sh $(realpath host) > host/etc/boa/boa.conf
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host/usr/bin/boa) -c $(realpath host/etc/boa) -d"
-
 runhttpd: hostenv
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host/usr/bin/lucittpd) $(realpath host)/usr/lib/lucittpd/plugins"
-
-runluci: luahost
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath libs/httpd/host/runluci) $(realpath host) $(HTDOCS)"
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua build/lucid.lua"
 
 runlua: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua -i build/setup.lua"
