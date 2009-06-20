@@ -261,8 +261,6 @@ define Package/luci-nixio/config
 
 		config PACKAGE_luci-nixio_axtls
 			bool "Builtin (axTLS)"
-			select PACKAGE_dropbear
-			select PACKAGE_dropbearconvert
 
 		config PACKAGE_luci-nixio_cyassl
 			bool "CyaSSL"
