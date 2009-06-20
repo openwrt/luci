@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freifunk-watchdog
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_DEPENDS := uci
@@ -48,8 +48,6 @@ define Package/freifunk-watchdog/install
 	$(INSTALL_BIN) ./files/freifunk-watchdog.init $(1)/etc/init.d/freifunk-watchdog
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ffwatchd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/lib/upgrade
-	$(INSTALL_DATA) ./files/sysupgrade.hook $(1)/lib/upgrade/kill-ffwatchd.sh
 endef
 
 $(eval $(call BuildPackage,freifunk-watchdog))
