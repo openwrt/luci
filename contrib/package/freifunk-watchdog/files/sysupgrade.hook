@@ -1,7 +1,0 @@
-kill_freifunk_watchdog() {
-	v "Terminating ffwatchd..."
-	killall ffwatchd
-	killall crond
-}
-
-export sysupgrade_pre_upgrade="${sysupgrade_pre_upgrade:+$sysupgrade_pre_upgrade }kill_freifunk_watchdog"
