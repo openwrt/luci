@@ -257,8 +257,6 @@ define Package/luci-nixio/config
 
 		config PACKAGE_luci-nixio_axtls
 			bool "Builtin (axTLS)"
-			select PACKAGE_dropbear
-			select PACKAGE_dropbearconvert
 
 		config PACKAGE_luci-nixio_cyassl
 			bool "CyaSSL"
@@ -997,9 +995,6 @@ ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-luci),)
 	PKG_SELECTED_MODULES+=libs/sgi-luci
-endif
-ifneq ($(CONFIG_PACKAGE_luci-sgi-webuci),)
-	PKG_SELECTED_MODULES+=libs/sgi-webuci
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-theme-base),)
