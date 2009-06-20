@@ -264,7 +264,9 @@ function dispatch(request)
 		local user
 
 		if sdat then
-			sdat = loadstring(sdat)()
+			sdat = loadstring(sdat)
+			setfenv(sdat, {})
+			sdat = sdat()
 			if not verifytoken or ctx.urltoken.stok == sdat.token then
 				user = sdat.user
 			end
@@ -657,18 +659,22 @@ local function _cbi(self, ...)
 		end
 	end
 
+	local function _resolve_path(path)
+		return type(path) == "table" and build_url(unpack(path)) or path
+	end
+
 	if config.on_valid_to and state and state > 0 and state < 2 then
-		http.redirect(config.on_valid_to)
+		http.redirect(_resolve_path(config.on_valid_to))
 		return
 	end
 
 	if config.on_changed_to and state and state > 1 then
-		http.redirect(config.on_changed_to)
+		http.redirect(_resolve_path(config.on_changed_to))
 		return
 	end
 
 	if config.on_success_to and state and state > 0 then
-		http.redirect(config.on_success_to)
+		http.redirect(_resolve_path(config.on_success_to))
 		return
 	end
 

@@ -1287,6 +1287,11 @@ function AbstractValue.parse(self, section, novld)
 			else
 				self.error = { [section] = "invalid" }
 			end
+			if self.section.error then
+				table.insert(self.section.error[section], "invalid")
+			else
+				self.section.error = {[section] = {"invalid"}}
+			end 
 			self.map.save = false
 		end
 		if fvalue and not (fvalue == cvalue) then
