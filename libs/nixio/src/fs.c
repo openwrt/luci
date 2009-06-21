@@ -254,7 +254,7 @@ static int nixio_link(lua_State *L) {
 
 static int nixio_utimes(lua_State *L) {
 	const char *path = luaL_checkstring(L, 1);
-	if (lua_gettop(L) < 2) {
+	if (lua_gettop(L) < 2 || (lua_isnoneornil(L, 2) && lua_isnoneornil(L, 3))) {
 		return nixio__pstatus(L, !utimes(path, NULL));
 	} else {
 		double atime = luaL_checknumber(L, 2);
