@@ -40,10 +40,8 @@ endef
 define Package/sysupgrade-atheros/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {
-  if ! grep -q /etc/firewall.freifunk /etc/config/firewall; then
-    uci add firewall include >/dev/null
-    uci set firewall.@include[-1].path=/etc/firewall.freifunk
-    uci commit firewall
+  if [ -f /lib/upgrade/kill-ffwatchd.sh ]; then
+    rm -f /lib/upgrade/kill-ffwatchd.sh
   fi
 }
 endef
