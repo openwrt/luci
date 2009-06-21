@@ -98,7 +98,7 @@ endef
 
 define Package/luci-core
   $(call Package/luci/libtemplate)
-  DEPENDS:=+lua
+  DEPENDS:=+lua +luci-nixio
   TITLE:=LuCI core libraries
 endef
 
@@ -246,7 +246,7 @@ NIXIO_TLS:=axtls
 
 define Package/luci-nixio
   $(call Package/luci/libtemplate)
-  TITLE:=NIXIO Socket Library
+  TITLE:=NIXIO POSIX Library
   DEPENDS:=
 endef
 

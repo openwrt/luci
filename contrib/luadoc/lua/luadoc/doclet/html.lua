@@ -14,7 +14,7 @@
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
 local io = require"io"
-local posix = require "posix"
+local posix = require "nixio.fs"
 local lp = require "luadoc.lp"
 local luadoc = require"luadoc"
 local package = package

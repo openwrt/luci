@@ -27,7 +27,7 @@ limitations under the License.
 
 local io    = require "io"
 local os    = require "os"
-local posix = require "posix"
+local nixio = require "nixio"
 local table = require "table"
 
 local luci  = {}
@@ -128,7 +128,7 @@ end
 -- @param var	Name of the environment variable to retrieve (optional)
 -- @return		String containg the value of the specified variable
 -- @return		Table containing all variables if no variable name is given
-getenv = posix.getenv
+getenv = nixio.getenv
 
 --- Get or set the current hostname.
 -- @param		String containing a new hostname to set (optional)
@@ -138,7 +138,7 @@ function hostname(newname)
 		luci.fs.writefile( "/proc/sys/kernel/hostname", newname .. "\n" )
 		return newname
 	else
-		return posix.uname("%n")
+		return nixio.uname().nodename
 	end
 end
 
@@ -161,11 +161,9 @@ end
 -- @return	String containing the average load value 1 minute ago
 -- @return	String containing the average load value 5 minutes ago
 -- @return	String containing the average load value 15 minutes ago
--- @return	String containing the active and total number of processes
--- @return	String containing the last used pid
 function loadavg()
-	local loadavg = io.lines("/proc/loadavg")()
-	return loadavg:match("^(.-) (.-) (.-) (.-) (.-)$")
+	local info = nixio.sysinfo()
+	return info.loads[1], info.loads[2], info.loads[3]
 end
 
 --- Initiate a system reboot.
@@ -193,7 +191,7 @@ function sysinfo()
 	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
 
 	if not system then
-		system = posix.uname("%m")
+		system = nixio.uname().machine
 		model = cpuinfo:match("model name.-:%s*([^\n]+)")
 		if not model then
 			model = cpuinfo:match("Processor.-:%s*([^\n]+)")
@@ -242,18 +240,6 @@ function uptime()
 	local loadavg = io.lines("/proc/uptime")()
 	return loadavg:match("^(.-) (.-)$")
 end
-
---- LuCI system utilities / POSIX user group related functions.
--- @class	module
--- @name	luci.sys.group
-group = {}
-
---- Returns information about a POSIX user group.
--- @class function
--- @name		getgroup
--- @param group Group ID or name of a system user group
--- @return	Table with information about the requested group
-group.getgroup = posix.getgroup
 
 
 --- LuCI system utilities / network related functions.
@@ -484,7 +470,10 @@ process = {}
 -- @class function
 -- @name  process.info
 -- @return	Number containing the current pid
-process.info = posix.getpid
+function process.info(key)
+	local s = {uid = nixio.getuid(), gid = nixio.getgid()}
+	return not key and s or s[key]
+end
 
 --- Retrieve information about currently running processes.
 -- @return 	Table containing process information
@@ -527,23 +516,21 @@ function process.list()
 end
 
 --- Set the gid of a process identified by given pid.
--- @param pid	Number containing the process id
 -- @param gid	Number containing the Unix group id
 -- @return		Boolean indicating successful operation
 -- @return		String containing the error message if failed
 -- @return		Number containing the error code if failed
-function process.setgroup(pid, gid)
-	return posix.setpid("g", pid, gid)
+function process.setgroup(gid)
+	return nixio.setgid(gid)
 end
 
 --- Set the uid of a process identified by given pid.
--- @param pid	Number containing the process id
 -- @param uid	Number containing the Unix user id
 -- @return		Boolean indicating successful operation
 -- @return		String containing the error message if failed
 -- @return		Number containing the error code if failed
-function process.setuser(pid, uid)
-	return posix.setpid("u", pid, uid)
+function process.setuser(uid)
+	return nixio.setuid(uid)
 end
 
 --- Send a signal to a process identified by given pid.
@@ -553,7 +540,7 @@ end
 -- @param sig	Signal to send (default: 15 [SIGTERM])
 -- @return		Boolean indicating successful operation
 -- @return		Number containing the error code if failed
-process.signal = posix.kill
+process.signal = nixio.kill
 
 
 --- LuCI system utilities / user related functions.
@@ -567,44 +554,20 @@ user = {}
 -- @param uid	Number containing the Unix user id
 -- @return		Table containing the following fields:
 --				{ "uid", "gid", "name", "passwd", "dir", "shell", "gecos" }
-user.getuser = posix.getpasswd
+user.getuser = nixio.getpw
 
 --- Test whether given string matches the password of a given system user.
 -- @param username	String containing the Unix user name
--- @param password	String containing the password to compare
+-- @param pass		String containing the password to compare
 -- @return			Boolean indicating wheather the passwords are equal
-function user.checkpasswd(username, password)
-	local account = user.getuser(username)
-
-	if account then
-		local pwd = account.passwd
-		local shadowpw
-		if #pwd == 1 then
-			if luci.fs.stat("/etc/shadow") then
-				if not pcall(function()
-					for l in io.lines("/etc/shadow") do
-						shadowpw = l:match("^%s:([^:]+)" % username)
-						if shadowpw then
-							pwd = shadowpw
-							break
-						end
-					end
-				end) then
-					return nil, "Unable to access shadow-file"
-				end
-			end
-
-			if pwd == "!" then
-				return true
-			end
-		end
-
-		if pwd and #pwd > 0 and password and #password > 0 then
-			return (pwd == posix.crypt(password, pwd))
-		end
+function user.checkpasswd(username, pass)
+	local pwe = nixio.getsp and nixio.getsp(username) or nixio.getpw(username)
+	local pwh = pwe and (pwe.pwdp or pwe.passwd)
+	if not pwh or #pwh < 1 or pwh ~= "!" and nixio.crypt(pass, pwh) ~= pwh then
+		return false
+	else
+		return true
 	end
-
-	return false
 end
 
 --- Change the password of given user.

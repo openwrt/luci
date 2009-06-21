@@ -66,10 +66,10 @@ $Id$
 		local filestat = luci.fs.stat( filepath )
 		local baseurl  = luci.dispatcher.build_url('admin', 'filebrowser')
 
-		if filestat and filestat.type == "regular" then
+		if filestat and filestat.type == "reg" then
 			table.remove( path, #path )
 			filepath = table.concat( path, '/' ) .. '/'
-		elseif not ( filestat and filestat.type == "directory" ) then
+		elseif not ( filestat and filestat.type == "dir" ) then
 			path     = { '' }
 			filepath = '/'
 		else
@@ -99,7 +99,7 @@ $Id$
 		<ul>
 			<% for _, e in luci.util.vspairs(entries) do
 			    local stat = luci.fs.stat(filepath..e)
-				if e ~= '.' and e ~= '..' and stat and stat.type == 'directory' then
+				if e ~= '.' and e ~= '..' and stat and stat.type == 'dir' then
 			-%>
 				<li class="dir">
 					<img src="/luci-static/resources/cbi/folder.png" alt="Directory" />
@@ -109,7 +109,7 @@ $Id$
 
 			<% for _, e in luci.util.vspairs(entries) do
 			    local stat = luci.fs.stat(filepath..e)
-				if stat and stat.type ~= 'directory' then
+				if stat and stat.type ~= 'dir' then
 			-%>
 				<li class="file">
 					<img src="/luci-static/resources/cbi/file.png" alt="File" />

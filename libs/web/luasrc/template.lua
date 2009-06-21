@@ -31,6 +31,7 @@ local table = require "table"
 local string = require "string"
 local config = require "luci.config"
 local coroutine = require "coroutine"
+local nixio = require "nixio", require "nixio.util"
 
 local tostring, pairs, loadstring = tostring, pairs, loadstring
 local setmetatable, loadfile = setmetatable, loadfile
@@ -177,7 +178,7 @@ function Template.__init__(self, name)
 		
 		if not fs.mtime(cdir) then
 			fs.mkdir(cdir, true)
-			fs.chmod(fs.dirname(cdir), "a+rxw")
+			fs.chmod(fs.dirname(cdir), 777)
 		end
 		
 		assert(tplmt or commt, "No such template: " .. name)
@@ -190,14 +191,15 @@ function Template.__init__(self, name)
 			if source then
 				local compiled, err = compile(source)
 				
-				fs.writefile(compiledfile, util.get_bytecode(compiled))
-				fs.chmod(compiledfile, "a-rwx,u+rw")
+				local f = nixio.open(compiledfile, "w", 600)
+				f:writeall(util.get_bytecode(compiled))
+				f:close()
 				self.template = compiled
 			end
 		else
 			assert(
 				sys.process.info("uid") == fs.stat(compiledfile, "uid")
-				and fs.stat(compiledfile, "mode") == "rw-------",
+				and fs.stat(compiledfile, "modestr") == "rw-------",
 				"Fatal: Cachefile is not sane!"
 			)
 			self.template, err = loadfile(compiledfile)

@@ -114,13 +114,12 @@ end
 
 local function splice_sync(sock, pipeout, pipein, file, cb)
 	local os = require "os"
-	local posix = require "posix"
 	local ssize = 65536
 	local smode = nixio.splice_flags("move", "more")
 	local stat
 	
 	-- This is probably the only forking http-client ;-)
-	local pid, code, msg = posix.fork()
+	local pid, code, msg = nixio.fork()
 	if not pid then
 		return pid, code, msg
 	elseif pid == 0 then
@@ -149,11 +148,11 @@ local function splice_sync(sock, pipeout, pipein, file, cb)
 		file:close()
 		
 		if not stat then
-			posix.kill(pid)
-			posix.wait(pid)
+			nixio.kill(pid, 15)
+			nixio.wait(pid)
 			return stat, code, msg
 		else
-			pid, msg, code = posix.wait(pid)
+			pid, msg, code = nixio.wait(pid)
 			if msg == "exited" then
 				if code == 0 then
 					return true
