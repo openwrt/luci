@@ -31,14 +31,6 @@ static void shutdown_watchdog(int sig)
 	{
 		syslog(LOG_INFO, "Stopping watchdog timer");
 		write(wdfd, &wshutdown, 1);
-
-		/* Older Kamikaze versions are compiled with
-		 * CONFIG_WATCHDOG_NOWAYOUT=y, this can be
-		 * harmful if we're in the middle of an upgrade.
-		 * Increase the watchdog timeout to 3600 seconds
-		 * here to avoid unplanned reboots. */
-		ioctl(wdfd, WDIOC_SETTIMEOUT, &wdelay);
-
 		close(wdfd);
 		wdfd = -1;
 	}
@@ -191,11 +183,9 @@ static int check_uci_update(const char *config, time_t *mtime)
 			*mtime = s.st_mtime;
 			return 1;
 		}
-
-		return 0;
 	}
 
-	return -1;
+	return 0;
 }
 
 /* Add tuple */
@@ -290,7 +280,7 @@ static wifi_tuple_t * load_wifi_uci(wifi_tuple_t *ifs, time_t *modtime)
 static int do_daemon(void)
 {
 	static int wdtrigger = 1;
-	static int wdtimeout = INTERVAL * 2;
+	static int wdtimeout = BASE_INTERVAL * 2;
 	static const char wdkeepalive = WATCH_KEEPALIVE;
 
 	int iwfd;
@@ -301,6 +291,7 @@ static int do_daemon(void)
 	wifi_tuple_t *ifs = NULL, *curif;
 	time_t modtime = 0;
 
+	int action_intv = 0;
 	int restart_wifi = 0;
 	int restart_cron = 0;
 	int restart_sshd = 0;
@@ -320,7 +311,7 @@ static int do_daemon(void)
 	if( (wdfd = open(WATCH_DEVICE, O_WRONLY)) > -1 )
 	{
 		syslog(LOG_INFO, "Opened %s - polling every %i seconds",
-			WATCH_DEVICE, INTERVAL);
+			WATCH_DEVICE, BASE_INTERVAL);
 
 		/* Install signal handler to halt watchdog on shutdown */
 		sa.sa_handler = shutdown_watchdog;
@@ -338,98 +329,106 @@ static int do_daemon(void)
 
 	while( 1 )
 	{
-		/* Check average load */
-		if( find_loadavg() >= LOAD_TRESHOLD )
-			loadavg_panic++;
-		else
-			loadavg_panic = 0;
-
-		/* Check crond */
-		if( find_process("crond") < 0 )
-			restart_cron++;
-		else
-			restart_cron = 0;
-
-		/* Check SSHd */
-		if( find_process("dropbear") < 0 )
-			restart_sshd++;
-		else
-			restart_sshd = 0;
-
-		/* Check wireless interfaces */
-		ifs = load_wifi_uci(ifs, &modtime);
-		for( curif = ifs; curif; curif = curif->next )
+		/* Check/increment action interval */
+		if( ++action_intv >= ACTION_INTERVAL )
 		{
-			/* Get current channel and bssid */
-			if( (iw_get_bssid(iwfd, curif->ifname, bssid) == 0) &&
+			/* Reset action interval */
+			action_intv = 0;
+
+			/* Check average load */
+			if( find_loadavg() >= LOAD_TRESHOLD )
+				loadavg_panic++;
+			else
+				loadavg_panic = 0;
+
+			/* Check crond */
+			if( find_process("crond") < 0 )
+				restart_cron++;
+			else
+				restart_cron = 0;
+
+			/* Check SSHd */
+			if( find_process("dropbear") < 0 )
+				restart_sshd++;
+			else
+				restart_sshd = 0;
+
+			/* Check wireless interfaces */
+			ifs = load_wifi_uci(ifs, &modtime);
+			for( curif = ifs; curif; curif = curif->next )
+			{
+				/* Get current channel and bssid */
+				if( (iw_get_bssid(iwfd, curif->ifname, bssid) == 0) &&
 			    (iw_get_channel(iwfd, curif->ifname, &channel) == 0) )
-			{
-				/* Check BSSID */
-				if( strcasecmp(bssid, curif->bssid) != 0 )
 				{
-					syslog(LOG_WARNING, "BSSID mismatch on %s: current=%s wanted=%s",
-						curif->ifname, bssid, curif->bssid);
+					/* Check BSSID */
+					if( strcasecmp(bssid, curif->bssid) != 0 )
+					{
+						syslog(LOG_WARNING, "BSSID mismatch on %s: current=%s wanted=%s",
+							curif->ifname, bssid, curif->bssid);
 
-					restart_wifi++;
+						restart_wifi++;
+					}
+
+					/* Check channel */
+					else if( channel != curif->channel )
+					{
+						syslog(LOG_WARNING, "Channel mismatch on %s: current=%d wanted=%d",
+							curif->ifname, channel, curif->channel);
+
+						restart_wifi++;
+					}
 				}
-
-				/* Check channel */
-				else if( channel != curif->channel )
+				else
 				{
-					syslog(LOG_WARNING, "Channel mismatch on %s: current=%d wanted=%d",
-						curif->ifname, channel, curif->channel);
-
-					restart_wifi++;
+					syslog(LOG_WARNING, "Requested interface %s not present", curif->ifname);
 				}
 			}
-			else
+
+
+			/* Wifi restart required? */
+			if( restart_wifi >= HYSTERESIS )
 			{
-				syslog(LOG_WARNING, "Requested interface %s not present", curif->ifname);
+				restart_wifi = 0;
+				syslog(LOG_WARNING, "Channel or BSSID mismatch on wireless interface, restarting");
+				EXEC(WIFI_ACTION);
+			}
+
+			/* Cron restart required? */
+			if( restart_cron >= HYSTERESIS )
+			{
+				restart_cron = 0;
+				syslog(LOG_WARNING, "The cron process died, restarting");
+				EXEC(CRON_ACTION);
+			}
+
+			/* SSHd restart required? */
+			if( restart_sshd >= HYSTERESIS )
+			{
+				restart_sshd = 0;
+				syslog(LOG_WARNING, "The ssh process died, restarting");
+				EXEC(SSHD_ACTION);
+			}
+
+			/* Is there a load problem? */
+			if( loadavg_panic >= HYSTERESIS )
+			{
+				syslog(LOG_EMERG, "Critical system load level, triggering reset!");
+
+				/* Try watchdog, fall back to reboot */
+				if( wdfd > -1 )
+					ioctl(wdfd, WDIOC_SETTIMEOUT, &wdtrigger);
+				else
+					EXEC(LOAD_ACTION);
 			}
 		}
 
-
-		/* Wifi restart required? */
-		if( restart_wifi >= HYSTERESIS )
-		{
-			restart_wifi = 0;
-			syslog(LOG_WARNING, "Channel or BSSID mismatch on wireless interface, restarting");
-			EXEC(WIFI_ACTION);
-		}
-
-		/* Cron restart required? */
-		if( restart_cron >= HYSTERESIS )
-		{
-			restart_cron = 0;
-			syslog(LOG_WARNING, "The cron process died, restarting");
-			EXEC(CRON_ACTION);
-		}
-
-		/* SSHd restart required? */
-		if( restart_sshd >= HYSTERESIS )
-		{
-			restart_sshd = 0;
-			syslog(LOG_WARNING, "The ssh process died, restarting");
-			EXEC(SSHD_ACTION);
-		}
-
-		/* Is there a load problem? */
-		if( loadavg_panic >= HYSTERESIS )
-		{
-			syslog(LOG_EMERG, "Critical system load level, triggering reset!");
-
-			/* Try watchdog, fall back to reboot */
-			if( wdfd > -1 )
-				ioctl(wdfd, WDIOC_SETTIMEOUT, &wdtrigger);
-			else
-				EXEC(LOAD_ACTION);
-		}
 
 		/* Reset watchdog timer */
 		if( wdfd > -1 )
 			write(wdfd, &wdkeepalive, 1);
 
-		sleep(INTERVAL);
+		sleep(BASE_INTERVAL);
 	}
 
 	shutdown_watchdog(0);
