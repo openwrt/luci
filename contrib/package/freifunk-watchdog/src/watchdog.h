@@ -39,8 +39,11 @@
 #include "wireless.22.h"
 
 
-/* Check interval */
-#define INTERVAL		30
+/* Watchdog poll interval */
+#define BASE_INTERVAL	5
+
+/* Action interval (N * BASE_INTERVAL) */
+#define ACTION_INTERVAL	6
 
 /* Hysteresis */
 #define HYSTERESIS		3
