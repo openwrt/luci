@@ -19,6 +19,8 @@ require("luci.fs")
 require("luci.util")
 require("luci.sys")
 require("luci.config")
+local nixio = require "nixio", require "nixio.util"
+local fs = require "nixio.fs"
 
 
 luci.config.sauth = luci.config.sauth or {}
@@ -37,7 +39,7 @@ function clean()
 	for i, file in pairs(files) do
 		local fname = sessionpath .. "/" .. file
 		local stat = luci.fs.stat(fname)
-		if stat and stat.type == "regular" and stat.atime + sessiontime < now then
+		if stat and stat.type == "reg" and stat.mtime + sessiontime < now then
 			luci.fs.unlink(fname)
 		end 
 	end
@@ -45,8 +47,7 @@ end
 
 --- Prepare session storage by creating the session directory.
 function prepare()
-	luci.fs.mkdir(sessionpath)
-	luci.fs.chmod(sessionpath, "a-rwx,u+rwx")
+	fs.mkdir(sessionpath, 700)
 	 
 	if not sane() then
 		error("Security Exception: Session path is not sane!")
@@ -67,6 +68,7 @@ function read(id)
 	if not sane(sessionpath .. "/" .. id) then
 		return
 	end
+	luci.fs.utime(sessionpath .. "/" .. id)
 	return luci.fs.readfile(sessionpath .. "/" .. id)
 end
 
@@ -76,7 +78,7 @@ end
 function sane(file)
 	return luci.sys.process.info("uid")
 			== luci.fs.stat(file or sessionpath, "uid")
-		and luci.fs.stat(file or sessionpath, "mode")
+		and luci.fs.stat(file or sessionpath, "modestr")
 			== (file and "rw-------" or "rwx------")
 end
 
@@ -91,8 +93,10 @@ function write(id, data)
 	if not id:match("^%w+$") then
 		error("Session ID is not sane!")
 	end
-	luci.fs.writefile(sessionpath .. "/" .. id, data)
-	luci.fs.chmod(sessionpath .. "/" .. id, "a-rwx,u+rw")
+	
+	local f = nixio.open(sessionpath .. "/" .. id, "w", 600)
+	f:writeall(data)
+	f:close()
 end
 
 

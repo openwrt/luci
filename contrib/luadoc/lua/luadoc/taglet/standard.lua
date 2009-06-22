@@ -4,7 +4,7 @@
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
 local io = require "io"
-local posix = require "posix"
+local posix = require "nixio.fs"
 local luadoc = require "luadoc"
 local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
@@ -505,14 +505,14 @@ end
 -- @return table with documentation
 
 function directory (path, doc)
-	for f in posix.files(path) do
+	for f in posix.dir(path) do
 		local fullpath = path .. "/" .. f
 		local attr = posix.stat(fullpath)
 		assert(attr, string.format("error stating file `%s'", fullpath))
 
-		if attr.type == "regular" then
+		if attr.type == "reg" then
 			doc = file(fullpath, doc)
-		elseif attr.type == "directory" and f ~= "." and f ~= ".." then
+		elseif attr.type == "dir" and f ~= "." and f ~= ".." then
 			doc = directory(fullpath, doc)
 		end
 	end
@@ -550,9 +550,9 @@ function start (files, doc)
 		local attr = posix.stat(path)
 		assert(attr, string.format("error stating path `%s'", path))
 
-		if attr.type == "regular" then
+		if attr.type == "reg" then
 			doc = file(path, doc)
-		elseif attr.type == "directory" then
+		elseif attr.type == "dir" then
 			doc = directory(path, doc)
 		end
 	end)

@@ -14,8 +14,9 @@ $Id$
 ]]--
 
 local io = require "io"
+local fs = require "nixio.fs"
 local util = require "luci.util"
-local posix = require "posix"
+local nixio = require "nixio"
 local debug = require "debug"
 local string = require "string"
 local package = require "package"
@@ -36,10 +37,10 @@ function cache_enable(cachepath, mode)
 	mode = mode or "r--r--r--"
 
 	local loader = package.loaders[2]
-	local uid    = posix.getpid("uid")
+	local uid    = nixio.getpid("uid")
 
-	if not posix.stat(cachepath) then
-		posix.mkdir(cachepath)
+	if not fs.stat(cachepath) then
+		fs.mkdir(cachepath)
 	end
 
 	local function _encode_filename(name)
@@ -51,19 +52,19 @@ function cache_enable(cachepath, mode)
 	end
 
 	local function _load_sane(file)
-		local stat = posix.stat(file)
+		local stat = fs.stat(file)
 		if stat and stat.uid == uid and stat.mode == mode then
 			return loadfile(file)
 		end
 	end
 
 	local function _write_sane(file, func)
-		if posix.getpid("uid") == uid then
+		if nixio.getuid() == uid then
 			local fp = io.open(file, "w")
 			if fp then
 				fp:write(util.get_bytecode(func))
 				fp:close()
-				posix.chmod(file, mode)
+				fs.chmod(file, mode)
 			end
 		end
 	end

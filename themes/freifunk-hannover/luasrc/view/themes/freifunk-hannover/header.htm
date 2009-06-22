@@ -62,7 +62,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <h1><%=luci.version.distname%></h1>
 <p>
 <%=luci.version.distversion%><br />
-<%:load%>: <%=load1%> <%=load5%> <%=load15%><br />
+<%:load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
 <%:hostname%>: <%=hostname%>
 </p>
 </div>

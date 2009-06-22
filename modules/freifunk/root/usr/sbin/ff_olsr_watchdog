@@ -3,9 +3,9 @@
 require "os"
 require "io"
 require "uci"
-require "posix"
+local fs = require "nixio.fs"
 
-if posix.access("/var/run/olsrd.pid") then
+if fs.access("/var/run/olsrd.pid") then
 	local stamp, intv
 	local x = uci.cursor()
 
@@ -17,7 +17,7 @@ if posix.access("/var/run/olsrd.pid") then
 			end
 		end)
 
-	if intv and posix.access(stamp) then
+	if intv and fs.access(stamp) then
 		local systime = os.time()
 		local wdgtime = tonumber(io.lines(stamp)())
 

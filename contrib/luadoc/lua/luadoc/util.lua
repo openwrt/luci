@@ -3,7 +3,7 @@
 -- @release $Id: util.lua,v 1.16 2008/02/17 06:42:51 jasonsantos Exp $
 -------------------------------------------------------------------------------
 
-local posix = require "posix"
+local posix = require "nixio.fs"
 local type, table, string, io, assert, tostring, setmetatable, pcall = type, table, string, io, assert, tostring, setmetatable, pcall
 
 -------------------------------------------------------------------------------

@@ -66,19 +66,19 @@ function datacopy(src, dest, size)
 end
 
 function copy(src, dest)
-	local stat, code, msg, res = nixio.lstat(src)
+	local stat, code, msg, res = nixio.fs.lstat(src)
 	if not stat then
 		return nil, code, msg
 	end
 	
 	if stat.type == "dir" then
-		if nixio.stat(dest, type) ~= "dir" then
-			res, code, msg = nixio.mkdir(dest)
+		if nixio.fs.stat(dest, type) ~= "dir" then
+			res, code, msg = nixio.fs.mkdir(dest)
 		else
 			stat = true
 		end
 	elseif stat.type == "lnk" then
-		res, code, msg = nixio.symlink(nixio.readlink(src), dest)
+		res, code, msg = nixio.fs.symlink(nixio.fs.readlink(src), dest)
 	elseif stat.type == "reg" then
 		res, code, msg = datacopy(src, dest)
 	end
@@ -87,39 +87,39 @@ function copy(src, dest)
 		return nil, code, msg
 	end
 	
-	nixio.utimes(dest, stat.atime, stat.mtime)
+	nixio.fs.utimes(dest, stat.atime, stat.mtime)
 	
-	if nixio.lchown then
-		nixio.lchown(dest, stat.uid, stat.gid)
+	if nixio.fs.lchown then
+		nixio.fs.lchown(dest, stat.uid, stat.gid)
 	end
 	
 	if stat.type ~= "lnk" then
-		nixio.chmod(dest, stat.modedec)
+		nixio.fs.chmod(dest, stat.modedec)
 	end
 	
 	return true
 end
 
 function move(src, dest)
-	local stat, code, msg = nixio.rename(src, dest)
+	local stat, code, msg = nixio.fs.rename(src, dest)
 	if not stat and code == nixio.const.EXDEV then
-		stat, code, msg = nixio.copy(src, dest)
+		stat, code, msg = copy(src, dest)
 		if stat then
-			stat, code, msg = nixio.unlink(src)
+			stat, code, msg = nixio.fs.unlink(src)
 		end
 	end
 	return stat, code, msg
 end
 
 function mkdirr(dest, mode)
-	if nixio.stat(dest, "type") == "dir" then
+	if nixio.fs.stat(dest, "type") == "dir" then
 		return true
 	else
-		local stat, code, msg = nixio.mkdir(dest, mode)
+		local stat, code, msg = nixio.fs.mkdir(dest, mode)
 		if not stat and code == nixio.const.ENOENT then
-			stat, code, msg = mkdirr(nixio.dirname(dest), mode)
+			stat, code, msg = mkdirr(nixio.fs.dirname(dest), mode)
 			if stat then
-				stat, code, msg = nixio.mkdir(dest, mode)
+				stat, code, msg = nixio.fs.mkdir(dest, mode)
 			end
 		end
 		return stat, code, msg
@@ -127,7 +127,7 @@ function mkdirr(dest, mode)
 end
 
 local function _recurse(cb, src, dest)
-	local type = nixio.lstat(src, "type")
+	local type = nixio.fs.lstat(src, "type")
 	if type ~= "dir" then
 		return cb(src, dest)
 	else
@@ -137,7 +137,7 @@ local function _recurse(cb, src, dest)
 			stat, code, msg = stat and s, c or code, m or msg
 		end
 
-		for e in nixio.dir(src) do
+		for e in nixio.fs.dir(src) do
 			if dest then
 				s, c, m = _recurse(cb, src .. se .. e, dest .. se .. e)
 			else
@@ -160,16 +160,16 @@ function copyr(src, dest)
 end
 
 function mover(src, dest)
-	local stat, code, msg = nixio.rename(src, dest)
+	local stat, code, msg = nixio.fs.rename(src, dest)
 	if not stat and code == nixio.const.EXDEV then
 		stat, code, msg = _recurse(copy, src, dest)
 		if stat then
-			stat, code, msg = _recurse(nixio.remove, src)
+			stat, code, msg = _recurse(nixio.fs.remove, src)
 		end
 	end
 	return stat, code, msg
 end
 
 function remover(src)
-	return _recurse(nixio.remove, src)
+	return _recurse(nixio.fs.remove, src)
 end

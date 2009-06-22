@@ -27,7 +27,8 @@ limitations under the License.
 local io    = require "io"
 local os    = require "os"
 local ltn12 = require "luci.ltn12"
-local posix = require "posix"
+local fs	= require "nixio.fs"
+local nutil = require "nixio.util"
 
 local type  = type
 
@@ -41,7 +42,7 @@ module "luci.fs"
 -- @return		Number containing the return code, 0 on sucess or nil on error
 -- @return		String containing the error description (if any)
 -- @return		Number containing the os specific errno (if any)
-access = posix.access
+access = fs.access
 
 --- Evaluate given shell glob pattern and return a table containing all matching
 -- file and directory entries.
@@ -51,81 +52,53 @@ access = posix.access
 -- @return			Table containing file and directory entries or nil if no matches
 -- @return			String containing the error description (if no matches)
 -- @return			Number containing the os specific errno (if no matches)
-glob = posix.glob
+function glob(...)
+	local iter, code, msg = fs.glob(...)
+	if iter then
+		return nutil.consume(iter)
+	else
+		return nil, code, msg
+	end
+end
 
 --- Checks wheather the given path exists and points to a regular file.
 -- @param filename	String containing the path of the file to test
 -- @return			Boolean indicating wheather given path points to regular file
 function isfile(filename)
-	return posix.stat(filename, "type") == "regular"
+	return fs.stat(filename, "type") == "reg"
 end
 
 --- Checks wheather the given path exists and points to a directory.
 -- @param dirname	String containing the path of the directory to test
 -- @return			Boolean indicating wheather given path points to directory
 function isdirectory(dirname)
-	return posix.stat(dirname, "type") == "directory"
+	return fs.stat(dirname, "type") == "dir"
 end
 
 --- Read the whole content of the given file into memory.
 -- @param filename	String containing the path of the file to read
 -- @return			String containing the file contents or nil on error
 -- @return			String containing the error message on error
-function readfile(filename)
-	local fp, err = io.open(filename)
-
-	if fp == nil then
-		return nil, err
-	end
-
-	local data = fp:read("*a")
-	fp:close()
-	return data
-end
+readfile = fs.readfile
 
 --- Write the contents of given string to given file.
 -- @param filename	String containing the path of the file to read
 -- @param data		String containing the data to write
 -- @return			Boolean containing true on success or nil on error
 -- @return			String containing the error message on error
-function writefile(filename, data)
-	local fp, err = io.open(filename, "w")
-
-	if fp == nil then
-		return nil, err
-	end
-
-	fp:write(data)
-	fp:close()
-
-	return true
-end
+writefile = fs.writefile
 
 --- Copies a file.
 -- @param source	Source file
 -- @param dest		Destination
 -- @return			Boolean containing true on success or nil on error
-function copy(source, dest)
-	return ltn12.pump.all(
-		ltn12.source.file(io.open(source)),
-		ltn12.sink.file(io.open(dest, "w"))
-	)
-end
+copy = fs.datacopy
 
 --- Renames a file.
 -- @param source	Source file
 -- @param dest		Destination
 -- @return			Boolean containing true on success or nil on error
-function rename(source, dest)
-	local stat, err, code = os.rename(source, dest)
-	if code == 18 then
-		stat, err, code = copy(source, dest)
-		if stat then
-			stat, err, code = unlink(source)
-		end
-	end
-	return stat, err, code
-end
+rename = fs.move
 
 --- Get the last modification time of given file path in Unix epoch format.
 -- @param path	String containing the path of the file or directory to read
@@ -133,7 +106,7 @@ end
 -- @return		String containing the error description (if any)
 -- @return		Number containing the os specific errno (if any)
 function mtime(path)
-	return posix.stat(path, "mtime")
+	return fs.stat(path, "mtime")
 end
 
 --- Set the last modification time  of given file path in Unix epoch format.
@@ -143,7 +116,9 @@ end
 -- @return		0 in case of success nil on error
 -- @return		String containing the error description (if any)
 -- @return		Number containing the os specific errno (if any)
-utime = posix.utime
+function utime(path, mtime, atime)
+	return fs.utimes(path, atime, mtime)
+end
 
 --- Return the last element - usually the filename - from the given path with
 -- the directory component stripped.
@@ -152,7 +127,7 @@ utime = posix.utime
 -- @param path	String containing the path to strip
 -- @return		String containing the base name of given path
 -- @see			dirname
-basename = posix.basename
+basename = fs.basename
 
 --- Return the directory component of the given path with the last element
 -- stripped of.
@@ -161,7 +136,7 @@ basename = posix.basename
 -- @param path	String containing the path to strip
 -- @return		String containing the directory component of given path
 -- @see			basename
-dirname = posix.dirname
+dirname = fs.dirname
 
 --- Return a table containing all entries of the specified directory.
 -- @class		function
@@ -170,7 +145,17 @@ dirname = posix.dirname
 -- @return		Table containing file and directory entries or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-dir = posix.dir
+function dir(...)
+	local iter, code, msg = fs.dir(...)
+	if iter then
+		local t = nutil.consume(iter)
+		t[#t+1] = "."
+		t[#t+1] = ".."
+		return t
+	else
+		return nil, code, msg
+	end
+end
 
 --- Create a new directory, recursively on demand.
 -- @param path		String with the name or path of the directory to create
@@ -179,36 +164,7 @@ dir = posix.dir
 -- @return			String containing the error description on error
 -- @return			Number containing the os specific errno on error
 function mkdir(path, recursive)
-	if recursive then
-		local base = "."
-
-		if path:sub(1,1) == "/" then
-			base = ""
-			path = path:gsub("^/+","")
-		end
-
-		for elem in path:gmatch("([^/]+)/*") do
-			base = base .. "/" .. elem
-
-			local stat = posix.stat( base )
-
-			if not stat then
-				local stat, errmsg, errno = posix.mkdir( base )
-
-				if type(stat) ~= "number" or stat ~= 0 then
-					return stat, errmsg, errno
-				end
-			else
-				if stat.type ~= "directory" then
-					return nil, base .. ": File exists", 17
-				end
-			end
-		end
-
-		return 0
-	else
-		return posix.mkdir( path )
-	end
+	return recursive and fs.mkdirr(path) or fs.mkdir(path)
 end
 
 --- Remove the given empty directory.
@@ -218,7 +174,7 @@ end
 -- @return		Number with the return code, 0 on sucess or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-rmdir = posix.rmdir
+rmdir = fs.rmdir
 
 --- Get information about given file or directory.
 -- @class		function
@@ -227,7 +183,7 @@ rmdir = posix.rmdir
 -- @return		Table containing file or directory properties or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-stat = posix.stat
+stat = fs.stat
 
 --- Set permissions on given file or directory.
 -- @class		function
@@ -237,7 +193,7 @@ stat = posix.stat
 -- @return		Number with the return code, 0 on sucess or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-chmod = posix.chmod
+chmod = fs.chmod
 
 --- Create a hard- or symlink from given file (or directory) to specified target
 -- file (or directory) path.
@@ -249,7 +205,9 @@ chmod = posix.chmod
 -- @return			Number with the return code, 0 on sucess or nil on error
 -- @return			String containing the error description on error
 -- @return			Number containing the os specific errno on error
-link = posix.link
+function link(src, dest, sym)
+	return sym and fs.symlink(src, dest) or fs.link(src, dest)
+end
 
 --- Remove the given file.
 -- @class		function
@@ -258,7 +216,7 @@ link = posix.link
 -- @return		Number with the return code, 0 on sucess or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-unlink = posix.unlink
+unlink = fs.unlink
 
 --- Retrieve target of given symlink.
 -- @class		function
@@ -267,4 +225,4 @@ unlink = posix.unlink
 -- @return		String containing the link target or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-readlink = posix.readlink
+readlink = fs.readlink

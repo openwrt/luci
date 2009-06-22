@@ -144,9 +144,9 @@ function directory( val, seen )
 
 	if s and not seen[s.ino] then
 		seen[s.ino] = true
-		if s.type == "directory" then
+		if s.type == "dir" then
 			return true
-		elseif s.type == "link" then
+		elseif s.type == "lnk" then
 			return directory( fs.readlink(val), seen )
 		end
 	end
@@ -160,9 +160,9 @@ function file( val, seen )
 
 	if s and not seen[s.ino] then
 		seen[s.ino] = true
-		if s.type == "regular" then
+		if s.type == "reg" then
 			return true
-		elseif s.type == "link" then
+		elseif s.type == "lnk" then
 			return file( fs.readlink(val), seen )
 		end
 	end
@@ -176,9 +176,9 @@ function device( val, seen )
 
 	if s and not seen[s.ino] then
 		seen[s.ino] = true
-		if s.type == "character device" or s.type == "block device" then
+		if s.type == "chr" or s.type == "blk" then
 			return true
-		elseif s.type == "link" then
+		elseif s.type == "lnk" then
 			return device( fs.readlink(val), seen )
 		end
 	end

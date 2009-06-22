@@ -19,7 +19,7 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 	<% if v then %>
-		<%:cbi_upload Uploaded File%> (<%=t.byte_format(luci.fs.stat(v).size or 0)%>)
+		<%:cbi_upload Uploaded File%> (<%=t.byte_format(luci.fs.stat(v, "size") or 0)%>)
 		<input type="hidden"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
 		<input class="cbi-input-image" type="image" value="<%:cbi_replace%>" name="cbi.rlf.<%=section .. "." .. self.option%>" alt="<%:cbi_replace%>" title="<%:cbi_replace%>" src="<%=resource%>/cbi/reload.gif" />
 	<% else %>

@@ -30,6 +30,7 @@ local sys = require "luci.sys"
 local init = require "luci.init"
 local util = require "luci.util"
 local http = require "luci.http"
+local nixio = require "nixio", require "nixio.util"
 
 module("luci.dispatcher", package.seeall)
 context = util.threadlocal()
@@ -210,7 +211,8 @@ function dispatch(request)
 	if (c and c.index) or not track.notemplate then
 		local tpl = require("luci.template")
 		local media = track.mediaurlbase or luci.config.main.mediaurlbase
-		if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
+		if not tpl.Template("themes/%s/header" % fs.basename(media)) then 
+		--if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
 			media = nil
 			for name, theme in pairs(luci.config.themes) do
 				if name:sub(1,1) ~= "." and pcall(tpl.Template,
@@ -411,7 +413,7 @@ function createindex_plain(path, suffixes)
 			if cachedate > realdate then
 				assert(
 					sys.process.info("uid") == fs.stat(indexcache, "uid")
-					and fs.stat(indexcache, "mode") == "rw-------",
+					and fs.stat(indexcache, "modestr") == "rw-------",
 					"Fatal: Indexcache is not sane!"
 				)
 
@@ -438,8 +440,9 @@ function createindex_plain(path, suffixes)
 	end
 
 	if indexcache then
-		fs.writefile(indexcache, util.get_bytecode(index))
-		fs.chmod(indexcache, "a-rwx,u+rw")
+		local f = nixio.open(indexcache, "w", 600)
+		f:writeall(util.get_bytecode(index))
+		f:close()
 	end
 end
 
