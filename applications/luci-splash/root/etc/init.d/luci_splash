@@ -40,6 +40,9 @@ iface_add() {
 	iptables -t nat -A prerouting_${zone} -j luci_splash_prerouting
 	iptables -t nat -A luci_splash_prerouting -j luci_splash_portal
 
+	iptables -t filter -I luci_splash_filter -s ! "$NETWORK/$PREFIX" -j RETURN
+	iptables -t nat    -I luci_splash_leases -s ! "$NETWORK/$PREFIX" -j RETURN
+
 	iptables -t filter -I luci_splash_filter -s "$NETWORK/$PREFIX" -d "$ipaddr/${netmask:-32}" -j RETURN
 	iptables -t nat    -I luci_splash_leases -s "$NETWORK/$PREFIX" -d "$ipaddr/${netmask:-32}" -j RETURN
 
