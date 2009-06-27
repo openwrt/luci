@@ -17,7 +17,7 @@ module("luci.statistics.datatree", package.seeall)
 
 local util = require("luci.util")
 local sys  = require("luci.sys")
-local fs   = require("luci.fs")
+local fs   = require("nixio.fs")
 local uci  = require("luci.model.uci").cursor()
 local sections = uci:get_all("luci_statistics")
 
@@ -50,6 +50,19 @@ function Instance._mkpath( self, plugin, pinstance )
 	return dir
 end
 
+function Instance._ls( self, ... )
+	local ditr = fs.dir(self:_mkpath(...))
+	if ditr then
+		local dirs = { }
+		while true do
+			local d = ditr()
+			if not d then break end
+			dirs[#dirs+1] = d
+		end
+		return dirs
+	end
+end
+
 function Instance._notzero( self, table )
 	for k in pairs(table) do
 		return true
@@ -59,7 +72,7 @@ function Instance._notzero( self, table )
 end
 
 function Instance._scan( self )
-	local dirs = fs.dir( self:_mkpath() )
+	local dirs = self:_ls()
 	if not dirs then
 		return
 	end
@@ -72,7 +85,7 @@ function Instance._scan( self )
 
 	for _, dir in ipairs(dirs) do
 		if dir ~= "." and dir ~= ".." and
-		   fs.stat(self:_mkpath(dir)).type == "directory"
+		   fs.stat(self:_mkpath(dir)).type == "dir"
 		then
 			local plugin = dir:gsub("%-.+$", "")
 			if not self._plugins[plugin] then
@@ -83,7 +96,7 @@ function Instance._scan( self )
 
 	for plugin, instances in pairs( self._plugins ) do
 
-		local dirs = fs.dir( self:_mkpath() )
+		local dirs = self:_ls()
 
 		if type(dirs) == "table" then
 			for i, dir in ipairs(dirs) do
@@ -101,7 +114,7 @@ function Instance._scan( self )
 
 		for instance, data_instances in pairs( instances ) do
 
-			dirs = fs.dir( self:_mkpath( plugin, instance ) )
+			dirs = self:_ls(plugin, instance)
 
 			if type(dirs) == "table" then
 				for i, file in ipairs(dirs) do
