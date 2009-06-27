@@ -17,7 +17,7 @@ module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 
 function index()
 
-	require("luci.fs")
+	require("nixio.fs")
 	require("luci.util")
 	require("luci.i18n")
 	require("luci.statistics.datatree")
@@ -32,7 +32,7 @@ function index()
 	-- override entry(): check for existance <plugin>.so where <plugin> is derived from the called path
 	function _entry( path, ... )
 		local file = path[5] or path[4]
-		if luci.fs.access( "/usr/lib/collectd/" .. file .. ".so" ) then
+		if nixio.fs.access( "/usr/lib/collectd/" .. file .. ".so" ) then
 			entry( path, ... )
 		end
 	end
