@@ -25,6 +25,11 @@ local uci = luci.model.uci.cursor()
 local sections = uci:get_all( "luci_statistics" )
 
 
+function print(...)
+	nixio.stdout:write(...)
+	nixio.stdout:write("\n")
+end
+
 function section( plugin )
 
 	local config = sections[ "collectd_" .. plugin ] or sections["collectd"]
