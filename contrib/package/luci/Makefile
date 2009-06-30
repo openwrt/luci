@@ -125,9 +125,6 @@ define Package/luci-core/config
        config PACKAGE_luci-core_source
                bool "Full Source"
 
-       config PACKAGE_luci-core_zipped
-               bool "Precompiled and compressed"
-
        endchoice
 endef
 
