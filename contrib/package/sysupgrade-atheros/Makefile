@@ -18,7 +18,7 @@ define Package/sysupgrade-atheros
   CATEGORY:=LuCI
   SUBMENU:=Freifunk
   TITLE:=Experimental sysupgrade support for Atheros SoC
-  DEPENDS:=@TARGET_atheros +base-files
+  DEPENDS:=@TARGET_atheros
 endef
 
 define Package/sysupgrade-atheros/description
