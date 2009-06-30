@@ -112,8 +112,8 @@ usage()
 
 Usage:
   remote-update -h
-  remote-update -c
-  remote-update -w
+  remote-update [-u <update url>] -c
+  remote-update [-v] [-y] [-u <update url>] -w
   remote-update [-d] [-n] [-v] [-y] [-s <sleep seconds>] [-u <update url>]
 
 Actions:
@@ -128,7 +128,7 @@ Options:
   -y    Assume defaults for all questions.
 
   -s <seconds>
-    Sleep given amount of seconds before invoking firmware burn.
+    Sleep given amount of seconds before starting flash write.
     If ommitted and '-y' is not used, 5 seconds are assumed.
 
   -u <url>
