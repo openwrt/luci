@@ -1,0 +1,59 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: contact.htm 3529 2008-10-07 13:10:24Z jow $
+
+-%>
+<%+header%>
+
+<h2><%:ff_remote_update Freifunk Remote Update%></h2>
+
+<p><%:ff_remote_update_desc Check for new firmware versions and perform automatic updates.%></p>
+
+<% if update then %>
+
+	<% if update.info then %>
+		<strong><%:ff_remote_update_available Update available!%></strong>
+		<br /><br />
+		<pre><%=update.info%></pre><br />
+	<% else %>
+		<strong><%:ff_remote_update_uptodate The installed firmware is the most recent version.%></strong>
+		<br /><br />
+	<% end %>
+
+	<p>
+		<form method="post" action="" class="inline">
+			<input type="hidden" name="flash" value="1" />
+			<input type="submit" class="cbi-button cbi-button-apply" value="<%:ff_remote_update_install Start Upgrade%>" />
+		</form>	
+	</p>
+
+<% elseif confirm then %>
+
+	<strong><%:ff_remote_update_settings Update Settings%></strong>
+	<br /><br />
+
+	<p><form method="post" action="" class="inline">
+		<input type="hidden" name="flash" value="1" />
+		<input type="hidden" name="confirm" value="1" />
+
+		<input type="checkbox" class="cbi-input-checkbox" name="keepcfg" value="1" checked="checked" id="cb_keepcfg" />
+		<label for="cb_keepcfg"><%:ff_remote_update_keepcfg Keep configuration%></label><br />
+
+		<input type="checkbox" class="cbi-input-checkbox" name="verify" value="1" checked="checked" id="cb_verify" />
+		<label for="cb_verify"><%:ff_remote_update_keepcfg Verify downloaded images%></label><br /><br />
+
+		<input type="submit" class="cbi-button cbi-button-apply" value="<%:ff_remote_update_install Confirm Upgrade%>" />
+	</form></p>
+
+<% end %>
+
+<%+footer%>

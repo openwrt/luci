@@ -49,9 +49,14 @@ find_local_checksum()
 	echo $1
 }
 
+find_remote_info()
+{
+	wget -qO- "${1%/*}/VERSION.txt" 2>/dev/null
+}
+
 find_remote_version()
 {
-	wget -qO- "${1%/*}/VERSION.txt" 2>/dev/null | \
+	find_remote_info "$1" | \
 		sed -ne "s!.*$D4/$D2/$D2 $D2:$D2.*!\\1\\2\\3\\4\\5!p;t"
 }
 
@@ -197,9 +202,12 @@ if [ "$checkupdate" = 1 ]; then
 	[ -n "$v1" -a -n "$v2" ] && {
 		version_compare "$v1" "$v2"
 		[ $? == 2 ] && {
-			echo "Update available! $v1 -> $v2"
+			echo "Update available!${NL}Local:  $v1${NL}Remote: $v2${NL}--"
+			find_remote_info "$image_url"
+			exit 0
 		} || {
 			echo "Local version $v1 is up to date"
+			exit 2
 		}
 	} || {
 		echo "No remote time stamp found."
