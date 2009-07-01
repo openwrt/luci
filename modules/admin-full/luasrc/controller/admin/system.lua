@@ -279,7 +279,7 @@ function action_upgrade()
 				while true do
 					local ln = fd:read("*l")
 					if not ln then break end
-					luci.http.write(ln)
+					luci.http.write(ln .. "\n")
 				end
 				fd:close()
 			end
