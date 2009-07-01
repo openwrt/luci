@@ -22,6 +22,11 @@ find_image()
 				echo "openwrt-ubiquity-combined.img"
 			fi
 		;;
+		ar71xx)
+			if grep -q '"kernel"' /proc/mtd; then
+				echo "openwrt-ar71xx-combined.img"
+			fi
+		;;
 		brcm-2.4)
 			echo "openwrt-brcm-2.4-squashfs.trx"
 		;;
