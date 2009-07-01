@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sysupgrade-atheros
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -17,8 +17,8 @@ define Package/sysupgrade-atheros
   SECTION:=luci
   CATEGORY:=LuCI
   SUBMENU:=Freifunk
-  TITLE:=Experimental sysupgrade support for Atheros SoC
-  DEPENDS:=@TARGET_atheros
+  TITLE:=Experimental sysupgrade support for Atheros SoC and AR71xx target (UBNT RS)
+  DEPENDS:=@TARGET_atheros||@TARGET_ar71xx
 endef
 
 define Package/sysupgrade-atheros/description

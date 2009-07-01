@@ -15,7 +15,7 @@ platform_check_image() {
 			fi
 		;;
 		*)
-			echo "Invalid image. Use Freifunk .img files on this platform"
+			echo "Invalid image. Use combined .img files on this platform"
 			return 1
 		;;
 	esac
