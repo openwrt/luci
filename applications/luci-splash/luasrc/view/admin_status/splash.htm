@@ -35,10 +35,10 @@ uci:foreach("luci_splash", "lease",
 				start   = tonumber(s.start),
 				limit   = ( tonumber(s.start) + leasetime ),
 				mac     = s.mac:upper(),
+				ipaddr  = s.ipaddr,
 				policy  = "normal",
 				packets = 0,
 				bytes   = 0,
-				kicked  = s.kicked and true or false
 			}
 		end
 	end)
@@ -58,11 +58,25 @@ for _, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases"})) do
 	end
 end
 
-for _, r in ipairs(ipt:find({table="filter", chain="luci_splash_filter", options={"MAC"}})) do
-	local c = clients[r.options[2]:lower()]
-	if c and c.packets == 0 then
-		c.bytes   = tonumber(r.bytes)
-		c.packets = tonumber(r.packets)
+for mac, client in pairs(clients) do
+	client.bytes_in    = 0
+	client.bytes_out   = 0
+	client.packets_in  = 0
+	client.packets_out = 0
+
+	if client.ipaddr then
+		local rin  = ipt:find({table="mangle", chain="luci_splash_mark_in", destination=client.ipaddr})
+		local rout = ipt:find({table="mangle", chain="luci_splash_mark_out", options={"MAC", client.mac:upper()}})
+
+		if rin and #rin > 0 then
+			client.bytes_in   = rin[1].bytes
+			client.packets_in = rin[1].packets
+		end
+
+		if rout and #rout > 0 then
+			client.bytes_out   = rout[1].bytes
+			client.packets_out = rout[1].packets
+		end
 	end
 end
 
@@ -123,7 +137,7 @@ end
 					<th class="cbi-section-table-cell"><%:ff_splash_ip IP Address%></th>
 					<th class="cbi-section-table-cell"><%:ff_splash_mac MAC Address%></th>
 					<th class="cbi-section-table-cell"><%:ff_splash_timeleft Time remaining%></th>
-					<th class="cbi-section-table-cell"><%:ff_splash_traffic Outgoing traffic%></th>
+					<th class="cbi-section-table-cell"><%:ff_splash_traffic Traffic in/out%></th>
 					<th class="cbi-section-table-cell"><%:ff_splash_policy Policy%></th>
 				</tr>
 
@@ -149,7 +163,7 @@ end
 							(c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or
 								(c.policy ~= "normal") and "-" or "<em>" .. translate("ff_splash_expired", "expired") .. "</em>"
 						%></td>
-						<td class="cbi-section-table-cell"><%=wat.byte_format(c.bytes)%></td>
+						<td class="cbi-section-table-cell"><%=wat.byte_format(c.bytes_in)%> / <%=wat.byte_format(c.bytes_out)%></td>
 						<td class="cbi-section-table-cell">
 							<% if is_admin then %>
 							<select name="policy.<%=c.mac:lower()%>" style="width:200px">
@@ -157,7 +171,7 @@ end
 								<option value="normal"<%=c.policy=="normal" and not c.kicked and ' selected="selected"'%>><%:ff_splash_splashed splashed%></option>
 								<option value="blacklist"<%=c.policy=="blacklist" and ' selected="selected"'%>><%:ff_splash_blacklisted blacklisted%></option>
 								<% if c.policy == "normal" then -%>
-								<option value="kick"<%=c.kicked and ' selected="selected"'%>><%:ff_splash_tempblock temporarily blocked%> (<%=wat.date_format(c.limit-os.time())%>)</option>
+									<option value="kicked"><%:ff_splash_tempblock temporarily blocked%></option>
 								<%- end %>
 							</select>
 							<input type="submit" class="cbi-button cbi-button-save" name="save.<%=c.mac:lower()%>" value="<%:save Save%>" />

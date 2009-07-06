@@ -106,19 +106,22 @@ end
 	
 function run()
 	local pollint = tonumber((cursor:get(UCINAME, "main", "pollinterval")))
+	local threadlimit = tonumber(cursor:get(UCINAME, "main", "threadlimit"))
 
 	while true do
-		local stat, code = nixio.poll(pollt, pollint)
+		if not threadlimit or tcount < threadlimit then
+			local stat, code = nixio.poll(pollt, pollint)
 		
-		if stat and stat > 0 then
-			for _, polle in ipairs(pollt) do
-				if polle.revents ~= 0 and polle.handler then
-					polle.handler(polle)
+			if stat and stat > 0 then
+				for _, polle in ipairs(pollt) do
+					if polle.revents ~= 0 and polle.handler then
+						polle.handler(polle)
+					end
 				end
+			elseif stat == 0 then
+				ifaddrs = nixio.getifaddrs()
+				collectgarbage("collect")
 			end
-		elseif stat == 0 then
-			ifaddrs = nixio.getifaddrs()
-			collectgarbage("collect")
 		end
 		
 		for _, cb in ipairs(tickt) do

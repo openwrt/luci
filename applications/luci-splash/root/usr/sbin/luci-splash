@@ -2,185 +2,324 @@
 
 require("luci.util")
 require("luci.model.uci")
+require("luci.sys")
 require("luci.sys.iptparser")
 
 -- Init state session
 local uci = luci.model.uci.cursor_state()
 local ipt = luci.sys.iptparser.IptParser()
+local net = luci.sys.net
 
-local splash_interfaces = { }
 local limit_up = 0
 local limit_down = 0
 
+function lock()
+	os.execute("lock -w /var/run/luci_splash.lock && lock /var/run/luci_splash.lock")
+end
+
+function unlock()
+	os.execute("lock -u /var/run/luci_splash.lock")
+end
+
 function main(argv)
-	local cmd = argv[1]
-	local arg = argv[2]
+	local cmd = table.remove(argv, 1)
+	local arg = argv[1]
 
 	limit_up = tonumber(uci:get("luci_splash", "general", "limit_up")) or 0
 	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down")) or 0
-	
-	uci:foreach("luci_splash", "iface", function(s)
-		if s.network then
-			splash_interfaces[#splash_interfaces+1] = uci:get("network", s.network, "ifname")
-		end
-	end)
 
-	if cmd == "status" and arg then
-		if islisted("whitelist", arg) then
-			print("whitelisted")
-		elseif islisted("blacklist", arg) then
-			print("blacklisted")
-		else		
-			local lease = haslease(arg)
-			if lease and lease.kicked then
-				print("kicked")
-			elseif lease then
-				print("lease")
+	if ( cmd == "lease" or cmd == "add-rules" or cmd == "remove" or
+	     cmd == "whitelist" or cmd == "blacklist" ) and #argv > 0
+	then
+		lock()
+
+		local arp_cache      = net.arptable()
+		local leased_macs    = get_known_macs("lease")
+		local blacklist_macs = get_known_macs("blacklist")
+		local whitelist_macs = get_known_macs("whitelist")
+
+		for i, adr in ipairs(argv) do
+			local mac = nil
+			if adr:find(":") then
+				mac = adr:lower()
 			else
-				print("unknown")
+				for _, e in ipairs(arp_cache) do
+					if e["IP address"] == adr then
+						mac = e["HW address"]
+						break
+					end
+				end
+			end
+
+			if mac and cmd == "add-rules" then
+				if leased_macs[mac] then
+					add_lease(mac, arp_cache, true)
+				elseif blacklist_macs[mac] then
+					add_blacklist_rule(mac)
+				elseif whitelist_macs[mac] then
+					add_whitelist_rule(mac)
+				end
+			elseif mac and ( cmd == "whitelist" or cmd == "blacklist" or cmd == "lease" ) then
+				if cmd ~= "lease" and leased_macs[mac] then
+					print("Removing %s from leases" % mac)
+					remove_lease(mac)
+					leased_macs[mac] = nil
+				end
+
+				if cmd ~= "whitelist" and whitelist_macs[mac] then
+					print("Removing %s from whitelist" % mac)
+					remove_whitelist(mac)
+					whitelist_macs[mac] = nil					
+				end
+
+				if cmd ~= "blacklist" and blacklist_macs[mac] then
+					print("Removing %s from blacklist" % mac)
+					remove_blacklist(mac)
+					blacklist_macs[mac] = nil
+				end
+
+				if cmd == "lease" and not leased_macs[mac] then
+					print("Adding %s to leases" % mac)
+					add_lease(mac)
+					leased_macs[mac] = true
+				elseif cmd == "whitelist" and not whitelist_macs[mac] then
+					print("Adding %s to whitelist" % mac)
+					add_whitelist(mac)
+					whitelist_macs[mac] = true
+				elseif cmd == "blacklist" and not blacklist_macs[mac] then
+					print("Adding %s to blacklist" % mac)
+					add_blacklist(mac)
+					blacklist_macs[mac] = true
+				else
+					print("The mac %s is already %sed" %{ mac, cmd })
+				end
+			elseif mac and cmd == "remove" then
+				if leased_macs[mac] then
+					print("Removing %s from leases" % mac)
+					remove_lease(mac)
+					leased_macs[mac] = nil
+				elseif whitelist_macs[mac] then
+					print("Removing %s from whitelist" % mac)
+					remove_whitelist(mac)
+					whitelist_macs[mac] = nil					
+				elseif blacklist_macs[mac] then
+					print("Removing %s from blacklist" % mac)
+					remove_blacklist(mac)
+					blacklist_macs[mac] = nil
+				else
+					print("The mac %s is not known" % mac)
+				end
+			else
+				print("Can not find mac for ip %s" % argv[i])
 			end
 		end
-		os.exit(0)
-	elseif cmd == "add" and arg then
-		if not haslease(arg) then
-			add_lease(arg)
-		else
-			print("already leased!")
-			os.exit(2)
-		end
-		os.exit(0)
-	elseif cmd == "remove" and arg then
-		remove_lease(arg)
-		os.exit(0)		
+
+		unlock()
+		os.exit(0)	
 	elseif cmd == "sync" then
 		sync()
 		os.exit(0)
+	elseif cmd == "list" then
+		list()
+		os.exit(0)
 	else
-		print("Usage: " .. argv[0] .. " <status|add|remove|sync> [MAC]")
+		print("Usage:")
+		print("\n  luci-splash list\n    List connected, black- and whitelisted clients")
+		print("\n  luci-splash sync\n    Synchronize firewall rules and clear expired leases")
+		print("\n  luci-splash lease <MAC-or-IP>\n    Create a lease for the given address")
+		print("\n  luci-splash blacklist <MAC-or-IP>\n    Add given address to blacklist")
+		print("\n  luci-splash whitelist <MAC-or-IP>\n    Add given address to whitelist")
+		print("\n  luci-splash remove <MAC-or-IP>\n    Remove given address from the lease-, black- or whitelist")
+		print("")
+
 		os.exit(1)	
 	end
 end
 
+-- Get a list of known mac addresses
+function get_known_macs(list)
+	local leased_macs = { }
+
+	if not list or list == "lease" then
+		uci:foreach("luci_splash", "lease",
+			function(s) leased_macs[s.mac:lower()] = true end)
+	end
+
+	if not list or list == "whitelist" then
+		uci:foreach("luci_splash", "whitelist",
+			function(s) leased_macs[s.mac:lower()] = true end)
+	end
+
+	if not list or list == "blacklist" then
+		uci:foreach("luci_splash", "blacklist",
+			function(s) leased_macs[s.mac:lower()] = true end)
+	end
+
+	return leased_macs
+end
+
+
+-- Get a list of known ip addresses
+function get_known_ips(macs, arp)
+	local leased_ips = { }
+	if not macs then macs = get_known_macs() end
+	for _, e in ipairs(arp or net.arptable()) do
+		if macs[e["HW address"]] then leased_ips[e["IP address"]] = true end
+	end
+	return leased_ips
+end
+
+
+-- Helper to delete iptables rules
+function ipt_delete_all(args, comp, off)
+	off = off or { }
+	for i, r in ipairs(ipt:find(args)) do
+		if comp == nil or comp(r) then
+			off[r.table] = off[r.table] or { }
+			off[r.table][r.chain] = off[r.table][r.chain] or 0
+
+			os.execute("iptables -t %q -D %q %d 2>/dev/null"
+				%{ r.table, r.chain, r.index - off[r.table][r.chain] })
+
+			off[r.table][r.chain] = off[r.table][r.chain] + 1
+		end
+	end
+end
+
+
 -- Add a lease to state and invoke add_rule
-function add_lease(mac)
-	uci:section("luci_splash", "lease", nil, {
-		mac = mac,
-		start = os.time()
-	})
-	add_rule(mac)
-	
-	uci:save("luci_splash")
+function add_lease(mac, arp, no_uci)
+	mac = mac:lower()
+
+	-- Get current ip address
+	local ipaddr
+	for _, entry in ipairs(arp or net.arptable()) do
+		if entry["HW address"] == mac then
+			ipaddr = entry["IP address"]
+			break
+		end
+	end
+
+	-- Add lease if there is an ip addr
+	if ipaddr then
+		if not no_uci then
+			uci:section("luci_splash", "lease", nil, {
+				mac    = mac,
+				ipaddr = ipaddr,
+				start  = os.time()
+			})
+			uci:save("luci_splash")
+		end
+		add_lease_rule(mac, ipaddr)
+	else
+		print("Found no active IP for %s, lease not added" % mac)
+	end
 end
 
 
 -- Remove a lease from state and invoke remove_rule
 function remove_lease(mac)
 	mac = mac:lower()
-	remove_rule(mac)
 
 	uci:delete_all("luci_splash", "lease",
-		function(s) return ( s.mac:lower() == mac ) end)
+		function(s)
+			if s.mac:lower() == mac then
+				remove_lease_rule(mac, s.ipaddr)
+				return true
+			end
+			return false
+		end)
 		
 	uci:save("luci_splash")
 end
 
 
+-- Add a whitelist entry
+function add_whitelist(mac)
+	uci:section("luci_splash", "whitelist", nil, { mac = mac })
+	uci:save("luci_splash")
+	uci:commit("luci_splash")
+	add_whitelist_rule(mac)
+end
+
+
+-- Add a blacklist entry
+function add_blacklist(mac)
+	uci:section("luci_splash", "blacklist", nil, { mac = mac })
+	uci:save("luci_splash")
+	uci:commit("luci_splash")
+	add_blacklist_rule(mac)
+end
+
+
+-- Remove a whitelist entry
+function remove_whitelist(mac)
+	mac = mac:lower()
+	uci:delete_all("luci_splash", "whitelist",
+		function(s) return not s.mac or s.mac:lower() == mac end)
+	uci:save("luci_splash")
+	uci:commit("luci_splash")
+	remove_lease_rule(mac)
+end
+
+
+-- Remove a blacklist entry
+function remove_blacklist(mac)
+	mac = mac:lower()
+	uci:delete_all("luci_splash", "blacklist",
+		function(s) return not s.mac or s.mac:lower() == mac end)
+	uci:save("luci_splash")
+	uci:commit("luci_splash")
+	remove_lease_rule(mac)
+end
+
+
 -- Add an iptables rule
-function add_rule(mac)
-	local a, b, c, d, e, f = mac:match("(%w+):(%w+):(%w+):(%w+):(%w+):(%w+)")
-	local mac_pre  = "%s%s" %{ a, b }
-	local mac_post = "%s%s%s%s" %{ c, d, e, f }
-	local handle   = f
-
+function add_lease_rule(mac, ipaddr)
 	if limit_up > 0 and limit_down > 0 then
-		os.execute("iptables -t mangle -I luci_splash_mark -m mac --mac-source %q -j MARK --set-mark 79" % mac)
-
-		for _, i in ipairs(splash_interfaces) do
-			os.execute("tc filter add dev %q parent 77:0 protocol ip prio 2 " % i .. 
-				"handle ::%q u32 " % handle ..
-				"match u16 0x0800 0xFFFF at -2 match u32 0x%q 0xFFFFFFFF at -12 " % mac_post ..
-				"match u16 0x%q 0xFFFF at -14 flowid 77:10" % mac_pre)
-		end
+		os.execute("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+		os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
 	end
 
 	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
-	return os.execute("iptables -t nat -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
+	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
 end
 
 
--- Remove an iptables rule
-function remove_rule(mac)
-	local handle = mac:match("%w+:%w+:%w+:%w+:%w+:(%w+)")
-
-	local function ipt_delete_foreach(args)
-		for _, r in ipairs(ipt:find(args)) do
-			os.execute("iptables -t %q -D %q -m mac --mac-source %q %s 2>/dev/null"
-				%{ r.table, r.chain, mac,
-					r.target == "MARK" and "-j MARK --set-mark 79" or
-						r.target and "-j %q" % r.target or "" })
-		end
-	end
-
-	ipt_delete_foreach({table="filter", chain="luci_splash_filter", options={"MAC", mac:upper()}})
-	ipt_delete_foreach({table="mangle", chain="luci_splash_mark", options={"MAC", mac:upper()}})
-	ipt_delete_foreach({table="nat", chain="luci_splash_leases", options={"MAC", mac:upper()}})
-
-	for _, i in ipairs(splash_interfaces) do
-		os.execute("tc filter del dev %q parent 77:0 protocol ip prio 2 " % i .. 
-			"handle 800::%q u32 2>/dev/null" % handle)
-	end
-
+-- Remove lease, black- or whitelist rules
+function remove_lease_rule(mac, ipaddr)
 	ipt:resync()
-end
 
-
--- Check whether a MAC-Address is listed in the lease state list
-function haslease(mac)
-	mac = mac:lower()
-	local lease = nil
-
-	uci:foreach("luci_splash", "lease",
-		function (section)
-			if section.mac:lower() == mac then
-				lease = section
-			end
-		end)
-
-	return lease
-end
-
-
--- Check whether a MAC-Address is in given list
-function islisted(what, mac)
-	mac = mac:lower()
-
-	uci:foreach("luci_splash", what,
-		function (section)
-			if section.mac:lower() == mac then
-				stat = true
-				return
-			end
-		end)
-
-	return false
-end
-
-
--- Returns a list of MAC-Addresses for which a rule is existing
-function listrules()
-	local macs = { }
-	for i, r in ipairs(ipt:find({table="nat", chain="luci_splash_leases", options={"MAC"}})) do
-		macs[r.options[2]:lower()] = true
+	if ipaddr then
+		ipt_delete_all({table="mangle", chain="luci_splash_mark_in",  destination=ipaddr})
+		ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", mac:upper()}})
 	end
-	return luci.util.keys(macs)
+
+	ipt_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
+	ipt_delete_all({table="nat",    chain="luci_splash_leases",   options={"MAC", mac:upper()}})
+end
+
+
+-- Add whitelist rules
+function add_whitelist_rule(mac)
+	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
+end
+
+
+-- Add blacklist rules
+function add_blacklist_rule(mac)
+	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
+	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j DROP" % mac)
 end
 
 
 -- Synchronise leases, remove abandoned rules
 function sync()
-	local written = {}
+	lock()
+
 	local time = os.time()
-	
+
 	-- Current leases in state files
 	local leases = uci:get_all("luci_splash")
 	
@@ -191,36 +330,105 @@ function sync()
 	uci:load("luci_splash")
 	uci:revert("luci_splash")
 	
-	
 	-- For all leases
 	for k, v in pairs(leases) do
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
 				-- Remove expired
-				remove_rule(v.mac)
+				remove_lease_rule(v.mac, v.ipaddr)
 			else
 				-- Rewrite state
 				uci:section("luci_splash", "lease", nil, {		
 					mac    = v.mac,
-					start  = v.start,
-					kicked = v.kicked
+					ipaddr = v.ipaddr,
+					start  = v.start
 				})
-				written[v.mac:lower()] = 1
 			end
-		elseif v[".type"] == "whitelist" or v[".type"] == "blacklist" then
-			written[v.mac:lower()] = 1
 		end
 	end
-	
-	
-	-- Delete rules without state
-	for i, r in ipairs(listrules()) do
-		if #r > 0 and not written[r:lower()] then
-			remove_rule(r)
-		end
-	end
-	
+
 	uci:save("luci_splash")
+
+	-- Get current IPs and MAC addresses
+	local macs = get_known_macs()
+	local ips  = get_known_ips(macs)
+
+	ipt:resync()
+
+	ipt_delete_all({table="filter", chain="luci_splash_filter", options={"MAC"}},
+		function(r) return not macs[r.options[2]:lower()] end)
+
+	ipt_delete_all({table="nat", chain="luci_splash_leases", options={"MAC"}},
+		function(r) return not macs[r.options[2]:lower()] end)
+
+	ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
+		function(r) return not macs[r.options[2]:lower()] end)
+
+	ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"MARK", "set"}},
+		function(r) return not ips[r.destination] end)
+
+	unlock()
+end
+
+-- Show client info
+function list()
+	-- Get current arp cache
+	local arpcache = { }
+	for _, entry in ipairs(net.arptable()) do
+		arpcache[entry["HW address"]] = { entry["Device"], entry["IP address"] }
+	end
+
+	-- Find traffic usage
+	local function traffic(lease)
+		local traffic_in  = 0
+		local traffic_out = 0
+
+		local rin  = ipt:find({table="mangle", chain="luci_splash_mark_in", destination=lease.ipaddr})
+		local rout = ipt:find({table="mangle", chain="luci_splash_mark_out", options={"MAC", lease.mac:upper()}})
+
+		if rin  and #rin  > 0 then traffic_in  = math.floor( rin[1].bytes / 1024) end
+		if rout and #rout > 0 then traffic_out = math.floor(rout[1].bytes / 1024) end
+
+		return traffic_in, traffic_out
+	end
+
+	-- Print listings
+	local leases = uci:get_all("luci_splash")
+
+	print(string.format(
+		"%-17s  %-15s  %-9s  %-4s  %-7s  %20s",
+		"MAC", "IP", "State", "Dur.", "Intf.", "Traffic down/up"
+	))
+
+	-- Leases
+	for _, s in pairs(leases) do
+		if s[".type"] == "lease" and s.mac then
+			local ti, to = traffic(s)
+			local mac = s.mac:lower()
+			local arp = arpcache[mac]
+			print(string.format(
+				"%-17s  %-15s  %-9s  %3dm  %-7s  %7dKB  %7dKB",
+				mac, s.ipaddr, "leased",
+				math.floor(( os.time() - tonumber(s.start) ) / 60),
+				arp and arp[1] or "?", ti, to
+			))
+		end
+	end
+
+	-- Whitelist, Blacklist
+	for _, s in luci.util.spairs(leases,
+		function(a,b) return leases[a][".type"] > leases[b][".type"] end
+	) do
+		if (s[".type"] == "whitelist" or s[".type"] == "blacklist") and s.mac then
+			local mac = s.mac:lower()
+			local arp = arpcache[mac]
+			print(string.format(
+				"%-17s  %-15s  %-9s  %4s  %-7s  %9s  %9s",
+				mac, arp and arp[2] or "?", s[".type"], "- ",
+				arp and arp[1] or "?", "-", "-"
+			))
+		end
+	end
 end
 
 main(arg)
