@@ -24,7 +24,7 @@ function action_activate()
 	local ip = luci.http.getenv("REMOTE_ADDR") or "127.0.0.1"
 	local mac = luci.sys.net.ip4mac(ip:match("^[\[::ffff:]*(%d+.%d+%.%d+%.%d+)\]*$"))
 	if mac and luci.http.formvalue("accept") then
-		os.execute("luci-splash add "..mac.." >/dev/null 2>&1")
+		os.execute("luci-splash lease "..mac.." >/dev/null 2>&1")
 		luci.http.redirect(luci.model.uci.cursor():get("freifunk", "community", "homepage"))
 	else
 		luci.http.redirect(luci.dispatcher.build_url())
@@ -35,63 +35,44 @@ function action_status_admin()
 	local uci = luci.model.uci.cursor_state()
 	local macs = luci.http.formvaluetable("save")
 
-	local function delete_mac(what, mac)
-		uci:delete_all("luci_splash", what,
-			function(s)
-				return ( s.mac and s.mac:lower() == mac )
-			end)
-	end
-
-	local function leases(mac)
-		local leases = { }
-
-		uci:foreach("luci_splash", "lease", function(s)
-			if s.start and s.mac and s.mac:lower() ~= mac then
-				leases[#leases+1] = {
-					start = s.start,
-					mac   = s.mac
-				}
-			end
-		end)
-
-		uci:revert("luci_splash")
-
-		return leases
-	end
-
-	local function commit(leases, no_commit)
-		if not no_commit then
-			uci:save("luci_splash")
-			uci:commit("luci_splash")
-		end
-
-		for _, l in ipairs(leases) do
-			uci:section("luci_splash", "lease", nil, l)
-		end
-
-		uci:save("luci_splash")
-		os.execute("/etc/init.d/luci_splash restart")
-	end
+	local changes = { 
+		whitelist = { },
+		blacklist = { },
+		lease     = { },
+		remove    = { }
+	}
 
 	for key, _ in pairs(macs) do
 		local policy = luci.http.formvalue("policy.%s" % key)
 		local mac    = luci.http.protocol.urldecode(key)
-		local lslist = leases(policy ~= "kick" and mac)
-
-		delete_mac("blacklist", mac)
-		delete_mac("whitelist", mac)
 
 		if policy == "whitelist" or policy == "blacklist" then
-			uci:section("luci_splash", policy, nil, { mac = mac })
-		elseif policy == "normal" then			
-			lslist[#lslist+1] = { mac = mac, start = os.time() }
-		elseif policy == "kick" then
-			for _, l in ipairs(lslist) do
-				if l.mac:lower() == mac then l.kicked="1" end
-			end
+			changes[policy][#changes[policy]+1] = mac
+		elseif policy == "normal" then
+			changes["lease"][#changes["lease"]+1] = mac
+		elseif policy == "kicked" then
+			changes["remove"][#changes["remove"]+1] = mac
 		end
+	end
 
-		commit(lslist)
+	if #changes.whitelist > 0 then
+		os.execute("luci-splash whitelist %s >/dev/null"
+			% table.concat(changes.whitelist))
+	end
+
+	if #changes.blacklist > 0 then
+		os.execute("luci-splash blacklist %s >/dev/null"
+			% table.concat(changes.blacklist))
+	end
+
+	if #changes.lease > 0 then
+		os.execute("luci-splash lease %s >/dev/null"
+			% table.concat(changes.lease))
+	end
+
+	if #changes.remove > 0 then
+		os.execute("luci-splash remove %s >/dev/null"
+			% table.concat(changes.remove))
 	end
 
 	luci.template.render("admin_status/splash", { is_admin = true })
