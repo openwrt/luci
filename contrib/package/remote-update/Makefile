@@ -18,7 +18,7 @@ define Package/remote-update
   CATEGORY:=LuCI
   SUBMENU:=Freifunk
   TITLE:=Freifunk remote update utility.
-  DEPENDS:=@TARGET_atheros||@TARGET_ar71xx||@TARGET_brcm-2.4
+  DEPENDS:=@TARGET_atheros||@TARGET_ar71xx||@TARGET_brcm_2_4
 endef
 
 define Package/remote-update/description
