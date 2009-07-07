@@ -65,6 +65,9 @@
 			function ffmapinit()
 			{
 				if(null!=window.map)map.Dispose();
+
+				var INFINITE = 99.99;
+
 				map = new VEMap('ffmap');
 				<%
 					local fd
@@ -77,12 +80,19 @@
 					end)
 
 					if fd then
-						while true do
-							local ln = fd:read("*l")
-							if not ln then break end
-							write(ln)
-						end
+						local data = fd:read("*a")
 						fd:close()
+
+						if data then
+							local line
+							for line in data:gmatch("[^\n]+") do
+								if line:match(";$") then
+									write(line .. "\n")
+								else
+									break
+								end
+							end
+						end
 					end
 				%>
 			}
