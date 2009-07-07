@@ -40,6 +40,12 @@ config fw_rule olsr
 	option proto  udp
 	option dest_port 698
 
+config fw_rule wprobe
+	option src freifunk
+	option target ACCEPT
+	option proto  tcp
+	option dest_port 17990
+
 config fw_forwarding lan
 	option src lan
 	option dest freifunk
