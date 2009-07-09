@@ -296,12 +296,14 @@ end
 --			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
 --			  "flags", "device" }
 function net.defaultroute()
-	local route = nil
-	for _, r in pairs(net.routes()) do
-		if r.dest:prefix() == 0 and (not route or route.metric > r.metric) then
-			route = r
+	local route
+
+	net.routes(function(rt)
+		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
+			route = rt
 		end
-	end
+	end)
+
 	return route
 end
 
@@ -371,7 +373,7 @@ end
 --			The following fields are defined for route entry tables:
 --			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
 --			  "flags", "device" }
-function net.routes()
+function net.routes(callback)
 	local routes = { }
 
 	for line in io.lines("/proc/net/route") do
@@ -389,7 +391,7 @@ function net.routes()
 				dst_ip, dst_mask:prefix(dst_mask), luci.ip.FAMILY_INET4
 			)
 
-			routes[#routes+1] = {
+			local rt = {
 				dest     = dst_ip,
 				gateway  = gateway,
 				metric   = tonumber(metric),
@@ -401,6 +403,12 @@ function net.routes()
 				flags    = tonumber(flags, 16),
 				device   = dev
 			}
+
+			if callback then
+				callback(rt)
+			else
+				routes[#routes+1] = rt
+			end
 		end
 	end
 
