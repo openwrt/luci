@@ -215,6 +215,16 @@ define Package/luci-json/install
 endef
 
 
+define Package/luci-lmo
+  $(call Package/luci/libtemplate)
+  TITLE:=lmo
+endef
+
+define Package/luci-lmo/install
+	$(call Package/luci/install/template,$(1),libs/lmo)
+endef
+
+
 define Package/luci-luanet
   $(call Package/luci/libtemplate)
   TITLE:=luanet
@@ -302,7 +312,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi
+  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,en,Default Language)
 endef
@@ -889,6 +899,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-json),)
 	PKG_SELECTED_MODULES+=libs/json
 endif
+ifneq ($(CONFIG_PACKAGE_luci-lmo),)
+	PKG_SELECTED_MODULES+=libs/lmo
+endif
 ifneq ($(CONFIG_PACKAGE_luci-luanet),)
 	PKG_SELECTED_MODULES+=libs/luanet
 endif
@@ -1082,6 +1095,7 @@ $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
+$(eval $(call BuildPackage,luci-lmo))
 $(eval $(call BuildPackage,luci-luanet))
 $(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
