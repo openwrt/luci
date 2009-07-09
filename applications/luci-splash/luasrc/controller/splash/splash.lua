@@ -12,8 +12,8 @@ end
 
 function action_dispatch()
 	local mac = luci.sys.net.ip4mac(luci.http.getenv("REMOTE_ADDR")) or ""
-	local status = luci.util.execl("luci-splash status "..mac)[1]
-	if #mac > 0 and ( status == "whitelisted" or status == "lease" ) then
+	local status = luci.util.execl("luci-splash status " .. mac)[1]
+	if #mac > 0 and ( status == "whitelist" or status == "lease" ) then
 		luci.http.redirect(luci.dispatcher.build_url())
 	else
 		luci.http.redirect(luci.dispatcher.build_url("splash", "splash"))
