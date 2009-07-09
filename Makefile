@@ -28,6 +28,7 @@ i18nbuild:
 	./build/i18n-po2lua.pl ./po host/lua-po
 
 clean:
+	rm -rf docs
 	make -C libs/lmo host-clean
 	for i in $(MODULES); do make -C$$i clean; done
 
