@@ -14,6 +14,7 @@ $Id$
 local ipairs, pairs = ipairs, pairs
 local tostring, tonumber = tostring, tonumber
 local pcall, assert, type = pcall, assert, type
+local set_memory_limit = set_memory_limit
 
 local os = require "os"
 local nixio = require "nixio"
@@ -408,6 +409,11 @@ function Server.process(self, client, env)
 	local close = false
 	local stat, code, msg, message, err
 	
+	env.config.memlimit = tonumber(env.config.memlimit)
+	if env.config.memlimit and set_memory_limit then
+		set_memory_limit(env.config.memlimit)
+	end
+
 	client:setsockopt("socket", "rcvtimeo", 5)
 	client:setsockopt("socket", "sndtimeo", 5)
 	
