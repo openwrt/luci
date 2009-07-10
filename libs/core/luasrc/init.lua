@@ -26,6 +26,11 @@ limitations under the License.
 
 local require = require
 
+-- Set memory limit if supported
+if _G.set_memory_limit then
+	set_memory_limit(1024 * 1024 * 1.5)
+end
+
 -- Make sure that bitlib is loaded
 if not _G.bit then
 	_G.bit = require "bit"
