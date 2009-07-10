@@ -35,8 +35,8 @@ luci.util   = require "luci.util"
 luci.fs     = require "luci.fs"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type =
-	tonumber, ipairs, pairs, pcall, type
+local tonumber, ipairs, pairs, pcall, type, next =
+	tonumber, ipairs, pairs, pcall, type, next
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -239,13 +239,13 @@ net = {}
 -- @return	Table of table containing the current arp entries.
 --			The following fields are defined for arp entry objects:
 --			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
-function net.arptable()
-	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+")
+function net.arptable(callback)
+	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+", callback)
 end
 
 --- Returns conntrack information
 -- @return	Table with the currently tracked IP connections
-function net.conntrack()
+function net.conntrack(callback)
 	local connt = {}
 	if luci.fs.access("/proc/net/nf_conntrack", "r") then
 		for line in io.lines("/proc/net/nf_conntrack") do
@@ -257,7 +257,11 @@ function net.conntrack()
 				entry[i] = nil
 			end
 
-			connt[#connt+1] = entry
+			if callback then
+				callback(entry)
+			else
+				connt[#connt+1] = entry
+			end
 		end
 	elseif luci.fs.access("/proc/net/ip_conntrack", "r") then
 		for line in io.lines("/proc/net/ip_conntrack") do
@@ -269,7 +273,11 @@ function net.conntrack()
 				entry[i] = nil
 			end
 
-			connt[#connt+1] = entry
+			if callback then
+				callback(entry)
+			else
+				connt[#connt+1] = entry
+			end
 		end
 	else
 		return nil
@@ -682,7 +690,7 @@ function wifi.channels(iface)
 		fd:close()
 	end
 
-	if not ((pairs(cns))(cns)) then
+	if not next(cns) then
 		cns = {
 			2.412, 2.417, 2.422, 2.427, 2.432, 2.437,
 			2.442, 2.447, 2.452, 2.457, 2.462
@@ -749,7 +757,7 @@ end
 
 -- Internal functions
 
-function _parse_delimited_table(iter, delimiter)
+function _parse_delimited_table(iter, delimiter, callback)
 	delimiter = delimiter or "%s+"
 
 	local data  = {}
@@ -771,7 +779,12 @@ function _parse_delimited_table(iter, delimiter)
 				end
 			end
 		end
-		table.insert(data, row)
+
+		if callback then
+			callback(row)
+		else
+			data[#data+1] = row
+		end
 	end
 
 	return data
