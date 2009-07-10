@@ -302,17 +302,14 @@ end
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
 function net.defaultroute6()
-	local route   = nil
-	local routes6 = net.routes6()
-	if routes6 then
-		for _, r in pairs(routes6) do
-			if r.dest:prefix() == 0 and
-			   (not route or route.metric > r.metric)
-			then
-				route = r
-			end
+	local route
+
+	net.routes6(function(rt)
+		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
+			route = rt
 		end
-	end
+	end)
+
 	return route
 end
 
@@ -426,7 +423,7 @@ end
 --			The following fields are defined for route entry tables:
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
-function net.routes6()
+function net.routes6(callback)
 	if luci.fs.access("/proc/net/ipv6_route", "r") then
 		local routes = { }
 
@@ -451,7 +448,7 @@ function net.routes6()
 
 			nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
 
-			routes[#routes+1] = {
+			local rt = {
 				source   = src_ip,
 				dest     = dst_ip,
 				nexthop  = nexthop,
@@ -461,6 +458,12 @@ function net.routes6()
 				flags    = tonumber(flags, 16),
 				device   = dev
 			}
+
+			if callback then
+				callback(rt)
+			else
+				routes[#routes+1] = rt
+			end
 		end
 
 		return routes
