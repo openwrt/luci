@@ -554,10 +554,10 @@ function strip_bytecode(code)
 		end
 	end
 
-	local strip_function
-	strip_function = function(code)
+	local function strip_function(code)
 		local count, offset = subint(code, 1, size)
-		local stripped, dirty = string.rep("\0", size), offset + count
+		local stripped = { string.rep("\0", size) }
+		local dirty = offset + count
 		offset = offset + count + int * 2 + 4
 		offset = offset + int + subint(code, offset, int) * ins
 		count, offset = subint(code, offset, int)
@@ -575,10 +575,11 @@ function strip_bytecode(code)
 			end
 		end
 		count, offset = subint(code, offset, int)
-		stripped = stripped .. code:sub(dirty, offset - 1)
+		stripped[#stripped+1] = code:sub(dirty, offset - 1)
 		for n = 1, count do
 			local proto, off = strip_function(code:sub(offset, -1))
-			stripped, offset = stripped .. proto, offset + off - 1
+			stripped[#stripped+1] = proto
+			offset = offset + off - 1
 		end
 		offset = offset + subint(code, offset, int) * int + int
 		count, offset = subint(code, offset, int)
@@ -589,8 +590,8 @@ function strip_bytecode(code)
 		for n = 1, count do
 			offset = offset + subint(code, offset, size) + size
 		end
-		stripped = stripped .. string.rep("\0", int * 3)
-		return stripped, offset
+		stripped[#stripped+1] = string.rep("\0", int * 3)
+		return table.concat(stripped), offset
 	end
 
 	return code:sub(1,12) .. strip_function(code:sub(13,-1))
