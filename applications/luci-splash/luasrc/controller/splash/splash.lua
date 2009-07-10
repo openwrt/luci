@@ -11,12 +11,21 @@ function index()
 end
 
 function action_dispatch()
+	local uci = luci.model.uci.cursor_state()
 	local mac = luci.sys.net.ip4mac(luci.http.getenv("REMOTE_ADDR")) or ""
-	local status = luci.util.execl("luci-splash status " .. mac)[1]
-	if #mac > 0 and status == "new" then
-		luci.http.redirect(luci.dispatcher.build_url("splash", "splash"))
-	else
+	local access = false
+
+	uci:foreach("luci_splash", "lease", function(s)
+		if s.mac and s.mac:lower() == mac then access = true end
+	end)
+	uci:foreach("luci_splash", "whitelist", function(s)
+		if s.mac and s.mac:lower() == mac then access = true end
+	end)
+
+	if #mac > 0 and access then
 		luci.http.redirect(luci.dispatcher.build_url())
+	else
+		luci.http.redirect(luci.dispatcher.build_url("splash", "splash"))
 	end
 end
 
