@@ -37,6 +37,7 @@ local rawget, rawset, unpack = rawget, rawset, unpack
 local tostring, type, assert = tostring, type, assert
 local ipairs, pairs, loadstring = ipairs, pairs, loadstring
 local require, pcall, xpcall = require, pcall, xpcall
+local collectgarbage, get_memory_limit = collectgarbage, get_memory_limit
 
 --- LuCI utility functions.
 module "luci.util"
@@ -784,5 +785,11 @@ end
 
 -- Resume execution of protected function call
 function performResume(err, co, ...)
+	if get_memory_limit and get_memory_limit() > 0 and
+	   collectgarbage("count") > (get_memory_limit() * 0.8)
+	then
+		collectgarbage("collect")
+	end
+
 	return handleReturnValue(err, co, coroutine.resume(co, ...))
 end
