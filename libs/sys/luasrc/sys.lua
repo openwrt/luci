@@ -219,26 +219,14 @@ end
 -- @param bytes	Number of bytes for the unique id
 -- @return		String containing hex encoded id
 function uniqueid(bytes)
-	local fp    = io.open("/dev/urandom")
-	local chunk = { fp:read(bytes):byte(1, bytes) }
-	fp:close()
-
-	local hex = ""
-
-	local pattern = "%02X"
-	for i, byte in ipairs(chunk) do
-		hex = hex .. pattern:format(byte)
-	end
-
-	return hex
+	local rand = luci.fs.readfile("/dev/urandom", bytes)
+	return rand and nixio.bin.hexlify(rand)
 end
 
 --- Returns the current system uptime stats.
 -- @return	String containing total uptime in seconds
--- @return	String containing idle time in seconds
 function uptime()
-	local loadavg = io.lines("/proc/uptime")()
-	return loadavg:match("^(.-) (.-)$")
+	return nixio.sysinfo().uptime
 end
 
 
@@ -331,25 +319,43 @@ end
 --- Determine the names of available network interfaces.
 -- @return	Table containing all current interface names
 function net.devices()
-	local devices = {}
-	for line in io.lines("/proc/net/dev") do
-		table.insert(devices, line:match(" *(.-):"))
+	local devs = {}
+	for k, v in ipairs(nixio.getifaddrs()) do
+		if v.family == "packet" then
+			devs[#devs+1] = v.name
+		end
 	end
-	return devices
+	return devs
 end
 
 
 --- Return information about available network interfaces.
 -- @return	Table containing all current interface names and their information
 function net.deviceinfo()
-	local devices = {}
-	for line in io.lines("/proc/net/dev") do
-		local name, data = line:match("^ *(.-): *(.*)$")
-		if name and data then
-			devices[name] = luci.util.split(data, " +", nil, true)
+	local devs = {}
+	for k, v in ipairs(nixio.getifaddrs()) do
+		if v.family == "packet" then
+			local d = v.data
+			d[1] = d.rx_bytes
+			d[2] = d.rx_packets
+			d[3] = d.rx_errors
+			d[4] = d.rx_dropped
+			d[5] = 0
+			d[6] = 0
+			d[7] = 0
+			d[8] = d.multicast
+			d[9] = d.tx_bytes
+			d[10] = d.tx_packets
+			d[11] = d.tx_errors
+			d[12] = d.tx_dropped
+			d[13] = 0
+			d[14] = d.collisions
+			d[15] = 0
+			d[16] = 0
+			devs[v.name] = d
 		end
 	end
-	return devices
+	return devs
 end
 
 
