@@ -258,7 +258,7 @@ function dispatch(request)
 		local verifytoken = false
 		if not sess then
 			sess = luci.http.getcookie("sysauth")
-			sess = sess and sess:match("^[A-F0-9]+$")
+			sess = sess and sess:match("^[a-f0-9]+$")
 			verifytoken = true
 		end
 
