@@ -1,0 +1,79 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008-2009 Steven Barth <steven@midlink.org>
+Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%-
+	require "bit"
+	require "luci.fs"
+	require "luci.sys"
+	require "luci.tools.webadmin"
+
+	local style = true
+-%>
+
+<%+header%>
+
+<div class="cbi-map" id="cbi-conntrack">
+	<h2><a id="content" name="content"><%:a_n_conntrack%></a></h2>
+	<div class="cbi-map-descr"><%:a_n_conntrack_desc%></div>
+
+	<fieldset class="cbi-section" id="cbi-table-table">
+		<legend>ARP</legend>
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%:ipaddress%></th>
+					<th class="cbi-section-table-cell"><%:macaddress%></th>
+					<th class="cbi-section-table-cell"><%:interface%></th>
+				</tr>
+
+				<% luci.sys.net.arptable(function(e) %>
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<td class="cbi-value-field"><%=e["IP address"]%></td>
+					<td class="cbi-value-field"><%=e["HW address"]%></td>
+					<td class="cbi-value-field"><%=e["Device"]%></td>
+				</tr>
+				<% style = not style; end) %>
+			</table>
+		</div>
+	</fieldset>
+	<br />
+
+	<fieldset class="cbi-section" id="cbi-table-table">
+		<legend><%:a_n_conntrack%></legend>
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%:network%></th>
+					<th class="cbi-section-table-cell"><%:protocol%></th>
+					<th class="cbi-section-table-cell"><%:source%></th>
+					<th class="cbi-section-table-cell"><%:destination%></th>
+				</tr>
+
+				<% style = true; luci.sys.net.conntrack(function(c) %>
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<td class="cbi-value-field"><%=c.layer3:upper()%></td>
+					<td class="cbi-value-field"><%=c.layer4:upper()%></td>
+					<td class="cbi-value-field"><%=c.src%></td>
+					<td class="cbi-value-field"><%=c.dst%></td>
+				</tr>
+				<% style = not style; end) %>
+			</table>
+		</div>
+	</fieldset>
+	<br />
+</div>
+	
+<%+footer%>
+
