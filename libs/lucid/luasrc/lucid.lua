@@ -110,22 +110,25 @@ end
 -- This main function of LuCId will wait for events on given file descriptors.
 function run()
 	local pollint = tonumber((cursor:get(UCINAME, "main", "pollinterval")))
-	local threadlimit = tonumber(cursor:get(UCINAME, "main", "threadlimit"))
+	local threadlimit = tonumber((cursor:get(UCINAME, "main", "threadlimit")))
 
 	while true do
-		if not threadlimit or tcount < threadlimit then
-			local stat, code = nixio.poll(pollt, pollint)
+		local stat, code = nixio.poll(pollt, pollint)
 		
-			if stat and stat > 0 then
-				for _, polle in ipairs(pollt) do
-					if polle.revents ~= 0 and polle.handler then
-						polle.handler(polle)
-					end
+		if stat and stat > 0 then
+			local ok = false
+			for _, polle in ipairs(pollt) do
+				if polle.revents ~= 0 and polle.handler then
+					ok = ok or polle.handler(polle)
 				end
-			elseif stat == 0 then
-				ifaddrs = nixio.getifaddrs()
-				collectgarbage("collect")
 			end
+			if not ok then
+				-- Avoid high CPU usage if thread limit is reached
+				nixio.nanosleep(0, 100000000)
+			end
+		elseif stat == 0 then
+			ifaddrs = nixio.getifaddrs()
+			collectgarbage("collect")
 		end
 		
 		for _, cb in ipairs(tickt) do
@@ -198,6 +201,14 @@ function unregister_tick(cb)
 		end
 	end
 	return false
+end
+
+--- Tests whether a given number of processes can be created.
+-- @oaram num Processes to be created
+-- @return boolean status
+function try_process(num)
+	local threadlimit = tonumber((cursor:get(UCINAME, "main", "threadlimit")))
+	return not threadlimit or (threadlimit - tcount) >= (num or 1)
 end
 
 --- Create a new child process from a Lua function and assign a destructor.

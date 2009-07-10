@@ -111,6 +111,9 @@ end
 -- @param polle Poll descriptor
 -- @return handler process id or nil, error code, error message 
 function accept(polle)
+	if not lucid.try_process() then
+		return false
+	end
 	local socket, host, port = polle.fd:accept()
 	if not socket then
 		return nixio.syslog("warn", "accept() failed: " .. port)
