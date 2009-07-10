@@ -21,7 +21,7 @@ function index()
 	entry({"admin", "status", "interfaces"}, template("admin_status/interfaces"), i18n("interfaces", "Interfaces"), 1)
 	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("a_s_ipt", "Firewall"), 2)
 	entry({"admin", "status", "conntrack"}, form("admin_status/conntrack"), i18n("a_n_conntrack"), 3)
-	entry({"admin", "status", "routes"}, form("admin_status/routes"), i18n("a_n_routes"), 4)
+	entry({"admin", "status", "routes"}, template("admin_status/routes"), i18n("a_n_routes"), 4)
 	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("syslog", "System Log"), 5)
 	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("dmesg", "Kernel Log"), 6)
 

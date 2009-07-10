@@ -1,0 +1,89 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008-2009 Steven Barth <steven@midlink.org>
+Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%-
+	require "bit"
+	require "luci.fs"
+	require "luci.sys"
+	require "luci.tools.webadmin"
+
+	local style = true
+-%>
+
+<%+header%>
+
+<div class="cbi-map" id="cbi-network">
+	<h2><a id="content" name="content"><%:a_n_routes%></a></h2>
+	<div class="cbi-map-descr"><%:a_n_routes1%></div>
+
+	<fieldset class="cbi-section" id="cbi-table-table">
+		<legend><%:a_n_routes_kernel4%></legend>
+
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%:network%></th>
+					<th class="cbi-section-table-cell"><%:target%></th>
+					<th class="cbi-section-table-cell"><%:netmask%></th>
+					<th class="cbi-section-table-cell"><%:gateway%></th>
+					<th class="cbi-section-table-cell"><%:metric%></th>
+				</tr>
+				<% luci.sys.net.routes(function(rt) %>
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(rt.device) or rt.device%></td>
+					<td class="cbi-value-field"><%=rt.dest:network():string()%></td>
+					<td class="cbi-value-field"><%=rt.dest:mask():string()%></td>
+					<td class="cbi-value-field"><%=rt.gateway:string()%></td>
+					<td class="cbi-value-field"><%=rt.metric%></td>
+				</tr>
+				<% style = not style; end) %>
+			</table>
+		</div>
+	</fieldset>
+	<br />
+
+	<% if luci.fs.access("/proc/net/ipv6_route") then style = true %>
+	<fieldset class="cbi-section" id="cbi-table-table">
+		<legend><%:a_n_routes_kernel6%></legend>
+
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%:network%></th>
+					<th class="cbi-section-table-cell"><%:target%></th>
+					<th class="cbi-section-table-cell"><%:gateway6%></th>
+					<th class="cbi-section-table-cell"><%:metric%></th>
+				</tr>
+				<% luci.sys.net.routes6(function(rt) %>
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(rt.device) or rt.device%></td>
+					<td class="cbi-value-field"><%=rt.dest:string()%></td>
+					<td class="cbi-value-field"><%=rt.source:string()%></td>
+					<td class="cbi-value-field"><%- 
+						local metr   = rt.metric
+						local lower  = bit.band(metr, 0xffff)
+						local higher = bit.rshift(bit.band(metr, 0xffff0000), 16)
+						write(string.format("%04X%04X", higher, lower))
+					-%></td>
+				</tr>
+				<% style = not style; end) %>
+			</table>
+		</div>
+	</fieldset>
+	<br />
+	<% end %>
+</div>
+
+<%+footer%>
