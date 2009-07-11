@@ -123,14 +123,18 @@ static int nixio_dup(lua_State *L) {
 	if (stat == -1) {
 		return nixio__perror(L);
 	} else {
-		int *udata = lua_newuserdata(L, sizeof(int));
-		if (!udata) {
-			return luaL_error(L, "out of memory");
-		}
+		if (newfd == -1) {
+			int *udata = lua_newuserdata(L, sizeof(int));
+			if (!udata) {
+				return luaL_error(L, "out of memory");
+			}
 
-		*udata = stat;
-		luaL_getmetatable(L, NIXIO_FILE_META);
-		lua_setmetatable(L, -2);
+			*udata = stat;
+			luaL_getmetatable(L, NIXIO_FILE_META);
+			lua_setmetatable(L, -2);
+		} else {
+			lua_pushvalue(L, 2);
+		}
 		return 1;
 	}
 }
