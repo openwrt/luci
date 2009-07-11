@@ -1,5 +1,5 @@
 /*
- * lmo - Lua Machine Objects - Lookup utility
+ * lmo - Lua Machine Objects - Lua binding
  *
  *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
  *
@@ -52,17 +52,14 @@ static int lmo_L_hash(lua_State *L) {
 	return 1;
 }
 
-static int lmo_L_lookup(lua_State *L) {
-	lmo_archive_t **ar = luaL_checkudata(L, 1, LMO_ARCHIVE_META);
-	lmo_entry_t *e = (*ar)->index;
-	const char *key = luaL_checkstring(L, 2);
-	uint32_t hash = sfh_hash(key, strlen(key));
+static int _lmo_lookup(lua_State *L, lmo_archive_t *ar, uint32_t hash) {
+	lmo_entry_t *e = ar->index;
 
 	while( e != NULL )
 	{
 		if( e->key_id == hash )
 		{
-			lua_pushlstring(L, &(*ar)->mmap[e->offset], e->length);
+			lua_pushlstring(L, &ar->mmap[e->offset], e->length);
 			return 1;
 		}
 
@@ -71,6 +68,38 @@ static int lmo_L_lookup(lua_State *L) {
 
 	lua_pushnil(L);
 	return 1;
+}
+
+static int lmo_L_get(lua_State *L) {
+	lmo_archive_t **ar = luaL_checkudata(L, 1, LMO_ARCHIVE_META);
+	uint32_t hash = (uint32_t) luaL_checknumber(L, 2);
+	return _lmo_lookup(L, *ar, hash);
+}
+
+static int lmo_L_lookup(lua_State *L) {
+	lmo_archive_t **ar = luaL_checkudata(L, 1, LMO_ARCHIVE_META);
+	const char *key = luaL_checkstring(L, 2);
+	uint32_t hash = sfh_hash(key, strlen(key));
+	return _lmo_lookup(L, *ar, hash);
+}
+
+static int lmo_L_foreach(lua_State *L) {
+	lmo_archive_t **ar = luaL_checkudata(L, 1, LMO_ARCHIVE_META);
+	lmo_entry_t *e = (*ar)->index;
+
+	if( lua_isfunction(L, 2) )
+	{
+		while( e != NULL )
+		{
+			lua_pushvalue(L, 2);
+			lua_pushinteger(L, e->key_id);
+			lua_pushlstring(L, &(*ar)->mmap[e->offset], e->length);
+			lua_pcall(L, 2, 0, 0);
+			e = e->next;
+		}
+	}
+
+	return 0;
 }
 
 static int lmo_L__gc(lua_State *L) {
@@ -94,7 +123,9 @@ static int lmo_L__tostring(lua_State *L) {
 /* method table */
 static const luaL_reg M[] = {
 	{"close",	lmo_L__gc},
+	{"get",		lmo_L_get},
 	{"lookup",	lmo_L_lookup},
+	{"foreach",	lmo_L_foreach},
 	{"__tostring",	lmo_L__tostring},
 	{"__gc",	lmo_L__gc},
 	{NULL,		NULL}
