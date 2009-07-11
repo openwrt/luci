@@ -1,7 +1,7 @@
 --- Changes and improvements.
 module "CHANGELOG"
 
---- Nixio 0.3
+--- Service Release.
 -- <ul>
 -- <li>Added getifaddrs() function.</li>
 -- <li>Added getsockopt(), setsockopt(), getsockname() and getpeername()
@@ -14,13 +14,13 @@ module "CHANGELOG"
 -- <li>Fixed usage of signed datatype breaking Base64 decoding.</li>
 -- <li>Fixed namespace clashes for nixio.fs.</li>
 -- <li>Fixed splice() support for some exotic C libraries.</li>
--- <li>Reconfigure axTLS cryptographical provider.</li>
+-- <li>Reconfigure axTLS cryptographical provider and mark it as obsolete.</li>
 -- </ul>
 -- @class table
--- @name 0.2
+-- @name 0.3
 -- @return !
 
---- Nixio 0.2
+--- Initial Release.
 -- <ul>
 -- <li>Initial Release</li>  
 -- </ul>
