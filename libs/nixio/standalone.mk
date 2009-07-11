@@ -42,7 +42,6 @@ clean: luaclean
 
 luasource:
 	mkdir -p dist$(LUA_MODULEDIR)
-	cp -pR root/* dist 2>/dev/null || true
 	cp -pR lua/* dist$(LUA_MODULEDIR) 2>/dev/null || true
 	for i in $$(find dist -name .svn); do rm -rf $$i || true; done
 

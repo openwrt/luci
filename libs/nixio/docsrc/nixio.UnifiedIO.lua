@@ -111,7 +111,6 @@ module "nixio.UnifiedIO"
 -- @usage This function uses the sendfile() syscall to copy the data or the
 -- blocksource function of the source descriptor and the sink function
 -- of the target descriptor as a fallback mechanism.
--- @usage Support for splice() on Linux is not implemented yet.
 -- @usage If the limit parameter is ommited, data is copied
 -- until an end-of-file, end-of-stream, connection shutdown or similar happens.
 -- @usage If the descriptor is non-blocking the function may fail with EAGAIN.
