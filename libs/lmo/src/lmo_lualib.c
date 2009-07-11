@@ -35,6 +35,7 @@ static int lmo_L_open(lua_State *L) {
 			return 1;
 		}
 
+		lmo_close(ar);
 		lua_pushnil(L);
 		lua_pushstring(L, "out of memory");
 		return 2;
