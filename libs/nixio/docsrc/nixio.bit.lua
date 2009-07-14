@@ -10,6 +10,12 @@ module "nixio.bit"
 -- @param ...	More Operands
 -- @return number
 
+--- Invert given number.
+-- @class function
+-- @name bnot
+-- @param oper Operand
+-- @return number
+
 --- Bitwise AND several numbers.
 -- @class function
 -- @name band
@@ -28,21 +34,21 @@ module "nixio.bit"
 
 --- Left shift a number.
 -- @class function
--- @name shl
+-- @name lshift
 -- @param oper	number
 -- @param shift	bits to shift 
 -- @return number
 
 --- Right shift a number.
 -- @class function
--- @name shr
+-- @name rshift
 -- @param oper	number
 -- @param shift	bits to shift 
 -- @return number
 
 --- Arithmetically right shift a number.
 -- @class function
--- @name ashr
+-- @name arshift
 -- @param oper	number
 -- @param shift	bits to shift 
 -- @return number
