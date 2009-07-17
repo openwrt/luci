@@ -520,6 +520,49 @@ define Package/luci-app-statistics/install
 	$(call Package/luci/install/template,$(1),applications/luci-statistics)
 endef
 
+define Package/luci-app-diag-core
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-core 
+  TITLE:=LuCI Diagnostics Tools (Core)
+endef
+
+define Package/luci-app-diag-devinfo
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-app-diag-core +smap +netdiscover +mac-to-devinfo +httping +smap-to-devinfo +netdiscover-to-devinfo
+  TITLE:=LuCI Diagnostics Tools (Device Info)
+endef
+
+define Package/luci-app-voice-core
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-core 
+  TITLE:=LuCI Voice Software (Core)
+endef
+
+define Package/luci-app-voice-diag
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-app-voice-core +luci-app-diag-devinfo
+  TITLE:=LuCI Voice Software (Diagnostics)
+endef
+
+define Package/luci-app-diag-devinfo/conffiles
+/etc/config/luci_devinfo
+endef
+
+define Package/luci-app-diag-core/install
+	$(call Package/luci/install/template,$(1),applications/luci-diag-core)
+endef
+
+define Package/luci-app-diag-devinfo/install
+	$(call Package/luci/install/template,$(1),applications/luci-diag-devinfo)
+endef
+
+define Package/luci-app-voice-core/install
+	$(call Package/luci/install/template,$(1),applications/luci-voice-core)
+endef
+
+define Package/luci-app-voice-diag/install
+	$(call Package/luci/install/template,$(1),applications/luci-voice-diag)
+endef
 
 define Package/luci-app-upnp
   $(call Package/luci/webtemplate)
@@ -978,6 +1021,18 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-statistics),)
 	PKG_SELECTED_MODULES+=applications/luci-statistics
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-voice-core),)
+	PKG_SELECTED_MODULES+=applications/luci-voice-core
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-voice-diag),)
+	PKG_SELECTED_MODULES+=applications/luci-voice-diag
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-diag-core),)
+	PKG_SELECTED_MODULES+=applications/luci-diag-core
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-diag-devinfo),)
+	PKG_SELECTED_MODULES+=applications/luci-diag-devinfo
+endif
 ifneq ($(CONFIG_PACKAGE_luci-app-upnp),)
 	PKG_SELECTED_MODULES+=applications/luci-upnp
 endif
@@ -1133,6 +1188,10 @@ $(eval $(call BuildPackage,luci-app-olsr))
 $(eval $(call BuildPackage,luci-app-qos))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
+$(eval $(call BuildPackage,luci-app-diag-core))
+$(eval $(call BuildPackage,luci-app-diag-devinfo))
+$(eval $(call BuildPackage,luci-app-voice-core))
+$(eval $(call BuildPackage,luci-app-voice-diag))
 $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))

@@ -1,0 +1,21 @@
+<%#
+LuCI - Lua Configuration Interface
+(c) 2009 Daniel Dickinson
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%+cbi/valueheader%>
+<% if self.href then %><a href="<%=self.href%>" target="_blank"><% end -%>
+	<%=luci.util.pcdata(self:cfgvalue(section))%>
+<%- if self.href then %></a><%end%>
+&#160;
+<input type="hidden" id="<%=cbid%>" value="<%=luci.util.pcdata(self:cfgvalue(section))%>" />
+<%+cbi/valuefooter%>
