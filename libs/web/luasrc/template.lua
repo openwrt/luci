@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 
-local fs = require"luci.fs"
+local fs = require "luci.fs"
 local sys = require "luci.sys"
 local util = require "luci.util"
 local table = require "table"
@@ -89,9 +89,9 @@ function compile(template)
 	
 	-- Replacements
 	local r_include = '")\ninclude("%s")\nwrite("'
-	local r_i18n    = '"..translate("%1","%2").."'
-	local r_i18n2    = '"..translate("%1", "").."'
-	local r_pexec   = '"..(%s or "").."'
+	local r_i18n    = '")\nwrite(translate("%1","%2"))\nwrite("'
+	local r_i18n2   = '")\nwrite(translate("%1", ""))\nwrite("'
+	local r_pexec   = '")\nwrite(tostring(%s or ""))\nwrite("'
 	local r_exec    = '")\n%s\nwrite("'
 	
 	-- Parse the expressions
