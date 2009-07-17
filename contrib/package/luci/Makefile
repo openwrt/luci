@@ -853,6 +853,16 @@ define Package/luci-i18n-portuguese/install
 endef
 
 
+define Package/luci-i18n-spanish
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Spanish (by Guillermo Javier Nardoni)
+endef
+
+define Package/luci-i18n-spanish/install
+	$(call Package/luci/install/template,$(1),i18n/spanish)
+endef
+
+
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
@@ -1047,6 +1057,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-portuguese),)
 	PKG_SELECTED_MODULES+=i18n/portuguese
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-spanish),)
+	PKG_SELECTED_MODULES+=i18n/spanish
+endif
 
 
 MAKE_FLAGS += \
@@ -1125,3 +1138,4 @@ $(eval $(call BuildPackage,luci-i18n-japanese))
 $(eval $(call BuildPackage,luci-i18n-greek))
 $(eval $(call BuildPackage,luci-i18n-catalan))
 $(eval $(call BuildPackage,luci-i18n-portuguese))
+$(eval $(call BuildPackage,luci-i18n-spanish))
