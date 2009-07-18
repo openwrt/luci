@@ -28,8 +28,10 @@ local ZBUG = uname.sysname == "Linux" and uname.release:sub(1, 3) == "2.4"
 
 function consume(iter, append)
 	local tbl = append or {}
-	for obj in iter do
-		tbl[#tbl+1] = obj
+	if iter then
+		for obj in iter do
+			tbl[#tbl+1] = obj
+		end
 	end
 	return tbl
 end
