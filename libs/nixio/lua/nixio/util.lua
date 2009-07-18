@@ -26,8 +26,8 @@ local file = nixio.meta_file
 local uname = nixio.uname()
 local ZBUG = uname.sysname == "Linux" and uname.release:sub(1, 3) == "2.4"
 
-function consume(iter)
-	local tbl = {}
+function consume(iter, append)
+	local tbl = append or {}
 	for obj in iter do
 		tbl[#tbl+1] = obj
 	end
