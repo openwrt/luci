@@ -9,15 +9,19 @@ __file__ = debug.getinfo(1, 'S').source:sub(2)
 function trap_memtrace(flags, dest)
 	flags = flags or "clr"
 	local tracefile = io.open(dest or "/tmp/memtrace", "w")
+	local peak = 0
 
 	local function trap(what, line)
 		local info = debug.getinfo(2, "Sn")
+		if collectgarbage("count") > peak then
+			peak = collectgarbage("count")
+		end
 		if tracefile then
 			tracefile:write(
 				"[", what, "] ", info.source, ":", (line or "?"), "\t",
 				(info.namewhat or ""), "\t",
 				(info.name or ""), "\t",
-				collectgarbage("count"), "\n"
+				collectgarbage("count"), " (", peak, ")\n"
 			)
 		end
 	end
