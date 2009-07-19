@@ -176,7 +176,7 @@ function Template.__init__(self, name)
 		local tplmt = fs.stat(sourcefile, "mtime") or fs.stat(sourcefile .. ".htm", "mtime")
 		local commt = fs.stat(compiledfile, "mtime")
 		
-		if not fs.mtime(cdir) then
+		if not fs.stat(cdir, "mtime") then
 			fs.mkdirr(cdir)
 			fs.chmod(fs.dirname(cdir), 777)
 		end

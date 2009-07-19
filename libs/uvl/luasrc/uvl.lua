@@ -19,11 +19,10 @@ $Id$
 -- @class	module
 -- @cstyle	instance
 
-require "nixio.util"
-
 local fs = require "nixio.fs"
 local uci = require "luci.model.uci"
 local util = require "luci.util"
+local nutil = require "nixio.util"
 local table = require "table"
 local string = require "string"
 
@@ -405,11 +404,11 @@ function UVL.read_scheme( self, shm, alias )
 	local bc = "%s/bytecode/%s.lua" %{ self.schemedir, shm }
 
 	if not fs.access(bc) then
-		local files = nixio.util.consume(fs.glob(self.schemedir .. '/*/' .. shm))
+		local files = nutil.consume((fs.glob(self.schemedir .. '/*/' .. shm)))
 
 		if #files > 0 then
 			local ok, err
-			for file in files do
+			for _, file in ipairs(files) do
 				if not fs.access(file) then
 					return false, so:error(ERR.SME_READ(so,file))
 				end
