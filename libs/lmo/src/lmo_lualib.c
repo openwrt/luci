@@ -49,7 +49,7 @@ static int lmo_L_open(lua_State *L) {
 static int lmo_L_hash(lua_State *L) {
 	const char *data = luaL_checkstring(L, 1);
 	uint32_t hash = sfh_hash(data, strlen(data));
-	lua_pushnumber(L, hash);
+	lua_pushinteger(L, (lua_Integer)hash);
 	return 1;
 }
 
@@ -140,17 +140,13 @@ static const luaL_reg R[] = {
 };
 
 LUALIB_API int luaopen_lmo(lua_State *L) {
-	luaL_newmetatable(L, LMO_LUALIB_META);
-	luaL_register(L, NULL, R);
-	lua_pushvalue(L, -1);
-	lua_setfield(L, -2, "__index");
-	lua_setglobal(L, LMO_LUALIB_META);
-
 	luaL_newmetatable(L, LMO_ARCHIVE_META);
 	luaL_register(L, NULL, M);
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 	lua_setglobal(L, LMO_ARCHIVE_META);
+
+	luaL_register(L, LMO_LUALIB_META, R);
 
 	return 1;
 }
