@@ -73,7 +73,7 @@ static int _lmo_lookup(lua_State *L, lmo_archive_t *ar, uint32_t hash) {
 
 static int lmo_L_get(lua_State *L) {
 	lmo_archive_t **ar = luaL_checkudata(L, 1, LMO_ARCHIVE_META);
-	uint32_t hash = (uint32_t) luaL_checknumber(L, 2);
+	uint32_t hash = (uint32_t) luaL_checkinteger(L, 2);
 	return _lmo_lookup(L, *ar, hash);
 }
 
