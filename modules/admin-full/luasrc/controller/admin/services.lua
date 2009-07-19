@@ -28,14 +28,14 @@ function index()
 	page.order  = 40
 	page.index  = true
 	
-	if luci.fs.access("/etc/config/lucittpd") then
+	if nixio.fs.access("/etc/config/lucittpd") then
 		local page  = node("admin", "services", "lucittpd")
 		page.target = cbi("admin_services/lucittpd")
 		page.title  = "LuCIttpd"
 		page.order  = 10
 	end
 
-	if luci.fs.access("/etc/config/httpd") then
+	if nixio.fs.access("/etc/config/httpd") then
 		local page  = node("admin", "services", "httpd")
 		page.target = cbi("admin_services/httpd")
 		page.title  = "Busybox HTTPd"

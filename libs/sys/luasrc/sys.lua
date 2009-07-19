@@ -27,12 +27,12 @@ limitations under the License.
 
 local io    = require "io"
 local os    = require "os"
-local nixio = require "nixio"
 local table = require "table"
+local nixio = require "nixio"
+local fs    = require "nixio.fs"
 
 local luci  = {}
 luci.util   = require "luci.util"
-luci.fs     = require "luci.fs"
 luci.ip     = require "luci.ip"
 
 local tonumber, ipairs, pairs, pcall, type, next =
@@ -135,7 +135,7 @@ getenv = nixio.getenv
 -- @return		String containing the system hostname
 function hostname(newname)
 	if type(newname) == "string" and #newname > 0 then
-		luci.fs.writefile( "/proc/sys/kernel/hostname", newname .. "\n" )
+		fs.writefile( "/proc/sys/kernel/hostname", newname )
 		return newname
 	else
 		return nixio.uname().nodename
@@ -180,8 +180,8 @@ end
 -- @return	String containing the memory used for buffering in kB
 -- @return	String containing the free memory amount in kB
 function sysinfo()
-	local cpuinfo = luci.fs.readfile("/proc/cpuinfo")
-	local meminfo = luci.fs.readfile("/proc/meminfo")
+	local cpuinfo = fs.readfile("/proc/cpuinfo")
+	local meminfo = fs.readfile("/proc/meminfo")
 
 	local system = cpuinfo:match("system typ.-:%s*([^\n]+)")
 	local model = ""
@@ -219,7 +219,7 @@ end
 -- @param bytes	Number of bytes for the unique id
 -- @return		String containing hex encoded id
 function uniqueid(bytes)
-	local rand = luci.fs.readfile("/dev/urandom", bytes)
+	local rand = fs.readfile("/dev/urandom", bytes)
 	return rand and nixio.bin.hexlify(rand)
 end
 
@@ -247,7 +247,7 @@ end
 -- @return	Table with the currently tracked IP connections
 function net.conntrack(callback)
 	local connt = {}
-	if luci.fs.access("/proc/net/nf_conntrack", "r") then
+	if fs.access("/proc/net/nf_conntrack", "r") then
 		for line in io.lines("/proc/net/nf_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
@@ -263,7 +263,7 @@ function net.conntrack(callback)
 				connt[#connt+1] = entry
 			end
 		end
-	elseif luci.fs.access("/proc/net/ip_conntrack", "r") then
+	elseif fs.access("/proc/net/ip_conntrack", "r") then
 		for line in io.lines("/proc/net/ip_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
@@ -369,13 +369,11 @@ end
 -- @return		String containing the MAC address or nil if it cannot be found
 function net.ip4mac(ip)
 	local mac = nil
-
-	for i, l in ipairs(net.arptable()) do
-		if l["IP address"] == ip then
-			mac = l["HW address"]
+	net.arptable(function(e)
+		if e["IP address"] == ip then
+			mac = e["HW address"]
 		end
-	end
-
+	end)
 	return mac
 end
 
@@ -432,7 +430,7 @@ end
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
 function net.routes6(callback)
-	if luci.fs.access("/proc/net/ipv6_route", "r") then
+	if fs.access("/proc/net/ipv6_route", "r") then
 		local routes = { }
 
 		for line in io.lines("/proc/net/ipv6_route") do
@@ -711,8 +709,8 @@ init.dir = "/etc/init.d/"
 -- @return	Table containing the names of all inistalled init scripts
 function init.names()
 	local names = { }
-	for _, name in ipairs(luci.fs.glob(init.dir.."*")) do
-		names[#names+1] = luci.fs.basename(name)
+	for name in fs.glob(init.dir.."*") do
+		names[#names+1] = fs.basename(name)
 	end
 	return names
 end
@@ -721,7 +719,7 @@ end
 -- @param name	Name of the init script
 -- @return		Boolean indicating whether init is enabled
 function init.enabled(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return ( call(init.dir..name.." enabled") == 0 )
 	end
 	return false
@@ -731,7 +729,7 @@ end
 -- @param name	Name of the init script
 -- @return		Numeric index value
 function init.index(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return call("source "..init.dir..name.."; exit $START")
 	end
 end
@@ -740,7 +738,7 @@ end
 -- @param name	Name of the init script
 -- @return		Boolean indicating success
 function init.enable(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return ( call(init.dir..name.." enable") == 1 )
 	end
 end
@@ -749,7 +747,7 @@ end
 -- @param name	Name of the init script
 -- @return		Boolean indicating success
 function init.disable(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return ( call(init.dir..name.." disable") == 0 )
 	end
 end

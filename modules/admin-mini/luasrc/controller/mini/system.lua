@@ -98,7 +98,7 @@ function action_upgrade()
 	
 	local function storage_size()
 		local size = 0
-		if luci.fs.access("/proc/mtd") then
+		if nixio.fs.access("/proc/mtd") then
 			for l in io.lines("/proc/mtd") do
 				local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
 				if n == "linux" then
@@ -106,7 +106,7 @@ function action_upgrade()
 					break
 				end
 			end
-		elseif luci.fs.access("/proc/partitions") then
+		elseif nixio.fs.access("/proc/partitions") then
 			for l in io.lines("/proc/partitions") do
 				local x, y, b, n = l:match('^%s*(%d+)%s+(%d+)%s+([^%s]+)%s+([^%s]+)')
 				if b and n and not n:match('[0-9]') then
@@ -123,7 +123,7 @@ function action_upgrade()
 	local file
 	luci.http.setfilehandler(
 		function(meta, chunk, eof)
-			if not luci.fs.access(tmpfile) and not file and chunk and #chunk > 0 then
+			if not nixio.fs.access(tmpfile) and not file and chunk and #chunk > 0 then
 				file = io.open(tmpfile, "w")
 			end
 			if file and chunk then
@@ -139,9 +139,9 @@ function action_upgrade()
 	-- Determine state
 	local keep_avail   = true
 	local step         = tonumber(luci.http.formvalue("step") or 1)
-	local has_image    = luci.fs.access(tmpfile)
+	local has_image    = nixio.fs.access(tmpfile)
 	local has_support  = image_supported()
-	local has_platform = luci.fs.access("/lib/upgrade/platform.sh")
+	local has_platform = nixio.fs.access("/lib/upgrade/platform.sh")
 	local has_upload   = luci.http.formvalue("image")
 	
 	-- This does the actual flashing which is invoked inside an iframe
@@ -182,7 +182,7 @@ function action_upgrade()
 		-- If there is an image but user has requested step 1
 		-- or type is not supported, then remove it.
 		if has_image then
-			luci.fs.unlink(tmpfile)
+			nixio.fs.unlink(tmpfile)
 		end
 			
 		luci.template.render("admin_system/upgrade", {
@@ -197,7 +197,7 @@ function action_upgrade()
 		luci.template.render("admin_system/upgrade", {
 			step=2,
 			checksum=image_checksum(),
-			filesize=luci.fs.stat(tmpfile).size,
+			filesize=nixio.fs.stat(tmpfile).size,
 			flashsize=storage_size(),
 			keepconfig=(keep_avail and luci.http.formvalue("keepcfg") == "1")
 		} )
@@ -217,7 +217,7 @@ function _keep_pattern()
 	if files then
 		kpattern = ""
 		for k, v in pairs(files) do
-			if k:sub(1,1) ~= "." and luci.fs.glob(v) then
+			if k:sub(1,1) ~= "." and nixio.fs.glob(v)() then
 				kpattern = kpattern .. " " ..  v
 			end
 		end

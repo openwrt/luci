@@ -705,7 +705,7 @@ end
 --- Returns the absolute path to LuCI base directory.
 -- @return		String containing the directory path
 function libpath()
-	return require "luci.fs".dirname(ldebug.__file__)
+	return require "nixio.fs".dirname(ldebug.__file__)
 end
 
 

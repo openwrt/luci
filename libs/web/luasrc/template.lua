@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local util = require "luci.util"
 local table = require "table"
@@ -173,18 +173,18 @@ function Template.__init__(self, name)
 	local err	
 	
 	if compiler_mode == "file" then
-		local tplmt = fs.mtime(sourcefile) or fs.mtime(sourcefile .. ".htm")
-		local commt = fs.mtime(compiledfile)
+		local tplmt = fs.stat(sourcefile, "mtime") or fs.stat(sourcefile .. ".htm", "mtime")
+		local commt = fs.stat(compiledfile, "mtime")
 		
 		if not fs.mtime(cdir) then
-			fs.mkdir(cdir, true)
+			fs.mkdirr(cdir)
 			fs.chmod(fs.dirname(cdir), 777)
 		end
 		
 		assert(tplmt or commt, "No such template: " .. name)
 				
 		-- Build if there is no compiled file or if compiled file is outdated
-		if not commt or (commt	and tplmt and commt < tplmt) then
+		if not commt or (commt and tplmt and commt < tplmt) then
 			local source
 			source, err = fs.readfile(sourcefile) or fs.readfile(sourcefile .. ".htm")
 			

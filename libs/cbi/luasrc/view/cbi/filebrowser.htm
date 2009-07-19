@@ -48,7 +48,8 @@ $Id$
 </head>
 <body>
 	<%
-		require("luci.fs")
+		require("nixio.fs")
+		require("nixio.util")
 		require("luci.http")
 		require("luci.dispatcher")
 
@@ -63,7 +64,7 @@ $Id$
 		end
 
 		local filepath = table.concat( path, '/' )
-		local filestat = luci.fs.stat( filepath )
+		local filestat = nixio.fs.stat( filepath )
 		local baseurl  = luci.dispatcher.build_url('admin', 'filebrowser')
 
 		if filestat and filestat.type == "reg" then
@@ -76,7 +77,7 @@ $Id$
 			filepath = filepath .. '/'
 		end
 
-		local entries = luci.fs.dir(filepath)
+		local entries = nixio.util.consume((nixio.fs.dir(filepath)))
 	-%>
     <div id="path">
 		Location:
@@ -98,8 +99,8 @@ $Id$
 	<div id="listing">
 		<ul>
 			<% for _, e in luci.util.vspairs(entries) do
-			    local stat = luci.fs.stat(filepath..e)
-				if e ~= '.' and e ~= '..' and stat and stat.type == 'dir' then
+			    local stat = nixio.fs.stat(filepath..e)
+				if stat and stat.type == 'dir' then
 			-%>
 				<li class="dir">
 					<img src="/luci-static/resources/cbi/folder.png" alt="Directory" />
@@ -108,7 +109,7 @@ $Id$
 			<% end end -%>
 
 			<% for _, e in luci.util.vspairs(entries) do
-			    local stat = luci.fs.stat(filepath..e)
+			    local stat = nixio.fs.stat(filepath..e)
 				if stat and stat.type ~= 'dir' then
 			-%>
 				<li class="file">

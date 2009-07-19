@@ -15,9 +15,9 @@ $Id$
 
 <%-
 	require "bit"
-	require "luci.fs"
 	require "luci.sys"
 	require "luci.tools.webadmin"
+	require "nixio.fs"
 
 	local style = true
 -%>
@@ -54,7 +54,7 @@ $Id$
 	</fieldset>
 	<br />
 
-	<% if luci.fs.access("/proc/net/ipv6_route") then style = true %>
+	<% if fs.access("/proc/net/ipv6_route") then style = true %>
 	<fieldset class="cbi-section" id="cbi-table-table">
 		<legend><%:a_n_routes_kernel6%></legend>
 

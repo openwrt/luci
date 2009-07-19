@@ -22,7 +22,7 @@ about open tcp connections, interface traffic, iptables rules etc.%></p>
 <p><%:stat_networkplugins_installed Installed network plugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
-			<% if luci.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>
+			<% if nixio.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>
 				<li><a href="<%=controller%>/admin/statistics/collectd/network/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>

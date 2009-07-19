@@ -13,9 +13,8 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-require("luci.fs")
-require("luci.ip")
-
+local ip = require "luci.ip"
+local fs = require "nixio.fs"
 
 if arg[1] then
 	mp = Map("olsrd", translate("olsrd_plugins", "OLSR - Plugins"))
@@ -44,7 +43,7 @@ if arg[1] then
 	local function Cidr2IpMask(val)
 		if val then
 			for i = 1, #val do
-				local cidr = luci.ip.IPv4(val[i]) or luci.ip.IPv6(val[i])
+				local cidr = ip.IPv4(val[i]) or ip.IPv6(val[i])
 				if cidr then
 					val[i] = cidr:network():string() .. " " .. cidr:mask():string()
 				end
@@ -59,9 +58,9 @@ if arg[1] then
 				local ip, mask = val[i]:gmatch("([^%s]+)%s+([^%s]+)")()
 				local cidr
 				if ip and mask and ip:match(":") then
-					cidr = luci.ip.IPv6(ip, mask)
+					cidr = ip.IPv6(ip, mask)
 				elseif ip and mask then
-					cidr = luci.ip.IPv4(ip, mask)
+					cidr = ip.IPv4(ip, mask)
 				end
 
 				if cidr then
@@ -220,7 +219,7 @@ else
 	)
 
 	-- create a loadplugin section for each found plugin
-	for k, v in pairs(luci.fs.dir("/usr/lib")) do
+	for v in fs.dir("/usr/lib") do
 		if v:sub(1, 6) == "olsrd_" then
 			if not plugins[v] then
 				mpi.uci:section(

@@ -56,7 +56,7 @@ function index()
 
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 
-	if luci.fs.access("/etc/config/luci_statistics") then
+	if nixio.fs.access("/etc/config/luci_statistics") then
 		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, i18n("stat_statistics", "Statistiken"), 40)
 	end
 
@@ -83,7 +83,7 @@ local function fetch_olsrd()
 	local rawdata = sys.httpget("http://127.0.0.1:2006/")
 
 	if #rawdata == 0 then
-		if luci.fs.access("/proc/net/ipv6_route", "r") then
+		if nixio.fs.access("/proc/net/ipv6_route", "r") then
 			rawdata = sys.httpget("http://[::1]:2006/")
 			if #rawdata == 0 then
 				return nil

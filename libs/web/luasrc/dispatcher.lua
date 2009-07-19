@@ -25,7 +25,7 @@ limitations under the License.
 ]]--
 
 --- LuCI web dispatcher.
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local init = require "luci.init"
 local util = require "luci.util"
@@ -394,19 +394,16 @@ end
 function createindex_plain(path, suffixes)
 	local controllers = { }
 	for _, suffix in ipairs(suffixes) do
-		controllers = util.combine(
-			controllers,
-			luci.fs.glob(path .. "*" .. suffix) or {},
-			luci.fs.glob(path .. "*/*" .. suffix) or {}
-		)
+		nixio.util.consume((fs.glob(path .. "*" .. suffix)), controllers)
+		nixio.util.consume((fs.glob(path .. "*/*" .. suffix)), controllers)
 	end
 
 	if indexcache then
-		local cachedate = fs.mtime(indexcache)
+		local cachedate = fs.stat(indexcache, "mtime")
 		if cachedate then
 			local realdate = 0
 			for _, obj in ipairs(controllers) do
-				local omtime = fs.mtime(path .. "/" .. obj)
+				local omtime = fs.stat(path .. "/" .. obj, "mtime")
 				realdate = (omtime and omtime > realdate) and omtime or realdate
 			end
 

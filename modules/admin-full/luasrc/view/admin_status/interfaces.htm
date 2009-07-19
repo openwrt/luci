@@ -15,15 +15,15 @@ $Id$
 
 <%-
 
-	require "luci.tools.webadmin"
-
-	local wba = luci.tools.webadmin
-	local uci = luci.model.uci.cursor_state()
+	local sys = require "luci.sys"
+	local wba = require "luci.tools.webadmin"
+	local uci = require "luci.model.uci".cursor_state()
+	local fs  = require "nixio.fs"
 
 	local bridge_ifs = { }
 	local single_ifs = { }
 	local wifi_ifs   = { }
-	local devinfo    = luci.sys.net.deviceinfo()
+	local devinfo    = sys.net.deviceinfo()
 
 	uci:foreach("network", "interface",
 		function(s)
@@ -86,8 +86,8 @@ $Id$
 
 	function get_switch_driver(i)
 		local n, d = i:match("([a-z]+)(%d+)%.%d+$")
-		local hw = luci.fs.readfile("/proc/switch/%s%s/driver" %{ n, d })
-			or luci.fs.readfile("/proc/switch/%s/driver" % d )
+		local hw = fs.readfile("/proc/switch/%s%s/driver" %{ n, d })
+			or fs.readfile("/proc/switch/%s/driver" % d )
 
 		return hw and hw:match("%S+")
 	end

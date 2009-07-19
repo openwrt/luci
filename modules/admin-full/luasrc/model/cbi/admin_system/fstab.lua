@@ -13,16 +13,18 @@ $Id$
 ]]--
 require("luci.tools.webadmin")
 
-local fs = require "luci.fs"
+local fs   = require "nixio.fs"
+local util = require "nixio.util"
+
 local devices = {}
-luci.util.update(devices, fs.glob("/dev/sd*") or {})
-luci.util.update(devices, fs.glob("/dev/hd*") or {})
-luci.util.update(devices, fs.glob("/dev/scd*") or {})
-luci.util.update(devices, fs.glob("/dev/mmc*") or {})
+util.consume((fs.glob("/dev/sd*")), devices)
+util.consume((fs.glob("/dev/hd*")), devices)
+util.consume((fs.glob("/dev/scd*")), devices)
+util.consume((fs.glob("/dev/mmc*")), devices)
 
 local size = {}
 for i, dev in ipairs(devices) do
-	local s = tonumber((luci.fs.readfile("/sys/class/block/%s/size" % dev:sub(6))))
+	local s = tonumber((fs.readfile("/sys/class/block/%s/size" % dev:sub(6))))
 	size[dev] = s and math.floor(s / 2048)
 end
 

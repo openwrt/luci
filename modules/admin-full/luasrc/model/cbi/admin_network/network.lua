@@ -12,14 +12,16 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-require("luci.sys")
-require("luci.tools.webadmin")
+
+local sys = require "luci.sys"
+local wa  = require "luci.tools.webadmin"
+local fs  = require "nixio.fs"
 
 local netstate = luci.model.uci.cursor_state():get_all("network")
 m = Map("network", translate("interfaces"))
 
 local created
-local netstat = luci.sys.net.deviceinfo()
+local netstat = sys.net.deviceinfo()
 
 s = m:section(TypedSection, "interface", "")
 s.addremove = true
@@ -76,25 +78,22 @@ if luci.model.uci.cursor():load("firewall") then
 	zone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
 
 	function zone.cfgvalue(self, section)
-		local zones = luci.tools.webadmin.network_get_zones(section)
-		return zones and table.concat(zones, ", ") or "-"
+		return table.concat(wa.network_get_zones(section) or { "-" }, ", ")
 	end
 end
 
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
-	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address")
+	return fs.readfile("/sys/class/net/" .. ix .. "/address")
 	 or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
 	 or "n/a"
-
 end
 
 
 ipaddr = s:option(DummyValue, "ipaddr", translate("addresses"))
 function ipaddr.cfgvalue(self, section)
-	local addr = luci.tools.webadmin.network_get_addresses(section)
-	return table.concat(addr, ", ")
+	return table.concat(wa.network_get_addresses(section), ", ")
 end
 
 txrx = s:option(DummyValue, "_txrx")
@@ -103,10 +102,10 @@ function txrx.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
 
 	local rx = netstat and netstat[ix] and netstat[ix][1]
-	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
+	rx = rx and wa.byte_format(tonumber(rx)) or "-"
 
 	local tx = netstat and netstat[ix] and netstat[ix][9]
-	tx = tx and luci.tools.webadmin.byte_format(tonumber(tx)) or "-"
+	tx = tx and wa.byte_format(tonumber(tx)) or "-"
 
 	return string.format("%s / %s", tx, rx)
 end

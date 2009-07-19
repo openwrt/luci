@@ -22,7 +22,8 @@ require("luci.statistics.i18n")
 require("luci.model.uci")
 require("luci.util")
 require("luci.sys")
-require("luci.fs")
+
+local fs = require "nixio.fs"
 
 
 Graph = luci.util.class()
@@ -96,7 +97,7 @@ function Graph._rrdtool( self, def, rrd )
 
 	-- prepare directory
 	local dir = def[1]:gsub("/[^/]+$","")
-	luci.fs.mkdir( dir, true )
+	fs.mkdirr( dir )
 
 	-- construct commandline
 	local cmdline = "rrdtool graph"
@@ -500,7 +501,7 @@ function Graph.render( self, plugin, plugin_instance )
 
 	-- check for a whole graph handler
 	local plugin_def = "luci.statistics.rrdtool.definitions." .. plugin
-	local stat, def = luci.util.copcall( require, plugin_def )
+	local stat, def = pcall( require, plugin_def )
 
 	if stat and def and type(def.rrdargs) == "function" then
 
@@ -539,7 +540,7 @@ function Graph.render( self, plugin, plugin_instance )
 
 			-- check for data type handler
 			local dtype_def = plugin_def .. "." .. dtype
-			local stat, def = luci.util.copcall( require, dtype_def )
+			local stat, def = pcall( require, dtype_def )
 
 			if stat and def and type(def.rrdargs) == "function" then
 

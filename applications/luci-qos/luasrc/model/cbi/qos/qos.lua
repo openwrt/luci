@@ -11,7 +11,10 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-require("luci.tools.webadmin")
+
+local wa = require "luci.tools.webadmin"
+local fs = require "nixio.fs"
+
 m = Map("qos")
 
 s = m:section(TypedSection, "interface", translate("interfaces"))
@@ -46,19 +49,19 @@ t.default = "Normal"
 srch = s:option(Value, "srchost")
 srch.rmempty = true
 srch:value("", translate("all"))
-luci.tools.webadmin.cbi_add_knownips(srch)
+wa.cbi_add_knownips(srch)
 
 dsth = s:option(Value, "dsthost")
 dsth.rmempty = true
 dsth:value("", translate("all"))
-luci.tools.webadmin.cbi_add_knownips(dsth)
+wa.cbi_add_knownips(dsth)
 
 l7 = s:option(ListValue, "layer7", translate("service"))
 l7.rmempty = true
 l7:value("", translate("all"))
-local pats = luci.fs.dir("/etc/l7-protocols")
+local pats = fs.dir("/etc/l7-protocols")
 if pats then
-	for i,f in ipairs(pats) do
+	for f in pats do
 		if f:sub(-4) == ".pat" then
 			l7:value(f:sub(1, #f-4))
 		end

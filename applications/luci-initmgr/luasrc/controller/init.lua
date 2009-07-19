@@ -15,7 +15,7 @@ $Id$
 module("luci.controller.init", package.seeall)
 
 function index()
-	if not luci.fs.access("/etc/rc.common") then
+	if not nixio.fs.access("/etc/rc.common") then
 		return
 	end
 

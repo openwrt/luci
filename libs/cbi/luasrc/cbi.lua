@@ -30,9 +30,10 @@ require("luci.template")
 local util = require("luci.util")
 require("luci.http")
 require("luci.uvl")
-require("luci.fs")
+
 
 --local event      = require "luci.sys.event"
+local fs         = require("nixio.fs")
 local uci        = require("luci.model.uci")
 local class      = util.class
 local instanceof = util.instanceof
@@ -52,7 +53,7 @@ REMOVE_PREFIX = "cbi.rts."
 
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap, ...)
-	require("luci.fs")
+	local fs   = require "nixio.fs"
 	local i18n = require "luci.i18n"
 	require("luci.config")
 	require("luci.util")
@@ -60,9 +61,9 @@ function load(cbimap, ...)
 	local upldir = "/lib/uci/upload/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
 
-	assert(luci.fs.stat(cbimap) or
-		luci.fs.stat(cbidir..cbimap..".lua") or
-		luci.fs.stat(cbidir..cbimap..".lua.gz"),
+	assert(fs.stat(cbimap) or
+		fs.stat(cbidir..cbimap..".lua") or
+		fs.stat(cbidir..cbimap..".lua.gz"),
 			"Model not found!")
 
 	local func, err = loadfile(cbimap)
@@ -1703,7 +1704,7 @@ end
 
 function FileUpload.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
-	if val and luci.fs.access(val) then
+	if val and fs.access(val) then
 		return val
 	end
 	return nil
@@ -1717,7 +1718,7 @@ function FileUpload.formvalue(self, section)
 		then
 			return val
 		end
-		luci.fs.unlink(val)
+		fs.unlink(val)
 		self.value = nil
 	end
 	return nil
@@ -1725,7 +1726,7 @@ end
 
 function FileUpload.remove(self, section)
 	local val = AbstractValue.formvalue(self, section)
-	if val and luci.fs.access(val) then luci.fs.unlink(val) end
+	if val and fs.access(val) then fs.unlink(val) end
 	return AbstractValue.remove(self, section)
 end
 

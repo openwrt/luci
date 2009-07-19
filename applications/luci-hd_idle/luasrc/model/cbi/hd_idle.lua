@@ -13,7 +13,7 @@ $Id$
 
 ]]--
 
-require("luci.fs")
+require("nixio.fs")
 
 m = Map("hd-idle", translate("hd_idle"), translate("hd_idle_desc"))
 
@@ -24,8 +24,8 @@ s:option(Flag, "enabled", translate("enable", "Enable"))
 
 disk = s:option(Value, "disk", translate("disk"))
 disk.rmempty = true
-for _, dev in ipairs(luci.fs.glob("/dev/[sh]d[a-z]")) do
-	disk:value(luci.fs.basename(dev))
+for _, dev in nixio.fs.glob("/dev/[sh]d[a-z]") do
+	disk:value(nixio.fs.basename(dev))
 end
 
 s:option(Value, "idle_time_interval", translate("idle_time_interval")).default = 10

@@ -13,14 +13,16 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-require("luci.tools.webadmin")
+local wa = require "luci.tools.webadmin"
+local fs = require "nixio.fs"
+
 arg[1] = arg[1] or ""
 
-local has_3g    = luci.fs.mtime("/usr/bin/gcom")
-local has_pptp  = luci.fs.mtime("/usr/sbin/pptp")
-local has_pppd  = luci.fs.mtime("/usr/sbin/pppd")
-local has_pppoe = luci.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")
-local has_pppoa = luci.fs.glob("/usr/lib/pppd/*/pppoatm.so")
+local has_3g    = fs.access("/usr/bin/gcom")
+local has_pptp  = fs.access("/usr/sbin/pptp")
+local has_pppd  = fs.access("/usr/sbin/pppd")
+local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
+local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
@@ -64,7 +66,7 @@ for i,d in ipairs(luci.sys.net.devices()) do
 	end
 end
 
-local zones = luci.tools.webadmin.network_get_zones(arg[1])
+local zones = wa.network_get_zones(arg[1])
 if zones then
 	if #zones == 0 then
 		m:chain("firewall")
@@ -83,7 +85,7 @@ if zones then
 		)
 
 		function fwzone.write(self, section, value)
-			local zone = luci.tools.webadmin.firewall_find_zone(value)
+			local zone = wa.firewall_find_zone(value)
 			local stat
 
 			if not zone then

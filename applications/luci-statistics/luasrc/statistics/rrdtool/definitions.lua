@@ -16,7 +16,6 @@ $Id$
 module("luci.statistics.rrdtool.definitions", package.seeall)
 
 require("luci.util")
-require("luci.fs")
 
 
 Instance = luci.util.class()
