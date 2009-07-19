@@ -329,7 +329,7 @@ static int nixio_file_close(lua_State *L) {
 static int nixio_file__gc(lua_State *L) {
 	int *fdp = luaL_checkudata(L, 1, NIXIO_FILE_META);
 	int res;
-	if (*fdp != -1) {
+	if (*fdp > 2) {
 		do {
 			res = close(*fdp);
 		} while (res == -1 && errno == EINTR);
