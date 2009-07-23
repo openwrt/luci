@@ -801,7 +801,8 @@ endef
 define Package/luci-theme-openwrt
   $(call Package/luci/thtemplate)
   TITLE:=OpenWrt.org (default)
-  DEPENDS:=+luci-theme-base
+  DEPENDS:=+luci-theme-base luci-core
+  DEFAULT:=y if PACKAGE_luci-core
 endef
 
 define Package/luci-theme-openwrt/install
