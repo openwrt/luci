@@ -45,7 +45,7 @@ function main(argv)
 			else
 				for _, e in ipairs(arp_cache) do
 					if e["IP address"] == adr then
-						mac = e["HW address"]
+						mac = e["HW address"]:lower()
 						break
 					end
 				end
@@ -169,7 +169,7 @@ function get_known_ips(macs, arp)
 	local leased_ips = { }
 	if not macs then macs = get_known_macs() end
 	for _, e in ipairs(arp or net.arptable()) do
-		if macs[e["HW address"]] then leased_ips[e["IP address"]] = true end
+		if macs[e["HW address"]:lower()] then leased_ips[e["IP address"]] = true end
 	end
 	return leased_ips
 end
@@ -199,7 +199,7 @@ function add_lease(mac, arp, no_uci)
 	-- Get current ip address
 	local ipaddr
 	for _, entry in ipairs(arp or net.arptable()) do
-		if entry["HW address"] == mac then
+		if entry["HW address"]:lower() == mac then
 			ipaddr = entry["IP address"]
 			break
 		end
@@ -380,7 +380,7 @@ function list()
 	-- Get current arp cache
 	local arpcache = { }
 	for _, entry in ipairs(net.arptable()) do
-		arpcache[entry["HW address"]] = { entry["Device"], entry["IP address"] }
+		arpcache[entry["HW address"]:lower()] = { entry["Device"], entry["IP address"] }
 	end
 
 	-- Find traffic usage
@@ -410,7 +410,7 @@ function list()
 		if s[".type"] == "lease" and s.mac then
 			local ti, to = traffic(s)
 			local mac = s.mac:lower()
-			local arp = arpcache[mac]
+			local arp = arpcache[mac]:lower()
 			print(string.format(
 				"%-17s  %-15s  %-9s  %3dm  %-7s  %7dKB  %7dKB",
 				mac, s.ipaddr, "leased",
@@ -426,7 +426,7 @@ function list()
 	) do
 		if (s[".type"] == "whitelist" or s[".type"] == "blacklist") and s.mac then
 			local mac = s.mac:lower()
-			local arp = arpcache[mac]
+			local arp = arpcache[mac]:lower()
 			print(string.format(
 				"%-17s  %-15s  %-9s  %4s  %-7s  %9s  %9s",
 				mac, arp and arp[2] or "?", s[".type"], "- ",
