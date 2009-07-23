@@ -122,21 +122,17 @@ function threadlocal()
 	local tbl = {}
 
 	local function get(self, key)
-		local c = coroutine.running()
-		local thread = coxpt[c] or c or 0
-		if not rawget(self, thread) then
-			return nil
-		end
-		return rawget(self, thread)[key]
+		local t = rawget(self, coxpt[coroutine.running()] or coroutine.running() or 0)
+		return t and t[key]
 	end
 
 	local function set(self, key, value)
-		local c = coroutine.running()
-		local thread = coxpt[c] or c or 0
-		if not rawget(self, thread) then
-			rawset(self, thread, {})
+		local c = coxpt[coroutine.running()] or coroutine.running() or 0
+		if not rawget(self, c) then
+			rawset(self, c, { [key] = value })
+		else
+			rawget(self, c)[key] = value
 		end
-		rawget(self, thread)[key] = value
 	end
 
 	setmetatable(tbl, {__index = get, __newindex = set, __mode = "k"})
