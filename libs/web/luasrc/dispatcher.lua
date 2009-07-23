@@ -129,7 +129,7 @@ end
 --- Dispatches a LuCI virtual path.
 -- @param request	Virtual path
 function dispatch(request, ext_tree)
-	context._disable_memtrace = require "luci.debug".trap_memtrace("l")
+	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
 	ctx.path = request
 	ctx.urltoken   = ctx.urltoken or {}
