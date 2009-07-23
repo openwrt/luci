@@ -1,6 +1,6 @@
 local debug = require "debug"
 local io = require "io"
-local collectgarbage = collectgarbage
+local collectgarbage, floor = collectgarbage, math.floor
 
 module "luci.debug"
 __file__ = debug.getinfo(1, 'S').source:sub(2)
@@ -13,15 +13,16 @@ function trap_memtrace(flags, dest)
 
 	local function trap(what, line)
 		local info = debug.getinfo(2, "Sn")
-		if collectgarbage("count") > peak then
-			peak = collectgarbage("count")
+		local size = floor(collectgarbage("count"))
+		if size > peak then
+			peak = size
 		end
 		if tracefile then
 			tracefile:write(
 				"[", what, "] ", info.source, ":", (line or "?"), "\t",
 				(info.namewhat or ""), "\t",
 				(info.name or ""), "\t",
-				collectgarbage("count"), " (", peak, ")\n"
+				size, " (", peak, ")\n"
 			)
 		end
 	end

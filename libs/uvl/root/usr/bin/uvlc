@@ -1,21 +1,22 @@
 #!/usr/bin/lua
 
-
 if arg[1] then
 	require("luci.util")
 	require("luci.uvl")
-	require("luci.fs")
+	require("nixio.fs")
 
 	local uvl = luci.uvl.UVL()
 	local scheme, err = uvl:get_scheme( arg[1] )
 
 	if scheme then
-		luci.fs.writefile(
+		nixio.fs.writefile(
 			"%s/bytecode/%s.lua" %{ uvl.schemedir, arg[1] },
 			luci.util.get_bytecode(scheme)
 		)
-	else
+	elseif err then
 		print("Error:", err:string())
+	else
+		print("Error: Can not find scheme:", arg[1])
 	end
 else
 	print( "Usage: uvlc <scheme>" )
