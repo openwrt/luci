@@ -27,16 +27,16 @@ limitations under the License.
 
 local io    = require "io"
 local os    = require "os"
-local nixio = require "nixio"
 local table = require "table"
+local nixio = require "nixio"
+local fs    = require "nixio.fs"
 
 local luci  = {}
 luci.util   = require "luci.util"
-luci.fs     = require "luci.fs"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type =
-	tonumber, ipairs, pairs, pcall, type
+local tonumber, ipairs, pairs, pcall, type, next =
+	tonumber, ipairs, pairs, pcall, type, next
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -135,7 +135,7 @@ getenv = nixio.getenv
 -- @return		String containing the system hostname
 function hostname(newname)
 	if type(newname) == "string" and #newname > 0 then
-		luci.fs.writefile( "/proc/sys/kernel/hostname", newname .. "\n" )
+		fs.writefile( "/proc/sys/kernel/hostname", newname )
 		return newname
 	else
 		return nixio.uname().nodename
@@ -180,8 +180,8 @@ end
 -- @return	String containing the memory used for buffering in kB
 -- @return	String containing the free memory amount in kB
 function sysinfo()
-	local cpuinfo = luci.fs.readfile("/proc/cpuinfo")
-	local meminfo = luci.fs.readfile("/proc/meminfo")
+	local cpuinfo = fs.readfile("/proc/cpuinfo")
+	local meminfo = fs.readfile("/proc/meminfo")
 
 	local system = cpuinfo:match("system typ.-:%s*([^\n]+)")
 	local model = ""
@@ -219,26 +219,14 @@ end
 -- @param bytes	Number of bytes for the unique id
 -- @return		String containing hex encoded id
 function uniqueid(bytes)
-	local fp    = io.open("/dev/urandom")
-	local chunk = { fp:read(bytes):byte(1, bytes) }
-	fp:close()
-
-	local hex = ""
-
-	local pattern = "%02X"
-	for i, byte in ipairs(chunk) do
-		hex = hex .. pattern:format(byte)
-	end
-
-	return hex
+	local rand = fs.readfile("/dev/urandom", bytes)
+	return rand and nixio.bin.hexlify(rand)
 end
 
 --- Returns the current system uptime stats.
 -- @return	String containing total uptime in seconds
--- @return	String containing idle time in seconds
 function uptime()
-	local loadavg = io.lines("/proc/uptime")()
-	return loadavg:match("^(.-) (.-)$")
+	return nixio.sysinfo().uptime
 end
 
 
@@ -251,15 +239,15 @@ net = {}
 -- @return	Table of table containing the current arp entries.
 --			The following fields are defined for arp entry objects:
 --			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
-function net.arptable()
-	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+")
+function net.arptable(callback)
+	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+", callback)
 end
 
 --- Returns conntrack information
 -- @return	Table with the currently tracked IP connections
-function net.conntrack()
+function net.conntrack(callback)
 	local connt = {}
-	if luci.fs.access("/proc/net/nf_conntrack", "r") then
+	if fs.access("/proc/net/nf_conntrack", "r") then
 		for line in io.lines("/proc/net/nf_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
@@ -269,9 +257,13 @@ function net.conntrack()
 				entry[i] = nil
 			end
 
-			connt[#connt+1] = entry
+			if callback then
+				callback(entry)
+			else
+				connt[#connt+1] = entry
+			end
 		end
-	elseif luci.fs.access("/proc/net/ip_conntrack", "r") then
+	elseif fs.access("/proc/net/ip_conntrack", "r") then
 		for line in io.lines("/proc/net/ip_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
@@ -281,7 +273,11 @@ function net.conntrack()
 				entry[i] = nil
 			end
 
-			connt[#connt+1] = entry
+			if callback then
+				callback(entry)
+			else
+				connt[#connt+1] = entry
+			end
 		end
 	else
 		return nil
@@ -296,12 +292,14 @@ end
 --			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
 --			  "flags", "device" }
 function net.defaultroute()
-	local route = nil
-	for _, r in pairs(net.routes()) do
-		if r.dest:prefix() == 0 and (not route or route.metric > r.metric) then
-			route = r
+	local route
+
+	net.routes(function(rt)
+		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
+			route = rt
 		end
-	end
+	end)
+
 	return route
 end
 
@@ -312,42 +310,57 @@ end
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
 function net.defaultroute6()
-	local route   = nil
-	local routes6 = net.routes6()
-	if routes6 then
-		for _, r in pairs(routes6) do
-			if r.dest:prefix() == 0 and
-			   (not route or route.metric > r.metric)
-			then
-				route = r
-			end
+	local route
+
+	net.routes6(function(rt)
+		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
+			route = rt
 		end
-	end
+	end)
+
 	return route
 end
 
 --- Determine the names of available network interfaces.
 -- @return	Table containing all current interface names
 function net.devices()
-	local devices = {}
-	for line in io.lines("/proc/net/dev") do
-		table.insert(devices, line:match(" *(.-):"))
+	local devs = {}
+	for k, v in ipairs(nixio.getifaddrs()) do
+		if v.family == "packet" then
+			devs[#devs+1] = v.name
+		end
 	end
-	return devices
+	return devs
 end
 
 
 --- Return information about available network interfaces.
 -- @return	Table containing all current interface names and their information
 function net.deviceinfo()
-	local devices = {}
-	for line in io.lines("/proc/net/dev") do
-		local name, data = line:match("^ *(.-): *(.*)$")
-		if name and data then
-			devices[name] = luci.util.split(data, " +", nil, true)
+	local devs = {}
+	for k, v in ipairs(nixio.getifaddrs()) do
+		if v.family == "packet" then
+			local d = v.data
+			d[1] = d.rx_bytes
+			d[2] = d.rx_packets
+			d[3] = d.rx_errors
+			d[4] = d.rx_dropped
+			d[5] = 0
+			d[6] = 0
+			d[7] = 0
+			d[8] = d.multicast
+			d[9] = d.tx_bytes
+			d[10] = d.tx_packets
+			d[11] = d.tx_errors
+			d[12] = d.tx_dropped
+			d[13] = 0
+			d[14] = d.collisions
+			d[15] = 0
+			d[16] = 0
+			devs[v.name] = d
 		end
 	end
-	return devices
+	return devs
 end
 
 
@@ -356,13 +369,11 @@ end
 -- @return		String containing the MAC address or nil if it cannot be found
 function net.ip4mac(ip)
 	local mac = nil
-
-	for i, l in ipairs(net.arptable()) do
-		if l["IP address"] == ip then
-			mac = l["HW address"]
+	net.arptable(function(e)
+		if e["IP address"] == ip then
+			mac = e["HW address"]
 		end
-	end
-
+	end)
 	return mac
 end
 
@@ -371,7 +382,7 @@ end
 --			The following fields are defined for route entry tables:
 --			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
 --			  "flags", "device" }
-function net.routes()
+function net.routes(callback)
 	local routes = { }
 
 	for line in io.lines("/proc/net/route") do
@@ -389,7 +400,7 @@ function net.routes()
 				dst_ip, dst_mask:prefix(dst_mask), luci.ip.FAMILY_INET4
 			)
 
-			routes[#routes+1] = {
+			local rt = {
 				dest     = dst_ip,
 				gateway  = gateway,
 				metric   = tonumber(metric),
@@ -401,6 +412,12 @@ function net.routes()
 				flags    = tonumber(flags, 16),
 				device   = dev
 			}
+
+			if callback then
+				callback(rt)
+			else
+				routes[#routes+1] = rt
+			end
 		end
 	end
 
@@ -412,8 +429,8 @@ end
 --			The following fields are defined for route entry tables:
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
-function net.routes6()
-	if luci.fs.access("/proc/net/ipv6_route", "r") then
+function net.routes6(callback)
+	if fs.access("/proc/net/ipv6_route", "r") then
 		local routes = { }
 
 		for line in io.lines("/proc/net/ipv6_route") do
@@ -437,7 +454,7 @@ function net.routes6()
 
 			nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
 
-			routes[#routes+1] = {
+			local rt = {
 				source   = src_ip,
 				dest     = dst_ip,
 				nexthop  = nexthop,
@@ -447,6 +464,12 @@ function net.routes6()
 				flags    = tonumber(flags, 16),
 				device   = dev
 			}
+
+			if callback then
+				callback(rt)
+			else
+				routes[#routes+1] = rt
+			end
 		end
 
 		return routes
@@ -665,7 +688,7 @@ function wifi.channels(iface)
 		fd:close()
 	end
 
-	if not ((pairs(cns))(cns)) then
+	if not next(cns) then
 		cns = {
 			2.412, 2.417, 2.422, 2.427, 2.432, 2.437,
 			2.442, 2.447, 2.452, 2.457, 2.462
@@ -686,8 +709,8 @@ init.dir = "/etc/init.d/"
 -- @return	Table containing the names of all inistalled init scripts
 function init.names()
 	local names = { }
-	for _, name in ipairs(luci.fs.glob(init.dir.."*")) do
-		names[#names+1] = luci.fs.basename(name)
+	for name in fs.glob(init.dir.."*") do
+		names[#names+1] = fs.basename(name)
 	end
 	return names
 end
@@ -696,7 +719,7 @@ end
 -- @param name	Name of the init script
 -- @return		Boolean indicating whether init is enabled
 function init.enabled(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return ( call(init.dir..name.." enabled") == 0 )
 	end
 	return false
@@ -706,7 +729,7 @@ end
 -- @param name	Name of the init script
 -- @return		Numeric index value
 function init.index(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return call("source "..init.dir..name.."; exit $START")
 	end
 end
@@ -715,7 +738,7 @@ end
 -- @param name	Name of the init script
 -- @return		Boolean indicating success
 function init.enable(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return ( call(init.dir..name.." enable") == 1 )
 	end
 end
@@ -724,7 +747,7 @@ end
 -- @param name	Name of the init script
 -- @return		Boolean indicating success
 function init.disable(name)
-	if luci.fs.access(init.dir..name) then
+	if fs.access(init.dir..name) then
 		return ( call(init.dir..name.." disable") == 0 )
 	end
 end
@@ -732,7 +755,7 @@ end
 
 -- Internal functions
 
-function _parse_delimited_table(iter, delimiter)
+function _parse_delimited_table(iter, delimiter, callback)
 	delimiter = delimiter or "%s+"
 
 	local data  = {}
@@ -754,7 +777,12 @@ function _parse_delimited_table(iter, delimiter)
 				end
 			end
 		end
-		table.insert(data, row)
+
+		if callback then
+			callback(row)
+		else
+			data[#data+1] = row
+		end
 	end
 
 	return data

@@ -117,7 +117,7 @@ end
 function rpc_fs()
 	local util    = require "luci.util"
 	local io      = require "io"
-	local fs2     = util.clone(require "luci.fs")
+	local fs2     = util.clone(require "nixio.fs")
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local ltn12   = require "luci.ltn12"

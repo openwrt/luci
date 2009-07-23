@@ -16,12 +16,11 @@ m = Map("system", translate("leds"), translate("leds_desc"))
 local sysfs_path = "/sys/class/leds/"
 local leds = {}
 
-if luci.fs.access(sysfs_path) then
-	for k, v in pairs(luci.fs.dir(sysfs_path)) do
-		if v ~= "." and v ~= ".." then
-			table.insert(leds, v)
-		end
-	end
+local fs   = require "nixio.fs"
+local util = require "nixio.util"
+
+if fs.access(sysfs_path) then
+	leds = util.consume((fs.dir(sysfs_path)))
 end
 
 if #leds == 0 then
@@ -52,7 +51,7 @@ s:option(Flag, "default").rmempty = true
 
 trigger = s:option(ListValue, "trigger")
 
-local triggers = luci.fs.readfile(sysfs_path .. leds[1] .. "/trigger")
+local triggers = fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
 	trigger:value(t, translate("system_led_trigger_" .. t:gsub("-", "")))
 end 

@@ -123,14 +123,18 @@ static int nixio_dup(lua_State *L) {
 	if (stat == -1) {
 		return nixio__perror(L);
 	} else {
-		int *udata = lua_newuserdata(L, sizeof(int));
-		if (!udata) {
-			return luaL_error(L, "out of memory");
-		}
+		if (newfd == -1) {
+			int *udata = lua_newuserdata(L, sizeof(int));
+			if (!udata) {
+				return luaL_error(L, "out of memory");
+			}
 
-		*udata = stat;
-		luaL_getmetatable(L, NIXIO_FILE_META);
-		lua_setmetatable(L, -2);
+			*udata = stat;
+			luaL_getmetatable(L, NIXIO_FILE_META);
+			lua_setmetatable(L, -2);
+		} else {
+			lua_pushvalue(L, 2);
+		}
 		return 1;
 	}
 }
@@ -325,7 +329,7 @@ static int nixio_file_close(lua_State *L) {
 static int nixio_file__gc(lua_State *L) {
 	int *fdp = luaL_checkudata(L, 1, NIXIO_FILE_META);
 	int res;
-	if (*fdp != -1) {
+	if (*fdp > 2) {
 		do {
 			res = close(*fdp);
 		} while (res == -1 && errno == EINTR);

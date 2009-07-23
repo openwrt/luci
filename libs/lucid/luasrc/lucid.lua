@@ -41,7 +41,7 @@ local UCINAME = UCINAME
 local SSTATE = "/tmp/.lucid_store"
 
 
-
+--- Starts a new LuCId superprocess.
 function start()
 	prepare()
 
@@ -60,6 +60,7 @@ function start()
 	run()
 end
 
+--- Stops any running LuCId superprocess. 
 function stop()
 	local pid = tonumber(state:get(UCINAME, "main", "pid"))
 	if pid then
@@ -68,6 +69,7 @@ function stop()
 	return false
 end
 
+--- Prepares the slaves, daemons and publishers, allocate resources.
 function prepare()
 	local debug = tonumber((cursor:get(UCINAME, "main", "debug")))
 	
@@ -104,24 +106,29 @@ function prepare()
 	end)
 end
 	
+--- Run the superprocess if prepared before. 
+-- This main function of LuCId will wait for events on given file descriptors.
 function run()
 	local pollint = tonumber((cursor:get(UCINAME, "main", "pollinterval")))
-	local threadlimit = tonumber(cursor:get(UCINAME, "main", "threadlimit"))
+	local threadlimit = tonumber((cursor:get(UCINAME, "main", "threadlimit")))
 
 	while true do
-		if not threadlimit or tcount < threadlimit then
-			local stat, code = nixio.poll(pollt, pollint)
+		local stat, code = nixio.poll(pollt, pollint)
 		
-			if stat and stat > 0 then
-				for _, polle in ipairs(pollt) do
-					if polle.revents ~= 0 and polle.handler then
-						polle.handler(polle)
-					end
+		if stat and stat > 0 then
+			local ok = false
+			for _, polle in ipairs(pollt) do
+				if polle.revents ~= 0 and polle.handler then
+					ok = ok or polle.handler(polle)
 				end
-			elseif stat == 0 then
-				ifaddrs = nixio.getifaddrs()
-				collectgarbage("collect")
 			end
+			if not ok then
+				-- Avoid high CPU usage if thread limit is reached
+				nixio.nanosleep(0, 100000000)
+			end
+		elseif stat == 0 then
+			ifaddrs = nixio.getifaddrs()
+			collectgarbage("collect")
 		end
 		
 		for _, cb in ipairs(tickt) do
@@ -139,11 +146,20 @@ function run()
 	end
 end
 
+--- Add a file descriptor for the main loop and associate handler functions.
+-- @param polle Table containing: {fd = FILE DESCRIPTOR, events = POLL EVENTS,
+-- handler = EVENT HANDLER CALLBACK}
+-- @see unregister_pollfd
+-- @return boolean status
 function register_pollfd(polle)
 	pollt[#pollt+1] = polle
 	return true 
 end
 
+--- Unregister a file desciptor and associate handler from the main loop.
+-- @param polle Poll descriptor
+-- @see register_pollfd
+-- @return boolean status
 function unregister_pollfd(polle)
 	for k, v in ipairs(pollt) do
 		if v == polle then
@@ -154,6 +170,8 @@ function unregister_pollfd(polle)
 	return false
 end
 
+--- Close all registered file descriptors from main loop.
+-- This is useful for forked child processes. 
 function close_pollfds()
 	for k, v in ipairs(pollt) do
 		if v.fd and v.fd.close then
@@ -162,11 +180,19 @@ function close_pollfds()
 	end
 end
 
+--- Register a tick function that will be called at each cycle of the main loop.
+-- @param cb Callback
+-- @see unregister_tick
+-- @return boolean status
 function register_tick(cb)
 	tickt[#tickt+1] = cb
 	return true
 end
 
+--- Unregister a tick function from the main loop.
+-- @param cb Callback
+-- @see register_tick
+-- @return boolean status
 function unregister_tick(cb)
 	for k, v in ipairs(tickt) do
 		if v == cb then
@@ -177,10 +203,22 @@ function unregister_tick(cb)
 	return false
 end
 
+--- Tests whether a given number of processes can be created.
+-- @oaram num Processes to be created
+-- @return boolean status
+function try_process(num)
+	local threadlimit = tonumber((cursor:get(UCINAME, "main", "threadlimit")))
+	return not threadlimit or (threadlimit - tcount) >= (num or 1)
+end
+
+--- Create a new child process from a Lua function and assign a destructor.
+-- @param threadcb main function of the new process
+-- @param waitcb destructor callback
+-- @return process identifier or nil, error code, error message
 function create_process(threadcb, waitcb)
 	local threadlimit = tonumber(cursor:get(UCINAME, "main", "threadlimit"))
 	if threadlimit and tcount >= threadlimit then
-		nixio.syslog("warning", "Unable to create thread: process limit reached")
+		nixio.syslog("warning", "Cannot create thread: process limit reached")
 		return nil
 	end
 	local pid, code, err = nixio.fork()
@@ -196,6 +234,9 @@ function create_process(threadcb, waitcb)
 	return pid, code, err
 end
 
+--- Prepare a daemon from a given configuration table.
+-- @param config Configuration data.
+-- @return boolean status or nil, error code, error message
 function prepare_daemon(config)
 	nixio.syslog("info", "Preparing daemon " .. config[".name"])
 	local modname = cursor:get(UCINAME, config.slave)
@@ -213,6 +254,9 @@ function prepare_daemon(config)
 	return module.prepare_daemon(config, _M)
 end
 
+--- Prepare a slave.
+-- @param name slave name
+-- @return table containing slave module and configuration or nil, error message
 function prepare_slave(name)
 	local slave = slaves[name]
 	if not slave then
@@ -231,16 +275,24 @@ function prepare_slave(name)
 	end
 end
 
+--- Return a list of available network interfaces on the host.
+-- @return table returned by nixio.getifaddrs()
 function get_interfaces()
 	return ifaddrs
 end
 
+--- Revoke process privileges.
+-- @param user new user name or uid
+-- @param group new group name or gid
+-- @return boolean status or nil, error code, error message
 function revoke_privileges(user, group)
 	if nixio.getuid() == 0 then
 		return nixio.setgid(group) and nixio.setuid(user)
 	end
 end
 
+--- Return a secure UCI cursor.
+-- @return UCI cursor
 function securestate()
 	local stat = nixio.fs.stat(SSTATE) or {}
 	local uid = nixio.getuid()
@@ -256,6 +308,8 @@ function securestate()
 	return uci.cursor(nil, SSTATE)
 end
 
+--- Daemonize the process.
+-- @return boolean status or nil, error code, error message
 function daemonize()
 	if nixio.getppid() == 1 then
 		return

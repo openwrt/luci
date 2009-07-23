@@ -15,7 +15,10 @@ $Id$
 
 -- Data init --
 
-local uci = luci.model.uci.cursor()
+local fs  = require "nixio.fs"
+local sys = require "luci.sys"
+local uci = require "luci.model.uci".cursor()
+
 if not uci:get("network", "wan") then
 	uci:section("network", "interface", "wan", {proto="none", ifname=" "})
 	uci:save("network")
@@ -24,7 +27,7 @@ end
 
 local wlcursor = luci.model.uci.cursor_state()
 local wireless = wlcursor:get_all("wireless")
-local wifidata = luci.sys.wifi.getiwconfig()
+local wifidata = sys.wifi.getiwconfig()
 local wifidevs = {}
 local ifaces = {}
 
@@ -99,7 +102,7 @@ function scan.write(self, section)
 	m.autoapply = false
 	t2.render = t2._render
 	local ifname = self.map:get(section, "ifname")
-	luci.util.update(t2.data, luci.sys.wifi.iwscan(ifname))
+	luci.util.update(t2.data, sys.wifi.iwscan(ifname))
 end
 
 t2._render = t2.render
@@ -218,8 +221,8 @@ encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
 
 if hwtype == "atheros" or hwtype == "mac80211" then
-	local supplicant = luci.fs.mtime("/usr/sbin/wpa_supplicant")
-	local hostapd = luci.fs.mtime("/usr/sbin/hostapd")
+	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
+	local hostapd    = fs.access("/usr/sbin/hostapd")
 
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK")

@@ -14,7 +14,7 @@ $Id$
 
 ]]--
 
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local ip = require "luci.ip"
 local math = require "math"
 local util = require "luci.util"

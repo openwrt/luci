@@ -97,6 +97,13 @@ static int nixio_bit_cast(lua_State *L) {
 	return 1;
 }
 
+static int nixio_bit_swap(lua_State *L) {
+	uint64_t op = luaL_checknumber(L, 1);
+	op = (op >> 24) | ((op >> 8) & 0xff00) | ((op & 0xff00) << 8) | (op << 24);
+	lua_pushnumber(L, op);
+	return 1;
+}
+
 /* module table */
 static const luaL_reg R[] = {
 	{"bor",			nixio_bit_or},
@@ -111,6 +118,8 @@ static const luaL_reg R[] = {
 	{"div",			nixio_bit_div},
 	{"check",		nixio_bit_check},
 	{"cast",		nixio_bit_cast},
+	{"tobit",		nixio_bit_cast},
+	{"bswap",		nixio_bit_swap},
 	{NULL,			NULL}
 };
 

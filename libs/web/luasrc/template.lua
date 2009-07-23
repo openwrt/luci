@@ -24,7 +24,7 @@ limitations under the License.
 
 ]]--
 
-local fs = require"luci.fs"
+local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local util = require "luci.util"
 local table = require "table"
@@ -32,6 +32,7 @@ local string = require "string"
 local config = require "luci.config"
 local coroutine = require "coroutine"
 local nixio = require "nixio", require "nixio.util"
+local tparser = require "luci.template.parser"
 
 local tostring, pairs, loadstring = tostring, pairs, loadstring
 local setmetatable, loadfile = setmetatable, loadfile
@@ -89,9 +90,9 @@ function compile(template)
 	
 	-- Replacements
 	local r_include = '")\ninclude("%s")\nwrite("'
-	local r_i18n    = '"..translate("%1","%2").."'
-	local r_i18n2    = '"..translate("%1", "").."'
-	local r_pexec   = '"..(%s or "").."'
+	local r_i18n    = '")\nwrite(translate("%1","%2"))\nwrite("'
+	local r_i18n2   = '")\nwrite(translate("%1", ""))\nwrite("'
+	local r_pexec   = '")\nwrite(tostring(%s or ""))\nwrite("'
 	local r_exec    = '")\n%s\nwrite("'
 	
 	-- Parse the expressions
@@ -173,18 +174,18 @@ function Template.__init__(self, name)
 	local err	
 	
 	if compiler_mode == "file" then
-		local tplmt = fs.mtime(sourcefile) or fs.mtime(sourcefile .. ".htm")
-		local commt = fs.mtime(compiledfile)
+		local tplmt = fs.stat(sourcefile, "mtime") or fs.stat(sourcefile .. ".htm", "mtime")
+		local commt = fs.stat(compiledfile, "mtime")
 		
-		if not fs.mtime(cdir) then
-			fs.mkdir(cdir, true)
+		if not fs.stat(cdir, "mtime") then
+			fs.mkdirr(cdir)
 			fs.chmod(fs.dirname(cdir), 777)
 		end
 		
 		assert(tplmt or commt, "No such template: " .. name)
 				
 		-- Build if there is no compiled file or if compiled file is outdated
-		if not commt or (commt	and tplmt and commt < tplmt) then
+		if not commt or (commt and tplmt and commt < tplmt) then
 			local source
 			source, err = fs.readfile(sourcefile) or fs.readfile(sourcefile .. ".htm")
 			
@@ -206,12 +207,7 @@ function Template.__init__(self, name)
 		end
 		
 	elseif compiler_mode == "memory" then
-		local source
-		source, err = fs.readfile(sourcefile) or fs.readfile(sourcefile .. ".htm")
-		if source then
-			self.template, err = compile(source)
-		end
-			
+		self.template, _, err = tparser.parse(sourcefile .. ".htm")
 	end
 	
 	-- If we have no valid template throw error, otherwise cache the template

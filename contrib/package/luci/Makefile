@@ -211,6 +211,16 @@ define Package/luci-json/install
 endef
 
 
+define Package/luci-lmo
+  $(call Package/luci/libtemplate)
+  TITLE:=lmo
+endef
+
+define Package/luci-lmo/install
+	$(call Package/luci/install/template,$(1),libs/lmo)
+endef
+
+
 define Package/luci-luanet
   $(call Package/luci/libtemplate)
   TITLE:=luanet
@@ -298,7 +308,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi
+  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,en,Default Language)
 endef
@@ -506,6 +516,49 @@ define Package/luci-app-statistics/install
 	$(call Package/luci/install/template,$(1),applications/luci-statistics)
 endef
 
+define Package/luci-app-diag-core
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-core 
+  TITLE:=LuCI Diagnostics Tools (Core)
+endef
+
+define Package/luci-app-diag-devinfo
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-app-diag-core +smap +netdiscover +mac-to-devinfo +httping +smap-to-devinfo +netdiscover-to-devinfo
+  TITLE:=LuCI Diagnostics Tools (Device Info)
+endef
+
+define Package/luci-app-voice-core
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-admin-core 
+  TITLE:=LuCI Voice Software (Core)
+endef
+
+define Package/luci-app-voice-diag
+  $(call Package/luci/webtemplate)
+  DEPENDS+=+luci-app-voice-core +luci-app-diag-devinfo
+  TITLE:=LuCI Voice Software (Diagnostics)
+endef
+
+define Package/luci-app-diag-devinfo/conffiles
+/etc/config/luci_devinfo
+endef
+
+define Package/luci-app-diag-core/install
+	$(call Package/luci/install/template,$(1),applications/luci-diag-core)
+endef
+
+define Package/luci-app-diag-devinfo/install
+	$(call Package/luci/install/template,$(1),applications/luci-diag-devinfo)
+endef
+
+define Package/luci-app-voice-core/install
+	$(call Package/luci/install/template,$(1),applications/luci-voice-core)
+endef
+
+define Package/luci-app-voice-diag/install
+	$(call Package/luci/install/template,$(1),applications/luci-voice-diag)
+endef
 
 define Package/luci-app-upnp
   $(call Package/luci/webtemplate)
@@ -885,6 +938,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-json),)
 	PKG_SELECTED_MODULES+=libs/json
 endif
+ifneq ($(CONFIG_PACKAGE_luci-lmo),)
+	PKG_SELECTED_MODULES+=libs/lmo
+endif
 ifneq ($(CONFIG_PACKAGE_luci-luanet),)
 	PKG_SELECTED_MODULES+=libs/luanet
 endif
@@ -950,6 +1006,18 @@ ifneq ($(CONFIG_PACKAGE_luci-app-splash),)
 endif
 ifneq ($(CONFIG_PACKAGE_luci-app-statistics),)
 	PKG_SELECTED_MODULES+=applications/luci-statistics
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-voice-core),)
+	PKG_SELECTED_MODULES+=applications/luci-voice-core
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-voice-diag),)
+	PKG_SELECTED_MODULES+=applications/luci-voice-diag
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-diag-core),)
+	PKG_SELECTED_MODULES+=applications/luci-diag-core
+endif
+ifneq ($(CONFIG_PACKAGE_luci-app-diag-devinfo),)
+	PKG_SELECTED_MODULES+=applications/luci-diag-devinfo
 endif
 ifneq ($(CONFIG_PACKAGE_luci-app-upnp),)
 	PKG_SELECTED_MODULES+=applications/luci-upnp
@@ -1078,6 +1146,7 @@ $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
+$(eval $(call BuildPackage,luci-lmo))
 $(eval $(call BuildPackage,luci-luanet))
 $(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
@@ -1102,6 +1171,10 @@ $(eval $(call BuildPackage,luci-app-olsr))
 $(eval $(call BuildPackage,luci-app-qos))
 $(eval $(call BuildPackage,luci-app-splash))
 $(eval $(call BuildPackage,luci-app-statistics))
+$(eval $(call BuildPackage,luci-app-diag-core))
+$(eval $(call BuildPackage,luci-app-diag-devinfo))
+$(eval $(call BuildPackage,luci-app-voice-core))
+$(eval $(call BuildPackage,luci-app-voice-diag))
 $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))

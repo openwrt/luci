@@ -27,7 +27,7 @@ luasource:
   ifneq ($(PO),)
 	mkdir -p dist$(LUCI_I18NDIR)
 	for file in $(PO); do \
-	  cp $(HOST)/lua-po/$$file.$(if $(PO_LANG),$(PO_LANG),*).lua dist$(LUCI_I18NDIR)/ 2>/dev/null || true; \
+	  cp $(HOST)/lua-po/$$file.$(if $(PO_LANG),$(PO_LANG),*).* dist$(LUCI_I18NDIR)/ 2>/dev/null || true; \
 	done
   endif
 

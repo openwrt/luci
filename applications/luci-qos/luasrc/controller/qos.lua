@@ -14,7 +14,7 @@ $Id$
 module("luci.controller.qos", package.seeall)
 
 function index()
-	if not luci.fs.access("/etc/config/qos") then
+	if not nixio.fs.access("/etc/config/qos") then
 		return
 	end
 	

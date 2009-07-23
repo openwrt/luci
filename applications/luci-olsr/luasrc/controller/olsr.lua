@@ -1,7 +1,7 @@
 module("luci.controller.olsr", package.seeall)
 
 function index()
-	if not luci.fs.access("/etc/config/olsrd") then
+	if not nixio.fs.access("/etc/config/olsrd") then
 		return
 	end
 
@@ -182,7 +182,7 @@ function fetch_txtinfo(otable)
 	local rawdata = luci.sys.httpget("http://127.0.0.1:2006/"..otable)
 
 	if #rawdata == 0 then
-		if luci.fs.access("/proc/net/ipv6_route", "r") then
+		if nixio.fs.access("/proc/net/ipv6_route", "r") then
 			rawdata = luci.sys.httpget("http://[::1]:2006/"..otable)
 			if #rawdata == 0 then
 				return nil

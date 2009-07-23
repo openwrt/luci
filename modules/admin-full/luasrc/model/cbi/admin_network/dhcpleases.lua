@@ -11,17 +11,21 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-require("luci.sys")
-require("luci.tools.webadmin")
+
+local uci = require "luci.model.uci".cursor()
+local sys = require "luci.sys"
+local wa  = require "luci.tools.webadmin"
+local fs  = require "nixio.fs"
+
 m2 = Map("luci_ethers", translate("dhcp_leases"))
 
 local leasefn, leasefp, leases
-luci.model.uci.cursor():foreach("dhcp", "dnsmasq",
+uci:foreach("dhcp", "dnsmasq",
  function(section)
  	leasefn = section.leasefile
  end
 ) 
-local leasefp = leasefn and luci.fs.access(leasefn) and io.lines(leasefn)
+local leasefp = leasefn and fs.access(leasefn) and io.lines(leasefn)
 if leasefp then
 	leases = {}
 	for lease in leasefp do
@@ -38,9 +42,7 @@ if leases then
 	ltime = v:option(DummyValue, 1, translate("dhcp_timeremain"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
-		return luci.tools.webadmin.date_format(
-		 os.difftime(tonumber(value), os.time())
-		)
+		return wa.date_format(os.difftime(tonumber(value), os.time()))
 	end
 end
 
@@ -51,11 +53,13 @@ s.template = "cbi/tblsection"
 
 mac = s:option(Value, "macaddr", translate("macaddress"))
 ip = s:option(Value, "ipaddr", translate("ipaddress"))
-for i, dataset in ipairs(luci.sys.net.arptable()) do
-	ip:value(dataset["IP address"])
-	mac:value(dataset["HW address"],
-	 dataset["HW address"] .. " (" .. dataset["IP address"] .. ")")
-end
+sys.net.arptable(function(entry)
+	ip:value(entry["IP address"])
+	mac:value(
+		entry["HW address"],
+		entry["HW address"] .. " (" .. entry["IP address"] .. ")"
+	)
+end)
 
 	
 return m2

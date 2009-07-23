@@ -18,6 +18,8 @@ local utl = require "luci.util"
 local ipt = require "luci.sys.iptparser".IptParser()
 local uci = require "luci.model.uci".cursor_state()
 local wat = require "luci.tools.webadmin"
+local fs  = require "nixio.fs"
+
 local clients = { }
 local leasetime = tonumber(uci:get("luci_splash", "general", "leasetime") or 1) * 60 * 60
 local leasefile = "/tmp/dhcp.leases"
@@ -94,7 +96,7 @@ uci:foreach("luci_splash", "blacklist",
 		end
 	end)		
 
-if luci.fs.access(leasefile) then
+if fs.access(leasefile) then
 	for l in io.lines(leasefile) do
 		local time, mac, ip, name = l:match("^(%d+) (%S+) (%S+) (%S+)")
 		if time and mac and ip then

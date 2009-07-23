@@ -13,16 +13,16 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-require("luci.tools.webadmin")
-require("luci.sys")
-require("luci.fs")
+local wa  = require "luci.tools.webadmin"
+local sys = require "luci.sys"
+local fs  = require "nixio.fs"
 
-local has_pptp  = luci.fs.mtime("/usr/sbin/pptp")
-local has_pppoe = luci.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")
+local has_pptp  = fs.access("/usr/sbin/pptp")
+local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 
 local network = luci.model.uci.cursor_state():get_all("network")
 
-local netstat = luci.sys.net.deviceinfo()
+local netstat = sys.net.deviceinfo()
 local ifaces = {}
 
 for k, v in pairs(network) do
@@ -41,7 +41,7 @@ hwaddr = s:option(DummyValue, "_hwaddr",
  translate("network_interface_hwaddr"), translate("network_interface_hwaddr_desc"))
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
-	return luci.fs.readfile("/sys/class/net/" .. ix .. "/address")
+	return fs.readfile("/sys/class/net/" .. ix .. "/address")
 		or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
 		or "n/a"
 end
@@ -59,10 +59,10 @@ function txrx.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
 
 	local rx = netstat and netstat[ix] and netstat[ix][1]
-	rx = rx and luci.tools.webadmin.byte_format(tonumber(rx)) or "-"
+	rx = rx and wa.byte_format(tonumber(rx)) or "-"
 
 	local tx = netstat and netstat[ix] and netstat[ix][9]
-	tx = tx and luci.tools.webadmin.byte_format(tonumber(tx)) or "-"
+	tx = tx and wa.byte_format(tonumber(tx)) or "-"
 
 	return string.format("%s / %s", tx, rx)
 end
@@ -150,7 +150,7 @@ pwd:depends("proto", "pptp")
 
 -- Allow user to set MSS correction here if the UCI firewall is installed
 -- This cures some cancer for providers with pre-war routers
-if luci.fs.access("/etc/config/firewall") then
+if fs.access("/etc/config/firewall") then
 	mssfix = s:option(Flag, "_mssfix",
 		translate("m_n_mssfix"), translate("m_n_mssfix_desc"))
 	mssfix.rmempty = false

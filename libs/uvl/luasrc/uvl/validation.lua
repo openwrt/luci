@@ -15,7 +15,7 @@ $Id$
 ]]--
 
 local os = require "os"
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local ERR = require "luci.uvl.errors"
 

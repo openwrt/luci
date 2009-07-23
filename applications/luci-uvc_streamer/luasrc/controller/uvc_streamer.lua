@@ -18,7 +18,7 @@ module("luci.controller.uvc_streamer", package.seeall)
 function index()
        require("luci.i18n")
        luci.i18n.loadc("uvc_streamer")
-       if not luci.fs.access("/etc/config/uvc-streamer") then
+       if not nixio.fs.access("/etc/config/uvc-streamer") then
                return
        end
 

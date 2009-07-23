@@ -19,7 +19,7 @@ $Id$
 <p><%:stat_systemplugins_desc System plugins collecting values about system state and ressource usage on the device.:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
-			<% if luci.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>
+			<% if nixio.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>
 				<li><a href="<%=controller%>/admin/statistics/collectd/system/<%=plugin%>"><%=desc%></a></li>
 			<% end %>
 		<% end %>

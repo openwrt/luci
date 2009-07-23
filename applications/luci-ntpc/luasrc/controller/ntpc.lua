@@ -17,7 +17,7 @@ module("luci.controller.ntpc", package.seeall)
 function index()
 	require("luci.i18n")
 	luci.i18n.loadc("ntpc")
-	if not luci.fs.access("/etc/config/ntpclient") then
+	if not nixio.fs.access("/etc/config/ntpclient") then
 		return
 	end
 	

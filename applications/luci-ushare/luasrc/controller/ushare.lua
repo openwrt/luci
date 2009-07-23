@@ -18,7 +18,7 @@ module("luci.controller.ushare", package.seeall)
 function index()
        require("luci.i18n")
        luci.i18n.loadc("ushare")
-       if not luci.fs.access("/etc/config/ushare") then
+       if not nixio.fs.access("/etc/config/ushare") then
                return
        end
 

@@ -80,15 +80,12 @@ module "README"
 
 --- Cryptography and TLS libraries.
 -- <ul>
--- <li>Currently 2 underlying cryptography libraries are supported: openssl and
--- axTLS. The name of the library in use is written to 
+-- <li>Currently 3 underlying cryptography libraries are supported: openssl,
+-- cyassl and axTLS. The name of the library in use is written to 
 -- <strong>nixio.tls_provider</strong></li>
--- <li>You should whenever possible use openssl as axTLS has only limited 
--- support. It does not provide support for non-blocking sockets and
--- is probably less audited than openssl.</li>
--- <li>However in embedded development if you don't need openssl anyway
--- you may safe an essential amount of flash space (about 1 MB for the openssl
--- library) by choosing axTLS over openssl.</li>
+-- <li>You should whenever possible use openssl or cyassl as axTLS has only 
+-- limited support. It does not provide support for non-blocking sockets and
+-- is probably less audited than the other ones.</li>
 -- <li>As the supported Windows versions are not suitable for embedded devices
 -- axTLS is at the moment not supported on Windows.</li>  
 -- </ul>

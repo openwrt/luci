@@ -18,7 +18,7 @@ module("luci.controller.hd_idle", package.seeall)
 function index()
        require("luci.i18n")
        luci.i18n.loadc("hd_idle")
-       if not luci.fs.access("/etc/config/hd-idle") then
+       if not nixio.fs.access("/etc/config/hd-idle") then
                return
        end
 

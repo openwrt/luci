@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 local io = require "io"
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local uvl = require "luci.uvl"
 local util = require "luci.util"
 local ltn12 = require "luci.ltn12"
@@ -48,7 +48,7 @@ function Generator.make(self)
 	fs.mkdir(self.output)
 
 	for i, file in ipairs(self.additionals) do
-		fs.copy(self.sourcedir .. file, self.output .. "/" .. file)
+		fs.datacopy(self.sourcedir .. file, self.output .. "/" .. file)
 	end
 
 	template.compiler_mode = "memory"

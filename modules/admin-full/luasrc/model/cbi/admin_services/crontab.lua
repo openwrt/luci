@@ -12,6 +12,8 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
+local fs = require "nixio.fs"
 local cronfile = "/etc/crontabs/root" 
 
 f = SimpleForm("crontab", translate("a_s_crontab"), translate("a_s_crontab1"))
@@ -20,13 +22,13 @@ t = f:field(TextValue, "crons")
 t.rmempty = true
 t.rows = 10
 function t.cfgvalue()
-	return luci.fs.readfile(cronfile) or ""
+	return fs.readfile(cronfile) or ""
 end
 
 function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.crons then
-			luci.fs.writefile(cronfile, data.crons:gsub("\r\n", "\n"))
+			fs.writefile(cronfile, data.crons:gsub("\r\n", "\n"))
 		end
 	end
 	return true

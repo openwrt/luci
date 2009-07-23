@@ -20,13 +20,13 @@ t = f:field(TextValue, "keys")
 t.rmempty = true
 t.rows = 10
 function t.cfgvalue()
-	return luci.fs.readfile(keyfile) or ""
+	return nixio.fs.readfile(keyfile) or ""
 end
 
 function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.keys then
-			luci.fs.writefile(keyfile, data.keys:gsub("\r\n", "\n"))
+			nixio.fs.writefile(keyfile, data.keys:gsub("\r\n", "\n"))
 		end
 	end
 	return true

@@ -12,6 +12,7 @@ all: build
 build: gccbuild luabuild
 
 gccbuild:
+	make -C libs/lmo CC="cc" CFLAGS="" LDFLAGS="" host-install
 	for i in $(MODULES); do \
 		make -C$$i compile || { \
 			echo "*** Compilation of $$i failed!"; \
@@ -28,6 +29,7 @@ i18nbuild:
 
 clean:
 	rm -rf docs
+	make -C libs/lmo host-clean
 	for i in $(MODULES); do make -C$$i clean; done
 
 

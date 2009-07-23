@@ -18,6 +18,7 @@
 
 #include "nixio.h"
 #include <sys/types.h>
+#include <sys/param.h>
 #include <errno.h>
 #include <string.h>
 
@@ -346,6 +347,9 @@ static int nixio_sock_getpeername(lua_State *L) {
 }
 
 #if defined(__linux__) || defined(BSD)
+#ifdef BSD
+#include <net/if.h>
+#endif
 #include <ifaddrs.h>
 
 static int nixio_getifaddrs(lua_State *L) {

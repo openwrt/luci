@@ -27,6 +27,7 @@ limitations under the License.
 --- LuCI translation library.
 module("luci.i18n", package.seeall)
 require("luci.util")
+require("lmo")
 
 table   = {}
 i18ndir = luci.util.libpath() .. "/i18n/"
@@ -47,13 +48,22 @@ end
 function load(file, lang, force)
 	lang = lang and lang:gsub("_", "-") or ""
 	if force or not loaded[lang] or not loaded[lang][file] then
-		local f = loadfile(i18ndir .. file .. "." .. lang .. ".lua") or
-			loadfile(i18ndir .. file .. "." .. lang .. ".lua.gz")
-
+		local f = lmo.open(i18ndir .. file .. "." .. lang .. ".lmo")
 		if f then
-			table[lang] = table[lang] or {}
-			setfenv(f, table[lang])
-			f()
+			if not table[lang] then
+				table[lang] = { f }
+				setmetatable(table[lang], {
+					__index = function(tbl, key)
+						for i = 1, #tbl do
+							local s = rawget(tbl, i):lookup(key)
+							if s then return s end
+						end
+					end
+				})
+			else
+				table[lang][#table[lang]+1] = f
+			end
+
 			loaded[lang] = loaded[lang] or {}
 			loaded[lang][file] = true
 			return true

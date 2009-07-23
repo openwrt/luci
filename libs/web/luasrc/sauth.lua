@@ -15,7 +15,6 @@ $Id$
 
 --- LuCI session library.
 module("luci.sauth", package.seeall)
-require("luci.fs")
 require("luci.util")
 require("luci.sys")
 require("luci.config")
@@ -30,17 +29,17 @@ sessiontime = tonumber(luci.config.sauth.sessiontime) or 15 * 60
 --- Manually clean up expired sessions.
 function clean()
 	local now   = os.time()
-	local files = luci.fs.dir(sessionpath)
+	local files = fs.dir(sessionpath)
 	
 	if not files then
 		return nil
 	end
 	
-	for i, file in pairs(files) do
+	for file in files do
 		local fname = sessionpath .. "/" .. file
-		local stat = luci.fs.stat(fname)
+		local stat = fs.stat(fname)
 		if stat and stat.type == "reg" and stat.mtime + sessiontime < now then
-			luci.fs.unlink(fname)
+			fs.unlink(fname)
 		end 
 	end
 end
@@ -68,8 +67,8 @@ function read(id)
 	if not sane(sessionpath .. "/" .. id) then
 		return
 	end
-	luci.fs.utime(sessionpath .. "/" .. id)
-	return luci.fs.readfile(sessionpath .. "/" .. id)
+	fs.utimes(sessionpath .. "/" .. id)
+	return fs.readfile(sessionpath .. "/" .. id)
 end
 
 
@@ -77,8 +76,8 @@ end
 -- @return Boolean status
 function sane(file)
 	return luci.sys.process.info("uid")
-			== luci.fs.stat(file or sessionpath, "uid")
-		and luci.fs.stat(file or sessionpath, "modestr")
+			== fs.stat(file or sessionpath, "uid")
+		and fs.stat(file or sessionpath, "modestr")
 			== (file and "rw-------" or "rwx------")
 end
 
@@ -106,5 +105,5 @@ function kill(id)
 	if not id:match("^%w+$") then
 		error("Session ID is not sane!")
 	end
-	luci.fs.unlink(sessionpath .. "/" .. id)
+	fs.unlink(sessionpath .. "/" .. id)
 end

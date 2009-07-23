@@ -87,6 +87,18 @@ $(AXTLS_DIR)/.prepared:
 src/libaxtls.a: $(AXTLS_DIR)/.prepared
 	$(MAKE) -C $(AXTLS_DIR) CC="$(CC)" CFLAGS="$(CFLAGS) $(EXTRA_CFLAGS) $(FPIC) -Wall -pedantic -I../config -I../ssl -I../crypto" LDFLAGS="$(LDFLAGS)" OS="$(OS)" clean all
 	cp -p $(AXTLS_DIR)/_stage/libaxtls.a src
+	# *************************************************************************
+	#
+	#
+	#
+	# *** WARNING ***
+	# The use of the axTLS cryptographical provider is discouraged!
+	# Please switch to either CyaSSL or OpenSSL.
+	# Support for axTLS might be removed in the near future.
+	#
+	#
+	#
+	#**************************************************************************
 
 clean: luaclean
 	rm -f src/*.o src/*.so src/*.a src/*.dll

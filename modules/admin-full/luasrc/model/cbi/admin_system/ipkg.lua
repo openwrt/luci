@@ -19,11 +19,11 @@ f = SimpleForm("ipkgconf", translate("a_s_p_ipkg"))
 t = f:field(TextValue, "lines")
 t.rows = 10
 function t.cfgvalue()
-	return luci.fs.readfile(ipkgfile) or ""
+	return nixio.fs.readfile(ipkgfile) or ""
 end
 
 function t.write(self, section, data)
-	return luci.fs.writefile(ipkgfile, data:gsub("\r\n", "\n"))
+	return nixio.fs.writefile(ipkgfile, data:gsub("\r\n", "\n"))
 end
 
 f:append(Template("admin_system/ipkg"))

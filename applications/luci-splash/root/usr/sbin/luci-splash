@@ -29,7 +29,7 @@ function main(argv)
 	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down")) or 0
 
 	if ( cmd == "lease" or cmd == "add-rules" or cmd == "remove" or
-	     cmd == "whitelist" or cmd == "blacklist" ) and #argv > 0
+	     cmd == "whitelist" or cmd == "blacklist" or cmd == "status" ) and #argv > 0
 	then
 		lock()
 
@@ -59,6 +59,11 @@ function main(argv)
 				elseif whitelist_macs[mac] then
 					add_whitelist_rule(mac)
 				end
+			elseif mac and cmd == "status" then
+				print(leased_macs[mac] and "lease"
+					or whitelist_macs[mac] and "whitelist"
+					or blacklist_macs[mac] and "blacklist"
+					or "new")
 			elseif mac and ( cmd == "whitelist" or cmd == "blacklist" or cmd == "lease" ) then
 				if cmd ~= "lease" and leased_macs[mac] then
 					print("Removing %s from leases" % mac)
