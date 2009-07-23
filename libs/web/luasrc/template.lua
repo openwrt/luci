@@ -32,6 +32,7 @@ local string = require "string"
 local config = require "luci.config"
 local coroutine = require "coroutine"
 local nixio = require "nixio", require "nixio.util"
+local tparser = require "luci.template.parser"
 
 local tostring, pairs, loadstring = tostring, pairs, loadstring
 local setmetatable, loadfile = setmetatable, loadfile
@@ -206,12 +207,7 @@ function Template.__init__(self, name)
 		end
 		
 	elseif compiler_mode == "memory" then
-		local source
-		source, err = fs.readfile(sourcefile) or fs.readfile(sourcefile .. ".htm")
-		if source then
-			self.template, err = compile(source)
-		end
-			
+		self.template, _, err = tparser.parse(sourcefile .. ".htm")
 	end
 	
 	-- If we have no valid template throw error, otherwise cache the template
