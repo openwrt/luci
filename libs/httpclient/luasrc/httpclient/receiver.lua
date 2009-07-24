@@ -171,43 +171,60 @@ function request_to_file(uri, target, options, cbs)
 	cbs = cbs or {}
 	options.headers = options.headers or {}
 	local hdr = options.headers
+	local file, code, msg
 	
-	local file, code, msg = prepare_fd(target)
-	if not file then
-		return file, code, msg
-	end
+	if target then
+		file, code, msg = prepare_fd(target)
+		if not file then
+			return file, code, msg
+		end
 	
-	local off = file:tell()
-	
-	-- Set content range
-	if off > 0 then
-		hdr.Range = hdr.Range or ("bytes=" .. off .. "-")  
+		local off = file:tell()
+		
+		-- Set content range
+		if off > 0 then
+			hdr.Range = hdr.Range or ("bytes=" .. off .. "-")  
+		end
 	end
 	
 	local code, resp, buffer, sock = httpc.request_raw(uri, options)
 	if not code then
 		-- No success
-		file:close()
+		if file then
+			file:close()
+		end
 		return code, resp, buffer
 	elseif hdr.Range and code ~= 206 then
 		-- We wanted a part but we got the while file
 		sock:close()
-		file:close()
+		if file then
+			file:close()
+		end
 		return nil, -4, code, resp
 	elseif not hdr.Range and code ~= 200 then
 		-- We encountered an error
 		sock:close()
-		file:close()
+		if file then
+			file:close()
+		end
 		return nil, -4, code, resp
 	end
 	
 	if cbs.on_header then
 		local stat = {cbs.on_header(file, code, resp)}
 		if stat[1] == false then
-			file:close()
+			if file then
+				file:close()
+			end
 			sock:close()
 			return unpack(stat)
+		elseif stat[2] then
+			file = file and stat[2]
 		end
+	end
+	
+	if not file then
+		return nil, -5, "no target given"
 	end
 
 	local chunked = resp.headers["Transfer-Encoding"] == "chunked"
