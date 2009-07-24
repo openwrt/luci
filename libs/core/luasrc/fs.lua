@@ -192,13 +192,13 @@ local stat_tr = {
 -- @return		Table containing file or directory properties or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-function stat(...)
-	local data, code, msg = fs.stat(...)
+function stat(path, key)
+	local data, code, msg = fs.stat(path)
 	if data then
 		data.mode = data.modestr
 		data.type = stat_tr[data.type] or "?"
 	end
-	return data, code, msg
+	return key and data and data[key] or data, code, msg
 end
 
 --- Set permissions on given file or directory.
