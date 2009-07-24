@@ -176,6 +176,15 @@ end
 -- @return		Number containing the os specific errno on error
 rmdir = fs.rmdir
 
+local stat_tr = {
+	reg = "regular",
+	dir = "directory",
+	lnk = "link",
+	chr = "character device",
+	blk = "block device",
+	fifo = "fifo",
+	sock = "socket"
+}
 --- Get information about given file or directory.
 -- @class		function
 -- @name		stat
@@ -183,7 +192,14 @@ rmdir = fs.rmdir
 -- @return		Table containing file or directory properties or nil on error
 -- @return		String containing the error description on error
 -- @return		Number containing the os specific errno on error
-stat = fs.stat
+function stat(...)
+	local data, code, msg = fs.stat(...)
+	if data then
+		data.mode = data.modestr
+		data.type = stat_tr[data.type] or "?"
+	end
+	return data, code, msg
+end
 
 --- Set permissions on given file or directory.
 -- @class		function
