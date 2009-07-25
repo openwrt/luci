@@ -258,7 +258,7 @@ function dispatch(request)
 		local verifytoken = false
 		if not sess then
 			sess = luci.http.getcookie("sysauth")
-			sess = sess and sess:match("^[a-f0-9]+$")
+			sess = sess and sess:match("^[a-f0-9]*$")
 			verifytoken = true
 		end
 
@@ -271,6 +271,12 @@ function dispatch(request)
 			sdat = sdat()
 			if not verifytoken or ctx.urltoken.stok == sdat.token then
 				user = sdat.user
+			end
+		else
+			local eu = http.getenv("HTTP_AUTH_USER")
+			local ep = http.getenv("HTTP_AUTH_PASS")
+			if eu and ep and luci.sys.user.checkpasswd(eu, ep) then
+				authen = function() return eu end
 			end
 		end
 

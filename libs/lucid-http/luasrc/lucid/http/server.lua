@@ -132,6 +132,7 @@ function Handler.checkrestricted(self, request)
 		end
 		
 		if stat then
+			request.env.HTTP_AUTH_USER, request.env.HTTP_AUTH_PASS = user, pass
 			return
 		end
 	end
