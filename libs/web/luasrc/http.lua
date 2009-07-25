@@ -258,6 +258,13 @@ function write(content, src_err)
 	end
 end
 
+--- Splice data from a filedescriptor to the client.
+-- @param fp	File descriptor
+-- @param size	Bytes to splice (optional)
+function splice(fd, size)
+	coroutine.yield(6, fd, size)
+end
+
 --- Redirects the client to a new URL and closes the connection.
 -- @param url	Target URL
 function redirect(url)

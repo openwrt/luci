@@ -510,7 +510,7 @@ function Server.process(self, client, env)
 					headers["Content-Length"] = sourceout.len
 				end
 			end
-			if not headers["Content-Length"] then
+			if not headers["Content-Length"] and not close then
 				if message.env.SERVER_PROTOCOL == "HTTP/1.1" then
 					headers["Transfer-Encoding"] = "chunked"
 					sinkout = chunksink(client)
@@ -554,8 +554,15 @@ function Server.process(self, client, env)
 
 		if sourceout and stat then
 			if util.instanceof(sourceout, IOResource) then
-				stat, code, msg = sourceout.fd:copyz(client, sourceout.len)
-			else
+				if not headers["Transfer-Encoding"] then
+					stat, code, msg = sourceout.fd:copyz(client, sourceout.len)
+					sourceout = nil
+				else
+					sourceout = sourceout.fd:blocksource(nil, sourceout.len)
+				end
+			end
+
+			if sourceout then
 				stat, msg = ltn12.pump.all(sourceout, sinkout)
 			end
 		end
