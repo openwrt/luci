@@ -27,6 +27,15 @@
 
 #define LMO_LUALIB_META  "lmo"
 #define LMO_ARCHIVE_META "lmo.archive"
+#define LMO_ENTRY_META   "lmo.entry"
+
+struct lmo_luaentry {
+	lmo_archive_t *archive;  
+	lmo_entry_t   *entry;
+};
+
+typedef struct lmo_luaentry lmo_luaentry_t;
+
 
 LUALIB_API int luaopen_lmo(lua_State *L);
 
