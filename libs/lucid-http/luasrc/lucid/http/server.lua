@@ -288,7 +288,7 @@ local function chunksink(sock)
 		if not chunk then
 			return sock:writeall("0\r\n\r\n")
 		else
-			return sock:writeall(("%X\r\n%s\r\n"):format(#chunk, chunk))
+			return sock:writeall(("%X\r\n%s\r\n"):format(#chunk, tostring(chunk)))
 		end
 	end
 end
