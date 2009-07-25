@@ -215,7 +215,7 @@ end
 -- @param value	String containing the HTML text
 -- @return	String with HTML tags stripped of
 function striptags(s)
-	return pcdata(s:gsub("</?[A-Za-z][A-Za-z0-9:_%-]*[^>]*>", " "):gsub("%s+", " "))
+	return pcdata(tostring(s):gsub("</?[A-Za-z][A-Za-z0-9:_%-]*[^>]*>", " "):gsub("%s+", " "))
 end
 
 --- Splits given string on a defined separator sequence and return a table
@@ -768,24 +768,19 @@ function copcall(f, ...)
 end
 
 -- Handle return value of protected call
-function handleReturnValue(err, co, status, ...)
+function handleReturnValue(err, co, status, arg1, arg2, arg3, arg4, arg5)
 	if not status then
-		return false, err(debug.traceback(co, (...)), ...)
+		return false, err(debug.traceback(co, arg1), arg1, arg2, arg3, arg4, arg5)
 	end
-	if coroutine.status(co) == 'suspended' then
-		return performResume(err, co, coroutine.yield(...))
-	else
-		return true, ...
+
+	if coroutine.status(co) ~= 'suspended' then
+		return true, arg1, arg2, arg3, arg4, arg5
 	end
+
+	return performResume(err, co, coroutine.yield(arg1, arg2, arg3, arg4, arg5))
 end
 
 -- Resume execution of protected function call
-function performResume(err, co, ...)
-	if get_memory_limit and get_memory_limit() > 0 and
-	   collectgarbage("count") > (get_memory_limit() * 0.8)
-	then
-		collectgarbage("collect")
-	end
-
-	return handleReturnValue(err, co, coroutine.resume(co, ...))
+function performResume(err, co, arg1, arg2, arg3, arg4, arg5)
+	return handleReturnValue(err, co, coroutine.resume(co, arg1, arg2, arg3, arg4, arg5))
 end
