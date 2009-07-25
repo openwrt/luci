@@ -108,13 +108,21 @@ end
 
 --- Dispatch an HTTP request.
 -- @param request	LuCI HTTP Request object
-function httpdispatch(request)
+function httpdispatch(request, prefix)
 	luci.http.context.request = request
-	context.request = {}
+
+	local r = {}
+	context.request = r
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
+	if prefix then
+		for _, node in ipairs(prefix) do
+			r[#r+1] = node
+		end
+	end
+
 	for node in pathinfo:gmatch("[^/]+") do
-		table.insert(context.request, node)
+		r[#r+1] = node
 	end
 
 	local stat, err = util.coxpcall(function()
