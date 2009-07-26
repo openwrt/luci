@@ -58,12 +58,12 @@ static char *strfind(char *haystack, int hslen, const char *needle, int ndlen)
 	return NULL;
 }
 
-/* 
- * Inspect current read buffer and find the number of "vague" characters at the end 
+/*
+ * Inspect current read buffer and find the number of "vague" characters at the end
  * which could indicate an opening token. Returns the number of "vague" chars.
  * The last continuous sequence of whitespace, optionally followed by a "<" is
  * treated as "vague" because whitespace may be discarded if the upcoming opening
- * token indicates pre-whitespace-removal ("<%-"). A single remaining "<" char 
+ * token indicates pre-whitespace-removal ("<%-"). A single remaining "<" char
  * can't be differentiated from an opening token ("<%"), so it's kept to be processed
  * in the next cycle.
  */
@@ -186,8 +186,8 @@ static const char * generate_expression(struct template_parser *data, size_t *sz
 			}
 		}
 
-		/* Found whitespace in i18n expression, raise flag */
-		else if( isspace(data->out[i]) && (data->type == T_TYPE_I18N) )
+		/* Found first whitespace in i18n expression, raise flag */
+		else if( isspace(data->out[i]) && (data->type == T_TYPE_I18N) && (i18n_hasdef == 0) )
 		{
 			i18n_hasdef = 1;
 		}
