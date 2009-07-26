@@ -28,7 +28,7 @@ local string = require "string"
 
 local require, pcall, ipairs, pairs = require, pcall, ipairs, pairs
 local type, error, tonumber, tostring = type, error, tonumber, tostring
-local unpack, loadfile = unpack, loadfile
+local unpack, loadfile, collectgarbage = unpack, loadfile, collectgarbage
 
 module "luci.uvl"
 
@@ -42,6 +42,10 @@ local TYPE_CONFIG   = 0x01
 local TYPE_SECTION  = 0x02
 local TYPE_OPTION   = 0x03
 local TYPE_ENUM     = 0x04
+
+local PAT_EXPR1		= "^%$?[%w_]+$"
+local PAT_EXPR2		= "^%$?[%w_]+%.%$?[%w_]+$"
+local PAT_EXPR3		= "^%$?[%w_]+%.%$?[%w_]+%.%$?[%w_]+$"
 
 --- Boolean; default true;
 -- treat sections found in config but not in scheme as error
@@ -274,7 +278,7 @@ function UVL._validate_section( self, section )
 	if STRICT_UNKNOWN_OPTIONS and not section:scheme('dynamic') then
 		for k, v in pairs(section:config()) do
 			local oo = section:option(k)
-			if k:sub(1,1) ~= "." and not self.beenthere[oo:cid()] then
+			if k:byte(1) == 46 and not self.beenthere[oo:cid()] then
 				section:error(ERR.OPT_UNKNOWN(oo))
 			end
 		end
@@ -542,7 +546,7 @@ function UVL._parse_section(self, scheme, k, v)
 	local so = scheme:section(v.name)
 
 	for k, v2 in pairs(v) do
-		if k ~= "name" and k ~= "package" and k:sub(1,1) ~= "." then
+		if k ~= "name" and k ~= "package" and k:byte(1) == 46 then
 			if k == "depends" then
 				s.depends = self:_read_dependency( v2, s.depends )
 				if not s.depends then
@@ -595,7 +599,7 @@ function UVL._parse_var(self, scheme, k, v)
 	local to = so:option(v.name)
 
 	for k, v2 in pairs(v) do
-		if k ~= "name" and k ~= "section" and k:sub(1,1) ~= "." then
+		if k ~= "name" and k ~= "section" and k:byte(1) == 46 then
 			if k == "depends" then
 				t.depends = self:_read_dependency( v2, t.depends )
 				if not t.depends then
@@ -718,9 +722,7 @@ function UVL._read_dependency( self, values, deps )
 				local k, e, v = val:match("%s*([%w$_.]+)%s*(=?)%s*(.*)")
 
 				if k and (
-					k:match("^"..expr.."%."..expr.."%."..expr.."$") or
-					k:match("^"..expr.."%."..expr.."$") or
-					k:match("^"..expr.."$")
+					k:match(PAT_EXPR1) or k:match(PAT_EXPR2) or k:match(PAT_EXPR3)
 				) then
 					condition[k] = (e == '=') and v or true
 				else
@@ -752,8 +754,8 @@ function UVL._read_validator( self, values, validators )
 				validator = self:_resolve_function( (value:gsub("^lua:","") ) )
 			elseif value:match("^regexp:") then
 				local pattern = value:gsub("^regexp:","")
-				validator = function( type, dtype, pack, sect, optn, ... )
-					local values = { ... }
+				validator = function( type, dtype, pack, sect, optn, arg1, arg2, arg3, arg4, arg5 )
+					local values = { arg1, arg2, arg3, arg4, arg5 }
 					for _, v in ipairs(values) do
 						local ok, match =
 							pcall( string.match, v, pattern )
@@ -920,13 +922,13 @@ function uvlitem.type(self)
 	end
 end
 
-function uvlitem.error(self, ...)
+function uvlitem.error(self, arg1, arg2, arg3, arg4, arg5)
 	if not self.e then
 		local errconst = { ERR.CONFIG, ERR.SECTION, ERR.OPTION, ERR.OPTION }
 		self.e = errconst[#self.cref]( self )
 	end
 
-	return self.e:child( ... )
+	return self.e:child( arg1, arg2, arg3, arg4, arg5 )
 end
 
 function uvlitem.errors(self)
@@ -993,9 +995,9 @@ end
 
 --- Add an error to scheme.
 -- @return	Scheme error context
-function scheme.error(self, ...)
+function scheme.error(self, arg1, arg2, arg3, arg4, arg5)
 	if not self.e then self.e = ERR.SCHEME( self ) end
-	return self.e:child( ... )
+	return self.e:child( arg1, arg2, arg3, arg4, arg5 )
 end
 
 --- Get an associated config object.

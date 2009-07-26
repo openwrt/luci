@@ -11,7 +11,6 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local cbi = require "luci.cbi"
 local dsp = require "luci.dispatcher"
 local util = require "luci.util"
 local http = require "luci.http"
@@ -27,8 +26,6 @@ Luci = util.class(srv.Handler)
 function Luci.__init__(self, name, prefix)
 	srv.Handler.__init__(self, name)
 	self.prefix = prefix
-
-	self.dsp_tree = dsp.createtree()
 end
 
 function Luci.handle_HEAD(self, ...)
@@ -53,7 +50,7 @@ function Luci.handle_GET(self, request, sourcein)
 
 	local x = coroutine.create(dsp.httpdispatch)
 	while not id or id < 3 do
-		res, id, data1, data2 = coroutine.resume(x, r, self.prefix, self.dsp_tree)
+		res, id, data1, data2 = coroutine.resume(x, r, self.prefix)
 
 		if not res then
 			status = 500

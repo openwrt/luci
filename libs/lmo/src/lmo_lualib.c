@@ -53,15 +53,40 @@ static int lmo_L_hash(lua_State *L) {
 	return 1;
 }
 
+static lmo_luaentry_t *_lmo_push_entry(lua_State *L) {
+	lmo_luaentry_t *le;
+
+	if( (le = lua_newuserdata(L, sizeof(lmo_luaentry_t))) != NULL )
+	{
+		luaL_getmetatable(L, LMO_ENTRY_META);
+		lua_setmetatable(L, -2);
+
+		return le;
+	}
+
+	return NULL;
+}
+
 static int _lmo_lookup(lua_State *L, lmo_archive_t *ar, uint32_t hash) {
 	lmo_entry_t *e = ar->index;
+	lmo_luaentry_t *le = NULL;
 
 	while( e != NULL )
 	{
 		if( e->key_id == hash )
 		{
-			lua_pushlstring(L, &ar->mmap[e->offset], e->length);
-			return 1;
+			if( (le = _lmo_push_entry(L)) != NULL )
+			{
+				le->archive = ar;
+				le->entry   = e;
+				return 1;
+			}
+			else
+			{
+				lua_pushnil(L);
+				lua_pushstring(L, "out of memory");
+				return 2;
+			}
 		}
 
 		e = e->next;
@@ -121,15 +146,69 @@ static int lmo_L__tostring(lua_State *L) {
 }
 
 
-/* method table */
+static int _lmo_convert_entry(lua_State *L, int idx) {
+	lmo_luaentry_t *le = luaL_checkudata(L, idx, LMO_ENTRY_META);
+
+	lua_pushlstring(L,
+		&le->archive->mmap[le->entry->offset],
+		le->entry->length
+	);
+
+	return 1;
+}
+
+static int lmo_L_entry__tostring(lua_State *L) {
+	return _lmo_convert_entry(L, 1);
+}
+
+static int lmo_L_entry__concat(lua_State *L) {
+	if( lua_isuserdata(L, 1) )
+		_lmo_convert_entry(L, 1);
+	else
+		lua_pushstring(L, lua_tostring(L, 1));
+
+	if( lua_isuserdata(L, 2) )
+		_lmo_convert_entry(L, 2);
+	else
+		lua_pushstring(L, lua_tostring(L, 2));
+
+	lua_concat(L, 2);
+
+	return 1;
+}
+
+static int lmo_L_entry__len(lua_State *L) {
+	lmo_luaentry_t *le = luaL_checkudata(L, 1, LMO_ENTRY_META);
+	lua_pushinteger(L, le->entry->length);
+	return 1;
+}
+
+static int lmo_L_entry__gc(lua_State *L) {
+	lmo_luaentry_t *le = luaL_checkudata(L, 1, LMO_ENTRY_META);
+	le->archive = NULL;
+	le->entry   = NULL;
+	return 0;
+}
+
+
+/* lmo method table */
 static const luaL_reg M[] = {
-	{"close",	lmo_L__gc},
-	{"get",		lmo_L_get},
-	{"lookup",	lmo_L_lookup},
-	{"foreach",	lmo_L_foreach},
+	{"close",		lmo_L__gc},
+	{"get",			lmo_L_get},
+	{"lookup",		lmo_L_lookup},
+	{"foreach",		lmo_L_foreach},
 	{"__tostring",	lmo_L__tostring},
-	{"__gc",	lmo_L__gc},
-	{NULL,		NULL}
+	{"__gc",		lmo_L__gc},
+	{NULL,			NULL}
+};
+
+/* lmo.entry method table */
+static const luaL_reg E[] = {
+	{"__tostring",	lmo_L_entry__tostring},
+	{"__concat",	lmo_L_entry__concat},
+	{"__len",		lmo_L_entry__len},
+	{"__gc",		lmo_L_entry__gc},
+	{NULL,			NULL}
 };
 
 /* module table */
@@ -145,6 +224,12 @@ LUALIB_API int luaopen_lmo(lua_State *L) {
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 	lua_setglobal(L, LMO_ARCHIVE_META);
+
+	luaL_newmetatable(L, LMO_ENTRY_META);
+	luaL_register(L, NULL, E);
+	lua_pushvalue(L, -1);
+	lua_setfield(L, -2, "__index");
+	lua_setglobal(L, LMO_ENTRY_META);	
 
 	luaL_register(L, LMO_LUALIB_META, R);
 

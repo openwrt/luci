@@ -108,17 +108,25 @@ end
 
 --- Dispatch an HTTP request.
 -- @param request	LuCI HTTP Request object
-function httpdispatch(request, prefix, ext_tree)
+function httpdispatch(request, prefix)
 	luci.http.context.request = request
-	context.request = {}
+
+	local r = {}
+	context.request = r
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
+	if prefix then
+		for _, node in ipairs(prefix) do
+			r[#r+1] = node
+		end
+	end
+
 	for node in pathinfo:gmatch("[^/]+") do
-		table.insert(context.request, node)
+		r[#r+1] = node
 	end
 
 	local stat, err = util.coxpcall(function()
-		dispatch(context.request, ext_tree)
+		dispatch(context.request)
 	end, error500)
 
 	luci.http.close()
@@ -128,7 +136,7 @@ end
 
 --- Dispatches a LuCI virtual path.
 -- @param request	Virtual path
-function dispatch(request, ext_tree)
+function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
 	ctx.path = request
@@ -151,14 +159,12 @@ function dispatch(request, ext_tree)
         end
 	require "luci.i18n".setlanguage(lang)
 
-	if ext_tree then
-		ctx.index, ctx.tree, ctx.treecache, ctx.modifiers = unpack(ext_tree)
-	elseif not ctx.tree then
-		createtree()
-	end
-
 	local c = ctx.tree
 	local stat
+	if not c then
+		c = createtree()
+	end
+
 	local track = {}
 	local args = {}
 	ctx.args = args
@@ -226,13 +232,13 @@ function dispatch(request, ext_tree)
 		end
 
 		tpl.context.viewns = setmetatable({
-			write       = luci.http.write;
-			include     = function(name) tpl.Template(name):render(getfenv(2)) end;
-			translate   = function(...) return require("luci.i18n").translate(...) end;
-			striptags   = util.striptags;
-			media       = media;
-			theme       = fs.basename(media);
-			resource    = luci.config.main.resourcebase
+		   write       = luci.http.write;
+		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
+		   translate   = function(...) return require("luci.i18n").translate(...) end;
+		   striptags   = util.striptags;
+		   media       = media;
+		   theme       = fs.basename(media);
+		   resource    = luci.config.main.resourcebase
 		}, {__index=function(table, key)
 			if key == "controller" then
 				return build_url()
@@ -260,7 +266,7 @@ function dispatch(request, ext_tree)
 		local verifytoken = false
 		if not sess then
 			sess = luci.http.getcookie("sysauth")
-			sess = sess and sess:match("^[a-f0-9]+$")
+			sess = sess and sess:match("^[a-f0-9]*$")
 			verifytoken = true
 		end
 
@@ -273,6 +279,12 @@ function dispatch(request, ext_tree)
 			sdat = sdat()
 			if not verifytoken or ctx.urltoken.stok == sdat.token then
 				user = sdat.user
+			end
+		else
+			local eu = http.getenv("HTTP_AUTH_USER")
+			local ep = http.getenv("HTTP_AUTH_PASS")
+			if eu and ep and luci.sys.user.checkpasswd(eu, ep) then
+				authen = function() return eu end
 			end
 		end
 
@@ -364,9 +376,9 @@ function createindex()
 	local suff = { ".lua", ".lua.gz" }
 
 	if luci.util.copcall(require, "luci.fastindex") then
-		return createindex_fastindex(path, suff)
+		createindex_fastindex(path, suff)
 	else
-		return createindex_plain(path, suff)
+		createindex_plain(path, suff)
 	end
 end
 
@@ -374,7 +386,7 @@ end
 -- @param path		Controller base directory
 -- @param suffixes	Controller file suffixes
 function createindex_fastindex(path, suffixes)
-	local index = {}
+	index = {}
 
 	if not fi then
 		fi = luci.fastindex.new("index")
@@ -388,8 +400,6 @@ function createindex_fastindex(path, suffixes)
 	for k, v in pairs(fi.indexes) do
 		index[v[2]] = v[1]
 	end
-
-	return index
 end
 
 --- Generate the dispatching index using the native file-cache based strategy.
@@ -424,7 +434,7 @@ function createindex_plain(path, suffixes)
 		end
 	end
 
-	local index = {}
+	index = {}
 
 	for i,c in ipairs(controllers) do
 		local module = "luci.controller." .. c:sub(#path+1, #c):gsub("/", ".")
@@ -445,24 +455,21 @@ function createindex_plain(path, suffixes)
 		f:writeall(util.get_bytecode(index))
 		f:close()
 	end
-
-	return index
 end
 
 --- Create the dispatching tree from the index.
 -- Build the index before if it does not exist yet.
 function createtree()
-	local ctx   = context
-	local tree  = {nodes={}}
-	local cache = setmetatable({}, {__mode="v"})
-	local modi  = {}
-
-	if not ctx.index then
-		ctx.index = createindex()
+	if not index then
+		createindex()
 	end
 
-	ctx.tree      = tree
-	ctx.treecache = cache
+	local ctx  = context
+	local tree = {nodes={}}
+	local modi = {}
+
+	ctx.treecache = setmetatable({}, {__mode="v"})
+	ctx.tree = tree
 	ctx.modifiers = modi
 
 	-- Load default translation
@@ -470,10 +477,10 @@ function createtree()
 
 	local scope = setmetatable({}, {__index = luci.dispatcher})
 
-	for k, v in pairs(ctx.index) do
+	for k, v in pairs(index) do
 		scope._NAME = k
 		setfenv(v, scope)
-		pcall(v)
+		v()
 	end
 
 	local function modisort(a,b)
@@ -483,10 +490,10 @@ function createtree()
 	for _, v in util.spairs(modi, modisort) do
 		scope._NAME = v.module
 		setfenv(v.func, scope)
-		pcall(v.func)
+		v.func()
 	end
 
-	return { index, tree, cache, modi }
+	return tree
 end
 
 --- Register a tree modifier.
