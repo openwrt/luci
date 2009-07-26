@@ -109,5 +109,5 @@ end
 -- @param ...		Format parameters
 -- @return			Translated and formatted string
 function translatef(key, default, ...)
-	return translate(key, default):format(...)
+	return tostring(translate(key, default)):format(...)
 end
