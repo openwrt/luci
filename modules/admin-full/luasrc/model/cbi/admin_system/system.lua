@@ -35,11 +35,11 @@ s:option(DummyValue, "_memtotal", translate("m_i_memory")).value =
  string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
   tonumber(memtotal) / 1024,
   100 * memcached / memtotal,
-  translate("mem_cached") or "",
+  tostring(translate("mem_cached", "")),
   100 * membuffers / memtotal,
-  translate("mem_buffered") or "",
+  tostring(translate("mem_buffered", "")),
   100 * memfree / memtotal,
-  translate("mem_free") or "")
+  tostring(translate("mem_free", ""))
 
 s:option(DummyValue, "_systime", translate("m_i_systemtime")).value =
  os.date("%c")

@@ -14,7 +14,8 @@ $Id$
 
 local table = require "table"
 local nixio = require "nixio"
-local getmetatable, assert, pairs, type = getmetatable, assert, pairs, type
+local getmetatable, assert, pairs, type, tostring =
+	getmetatable, assert, pairs, type, tostring
 
 module "nixio.util"
 
@@ -79,6 +80,7 @@ end
 meta.recvall = meta.readall
 
 function meta.writeall(self, data)
+	data = tostring(data)
 	local sent, code, msg = self:write(data)
 
 	if not sent then
