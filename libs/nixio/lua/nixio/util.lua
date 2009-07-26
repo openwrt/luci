@@ -14,7 +14,8 @@ $Id$
 
 local table = require "table"
 local nixio = require "nixio"
-local getmetatable, assert, pairs, type = getmetatable, assert, pairs, type
+local getmetatable, assert, pairs, type, tostring =
+	getmetatable, assert, pairs, type, tostring
 
 module "nixio.util"
 
