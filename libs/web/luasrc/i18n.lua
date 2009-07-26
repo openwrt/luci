@@ -111,3 +111,24 @@ end
 function translatef(key, default, ...)
 	return tostring(translate(key, default)):format(...)
 end
+
+--- Return the translated value for a specific translation key
+-- and ensure that the returned value is a Lua string value.
+-- This is the same as calling <code>tostring(translate(...))</code>
+-- @param key		Translation key
+-- @param default	Default translation
+-- @return			Translated string
+function string(key, default)
+	return tostring(translate(key, default))
+end
+
+--- Return the translated value for a specific translation key and use it as sprintf pattern.
+-- Ensure that the returned value is a Lua string value.
+-- This is the same as calling <code>tostring(translatef(...))</code>
+-- @param key		Translation key
+-- @param default	Default translation
+-- @param ...		Format parameters
+-- @return			Translated and formatted string
+function stringf(key, default, ...)
+	return tostring(translate(key, default)):format(...)
+end
