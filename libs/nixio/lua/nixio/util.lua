@@ -79,6 +79,7 @@ end
 meta.recvall = meta.readall
 
 function meta.writeall(self, data)
+	data = tostring(data)
 	local sent, code, msg = self:write(data)
 
 	if not sent then
