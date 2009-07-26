@@ -29,8 +29,13 @@ int template_L_parse(lua_State *L)
 		parser.flags   = 0;
 		parser.bufsize = 0;
 		parser.state   = T_STATE_TEXT_NEXT;
-		
-		if( !(lua_status = lua_load(L, template_reader, &parser, file)) )
+
+		lua_status = lua_load(L, template_reader, &parser, file);
+
+		(void) close(parser.fd);
+
+
+		if( lua_status == 0 )
 		{
 			return 1;
 		}
