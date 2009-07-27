@@ -19,6 +19,7 @@ config LuciWebPublisher luciweb
 	option physical ''
 	list virtual /luci
 	option domain ''
+	option home 1
 	list exec ':lo'
 	list exec ':br-lan'
 	list exec 'root'
@@ -71,4 +72,3 @@ config 'Redirector' 'splashredir'
         option 'virtual' '/'
         option 'physical' ':80/luci/splash'
 
-	

@@ -56,11 +56,18 @@ function factory(server, config)
 		end
 	end
 
+	local mypath
 	if type(config.virtual) == "table" then
 		for _, v in ipairs(config.virtual) do
+			mypath = mypath or v
 			vhost:set_handler(v, handler)
 		end
 	else
+		mypath = config.virtual
 		vhost:set_handler(config.virtual, handler)
+	end
+
+	if config.home then
+		vhost.default = mypath
 	end
 end
