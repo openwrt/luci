@@ -419,8 +419,8 @@ function Server.process(self, client, env)
 		set_memory_limit(env.config.memlimit)
 	end
 
-	client:setsockopt("socket", "rcvtimeo", 5)
-	client:setsockopt("socket", "sndtimeo", 5)
+	client:setsockopt("socket", "rcvtimeo", 60)
+	client:setsockopt("socket", "sndtimeo", 60)
 	
 	repeat
 		-- parse headers
