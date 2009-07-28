@@ -32,6 +32,7 @@ string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
 	tostring(translate("mem_buffered", "")),
 	100 * memfree / memtotal,
 	tostring(translate("mem_free", ""))
+)
 
 f:field(DummyValue, "_systime", translate("m_i_systemtime")).value =
 os.date("%c")
