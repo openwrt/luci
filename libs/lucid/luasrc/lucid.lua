@@ -60,6 +60,12 @@ function start()
 	run()
 end
 
+--- Returns the PID of the currently active LuCId process.
+function running()
+	local pid = tonumber(state:get(UCINAME, "main", "pid"))
+	return pid and nixio.kill(pid, 0) and pid
+end
+
 --- Stops any running LuCId superprocess. 
 function stop()
 	local pid = tonumber(state:get(UCINAME, "main", "pid"))

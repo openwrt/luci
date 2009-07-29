@@ -114,19 +114,16 @@ end
 -- Scope manipulation routines
 --
 
---- Create a new or get an already existing thread local store associated with
--- the current active coroutine. A thread local store is private a table object
--- whose values can't be accessed from outside of the running coroutine.
--- @return	Table value representing the corresponding thread local store
-function threadlocal()
-	local tbl = {}
+local tl_meta = {
+	__mode = "k",
 
-	local function get(self, key)
-		local t = rawget(self, coxpt[coroutine.running()] or coroutine.running() or 0)
+	__index = function(self, key)
+		local t = rawget(self, coxpt[coroutine.running()]
+		 or coroutine.running() or 0)
 		return t and t[key]
-	end
+	end,
 
-	local function set(self, key, value)
+	__newindex = function(self, key, value)
 		local c = coxpt[coroutine.running()] or coroutine.running() or 0
 		if not rawget(self, c) then
 			rawset(self, c, { [key] = value })
@@ -134,10 +131,14 @@ function threadlocal()
 			rawget(self, c)[key] = value
 		end
 	end
+}
 
-	setmetatable(tbl, {__index = get, __newindex = set, __mode = "k"})
-
-	return tbl
+--- Create a new or get an already existing thread local store associated with
+-- the current active coroutine. A thread local store is private a table object
+-- whose values can't be accessed from outside of the running coroutine.
+-- @return	Table value representing the corresponding thread local store
+function threadlocal(tbl)
+	return setmetatable(tbl or {}, tl_meta)
 end
 
 

@@ -173,6 +173,10 @@ function VHost.process(self, request, ...)
 	-- Call URI part
 	request.env.PATH_INFO = uri
 	
+	if self.default and uri == "/" then
+		return 302, {Location = self.default}
+	end
+
 	for k, h in pairs(self.handlers) do
 		if #k > hlen then
 			if uri == k or (uri:sub(1, #k) == k and uri:byte(#k+1) == sc) then
@@ -365,8 +369,8 @@ function Server.process(self, client, env)
 		set_memory_limit(env.config.memlimit)
 	end
 
-	client:setsockopt("socket", "rcvtimeo", 5)
-	client:setsockopt("socket", "sndtimeo", 5)
+	client:setsockopt("socket", "rcvtimeo", 60)
+	client:setsockopt("socket", "sndtimeo", 60)
 	
 	repeat
 		-- parse headers
