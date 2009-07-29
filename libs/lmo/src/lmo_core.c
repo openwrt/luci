@@ -132,7 +132,7 @@ lmo_archive_t * lmo_open(const char *file)
 			goto cleanup;
 		}
 
-		if( (ar->mmap = mmap(NULL, ar->length, PROT_READ, MAP_SHARED, ar->fd, 0)) == MAP_FAILED )
+		if( (ar->mmap = mmap(NULL, ar->length, PROT_READ, MAP_PRIVATE, ar->fd, 0)) == MAP_FAILED )
 		{
 			error("Failed to memory map archive contents", 1);
 			goto cleanup;
