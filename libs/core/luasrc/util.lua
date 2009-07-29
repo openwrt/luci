@@ -49,8 +49,10 @@ getmetatable("").__mod = function(a, b)
 	if not b then
 		return a
 	elseif type(b) == "table" then
+		for k, _ in pairs(b) do if type(b[k]) == "userdata" then b[k] = tostring(b[k]) end end
 		return a:format(unpack(b))
 	else
+		if type(b) == "userdata" then b = tostring(b) end
 		return a:format(b)
 	end
 end
