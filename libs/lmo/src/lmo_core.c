@@ -22,13 +22,10 @@ extern char _lmo_error[1024];
 
 static int lmo_read32( int fd, uint32_t *val )
 {
-	uint8_t buffer[5];
-
-	if( read(fd, buffer, 4) < 4 )
+	if( read(fd, val, 4) < 4 )
 		return -1;
 
-	buffer[4] = 0;
-	*val = ntohl(*((uint32_t *) buffer));
+	*val = ntohl(*val);
 
 	return 4;
 }
