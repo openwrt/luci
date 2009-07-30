@@ -74,7 +74,7 @@ lmo_archive_t * lmo_open(const char *file)
 		goto cleanup;
 	}
 
-	if( lseek(in, -sizeof(uint32_t), SEEK_END) == -1 )
+	if( lseek(in, (off_t)(-sizeof(uint32_t)), SEEK_END) == -1 )
 	{
 		error("Can not seek to eof", 1);
 		goto cleanup;
@@ -86,7 +86,7 @@ lmo_archive_t * lmo_open(const char *file)
 		goto cleanup;
 	}
 
-	if( lseek(in, idx_offset, SEEK_SET) == -1 )
+	if( lseek(in, (off_t)idx_offset, SEEK_SET) == -1 )
 	{
 		error("Can not seek to index offset", 1);
 		goto cleanup;
