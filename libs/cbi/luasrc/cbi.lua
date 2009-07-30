@@ -578,8 +578,11 @@ function Delegator.parse(self, ...)
 		else
 			newcurrent = self:get_next(self.current)
 		end
+	elseif stat < FORM_PROCEED then
+		return stat
 	end
 	
+
 	if not Map.formvalue(self, "cbi.submit") then
 		return FORM_NODATA
 	elseif not newcurrent or not self:get(newcurrent) then
