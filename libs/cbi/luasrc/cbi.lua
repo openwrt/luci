@@ -286,6 +286,11 @@ function Template.render(self)
 	luci.template.render(self.template, {self=self})
 end
 
+function Template.parse(self, readinput)
+	self.readinput = (readinput ~= false)
+	return Map.formvalue(self, "cbi.submit") and FORM_DONE or FORM_NODATA
+end
+
 
 --[[
 Map - A map describing a configuration file
@@ -499,6 +504,7 @@ function Delegator.__init__(self, ...)
 	self.defaultpath = {}
 	self.pageaction = false
 	self.readinput = true
+	self.allow_reset = false
 	self.allow_back = false
 	self.allow_finish = false
 	self.template = "cbi/delegator"
@@ -573,8 +579,10 @@ function Delegator.parse(self, ...)
 			newcurrent = self:get_next(self.current)
 		end
 	end
-
-	if not newcurrent or not self:get(newcurrent) then
+	
+	if not Map.formvalue(self, "cbi.submit") then
+		return FORM_NODATA
+	elseif not newcurrent or not self:get(newcurrent) then
 		return FORM_DONE
 	else
 		self.current = newcurrent

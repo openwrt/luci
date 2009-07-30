@@ -20,7 +20,9 @@ $Id$
 <% if self.allow_back and self:get_prev(self.current) then %>
 		<input class="cbi-button cbi-button-back" type="submit" name="cbi.delg.back" value="<%:cbi_back &lt; Back%>" />
 <% end %>
+<% if self.allow_reset then %>
 		<input class="cbi-button cbi-button-reset" type="reset" value="<%:reset%>" />
+<% end %>
 <% if self.allow_finish and not self:get_next(self.current) then %>
 	<input class="cbi-button cbi-button-finish" type="submit" value="<%:cbi_finish Finish%>" />
 <% elseif self:get_next(self.current) then %>
