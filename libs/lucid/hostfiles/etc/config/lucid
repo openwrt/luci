@@ -10,9 +10,6 @@ config DirectoryPublisher webroot
 	option physical host/www
 	option virtual ''
 	option domain ''
-	list read ':lo'
-	list read ':br-lan'
-	list read 'root'
 	
 config LuciWebPublisher luciweb
 	option name 'LuCI Webapplication'
@@ -20,9 +17,6 @@ config LuciWebPublisher luciweb
 	list virtual /luci
 	option domain ''
 	option home 1
-	list exec ':lo'
-	list exec ':br-lan'
-	list exec 'root'
 	
 config RPCPublisher	mainrpc
 	option namespace 'luci.lucid.rpc'
