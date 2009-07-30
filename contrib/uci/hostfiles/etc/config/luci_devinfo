@@ -1,0 +1,29 @@
+config 'smap_scannet' 'SIP_LAN'
+        option 'enable' '0'
+	option 'interface' 'lan'
+	option 'subnet' '192.168.99.0/24'
+	option 'ports'	'5060'
+	option 'timeout' '10'
+	option 'repeat_count' '1'
+	option 'sleepreq' '100'
+	
+config 'smap_scannet' 'SIP_WAN'
+        option 'enable' '0'
+	option 'interface' 'wan'
+	option 'subnet' '216.218.0.0/16'
+
+config 'netdiscover_scannet' 'SCAN_LAN'
+        option 'enable' '0'
+	option 'interface' 'lan'
+	option 'subnet' '192.168.99.0/24'
+	
+config 'netdiscover_scannet' 'SCAN_WAN'
+        option 'enable' '0'
+	option 'interface' 'wan'
+	option 'subnet' '216.218.0.0/16'
+	option 'ports'	'5060'
+	option 'timeout' '10'
+	option 'repeat_count' '1'
+	option 'sleepreq' '100'
+	
+
