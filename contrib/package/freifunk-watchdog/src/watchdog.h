@@ -66,7 +66,7 @@
 #define WATCH_KEEPALIVE	'\0'
 
 /* System load error action and treshold */
-#define LOAD_TRESHOLD	5.00
+#define LOAD_TRESHOLD	15.00
 #define LOAD_ACTION		"/sbin/reboot"
 
 /* Fallback binary name (passed by makefile) */
