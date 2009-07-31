@@ -16,7 +16,7 @@ $Id$
 <% if self.widget == "select" then %>
 	<select class="cbi-input-select" onchange="cbi_d_update(this.id)"<%= attr("id", cbid) .. attr("name", cbid) .. ifattr(self.size, "size") %>>
 	<% for i, key in pairs(self.keylist) do -%>
-		<option id="cbi-<%=self.config.."-"..section.."-"..self.option.."-"..key%>"<%= attr("value", key) .. ifattr(self:cfgvalue(section) == key, "selected", "selected") %>><%=striptags(self.vallist[i])%></option>
+		<option id="cbi-<%=self.config.."-"..section.."-"..self.option.."-"..key%>"<%= attr("value", key) .. ifattr((self:cfgvalue(section) or self.default) == key, "selected", "selected") %>><%=striptags(self.vallist[i])%></option>
 	<%- end %>
 	</select>
 <% elseif self.widget == "radio" then
