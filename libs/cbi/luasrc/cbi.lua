@@ -60,17 +60,18 @@ function load(cbimap, ...)
 
 	local upldir = "/lib/uci/upload/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
+	local func, err
 
-	assert(fs.stat(cbimap) or
-		fs.stat(cbidir..cbimap..".lua") or
-		fs.stat(cbidir..cbimap..".lua.gz"),
-			"Model not found!")
-
-	local func, err = loadfile(cbimap)
-	if not func then
-		func, err = loadfile(cbidir..cbimap..".lua") or
-			loadfile(cbidir..cbimap..".lua.gz")
+	if fs.access(cbimap) then
+		func, err = loadfile(cbimap)
+	elseif fs.access(cbidir..cbimap..".lua") then
+		func, err = loadfile(cbidir..cbimap..".lua")
+	elseif fs.access(cbidir..cbimap..".lua.gz") then
+		func, err = loadfile(cbidir..cbimap..".lua.gz")
+	else
+		func, err = nil, "Model '" .. cbimap .. "' not found!"
 	end
+
 	assert(func, err)
 
 	luci.i18n.loadc("cbi")
@@ -286,6 +287,11 @@ function Template.render(self)
 	luci.template.render(self.template, {self=self})
 end
 
+function Template.parse(self, readinput)
+	self.readinput = (readinput ~= false)
+	return Map.formvalue(self, "cbi.submit") and FORM_DONE or FORM_NODATA
+end
+
 
 --[[
 Map - A map describing a configuration file
@@ -499,6 +505,7 @@ function Delegator.__init__(self, ...)
 	self.defaultpath = {}
 	self.pageaction = false
 	self.readinput = true
+	self.allow_reset = false
 	self.allow_back = false
 	self.allow_finish = false
 	self.template = "cbi/delegator"
@@ -572,9 +579,14 @@ function Delegator.parse(self, ...)
 		else
 			newcurrent = self:get_next(self.current)
 		end
+	elseif stat < FORM_PROCEED then
+		return stat
 	end
+	
 
-	if not newcurrent or not self:get(newcurrent) then
+	if not Map.formvalue(self, "cbi.submit") then
+		return FORM_NODATA
+	elseif not newcurrent or not self:get(newcurrent) then
 		return FORM_DONE
 	else
 		self.current = newcurrent
