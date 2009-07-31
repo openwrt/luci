@@ -57,7 +57,7 @@ end
 -- @param id	Session identifier
 -- @return		Session data
 function read(id)
-	if not id or #id == 0then
+	if not id or #id == 0 then
 		return
 	end
 	if not id:match("^%w+$") then
