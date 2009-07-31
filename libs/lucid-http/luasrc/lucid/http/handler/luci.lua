@@ -26,6 +26,7 @@ Luci = util.class(srv.Handler)
 function Luci.__init__(self, name, prefix)
 	srv.Handler.__init__(self, name)
 	self.prefix = prefix
+	dsp.indexcache = "/tmp/luci-indexcache"
 end
 
 function Luci.handle_HEAD(self, ...)
