@@ -43,6 +43,7 @@ s:option(DummyValue, "_memtotal", translate("m_i_memory")).value =
   tostring(translate("mem_buffered", "")),
   100 * memfree / memtotal,
   tostring(translate("mem_free", ""))
+)
 
 s:option(DummyValue, "_systime", translate("m_i_systemtime")).value =
  os.date("%c")
