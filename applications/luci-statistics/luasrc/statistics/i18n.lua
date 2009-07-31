@@ -43,13 +43,13 @@ end
 
 function Instance.title( self, plugin, pinst, dtype, dinst )
 
-	local title = self.i18n.translate(
+	local title = self.i18n.string(
 		string.format( "stat_dg_title_%s_%s_%s", plugin, pinst, dtype ),
-		self.i18n.translate(
+		self.i18n.string(
 			string.format( "stat_dg_title_%s_%s", plugin, pinst ),
-			self.i18n.translate(
+			self.i18n.string(
 				string.format( "stat_dg_title_%s__%s", plugin, dtype ),
-				self.i18n.translate(
+				self.i18n.string(
 					string.format( "stat_dg_title_%s", plugin ),
 					self.graph:_mkpath( plugin, pinst, dtype )
 				)
@@ -68,13 +68,13 @@ end
 
 function Instance.label( self, plugin, pinst, dtype, dinst )
 
-	local label = self.i18n.translate(
+	local label = self.i18n.string(
 		string.format( "stat_dg_label_%s_%s_%s", plugin, pinst, dtype ),
-		self.i18n.translate(
+		self.i18n.string(
 			string.format( "stat_dg_label_%s_%s", plugin, pinst ),
-			self.i18n.translate(
+			self.i18n.string(
 				string.format( "stat_dg_label_%s__%s", plugin, dtype ),
-				self.i18n.translate(
+				self.i18n.string(
 					string.format( "stat_dg_label_%s", plugin ),
 					self.graph:_mkpath( plugin, pinst, dtype )
 				)
@@ -93,13 +93,13 @@ end
 
 function Instance.ds( self, source )
 
-	local label = self.i18n.translate(
+	local label = self.i18n.string(
 		string.format( "stat_ds_%s_%s_%s", source.type, source.instance, source.ds ),
-		self.i18n.translate(
+		self.i18n.string(
 			string.format( "stat_ds_%s_%s", source.type, source.instance ),
-			self.i18n.translate(
+			self.i18n.string(
 				string.format( "stat_ds_label_%s__%s", source.type, source.ds ),
-				self.i18n.translate(
+				self.i18n.string(
 					string.format( "stat_ds_%s", source.type ),
 					source.type .. "_" .. source.instance:gsub("[^%w]","_") .. "_" .. source.ds
 				)
