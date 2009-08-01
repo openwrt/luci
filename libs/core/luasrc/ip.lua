@@ -159,6 +159,7 @@ function IPv4(address, netmask)
 	local data = {}
 	local prefix = address:match("/(.+)")
 	address = address:gsub("/.+","")
+	address = address:gsub("^%[(.*)%]$", "%1"):upper():gsub("^::FFFF:", "")
 
 	if netmask then
 		prefix = obj:prefix(netmask)
@@ -206,6 +207,7 @@ function IPv6(address, netmask)
 	local data = {}
 	local prefix = address:match("/(.+)")
 	address = address:gsub("/.+","")
+	address = address:gsub("^%[(.*)%]$", "%1")
 
 	if netmask then
 		prefix = obj:prefix(netmask)
