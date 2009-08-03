@@ -30,7 +30,7 @@ validate_ifname() {
 
 validate_olsrd_option() {
 	local str=$1
-	[ -z "$str" -o "$str" != "${str%%[! 	0-9A-Za-z./:_-]*}" ] && return 1
+	[ -z "$str" -o "$str" != "${str%%[! 	0-9A-Za-z./|:_-]*}" ] && return 1
 	return 0
 }
 
