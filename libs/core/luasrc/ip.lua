@@ -17,11 +17,12 @@ $Id$
 --- LuCI IP calculation library.
 module( "luci.ip", package.seeall )
 
-require("bit")
-require("luci.util")
+require "nixio"
+local bit  = nixio.bit
+local util = require "luci.util"
 
 --- Boolean; true if system is little endian
-LITTLE_ENDIAN = not luci.util.bigendian()
+LITTLE_ENDIAN = not util.bigendian()
 
 --- Boolean; true if system is big endian
 BIG_ENDIAN    = not LITTLE_ENDIAN
@@ -324,7 +325,7 @@ end
 -- @class	module
 -- @cstyle	instance
 -- @name	luci.ip.cidr
-cidr = luci.util.class()
+cidr = util.class()
 
 --- Test whether the instance is a IPv4 address.
 -- @return	Boolean indicating a IPv4 address type
