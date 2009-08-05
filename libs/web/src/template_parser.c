@@ -21,12 +21,12 @@
 
 /* leading and trailing code for different types */
 const char * gen_code[6][2] = {
-	{ "write(\"",			"\")"	},
-	{ NULL,					NULL	},
-	{ "write(tostring(",	"))"	},
-	{ "include(\"",			"\")"	},
-	{ "write(translate(\"",	"\"))"	},
-	{ NULL,					" "		}
+	{ "write(\"",			"\")"			},
+	{ NULL,					NULL			},
+	{ "write(tostring(",	" or \"\"))"	},
+	{ "include(\"",			"\")"			},
+	{ "write(translate(\"",	"\"))"			},
+	{ NULL,					" "				}
 };
 
 /* Simple strstr() like function that takes len arguments for both haystack and needle. */
