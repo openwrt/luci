@@ -219,8 +219,7 @@ function dispatch(request)
 	if (c and c.index) or not track.notemplate then
 		local tpl = require("luci.template")
 		local media = track.mediaurlbase or luci.config.main.mediaurlbase
-		if not tpl.Template("themes/%s/header" % fs.basename(media)) then 
-		--if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
+		if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
 			media = nil
 			for name, theme in pairs(luci.config.themes) do
 				if name:sub(1,1) ~= "." and pcall(tpl.Template,
