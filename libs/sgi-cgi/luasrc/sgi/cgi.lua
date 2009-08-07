@@ -80,7 +80,7 @@ function run()
 				io.write(hcache)
 				io.write("\r\n")
 			elseif id == 4 then
-				io.write(data1)
+				io.write(tostring(data1 or ""))
 			elseif id == 5 then
 				io.flush()
 				io.close()
