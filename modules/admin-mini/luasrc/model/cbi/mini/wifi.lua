@@ -227,20 +227,20 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK")
 		encr:value("psk2", "WPA2-PSK")
-		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
 		encr:value("wpa", "WPA-Radius", {mode="ap"}, {mode="sta"})
 		encr:value("wpa2", "WPA2-Radius", {mode="ap"}, {mode="sta"})
 	elseif hostapd and not supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"})
-		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"})
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"})
 		encr:value("wpa", "WPA-Radius", {mode="ap"})
 		encr:value("wpa2", "WPA2-Radius", {mode="ap"})
 		encr.description = translate("wifi_wpareq")
 	elseif not hostapd and supplicant then
 		encr:value("psk", "WPA-PSK", {mode="sta"})
 		encr:value("psk2", "WPA2-PSK", {mode="sta"})
-		encr:value("mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
 		encr:value("wpa", "WPA-EAP", {mode="sta"})
 		encr:value("wpa2", "WPA2-EAP", {mode="sta"})
 		encr.description = translate("wifi_wpareq")
