@@ -25,18 +25,19 @@ limitations under the License.
 ]]--
 
 
-local io    = require "io"
-local os    = require "os"
-local table = require "table"
-local nixio = require "nixio"
-local fs    = require "nixio.fs"
+local io     = require "io"
+local os     = require "os"
+local table  = require "table"
+local nixio  = require "nixio"
+local fs     = require "nixio.fs"
+local iwinfo = require "iwinfo"
 
 local luci  = {}
 luci.util   = require "luci.util"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type, next =
-	tonumber, ipairs, pairs, pcall, type, next
+local tonumber, ipairs, pairs, pcall, type, next, setmetatable =
+	tonumber, ipairs, pairs, pcall, type, next, setmetatable
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -616,6 +617,21 @@ end
 -- @class	module
 -- @name	luci.sys.wifi
 wifi = {}
+
+--- Get wireless information for given interface.
+-- @param ifname        String containing the interface name
+-- @return              A wrapped iwinfo object instance
+function wifi.getiwinfo(ifname)
+	local t = iwinfo.type(ifname)
+	if t then
+		local x = iwinfo[t]
+		return setmetatable({}, {
+			__index = function(t, k)
+				if x[k] then return x[k](ifname) end
+			end
+		})
+	end
+end
 
 --- Get iwconfig output for all wireless devices.
 -- @return	Table of tables containing the iwconfing output for each wifi device
