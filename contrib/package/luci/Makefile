@@ -313,6 +313,7 @@ endef
 define Package/luci-sys
   $(call Package/luci/libtemplate)
   TITLE:=LuCI Linux/POSIX system library
+  DEPENDS:=+luci-iwinfo
 endef
 
 define Package/luci-sys/install
