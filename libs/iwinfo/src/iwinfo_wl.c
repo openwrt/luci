@@ -152,16 +152,14 @@ int wl_get_signal(const char *ifname, int *buf)
 
 	wl_ioctl(ifname, WLC_GET_BSS_INFO, tmp, WLC_IOCTL_MAXLEN);
 
-	rssi = 0;
-	rssi_count = 0;
-
 	if( !wl_ioctl(ifname, WLC_GET_AP, &ap, sizeof(ap)) && !ap )
 	{
-		rssi = tmp[WL_BSS_RSSI_OFFSET];
-		rssi_count = 1;
+		*buf = tmp[WL_BSS_RSSI_OFFSET];
 	}
 	else
 	{
+		rssi = rssi_count = 0;
+
 		/* Calculate average rssi from conntected stations */
 		if( (macs = wl_read_assoclist(ifname)) != NULL )
 		{
@@ -171,16 +169,16 @@ int wl_get_signal(const char *ifname, int *buf)
 
 				if( !wl_ioctl(ifname, WLC_GET_RSSI, &starssi, 12) )
 				{
-					rssi += starssi.rssi;
+					rssi -= starssi.rssi;
 					rssi_count++;
 				}
 			}
 
 			free(macs);
 		}
-	}
 
-	*buf = (rssi == 0 || rssi_count == 0) ? 1 : (rssi / rssi_count);
+		*buf = (rssi == 0 || rssi_count == 0) ? 1 : -(rssi / rssi_count);
+	}
 
 	return 0;
 }
