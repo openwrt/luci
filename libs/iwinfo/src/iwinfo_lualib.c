@@ -77,6 +77,7 @@ int iwinfo_L_assoclist(lua_State *L, int (*func)(const char *, char *, int *))
 
 /* Broadcom */
 LUA_WRAP_INT(wl,channel)
+LUA_WRAP_INT(wl,frequency)
 LUA_WRAP_INT(wl,bitrate)
 LUA_WRAP_INT(wl,signal)
 LUA_WRAP_INT(wl,noise)
@@ -90,6 +91,7 @@ LUA_WRAP_ASSOCLIST(wl)
 
 /* Madwifi */
 LUA_WRAP_INT(madwifi,channel)
+LUA_WRAP_INT(madwifi,frequency)
 LUA_WRAP_INT(madwifi,bitrate)
 LUA_WRAP_INT(madwifi,signal)
 LUA_WRAP_INT(madwifi,noise)
@@ -103,6 +105,7 @@ LUA_WRAP_ASSOCLIST(madwifi)
 
 /* Wext */
 LUA_WRAP_INT(wext,channel)
+LUA_WRAP_INT(wext,frequency)
 LUA_WRAP_INT(wext,bitrate)
 LUA_WRAP_INT(wext,signal)
 LUA_WRAP_INT(wext,noise)
@@ -117,6 +120,7 @@ LUA_WRAP_ASSOCLIST(wext)
 /* Broadcom table */
 static const luaL_reg R_wl[] = {
 	LUA_REG(wl,channel),
+	LUA_REG(wl,frequency),
 	LUA_REG(wl,bitrate),
 	LUA_REG(wl,signal),
 	LUA_REG(wl,noise),
@@ -133,6 +137,7 @@ static const luaL_reg R_wl[] = {
 /* Madwifi table */
 static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,channel),
+	LUA_REG(madwifi,frequency),
 	LUA_REG(madwifi,bitrate),
 	LUA_REG(madwifi,signal),
 	LUA_REG(madwifi,noise),
@@ -149,6 +154,7 @@ static const luaL_reg R_madwifi[] = {
 /* Wext table */
 static const luaL_reg R_wext[] = {
 	LUA_REG(wext,channel),
+	LUA_REG(wext,frequency),
 	LUA_REG(wext,bitrate),
 	LUA_REG(wext,signal),
 	LUA_REG(wext,noise),

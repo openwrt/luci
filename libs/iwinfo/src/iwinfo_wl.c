@@ -128,6 +128,11 @@ int wl_get_channel(const char *ifname, int *buf)
 	return wl_ioctl(ifname, WLC_GET_CHANNEL, buf, sizeof(buf));
 }
 
+int wl_get_frequency(const char *ifname, int *buf)
+{
+	return wext_get_frequency(ifname, buf);
+}
+
 int wl_get_bitrate(const char *ifname, int *buf)
 {
 	int ret = -1;

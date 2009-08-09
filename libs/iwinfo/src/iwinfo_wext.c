@@ -32,6 +32,24 @@ static double wext_freq2float(const struct iw_freq *in)
 	return res;
 }
 
+static int wext_freq2mhz(const struct iw_freq *in)
+{
+	int i, mhz;
+
+	if( in->e == 6 )
+	{
+		return in->m;
+	}
+	else
+	{
+		mhz = in->m;
+		for(i = 0; i < in->e; i++)
+			mhz *= 10;
+
+		return (int)(mhz / 100000);
+	}
+}
+
 static int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
 {
 	/* prepare socket */
@@ -152,6 +170,44 @@ int wext_get_channel(const char *ifname, int *buf)
 		/* FIXME: iwlib has some strange workarounds here, maybe we need them as well... */
 		*buf = (int) wext_freq2float(&wrq.u.freq);
 		return 0;
+	}
+
+	return -1;	
+}
+
+int wext_get_frequency(const char *ifname, int *buf)
+{
+	struct iwreq wrq;
+	struct iw_range range;
+	int i, channel;
+
+	if(wext_ioctl(ifname, SIOCGIWFREQ, &wrq) >= 0)
+	{
+		/* We got a channel number instead ... */
+		if( wrq.u.freq.m < 1000 )
+		{
+			channel = wrq.u.freq.m;
+			wrq.u.data.pointer = (caddr_t) &range;
+			wrq.u.data.length  = sizeof(struct iw_range);
+			wrq.u.data.flags   = 0;
+
+			if(wext_ioctl(ifname, SIOCGIWRANGE, &wrq) >= 0)
+			{
+				for(i = 0; i < range.num_frequency; i++)
+				{
+					if( range.freq[i].i == channel )
+					{
+						*buf = wext_freq2mhz(&range.freq[i]);
+						return 0;
+					}
+				}
+			}
+		}
+		else
+		{
+			*buf = wext_freq2mhz(&wrq.u.freq);
+			return 0;
+		}
 	}
 
 	return -1;	

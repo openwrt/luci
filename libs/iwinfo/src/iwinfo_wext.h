@@ -19,21 +19,7 @@
 #ifndef __IWINFO_WEXT_H_
 #define __IWINFO_WEXT_H_
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <glob.h>
-#include <ctype.h>
-#include <stdint.h>
-
-#include <sys/ioctl.h>
-#include <net/if.h>
-#include <errno.h>
-
+#include "iwinfo.h"
 #include "include/wext.h"
 
 int wext_probe(const char *ifname);
@@ -41,6 +27,7 @@ int wext_get_mode(const char *ifname, char *buf);
 int wext_get_ssid(const char *ifname, char *buf);
 int wext_get_bssid(const char *ifname, char *buf);
 int wext_get_channel(const char *ifname, int *buf);
+int wext_get_frequency(const char *ifname, int *buf);
 int wext_get_bitrate(const char *ifname, int *buf);
 int wext_get_signal(const char *ifname, int *buf);
 int wext_get_noise(const char *ifname, int *buf);

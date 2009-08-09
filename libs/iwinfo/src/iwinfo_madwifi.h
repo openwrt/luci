@@ -27,6 +27,7 @@ int madwifi_get_mode(const char *ifname, char *buf);
 int madwifi_get_ssid(const char *ifname, char *buf);
 int madwifi_get_bssid(const char *ifname, char *buf);
 int madwifi_get_channel(const char *ifname, int *buf);
+int madwifi_get_frequency(const char *ifname, int *buf);
 int madwifi_get_bitrate(const char *ifname, int *buf);
 int madwifi_get_signal(const char *ifname, int *buf);
 int madwifi_get_noise(const char *ifname, int *buf);

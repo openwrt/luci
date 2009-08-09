@@ -127,6 +127,19 @@ int madwifi_get_channel(const char *ifname, int *buf)
 	return -1;
 }
 
+int madwifi_get_frequency(const char *ifname, int *buf)
+{
+	struct iwreq wrq;
+
+	if( madwifi_ioctl(&wrq, ifname, SIOCGIWFREQ, NULL, 0) >= 0 )
+	{
+		*buf = (uint16_t)(wrq.u.freq.m / 100000);
+		return 0;
+	}
+
+	return -1;
+}
+
 int madwifi_get_bitrate(const char *ifname, int *buf)
 {
 	unsigned int mode, len, rate, rate_count;
