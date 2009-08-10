@@ -51,6 +51,7 @@
 	{													\
 		const char *ifname = luaL_checkstring(L, 1);	\
 		char rv[IWINFO_BUFSIZE];						\
+		memset(rv, 0, IWINFO_BUFSIZE);					\
 		if( !type##_get_##op(ifname, rv) )				\
 			lua_pushstring(L, rv);						\
 		else											\

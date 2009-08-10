@@ -14,8 +14,8 @@
  *
  */
 
-#ifndef _wlioctl_h_
-#define	_wlioctl_h_
+#ifndef _BROADCOM_H
+#define _BROADCOM_H
 
 #define WL_MCSSET_LEN				16
 #define WL_MAX_STA_COUNT			32
@@ -73,4 +73,4 @@ typedef struct wl_ioctl {
 	uint32_t				needed;	/* bytes needed (optional) */
 } wl_ioctl_t;
 
-#endif /* _wlioctl_h_ */
+#endif

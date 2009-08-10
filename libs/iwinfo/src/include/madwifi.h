@@ -18,6 +18,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef _MADWIFI_H
+#define _MADWIFI_H
 
 /* ieee80211.h */
 #define	IEEE80211_ADDR_LEN		6
@@ -118,3 +120,4 @@ struct ieee80211req_sta_info {
 	u_int8_t isi_opmode;		/* sta operating mode */
 };
 
+#endif
