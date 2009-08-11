@@ -366,3 +366,20 @@ int wl_get_assoclist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int wl_get_mbssid_support(const char *ifname, int *buf)
+{
+	wlc_rev_info_t revinfo;
+
+	/* Multi bssid support only works on corerev >= 9 */
+	if( !wl_ioctl(ifname, WLC_GET_REVINFO, &revinfo, sizeof(revinfo)) )
+	{
+		if( revinfo.corerev >= 9 )
+		{
+			*buf = 1;
+			return 0;
+		}
+	}
+
+	return -1;
+}
+

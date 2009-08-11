@@ -35,5 +35,6 @@ int wl_get_quality(const char *ifname, int *buf);
 int wl_get_quality_max(const char *ifname, int *buf);
 int wl_get_enctype(const char *ifname, char *buf);
 int wl_get_assoclist(const char *ifname, char *buf, int *len);
+int wl_get_mbssid_support(const char *ifname, int *buf);
 
 #endif

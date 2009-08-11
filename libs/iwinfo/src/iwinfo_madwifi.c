@@ -398,4 +398,10 @@ int madwifi_get_assoclist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int madwifi_get_mbssid_support(const char *ifname, int *buf)
+{
+	/* We assume that multi bssid is always possible */
+	*buf = 1;
+	return 0;
+}
 

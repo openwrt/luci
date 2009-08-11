@@ -33,6 +33,7 @@
 #define WLC_GET_SSID				25
 #define WLC_GET_CHANNEL				29
 #define WLC_GET_PASSIVE 			48
+#define WLC_GET_REVINFO				98
 #define WLC_GET_AP					117
 #define WLC_GET_RSSI				127
 #define WLC_GET_WSEC				133
@@ -72,5 +73,21 @@ typedef struct wl_ioctl {
 	uint32_t				used;	/* bytes read or written (optional) */
 	uint32_t				needed;	/* bytes needed (optional) */
 } wl_ioctl_t;
+
+/* Revision info */
+typedef struct wlc_rev_info {
+	uint		vendorid;	/* PCI vendor id */
+	uint		deviceid;	/* device id of chip */
+	uint		radiorev;	/* radio revision */
+	uint		chiprev;	/* chip revision */
+	uint		corerev;	/* core revision */
+	uint		boardid;	/* board identifier (usu. PCI sub-device id) */
+	uint		boardvendor;	/* board vendor (usu. PCI sub-vendor id) */
+	uint		boardrev;	/* board revision */
+	uint		driverrev;	/* driver version */
+	uint		ucoderev;	/* microcode version */
+	uint		bus;		/* bus type */
+	uint		chipnum;	/* chip number */
+} wlc_rev_info_t;
 
 #endif

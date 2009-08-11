@@ -83,6 +83,7 @@ LUA_WRAP_INT(wl,signal)
 LUA_WRAP_INT(wl,noise)
 LUA_WRAP_INT(wl,quality)
 LUA_WRAP_INT(wl,quality_max)
+LUA_WRAP_INT(wl,mbssid_support)
 LUA_WRAP_STRING(wl,mode)
 LUA_WRAP_STRING(wl,ssid)
 LUA_WRAP_STRING(wl,bssid)
@@ -97,6 +98,7 @@ LUA_WRAP_INT(madwifi,signal)
 LUA_WRAP_INT(madwifi,noise)
 LUA_WRAP_INT(madwifi,quality)
 LUA_WRAP_INT(madwifi,quality_max)
+LUA_WRAP_INT(madwifi,mbssid_support)
 LUA_WRAP_STRING(madwifi,mode)
 LUA_WRAP_STRING(madwifi,ssid)
 LUA_WRAP_STRING(madwifi,bssid)
@@ -111,6 +113,7 @@ LUA_WRAP_INT(wext,signal)
 LUA_WRAP_INT(wext,noise)
 LUA_WRAP_INT(wext,quality)
 LUA_WRAP_INT(wext,quality_max)
+LUA_WRAP_INT(wext,mbssid_support)
 LUA_WRAP_STRING(wext,mode)
 LUA_WRAP_STRING(wext,ssid)
 LUA_WRAP_STRING(wext,bssid)
@@ -131,6 +134,7 @@ static const luaL_reg R_wl[] = {
 	LUA_REG(wl,bssid),
 	LUA_REG(wl,enctype),
 	LUA_REG(wl,assoclist),
+	LUA_REG(wl,mbssid_support),
 	{ NULL, NULL }
 };
 
@@ -148,6 +152,7 @@ static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,bssid),
 	LUA_REG(madwifi,enctype),
 	LUA_REG(madwifi,assoclist),
+	LUA_REG(madwifi,mbssid_support),
 	{ NULL, NULL }
 };
 
@@ -165,6 +170,7 @@ static const luaL_reg R_wext[] = {
 	LUA_REG(wext,bssid),
 	LUA_REG(wext,enctype),
 	LUA_REG(wext,assoclist),
+	LUA_REG(wext,mbssid_support),
 	{ NULL, NULL }
 };
 
