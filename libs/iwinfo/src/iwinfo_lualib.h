@@ -35,7 +35,7 @@
 	{ #op, iwinfo_L_##type##_##op }
 
 #define LUA_WRAP_INT(type,op) 							\
-	int iwinfo_L_##type##_##op(lua_State *L)			\
+	static int iwinfo_L_##type##_##op(lua_State *L)		\
 	{													\
 		const char *ifname = luaL_checkstring(L, 1);	\
 		int rv;											\
@@ -47,7 +47,7 @@
 	}
 
 #define LUA_WRAP_STRING(type,op) 						\
-	int iwinfo_L_##type##_##op(lua_State *L)			\
+	static int iwinfo_L_##type##_##op(lua_State *L)		\
 	{													\
 		const char *ifname = luaL_checkstring(L, 1);	\
 		char rv[IWINFO_BUFSIZE];						\
@@ -60,7 +60,7 @@
 	}
 
 #define LUA_WRAP_ASSOCLIST(type)						\
-	int iwinfo_L_##type##_assoclist(lua_State *L)		\
+	static int iwinfo_L_##type##_assoclist(lua_State *L)\
 	{													\
 		return iwinfo_L_assoclist(L,					\
 			type##_get_assoclist);						\

@@ -19,7 +19,7 @@
 #include "iwinfo_lualib.h"
 
 /* Determine type */
-int iwinfo_L_type(lua_State *L)
+static int iwinfo_L_type(lua_State *L)
 {
 	const char *ifname = luaL_checkstring(L, 1);
 
@@ -39,7 +39,7 @@ int iwinfo_L_type(lua_State *L)
 }
 
 /* Wrapper for assoclist */
-int iwinfo_L_assoclist(lua_State *L, int (*func)(const char *, char *, int *))
+static int iwinfo_L_assoclist(lua_State *L, int (*func)(const char *, char *, int *))
 {
 	int i, len;
 	char rv[IWINFO_BUFSIZE];
