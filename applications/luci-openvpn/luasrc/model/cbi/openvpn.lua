@@ -70,10 +70,10 @@ s:option( Flag, "enable", translate("openvpn_enable") )
 
 local active = s:option( DummyValue, "_active", translate("openvpn_active") )
 function active.cfgvalue(self, section)
-	local pid = fs.readfile("/var/run/openvpn_%s.pid" % section)
+	local pid = fs.readfile("/var/run/openvpn-%s.pid" % section)
 	if pid and #pid > 0 and tonumber(pid) ~= nil then
 		return (sys.process.signal(pid, 0))
-			and translatef("openvpn_active_yes", pid)
+			and translatef("openvpn_active_yes", "yes (%i)", pid)
 			or  translate("openvpn_active_no")
 	end
 	return translate("openvpn_active_no")
