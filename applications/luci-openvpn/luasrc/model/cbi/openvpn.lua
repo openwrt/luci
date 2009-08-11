@@ -53,16 +53,20 @@ function s.create(self, name)
 		self.sectiontype .. ".select"
 	)
 
-	uci:section(
-		"openvpn", "openvpn", name,
-		uci:get_all( "openvpn_recipes", recipe )
-	)
+	if name and not name:match("[^a-zA-Z0-9_]") then
+		uci:section(
+			"openvpn", "openvpn", name,
+			uci:get_all( "openvpn_recipes", recipe )
+		)
 
-	uci:delete("openvpn", name, "_role")
-	uci:delete("openvpn", name, "_description")
-	uci:save("openvpn")
+		uci:delete("openvpn", name, "_role")
+		uci:delete("openvpn", name, "_description")
+		uci:save("openvpn")
 
-	luci.http.redirect( self.extedit:format(name) )
+		luci.http.redirect( self.extedit:format(name) )
+	else
+		self.invalid_cts = true
+	end
 end
 
 
