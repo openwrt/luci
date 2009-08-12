@@ -83,6 +83,26 @@ function active.cfgvalue(self, section)
 	return translate("openvpn_active_no")
 end
 
+local updown = s:option( Button, "_updown", translate("openvpn_updown", "Start/Stop") )
+updown._state = false
+function updown.cbid(self, section)
+	local pid = fs.readfile("/var/run/openvpn-%s.pid" % section)
+	self._state = pid and #pid > 0 and sys.process.signal(pid, 0)
+	self.option = self._state and "stop" or "start"
+	return AbstractValue.cbid(self, section)
+end
+function updown.cfgvalue(self, section)
+	self.title = self._state and "stop" or "start"
+	self.inputstyle = self._state and "reset" or "reload"
+end
+function updown.write(self, section, value)
+	if self.option == "stop" then
+		luci.sys.call("/etc/init.d/openvpn down %s" % section)
+	else
+		luci.sys.call("/etc/init.d/openvpn up %s" % section)
+	end
+end
+
 local port = s:option( DummyValue, "port", translate("openvpn_port") )
 function port.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
