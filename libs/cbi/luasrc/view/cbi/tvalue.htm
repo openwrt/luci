@@ -14,6 +14,6 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 	<textarea class="cbi-input-textarea" <% if not self.size then %> style="width: 100%"<% else %> cols="<%=self.size%>"<% end %> onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. ifattr(self.rows, "rows") .. ifattr(self.wrap, "wrap") %>>
-	<%-=luci.util.pcdata(self:cfgvalue(section))-%>
+	<%-=pcdata(self:cfgvalue(section))-%>
 	</textarea>
 <%+cbi/valuefooter%>

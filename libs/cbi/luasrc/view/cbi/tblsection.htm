@@ -109,7 +109,7 @@ end
 		<% if self.error then %>
 			<div class="cbi-section-error">
 				<ul><% for _, c in pairs(self.error) do for _, e in ipairs(c) do -%>
-					<li><%=luci.util.pcdata(e):gsub("\n","<br />")%></li>
+					<li><%=pcdata(e):gsub("\n","<br />")%></li>
 				<%- end end %></ul>
 			</div>
 		<% end %>

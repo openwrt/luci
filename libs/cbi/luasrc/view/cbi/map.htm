@@ -24,7 +24,7 @@ $Id$
 				self._apply = nil
 				local line = fp:read()
 				while line do
-					write("<li>" .. luci.util.pcdata(line) .. "</li>\n")
+					write("<li>" .. pcdata(line) .. "</li>\n")
 					line = fp:read()
 				end
 				fp:close()

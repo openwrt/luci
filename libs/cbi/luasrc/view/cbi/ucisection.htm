@@ -17,7 +17,7 @@ $Id$
 	if type(self.hidden) == "table" then
 		for k, v in pairs(self.hidden) do
 -%>
-	<input type="hidden" id="cbid.<%=self.config%>.<%=section%>.<%=k%>" name="cbid.<%=self.config%>.<%=section%>.<%=k%>" value="<%=luci.util.pcdata(v)%>" />
+	<input type="hidden" id="cbid.<%=self.config%>.<%=section%>.<%=k%>" name="cbid.<%=self.config%>.<%=section%>.<%=k%>" value="<%=pcdata(v)%>" />
 <%-
 		end
 	end
@@ -27,7 +27,7 @@ $Id$
 
 <% if self.error and self.error[section] then -%>
 	<div class="cbi-section-error">
-		<ul><% for _, e in ipairs(self.error[section]) do %><li><%=luci.util.pcdata(e):gsub("\n","<br />")%></li><% end %></ul>
+		<ul><% for _, e in ipairs(self.error[section]) do %><li><%=pcdata(e):gsub("\n","<br />")%></li><% end %></ul>
 	</div>
 <%- end %>
 

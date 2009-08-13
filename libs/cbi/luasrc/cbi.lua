@@ -1340,6 +1340,7 @@ function AbstractValue.render(self, s, scope)
 		scope.section   = s
 		scope.cbid      = self:cbid(s)
 		scope.striptags = luci.util.striptags
+		scope.pcdata	= luci.util.pcdata
 
 		scope.ifattr = function(cond,key,val)
 			if cond then
