@@ -9,7 +9,7 @@ uci_model.cursor = function(config, save)
 end
 
 uci_model.cursor_state = function()
-	return uci_core.cursor(nil, SYSROOT .. "/var/state")
+	return uci_core.cursor(SYSROOT .. "/etc/config", SYSROOT .. "/var/state")
 end
 
 -- override uvl access
