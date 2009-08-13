@@ -43,6 +43,8 @@ local SSTATE = "/tmp/.lucid_store"
 
 --- Starts a new LuCId superprocess.
 function start()
+	state:revert(UCINAME, "main")
+
 	prepare()
 
 	local detach = cursor:get(UCINAME, "main", "daemonize")
