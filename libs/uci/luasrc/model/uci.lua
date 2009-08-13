@@ -34,6 +34,12 @@ local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
 local require, getmetatable, type = require, getmetatable, type
 
 --- LuCI UCI model library.
+-- The typical workflow for UCI is:  Get a cursor instance from the
+-- cursor factory, modify data (via Cursor.add, Cursor.delete, etc.),
+-- save the changes to the staging area via Cursor.save and finally
+-- Cursor.commit the data to the actual config files.
+-- LuCI then needs to Cursor.apply the changes so deamons etc. are
+-- reloaded.
 -- @cstyle	instance
 module "luci.model.uci"
 
@@ -226,18 +232,20 @@ end
 -- @param type		UCI section type
 -- @return			Name of created section
 
---- Get a table of unsaved changes.
+--- Get a table of saved but uncommitted changes.
 -- @class function
 -- @name Cursor.changes
 -- @param config	UCI config
 -- @return			Table of changes
+-- @see Cursor.save
 
---- Commit unsaved changes.
+--- Commit saved changes.
 -- @class function
 -- @name Cursor.commit
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see Cursor.revert
+-- @see Cursor.save
 
 --- Deletes a section or an option.
 -- @class function
@@ -278,12 +286,13 @@ end
 -- @see Cursor.save
 -- @see Cursor.unload
 
---- Revert unsaved changes.
+--- Revert saved but uncommitted changes.
 -- @class function
 -- @name Cursor.revert
 -- @param config	UCI config
 -- @return			Boolean whether operation succeeded
 -- @see Cursor.commit
+-- @see Cursor.save
 
 --- Saves changes made to a config to make them committable.
 -- @class function
