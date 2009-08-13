@@ -41,6 +41,7 @@ luahost: luabuild hostcopy
 
 hostcopy: 
 	mkdir -p host/tmp
+	mkdir -p host/var/state
 	for i in $(MODULES); do cp -pR $$i/dist/* host/ 2>/dev/null || true; done
 	for i in $(MODULES); do cp -pR $$i/hostfiles/* host/ 2>/dev/null || true; done
 	rm -f host/luci
