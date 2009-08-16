@@ -322,7 +322,7 @@ if hwtype == "prism2" then
 	bssid:depends({mode="sta"})
 
 	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("wifi_macpolicy"))
-	mp:value("")
+	mp:value("", translate("disable"))
 	mp:value("deny", translate("wifi_whitelist"))
 	mp:value("allow", translate("wifi_blacklist"))
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("wifi_maclist"))
