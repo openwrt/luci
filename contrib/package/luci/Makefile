@@ -941,6 +941,16 @@ define Package/luci-i18n-spanish/install
 endef
 
 
+define Package/luci-i18n-vietnamese
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Vietnamese (by Hong Phuc Dang)
+endef
+
+define Package/luci-i18n-vietnamese/install
+	$(call Package/luci/install/template,$(1),i18n/vietnamese)
+endef
+
+
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
@@ -1159,6 +1169,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-spanish),)
 	PKG_SELECTED_MODULES+=i18n/spanish
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-vietnamese),)
+	PKG_SELECTED_MODULES+=i18n/vietnamese
+endif
 
 
 MAKE_FLAGS += \
@@ -1245,3 +1258,4 @@ $(eval $(call BuildPackage,luci-i18n-greek))
 $(eval $(call BuildPackage,luci-i18n-catalan))
 $(eval $(call BuildPackage,luci-i18n-portuguese))
 $(eval $(call BuildPackage,luci-i18n-spanish))
+$(eval $(call BuildPackage,luci-i18n-vietnamese))
