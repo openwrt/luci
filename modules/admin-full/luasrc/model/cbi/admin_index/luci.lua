@@ -32,10 +32,7 @@ l:value("auto")
 local i18ndir = luci.i18n.i18ndir .. "default."
 for k, v in luci.util.kspairs(luci.config.languages) do
 	local file = i18ndir .. k:gsub("_", "-")
-	if k:sub(1, 1) ~= "." and (
-		fs.access(file .. ".lua") or
-		fs.access(file .. ".lua.gz")
-	) then
+	if k:sub(1, 1) ~= "." and fs.access(file .. ".lmo") then
 		l:value(k, v)
 	end
 end
