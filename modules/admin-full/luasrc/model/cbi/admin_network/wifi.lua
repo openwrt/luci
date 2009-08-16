@@ -105,7 +105,7 @@ if hwtype == "broadcom" then
 	s:taboption("advanced", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
 	mp = s:taboption("macfilter", ListValue, "macfilter", translate("wifi_macpolicy"))
-	mp:value("")
+	mp:value("", translate("disable"))
 	mp:value("allow", translate("wifi_whitelist"))
 	mp:value("deny", translate("wifi_blacklist"))
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("wifi_maclist"))
@@ -252,7 +252,7 @@ if hwtype == "atheros" then
 	s:taboption("advanced", Flag, "bgscan", translate("wifi_bgscan"))
 
 	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("wifi_macpolicy"))
-	mp:value("")
+	mp:value("", translate("disable"))
 	mp:value("deny", translate("wifi_whitelist"))
 	mp:value("allow", translate("wifi_blacklist"))
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("wifi_maclist"))
