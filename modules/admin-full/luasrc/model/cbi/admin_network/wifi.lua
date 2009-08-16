@@ -22,12 +22,17 @@ m = Map("wireless", translate("networks"), translate("a_w_networks1"))
 s = m:section(NamedSection, arg[1], "wifi-device", translate("device") .. " " .. arg[1])
 s.addremove = false
 
+s:tab("general", translate("a_w_general", "General Setup"))
+s:tab("macfilter", translate("a_w_macfilter", "MAC-Filter"))
+s:tab("advanced", translate("a_w_advanced", "Advanced Settings"))
+
+--[[
 back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "wireless")
+]]
 
-
-en = s:option(Flag, "disabled", translate("enable"))
+en = s:taboption("general", Flag, "disabled", translate("enable"))
 en.enabled = "0"
 en.disabled = "1"
 en.rmempty = false
@@ -36,12 +41,13 @@ function en.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "0"
 end
 
-s:option(DummyValue, "type", translate("type"))
+s:taboption("general", DummyValue, "type", translate("type"))
+
 local hwtype = m:get(arg[1], "type")
 -- NanoFoo
 local nsantenna = m:get(arg[1], "antenna")
 
-ch = s:option(Value, "channel", translate("a_w_channel"))
+ch = s:taboption("general", Value, "channel", translate("a_w_channel"))
 ch:value("auto", translate("wifi_auto"))
 for c, f in luci.util.kspairs(luci.sys.wifi.channels()) do
 	ch:value(c, "%i (%.3f GHz)" %{ c, f })
@@ -51,16 +57,16 @@ end
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+	s:taboption("general", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 end
 
 
 ------------------- Madwifi Device ------------------
 
 if hwtype == "atheros" then
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+	s:taboption("general", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
-	mode = s:option(ListValue, "hwmode", translate("mode"))
+	mode = s:taboption("advanced", ListValue, "hwmode", translate("mode"))
 	mode:value("", translate("wifi_auto"))
 	mode:value("11b", "802.11b")
 	mode:value("11g", "802.11g")
@@ -70,25 +76,25 @@ if hwtype == "atheros" then
 	mode:value("11ast", "802.11a + Turbo")
 	mode:value("fh", translate("wifi_fh"))
 
-	s:option(Flag, "diversity", translate("wifi_diversity")).rmempty = false
+	s:taboption("advanced", Flag, "diversity", translate("wifi_diversity")).rmempty = false
 
 	if not nsantenna then
-		s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
-		s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
+		s:taboption("advanced", Value, "txantenna", translate("wifi_txantenna"))
+		s:taboption("advanced", Value, "rxantenna", translate("wifi_rxantenna"))
 	else -- NanoFoo
-		local ant = s:option(ListValue, "antenna", translate("wifi_txantenna"))
+		local ant = s:taboption("advanced", ListValue, "antenna", translate("wifi_txantenna"))
 		ant:value("auto")
 		ant:value("vertical")
 		ant:value("horizontal")
 		ant:value("external")
 	end
-	s:option(Value, "distance", translate("wifi_distance"),
-		translate("wifi_distance_desc")).optional = true
-	s:option(Value, "regdomain", translate("wifi_regdomain")).optional = true
-	s:option(Value, "country", translate("wifi_country")).optional = true
-	s:option(Flag, "outdoor", translate("wifi_outdoor")).optional = true
+	s:taboption("advanced", Value, "distance", translate("wifi_distance"),
+		translate("wifi_distance_desc"))
+	s:taboption("advanced", Value, "regdomain", translate("wifi_regdomain"))
+	s:taboption("advanced", Value, "country", translate("wifi_country"))
+	s:taboption("advanced", Flag, "outdoor", translate("wifi_outdoor"))
 
-	--s:option(Flag, "nosbeacon", translate("wifi_nosbeacon")).optional = true
+	--s:option(Flag, "nosbeacon", translate("wifi_nosbeacon"))
 end
 
 
@@ -96,39 +102,38 @@ end
 ------------------- Broadcom Device ------------------
 
 if hwtype == "broadcom" then
-	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+	s:taboption("advanced", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
-	mp = s:option(ListValue, "macfilter", translate("wifi_macpolicy"))
-	mp.optional = true
+	mp = s:taboption("macfilter", ListValue, "macfilter", translate("wifi_macpolicy"))
 	mp:value("")
 	mp:value("allow", translate("wifi_whitelist"))
 	mp:value("deny", translate("wifi_blacklist"))
-	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("wifi_maclist"))
 	ml:depends({macfilter="allow"})
 	ml:depends({macfilter="deny"})
 
-	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
-	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
+	s:taboption("advanced", Value, "txantenna", translate("wifi_txantenna"))
+	s:taboption("advanced", Value, "rxantenna", translate("wifi_rxantenna"))
 
-	s:option(Flag, "frameburst", translate("wifi_bursting")).optional = true
+	s:taboption("advanced", Flag, "frameburst", translate("wifi_bursting"))
 
-	s:option(Value, "distance", translate("wifi_distance")).optional = true
-	--s:option(Value, "slottime", translate("wifi_slottime")).optional = true
+	s:taboption("advanced", Value, "distance", translate("wifi_distance"))
+	--s:option(Value, "slottime", translate("wifi_slottime"))
 
-	s:option(Value, "country", translate("wifi_country")).optional = true
-	s:option(Value, "maxassoc", translate("wifi_maxassoc")).optional = true
+	s:taboption("advanced", Value, "country", translate("wifi_country"))
+	s:taboption("advanced", Value, "maxassoc", translate("wifi_maxassoc"))
 end
 
 
 --------------------- HostAP Device ---------------------
 
 if hwtype == "prism2" then
-	s:option(Value, "txpower", translate("a_w_txpwr"), "att units").rmempty = true
+	s:taboption("advanced", Value, "txpower", translate("a_w_txpwr"), "att units").rmempty = true
 
-	s:option(Flag, "diversity", translate("wifi_diversity")).rmempty = false
+	s:taboption("advanced", Flag, "diversity", translate("wifi_diversity")).rmempty = false
 
-	s:option(Value, "txantenna", translate("wifi_txantenna")).optional = true
-	s:option(Value, "rxantenna", translate("wifi_rxantenna")).optional = true
+	s:taboption("advanced", Value, "txantenna", translate("wifi_txantenna"))
+	s:taboption("advanced", Value, "rxantenna", translate("wifi_rxantenna"))
 end
 
 
@@ -140,9 +145,14 @@ s.anonymous = true
 s:depends("device", arg[1])
 s.defaults.device = arg[1]
 
-s:option(Value, "ssid", translate("wifi_essid"))
+s:tab("general", translate("a_w_general", "General Setup"))
+s:tab("encryption", translate("a_w_security", "Wireless Security"))
+s:tab("macfilter", translate("a_w_macfilter", "MAC-Filter"))
+s:tab("advanced", translate("a_w_advanced", "Advanced Settings"))
 
-network = s:option(Value, "network", translate("network"), translate("a_w_network1"))
+s:taboption("general", Value, "ssid", translate("wifi_essid"))
+
+network = s:taboption("general", Value, "network", translate("network"), translate("a_w_network1"))
 network.rmempty = true
 network:value("")
 network.combobox_manual = translate("a_w_netmanual")
@@ -164,13 +174,13 @@ function network.write(self, section, value)
 end
 
 
-mode = s:option(ListValue, "mode", translate("mode"))
+mode = s:taboption("general", ListValue, "mode", translate("mode"))
 mode.override_values = true
 mode:value("ap", translate("a_w_ap"))
 mode:value("adhoc", translate("a_w_adhoc"))
 mode:value("sta", translate("a_w_client"))
 
-bssid = s:option(Value, "bssid", translate("wifi_bssid"))
+bssid = s:taboption("general", Value, "bssid", translate("wifi_bssid"))
 
 
 -------------------- MAC80211 Interface ----------------------
@@ -184,8 +194,8 @@ if hwtype == "mac80211" then
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
 
-	s:option(Value, "frag", translate("wifi_frag")).optional = true
-	s:option(Value, "rts", translate("wifi_rts")).optional = true
+	s:taboption("advanced", Value, "frag", translate("wifi_frag"))
+	s:taboption("advanced", Value, "rts", translate("wifi_rts"))
 end
 
 
@@ -199,61 +209,54 @@ if hwtype == "atheros" then
 	bssid:depends({mode="adhoc"})
 	bssid:depends({mode="ahdemo"})
 
-	wds = s:option(Flag, "wds", translate("a_w_wds"))
+	wds = s:taboption("general", Flag, "wds", translate("a_w_wds"))
 	wds:depends({mode="ap"})
 	wds:depends({mode="sta"})
 	wds.rmempty = true
-	wdssep = s:option(Flag, "wdssep", translate("wifi_wdssep"))
+	wdssep = s:taboption("advanced", Flag, "wdssep", translate("wifi_wdssep"))
 	wdssep:depends({mode="ap", wds="1"})
-	wdssep.optional = true
 
-	s:option(Flag, "doth", "802.11h").optional = true
-	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
+	s:taboption("advanced", Flag, "doth", "802.11h")
+	hidden = s:taboption("general", Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
 	hidden:depends({mode="wds"})
-	hidden.optional = true
-	isolate = s:option(Flag, "isolate", translate("wifi_isolate"),
+	isolate = s:taboption("advanced", Flag, "isolate", translate("wifi_isolate"),
 	 translate("wifi_isolate_desc"))
 	isolate:depends({mode="ap"})
-	isolate.optional = true
-	s:option(Flag, "bgscan", translate("wifi_bgscan")).optional = true
+	s:taboption("advanced", Flag, "bgscan", translate("wifi_bgscan"))
 
-	mp = s:option(ListValue, "macpolicy", translate("wifi_macpolicy"))
-	mp.optional = true
+	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("wifi_macpolicy"))
 	mp:value("")
 	mp:value("deny", translate("wifi_whitelist"))
 	mp:value("allow", translate("wifi_blacklist"))
-	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("wifi_maclist"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 
-	s:option(Value, "rate", translate("wifi_rate")).optional = true
-	s:option(Value, "mcast_rate", translate("wifi_mcast_rate")).optional = true
-	s:option(Value, "frag", translate("wifi_frag")).optional = true
-	s:option(Value, "rts", translate("wifi_rts")).optional = true
-	s:option(Value, "minrate", translate("wifi_minrate")).optional = true
-	s:option(Value, "maxrate", translate("wifi_maxrate")).optional = true
-	s:option(Flag, "compression", translate("wifi_compression")).optional = true
+	s:taboption("advanced", Value, "rate", translate("wifi_rate"))
+	s:taboption("advanced", Value, "mcast_rate", translate("wifi_mcast_rate"))
+	s:taboption("advanced", Value, "frag", translate("wifi_frag"))
+	s:taboption("advanced", Value, "rts", translate("wifi_rts"))
+	s:taboption("advanced", Value, "minrate", translate("wifi_minrate"))
+	s:taboption("advanced", Value, "maxrate", translate("wifi_maxrate"))
+	s:taboption("advanced", Flag, "compression", translate("wifi_compression"))
 
-	s:option(Flag, "bursting", translate("wifi_bursting")).optional = true
-	s:option(Flag, "turbo", translate("wifi_turbo")).optional = true
-	s:option(Flag, "ff", translate("wifi_ff")).optional = true
+	s:taboption("advanced", Flag, "bursting", translate("wifi_bursting"))
+	s:taboption("advanced", Flag, "turbo", translate("wifi_turbo"))
+	s:taboption("advanced", Flag, "ff", translate("wifi_ff"))
 
-	s:option(Flag, "wmm", translate("wifi_wmm")).optional = true
-	s:option(Flag, "xr", translate("wifi_xr")).optional = true
-	s:option(Flag, "ar", translate("wifi_ar")).optional = true
+	s:taboption("advanced", Flag, "wmm", translate("wifi_wmm"))
+	s:taboption("advanced", Flag, "xr", translate("wifi_xr"))
+	s:taboption("advanced", Flag, "ar", translate("wifi_ar"))
 
-	local swm = s:option(Flag, "sw_merge", translate("wifi_nosbeacon"))
+	local swm = s:taboption("advanced", Flag, "sw_merge", translate("wifi_nosbeacon"))
 	swm:depends({mode="adhoc"})
-	swm.optional = true
 
-	local nos = s:option(Flag, "nosbeacon", translate("wifi_nosbeacon"))
+	local nos = s:taboption("advanced", Flag, "nosbeacon", translate("wifi_nosbeacon"))
 	nos:depends({mode="sta"})
-	nos.optional = true
 
-	local probereq = s:option(Flag, "probereq", translate("wifi_noprobereq"))
-	probereq.optional = true
+	local probereq = s:taboption("advanced", Flag, "probereq", translate("wifi_noprobereq"))
 	probereq.enabled  = "0"
 	probereq.disabled = "1"
 end
@@ -265,16 +268,14 @@ if hwtype == "broadcom" then
 	mode:value("wds", translate("a_w_wds"))
 	mode:value("monitor", translate("a_w_monitor"))
 
-	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
+	hidden = s:taboption("general", Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
 	hidden:depends({mode="wds"})
-	hidden.optional = true
 
-	isolate = s:option(Flag, "isolate", translate("wifi_isolate"),
+	isolate = s:taboption("advanced", Flag, "isolate", translate("wifi_isolate"),
 	 translate("wifi_isolate_desc"))
 	isolate:depends({mode="ap"})
-	isolate.optional = true
 
 	bssid:depends({mode="wds"})
 	bssid:depends({mode="adhoc"})
@@ -287,32 +288,30 @@ if hwtype == "prism2" then
 	mode:value("wds", translate("a_w_wds"))
 	mode:value("monitor", translate("a_w_monitor"))
 
-	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
+	hidden = s:taboption("general", Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
 	hidden:depends({mode="wds"})
-	hidden.optional = true
 
 	bssid:depends({mode="sta"})
 
-	mp = s:option(ListValue, "macpolicy", translate("wifi_macpolicy"))
-	mp.optional = true
+	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("wifi_macpolicy"))
 	mp:value("")
 	mp:value("deny", translate("wifi_whitelist"))
 	mp:value("allow", translate("wifi_blacklist"))
-	ml = s:option(DynamicList, "maclist", translate("wifi_maclist"))
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("wifi_maclist"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 
-	s:option(Value, "rate", translate("wifi_rate")).optional = true
-	s:option(Value, "frag", translate("wifi_frag")).optional = true
-	s:option(Value, "rts", translate("wifi_rts")).optional = true
+	s:taboption("advanced", Value, "rate", translate("wifi_rate"))
+	s:taboption("advanced", Value, "frag", translate("wifi_frag"))
+	s:taboption("advanced", Value, "rts", translate("wifi_rts"))
 end
 
 
 ------------------- WiFI-Encryption -------------------
 
-encr = s:option(ListValue, "encryption", translate("encryption"))
+encr = s:taboption("encryption", ListValue, "encryption", translate("encryption"))
 encr.override_values = true
 encr:depends({mode="ap"})
 encr:depends({mode="sta"})
@@ -361,17 +360,17 @@ encr:depends("mode", "ap")
 encr:depends("mode", "sta")
 encr:depends("mode", "wds")
 
-server = s:option(Value, "server", translate("a_w_radiussrv"))
+server = s:taboption("encryption", Value, "server", translate("a_w_radiussrv"))
 server:depends({mode="ap", encryption="wpa"})
 server:depends({mode="ap", encryption="wpa2"})
 server.rmempty = true
 
-port = s:option(Value, "port", translate("a_w_radiusport"))
+port = s:taboption("encryption", Value, "port", translate("a_w_radiusport"))
 port:depends({mode="ap", encryption="wpa"})
 port:depends({mode="ap", encryption="wpa2"})
 port.rmempty = true
 
-key = s:option(Value, "key", translate("key"))
+key = s:taboption("encryption", Value, "key", translate("key"))
 key:depends("encryption", "wep")
 key:depends("encryption", "psk")
 key:depends("encryption", "psk2")
@@ -383,32 +382,32 @@ key.rmempty = true
 key.password = true
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
-	nasid = s:option(Value, "nasid", translate("a_w_nasid"))
+	nasid = s:taboption("encryption", Value, "nasid", translate("a_w_nasid"))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})
 	nasid.rmempty = true
 
-	eaptype = s:option(ListValue, "eap_type", translate("a_w_eaptype"))
+	eaptype = s:taboption("encryption", ListValue, "eap_type", translate("a_w_eaptype"))
 	eaptype:value("TLS")
 	eaptype:value("TTLS")
 	eaptype:value("PEAP")
 	eaptype:depends({mode="sta", encryption="wpa"})
 	eaptype:depends({mode="sta", encryption="wpa2"})
 
-	cacert = s:option(FileUpload, "ca_cert", translate("a_w_cacert"))
+	cacert = s:taboption("encryption", FileUpload, "ca_cert", translate("a_w_cacert"))
 	cacert:depends({mode="sta", encryption="wpa"})
 	cacert:depends({mode="sta", encryption="wpa2"})
 
-	privkey = s:option(FileUpload, "priv_key", translate("a_w_tlsprivkey"))
+	privkey = s:taboption("encryption", FileUpload, "priv_key", translate("a_w_tlsprivkey"))
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa2"})
 	privkey:depends({mode="sta", eap_type="TLS", encryption="wpa"})
 
-	privkeypwd = s:option(Value, "priv_key_pwd", translate("a_w_tlsprivkeypwd"))
+	privkeypwd = s:taboption("encryption", Value, "priv_key_pwd", translate("a_w_tlsprivkeypwd"))
 	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa2"})
 	privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa"})
 
 
-	auth = s:option(Value, "auth", translate("a_w_peapauth"))
+	auth = s:taboption("encryption", Value, "auth", translate("a_w_peapauth"))
 	auth:value("PAP")
 	auth:value("CHAP")
 	auth:value("MSCHAP")
@@ -419,13 +418,13 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	auth:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
 
 
-	identity = s:option(Value, "identity", translate("a_w_peapidentity"))
+	identity = s:taboption("encryption", Value, "identity", translate("a_w_peapidentity"))
 	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
 	identity:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
 	identity:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
 	identity:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
 
-	password = s:option(Value, "password", translate("a_w_peappassword"))
+	password = s:taboption("encryption", Value, "password", translate("a_w_peappassword"))
 	password:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
 	password:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
 	password:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
