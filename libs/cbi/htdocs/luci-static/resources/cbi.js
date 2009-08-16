@@ -2,7 +2,7 @@
 	LuCI - Lua Configuration Interface
 
 	Copyright 2008 Steven Barth <steven@midlink.org>
-	Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+	Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 */
 
 var cbi_d = [];
+var cbi_t = [];
 
 function cbi_d_add(field, dep, next) {
 	var obj = document.getElementById(field);
@@ -218,4 +219,33 @@ function cbi_hijack_forms(layer, win, fail, load) {
 			}
 		});
 	}
+}
+
+
+function cbi_t_add(section, tab) {
+	var t = document.getElementById('tab.' + section + '.' + tab);
+	var c = document.getElementById('container.' + section + '.' + tab);
+
+	if( t && c ) {
+		cbi_t[section] = (cbi_t[section] || [ ]);
+		cbi_t[section][tab] = { 'tab': t, 'container': c };
+	}
+}
+
+function cbi_t_switch(section, tab) {
+	if( cbi_t[section] && cbi_t[section][tab] ) {
+		var o = cbi_t[section][tab];
+		for( var tid in cbi_t[section] ) {
+			var o2 = cbi_t[section][tid];
+			if( o.tab.id != o2.tab.id ) {
+				o2.tab.className = o2.tab.className.replace(/(^| )cbi-tab( |$)/, " cbi-tab-disabled ");
+				o2.container.style.display = 'none';
+			}
+			else {
+				o2.tab.className = o2.tab.className.replace(/(^| )cbi-tab-disabled( |$)/, " cbi-tab ");
+				o2.container.style.display = 'block';
+			}
+		}
+	}
+	return false
 }

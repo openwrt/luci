@@ -24,11 +24,14 @@ $Id$
 				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del%>" />
 			</div>
 		<%- end %>
-		<% section = k; isempty = false %>
+
+		<%- section = k; isempty = false -%>
 
 		<% if not self.anonymous then -%>
-			<h3><%=k:upper()%></h3>
+			<h3><%=section:upper()%></h3>
 		<%- end %>
+
+		<%+cbi/tabmenu%>
 
 		<fieldset class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
 			<%+cbi/ucisection%>

@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ $Id$
 				<input type="submit" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:cbi_del%>" />
 			</div>
 		<%- end %>
+		<%+cbi/tabmenu%>
 		<div class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
 			<%+cbi/ucisection%>
 		</div>

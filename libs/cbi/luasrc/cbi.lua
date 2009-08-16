@@ -781,6 +781,19 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.dynamic = false
 end
 
+-- Define a tab for the section
+function AbstractSection.tab(self, tab, title, desc)
+	self.tabs      = self.tabs      or { }
+	self.tab_names = self.tab_names or { }
+
+	self.tab_names[#self.tab_names+1] = tab
+	self.tabs[tab] = {
+		title       = title,
+		description = desc,
+		childs      = { }
+	}
+end
+
 -- Appends a new option
 function AbstractSection.option(self, class, option, ...)
 	-- Autodetect from UVL
@@ -809,6 +822,31 @@ function AbstractSection.option(self, class, option, ...)
 		error("No valid class was given and autodetection failed.")
 	else
 		error("class must be a descendant of AbstractValue")
+	end
+end
+
+-- Appends a new tabbed option
+function AbstractSection.taboption(self, tab, ...)
+
+	assert(tab and self.tabs and self.tabs[tab],
+		"Cannot assign option to not existing tab %q" % tostring(tab))
+
+	local l = self.tabs[tab].childs
+	local o = AbstractSection.option(self, ...)
+
+	if o then l[#l+1] = o end
+
+	return o
+end
+
+-- Render a single tab
+function AbstractSection.render_tab(self, tab, ...)
+
+	assert(tab and self.tabs and self.tabs[tab],
+		"Cannot render not existing tab %q" % tostring(tab))
+
+	for _, node in ipairs(self.tabs[tab].childs) do
+		node:render(...)
 	end
 end
 
