@@ -177,8 +177,8 @@ end
 mode = s:taboption("general", ListValue, "mode", translate("mode"))
 mode.override_values = true
 mode:value("ap", translate("a_w_ap"))
-mode:value("adhoc", translate("a_w_adhoc"))
 mode:value("sta", translate("a_w_client"))
+mode:value("adhoc", translate("a_w_adhoc"))
 
 bssid = s:taboption("general", Value, "bssid", translate("wifi_bssid"))
 
@@ -205,22 +205,47 @@ end
 if hwtype == "atheros" then
 	mode:value("ahdemo", translate("a_w_ahdemo"))
 	mode:value("monitor", translate("a_w_monitor"))
+	mode:value("ap-wds", "%s (%s)" % {translate("a_w_ap"), translate("a_w_wds")})
+	mode:value("sta-wds", "%s (%s)" % {translate("a_w_client"), translate("a_w_wds")})
+
+	function mode.write(self, section, value)
+		if value == "ap-wds" then
+			ListValue.write(self, section, "ap")
+			m.uci:set("wireless", section, "wds", 1)
+		elseif value == "sta-wds" then
+			ListValue.write(self, section, "sta")
+			m.uci:set("wireless", section, "wds", 1)
+		else
+			ListValue.write(self, section, value)
+			m.uci:delete("wireless", section, "wds")
+		end
+	end
+
+	function mode.cfgvalue(self, section)
+		local mode = ListValue.cfgvalue(self, section)
+		local wds  = m.uci:get("wireless", section, "wds") == "1"
+
+		if mode == "ap" and wds then
+			return "ap-wds"
+		elseif mode == "sta" and wds then
+			return "sta-wds"
+		else
+			return mode
+		end
+	end
 
 	bssid:depends({mode="adhoc"})
 	bssid:depends({mode="ahdemo"})
 
-	wds = s:taboption("general", Flag, "wds", translate("a_w_wds"))
-	wds:depends({mode="ap"})
-	wds:depends({mode="sta"})
-	wds.rmempty = true
 	wdssep = s:taboption("advanced", Flag, "wdssep", translate("wifi_wdssep"))
-	wdssep:depends({mode="ap", wds="1"})
+	wdssep:depends({mode="ap-wds"})
 
 	s:taboption("advanced", Flag, "doth", "802.11h")
 	hidden = s:taboption("general", Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
-	hidden:depends({mode="wds"})
+	hidden:depends({mode="ap-wds"})
+	hidden:depends({mode="sta-wds"})
 	isolate = s:taboption("advanced", Flag, "isolate", translate("wifi_isolate"),
 	 translate("wifi_isolate_desc"))
 	isolate:depends({mode="ap"})
@@ -255,6 +280,7 @@ if hwtype == "atheros" then
 
 	local nos = s:taboption("advanced", Flag, "nosbeacon", translate("wifi_nosbeacon"))
 	nos:depends({mode="sta"})
+	nos:depends({mode="sta-wds"})
 
 	local probereq = s:taboption("advanced", Flag, "probereq", translate("wifi_noprobereq"))
 	probereq.enabled  = "0"
@@ -317,7 +343,8 @@ encr:depends({mode="ap"})
 encr:depends({mode="sta"})
 encr:depends({mode="adhoc"})
 encr:depends({mode="ahdemo"})
-encr:depends({mode="wds"})
+encr:depends({mode="ap-wds"})
+encr:depends({mode="sta-wds"})
 encr:depends({mode="mesh"})
 
 encr:value("none", "No Encryption")
@@ -331,21 +358,21 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 		encr:value("psk", "WPA-PSK")
 		encr:value("psk2", "WPA2-PSK")
 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
-		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"})
+		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 		encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="sta"})
 	elseif hostapd and not supplicant then
-		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
-		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"}, {mode="ahdemo"})
-		encr:value("wpa", "WPA-EAP", {mode="ap"})
-		encr:value("wpa2", "WPA2-EAP", {mode="ap"})
+		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
+		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
+		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
+		encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="ap-wds"})
 		encr.description = translate("wifi_wpareq")
 	elseif not hostapd and supplicant then
-		encr:value("psk", "WPA-PSK", {mode="sta"})
-		encr:value("psk2", "WPA2-PSK", {mode="sta"})
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
-		encr:value("wpa", "WPA-EAP", {mode="sta"})
-		encr:value("wpa2", "WPA2-EAP", {mode="sta"})
+		encr:value("psk", "WPA-PSK", {mode="sta"}, {mode="sta-wds"})
+		encr:value("psk2", "WPA2-PSK", {mode="sta"}, {mode="sta-wds"})
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"}, {mode="sta-wds"})
+		encr:value("wpa", "WPA-EAP", {mode="sta"}, {mode="sta-wds"})
+		encr:value("wpa2", "WPA2-EAP", {mode="sta"}, {mode="sta-wds"})
 		encr.description = translate("wifi_wpareq")
 	else
 		encr.description = translate("wifi_wpareq")
@@ -358,6 +385,8 @@ end
 
 encr:depends("mode", "ap")
 encr:depends("mode", "sta")
+encr:depends("mode", "ap-wds")
+encr:depends("mode", "sta-wds")
 encr:depends("mode", "wds")
 
 server = s:taboption("encryption", Value, "server", translate("a_w_radiussrv"))
