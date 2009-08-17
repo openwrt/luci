@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-16 06:58+0200\n"
-"PO-Revision-Date: 2009-08-12 17:27+0200\n"
+"PO-Revision-Date: 2009-08-16 12:38+0200\n"
 "Last-Translator: Hong Phuc Dang <dhppat@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -149,12 +149,10 @@ msgstr ""
 
 #. Also kernel or service logfiles can be viewed here to get an overview over their current state.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:23
-#, fuzzy
 msgid "a_st_i_status2"
 msgstr ""
-"Ở đây bạn có thể tìm thấy thông tin về tình trạng của hệ thống hiện hành  "
-"như là <abbr title=\"Bộ điều khiển trung tâm\">CPU</abbr> đồng hồ tần số, bộ "
-"nhớ hoặc mạng lưới dữ liệu giao diện."
+"Kernel hoặc service logfiles cũng có thể được view ở đây để lấy tầm nhìn "
+"tổng quát của hình trạng hiện tại. "
 
 #. <abbr title=\"Wireless Local Area Network\">WLAN</abbr>-Scan
 #: i18n/english/luasrc/i18n/admin-core.en.lua:24
@@ -771,14 +769,21 @@ msgstr ""
 
 #. The filesystem that was used to format the memory (<abbr title=\"for example\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem\">ext3</abbr></samp>)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:144
-#, fuzzy
 msgid "a_s_fstab_fs1"
-msgstr "Đã sử dụng"
+msgstr ""
+"Filesystem mà được dùng để format memory (<abbr title=\"for "
+"example\">e.g.</abbr> <samp><abbr title=\"Third Extended "
+"Filesystem\">ext3</abbr></samp>)"
 
 #. If your physical memory is insufficient unused data can be temporarily swapped to a swap-device resulting in a higher amount of usable <abbr title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very slow process as the swap-device cannot be accessed with the high datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:145
 msgid "a_s_fstab_swap1"
 msgstr ""
+"Nếu bộ nhớ vật lý không đủ dữ liệu không dùng có thể được swap tạm thời đến "
+"một thiết bị swap để tạo ra nhiều khoảng trống hơn trong <abbr title=\"Random "
+"Access Memory\">RAM</abbr>. Hãy nhận biết rằng swapping dữ liệu là một quá "
+"trình rất chậm vì một thiết bị swap không thể được truy cập với  datarates "
+"cao hơn của <abbr title=\"Random Access Memory\">RAM</abbr>."
 
 #. Reboots the operating system of your device
 #: i18n/english/luasrc/i18n/admin-core.en.lua:146
@@ -1095,9 +1100,12 @@ msgstr "Monitor"
 
 #. Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>-Server and <abbr title=\"Domain Name System\">DNS</abbr>-Forwarder for <abbr title=\"Network Address Translation\">NAT</abbr> firewalls
 #: i18n/english/luasrc/i18n/admin-core.en.lua:203
-#, fuzzy
 msgid "dhcp_dnsmasq_desc"
-msgstr "<abbr title=\"Domain Name System\">DNS</abbr>-Cổng"
+msgstr ""
+"Dnsmasq là một phối hợp  <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr>-Server and <abbr title=\"Domain Name "
+"System\">DNS</abbr>-Forwarder for <abbr title=\"Network Address "
+"Translation\">NAT</abbr> firewalls"
 
 #. Domain required
 #: i18n/english/luasrc/i18n/admin-core.en.lua:204
@@ -1118,15 +1126,15 @@ msgstr "Authoritative"
 
 #. This is the only <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> in the local network
 #: i18n/english/luasrc/i18n/admin-core.en.lua:207
-#, fuzzy
 msgid "dhcp_dnsmasq_authoritative_desc"
-msgstr "Authoritative"
+msgstr ""
+"Đây là <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> duy "
+"nhất trong mạng địa phương. "
 
 #. Filter private
 #: i18n/english/luasrc/i18n/admin-core.en.lua:208
-#, fuzzy
 msgid "dhcp_dnsmasq_boguspriv"
-msgstr "Don&amp;#39;t chuyển tiếp lookups đảo ngược cho các mạng địa phương"
+msgstr "Filter private"
 
 #. Don&#39;t forward reverse lookups for local networks
 #: i18n/english/luasrc/i18n/admin-core.en.lua:209
@@ -1206,9 +1214,10 @@ msgstr "Leasefile"
 
 #. file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>-leases will be stored
 #: i18n/english/luasrc/i18n/admin-core.en.lua:223
-#, fuzzy
 msgid "dhcp_dnsmasq_leasefile_desc"
-msgstr "Tập tin <abbr title=\"Domain Name System\">DNS</abbr> địa phương"
+msgstr ""
+"Tập tin được cho <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr>-leases sẽ được lưu trữ"
 
 #. Resolvfile
 #: i18n/english/luasrc/i18n/admin-core.en.lua:224
@@ -1341,846 +1350,906 @@ msgstr ""
 
 #. Interfaces and <abbr title=\"Point-to-Point Protocol over Ethernet\">PPPoE</abbr> / <abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Settings allow a custom organisation of the network and connections to other networks like the internet.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:248
-#, fuzzy
 msgid "a_network3"
-msgstr "Trong vùng này bạn tìm thấy tât cả cài đặt liên quan mạng"
+msgstr ""
+"Giao diện và <abbr title=\"Point-to-Point Protocol over "
+"Ethernet\">PPPoE</abbr> / <abbr title=\"Point-to-Point Tunneling "
+"Protocol\">PPTP</abbr>- Cài đặt cho phép một tổ chức tùy chỉnh của network và "
+"kết nối tới network khác giống như internet."
 
 #. With <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> devices in your local network can be automatically configured for network communication.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:249
-#, fuzzy
 msgid "a_network4"
-msgstr "Trong vùng này bạn tìm thấy tât cả cài đặt liên quan mạng"
+msgstr ""
+"Với <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> cộng cụ "
+"trong network địa phương có thể tự định cấu hình cho giao tiếp network. "
 
 #. Firewall and portforwarding can be used to secure your network while providing services to external networks.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:250
-#, fuzzy
 msgid "a_network5"
-msgstr "Trong vùng này bạn tìm thấy tât cả cài đặt liên quan mạng"
+msgstr ""
+"Firewall và portforwarding có thể được dùng để bảo vệ network của bạn trong "
+"khi cung cấp dịch vụ tới những network bên ngoài. "
 
 #. The network ports on your router can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:251
-#, fuzzy
 msgid "a_n_switch1"
-msgstr "chuyển đổi"
+msgstr ""
+"Cổng network trên bộ định tuyến có thể phối hợp với nhiều <abbr "
+"title=\"Virtual Local Area Network\">VLAN</abbr>s làm máy tính tự giao tiếp "
+"trực tiếp với nhau. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s "
+"thường được dùng để phân tách những phân đoạn network khác nhau. Thông "
+"thường có một cổng Uplink mặc định cho một kết nối vào mạng lớn hơn như "
+"Internet và các cổng khác cho một mạng lưới địa phương."
 
 #. Ports belonging to a <abbr title=\"Virtual Local Area Network\">VLAN</abbr> are separated with spaces. The port with the highest number (usually 5) is oftern the connection to the internal network interface of the router. On devices with 5 ports often the one with the lowest number (0) is the predefined Uplink port.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:252
 msgid "network_switch_desc"
 msgstr ""
+"Cổng thuộc về một <abbr title=\"Virtual Local Area Network\">VLAN</abbr> được "
+"phân tách với những khoảng trống. Cổng với số lớn nhất (thường là 5) kết nối "
+"với giao diện nội mạng của bộ định tuyến. Trên thiết bị với 5 cổng thương "
+"là cái với số thấp nhất (0) is được định nghĩa lại như cổng Uplink."
 
 #. On this page you can configure the network interfaces. You can bridge several interfaces by ticking the &quot;bridge interfaces&quot; field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>).
 #: i18n/english/luasrc/i18n/admin-core.en.lua:253
 msgid "a_n_ifaces1"
 msgstr ""
+"Trên trang này bạn có thể định cấu hình giao diện network. Bạn có thể bắt "
+"cầu nhiều giao diện bằng cách đánh dấu &amp;quot;bridge interfaces&amp;quot; "
+"field và nhập tên vào của nhiều giao diện network phân tách bởi những "
+"khoảng trống. Bạn có thể cũng dùng <abbr title=\"Virtual Local Area "
+"Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr "
+"title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."
 
 #. Bridge interfaces
 #: i18n/english/luasrc/i18n/admin-core.en.lua:254
-#, fuzzy
 msgid "a_n_i_bridge"
-msgstr "Cầu nối"
+msgstr "Giao diện cầu nối"
 
 #. creates a bridge over specified interface(s)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:255
-#, fuzzy
 msgid "a_n_i_bridge1"
-msgstr "Cầu nối"
+msgstr "tạo một cầu nối trên một giao diện được chỉ định"
 
 #. Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>
 msgid "a_n_i_stp"
-msgstr ""
+msgstr "Kích hoạt <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 
 #. Enables the Spanning Tree Protocol on this bridge
 msgid "a_n_i_stp1"
-msgstr ""
+msgstr "Kích hoạt Spanning Tree Protocol trên cầu nối này"
 
 #. With <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> network members can automatically receive their network settings (<abbr title=\"Internet Protocol\">IP</abbr>-address, netmask, <abbr title=\"Domain Name System\">DNS</abbr>-server, ...).
 #: i18n/english/luasrc/i18n/admin-core.en.lua:256
 msgid "dhcp_desc"
 msgstr ""
+"Với <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> thành viên "
+"network có thể tự động nhận cài đặt mạng (<abbr title=\"Internet "
+"Protocol\">IP</abbr>-address, netmask, <abbr title=\"Domain Name "
+"System\">DNS</abbr>-server, ...)."
 
 #. Leasetime
 #: i18n/english/luasrc/i18n/admin-core.en.lua:257
 msgid "dhcp_dhcp_leasetime"
-msgstr ""
+msgstr "Leasetime"
 
 #. Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>
 #: i18n/english/luasrc/i18n/admin-core.en.lua:258
 msgid "dhcp_dhcp_dynamicdhcp"
-msgstr ""
+msgstr "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #. Ignore interface
 #: i18n/english/luasrc/i18n/admin-core.en.lua:259
 msgid "dhcp_dhcp_ignore"
-msgstr ""
+msgstr "Lờ đi giao diện"
 
 #. disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for this interface
 #: i18n/english/luasrc/i18n/admin-core.en.lua:260
 msgid "dhcp_dhcp_ignore_desc"
 msgstr ""
+"Vô hiệu hóa <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
+"cho giao diện này"
 
 #. Force
 #: i18n/english/luasrc/i18n/admin-core.en.lua:261
 msgid "dhcp_dhcp_force"
-msgstr ""
+msgstr "Force"
 
 #. first address (last octet)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:262
 msgid "dhcp_dhcp_start_desc"
-msgstr ""
+msgstr "Địa chỉ đầu tiên (last oclet)"
 
 #. number of leased addresses -1
 #: i18n/english/luasrc/i18n/admin-core.en.lua:263
 msgid "dhcp_dhcp_limit_desc"
-msgstr ""
+msgstr "Số của leased addresses -1"
 
 #. DHCP-Options
 #: i18n/english/luasrc/i18n/admin-core.en.lua:264
 msgid "dhcp_dhcp_dhcpoption"
-msgstr ""
+msgstr "Tùy chọn DHCP"
 
 #. See &quot;dnsmasq --help dhcp&quot; for a list of available options.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:265
 msgid "dhcp_dhcp_dhcpoption_desc"
 msgstr ""
+"See &amp;quot;dnsmasq --help dhcp&amp;quot; cho một list của những tùy chọn"
 
 #. Leases
 #: i18n/english/luasrc/i18n/admin-core.en.lua:266
 msgid "dhcp_leases"
-msgstr ""
+msgstr "Leases"
 
 #. Static Leases
 #: i18n/english/luasrc/i18n/admin-core.en.lua:267
 msgid "luci_ethers"
-msgstr ""
+msgstr "Thống kê leases"
 
 #. Leasetime remaining
 #: i18n/english/luasrc/i18n/admin-core.en.lua:268
 msgid "dhcp_timeremain"
-msgstr ""
+msgstr "Leasetime còn lại"
 
 #. Active Leases
 #: i18n/english/luasrc/i18n/admin-core.en.lua:269
 msgid "dhcp_leases_active"
-msgstr ""
+msgstr "Leases hoạt động"
 
 #. Point-to-Point Connections
 #: i18n/english/luasrc/i18n/admin-core.en.lua:270
 msgid "a_n_ptp"
-msgstr ""
+msgstr "Point-to-Point kết nối"
 
 #. Point-to-Point connections with <abbr title=\"Point-to-Point Protocol over Ethernet\">PPPoE</abbr> or <abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr> are often used to connect a device over <abbr title=\"Digital Subscriber Line\">DSL</abbr> or similar technologies to an internet access point.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:271
 msgid "a_n_ptp1"
 msgstr ""
+"Point-to-Point kết nối với <abbr title=\"Point-to-Point Protocol over "
+"Ethernet\">PPPoE</abbr> or <abbr title=\"Point-to-Point Tunneling "
+"Protocol\">PPTP</abbr> thì thường dùng để kết nối với một thiết bị trên <abbr "
+"title=\"Digital Subscriber Line\">DSL</abbr> hoặc những công nghệ tới một "
+"điểm internet truy cập."
 
 #. You need to install &quot;comgt&quot; for UMTS/GPRS, &quot;ppp-mod-pppoe&quot; for PPPoE, &quot;ppp-mod-pppoa&quot; for PPPoA or &quot;pptp&quot; for PPtP support
 #: i18n/english/luasrc/i18n/admin-core.en.lua:272
 msgid "network_interface_prereq"
 msgstr ""
+"Bạn cần cài đặt &amp;quot;comgt&amp;quot; for UMTS/GPRS, &amp;quot;ppp-mod-"
+"pppoe&amp;quot; for PPPoE, &amp;quot;ppp-mod-pppoa&amp;quot; for PPPoA or "
+"&amp;quot;pptp&amp;quot; for PPtP support"
 
 #. You need to install &quot;ppp-mod-pppoe&quot; for PPPoE or &quot;pptp&quot; for PPtP support
 #: i18n/english/luasrc/i18n/admin-core.en.lua:273
 msgid "network_interface_prereq_mini"
 msgstr ""
+"Bạn cần cài đặt &amp;quot;ppp-mod-pppoe&amp;quot; for PPPoE or "
+"&amp;quot;pptp&amp;quot; cho hỗ trợ PPtP "
 
 #. <abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server
 #: i18n/english/luasrc/i18n/admin-core.en.lua:274
 msgid "network_interface_server"
-msgstr ""
+msgstr "<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"
 
 #. Automatic Disconnect
 #: i18n/english/luasrc/i18n/admin-core.en.lua:275
 msgid "network_interface_demand"
-msgstr ""
+msgstr "Tự động ngừng kết nối"
 
 #. Time (in seconds) after which an unused connection will be closed
 #: i18n/english/luasrc/i18n/admin-core.en.lua:276
 msgid "network_interface_demand_desc"
-msgstr ""
+msgstr "Thời gian (giây) sau khi một kết nối không sử dụng sẽ bị đóng"
 
 #. Keep-Alive
 #: i18n/english/luasrc/i18n/admin-core.en.lua:277
 msgid "network_interface_keepalive"
-msgstr ""
+msgstr "Giữ-alive"
 
 #. Number of failed connection tests to initiate automatic reconnect
 #: i18n/english/luasrc/i18n/admin-core.en.lua:278
 msgid "network_interface_keepalive_desc"
-msgstr ""
+msgstr "Kiểm tra số lượng kết nối không thành công để tự động kết nối lại. "
 
 #. Modem device
 #: i18n/english/luasrc/i18n/admin-core.en.lua:279
 msgid "network_interface_device"
-msgstr ""
+msgstr "Thiết bị modem"
 
 #. The device node of your modem, e.g. /dev/ttyUSB0
 #: i18n/english/luasrc/i18n/admin-core.en.lua:280
 msgid "network_interface_device_desc"
-msgstr ""
+msgstr "Thiết bị node của modem, e.g. /dev/ttyUSB0"
 
 #. Replace default route
 #: i18n/english/luasrc/i18n/admin-core.en.lua:281
 msgid "network_interface_defaultroute"
-msgstr ""
+msgstr "Thay thế route mặc định"
 
 #. Let pppd replace the current default route to use the PPP interface after successful connect
 #: i18n/english/luasrc/i18n/admin-core.en.lua:282
 msgid "network_interface_defaultroute_desc"
 msgstr ""
+"Để pppd thay thế route mặc định hiện tại để dùng giao diện PPP sau khi kết "
+"nối thành công"
 
 #. Use peer DNS
 #: i18n/english/luasrc/i18n/admin-core.en.lua:283
 msgid "network_interface_peerdns"
-msgstr ""
+msgstr "Dùng peer DNS"
 
 #. Configure the local DNS server to use the name servers adverticed by the PPP peer
 #: i18n/english/luasrc/i18n/admin-core.en.lua:284
 msgid "network_interface_peerdns_desc"
 msgstr ""
+"Định cấu hình DNS server địa phương để dùng tên servers adverticed bởi PPP "
+"peer"
 
 #. Enable IPv6 on PPP link
 #: i18n/english/luasrc/i18n/admin-core.en.lua:285
 msgid "network_interface_ipv6"
-msgstr ""
+msgstr "Kích hoạt IPv6 on PPP link"
 
 #. Connect script
 #: i18n/english/luasrc/i18n/admin-core.en.lua:286
 msgid "network_interface_connect"
-msgstr ""
+msgstr "Kết nối script"
 
 #. Let pppd run this script after establishing the PPP link
 #: i18n/english/luasrc/i18n/admin-core.en.lua:287
 msgid "network_interface_connect_desc"
-msgstr ""
+msgstr "Để pppd chạy script này sau khi thành lập PPP link"
 
 #. Disconnect script
 #: i18n/english/luasrc/i18n/admin-core.en.lua:288
 msgid "network_interface_disconnect"
-msgstr ""
+msgstr "Ngừng script"
 
 #. Let pppd run this script before tearing down the PPP link
 #: i18n/english/luasrc/i18n/admin-core.en.lua:289
 msgid "network_interface_disconnect_desc"
-msgstr ""
+msgstr "Để pppd chạy trên script trước khi phá vỡ PPP link"
 
 #. Additional pppd options
 #: i18n/english/luasrc/i18n/admin-core.en.lua:290
 msgid "network_interface_pppd_options"
-msgstr ""
+msgstr "Tùy chọn pppd bổ sung"
 
 #. Specify additional command line arguments for pppd here
 #: i18n/english/luasrc/i18n/admin-core.en.lua:291
 msgid "network_interface_pppd_options_desc"
-msgstr ""
+msgstr "Chỉ định những dòng lệnh tranh cãi cho pppd ở đây"
 
 #. Access point (APN)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:292
 msgid "network_interface_apn"
-msgstr ""
+msgstr "Điểm truy cập (APN)"
 
 #. PIN code
 #: i18n/english/luasrc/i18n/admin-core.en.lua:293
 msgid "network_interface_pincode"
-msgstr ""
+msgstr "PIN code"
 
 #. Make sure that you provide the correct pin code here or you might lock your sim card!
 #: i18n/english/luasrc/i18n/admin-core.en.lua:294
 msgid "network_interface_pincode_desc"
 msgstr ""
+"Bảo đảm rằng bạn cung cấp pin code chính xác ở đây hoặc sim card của bạn sẽ "
+"bị khóa"
 
 #. Service type
 #: i18n/english/luasrc/i18n/admin-core.en.lua:295
 msgid "network_interface_service"
-msgstr ""
+msgstr "Service type"
 
 #. Setup wait time
 #: i18n/english/luasrc/i18n/admin-core.en.lua:296
 msgid "network_interface_maxwait"
-msgstr ""
+msgstr "Cài đặt thời gian chờ"
 
 #. Seconds to wait for the modem to become ready before attempting to connect
 #: i18n/english/luasrc/i18n/admin-core.en.lua:297
 msgid "network_interface_maxwait_desc"
-msgstr ""
+msgstr "Giây để chờ cho modem trở nên sẵn sàng trước khi kết nối"
 
 #. PPPoA Encapsulation
 #: i18n/english/luasrc/i18n/admin-core.en.lua:298
 msgid "network_interface_encaps"
-msgstr ""
+msgstr "PPPoA Encapsulation"
 
 #. Routes specify over which interface and gateway a certain host or network can be reached.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:299
-#, fuzzy
 msgid "a_n_r_routes1"
-msgstr "Tuyến"
+msgstr ""
+"Routes chỉ định trên giao diện và cổng một host nhất định hay network được "
+"tiếp cận."
 
 #. Static Routes
 #: i18n/english/luasrc/i18n/admin-core.en.lua:300
 msgid "a_n_routes_static"
-msgstr ""
+msgstr "Static Routes"
 
 #. Static IPv4 Routes
 #: i18n/english/luasrc/i18n/admin-core.en.lua:301
 msgid "a_n_routes_static4"
-msgstr ""
+msgstr "Static IPv4 Routes"
 
 #. Static IPv6 Routes
 #: i18n/english/luasrc/i18n/admin-core.en.lua:302
 msgid "a_n_routes_static6"
-msgstr ""
+msgstr "Static IPv6 Routes"
 
 #. Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes
 #: i18n/english/luasrc/i18n/admin-core.en.lua:303
 msgid "a_n_routes_kernel4"
-msgstr ""
+msgstr "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
 
 #. Active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Routes
 #: i18n/english/luasrc/i18n/admin-core.en.lua:304
 msgid "a_n_routes_kernel6"
-msgstr ""
+msgstr "Active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Routes"
 
 #. Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network
 #: i18n/english/luasrc/i18n/admin-core.en.lua:305
 msgid "a_n_r_target1"
-msgstr ""
+msgstr "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
 
 #. <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address or Network (CIDR)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:306
 msgid "a_n_r_target6"
 msgstr ""
+"<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address or Network "
+"(CIDR)"
 
 #. if target is a network
 #: i18n/english/luasrc/i18n/admin-core.en.lua:307
 msgid "a_n_r_netmask1"
-msgstr ""
+msgstr "Nếu mục tiêu là một network"
 
 #. Internet Connection
 #: i18n/english/luasrc/i18n/admin-core.en.lua:308
 msgid "m_n_inet"
-msgstr ""
+msgstr "Kết nối Internet"
 
 #. Local Network
 #: i18n/english/luasrc/i18n/admin-core.en.lua:309
 msgid "m_n_local"
-msgstr ""
+msgstr "Network địa phương"
 
 #. Route
 #: i18n/english/luasrc/i18n/admin-core.en.lua:310
-#, fuzzy
 msgid "m_n_route"
-msgstr "Tuyến"
+msgstr "Route"
 
 #. Bridge
 #: i18n/english/luasrc/i18n/admin-core.en.lua:311
 msgid "m_n_brdige"
-msgstr ""
+msgstr "Cấu nối"
 
 #. Provide (Access Point)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:312
-#, fuzzy
 msgid "m_w_ap"
-msgstr "Điểm truy cập"
+msgstr "Cung cấp (Điểm truy cập)"
 
 #. Independent (Ad-Hoc)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:313
-#, fuzzy
 msgid "m_w_adhoc"
-msgstr "Ad-Hoc"
+msgstr "Độc lập (Ad-Hoc)"
 
 #. Join (Client)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:314
-#, fuzzy
 msgid "m_w_client"
-msgstr "Khách hàng"
+msgstr "Tham gia (client)"
 
 #. Distributed (<abbr title=\"Wireless Distribution System\">WDS</abbr>)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:315
-#, fuzzy
 msgid "m_w_wds"
-msgstr "WDS"
+msgstr "Phân phối (<abbr title=\"Wireless Distribution System\">WDS</abbr>)"
 
 #. Clientmode
 #: i18n/english/luasrc/i18n/admin-core.en.lua:316
 msgid "m_w_clientmode"
-msgstr ""
+msgstr "Clientmode"
 
 #. System log buffer size
 #: i18n/english/luasrc/i18n/admin-core.en.lua:317
 msgid "system_system_logsize"
-msgstr ""
+msgstr "System log buffer size"
 
 #. External system log server
 #: i18n/english/luasrc/i18n/admin-core.en.lua:318
 msgid "system_system_logip"
-msgstr ""
+msgstr "External system log server"
 
 #. Log output level
 #: i18n/english/luasrc/i18n/admin-core.en.lua:319
 msgid "system_system_conloglevel"
-msgstr ""
+msgstr "Log output level"
 
 #. Level of log messages on the console
 #: i18n/english/luasrc/i18n/admin-core.en.lua:320
 msgid "system_system_conloglevel_desc"
-msgstr ""
+msgstr "Level của log messages trên console"
 
 #. Processor
 #: i18n/english/luasrc/i18n/admin-core.en.lua:321
 msgid "m_i_processor"
-msgstr ""
+msgstr "Bộ xử lý"
 
 #. Memory
 #: i18n/english/luasrc/i18n/admin-core.en.lua:322
 msgid "m_i_memory"
-msgstr ""
+msgstr "Bộ nhớ"
 
 #. Local Time
 #: i18n/english/luasrc/i18n/admin-core.en.lua:323
 msgid "m_i_systemtime"
-msgstr ""
+msgstr "Giờ địa phương"
 
 #. Uptime
 #: i18n/english/luasrc/i18n/admin-core.en.lua:324
 msgid "m_i_uptime"
-msgstr ""
+msgstr "Uptime"
 
 #. First leased address
 #: i18n/english/luasrc/i18n/admin-core.en.lua:325
 msgid "m_n_d_firstaddress"
-msgstr ""
+msgstr "Địa chỉ lease đầu tiên"
 
 #. Number of leased addresses
 #: i18n/english/luasrc/i18n/admin-core.en.lua:326
 msgid "m_n_d_numleases"
-msgstr ""
+msgstr "Số của địa chỉ lease"
 
 #. Routing table
 #: i18n/english/luasrc/i18n/admin-core.en.lua:327
 msgid "routingtable"
-msgstr ""
+msgstr "Routing table"
 
 #. Wifi scan
 #: i18n/english/luasrc/i18n/admin-core.en.lua:328
 msgid "wlanscan"
-msgstr ""
+msgstr "Wifi scan"
 
 #. Frequency
 #: i18n/english/luasrc/i18n/admin-core.en.lua:329
 msgid "frequency"
-msgstr ""
+msgstr "Tần số"
 
 #. Power
 #: i18n/english/luasrc/i18n/admin-core.en.lua:330
 msgid "power"
-msgstr ""
+msgstr "Power"
 
 #. Noise
 #: i18n/english/luasrc/i18n/admin-core.en.lua:331
 msgid "noise"
-msgstr ""
+msgstr "Noise"
 
 #. Signal
 #: i18n/english/luasrc/i18n/admin-core.en.lua:332
 msgid "signal"
-msgstr ""
+msgstr "Signal"
 
 #. Link
 #: i18n/english/luasrc/i18n/admin-core.en.lua:333
 msgid "link"
-msgstr ""
+msgstr "Link"
 
 #. <abbr title=\"Fragmentation\">Frag.</abbr>
 #: i18n/english/luasrc/i18n/admin-core.en.lua:334
 msgid "frag"
-msgstr ""
+msgstr "<abbr title=\"Fragmentation\">Frag.</abbr>"
 
 #. <abbr title=\"Request To Send\">RTS</abbr>
 #: i18n/english/luasrc/i18n/admin-core.en.lua:335
 msgid "rts"
-msgstr ""
+msgstr "<abbr title=\"Request To Send\">RTS</abbr>"
 
 #. Bitrate
 #: i18n/english/luasrc/i18n/admin-core.en.lua:336
 msgid "bitrate"
-msgstr ""
+msgstr "Bitrate"
 
 #. automatically reconnect
 #: i18n/english/luasrc/i18n/admin-core.en.lua:337
 msgid "m_n_keepalive"
-msgstr ""
+msgstr "Tự động kết nối lại"
 
 #. disconnect when idle for
 #: i18n/english/luasrc/i18n/admin-core.en.lua:338
 msgid "m_n_dialondemand"
-msgstr ""
+msgstr "Ngừng kết nối khi idle cho"
 
 #. <abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server
 #: i18n/english/luasrc/i18n/admin-core.en.lua:339
 msgid "m_n_pptp_server"
-msgstr ""
+msgstr "<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"
 
 #. <abbr title=\"Light Emitting Diode\">LED</abbr> Configuration
 #: i18n/english/luasrc/i18n/admin-core.en.lua:340
 msgid "leds"
-msgstr ""
+msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
 
 #. Customizes the behaviour of the device <abbr title=\"Light Emitting Diode\">LED</abbr>s if possible.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:341
 msgid "leds_desc"
 msgstr ""
+"Tùy chỉnh chế độ của thiết bị <abbr title=\"Light Emitting Diode\">LED</abbr>s "
+"nếu có thể."
 
 #. <abbr title=\"Light Emitting Diode\">LED</abbr> Name
 #: i18n/english/luasrc/i18n/admin-core.en.lua:342
 msgid "system_led_name"
-msgstr ""
+msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Name"
 
 #. <abbr title=\"Light Emitting Diode\">LED</abbr> Device
 #: i18n/english/luasrc/i18n/admin-core.en.lua:343
 msgid "system_led_sysfs"
-msgstr ""
+msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Device"
 
 #. Default state
 #: i18n/english/luasrc/i18n/admin-core.en.lua:344
 msgid "system_led_default"
-msgstr ""
+msgstr "Tình trạng mặc định"
 
 #. ticked = on
 #: i18n/english/luasrc/i18n/admin-core.en.lua:345
 msgid "system_led_default_desc"
-msgstr ""
+msgstr "ticked = on"
 
 #. Trigger
 #: i18n/english/luasrc/i18n/admin-core.en.lua:346
 msgid "system_led_trigger"
-msgstr ""
+msgstr "Trigger"
 
 #. None
 #: i18n/english/luasrc/i18n/admin-core.en.lua:347
 msgid "system_led_trigger_none"
-msgstr ""
+msgstr "None"
 
 #. Default On
 #: i18n/english/luasrc/i18n/admin-core.en.lua:348
 msgid "system_led_trigger_defaulton"
-msgstr ""
+msgstr "Mặc định trên"
 
 #. Timer
 #: i18n/english/luasrc/i18n/admin-core.en.lua:349
 msgid "system_led_trigger_timer"
-msgstr ""
+msgstr "Timer"
 
 #. Heartbeat (Load Average)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:350
 msgid "system_led_trigger_heartbeat"
-msgstr ""
+msgstr "Heartbeat (Load Average)"
 
 #. Network Device
 #: i18n/english/luasrc/i18n/admin-core.en.lua:351
 msgid "system_led_trigger_netdev"
-msgstr ""
+msgstr "Network Device"
 
 #. Off-State Delay
 #: i18n/english/luasrc/i18n/admin-core.en.lua:352
 msgid "system_led_delayoff"
-msgstr ""
+msgstr "Off-State Delay"
 
 #. Time (in ms) the <abbr title=\"Light Emitting Diode\">LED</abbr> is off
 #: i18n/english/luasrc/i18n/admin-core.en.lua:353
 msgid "system_led_delayoff_desc"
 msgstr ""
+"Thời gian (in ms) the <abbr title=\"Light Emitting Diode\">LED</abbr> thì off"
 
 #. On-State Delay
 #: i18n/english/luasrc/i18n/admin-core.en.lua:354
 msgid "system_led_delayon"
-msgstr ""
+msgstr "On-State Delay"
 
 #. Time (in ms) the <abbr title=\"Light Emitting Diode\">LED</abbr> is on
 #: i18n/english/luasrc/i18n/admin-core.en.lua:355
 msgid "system_led_delayon_desc"
 msgstr ""
+"Thời gian (in ms) the <abbr title=\"Light Emitting Diode\">LED</abbr> thì on"
 
 #. Device
 #: i18n/english/luasrc/i18n/admin-core.en.lua:356
 msgid "system_led_dev"
-msgstr ""
+msgstr "Thiết bị"
 
 #. Trigger Mode
 #: i18n/english/luasrc/i18n/admin-core.en.lua:357
 msgid "system_led_mode"
-msgstr ""
+msgstr "Chế độ trigger"
 
 #. Link On
 #: i18n/english/luasrc/i18n/admin-core.en.lua:358
 msgid "system_led_mode_link"
-msgstr ""
+msgstr "Link On"
 
 #. Transmit
 #: i18n/english/luasrc/i18n/admin-core.en.lua:359
 msgid "system_led_mode_tx"
-msgstr ""
+msgstr "Transmit"
 
 #. Receive
 #: i18n/english/luasrc/i18n/admin-core.en.lua:360
 msgid "system_led_mode_rx"
-msgstr ""
+msgstr "Receive"
 
 #. Active
 #: i18n/english/luasrc/i18n/admin-core.en.lua:361
 msgid "network_interface_up"
-msgstr ""
+msgstr "Active"
 
 #. <abbr title=\"Media Access Control\">MAC</abbr>-Address
 #: i18n/english/luasrc/i18n/admin-core.en.lua:362
 msgid "network_interface_hwaddr"
-msgstr ""
+msgstr "<abbr title=\"Media Access Control\">MAC</abbr>-Address"
 
 #. Hardware Address
 #: i18n/english/luasrc/i18n/admin-core.en.lua:363
 msgid "network_interface_hwaddr_desc"
-msgstr ""
+msgstr "Địa chỉ phần cứng"
 
 #. Traffic
 #: i18n/english/luasrc/i18n/admin-core.en.lua:364
 msgid "network_interface_txrx"
-msgstr ""
+msgstr "Lưu thông"
 
 #. transmitted / received
 #: i18n/english/luasrc/i18n/admin-core.en.lua:365
 msgid "network_interface_txrx_desc"
-msgstr ""
+msgstr "Đã truyền/ đã nhận"
 
 #. Errors
 #: i18n/english/luasrc/i18n/admin-core.en.lua:366
 msgid "network_interface_err"
-msgstr ""
+msgstr "Lỗi"
 
 #. TX / RX
 #: i18n/english/luasrc/i18n/admin-core.en.lua:367
 msgid "network_interface_err_desc"
-msgstr ""
+msgstr "TX / RX"
 
 #. Create / Assign firewall-zone
 #: i18n/english/luasrc/i18n/admin-core.en.lua:368
 msgid "network_interface_fwzone"
-msgstr ""
+msgstr "Tạo/ gán firewall-zone"
 
 #. This interface does not belong to any firewall zone yet.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:369
 msgid "network_interface_fwzone_desc"
-msgstr ""
+msgstr "Giao diện này chưa thuộc về bất kỳ firewall zone nào."
 
 #. Processes
 #: i18n/english/luasrc/i18n/admin-core.en.lua:370
 msgid "process_head"
-msgstr ""
+msgstr "Processes"
 
 #. This list gives an overview over currently running system processes and their status.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:371
 msgid "process_descr"
 msgstr ""
+"List này đưa ra một tầm nhìn tổng quát về xử lý hệ thống đang chạy và tình "
+"trạng của chúng."
 
 #. PID
 #: i18n/english/luasrc/i18n/admin-core.en.lua:372
 msgid "process_pid"
-msgstr ""
+msgstr "PID"
 
 #. Owner
 #: i18n/english/luasrc/i18n/admin-core.en.lua:373
 msgid "process_owner"
-msgstr ""
+msgstr "Owner"
 
 #. Command
 #: i18n/english/luasrc/i18n/admin-core.en.lua:374
 msgid "process_command"
-msgstr ""
+msgstr "Lệnh"
 
 #. CPU usage (%)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:375
 msgid "process_cpu"
-msgstr ""
+msgstr "CPU usage (%)"
 
 #. Memory usage (%)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:376
 msgid "process_mem"
-msgstr ""
+msgstr "Memory usage (%)"
 
 #. Hang Up
 #: i18n/english/luasrc/i18n/admin-core.en.lua:377
 msgid "process_hup"
-msgstr ""
+msgstr "Hang Up"
 
 #. Terminate
 #: i18n/english/luasrc/i18n/admin-core.en.lua:378
 msgid "process_term"
-msgstr ""
+msgstr "Terminate"
 
 #. Kill
 #: i18n/english/luasrc/i18n/admin-core.en.lua:379
 msgid "process_kill"
-msgstr ""
+msgstr "Kill"
 
 #. cached
 #: i18n/english/luasrc/i18n/admin-core.en.lua:380
 msgid "mem_cached"
-msgstr ""
+msgstr "cached"
 
 #. buffered
 #: i18n/english/luasrc/i18n/admin-core.en.lua:381
 msgid "mem_buffered"
-msgstr ""
+msgstr "buffered"
 
 #. free
 #: i18n/english/luasrc/i18n/admin-core.en.lua:382
 msgid "mem_free"
-msgstr ""
+msgstr "free"
 
 #. Scheduled Tasks
 #: i18n/english/luasrc/i18n/admin-core.en.lua:383
 msgid "a_s_crontab"
-msgstr ""
+msgstr "Scheduled Tasks"
 
 #. This is the system crontab in which scheduled tasks can be defined.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:384
 msgid "a_s_crontab1"
-msgstr ""
+msgstr "Đây là system crontab mà scheduled tasks có thể bị định nghĩa."
 
 #. NAS ID
 #: i18n/english/luasrc/i18n/admin-core.en.lua:385
-#, fuzzy
 msgid "a_w_nasid"
-msgstr "Tên mạng (<abbr title=\"Mở rộng dịch vụ đặt Identifier\">ESSID</abbr>)"
+msgstr "NAS ID"
 
 #. Path to CA-Certificate
 #: i18n/english/luasrc/i18n/admin-core.en.lua:386
 msgid "a_w_cacert"
-msgstr ""
+msgstr "Đường dẫn tới CA-Certificate"
 
 #. EAP-Method
 #: i18n/english/luasrc/i18n/admin-core.en.lua:387
 msgid "a_w_eaptype"
-msgstr ""
+msgstr "EAP-Method"
 
 #. Path to Private Key
 #: i18n/english/luasrc/i18n/admin-core.en.lua:388
 msgid "a_w_tlsprivkey"
-msgstr ""
+msgstr "Đường dẫn tới private key"
 
 #. Password of Private Key
 #: i18n/english/luasrc/i18n/admin-core.en.lua:389
 msgid "a_w_tlsprivkeypwd"
-msgstr ""
+msgstr "Mật mã của private key"
 
 #. Authentication
 #: i18n/english/luasrc/i18n/admin-core.en.lua:390
 msgid "a_w_peapauth"
-msgstr ""
+msgstr "Xác thực"
 
 #. Identity
 #: i18n/english/luasrc/i18n/admin-core.en.lua:391
 msgid "a_w_peapidentity"
-msgstr ""
+msgstr "Nhận dạng"
 
 #. Password
 #: i18n/english/luasrc/i18n/admin-core.en.lua:392
 msgid "a_w_peappassword"
-msgstr ""
+msgstr "Mật mã"
 
 #. Create Network
 #: i18n/english/luasrc/i18n/admin-core.en.lua:393
 msgid "a_w_create"
-msgstr ""
+msgstr "Tạo network"
 
 #. Hostnames
 #: i18n/english/luasrc/i18n/admin-core.en.lua:394
 msgid "hostnames"
-msgstr ""
+msgstr "Tên host"
 
 #. Host entries
 #: i18n/english/luasrc/i18n/admin-core.en.lua:395
 msgid "hostnames_entries"
-msgstr ""
+msgstr "Host entries"
 
 #. Hostname
 #: i18n/english/luasrc/i18n/admin-core.en.lua:396
 msgid "hostnames_hostname"
-msgstr ""
+msgstr "Tên host"
 
 #. IP address
 #: i18n/english/luasrc/i18n/admin-core.en.lua:397
 msgid "hostnames_address"
-msgstr ""
+msgstr "Địa chỉ IP"
 
 #. Clamp Segment Size
 #: i18n/english/luasrc/i18n/admin-core.en.lua:398
 msgid "m_n_mssfix"
-msgstr ""
+msgstr "Clamp Segment Size"
 
 #. Fixes problems with unreachable websites, submitting forms or other unexpected behaviour for some ISPs.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:399
 msgid "m_n_mssfix_desc"
 msgstr ""
+"Chỉnh sửa vấn đề với những website không tiếp cận được, trình form hoặc "
+"những hình thức bất ngờ cho một vài ISP."
 
 #. Flash Firmware
 #: i18n/english/luasrc/i18n/admin-core.en.lua:400
 msgid "admin_upgrade"
-msgstr ""
+msgstr "Phần cứng flash"
 
 #. The uploaded image file does not contain a supported format. Make sure that you choose the generic image format for your platform.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:401
 msgid "admin_upgrade_badimage"
 msgstr ""
+"Tập tin đang tải hình ảnh không bao gồm một hổ trợ format. Bảo đảm rằng bạn "
+"chọn một image format tổng quát cho platform."
 
 #. Checksum
 #: i18n/english/luasrc/i18n/admin-core.en.lua:402
 msgid "admin_upgrade_checksum"
-msgstr ""
+msgstr "Checksum"
 
 #. Upload an OpenWrt image file to reflash the device.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:403
 msgid "admin_upgrade_desc"
-msgstr ""
+msgstr "Tải một tập tin hình ảnh OpenWrt để reflash thiết bị."
 
 #. Size
 #: i18n/english/luasrc/i18n/admin-core.en.lua:404
 msgid "admin_upgrade_filesize"
-msgstr ""
+msgstr "Size"
 
 #. Firmware image
 #: i18n/english/luasrc/i18n/admin-core.en.lua:405
 msgid "admin_upgrade_fwimage"
-msgstr ""
+msgstr "HÌnh ảnh firmware"
 
 #. Keep configuration files
 #: i18n/english/luasrc/i18n/admin-core.en.lua:406
 msgid "admin_upgrade_keepcfg"
-msgstr ""
+msgstr "Giữ tập tin cấu hình"
 
 #. Sorry. OpenWrt does not support a system upgrade on this platform.<br /> You need to manually flash your device.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:407
 msgid "admin_upgrade_nosupport"
 msgstr ""
+"Xin lỗi. OpenWrt không hỗ trợ nâng cấp hệ thống trên platform này. <br /> "
+"Bạn cần tự flash thiết bị của bạn. "
 
 #. The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes until you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:408
 msgid "admin_upgrade_running"
 msgstr ""
+"Hệ thống bây giờ đang flashing.<br /> DO NOT POWER OFF THE DEVICE!<br /> Chờ "
+"một vài phút cho tới khi kết nối lại. Có thể cần phải làm mới địa chỉ của "
+"máy tính để tiếp cận thiết bị một lần nữa, phụ thuộc vào cài đặt của bạn. "
 
 #.  (%s available)
 #: i18n/english/luasrc/i18n/admin-core.en.lua:409
 msgid "admin_upgrade_spaceavail"
 msgstr ""
+"<span class=\"translation-space\"> </span>\n"
+"(%s available)"
 
 #. It appears that you try to flash an image that does not fit into the flash memory, please verify the image file!
 #: i18n/english/luasrc/i18n/admin-core.en.lua:410
 msgid "admin_upgrade_toolarge"
 msgstr ""
+"Dường như bạn cố gắng flash một hình ảnh không phù hợp với bộ nhớ flash, xin "
+"vui lòng xác minh các tập tin hình ảnh!"
 
 #. Upload image
 #: i18n/english/luasrc/i18n/admin-core.en.lua:411
 msgid "admin_upgrade_upload"
-msgstr ""
+msgstr "Tải hình ảnh"
 
 #. The flash image was uploaded. Below is the checksum and file size listed, compare them with the original file to ensure data integrity.<br /> Click \"Proceed\" below to start the flash procedure.
 #: i18n/english/luasrc/i18n/admin-core.en.lua:412
 msgid "admin_upgrade_uploaded"
 msgstr ""
+"Hình ảnh flash đã được tải. Dưới đây là checksum và dung lượng tập tin liệt "
+"kê, so sánh với những tập tin ban đầu để đảm bảo tính chính xác của dữ liệu. "
+"<br /> Click \"Proceed\" để bắt đầu những thủ tục flash. "
