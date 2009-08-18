@@ -16,6 +16,8 @@ require("luci.i18n")
 require("luci.util")
 require("luci.sys")
 require("luci.model.uci")
+require("luci.controller.luci_diag.smap_common")
+require("luci.controller.luci_diag.devinfo_common")
 
 local debug = false
 

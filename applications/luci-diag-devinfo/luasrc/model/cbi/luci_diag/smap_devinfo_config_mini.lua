@@ -12,6 +12,8 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
+require("luci.controller.luci_diag.devinfo_common")
+
 m = Map("luci_devinfo", translate("l_d_d_sdc_mini_smap_to_devinfo_config"), translate("l_d_d_sdc_mini_smap_to_devinfo_config_descr"))
 
 s = m:section(SimpleSection, "", translate("l_d_d_sdc_mini_use_config"))
