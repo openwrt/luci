@@ -15,7 +15,7 @@ IWINFO_OBJ        = src/iwinfo_wl.o src/iwinfo_madwifi.o src/iwinfo_wext.o src/i
 %.o: %.c
 	$(COMPILE) $(IWINFO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $< 
 
-ifeq ($(OS),Linux)
+ifeq ($(SDK),)
 compile: clean $(IWINFO_OBJ)
 	$(LINK) $(SHLIB_FLAGS) $(IWINFO_LDFLAGS) -o src/$(IWINFO_SO) $(IWINFO_OBJ)
 	mkdir -p dist$(LUA_LIBRARYDIR)
