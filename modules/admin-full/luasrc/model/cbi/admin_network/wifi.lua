@@ -19,6 +19,18 @@ arg[1] = arg[1] or ""
 
 m = Map("wireless", translate("networks"), translate("a_w_networks1"))
 
+
+local iw = nil
+local tx_powers = nil
+
+m.uci:foreach("wireless", "wifi-iface",
+	function(s)
+		if s.device == arg[1] and s.ifname and not iw then
+			iw = luci.sys.wifi.getiwinfo(s.ifname)
+			tx_powers = iw.txpwrlist or { }
+		end
+	end)
+
 s = m:section(NamedSection, arg[1], "wifi-device", translate("device") .. " " .. arg[1])
 s.addremove = false
 
@@ -57,14 +69,28 @@ end
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
-	s:taboption("general", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+	tp = s:taboption("general",
+		(#tx_powers > 0) and ListValue or Value,
+		"txpower", translate("a_w_txpwr"), "dBm")
+
+	tp.rmempty = true
+	for _, p in ipairs(iw.txpwrlist) do
+		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
+	end
 end
 
 
 ------------------- Madwifi Device ------------------
 
 if hwtype == "atheros" then
-	s:taboption("general", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+	tp = s:taboption("general",
+		(#tx_powers > 0) and ListValue or Value,
+		"txpower", translate("a_w_txpwr"), "dBm")
+
+	tp.rmempty = true
+	for _, p in ipairs(iw.txpwrlist) do
+		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
+	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("mode"))
 	mode:value("", translate("wifi_auto"))
@@ -102,7 +128,14 @@ end
 ------------------- Broadcom Device ------------------
 
 if hwtype == "broadcom" then
-	s:taboption("advanced", Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+	tp = s:taboption("general",
+		(#tx_powers > 0) and ListValue or Value,
+		"txpower", translate("a_w_txpwr"), "dBm")
+
+	tp.rmempty = true
+	for _, p in ipairs(iw.txpwrlist) do
+		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
+	end	
 
 	mp = s:taboption("macfilter", ListValue, "macfilter", translate("wifi_macpolicy"))
 	mp:value("", translate("disable"))
@@ -152,6 +185,14 @@ s:tab("advanced", translate("a_w_advanced", "Advanced Settings"))
 
 s:taboption("general", Value, "ssid", translate("wifi_essid"))
 
+mode = s:taboption("general", ListValue, "mode", translate("mode"))
+mode.override_values = true
+mode:value("ap", translate("a_w_ap"))
+mode:value("sta", translate("a_w_client"))
+mode:value("adhoc", translate("a_w_adhoc"))
+
+bssid = s:taboption("general", Value, "bssid", translate("wifi_bssid"))
+
 network = s:taboption("general", Value, "network", translate("network"), translate("a_w_network1"))
 network.rmempty = true
 network:value("")
@@ -172,15 +213,6 @@ function network.write(self, section, value)
 		end
 	end
 end
-
-
-mode = s:taboption("general", ListValue, "mode", translate("mode"))
-mode.override_values = true
-mode:value("ap", translate("a_w_ap"))
-mode:value("sta", translate("a_w_client"))
-mode:value("adhoc", translate("a_w_adhoc"))
-
-bssid = s:taboption("general", Value, "bssid", translate("wifi_bssid"))
 
 
 -------------------- MAC80211 Interface ----------------------
