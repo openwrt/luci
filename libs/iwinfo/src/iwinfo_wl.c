@@ -366,6 +366,24 @@ int wl_get_assoclist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int wl_get_txpwrlist(const char *ifname, char *buf, int *len)
+{
+	struct iwinfo_txpwrlist_entry entry;
+	uint8_t dbm[8] = { 0, 6, 8, 10, 12, 14, 16, 18 };
+	uint8_t mw[8]  = { 1, 3, 6, 10, 15, 25, 39, 63 };
+	int i;
+
+	for( i = 0; i < 8; i++ )
+	{
+		entry.dbm = dbm[i];
+		entry.mw  = mw[i];
+		memcpy(&buf[i*sizeof(entry)], &entry, sizeof(entry));
+	}
+
+	*len = 8 * sizeof(entry);
+	return 0;
+}
+
 int wl_get_mbssid_support(const char *ifname, int *buf)
 {
 	wlc_rev_info_t revinfo;

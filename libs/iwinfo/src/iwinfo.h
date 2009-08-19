@@ -29,5 +29,10 @@ struct iwinfo_assoclist_entry {
 	int8_t noise;
 };
 
+struct iwinfo_txpwrlist_entry {
+	uint8_t	dbm;
+	uint8_t	mw;
+};
+
 #endif
 

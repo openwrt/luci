@@ -398,6 +398,11 @@ int madwifi_get_assoclist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len)
+{
+	return wext_get_txpwrlist(ifname, buf, len);
+}
+
 int madwifi_get_mbssid_support(const char *ifname, int *buf)
 {
 	/* We assume that multi bssid is always possible */

@@ -66,5 +66,12 @@
 			type##_get_assoclist);						\
 	}
 
+#define LUA_WRAP_TXPWRLIST(type)						\
+	static int iwinfo_L_##type##_txpwrlist(lua_State *L)\
+	{													\
+		return iwinfo_L_txpwrlist(L,					\
+			type##_get_txpwrlist);						\
+	}
+
 #endif
 

@@ -75,6 +75,39 @@ static int iwinfo_L_assoclist(lua_State *L, int (*func)(const char *, char *, in
 	return 1;
 }
 
+/* Wrapper for tx power list */
+static int iwinfo_L_txpwrlist(lua_State *L, int (*func)(const char *, char *, int *))
+{
+	int i, x, len;
+	char rv[IWINFO_BUFSIZE];
+	const char *ifname = luaL_checkstring(L, 1);
+	struct iwinfo_txpwrlist_entry *e;
+
+	lua_newtable(L);
+	memset(rv, 0, sizeof(rv));
+
+	if( !(*func)(ifname, rv, &len) )
+	{
+		for( i = 0, x = 1; i < len; i += sizeof(struct iwinfo_txpwrlist_entry), x++ )
+		{
+			e = (struct iwinfo_txpwrlist_entry *) &rv[i];
+
+			lua_pushinteger(L, x);
+			lua_newtable(L);
+
+			lua_pushnumber(L, e->mw);
+			lua_setfield(L, -2, "mw");
+			
+			lua_pushnumber(L, e->dbm);
+			lua_setfield(L, -2, "dbm");
+
+			lua_settable(L, -3);
+		}
+	}
+
+	return 1;
+}
+
 /* Broadcom */
 LUA_WRAP_INT(wl,channel)
 LUA_WRAP_INT(wl,frequency)
@@ -89,6 +122,7 @@ LUA_WRAP_STRING(wl,ssid)
 LUA_WRAP_STRING(wl,bssid)
 LUA_WRAP_STRING(wl,enctype)
 LUA_WRAP_ASSOCLIST(wl)
+LUA_WRAP_TXPWRLIST(wl)
 
 /* Madwifi */
 LUA_WRAP_INT(madwifi,channel)
@@ -104,6 +138,7 @@ LUA_WRAP_STRING(madwifi,ssid)
 LUA_WRAP_STRING(madwifi,bssid)
 LUA_WRAP_STRING(madwifi,enctype)
 LUA_WRAP_ASSOCLIST(madwifi)
+LUA_WRAP_TXPWRLIST(madwifi)
 
 /* Wext */
 LUA_WRAP_INT(wext,channel)
@@ -119,6 +154,7 @@ LUA_WRAP_STRING(wext,ssid)
 LUA_WRAP_STRING(wext,bssid)
 LUA_WRAP_STRING(wext,enctype)
 LUA_WRAP_ASSOCLIST(wext)
+LUA_WRAP_TXPWRLIST(wext)
 
 /* Broadcom table */
 static const luaL_reg R_wl[] = {
@@ -134,6 +170,7 @@ static const luaL_reg R_wl[] = {
 	LUA_REG(wl,bssid),
 	LUA_REG(wl,enctype),
 	LUA_REG(wl,assoclist),
+	LUA_REG(wl,txpwrlist),
 	LUA_REG(wl,mbssid_support),
 	{ NULL, NULL }
 };
@@ -152,6 +189,7 @@ static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,bssid),
 	LUA_REG(madwifi,enctype),
 	LUA_REG(madwifi,assoclist),
+	LUA_REG(madwifi,txpwrlist),
 	LUA_REG(madwifi,mbssid_support),
 	{ NULL, NULL }
 };
@@ -170,6 +208,7 @@ static const luaL_reg R_wext[] = {
 	LUA_REG(wext,bssid),
 	LUA_REG(wext,enctype),
 	LUA_REG(wext,assoclist),
+	LUA_REG(wext,txpwrlist),
 	LUA_REG(wext,mbssid_support),
 	{ NULL, NULL }
 };

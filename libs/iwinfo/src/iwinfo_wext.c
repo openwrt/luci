@@ -22,6 +22,8 @@
 #include "iwinfo.h"
 #include "iwinfo_wext.h"
 
+#define LOG10_MAGIC	1.25892541179
+
 static int ioctl_socket = -1;
 
 static double wext_freq2float(const struct iw_freq *in)
@@ -48,6 +50,39 @@ static int wext_freq2mhz(const struct iw_freq *in)
 
 		return (int)(mhz / 100000);
 	}
+}
+
+static int wext_dbm2mw(int in)
+{
+	double res = 1.0;
+	int ip = in / 10;
+	int fp = in % 10;
+	int k;
+
+	for(k = 0; k < ip; k++) res *= 10;
+	for(k = 0; k < fp; k++) res *= LOG10_MAGIC;
+
+	return (int)res;
+}
+
+static int wext_mw2dbm(int in)
+{
+	double fin = (double) in;
+	int res = 0;
+
+	while(fin > 10.0)
+	{
+		res += 10;
+		fin /= 10.0;
+	}
+
+	while(fin > 1.000001)
+	{
+		res += 1;
+		fin /= LOG10_MAGIC;
+	}
+
+	return res;
 }
 
 static int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
@@ -295,6 +330,44 @@ int wext_get_assoclist(const char *ifname, char *buf, int *len)
 {
 	/* Stub */
 	return -1;
+}
+
+int wext_get_txpwrlist(const char *ifname, char *buf, int *len)
+{
+	struct iwreq wrq;
+	struct iw_range range;
+	struct iwinfo_txpwrlist_entry entry;
+	int i;
+
+	wrq.u.data.pointer = (caddr_t) &range;
+	wrq.u.data.length  = sizeof(struct iw_range);
+	wrq.u.data.flags   = 0;
+
+	if( (wext_ioctl(ifname, SIOCGIWRANGE, &wrq) >= 0) &&
+	    (range.num_txpower > 0) && (range.num_txpower <= IW_MAX_TXPOWER) &&
+	    !(range.txpower_capa & IW_TXPOW_RELATIVE)
+	) {
+		for( i = 0; i < range.num_txpower; i++ )
+		{
+			if( range.txpower_capa & IW_TXPOW_MWATT )
+			{
+				entry.dbm = wext_mw2dbm(range.txpower[i]);
+				entry.mw  = range.txpower[i];
+			}
+			else
+			{
+				entry.dbm = range.txpower[i];
+				entry.mw  = wext_dbm2mw(range.txpower[i]);
+			}
+
+			memcpy(&buf[i*sizeof(entry)], &entry, sizeof(entry));
+		}
+
+		*len = i * sizeof(entry);
+		return 0;
+	}
+
+	return -1;	
 }
 
 int wext_get_mbssid_support(const char *ifname, int *buf)

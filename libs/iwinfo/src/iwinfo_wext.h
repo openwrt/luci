@@ -35,6 +35,7 @@ int wext_get_quality(const char *ifname, int *buf);
 int wext_get_quality_max(const char *ifname, int *buf);
 int wext_get_enctype(const char *ifname, char *buf);
 int wext_get_assoclist(const char *ifname, char *buf, int *len);
+int wext_get_txpwrlist(const char *ifname, char *buf, int *len);
 int wext_get_mbssid_support(const char *ifname, int *buf);
 
 #endif
