@@ -54,6 +54,19 @@ function dummy.assoclist()
 	return {}
 end
 
+function dummy.txpwrlist()
+	return {
+		{ dbm = 0, mw = 1 },
+		{ dbm = 6, mw = 3 },
+		{ dbm = 8, mw = 6 },
+		{ dbm = 10, mw = 10 },
+		{ dbm = 12, mw = 15 },
+		{ dbm = 14, mw = 25 },
+		{ dbm = 16, mw = 39 },
+		{ dbm = 18, mw = 63 }
+	}
+end
+
 function dummy.mbssid_support()
 	return 1
 end
