@@ -197,7 +197,7 @@ end
 ----------------------- Interface -----------------------
 
 s = m:section(TypedSection, "wifi-iface", translate("interfaces"))
-s.addremove = true
+s.addremove = (iw and iw.mbssid_support) and true or false
 s.anonymous = true
 s:depends("device", arg[1])
 s.defaults.device = arg[1]
