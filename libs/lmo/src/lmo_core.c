@@ -207,8 +207,12 @@ int lmo_lookup(lmo_archive_t *ar, const char *key, char *dest, int len)
 {
 	uint32_t look_key = sfh_hash(key, strlen(key));
 	int copy_len = -1;
+	lmo_entry_t *entry;
 
-	lmo_entry_t *entry = ar->index;
+	if( !ar )
+		return copy_len;
+
+	entry = ar->index;
 
 	while( entry != NULL )
 	{
