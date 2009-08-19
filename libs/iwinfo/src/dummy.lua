@@ -53,3 +53,7 @@ end
 function dummy.assoclist()
 	return {}
 end
+
+function dummy.mbssid_support()
+	return 1
+end
