@@ -59,18 +59,10 @@
 		return 1;										\
 	}
 
-#define LUA_WRAP_ASSOCLIST(type)						\
-	static int iwinfo_L_##type##_assoclist(lua_State *L)\
+#define LUA_WRAP_LIST(type,op)							\
+	static int iwinfo_L_##type##_##op(lua_State *L)		\
 	{													\
-		return iwinfo_L_assoclist(L,					\
-			type##_get_assoclist);						\
-	}
-
-#define LUA_WRAP_TXPWRLIST(type)						\
-	static int iwinfo_L_##type##_txpwrlist(lua_State *L)\
-	{													\
-		return iwinfo_L_txpwrlist(L,					\
-			type##_get_txpwrlist);						\
+		return iwinfo_L_##op(L, type##_get_##op);		\
 	}
 
 #endif

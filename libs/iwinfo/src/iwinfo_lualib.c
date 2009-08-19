@@ -92,7 +92,6 @@ static int iwinfo_L_txpwrlist(lua_State *L, int (*func)(const char *, char *, in
 		{
 			e = (struct iwinfo_txpwrlist_entry *) &rv[i];
 
-			lua_pushinteger(L, x);
 			lua_newtable(L);
 
 			lua_pushnumber(L, e->mw);
@@ -101,7 +100,7 @@ static int iwinfo_L_txpwrlist(lua_State *L, int (*func)(const char *, char *, in
 			lua_pushnumber(L, e->dbm);
 			lua_setfield(L, -2, "dbm");
 
-			lua_settable(L, -3);
+			lua_rawseti(L, -2, x);
 		}
 	}
 
@@ -121,8 +120,8 @@ LUA_WRAP_STRING(wl,mode)
 LUA_WRAP_STRING(wl,ssid)
 LUA_WRAP_STRING(wl,bssid)
 LUA_WRAP_STRING(wl,enctype)
-LUA_WRAP_ASSOCLIST(wl)
-LUA_WRAP_TXPWRLIST(wl)
+LUA_WRAP_LIST(wl,assoclist)
+LUA_WRAP_LIST(wl,txpwrlist)
 
 /* Madwifi */
 LUA_WRAP_INT(madwifi,channel)
@@ -137,8 +136,8 @@ LUA_WRAP_STRING(madwifi,mode)
 LUA_WRAP_STRING(madwifi,ssid)
 LUA_WRAP_STRING(madwifi,bssid)
 LUA_WRAP_STRING(madwifi,enctype)
-LUA_WRAP_ASSOCLIST(madwifi)
-LUA_WRAP_TXPWRLIST(madwifi)
+LUA_WRAP_LIST(madwifi,assoclist)
+LUA_WRAP_LIST(madwifi,txpwrlist)
 
 /* Wext */
 LUA_WRAP_INT(wext,channel)
@@ -153,8 +152,8 @@ LUA_WRAP_STRING(wext,mode)
 LUA_WRAP_STRING(wext,ssid)
 LUA_WRAP_STRING(wext,bssid)
 LUA_WRAP_STRING(wext,enctype)
-LUA_WRAP_ASSOCLIST(wext)
-LUA_WRAP_TXPWRLIST(wext)
+LUA_WRAP_LIST(wext,assoclist)
+LUA_WRAP_LIST(wext,txpwrlist)
 
 /* Broadcom table */
 static const luaL_reg R_wl[] = {
