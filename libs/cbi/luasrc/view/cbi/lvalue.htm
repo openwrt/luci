@@ -25,7 +25,7 @@ $Id$
 	c = c + 1
 %>
 	<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%= attr("id", cbid..c) .. attr("name", cbid) .. attr("value", key) .. ifattr(self:cfgvalue(section) == key, "checked", "checked") %> />
-	<label<%= attr("for", cbid..c) %>><%=self.vallist[i]%></label><br />
+	<label<%= attr("for", cbid..c) %>><%=self.vallist[i]%></label>
 <% if c == self.size then c = 0 %><br />
 <% end end %>
 <% end %>
