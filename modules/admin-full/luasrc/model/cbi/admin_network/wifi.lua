@@ -105,8 +105,20 @@ if hwtype == "atheros" then
 	s:taboption("advanced", Flag, "diversity", translate("wifi_diversity")).rmempty = false
 
 	if not nsantenna then
-		s:taboption("advanced", Value, "txantenna", translate("wifi_txantenna"))
-		s:taboption("advanced", Value, "rxantenna", translate("wifi_rxantenna"))
+		ant1 = s:taboption("advanced", ListValue, "txantenna", translate("wifi_txantenna"))
+		ant1.widget = "radio"
+		ant1:depends("diversity", "")
+		ant1:value("0", translate("wifi_auto"))
+		ant1:value("1", translate("wifi_ant1", "Antenna 1"))
+		ant1:value("2", translate("wifi_ant2", "Antenna 2"))
+
+		ant2 = s:taboption("advanced", ListValue, "rxantenna", translate("wifi_rxantenna"))
+		ant2.widget = "radio"
+		ant2:depends("diversity", "")
+		ant2:value("0", translate("wifi_auto"))
+		ant2:value("1", translate("wifi_ant1", "Antenna 1"))
+		ant2:value("2", translate("wifi_ant2", "Antenna 2"))
+
 	else -- NanoFoo
 		local ant = s:taboption("advanced", ListValue, "antenna", translate("wifi_txantenna"))
 		ant:value("auto")
@@ -114,6 +126,7 @@ if hwtype == "atheros" then
 		ant:value("horizontal")
 		ant:value("external")
 	end
+
 	s:taboption("advanced", Value, "distance", translate("wifi_distance"),
 		translate("wifi_distance_desc"))
 	s:taboption("advanced", Value, "regdomain", translate("wifi_regdomain"))
@@ -145,8 +158,19 @@ if hwtype == "broadcom" then
 	ml:depends({macfilter="allow"})
 	ml:depends({macfilter="deny"})
 
-	s:taboption("advanced", Value, "txantenna", translate("wifi_txantenna"))
-	s:taboption("advanced", Value, "rxantenna", translate("wifi_rxantenna"))
+	ant1 = s:taboption("advanced", ListValue, "txantenna", translate("wifi_txantenna"))
+	ant1.widget = "radio"
+	ant1:depends("diversity", "")
+	ant1:value("3", translate("wifi_auto"))
+	ant1:value("0", translate("wifi_ant1", "Antenna 1"))
+	ant1:value("1", translate("wifi_ant2", "Antenna 2"))
+
+	ant2 = s:taboption("advanced", ListValue, "rxantenna", translate("wifi_rxantenna"))
+	ant2.widget = "radio"
+	ant2:depends("diversity", "")
+	ant2:value("3", translate("wifi_auto"))
+	ant2:value("0", translate("wifi_ant1", "Antenna 1"))
+	ant2:value("1", translate("wifi_ant2", "Antenna 2"))
 
 	s:taboption("advanced", Flag, "frameburst", translate("wifi_bursting"))
 
