@@ -12,22 +12,24 @@ all: build
 build: gccbuild luabuild
 
 gccbuild:
-	make -C libs/lmo CC="cc" CFLAGS="" LDFLAGS="" host-install
+	make -C libs/lmo CC="cc" CFLAGS="" LDFLAGS="" SDK="$(shell test -f .running-sdk && echo 1)" host-install
 	for i in $(MODULES); do \
-		make -C$$i compile || { \
+		make -C$$i SDK="$(shell test -f .running-sdk && echo 1)" compile || { \
 			echo "*** Compilation of $$i failed!"; \
 			exit 1; \
 		}; \
 	done
 
 luabuild: i18nbuild
-	for i in $(MODULES); do HOST=$(realpath host) make -C$$i luabuild; done
+	for i in $(MODULES); do HOST=$(realpath host) \
+		SDK="$(shell test -f .running-sdk && echo 1)" make -C$$i luabuild; done
 
 i18nbuild:
 	mkdir -p host/lua-po
 	./build/i18n-po2lua.pl ./po host/lua-po
 
 clean:
+	rm -f .running-sdk
 	rm -rf docs
 	make -C libs/lmo host-clean
 	for i in $(MODULES); do make -C$$i clean; done
@@ -48,7 +50,10 @@ hostcopy:
 	ln -s .$(LUCI_MODULEDIR) host/luci
 	rm -rf /tmp/luci-* || true
 
-hostenv: host ucidefaults
+hostenv: sdk host ucidefaults
+
+sdk:
+	touch .running-sdk
 
 ucidefaults:
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-freifunk-*"
