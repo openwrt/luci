@@ -218,8 +218,9 @@ int lmo_lookup(lmo_archive_t *ar, const char *key, char *dest, int len)
 	{
 		if( entry->key_id == look_key )
 		{
-			copy_len = (len > entry->length) ? entry->length : len;
+			copy_len = ((len - 1) > entry->length) ? entry->length : (len - 1);
 			memcpy(dest, &ar->mmap[entry->offset], copy_len);
+			data[copy_len] = '\0';
 
 			break;
 		}
