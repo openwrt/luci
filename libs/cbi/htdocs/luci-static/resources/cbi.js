@@ -235,6 +235,7 @@ function cbi_t_add(section, tab) {
 function cbi_t_switch(section, tab) {
 	if( cbi_t[section] && cbi_t[section][tab] ) {
 		var o = cbi_t[section][tab];
+		var h = document.getElementById('tab.' + section);
 		for( var tid in cbi_t[section] ) {
 			var o2 = cbi_t[section][tid];
 			if( o.tab.id != o2.tab.id ) {
@@ -242,6 +243,7 @@ function cbi_t_switch(section, tab) {
 				o2.container.style.display = 'none';
 			}
 			else {
+				if(h) h.value = tab;
 				o2.tab.className = o2.tab.className.replace(/(^| )cbi-tab-disabled( |$)/, " cbi-tab ");
 				o2.container.style.display = 'block';
 			}
