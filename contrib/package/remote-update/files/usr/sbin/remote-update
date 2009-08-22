@@ -8,8 +8,11 @@ local NL='
 
 find_architecture()
 {
-	opkg list_installed 'base-files-*' | \
-		sed -ne 's/base-files-\([^ ]\+\).*/\1/p'
+	local ifs="$IFS"; IFS="-"
+	set -- $(opkg list_installed kernel)
+	IFS="$ifs"
+
+	echo "$3"
 }
 
 find_image()
