@@ -47,6 +47,9 @@ struct iwinfo_scanlist_entry {
 	uint8_t ssid[IW_ESSID_MAX_SIZE+1];
 	uint8_t mode[8];
 	uint8_t channel;
+	uint8_t signal;
+	uint8_t quality;
+	uint8_t quality_max;
 	struct iwinfo_crypto_entry crypto;
 };
 

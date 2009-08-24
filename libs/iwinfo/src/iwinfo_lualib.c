@@ -150,6 +150,16 @@ static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int
 			lua_pushstring(L, (char *) e->mode);
 			lua_setfield(L, -2, "mode");
 
+			/* Quality, Signal */
+			lua_pushinteger(L, e->quality);
+			lua_setfield(L, -2, "quality");
+
+			lua_pushinteger(L, e->quality_max);
+			lua_setfield(L, -2, "quality_max");
+
+			lua_pushnumber(L, (e->signal - 0x100));
+			lua_setfield(L, -2, "signal");
+
 			/* Crypto */
 			lua_pushinteger(L, e->crypto.wpa_version);
 			lua_setfield(L, -2, "wpa");

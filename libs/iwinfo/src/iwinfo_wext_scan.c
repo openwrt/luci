@@ -411,6 +411,11 @@ static inline int wext_fill_entry(struct stream_descr *stream, struct iw_event *
 			e->crypto.enabled = !(event->u.data.flags & IW_ENCODE_DISABLED);
 			break;
 
+		case IWEVQUAL:
+			e->signal = event->u.qual.level;
+			e->quality = event->u.qual.qual;
+			e->quality_max = iw_range->max_qual.qual;
+			break;
 #if 0
 		case SIOCGIWRATE:
 			if(state->val_index == 0)
