@@ -284,20 +284,23 @@ static inline void wext_fill_wpa(unsigned char *iebuf, int buflen, struct iwinfo
 
 	if(ielen < (offset + 4))
 	{
-		ce->group_ciphers[2] = 1; /* TKIP */
+		ce->group_ciphers |= (1<<2); /* TKIP */
+		ce->pair_ciphers  |= (1<<2); /* TKIP */
+		ce->auth_suites   |= (1<<2); /* PSK */
 		return;
 	}
 
 	if(memcmp(&iebuf[offset], wpa_oui, 3) != 0)
-		ce->group_ciphers[7] = 1; /* Proprietary */
+		ce->group_ciphers |= (1<<7); /* Proprietary */
 	else
-		ce->group_ciphers[iebuf[offset+3]] = 1;
+		ce->group_ciphers |= (1<<iebuf[offset+3]);
 
 	offset += 4;
 
 	if(ielen < (offset + 2))
 	{
-		ce->pair_ciphers[2] = 1; /* TKIP */
+		ce->pair_ciphers |= (1<<2); /* TKIP */
+		ce->auth_suites  |= (1<<2); /* PSK */
 		return;
 	}
 
@@ -312,9 +315,9 @@ static inline void wext_fill_wpa(unsigned char *iebuf, int buflen, struct iwinfo
 	for(i = 0; i < cnt; i++)
 	{
 		if(memcmp(&iebuf[offset], wpa_oui, 3) != 0)
-			ce->pair_ciphers[7] = 1; /* Proprietary */
+			ce->pair_ciphers |= (1<<7); /* Proprietary */
 		else if(iebuf[offset+3] <= IW_IE_CYPHER_NUM)
-			ce->pair_ciphers[iebuf[offset+3]] = 1;
+			ce->pair_ciphers |= (1<<iebuf[offset+3]);
 		//else
 		//	ce->pair_ciphers[ce->pair_cipher_num++] = 255; /* Unknown */
 
@@ -336,9 +339,9 @@ static inline void wext_fill_wpa(unsigned char *iebuf, int buflen, struct iwinfo
 	for(i = 0; i < cnt; i++)
 	{
 		if(memcmp(&iebuf[offset], wpa_oui, 3) != 0)
-			ce->auth_suites[7] = 1; /* Proprietary */
+			ce->auth_suites |= (1<<7); /* Proprietary */
 		else if(iebuf[offset+3] <= IW_IE_KEY_MGMT_NUM)
-			ce->auth_suites[iebuf[offset+3]] = 1;
+			ce->auth_suites |= (1<<iebuf[offset+3]);
 		//else
 		//	ce->auth_suites[ce->auth_suite_num++] = 255; /* Unknown */
 
@@ -467,7 +470,7 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 	struct timeval tv;             /* Select timeout */
 	int timeout = 15000000;     /* 15s */
 
-	int _len = 0;
+	int entrylen = 0;
 	struct iwinfo_scanlist_entry e;
 
 	//IWINFO_BUFSIZE
@@ -610,10 +613,10 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 							{
 								first = 0;
 							}
-							else if( (_len + sizeof(struct iwinfo_scanlist_entry)) <= IWINFO_BUFSIZE )
+							else if( (entrylen + sizeof(struct iwinfo_scanlist_entry)) <= IWINFO_BUFSIZE )
 							{
-								memcpy(&buf[_len], &e, sizeof(struct iwinfo_scanlist_entry));
-								_len += sizeof(struct iwinfo_scanlist_entry);
+								memcpy(&buf[entrylen], &e, sizeof(struct iwinfo_scanlist_entry));
+								entrylen += sizeof(struct iwinfo_scanlist_entry);
 							}
 							else
 							{
@@ -630,7 +633,7 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 				} while(ret > 0);
 
 				free(buffer);
-				*len = _len;
+				*len = entrylen;
 				return 0;
 			}
 

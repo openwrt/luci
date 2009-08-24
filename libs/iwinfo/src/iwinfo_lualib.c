@@ -133,7 +133,7 @@ static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int
 				e->mac[3], e->mac[4], e->mac[5]);
 
 			lua_pushstring(L, macstr);
-			lua_setfield(L, -2, "mac");
+			lua_setfield(L, -2, "bssid");
 
 			/* ESSID */
 			if( e->ssid[0] )
@@ -152,12 +152,15 @@ static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int
 
 			/* Crypto */
 			lua_pushinteger(L, e->crypto.wpa_version);
-			lua_setfield(L, -2, "wpa_version");
+			lua_setfield(L, -2, "wpa");
+
+			lua_pushboolean(L, (!e->crypto.wpa_version && e->crypto.enabled));
+			lua_setfield(L, -2, "wep");
 
 			lua_newtable(L);
-			for( j = 0, y = 1; j < sizeof(e->crypto.group_ciphers); j++ )
+			for( j = 0, y = 1; j < 8; j++ )
 			{
-				if( e->crypto.group_ciphers[j] )
+				if( e->crypto.group_ciphers & (1<<j) )
 				{
 					lua_pushstring(L, (j < IW_IE_CYPHER_NUM)
 						? iw_ie_cypher_name[j] : "Proprietary");
@@ -168,9 +171,9 @@ static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int
 			lua_setfield(L, -2, "group_ciphers");
 
 			lua_newtable(L);
-			for( j = 0, y = 1; j < sizeof(e->crypto.pair_ciphers); j++ )
+			for( j = 0, y = 1; j < 8; j++ )
 			{
-				if( e->crypto.pair_ciphers[j] )
+				if( e->crypto.pair_ciphers & (1<<j) )
 				{
 					lua_pushstring(L, (j < IW_IE_CYPHER_NUM)
 						? iw_ie_cypher_name[j] : "Proprietary");
@@ -181,9 +184,9 @@ static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int
 			lua_setfield(L, -2, "pair_ciphers");
 
 			lua_newtable(L);
-			for( j = 0, y = 1; j < sizeof(e->crypto.auth_suites); j++ )
+			for( j = 0, y = 1; j < 8; j++ )
 			{
-				if( e->crypto.auth_suites[j] )
+				if( e->crypto.auth_suites & (1<<j) )
 				{
 					lua_pushstring(L, (j < IW_IE_KEY_MGMT_NUM)
 						? iw_ie_key_mgmt_name[j] : "Proprietary");

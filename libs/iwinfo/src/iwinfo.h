@@ -37,9 +37,9 @@ struct iwinfo_txpwrlist_entry {
 struct iwinfo_crypto_entry {
 	uint8_t	enabled;
 	uint8_t wpa_version;
-	uint8_t group_ciphers[8];
-	uint8_t pair_ciphers[8];
-	uint8_t auth_suites[8];
+	uint8_t group_ciphers;
+	uint8_t pair_ciphers;
+	uint8_t auth_suites;
 };
 
 struct iwinfo_scanlist_entry {
