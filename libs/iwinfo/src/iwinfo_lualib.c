@@ -158,39 +158,33 @@ static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int
 			lua_setfield(L, -2, "wep");
 
 			lua_newtable(L);
-			for( j = 0, y = 1; j < 8; j++ )
+			for( j = 0, y = 1; j < IW_IE_CYPHER_NUM; j++ )
 			{
 				if( e->crypto.group_ciphers & (1<<j) )
 				{
-					lua_pushstring(L, (j < IW_IE_CYPHER_NUM)
-						? iw_ie_cypher_name[j] : "Proprietary");
-
+					lua_pushstring(L, iw_ie_cypher_name[j]);
 					lua_rawseti(L, -2, y++);
 				}
 			}
 			lua_setfield(L, -2, "group_ciphers");
 
 			lua_newtable(L);
-			for( j = 0, y = 1; j < 8; j++ )
+			for( j = 0, y = 1; j < IW_IE_CYPHER_NUM; j++ )
 			{
 				if( e->crypto.pair_ciphers & (1<<j) )
 				{
-					lua_pushstring(L, (j < IW_IE_CYPHER_NUM)
-						? iw_ie_cypher_name[j] : "Proprietary");
-
+					lua_pushstring(L, iw_ie_cypher_name[j]);
 					lua_rawseti(L, -2, y++);
 				}
 			}
 			lua_setfield(L, -2, "pair_ciphers");
 
 			lua_newtable(L);
-			for( j = 0, y = 1; j < 8; j++ )
+			for( j = 0, y = 1; j < IW_IE_KEY_MGMT_NUM; j++ )
 			{
 				if( e->crypto.auth_suites & (1<<j) )
 				{
-					lua_pushstring(L, (j < IW_IE_KEY_MGMT_NUM)
-						? iw_ie_key_mgmt_name[j] : "Proprietary");
-
+					lua_pushstring(L, iw_ie_key_mgmt_name[j]);
 					lua_rawseti(L, -2, y++);
 				}
 			}
