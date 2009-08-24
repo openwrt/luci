@@ -107,6 +107,100 @@ static int iwinfo_L_txpwrlist(lua_State *L, int (*func)(const char *, char *, in
 	return 1;
 }
 
+/* Wrapper for scan list */
+static int iwinfo_L_scanlist(lua_State *L, int (*func)(const char *, char *, int *))
+{
+	int i, j, x, y, len;
+	char rv[IWINFO_BUFSIZE];
+	char macstr[18];
+	const char *ifname = luaL_checkstring(L, 1);
+	struct iwinfo_scanlist_entry *e;
+
+	lua_newtable(L);
+	memset(rv, 0, sizeof(rv));
+
+	if( !(*func)(ifname, rv, &len) )
+	{
+		for( i = 0, x = 1; i < len; i += sizeof(struct iwinfo_scanlist_entry), x++ )
+		{
+			e = (struct iwinfo_scanlist_entry *) &rv[i];
+
+			lua_newtable(L);
+
+			/* BSSID */
+			sprintf(macstr, "%02X:%02X:%02X:%02X:%02X:%02X",
+				e->mac[0], e->mac[1], e->mac[2],
+				e->mac[3], e->mac[4], e->mac[5]);
+
+			lua_pushstring(L, macstr);
+			lua_setfield(L, -2, "mac");
+
+			/* ESSID */
+			if( e->ssid[0] )
+			{
+				lua_pushstring(L, (char *) e->ssid);
+				lua_setfield(L, -2, "ssid");
+			}
+
+			/* Channel */
+			lua_pushinteger(L, e->channel);
+			lua_setfield(L, -2, "channel");
+
+			/* Mode */
+			lua_pushstring(L, (char *) e->mode);
+			lua_setfield(L, -2, "mode");
+
+			/* Crypto */
+			lua_pushinteger(L, e->crypto.wpa_version);
+			lua_setfield(L, -2, "wpa_version");
+
+			lua_newtable(L);
+			for( j = 0, y = 1; j < sizeof(e->crypto.group_ciphers); j++ )
+			{
+				if( e->crypto.group_ciphers[j] )
+				{
+					lua_pushstring(L, (j < IW_IE_CYPHER_NUM)
+						? iw_ie_cypher_name[j] : "Proprietary");
+
+					lua_rawseti(L, -2, y++);
+				}
+			}
+			lua_setfield(L, -2, "group_ciphers");
+
+			lua_newtable(L);
+			for( j = 0, y = 1; j < sizeof(e->crypto.pair_ciphers); j++ )
+			{
+				if( e->crypto.pair_ciphers[j] )
+				{
+					lua_pushstring(L, (j < IW_IE_CYPHER_NUM)
+						? iw_ie_cypher_name[j] : "Proprietary");
+
+					lua_rawseti(L, -2, y++);
+				}
+			}
+			lua_setfield(L, -2, "pair_ciphers");
+
+			lua_newtable(L);
+			for( j = 0, y = 1; j < sizeof(e->crypto.auth_suites); j++ )
+			{
+				if( e->crypto.auth_suites[j] )
+				{
+					lua_pushstring(L, (j < IW_IE_KEY_MGMT_NUM)
+						? iw_ie_key_mgmt_name[j] : "Proprietary");
+
+					lua_rawseti(L, -2, y++);
+				}
+			}
+			lua_setfield(L, -2, "auth_suites");
+
+			lua_rawseti(L, -2, x);
+		}
+	}
+
+	return 1;
+}
+
+
 /* Broadcom */
 LUA_WRAP_INT(wl,channel)
 LUA_WRAP_INT(wl,frequency)
@@ -122,6 +216,7 @@ LUA_WRAP_STRING(wl,bssid)
 LUA_WRAP_STRING(wl,enctype)
 LUA_WRAP_LIST(wl,assoclist)
 LUA_WRAP_LIST(wl,txpwrlist)
+LUA_WRAP_LIST(wl,scanlist)
 
 /* Madwifi */
 LUA_WRAP_INT(madwifi,channel)
@@ -138,6 +233,7 @@ LUA_WRAP_STRING(madwifi,bssid)
 LUA_WRAP_STRING(madwifi,enctype)
 LUA_WRAP_LIST(madwifi,assoclist)
 LUA_WRAP_LIST(madwifi,txpwrlist)
+LUA_WRAP_LIST(madwifi,scanlist)
 
 /* Wext */
 LUA_WRAP_INT(wext,channel)
@@ -154,6 +250,7 @@ LUA_WRAP_STRING(wext,bssid)
 LUA_WRAP_STRING(wext,enctype)
 LUA_WRAP_LIST(wext,assoclist)
 LUA_WRAP_LIST(wext,txpwrlist)
+LUA_WRAP_LIST(wext,scanlist)
 
 /* Broadcom table */
 static const luaL_reg R_wl[] = {
@@ -170,6 +267,7 @@ static const luaL_reg R_wl[] = {
 	LUA_REG(wl,enctype),
 	LUA_REG(wl,assoclist),
 	LUA_REG(wl,txpwrlist),
+	LUA_REG(wl,scanlist),
 	LUA_REG(wl,mbssid_support),
 	{ NULL, NULL }
 };
@@ -189,6 +287,7 @@ static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,enctype),
 	LUA_REG(madwifi,assoclist),
 	LUA_REG(madwifi,txpwrlist),
+	LUA_REG(madwifi,scanlist),
 	LUA_REG(madwifi,mbssid_support),
 	{ NULL, NULL }
 };
@@ -208,6 +307,7 @@ static const luaL_reg R_wext[] = {
 	LUA_REG(wext,enctype),
 	LUA_REG(wext,assoclist),
 	LUA_REG(wext,txpwrlist),
+	LUA_REG(wext,scanlist),
 	LUA_REG(wext,mbssid_support),
 	{ NULL, NULL }
 };

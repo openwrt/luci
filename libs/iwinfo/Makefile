@@ -10,7 +10,8 @@ IWINFO_LDFLAGS    =
 IWINFO_CFLAGS     = -fstrict-aliasing
 IWINFO_SO         = iwinfo.so
 IWINFO_LUA        = iwinfo.lua
-IWINFO_OBJ        = src/iwinfo_wl.o src/iwinfo_madwifi.o src/iwinfo_wext.o src/iwinfo_lualib.o
+IWINFO_OBJ        = src/iwinfo_wl.o src/iwinfo_madwifi.o \
+	src/iwinfo_wext.o src/iwinfo_wext_scan.o src/iwinfo_lualib.o
 
 %.o: %.c
 	$(COMPILE) $(IWINFO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $< 

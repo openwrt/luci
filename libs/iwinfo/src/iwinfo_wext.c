@@ -189,7 +189,7 @@ int wext_get_bitrate(const char *ifname, int *buf)
 
 	if(wext_ioctl(ifname, SIOCGIWRATE, &wrq) >= 0)
 	{
-		*buf = wrq.u.bitrate.value;
+		*buf = (wrq.u.bitrate.value / 1000000);
 		return 0;
 	}
 
@@ -199,12 +199,36 @@ int wext_get_bitrate(const char *ifname, int *buf)
 int wext_get_channel(const char *ifname, int *buf)
 {
 	struct iwreq wrq;
+	struct iw_range range;
+	double freq;
+	int i;
 
 	if(wext_ioctl(ifname, SIOCGIWFREQ, &wrq) >= 0)
 	{
-		/* FIXME: iwlib has some strange workarounds here, maybe we need them as well... */
-		*buf = (int) wext_freq2float(&wrq.u.freq);
-		return 0;
+		if( wrq.u.freq.m >= 1000 )
+		{
+			freq = wext_freq2float(&wrq.u.freq);
+			wrq.u.data.pointer = (caddr_t) &range;
+			wrq.u.data.length  = sizeof(struct iw_range);
+			wrq.u.data.flags   = 0;
+
+			if(wext_ioctl(ifname, SIOCGIWRANGE, &wrq) >= 0)
+			{
+				for(i = 0; i < range.num_frequency; i++)
+				{
+					if( wext_freq2float(&range.freq[i]) == freq )
+					{
+						*buf = range.freq[i].i;
+						return 0;
+					}
+				}
+			}
+		}
+		else
+		{
+			*buf = wrq.u.freq.m;
+			return 0;
+		}
 	}
 
 	return -1;	

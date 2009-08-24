@@ -24,6 +24,7 @@
 #include <lauxlib.h>
 
 #include "iwinfo.h"
+#include "iwinfo_wext_scan.h"
 
 
 #define IWINFO_META			"iwinfo"

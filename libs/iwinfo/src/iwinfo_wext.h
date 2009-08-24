@@ -22,6 +22,7 @@
 #include "iwinfo.h"
 #include "include/wext.h"
 
+
 int wext_probe(const char *ifname);
 int wext_get_mode(const char *ifname, char *buf);
 int wext_get_ssid(const char *ifname, char *buf);
@@ -36,6 +37,7 @@ int wext_get_quality_max(const char *ifname, int *buf);
 int wext_get_enctype(const char *ifname, char *buf);
 int wext_get_assoclist(const char *ifname, char *buf, int *len);
 int wext_get_txpwrlist(const char *ifname, char *buf, int *len);
+int wext_get_scanlist(const char *ifname, char *buf, int *len);
 int wext_get_mbssid_support(const char *ifname, int *buf);
 
 #endif

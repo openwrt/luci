@@ -34,5 +34,21 @@ struct iwinfo_txpwrlist_entry {
 	uint8_t	mw;
 };
 
+struct iwinfo_crypto_entry {
+	uint8_t	enabled;
+	uint8_t wpa_version;
+	uint8_t group_ciphers[8];
+	uint8_t pair_ciphers[8];
+	uint8_t auth_suites[8];
+};
+
+struct iwinfo_scanlist_entry {
+	uint8_t mac[6];
+	uint8_t ssid[IW_ESSID_MAX_SIZE+1];
+	uint8_t mode[8];
+	uint8_t channel;
+	struct iwinfo_crypto_entry crypto;
+};
+
 #endif
 
