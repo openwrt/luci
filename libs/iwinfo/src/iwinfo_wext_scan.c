@@ -43,7 +43,7 @@ static double wext_freq2float(const struct iw_freq *in)
 	return res;
 }
 
-static int wext_extract_event(struct stream_descr *stream, struct iw_event *iwe)
+static int wext_extract_event(struct stream_descr *stream, struct iw_event *iwe, int wev)
 {
 	const struct iw_ioctl_description *descr = NULL;
 	int event_type = 0;
@@ -83,6 +83,10 @@ static int wext_extract_event(struct stream_descr *stream, struct iw_event *iwe)
 	/* Unknown events -> event_type=0 => IW_EV_LCP_PK_LEN */
 	event_len = event_type_size[event_type];
 
+	/* Fixup for earlier version of WE */
+	if((wev <= 18) && (event_type == IW_HEADER_TYPE_POINT))
+		event_len += IW_EV_POINT_OFF;
+
 	/* Check if we know about this event */
 	if(event_len <= IW_EV_LCP_PK_LEN)
 	{
@@ -109,7 +113,7 @@ static int wext_extract_event(struct stream_descr *stream, struct iw_event *iwe)
 
 	/* Fixup for WE-19 and later : pointer no longer in the stream */
 	/* Beware of alignement. Dest has local alignement, not packed */
-	if( event_type == IW_HEADER_TYPE_POINT )
+	if( (wev > 18) && (event_type == IW_HEADER_TYPE_POINT) )
 		memcpy((char *) iwe + IW_EV_LCP_LEN + IW_EV_POINT_OFF, pointer, event_len);
 	else
 		memcpy((char *) iwe + IW_EV_LCP_LEN, pointer, event_len);
@@ -229,11 +233,6 @@ static inline void wext_fill_wpa(unsigned char *iebuf, int buflen, struct iwinfo
 	char buf[256];
 
 	struct iwinfo_crypto_entry *ce = &e->crypto;
-
-	if( !ce->enabled )
-		return;
-
-	//memset(&e->crypto, 0, sizeof(struct iwinfo_crypto_entry));
 
 	if(ielen > buflen)
 		ielen = buflen;
@@ -391,6 +390,7 @@ static inline int wext_fill_entry(struct stream_descr *stream, struct iw_event *
 					sprintf((char *) e->mode, "Ad-Hoc");
 					break;
 
+				case 2:
 				case 3:
 					sprintf((char *) e->mode, "Master");
 					break;
@@ -608,7 +608,7 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 				do
 				{
 					/* Extract an event and print it */
-					ret = wext_extract_event(&stream, &iwe);
+					ret = wext_extract_event(&stream, &iwe, range.we_version_compiled);
 
 					if(ret >= 0)
 					{
@@ -620,6 +620,10 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 							}
 							else if( (entrylen + sizeof(struct iwinfo_scanlist_entry)) <= IWINFO_BUFSIZE )
 							{
+								/* if encryption is off, clear the crypto strunct */
+								if( !e.crypto.enabled )
+									memset(&e.crypto, 0, sizeof(struct iwinfo_crypto_entry));
+
 								memcpy(&buf[entrylen], &e, sizeof(struct iwinfo_scanlist_entry));
 								entrylen += sizeof(struct iwinfo_scanlist_entry);
 							}
