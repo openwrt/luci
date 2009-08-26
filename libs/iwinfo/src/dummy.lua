@@ -15,7 +15,7 @@ function dummy.frequency()
 end
 
 function dummy.bitrate()
-	return 36
+	return 36000
 end
 
 function dummy.signal()
@@ -27,7 +27,7 @@ function dummy.noise()
 end
 
 function dummy.quality()
-	return 11
+	return 50
 end
 
 function dummy.quality_max()

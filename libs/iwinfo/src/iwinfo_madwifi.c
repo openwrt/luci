@@ -175,7 +175,7 @@ int madwifi_get_bitrate(const char *ifname, int *buf)
 				} while (len >= sizeof(struct ieee80211req_sta_info));
 			}
 
-			*buf = (rate == 0 || rate_count == 0) ? 0 : (rate / rate_count);
+			*buf = (rate == 0 || rate_count == 0) ? 0 : (rate / rate_count) * 1000;
 			return 0;
 		}
 

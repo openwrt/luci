@@ -349,7 +349,7 @@ static inline void wext_fill_wpa(unsigned char *iebuf, int buflen, struct iwinfo
 }
 
 
-static inline int wext_fill_entry(struct stream_descr *stream, struct iw_event *event,
+static inline void wext_fill_entry(struct stream_descr *stream, struct iw_event *event,
 	struct iw_range *iw_range, int has_range, struct iwinfo_scanlist_entry *e)
 {
 	int i;
@@ -458,8 +458,6 @@ static inline int wext_fill_entry(struct stream_descr *stream, struct iw_event *
 
 			break;
 	}
-
-	return 0;
 }
 
 
@@ -467,7 +465,6 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 {
 	struct iwreq wrq;
 	struct iw_scan_req scanopt;        /* Options for 'set' */
-	//int scanflags = 0;      /* Flags for scan */
 	unsigned char *buffer = NULL;      /* Results */
 	int buflen = IW_SCAN_MAX_DATA; /* Min for compat WE<17 */
 	struct iw_range range;
@@ -478,7 +475,6 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 	int entrylen = 0;
 	struct iwinfo_scanlist_entry e;
 
-	//IWINFO_BUFSIZE
 	wrq.u.data.pointer = (caddr_t) &range;
 	wrq.u.data.length  = sizeof(struct iw_range);
 	wrq.u.data.flags   = 0;	

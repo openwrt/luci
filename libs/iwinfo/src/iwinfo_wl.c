@@ -139,7 +139,7 @@ int wl_get_bitrate(const char *ifname, int *buf)
 	int rate = 0;
 
 	if( !(ret = wl_ioctl(ifname, WLC_GET_RATE, &rate, sizeof(rate))) && (rate > 0))
-		*buf = rate / 2;
+		*buf = ((rate / 2) * 1000) + ((rate & 1) ? 500 : 0);
 
 	return ret;
 }

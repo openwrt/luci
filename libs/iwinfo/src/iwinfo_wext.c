@@ -189,7 +189,7 @@ int wext_get_bitrate(const char *ifname, int *buf)
 
 	if(wext_ioctl(ifname, SIOCGIWRATE, &wrq) >= 0)
 	{
-		*buf = (wrq.u.bitrate.value / 1000000);
+		*buf = (wrq.u.bitrate.value / 1000);
 		return 0;
 	}
 
