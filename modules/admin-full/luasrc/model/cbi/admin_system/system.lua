@@ -20,6 +20,7 @@ m = Map("system", translate("system"), translate("a_s_desc"))
 
 s = m:section(TypedSection, "system", "")
 s.anonymous = true
+s.addremove = false
 
 local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 local uptime = luci.sys.uptime()
