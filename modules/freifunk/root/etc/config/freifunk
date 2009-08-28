@@ -91,51 +91,67 @@ config community leipzig
 	option name "Freifunk Leipzig"
 	option homepage http://leipzig.freifunk.net
 	option ssid "leipzig.freifunk.net"
-	option prefix "104.61"
+	option mesh_network "104.61.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 
 config community halle
 	option name "Freifunk Halle"
 	option homepage http://halle.freifunk.net
 	option ssid "halle.freifunk.net"
-	option prefix "104.62"
+	option mesh_network "104.62.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 
 config community l59
 	option name "Freifunk L59"
 	option homepage http://freifunk.net
 	option ssid "start.freifunk.net"
-	option prefix "104.59"
+	option mesh_network "104.59.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 
 config community berlin
 	option name "Freifunk Berlin"
 	option homepage http://berlin.freifunk.net
 	option ssid "olsr.freifunk.net"
-	option prefix "104"
+	option mesh_network "104.0.0.0/8"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 	option external freifunk_berlin
 
 config community potsdam
 	option name "Freifunk Potsdam"
 	option homepage http://potsdam.freifunk.net
 	option ssid "www.freifunk-potsdam.de"
-	option prefix "10.22"
+	option mesh_network "10.22.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 	option external freifunk_potsdam
 
 config community hannover
 	option name "Freifunk Hannover"
 	option homepage http://hannover.freifunk.net
 	option ssid "hannover.freifunk.net"
-	option prefix "10.2"
+	option mesh_network "10.2.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 	option external freifunk_hannover
 
 config community augsburg
 	option name "Freifunk Augsburg"
 	option homepage http://augsburg.freifunk.net
 	option ssid "augsburg.freifunk.net"
-	option prefix "191.161"
+	option mesh_network "191.161.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 	option external freifunk_augsburg
 
 config 'community' 'jena'
 	option 'name' 'Freifunk Jena'
 	option 'homepage' 'http://www.freifunk-jena.de'
 	option 'ssid' 'jena.freifunk.net'
-	option 'prefix' '10.127'
+	option mesh_network "10.127.0.0/16"
+	option splash_network "10.104.0.0/16"
+	option splash_prefix "27"
 #	option 'external' 'freifunk_jena'
