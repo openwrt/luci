@@ -258,7 +258,7 @@ key:depends("encryption", "wep")
 key:depends("encryption", "psk")
 key:depends("encryption", "psk2")
 key:depends("encryption", "psk+psk2")
-key:depends("encryption", "mixed")
+key:depends("encryption", "psk-mixed")
 key:depends({mode="ap", encryption="wpa"})
 key:depends({mode="ap", encryption="wpa2"})
 key.rmempty = true
