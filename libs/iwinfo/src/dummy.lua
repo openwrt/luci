@@ -67,6 +67,29 @@ function dummy.txpwrlist()
 	}
 end
 
+function dummy.scanlist()
+	return {
+		{ quality = 23, quality_max = 70, signal = -60,
+		  bssid = "00:12:23:34:45:56", ssid = "Test_Net_1",
+		  mode = "Master", wep = true },
+		{ quality = 45, quality_max = 70, signal = -43,
+		  bssid = "01:23:34:45:56:67", ssid = "Test_Net_2",
+		  mode = "Master", wep = false, wpa_version = 3,
+		  pair_ciphers = { "TKIP", "CCMP" },
+		  group_ciphers = { "TKIP", "CCMP" },
+		  auth_suites = { "PSK" } },
+		{ quality = 5, quality_max = 70, signal = -77,
+		  bssid = "02:34:45:56:67:78", ssid = "Test_Net_3",
+		  mode = "Master", wep = false, wpa_version = 1,
+		  pair_ciphers = { "TKIP" },
+		  group_ciphers = { "TKIP" },
+		  auth_suites = { "PSK" } },
+		{ quality = 12, quality_max = 70, signal = -64,
+		  bssid = "02:00:DE:AD:BE:EF", ssid = "Test_Net_4",
+		  mode = "Ad-Hoc", wep = false }
+	}
+end
+
 function dummy.mbssid_support()
 	return 1
 end
