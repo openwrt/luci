@@ -76,7 +76,9 @@ function Template.__init__(self, name)
 	if not self.template then
 
 		-- Compile template
+		local err
 		local sourcefile = viewdir .. "/" .. name .. ".htm"
+
 		self.template, _, err = tparser.parse(sourcefile)
 
 		-- If we have no valid template throw error, otherwise cache the template
