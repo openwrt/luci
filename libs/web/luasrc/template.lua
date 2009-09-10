@@ -24,13 +24,8 @@ limitations under the License.
 
 ]]--
 
-local fs = require "nixio.fs"
-local sys = require "luci.sys"
 local util = require "luci.util"
-local table = require "table"
-local string = require "string"
 local config = require "luci.config"
-local nixio = require "nixio", require "nixio.util"
 local tparser = require "luci.template.parser"
 
 local tostring, pairs, loadstring = tostring, pairs, loadstring
