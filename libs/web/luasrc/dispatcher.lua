@@ -208,7 +208,7 @@ function dispatch(request)
 		end
 	end
 
-	ctx.requestpath = freq
+	ctx.requestpath = ctx.requestpath or freq
 	ctx.path = preq
 
 	if track.i18n then
@@ -306,6 +306,7 @@ function dispatch(request)
 					end
 					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
 					ctx.authsession = sid
+					ctx.authuser = user
 				end
 			else
 				luci.http.status(403, "Forbidden")
@@ -313,6 +314,7 @@ function dispatch(request)
 			end
 		else
 			ctx.authsession = sess
+			ctx.authuser = user
 		end
 	end
 
