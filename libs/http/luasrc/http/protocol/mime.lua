@@ -44,6 +44,7 @@ MIME_TYPES = {
     ["zip"]   = "application/zip";
     ["pdf"]   = "application/pdf";
     ["xml"]   = "application/xml";
+    ["xsl"]   = "application/xml";
     ["doc"]   = "application/msword";
     ["ppt"]   = "application/vnd.ms-powerpoint";
     ["xls"]   = "application/vnd.ms-excel";
