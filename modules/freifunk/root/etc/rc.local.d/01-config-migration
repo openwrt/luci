@@ -6,7 +6,7 @@ _log() {
 }
 
 _uci() {
-	uci get "$1" 2>/dev/null
+	uci ${2:+-c $2} get "$1" 2>/dev/null
 }
 
 
@@ -38,4 +38,14 @@ done
 	_log "Fix olsrd configuration for MinTCVTime hack"
 	uci commit olsrd
 	/etc/init.d/olsrd restart
+}
+
+
+# Ensure that the community definitions are in the
+# new format
+
+[ -z "$(_uci freifunk.leipzig.mesh_network)" ] && \
+[ -n "$(_uci freifunk.leipzig.mesh_network /rom/etc/config)" ] && {
+	_log "Converting freifunk configuration to new format"
+	cp /rom/etc/config/freifunk /etc/config/freifunk
 }
