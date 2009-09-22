@@ -359,6 +359,9 @@ if hwtype == "broadcom" then
 	 translate("wifi_isolate_desc"))
 	isolate:depends({mode="ap"})
 
+	s:taboption("advanced", Flag, "doth", "802.11h")
+	s:taboption("advanced", Flag, "wmm", translate("wifi_wmm"))
+
 	bssid:depends({mode="wds"})
 	bssid:depends({mode="adhoc"})
 end
