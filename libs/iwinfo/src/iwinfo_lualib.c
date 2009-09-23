@@ -23,11 +23,11 @@ static int iwinfo_L_type(lua_State *L)
 {
 	const char *ifname = luaL_checkstring(L, 1);
 
-	if( wl_probe(ifname) )
-		lua_pushstring(L, "wl");
-
-	else if( madwifi_probe(ifname) )
+	if( madwifi_probe(ifname) )
 		lua_pushstring(L, "madwifi");
+
+	else if( wl_probe(ifname) )
+		lua_pushstring(L, "wl");
 
 	else if( wext_probe(ifname) )
 		lua_pushstring(L, "wext");
