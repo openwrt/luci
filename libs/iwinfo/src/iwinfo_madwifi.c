@@ -59,25 +59,60 @@ static int get80211priv(const char *ifname, int op, void *data, size_t len)
 	return iwr.u.data.length;
 }
 
-
-int madwifi_probe(const char *ifname)
+static int madwifi_isvap(const char *ifname, const char *wifiname)
 {
 	int fd, ret;
 	char path[32];
-	char name[5];
+	char name[IFNAMSIZ];
 
-	sprintf(path, "/proc/sys/net/%s/%%parent", ifname);
 	ret = 0;
 
-	if( (fd = open(path, O_RDONLY)) > -1 )
+	if( strlen(ifname) <= 9 )
 	{
-		if( read(fd, name, 4) == 4 )
-			ret = strncmp(name, "wifi", 4) ? 0 : 1;
+		sprintf(path, "/proc/sys/net/%s/%%parent", ifname);
 
-		(void) close(fd);
+		if( (fd = open(path, O_RDONLY)) > -1 )
+		{
+			if( wifiname != NULL )
+			{
+				if( read(fd, name, strlen(wifiname)) == strlen(wifiname) )
+					ret = strncmp(name, wifiname, strlen(wifiname)) ? 0 : 1;
+			}
+			else if( read(fd, name, 4) == 4 )
+			{
+				ret = strncmp(name, "wifi", 4) ? 0 : 1;
+			}
+
+			(void) close(fd);
+		}
 	}
 
 	return ret;
+}
+
+static int madwifi_iswifi(const char *ifname)
+{
+	int ret;
+	char path[32];
+	struct stat s;
+
+	ret = 0;
+
+	if( strlen(ifname) <= 7 )
+	{
+		sprintf(path, "/proc/sys/dev/%s/diversity", ifname);
+
+		if( ! stat(path, &s) )
+			ret = (s.st_mode & S_IFREG);
+	}
+
+	return ret;
+}
+
+
+int madwifi_probe(const char *ifname)
+{
+	return ( madwifi_isvap(ifname, NULL) || madwifi_iswifi(ifname) );
 }
 
 int madwifi_get_mode(const char *ifname, char *buf)
@@ -405,7 +440,58 @@ int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len)
 
 int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 {
-	return wext_get_scanlist(ifname, buf, len);
+	int ret;
+	char cmd[256];
+	DIR *proc;
+	struct dirent *e;
+
+	ret = -1;
+
+	/* We got a wifiX device passed, try to lookup a vap on it */
+	if( madwifi_iswifi(ifname) )
+	{
+		if( (proc = opendir("/proc/sys/net/")) != NULL )
+		{
+			while( (e = readdir(proc)) != NULL )
+			{
+				if( madwifi_isvap(e->d_name, ifname) )
+				{
+					sprintf(cmd, "ifconfig %s up", e->d_name);
+
+					if( ! WEXITSTATUS(system(cmd)) )
+					{
+						ret = wext_get_scanlist(e->d_name, buf, len);
+						break;
+					}
+				}
+			}
+
+			closedir(proc);
+		}
+
+		/* Still nothing found, try to create a vap */
+		if( ret == -1 )
+		{
+			sprintf(cmd, "wlanconfig ath-scan create nounit "
+				"wlandev %s wlanmode sta >/dev/null", ifname);
+
+			if( ! WEXITSTATUS(system(cmd)) && ! WEXITSTATUS(system("ifconfig ath-scan up")) )
+			{
+				ret = wext_get_scanlist("ath-scan", buf, len);
+
+				(void) WEXITSTATUS(system("ifconfig ath-scan down"));
+				(void) WEXITSTATUS(system("wlanconfig ath-scan destroy"));
+			}
+		}
+	}
+
+	/* Got athX device? */
+	else if( madwifi_isvap(ifname, NULL) )
+	{
+		ret = wext_get_scanlist(ifname, buf, len);
+	}
+
+	return ret;
 }
 
 int madwifi_get_mbssid_support(const char *ifname, int *buf)
