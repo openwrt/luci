@@ -3,6 +3,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +11,7 @@
 #include <fcntl.h>
 #include <glob.h>
 #include <ctype.h>
+#include <dirent.h>
 #include <stdint.h>
 
 #include <sys/ioctl.h>
