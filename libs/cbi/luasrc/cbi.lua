@@ -369,7 +369,7 @@ function Map.parse(self, readinput, ...)
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
-		if self:submitstate() and not self.proceed and (self.flow.autoapply or luci.http.formvalue("cbi.apply")) then
+		if self:submitstate() and ((not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply")) then
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 
@@ -1329,6 +1329,22 @@ end
 function AbstractValue.parse(self, section, novld)
 	local fvalue = self:formvalue(section)
 	local cvalue = self:cfgvalue(section)
+
+	-- If favlue and cvalue are both tables and have the same content
+	-- make them identical
+	if type(fvalue) == "table" and type(cvalue) == "table" then
+		local equal = #fvalue == #cvalue
+		if equal then
+			for i=1, #fvalue do
+				if cvalue[i] ~= fvalue[i] then
+					equal = false
+				end
+			end
+		end
+		if equal then
+			fvalue = cvalue
+		end
+	end
 
 	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
 		fvalue = self:transform(self:validate(fvalue, section))
