@@ -268,6 +268,9 @@ if hwtype == "broadcom" then
 	isolate:depends({mode="ap"})
 	isolate.optional = true
 
+	s:option(Flag, "doth", "802.11h").optional = true
+	s:option(Flag, "wmm", translate("wifi_wmm")).optional = true
+
 	bssid:depends({mode="wds"})
 	bssid:depends({mode="adhoc"})
 end
