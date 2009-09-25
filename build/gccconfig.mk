@@ -10,7 +10,7 @@ RANLIB = ranlib
 CFLAGS = -O2
 FPIC = -fPIC
 EXTRA_CFLAGS = --std=gnu99
-WFLAGS = -Wall -Werror -pedantic
+WFLAGS = -Wall -pedantic
 CPPFLAGS =
 COMPILE = $(CC) $(CPPFLAGS) $(CFLAGS) $(EXTRA_CFLAGS) $(WFLAGS)
 ifeq ($(OS),Darwin)
