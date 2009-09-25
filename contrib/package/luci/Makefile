@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_BRANCH:=branches/luci-0.8
+PKG_BRANCH:=tags/0.8.8
 
 ifeq ($(DUMP),)
   USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
@@ -14,8 +14,8 @@ ifeq ($(USELOCAL),1)
 else
   PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
-    PKG_REV:=$(shell LC_ALL=C svn info $(CURDIR) | sed -ne 's/^Revision: //p')
-    PKG_VERSION:=0.8+svn$(PKG_REV)
+    PKG_REV:=HEAD
+    PKG_VERSION:=0.8.8
   endif
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
