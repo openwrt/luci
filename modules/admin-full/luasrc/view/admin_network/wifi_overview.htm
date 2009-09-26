@@ -130,7 +130,7 @@ $Id$
 	end
 
 	function find_wifi_frequency(state)
-		if state.active then
+		if state and state.active and state.networks[1] and state.networks[1].info then
 			return string.format("%d (%.03f GHz)",
 				state.networks[1].info.channel,
 				state.networks[1].info.frequency / 1000);
@@ -161,7 +161,7 @@ $Id$
 				<td colspan="2" style="text-align:left">
 					<big><strong><%=state.hwname%> (<%=dev%>)</strong></big><br />
 					<strong>Channel:</strong> <%=find_wifi_frequency(state)%> |
-					<strong>Bitrate:</strong> <%=state.active and (state.networks[1].info.bitrate / 1000) .. " Mb/s" or "n/a"%>
+					<strong>Bitrate:</strong> <%=(state and state.networks[1]) and (state.networks[1].info.bitrate / 1000) .. " Mb/s" or "n/a"%>
 				</td>
 				<td style="width:40px">
 					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_join?device="..dev)%>"><img style="border:none" src="<%=resource%>/cbi/find.gif" alt="Find and join network" title="Find and join network" /></a>

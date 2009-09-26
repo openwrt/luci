@@ -28,6 +28,18 @@ $Id$
 	local dev = luci.http.formvalue("device")
 	local iw = luci.sys.wifi.getiwinfo(dev)
 
+	local requirement
+
+	if iwinfo.type(dev) == "broadcom" and not nixio.fs.access("/usr/sbin/nas") then
+		requirement = luci.i18n.translatef("a_s_iw_require_nas",
+			"You need to install the <a href='%s'>Broadcom <em>nas</em> supplicant</a> to use WPA!"
+			% luci.dispatcher.build_url("admin/system/packages?url=nas&amp;submit=1"))
+	elseif not nixio.fs.access("/usr/sbin/wpa_supplicant") then
+		requirement = luci.i18n.translatef("a_s_iw_require_wpasupplicant",
+			"You need to install <a href='%s'><em>wpa-supplicant</em></a> to use WPA!"
+			% luci.dispatcher.build_url("admin/system/packages?url=wpa-supplicant&amp;submit=1"))
+	end
+
 -%>
 
 <%+header%>
@@ -71,6 +83,10 @@ $Id$
 					<input type="hidden" name="wpa_suite" value="psk<%=tonumber(luci.http.formvalue("wpa_version") or 0) == 2 and 2%>" />
 				<% end %>
 
+				<% if requirement then %>
+					<strong class="error">&nbsp; <%=requirement%></strong>
+				<% end %>
+
 				<br /><br />
 			<% end %>
 
@@ -87,7 +103,7 @@ $Id$
 
 			<% if luci.http.formvalue("mode") == "Ad-Hoc" then %>
 			<input type="checkbox" name="fixed_bssid" value="1" id="cb_fixed_bssid" checked="checked" />
-			<label for="cb_fixed_bssid">Lock to BSSID <%=luci.http.formvalue("bssid")%></label>
+			<label for="cb_fixed_bssid">Lock BSSID to <%=luci.http.formvalue("bssid")%></label>
 			<br />
 			<% end %>
 

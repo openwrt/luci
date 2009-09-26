@@ -52,12 +52,12 @@ $Id$
 	function format_wifi_encryption(info)
 		if info.wep == true and not info.wpa_version then
 			return "WEP"
-		elseif info.wpa_version then
+		elseif info.wpa then
 			return "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>" % {
 				table.concat(info.pair_ciphers, ", "),
 				table.concat(info.group_ciphers, ", "),
-				(info.wpa_version == 3) and "mixed WPA/WPA2"
-					or (info.wpa_version == 2 and "WPA2" or "WPA"),
+				(info.wpa == 3) and "mixed WPA/WPA2"
+					or (info.wpa == 2 and "WPA2" or "WPA"),
 				table.concat(info.auth_suites, ", ")
 			}
 		else
@@ -100,8 +100,8 @@ $Id$
 						<input type="hidden" name="bssid" value="<%=net.bssid%>" />
 						<input type="hidden" name="channel" value="<%=net.channel%>" />
 						<input type="hidden" name="wep" value="<%=net.wep and 1 or 0%>" />
-						<% if net.wpa_version then %>
-						<input type="hidden" name="wpa_version" value="<%=net.wpa_version%>" />
+						<% if net.wpa then %>
+						<input type="hidden" name="wpa_version" value="<%=net.wpa%>" />
 						<% for _, v in ipairs(net.auth_suites) do %><input type="hidden" name="wpa_suites" value="<%=v%>" />
 						<% end; for _, v in ipairs(net.group_ciphers) do %><input type="hidden" name="wpa_group" value="<%=v%>" />
 						<% end; for _, v in ipairs(net.pair_ciphers) do %><input type="hidden" name="wpa_pairwise" value="<%=v%>" />
