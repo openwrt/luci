@@ -25,8 +25,8 @@ local tx_powers = nil
 
 m.uci:foreach("wireless", "wifi-iface",
 	function(s)
-		if s.device == arg[1] and s.ifname and not iw then
-			iw = luci.sys.wifi.getiwinfo(s.ifname)
+		if s.device == arg[1] and not iw then
+			iw = luci.sys.wifi.getiwinfo(s.ifname or s.device)
 			tx_powers = iw.txpwrlist or { }
 		end
 	end)
