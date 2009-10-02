@@ -154,11 +154,13 @@ gw.rmempty = true
 bcast = s:taboption("general", Value, "bcast", translate("broadcast"))
 bcast:depends("proto", "static")
 
-ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
-ip6addr:depends("proto", "static")
+if has_ipv6 then
+	ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
+	ip6addr:depends("proto", "static")
 
-ip6gw = s:taboption("ipv6", Value, "ip6gw", translate("gateway6"))
-ip6gw:depends("proto", "static")
+	ip6gw = s:taboption("ipv6", Value, "ip6gw", translate("gateway6"))
+	ip6gw:depends("proto", "static")
+end
 
 dns = s:taboption("general", Value, "dns", translate("dnsserver"))
 dns:depends("peerdns", "")
@@ -281,12 +283,14 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 		return ( AbstractValue.cfgvalue(...) or '1' )
 	end
 
-	ipv6 = s:taboption("general", Flag, "ipv6", translate("network_interface_ipv6") )
-	ipv6:depends("proto", "ppp")
-	ipv6:depends("proto", "pppoa")
-	ipv6:depends("proto", "pppoe")
-	ipv6:depends("proto", "pptp")
-	ipv6:depends("proto", "3g")
+	if has_ipv6 then
+		ipv6 = s:taboption("general", Flag, "ipv6", translate("network_interface_ipv6") )
+		ipv6:depends("proto", "ppp")
+		ipv6:depends("proto", "pppoa")
+		ipv6:depends("proto", "pppoe")
+		ipv6:depends("proto", "pptp")
+		ipv6:depends("proto", "3g")
+	end
 
 	connect = s:taboption("general", Value, "connect",
 	 translate("network_interface_connect"),
