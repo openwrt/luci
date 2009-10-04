@@ -21,10 +21,18 @@
 /* Global watchdog fd, required by signal handler */
 int wdfd = -1;
 
+/* Handle finished childs */
+static void sigchld_handler(int sig)
+{
+	pid_t pid;
+
+	while( (pid = waitpid(-1, NULL, WNOHANG)) > 0 )
+		syslog(LOG_INFO, "Child returned (pid %d)", pid);
+}
+
 /* Watchdog shutdown helper */
 static void shutdown_watchdog(int sig)
 {
-	static int wdelay = 3600;
 	static const char wshutdown = WATCH_SHUTDOWN;
 
 	if( wdfd > -1 )
@@ -298,7 +306,7 @@ static int do_daemon(void)
 	int loadavg_panic = 0;
 
 	openlog(SYSLOG_IDENT, 0, LOG_DAEMON);
-	//daemon(1, 1);
+	memset(&sa, 0, sizeof(sa));
 
 	if( (iwfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1 )
 	{
@@ -326,6 +334,11 @@ static int do_daemon(void)
 		/* Set watchdog timeout to twice the interval */
 		ioctl(wdfd, WDIOC_SETTIMEOUT, &wdtimeout);
 	}
+
+	/* Install signal handler to reap childs */
+	sa.sa_handler = sigchld_handler;
+	sa.sa_flags = 0;
+	sigaction(SIGCHLD, &sa, NULL);
 
 	while( 1 )
 	{

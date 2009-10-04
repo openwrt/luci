@@ -29,6 +29,7 @@
 #include <math.h>
 #include <time.h>
 #include <signal.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -67,7 +68,7 @@
 
 /* System load error action and treshold */
 #define LOAD_TRESHOLD	15.00
-#define LOAD_ACTION		"/sbin/reboot"
+#define LOAD_ACTION		"/sbin/reboot", "/sbin/reboot"
 
 /* Fallback binary name (passed by makefile) */
 #ifndef BINARY
@@ -107,22 +108,20 @@ iw_ioctl(int                  skfd,           /* Socket to the kernel */
 }
 
 /* fork() & execl() helper */
-#define EXEC(x)															\
-	do {																\
-		switch(fork())													\
-		{																\
-			case -1:													\
-				syslog(LOG_CRIT, "Unable to fork child: %s",			\
-					strerror(errno));									\
-																		\
-					break;												\
-																		\
-				case 0:													\
-					execl(x, NULL);										\
-					syslog(LOG_CRIT, "Unable to execute action: %s",	\
-						strerror(errno));								\
-																		\
-					return 1;											\
-		}																\
+#define EXEC(x)														\
+	do {															\
+		switch(fork())												\
+		{															\
+			case -1:												\
+				syslog(LOG_CRIT, "Unable to fork child: %s",		\
+					strerror(errno));								\
+				break;												\
+																	\
+			case 0:													\
+				execl(x, NULL);										\
+				syslog(LOG_CRIT, "Unable to execute action: %s",	\
+					strerror(errno));								\
+				return 1;											\
+		}															\
 	} while(0)
 
