@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@ $Id$
 <%
 	local t = require("luci.tools.webadmin")
 	local v = self:cfgvalue(section)
-	v = v and nixio.fs.stat(v)
+	local s = v and nixio.fs.stat(v)
 -%>
 <%+cbi/valueheader%>
-	<% if v then %>
-		<%:cbi_upload Uploaded File%> (<%=t.byte_format(v.size)%>)
+	<% if s then %>
+		<%:cbi_upload Uploaded File%> (<%=t.byte_format(s.size)%>)
 		<input type="hidden"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
 		<input class="cbi-input-image" type="image" value="<%:cbi_replace%>" name="cbi.rlf.<%=section .. "." .. self.option%>" alt="<%:cbi_replace%>" title="<%:cbi_replace%>" src="<%=resource%>/cbi/reload.gif" />
 	<% else %>
