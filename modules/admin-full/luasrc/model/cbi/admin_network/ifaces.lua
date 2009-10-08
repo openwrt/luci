@@ -14,6 +14,7 @@ $Id$
 ]]--
 
 local fs = require "nixio.fs"
+local nw = require "luci.model.network"
 local fw = require "luci.model.firewall"
 
 arg[1] = arg[1] or ""
@@ -28,6 +29,7 @@ local has_ipv6  = fs.access("/proc/net/ipv6_route")
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 m:chain("firewall")
 
+nw.init(m.uci)
 fw.init(m.uci)
 
 s = m:section(NamedSection, arg[1], "interface")
@@ -69,6 +71,9 @@ stp:depends("type", "1")
 stp.rmempty = true
 
 ifname_single = s:taboption("physical", Value, "ifname_single", translate("interface"))
+ifname_single.template = "cbi/network_ifacelist"
+ifname_single.widget = "radio"
+ifname_single.nobridges = true
 ifname_single.rmempty = true
 ifname_single:depends("type", "")
 
@@ -77,20 +82,23 @@ function ifname_single.cfgvalue(self, s)
 end
 
 function ifname_single.write(self, s, val)
-	self.map.uci:set("network", s, "ifname", val)
+	local n = nw:get_network(s)
+	if n then n:ifname(val) end
 end
 
 
 ifname_multi = s:taboption("physical", MultiValue, "ifname_multi", translate("interface"))
+ifname_multi.template = "cbi/network_ifacelist"
+ifname_multi.nobridges = true
 ifname_multi.widget = "checkbox"
 ifname_multi:depends("type", "1")
 ifname_multi.cfgvalue = ifname_single.cfgvalue
 ifname_multi.write = ifname_single.write
 
-for i,d in ipairs(luci.sys.net.devices()) do
-	if d ~= "lo" then
-		ifname_single:value(d)
-		ifname_multi:value(d)
+for _, d in ipairs(nw:get_interfaces()) do
+	if not d:is_bridge() then
+		ifname_single:value(d:name())
+		ifname_multi:value(d:name())
 	end
 end
 
