@@ -17,7 +17,8 @@ limitations under the License.
 
 ]]--
 
-local type, pairs, ipairs, table = type, pairs, ipairs, table
+local type, pairs, ipairs, table, i18n
+	= type, pairs, ipairs, table, luci.i18n
 
 local lmo = require "lmo"
 local nxo = require "nixio"
@@ -206,7 +207,7 @@ end
 
 function network.add_interface(self, ifname)
 	if type(ifname) ~= "string" then
-		ifname = ifname:ifname()
+		ifname = ifname:name()
 	end
 	if ifs[ifname] then
 		self:ifname(ub:list((self:ifname() or ''), ifname))
@@ -215,7 +216,7 @@ end
 
 function network.del_interface(self, ifname)
 	if type(ifname) ~= "string" then
-		ifname = ifname:ifname()
+		ifname = ifname:name()
 	end
 	self:ifname(ub:list((self:ifname() or ''), nil, ifname))
 end
@@ -234,14 +235,14 @@ function network.get_interfaces(self)
 	return ifaces
 end
 
-function contains_interface(self, iface)
+function network.contains_interface(self, iface)
 	local i
 	local ifaces = ub:list(
 		(self:ifname() or '') .. ' ' .. (self:device() or '')
 	)
 
 	if type(iface) ~= "string" then
-		iface = iface:ifname()
+		iface = iface:name()
 	end
 
 	for _, i in ipairs(ifaces) do
@@ -276,6 +277,19 @@ function interface.type(self)
 		return "switch"
 	else
 		return "ethernet"
+	end
+end
+
+function interface.get_type_i18n(self)
+	local x = self:type()
+	if x == "wifi" then
+		return i18n.translate("a_s_if_wifidev", "Wireless Adapter")
+	elseif x == "bridge" then
+		return i18n.translate("a_s_if_bridge", "Bridge")
+	elseif x == "switch" then
+		return i18n.translate("a_s_if_ethswitch", "Ethernet Switch")
+	else
+		return i18n.translate("a_s_if_ethdev", "Ethernet Adapter")
 	end
 end
 
