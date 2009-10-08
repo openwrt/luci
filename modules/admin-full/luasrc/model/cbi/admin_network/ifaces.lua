@@ -13,8 +13,8 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local wa = require "luci.tools.webadmin"
 local fs = require "nixio.fs"
+local fw = require "luci.model.firewall"
 
 arg[1] = arg[1] or ""
 
@@ -26,6 +26,9 @@ local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 local has_ipv6  = fs.access("/proc/net/ipv6_route")
 
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
+m:chain("firewall")
+
+fw.init(m.uci)
 
 s = m:section(NamedSection, arg[1], "interface")
 s.addremove = true
@@ -91,49 +94,36 @@ for i,d in ipairs(luci.sys.net.devices()) do
 	end
 end
 
-local zones = wa.network_get_zones(arg[1])
-if zones then
-	if #zones == 0 then
-		m:chain("firewall")
 
-		fwzone = s:taboption("general", Value, "_fwzone",
-			translate("network_interface_fwzone"),
-			translate("network_interface_fwzone_desc"))
-		fwzone.rmempty = true
-		fwzone:value("", "- " .. translate("none") .. " -")
-		fwzone:value(arg[1])
-		m.uci:load("firewall")
-		m.uci:foreach("firewall", "zone",
-			function (section)
-				fwzone:value(section.name)
-			end
-		)
+fwzone = s:taboption("general", Value, "_fwzone",
+	translate("network_interface_fwzone"),
+	translate("network_interface_fwzone_desc"))
 
-		function fwzone.write(self, section, value)
-			local zone = wa.firewall_find_zone(value)
-			local stat
+fwzone.template = "cbi/firewall_zonelist"
+fwzone.rmempty = false
 
-			if not zone then
-				stat = m.uci:section("firewall", "zone", nil, {
-					name = value,
-					network = section
-				})
-			else
-				local net = m.uci:get("firewall", zone, "network")
-				net = (net or value) .. " " .. section
-				stat = m.uci:set("firewall", zone, "network", net)
-			end
+function fwzone.cfgvalue(self, section)
+	self.iface = section
+	local z = fw.get_zones_by_network(section)[1]
+	return z and z:name()
+end
 
-			if stat then
-				self.render = function() end
-			end
+function fwzone.write(self, section, value)
+
+	fw.del_network(section)
+
+	local zone = fw.get_zone(value)
+
+	if not zone then
+		value = m:formvalue(self:cbid(section) .. ".newzone")
+		if value and #value > 0 and value:match("^[a-zA-Z0-9_]+$") then
+			zone = fw.add_zone(value)
 		end
-	else
-		fwzone = s:taboption("general", DummyValue, "_fwzone", translate("zone"))
-		fwzone.value = table.concat(zones, ", ")
 	end
-	fwzone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
-	m.uci:unload("firewall")
+
+	if zone then
+		zone:add_network(section)
+	end
 end
 
 ipaddr = s:taboption("general", Value, "ipaddr", translate("ipaddress"))
