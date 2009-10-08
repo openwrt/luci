@@ -37,8 +37,8 @@ function init(cursor)
 	end
 end
 
-function add_zone(n)
-	if n then
+function add_zone(self, n)
+	if n and #n > 0 and n:match("^[a-zA-Z0-9_]+$") and not self:get_zone(n) then
 		local z = ub.uci:section("firewall", "zone", nil, {
 			name    = n,
 			network = " ",
@@ -51,7 +51,7 @@ function add_zone(n)
 	end
 end
 
-function get_zone(n)
+function get_zone(self, n)
 	local z
 	ub.uci:foreach("firewall", "zone",
 		function(s)
@@ -63,7 +63,7 @@ function get_zone(n)
 	return z and zone(z)
 end
 
-function get_zones()
+function get_zones(self)
 	local zones = { }
 	ub.uci:foreach("firewall", "zone",
 		function(s)
@@ -74,7 +74,7 @@ function get_zones()
 	return zones
 end
 
-function get_zones_by_network(net)
+function get_zones_by_network(self, net)
 	local zones = { }
 	ub.uci:foreach("firewall", "zone",
 		function(s)
@@ -91,7 +91,7 @@ function get_zones_by_network(net)
 	return zones
 end
 
-function del_zone(n)
+function del_zone(self, n)
 	local r = false
 	ub.uci:foreach("firewall", "zone",
 		function(s)
@@ -123,10 +123,47 @@ function del_zone(n)
 	return r
 end
 
-function del_network(net)
+function rename_zone(self, old, new)
+	local r = false
+	if new and #new > 0 and new:match("^[a-zA-Z0-9_]+$") and not self:get_zone(new) then
+		ub.uci:foreach("firewall", "zone",
+			function(s)
+				if n and s.name == old then
+					ub.uci:set("firewall", s['.name'], "name", new)
+					r = true
+					return false
+				end
+			end)
+		if r then
+			ub.uci:foreach("firewall", "rule",
+				function(s)
+					if s.src == old then
+						ub.uci:set("firewall", s['.name'], "src", new)
+					elseif s.dest == old then
+						ub.uci:set("firewall", s['.name'], "dest", new)
+					end
+				end)
+			ub.uci:foreach("firewall", "redirect",
+				function(s)
+					if s.src == old then
+						ub.uci:set("firewall", s['.name'], "src", new)
+					end
+				end)
+			ub.uci:foreach("firewall", "forwarding",
+				function(s)
+					if s.src == old then
+						ub.uci:set("firewall", s['.name'], "src", new)
+					end
+				end)
+		end
+	end
+	return r
+end
+
+function del_network(self, net)
 	local z
 	if net then
-		for _, z in ipairs(get_zones()) do
+		for _, z in ipairs(self:get_zones()) do
 			z:del_network(net)
 		end
 	end
