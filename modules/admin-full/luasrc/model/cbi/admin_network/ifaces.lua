@@ -104,22 +104,24 @@ fwzone.rmempty = false
 
 function fwzone.cfgvalue(self, section)
 	self.iface = section
-	local z = fw.get_zones_by_network(section)[1]
+	local z = fw:get_zones_by_network(section)[1]
 	return z and z:name()
 end
 
 function fwzone.write(self, section, value)
-	local zone = fw.get_zone(value)
+	local zone = fw:get_zone(value)
 
-	if not zone then
+	if not zone and value == '-' then
 		value = m:formvalue(self:cbid(section) .. ".newzone")
-		if value and #value > 0 and value:match("^[a-zA-Z0-9_]+$") then
-			zone = fw.add_zone(value)
+		if value and #value > 0 then
+			zone = fw:add_zone(value)
+		else
+			fw:del_network(section)
 		end
 	end
 
 	if zone then
-		fw.del_network(section)
+		fw:del_network(section)
 		zone:add_network(section)
 	end
 end
