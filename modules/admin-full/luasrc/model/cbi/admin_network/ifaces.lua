@@ -109,9 +109,6 @@ function fwzone.cfgvalue(self, section)
 end
 
 function fwzone.write(self, section, value)
-
-	fw.del_network(section)
-
 	local zone = fw.get_zone(value)
 
 	if not zone then
@@ -122,6 +119,7 @@ function fwzone.write(self, section, value)
 	end
 
 	if zone then
+		fw.del_network(section)
 		zone:add_network(section)
 	end
 end
