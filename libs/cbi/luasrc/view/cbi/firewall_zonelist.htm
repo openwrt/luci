@@ -29,7 +29,7 @@ $Id$
 -%>
 
 <ul style="margin:0; list-style-type:none">
-	<% for _, zone in ipairs(zones) do %><%# --utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do %>
+	<% for _, zone in utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do %>
 	<li style="padding:0.5em">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(value == zone:name(), "checked", "checked")%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. zone:name())%> style="background-color:<%=zone:get_color()%>; padding:0.5em">
@@ -45,7 +45,7 @@ $Id$
 					<% if iface == self.iface then %><strong><%=ifname%></strong><% else %><%=ifname%><% end %> &nbsp;
 				<% end %>
 			<% end %>
-			<% if empty then %><em>(no interfaces attached)</em><% end %>
+			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
 		</label>
 	</li>
 	<% end %>
@@ -53,7 +53,7 @@ $Id$
 	<li style="padding:0.5em">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
 		<div style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em; display:inline">
-			<label<%=attr("for", cbid .. "_new")%>><em>unspecified / create:&nbsp;</em></label>
+			<label<%=attr("for", cbid .. "_new")%>><em><%:a_s_ipt_zone_unspec_create unspecified -or- create:%>&nbsp;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newzone")%> />
 		</div>
 	</li>
