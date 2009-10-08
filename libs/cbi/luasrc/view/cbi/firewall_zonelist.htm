@@ -1,0 +1,62 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2009 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+<%+cbi/valueheader%>
+
+<%-
+	local utl = require "luci.util"
+	local wba = require "luci.tools.webadmin"
+	local wbi = require "luci.tools.webadmin_interfaces"
+	local fwm = require "luci.model.firewall"
+
+	wbi.init(self.map.uci)
+
+	local zone, iface, ifname
+	local zones = fwm.get_zones()
+	local value = self:cfgvalue(section) or self.default
+
+	if value and #value == 0 then value = nil end
+-%>
+
+<ul style="margin:0; list-style-type:none">
+	<% for _, zone in ipairs(zones) do %><%# --utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do %>
+	<li style="padding:0.5em">
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(value == zone:name(), "checked", "checked")%> /> &nbsp;
+		<label<%=attr("for", cbid .. "." .. zone:name())%> style="background-color:<%=zone:get_color()%>; padding:0.5em">
+			<strong><%=zone:name()%>:</strong>
+			<%
+				local empty = true
+				for _, iface in ipairs(zone:get_networks()) do
+					local ifname = wbi.network_get_ifname(iface)
+					local dev    = wbi.iface_get_list()[ifname]
+			 %>
+				<% if ifname and dev then empty = false %>
+					<img title="<%=wbi.iface_format_type(dev.type)%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=dev.type or "ethernet"%><%=dev.flags and dev.flags.up and "" or "_disabled"%>.png" />
+					<% if iface == self.iface then %><strong><%=ifname%></strong><% else %><%=ifname%><% end %> &nbsp;
+				<% end %>
+			<% end %>
+			<% if empty then %><em>(no interfaces attached)</em><% end %>
+		</label>
+	</li>
+	<% end %>
+
+	<li style="padding:0.5em">
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
+		<div style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em; display:inline">
+			<label<%=attr("for", cbid .. "_new")%>><em>unspecified / create:&nbsp;</em></label>
+			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newzone")%> />
+		</div>
+	</li>
+</ul>
+
+<%+cbi/valuefooter%>
