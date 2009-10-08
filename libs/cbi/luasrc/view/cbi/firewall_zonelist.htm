@@ -22,7 +22,7 @@ $Id$
 	wbi.init(self.map.uci)
 
 	local zone, iface, ifname
-	local zones = fwm.get_zones()
+	local zones = fwm:get_zones()
 	local value = self:cfgvalue(section) or self.default
 
 	if value and #value == 0 then value = nil end
