@@ -90,49 +90,56 @@ bsection = utl.class()
 
 function bsection.uciop(self, op, ...)
 	assert(self.bind and self.bind.uci,
-		"attempt to use unitialized binding: " .. type(self.sid))
+		"attempt to use unitialized binding")
 
-	return op and self.bind.uci[op](self.bind.uci, self.bind.cfg, ...)
-		or self.bind.uci
+	if op then
+		return self.bind.uci[op](self.bind.uci, self.bind.cfg, ...)
+	else
+		return self.bind.uci
+	end
 end
 
 function bsection.get(self, k, c)
 	local v
-	self:uciop("foreach", self.stype,
-		function(s)
-			if type(c) == "table" then
-				local ck, cv
-				for ck, cv in pairs(c) do
-					if s[ck] ~= cv then return true end
+	if type(c) == "string" then
+		v = self:uciop("get", c, k)
+	else
+		self:uciop("foreach", self.stype,
+			function(s)
+				if type(c) == "table" then
+					local ck, cv
+					for ck, cv in pairs(c) do
+						if s[ck] ~= cv then return true end
+					end
 				end
-			elseif type(c) == "string" and s['.name'] ~= c then
-				return true
-			end
-			if k ~= nil then
-				v = s[k]
-			else
-				v = s
-			end
-			return false
-		end)
+				if k ~= nil then
+					v = s[k]
+				else
+					v = s
+				end
+				return false
+			end)
+	end
 	return v
 end
 
 function bsection.set(self, k, v, c)
 	local stat
-	self:uciop("foreach", self.stype,
-		function(s)
-			if type(c) == "table" then
-				local ck, cv
-				for ck, cv in pairs(c) do
-					if s[ck] ~= cv then return true end
+	if type(c) == "string" then
+		stat = self:uciop("set", c, k, v)
+	else
+		self:uciop("foreach", self.stype,
+			function(s)
+				if type(c) == "table" then
+					local ck, cv
+					for ck, cv in pairs(c) do
+						if s[ck] ~= cv then return true end
+					end
 				end
-			elseif type(c) == "string" and s['.name'] ~= c then
-				return true
-			end
-			stat = self:uciop("set", c, k, v)
-			return false
-		end)
+				stat = self:uciop("set", c, k, v)
+				return false
+			end)
+	end
 	return stat or false
 end
 
