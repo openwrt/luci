@@ -931,7 +931,7 @@ function AbstractSection.create(self, section)
 	local stat
 
 	if section then
-		stat = section:match("^%w+$") and self.map:set(section, nil, self.sectiontype)
+		stat = section:match("^[%w_]+$") and self.map:set(section, nil, self.sectiontype)
 	else
 		section = self.map:add(self.sectiontype)
 		stat = section
