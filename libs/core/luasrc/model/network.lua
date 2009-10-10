@@ -32,7 +32,7 @@ module "luci.model.network"
 
 
 local ub = uct.bind("network")
-local ifs, brs
+local ifs, brs, sws
 
 function init(cursor)
 	if cursor then
@@ -42,11 +42,13 @@ function init(cursor)
 
 		ifs = { }
 		brs = { }
+		sws = { }
 
 		-- read interface information
 		local n, i
 		for n, i in ipairs(nxo.getifaddrs()) do
 			local name = i.name:match("[^:]+")
+			local prnt = name:match("^([^%.]+)%.")
 
 			if not _M:ignore_interface(name) then
 				ifs[name] = ifs[name] or {
@@ -57,6 +59,11 @@ function init(cursor)
 					ipaddrs  = { },
 					ip6addrs = { }
 				}
+
+				if prnt then
+					sws[name] = true
+					sws[prnt] = true
+				end
 
 				if i.family == "packet" then
 					ifs[name].flags   = i.flags
@@ -229,9 +236,7 @@ end
 function network.get_interfaces(self)
 	local ifaces = { }
 	local iface
-	for _, iface in ub:list(
-		(self:ifname() or '') .. ' ' .. (self:device() or '')
-	) do
+	for _, iface in ipairs(ub:list(self:ifname())) do
 		iface = iface:match("[^:]+")
 		if ifs[iface] then
 			ifaces[#ifaces+1] = interface(iface)
@@ -242,9 +247,7 @@ end
 
 function network.contains_interface(self, iface)
 	local i
-	local ifaces = ub:list(
-		(self:ifname() or '') .. ' ' .. (self:device() or '')
-	)
+	local ifaces = ub:list(self:ifname())
 
 	if type(iface) ~= "string" then
 		iface = iface:name()
@@ -290,7 +293,7 @@ function interface.type(self)
 		return "wifi"
 	elseif brs[self.ifname] then
 		return "bridge"
-	elseif self.ifname:match("%.") then
+	elseif sws[self.ifname] or self.ifname:match("%.") then
 		return "switch"
 	else
 		return "ethernet"
