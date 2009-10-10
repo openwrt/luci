@@ -74,21 +74,21 @@ function get_zones(self)
 	return zones
 end
 
-function get_zones_by_network(self, net)
-	local zones = { }
+function get_zone_by_network(self, net)
+	local z
 	ub.uci:foreach("firewall", "zone",
 		function(s)
-			if s.name then
+			if s.name and net then
 				local n
 				for _, n in ipairs(ub:list(s.network or s.name)) do
 					if n == net then
-						zones[#zones+1] = zone(s['.name'])
-						return true
+						z = s['.name']
+						return false
 					end
 				end
 			end
 		end)
-	return zones
+	return z and zone(z)
 end
 
 function del_zone(self, n)
