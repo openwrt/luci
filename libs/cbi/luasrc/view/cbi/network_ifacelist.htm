@@ -22,6 +22,7 @@ $Id$
 	local value = (self:cfgvalue(section) or self.default or "")
 	local checked = { }
 
+	if type(value) == "table" then value = table.concat(value, " ") end
 	for value in value:gmatch("%S+") do
 		checked[value] = true
 	end

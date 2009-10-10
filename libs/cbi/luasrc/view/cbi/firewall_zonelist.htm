@@ -15,48 +15,51 @@ $Id$
 
 <%-
 	local utl = require "luci.util"
-	local wba = require "luci.tools.webadmin"
-	local wbi = require "luci.tools.webadmin_interfaces"
 	local fwm = require "luci.model.firewall"
+	local nwm = require "luci.model.network"
 
-	wbi.init(self.map.uci)
-
-	local zone, iface, ifname
+	local zone, net, iface
 	local zones = fwm:get_zones()
 	local value = self:cfgvalue(section) or self.default
+	local selected = false
 
 	if value and #value == 0 then value = nil end
 -%>
 
 <ul style="margin:0; list-style-type:none">
-	<% for _, zone in utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do %>
+	<%
+		for _, zone in utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do
+			selected = selected or (value == zone:name())
+ 	%>
 	<li style="padding:0.5em">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(value == zone:name(), "checked", "checked")%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. zone:name())%> style="background-color:<%=zone:get_color()%>; padding:0.5em">
 			<strong><%=zone:name()%>:</strong>
 			<%
 				local empty = true
-				for _, iface in ipairs(zone:get_networks()) do
-					local ifname = wbi.network_get_ifname(iface)
-					local dev    = wbi.iface_get_list()[ifname]
+				for _, net in ipairs(zone:get_networks()) do
+					net = nwm:get_network(net)
+					for _, iface in ipairs(net and net:get_interfaces() or {}) do
+						if not iface:is_bridgeport() then
+							empty = false
 			 %>
-				<% if ifname and dev then empty = false %>
-					<img title="<%=wbi.iface_format_type(dev.type)%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=dev.type or "ethernet"%><%=dev.flags and dev.flags.up and "" or "_disabled"%>.png" />
-					<% if iface == self.iface then %><strong><%=ifname%></strong><% else %><%=ifname%><% end %> &nbsp;
-				<% end %>
-			<% end %>
+				<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+				<% if iface:name() == self.iface then %><strong><%=iface:name()%></strong><% else %><%=iface:name()%><% end %> &nbsp;
+			<% end end end %>
 			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
 		</label>
 	</li>
 	<% end %>
 
+	<% if not self.nocreate then %>
 	<li style="padding:0.5em">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not selected, "checked", "checked")%> /> &nbsp;
 		<div style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em; display:inline">
 			<label<%=attr("for", cbid .. "_new")%>><em><%:a_s_ipt_zone_unspec_create unspecified -or- create:%>&nbsp;</em></label>
-			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newzone")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
+			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newzone") .. ifattr(not selected, "value", self.default)%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>
+	<% end %>
 </ul>
 
 <%+cbi/valuefooter%>

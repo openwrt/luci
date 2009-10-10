@@ -13,7 +13,7 @@ $Id$
 
 -%>
 <%+cbi/valueheader%>
-	<input type="<%=self.password and 'password" class="cbi-input-password' or 'text" class="cbi-input-text' %>" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. attr("value", self:cfgvalue(section)) .. ifattr(self.size, "size")%> />
+	<input type="<%=self.password and 'password" class="cbi-input-password' or 'text" class="cbi-input-text' %>" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. attr("value", self:cfgvalue(section) or self.default) .. ifattr(self.size, "size")%> />
 	<% if #self.keylist > 0 then -%>
 	<script type="text/javascript">
 		cbi_combobox_init('<%=cbid%>', {
