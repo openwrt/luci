@@ -37,6 +37,7 @@ s.addremove = true
 
 s:tab("general", translate("a_n_general", "General Setup"))
 if has_ipv6 then s:tab("ipv6", translate("a_n_ipv6", "IPv6 Setup")) end
+if has_pppd then s:tab("ppp", translate("a_n_ppp", "PPP Settings")) end
 s:tab("physical", translate("a_n_physical", "Physical Settings"))
 
 --[[
@@ -112,7 +113,7 @@ fwzone.rmempty = false
 
 function fwzone.cfgvalue(self, section)
 	self.iface = section
-	local z = fw:get_zones_by_network(section)[1]
+	local z = fw:get_zone_by_network(section)
 	return z and z:name()
 end
 
@@ -210,7 +211,7 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	pass:depends("proto", "ppp")
 	pass:depends("proto", "3g")
 
-	ka = s:taboption("general", Value, "keepalive",
+	ka = s:taboption("ppp", Value, "keepalive",
 	 translate("network_interface_keepalive"),
 	 translate("network_interface_keepalive_desc")
 	)
@@ -220,7 +221,7 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	ka:depends("proto", "ppp")
 	ka:depends("proto", "3g")
 
-	demand = s:taboption("general", Value, "demand",
+	demand = s:taboption("ppp", Value, "demand",
 	 translate("network_interface_demand"),
 	 translate("network_interface_demand_desc")
 	)
@@ -232,16 +233,16 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 end
 
 if has_pppoa then
-	encaps = s:taboption("general", ListValue, "encaps", translate("network_interface_encaps"))
+	encaps = s:taboption("ppp", ListValue, "encaps", translate("network_interface_encaps"))
 	encaps:depends("proto", "pppoa")
 	encaps:value("", translate("cbi_select"))
 	encaps:value("vc", "VC")
 	encaps:value("llc", "LLC")
 
-	vpi = s:taboption("general", Value, "vpi", "VPI")
+	vpi = s:taboption("ppp", Value, "vpi", "VPI")
 	vpi:depends("proto", "pppoa")
 
-	vci = s:taboption("general", Value, "vci", "VCI")
+	vci = s:taboption("ppp", Value, "vci", "VCI")
 	vci:depends("proto", "pppoa")
 end
 
@@ -253,7 +254,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	device:depends("proto", "ppp")
 	device:depends("proto", "3g")
 
-	defaultroute = s:taboption("general", Flag, "defaultroute",
+	defaultroute = s:taboption("ppp", Flag, "defaultroute",
 	 translate("network_interface_defaultroute"),
 	 translate("network_interface_defaultroute_desc")
 	)
@@ -267,7 +268,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 		return ( AbstractValue.cfgvalue(...) or '1' )
 	end
 
-	peerdns = s:taboption("general", Flag, "peerdns",
+	peerdns = s:taboption("ppp", Flag, "peerdns",
 	 translate("network_interface_peerdns"),
 	 translate("network_interface_peerdns_desc")
 	)
@@ -282,7 +283,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	end
 
 	if has_ipv6 then
-		ipv6 = s:taboption("general", Flag, "ipv6", translate("network_interface_ipv6") )
+		ipv6 = s:taboption("ppp", Flag, "ipv6", translate("network_interface_ipv6") )
 		ipv6:depends("proto", "ppp")
 		ipv6:depends("proto", "pppoa")
 		ipv6:depends("proto", "pppoe")
@@ -290,7 +291,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 		ipv6:depends("proto", "3g")
 	end
 
-	connect = s:taboption("general", Value, "connect",
+	connect = s:taboption("ppp", Value, "connect",
 	 translate("network_interface_connect"),
 	 translate("network_interface_connect_desc")
 	)
@@ -300,7 +301,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	connect:depends("proto", "pptp")
 	connect:depends("proto", "3g")
 
-	disconnect = s:taboption("general", Value, "disconnect",
+	disconnect = s:taboption("ppp", Value, "disconnect",
 	 translate("network_interface_disconnect"),
 	 translate("network_interface_disconnect_desc")
 	)
@@ -310,7 +311,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	disconnect:depends("proto", "pptp")
 	disconnect:depends("proto", "3g")
 
-	pppd_options = s:taboption("general", Value, "pppd_options",
+	pppd_options = s:taboption("ppp", Value, "pppd_options",
 	 translate("network_interface_pppd_options"),
 	 translate("network_interface_pppd_options_desc")
 	)
@@ -320,7 +321,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	pppd_options:depends("proto", "pptp")
 	pppd_options:depends("proto", "3g")
 
-	maxwait = s:taboption("general", Value, "maxwait",
+	maxwait = s:taboption("ppp", Value, "maxwait",
 	 translate("network_interface_maxwait"),
 	 translate("network_interface_maxwait_desc")
 	)
@@ -333,31 +334,26 @@ s2.addremove = true
 s2:depends("interface", arg[1])
 s2.defaults.interface = arg[1]
 
+s2:tab("general", translate("a_n_general", "General Setup"))
 
 s2.defaults.proto = "static"
 
-ipaddr = s2:option(Value, "ipaddr", translate("ipaddress"))
-ipaddr.rmempty = true
+s2:taboption("general", Value, "ipaddr", translate("ipaddress")).rmempty = true
 
-nm = s2:option(Value, "netmask", translate("netmask"))
+nm = s2:taboption("general", Value, "netmask", translate("netmask"))
 nm.rmempty = true
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
-gw = s2:option(Value, "gateway", translate("gateway"))
-gw.rmempty = true
+s2:taboption("general", Value, "gateway", translate("gateway")).rmempty = true
+s2:taboption("general", Value, "bcast", translate("broadcast"))
+s2:taboption("general", Value, "dns", translate("dnsserver"))
 
-bcast = s2:option(Value, "bcast", translate("broadcast"))
-bcast.optional = true
-
-ip6addr = s2:option(Value, "ip6addr", translate("ip6address"), translate("cidr6"))
-ip6addr.optional = true
-
-ip6gw = s2:option(Value, "ip6gw", translate("gateway6"))
-ip6gw.optional = true
-
-dns = s2:option(Value, "dns", translate("dnsserver"))
-dns.optional = true
+if has_ipv6 then
+	s2:tab("ipv6", translate("a_n_ipv6", "IPv6 Setup"))
+	s2:taboption("ipv6", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
+	s2:taboption("ipv6", Value, "ip6gw", translate("gateway6"))
+end
 
 return m
