@@ -22,6 +22,7 @@ local type, pairs, ipairs, table, i18n
 
 local lmo = require "lmo"
 local nxo = require "nixio"
+local nfs = require "nixio.fs"
 local iwi = require "iwinfo"
 local ipc = require "luci.ip"
 local utl = require "luci.util"
@@ -92,6 +93,10 @@ function init(cursor)
 			end
 		end
 	end
+end
+
+function has_ipv6(self)
+	return nfs.access("/proc/net/ipv6_route")
 end
 
 function add_network(self, n, options)
@@ -268,6 +273,18 @@ function interface.name(self)
 	return self.ifname
 end
 
+function interface.mac(self)
+	return self.dev.macaddr or "00:00:00:00:00:00"
+end
+
+function interface.ipaddrs(self)
+	return self.dev.ipaddrs or { }
+end
+
+function interface.ip6addrs(self)
+	return self.dev.ip6addrs or { }
+end
+
 function interface.type(self)
 	if iwi.type(self.ifname) and iwi.type(self.ifname) ~= "dummy" then
 		return "wifi"
@@ -298,9 +315,25 @@ function interface.ports(self)
 		local iface
 		local ifaces = { }
 		for _, iface in ipairs(self.br.ifnames) do
-			ifaces[#ifaces+1] = interface(iface)
+			ifaces[#ifaces+1] = interface(iface.name)
 		end
 		return ifaces
+	end
+end
+
+function interface.bridge_id(self)
+	if self.br then
+		return self.br.id
+	else
+		return nil
+	end
+end
+
+function interface.bridge_stp(self)
+	if self.br then
+		return self.br.stp
+	else
+		return false
 	end
 end
 
@@ -312,12 +345,41 @@ function interface.is_bridge(self)
 	return (self:type() == "bridge")
 end
 
+function interface.is_bridgeport(self)
+	return self.dev and self.dev.bridge and true or false
+end
+
+function interface.tx_bytes(self)
+	return self.dev and self.dev.stats
+		and self.dev.stats.tx_bytes or 0
+end
+
+function interface.rx_bytes(self)
+	return self.dev and self.dev.stats
+		and self.dev.stats.rx_bytes or 0
+end
+
+function interface.tx_packets(self)
+	return self.dev and self.dev.stats
+		and self.dev.stats.tx_packets or 0
+end
+
+function interface.rx_packets(self)
+	return self.dev and self.dev.stats
+		and self.dev.stats.rx_packets or 0
+end
+
 function interface.get_network(self)
-	local net
-	for _, net in ipairs(_M:get_networks()) do
-		if net:contains_interface(self.ifname) then
-			return net
+	if not self.network then
+		local net
+		for _, net in ipairs(_M:get_networks()) do
+			if net:contains_interface(self.ifname) then
+				self.network = net
+				return net
+			end
 		end
+	else
+		return self.network
 	end
 end
 
