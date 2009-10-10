@@ -51,6 +51,9 @@ function index()
 	page.leaf   = true
 	page.subindex = true
 
+	local page = entry({"admin", "network", "add"}, cbi("admin_network/iface_add"), nil)
+	page.leaf = true
+
 	uci:foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
