@@ -33,7 +33,7 @@ nw.init(m.uci)
 fw.init(m.uci)
 
 s = m:section(NamedSection, arg[1], "interface")
-s.addremove = true
+s.addremove = false
 
 s:tab("general", translate("a_n_general", "General Setup"))
 if has_ipv6 then s:tab("ipv6", translate("a_n_ipv6", "IPv6 Setup")) end
