@@ -1,0 +1,58 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2009 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+<%+cbi/valueheader%>
+
+<%-
+	local utl = require "luci.util"
+	local nwm = require "luci.model.network"
+
+	local net, iface
+	local networks = nwm:get_networks()
+	local value = self:cfgvalue(section) or self.default
+
+	if value and #value == 0 then value = nil end
+-%>
+
+<ul style="margin:0; list-style-type:none">
+	<% for _, net in utl.spairs(networks, function(a,b) return (networks[a]:name() < networks[b]:name()) end) do
+	       if net:name() ~= "loopback" then %>
+	<li style="padding:0.25em 0">
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "." .. net:name()) .. attr("name", cbid) .. attr("value", net:name()) .. ifattr(value == net:name(), "checked", "checked")%> /> &nbsp;
+		<label<%=attr("for", cbid .. "." .. net:name())%>>
+			<strong><%=net:name()%>:</strong>
+			<%
+				local empty = true
+				for _, iface in ipairs(net:get_interfaces()) do if not iface:is_bridgeport() then
+					empty = false
+			 %>
+				<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+				<% if iface:name() == self.iface then %><strong><%=iface:name()%></strong><% else %><%=iface:name()%><% end %> &nbsp;
+			<% end end %>
+			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
+		</label>
+	</li>
+	<% end end %>
+
+	<% if not self.nocreate then %>
+	<li style="padding:0.25em 0">
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
+		<div style="padding:0.5em; display:inline">
+			<label<%=attr("for", cbid .. "_new")%>><em><%:a_s_ipt_zone_unspec_create unspecified -or- create:%>&nbsp;</em></label>
+			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newiface")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
+		</div>
+	</li>
+	<% end %>
+</ul>
+
+<%+cbi/valuefooter%>
