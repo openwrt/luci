@@ -36,9 +36,6 @@ function cbi_d_add(field, dep, next) {
 				"deps": []
 			};
 			cbi_d.unshift(entry);
-
-			if( entry.parent )
-				cbi_c[entry.parent] = (cbi_c[entry.parent] || 0) + 1;
 		}
 		entry.deps.push(dep)
 	}

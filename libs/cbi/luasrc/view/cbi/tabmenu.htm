@@ -16,6 +16,7 @@ $Id$
 	<ul class="cbi-tabmenu">
 	<%- self.selected_tab = luci.http.formvalue("tab." .. self.config .. "." .. section) %>
 	<%- for _, tab in ipairs(self.tab_names) do if #self.tabs[tab].childs > 0 then %>
+		<script type="text/javascript">cbi_c['container.<%=self.config%>.<%=section%>.<%=tab%>'] = <%=#self.tabs[tab].childs%>;</script>
 		<%- if not self.selected_tab then self.selected_tab = tab end %>
 		<li id="tab.<%=self.config%>.<%=section%>.<%=tab%>" class="cbi-tab<%=(tab == self.selected_tab) and '' or '-disabled'%>">
 			<a onclick="this.blur(); return cbi_t_switch('<%=self.config%>.<%=section%>', '<%=tab%>')" href="<%=REQUEST_URI%>?tab.<%=self.config%>.<%=section%>=<%=tab%>"><%=self.tabs[tab].title%></a>
