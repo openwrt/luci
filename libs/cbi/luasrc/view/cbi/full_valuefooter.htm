@@ -14,7 +14,7 @@ $Id$
 -%>
 
 		<% if self.description and #self.description > 0 then -%>
-			<% if not luci.util.instanceof( self, luci.cbi.Flag ) then -%>
+			<% if not luci.util.instanceof( self, luci.cbi.Flag ) or self.orientation ~= "horizontal" then -%>
 				<br />
 			<%- end %>
 			<div class="cbi-value-description">

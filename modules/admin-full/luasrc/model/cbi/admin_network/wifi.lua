@@ -70,11 +70,11 @@ end
 
 if hwtype == "mac80211" then
 	tp = s:taboption("general",
-		(#tx_powers > 0) and ListValue or Value,
+		(tx_powers and #tx_powers > 0) and ListValue or Value,
 		"txpower", translate("a_w_txpwr"), "dBm")
 
 	tp.rmempty = true
-	for _, p in ipairs(iw.txpwrlist) do
+	for _, p in ipairs(iw and iw.txpwrlist or {}) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end
 end
@@ -107,6 +107,7 @@ if hwtype == "atheros" then
 	if not nsantenna then
 		ant1 = s:taboption("advanced", ListValue, "txantenna", translate("wifi_txantenna"))
 		ant1.widget = "radio"
+		ant1.orientation = "horizontal"
 		ant1:depends("diversity", "")
 		ant1:value("0", translate("wifi_auto"))
 		ant1:value("1", translate("wifi_ant1", "Antenna 1"))
@@ -114,6 +115,7 @@ if hwtype == "atheros" then
 
 		ant2 = s:taboption("advanced", ListValue, "rxantenna", translate("wifi_rxantenna"))
 		ant2.widget = "radio"
+		ant2.orientation = "horizontal"
 		ant2:depends("diversity", "")
 		ant2:value("0", translate("wifi_auto"))
 		ant2:value("1", translate("wifi_ant1", "Antenna 1"))
