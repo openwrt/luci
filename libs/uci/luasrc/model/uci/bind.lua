@@ -126,7 +126,11 @@ end
 function bsection.set(self, k, v, c)
 	local stat
 	if type(c) == "string" then
-		stat = self:uciop("set", c, k, v)
+		if type(v) == "table" and #v == 0 then
+			stat = self:uciop("delete", c, k)
+		else
+			stat = self:uciop("set", c, k, v)
+		end
 	else
 		self:uciop("foreach", self.stype,
 			function(s)
