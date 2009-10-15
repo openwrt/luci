@@ -17,8 +17,8 @@ limitations under the License.
 
 ]]--
 
-local type, pairs, ipairs, table, i18n
-	= type, pairs, ipairs, table, luci.i18n
+local type, pairs, ipairs, loadfile, table, i18n
+	= type, pairs, ipairs, loadfile, table, luci.i18n
 
 local lmo = require "lmo"
 local nxo = require "nixio"
@@ -30,6 +30,28 @@ local uct = require "luci.model.uci.bind"
 
 module "luci.model.network"
 
+-- load extensions
+local ext
+local handler = { }
+
+for ext in nfs.glob(utl.libpath() .. "/model/network/*.lua") do
+	if nfs.access(ext) then
+		local m = loadfile(ext)
+		if m then
+			handler[#handler+1] = m()
+		end
+	end
+end
+
+function foreach_handler(code, ...)
+	local h
+	for _, h in ipairs(handler) do
+		if code(h, ...) then
+			return true
+		end
+	end
+	return false
+end
 
 local ub = uct.bind("network")
 local ifs, brs, sws
@@ -43,6 +65,12 @@ function init(cursor)
 		ifs = { }
 		brs = { }
 		sws = { }
+
+		-- init handler
+		foreach_handler(function(h)
+			h:init(cursor)
+			h:find_interfaces(ifs, brs)
+		end)
 
 		-- read interface information
 		local n, i
@@ -75,7 +103,7 @@ function init(cursor)
 					ifs[name].ip6addrs[#ifs[name].ip6addrs+1] = ipc.IPv6(i.addr, i.netmask)
 				end
 			end
-		end		
+		end
 
 		-- read bridge informaton
 		local b, l
@@ -150,6 +178,8 @@ function del_network(self, n)
 					ub.uci:delete("network", s['.name'])
 				end
 			end)
+
+		foreach_handler(function(h) h:del_network(n) end)
 	end
 	return r
 end
@@ -179,6 +209,8 @@ function rename_network(self, old, new)
 						ub.uci:set("network", s['.name'], "interface", new)
 					end
 				end)
+
+			foreach_handler(function(h) h:rename_network(old, new) end)
 		end
 	end
 	return r or false
@@ -198,8 +230,12 @@ function get_interfaces(self)
 end
 
 function ignore_interface(self, x)
-	return (x:match("^wmaster%d") or x:match("^wifi%d")
-		or x:match("^hwsim%d") or x:match("^imq%d") or x == "lo")
+	if foreach_handler(function(h) return h:ignore_interface(x) end) then
+		return true
+	else
+		return (x:match("^wmaster%d") or x:match("^wifi%d")
+			or x:match("^hwsim%d") or x:match("^imq%d") or x == "lo")
+	end
 end
 
 
@@ -218,11 +254,27 @@ function network.is_bridge(self)
 end
 
 function network.add_interface(self, ifname)
+	local ifaces, iface
+
 	if type(ifname) ~= "string" then
-		ifname = ifname:name()
+		ifaces = { ifname:name() }
+	else
+		ifaces = ub:list(ifname)
 	end
-	if ifs[ifname] then
-		self:ifname(ub:list((self:ifname() or ''), ifname))
+
+	for _, iface in ipairs(ifaces) do
+		if ifs[iface] then
+			-- make sure the interface is removed from all networks
+			local i = interface(iface)
+			local n = i:get_network()
+			if n then n:del_interface(iface) end
+
+			if ifs[iface].handler then
+				ifs[iface].handler:add_interface(self, iface, ifs[iface])
+			else
+				self:ifname(ub:list((self:ifname() or ''), iface))
+			end
+		end
 	end
 end
 
@@ -230,7 +282,12 @@ function network.del_interface(self, ifname)
 	if type(ifname) ~= "string" then
 		ifname = ifname:name()
 	end
-	self:ifname(ub:list((self:ifname() or ''), nil, ifname))
+
+	if ifs[ifname] and ifs[ifname].handler then
+		ifs[ifname].handler:del_interface(self, ifname, ifs[ifname])
+	else
+		self:ifname(ub:list((self:ifname() or ''), nil, ifname))
+	end
 end
 
 function network.get_interfaces(self)
@@ -239,6 +296,11 @@ function network.get_interfaces(self)
 	for _, iface in ipairs(ub:list(self:ifname())) do
 		iface = iface:match("[^:]+")
 		if ifs[iface] then
+			ifaces[#ifaces+1] = interface(iface)
+		end
+	end
+	for iface, _ in pairs(ifs) do
+		if ifs[iface].network == self:name() then
 			ifaces[#ifaces+1] = interface(iface)
 		end
 	end
@@ -255,6 +317,12 @@ function network.contains_interface(self, iface)
 
 	for _, i in ipairs(ifaces) do
 		if i == iface then
+			return true
+		end
+	end
+
+	for i, _ in pairs(ifs) do
+		if ifs[i].dev and ifs[i].dev.network == self:name() then
 			return true
 		end
 	end
@@ -289,14 +357,30 @@ function interface.ip6addrs(self)
 end
 
 function interface.type(self)
-	if iwi.type(self.ifname) and iwi.type(self.ifname) ~= "dummy" then
-		return "wifi"
+	if self.dev and self.dev.type then
+		return self.dev.type
 	elseif brs[self.ifname] then
 		return "bridge"
 	elseif sws[self.ifname] or self.ifname:match("%.") then
 		return "switch"
 	else
 		return "ethernet"
+	end
+end
+
+function interface.shortname(self)
+	if self.dev and self.dev.handler then
+		return self.dev.handler:shortname(self)
+	else
+		return self.ifname
+	end
+end
+
+function interface.get_i18n(self)
+	if self.dev and self.dev.handler then
+		return self.dev.handler:get_i18n(self)
+	else
+		return "%s: %q" %{ self:get_type_i18n(), self:name() }
 	end
 end
 
@@ -373,6 +457,10 @@ function interface.rx_packets(self)
 end
 
 function interface.get_network(self)
+	if self.dev and self.dev.network then
+		self.network = _M:get_network(self.dev.network)
+	end
+
 	if not self.network then
 		local net
 		for _, net in ipairs(_M:get_networks()) do
