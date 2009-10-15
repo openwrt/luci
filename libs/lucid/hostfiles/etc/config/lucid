@@ -48,7 +48,14 @@ config daemon https
 	list publisher luciweb
 	option enabled 1
 	option encryption enable
+	option tls sdk_tls
 	
+config tls sdk_tls
+	option generate 1
+	option key /tmp/lucid-tls.key
+	option cert /tmp/lucid-tls.cert
+	option type asn1
+
 config daemon rpc
 	option slave rpcd
 	list address 12900
