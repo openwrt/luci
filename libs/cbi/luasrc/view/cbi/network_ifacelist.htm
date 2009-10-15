@@ -19,23 +19,33 @@ $Id$
 
 	local iface
 	local ifaces = net:get_interfaces()
-	local value = (self:cfgvalue(section) or self.default or "")
+	local value = (self:formvalue(section) or self.default or "")
 	local checked = { }
 
-	if type(value) == "table" then value = table.concat(value, " ") end
-	for value in value:gmatch("%S+") do
-		checked[value] = true
+	if value and #value > 0 then
+		if type(value) == "table" then value = table.concat(value, " ") end
+		for value in value:gmatch("%S+") do
+			checked[value] = true
+		end		
+	else
+		local n = self.network and net:get_network(self.network)
+		if n then
+			local i
+			for _, i in ipairs(n:get_interfaces()) do
+				checked[i:name()] = true
+			end
+		end
 	end
 -%>
 
 <ul style="margin:0; list-style-type:none">
-	<% for _, iface in utl.spairs(ifaces, function(a,b) return (ifaces[a]:name() < ifaces[b]:name()) end) do
+	<% for _, iface in utl.spairs(ifaces, function(a,b) return (ifaces[a]:type() < ifaces[b]:type()) end) do
          if not self.nobridges or not iface:is_bridge() then %>
 	<li>
 		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. iface:name()) .. attr("name", cbid) .. attr("value", iface:name()) .. ifattr(checked[iface:name()], "checked", "checked")%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
-			<%=iface:name()%><% local n = iface:get_network(); if n then %> (<%=n:name()%>)<% end %>
+			<%=iface:get_i18n()%><% local n = iface:get_network(); if n then %> (<%=n:name()%>)<% end %>
 		</label>
 	</li>
 	<% end end %>

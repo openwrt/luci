@@ -44,7 +44,7 @@ $Id$
 							empty = false
 			 %>
 				<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
-				<% if iface:name() == self.iface then %><strong><%=iface:name()%></strong><% else %><%=iface:name()%><% end %> &nbsp;
+				<% if iface:name() == self.iface then %><strong><%=iface:shortname()%></strong><% else %><%=iface:shortname()%><% end %> &nbsp;
 			<% end end end %>
 			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
 		</label>
