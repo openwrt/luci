@@ -19,16 +19,10 @@ find_image()
 {
 	case "$1" in
 		atheros)
-			if grep -q '"vmlinux.bin.l7"' /proc/mtd; then
-				echo "openwrt-fonera-combined.img"
-			else
-				echo "openwrt-ubiquity-combined.img"
-			fi
+			echo "openwrt-atheros-combined.img"
 		;;
 		ar71xx)
-			if grep -q '"kernel"' /proc/mtd; then
-				echo "openwrt-ar71xx-combined.img"
-			fi
+			echo "openwrt-ar71xx-combined.img"
 		;;
 		brcm-2.4)
 			echo "openwrt-brcm-2.4-squashfs.trx"
