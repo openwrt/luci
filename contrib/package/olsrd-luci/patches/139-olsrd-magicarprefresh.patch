@@ -1,6 +1,5 @@
-diff -Nur olsrd-0.5.6-r2.orig/lib/arprefresh/src/olsrd_arprefresh.c olsrd-0.5.6-r2/lib/arprefresh/src/olsrd_arprefresh.c
---- olsrd-0.5.6-r2.orig/lib/arprefresh/src/olsrd_arprefresh.c	2008-11-26 10:54:16.000000000 +0100
-+++ olsrd-0.5.6-r2/lib/arprefresh/src/olsrd_arprefresh.c	2008-11-26 10:56:15.000000000 +0100
+--- a/lib/arprefresh/src/olsrd_arprefresh.c
++++ b/lib/arprefresh/src/olsrd_arprefresh.c
 @@ -34,6 +34,8 @@
   * Plugin to refresh the local ARP cache from received OLSR broadcasts
   */
@@ -19,8 +18,8 @@ diff -Nur olsrd-0.5.6-r2.orig/lib/arprefresh/src/olsrd_arprefresh.c olsrd-0.5.6-
 +#endif
  #include <linux/types.h>
  #include <linux/filter.h>
- 
-@@ -53,7 +58,6 @@
+ #include <unistd.h>
+@@ -54,7 +59,6 @@
  #include "kernel_routes.h"
  #include "scheduler.h"
  
@@ -28,7 +27,7 @@ diff -Nur olsrd-0.5.6-r2.orig/lib/arprefresh/src/olsrd_arprefresh.c olsrd-0.5.6-
  #define PLUGIN_INTERFACE_VERSION 5
  
  /****************************************************************************
-@@ -128,7 +132,13 @@
+@@ -129,7 +133,13 @@
        memcpy(&req.in_pa.sin_addr, &buf.ip.saddr, sizeof(buf.ip.saddr));
        req.arp.arp_ha.sa_family = AF_LOCAL;
        memcpy(&req.arp.arp_ha.sa_data, &buf.eth.h_source, sizeof(buf.eth.h_source));
