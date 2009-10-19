@@ -1,6 +1,6 @@
 --- a/Makefile.inc
 +++ b/Makefile.inc
-@@ -204,6 +204,10 @@
+@@ -207,6 +207,10 @@
  $(warning Use CPPFLAGS instead of DEFINES for -D)
  endif
  
@@ -13,7 +13,7 @@
  help:
 --- a/lib/bmf/src/NetworkInterfaces.c
 +++ b/lib/bmf/src/NetworkInterfaces.c
-@@ -544,7 +544,9 @@
+@@ -541,7 +541,9 @@
            OLSR_PRINTF(9, "%s: ----> Not forwarding to %s: no link found\n", PLUGIN_NAME_SHORT,
                        olsr_ip_to_string(&buf, &walker->neighbor_iface_addr));
          } else {
@@ -49,17 +49,7 @@
  
  #ifdef OS
  #undef OS
-@@ -181,7 +183,9 @@
- 
- static int build_about_body(char *, uint32_t);
- 
-+#ifndef SVEN_OLA_UNBLOAT
- static int build_cfgfile_body(char *, uint32_t);
-+#endif /* SVEN_OLA_UNBLOAT */
- 
- static int check_allowed_ip(const struct allowed_net *const allowed_nets, const union olsr_ip_addr *const addr);
- 
-@@ -216,10 +220,13 @@
+@@ -222,10 +224,13 @@
    {"Admin", "admin", build_admin_body, true},
  #endif
    {"About", "about", build_about_body, true},
@@ -73,7 +63,7 @@
  static const struct static_bin_file_entry static_bin_files[] = {
    {"favicon.ico", favicon_ico, sizeof(favicon_ico)}
    ,
-@@ -229,6 +236,7 @@
+@@ -235,6 +240,7 @@
    ,
    {NULL, NULL, 0}
  };
@@ -81,7 +71,7 @@
  
  static const struct static_txt_file_entry static_txt_files[] = {
    {"httpinfo.css", httpinfo_css},
-@@ -407,6 +415,7 @@
+@@ -428,6 +434,7 @@
    } else if (!strcmp(req_type, "GET")) {
      int i = 0;
  
@@ -89,7 +79,7 @@
      for (i = 0; static_bin_files[i].filename; i++) {
        if (FILENREQ_MATCH(filename, static_bin_files[i].filename)) {
          break;
-@@ -422,6 +431,7 @@
+@@ -442,6 +449,7 @@
      }
  
      i = 0;
@@ -97,8 +87,8 @@
      while (static_txt_files[i].filename) {
        if (FILENREQ_MATCH(filename, static_txt_files[i].filename)) {
          break;
-@@ -461,16 +471,22 @@
-         snprintf(&body[size], sizeof(body) - size,
+@@ -480,16 +488,22 @@
+       abuf_appendf(&body_abuf,
                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n" "<head>\n"
                   "<meta http-equiv=\"Content-type\" content=\"text/html; charset=ISO-8859-1\">\n"
 -                 "<title>olsr.org httpinfo plugin</title>\n" "<link rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n"
@@ -120,44 +110,44 @@
 +#endif /* SVEN_OLA_UNBLOAT */
 +        );
  
-       size += build_tabs(&body[size], sizeof(body) - size, i);
-       size += build_frame(&body[size], sizeof(body) - size, "Current Routes", "routes", FRAMEWIDTH, tab_entries[i].build_body_cb);
-@@ -854,7 +870,7 @@
-       size += snprintf(&buf[size], bufsize - size, "<tr><td colspan=\"3\">Status: DOWN</td></tr>\n");
+       build_tabs(&body_abuf, i);
+       build_frame(&body_abuf, "Current Routes", "routes", FRAMEWIDTH, tab_entries[i].build_body_cb);
+@@ -894,7 +908,7 @@
+       abuf_puts(abuf, "<tr><td colspan=\"3\">Status: DOWN</td></tr>\n");
        continue;
      }
 -
 +#ifndef SVEN_OLA_UNBLOAT
      if (olsr_cnf->ip_version == AF_INET) {
        struct ipaddr_str addrbuf, maskbuf, bcastbuf;
-       size +=
-@@ -867,6 +883,7 @@
-         snprintf(&buf[size], bufsize - size, "<tr>\n" "<td>IP: %s</td>\n" "<td>MCAST: %s</td>\n" "<td></td>\n" "</tr>\n",
+       abuf_appendf(abuf, "<tr>\n" "<td>IP: %s</td>\n" "<td>MASK: %s</td>\n" "<td>BCAST: %s</td>\n" "</tr>\n",
+@@ -905,6 +919,7 @@
+       abuf_appendf(abuf, "<tr>\n" "<td>IP: %s</td>\n" "<td>MCAST: %s</td>\n" "<td></td>\n" "</tr>\n",
                   ip6_to_string(&addrbuf, &rifs->int6_addr.sin6_addr), ip6_to_string(&maskbuf, &rifs->int6_multaddr.sin6_addr));
      }
 +#endif /* SVEN_OLA_UNBLOAT */
-     size +=
-       snprintf(&buf[size], bufsize - size, "<tr>\n" "<td>MTU: %d</td>\n" "<td>WLAN: %s</td>\n" "<td>STATUS: UP</td>\n" "</tr>\n",
+     abuf_appendf(abuf, "<tr>\n" "<td>MTU: %d</td>\n" "<td>WLAN: %s</td>\n" "<td>STATUS: UP</td>\n" "</tr>\n",
                 rifs->int_mtu, rifs->is_wireless ? "Yes" : "No");
-@@ -1115,6 +1132,7 @@
-                   build_host);
+   }
+@@ -1155,6 +1170,7 @@
+ #endif
  }
  
 +#ifndef SVEN_OLA_UNBLOAT
  static int
- build_cfgfile_body(char *buf, uint32_t bufsize)
+ check_allowed_ip(const struct allowed_net *const my_allowed_nets, const union olsr_ip_addr *const addr)
  {
-@@ -1149,6 +1167,7 @@
- #endif
-   return size;
+@@ -1166,6 +1182,7 @@
+   }
+   return 0;
  }
 +#endif /* SVEN_OLA_UNBLOAT */
  
- static int
- check_allowed_ip(const struct allowed_net *const allowed_nets, const union olsr_ip_addr *const addr)
+ #if 0
+ 
 --- a/lib/nameservice/src/nameservice.c
 +++ b/lib/nameservice/src/nameservice.c
-@@ -65,6 +65,11 @@
+@@ -67,6 +67,11 @@
  #include "mapwrite.h"
  #include "compat.h"
  
@@ -169,7 +159,7 @@
  /* config parameters */
  static char my_hosts_file[MAX_FILE + 1];
  static char my_sighup_pid_file[MAX_FILE + 1];
-@@ -381,6 +386,7 @@
+@@ -383,6 +388,7 @@
        name->ip = olsr_cnf->main_addr;
      }
    }
@@ -177,7 +167,7 @@
    for (name = my_forwarders; name != NULL; name = name->next) {
      if (name->ip.v4.s_addr == 0) {
        OLSR_PRINTF(2, "NAME PLUGIN: insert main addr for name %s \n", name->name);
-@@ -901,9 +907,11 @@
+@@ -903,9 +909,11 @@
      pos += sizeof(struct name);
      pos += 1 + ((ntohs(from_packet->len) - 1) | 3);
    }
@@ -303,7 +293,7 @@
    }
    return olsr_cnf;
  }
-@@ -405,7 +409,9 @@
+@@ -416,7 +420,9 @@
  
    cnf->debug_level = DEF_DEBUGLVL;
    cnf->no_fork = false;
@@ -313,7 +303,7 @@
    cnf->ip_version = AF_INET;
    cnf->ipsize = sizeof(struct in_addr);
    cnf->maxplen = 32;
-@@ -416,7 +422,9 @@
+@@ -427,7 +433,9 @@
    cnf->rtproto = DEF_RTPROTO;
    cnf->rttable_default = 0;
    cnf->willingness_auto = DEF_WILL_AUTO;
@@ -323,7 +313,7 @@
    cnf->fib_metric = DEF_FIB_METRIC;
  
    cnf->use_hysteresis = DEF_USE_HYST;
-@@ -495,6 +503,7 @@
+@@ -506,6 +514,7 @@
  
  }
  
@@ -331,7 +321,7 @@
  void
  olsrd_print_cnf(struct olsrd_config *cnf)
  {
-@@ -638,6 +647,7 @@
+@@ -649,6 +658,7 @@
      }
    }
  }
@@ -464,7 +454,7 @@
    int ifcnt = ifs_in_curr_cfg;
 --- a/src/cfgparser/oscan.lex
 +++ b/src/cfgparser/oscan.lex
-@@ -253,11 +253,6 @@
+@@ -252,11 +252,6 @@
      return TOK_NETLABEL;
  }
  
@@ -476,7 +466,7 @@
  "DebugLevel" {
      yylval = NULL;
      return TOK_DEBUGLEVEL;
-@@ -334,11 +329,6 @@
+@@ -333,11 +328,6 @@
      return TOK_WILLINGNESS;
  }
  
@@ -490,16 +480,16 @@
      return TOK_FIBMETRIC;
 --- a/src/defs.h
 +++ b/src/defs.h
-@@ -190,6 +190,8 @@
-  */
- clock_t olsr_times(void);
+@@ -189,6 +189,8 @@
+ 
+ uint32_t olsr_times(void);
  
 +#ifndef SVEN_OLA_UNBLOAT
 +
  /*
   *IPC functions
   *These are moved to a plugin soon
-@@ -207,6 +209,7 @@
+@@ -206,6 +208,7 @@
  int ipc_output(struct olsr *);
  
  #endif
@@ -509,7 +499,7 @@
   * Local Variables:
 --- a/src/duplicate_set.c
 +++ b/src/duplicate_set.c
-@@ -174,6 +174,7 @@
+@@ -177,6 +177,7 @@
    return false;                 /* no duplicate */
  }
  
@@ -517,7 +507,7 @@
  void
  olsr_print_duplicate_table(void)
  {
-@@ -192,6 +193,7 @@
+@@ -195,6 +196,7 @@
    } OLSR_FOR_ALL_DUP_ENTRIES_END(entry);
  #endif
  }
@@ -668,7 +658,7 @@
  sockaddr4_to_string(struct ipaddr_str *const buf, const struct sockaddr *const addr)
 --- a/src/link_set.c
 +++ b/src/link_set.c
-@@ -762,6 +762,7 @@
+@@ -770,6 +770,7 @@
    return ret;
  }
  
@@ -676,7 +666,7 @@
  void
  olsr_print_link_set(void)
  {
-@@ -783,6 +784,7 @@
+@@ -791,6 +792,7 @@
    } OLSR_FOR_ALL_LINK_ENTRIES_END(walker);
  #endif
  }
@@ -704,21 +694,20 @@
   * Local Variables:
 --- a/src/linux/kernel_routes.c
 +++ b/src/linux/kernel_routes.c
-@@ -300,11 +300,13 @@
-     if (rt_ret > 0) rt_ret = 0; /* successful recovery */
-     else rt_ret = -1; /* unrecoverable error */
+@@ -486,7 +486,11 @@
    }
+   /* send ipc update on success */
+   if ( ( cmd != RTM_NEWRULE ) && ( cmd != RTM_DELRULE )
+-      && (flag = RT_ORIG_REQUEST) && (0 <= rt_ret && olsr_cnf->ipc_connections > 0) ) {
++      && (flag = RT_ORIG_REQUEST) && (0 <= rt_ret
 +#ifndef SVEN_OLA_UNBLOAT
-   //send ipc update on success
-   if ( ( cmd != RTM_NEWRULE ) && ( cmd != RTM_DELRULE ) && (flag = RT_ORIG_REQUEST) && (0 <= rt_ret && olsr_cnf->ipc_connections > 0)) {
-     ipc_route_send_rtentry(&rt->rt_dst.prefix, &nexthop->gateway, metric, RTM_NEWROUTE == cmd,
-                              if_ifwithindex_name(nexthop->iif_index));
-   }
++      && olsr_cnf->ipc_connections > 0
 +#endif /* SVEN_OLA_UNBLOAT */
-   if (rt_ret == -2) olsr_syslog(OLSR_LOG_ERR,"no rtnetlink response! (no system ressources left?, everything may happen now ...)");
-   return rt_ret;
- }
-@@ -342,7 +344,9 @@
++      ) ) {
+     ipc_route_send_rtentry(&rt->rt_dst.prefix, &nexthop->gateway, metric,
+         RTM_NEWROUTE == cmd, if_ifwithindex_name(nexthop->iif_index));
+   }
+@@ -528,7 +532,9 @@
    int rslt;
  #endif /* LINUX_POLICY_ROUTING */
  
@@ -728,7 +717,7 @@
  
  #if !LINUX_POLICY_ROUTING
    memset(&kernel_route, 0, sizeof(struct rtentry));
-@@ -416,7 +420,9 @@
+@@ -604,7 +610,9 @@
    struct in6_rtmsg kernel_route;
    int rslt;
  
@@ -738,7 +727,7 @@
  
    memset(&kernel_route, 0, sizeof(struct in6_rtmsg));
  
-@@ -468,7 +474,9 @@
+@@ -658,7 +666,9 @@
    int rslt;
  #endif /* LINUX_POLICY_ROUTING */
  
@@ -748,7 +737,7 @@
  
  #if !LINUX_POLICY_ROUTING
    memset(&kernel_route, 0, sizeof(struct rtentry));
-@@ -535,7 +543,9 @@
+@@ -727,7 +737,9 @@
    int rslt;
  #endif /* LINUX_POLICY_ROUTING */
  
@@ -760,7 +749,7 @@
    memset(&kernel_route, 0, sizeof(struct in6_rtmsg));
 --- a/src/linux/net.c
 +++ b/src/linux/net.c
-@@ -69,8 +69,10 @@
+@@ -70,8 +70,10 @@
  #define SIOCGIWRATE	0x8B21  /* get default bit rate (bps) */
  
  /* The original state of the IP forwarding proc entry */
@@ -771,7 +760,7 @@
  
  /**
   *Bind a socket to a device
-@@ -91,6 +93,8 @@
+@@ -92,6 +94,8 @@
    return setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE, dev_name, strlen(dev_name) + 1);
  }
  
@@ -780,7 +769,7 @@
  /**
   *Enable IP forwarding.
   *Just writing "1" to the /proc/sys/net/ipv4/ip_forward
-@@ -110,6 +114,9 @@
+@@ -111,6 +115,9 @@
    const char *const procfile = version == AF_INET ? "/proc/sys/net/ipv4/ip_forward" : "/proc/sys/net/ipv6/conf/all/forwarding";
  
    if ((proc_fwd = fopen(procfile, "r")) == NULL) {
@@ -790,7 +779,7 @@
      /* IPv4 */
      if (version == AF_INET)
        fprintf(stderr,
-@@ -122,6 +129,7 @@
+@@ -123,6 +130,7 @@
                procfile);
  
      sleep(3);
@@ -798,7 +787,7 @@
      return 0;
    }
  
-@@ -131,9 +139,13 @@
+@@ -132,9 +140,13 @@
      OLSR_PRINTF(3, "\nIP forwarding is enabled on this system\n");
    } else {
      if ((proc_fwd = fopen(procfile, "w")) == NULL) {
@@ -812,7 +801,7 @@
        return 0;
      } else {
        syslog(LOG_INFO, "Writing \"1\" to %s\n", procfile);
-@@ -154,11 +166,15 @@
+@@ -155,11 +167,15 @@
      return -1;
  
    if ((proc_redirect = fopen(procfile, "r")) == NULL) {
@@ -828,7 +817,7 @@
      return -1;
    }
    orig_global_redirect_state = fgetc(proc_redirect);
-@@ -168,9 +184,13 @@
+@@ -169,9 +185,13 @@
      return 0;
  
    if ((proc_redirect = fopen(procfile, "w")) == NULL) {
@@ -842,7 +831,7 @@
      return 0;
    }
    syslog(LOG_INFO, "Writing \"0\" to %s", procfile);
-@@ -196,19 +216,27 @@
+@@ -197,19 +217,27 @@
    snprintf(procfile, sizeof(procfile), REDIRECT_PROC, if_name);
  
    if ((proc_redirect = fopen(procfile, "r")) == NULL) {
@@ -870,7 +859,7 @@
      return 0;
    }
    syslog(LOG_INFO, "Writing \"0\" to %s", procfile);
-@@ -234,20 +262,28 @@
+@@ -235,20 +263,28 @@
    sprintf(procfile, SPOOF_PROC, if_name);
  
    if ((proc_spoof = fopen(procfile, "r")) == NULL) {
@@ -899,7 +888,7 @@
      return 0;
    }
    syslog(LOG_INFO, "Writing \"0\" to %s", procfile);
-@@ -272,7 +308,11 @@
+@@ -273,7 +309,11 @@
      FILE *proc_fd;
  
      if ((proc_fd = fopen(procfile, "w")) == NULL) {
@@ -911,7 +900,7 @@
      } else {
        syslog(LOG_INFO, "Resetting %s to %c\n", procfile, orig_fwd_state);
        fputc(orig_fwd_state, proc_fd);
-@@ -287,7 +327,11 @@
+@@ -288,7 +328,11 @@
        FILE *proc_fd;
  
        if ((proc_fd = fopen(procfile, "w")) == NULL) {
@@ -923,7 +912,7 @@
        } else {
          syslog(LOG_INFO, "Resetting %s to %c\n", procfile, orig_global_redirect_state);
          fputc(orig_global_redirect_state, proc_fd);
-@@ -311,7 +355,11 @@
+@@ -312,7 +356,11 @@
      snprintf(procfile, sizeof(procfile), REDIRECT_PROC, ifs->int_name);
  
      if ((proc_fd = fopen(procfile, "w")) == NULL)
@@ -935,7 +924,7 @@
      else {
        syslog(LOG_INFO, "Resetting %s to %c\n", procfile, ifs->nic_state.redirect);
  
-@@ -324,7 +372,11 @@
+@@ -325,7 +373,11 @@
      /* Generate the procfile name */
      sprintf(procfile, SPOOF_PROC, ifs->int_name);
      if ((proc_fd = fopen(procfile, "w")) == NULL)
@@ -947,7 +936,7 @@
      else {
        syslog(LOG_INFO, "Resetting %s to %c\n", procfile, ifs->nic_state.spoof);
  
-@@ -372,6 +424,8 @@
+@@ -373,6 +425,8 @@
    return sock;
  }
  
@@ -1071,7 +1060,7 @@
  #include "tc_set.h"
  #include "link_set.h"
  #include "lq_plugin.h"
-@@ -238,6 +239,7 @@
+@@ -223,6 +224,7 @@
    snprintf(buffer->buf, sizeof(buffer->buf), "%.3f", (float)(cost) / LQ_FPM_LINKCOST_MULTIPLIER);
    return buffer->buf;
  }
@@ -1099,7 +1088,7 @@
   * Local Variables:
 --- a/src/main.c
 +++ b/src/main.c
-@@ -312,13 +312,17 @@
+@@ -289,13 +289,17 @@
    /*
     * Print configuration
     */
@@ -1117,7 +1106,7 @@
  
    /*
     * socket for ioctl calls
-@@ -354,7 +358,9 @@
+@@ -331,7 +335,9 @@
    /*
     *enable ip forwarding on host
     */
@@ -1127,7 +1116,7 @@
  
    /* Initialize parser */
    olsr_init_parser();
-@@ -372,6 +378,7 @@
+@@ -349,6 +355,7 @@
     *Set up willingness/APM
     */
    if (olsr_cnf->willingness_auto) {
@@ -1135,7 +1124,7 @@
      if (apm_init() < 0) {
        OLSR_PRINTF(1, "Could not read APM info - setting default willingness(%d)\n", WILL_DEFAULT);
  
-@@ -382,10 +389,13 @@
+@@ -359,10 +366,13 @@
        olsr_cnf->willingness_auto = 0;
        olsr_cnf->willingness = WILL_DEFAULT;
      } else {
@@ -1149,7 +1138,7 @@
    }
  
    /* Initialize net */
-@@ -415,9 +425,11 @@
+@@ -392,9 +402,11 @@
  
    /* Initialize the IPC socket */
  
@@ -1161,7 +1150,7 @@
    /* Initialisation of different tables to be used. */
    olsr_init_tables();
  
-@@ -549,9 +561,11 @@
+@@ -533,9 +545,11 @@
    OLSR_PRINTF(1, "Closing sockets...\n");
  
    /* front-end IPC socket */
@@ -1173,7 +1162,7 @@
  
    /* OLSR sockets */
    for (ifn = ifnet; ifn; ifn = ifn->int_next)
-@@ -561,7 +575,9 @@
+@@ -545,7 +559,9 @@
    olsr_close_plugins();
  
    /* Reset network settings */
@@ -1183,7 +1172,7 @@
  
    /* ioctl socket */
    close(olsr_cnf->ioctl_s);
-@@ -601,7 +617,11 @@
+@@ -585,7 +601,11 @@
          "usage: olsrd [-f <configfile>] [ -i interface1 interface2 ... ]\n"
          "  [-d <debug_level>] [-ipv6] [-multi <IPv6 multicast address>]\n"
          "  [-lql <LQ level>] [-lqw <LQ winsize>] [-lqnt <nat threshold>]\n"
@@ -1195,7 +1184,7 @@
          "  [-hint <hello interval (secs)>] [-tcint <tc interval (secs)>]\n"
          "  [-midint <mid interval (secs)>] [-hnaint <hna interval (secs)>]\n"
          "  [-T <Polling Rate (secs)>] [-nofork] [-hemu <ip_address>]\n" "  [-lql <LQ level>] [-lqa <LQ aging factor>]\n");
-@@ -765,12 +785,20 @@
+@@ -749,12 +769,20 @@
          olsr_exit(__func__, EXIT_FAILURE);
        }
        printf("Queuing if %s\n", *argv);
@@ -1216,7 +1205,7 @@
        }
  
        continue;
-@@ -833,7 +861,7 @@
+@@ -817,7 +845,7 @@
        sscanf(*argv, "%f", &cnf->pollrate);
        continue;
      }
@@ -1225,7 +1214,7 @@
      /*
       * Should we display the contents of packages beeing sent?
       */
-@@ -857,6 +885,7 @@
+@@ -841,6 +869,7 @@
        cnf->ipc_connections = 1;
        continue;
      }
@@ -1233,7 +1222,7 @@
  
      /*
       * IPv6 multicast addr
-@@ -874,7 +903,7 @@
+@@ -858,7 +887,7 @@
  
        continue;
      }
@@ -1242,7 +1231,7 @@
      /*
       * Host emulation
       */
-@@ -902,6 +931,7 @@
+@@ -886,6 +915,7 @@
  
        continue;
      }
@@ -1310,7 +1299,7 @@
    }
 --- a/src/olsr.c
 +++ b/src/olsr.c
-@@ -149,7 +149,9 @@
+@@ -150,7 +150,9 @@
      return;
  
    if (olsr_cnf->debug_level > 0 && olsr_cnf->clear_screen && isatty(1)) {
@@ -1320,7 +1309,7 @@
      printf("       *** %s (%s on %s) ***\n", olsrd_version, build_date, build_host);
    }
  
-@@ -165,7 +167,7 @@
+@@ -166,7 +168,7 @@
    if (changes_neighborhood || changes_topology || changes_hna) {
      olsr_calculate_routing_table();
    }
@@ -1329,7 +1318,7 @@
    if (olsr_cnf->debug_level > 0) {
      if (olsr_cnf->debug_level > 2) {
        olsr_print_mid_set();
-@@ -184,6 +186,7 @@
+@@ -185,6 +187,7 @@
      olsr_print_tc_table();
  #endif
    }
@@ -1337,7 +1326,7 @@
  
    for (tmp_pc_list = pcf_list; tmp_pc_list != NULL; tmp_pc_list = tmp_pc_list->next) {
      tmp_pc_list->function(changes_neighborhood, changes_topology, changes_hna);
-@@ -420,12 +423,15 @@
+@@ -421,12 +424,15 @@
  uint8_t
  olsr_calculate_willingness(void)
  {
@@ -1353,7 +1342,7 @@
    if (apm_read(&ainfo) < 1)
      return WILL_DEFAULT;
  
-@@ -442,8 +448,12 @@
+@@ -443,8 +449,12 @@
     * 26% > juice will: 1
     */
    return (ainfo.battery_percentage / 26);
@@ -1366,7 +1355,7 @@
  const char *
  olsr_msgtype_to_string(uint8_t msgtype)
  {
-@@ -513,6 +523,7 @@
+@@ -514,6 +524,7 @@
    snprintf(type, sizeof(type), "UNKNOWN(%d)", status);
    return type;
  }
@@ -1374,7 +1363,7 @@
  
  /**
   *Termination function to be called whenever a error occures
-@@ -541,6 +552,7 @@
+@@ -542,6 +553,7 @@
   *
   * @return a void pointer to the memory allocated
   */
@@ -1382,7 +1371,7 @@
  void *
  olsr_malloc(size_t size, const char *id)
  {
-@@ -565,6 +577,7 @@
+@@ -566,6 +578,7 @@
  
    return ptr;
  }
@@ -1416,7 +1405,7 @@
  
 --- a/src/olsr_cfg.h
 +++ b/src/olsr_cfg.h
-@@ -149,8 +149,10 @@
+@@ -154,8 +154,10 @@
    char *name;
    char *config;
    bool configured;
@@ -1427,7 +1416,7 @@
    struct interface *interf;
    struct if_config_options *cnf;
    struct olsr_if *next;
-@@ -193,7 +195,9 @@
+@@ -198,7 +200,9 @@
    uint16_t olsrport;
    int debug_level;
    bool no_fork;
@@ -1437,7 +1426,7 @@
    int ip_version;
    bool allow_no_interfaces;
    uint16_t tos;
-@@ -202,13 +206,17 @@
+@@ -207,13 +211,17 @@
    uint8_t rttable_default;
    uint8_t willingness;
    bool willingness_auto;
@@ -1455,7 +1444,7 @@
    struct olsr_if *interfaces;
    float pollrate;
    float nic_chgs_pollrate;
-@@ -271,7 +279,9 @@
+@@ -275,7 +283,9 @@
  
    void olsrd_free_cnf(struct olsrd_config *);
  
@@ -1552,7 +1541,7 @@
  }
  
  /**
-@@ -385,9 +401,11 @@
+@@ -388,9 +404,11 @@
    /* route additions */
    olsr_add_kernel_routes(&add_kernel_list);
  
@@ -1767,7 +1756,7 @@
  
    ifp = iface->interf;
  
-@@ -281,7 +289,9 @@
+@@ -278,7 +286,9 @@
    } else
      /* IP version 4 */
    {
@@ -1777,9 +1766,9 @@
      /* Check interface address (IPv4) */
      if (ioctl(olsr_cnf->ioctl_s, SIOCGIFADDR, &ifr) < 0) {
        OLSR_PRINTF(1, "\tCould not get address of interface - removing it\n");
-@@ -294,17 +304,21 @@
+@@ -291,17 +301,21 @@
      if (memcmp
-         (&((struct sockaddr_in *)&ifp->int_addr)->sin_addr.s_addr, &((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr,
+         (&((struct sockaddr_in *)(ARM_NOWARN_ALIGN)&ifp->int_addr)->sin_addr.s_addr, &((struct sockaddr_in *)(ARM_NOWARN_ALIGN)&ifr.ifr_addr)->sin_addr.s_addr,
           olsr_cnf->ipsize) != 0) {
 +#ifndef SVEN_OLA_UNBLOAT
        /* New address */
@@ -1788,7 +1777,7 @@
        OLSR_PRINTF(1, "\tNew:%s\n", sockaddr4_to_string(&buf, &ifr.ifr_addr));
 +#endif /* SVEN_OLA_UNBLOAT */
  
-       ifp->int_addr = *(struct sockaddr_in *)&ifr.ifr_addr;
+       ifp->int_addr = *(struct sockaddr_in *)(ARM_NOWARN_ALIGN)&ifr.ifr_addr;
        /* deactivated to prevent change of originator IP */
  #if 0
        if (memcmp(&olsr_cnf->main_addr, &ifp->ip_addr, olsr_cnf->ipsize) == 0) {
@@ -1799,9 +1788,9 @@
          memcpy(&olsr_cnf->main_addr, &((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr, olsr_cnf->ipsize);
        }
  #endif
-@@ -366,7 +380,9 @@
+@@ -375,7 +389,9 @@
+   ifp = iface->interf;
  
- remove_interface:
    OLSR_PRINTF(1, "Removing interface %s\n", iface->name);
 +#ifndef SVEN_OLA_UNBLOAT
    olsr_syslog(OLSR_LOG_INFO, "Removing interface %s\n", iface->name);
@@ -1809,7 +1798,7 @@
  
    olsr_delete_link_entry_by_ip(&ifp->ip_addr);
  
-@@ -398,10 +414,14 @@
+@@ -417,10 +433,14 @@
        memset(&olsr_cnf->main_addr, 0, olsr_cnf->ipsize);
        OLSR_PRINTF(1, "No more interfaces...\n");
      } else {
@@ -1824,7 +1813,7 @@
      }
    }
  #endif
-@@ -425,7 +445,9 @@
+@@ -444,13 +464,17 @@
  
    if ((ifnet == NULL) && (!olsr_cnf->allow_no_interfaces)) {
      OLSR_PRINTF(1, "No more active interfaces - exiting.\n");
@@ -1834,7 +1823,6 @@
      olsr_cnf->exit_value = EXIT_FAILURE;
      kill(getpid(), SIGINT);
    }
-@@ -434,6 +456,8 @@
  
  }
  
@@ -1843,7 +1831,7 @@
  /**
   * Initializes the special interface used in
   * host-client emulation
-@@ -585,6 +609,7 @@
+@@ -602,6 +626,7 @@
  
    return 1;
  }
@@ -1851,7 +1839,7 @@
  
  static char basenamestr[32];
  static const char *if_basename(const char *name);
-@@ -620,8 +645,10 @@
+@@ -637,8 +662,10 @@
    int tos_bits = IPTOS_TOS(olsr_cnf->tos);
  #endif
  
@@ -1862,8 +1850,8 @@
  
    memset(&ifr, 0, sizeof(struct ifreq));
    memset(&ifs, 0, sizeof(struct interface));
-@@ -728,11 +755,13 @@
-       ifs.int_broadaddr = *(struct sockaddr_in *)&ifr.ifr_broadaddr;
+@@ -745,11 +772,13 @@
+       ifs.int_broadaddr = *(struct sockaddr_in *)(ARM_NOWARN_ALIGN)&ifr.ifr_broadaddr;
      }
  
 +#ifndef SVEN_OLA_UNBLOAT
@@ -1876,7 +1864,7 @@
  
    }
  
-@@ -762,7 +791,9 @@
+@@ -779,7 +808,9 @@
  
    OLSR_PRINTF(1, "\tMTU - IPhdr: %d\n", ifs.int_mtu);
  
@@ -1886,7 +1874,7 @@
    OLSR_PRINTF(1, "\tIndex %d\n", ifs.if_index);
  
    if (olsr_cnf->ip_version == AF_INET) {
-@@ -867,10 +898,14 @@
+@@ -884,10 +915,14 @@
     */
    memset(&null_addr, 0, olsr_cnf->ipsize);
    if (ipequal(&null_addr, &olsr_cnf->main_addr)) {

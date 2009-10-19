@@ -1,0 +1,10 @@
+--- a/src/linux/kernel_routes.c
++++ b/src/linux/kernel_routes.c
+@@ -42,6 +42,7 @@
+ #include "kernel_routes.h"
+ #include "ipc_frontend.h"
+ #include "log.h"
++#include <fcntl.h>
+ 
+ /* values for control flag to handle recursive route corrections 
+  *  currently only requires in linux specific kernel_routes.c */
