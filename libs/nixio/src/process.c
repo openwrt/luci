@@ -225,16 +225,16 @@ static int nixio_times(lua_State *L) {
 		return nixio__perror(L);
 	} else {
 		lua_createtable(L, 0, 4);
-		lua_pushnumber(L, buf.tms_cstime);
+		lua_pushinteger(L, buf.tms_cstime);
 		lua_setfield(L, -2, "cstime");
 
-		lua_pushnumber(L, buf.tms_cutime);
+		lua_pushinteger(L, buf.tms_cutime);
 		lua_setfield(L, -2, "cutime");
 
-		lua_pushnumber(L, buf.tms_stime);
+		lua_pushinteger(L, buf.tms_stime);
 		lua_setfield(L, -2, "stime");
 
-		lua_pushnumber(L, buf.tms_utime);
+		lua_pushinteger(L, buf.tms_utime);
 		lua_setfield(L, -2, "utime");
 
 		return 1;
@@ -365,44 +365,44 @@ static int nixio_sysinfo(lua_State *L) {
 
 	lua_createtable(L, 0, 12);
 
-	lua_pushnumber(L, info.bufferram);
+	lua_pushinteger(L, info.bufferram);
 	lua_setfield(L, -2, "bufferram");
 
-	lua_pushnumber(L, info.freehigh);
+	lua_pushinteger(L, info.freehigh);
 	lua_setfield(L, -2, "freehigh");
 
-	lua_pushnumber(L, info.freeram);
+	lua_pushinteger(L, info.freeram);
 	lua_setfield(L, -2, "freeram");
 
-	lua_pushnumber(L, info.freeswap);
+	lua_pushinteger(L, info.freeswap);
 	lua_setfield(L, -2, "freeswap");
 
 	lua_createtable(L, 0, 3);
 	for (int i=0; i<3; i++) {
-		lua_pushnumber(L, info.loads[i] / 65536.);
+		lua_pushinteger(L, info.loads[i] / 65536.);
 		lua_rawseti(L, -2, i+1);
 	}
 	lua_setfield(L, -2, "loads");
 
-	lua_pushnumber(L, info.mem_unit);
+	lua_pushinteger(L, info.mem_unit);
 	lua_setfield(L, -2, "mem_unit");
 
-	lua_pushnumber(L, info.procs);
+	lua_pushinteger(L, info.procs);
 	lua_setfield(L, -2, "procs");
 
-	lua_pushnumber(L, info.sharedram);
+	lua_pushinteger(L, info.sharedram);
 	lua_setfield(L, -2, "sharedram");
 
-	lua_pushnumber(L, info.totalhigh);
+	lua_pushinteger(L, info.totalhigh);
 	lua_setfield(L, -2, "totalhigh");
 
-	lua_pushnumber(L, info.totalram);
+	lua_pushinteger(L, info.totalram);
 	lua_setfield(L, -2, "totalram");
 
-	lua_pushnumber(L, info.totalswap);
+	lua_pushinteger(L, info.totalswap);
 	lua_setfield(L, -2, "totalswap");
 
-	lua_pushnumber(L, info.uptime);
+	lua_pushinteger(L, info.uptime);
 	lua_setfield(L, -2, "uptime");
 
 	return 1;

@@ -97,7 +97,7 @@ static const uint32_t nixio__crc32_tbl[] = {
 static int nixio_bin_crc32(lua_State *L) {
 	size_t len;
 	const char *buffer = luaL_checklstring(L, 1, &len);
-	uint32_t value = luaL_optnumber(L, 2, 0);
+	uint32_t value = luaL_optinteger(L, 2, 0);
 
 	value = ~value;
 	for (size_t i=0; i<len; i++) {

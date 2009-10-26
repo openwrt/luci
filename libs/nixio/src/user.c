@@ -78,7 +78,7 @@ static int nixio_getgr(lua_State *L) {
 	struct group *gr;
 	errno = 0;
 	if (lua_isnumber(L, 1)) {
-		gr = getgrgid(lua_tonumber(L, 1));
+		gr = getgrgid(lua_tointeger(L, 1));
 	} else if (lua_isstring(L, 1)) {
 		gr = getgrnam(lua_tostring(L, 1));
 	} else if (lua_isnoneornil(L, 1)) {
@@ -131,7 +131,7 @@ static int nixio_getpw(lua_State *L) {
 	struct passwd *pw;
 	errno = 0;
 	if (lua_isnumber(L, 1)) {
-		pw = getpwuid(lua_tonumber(L, 1));
+		pw = getpwuid(lua_tointeger(L, 1));
 	} else if (lua_isstring(L, 1)) {
 		pw = getpwnam(lua_tostring(L, 1));
 	} else if (lua_isnoneornil(L, 1)) {

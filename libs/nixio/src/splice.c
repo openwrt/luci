@@ -90,7 +90,7 @@ static int nixio_splice(lua_State *L) {
 		return nixio__perror(L);
 	}
 
-	lua_pushnumber(L, spliced);
+	lua_pushinteger(L, spliced);
 	return 1;
 }
 
@@ -151,7 +151,7 @@ static int nixio_sendfile(lua_State *L) {
 	}
 #endif
 
-	lua_pushnumber(L, spliced);
+	lua_pushinteger(L, spliced);
 	return 1;
 }
 

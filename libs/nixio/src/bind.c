@@ -261,7 +261,7 @@ static int nixio_sock_accept(lua_State *L) {
 
 	if (!nixio__addr_parse(&addr, (struct sockaddr *)&saddr)) {
 		lua_pushstring(L, addr.host);
-		lua_pushnumber(L, addr.port);
+		lua_pushinteger(L, addr.port);
 		return 3;
 	} else {
 		return 1;
