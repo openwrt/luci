@@ -23,9 +23,12 @@ $(UCI_FILE):
 $(UCI_PATCHDIR)/series:
 	(cd $(UCI_PATCHDIR); ls *.patch | sort > series)
 
-$(UCI_DIR)/.prepared: $(UCI_FILE)
+$(UCI_DIR)/.prepared: $(UCI_PATCHDIR)/series $(UCI_FILE)
 	rm -rf $(UCI_DIR)
 	tar xvfz $(UCI_FILE)
+	[ -f "$(UCI_PATCHDIR)/series" ] && while read patch; do \
+		patch -d $(UCI_DIR) -p1 < $(UCI_PATCHDIR)/$$patch; \
+	done < $(UCI_PATCHDIR)/series || true
 	touch $@
 
 compile: $(UCI_DIR)/.prepared
