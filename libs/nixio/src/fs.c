@@ -83,7 +83,7 @@ int nixio__check_mode(lua_State *L, int idx, int def) {
 		if (i == 9) {	/* successfully parsed */
 			return mode;
 		}
-	} else if (lua_isinteger(L, idx)) {
+	} else if (lua_isnumber(L, idx)) {
 		int decmode = lua_tointeger(L, idx);
 		int s = (decmode % 10000)	/ 1000;
 		int u = (decmode % 1000)	/ 100;
