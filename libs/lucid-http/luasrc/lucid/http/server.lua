@@ -419,8 +419,8 @@ function Server.process(self, client, env)
 		set_memory_limit(env.config.memlimit)
 	end
 
-	client:setsockopt("socket", "rcvtimeo", 60)
-	client:setsockopt("socket", "sndtimeo", 60)
+	client:setsockopt("socket", "rcvtimeo", 5)
+	client:setsockopt("socket", "sndtimeo", 5)
 	
 	repeat
 		-- parse headers
@@ -531,7 +531,11 @@ function Server.process(self, client, env)
 			headers["Connection"] = "close"
 		elseif message.env.SERVER_PROTOCOL == "HTTP/1.0" then
 			headers["Connection"] = "Keep-Alive"
-		end 
+		end
+		
+		if not close then
+			headers["Keep-Alive"] = "timeout=5, max=50"
+		end
 
 		headers["Date"] = date.to_http(os.time())
 		local header = {

@@ -506,6 +506,7 @@ function Delegator.__init__(self, ...)
 	self.pageaction = false
 	self.readinput = true
 	self.allow_reset = false
+	self.allow_cancel = false
 	self.allow_back = false
 	self.allow_finish = false
 	self.template = "cbi/delegator"
@@ -559,6 +560,17 @@ function Delegator.get(self, name)
 end
 
 function Delegator.parse(self, ...)
+	if self.allow_cancel and Map.formvalue(self, "cbi.cancel") then
+		if self.on_cancel then
+			self:on_cancel()
+			return FORM_DONE
+		end
+	end
+	
+	if self.on_init and not Map.formvalue(self, "cbi.delg.current") then
+		self:on_init()
+	end
+
 	local newcurrent
 	self.chain = self.chain or self:get_chain()
 	self.current = self.current or self:get_active()
@@ -587,6 +599,9 @@ function Delegator.parse(self, ...)
 	if not Map.formvalue(self, "cbi.submit") then
 		return FORM_NODATA
 	elseif not newcurrent or not self:get(newcurrent) then
+		if self.on_done then
+			self:on_done()
+		end
 		return FORM_DONE
 	else
 		self.current = newcurrent

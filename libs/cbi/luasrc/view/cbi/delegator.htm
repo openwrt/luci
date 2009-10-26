@@ -23,6 +23,9 @@ $Id$
 <% if self.allow_reset then %>
 		<input class="cbi-button cbi-button-reset" type="reset" value="<%:reset%>" />
 <% end %>
+<% if self.allow_cancel then %>
+		<input class="cbi-button cbi-button-cancel" type="submit" name="cbi.cancel" value="<%:cancel%>" />
+<% end %>
 <% if self.allow_finish and not self:get_next(self.current) then %>
 	<input class="cbi-button cbi-button-finish" type="submit" value="<%:cbi_finish Finish%>" />
 <% elseif self:get_next(self.current) then %>
