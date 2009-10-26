@@ -1,0 +1,32 @@
+<%
+local dsp = require "luci.dispatcher"
+local utl = require "luci.util"
+local str = require "luci.store"
+
+local nws = {}
+str.uci_state:foreach("network", "interface", function(s)
+	nws[#nws+1] = s
+end)
+
+local function cmp(a, b)
+	return (a.order or 100) < (b.order or 100)
+end
+%>
+<div>Status:</div>
+<table>
+<% 
+for _, v in ipairs(nws) do if v[".name"] ~= "loopback" then
+%>
+<tr><td><%=v[".name"]%></td><td><%=v.ipaddr%></td></tr>
+<% end end %>
+</table>
+<br />
+<ul>
+<%
+for k, v in utl.spairs(dsp.node("niu", "network").nodes, cmp) do
+%>
+<li><a href="<%=dsp.build_url("niu", "network", k)%>"><%=v.title%></a></li>
+<%
+end
+%>
+</ul>

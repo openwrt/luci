@@ -1,0 +1,22 @@
+<%+header%>
+
+<%
+local function cmp(a, b)
+	return (a.order or 100) < (b.order or 100)
+end
+for k, v in utl.spairs(nodes, cmp) do
+	if v.dbtemplate then
+	%>
+	<fieldset style="float: left; margin: 1em; padding: 0.5em">
+		<legend><%=v.title%></legend>
+		<%
+			tpl.render(v.dbtemplate)
+		%>
+	</fieldset>
+	<%
+	end
+end
+
+%>
+
+<%+footer%>
