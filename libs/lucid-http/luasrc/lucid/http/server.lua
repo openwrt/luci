@@ -529,11 +529,8 @@ function Server.process(self, client, env)
 		
 		if close then
 			headers["Connection"] = "close"
-		elseif message.env.SERVER_PROTOCOL == "HTTP/1.0" then
+		else
 			headers["Connection"] = "Keep-Alive"
-		end
-		
-		if not close then
 			headers["Keep-Alive"] = "timeout=5, max=50"
 		end
 
