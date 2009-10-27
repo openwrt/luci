@@ -91,6 +91,7 @@ function attachnet.write(self, section, value)
 			zone:add_network(net:name())
 		end
 
+		uci:save("wireless")
 		uci:save("network")
 		uci:save("firewall")
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/network", net:name()))
