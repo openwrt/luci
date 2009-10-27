@@ -13,12 +13,15 @@ $Id$
 ]]--
 
 local wa = require "luci.tools.webadmin"
+local nw = require "luci.model.network"
 local fs = require "nixio.fs"
 
 arg[1] = arg[1] or ""
+arg[2] = arg[2] or ""
 
 m = Map("wireless", translate("networks"), translate("a_w_networks1"))
-
+m:chain("network")
+nw.init(m.uci)
 
 local iw = nil
 local tx_powers = nil
@@ -198,10 +201,9 @@ end
 
 ----------------------- Interface -----------------------
 
-s = m:section(TypedSection, "wifi-iface", translate("interfaces"))
-s.addremove = (iw and iw.mbssid_support) and true or false
+s = m:section(NamedSection, arg[2], "wifi-iface", translate("interfaces"))
+s.addremove = false
 s.anonymous = true
-s:depends("device", arg[1])
 s.defaults.device = arg[1]
 
 s:tab("general", translate("a_w_general", "General Setup"))
@@ -221,25 +223,30 @@ bssid = s:taboption("general", Value, "bssid", translate("wifi_bssid"))
 
 network = s:taboption("general", Value, "network", translate("network"), translate("a_w_network1"))
 network.rmempty = true
-network:value("")
-network.combobox_manual = translate("a_w_netmanual")
-wa.cbi_add_networks(network)
+network.template = "cbi/network_netlist"
+network.widget = "radio"
 
 function network.write(self, section, value)
-	if not m.uci:get("network", value) then
-		-- avoid "value not defined in enum" because network is not known yet
-		s.override_scheme = true
-
-		m:chain("network")
-		m.uci:set("network", value, "interface")
-		Value.write(self, section, value)
-	else
-		if m.uci:get("network", value) == "interface" then
-			Value.write(self, section, value)
+	local i = nw:get_interface(section)
+	if i then
+		if value == '-' then
+			value = m:formvalue(self:cbid(section) .. ".newnet")
+			if value and #value > 0 then
+				local n = nw:add_network(value, {type="bridge", proto="none"})
+				if n then n:add_interface(i) end
+			else
+				local n = i:get_network()
+				if n then n:del_interface(i) end
+			end
+		else
+			local n = nw:get_network(value)
+			if n then
+				n:type("bridge")
+				n:add_interface(i)
+			end
 		end
 	end
 end
-
 
 -------------------- MAC80211 Interface ----------------------
 
