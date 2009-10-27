@@ -45,6 +45,10 @@ function bind.section(self, stype)
 		inst.bind  = self
 		inst.stype = stype
 		inst.sid   = sid
+
+		if inst._init then
+			inst:_init(sid)
+		end
 	end
 	return x
 end
