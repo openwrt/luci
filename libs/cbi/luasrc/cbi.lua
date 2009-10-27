@@ -238,6 +238,19 @@ function Node._i18n(self, config, section, option, title, description)
 	end
 end
 
+-- hook helper
+function Node._run_hooks(self, ...)
+	local f
+	local r = false
+	for _, f in ipairs(arg) do
+		if type(self[f]) == "function" then
+			self[f](self)
+			r = true
+		end
+	end
+	return r
+end
+
 -- Prepare nodes
 function Node.prepare(self, ...)
 	for k, child in ipairs(self.children) do
@@ -321,7 +334,6 @@ function Map.__init__(self, config, ...)
 
 	self.validator = luci.uvl.UVL()
 	self.scheme = self.validator:get_scheme(self.config)
-
 end
 
 function Map.formvalue(self, key)
@@ -370,14 +382,17 @@ function Map.parse(self, readinput, ...)
 			self.uci:save(config)
 		end
 		if self:submitstate() and ((not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply")) then
+			self:_run_hooks("on_before_commit")
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 
 				-- Refresh data because commit changes section names
 				self.uci:load(config)
 			end
+			self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
 			if self.apply_on_parse then
 				self.uci:apply(self.parsechain)
+				self:_run_hooks("on_apply", "on_after_apply")
 			else
 				self._apply = function()
 					local cmd = self.uci:apply(self.parsechain, true)
@@ -413,11 +428,13 @@ function Map.parse(self, readinput, ...)
 end
 
 function Map.render(self, ...)
+	self:_run_hooks("on_init")
 	Node.render(self, ...)
 	if self._apply then
 		local fp = self._apply()
 		fp:read("*a")
 		fp:close()
+		self:_run_hooks("on_apply")
 	end
 end
 
@@ -561,14 +578,13 @@ end
 
 function Delegator.parse(self, ...)
 	if self.allow_cancel and Map.formvalue(self, "cbi.cancel") then
-		if self.on_cancel then
-			self:on_cancel()
+		if self:_run_hooks("on_cancel") then
 			return FORM_DONE
 		end
 	end
 	
-	if self.on_init and not Map.formvalue(self, "cbi.delg.current") then
-		self:on_init()
+	if not Map.formvalue(self, "cbi.delg.current") then
+		self:_run_hooks("on_init")
 	end
 
 	local newcurrent
@@ -599,9 +615,7 @@ function Delegator.parse(self, ...)
 	if not Map.formvalue(self, "cbi.submit") then
 		return FORM_NODATA
 	elseif not newcurrent or not self:get(newcurrent) then
-		if self.on_done then
-			self:on_done()
-		end
+		self:_run_hooks("on_done")
 		return FORM_DONE
 	else
 		self.current = newcurrent
