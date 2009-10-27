@@ -18,5 +18,10 @@ module "luci.controller.niu.network"
 function index()
 	entry({"niu", "network"}, alias("admin", "network"), "Network")
 	.dbtemplate = "niu/network"
-	entry({"niu", "network", "lan"}, cbi("niu/network/lan"), "Configure LAN")
+
+	entry({"niu", "network", "lan"}, 
+	cbi("niu/network/lan", {on_success_to={"niu"}}), "Configure LAN")
+
+	entry({"niu", "network", "wan"}, 
+	cbi("niu/network/wan", {on_success_to={"niu"}}), "Configure Internet")
 end

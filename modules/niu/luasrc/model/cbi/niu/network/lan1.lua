@@ -14,15 +14,12 @@ $Id$
 ]]--
 
 local nw = require "luci.model.network"
-local fw = require "luci.model.firewall"
 
 local has_ipv6 = nw:has_ipv6()
 
-m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
-m:chain("firewall")
+m = Map("network", translate("m_n_lan"))
 
 nw.init(m.uci)
-fw.init(m.uci)
 
 s = m:section(NamedSection, "lan", "interface")
 s.addremove = false
@@ -59,48 +56,50 @@ if has_ipv6 then
 end
 
 
-br = s:taboption("expert", Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"))
-br.enabled = "bridge"
-br.rmempty = true
-
 stp = s:taboption("expert", Flag, "stp", translate("a_n_i_stp"),
 	translate("a_n_i_stp1", "Enables the Spanning Tree Protocol on this bridge"))
-stp:depends("type", "1")
-stp.rmempty = true
-
-ifname_single = s:taboption("expert", Value, "ifname_single", translate("interface"))
-ifname_single.template = "cbi/network_ifacelist"
-ifname_single.widget = "radio"
-ifname_single.nobridges = true
-ifname_single.rmempty = true
-ifname_single:depends("type", "")
-
-function ifname_single.cfgvalue(self, s)
-	return self.map.uci:get("network", s, "ifname")
-end
-
-function ifname_single.write(self, s, val)
-	local n = nw:get_network(s)
-	if n then n:ifname(val) end
-end
-
 
 ifname_multi = s:taboption("expert", MultiValue, "ifname_multi", translate("interface"))
 ifname_multi.template = "cbi/network_ifacelist"
 ifname_multi.nobridges = true
 ifname_multi.widget = "checkbox"
-ifname_multi:depends("type", "1")
-ifname_multi.cfgvalue = ifname_single.cfgvalue
-ifname_multi.write = ifname_single.write
+
+function ifname_multi.cfgvalue(self, s)
+	return self.map.uci:get("network", s, "ifname")
+end
+
+function ifname_multi.write(self, s, val)
+	local n = nw:get_network(s)
+	if n then n:ifname(val) end
+end
 
 for _, d in ipairs(nw:get_interfaces()) do
 	if not d:is_bridge() then
-		ifname_single:value(d:name())
 		ifname_multi:value(d:name())
 	end
 end
 
 
+m2 = Map("dhcp", "DHCP")
+
+s = m2:section(TypedSection, "dhcp", "DHCP-Server")
+s.anonymous = true
+s.addremove = false
+s.dynamic = false
+
+s:tab("general", translate("niu_general", "General Settings"))
+
+s:depends("interface", "lan")
+
+enable = s:taboption("general", ListValue, "ignore", translate("enable"), "")
+enable:value(0, translate("enable"))
+enable:value(1, translate("disable"))
 
 
-return m
+s:tab("expert", translate("niu_expert", "Expert Settings"))
+start = s:taboption("expert", Value, "start", translate("m_n_d_firstaddress"))
+limit = s:taboption("expert", Value, "limit", translate("m_n_d_numleases"), "")
+time = s:taboption("expert", Value, "leasetime")
+
+
+return m, m2
