@@ -1,7 +1,8 @@
 module "iwinfo"
 
 function type(x)
-	if x:match("^wlan%d") or x:match("^wl%d") or x:match("^ath%d") then
+	if x:match("^wlan%d") or x:match("^wl%d") or
+	   x:match("^wifi%d") or x:match("^ath%d") then
 		return "dummy"
 	end
 end
