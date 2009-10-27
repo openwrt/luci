@@ -234,7 +234,7 @@ function zone.add_forwarding_to(self, dest, with_mtu_fix)
 		local s = ub.uci:section("firewall", "forwarding", nil, {
 			src     = self:name(),
 			dest    = dest,
-			mtu_fix = with_mtu_fix and true or false
+			mtu_fix = with_mtu_fix and "1" or "0"
 		})
 		return s and forwarding(s)
 	end
@@ -252,10 +252,20 @@ function zone.add_forwarding_from(self, src, with_mtu_fix)
 		local s = ub.uci:section("firewall", "forwarding", nil, {
 			src     = src,
 			dest    = self:name(),
-			mtu_fix = with_mtu_fix and true or false
+			mtu_fix = with_mtu_fix and "1" or "0"
 		})
 		return s and forwarding(s)
 	end
+end
+
+function zone.del_forwardings_by(self, what)
+	local name = self:name()
+	ub.uci:foreach("firewall", "forwarding",
+		function(s)
+			if s.src and s.dest and s[what] == name then
+				ub.uci:delete("firewall", s['.name'])
+			end
+		end)
 end
 
 function zone.add_redirect(self, options)

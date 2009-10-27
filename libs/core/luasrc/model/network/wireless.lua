@@ -44,11 +44,11 @@ function init(self, cursor)
 
 			local device = s.device or "wlan0"
 			local state = st:get_all("wireless", s['.name'])
-			local name = state.ifname or device .. ".network" .. count
+			local name = device .. ".network" .. count
 			
-			ifs[state and state.ifname or name] = {
+			ifs[name] = {
 				idx      = count,
-				name     = state and state.ifname or name,
+				name     = name,
 				rawname  = state and state.ifname or name,
 				flags    = { },
 				ipaddrs  = { },
