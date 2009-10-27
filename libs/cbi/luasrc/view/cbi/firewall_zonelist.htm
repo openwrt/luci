@@ -20,38 +20,60 @@ $Id$
 
 	local zone, net, iface
 	local zones = fwm:get_zones()
-	local value = self:cfgvalue(section) or self.default
-	local selected = false
+	local value = self:formvalue(section)
+	if not value or value == "-" then value = self:cfgvalue(section) or self.default end
 
-	if value and #value == 0 then value = nil end
+	local selected = false
+	local checked = { }
+
+	if value and #value == 0 then
+		value = nil
+	elseif type(value) == "table" then
+		for _, value in ipairs(value) do
+			checked[value] = true
+		end
+	elseif value then
+		checked[value] = true		
+	end
 -%>
 
-<ul style="margin:0; list-style-type:none">
+<ul style="margin:0; list-style-type:none; text-align:left">
 	<%
 		for _, zone in utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do
-			selected = selected or (value == zone:name())
+			if zone:name() ~= self.exclude then
+				selected = selected or (value == zone:name())
  	%>
 	<li style="padding:0.5em">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(value == zone:name(), "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(checked[zone:name()], "checked", "checked")%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. zone:name())%> style="background-color:<%=zone:get_color()%>; padding:0.5em">
 			<strong><%=zone:name()%>:</strong>
 			<%
 				local empty = true
 				for _, net in ipairs(zone:get_networks()) do
 					net = nwm:get_network(net)
+					if net then
+			%>
+				&nbsp;
+				<%- if net:name() == self.network then -%>
+					<span style="background-color:#FFFFFF; border:1px solid #000000; padding:2px; font-weight:bold"><%=net:name()%>:
+				<%- else -%>
+					<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
+				<%- end -%>
+				<%
 					for _, iface in ipairs(net and net:get_interfaces() or {}) do
 						if not iface:is_bridgeport() then
 							empty = false
-			 %>
-				<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
-				<% if iface:name() == self.iface then %><strong><%=iface:shortname()%></strong><% else %><%=iface:shortname()%><% end %> &nbsp;
-			<% end end end %>
+				 %>
+					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+				<% end end %>
+				</span>
+			<% end end %>
 			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
 		</label>
 	</li>
-	<% end %>
+	<% end end %>
 
-	<% if not self.nocreate then %>
+	<% if self.widget ~= "checkbox" and not self.nocreate then %>
 	<li style="padding:0.5em">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not selected, "checked", "checked")%> /> &nbsp;
 		<div style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em; display:inline">

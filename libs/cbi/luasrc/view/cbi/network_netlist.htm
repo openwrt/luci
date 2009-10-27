@@ -19,37 +19,40 @@ $Id$
 
 	local net, iface
 	local networks = nwm:get_networks()
-	local value = self:cfgvalue(section) or self.default
+	local value = self:formvalue(section)
 
-	if value and #value == 0 then value = nil end
+	if not value or value == "-" then
+		value = self:cfgvalue(section) or self.default
+	end
 -%>
 
-<ul style="margin:0; list-style-type:none">
+<ul style="margin:0; list-style-type:none; text-align:left">
 	<% for _, net in utl.spairs(networks, function(a,b) return (networks[a]:name() < networks[b]:name()) end) do
 	       if net:name() ~= "loopback" then %>
 	<li style="padding:0.25em 0">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "." .. net:name()) .. attr("name", cbid) .. attr("value", net:name()) .. ifattr(value == net:name(), "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. net:name()) .. attr("name", cbid) .. attr("value", net:name()) .. ifattr(value == net:name(), "checked", "checked")%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. net:name())%>>
-			<strong><%=net:name()%>:</strong>
-			<%
-				local empty = true
-				for _, iface in ipairs(net:get_interfaces()) do if not iface:is_bridgeport() then
-					empty = false
-			 %>
-				<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
-				<% if iface:name() == self.iface then %><strong><%=iface:shortname()%></strong><% else %><%=iface:shortname()%><% end %> &nbsp;
-			<% end end %>
-			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
+			&nbsp;<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
+				<%
+					local empty = true
+					for _, iface in ipairs(net:get_interfaces()) do
+						if not iface:is_bridge() then
+							empty = false
+				 %>
+					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+				<% end end %>
+				<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
+			</span>
 		</label>
 	</li>
 	<% end end %>
 
-	<% if not self.nocreate then %>
+	<% if self.widget ~= "checkbox" and not self.nocreate then %>
 	<li style="padding:0.25em 0">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
 		<div style="padding:0.5em; display:inline">
 			<label<%=attr("for", cbid .. "_new")%>><em><%:a_s_ipt_zone_unspec_create unspecified -or- create:%>&nbsp;</em></label>
-			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newiface")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
+			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newnet")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>
 	<% end %>
