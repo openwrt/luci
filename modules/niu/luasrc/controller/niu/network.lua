@@ -20,8 +20,14 @@ function index()
 	.dbtemplate = "niu/network"
 
 	entry({"niu", "network", "lan"}, 
-	cbi("niu/network/lan", {on_success_to={"niu"}}), "Configure LAN")
+	cbi("niu/network/lan", {on_success_to={"niu"}}), "Configure LAN", 10)
 
 	entry({"niu", "network", "wan"}, 
-	cbi("niu/network/wan", {on_success_to={"niu"}}), "Configure Internet")
+	cbi("niu/network/wan", {on_success_to={"niu"}}), "Configure Internet", 20)
+	
+	entry({"niu", "network", "assign"}, cbi("niu/network/assign",
+	 {on_success_to={"niu"}}), "Address Assignment", 30)
+	
+	entry({"niu", "network", "routes"},  cbi("niu/network/routes",
+	 {on_success_to={"niu"}}), "Custom Routing", 40)
 end
