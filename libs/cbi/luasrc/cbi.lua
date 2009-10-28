@@ -614,11 +614,12 @@ function Delegator.parse(self, ...)
 
 	if not Map.formvalue(self, "cbi.submit") then
 		return FORM_NODATA
-	elseif not newcurrent or not self:get(newcurrent) then
+	elseif stat > FORM_PROCEED 
+	and (not newcurrent or not self:get(newcurrent)) then
 		self:_run_hooks("on_done")
 		return FORM_DONE
 	else
-		self.current = newcurrent
+		self.current = newcurrent or self.current
 		self.active = self:get(self.current)
 		if type(self.active) ~= "function" then
 			self.active:parse(false)
