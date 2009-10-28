@@ -24,7 +24,9 @@ start() {
 	test -f /etc/hosts.local && cat /etc/hosts.local >> /var/etc/hosts
 
 	config_load luci_hosts
+	config_load luci_etherhosts
 	config_foreach apply_host host
+	config_foreach apply_host entry
 
 	return 0
 }
