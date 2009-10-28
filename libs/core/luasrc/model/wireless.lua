@@ -23,12 +23,12 @@ local iwi = require "iwinfo"
 local utl = require "luci.util"
 local uct = require "luci.model.uci.bind"
 
-module "luci.model.network.wireless"
+module "luci.model.wireless"
 
 local ub = uct.bind("wireless")
 local st, ifs
 
-function init(self, cursor)
+function init(cursor)
 	cursor:unload("wireless")
 	cursor:load("wireless")
 	ub:init(cursor)
@@ -42,7 +42,7 @@ function init(self, cursor)
 		function(s)
 			count = count + 1
 
-			local id = "%s.network%d" %{ self.device, count }
+			local id = "%s.network%d" %{ s.device, count }
 
 			ifs[id] = {
 				id    = id,
@@ -80,10 +80,10 @@ function get_network(self, id)
 end
 
 function shortname(self, iface)
-	if iface.dev and iface.dev.wifi then
+	if iface.wdev and iface.winfo then
 		return "%s %q" %{
-			i18n.translate("a_s_if_iwmode_" .. (iface.dev.wifi.mode or "ap")), 
-			iface.dev.wifi.ssid or iface.dev.wifi.bssid or "(hidden)"
+			i18n.translate("a_s_if_iwmode_" .. iface:active_mode(), iface.winfo.mode(iface.wdev)), 
+			iface:active_ssid() or "(hidden)"
 		}
 	else
 		return iface:name()
@@ -91,11 +91,11 @@ function shortname(self, iface)
 end
 
 function get_i18n(self, iface)
-	if iface.dev and iface.dev.wifi then
-		return "%s: %s %q" %{
+	if iface.wdev and iface.winfo then
+		return "%s: %s %q (%s)" %{
 			i18n.translate("a_s_if_wifinet", "Wireless Network"),
-			i18n.translate("a_s_if_iwmode_" .. (iface.dev.wifi.mode or "ap"), iface.dev.wifi.mode or "AP"),
-			iface.dev.wifi.ssid or iface.dev.wifi.bssid or "(hidden)"
+			i18n.translate("a_s_if_iwmode_" .. iface:active_mode(), iface.winfo.mode(iface.wdev)),
+			iface:active_ssid() or "(hidden)", iface.wdev
 		}
 	else
 		return "%s: %q" %{ i18n.translate("a_s_if_wifinet", "Wireless Network"), iface:name() }
@@ -198,17 +198,18 @@ function network._init(self, sid)
 			count = count + 1
 			return s['.name'] ~= sid
 		end)
-
-	self.id = "%s.network%d" %{ self.device, count }
 	
 	local dev = st:get("wireless", sid, "ifname")
 		or st:get("wireless", sid, "device")
 
-	local wtype = dev and iwi.type(dev)
+	if dev then
+		self.id = "%s.network%d" %{ dev, count }
 
-	if dev and wtype then
-		self.winfo = iwi[wtype]
-		self.wdev  = dev
+		local wtype = iwi.type(dev)
+		if dev and wtype then
+			self.winfo = iwi[wtype]
+			self.wdev  = dev
+		end
 	end
 end
 
