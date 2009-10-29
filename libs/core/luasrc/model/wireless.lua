@@ -66,6 +66,13 @@ function get_device(self, dev)
 	return device(dev)
 end
 
+function get_devices(self)
+	local devs = { }
+	ub.uci:foreach("wireless", "wifi-device",
+		function(s) devs[#devs+1] = device(s['.name']) end)
+	return devs
+end
+
 function get_network(self, id)
 	if ifs[id] then
 		return network(ifs[id].sid)
@@ -102,28 +109,19 @@ function get_i18n(self, iface)
 	end
 end
 
-function rename_network(self, old, new)
-	local i
-	for i, _ in pairs(ifs) do
-		if ifs[i].network == old then
-			ifs[i].network = new
+function del_network(self, id)
+	if ifs[id] then
+		ub.uci:delete("wireless", ifs[id].sid)
+		ifs[id] = nil
+	else
+		local n
+		for n, _ in pairs(ifs) do
+			if ifs[n].sid == id then
+				ub.uci:delete("wireless", id)
+				ifs[n] = nil
+			end
 		end
 	end
-
-	ub.uci:foreach("wireless", "wifi-iface",
-		function(s)
-			if s.network == old then
-				if new then 
-					ub.uci:set("wireless", s['.name'], "network", new)
-				else
-					ub.uci:delete("wireless", s['.name'], "network")
-				end
-			end
-		end)
-end
-
-function del_network(self, old)
-	return self:rename_network(old, nil)
 end
 
 function find_interfaces(self, iflist, brlist)
@@ -164,10 +162,26 @@ end
 device = ub:section("wifi-device")
 device:property("type")
 device:property("channel")
-device:property("disabled")
+device:property_bool("disabled")
 
 function device.name(self)
 	return self.sid
+end
+
+function device.is_up(self)
+	local rv = false
+
+	if not self:disabled() then
+		st:foreach("wireless", "wifi-iface",
+			function(s)
+				if s.device == self:name() and s.up == "1" then
+					rv = true
+					return false
+				end
+			end)
+	end
+
+	return rv
 end
 
 function device.get_networks(self)
@@ -227,6 +241,10 @@ function network.get_device(self)
 	end
 end
 
+function network.is_up(self)
+	return (st:get("wireless", self.sid, "up") == "1")
+end
+
 function network.active_mode(self)
 	local m = self.winfo and self.winfo.mode(self.wdev)
 	if m == "Master" or m == "Auto" then
@@ -257,6 +275,28 @@ function network.active_bssid(self)
 		self:bssid() or "00:00:00:00:00:00"
 end
 
+function network.active_encryption(self)
+	return self.winfo and self.winfo.enctype(self.wdev) or "-"
+end
+
+function network.assoclist(self)
+	return self.winfo and self.winfo.assoclist(self.wdev) or { }
+end
+
+function network.frequency(self)
+	local freq = self.winfo and self.winfo.frequency(self.wdev)
+	return freq and freq > 0 and "%.03f" % (freq / 1000)
+end
+
+function network.bitrate(self)
+	local rate = self.winfo and self.winfo.bitrate(self.wdev)
+	return rate and rate > 0 and (rate / 1000)
+end
+
+function network.channel(self)
+	return self.winfo and self.winfo.channel(self.wdef)
+end
+
 function network.signal(self)
 	return self.winfo and self.winfo.signal(self.wdev) or 0
 end
@@ -265,12 +305,12 @@ function network.noise(self)
 	return self.winfo and self.winfo.noise(self.wdev) or 0
 end
 
-function network.signal_level(self)
+function network.signal_level(self, s, n)
 	if self:active_bssid() ~= "00:00:00:00:00:00" then
-		local signal = self:signal()
-		local noise  = self:noise()
+		local signal = s or self:signal()
+		local noise  = n or self:noise()
 
-		if signal > 0 and noise > 0 then
+		if signal < 0 and noise < 0 then
 			local snr = -1 * (noise - signal)
 			return math.floor(snr / 5)
 		else
