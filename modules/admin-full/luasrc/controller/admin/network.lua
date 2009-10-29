@@ -34,15 +34,6 @@ function index()
 	page.leaf = true
 	page.subindex = true
 
-	uci:foreach("wireless", "wifi-device",
-		function (section)
-			local ifc = section[".name"]
-				entry({"admin", "network", "wireless", ifc},
-				 true,
-				 ifc:upper()).i18n = "wifi"
-		end
-	)
-
 	local page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
 	page.i18n = "wifi"
 	page.leaf = true
