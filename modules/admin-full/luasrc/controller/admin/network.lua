@@ -47,6 +47,10 @@ function index()
 	page.i18n = "wifi"
 	page.leaf = true
 
+	local page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
+	page.i18n = "wifi"
+	page.leaf = true
+
 	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("interfaces", "Schnittstellen"), 10)
 	page.leaf   = true
 	page.subindex = true
@@ -130,11 +134,13 @@ function wifi_join()
 				ssid    = ssid
 			}
 
-			if attach_intf and uci:get("network", attach_intf, "ifname") then
+			if attach_intf and uci:get("network", attach_intf) == "interface" then
 				-- target network already has a interface, make it a bridge
 				uci:set("network", attach_intf, "type", "bridge")
 				uci:save("network")
 				uci:commit("network")
+
+				wificonf.network = attach_intf
 
 				if autoconnect then
 					require "luci.sys".call("/sbin/ifup " .. attach_intf)
@@ -153,7 +159,7 @@ function wifi_join()
 				wificonf.key = param("key")
 			end
 
-			uci:section("wireless", "wifi-iface", nil, wificonf)
+			local s = uci:section("wireless", "wifi-iface", nil, wificonf)
 			uci:delete("wireless", dev, "disabled")
 			uci:set("wireless", dev, "channel", channel)
 
@@ -164,7 +170,7 @@ function wifi_join()
 				require "luci.sys".call("/sbin/wifi")
 			end
 
-			luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", dev))
+			luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 		elseif cancel then
 			luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless_join?device=" .. dev))
 		else
@@ -173,4 +179,15 @@ function wifi_join()
 	else
 		luci.template.render("admin_network/wifi_join")
 	end
+end
+
+function wifi_delete(network)
+	local uci = require "luci.model.uci".cursor()
+	local wlm = require "luci.model.wireless"
+
+	wlm.init(uci)
+	wlm:del_network(network)
+
+	uci:save("wireless")
+	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 end
