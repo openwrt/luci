@@ -164,7 +164,7 @@ end
 function bsection.property_bool(self, k, n)
 	self[n or k] = function(c, val)
 		if val == nil then
-			return self.bind:bool(c:get(k, c.sid))
+			return bind:bool(c:get(k, c.sid))
 		else
 			return c:set(k, self.bind:bool(val) and "1" or "0", c.sid)
 		end
