@@ -294,7 +294,7 @@ function network.bitrate(self)
 end
 
 function network.channel(self)
-	return self.winfo and self.winfo.channel(self.wdef)
+	return self.winfo and self.winfo.channel(self.wdev)
 end
 
 function network.signal(self)
