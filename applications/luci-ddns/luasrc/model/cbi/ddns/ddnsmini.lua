@@ -36,14 +36,14 @@ pw.password = true
 s.defaults.ip_source = "network"
 s.defaults.ip_network = "wan"
 
-s:option(Value, "check_interval").default = 10
-unit = s:option(ListValue, "check_unit")
+s:option(Value, "check_interval", translate("Check for changed IP every")).default = 10
+unit = s:option(ListValue, "check_unit", translate("Check-Time unit"))
 unit.default = "minutes"
 unit:value("minutes", "min")
 unit:value("hours", "h")
 
-s:option(Value, "force_interval").default = 72
-unit = s:option(ListValue, "force_unit")
+s:option(Value, "force_interval", translate("Force update every")).default = 72
+unit = s:option(ListValue, "force_unit", translate("Force-Time unit"))
 unit.default = "hours"
 unit:value("minutes", "min")
 unit:value("hours", "h")
