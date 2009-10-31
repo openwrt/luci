@@ -222,22 +222,6 @@ function Node.__init__(self, title, description)
 	self.template = "cbi/node"
 end
 
--- i18n helper
-function Node._i18n(self, config, section, option, title, description)
-
-	-- i18n loaded?
-	if type(luci.i18n) == "table" then
-
-		local key = config and config:gsub("[^%w]+", "") or ""
-
-		if section then	key = key .. "_" .. section:lower():gsub("[^%w]+", "") end
-		if option  then key = key .. "_" .. tostring(option):lower():gsub("[^%w]+", "")  end
-
-		self.title = title or luci.i18n.translate( key, option or section or config )
-		self.description = description or luci.i18n.translate( key .. "_desc", "" )
-	end
-end
-
 -- hook helper
 function Node._run_hooks(self, ...)
 	local f
@@ -313,7 +297,6 @@ Map = class(Node)
 
 function Map.__init__(self, config, ...)
 	Node.__init__(self, ...)
-	Node._i18n(self, config, nil, nil, ...)
 
 	self.config = config
 	self.parsechain = {self.config}
@@ -842,9 +825,6 @@ function AbstractSection.option(self, class, option, ...)
 
 	if instanceof(class, AbstractValue) then
 		local obj  = class(self.map, self, option, ...)
-
-		Node._i18n(obj, self.config, self.section or self.sectiontype, option, ...)
-
 		self:append(obj)
 		self.fields[option] = obj
 		return obj
@@ -1059,7 +1039,6 @@ NamedSection = class(AbstractSection)
 
 function NamedSection.__init__(self, map, section, stype, ...)
 	AbstractSection.__init__(self, map, stype, ...)
-	Node._i18n(self, map.config, section, nil, ...)
 
 	-- Defaults
 	self.addremove = false
@@ -1124,7 +1103,6 @@ TypedSection = class(AbstractSection)
 
 function TypedSection.__init__(self, map, type, ...)
 	AbstractSection.__init__(self, map, type, ...)
-	Node._i18n(self, map.config, type, nil, ...)
 
 	self.template  = "cbi/tsection"
 	self.deps = {}
