@@ -1,4 +1,4 @@
-<%#
+a<%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
@@ -51,7 +51,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <script type="text/javascript" src="<%=resource%>/VarType.js"></script>
 <script type="text/javascript" src="<%=resource%>/XHTML1.js"></script>
 <script type="text/javascript" src="<%=resource%>/Dropdowns.js"></script>
-<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. pcdata(node.title) or '')) %> - LuCI</title>
+<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
 
@@ -98,7 +98,7 @@ local function submenu(prefix, node)
 				local href = controller .. prefix .. v.name .. "/"
 				href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 %>
-<li><a<% if nnode._menu_selected then %> class="active"<%end%> href="<%=luci.util.pcdata(href)%>"><%=pcdata(nnode.title)%></a><%-
+<li><a<% if nnode._menu_selected then %> class="active"<%end%> href="<%=pcdata(href)%>"><%=pcdata(striptags(nnode.title))%></a><%-
 submenu(prefix .. v.name .. "/", nnode)
 %></li>
 <%-
@@ -124,7 +124,7 @@ if cattree and cattree.nodes then
 			local href = controller.."/"..category.."/"..k.name.."/"
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href
 %>
-<li><a<% if node._menu_selected then %> class="preactive"<%end%> href="<%=href%>"><%=pcdata(node.title)%></a><%
+<li><a<% if node._menu_selected then %> class="preactive"<%end%> href="<%=pcdata(href)%>"><%=pcdata(striptags(node.title))%></a><%
 submenu("/" .. category .. "/" .. k.name .. "/", node)
 %></li><% end
 	end
@@ -135,7 +135,7 @@ end
 <ul id="modemenu"><%
 for k,node in pairs(tree.nodes) do
 	if node.title and not node.hidden then %>
-<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=pcdata(node.title)%></a></li><%
+<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=pcdata(striptags(node.title))%></a></li><%
 	end
 end
 %>

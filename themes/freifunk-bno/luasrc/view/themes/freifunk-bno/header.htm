@@ -44,7 +44,7 @@ require("luci.http").prepare_content("text/html")
 	<link rel="shortcut icon" href="<%=media%>/images/favicon.ico" />
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
-	<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. pcdata(node.title) or '')) %> - LuCI</title>
+	<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 
 	<!--[if lt IE 7]>
 		<script type="text/javascript">
@@ -92,7 +92,7 @@ for k,v in pairs(request) do
 	if c.nodes and c.nodes[v] then
 		c = c.nodes[v]
 		url = url .. "/" .. v
-	%><a href="<%=url%>"><%=pcdata(c.title or v)%></a> <% if k ~= #request then %>&#187; <% end
+	%><a href="<%=url%>"><%=pcdata(striptags(c.title or v))%></a> <% if k ~= #request then %>&#187; <% end
 	end
 end
 %>
@@ -126,7 +126,7 @@ local function submenu(prefix, node)
 			href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 		%>
 		<li>
-			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=luci.util.pcdata(href)%>"><%=pcdata(nnode.title)%></a></span>
+			<span<% if nnode._menu_selected then %> class="active"<%end%>><a href="<%=pcdata(href)%>"><%=pcdata(striptags(nnode.title))%></a></span>
 			<%- submenu(prefix .. v.name .. "/", nnode) %>
 		</li>
 		<%- end %>
@@ -149,7 +149,7 @@ if cattree and cattree.nodes then
 		if not node.hidden and node.title and node.target then
 			local href = controller.."/"..category.."/"..k.name
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href %>
-			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=href%>"><%=pcdata(node.title)%></a>
+			<div<% if node._menu_selected then %> class="preactive"<%end%>><a href="<%=pcdata(href)%>"><%=pcdata(striptags(node.title))%></a>
 				<%submenu("/" .. category .. "/" .. k.name .. "/", node)%>
 			</div>
 <%		end
@@ -161,7 +161,7 @@ end
 		<ul><%
 			for k,node in pairs(tree.nodes) do
 				if node.title and not node.hidden then %>
-					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=pcdata(node.title)%></a></li>
+					<li<% if request[1] == k then %> class="active"<%end%>><a href="<%=controller%>/<%=k%>"><%=pcdata(striptags(node.title))%></a></li>
 <%				end
 			end%>
 		</ul>
