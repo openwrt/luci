@@ -14,7 +14,7 @@ $Id$
 ]]--
 local ipkgfile = "/etc/opkg.conf" 
 
-f = SimpleForm("ipkgconf", translate("a_s_p_ipkg"))
+f = SimpleForm("ipkgconf", translate("OPKG-Configuration"))
 
 t = f:field(TextValue, "lines")
 t.rows = 10

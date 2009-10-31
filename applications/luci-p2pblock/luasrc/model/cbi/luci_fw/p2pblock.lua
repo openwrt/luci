@@ -14,14 +14,14 @@ $Id$
 
 local sys = require "luci.sys"
 
-m = Map("freifunk_p2pblock", translate("ff_p2pblock", "P2P-Block"),
-	translate("ff_p2pblock_desc", "P2P-Block is a greylisting mechanism to block various peer-to-peer protocols for non-whitelisted clients."))
+m = Map("freifunk_p2pblock", translate("P2P-Block"),
+	translate("P2P-Block is a greylisting mechanism to block various peer-to-peer protocols for non-whitelisted clients."))
 
 s = m:section(NamedSection, "p2pblock", "settings", "Settings")
 s.anonymous = true
 s.addremove = false
 
-en = s:option(Flag, "_enabled", translate("ff_p2pblock_enabled", "Enable P2P-Block"))
+en = s:option(Flag, "_enabled", translate("Enable P2P-Block"))
 en.rmempty = false
 
 function en.cfgvalue()
@@ -36,14 +36,14 @@ function en.write(self, section, val)
 	end
 end
 
-s:option(Value, "portrange", translate("ff_p2pblock_portrange", "Portrange"))
+s:option(Value, "portrange", translate("Portrange"))
 
-s:option(Value, "blocktime", translate("ff_p2pblock_blocktime", "Block Time"),
-	translate("ff_p2pblock_blocktime_desc", "seconds"))
+s:option(Value, "blocktime", translate("Block Time"),
+	translate("seconds"))
 
-s:option(DynamicList, "whitelist", translate("ff_p2pblock_whitelist", "Whitelisted IPs"))
+s:option(DynamicList, "whitelist", translate("Whitelisted IPs"))
 
-l7 = s:option(MultiValue, "layer7", translate("ff_p2pblock_layer7", "Layer7-Protokolle"))
+l7 = s:option(MultiValue, "layer7", translate("Layer7-Protocols"))
 l7.widget = "checkbox"
 l7:value("aim", "AIM Chat")
 l7:value("bittorrent", "Bittorrent")
@@ -62,7 +62,7 @@ l7:value("smtp", "SMTP Protocol")
 l7:value("ssl", "SSL Protocol")
 l7:value("vnc", "VNC Protocol")
 
-ipp2p = s:option(MultiValue, "ipp2p", translate("ff_p2pblock_ipp2p", "IP-P2P"))
+ipp2p = s:option(MultiValue, "ipp2p", translate("IP-P2P"))
 ipp2p.widget = "checkbox"
 ipp2p:value("edk", "eDonkey, eMule, Kademlia")
 ipp2p:value("kazaa", "KaZaA, FastTrack")

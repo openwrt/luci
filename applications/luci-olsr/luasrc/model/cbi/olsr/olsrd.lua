@@ -14,7 +14,7 @@ $Id$
 
 require("luci.tools.webadmin")
 
-m = Map("olsrd", translate("olsrd", "OLSR Daemon"))
+m = Map("olsrd", translate("OLSR Daemon"))
 
 s = m:section(TypedSection, "olsrd", translate("olsrd_general"))
 s.dynamic = true
@@ -38,26 +38,26 @@ noint.optional = true
 s:option(Value, "Pollrate").optional = true
 
 tcr = s:option(ListValue, "TcRedundancy")
-tcr:value("0", translate("olsrd_olsrd_tcredundancy_0"))
-tcr:value("1", translate("olsrd_olsrd_tcredundancy_1"))
-tcr:value("2", translate("olsrd_olsrd_tcredundancy_2"))
+tcr:value("0", translate("MPR selectors"))
+tcr:value("1", translate("MPR selectors and MPR"))
+tcr:value("2", translate("all neighbours"))
 tcr.optional = true
 
 s:option(Value, "MprCoverage").optional = true
 
 lql = s:option(ListValue, "LinkQualityLevel")
 lql:value("0", translate("disable"))
-lql:value("1", translate("olsrd_olsrd_linkqualitylevel_1"))
-lql:value("2", translate("olsrd_olsrd_linkqualitylevel_2"))
+lql:value("1", translate("MPR selection"))
+lql:value("2", translate("MPR selection and routing"))
 lql.optional = true
 
 s:option(Value, "LinkQualityAging").optional = true
 
 lqa = s:option(ListValue, "LinkQualityAlgorithm")
 lqa.optional = true
-lqa:value("etx_fpm", translate("olsrd_etx_fpm"))
-lqa:value("etx_float", translate("olsrd_etx_float"))
-lqa:value("etx_ff", translate("olsrd_etx_ff"))
+lqa:value("etx_fpm", translate("fixed point math"))
+lqa:value("etx_float", translate("floating point"))
+lqa:value("etx_ff", translate("Freifunk"))
 lqa.optional = true
 
 lqfish = s:option(Flag, "LinkQualityFishEye")
@@ -92,7 +92,7 @@ willingness.optional = true
 
 
 
-i = m:section(TypedSection, "Interface", translate("interfaces"))
+i = m:section(TypedSection, "Interface", translate("Interfaces"))
 i.anonymous = true
 i.addremove = true
 i.dynamic = true
@@ -105,13 +105,13 @@ function ign.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "0"
 end
 
-network = i:option(ListValue, "interface", translate("network"))
+network = i:option(ListValue, "interface", translate("Network"))
 luci.tools.webadmin.cbi_add_networks(network)
 
 i:option(Value, "Ip4Broadcast").optional = true
 
 ip6t = i:option(ListValue, "Ip6AddrType")
-ip6t:value("", translate("cbi_select"))
+ip6t:value("", translate("-- Please choose --"))
 ip6t:value("auto")
 ip6t:value("site-local")
 ip6t:value("unique-local")

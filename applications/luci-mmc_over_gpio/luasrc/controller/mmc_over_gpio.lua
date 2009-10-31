@@ -22,7 +22,7 @@ function index()
                return
        end
 
-       local page = entry({"admin", "system", "mmc_over_gpio"}, cbi("mmc_over_gpio"), luci.i18n.translate("mmc_over_gpio", "mmc_over_gpio"), 60)
+       local page = entry({"admin", "system", "mmc_over_gpio"}, cbi("mmc_over_gpio"), luci.i18n.translate("MMC/SD driver configuration"), 60)
        page.i18n = "mmc_over_gpio"
        page.dependent = true
 end

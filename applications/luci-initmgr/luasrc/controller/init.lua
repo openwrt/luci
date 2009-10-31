@@ -24,6 +24,6 @@ function index()
 
 	entry(
 		{"admin", "system", "init"}, form("init/init"),
-		luci.i18n.translate("initmgr", "Init Scripts")
+		luci.i18n.translate("Initscripts")
 	).i18n = "initmgr"
 end

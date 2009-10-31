@@ -18,7 +18,7 @@ local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
 
 local netstate = luci.model.uci.cursor_state():get_all("network")
-m = Map("network", translate("interfaces"))
+m = Map("network", translate("Interfaces"))
 
 local created
 local netstat = sys.net.deviceinfo()
@@ -65,7 +65,7 @@ function up.write(self, section, value)
 	os.execute(call .. " " .. section .. " >/dev/null 2>&1")
 end
 
-ifname = s:option(DummyValue, "ifname", translate("device"))
+ifname = s:option(DummyValue, "ifname", translate("Device"))
 function ifname.cfgvalue(self, section)
 	return netstate[section] and netstate[section].ifname
 end
@@ -91,7 +91,7 @@ function hwaddr.cfgvalue(self, section)
 end
 
 
-ipaddr = s:option(DummyValue, "ipaddr", translate("addresses"))
+ipaddr = s:option(DummyValue, "ipaddr", translate("Addresses"))
 function ipaddr.cfgvalue(self, section)
 	return table.concat(wa.network_get_addresses(section), ", ")
 end

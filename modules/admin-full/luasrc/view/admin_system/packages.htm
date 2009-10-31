@@ -25,29 +25,29 @@ function opkg_error(code)
 	code = bit.rshift(tonumber(code), 8)
 	return translate(
 		'a_s_packages_code%i' % code,
-		'%s %i' % { translate('code'), code }
+		'%s %i' % { translate('Code'), code }
 	)
 end
 -%>
 <%+header%>
-<h2><a id="content" name="content"><%:system%></a></h2>
-<h3><%:a_s_packages%></h3>
+<h2><a id="content" name="content"><%:System%></a></h2>
+<h3><%:Software%></h3>
 
 <br />
 
 <% if install or remove or update or upgrade then %>
-<div class="code"><strong><%:status%>:</strong><br />
+<div class="code"><strong><%:Status%>:</strong><br />
 <% if update then %>
-	<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(update)%>)</span><% end %><br />
+	<%:Package lists updated%>: <% if update == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(update)%>)</span><% end %><br />
 <% end %>
 <% if upgrade then%>
-	<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
+	<%:Upgrade installed packages%>: <% if upgrade == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
 <% end %>
 <% if install then for k,v in pairs(install) do %>
-	<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
+	<%:Install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(v)%>)</span><% end %><br />
 <% end end %>
 <% if remove then for k,v in pairs(remove) do %>
-	<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
+	<%:Remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(v)%>)</span><% end %><br />
 <% end end %>
 </div>
 <br />
@@ -57,41 +57,41 @@ end
 	<div class="cbi-map">
 		<fieldset class="cbi-section">
 			<ul>
-				<li><a href="<%=REQUEST_URI%>/ipkg"><%:a_s_packages_ipkg%></a></li>
-				<li><a href="<%=REQUEST_URI%>?update=1"><%:a_s_packages_updatelist%></a></li>
+				<li><a href="<%=REQUEST_URI%>/ipkg"><%:Edit package lists and installation targets%></a></li>
+				<li><a href="<%=REQUEST_URI%>?update=1"><%:Update package lists%></a></li>
 			</ul>
 			<br />
 			<fieldset class="cbi-section-node">
 			<div class="cbi-value">
-				<label class="cbi-value-title"><%:a_s_packages_installurl%>:</label>
+				<label class="cbi-value-title"><%:Download and install package%>:</label>
 				<div class="cbi-value-field">
 					<input type="text" name="url" size="30" value="" />
-					<input class="cbi-input-save" type="submit" name="submit" value="<%:ok%>" />
+					<input class="cbi-input-save" type="submit" name="submit" value="<%:OK%>" />
 				</div>
 			</div>
 
 			<div class="cbi-value">
-				<label class="cbi-value-title"><%:filter%>:</label>
+				<label class="cbi-value-title"><%:Filter%>:</label>
 				<div class="cbi-value-field">
 					<input type="text" name="query" size="20" value="<%=query%>" />
-					<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
+					<input type="submit" class="cbi-input-find" name="search" value="<%:Find package%>" />
 				</div>
 			</div>
 
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:a_s_packages_name%></th>
-					<th class="cbi-section-table-cell"><%:version%></th>
-					<th class="cbi-section-table-cell"><%:install%></th>
-					<th class="cbi-section-table-cell"><%:delete%></th>
-					<th class="cbi-section-table-cell"><%:descr%></th>
+					<th class="cbi-section-table-cell"><%:Package name%></th>
+					<th class="cbi-section-table-cell"><%:Version%></th>
+					<th class="cbi-section-table-cell"><%:Install%></th>
+					<th class="cbi-section-table-cell"><%:Delete%></th>
+					<th class="cbi-section-table-cell"><%:Description%></th>
 				</tr>
 				<% for k, pkg in pairs(pkgs) do %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
 					<td><%=luci.util.pcdata(pkg.Package)%></td>
 					<td><%=luci.util.pcdata(pkg.Version)%></td>
 					<td><% if not pkg.Status or not pkg.Status.installed then %><input type="checkbox" name="install.<%=pkg.Package%>" value="1" /><% else %><%:installed%><% end %></td>
-					<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:notinstalled%><% end %></td>
+					<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:not installed%><% end %></td>
 					<td><%=luci.util.pcdata(pkg.Description)%></td>
 				</tr>
 				<% end %>
@@ -100,7 +100,7 @@ end
 			<br />
 
 			<div style="text-align: right">
-				<input type="submit" class="cbi-input-apply" name="submit" value="<%:a_s_packages_do%>" />
+				<input type="submit" class="cbi-input-apply" name="submit" value="<%:Perform Actions%>" />
 			</div>
 		</fieldset></fieldset>
 	</div>

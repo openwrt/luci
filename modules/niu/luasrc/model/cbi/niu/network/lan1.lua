@@ -24,42 +24,42 @@ nw.init(m.uci)
 s = m:section(NamedSection, "lan", "interface")
 s.addremove = false
 
-s:tab("general", translate("niu_general", "General Settings"))
+s:tab("general", translate("General Settings"))
 
-ipaddr = s:taboption("general", Value, "ipaddr", translate("ipaddress"))
+ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 
-nm = s:taboption("general", Value, "netmask", translate("netmask"))
+nm = s:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
 
 
-s:tab("expert", translate("niu_expert", "Expert Settings"))
+s:tab("expert", translate("Expert Settings"))
 
-mac = s:taboption("expert", Value, "macaddr", translate("macaddress"))
+mac = s:taboption("expert", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 
 mtu = s:taboption("expert", Value, "mtu", "MTU")
 mtu.isinteger = true
 
-dns = s:taboption("expert", Value, "dns", translate("dnsserver"))
+dns = s:taboption("expert", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
 dns:depends("peerdns", "")
 
 
-gw = s:taboption("expert", Value, "gateway", translate("gateway"))
-bcast = s:taboption("expert", Value, "bcast", translate("broadcast"))
+gw = s:taboption("expert", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
+bcast = s:taboption("expert", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
 
 
 if has_ipv6 then
-	ip6addr = s:taboption("expert", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
-	ip6gw = s:taboption("expert", Value, "ip6gw", translate("gateway6"))
+	ip6addr = s:taboption("expert", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
+	ip6gw = s:taboption("expert", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 end
 
 
-stp = s:taboption("expert", Flag, "stp", translate("a_n_i_stp"),
-	translate("a_n_i_stp1", "Enables the Spanning Tree Protocol on this bridge"))
+stp = s:taboption("expert", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
+	translate("Enables the Spanning Tree Protocol on this bridge"))
 
-ifname_multi = s:taboption("expert", MultiValue, "ifname_multi", translate("interface"))
+ifname_multi = s:taboption("expert", MultiValue, "ifname_multi", translate("Interface"))
 ifname_multi.template = "cbi/network_ifacelist"
 ifname_multi.nobridges = true
 ifname_multi.widget = "checkbox"
@@ -87,7 +87,7 @@ s.anonymous = true
 s.addremove = false
 s.dynamic = false
 
-s:tab("general", translate("niu_general", "General Settings"))
+s:tab("general", translate("General Settings"))
 
 s:depends("interface", "lan")
 
@@ -96,9 +96,9 @@ enable:value(0, translate("enable"))
 enable:value(1, translate("disable"))
 
 
-s:tab("expert", translate("niu_expert", "Expert Settings"))
-start = s:taboption("expert", Value, "start", translate("m_n_d_firstaddress"))
-limit = s:taboption("expert", Value, "limit", translate("m_n_d_numleases"), "")
+s:tab("expert", translate("Expert Settings"))
+start = s:taboption("expert", Value, "start", translate("First leased address"))
+limit = s:taboption("expert", Value, "limit", translate("Number of leased addresses"), "")
 time = s:taboption("expert", Value, "leasetime")
 
 

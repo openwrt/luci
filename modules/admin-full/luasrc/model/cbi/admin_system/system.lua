@@ -16,7 +16,7 @@ require("luci.sys")
 require("luci.sys.zoneinfo")
 require("luci.tools.webadmin")
 
-m = Map("system", translate("system"), translate("a_s_desc"))
+m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 
 s = m:section(TypedSection, "system", "")
 s.anonymous = true
@@ -25,14 +25,14 @@ s.addremove = false
 local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 local uptime = luci.sys.uptime()
 
-s:option(DummyValue, "_system", translate("system")).value = system
-s:option(DummyValue, "_cpu", translate("m_i_processor")).value = model
+s:option(DummyValue, "_system", translate("System")).value = system
+s:option(DummyValue, "_cpu", translate("Processor")).value = model
 
 local load1, load5, load15 = luci.sys.loadavg()
-s:option(DummyValue, "_la", translate("load")).value =
+s:option(DummyValue, "_la", translate("Load")).value =
  string.format("%.2f, %.2f, %.2f", load1, load5, load15)
 
-s:option(DummyValue, "_memtotal", translate("m_i_memory")).value =
+s:option(DummyValue, "_memtotal", translate("Memory")).value =
  string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
   tonumber(memtotal) / 1024,
   100 * memcached / memtotal,
@@ -43,13 +43,13 @@ s:option(DummyValue, "_memtotal", translate("m_i_memory")).value =
   tostring(translate("mem_free", ""))
 )
 
-s:option(DummyValue, "_systime", translate("m_i_systemtime")).value =
+s:option(DummyValue, "_systime", translate("Local Time")).value =
  os.date("%c")
 
-s:option(DummyValue, "_uptime", translate("m_i_uptime")).value =
+s:option(DummyValue, "_uptime", translate("Uptime")).value =
  luci.tools.webadmin.date_format(tonumber(uptime))
 
-hn = s:option(Value, "hostname", translate("hostname"))
+hn = s:option(Value, "hostname", translate("Hostname"))
 
 function hn.write(self, section, value)
 	Value.write(self, section, value)
@@ -57,7 +57,7 @@ function hn.write(self, section, value)
 end
 
 
-tz = s:option(ListValue, "zonename", translate("timezone"))
+tz = s:option(ListValue, "zonename", translate("Timezone"))
 tz:value("UTC")
 
 for i, zone in ipairs(luci.sys.zoneinfo.TZ) do

@@ -45,7 +45,7 @@ function index()
 
 	local page  = node("freifunk", "status", "status")
 	page.target = form("freifunk/public_status")
-	page.title  = i18n("overview")
+	page.title  = i18n("Overview")
 	page.order  = 20
 	page.i18n   = "admin-core"
 	page.setuser  = false
@@ -57,7 +57,7 @@ function index()
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, "OLSR", 30)
 
 	if nixio.fs.access("/etc/config/luci_statistics") then
-		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, i18n("stat_statistics", "Statistiken"), 40)
+		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, i18n("Statistics"), 40)
 	end
 
 	assign({"mini", "freifunk"}, {"admin", "freifunk"}, "Freifunk", 15)
@@ -72,7 +72,7 @@ function index()
 	page.title  = "Kontakt"
 	page.order  = 40
 
-	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("freifunk_map", "Karte"), 50)
+	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("Karte"), 50)
 	entry({"freifunk", "map", "content"}, template("freifunk-map/map"), nil, 51)
 end
 

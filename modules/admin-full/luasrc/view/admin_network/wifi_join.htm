@@ -71,7 +71,7 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:a_s_iw_scan Wireless Scan%></a></h2>
+<h2><a id="content" name="content"><%:Wireless Scan%></a></h2>
 
 <div class="cbi-map">
 	<fieldset class="cbi-section">
@@ -118,11 +118,11 @@ $Id$
 </div>
 <div class="cbi-page-actions right">
 	<form class="inline" action="<%=luci.dispatcher.build_url("admin/network/wireless")%>" method="get">
-		<input class="cbi-button-reset" type="submit" value="<%:a_s_iw_back_overview Back to overview%>" />
+		<input class="cbi-button-reset" type="submit" value="<%:Back to overview%>" />
 	</form>
 	<form class="inline" action="<%=REQUEST_URI%>" method="get">
 		<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>" />
-		<input class="cbi-input-find" type="submit" value="<%:a_s_iw_scan_repeat Repeat scan%>" />
+		<input class="cbi-input-find" type="submit" value="<%:Repeat scan%>" />
 	</form>
 </div>
 

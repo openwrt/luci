@@ -18,17 +18,17 @@ m = Map("freifunk", translate("contact"), translate("contact1"))
 
 c = m:section(NamedSection, "contact", "public", "")
 
-c:option(Value, "nickname", translate("ff_nickname"))
-c:option(Value, "name", translate("ff_name"))
-c:option(Value, "mail", translate("ff_mail"), translate("ff_mail1"))
-c:option(Value, "phone", translate("ff_phone"))
-c:option(Value, "location", translate("ff_location"))
-c:option(Value, "note", translate("ff_note"))
+c:option(Value, "nickname", translate("Nickname"))
+c:option(Value, "name", translate("Realname"))
+c:option(Value, "mail", translate("E-Mail"), translate("You really should provide your address here!"))
+c:option(Value, "phone", translate("Phone"))
+c:option(Value, "location", translate("Location"))
+c:option(Value, "note", translate("Notice"))
 
 m2 = Map("system", translate("geo"))
 
 s = m2:section(TypedSection, "system", "")
-s:option(Value, "latitude", translate("latitude", "Breite")).rmempty = true
-s:option(Value, "longitude", translate("longitude", "Länge")).rmempty = true
+s:option(Value, "latitude", translate("Breite")).rmempty = true
+s:option(Value, "longitude", translate("Länge")).rmempty = true
 
 return m, m2

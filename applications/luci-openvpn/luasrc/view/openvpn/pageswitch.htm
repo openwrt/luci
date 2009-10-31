@@ -16,7 +16,7 @@ $Id$
 <fieldset class="cbi-section">
 	<legend>
 		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn")%>"><%:openvpn_overview Overview%></a> &raquo;
-		<%=luci.i18n.translatef("openvpn_instance", "%s", self.instance)%>
+		<%=luci.i18n.translatef("Instance \"%s\"", self.instance)%>
 	</legend>
 
 	<% if self.mode == "basic" then %>

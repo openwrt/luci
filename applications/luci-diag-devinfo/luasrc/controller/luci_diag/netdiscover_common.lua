@@ -81,15 +81,15 @@ end
 
 function action_links(netdiscovermap, mini) 
    luci.i18n.loadc("diag_devinfo")
-   s = netdiscovermap:section(SimpleSection, "", translate("l_d_d_nc_netdiscover_actions")) 
-   b = s:option(DummyValue, "_config", translate("l_d_d_nc_config_scan"))
+   s = netdiscovermap:section(SimpleSection, "", translate("Actions")) 
+   b = s:option(DummyValue, "_config", translate("Configure Scans"))
    b.value = ""
    if (mini) then
       b.titleref = luci.dispatcher.build_url("mini", "network", "netdiscover_devinfo_config")
    else
       b.titleref = luci.dispatcher.build_url("admin", "network", "diag_config", "netdiscover_devinfo_config")
    end
-   b = s:option(DummyValue, "_scans", translate("l_d_d_nc_redo_scans"))
+   b = s:option(DummyValue, "_scans", translate("Repeat Scans (this can take a few minutes)"))
    b.value = ""
    if (mini) then
       b.titleref = luci.dispatcher.build_url("mini", "diag", "netdiscover_devinfo")

@@ -12,25 +12,25 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 arg[1] = arg[1] or ""
-m = Map("firewall", translate("firewall_rule"), translate("firewall_rule_desc"))
+m = Map("firewall", translate("Advanced Rules"), translate("Advanced rules let you customize the firewall to your needs. Only new connections will be matched. Packets belonging to already open connections are automatically allowed to pass the firewall."))
 
 s = m:section(NamedSection, arg[1], "rule", "")
 s.anonymous = true
 s.addremove = false
 
-back = s:option(DummyValue, "_overview", translate("overview"))
+back = s:option(DummyValue, "_overview", translate("Overview"))
 back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "rule")
 
 
-name = s:option(Value, "_name", translate("name")..translate("cbi_optional"))
+name = s:option(Value, "_name", translate("Name")..translate(" (optional)"))
 name.rmempty = true
 
-iface = s:option(ListValue, "src", translate("fw_src"))
+iface = s:option(ListValue, "src", translate("Source"))
 iface.rmempty = true
 
-oface = s:option(ListValue, "dest", translate("fw_dest"))
-oface:value("", translate("device", "device"))
+oface = s:option(ListValue, "dest", translate("Destination"))
+oface:value("", translate("Device"))
 oface.rmempty = true
 
 luci.model.uci.cursor():foreach("firewall", "zone",
@@ -39,7 +39,7 @@ luci.model.uci.cursor():foreach("firewall", "zone",
 		oface:value(section.name)
 	end)
 
-proto = s:option(Value, "proto", translate("protocol"))
+proto = s:option(Value, "proto", translate("Protocol"))
 proto.optional = true
 proto:value("")
 proto:value("tcpudp", "TCP+UDP")
@@ -47,26 +47,26 @@ proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("icmp", "ICMP")
 
-s:option(Value, "src_ip", translate("firewall_rule_srcip")).optional = true
-s:option(Value, "dest_ip", translate("firewall_rule_destip")).optional = true
-s:option(Value, "src_mac", translate("firewall_rule_srcmac")).optional = true
+s:option(Value, "src_ip", translate("Source address")).optional = true
+s:option(Value, "dest_ip", translate("Destination address")).optional = true
+s:option(Value, "src_mac", translate("Source MAC-Address")).optional = true
 
-sport = s:option(Value, "src_port", translate("firewall_rule_srcport"))
+sport = s:option(Value, "src_port", translate("Source port"))
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
 
-dport = s:option(Value, "dest_port", translate("firewall_rule_destport"))
+dport = s:option(Value, "dest_port", translate("Destination port"))
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")
 
-jump = s:option(ListValue, "target", translate("firewall_rule_target"))
+jump = s:option(ListValue, "target", translate("Action"))
 jump.rmempty = true
 jump.default = "ACCEPT"
-jump:value("DROP", translate("fw_drop"))
-jump:value("ACCEPT", translate("fw_accept"))
-jump:value("REJECT", translate("fw_reject"))
+jump:value("DROP", translate("drop"))
+jump:value("ACCEPT", translate("accept"))
+jump:value("REJECT", translate("reject"))
 
 
 return m

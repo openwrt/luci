@@ -12,14 +12,14 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("ddns", translate("ddns"), translate("ddns_desc"))
+m = Map("ddns", translate("Dynamic DNS"), translate("Dynamic DNS allows that your router can be reached with a fixed hostname while having a dynamically changing IP-Address."))
 
 s = m:section(TypedSection, "service", "")
 s.addremove = true
 
 s:option(Flag, "enabled", translate("enable"))
 
-svc = s:option(ListValue, "service_name", translate("service"))
+svc = s:option(ListValue, "service_name", translate("Service"))
 svc.rmempty = true
 svc:value("dyndns.org")
 svc:value("changeip.com")
@@ -27,9 +27,9 @@ svc:value("zoneedit.com")
 svc:value("no-ip.com")
 svc:value("freedns.afraid.org")
 
-s:option(Value, "domain", translate("hostname")).rmempty = true
-s:option(Value, "username", translate("username")).rmempty = true
-pw = s:option(Value, "password", translate("password"))
+s:option(Value, "domain", translate("Hostname")).rmempty = true
+s:option(Value, "username", translate("Username")).rmempty = true
+pw = s:option(Value, "password", translate("Password"))
 pw.rmempty = true
 pw.password = true
 

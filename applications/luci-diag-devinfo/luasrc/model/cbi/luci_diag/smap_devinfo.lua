@@ -21,7 +21,7 @@ require("luci.controller.luci_diag.devinfo_common")
 
 local debug = false
 
-m = SimpleForm("luci-smap-to-devinfo", translate("l_d_d_sd_smap_to_devinfo"), translate("l_d_d_sd_smap_to_devinfo_descr"))
+m = SimpleForm("luci-smap-to-devinfo", translate("SIP Device Information"), translate("Scan for supported SIP devices on specified networks."))
 m.reset = false
 m.submit = false
 

@@ -85,7 +85,7 @@ require("luci.http").prepare_content("text/html")
 </div>
 
 <div class="pathbar separator black whitetext bold">
-<%:path%>: <%
+<%:Path%>: <%
 local c = tree
 local url = controller
 for k,v in pairs(request) do
@@ -182,10 +182,10 @@ end
 	<div class="mainmenu" style="float:right; margin-right:2em">
 		<div>
 			<% if ucic > 0 then %>
-			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:unsavedchanges%>: <%=ucic%></a>
+			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucic%></a>
 			<% submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"]) -%>
 			<% else %>
-			<a href="#"><%:changes%>: 0</a>
+			<a href="#"><%:Changes%>: 0</a>
 			<% end %>
 		</div>
 	</div>

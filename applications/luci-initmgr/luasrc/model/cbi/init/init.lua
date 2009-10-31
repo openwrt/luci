@@ -30,13 +30,13 @@ for _, name in ipairs(luci.sys.init.names()) do
 end
 
 
-m = SimpleForm("initmgr", translate("initmgr"), translate("initmgr_desc"))
+m = SimpleForm("initmgr", translate("Initscripts"), translate("You can enable or disable installed init scripts here. Changes will applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like \"network\", your device might become inaccesable!</strong>"))
 m.reset = false
 
 s = m:section(Table, inits)
 
-i = s:option(DummyValue, "index", translate("initmgr_index"))
-n = s:option(DummyValue, "name", translate("initmgr_name"))
+i = s:option(DummyValue, "index", translate("Start priority"))
+n = s:option(DummyValue, "name", translate("Initscript"))
 
 e = s:option(Flag, "enabled", translate("initmgr_enabled"))
 

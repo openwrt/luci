@@ -34,12 +34,12 @@ if leasefp then
 end
 
 if leases then
-	v = m2:section(Table, leases, translate("dhcp_leases_active"))
-	ip = v:option(DummyValue, 3, translate("ipaddress"))
+	v = m2:section(Table, leases, translate("Active Leases"))
+	ip = v:option(DummyValue, 3, translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 	
-	mac  = v:option(DummyValue, 2, translate("macaddress"))
+	mac  = v:option(DummyValue, 2, translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 	
-	ltime = v:option(DummyValue, 1, translate("dhcp_timeremain"))
+	ltime = v:option(DummyValue, 1, translate("Leasetime remaining"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
 		return wa.date_format(os.difftime(tonumber(value), os.time()))
@@ -51,9 +51,9 @@ s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 
-hn = s:option(Value, "name", translate("hostnames_hostname"))
-mac = s:option(Value, "mac", translate("macaddress"))
-ip = s:option(Value, "ip", translate("ipaddress"))
+hn = s:option(Value, "name", translate("Hostname"))
+mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
+ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
 	mac:value(

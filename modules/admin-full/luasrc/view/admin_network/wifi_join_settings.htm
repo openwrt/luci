@@ -31,12 +31,10 @@ $Id$
 	local requirement
 
 	if iwinfo.type(dev) == "broadcom" and not nixio.fs.access("/usr/sbin/nas") then
-		requirement = luci.i18n.translatef("a_s_iw_require_nas",
-			"You need to install the <a href='%s'>Broadcom <em>nas</em> supplicant</a> to use WPA!"
+		requirement = luci.i18n.translatef("You need to install the <a href='%s'>Broadcom <em>nas</em> supplicant</a> to use WPA!"
 			% luci.dispatcher.build_url("admin/system/packages?url=nas&amp;submit=1"))
 	elseif not nixio.fs.access("/usr/sbin/wpa_supplicant") then
-		requirement = luci.i18n.translatef("a_s_iw_require_wpasupplicant",
-			"You need to install <a href='%s'><em>wpa-supplicant</em></a> to use WPA!"
+		requirement = luci.i18n.translatef("You need to install <a href='%s'><em>wpa-supplicant</em></a> to use WPA!"
 			% luci.dispatcher.build_url("admin/system/packages?url=wpa-supplicant&amp;submit=1"))
 	end
 
@@ -44,12 +42,12 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:a_s_iw_join Join Network%></a></h2>
+<h2><a id="content" name="content"><%:Join Network%></a></h2>
 
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
 		<div class="cbi-map-descr">
-			<%=luci.i18n.translatef("a_s_iw_join_desc", "You are about to join the wireless network <em><strong>%s</strong></em>. " ..
+			<%=luci.i18n.translatef("You are about to join the wireless network <em><strong>%s</strong></em>. " ..
 				"In order to complete the process, you need to provide some additional details.",
 				utl.pcdata(luci.http.formvalue("join") or "(hidden)")
 			)%>
@@ -120,8 +118,8 @@ $Id$
 		</fieldset>
 	</div>
 	<div class="cbi-page-actions">
-		<input class="cbi-button-apply" type="submit" value="<%:a_s_iw_join_confirm Join network%>" />
-		<input class="cbi-button-reset" type="submit" name="cancel" value="<%:a_s_iw_back_scan Back to scan results%>" />
+		<input class="cbi-button-apply" type="submit" value="<%:Join network%>" />
+		<input class="cbi-button-reset" type="submit" name="cancel" value="<%:Back to scan results%>" />
 	</div>
 </form>
 

@@ -22,7 +22,7 @@ function index()
                return
        end
 
-       local page = entry({"admin", "services", "hd_idle"}, cbi("hd_idle"), luci.i18n.translate("hd_idle", "hd-idle"), 60)
+       local page = entry({"admin", "services", "hd_idle"}, cbi("hd_idle"), luci.i18n.translate("hd-idle"), 60)
        page.i18n = "hd_idle"
        page.dependent = true
 end

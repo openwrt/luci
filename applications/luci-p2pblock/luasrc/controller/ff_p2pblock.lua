@@ -17,5 +17,5 @@ module("luci.controller.ff_p2pblock", package.seeall)
 function index()
 	require("luci.i18n").loadc("freifunk")
 	entry({"admin", "network", "firewall", "p2pblock"}, cbi("luci_fw/p2pblock"),
-		luci.i18n.translate("ff_p2pblock", "P2P-Block"), 40)
+		luci.i18n.translate("P2P-Block"), 40)
 end

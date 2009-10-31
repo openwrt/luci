@@ -32,14 +32,14 @@
 			2000,
 
 			// Data sources
-			[ "0", "<%:livestats_incoming%> (kiB/s)", "8", "<%:livestats_outgoing%> (kiB/s)" ],
+			[ "0", "<%:incoming%> (kiB/s)", "8", "<%:outgoing%> (kiB/s)" ],
 
 			// Graph layout options
 			{ 
 			shouldFill: false, 
 			drawBackground: false, 
 			strokeColor: null,
-			title: '<%:livestats_traffic%> %s',
+			title: '<%:traffic on%> %s',
 			strokeWidth: 2.5, height: 140,
 			padding: { left: 70, right: 10, top: 10, bottom: 20 },
 			instances: [ <%=table.concat(interfaces, ", ") %> ],

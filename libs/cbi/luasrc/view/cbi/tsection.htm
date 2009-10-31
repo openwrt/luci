@@ -21,7 +21,7 @@ $Id$
 	<% local isempty = true for i, k in ipairs(self:cfgsections()) do -%>
 		<% if self.addremove then -%>
 			<div class="cbi-section-remove right">
-				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:cbi_del%>" />
+				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:Delete%>" />
 			</div>
 		<%- end %>
 
@@ -40,20 +40,20 @@ $Id$
 	<%- end %>
 
 	<% if isempty then -%>
-		<em><%:cbi_sectempty%><br /><br /></em>
+		<em><%:This section contains no values yet%><br /><br /></em>
 	<%- end %>
 
 	<% if self.addremove then -%>
 		<% if self.template_addremove then include(self.template_addremove) else -%>
 		<div class="cbi-section-create">
 			<% if self.anonymous then -%>
-				<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:cbi_add%>" />
+				<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" value="<%:Add%>" />
 			<%- else -%>
 				<% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
 				<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-				<input type="submit" class="cbi-button cbi-button-add" value="<%:cbi_add%>" />
+				<input type="submit" class="cbi-button cbi-button-add" value="<%:Add%>" />
 				<% if self.invalid_cts then -%>
-					<br /><%:cbi_invalid%></div>
+					<br /><%:Invalid%></div>
 				<%- end %>
 			<%- end %>
 		</div>

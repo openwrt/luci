@@ -13,15 +13,15 @@ $Id$
 
 -%>
 <%+header%>
-<h2><a id="content" name="content"><%:olsrd_routes%></a></h2>
-<p><%:olsrd_routes_desc%></p>
+<h2><a id="content" name="content"><%:Known OLSR routes%></a></h2>
+<p><%:Overview of currently known routes to other OLSR nodes%></p>
 <br />
 <table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
-<th><%:olsrd_network%></th>
-<th><%:olsrd_gateway%></th>
-<th><%:interface%></th>
-<th><%:metric%></th>
+<th><%:Announced network%></th>
+<th><%:OLSR gateway%></th>
+<th><%:Interface%></th>
+<th><%:Metric%></th>
 <th>ETX</th>
 </tr>
 <% for k, route in ipairs(routes) do

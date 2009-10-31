@@ -101,7 +101,7 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 		end
 	end
 -%>
-<% if ucic > 0 then %><div class="menubar"><div><a class="warning" href="<%=controller%>/<%=category%>/uci/changes/"><%:unsavedchanges%>: <%=ucic%></a><%
+<% if ucic > 0 then %><div class="menubar"><div><a class="warning" href="<%=controller%>/<%=category%>/uci/changes/"><%:Unsaved Changes%>: <%=ucic%></a><%
 ucimenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"], "changes")-%>
 <div class="clear"></div>
 </div></div>
@@ -110,7 +110,7 @@ ucimenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"], "changes"
 
 <div class="menubar">
 <h2 class="navigation"><a id="navigation" name="navigation"><%:navigation Navigation%></a></h2>
-<strong><%:path%>:</strong>
+<strong><%:Path%>:</strong>
 <a href="<%=controller%>"><%= luci.__appname__ %></a>
 
 <%

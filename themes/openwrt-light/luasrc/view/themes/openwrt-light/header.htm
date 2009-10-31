@@ -62,8 +62,8 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <h1><%=luci.version.distname%></h1>
 <p>
 : <%=luci.version.distversion%> |
-<%:load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%> |
-<%:hostname%>: <%=hostname%>
+<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%> |
+<%:Hostname%>: <%=hostname%>
 </p>
 </div>
 
@@ -151,10 +151,10 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 	end
 -%>
 <ul id="savemenu" class="dropdowns">
-<li><% if ucic > 0 then %><a class="warning" href="<%=controller%>/<%=category%>/uci/changes/"><%:unsavedchanges%>: <%=ucic%></a><%
+<li><% if ucic > 0 then %><a class="warning" href="<%=controller%>/<%=category%>/uci/changes/"><%:Unsaved Changes%>: <%=ucic%></a><%
 submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"])
 else -%>
-<a href="#"><%:changes%>: 0</a><% end -%>
+<a href="#"><%:Changes%>: 0</a><% end -%>
 </li>
 </ul><% end %>
 

@@ -14,14 +14,14 @@ $Id$
 
 require("luci.controller.luci_diag.devinfo_common")
 
-m = Map("luci_devinfo", translate("l_d_d_ndc_netdiscover_to_devinfo_config_mini"), translate("l_d_d_ndc_mini_netdiscover_to_devinfo_config_descr"))
+m = Map("luci_devinfo", translate("Network Device Scanning Configuration"), translate("Configure scanning for devices on specified networks. Decreasing \'Timeout\', \'Repeat Count\', and/or \'Sleep Between Requests\' may speed up scans, but also may fail to find some devices."))
 
-s = m:section(SimpleSection, "", translate("l_d_d_ndc_mini_use_config"))
-b = s:option(DummyValue, "_scans", translate("l_d_d_ndc_mini_do_scans"))
+s = m:section(SimpleSection, "", translate("Use Configuration"))
+b = s:option(DummyValue, "_scans", translate("Perform Scans (this can take a few minutes)"))
 b.value = ""
 b.titleref = luci.dispatcher.build_url("mini", "diag", "netdiscover_devinfo")
 
-scannet = m:section(TypedSection, "netdiscover_scannet", translate("l_d_d_ndc_mini_netdiscover_scannet"), translate("l_d_d_ndc_mini_netdiscover_scannet_descr"))
+scannet = m:section(TypedSection, "netdiscover_scannet", translate("Scanning Configuration"), translate("Networks to scan for devices"))
 scannet.addremove = true
 scannet.anonymous = false
 

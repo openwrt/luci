@@ -13,14 +13,14 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.tools.webadmin")
-m = Map("ddns", translate("ddns"), translate("ddns_desc"))
+m = Map("ddns", translate("Dynamic DNS"), translate("Dynamic DNS allows that your router can be reached with a fixed hostname while having a dynamically changing IP-Address."))
 
 s = m:section(TypedSection, "service", "")
 s.addremove = true
 
 s:option(Flag, "enabled", translate("enable"))
 
-svc = s:option(ListValue, "service_name", translate("service"))
+svc = s:option(ListValue, "service_name", translate("Service"))
 svc.rmempty = true
 svc:value("")
 svc:value("dyndns.org")
@@ -29,23 +29,23 @@ svc:value("zoneedit.com")
 svc:value("no-ip.com")
 svc:value("freedns.afraid.org")
 
-s:option(Value, "domain", translate("hostname")).rmempty = true
-s:option(Value, "username", translate("username")).rmempty = true
-pw = s:option(Value, "password", translate("password"))
+s:option(Value, "domain", translate("Hostname")).rmempty = true
+s:option(Value, "username", translate("Username")).rmempty = true
+pw = s:option(Value, "password", translate("Password"))
 pw.rmempty = true
 pw.password = true
 
 src = s:option(ListValue, "ip_source")
-src:value("network", translate("network"))
-src:value("interface", translate("interface"))
+src:value("network", translate("Network"))
+src:value("interface", translate("Interface"))
 src:value("web", "URL")
 
-iface = s:option(ListValue, "ip_network", translate("network"))
+iface = s:option(ListValue, "ip_network", translate("Network"))
 iface:depends("ip_source", "network")
 iface.rmempty = true
 luci.tools.webadmin.cbi_add_networks(iface)
 
-iface = s:option(ListValue, "ip_interface", translate("interface"))
+iface = s:option(ListValue, "ip_interface", translate("Interface"))
 iface:depends("ip_source", "interface")
 iface.rmempty = true
 for k, v in pairs(luci.sys.net.devices()) do

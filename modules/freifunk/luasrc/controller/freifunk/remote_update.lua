@@ -20,7 +20,7 @@ function index()
 	local i18n = luci.i18n.translate
 
 	entry({"admin", "system", "remote_update"}, call("act_remote_update"),
-		i18n("ff_remote_update", "Freifunk Remote Update"), 90)
+		i18n("Freifunk Remote Update"), 90)
 end
 
 function act_remote_update()

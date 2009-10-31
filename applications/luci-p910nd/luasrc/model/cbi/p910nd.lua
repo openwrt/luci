@@ -15,19 +15,19 @@ $Id$
 
 local uci = luci.model.uci.cursor_state()
 
-m = Map("p910nd", translate("p910nd", "p910nd"),
-        translatef("p910nd_desc"))
+m = Map("p910nd", translate("p910nd - Printer server"),
+        translatef("First you have to install the packages to get support for USB (kmod-usb-printer) or parallel port (kmod-lp)."))
 
-s = m:section(TypedSection, "p910nd", translate("settings", "settings"))
+s = m:section(TypedSection, "p910nd", translate("Settings"))
 s.addremove = true
 s.anonymous = true
 
 s:option(Flag, "enabled", translate("enable"))
 
-s:option(Value, "device", translate("device", "Device")).rmempty = true
+s:option(Value, "device", translate("Device")).rmempty = true
 
-s:option(Value, "port", translate("port"), translate("port_help")).rmempty = true
+s:option(Value, "port", translate("Port"), translate("port_help")).rmempty = true
 
-s:option(Flag, "bidirectional", translate("bidirectional"))
+s:option(Flag, "bidirectional", translate("Bidirectional mode"))
 
 return m

@@ -15,7 +15,7 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:system%></a></h2>
+<h2><a id="content" name="content"><%:System%></a></h2>
 <h3><%:admin_upgrade Flash Firmware%></h3>
 
 <% if step == 1 then %>
@@ -73,7 +73,6 @@ $Id$
 	
 				if flashsize > 0 then
 					write(luci.i18n.translatef(
-						"admin_upgrade_spaceavail",
 						" (%s available)",
 						w.byte_format(flashsize)
 					))

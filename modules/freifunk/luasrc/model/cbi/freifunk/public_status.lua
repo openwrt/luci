@@ -16,14 +16,14 @@ f.reset = false
 local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 local uptime = luci.sys.uptime()
 
-f:field(DummyValue, "_system", translate("system")).value = system
-f:field(DummyValue, "_cpu", translate("m_i_processor")).value = model
+f:field(DummyValue, "_system", translate("System")).value = system
+f:field(DummyValue, "_cpu", translate("Processor")).value = model
 
 local load1, load5, load15 = luci.sys.loadavg()
-f:field(DummyValue, "_la", translate("load")).value =
+f:field(DummyValue, "_la", translate("Load")).value =
 string.format("%.2f, %.2f, %.2f", load1, load5, load15)
 
-f:field(DummyValue, "_memtotal", translate("m_i_memory")).value =
+f:field(DummyValue, "_memtotal", translate("Memory")).value =
 string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
 	tonumber(memtotal) / 1024,
 	100 * memcached / memtotal,
@@ -34,10 +34,10 @@ string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
 	tostring(translate("mem_free", ""))
 )
 
-f:field(DummyValue, "_systime", translate("m_i_systemtime")).value =
+f:field(DummyValue, "_systime", translate("Local Time")).value =
 os.date("%c")
 
-f:field(DummyValue, "_uptime", translate("m_i_uptime")).value =
+f:field(DummyValue, "_uptime", translate("Uptime")).value =
 luci.tools.webadmin.date_format(tonumber(uptime))
 
 
@@ -61,9 +61,9 @@ m = SimpleForm("wireless", "Freifunk WLAN")
 m.submit = false
 m.reset = false
 
-s = m:section(Table, ifaces, translate("networks"))
+s = m:section(Table, ifaces, translate("Networks"))
 
-link = s:option(DummyValue, "_link", translate("link"))
+link = s:option(DummyValue, "_link", translate("Link"))
 function link.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
 	return wifidata[ifname] and wifidata[ifname]["Link Quality"] or "-"
@@ -78,34 +78,34 @@ function bssid.cfgvalue(self, section)
 		or wifidata[ifname]["Access Point"])) or "-"
 end
 
-channel = s:option(DummyValue, "channel", translate("channel"))
+channel = s:option(DummyValue, "channel", translate("Channel"))
 	function channel.cfgvalue(self, section)
 	return wireless[self.map:get(section, "device")].channel
 end
 
-protocol = s:option(DummyValue, "_mode", translate("protocol"))
+protocol = s:option(DummyValue, "_mode", translate("Protocol"))
 function protocol.cfgvalue(self, section)
 	local mode = wireless[self.map:get(section, "device")].mode
 	return mode and "802." .. mode
 end
 
-mode = s:option(DummyValue, "mode", translate("mode"))
-encryption = s:option(DummyValue, "encryption", translate("iwscan_encr"))
+mode = s:option(DummyValue, "mode", translate("Mode"))
+encryption = s:option(DummyValue, "encryption", translate("<abbr title=\"Encrypted\">Encr.</abbr>"))
 
-power = s:option(DummyValue, "_power", translate("power"))
+power = s:option(DummyValue, "_power", translate("Power"))
 function power.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
 	return wifidata[ifname] and wifidata[ifname]["Tx-Power"] or "-"
 end
 
-scan = s:option(Button, "_scan", translate("scan"))
+scan = s:option(Button, "_scan", translate("Scan"))
 scan.inputstyle = "find"
 
 function scan.cfgvalue(self, section)
 	return self.map:get(section, "ifname") or false
 end
 
-t2 = m:section(Table, {}, translate("iwscan"), translate("iwscan1"))
+t2 = m:section(Table, {}, translate("<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-Scan"), translate("Wifi networks in your local environment"))
 
 function scan.write(self, section)
 	t2.render = t2._render
@@ -116,26 +116,26 @@ end
 t2._render = t2.render
 t2.render = function() end
 
-t2:option(DummyValue, "Quality", translate("iwscan_link"))
+t2:option(DummyValue, "Quality", translate("Link"))
 essid = t2:option(DummyValue, "ESSID", "ESSID")
 function essid.cfgvalue(self, section)
 	return luci.util.pcdata(self.map:get(section, "ESSID"))
 end
 
 t2:option(DummyValue, "Address", "BSSID")
-t2:option(DummyValue, "Mode", translate("mode"))
-chan = t2:option(DummyValue, "channel", translate("channel"))
+t2:option(DummyValue, "Mode", translate("Mode"))
+chan = t2:option(DummyValue, "channel", translate("Channel"))
 function chan.cfgvalue(self, section)
 	return self.map:get(section, "Channel")
 	or self.map:get(section, "Frequency")
 	or "-"
 end
 
-t2:option(DummyValue, "Encryption key", translate("iwscan_encr"))
+t2:option(DummyValue, "Encryption key", translate("<abbr title=\"Encrypted\">Encr.</abbr>"))
 
-t2:option(DummyValue, "Signal level", translate("iwscan_signal"))
+t2:option(DummyValue, "Signal level", translate("Signal"))
 
-t2:option(DummyValue, "Noise level", translate("iwscan_noise"))
+t2:option(DummyValue, "Noise level", translate("Noise"))
 
 
 -- Routes --
@@ -152,28 +152,28 @@ end
 
 v = r:section(Table, routes)
 
-net = v:option(DummyValue, "iface", translate("network"))
+net = v:option(DummyValue, "iface", translate("Network"))
 function net.cfgvalue(self, section)
 	return luci.tools.webadmin.iface_get_network(routes[section].device)
 	or routes[section].device
 end
 
-target  = v:option(DummyValue, "target", translate("target"))
+target  = v:option(DummyValue, "target", translate("Target"))
 function target.cfgvalue(self, section)
 	return routes[section].dest:network():string()
 end
 
-netmask = v:option(DummyValue, "netmask", translate("netmask"))
+netmask = v:option(DummyValue, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
 function netmask.cfgvalue(self, section)
 	return routes[section].dest:mask():string()
 end
 
-gateway = v:option(DummyValue, "gateway", translate("gateway"))
+gateway = v:option(DummyValue, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
 function gateway.cfgvalue(self, section)
 	return routes[section].gateway:string()
 end
 
-metric = v:option(DummyValue, "metric", translate("metric"))
+metric = v:option(DummyValue, "metric", translate("Metric"))
 function metric.cfgvalue(self, section)
 	return routes[section].metric
 end
@@ -189,23 +189,23 @@ end
 if #routes6 > 0 then
 	v6 = r:section(Table, routes6)
 
-	net = v6:option(DummyValue, "iface", translate("network"))
+	net = v6:option(DummyValue, "iface", translate("Network"))
 	function net.cfgvalue(self, section)
 		return luci.tools.webadmin.iface_get_network(routes6[section].device)
 		or routes6[section].device
 	end
 
-	target  = v6:option(DummyValue, "target", translate("target"))
+	target  = v6:option(DummyValue, "target", translate("Target"))
 	function target.cfgvalue(self, section)
 		return routes6[section].dest:string()
 	end
 
-	gateway = v6:option(DummyValue, "gateway6", translate("gateway6"))
+	gateway = v6:option(DummyValue, "gateway6", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 	function gateway.cfgvalue(self, section)
 		return routes6[section].source:string()
 	end
 
-	metric = v6:option(DummyValue, "metric", translate("metric"))
+	metric = v6:option(DummyValue, "metric", translate("Metric"))
 	function metric.cfgvalue(self, section)
 		local metr = routes6[section].metric
 		local lower = bit.band(metr, 0xffff)

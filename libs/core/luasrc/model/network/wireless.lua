@@ -77,12 +77,12 @@ end
 function get_i18n(self, iface)
 	if iface.dev and iface.dev.wifi then
 		return "%s: %s %q" %{
-			i18n.translate("a_s_if_wifinet", "Wireless Network"),
+			i18n.translate("Wireless Network"),
 			i18n.translate("a_s_if_iwmode_" .. (iface.dev.wifi.mode or "ap"), iface.dev.wifi.mode or "AP"),
 			iface.dev.wifi.ssid or iface.dev.wifi.bssid or "(hidden)"
 		}
 	else
-		return "%s: %q" %{ i18n.translate("a_s_if_wifinet", "Wireless Network"), iface:name() }
+		return "%s: %q" %{ i18n.translate("Wireless Network"), iface:name() }
 	end
 end
 

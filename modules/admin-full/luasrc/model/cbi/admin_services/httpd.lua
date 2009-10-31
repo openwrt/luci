@@ -11,21 +11,21 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("httpd", "Busybox HTTPd", translate("a_srv_http1"))
+m = Map("httpd", "Busybox HTTPd", translate("A small webserver which can be used to serve <abbr title=\"Lua Configuration Interface\">LuCI</abbr>."))
 
 s = m:section(TypedSection, "httpd", "")
 s.anonymous = true
 s.addremove = true
 
-port = s:option(Value, "port", translate("port"))
+port = s:option(Value, "port", translate("Port"))
 port.isinteger = true
 
-s:option(Value, "home", translate("a_srv_http_root"))
+s:option(Value, "home", translate("Document root"))
 
-config = s:option(Value, "c_file", translate("configfile"), translate("a_srv_http_config1"))
+config = s:option(Value, "c_file", translate("Configuration file"), translate("defaults to <code>/etc/httpd.conf</code>"))
 config.rmempty = true
 
-realm = s:option(Value, "realm", translate("a_srv_http_authrealm"), translate("a_srv_http_authrealm1"))
+realm = s:option(Value, "realm", translate("Authentication Realm"), translate("The realm which will be displayed at the authentication prompt for protected pages."))
 realm.rmempty = true
 
 return m

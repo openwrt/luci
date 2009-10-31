@@ -12,14 +12,14 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("tinyproxy", translate("tinyproxy"), translate("tinyproxy_desc"))
+m = Map("tinyproxy", translate("Tinyproxy"), translate("Tinyproxy is a small and fast non-caching HTTP(S)-Proxy"))
 
-s = m:section(TypedSection, "tinyproxy", translate("general"))
+s = m:section(TypedSection, "tinyproxy", translate("General"))
 s.anonymous = true
 
 s:option(Flag, "enable", translate("enable"))
 
-s:option(Value, "Port", translate("port"))
+s:option(Value, "Port", translate("Port"))
 s:option(Value, "Listen").optional = true
 s:option(Value, "Bind").optional = true
 s:option(Value, "Timeout").optional = true
@@ -68,8 +68,8 @@ s.anonymous = true
 s.addremove = true
 
 t = s:option(ListValue, "type")
-t:value("proxy", translate("tinyproxy_type_proxy"))
-t:value("reject", translate("tinyproxy_type_reject"))
+t:value("proxy", translate("Via proxy"))
+t:value("reject", translate("Reject access"))
 
 ta = s:option(Value, "target")
 ta.rmempty = true

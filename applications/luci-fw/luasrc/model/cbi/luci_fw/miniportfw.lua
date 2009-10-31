@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
-m = Map("firewall", translate("fw_portfw"), translate("fw_portfw1"))
+m = Map("firewall", translate("Port forwarding"), translate("Port forwarding allows to provide network services in the internal network to an external network."))
 
 
 s = m:section(TypedSection, "redirect", "")
@@ -23,10 +23,10 @@ s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-name = s:option(Value, "_name", translate("name"), translate("cbi_optional"))
+name = s:option(Value, "_name", translate("Name"), translate(" (optional)"))
 name.size = 10
 
-proto = s:option(ListValue, "proto", translate("protocol"))
+proto = s:option(ListValue, "proto", translate("Protocol"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP+UDP")

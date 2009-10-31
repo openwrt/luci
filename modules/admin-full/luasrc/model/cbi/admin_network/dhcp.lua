@@ -21,7 +21,7 @@ s = m:section(TypedSection, "dhcp", "")
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "interface", translate("interface"))
+iface = s:option(ListValue, "interface", translate("Interface"))
 luci.tools.webadmin.cbi_add_networks(iface)
 
 local uci = luci.model.uci.cursor()
@@ -39,9 +39,9 @@ uci:foreach("network", "alias",
 		s:depends("interface", section[".name"])
 	end)
 
-s:option(Value, "start", translate("start")).rmempty = true
+s:option(Value, "start", translate("Start")).rmempty = true
 
-s:option(Value, "limit", translate("limit")).rmempty = true
+s:option(Value, "limit", translate("Limit")).rmempty = true
 
 s:option(Value, "leasetime").rmempty = true
 
@@ -51,12 +51,12 @@ function dd.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "1"
 end
 
-s:option(Value, "name", translate("name")).optional = true
+s:option(Value, "name", translate("Name")).optional = true
 
 ignore = s:option(Flag, "ignore")
 ignore.optional = true
 
-s:option(Value, "netmask", translate("netmask")).optional = true
+s:option(Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask")).optional = true
 
 s:option(Flag, "force").optional = true
 

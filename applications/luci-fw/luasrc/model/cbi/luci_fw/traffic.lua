@@ -13,15 +13,15 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-m = Map("firewall", translate("fw_traffic"))
-s = m:section(TypedSection, "forwarding", translate("fw_forwarding"), translate("fw_forwarding1"))
+m = Map("firewall", translate("Traffic Control"))
+s = m:section(TypedSection, "forwarding", translate("Zone-to-Zone traffic"), translate("Here you can specify which network traffic is allowed to flow between network zones. Only new connections will be matched. Packets belonging to already open connections are automatically allowed to pass the firewall. If you experience occasional connection problems try enabling MSS Clamping otherwise disable it for performance reasons."))
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
 
-iface = s:option(ListValue, "src", translate("fw_src"))
-oface = s:option(ListValue, "dest", translate("fw_dest"))
-s:option(Flag, "mtu_fix", translate("fw_mtufix"))
+iface = s:option(ListValue, "src", translate("Source"))
+oface = s:option(ListValue, "dest", translate("Destination"))
+s:option(Flag, "mtu_fix", translate("MSS Clamping"))
 
 luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
@@ -54,10 +54,10 @@ function s.parse(self, ...)
 	end
 end
 
-s:option(DummyValue, "_name", translate("name"))
-s:option(DummyValue, "proto", translate("protocol"))
+s:option(DummyValue, "_name", translate("Name"))
+s:option(DummyValue, "proto", translate("Protocol"))
 
-src = s:option(DummyValue, "src", translate("fw_src"))
+src = s:option(DummyValue, "src", translate("Source"))
 function src.cfgvalue(self, s)
 	return "%s:%s:%s" % {
 		self.map:get(s, "src") or "*",
@@ -66,10 +66,10 @@ function src.cfgvalue(self, s)
 	} 
 end
 
-dest = s:option(DummyValue, "dest", translate("fw_dest"))
+dest = s:option(DummyValue, "dest", translate("Destination"))
 function dest.cfgvalue(self, s)
 	return "%s:%s:%s" % {
-		self.map:get(s, "dest") or translate("device", "device"),
+		self.map:get(s, "dest") or translate("Device"),
 		self.map:get(s, "dest_ip") or "0.0.0.0/0",
 		self.map:get(s, "dest_port") or "*"
 	} 

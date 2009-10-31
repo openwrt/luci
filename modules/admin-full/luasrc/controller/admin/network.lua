@@ -20,16 +20,16 @@ function index()
 
 	local page  = node("admin", "network")
 	page.target = alias("admin", "network", "network")
-	page.title  = i18n("network")
+	page.title  = i18n("Network")
 	page.order  = 50
 	page.index  = true
 
 	local page  = node("admin", "network", "vlan")
 	page.target = cbi("admin_network/vlan")
-	page.title  = i18n("a_n_switch")
+	page.title  = i18n("Switch")
 	page.order  = 20
 
-	local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("wifi"), 15)
+	local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
 	page.i18n   = "wifi"
 	page.leaf = true
 	page.subindex = true
@@ -42,7 +42,7 @@ function index()
 	page.i18n = "wifi"
 	page.leaf = true
 
-	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("interfaces", "Schnittstellen"), 10)
+	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
 	page.leaf   = true
 	page.subindex = true
 
@@ -69,17 +69,17 @@ function index()
 	entry(
 	 {"admin", "network", "dhcp", "leases"},
 	 cbi("admin_network/dhcpleases"),
-	 i18n("dhcp_leases")
+	 i18n("Leases")
 	)
 
 	local page  = node("admin", "network", "hosts")
 	page.target = cbi("admin_network/hosts")
-	page.title  = i18n("hostnames", "Hostnames")
+	page.title  = i18n("Hostnames")
 	page.order  = 40
 
 	local page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
-	page.title  = i18n("a_n_routes_static")
+	page.title  = i18n("Static Routes")
 	page.order  = 50
 
 end

@@ -49,20 +49,20 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:a_s_ipt_status Firewall Status%></a></h2>
+<h2><a id="content" name="content"><%:Firewall Status%></a></h2>
 
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
 		<fieldset class="cbi-section">
-			<h3><%:a_s_ipt_actions Actions%></h3>
+			<h3><%:Actions%></h3>
 			<ul>
-				<li><a href="<%=REQUEST_URI%>?zero=1"><%:a_s_ipt_reset Reset Counters%></a></li>
-				<li><a href="<%=REQUEST_URI%>?restart=1"><%:a_s_ipt_restart Restart Firewall%></a></li>
+				<li><a href="<%=REQUEST_URI%>?zero=1"><%:Reset Counters%></a></li>
+				<li><a href="<%=REQUEST_URI%>?restart=1"><%:Restart Firewall%></a></li>
 			</ul>
 			<br /><br />
 
 			<% for _, tbl in ipairs({"Filter", "NAT", "Mangle"}) do chaincnt = 0 %>
-				<h3><%:a_s_ipt_table Table%>: <%=tbl%></h3>
+				<h3><%:Table%>: <%=tbl%></h3>
 				<table class="cbi-section-table" style="font-size:90%">
 					<% for _, chain in ipairs(ipt:chains(tbl)) do
 						rowcnt    = 0
@@ -72,26 +72,26 @@ $Id$
 						<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
 							<th class="cbi-section-table-cell" style="text-align:left" colspan="11">
 								<br /><a name="rule_<%=tbl:lower()%>_<%=chain%>"></a>
-								<%:a_s_ipt_chain Chain%> <em><%=chain%></em>
+								<%:Chain%> <em><%=chain%></em>
 								(<%- if chaininfo.policy then -%>
-									<%:a_s_ipt_policy Policy%>: <em><%=chaininfo.policy%></em>, <%:a_s_ipt_packets Packets%>: <%=chaininfo.packets%>, <%:a_s_ipt_bytes Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
+									<%:Policy%>: <em><%=chaininfo.policy%></em>, <%:Packets%>: <%=chaininfo.packets%>, <%:Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
 								<%- else -%>
-									<%:a_s_ipt_references References%>: <%=chaininfo.references-%>
+									<%:References%>: <%=chaininfo.references-%>
 								<%- end -%>)
 							</th>
 						</tr>
 						<tr class="cbi-section-table-descr">
-							<th class="cbi-section-table-cell"><%:a_s_ipt_rulenum Rule #%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_packets Pkts.%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_bytes Traffic%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_target Target%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_proto Prot.%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_flags Flags%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_inputif In%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_outputif Out%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_source Source%></th>
-							<th class="cbi-section-table-cell"><%:a_s_ipt_destination Destination%></th>
-							<th class="cbi-section-table-cell" style="width:30%"><%:a_s_ipt_options Options%></th>
+							<th class="cbi-section-table-cell"><%:Rule #%></th>
+							<th class="cbi-section-table-cell"><%:Pkts.%></th>
+							<th class="cbi-section-table-cell"><%:Traffic%></th>
+							<th class="cbi-section-table-cell"><%:Target%></th>
+							<th class="cbi-section-table-cell"><%:Prot.%></th>
+							<th class="cbi-section-table-cell"><%:Flags%></th>
+							<th class="cbi-section-table-cell"><%:In%></th>
+							<th class="cbi-section-table-cell"><%:Out%></th>
+							<th class="cbi-section-table-cell"><%:Source%></th>
+							<th class="cbi-section-table-cell"><%:Destination%></th>
+							<th class="cbi-section-table-cell" style="width:30%"><%:Options%></th>
 						</tr>
 
 						<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
@@ -112,14 +112,14 @@ $Id$
 
 						<% if rowcnt == 1 then %>
 							<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-								<td colspan="11"><em><%:a_s_ipt_norules No rules in this chain%></em></td>
+								<td colspan="11"><em><%:No rules in this chain%></em></td>
 							</tr>
 						<% end %>
 					<% end %>
 
 					<% if chaincnt == 0 then %>
 						<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-							<td colspan="11"><em><%:a_s_ipt_nochains No chains in this table%></em></td>
+							<td colspan="11"><em><%:No chains in this table%></em></td>
 						</tr>
 					<% end %>
 				</table>

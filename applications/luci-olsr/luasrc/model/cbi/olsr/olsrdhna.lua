@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-mh = Map("olsrd", translate("olsrd_hna", "OLSR - HNA-Ankündigungen"))
+mh = Map("olsrd", translate("OLSR - HNA-Announcements"))
 
 
 hna4 = mh:section(TypedSection, "Hna4")

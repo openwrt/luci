@@ -129,13 +129,13 @@ $Id$
 
 	function get_iwmode(w)
 		local m = {
-			ap     = translate("a_s_if_iwmode_ap", "Master"),
-			sta    = translate("a_s_if_iwmode_sta", "Client"),
-			wds    = translate("a_s_if_iwmode_wds", "WDS"),
-			stawds = translate("a_s_if_iwmode_stawds", "Client + WDS"),
-			apwds  = translate("a_s_if_iwmode_apwds", "Master + WDS"),
-			adhoc  = translate("a_s_if_iwmode_adhoc", "Ad-Hoc"),
-			ahdemo = translate("a_s_if_iwmode_ahdemo", "Pseudo Ad-Hoc")
+			ap     = translate("Master"),
+			sta    = translate("Client"),
+			wds    = translate("WDS"),
+			stawds = translate("Client + WDS"),
+			apwds  = translate("Master + WDS"),
+			adhoc  = translate("Ad-Hoc"),
+			ahdemo = translate("Pseudo Ad-Hoc")
 		}
 
 		return m[w.mode] or w.mode
@@ -169,7 +169,7 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:a_s_if_status Interface Status%></a></h2>
+<h2><a id="content" name="content"><%:Interface Status%></a></h2>
 
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
@@ -180,52 +180,52 @@ $Id$
 
 				if dev and devinfo and devinfo[dev] then
 			%>
-				<h3><%:a_s_if_interface Interface%> <%=i['.name']%></h3>
+				<h3><%:Interface%> <%=i['.name']%></h3>
 				<p style="font-size:90%;padding-left:1em">
 
-				<strong><%:a_s_if_device Device%>:</strong>
-				<%=dev%> (<%:a_s_if_mac MAC%> <%=get_mac(dev)%>)<br />
+				<strong><%:Device%>:</strong>
+				<%=dev%> (<%:MAC%> <%=get_mac(dev)%>)<br />
 
-				<strong><%:a_s_if_type Type%>:</strong>
+				<strong><%:Type%>:</strong>
 				<% if is_wifi(dev) then iw = get_iwinfo(dev) -%>
-					<%:a_s_if_wifidev Wireless Adapter%> (<%=iw.type%>)<br />
+					<%:Wireless Adapter%> (<%=iw.type%>)<br />
 					<% if iw then %>
-						&nbsp; &#x2514; <strong><%:a_s_if_iwmode Mode%>:</strong> <%=get_iwmode(iw)%><br />
-						&nbsp; &#x2514; <strong><%:a_s_if_iwssid SSID%>:</strong> <%=iw.ssid%><br />
-						&nbsp; &#x2514; <strong><%:a_s_if_iwchannel Channel%>:</strong> <%=iw.channel%>
+						&nbsp; &#x2514; <strong><%:Mode%>:</strong> <%=get_iwmode(iw)%><br />
+						&nbsp; &#x2514; <strong><%:SSID%>:</strong> <%=iw.ssid%><br />
+						&nbsp; &#x2514; <strong><%:Channel%>:</strong> <%=iw.channel%>
 					<% end %>
 				<% else -%>
 					<% if vlan then %>
-						<%:a_s_if_ethswitch Ethernet Switch%> (<%=get_switch_driver(dev)%>)<br />
-						&nbsp; &#x2514; <strong><%:a_s_if_vlan VLAN%>:</strong> <%=get_vlan(dev)%> (<%:a_s_if_vlanports Ports%> <%=table.concat(get_vlan_ports(dev), ", ")%>)
+						<%:Ethernet Switch%> (<%=get_switch_driver(dev)%>)<br />
+						&nbsp; &#x2514; <strong><%:VLAN%>:</strong> <%=get_vlan(dev)%> (<%:Ports%> <%=table.concat(get_vlan_ports(dev), ", ")%>)
 					<% else %>
-						<%:a_s_if_ethdev Ethernet Adapter%>
+						<%:Ethernet Adapter%>
 					<% end %>
 				<% end -%><br />
 
-				<strong><%:a_s_if_transfer Transfer%></strong><br />
-				&nbsp; &#x2514; <strong><%:a_s_if_transfer_rx RX%>:</strong> <%=devinfo[dev][2]%> <%:a_s_if_pkts Pkts.%> (<%=wba.byte_format(tonumber(devinfo[dev][1]))%>)<br />
-				&nbsp; &#x2514; <strong><%:a_s_if_transfer_tx TX%>:</strong> <%=devinfo[dev][10]%> <%:a_s_if_pkts Pkts.%> (<%=wba.byte_format(tonumber(devinfo[dev][9]))%>)<br />
+				<strong><%:Transfer%></strong><br />
+				&nbsp; &#x2514; <strong><%:RX%>:</strong> <%=devinfo[dev][2]%> <%:Pkts.%> (<%=wba.byte_format(tonumber(devinfo[dev][1]))%>)<br />
+				&nbsp; &#x2514; <strong><%:TX%>:</strong> <%=devinfo[dev][10]%> <%:Pkts.%> (<%=wba.byte_format(tonumber(devinfo[dev][9]))%>)<br />
 
 				<%- if ( i.ipaddr and #i.ipaddr > 0 ) or ( i.ip6addr and #i.ip6addr > 0 ) then -%>
-					<strong><%:a_s_if_ipconfig IP Configuration%></strong><br />
-					&nbsp; &#x2514; <strong><%:a_s_if_ipconfig_primary Primary%>:</strong>
+					<strong><%:IP Configuration%></strong><br />
+					&nbsp; &#x2514; <strong><%:Primary%>:</strong>
 					<% if i.ipaddr and #i.ipaddr > 0 then %>
 						<%=i.ipaddr%>/<%=i.netmask%>
 						<% if i.proto == "dhcp" then -%>
-							(<%:a_s_if_ipconfig_dhcp DHCP assigned%>)
+							(<%:DHCP assigned%>)
 						<%- end %>
 					<% else %>
-						<em><%:a_s_if_ipconfig_none Not configured%></em>
+						<em><%:Not configured%></em>
 					<% end %><br />
 
 					<% for i, a in ipairs(get_aliases(i)) do %>
-						&nbsp; &#x2514; <strong><%:a_s_if_ipconfig_alias Alias%> #<%=i%>:</strong>
-						<%=a.ipaddr%>/<%=a.netmask%> (<%:a_s_if_device Device%> <%=dev%>:<%=i%>) <br />
+						&nbsp; &#x2514; <strong><%:Alias%> #<%=i%>:</strong>
+						<%=a.ipaddr%>/<%=a.netmask%> (<%:Device%> <%=dev%>:<%=i%>) <br />
 					<% end %>
 
 					<% if i.ip6addr and #i.ip6addr > 0 then %>
-						&nbsp; &#x2514; <strong><%:a_s_if_ipconfig_ipv6 IPv6%>:</strong> <%=i.ip6addr%><br />
+						&nbsp; &#x2514; <strong><%:IPv6%>:</strong> <%=i.ip6addr%><br />
 					<% end %>
 				<%- end -%>
 				<br /></p>
@@ -238,41 +238,41 @@ $Id$
 
 				if br and devinfo and devinfo[dev] then
 			%>
-				<h3><%:a_s_if_bridge Bridge%> <%=br.name%></h3>
+				<h3><%:Bridge%> <%=br.name%></h3>
 				<p style="font-size:90%;padding-left:1em">
 
-				<strong><%:a_s_if_device Device%>:</strong>
-				<%=dev%> (<%:a_s_if_mac MAC%> <%=get_mac(dev)%>)<br />
+				<strong><%:Device%>:</strong>
+				<%=dev%> (<%:MAC%> <%=get_mac(dev)%>)<br />
 
-				<strong><%:a_s_if_type Type%>:</strong>
-				<%:a_s_if_ethbridge Ethernet Bridge%><br />
+				<strong><%:Type%>:</strong>
+				<%:Ethernet Bridge%><br />
 
-				&nbsp; &#x2514; <strong><%:a_s_if_bridge_id ID%>:</strong> <%=br.id%><br />
-				&nbsp; &#x2514; <strong><%:a_s_if_bridge_stp STP%>:</strong> <%=br.stp and "enabled" or "disabled"%><br />
+				&nbsp; &#x2514; <strong><%:ID%>:</strong> <%=br.id%><br />
+				&nbsp; &#x2514; <strong><%:STP%>:</strong> <%=br.stp and "enabled" or "disabled"%><br />
 
-				<strong><%:a_s_if_transfer Transfer%></strong><br />
-				&nbsp; &#x2514; <strong><%:a_s_if_transfer_rx RX%>:</strong> <%=devinfo[dev][2]%> Pkts. (<%=wba.byte_format(tonumber(devinfo[dev][1]))%>)<br />
-				&nbsp; &#x2514; <strong><%:a_s_if_transfer_tx TX%>:</strong> <%=devinfo[dev][10]%> Pkts. (<%=wba.byte_format(tonumber(devinfo[dev][9]))%>)<br />
+				<strong><%:Transfer%></strong><br />
+				&nbsp; &#x2514; <strong><%:RX%>:</strong> <%=devinfo[dev][2]%> Pkts. (<%=wba.byte_format(tonumber(devinfo[dev][1]))%>)<br />
+				&nbsp; &#x2514; <strong><%:TX%>:</strong> <%=devinfo[dev][10]%> Pkts. (<%=wba.byte_format(tonumber(devinfo[dev][9]))%>)<br />
 
 				<%- if ( b.ipaddr and #b.ipaddr > 0 ) or ( b.ip6addr and #b.ip6addr > 0 ) then -%>
-					<strong><%:a_s_if_ipconfig IP Configuration%></strong><br />
-					&nbsp; &#x2514; <strong><%:a_s_if_ipconfig_primary Primary%>:</strong>
+					<strong><%:IP Configuration%></strong><br />
+					&nbsp; &#x2514; <strong><%:Primary%>:</strong>
 					<% if b.ipaddr and #b.ipaddr > 0 then %>
 						<%=b.ipaddr%>/<%=b.netmask%>
 						<% if b.proto == "dhcp" then -%>
-							(<%:a_s_if_ipconfig_dhcp DHCP assigned%>)
+							(<%:DHCP assigned%>)
 						<%- end %>
 					<% else %>
-						<em><%:a_s_if_ipconfig_none Not configured%></em>
+						<em><%:Not configured%></em>
 					<% end %><br />
 
 					<% for i, a in ipairs(get_aliases(b)) do %>
-						&nbsp; &#x2514; <strong><%:a_s_if_ipconfig_alias Alias%> #<%=i%>:</strong>
-						<%=a.ipaddr%>/<%=a.netmask%> (<%:a_s_if_device Device%> <%=dev%>:<%=i%>) <br />
+						&nbsp; &#x2514; <strong><%:Alias%> #<%=i%>:</strong>
+						<%=a.ipaddr%>/<%=a.netmask%> (<%:Device%> <%=dev%>:<%=i%>) <br />
 					<% end %>
 
 					<% if b.ip6addr and #b.ip6addr > 0 then %>
-						&nbsp; &#x2514; <strong><%:a_s_if_ipconfig_ipv6 IPv6%>:</strong> <%=b.ip6addr%><br />
+						&nbsp; &#x2514; <strong><%:IPv6%>:</strong> <%=b.ip6addr%><br />
 					<% end %>
 				<%- end -%>
 
@@ -280,26 +280,26 @@ $Id$
 					dev     = i
 					vlan    = get_vlan(dev)
 				%>
-					<strong><%:a_s_if_bridge_port Bridge Port%> <%=n%></strong><br />
+					<strong><%:Bridge Port%> <%=n%></strong><br />
 
-					&nbsp; &#x2514; <strong><%:a_s_if_device Device%>:</strong>
-					<%=dev%> (<%:a_s_if_mac MAC%> <%=get_mac(dev)%>)<br />
+					&nbsp; &#x2514; <strong><%:Device%>:</strong>
+					<%=dev%> (<%:MAC%> <%=get_mac(dev)%>)<br />
 
-					&nbsp; &#x2514; <strong><%:a_s_if_type Type%>:</strong>
+					&nbsp; &#x2514; <strong><%:Type%>:</strong>
 					<% if is_wifi(dev) then iw = get_iwinfo(dev) -%>
-						<%:a_s_if_wifidev Wireless Adapter%> (<%=iw.type%>)<br />
+						<%:Wireless Adapter%> (<%=iw.type%>)<br />
 						<% if iw then %>
-							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:a_s_if_iwmode Mode%>:</strong> <%=get_iwmode(iw)%><br />
-							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:a_s_if_iwssid SSID%>:</strong> <%=iw.ssid%><br />
-							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:a_s_if_iwchannel Channel%>:</strong> <%=iw.channel%>
+							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:Mode%>:</strong> <%=get_iwmode(iw)%><br />
+							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:SSID%>:</strong> <%=iw.ssid%><br />
+							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:Channel%>:</strong> <%=iw.channel%>
 						<% end %>
 					<% else -%>
 						<% if vlan then %>
-							<%:a_s_if_ethswitch Ethernet Switch%> (<%=get_switch_driver(dev)%>)<br />
-							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:a_s_if_vlan VLAN%>:</strong>
-							<%=get_vlan(dev)%> (<%:a_s_if_vlan_ports Ports%> <%=table.concat(get_vlan_ports(dev), ", ")%>)
+							<%:Ethernet Switch%> (<%=get_switch_driver(dev)%>)<br />
+							&nbsp; &nbsp; &nbsp; &#x2514; <strong><%:VLAN%>:</strong>
+							<%=get_vlan(dev)%> (<%:Ports%> <%=table.concat(get_vlan_ports(dev), ", ")%>)
 						<% else %>
-							<%:a_s_if_ethdev Ethernet Adapter%>
+							<%:Ethernet Adapter%>
 						<% end %>
 					<% end -%><br />
 				<% end %>

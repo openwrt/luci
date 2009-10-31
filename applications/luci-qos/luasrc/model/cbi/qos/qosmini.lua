@@ -18,11 +18,11 @@ local fs = require "nixio.fs"
 
 m = Map("qos")
 
-s = m:section(NamedSection, "wan", "interface", translate("m_n_inet"))
+s = m:section(NamedSection, "wan", "interface", translate("Internet Connection"))
 
-s:option(Flag, "enabled", translate("qos"))
-s:option(Value, "download", translate("qos_interface_download"), "kb/s")
-s:option(Value, "upload", translate("qos_interface_upload"), "kb/s")
+s:option(Flag, "enabled", translate("Quality of Service"))
+s:option(Value, "download", translate("Downlink"), "kb/s")
+s:option(Value, "upload", translate("Uplink"), "kb/s")
 
 s = m:section(TypedSection, "classify")
 s.template = "cbi/tblsection"
@@ -31,10 +31,10 @@ s.anonymous = true
 s.addremove = true
 
 t = s:option(ListValue, "target")
-t:value("Priority", translate("qos_priority"))
-t:value("Express", translate("qos_express"))
-t:value("Normal", translate("qos_normal"))
-t:value("Bulk", translate("qos_bulk"))
+t:value("Priority", translate("priority"))
+t:value("Express", translate("express"))
+t:value("Normal", translate("normal"))
+t:value("Bulk", translate("low"))
 t.default = "Normal"
 
 srch = s:option(Value, "srchost")
@@ -47,7 +47,7 @@ dsth.rmempty = true
 dsth:value("", translate("all"))
 wa.cbi_add_knownips(dsth)
 
-l7 = s:option(ListValue, "layer7", translate("service"))
+l7 = s:option(ListValue, "layer7", translate("Service"))
 l7.rmempty = true
 l7:value("", translate("all"))
 local pats = fs.dir("/etc/l7-protocols")
@@ -59,14 +59,14 @@ if pats then
 	end
 end
 
-p = s:option(ListValue, "proto", translate("protocol"))
+p = s:option(ListValue, "proto", translate("Protocol"))
 p:value("", translate("all"))
 p:value("tcp", "TCP")
 p:value("udp", "UDP")
 p:value("icmp", "ICMP")
 p.rmempty = true
 
-ports = s:option(Value, "ports", translate("ports"))
+ports = s:option(Value, "ports", translate("Ports"))
 ports.rmempty = true
 ports:value("", translate("allf", translate("all")))
 

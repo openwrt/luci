@@ -17,7 +17,7 @@ local fs = require "nixio.fs"
 
 m = Map("qos")
 
-s = m:section(TypedSection, "interface", translate("interfaces"))
+s = m:section(TypedSection, "interface", translate("Interfaces"))
 s.addremove = true
 
 s:option(Flag, "enabled", translate("enable"))
@@ -40,10 +40,10 @@ s.anonymous = true
 s.addremove = true
 
 t = s:option(ListValue, "target")
-t:value("Priority", translate("qos_priority"))
-t:value("Express", translate("qos_express"))
-t:value("Normal", translate("qos_normal"))
-t:value("Bulk", translate("qos_bulk"))
+t:value("Priority", translate("priority"))
+t:value("Express", translate("express"))
+t:value("Normal", translate("normal"))
+t:value("Bulk", translate("low"))
 t.default = "Normal"
 
 srch = s:option(Value, "srchost")
@@ -56,7 +56,7 @@ dsth.rmempty = true
 dsth:value("", translate("all"))
 wa.cbi_add_knownips(dsth)
 
-l7 = s:option(ListValue, "layer7", translate("service"))
+l7 = s:option(ListValue, "layer7", translate("Service"))
 l7.rmempty = true
 l7:value("", translate("all"))
 local pats = fs.dir("/etc/l7-protocols")
@@ -68,14 +68,14 @@ if pats then
 	end
 end
 
-p = s:option(Value, "proto", translate("protocol"))
+p = s:option(Value, "proto", translate("Protocol"))
 p:value("", translate("all"))
 p:value("tcp", "TCP")
 p:value("udp", "UDP")
 p:value("icmp", "ICMP")
 p.rmempty = true
 
-ports = s:option(Value, "ports", translate("ports"))
+ports = s:option(Value, "ports", translate("Ports"))
 ports.rmempty = true
 ports:value("", translate("allf", translate("all")))
 

@@ -27,7 +27,7 @@ function index()
 	
 	local page   = node("admin")
 	page.target  = alias("admin", "index")
-	page.title   = i18n("administration", "Administration")
+	page.title   = i18n("Administration")
 	page.order   = 10
 	page.i18n    = "admin-core"
 	page.sysauth = "root"
@@ -37,17 +37,17 @@ function index()
 	
 	local page  = node("admin", "index")
 	page.target = template("admin_index/index")
-	page.title  = i18n("overview", "Übersicht")
+	page.title  = i18n("Overview")
 	page.order  = 10
 	page.index = true
 
 	local page  = node("admin", "index", "luci")
 	page.target = cbi("admin_index/luci")
-	page.title  = i18n("a_i_ui", "Oberfläche")
+	page.title  = i18n("User Interface")
 	page.order  = 10
 
-	entry({"admin", "index", "components"}, call("redir_components"), i18n("luci_components", "LuCI Components"), 20)
-	entry({"admin", "index", "logout"}, call("action_logout"), i18n("logout"), 90)
+	entry({"admin", "index", "components"}, call("redir_components"), i18n("LuCI Components"), 20)
+	entry({"admin", "index", "logout"}, call("action_logout"), i18n("Logout"), 90)
 end
 
 function redir_components()

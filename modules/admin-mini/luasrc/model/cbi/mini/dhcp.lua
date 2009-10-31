@@ -31,12 +31,12 @@ enable = s:option(ListValue, "ignore", translate("enable"), "")
 enable:value(0, translate("enable"))
 enable:value(1, translate("disable"))
 
-start = s:option(Value, "start", translate("m_n_d_firstaddress"))
+start = s:option(Value, "start", translate("First leased address"))
 start.rmempty = true
 start:depends("ignore", "0")
 
 
-limit = s:option(Value, "limit", translate("m_n_d_numleases"), "")
+limit = s:option(Value, "limit", translate("Number of leased addresses"), "")
 limit:depends("ignore", "0")
 
 function limit.cfgvalue(self, section)
@@ -60,7 +60,7 @@ time.rmempty = true
 
 
 
-m2 = Map("luci_ethers", translate("dhcp_leases"))
+m2 = Map("luci_ethers", translate("Leases"))
 
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",
@@ -77,25 +77,25 @@ if leasefp then
 end
 
 if leases then
-	v = m2:section(Table, leases, translate("dhcp_leases_active"))
-	ip = v:option(DummyValue, 3, translate("ipaddress"))
+	v = m2:section(Table, leases, translate("Active Leases"))
+	ip = v:option(DummyValue, 3, translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 	
-	mac  = v:option(DummyValue, 2, translate("macaddress"))
+	mac  = v:option(DummyValue, 2, translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 	
-	ltime = v:option(DummyValue, 1, translate("dhcp_timeremain"))
+	ltime = v:option(DummyValue, 1, translate("Leasetime remaining"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
 		return wa.date_format(os.difftime(tonumber(value), os.time()))
 	end
 end
 
-s = m2:section(TypedSection, "static_lease", translate("luci_ethers"))
+s = m2:section(TypedSection, "static_lease", translate("Static Leases"))
 s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 
-mac = s:option(Value, "macaddr", translate("macaddress"))
-ip = s:option(Value, "ipaddr", translate("ipaddress"))
+mac = s:option(Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
+ip = s:option(Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
 	mac:value(

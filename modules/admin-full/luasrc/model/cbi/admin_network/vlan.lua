@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("network", translate("a_n_switch"), translate("a_n_switch1"))
+m = Map("network", translate("Switch"), translate("The network ports on your router can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
 
 s = m:section(TypedSection, "switch", "")
 

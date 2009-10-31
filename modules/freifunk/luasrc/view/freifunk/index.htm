@@ -14,11 +14,11 @@ $Id$
 -%>
 <%+header%>
 <% local ff = luci.model.uci.cursor():get_all("freifunk") %>
-<h2><a id="content" name="content"><%:ff_hellonet%> <%=ff.community.name or 'Freifunk Deutschland'%>!</a></h2>
-<p><%:ff_public1%><br />
-<%:ff_public2%> <%=luci.sys.hostname()%>. <%:ff_public3%>
+<h2><a id="content" name="content"><%:Hello and welcome in the network of%> <%=ff.community.name or 'Freifunk Deutschland'%>!</a></h2>
+<p><%:We are an initiative to establish a free, independent and open wireless mesh network.%><br />
+<%:This is the access point%> <%=luci.sys.hostname()%>. <%:It is operated by%>
 <a href="<%=luci.dispatcher.build_url("freifunk", "index", "contact")%>"> <%=ff.contact.nickname%></a>.</p>
-<p><%:ff_public4%> <a href="http://freifunk.net">Freifunk.net</a>.<br />
-<%:ff_public5%> <a href="<%=ff.community.homepage or 'http//freifunk.net'%>"><%=ff.community.name or 'Freifunk'%></a>.</p>
-<p><strong><%:ff_note%></strong>: <%:ff_public6%></p>
+<p><%:You can find further information about the global Freifunk initiative at%> <a href="http://freifunk.net">Freifunk.net</a>.<br />
+<%:If you are interested in our project then contact the local community%> <a href="<%=ff.community.homepage or 'http//freifunk.net'%>"><%=ff.community.name or 'Freifunk'%></a>.</p>
+<p><strong><%:Notice%></strong>: <%:Internet access depends on technical and organisational conditions and may or may not work for you.%></p>
 <%+footer%>

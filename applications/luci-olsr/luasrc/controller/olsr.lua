@@ -16,12 +16,12 @@ function index()
 
 	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
-	page.title  = i18n("olsr_routes", "Routen")
+	page.title  = i18n("Routen")
 	page.order  = 10
 
 	local page  = node("admin", "status", "olsr", "topology")
 	page.target = call("action_topology")
-	page.title  = i18n("olsr_topology", "Topologie")
+	page.title  = i18n("Topologie")
 	page.order  = 20
 
 	local page  = node("admin", "status", "olsr", "hna")

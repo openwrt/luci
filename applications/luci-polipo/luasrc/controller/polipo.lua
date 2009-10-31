@@ -22,7 +22,7 @@ function index()
 	luci.i18n.loadc("polipo")
 	local i18n = luci.i18n.translate
 	
-	local p = entry({"admin", "services", "polipo"}, cbi("polipo"), i18n("polipo", "Polipo"))
+	local p = entry({"admin", "services", "polipo"}, cbi("polipo"), i18n("Polipo"))
 	p.dependent = true
 	p.i18n = "polipo"
 end

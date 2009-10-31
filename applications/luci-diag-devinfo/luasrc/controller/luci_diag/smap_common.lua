@@ -91,15 +91,15 @@ end
 
 function action_links(smapmap, mini) 
    luci.i18n.loadc("diag_devinfo")
-   s = smapmap:section(SimpleSection, "", translate("l_d_d_sc_smap_actions")) 
-   b = s:option(DummyValue, "_config", translate("l_d_d_sc_config_scan"))
+   s = smapmap:section(SimpleSection, "", translate("Actions")) 
+   b = s:option(DummyValue, "_config", translate("Configure Scans"))
    b.value = ""
    if (mini) then
       b.titleref = luci.dispatcher.build_url("mini", "voice", "phones", "phone_scan_config")
    else
       b.titleref = luci.dispatcher.build_url("admin", "network", "diag_config", "smap_devinfo_config")
    end
-   b = s:option(DummyValue, "_scans", translate("l_d_d_sc_redo_scans"))
+   b = s:option(DummyValue, "_scans", translate("Repeat Scans (this can take a few minutes)"))
    b.value = ""
    if (mini) then
       b.titleref = luci.dispatcher.build_url("mini", "diag", "phone_scan")

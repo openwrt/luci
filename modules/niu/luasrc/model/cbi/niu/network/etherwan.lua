@@ -29,10 +29,10 @@ nw.init(m.uci)
 s = m:section(NamedSection, "wan", "interface")
 s.addremove = false
 
-s:tab("general", translate("niu_general", "General Settings"))
-s:tab("expert", translate("niu_expert", "Expert Settings"))
+s:tab("general", translate("General Settings"))
+s:tab("expert", translate("Expert Settings"))
 
-p = s:taboption("general", ListValue, "proto", translate("protocol"))
+p = s:taboption("general", ListValue, "proto", translate("Protocol"))
 p.override_scheme = true
 p.default = "static"
 p:value("static", translate("static"))
@@ -44,53 +44,53 @@ p:value("none", translate("none"))
 
 
 
-ipaddr = s:taboption("general", Value, "ipaddr", translate("ipaddress"))
+ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ipaddr.rmempty = true
 ipaddr:depends("proto", "static")
 
-nm = s:taboption("general", Value, "netmask", translate("netmask"))
+nm = s:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
 nm.rmempty = true
 nm:depends("proto", "static")
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
-gw = s:taboption("general", Value, "gateway", translate("gateway"))
+gw = s:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
 gw:depends("proto", "static")
 gw.rmempty = true
 
-bcast = s:taboption("expert", Value, "bcast", translate("broadcast"))
+bcast = s:taboption("expert", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
 bcast:depends("proto", "static")
 
 if has_ipv6 then
-	ip6addr = s:taboption("expert", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
+	ip6addr = s:taboption("expert", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
 	ip6addr:depends("proto", "static")
 
-	ip6gw = s:taboption("expert", Value, "ip6gw", translate("gateway6"))
+	ip6gw = s:taboption("expert", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 	ip6gw:depends("proto", "static")
 end
 
-dns = s:taboption("expert", Value, "dns", translate("dnsserver"))
+dns = s:taboption("expert", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
 dns:depends("peerdns", "")
 
 mtu = s:taboption("expert", Value, "mtu", "MTU")
 mtu.isinteger = true
 
-mac = s:taboption("expert", Value, "macaddr", translate("macaddress"))
+mac = s:taboption("expert", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 
 
-srv = s:taboption("general", Value, "server", translate("network_interface_server"))
+srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
 srv:depends("proto", "pptp")
 srv.rmempty = true
 
 if has_pppd or has_pppoe or has_pppoa or has_pptp then
-	user = s:taboption("general", Value, "username", translate("username"))
+	user = s:taboption("general", Value, "username", translate("Username"))
 	user.rmempty = true
 	user:depends("proto", "pptp")
 	user:depends("proto", "pppoe")
 	user:depends("proto", "pppoa")
 
-	pass = s:taboption("general", Value, "password", translate("password"))
+	pass = s:taboption("general", Value, "password", translate("Password"))
 	pass.rmempty = true
 	pass.password = true
 	pass:depends("proto", "pptp")
@@ -98,8 +98,8 @@ if has_pppd or has_pppoe or has_pppoa or has_pptp then
 	pass:depends("proto", "pppoa")
 
 	ka = s:taboption("expert", Value, "keepalive",
-	 translate("network_interface_keepalive"),
-	 translate("network_interface_keepalive_desc")
+	 translate("Keep-Alive"),
+	 translate("Number of failed connection tests to initiate automatic reconnect")
 	)
 	ka.default = "5"
 	ka:depends("proto", "pptp")
@@ -107,8 +107,8 @@ if has_pppd or has_pppoe or has_pppoa or has_pptp then
 	ka:depends("proto", "pppoa")
 
 	demand = s:taboption("expert", Value, "demand",
-	 translate("network_interface_demand"),
-	 translate("network_interface_demand_desc")
+	 translate("Automatic Disconnect"),
+	 translate("Time (in seconds) after which an unused connection will be closed")
 	)
 	demand:depends("proto", "pptp")
 	demand:depends("proto", "pppoe")
@@ -116,9 +116,9 @@ if has_pppd or has_pppoe or has_pppoa or has_pptp then
 end
 
 if has_pppoa then
-	encaps = s:taboption("expert", ListValue, "encaps", translate("network_interface_encaps"))
+	encaps = s:taboption("expert", ListValue, "encaps", translate("PPPoA Encapsulation"))
 	encaps:depends("proto", "pppoa")
-	encaps:value("", translate("cbi_select"))
+	encaps:value("", translate("-- Please choose --"))
 	encaps:value("vc", "VC")
 	encaps:value("llc", "LLC")
 
@@ -132,8 +132,8 @@ end
 if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 --[[
 	defaultroute = s:taboption("expert", Flag, "defaultroute",
-	 translate("network_interface_defaultroute"),
-	 translate("network_interface_defaultroute_desc")
+	 translate("Replace default route"),
+	 translate("Let pppd replace the current default route to use the PPP interface after successful connect")
 	)
 	defaultroute:depends("proto", "pppoa")
 	defaultroute:depends("proto", "pppoe")
@@ -144,8 +144,8 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	end
 ]]
 	peerdns = s:taboption("expert", Flag, "peerdns",
-	 translate("network_interface_peerdns"),
-	 translate("network_interface_peerdns_desc")
+	 translate("Use peer DNS"),
+	 translate("Configure the local DNS server to use the name servers adverticed by the PPP peer")
 	)
 	peerdns:depends("proto", "pppoa")
 	peerdns:depends("proto", "pppoe")
@@ -154,7 +154,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	peerdns.default = "1"
 
 	if has_ipv6 then
-		ipv6 = s:taboption("expert", Flag, "ipv6", translate("network_interface_ipv6") )
+		ipv6 = s:taboption("expert", Flag, "ipv6", translate("Enable IPv6 on PPP link") )
 		ipv6:depends("proto", "pppoa")
 		ipv6:depends("proto", "pppoe")
 		ipv6:depends("proto", "pptp")

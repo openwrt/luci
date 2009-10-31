@@ -158,12 +158,12 @@ end
 							count = count + 1
 				-%>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
-						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("ff_splash_unknown", "unknown") .. "</em>"%></td>
-						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("ff_splash_unknown", "unknown") .. "</em>"%></td>
+						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("unknown") .. "</em>"%></td>
+						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("unknown") .. "</em>"%></td>
 						<td class="cbi-section-table-cell"><%=showmac(c.mac)%></td>
 						<td class="cbi-section-table-cell"><%=
 							(c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or
-								(c.policy ~= "normal") and "-" or "<em>" .. translate("ff_splash_expired", "expired") .. "</em>"
+								(c.policy ~= "normal") and "-" or "<em>" .. translate("expired") .. "</em>"
 						%></td>
 						<td class="cbi-section-table-cell"><%=wat.byte_format(c.bytes_in)%> / <%=wat.byte_format(c.bytes_out)%></td>
 						<td class="cbi-section-table-cell">

@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("upnpd", translate("upnpd"), translate("upnpd_desc"))
+m = Map("upnpd", translate("Universal Plug & Play"), translate("UPNP allows clients in the local network to automatically configure the router."))
 
 s = m:section(NamedSection, "config", "upnpd", "")
 e = s:option(Flag, "enabled", translate("enable"))

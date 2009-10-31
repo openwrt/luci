@@ -396,13 +396,13 @@ end
 function interface.get_type_i18n(self)
 	local x = self:type()
 	if x == "wifi" then
-		return i18n.translate("a_s_if_wifidev", "Wireless Adapter")
+		return i18n.translate("Wireless Adapter")
 	elseif x == "bridge" then
-		return i18n.translate("a_s_if_bridge", "Bridge")
+		return i18n.translate("Bridge")
 	elseif x == "switch" then
-		return i18n.translate("a_s_if_ethswitch", "Ethernet Switch")
+		return i18n.translate("Ethernet Switch")
 	else
-		return i18n.translate("a_s_if_ethdev", "Ethernet Adapter")
+		return i18n.translate("Ethernet Adapter")
 	end
 end
 

@@ -50,7 +50,7 @@ function index()
 	}
 
 	-- create toplevel menu nodes
-	local st = entry({"admin", "statistics"},             call("statistics_index"),        _i18n("statistics"), 80)
+	local st = entry({"admin", "statistics"},             call("statistics_index"),        _i18n("Statistics"), 80)
 	st.i18n = "statistics"
 	st.index = true
 	

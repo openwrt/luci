@@ -22,7 +22,7 @@ function index()
                return
        end
 
-       local page = entry({"admin", "services", "uvc_streamer"}, cbi("uvc_streamer"), luci.i18n.translate("uvc_streamer", "UVC Streaming"), 60)
+       local page = entry({"admin", "services", "uvc_streamer"}, cbi("uvc_streamer"), luci.i18n.translate("Webcam streaming"), 60)
        page.i18n = "uvc_streamer"
        page.dependent = true
 end

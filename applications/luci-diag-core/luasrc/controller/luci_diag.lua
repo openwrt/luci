@@ -19,7 +19,7 @@ function index()
    require("luci.i18n")
    luci.i18n.loadc("diag_core")
 
-   local e = entry({"admin", "network", "diag_config"}, template("diag/network_config_index") , luci.i18n.translate("l_d_diag_config"), 120)
+   local e = entry({"admin", "network", "diag_config"}, template("diag/network_config_index") , luci.i18n.translate("Configure Diagnostics"), 120)
    e.index = true
    e.i18n = "diag_core"
    e.dependent = true

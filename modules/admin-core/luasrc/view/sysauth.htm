@@ -17,9 +17,9 @@ $Id$
 
 <form method="post" action="<%=luci.http.getenv("REQUEST_URI")%>">
 	<div class="cbi-map">
-		<h2><a id="content" name="content"><%:sysauth_head%></a></h2>
+		<h2><a id="content" name="content"><%:Authorization Required%></a></h2>
 		<div class="cbi-map-descr">
-			<%:sysauth_prompt%>
+			<%:Please enter your username and password.%>
 			<%- if fuser then %>
 			<div class="error"><%:sysauth_failed%></div>
 			<br />
@@ -27,13 +27,13 @@ $Id$
 		</div>
 		<fieldset class="cbi-section"><fieldset class="cbi-section-node">
 			<div class="cbi-value">
-				<label class="cbi-value-title"><%:username%></label>
+				<label class="cbi-value-title"><%:Username%></label>
 				<div class="cbi-value-field">
 					<input class="cbi-input-user" type="text" name="username" value="<%=duser%>" />
 				</div>
 			</div>
 			<div class="cbi-value">
-				<label class="cbi-value-title"><%:password%></label>
+				<label class="cbi-value-title"><%:Password%></label>
 				<div class="cbi-value-field">
 					<input class="cbi-input-password" type="password" name="password" />
 				</div>
@@ -42,8 +42,8 @@ $Id$
 	</div>
 
 	<div>
-		<input type="submit" value="<%:login%>" class="cbi-button cbi-button-apply" />
-		<input type="reset" value="<%:reset%>" class="cbi-button cbi-button-reset" />
+		<input type="submit" value="<%:Login%>" class="cbi-button cbi-button-apply" />
+		<input type="reset" value="<%:Reset%>" class="cbi-button cbi-button-reset" />
 	</div>
 </form>
 <%+footer%>

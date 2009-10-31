@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("system", translate("leds"), translate("leds_desc"))
+m = Map("system", translate("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), translate("Customizes the behaviour of the device <abbr title=\"Light Emitting Diode\">LED</abbr>s if possible."))
 
 local sysfs_path = "/sys/class/leds/"
 local leds = {}
@@ -78,8 +78,8 @@ end
 mode = s:option(MultiValue, "mode")
 mode.rmempty = true
 mode:depends("trigger", "netdev")
-mode:value("link", translate("system_led_mode_link"))
-mode:value("tx", translate("system_led_mode_tx"))
-mode:value("rx", translate("system_led_mode_rx"))
+mode:value("link", translate("Link On"))
+mode:value("tx", translate("Transmit"))
+mode:value("rx", translate("Receive"))
 
 return m

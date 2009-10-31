@@ -13,15 +13,15 @@ $Id$
 
 -%>
 <%+header%>
-<h2><a id="content" name="content"><%:system%></a></h2>
-<h3><%:a_s_backup%></h3>
-<p><%:a_s_backup1%></p>
+<h2><a id="content" name="content"><%:System%></a></h2>
+<h3><%:Backup / Restore%></h3>
+<p><%:Here you can backup and restore your router configuration and - if possible - reset the router to the default settings.%></p>
 <br />
 <div>
 	<ul>
-	<li><a href="<%=REQUEST_URI%>?backup=kthxbye"><%:a_s_backup_backup%></a></li>
+	<li><a href="<%=REQUEST_URI%>?backup=kthxbye"><%:Create backup%></a></li>
 	<% if reset_avail then -%>
-	<li><a href="<%=REQUEST_URI%>?reset=yarly" onclick="return confirm('<%:a_s_backup_reset1%>')"><%:a_s_backup_reset%></a></li>
+	<li><a href="<%=REQUEST_URI%>?reset=yarly" onclick="return confirm('<%:Proceed reverting all settings and resetting to firmware defaults?%>')"><%:Reset router to defaults%></a></li>
 	<% end -%>
 	</ul>
 </div>
@@ -29,12 +29,12 @@ $Id$
 <br />
 
 <form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
-	<div class="left"><%:a_s_backup_archive%>:</div>
+	<div class="left"><%:Backup Archive%>:</div>
 	<div>
 		<input type="file" size="30" name="archive" />
 	</div>
 	<div>
-		<input type="submit" class="cbi-input-apply" value="<%:a_s_backup_restore%>" />
+		<input type="submit" class="cbi-input-apply" value="<%:Restore backup%>" />
 	</div>
 </form>
 <%+footer%>

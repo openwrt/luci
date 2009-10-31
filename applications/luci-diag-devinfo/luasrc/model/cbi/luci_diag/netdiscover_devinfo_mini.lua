@@ -21,7 +21,7 @@ require("luci.controller.luci_diag.devinfo_common")
 
 local debug = false
 
-m = SimpleForm("luci_devinfo", translate("l_d_d_nd_mini_netdiscover_to_devinfo"), translate("l_d_d_nd_mini_netdiscover_to_devinfo_descr"))
+m = SimpleForm("luci_devinfo", translate("Network Device Scan"), translate("Scan for devices on specified networks."))
 m.reset = false
 m.submit = false
 

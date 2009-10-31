@@ -16,7 +16,7 @@ $Id$
 local fs = require "nixio.fs"
 local cronfile = "/etc/crontabs/root" 
 
-f = SimpleForm("crontab", translate("a_s_crontab"), translate("a_s_crontab1"))
+f = SimpleForm("crontab", translate("Scheduled Tasks"), translate("This is the system crontab in which scheduled tasks can be defined."))
 
 t = f:field(TextValue, "crons")
 t.rmempty = true

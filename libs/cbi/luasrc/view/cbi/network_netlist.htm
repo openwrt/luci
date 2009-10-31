@@ -41,7 +41,7 @@ $Id$
 				 %>
 					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 				<% end end %>
-				<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
+				<% if empty then %><em><%:(no interfaces attached)%></em><% end %>
 			</span>
 		</label>
 	</li>
@@ -51,7 +51,7 @@ $Id$
 	<li style="padding:0.25em 0">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
 		<div style="padding:0.5em; display:inline">
-			<label<%=attr("for", cbid .. "_new")%>><em><%:a_s_ipt_zone_unspec_create unspecified -or- create:%>&nbsp;</em></label>
+			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&nbsp;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newnet")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>

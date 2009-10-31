@@ -18,15 +18,15 @@ function index()
    require("luci.i18n")
    luci.i18n.loadc("voice_core")
 
-   local e = entry({"admin", "voice"}, template("luci_voice/index") , luci.i18n.translate("l_v_adminvoice", "Voice"), 90)
+   local e = entry({"admin", "voice"}, template("luci_voice/index") , luci.i18n.translate("Voice"), 90)
    e.index = true
    e.i18n = "voice_core"
 
-   e = entry({"mini", "voice"}, template("luci_voice/index"), luci.i18n.translate("l_v_minivoice", "Voice"), 90)
+   e = entry({"mini", "voice"}, template("luci_voice/index"), luci.i18n.translate("Voice"), 90)
    e.index = true
    e.i18n = "voice_core"
 
-   e = entry({"mini", "voice", "phones"}, template("luci_voice/phone_index"), luci.i18n.translate("l_v_miniphones"), 90)
+   e = entry({"mini", "voice", "phones"}, template("luci_voice/phone_index"), luci.i18n.translate("Phones"), 90)
    e.index = true
    e.i18n = "voice_core"
 

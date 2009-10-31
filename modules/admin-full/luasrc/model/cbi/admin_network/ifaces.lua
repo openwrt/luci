@@ -26,7 +26,7 @@ local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 local has_ipv6  = fs.access("/proc/net/ipv6_route")
 
-m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
+m = Map("network", translate("Interfaces"), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("firewall")
 m:chain("wireless")
 
@@ -36,19 +36,19 @@ fw.init(m.uci)
 s = m:section(NamedSection, arg[1], "interface")
 s.addremove = false
 
-s:tab("general", translate("a_n_general", "General Setup"))
-if has_ipv6 then s:tab("ipv6", translate("a_n_ipv6", "IPv6 Setup")) end
-if has_pppd then s:tab("ppp", translate("a_n_ppp", "PPP Settings")) end
-s:tab("physical", translate("a_n_physical", "Physical Settings"))
-s:tab("firewall", translate("a_n_firewall", "Firewall Settings"))
+s:tab("general", translate("General Setup"))
+if has_ipv6 then s:tab("ipv6", translate("IPv6 Setup")) end
+if has_pppd then s:tab("ppp", translate("PPP Settings")) end
+s:tab("physical", translate("Physical Settings"))
+s:tab("firewall", translate("Firewall Settings"))
 
 --[[
-back = s:taboption("general", DummyValue, "_overview", translate("overview"))
+back = s:taboption("general", DummyValue, "_overview", translate("Overview"))
 back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "network")
 ]]
 
-p = s:taboption("general", ListValue, "proto", translate("protocol"))
+p = s:taboption("general", ListValue, "proto", translate("Protocol"))
 p.override_scheme = true
 p.default = "static"
 p:value("static", translate("static"))
@@ -61,19 +61,19 @@ if has_pptp  then p:value("pptp",  "PPTP")    end
 p:value("none", translate("none"))
 
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
-	p.description = translate("network_interface_prereq")
+	p.description = translate("You need to install \"comgt\" for UMTS/GPRS, \"ppp-mod-pppoe\" for PPPoE, \"ppp-mod-pppoa\" for PPPoA or \"pptp\" for PPtP support")
 end
 
-br = s:taboption("physical", Flag, "type", translate("a_n_i_bridge"), translate("a_n_i_bridge1"))
+br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
 br.enabled = "bridge"
 br.rmempty = true
 
-stp = s:taboption("physical", Flag, "stp", translate("a_n_i_stp"),
-	translate("a_n_i_stp1", "Enables the Spanning Tree Protocol on this bridge"))
+stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
+	translate("Enables the Spanning Tree Protocol on this bridge"))
 stp:depends("type", "1")
 stp.rmempty = true
 
-ifname_single = s:taboption("physical", Value, "ifname_single", translate("interface"))
+ifname_single = s:taboption("physical", Value, "ifname_single", translate("Interface"))
 ifname_single.template = "cbi/network_ifacelist"
 ifname_single.widget = "radio"
 ifname_single.nobridges = true
@@ -97,7 +97,7 @@ function ifname_single.write(self, s, val)
 end
 
 
-ifname_multi = s:taboption("physical", MultiValue, "ifname_multi", translate("interface"))
+ifname_multi = s:taboption("physical", MultiValue, "ifname_multi", translate("Interface"))
 ifname_multi.template = "cbi/network_ifacelist"
 ifname_multi.nobridges = true
 ifname_multi.network = arg[1]
@@ -118,8 +118,8 @@ end
 local fwd_to, fwd_from
 
 fwzone = s:taboption("firewall", Value, "_fwzone",
-	translate("network_interface_fwzone"),
-	translate("network_interface_fwzone_desc"))
+	translate("Create / Assign firewall-zone"),
+	translate("Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it."))
 
 fwzone.template = "cbi/firewall_zonelist"
 fwzone.network = arg[1]
@@ -150,66 +150,66 @@ function fwzone.write(self, section, value)
 end
 
 
-ipaddr = s:taboption("general", Value, "ipaddr", translate("ipaddress"))
+ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ipaddr.rmempty = true
 ipaddr:depends("proto", "static")
 
-nm = s:taboption("general", Value, "netmask", translate("netmask"))
+nm = s:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
 nm.rmempty = true
 nm:depends("proto", "static")
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
-gw = s:taboption("general", Value, "gateway", translate("gateway"))
+gw = s:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
 gw:depends("proto", "static")
 gw.rmempty = true
 
-bcast = s:taboption("general", Value, "bcast", translate("broadcast"))
+bcast = s:taboption("general", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
 bcast:depends("proto", "static")
 
 if has_ipv6 then
-	ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
+	ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
 	ip6addr:depends("proto", "static")
 
-	ip6gw = s:taboption("ipv6", Value, "ip6gw", translate("gateway6"))
+	ip6gw = s:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 	ip6gw:depends("proto", "static")
 end
 
-dns = s:taboption("general", Value, "dns", translate("dnsserver"))
+dns = s:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
 dns:depends("peerdns", "")
 
 mtu = s:taboption("physical", Value, "mtu", "MTU")
 mtu.isinteger = true
 
-mac = s:taboption("physical", Value, "macaddr", translate("macaddress"))
+mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 
 
-srv = s:taboption("general", Value, "server", translate("network_interface_server"))
+srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
 srv:depends("proto", "pptp")
 srv.rmempty = true
 
 if has_3g then
-	service = s:taboption("general", ListValue, "service", translate("network_interface_service"))
-	service:value("", translate("cbi_select"))
+	service = s:taboption("general", ListValue, "service", translate("Service type"))
+	service:value("", translate("-- Please choose --"))
 	service:value("umts", "UMTS/GPRS")
 	service:value("cdma", "CDMA")
 	service:value("evdo", "EV-DO")
 	service:depends("proto", "3g")
 	service.rmempty = true
 
-	apn = s:taboption("general", Value, "apn", translate("network_interface_apn"))
+	apn = s:taboption("general", Value, "apn", translate("Access point (APN)"))
 	apn:depends("proto", "3g")
 
 	pincode = s:taboption("general", Value, "pincode",
-	 translate("network_interface_pincode"),
-	 translate("network_interface_pincode_desc")
+	 translate("PIN code"),
+	 translate("Make sure that you provide the correct pin code here or you might lock your sim card!")
 	)
 	pincode:depends("proto", "3g")
 end
 
 if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
-	user = s:taboption("general", Value, "username", translate("username"))
+	user = s:taboption("general", Value, "username", translate("Username"))
 	user.rmempty = true
 	user:depends("proto", "pptp")
 	user:depends("proto", "pppoe")
@@ -217,7 +217,7 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	user:depends("proto", "ppp")
 	user:depends("proto", "3g")
 
-	pass = s:taboption("general", Value, "password", translate("password"))
+	pass = s:taboption("general", Value, "password", translate("Password"))
 	pass.rmempty = true
 	pass.password = true
 	pass:depends("proto", "pptp")
@@ -227,8 +227,8 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	pass:depends("proto", "3g")
 
 	ka = s:taboption("ppp", Value, "keepalive",
-	 translate("network_interface_keepalive"),
-	 translate("network_interface_keepalive_desc")
+	 translate("Keep-Alive"),
+	 translate("Number of failed connection tests to initiate automatic reconnect")
 	)
 	ka:depends("proto", "pptp")
 	ka:depends("proto", "pppoe")
@@ -237,8 +237,8 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	ka:depends("proto", "3g")
 
 	demand = s:taboption("ppp", Value, "demand",
-	 translate("network_interface_demand"),
-	 translate("network_interface_demand_desc")
+	 translate("Automatic Disconnect"),
+	 translate("Time (in seconds) after which an unused connection will be closed")
 	)
 	demand:depends("proto", "pptp")
 	demand:depends("proto", "pppoe")
@@ -248,9 +248,9 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 end
 
 if has_pppoa then
-	encaps = s:taboption("ppp", ListValue, "encaps", translate("network_interface_encaps"))
+	encaps = s:taboption("ppp", ListValue, "encaps", translate("PPPoA Encapsulation"))
 	encaps:depends("proto", "pppoa")
-	encaps:value("", translate("cbi_select"))
+	encaps:value("", translate("-- Please choose --"))
 	encaps:value("vc", "VC")
 	encaps:value("llc", "LLC")
 
@@ -263,15 +263,15 @@ end
 
 if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	device = s:taboption("general", Value, "device",
-	 translate("network_interface_device"),
-	 translate("network_interface_device_desc")
+	 translate("Modem device"),
+	 translate("The device node of your modem, e.g. /dev/ttyUSB0")
 	)
 	device:depends("proto", "ppp")
 	device:depends("proto", "3g")
 
 	defaultroute = s:taboption("ppp", Flag, "defaultroute",
-	 translate("network_interface_defaultroute"),
-	 translate("network_interface_defaultroute_desc")
+	 translate("Replace default route"),
+	 translate("Let pppd replace the current default route to use the PPP interface after successful connect")
 	)
 	defaultroute:depends("proto", "ppp")
 	defaultroute:depends("proto", "pppoa")
@@ -284,8 +284,8 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	end
 
 	peerdns = s:taboption("ppp", Flag, "peerdns",
-	 translate("network_interface_peerdns"),
-	 translate("network_interface_peerdns_desc")
+	 translate("Use peer DNS"),
+	 translate("Configure the local DNS server to use the name servers adverticed by the PPP peer")
 	)
 	peerdns:depends("proto", "ppp")
 	peerdns:depends("proto", "pppoa")
@@ -298,7 +298,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	end
 
 	if has_ipv6 then
-		ipv6 = s:taboption("ppp", Flag, "ipv6", translate("network_interface_ipv6") )
+		ipv6 = s:taboption("ppp", Flag, "ipv6", translate("Enable IPv6 on PPP link") )
 		ipv6:depends("proto", "ppp")
 		ipv6:depends("proto", "pppoa")
 		ipv6:depends("proto", "pppoe")
@@ -307,8 +307,8 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	end
 
 	connect = s:taboption("ppp", Value, "connect",
-	 translate("network_interface_connect"),
-	 translate("network_interface_connect_desc")
+	 translate("Connect script"),
+	 translate("Let pppd run this script after establishing the PPP link")
 	)
 	connect:depends("proto", "ppp")
 	connect:depends("proto", "pppoe")
@@ -317,8 +317,8 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	connect:depends("proto", "3g")
 
 	disconnect = s:taboption("ppp", Value, "disconnect",
-	 translate("network_interface_disconnect"),
-	 translate("network_interface_disconnect_desc")
+	 translate("Disconnect script"),
+	 translate("Let pppd run this script before tearing down the PPP link")
 	)
 	disconnect:depends("proto", "ppp")
 	disconnect:depends("proto", "pppoe")
@@ -327,8 +327,8 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	disconnect:depends("proto", "3g")
 
 	pppd_options = s:taboption("ppp", Value, "pppd_options",
-	 translate("network_interface_pppd_options"),
-	 translate("network_interface_pppd_options_desc")
+	 translate("Additional pppd options"),
+	 translate("Specify additional command line arguments for pppd here")
 	)
 	pppd_options:depends("proto", "ppp")
 	pppd_options:depends("proto", "pppoa")
@@ -337,38 +337,38 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	pppd_options:depends("proto", "3g")
 
 	maxwait = s:taboption("ppp", Value, "maxwait",
-	 translate("network_interface_maxwait"),
-	 translate("network_interface_maxwait_desc")
+	 translate("Setup wait time"),
+	 translate("Seconds to wait for the modem to become ready before attempting to connect")
 	)
 	maxwait:depends("proto", "3g")
 end
 
-s2 = m:section(TypedSection, "alias", translate("aliases"))
+s2 = m:section(TypedSection, "alias", translate("Aliases"))
 s2.addremove = true
 
 s2:depends("interface", arg[1])
 s2.defaults.interface = arg[1]
 
-s2:tab("general", translate("a_n_general", "General Setup"))
+s2:tab("general", translate("General Setup"))
 
 s2.defaults.proto = "static"
 
-s2:taboption("general", Value, "ipaddr", translate("ipaddress")).rmempty = true
+s2:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address")).rmempty = true
 
-nm = s2:taboption("general", Value, "netmask", translate("netmask"))
+nm = s2:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
 nm.rmempty = true
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
-s2:taboption("general", Value, "gateway", translate("gateway")).rmempty = true
-s2:taboption("general", Value, "bcast", translate("broadcast"))
-s2:taboption("general", Value, "dns", translate("dnsserver"))
+s2:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway")).rmempty = true
+s2:taboption("general", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
+s2:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
 
 if has_ipv6 then
-	s2:tab("ipv6", translate("a_n_ipv6", "IPv6 Setup"))
-	s2:taboption("ipv6", Value, "ip6addr", translate("ip6address"), translate("cidr6"))
-	s2:taboption("ipv6", Value, "ip6gw", translate("gateway6"))
+	s2:tab("ipv6", translate("IPv6 Setup"))
+	s2:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
+	s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 end
 
 return m

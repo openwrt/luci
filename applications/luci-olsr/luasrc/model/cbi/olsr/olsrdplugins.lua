@@ -17,7 +17,7 @@ local ip = require "luci.ip"
 local fs = require "nixio.fs"
 
 if arg[1] then
-	mp = Map("olsrd", translate("olsrd_plugins", "OLSR - Plugins"))
+	mp = Map("olsrd", translate("OLSR - Plugins"))
 
 	p = mp:section(TypedSection, "LoadPlugin")
 	p:depends("library", arg[1])
@@ -31,7 +31,7 @@ if arg[1] then
 		return Flag.cfgvalue(self, section) or "0"
 	end
 
-	lib = p:option(DummyValue, "library", translate("library"))
+	lib = p:option(DummyValue, "library", translate("Library"))
 	lib.default = arg[1]
 
 	local function Range(x,y)

@@ -12,14 +12,14 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-m = Map("lucittpd", "LuCIttpd", translate("a_srv_lucittpd"))
+m = Map("lucittpd", "LuCIttpd", translate("A lightweight HTTP/1.1 webserver written in C and Lua designed to serve LuCI"))
 
 s = m:section(NamedSection, "lucittpd", "lucittpd", "")
 
-s:option(Value, "port", translate("port"))
-s:option(Value, "root", translate("a_srv_http_root"))
-s:option(Value, "path", translate("a_srv_http_path"))
-s:option(Flag, "keepalive", translate("a_srv_http_keepalive"))
-s:option(Value, "timeout", translate("a_srv_http_timeout"))
+s:option(Value, "port", translate("Port"))
+s:option(Value, "root", translate("Document root"))
+s:option(Value, "path", translate("Plugin path"))
+s:option(Flag, "keepalive", translate("Enable Keep-Alive"))
+s:option(Value, "timeout", translate("Connection timeout"))
 
 return m

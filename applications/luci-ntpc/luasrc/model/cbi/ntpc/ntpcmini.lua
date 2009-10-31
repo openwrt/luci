@@ -13,22 +13,22 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.tools.webadmin")
-m = Map("ntpclient", translate("ntpc"), translate("ntpc_desc"))
+m = Map("ntpclient", translate("Time Synchronisation"), translate("Synchronizes the system time"))
 
-s = m:section(TypedSection, "ntpclient", translate("general"))
+s = m:section(TypedSection, "ntpclient", translate("General"))
 s.anonymous = true
 
 s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
 
-s:option(Value, "interval", translate("ntpc_interval")).rmempty = true
+s:option(Value, "interval", translate("Update Interval (in s)")).rmempty = true
 
 
-s3 = m:section(TypedSection, "ntpserver", translate("ntpc_timeserver"))
+s3 = m:section(TypedSection, "ntpserver", translate("Time Server"))
 s3.anonymous = true
 s3.addremove = true
 s3.template = "cbi/tblsection"
 
-s3:option(Value, "hostname", translate("hostname"))
-s3:option(Value, "port", translate("port")).rmempty = true
+s3:option(Value, "hostname", translate("Hostname"))
+s3:option(Value, "port", translate("Port")).rmempty = true
 
 return m

@@ -90,11 +90,11 @@ function parse_output(devmap, outnets, haslink, type, mini, debug)
 	    row["mac"] = ""
 	 end
 	 if (type == "smap") then
-	    row["vendor"] = luci.i18n.translate("l_d_d_dc_nosipdev")
+	    row["vendor"] = luci.i18n.translate("No SIP devices")
 	 else
-	    row["vendor"] = luci.i18n.translate("l_d_d_dc_nodev")
+	    row["vendor"] = luci.i18n.translate("No devices detected")
 	 end
-	 row["type"] = luci.i18n.translate("l_d_d_dc_checkothernet")
+	 row["type"] = luci.i18n.translate("check other networks")
 	 if (not mini) then
 	    row["model"] = ""
 	 end
@@ -109,40 +109,40 @@ function parse_output(devmap, outnets, haslink, type, mini, debug)
       local s
       if (type == "smap") then
 	 if (mini) then
-	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("l_d_d_dc_sipdev_found_mini") .. " " .. curnet)
+	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("SIP devices discovered for") .. " " .. curnet)
 	 else
 	    local interfacestring = ""
 	    if ( interface ~= "" ) then
 	       interfacestring = ", " .. interface
 	    end
-	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("l_d_d_dc_sipdev_found_admin") .. " " .. curnet .. " (" .. subnet .. ":" .. ports .. interfacestring .. ")")
+	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("SIP devices discovered for") .. " " .. curnet .. " (" .. subnet .. ":" .. ports .. interfacestring .. ")")
 	 end
 	 s.template = "diag/smapsection"
       else
 	 if (mini) then
-	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("l_dd_dc_netdev_found_mini") .. " " .. curnet)
+	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("Devices discovered for") .. " " .. curnet)
 	 else
 	    local interfacestring = ""
 	    if ( interface ~= "" ) then
 	       interfacestring = ", " .. interface
 	    end
-	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("l_d_d_dc_netdev_found_admin", "Devices discovered for") .. " " .. curnet .. " (" .. subnet .. interfacestring .. ")")
+	    s = devmap:section(luci.cbi.Table, netdevs, luci.i18n.translate("Devices discovered for") .. " " .. curnet .. " (" .. subnet .. interfacestring .. ")")
 	 end
       end
-      s:option(DummyValue, "ip", translate("l_d_d_dc_mac_ip"))
+      s:option(DummyValue, "ip", translate("IP Address"))
       if (not mini) then
-	 s:option(DummyValue, "mac", translate("l_d_d_dc_mac_address"))
+	 s:option(DummyValue, "mac", translate("MAC Address"))
       end
-      s:option(DummyValue, "vendor", translate("l_d_d_dc_mac_vendor"))
-      s:option(DummyValue, "type", translate("l_d_d_dc_mac_device_type"))
+      s:option(DummyValue, "vendor", translate("Vendor"))
+      s:option(DummyValue, "type", translate("Device Type"))
       if (not mini) then
-	 s:option(DummyValue, "model", translate("l_d_d_dc_mac_model"))
+	 s:option(DummyValue, "model", translate("Model"))
       end
       if (haslink) then
-	 s:option(DummyValue, "config_page", translate("l_d_d_dc_config_page"))
+	 s:option(DummyValue, "config_page", translate("Link to Device"))
       end
       if (debug) then
-	 s:option(DummyValue, "raw", translate("l_d_d_dc_raw"))
+	 s:option(DummyValue, "raw", translate("Raw"))
       end
       curnet = next(outnets, curnet)
    end
@@ -170,24 +170,24 @@ end
 
 function config_devinfo_scan(map, scannet)
    local o
-   o = scannet:option(luci.cbi.Flag, "enable", translate("l_d_d_dc_enable"))
+   o = scannet:option(luci.cbi.Flag, "enable", translate("Enable"))
    o.optional = false
    o.rmempty = false
 
-   o = scannet:option(luci.cbi.Value, "interface", translate("l_d_d_dc_interface"))
+   o = scannet:option(luci.cbi.Value, "interface", translate("Interface"))
    o.optional = false
    luci.controller.luci_diag.devinfo_common.cbi_add_networks(o)
    
    local scansubnet
-   scansubnet = scannet:option(luci.cbi.Value, "subnet", translate("l_d_d_dc_subnet"))
+   scansubnet = scannet:option(luci.cbi.Value, "subnet", translate("Subnet"))
    scansubnet.optional = false
    
-   o = scannet:option(luci.cbi.Value, "timeout", translate("l_d_d_dc_timeout"), translate("l_d_d_dc_timeout_descr"))
+   o = scannet:option(luci.cbi.Value, "timeout", translate("Timeout"), translate("Time to wait for responses in seconds (default 10)"))
    o.optional = true
    
-   o = scannet:option(luci.cbi.Value, "repeat_count", translate("l_d_d_dc_repeat_count"), translate("l_d_d_dc_repeat_count_descr"))
+   o = scannet:option(luci.cbi.Value, "repeat_count", translate("Repeat Count"), translate("Number of times to send requests (default 1)"))
    o.optional = true
    
-   o = scannet:option(luci.cbi.Value, "sleepreq", translate("l_d_d_dc_sleep"), translate("l_d_d_dc_sleep_desc"))
+   o = scannet:option(luci.cbi.Value, "sleepreq", translate("Sleep Between Requests"), translate("Milliseconds to sleep between requests (default 100)"))
    o.optional = true
 end

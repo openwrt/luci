@@ -14,7 +14,7 @@ $Id$
 ]]--
 local keyfile = "/etc/dropbear/authorized_keys" 
 
-f = SimpleForm("sshkeys", translate("a_s_sshkeys"), translate("a_s_sshkeys1"))
+f = SimpleForm("sshkeys", translate("<abbr title=\"Secure Shell\">SSH</abbr>-Keys"), translate("Here you can paste public <abbr title=\"Secure Shell\">SSH</abbr>-Keys (one per line) for <abbr title=\"Secure Shell\">SSH</abbr> public-key authentication."))
 
 t = f:field(TextValue, "keys")
 t.rmempty = true

@@ -29,7 +29,7 @@ s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"
 
-s:option(Value, "name", translate("name"))
+s:option(Value, "name", translate("Name"))
 s:option(Value, "path").titleref = luci.dispatcher.build_url("admin", "system", "fstab")
 
 s:option(Value, "users").rmempty = true

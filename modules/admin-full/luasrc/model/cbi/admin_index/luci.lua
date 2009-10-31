@@ -12,8 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.config")
-m = Map("luci", translate("webui"), translate("a_i_luci1",
- "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst werden."))
+m = Map("luci", translate("Web <abbr title=\"User Interface\">UI</abbr>"), translate("Here you can customize the settings and the functionality of <abbr title=\"Lua Configuration Interface\">LuCI</abbr>."))
 
 local fs = require "nixio.fs"
 
@@ -24,9 +23,9 @@ function m.commit_handler(self)
 end
 
 
-c = m:section(NamedSection, "main", "core", translate("general"))
+c = m:section(NamedSection, "main", "core", translate("General"))
 
-l = c:option(ListValue, "lang", translate("language"))
+l = c:option(ListValue, "lang", translate("Language"))
 l:value("auto")
 
 local i18ndir = luci.i18n.i18ndir .. "default."
@@ -37,19 +36,19 @@ for k, v in luci.util.kspairs(luci.config.languages) do
 	end
 end
 
-t = c:option(ListValue, "mediaurlbase", translate("design"))
+t = c:option(ListValue, "mediaurlbase", translate("Design"))
 for k, v in pairs(luci.config.themes) do
 	if k:sub(1, 1) ~= "." then
 		t:value(v, k)
 	end
 end
 
-u = m:section(NamedSection, "uci_oncommit", "event", translate("a_i_ucicommit"),
- translate("a_i_ucicommit1"))
+u = m:section(NamedSection, "uci_oncommit", "event", translate("Post-commit actions"),
+ translate("These commands will be executed automatically when a given <abbr title=\"Unified Configuration Interface\">UCI</abbr> configuration is committed allowing changes to be applied instantly."))
 u.dynamic = true
 
-f = m:section(NamedSection, "flash_keep", "extern", translate("a_i_keepflash"),
- translate("a_i_keepflash1"))
+f = m:section(NamedSection, "flash_keep", "extern", translate("Files to be kept when flashing a new firmware"),
+ translate("When flashing a new firmware with <abbr title=\"Lua Configuration Interface\">LuCI</abbr> these files will be added to the new firmware installation."))
 f.dynamic = true
 
 return m

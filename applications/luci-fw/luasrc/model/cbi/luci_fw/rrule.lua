@@ -14,56 +14,56 @@ $Id$
 require("luci.sys")
 arg[1] = arg[1] or ""
 
-m = Map("firewall", translate("fw_redirect"), translate("fw_redirect_desc"))
+m = Map("firewall", translate("Traffic Redirection"), translate("Traffic redirection allows you to change the destination address of forwarded packets."))
 
 
 s = m:section(NamedSection, arg[1], "redirect", "")
 s.anonymous = true
 s.addremove = false
 
-back = s:option(DummyValue, "_overview", translate("overview"))
+back = s:option(DummyValue, "_overview", translate("Overview"))
 back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "redirect")
 
-name = s:option(Value, "_name", translate("name"))
+name = s:option(Value, "_name", translate("Name"))
 name.rmempty = true
 name.size = 10
 
-iface = s:option(ListValue, "src", translate("fw_zone"))
+iface = s:option(ListValue, "src", translate("Zone"))
 iface.default = "wan"
 luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
 		iface:value(section.name)
 	end)
 	
-s:option(Value, "src_ip", translate("firewall_redirect_srcip")).optional = true
-s:option(Value, "src_mac", translate("firewall_redirect_srcmac")).optional = true
+s:option(Value, "src_ip", translate("Source address")).optional = true
+s:option(Value, "src_mac", translate("Source MAC")).optional = true
 
-sport = s:option(Value, "src_port", translate("firewall_rule_srcport"))
+sport = s:option(Value, "src_port", translate("Source port"))
 sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
 
-proto = s:option(ListValue, "proto", translate("protocol"))
+proto = s:option(ListValue, "proto", translate("Protocol"))
 proto.optional = true
 proto:value("")
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP+UDP")
 
-dport = s:option(Value, "src_dport", translate("firewall_redirect_srcdport"))
+dport = s:option(Value, "src_dport", translate("External port"))
 dport.size = 5
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")
 
-to = s:option(Value, "dest_ip", translate("firewall_redirect_destip"))
+to = s:option(Value, "dest_ip", translate("Internal address"))
 for i, dataset in ipairs(luci.sys.net.arptable()) do
 	to:value(dataset["IP address"])
 end
 
-toport = s:option(Value, "dest_port", translate("firewall_redirect_destport"))
+toport = s:option(Value, "dest_port", translate("Internal port (optional)"))
 toport.optional = true
 toport.size = 5
 

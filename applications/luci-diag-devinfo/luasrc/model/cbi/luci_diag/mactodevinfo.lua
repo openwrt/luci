@@ -12,25 +12,25 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-m = Map("mactodevinfo", luci.i18n.translate("l_d_d_m_mac_to_devinfo_override"), translate("l_d_d_m_mac_to_devinfo_override_descr"))
+m = Map("mactodevinfo", luci.i18n.translate("MAC Device Info Overrides"), translate("Override the information returned by the MAC to Device Info Script (mac-to-devinfo) for a specified range of MAC Addresses"))
 
-s = m:section(TypedSection, "mactodevinfo", translate("l_d_d_m_mac_to_devinfo_section"), translate("l_d_d_m_mac_to_devinfo_section_descr"))
+s = m:section(TypedSection, "mactodevinfo", translate("MAC Device Override"), translate("MAC range and information used to override system and IEEE databases"))
 s.addremove = true
 s.anonymous = true
 
-v = s:option(Value, "name", translate("l_d_d_m_name"))
+v = s:option(Value, "name", translate("Name"))
 v.optional = true
-v = s:option(Value, "maclow", translate("l_d_d_m_maclow"))
+v = s:option(Value, "maclow", translate("Beginning of MAC address range"))
 v.optional = false
-v = s:option(Value, "machigh", translate("l_d_d_m_machigh"))
+v = s:option(Value, "machigh", translate("End of MAC address range"))
 v.optional = false
-v = s:option(Value, "vendor", translate("l_d_d_m_vendor"))
+v = s:option(Value, "vendor", translate("Vendor"))
 v.optional = false
-v = s:option(Value, "devtype", translate("l_d_d_m_mactodevinfo_devtype"))
+v = s:option(Value, "devtype", translate("Device Type"))
 v.optional = false
-v = s:option(Value, "model", translate("l_d_d_m_model"))
+v = s:option(Value, "model", translate("Model"))
 v.optional = false
-v = s:option(Value, "ouiowneroverride", translate("l_d_d_m_ouiowneroverride"))
+v = s:option(Value, "ouiowneroverride", translate("OUI Owner"))
 v.optional = true
 
 return m

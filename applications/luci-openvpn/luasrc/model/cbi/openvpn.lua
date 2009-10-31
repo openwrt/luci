@@ -16,8 +16,8 @@ local fs  = require "nixio.fs"
 local sys = require "luci.sys"
 local uci = require "luci.model.uci".cursor()
 
-local m = Map("openvpn", translate("openvpn"))
-local s = m:section( TypedSection, "openvpn", translate("openvpn_overview"), translate("openvpn_overview_desc") )
+local m = Map("openvpn", translate("OpenVPN"))
+local s = m:section( TypedSection, "openvpn", translate("OpenVPN instances"), translate("Below is a list of configured OpenVPN instances and their current state") )
 s.template = "cbi/tblsection"
 s.template_addremove = "openvpn/cbi-select-input-add"
 s.addremove = true
@@ -70,20 +70,20 @@ function s.create(self, name)
 end
 
 
-s:option( Flag, "enable", translate("openvpn_enable") )
+s:option( Flag, "enable", translate("Enabled") )
 
-local active = s:option( DummyValue, "_active", translate("openvpn_active") )
+local active = s:option( DummyValue, "_active", translate("Started") )
 function active.cfgvalue(self, section)
 	local pid = fs.readfile("/var/run/openvpn-%s.pid" % section)
 	if pid and #pid > 0 and tonumber(pid) ~= nil then
 		return (sys.process.signal(pid, 0))
-			and translatef("openvpn_active_yes", "yes (%i)", pid)
-			or  translate("openvpn_active_no")
+			and translatef("yes (%i)", pid)
+			or  translate("no")
 	end
-	return translate("openvpn_active_no")
+	return translate("no")
 end
 
-local updown = s:option( Button, "_updown", translate("openvpn_updown", "Start/Stop") )
+local updown = s:option( Button, "_updown", translate("Start/Stop") )
 updown._state = false
 function updown.cbid(self, section)
 	local pid = fs.readfile("/var/run/openvpn-%s.pid" % section)
@@ -103,13 +103,13 @@ function updown.write(self, section, value)
 	end
 end
 
-local port = s:option( DummyValue, "port", translate("openvpn_port") )
+local port = s:option( DummyValue, "port", translate("Port") )
 function port.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
 	return val or "1194"
 end
 
-local proto = s:option( DummyValue, "proto", translate("openvpn_proto") )
+local proto = s:option( DummyValue, "proto", translate("Protocol") )
 function proto.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
 	return val or "udp"

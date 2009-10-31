@@ -12,14 +12,14 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.tools.webadmin")
-m = Map("firewall", translate("fw_fw"), translate("fw_fw1"))
+m = Map("firewall", translate("Firewall"), translate("The firewall creates zones over your network interfaces to control network traffic flow."))
 
 s = m:section(TypedSection, "defaults")
 s.anonymous = true
 
 s:option(Flag, "syn_flood")
 
-local di = s:option(Flag, "drop_invalid", translate("fw_dropinvalid"))
+local di = s:option(Flag, "drop_invalid", translate("Drop invalid packets"))
 di.rmempty = false
 function di.cfgvalue(...)
 	return AbstractValue.cfgvalue(...) or "1"
@@ -31,18 +31,18 @@ p[2] = s:option(ListValue, "output")
 p[3] = s:option(ListValue, "forward")
 
 for i, v in ipairs(p) do
-	v:value("REJECT", translate("fw_reject"))
-	v:value("DROP", translate("fw_drop"))
-	v:value("ACCEPT", translate("fw_accept"))
+	v:value("REJECT", translate("reject"))
+	v:value("DROP", translate("drop"))
+	v:value("ACCEPT", translate("accept"))
 end
 
 
-s = m:section(TypedSection, "zone", translate("fw_zones"))
+s = m:section(TypedSection, "zone", translate("Zones"))
 s.template = "cbi/tblsection"
 s.anonymous = true
 s.addremove = true
 
-name = s:option(Value, "name", translate("name"))
+name = s:option(Value, "name", translate("Name"))
 name.size = 8
 
 p = {}
@@ -51,9 +51,9 @@ p[2] = s:option(ListValue, "output")
 p[3] = s:option(ListValue, "forward")
 
 for i, v in ipairs(p) do
-	v:value("REJECT", translate("fw_reject"))
-	v:value("DROP", translate("fw_drop"))
-	v:value("ACCEPT", translate("fw_accept"))
+	v:value("REJECT", translate("reject"))
+	v:value("DROP", translate("drop"))
+	v:value("ACCEPT", translate("accept"))
 end
 
 s:option(Flag, "masq")

@@ -24,24 +24,24 @@ uci:foreach( "uvc-streamer", "uvc-streamer",
 addr = addr or "192.168.1.1"
 port = port or 8080
 
-m = Map("uvc-streamer", translate("uvc_streamer"),
+m = Map("uvc-streamer", translate("Webcam streaming"),
 	translatef("uvc_streamer_desc", nil, addr, port, addr, port))
 
-s = m:section(TypedSection, "uvc-streamer", translate("settings"))
+s = m:section(TypedSection, "uvc-streamer", translate("Settings"))
 s.addremove = false
 s.anonymous = true
 
-s:option(Flag, "enabled", translate("enabled", "Enable"))
+s:option(Flag, "enabled", translate("Enable"))
 
-s:option(Value, "device", translate("device")).rmempty = true
+s:option(Value, "device", translate("Device")).rmempty = true
 
-nm = s:option(Value, "resolution", translate("resolution"))
+nm = s:option(Value, "resolution", translate("Resolution"))
 nm:value("640x480")
 nm:value("320x240")
 nm:value("160x120")
 
-s:option(Value, "framespersecond", translate("framespersecond")).rmempty = true
+s:option(Value, "framespersecond", translate("Frames per second")).rmempty = true
 
-s:option(Value, "port", translate("port", "Port")).rmempty = true
+s:option(Value, "port", translate("Port")).rmempty = true
 
 return m

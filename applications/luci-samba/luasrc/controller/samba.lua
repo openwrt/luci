@@ -21,7 +21,7 @@ function index()
 	require("luci.i18n")
 	luci.i18n.loadc("samba")
 	
-	local page = entry({"admin", "services", "samba"}, cbi("samba"), luci.i18n.translate("samba"))
+	local page = entry({"admin", "services", "samba"}, cbi("samba"), luci.i18n.translate("Network Shares"))
 	page.i18n = "samba"
 	page.dependent = true
 end

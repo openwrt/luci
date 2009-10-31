@@ -21,17 +21,17 @@ $Id$
 <%+header%>
 
 <div class="cbi-map" id="cbi-conntrack">
-	<h2><a id="content" name="content"><%:a_n_conntrack%></a></h2>
-	<div class="cbi-map-descr"><%:a_n_conntrack_desc%></div>
+	<h2><a id="content" name="content"><%:Active Connections%></a></h2>
+	<div class="cbi-map-descr"><%:This page gives an overview over currently active network connections.%></div>
 
 	<fieldset class="cbi-section" id="cbi-table-table">
 		<legend>ARP</legend>
 		<div class="cbi-section-node">
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:ipaddress%></th>
-					<th class="cbi-section-table-cell"><%:macaddress%></th>
-					<th class="cbi-section-table-cell"><%:interface%></th>
+					<th class="cbi-section-table-cell"><%:<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address%></th>
+					<th class="cbi-section-table-cell"><%:<abbr title="Media Access Control">MAC</abbr>-Address%></th>
+					<th class="cbi-section-table-cell"><%:Interface%></th>
 				</tr>
 
 				<% luci.sys.net.arptable(function(e) %>
@@ -47,14 +47,14 @@ $Id$
 	<br />
 
 	<fieldset class="cbi-section" id="cbi-table-table">
-		<legend><%:a_n_conntrack%></legend>
+		<legend><%:Active Connections%></legend>
 		<div class="cbi-section-node">
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:network%></th>
-					<th class="cbi-section-table-cell"><%:protocol%></th>
-					<th class="cbi-section-table-cell"><%:source%></th>
-					<th class="cbi-section-table-cell"><%:destination%></th>
+					<th class="cbi-section-table-cell"><%:Network%></th>
+					<th class="cbi-section-table-cell"><%:Protocol%></th>
+					<th class="cbi-section-table-cell"><%:Source%></th>
+					<th class="cbi-section-table-cell"><%:Destination%></th>
 				</tr>
 
 				<% style = true; luci.sys.net.conntrack(function(c) %>

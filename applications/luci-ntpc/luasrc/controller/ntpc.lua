@@ -21,12 +21,12 @@ function index()
 		return
 	end
 	
-	local page = entry({"admin", "system", "ntpc"}, cbi("ntpc/ntpc"), luci.i18n.translate("ntpc"), 50)
+	local page = entry({"admin", "system", "ntpc"}, cbi("ntpc/ntpc"), luci.i18n.translate("Time Synchronisation"), 50)
 	page.i18n = "ntpc"
 	page.dependent = true
 	
 	
-	local page = entry({"mini", "system", "ntpc"}, cbi("ntpc/ntpcmini", {autoapply=true}), luci.i18n.translate("ntpc"), 50)
+	local page = entry({"mini", "system", "ntpc"}, cbi("ntpc/ntpcmini", {autoapply=true}), luci.i18n.translate("Time Synchronisation"), 50)
 	page.i18n = "ntpc"
 	page.dependent = true
 end

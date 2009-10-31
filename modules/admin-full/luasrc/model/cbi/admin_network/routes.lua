@@ -13,36 +13,36 @@ $Id$
 ]]--
 
 require("luci.tools.webadmin")
-m = Map("network", translate("a_n_routes"), translate("a_n_routes1"))
+m = Map("network", translate("Routes"), translate("a_n_routes1"))
 
 local routes6 = luci.sys.net.routes6()
 local bit = require "bit"
 
-s = m:section(TypedSection, "route", translate("a_n_routes_static4"))
+s = m:section(TypedSection, "route", translate("Static IPv4 Routes"))
 s.addremove = true
 s.anonymous = true
 
 s.template  = "cbi/tblsection"
 
-iface = s:option(ListValue, "interface", translate("interface"))
+iface = s:option(ListValue, "interface", translate("Interface"))
 luci.tools.webadmin.cbi_add_networks(iface)
 
-s:option(Value, "target", translate("target"), translate("a_n_r_target1"))
-s:option(Value, "netmask", translate("netmask"), translate("a_n_r_netmask1")).rmemepty = true
-s:option(Value, "gateway", translate("gateway"))
+s:option(Value, "target", translate("Target"), translate("Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"))
+s:option(Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"), translate("if target is a network")).rmemepty = true
+s:option(Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
 
 if routes6 then
-	s = m:section(TypedSection, "route6", translate("a_n_routes_static6"))
+	s = m:section(TypedSection, "route6", translate("Static IPv6 Routes"))
 	s.addremove = true
 	s.anonymous = true
 
 	s.template  = "cbi/tblsection"
 
-	iface = s:option(ListValue, "interface", translate("interface"))
+	iface = s:option(ListValue, "interface", translate("Interface"))
 	luci.tools.webadmin.cbi_add_networks(iface)
 
-	s:option(Value, "target", translate("target"), translate("a_n_r_target6"))
-	s:option(Value, "gateway", translate("gateway6")).rmempty = true
+	s:option(Value, "target", translate("Target"), translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address or Network (CIDR)"))
+	s:option(Value, "gateway", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway")).rmempty = true
 end
 
 

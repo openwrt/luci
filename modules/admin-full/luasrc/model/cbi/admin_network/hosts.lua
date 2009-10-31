@@ -14,15 +14,15 @@ $Id$
 
 require("luci.sys")
 require("luci.util")
-m = Map("luci_hosts", translate("hostnames"))
+m = Map("luci_hosts", translate("Hostnames"))
 
-s = m:section(TypedSection, "host", translate("hostnames_entries"))
+s = m:section(TypedSection, "host", translate("Host entries"))
 s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 
-hn = s:option(Value, "hostname", translate("hostnames_hostname"))
-ip = s:option(Value, "ipaddr", translate("hostnames_address"))
+hn = s:option(Value, "hostname", translate("Hostname"))
+ip = s:option(Value, "ipaddr", translate("IP address"))
 for i, dataset in ipairs(luci.sys.net.arptable()) do
 	ip:value(
 		dataset["IP address"],

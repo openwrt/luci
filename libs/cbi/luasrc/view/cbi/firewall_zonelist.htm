@@ -68,7 +68,7 @@ $Id$
 				<% end end %>
 				</span>
 			<% end end %>
-			<% if empty then %><em><%:a_s_ipt_zone_empty (no interfaces attached)%></em><% end %>
+			<% if empty then %><em><%:(no interfaces attached)%></em><% end %>
 		</label>
 	</li>
 	<% end end %>
@@ -77,7 +77,7 @@ $Id$
 	<li style="padding:0.5em">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not selected, "checked", "checked")%> /> &nbsp;
 		<div style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em; display:inline">
-			<label<%=attr("for", cbid .. "_new")%>><em><%:a_s_ipt_zone_unspec_create unspecified -or- create:%>&nbsp;</em></label>
+			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&nbsp;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newzone") .. ifattr(not selected, "value", self.default)%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>
