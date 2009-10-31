@@ -15,7 +15,12 @@ require("luci.tools.webadmin")
 require("luci.model.uci")
 require("luci.util")
 
-m = Map("dhcp", "DHCP")
+m = Map("dhcp",
+	translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
+	translate("With <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> network " ..
+		"members can automatically receive their network settings (<abbr title=" ..
+		"\"Internet Protocol\">IP</abbr>-address, netmask, <abbr title=\"Domain Name " ..
+		"System\">DNS</abbr>-server, ...)."))
 
 s = m:section(TypedSection, "dhcp", "")
 s.addremove = true
@@ -43,9 +48,9 @@ s:option(Value, "start", translate("Start")).rmempty = true
 
 s:option(Value, "limit", translate("Limit")).rmempty = true
 
-s:option(Value, "leasetime").rmempty = true
+s:option(Value, "leasetime", translate("Leasetime")).rmempty = true
 
-local dd = s:option(Flag, "dynamicdhcp")
+local dd = s:option(Flag, "dynamicdhcp", translate("dynamic"))
 dd.rmempty = false
 function dd.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "1"
@@ -53,14 +58,18 @@ end
 
 s:option(Value, "name", translate("Name")).optional = true
 
-ignore = s:option(Flag, "ignore")
+ignore = s:option(Flag, "ignore",
+	translate("Ignore interface"),
+	translate("disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for " ..
+		"this interface"))
+
 ignore.optional = true
 
 s:option(Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask")).optional = true
 
-s:option(Flag, "force").optional = true
+s:option(Flag, "force", translate("Force")).optional = true
 
-s:option(DynamicList, "dhcp_option").optional = true
+s:option(DynamicList, "dhcp_option", translate("DHCP-Options")).optional = true
 
 
 for i, n in ipairs(s.children) do
