@@ -16,58 +16,58 @@ $Id$
 <%+header%>
 
 <h2><a id="content" name="content"><%:System%></a></h2>
-<h3><%:admin_upgrade Flash Firmware%></h3>
+<h3><%:Flash Firmware%></h3>
 
 <% if step == 1 then %>
 	<% if supported then %>
 	<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
 	<p>
-		<%:admin_upgrade_desc Upload an OpenWrt image file to reflash the device.%>
+		<%:Upload an OpenWrt image file to reflash the device.%>
 		<% if bad_image then %>
 			<br /><br />
-			<div class="error"><%:admin_upgrade_badimage The uploaded image file does not
+			<div class="error"><%:The uploaded image file does not
 				contain a supported format. Make sure that you choose the generic
 				image format for your platform. %></div>
 		<% end %>
 	</p>
 	<div>
-		<%:admin_upgrade_fwimage Firmware image%>:<br />
+		<%:Firmware image%>:<br />
 		<input type="hidden" name="step" value="2" />
 		<input type="file" size="30" name="image" />
 		<br />
 		<br />
 		<% if keepavail then -%>
 		<input type="checkbox" name="keepcfg" value="1" checked="checked" />
-		<span class="bold"><%:admin_upgrade_keepcfg Keep configuration files%></span>
+		<span class="bold"><%:Keep configuration files%></span>
 		<% end -%>
 
 		<br />
-		<input class="cbi-button cbi-button-apply" type="submit" value="<%:admin_upgrade_upload Upload image%>" />
+		<input class="cbi-button cbi-button-apply" type="submit" value="<%:Upload image%>" />
 	</div>
 	</form>
 	<% else %>
-		<div class="error"><%:admin_upgrade_nosupport Sorry.
+		<div class="error"><%_ Sorry.
 			OpenWrt does not support a system upgrade on this platform.<br />
 			You need to manually flash your device. %></div>
 	<% end %>
 <% elseif step == 2 then %>
 	<p>
-		<%:admin_upgrade_uploaded The flash image was uploaded.
+		<%_ The flash image was uploaded.
 			Below is the checksum and file size listed,
 			compare them with the original file to ensure data integrity.<br />
 			Click "Proceed" below to start the flash procedure. %>
 
 		<% if flashsize > 0 and filesize > flashsize then %>
 			<br /><br />
-			<div class="error"><%:admin_upgrade_toolarge It appears that you try to
+			<div class="error"><%:It appears that you try to
 				flash an image that does not fit into the flash memory, please verify
 				the image file! %></div>
 		<% end %>
 
 		<br />
 		<ul>
-			<li><%:admin_upgrade_checksum Checksum%>: <code><%=checksum%></code></li>
-			<li><%:admin_upgrade_filesize Size%>: <%
+			<li><%:Checksum%>: <code><%=checksum%></code></li>
+			<li><%:Size%>: <%
 				local w = require "luci.tools.webadmin"
 				write(w.byte_format(filesize))
 	
@@ -84,16 +84,16 @@ $Id$
 		<form style="display:inline">
 			<input type="hidden" name="step" value="3" />
 			<input type="hidden" name="keepcfg" value="<%=keepconfig and "1" or "0"%>" />
-			<input class="cbi-button cbi-button-apply" type="submit" value="<%:proceed Proceed%>" />	
+			<input class="cbi-button cbi-button-apply" type="submit" value="<%:Proceed%>" />	
 		</form>
 		<form style="display:inline">
 			<input type="hidden" name="step" value="1" />
 			<input type="hidden" name="keepcfg" value="<%=keepconfig and "1" or "0"%>" />
-			<input class="cbi-button cbi-button-reset" type="submit" value="<%:cancel Cancel%>" />
+			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Cancel%>" />
 		</form>
 	</div>
 <% elseif step == 3 then %>
-	<p><%:admin_upgrade_running The system is flashing now.<br />
+	<p><%_ The system is flashing now.<br />
 		DO NOT POWER OFF THE DEVICE!<br />
 		Wait a few minutes until you try to reconnect.
 		It might be necessary to renew the address of your computer to reach the device

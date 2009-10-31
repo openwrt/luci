@@ -14,13 +14,13 @@ $Id$
 -%>
 <%+header%>
 
-<h2><a id="content" name="content"><%:stat_outputplugins Output plugins%></a></h2>
+<h2><a id="content" name="content"><%:Output plugins%></a></h2>
 
-<p><%:stat_outputplugins_desc Output plugins provide different possibilities to store collected data.
+<p><%:Output plugins provide different possibilities to store collected data.
 It is possible to enable multiple plugin at one, for example to store collected data in rrd databases
 and to transmit the data over the network to other collectd instances.%></p>
 
-<p><%:stat_outputplugins_installed Installed output plugins:%>
+<p><%:Installed output plugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if nixio.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>

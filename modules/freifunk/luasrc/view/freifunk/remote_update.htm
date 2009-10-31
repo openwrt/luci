@@ -14,31 +14,31 @@ $Id: contact.htm 3529 2008-10-07 13:10:24Z jow $
 -%>
 <%+header%>
 
-<h2><%:ff_remote_update Freifunk Remote Update%></h2>
+<h2><%:Freifunk Remote Update%></h2>
 
-<p><%:ff_remote_update_desc Check for new firmware versions and perform automatic updates.%></p>
+<p><%:Check for new firmware versions and perform automatic updates.%></p>
 
 <% if update then %>
 
 	<% if update.info then %>
-		<strong><%:ff_remote_update_available Update available!%></strong>
+		<strong><%:Update available!%></strong>
 		<br /><br />
 		<pre><%=update.info%></pre><br />
 	<% else %>
-		<strong><%:ff_remote_update_uptodate The installed firmware is the most recent version.%></strong>
+		<strong><%:The installed firmware is the most recent version.%></strong>
 		<br /><br />
 	<% end %>
 
 	<p>
 		<form method="post" action="" class="inline">
 			<input type="hidden" name="flash" value="1" />
-			<input type="submit" class="cbi-button cbi-button-apply" value="<%:ff_remote_update_install Start Upgrade%>" />
+			<input type="submit" class="cbi-button cbi-button-apply" value="<%:Start Upgrade%>" />
 		</form>	
 	</p>
 
 <% elseif confirm then %>
 
-	<strong><%:ff_remote_update_settings Update Settings%></strong>
+	<strong><%:Update Settings%></strong>
 	<br /><br />
 
 	<p><form method="post" action="" class="inline">
@@ -46,12 +46,12 @@ $Id: contact.htm 3529 2008-10-07 13:10:24Z jow $
 		<input type="hidden" name="confirm" value="1" />
 
 		<input type="checkbox" class="cbi-input-checkbox" name="keepcfg" value="1" checked="checked" id="cb_keepcfg" />
-		<label for="cb_keepcfg"><%:ff_remote_update_keepcfg Keep configuration%></label><br />
+		<label for="cb_keepcfg"><%:Keep configuration%></label><br />
 
 		<input type="checkbox" class="cbi-input-checkbox" name="verify" value="1" checked="checked" id="cb_verify" />
-		<label for="cb_verify"><%:ff_remote_update_verify Verify downloaded images%></label><br /><br />
+		<label for="cb_verify"><%:Verify downloaded images%></label><br /><br />
 
-		<input type="submit" class="cbi-button cbi-button-apply" value="<%:ff_remote_update_confirm Confirm Upgrade%>" />
+		<input type="submit" class="cbi-button cbi-button-apply" value="<%:Confirm Upgrade%>" />
 	</form></p>
 
 <% end %>

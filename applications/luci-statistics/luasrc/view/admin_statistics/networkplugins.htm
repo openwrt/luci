@@ -14,12 +14,12 @@ $Id$
 -%>
 <%+header%>
 
-<h2><a id="content" name="content"><%:stat_networkplugins Network plugins%></a></h2>
+<h2><a id="content" name="content"><%:Network plugins%></a></h2>
 
-<p><%:stat_networkplugins_desc Network plugins are used to collect information
+<p><%:Network plugins are used to collect information
 about open tcp connections, interface traffic, iptables rules etc.%></p>
 
-<p><%:stat_networkplugins_installed Installed network plugins:%>
+<p><%:Installed network plugins:%>
 	<ul>
 		<% for plugin, desc in pairs(plugins) do %>
 			<% if nixio.fs.access("/usr/lib/collectd/" .. plugin .. ".so") then %>

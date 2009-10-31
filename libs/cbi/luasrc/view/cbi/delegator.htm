@@ -18,7 +18,7 @@ $Id$
 		<input type="hidden" name="cbi.delg.path" value="<%=x%>" />
 <% end %>
 <% if self.allow_back and self:get_prev(self.current) then %>
-		<input class="cbi-button cbi-button-back" type="submit" name="cbi.delg.back" value="<%:cbi_back &lt; Back%>" />
+		<input class="cbi-button cbi-button-back" type="submit" name="cbi.delg.back" value="<%:« Back%>" />
 <% end %>
 <% if self.allow_reset then %>
 		<input class="cbi-button cbi-button-reset" type="reset" value="<%:Reset%>" />
@@ -27,9 +27,9 @@ $Id$
 		<input class="cbi-button cbi-button-cancel" type="submit" name="cbi.cancel" value="<%:Cancel%>" />
 <% end %>
 <% if self.allow_finish and not self:get_next(self.current) then %>
-	<input class="cbi-button cbi-button-finish" type="submit" value="<%:cbi_finish Finish%>" />
+	<input class="cbi-button cbi-button-finish" type="submit" value="<%:Finish%>" />
 <% elseif self:get_next(self.current) then %>
-		<input class="cbi-button cbi-button-next" type="submit" value="<%:cbi_next Next &gt;%>" />
+		<input class="cbi-button cbi-button-next" type="submit" value="<%:Next »%>" />
 <% end %>
 		<script type="text/javascript">cbi_d_update();</script>
 	</div>

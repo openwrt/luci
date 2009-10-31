@@ -20,7 +20,7 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 	<% if s then %>
-		<%:cbi_upload Uploaded File%> (<%=t.byte_format(s.size)%>)
+		<%:Uploaded File%> (<%=t.byte_format(s.size)%>)
 		<input type="hidden"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
 		<input class="cbi-input-image" type="image" value="<%:Replace entry%>" name="cbi.rlf.<%=section .. "." .. self.option%>" alt="<%:Replace entry%>" title="<%:Replace entry%>" src="<%=resource%>/cbi/reload.gif" />
 	<% else %>
