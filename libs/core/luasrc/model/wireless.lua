@@ -89,8 +89,8 @@ end
 function shortname(self, iface)
 	if iface.wdev and iface.winfo then
 		return "%s %q" %{
-			i18n.translate("a_s_if_iwmode_" .. iface:active_mode(), iface.winfo.mode(iface.wdev)), 
-			iface:active_ssid() or "(hidden)"
+			i18n.translate(iface:active_mode()), 
+			iface:active_ssid() or i18n.translate("(hidden)")
 		}
 	else
 		return iface:name()
@@ -101,8 +101,8 @@ function get_i18n(self, iface)
 	if iface.wdev and iface.winfo then
 		return "%s: %s %q (%s)" %{
 			i18n.translate("Wireless Network"),
-			i18n.translate("a_s_if_iwmode_" .. iface:active_mode(), iface.winfo.mode(iface.wdev)),
-			iface:active_ssid() or "(hidden)", iface.wdev
+			i18n.translate(iface:active_mode()),
+			iface:active_ssid() or i18n.translate("(hidden)"), iface.wdev
 		}
 	else
 		return "%s: %q" %{ i18n.translate("Wireless Network"), iface:name() }
@@ -212,12 +212,14 @@ function network._init(self, sid)
 			count = count + 1
 			return s['.name'] ~= sid
 		end)
-	
+
+	local parent_dev = st:get("wireless", sid, "device")
+
 	local dev = st:get("wireless", sid, "ifname")
-		or st:get("wireless", sid, "device")
+		or parent_dev
 
 	if dev then
-		self.id = "%s.network%d" %{ dev, count }
+		self.id = "%s.network%d" %{ parent_dev, count }
 
 		local wtype = iwi.type(dev)
 		if dev and wtype then
@@ -247,22 +249,20 @@ end
 
 function network.active_mode(self)
 	local m = self.winfo and self.winfo.mode(self.wdev)
-	if m == "Master" or m == "Auto" then
-		m = "ap"
-	elseif m == "Ad-Hoc" then
-		m = "adhoc"
-	elseif m == "Client" then
-		m = "sta"
-	elseif m then
-		m = m:lower()
-	else
+	if not m then
 		m = self:mode()
+		if     m == "ap"      then m = "AP"
+		elseif m == "sta"     then m = "Client"
+		elseif m == "adhoc"   then m = "Ad-Hoc"
+		elseif m == "mesh"    then m = "Mesh"
+		elseif m == "monitor" then m = "Monitor"
+		end
 	end
-	return m or "ap"
+	return m or "Client"
 end
 
 function network.active_mode_i18n(self)
-	return i18n.translate("a_s_if_iwmode_" .. self:active_mode())
+	return i18n.translate(self:active_mode())
 end
 
 function network.active_ssid(self)

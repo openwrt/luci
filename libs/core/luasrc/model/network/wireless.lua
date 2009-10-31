@@ -66,8 +66,9 @@ end
 function shortname(self, iface)
 	if iface.dev and iface.dev.wifi then
 		return "%s %q" %{
-			i18n.translate("a_s_if_iwmode_" .. (iface.dev.wifi.mode or "ap")), 
-			iface.dev.wifi.ssid or iface.dev.wifi.bssid or "(hidden)"
+			i18n.translate(iface.dev.wifi.mode or "Client"), 
+			iface.dev.wifi.ssid or iface.dev.wifi.bssid
+				or i18n.translate("(hidden)")
 		}
 	else
 		return iface:name()
@@ -78,8 +79,9 @@ function get_i18n(self, iface)
 	if iface.dev and iface.dev.wifi then
 		return "%s: %s %q" %{
 			i18n.translate("Wireless Network"),
-			i18n.translate("a_s_if_iwmode_" .. (iface.dev.wifi.mode or "ap"), iface.dev.wifi.mode or "AP"),
-			iface.dev.wifi.ssid or iface.dev.wifi.bssid or "(hidden)"
+			i18n.translate(iface.dev.wifi.mode or "Client"),
+			iface.dev.wifi.ssid or iface.dev.wifi.bssid
+				or i18n.translate("(hidden)")
 		}
 	else
 		return "%s: %q" %{ i18n.translate("Wireless Network"), iface:name() }

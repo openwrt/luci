@@ -11,8 +11,15 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
+local nw = require "luci.model.network"
+local fw = require "luci.model.firewall"
+
 require("luci.tools.webadmin")
 m = Map("firewall", translate("Firewall"), translate("The firewall creates zones over your network interfaces to control network traffic flow."))
+
+fw.init(m.uci)
+nw.init(m.uci)
 
 s = m:section(TypedSection, "defaults")
 s.anonymous = true
@@ -59,7 +66,8 @@ end
 s:option(Flag, "masq")
 
 net = s:option(MultiValue, "network")
-net.widget = "select"
+net.template = "cbi/network_netlist"
+net.widget = "checkbox"
 net.rmempty = true
 luci.tools.webadmin.cbi_add_networks(net)
 
