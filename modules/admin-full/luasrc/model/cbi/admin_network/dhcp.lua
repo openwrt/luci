@@ -16,7 +16,7 @@ require("luci.model.uci")
 require("luci.util")
 
 m = Map("dhcp",
-	translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
+	translate("DHCP"),
 	translate("With <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> network " ..
 		"members can automatically receive their network settings (<abbr title=" ..
 		"\"Internet Protocol\">IP</abbr>-address, netmask, <abbr title=\"Domain Name " ..
@@ -50,7 +50,9 @@ s:option(Value, "limit", translate("Limit")).rmempty = true
 
 s:option(Value, "leasetime", translate("Leasetime")).rmempty = true
 
-local dd = s:option(Flag, "dynamicdhcp", translate("dynamic"))
+local dd = s:option(Flag, "dynamicdhcp",
+	translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"))
+
 dd.rmempty = false
 function dd.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "1"
