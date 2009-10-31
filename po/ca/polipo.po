@@ -35,14 +35,19 @@ msgstr "Activa si la memòria cau (proxy) és compartida per múltiples usuaris.
 
 #. To enable polipo on-disk cache cleaning (highly recommended), you should add a cron job in Scheduled Tasks services that will execute /usr/sbin/polipo_purge script. For example to perform disk cache cleanup every day at 6:00 in the morning you should add the following line in Scheduled Tasks &quot;0 6 * * *	/usr/sbin/polipo_purge&quot; (without quotes).
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:5
-msgid "To enable polipo on-disk cache cleaning (highly recommended), you should add a cron job in Scheduled Tasks services that will execute /usr/sbin/polipo_purge script. For example to perform disk cache cleanup every day at 6:00 in the morning you should add the following line in Scheduled Tasks \"0 6 * * *\\t/usr/sbin/polipo_purge\" (without quotes)."
+msgid ""
+"To enable polipo on-disk cache cleaning (highly recommended), you should add "
+"a cron job in Scheduled Tasks services that will execute /usr/sbin/"
+"polipo_purge script. For example to perform disk cache cleanup every day at "
+"6:00 in the morning you should add the following line in Scheduled Tasks \"0 "
+"6 * * *\\t/usr/sbin/polipo_purge\" (without quotes)."
 msgstr ""
 "Per activar la neteja memòria cau en disc de polipo (altament recomenat), "
 "hauries d'afegir una tasca de cron al servei de Tasques Programades que "
 "executaran l'script /usr/sbin/polipo_purge. Per exemple, per executar la "
 "neteja de memòria cau del disc cada dia a les 6:00 del matí, hauries "
-"d'afegir la següent línia a les Tasques Programades: &quot;0 6 * * * "
-"/usr/sbin/polipo_purge&quot; (sense cometes)."
+"d'afegir la següent línia a les Tasques Programades: &quot;0 6 * * * /usr/"
+"sbin/polipo_purge&quot; (sense cometes)."
 
 #. Disk cache location
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:6
@@ -51,7 +56,10 @@ msgstr "Localització de la memòria cau del disc"
 
 #. Location where polipo will cache files permanently. Use of external storage devices is recommended, because the cache can grow considerably. Leave it empty to disable on-disk cache.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:7
-msgid "Location where polipo will cache files permanently. Use of external storage devices is recommended, because the cache can grow considerably. Leave it empty to disable on-disk cache."
+msgid ""
+"Location where polipo will cache files permanently. Use of external storage "
+"devices is recommended, because the cache can grow considerably. Leave it "
+"empty to disable on-disk cache."
 msgstr ""
 "Localització on polipo desarà els fitxers de memòria cau permanentment. Es "
 "recomana l'ús de dispositius d'emmagatzematge extern, perquè la memòria cau "
@@ -65,7 +73,8 @@ msgstr "Mida de truncatge de fitxer de memòria cau (en bytes)"
 
 #. Size to which cached files should be truncated. (default value: 1048576)
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:9
-msgid "Size to which cached files should be truncated. (default value: 1048576)"
+msgid ""
+"Size to which cached files should be truncated. (default value: 1048576)"
 msgstr ""
 "Mida a la qual els fitxers de memòria cau s'haurien de truncar (valor per "
 "defecte: 1048576)"
@@ -111,7 +120,10 @@ msgstr "Clients permesos"
 
 #. When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients that are allowed to connect. The format is IP address or network address (192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6)).
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:17
-msgid "When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients that are allowed to connect. The format is IP address or network address (192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))."
+msgid ""
+"When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients "
+"that are allowed to connect. The format is IP address or network address "
+"(192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))."
 msgstr ""
 "Quan l'adreça d'escolta s'estableix a 0.0.0.0 o :: (IPv6), has de llistar "
 "els clients que es permeten per connectar. El format és adreça IP o adreça "
@@ -134,7 +146,9 @@ msgstr "Adreça de servidor DNS"
 
 #. Set the DNS server address to use, if you want Polipo to use different DNS server than the host system.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:21
-msgid "Set the DNS server address to use, if you want Polipo to use different DNS server than the host system."
+msgid ""
+"Set the DNS server address to use, if you want Polipo to use different DNS "
+"server than the host system."
 msgstr ""
 "Estableix l'adreça de servidor DNS a utilitzar, si vols que Polipo faci "
 "servir un servidor DNS diferent al del sistema."
@@ -146,7 +160,9 @@ msgstr "Consulta DNS per IPv6"
 
 #. false = Do not query IPv6; reluctantly = Query both, prefer IPv4; happily = Query both, prefer IPv6; true = Query only IPv6
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:23
-msgid "false = Do not query IPv6; reluctantly = Query both, prefer IPv4; happily = Query both, prefer IPv6; true = Query only IPv6"
+msgid ""
+"false = Do not query IPv6; reluctantly = Query both, prefer IPv4; happily = "
+"Query both, prefer IPv6; true = Query only IPv6"
 msgstr ""
 "fals = No consultis IPv6; a contracor = Consulta els dos, prefereix IPv4; "
 "feliçment = Consulta els dos, prefereix IPv6; cert = Consulta només IPv6"
@@ -158,13 +174,16 @@ msgstr "Consulta DNS per nom de màquina"
 
 #. false = Never use system DNS resolver; reluctantly = Query DNS directly, if DNS server is unavailable fail to system DNS resolver; happily = Query DNS directly, if host could not be found fallback to system DNS resolver; true = Always use system DNS resolver
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:25
-msgid "false = Never use system DNS resolver; reluctantly = Query DNS directly, if DNS server is unavailable fail to system DNS resolver; happily = Query DNS directly, if host could not be found fallback to system DNS resolver; true = Always use system DNS resolver"
+msgid ""
+"false = Never use system DNS resolver; reluctantly = Query DNS directly, if "
+"DNS server is unavailable fail to system DNS resolver; happily = Query DNS "
+"directly, if host could not be found fallback to system DNS resolver; true = "
+"Always use system DNS resolver"
 msgstr ""
 "fals = mai utilitzis resoledor DNS; a contracor = Consulta DNS directament, "
 "si el servidor DNS està indisponible no utilitzis el sistema resoledor de "
 "DNS; feliçment = Consulta DNS directament, si la màquina no es pot trobar, "
-"vés al sistema resoledor de DNS; cert = Utilitza sistema resoledor DNS "
-"sempre"
+"vés al sistema resoledor de DNS; cert = Utilitza sistema resoledor DNS sempre"
 
 #. Syslog facility
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:26
@@ -178,7 +197,9 @@ msgstr "Localització de fitxer registre"
 
 #. Use of external storage device is recommended, because the log file is written frequently and can grow considerably.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:28
-msgid "Use of external storage device is recommended, because the log file is written frequently and can grow considerably."
+msgid ""
+"Use of external storage device is recommended, because the log file is "
+"written frequently and can grow considerably."
 msgstr ""
 "Es recomana l'ǘs de dispositius d'emmagatzematge externs, ja que el fitxer "
 "de registre és escrit freqüentment i pot créixer considerablement."
@@ -195,7 +216,9 @@ msgstr "Autenticació de proxy pare"
 
 #. Basic HTTP authentication supported. Provide username and password in username:password format.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:31
-msgid "Basic HTTP authentication supported. Provide username and password in username:password format."
+msgid ""
+"Basic HTTP authentication supported. Provide username and password in "
+"username:password format."
 msgstr ""
 "Se suporta autenticació HTTP bàsica. Entra el nom d'usuari i contrasenya en "
 "format usuari:contrasenya."
@@ -207,7 +230,9 @@ msgstr "Adreça de proxy pare"
 
 #. Parent proxy address (in host:port format), to which Polipo will forward the requests.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:33
-msgid "Parent proxy address (in host:port format), to which Polipo will forward the requests."
+msgid ""
+"Parent proxy address (in host:port format), to which Polipo will forward the "
+"requests."
 msgstr ""
 "Adreça de proxy pare (en format host:port), al que Polipo readreçarà les "
 "sol·licituds."
@@ -219,7 +244,9 @@ msgstr "Adreça que rep connexions"
 
 #. The interface on which Polipo will listen. To listen on all interfaces use 0.0.0.0 or :: (IPv6).
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:35
-msgid "The interface on which Polipo will listen. To listen on all interfaces use 0.0.0.0 or :: (IPv6)."
+msgid ""
+"The interface on which Polipo will listen. To listen on all interfaces use "
+"0.0.0.0 or :: (IPv6)."
 msgstr ""
 "La interfície a la que Polipo rebrà les connexions. Per rebre-les a a totes "
 "les interfícies, utilitza 0.0.0.0 o :: (IPv6)."
@@ -241,7 +268,11 @@ msgstr "Multiplexació Poor Man's"
 
 #. Poor Man&#39;s Multiplexing (PMM) is a technique that simulates multiplexing by requesting an instance in multiple segments. It tries to lower the latency caused by the weakness of HTTP protocol. NOTE: some sites may not work with PMM enabled.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:39
-msgid "Poor Man's Multiplexing (PMM) is a technique that simulates multiplexing by requesting an instance in multiple segments. It tries to lower the latency caused by the weakness of HTTP protocol. NOTE: some sites may not work with PMM enabled."
+msgid ""
+"Poor Man's Multiplexing (PMM) is a technique that simulates multiplexing by "
+"requesting an instance in multiple segments. It tries to lower the latency "
+"caused by the weakness of HTTP protocol. NOTE: some sites may not work with "
+"PMM enabled."
 msgstr ""
 "Multiplexació Poor Man's (PMM) és una tècnica que multiplexa sol·licitant "
 "una instància en segments múltiples. Intenta reduir la latència causada per "
@@ -255,7 +286,9 @@ msgstr "Mida de segment del primer PMM (en bytes)"
 
 #. Size of the first PMM segment. If not defined, it defaults to twice the PMM segment size.
 #: applications/luci-polipo/luasrc/i18n/polipo.en.lua:41
-msgid "Size of the first PMM segment. If not defined, it defaults to twice the PMM segment size."
+msgid ""
+"Size of the first PMM segment. If not defined, it defaults to twice the PMM "
+"segment size."
 msgstr ""
 "Mida del primer segment PMM. Si no es defineix, per defecte és el doble de "
 "la mida de segment MMS."
