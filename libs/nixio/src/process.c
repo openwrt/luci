@@ -379,7 +379,7 @@ static int nixio_sysinfo(lua_State *L) {
 
 	lua_createtable(L, 0, 3);
 	for (int i=0; i<3; i++) {
-		lua_pushinteger(L, info.loads[i] / 65536.);
+		lua_pushnumber(L, info.loads[i] / 65536.);
 		lua_rawseti(L, -2, i+1);
 	}
 	lua_setfield(L, -2, "loads");
