@@ -29,15 +29,15 @@ $Id$
 	<div class="cbi-map-descr"><%:a_n_routes1%></div>
 
 	<fieldset class="cbi-section" id="cbi-table-table">
-		<legend><%:Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes%></legend>
+		<legend><%_Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes%></legend>
 
 		<div class="cbi-section-node">
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
 					<th class="cbi-section-table-cell"><%:Network%></th>
 					<th class="cbi-section-table-cell"><%:Target%></th>
-					<th class="cbi-section-table-cell"><%:<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask%></th>
-					<th class="cbi-section-table-cell"><%:<abbr title="Internet Protocol Version 4">IPv4</abbr>-Gateway%></th>
+					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask%></th>
+					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Gateway%></th>
 					<th class="cbi-section-table-cell"><%:Metric%></th>
 				</tr>
 				<% luci.sys.net.routes(function(rt) %>
@@ -56,14 +56,14 @@ $Id$
 
 	<% if nixio.fs.access("/proc/net/ipv6_route") then style = true %>
 	<fieldset class="cbi-section" id="cbi-table-table">
-		<legend><%:Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes%></legend>
+		<legend><%_Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes%></legend>
 
 		<div class="cbi-section-node">
 			<table class="cbi-section-table">
 				<tr class="cbi-section-table-titles">
 					<th class="cbi-section-table-cell"><%:Network%></th>
 					<th class="cbi-section-table-cell"><%:Target%></th>
-					<th class="cbi-section-table-cell"><%:<abbr title="Internet Protocol Version 6">IPv6</abbr>-Gateway%></th>
+					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 6">IPv6</abbr>-Gateway%></th>
 					<th class="cbi-section-table-cell"><%:Metric%></th>
 				</tr>
 				<% luci.sys.net.routes6(function(rt) %>

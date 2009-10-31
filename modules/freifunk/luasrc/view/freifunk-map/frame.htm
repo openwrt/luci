@@ -13,8 +13,8 @@
 <% if has_latlon then %>
 	<iframe style="width:100%; height:640px; border:none" src="<%=luci.dispatcher.build_url("freifunk/map/content")%>"></iframe>
 <% else %>
-	<h2><%:freifunk_map_error Map Error%></h2>
-	<p><%:freifunk_map_nodata The OLSRd service is not configured to capture position data from the network.<br />
+	<h2><%:Map Error%></h2>
+	<p><%_The OLSRd service is not configured to capture position data from the network.<br />
 		Please make sure that the nameservice plugin is properly configured and that the <em>latlon_file</em> option is enabled.%></p>
 <% end %>
 
