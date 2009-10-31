@@ -49,7 +49,6 @@
 #define T_TOK_START			"<%"
 #define T_TOK_END			"%>"
 #define T_TOK_SKIPWS		"-"
-#define T_TOK_I18NSEP		"\", \""
 
 /* generator flags */
 #define T_GEN_START			0x01
@@ -61,7 +60,8 @@
 #define T_TYPE_EXPR			2
 #define T_TYPE_INCLUDE 		3
 #define T_TYPE_I18N			4
-#define T_TYPE_CODE			5
+#define T_TYPE_I18N_RAW		5
+#define T_TYPE_CODE			6
 
 /* parser state */
 struct template_parser {

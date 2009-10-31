@@ -235,6 +235,7 @@ function dispatch(request)
 		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
 		   translate   = function(...) return require("luci.i18n").translate(...) end;
 		   striptags   = util.striptags;
+		   pcdata      = util.pcdata;
 		   media       = media;
 		   theme       = fs.basename(media);
 		   resource    = luci.config.main.resourcebase

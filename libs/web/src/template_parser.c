@@ -20,11 +20,12 @@
 
 
 /* leading and trailing code for different types */
-const char * gen_code[6][2] = {
+const char * gen_code[7][2] = {
 	{ "write(\"",			"\")"			},
 	{ NULL,					NULL			},
 	{ "write(tostring(",	" or \"\"))"	},
 	{ "include(\"",			"\")"			},
+	{ "write(pcdata(translate(\"",	"\")))"	},
 	{ "write(translate(\"",	"\"))"			},
 	{ NULL,					" "				}
 };
@@ -127,7 +128,7 @@ static const char * generate_expression(struct template_parser *data, size_t *sz
 	int i;
 	int size = 0;
 	int start = 0;
-	int i18n_hasdef = 0;
+	int whitespace = 0;
 
 	memset(tmp, 0, T_OUTBUFSZ);
 
@@ -142,31 +143,35 @@ static const char * generate_expression(struct template_parser *data, size_t *sz
 	for( i = 0; i < data->outsize; i++ )
 	{
 		/* Skip leading whitespace for non-raw and non-expr chunks */
-		if( !start && isspace(data->out[i]) && (data->type == T_TYPE_I18N || data->type == T_TYPE_INCLUDE) )
+		if( !start && isspace(data->out[i]) && (data->type == T_TYPE_I18N ||
+           data->type == T_TYPE_I18N_RAW || data->type == T_TYPE_INCLUDE) )
 			continue;
 		else if( !start )
 			start = 1;
 
 		/* Found whitespace after i18n key */
-		if( (data->type == T_TYPE_I18N) && (i18n_hasdef == 1) )
+		if( data->type == T_TYPE_I18N || data->type == T_TYPE_I18N_RAW )
 		{
-			/* At non-whitespace char, inject seperator token */
-			if( !isspace(data->out[i]) )
+			/* Is initial whitespace, insert space */
+			if( !whitespace && isspace(data->out[i]) )
 			{
-				memcpy(&tmp[size], T_TOK_I18NSEP, strlen(T_TOK_I18NSEP));
-				size += strlen(T_TOK_I18NSEP);
-				i18n_hasdef = 2;
+				tmp[size++] = ' ';
+				whitespace = 1;
 			}
 
-			/* At further whitespace, skip */
-			else
+			/* Suppress subsequent whitespace, escape special chars */
+			else if( !isspace(data->out[i]) )
 			{
-				continue;
+				if( data->out[i] == '\\' || data->out[i] == '"' )
+					tmp[size++] = '\\';
+
+				tmp[size++] = data->out[i];
+				whitespace = 0;
 			}
 		}
 
-		/* Escape quotes, backslashes and newlines for plain, i18n and include expressions */
-		if( (data->type == T_TYPE_TEXT || data->type == T_TYPE_I18N || data->type == T_TYPE_INCLUDE) &&
+		/* Escape quotes, backslashes and newlines for plain and include expressions */
+		else if( (data->type == T_TYPE_TEXT || data->type == T_TYPE_INCLUDE) &&
 		    (data->out[i] == '\\' || data->out[i] == '"' || data->out[i] == '\n' || data->out[i] == '\t') )
 		{
 			tmp[size++] = '\\';
@@ -186,12 +191,6 @@ static const char * generate_expression(struct template_parser *data, size_t *sz
 			}
 		}
 
-		/* Found first whitespace in i18n expression, raise flag */
-		else if( isspace(data->out[i]) && (data->type == T_TYPE_I18N) && (i18n_hasdef == 0) )
-		{
-			i18n_hasdef = 1;
-		}
-
 		/* Normal char */
 		else
 		{
@@ -199,16 +198,14 @@ static const char * generate_expression(struct template_parser *data, size_t *sz
 		}
 	}
 
-	/* Processed i18n expression without default text, inject separator */
-	if( (data->type == T_TYPE_I18N) && (i18n_hasdef < 2) )
-	{
-		memcpy(&tmp[size], T_TOK_I18NSEP, strlen(T_TOK_I18NSEP));
-		size += strlen(T_TOK_I18NSEP);
-	}
-
 	/* Inject trailing expression code (if any) */
 	if( (what & T_GEN_END) && (gen_code[data->type][1] != NULL) )
 	{
+		/* Strip trailing space for i18n expressions */
+		if( data->type == T_TYPE_I18N || data->type == T_TYPE_I18N_RAW )
+			if( (size > 0) && (tmp[size-1] == ' ') )
+				size--;
+
 		memcpy(&tmp[size], gen_code[data->type][1], strlen(gen_code[data->type][1]));
 		size += strlen(gen_code[data->type][1]);
 	}
@@ -401,6 +398,11 @@ const char *template_reader(lua_State *L, void *ud, size_t *sz)
 					case ':':
 						off++;
 						data->type = T_TYPE_I18N;
+						break;
+
+					case '_':
+						off++;
+						data->type = T_TYPE_I18N_RAW;
 						break;
 
 					default:
