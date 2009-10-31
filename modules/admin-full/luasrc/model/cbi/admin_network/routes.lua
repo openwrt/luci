@@ -13,7 +13,10 @@ $Id$
 ]]--
 
 require("luci.tools.webadmin")
-m = Map("network", translate("Routes"), translate("a_n_routes1"))
+m = Map("network",
+	translate("Routes"),
+	translate("Routes specify over which interface and gateway a certain host or network " ..
+		"can be reached."))
 
 local routes6 = luci.sys.net.routes6()
 local bit = require "bit"
