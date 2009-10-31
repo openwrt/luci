@@ -1,0 +1,35 @@
+<%
+local dsp = require "luci.dispatcher"
+local utl = require "luci.util"
+local nxo = require "nixio"
+local sinfo = nxo.sysinfo()
+local load1 = nxo.bit.div(sinfo.loads[1] * 100, 1)
+local days = nxo.bit.div(sinfo.uptime, 86400)
+local hour = nxo.bit.div(sinfo.uptime, 3600) % 24
+local mins = nxo.bit.div(sinfo.uptime, 60) % 60
+%>
+<div>Status:</div>
+<table>
+<tr>
+<th>System Load</th>
+<td><%=load1%> %</td>
+</tr>
+<tr>
+<th>Uptime</th>
+<td><%=days%>d, <%=hour%>:<%=mins%></td>
+</tr>
+</table>
+<br />
+<ul>
+<%
+local nodes = dsp.node("niu", "system").nodes
+local function cmp(a, b)
+	return (nodes[a].order or 100) < (nodes[b].order or 100)
+end
+for k, v in utl.spairs(nodes, cmp) do
+%>
+<li><a href="<%=dsp.build_url("niu", "system", k)%>"><%=v.title%></a></li>
+<%
+end
+%>
+</ul>
