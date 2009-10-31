@@ -71,7 +71,7 @@ end
 
 mount:option(Value, "target", translate("Mount Point"))
 mount:option(Value, "fstype", translate("Filesystem"), translate("The filesystem that was used to format the memory (<abbr title=\"for example\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem\">ext3</abbr></samp>)"))
-mount:option(Value, "options", translate("Options"), translatef("see \'%s\' manpage"%s' manpage", "mount"))
+mount:option(Value, "options", translate("Options"), translate("See \"mount\" manpage for details"))
 
 
 swap = m:section(TypedSection, "swap", "SWAP", translate("If your physical memory is insufficient unused data can be temporarily swapped to a swap-device resulting in a higher amount of usable <abbr title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very slow process as the swap-device cannot be accessed with the high datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."))

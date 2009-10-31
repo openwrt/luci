@@ -20,10 +20,10 @@ function index()
 	luci.i18n.loadc("livestats")
 
 	entry( {"admin", "status", "wifistat"}, template("livestats/wireless"), luci.i18n.translate("Realtime Wireless Status"), 90 ).i18n = "livestats"
-	entry( {"admin", "status", "trafstat"}, template("livestats/traffic"),  luci.i18n.translate("livestats_stat_traffic"),  91 ).i18n = "livestats"
-	entry( {"admin", "status", "loadavg"},  template("livestats/loadavg"),  luci.i18n.translate("livestats_stat_loadavg"),  92 ).i18n = "livestats"
+	entry( {"admin", "status", "trafstat"}, template("livestats/traffic"),  luci.i18n.translate("Realtime Traffic Status"),  91 ).i18n = "livestats"
+	entry( {"admin", "status", "loadavg"},  template("livestats/loadavg"),  luci.i18n.translate("Realtime Load Status"),  92 ).i18n = "livestats"
 	
 	entry( {"mini", "network", "wifistat"}, template("livestats/wireless"), luci.i18n.translate("Realtime Wireless Status"), 90 ).i18n = "livestats"
-	entry( {"mini", "network", "trafstat"}, template("livestats/traffic"),  luci.i18n.translate("livestats_stat_traffic"),  91 ).i18n = "livestats"
-	entry( {"mini", "system", "loadavg"},  template("livestats/loadavg"),  luci.i18n.translate("livestats_stat_loadavg"),  92 ).i18n = "livestats"
+	entry( {"mini", "network", "trafstat"}, template("livestats/traffic"),  luci.i18n.translate("Realtime Traffic Status"),  91 ).i18n = "livestats"
+	entry( {"mini", "system", "loadavg"},  template("livestats/loadavg"),  luci.i18n.translate("Realtime Load Status"),  92 ).i18n = "livestats"
 end

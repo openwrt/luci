@@ -50,12 +50,12 @@ $Id$
 				<%-
 					end
 				-%>
-				}, '', '<%-:cbi_manual-%>');
+				}, '', '<%-: -- custom -- -%>');
 			</script>
 			<% end %>
 		<% else %>
 		<select id="cbi.opt.<%=self.config%>.<%=section%>" name="cbi.opt.<%=self.config%>.<%=section%>">
-			<option><%:-- Additional Field --%></option>
+			<option><%: -- Additional Field -- %></option>
 			<% for key, val in pairs(self.optionals[section]) do -%>
 				<option id="cbi-<%=self.config.."-"..section.."-"..val.option%>" value="<%=val.option%>"><%=striptags(val.title)%></option>
 			<%- end %>
