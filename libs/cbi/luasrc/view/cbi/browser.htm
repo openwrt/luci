@@ -19,5 +19,5 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 	<input class="cbi-input-text" type="text"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
-	<input class="cbi-input-image" type="image" value="<%:cbi_browser%>" onclick="cbi_filebrowser('<%=cbid%>','<%=luci.dispatcher.build_url("admin", "filebrowser")%>'<%=self.default_path and ", '"..self.default_path.."'"%>);return false" alt="<%:cbi_browser%>" title="<%:cbi_browser%>" src="<%=resource%>/cbi/folder.png" style="vertical-align:bottom" />
+	<input class="cbi-input-image" type="image" value="<%:Search file...%>" onclick="cbi_filebrowser('<%=cbid%>','<%=luci.dispatcher.build_url("admin", "filebrowser")%>'<%=self.default_path and ", '"..self.default_path.."'"%>);return false" alt="<%:Search file...%>" title="<%:Search file...%>" src="<%=resource%>/cbi/folder.png" style="vertical-align:bottom" />
 <%+cbi/valuefooter%>
