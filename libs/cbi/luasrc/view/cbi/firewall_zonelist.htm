@@ -48,10 +48,12 @@ $Id$
 		<label<%=attr("for", cbid .. "." .. zone:name())%> style="background-color:<%=zone:get_color()%>; padding:0.5em">
 			<strong><%=zone:name()%>:</strong>
 			<%
-				local empty = true
+				local zempty = true
 				for _, net in ipairs(zone:get_networks()) do
 					net = nwm:get_network(net)
+					zempty = false
 					if net then
+						local nempty = true
 			%>
 				&nbsp;
 				<%- if net:name() == self.network then -%>
@@ -62,13 +64,14 @@ $Id$
 				<%
 					for _, iface in ipairs(net and net:get_interfaces() or {}) do
 						if not iface:is_bridgeport() then
-							empty = false
+							nempty = false
 				 %>
 					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 				<% end end %>
+				<% if nempty then %><em><%:(no interfaces attached)%></em><% end %>
 				</span>
 			<% end end %>
-			<% if empty then %><em><%:(no interfaces attached)%></em><% end %>
+			<% if zempty then %><em><%:(no interfaces attached)%></em><% end %>
 		</label>
 	</li>
 	<% end end %>
