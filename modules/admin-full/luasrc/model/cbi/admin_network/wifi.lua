@@ -292,6 +292,7 @@ if wnet then
 		mode:value("monitor", translate("Monitor"))
 		mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
 		mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})
+		mode:value("wds", translate("Static WDS"))
 
 		function mode.write(self, section, value)
 			if value == "ap-wds" then
@@ -321,6 +322,7 @@ if wnet then
 
 		bssid:depends({mode="adhoc"})
 		bssid:depends({mode="ahdemo"})
+		bssid:depends({mode="wds"})
 
 		wdssep = s:taboption("advanced", Flag, "wdssep", translate("Separate WDS"))
 		wdssep:depends({mode="ap-wds"})
@@ -427,6 +429,7 @@ if wnet then
 
 	encr = s:taboption("encryption", ListValue, "encryption", translate("Encryption"))
 	encr.override_values = true
+	encr.override_depends = true
 	encr:depends({mode="ap"})
 	encr:depends({mode="sta"})
 	encr:depends({mode="adhoc"})
@@ -436,7 +439,7 @@ if wnet then
 	encr:depends({mode="mesh"})
 
 	encr:value("none", "No Encryption")
-	encr:value("wep", "WEP")
+	encr:value("wep", "WEP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 
 	if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 		local supplicant = fs.access("/usr/sbin/wpa_supplicant")
