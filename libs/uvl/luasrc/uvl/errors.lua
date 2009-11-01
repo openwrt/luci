@@ -85,11 +85,11 @@ for i, v in ipairs(ERRCODES) do
 end
 
 
-function i18n(key, def)
+function i18n(key)
 	if luci.i18n then
-		return luci.i18n.translate(key,def)
+		return luci.i18n.translate(key)
 	else
-		return def
+		return key
 	end
 end
 
@@ -130,10 +130,7 @@ end
 function error.string(self,pad)
 	pad = pad or "  "
 
-	local str = i18n(
-		'uvl_err_%s' % string.lower(ERRCODES[self.code][1]),
-		ERRCODES[self.code][2]
-	)
+	local str = i18n(ERRCODES[self.code][2])
 		:gsub("\n", "\n"..pad)
 		:gsub("%%i", self:cid())
 		:gsub("%%I", self:sid())
