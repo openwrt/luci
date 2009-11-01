@@ -63,10 +63,21 @@ function init(self, cursor)
 		end)
 end
 
+local function _mode(m)
+	if     m == "ap"      then m = "AP"
+	elseif m == "sta"     then m = "Client"
+	elseif m == "adhoc"   then m = "Ad-Hoc"
+	elseif m == "mesh"    then m = "Mesh"
+	elseif m == "monitor" then m = "Monitor"
+	end
+
+	return m or "Client"
+end
+
 function shortname(self, iface)
 	if iface.dev and iface.dev.wifi then
 		return "%s %q" %{
-			i18n.translate(iface.dev.wifi.mode or "Client"), 
+			i18n.translate(_mode(iface.dev.wifi.mode)),
 			iface.dev.wifi.ssid or iface.dev.wifi.bssid
 				or i18n.translate("(hidden)")
 		}
