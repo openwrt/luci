@@ -53,7 +53,7 @@ trigger = s:option(ListValue, "trigger")
 
 local triggers = fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
-	trigger:value(t, translate("system_led_trigger_" .. t:gsub("-", "")))
+	trigger:value(t, translate(t:gsub("-", "")))
 end 
 
 
