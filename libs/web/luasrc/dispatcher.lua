@@ -475,7 +475,7 @@ function createtree()
 	ctx.modifiers = modi
 
 	-- Load default translation
-	require "luci.i18n".loadc("default")
+	require "luci.i18n".loadc("base")
 
 	local scope = setmetatable({}, {__index = luci.dispatcher})
 

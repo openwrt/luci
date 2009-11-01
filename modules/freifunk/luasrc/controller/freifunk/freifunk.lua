@@ -47,7 +47,7 @@ function index()
 	page.target = form("freifunk/public_status")
 	page.title  = i18n("Overview")
 	page.order  = 20
-	page.i18n   = "admin-core"
+	page.i18n   = "base"
 	page.setuser  = false
 	page.setgroup = false
 

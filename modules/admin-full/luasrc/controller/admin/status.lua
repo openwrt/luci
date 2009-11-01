@@ -14,7 +14,7 @@ $Id$
 module("luci.controller.admin.status", package.seeall)
 
 function index()
-	luci.i18n.loadc("admin-core")
+	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 
 	entry({"admin", "status"}, template("admin_status/index"), i18n("Status"), 20).index = true

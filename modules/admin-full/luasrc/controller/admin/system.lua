@@ -15,7 +15,7 @@ $Id$
 module("luci.controller.admin.system", package.seeall)
 
 function index()
-	luci.i18n.loadc("admin-core")
+	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 	
 	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("System"), 30).index = true

@@ -23,9 +23,7 @@ if not arg[1] then
  	os.exit(1)
 end
 
-i18n.load("default", "en")
-i18n.load("admin-core", "en")
-i18n.load("wifi", "en")
+i18n.load("base", "en")
 
 if arg[2] then
 	i18n.load(arg[2], "en")

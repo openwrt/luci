@@ -14,7 +14,7 @@ $Id$
 module("luci.controller.admin.services", package.seeall)
 
 function index()
-	luci.i18n.loadc("admin-core")
+	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 	
 	local page  = node("admin", "services", "crontab")

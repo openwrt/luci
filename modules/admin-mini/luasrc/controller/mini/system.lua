@@ -16,7 +16,7 @@ $Id$
 module("luci.controller.mini.system", package.seeall)
 
 function index()
-	luci.i18n.loadc("admin-core")
+	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 
 	entry({"mini", "system"}, alias("mini", "system", "index"), i18n("System"), 40).index = true

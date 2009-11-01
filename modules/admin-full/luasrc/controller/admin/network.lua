@@ -30,16 +30,13 @@ function index()
 	page.order  = 20
 
 	local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
-	page.i18n   = "wifi"
 	page.leaf = true
 	page.subindex = true
 
 	local page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
-	page.i18n = "wifi"
 	page.leaf = true
 
 	local page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
-	page.i18n = "wifi"
 	page.leaf = true
 
 	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)

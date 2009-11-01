@@ -14,7 +14,7 @@ $Id$
 module("luci.controller.admin.index", package.seeall)
 
 function index()
-	luci.i18n.loadc("admin-core")
+	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 
 	local root = node()
@@ -23,13 +23,12 @@ function index()
 		root.index = true
 	end
 	
-	entry({"about"}, template("about")).i18n = "admin-core"
+	entry({"about"}, template("about"))
 	
 	local page   = node("admin")
 	page.target  = alias("admin", "index")
 	page.title   = i18n("Administration")
 	page.order   = 10
-	page.i18n    = "admin-core"
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true

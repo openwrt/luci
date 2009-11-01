@@ -16,7 +16,7 @@ $Id$
 module("luci.controller.mini.index", package.seeall)
 
 function index()
-	luci.i18n.loadc("admin-core")
+	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 
 	local root = node()
@@ -25,10 +25,9 @@ function index()
 		root.index = true
 	end
 	
-	entry({"about"}, template("about")).i18n = "admin-core"
+	entry({"about"}, template("about"))
 	
 	local page   = entry({"mini"}, alias("mini", "index"), i18n("Essentials"), 10)
-	page.i18n    = "admin-core"
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.index = true
