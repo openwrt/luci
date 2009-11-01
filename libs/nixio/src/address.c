@@ -420,34 +420,34 @@ static int nixio_getifaddrs(lua_State *L) {
 					lua_createtable(L, 0, 10);
 					struct nixio__nds *stats = c->ifa_data;
 
-					lua_pushinteger(L, stats->rx_packets);
+					lua_pushnumber(L, stats->rx_packets);
 					lua_setfield(L, -2, "rx_packets");
 
-					lua_pushinteger(L, stats->tx_packets);
+					lua_pushnumber(L, stats->tx_packets);
 					lua_setfield(L, -2, "tx_packets");
 
-					lua_pushinteger(L, stats->rx_bytes);
+					lua_pushnumber(L, stats->rx_bytes);
 					lua_setfield(L, -2, "rx_bytes");
 
-					lua_pushinteger(L, stats->tx_bytes);
+					lua_pushnumber(L, stats->tx_bytes);
 					lua_setfield(L, -2, "tx_bytes");
 
-					lua_pushinteger(L, stats->rx_errors);
+					lua_pushnumber(L, stats->rx_errors);
 					lua_setfield(L, -2, "rx_errors");
 
-					lua_pushinteger(L, stats->tx_errors);
+					lua_pushnumber(L, stats->tx_errors);
 					lua_setfield(L, -2, "tx_errors");
 
-					lua_pushinteger(L, stats->rx_dropped);
+					lua_pushnumber(L, stats->rx_dropped);
 					lua_setfield(L, -2, "rx_dropped");
 
-					lua_pushinteger(L, stats->tx_dropped);
+					lua_pushnumber(L, stats->tx_dropped);
 					lua_setfield(L, -2, "tx_dropped");
 
-					lua_pushinteger(L, stats->multicast);
+					lua_pushnumber(L, stats->multicast);
 					lua_setfield(L, -2, "multicast");
 
-					lua_pushinteger(L, stats->collisions);
+					lua_pushnumber(L, stats->collisions);
 					lua_setfield(L, -2, "collisions");
 				} else {
 					lua_newtable(L);
