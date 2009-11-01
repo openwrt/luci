@@ -1,4 +1,4 @@
-PO = default cbi admin-core sysauth wifi
+PO = base
 PO_LANG = fr
 
 include ../../build/config.mk
