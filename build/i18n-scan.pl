@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
 
-@ARGV == 1 || die "Usage: $0 <source direcory>\n";
+@ARGV >= 1 || die "Usage: $0 <source direcory>\n";
 
 
 my %stringtable;
@@ -31,7 +31,7 @@ sub dec_tpl_str
 }
 
 
-if( open F, "find $ARGV[0] -type f '(' -name '*.htm' -or -name '*.lua' ')' |" )
+if( open F, "find @ARGV -type f '(' -name '*.htm' -or -name '*.lua' ')' |" )
 {
 	while( defined( my $file = readline F ) )
 	{
