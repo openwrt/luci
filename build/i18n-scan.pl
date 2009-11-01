@@ -24,6 +24,7 @@ sub dec_lua_str
 sub dec_tpl_str
 {
 	my $s = shift;
+	$s =~ s/-$//;
 	$s =~ s/[\s\n]+/ /g;
 	$s =~ s/^ //;
 	$s =~ s/ $//;
