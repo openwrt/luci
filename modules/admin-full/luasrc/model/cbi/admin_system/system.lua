@@ -36,11 +36,11 @@ s:option(DummyValue, "_memtotal", translate("Memory")).value =
  string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
   tonumber(memtotal) / 1024,
   100 * memcached / memtotal,
-  tostring(translate("mem_cached", "")),
+  tostring(translate("cached")),
   100 * membuffers / memtotal,
-  tostring(translate("mem_buffered", "")),
+  tostring(translate("buffered")),
   100 * memfree / memtotal,
-  tostring(translate("mem_free", ""))
+  tostring(translate("free"))
 )
 
 s:option(DummyValue, "_systime", translate("Local Time")).value =

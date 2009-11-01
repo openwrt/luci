@@ -196,7 +196,7 @@ if hwtype == "broadcom" then
 	s:taboption("advanced", Flag, "frameburst", translate("Frame Bursting"))
 
 	s:taboption("advanced", Value, "distance", translate("Distance Optimization"))
-	--s:option(Value, "slottime", translate("wifi_slottime"))
+	--s:option(Value, "slottime", translate("Slot time"))
 
 	s:taboption("advanced", Value, "country", translate("Country Code"))
 	s:taboption("advanced", Value, "maxassoc", translate("Connection Limit"))
@@ -331,8 +331,8 @@ if wnet then
 		hidden:depends({mode="adhoc"})
 		hidden:depends({mode="ap-wds"})
 		hidden:depends({mode="sta-wds"})
-		isolate = s:taboption("advanced", Flag, "isolate", translate("wifi_isolate"),
-		 translate("wifi_isolate_desc"))
+		isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
+		 translate("Prevents client-to-client communication"))
 		isolate:depends({mode="ap"})
 		s:taboption("advanced", Flag, "bgscan", translate("Background Scan"))
 
@@ -384,8 +384,8 @@ if wnet then
 		hidden:depends({mode="adhoc"})
 		hidden:depends({mode="wds"})
 
-		isolate = s:taboption("advanced", Flag, "isolate", translate("wifi_isolate"),
-		 translate("wifi_isolate_desc"))
+		isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
+		 translate("Prevents client-to-client communication"))
 		isolate:depends({mode="ap"})
 
 		s:taboption("advanced", Flag, "doth", "802.11h")
@@ -454,16 +454,25 @@ if wnet then
 			encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
 			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="ap-wds"})
-			encr.description = translate("wifi_wpareq")
+			encr.description = translate(
+				"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
+				"and ad-hoc mode) to be installed."
+			)
 		elseif not hostapd and supplicant then
 			encr:value("psk", "WPA-PSK", {mode="sta"}, {mode="sta-wds"})
 			encr:value("psk2", "WPA2-PSK", {mode="sta"}, {mode="sta-wds"})
 			encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"}, {mode="sta-wds"})
 			encr:value("wpa", "WPA-EAP", {mode="sta"}, {mode="sta-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="sta"}, {mode="sta-wds"})
-			encr.description = translate("wifi_wpareq")
+			encr.description = translate(
+				"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
+				"and ad-hoc mode) to be installed."
+			)
 		else
-			encr.description = translate("wifi_wpareq")
+			encr.description = translate(
+				"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
+				"and ad-hoc mode) to be installed."
+			)
 		end
 	elseif hwtype == "broadcom" then
 		encr:value("psk", "WPA-PSK")
@@ -477,7 +486,7 @@ if wnet then
 	encr:depends("mode", "sta-wds")
 	encr:depends("mode", "wds")
 
-	server = s:taboption("encryption", Value, "server", translate("RadiusServer"))
+	server = s:taboption("encryption", Value, "server", translate("Radius-Server"))
 	server:depends({mode="ap", encryption="wpa"})
 	server:depends({mode="ap", encryption="wpa2"})
 	server.rmempty = true

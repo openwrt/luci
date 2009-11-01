@@ -236,16 +236,25 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"})
 		encr:value("wpa", "WPA-Radius", {mode="ap"})
 		encr:value("wpa2", "WPA2-Radius", {mode="ap"})
-		encr.description = translate("wifi_wpareq")
+		encr.description = translate(
+			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
+			"and ad-hoc mode) to be installed."
+		)
 	elseif not hostapd and supplicant then
 		encr:value("psk", "WPA-PSK", {mode="sta"})
 		encr:value("psk2", "WPA2-PSK", {mode="sta"})
 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
 		encr:value("wpa", "WPA-EAP", {mode="sta"})
 		encr:value("wpa2", "WPA2-EAP", {mode="sta"})
-		encr.description = translate("wifi_wpareq")
+		encr.description = translate(
+			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
+			"and ad-hoc mode) to be installed."
+		)		
 	else
-		encr.description = translate("wifi_wpareq")
+		encr.description = translate(
+			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
+			"and ad-hoc mode) to be installed."
+		)
 	end
 elseif hwtype == "broadcom" then
 	encr:value("psk", "WPA-PSK")
@@ -264,7 +273,7 @@ key:depends({mode="ap", encryption="wpa2"})
 key.rmempty = true
 key.password = true
 
-server = s:option(Value, "server", translate("RadiusServer"))
+server = s:option(Value, "server", translate("Radius-Server"))
 server:depends({mode="ap", encryption="wpa"})
 server:depends({mode="ap", encryption="wpa2"})
 server.rmempty = true
