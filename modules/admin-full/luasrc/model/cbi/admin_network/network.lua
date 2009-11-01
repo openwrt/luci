@@ -74,7 +74,7 @@ ifname.titleref = luci.dispatcher.build_url("admin", "network", "vlan")
 
 
 if luci.model.uci.cursor():load("firewall") then
-	zone = s:option(DummyValue, "_zone", translate("zone"))
+	zone = s:option(DummyValue, "_zone", translate("Zone"))
 	zone.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "zones")
 
 	function zone.cfgvalue(self, section)
