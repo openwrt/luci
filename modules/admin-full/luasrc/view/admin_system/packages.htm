@@ -23,10 +23,7 @@ end
 
 function opkg_error(code)
 	code = bit.rshift(tonumber(code), 8)
-	return translate(
-		'a_s_packages_code%i' % code,
-		'%s %i' % { translate('Code'), code }
-	)
+	return translate("OPKG error code %i" % code)
 end
 -%>
 <%+header%>
