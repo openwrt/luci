@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	memset(key, 0, sizeof(val));
 	memset(val, 0, sizeof(val));
 
-	while( (NULL != fgets(line, sizeof(line), in)) || (state >= 3 && feof(in)) )
+	while( (NULL != fgets(line, sizeof(line), in)) || (state >= 2 && feof(in)) )
 	{
 		if( state == 0 && strstr(line, "msgid \"") == line )
 		{
@@ -123,9 +123,6 @@ int main(int argc, char *argv[])
 					case -1:
 						state = 4;
 						break;
-					case 0:
-						state = 2;
-						break;
 					default:
 						state = 3;
 				}
@@ -135,7 +132,7 @@ int main(int argc, char *argv[])
 				switch(extract_string(line, tmp, sizeof(tmp)))
 				{
 					case -1:
-						state = 4;
+						state = 2;
 						break;
 					default:
 						strcat(key, tmp);
@@ -153,7 +150,8 @@ int main(int argc, char *argv[])
 					strcat(val, tmp);
 			}
 		}
-		else if( state == 4 )
+
+		if( state == 4 )
 		{
 			if( strlen(key) > 0 && strlen(val) > 0 )
 			{
