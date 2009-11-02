@@ -145,6 +145,7 @@ function run()
 		
 		local pid, stat, code = nixio.wait(-1, "nohang")
 		while pid and pid > 0 do
+			nixio.syslog("info", "Buried thread: " .. pid)
 			if tpids[pid] then
 				tcount = tcount - 1
 				if tpids[pid] ~= true then
@@ -233,6 +234,7 @@ function create_process(threadcb, waitcb)
 	end
 	local pid, code, err = nixio.fork()
 	if pid and pid ~= 0 then
+		nixio.syslog("info", "Created thread: " .. pid)
 		tpids[pid] = waitcb or true
 		tcount = tcount + 1
 	elseif pid == 0 then
