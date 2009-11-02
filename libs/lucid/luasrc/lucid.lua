@@ -145,9 +145,11 @@ function run()
 		
 		local pid, stat, code = nixio.wait(-1, "nohang")
 		while pid and pid > 0 do
-			tcount = tcount - 1
-			if tpids[pid] and tpids[pid] ~= true then
-				tpids[pid](pid, stat, code)
+			if tpids[pid] then
+				tcount = tcount - 1
+				if tpids[pid] ~= true then
+					tpids[pid](pid, stat, code)
+				end
 			end
 			pid, stat, code = nixio.wait(-1, "nohang")
 		end
@@ -231,7 +233,7 @@ function create_process(threadcb, waitcb)
 	end
 	local pid, code, err = nixio.fork()
 	if pid and pid ~= 0 then
-		tpids[pid] = waitcb
+		tpids[pid] = waitcb or true
 		tcount = tcount + 1
 	elseif pid == 0 then
 		local code = threadcb()
