@@ -87,6 +87,7 @@ function run()
 				active = false
 			elseif id == 6 then
 				data1:copyz(nixio.stdout, data2)
+				data1:close()
 			end
 		end
 	end
