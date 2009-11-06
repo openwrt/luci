@@ -226,7 +226,7 @@ static int nixio_file_read(lua_State *L) {
 
 static int nixio_file_seek(lua_State *L) {
 	int fd = nixio__checkfd(L, 1);
-	off_t len = (off_t)luaL_checknumber(L, 2);
+	off_t len = (off_t)luaL_checkinteger(L, 2);
 	int whence;
 	const char *whstr = luaL_optlstring(L, 3, "set", NULL);
 	if (!strcmp(whstr, "set")) {
@@ -242,7 +242,7 @@ static int nixio_file_seek(lua_State *L) {
 	if (len == -1) {
 		return nixio__perror(L);
 	} else {
-		lua_pushnumber(L, len);
+		lua_pushinteger(L, len);
 		return 1;
 	}
 }
@@ -253,7 +253,7 @@ static int nixio_file_tell(lua_State *L) {
 	if (pos < 0) {
 		return nixio__perror(L);
 	} else {
-		lua_pushnumber(L, pos);
+		lua_pushinteger(L, pos);
 		return 1;
 	}
 }
@@ -291,7 +291,7 @@ static int nixio_file_sync(lua_State *L) {
 static int nixio_file_lock(lua_State *L) {
 	int fd = nixio__checkfd(L, 1);
 	const char *flag = luaL_checkstring(L, 2);
-	off_t len = (off_t)luaL_optnumber(L, 3, 0);
+	off_t len = (off_t)luaL_optinteger(L, 3, 0);
 	int stat;
 
 	int cmd = 0;

@@ -204,7 +204,7 @@ static int nixio__gso_mreq6(lua_State *L, int fd, int level, int opt, int set) {
 				return nixio__perror_s(L);
 			}
 			lua_pushstring(L, buf);
-			lua_pushnumber(L, val.ipv6mr_interface);
+			lua_pushinteger(L, val.ipv6mr_interface);
 			return 2;
 		}
 	} else {

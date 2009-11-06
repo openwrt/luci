@@ -323,7 +323,7 @@ static int nixio_sock_getsockname(lua_State *L) {
 	}
 
 	lua_pushstring(L, addr.host);
-	lua_pushnumber(L, addr.port);
+	lua_pushinteger(L, addr.port);
 	return 2;
 }
 
@@ -342,7 +342,7 @@ static int nixio_sock_getpeername(lua_State *L) {
 	}
 
 	lua_pushstring(L, addr.host);
-	lua_pushnumber(L, addr.port);
+	lua_pushinteger(L, addr.port);
 	return 2;
 }
 

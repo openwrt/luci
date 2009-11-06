@@ -147,7 +147,7 @@ NIXIO_API int luaopen_nixio(lua_State *L) {
 	nixio_open_tls_socket(L);
 
 	/* module version */
-	lua_pushnumber(L, VERSION);
+	lua_pushinteger(L, VERSION);
 	lua_setfield(L, -2, "version");
 
 	/* some constants */

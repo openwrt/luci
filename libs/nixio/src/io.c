@@ -141,7 +141,7 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 			nixio_addr naddr;
 			if (!nixio__addr_parse(&naddr, (struct sockaddr *)&addrobj)) {
 				lua_pushstring(L, naddr.host);
-				lua_pushnumber(L, naddr.port);
+				lua_pushinteger(L, naddr.port);
 				return 3;
 			} else {
 				return 1;
