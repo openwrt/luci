@@ -26,7 +26,7 @@ local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 local has_ipv6  = fs.access("/proc/net/ipv6_route")
 
-m = Map("network", translate("Interfaces"), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
+m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("firewall")
 m:chain("wireless")
 
