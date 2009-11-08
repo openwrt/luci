@@ -17,7 +17,7 @@ $Id$
 	if type(self.hidden) == "table" then
 		for k, v in pairs(self.hidden) do
 -%>
-	<input type="hidden" id="cbid.<%=self.config%>.<%=section%>.<%=k%>" name="cbid.<%=self.config%>.<%=section%>.<%=k%>" value="<%=pcdata(v)%>" />
+	<input type="hidden" id="<%=k%>" name="<%=k%>" value="<%=pcdata(v)%>" />
 <%-
 		end
 	end

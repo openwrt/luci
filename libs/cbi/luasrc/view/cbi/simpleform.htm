@@ -33,17 +33,31 @@ $Id$
 <%- end %>	
 <% if not self.embedded then %>
 	<div>
+<%-
+	if type(self.hidden) == "table" then
+		for k, v in pairs(self.hidden) do
+-%>
+	<input type="hidden" id="<%=k%>" name="<%=k%>" value="<%=pcdata(v)%>" />
+<%-
+		end
+	end
+%>
 <%- if self.flow and self.flow.skip then %>
 	<input class="cbi-button cbi-button-skip" type="submit" name="cbi.skip" value="<%:Skip%>" />
 <% end %>
 <%- if self.submit ~= false then %>
-		<input class="cbi-button-save" type="submit" value="
-	<%- if not self.submit then -%><%-:submit-%><%-else-%><%=self.submit%><%end-%>
+	<input class="cbi-button-save" type="submit" value="
+		<%- if not self.submit then -%><%-:Submit-%><%-else-%><%=self.submit%><%end-%>
 	" />
 <% end %>
 <%- if self.reset ~= false then %>
-		<input class="cbi-button-reset" type="reset" value="
-	<%- if not self.reset then -%><%-:reset-%><%-else-%><%=self.reset%><%end-%>
+	<input class="cbi-button-reset" type="reset" value="
+		<%- if not self.reset then -%><%-:Reset-%><%-else-%><%=self.reset%><%end-%>
+	" />
+<% end %>
+<%- if self.cancel ~= false and self.on_cancel then %>
+	<input class="cbi-button-reset" type="submit" name="cbi.cancel" value="
+		<%- if not self.cancel then -%><%-:Cancel-%><%-else-%><%=self.cancel%><%end-%>
 	" />
 <% end %>
 		<script type="text/javascript">cbi_d_update();</script>

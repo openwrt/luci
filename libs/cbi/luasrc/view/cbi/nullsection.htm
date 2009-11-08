@@ -21,3 +21,12 @@ $Id$
 			</div>
 			<br />
 		</fieldset>
+		<%-
+			if type(self.hidden) == "table" then
+				for k, v in pairs(self.hidden) do
+		-%>
+			<input type="hidden" id="<%=k%>" name="<%=k%>" value="<%=pcdata(v)%>" />
+		<%-
+				end
+			end
+		%>
