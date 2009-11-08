@@ -35,7 +35,7 @@ newnet = m:field(Value, "_netname_new", translate("Name of the new network"),
 	))
 
 newnet:depends("_attach", "")
-newnet.default = "net_" .. arg[1]:gsub("[^%w_]+", "_")
+newnet.default = arg[1] and "net_" .. arg[1]:gsub("[^%w_]+", "_")
 
 addnet = m:field(Value, "_netname_attach",
 	translate("Network to attach interface to"))
@@ -52,7 +52,7 @@ fwzone = m:field(Value, "_fwzone",
 fwzone.template = "cbi/firewall_zonelist"
 addnet.widget = "radio"
 fwzone:depends("_attach", "")
-fwzone.default = "zone_" .. arg[1]:gsub("[^%w_]+", "_")
+fwzone.default = arg[1] and "zone_" .. arg[1]:gsub("[^%w_]+", "_")
 
 
 function attachnet.write(self, section, value)

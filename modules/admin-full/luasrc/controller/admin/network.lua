@@ -95,74 +95,20 @@ function wifi_join()
 	local ssid = param("join")
 
 	if dev and ssid then
-		local wep     = (tonumber(param("wep")) == 1)
-		local wpa     = tonumber(param("wpa_version")) or 0
-		local channel = tonumber(param("channel"))
-		local mode    = param("mode")
-		local bssid   = param("bssid")
+		local cancel  = (param("cancel") or param("cbi.cancel")) and true or false
 
-		local confirm = (param("confirm") == "1")
-		local cancel  = param("cancel") and true or false
-
-		if confirm and not cancel then
-			local fixed_bssid = (param("fixed_bssid") == "1")
-			local replace_net = (param("replace_net") == "1")
-			local autoconnect = (param("autoconnect") == "1")
-			local attach_intf = param("attach_intf")
-
-			local uci = require "luci.model.uci".cursor()
-
-			if replace_net then
-				uci:delete_all("wireless", "wifi-iface")
-			end
-
-			local wificonf = {
-				device  = dev,
-				mode    = (mode == "Ad-Hoc" and "adhoc" or "sta"),
-				ssid    = ssid
-			}
-
-			if attach_intf and uci:get("network", attach_intf) == "interface" then
-				-- target network already has a interface, make it a bridge
-				uci:set("network", attach_intf, "type", "bridge")
-				uci:save("network")
-				uci:commit("network")
-
-				wificonf.network = attach_intf
-
-				if autoconnect then
-					require "luci.sys".call("/sbin/ifup " .. attach_intf)
-				end
-			end
-
-			if fixed_bssid then
-				wificonf.bssid = bssid
-			end
-
-			if wep then
-				wificonf.encryption = "wep"
-				wificonf.key = param("key")
-			elseif wpa > 0 then
-				wificonf.encryption = param("wpa_suite")
-				wificonf.key = param("key")
-			end
-
-			local s = uci:section("wireless", "wifi-iface", nil, wificonf)
-			uci:delete("wireless", dev, "disabled")
-			uci:set("wireless", dev, "channel", channel)
-
-			uci:save("wireless")
-			uci:commit("wireless")
-
-			if autoconnect then
-				require "luci.sys".call("/sbin/wifi")
-			end
-
-			luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
-		elseif cancel then
+		if cancel then
 			luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless_join?device=" .. dev))
 		else
-			luci.template.render("admin_network/wifi_join_settings")
+			local cbi = require "luci.cbi"
+			local tpl = require "luci.template"
+			local map = luci.cbi.load("admin_network/wifi_add")[1]
+
+			if map:parse() ~= cbi.FORM_DONE then
+				tpl.render("header")
+				map:render()
+				tpl.render("footer")
+			end
 		end
 	else
 		luci.template.render("admin_network/wifi_join")
