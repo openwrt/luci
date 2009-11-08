@@ -69,6 +69,7 @@ local function _mode(m)
 	elseif m == "adhoc"   then m = "Ad-Hoc"
 	elseif m == "mesh"    then m = "Mesh"
 	elseif m == "monitor" then m = "Monitor"
+	elseif m == "wds"     then m = "WDS"
 	end
 
 	return m or "Client"
@@ -90,7 +91,7 @@ function get_i18n(self, iface)
 	if iface.dev and iface.dev.wifi then
 		return "%s: %s %q" %{
 			i18n.translate("Wireless Network"),
-			i18n.translate(iface.dev.wifi.mode or "Client"),
+			i18n.translate(_mode(iface.dev.wifi.mode)),
 			iface.dev.wifi.ssid or iface.dev.wifi.bssid
 				or i18n.translate("(hidden)")
 		}
