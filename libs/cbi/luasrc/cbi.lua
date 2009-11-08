@@ -671,6 +671,10 @@ function SimpleForm.parse(self, readinput, ...)
 		return FORM_SKIP
 	end
 
+	if self:formvalue("cbi.cancel") and self:_run_hooks("on_cancel") then
+		return FORM_DONE
+	end
+
 	if self:submitstate() then
 		Node.parse(self, 1, ...)
 	end
