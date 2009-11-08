@@ -15,8 +15,8 @@ $Id$
 
 <%+cbi/valueheader%>
 <% if self.href then %><a href="<%=self.href%>"><% end -%>
-	<%=pcdata(self:cfgvalue(section))%>
+	<%=pcdata(self:cfgvalue(section) or self.default or "")%>
 <%- if self.href then %></a><%end%>
 &#160;
-<input type="hidden" id="<%=cbid%>" value="<%=pcdata(self:cfgvalue(section))%>" />
+<input type="hidden" id="<%=cbid%>" value="<%=pcdata(self:cfgvalue(section) or self.default or "")%>" />
 <%+cbi/valuefooter%>
