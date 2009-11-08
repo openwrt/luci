@@ -17,7 +17,7 @@ limitations under the License.
 
 ]]--
 
-local pairs, i18n, uci, math = pairs, luci.i18n, luci.model.uci, math
+local pairs, type, i18n, uci, math = pairs, type, luci.i18n, luci.model.uci, math
 
 local iwi = require "iwinfo"
 local utl = require "luci.util"
@@ -86,6 +86,46 @@ function get_network(self, id)
 	end
 end
 
+function add_network(self, options)
+	if type(options) == "table" and options.device and
+		ub.uci:get("wireless", options.device) == "wifi-device"
+	then
+		local s = ub.uci:section("wireless", "wifi-iface", nil, options)
+		local c = 1
+		ub.uci:foreach("wireless", "wifi-iface", function(s) c = c + 1 end)
+
+		local id = "%s.network%d" %{ options.device, c }
+		ifs[id] = {
+			id    = id,
+			sid   = s,
+			count = c
+		}
+
+		local wtype = iwi.type(options.device)
+		if wtype then
+			ifs[id].winfo = iwi[wtype]
+			ifs[id].wdev  = options.device
+		end
+
+		return network(s)
+	end
+end
+
+function del_network(self, id)
+	if ifs[id] then
+		ub.uci:delete("wireless", ifs[id].sid)
+		ifs[id] = nil
+	else
+		local n
+		for n, _ in pairs(ifs) do
+			if ifs[n].sid == id then
+				ub.uci:delete("wireless", id)
+				ifs[n] = nil
+			end
+		end
+	end
+end
+
 function shortname(self, iface)
 	if iface.wdev and iface.winfo then
 		return "%s %q" %{
@@ -106,21 +146,6 @@ function get_i18n(self, iface)
 		}
 	else
 		return "%s: %q" %{ i18n.translate("Wireless Network"), iface:name() }
-	end
-end
-
-function del_network(self, id)
-	if ifs[id] then
-		ub.uci:delete("wireless", ifs[id].sid)
-		ifs[id] = nil
-	else
-		local n
-		for n, _ in pairs(ifs) do
-			if ifs[n].sid == id then
-				ub.uci:delete("wireless", id)
-				ifs[n] = nil
-			end
-		end
 	end
 end
 
@@ -214,6 +239,7 @@ function network._init(self, sid)
 		end)
 
 	local parent_dev = st:get("wireless", sid, "device")
+		or ub.uci:get("wireless", sid, "device")
 
 	local dev = st:get("wireless", sid, "ifname")
 		or parent_dev
