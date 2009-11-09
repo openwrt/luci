@@ -51,9 +51,8 @@ $Id$
 				local zempty = true
 				for _, net in ipairs(zone:get_networks()) do
 					net = nwm:get_network(net)
-					zempty = false
 					if net then
-						local nempty = true
+						zempty = false
 			%>
 				&nbsp;
 				<%- if net:name() == self.network then -%>
@@ -62,6 +61,7 @@ $Id$
 					<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
 				<%- end -%>
 				<%
+					local nempty = true
 					for _, iface in ipairs(net and net:get_interfaces() or {}) do
 						if not iface:is_bridgeport() then
 							nempty = false
