@@ -17,7 +17,10 @@ local sys = require "luci.sys"
 local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
 
-m2 = Map("luci_ethers", translate("Leases"))
+m2 = Map("dhcp", translate("DHCP Leases"),
+	translate("Static leases are used to assign fixed IP addresses and symbolic hostnames to " ..
+		"DHCP clients. They are also required for non-dynamic interface configurations where " ..
+		"only hosts with a corresponding lease are served."))
 
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",
@@ -46,13 +49,18 @@ if leases then
 	end
 end
 
-s = m2:section(TypedSection, "static_lease", translate("Static Leases"))
+s = m2:section(TypedSection, "host", translate("Static Leases"),
+	translate("Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</em> " ..
+		"indentifies the host, the <em>IPv4-Address</em> specifies to the fixed address to " ..
+		"use and the <em>Hostname</em> is assigned as symbolic name to the requesting host."))
+
 s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 
-mac = s:option(Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-ip = s:option(Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
+name = s:option(Value, "name", translate("Hostname"))
+mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
+ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
 	mac:value(
