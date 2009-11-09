@@ -27,8 +27,21 @@ $Id$
 	<%- end -%>
 </div>
 
-<% if #self.deps > 0 then -%>
+
+<% if #self.deps > 0 or #self.subdeps > 0 then -%>
 	<script type="text/javascript" id="cbip-<%=self.config.."-"..section.."-"..self.option%>">
+		<% for j, d in ipairs(self.subdeps) do -%>
+			cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option..d.add%>", {
+		<%-
+			for k,v in pairs(d.deps) do
+		-%>
+			<%-=string.format('"cbid.%s.%s.%s"', self.config, section, k) .. ":" .. string.format("%q", v)-%>
+			<%-if next(d.deps, k) then-%>,<%-end-%>
+		<%-
+			end
+		-%>
+			}, "cbip-<%=self.config.."-"..section.."-"..self.option..d.add%>");
+		<%- end %>
 		<% for j, d in ipairs(self.deps) do -%>
 			cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option..d.add%>", {
 		<%-

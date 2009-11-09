@@ -1265,6 +1265,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.tag_reqerror = {}
 	self.tag_error = {}
 	self.deps = {}
+	self.subdeps = {}
 	--self.cast = "string"
 
 	self.track_missing = false
@@ -1595,7 +1596,7 @@ function ListValue.value(self, key, val, ...)
 	table.insert(self.vallist, tostring(val))
 
 	for i, deps in ipairs({...}) do
-		table.insert(self.deps, {add = "-"..key, deps=deps})
+		self.subdeps[#self.subdeps + 1] = {add = "-"..key, deps=deps}
 	end
 end
 
