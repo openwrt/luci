@@ -33,7 +33,7 @@ m:chain("wireless")
 nw.init(m.uci)
 fw.init(m.uci)
 
-s = m:section(NamedSection, arg[1], "interface")
+s = m:section(NamedSection, arg[1], "interface", translate("Common Configuration"))
 s.addremove = false
 
 s:tab("general", translate("General Setup"))
@@ -176,7 +176,10 @@ if has_ipv6 then
 	ip6gw:depends("proto", "static")
 end
 
-dns = s:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
+dns = s:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"),
+	translate("You can specify multiple DNS servers separated by space here. Servers entered here will override " ..
+		"automatically assigned ones."))
+
 dns:depends("peerdns", "")
 
 mtu = s:taboption("physical", Value, "mtu", "MTU")
@@ -343,7 +346,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	maxwait:depends("proto", "3g")
 end
 
-s2 = m:section(TypedSection, "alias", translate("Aliases"))
+s2 = m:section(TypedSection, "alias", translate("IP-Aliases"))
 s2.addremove = true
 
 s2:depends("interface", arg[1])
@@ -371,4 +374,85 @@ if has_ipv6 then
 	s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 end
 
-return m
+
+m2 = Map("dhcp", "", "")
+function m2.on_parse()
+	local has_section = false
+
+	m2.uci:foreach("dhcp", "dhcp", function(s)
+		if s.interface == arg[1] then
+			has_section = true
+			return false
+		end
+	end)
+
+	if not has_section then
+		m2.uci:section("dhcp", "dhcp", nil, { interface = arg[1], ignore = "1" })
+		m2.uci:save("dhcp")
+	end
+end
+
+s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
+s.addremove = false
+s:tab("general",  translate("General Setup"))
+s:tab("advanced", translate("Advanced Settings"))
+
+function s.filter(self, section)
+	return m2.uci:get("dhcp", section, "interface") == arg[1]
+end
+
+local ignore = s:taboption("general", Flag, "ignore",
+	translate("Ignore interface"),
+	translate("Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for " ..
+		"this interface."))
+
+ignore.rmempty = false
+
+local start = s:taboption("general", Value, "start", translate("Start"),
+	translate("Lowest leased address as offset from the network address."))
+start.rmempty = true
+start.default = "100"
+
+local limit = s:taboption("general", Value, "limit", translate("Limit"),
+	translate("Maximum number of leased addresses."))
+limit.rmempty = true
+limit.default = "150"
+
+local ltime = s:taboption("general", Value, "leasetime", translate("Leasetime"),
+	translate("Expiry time of leased addresses, minimum is 2 Minutes (<code>2m</code>)."))
+ltime.rmempty = true
+ltime.default = "12h"
+
+local dd = s:taboption("advanced", Flag, "dynamicdhcp",
+	translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
+	translate("Dynamically allocate DHCP addresses for clients. If disabled, only " ..
+		"clients having static leases will be served."))
+
+dd.rmempty = false
+function dd.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "1"
+end
+
+s:taboption("advanced", Flag, "force", translate("Force"),
+	translate("Force DHCP on this network even if another server is detected."))
+
+-- XXX: is this actually useful?
+--s:taboption("advanced", Value, "name", translate("Name"),
+--	translate("Define a name for this network."))
+
+s:taboption("advanced", Value, "netmask",
+	translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"),
+	translate("Override the netmask sent to clients. Normally it is calculated " ..
+		"from the subnet that is served."))
+
+s:taboption("advanced", DynamicList, "dhcp_option", translate("DHCP-Options"),
+	translate("Define additional DHCP options, for example \"<code>6,192.168.2.1," ..
+		"192.168.2.2</code>\" which advertises different DNS servers to clients."))
+
+for i, n in ipairs(s.children) do
+	if n ~= ignore then
+		n:depends("ignore", "")
+	end
+end
+
+return m, m2
