@@ -351,6 +351,7 @@ end
 -- Use optimized UCI writing
 function Map.parse(self, readinput, ...)
 	self.readinput = (readinput ~= false)
+	self:_run_hooks("on_parse")
 
 	if self:formvalue("cbi.skip") then
 		self.state = FORM_SKIP
