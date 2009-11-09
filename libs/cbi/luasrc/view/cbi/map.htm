@@ -14,10 +14,10 @@ $Id$
 -%>
 
 <div class="cbi-map" id="cbi-<%=self.config%>">
-	<h2><a id="content" name="content"><%=self.title%></a></h2>
-	<div class="cbi-map-descr"><%=self.description%></div>
+	<% if self.title and #self.title > 0 then %><h2><a id="content" name="content"><%=self.title%></a></h2><% end %>
+	<% if self.description and #self.description > 0 then %><div class="cbi-map-descr"><%=self.description%></div><% end %>
 	<%- if self._apply then -%>
-		<fieldset class="cbi-section">
+		<fieldset class="cbi-section" id="cbi-apply-<%=self.config%>">
 			<legend><%:Applying changes%></legend>
 			<ul class="cbi-apply"><%-
 				local fp = self._apply()
@@ -30,6 +30,12 @@ $Id$
 				fp:close()
 			-%></ul>
 		</fieldset>
+		<script type="text/javascript">
+			window.setTimeout(function() {
+				var e = document.getElementById('cbi-apply-<%=self.config%>');
+				if(e) e.style.display = 'none';
+			}, 750);
+		</script>
 	<%- end -%>
 	<%- self:render_children() %>
 	<br />
