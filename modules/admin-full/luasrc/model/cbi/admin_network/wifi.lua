@@ -20,7 +20,12 @@ local fs = require "nixio.fs"
 arg[1] = arg[1] or ""
 arg[2] = arg[2] or ""
 
-m = Map("wireless", translate("Networks"), translate("You can run several wifi networks with one device. Be aware that there are certain hardware and driverspecific restrictions. Normally you can operate 1 Ad-Hoc or up to 3 Master-Mode and 1 Client-Mode network simultaneously."))
+m = Map("wireless", "",
+	translate("The <em>Device Configuration</em> section covers physical settings of the radio " ..
+		"hardware such as channel, transmit power or antenna selection which is shared among all " ..
+		"defined wireless networks (if the radio hardware is multi-SSID capable). Per network settings " ..
+		"like encryption or operation mode are grouped in the <em>Interface Configuration</em>."))
+
 m:chain("network")
 
 local ifsection
@@ -38,6 +43,12 @@ end
 nw.init(m.uci)
 ww.init(m.uci)
 
+local wnet = ww:get_network(arg[2])
+
+if wnet then
+	m.title = wnet and ww:get_i18n(wnet)
+end
+
 
 local iw = nil
 local tx_powers = nil
@@ -50,7 +61,7 @@ m.uci:foreach("wireless", "wifi-iface",
 		end
 	end)
 
-s = m:section(NamedSection, arg[1], "wifi-device", translate("Device") .. " " .. arg[1])
+s = m:section(NamedSection, arg[1], "wifi-device", translate("Device Configuration"))
 s.addremove = false
 
 s:tab("general", translate("General Setup"))
@@ -220,7 +231,7 @@ end
 local wnet = ww:get_network(arg[2])
 
 if wnet then
-	s = m:section(NamedSection, wnet.sid, "wifi-iface", ww:get_i18n(wnet))
+	s = m:section(NamedSection, wnet.sid, "wifi-iface", translate("Interface Configuration"))
 	ifsection = s
 	s.addremove = false
 	s.anonymous = true
@@ -241,7 +252,11 @@ if wnet then
 
 	bssid = s:taboption("general", Value, "bssid", translate("<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"))
 
-	network = s:taboption("general", Value, "network", translate("Network"), translate("Add the Wifi network to physical network"))
+	network = s:taboption("general", Value, "network", translate("Network"),
+		translate("Choose the network you want to attach to this wireless interface. " ..
+			"Select <em>unspecified</em> to not attach any network or fill out the " ..
+			"<em>create</em> field to define a new network."))
+
 	network.rmempty = true
 	network.template = "cbi/network_netlist"
 	network.widget = "radio"
