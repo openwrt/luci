@@ -1,0 +1,14 @@
+Rebooting. Please wait...
+
+<script type="text/javascript">
+window.setInterval(function() {
+	var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', '/', true);
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && req.status >= 200 && req.status < 400) {
+        	window.location = "/";
+        }
+    };
+    xmlHttp.send(null);
+}, 10000);
+</script>

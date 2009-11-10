@@ -58,7 +58,10 @@ function cursor_state()
 end
 
 
-local Cursor = getmetatable(cursor())
+inst = cursor()
+inst_state = cursor_state()
+
+local Cursor = getmetatable(inst)
 
 --- Applies UCI configuration changes
 -- @param configlist		List of UCI configurations

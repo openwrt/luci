@@ -1,13 +1,19 @@
 <%
 local dsp = require "luci.dispatcher"
 local utl = require "luci.util"
-local str = require "luci.store"
+local uci = require "luci.model.uci"
 
 local nws = {}
-str.uci_state:foreach("network", "interface", function(s)
+uci.inst_state:foreach("network", "interface", function(s)
 	nws[#nws+1] = s
 end)
+
+if uci.inst_state:get("network", "lan", "_ipchanged") and
+uci.inst_state:revert("network", "lan", "_ipchanged") then
+	include("niu/network/warn_ip_change")
+end
 %>
+
 <div>Status:</div>
 <table>
 <% 

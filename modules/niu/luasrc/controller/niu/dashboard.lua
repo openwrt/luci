@@ -36,8 +36,6 @@ function dashboard()
 	local tpl = require "luci.template"
 	local utl = require "luci.util"
 	local uci = require "luci.model.uci"
-	local str = require "luci.store"
-	str.uci_state = str.uci_state or uci.cursor()
 
 	local nds = dsp.node("niu").nodes
 	tpl.render("niu/dashboard", {utl = utl, nodes = nds, dsp = dsp, tpl = tpl}) 

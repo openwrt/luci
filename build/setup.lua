@@ -12,6 +12,9 @@ uci_model.cursor_state = function()
 	return uci_core.cursor(SYSROOT .. "/etc/config", SYSROOT .. "/var/state")
 end
 
+uci_model.inst = uci_model.cursor()
+uci_model.inst_state = uci_model.cursor_state()
+
 -- override uvl access
 local uvl_model = require "luci.uvl"
 local uvl_init  = uvl_model.UVL.__init__

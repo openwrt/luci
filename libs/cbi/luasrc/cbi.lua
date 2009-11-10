@@ -222,6 +222,12 @@ function Node.__init__(self, title, description)
 end
 
 -- hook helper
+function Node._run_hook(self, hook)
+	if type(self[hook]) == "function" then
+		return self[hook](self)
+	end 
+end
+
 function Node._run_hooks(self, ...)
 	local f
 	local r = false
@@ -528,9 +534,9 @@ function Delegator.add(self, name, node)
 end
 
 function Delegator.insert_after(self, name, after)
-	local n = #self.chain
+	local n = #self.chain + 1
 	for k, v in ipairs(self.chain) do
-		if v == state then
+		if v == after then
 			n = k + 1
 			break
 		end
@@ -599,8 +605,7 @@ function Delegator.parse(self, ...)
 		return FORM_NODATA
 	elseif stat > FORM_PROCEED 
 	and (not newcurrent or not self:get(newcurrent)) then
-		self:_run_hooks("on_done")
-		return FORM_DONE
+		return self:_run_hook("on_done") or FORM_DONE
 	else
 		self.current = newcurrent or self.current
 		self.active = self:get(self.current)
