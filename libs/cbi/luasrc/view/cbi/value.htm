@@ -14,6 +14,7 @@ $Id$
 -%>
 <%+cbi/valueheader%>
 	<input type="<%=self.password and 'password" class="cbi-input-password' or 'text" class="cbi-input-text' %>" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. attr("value", self:cfgvalue(section) or self.default) .. ifattr(self.size, "size")%> />
+	<% if self.password then %><img src="<%=resource%>/cbi/reload.gif" style="vertical-align:middle" title="<%:Reveal/hide password%>" onclick="var e = document.getElementById('<%=cbid%>'); e.type = (e.type=='password') ? 'text' : 'password';" /><% end %>
 	<% if #self.keylist > 0 then -%>
 	<script type="text/javascript">
 		cbi_combobox_init('<%=cbid%>', {
