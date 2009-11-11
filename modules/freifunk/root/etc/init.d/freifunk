@@ -27,7 +27,6 @@ boot() {
 		echo "17 * * * *	/usr/sbin/ff_mapupdate" >> /etc/crontabs/root
 	}
 
-	[ -f /etc/rc.local ] && . /etc/rc.local
 	[ -d /etc/rc.local.d ] && {
 		for file in /etc/rc.local.d/*; do
 			test -f "$file" && . "$file"
