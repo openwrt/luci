@@ -17,11 +17,11 @@ local nw = require "luci.model.network"
 
 local has_ipv6 = nw:has_ipv6()
 
-m = Map("network", translate("m_n_lan"))
+m = Map("network", "Local Network")
 
 nw.init(m.uci)
 
-s = m:section(NamedSection, "lan", "interface")
+s = m:section(NamedSection, "lan", "interface", "Network Settings")
 s.addremove = false
 
 s:tab("general", translate("General Settings"))
@@ -80,9 +80,9 @@ for _, d in ipairs(nw:get_interfaces()) do
 end
 
 
-m2 = Map("dhcp", "DHCP")
+m2 = Map("dhcp")
 
-s = m2:section(TypedSection, "dhcp", "DHCP-Server")
+s = m2:section(TypedSection, "dhcp", "DHCP")
 s.anonymous = true
 s.addremove = false
 s.dynamic = false
@@ -91,7 +91,7 @@ s:tab("general", translate("General Settings"))
 
 s:depends("interface", "lan")
 
-enable = s:taboption("general", ListValue, "ignore", translate("enable"), "")
+enable = s:taboption("general", ListValue, "ignore", "Automatic address assignment for network devices", "")
 enable:value(0, translate("enable"))
 enable:value(1, translate("disable"))
 
@@ -99,7 +99,7 @@ enable:value(1, translate("disable"))
 s:tab("expert", translate("Expert Settings"))
 start = s:taboption("expert", Value, "start", translate("First leased address"))
 limit = s:taboption("expert", Value, "limit", translate("Number of leased addresses"), "")
-time = s:taboption("expert", Value, "leasetime")
+time = s:taboption("expert", Value, "leasetime", "Lease Time")
 
 
 return m, m2

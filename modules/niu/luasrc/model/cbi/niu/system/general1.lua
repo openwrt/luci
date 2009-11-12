@@ -17,22 +17,16 @@ local i18n = require "luci.i18n"
 local util = require "luci.util"
 local config = require "luci.config"
 
-m = Map("system", translate("System"))
+m = Map("luci", "Device Settings")
 
-s = m:section(TypedSection, "system", "")
-s.anonymous = true
-s.addremove = false
+c = m:section(NamedSection, "main", "core", translate("Local Settings"))
 
-hn = s:option(Value, "hostname", translate("Hostname"))
+hn = c:option(Value, "_uniquename", translate("Unique Devicename"))
+function hn:cfgvalue(self)
+	return require "nixio.fs".readfile("/proc/sys/kernel/hostname")
+end
 
-
-
-m2 = Map("luci", translate("Web <abbr title=\"User Interface\">UI</abbr>"))
-
-
-c = m2:section(NamedSection, "main", "core")
-
-l = c:option(ListValue, "lang", translate("Language"))
+l = c:option(ListValue, "lang", translate("System Language"))
 l:value("auto")
 
 local i18ndir = i18n.i18ndir .. "default."
@@ -42,4 +36,10 @@ for k, v in util.kspairs(config.languages) do
 		l:value(k, v)
 	end
 end
-return m, m2
+
+pw1 = c:option(Value, "_pw1", translate("Administrator Password"))
+pw1.password = true
+pw1.default = "**********"
+
+
+return m
