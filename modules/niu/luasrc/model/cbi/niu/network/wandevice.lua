@@ -12,19 +12,27 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local cursor = require "luci.model.uci".cursor()
+local cursor = require "luci.model.uci".inst_state
 local nw = require "luci.model.network"
 nw.init(cursor)
 
-f = Form("wandev", "Internet Device")
-l = f:field(ListValue, "device", "Gerät")
-l:value("ethernet:eth0", "Ethernet / Cable / DSL (eth0)")
-l:value("none", "No Internet Connection")
+m = Map("network", "Configure Internet Connection")
+s = m:section(NamedSection, "wan", "interface", "Internet Connection Device")
+s.anonymous = true
+s.addremove = false
 
-function f.handle(self, state, data)
-	if state == FORM_VALID then
-		
+l = s:option(ListValue, "_wandev", "Internet Connection via")
+
+for _, iface in ipairs(nw.get_interfaces()) do
+	if iface:name():find("eth") == 1 then
+		local net = iface:get_network()
+		if not net or net:name() == "wan" or os.getenv("LUCI_SYSROOT") then
+			l:value("ethernet:%s" % iface:name(),
+				"Cable / DSL / Ethernet Adapter (%s)" % iface:name())
+		end
 	end
 end
 
-return f
+l:value("none", "No Internet Connection")
+
+return m

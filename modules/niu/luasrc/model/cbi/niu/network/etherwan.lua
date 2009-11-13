@@ -23,7 +23,7 @@ local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 
 
-m = Map("network", translate("m_n_internet"))
+m = Map("network", "Configure Ethernet Adapter")
 nw.init(m.uci)
 
 s = m:section(NamedSection, "wan", "interface")
@@ -32,15 +32,14 @@ s.addremove = false
 s:tab("general", translate("General Settings"))
 s:tab("expert", translate("Expert Settings"))
 
-p = s:taboption("general", ListValue, "proto", translate("Protocol"))
+p = s:taboption("general", ListValue, "proto", "Connection Type")
 p.override_scheme = true
-p.default = "static"
-p:value("static", translate("static"))
-p:value("dhcp", "DHCP")
-if has_pppoe then p:value("pppoe", "PPPoE")   end
+p.default = "dhcp"
+p:value("dhcp", "Cable / Ethernet / DHCP")
+if has_pppoe then p:value("pppoe", "DSL / PPPoE")   end
 if has_pppoa then p:value("pppoa", "PPPoA")   end
 if has_pptp  then p:value("pptp",  "PPTP")    end
-p:value("none", translate("none"))
+p:value("static", "Static Ethernet")
 
 
 

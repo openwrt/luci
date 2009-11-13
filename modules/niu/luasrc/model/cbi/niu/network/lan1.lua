@@ -100,6 +100,9 @@ s:tab("expert", translate("Expert Settings"))
 start = s:taboption("expert", Value, "start", translate("First leased address"))
 limit = s:taboption("expert", Value, "limit", translate("Number of leased addresses"), "")
 time = s:taboption("expert", Value, "leasetime", "Lease Time")
+local dd = s:taboption("expert", Flag, "dynamicdhcp", "Also generate addresses for unknown devices")
+dd.rmempty = false
+dd.default = "1"
 
 
 return m, m2

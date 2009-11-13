@@ -14,10 +14,39 @@ $Id$
 
 local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
-local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
 
-m2 = Map("dhcp", "Address Assignment")
+
+local function date_format(secs)
+	local suff = {"min", "h", "d"}
+	local mins = 0
+	local hour = 0
+	local days = 0
+	
+	secs = math.floor(secs)
+	if secs > 60 then
+		mins = math.floor(secs / 60)
+		secs = secs % 60
+	end
+	
+	if mins > 60 then
+		hour = math.floor(mins / 60)
+		mins = mins % 60
+	end
+	
+	if hour > 24 then
+		days = math.floor(hour / 24)
+		hour = hour % 24
+	end
+	
+	if days > 0 then
+		return string.format("%.0fd %02.0fh %02.0fmin %02.0fs", days, hour, mins, secs)
+	else
+		return string.format("%02.0fh %02.0fmin %02.0fs", hour, mins, secs)
+	end
+end
+
+m2 = Map("dhcp", "Display and Customize Address Assignment")
 
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",
@@ -42,11 +71,12 @@ if leases then
 	ltime = v:option(DummyValue, 1, translate("Leasetime remaining"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
-		return wa.date_format(os.difftime(tonumber(value), os.time()))
+		return date_format(os.difftime(tonumber(value), os.time()))
 	end
 end
 
-s = m2:section(TypedSection, "host")
+s = m2:section(TypedSection, "host", "Static Assignment",
+"You can assign fixed addresses and DNS names to devices in you local network to make reaching them more easy.")
 s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"

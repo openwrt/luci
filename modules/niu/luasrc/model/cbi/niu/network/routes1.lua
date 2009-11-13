@@ -12,12 +12,15 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-m = Map("network", translate("Routes"), translate("a_n_routes1"))
+m = Map("network", translate("Display and Customize Routing"),
+translate("With additional static routes you allow computers on your network to reach unannounced remote hosts or networks."))
 
 local routes6 = luci.sys.net.routes6()
 local bit = require "bit"
 
-s = m:section(TypedSection, "route", translate("Static IPv4 Routes"))
+m:append(Template("niu/network/rtable"))
+
+s = m:section(TypedSection, "route", "Static IPv4 Routes")
 s.addremove = true
 s.anonymous = true
 
@@ -30,7 +33,7 @@ s:option(Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\
 s:option(Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
 
 if routes6 then
-	s = m:section(TypedSection, "route6", translate("Static IPv6 Routes"))
+	s = m:section(TypedSection, "route6", "Static IPv6 Routes")
 	s.addremove = true
 	s.anonymous = true
 
@@ -50,6 +53,5 @@ m.uci:foreach("network", "interface", function(s)
 		end
 	end
 end)
-
 
 return m

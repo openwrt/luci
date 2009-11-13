@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local req = require
+local require = require
 module "luci.controller.niu.network"
 
 function index()
@@ -27,10 +27,17 @@ function index()
 	uci.inst_state:foreach("dhcp", "dhcp", function(s)
 		if s.interface == "lan" and s.ignore ~= "1" then 
 			entry({"niu", "network", "assign"}, cbi("niu/network/assign",
-	 			{on_success_to={"niu"}}), "Assign local addresses", 30)
+	 			{on_success_to={"niu"}}), "Display and Customize Address Assignment", 30)
 	 	end
 	end)
 	
 	entry({"niu", "network", "routes"},  cbi("niu/network/routes",
-	 {on_success_to={"niu"}}), "Assign custom routes", 40)
+	 {on_success_to={"niu"}}), "Display and Customize Routing", 40)
+	 
+	entry({"niu", "network", "conntrack"},  call("cnntrck"),
+	 "Display Local Network Activity", 50)
+end
+
+function cnntrck()
+	require "luci.template".render("niu/network/conntrack")
 end
