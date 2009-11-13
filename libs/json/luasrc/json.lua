@@ -52,12 +52,40 @@ local type	    = type
 local pairs	    = pairs
 local ipairs    = ipairs
 local next      = next
+local pcall		= pcall
 
 local getmetatable = getmetatable
 
 --- LuCI JSON-Library
 -- @cstyle	instance
 module "luci.json"
+
+
+--- Directly decode a JSON string
+-- @param json JSON-String
+-- @return Lua object
+function decode(json, ...)
+	local a = ActiveDecoder(function() return nil end, ...)
+	a.chunk = json
+	local s, obj = pcall(a.get, a)
+	return s and obj or nil
+end
+
+
+--- Direcly encode a Lua object into a JSON string.
+-- @param obj Lua Object
+-- @return JSON string
+function encode(obj, ...)
+	local out = {}
+	local e = Encoder(obj, 1, ...):source()
+	local chnk, err
+	repeat
+		chnk, err = e()
+		out[#out+1] = chnk
+	until chnk
+	return not err and table.concat(out) or nil
+end
+
 
 --- Null replacement function
 -- @return null
