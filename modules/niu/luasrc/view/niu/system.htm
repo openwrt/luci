@@ -1,35 +1,72 @@
 <%
-local dsp = require "luci.dispatcher"
-local utl = require "luci.util"
 local nxo = require "nixio"
+local fs = require "nixio.fs"
 local sinfo = nxo.sysinfo()
 local load1 = nxo.bit.div(sinfo.loads[1] * 100, 1)
-local days = nxo.bit.div(sinfo.uptime, 86400)
-local hour = nxo.bit.div(sinfo.uptime, 3600) % 24
-local mins = nxo.bit.div(sinfo.uptime, 60) % 60
+local load15 = nxo.bit.div(sinfo.loads[3] * 100, 1)
+
+local meminfo = fs.readfile("/proc/meminfo")
+local totalram = nxo.bit.div(sinfo.totalram, 1024)
+local freeram = nxo.bit.div(sinfo.freeram, 1024)
+local buffers = nxo.bit.div(sinfo.bufferram, 1024)
+local cached = tonumber(meminfo:match("Cached:%s+([0-9]+)%s+"))
+local memused = nxo.bit.div(totalram - freeram - cached - buffers, 1024)
+totalram = nxo.bit.div(totalram, 1024)
+
+local totalswap = nxo.bit.div(sinfo.totalswap, 1048576)
+local usedswap = totalswap - nxo.bit.div(sinfo.freeswap, 1048576)
+
+
+local function date_format(secs)
+	local suff = {"min", "h", "d"}
+	local mins = 0
+	local hour = 0
+	local days = 0
+	
+	secs = nxo.bit.div(secs, 1)
+	if secs > 60 then
+		mins = nxo.bit.div(secs, 60)
+		secs = secs % 60
+	end
+	
+	if mins > 60 then
+		hour = nxo.bit.div(mins, 60)
+		mins = mins % 60
+	end
+	
+	if hour > 24 then
+		days = nxo.bit.div(hour, 24)
+		hour = hour % 24
+	end
+	
+	if days > 0 then
+		return string.format("%.0fd %02.0fh %02.0fmin", days, hour, mins)
+	else
+		return string.format("%02.0fh %02.0fmin", hour, mins)
+	end
+end
 %>
-<div>Status:</div>
-<table>
+<table class="dbstattbl">
 <tr>
-<th>System Load</th>
-<td><%=load1%> %</td>
+<th>Load:</th>
+<td><%=load1%>% / <%=load15%>%</td>
 </tr>
 <tr>
-<th>Uptime</th>
-<td><%=days%>d, <%=hour%>:<%=mins%></td>
+<th>Memory:</th>
+<td><%=memused%> MiB / <%=totalram%> MiB</td>
+</tr>
+
+
+<% if totalswap > 0 then %>
+<tr>
+<th>Swap:</th>
+<td><%=usedswap%> MiB / <%=totalswap%> MiB</td>
+</tr>
+<% end %>
+
+<tr>
+<th>Uptime:</th>
+<td><%=date_format(sinfo.uptime)%></td>
 </tr>
 </table>
 <br />
-<ul>
-<%
-local nodes = dsp.node("niu", "system").nodes
-local function cmp(a, b)
-	return (nodes[a].order or 100) < (nodes[b].order or 100)
-end
-for k, v in utl.spairs(nodes, cmp) do
-%>
-<li><a href="<%=dsp.build_url("niu", "system", k)%>"><%=v.title%></a></li>
-<%
-end
-%>
-</ul>

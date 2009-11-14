@@ -16,23 +16,28 @@ local require = require
 module "luci.controller.niu.network"
 
 function index()
-	entry({"niu", "network"}, nil, "Network", 10).dbtemplate = "niu/network"
+	local toniu = {on_success_to={"niu"}}
+	
+	local e = entry({"niu", "network"}, alias("niu"), "Network", 10)
+	e.niu_dbtemplate = "niu/network"
+	e.niu_dbtasks = true
+	e.niu_dbicon = "icons32/network-workgroup.png"
 
 	entry({"niu", "network", "wan"}, 
-	cbi("niu/network/wan", {on_success_to={"niu"}}), "Configure Internet Connection", 10)
+	cbi("niu/network/wan", toniu), "Configure Internet Connection", 1)
 
 	entry({"niu", "network", "lan"}, 
-	cbi("niu/network/lan", {on_success_to={"niu"}}), "Configure Local Network", 20)
+	cbi("niu/network/lan", toniu), "Configure Local Network", 2)
 	
 	uci.inst_state:foreach("dhcp", "dhcp", function(s)
 		if s.interface == "lan" and s.ignore ~= "1" then 
 			entry({"niu", "network", "assign"}, cbi("niu/network/assign",
-	 			{on_success_to={"niu"}}), "Display and Customize Address Assignment", 30)
+	 			toniu), "Display and Customize Address Assignment", 30)
 	 	end
 	end)
 	
 	entry({"niu", "network", "routes"},  cbi("niu/network/routes",
-	 {on_success_to={"niu"}}), "Display and Customize Routing", 40)
+	 toniu), "Display and Customize Routing", 40)
 	 
 	entry({"niu", "network", "conntrack"},  call("cnntrck"),
 	 "Display Local Network Activity", 50)

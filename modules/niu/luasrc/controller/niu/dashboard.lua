@@ -26,7 +26,8 @@ function index()
 	end
 
 	entry({"niu"}, alias("niu", "dashboard"), "NIU", 10)
-	entry({"niu", "dashboard"}, call("dashboard"), "Dashboard", 1)
+	entry({"niu", "dashboard"}, call("dashboard"), "Dashboard", 1).css = 
+	"niu.css"
 end
 
 local require = req

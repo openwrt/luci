@@ -1,17 +1,34 @@
-<%+header%>
+<% 
+local dsp = require "luci.dispatcher"
+local utl = require "luci.util"
 
-<%
+include("header")
+ 
 local function cmp(a, b)
-	return (a.order or 100) < (b.order or 100)
+	return (nodes[a].order or 100) < (nodes[b].order or 100)
 end
 for k, v in utl.spairs(nodes, cmp) do
-	if v.dbtemplate then
+	if v.niu_dbtemplate or v.niu_dbtasks then
 	%>
-	<fieldset style="float: left; margin: 1em; padding: 0.5em">
-		<legend><%=v.title%></legend>
-		<%
-			tpl.render(v.dbtemplate)
-		%>
+	<fieldset class="dbbox">
+		<h2<% if v.niu_dbicon then %> style="background-image: url(<%=resource%>/<%=v.niu_dbicon%>)"<% end %>><%=v.title%></h2>
+		<% if v.niu_dbtemplate then tpl.render(v.niu_dbtemplate) end %>
+		<% if v.niu_dbtasks then %>
+		<h4>Tasks:</h4>
+		<ul>
+			<%
+			local nodes = dsp.node("niu", k).nodes
+			local function cmp(a, b)
+				return (nodes[a].order or 100) < (nodes[b].order or 100)
+			end
+			for k2, v2 in utl.spairs(nodes, cmp) do
+			%>
+			<li><a href="<%=dsp.build_url("niu", k, k2)%>"><%=v2.title%></a></li>
+			<%
+			end
+			%>
+		</ul>
+		<% end %>
 	</fieldset>
 	<%
 	end

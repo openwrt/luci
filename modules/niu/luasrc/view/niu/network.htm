@@ -1,7 +1,6 @@
 <%
-local dsp = require "luci.dispatcher"
-local utl = require "luci.util"
 local uci = require "luci.model.uci"
+local fs = require "nixio.fs"
 
 local nws = {}
 uci.inst_state:foreach("network", "interface", function(s)
@@ -12,27 +11,85 @@ if uci.inst_state:get("network", "lan", "_ipchanged") and
 uci.inst_state:revert("network", "lan", "_ipchanged") then
 	include("niu/network/warn_ip_change")
 end
+
+local wanon = uci.inst_state:get("network", "wan", "proto")
+local wanup = uci.inst_state:get("network", "wan", "up")
+local wanip = uci.inst_state:get("network", "wan", "ipaddr")
+local wanif = uci.inst_state:get("network", "wan", "ifname")
+local wanul, wandl
+
+if wanif then
+	local devstats = fs.readfile("/proc/net/dev")
+ 	local rx, tx = devstats:match("%s*"..wanif..
+ 	":%s*([0-9]+)%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+"..
+ 	"[0-9]+%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+([0-9]+)")
+ 	wanul = tx and (tonumber(tx) / 1000000000)
+ 	wandl = rx and (tonumber(rx) / 1000000000)
+end
+
+local leasefn
+uci.inst:foreach("dhcp", "dnsmasq",
+ function(section)
+ 	leasefn = section.leasefile
+ end
+)
+
+if leasefn then
+	local ln = io.lines(leasefn)
+	leasefn = 0
+	while ln and ln() do
+		leasefn = leasefn + 1
+	end
+end
+
+local arps
+if fs.access("/proc/net/arp", "r") then
+	local ln = io.lines("/proc/net/arp")
+	arps = -1
+	while ln and ln() do
+		arps = arps + 1
+	end
+	arps = arps >= 0 and arps
+end
 %>
 
-<div>Status:</div>
-<table>
-<% 
-for _, v in ipairs(nws) do if v[".name"] ~= "loopback" then
-%>
-<tr><td><%=v[".name"]%></td><td><%=v.ipaddr%></td></tr>
-<% end end %>
+<table class="dbstattbl">
+<% if wanon and wanon ~= "none" then %>
+<tr>
+<% if wanup then %>
+<th>Uplink Address</th>
+<td><span style="color: darkgreen"><%=wanip%></span>
+</td>
+<% else %>
+<th>Uplink</th>
+<td><span style="color: darkred"><em>offline</em></span>
+</td>
+<% end %>
+
+</tr>
+<% end %>
+
+<% if wanul and wandl then %>
+<tr>
+<th>Uplink Traffic</th><td>
+<%=("%.2f"):format(wandl)%> GB&#8659; <%=("%.2f"):format(wanul)%> GB&#8657;
+</td>
+</tr>
+<% end %> 
+
+<tr>
+<th>Local Address</th><td>
+<%=uci.inst_state:get("network", "lan", "ipaddr")%>
+</td>
+</tr>
+
+<% if arps then %>
+<tr>
+<th>Active IP-Devices</th><td><%=arps%><% if leasefn then %>
+(<%=leasefn%> assigned)
+<% end %></td>
+</tr>
+<% end %>
+
 </table>
 <br />
-<ul>
-<%
-local nodes = dsp.node("niu", "network").nodes
-local function cmp(a, b)
-	return (nodes[a].order or 100) < (nodes[b].order or 100)
-end
-for k, v in utl.spairs(nodes, cmp) do
-%>
-<li><a href="<%=dsp.build_url("niu", "network", k)%>"><%=v.title%></a></li>
-<%
-end
-%>
-</ul>

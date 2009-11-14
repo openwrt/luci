@@ -1,2 +1,11 @@
-<strong>Warning!<br />
-Device IP has changed.</strong>
+<%
+local http = require "luci.http"
+local dsp = require "luci.dispatcher"
+local ip = require "luci.model.uci".inst:get("network", "lan", "ipaddr")
+local url = (http.getenv("HTTPS") and "https" or "http") .. "://" .. ip ..
+dsp.build_url("niu")
+%>
+
+<div style="color: red">Warning! The device IP-address has been changed.<br />
+The router will be available in a few seconds at <a href="<%=url%>"><%=url%></a></div>
+<br />
