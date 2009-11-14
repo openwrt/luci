@@ -18,7 +18,7 @@ module "luci.controller.niu.system"
 function index()
 	local toniu = {on_success_to={"niu"}}
 
-	local e = entry({"niu", "system"}, alias("niu"), "System", 20)
+	local e = entry({"niu", "system"}, alias("niu"), "System", 30)
 	e.niu_dbtemplate = "niu/system"
 	e.niu_dbtasks = true
 	e.niu_dbicon = "icons32/preferences-system.png"

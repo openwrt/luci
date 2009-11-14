@@ -40,6 +40,13 @@ pw.password = true
 local dom = s:taboption("general", Value, "domain", translate("Hostname"))
 
 local current = s:taboption("general", DummyValue, "_current", "Current IP-Address")
+
+function current.render(self, section, ...)
+	if dom:cfgvalue(section) then
+		return DummyValue.render(self, section, ...)
+	end
+end
+
 function current.value(self, section)
 	local dns = nxo.getaddrinfo(dom:cfgvalue(section))
 	if dns then
