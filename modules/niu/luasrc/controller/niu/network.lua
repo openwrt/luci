@@ -41,6 +41,11 @@ function index()
 	 
 	entry({"niu", "network", "conntrack"},  call("cnntrck"),
 	 "Display Local Network Activity", 50)
+	 
+	 if fs.access("/etc/config/ddns") then
+		entry({"niu", "network", "ddns"},  cbi("niu/network/ddns", toniu),
+		 "Configure Dynamic-DNS names", 60)		
+	 end
 end
 
 function cnntrck()
