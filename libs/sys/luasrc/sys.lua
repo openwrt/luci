@@ -695,17 +695,17 @@ function wifi.channels(iface)
 
 	if not cns or #cns == 0 then
 		cns = {
-			{channel =  1, mhz = 2.412},
-			{channel =  2, mhz = 2.417},
-			{channel =  3, mhz = 2.422},
-			{channel =  4, mhz = 2.427},
-			{channel =  5, mhz = 2.432},
-			{channel =  6, mhz = 2.437},
-			{channel =  7, mhz = 2.442},
-			{channel =  8, mhz = 2.447},
-			{channel =  9, mhz = 2.452},
-			{channel = 10, mhz = 2.457},
-			{channel = 11, mhz = 2.462}
+			{channel =  1, mhz = 2412},
+			{channel =  2, mhz = 2417},
+			{channel =  3, mhz = 2422},
+			{channel =  4, mhz = 2427},
+			{channel =  5, mhz = 2432},
+			{channel =  6, mhz = 2437},
+			{channel =  7, mhz = 2442},
+			{channel =  8, mhz = 2447},
+			{channel =  9, mhz = 2452},
+			{channel = 10, mhz = 2457},
+			{channel = 11, mhz = 2462}
 		}
 	end
 
