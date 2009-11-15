@@ -17,7 +17,8 @@ local nw = require "luci.model.network"
 
 local has_ipv6 = nw:has_ipv6()
 
-m = Map("network", "Local Network")
+m = Map("network", "Configure Local Network", "These settings affect the devices in your local network. "..
+"Usually you do not need to change anything here for your router to work correctly.")
 
 nw.init(m.uci)
 

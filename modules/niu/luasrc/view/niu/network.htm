@@ -35,7 +35,7 @@ uci.inst:foreach("dhcp", "dnsmasq",
 )
 
 if leasefn then
-	local ln = io.lines(leasefn)
+	local ln = fs.access(leasefn, "r") and io.lines(leasefn)
 	leasefn = 0
 	while ln and ln() do
 		leasefn = leasefn + 1

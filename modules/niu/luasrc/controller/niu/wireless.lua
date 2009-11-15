@@ -16,6 +16,11 @@ local require = require
 module "luci.controller.niu.wireless"
 
 function index()
+	if not fs.access("/etc/config/wireless") then
+		return
+	end
+
+
 	local toniu = {on_success_to={"niu"}}
 	
 	local e = entry({"niu", "wireless"}, alias("niu"), "Wireless", 20)
@@ -24,5 +29,5 @@ function index()
 	e.niu_dbicon = "icons32/network-wireless.png"
 
 	entry({"niu", "wireless", "ap"}, 
-	cbi("niu/network/ap", toniu), "Configure Private Access Point", 1)
+	cbi("niu/wireless/ap", toniu), "Configure Private Access Point", 1)
 end

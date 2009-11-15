@@ -20,6 +20,7 @@ function d.on_done()
 		cs:save("network")
 	end
 
+	cursor:set("network", "lan", "type", "bridge")
 	cursor:commit("network")
 	cursor:commit("dhcp")
 end
