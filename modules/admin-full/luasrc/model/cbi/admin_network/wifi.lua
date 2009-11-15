@@ -44,10 +44,7 @@ nw.init(m.uci)
 ww.init(m.uci)
 
 local wnet = ww:get_network(arg[2])
-
-if wnet then
-	m.title = wnet and ww:get_i18n(wnet)
-end
+m.title = wnet and ww:get_i18n(wnet) or translate("Wireless Network")
 
 
 local iw = nil
@@ -92,7 +89,7 @@ local nsantenna = m:get(arg[1], "antenna")
 ch = s:taboption("general", Value, "channel", translate("Channel"))
 ch:value("auto", translate("auto"))
 for _, f in ipairs(luci.sys.wifi.channels()) do
-	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz })
+	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
 end
 
 
