@@ -25,7 +25,7 @@ local hwtype = cursor:get("wireless", device, "type")
 local nsantenna = cursor:get("wireless", device, "antenna")
 
 local iw = nil
-local tx_powers = nil
+local tx_powers = {}
 local chan = sys.wifi.channels()
 
 state:foreach("wireless", "wifi-iface",
@@ -58,6 +58,47 @@ end
 
 s:tab("expert", translate("Expert Settings"))
 if hwtype == "mac80211" then
+	local macaddr = cursor:get("wireless", device, "macaddr") or "!"
+	local hwmode = cursor:get("wireless", device, "hwmode")
+	local modes = {}
+	local phy
+	local allowed = {}
+	for entry in fs.glob("/sys/class/ieee80211/*") do
+		if (fs.readfile(entry .. "/macaddress") or ""):find(macaddr) == 1 then
+			phy = entry:sub(22)
+		end
+	end
+	if phy then
+		local iwp = io.popen("iw phy " .. phy .. " info")
+		local iwin = iwp:read("*a")
+		
+		if iwp then
+			iwp:close()
+			local htcap = iwin:match("HT capabilities:%s*0x([0-9a-fA-F]+)")
+			allowed.n = (htcap and tonumber(htcap, 16) or 0) > 0
+			allowed.g = iwin:find("2412 MHz")
+			allowed.a = iwin:find("5180 MHz")
+		end
+	end
+	
+	if next(allowed) then
+		mode = s:taboption("expert", ListValue, "hwmode", translate("Communication Protocol"))
+		if allowed.n and allowed.g then
+			mode:value("11ng", "802.11n (2.4 GHz)")
+		end
+		if allowed.n and allowed.a then
+			mode:value("11na", "802.11n (5 GHz)")
+		end
+		if allowed.a then
+			mode:value("11a", "802.11a (5 GHz)")
+		end
+		if allowed.g then
+			mode:value("11g", "802.11g (2.4 GHz)")
+			mode:value("11bg", "802.11b+g (2.4 GHz)")
+			mode:value("11b", "802.11b (2.4 GHz)")
+		end
+	end
+
 	tp = s:taboption("expert",
 		(tx_powers and #tx_powers > 0) and ListValue or Value,
 		"txpower", translate("Transmission Power"), "dBm")
@@ -138,26 +179,10 @@ encr = s:taboption("expert", ListValue, "encryption", translate("Encryption"))
 
 
 if hwtype == "mac80211" then
-	-- Empty
+	s:taboption("expert", Flag, "wds", "Allow Bridging and Repeating (WDS)")
+	s:taboption("expert", Flag, "powersave", "Enable Powersaving")
 elseif hwtype == "atheros" then
-	mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
-	mode:value("wds", translate("Static WDS"))
-	
-	function mode.write(self, section, value)
-		if value == "ap-wds" then
-			ListValue.write(self, section, "ap")
-			self.map:set(section, "wds", 1)
-		else
-			ListValue.write(self, section, value)
-			self.map:del(section, "wds")
-		end
-	end
-
-	function mode.cfgvalue(self, section)
-		local mode = ListValue.cfgvalue(self, section)
-		local wds  = self.map:get(section, "wds") == "1"
-		return mode == "ap" and wds and "ap-wds" or mode
-	end
+	-- mode:value("wds", translate("Static WDS"))
 	
 	mp = s:taboption("expert", ListValue, "macpolicy", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
@@ -167,6 +192,7 @@ elseif hwtype == "atheros" then
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 	
+	s:taboption("expert", Flag, "wds", "Allow Bridging and Repeating (WDS)")
 		
 	hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
 	hidden:depends({mode="ap"})
@@ -233,15 +259,11 @@ end
 server = s:taboption("general", Value, "server", translate("Radius-Server"))
 server:depends({mode="ap", encryption="wpa"})
 server:depends({mode="ap", encryption="wpa2"})
-server:depends({mode="ap-wds", encryption="wpa"})
-server:depends({mode="ap-wds", encryption="wpa2"})
 server.rmempty = true
 
 port = s:taboption("general", Value, "port", translate("Radius-Port"))
 port:depends({mode="ap", encryption="wpa"})
 port:depends({mode="ap", encryption="wpa2"})
-port:depends({mode="ap-wds", encryption="wpa"})
-port:depends({mode="ap-wds", encryption="wpa2"})
 port.rmempty = true
 
 key = s:taboption("general", Value, "key", translate("Password"))
@@ -252,8 +274,6 @@ key:depends("encryption", "psk+psk2")
 key:depends("encryption", "psk-mixed")
 key:depends({mode="ap", encryption="wpa"})
 key:depends({mode="ap", encryption="wpa2"})
-key:depends({mode="ap-wds", encryption="wpa"})
-key:depends({mode="ap-wds", encryption="wpa2"})
 key.rmempty = true
 key.password = true
 
@@ -261,8 +281,6 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	nasid = s:taboption("general", Value, "nasid", translate("NAS ID"))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})
-	nasid:depends({mode="ap-wds", encryption="wpa"})
-	nasid:depends({mode="ap-wds", encryption="wpa2"})
 	nasid.rmempty = true
 end
 return m
