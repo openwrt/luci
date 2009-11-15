@@ -687,7 +687,7 @@ end
 -- @param iface	Wireless interface (optional)
 -- @return		Table of available channels
 function wifi.channels(iface)
-	local t = iwinfo.type(iface)
+	local t = iwinfo.type(iface or "")
 	local cns
 	if t and iwinfo[t] then
 		cns = iwinfo[t].freqlist(iface)

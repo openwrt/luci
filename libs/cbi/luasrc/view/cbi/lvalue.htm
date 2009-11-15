@@ -24,7 +24,7 @@ $Id$
 	for i, key in pairs(self.keylist) do
 	c = c + 1
 %>
-	<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%= attr("id", cbid..c) .. attr("name", cbid) .. attr("value", key) .. ifattr(self:cfgvalue(section) == key, "checked", "checked") %> />
+	<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%= attr("id", cbid..c) .. attr("name", cbid) .. attr("value", key) .. ifattr((self:cfgvalue(section) or self.default) == key, "checked", "checked") %> />
 	<label<%= attr("for", cbid..c) %>><%=self.vallist[i]%></label>
 <% if c == self.size then c = 0 %><% if self.orientation == "horizontal" then %>&nbsp;<% else %><br /><% end %>
 <% end end %>
