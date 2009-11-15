@@ -687,27 +687,25 @@ end
 -- @param iface	Wireless interface (optional)
 -- @return		Table of available channels
 function wifi.channels(iface)
-	local cmd = "iwlist " .. ( iface or "" ) .. " freq 2>/dev/null"
-	local cns = { }
-
-	local fd = io.popen(cmd)
-	if fd then
-		local ln, c, f
-		while true do
-			ln = fd:read("*l")
-			if not ln then break end
-			c, f = ln:match("Channel (%d+) : (%d+%.%d+) GHz")
-			if c and f then
-				cns[tonumber(c)] = tonumber(f)
-			end
-		end
-		fd:close()
+	local t = iwinfo.type(iface)
+	local cns
+	if t and iwinfo[t] then
+		cns = iwinfo[t].freqlist(iface)
 	end
 
-	if not next(cns) then
+	if not cns or #cns == 0 then
 		cns = {
-			2.412, 2.417, 2.422, 2.427, 2.432, 2.437,
-			2.442, 2.447, 2.452, 2.457, 2.462
+			{channel =  1, mhz = 2.412},
+			{channel =  2, mhz = 2.417},
+			{channel =  3, mhz = 2.422},
+			{channel =  4, mhz = 2.427},
+			{channel =  5, mhz = 2.432},
+			{channel =  6, mhz = 2.437},
+			{channel =  7, mhz = 2.442},
+			{channel =  8, mhz = 2.447},
+			{channel =  9, mhz = 2.452},
+			{channel = 10, mhz = 2.457},
+			{channel = 11, mhz = 2.462}
 		}
 	end
 

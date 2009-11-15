@@ -91,8 +91,8 @@ local nsantenna = m:get(arg[1], "antenna")
 
 ch = s:taboption("general", Value, "channel", translate("Channel"))
 ch:value("auto", translate("auto"))
-for c, f in luci.util.kspairs(luci.sys.wifi.channels()) do
-	ch:value(c, "%i (%.3f GHz)" %{ c, f })
+for _, f in ipairs(luci.sys.wifi.channels()) do
+	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz })
 end
 
 
