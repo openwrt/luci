@@ -230,11 +230,11 @@ end
 
 -- Encryption --
 
-
+encr.default = "wep" -- Early default
 encr.override_values = true
 encr.override_depends = true
 encr:value("none", "No Encryption")
-encr:value("wep", "WEP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"})
+encr:value("wep", "WEP", {mode="ap"}, {mode="sta"})
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local hostapd = fs.access("/usr/sbin/hostapd") or os.getenv("LUCI_SYSROOT")
@@ -242,11 +242,11 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	if hostapd then
 		--s:taboption("expert", Flag, "_alloweap", "Allow EAP / 802.11i authentication")
 		
-		encr:value("psk", "WPA", {mode="ap"}, {mode="ap-wds"})
-		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
-		encr:value("psk-mixed", "WPA + WPA2", {mode="ap"}, {mode="ap-wds"})
-		encr:value("psk2", "WPA2", {mode="ap"}, {mode="ap-wds"})
-		encr:value("wpa2", "WPA2-EAP (802.11i)", {mode="ap"}, {mode="ap-wds"})
+		encr:value("psk", "WPA", {mode="ap"})
+		encr:value("wpa", "WPA-EAP", {mode="ap"})
+		encr:value("psk-mixed", "WPA + WPA2", {mode="ap"})
+		encr:value("psk2", "WPA2", {mode="ap"})
+		encr:value("wpa2", "WPA2-EAP (802.11i)", {mode="ap"})
 		encr.default = "psk-mixed"
 	end
 elseif hwtype == "broadcom" then
