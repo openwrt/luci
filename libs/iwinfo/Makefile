@@ -7,10 +7,10 @@ include standalone.mk
 endif
 
 IWINFO_LDFLAGS    =
-IWINFO_CFLAGS     = -fstrict-aliasing
+IWINFO_CFLAGS     = -fstrict-aliasing $(if $(CRAP),-DUSE_WL,-DUSE_MADWIFI)
 IWINFO_SO         = iwinfo.so
 IWINFO_LUA        = iwinfo.lua
-IWINFO_OBJ        = src/iwinfo_wl.o src/iwinfo_madwifi.o \
+IWINFO_OBJ        = $(if $(CRAP),src/iwinfo_wl.o,src/iwinfo_madwifi.o) \
 	src/iwinfo_wext.o src/iwinfo_wext_scan.o src/iwinfo_lualib.o
 
 %.o: %.c

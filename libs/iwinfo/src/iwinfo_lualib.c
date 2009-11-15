@@ -23,13 +23,19 @@ static int iwinfo_L_type(lua_State *L)
 {
 	const char *ifname = luaL_checkstring(L, 1);
 
+#ifdef USE_MADWIFI
 	if( madwifi_probe(ifname) )
 		lua_pushstring(L, "madwifi");
+	else
+#endif
 
-	else if( wl_probe(ifname) )
+#ifdef USE_WL
+	if( wl_probe(ifname) )
 		lua_pushstring(L, "wl");
+	else
+#endif
 
-	else if( wext_probe(ifname) )
+	if( wext_probe(ifname) )
 		lua_pushstring(L, "wext");
 
 	else
@@ -244,6 +250,7 @@ static int iwinfo_L_freqlist(lua_State *L, int (*func)(const char *, char *, int
 	return 1;
 }
 
+#ifdef USE_WL
 /* Broadcom */
 LUA_WRAP_INT(wl,channel)
 LUA_WRAP_INT(wl,frequency)
@@ -261,7 +268,9 @@ LUA_WRAP_LIST(wl,assoclist)
 LUA_WRAP_LIST(wl,txpwrlist)
 LUA_WRAP_LIST(wl,scanlist)
 LUA_WRAP_LIST(wl,freqlist)
+#endif
 
+#ifdef USE_MADWIFI
 /* Madwifi */
 LUA_WRAP_INT(madwifi,channel)
 LUA_WRAP_INT(madwifi,frequency)
@@ -279,6 +288,7 @@ LUA_WRAP_LIST(madwifi,assoclist)
 LUA_WRAP_LIST(madwifi,txpwrlist)
 LUA_WRAP_LIST(madwifi,scanlist)
 LUA_WRAP_LIST(madwifi,freqlist)
+#endif
 
 /* Wext */
 LUA_WRAP_INT(wext,channel)
@@ -298,6 +308,7 @@ LUA_WRAP_LIST(wext,txpwrlist)
 LUA_WRAP_LIST(wext,scanlist)
 LUA_WRAP_LIST(wext,freqlist)
 
+#ifdef USE_WL
 /* Broadcom table */
 static const luaL_reg R_wl[] = {
 	LUA_REG(wl,channel),
@@ -318,7 +329,9 @@ static const luaL_reg R_wl[] = {
 	LUA_REG(wl,mbssid_support),
 	{ NULL, NULL }
 };
+#endif
 
+#ifdef USE_MADWIFI
 /* Madwifi table */
 static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,channel),
@@ -339,6 +352,7 @@ static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,mbssid_support),
 	{ NULL, NULL }
 };
+#endif
 
 /* Wext table */
 static const luaL_reg R_wext[] = {
@@ -371,17 +385,21 @@ static const luaL_reg R_common[] = {
 LUALIB_API int luaopen_iwinfo(lua_State *L) {
 	luaL_register(L, IWINFO_META, R_common);
 
+#ifdef USE_WL
 	luaL_newmetatable(L, IWINFO_WL_META);
 	luaL_register(L, NULL, R_wl);
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 	lua_setfield(L, -2, "wl");
+#endif
 
+#ifdef USE_MADWIFI
 	luaL_newmetatable(L, IWINFO_MADWIFI_META);
 	luaL_register(L, NULL, R_madwifi);
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 	lua_setfield(L, -2, "madwifi");
+#endif
 
 	luaL_newmetatable(L, IWINFO_WEXT_META);
 	luaL_register(L, NULL, R_wext);

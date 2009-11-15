@@ -18,9 +18,15 @@
 #include <net/if.h>
 #include <errno.h>
 
-#include "iwinfo_wl.h"
-#include "iwinfo_madwifi.h"
 #include "iwinfo_wext.h"
+
+#ifdef USE_WL
+#include "iwinfo_wl.h"
+#endif
+
+#ifdef USE_MADWIFI
+#include "iwinfo_madwifi.h"
+#endif
 
 
 #define IWINFO_BUFSIZE	24 * 1024

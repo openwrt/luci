@@ -28,9 +28,16 @@
 
 
 #define IWINFO_META			"iwinfo"
-#define IWINFO_WL_META		"iwinfo.wl"
-#define IWINFO_MADWIFI_META	"iwinfo.madwifi"
 #define IWINFO_WEXT_META	"iwinfo.wext"
+
+#ifdef USE_WL
+#define IWINFO_WL_META		"iwinfo.wl"
+#endif
+
+#ifdef USE_MADWIFI
+#define IWINFO_MADWIFI_META	"iwinfo.madwifi"
+#endif
+
 
 #define LUA_REG(type,op) \
 	{ #op, iwinfo_L_##type##_##op }
