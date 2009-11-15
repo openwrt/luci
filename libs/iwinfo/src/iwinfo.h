@@ -36,6 +36,11 @@ struct iwinfo_txpwrlist_entry {
 	uint8_t	mw;
 };
 
+struct iwinfo_freqlist_entry {
+	uint8_t channel;
+	uint32_t mhz;
+};
+
 struct iwinfo_crypto_entry {
 	uint8_t	enabled;
 	uint8_t wpa_version;

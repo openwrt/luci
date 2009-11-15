@@ -394,6 +394,37 @@ int wext_get_txpwrlist(const char *ifname, char *buf, int *len)
 	return -1;	
 }
 
+int wext_get_freqlist(const char *ifname, char *buf, int *len)
+{
+	struct iwreq wrq;
+	struct iw_range range;
+	struct iwinfo_freqlist_entry entry;
+	int i, bl;
+
+	wrq.u.data.pointer = (caddr_t) &range;
+	wrq.u.data.length  = sizeof(struct iw_range);
+	wrq.u.data.flags   = 0;
+
+	if(wext_ioctl(ifname, SIOCGIWRANGE, &wrq) >= 0)
+	{
+		bl = 0;
+
+		for(i = 0; i < range.num_frequency; i++)
+		{
+			entry.mhz     = wext_freq2mhz(&range.freq[i]);
+			entry.channel = range.freq[i].i;
+
+			memcpy(&buf[bl], &entry, sizeof(struct iwinfo_freqlist_entry));
+			bl += sizeof(struct iwinfo_freqlist_entry);
+		}
+
+		*len = bl;
+		return 0;
+	}
+
+	return -1;
+}
+
 int wext_get_mbssid_support(const char *ifname, int *buf)
 {
 	/* No multi bssid support atm */

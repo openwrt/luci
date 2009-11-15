@@ -389,6 +389,11 @@ int wl_get_scanlist(const char *ifname, char *buf, int *len)
 	return wext_get_scanlist(ifname, buf, len);
 }
 
+int wl_get_freqlist(const char *ifname, char *buf, int *len)
+{
+	return wext_get_freqlist(ifname, buf, len);
+}
+
 int wl_get_mbssid_support(const char *ifname, int *buf)
 {
 	wlc_rev_info_t revinfo;

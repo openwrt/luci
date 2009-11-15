@@ -494,6 +494,32 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 	return ret;
 }
 
+int madwifi_get_freqlist(const char *ifname, char *buf, int *len)
+{
+	int i, bl;
+	struct ieee80211req_chaninfo chans;
+	struct iwinfo_freqlist_entry entry;
+
+	if( get80211priv(ifname, IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans)) >= 0 )
+	{
+		bl = 0;
+
+		for( i = 0; i < chans.ic_nchans; i++ )
+		{
+			entry.mhz     = (int)(chans.ic_chans[i].ic_freq / 1000);
+			entry.channel = chans.ic_chans[i].ic_ieee;
+
+			memcpy(&buf[bl], &entry, sizeof(struct iwinfo_freqlist_entry));
+			bl += sizeof(struct iwinfo_freqlist_entry);
+		}
+
+		*len = bl;
+		return 0;
+	}
+
+	return -1;
+}
+
 int madwifi_get_mbssid_support(const char *ifname, int *buf)
 {
 	/* We assume that multi bssid is always possible */

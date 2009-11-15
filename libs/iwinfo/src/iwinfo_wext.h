@@ -38,6 +38,7 @@ int wext_get_enctype(const char *ifname, char *buf);
 int wext_get_assoclist(const char *ifname, char *buf, int *len);
 int wext_get_txpwrlist(const char *ifname, char *buf, int *len);
 int wext_get_scanlist(const char *ifname, char *buf, int *len);
+int wext_get_freqlist(const char *ifname, char *buf, int *len);
 int wext_get_mbssid_support(const char *ifname, int *buf);
 
 #endif
