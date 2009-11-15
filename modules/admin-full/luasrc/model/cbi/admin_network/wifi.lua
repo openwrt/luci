@@ -504,11 +504,15 @@ if wnet then
 	server = s:taboption("encryption", Value, "server", translate("Radius-Server"))
 	server:depends({mode="ap", encryption="wpa"})
 	server:depends({mode="ap", encryption="wpa2"})
+	server:depends({mode="ap-wds", encryption="wpa"})
+	server:depends({mode="ap-wds", encryption="wpa2"})
 	server.rmempty = true
 
 	port = s:taboption("encryption", Value, "port", translate("Radius-Port"))
 	port:depends({mode="ap", encryption="wpa"})
 	port:depends({mode="ap", encryption="wpa2"})
+	port:depends({mode="ap-wds", encryption="wpa"})
+	port:depends({mode="ap-wds", encryption="wpa2"})
 	port.rmempty = true
 
 	key = s:taboption("encryption", Value, "key", translate("Key"))
@@ -519,6 +523,8 @@ if wnet then
 	key:depends("encryption", "psk-mixed")
 	key:depends({mode="ap", encryption="wpa"})
 	key:depends({mode="ap", encryption="wpa2"})
+	key:depends({mode="ap-wds", encryption="wpa"})
+	key:depends({mode="ap-wds", encryption="wpa2"})
 	key.rmempty = true
 	key.password = true
 
@@ -526,6 +532,8 @@ if wnet then
 		nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"))
 		nasid:depends({mode="ap", encryption="wpa"})
 		nasid:depends({mode="ap", encryption="wpa2"})
+		nasid:depends({mode="ap-wds", encryption="wpa"})
+		nasid:depends({mode="ap-wds", encryption="wpa2"})
 		nasid.rmempty = true
 
 		eaptype = s:taboption("encryption", ListValue, "eap_type", translate("EAP-Method"))
