@@ -1,0 +1,58 @@
+<%
+local uci = require "luci.model.uci"
+local fs = require "nixio.fs"
+
+local wanon = uci.inst_state:get("network", "wan", "up") == "1"
+local wanif = wanon and uci.inst_state:get("network", "wan", "ifname")
+local lanif = uci.inst_state:get("network", "lan", "ifname")
+local wanul, wandl, lanul, landl
+local devstats = fs.readfile("/proc/net/dev")
+
+local fwav = fs.access("/etc/config/firewall", "r")
+local fwon = uci.inst_state:get("firewall", "core", "loaded") == "1"
+
+if lanif then
+	local rx, tx = devstats:match("%s*"..lanif..
+ 	":%s*([0-9]+)%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+"..
+ 	"[0-9]+%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+([0-9]+)")
+ 	lanul = tx and (tonumber(tx) / 1000000000)
+ 	landl = rx and (tonumber(rx) / 1000000000)
+end
+
+if wanif then
+ 	local rx, tx = devstats:match("%s*"..wanif..
+ 	":%s*([0-9]+)%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+"..
+ 	"[0-9]+%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+([0-9]+)")
+ 	wanul = tx and (tonumber(tx) / 1000000000)
+ 	wandl = rx and (tonumber(rx) / 1000000000)
+end
+
+%>
+
+<table class="dbstattbl">
+<% if wanul and wandl then %>
+<tr>
+<th>Uplink Traffic: </th><td>
+<%=("%.2f"):format(wandl)%> GB&#8659; <%=("%.2f"):format(wanul)%> GB&#8657;
+</td>
+</tr>
+<% end %> 
+
+<% if lanul and landl then %>
+<tr>
+<th>Local Traffic: </th><td>
+<%=("%.2f"):format(landl)%> GB&#8659; <%=("%.2f"):format(lanul)%> GB&#8657;
+</td>
+</tr>
+<% end %>
+
+<% if fwav then %>
+<tr>
+<th>Firewall: </th><td>
+<%=fwon and translate("active") or translate("inactive")%>
+</td>
+</tr>
+<% end %>
+
+</table>
+<br />

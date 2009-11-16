@@ -32,22 +32,12 @@ function index()
 	uci.inst_state:foreach("dhcp", "dhcp", function(s)
 		if s.interface == "lan" and s.ignore ~= "1" then 
 			entry({"niu", "network", "assign"}, cbi("niu/network/assign",
-	 			toniu), "Display and Customize Address Assignment", 30)
+	 			toniu), "Manage Address Assignment", 30)
 	 	end
 	end)
-	
-	entry({"niu", "network", "routes"},  cbi("niu/network/routes",
-	 toniu), "Display and Customize Routing", 40)
-	 
-	entry({"niu", "network", "conntrack"},  call("cnntrck"),
-	 "Display Local Network Activity", 50)
 	 
 	 if fs.access("/etc/config/ddns") then
 		entry({"niu", "network", "ddns"},  cbi("niu/network/ddns", toniu),
 		 "Configure Dynamic-DNS names", 60)		
 	 end
-end
-
-function cnntrck()
-	require "luci.template".render("niu/network/conntrack")
 end

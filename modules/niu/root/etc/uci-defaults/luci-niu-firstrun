@@ -1,0 +1,7 @@
+#!/bin/sh
+# Disable some services by default
+
+uci get luci.main._niuinit && exit 0
+uci set qos.wan.enabled=0
+uci set upnpd.config.external_iface=none
+uci set luci.main._niuinit=1

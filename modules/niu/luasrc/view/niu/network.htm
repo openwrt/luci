@@ -15,17 +15,6 @@ end
 local wanon = uci.inst_state:get("network", "wan", "proto")
 local wanup = uci.inst_state:get("network", "wan", "up")
 local wanip = uci.inst_state:get("network", "wan", "ipaddr")
-local wanif = uci.inst_state:get("network", "wan", "ifname")
-local wanul, wandl
-
-if wanif then
-	local devstats = fs.readfile("/proc/net/dev")
- 	local rx, tx = devstats:match("%s*"..wanif..
- 	":%s*([0-9]+)%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+"..
- 	"[0-9]+%s+[0-9]+%s+[0-9]+%s+[0-9]+%s+([0-9]+)")
- 	wanul = tx and (tonumber(tx) / 1000000000)
- 	wandl = rx and (tonumber(rx) / 1000000000)
-end
 
 local leasefn
 uci.inst:foreach("dhcp", "dnsmasq",
@@ -57,10 +46,10 @@ end
 <% if wanon and wanon ~= "none" then %>
 <tr>
 <% if wanup then %>
-<th>Uplink Address</th>
+<th>Uplink Address:</th>
 <td><%=wanip%></td>
 <% else %>
-<th>Uplink</th>
+<th>Uplink:</th>
 <td><span style="color: darkred"><em>offline</em></span>
 </td>
 <% end %>
@@ -68,23 +57,15 @@ end
 </tr>
 <% end %>
 
-<% if wanul and wandl then %>
 <tr>
-<th>Uplink Traffic</th><td>
-<%=("%.2f"):format(wandl)%> GB&#8659; <%=("%.2f"):format(wanul)%> GB&#8657;
-</td>
-</tr>
-<% end %> 
-
-<tr>
-<th>Local Address</th><td>
+<th>Local Address:</th><td>
 <%=uci.inst_state:get("network", "lan", "ipaddr")%>
 </td>
 </tr>
 
 <% if arps then %>
 <tr>
-<th>Active IP-Devices</th><td><%=arps%><% if leasefn then %>
+<th>Active IP-Devices:</th><td><%=arps%><% if leasefn then %>
 (<%=leasefn%> assigned)
 <% end %></td>
 </tr>
