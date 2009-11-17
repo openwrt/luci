@@ -519,10 +519,6 @@ function Delegator.__init__(self, ...)
 end
 
 function Delegator.set(self, name, node)
-	if type(node) == "table" and getmetatable(node) == nil then
-		node = Compound(unpack(node))
-	end
-	assert(type(node) == "function" or instanceof(node, Compound), "Invalid")
 	assert(not self.nodes[name], "Duplicate entry")
 
 	self.nodes[name] = node
@@ -562,7 +558,17 @@ function Delegator.set_route(self, ...)
 end
 
 function Delegator.get(self, name)
-	return self.nodes[name]
+	local node = self.nodes[name]
+
+	if type(node) == "string" then
+		node = load(node)
+	end
+
+	if type(node) == "table" and getmetatable(node) == nil then
+		node = Compound(unpack(node))
+	end
+
+	return node
 end
 
 function Delegator.parse(self, ...)
