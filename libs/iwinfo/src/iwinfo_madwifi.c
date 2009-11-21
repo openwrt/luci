@@ -497,16 +497,39 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 int madwifi_get_freqlist(const char *ifname, char *buf, int *len)
 {
 	int i, bl;
+	int rc = -1;
+	char cmd[256];
 	struct ieee80211req_chaninfo chans;
 	struct iwinfo_freqlist_entry entry;
 
-	if( get80211priv(ifname, IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans)) >= 0 )
+	/* A wifiX device? */
+	if( madwifi_iswifi(ifname) )
+	{
+		sprintf(cmd, "wlanconfig ath-channels create nounit "
+			"wlandev %s wlanmode ap >/dev/null", ifname);
+
+		if( ! WEXITSTATUS(system(cmd)) )
+		{
+			rc = get80211priv("ath-channels", IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans));
+			(void) WEXITSTATUS(system("wlanconfig ath-channels destroy"));
+		}
+	}
+
+	/* Its an athX ... */
+	else if( madwifi_isvap(ifname, NULL) )
+	{
+		rc = get80211priv(ifname, IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans));
+	}
+
+
+	/* Got chaninfo? */
+	if( rc >= 0 )
 	{
 		bl = 0;
 
 		for( i = 0; i < chans.ic_nchans; i++ )
 		{
-			entry.mhz     = (int)(chans.ic_chans[i].ic_freq / 1000);
+			entry.mhz     = chans.ic_chans[i].ic_freq;
 			entry.channel = chans.ic_chans[i].ic_ieee;
 
 			memcpy(&buf[bl], &entry, sizeof(struct iwinfo_freqlist_entry));
