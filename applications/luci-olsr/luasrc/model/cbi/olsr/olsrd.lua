@@ -90,6 +90,8 @@ for i=0,7 do
 end
 willingness.optional = true
 
+natthr = s:option(Value, "NatThreshold")
+natthr.optional = true
 
 
 i = m:section(TypedSection, "Interface", translate("Interfaces"))
