@@ -435,7 +435,29 @@ int madwifi_get_assoclist(const char *ifname, char *buf, int *len)
 
 int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len)
 {
-	return wext_get_txpwrlist(ifname, buf, len);
+	int rc = -1;
+	char cmd[256];
+
+	/* A wifiX device? */
+	if( madwifi_iswifi(ifname) )
+	{
+		sprintf(cmd, "wlanconfig ath-txpwr create nounit "
+			"wlandev %s wlanmode ap >/dev/null", ifname);
+
+		if( ! WEXITSTATUS(system(cmd)) )
+		{
+			rc = wext_get_txpwrlist("ath-txpwr", buf, len);
+			(void) WEXITSTATUS(system("wlanconfig ath-txpwr destroy"));
+		}
+	}
+
+	/* Its an athX ... */
+	else if( madwifi_isvap(ifname, NULL) )
+	{
+		rc = wext_get_txpwrlist(ifname, buf, len);
+	}
+
+	return rc;
 }
 
 int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
