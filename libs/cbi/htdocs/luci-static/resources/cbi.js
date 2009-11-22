@@ -59,15 +59,26 @@ function cbi_d_checkvalue(target, ref) {
 }
 
 function cbi_d_check(deps) {
+	var reverse;
+	var def = false;
 	for (var i=0; i<deps.length; i++) {
-		var istat = true
+		var istat = true;
+		reverse = false;
 		for (var j in deps[i]) {
-			istat = (istat && cbi_d_checkvalue(j, deps[i][j]))
+			if (j.slice(-8) == "!reverse") {
+				reverse = true;
+			} else if (j.slice(-8) == "!default") {
+				def = true;
+				istat = false;
+			} else {
+				istat = (istat && cbi_d_checkvalue(j, deps[i][j]))
+			}
 		}
 		if (istat) {
-			return true
+			return !reverse;
 		}
 	}
+	return def;
 }
 
 function cbi_d_update() {

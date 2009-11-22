@@ -616,6 +616,7 @@ function Delegator.parse(self, ...)
 		self.current = newcurrent or self.current
 		self.active = self:get(self.current)
 		if type(self.active) ~= "function" then
+			self.active:populate_delegator(self)
 			self.active:parse(false)
 			return FROM_PROCEED
 		else
