@@ -234,7 +234,7 @@ encr.default = "wep" -- Early default
 encr.override_values = true
 encr.override_depends = true
 encr:value("none", "No Encryption")
-encr:value("wep", "WEP", {mode="ap"}, {mode="sta"})
+encr:value("wep", "WEP", {mode="ap"})
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local hostapd = fs.access("/usr/sbin/hostapd") or os.getenv("LUCI_SYSROOT")

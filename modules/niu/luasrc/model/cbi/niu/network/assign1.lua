@@ -46,7 +46,7 @@ local function date_format(secs)
 	end
 end
 
-m2 = Map("dhcp", "Display and Customize Address Assignment")
+m2 = Map("dhcp", "Manage Address Assignment")
 
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",

@@ -5,6 +5,12 @@ if not cursor:get("network", "wan") then
 	cursor:save("network")
 end
 
+if not cursor:get("wireless", "client") then
+	cursor:section("wireless", "wifi-iface", "client",
+		{device = "_", doth = "1", _niu = "1", mode = "sta"})
+	cursor:save("wireless")
+end
+
 local function deviceroute(self)
 	cursor:unload("network")
 	local wd = cursor:get("network", "wan", "_wandev") or ""
@@ -22,10 +28,17 @@ local function deviceroute(self)
 	end
 	
 	if wd:find("wlan:") == 1 then
-	
+		local widev = wd:sub(6)
+		if cursor:get("wireless", "client", "device") ~= widev then
+			cursor:delete("wireless", "client", "network")
+			cursor:set("wireless", "client", "device", widev)
+		end
+		self:set_route("wlanwan1", "wlanwan2")
 	else
-		cursor:delete_all("wireless", "wifi-iface", {network = "wan"}) 
+		cursor:delete("wireless", "client", "device")
+		cursor:delete("wireless", "client", "network")
 	end
+	
 	
 	cursor:save("wireless")
 	cursor:save("network")
@@ -37,9 +50,11 @@ d.allow_finish = true
 d.allow_back = true
 d.allow_cancel = true
 
-d:add("device", load("niu/network/wandevice"))
+d:add("device", "niu/network/wandevice")
 d:add("deviceroute", deviceroute)
-d:set("etherwan", load("niu/network/etherwan"))
+d:set("etherwan", "niu/network/etherwan")
+d:set("wlanwan1", "niu/network/wlanwanscan")
+d:set("wlanwan2", "niu/network/wlanwan")
 
 function d.on_cancel()
 	cursor:revert("network")

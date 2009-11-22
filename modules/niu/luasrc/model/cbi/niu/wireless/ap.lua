@@ -2,7 +2,7 @@ local cursor = require "luci.model.uci".cursor()
 
 if not cursor:get("wireless", "ap") then
 	cursor:section("wireless", "wifi-iface", "ap",
-		{device = "_", doth = "1", wmm = "1", _niu = "1", mode = "ap"})
+		{device = "_", doth = "1", _niu = "1", mode = "ap"})
 	cursor:save("wireless")
 end
 
@@ -15,7 +15,6 @@ local function deviceroute(self)
 		end)
 		cursor:set("wireless", d, "disabled", 0)
 		cursor:set("wireless", "ap", "network", "lan")
-		self:set("ap1", load("niu/wireless/ap1"))
 		self:set_route("ap1")
 	else
 		cursor:delete("wireless", "ap", "network")
@@ -29,8 +28,9 @@ d.allow_finish = true
 d.allow_back = true
 d.allow_cancel = true
 
-d:add("device", load("niu/wireless/apdevice"))
+d:add("device", "niu/wireless/apdevice")
 d:add("deviceroute", deviceroute)
+d:set("ap1", "niu/wireless/ap1")
 
 function d.on_cancel()
 	cursor:revert("wireless")

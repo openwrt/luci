@@ -11,10 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-
-local iwinfo = require "iwinfo"
-local cursor = require "luci.model.uci".inst
-cursor:unload("wireless")
+local niulib = require "luci.niulib"
 
 m = Map("wireless", "Configure Private Access Point")
 s = m:section(NamedSection, "ap", "interface", "Wireless Radio Device",
@@ -27,25 +24,9 @@ s.addremove = false
 
 l = s:option(ListValue, "device", "Device providing Access Point")
 
-local used = {}
-cursor:foreach("wireless", "wifi-iface", function(s)
-	if s[".name"] ~= "ap" and s._niu == 1 then
-		used[s.device] = 1
-	end
-end)
-
-for k in pairs(used) do
-	local t = iwinfo.type(k)
-	if t and iwinfo[t] then
-		used[k] = (iwinfo[t].mbssid_support() < 1)
-	end
+for _, wifi in ipairs(niulib.wifi_get_available("ap")) do
+	l:value(wifi, "WLAN-Adapter (%s)" % wifi)
 end
-
-cursor:foreach("wireless", "wifi-device", function(s)
-	if not used[s[".name"]] then
-		l:value(s[".name"], "Radio %s" % s[".name"])
-	end
-end)
 l:value("none", "Disable Private Access Point")
 
 return m

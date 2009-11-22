@@ -14,9 +14,8 @@ $Id$
 ]]--
 
 local fs = require "nixio.fs"
-local nw = require "luci.model.network"
 
-local has_ipv6 = nw:has_ipv6()
+local has_ipv6  = fs.access("/proc/net/ipv6_route")
 local has_pptp  = fs.access("/usr/sbin/pptp")
 local has_pppd  = fs.access("/usr/sbin/pppd")
 local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
@@ -24,7 +23,6 @@ local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 
 
 m = Map("network", "Configure Ethernet Adapter for Internet Connection")
-nw.init(m.uci)
 
 s = m:section(NamedSection, "wan", "interface")
 s.addremove = false

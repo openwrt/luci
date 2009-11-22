@@ -5,8 +5,7 @@ d.allow_finish = true
 d.allow_back = true
 d.allow_cancel = true
 
-d:add("lan1", load("niu/network/lan1"))
-d:set("warnip", {Template("niu/network/warn_ip_change")})
+d:add("lan1", "niu/network/lan1")
 
 function d.on_cancel()
 	cursor:revert("network")

@@ -12,9 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local cursor = require "luci.model.uci".inst_state
-local nw = require "luci.model.network"
-nw.init(cursor)
+local niulib = require "luci.niulib"
 
 m = Map("network", "Configure Internet Connection")
 s = m:section(NamedSection, "wan", "interface", "Internet Connection Device")
@@ -23,15 +21,14 @@ s.addremove = false
 
 l = s:option(ListValue, "_wandev", "Internet Connection via")
 
-for _, iface in ipairs(nw.get_interfaces()) do
-	if iface:name():find("eth") == 1 then
-		local net = iface:get_network()
-		if not net or net:name() == "wan" or os.getenv("LUCI_SYSROOT") then
-			l:value("ethernet:%s" % iface:name(),
-				"Cable / DSL / Ethernet Adapter (%s)" % iface:name())
-		end
-	end
+for _, ifc in ipairs(niulib.eth_get_available("wan")) do
+	l:value("ethernet:%s" % ifc, "Cable / DSL / Ethernet-Adapter (%s)" % ifc)
 end
+
+for _, wifi in ipairs(niulib.wifi_get_available("client")) do
+	l:value("wlan:%s" % wifi, "WLAN-Adapter (%s)" % wifi)
+end
+
 
 l:value("none", "No Internet Connection")
 

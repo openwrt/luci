@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-m = Map("network", translate("Display and Customize Routing"),
+m = Map("network", translate("Manage Traffic Routing"),
 translate("With additional static routes you allow computers on your network to reach unannounced remote hosts or networks."))
 
 local routes6 = luci.sys.net.routes6()
