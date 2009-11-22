@@ -101,7 +101,7 @@ s:option(Value, "dhcpleasemax",
 	translate("<abbr title=\"maximal\">max.</abbr> <abbr title=\"Dynamic Host Configuration " ..
 		"Protocol\">DHCP</abbr>-Leases")).optional = true
 
-s:option(Value, "addnhosts",
+s:option(DynamicList, "addnhosts",
 	translate("additional hostfile")).optional = true
 
 s:option(Value, "queryport",
