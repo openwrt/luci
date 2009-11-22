@@ -617,8 +617,12 @@ function Delegator.parse(self, ...)
 		self.active = self:get(self.current)
 		if type(self.active) ~= "function" then
 			self.active:populate_delegator(self)
-			self.active:parse(false)
-			return FROM_PROCEED
+			local stat = self.active:parse(false)
+			if stat == FORM_SKIP then
+				return self:parse(...)
+			else
+				return FORM_PROCEED
+			end
 		else
 			return self:parse(...)
 		end
