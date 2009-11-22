@@ -1,168 +1,170 @@
-config settings wizard
-config public contact
-	option nickname ''
-	option name ''
-	option mail ''
-	option phone ''
-	option location ''
-	option note ''
+package 'freifunk'
 
-config public community
-	option name 'Freifunk'
-	option homepage 'http://freifunk.net'
+config 'settings' 'wizard'
 
-config fw_rule icmp
-	option src freifunk
-	option target ACCEPT
-	option proto  icmp
+config 'public' 'contact'
+	option 'nickname' ''
+	option 'name' ''
+	option 'mail' ''
+	option 'phone' ''
+	option 'location' ''
+	option 'note' ''
 
-config fw_rule http
-	option src freifunk
-	option target ACCEPT
-	option proto  tcp
-	option dest_port 80
+config 'public' 'community'
+	option 'name' 'Freifunk'
+	option 'homepage' 'http://freifunk.net'
 
-config fw_rule https
-	option src freifunk
-	option target ACCEPT
-	option proto  tcp
-	option dest_port 443
+config 'fw_rule' 'icmp'
+	option 'src' 'freifunk'
+	option 'target' 'ACCEPT'
+	option 'proto' 'icmp'
 
-config fw_rule ssh
-	option src freifunk
-	option target ACCEPT
-	option proto  tcp
-	option dest_port 22
+config 'fw_rule' 'http'
+	option 'src' 'freifunk'
+	option 'target' 'ACCEPT'
+	option 'proto' 'tcp'
+	option 'dest_port' '80'
 
-config fw_rule olsr
-	option src freifunk
-	option target ACCEPT
-	option proto  udp
-	option dest_port 698
+config 'fw_rule' 'https'
+	option 'src' 'freifunk'
+	option 'target' 'ACCEPT'
+	option 'proto' 'tcp'
+	option 'dest_port' '443'
 
-config fw_rule wprobe
-	option src freifunk
-	option target ACCEPT
-	option proto  tcp
-	option dest_port 17990
+config 'fw_rule' 'ssh'
+	option 'src' 'freifunk'
+	option 'target' 'ACCEPT'
+	option 'proto' 'tcp'
+	option 'dest_port' '22'
 
-config fw_forwarding lan
-	option src lan
-	option dest freifunk
+config 'fw_rule' 'olsr'
+	option 'src' 'freifunk'
+	option 'target' 'ACCEPT'
+	option 'proto' 'udp'
+	option 'dest_port' '698'
 
-config fw_forwarding fffwd
-	option src freifunk
-	option dest freifunk
+config 'fw_rule' 'wprobe'
+	option 'src' 'freifunk'
+	option 'target' 'ACCEPT'
+	option 'proto' 'tcp'
+	option 'dest_port' '17990'
 
+config 'fw_forwarding' 'lan'
+	option 'src' 'lan'
+	option 'dest' 'freifunk'
 
-config defaults wifi_device
-    option channel   1
-    option diversity 1
-    option disabled  0
-    option txpower   15
-    option country   276
+config 'fw_forwarding' 'fffwd'
+	option 'src' 'freifunk'
+	option 'dest' 'freifunk'
 
-config defaults wifi_iface
-    option mode		adhoc
-    option bssid    02:CA:FF:EE:BA:BE
-    option sw_merge 1
+config 'defaults' 'wifi_device'
+	option 'channel' '1'
+	option 'diversity' '1'
+	option 'disabled' '0'
+	option 'txpower' '15'
+	option 'country' '276'
 
-config defaults interface
-    option netmask  255.0.0.0
-    option dns      "88.198.178.18 141.54.1.1 212.204.49.83 208.67.220.220 208.67.222.222"
+config 'defaults' 'wifi_iface'
+	option 'mode' 'adhoc'
+	option 'bssid' '02:CA:FF:EE:BA:BE'
+	option 'sw_merge' '1'
 
-config defaults alias
-	option netmask	255.255.255.0
+config 'defaults' 'interface'
+	option 'netmask' '255.0.0.0'
+	option 'dns' '88.198.178.18 141.54.1.1 212.204.49.83 208.67.220.220 208.67.222.222'
 
-config defaults dhcp
-	option leasetime 30m
+config 'defaults' 'alias'
+	option 'netmask' '255.255.255.0'
 
-config defaults olsr_interface
-	option Ip4Broadcast 255.255.255.255
+config 'defaults' 'dhcp'
+	option 'leasetime' '30m'
 
-config defaults time
-	option rdate_servers "128.138.140.44 171.64.7.77 171.64.7.99 81.169.154.44 130.133.1.10"
+config 'defaults' 'olsr_interface'
+	option 'Ip4Broadcast' '255.255.255.255'
 
-config defaults upgrade
-	option repository "http://dev.luci.freifunk-halle.net/freifunk-snapshots"
-	option rssfeed "http://firmware.leipzig.freifunk.net/kamikaze/.rss.xml"
+config 'defaults' 'time'
+	option 'rdate_servers' '128.138.140.44 171.64.7.77 171.64.7.99 81.169.154.44 130.133.1.10'
 
-config community leipzig
-	option name "Freifunk Leipzig"
-	option homepage http://leipzig.freifunk.net
-	option ssid "leipzig.freifunk.net"
-	option mesh_network "104.61.0.0/16"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
+config 'defaults' 'upgrade'
+	option 'repository' 'http://dev.luci.freifunk-halle.net/freifunk-snapshots'
+	option 'rssfeed' 'http://firmware.leipzig.freifunk.net/kamikaze/.rss.xml'
 
-config community halle
-	option name "Freifunk Halle"
-	option homepage http://halle.freifunk.net
-	option ssid "halle.freifunk.net"
-	option mesh_network "104.62.0.0/16"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
+config 'community' 'leipzig'
+	option 'name' 'Freifunk Leipzig'
+	option 'homepage' 'http://leipzig.freifunk.net'
+	option 'ssid' 'leipzig.freifunk.net'
+	option 'mesh_network' '104.61.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
 
-config community l59
-	option name "Freifunk L59"
-	option homepage http://freifunk.net
-	option ssid "start.freifunk.net"
-	option mesh_network "104.59.0.0/16"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
+config 'community' 'halle'
+	option 'name' 'Freifunk Halle'
+	option 'homepage' 'http://halle.freifunk.net'
+	option 'ssid' 'halle.freifunk.net'
+	option 'mesh_network' '104.62.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
 
-config community berlin
-	option name "Freifunk Berlin"
-	option homepage http://berlin.freifunk.net
-	option ssid "olsr.freifunk.net"
-	option mesh_network "104.0.0.0/8"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
-	option external freifunk_berlin
+config 'community' 'l59'
+	option 'name' 'Freifunk L59'
+	option 'homepage' 'http://freifunk.net'
+	option 'ssid' 'start.freifunk.net'
+	option 'mesh_network' '104.59.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
 
-config community potsdam
-	option name "Freifunk Potsdam"
-	option homepage http://potsdam.freifunk.net
-	option ssid "www.freifunk-potsdam.de"
-	option mesh_network "10.22.0.0/16"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
-	option external freifunk_potsdam
+config 'community' 'berlin'
+	option 'name' 'Freifunk Berlin'
+	option 'homepage' 'http://berlin.freifunk.net'
+	option 'ssid' 'olsr.freifunk.net'
+	option 'mesh_network' '104.0.0.0/8'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_berlin'
 
-config community hamburg
-	option name "Freifunk Hamburg"
-	option homepage http://hamburg.piratenpartei.de
-	option ssid "hamburg.freifunk.net"
-	option mesh_network "10.112.0.0/12"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
-	option external freifunk_hamburg
+config 'community' 'potsdam'
+	option 'name' 'Freifunk Potsdam'
+	option 'homepage' 'http://potsdam.freifunk.net'
+	option 'ssid' 'www.freifunk-potsdam.de'
+	option 'mesh_network' '10.22.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_potsdam'
 
-config community hannover
-	option name "Freifunk Hannover"
-	option homepage http://hannover.freifunk.net
-	option ssid "hannover.freifunk.net"
-	option mesh_network "10.2.0.0/16"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
-	option external freifunk_hannover
+config 'community' 'hamburg'
+	option 'name' 'Freifunk Hamburg'
+	option 'homepage' 'http://hamburg.piratenpartei.de'
+	option 'ssid' 'hamburg.freifunk.net'
+	option 'mesh_network' '10.112.0.0/12'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_hamburg'
 
-config community augsburg
-	option name "Freifunk Augsburg"
-	option homepage http://augsburg.freifunk.net
-	option ssid "augsburg.freifunk.net"
-	option mesh_network "10.11.0.0/18"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "27"
-	option external freifunk_augsburg
+config 'community' 'hannover'
+	option 'name' 'Freifunk Hannover'
+	option 'homepage' 'http://hannover.freifunk.net'
+	option 'ssid' 'hannover.freifunk.net'
+	option 'mesh_network' '10.2.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_hannover'
+
+config 'community' 'augsburg'
+	option 'name' 'Freifunk Augsburg'
+	option 'homepage' 'http://augsburg.freifunk.net'
+	option 'ssid' 'augsburg.freifunk.net'
+	option 'mesh_network' '10.11.0.0/18'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_augsburg'
 
 config 'community' 'jena'
 	option 'name' 'Freifunk Jena'
 	option 'homepage' 'http://www.freifunk-jena.de'
 	option 'ssid' 'jena.freifunk.net'
-	option mesh_network "10.127.0.0/20"
-	option splash_network "10.104.0.0/16"
-	option splash_prefix "29"
+	option 'mesh_network' '10.127.0.0/20'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '29'
 	option 'external' 'freifunk_jena'
 
 config 'community' 'mainz'
@@ -174,6 +176,24 @@ config 'community' 'mainz'
 	option 'splash_prefix' '27'
 	option 'external' 'freifunk_mainz'
 
+config 'community' 'seefeld'
+	option 'name' 'Freifunk Seefeld'
+	option 'homepage' 'http://wiki.freifunk.net/Seefeld.freifunk.net'
+	option 'ssid' 'seefeld.freifunk.net'
+	option 'mesh_network' '10.111.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_seefeld'
+
+config 'community' 'duesseldorf'
+	option 'name' 'Freifunk Duesseldorf'
+	option 'homepage' 'http://wiki.piratenpartei.de/D%C3%BCsseldorf/Freifunk'
+	option 'ssid' 'duesseldorf.freifunk.net'
+	option 'mesh_network' '10.40.0.0/16'
+	option 'splash_network' '10.104.0.0/16'
+	option 'splash_prefix' '27'
+	option 'external' 'freifunk_duesseldorf'
+
 config 'community' 'ljubljana'
 	option 'name' 'Kiberpipa.net (wlan-lj)'
 	option 'homepage' 'http://www.kiberpipa.net'
@@ -182,3 +202,4 @@ config 'community' 'ljubljana'
 	option 'splash_network' '10.14.128.0/17'
 	option 'splash_prefix' '27'
 	option 'external' 'freifunk_ljubljana'
+
