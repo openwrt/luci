@@ -70,6 +70,22 @@ function dummy.txpwrlist()
 	}
 end
 
+function dummy.freqlist()
+	return {
+		{channel =  1, mhz = 2412},
+		{channel =  2, mhz = 2417},
+		{channel =  3, mhz = 2422},
+		{channel =  4, mhz = 2427},
+		{channel =  5, mhz = 2432},
+		{channel =  6, mhz = 2437},
+		{channel =  7, mhz = 2442},
+		{channel =  8, mhz = 2447},
+		{channel =  9, mhz = 2452},
+		{channel = 10, mhz = 2457},
+		{channel = 11, mhz = 2462}
+	}
+end
+
 function dummy.scanlist()
 	return {
 		{ quality = 23, quality_max = 70, signal = -60,
