@@ -50,7 +50,7 @@ function wifi_get_available(except)
 	for k in pairs(used) do
 		local t = iwinfo.type(k)
 		if t and iwinfo[t] then
-			used[k] = (iwinfo[t].mbssid_support() < 1)
+			used[k] = (iwinfo[t].mbssid_support(k) < 1)
 		end
 	end
 
