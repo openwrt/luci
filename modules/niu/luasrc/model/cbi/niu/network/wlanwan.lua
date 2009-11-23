@@ -114,11 +114,20 @@ for _, v in ipairs(suggest) do
 	end
 end
 
+mode = s:taboption("expert", ListValue, "mode", translate("Operating Mode"))
+mode.override_values = true
+mode:value("sta", translate("Client"))
+
 encr = s:taboption("general", ListValue, "encryption", translate("Encryption"))
 
 
 if hwtype == "mac80211" then
-	s:taboption("expert", Flag, "powersave", "Enable Powersaving")
+	mode:value("mesh", translate("Mesh (802.11s)"))
+	local meshid = s:taboption("expert", Value, "mesh_id", translate("Mesh ID"))
+	meshid:depends("mode", "mesh")
+	
+	local ps = s:taboption("expert", Flag, "powersave", translate("Enable Powersaving"))
+	ps:depends("mode", "sta")
 elseif hwtype == "atheros" then
 	s:taboption("expert", Flag, "bursting", translate("Allow Burst Transmissions"))
 end

@@ -185,8 +185,8 @@ encr = s:taboption("expert", ListValue, "encryption", translate("Encryption"))
 
 
 if hwtype == "mac80211" then
-	s:taboption("expert", Flag, "wds", "Allow Bridging and Repeating (WDS)")
-	s:taboption("expert", Flag, "powersave", "Enable Powersaving")
+	s:taboption("expert", Flag, "wds", translate("Enable Bridging and Repeating (WDS)"))
+	s:taboption("expert", Flag, "powersave", translate("Enable Powersaving"))
 elseif hwtype == "atheros" then
 	-- mode:value("wds", translate("Static WDS"))
 	
@@ -198,7 +198,7 @@ elseif hwtype == "atheros" then
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 
-	s:taboption("expert", Flag, "wds", "Allow Bridging and Repeating (WDS)")
+	s:taboption("expert", Flag, "wds", translate("Enable Bridging and Repeating (WDS)"))
 		
 	if ap then				
 		hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
@@ -212,8 +212,6 @@ elseif hwtype == "atheros" then
 	s:taboption("expert", Flag, "bursting", translate("Allow Burst Transmissions"))
 elseif hwtype == "broadcom" then
 	if ap then
-		mode:value("wds", translate("WDS"))
-
 		hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
 		hidden:depends({mode="ap"})
 		hidden:depends({mode="wds"})
@@ -222,10 +220,6 @@ elseif hwtype == "broadcom" then
 		isolate:depends({mode="ap"})
 	end
 elseif hwtype == "prism2" then
-	if ap then
-		mode:value("wds", translate("WDS"))
-	end
-
 	mp = s:taboption("expert", ListValue, "macpolicy", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
 	mp:value("deny", translate("Allow listed only"))

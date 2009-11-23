@@ -45,6 +45,7 @@ local function deviceroute(self)
 		local widev = wd:sub(6)
 		if cursor:get("wireless", "client", "device") ~= widev then
 			cursor:delete("wireless", "client", "network")
+			cursor:set("wireless", "client", "mode", "sta")
 			cursor:set("wireless", "client", "device", widev)
 			cursor:delete_all("wireless", "wifi-iface", function(s)
 				return s.device == widev and s._niu ~= "1"
