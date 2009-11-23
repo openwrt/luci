@@ -21,7 +21,21 @@ local function deviceroute(self)
 	
 	if wd:find("ethernet:") == 1 then
 		cursor:set("network", "wan", "defaultroute", "1")
-		cursor:set("network", "wan", "ifname", wd:sub(10))
+		if wd:find("!", 10) == 10 then	--Unbridge from LAN
+			local ethdev = wd:sub(11)
+			local ifname = cursor:get("network", "lan", "ifname")
+			local newifname = {}
+			for k in ifname:gmatch("[^ ]+") do
+				if k ~= ifname then
+					newifname[#newifname+1] = k
+				end
+			end
+			cursor:set("network", "lan", "ifname", table.concat(newifname, " "))
+			cursor:set("network", "wan", "_wandev", "ethernet:" .. ethdev)
+			cursor:set("network", "wan", "ifname", ethdev)
+		else
+			cursor:set("network", "wan", "ifname", wd:sub(10))
+		end
 		self:set_route("etherwan")
 	else
 		cursor:delete("network", "wan", "ifname")

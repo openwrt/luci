@@ -42,8 +42,8 @@ s:tab("expert", translate("Expert Settings"))
 
 p = s:taboption("expert", ListValue, "proto", translate("Connection Protocol"))
 p.default = "static"
-p:value("dhcp", "DHCP")
 p:value("static", translate("Static Ethernet"))
+p:value("dhcp", "DHCP")
 
 mac = s:taboption("expert", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 

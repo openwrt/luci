@@ -15,7 +15,9 @@ $Id$
 local ipairs, pairs, require = ipairs, pairs, require
 local os = require "os"
 
-local cursor = require "luci.model.uci".inst
+local uci = require "luci.model.uci"
+local cursor = uci.inst
+local state = uci.inst_state
 
 
 module "luci.niulib"
@@ -34,6 +36,20 @@ function eth_get_available(except)
 		end
 	end
 	return ifs
+end
+
+function eth_get_bridged(except)
+	local devs = state:get("network", except, "device")
+	
+	local ifs = {}
+	local cnt = 0
+	for x in devs:gmatch("[^ ]+") do
+		cnt = cnt + 1
+		if x:find("eth") == 1 then
+			ifs[#ifs+1] = x
+		end
+	end
+	return cnt > 1 and ifs or {}
 end
 
 function wifi_get_available(except)
