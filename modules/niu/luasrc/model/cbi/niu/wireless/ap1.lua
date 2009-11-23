@@ -13,13 +13,17 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
+local iface = "ap"
+local ap = true
+
+
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local cursor = require "luci.model.uci".inst
 local state = require "luci.model.uci".inst_state
 cursor:unload("wireless")
 
-local device = cursor:get("wireless", "ap", "device")
+local device = cursor:get("wireless", iface, "device")
 local hwtype = cursor:get("wireless", device, "type")
 
 local nsantenna = cursor:get("wireless", device, "antenna")
@@ -36,11 +40,13 @@ state:foreach("wireless", "wifi-iface",
 			tx_powers = iw.txpwrlist or { }
 		end
 	end)
+	
+local m
 
-m = Map("wireless", "Configure Access Point",
-"The private Access Point is about to be created. You only need to provide "..
-"a network name and a password to finish this step and - if you like - tweak "..
-"some of the advanced settings.")
+
+if ap then
+m = Map("wireless", translate("Configure Access Point"))
+end
 
 --- Device Settings ---
 s = m:section(NamedSection, device, "wifi-device", "Device Configuration")
@@ -163,7 +169,7 @@ end
 
 
 
-s = m:section(NamedSection, "ap", "wifi-iface", "Access Point Details")
+s = m:section(NamedSection, iface, "wifi-iface", translate("Interface Details"))
 s.addremove = false
 
 s:tab("general", translate("General Settings"))
@@ -191,28 +197,34 @@ elseif hwtype == "atheros" then
 	ml = s:taboption("expert", DynamicList, "maclist", translate("MAC-List"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
-	
+
 	s:taboption("expert", Flag, "wds", "Allow Bridging and Repeating (WDS)")
 		
-	hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
-	hidden:depends({mode="ap"})
-	hidden:depends({mode="ap-wds"})
-	
-	isolate = s:taboption("expert", Flag, "isolate", translate("Prevent communication between clients"))
-	isolate:depends({mode="ap"})
+	if ap then				
+		hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
+		hidden:depends({mode="ap"})
+		hidden:depends({mode="ap-wds"})
+		
+		isolate = s:taboption("expert", Flag, "isolate", translate("Prevent communication between clients"))
+		isolate:depends({mode="ap"})
+	end
 	
 	s:taboption("expert", Flag, "bursting", translate("Allow Burst Transmissions"))
 elseif hwtype == "broadcom" then
-	mode:value("wds", translate("WDS"))
+	if ap then
+		mode:value("wds", translate("WDS"))
 
-	hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
-	hidden:depends({mode="ap"})
-	hidden:depends({mode="wds"})
+		hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
+		hidden:depends({mode="ap"})
+		hidden:depends({mode="wds"})
 	
-	isolate = s:taboption("expert", Flag, "isolate", translate("Prevent communication between clients"))
-	isolate:depends({mode="ap"})
+		isolate = s:taboption("expert", Flag, "isolate", translate("Prevent communication between clients"))
+		isolate:depends({mode="ap"})
+	end
 elseif hwtype == "prism2" then
-	mode:value("wds", translate("WDS"))
+	if ap then
+		mode:value("wds", translate("WDS"))
+	end
 
 	mp = s:taboption("expert", ListValue, "macpolicy", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
@@ -223,9 +235,11 @@ elseif hwtype == "prism2" then
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 	
-	hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
-	hidden:depends({mode="ap"})
-	hidden:depends({mode="wds"})
+	if ap then
+		hidden = s:taboption("expert", Flag, "hidden", translate("Hide Access Point"))
+		hidden:depends({mode="ap"})
+		hidden:depends({mode="wds"})
+	end
 end
 
 -- Encryption --

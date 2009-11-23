@@ -14,11 +14,12 @@ $Id$
 local niulib = require "luci.niulib"
 
 m = Map("wireless", "Configure Private Access Point")
-s = m:section(NamedSection, "ap", "interface", "Wireless Radio Device",
-"Select the wireless radio device that should be used to run the access"..
-" point. Note that wireless radios will not show up here if you already use"..
-" them for connecting to the Internet and are not capable of being used as"..
-" an access point in parallel.")
+s = m:section(NamedSection, "ap", "interface", translate("Wireless Radio Device"),
+translate(
+"Select the wireless radio device that should be used to run the interface."..
+" Note that wireless radios will not show up here if you already use"..
+" them for other wireless services and are not capable of being used as"..
+" an access point in parallel."))
 s.anonymous = true
 s.addremove = false
 

@@ -46,6 +46,10 @@ local function deviceroute(self)
 		if cursor:get("wireless", "client", "device") ~= widev then
 			cursor:delete("wireless", "client", "network")
 			cursor:set("wireless", "client", "device", widev)
+			cursor:delete_all("wireless", "wifi-iface", function(s)
+				return s.device == widev and s._niu ~= "1"
+			end)
+			cursor:set("wireless", widev, "disabled", 0)
 		end
 		self:set_route("wlanwan1", "wlanwan2")
 	else

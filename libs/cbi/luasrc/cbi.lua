@@ -561,7 +561,7 @@ function Delegator.get(self, name)
 	local node = self.nodes[name]
 
 	if type(node) == "string" then
-		node = load(node)
+		node = load(node, name)
 	end
 
 	if type(node) == "table" and getmetatable(node) == nil then
