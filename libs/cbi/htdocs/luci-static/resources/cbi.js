@@ -65,9 +65,9 @@ function cbi_d_check(deps) {
 		var istat = true;
 		reverse = false;
 		for (var j in deps[i]) {
-			if (j.slice(-8) == "!reverse") {
+			if (j == "!reverse") {
 				reverse = true;
-			} else if (j.slice(-8) == "!default") {
+			} else if (j == "!default") {
 				def = true;
 				istat = false;
 			} else {

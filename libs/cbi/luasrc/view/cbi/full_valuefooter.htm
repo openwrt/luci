@@ -34,8 +34,16 @@ $Id$
 			cbi_d_add("cbi-<%=self.config.."-"..section.."-"..self.option..d.add%>", {
 		<%-
 			for k,v in pairs(d.deps) do
+				local depk
+				if k:find("!", 1, true) then
+					depk = string.format('"%s"', k)
+				elseif k:find(".", 1, true) then
+					depk = string.format('"cbid.%s"', k)
+				else
+					depk = string.format('"cbid.%s.%s.%s"', self.config, section, k)
+				end
 		-%>
-			<%-=string.format('"cbid.%s.%s.%s"', self.config, section, k) .. ":" .. string.format("%q", v)-%>
+			<%-= depk .. ":" .. string.format("%q", v)-%>
 			<%-if next(d.deps, k) then-%>,<%-end-%>
 		<%-
 			end
