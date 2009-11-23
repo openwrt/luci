@@ -91,7 +91,7 @@ function cbi_d_update() {
 
 		if (node && node.parentNode && !cbi_d_check(entry.deps)) {
 			node.parentNode.removeChild(node);
-			state = (state || !node.parentNode);
+			state = true;
 			if( entry.parent )
 				cbi_c[entry.parent]--;
 		} else if ((!node || !node.parentNode) && cbi_d_check(entry.deps)) {
@@ -100,7 +100,7 @@ function cbi_d_update() {
 			} else {
 				next.parentNode.insertBefore(entry.node, next);
 			}
-			state = (state || (node && node.parentNode))
+			state = true;
 			if( entry.parent )
 				cbi_c[entry.parent]++;
 		}
