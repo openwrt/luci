@@ -51,7 +51,7 @@ s:tab("general", translate("General Settings"))
 ch = s:taboption("general", Value, "channel", translate("Channel"))
 ch:value("auto", translate("automatic"))
 for _, f in ipairs(chan) do
-	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz })
+	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
 end
 
 
