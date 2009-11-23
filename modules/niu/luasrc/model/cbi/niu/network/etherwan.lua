@@ -30,14 +30,14 @@ s.addremove = false
 s:tab("general", translate("General Settings"))
 s:tab("expert", translate("Expert Settings"))
 
-p = s:taboption("general", ListValue, "proto", "Connection Type")
+p = s:taboption("general", ListValue, "proto", translate("Connection Protocol"))
 p.override_scheme = true
 p.default = "dhcp"
-p:value("dhcp", "Cable / Ethernet / DHCP")
+p:value("dhcp", translate("Cable / Ethernet / DHCP"))
 if has_pppoe then p:value("pppoe", "DSL / PPPoE")   end
 if has_pppoa then p:value("pppoa", "PPPoA")   end
 if has_pptp  then p:value("pptp",  "PPTP")    end
-p:value("static", "Static Ethernet")
+p:value("static", translate("Static Ethernet"))
 
 
 

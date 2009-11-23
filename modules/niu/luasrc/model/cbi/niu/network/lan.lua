@@ -18,6 +18,23 @@ function d.on_done()
 		cs:set("network", "lan", "_ipchanged", "1")
 		cs:save("network")
 	end
+	
+	if cursor:get("network", "lan", "proto") == "dhcp" then
+		local emergv4 = cursor:get("network", "lan", "_emergv4")
+		if emergv4 then
+			if cursor:get("network", "lan_ea") then
+				cursor:set("network", "lan_ea", "ipaddr", emergv4)
+			else
+				cursor:section("network", "alias", "lan_ea", {
+					ipaddr = emergv4,
+					netmask = "255.255.255.0",
+					network = "lan"
+				})
+			end
+		else
+			cursor:delete("network", "lan_ea")
+		end
+	end
 
 	cursor:set("network", "lan", "type", "bridge")
 	cursor:commit("network")
