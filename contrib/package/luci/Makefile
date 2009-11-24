@@ -60,8 +60,13 @@ define Package/luci/libtemplate
   TITLE:=LuCI - Lua Configuration Interface
   URL:=http://luci.freifunk-halle.net/
   MAINTAINER:=Steven Barth <steven-at-midlink-dot-org>
-  SUBMENU:=Libraries
+  SUBMENU:=Internal Libraries
   DEPENDS:=+luci-core
+endef
+
+define Package/luci/webservertemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=Webserver
 endef
 
 define Package/luci/fftemplate
@@ -80,6 +85,11 @@ define Package/luci/thtemplate
   $(call Package/luci/libtemplate)
   SUBMENU:=Themes
   DEPENDS:=+luci-web
+endef
+
+define Package/luci/maintemplate
+  $(call Package/luci/libtemplate)
+  SUBMENU:=
 endef
 
 define Package/luci/webtemplate
@@ -253,8 +263,8 @@ endef
 
 
 define Package/luci-lucid
-  $(call Package/luci/libtemplate)
-  TITLE:=LuCId Superserver
+  $(call Package/luci/webservertemplate)
+  TITLE:=LuCId Full-Stack Webserver
   DEPENDS+=+luci-nixio +luci-http +luci-px5g
 endef
 
@@ -331,7 +341,7 @@ define Package/luci-web
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi +luci-lmo
   TITLE:=MVC Webframework
-  $(call Config,luci.main.lang,string,en,Default Language)
+  $(call Config,luci.main.lang,string,auto,Default Language)
 endef
 
 define Package/luci-web/conffiles
@@ -392,6 +402,16 @@ define Package/luci-admin-core/install
 	touch $(1)/etc/init.d/luci_fixtime || true
 endef
 
+
+define Package/luci-niu
+  $(call Package/luci/maintemplate)
+  DEPENDS+=+luci-admin-core @BROKEN
+  TITLE:=NIU - Next Generation Interface 
+endef
+
+define Package/luci-niu/install	
+	$(call Package/luci/install/template,$(1),modules/niu)
+endef
 
 define Package/luci-admin-mini
   $(call Package/luci/webtemplate)
@@ -759,8 +779,8 @@ endef
 ### Server Gateway Interfaces ###
 
 define Package/luci-sgi-cgi
-  $(call Package/luci/libtemplate)
-  TITLE:=SGI for CGI
+  $(call Package/luci/webservertemplate)
+  TITLE:=CGI Gateway behind existing Webserver
 endef
 
 define Package/luci-sgi-cgi/install
@@ -1039,6 +1059,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-admin-full),)
 	PKG_SELECTED_MODULES+=modules/admin-full
 endif
+ifneq ($(CONFIG_PACKAGE_luci-niu),)
+	PKG_SELECTED_MODULES+=modules/niu
+endif
 ifneq ($(CONFIG_PACKAGE_luci-admin-rpc),)
 	PKG_SELECTED_MODULES+=modules/rpc
 endif
@@ -1230,6 +1253,7 @@ $(eval $(call BuildPackage,luci-uvl))
 $(eval $(call BuildPackage,luci-admin-core))
 $(eval $(call BuildPackage,luci-admin-mini))
 $(eval $(call BuildPackage,luci-admin-full))
+$(eval $(call BuildPackage,luci-niu))
 $(eval $(call BuildPackage,luci-admin-rpc))
 $(eval $(call BuildPackage,luci-mod-freifunk))
 

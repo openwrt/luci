@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASENAME:=cyassl
 PKG_NAME:=$(PKG_BASENAME)-luci
-PKG_VERSION:=1.1.0
+PKG_VERSION:=1.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_BASENAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://www.yassl.com/
-PKG_MD5SUM:=938341f20d7ddcba157c4ee5b00244d0
+PKG_MD5SUM:=de12e76b3faf760107e45af487adcbde
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_BASENAME)-$(PKG_VERSION)
 PKG_UNPACK=unzip -d $(BUILD_DIR)/$(PKG_NAME) $(DL_DIR)/$(PKG_SOURCE)
 
@@ -29,7 +29,7 @@ define Package/libcyassl-luci
   $(call Package/cyassl-luci/Default)
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Libraries
+  SUBMENU:=Internal Libraries
   TITLE+= (library)
 endef
 
