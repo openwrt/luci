@@ -316,8 +316,8 @@ endif
 
 
 define Package/luci-px5g
-  $(call Package/luci/libtemplate)
-  TITLE:=PX5G RSA Keymaster
+  $(call Package/luci/webservertemplate)
+  TITLE:=RSA/X.509 Key Generator (required for LuCId SSL support)
   DEPENDS:=+luci-nixio
 endef
 
