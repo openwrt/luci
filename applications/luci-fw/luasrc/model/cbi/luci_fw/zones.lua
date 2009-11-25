@@ -23,6 +23,7 @@ nw.init(m.uci)
 
 s = m:section(TypedSection, "defaults")
 s.anonymous = true
+s.addremove = false
 
 s:option(Flag, "syn_flood")
 
