@@ -15,6 +15,7 @@ m = Map("dhcp", "Dnsmasq")
 
 s = m:section(TypedSection, "dnsmasq", translate("settings"))
 s.anonymous = true
+s.addremove = false
 
 s:option(Flag, "domainneeded")
 s:option(Flag, "authoritative")

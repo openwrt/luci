@@ -16,6 +16,7 @@ m = Map("firewall", translate("fw_fw"), translate("fw_fw1"))
 
 s = m:section(TypedSection, "defaults")
 s.anonymous = true
+s.addremove = false
 
 s:option(Flag, "syn_flood")
 
