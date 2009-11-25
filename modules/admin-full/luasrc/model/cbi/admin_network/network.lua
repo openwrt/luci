@@ -25,6 +25,7 @@ local netstat = sys.net.deviceinfo()
 
 s = m:section(TypedSection, "interface", "")
 s.addremove = true
+s.anonymous = false
 s.extedit   = luci.dispatcher.build_url("admin", "network", "network") .. "/%s"
 s.template  = "cbi/tblsection"
 s.override_scheme = true
