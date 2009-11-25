@@ -4,6 +4,8 @@ require("luci.model.uci")
 m = Map("luci_splash", "Client-Splash", [[Client-Splash ist das Freifunk Hotspot-Authentifizierungs-System.]])
 
 s = m:section(NamedSection, "general", "core", "Allgemein")
+s.addremove = false
+
 s:option(Value, "leasetime", "Freigabezeit", "h")
 
 s:option(Value, "limit_up", "Upload-Limitierung", "Kilobyte/s - limitiert die Upload-Geschwindigkeit von Clients")
