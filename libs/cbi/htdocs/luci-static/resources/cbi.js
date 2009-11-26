@@ -45,7 +45,18 @@ function cbi_d_checkvalue(target, ref) {
 	var t = document.getElementById(target);
 	var value;
 
-	if (!t || !t.value) {
+	if (!t) {
+		var tl = document.getElementsByName(target);
+
+		if( tl.length > 0 && tl[0].type == 'radio' )
+			for( var i = 0; i < tl.length; i++ )
+				if( tl[i].checked ) {
+					value = tl[i].value;
+					break;
+				}
+
+		value = value ? value : "";
+	} else if (!t.value) {
 		value = "";
 	} else {
 		value = t.value;
