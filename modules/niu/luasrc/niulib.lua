@@ -39,7 +39,7 @@ function eth_get_available(except)
 end
 
 function eth_get_bridged(except)
-	local devs = state:get("network", except, "device")
+	local devs = state:get("network", except, "device") or ""
 	
 	local ifs = {}
 	local cnt = 0
