@@ -21,19 +21,24 @@
 #include <stdlib.h>
 
 /* 52 bit maximum precision */
+#ifdef NIXIO_DOUBLE
+#define NIXIO_BIT_BMAX 52
+#define NIXIO_BIT_NMAX 0xfffffffffffff
+#else
 #define NIXIO_BIT_BMAX 32
 #define NIXIO_BIT_NMAX 0xffffffff
+#endif
 
 #define NIXIO_BIT_XOP(BIT_XOP)						\
-	uint64_t oper = luaL_checkinteger(L, 1);			\
+	uint64_t oper = nixio__checknumber(L, 1);		\
 	const int args = lua_gettop(L);					\
 													\
 	for (int i = 2; i <= args; i++) {				\
-		uint64_t oper2 = luaL_checkinteger(L, i);	\
+		uint64_t oper2 = nixio__checknumber(L, i);	\
 		oper BIT_XOP oper2;							\
 	}												\
 													\
-	lua_pushinteger(L, oper);						\
+	nixio__pushnumber(L, oper);						\
 	return 1;										\
 
 
@@ -54,53 +59,63 @@ static int nixio_bit_unset(lua_State *L) {
 }
 
 static int nixio_bit_not(lua_State *L) {
-	lua_pushinteger(L, (~((uint64_t)luaL_checkinteger(L, 1))) & NIXIO_BIT_NMAX);
+	nixio__pushnumber(L,
+			(~((uint64_t)nixio__checknumber(L, 1))) & NIXIO_BIT_NMAX);
 	return 1;
 }
 
 static int nixio_bit_shl(lua_State *L) {
-	uint64_t oper = luaL_checkinteger(L, 1);
+	uint64_t oper = nixio__checknumber(L, 1);
 	oper <<= luaL_checkinteger(L, 2);
 	if (oper > NIXIO_BIT_NMAX) {
 		return luaL_error(L, "arithmetic overflow");
 	} else {
-		lua_pushinteger(L, oper);
+		nixio__pushnumber(L, oper);
 		return 1;
 	}
 }
 
 static int nixio_bit_ashr(lua_State *L) {
-	int64_t oper = luaL_checkinteger(L, 1);
-	lua_pushinteger(L, oper >> luaL_checkinteger(L, 2));
+	int64_t oper = nixio__checknumber(L, 1);
+	nixio__pushnumber(L, oper >> luaL_checkinteger(L, 2));
 	return 1;
 }
 
 static int nixio_bit_shr(lua_State *L) {
-	uint64_t oper = luaL_checkinteger(L, 1);
-	lua_pushinteger(L, oper >> luaL_checkinteger(L, 2));
+	uint64_t oper = nixio__checknumber(L, 1);
+	nixio__pushnumber(L, oper >> luaL_checkinteger(L, 2));
 	return 1;
 }
 
 static int nixio_bit_div(lua_State *L) {
-	NIXIO_BIT_XOP(/=);
+	uint64_t oper = luaL_checknumber(L, 1);
+	const int args = lua_gettop(L);
+
+	for (int i = 2; i <= args; i++) {
+		uint64_t oper2 = nixio__checknumber(L, i);
+		oper /= oper2;
+	}
+
+	nixio__pushnumber(L, oper);
+	return 1;
 }
 
 static int nixio_bit_check(lua_State *L) {
-	uint64_t oper  = luaL_checkinteger(L, 1);
-	uint64_t oper2 = luaL_checkinteger(L, 2);
+	uint64_t oper  = nixio__checknumber(L, 1);
+	uint64_t oper2 = nixio__checknumber(L, 2);
 	lua_pushboolean(L, (oper & oper2) == oper2);
 	return 1;
 }
 
 static int nixio_bit_cast(lua_State *L) {
-	lua_pushinteger(L, ((uint64_t)luaL_checkinteger(L, 1)) & NIXIO_BIT_NMAX);
+	nixio__pushnumber(L, ((uint64_t)nixio__checknumber(L, 1)) & NIXIO_BIT_NMAX);
 	return 1;
 }
 
 static int nixio_bit_swap(lua_State *L) {
-	uint64_t op = luaL_checkinteger(L, 1);
+	uint64_t op = nixio__checknumber(L, 1);
 	op = (op >> 24) | ((op >> 8) & 0xff00) | ((op & 0xff00) << 8) | (op << 24);
-	lua_pushinteger(L, op);
+	nixio__pushnumber(L, op);
 	return 1;
 }
 
@@ -126,9 +141,9 @@ static const luaL_reg R[] = {
 void nixio_open_bit(lua_State *L) {
 	lua_newtable(L);
 	luaL_register(L, NULL, R);
-	lua_pushinteger(L, NIXIO_BIT_BMAX);
+	nixio__pushnumber(L, NIXIO_BIT_BMAX);
 	lua_setfield(L, -2, "bits");
-	lua_pushinteger(L, NIXIO_BIT_NMAX);
+	nixio__pushnumber(L, NIXIO_BIT_NMAX);
 	lua_setfield(L, -2, "max");
 	lua_setfield(L, -2, "bit");
 }

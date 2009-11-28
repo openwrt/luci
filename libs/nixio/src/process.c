@@ -225,16 +225,16 @@ static int nixio_times(lua_State *L) {
 		return nixio__perror(L);
 	} else {
 		lua_createtable(L, 0, 4);
-		lua_pushinteger(L, buf.tms_cstime);
+		nixio__pushnumber(L, buf.tms_cstime);
 		lua_setfield(L, -2, "cstime");
 
-		lua_pushinteger(L, buf.tms_cutime);
+		nixio__pushnumber(L, buf.tms_cutime);
 		lua_setfield(L, -2, "cutime");
 
-		lua_pushinteger(L, buf.tms_stime);
+		nixio__pushnumber(L, buf.tms_stime);
 		lua_setfield(L, -2, "stime");
 
-		lua_pushinteger(L, buf.tms_utime);
+		nixio__pushnumber(L, buf.tms_utime);
 		lua_setfield(L, -2, "utime");
 
 		return 1;
@@ -365,16 +365,16 @@ static int nixio_sysinfo(lua_State *L) {
 
 	lua_createtable(L, 0, 12);
 
-	lua_pushinteger(L, info.bufferram);
+	nixio__pushnumber(L, info.bufferram);
 	lua_setfield(L, -2, "bufferram");
 
-	lua_pushinteger(L, info.freehigh);
+	nixio__pushnumber(L, info.freehigh);
 	lua_setfield(L, -2, "freehigh");
 
-	lua_pushinteger(L, info.freeram);
+	nixio__pushnumber(L, info.freeram);
 	lua_setfield(L, -2, "freeram");
 
-	lua_pushinteger(L, info.freeswap);
+	nixio__pushnumber(L, info.freeswap);
 	lua_setfield(L, -2, "freeswap");
 
 	lua_createtable(L, 0, 3);
@@ -390,16 +390,16 @@ static int nixio_sysinfo(lua_State *L) {
 	lua_pushinteger(L, info.procs);
 	lua_setfield(L, -2, "procs");
 
-	lua_pushinteger(L, info.sharedram);
+	nixio__pushnumber(L, info.sharedram);
 	lua_setfield(L, -2, "sharedram");
 
-	lua_pushinteger(L, info.totalhigh);
+	nixio__pushnumber(L, info.totalhigh);
 	lua_setfield(L, -2, "totalhigh");
 
-	lua_pushinteger(L, info.totalram);
+	nixio__pushnumber(L, info.totalram);
 	lua_setfield(L, -2, "totalram");
 
-	lua_pushinteger(L, info.totalswap);
+	nixio__pushnumber(L, info.totalswap);
 	lua_setfield(L, -2, "totalswap");
 
 	lua_pushinteger(L, info.uptime);
