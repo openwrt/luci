@@ -13,17 +13,30 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
+local bridge = (arg[1] == "bridgelan")
 local niulib = require "luci.niulib"
 local fs = require "nixio.fs"
 local has_ipv6 = fs.access("/proc/net/ipv6_route")
 
-m = Map("network", "Configure Local Network", "These settings affect the devices in your local network. "..
-"Usually you do not need to change anything here for your router to work correctly.")
+m = Map("network", translate("Configure Local Network"), bridge and
+translate([[The wireless network will be connected directly to your local network.
+Make sure you to assign any address to this device that is in the same subnet
+of the other devices in your network but that is not already occupied.
+If you have a DHCP-Server in this network you may also choose DHCP for address configuration.]])
+or translate("These settings affect the devices in your local network. "..
+"Usually you do not need to change anything here for your router to work correctly."))
 
 s = m:section(NamedSection, "lan", "interface", "Network Settings")
 s.addremove = false
 
 s:tab("general", translate("General Settings"))
+s:tab("expert", translate("Expert Settings"))
+
+p = s:taboption("expert", ListValue, "proto", translate("Address Configuration"))
+p.default = "static"
+p:value("static", translate("Static Configuration"))
+p:value("dhcp", "DHCP")
+
 
 ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ipaddr.default = "192.168.0.1"
@@ -37,14 +50,6 @@ nm:value("255.0.0.0")
 nm:depends("proto", "static")
 
 
-
-s:tab("expert", translate("Expert Settings"))
-
-p = s:taboption("expert", ListValue, "proto", translate("Connection Protocol"))
-p.default = "static"
-p:value("static", translate("Static Ethernet"))
-p:value("dhcp", "DHCP")
-
 mac = s:taboption("expert", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 
 mtu = s:taboption("expert", Value, "mtu", "MTU")
@@ -54,7 +59,7 @@ dns = s:taboption("expert", Value, "dns", translate("<abbr title=\"Domain Name S
 dns:depends("peerdns", "")
 
 
-gw = s:taboption("expert", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
+gw = s:taboption(bridge and "general" or "expert", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
 gw:depends("proto", "static")
 
 bcast = s:taboption("expert", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
@@ -68,8 +73,11 @@ if has_ipv6 then
 	ip6gw:depends("proto", "static")
 end
 
-emerg = s:taboption("expert", Value, "_emergv4", translate("Emergency Access Address"))
+emerg = s:taboption("expert", Value, "_emergv4", translate("Emergency Access Address"),
+translate([[In case the DHCP request fails you will still be able to access this device using given IP 
+by configuring your computer to an address in the same subnet and netmask 255.255.255.0.]]))
 emerg:depends("proto", "dhcp")
+emerg:value("", translate("disable"))
 emerg.default = "169.254.255.169"
 
 
@@ -83,7 +91,6 @@ for _, eth in ipairs(niulib.eth_get_available("lan")) do
 end
 
 
-
 m2 = Map("dhcp")
 
 s = m2:section(TypedSection, "dhcp", "DHCP")
@@ -95,7 +102,10 @@ s:tab("general", translate("General Settings"))
 
 s:depends("interface", "lan")
 
-enable = s:taboption("general", ListValue, "ignore", "Automatic address assignment for network devices", "")
+enable = s:taboption("general", ListValue, "ignore", translate("Automatic address assignment for network devices"),
+bridge and 
+translate("Note: Be careful that you do not accidently two DHCP servers in the same network with overlapping address ranges.")
+or "")
 enable:value(0, translate("enable"), {["network.lan.proto"] = "static"})
 enable:value(1, translate("disable"))
 
@@ -103,17 +113,19 @@ enable:value(1, translate("disable"))
 s:tab("expert", translate("Expert Settings"))
 start = s:taboption("expert", Value, "start", translate("First leased address"))
 start:depends("ignore", "0")
+start.default = "100"
 
 limit = s:taboption("expert", Value, "limit", translate("Number of leased addresses"), "")
 limit:depends("ignore", "0")
+limit.default = "150"
 
-time = s:taboption("expert", Value, "leasetime", "Lease Time")
+time = s:taboption("expert", Value, "leasetime", translate("Lease Time"))
 time:depends("ignore", "0")
+time.default = "12h"
 
-local dd = s:taboption("expert", Flag, "dynamicdhcp", "Also generate addresses for unknown devices")
+local dd = s:taboption("expert", Flag, "dynamicdhcp", translate("Also generate addresses for unknown devices"))
 dd.rmempty = false
 dd.default = "1"
 dd:depends("ignore", "0")
-
 
 return m, m2

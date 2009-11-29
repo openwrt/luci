@@ -16,12 +16,12 @@ $Id$
 local iface = "ap"
 local ap = true
 
-
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local cursor = require "luci.model.uci".inst
 local state = require "luci.model.uci".inst_state
 cursor:unload("wireless")
+
 
 local device = cursor:get("wireless", iface, "device")
 local hwtype = cursor:get("wireless", device, "type")
@@ -175,7 +175,9 @@ s.addremove = false
 s:tab("general", translate("General Settings"))
 s:tab("expert", translate("Expert Settings"))
 
-s:taboption("general", Value, "ssid", translate("Network Name (<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>)"))
+
+
+local ssid = s:taboption("general", Value, "ssid", translate("Network Name (<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>)"))
 
 mode = s:taboption("expert", ListValue, "mode", translate("Operating Mode"))
 mode.override_values = true
@@ -185,8 +187,12 @@ encr = s:taboption("expert", ListValue, "encryption", translate("Encryption"))
 
 
 if hwtype == "mac80211" then
-	s:taboption("expert", Flag, "wds", translate("Enable Bridging and Repeating (WDS)"))
-	s:taboption("expert", Flag, "powersave", translate("Enable Powersaving"))
+	mode:value("mesh", translate("Mesh (802.11s)"))
+	local meshid = s:taboption("expert", Value, "mesh_id", translate("Mesh ID"))
+	meshid:depends("mode", "mesh")
+
+	s:taboption("expert", Flag, "wds", translate("Enable Bridging and Repeating (WDS)")):depends("mode", "ap")
+	s:taboption("expert", Flag, "powersave", translate("Enable Powersaving")):depends("mode", "ap")
 elseif hwtype == "atheros" then
 	-- mode:value("wds", translate("Static WDS"))
 	
@@ -246,16 +252,26 @@ encr:value("wep", "WEP", {mode="ap"})
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local hostapd = fs.access("/usr/sbin/hostapd") or os.getenv("LUCI_SYSROOT")
+	local supplicant = fs.access("/usr/sbin/wpa_supplicant") or os.getenv("LUCI_SYSROOT")
 
-	if hostapd then
-		--s:taboption("expert", Flag, "_alloweap", "Allow EAP / 802.11i authentication")
-		
+	if hostapd and not supplicant then		
 		encr:value("psk", "WPA", {mode="ap"})
 		encr:value("wpa", "WPA-EAP", {mode="ap"})
 		encr:value("psk-mixed", "WPA + WPA2", {mode="ap"})
 		encr:value("psk2", "WPA2", {mode="ap"})
 		encr:value("wpa2", "WPA2-EAP (802.11i)", {mode="ap"})
 		encr.default = "psk-mixed"
+	elseif not hostapd and supplicant then
+		encr:value("psk", "WPA", {mode="mesh"})
+		encr:value("psk2", "WPA2", {mode="mesh"})
+		encr.default = "psk2"
+	elseif hostapd and supplicant then
+		encr:value("psk", "WPA", {mode="ap"}, {mode="mesh"})
+		encr:value("wpa", "WPA-EAP", {mode="ap"})
+		encr:value("psk-mixed", "WPA + WPA2", {mode="ap"})
+		encr:value("psk2", "WPA2", {mode="ap"}, {mode="mesh"})
+		encr:value("wpa2", "WPA2-EAP (802.11i)", {mode="ap"})
+		encr.default = "psk-mixed"		
 	end
 elseif hwtype == "broadcom" then
 	encr:value("psk", "WPA")

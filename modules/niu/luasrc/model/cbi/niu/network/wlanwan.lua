@@ -18,47 +18,56 @@ local uci = require "luci.model.uci"
 local nixio = require "nixio"
 local iwinfo = require "iwinfo"
 
+local bridge
+local iface = "client"
+local net = "wan"
+if arg[1] == "bridge" then
+	bridge = true
+	iface = "bridge"
+	net = "lan"
+end
+
 local cursor = uci.inst
 local state = uci.inst_state
 cursor:unload("wireless")
 state:unload("wireless")
 
 local has_ipv6 = fs.access("/proc/net/ipv6_route")
-local device = cursor:get("wireless", "client", "device")
+local device = cursor:get("wireless", iface, "device")
 local hwtype = cursor:get("wireless", device, "type")
 
 
 -- Bring up interface and scan --
 
-if not state:get("wireless", "client", "network") then
+if not state:get("wireless", iface, "network") then
 	local olduci = uci.cursor(nil, "")
-	local oldcl = olduci:get_all("wireless", "client")
+	local oldcl = olduci:get_all("wireless", iface)
 	olduci:unload("wireless")
 	
 	local newuci = uci.cursor()
-	local newcl = newuci:get_all("wireless", "client")
-	newcl.network = "wan"
+	local newcl = newuci:get_all("wireless", iface)
+	newcl.network = net
 	
 	local proc = nixio.fork()
 	if proc == 0 then
-		newuci:delete("wireless", "client", "ssid")
+		newuci:delete("wireless", iface, "ssid")
 		newuci:commit("wireless")
 		nixio.exec("/sbin/wifi", "up", device)
 		os.exit(1) 
 	end
 	nixio.wait(proc)
 	
-	newuci:delete("wireless", "client")
-	newuci:section("wireless", "wifi-iface", "client", oldcl)
+	newuci:delete("wireless", iface)
+	newuci:section("wireless", "wifi-iface", iface, oldcl)
 	newuci:commit("wireless")
-	newuci:tset("wireless", "client", newcl)
+	newuci:tset("wireless", iface, newcl)
 	newuci:save("wireless")
 	newuci:unload("wireless")
 
 	state:unload("wireless")
 end
  
-local ifname = state:get("wireless", "client", "ifname") or "wlan0dummy"
+local ifname = state:get("wireless", iface, "ifname") or "wlan0dummy"
 local iwlib = iwinfo.type(ifname) and iwinfo[iwinfo.type(ifname)]
 local suggest = {}
 local encrdep = {
@@ -78,9 +87,13 @@ end
 
 -- Form definition --
 
-m2 = Map("wireless", "Configure WLAN-Adapter for Internet Connection")
+m2 = Map("wireless", translate("Configure WLAN-Adapter for Client Connection"),
+bridge and ("<strong>" .. translate([[It is absolutely necessary that the network you are joining
+supports and allows bridging (WDS) otherwise your connection will fail.]]) .. "</strong> " .. 
+translate([[Note: You can use the access point wizard to configure your
+private access point to increase the range of the network you are connected to.]])) or "")
 
-s = m2:section(NamedSection, "client", "wifi-iface", "Wireless Settings")
+s = m2:section(NamedSection, iface, "wifi-iface", translate("Wireless Settings"))
 s.addremove = false
 
 s:tab("general", translate("General Settings"))
@@ -122,9 +135,11 @@ encr = s:taboption("general", ListValue, "encryption", translate("Encryption"))
 
 
 if hwtype == "mac80211" then
-	mode:value("mesh", translate("Mesh (802.11s)"))
-	local meshid = s:taboption("expert", Value, "mesh_id", translate("Mesh ID"))
-	meshid:depends("mode", "mesh")
+	if not bridge then
+		mode:value("mesh", translate("Mesh (802.11s)"))
+		local meshid = s:taboption("expert", Value, "mesh_id", translate("Mesh ID"))
+		meshid:depends("mode", "mesh")
+	end
 	
 	local ps = s:taboption("expert", Flag, "powersave", translate("Enable Powersaving"))
 	ps:depends("mode", "sta")
@@ -208,11 +223,11 @@ end
 
 
 
-
+if not bridge then
 
 m = Map("network")
 
-s = m:section(NamedSection, "wan", "interface", translate("Address Settings"))
+s = m:section(NamedSection, net, "interface", translate("Address Settings"))
 s.addremove = false
 
 s:tab("general", translate("General Settings"))
@@ -261,3 +276,9 @@ mtu.isinteger = true
 mac = s:taboption("expert", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 
 return m2, m
+
+else
+
+return m2
+
+end

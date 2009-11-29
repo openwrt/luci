@@ -52,7 +52,7 @@ function eth_get_bridged(except)
 	return cnt > 1 and ifs or {}
 end
 
-function wifi_get_available(except)
+function wifi_get_available(except, types)
 	cursor:unload("wireless")
 
 	local iwinfo = require "iwinfo"
@@ -72,7 +72,7 @@ function wifi_get_available(except)
 
 	local wifis = {}
 	cursor:foreach("wireless", "wifi-device", function(s)
-		if not used[s[".name"]] then
+		if not used[s[".name"]] and (not types or types[s.type]) then
 			wifis[#wifis+1] = s[".name"]
 		end
 	end)

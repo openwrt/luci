@@ -35,6 +35,7 @@ local nixio = require "nixio", require "nixio.util"
 module("luci.dispatcher", package.seeall)
 context = util.threadlocal()
 uci = require "luci.model.uci"
+i18n = require "luci.i18n"
 _M.fs = fs
 
 authenticator = {}

@@ -9,12 +9,21 @@ end
 local function deviceroute(self)
 	cursor:unload("wireless")
 	local d = cursor:get("wireless", "ap", "device")
+	local t = cursor:get("wireless", "ap", "_cfgtpl")
 	if d ~= "none" then
 		cursor:delete_all("wireless", "wifi-iface", function(s)
 			return s.device == d and s._niu ~= "1"
 		end)
 		cursor:set("wireless", d, "disabled", 0)
 		cursor:set("wireless", "ap", "network", "lan")
+		if t and #t > 0 then
+			cursor:delete("wireless", "ap", "_cfgtpl")
+			cursor:set("wireless", "ap", "ssid", cursor:get("wireless", "bridge", "ssid"))
+			cursor:set("wireless", "ap", "encryption", cursor:get("wireless", "bridge", "encryption"))
+			cursor:set("wireless", "ap", "key", cursor:get("wireless", "bridge", "key"))
+			cursor:set("wireless", "ap", "wds", "1")
+		end
+		
 		self:set_route("ap1")
 	else
 		cursor:delete("wireless", "ap", "network")
