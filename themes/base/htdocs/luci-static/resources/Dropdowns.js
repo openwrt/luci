@@ -60,46 +60,118 @@ function initDropdowns() {
 		}
 	}
 
+	function isEmptyObject(obj) {
+		for(var i in obj) {
+			return false;
+		}
+		return true;
+	}
+
+	var nextUniqueID = 1;
+	var elementsNeeded = {};
+	var menusShown = {};
+	var menusToHide = {};
+	var delayHideTimerId;
+	var delayHideAllTime = 1000;
+	var delayHideTime = 400;
+	function delayHide() {
+		for(var i in menusToHide) {
+			XHTML1.removeClass(menusToHide[i], "focus");
+		}
+		delayHideTimerId = null;
+	}
+
+	function updatePopup() {
+		if(isIE6) {
+			if(isEmptyObject(elementsNeeded)) {
+				showSelects();
+			}
+			else{
+				hideSelects();
+			}
+		}
+
+		var menusShownOld = menusShown;
+		menusShown = {};
+		for(var id in elementsNeeded) {
+			var element = elementsNeeded[id];
+			for(element = findLi(element); element; element = findLi(element.parentNode)) {
+				XHTML1.addClass(element, "focus");
+				if(!element.uniqueID) {
+					element.uniqueID = nextUniqueID++;
+				}
+				element.style.zIndex = 1000;
+				menusShown[element.uniqueID] = element;
+				delete menusToHide[element.uniqueID];
+			}
+		}
+		for(var id in menusShownOld) {
+			if(!menusShown[id]) {
+				if(delayHideTimerId) {
+					clearTimeout(delayHideTimerId);
+					delayHideTimerId = 0;
+					delayHide();
+				}
+				menusToHide[id] = menusShownOld[id];
+				menusToHide[id].style.zIndex = 999;
+			}
+		}
+		if(menusToHide || isEmptyObject(elementsNeeded)) {
+			if(delayHideTimerId) {
+				clearTimeout(delayHideTimerId);
+			}
+			delayHideTimerId = setTimeout(delayHide, isEmptyObject(elementsNeeded) ? delayHideAllTime : delayHideTime);
+		}
+	}
+
+	function findLi(element) {
+		for(; element; element = element.parentNode) {
+			if(XHTML1.isElement(element, "li")) {
+				return element;
+			}
+		}
+	}
+
 	function onmouseover(evt) {
+		var li = findLi(evt.currentTarget);
+		if(li && !li.focused) {
+			if(!li.uniqueID) {
+				li.uniqueID = nextUniqueID++;
+			}
+			elementsNeeded[li.uniqueID] = li;
+		}
 		XHTML1.addClass(evt.currentTarget, "over");
-		if( isIE6 ) hideSelects();
+		updatePopup();
 	}
 
 	function onmouseout(evt) {
+		var li = findLi(evt.currentTarget);
+		if(li && !li.focused && li.uniqueID) {
+			delete elementsNeeded[li.uniqueID];
+		}
 		XHTML1.removeClass(evt.currentTarget, "over");
-		if( isIE6 ) showSelects();
+		updatePopup();
 	}
 
 	function onfocus(evt) {
-		for(var element = evt.currentTarget; element; element = element.parentNode) {
-			if(XHTML1.isElement(element, "li")) {
-				XHTML1.addClass(element, "focus");
+		var li = findLi(evt.currentTarget);
+		if(li) {
+			li.focused = true;
+			if(!li.uniqueID) {
+				li.uniqueID = nextUniqueID++;
 			}
+			elementsNeeded[li.uniqueID] = li;
 		}
-		if( isIE6 ) hideSelects();
+		updatePopup();
 	}
 
 	function onblur(evt) {
-		for(var element = evt.currentTarget; element; element = element.parentNode) {
-			if(XHTML1.isElement(element, "li")) {
-				XHTML1.removeClass(element, "focus");
-			}
+		var li = findLi(evt.currentTarget);
+		if(li) {
+			li.focused = false;
+			delete elementsNeeded[li.uniqueID];
 		}
-		if( isIE6 ) showSelects();
-	}
-
-	if(document.all) {
-		var liElements = XHTML1.getElementsByTagName("li");
-		for(var i = 0; i < liElements.length; i++) {
-			var li = liElements[i];
-			for(var element = li.parentNode; element; element = element.parentNode) {
-				if(XHTML1.isElement(element, "ul") && XHTML1.containsClass(element, "dropdowns")) {
-					XHTML1.addEventListener(li, "mouseover", onmouseover);
-					XHTML1.addEventListener(li, "mouseout", onmouseout);
-					break;
-				}
-			}
-		}
+		updatePopup();
 	}
 
 	var aElements = XHTML1.getElementsByTagName("a");
@@ -109,6 +181,8 @@ function initDropdowns() {
 			if(XHTML1.isElement(element, "ul") && XHTML1.containsClass(element, "dropdowns")) {
 				XHTML1.addEventListener(a, "focus", onfocus);
 				XHTML1.addEventListener(a, "blur", onblur);
+				XHTML1.addEventListener(a, "mouseover", onmouseover);
+				XHTML1.addEventListener(a, "mouseout", onmouseout);
 				break;
 			}
 		}
