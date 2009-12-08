@@ -107,7 +107,14 @@ end
 --
 function request_raw(uri, options)
 	options = options or {}
-	local pr, host, port, path = uri:match("(%w+)://([%w-.]+):?([0-9]*)(.*)")
+	local pr, auth, host, port, path
+	if uri:find("@") then
+		pr, auth, host, port, path =
+			uri:match("(%w+)://(.+)@([%w-.]+):?([0-9]*)(.*)")
+	else
+		pr, host, port, path = uri:match("(%w+)://([%w-.]+):?([0-9]*)(.*)")
+	end
+
 	if not host then
 		return nil, -1, "unable to parse URI"
 	end
@@ -128,6 +135,10 @@ function request_raw(uri, options)
 		headers.Connection = "close"
 	end
 	
+	if auth and not headers.Authorization then
+		headers.Authorization = "Basic " .. nixio.bin.b64encode(auth)
+	end
+
 	local sock, code, msg = nixio.connect(host, port)
 	if not sock then
 		return nil, code, msg
