@@ -523,6 +523,7 @@ static void fwd_read_redirects_cb(
 ) {
 	const char *src;
 	struct fwd_data *dtn  = NULL;
+	struct fwd_data *dtn2 = NULL;
 	struct fwd_zone *zsrc = NULL;
 
 	/* check zone */
@@ -561,6 +562,31 @@ static void fwd_read_redirects_cb(
 		dtn->type = FWD_S_REDIRECT;
 		dtn->next = cv->cursor;
 		cv->cursor = dtn;
+
+		if( (proto != NULL) && (proto->type == FWD_PR_TCPUDP) )
+		{
+			if( !(dtn2 = fwd_alloc_ptr(struct fwd_data)) ||
+			    !(dtn2->section.redirect.proto = fwd_alloc_ptr(struct fwd_proto))
+			) {
+				fwd_free_ptr(dtn2);
+				fwd_read_error("out of memory while parsing config!");
+			}
+
+			dtn->section.redirect.proto->type = FWD_PR_UDP;
+			dtn2->section.redirect.proto->type = FWD_PR_TCP;
+
+			dtn2->section.redirect.src       = zsrc;
+			dtn2->section.redirect.src_ip    = src_ip;
+			dtn2->section.redirect.src_mac   = src_mac;
+			dtn2->section.redirect.src_port  = src_port;
+			dtn2->section.redirect.src_dport = src_dport;
+			dtn2->section.redirect.dest_ip   = dest_ip;
+			dtn2->section.redirect.dest_port = dest_port;
+
+			dtn2->type = FWD_S_REDIRECT;
+			dtn2->next = cv->cursor;
+			cv->cursor = dtn2;
+		}
 	}
 	else
 	{
@@ -592,6 +618,7 @@ static void fwd_read_rules_cb(
 ) {
 	const char *src, *dest;
 	struct fwd_data *dtn   = NULL;
+	struct fwd_data *dtn2  = NULL;
 	struct fwd_zone *zsrc  = NULL;
 	struct fwd_zone *zdest = NULL;
 
@@ -640,6 +667,32 @@ static void fwd_read_rules_cb(
 		dtn->type = FWD_S_RULE;
 		dtn->next = cv->cursor;
 		cv->cursor = dtn;
+
+		if( (proto != NULL) && (proto->type == FWD_PR_TCPUDP) )
+		{
+			if( !(dtn2 = fwd_alloc_ptr(struct fwd_data)) ||
+			    !(dtn2->section.rule.proto = fwd_alloc_ptr(struct fwd_proto))
+			) {
+				fwd_free_ptr(dtn2);
+				fwd_read_error("out of memory while parsing config!");
+			}
+
+			dtn->section.rule.proto->type = FWD_PR_UDP;
+			dtn2->section.rule.proto->type = FWD_PR_TCP;
+
+			dtn2->section.rule.src       = zsrc;
+			dtn2->section.rule.src_ip    = src_ip;
+			dtn2->section.rule.src_mac   = src_mac;
+			dtn2->section.rule.src_port  = src_port;
+			dtn2->section.rule.dest      = zdest;
+			dtn2->section.rule.dest_ip   = dest_ip;
+			dtn2->section.rule.dest_port = dest_port;
+			dtn2->section.rule.target    = dtn->section.rule.target;
+
+			dtn2->type = FWD_S_RULE;
+			dtn2->next = cv->cursor;
+			cv->cursor = dtn2;
+		}
 	}
 	else
 	{
