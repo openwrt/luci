@@ -19,6 +19,7 @@
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+#include <luaconf.h>
 
 #define NIXIO_BUFFERSIZE 8192
 
@@ -38,6 +39,18 @@ typedef struct nixio_address {
 
 int nixio__perror(lua_State *L);
 int nixio__pstatus(lua_State *L, int condition);
+
+#if defined(LUA_NUMBER_DOUBLE) || defined(LNUM_DOUBLE) || defined(LNUM_LDOUBLE)
+#define NIXIO_DOUBLE 1
+#define nixio__checknumber luaL_checknumber
+#define nixio__pushnumber  lua_pushnumber
+#define nixio__optnumber   luaL_optnumber
+#else
+#define nixio__checknumber luaL_checkinteger
+#define nixio__pushnumber  lua_pushinteger
+#define nixio__optnumber   luaL_optinteger
+#endif
+
 
 #ifndef __WINNT__
 
