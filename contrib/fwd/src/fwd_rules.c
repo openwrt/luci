@@ -20,6 +20,7 @@
 #include "fwd.h"
 #include "fwd_addr.h"
 #include "fwd_rules.h"
+#include "fwd_xtables.h"
 
 static void
 fwd_ipt_rule_append(struct fwd_ipt_rulebuf *r, const char *fmt, ...)
@@ -179,6 +180,33 @@ static void fwd_ipt_add_dnat_target(
 	}
 }
 
+static void fwd_ipt_add_policy_target(
+	struct fwd_ipt_rulebuf *r, enum fwd_policy p
+) {
+	fwd_ipt_rule_append(r, " -j %s",
+		(p == FWD_P_ACCEPT)
+			? "handle_accept"
+			: (p == FWD_P_REJECT)
+				? "handle_reject"
+				: "handle_drop"
+	);
+}
+
+static void fwd_ipt_add_comment(
+	struct fwd_ipt_rulebuf *r, const char *t, struct fwd_zone *z,
+	struct fwd_network_list *n, struct fwd_network_list *n2
+) {
+	if( (n != NULL) && (n2 != NULL) )
+		fwd_ipt_add_format(r, " -m comment --comment '%s:%s src:%s dest:%s'",
+			t, z->name, n->name, n2->name);
+	else if( (n == NULL) && (n2 != NULL) )
+		fwd_ipt_add_format(r, " -m comment --comment '%s:%s dest:%s'",
+			t, z->name, n2->name);
+	else
+		fwd_ipt_add_format(r, " -m comment --comment '%s:%s src:%s'",
+			t, z->name, n->name);
+}
+
 static void fwd_ipt_exec(struct fwd_ipt_rulebuf *r)
 {
 	if( r->len )
@@ -188,229 +216,310 @@ static void fwd_ipt_exec(struct fwd_ipt_rulebuf *r)
 	fwd_free_ptr(r);
 }
 
-static const char * fwd_str_policy(enum fwd_policy pol)
-{
-	return (pol == FWD_P_ACCEPT ? "ACCEPT" : "DROP");
+/* -P <chain> <policy> */
+static void fwd_r_set_policy(
+	struct iptc_handle *h, const char *chain, const char *policy
+) {
+	iptc_set_policy(chain, policy, NULL, h);
 }
 
-static const char * fwd_str_target(enum fwd_policy pol)
+/* -N <chain> */
+static void fwd_r_new_chain(struct iptc_handle *h, const char *chain)
 {
-	switch(pol)
+	iptc_create_chain(chain, h);
+}
+
+/* -A <chain1> -j <chain2> */
+static void fwd_r_jump_chain(
+	struct iptc_handle *h, const char *chain1, const char *chain2
+) {
+	struct fwd_xt_rule *r;
+
+	if( (r = fwd_xt_init_rule(h)) != NULL )
 	{
-		case FWD_P_ACCEPT:
-			return "ACCEPT";
+		fwd_xt_get_target(r, chain2);
+		fwd_xt_exec_rule(r, chain1);
+	}
+}
 
-		case FWD_P_REJECT:
-			return "REJECT";
+/* -A <chain> -m state --state INVALID -j DROP */
+static void fwd_r_drop_invalid(struct iptc_handle *h, const char *chain)
+{
+	struct fwd_xt_rule *r;
+	struct xtables_match *m;
 
-		default:
-			return "DROP";
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		if( (m = fwd_xt_get_match(r, "state")) != NULL )
+		{
+			fwd_xt_parse_match(r, m, "--state", "INVALID", 0);
+			fwd_xt_get_target(r, "DROP");
+			fwd_xt_exec_rule(r, chain);
+		}
+	}
+}
+
+/* -A <chain> -m state --state RELATED,ESTABLISHED -j ACCEPT */
+static void fwd_r_accept_related(struct iptc_handle *h, const char *chain)
+{
+	struct fwd_xt_rule *r;
+	struct xtables_match *m;
+
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		if( (m = fwd_xt_get_match(r, "state")) != NULL )
+		{
+			fwd_xt_parse_match(r, m, "--state", "RELATED,ESTABLISHED", 0);
+			fwd_xt_get_target(r, "ACCEPT");
+			fwd_xt_exec_rule(r, chain);
+		}
+	}
+}
+
+/* -A INPUT -i lo -j ACCEPT; -A OUTPUT -o lo -j ACCEPT */
+static void fwd_r_accept_lo(struct iptc_handle *h)
+{
+	struct fwd_network_list n;
+	struct fwd_xt_rule *r;
+
+	n.ifname = "lo";
+
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		fwd_xt_parse_in(r, &n, 0);
+		fwd_xt_get_target(r, "ACCEPT");
+		fwd_xt_exec_rule(r, "INPUT");
 	}
 
-	return "DROP";
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		fwd_xt_parse_out(r, &n, 0);
+		fwd_xt_get_target(r, "ACCEPT");
+		fwd_xt_exec_rule(r, "OUTPUT");
+	}
+}
+
+/* build syn_flood chain and jump rule */
+static void fwd_r_add_synflood(struct iptc_handle *h, struct fwd_defaults *def)
+{
+	struct fwd_proto p;
+	struct fwd_xt_rule *r;
+	struct xtables_match *m;
+	char buf[32];
+
+	/* -N syn_flood */
+	fwd_r_new_chain(h, "syn_flood");
+
+	/* return rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		/* -p tcp */
+		p.type = FWD_PR_TCP;
+		fwd_xt_parse_proto(r, &p, 0);
+
+		/* -m tcp --syn */
+		if( (m = fwd_xt_get_match(r, "tcp")) != NULL )
+		{
+			fwd_xt_parse_match(r, m, "--syn", NULL, 0);
+		}
+
+		/* -m limit --limit x/second --limit-burst y */
+		if( (m = fwd_xt_get_match(r, "limit")) != NULL )
+		{
+			sprintf(buf, "%i/second", def->syn_rate);
+			fwd_xt_parse_match(r, m, "--limit", buf, 0);
+
+			sprintf(buf, "%i", def->syn_burst);
+			fwd_xt_parse_match(r, m, "--limit-burst", buf, 0);
+		}
+
+		/* -j RETURN; -A syn_flood */
+		fwd_xt_get_target(r, "RETURN");
+		fwd_xt_exec_rule(r, "syn_flood");
+	}
+
+	/* drop rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{	
+		/* -j DROP; -A syn_flood */
+		fwd_xt_get_target(r, "DROP");
+		fwd_xt_exec_rule(r, "syn_flood");
+	}
+
+	/* jump to syn_flood rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{	
+		/* -p tcp */
+		p.type = FWD_PR_TCP;
+		fwd_xt_parse_proto(r, &p, 0);
+
+		/* -m tcp --syn */
+		if( (m = fwd_xt_get_match(r, "tcp")) != NULL )
+		{
+			fwd_xt_parse_match(r, m, "--syn", NULL, 0);
+		}
+
+		/* -j syn_flood; -A INPUT */
+		fwd_xt_get_target(r, "syn_flood");
+		fwd_xt_exec_rule(r, "INPUT");
+	}
+}
+
+/* build reject target chain */
+static void fwd_r_handle_reject(struct iptc_handle *h)
+{
+	struct fwd_proto p;
+	struct fwd_xt_rule *r;
+	struct xtables_target *t;
+
+	/* -N handle_reject */
+	fwd_r_new_chain(h, "handle_reject");
+
+	/* tcp reject rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		/* -p tcp */
+		p.type = FWD_PR_TCP;
+		fwd_xt_parse_proto(r, &p, 0);
+
+		/* -j REJECT --reject-with tcp-reset */
+		if( (t = fwd_xt_get_target(r, "REJECT")) != NULL )
+		{
+			fwd_xt_parse_target(r, t, "--reject-with", "tcp-reset", 0);
+		}
+
+		/* -A handle_reject */
+		fwd_xt_exec_rule(r, "handle_reject");
+	}
+
+	/* common reject rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		/* -j REJECT --reject-with icmp-port-unreachable */
+		if( (t = fwd_xt_get_target(r, "REJECT")) != NULL )
+		{
+			fwd_xt_parse_target(r, t, "--reject-with",
+				"icmp-port-unreachable", 0);
+		}
+
+		/* -A handle_reject */
+		fwd_xt_exec_rule(r, "handle_reject");
+	}
+}
+
+/* build drop target chain */
+static void fwd_r_handle_drop(struct iptc_handle *h)
+{
+	struct fwd_xt_rule *r;
+
+	/* -N handle_drop */
+	fwd_r_new_chain(h, "handle_drop");
+
+	/* common drop rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		/* -j DROP; -A handle_reject */
+		fwd_xt_get_target(r, "DROP");
+		fwd_xt_exec_rule(r, "handle_reject");
+	}
+}
+
+/* build accept target chain */
+static void fwd_r_handle_accept(struct iptc_handle *h)
+{
+	struct fwd_xt_rule *r;
+
+	/* -N handle_accept */
+	fwd_r_new_chain(h, "handle_accept");
+
+	/* common accept rule */
+	if( (r = fwd_xt_init_rule(h)) != NULL )
+	{
+		/* -j ACCEPT; -A handle_accept */
+		fwd_xt_get_target(r, "ACCEPT");
+		fwd_xt_exec_rule(r, "handle_accept");
+	}
 }
 
 
 static void fwd_ipt_defaults_create(struct fwd_data *d)
 {
 	struct fwd_defaults *def = &d->section.defaults;
+	struct iptc_handle *h_filter, *h_nat;
+
+	if( !(h_filter = iptc_init("filter")) || !(h_nat = iptc_init("nat")) )
+		fwd_fatal("Unable to obtain libiptc handle");
 
 	/* policies */
-	fwd_ipt_exec_format("filter", " -P INPUT %s", fwd_str_policy(def->input));
-	fwd_ipt_exec_format("filter", " -P OUTPUT %s", fwd_str_policy(def->output));
-	fwd_ipt_exec_format("filter", " -P FORWARD %s", fwd_str_policy(def->forward));
+	fwd_r_set_policy(h_filter, "INPUT",
+		def->input == FWD_P_ACCEPT ? "ACCEPT" : "DROP");
+	fwd_r_set_policy(h_filter, "OUTPUT",
+		def->output == FWD_P_ACCEPT ? "ACCEPT" : "DROP");
+	fwd_r_set_policy(h_filter, "FORWARD",
+		def->forward == FWD_P_ACCEPT ? "ACCEPT" : "DROP");
 
 	/* invalid state drop */
 	if( def->drop_invalid )
 	{
-		fwd_ipt_exec_format("filter", " -A INPUT --state INVALID -j DROP");
-		fwd_ipt_exec_format("filter", " -A OUTPUT --state INVALID -j DROP");
-		fwd_ipt_exec_format("filter", " -A FORWARD --state INVALID -j DROP");
+		fwd_r_drop_invalid(h_filter, "INPUT");
+		fwd_r_drop_invalid(h_filter, "OUTPUT");
+		fwd_r_drop_invalid(h_filter, "FORWARD");
 	}
 
 	/* default accept related */
-	fwd_ipt_exec_format("filter", " -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT");
-	fwd_ipt_exec_format("filter", " -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT");
-	fwd_ipt_exec_format("filter", " -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT");
+	fwd_r_accept_related(h_filter, "INPUT");
+	fwd_r_accept_related(h_filter, "OUTPUT");
+	fwd_r_accept_related(h_filter, "FORWARD");
 
 	/* default accept on lo */
-	fwd_ipt_exec_format("filter", " -A INPUT -i lo -j ACCEPT");
-	fwd_ipt_exec_format("filter", " -A OUTPUT -o lo -j ACCEPT");
+	fwd_r_accept_lo(h_filter);
 
 	/* syn flood protection */
 	if( def->syn_flood )
 	{
-		fwd_ipt_exec_format("filter", " -N syn_flood");
-
-		fwd_ipt_exec_format("filter",
-			" -A syn_flood -p tcp --syn -m limit --limit %i/second"
-			" --limit-burst %i -j RETURN",
-				def->syn_rate, def->syn_burst);
-
-		fwd_ipt_exec_format("filter", " -A syn_flood -j DROP");
-		fwd_ipt_exec_format("filter", " -A INPUT -p tcp --syn -j syn_flood");
+		fwd_r_add_synflood(h_filter, def);
 	}
 
-	/* standard input/output/forward chain */
-	fwd_ipt_exec_format("filter", " -N input");
-	fwd_ipt_exec_format("filter", " -N output");
-	fwd_ipt_exec_format("filter", " -N forward");
-	fwd_ipt_exec_format("filter", " -A INPUT -j input");
-	fwd_ipt_exec_format("filter", " -A OUTPUT -j output");
-	fwd_ipt_exec_format("filter", " -A FORWARD -j forward");
+	/* rule container chains */
+	fwd_r_new_chain(h_filter, "mssfix");
+	fwd_r_new_chain(h_filter, "zones");
+	fwd_r_new_chain(h_filter, "rules");
+	fwd_r_new_chain(h_filter, "redirects");
+	fwd_r_new_chain(h_filter, "forwardings");
+	fwd_r_jump_chain(h_filter, "INPUT", "rules");
+	fwd_r_jump_chain(h_filter, "FORWARD", "mssfix");
+	fwd_r_jump_chain(h_filter, "FORWARD", "zones");
+	fwd_r_jump_chain(h_filter, "FORWARD", "rules");
+	fwd_r_jump_chain(h_filter, "FORWARD", "redirects");
+	fwd_r_jump_chain(h_filter, "FORWARD", "forwardings");
+	fwd_r_new_chain(h_nat, "zonemasq");
+	fwd_r_new_chain(h_nat, "redirects");
+	fwd_r_jump_chain(h_nat, "POSTROUTING", "zonemasq");
+	fwd_r_jump_chain(h_nat, "PREROUTING", "redirects");
+	fwd_r_jump_chain(h_nat, "POSTROUTING", "redirects");
 
-	/* standard reject chain */
-	fwd_ipt_exec_format("filter", " -N reject");
-	fwd_ipt_exec_format("filter", " -A reject -p tcp -j REJECT --reject-with tcp-reset");
-	fwd_ipt_exec_format("filter", " -A reject -j REJECT --reject-with icmp-port-unreachable");
-}
-
-static void fwd_ipt_zone_create(struct fwd_data *d)
-{
-	struct fwd_zone *z = &d->section.zone;
-
-	if( !strcmp(z->name, "loopback") )
-		return;
-
-	fwd_ipt_exec_format("filter", " -N zone_%s",         z->name);
-	fwd_ipt_exec_format("filter", " -N zone_%s_forward", z->name);
-	fwd_ipt_exec_format("filter", " -N zone_%s_ACCEPT",  z->name);
-	fwd_ipt_exec_format("filter", " -N zone_%s_REJECT",  z->name);
-	fwd_ipt_exec_format("filter", " -N zone_%s_DROP",    z->name);
-	fwd_ipt_exec_format("filter", " -N zone_%s_MSSFIX",  z->name);
-
-	if( z->forward != FWD_P_UNSPEC )
-		fwd_ipt_exec_format("filter", " -A zone_%s_forward -j zone_%s_%s",
-			z->name, z->name, fwd_str_target(z->forward));
-
-	if( z->input != FWD_P_UNSPEC )
-		fwd_ipt_exec_format("filter", " -A zone_%s -j zone_%s_%s",
-			z->name, z->name, fwd_str_target(z->input));
-
-	if( z->output != FWD_P_UNSPEC )
-		fwd_ipt_exec_format("filter", " -A output -j zone_%s_%s",
-			z->name, fwd_str_target(z->output));
-
-	fwd_ipt_exec_format("nat", " -N zone_%s_nat",        z->name);
-	fwd_ipt_exec_format("nat", " -N zone_%s_prerouting", z->name);
-	fwd_ipt_exec_format("raw", " -N zone_%s_notrack",    z->name);
-
-	if( z->masq )
-		fwd_ipt_exec_format("nat", " -A POSTROUTING -j zone_%s_nat",
-			z->name);
-
-	if( z->mtu_fix )
-		fwd_ipt_exec_format("filter", " -A FORWARD -j zone_%s_MSSFIX",
-			z->name);
-}
-
-static void fwd_ipt_forwarding_create(struct fwd_data *d)
-{
-	struct fwd_forwarding *f = &d->section.forwarding;
-	struct fwd_ipt_rulebuf *b;
-
-	b = fwd_ipt_init("filter");
-
-	if( f->src )
-		fwd_ipt_add_format(b, " -I zone_%s_forward 1", f->src->name);
-	else
-		fwd_ipt_add_format(b, " -I forward 1");
-
-	if( f->dest )
-		fwd_ipt_add_format(b, " -j zone_%s_ACCEPT", f->dest->name);
-	else
-		fwd_ipt_add_format(b, " -j ACCEPT");
-
-	fwd_ipt_exec(b);
-}
-
-static void fwd_ipt_redirect_create(struct fwd_data *d)
-{
-	struct fwd_redirect *r = &d->section.redirect;
-	struct fwd_ipt_rulebuf *b;
-
-	b = fwd_ipt_init("nat");
-	fwd_ipt_add_format(b, " -A zone_%s_prerouting", r->src->name);
-	fwd_ipt_add_proto(b, r->proto);
-	fwd_ipt_add_srcaddr(b, r->src_ip);
-	fwd_ipt_add_srcport(b, r->src_port);
-	fwd_ipt_add_destport(b, r->src_dport);
-	fwd_ipt_add_srcmac(b, r->src_mac);
-	fwd_ipt_add_dnat_target(b, r->dest_ip, r->dest_port);
-	fwd_ipt_exec(b);
-
-	b = fwd_ipt_init("nat");
-	fwd_ipt_add_format(b, " -I zone_%s_forward 1", r->src->name);
-	fwd_ipt_add_proto(b, r->proto);
-	fwd_ipt_add_srcmac(b, r->src_mac);
-	fwd_ipt_add_srcaddr(b, r->src_ip);
-	fwd_ipt_add_srcport(b, r->src_port);
-	fwd_ipt_add_destaddr(b, r->dest_ip);
-	fwd_ipt_add_destport(b, r->dest_port);
-	fwd_ipt_add_format(b, " -j ACCEPT");
-	fwd_ipt_exec(b);
-}
-
-static void fwd_ipt_rule_create(struct fwd_data *d)
-{
-	struct fwd_rule *r = &d->section.rule;
-	struct fwd_ipt_rulebuf *b;
-
-	b = fwd_ipt_init("filter");
-
-	if( r->dest )
-		fwd_ipt_add_format(b, " -A zone_%s_forward", r->src->name);
-	else
-		fwd_ipt_add_format(b, " -A zone_%s", r->src->name);
-
-	fwd_ipt_add_proto(b, r->proto);
-	fwd_ipt_add_icmptype(b, r->icmp_type);
-	fwd_ipt_add_srcmac(b, r->src_mac);
-	fwd_ipt_add_srcaddr(b, r->src_ip);
-	fwd_ipt_add_srcport(b, r->src_port);
-	fwd_ipt_add_destaddr(b, r->dest_ip);
-	fwd_ipt_add_destport(b, r->dest_port);
-
-	if( r->dest )
-		fwd_ipt_add_format(b, " -j zone_%s_%s",
-			r->dest->name, fwd_str_target(r->target));
-	else
-		fwd_ipt_add_format(b, " -j %s", fwd_str_target(r->target));
-
-	fwd_ipt_exec(b);
-}
+	/* standard drop, accept, reject chain */
+	fwd_r_handle_drop(h_filter);
+	fwd_r_handle_accept(h_filter);
+	fwd_r_handle_reject(h_filter);
 
 
-static struct fwd_network_list *
-fwd_lookup_network(struct fwd_network_list *n, const char *net)
-{
-	struct fwd_network_list *e;
+	if( !iptc_commit(h_nat) )
+		fwd_fatal("Cannot commit nat table: %s", iptc_strerror(errno));
 
-	if( n != NULL )
-		for( e = n; e; e = e->next )
-			if( !strcmp(e->name, net) )
-				return e;
+	if( !iptc_commit(h_filter) )
+		fwd_fatal("Cannot commit filter table: %s", iptc_strerror(errno));
 
-	return NULL;
-}
-
-static struct fwd_addr_list *
-fwd_lookup_addr(struct fwd_addr_list *a, const char *ifname)
-{
-	struct fwd_addr_list *e;
-
-	if( a != NULL )
-		for( e = a; e; e = e->next )
-			if( !strcmp(e->ifname, ifname) )
-				return e;
-
-	return NULL;
+	iptc_free(h_nat);
+	iptc_free(h_filter);
 }
 
 
 void fwd_ipt_build_ruleset(struct fwd_handle *h)
 {
 	struct fwd_data *e;
+
+	fwd_xt_init();
 
 	for( e = h->conf; e; e = e->next )
 	{
@@ -421,97 +530,241 @@ void fwd_ipt_build_ruleset(struct fwd_handle *h)
 				fwd_ipt_defaults_create(e);
 				break;
 
-			case FWD_S_ZONE:
-				printf("\n## ZONE %s\n", e->section.zone.name);
-				fwd_ipt_zone_create(e);
-				break;
-
-			case FWD_S_FORWARD:
-				printf("\n## FORWARD %s -> %s\n",
-					e->section.forwarding.src
-						? e->section.forwarding.src->name : "(all)",
-					e->section.forwarding.dest
-						? e->section.forwarding.dest->name : "(all)");
-				fwd_ipt_forwarding_create(e);
-				break;
-
-			case FWD_S_REDIRECT:
-				printf("\n## REDIRECT %s\n", e->section.forwarding.src->name);
-				fwd_ipt_redirect_create(e);
-				break;
-
-			case FWD_S_RULE:
-				printf("\n## RULE %s\n", e->section.rule.src->name);
-				fwd_ipt_rule_create(e);
-				break;
-
 			case FWD_S_INCLUDE:
 				printf("\n## INCLUDE %s\n", e->section.include.path);
 				break;
+
+			case FWD_S_ZONE:
+			case FWD_S_FORWARD:
+			case FWD_S_REDIRECT:
+			case FWD_S_RULE:
+				/* Make gcc happy */
+				break;
 		}
 	}
+}
+
+
+static struct fwd_zone *
+fwd_lookup_zone(struct fwd_handle *h, const char *net)
+{
+	struct fwd_data *e;
+	struct fwd_network_list *n;
+
+	for( e = h->conf; e; e = e->next )
+		if( e->type == FWD_S_ZONE )
+			for( n = e->section.zone.networks; n; n = n->next )
+				if( !strcmp(n->name, net) )
+					return &e->section.zone;
+
+	return NULL;
+}
+
+static struct fwd_network_list *
+fwd_lookup_network(struct fwd_zone *z, const char *net)
+{
+	struct fwd_network_list *n;
+
+	for( n = z->networks; n; n = n->next )
+		if( !strcmp(n->name, net) )
+			return n;
+
+	return NULL;
+}
+
+static struct fwd_addr_list *
+fwd_lookup_addr(struct fwd_handle *h, struct fwd_network_list *n)
+{
+	struct fwd_addr_list *a;
+
+	if( n != NULL )
+		for( a = h->addrs; a; a = a->next )
+			if( !strcmp(a->ifname, n->ifname) )
+				return a;
+
+	return NULL;
 }
 
 void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 {
 	struct fwd_data *e;
 	struct fwd_zone *z;
-	struct fwd_addr_list *a;
-	struct fwd_network_list *n;
+	struct fwd_ipt_rulebuf *b;
+	struct fwd_rule *c;
+	struct fwd_redirect *r;
+	struct fwd_forwarding *f;
+	struct fwd_addr_list *a, *a2;
+	struct fwd_network_list *n, *n2;
 
-	for( e = h->conf; e; e = e->next )
+	if( !(z = fwd_lookup_zone(h, net)) )
+		return;
+
+	if( !(n = fwd_lookup_network(z, net)) )
+		return;
+
+	if( !(a = fwd_lookup_addr(h, n)) )
+		return;
+
+	printf("\n\n#\n# addif(%s)\n#\n", net);
+
+	/* Build masquerading rule */
+	if( z->masq )
 	{
-		if( (e->type != FWD_S_ZONE) ||
-            !(n = fwd_lookup_network(e->section.zone.networks, net)) ||
-			!(a = fwd_lookup_addr(h->addrs, n->ifname)) )
-				continue;
+		printf("\n# Net %s (%s) - masq\n", n->name, n->ifname);
 
-		z = &e->section.zone;
+		b = fwd_ipt_init("nat");
+		fwd_ipt_add_format(b, " -A zonemasq -o %s -j MASQUERADE", n->ifname);
+		fwd_ipt_add_comment(b, "masq", z, NULL, n);
+		fwd_ipt_exec(b);
+	}
 
-		printf("\n## NETWORK %s (%s - %s/%u)\n",
-			n->name, n->ifname,
-			inet_ntoa(a->ipaddr.v4), a->prefix
-		);
+	/* Build MSS fix rule */
+	if( z->mtu_fix )
+	{
+		printf("\n# Net %s (%s) - mtu_fix\n", n->name, n->ifname);
 
-		fwd_ipt_exec_format("filter", " -A input -i %s -j zone_%s",
-			n->ifname, z->name);
+		b = fwd_ipt_init("filter");
+		fwd_ipt_add_format(b,
+			" -A mssfix -o %s -p tcp --tcp-flags SYN,RST SYN"
+			" -j TCPMSS --clamp-mss-to-pmtu", n->ifname);
+		fwd_ipt_add_comment(b, "mssfix", z, NULL, n);
+		fwd_ipt_exec(b);
+	}
 
-		fwd_ipt_exec_format("filter",
-			" -I zone_%s_MSSFIX 1 -o %s -p tcp --tcp-flags SYN,RST SYN"
-			" -j TCPMSS --clamp-mss-to-pmtu",
-				z->name, n->ifname);
+	/* Build intra-zone forwarding rules */
+	for( n2 = z->networks; n2; n2 = n2->next )
+	{
+		if( (a2 = fwd_lookup_addr(h, n2)) != NULL )
+		{
+			printf("\n# Net %s (%s) - intra-zone-forwarding"
+			       " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
+				n->name, n->ifname, z->name, n->name, n->ifname,
+				z->name, n2->name, n2->ifname);
 
-		fwd_ipt_exec_format("filter", " -I zone_%s_ACCEPT 1 -o %s -j ACCEPT",
-			z->name, n->ifname);
+			b = fwd_ipt_init("filter");
+			fwd_ipt_add_format(b, " -A zones -i %s -o %s",
+				n->ifname, n2->ifname);
+			fwd_ipt_add_policy_target(b, z->forward);
+			fwd_ipt_add_comment(b, "zone", z, n, n2);
+			fwd_ipt_exec(b);
+		}
+	}
 
-		fwd_ipt_exec_format("filter", " -I zone_%s_DROP 1 -o %s -j DROP",
-			z->name, n->ifname);
+	/* Build inter-zone forwarding rules */
+	for( e = z->forwardings; e && (f = &e->section.forwarding); e = e->next )
+	{
+		for( n2 = f->dest->networks; n2; n2 = n2->next )
+		{
+			printf("\n# Net %s (%s) - inter-zone-forwarding"
+                   " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
+				n->name, n->ifname, z->name, n->name, n->ifname,
+				f->dest->name, n2->name, n2->ifname);
 
-		fwd_ipt_exec_format("filter", " -I zone_%s_REJECT 1 -o %s -j reject",
-			z->name, n->ifname);
+			/* Build forwarding rule */
+			b = fwd_ipt_init("filter");
+			fwd_ipt_add_format(b, " -A forwardings -i %s -o %s",
+				n->ifname, n2->ifname);
+			fwd_ipt_add_policy_target(b, FWD_P_ACCEPT);
+			fwd_ipt_add_comment(b, "forward", z, n, n2);
+			fwd_ipt_exec(b);
+		}
+	}
 
-		fwd_ipt_exec_format("filter", " -I zone_%s_ACCEPT 1 -i %s -j ACCEPT",
-			z->name, n->ifname);
+	/* Build DNAT rules */
+	for( e = z->redirects; e && (r = &e->section.redirect); e = e->next )
+	{
+		printf("\n# Net %s (%s) - redirect Z:%s N:%s I:%s\n",
+			n->name, n->ifname, z->name, n->name, n->ifname);
 
-		fwd_ipt_exec_format("filter", " -I zone_%s_DROP 1 -i %s -j DROP",
-			z->name, n->ifname);
+		/* DNAT */
+		b = fwd_ipt_init("nat");
+		fwd_ipt_add_format(b, " -A redirects -i %s -d %s",
+			n->ifname, inet_ntoa(a->ipaddr.v4));
+		fwd_ipt_add_proto(b, r->proto);
+		fwd_ipt_add_srcaddr(b, r->src_ip);
+		fwd_ipt_add_srcport(b, r->src_port);
+		fwd_ipt_add_destport(b, r->src_dport);
+		fwd_ipt_add_srcmac(b, r->src_mac);
+		fwd_ipt_add_dnat_target(b, r->dest_ip, r->dest_port);
+		fwd_ipt_add_comment(b, "redir", z, n, NULL);
+		fwd_ipt_exec(b);
 
-		fwd_ipt_exec_format("filter", " -I zone_%s_REJECT 1 -i %s -j reject",
-			z->name, n->ifname);
+		/* Forward */
+		b = fwd_ipt_init("filter");
+		fwd_ipt_add_format(b, " -A redirects -i %s", n->ifname);
+		fwd_ipt_add_proto(b, r->proto);
+		fwd_ipt_add_srcmac(b, r->src_mac);
+		fwd_ipt_add_srcaddr(b, r->src_ip);
+		fwd_ipt_add_srcport(b, r->src_port);
+		fwd_ipt_add_destaddr(b, r->dest_ip);
+		fwd_ipt_add_destport(b, r->dest_port);
+		fwd_ipt_add_policy_target(b, FWD_P_ACCEPT);
+		fwd_ipt_add_comment(b, "redir", z, n, NULL);
+		fwd_ipt_exec(b);
 
-		fwd_ipt_exec_format("filter",
-			" -I zone_%s_nat 1 -t nat -o %s -j MASQUERADE",
-				z->name, n->ifname);
+		/* Add loopback rule if neither src_ip nor src_mac are defined */
+		if( !r->src_ip && !r->src_mac )
+		{
+			b = fwd_ipt_init("nat");
+			fwd_ipt_add_format(b, " -A redirects -i ! %s -d %s",
+				n->ifname, inet_ntoa(r->dest_ip->addr));
+			fwd_ipt_add_proto(b, r->proto);
+			fwd_ipt_add_srcport(b, r->src_port);
+			fwd_ipt_add_destport(b, r->src_dport);
+			fwd_ipt_add_format(b, " -j MASQUERADE");
+			fwd_ipt_add_comment(b, "redir", z, n, NULL);
+			fwd_ipt_exec(b);
+		}
+	}
 
-		fwd_ipt_exec_format("filter",
-			" -I PREROUTING 1 -t nat -i %s -j zone_%s_prerouting",
-				n->ifname, z->name);
+	/* Build rules */
+	for( e = z->rules; e && (c = &e->section.rule); e = e->next )
+	{
+		/* Has destination, add forward rule for each network in target zone */
+		if( c->dest )
+		{
+			for( n2 = c->dest->networks; n2; n2 = n2->next )
+			{
+				printf("\n# Net %s (%s) - rule+dest"
+		               " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
+					n->name, n->ifname, z->name, n->name, n->ifname,
+					f->dest->name, n2->name, n2->ifname);
 
-		fwd_ipt_exec_format("filter", " -A forward -i %s -j zone_%s_forward",
-			n->ifname, z->name);
+				b = fwd_ipt_init("filter");
+				fwd_ipt_add_format(b, " -A rules -i %s -o %s",
+					n->ifname, n2->ifname);
+				fwd_ipt_add_proto(b, c->proto);
+				fwd_ipt_add_icmptype(b, c->icmp_type);
+				fwd_ipt_add_srcmac(b, c->src_mac);
+				fwd_ipt_add_srcaddr(b, c->src_ip);
+				fwd_ipt_add_srcport(b, c->src_port);
+				fwd_ipt_add_destaddr(b, c->dest_ip);
+				fwd_ipt_add_destport(b, c->dest_port);
+				fwd_ipt_add_policy_target(b, c->target);
+				fwd_ipt_add_comment(b, "rule", z, n, n2);
+				fwd_ipt_exec(b);
+			}
+		}
 
-		fwd_ipt_exec_format("raw", " -I PREROUTING 1 -i %s -j zone_%s_notrack",
-			n->ifname, z->name);
+		/* No destination specified, treat it as input rule */
+		else
+		{
+			printf("\n# Net %s (%s) - rule Z:%s N:%s I:%s\n",
+				n->name, n->ifname, z->name, n->name, n->ifname);
+
+			b = fwd_ipt_init("filter");
+			fwd_ipt_add_format(b, " -A rules -i %s", n->ifname);
+			fwd_ipt_add_proto(b, c->proto);
+			fwd_ipt_add_icmptype(b, c->icmp_type);
+			fwd_ipt_add_srcmac(b, c->src_mac);
+			fwd_ipt_add_srcaddr(b, c->src_ip);
+			fwd_ipt_add_srcport(b, c->src_port);
+			fwd_ipt_add_destaddr(b, c->dest_ip);
+			fwd_ipt_add_destport(b, c->dest_port);
+			fwd_ipt_add_policy_target(b, c->target);
+			fwd_ipt_add_comment(b, "rule", z, n, n2);
+			fwd_ipt_exec(b);
+		}
 	}
 }
 
