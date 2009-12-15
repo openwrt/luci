@@ -65,7 +65,7 @@ void fwd_xt_init(void)
 }
 
 
-struct fwd_xt_rule * fwd_xt_init_rule(const char *table)
+struct fwd_xt_rule * fwd_xt_init_rule(struct iptc_handle *h)
 {
 	struct fwd_xt_rule *r;
 
@@ -73,10 +73,8 @@ struct fwd_xt_rule * fwd_xt_init_rule(const char *table)
 	{
 		if( (r->entry = fwd_alloc_ptr(struct ipt_entry)) != NULL )
 		{
-			if( (r->iptc = iptc_init(table)) != NULL )
-			{
-				return r;
-			}
+			r->iptc = h;
+			return r;
 		}
 	}
 
@@ -198,7 +196,7 @@ struct xtables_match * fwd_xt_get_match(
 
 void fwd_xt_parse_match(
 	struct fwd_xt_rule *r, struct xtables_match *m,
-	const char *opt, const char *val
+	const char *opt, const char *val, int inv
 ) {
 	char optcode;
 	const char *opts[3] = { "x", opt, val };
@@ -207,7 +205,7 @@ void fwd_xt_parse_match(
 	optcode = getopt_long(val ? 3 : 2, (char **)opts, "", m->extra_opts, NULL);
 
 	if( (optcode > -1) && (optcode != '?') )
-		m->parse(optcode, (char **)opts, 0, &m->mflags, r->entry, &m->m);
+		m->parse(optcode, (char **)opts, inv, &m->mflags, r->entry, &m->m);
 }
 
 
@@ -245,7 +243,7 @@ struct xtables_target * fwd_xt_get_target(
 
 void fwd_xt_parse_target(
 	struct fwd_xt_rule *r, struct xtables_target *t,
-	const char *opt, const char *val
+	const char *opt, const char *val, int inv
 ) {
 	char optcode;
 	const char *opts[3] = { "x", opt, val };
@@ -254,13 +252,15 @@ void fwd_xt_parse_target(
 	optcode = getopt_long(val ? 3 : 2, (char **)opts, "", t->extra_opts, NULL);
 
 	if( (optcode > -1) && (optcode != '?') )
-		t->parse(optcode, (char **)opts, 0, &t->tflags, r->entry, &t->t);
+		t->parse(optcode, (char **)opts, inv, &t->tflags, r->entry, &t->t);
 }
 
 int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
 {
 	size_t s;
 	struct xtables_rule_match *m, *next;
+	struct xtables_match *em;
+	struct xtables_target *et;
 	struct ipt_entry *e;
 	int rv = 0;
 
@@ -287,8 +287,7 @@ int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
 
 		memcpy(e->elems + s, r->target->t, r->target->t->u.target_size);
 
-		if( (rv = iptc_append_entry(chain, e, r->iptc)) > 0 )
-			iptc_commit(r->iptc);
+		rv = iptc_append_entry(chain, e, r->iptc);
 	}
 	else
 	{
@@ -304,12 +303,25 @@ int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
 	{
 		next = m->next;
 		fwd_free_ptr(m->match->m);
+
+		if( m->match == m->match->next )
+			fwd_free_ptr(m->match);
+
 		fwd_free_ptr(m);
 		m = next;
 	}
 
-	iptc_free(r->iptc);
 	fwd_free_ptr(r);
+
+	/* reset all targets and matches */
+	for (em = xtables_matches; em; em = em->next)
+		em->mflags = 0;
+
+	for (et = xtables_targets; et; et = et->next)
+	{
+		et->tflags = 0;
+		et->used = 0;
+	}
 
 	return rv;
 }

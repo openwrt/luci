@@ -47,7 +47,7 @@ extern void get_kernel_version(void);
 
 void fwd_xt_init(void);
 
-struct fwd_xt_rule * fwd_xt_init_rule(const char *table);
+struct fwd_xt_rule * fwd_xt_init_rule(struct iptc_handle *h);
 
 void fwd_xt_parse_proto(struct fwd_xt_rule *r, struct fwd_proto *p, int inv);
 void fwd_xt_parse_in(struct fwd_xt_rule *r, struct fwd_network_list *n, int inv);
@@ -56,10 +56,10 @@ void fwd_xt_parse_src(struct fwd_xt_rule *r, struct fwd_cidr *c, int inv);
 void fwd_xt_parse_dest(struct fwd_xt_rule *r, struct fwd_cidr *c, int inv);
 
 struct xtables_match * fwd_xt_get_match(struct fwd_xt_rule *r, const char *name);
-void fwd_xt_parse_match(struct fwd_xt_rule *r, struct xtables_match *m, const char *opt, const char *val);
+void fwd_xt_parse_match(struct fwd_xt_rule *r, struct xtables_match *m, const char *opt, const char *val, int inv);
 
 struct xtables_target * fwd_xt_get_target(struct fwd_xt_rule *r, const char *name);
-void fwd_xt_parse_target(struct fwd_xt_rule *r, struct xtables_target *t, const char *opt, const char *val);
+void fwd_xt_parse_target(struct fwd_xt_rule *r, struct xtables_target *t, const char *opt, const char *val, int inv);
 
 int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain);
 
