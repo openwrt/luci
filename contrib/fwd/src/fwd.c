@@ -21,13 +21,16 @@
 #include "fwd_addr.h"
 #include "fwd_rules.h"
 #include "fwd_config.h"
-
-#define IPT "iptables"
+#include "fwd_xtables.h"
 
 
 int main(int argc, const char *argv[])
 {
 	struct fwd_handle *h;
+	struct iptc_handle *ipt;
+
+	if( getuid() > 0 )
+		fwd_fatal("Need root permissions!");
 
 	if( !(h = fwd_alloc_ptr(struct fwd_handle)) )
 		fwd_fatal("Out of memory");
@@ -41,12 +44,10 @@ int main(int argc, const char *argv[])
 	if( !(h->addrs = fwd_get_addrs(h->rtnl_socket, AF_INET)) )
 		fwd_fatal("Failed to issue RTM_GETADDR (%m)");
 
-
 	fwd_ipt_build_ruleset(h);
 
 	fwd_ipt_addif(h, "lan");
 	fwd_ipt_addif(h, "wan");
-
 
 	close(h->rtnl_socket);
 	fwd_free_config(h->conf);
