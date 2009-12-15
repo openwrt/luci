@@ -194,18 +194,45 @@ struct xtables_match * fwd_xt_get_match(
 	return NULL;
 }
 
-void fwd_xt_parse_match(
-	struct fwd_xt_rule *r, struct xtables_match *m,
-	const char *opt, const char *val, int inv
+void __fwd_xt_parse_match(
+	struct fwd_xt_rule *r, struct xtables_match *m, ...
 ) {
-	char optcode;
-	const char *opts[3] = { "x", opt, val };
+	char optc;
+	char *s, **opts;
+	size_t len = 1;
+	int inv = 0;
 
-	optind  = 0;
-	optcode = getopt_long(val ? 3 : 2, (char **)opts, "", m->extra_opts, NULL);
+	va_list ap;
+	va_start(ap, m);
 
-	if( (optcode > -1) && (optcode != '?') )
-		m->parse(optcode, (char **)opts, inv, &m->mflags, r->entry, &m->m);
+	opts = malloc(len * sizeof(*opts));
+	opts[0] = "x";
+
+	while( (s = (char *)va_arg(ap, char *)) != NULL )
+	{
+		opts = realloc(opts, ++len * sizeof(*opts));
+		opts[len-1] = s;
+	}
+
+	va_end(ap);
+
+	if( len > 1 )
+	{
+		optind = 0;
+
+		while( (optc = getopt_long(len, opts, "", m->extra_opts, NULL)) > -1 )
+		{
+			if( (optc == '?') && (optarg[0] == '!') && (optarg[1] == '\0') )
+			{
+				inv = 1;
+				continue;
+			}
+
+			m->parse(optc, opts, inv, &m->mflags, r->entry, &m->m);
+		}
+	}
+
+	free(opts);
 }
 
 
@@ -241,19 +268,47 @@ struct xtables_target * fwd_xt_get_target(
 	return NULL;
 }
 
-void fwd_xt_parse_target(
-	struct fwd_xt_rule *r, struct xtables_target *t,
-	const char *opt, const char *val, int inv
+void __fwd_xt_parse_target(
+	struct fwd_xt_rule *r, struct xtables_target *t, ...
 ) {
-	char optcode;
-	const char *opts[3] = { "x", opt, val };
+	char optc;
+	char *s, **opts;
+	size_t len = 1;
+	int inv = 0;
 
-	optind  = 0;
-	optcode = getopt_long(val ? 3 : 2, (char **)opts, "", t->extra_opts, NULL);
+	va_list ap;
+	va_start(ap, t);
 
-	if( (optcode > -1) && (optcode != '?') )
-		t->parse(optcode, (char **)opts, inv, &t->tflags, r->entry, &t->t);
+	opts = malloc(len * sizeof(*opts));
+	opts[0] = "x";
+
+	while( (s = (char *)va_arg(ap, char *)) != NULL )
+	{
+		opts = realloc(opts, ++len * sizeof(*opts));
+		opts[len-1] = s;
+	}
+
+	va_end(ap);
+
+	if( len > 1 )
+	{
+		optind = 0;
+
+		while( (optc = getopt_long(len, opts, "", t->extra_opts, NULL)) > -1 )
+		{
+			if( (optc == '?') && (optarg[0] == '!') && (optarg[1] == '\0') )
+			{
+				inv = 1;
+				continue;
+			}
+
+			t->parse(optc, opts, inv, &t->tflags, r->entry, &t->t);
+		}
+	}
+
+	free(opts);
 }
+
 
 int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
 {
