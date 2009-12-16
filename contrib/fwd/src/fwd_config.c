@@ -163,11 +163,17 @@ fwd_read_mac(struct uci_context *uci, const char *s, const char *o, struct fwd_m
 	{
 		if( (*m = fwd_alloc_ptr(struct fwd_mac)) != NULL )
 		{
+			unsigned int i1, i2, i3, i4, i5, i6;
+
 			if( sscanf(val, "%2x:%2x:%2x:%2x:%2x:%2x",
-				(unsigned int *)&(*m)->mac[0], (unsigned int *)&(*m)->mac[1],
-				(unsigned int *)&(*m)->mac[2], (unsigned int *)&(*m)->mac[3],
-				(unsigned int *)&(*m)->mac[4], (unsigned int *)&(*m)->mac[5]) == 6
+				&i1, &i2, &i3, &i4, &i5, &i6) == 6
 			) {
+				(*m)->mac[0] = (unsigned char)i1;
+				(*m)->mac[1] = (unsigned char)i2;
+				(*m)->mac[2] = (unsigned char)i3;
+				(*m)->mac[3] = (unsigned char)i4;
+				(*m)->mac[4] = (unsigned char)i5;
+				(*m)->mac[5] = (unsigned char)i6;
 				return 0;
 			}
 		}
@@ -470,17 +476,14 @@ static void fwd_read_forwards_cb(
 	struct fwd_zone *zsrc  = NULL;
 	struct fwd_zone *zdest = NULL;
 
-	if( (src = fwd_read_string(uci, s, "src")) != NULL )
-	{
-		if( !(zsrc = fwd_lookup_zone(cv->head, src)) )
-			fwd_read_error("section '%s' references unknown src zone '%s'!", s, src);
-	}
-
-	if( (dest = fwd_read_string(uci, s, "dest")) != NULL )
-	{
-		if( !(zdest = fwd_lookup_zone(cv->head, dest)) )
-			fwd_read_error("section '%s' references unknown dest zone '%s'!", s, dest);
-	}
+	if( !(src = fwd_read_string(uci, s, "src")) )
+		fwd_read_error("section '%s' is missing 'src' option!", s);
+	else if( !(zsrc = fwd_lookup_zone(cv->head, src)) )
+		fwd_read_error("section '%s' references unknown src zone '%s'!", s, src);
+	else if( !(dest = fwd_read_string(uci, s, "dest")) )
+		fwd_read_error("section '%s' is missing 'dest' option!", s);
+	else if( !(zdest = fwd_lookup_zone(cv->head, dest)) )
+		fwd_read_error("section '%s' references unknown dest zone '%s'!", s, dest);
 	
 	if( (dtn = fwd_alloc_ptr(struct fwd_data)) != NULL )
 	{
@@ -490,8 +493,17 @@ static void fwd_read_forwards_cb(
 		dtn->section.forwarding.masq = fwd_read_bool(uci, s, "masq", 0);
 
 		dtn->type = FWD_S_FORWARD;
-		dtn->next = cv->cursor;
-		cv->cursor = dtn;
+
+		if( zsrc )
+		{
+			dtn->next = zsrc->forwardings;
+			zsrc->forwardings = dtn;
+		}
+		else
+		{
+			dtn->next = cv->cursor;
+			cv->cursor = dtn;
+		}
 	}
 	else
 	{
@@ -560,8 +572,8 @@ static void fwd_read_redirects_cb(
 		dtn->section.redirect.dest_port = dest_port;
 
 		dtn->type = FWD_S_REDIRECT;
-		dtn->next = cv->cursor;
-		cv->cursor = dtn;
+		dtn->next = zsrc->redirects;
+		zsrc->redirects = dtn;
 
 		if( (proto != NULL) && (proto->type == FWD_PR_TCPUDP) )
 		{
@@ -582,10 +594,11 @@ static void fwd_read_redirects_cb(
 			dtn2->section.redirect.src_dport = src_dport;
 			dtn2->section.redirect.dest_ip   = dest_ip;
 			dtn2->section.redirect.dest_port = dest_port;
+			dtn2->section.redirect.clone     = 1;
 
 			dtn2->type = FWD_S_REDIRECT;
-			dtn2->next = cv->cursor;
-			cv->cursor = dtn2;
+			dtn2->next = zsrc->redirects;
+			zsrc->redirects = dtn2;
 		}
 	}
 	else
@@ -665,8 +678,8 @@ static void fwd_read_rules_cb(
 		dtn->section.rule.target    = fwd_read_policy(uci, s, "target");
 
 		dtn->type = FWD_S_RULE;
-		dtn->next = cv->cursor;
-		cv->cursor = dtn;
+		dtn->next = zsrc->rules;
+		zsrc->rules = dtn;
 
 		if( (proto != NULL) && (proto->type == FWD_PR_TCPUDP) )
 		{
@@ -688,10 +701,11 @@ static void fwd_read_rules_cb(
 			dtn2->section.rule.dest_ip   = dest_ip;
 			dtn2->section.rule.dest_port = dest_port;
 			dtn2->section.rule.target    = dtn->section.rule.target;
+			dtn2->section.rule.clone     = 1;
 
 			dtn2->type = FWD_S_RULE;
-			dtn2->next = cv->cursor;
-			cv->cursor = dtn2;
+			dtn2->next = zsrc->rules;
+			zsrc->rules = dtn2;
 		}
 	}
 	else
@@ -868,26 +882,39 @@ void fwd_free_config(struct fwd_data *h)
 			case FWD_S_ZONE:
 				fwd_free_ptr(h->section.zone.name);
 				fwd_free_networks(h->section.zone.networks);
+				fwd_free_config(h->section.zone.rules);
+				fwd_free_config(h->section.zone.redirects);
+				fwd_free_config(h->section.zone.forwardings);
 				break;
 
 			case FWD_S_REDIRECT:
-				fwd_free_ptr(h->section.redirect.src_ip);
-				fwd_free_ptr(h->section.redirect.src_mac);
-				fwd_free_ptr(h->section.redirect.src_port);
-				fwd_free_ptr(h->section.redirect.src_dport);
-				fwd_free_ptr(h->section.redirect.dest_ip);
-				fwd_free_ptr(h->section.redirect.dest_port);
+				/* Clone rules share all pointers except proto.
+                   Prevent a double-free here */          
+				if( ! h->section.redirect.clone )
+				{
+					fwd_free_ptr(h->section.redirect.src_ip);
+					fwd_free_ptr(h->section.redirect.src_mac);
+					fwd_free_ptr(h->section.redirect.src_port);
+					fwd_free_ptr(h->section.redirect.src_dport);
+					fwd_free_ptr(h->section.redirect.dest_ip);
+					fwd_free_ptr(h->section.redirect.dest_port);
+				}
 				fwd_free_ptr(h->section.redirect.proto);
 				break;
 
 			case FWD_S_RULE:
-				fwd_free_ptr(h->section.rule.src_ip);
-				fwd_free_ptr(h->section.rule.src_mac);
-				fwd_free_ptr(h->section.rule.src_port);
-				fwd_free_ptr(h->section.rule.dest_ip);
-				fwd_free_ptr(h->section.rule.dest_port);
+				/* Clone rules share all pointers except proto.
+                   Prevent a double-free here */          
+				if( ! h->section.rule.clone )
+				{
+					fwd_free_ptr(h->section.rule.src_ip);
+					fwd_free_ptr(h->section.rule.src_mac);
+					fwd_free_ptr(h->section.rule.src_port);
+					fwd_free_ptr(h->section.rule.dest_ip);
+					fwd_free_ptr(h->section.rule.dest_port);
+					fwd_free_ptr(h->section.rule.icmp_type);
+				}
 				fwd_free_ptr(h->section.rule.proto);
-				fwd_free_ptr(h->section.rule.icmp_type);
 				break;
 
 			case FWD_S_DEFAULTS:
@@ -896,7 +923,7 @@ void fwd_free_config(struct fwd_data *h)
 				break;
 		}
 
-		free(h);
+		fwd_free_ptr(h);
 		h = e;
 	}
 

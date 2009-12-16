@@ -33,11 +33,7 @@ struct fwd_addr_list {
 	char label[IFNAMSIZ];
 	int family;
 	int index;
-	unsigned int prefix;
-	union {
-		struct in_addr v4;
-		struct in6_addr v6;
-	} ipaddr;
+	struct fwd_cidr ipaddr;
 	struct fwd_addr_list *next;
 };
 

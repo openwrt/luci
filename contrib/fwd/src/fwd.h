@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <getopt.h>
 #include <netinet/in.h>
 
 #if 0
@@ -36,7 +37,7 @@ enum fwd_policy {
 	FWD_P_UNSPEC = 0,
 	FWD_P_DROP   = 1,
 	FWD_P_REJECT = 2,
-	FWD_P_ACCEPT = 3	
+	FWD_P_ACCEPT = 3
 };
 
 enum fwd_stype {
@@ -103,6 +104,9 @@ struct fwd_defaults {
 struct fwd_zone {
 	char *name;
 	struct fwd_network_list *networks;
+	struct fwd_data *forwardings;
+	struct fwd_data *redirects;
+	struct fwd_data *rules;
 	enum fwd_policy input;
 	enum fwd_policy forward;
 	enum fwd_policy output;
@@ -127,6 +131,7 @@ struct fwd_redirect {
 	struct fwd_cidr      *dest_ip;
 	struct fwd_portrange *dest_port;
 	struct fwd_proto     *proto;
+	int clone; /* true if rule is cloned (tcpudp -> tcp + udp) */
 };
 
 struct fwd_rule {
@@ -140,6 +145,7 @@ struct fwd_rule {
 	struct fwd_proto     *proto;
 	struct fwd_icmptype  *icmp_type;
 	enum fwd_policy target;
+	int clone; /* true if rule is cloned (tcpudp -> tcp + udp) */
 };
 
 struct fwd_include {

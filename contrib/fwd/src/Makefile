@@ -1,4 +1,4 @@
-CFLAGS  := -g -Wall -I./uci -I./iptables-1.4.5/include
+CFLAGS  := -ggdb3 -O0 -Wall -I./uci -I./iptables-1.4.5/include
 LDFLAGS := -luci -liptc -lxtables -ldl -L./iptables-1.4.5/libiptc/.libs -L./iptables-1.4.5/.libs -Wl,--export-dynamic
 
 fwd:

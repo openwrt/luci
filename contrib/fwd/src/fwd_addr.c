@@ -95,8 +95,8 @@ struct fwd_addr_list * fwd_get_addrs(int fd, int family)
 			{
 				if( rtatp->rta_type == IFA_ADDRESS )
 				{
-					memcpy(&entry->ipaddr, (char *) RTA_DATA(rtatp), rtatp->rta_len);
-					entry->prefix = rtmp->ifa_prefixlen;
+					memcpy(&entry->ipaddr.addr, (char *) RTA_DATA(rtatp), rtatp->rta_len);
+					entry->ipaddr.prefix = rtmp->ifa_prefixlen;
 					entry->family = family;
 				}
 				else if( rtatp->rta_type == IFA_LABEL)
