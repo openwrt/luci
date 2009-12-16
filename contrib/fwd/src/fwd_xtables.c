@@ -229,6 +229,7 @@ void __fwd_xt_parse_match(
 			}
 
 			m->parse(optc, opts, inv, &m->mflags, r->entry, &m->m);
+			inv = 0;
 		}
 	}
 
@@ -303,6 +304,7 @@ void __fwd_xt_parse_target(
 			}
 
 			t->parse(optc, opts, inv, &t->tflags, r->entry, &t->t);
+			inv = 0;
 		}
 	}
 
