@@ -225,9 +225,9 @@ static void fwd_r_handle_drop(struct iptc_handle *h)
 	/* common drop rule */
 	if( (r = fwd_xt_init_rule(h)) != NULL )
 	{
-		/* -j DROP; -A handle_reject */
+		/* -j DROP; -A handle_drop */
 		fwd_xt_get_target(r, "DROP");
-		fwd_xt_append_rule(r, "handle_reject");
+		fwd_xt_append_rule(r, "handle_drop");
 	}
 }
 
