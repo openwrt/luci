@@ -45,7 +45,7 @@ static void fwd_r_jump_chain(
 	if( (r = fwd_xt_init_rule(h)) != NULL )
 	{
 		fwd_xt_get_target(r, chain2);
-		fwd_xt_exec_rule(r, chain1);
+		fwd_xt_append_rule(r, chain1);
 	}
 }
 
@@ -61,7 +61,7 @@ static void fwd_r_drop_invalid(struct iptc_handle *h, const char *chain)
 		{
 			fwd_xt_parse_match(r, m, "--state", "INVALID");
 			fwd_xt_get_target(r, "DROP");
-			fwd_xt_exec_rule(r, chain);
+			fwd_xt_append_rule(r, chain);
 		}
 	}
 }
@@ -78,7 +78,7 @@ static void fwd_r_accept_related(struct iptc_handle *h, const char *chain)
 		{
 			fwd_xt_parse_match(r, m, "--state", "RELATED,ESTABLISHED");
 			fwd_xt_get_target(r, "ACCEPT");
-			fwd_xt_exec_rule(r, chain);
+			fwd_xt_append_rule(r, chain);
 		}
 	}
 }
@@ -95,14 +95,14 @@ static void fwd_r_accept_lo(struct iptc_handle *h)
 	{
 		fwd_xt_parse_in(r, &n, 0);
 		fwd_xt_get_target(r, "ACCEPT");
-		fwd_xt_exec_rule(r, "INPUT");
+		fwd_xt_append_rule(r, "INPUT");
 	}
 
 	if( (r = fwd_xt_init_rule(h)) != NULL )
 	{
 		fwd_xt_parse_out(r, &n, 0);
 		fwd_xt_get_target(r, "ACCEPT");
-		fwd_xt_exec_rule(r, "OUTPUT");
+		fwd_xt_append_rule(r, "OUTPUT");
 	}
 }
 
@@ -142,7 +142,7 @@ static void fwd_r_add_synflood(struct iptc_handle *h, struct fwd_defaults *def)
 
 		/* -j RETURN; -A syn_flood */
 		fwd_xt_get_target(r, "RETURN");
-		fwd_xt_exec_rule(r, "syn_flood");
+		fwd_xt_append_rule(r, "syn_flood");
 	}
 
 	/* drop rule */
@@ -150,7 +150,7 @@ static void fwd_r_add_synflood(struct iptc_handle *h, struct fwd_defaults *def)
 	{	
 		/* -j DROP; -A syn_flood */
 		fwd_xt_get_target(r, "DROP");
-		fwd_xt_exec_rule(r, "syn_flood");
+		fwd_xt_append_rule(r, "syn_flood");
 	}
 
 	/* jump to syn_flood rule */
@@ -168,7 +168,7 @@ static void fwd_r_add_synflood(struct iptc_handle *h, struct fwd_defaults *def)
 
 		/* -j syn_flood; -A INPUT */
 		fwd_xt_get_target(r, "syn_flood");
-		fwd_xt_exec_rule(r, "INPUT");
+		fwd_xt_append_rule(r, "INPUT");
 	}
 }
 
@@ -196,7 +196,7 @@ static void fwd_r_handle_reject(struct iptc_handle *h)
 		}
 
 		/* -A handle_reject */
-		fwd_xt_exec_rule(r, "handle_reject");
+		fwd_xt_append_rule(r, "handle_reject");
 	}
 
 	/* common reject rule */
@@ -210,7 +210,7 @@ static void fwd_r_handle_reject(struct iptc_handle *h)
 		}
 
 		/* -A handle_reject */
-		fwd_xt_exec_rule(r, "handle_reject");
+		fwd_xt_append_rule(r, "handle_reject");
 	}
 }
 
@@ -227,7 +227,7 @@ static void fwd_r_handle_drop(struct iptc_handle *h)
 	{
 		/* -j DROP; -A handle_reject */
 		fwd_xt_get_target(r, "DROP");
-		fwd_xt_exec_rule(r, "handle_reject");
+		fwd_xt_append_rule(r, "handle_reject");
 	}
 }
 
@@ -244,7 +244,7 @@ static void fwd_r_handle_accept(struct iptc_handle *h)
 	{
 		/* -j ACCEPT; -A handle_accept */
 		fwd_xt_get_target(r, "ACCEPT");
-		fwd_xt_exec_rule(r, "handle_accept");
+		fwd_xt_append_rule(r, "handle_accept");
 	}
 }
 
@@ -603,7 +603,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 			fwd_xt_parse_out(x, n, 0);					/* -o ... */
 			fwd_xt_get_target(x, "MASQUERADE");			/* -j MASQUERADE */
 			fwd_r_add_comment(x, "masq", z, NULL, n);	/* -m comment ... */
-			fwd_xt_exec_rule(x, "zonemasq");			/* -A zonemasq */
+			fwd_xt_append_rule(x, "zonemasq");			/* -A zonemasq */
 		}
 	}
 
@@ -630,7 +630,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 			fwd_r_add_comment(x, "mssfix", z, NULL, n);
 
 			/* -A mssfix */
-			fwd_xt_exec_rule(x, "mssfix");
+			fwd_xt_append_rule(x, "mssfix");
 		}
 	}
 
@@ -650,7 +650,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_xt_parse_out(x, n2, 0);				/* -o ... */
 				fwd_r_add_policytarget(x, z->forward);	/* -j handle_... */
 				fwd_r_add_comment(x, "zone", z, n, n2);	/* -m comment ... */
-				fwd_xt_exec_rule(x, "zones");			/* -A zones */
+				fwd_xt_append_rule(x, "zones");			/* -A zones */
 			}
 		}
 	}
@@ -672,7 +672,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_xt_parse_out(x, n2, 0);					/* -o ... */
 				fwd_r_add_policytarget(x, FWD_P_ACCEPT);	/* -j handle_... */
 				fwd_r_add_comment(x, "forward", z, n, n2);	/* -m comment ... */
-				fwd_xt_exec_rule(x, "forwardings");			/* -A forwardings */
+				fwd_xt_append_rule(x, "forwardings");			/* -A forwardings */
 			}
 		}
 	}
@@ -695,7 +695,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 			fwd_r_add_srcmac(x, r->src_mac);			/* -m mac --mac-source ... */
 			fwd_r_add_dnattarget(x, r->dest_ip, r->dest_port);	/* -j DNAT ... */
 			fwd_r_add_comment(x, "redir", z, n, NULL);	/* -m comment ... */
-			fwd_xt_exec_rule(x, "redirects");			/* -A redirects */
+			fwd_xt_append_rule(x, "redirects");			/* -A redirects */
 		}
 
 		/* Forward */
@@ -710,7 +710,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 			fwd_r_add_dport(x, r->dest_port);			/* --dport ... */
 			fwd_r_add_policytarget(x, FWD_P_ACCEPT);	/* -j handle_accept */
 			fwd_r_add_comment(x, "redir", z, n, NULL);	/* -m comment ... */
-			fwd_xt_exec_rule(x, "redirects");			/* -A redirects */
+			fwd_xt_append_rule(x, "redirects");			/* -A redirects */
 		}
 
 		/* Add loopback rule if neither src_ip nor src_mac are defined */
@@ -725,7 +725,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_r_add_dport(x, r->src_dport);			/* --dport ... */
 				fwd_xt_get_target(x, "MASQUERADE");			/* -j MASQUERADE */
 				fwd_r_add_comment(x, "redir", z, n, NULL);	/* -m comment ... */
-				fwd_xt_exec_rule(x, "loopback");			/* -A loopback */
+				fwd_xt_append_rule(x, "loopback");			/* -A loopback */
 			}
 		}
 	}
@@ -756,7 +756,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 					fwd_r_add_dport(x, c->dest_port);		/* --dport ... */
 					fwd_r_add_policytarget(x, c->target);	/* -j handle_... */
 					fwd_r_add_comment(x, "rule", z, n, n2);	/* -m comment ... */
-					fwd_xt_exec_rule(x, "rules");			/* -A rules */
+					fwd_xt_append_rule(x, "rules");			/* -A rules */
 				}
 			}
 		}
@@ -779,7 +779,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_r_add_dport(x, c->dest_port);			/* --dport ... */
 				fwd_r_add_policytarget(x, c->target);		/* -j handle_... */
 				fwd_r_add_comment(x, "rule", z, n, NULL);	/* -m comment ... */
-				fwd_xt_exec_rule(x, "rules");				/* -A rules */
+				fwd_xt_append_rule(x, "rules");				/* -A rules */
 			}
 		}
 	}

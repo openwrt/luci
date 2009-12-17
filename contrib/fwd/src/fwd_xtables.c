@@ -82,6 +82,17 @@ struct fwd_xt_rule * fwd_xt_init_rule(struct iptc_handle *h)
 	return NULL;
 }
 
+void fwd_xt_parse_frag(
+	struct fwd_xt_rule *r, int frag, int inv
+) {
+	if( frag )
+	{
+		r->entry->ip.flags |= IPT_F_FRAG;
+
+		if( inv )
+			r->entry->ip.invflags |= IPT_INV_FRAG;
+	}
+}
 
 void fwd_xt_parse_proto(
 	struct fwd_xt_rule *r, struct fwd_proto *p, int inv
@@ -312,7 +323,7 @@ void __fwd_xt_parse_target(
 }
 
 
-int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
+static int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain, int pos)
 {
 	size_t s;
 	struct xtables_rule_match *m, *next;
@@ -344,7 +355,10 @@ int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
 
 		memcpy(e->elems + s, r->target->t, r->target->t->u.target_size);
 
-		rv = iptc_append_entry(chain, e, r->iptc);
+		rv = (pos > -1)
+			? iptc_insert_entry(chain, e, (unsigned int) pos, r->iptc)
+			: iptc_append_entry(chain, e, r->iptc)
+		;
 	}
 	else
 	{
@@ -381,5 +395,17 @@ int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain)
 	}
 
 	return rv;
+}
+
+int fwd_xt_insert_rule(
+	struct fwd_xt_rule *r, const char *chain, unsigned int pos
+) {
+	return fwd_xt_exec_rule(r, chain, pos);
+}
+
+int fwd_xt_append_rule(
+	struct fwd_xt_rule *r, const char *chain
+) {
+	return fwd_xt_exec_rule(r, chain, -1);
 }
 

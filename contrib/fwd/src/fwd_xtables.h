@@ -54,6 +54,7 @@ void fwd_xt_parse_in(struct fwd_xt_rule *r, struct fwd_network_list *n, int inv)
 void fwd_xt_parse_out(struct fwd_xt_rule *r, struct fwd_network_list *n, int inv);
 void fwd_xt_parse_src(struct fwd_xt_rule *r, struct fwd_cidr *c, int inv);
 void fwd_xt_parse_dest(struct fwd_xt_rule *r, struct fwd_cidr *c, int inv);
+void fwd_xt_parse_frag(struct fwd_xt_rule *r, int frag, int inv);
 
 struct xtables_match * fwd_xt_get_match(struct fwd_xt_rule *r, const char *name);
 void __fwd_xt_parse_match(struct fwd_xt_rule *r, struct xtables_match *m, ...);
@@ -63,6 +64,7 @@ struct xtables_target * fwd_xt_get_target(struct fwd_xt_rule *r, const char *nam
 void __fwd_xt_parse_target(struct fwd_xt_rule *r, struct xtables_target *t, ...);
 #define fwd_xt_parse_target(r, t, ...) __fwd_xt_parse_target(r, t, __VA_ARGS__, NULL)
 
-int fwd_xt_exec_rule(struct fwd_xt_rule *r, const char *chain);
+int fwd_xt_append_rule(struct fwd_xt_rule *r, const char *chain);
+int fwd_xt_insert_rule(struct fwd_xt_rule *r, const char *chain, unsigned int pos);
 
 #endif
