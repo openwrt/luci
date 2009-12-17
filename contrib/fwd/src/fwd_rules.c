@@ -402,8 +402,6 @@ static int fwd_r_cmp(const char *what, const char *cmt, const char *cmp)
 {
 	char *match;
 
-	printf("CMP: %s %s %s\n", what, cmt, cmp);
-
 	if( (match = strstr(cmt, what)) == NULL )
 		return 0;
 
