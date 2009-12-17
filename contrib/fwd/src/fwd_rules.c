@@ -397,6 +397,27 @@ static void fwd_r_add_dnattarget(
 	}
 }
 
+/* parse comment string and look for match */
+static int fwd_r_cmp(const char *what, const char *cmt, const char *cmp)
+{
+	char *match;
+
+	printf("CMP: %s %s %s\n", what, cmt, cmp);
+
+	if( (match = strstr(cmt, what)) == NULL )
+		return 0;
+
+	match += strlen(what);
+
+	if( strncmp(match, cmp, strlen(cmp)) != 0 )
+		return 0;
+
+	if( (match[strlen(cmp)] != ' ') && (match[strlen(cmp)] != '\0') )
+		return 0;
+
+	return 1;
+}
+
 
 static void fwd_ipt_defaults_create(struct fwd_data *d)
 {
@@ -764,6 +785,130 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 			}
 		}
 	}
+
+	if( !iptc_commit(h_nat) )
+		fwd_fatal("Cannot commit nat table: %s", iptc_strerror(errno));
+
+	if( !iptc_commit(h_filter) )
+		fwd_fatal("Cannot commit filter table: %s", iptc_strerror(errno));
+
+	iptc_free(h_nat);
+	iptc_free(h_filter);
+}
+
+
+static void fwd_ipt_delif_table(struct iptc_handle *h, const char *net)
+{
+	struct xt_entry_match *m;
+	struct ipt_entry *e;
+	const char *chain, *comment;
+	size_t off = 0, num = 0;
+
+	/* iterate chains */
+	for( chain = iptc_first_chain(h); chain;
+	     chain = iptc_next_chain(h)
+	) {
+		/* iterate rules */
+		for( e = iptc_first_rule(chain, h), num = 0; e;
+		     e = iptc_next_rule(e, h), num++
+		) {
+			repeat_rule:
+
+			/* skip entries w/o matches */
+			if( ! e->target_offset )
+				continue;
+
+			/* iterate matches */
+			for( off = sizeof(struct ipt_entry);
+			     off < e->target_offset;
+			     off += m->u.match_size
+			) {
+				m = (void *)e + off;
+
+				/* yay */
+				if( ! strcmp(m->u.user.name, "comment") )
+				{
+					/* better use struct_xt_comment_info but well... */
+					comment = (void *)m + sizeof(struct xt_entry_match);
+
+					if( fwd_r_cmp("src:", comment, net) )
+					{
+						e = iptc_next_rule(e, h);
+						iptc_delete_num_entry(chain, num, h);
+
+						if( e != NULL )
+							goto repeat_rule;
+						else
+							break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void fwd_ipt_delif(struct fwd_handle *h, const char *net)
+{
+	struct iptc_handle *h_filter, *h_nat;
+
+	if( !(h_filter = iptc_init("filter")) || !(h_nat = iptc_init("nat")) )
+		fwd_fatal("Unable to obtain libiptc handle");
+
+
+	printf("\n\n#\n# delif(%s)\n#\n", net);
+
+	/* delete network related rules */
+	fwd_ipt_delif_table(h_nat, net);
+	fwd_ipt_delif_table(h_filter, net);
+
+
+	if( !iptc_commit(h_nat) )
+		fwd_fatal("Cannot commit nat table: %s", iptc_strerror(errno));
+
+	if( !iptc_commit(h_filter) )
+		fwd_fatal("Cannot commit filter table: %s", iptc_strerror(errno));
+
+	iptc_free(h_nat);
+	iptc_free(h_filter);
+}
+
+
+static void fwd_ipt_clear_ruleset_table(struct iptc_handle *h)
+{
+	const char *chain;
+
+	/* pass 1: flush all chains */
+	for( chain = iptc_first_chain(h); chain;
+	     chain = iptc_next_chain(h)
+	) {
+		iptc_flush_entries(chain, h);
+	}
+
+	/* pass 2: remove user defined chains */
+	for( chain = iptc_first_chain(h); chain;
+	     chain = iptc_next_chain(h)
+	) {
+		if( ! iptc_builtin(chain, h) )
+			iptc_delete_chain(chain, h);
+	}
+}
+
+void fwd_ipt_clear_ruleset(struct fwd_handle *h)
+{
+	struct iptc_handle *h_filter, *h_nat;
+
+	if( !(h_filter = iptc_init("filter")) || !(h_nat = iptc_init("nat")) )
+		fwd_fatal("Unable to obtain libiptc handle");
+
+	/* flush tables */
+	fwd_ipt_clear_ruleset_table(h_nat);
+	fwd_ipt_clear_ruleset_table(h_filter);
+
+	/* revert policies */
+	fwd_r_set_policy(h_filter, "INPUT", "ACCEPT");
+	fwd_r_set_policy(h_filter, "OUTPUT", "ACCEPT");
+	fwd_r_set_policy(h_filter, "FORWARD", "ACCEPT");	
+
 
 	if( !iptc_commit(h_nat) )
 		fwd_fatal("Cannot commit nat table: %s", iptc_strerror(errno));

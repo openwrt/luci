@@ -21,24 +21,11 @@
 
 #include "fwd.h"
 
-#define IPT "iptables"
-
-struct fwd_ipt_rulebuf {
-	char *buf;
-	size_t len;
-};
-
-
-#define fwd_ipt_add_format fwd_ipt_rule_append
-
-#define fwd_ipt_exec_format(t, ...) do {         \
-	struct fwd_ipt_rulebuf *r = fwd_ipt_init(t); \
-	fwd_ipt_add_format(r, __VA_ARGS__);          \
-	fwd_ipt_exec(r);                             \
-} while(0)
-
 void fwd_ipt_build_ruleset(struct fwd_handle *h);
+void fwd_ipt_clear_ruleset(struct fwd_handle *h);
+
 void fwd_ipt_addif(struct fwd_handle *h, const char *net);
+void fwd_ipt_delif(struct fwd_handle *h, const char *net);
 
 #endif
 

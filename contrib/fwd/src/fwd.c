@@ -27,7 +27,6 @@
 int main(int argc, const char *argv[])
 {
 	struct fwd_handle *h;
-	struct iptc_handle *ipt;
 
 	if( getuid() > 0 )
 		fwd_fatal("Need root permissions!");
@@ -48,6 +47,13 @@ int main(int argc, const char *argv[])
 
 	fwd_ipt_addif(h, "lan");
 	fwd_ipt_addif(h, "wan");
+
+	sleep(1);
+
+	fwd_ipt_delif(h, "wan");
+	fwd_ipt_delif(h, "lan");
+
+	fwd_ipt_clear_ruleset(h);
 
 	close(h->rtnl_socket);
 	fwd_free_config(h->conf);
