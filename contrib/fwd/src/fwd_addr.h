@@ -28,19 +28,21 @@
 #include <arpa/inet.h>
 
 
-struct fwd_addr_list {
+struct fwd_addr {
 	char ifname[IFNAMSIZ];
 	char label[IFNAMSIZ];
 	int family;
 	int index;
 	struct fwd_cidr ipaddr;
-	struct fwd_addr_list *next;
+	struct fwd_addr *next;
 };
 
 
-struct fwd_addr_list * fwd_get_addrs(int, int);
-struct fwd_addr_list * fwd_append_addrs(struct fwd_addr_list *, struct fwd_addr_list *);
-void fwd_free_addrs(struct fwd_addr_list *);
+struct fwd_addr * fwd_get_addrs(int, int);
+struct fwd_addr * fwd_append_addrs(struct fwd_addr *, struct fwd_addr *);
+void fwd_free_addrs(struct fwd_addr *);
+
+struct fwd_cidr * fwd_lookup_addr(struct fwd_addr *, const char *);
 
 #define fwd_foreach_addrs(head, entry) for(entry = head; entry; entry = entry->next)
 

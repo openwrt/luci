@@ -19,6 +19,7 @@
 
 #include "fwd.h"
 #include "fwd_xtables.h"
+#include "fwd_utils.h"
 
 
 /* Required by certain extensions like SNAT and DNAT */
@@ -129,7 +130,7 @@ void fwd_xt_parse_proto(
 }
 
 void fwd_xt_parse_in(
-	struct fwd_xt_rule *r, struct fwd_network_list *n, int inv
+	struct fwd_xt_rule *r, struct fwd_network *n, int inv
 ) {
 	if( n != NULL )
 	{
@@ -141,7 +142,7 @@ void fwd_xt_parse_in(
 }
 
 void fwd_xt_parse_out(
-	struct fwd_xt_rule *r, struct fwd_network_list *n, int inv
+	struct fwd_xt_rule *r, struct fwd_network *n, int inv
 ) {
 	if( n != NULL )
 	{

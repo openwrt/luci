@@ -19,8 +19,9 @@
 
 #include "fwd.h"
 #include "fwd_addr.h"
+#include "fwd_utils.h"
 
-struct fwd_addr_list * fwd_get_addrs(int fd, int family)
+struct fwd_addr * fwd_get_addrs(int fd, int family)
 {
 	struct {
 		  struct nlmsghdr n;
@@ -37,7 +38,7 @@ struct fwd_addr_list * fwd_get_addrs(int fd, int family)
 	struct nlmsghdr *nlmp;
 	struct ifaddrmsg *rtmp;
 
-	struct fwd_addr_list *head, *entry;
+	struct fwd_addr *head, *entry;
 
 	/* Build request */
 	memset(&req, 0, sizeof(req));
@@ -83,7 +84,7 @@ struct fwd_addr_list * fwd_get_addrs(int fd, int family)
 			rtmp  = (struct ifaddrmsg *) NLMSG_DATA(nlmp);
 			rtatp = (struct rtattr *) IFA_RTA(rtmp);
 
-			if( !(entry = fwd_alloc_ptr(struct fwd_addr_list)) )
+			if( !(entry = fwd_alloc_ptr(struct fwd_addr)) )
 				goto error;
 
 			entry->index = rtmp->ifa_index;
@@ -124,9 +125,20 @@ struct fwd_addr_list * fwd_get_addrs(int fd, int family)
 	return NULL;
 }
 
-void fwd_free_addrs(struct fwd_addr_list *head)
+struct fwd_cidr * fwd_lookup_addr(struct fwd_addr *head, const char *ifname)
 {
-	struct fwd_addr_list *entry = head;
+	struct fwd_addr *entry;
+
+	for( entry = head; entry; entry = entry->next )
+		if( !strncmp(entry->ifname, ifname, IFNAMSIZ) )
+			return &entry->ipaddr;
+
+	return NULL;
+}
+
+void fwd_free_addrs(struct fwd_addr *head)
+{
+	struct fwd_addr *entry = head;
 
 	while( entry != NULL )
 	{
@@ -138,9 +150,9 @@ void fwd_free_addrs(struct fwd_addr_list *head)
 	head = entry = NULL;
 }
 
-struct fwd_addr_list * fwd_append_addrs(struct fwd_addr_list *head, struct fwd_addr_list *add)
+struct fwd_addr * fwd_append_addrs(struct fwd_addr *head, struct fwd_addr *add)
 {
-	struct fwd_addr_list *entry = head;
+	struct fwd_addr *entry = head;
 
 	while( entry->next != NULL )
 		entry = entry->next;

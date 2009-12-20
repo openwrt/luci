@@ -25,13 +25,9 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <signal.h>
 #include <netinet/in.h>
 
-#if 0
-#include "fwd_addr.h"
-#include "fwd_rules.h"
-#include "fwd_config.h"
-#endif
 
 enum fwd_policy {
 	FWD_P_UNSPEC = 0,
@@ -83,12 +79,12 @@ struct fwd_icmptype {
 	int code;
 };
 
-struct fwd_network_list {
+struct fwd_network {
 	char *name;
 	char *ifname;
 	int isalias;
 	struct fwd_cidr *addr;
-	struct fwd_network_list *next;
+	struct fwd_network *next;
 };
 
 struct fwd_defaults {
@@ -103,7 +99,7 @@ struct fwd_defaults {
 
 struct fwd_zone {
 	char *name;
-	struct fwd_network_list *networks;
+	struct fwd_network *networks;
 	struct fwd_data *forwardings;
 	struct fwd_data *redirects;
 	struct fwd_data *rules;
@@ -168,22 +164,10 @@ struct fwd_data {
 
 struct fwd_handle {
 	int rtnl_socket;
+	int unix_socket;
 	struct fwd_data *conf;
-	struct fwd_addr_list *addrs;
 };
 
-
-/* fwd_zmalloc(size_t)
- * Allocates a zeroed buffer of the given size. */
-static void * fwd_zmalloc(size_t s)
-{
-	void *b = malloc(s);
-
-	if( b != NULL )
-		memset(b, 0, s);
-
-	return b;
-}
 
 /* fwd_fatal(fmt, ...)
  * Prints message to stderr and termintes program. */
@@ -194,14 +178,5 @@ static void * fwd_zmalloc(size_t s)
 	exit(1);                      \
 } while(0)
 
-/* fwd_alloc_ptr(type)
- * Allocates a buffer with the size of the given datatype
- * and returns a pointer to it. */
-#define fwd_alloc_ptr(t) (t *) fwd_zmalloc(sizeof(t))
-
-/* fwd_free_ptr(void *)
- * Frees the given pointer and sets it to NULL.
- * Safe for NULL values. */
-#define fwd_free_ptr(x) do { if(x != NULL) free(x); x = NULL; } while(0)
 
 #endif

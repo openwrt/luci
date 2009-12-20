@@ -50,8 +50,8 @@ void fwd_xt_init(void);
 struct fwd_xt_rule * fwd_xt_init_rule(struct iptc_handle *h);
 
 void fwd_xt_parse_proto(struct fwd_xt_rule *r, struct fwd_proto *p, int inv);
-void fwd_xt_parse_in(struct fwd_xt_rule *r, struct fwd_network_list *n, int inv);
-void fwd_xt_parse_out(struct fwd_xt_rule *r, struct fwd_network_list *n, int inv);
+void fwd_xt_parse_in(struct fwd_xt_rule *r, struct fwd_network *n, int inv);
+void fwd_xt_parse_out(struct fwd_xt_rule *r, struct fwd_network *n, int inv);
 void fwd_xt_parse_src(struct fwd_xt_rule *r, struct fwd_cidr *c, int inv);
 void fwd_xt_parse_dest(struct fwd_xt_rule *r, struct fwd_cidr *c, int inv);
 void fwd_xt_parse_frag(struct fwd_xt_rule *r, int frag, int inv);
