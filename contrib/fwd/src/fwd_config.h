@@ -21,7 +21,7 @@ struct fwd_data_conveyor {
 };
 
 /* api */
-struct fwd_data * fwd_read_config(void);
+struct fwd_data * fwd_read_config(struct fwd_handle *);
 struct fwd_zone * fwd_lookup_zone(struct fwd_data *, const char *);
 
 void fwd_free_config(struct fwd_data *);

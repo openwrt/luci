@@ -20,6 +20,7 @@
 #include "fwd.h"
 #include "fwd_addr.h"
 #include "fwd_config.h"
+#include "fwd_utils.h"
 
 #include "ucix.h"
 
@@ -395,11 +396,11 @@ fwd_read_defaults(struct uci_context *uci)
  * config zone
  */
 static void fwd_read_zone_networks_cb(
-	const char *net, struct fwd_network_list **np
+	const char *net, struct fwd_network **np
 ) {
-	struct fwd_network_list *nn;
+	struct fwd_network *nn;
 
-	if( (nn = fwd_alloc_ptr(struct fwd_network_list)) != NULL )
+	if( (nn = fwd_alloc_ptr(struct fwd_network)) != NULL )
 	{
 		nn->name = strdup(net);
 		nn->next = *np;
@@ -412,7 +413,7 @@ static void fwd_read_zones_cb(
 	const char *s, struct fwd_data_conveyor *cv
 ) {
 	struct fwd_data *dtn;
-	struct fwd_network_list *net = NULL;
+	struct fwd_network *net = NULL;
 	const char *name;
 
 	if( !(name = fwd_read_string(uci, s, "name")) )
@@ -775,9 +776,9 @@ fwd_read_includes(struct uci_context *uci)
  * config interface
  */
 static void fwd_read_network_data(
-	struct uci_context *uci, struct fwd_network_list *net
+	struct uci_context *uci, struct fwd_network *net
 ) {
-	struct fwd_network_list *e;
+	struct fwd_network *e;
 	const char *type, *ifname;
 
 	for( e = net; e; e = e->next )
@@ -806,9 +807,9 @@ static void fwd_read_networks(
 			fwd_read_network_data(uci, e->section.zone.networks);
 }
 
-static void fwd_free_networks(struct fwd_network_list *h)
+static void fwd_free_networks(struct fwd_network *h)
 {
-	struct fwd_network_list *e = h;
+	struct fwd_network *e = h;
 
 	while( h != NULL )
 	{
@@ -825,12 +826,33 @@ static void fwd_free_networks(struct fwd_network_list *h)
 	e = h = NULL;
 }
 
+static struct fwd_cidr * fwd_alloc_cidr(struct fwd_cidr *addr)
+{
+	struct fwd_cidr *cidr;
+
+	if( (cidr = fwd_alloc_ptr(struct fwd_cidr)) != NULL )
+	{
+		if( addr != NULL )
+		{
+			cidr->addr.s_addr = addr->addr.s_addr;
+			cidr->prefix = addr->prefix;
+		}
+
+		return cidr;
+	}
+
+	return NULL;
+}
 
 
-struct fwd_data * fwd_read_config(void)
+
+struct fwd_data * fwd_read_config(struct fwd_handle *h)
 {
 	struct uci_context *ctx;
-	struct fwd_data *defaults, *zones;
+	struct fwd_data *defaults, *zones, *e;
+	struct fwd_addr *addrs;
+	struct fwd_network *net;
+	struct fwd_zone *zone;
 
 	if( (ctx = ucix_init("firewall")) != NULL )
 	{
@@ -853,6 +875,23 @@ struct fwd_data * fwd_read_config(void)
 			fwd_read_networks(ctx, zones);
 			ucix_cleanup(ctx);
 
+			if( !(addrs = fwd_get_addrs(h->rtnl_socket, AF_INET)) )
+				goto error;
+
+			for( e = zones; e && (zone = &e->section.zone); e = e->next )
+			{
+				if( e->type != FWD_S_ZONE )
+					break;
+
+				for( net = zone->networks; net; net = net->next )
+				{
+					net->addr = fwd_alloc_cidr(
+						fwd_lookup_addr(addrs, net->ifname)
+					);
+				}
+			}
+
+			fwd_free_addrs(addrs);
 			return defaults;
 		}
 	}
