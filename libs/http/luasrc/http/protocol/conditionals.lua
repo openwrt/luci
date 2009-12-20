@@ -93,16 +93,15 @@ end
 -- @return		Alternative status code if the precondition failed
 -- @return		Table containing extra HTTP headers if the precondition failed
 function if_none_match( req, stat )
-	local h    = req.headers
-	local etag = mk_etag( stat )
+	local h      = req.headers
+	local etag   = mk_etag( stat )
+	local method = req.env and req.env.REQUEST_METHOD or "GET"
 
 	-- Check for matching resource
 	if type(h['If-None-Match']) == "string" then
 		for ent in h['If-None-Match']:gmatch("([^, ]+)") do
 			if ( ent == '*' or ent == etag ) and stat ~= nil then
-				if req.request_method == "get"  or
-				   req.request_method == "head"
-				then
+				if method == "GET" or method == "HEAD" then
 					return false, 304, {
 						["ETag"]          = mk_etag( stat );
 						["Date"]          = date.to_http( os.time() );
