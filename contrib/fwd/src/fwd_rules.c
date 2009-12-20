@@ -496,12 +496,13 @@ void fwd_ipt_build_ruleset(struct fwd_handle *h)
 		switch(e->type)
 		{
 			case FWD_S_DEFAULTS:
-				printf("\n## DEFAULTS\n");
+				fwd_log_info("Loading defaults");
 				fwd_ipt_defaults_create(e);
 				break;
 
 			case FWD_S_INCLUDE:
-				printf("\n## INCLUDE %s\n", e->section.include.path);
+				fwd_log_info("Loading include: %s",
+					e->section.include.path);
 				break;
 
 			case FWD_S_ZONE:
@@ -573,13 +574,12 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 		return;
 
 
-	printf("\n\n#\n# addif(%s)\n#\n", net);
+	fwd_log_info("Adding network %s (interface %s)",
+		n->name, n->ifname);
 
 	/* Build masquerading rule */
 	if( z->masq )
 	{
-		printf("\n# Net %s (%s) - masq\n", n->name, n->ifname);
-
 		if( (x = fwd_xt_init_rule(h_nat)) != NULL )
 		{
 			fwd_xt_parse_out(x, n, 0);				/* -o ... */
@@ -592,8 +592,6 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	/* Build MSS fix rule */
 	if( z->mtu_fix )
 	{
-		printf("\n# Net %s (%s) - mtu_fix\n", n->name, n->ifname);
-
 		if( (x = fwd_xt_init_rule(h_filter)) != NULL )
 		{
 			p.type = FWD_PR_TCP;
@@ -621,11 +619,6 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	{
 		if( (a2 = n2->addr) != NULL )
 		{
-			printf("\n# Net %s (%s) - intra-zone-forwarding"
-			       " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
-				n->name, n->ifname, z->name, n->name, n->ifname,
-				z->name, n2->name, n2->ifname);
-
 			if( (x = fwd_xt_init_rule(h_filter)) != NULL )
 			{
 				fwd_xt_parse_in(x, n, 0);				/* -i ... */
@@ -642,11 +635,6 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	{
 		for( n2 = f->dest->networks; n2; n2 = n2->next )
 		{
-			printf("\n# Net %s (%s) - inter-zone-forwarding"
-                   " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
-				n->name, n->ifname, z->name, n->name, n->ifname,
-				f->dest->name, n2->name, n2->ifname);
-
 			/* Build forwarding rule */
 			if( (x = fwd_xt_init_rule(h_filter)) != NULL )
 			{
@@ -662,9 +650,6 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	/* Build DNAT rules */
 	for( e = z->redirects; e && (r = &e->section.redirect); e = e->next )
 	{
-		printf("\n# Net %s (%s) - redirect Z:%s N:%s I:%s\n",
-			n->name, n->ifname, z->name, n->name, n->ifname);
-
 		/* DNAT */
 		if( (x = fwd_xt_init_rule(h_nat)) != NULL )
 		{
@@ -720,11 +705,6 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 		{
 			for( n2 = c->dest->networks; n2; n2 = n2->next )
 			{
-				printf("\n# Net %s (%s) - rule+dest"
-		               " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
-					n->name, n->ifname, z->name, n->name, n->ifname,
-					f->dest->name, n2->name, n2->ifname);
-
 				if( (x = fwd_xt_init_rule(h_filter)) != NULL )
 				{
 					fwd_xt_parse_in(x, n, 0);				/* -i ... */
@@ -746,9 +726,6 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 		/* No destination specified, treat it as input rule */
 		else
 		{
-			printf("\n# Net %s (%s) - rule Z:%s N:%s I:%s\n",
-				n->name, n->ifname, z->name, n->name, n->ifname);
-
 			if( (x = fwd_xt_init_rule(h_filter)) != NULL )
 			{
 				fwd_xt_parse_in(x, n, 0);				/* -i ... */
@@ -835,7 +812,7 @@ void fwd_ipt_delif(struct fwd_handle *h, const char *net)
 		fwd_fatal("Unable to obtain libiptc handle");
 
 
-	printf("\n\n#\n# delif(%s)\n#\n", net);
+	fwd_log_info("Removing network %s", net);
 
 	/* delete network related rules */
 	fwd_ipt_delif_table(h_nat, net);

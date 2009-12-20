@@ -106,19 +106,31 @@ static int fwd_server_main(int argc, const char *argv[])
 
 					if( !fwd_empty_cidr(addr_new) && fwd_empty_cidr(addr_old) )
 					{
-						printf("IFUP[%s]\n", net->ifname);
+						fwd_log_info(
+							"Interface %s brought up - adding rules",
+							net->ifname
+						);
+
 						fwd_update_cidr(addr_old, addr_new);
 						fwd_ipt_addif(h, net->name);
 					}
 					else if( fwd_empty_cidr(addr_new) && !fwd_empty_cidr(addr_old) )
 					{
-						printf("IFDOWN[%s]\n", net->ifname);
+						fwd_log_info(
+							"Interface %s went down - removing rules",
+							net->ifname
+						);
+
 						fwd_update_cidr(addr_old, NULL);
 						fwd_ipt_delif(h, net->name);
 					}
 					else if( ! fwd_equal_cidr(addr_old, addr_new) )
 					{
-						printf("IFCHANGE[%s]\n", net->ifname);
+						fwd_log_info(
+							"Interface %s changed IP - rebuilding rules",
+							net->ifname
+						);
+
 						fwd_update_cidr(addr_old, addr_new);
 						fwd_ipt_chgif(h, net->name);
 					}

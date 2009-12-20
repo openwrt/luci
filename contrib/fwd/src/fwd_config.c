@@ -25,11 +25,9 @@
 #include "ucix.h"
 
 
-#define fwd_read_error(...) do {  \
-	fprintf(stderr, "ERROR: ");   \
-	fprintf(stderr, __VA_ARGS__); \
-	fprintf(stderr, "\n");        \
-	return;                       \
+#define fwd_read_error(...) do { \
+	fwd_log_err(__VA_ARGS__);    \
+	return;                      \
 } while(0)
 
 
