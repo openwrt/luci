@@ -26,6 +26,7 @@ void fwd_ipt_clear_ruleset(struct fwd_handle *h);
 
 void fwd_ipt_addif(struct fwd_handle *h, const char *net);
 void fwd_ipt_delif(struct fwd_handle *h, const char *net);
+void fwd_ipt_chgif(struct fwd_handle *h, const char *net);
 
 #endif
 

@@ -21,6 +21,7 @@
 #include "fwd_addr.h"
 #include "fwd_rules.h"
 #include "fwd_xtables.h"
+#include "fwd_utils.h"
 
 
 /* -P <chain> <policy> */
@@ -86,7 +87,7 @@ static void fwd_r_accept_related(struct iptc_handle *h, const char *chain)
 /* -A INPUT -i lo -j ACCEPT; -A OUTPUT -o lo -j ACCEPT */
 static void fwd_r_accept_lo(struct iptc_handle *h)
 {
-	struct fwd_network_list n;
+	struct fwd_network n;
 	struct fwd_xt_rule *r;
 
 	n.ifname = "lo";
@@ -251,21 +252,14 @@ static void fwd_r_handle_accept(struct iptc_handle *h)
 /* add comment match */
 static void fwd_r_add_comment(
 	struct fwd_xt_rule *r, const char *t, struct fwd_zone *z,
-	struct fwd_network_list *n, struct fwd_network_list *n2
+	struct fwd_network *n
 ) {
 	struct xtables_match *m;
 	char buf[256];
 
 	if( (m = fwd_xt_get_match(r, "comment")) != NULL )
 	{
-		if( (n != NULL) && (n2 != NULL) )
-			snprintf(buf, sizeof(buf), "%s:%s src:%s dest:%s",
-				t, z->name, n->name, n2->name);
-		else if( (n == NULL) && (n2 != NULL) )
-			snprintf(buf, sizeof(buf), "%s:%s dest:%s", t, z->name, n2->name);
-		else
-			snprintf(buf, sizeof(buf), "%s:%s src:%s", t, z->name, n->name);
-
+		snprintf(buf, sizeof(buf), "%s:net=%s zone=%s", t, n->name, z->name);
 		fwd_xt_parse_match(r, m, "--comment", buf);
 	}
 }
@@ -525,7 +519,7 @@ static struct fwd_zone *
 fwd_lookup_zone(struct fwd_handle *h, const char *net)
 {
 	struct fwd_data *e;
-	struct fwd_network_list *n;
+	struct fwd_network *n;
 
 	for( e = h->conf; e; e = e->next )
 		if( e->type == FWD_S_ZONE )
@@ -536,27 +530,14 @@ fwd_lookup_zone(struct fwd_handle *h, const char *net)
 	return NULL;
 }
 
-static struct fwd_network_list *
+static struct fwd_network *
 fwd_lookup_network(struct fwd_zone *z, const char *net)
 {
-	struct fwd_network_list *n;
+	struct fwd_network *n;
 
 	for( n = z->networks; n; n = n->next )
 		if( !strcmp(n->name, net) )
 			return n;
-
-	return NULL;
-}
-
-static struct fwd_addr_list *
-fwd_lookup_addr(struct fwd_handle *h, struct fwd_network_list *n)
-{
-	struct fwd_addr_list *a;
-
-	if( n != NULL )
-		for( a = h->addrs; a; a = a->next )
-			if( !strcmp(a->ifname, n->ifname) )
-				return a;
 
 	return NULL;
 }
@@ -568,8 +549,8 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	struct fwd_rule *c;
 	struct fwd_redirect *r;
 	struct fwd_forwarding *f;
-	struct fwd_addr_list *a, *a2;
-	struct fwd_network_list *n, *n2;
+	struct fwd_cidr *a, *a2;
+	struct fwd_network *n, *n2;
 	struct fwd_proto p;
 
 	struct fwd_xt_rule *x;
@@ -588,8 +569,9 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	if( !(n = fwd_lookup_network(z, net)) )
 		return;
 
-	if( !(a = fwd_lookup_addr(h, n)) )
+	if( !(a = n->addr) || fwd_empty_cidr(a) )
 		return;
+
 
 	printf("\n\n#\n# addif(%s)\n#\n", net);
 
@@ -600,10 +582,10 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 
 		if( (x = fwd_xt_init_rule(h_nat)) != NULL )
 		{
-			fwd_xt_parse_out(x, n, 0);					/* -o ... */
-			fwd_xt_get_target(x, "MASQUERADE");			/* -j MASQUERADE */
-			fwd_r_add_comment(x, "masq", z, NULL, n);	/* -m comment ... */
-			fwd_xt_append_rule(x, "zonemasq");			/* -A zonemasq */
+			fwd_xt_parse_out(x, n, 0);				/* -o ... */
+			fwd_xt_get_target(x, "MASQUERADE");		/* -j MASQUERADE */
+			fwd_r_add_comment(x, "masq", z, n);		/* -m comment ... */
+			fwd_xt_append_rule(x, "zonemasq");		/* -A zonemasq */
 		}
 	}
 
@@ -627,7 +609,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_xt_parse_target(x, t, "--clamp-mss-to-pmtu");
 
 			/* -m comment ... */
-			fwd_r_add_comment(x, "mssfix", z, NULL, n);
+			fwd_r_add_comment(x, "mssfix", z, n);
 
 			/* -A mssfix */
 			fwd_xt_append_rule(x, "mssfix");
@@ -637,7 +619,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 	/* Build intra-zone forwarding rules */
 	for( n2 = z->networks; n2; n2 = n2->next )
 	{
-		if( (a2 = fwd_lookup_addr(h, n2)) != NULL )
+		if( (a2 = n2->addr) != NULL )
 		{
 			printf("\n# Net %s (%s) - intra-zone-forwarding"
 			       " Z:%s N:%s I:%s -> Z:%s N:%s I:%s\n",
@@ -649,7 +631,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_xt_parse_in(x, n, 0);				/* -i ... */
 				fwd_xt_parse_out(x, n2, 0);				/* -o ... */
 				fwd_r_add_policytarget(x, z->forward);	/* -j handle_... */
-				fwd_r_add_comment(x, "zone", z, n, n2);	/* -m comment ... */
+				fwd_r_add_comment(x, "zone", z, n);		/* -m comment ... */
 				fwd_xt_append_rule(x, "zones");			/* -A zones */
 			}
 		}
@@ -671,8 +653,8 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 				fwd_xt_parse_in(x, n, 0);					/* -i ... */
 				fwd_xt_parse_out(x, n2, 0);					/* -o ... */
 				fwd_r_add_policytarget(x, FWD_P_ACCEPT);	/* -j handle_... */
-				fwd_r_add_comment(x, "forward", z, n, n2);	/* -m comment ... */
-				fwd_xt_append_rule(x, "forwardings");			/* -A forwardings */
+				fwd_r_add_comment(x, "forward", z, n);		/* -m comment ... */
+				fwd_xt_append_rule(x, "forwardings");		/* -A forwardings */
 			}
 		}
 	}
@@ -688,13 +670,13 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 		{
 			fwd_xt_parse_in(x, n, 0);					/* -i ... */
 			fwd_xt_parse_src(x, r->src_ip, 0);			/* -s ... */
-			fwd_xt_parse_dest(x, &a->ipaddr, 0);		/* -d ... */
+			fwd_xt_parse_dest(x, a, 0);					/* -d ... */
 			fwd_xt_parse_proto(x, r->proto, 0);			/* -p ... */
 			fwd_r_add_sport(x, r->src_port);			/* --sport ... */
 			fwd_r_add_dport(x, r->src_dport);			/* --dport ... */
 			fwd_r_add_srcmac(x, r->src_mac);			/* -m mac --mac-source ... */
 			fwd_r_add_dnattarget(x, r->dest_ip, r->dest_port);	/* -j DNAT ... */
-			fwd_r_add_comment(x, "redir", z, n, NULL);	/* -m comment ... */
+			fwd_r_add_comment(x, "redir", z, n);		/* -m comment ... */
 			fwd_xt_append_rule(x, "redirects");			/* -A redirects */
 		}
 
@@ -709,7 +691,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 			fwd_r_add_sport(x, r->src_port);			/* --sport ... */
 			fwd_r_add_dport(x, r->dest_port);			/* --dport ... */
 			fwd_r_add_policytarget(x, FWD_P_ACCEPT);	/* -j handle_accept */
-			fwd_r_add_comment(x, "redir", z, n, NULL);	/* -m comment ... */
+			fwd_r_add_comment(x, "redir", z, n);		/* -m comment ... */
 			fwd_xt_append_rule(x, "redirects");			/* -A redirects */
 		}
 
@@ -718,14 +700,14 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 		{
 			if( (x = fwd_xt_init_rule(h_nat)) != NULL )
 			{
-				fwd_xt_parse_in(x, n, 1);					/* -i ! ... */
-				fwd_xt_parse_dest(x, r->dest_ip, 0);		/* -d ... */
-				fwd_xt_parse_proto(x, r->proto, 0);			/* -p ... */
-				fwd_r_add_sport(x, r->src_port);			/* --sport ... */
-				fwd_r_add_dport(x, r->src_dport);			/* --dport ... */
-				fwd_xt_get_target(x, "MASQUERADE");			/* -j MASQUERADE */
-				fwd_r_add_comment(x, "redir", z, n, NULL);	/* -m comment ... */
-				fwd_xt_append_rule(x, "loopback");			/* -A loopback */
+				fwd_xt_parse_in(x, n, 1);				/* -i ! ... */
+				fwd_xt_parse_dest(x, r->dest_ip, 0);	/* -d ... */
+				fwd_xt_parse_proto(x, r->proto, 0);		/* -p ... */
+				fwd_r_add_sport(x, r->src_port);		/* --sport ... */
+				fwd_r_add_dport(x, r->src_dport);		/* --dport ... */
+				fwd_xt_get_target(x, "MASQUERADE");		/* -j MASQUERADE */
+				fwd_r_add_comment(x, "redir", z, n);	/* -m comment ... */
+				fwd_xt_append_rule(x, "loopback");		/* -A loopback */
 			}
 		}
 	}
@@ -755,7 +737,7 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 					fwd_r_add_sport(x, c->src_port);		/* --sport ... */
 					fwd_r_add_dport(x, c->dest_port);		/* --dport ... */
 					fwd_r_add_policytarget(x, c->target);	/* -j handle_... */
-					fwd_r_add_comment(x, "rule", z, n, n2);	/* -m comment ... */
+					fwd_r_add_comment(x, "rule", z, n);		/* -m comment ... */
 					fwd_xt_append_rule(x, "rules");			/* -A rules */
 				}
 			}
@@ -769,17 +751,17 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 
 			if( (x = fwd_xt_init_rule(h_filter)) != NULL )
 			{
-				fwd_xt_parse_in(x, n, 0);					/* -i ... */
-				fwd_xt_parse_src(x, c->src_ip, 0);			/* -s ... */
-				fwd_xt_parse_dest(x, c->dest_ip, 0);		/* -d ... */
-				fwd_xt_parse_proto(x, c->proto, 0);			/* -p ... */
-				fwd_r_add_icmptype(x, c->icmp_type);		/* --icmp-type ... */
-				fwd_r_add_srcmac(x, c->src_mac);			/* --mac-source ... */
-				fwd_r_add_sport(x, c->src_port);			/* --sport ... */
-				fwd_r_add_dport(x, c->dest_port);			/* --dport ... */
-				fwd_r_add_policytarget(x, c->target);		/* -j handle_... */
-				fwd_r_add_comment(x, "rule", z, n, NULL);	/* -m comment ... */
-				fwd_xt_append_rule(x, "rules");				/* -A rules */
+				fwd_xt_parse_in(x, n, 0);				/* -i ... */
+				fwd_xt_parse_src(x, c->src_ip, 0);		/* -s ... */
+				fwd_xt_parse_dest(x, c->dest_ip, 0);	/* -d ... */
+				fwd_xt_parse_proto(x, c->proto, 0);		/* -p ... */
+				fwd_r_add_icmptype(x, c->icmp_type);	/* --icmp-type ... */
+				fwd_r_add_srcmac(x, c->src_mac);		/* --mac-source ... */
+				fwd_r_add_sport(x, c->src_port);		/* --sport ... */
+				fwd_r_add_dport(x, c->dest_port);		/* --dport ... */
+				fwd_r_add_policytarget(x, c->target);	/* -j handle_... */
+				fwd_r_add_comment(x, "rule", z, n);		/* -m comment ... */
+				fwd_xt_append_rule(x, "rules");			/* -A rules */
 			}
 		}
 	}
@@ -797,8 +779,8 @@ void fwd_ipt_addif(struct fwd_handle *h, const char *net)
 
 static void fwd_ipt_delif_table(struct iptc_handle *h, const char *net)
 {
-	struct xt_entry_match *m;
-	struct ipt_entry *e;
+	const struct xt_entry_match *m;
+	const struct ipt_entry *e;
 	const char *chain, *comment;
 	size_t off = 0, num = 0;
 
@@ -829,7 +811,7 @@ static void fwd_ipt_delif_table(struct iptc_handle *h, const char *net)
 					/* better use struct_xt_comment_info but well... */
 					comment = (void *)m + sizeof(struct xt_entry_match);
 
-					if( fwd_r_cmp("src:", comment, net) )
+					if( fwd_r_cmp("net=", comment, net) )
 					{
 						e = iptc_next_rule(e, h);
 						iptc_delete_num_entry(chain, num, h);
@@ -868,6 +850,13 @@ void fwd_ipt_delif(struct fwd_handle *h, const char *net)
 
 	iptc_free(h_nat);
 	iptc_free(h_filter);
+}
+
+void fwd_ipt_chgif(struct fwd_handle *h, const char *net)
+{
+	/* XXX: should alter rules in-place, tbd */
+	fwd_ipt_delif(h, net);
+	fwd_ipt_addif(h, net);
 }
 
 
