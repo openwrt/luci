@@ -7,9 +7,12 @@ fwd:
 	$(CC) $(CFLAGS) -c -o fwd_rules.o fwd_rules.c
 	$(CC) $(CFLAGS) -c -o fwd_config.o fwd_config.c
 	$(CC) $(CFLAGS) -c -o fwd_xtables.o fwd_xtables.c
+	$(CC) $(CFLAGS) -c -o fwd_ipc.o fwd_ipc.c
+	$(CC) $(CFLAGS) -c -o fwd_utils.o fwd_utils.c
 	$(CC) $(CFLAGS) -c -o fwd.o fwd.c
-	$(CC) $(LDFLAGS) -o fwd fwd.o fwd_addr.o fwd_rules.o fwd_config.o fwd_xtables.o ucix.o
+	$(CC) $(LDFLAGS) -o fwd fwd.o fwd_addr.o fwd_rules.o fwd_config.o fwd_xtables.o fwd_ipc.o fwd_utils.o ucix.o
+	ln -s fwd fw
 
 clean:
-	rm -f *~ fwd *.o
+	rm -f *~ fwd fw *.o
 
