@@ -17,6 +17,7 @@ function index()
 	require("luci.i18n")
 	local uci = require("luci.model.uci").cursor()
 	local i18n = luci.i18n.translate
+	local has_wifi = nixio.fs.stat("/etc/config/wireless")
 
 	local page  = node("admin", "network")
 	page.target = alias("admin", "network", "network")
@@ -29,15 +30,17 @@ function index()
 	page.title  = i18n("Switch")
 	page.order  = 20
 
-	local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
-	page.leaf = true
-	page.subindex = true
+	if has_wifi and has_wifi.size > 0 then
+		local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
+		page.leaf = true
+		page.subindex = true
 
-	local page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
-	page.leaf = true
+		local page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
+		page.leaf = true
 
-	local page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
-	page.leaf = true
+		local page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
+		page.leaf = true
+	end
 
 	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
 	page.leaf   = true
@@ -57,10 +60,12 @@ function index()
 		end
 	)
 
-	local page  = node("admin", "network", "dhcpleases")
-	page.target = cbi("admin_network/dhcpleases")
-	page.title  = i18n("DHCP Leases")
-	page.order  = 30
+	if nixio.fs.access("/etc/config/dhcp") then
+		local page  = node("admin", "network", "dhcpleases")
+		page.target = cbi("admin_network/dhcpleases")
+		page.title  = i18n("DHCP Leases")
+		page.order  = 30
+	end
 
 	local page  = node("admin", "network", "hosts")
 	page.target = cbi("admin_network/hosts")

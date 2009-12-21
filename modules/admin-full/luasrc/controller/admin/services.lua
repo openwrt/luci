@@ -46,9 +46,11 @@ function index()
 	page.target = cbi("admin_services/dropbear")
 	page.title  = "Dropbear SSHd"
 	page.order  = 20
-	
-	local page  = node("admin", "services", "dnsmasq")
-	page.target = cbi("admin_services/dnsmasq")
-	page.title  = "Dnsmasq"
-	page.order  = 30
+
+	if nixio.fs.access("/etc/config/dhcp") then	
+		local page  = node("admin", "services", "dnsmasq")
+		page.target = cbi("admin_services/dnsmasq")
+		page.title  = "Dnsmasq"
+		page.order  = 30
+	end
 end
