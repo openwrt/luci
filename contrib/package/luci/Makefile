@@ -541,7 +541,7 @@ define Package/luci-app-statistics
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-admin-full +PACKAGE_luci-app-statistics:collectd \
    +PACKAGE_luci-app-statistics:rrdtool1 \
-   +PACKAGE_luci-app-statistics:collectd-mod-rrdtool1 \
+   +PACKAGE_luci-app-statistics:collectd-mod-rrdtool \
    +PACKAGE_luci-app-statistics:collectd-mod-wireless \
    +PACKAGE_luci-app-statistics:collectd-mod-interface \
    +PACKAGE_luci-app-statistics:collectd-mod-load
