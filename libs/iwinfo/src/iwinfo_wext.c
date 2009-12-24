@@ -373,15 +373,16 @@ int wext_get_txpwrlist(const char *ifname, char *buf, int *len)
 	) {
 		for( i = 0; i < range.num_txpower; i++ )
 		{
-			if( range.txpower_capa & IW_TXPOW_MWATT )
-			{
-				entry.dbm = wext_mw2dbm(range.txpower[i]);
-				entry.mw  = range.txpower[i];
-			}
-			else
+			if( range.txpower_capa & IW_TXPOW_DBM )
 			{
 				entry.dbm = range.txpower[i];
 				entry.mw  = wext_dbm2mw(range.txpower[i]);
+			}
+
+			else if( range.txpower_capa & IW_TXPOW_MWATT )
+			{
+				entry.dbm = wext_mw2dbm(range.txpower[i]);
+				entry.mw  = range.txpower[i];
 			}
 
 			memcpy(&buf[i*sizeof(entry)], &entry, sizeof(entry));
