@@ -232,12 +232,6 @@ network:property("network")
 function network._init(self, sid)
 	local count = 0
 
-	ub.uci:foreach("wireless", "wifi-iface",
-		function(s)
-			count = count + 1
-			return s['.name'] ~= sid
-		end)
-
 	local parent_dev = st:get("wireless", sid, "device")
 		or ub.uci:get("wireless", sid, "device")
 
@@ -245,13 +239,19 @@ function network._init(self, sid)
 		or parent_dev
 
 	if dev then
-		self.id = "%s.network%d" %{ parent_dev, count }
+		ub.uci:foreach("wireless", "wifi-iface",
+			function(s)
+				count = count + 1
+				if s['.name'] == sid then
+					self.id = "%s.network%d" %{ parent_dev, count }
 
-		local wtype = iwi.type(dev)
-		if dev and wtype then
-			self.winfo = iwi[wtype]
-			self.wdev  = dev
-		end
+					local wtype = iwi.type(dev)
+					if dev and wtype then
+						self.winfo = iwi[wtype]
+						self.wdev  = dev
+					end
+				end
+			end)
 	end
 end
 
