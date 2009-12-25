@@ -353,7 +353,6 @@ s2:depends("interface", arg[1])
 s2.defaults.interface = arg[1]
 
 s2:tab("general", translate("General Setup"))
-
 s2.defaults.proto = "static"
 
 s2:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address")).rmempty = true
@@ -365,14 +364,16 @@ nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
 s2:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway")).rmempty = true
-s2:taboption("general", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
-s2:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
 
 if has_ipv6 then
 	s2:tab("ipv6", translate("IPv6 Setup"))
 	s2:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
 	s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
 end
+
+s2:tab("advanced", translate("Advanced Settings"))
+s2:taboption("advanced", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
+s2:taboption("advanced", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
 
 
 m2 = Map("dhcp", "", "")
