@@ -44,7 +44,14 @@ nw.init(m.uci)
 ww.init(m.uci)
 
 local wnet = ww:get_network(arg[2])
-m.title = wnet and ww:get_i18n(wnet) or translate("Wireless Network")
+
+-- redirect to overview page if network does not exist anymore (e.g. after a revert)
+if not wnet then
+	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
+	return
+end
+
+m.title = ww:get_i18n(wnet)
 
 
 local iw = nil
