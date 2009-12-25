@@ -38,6 +38,9 @@ function index()
 		local page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
 		page.leaf = true
 
+		local page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil, 16)
+		page.leaf = true
+
 		local page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
 		page.leaf = true
 	end
@@ -110,6 +113,26 @@ function wifi_join()
 		end
 	else
 		luci.template.render("admin_network/wifi_join")
+	end
+end
+
+function wifi_add()
+	local dev = luci.http.formvalue("device") 
+	local uci = require "luci.model.uci".cursor()
+	local wlm = require "luci.model.wireless"
+
+	if dev then
+		wlm.init(uci)
+
+		local net = wlm:add_network({
+			device     = dev,
+			mode       = "ap",
+			ssid       = "OpenWrt",
+			encryption = "none"
+		})
+
+		uci:save("wireless")
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", dev, net:name()))
 	end
 end
 
