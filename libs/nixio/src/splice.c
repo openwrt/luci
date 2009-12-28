@@ -144,7 +144,7 @@ static int nixio_sendfile(lua_State *L) {
 
 	do {
 #ifdef __DARWIN__
-		r = sendfile(infd, sock, offset, len, NULL, 0);
+		r = sendfile(infd, sock, offset, (off_t *)&len, NULL, 0);
 #else
 		r = sendfile(infd, sock, offset, len, NULL, &spliced, 0);
 #endif
