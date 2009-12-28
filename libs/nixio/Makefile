@@ -10,8 +10,14 @@ AXTLS_VERSION = 1.2.1
 AXTLS_DIR     = axTLS
 AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VERSION).tar.gz
 NIXIO_TLS    ?= openssl
-NIXIO_LDFLAGS = -lcrypt
 NIXIO_SO      = nixio.so
+NIXIO_LDFLAGS =
+
+ifeq (,$(findstring Darwin,$(OS)))
+	NIXIO_LDFLAGS += -lcrypt
+else
+	EXTRA_CFLAGS += -D__DARWIN__
+endif
 
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
 	    src/poll.o src/io.o src/file.o src/splice.o src/process.o src/syslog.o \
