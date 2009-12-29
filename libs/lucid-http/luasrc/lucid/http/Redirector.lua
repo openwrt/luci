@@ -29,5 +29,5 @@ function factory(server, config)
 	end
 
 	local handler = catchall.Redirect(config.name, config.physical)
-	vhost:set_handler(config.virtual, handler)
+	vhost:set_handler(config.virtual or "", handler)
 end
