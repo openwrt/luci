@@ -1,4 +1,4 @@
-##!/bin/sh
+#!/bin/sh
 export LD_LIBRARY_PATH="$1/usr/lib:$LD_LIBRARY_PATH"
 [ `uname -s` == "Darwin" ] && export DYLD_LIBRARY_PATH="$1/usr/lib:$DYLD_LIBRARY_PATH"
 export PATH="$1/bin:$1/usr/bin:$PATH"
