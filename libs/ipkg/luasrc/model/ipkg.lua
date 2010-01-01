@@ -21,7 +21,7 @@ local type  = type
 local pairs = pairs
 local error = error
 
-local ipkg = "opkg -force-defaults"
+local ipkg = "opkg"
 
 --- LuCI IPKG/OPKG call abstraction library
 module "luci.model.ipkg"
