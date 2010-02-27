@@ -28,6 +28,10 @@ m = Map("wireless", "",
 
 m:chain("network")
 
+m.breadcrumb = {
+	{ luci.dispatcher.build_url("admin/network/wireless"), translate("Wireless Networks") }
+}
+
 local ifsection
 
 function m.on_commit(map)
@@ -111,6 +115,29 @@ if hwtype == "mac80211" then
 	for _, p in ipairs(iw and iw.txpwrlist or {}) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end
+	
+	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
+	mode:value("", translate("auto"))
+	mode:value("11b", "802.11b")
+	mode:value("11g", "802.11g")
+	mode:value("11a", "802.11a")
+	mode:value("11ng", "802.11g+n")
+	mode:value("11na", "802.11a+n")
+
+	htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode"))
+	htmode:depends("hwmode", "11na")
+	htmode:depends("hwmode", "11ng")
+	htmode:value("HT20", "20MHz")
+	htmode:value("HT40-", translate("40MHz 2nd channel below"))
+	htmode:value("HT40+", translate("40MHz 2nd channel above"))
+	
+	htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
+	htcapab:depends("hwmode", "11na")
+	htcapab:depends("hwmode", "11ng")
+	
+	s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	s:taboption("advanced", Value, "distance", translate("Distance Optimization"),
+		translate("Distance to farthest network member in meters."))	
 end
 
 
@@ -300,6 +327,26 @@ if wnet then
 
 		s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 		s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
+		
+		mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
+		mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})		
+		
+		function mode.write(self, section, value)
+			if value == "ap-wds" then
+				ListValue.write(self, section, "ap")
+				m.uci:set("wireless", section, "wds", 1)
+			elseif value == "sta-wds" then
+				ListValue.write(self, section, "sta")
+				m.uci:set("wireless", section, "wds", 1)
+			else
+				ListValue.write(self, section, value)
+				m.uci:delete("wireless", section, "wds")
+			end
+		end
+		
+		hidden = s:taboption("general", Flag, "hidden", translate("Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+		hidden:depends({mode="ap"})
+		hidden:depends({mode="ap-wds"})				
 	end
 
 
