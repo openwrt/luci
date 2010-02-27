@@ -558,32 +558,32 @@ endef
 
 define Package/luci-app-diag-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+PACKAGE_luci-app-diag-core:luci-admin-core 
+  DEPENDS+=+luci-admin-core 
   TITLE:=LuCI Diagnostics Tools (Core)
 endef
 
 define Package/luci-app-diag-devinfo
   $(call Package/luci/webtemplate)
-  DEPENDS+=+PACKAGE_luci_app-diag-devinfo:luci-app-diag-core \
+  DEPENDS+=+PACKAGE_luci-app-diag-devinfo:luci-app-diag-core \
 	+PACKAGE_luci-app-diag-devinfo:smap \
 	+PACKAGE_luci-app-diag-devinfo:netdiscover \
 	+PACKAGE_luci-app-diag-devinfo:mac-to-devinfo \
 	+PACKAGE_luci-app-diag-devinfo:httping \
 	+PACKAGE_luci-app-diag-devinfo:smap-to-devinfo \
-	+PACAKGE_luci-app-diag-devinfo:netdiscover-to-devinfo
+	+PACKAGE_luci-app-diag-devinfo:netdiscover-to-devinfo
   TITLE:=LuCI Diagnostics Tools (Device Info)
 endef
 
 define Package/luci-app-voice-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+PACKAGE_luci-app-voice-core:luci-admin-core 
+  DEPENDS+=+luci-admin-core 
   TITLE:=LuCI Voice Software (Core)
 endef
 
 define Package/luci-app-voice-diag
   $(call Package/luci/webtemplate)
   DEPENDS+=+PACKAGE_luci-app-voice-diag:luci-app-voice-core \
-	+PACKAGE_luci-apps-voice-diag:luci-app-diag-devinfo
+     +PACKAGE_luci-app-voice-diag:luci-app-diag-devinfo
   TITLE:=LuCI Voice Software (Diagnostics)
 endef
 
