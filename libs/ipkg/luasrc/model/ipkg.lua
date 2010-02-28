@@ -20,6 +20,7 @@ local util = require "luci.util"
 local type  = type
 local pairs = pairs
 local error = error
+local table = table
 
 local ipkg = "opkg"
 
@@ -30,8 +31,7 @@ module "luci.model.ipkg"
 -- Internal action function
 local function _action(cmd, ...)
 	local pkg = ""
-	arg.n = nil
-	for k, v in pairs(arg) do
+	for k, v in pairs({...}) do
 		pkg = pkg .. " '" .. v:gsub("'", "") .. "'"
 	end
 
@@ -146,4 +146,49 @@ end
 -- @return IPKG return code
 function upgrade()
 	return _action("upgrade")
+end
+
+-- List helper
+function _list(action, pat, cb)
+	local fd = io.popen(ipkg .. " " .. action .. (pat and " '*" .. pat:gsub("'", "") .. "*'" or ""))
+	if fd then
+		local name, version, desc
+		while true do
+			local line = fd:read("*l")
+			if not line then break end
+
+			if line:sub(1,1) ~= " " then
+				name, version, desc = line:match("^(.-) %- (.-) %- (.+)")
+
+				if not name then
+					name, version = line:match("^(.-) %- (.+)")
+					desc = ""
+				end
+
+				cb(name, version, desc)
+
+				name    = nil
+				version = nil
+				desc    = nil
+			end
+		end
+
+		fd:close()
+	end
+end
+
+--- List all packages known to opkg.
+-- @param pat	Only find packages matching this pattern, nil lists all packages
+-- @param cb	Callback function invoked for each package, receives name, version and description as arguments
+-- @return	nothing
+function list_all(pat, cb)
+	_list("list", pat, cb)
+end
+
+--- List installed packages.
+-- @param pat	Only find packages matching this pattern, nil lists all packages
+-- @param cb	Callback function invoked for each package, receives name, version and description as arguments
+-- @return	nothing
+function list_installed(pat, cb)
+	_list("list_installed", pat, cb)
 end
