@@ -30,28 +30,7 @@ function opkg_error(code)
 end
 -%>
 <%+header%>
-<h2><a id="content" name="content"><%:system%></a></h2>
-<h3><%:a_s_packages%></h3>
-
-<br />
-
-<% if install or remove or update or upgrade then %>
-<div class="code"><strong><%:status%>:</strong><br />
-<% if update then %>
-	<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(update)%>)</span><% end %><br />
-<% end %>
-<% if upgrade then%>
-	<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
-<% end %>
-<% if install then for k,v in pairs(install) do %>
-	<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
-<% end end %>
-<% if remove then for k,v in pairs(remove) do %>
-	<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
-<% end end %>
-</div>
-<br />
-<% end %>
+<h2><a id="content" name="content"><%:system%> - <%:a_s_packages%></a></h2>
 
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
@@ -77,32 +56,83 @@ end
 					<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
 				</div>
 			</div>
+			</fieldset>
+		</fieldset>
 
-			<table class="cbi-section-table">
+		<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
+		<h2><%:status%></h2>
+		<fieldset class="cbi-section">
+			<% if update then %>
+				<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(update)%>)</span><% end %><br />
+			<% end %>
+			<% if upgrade then%>
+				<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
+			<% end %>
+			<% if install then for k,v in pairs(install) do %>
+				<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
+			<% end end %>
+			<% if remove then for k,v in pairs(remove) do %>
+				<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
+			<% end end %>
+		</fieldset>
+		<br />
+		<% end %>
+
+		<h2><%:a_s_packages_installed Installed packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h2>
+
+		<fieldset class="cbi-section">
+			<table class="cbi-section-table" style="width:100%">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:a_s_packages_name%></th>
-					<th class="cbi-section-table-cell"><%:version%></th>
-					<th class="cbi-section-table-cell"><%:install%></th>
-					<th class="cbi-section-table-cell"><%:delete%></th>
-					<th class="cbi-section-table-cell"><%:descr%></th>
+					<th class="cbi-section-table-cell" style="text-align:left">&nbsp;</th>
+					<th class="cbi-section-table-cell" style="text-align:left"><%:a_s_packages_name%></th>
+					<th class="cbi-section-table-cell" style="text-align:left"><%:version%></th>
 				</tr>
-				<% for k, pkg in pairs(pkgs) do %>
+				<% local empty = true; luci.model.ipkg.list_installed(query, function(n, v, d) empty = false %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td><%=luci.util.pcdata(pkg.Package)%></td>
-					<td><%=luci.util.pcdata(pkg.Version)%></td>
-					<td><% if not pkg.Status or not pkg.Status.installed then %><input type="checkbox" name="install.<%=pkg.Package%>" value="1" /><% else %><%:installed%><% end %></td>
-					<td><% if pkg.Status and pkg.Status.installed then %><input type="checkbox" name="remove.<%=pkg.Package%>" value="1" /><% else %><%:notinstalled%><% end %></td>
-					<td><%=luci.util.pcdata(pkg.Description)%></td>
+					<td style="text-align:left; width:10%"><a href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:delete%></a></td>
+					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
+					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
+				</tr>
+				<% end) %>
+				<% if empty then %>
+				<tr class="cbi-section-table-row">
+					<td style="text-align:left">&nbsp;</td>
+					<td style="text-align:left"><em><%:none%></em></td>
+					<td style="text-align:left"><em><%:none%></em></td>
 				</tr>
 				<% end %>
 			</table>
+		</fieldset>
 
-			<br />
 
-			<div style="text-align: right">
-				<input type="submit" class="cbi-input-apply" name="submit" value="<%:a_s_packages_do%>" />
-			</div>
-		</fieldset></fieldset>
+		<h2><%:a_s_packages_available Available packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h2>
+
+		<fieldset class="cbi-section">
+			<table class="cbi-section-table" style="width:100%">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell" style="text-align:left">&nbsp;</th>
+					<th class="cbi-section-table-cell" style="text-align:left"><%:a_s_packages_name%></th>
+					<th class="cbi-section-table-cell" style="text-align:left"><%:version%></th>
+					<th class="cbi-section-table-cell" style="text-align:left"><%:descr%></th>
+				</tr>
+				<% local empty = true; luci.model.ipkg.list_all(query, function(n, v, d) empty = false %>
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+					<td style="text-align:left; width:10%"><a href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:install%></a></td>
+					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
+					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
+					<td style="text-align:left"><%=luci.util.pcdata(d)%></td>
+				</tr>
+				<% end) %>
+				<% if empty then %>
+				<tr class="cbi-section-table-row">
+					<td style="text-align:left">&nbsp;</td>
+					<td style="text-align:left"><em><%:none%></em></td>
+					<td style="text-align:left"><em><%:none%></em></td>
+					<td style="text-align:left"><em><%:none%></em></td>
+				</tr>
+				<% end %>
+			</table>
+		</fieldset>
 	</div>
 </form>
 <%+footer%>
