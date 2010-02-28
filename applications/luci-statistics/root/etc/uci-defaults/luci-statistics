@@ -1,7 +1,35 @@
 #!/bin/sh
 
-uci batch <<-EOF
+# register commit handler
+[ -f /etc/config/ucitrack ] && \
+[ "$(uci get ucitrack.@luci_statistics[0] 2>/dev/null)" != "luci_statistics" ] && \
+uci batch <<-EOF >/dev/null 2>/dev/null
 	add ucitrack luci_statistics
 	set ucitrack.@luci_statistics[-1].init=luci_statistics
 	commit ucitrack
 EOF
+
+# register LuCId virtual path handler
+[ -f /etc/config/lucid ] && \
+[ "$(uci get lucid.statistics 2>/dev/null)" != "DirectoryPublisher" ] && \
+uci batch <<-EOF >/dev/null 2>/dev/null
+	set lucid.statistics=DirectoryPublisher
+	set lucid.statistics.name='RRDTool Image Cache'
+	set lucid.statistics.physical=/tmp/rrdimg
+	set lucid.statistics.virtual=/rrdimg
+	set lucid.statistics.domain=''
+
+	add_list lucid.http.publisher=statistics
+	add_list lucid.https.publisher=statistics
+
+	commit lucid
+EOF
+
+# symlink for busybox httpd
+[ -x /usr/sbin/httpd ] && [ ! -h /www/rrdimg ] && \
+	ln -s /tmp/rrdimg /www/rrdimg
+
+# restart LuCId service
+[ -x /etc/init.d/lucid ] && /etc/init.d/lucid enabled && /etc/init.d/lucid restart
+
+exit 0

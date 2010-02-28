@@ -1,27 +1,6 @@
 #!/bin/sh /etc/rc.common
 START=79
 
-boot() {
-	### prepare publisher
-	if ! uci get lucid.rrdimg >/dev/null 2>/dev/null; then
-		uci batch <<-EOF
-set lucid.rrdimg=DirectoryPublisher
-set lucid.rrdimg.name='Statistics Images'
-set lucid.rrdimg.physical=/tmp/rrdimg
-set lucid.rrdimg.virtual=/rrdimg
-set lucid.rrdimg.domain=''
-
-add_list lucid.http.publisher=rrdimg
-add_list lucid.https.publisher=rrdimg	
-
-commit lucid
-EOF
-		/etc/init.d/lucid restart
-	fi
-
-	start
-}
-
 start() {
 	### replace shipped config with symlink
 	if [ ! -L /etc/collectd.conf ]; then
@@ -34,14 +13,12 @@ start() {
 	/usr/bin/stat-genconfig > /var/etc/collectd.conf
 
 	### prepare rrdimg directory
-	if [ "$(uci get luci_statistics.rrdtool.image_path 2>/dev/null)" != "$(uci get lucid.rrdimg.physical 2>/dev/null)" ]; then
-		uci set lucid.rrdimg.physical=$(uci get luci_statistics.rrdtool.image_path)
+	if [ -f /etc/config/lucid ] && [ -x /etc/init.d/lucid ] && /etc/init.d/lucid enabled && \
+	   [ "$(uci get luci_statistics.rrdtool.image_path 2>/dev/null)" != "$(uci get lucid.statistics.physical 2>/dev/null)" ]; then
+		uci set lucid.statistics.physical=$(uci get luci_statistics.rrdtool.image_path)
 		uci commit lucid
 		/etc/init.d/lucid restart
 	fi
-
-	### flush LuCI index cache
-	test -f /var/luci-indexcache && rm /var/luci-indexcache
 
 	### workaround broken permissions on /tmp
 	chmod 1777 /tmp
