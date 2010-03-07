@@ -22,7 +22,7 @@ local pairs = pairs
 local error = error
 local table = table
 
-local ipkg = "opkg"
+local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite"
 
 --- LuCI IPKG/OPKG call abstraction library
 module "luci.model.ipkg"
