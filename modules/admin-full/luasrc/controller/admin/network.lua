@@ -17,6 +17,22 @@ function index()
 	require("luci.i18n")
 	local uci = require("luci.model.uci").cursor()
 	local i18n = luci.i18n.translate
+	local has_wifi = false
+	local has_switch = false
+
+	uci:foreach("wireless", "wifi-device",
+		function(s)
+			has_wifi = true
+			return false
+		end
+	)
+
+	uci:foreach("network", "switch",
+		function(s)
+			has_switch = true
+			return false
+		end
+	)
 
 	local page  = node("admin", "network")
 	page.target = alias("admin", "network", "network")
@@ -24,24 +40,28 @@ function index()
 	page.order  = 50
 	page.index  = true
 
-	local page  = node("admin", "network", "vlan")
-	page.target = cbi("admin_network/vlan")
-	page.title  = i18n("a_n_switch")
-	page.order  = 20
+	if has_switch then
+		local page  = node("admin", "network", "vlan")
+		page.target = cbi("admin_network/vlan")
+		page.title  = i18n("a_n_switch")
+		page.order  = 20
+	end
 
-	local page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wireless"), cbi("admin_network/wifi")), i18n("wifi"), 15)
-	page.i18n   = "wifi"
-	page.leaf = true
-	page.subindex = true
+	if has_wifi then
+		local page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wireless"), cbi("admin_network/wifi")), i18n("wifi"), 15)
+		page.i18n   = "wifi"
+		page.leaf = true
+		page.subindex = true
 
-	uci:foreach("wireless", "wifi-device",
-		function (section)
-			local ifc = section[".name"]
-				entry({"admin", "network", "wireless", ifc},
-				 true,
-				 ifc:upper()).i18n = "wifi"
-		end
-	)
+		uci:foreach("wireless", "wifi-device",
+			function (section)
+				local ifc = section[".name"]
+					entry({"admin", "network", "wireless", ifc},
+					 true,
+					 ifc:upper()).i18n = "wifi"
+			end
+		)
+	end
 
 	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("interfaces", "Schnittstellen"), 10)
 	page.leaf   = true
