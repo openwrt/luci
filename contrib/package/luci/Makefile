@@ -280,7 +280,7 @@ NIXIO_TLS:=axtls
 define Package/luci-nixio
   $(call Package/luci/libtemplate)
   TITLE:=NIXIO POSIX Library
-  DEPENDS:=+PACKAGE_luci-nixio_openssl:libopenssl +PACKAGE_luci-nixio_cyassl:libcyassl-luci
+  DEPENDS:=+PACKAGE_luci-nixio_openssl:libopenssl +PACKAGE_luci-nixio_cyassl:libcyassl
 endef
 
 define Package/luci-nixio/install
