@@ -15,6 +15,7 @@ $Id$
 
 local os   = require "os"
 local io   = require "io"
+local fs   = require "nixio.fs"
 local util = require "luci.util"
 
 local type  = type
@@ -23,6 +24,7 @@ local error = error
 local table = table
 
 local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite"
+local icfg = "/etc/opkg.conf"
 
 --- LuCI IPKG/OPKG call abstraction library
 module "luci.model.ipkg"
@@ -192,3 +194,33 @@ end
 function list_installed(pat, cb)
 	_list("list_installed", pat, cb)
 end
+
+--- Determines the overlay root used by opkg.
+-- @return		String containing the directory path of the overlay root.
+function overlay_root()
+	local od = "/"
+	local fd = io.open(icfg, "r")
+
+	if fd then
+		local ln
+
+		repeat
+			ln = fd:read("*l")
+			if ln and ln:match("^%s*option%s+overlay_root%s+") then
+				od = ln:match("^%s*option%s+overlay_root%s+(%S+)")
+
+				local s = fs.stat(od)
+				if not s or s.type ~= "dir" then
+					od = "/"
+				end
+
+				break
+			end
+		until not ln
+
+		fd:close()
+	end
+
+	return od
+end
+
