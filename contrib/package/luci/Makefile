@@ -297,7 +297,7 @@ define Package/luci-nixio/config
 
 		config PACKAGE_luci-nixio_cyassl
 			bool "CyaSSL"
-			select PACKAGE_libcyassl-luci
+			select PACKAGE_libcyassl
 
 		config PACKAGE_luci-nixio_openssl
 			bool "OpenSSL"
