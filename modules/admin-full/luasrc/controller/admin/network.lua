@@ -18,6 +18,14 @@ function index()
 	local uci = require("luci.model.uci").cursor()
 	local i18n = luci.i18n.translate
 	local has_wifi = nixio.fs.stat("/etc/config/wireless")
+	local has_switch = false
+
+	uci:foreach("network", "switch",
+		function(s)
+			has_switch = true
+			return false
+		end
+	)
 
 	local page  = node("admin", "network")
 	page.target = alias("admin", "network", "network")
@@ -25,10 +33,12 @@ function index()
 	page.order  = 50
 	page.index  = true
 
-	local page  = node("admin", "network", "vlan")
-	page.target = cbi("admin_network/vlan")
-	page.title  = i18n("Switch")
-	page.order  = 20
+	if has_switch then
+		local page  = node("admin", "network", "vlan")
+		page.target = cbi("admin_network/vlan")
+		page.title  = i18n("Switch")
+		page.order  = 20
+	end
 
 	if has_wifi and has_wifi.size > 0 then
 		local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
