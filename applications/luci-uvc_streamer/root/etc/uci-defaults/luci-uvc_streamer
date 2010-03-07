@@ -1,7 +1,0 @@
-#!/bin/sh
-
-uci batch <<-EOF
-	add ucitrack uvc-streamer
-	set ucitrack.@uvc-streamer[-1].init=uvc-streamer
-	commit ucitrack
-EOF

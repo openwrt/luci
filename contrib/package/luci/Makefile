@@ -651,17 +651,6 @@ define Package/luci-app-samba/install
 endef
 
 
-define Package/luci-app-uvc_streamer
-  $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-admin-full +PACKAGE_luci-app-uvc_streamer:uvc-streamer
-  TITLE:=Webcam Streaming - UVC-Streamer module
-endef
-
-define Package/luci-app-uvc_streamer/install
-        $(call Package/luci/install/template,$(1),applications/luci-uvc_streamer)
-endef
-
-
 define Package/luci-app-mmc_over_gpio
   $(call Package/luci/webtemplate)
   DEPENDS+=+luci-admin-full +PACKAGE_luci-app-mmc_over_gpio:kmod-mmc-over-gpio
@@ -1118,9 +1107,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-samba),)
 	PKG_SELECTED_MODULES+=applications/luci-samba
 endif
-ifneq ($(CONFIG_PACKAGE_luci-app-uvc_streamer),)
-	PKG_SELECTED_MODULES+=applications/luci-uvc_streamer
-endif
 ifneq ($(CONFIG_PACKAGE_luci-app-mmc_over_gpio),)
         PKG_SELECTED_MODULES+=applications/luci-mmc_over_gpio
 endif
@@ -1274,7 +1260,6 @@ $(eval $(call BuildPackage,luci-app-upnp))
 $(eval $(call BuildPackage,luci-app-ntpc))
 $(eval $(call BuildPackage,luci-app-ddns))
 $(eval $(call BuildPackage,luci-app-samba))
-$(eval $(call BuildPackage,luci-app-uvc_streamer))
 $(eval $(call BuildPackage,luci-app-mmc_over_gpio))
 $(eval $(call BuildPackage,luci-app-p910nd))
 $(eval $(call BuildPackage,luci-app-ushare))
