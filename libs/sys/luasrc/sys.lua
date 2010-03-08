@@ -463,7 +463,11 @@ function net.routes6(callback)
 				refcount = tonumber(refcnt, 16),
 				usecount = tonumber(usecnt, 16),
 				flags    = tonumber(flags, 16),
-				device   = dev
+				device   = dev,
+
+				-- lua number is too small for storing the metric
+				-- add a metric_raw field with the original content
+				metric_raw = metric
 			}
 
 			if callback then
