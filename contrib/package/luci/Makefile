@@ -969,17 +969,27 @@ endef
 
 
 ### Collections ###
-define Package/luci-kamikaze
+define Package/luci
   $(call Package/luci/collectiontemplate)
   TITLE:=Standard OpenWrt Kamikaze set including full and mini admin and the standard theme
-  DEPENDS:=+luci-admin-full +luci-admin-mini +luci-theme-openwrt +luci-app-firewall
+  DEPENDS:=+luci-admin-full +luci-admin-mini +luci-theme-openwrt +luci-app-firewall +luci-app-initmgr
 endef
+
+define Package/luci/install
+	true
+endef
+
 
 define Package/luci-light
   $(call Package/luci/collectiontemplate)
   TITLE:=Minimum package set using only admin mini and a theme without grafics
   DEPENDS:=+luci-admin-mini +luci-theme-openwrtlight
 endef
+
+define Package/luci-light/install
+	true
+endef
+
 
 ### Compile ###
 ifneq ($(CONFIG_PACKAGE_luci-core),)
@@ -1290,5 +1300,5 @@ $(eval $(call BuildPackage,luci-i18n-portuguese))
 $(eval $(call BuildPackage,luci-i18n-spanish))
 $(eval $(call BuildPackage,luci-i18n-vietnamese))
 
-$(eval $(call BuildPackage,luci-kamikaze))
+$(eval $(call BuildPackage,luci))
 $(eval $(call BuildPackage,luci-light))
