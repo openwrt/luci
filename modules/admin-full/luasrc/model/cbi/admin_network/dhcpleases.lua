@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@ local sys = require "luci.sys"
 local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
 
-m2 = Map("luci_ethers", translate("dhcp_leases"))
+m2 = Map("dhcp", translate("dhcp_leases"))
 
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",
@@ -46,13 +47,14 @@ if leases then
 	end
 end
 
-s = m2:section(TypedSection, "static_lease", translate("luci_ethers"))
+s = m2:section(TypedSection, "host", translate("luci_ethers"))
 s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
 
-mac = s:option(Value, "macaddr", translate("macaddress"))
-ip = s:option(Value, "ipaddr", translate("ipaddress"))
+name = s:option(Value, "name", translate("hostname"))
+mac = s:option(Value, "mac", translate("macaddress"))
+ip = s:option(Value, "ip", translate("ipaddress"))
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
 	mac:value(
