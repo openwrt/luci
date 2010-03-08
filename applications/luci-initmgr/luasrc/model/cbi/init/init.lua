@@ -39,6 +39,7 @@ i = s:option(DummyValue, "index", translate("Start priority"))
 n = s:option(DummyValue, "name", translate("Initscript"))
 
 e = s:option(Flag, "enabled", translate("initmgr_enabled"))
+e.rmempty = false
 
 e.cfgvalue = function(self, section)
 	return inits[section].enabled and "1" or "0"
