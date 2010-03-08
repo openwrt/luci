@@ -748,7 +748,7 @@ end
 -- @return		Numeric index value
 function init.index(name)
 	if fs.access(init.dir..name) then
-		return call("source "..init.dir..name.."; exit $START")
+		return call("source "..init.dir..name.." enabled; exit $START")
 	end
 end
 
