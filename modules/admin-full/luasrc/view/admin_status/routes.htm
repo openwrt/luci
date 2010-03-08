@@ -68,15 +68,10 @@ $Id$
 				</tr>
 				<% luci.sys.net.routes6(function(rt) %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
-					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(rt.device) or rt.device%></td>
+					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(rt.device) or '(' .. rt.device .. ')'%></td>
 					<td class="cbi-value-field"><%=rt.dest:string()%></td>
 					<td class="cbi-value-field"><%=rt.source:string()%></td>
-					<td class="cbi-value-field"><%- 
-						local metr   = rt.metric
-						local lower  = bit.band(metr, 0xffff)
-						local higher = bit.rshift(bit.band(metr, 0xffff0000), 16)
-						write(string.format("%04X%04X", higher, lower))
-					-%></td>
+					<td class="cbi-value-field"><%=rt.metric_raw:upper()%></td>
 				</tr>
 				<% style = not style; end) %>
 			</table>
