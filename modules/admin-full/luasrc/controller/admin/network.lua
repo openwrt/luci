@@ -82,13 +82,6 @@ function index()
 	page.target = cbi("admin_network/dhcp")
 	page.title  = "DHCP"
 	page.order  = 30
-	page.subindex = true
-
-	entry(
-	 {"admin", "network", "dhcp", "leases"},
-	 cbi("admin_network/dhcpleases"),
-	 i18n("dhcp_leases")
-	)
 
 	local page  = node("admin", "network", "hosts")
 	page.target = cbi("admin_network/hosts")

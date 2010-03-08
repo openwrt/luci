@@ -11,9 +11,12 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-require("luci.tools.webadmin")
-require("luci.model.uci")
-require("luci.util")
+
+local uci = require "luci.model.uci".cursor()
+local wa  = require "luci.tools.webadmin"
+local sys = require "luci.sys"
+local utl = require "luci.util"
+local fs  = require "nixio.fs"
 
 m = Map("dhcp", "DHCP")
 
@@ -22,9 +25,8 @@ s.addremove = true
 s.anonymous = true
 
 iface = s:option(ListValue, "interface", translate("interface"))
-luci.tools.webadmin.cbi_add_networks(iface)
+wa.cbi_add_networks(iface)
 
-local uci = luci.model.uci.cursor()
 uci:foreach("network", "interface",
 	function (section)
 		if section[".name"] ~= "loopback" then
@@ -69,4 +71,52 @@ for i, n in ipairs(s.children) do
 	end
 end
 
-return m
+
+m2 = Map("dhcp", translate("dhcp_leases"), "")
+
+local leasefn, leasefp, leases
+uci:foreach("dhcp", "dnsmasq",
+ function(section)
+ 	leasefn = section.leasefile
+ end
+) 
+local leasefp = leasefn and fs.access(leasefn) and io.lines(leasefn)
+if leasefp then
+	leases = {}
+	for lease in leasefp do
+		table.insert(leases, luci.util.split(lease, " "))
+	end
+end
+
+if leases then
+	v = m2:section(Table, leases, translate("dhcp_leases_active"))
+	ip = v:option(DummyValue, 3, translate("ipaddress"))
+	
+	mac  = v:option(DummyValue, 2, translate("macaddress"))
+	
+	ltime = v:option(DummyValue, 1, translate("dhcp_timeremain"))
+	function ltime.cfgvalue(self, ...)
+		local value = DummyValue.cfgvalue(self, ...)
+		return wa.date_format(os.difftime(tonumber(value), os.time()))
+	end
+end
+
+s = m2:section(TypedSection, "host", translate("luci_ethers"))
+s.addremove = true
+s.anonymous = true
+s.template = "cbi/tblsection"
+
+name = s:option(Value, "name", translate("hostname"))
+mac = s:option(Value, "mac", translate("macaddress"))
+ip = s:option(Value, "ip", translate("ipaddress"))
+sys.net.arptable(function(entry)
+	ip:value(entry["IP address"])
+	mac:value(
+		entry["HW address"],
+		entry["HW address"] .. " (" .. entry["IP address"] .. ")"
+	)
+end)
+
+	
+return m, m2
+
