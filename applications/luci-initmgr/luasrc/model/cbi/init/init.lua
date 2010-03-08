@@ -32,28 +32,53 @@ end
 
 m = SimpleForm("initmgr", translate("Initscripts"), translate("You can enable or disable installed init scripts here. Changes will applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like \"network\", your device might become inaccesable!</strong>"))
 m.reset = false
+m.submit = false
+
 
 s = m:section(Table, inits)
 
 i = s:option(DummyValue, "index", translate("Start priority"))
 n = s:option(DummyValue, "name", translate("Initscript"))
 
-e = s:option(Flag, "enabled", translate("initmgr_enabled"))
-e.rmempty = false
 
-e.cfgvalue = function(self, section)
-	return inits[section].enabled and "1" or "0"
+e = s:option(Button, "endisable", translate("Enable/Disable"))
+
+e.render = function(self, section, scope)
+	if inits[section].enabled then
+		self.title = translate("Enabled")
+		self.inputstyle = "save"
+	else
+		self.title = translate("Disabled")
+		self.inputstyle = "reset"
+	end
+
+	Button.render(self, section, scope)
 end
 
-e.write = function(self, section, value)
-	if value == "1" and not inits[section].enabled then
-		inits[section].enabled = true
-		return luci.sys.init.enable(inits[section].name)
-	elseif value == "0" and inits[section].enabled then
+e.write = function(self, section)
+	if inits[section].enabled then
 		inits[section].enabled = false
 		return luci.sys.init.disable(inits[section].name)
+	else
+		inits[section].enabled = true
+		return luci.sys.init.enable(inits[section].name)
 	end
-	return true
 end
+
+
+start = s:option(Button, "start", translate("Start"))
+start.inputstyle = "apply"
+start.write = function(self, section)
+	luci.sys.call("/etc/init.d/%s %s" %{ inits[section].name, self.option })
+end
+
+restart = s:option(Button, "restart", translate("Restart"))
+restart.inputstyle = "reload"
+restart.write = start.write
+
+stop = s:option(Button, "stop", translate("Stop"))
+stop.inputstyle = "remove"
+stop.write = start.write
+
 
 return m
