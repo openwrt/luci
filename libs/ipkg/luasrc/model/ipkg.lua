@@ -23,7 +23,7 @@ local pairs = pairs
 local error = error
 local table = table
 
-local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite"
+local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite --autoremove"
 local icfg = "/etc/opkg.conf"
 
 --- LuCI IPKG/OPKG call abstraction library
