@@ -58,6 +58,7 @@ for i, v in ipairs(p) do
 end
 
 s:option(Flag, "masq")
+s:option(Flag, "mtu_fix", translate("fw_mtufix"))
 
 net = s:option(MultiValue, "network")
 net.widget = "select"
