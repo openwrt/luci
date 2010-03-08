@@ -23,7 +23,7 @@ function index()
 	luci.i18n.loadc("initmgr")
 
 	entry(
-		{"admin", "system", "init"}, form("init/init"),
-		luci.i18n.translate("initmgr", "Init Scripts")
+		{"admin", "services", "init"}, form("init/init"),
+		luci.i18n.translate("initmgr", "Init Scripts"), 0
 	).i18n = "initmgr"
 end
