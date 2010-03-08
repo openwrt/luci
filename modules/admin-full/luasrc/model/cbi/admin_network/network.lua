@@ -13,6 +13,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
+local utl = require "luci.util"
 local sys = require "luci.sys"
 local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
@@ -68,7 +69,11 @@ end
 
 ifname = s:option(DummyValue, "ifname", translate("device"))
 function ifname.cfgvalue(self, section)
-	return netstate[section] and netstate[section].ifname
+	local ix = utl.trim(netstate[section] and netstate[section].ifname or "")
+	if #ix > 0 then
+		return ix
+	end
+	return "?"
 end
 
 ifname.titleref = luci.dispatcher.build_url("admin", "network", "vlan")
@@ -85,16 +90,26 @@ end
 
 hwaddr = s:option(DummyValue, "_hwaddr")
 function hwaddr.cfgvalue(self, section)
-	local ix = self.map:get(section, "ifname") or ""
-	return fs.readfile("/sys/class/net/" .. ix .. "/address")
-	 or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
-	 or "n/a"
+	local ix = utl.trim(self.map:get(section, "ifname") or "")
+	if #ix > 0 then
+		local mac = fs.readfile("/sys/class/net/" .. ix .. "/address")
+			or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
+
+		if mac and #mac > 0 then
+			return mac:upper()
+		end
+	end
+	return "?"
 end
 
 
 ipaddr = s:option(DummyValue, "ipaddr", translate("addresses"))
 function ipaddr.cfgvalue(self, section)
-	return table.concat(wa.network_get_addresses(section), ", ")
+	local addr = table.concat(wa.network_get_addresses(section), ", ")
+	if addr and #addr > 0 then
+		return addr
+	end
+	return "?"
 end
 
 txrx = s:option(DummyValue, "_txrx")

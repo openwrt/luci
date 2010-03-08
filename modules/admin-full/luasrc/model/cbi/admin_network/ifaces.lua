@@ -27,7 +27,8 @@ local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 m = Map("network", translate("interfaces"), translate("a_n_ifaces1"))
 
 s = m:section(NamedSection, arg[1], "interface")
-s.addremove = true
+s.addremove = false
+s.title = arg[1]:upper()
 
 back = s:option(DummyValue, "_overview", translate("overview"))
 back.value = ""
