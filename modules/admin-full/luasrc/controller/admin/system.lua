@@ -25,7 +25,10 @@ function index()
 	entry({"admin", "system", "passwd"}, form("admin_system/passwd"), i18n("Admin Password"), 20)
 	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("<abbr title=\"Secure Shell\">SSH</abbr>-Keys"), 30)
 	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("Processes"), 45)
-	entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("Mount Points"), 50)
+
+	if nixio.fs.access("/etc/config/fstab") then
+		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("Mount Points"), 50)
+	end
 
 	if nixio.fs.access("/sys/class/leds") then
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
