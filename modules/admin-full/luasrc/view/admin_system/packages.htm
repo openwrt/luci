@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,9 @@ $Id$
 -%>
 <%-
 local bit = require "bit"
+local opkg = require "luci.model.ipkg"
+local fs = require "nixio.fs"
+local wa = require "luci.tools.webadmin"
 local rowcnt = 1
 
 function rowstyle()
@@ -28,6 +31,15 @@ function opkg_error(code)
 		'%s %i' % { translate('code'), code }
 	)
 end
+
+local fstat = fs.statvfs(opkg.overlay_root())
+local space_total = fstat and fstat.blocks or 0
+local space_free  = fstat and fstat.bfree  or 0
+local space_used  = space_total - space_free
+
+local used_perc = math.floor(0.5 + ((space_total > 0) and ((100 / space_total) * space_used) or 100))
+local free_byte = space_free * fstat.frsize
+
 -%>
 <%+header%>
 <h2><a id="content" name="content"><%:system%> - <%:a_s_packages%></a></h2>
@@ -41,44 +53,51 @@ end
 			</ul>
 			<br />
 			<fieldset class="cbi-section-node">
-			<div class="cbi-value">
-				<label class="cbi-value-title"><%:a_s_packages_installurl%>:</label>
-				<div class="cbi-value-field">
-					<input type="text" name="url" size="30" value="" />
-					<input class="cbi-input-save" type="submit" name="submit" value="<%:ok%>" />
+				<div class="cbi-value">
+					<label class="cbi-value-title"><%:a_s_packages_installurl%>:</label>
+					<div class="cbi-value-field">
+						<input type="text" name="url" size="30" value="" />
+						<input class="cbi-input-save" type="submit" name="submit" value="<%:ok%>" />
+					</div>
 				</div>
-			</div>
 
-			<div class="cbi-value">
-				<label class="cbi-value-title"><%:filter%>:</label>
-				<div class="cbi-value-field">
-					<input type="text" name="query" size="20" value="<%=query%>" />
-					<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
+				<div class="cbi-value">
+					<label class="cbi-value-title"><%:filter%>:</label>
+					<div class="cbi-value-field">
+						<input type="text" name="query" size="20" value="<%=query%>" />
+						<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
+					</div>
 				</div>
-			</div>
 			</fieldset>
 		</fieldset>
+		<br />
 
-		<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
-		<h2><%:status%></h2>
+		<h3><%:status%></h3>
 		<fieldset class="cbi-section">
-			<% if update then %>
-				<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(update)%>)</span><% end %><br />
+			<%:a_s_packages_freespace Free space%>: <strong><%=(100-used_perc)%>%</strong> (<strong><%=wa.byte_format(free_byte)%></strong>)
+			<div style="margin:3px 0; width:300px; height:10px; border:1px solid #000000; background-color:#80C080">
+				<div style="background-color:#F08080; border-right:1px solid #000000; height:100%; width:<%=used_perc%>%">&nbsp;</div>
+			</div>
+
+			<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
+				<br /><hr /><br />
+				<% if update then %>
+					<%:a_s_packages_update%>: <% if update == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(update)%>)</span><% end %><br />
+				<% end %>
+				<% if upgrade then%>
+					<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
+				<% end %>
+				<% if install then for k,v in pairs(install) do %>
+					<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
+				<% end end %>
+				<% if remove then for k,v in pairs(remove) do %>
+					<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
+				<% end end %>
 			<% end %>
-			<% if upgrade then%>
-				<%:a_s_packages_upgrade%>: <% if upgrade == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
-			<% end %>
-			<% if install then for k,v in pairs(install) do %>
-				<%:a_s_packages_install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
-			<% end end %>
-			<% if remove then for k,v in pairs(remove) do %>
-				<%:a_s_packages_remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:ok%></span><% else %><span class="error"><%:error%> (<%=opkg_error(v)%>)</span><% end %><br />
-			<% end end %>
 		</fieldset>
 		<br />
-		<% end %>
 
-		<h2><%:a_s_packages_installed Installed packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h2>
+		<h3><%:a_s_packages_installed Installed packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h3>
 
 		<fieldset class="cbi-section">
 			<table class="cbi-section-table" style="width:100%">
@@ -89,7 +108,7 @@ end
 				</tr>
 				<% local empty = true; luci.model.ipkg.list_installed(query, function(n, v, d) empty = false %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td style="text-align:left; width:10%"><a href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:delete%></a></td>
+					<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:delete%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:delete%></a></td>
 					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
 					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
 				</tr>
@@ -103,9 +122,10 @@ end
 				<% end %>
 			</table>
 		</fieldset>
+		<br />
 
 
-		<h2><%:a_s_packages_available Available packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h2>
+		<h3><%:a_s_packages_available Available packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h3>
 
 		<fieldset class="cbi-section">
 			<table class="cbi-section-table" style="width:100%">
@@ -117,7 +137,7 @@ end
 				</tr>
 				<% local empty = true; luci.model.ipkg.list_all(query, function(n, v, d) empty = false %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td style="text-align:left; width:10%"><a href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:install%></a></td>
+					<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:install%></a></td>
 					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
 					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
 					<td style="text-align:left"><%=luci.util.pcdata(d)%></td>
