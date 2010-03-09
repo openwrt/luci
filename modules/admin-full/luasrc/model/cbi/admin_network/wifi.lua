@@ -343,6 +343,19 @@ if wnet then
 				m.uci:delete("wireless", section, "wds")
 			end
 		end
+
+		function mode.cfgvalue(self, section)
+			local mode = ListValue.cfgvalue(self, section)
+			local wds  = m.uci:get("wireless", section, "wds") == "1"
+
+			if mode == "ap" and wds then
+				return "ap-wds"
+			elseif mode == "sta" and wds then
+				return "sta-wds"
+			else
+				return mode
+			end
+		end
 		
 		hidden = s:taboption("general", Flag, "hidden", translate("Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
 		hidden:depends({mode="ap"})
