@@ -52,6 +52,31 @@ end
 
 if hwtype == "mac80211" then
 	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
+
+	mode = s:option(ListValue, "hwmode", translate("mode"))
+	mode:value("", translate("auto"))
+	mode:value("11b", "802.11b")
+	mode:value("11g", "802.11g")
+	mode:value("11a", "802.11a")
+	mode:value("11ng", "802.11g+n")
+	mode:value("11na", "802.11a+n")
+
+	htmode = s:option(ListValue, "htmode", translate("wifi_htmode", "HT mode"))
+	htmode:depends("hwmode", "11na")
+	htmode:depends("hwmode", "11ng")
+	htmode:value("HT20", "20MHz")
+	htmode:value("HT40-", translate("wifi_ht40m", "40MHz - 2nd channel below"))
+	htmode:value("HT40+", translate("wifi_ht40p", "40MHz - 2nd channel above"))
+	
+	htcapab = s:option(DynamicList, "ht_capab", translate("wifi_htcapab", "HT capabilities"))
+	htcapab:depends("hwmode", "11na")
+	htcapab:depends("hwmode", "11ng")
+	
+	s:option(Value, "country", translate("wifi_country", "Country Code"),
+		translate("wifi_country_iso3166", "Use ISO/IEC 3166 alpha2 country codes.")).optional = true
+
+	s:option(Value, "distance", translate("wifi_distance", "Distance Optimization"),
+		translate("wifi_distance_desc", "Distance to farthest network member in meters.")).optional = true
 end
 
 
@@ -180,9 +205,42 @@ if hwtype == "mac80211" then
 		mode:value("mesh", "802.11s")
 	end
 
-	mode:value("ahdemo", translate("a_w_ahdemo"))
 	mode:value("monitor", translate("a_w_monitor"))
 	bssid:depends({mode="adhoc"})
+
+	mode:value("ap-wds", "%s (WDS)" % translate("a_w_ap"))
+	mode:value("sta-wds", "%s (WDS)" % translate("a_w_client"))		
+
+	function mode.write(self, section, value)
+		if value == "ap-wds" then
+			ListValue.write(self, section, "ap")
+			m.uci:set("wireless", section, "wds", 1)
+		elseif value == "sta-wds" then
+			ListValue.write(self, section, "sta")
+			m.uci:set("wireless", section, "wds", 1)
+		else
+			ListValue.write(self, section, value)
+			m.uci:delete("wireless", section, "wds")
+		end
+	end
+
+	function mode.cfgvalue(self, section)
+		local mode = ListValue.cfgvalue(self, section)
+		local wds  = m.uci:get("wireless", section, "wds") == "1"
+
+		if mode == "ap" and wds then
+			return "ap-wds"
+		elseif mode == "sta" and wds then
+			return "sta-wds"
+		else
+			return mode
+		end
+	end
+		
+	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
+	hidden:depends({mode="ap"})
+	hidden:depends({mode="ap-wds"})
+	hidden.optional = true
 
 	s:option(Value, "frag", translate("wifi_frag")).optional = true
 	s:option(Value, "rts", translate("wifi_rts")).optional = true
@@ -199,20 +257,48 @@ if hwtype == "atheros" then
 	bssid:depends({mode="adhoc"})
 	bssid:depends({mode="ahdemo"})
 
-	wds = s:option(Flag, "wds", translate("a_w_wds"))
-	wds:depends({mode="ap"})
-	wds:depends({mode="sta"})
-	wds.rmempty = true
+	mode:value("ap-wds", "%s (WDS)" % translate("a_w_ap"))
+	mode:value("sta-wds", "%s (WDS)" % translate("a_w_client"))		
+
+	function mode.write(self, section, value)
+		if value == "ap-wds" then
+			ListValue.write(self, section, "ap")
+			m.uci:set("wireless", section, "wds", 1)
+		elseif value == "sta-wds" then
+			ListValue.write(self, section, "sta")
+			m.uci:set("wireless", section, "wds", 1)
+		else
+			ListValue.write(self, section, value)
+			m.uci:delete("wireless", section, "wds")
+		end
+	end
+
+	function mode.cfgvalue(self, section)
+		local mode = ListValue.cfgvalue(self, section)
+		local wds  = m.uci:get("wireless", section, "wds") == "1"
+
+		if mode == "ap" and wds then
+			return "ap-wds"
+		elseif mode == "sta" and wds then
+			return "sta-wds"
+		else
+			return mode
+		end
+	end
+
 	wdssep = s:option(Flag, "wdssep", translate("wifi_wdssep"))
-	wdssep:depends({mode="ap", wds="1"})
+	wdssep:depends({mode="ap-wds"})
 	wdssep.optional = true
 
 	s:option(Flag, "doth", "802.11h").optional = true
+
 	hidden = s:option(Flag, "hidden", translate("wifi_hidden"))
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="adhoc"})
 	hidden:depends({mode="wds"})
+	hidden:depends({mode="ap-wds"})
 	hidden.optional = true
+
 	isolate = s:option(Flag, "isolate", translate("wifi_isolate"),
 	 translate("wifi_isolate_desc"))
 	isolate:depends({mode="ap"})
@@ -318,6 +404,8 @@ encr:depends({mode="ap"})
 encr:depends({mode="sta"})
 encr:depends({mode="adhoc"})
 encr:depends({mode="ahdemo"})
+encr:depends({mode="ap-wds"})
+encr:depends({mode="sta-wds"})
 encr:depends({mode="wds"})
 encr:depends({mode="mesh"})
 
