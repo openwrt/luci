@@ -1,0 +1,41 @@
+#!/bin/sh /etc/rc.common
+
+START=59
+
+boot() {
+	if [ -f /etc/config/luci_ethers ]; then
+		logger -t luci_dhcp_migrate "Migrating luci_ethers configuration ..."
+
+		lua -lluci.model.uci -e '
+			x=luci.model.uci.cursor()
+			x:foreach("luci_ethers", "static_lease",
+			function(s)
+				x:section("dhcp", "host", nil, {mac=s.macaddr, ip=s.ipaddr})
+			end)
+			x:save("dhcp")
+			x:commit("dhcp")
+		'
+
+		rm -f /etc/config/luci_ethers
+	fi
+
+	if [ -f /etc/config/luci_hosts ]; then
+		logger -t luci_dhcp_migrate "Migrating luci_hosts configuration ..."
+
+		lua -lluci.model.uci -e '
+			x=luci.model.uci.cursor()
+			x:foreach("luci_hosts", "host",
+			function(s)
+				x:section("dhcp", "domain", nil, {name=s.hostname, ip=s.ipaddr})
+			end)
+			x:save("dhcp")
+			x:commit("dhcp")
+		'
+
+		rm -f /etc/config/luci_hosts
+	fi
+}
+
+start() { :; }
+stop() { :; }
+
