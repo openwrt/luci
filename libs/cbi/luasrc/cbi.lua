@@ -230,12 +230,31 @@ function Node._i18n(self, config, section, option, title, description)
 
 		local key = config and config:gsub("[^%w]+", "") or ""
 
-		if section then	key = key .. "_" .. section:lower():gsub("[^%w]+", "") end
+		if section then key = key .. "_" .. section:lower():gsub("[^%w]+", "") end
 		if option  then key = key .. "_" .. tostring(option):lower():gsub("[^%w]+", "")  end
 
 		self.title = title or luci.i18n.translate( key, option or section or config )
 		self.description = description or luci.i18n.translate( key .. "_desc", "" )
 	end
+end
+
+-- hook helper
+function Node._run_hook(self, hook)
+	if type(self[hook]) == "function" then
+		return self[hook](self)
+	end 
+end
+
+function Node._run_hooks(self, ...)
+	local f
+	local r = false
+	for _, f in ipairs(arg) do
+		if type(self[f]) == "function" then
+			self[f](self)
+			r = true
+		end
+	end
+	return r
 end
 
 -- Prepare nodes
@@ -357,6 +376,7 @@ end
 -- Use optimized UCI writing
 function Map.parse(self, readinput, ...)
 	self.readinput = (readinput ~= false)
+	self:_run_hooks("on_parse")
 
 	if self:formvalue("cbi.skip") then
 		self.state = FORM_SKIP
@@ -370,14 +390,17 @@ function Map.parse(self, readinput, ...)
 			self.uci:save(config)
 		end
 		if self:submitstate() and ((not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply")) then
+			self:_run_hooks("on_before_commit")
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
 
 				-- Refresh data because commit changes section names
 				self.uci:load(config)
 			end
+			self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
 			if self.apply_on_parse then
 				self.uci:apply(self.parsechain)
+				self:_run_hooks("on_apply", "on_after_apply")
 			else
 				self._apply = function()
 					local cmd = self.uci:apply(self.parsechain, true)
@@ -413,11 +436,13 @@ function Map.parse(self, readinput, ...)
 end
 
 function Map.render(self, ...)
+	self:_run_hooks("on_init")
 	Node.render(self, ...)
 	if self._apply then
 		local fp = self._apply()
 		fp:read("*a")
 		fp:close()
+		self:_run_hooks("on_apply")
 	end
 end
 
@@ -506,16 +531,13 @@ function Delegator.__init__(self, ...)
 	self.pageaction = false
 	self.readinput = true
 	self.allow_reset = false
+	self.allow_cancel = false
 	self.allow_back = false
 	self.allow_finish = false
 	self.template = "cbi/delegator"
 end
 
 function Delegator.set(self, name, node)
-	if type(node) == "table" and getmetatable(node) == nil then
-		node = Compound(unpack(node))
-	end
-	assert(type(node) == "function" or instanceof(node, Compound), "Invalid")
 	assert(not self.nodes[name], "Duplicate entry")
 
 	self.nodes[name] = node
@@ -527,9 +549,9 @@ function Delegator.add(self, name, node)
 end
 
 function Delegator.insert_after(self, name, after)
-	local n = #self.chain
+	local n = #self.chain + 1
 	for k, v in ipairs(self.chain) do
-		if v == state then
+		if v == after then
 			n = k + 1
 			break
 		end
@@ -555,10 +577,30 @@ function Delegator.set_route(self, ...)
 end
 
 function Delegator.get(self, name)
-	return self.nodes[name]
+	local node = self.nodes[name]
+
+	if type(node) == "string" then
+		node = load(node, name)
+	end
+
+	if type(node) == "table" and getmetatable(node) == nil then
+		node = Compound(unpack(node))
+	end
+
+	return node
 end
 
 function Delegator.parse(self, ...)
+	if self.allow_cancel and Map.formvalue(self, "cbi.cancel") then
+		if self:_run_hooks("on_cancel") then
+			return FORM_DONE
+		end
+	end
+	
+	if not Map.formvalue(self, "cbi.delg.current") then
+		self:_run_hooks("on_init")
+	end
+
 	local newcurrent
 	self.chain = self.chain or self:get_chain()
 	self.current = self.current or self:get_active()
@@ -586,14 +628,20 @@ function Delegator.parse(self, ...)
 
 	if not Map.formvalue(self, "cbi.submit") then
 		return FORM_NODATA
-	elseif not newcurrent or not self:get(newcurrent) then
-		return FORM_DONE
+	elseif stat > FORM_PROCEED 
+	and (not newcurrent or not self:get(newcurrent)) then
+		return self:_run_hook("on_done") or FORM_DONE
 	else
-		self.current = newcurrent
+		self.current = newcurrent or self.current
 		self.active = self:get(self.current)
 		if type(self.active) ~= "function" then
-			self.active:parse(false)
-			return FROM_PROCEED
+			self.active:populate_delegator(self)
+			local stat = self.active:parse(false)
+			if stat == FORM_SKIP then
+				return self:parse(...)
+			else
+				return FORM_PROCEED
+			end
 		else
 			return self:parse(...)
 		end
@@ -657,6 +705,10 @@ function SimpleForm.parse(self, readinput, ...)
 
 	if self:formvalue("cbi.skip") then
 		return FORM_SKIP
+	end
+
+	if self:formvalue("cbi.cancel") and self:_run_hooks("on_cancel") then
+		return FORM_DONE
 	end
 
 	if self:submitstate() then
@@ -781,6 +833,19 @@ function AbstractSection.__init__(self, map, sectiontype, ...)
 	self.dynamic = false
 end
 
+-- Define a tab for the section
+function AbstractSection.tab(self, tab, title, desc)
+	self.tabs      = self.tabs      or { }
+	self.tab_names = self.tab_names or { }
+
+	self.tab_names[#self.tab_names+1] = tab
+	self.tabs[tab] = {
+		title       = title,
+		description = desc,
+		childs      = { }
+	}
+end
+
 -- Appends a new option
 function AbstractSection.option(self, class, option, ...)
 	-- Autodetect from UVL
@@ -809,6 +874,31 @@ function AbstractSection.option(self, class, option, ...)
 		error("No valid class was given and autodetection failed.")
 	else
 		error("class must be a descendant of AbstractValue")
+	end
+end
+
+-- Appends a new tabbed option
+function AbstractSection.taboption(self, tab, ...)
+
+	assert(tab and self.tabs and self.tabs[tab],
+		"Cannot assign option to not existing tab %q" % tostring(tab))
+
+	local l = self.tabs[tab].childs
+	local o = AbstractSection.option(self, ...)
+
+	if o then l[#l+1] = o end
+
+	return o
+end
+
+-- Render a single tab
+function AbstractSection.render_tab(self, tab, ...)
+
+	assert(tab and self.tabs and self.tabs[tab],
+		"Cannot render not existing tab %q" % tostring(tab))
+
+	for _, node in ipairs(self.tabs[tab].childs) do
+		node:render(...)
 	end
 end
 
@@ -1215,6 +1305,7 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.tag_reqerror = {}
 	self.tag_error = {}
 	self.deps = {}
+	self.subdeps = {}
 	--self.cast = "string"
 
 	self.track_missing = false
@@ -1356,6 +1447,7 @@ function AbstractValue.render(self, s, scope)
 		scope.section   = s
 		scope.cbid      = self:cbid(s)
 		scope.striptags = luci.util.striptags
+		scope.pcdata	= luci.util.pcdata
 
 		scope.ifattr = function(cond,key,val)
 			if cond then
@@ -1544,7 +1636,7 @@ function ListValue.value(self, key, val, ...)
 	table.insert(self.vallist, tostring(val))
 
 	for i, deps in ipairs({...}) do
-		table.insert(self.deps, {add = "-"..key, deps=deps})
+		self.subdeps[#self.subdeps + 1] = {add = "-"..key, deps=deps}
 	end
 end
 
