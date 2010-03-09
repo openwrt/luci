@@ -602,7 +602,7 @@ table.cbi-section-table .cbi-rowstyle-1 * {
 div.cbi-value {
 	clear: left;
 	vertical-align: middle;
-	padding-left: 0.25em;
+	padding: 0.25em;
 	border-bottom: 1px dotted #bbbbbb;
 }
 
@@ -725,6 +725,56 @@ td.cbi-value-error {
 	border: 1px dotted red;
 	margin: 3px;
 	padding: 3px;
+}
+
+ul.cbi-tabmenu {
+	padding: 3px 0;
+	margin-left: 0 !important;
+	margin-bottom: -1px;
+	list-style-type: none;
+}
+
+ul.cbi-tabmenu li.cbi-tab,
+ul.cbi-tabmenu li.cbi-tab-disabled {
+	display: inline;
+	margin: 0;
+}
+
+ul.cbi-tabmenu li.cbi-tab a,
+ul.cbi-tabmenu li.cbi-tab-disabled a {
+	text-decoration: none;
+	padding: 3px 7px;
+	margin-right: 3px;
+	border: 1px outset #000000;
+	border-bottom: none;
+	background-color: #EEEEEE;
+	color: #BBBBBB;
+}
+
+ul.cbi-tabmenu li.cbi-tab-highlighted a {
+	color: #000000;
+	background-color: #FFEEAA;
+}
+
+ul.cbi-tabmenu li a:hover {
+	color: #000000;
+}
+
+ul.cbi-tabmenu li.cbi-tab a {
+	position: relative;
+	top: 1px;
+	padding-top: 4px;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+div.cbi-tab-descr {
+	background-image: url(/luci-static/resources/cbi/help.gif);
+	background-position: 0.25em 50%;
+	background-repeat: no-repeat;
+	border-bottom: 1px solid #CCCCCC;
+	margin: 0.25em 0.25em 2em;
+	padding: 0.5em 0.5em 0.5em 2em;
 }
 
 .right {
