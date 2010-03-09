@@ -68,10 +68,10 @@ if hwtype == "mac80211" then
 	htmode:value("HT40-", translate("wifi_ht40m", "40MHz - 2nd channel below"))
 	htmode:value("HT40+", translate("wifi_ht40p", "40MHz - 2nd channel above"))
 	
-	htcapab = s:option(DynamicList, "ht_capab", translate("wifi_htcapab", "HT capabilities"))
-	htcapab:depends("hwmode", "11na")
-	htcapab:depends("hwmode", "11ng")
-	
+	--htcapab = s:option(DynamicList, "ht_capab", translate("wifi_htcapab", "HT capabilities"))
+	--htcapab:depends("hwmode", "11na")
+	--htcapab:depends("hwmode", "11ng")
+
 	s:option(Value, "country", translate("wifi_country", "Country Code"),
 		translate("wifi_country_iso3166", "Use ISO/IEC 3166 alpha2 country codes.")).optional = true
 
