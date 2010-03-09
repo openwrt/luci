@@ -130,11 +130,11 @@ if hwtype == "mac80211" then
 	htmode:value("HT20", "20MHz")
 	htmode:value("HT40-", translate("40MHz 2nd channel below"))
 	htmode:value("HT40+", translate("40MHz 2nd channel above"))
-	
-	htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
-	htcapab:depends("hwmode", "11na")
-	htcapab:depends("hwmode", "11ng")
-	
+
+	--htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
+	--htcapab:depends("hwmode", "11na")
+	--htcapab:depends("hwmode", "11ng")
+
 	s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
 	s:taboption("advanced", Value, "distance", translate("Distance Optimization"),
 		translate("Distance to farthest network member in meters."))	
