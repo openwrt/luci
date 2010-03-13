@@ -30,7 +30,7 @@ c = m:section(NamedSection, "main", "core", translate("General"))
 l = c:option(ListValue, "lang", translate("Language"))
 l:value("auto")
 
-local i18ndir = luci.i18n.i18ndir .. "default."
+local i18ndir = luci.i18n.i18ndir .. "base."
 for k, v in luci.util.kspairs(luci.config.languages) do
 	local file = i18ndir .. k:gsub("_", "-")
 	if k:sub(1, 1) ~= "." and fs.access(file .. ".lmo") then
