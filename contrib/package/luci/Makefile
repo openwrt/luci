@@ -227,17 +227,6 @@ define Package/luci-lmo/install
 endef
 
 
-define Package/luci-luanet
-  $(call Package/luci/libtemplate)
-  TITLE:=luanet
-  DEPENDS+=+libiw
-endef
-
-define Package/luci-luanet/install
-	$(call Package/luci/install/template,$(1),libs/luanet)
-endef
-
-
 define Package/luci-lucid
   $(call Package/luci/libtemplate)
   TITLE:=LuCId Superserver
@@ -910,9 +899,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-lmo),)
 	PKG_SELECTED_MODULES+=libs/lmo
 endif
-ifneq ($(CONFIG_PACKAGE_luci-luanet),)
-	PKG_SELECTED_MODULES+=libs/luanet
-endif
 ifneq ($(CONFIG_PACKAGE_luci-lucid),)
 	PKG_SELECTED_MODULES+=libs/lucid libs/lucid-http
 endif
@@ -1101,7 +1087,6 @@ $(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
 $(eval $(call BuildPackage,luci-lmo))
-$(eval $(call BuildPackage,luci-luanet))
 $(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
 $(eval $(call BuildPackage,luci-px5g))
