@@ -173,7 +173,7 @@ local function _uvl_validate_section(node, name)
 	local function tag_section(e)
 		local s = { }
 		for _, c in ipairs(e.childs or { e }) do
-			if c.childs and not c:is(luci.uvl.errors.ERR_DEPENDENCY) then
+			if c.childs and not c:is('DEPENDENCY') then
 				table.insert( s, c.childs[1]:string() )
 			else
 				table.insert( s, c:string() )
