@@ -19,11 +19,8 @@ local uvl = require "luci.uvl"
 local util = require "luci.util"
 local string = require "string"
 
-local ipairs, error, type = ipairs, error, type
-local tonumber, unpack = tonumber, unpack
-
-
-local luci = luci
+local luci, tonumber, unpack, ipairs, type =
+	luci, tonumber, unpack, ipairs, type
 
 module "luci.uvl.errors"
 
