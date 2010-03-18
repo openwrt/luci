@@ -15,7 +15,7 @@ $Id$
 ]]--
 
 local uvl = require "luci.uvl"
-local ERR = require "luci.uvl.errors"
+local ERR = require "luci.uvl.errors".error
 local util = require "luci.util"
 local table = require "table"
 
@@ -67,12 +67,12 @@ end
 
 function check( self, object, nodeps )
 
-	local derr = ERR.DEPENDENCY(object)
+	local derr = ERR('DEPENDENCY', object)
 
 	if not self.depseen[object:cid()] then
 		self.depseen[object:cid()] = true
 	else
-		return false, derr:child(ERR.DEP_RECURSIVE(object))
+		return false, derr:child(ERR('DEP_RECURSIVE', object))
 	end
 
 	if object:scheme('depends') then
@@ -86,7 +86,7 @@ function check( self, object, nodeps )
 				local ref = _parse_reference( k, unpack(object.cref) )
 
 				if not ref then
-					return false, derr:child(ERR.SME_BADDEP(object,k))
+					return false, derr:child(ERR('SME_BADDEP',object,k))
 				end
 
 				local option = uvl.option( self, object.c, unpack(ref) )
@@ -102,8 +102,8 @@ function check( self, object, nodeps )
 						local depstr = _serialize_dependency( dep, v )
 						derr:child(
 							type(v) == "boolean"
-								and ERR.DEP_NOVALUE(option, depstr)
-								or  ERR.DEP_NOTEQUAL(option, {depstr, v})
+								and ERR('DEP_NOVALUE', option, depstr)
+								or  ERR('DEP_NOTEQUAL', option, {depstr, v})
 						)
 
 						break
@@ -112,7 +112,7 @@ function check( self, object, nodeps )
 					subcondition = false
 
 					local depstr = _serialize_dependency( dep, v )
-					derr:child(ERR.DEP_NOTVALID(option, depstr):child(err))
+					derr:child(ERR('DEP_NOTVALID', option, depstr):child(err))
 
 					break
 				end
@@ -139,7 +139,7 @@ function check( self, object, nodeps )
 		local ok    = true
 		local valid = false
 		local enum  = object:enum()
-		local eerr  = ERR.DEP_BADENUM(enum)
+		local eerr  = ERR('DEP_BADENUM', enum)
 
 		for _, dep in ipairs(enum:scheme('enum_depends')[object:value()]) do
 			local subcondition = true
@@ -148,7 +148,7 @@ function check( self, object, nodeps )
 				local ref = _parse_reference( k, unpack(object.cref) )
 
 				if not ref then
-					return false, derr:child(eerr:child(ERR.SME_BADDEP(enum,k)))
+					return false, derr:child(eerr:child(ERR('SME_BADDEP',enum,k)))
 				end
 
 				local option = luci.uvl.option( self, object.c, unpack(ref) )
@@ -164,8 +164,8 @@ function check( self, object, nodeps )
 						local depstr = _serialize_dependency( dep, v )
 						eerr:child(
 							type(v) == "boolean"
-								and ERR.DEP_NOVALUE(option, depstr)
-								or  ERR.DEP_NOTEQUAL(option, {depstr, v})
+								and ERR('DEP_NOVALUE', option, depstr)
+								or  ERR('DEP_NOTEQUAL', option, {depstr, v})
 						)
 
 						break
@@ -174,7 +174,7 @@ function check( self, object, nodeps )
 					subcondition = false
 
 					local depstr = _serialize_dependency( dep, v )
-					eerr:child(ERR.DEP_NOTVALID(option, depstr):child(err))
+					eerr:child(ERR('DEP_NOTVALID', option, depstr):child(err))
 
 					break
 				end
