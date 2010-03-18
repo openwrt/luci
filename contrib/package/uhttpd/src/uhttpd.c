@@ -347,8 +347,8 @@ static int uh_docroot_resolve(const char *path, char *buf)
 int main (int argc, char **argv)
 {
 #ifdef HAVE_LUA
-	/* init Lua runtime */
-	lua_State *L;
+	/* Lua runtime */
+	lua_State *L = NULL;
 #endif
 
 	/* master file descriptor list */
@@ -552,15 +552,6 @@ int main (int argc, char **argv)
 		exit(1);
 	}
 
-#ifdef HAVE_LUA
-	/* default lua prefix and handler */
-	if( ! conf.lua_handler )
-		conf.lua_handler = "./lua/handler.lua";
-
-	if( ! conf.lua_prefix )
-		conf.lua_prefix = "/lua";
-#endif
-
 #ifdef HAVE_CGI
 	/* default cgi prefix */
 	if( ! conf.cgi_prefix )
@@ -568,8 +559,15 @@ int main (int argc, char **argv)
 #endif
 
 #ifdef HAVE_LUA
-	/* init Lua runtime */
-	L = uh_lua_init(conf.lua_handler);
+	/* init Lua runtime if handler is specified */
+	if( conf.lua_handler )
+	{
+		/* default lua prefix */
+		if( ! conf.lua_prefix )
+			conf.lua_prefix = "/lua";
+
+		L = uh_lua_init(conf.lua_handler);
+	}
 #endif
 
 	/* fork (if not disabled) */
@@ -682,8 +680,9 @@ int main (int argc, char **argv)
 #endif
 
 #ifdef HAVE_LUA
-						if( strstr(req->url, conf.lua_prefix) == req->url )
-						{
+						if( (L != NULL) &&
+						    (strstr(req->url, conf.lua_prefix) == req->url)
+						) {
 							uh_lua_request(cl, req, L);
 						}
 						else
@@ -715,7 +714,8 @@ int main (int argc, char **argv)
 
 #ifdef HAVE_LUA
 	/* destroy the Lua state */
-	lua_close(L);
+	if( L != NULL )
+		lua_close(L);
 #endif
 
 	return 0;
