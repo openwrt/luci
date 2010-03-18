@@ -28,62 +28,52 @@ local luci = luci
 module "luci.uvl.errors"
 
 ERRCODES = {
-	{ 'UCILOAD', 		'Unable to load config "%p": %1' },
+	UCILOAD 		 = 'Unable to load config "%p": %1',
 
-	{ 'SCHEME',			'Error in scheme "%p":\n%c' },
-	{ 'CONFIG',  		'Error in config "%p":\n%c' },
-	{ 'SECTION',		'Error in section "%i" (%I):\n%c' },
-	{ 'OPTION',			'Error in option "%i" (%I):\n%c' },
-	{ 'REFERENCE',		'Option "%i" has invalid reference specification %1:\n%c' },
-	{ 'DEPENDENCY',		'In dependency check for %t "%i":\n%c' },
+	SCHEME			 = 'Error in scheme "%p":\n%c',
+	CONFIG  		 = 'Error in config "%p":\n%c',
+	SECTION		 = 'Error in section "%i" (%I):\n%c',
+	OPTION			 = 'Error in option "%i" (%I):\n%c',
+	REFERENCE		 = 'Option "%i" has invalid reference specification %1:\n%c',
+	DEPENDENCY		 = 'In dependency check for %t "%i":\n%c',
 
-	{ 'SME_FIND',		'Can not find scheme "%p" in "%1"' },
-	{ 'SME_READ',		'Can not access file "%1"' },
-	{ 'SME_REQFLD',		'Missing required scheme field "%1" in "%i"' },
-	{ 'SME_INVREF',		'Illegal reference "%1" to an anonymous section' },
-	{ 'SME_BADREF',		'Malformed reference in "%1"' },
-	{ 'SME_BADDEP',		'Malformed dependency specification "%1" in "%i"' },
-	{ 'SME_BADVAL',		'Malformed validator specification "%1" in "%i"' },
-	{ 'SME_ERRVAL',		'External validator "%1" failed: %2' },
-	{ 'SME_VBADPACK',	'Variable "%o" in scheme "%p" references unknown package "%1"' },
-	{ 'SME_VBADSECT',	'Variable "%o" in scheme "%p" references unknown section "%1"' },
-	{ 'SME_EBADPACK',	'Enum "%v" in scheme "%p" references unknown package "%1"' },
-	{ 'SME_EBADSECT',	'Enum "%v" in scheme "%p" references unknown section "%1"' },
-	{ 'SME_EBADOPT',	'Enum "%v" in scheme "%p" references unknown option "%1"'  },
-	{ 'SME_EBADTYPE',	'Enum "%v" in scheme "%p" references non-enum option "%I"' },
-	{ 'SME_EBADDEF',	'Enum "%v" in scheme "%p" redeclares the default value of "%I"' },
+	SME_FIND		 = 'Can not find scheme "%p" in "%1"',
+	SME_READ		 = 'Can not access file "%1"',
+	SME_REQFLD		 = 'Missing required scheme field "%1" in "%i"',
+	SME_INVREF		 = 'Illegal reference "%1" to an anonymous section',
+	SME_BADREF		 = 'Malformed reference in "%1"',
+	SME_BADDEP		 = 'Malformed dependency specification "%1" in "%i"',
+	SME_BADVAL		 = 'Malformed validator specification "%1" in "%i"',
+	SME_ERRVAL		 = 'External validator "%1" failed: %2',
+	SME_VBADPACK	 = 'Variable "%o" in scheme "%p" references unknown package "%1"',
+	SME_VBADSECT	 = 'Variable "%o" in scheme "%p" references unknown section "%1"',
+	SME_EBADPACK	 = 'Enum "%v" in scheme "%p" references unknown package "%1"',
+	SME_EBADSECT	 = 'Enum "%v" in scheme "%p" references unknown section "%1"',
+	SME_EBADOPT	 = 'Enum "%v" in scheme "%p" references unknown option "%1"',
+	SME_EBADTYPE	 = 'Enum "%v" in scheme "%p" references non-enum option "%I"',
+	SME_EBADDEF	 = 'Enum "%v" in scheme "%p" redeclares the default value of "%I"',
 
-	{ 'SECT_UNKNOWN',	'Section "%i" (%I) not found in scheme' },
-	{ 'SECT_REQUIRED',	'Required section "%p.%S" not found in config' },
-	{ 'SECT_UNIQUE',	'Unique section "%p.%S" occurs multiple times in config' },
-	{ 'SECT_NAMED', 	'The section of type "%p.%S" is stored anonymously in config but must be named' },
-	{ 'SECT_NOTFOUND',	'Section "%p.%s" not found in config' },
+	SECT_UNKNOWN	 = 'Section "%i" (%I) not found in scheme',
+	SECT_REQUIRED	 = 'Required section "%p.%S" not found in config',
+	SECT_UNIQUE	 = 'Unique section "%p.%S" occurs multiple times in config',
+	SECT_NAMED 	 = 'The section of type "%p.%S" is stored anonymously in config but must be named',
+	SECT_NOTFOUND	 = 'Section "%p.%s" not found in config',
 
-	{ 'OPT_UNKNOWN',	'Option "%i" (%I) not found in scheme' },
-	{ 'OPT_REQUIRED',	'Required option "%i" has no value' },
-	{ 'OPT_BADVALUE', 	'Value "%1" of option "%i" is not defined in enum %2' },
-	{ 'OPT_INVVALUE',	'Value "%1" of option "%i" does not validate as datatype "%2"' },
-	{ 'OPT_NOTLIST',	'Option "%i" is defined as list but stored as plain value' },
-	{ 'OPT_DATATYPE',	'Option "%i" has unknown datatype "%1"' },
-	{ 'OPT_NOTFOUND',	'Option "%p.%s.%o" not found in config' },
-	{ 'OPT_RANGE',		'Option "%p.%s.%o" is not within the specified range' },
+	OPT_UNKNOWN	 = 'Option "%i" (%I) not found in scheme',
+	OPT_REQUIRED	 = 'Required option "%i" has no value',
+	OPT_BADVALUE 	 = 'Value "%1" of option "%i" is not defined in enum %2',
+	OPT_INVVALUE	 = 'Value "%1" of option "%i" does not validate as datatype "%2"',
+	OPT_NOTLIST	 = 'Option "%i" is defined as list but stored as plain value',
+	OPT_DATATYPE	 = 'Option "%i" has unknown datatype "%1"',
+	OPT_NOTFOUND	 = 'Option "%p.%s.%o" not found in config',
+	OPT_RANGE		 = 'Option "%p.%s.%o" is not within the specified range',
 
-	{ 'DEP_NOTEQUAL',	'Dependency (%1) failed:\nOption "%i" is not eqal "%2"' },
-	{ 'DEP_NOVALUE',	'Dependency (%1) failed:\nOption "%i" has no value' },
-	{ 'DEP_NOTVALID',	'Dependency (%1) failed:\n%c' },
-	{ 'DEP_RECURSIVE',	'Recursive dependency for option "%i" detected' },
-	{ 'DEP_BADENUM',	'In dependency check for enum value "%i":\n%c' }
+	DEP_NOTEQUAL	 = 'Dependency (%1) failed:\nOption "%i" is not eqal "%2"',
+	DEP_NOVALUE	 = 'Dependency (%1) failed:\nOption "%i" has no value',
+	DEP_NOTVALID	 = 'Dependency (%1) failed:\n%c',
+	DEP_RECURSIVE	 = 'Recursive dependency for option "%i" detected',
+	DEP_BADENUM	 = 'In dependency check for enum value "%i":\n%c'
 }
-
--- build error constants and instance constructors
-for i, v in ipairs(ERRCODES) do
-	_M[v[1]] = function(...)
-		return error(i, ...)
-	end
-
-	_M['ERR_'..v[1]] = i
-end
-
 
 function i18n(key)
 	if luci.i18n then
@@ -130,7 +120,7 @@ end
 function error.string(self,pad)
 	pad = pad or "  "
 
-	local str = i18n(ERRCODES[self.code][2])
+	local str = i18n(ERRCODES[self.code] or self.code])
 		:gsub("\n", "\n"..pad)
 		:gsub("%%i", self:cid())
 		:gsub("%%I", self:sid())
