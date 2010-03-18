@@ -32,7 +32,7 @@ local unpack, loadfile, collectgarbage = unpack, loadfile, collectgarbage
 
 module "luci.uvl"
 
-local ERR = require "luci.uvl.errors"
+local ERR = require "luci.uvl.errors".error
 local datatypes = require "luci.uvl.datatypes"
 local validation = require "luci.uvl.validation"
 local dependencies = require "luci.uvl.dependencies"
@@ -165,7 +165,7 @@ function UVL.validate_config( self, cfg, uci )
 		for k, v in pairs(co:config()) do
 			local so = co:section(k)
 			if not self.beenthere[so:cid()] then
-				co:error(ERR.SECT_UNKNOWN(so))
+				co:error(ERR('SECT_UNKNOWN', so))
 			end
 		end
 	end
@@ -173,9 +173,9 @@ function UVL.validate_config( self, cfg, uci )
 	for _, k in ipairs(util.keys(sc)) do
 		local so = co:section(k)
 		if so:scheme('required') and sc[k] == 0 then
-			co:error(ERR.SECT_REQUIRED(so))
+			co:error(ERR('SECT_REQUIRED', so))
 		elseif so:scheme('unique') and sc[k] > 1 then
-			co:error(ERR.SECT_UNIQUE(so))
+			co:error(ERR('SECT_UNIQUE', so))
 		end
 	end
 
@@ -209,7 +209,7 @@ function UVL.validate_section( self, cfg, section, uci )
 	if so:config() then
 		return self:_validate_section( so )
 	else
-		return false, ERR.SECT_NOTFOUND(so)
+		return false, ERR('SECT_NOTFOUND', so)
 	end
 end
 
@@ -239,7 +239,7 @@ function UVL.validate_option( self, cfg, section, option, uci )
 	if so:config() and oo:config() then
 		return self:_validate_option( oo )
 	else
-		return false, ERR.OPT_NOTFOUND(oo)
+		return false, ERR('OPT_NOTFOUND', oo)
 	end
 end
 
@@ -252,15 +252,15 @@ function UVL._validate_section( self, section )
 		if section:scheme('named') == true and
 		   section:config('.anonymous') == true
 		then
-			return false, ERR.SECT_NAMED(section)
+			return false, ERR('SECT_NAMED', section)
 		end
 
 		for _, v in ipairs(section:variables()) do
 			local ok, err = self:_validate_option( v )
 			if not ok and (
 				v:scheme('required') or v:scheme('type') == "enum" or (
-					not err:is(ERR.ERR_DEP_NOTEQUAL) and
-					not err:is(ERR.ERR_DEP_NOVALUE)
+					not err:is('DEP_NOTEQUAL') and
+					not err:is('DEP_NOVALUE')
 				)
 			) then
 				section:error(err)
@@ -272,14 +272,14 @@ function UVL._validate_section( self, section )
 			section:error(err)
 		end
 	else
-		return false, ERR.SECT_NOTFOUND(section)
+		return false, ERR('SECT_NOTFOUND', section)
 	end
 
 	if STRICT_UNKNOWN_OPTIONS and not section:scheme('dynamic') then
 		for k, v in pairs(section:config()) do
 			local oo = section:option(k)
 			if k:byte(1) == 46 and not self.beenthere[oo:cid()] then
-				section:error(ERR.OPT_UNKNOWN(oo))
+				section:error(ERR('OPT_UNKNOWN', oo))
 			end
 		end
 	end
@@ -293,7 +293,7 @@ function UVL._validate_option( self, option, nodeps )
 
 	if not option:scheme() and not option:parent():scheme('dynamic') then
 		if STRICT_UNKNOWN_OPTIONS then
-			return false, option:error(ERR.OPT_UNKNOWN(option))
+			return false, option:error(ERR('OPT_UNKNOWN', option))
 		else
 			return true
 		end
@@ -303,9 +303,9 @@ function UVL._validate_option( self, option, nodeps )
 			local ok, err = dependencies.check( self, option )
 			if not ok then
 				if not err:is_all(
-					ERR.ERR_OPT_REQUIRED,
-					ERR.ERR_DEP_NOTEQUAL,
-					ERR.ERR_DEP_NOVALUE
+					'OPT_REQUIRED',
+					'DEP_NOTEQUAL',
+					'DEP_NOVALUE'
 				) then
 					option:error(err)
 					return false, option:errors()
@@ -316,7 +316,7 @@ function UVL._validate_option( self, option, nodeps )
 		end
 
 		if option:scheme('required') and not option:value() then
-			return false, option:error(ERR.OPT_REQUIRED(option))
+			return false, option:error(ERR('OPT_REQUIRED', option))
 
 		elseif option:value() then
 			local val = option:value()
@@ -328,7 +328,8 @@ function UVL._validate_option( self, option, nodeps )
 				local config_values = ( type(val) == "table" and val or { val } )
 				for _, v in ipairs(config_values) do
 					if not scheme_values[v] then
-						return false, option:error( ERR.OPT_BADVALUE(
+						return false, option:error( ERR(
+							'OPT_BADVALUE',
 							option, { v, util.serialize_data(
 								util.keys(scheme_values)
 							) }
@@ -337,7 +338,7 @@ function UVL._validate_option( self, option, nodeps )
 				end
 			elseif option:scheme('type') == "list" then
 				if type(val) ~= "table" and STRICT_LIST_TYPE then
-					return false, option:error(ERR.OPT_NOTLIST(option))
+					return false, option:error(ERR('OPT_NOTLIST', option))
 				end
 			end
 
@@ -349,12 +350,12 @@ function UVL._validate_option( self, option, nodeps )
 					for i, v in ipairs(val) do
 						if not self.datatypes[dt]( v ) then
 							return false, option:error(
-								ERR.OPT_INVVALUE(option, { v, dt })
+								ERR('OPT_INVVALUE', option, { v, dt })
 							)
 						end
 					end
 				else
-					return false, option:error(ERR.OPT_DATATYPE(option, dt))
+					return false, option:error(ERR('OPT_DATATYPE', option, dt))
 				end
 			end
 
@@ -362,13 +363,13 @@ function UVL._validate_option( self, option, nodeps )
 			for _, v in ipairs(val) do
 				if option:scheme('minlength') then
 					if #v < option:scheme('minlength') then
-						return false, option:error(ERR.OPT_RANGE(option))
+						return false, option:error(ERR('OPT_RANGE', option))
 					end
 				end
 
 				if option:scheme('maxlength') then
 					if #v > option:scheme('maxlength') then
-						return false, option:error(ERR.OPT_RANGE(option))
+						return false, option:error(ERR('OPT_RANGE', option))
 					end
 				end
 
@@ -376,13 +377,13 @@ function UVL._validate_option( self, option, nodeps )
 
 				if option:scheme('minimum') then
 					if not w or w < option:scheme('minimum') then
-						return false, option:error(ERR.OPT_RANGE(option))
+						return false, option:error(ERR('OPT_RANGE', option))
 					end
 				end
 
 				if option:scheme('maximum') then
 					if not w or w > option:scheme('maximum') then
-						return false, option:error(ERR.OPT_RANGE(option))
+						return false, option:error(ERR('OPT_RANGE', option))
 					end
 				end
 			end
@@ -414,7 +415,7 @@ function UVL.read_scheme( self, shm, alias )
 			local ok, err
 			for _, file in ipairs(files) do
 				if not fs.access(file) then
-					return false, so:error(ERR.SME_READ(so,file))
+					return false, so:error(ERR('SME_READ', so,file))
 				end
 
 				local uci = uci.cursor( fs.dirname(file), default_savedir )
@@ -423,7 +424,7 @@ function UVL.read_scheme( self, shm, alias )
 				local sd, err = uci:load( sname )
 
 				if not sd then
-					return false, ERR.UCILOAD(so, err)
+					return false, ERR('UCILOAD', so, err)
 				end
 
 				ok, err = pcall(function()
@@ -446,7 +447,7 @@ function UVL.read_scheme( self, shm, alias )
 			if ok and alias then self.packages[alias] = self.packages[shm] end
 			return ok and self, err
 		else
-			return false, so:error(ERR.SME_FIND(so, self.schemedir))
+			return false, so:error(ERR('SME_FIND', so, self.schemedir))
 		end
 	else
 		local sc = loadfile(bc)
@@ -454,7 +455,7 @@ function UVL.read_scheme( self, shm, alias )
 			self.packages[shm] = sc()
 			return true
 		else
-			return false, so:error(ERR.SME_READ(so,bc))
+			return false, so:error(ERR('SME_READ',so,bc))
 		end
 	end
 end
@@ -473,7 +474,7 @@ local function _req( t, n, c, r )
 				o = enum( scheme, nil, p, '(nil)', '(nil)', n )
 			end
 
-			return false, ERR.SME_REQFLD(o,v)
+			return false, ERR('SME_REQFLD',o,v)
 		end
 	end
 	return true
@@ -499,7 +500,7 @@ local function _ref( c, t )
 	r[1] = ( #r[1] > 0 and r[1] or scheme:sid() )
 
 	if #r ~= n then
-		return false, ERR.SME_BADREF(scheme, k)
+		return false, ERR('SME_BADREF', scheme, k)
 	end
 
 	return r
@@ -551,7 +552,7 @@ function UVL._parse_section(self, scheme, k, v)
 				s.depends = self:_read_dependency( v2, s.depends )
 				if not s.depends then
 					return false, scheme:error(
-						ERR.SME_BADDEP(so, util.serialize_data(s.depends))
+						ERR('SME_BADDEP', so, util.serialize_data(s.depends))
 					)
 				end
 			elseif k == "dynamic" or k == "unique" or
@@ -581,14 +582,14 @@ function UVL._parse_var(self, scheme, k, v)
 	local p = self.packages[r[1]]
 	if not p then
 		error(scheme:error(
-			ERR.SME_VBADPACK({scheme:sid(), '', v.name}, r[1])
+			ERR('SME_VBADPACK', {scheme:sid(), '', v.name}, r[1])
 		))
 	end
 
 	local s = p.variables[r[2]]
 	if not s then
 		error(scheme:error(
-			ERR.SME_VBADSECT({scheme:sid(), '', v.name}, r[2])
+			ERR('SME_VBADSECT', {scheme:sid(), '', v.name}, r[2])
 		))
 	end
 
@@ -604,21 +605,21 @@ function UVL._parse_var(self, scheme, k, v)
 				t.depends = self:_read_dependency( v2, t.depends )
 				if not t.depends then
 					error(scheme:error(so:error(
-						ERR.SME_BADDEP(to, util.serialize_data(v2))
+						ERR('SME_BADDEP', to, util.serialize_data(v2))
 					)))
 				end
 			elseif k == "validator" then
 				t.validators = self:_read_validator( v2, t.validators )
 				if not t.validators then
 					error(scheme:error(so:error(
-						ERR.SME_BADVAL(to, util.serialize_data(v2))
+						ERR('SME_BADVAL', to, util.serialize_data(v2))
 					)))
 				end
 			elseif k == "valueof" then
 				local values, err = self:_read_reference( v2 )
 				if err then
 					error(scheme:error(so:error(
-						ERR.REFERENCE(to, util.serialize_data(v2)):child(err)
+						ERR('REFERENCE', to, util.serialize_data(v2)):child(err)
 					)))
 				end
 				t.type   = "reference"
@@ -652,21 +653,21 @@ function UVL._parse_enum(self, scheme, k, v)
 	local p = self.packages[r[1]]
 	if not p then
 		error(scheme:error(
-			ERR.SME_EBADPACK({scheme:sid(), '', '', v.value}, r[1])
+			ERR('SME_EBADPACK', {scheme:sid(), '', '', v.value}, r[1])
 		))
 	end
 
 	local s = p.variables[r[2]]
 	if not s then
 		error(scheme:error(
-			ERR.SME_EBADSECT({scheme:sid(), '', '', v.value}, r[2])
+			ERR('SME_EBADSECT', {scheme:sid(), '', '', v.value}, r[2])
 		))
 	end
 
 	local t = s[r[3]]
 	if not t then
 		error(scheme:error(
-			ERR.SME_EBADOPT({scheme:sid(), '', '', v.value}, r[3])
+			ERR('SME_EBADOPT', {scheme:sid(), '', '', v.value}, r[3])
 		))
 	end
 
@@ -676,7 +677,7 @@ function UVL._parse_enum(self, scheme, k, v)
 	local eo = oo:enum(v.value)
 
 	if t.type ~= "enum" and t.type ~= "reference" then
-		error(scheme:error(ERR.SME_EBADTYPE(eo)))
+		error(scheme:error(ERR('SME_EBADTYPE', eo)))
 	end
 
 	if not t.values then
@@ -693,7 +694,7 @@ function UVL._parse_enum(self, scheme, k, v)
 
 	if v.default then
 		if t.default then
-			error(scheme:error(ERR.SME_EBADDEF(eo)))
+			error(scheme:error(ERR('SME_EBADDEF', eo)))
 		end
 		t.default = v.value
 	end
@@ -705,7 +706,7 @@ function UVL._parse_enum(self, scheme, k, v)
 
 		if not t.enum_depends[v.value] then
 			error(scheme:error(so:error(oo:error(
-				ERR.SME_BADDEP(eo, util.serialize_data(v.depends))
+				ERR('SME_BADDEP', eo, util.serialize_data(v.depends))
 			))))
 		end
 	end
@@ -804,7 +805,7 @@ function UVL._read_reference( self, values )
 				if v['.type'] == ref[2] then
 					if #ref == 2 then
 						if v['.anonymous'] == true then
-							return false, ERR.SME_INVREF('', value)
+							return false, ERR('SME_INVREF', '', value)
 						end
 						val[k] = k	-- XXX: title/description would be nice
 					elseif v[ref[3]] then
@@ -813,7 +814,7 @@ function UVL._read_reference( self, values )
 				end
 			end
 		else
-			return false, ERR.SME_BADREF('', value)
+			return false, ERR('SME_BADREF', '', value)
 		end
 	end
 
@@ -924,8 +925,8 @@ end
 
 function uvlitem.error(self, arg1, arg2, arg3, arg4, arg5)
 	if not self.e then
-		local errconst = { ERR.CONFIG, ERR.SECTION, ERR.OPTION, ERR.OPTION }
-		self.e = errconst[#self.cref]( self )
+		local errconst = { 'CONFIG', 'SECTION', 'OPTION', 'OPTION' }
+		self.e = ERR( errconst[#self.cref], self )
 	end
 
 	return self.e:child( arg1, arg2, arg3, arg4, arg5 )
@@ -958,7 +959,7 @@ function uvlitem._loadconf(self, co, c, configdir)
 		co, err = uci.cursor(configdir):get_all(c)
 
 		if err then
-			self:error(ERR.UCILOAD(self, err))
+			self:error(ERR('UCILOAD', self, err))
 		end
 
 		self._configcache = co
@@ -996,7 +997,7 @@ end
 --- Add an error to scheme.
 -- @return	Scheme error context
 function scheme.error(self, arg1, arg2, arg3, arg4, arg5)
-	if not self.e then self.e = ERR.SCHEME( self ) end
+	if not self.e then self.e = ERR( 'SCHEME', self ) end
 	return self.e:child( arg1, arg2, arg3, arg4, arg5 )
 end
 
