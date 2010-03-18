@@ -525,7 +525,7 @@ function get_bytecode(val)
 		code = string.dump( loadstring( "return " .. serialize_data(val) ) )
 	end
 
-	return code and strip_bytecode(code)
+	return code -- and strip_bytecode(code)
 end
 
 --- Strips unnescessary lua bytecode from given string. Information like line
