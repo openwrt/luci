@@ -17,7 +17,7 @@ $Id$
 local os = require "os"
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
-local ERR = require "luci.uvl.errors"
+local ERR = require "luci.uvl.errors".error
 
 local ipairs, unpack, type, tostring = ipairs, unpack, type, tostring
 
@@ -63,7 +63,7 @@ function check( self, object )
 			end
 
 			if not ok then
-				return false, ERR.SME_ERRVAL(object, {tostring(val), err})
+				return false, ERR('SME_ERRVAL', object, {tostring(val), err})
 			end
 		end
 	end
