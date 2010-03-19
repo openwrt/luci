@@ -53,7 +53,7 @@ static time_t uh_file_date2unix(const char *date)
 	memset(&t, 0, sizeof(t));
 
 	if( strptime(date, "%a, %d %b %Y %H:%M:%S %Z", &t) != NULL )
-		return mktime(&t);
+		return timegm(&t);
 
 	return 0;
 }
@@ -61,9 +61,9 @@ static time_t uh_file_date2unix(const char *date)
 static char * uh_file_unix2date(time_t ts)
 {
 	static char str[128];
-	struct tm *t = localtime(&ts);
+	struct tm *t = gmtime(&ts);
 
-	strftime(str, sizeof(str), "%a, %d %b %Y %H:%M:%S %Z", t);
+	strftime(str, sizeof(str), "%a, %d %b %Y %H:%M:%S GMT", t);
 
 	return str;
 }
