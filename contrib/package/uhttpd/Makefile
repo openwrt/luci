@@ -18,7 +18,7 @@ define Package/uhttpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=uHTTPd - tiny, single threaded HTTP server
-  DEPENDS:=+liblua +libcyassl
+  DEPENDS:=+liblua +libcyassl +zlib
 endef
 
 define Package/uhttpd/description
@@ -35,9 +35,17 @@ define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
+define Package/uhttpd/conffiles
+/etc/config/uhttpd
+endef
+
 define Package/uhttpd/install
-	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uhttpd $(1)/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/uhttpd.init $(1)/etc/init.d/uhttpd
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/uhttpd.config $(1)/etc/config/uhttpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uhttpd $(1)/usr/sbin/uhttpd
 endef
 
 $(eval $(call BuildPackage,uhttpd))
