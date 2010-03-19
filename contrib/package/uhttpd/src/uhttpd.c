@@ -523,7 +523,7 @@ int main (int argc, char **argv)
 					"	-f	Do not fork to background\n"
 #ifdef HAVE_LUA
 					"	-l	URL prefix for Lua handler, default is '/lua'\n"
-					"	-L	Lua handler script, default is './lua/handler.lua'\n"
+					"	-L	Lua handler script, omit to disable Lua\n"
 #endif
 #ifdef HAVE_CGI
 					"	-c	URL prefix for CGI handler, default is '/cgi-bin'\n"
