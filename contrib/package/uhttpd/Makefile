@@ -27,13 +27,13 @@ define Package/uhttpd/description
  HTTP daemon.
 endef
 
+# hack to use CyASSL headers
+TARGET_CFLAGS += -I$(firstword $(wildcard $(BUILD_DIR)/cyassl-*/include))
+
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
-
-TARGET_CFLAGS += --std=c99 -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE=500
-TARGET_LDFLAGS += -lz -lm -lcrypt
 
 define Package/uhttpd/install
 	$(INSTALL_DIR) $(1)/sbin
