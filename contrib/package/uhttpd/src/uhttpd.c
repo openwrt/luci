@@ -104,7 +104,7 @@ static int uh_socket_bind(
 		continue;
 
 		error:
-		if( sock > 0 )	
+		if( sock > 0 )
 			close(sock);
 	}
 
@@ -363,6 +363,8 @@ int main (int argc, char **argv)
 
 	/* maximum file descriptor number */
 	int new_fd, cur_fd, max_fd = 0;
+
+	int tls = 0;
 	int keys = 0;
 	int bound = 0;
 	int nofork = 0;
@@ -428,10 +430,13 @@ int main (int argc, char **argv)
 					port = optarg;
 				}
 
+				if( opt == 's' )
+					tls = 1;
+
 				/* bind sockets */
 				bound += uh_socket_bind(
-					&serv_fds, &max_fd, bind[0] ? bind : NULL, port, &hints,
-					(opt == 's') ? 1 : 0, &conf
+					&serv_fds, &max_fd, bind[0] ? bind : NULL, port,
+					&hints,	tls, &conf
 				);
 
 				break;
@@ -532,7 +537,7 @@ int main (int argc, char **argv)
 	}
 
 #ifdef HAVE_TLS
-	if( keys < 2 )
+	if( (tls == 1) && (keys < 2) )
 	{
 		fprintf(stderr, "Missing private key or certificate file\n");
 		exit(1);
@@ -621,7 +626,7 @@ int main (int argc, char **argv)
 		{
 			/* is a socket managed by us */
 			if( FD_ISSET(cur_fd, &read_fds) )
-			{			
+			{
 				/* is one of our listen sockets */
 				if( FD_ISSET(cur_fd, &serv_fds) )
 				{
@@ -638,7 +643,7 @@ int main (int argc, char **argv)
 
 							/* add client socket to global fdset */
 							FD_SET(new_fd, &used_fds);
-							max_fd = max(max_fd, new_fd);							
+							max_fd = max(max_fd, new_fd);
 						}
 
 						/* insufficient resources */
