@@ -181,7 +181,7 @@ void uh_cgi_request(struct client *cl, struct http_request *req)
 					/* common information */
 					setenv("GATEWAY_INTERFACE", "CGI/1.1", 1);
 					setenv("SERVER_SOFTWARE", "uHTTPd", 1);
-					setenv("PATH", "/usr/bin:/bin", 1);
+					setenv("PATH", "/sbin:/usr/sbin:/bin:/usr/bin", 1);
 
 #ifdef HAVE_TLS
 					/* https? */
