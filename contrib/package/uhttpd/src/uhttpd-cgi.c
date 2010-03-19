@@ -12,9 +12,10 @@ static struct http_response * uh_cgi_header_parse(char *buf, int len, int *off)
 	static struct http_response res;
 
 
-	if( (bufptr = strfind(buf, len, "\r\n\r\n", 4)) != NULL )
-	{
-		*off = (int)(bufptr - buf) + 4;
+	if( ((bufptr = strfind(buf, len, "\r\n\r\n", 4)) != NULL) ||
+	    ((bufptr = strfind(buf, len, "\n\n", 2)) != NULL)
+	) {
+		*off = (int)(bufptr - buf) + ((bufptr[1] == '\r') ? 4 : 2);
 
 		memset(&res, 0, sizeof(res));
 
