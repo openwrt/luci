@@ -268,7 +268,7 @@ static struct http_request * uh_http_header_parse(struct client *cl, char *buffe
 
 static struct http_request * uh_http_header_recv(struct client *cl)
 {
-	char buffer[UH_LIMIT_MSGHEAD];
+	static char buffer[UH_LIMIT_MSGHEAD];
 	char *bufptr = &buffer[0];
 	char *idxptr = NULL;
 
@@ -670,7 +670,7 @@ int main (int argc, char **argv)
 					{
 #ifdef HAVE_LUA
 						/* Lua request? */
-						if( strstr(req->url, conf.lua_prefix) == req->url )
+						if( L && strstr(req->url, conf.lua_prefix) == req->url )
 						{
 							uh_lua_request(cl, req, L);
 						}
@@ -679,15 +679,19 @@ int main (int argc, char **argv)
 						/* dispatch request */
 						if( (pin = uh_path_lookup(cl, req->url)) != NULL )
 						{
+							/* auth ok? */
+							if( uh_auth_check(cl, req, pin) )
+							{
 #ifdef HAVE_CGI
-							if( strstr(pin->name, conf.cgi_prefix) == pin->name )
-							{
-								uh_cgi_request(cl, req, pin);
-							}
-							else
+								if( strstr(pin->name, conf.cgi_prefix) == pin->name )
+								{
+									uh_cgi_request(cl, req, pin);
+								}
+								else
 #endif
-							{
-								uh_file_request(cl, req, pin);
+								{
+									uh_file_request(cl, req, pin);
+								}
 							}
 						}
 

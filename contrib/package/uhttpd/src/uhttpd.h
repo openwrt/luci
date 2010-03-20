@@ -42,6 +42,7 @@
 
 #define UH_LIMIT_LISTENERS	16
 #define UH_LIMIT_CLIENTS	64
+#define UH_LIMIT_AUTHREALMS	8
 
 #define UH_HTTP_MSG_GET		0
 #define UH_HTTP_MSG_HEAD	1
@@ -85,11 +86,19 @@ struct client {
 #endif
 };
 
+struct auth_realm {
+	char path[PATH_MAX];
+	char realm[128];
+	char user[32];
+	char pass[128];
+};
+
 struct http_request {
 	int	method;
 	float version;
 	char *url;
 	char *headers[UH_LIMIT_HEADERS];
+	struct auth_realm *realm;
 };
 
 struct http_response {

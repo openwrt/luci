@@ -16,6 +16,9 @@
  *  limitations under the License.
  */
 
+#define _XOPEN_SOURCE 500	/* crypt() */
+#define _BSD_SOURCE			/* strcasecmp(), strncasecmp() */
+
 #include "uhttpd.h"
 #include "uhttpd-utils.h"
 
@@ -304,50 +307,52 @@ int uh_urlencode(char *buf, int blen, const char *src, int slen)
 	return len;
 }
 
-int uh_path_normalize(char *buf, int blen, const char *src, int slen)
+int uh_b64decode(char *buf, int blen, const unsigned char *src, int slen)
 {
-	int i, skip;
+	int i = 0;
 	int len = 0;
 
-	for( i = 0, skip = 1; (i <= slen) && (src[i] != 0); i++ )
+	unsigned int cin  = 0;
+	unsigned int cout = 0;
+
+
+	for( i = 0; (i <= slen) && (src[i] != 0); i++ )
 	{
-		/* collapse multiple "/" into one */
-		if( src[i] == '/' )
-		{
-			/* collapse "/../" to "/" */
-			if( ((i+2) <= slen) && (src[i+1] == '.') && (src[i+2] == '.') &&
-				(((i+3) > slen) || (src[i+3] == '/'))
-			) {
-				i += 2;
-				continue;
-			}
+		cin = src[i];
 
-			/* collapse "/./" to "/" */
-			else if( ((i+1) <= slen) && (src[i+1] == '.') &&
-			    (((i+2) > slen) || (src[i+2] == '/'))
-			) {
-				i += 1;
-				continue;
-			}
-
-			/* skip repeating "/" */
-			else if( skip )
-			{
-				continue;
-			}
-
-			skip++;
-		}
-
-		/* finally a harmless char */
+		if( (cin >= '0') && (cin <= '9') )
+			cin = cin - '0' + 52;
+		else if( (cin >= 'A') && (cin <= 'Z') )
+			cin = cin - 'A';
+		else if( (cin >= 'a') && (cin <= 'z') )
+			cin = cin - 'a' + 26;
+		else if( cin == '+' )
+			cin = 62;
+		else if( cin == '/' )
+			cin = 63;
+		else if( cin == '=' )
+			cin = 0;
 		else
-		{
-			skip = 0;
-		}
+			continue;
 
-		buf[len++] = src[i];
+		cout = (cout << 6) | cin;
+
+		if( (i % 4) == 3 )
+		{
+			if( (len + 3) < blen )
+			{
+				buf[len++] = (char)(cout >> 16);
+				buf[len++] = (char)(cout >> 8);
+				buf[len++] = (char)(cout);
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
 
+	buf[len++] = 0;
 	return len;
 }
 
@@ -372,7 +377,8 @@ struct path_info * uh_path_lookup(struct client *cl, const char *url)
 	memset(&p, 0, sizeof(p));
 
 	/* copy docroot */
-	memcpy(buffer, docroot, sizeof(buffer));
+	memcpy(buffer, docroot,
+		min(strlen(docroot), sizeof(buffer) - 1));
 
 	/* separate query string from url */
 	if( (pathptr = strchr(url, '?')) != NULL )
@@ -470,6 +476,170 @@ struct path_info * uh_path_lookup(struct client *cl, const char *url)
 	}
 
 	return p.phys ? &p : NULL;
+}
+
+
+static char uh_realms[UH_LIMIT_AUTHREALMS * sizeof(struct auth_realm)] = { 0 };
+static int uh_realm_count = 0;
+
+struct auth_realm * uh_auth_add(
+	char *path, char *realm, char *user, char *pass
+) {
+	struct auth_realm *new = NULL;
+	struct passwd *pwd;
+	struct spwd *spwd;
+
+	if( uh_realm_count < UH_LIMIT_AUTHREALMS )
+	{
+		new = (struct auth_realm *)
+			&uh_realms[uh_realm_count * sizeof(struct auth_realm)];
+
+		memset(new, 0, sizeof(struct auth_realm));
+
+		memcpy(new->realm, realm,
+			min(strlen(realm), sizeof(new->realm) - 1));
+
+		memcpy(new->path, path,
+			min(strlen(path), sizeof(new->path) - 1));
+
+		memcpy(new->user, user,
+			min(strlen(user), sizeof(new->user) - 1));
+
+		/* given password refers to a passwd entry */
+		if( (strlen(pass) > 3) && !strncmp(pass, "$p$", 3) )
+		{
+			/* try to resolve shadow entry */
+			if( ((spwd = getspnam(&pass[3])) != NULL) && spwd->sp_pwdp )
+			{
+				memcpy(new->pass, spwd->sp_pwdp,
+					min(strlen(spwd->sp_pwdp), sizeof(new->pass) - 1));
+			}
+
+			/* try to resolve passwd entry */
+			else if( ((pwd = getpwnam(&pass[3])) != NULL) && pwd->pw_passwd &&
+				(pwd->pw_passwd[0] != '!') && (pwd->pw_passwd[0] != 0)
+			) {
+				memcpy(new->pass, pwd->pw_passwd,
+					min(strlen(pwd->pw_passwd), sizeof(new->pass) - 1));
+			}			
+		}
+
+		/* ordinary pwd */
+		else
+		{
+			memcpy(new->pass, pass,
+				min(strlen(pass), sizeof(new->pass) - 1));
+		}
+
+		uh_realm_count++;
+	}
+
+	return new;
+}
+
+int uh_auth_check(
+	struct client *cl, struct http_request *req, struct path_info *pi
+) {
+	int i, plen, rlen, protected;
+	char buffer[UH_LIMIT_MSGHEAD];
+	char *user = NULL;
+	char *pass = NULL;
+
+	struct auth_realm *realm = NULL;
+
+	plen = strlen(pi->name);
+	protected = 0;
+
+	/* check whether at least one realm covers the requested url */
+	for( i = 0; i < uh_realm_count; i++ )
+	{
+		realm = (struct auth_realm *)
+			&uh_realms[i * sizeof(struct auth_realm)];
+
+		rlen = strlen(realm->path);
+
+		if( (plen >= rlen) && !strncasecmp(pi->name, realm->path, rlen) )
+		{
+			req->realm = realm;
+			protected = 1;
+			break;
+		}
+	}
+
+	/* requested resource is covered by a realm */
+	if( protected )
+	{
+		/* try to get client auth info */
+		foreach_header(i, req->headers)
+		{
+			if( !strcasecmp(req->headers[i], "Authorization") &&
+				(strlen(req->headers[i+1]) > 6) &&
+				!strncasecmp(req->headers[i+1], "Basic ", 6)
+			) {
+				memset(buffer, 0, sizeof(buffer));
+				uh_b64decode(buffer, sizeof(buffer) - 1,
+					(unsigned char *) &req->headers[i+1][6],
+					strlen(req->headers[i+1]) - 6);
+
+				if( (pass = strchr(buffer, ':')) != NULL )
+				{
+					user = buffer;
+					*pass++ = 0;
+				}
+
+				break;
+			}
+		}
+
+		/* have client auth */
+		if( user && pass )
+		{
+			/* find matching realm */
+			for( i = 0, realm = NULL; i < uh_realm_count; i++ )
+			{
+				realm = (struct auth_realm *)
+					&uh_realms[i * sizeof(struct auth_realm)];
+
+				rlen = strlen(realm->path);
+
+				if( (plen >= rlen) &&
+				    !strncasecmp(pi->name, realm->path, rlen) &&
+				    !strcmp(user, realm->user)
+				) {
+					req->realm = realm;
+					break;
+				}
+
+				realm = NULL;
+			}
+
+			/* found a realm matching the username */
+			if( realm )
+			{
+				/* is a crypt passwd */
+				if( realm->pass[0] == '$' )
+					pass = crypt(pass, realm->pass);
+
+				/* check user pass */
+				if( !strcmp(pass, realm->pass) )
+					return 1;
+			}
+		}
+
+		/* 401 */
+		uh_http_sendf(cl, NULL,
+			"HTTP/%.1f 401 Authorization Required\r\n"
+			"WWW-Authenticate: Basic realm=\"%s\"\r\n"
+			"Content-Type: text/plain\r\n"
+			"Content-Length: 23\r\n\r\n"
+			"Authorization Required\n",
+				req->version, realm ? realm->realm : ""
+		);
+
+		return 0;
+	}
+
+	return 1;
 }
 
 

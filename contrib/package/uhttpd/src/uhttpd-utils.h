@@ -20,6 +20,8 @@
 
 #include <stdarg.h>
 #include <fcntl.h>
+#include <pwd.h>
+#include <shadow.h>
 #include <sys/stat.h>
 
 #define min(x, y) (((x) < (y)) ? (x) : (y))
@@ -51,7 +53,10 @@ int uh_tcp_send(struct client *cl, const char *buf, int len);
 int uh_tcp_peek(struct client *cl, char *buf, int len);
 int uh_tcp_recv(struct client *cl, char *buf, int len);
 
-int uh_http_sendhf(struct client *cl, int code, const char *summary, const char *fmt, ...);
+int uh_http_sendhf(
+	struct client *cl, int code, const char *summary,
+	const char *fmt, ...
+);
 
 #define uh_http_response(cl, code, message) \
 	uh_http_sendhf(cl, code, message, message)
@@ -71,7 +76,17 @@ int uh_http_send(
 
 int uh_urldecode(char *buf, int blen, const char *src, int slen);
 int uh_urlencode(char *buf, int blen, const char *src, int slen);
-int uh_path_normalize(char *buf, int blen, const char *src, int slen);
+int uh_b64decode(char *buf, int blen, const unsigned char *src, int slen);
+
+
+struct auth_realm * uh_auth_add(
+	char *path, char *realm, char *user, char *pass
+);
+
+int uh_auth_check(
+	struct client *cl, struct http_request *req, struct path_info *pi
+);
+
 
 struct path_info * uh_path_lookup(struct client *cl, const char *url);
 

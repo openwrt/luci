@@ -248,6 +248,10 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 				/* request url */
 				setenv("REQUEST_URI", req->url, 1);
 
+				/* remote user */
+				if( req->realm )
+					setenv("REMOTE_USER", req->realm->user, 1);
+
 				/* request message headers */
 				foreach_header(i, req->headers)
 				{
