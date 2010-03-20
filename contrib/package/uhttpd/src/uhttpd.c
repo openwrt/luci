@@ -668,6 +668,14 @@ int main (int argc, char **argv)
 					/* parse message header */
 					if( (req = uh_http_header_recv(cl)) != NULL )
 					{
+#ifdef HAVE_LUA
+						/* Lua request? */
+						if( strstr(req->url, conf.lua_prefix) == req->url )
+						{
+							uh_lua_request(cl, req, L);
+						}
+						else
+#endif
 						/* dispatch request */
 						if( (pin = uh_path_lookup(cl, req->url)) != NULL )
 						{
@@ -682,13 +690,7 @@ int main (int argc, char **argv)
 								uh_file_request(cl, req, pin);
 							}
 						}
-#ifdef HAVE_LUA
-						/* Lua request? */
-						else if( strstr(req->url, conf.lua_prefix) == req->url )
-						{
-							uh_lua_request(cl, req, L);
-						}
-#endif
+
 						/* 404 */
 						else
 						{
