@@ -315,34 +315,6 @@ static struct http_request * uh_http_header_recv(struct client *cl)
 	return NULL;
 }
 
-static int uh_docroot_resolve(const char *path, char *buf)
-{
-	char curpath[PATH_MAX];
-
-	if( ! getcwd(curpath, sizeof(curpath)) )
-	{
-		perror("getcwd()");
-		return 0;
-	}
-
-	if( chdir(path) || !getcwd(buf, PATH_MAX) )
-	{
-		return 0;
-	}
-	else
-	{
-		buf[strlen(buf)] = '/';
-	}
-
-	if( chdir(curpath) )
-	{
-		perror("chdir()");
-		return 0;
-	}
-
-	return 1;
-}
-
 
 int main (int argc, char **argv)
 {
@@ -357,6 +329,7 @@ int main (int argc, char **argv)
 	/* working structs */
 	struct addrinfo hints;
 	struct http_request *req;
+	struct uh_path_info *pin;
 	struct client *cl;
 	struct sigaction sa;
 	struct config conf;
@@ -467,9 +440,9 @@ int main (int argc, char **argv)
 
 			/* docroot */
 			case 'h':
-				if( ! uh_docroot_resolve(optarg, conf.docroot) )
+				if( ! realpath(optarg, conf.docroot) )
 				{
-					fprintf(stderr, "Invalid directory: %s\n", optarg);
+					fprintf(stderr, "Invalid directory %s: %s\n", optarg, strerror(errno));
 					exit(1);
 				}
 				break;
@@ -551,9 +524,10 @@ int main (int argc, char **argv)
 	}
 
 	/* default docroot */
-	if( !conf.docroot[0] && !uh_docroot_resolve(".", conf.docroot) )
+	if( !conf.docroot[0] && !realpath(".", conf.docroot) )
 	{
-		fprintf(stderr, "Can not determine default document root\n");
+		fprintf(stderr, "Can not determine default document root: %s\n",
+			strerror(errno));
 		exit(1);
 	}
 
@@ -673,31 +647,44 @@ int main (int argc, char **argv)
 						goto cleanup;
 					}
 
-					/* parse message header and dispatch request */
+					/* parse message header */
 					if( (req = uh_http_header_recv(cl)) != NULL )
 					{
-#ifdef HAVE_CGI
-						if( strstr(req->url, conf.cgi_prefix) == req->url )
+						/* dispatch request */
+						if( (pin = uh_path_lookup(cl, req->url)) != NULL )
 						{
-							uh_cgi_request(cl, req);
-						}
-						else
+#ifdef HAVE_CGI
+							if( strstr(pin->name, conf.cgi_prefix) == pin->name )
+							{
+								uh_cgi_request(cl, req, pin);
+							}
+							else
 #endif
-
+							{
+								uh_file_request(cl, req, pin);
+							}
+						}
 #ifdef HAVE_LUA
-						if( (L != NULL) &&
-						    (strstr(req->url, conf.lua_prefix) == req->url)
-						) {
+						/* Lua request? */
+						else if( strstr(req->url, conf.lua_prefix) == req->url )
+						{
 							uh_lua_request(cl, req, L);
 						}
-						else
 #endif
-
+						/* 404 */
+						else
 						{
-							uh_file_request(cl, req);
+							uh_http_sendhf(cl, 404, "Not Found",
+								"No such file or directory");
 						}
 					}
 
+					/* 400 */
+					else
+					{
+						uh_http_sendhf(cl, 400, "Bad Request",
+							"Malformed request received");
+					}
 
 #ifdef HAVE_TLS
 					/* free client tls context */

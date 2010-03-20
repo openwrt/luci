@@ -15,6 +15,8 @@
 
 lua_State * uh_lua_init();
 
-void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L);
+void uh_lua_request(
+	struct client *cl, struct http_request *req, lua_State *L
+);
 
 #endif

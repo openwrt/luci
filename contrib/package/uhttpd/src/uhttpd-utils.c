@@ -344,9 +344,7 @@ struct uh_path_info * uh_path_lookup(struct client *cl, const char *url)
 	char *docroot = cl->server->conf->docroot;
 	char *pathptr = NULL;
 
-	int skip = 0;
-	int plen = 0;
-
+	int i = 0;
 	struct stat s;
 
 
@@ -355,129 +353,101 @@ struct uh_path_info * uh_path_lookup(struct client *cl, const char *url)
 	memset(buffer, 0, sizeof(buffer));
 	memset(&p, 0, sizeof(p));
 
-	/* first separate query string from url */
+	/* copy docroot */
+	memcpy(buffer, docroot, sizeof(buffer));
+
+	/* separate query string from url */
 	if( (pathptr = strchr(url, '?')) != NULL )
 	{
 		p.query = pathptr[1] ? pathptr + 1 : NULL;
 
 		/* urldecode component w/o query */
 		if( pathptr > url )
-			plen = uh_urldecode(
-				buffer, sizeof(buffer), url,
-				(int)(pathptr - url) - 1
+			uh_urldecode(
+				&buffer[strlen(docroot)],
+				sizeof(buffer) - strlen(docroot) - 1,
+				url, (int)(pathptr - url) - 1
 			);
-		else
-			plen = 0;
 	}
 
 	/* no query string, decode all of url */
 	else
 	{
-		plen = uh_urldecode(
-			buffer, sizeof(buffer), url, strlen(url)
+		uh_urldecode(
+			&buffer[strlen(docroot)],
+			sizeof(buffer) - strlen(docroot) - 1,
+			url, strlen(url)
 		);
 	}
 
-	/* copy docroot */
-	memcpy(path_phys, docroot, sizeof(path_phys));
-
-	/* append normalized path, leave two bytes free
-	 * for trailing slash and terminating zero byte */
-	plen = strlen(docroot) + uh_path_normalize(
-		&path_phys[strlen(docroot)],
-		sizeof(path_phys) - strlen(docroot) - 2,
-		buffer, plen
-	);
-
-	/* copy result to info buffer */
-	memcpy(path_info, path_phys, sizeof(path_info));
-
-	/* find path */
-	while( 1 )
+	/* create canon path */
+	for( i = strlen(buffer); i >= 0; i-- )
 	{
-		/* test current path */
-		if( !stat(path_phys, &p.stat) )
+		if( (buffer[i] == 0) || (buffer[i] == '/') )
 		{
-			/* is a regular file */
-			if( p.stat.st_mode & S_IFREG )
+			memset(path_info, 0, sizeof(path_info));
+			memcpy(path_info, buffer, min(i + 1, sizeof(path_info) - 1));
+
+			if( realpath(path_info, path_phys) )
 			{
-				p.root = docroot;
-				p.phys = path_phys;
-				p.name = &path_phys[strlen(docroot)-1];
+				memset(path_info, 0, sizeof(path_info));
+				memcpy(path_info, &buffer[i],
+					min(strlen(buffer) - i, sizeof(path_info) - 1));
 
-				/* find workdir */
-				if( (pathptr = strrchr(path_phys, '/')) != NULL )
-				{
-					path_info[(int)(pathptr - path_phys) + 1] = 0;
-					p.wdir = path_info;
-				}
-				else
-				{
-					p.wdir = docroot;
-				}
-
-				/* find path info */
-				if( path_info[strlen(path_phys)] != 0 )
-				{
-					p.info = &path_info[strlen(path_phys)];
-				}
-
-				break;
-			}
-
-			/* is a directory */
-			else if( (p.stat.st_mode & S_IFDIR) && (skip < 1) )
-			{
-				/* ensure trailing slash */
-				if( path_phys[plen-1] != '/' )
-					path_phys[plen] = '/';
-
-				/* try to locate index file */
-				memset(buffer, 0, sizeof(buffer));
-				memcpy(buffer, path_phys, sizeof(buffer));
-				pathptr = &buffer[strlen(buffer)];
-
-				for( skip = 0; skip < array_size(uh_index_files); skip++ )
-				{
-					strncat(buffer, uh_index_files[skip], sizeof(buffer));
-
-					if( !stat(buffer, &s) && (s.st_mode & S_IFREG) )
-					{
-						memset(path_info, 0, sizeof(path_info));
-						memcpy(path_info, path_phys, strlen(path_phys));
-						memcpy(path_phys, buffer, sizeof(path_phys));
-						memcpy(&p.stat, &s, sizeof(p.stat));
-						p.wdir = path_info;
-						break;
-					}
-
-					*pathptr = 0;
-				}
-
-				p.root = docroot;
-				p.phys = path_phys;
-				p.name = &path_phys[strlen(docroot)-1];
-
-				break;
-			}
-
-			/* not found */
-			else if( skip )
-			{
 				break;
 			}
 		}
+	}
 
-		else if( (strlen(path_phys) > strlen(docroot)) &&
-		         ((pathptr = strrchr(path_phys, '/')) != NULL)
-		) {
-			*pathptr = 0;
-			skip = 1;
+	/* check whether found path is within docroot */
+	if( strncmp(path_phys, docroot, strlen(docroot)) ||
+	    ((path_phys[strlen(docroot)] != 0) &&
+		 (path_phys[strlen(docroot)] != '/'))
+	) {
+		return NULL;
+	}
+
+	/* test current path */
+	if( ! stat(path_phys, &p.stat) )
+	{
+		/* is a regular file */
+		if( p.stat.st_mode & S_IFREG )
+		{
+			p.root = docroot;
+			p.phys = path_phys;
+			p.name = &path_phys[strlen(docroot)];
+			p.info = path_info[0] ? path_info : NULL;
 		}
 
-		else
+		/* is a directory */
+		else if( (p.stat.st_mode & S_IFDIR) && !strlen(path_info) )
 		{
-			break;
+			/* ensure trailing slash */
+			if( path_phys[strlen(path_phys)-1] != '/' )
+				path_phys[strlen(path_phys)] = '/';
+
+			/* try to locate index file */
+			memset(buffer, 0, sizeof(buffer));
+			memcpy(buffer, path_phys, sizeof(buffer));
+			pathptr = &buffer[strlen(buffer)];
+
+			for( i = 0; i < array_size(uh_index_files); i++ )
+			{
+				strncat(buffer, uh_index_files[i], sizeof(buffer));
+
+				if( !stat(buffer, &s) && (s.st_mode & S_IFREG) )
+				{
+					memcpy(path_phys, buffer, sizeof(path_phys));
+					memcpy(&p.stat, &s, sizeof(p.stat));
+					break;
+				}
+
+				*pathptr = 0;
+			}
+
+			p.root = docroot;
+			p.phys = path_phys;
+			p.name = &path_phys[strlen(docroot)];
 		}
 	}
 

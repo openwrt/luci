@@ -4,8 +4,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#define min(x, y) ((x) < (y)) ? (x) : (y)
-#define max(x, y) ((x) > (y)) ? (x) : (y)
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+#define max(x, y) (((x) > (y)) ? (x) : (y))
 
 #define array_size(x) \
 	(sizeof(x) / sizeof(x[0]))

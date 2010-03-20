@@ -1,6 +1,6 @@
 #include "uhttpd.h"
-#include "uhttpd-cgi.h"
 #include "uhttpd-utils.h"
+#include "uhttpd-cgi.h"
 
 static struct http_response * uh_cgi_header_parse(char *buf, int len, int *off)
 {
@@ -114,7 +114,7 @@ static void uh_cgi_error_500(struct client *cl, struct http_request *req, const 
 }
 
 
-void uh_cgi_request(struct client *cl, struct http_request *req)
+void uh_cgi_request(struct client *cl, struct http_request *req, struct uh_path_info *pi)
 {
 	int i, hdroff, bufoff;
 	int hdrlen = 0;
@@ -134,7 +134,6 @@ void uh_cgi_request(struct client *cl, struct http_request *req)
 
 	struct timeval timeout;
 	struct http_response *res;
-	struct uh_path_info *pi;
 
 
 	/* spawn pipes for me->child, child->me */
@@ -170,143 +169,129 @@ void uh_cgi_request(struct client *cl, struct http_request *req)
 			dup2(rfd[1], 1);
 			dup2(wfd[0], 0);
 
-			if( (pi = uh_path_lookup(cl, req->url)) != NULL )
-			{
-				/* check for regular, world-executable file */
-				if( (pi->stat.st_mode & S_IFREG) &&
-				    (pi->stat.st_mode & S_IXOTH)
-				) {
-					/* build environment */
-					clearenv();
+			/* check for regular, world-executable file */
+			if( (pi->stat.st_mode & S_IFREG) &&
+			    (pi->stat.st_mode & S_IXOTH)
+			) {
+				/* build environment */
+				clearenv();
 
-					/* common information */
-					setenv("GATEWAY_INTERFACE", "CGI/1.1", 1);
-					setenv("SERVER_SOFTWARE", "uHTTPd", 1);
-					setenv("PATH", "/sbin:/usr/sbin:/bin:/usr/bin", 1);
+				/* common information */
+				setenv("GATEWAY_INTERFACE", "CGI/1.1", 1);
+				setenv("SERVER_SOFTWARE", "uHTTPd", 1);
+				setenv("PATH", "/sbin:/usr/sbin:/bin:/usr/bin", 1);
 
 #ifdef HAVE_TLS
-					/* https? */
-					if( cl->tls )
-						setenv("HTTPS", "on", 1);
+				/* https? */
+				if( cl->tls )
+					setenv("HTTPS", "on", 1);
 #endif
 
-					/* addresses */
-					setenv("SERVER_NAME", sa_straddr(&cl->servaddr), 1);
-					setenv("SERVER_ADDR", sa_straddr(&cl->servaddr), 1);
-					setenv("SERVER_PORT", sa_strport(&cl->servaddr), 1);
-					setenv("REMOTE_HOST", sa_straddr(&cl->peeraddr), 1);
-					setenv("REMOTE_ADDR", sa_straddr(&cl->peeraddr), 1);
-					setenv("REMOTE_PORT", sa_strport(&cl->peeraddr), 1);
+				/* addresses */
+				setenv("SERVER_NAME", sa_straddr(&cl->servaddr), 1);
+				setenv("SERVER_ADDR", sa_straddr(&cl->servaddr), 1);
+				setenv("SERVER_PORT", sa_strport(&cl->servaddr), 1);
+				setenv("REMOTE_HOST", sa_straddr(&cl->peeraddr), 1);
+				setenv("REMOTE_ADDR", sa_straddr(&cl->peeraddr), 1);
+				setenv("REMOTE_PORT", sa_strport(&cl->peeraddr), 1);
 
-					/* path information */
-					setenv("SCRIPT_NAME", pi->name, 1);
-					setenv("SCRIPT_FILENAME", pi->phys, 1);
-					setenv("SCRIPT_WORKDIR", pi->wdir, 1);	/* nonstandard */
-					setenv("DOCUMENT_ROOT", pi->root, 1);
-					setenv("QUERY_STRING", pi->query ? pi->query : "", 1);
+				/* path information */
+				setenv("SCRIPT_NAME", pi->name, 1);
+				setenv("SCRIPT_FILENAME", pi->phys, 1);
+				setenv("DOCUMENT_ROOT", pi->root, 1);
+				setenv("QUERY_STRING", pi->query ? pi->query : "", 1);
 
-					if( pi->info )
-						setenv("PATH_INFO", pi->info, 1);
-
-
-					/* http version */
-					if( req->version > 1.0 )
-						setenv("SERVER_PROTOCOL", "HTTP/1.1", 1);
-					else
-						setenv("SERVER_PROTOCOL", "HTTP/1.0", 1);
-
-					/* request method */
-					switch( req->method )
-					{
-						case UH_HTTP_MSG_GET:
-							setenv("REQUEST_METHOD", "GET", 1);
-							break;
-
-						case UH_HTTP_MSG_HEAD:
-							setenv("REQUEST_METHOD", "HEAD", 1);
-							break;
-
-						case UH_HTTP_MSG_POST:
-							setenv("REQUEST_METHOD", "POST", 1);
-							break;
-					}
-
-					/* request url */
-					setenv("REQUEST_URI", req->url, 1);
-
-					/* request message headers */
-					foreach_header(i, req->headers)
-					{
-						if( ! strcasecmp(req->headers[i], "Accept") )
-							setenv("HTTP_ACCEPT", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Accept-Charset") )
-							setenv("HTTP_ACCEPT_CHARSET", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Accept-Encoding") )
-							setenv("HTTP_ACCEPT_ENCODING", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Accept-Language") )
-							setenv("HTTP_ACCEPT_LANGUAGE", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Authorization") )
-							setenv("HTTP_AUTHORIZATION", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Connection") )
-							setenv("HTTP_CONNECTION", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Cookie") )
-							setenv("HTTP_COOKIE", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Host") )
-							setenv("HTTP_HOST", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Referer") )
-							setenv("HTTP_REFERER", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "User-Agent") )
-							setenv("HTTP_USER_AGENT", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Content-Type") )
-							setenv("CONTENT_TYPE", req->headers[i+1], 1);
-
-						else if( ! strcasecmp(req->headers[i], "Content-Length") )
-							setenv("CONTENT_LENGTH", req->headers[i+1], 1);
-					}
+				if( pi->info )
+					setenv("PATH_INFO", pi->info, 1);
 
 
-					/* execute child code ... */
-					if( chdir(pi->wdir) )
-						perror("chdir()");
-
-					execl(pi->phys, pi->phys, NULL);
-
-					/* in case it fails ... */
-					printf(
-						"Status: 500 Internal Server Error\r\n\r\n"
-						"Unable to launch the requested CGI program:\n"
-						"  %s: %s\n",
-							pi->phys, strerror(errno)
-					);
-				}
-
-				/* 403 */
+				/* http version */
+				if( req->version > 1.0 )
+					setenv("SERVER_PROTOCOL", "HTTP/1.1", 1);
 				else
+					setenv("SERVER_PROTOCOL", "HTTP/1.0", 1);
+
+				/* request method */
+				switch( req->method )
 				{
-					printf(
-						"Status: 403 Forbidden\r\n\r\n"
-						"Access to this resource is forbidden\n"
-					);
+					case UH_HTTP_MSG_GET:
+						setenv("REQUEST_METHOD", "GET", 1);
+						break;
+
+					case UH_HTTP_MSG_HEAD:
+						setenv("REQUEST_METHOD", "HEAD", 1);
+						break;
+
+					case UH_HTTP_MSG_POST:
+						setenv("REQUEST_METHOD", "POST", 1);
+						break;
 				}
+
+				/* request url */
+				setenv("REQUEST_URI", req->url, 1);
+
+				/* request message headers */
+				foreach_header(i, req->headers)
+				{
+					if( ! strcasecmp(req->headers[i], "Accept") )
+						setenv("HTTP_ACCEPT", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Accept-Charset") )
+						setenv("HTTP_ACCEPT_CHARSET", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Accept-Encoding") )
+						setenv("HTTP_ACCEPT_ENCODING", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Accept-Language") )
+						setenv("HTTP_ACCEPT_LANGUAGE", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Authorization") )
+						setenv("HTTP_AUTHORIZATION", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Connection") )
+						setenv("HTTP_CONNECTION", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Cookie") )
+						setenv("HTTP_COOKIE", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Host") )
+						setenv("HTTP_HOST", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Referer") )
+						setenv("HTTP_REFERER", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "User-Agent") )
+						setenv("HTTP_USER_AGENT", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Content-Type") )
+						setenv("CONTENT_TYPE", req->headers[i+1], 1);
+
+					else if( ! strcasecmp(req->headers[i], "Content-Length") )
+						setenv("CONTENT_LENGTH", req->headers[i+1], 1);
+				}
+
+
+				/* execute child code ... */
+				if( chdir(pi->root) )
+					perror("chdir()");
+
+				execl(pi->phys, pi->phys, NULL);
+
+				/* in case it fails ... */
+				printf(
+					"Status: 500 Internal Server Error\r\n\r\n"
+					"Unable to launch the requested CGI program:\n"
+					"  %s: %s\n",
+						pi->phys, strerror(errno)
+				);
 			}
 
-			/* 404 */
+			/* 403 */
 			else
 			{
 				printf(
-					"Status: 404 Not Found\r\n\r\n"
-					"Unable to launch the requested CGI program:\n"
-					"  No such file or directory\n"
+					"Status: 403 Forbidden\r\n\r\n"
+					"Access to this resource is forbidden\n"
 				);
 			}
 
@@ -481,6 +466,15 @@ void uh_cgi_request(struct client *cl, struct http_request *req)
 						/* looks like eof from child */
 						else
 						{
+							/* cgi script did not output useful stuff at all */
+							if( ! header_sent )
+							{
+								uh_cgi_error_500(cl, req,
+									"The CGI program generated an invalid response:\n\n");
+
+								uh_http_send(cl, req, hdr, hdrlen);
+							}
+
 							/* send final chunk if we're in chunked transfer mode */
 							uh_http_send(cl, req, "", 0);
 							break;

@@ -1,6 +1,6 @@
 #include "uhttpd.h"
-#include "uhttpd-lua.h"
 #include "uhttpd-utils.h"
+#include "uhttpd-lua.h"
 
 
 static int uh_lua_recv(lua_State *L)
@@ -196,6 +196,7 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 {
 	int i;
 	char *query_string;
+	const char *prefix = cl->server->conf->lua_prefix;
 	const char *err_str = NULL;
 
 	/* put handler callback on stack */
@@ -237,12 +238,19 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 		lua_pushstring(L, query_string + 1);
 		lua_setfield(L, -2, "query_string");
 
-		lua_pushlstring(L, req->url, (int)(query_string - req->url));
-		lua_setfield(L, -2, "path_info");
+		if( (int)(query_string - req->url) > strlen(prefix) )
+		{
+			lua_pushlstring(L,
+				&req->url[strlen(prefix)],
+				(int)(query_string - req->url) - strlen(prefix)
+			);
+
+			lua_setfield(L, -2, "path_info");
+		}
 	}
-	else
+	else if( strlen(req->url) > strlen(prefix) )
 	{
-		lua_pushstring(L, req->url);
+		lua_pushstring(L, &req->url[strlen(prefix)]);
 		lua_setfield(L, -2, "path_info");
 	}
 

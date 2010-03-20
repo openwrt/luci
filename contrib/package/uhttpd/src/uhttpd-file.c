@@ -2,8 +2,8 @@
 #define _BSD_SOURCE			/* scandir() ... */
 
 #include "uhttpd.h"
-#include "uhttpd-file.h"
 #include "uhttpd-utils.h"
+#include "uhttpd-file.h"
 
 #include "uhttpd-mimetypes.h"
 
@@ -296,40 +296,38 @@ static void uh_file_dirlist(struct client *cl, struct http_request *req, struct 
 }
 
 
-void uh_file_request(struct client *cl, struct http_request *req)
+void uh_file_request(struct client *cl, struct http_request *req, struct uh_path_info *pi)
 {
 	int fd, rlen;
 	char buf[UH_LIMIT_MSGHEAD];
-	struct uh_path_info *pi;
 
-	/* obtain path information */
-	if( (pi = uh_path_lookup(cl, req->url)) != NULL )
+	/* we have a file */
+	if( (pi->stat.st_mode & S_IFREG) && ((fd = open(pi->phys, O_RDONLY)) > 0) )
 	{
-		/* we have a file */
-		if( (pi->stat.st_mode & S_IFREG) &&
-		    ((fd = open(pi->phys, O_RDONLY)) > 0)
+		/* test preconditions */
+		if(
+			uh_file_if_modified_since(cl, req, &pi->stat)  	&&
+			uh_file_if_match(cl, req, &pi->stat)           	&&
+			uh_file_if_range(cl, req, &pi->stat)           	&&
+			uh_file_if_unmodified_since(cl, req, &pi->stat)	&&
+			uh_file_if_none_match(cl, req, &pi->stat)
 		) {
-			/* test preconditions */
-			if(
-				uh_file_if_modified_since(cl, req, &pi->stat)  	&&
-				uh_file_if_match(cl, req, &pi->stat)           	&&
-				uh_file_if_range(cl, req, &pi->stat)           	&&
-				uh_file_if_unmodified_since(cl, req, &pi->stat)	&&
-				uh_file_if_none_match(cl, req, &pi->stat)
-			) {
-				/* write status */
-				uh_file_response_200(cl, req, &pi->stat);
+			/* write status */
+			uh_file_response_200(cl, req, &pi->stat);
 
-				uh_http_sendf(cl, NULL, "Content-Type: %s\r\n", uh_file_mime_lookup(pi->name));
-				uh_http_sendf(cl, NULL, "Content-Length: %i\r\n", pi->stat.st_size);
+			uh_http_sendf(cl, NULL, "Content-Type: %s\r\n", uh_file_mime_lookup(pi->name));
+			uh_http_sendf(cl, NULL, "Content-Length: %i\r\n", pi->stat.st_size);
 
-				/* if request was HTTP 1.1 we'll respond chunked */
-				if( req->version > 1.0 )
-					uh_http_send(cl, NULL, "Transfer-Encoding: chunked\r\n", -1);
+			/* if request was HTTP 1.1 we'll respond chunked */
+			if( (req->version > 1.0) && (req->method != UH_HTTP_MSG_HEAD) )
+				uh_http_send(cl, NULL, "Transfer-Encoding: chunked\r\n", -1);
 
-				/* close header */
-				uh_http_send(cl, NULL, "\r\n", -1);
+			/* close header */
+			uh_http_send(cl, NULL, "\r\n", -1);
 
+			/* send body */
+			if( req->method != UH_HTTP_MSG_HEAD )
+			{
 				/* pump file data */
 				while( (rlen = read(fd, buf, sizeof(buf))) > 0 )
 				{
@@ -339,44 +337,37 @@ void uh_file_request(struct client *cl, struct http_request *req)
 				/* send trailer in chunked mode */
 				uh_http_send(cl, req, "", 0);
 			}
-
-			/* one of the preconditions failed, terminate opened header and exit */
-			else
-			{
-				uh_http_send(cl, NULL, "\r\n", -1);
-			}
-
-			close(fd);
 		}
 
-		/* directory */
-		else if( pi->stat.st_mode & S_IFDIR )
-		{
-			/* write status */
-			uh_file_response_200(cl, req, NULL);
-
-			if( req->version > 1.0 )
-				uh_http_send(cl, NULL, "Transfer-Encoding: chunked\r\n", -1);
-
-			uh_http_send(cl, NULL, "Content-Type: text/html\r\n\r\n", -1);
-
-			/* content */
-			uh_file_dirlist(cl, req, pi);
-		}
-
-		/* 403 */
+		/* one of the preconditions failed, terminate opened header and exit */
 		else
 		{
-			uh_http_sendhf(cl, 403, "Forbidden",
-				"Access to this resource is forbidden");
+			uh_http_send(cl, NULL, "\r\n", -1);
 		}
+
+		close(fd);
 	}
 
-	/* 404 */
+	/* directory */
+	else if( pi->stat.st_mode & S_IFDIR )
+	{
+		/* write status */
+		uh_file_response_200(cl, req, NULL);
+
+		if( req->version > 1.0 )
+			uh_http_send(cl, NULL, "Transfer-Encoding: chunked\r\n", -1);
+
+		uh_http_send(cl, NULL, "Content-Type: text/html\r\n\r\n", -1);
+
+		/* content */
+		uh_file_dirlist(cl, req, pi);
+	}
+
+	/* 403 */
 	else
 	{
-		uh_http_sendhf(cl, 404, "Not Found",
-			"No such file or directory");
+		uh_http_sendhf(cl, 403, "Forbidden",
+			"Access to this resource is forbidden");
 	}
 }
 
