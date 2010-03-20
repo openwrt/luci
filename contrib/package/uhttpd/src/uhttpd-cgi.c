@@ -469,8 +469,24 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct uh_path_
 							/* cgi script did not output useful stuff at all */
 							if( ! header_sent )
 							{
-								uh_cgi_error_500(cl, req,
-									"The CGI program generated an invalid response:\n\n");
+								/* I would do this ...
+								 *
+								 *    uh_cgi_error_500(cl, req,
+								 *        "The CGI program generated an "
+								 *        "invalid response:\n\n");
+								 *
+								 * ... but in order to stay as compatible as possible,
+								 * treat whatever we got as text/plain response and
+								 * build the required headers here.
+								 */
+
+								uh_http_sendf(cl, NULL,
+									"HTTP/%.1f 200 OK\r\n"
+									"Content-Type: text/plain\r\n"
+									"%s\r\n",
+										req->version, (req->version > 1.0)
+											? "Transfer-Encoding: chunked\r\n" : ""
+								);
 
 								uh_http_send(cl, req, hdr, hdrlen);
 							}
