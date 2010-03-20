@@ -347,7 +347,7 @@ int main (int argc, char **argv)
 	/* working structs */
 	struct addrinfo hints;
 	struct http_request *req;
-	struct uh_path_info *pin;
+	struct path_info *pin;
 	struct client *cl;
 	struct sigaction sa;
 	struct config conf;

@@ -352,11 +352,11 @@ int uh_path_normalize(char *buf, int blen, const char *src, int slen)
 }
 
 
-struct uh_path_info * uh_path_lookup(struct client *cl, const char *url)
+struct path_info * uh_path_lookup(struct client *cl, const char *url)
 {
 	static char path_phys[PATH_MAX];
 	static char path_info[PATH_MAX];
-	static struct uh_path_info p;
+	static struct path_info p;
 
 	char buffer[UH_LIMIT_MSGHEAD];
 	char *docroot = cl->server->conf->docroot;

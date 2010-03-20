@@ -31,9 +31,8 @@
 #define foreach_header(i, h) \
 	for( i = 0; (i + 1) < (sizeof(h) / sizeof(h[0])) && h[i]; i += 2 )
 
-struct uh_path_info {
+struct path_info {
 	char *root;
-	char *wdir;
 	char *phys;
 	char *name;
 	char *info;
@@ -74,7 +73,7 @@ int uh_urldecode(char *buf, int blen, const char *src, int slen);
 int uh_urlencode(char *buf, int blen, const char *src, int slen);
 int uh_path_normalize(char *buf, int blen, const char *src, int slen);
 
-struct uh_path_info * uh_path_lookup(struct client *cl, const char *url);
+struct path_info * uh_path_lookup(struct client *cl, const char *url);
 
 struct listener * uh_listener_add(int sock, struct config *conf);
 struct listener * uh_listener_lookup(int sock);

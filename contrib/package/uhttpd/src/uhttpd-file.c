@@ -248,7 +248,7 @@ static int uh_file_scandir_filter_dir(const struct dirent *e)
 	return strcmp(e->d_name, ".") ? 1 : 0;
 }
 
-static void uh_file_dirlist(struct client *cl, struct http_request *req, struct uh_path_info *pi)
+static void uh_file_dirlist(struct client *cl, struct http_request *req, struct path_info *pi)
 {
 	int i, count;
 	char filename[PATH_MAX];
@@ -314,7 +314,7 @@ static void uh_file_dirlist(struct client *cl, struct http_request *req, struct 
 }
 
 
-void uh_file_request(struct client *cl, struct http_request *req, struct uh_path_info *pi)
+void uh_file_request(struct client *cl, struct http_request *req, struct path_info *pi)
 {
 	int fd, rlen;
 	char buf[UH_LIMIT_MSGHEAD];

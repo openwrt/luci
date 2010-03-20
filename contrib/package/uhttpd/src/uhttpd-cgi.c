@@ -132,7 +132,7 @@ static void uh_cgi_error_500(struct client *cl, struct http_request *req, const 
 }
 
 
-void uh_cgi_request(struct client *cl, struct http_request *req, struct uh_path_info *pi)
+void uh_cgi_request(struct client *cl, struct http_request *req, struct path_info *pi)
 {
 	int i, hdroff, bufoff;
 	int hdrlen = 0;

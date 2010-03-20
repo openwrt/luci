@@ -32,7 +32,7 @@ struct mimetype {
 };
 
 void uh_file_request(
-	struct client *cl, struct http_request *req, struct uh_path_info *pi
+	struct client *cl, struct http_request *req, struct path_info *pi
 );
 
 #endif
