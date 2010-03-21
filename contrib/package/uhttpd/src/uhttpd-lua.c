@@ -211,8 +211,6 @@ lua_State * uh_lua_init(const char *handler)
 
 void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 {
-	pid_t pid;
-
 	int i, data_sent;
 	int content_length = 0;
 	int buflen = 0;
@@ -225,6 +223,8 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 	int wfd[2] = { 0, 0 };
 
 	char buf[UH_LIMIT_MSGHEAD];
+
+	pid_t child;
 
 	fd_set reader;
 	fd_set writer;
@@ -247,7 +247,7 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 	}
 
 
-	switch( (pid = fork()) )
+	switch( (child = fork()) )
 	{
 		case -1:
 			uh_http_sendhf(cl, 500, "Internal Server Error",
@@ -518,6 +518,9 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 		out:
 			close(rfd[0]);
 			close(wfd[1]);
+
+			if( !kill(child, 0) )
+				kill(child, SIGTERM);
 
 			break;
 	}

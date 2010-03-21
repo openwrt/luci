@@ -150,6 +150,8 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 	char buf[UH_LIMIT_MSGHEAD];
 	char hdr[UH_LIMIT_MSGHEAD];
 
+	pid_t child;
+
 	fd_set reader;
 	fd_set writer;
 
@@ -172,7 +174,7 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 	}
 
 	/* fork off child process */
-	switch( fork() )
+	switch( (child = fork()) )
 	{
 		/* oops */
 		case -1:
@@ -542,6 +544,9 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 		out:
 			close(rfd[0]);
 			close(wfd[1]);
+
+			if( !kill(child, 0) )
+				kill(child, SIGTERM);
 
 			break;
 	}
