@@ -482,9 +482,8 @@ struct path_info * uh_path_lookup(struct client *cl, const char *url)
 static char uh_realms[UH_LIMIT_AUTHREALMS * sizeof(struct auth_realm)] = { 0 };
 static int uh_realm_count = 0;
 
-struct auth_realm * uh_auth_add(
-	char *path, char *realm, char *user, char *pass
-) {
+struct auth_realm * uh_auth_add(char *path, char *user, char *pass)
+{
 	struct auth_realm *new = NULL;
 	struct passwd *pwd;
 	struct spwd *spwd;
@@ -495,9 +494,6 @@ struct auth_realm * uh_auth_add(
 			&uh_realms[uh_realm_count * sizeof(struct auth_realm)];
 
 		memset(new, 0, sizeof(struct auth_realm));
-
-		memcpy(new->realm, realm,
-			min(strlen(realm), sizeof(new->realm) - 1));
 
 		memcpy(new->path, path,
 			min(strlen(path), sizeof(new->path) - 1));
@@ -633,7 +629,7 @@ int uh_auth_check(
 			"Content-Type: text/plain\r\n"
 			"Content-Length: 23\r\n\r\n"
 			"Authorization Required\n",
-				req->version, realm ? realm->realm : ""
+				req->version, cl->server->conf->realm
 		);
 
 		return 0;

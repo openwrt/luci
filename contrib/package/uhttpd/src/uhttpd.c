@@ -16,6 +16,8 @@
  *  limitations under the License.
  */
 
+#define _XOPEN_SOURCE 500	/* crypt() */
+
 #include "uhttpd.h"
 #include "uhttpd-utils.h"
 #include "uhttpd-file.h"
@@ -38,6 +40,43 @@ static int run = 1;
 static void uh_sigterm(int sig)
 {
 	run = 0;
+}
+
+static void uh_config_parse(const char *path)
+{
+	FILE *c;
+	char line[512];
+	char *user = NULL;
+	char *pass = NULL;
+	char *eol  = NULL;
+
+	if( (c = fopen(path ? path : "/etc/httpd.conf", "r")) != NULL )
+	{
+		memset(line, 0, sizeof(line));
+
+		while( fgets(line, sizeof(line) - 1, c) )
+		{
+			if( (line[0] == '/') && (strchr(line, ':') != NULL) )
+			{
+				if( !(user = strchr(line, ':')) || (*user++ = 0) ||
+				    !(pass = strchr(user, ':')) || (*pass++ = 0) ||
+					!(eol = strchr(pass, '\n')) || (*eol++  = 0) )
+						continue;
+
+				if( !uh_auth_add(line, user, pass) )
+				{
+					fprintf(stderr,
+						"Can not manage more than %i basic auth realms, "
+						"will skip the rest\n", UH_LIMIT_AUTHREALMS
+					);
+
+					break;
+				} 
+			}
+		}
+
+		fclose(c);
+	}
 }
 
 static int uh_socket_bind(
@@ -398,7 +437,7 @@ int main (int argc, char **argv)
 	}
 #endif
 
-	while( (opt = getopt(argc, argv, "fC:K:p:s:h:c:l:L:d:")) > 0 )
+	while( (opt = getopt(argc, argv, "fC:K:p:s:h:c:l:L:d:r:m:x:")) > 0 )
 	{
 		switch(opt)
 		{
@@ -467,7 +506,7 @@ int main (int argc, char **argv)
 
 #ifdef HAVE_CGI
 			/* cgi prefix */
-			case 'c':
+			case 'x':
 				conf.cgi_prefix = optarg;
 				break;
 #endif
@@ -501,25 +540,44 @@ int main (int argc, char **argv)
 				}
 				break;
 
+			/* basic auth realm */
+			case 'r':
+				conf.realm = optarg;
+				break;
+
+			/* md5 crypt */
+			case 'm':
+				printf("%s\n", crypt(optarg, "$1$"));
+				exit(0);
+				break;
+
+			/* config file */
+			case 'c':
+				conf.file = optarg;
+				break;
+
 			default:
 				fprintf(stderr,
 					"Usage: %s -p [addr:]port [-h docroot]\n"
-					"	-p	Bind to specified address and port, multiple allowed\n"
+					"	-f              Do not fork to background\n"
+					"	-c file         Configuration file, default is '/etc/httpd.conf'\n"
+					"	-p [addr:]port  Bind to specified address and port, multiple allowed\n"
 #ifdef HAVE_TLS
-					"	-s	Like -p but provide HTTPS on this port\n"
-					"	-C	ASN.1 server certificate file\n"
-					"	-K	ASN.1 server private key file\n"
+					"	-s [addr:]port  Like -p but provide HTTPS on this port\n"
+					"	-C file         ASN.1 server certificate file\n"
+					"	-K file         ASN.1 server private key file\n"
 #endif
-					"	-h	Specify the document root, default is '.'\n"
-					"	-f	Do not fork to background\n"
+					"	-h directory    Specify the document root, default is '.'\n"
 #ifdef HAVE_LUA
-					"	-l	URL prefix for Lua handler, default is '/lua'\n"
-					"	-L	Lua handler script, omit to disable Lua\n"
+					"	-l string       URL prefix for Lua handler, default is '/lua'\n"
+					"	-L file         Lua handler script, omit to disable Lua\n"
 #endif
 #ifdef HAVE_CGI
-					"	-c	URL prefix for CGI handler, default is '/cgi-bin'\n"
+					"	-x string       URL prefix for CGI handler, default is '/cgi-bin'\n"
 #endif
-					"	-d	URL decode given string\n"
+					"	-d string       URL decode given string\n"
+					"	-r string       Specify basic auth realm\n"
+					"	-m string       MD5 crypt given string\n"
 					"\n", argv[0]
 				);
 
@@ -548,6 +606,13 @@ int main (int argc, char **argv)
 			strerror(errno));
 		exit(1);
 	}
+
+	/* default realm */
+	if( ! conf.realm )
+		conf.realm = "Protected Area";
+
+	/* config file */
+	uh_config_parse(conf.file);
 
 #ifdef HAVE_CGI
 	/* default cgi prefix */

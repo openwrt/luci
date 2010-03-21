@@ -79,9 +79,7 @@ int uh_urlencode(char *buf, int blen, const char *src, int slen);
 int uh_b64decode(char *buf, int blen, const unsigned char *src, int slen);
 
 
-struct auth_realm * uh_auth_add(
-	char *path, char *realm, char *user, char *pass
-);
+struct auth_realm * uh_auth_add(char *path, char *user, char *pass);
 
 int uh_auth_check(
 	struct client *cl, struct http_request *req, struct path_info *pi

@@ -51,6 +51,8 @@
 
 struct config {
 	char docroot[PATH_MAX];
+	char *realm;
+	char *file;
 #ifdef HAVE_CGI
 	char *cgi_prefix;
 #endif
@@ -88,7 +90,6 @@ struct client {
 
 struct auth_realm {
 	char path[PATH_MAX];
-	char realm[128];
 	char user[32];
 	char pass[128];
 };
