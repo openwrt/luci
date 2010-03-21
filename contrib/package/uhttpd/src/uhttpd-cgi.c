@@ -357,7 +357,7 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 				FD_SET(rfd[0], &reader);
 				FD_SET(wfd[1], &writer);
 
-				timeout.tv_sec = 3;
+				timeout.tv_sec = 15;
 				timeout.tv_usec = 0;
 
 				/* wait until we can read or write or both */
@@ -520,7 +520,7 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 					}
 				}
 
-				/* no activity for 3 seconds... looks dead */
+				/* no activity for 15 seconds... looks dead */
 				else
 				{
 					uh_http_sendhf(cl, 504, "Gateway Timeout",
