@@ -430,7 +430,8 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 								{
 									/* write status */
 									ensure(uh_http_sendf(cl, NULL,
-										"HTTP/%.1f %03d %s\r\n",
+										"HTTP/%.1f %03d %s\r\n"
+										"Connection: close\r\n",
 										req->version, res->statuscode,
 										res->statusmsg));
 

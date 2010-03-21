@@ -101,6 +101,8 @@ static char * uh_file_header_lookup(struct http_request *req, const char *name)
 
 static void uh_file_response_ok_hdrs(struct client *cl, struct http_request *req, struct stat *s)
 {
+	uh_http_sendf(cl, NULL, "Connection: close\r\n");
+
 	if( s )
 	{
 		uh_http_sendf(cl, NULL, "ETag: %s\r\n", uh_file_mktag(s));
@@ -124,8 +126,9 @@ static void uh_file_response_304(struct client *cl, struct http_request *req, st
 
 static void uh_file_response_412(struct client *cl, struct http_request *req)
 {
-	uh_http_sendf(cl, NULL, "HTTP/%.1f 412 Precondition Failed\r\n",
-		req->version);
+	uh_http_sendf(cl, NULL,
+		"HTTP/%.1f 412 Precondition Failed\r\n"
+		"Connection: close\r\n", req->version);
 }
 
 static int uh_file_if_match(struct client *cl, struct http_request *req, struct stat *s)

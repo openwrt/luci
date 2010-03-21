@@ -171,6 +171,7 @@ int uh_http_sendhf(struct client *cl, int code, const char *summary, const char 
 
 	len = snprintf(buffer, sizeof(buffer),
 		"HTTP/1.1 %03i %s\r\n"
+		"Connection: close\r\n"
 		"Content-Type: text/plain\r\n"
 		"Transfer-Encoding: chunked\r\n\r\n",
 			code, summary
