@@ -229,6 +229,7 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 	fd_set reader;
 	fd_set writer;
 
+	struct sigaction sa;
 	struct timeval timeout;
 
 
@@ -255,7 +256,13 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 			break;
 
 		case 0:
-			/* child */
+			/* restore SIGTERM */
+			sa.sa_flags = 0;
+			sa.sa_handler = SIG_DFL;
+			sigemptyset(&sa.sa_mask);
+			sigaction(SIGTERM, &sa, NULL);
+
+			/* close loose pipe ends */
 			close(rfd[0]);
 			close(wfd[1]);
 

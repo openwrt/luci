@@ -155,6 +155,7 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 	fd_set reader;
 	fd_set writer;
 
+	struct sigaction sa;
 	struct timeval timeout;
 	struct http_response *res;
 
@@ -184,7 +185,13 @@ void uh_cgi_request(struct client *cl, struct http_request *req, struct path_inf
 
 		/* exec child */
 		case 0:
-			/* child */
+			/* restore SIGTERM */
+			sa.sa_flags = 0;
+			sa.sa_handler = SIG_DFL;
+			sigemptyset(&sa.sa_mask);
+			sigaction(SIGTERM, &sa, NULL);
+
+			/* close loose pipe ends */
 			close(rfd[0]);
 			close(wfd[1]);
 

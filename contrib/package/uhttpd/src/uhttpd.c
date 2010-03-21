@@ -423,6 +423,9 @@ int main (int argc, char **argv)
 	FD_ZERO(&read_fds);
 
 	/* handle SIGPIPE, SIGCHILD */
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGPIPE, &sa, NULL);
 	sigaction(SIGCHLD, &sa, NULL);
