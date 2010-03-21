@@ -80,7 +80,7 @@ static int uh_lua_recv(lua_State *L)
 	return 1;
 }
 
-static int uh_lua_send(lua_State *L)
+static int uh_lua_send_common(lua_State *L, int chunked)
 {
 	size_t length;
 	const char *buffer;
@@ -93,13 +93,27 @@ static int uh_lua_send(lua_State *L)
 
 	if( (cl != NULL) && (length > 0) )
 	{
-		slen = uh_tcp_send(cl, buffer, length);
+		if( chunked )
+			slen = uh_http_sendc(cl, buffer, length);
+		else
+			slen = uh_tcp_send(cl, buffer, length);
+
 		lua_pushnumber(L, slen);
 		return 1;
 	}
 
 	lua_pushnumber(L, -1);
 	return 1;
+}
+
+static int uh_lua_send(lua_State *L)
+{
+	return uh_lua_send_common(L, 0);
+}
+
+static int uh_lua_sendc(lua_State *L)
+{
+	return uh_lua_send_common(L, 1);
 }
 
 static int uh_lua_urldecode(lua_State *L)
@@ -140,15 +154,24 @@ lua_State * uh_lua_init(const char *handler)
         	lua_settop(L, 0);
 	}
 
+	/* build uhttpd api table */
+	lua_newtable(L);
+
 	/* register global send and receive functions */
 	lua_pushcfunction(L, uh_lua_recv);
-	lua_setfield(L, LUA_GLOBALSINDEX, "recv");
+	lua_setfield(L, -2, "recv");
 
 	lua_pushcfunction(L, uh_lua_send);
-	lua_setfield(L, LUA_GLOBALSINDEX, "send");
+	lua_setfield(L, -2, "send");
+
+	lua_pushcfunction(L, uh_lua_sendc);
+	lua_setfield(L, -2, "sendc");
 
 	lua_pushcfunction(L, uh_lua_urldecode);
-	lua_setfield(L, LUA_GLOBALSINDEX, "urldecode");
+	lua_setfield(L, -2, "urldecode");
+
+	/* _G.uhttpd = { ... } */
+	lua_setfield(L, LUA_GLOBALSINDEX, "uhttpd");
 
 
 	/* load Lua handler */
