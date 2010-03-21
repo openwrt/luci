@@ -771,6 +771,17 @@ define Package/luci-sgi-cgi/install
 	$(call Package/luci/install/template,$(1),libs/sgi-cgi)
 endef
 
+define Package/luci-sgi-uhttpd
+  $(call Package/luci/webservertemplate)
+  TITLE:=Binding for the uHTTPd server
+  DEPENDS+=+uhttpd
+endef
+
+define Package/luci-sgi-uhttpd/install
+	$(call Package/luci/install/template,$(1),libs/sgi-uhttpd)
+endef
+
+
 ### Themes ###
 define Package/luci-theme-base
   $(call Package/luci/thtemplate)
@@ -1150,6 +1161,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
 	PKG_SELECTED_MODULES+=libs/sgi-cgi
 endif
+ifneq ($(CONFIG_PACKAGE_luci-sgi-uhttpd),)
+	PKG_SELECTED_MODULES+=libs/sgi-uhttpd
+endif
 ifneq ($(CONFIG_PACKAGE_luci-sgi-luci),)
 	PKG_SELECTED_MODULES+=libs/sgi-luci
 endif
@@ -1278,6 +1292,7 @@ $(eval $(call BuildPackage,luci-app-openvpn))
 $(eval $(call BuildPackage,luci-app-p2pblock))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
+$(eval $(call BuildPackage,luci-sgi-uhttpd))
 
 $(eval $(call BuildPackage,luci-theme-base))
 $(eval $(call BuildPackage,luci-theme-fledermaus))
