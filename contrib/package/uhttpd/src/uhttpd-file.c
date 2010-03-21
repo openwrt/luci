@@ -349,7 +349,8 @@ void uh_file_request(struct client *cl, struct http_request *req, struct path_in
 				/* pump file data */
 				while( (rlen = read(fd, buf, sizeof(buf))) > 0 )
 				{
-					uh_http_send(cl, req, buf, rlen);
+					if( uh_http_send(cl, req, buf, rlen) < 0 )
+						break;
 				}
 
 				/* send trailer in chunked mode */
