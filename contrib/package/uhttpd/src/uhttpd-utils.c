@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - Utility functions
+ * uhttpd - Tiny single-threaded httpd - Utility functions
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *

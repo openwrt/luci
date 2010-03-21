@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - CGI header
+ * uhttpd - Tiny single-threaded httpd - CGI header
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *

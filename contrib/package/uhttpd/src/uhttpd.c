@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - Main component
+ * uhttpd - Tiny single-threaded httpd - Main component
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *
@@ -372,6 +372,19 @@ static struct http_request * uh_http_header_recv(struct client *cl)
 	return NULL;
 }
 
+static int uh_path_match(const char *prefix, const char *url)
+{
+	if( (strstr(url, prefix) == url) &&
+	    ((prefix[strlen(prefix)-1] == '/') ||
+		 (strlen(url) == strlen(prefix))   ||
+		 (url[strlen(prefix)] == '/'))
+	) {
+		return 1;
+	}
+
+	return 0;
+}
+
 
 int main (int argc, char **argv)
 {
@@ -735,7 +748,7 @@ int main (int argc, char **argv)
 					{
 #ifdef HAVE_LUA
 						/* Lua request? */
-						if( L && strstr(req->url, conf.lua_prefix) == req->url )
+						if( L && uh_path_match(conf.lua_prefix, req->url) )
 						{
 							uh_lua_request(cl, req, L);
 						}
@@ -748,7 +761,7 @@ int main (int argc, char **argv)
 							if( uh_auth_check(cl, req, pin) )
 							{
 #ifdef HAVE_CGI
-								if( strstr(pin->name, conf.cgi_prefix) == pin->name )
+								if( uh_path_match(conf.cgi_prefix, pin->name) )
 								{
 									uh_cgi_request(cl, req, pin);
 								}

@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - Lua header
+ * uhttpd - Tiny single-threaded httpd - Lua header
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *
@@ -19,6 +19,7 @@
 #ifndef _UHTTPD_LUA_
 
 #include <math.h>  /* floor() */
+#include <errno.h>
 
 #include <lua.h>
 #include <lauxlib.h>

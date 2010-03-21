@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - CGI handler
+ * uhttpd - Tiny single-threaded httpd - CGI handler
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *

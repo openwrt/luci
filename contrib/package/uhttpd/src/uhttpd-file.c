@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - Static file handler
+ * uhttpd - Tiny single-threaded httpd - Static file handler
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *

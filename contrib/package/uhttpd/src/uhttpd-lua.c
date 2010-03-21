@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - Lua handler
+ * uhttpd - Tiny single-threaded httpd - Lua handler
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *
@@ -28,37 +28,23 @@ static int uh_lua_recv(lua_State *L)
 	ssize_t rlen = 0;
 	fd_set reader;
 	struct timeval timeout;
-	struct client *cl;
 
-	luaL_checktype(L, 1, LUA_TLIGHTUSERDATA);
-	cl = (struct client *) lua_topointer(L, 1);
-	length = luaL_checknumber(L, 2);
+	length = luaL_checknumber(L, 1);
 
-	if( (cl != NULL) && (length > 0) && (length <= sizeof(buffer)) )
+	if( (length > 0) && (length <= sizeof(buffer)) )
 	{
 		FD_ZERO(&reader);
-		FD_SET(cl->socket, &reader);
+		FD_SET(fileno(stdin), &reader);
 
 		/* fail after 0.1s */
 		timeout.tv_sec  = 0;
 		timeout.tv_usec = 100000;
 
-		/* first return stuff from peek buffer */
-		if( cl->peeklen > 0 )
-		{
-			/* receive data */
-			rlen = uh_tcp_recv(cl, buffer, min(cl->peeklen, length));
-			lua_pushnumber(L, rlen);
-			lua_pushlstring(L, buffer, rlen);
-
-			return 2;
-		}
-
 		/* check whether fd is readable */
-		else if( select(cl->socket + 1, &reader, NULL, NULL, &timeout) > 0 )
+		if( select(fileno(stdin) + 1, &reader, NULL, NULL, &timeout) > 0 )
 		{
 			/* receive data */
-			rlen = uh_tcp_recv(cl, buffer, length);
+			rlen = read(fileno(stdin), buffer, length);
 			lua_pushnumber(L, rlen);
 
 			if( rlen > 0 )
@@ -84,25 +70,31 @@ static int uh_lua_send_common(lua_State *L, int chunked)
 {
 	size_t length;
 	const char *buffer;
+	char chunk[16];
 	ssize_t slen = 0;
-	struct client *cl;
 
-	luaL_checktype(L, 1, LUA_TLIGHTUSERDATA);
-	cl = (struct client *) lua_topointer(L, 1);
-	buffer = luaL_checklstring(L, 2, &length);
+	buffer = luaL_checklstring(L, 1, &length);
 
-	if( (cl != NULL) && (length > 0) )
+	if( chunked )
 	{
-		if( chunked )
-			slen = uh_http_sendc(cl, buffer, length);
+		if( length > 0 )
+		{
+			snprintf(chunk, sizeof(chunk), "%X\r\n", length);
+			slen =  write(fileno(stdout), chunk, strlen(chunk));
+			slen += write(fileno(stdout), buffer, length);
+			slen += write(fileno(stdout), "\r\n", 2);
+		}
 		else
-			slen = uh_tcp_send(cl, buffer, length);
-
-		lua_pushnumber(L, slen);
-		return 1;
+		{
+			slen = write(fileno(stdout), "0\r\n\r\n", 5);
+		}
+	}
+	else
+	{
+		slen = write(fileno(stdout), buffer, length);
 	}
 
-	lua_pushnumber(L, -1);
+	lua_pushnumber(L, slen);
 	return 1;
 }
 
@@ -133,26 +125,10 @@ static int uh_lua_urldecode(lua_State *L)
 lua_State * uh_lua_init(const char *handler)
 {
 	lua_State *L = lua_open();
-	const luaL_reg *lib;
 	const char *err_str = NULL;
 
-	/* Declare the Lua libraries we wish to use. */
-	/* Note: If you are opening and running a file containing Lua code */
-	/* using 'lua_dofile(l, "myfile.lua") - you must delcare all the libraries */
-	/* used in that file here also. */
-	static const luaL_reg lualibs[] =
-	{
-        	{ "base",       luaopen_base },
-			{ "string",		luaopen_string },
-        	{ NULL,         NULL }
-	};
-
-	/* preload libraries */
-	for (lib = lualibs; lib->func != NULL; lib++)
-	{
-        	lib->func(L);
-        	lua_settop(L, 0);
-	}
+	/* Load standard libaries */
+	luaL_openlibs(L);
 
 	/* build uhttpd api table */
 	lua_newtable(L);
@@ -235,113 +211,314 @@ lua_State * uh_lua_init(const char *handler)
 
 void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 {
-	int i;
+	pid_t pid;
+
+	int i, data_sent;
+	int content_length = 0;
+	int buflen = 0;
+	int fd_max = 0;
 	char *query_string;
 	const char *prefix = cl->server->conf->lua_prefix;
 	const char *err_str = NULL;
 
-	/* put handler callback on stack */
-	lua_getglobal(L, UH_LUA_CALLBACK);
+	int rfd[2] = { 0, 0 };
+	int wfd[2] = { 0, 0 };
+
+	char buf[UH_LIMIT_MSGHEAD];
+
+	fd_set reader;
+	fd_set writer;
+
+	struct timeval timeout;
 
 
-	/* build env table */
-	lua_newtable(L);
-
-	/* client object */
-	lua_pushlightuserdata(L, (void *)cl);
-	lua_setfield(L, -2, "client");
-
-	/* request method */
-	switch(req->method)
+	/* spawn pipes for me->child, child->me */
+	if( (pipe(rfd) < 0) || (pipe(wfd) < 0) )
 	{
-		case UH_HTTP_MSG_GET:
-			lua_pushstring(L, "get");
-			break;
+		uh_http_sendhf(cl, 500, "Internal Server Error",
+			"Failed to create pipe: %s", strerror(errno));
 
-		case UH_HTTP_MSG_HEAD:
-			lua_pushstring(L, "head");
-			break;
+		if( rfd[0] > 0 ) close(rfd[0]);
+		if( rfd[1] > 0 ) close(rfd[1]);
+		if( wfd[0] > 0 ) close(wfd[0]);
+		if( wfd[1] > 0 ) close(wfd[1]);
 
-		case UH_HTTP_MSG_POST:
-			lua_pushstring(L, "post");
-			break;
+		return;
 	}
 
-	lua_setfield(L, -2, "request_method");
 
-	/* request url */
-	lua_pushstring(L, req->url);
-	lua_setfield(L, -2, "request_url");
-
-	/* query string, path info */
-	if( (query_string = strchr(req->url, '?')) != NULL )
+	switch( (pid = fork()) )
 	{
-		lua_pushstring(L, query_string + 1);
-		lua_setfield(L, -2, "query_string");
-
-		if( (int)(query_string - req->url) > strlen(prefix) )
-		{
-			lua_pushlstring(L,
-				&req->url[strlen(prefix)],
-				(int)(query_string - req->url) - strlen(prefix)
-			);
-
-			lua_setfield(L, -2, "path_info");
-		}
-	}
-	else if( strlen(req->url) > strlen(prefix) )
-	{
-		lua_pushstring(L, &req->url[strlen(prefix)]);
-		lua_setfield(L, -2, "path_info");
-	}
-
-	/* http protcol version */
-	lua_pushnumber(L, floor(req->version * 10) / 10);
-	lua_setfield(L, -2, "http_version");
-
-
-	/* address information */
-	lua_pushstring(L, sa_straddr(&cl->peeraddr));
-	lua_setfield(L, -2, "remote_addr");
-
-	lua_pushinteger(L, sa_port(&cl->peeraddr));
-	lua_setfield(L, -2, "remote_port");
-
-	lua_pushstring(L, sa_straddr(&cl->servaddr));
-	lua_setfield(L, -2, "server_addr");
-
-	lua_pushinteger(L, sa_port(&cl->servaddr));
-	lua_setfield(L, -2, "server_port");
-
-
-	/* headers */
-	lua_newtable(L);
-
-	foreach_header(i, req->headers)
-	{
-		lua_pushstring(L, req->headers[i+1]);
-		lua_setfield(L, -2, req->headers[i]);
-	}
-
-	lua_setfield(L, -2, "headers");
-
-
-	/* call */
-	switch( lua_pcall(L, 1, 0, 0) )
-	{
-		case LUA_ERRRUN:
-			err_str = luaL_checkstring(L, -1);
-			uh_http_sendhf(cl, 500, "Lua runtime error",
-				"Lua raised an error:\n%s\n", err_str);
+		case -1:
+			uh_http_sendhf(cl, 500, "Internal Server Error",
+				"Failed to fork child: %s", strerror(errno));
 			break;
 
-		case LUA_ERRMEM:
-			err_str = luaL_checkstring(L, -1);
-			uh_http_sendhf(cl, 500, "Lua out of memory",
-				"Lua raised an error:\n%s\n", err_str);
+		case 0:
+			/* child */
+			close(rfd[0]);
+			close(wfd[1]);
+
+			/* patch stdout and stdin to pipes */
+			dup2(rfd[1], 1);
+			dup2(wfd[0], 0);
+
+			/* put handler callback on stack */
+			lua_getglobal(L, UH_LUA_CALLBACK);
+
+			/* build env table */
+			lua_newtable(L);
+
+			/* request method */
+			switch(req->method)
+			{
+				case UH_HTTP_MSG_GET:
+					lua_pushstring(L, "GET");
+					break;
+
+				case UH_HTTP_MSG_HEAD:
+					lua_pushstring(L, "HEAD");
+					break;
+
+				case UH_HTTP_MSG_POST:
+					lua_pushstring(L, "POST");
+					break;
+			}
+
+			lua_setfield(L, -2, "REQUEST_METHOD");
+
+			/* request url */
+			lua_pushstring(L, req->url);
+			lua_setfield(L, -2, "REQUEST_URI");
+
+			/* script name */
+			lua_pushstring(L, cl->server->conf->lua_prefix);
+			lua_setfield(L, -2, "SCRIPT_NAME");
+
+			/* query string, path info */
+			if( (query_string = strchr(req->url, '?')) != NULL )
+			{
+				lua_pushstring(L, query_string + 1);
+				lua_setfield(L, -2, "QUERY_STRING");
+
+				if( (int)(query_string - req->url) > strlen(prefix) )
+				{
+					lua_pushlstring(L,
+						&req->url[strlen(prefix)],
+						(int)(query_string - req->url) - strlen(prefix)
+					);
+
+					lua_setfield(L, -2, "PATH_INFO");
+				}
+			}
+			else if( strlen(req->url) > strlen(prefix) )
+			{
+				lua_pushstring(L, &req->url[strlen(prefix)]);
+				lua_setfield(L, -2, "PATH_INFO");
+			}
+
+			/* http protcol version */
+			lua_pushnumber(L, floor(req->version * 10) / 10);
+			lua_setfield(L, -2, "HTTP_VERSION");
+
+			if( req->version > 1.0 )
+				lua_pushstring(L, "HTTP/1.1");
+			else
+				lua_pushstring(L, "HTTP/1.0");
+
+			lua_setfield(L, -2, "SERVER_PROTOCOL");
+
+
+			/* address information */
+			lua_pushstring(L, sa_straddr(&cl->peeraddr));
+			lua_setfield(L, -2, "REMOTE_ADDR");
+
+			lua_pushinteger(L, sa_port(&cl->peeraddr));
+			lua_setfield(L, -2, "REMOTE_PORT");
+
+			lua_pushstring(L, sa_straddr(&cl->servaddr));
+			lua_setfield(L, -2, "SERVER_ADDR");
+
+			lua_pushinteger(L, sa_port(&cl->servaddr));
+			lua_setfield(L, -2, "SERVER_PORT");
+
+			/* essential env vars */
+			foreach_header(i, req->headers)
+			{
+				if( !strcasecmp(req->headers[i], "Content-Length") )
+				{
+					lua_pushnumber(L, atoi(req->headers[i+1]));
+					lua_setfield(L, -2, "CONTENT_LENGTH");
+				}
+				else if( !strcasecmp(req->headers[i], "Content-Type") )
+				{
+					lua_pushstring(L, req->headers[i+1]);
+					lua_setfield(L, -2, "CONTENT_TYPE");
+				}
+			}
+
+			/* misc. headers */
+			lua_newtable(L);
+
+			foreach_header(i, req->headers)
+			{
+				if( strcasecmp(req->headers[i], "Content-Length") &&
+					strcasecmp(req->headers[i], "Content-Type")
+				) {
+					lua_pushstring(L, req->headers[i+1]);
+					lua_setfield(L, -2, req->headers[i]);
+				}
+			}
+
+			lua_setfield(L, -2, "headers");
+
+
+			/* call */
+			switch( lua_pcall(L, 1, 0, 0) )
+			{
+				case LUA_ERRMEM:
+				case LUA_ERRRUN:
+					err_str = luaL_checkstring(L, -1);
+
+					if( ! err_str )
+						err_str = "Unknown error";
+
+					printf(
+						"HTTP/%.1f 500 Internal Server Error\r\n"
+						"Connection: close\r\n"
+						"Content-Type: text/plain\r\n"
+						"Content-Length: %i\r\n\r\n"
+						"Lua raised a runtime error:\n  %s\n",
+							req->version, 31 + strlen(err_str), err_str
+					);
+
+					break;
+
+				default:
+					break;
+			}
+
+			close(wfd[0]);
+			close(rfd[1]);
+			exit(0);
+
 			break;
 
+		/* parent; handle I/O relaying */
 		default:
+			/* close unneeded pipe ends */
+			close(rfd[1]);
+			close(wfd[0]);
+
+			/* max watch fd */
+			fd_max = max(rfd[0], wfd[1]) + 1;
+
+			/* find content length */
+			if( req->method == UH_HTTP_MSG_POST )
+			{
+				foreach_header(i, req->headers)
+				{
+					if( ! strcasecmp(req->headers[i], "Content-Length") )
+					{
+						content_length = atoi(req->headers[i+1]);
+						break;
+					}
+				}
+			}
+
+
+#define ensure(x) \
+	do { if( x < 0 ) goto out; } while(0)
+
+			data_sent = 0;
+
+			/* I/O loop, watch our pipe ends and dispatch child reads/writes from/to socket */
+			while( 1 )
+			{
+				FD_ZERO(&reader);
+				FD_ZERO(&writer);
+
+				FD_SET(rfd[0], &reader);
+				FD_SET(wfd[1], &writer);
+
+				timeout.tv_sec = 15;
+				timeout.tv_usec = 0;
+
+				/* wait until we can read or write or both */
+				if( select(fd_max, &reader, (content_length > -1) ? &writer : NULL, NULL, &timeout) > 0 )
+				{
+					/* ready to write to Lua child */
+					if( FD_ISSET(wfd[1], &writer) )
+					{
+						/* there is unread post data waiting */
+						if( content_length > 0 )
+						{
+							/* read it from socket ... */
+							if( (buflen = uh_tcp_recv(cl, buf, min(content_length, sizeof(buf)))) > 0 )
+							{
+								/* ... and write it to child's stdin */
+								if( write(wfd[1], buf, buflen) < 0 )
+									perror("write()");
+
+								content_length -= buflen;
+							}
+
+							/* unexpected eof! */
+							else
+							{
+								if( write(wfd[1], "", 0) < 0 )
+									perror("write()");
+
+								content_length = 0;
+							}
+						}
+
+						/* there is no more post data, close pipe to child's stdin */
+						else if( content_length > -1 )
+						{
+							close(wfd[1]);
+							content_length = -1;
+						}
+					}
+
+					/* ready to read from Lua child */
+					if( FD_ISSET(rfd[0], &reader) )
+					{
+						/* read data from child ... */
+						if( (buflen = read(rfd[0], buf, sizeof(buf))) > 0 )
+						{
+							/* pass through buffer to socket */
+							ensure(uh_tcp_send(cl, buf, buflen));
+							data_sent = 1;
+						}
+
+						/* looks like eof from child */
+						else
+						{
+							/* error? */
+							if( ! data_sent )
+								uh_http_sendhf(cl, 500, "Internal Server Error",
+									"The Lua child did not produce any response");
+
+							break;
+						}
+					}
+				}
+
+				/* no activity for 15 seconds... looks dead */
+				else
+				{
+					ensure(uh_http_sendhf(cl, 504, "Gateway Timeout",
+						"The Lua handler took too long to produce a response"));
+
+					break;
+				}
+			}
+
+		out:
+			close(rfd[0]);
+			close(wfd[1]);
+
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * uhttpd - Tiny non-forking httpd - TLS header
+ * uhttpd - Tiny single-threaded httpd - TLS header
  *
  *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *
