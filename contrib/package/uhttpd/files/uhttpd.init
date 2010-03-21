@@ -18,10 +18,11 @@ append_arg() {
 	local cfg="$1"
 	local var="$2"
 	local opt="$3"
+	local def="$4"
 	local val
 
 	config_get val "$cfg" "$var"
-	[ -n "$val" ] && append UHTTPD_ARGS "$opt $val"
+	[ -n "$val" -o -n "$def" ] && append UHTTPD_ARGS "$opt ${val:-$def}"
 }
 
 start_instance()
@@ -29,10 +30,13 @@ start_instance()
 	UHTTPD_ARGS=""
 
 	local cfg="$1"
+	local realm="$(uci get system.@system[0].hostname 2>/dev/null)"
 	local ssl
 
 	append_arg "$cfg" home "-h"
-	append_arg "$cfg" cgi_prefix "-c"
+	append_arg "$cfg" realm "-r" "${realm:-OpenWrt}"
+	append_arg "$cfg" config "-c"
+	append_arg "$cfg" cgi_prefix "-x"
 	append_arg "$cfg" lua_prefix "-l"
 	append_arg "$cfg" lua_handler "-L"
 
