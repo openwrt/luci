@@ -70,8 +70,8 @@ start_instance()
 		append_listen_http
 
 	config_get ssl "$cfg" listen_https
-	config_get UHTTPD_KEY  "$cfg" key  /etc/httpd.key
-	config_get UHTTPD_CERT "$cfg" cert /etc/httpd.cert
+	config_get UHTTPD_KEY  "$cfg" key  /etc/uhttpd.key
+	config_get UHTTPD_CERT "$cfg" cert /etc/uhttpd.crt
 
 	[ -n "$ssl" ] && {
 		[ -f "$UHTTPD_CERT" -a -f "$UHTTPD_KEY" ] || {
