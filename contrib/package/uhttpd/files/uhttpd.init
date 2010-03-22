@@ -3,7 +3,7 @@
 
 START=50
 UHTTPD_BIN="/usr/sbin/uhttpd"
-UHTTPD_ARGS=""
+PX5G_BIN="/usr/sbin/px5g"
 
 
 append_listen_http() {
@@ -25,9 +25,35 @@ append_arg() {
 	[ -n "$val" -o -n "$def" ] && append UHTTPD_ARGS "$opt ${val:-$def}"
 }
 
+generate_keys() {
+	local cfg="$1"
+	local key="$2"
+	local crt="$3"
+	local days bits country state location commonname
+
+	config_get days       "$cfg" days
+	config_get bits       "$cfg" bits
+	config_get country    "$cfg" country
+	config_get state      "$cfg" state
+	config_get location   "$cfg" location
+	config_get commonname "$cfg" commonname
+
+	[ -x "$PX5G_BIN" ] && {
+		$PX5G_BIN selfsigned -der \
+			-days ${days:-730} -newkey rsa:${bits:-1024} -keyout "$UHTTPD_KEY" -out "$UHTTPD_CERT" \
+			-subj /C=${country:-DE}/ST=${state:-Saxony}/L=${location:-Leipzig}/CN=${commonname:-OpenWrt}
+	} || {
+		echo "WARNING: the specified certificate and key" \
+			"files do not exist and the px5g generator" \
+			"is not available, skipping SSL setup."
+	}	
+}
+
 start_instance()
 {
 	UHTTPD_ARGS=""
+	UHTTPD_CERT=""
+	UHTTPD_KEY=""
 
 	local cfg="$1"
 	local realm="$(uci get system.@system[0].hostname 2>/dev/null)"
@@ -44,12 +70,21 @@ start_instance()
 		append_listen_http
 
 	config_get ssl "$cfg" listen_https
-	[ -n "$ssl" ] && {
-		append_arg "$cfg" cert "-C"
-		append_arg "$cfg" key  "-K"
+	config_get UHTTPD_KEY  "$cfg" key  /etc/httpd.key
+	config_get UHTTPD_CERT "$cfg" cert /etc/httpd.cert
 
-		config_list_foreach "$cfg" listen_https \
-			append_listen_https
+	[ -n "$ssl" ] && {
+		[ -f "$UHTTPD_CERT" -a -f "$UHTTPD_KEY" ] || {
+			config_foreach generate_keys cert
+		}
+
+		[ -f "$UHTTPD_CERT" -a -f "$UHTTPD_KEY" ] && {
+			append_arg "$cfg" cert "-C"
+			append_arg "$cfg" key  "-K"
+
+			config_list_foreach "$cfg" listen_https \
+				append_listen_https
+		}
 	}
 
 	start-stop-daemon -S -x $UHTTPD_BIN \
