@@ -786,7 +786,7 @@ endef
 ### Themes ###
 define Package/luci-theme-base
   $(call Package/luci/thtemplate)
-  DEPENDS:=+luci-web
+  DEPENDS:=
   TITLE:=Common base for all themes
 endef
 
