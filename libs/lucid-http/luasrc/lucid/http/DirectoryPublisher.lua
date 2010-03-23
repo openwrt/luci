@@ -42,6 +42,6 @@ function factory(server, config)
 			vhost:set_handler(v, handler)
 		end
 	else
-		vhost:set_handler(config.virtual, handler)
+		vhost:set_handler(config.virtual or "", handler)
 	end
 end

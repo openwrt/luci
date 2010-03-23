@@ -60,7 +60,7 @@ function factory(server, config)
 		end
 	else
 		mypath = config.virtual
-		vhost:set_handler(config.virtual, handler)
+		vhost:set_handler(config.virtual or "", handler)
 	end
 
 	if config.home then
