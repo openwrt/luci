@@ -339,7 +339,8 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi +luci-lmo
+  DEPENDS+=+luci-http +luci-sys +luci-nixio +luci-uci \
+  	+luci-sgi-cgi +luci-sgi-uhttpd +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,auto,Default Language)
 endef
@@ -370,7 +371,7 @@ endef
 define Package/luci-freifunk-community
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-lucid +luci-sgi-cgi +luci-app-splash \
+   +luci-web +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-i18n-german \
    +PACKAGE_luci-freifunk-community:olsrd-luci +PACKAGE_luci-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
@@ -774,7 +775,7 @@ endef
 define Package/luci-sgi-uhttpd
   $(call Package/luci/webservertemplate)
   TITLE:=Binding for the uHTTPd server
-  DEPENDS+=+uhttpd
+  DEPENDS+=+uhttpd +px5g
 endef
 
 define Package/luci-sgi-uhttpd/install
