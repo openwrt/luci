@@ -59,9 +59,6 @@ time:depends("ignore", "0")
 time.rmempty = true
 
 
-
-m2 = Map("luci_ethers", translate("Leases"))
-
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",
  function(section)
@@ -77,11 +74,9 @@ if leasefp then
 end
 
 if leases then
-	v = m2:section(Table, leases, translate("Active Leases"))
+	v = m:section(Table, leases, translate("Active Leases"))
 	ip = v:option(DummyValue, 3, translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
-	
 	mac  = v:option(DummyValue, 2, translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-	
 	ltime = v:option(DummyValue, 1, translate("Leasetime remaining"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
@@ -89,13 +84,14 @@ if leases then
 	end
 end
 
-s = m2:section(TypedSection, "static_lease", translate("Static Leases"))
-s.addremove = true
-s.anonymous = true
-s.template = "cbi/tblsection"
+s2 = m:section(TypedSection, "host", translate("Static Leases"))
+s2.addremove = true
+s2.anonymous = true
+s2.template = "cbi/tblsection"
 
-mac = s:option(Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-ip = s:option(Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
+name = s2:option(Value, "name", translate("Hostname"))
+mac = s2:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
+ip = s2:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
 	mac:value(
@@ -104,4 +100,5 @@ sys.net.arptable(function(entry)
 	)
 end)
 
-return m, m2
+return m
+
