@@ -59,9 +59,6 @@ time:depends("ignore", "0")
 time.rmempty = true
 
 
-
-m2 = Map("luci_ethers", translate("dhcp_leases"))
-
 local leasefn, leasefp, leases
 uci:foreach("dhcp", "dnsmasq",
  function(section)
@@ -77,11 +74,9 @@ if leasefp then
 end
 
 if leases then
-	v = m2:section(Table, leases, translate("dhcp_leases_active"))
+	v = m:section(Table, leases, translate("dhcp_leases_active"))
 	ip = v:option(DummyValue, 3, translate("ipaddress"))
-	
 	mac  = v:option(DummyValue, 2, translate("macaddress"))
-	
 	ltime = v:option(DummyValue, 1, translate("dhcp_timeremain"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
@@ -89,13 +84,14 @@ if leases then
 	end
 end
 
-s = m2:section(TypedSection, "static_lease", translate("luci_ethers"))
-s.addremove = true
-s.anonymous = true
-s.template = "cbi/tblsection"
+s2 = m:section(TypedSection, "host", translate("luci_ethers"))
+s2.addremove = true
+s2.anonymous = true
+s2.template = "cbi/tblsection"
 
-mac = s:option(Value, "macaddr", translate("macaddress"))
-ip = s:option(Value, "ipaddr", translate("ipaddress"))
+name = s2:option(Value, "name", translate("hostname", "Hostname"))
+mac = s2:option(Value, "mac", translate("macaddress"))
+ip = s2:option(Value, "ip", translate("ipaddress"))
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
 	mac:value(
@@ -104,4 +100,5 @@ sys.net.arptable(function(entry)
 	)
 end)
 
-return m, m2
+return m
+
