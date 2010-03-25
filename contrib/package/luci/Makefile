@@ -240,7 +240,7 @@ endef
 
 
 
-NIXIO_TLS:=axtls
+NIXIO_TLS:=cyassl
 
 define Package/luci-nixio
   $(call Package/luci/libtemplate)
@@ -255,7 +255,7 @@ endef
 define Package/luci-nixio/config
 	choice
 		prompt "TLS Provider"
-		default PACKAGE_luci-nixio_axtls
+		default PACKAGE_luci-nixio_cyassl
 
 		config PACKAGE_luci-nixio_axtls
 			bool "Builtin (axTLS)"
@@ -269,6 +269,10 @@ define Package/luci-nixio/config
 			select PACKAGE_libopenssl
 	endchoice
 endef
+
+ifneq ($(CONFIG_PACKAGE_luci-nixio_axtls),)
+  NIXIO_TLS:=axtls
+endif
 
 ifneq ($(CONFIG_PACKAGE_luci-nixio_openssl),)
   NIXIO_TLS:=openssl
@@ -303,7 +307,8 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-uci +luci-lucid +luci-sgi-cgi +luci-lmo
+  DEPENDS+=+luci-http +luci-sys +luci-nixio +luci-uci \
+  	+luci-sgi-cgi +luci-sgi-uhttpd +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,en,Default Language)
 endef
@@ -334,7 +339,7 @@ endef
 define Package/luci-freifunk-community
   $(call Package/luci/fftemplate)
   DEPENDS+= \
-   +luci-lucid +luci-sgi-cgi +luci-app-splash \
+   +luci-web +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-i18n-german \
    +PACKAGE_luci-freifunk-community:olsrd-luci +PACKAGE_luci-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
@@ -667,7 +672,7 @@ endef
 define Package/luci-sgi-uhttpd
   $(call Package/luci/webservertemplate)
   TITLE:=Binding for the uHTTPd server
-  DEPENDS+=+uhttpd
+  DEPENDS+=+uhttpd +px5g
 endef
 
 define Package/luci-sgi-uhttpd/install
@@ -678,7 +683,7 @@ endef
 ### Themes ###
 define Package/luci-theme-base
   $(call Package/luci/thtemplate)
-  DEPENDS:=+luci-web
+  DEPENDS:=
   TITLE:=Common base for all themes
 endef
 
