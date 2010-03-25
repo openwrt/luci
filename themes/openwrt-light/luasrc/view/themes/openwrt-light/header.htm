@@ -96,7 +96,7 @@ local function submenu(prefix, node)
 				local href = controller .. prefix .. v.name .. "/"
 				href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
 %>
-<li><a<% if nnode._menu_selected then %> class="active"<%end%> href="<%=pcdata(href)%>"><%=pcdata(striptags(nnode.title))%></a><%-
+<li><a<% if nnode._menu_selected then %> class="active"<%end%> href="<%=pcdata(href)%>"><%=striptags(nnode.title)%></a><%-
 submenu(prefix .. v.name .. "/", nnode)
 %></li>
 <%-
@@ -122,7 +122,7 @@ if cattree and cattree.nodes then
 			local href = controller.."/"..category.."/"..k.name.."/"
 			href = (k.query) and href .. luci.http.build_querystring(k.query) or href
 %>
-<li><a<% if node._menu_selected then %> class="preactive"<%end%> href="<%=pcdata(href)%>"><%=pcdata(striptags(node.title))%></a><%
+<li><a<% if node._menu_selected then %> class="preactive"<%end%> href="<%=pcdata(href)%>"><%=striptags(node.title)%></a><%
 submenu("/" .. category .. "/" .. k.name .. "/", node)
 %></li><% end
 	end
@@ -133,7 +133,7 @@ end
 <ul id="modemenu"><%
 for k,node in pairs(tree.nodes) do
 	if node.title and not node.hidden then %>
-<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=pcdata(striptags(node.title))%></a></li><%
+<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(node.title)%></a></li><%
 	end
 end
 %>
