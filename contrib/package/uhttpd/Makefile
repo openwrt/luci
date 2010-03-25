@@ -56,6 +56,7 @@ endef
 
 # hack to use CyASSL headers
 TARGET_CFLAGS += -I$(firstword $(wildcard $(BUILD_DIR)/cyassl-*/include))
+MAKE_VARS += FPIC="$(FPIC)"
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
