@@ -15,6 +15,7 @@ $Id$
 require("luci.sys")
 require("luci.sys.zoneinfo")
 require("luci.tools.webadmin")
+require("luci.fs")
 
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 
@@ -72,7 +73,9 @@ function tz.write(self, section, value)
 	end
 
 	AbstractValue.write(self, section, value)
-	self.map.uci:set("system", section, "timezone", lookup_zone(value) or "GMT0")
+	local timezone = lookup_zone(value) or "GMT0"
+	self.map.uci:set("system", section, "timezone", timezone)
+	luci.fs.writefile("/etc/TZ", timezone .. "\n")
 end
 
 s:option(Value, "log_size", nil, "kiB").optional = true
