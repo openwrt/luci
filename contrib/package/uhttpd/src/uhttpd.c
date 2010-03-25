@@ -417,6 +417,10 @@ int main (int argc, char **argv)
 	char bind[128];
 	char *port = NULL;
 
+	/* library handles */
+	void *tls_lib;
+	void *lua_lib;
+
 	/* clear the master and temp sets */
 	FD_ZERO(&used_fds);
 	FD_ZERO(&serv_fds);
@@ -445,11 +449,39 @@ int main (int argc, char **argv)
 	memset(bind, 0, sizeof(bind));
 
 #ifdef HAVE_TLS
-	/* init SSL context */
-	if( ! (conf.tls = uh_tls_ctx_init()) )
+	/* load TLS plugin */
+	if( ! (tls_lib = dlopen("uhttpd_tls.so", RTLD_LAZY | RTLD_GLOBAL)) )
 	{
-		fprintf(stderr, "Failed to initalize SSL context\n");
-		exit(1);
+		fprintf(stderr,
+			"Notice: Unable to load TLS plugin - disabling SSL support! "
+			"(Reason: %s)\n", dlerror()
+		);
+	}
+	else
+	{
+		/* resolve functions */
+		if( !(conf.tls_init   = dlsym(tls_lib, "uh_tls_ctx_init"))      ||
+		    !(conf.tls_cert   = dlsym(tls_lib, "uh_tls_ctx_cert"))      ||
+		    !(conf.tls_key    = dlsym(tls_lib, "uh_tls_ctx_key"))       ||
+		    !(conf.tls_free   = dlsym(tls_lib, "uh_tls_ctx_free"))      ||
+			!(conf.tls_accept = dlsym(tls_lib, "uh_tls_client_accept")) ||
+			!(conf.tls_close  = dlsym(tls_lib, "uh_tls_client_close"))  ||
+			!(conf.tls_recv   = dlsym(tls_lib, "uh_tls_client_recv"))   ||
+			!(conf.tls_send   = dlsym(tls_lib, "uh_tls_client_send"))
+		) {
+			fprintf(stderr,
+				"Error: Failed to lookup required symbols "
+				"in TLS plugin: %s\n", dlerror()
+			);
+			exit(1);
+		}
+
+		/* init SSL context */
+		if( ! (conf.tls = conf.tls_init()) )
+		{
+			fprintf(stderr, "Error: Failed to initalize SSL context\n");
+			exit(1);
+		}
 	}
 #endif
 
@@ -477,12 +509,23 @@ int main (int argc, char **argv)
 				}
 
 				if( opt == 's' )
+				{
+					if( !conf.tls )
+					{
+						fprintf(stderr,
+							"Notice: TLS support is disabled, "
+							"ignoring '-s %s'\n", optarg
+						);
+						continue;
+					}
+
 					tls = 1;
+				}
 
 				/* bind sockets */
 				bound += uh_socket_bind(
 					&serv_fds, &max_fd, bind[0] ? bind : NULL, port,
-					&hints,	tls, &conf
+					&hints,	(opt == 's'), &conf
 				);
 
 				break;
@@ -490,24 +533,34 @@ int main (int argc, char **argv)
 #ifdef HAVE_TLS
 			/* certificate */
 			case 'C':
-				if( SSL_CTX_use_certificate_file(conf.tls, optarg, SSL_FILETYPE_ASN1) < 1 )
+				if( conf.tls )
 				{
-					fprintf(stderr, "Invalid certificate file given\n");
-					exit(1);
+					if( conf.tls_cert(conf.tls, optarg) < 1 )
+					{
+						fprintf(stderr,
+							"Error: Invalid certificate file given\n");
+						exit(1);
+					}
+
+					keys++;
 				}
 
-				keys++;
 				break;
 
 			/* key */
 			case 'K':
-				if( SSL_CTX_use_PrivateKey_file(conf.tls, optarg, SSL_FILETYPE_ASN1) < 1 )
+				if( conf.tls )
 				{
-					fprintf(stderr, "Invalid private key file given\n");
-					exit(1);
+					if( conf.tls_key(conf.tls, optarg) < 1 )
+					{
+						fprintf(stderr,
+							"Error: Invalid private key file given\n");
+						exit(1);
+					}
+
+					keys++;
 				}
 
-				keys++;
 				break;
 #endif
 
@@ -515,7 +568,8 @@ int main (int argc, char **argv)
 			case 'h':
 				if( ! realpath(optarg, conf.docroot) )
 				{
-					fprintf(stderr, "Invalid directory %s: %s\n", optarg, strerror(errno));
+					fprintf(stderr, "Error: Invalid directory %s: %s\n",
+						optarg, strerror(errno));
 					exit(1);
 				}
 				break;
@@ -604,21 +658,21 @@ int main (int argc, char **argv)
 #ifdef HAVE_TLS
 	if( (tls == 1) && (keys < 2) )
 	{
-		fprintf(stderr, "Missing private key or certificate file\n");
+		fprintf(stderr, "Error: Missing private key or certificate file\n");
 		exit(1);
 	}
 #endif
 
 	if( bound < 1 )
 	{
-		fprintf(stderr, "No sockets bound, unable to continue\n");
+		fprintf(stderr, "Error: No sockets bound, unable to continue\n");
 		exit(1);
 	}
 
 	/* default docroot */
 	if( !conf.docroot[0] && !realpath(".", conf.docroot) )
 	{
-		fprintf(stderr, "Can not determine default document root: %s\n",
+		fprintf(stderr, "Error: Can not determine default document root: %s\n",
 			strerror(errno));
 		exit(1);
 	}
@@ -637,14 +691,37 @@ int main (int argc, char **argv)
 #endif
 
 #ifdef HAVE_LUA
-	/* init Lua runtime if handler is specified */
-	if( conf.lua_handler )
+	/* load Lua plugin */
+	if( ! (lua_lib = dlopen("uhttpd_lua.so", RTLD_LAZY | RTLD_GLOBAL)) )
 	{
-		/* default lua prefix */
-		if( ! conf.lua_prefix )
-			conf.lua_prefix = "/lua";
+		fprintf(stderr,
+			"Notice: Unable to load Lua plugin - disabling Lua support! "
+			"(Reason: %s)\n", dlerror()
+		);
+	}
+	else
+	{
+		/* resolve functions */
+		if( !(conf.lua_init    = dlsym(lua_lib, "uh_lua_init"))    ||
+		    !(conf.lua_close   = dlsym(lua_lib, "uh_lua_close"))   ||
+		    !(conf.lua_request = dlsym(lua_lib, "uh_lua_request"))
+		) {
+			fprintf(stderr,
+				"Error: Failed to lookup required symbols "
+				"in Lua plugin: %s\n", dlerror()
+			);
+			exit(1);
+		}
 
-		L = uh_lua_init(conf.lua_handler);
+		/* init Lua runtime if handler is specified */
+		if( conf.lua_handler )
+		{
+			/* default lua prefix */
+			if( ! conf.lua_prefix )
+				conf.lua_prefix = "/lua";
+
+			L = conf.lua_init(conf.lua_handler);
+		}
 	}
 #endif
 
@@ -711,7 +788,8 @@ int main (int argc, char **argv)
 						{
 #ifdef HAVE_TLS
 							/* setup client tls context */
-							uh_tls_client_accept(cl);
+							if( conf.tls )
+								conf.tls_accept(cl);
 #endif
 
 							/* add client socket to global fdset */
@@ -753,7 +831,7 @@ int main (int argc, char **argv)
 						/* Lua request? */
 						if( L && uh_path_match(conf.lua_prefix, req->url) )
 						{
-							uh_lua_request(cl, req, L);
+							conf.lua_request(cl, req, L);
 						}
 						else
 #endif
@@ -793,7 +871,8 @@ int main (int argc, char **argv)
 
 #ifdef HAVE_TLS
 					/* free client tls context */
-					uh_tls_client_close(cl);
+					if( conf.tls )
+						conf.tls_close(cl);
 #endif
 
 					cleanup:
@@ -812,7 +891,7 @@ int main (int argc, char **argv)
 #ifdef HAVE_LUA
 	/* destroy the Lua state */
 	if( L != NULL )
-		lua_close(L);
+		conf.lua_close(L);
 #endif
 
 	return 0;

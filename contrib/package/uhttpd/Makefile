@@ -14,11 +14,15 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/uhttpd
+define Package/uhttpd/default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=uHTTPd - tiny, single threaded HTTP server
-  DEPENDS:=+liblua +libcyassl +zlib
+endef
+
+define Package/uhttpd
+  $(Package/uhttpd/default)
+  MENU:=1
 endef
 
 define Package/uhttpd/description
@@ -26,6 +30,29 @@ define Package/uhttpd/description
  support. It is intended as a drop-in replacement for the Busybox
  HTTP daemon.
 endef
+
+
+define Package/uhttpd-mod-tls
+  $(Package/uhttpd/default)
+  TITLE+= (TLS plugin)
+  DEPENDS:=uhttpd +libcyassl
+endef
+
+define Package/uhttpd-mod-tls/description
+ The TLS plugin adds HTTPS support to uHTTPd.
+endef
+
+
+define Package/uhttpd-mod-lua
+  $(Package/uhttpd/default)
+  TITLE+= (Lua plugin)
+  DEPENDS:=uhttpd +liblua
+endef
+
+define Package/uhttpd-mod-lua/description
+ The Lua plugin adds a CGI-like Lua runtime interface to uHTTPd.
+endef
+
 
 # hack to use CyASSL headers
 TARGET_CFLAGS += -I$(firstword $(wildcard $(BUILD_DIR)/cyassl-*/include))
@@ -48,4 +75,17 @@ define Package/uhttpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uhttpd $(1)/usr/sbin/uhttpd
 endef
 
+define Package/uhttpd-mod-tls/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uhttpd_tls.so $(1)/usr/lib/
+endef
+
+define Package/uhttpd-mod-lua/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uhttpd_lua.so $(1)/usr/lib/
+endef
+
+
 $(eval $(call BuildPackage,uhttpd))
+$(eval $(call BuildPackage,uhttpd-mod-tls))
+$(eval $(call BuildPackage,uhttpd-mod-lua))

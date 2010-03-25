@@ -32,6 +32,13 @@
 #include <netdb.h>
 #include <ctype.h>
 
+#include <dlfcn.h>
+
+
+#ifdef HAVE_LUA
+#include <lua.h>
+#endif
+
 #ifdef HAVE_TLS
 #include <openssl/ssl.h>
 #endif
@@ -48,6 +55,9 @@
 #define UH_HTTP_MSG_HEAD	1
 #define UH_HTTP_MSG_POST	2
 
+struct listener;
+struct client;
+struct http_request;
 
 struct config {
 	char docroot[PATH_MAX];
@@ -59,11 +69,22 @@ struct config {
 #ifdef HAVE_LUA
 	char *lua_prefix;
 	char *lua_handler;
+	lua_State * (*lua_init) (const char *handler);
+	void (*lua_close) (lua_State *L);
+	void (*lua_request) (struct client *cl, struct http_request *req, lua_State *L);
 #endif
 #ifdef HAVE_TLS
 	char *cert;
 	char *key;
 	SSL_CTX *tls;
+	SSL_CTX * (*tls_init) (void);
+	int (*tls_cert) (SSL_CTX *c, const char *file);
+	int (*tls_key) (SSL_CTX *c, const char *file);
+	void (*tls_free) (struct listener *l);
+	void (*tls_accept) (struct client *c);
+	void (*tls_close) (struct client *c);
+	int (*tls_recv) (struct client *c, void *buf, int len);
+	int (*tls_send) (struct client *c, void *buf, int len);
 #endif
 };
 

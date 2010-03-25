@@ -533,3 +533,9 @@ void uh_lua_request(struct client *cl, struct http_request *req, lua_State *L)
 	}
 }
 
+void uh_lua_close(lua_State *L)
+{
+	lua_close(L);
+}
+
+

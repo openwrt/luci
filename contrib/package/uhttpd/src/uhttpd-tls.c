@@ -33,6 +33,16 @@ SSL_CTX * uh_tls_ctx_init()
 	return c;
 }
 
+int uh_tls_ctx_cert(SSL_CTX *c, const char *file)
+{
+	return SSL_CTX_use_certificate_file(c, file, SSL_FILETYPE_ASN1);
+}
+
+int uh_tls_ctx_key(SSL_CTX *c, const char *file)
+{
+	return SSL_CTX_use_PrivateKey_file(c, file, SSL_FILETYPE_ASN1);
+}
+
 void uh_tls_ctx_free(struct listener *l)
 {
 	SSL_CTX_free(l->tls);
@@ -48,6 +58,16 @@ void uh_tls_client_accept(struct client *c)
 	}
 }
 
+int uh_tls_client_recv(struct client *c, void *buf, int len)
+{
+	return SSL_read(c->tls, buf, len);
+}
+
+int uh_tls_client_send(struct client *c, void *buf, int len)
+{
+	return SSL_write(c->tls, buf, len);
+}
+
 void uh_tls_client_close(struct client *c)
 {
 	if( c->tls )
@@ -58,3 +78,5 @@ void uh_tls_client_close(struct client *c)
 		c->tls = NULL;
 	}
 }
+
+

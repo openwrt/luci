@@ -22,9 +22,13 @@
 
 
 SSL_CTX * uh_tls_ctx_init();
-
+int uh_tls_ctx_cert(SSL_CTX *c, const char *file);
+int uh_tls_ctx_key(SSL_CTX *c, const char *file);
 void uh_tls_ctx_free(struct listener *l);
+
 void uh_tls_client_accept(struct client *c);
+int uh_tls_client_recv(struct client *c, void *buf, int len);
+int uh_tls_client_send(struct client *c, void *buf, int len);
 void uh_tls_client_close(struct client *c);
 
 #endif

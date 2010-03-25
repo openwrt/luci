@@ -104,7 +104,7 @@ int uh_tcp_send(struct client *cl, const char *buf, int len)
 	{
 #ifdef HAVE_TLS
 		if( cl->tls )
-			return SSL_write(cl->tls, buf, len);
+			return cl->server->conf->tls_send(cl, (void *)buf, len);
 		else
 #endif
 			return send(cl->socket, buf, len, 0);
@@ -147,7 +147,7 @@ int uh_tcp_recv(struct client *cl, char *buf, int len)
 	{
 #ifdef HAVE_TLS
 		if( cl->tls )
-			rsz = SSL_read(cl->tls, (void *)&buf[sz], len);
+			rsz = cl->server->conf->tls_recv(cl, (void *)&buf[sz], len);
 		else
 #endif
 			rsz = recv(cl->socket, (void *)&buf[sz], len, 0);
