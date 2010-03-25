@@ -779,7 +779,7 @@ endef
 define Package/luci-sgi-uhttpd
   $(call Package/luci/webservertemplate)
   TITLE:=Binding for the uHTTPd server
-  DEPENDS+=+uhttpd +px5g
+  DEPENDS+=+uhttpd +uhttpd-mod-tls +uhttpd-mod-lua +px5g
 endef
 
 define Package/luci-sgi-uhttpd/install
