@@ -187,6 +187,14 @@ function initDropdowns() {
 			}
 		}
 	}
+
+	XHTML1.addEventListener(document, "click", function() {
+		if (delayHideTimerId) {
+			clearTimeout(delayHideTimerId);
+			delayHideTimerId = 0;
+			delayHide();
+		}
+	});
 }
 
 if(XHTML1.isDOMSupported()) {
