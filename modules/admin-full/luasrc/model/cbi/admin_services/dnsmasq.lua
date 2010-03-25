@@ -116,4 +116,8 @@ s:option(Value, "tftp_root",
 s:option(Value, "dhcp_boot",
 	translate("Network Boot Image")).optional = true
 
+s:option(DynamicList, "server", translate("DNS forward"),
+        translate("List of <abbr title=\"Domain Name System\">DNS</abbr> " ..
+                "servers to forward requests to")).optional = true
+
 return m
