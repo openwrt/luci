@@ -19,6 +19,22 @@ require("luci.fs")
 
 m = Map("system", translate("system"), translate("a_s_desc"))
 
+function m.on_parse()
+	local has_rdate = false
+
+	m.uci:foreach("system", "rdate",
+		function()
+			has_rdate = true
+			return false
+		end)
+
+	if not has_rdate then
+		m.uci:section("system", "rdate", nil, { })
+		m.uci:save("system")
+	end
+end
+
+
 s = m:section(TypedSection, "system", "")
 s.anonymous = true
 s.addremove = false
