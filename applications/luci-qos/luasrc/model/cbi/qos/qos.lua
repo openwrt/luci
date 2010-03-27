@@ -19,6 +19,7 @@ m = Map("qos")
 
 s = m:section(TypedSection, "interface", translate("interfaces"))
 s.addremove = true
+s.anonymous = true
 
 s:option(Flag, "enabled", translate("enable"))
 
