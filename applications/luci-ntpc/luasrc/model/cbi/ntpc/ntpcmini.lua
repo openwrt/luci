@@ -17,6 +17,7 @@ m = Map("ntpclient", translate("Time Synchronisation"), translate("Synchronizes 
 
 s = m:section(TypedSection, "ntpclient", translate("General"))
 s.anonymous = true
+s.addremove = false
 
 s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
 

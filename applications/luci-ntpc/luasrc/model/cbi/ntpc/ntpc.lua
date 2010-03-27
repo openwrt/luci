@@ -16,6 +16,7 @@ m = Map("ntpclient", translate("Time Synchronisation"), translate("Synchronizes 
 
 s = m:section(TypedSection, "ntpclient", translate("General"))
 s.anonymous = true
+s.addremove = false
 
 s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
 
@@ -25,8 +26,8 @@ s:option(Value, "count", translate("Count of Time Measurements"), translate("emp
 
 s2 = m:section(TypedSection, "ntpdrift", translate("Clock Adjustment"))
 s2.anonymous = true
+s2.addremove = false
 s2:option(Value, "freq", translate("Offset Frequency")).rmempty = true
-
 
 s3 = m:section(TypedSection, "ntpserver", translate("Time Server"))
 s3.anonymous = true
