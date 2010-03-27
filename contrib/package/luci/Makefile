@@ -673,7 +673,7 @@ define Package/luci-sgi-cgi/install
 endef
 
 define Package/luci-sgi-uhttpd
-  $(call Package/luci/webservertemplate)
+  $(call Package/luci/libtemplate)
   TITLE:=Binding for the uHTTPd server
   DEPENDS+=+uhttpd +uhttpd-mod-lua
 endef
@@ -873,8 +873,9 @@ endef
 ### Collections ###
 define Package/luci
   $(call Package/luci/collectiontemplate)
-  TITLE:=Standard OpenWrt Kamikaze set including full and mini admin and the standard theme
-  DEPENDS:=+luci-admin-full +luci-admin-mini +luci-theme-openwrt +luci-app-firewall +luci-app-initmgr
+  TITLE:=Standard OpenWrt set including full and mini admin and the standard theme
+  DEPENDS:=+uhttpd +luci-admin-full +luci-admin-mini +luci-theme-openwrt \
+    +luci-app-firewall +luci-app-initmgr
 endef
 
 define Package/luci/install
@@ -882,10 +883,22 @@ define Package/luci/install
 endef
 
 
+define Package/luci-ssl
+  $(call Package/luci/collectiontemplate)
+  TITLE:=Standard OpenWrt set with https support
+  DEPENDS:=+uhttpd +uhttpd-mod-tls +px5g +luci-admin-full +luci-admin-mini \
+    +luci-theme-openwrt +luci-app-firewall +luci-app-initmgr
+endef
+
+define Package/luci-ssl/install
+	true
+endef
+
+
 define Package/luci-light
   $(call Package/luci/collectiontemplate)
   TITLE:=Minimum package set using only admin mini and a theme without grafics
-  DEPENDS:=+luci-admin-mini +luci-theme-openwrtlight
+  DEPENDS:=+uhttpd +luci-admin-mini +luci-theme-openwrtlight
 endef
 
 define Package/luci-light/install
@@ -1171,4 +1184,5 @@ $(eval $(call BuildPackage,luci-i18n-portuguese))
 $(eval $(call BuildPackage,luci-i18n-spanish))
 
 $(eval $(call BuildPackage,luci))
+$(eval $(call BuildPackage,luci-ssl))
 $(eval $(call BuildPackage,luci-light))
