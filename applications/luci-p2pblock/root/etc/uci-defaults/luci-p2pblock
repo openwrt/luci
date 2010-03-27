@@ -1,7 +1,9 @@
 #!/bin/sh
 
-uci batch <<-EOF
+uci batch <<-EOF 2>/dev/null
 	add ucitrack freifunk_p2pblock
 	set ucitrack.@freifunk_p2pblock[-1].init=freifunk-p2pblock
 	commit ucitrack
 EOF
+
+exit 0
