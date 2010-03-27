@@ -120,9 +120,12 @@ void nixio_open_bit(lua_State *L);
 void nixio_open_bin(lua_State *L);
 void nixio_open_fs(lua_State *L);
 void nixio_open_user(lua_State *L);
+
+#ifndef NO_TLS
 void nixio_open_tls_crypto(lua_State *L);
 void nixio_open_tls_context(lua_State *L);
 void nixio_open_tls_socket(lua_State *L);
+#endif
 
 /* Method functions */
 

@@ -237,30 +237,34 @@ function meta.copyz(self, fd, size)
 	return self:copy(fd, size)
 end
 
-function tls_socket.close(self)
-	return self.socket:close()
-end
+if tls_socket then
+	function tls_socket.close(self)
+		return self.socket:close()
+	end
 
-function tls_socket.getsockname(self)
-	return self.socket:getsockname()
-end
+	function tls_socket.getsockname(self)
+		return self.socket:getsockname()
+	end
 
-function tls_socket.getpeername(self)
-	return self.socket:getpeername()
-end
+	function tls_socket.getpeername(self)
+		return self.socket:getpeername()
+	end
 
-function tls_socket.getsockopt(self, ...)
-	return self.socket:getsockopt(...)
-end
-tls_socket.getopt = tls_socket.getsockopt
+	function tls_socket.getsockopt(self, ...)
+		return self.socket:getsockopt(...)
+	end
+	tls_socket.getopt = tls_socket.getsockopt
 
-function tls_socket.setsockopt(self, ...)
-	return self.socket:setsockopt(...)
+	function tls_socket.setsockopt(self, ...)
+		return self.socket:setsockopt(...)
+	end
+	tls_socket.setopt = tls_socket.setsockopt
 end
-tls_socket.setopt = tls_socket.setsockopt
 
 for k, v in pairs(meta) do
 	file[k] = v
 	socket[k] = v
-	tls_socket[k] = v
+	if tls_socket then
+		tls_socket[k] = v
+	end
 end
