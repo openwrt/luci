@@ -270,21 +270,15 @@ function action_upgrade()
 		if has_platform and has_image and has_support then
 			-- Mimetype text/plain
 			luci.http.prepare_content("text/plain")
+			luci.http.write("Starting luci-flash...\n")
 
 			-- Now invoke sysupgrade
 			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
-			local fd = io.popen("/sbin/luci-flash %s %q" %{
+			local flash = ltn12_popen("/sbin/luci-flash %s %q" %{
 				keepcfg and "-k %q" % _keep_pattern() or "", tmpfile
 			})
 
-			if fd then
-				while true do
-					local ln = fd:read("*l")
-					if not ln then break end
-					luci.http.write(ln .. "\n")
-				end
-				fd:close()
-			end
+			luci.ltn12.pump.all(flash, luci.http.write)
 
 			-- Make sure the device is rebooted
 			luci.sys.reboot()
