@@ -116,7 +116,7 @@ endef
 define Package/luci-core/config
        choice
                prompt "Build Target"
-               default PACKAGE_luci-core_source
+               default PACKAGE_luci-core_compile
 
        config PACKAGE_luci-core_compile
                bool "Precompiled"
