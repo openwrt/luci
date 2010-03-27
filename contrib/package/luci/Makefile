@@ -347,7 +347,7 @@ endef
 define Package/luci-web
   $(call Package/luci/libtemplate)
   DEPENDS+=+luci-http +luci-sys +luci-nixio +luci-uci \
-  	+luci-sgi-cgi +luci-sgi-uhttpd +luci-lmo
+  	+luci-sgi-cgi +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,auto,Default Language)
 endef
@@ -782,7 +782,7 @@ endef
 define Package/luci-sgi-uhttpd
   $(call Package/luci/webservertemplate)
   TITLE:=Binding for the uHTTPd server
-  DEPENDS+=+uhttpd +uhttpd-mod-tls +uhttpd-mod-lua +px5g
+  DEPENDS+=+uhttpd +uhttpd-mod-lua
 endef
 
 define Package/luci-sgi-uhttpd/install
