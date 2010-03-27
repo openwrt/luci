@@ -41,9 +41,18 @@ hwaddr = s:option(DummyValue, "_hwaddr",
  translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"), translate("Hardware Address"))
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
-	return fs.readfile("/sys/class/net/" .. ix .. "/address")
-		or luci.util.exec("ifconfig " .. ix):match(" ([A-F0-9:]+)%s*\n")
-		or "n/a"
+	local mac = fs.readfile("/sys/class/net/" .. ix .. "/address")
+
+	if not mac then
+		mac = luci.util.exec("ifconfig " .. ix)
+		mac = mac and mac:match(" ([A-F0-9:]+)%s*\n")
+	end
+
+	if mac and #mac > 0 then
+		return mac:upper()
+	end
+
+	return "?"
 end
 
 
