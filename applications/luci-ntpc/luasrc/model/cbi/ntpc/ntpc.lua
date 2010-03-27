@@ -16,6 +16,7 @@ m = Map("ntpclient", translate("ntpc"), translate("ntpc_desc"))
 
 s = m:section(TypedSection, "ntpclient", translate("general"))
 s.anonymous = true
+s.addremove = false
 
 s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
 
@@ -25,6 +26,8 @@ s:option(Value, "count", translate("ntpc_count"), translate("ntpc_count_desc")).
 
 s2 = m:section(TypedSection, "ntpdrift", translate("ntpc_drift"))
 s2.anonymous = true
+s2.addremove = false
+
 s2:option(Value, "freq", translate("ntpc_drift_freq")).rmempty = true
 
 
