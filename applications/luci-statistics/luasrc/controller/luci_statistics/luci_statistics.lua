@@ -161,16 +161,28 @@ function statistics_render()
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
 	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
 
+	-- deliver image
+	if vars.img then
+		local l12 = require "luci.ltn12"
+		local png = io.open(graph.opts.imgpath .. "/" .. vars.img:gsub("%.+", "."), "r")
+		if png then
+			luci.http.prepare_content("image/png")
+			l12.pump.all(l12.source.file(png), luci.http.write)
+			png:close()
+		end
+		return
+	end
+
 	local plugin, instances
 	local images = { }
 
 	-- find requested plugin and instance
-        for i, p in ipairs( luci.dispatcher.context.path ) do
-                if luci.dispatcher.context.path[i] == "graph" then
-                        plugin    = luci.dispatcher.context.path[i+1]
-                        instances = { luci.dispatcher.context.path[i+2] }
-                end
+    for i, p in ipairs( luci.dispatcher.context.path ) do
+        if luci.dispatcher.context.path[i] == "graph" then
+            plugin    = luci.dispatcher.context.path[i+1]
+            instances = { luci.dispatcher.context.path[i+2] }
         end
+    end
 
 	-- no instance requested, find all instances
 	if #instances == 0 then
