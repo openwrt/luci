@@ -65,7 +65,7 @@ m.uci:foreach("network", "switch",
 		end
 
 		s.create = function(self, section)
-			local n = tonumber(section)
+			local n = tonumber(section and section:match("(%d+)"))
 			if n ~= nil and n >= 0 then
 				local sn = "%s_%d" %{ x['.name'], n }
 				local rv = TypedSection.create(self, sn)
