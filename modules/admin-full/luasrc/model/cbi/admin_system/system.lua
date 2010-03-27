@@ -82,4 +82,11 @@ s:option(Value, "log_size", nil, "kiB").optional = true
 s:option(Value, "log_ip").optional = true
 s:option(Value, "conloglevel").optional = true
 s:option(Value, "cronloglevel").optional = true
+
+s2 = m:section(TypedSection, "rdate", translate("Time Server (rdate)"))
+s2.anonymous = true
+s2.addremove = false
+
+s2:option(DynamicList, "server", translate("Server"))
+
 return m
