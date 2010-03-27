@@ -275,7 +275,7 @@ endef
 
 
 
-NIXIO_TLS:=cyassl
+NIXIO_TLS:=
 
 define Package/luci-nixio
   $(call Package/luci/libtemplate)
@@ -290,7 +290,10 @@ endef
 define Package/luci-nixio/config
 	choice
 		prompt "TLS Provider"
-		default PACKAGE_luci-nixio_cyassl
+		default PACKAGE_luci-nixio_notls
+
+		config PACKAGE_luci-nixio_notls
+			bool "Disabled"
 
 		config PACKAGE_luci-nixio_axtls
 			bool "Builtin (axTLS)"
