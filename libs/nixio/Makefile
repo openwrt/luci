@@ -22,7 +22,7 @@ endif
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
 	    src/poll.o src/io.o src/file.o src/splice.o src/process.o src/syslog.o \
 	    src/bit.o src/binary.o src/fs.o src/user.o \
-	    src/tls-crypto.o src/tls-context.o src/tls-socket.o
+	    $(if $(NIXIO_TLS),src/tls-crypto.o src/tls-context.o src/tls-socket.o,)
 
 ifeq ($(NIXIO_TLS),axtls)
 	TLS_CFLAGS = -IaxTLS/ssl -IaxTLS/crypto -IaxTLS/config -include src/axtls-compat.h
@@ -39,6 +39,10 @@ ifeq ($(NIXIO_TLS),cyassl)
 	TLS_DEPENDS = src/cyassl-compat.o
 	TLS_CFLAGS = -include src/cyassl-compat.h
 	NIXIO_OBJ += src/cyassl-compat.o
+endif
+
+ifeq ($(NIXIO_TLS),)
+	NIXIO_CFLAGS += -DNO_TLS
 endif
 
 
@@ -64,6 +68,7 @@ endif
 %.o: %.c
 	$(COMPILE) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $< 
 
+ifneq ($(NIXIO_TLS),)
 src/tls-crypto.o: $(TLS_DEPENDS) src/tls-crypto.c
 	$(COMPILE) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) $(TLS_CFLAGS) -c -o $@ src/tls-crypto.c
 
@@ -77,7 +82,7 @@ src/axtls-compat.o: src/libaxtls.a src/axtls-compat.c
 	$(COMPILE) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) $(TLS_CFLAGS) -c -o $@ src/axtls-compat.c
 	mkdir -p dist
 	cp -pR axtls-root/* dist/
-	
+endif	
 
 compile: $(NIXIO_OBJ)
 	$(LINK) $(SHLIB_FLAGS) $(NIXIO_LDFLAGS) -o src/$(NIXIO_SO) $(NIXIO_OBJ) $(NIXIO_LDFLAGS_POST)
