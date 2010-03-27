@@ -15,7 +15,7 @@ $Id$
 
 <%+header%>
 
-<form method="post" action="<%=luci.http.getenv("REQUEST_URI")%>">
+<form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
 	<div class="cbi-map">
 		<h2><a id="content" name="content"><%:Authorization Required%></a></h2>
 		<div class="cbi-map-descr">
