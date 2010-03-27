@@ -1,11 +1,16 @@
 #!/bin/sh /etc/rc.common
 
 START=05
+STOP=95
 
 start() {
 	cat <<'	EOF' | lua -l luci.fs -l luci.util -
 		if (os.time() < 1000000000) then
-			os.execute('date -s ' .. os.date('%m%d%H%M%Y', luci.fs.mtime("/etc/init.d/luci_fixtime")))
+			os.execute('date -s ' .. os.date('%Y%m%d%H%M', luci.fs.mtime("/etc/init.d/luci_fixtime")))
 		end
 	EOF
+}
+
+stop() {
+	[[ -w /etc/init.d/luci_fixtime ]] && touch /etc/init.d/luci_fixtime
 }
