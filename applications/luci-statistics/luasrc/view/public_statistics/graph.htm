@@ -31,7 +31,7 @@ $Id$
 
 <div style="text-align: center">
 	<% for i, img in ipairs(images) do %>
-		<img src="/rrdimg/<%=img%>" />
+		<img src="<%=REQUEST_URI%>?img=<%=img%>" />
 		<br />
 	<% end %>
 </div>
