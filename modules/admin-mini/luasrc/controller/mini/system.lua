@@ -151,6 +151,7 @@ function action_upgrade()
 		if has_platform and has_image and has_support then
 			-- Mimetype text/plain
 			luci.http.prepare_content("text/plain")
+			luci.http.write("Starting luci-flash...\n")
 
 			-- Now invoke sysupgrade
 			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
@@ -163,6 +164,7 @@ function action_upgrade()
 					local ln = fd:read("*l")
 					if not ln then break end
 					luci.http.write(ln .. "\n")
+					io.flush()
 				end
 				fd:close()
 			end
