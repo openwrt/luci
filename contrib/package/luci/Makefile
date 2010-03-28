@@ -1012,6 +1012,17 @@ define Package/luci-ssl/install
 endef
 
 
+define Package/luci-medium
+  $(call Package/luci/collectiontemplate)
+  TITLE:=Medium package set using only admin full and a theme without grafics
+  DEPENDS:=+uhttpd +luci-admin-full +luci-theme-openwrtlight
+endef
+
+define Package/luci-medium/install
+	true
+endef
+
+
 define Package/luci-light
   $(call Package/luci/collectiontemplate)
   TITLE:=Minimum package set using only admin mini and a theme without grafics
@@ -1338,4 +1349,5 @@ $(eval $(call BuildPackage,luci-i18n-vietnamese))
 
 $(eval $(call BuildPackage,luci))
 $(eval $(call BuildPackage,luci-ssl))
+$(eval $(call BuildPackage,luci-medium))
 $(eval $(call BuildPackage,luci-light))
