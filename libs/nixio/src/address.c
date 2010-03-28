@@ -391,9 +391,11 @@ static int nixio_getifaddrs(lua_State *L) {
 			lua_setfield(L, -2, "multicast");
 		lua_setfield(L, -2, "flags");
 
-		if (c->ifa_addr && !nixio__addr_parse(&addr, c->ifa_addr)) {
-			lua_pushstring(L, addr.host);
-			lua_setfield(L, -2, "addr");
+		if (c->ifa_addr) {
+			if (!nixio__addr_parse(&addr, c->ifa_addr)) {
+				lua_pushstring(L, addr.host);
+				lua_setfield(L, -2, "addr");
+			}
 
 			if (c->ifa_addr->sa_family == AF_INET) {
 				lua_pushliteral(L, "inet");
@@ -415,47 +417,55 @@ static int nixio_getifaddrs(lua_State *L) {
 
 				lua_pushinteger(L, addr.prefix);
 				lua_setfield(L, -2, "hatype");
-
-				if (c->ifa_data) {
-					lua_createtable(L, 0, 10);
-					struct nixio__nds *stats = c->ifa_data;
-
-					lua_pushnumber(L, stats->rx_packets);
-					lua_setfield(L, -2, "rx_packets");
-
-					lua_pushnumber(L, stats->tx_packets);
-					lua_setfield(L, -2, "tx_packets");
-
-					lua_pushnumber(L, stats->rx_bytes);
-					lua_setfield(L, -2, "rx_bytes");
-
-					lua_pushnumber(L, stats->tx_bytes);
-					lua_setfield(L, -2, "tx_bytes");
-
-					lua_pushnumber(L, stats->rx_errors);
-					lua_setfield(L, -2, "rx_errors");
-
-					lua_pushnumber(L, stats->tx_errors);
-					lua_setfield(L, -2, "tx_errors");
-
-					lua_pushnumber(L, stats->rx_dropped);
-					lua_setfield(L, -2, "rx_dropped");
-
-					lua_pushnumber(L, stats->tx_dropped);
-					lua_setfield(L, -2, "tx_dropped");
-
-					lua_pushnumber(L, stats->multicast);
-					lua_setfield(L, -2, "multicast");
-
-					lua_pushnumber(L, stats->collisions);
-					lua_setfield(L, -2, "collisions");
-				} else {
-					lua_newtable(L);
-				}
-				lua_setfield(L, -2, "data");
 			}
 #endif
 		}
+
+#ifdef __linux__
+		if (c->ifa_data && (!c->ifa_addr
+							|| c->ifa_addr->sa_family == AF_PACKET)) {
+			if (!c->ifa_addr) {
+				lua_pushliteral(L, "packet");
+				lua_setfield(L, -2, "family");
+			}
+
+			lua_createtable(L, 0, 10);
+			struct nixio__nds *stats = c->ifa_data;
+
+			lua_pushnumber(L, stats->rx_packets);
+			lua_setfield(L, -2, "rx_packets");
+
+			lua_pushnumber(L, stats->tx_packets);
+			lua_setfield(L, -2, "tx_packets");
+
+			lua_pushnumber(L, stats->rx_bytes);
+			lua_setfield(L, -2, "rx_bytes");
+
+			lua_pushnumber(L, stats->tx_bytes);
+			lua_setfield(L, -2, "tx_bytes");
+
+			lua_pushnumber(L, stats->rx_errors);
+			lua_setfield(L, -2, "rx_errors");
+
+			lua_pushnumber(L, stats->tx_errors);
+			lua_setfield(L, -2, "tx_errors");
+
+			lua_pushnumber(L, stats->rx_dropped);
+			lua_setfield(L, -2, "rx_dropped");
+
+			lua_pushnumber(L, stats->tx_dropped);
+			lua_setfield(L, -2, "tx_dropped");
+
+			lua_pushnumber(L, stats->multicast);
+			lua_setfield(L, -2, "multicast");
+
+			lua_pushnumber(L, stats->collisions);
+			lua_setfield(L, -2, "collisions");
+		} else {
+			lua_newtable(L);
+		}
+		lua_setfield(L, -2, "data");
+#endif
 
 		if (c->ifa_netmask && !nixio__addr_parse(&addr, c->ifa_netmask)) {
 			lua_pushstring(L, addr.host);
