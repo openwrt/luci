@@ -218,3 +218,33 @@ function _keep_pattern()
 	end
 	return kpattern
 end
+
+function ltn12_popen(command)
+
+	local fdi, fdo = nixio.pipe()
+	local pid = nixio.fork()
+
+	if pid > 0 then
+		fdo:close()
+		local close
+		return function()
+			local buffer = fdi:read(2048)
+			local wpid, stat = nixio.waitpid(pid, "nohang")
+			if not close and wpid and stat == "exited" then
+				close = true
+			end
+
+			if buffer and #buffer > 0 then
+				return buffer
+			elseif close then
+				fdi:close()
+				return nil
+			end
+		end
+	elseif pid == 0 then
+		nixio.dup(fdo, nixio.stdout)
+		fdi:close()
+		fdo:close()
+		nixio.exec("/bin/sh", "-c", command)
+	end
+end
