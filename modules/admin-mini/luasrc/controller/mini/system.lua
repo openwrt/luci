@@ -55,12 +55,11 @@ function action_backup()
 		luci.template.render("mini/applyreboot")
 		luci.sys.reboot()
 	elseif backup then
-		luci.util.perror(backup_cmd:format(_keep_pattern()))
-		local backup_fpi = io.popen(backup_cmd:format(_keep_pattern()), "r")
+		local reader = ltn12_popen(backup_cmd:format(_keep_pattern()))
 		luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
 			luci.sys.hostname(), os.date("%Y-%m-%d")})
 		luci.http.prepare_content("application/x-targz")
-		luci.ltn12.pump.all(luci.ltn12.source.file(backup_fpi), luci.http.write)
+		luci.ltn12.pump.all(reader, luci.http.write)
 	elseif reset then
 		luci.template.render("mini/applyreboot")
 		luci.util.exec("mtd -r erase rootfs_data")
