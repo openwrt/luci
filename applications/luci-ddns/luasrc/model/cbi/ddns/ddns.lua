@@ -12,22 +12,38 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
-require("luci.tools.webadmin")
+
+local is_mini = (luci.dispatcher.context.path[1] == "mini")
+
+
 m = Map("ddns", translate("Dynamic DNS"), translate("Dynamic DNS allows that your router can be reached with a fixed hostname while having a dynamically changing IP-Address."))
 
 s = m:section(TypedSection, "service", "")
 s.addremove = true
+s.anonymous = false
 
 s:option(Flag, "enabled", translate("enable"))
 
-svc = s:option(ListValue, "service_name", translate("Service"))
+svc = s:option(Value, "service_name", translate("Service"))
 svc.rmempty = true
-svc:value("")
-svc:value("dyndns.org")
-svc:value("changeip.com")
-svc:value("zoneedit.com")
-svc:value("no-ip.com")
-svc:value("freedns.afraid.org")
+
+local services = { }
+local fd = io.open("/usr/lib/ddns/services", "r")
+if fd then
+	local ln
+	repeat
+		ln = fd:read("*l")
+		local s = ln and ln:match('^%s*"([^"]+)"')
+		if s then services[#services+1] = s end
+	until not ln
+	fd:close()
+end
+
+local v
+for _, v in luci.util.vspairs(services) do
+	svc:value(v)
+end
+
 
 s:option(Value, "domain", translate("Hostname")).rmempty = true
 s:option(Value, "username", translate("Username")).rmempty = true
@@ -35,28 +51,37 @@ pw = s:option(Value, "password", translate("Password"))
 pw.rmempty = true
 pw.password = true
 
-src = s:option(ListValue, "ip_source", translate("Source of IP-Address"))
-src:value("network", translate("Network"))
-src:value("interface", translate("Interface"))
-src:value("web", "URL")
 
-iface = s:option(ListValue, "ip_network", translate("Network"))
-iface:depends("ip_source", "network")
-iface.rmempty = true
-luci.tools.webadmin.cbi_add_networks(iface)
+if is_mini then
+	s.defaults.ip_source = "network"
+	s.defaults.ip_network = "wan"
+else
+	require("luci.tools.webadmin")
 
-iface = s:option(ListValue, "ip_interface", translate("Interface"))
-iface:depends("ip_source", "interface")
-iface.rmempty = true
-for k, v in pairs(luci.sys.net.devices()) do
-	iface:value(v)
+	src = s:option(ListValue, "ip_source", translate("Source of IP-Address"))
+	src:value("network", translate("Network"))
+	src:value("interface", translate("Interface"))
+	src:value("web", "URL")
+
+	iface = s:option(ListValue, "ip_network", translate("Network"))
+	iface:depends("ip_source", "network")
+	iface.rmempty = true
+	luci.tools.webadmin.cbi_add_networks(iface)
+
+	iface = s:option(ListValue, "ip_interface", translate("Interface"))
+	iface:depends("ip_source", "interface")
+	iface.rmempty = true
+	for k, v in pairs(luci.sys.net.devices()) do
+		iface:value(v)
+	end
+
+	web = s:option(Value, "ip_url", "URL")
+	web:depends("ip_source", "web")
+	web.rmempty = true
+
+	s:option(Value, "update_url", translate("Custom Update-URL")).optional = true
 end
 
-web = s:option(Value, "ip_url", "URL")
-web:depends("ip_source", "web")
-web.rmempty = true
-
-s:option(Value, "update_url", translate("Custom Update-URL")).optional = true
 
 s:option(Value, "check_interval", translate("Check for changed IP every")).default = 10
 unit = s:option(ListValue, "check_unit", translate("Check-Time unit"))
