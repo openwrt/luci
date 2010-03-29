@@ -23,7 +23,11 @@ $Id$
 	end
 %>
 
-<% self:render_children(section, scope or {}) %>
+<% if self.tabs then %>
+	<%+cbi/tabcontainer%>
+<% else %>
+	<% self:render_children(section, scope or {}) %>
+<% end %>
 
 <% if self.error and self.error[section] then -%>
 	<div class="cbi-section-error">
