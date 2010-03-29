@@ -1014,7 +1014,7 @@ endef
 
 define Package/luci-medium
   $(call Package/luci/collectiontemplate)
-  TITLE:=Medium package set using only admin full and a theme without grafics
+  TITLE:=Medium package set using only admin full and a theme without graphics
   DEPENDS:=+uhttpd +luci-admin-full +luci-theme-openwrtlight
 endef
 
@@ -1025,7 +1025,7 @@ endef
 
 define Package/luci-light
   $(call Package/luci/collectiontemplate)
-  TITLE:=Minimum package set using only admin mini and a theme without grafics
+  TITLE:=Minimum package set using only admin mini and a theme without graphics
   DEPENDS:=+uhttpd +luci-admin-mini +luci-theme-openwrtlight
 endef
 
