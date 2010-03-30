@@ -15,44 +15,47 @@ $Id$
 local wa = require "luci.tools.webadmin"
 local fs = require "nixio.fs"
 
-m = Map("qos")
+m = Map("qos", translate("Quality of Service"),
+	translate("With <abbr title=\"Quality of Service\">QoS</abbr> you " ..
+		"can prioritize network traffic selected by addresses, " ..
+		"ports or services."))
 
 s = m:section(TypedSection, "interface", translate("Interfaces"))
 s.addremove = true
 s.anonymous = false
 
-s:option(Flag, "enabled", translate("enable"))
+s:option(Flag, "enabled", translate("Enable"))
 
-c = s:option(ListValue, "classgroup")
-c:value("Default", "standard")
+c = s:option(ListValue, "classgroup", translate("Classification group"))
+c:value("Default", translate("default"))
 c.default = "Default"
 
-s:option(Flag, "overhead")
+s:option(Flag, "overhead", translate("Calculate overhead"))
 
-s:option(Flag, "halfduplex")
+s:option(Flag, "halfduplex", translate("Half-duplex"))
 
-s:option(Value, "download", nil, "kb/s")
+s:option(Value, "download", translate("Download speed (kb/s)"))
 
-s:option(Value, "upload", nil, "kb/s")
+s:option(Value, "upload", translate("Upload speed (kb/s)"))
 
-s = m:section(TypedSection, "classify")
+s = m:section(TypedSection, "classify", translate("Classification Rules"))
 s.template = "cbi/tblsection"
 s.anonymous = true
 s.addremove = true
 
-t = s:option(ListValue, "target")
+t = s:option(ListValue, "target", translate("Target"))
 t:value("Priority", translate("priority"))
 t:value("Express", translate("express"))
 t:value("Normal", translate("normal"))
 t:value("Bulk", translate("low"))
 t.default = "Normal"
 
-srch = s:option(Value, "srchost")
+srch = s:option(Value, "srchost", translate("Source host"))
 srch.rmempty = true
 srch:value("", translate("all"))
 wa.cbi_add_knownips(srch)
 
-dsth = s:option(Value, "dsthost")
+dsth = s:option(Value, "dsthost", translate("Destination host"))
 dsth.rmempty = true
 dsth:value("", translate("all"))
 wa.cbi_add_knownips(dsth)
@@ -78,8 +81,8 @@ p.rmempty = true
 
 ports = s:option(Value, "ports", translate("Ports"))
 ports.rmempty = true
-ports:value("", translate("allf", translate("all")))
+ports:value("", translate("all"))
 
-bytes = s:option(Value, "connbytes", translate("qos_connbytes"))
+bytes = s:option(Value, "connbytes", translate("Number of bytes"))
 
 return m
