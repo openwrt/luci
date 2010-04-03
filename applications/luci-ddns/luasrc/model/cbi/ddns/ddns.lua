@@ -23,7 +23,7 @@ s.anonymous = false
 
 s:option(Flag, "enabled", translate("enable"))
 
-svc = s:option(Value, "service_name", translate("service"))
+svc = s:option(ListValue, "service_name", translate("service"))
 svc.rmempty = true
 
 local services = { }
@@ -42,6 +42,8 @@ local v
 for _, v in luci.util.vspairs(services) do
 	svc:value(v)
 end
+
+svc:value("", translate("cbi_manual"))
 
 
 s:option(Value, "domain", translate("hostname")).rmempty = true
@@ -77,10 +79,11 @@ else
 	web = s:option(Value, "ip_url", "URL")
 	web:depends("ip_source", "web")
 	web.rmempty = true
-
-	s:option(Value, "update_url").optional = true
 end
 
+url = s:option(Value, "update_url")
+url:depends("service_name", "")
+url.rmempty = true
 
 s:option(Value, "check_interval").default = 10
 unit = s:option(ListValue, "check_unit")
