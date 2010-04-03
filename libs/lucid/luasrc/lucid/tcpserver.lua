@@ -193,7 +193,7 @@ end
 -- @return TLS server conext or nil
 function prepare_tls(tlskey)
 	local tls
-	if tlskey and cursor:get(UCINAME, tlskey) then
+	if nixio.tls and tlskey and cursor:get(UCINAME, tlskey) then
 		tls = nixio.tls("server")
 		
 		local make = cursor:get(UCINAME, tlskey, "generate") == "1"
