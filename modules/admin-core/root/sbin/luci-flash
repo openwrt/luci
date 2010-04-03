@@ -1,6 +1,10 @@
 #!/bin/sh
 . /etc/functions.sh
 
+trap '' INT
+trap '' TERM
+trap '' PIPE
+
 # initialize defaults
 RAMFS_COPY_BIN="/usr/bin/awk"       # extra programs for temporary ramfs root
 RAMFS_COPY_DATA=""      # extra data files
