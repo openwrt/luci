@@ -90,6 +90,13 @@ end
 
 if leases then
 	v = m2:section(Table, leases, translate("dhcp_leases_active"))
+
+	name = v:option(DummyValue, 4, translate("hostname"))
+	function name.cfgvalue(self, ...)
+		local value = DummyValue.cfgvalue(self, ...)
+		return (value == "*") and "?" or value
+	end
+
 	ip = v:option(DummyValue, 3, translate("ipaddress"))
 	
 	mac  = v:option(DummyValue, 2, translate("macaddress"))
