@@ -14,7 +14,9 @@ $Id$
 require("luci.sys")
 arg[1] = arg[1] or ""
 
-m = Map("firewall", translate("Traffic Redirection"), translate("Traffic redirection allows you to change the destination address of forwarded packets."))
+m = Map("firewall", translate("Traffic Redirection"),
+	translate("Traffic redirection allows you to change the " ..
+		"destination address of forwarded packets."))
 
 
 s = m:section(NamedSection, arg[1], "redirect", "")
@@ -29,17 +31,19 @@ name = s:option(Value, "_name", translate("Name"))
 name.rmempty = true
 name.size = 10
 
-iface = s:option(ListValue, "src", translate("Zone"))
+iface = s:option(ListValue, "src", translate("Source zone"))
 iface.default = "wan"
 luci.model.uci.cursor():foreach("firewall", "zone",
 	function (section)
 		iface:value(section.name)
 	end)
 	
-s:option(Value, "src_ip", translate("Source address")).optional = true
-s:option(Value, "src_mac", translate("Source MAC")).optional = true
+s:option(Value, "src_ip", translate("Source IP address")).optional = true
+s:option(Value, "src_mac", translate("Source MAC-address")).optional = true
 
-sport = s:option(Value, "src_port", translate("Source port"))
+sport = s:option(Value, "src_port", translate("Source port"),
+	translate("Match incoming traffic originating from the given " ..
+		"source port or port range on the client host"))
 sport.optional = true
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
@@ -52,18 +56,24 @@ proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP+UDP")
 
-dport = s:option(Value, "src_dport", translate("External port"))
+dport = s:option(Value, "src_dport", translate("External port"),
+	translate("Match incoming traffic directed at the given " ..
+		"destination port or port range on this host"))
 dport.size = 5
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")
 
-to = s:option(Value, "dest_ip", translate("Internal address"))
+to = s:option(Value, "dest_ip", translate("Internal IP address"),
+	translate("Redirect matched incoming traffic to the specified " ..
+		"internal host"))
 for i, dataset in ipairs(luci.sys.net.arptable()) do
 	to:value(dataset["IP address"])
 end
 
-toport = s:option(Value, "dest_port", translate("Internal port (optional)"))
+toport = s:option(Value, "dest_port", translate("Internal port (optional)"),
+	translate("Redirect matched incoming traffic to the given port on " ..
+		"the internal host"))
 toport.optional = true
 toport.size = 5
 

@@ -25,7 +25,7 @@ s = m:section(TypedSection, "defaults")
 s.anonymous = true
 s.addremove = false
 
-s:option(Flag, "syn_flood")
+s:option(Flag, "syn_flood", translate("Enable SYN-flood protection"))
 
 local di = s:option(Flag, "drop_invalid", translate("Drop invalid packets"))
 di.rmempty = false
@@ -34,9 +34,9 @@ function di.cfgvalue(...)
 end
 
 p = {}
-p[1] = s:option(ListValue, "input")
-p[2] = s:option(ListValue, "output")
-p[3] = s:option(ListValue, "forward")
+p[1] = s:option(ListValue, "input", translate("Input"))
+p[2] = s:option(ListValue, "output", translate("Output"))
+p[3] = s:option(ListValue, "forward", translate("Forward"))
 
 for i, v in ipairs(p) do
 	v:value("REJECT", translate("reject"))
@@ -54,9 +54,9 @@ name = s:option(Value, "name", translate("Name"))
 name.size = 8
 
 p = {}
-p[1] = s:option(ListValue, "input")
-p[2] = s:option(ListValue, "output")
-p[3] = s:option(ListValue, "forward")
+p[1] = s:option(ListValue, "input", translate("input"))
+p[2] = s:option(ListValue, "output", translate("output"))
+p[3] = s:option(ListValue, "forward", translate("forward"))
 
 for i, v in ipairs(p) do
 	v:value("REJECT", translate("reject"))
@@ -64,10 +64,10 @@ for i, v in ipairs(p) do
 	v:value("ACCEPT", translate("accept"))
 end
 
-s:option(Flag, "masq")
-s:option(Flag, "mtu_fix", translate("MSS Clamping"))
+s:option(Flag, "masq", translate("Masquerading"))
+s:option(Flag, "mtu_fix", translate("MSS clamping"))
 
-net = s:option(MultiValue, "network")
+net = s:option(MultiValue, "network", translate("Network"))
 net.template = "cbi/network_netlist"
 net.widget = "checkbox"
 net.rmempty = true

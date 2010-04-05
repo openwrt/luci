@@ -14,7 +14,14 @@ $Id$
 ]]--
 
 m = Map("firewall", translate("Traffic Control"))
-s = m:section(TypedSection, "forwarding", translate("Zone-to-Zone traffic"), translate("Here you can specify which network traffic is allowed to flow between network zones. Only new connections will be matched. Packets belonging to already open connections are automatically allowed to pass the firewall. If you experience occasional connection problems try enabling MSS Clamping otherwise disable it for performance reasons."))
+s = m:section(TypedSection, "forwarding", translate("Zone-to-Zone traffic"),
+	translate("Here you can specify which network traffic is allowed " ..
+		"to flow between network zones. Only new connections will " ..
+		"be matched.  Packets belonging to already open " ..
+		"connections are automatically allowed to pass the " ..
+		"firewall. If you experience occasional connection " ..
+		"problems try enabling MSS Clamping otherwise disable it " ..
+		"for performance reasons."))
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
@@ -30,7 +37,7 @@ luci.model.uci.cursor():foreach("firewall", "zone",
 
 
 
-s = m:section(TypedSection, "rule")
+s = m:section(TypedSection, "rule", translate("Rules"))
 s.addremove = true
 s.anonymous = true
 s.template = "cbi/tblsection"
@@ -75,7 +82,7 @@ function dest.cfgvalue(self, s)
 end
 
 
-s:option(DummyValue, "target")
+s:option(DummyValue, "target", translate("Action"))
 
 
 return m

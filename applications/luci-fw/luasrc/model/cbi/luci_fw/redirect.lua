@@ -12,7 +12,9 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 require("luci.sys")
-m = Map("firewall", translate("Traffic Redirection"), translate("Traffic redirection allows you to change the destination address of forwarded packets."))
+m = Map("firewall", translate("Traffic Redirection"),
+	translate("Traffic redirection allows you to change the " ..
+		"destination address of forwarded packets."))
 
 
 s = m:section(TypedSection, "redirect", "")
@@ -21,7 +23,7 @@ s.addremove = true
 s.anonymous = true
 s.extedit   = luci.dispatcher.build_url("admin", "network", "firewall", "redirect", "%s")
 
-name = s:option(Value, "_name", translate("Name"), translate(" (optional)"))
+name = s:option(Value, "_name", translate("Name"), translate("(optional)"))
 name.size = 10
 
 iface = s:option(ListValue, "src", translate("Zone"))
@@ -36,15 +38,15 @@ proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
 proto:value("tcpudp", "TCP+UDP")
 
-dport = s:option(Value, "src_dport")
+dport = s:option(Value, "src_dport", translate("Source port"))
 dport.size = 5
 
-to = s:option(Value, "dest_ip")
+to = s:option(Value, "dest_ip", translate("Destination IP"))
 for i, dataset in ipairs(luci.sys.net.arptable()) do
 	to:value(dataset["IP address"])
 end
 
-toport = s:option(Value, "dest_port")
+toport = s:option(Value, "dest_port", translate("Destination port"))
 toport.size = 5
 
 return m
