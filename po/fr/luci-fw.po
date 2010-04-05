@@ -3,27 +3,109 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-03-30 17:00+0200\n"
+"PO-Revision-Date: 2010-03-17 12:06+0100\n"
+"Last-Translator: Benoît Knecht <benoit.knecht@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
-#. Port forwarding
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:1
-msgid "Port forwarding"
-msgstr "Redirection de port"
+msgid "Firewall"
+msgstr "Pare-Feu"
 
-#. Traffic Redirection
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:2
+msgid ""
+"The firewall creates zones over your network interfaces to control network "
+"traffic flow."
+msgstr ""
+"Le pare-feu crée des zones à partir des interfaces réseaux pour controller "
+"le trafic réseau."
+
+#, fuzzy
+msgid "Enable SYN-flood protection"
+msgstr "Protection contre le SYN-flood"
+
+msgid "Drop invalid packets"
+msgstr "Ignorer les paquets invalides"
+
+msgid "Input"
+msgstr "Entrée"
+
+msgid "Output"
+msgstr "Sortie"
+
+msgid "Forward"
+msgstr ""
+
+msgid "reject"
+msgstr "rejeter"
+
+msgid "drop"
+msgstr "ignorer (drop)"
+
+msgid "accept"
+msgstr "accepter"
+
+msgid "Zones"
+msgstr "Zones"
+
+msgid "Name"
+msgstr ""
+
+msgid "Masquerading"
+msgstr ""
+
+#, fuzzy
+msgid "MSS clamping"
+msgstr "MSS Clamping"
+
+#, fuzzy
+msgid "Network"
+msgstr "Réseaux"
+
+msgid "Traffic Control"
+msgstr "Contrôle de trafic"
+
+msgid "Zone-to-Zone traffic"
+msgstr "Trafic inter-zone"
+
+#, fuzzy
+msgid ""
+"Here you can specify which network traffic is allowed to flow between "
+"network zones. Only new connections will be matched.  Packets belonging to "
+"already open connections are automatically allowed to pass the firewall. If "
+"you experience occasional connection problems try enabling MSS Clamping "
+"otherwise disable it for performance reasons."
+msgstr ""
+"Ici, vous pouvez spécifier quel trafic réseau est autorisé à transiter entre "
+"les zones réseaux. Seules les nouvelles connexions seront prises en compte. "
+"Les paquets appartenant à des connexions déjà ouvertes sont automatiquement "
+"admis à passer le pare-feu. Si vous subissez des problèmes de connexion "
+"occasionnels, essayer d'activer le MSS Clamping; sinon laissez-le désactivé "
+"pour des raisons de performance."
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Rules"
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+msgid "Device"
+msgstr ""
+
+msgid "Action"
+msgstr "Action"
+
 msgid "Traffic Redirection"
 msgstr "Redirection de trafic"
 
-#. Traffic redirection allows you to change the destination address of forwarded packets.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:3
 msgid ""
 "Traffic redirection allows you to change the destination address of "
 "forwarded packets."
@@ -31,47 +113,29 @@ msgstr ""
 "La redirection de trafic vous permet de changer l'adresse de destination des "
 "paquets transférés."
 
-#. Zone-to-Zone traffic
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:4
-msgid "Zone-to-Zone traffic"
-msgstr "Trafic inter-zone"
+msgid "(optional)"
+msgstr ""
 
-#. Firewall
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:5
-msgid "Firewall"
-msgstr "Pare-Feu"
-
-#. Zone
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:6
 msgid "Zone"
 msgstr "Zone"
 
-#. Zones
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:7
-msgid "Zones"
-msgstr "Zones"
+msgid "Source port"
+msgstr "Port source"
 
-#. Custom forwarding
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:8
-msgid "Custom forwarding"
-msgstr "Transfert particulière"
+#, fuzzy
+msgid "Destination IP"
+msgstr "Destination"
 
-#. The firewall creates zones over your network interfaces to control network traffic flow.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:9
-msgid ""
-"The firewall creates zones over your network interfaces to control network "
-"traffic flow."
-msgstr ""
-"Le pare-feu crée des zone à partir des interfaces réseaux pour controller le "
-"trafic réseau."
+#, fuzzy
+msgid "IP address"
+msgstr "Adresse IP"
 
-#. Advanced Rules
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:10
+msgid "Destination port"
+msgstr "Port de destination"
+
 msgid "Advanced Rules"
 msgstr "Règles Avancées"
 
-#. Advanced rules let you customize the firewall to your needs. Only new connections will be matched. Packets belonging to already open connections are automatically allowed to pass the firewall.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:11
 msgid ""
 "Advanced rules let you customize the firewall to your needs. Only new "
 "connections will be matched. Packets belonging to already open connections "
@@ -82,83 +146,65 @@ msgstr ""
 "appartenant à des connexions déjà ouvertes sont automatiquement admises à "
 "passer le pare-feu."
 
-#. Input Zone
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:12
-msgid "Input Zone"
-msgstr "Zone d'Entrée (Input)"
+msgid "Overview"
+msgstr ""
 
-#. Output Zone
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:13
-msgid "Output Zone"
-msgstr "Zone de Sortie (Output)"
+#, fuzzy
+msgid "Source zone"
+msgstr "Port source"
 
-#. Destination address
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:15
+#, fuzzy
+msgid "Destination zone"
+msgstr "Destination"
+
+msgid "any"
+msgstr ""
+
+#, fuzzy
+msgid "Source address"
+msgstr "Adresse MAC source"
+
 msgid "Destination address"
 msgstr "Adresse de destination"
 
-#. Source MAC-Address
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:16
-msgid "Source MAC-Address"
+#, fuzzy
+msgid "Source MAC-address"
 msgstr "Adresse MAC source"
 
-#. Source port
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:17
-msgid "Source port"
-msgstr "Port source"
+#, fuzzy
+msgid "Source IP address"
+msgstr "Adresse MAC source"
 
-#. Destination port
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:18
-msgid "Destination port"
-msgstr "Port de destination"
+msgid ""
+"Match incoming traffic originating from the given source port or port range "
+"on the client host"
+msgstr ""
 
-#. Action
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:19
-msgid "Action"
-msgstr "Action"
+msgid "External port"
+msgstr "Port externe"
 
-#. accept
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:20
-msgid "accept"
-msgstr "accepter"
+msgid ""
+"Match incoming traffic directed at the given destination port or port range "
+"on this host"
+msgstr ""
 
-#. reject
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:21
-msgid "reject"
-msgstr "rejeter"
+#, fuzzy
+msgid "Internal IP address"
+msgstr "Adresse interne"
 
-#. drop
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:22
-msgid "drop"
-msgstr "ignorer (drop)"
+msgid "Redirect matched incoming traffic to the specified internal host"
+msgstr ""
 
-#. Source
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:23
-msgid "Source"
-msgstr "Source"
+msgid "Internal port (optional)"
+msgstr "Port interne (optionel)"
 
-#. Destination
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:24
-msgid "Destination"
-msgstr "Destination"
+msgid ""
+"Redirect matched incoming traffic to the given port on the internal host"
+msgstr ""
 
-#. Traffic Control
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:25
-msgid "Traffic Control"
-msgstr "Contrôle de Trafic"
+msgid "Port forwarding"
+msgstr "Redirection de port"
 
-#. MSS Clamping
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:26
-msgid "MSS Clamping"
-msgstr "MSS-Correction"
-
-#. Drop invalid packets
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:27
-msgid "Drop invalid packets"
-msgstr "Drop incorrect packets"
-
-#. Port forwarding allows to provide network services in the internal network to an external network.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:28
 msgid ""
 "Port forwarding allows to provide network services in the internal network "
 "to an external network."
@@ -166,100 +212,46 @@ msgstr ""
 "La redirection de port vous permet d'exposer des services réseaux de votre "
 "réseau local au réseau externe."
 
-#. External Zone
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:29
-msgid "External Zone"
-msgstr "Zone externe"
-
-#. External port
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:30
-msgid "External port"
+#, fuzzy
+msgid "Internal port"
 msgstr "Port externe"
 
-#. Source MAC
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:33
-msgid "Source MAC"
-msgstr "MAC source"
+#~ msgid "Custom forwarding"
+#~ msgstr "Transfert particulier"
 
-#. Internal address
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:34
-msgid "Internal address"
-msgstr "Adresse interne"
+#~ msgid "Input Zone"
+#~ msgstr "Zone d'entrée"
 
-#. IP-Address
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:35
-msgid "IP-Address"
-msgstr "Adresse IP"
+#~ msgid "Output Zone"
+#~ msgstr "Zone de sortie"
 
-#. Internal port (optional)
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:36
-msgid "Internal port (optional)"
-msgstr "Port interne"
+#~ msgid "External Zone"
+#~ msgstr "Zone externe"
 
-#. Here you can specify which network traffic is allowed to flow between network zones. Only new connections will be matched. Packets belonging to already open connections are automatically allowed to pass the firewall. If you experience occasional connection problems try enabling MSS Clamping otherwise disable it for performance reasons.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:38
-msgid ""
-"Here you can specify which network traffic is allowed to flow between "
-"network zones. Only new connections will be matched. Packets belonging to "
-"already open connections are automatically allowed to pass the firewall. If "
-"you experience occasional connection problems try enabling MSS Clamping "
-"otherwise disable it for performance reasons."
-msgstr ""
-"Ici, vous pouvez spécifier quel trafic réseau est autorisé à transiter entre "
-"les zones réseaux. Seules les nouvelles connexions seront prises en compte. "
-"Les paquets appartenant à des connexions déjà ouvertes sont automatiquement "
-"admises à passer le pare-feu."
+#~ msgid "Source MAC"
+#~ msgstr "MAC source"
 
-#. Input
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:39
-msgid "Input"
-msgstr "Entrée (Input)"
+#~ msgid "Defaults"
+#~ msgstr "Valeurs par défaut"
 
-#. Output
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:40
-msgid "Output"
-msgstr "Sortie (Output)"
+#~ msgid ""
+#~ "These are the default settings that are used if no other rules match."
+#~ msgstr ""
+#~ "Ceci sont les paramètres par défaut qui sont utilisés si aucune autre "
+#~ "règle ne s'applique."
 
-#. Defaults
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:41
-msgid "Defaults"
-msgstr "Défauts"
+#~ msgid ""
+#~ "Zones part the network interfaces into certain isolated areas to separate "
+#~ "network traffic. One or more networks can belong to a zone. The MASQ-flag "
+#~ "enables NAT masquerading for all outgoing traffic on this zone."
+#~ msgstr ""
+#~ "Les zones partagent les interfaces réseaux en régions isolées pour "
+#~ "séparer le trafic réseau. Un réseau ou plus peuvent appartenir à une "
+#~ "zone. Le marqueur MASQ active le NAT masquerading pour tout le trafic "
+#~ "sortant de cette zone."
 
-#. These are the default settings that are used if no other rules match.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:42
-msgid "These are the default settings that are used if no other rules match."
-msgstr ""
-"Ceci sont les paramètres par défaut qui sont utilisés si aucune autre règle "
-"ne s'applique."
+#~ msgid "MASQ"
+#~ msgstr "MASQ"
 
-#. SYN-flood protection
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:43
-msgid "SYN-flood protection"
-msgstr "Protection anti SYN-flood"
-
-#. Zones part the network interfaces into certain isolated areas to separate network traffic. One or more networks can belong to a zone. The MASQ-flag enables NAT masquerading for all outgoing traffic on this zone.
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:47
-msgid ""
-"Zones part the network interfaces into certain isolated areas to separate "
-"network traffic. One or more networks can belong to a zone. The MASQ-flag "
-"enables NAT masquerading for all outgoing traffic on this zone."
-msgstr ""
-"Les zones partagent les interfaces réseaux en régions isolées pour séparer "
-"les trafic réseaux. Seules les nouvelles connexions seront prises en compte. "
-"Les paquets appartenant à des connexions déjà ouvertes sont automatiquement "
-"admises à passer le pare-feu."
-
-#. MASQ
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:54
-msgid "MASQ"
-msgstr "MASQ"
-
-#. Networks
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:55
-msgid "Networks"
-msgstr "Réseaux"
-
-#. contained networks
-#: applications/luci-fw/luasrc/i18n/luci-fw.en.lua:56
-msgid "contained networks"
-msgstr "réseaux compris"
+#~ msgid "contained networks"
+#~ msgstr "réseaux compris"
