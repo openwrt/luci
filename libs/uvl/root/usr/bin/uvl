@@ -216,7 +216,7 @@ elseif arguments[1] == "verify" or arguments[1] == "verify-scheme" then
 		)
 
 		ok, err = uvl:validate_config( cso[1], uci:get_all(cso[1]) )
-		if err then err.code = luci.uvl.errors.ERR_SCHEME end
+		if err then err.code = 'SCHEME' end
 	else
 		ok, err = uvl:validate( unpack(cso) )
 	end

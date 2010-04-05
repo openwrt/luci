@@ -278,7 +278,7 @@ function UVL._validate_section( self, section )
 	if STRICT_UNKNOWN_OPTIONS and not section:scheme('dynamic') then
 		for k, v in pairs(section:config()) do
 			local oo = section:option(k)
-			if k:byte(1) == 46 and not self.beenthere[oo:cid()] then
+			if k:byte(1) ~= 46 and not self.beenthere[oo:cid()] then
 				section:error(ERR('OPT_UNKNOWN', oo))
 			end
 		end

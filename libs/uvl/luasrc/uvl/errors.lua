@@ -19,8 +19,8 @@ local uvl = require "luci.uvl"
 local util = require "luci.util"
 local string = require "string"
 
-local luci, tonumber, unpack, ipairs, type =
-	luci, tonumber, unpack, ipairs, type
+local luci, tonumber, tostring, unpack, ipairs, type =
+	luci, tonumber, tostring, unpack, ipairs, type
 
 module "luci.uvl.errors"
 
@@ -128,7 +128,7 @@ function error.string(self,pad)
 		:gsub("%%s", self.section or '(nil)')
 		:gsub("%%S", self.stype   or '(nil)')
 		:gsub("%%o", self.option  or '(nil)')
-		:gsub("%%v", self.value   or '(nil)')
+		:gsub("%%v", self.value  and tostring(self.value) or '(nil)')
 		:gsub("%%t", self.object and self.object:type()  or '(nil)' )
 		:gsub("%%T", self.object and self.object:title() or '(nil)' )
 		:gsub("%%([1-9])", function(n) return self.args[tonumber(n)] or '(nil)' end)
