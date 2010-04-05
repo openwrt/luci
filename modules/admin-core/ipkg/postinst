@@ -2,7 +2,6 @@
 
 [ -n "${IPKG_INSTROOT}" ] || {
 	/etc/init.d/luci_fixtime enabled || /etc/init.d/luci_fixtime enable
-	/etc/init.d/luci_ethers enabled || /etc/init.d/luci_ethers enable
-	/etc/init.d/luci_hosts enabled || /etc/init.d/luci_hosts enable
+	/etc/init.d/luci_dhcp_migrate enabled || /etc/init.d/luci_dhcp_migrate enable
 	exit 0
 }
