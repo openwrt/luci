@@ -123,6 +123,12 @@ end
 if hwtype == "broadcom" then
 	s:option(Value, "txpower", translate("a_w_txpwr"), "dBm").rmempty = true
 
+	mode = s:option(ListValue, "hwmode", translate("mode"))
+	mode:value("11bg", "802.11b+g")
+	mode:value("11b", "802.11b")
+	mode:value("11g", "802.11g")
+	mode:value("11gst", "802.11g + Turbo")
+
 	mp = s:option(ListValue, "macfilter", translate("wifi_macpolicy"))
 	mp.optional = true
 	mp:value("")
