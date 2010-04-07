@@ -213,6 +213,12 @@ if hwtype == "broadcom" then
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end	
 
+	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
+	mode:value("11bg", "802.11b+g")
+	mode:value("11b", "802.11b")
+	mode:value("11g", "802.11g")
+	mode:value("11gst", "802.11g + Turbo")
+
 	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
 	mp:value("allow", translate("Allow listed only"))
