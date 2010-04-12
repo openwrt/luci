@@ -44,8 +44,11 @@ for _, v in luci.util.vspairs(services) do
 	svc:value(v)
 end
 
-svc:value("", translate("-- custom --"))
+svc:value("", "-- "..translate("custom").." --")
 
+url = s:option(Value, "update_url", translate("Custom update-URL"))
+url:depends("service_name", "")
+url.rmempty = true
 
 s:option(Value, "domain", translate("Hostname")).rmempty = true
 s:option(Value, "username", translate("Username")).rmempty = true
@@ -81,10 +84,6 @@ else
 	web:depends("ip_source", "web")
 	web.rmempty = true
 end
-
-url = s:option(Value, "update_url", translate("Custom Update-URL"))
-url:depends("service_name", "")
-url.rmempty = true
 
 s:option(Value, "check_interval", translate("Check for changed IP every")).default = 10
 unit = s:option(ListValue, "check_unit", translate("Check-Time unit"))
