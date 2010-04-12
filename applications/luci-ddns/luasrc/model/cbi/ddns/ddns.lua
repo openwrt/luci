@@ -16,13 +16,16 @@ $Id$
 local is_mini = (luci.dispatcher.context.path[1] == "mini")
 
 
-m = Map("ddns", translate("Dynamic DNS"), translate("Dynamic DNS allows that your router can be reached with a fixed hostname while having a dynamically changing IP-Address."))
+m = Map("ddns", translate("Dynamic DNS"),
+	translate("Dynamic DNS allows that your router can be reached with " ..
+		"a fixed hostname while having a dynamically changing " ..
+		"IP address."))
 
 s = m:section(TypedSection, "service", "")
 s.addremove = true
 s.anonymous = false
 
-s:option(Flag, "enabled", translate("enable"))
+s:option(Flag, "enabled", translate("Enable"))
 
 svc = s:option(ListValue, "service_name", translate("Service"))
 svc.rmempty = true
@@ -63,10 +66,11 @@ if is_mini then
 else
 	require("luci.tools.webadmin")
 
-	src = s:option(ListValue, "ip_source", translate("Source of IP-Address"))
+	src = s:option(ListValue, "ip_source",
+		translate("Source of IP address"))
 	src:value("network", translate("Network"))
 	src:value("interface", translate("Interface"))
-	src:value("web", "URL")
+	src:value("web", translate("URL"))
 
 	iface = s:option(ListValue, "ip_network", translate("Network"))
 	iface:depends("ip_source", "network")
@@ -80,22 +84,24 @@ else
 		iface:value(v)
 	end
 
-	web = s:option(Value, "ip_url", "URL")
+	web = s:option(Value, "ip_url", translate("URL"))
 	web:depends("ip_source", "web")
 	web.rmempty = true
 end
 
-s:option(Value, "check_interval", translate("Check for changed IP every")).default = 10
-unit = s:option(ListValue, "check_unit", translate("Check-Time unit"))
+
+s:option(Value, "check_interval",
+	translate("Check for changed IP every")).default = 10
+unit = s:option(ListValue, "check_unit", translate("Check-time unit"))
 unit.default = "minutes"
-unit:value("minutes", "min")
-unit:value("hours", "h")
+unit:value("minutes", translate("min"))
+unit:value("hours", translate("h"))
 
 s:option(Value, "force_interval", translate("Force update every")).default = 72
-unit = s:option(ListValue, "force_unit", translate("Force-Time unit"))
+unit = s:option(ListValue, "force_unit", translate("Force-time unit"))
 unit.default = "hours"
-unit:value("minutes", "min")
-unit:value("hours", "h")
+unit:value("minutes", translate("min"))
+unit:value("hours", translate("h"))
 
 
 return m
