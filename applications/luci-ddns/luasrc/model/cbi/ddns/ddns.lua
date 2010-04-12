@@ -68,8 +68,8 @@ else
 
 	src = s:option(ListValue, "ip_source",
 		translate("Source of IP address"))
-	src:value("network", translate("Network"))
-	src:value("interface", translate("Interface"))
+	src:value("network", translate("network"))
+	src:value("interface", translate("interface"))
 	src:value("web", translate("URL"))
 
 	iface = s:option(ListValue, "ip_network", translate("Network"))
