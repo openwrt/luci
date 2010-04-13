@@ -426,11 +426,11 @@ function list()
 	) do
 		if (s[".type"] == "whitelist" or s[".type"] == "blacklist") and s.mac then
 			local mac = s.mac:lower()
-			local arp = arpcache[mac]:lower()
+			local arp = arpcache[mac]
 			print(string.format(
 				"%-17s  %-15s  %-9s  %4s  %-7s  %9s  %9s",
-				mac, arp and arp[2] or "?", s[".type"], "- ",
-				arp and arp[1] or "?", "-", "-"
+				mac, arp and arp[2]:lower() or "?", s[".type"],
+				"- ", arp and arp[1]:lower() or "?", "-", "-"
 			))
 		end
 	end
