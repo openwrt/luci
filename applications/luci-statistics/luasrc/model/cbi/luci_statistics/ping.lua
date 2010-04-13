@@ -13,22 +13,27 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Ping Plugin Configuration"),
+	translate(
+		"The ping plugin will send icmp echo replies to selected " ..
+		"hosts and measure the roundtrip time for each host."
+	))
 
 -- collectd_ping config section
 s = m:section( NamedSection, "collectd_ping", "luci_statistics" )
 
 -- collectd_ping.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_ping.hosts (Host)
-hosts = s:option( Value, "Hosts" )
+hosts = s:option( Value, "Hosts", translate("Monitor hosts") )
 hosts.default = "127.0.0.1"
 hosts:depends( "enable", 1 )
 
 -- collectd_ping.ttl (TTL)
-ttl = s:option( Value, "TTL" )
+ttl = s:option( Value, "TTL", translate("TTL for ping packets") )
 ttl.isinteger = true
 ttl.default   = 128
 ttl:depends( "enable", 1 )

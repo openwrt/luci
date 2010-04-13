@@ -18,17 +18,22 @@ require("luci.sys")
 local devices = luci.sys.net.devices()
 
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Netlink Plugin Configuration"),
+	translate(
+		"The netlink plugin collects extended informations like " ..
+		"qdisc-, class- and filter-statistics for selected interfaces."
+	))
 
 -- collectd_netlink config section
 s = m:section( NamedSection, "collectd_netlink", "luci_statistics" )
 
 -- collectd_netlink.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_netlink.interfaces (Interface)
-interfaces = s:option( MultiValue, "Interfaces" )
+interfaces = s:option( MultiValue, "Interfaces", translate("Basic monitoring") )
 interfaces.widget   = "select"
 interfaces.optional = true
 interfaces.size     = #devices + 1
@@ -39,7 +44,7 @@ for i, v in ipairs(devices) do
 end
 
 -- collectd_netlink.verboseinterfaces (VerboseInterface)
-verboseinterfaces = s:option( MultiValue, "VerboseInterfaces" )
+verboseinterfaces = s:option( MultiValue, "VerboseInterfaces", translate("Verbose monitoring") )
 verboseinterfaces.widget   = "select"
 verboseinterfaces.optional = true
 verboseinterfaces.size     = #devices + 1
@@ -50,7 +55,7 @@ for i, v in ipairs(devices) do
 end
 
 -- collectd_netlink.qdiscs (QDisc)
-qdiscs = s:option( MultiValue, "QDiscs" )
+qdiscs = s:option( MultiValue, "QDiscs", translate("Qdisc monitoring") )
 qdiscs.widget   = "select"
 qdiscs.optional = true
 qdiscs.size     = #devices + 1
@@ -61,7 +66,7 @@ for i, v in ipairs(devices) do
 end
 
 -- collectd_netlink.classes (Class)
-classes = s:option( MultiValue, "Classes" )
+classes = s:option( MultiValue, "Classes", translate("Shaping class monitoring") )
 classes.widget   = "select"
 classes.optional = true
 classes.size     = #devices + 1
@@ -72,7 +77,7 @@ for i, v in ipairs(devices) do
 end
 
 -- collectd_netlink.filters (Filter)
-filters = s:option( MultiValue, "Filters" )
+filters = s:option( MultiValue, "Filters", translate("Filter class monitoring") )
 filters.widget   = "select"
 filters.optional = true
 filters.size     = #devices + 1

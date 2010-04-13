@@ -13,13 +13,18 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Wireless Plugin Configuration"),
+	translate(
+		"The wireless plugin collects statistics about wireless signal " ..
+		"strength, noise and quality."
+	))
 
 -- collectd_wireless config section
 s = m:section( NamedSection, "collectd_wireless", "luci_statistics" )
 
 -- collectd_wireless.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 return m

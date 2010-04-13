@@ -16,54 +16,54 @@ $Id$
 require("luci.sys")
 
 
---[[
-m = Map("luci_statistics", "Collector Daemon",
-Collectd ist ein kleiner und flexibler Dienst zum Sammeln und Abfragen von Daten
-aus verschieden Quellen. Zur weiteren Verarbeitung werden die Daten in RRD Datenbanken
-gespeichert oder per Multicast Relaying über das Netzwerk versendet.)
-]]--
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Collectd Settings"),
+	translate(
+		"Collectd is a small daeomon for collecting data from " ..
+		"various sources through different plugins. On this page " ..
+		"you can change general settings for the collectd daemon."
+	))
 
 -- general config section
 s = m:section( NamedSection, "collectd", "luci_statistics" )
 
 -- general.hostname (Hostname)
-hostname = s:option( Value, "Hostname" )
+hostname = s:option( Value, "Hostname", translate("Hostname") )
 hostname.default  = luci.sys.hostname()
 hostname.optional = true
 
 -- general.basedir (BaseDir)
-basedir = s:option( Value, "BaseDir" )
+basedir = s:option( Value, "BaseDir", translate("Base Directory") )
 basedir.default = "/var/run/collectd"
 
 -- general.include (Include)
-include = s:option( Value, "Include" )
+include = s:option( Value, "Include", translate("Directory for sub-configurations") )
 include.default = "/etc/collectd/conf.d/*.conf"
 
 -- general.plugindir (PluginDir)
-plugindir = s:option( Value, "PluginDir" )
+plugindir = s:option( Value, "PluginDir", translate("Directory for collectd plugins") )
 plugindir.default = "/usr/lib/collectd/"
 
 -- general.pidfile (PIDFile)
-pidfile = s:option( Value, "PIDFile" )
+pidfile = s:option( Value, "PIDFile", translate("Used PID file") )
 pidfile.default = "/var/run/collectd.pid"
 
 -- general.typesdb (TypesDB)
-typesdb = s:option( Value, "TypesDB" )
+typesdb = s:option( Value, "TypesDB", translate("Datasets definition file") )
 typesdb.default = "/etc/collectd/types.db"
 
 -- general.interval (Interval)
-interval = s:option( Value, "Interval" )
+interval = s:option( Value, "Interval", translate("Data collection interval"), translate("Seconds") )
 interval.default  = 60
 interval.isnumber = true
 
 -- general.readthreads (ReadThreads)
-readthreads = s:option( Value, "ReadThreads" )
+readthreads = s:option( Value, "ReadThreads", translate("Number of threads for data collection") )
 readthreads.default  = 5
 readthreads.isnumber = true
 
 -- general.fqdnlookup (FQDNLookup)
-fqdnlookup = s:option( Flag, "FQDNLookup" )
+fqdnlookup = s:option( Flag, "FQDNLookup", translate("Try to lookup fully qualified hostname") )
 fqdnlookup.enabled  = "true"
 fqdnlookup.disabled = "false"
 fqdnlookup.default  = "false"

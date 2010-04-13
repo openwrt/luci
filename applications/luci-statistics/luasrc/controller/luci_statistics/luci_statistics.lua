@@ -37,10 +37,33 @@ function index()
 		end
 	end
 
-	-- override i18n(): try to translate stat_<str> or fall back to <str>
-	function _i18n( str )
-		return luci.i18n.translate( "stat_" .. str, str )
-	end
+	local translate = luci.i18n.translate
+
+	local labels = {
+		s_output	= translate("Output plugins"),
+		s_system	= translate("System plugins"),
+		s_network	= translate("Network plugins"),
+
+		rrdtool		= translate("RRDTool"),
+		network		= translate("Network"),
+		unixsock	= translate("UnixSock"),
+		csv			= translate("CSV Output"),
+		exec		= translate("Exec"),
+		email		= translate("Email"),
+		cpu			= translate("Processor"),
+		df			= translate("Disk Space Usage"),
+		disk		= translate("Disk Usage"),
+		irq			= translate("Interrupts"),
+		processes	= translate("Processes"),
+		load		= translate("System Load"),
+		interface	= translate("Interfaces"),
+		netlink		= translate("Netlink"),
+		iptables	= translate("Firewall"),
+		tcpconns	= translate("TCP Connections"),
+		ping		= translate("Ping"),
+		dns			= translate("DNS"),
+		wireless	= translate("Wireless")
+	}
 
 	-- our collectd menu
 	local collectd_menu = {
@@ -50,11 +73,11 @@ function index()
 	}
 
 	-- create toplevel menu nodes
-	local st = entry({"admin", "statistics"},             call("statistics_index"),        _i18n("Statistics"), 80)
+	local st = entry({"admin", "statistics"}, call("statistics_index"), translate("Statistics"), 80)
 	st.i18n = "statistics"
 	st.index = true
 	
-	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _i18n("collectd"),   10).subindex = true
+	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), translate("Collectd"), 10).subindex = true
 	
 
 	-- populate collectd plugin menu
@@ -63,16 +86,14 @@ function index()
 		entry(
 			{ "admin", "statistics", "collectd", section },
 			call( "statistics_" .. section .. "plugins" ),
-			_i18n( section .. "plugins" ),
-			index * 10
+			labels["s_"..section], index * 10
 		).index = true
 
 		for j, plugin in luci.util.vspairs( plugins ) do
 			_entry(
 				{ "admin", "statistics", "collectd", section, plugin },
 				cbi("luci_statistics/" .. plugin ),
-				_i18n( plugin ),
-				j * 10
+				labels[plugin], j * 10
 			)
 		end
 
@@ -80,7 +101,7 @@ function index()
 	end
 
 	-- output views
-	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), _i18n("graphs"), 80)
+	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), translate("Graphs"), 80)
 	      page.i18n     = "statistics"
 	      page.setuser  = "nobody"
 	      page.setgroup = "nogroup"
@@ -96,7 +117,7 @@ function index()
 		-- plugin menu entry
 		entry(
 			{ "admin", "statistics", "graph", plugin },
-			call("statistics_render"), _i18n( plugin ), i
+			call("statistics_render"), labels[plugin], i
 		).query = { timespan = span }
 
 		-- if more then one instance is found then generate submenu
@@ -117,31 +138,44 @@ function statistics_index()
 end
 
 function statistics_outputplugins()
-	local plugins = { }
-
-	for i, p in ipairs({ "rrdtool", "network", "unixsock", "csv" }) do
-		plugins[p] = luci.i18n.translate( "stat_" .. p, p )
-	end
+	local translate = luci.i18n.translate
+	local plugins = {
+		rrdtool		= translate("RRDTool"),
+		network		= translate("Network"),
+		unixsock	= translate("UnixSock"),
+		csv			= translate("CSV Output")
+	}
 
 	luci.template.render("admin_statistics/outputplugins", {plugins=plugins})
 end
 
 function statistics_systemplugins()
-	local plugins = { }
-
-	for i, p in ipairs({ "exec", "email", "df", "disk", "irq", "processes", "cpu" }) do
-		plugins[p] = luci.i18n.translate( "stat_" .. p, p )
-	end
+	local translate = luci.i18n.translate
+	local plugins = {
+		exec		= translate("Exec"),
+		email		= translate("Email"),
+		cpu			= translate("Processor"),
+		df			= translate("Disk Space Usage"),
+		disk		= translate("Disk Usage"),
+		irq			= translate("Interrupts"),
+		processes	= translate("Processes"),
+		load		= translate("System Load"),
+	}
 
 	luci.template.render("admin_statistics/systemplugins", {plugins=plugins})
 end
 
 function statistics_networkplugins()
-	local plugins = { }
-
-	for i, p in ipairs({ "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless" }) do
-		plugins[p] = luci.i18n.translate( "stat_" .. p, p )
-	end
+	local translate = luci.i18n.translate
+	local plugins = {
+		interface	= translate("Interfaces"),
+		netlink		= translate("Netlink"),
+		iptables	= translate("Firewall"),
+		tcpconns	= translate("TCP Connections"),
+		ping		= translate("Ping"),
+		dns			= translate("DNS"),
+		wireless	= translate("Wireless")
+	}
 
 	luci.template.render("admin_statistics/networkplugins", {plugins=plugins})
 end

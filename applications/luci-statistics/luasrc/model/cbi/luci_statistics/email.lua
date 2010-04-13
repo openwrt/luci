@@ -13,13 +13,21 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("E-Mail Plugin Configuration"),
+	translate(
+		"The email plugin creates a unix socket which can be used " ..
+		"to transmit email-statistics to a running collectd daemon. " ..
+		"This plugin is primarily intended to be used in conjunction " ..
+		"with Mail::SpamAssasin::Plugin::Collectd but can be used in " ..
+		"other ways as well."
+	))
 
 -- collectd_email config section
 s = m:section( NamedSection, "collectd_email", "luci_statistics" )
 
 -- collectd_email.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_email.socketfile (SocketFile)
@@ -42,7 +50,7 @@ socketperms.optional = true
 socketperms:depends( "enable", 1 )
 
 -- collectd_email.maxconns (MaxConns)
-maxconns = s:option( Value, "MaxConns" )
+maxconns = s:option( Value, "MaxConns", translate("Maximum allowed connections") )
 maxconns.default   = 5
 maxconns.isinteger = true
 maxconns.rmempty   = true

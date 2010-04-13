@@ -13,18 +13,30 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Exec Plugin Configuration"),
+	translate(
+		"The exec plugin starts external commands to read values " ..
+		"from or to notify external processes when certain threshold " ..
+		"values have been reached."
+	))
 
 -- collectd_exec config section
 s = m:section( NamedSection, "collectd_exec", "luci_statistics" )
 
 -- collectd_exec.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 
 -- collectd_exec_input config section (Exec directives)
-exec = m:section( TypedSection, "collectd_exec_input" )
+exec = m:section( TypedSection, "collectd_exec_input",
+	translate("Add command for reading values"),
+	translate(
+		"Here you can define external commands which will be " ..
+		"started by collectd in order to read certain values. " ..
+		"The values will be read from stdout."
+	))
 exec.addremove = true
 exec.anonymous = true
 
@@ -46,7 +58,14 @@ exec_cmdgroup.optional = true
 
 
 -- collectd_exec_notify config section (NotifyExec directives)
-notify = m:section( TypedSection, "collectd_exec_notify" )
+notify = m:section( TypedSection, "collectd_exec_notify",
+	translate("Add notification command"),
+	translate(
+		"Here you can define external commands which will be " ..
+		"started by collectd when certain threshold values have " ..
+		"been reached. The values leading to invokation will be " ..
+		"feeded to the the called programs stdin."
+	))
 notify.addremove = true
 notify.anonymous = true
 

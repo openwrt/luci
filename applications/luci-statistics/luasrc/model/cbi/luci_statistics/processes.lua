@@ -13,17 +13,22 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Processes Plugin Configuration"),
+	translate(
+		"The processes plugin collects informations like cpu time, " ..
+		"page faults and memory usage of selected processes."
+	))
 
 -- collectd_processes config section
 s = m:section( NamedSection, "collectd_processes", "luci_statistics" )
 
 -- collectd_processes.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_processes.processes (Process)
-processes = s:option( Value, "Processes" )
+processes = s:option( Value, "Processes", translate("Monitor processes") )
 processes.default = "olsrd bmxd httpd dnsmasq dropbear tinc"
 processes:depends( "enable", 1 )
 

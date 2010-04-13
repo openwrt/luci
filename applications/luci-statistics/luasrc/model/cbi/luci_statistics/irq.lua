@@ -13,17 +13,23 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("IRQ Plugin Configuration"),
+	translate(
+		"The irq plugin will monitor the rate of issues per second for " ..
+		"each selected interrupt. If no interrupt is selected then all " ..
+		"interrupts are monitored."
+	))
 
 -- collectd_irq config section
 s = m:section( NamedSection, "collectd_irq", "luci_statistics" )
 
 -- collectd_irq.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_irq.irqs (Irq)
-irqs = s:option( Value, "Irqs" )
+irqs = s:option( Value, "Irqs", translate("Monitor interrupts") )
 irqs.optional = true
 irqs:depends( "enable", 1 )
 

@@ -16,13 +16,18 @@ $Id$
 require("luci.sys")
 
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Interface Plugin Configuration"),
+	translate(
+		"The interface plugin collects traffic statistics on " ..
+		"selected interfaces."
+	))
 
 -- collectd_interface config section
 s = m:section( NamedSection, "collectd_interface", "luci_statistics" )
 
 -- collectd_interface.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_interface.interfaces (Interface)

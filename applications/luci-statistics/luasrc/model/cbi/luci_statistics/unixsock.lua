@@ -13,13 +13,18 @@ $Id$
 
 ]]--
 
-m = Map("luci_statistics")
+m = Map("luci_statistics",
+	translate("Unixsock Plugin Configuration"),
+	translate(
+		"The unixsock plugin creates a unix socket which can be used " ..
+		"to read collected data from a running collectd instance."
+	))
 
 -- collectd_unixsock config section
 s = m:section( NamedSection, "collectd_unixsock", "luci_statistics" )
 
 -- collectd_unixsock.enable
-enable = s:option( Flag, "enable" )
+enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_unixsock.socketfile (SocketFile)
