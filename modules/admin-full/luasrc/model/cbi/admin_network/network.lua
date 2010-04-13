@@ -83,7 +83,9 @@ if luci.model.uci.cursor():load("firewall") then
 	end
 end
 
-hwaddr = s:option(DummyValue, "_hwaddr")
+hwaddr = s:option(DummyValue, "_hwaddr",
+	translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"),
+        translate("Hardware Address"))
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
 	local mac = fs.readfile("/sys/class/net/" .. ix .. "/address")
@@ -101,12 +103,15 @@ function hwaddr.cfgvalue(self, section)
 end
 
 
-ipaddr = s:option(DummyValue, "ipaddr", translate("Addresses"))
+ipaddr = s:option(DummyValue, "ipaddr",
+	translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>" ..
+		"-Address"))
 function ipaddr.cfgvalue(self, section)
 	return table.concat(wa.network_get_addresses(section), ", ")
 end
 
-txrx = s:option(DummyValue, "_txrx")
+txrx = s:option(DummyValue, "_txrx", translate("Traffic"),
+	translate("transmitted / received"))
 
 function txrx.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
@@ -120,7 +125,8 @@ function txrx.cfgvalue(self, section)
 	return string.format("%s / %s", tx, rx)
 end
 
-errors = s:option(DummyValue, "_err")
+errors = s:option(DummyValue, "_err", translate("Errors"),
+	translate("TX / RX"))
 
 function errors.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname")
