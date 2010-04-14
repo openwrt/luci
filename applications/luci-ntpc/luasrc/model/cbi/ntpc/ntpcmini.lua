@@ -19,9 +19,9 @@ s = m:section(TypedSection, "ntpclient", translate("General"))
 s.anonymous = true
 s.addremove = false
 
-s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
+s:option(DummyValue, "_time", translate("Current system time")).value = os.date("%c")
 
-s:option(Value, "interval", translate("Update Interval (in s)")).rmempty = true
+s:option(Value, "interval", translate("Update interval (in seconds)")).rmempty = true
 
 
 s3 = m:section(TypedSection, "ntpserver", translate("Time Server"))

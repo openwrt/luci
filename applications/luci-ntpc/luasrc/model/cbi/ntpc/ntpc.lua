@@ -18,18 +18,18 @@ s = m:section(TypedSection, "ntpclient", translate("General"))
 s.anonymous = true
 s.addremove = false
 
-s:option(DummyValue, "_time", translate("ntpc_current")).value = os.date("%c")
+s:option(DummyValue, "_time", translate("Current system time")).value = os.date("%c")
 
-s:option(Value, "interval", translate("Update Interval (in s)")).rmempty = true
-s:option(Value, "count", translate("Count of Time Measurements"), translate("empty = infinite")).rmempty = true
+s:option(Value, "interval", translate("Update interval (in seconds)")).rmempty = true
+s:option(Value, "count", translate("Count of time measurements"), translate("empty = infinite")).rmempty = true
 
 
 s2 = m:section(TypedSection, "ntpdrift", translate("Clock Adjustment"))
 s2.anonymous = true
 s2.addremove = false
-s2:option(Value, "freq", translate("Offset Frequency")).rmempty = true
+s2:option(Value, "freq", translate("Offset frequency")).rmempty = true
 
-s3 = m:section(TypedSection, "ntpserver", translate("Time Server"))
+s3 = m:section(TypedSection, "ntpserver", translate("Time Servers"))
 s3.anonymous = true
 s3.addremove = true
 s3.template = "cbi/tblsection"
