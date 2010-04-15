@@ -54,9 +54,9 @@ name = s:option(Value, "name", translate("Name"))
 name.size = 8
 
 p = {}
-p[1] = s:option(ListValue, "input", translate("input"))
-p[2] = s:option(ListValue, "output", translate("output"))
-p[3] = s:option(ListValue, "forward", translate("forward"))
+p[1] = s:option(ListValue, "input", translate("Input"))
+p[2] = s:option(ListValue, "output", translate("Output"))
+p[3] = s:option(ListValue, "forward", translate("Forward"))
 
 for i, v in ipairs(p) do
 	v:value("REJECT", translate("reject"))
