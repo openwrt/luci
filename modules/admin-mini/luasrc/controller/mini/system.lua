@@ -178,7 +178,7 @@ function action_upgrade()
 			nixio.fs.unlink(tmpfile)
 		end
 			
-		luci.template.render("admin_system/upgrade", {
+		luci.template.render("mini/upgrade", {
 			step=1,
 			bad_image=(has_image and not has_support or false),
 			keepavail=keep_avail,
@@ -187,7 +187,7 @@ function action_upgrade()
 
 	-- Step 2: present uploaded file, show checksum, confirmation
 	elseif step == 2 then
-		luci.template.render("admin_system/upgrade", {
+		luci.template.render("mini/upgrade", {
 			step=2,
 			checksum=image_checksum(),
 			filesize=nixio.fs.stat(tmpfile).size,
@@ -197,7 +197,7 @@ function action_upgrade()
 	
 	-- Step 3: load iframe which calls the actual flash procedure
 	elseif step == 3 then
-		luci.template.render("admin_system/upgrade", {
+		luci.template.render("mini/upgrade", {
 			step=3,
 			keepconfig=(keep_avail and luci.http.formvalue("keepcfg") == "1")
 		} )
