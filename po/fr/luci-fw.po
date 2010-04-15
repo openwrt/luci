@@ -4,27 +4,30 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2010-03-17 12:06+0100\n"
+"PO-Revision-Date: 2010-04-14 16:36+0200\n"
 "Last-Translator: Benoît Knecht <benoit.knecht@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: French\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/zones.lua                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
 msgid "Firewall"
-msgstr "Pare-Feu"
+msgstr "Pare-feu"
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
 "traffic flow."
 msgstr ""
-"Le pare-feu crée des zones à partir des interfaces réseaux pour controller "
-"le trafic réseau."
+"Le pare-feu crée des zones sur les interfaces réseau pour contrôler le flux "
+"du trafic réseau."
 
-#, fuzzy
 msgid "Enable SYN-flood protection"
-msgstr "Protection contre le SYN-flood"
+msgstr "Activer la protection contre le SYN-flood"
 
 msgid "Drop invalid packets"
 msgstr "Ignorer les paquets invalides"
@@ -36,13 +39,13 @@ msgid "Output"
 msgstr "Sortie"
 
 msgid "Forward"
-msgstr ""
+msgstr "Transfert"
 
 msgid "reject"
 msgstr "rejeter"
 
 msgid "drop"
-msgstr "ignorer (drop)"
+msgstr "ignorer"
 
 msgid "accept"
 msgstr "accepter"
@@ -51,26 +54,30 @@ msgid "Zones"
 msgstr "Zones"
 
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 msgid "Masquerading"
 msgstr ""
 
-#, fuzzy
 msgid "MSS clamping"
-msgstr "MSS Clamping"
+msgstr ""
 
-#, fuzzy
 msgid "Network"
-msgstr "Réseaux"
+msgstr "Réseau"
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/traffic.lua                  #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
 msgid "Traffic Control"
 msgstr "Contrôle de trafic"
 
 msgid "Zone-to-Zone traffic"
-msgstr "Trafic inter-zone"
+msgstr "Trafic zone-à-zone"
 
-#, fuzzy
 msgid ""
 "Here you can specify which network traffic is allowed to flow between "
 "network zones. Only new connections will be matched.  Packets belonging to "
@@ -79,10 +86,10 @@ msgid ""
 "otherwise disable it for performance reasons."
 msgstr ""
 "Ici, vous pouvez spécifier quel trafic réseau est autorisé à transiter entre "
-"les zones réseaux. Seules les nouvelles connexions seront prises en compte. "
+"les zones réseau. Seules les nouvelles connexions seront prises en compte. "
 "Les paquets appartenant à des connexions déjà ouvertes sont automatiquement "
 "admis à passer le pare-feu. Si vous subissez des problèmes de connexion "
-"occasionnels, essayer d'activer le MSS Clamping; sinon laissez-le désactivé "
+"occasionnels, essayer d'activer le MSS clamping; sinon laissez-le désactivé "
 "pour des raisons de performance."
 
 msgid "Source"
@@ -92,19 +99,29 @@ msgid "Destination"
 msgstr "Destination"
 
 msgid "Rules"
-msgstr ""
+msgstr "Règles"
 
 msgid "Protocol"
-msgstr ""
+msgstr "Protocole"
 
 msgid "Device"
-msgstr ""
+msgstr "Équipement"
 
 msgid "Action"
 msgstr "Action"
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua                 #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
 msgid "Traffic Redirection"
-msgstr "Redirection de trafic"
+msgstr "Redirection du trafic"
 
 msgid ""
 "Traffic redirection allows you to change the destination address of "
@@ -114,7 +131,7 @@ msgstr ""
 "paquets transférés."
 
 msgid "(optional)"
-msgstr ""
+msgstr "(optionnel)"
 
 msgid "Zone"
 msgstr "Zone"
@@ -122,63 +139,120 @@ msgstr "Zone"
 msgid "Source port"
 msgstr "Port source"
 
-#, fuzzy
 msgid "Destination IP"
-msgstr "Destination"
+msgstr "IP de destination"
 
-#, fuzzy
 msgid "IP address"
 msgstr "Adresse IP"
 
 msgid "Destination port"
 msgstr "Port de destination"
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "(optional)"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
+# msgid "Source port"
+# msgstr ""
+#
+# msgid "Destination port"
+# msgstr ""
+#
+# msgid "Action"
+# msgstr ""
+#
+# msgid "drop"
+# msgstr ""
+#
+# msgid "accept"
+# msgstr ""
+#
+# msgid "reject"
+# msgstr ""
+#
 msgid "Advanced Rules"
-msgstr "Règles Avancées"
+msgstr "Règles avancées"
 
 msgid ""
 "Advanced rules let you customize the firewall to your needs. Only new "
 "connections will be matched. Packets belonging to already open connections "
 "are automatically allowed to pass the firewall."
 msgstr ""
-"Les règles avancées vous laisse personnaliser le pare-feu selon vos besoins. "
-"Seules les nouvelles connexions seront prises en compte. Les paquets "
-"appartenant à des connexions déjà ouvertes sont automatiquement admises à "
-"passer le pare-feu."
+"Les règles avancées vous laissent personnaliser le pare-feu selon vos "
+"besoins. Seules les nouvelles connexions seront prises en compte. Les "
+"paquets appartenant à des connexions déjà ouvertes sont automatiquement "
+"admis à passer le pare-feu."
 
 msgid "Overview"
-msgstr ""
+msgstr "Vue d'ensemble"
 
-#, fuzzy
 msgid "Source zone"
-msgstr "Port source"
+msgstr "Zone source"
 
-#, fuzzy
 msgid "Destination zone"
-msgstr "Destination"
-
-msgid "any"
-msgstr ""
+msgstr "Zone de destination"
 
 #, fuzzy
+msgid "any"
+msgstr "tous"
+
 msgid "Source address"
-msgstr "Adresse MAC source"
+msgstr "Adresse source"
 
 msgid "Destination address"
 msgstr "Adresse de destination"
 
-#, fuzzy
 msgid "Source MAC-address"
 msgstr "Adresse MAC source"
 
-#, fuzzy
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/rrule.lua                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Traffic Redirection"
+# msgstr ""
+#
+# msgid ""
+# "Traffic redirection allows you to change the destination address of "
+# "forwarded packets."
+# msgstr ""
+#
+# msgid "Overview"
+# msgstr ""
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "Source zone"
+# msgstr ""
+#
+# msgid "Source MAC-address"
+# msgstr ""
+#
+# msgid "Source port"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
 msgid "Source IP address"
-msgstr "Adresse MAC source"
+msgstr "Adresse IP source"
 
 msgid ""
 "Match incoming traffic originating from the given source port or port range "
 "on the client host"
 msgstr ""
+"Prendre en compte le trafic entrant provenant du port source donné (ou la "
+"gamme de ports) sur l'hôte client"
 
 msgid "External port"
 msgstr "Port externe"
@@ -187,21 +261,43 @@ msgid ""
 "Match incoming traffic directed at the given destination port or port range "
 "on this host"
 msgstr ""
+"Prendre en compte le trafic dirigé vers le port de destination donné (ou la "
+"gamme de ports) sur cet hôte"
 
-#, fuzzy
 msgid "Internal IP address"
-msgstr "Adresse interne"
+msgstr "Adresse IP interne"
 
 msgid "Redirect matched incoming traffic to the specified internal host"
-msgstr ""
+msgstr "Rediriger le trafic entrant correspondant vers l'hôte interne spécifié"
 
 msgid "Internal port (optional)"
-msgstr "Port interne (optionel)"
+msgstr "Port interne (optionnel)"
 
 msgid ""
 "Redirect matched incoming traffic to the given port on the internal host"
 msgstr ""
+"Rediriger le trafic entrant correspondant vers le port donné sur l'hôte "
+"interne"
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "(optional)"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
+# msgid "External port"
+# msgstr ""
+#
+# msgid "Internal IP address"
+# msgstr ""
+#
 msgid "Port forwarding"
 msgstr "Redirection de port"
 
@@ -212,46 +308,5 @@ msgstr ""
 "La redirection de port vous permet d'exposer des services réseaux de votre "
 "réseau local au réseau externe."
 
-#, fuzzy
 msgid "Internal port"
-msgstr "Port externe"
-
-#~ msgid "Custom forwarding"
-#~ msgstr "Transfert particulier"
-
-#~ msgid "Input Zone"
-#~ msgstr "Zone d'entrée"
-
-#~ msgid "Output Zone"
-#~ msgstr "Zone de sortie"
-
-#~ msgid "External Zone"
-#~ msgstr "Zone externe"
-
-#~ msgid "Source MAC"
-#~ msgstr "MAC source"
-
-#~ msgid "Defaults"
-#~ msgstr "Valeurs par défaut"
-
-#~ msgid ""
-#~ "These are the default settings that are used if no other rules match."
-#~ msgstr ""
-#~ "Ceci sont les paramètres par défaut qui sont utilisés si aucune autre "
-#~ "règle ne s'applique."
-
-#~ msgid ""
-#~ "Zones part the network interfaces into certain isolated areas to separate "
-#~ "network traffic. One or more networks can belong to a zone. The MASQ-flag "
-#~ "enables NAT masquerading for all outgoing traffic on this zone."
-#~ msgstr ""
-#~ "Les zones partagent les interfaces réseaux en régions isolées pour "
-#~ "séparer le trafic réseau. Un réseau ou plus peuvent appartenir à une "
-#~ "zone. Le marqueur MASQ active le NAT masquerading pour tout le trafic "
-#~ "sortant de cette zone."
-
-#~ msgid "MASQ"
-#~ msgstr "MASQ"
-
-#~ msgid "contained networks"
-#~ msgstr "réseaux compris"
+msgstr "Port interne"
