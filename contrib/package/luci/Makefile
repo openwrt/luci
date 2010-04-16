@@ -767,6 +767,17 @@ define Package/luci-app-p2pblock/install
         $(call Package/luci/install/template,$(1),applications/luci-p2pblock)
 endef
 
+define Package/luci-app-multiwan
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for the OpenWrt MultiWAN agent
+  DEPENDS+=+luci-admin-core +luci-app-firewall \
+    +PACKAGE_luci-app-multiwan:multiwan
+endef
+
+define Package/luci-app-multiwan/install
+        $(call Package/luci/install/template,$(1),applications/luci-multiwan)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -1188,6 +1199,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-p2pblock),)
        PKG_SELECTED_MODULES+=applications/luci-p2pblock
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-multiwan),)
+       PKG_SELECTED_MODULES+=applications/luci-multiwan
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -1322,6 +1336,7 @@ $(eval $(call BuildPackage,luci-app-asterisk))
 $(eval $(call BuildPackage,luci-app-polipo))
 $(eval $(call BuildPackage,luci-app-openvpn))
 $(eval $(call BuildPackage,luci-app-p2pblock))
+$(eval $(call BuildPackage,luci-app-multiwan))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-uhttpd))
