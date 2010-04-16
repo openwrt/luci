@@ -1,0 +1,11 @@
+--- a/uhttpd-cgi.c
++++ b/uhttpd-cgi.c
+@@ -204,7 +204,7 @@ void uh_cgi_request(struct client *cl, s
+ 			    (pi->stat.st_mode & S_IXOTH)
+ 			) {
+ 				/* build environment */
+-				clearenv();
++				//clearenv();
+ 
+ 				/* common information */
+ 				setenv("GATEWAY_INTERFACE", "CGI/1.1", 1);

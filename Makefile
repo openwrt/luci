@@ -61,6 +61,10 @@ ucidefaults:
 runhttpd: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua build/lucid.lua"
 
+runuhttpd: hostenv
+	cp $(realpath build)/luci.cgi $(realpath host)/www/cgi-bin/luci
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/usr/sbin/uhttpd -p 8080 -h $(realpath host)/www -f"
+
 runlua: hostenv
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua -i build/setup.lua"
 
