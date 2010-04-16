@@ -149,7 +149,7 @@ function dispatch(request)
 	assert(conf.main,
 		"/etc/config/luci seems to be corrupt, unable to find section 'main'")
 
-	local lang = conf.main.lang
+	local lang = conf.main.lang or "auto"
 	if lang == "auto" then
 		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
 		for lpat in aclang:gmatch("[%w-]+") do
@@ -159,7 +159,7 @@ function dispatch(request)
 				break
 			end
 		end
-        end
+	end
 	require "luci.i18n".setlanguage(lang)
 
 	local c = ctx.tree
