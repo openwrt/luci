@@ -778,6 +778,16 @@ define Package/luci-app-multiwan/install
         $(call Package/luci/install/template,$(1),applications/luci-multiwan)
 endef
 
+define Package/luci-app-wol
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for Wake-on-LAN
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-wol:etherwake
+endef
+
+define Package/luci-app-wol/install
+        $(call Package/luci/install/template,$(1),applications/luci-wol)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -1202,6 +1212,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-multiwan),)
        PKG_SELECTED_MODULES+=applications/luci-multiwan
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-wol),)
+       PKG_SELECTED_MODULES+=applications/luci-wol
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -1337,6 +1350,7 @@ $(eval $(call BuildPackage,luci-app-polipo))
 $(eval $(call BuildPackage,luci-app-openvpn))
 $(eval $(call BuildPackage,luci-app-p2pblock))
 $(eval $(call BuildPackage,luci-app-multiwan))
+$(eval $(call BuildPackage,luci-app-wol))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-uhttpd))
