@@ -41,90 +41,63 @@ end
 
 function action_packages()
 	local ipkg = require("luci.model.ipkg")
-	local void = nil
 	local submit = luci.http.formvalue("submit")
 	local changes = false
-	
-	
+	local install = { }
+	local remove  = { }
+
 	-- Search query
 	local query = luci.http.formvalue("query")
 	query = (query ~= '') and query or nil
 	
 	
 	-- Packets to be installed
-	local install = submit and luci.http.formvaluetable("install")
-	
+	local ninst = submit and luci.http.formvalue("install")
+	local uinst = nil	
+
 	-- Install from URL
 	local url = luci.http.formvalue("url")
 	if url and url ~= '' and submit then
-		if not install then
-			install = {}
-		end
-		install[url] = 1
-		changes = true
+		uinst = url
 	end
-	
+
 	-- Do install
-	if install then
-		for k, v in pairs(install) do
-			void, install[k] = ipkg.install(k)
-		end
+	if ninst then
+		_, install[ninst] = ipkg.install(ninst)
 		changes = true
 	end
-	
-	
+
+	if uinst then
+		_, install[uinst] = ipkg.install(uinst)
+		changes = true
+	end
+
 	-- Remove packets
-	local remove = submit and luci.http.formvaluetable("remove")
-	if remove then	
-		for k, v in pairs(remove) do
-			void, remove[k] = ipkg.remove(k)
-		end
+	local rem = submit and luci.http.formvalue("remove")
+	if rem then	
+		_, remove[rem] = ipkg.remove(rem)
 		changes = true
 	end
-	
+
 	
 	-- Update all packets
 	local update = luci.http.formvalue("update")
 	if update then
-		void, update = ipkg.update()
+		_, update = ipkg.update()
 	end
 	
 	
 	-- Upgrade all packets
 	local upgrade = luci.http.formvalue("upgrade")
 	if upgrade then
-		void, upgrade = ipkg.upgrade()
+		_, upgrade = ipkg.upgrade()
 	end
+
 	
-	
-	-- Package info
-	local info = luci.model.ipkg.info(query and "*"..query.."*")
-	info = info or {}
-	local pkgs = {}
-	
-	-- Sort after status and name
-	for k, v in pairs(info) do
-		local x = 0
-		for i, j in pairs(pkgs) do
-			local vins = (v.Status and v.Status.installed)
-			local jins = (j.Status and j.Status.installed)
-			if vins ~= jins then
-				if vins then
-					break
-				end
-			else
-				if j.Package > v.Package then
-					break
-				end
-			end
-			x = i
-		end
-		table.insert(pkgs, x+1, v)
-	end 
-	
-	luci.template.render("admin_system/packages", {pkgs=pkgs, query=query,
-	 install=install, remove=remove, update=update, upgrade=upgrade})
-	 
+	luci.template.render("admin_system/packages", {
+		query=query, install=install, remove=remove, update=update, upgrade=upgrade
+	})
+ 
 	-- Remove index cache
 	if changes then
 		nixio.fs.unlink("/tmp/luci-indexcache")
