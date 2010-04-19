@@ -86,8 +86,11 @@ end
 hwaddr = s:option(DummyValue, "_hwaddr",
 	translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"),
         translate("Hardware Address"))
+
 function hwaddr.cfgvalue(self, section)
 	local ix = self.map:get(section, "ifname") or ""
+	      ix = (type(ix) == "table") and ix[1] or ix
+
 	local mac = fs.readfile("/sys/class/net/" .. ix .. "/address")
 
 	if not mac then
