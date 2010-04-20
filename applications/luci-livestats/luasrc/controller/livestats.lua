@@ -18,12 +18,14 @@ module("luci.controller.livestats", package.seeall)
 function index()
 	require("luci.i18n")
 	luci.i18n.loadc("livestats")
+	local i18n = luci.i18n.translate
 
-	entry( {"admin", "status", "wifistat"}, template("livestats/wireless"), luci.i18n.translate("Realtime Wireless Status"), 90 ).i18n = "livestats"
-	entry( {"admin", "status", "trafstat"}, template("livestats/traffic"),  luci.i18n.translate("Realtime Traffic Status"),  91 ).i18n = "livestats"
-	entry( {"admin", "status", "loadavg"},  template("livestats/loadavg"),  luci.i18n.translate("Realtime Load Status"),  92 ).i18n = "livestats"
+	entry( {"admin", "status", "livestats"}, alias("admin", "status", "livestats", "wifistat"), i18n("Realtime Status"), 90 ).i18n = "livestats"
+	entry( {"admin", "status", "livestats", "wifistat"}, template("livestats/wireless"),        i18n("Wireless"),        10 )
+	entry( {"admin", "status", "livestats", "trafstat"}, template("livestats/traffic"),         i18n("Traffic"),         20 )
+	entry( {"admin", "status", "livestats", "loadavg"},  template("livestats/loadavg"),         i18n("System Load"),     30 )
 	
-	entry( {"mini", "network", "wifistat"}, template("livestats/wireless"), luci.i18n.translate("Realtime Wireless Status"), 90 ).i18n = "livestats"
-	entry( {"mini", "network", "trafstat"}, template("livestats/traffic"),  luci.i18n.translate("Realtime Traffic Status"),  91 ).i18n = "livestats"
-	entry( {"mini", "system", "loadavg"},  template("livestats/loadavg"),  luci.i18n.translate("Realtime Load Status"),  92 ).i18n = "livestats"
+	entry( {"mini", "network", "wifistat"}, template("livestats/wireless"), i18n("Realtime Wireless Status"), 90 ).i18n = "livestats"
+	entry( {"mini", "network", "trafstat"}, template("livestats/traffic"),  i18n("Realtime Traffic Status"),  91 ).i18n = "livestats"
+	entry( {"mini", "system", "loadavg"},   template("livestats/loadavg"),  i18n("Realtime Load Status"),     92 ).i18n = "livestats"
 end
