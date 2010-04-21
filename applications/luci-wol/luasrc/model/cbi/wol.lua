@@ -23,51 +23,6 @@ m.reset  = false
 local has_ewk = fs.access("/usr/bin/etherwake")
 local has_wol = fs.access("/usr/bin/wol")
 
-if luci.http.formvalue("cbi.submit") then
-	local host = luci.http.formvalue("cbid.wol.1.mac")
-	if host and #host > 0 then
-		local cmd
-		local util = luci.http.formvalue("cbid.wol.1.binary") or (
-			has_ewk and "/usr/bin/etherwake" or "/usr/bin/wol"
-		)
-
-		if util == "/usr/bin/etherwake" then
-			local iface = luci.http.formvalue("cbid.wol.1.iface")
-			cmd = "%s -D%s %q" %{
-				util, (iface ~= "" and " -i %q" % iface or ""), host
-			}
-		else
-			cmd = "%s -v %q" %{ util, host }
-		end
-
-		is = m:section(SimpleSection)
-
-		function is.render()
-			luci.http.write(
-				"<p><br /><strong>%s</strong><br /><br /><code>%s<br /><br />" %{
-					translate("Starting WoL utility:"), cmd
-				}
-			)
-
-			local p = io.popen(cmd .. " 2>&1")
-			if p then
-				while true do
-					local l = p:read("*l")
-					if l then
-						if #l > 100 then l = l:sub(1, 100) .. "..." end
-						luci.http.write(l .. "<br />")
-					else
-						break
-					end
-				end
-				p:close()
-			end
-
-			luci.http.write("</code><br /></p>")
-		end
-	end
-end
-
 
 s = m:section(SimpleSection)
 
@@ -117,6 +72,48 @@ host = s:option(Value, "mac", translate("Host to wake up"),
 
 for mac, ip in pairs(arp) do
 	host:value(mac, "%s (%s)" %{ mac, ip[2] or ip[1] })
+end
+
+
+function host.write(self, s, val)
+	local host = luci.http.formvalue("cbid.wol.1.mac")
+	if host and #host > 0 then
+		local cmd
+		local util = luci.http.formvalue("cbid.wol.1.binary") or (
+			has_ewk and "/usr/bin/etherwake" or "/usr/bin/wol"
+		)
+
+		if util == "/usr/bin/etherwake" then
+			local iface = luci.http.formvalue("cbid.wol.1.iface")
+			cmd = "%s -D%s %q" %{
+				util, (iface ~= "" and " -i %q" % iface or ""), host
+			}
+		else
+			cmd = "%s -v %q" %{ util, host }
+		end
+
+		local msg = "<p><strong>%s</strong><br /><br /><code>%s<br /><br />" %{
+			translate("Starting WoL utility:"), cmd
+		}
+
+		local p = io.popen(cmd .. " 2>&1")
+		if p then
+			while true do
+				local l = p:read("*l")
+				if l then
+					if #l > 100 then l = l:sub(1, 100) .. "..." end
+					msg = msg .. l .. "<br />"
+				else
+					break
+				end
+			end
+			p:close()
+		end
+
+		msg = msg .. "</code></p>"
+
+		m.message = msg
+	end
 end
 
 
