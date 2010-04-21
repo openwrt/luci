@@ -788,6 +788,17 @@ define Package/luci-app-wol/install
         $(call Package/luci/install/template,$(1),applications/luci-wol)
 endef
 
+define Package/luci-app-vnstat
+  $(call Package/luci/webtemplate)
+  TITLE:=LuCI Support for VnStat
+  DEPENDS+=+luci-admin-core +PACKAGE_luci-app-vnstat:vnstat \
+    +PACKAGE_luci-app-vnstat:vnstati
+endef
+
+define Package/luci-app-vnstat/install
+        $(call Package/luci/install/template,$(1),applications/luci-vnstat)
+endef
+
 
 ### Server Gateway Interfaces ###
 
@@ -1215,6 +1226,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-app-wol),)
        PKG_SELECTED_MODULES+=applications/luci-wol
 endif
+ifneq ($(CONFIG_PACKAGE_luci-app-vnstat),)
+       PKG_SELECTED_MODULES+=applications/luci-vnstat
+endif
 
 
 ifneq ($(CONFIG_PACKAGE_luci-sgi-cgi),)
@@ -1351,6 +1365,7 @@ $(eval $(call BuildPackage,luci-app-openvpn))
 $(eval $(call BuildPackage,luci-app-p2pblock))
 $(eval $(call BuildPackage,luci-app-multiwan))
 $(eval $(call BuildPackage,luci-app-wol))
+$(eval $(call BuildPackage,luci-app-vnstat))
 
 $(eval $(call BuildPackage,luci-sgi-cgi))
 $(eval $(call BuildPackage,luci-sgi-uhttpd))
