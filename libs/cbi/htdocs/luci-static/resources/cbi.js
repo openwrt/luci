@@ -2,15 +2,13 @@
 	LuCI - Lua Configuration Interface
 
 	Copyright 2008 Steven Barth <steven@midlink.org>
-	Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
+	Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
-
-	$Id$
 */
 
 var cbi_d = [];
@@ -446,5 +444,46 @@ function cbi_t_update() {
 				window.setTimeout(function() { t.className = t.className.replace(/ cbi-tab-highlighted/g, '') }, 750);
 				cbi_t[sid][tid].tab.className += ' cbi-tab-highlighted';
 			}
+}
+
+
+function cbi_validate_disable_form(form, onoff)
+{
+	for( var i = 0; i < form.elements.length; i++ )
+	{
+		if( form.elements[i].type == 'submit' )
+		{
+			form.elements[i].disabled = onoff;
+			break;
+		}
+	}
+}
+
+function cbi_validate_field(type, optional, field)
+{
+	var vldcb = cbi_validators[type];
+	if( vldcb )
+	{
+		var value = (field.options) ? field.options[field.options.selectedIndex].value : field.value;
+
+		if( ((value.length == 0) && optional) || vldcb(value) )
+		{
+			// OK
+			field.className = field.className.replace(/ cbi-input-invalid/g, '');
+			cbi_validate_disable_form(field.form, false);
+		}
+		else
+		{
+			// Invalid
+			field.className += ' cbi-input-invalid';
+			cbi_validate_disable_form(field.form, true);
+		}
+	}
+	else
+	{
+		// OK
+		field.className = field.className.replace(/ cbi-input-invalid/g, '');
+		cbi_validate_disable_form(field.form, false);
+	}
 }
 
