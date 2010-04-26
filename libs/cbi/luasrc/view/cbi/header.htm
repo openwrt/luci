@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ $Id$
 -%>
 
 <%+header%>
-<form method="post" name="cbi" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+<form method="post" name="cbi" action="<%=REQUEST_URI%>" enctype="multipart/form-data" onreset="return cbi_validate_reset(this)" onsubmit="return cbi_validate_form(this, '<%:Some fields are invalid, cannot save values!%>')">
 	<div>
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />

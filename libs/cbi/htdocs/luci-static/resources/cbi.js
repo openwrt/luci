@@ -304,6 +304,9 @@ function cbi_combobox(id, values, def, man) {
 	var sel = document.createElement("select");
 	sel.id = selid;
 	sel.className = 'cbi-input-select';
+	if (obj.className && obj.className.match(/cbi-input-invalid/)) {
+		sel.className += ' cbi-input-invalid';
+	}
 	if (obj.nextSibling) {
 		obj.parentNode.insertBefore(sel, obj.nextSibling);
 	} else {
@@ -351,6 +354,8 @@ function cbi_combobox(id, values, def, man) {
 			obj.focus();
 		} else {
 			obj.value = sel.options[sel.selectedIndex].value;
+			sel.className = (!obj.validate || obj.validate())
+				? 'cbi-input-select' : 'cbi-input-select cbi-input-invalid';
 		}
 
 		try {
@@ -447,43 +452,63 @@ function cbi_t_update() {
 }
 
 
-function cbi_validate_disable_form(form, onoff)
+function cbi_validate_form(form, errmsg)
 {
-	for( var i = 0; i < form.elements.length; i++ )
+	if( form.cbi_validators )
 	{
-		if( form.elements[i].type == 'submit' )
+		for( var i = 0; i < form.cbi_validators.length; i++ )
 		{
-			form.elements[i].disabled = onoff;
-			break;
+			var validator = form.cbi_validators[i];
+			if( !validator() && errmsg )
+			{
+				alert(errmsg);
+				return false;
+			}
 		}
 	}
+
+	return true;
 }
 
-function cbi_validate_field(type, optional, field)
+function cbi_validate_reset(form)
 {
-	field.className = field.className.replace(/ cbi-input-invalid/g, '');
+	window.setTimeout(
+		function() { cbi_validate_form(form, null) }, 100
+	);
 
+	return true;
+}
+
+function cbi_validate_field(cbid, optional, type)
+{
+	var field = document.getElementById(cbid);
 	var vldcb = cbi_validators[type];
-	if( vldcb )
-	{
-		var value = (field.options) ? field.options[field.options.selectedIndex].value : field.value;
 
-		if( ((value.length == 0) && optional) || vldcb(value) )
-		{
-			// OK
-			cbi_validate_disable_form(field.form, false);
-		}
-		else
-		{
-			// Invalid
-			field.className += ' cbi-input-invalid';
-			cbi_validate_disable_form(field.form, true);
-		}
-	}
-	else
+	if( field && vldcb )
 	{
-		// OK
-		cbi_validate_disable_form(field.form, false);
+		var validator = function(reset)
+		{
+			field.className = field.className.replace(/ cbi-input-invalid/g, '');
+
+			// validate value
+			var value = (field.options) ? field.options[field.options.selectedIndex].value : field.value;
+			if( !(((value.length == 0) && optional) || vldcb(value)) )
+			{
+				// invalid
+				field.className += ' cbi-input-invalid';
+				return false;
+			}
+
+			return true;
+		};
+
+		if( ! field.form.cbi_validators )
+			field.form.cbi_validators = [ ];
+
+		field.form.cbi_validators.push(validator);
+		field.onblur = field.onkeyup = field.validate = validator;
+
+		validator();
 	}
 }
 

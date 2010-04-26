@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@ $Id$
 <%+cbi/valueheader%>
 	<input type="<%=self.password and 'password" class="cbi-input-password' or 'text" class="cbi-input-text' %>" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. attr("id", cbid) .. attr("value", self:cfgvalue(section) or self.default) .. ifattr(self.size, "size")%> />
 	<% if self.password then %><img src="<%=resource%>/cbi/reload.gif" style="vertical-align:middle" title="<%:Reveal/hide password%>" onclick="var e = document.getElementById('<%=cbid%>'); e.type = (e.type=='password') ? 'text' : 'password';" /><% end %>
-	<% if #self.keylist > 0 then -%>
+	<% if #self.keylist > 0 or self.datatype then -%>
 	<script type="text/javascript">
+		<% if #self.keylist > 0 then -%>
 		cbi_combobox_init('<%=cbid%>', {
 		<%-
 			for i, k in ipairs(self.keylist) do
@@ -34,6 +35,10 @@ $Id$
 		<%- else -%>
 			<%-: -- custom -- -%>
 		<%- end -%>');
+		<%- end %>
+		<% if self.datatype then -%>
+		cbi_validate_field('<%=cbid%>', <%=tostring(self.optional == true)%>, '<%=self.datatype%>');
+		<%- end %>
 	</script>
 	<% end -%>
 <%+cbi/valuefooter%>
