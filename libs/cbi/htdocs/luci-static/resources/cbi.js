@@ -461,6 +461,8 @@ function cbi_validate_disable_form(form, onoff)
 
 function cbi_validate_field(type, optional, field)
 {
+	field.className = field.className.replace(/ cbi-input-invalid/g, '');
+
 	var vldcb = cbi_validators[type];
 	if( vldcb )
 	{
@@ -469,7 +471,6 @@ function cbi_validate_field(type, optional, field)
 		if( ((value.length == 0) && optional) || vldcb(value) )
 		{
 			// OK
-			field.className = field.className.replace(/ cbi-input-invalid/g, '');
 			cbi_validate_disable_form(field.form, false);
 		}
 		else
@@ -482,7 +483,6 @@ function cbi_validate_field(type, optional, field)
 	else
 	{
 		// OK
-		field.className = field.className.replace(/ cbi-input-invalid/g, '');
 		cbi_validate_disable_form(field.form, false);
 	}
 }
