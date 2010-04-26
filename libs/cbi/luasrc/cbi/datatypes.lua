@@ -23,7 +23,7 @@ local tonumber = tonumber
 module "luci.cbi.datatypes"
 
 
-function bool( val )
+function bool(val)
 	if val == "1" or val == "yes" or val == "on" or val == "true" then
 		return true
 	elseif val == "0" or val == "no" or val == "off" or val == "false" then
@@ -35,7 +35,7 @@ function bool( val )
 	return false
 end
 
-function uint( val )
+function uint(val)
 	local n = tonumber(val)
 	if n ~= nil and math.floor(n) == n and n >= 0 then
 		return true
@@ -44,7 +44,7 @@ function uint( val )
 	return false
 end
 
-function int( val )
+function int(val)
 	local n = tonumber(val)
 	if n ~= nil and math.floor(n) == n then
 		return true
@@ -53,15 +53,15 @@ function int( val )
 	return false
 end
 
-function float( val )
+function float(val)
 	return ( tonumber(val) ~= nil )
 end
 
-function ipaddr( val )
+function ipaddr(val)
 	return ip4addr(val) or ip6addr(val)
 end
 
-function ip4addr( val )
+function ip4addr(val)
 	if val then
 		return ip.IPv4(val) and true or false
 	end
@@ -69,12 +69,12 @@ function ip4addr( val )
 	return false
 end
 
-function ip4prefix( val )
+function ip4prefix(val)
 	val = tonumber(val)
 	return ( val and val >= 0 and val <= 32 )
 end
 
-function ip6addr( val )
+function ip6addr(val)
 	if val then
 		return ip.IPv6(val) and true or false
 	end
@@ -82,17 +82,17 @@ function ip6addr( val )
 	return false
 end
 
-function ip6prefix( val )
+function ip6prefix(val)
 	val = tonumber(val)
 	return ( val and val >= 0 and val <= 128 )
 end
 
-function port( val )
+function port(val)
 	val = tonumber(val)
 	return ( val and val >= 1 and val <= 65535 )
 end
 
-function portrange( val )
+function portrange(val)
 	local p1, p2 = val:match("^(%d+)%-(%d+)$")
 	if p1 and p2 and port(p1) and port(p2) then
 		return true
@@ -101,7 +101,7 @@ function portrange( val )
 	end
 end
 
-function macaddr( val )
+function macaddr(val)
 	if val and val:match(
 		"^[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+:" ..
 		 "[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+$"
@@ -121,7 +121,7 @@ function macaddr( val )
 	return false
 end
 
-function hostname( val )
+function hostname(val)
 	if val and val:match("[a-zA-Z0-9_][a-zA-Z0-9_%-%.]*") then
 		return true	-- XXX: ToDo: need better solution
 	end
@@ -129,16 +129,36 @@ function hostname( val )
 	return false
 end
 
-function host( val )
+function host(val)
 	return hostname(val) or ipaddr(val)
 end
 
-function string( val )
+function wpakey(val)
+	if #val == 64 then
+		return (val:match("^[a-fA-F0-9]+$") ~= nil)
+	else
+		return (#val >= 8) and (#val <= 63)
+	end
+end
+
+function wepkey(val)
+	if val:sub(1, 2) == "s:" then
+		val = val:sub(3)
+	end
+
+	if (#val == 10) or (#val == 26) then
+		return (val:match("^[a-fA-F0-9]+$") ~= nil)
+	else
+		return (#v == 5) or (#v == 13)
+	end
+end
+
+function string(val)
 	return true		-- Everything qualifies as valid string
 end
 
 function directory( val, seen )
-	local s = fs.stat( val )
+	local s = fs.stat(val)
 	seen = seen or { }
 
 	if s and not seen[s.ino] then
@@ -154,7 +174,7 @@ function directory( val, seen )
 end
 
 function file( val, seen )
-	local s = fs.stat( val )
+	local s = fs.stat(val)
 	seen = seen or { }
 
 	if s and not seen[s.ino] then
@@ -170,7 +190,7 @@ function file( val, seen )
 end
 
 function device( val, seen )
-	local s = fs.stat( val )
+	local s = fs.stat(val)
 	seen = seen or { }
 
 	if s and not seen[s.ino] then
