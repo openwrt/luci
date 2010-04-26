@@ -26,13 +26,13 @@ default_route.default = "balancer"
 default_route.optional = false
 default_route.rmempty = false
 
-resolv_conf = s:option(Value, "resolv_conf", translate("DNS configuration file"),
-	translate("(dnsmasq uses /tmp/resolv.conf.auto)"))
+resolv_conf = s:option(Value, "resolv_conf", translate("DNS Configuration File"),
+	translate("Writeable resolv file, dnsmasq defaults to /tmp/resolv.conf.auto"))
 resolv_conf.default = "/tmp/resolv.conf.auto"
 resolv_conf.optional = false
 resolv_conf.rmempty = false
 
-s = m:section(TypedSection, "interface", translate("WAN Uplinks Configuration"),
+s = m:section(TypedSection, "interface", translate("WAN Interfaces"),
 	translate("Health Monitor detects and corrects network changes and failed connections."))
 s.addremove = true
 
@@ -48,11 +48,11 @@ weight:value("3", "3")
 weight:value("2", "2")
 weight:value("1", "1")
 weight:value("disable", translate("None"))
-weight.default = "5"
+weight.default = "10"
 weight.optional = false
 weight.rmempty = false
 
-interval = s:option(ListValue, "health_interval", translate("Health Monitor Frequency"))
+interval = s:option(ListValue, "health_interval", translate("Health Monitor Interval"))
 interval:value("disable", translate("Disable"))
 interval:value("5", "5 sec.")
 interval:value("10", "10 sec.")
