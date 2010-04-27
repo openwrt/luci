@@ -31,7 +31,17 @@ $Id$
 
 <% if self.error and self.error[section] then -%>
 	<div class="cbi-section-error">
-		<ul><% for _, e in ipairs(self.error[section]) do %><li><%=pcdata(e):gsub("\n","<br />")%></li><% end %></ul>
+		<ul><% for _, e in ipairs(self.error[section]) do -%>
+			<li>
+				<%- if e == "invalid" then -%>
+					<%:One or more fields contain invalid values!%>
+				<%- elseif e == "missing" then -%>
+					<%:One or more required fields have no value!%>
+				<%- else -%>
+					<%=pcdata(e)%>
+				<%- end -%>
+			</li>
+		<%- end %></ul>
 	</div>
 <%- end %>
 

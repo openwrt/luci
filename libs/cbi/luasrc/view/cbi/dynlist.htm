@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,4 +42,11 @@ $Id$
 	<% end -%>
 <% if i <= #vals then %><br />
 <% end end %>
+<% if self.datatype then -%>
+	<script type="text/javascript">
+		<% for i=1, #vals + 1 do -%>
+		cbi_validate_field('<%=cbid%>.<%=i%>', <%=tostring(self.optional == true or i > #vals)%>, '<%=self.datatype%>');
+		<%- end %>
+	</script>
+<% end -%>
 <%+cbi/valuefooter%>

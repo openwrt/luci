@@ -813,7 +813,7 @@ function AbstractSection.parse_optionals(self, section)
 
 	local field = self.map:formvalue("cbi.opt."..self.config.."."..section)
 	for k,v in ipairs(self.children) do
-		if v.optional and not v:cfgvalue(section) then
+		if v.optional and not v:cfgvalue(section) and not next(self.tabs) then
 			if field == v.option then
 				field = nil
 				self.map.proceed = true
@@ -1290,7 +1290,7 @@ end
 
 -- Render if this value exists or if it is mandatory
 function AbstractValue.render(self, s, scope)
-	if not self.optional or self:cfgvalue(s) or self:formcreated(s) then
+	if not self.optional or next(self.section.tabs) or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
 		scope.section   = s
 		scope.cbid      = self:cbid(s)
@@ -1339,12 +1339,20 @@ end
 -- Validate the form value
 function AbstractValue.validate(self, value)
 	if self.datatype and value and datatypes[self.datatype] then
-		if datatypes[self.datatype](value) then
-			return value
+		if type(value) == "table" then
+			local v
+			for _, v in ipairs(value) do
+				if v and #v > 0 and not datatypes[self.datatype](v) then
+					return nil
+				end
+			end
+		else
+			if not datatypes[self.datatype](value) then
+				return nil
+			end
 		end
-	else
-		return value
 	end
+	return value
 end
 
 AbstractValue.transform = AbstractValue.validate

@@ -488,15 +488,19 @@ function cbi_validate_field(cbid, optional, type)
 	{
 		var validator = function(reset)
 		{
-			field.className = field.className.replace(/ cbi-input-invalid/g, '');
-
-			// validate value
-			var value = (field.options) ? field.options[field.options.selectedIndex].value : field.value;
-			if( !(((value.length == 0) && optional) || vldcb(value)) )
+			// is not detached
+			if( field.form )
 			{
-				// invalid
-				field.className += ' cbi-input-invalid';
-				return false;
+				field.className = field.className.replace(/ cbi-input-invalid/g, '');
+
+				// validate value
+				var value = (field.options) ? field.options[field.options.selectedIndex].value : field.value;
+				if( !(((value.length == 0) && optional) || vldcb(value)) )
+				{
+					// invalid
+					field.className += ' cbi-input-invalid';
+					return false;
+				}
 			}
 
 			return true;
