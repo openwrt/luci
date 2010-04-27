@@ -764,6 +764,11 @@ function AbstractSection.tab(self, tab, title, desc)
 	}
 end
 
+-- Check whether the section has tabs
+function AbstractSection.has_tabs(self)
+	return (self.tabs ~= nil) and (next(self.tabs) ~= nil)
+end
+
 -- Appends a new option
 function AbstractSection.option(self, class, option, ...)
 	if instanceof(class, AbstractValue) then
@@ -813,7 +818,7 @@ function AbstractSection.parse_optionals(self, section)
 
 	local field = self.map:formvalue("cbi.opt."..self.config.."."..section)
 	for k,v in ipairs(self.children) do
-		if v.optional and not v:cfgvalue(section) and not next(self.tabs) then
+		if v.optional and not v:cfgvalue(section) and not self:has_tabs() then
 			if field == v.option then
 				field = nil
 				self.map.proceed = true
@@ -1290,7 +1295,7 @@ end
 
 -- Render if this value exists or if it is mandatory
 function AbstractValue.render(self, s, scope)
-	if not self.optional or next(self.section.tabs) or self:cfgvalue(s) or self:formcreated(s) then
+	if not self.optional or self.section:has_tabs() or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
 		scope.section   = s
 		scope.cbid      = self:cbid(s)
