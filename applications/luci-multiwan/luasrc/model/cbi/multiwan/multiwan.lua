@@ -26,12 +26,6 @@ default_route.default = "balancer"
 default_route.optional = false
 default_route.rmempty = false
 
-resolv_conf = s:option(Value, "resolv_conf", translate("DNS Configuration File"),
-	translate("Writeable resolv file, dnsmasq defaults to /tmp/resolv.conf.auto"))
-resolv_conf.default = "/tmp/resolv.conf.auto"
-resolv_conf.optional = false
-resolv_conf.rmempty = false
-
 s = m:section(TypedSection, "interface", translate("WAN Interfaces"),
 	translate("Health Monitor detects and corrects network changes and failed connections."))
 s.addremove = true
@@ -112,6 +106,12 @@ failover_to:value("balancer", translate("Load Balancer"))
 failover_to.default = "balancer"
 failover_to.optional = false
 failover_to.rmempty = false
+
+dns = s:option(Value, "dns", translate("DNS Server(s)"))
+dns:value("", translate("Auto"))
+dns.default = ""
+dns.optional = false
+dns.rmempty = true
 
 s = m:section(TypedSection, "mwanfw", translate("Multi-WAN Traffic Rules"),
 	translate("Configure rules for directing outbound traffic through specified WAN Uplinks."))

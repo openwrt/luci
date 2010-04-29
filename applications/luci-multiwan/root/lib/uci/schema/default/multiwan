@@ -15,41 +15,35 @@ config variable
 	option section	'multiwan.multiwan'
 	option required true
 
-config variable
-	option name	'resolv_conf'
-	option title	'DNS configuration file'
-	option section	'multiwan.multiwan'
-	option required true
-
 config section
 	option name     'interface'
-	option title    'WAN Uplinks Configuration'
+	option title    'WAN Interfaces'
 	option named    true
 	option required true
 
 config variable
 	option name	'weight'
-	option title    'Load Balancer Weight'
+	option title    'Load Balancer Distribution'
 	option section  'multiwan.interface'
 	option datatype 'integer'
 	option required true
 
 config variable
 	option name	'health_interval'
-	option title	'Health Monitor - Interval'
+	option title	'Health Monitor Interval'
 	option section	'multiwan.multiwan'
 	option datatype 'integer'
 	option required true
 
 config variable
 	option name	'icmp_hosts'
-	option title	'Health Monitor - ICMP Host(s)'
+	option title	'Health Monitor ICMP Host(s)'
 	option section	'multiwan.interface'
 	option required true
 
 config variable
 	option name	'timeout'
-	option title	'Health Monitor - ICMP Timeout'
+	option title	'Health Monitor ICMP Timeout'
 	option section	'multiwan.interface'
 	option datatype 'integer'
 	option required true
@@ -73,6 +67,11 @@ config variable
 	option title	'Failover Traffic Destination'
 	option section	'multiwan.interface'
 	option required true
+
+config variable
+	option name	'dns'
+	option title	'DNS Server(s)'
+	option section	'multiwan.interface'
 
 config section
 	option name     'mwanfw'
@@ -101,7 +100,7 @@ config section
 
 config section
 	option name     'wanrule'
-	option title    'WAN Traffic Decision'
+	option title    'WAN Uplink'
 	option section  'multiwan.mwanfw'
 	option required true
 
