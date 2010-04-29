@@ -108,8 +108,8 @@ failover_to.optional = false
 failover_to.rmempty = false
 
 dns = s:option(Value, "dns", translate("DNS Server(s)"))
-dns:value("", translate("Auto"))
-dns.default = ""
+dns:value("auto", translate("Auto"))
+dns.default = "auto"
 dns.optional = false
 dns.rmempty = true
 
