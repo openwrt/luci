@@ -1018,6 +1018,15 @@ define Package/luci-i18n-vietnamese/install
 	$(call Package/luci/install/template,$(1),i18n/vietnamese)
 endef
 
+define Package/luci-i18n-malay
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Malay (by Teow Wai Chet)
+endef
+
+define Package/luci-i18n-malay/install
+	$(call Package/luci/install/template,$(1),i18n/malay)
+endef
+
 
 ### Collections ###
 define Package/luci
@@ -1299,6 +1308,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-vietnamese),)
 	PKG_SELECTED_MODULES+=i18n/vietnamese
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-malay),)
+	PKG_SELECTED_MODULES+=i18n/malay
+endif
 
 
 MAKE_FLAGS += \
@@ -1390,6 +1402,7 @@ $(eval $(call BuildPackage,luci-i18n-catalan))
 $(eval $(call BuildPackage,luci-i18n-portuguese))
 $(eval $(call BuildPackage,luci-i18n-spanish))
 $(eval $(call BuildPackage,luci-i18n-vietnamese))
+$(eval $(call BuildPackage,luci-i18n-malay))
 
 $(eval $(call BuildPackage,luci))
 $(eval $(call BuildPackage,luci-ssl))
