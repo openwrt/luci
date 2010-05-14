@@ -10,4 +10,9 @@ function index()
 	page.i18n = "multiwan"
 	page.dependent = true
 
+        local page = entry({"mini", "network", "multiwan"}, cbi("multiwan/multiwanmini", {autoapply=true}), "Multi-WAN")
+        page.i18n = "multiwan"
+        page.dependent = true
+
+
 end
