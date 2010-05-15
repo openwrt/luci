@@ -19,14 +19,6 @@ function e.cfgvalue(self, section)
         return (os.execute("/etc/init.d/multiwan enabled") == 0) and "1" or "0"
 end
 
-default_route = s:option(ListValue, "default_route", translate("Default Route"))
-luci.tools.webadmin.cbi_add_networks(default_route)
-default_route:value("fastbalancer", translate("Fast Balancer"))
-default_route:value("balancer", translate("Load Balancer"))
-default_route.default = "balancer"
-default_route.optional = false
-default_route.rmempty = false
-
 s = m:section(TypedSection, "mwanfw", translate("Multi-WAN Traffic Rules"),
 	translate("Configure rules for directing outbound traffic through specified WAN Uplinks."))
 s.template = "cbi/tblsection"
@@ -61,5 +53,16 @@ wanrule:value("balancer", translate("Load Balancer"))
 wanrule.default = "fastbalancer"
 wanrule.optional = false
 wanrule.rmempty = false
+
+s = m:section(NamedSection, "config", "", "")
+s.addremove = false
+
+default_route = s:option(ListValue, "default_route", translate("Default Route"))
+luci.tools.webadmin.cbi_add_networks(default_route)
+default_route:value("fastbalancer", translate("Fast Balancer"))
+default_route:value("balancer", translate("Load Balancer"))
+default_route.default = "balancer"
+default_route.optional = false
+default_route.rmempty = false
 
 return m
