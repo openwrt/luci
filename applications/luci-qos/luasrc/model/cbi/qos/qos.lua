@@ -24,7 +24,8 @@ s = m:section(TypedSection, "interface", translate("Interfaces"))
 s.addremove = true
 s.anonymous = false
 
-s:option(Flag, "enabled", translate("Enable"))
+e = s:option(Flag, "enabled", translate("Enable"))
+e.rmempty = false
 
 c = s:option(ListValue, "classgroup", translate("Classification group"))
 c:value("Default", translate("default"))
