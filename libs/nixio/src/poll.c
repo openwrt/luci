@@ -21,6 +21,16 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/time.h>
+
+
+static int nixio_gettimeofday(lua_State *L) {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	nixio__pushnumber(L, tv.tv_sec);
+	nixio__pushnumber(L, tv.tv_usec);
+	return 2;
+}
 
 
 /**
@@ -188,6 +198,7 @@ static int nixio_poll(lua_State *L) {
 
 /* module table */
 static const luaL_reg R[] = {
+	{"gettimeofday", nixio_gettimeofday},
 	{"nanosleep",	nixio_nanosleep},
 	{"poll",		nixio_poll},
 	{"poll_flags",	nixio_poll_flags},
