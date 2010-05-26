@@ -95,8 +95,8 @@ recovery.rmempty = false
 failover_to = s:option(ListValue, "failover_to", translate("Failover Traffic Destination"))
 failover_to:value("disable", translate("None"))
 luci.tools.webadmin.cbi_add_networks(failover_to)
-failover_to:value("fastbalancer", translate("Fast Balancer"))
-failover_to:value("balancer", translate("Load Balancer"))
+failover_to:value("fastbalancer", translate("Load Balancer(Performance)"))
+failover_to:value("balancer", translate("Load Balancer(Compatibility)"))
 failover_to.default = "balancer"
 failover_to.optional = false
 failover_to.rmempty = false
@@ -136,8 +136,8 @@ ports:value("", translate("all", translate("all")))
 
 wanrule = s:option(ListValue, "wanrule", translate("WAN Uplink"))
 luci.tools.webadmin.cbi_add_networks(wanrule)
-wanrule:value("fastbalancer", translate("Fast Balancer"))
-wanrule:value("balancer", translate("Load Balancer"))
+wanrule:value("fastbalancer", translate("Load Balancer(Performance)"))
+wanrule:value("balancer", translate("Load Balancer(Compatibility)"))
 wanrule.default = "fastbalancer"
 wanrule.optional = false
 wanrule.rmempty = false
@@ -147,8 +147,8 @@ s.addremove = false
 
 default_route = s:option(ListValue, "default_route", translate("Default Route"))
 luci.tools.webadmin.cbi_add_networks(default_route)
-default_route:value("fastbalancer", translate("Fast Balancer"))
-default_route:value("balancer", translate("Load Balancer"))
+default_route:value("fastbalancer", translate("Load Balancer(Performance)"))
+default_route:value("balancer", translate("Load Balancer(Compatibility)"))
 default_route.default = "balancer"
 default_route.optional = false
 default_route.rmempty = false
