@@ -41,7 +41,7 @@ luci.model.uci.cursor():foreach("firewall", "zone",
 
 proto = s:option(Value, "proto", translate("protocol"))
 proto.optional = true
-proto:value("")
+proto:value("all", translate("firewall_rule_proto_all", "Any"))
 proto:value("tcpudp", "TCP+UDP")
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
