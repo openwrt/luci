@@ -35,7 +35,7 @@ dst.rmempty = true
 dst:value("", translate("all"))
 luci.tools.webadmin.cbi_add_knownips(dst)
 
-proto = s:option(ListValue, "proto", translate("Protocol"))
+proto = s:option(Value, "proto", translate("Protocol"))
 proto:value("", translate("all"))
 proto:value("tcp", "TCP")
 proto:value("udp", "UDP")
