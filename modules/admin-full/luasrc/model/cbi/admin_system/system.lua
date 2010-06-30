@@ -94,10 +94,10 @@ function tz.write(self, section, value)
 	luci.fs.writefile("/etc/TZ", timezone .. "\n")
 end
 
-s:option(Value, "log_size", nil, "kiB").optional = true
-s:option(Value, "log_ip").optional = true
-s:option(Value, "conloglevel").optional = true
-s:option(Value, "cronloglevel").optional = true
+s:option(Value, "log_size", translate("Log Size"), "kiB").optional = true
+s:option(Value, "log_ip", translate("Remote Syslog IP")).optional = true
+s:option(Value, "conloglevel", translate("Console Log Level")).optional = true
+s:option(Value, "cronloglevel", translate("Cron Log Level")).optional = true
 
 s2 = m:section(TypedSection, "rdate", translate("Time Server (rdate)"))
 s2.anonymous = true
