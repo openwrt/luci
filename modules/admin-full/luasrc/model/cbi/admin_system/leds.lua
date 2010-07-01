@@ -38,18 +38,18 @@ function s.parse(self, ...)
 end
 
 
-s:option(Value, "name")
+s:option(Value, "name", translate("Name"))
 
 
-sysfs = s:option(ListValue, "sysfs")
+sysfs = s:option(ListValue, "sysfs", translate("<abbr title=\"Light Emitting Diode\">LED</abbr> Name"))
 for k, v in ipairs(leds) do
 	sysfs:value(v)
 end
 
-s:option(Flag, "default").rmempty = true
+s:option(Flag, "default", translate("Default state")).rmempty = true
 
 
-trigger = s:option(ListValue, "trigger")
+trigger = s:option(ListValue, "trigger", translate("Trigger"))
 
 local triggers = fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
@@ -57,14 +57,14 @@ for t in triggers:gmatch("[%w-]+") do
 end 
 
 
-delayon = s:option(Value, "delayon")
+delayon = s:option(Value, "delayon", translate ("On-State Delay"))
 delayon:depends("trigger", "timer")
 
-delayoff = s:option(Value, "delayoff")
+delayoff = s:option(Value, "delayoff", translate ("Off-State Delay"))
 delayoff:depends("trigger", "timer")
 
 
-dev = s:option(ListValue, "dev")
+dev = s:option(ListValue, "dev", translate("Device"))
 dev.rmempty = true
 dev:value("")
 dev:depends("trigger", "netdev")
@@ -75,7 +75,7 @@ for k, v in pairs(luci.sys.net.devices()) do
 end
 
 
-mode = s:option(MultiValue, "mode")
+mode = s:option(MultiValue, "mode", translate("Trigger Mode"))
 mode.rmempty = true
 mode:depends("trigger", "netdev")
 mode:value("link", translate("Link On"))
