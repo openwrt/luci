@@ -2,4 +2,5 @@
 [ -n "${IPKG_INSTROOT}" ] || {
 	( . /etc/uci-defaults/luci-p2pblock ) && rm -f /etc/uci-defaults/luci-p2pblock
 	/etc/init.d/freifunk-p2pblock enabled || /etc/init.d/freifunk-p2pblock enable
+	exit 0
 }

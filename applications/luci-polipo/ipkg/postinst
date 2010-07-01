@@ -2,4 +2,5 @@
 [ -n "${IPKG_INSTROOT}" ] || {
 	( . /etc/uci-defaults/luci-polipo ) && rm -f /etc/uci-defaults/luci-polipo
 	/etc/init.d/polipo enabled || /etc/init.d/polipo enable
+	exit 0
 }
