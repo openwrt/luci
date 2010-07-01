@@ -19,11 +19,11 @@ local fs = require "nixio.fs"
 if arg[1] then
 	mp = Map("olsrd", translate("OLSR - Plugins"))
 
-	p = mp:section(TypedSection, "LoadPlugin")
+	p = mp:section(TypedSection, "LoadPlugin", translate("Plugin configuration"))
 	p:depends("library", arg[1])
 	p.anonymous = true
 
-	ign = p:option(Flag, "ignore", "Enable")
+	ign = p:option(Flag, "ignore", translate("Enable"))
 	ign.enabled  = "0"
 	ign.disabled = "1"
 	ign.rmempty  = false
@@ -162,7 +162,7 @@ if arg[1] then
 			end
 
 			if otype == Flag then
-				local bool = p:option( Flag, name )
+				local bool = p:option( Flag, name, name )
 				if default == "yes" or default == "no" then
 					bool.enabled  = "yes"
 					bool.disabled = "no"
@@ -180,7 +180,7 @@ if arg[1] then
 				bool.default = default
 				bool:depends({ library = plugin })
 			else
-				local field = p:option( otype, name )
+				local field = p:option( otype, name, name )
 				if values then
 					for _, value in ipairs(values) do
 						field:value( value )
@@ -207,7 +207,7 @@ if arg[1] then
 
 else
 
-	mpi = Map("olsrd", "OLSR - Plugins")
+	mpi = Map("olsrd", translate("OLSR - Plugins"))
 
 	local plugins = {}
 	mpi.uci:foreach("olsrd", "LoadPlugin",
@@ -230,7 +230,7 @@ else
 		end
 	end
 
-	t = mpi:section( TypedSection, "LoadPlugin", "Plugins" )
+	t = mpi:section( TypedSection, "LoadPlugin", translate("Plugins") )
 	t.anonymous = true
 	t.template  = "cbi/tblsection"
 	t.override_scheme = true
@@ -239,7 +239,7 @@ else
 		return luci.dispatcher.build_url("admin", "services", "olsrd", "plugins") .. "/" .. lib
 	end
 
-	ign = t:option( Flag, "ignore", "Enabled" )
+	ign = t:option( Flag, "ignore", translate("Enabled") )
 	ign.enabled  = "0"
 	ign.disabled = "1"
 	ign.rmempty  = false
@@ -247,7 +247,7 @@ else
 		return Flag.cfgvalue(self, section) or "0"
 	end
 
-	t:option( DummyValue, "library", "Library" )
+	t:option( DummyValue, "library", translate("Library") )
 
 	return mpi
 end
