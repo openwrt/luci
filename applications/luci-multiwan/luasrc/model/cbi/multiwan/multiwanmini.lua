@@ -65,9 +65,4 @@ default_route.default = "balancer"
 default_route.optional = false
 default_route.rmempty = false
 
-lan_if = s:option(ListValue, "lan_if", translate("LAN Interface"))
-luci.tools.webadmin.cbi_add_networks(lan_if)
-lan_if.optional = false
-lan_if.rmempty = false
-
 return m
