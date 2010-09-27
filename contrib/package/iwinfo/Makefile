@@ -46,7 +46,7 @@ MAKE_FLAGS += \
 
 define Package/libiwinfo/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.lua $(INSTALL_DIR) $(1)/usr/bin/iwinfo
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.lua $(1)/usr/bin/iwinfo
 	$(INSTALL_DIR) $(1)/usr/lib/lua
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.so $(1)/usr/lib/lua/iwinfo.so
 endef
