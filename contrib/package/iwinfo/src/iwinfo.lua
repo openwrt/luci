@@ -24,12 +24,16 @@ end
 
 function print_info(api, dev)
 	local iw = iwinfo[api]
+	local enc = iw.encryption(dev)
 
-	printf("%-9s Type: %s  ESSID: \"%s\"", dev, api, iw.ssid(dev))
-	printf("          Access Point: %s", iw.bssid(dev))
+	printf("%-9s Type: %s  ESSID: \"%s\"",
+		dev, api, s(iw.ssid(dev)))
+
+	printf("          Access Point: %s",
+		s(iw.bssid(dev)))
 
 	printf("          Mode: %s  Channel: %d (%.3f GHz)",
-		iw.mode(dev), iw.channel(dev), n(iw.frequency(dev)) / 1000)
+		iw.mode(dev), n(iw.channel(dev)), n(iw.frequency(dev)) / 1000)
 
 	printf("          Tx-Power: %s dBm  Link Quality: %s/%s",
 		s(iw.txpower(dev)), s(iw.quality(dev)), s(iw.quality_max(dev)))
@@ -41,7 +45,7 @@ function print_info(api, dev)
 		n(iw.bitrate(dev)) / 1000)
 
 	printf("          Encryption: %s",
-		iw.encryption(dev).description)
+		s(enc and enc.description))
 
 	print("")
 end
@@ -84,7 +88,7 @@ function print_txpwrlist(api, dev)
 		for _, pe in ipairs(pl) do
 			printf("%s%3d dBm (%4d mW)",
 				(cp == pe.dbm) and "*" or " ",
-				pe.dbm, pe.mw)
+				n(pe.dbm), n(pe.mw))
 		end
 	else
 		print("No TX power information available")
