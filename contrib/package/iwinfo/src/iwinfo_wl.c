@@ -265,7 +265,7 @@ int wl_get_encryption(const char *ifname, char *buf)
 				c->auth_algs |= IWINFO_AUTH_SHARED;
 
 			/* ToDo: evaluate WEP key lengths */
-			c->auth_ciphers = IWINFO_CIPHER_WEP40 | IWINFO_CIPHER_WEP104;
+			c->pair_ciphers = IWINFO_CIPHER_WEP40 | IWINFO_CIPHER_WEP104;
 			c->auth_suites |= IWINFO_KMGMT_NONE;
 			break;
 

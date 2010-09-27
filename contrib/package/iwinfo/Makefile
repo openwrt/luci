@@ -19,7 +19,7 @@ define Package/libiwinfo
   CATEGORY:=LuCI
   SUBMENU:=Libraries
   TITLE:=Generalized Wireless Information Library (iwinfo)
-  DEPENDS:=+libnl-tiny +liblua +lua
+  DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +liblua +lua
 endef
 
 define Package/libiwinfo/description
@@ -35,6 +35,11 @@ endef
 define Build/Configure
 endef
 
+IWINFO_BACKENDS := \
+	$(if $(CONFIG_PACKAGE_kmod-brcm-wl),wl) \
+	$(if $(CONFIG_PACKAGE_kmod-madwifi),madwifi) \
+	$(if $(CONFIG_PACKAGE_kmod-mac80211),nl80211)
+
 TARGET_CFLAGS += \
 	-I$(STAGING_DIR)/usr/include \
 	-I$(STAGING_DIR)/usr/include/libnl-tiny
@@ -42,7 +47,8 @@ TARGET_CFLAGS += \
 MAKE_FLAGS += \
 	FPIC="$(FPIC)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="$(TARGET_LDFLAGS)"
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	BACKENDS="$(IWINFO_BACKENDS)"
 
 define Package/libiwinfo/install
 	$(INSTALL_DIR) $(1)/usr/bin

@@ -29,6 +29,7 @@
 #define WLC_GET_MAGIC				0
 #define WLC_GET_RATE				12
 #define WLC_GET_INFRA				19
+#define WLC_GET_AUTH				21
 #define WLC_GET_BSSID				23
 #define WLC_GET_SSID				25
 #define WLC_GET_CHANNEL				29
