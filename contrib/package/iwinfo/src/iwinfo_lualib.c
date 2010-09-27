@@ -532,7 +532,7 @@ static const luaL_reg R_wl[] = {
 static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,channel),
 	LUA_REG(madwifi,frequency),
-	LUA_REG(madwifi,frequency),
+	LUA_REG(madwifi,txpower),
 	LUA_REG(madwifi,bitrate),
 	LUA_REG(madwifi,signal),
 	LUA_REG(madwifi,noise),
