@@ -23,6 +23,179 @@
 #include "iwinfo_madwifi.h"
 #include "iwinfo_wext.h"
 
+
+/*
+ * Madwifi ISO 3166 to Country/Region Code mapping.
+ */
+
+static struct ISO3166_to_CCode
+{
+	u_int16_t iso3166;
+	u_int16_t ccode;
+} CountryCodes[] = {
+	{ 0x3030 /* 00 */,   0 }, /* World */
+	{ 0x4145 /* AE */, 784 }, /* U.A.E. */
+	{ 0x414C /* AL */,   8 }, /* Albania */
+	{ 0x414D /* AM */,  51 }, /* Armenia */
+	{ 0x4152 /* AR */,  32 }, /* Argentina */
+	{ 0x4154 /* AT */,  40 }, /* Austria */
+	{ 0x4155 /* AU */,  36 }, /* Australia */
+	{ 0x415A /* AZ */,  31 }, /* Azerbaijan */
+	{ 0x4245 /* BE */,  56 }, /* Belgium */
+	{ 0x4247 /* BG */, 100 }, /* Bulgaria */
+	{ 0x4248 /* BH */,  48 }, /* Bahrain */
+	{ 0x424E /* BN */,  96 }, /* Brunei Darussalam */
+	{ 0x424F /* BO */,  68 }, /* Bolivia */
+	{ 0x4252 /* BR */,  76 }, /* Brazil */
+	{ 0x4259 /* BY */, 112 }, /* Belarus */
+	{ 0x425A /* BZ */,  84 }, /* Belize */
+	{ 0x4341 /* CA */, 124 }, /* Canada */
+	{ 0x4348 /* CH */, 756 }, /* Switzerland */
+	{ 0x434C /* CL */, 152 }, /* Chile */
+	{ 0x434E /* CN */, 156 }, /* People's Republic of China */
+	{ 0x434F /* CO */, 170 }, /* Colombia */
+	{ 0x4352 /* CR */, 188 }, /* Costa Rica */
+	{ 0x4359 /* CY */, 196 }, /* Cyprus */
+	{ 0x435A /* CZ */, 203 }, /* Czech Republic */
+	{ 0x4445 /* DE */, 276 }, /* Germany */
+	{ 0x444B /* DK */, 208 }, /* Denmark */
+	{ 0x444F /* DO */, 214 }, /* Dominican Republic */
+	{ 0x445A /* DZ */,  12 }, /* Algeria */
+	{ 0x4543 /* EC */, 218 }, /* Ecuador */
+	{ 0x4545 /* EE */, 233 }, /* Estonia */
+	{ 0x4547 /* EG */, 818 }, /* Egypt */
+	{ 0x4553 /* ES */, 724 }, /* Spain */
+	{ 0x4649 /* FI */, 246 }, /* Finland */
+	{ 0x464F /* FO */, 234 }, /* Faeroe Islands */
+	{ 0x4652 /* FR */, 250 }, /* France */
+	{ 0x4652 /* FR */, 255 }, /* France2 */
+	{ 0x4742 /* GB */, 826 }, /* United Kingdom */
+	{ 0x4745 /* GE */, 268 }, /* Georgia */
+	{ 0x4752 /* GR */, 300 }, /* Greece */
+	{ 0x4754 /* GT */, 320 }, /* Guatemala */
+	{ 0x484B /* HK */, 344 }, /* Hong Kong S.A.R., P.R.C. */
+	{ 0x484E /* HN */, 340 }, /* Honduras */
+	{ 0x4852 /* HR */, 191 }, /* Croatia */
+	{ 0x4855 /* HU */, 348 }, /* Hungary */
+	{ 0x4944 /* ID */, 360 }, /* Indonesia */
+	{ 0x4945 /* IE */, 372 }, /* Ireland */
+	{ 0x494C /* IL */, 376 }, /* Israel */
+	{ 0x494E /* IN */, 356 }, /* India */
+	{ 0x4951 /* IQ */, 368 }, /* Iraq */
+	{ 0x4952 /* IR */, 364 }, /* Iran */
+	{ 0x4953 /* IS */, 352 }, /* Iceland */
+	{ 0x4954 /* IT */, 380 }, /* Italy */
+	{ 0x4A4D /* JM */, 388 }, /* Jamaica */
+	{ 0x4A4F /* JO */, 400 }, /* Jordan */
+	{ 0x4A50 /* JP */, 392 }, /* Japan */
+	{ 0x4A50 /* JP */, 393 }, /* Japan (JP1) */
+	{ 0x4A50 /* JP */, 394 }, /* Japan (JP0) */
+	{ 0x4A50 /* JP */, 395 }, /* Japan (JP1-1) */
+	{ 0x4A50 /* JP */, 396 }, /* Japan (JE1) */
+	{ 0x4A50 /* JP */, 397 }, /* Japan (JE2) */
+	{ 0x4A50 /* JP */, 399 }, /* Japan (JP6) */
+	{ 0x4A50 /* JP */, 900 }, /* Japan */
+	{ 0x4A50 /* JP */, 901 }, /* Japan */
+	{ 0x4A50 /* JP */, 902 }, /* Japan */
+	{ 0x4A50 /* JP */, 903 }, /* Japan */
+	{ 0x4A50 /* JP */, 904 }, /* Japan */
+	{ 0x4A50 /* JP */, 905 }, /* Japan */
+	{ 0x4A50 /* JP */, 906 }, /* Japan */
+	{ 0x4A50 /* JP */, 907 }, /* Japan */
+	{ 0x4A50 /* JP */, 908 }, /* Japan */
+	{ 0x4A50 /* JP */, 909 }, /* Japan */
+	{ 0x4A50 /* JP */, 910 }, /* Japan */
+	{ 0x4A50 /* JP */, 911 }, /* Japan */
+	{ 0x4A50 /* JP */, 912 }, /* Japan */
+	{ 0x4A50 /* JP */, 913 }, /* Japan */
+	{ 0x4A50 /* JP */, 914 }, /* Japan */
+	{ 0x4A50 /* JP */, 915 }, /* Japan */
+	{ 0x4A50 /* JP */, 916 }, /* Japan */
+	{ 0x4A50 /* JP */, 917 }, /* Japan */
+	{ 0x4A50 /* JP */, 918 }, /* Japan */
+	{ 0x4A50 /* JP */, 919 }, /* Japan */
+	{ 0x4A50 /* JP */, 920 }, /* Japan */
+	{ 0x4A50 /* JP */, 921 }, /* Japan */
+	{ 0x4A50 /* JP */, 922 }, /* Japan */
+	{ 0x4A50 /* JP */, 923 }, /* Japan */
+	{ 0x4A50 /* JP */, 924 }, /* Japan */
+	{ 0x4A50 /* JP */, 925 }, /* Japan */
+	{ 0x4A50 /* JP */, 926 }, /* Japan */
+	{ 0x4A50 /* JP */, 927 }, /* Japan */
+	{ 0x4A50 /* JP */, 928 }, /* Japan */
+	{ 0x4A50 /* JP */, 929 }, /* Japan */
+	{ 0x4A50 /* JP */, 930 }, /* Japan */
+	{ 0x4A50 /* JP */, 931 }, /* Japan */
+	{ 0x4A50 /* JP */, 932 }, /* Japan */
+	{ 0x4A50 /* JP */, 933 }, /* Japan */
+	{ 0x4A50 /* JP */, 934 }, /* Japan */
+	{ 0x4A50 /* JP */, 935 }, /* Japan */
+	{ 0x4A50 /* JP */, 936 }, /* Japan */
+	{ 0x4A50 /* JP */, 937 }, /* Japan */
+	{ 0x4A50 /* JP */, 938 }, /* Japan */
+	{ 0x4A50 /* JP */, 939 }, /* Japan */
+	{ 0x4A50 /* JP */, 940 }, /* Japan */
+	{ 0x4A50 /* JP */, 941 }, /* Japan */
+	{ 0x4B45 /* KE */, 404 }, /* Kenya */
+	{ 0x4B50 /* KP */, 408 }, /* North Korea */
+	{ 0x4B52 /* KR */, 410 }, /* South Korea */
+	{ 0x4B52 /* KR */, 411 }, /* South Korea */
+	{ 0x4B57 /* KW */, 414 }, /* Kuwait */
+	{ 0x4B5A /* KZ */, 398 }, /* Kazakhstan */
+	{ 0x4C42 /* LB */, 422 }, /* Lebanon */
+	{ 0x4C49 /* LI */, 438 }, /* Liechtenstein */
+	{ 0x4C54 /* LT */, 440 }, /* Lithuania */
+	{ 0x4C55 /* LU */, 442 }, /* Luxembourg */
+	{ 0x4C56 /* LV */, 428 }, /* Latvia */
+	{ 0x4C59 /* LY */, 434 }, /* Libya */
+	{ 0x4D41 /* MA */, 504 }, /* Morocco */
+	{ 0x4D43 /* MC */, 492 }, /* Principality of Monaco */
+	{ 0x4D4B /* MK */, 807 }, /* the Former Yugoslav Republic of Macedonia */
+	{ 0x4D4F /* MO */, 446 }, /* Macau */
+	{ 0x4D58 /* MX */, 484 }, /* Mexico */
+	{ 0x4D59 /* MY */, 458 }, /* Malaysia */
+	{ 0x4E49 /* NI */, 558 }, /* Nicaragua */
+	{ 0x4E4C /* NL */, 528 }, /* Netherlands */
+	{ 0x4E4F /* NO */, 578 }, /* Norway */
+	{ 0x4E5A /* NZ */, 554 }, /* New Zealand */
+	{ 0x4F4D /* OM */, 512 }, /* Oman */
+	{ 0x5041 /* PA */, 591 }, /* Panama */
+	{ 0x5045 /* PE */, 604 }, /* Peru */
+	{ 0x5048 /* PH */, 608 }, /* Republic of the Philippines */
+	{ 0x504B /* PK */, 586 }, /* Islamic Republic of Pakistan */
+	{ 0x504C /* PL */, 616 }, /* Poland */
+	{ 0x5052 /* PR */, 630 }, /* Puerto Rico */
+	{ 0x5054 /* PT */, 620 }, /* Portugal */
+	{ 0x5059 /* PY */, 600 }, /* Paraguay */
+	{ 0x5141 /* QA */, 634 }, /* Qatar */
+	{ 0x524F /* RO */, 642 }, /* Romania */
+	{ 0x5255 /* RU */, 643 }, /* Russia */
+	{ 0x5341 /* SA */, 682 }, /* Saudi Arabia */
+	{ 0x5345 /* SE */, 752 }, /* Sweden */
+	{ 0x5347 /* SG */, 702 }, /* Singapore */
+	{ 0x5349 /* SI */, 705 }, /* Slovenia */
+	{ 0x534B /* SK */, 703 }, /* Slovak Republic */
+	{ 0x5356 /* SV */, 222 }, /* El Salvador */
+	{ 0x5359 /* SY */, 760 }, /* Syria */
+	{ 0x5448 /* TH */, 764 }, /* Thailand */
+	{ 0x544E /* TN */, 788 }, /* Tunisia */
+	{ 0x5452 /* TR */, 792 }, /* Turkey */
+	{ 0x5454 /* TT */, 780 }, /* Trinidad y Tobago */
+	{ 0x5457 /* TW */, 158 }, /* Taiwan */
+	{ 0x5541 /* UA */, 804 }, /* Ukraine */
+	{ 0x554B /* UK */, 826 }, /* United Kingdom */
+	{ 0x5553 /* US */, 840 }, /* United States */
+	{ 0x5553 /* US */, 842 }, /* United States (Public Safety)*/
+	{ 0x5559 /* UY */, 858 }, /* Uruguay */
+	{ 0x555A /* UZ */, 860 }, /* Uzbekistan */
+	{ 0x5645 /* VE */, 862 }, /* Venezuela */
+	{ 0x564E /* VN */, 704 }, /* Viet Nam */
+	{ 0x5945 /* YE */, 887 }, /* Yemen */
+	{ 0x5A41 /* ZA */, 710 }, /* South Africa */
+	{ 0x5A57 /* ZW */, 716 }, /* Zimbabwe */
+};
+
+
 static int ioctl_socket = -1;
 
 static int madwifi_ioctl(struct iwreq *wrq, const char *ifname, int cmd, void *data, size_t len)
@@ -59,13 +232,12 @@ static int get80211priv(const char *ifname, int op, void *data, size_t len)
 	return iwr.u.data.length;
 }
 
-static int madwifi_isvap(const char *ifname, const char *wifiname)
+static char * madwifi_isvap(const char *ifname, const char *wifiname)
 {
-	int fd, ret;
+	int fd, ln;
 	char path[32];
-	char name[IFNAMSIZ];
-
-	ret = 0;
+	char *ret = NULL;
+	static char name[IFNAMSIZ];
 
 	if( strlen(ifname) <= 9 )
 	{
@@ -76,11 +248,13 @@ static int madwifi_isvap(const char *ifname, const char *wifiname)
 			if( wifiname != NULL )
 			{
 				if( read(fd, name, strlen(wifiname)) == strlen(wifiname) )
-					ret = strncmp(name, wifiname, strlen(wifiname)) ? 0 : 1;
+					ret = strncmp(name, wifiname, strlen(wifiname))
+						? NULL : name;
 			}
-			else if( read(fd, name, 4) == 4 )
+			else if( (ln = read(fd, name, IFNAMSIZ)) >= 4 )
 			{
-				ret = strncmp(name, "wifi", 4) ? 0 : 1;
+				name[ln-1] = 0;
+				ret = name;
 			}
 
 			(void) close(fd);
@@ -112,7 +286,7 @@ static int madwifi_iswifi(const char *ifname)
 
 int madwifi_probe(const char *ifname)
 {
-	return ( madwifi_isvap(ifname, NULL) || madwifi_iswifi(ifname) );
+	return ( !!madwifi_isvap(ifname, NULL) || madwifi_iswifi(ifname) );
 }
 
 int madwifi_get_mode(const char *ifname, char *buf)
@@ -523,7 +697,7 @@ int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len)
 	}
 
 	/* Its an athX ... */
-	else if( madwifi_isvap(ifname, NULL) )
+	else if( !!madwifi_isvap(ifname, NULL) )
 	{
 		rc = wext_get_txpwrlist(ifname, buf, len);
 	}
@@ -547,7 +721,7 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 		{
 			while( (e = readdir(proc)) != NULL )
 			{
-				if( madwifi_isvap(e->d_name, ifname) )
+				if( !!madwifi_isvap(e->d_name, ifname) )
 				{
 					sprintf(cmd, "ifconfig %s up", e->d_name);
 
@@ -579,7 +753,7 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 	}
 
 	/* Got athX device? */
-	else if( madwifi_isvap(ifname, NULL) )
+	else if( !!madwifi_isvap(ifname, NULL) )
 	{
 		ret = wext_get_scanlist(ifname, buf, len);
 	}
@@ -609,7 +783,7 @@ int madwifi_get_freqlist(const char *ifname, char *buf, int *len)
 	}
 
 	/* Its an athX ... */
-	else if( madwifi_isvap(ifname, NULL) )
+	else if( !!madwifi_isvap(ifname, NULL) )
 	{
 		rc = get80211priv(ifname, IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans));
 	}
@@ -636,10 +810,75 @@ int madwifi_get_freqlist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int madwifi_get_country(const char *ifname, char *buf)
+{
+	int i, fd, ccode = -1;
+	char buffer[34];
+	char *wifi = madwifi_iswifi(ifname)
+		? (char *)ifname : madwifi_isvap(ifname, NULL);
+
+	struct ISO3166_to_CCode *e;
+
+	if( wifi )
+	{
+		snprintf(buffer, sizeof(buffer), "/proc/sys/dev/%s/countrycode", wifi);
+
+		if( (fd = open(buffer, O_RDONLY)) > -1 )
+		{
+			memset(buffer, 0, sizeof(buffer));
+
+			if( read(fd, buffer, sizeof(buffer)-1) > 0 )
+				ccode = atoi(buffer);
+
+			close(fd);
+		}
+	}
+
+	for( i = 0; i < (sizeof(CountryCodes)/sizeof(CountryCodes[0])); i++ )
+	{
+		e = &CountryCodes[i];
+
+		if( e->ccode == ccode )
+		{
+			sprintf(buf, "%c%c", e->iso3166 / 256, e->iso3166 % 256);
+			return 0;
+		}
+	}
+
+	return -1;
+}
+
+int madwifi_get_countrylist(const char *ifname, char *buf, int *len)
+{
+	int i, count;
+	struct ISO3166_to_CCode *e, *p = NULL;
+	struct iwinfo_country_entry *c = (struct iwinfo_country_entry *)buf;
+
+	count = 0;
+
+	for( int i = 0; i < (sizeof(CountryCodes)/sizeof(CountryCodes[0])); i++ )
+	{
+		e = &CountryCodes[i];
+
+		if( !p || (e->iso3166 != p->iso3166) )
+		{
+			c->iso3166 = e->iso3166;
+			snprintf(c->ccode, sizeof(c->ccode), "%i", e->ccode);
+
+			c++;
+			count++;
+		}
+
+		p = e;
+	}
+
+	*len = (count * sizeof(struct iwinfo_country_entry));
+	return 0;
+}
+
 int madwifi_get_mbssid_support(const char *ifname, int *buf)
 {
 	/* We assume that multi bssid is always possible */
 	*buf = 1;
 	return 0;
 }
-

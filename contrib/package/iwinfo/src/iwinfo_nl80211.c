@@ -27,6 +27,7 @@
 
 #define min(x, y) ((x) < (y)) ? (x) : (y)
 
+extern struct iwinfo_iso3166_label ISO3166_Names[];
 static struct nl80211_state *nls = NULL;
 
 static int nl80211_init(void)
@@ -937,7 +938,7 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 						break;
 					}
 				}
-			}			
+			}
 
 			nl80211_free(res);
 		}
@@ -1155,10 +1156,50 @@ int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 	return wext_get_freqlist(ifname, buf, len);
 }
 
+int nl80211_get_country(const char *ifname, char *buf)
+{
+	int rv = -1;
+	struct nl80211_msg_conveyor *req, *res;
+
+	req = nl80211_msg(ifname, NL80211_CMD_GET_REG, 0);
+	if( req )
+	{
+		res = nl80211_send(req);
+		if( res )
+		{
+			if( res->attr[NL80211_ATTR_REG_ALPHA2] )
+			{
+				memcpy(buf, nla_data(res->attr[NL80211_ATTR_REG_ALPHA2]), 2);
+				rv = 0;
+			}
+			nl80211_free(res);
+		}
+		nl80211_free(req);
+	}
+
+	return rv;
+}
+
+int nl80211_get_countrylist(const char *ifname, char *buf, int *len)
+{
+	int i, count;
+	struct iwinfo_iso3166_label *l;
+	struct iwinfo_country_entry *e = (struct iwinfo_country_entry *)buf;
+
+	for( l = ISO3166_Names, count = 0; l->iso3166; l++, e++, count++ )
+	{
+		e->iso3166 = l->iso3166;
+		e->ccode[0] = (l->iso3166 / 256);
+		e->ccode[1] = (l->iso3166 % 256);
+	}
+
+	*len = (count * sizeof(struct iwinfo_country_entry));
+	return 0;
+}
+
 int nl80211_get_mbssid_support(const char *ifname, int *buf)
 {
 	/* We assume that multi bssid is always possible */
 	*buf = 1;
 	return 0;
 }
-

@@ -30,6 +30,7 @@ int wext_probe(const char *ifname);
 int wext_get_mode(const char *ifname, char *buf);
 int wext_get_ssid(const char *ifname, char *buf);
 int wext_get_bssid(const char *ifname, char *buf);
+int wext_get_country(const char *ifname, char *buf);
 int wext_get_channel(const char *ifname, int *buf);
 int wext_get_frequency(const char *ifname, int *buf);
 int wext_get_txpower(const char *ifname, int *buf);
@@ -43,6 +44,7 @@ int wext_get_assoclist(const char *ifname, char *buf, int *len);
 int wext_get_txpwrlist(const char *ifname, char *buf, int *len);
 int wext_get_scanlist(const char *ifname, char *buf, int *len);
 int wext_get_freqlist(const char *ifname, char *buf, int *len);
+int wext_get_countrylist(const char *ifname, char *buf, int *len);
 int wext_get_mbssid_support(const char *ifname, int *buf);
 
 #endif

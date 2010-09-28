@@ -6,7 +6,7 @@
  *
  * Copyright 2006, Broadcom Corporation
  * All Rights Reserved.
- * 
+ *
  * THIS SOFTWARE IS OFFERED "AS IS", AND BROADCOM GRANTS NO WARRANTIES OF ANY
  * KIND, EXPRESS OR IMPLIED, BY STATUTE, COMMUNICATION OR OTHERWISE. BROADCOM
  * SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -26,6 +26,8 @@
 #define WLC_IOCTL_MAGIC				0x14e46c77
 #define	WLC_IOCTL_MAXLEN			8192
 
+#define WLC_CNTRY_BUF_SZ        	4
+
 #define WLC_GET_MAGIC				0
 #define WLC_GET_RATE				12
 #define WLC_GET_INFRA				19
@@ -34,6 +36,7 @@
 #define WLC_GET_SSID				25
 #define WLC_GET_CHANNEL				29
 #define WLC_GET_PASSIVE 			48
+#define WLC_GET_COUNTRY				83
 #define WLC_GET_REVINFO				98
 #define WLC_GET_AP					117
 #define WLC_GET_RSSI				127
@@ -42,6 +45,8 @@
 #define WLC_GET_BSS_INFO			136
 #define WLC_GET_ASSOCLIST			159
 #define WLC_GET_WPA_AUTH			164
+//#define WLC_GET_CHANNELS_IN_COUNTRY	260
+#define WLC_GET_COUNTRY_LIST		261
 #define WLC_GET_VAR					262
 
 
@@ -90,5 +95,14 @@ typedef struct wlc_rev_info {
 	uint		bus;		/* bus type */
 	uint		chipnum;	/* chip number */
 } wlc_rev_info_t;
+
+typedef struct wl_country_list {
+	uint32_t buflen;
+	uint32_t band_set;
+	uint32_t band;
+	uint32_t count;
+	char country_abbrev[1];
+} wl_country_list_t;
+
 
 #endif

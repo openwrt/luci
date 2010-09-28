@@ -62,6 +62,7 @@ int nl80211_probe(const char *ifname);
 int nl80211_get_mode(const char *ifname, char *buf);
 int nl80211_get_ssid(const char *ifname, char *buf);
 int nl80211_get_bssid(const char *ifname, char *buf);
+int nl80211_get_country(const char *ifname, char *buf);
 int nl80211_get_channel(const char *ifname, int *buf);
 int nl80211_get_frequency(const char *ifname, int *buf);
 int nl80211_get_txpower(const char *ifname, int *buf);
@@ -75,6 +76,7 @@ int nl80211_get_assoclist(const char *ifname, char *buf, int *len);
 int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len);
 int nl80211_get_scanlist(const char *ifname, char *buf, int *len);
 int nl80211_get_freqlist(const char *ifname, char *buf, int *len);
+int nl80211_get_countrylist(const char *ifname, char *buf, int *len);
 int nl80211_get_mbssid_support(const char *ifname, int *buf);
 
 #endif

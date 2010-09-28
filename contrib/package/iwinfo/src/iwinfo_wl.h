@@ -26,6 +26,7 @@ int wl_probe(const char *ifname);
 int wl_get_mode(const char *ifname, char *buf);
 int wl_get_ssid(const char *ifname, char *buf);
 int wl_get_bssid(const char *ifname, char *buf);
+int wl_get_country(const char *ifname, char *buf);
 int wl_get_channel(const char *ifname, int *buf);
 int wl_get_frequency(const char *ifname, int *buf);
 int wl_get_txpower(const char *ifname, int *buf);
@@ -40,6 +41,7 @@ int wl_get_assoclist(const char *ifname, char *buf, int *len);
 int wl_get_txpwrlist(const char *ifname, char *buf, int *len);
 int wl_get_scanlist(const char *ifname, char *buf, int *len);
 int wl_get_freqlist(const char *ifname, char *buf, int *len);
+int wl_get_countrylist(const char *ifname, char *buf, int *len);
 int wl_get_mbssid_support(const char *ifname, int *buf);
 
 #endif

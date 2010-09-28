@@ -132,6 +132,25 @@ function print_assoclist(api, dev)
 	print("")
 end
 
+function print_countrylist(api, dev)
+	local iw = iwinfo[api]
+	local cl = iw.countrylist(dev)
+	local cc = iw.country(dev)
+	local ce
+
+	if cl and #cl > 0 then
+		for _, ce in ipairs(cl) do
+			printf("%s %4s	%s",
+				(cc == ce.alpha2) and "*" or " ",
+				ce.ccode, ce.name)
+		end
+	else
+		print("No country code information available")
+	end
+
+	print("")
+end
+
 
 if #arg ~= 2 then
 	print("Usage:")
@@ -140,6 +159,7 @@ if #arg ~= 2 then
 	print("	iwinfo <device> txpowerlist")
 	print("	iwinfo <device> freqlist")
 	print("	iwinfo <device> assoclist")
+	print("	iwinfo <device> countrylist")
 	os.exit(1)
 end
 
@@ -165,6 +185,9 @@ elseif arg[2]:match("^f") then
 
 elseif arg[2]:match("^a") then
 	print_assoclist(api, dev)
+
+elseif arg[2]:match("^c") then
+	print_countrylist(api, dev)
 
 else
 	print("Unknown command: " .. arg[2])

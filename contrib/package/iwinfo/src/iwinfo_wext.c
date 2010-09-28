@@ -184,7 +184,7 @@ int wext_get_bssid(const char *ifname, char *buf)
 		return 0;
 	}
 
-	return -1;	
+	return -1;
 }
 
 int wext_get_bitrate(const char *ifname, int *buf)
@@ -197,7 +197,7 @@ int wext_get_bitrate(const char *ifname, int *buf)
 		return 0;
 	}
 
-	return -1;	
+	return -1;
 }
 
 int wext_get_channel(const char *ifname, int *buf)
@@ -235,7 +235,7 @@ int wext_get_channel(const char *ifname, int *buf)
 		}
 	}
 
-	return -1;	
+	return -1;
 }
 
 int wext_get_frequency(const char *ifname, int *buf)
@@ -273,7 +273,7 @@ int wext_get_frequency(const char *ifname, int *buf)
 		}
 	}
 
-	return -1;	
+	return -1;
 }
 
 int wext_get_txpower(const char *ifname, int *buf)
@@ -413,7 +413,7 @@ int wext_get_txpwrlist(const char *ifname, char *buf, int *len)
 		return 0;
 	}
 
-	return -1;	
+	return -1;
 }
 
 int wext_get_freqlist(const char *ifname, char *buf, int *len)
@@ -447,6 +447,18 @@ int wext_get_freqlist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int wext_get_country(const char *ifname, char *buf)
+{
+	sprintf(buf, "00");
+	return 0;
+}
+
+int wext_get_countrylist(const char *ifname, char *buf, int *len)
+{
+	/* Stub */
+	return -1;
+}
+
 int wext_get_encryption(const char *ifname, char *buf)
 {
 	/* No reliable crypto info in wext */
@@ -458,4 +470,3 @@ int wext_get_mbssid_support(const char *ifname, int *buf)
 	/* No multi bssid support atm */
 	return -1;
 }
-

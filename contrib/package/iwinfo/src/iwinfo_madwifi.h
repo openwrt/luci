@@ -26,6 +26,7 @@ int madwifi_probe(const char *ifname);
 int madwifi_get_mode(const char *ifname, char *buf);
 int madwifi_get_ssid(const char *ifname, char *buf);
 int madwifi_get_bssid(const char *ifname, char *buf);
+int madwifi_get_country(const char *ifname, char *buf);
 int madwifi_get_channel(const char *ifname, int *buf);
 int madwifi_get_frequency(const char *ifname, int *buf);
 int madwifi_get_txpower(const char *ifname, int *buf);
@@ -39,6 +40,7 @@ int madwifi_get_assoclist(const char *ifname, char *buf, int *len);
 int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len);
 int madwifi_get_scanlist(const char *ifname, char *buf, int *len);
 int madwifi_get_freqlist(const char *ifname, char *buf, int *len);
+int madwifi_get_countrylist(const char *ifname, char *buf, int *len);
 int madwifi_get_mbssid_support(const char *ifname, int *buf);
 
 #endif

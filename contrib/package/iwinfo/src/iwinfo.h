@@ -88,5 +88,14 @@ struct iwinfo_scanlist_entry {
 	struct iwinfo_crypto_entry crypto;
 };
 
-#endif
+struct iwinfo_country_entry {
+	uint16_t iso3166;
+	uint8_t ccode[4];
+};
 
+struct iwinfo_iso3166_label {
+	uint16_t iso3166;
+	uint8_t  name[28];
+};
+
+#endif

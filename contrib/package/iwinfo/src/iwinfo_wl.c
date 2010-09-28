@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along
  * with the iwinfo library. If not, see http://www.gnu.org/licenses/.
  *
- * This code is based on the wlc.c utility published by OpenWrt.org . 
+ * This code is based on the wlc.c utility published by OpenWrt.org .
  */
 
 #include "iwinfo_wl.h"
@@ -480,6 +480,46 @@ int wl_get_freqlist(const char *ifname, char *buf, int *len)
 	return wext_get_freqlist(ifname, buf, len);
 }
 
+int wl_get_country(const char *ifname, char *buf)
+{
+	if( !wl_ioctl(ifname, WLC_GET_COUNTRY, buf, WLC_CNTRY_BUF_SZ) )
+		return 0;
+
+	return -1;
+}
+
+int wl_get_countrylist(const char *ifname, char *buf, int *len)
+{
+	int i, count;
+	char cdata[WLC_IOCTL_MAXLEN];
+	struct iwinfo_country_entry *c = (struct iwinfo_country_entry *)buf;
+	wl_country_list_t *cl = (wl_country_list_t *)cdata;
+
+	cl->buflen = sizeof(cdata);
+
+	if( !wl_ioctl(ifname, WLC_GET_COUNTRY_LIST, cl, cl->buflen) )
+	{
+		for( i = 0, count = 0; i < cl->count; i++, c++ )
+		{
+			sprintf(c->ccode, &cl->country_abbrev[i * WLC_CNTRY_BUF_SZ]);
+			c->iso3166 = c->ccode[0] * 256 + c->ccode[1];
+
+			/* IL0 -> World */
+			if( !strcmp(c->ccode, "IL0") )
+				c->iso3166 = 0x3030;
+
+			/* YU -> RS */
+			else if( !strcmp(c->ccode, "YU") )
+				c->iso3166 = 0x5253;
+		}
+
+		*len = (i * sizeof(struct iwinfo_country_entry));
+		return 0;
+	}
+
+	return -1;
+}
+
 int wl_get_mbssid_support(const char *ifname, int *buf)
 {
 	wlc_rev_info_t revinfo;
@@ -496,4 +536,3 @@ int wl_get_mbssid_support(const char *ifname, int *buf)
 
 	return -1;
 }
-
