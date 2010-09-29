@@ -482,8 +482,23 @@ int wl_get_freqlist(const char *ifname, char *buf, int *len)
 
 int wl_get_country(const char *ifname, char *buf)
 {
-	if( !wl_ioctl(ifname, WLC_GET_COUNTRY, buf, WLC_CNTRY_BUF_SZ) )
+	char ccode[WLC_CNTRY_BUF_SZ];
+
+	if( !wl_ioctl(ifname, WLC_GET_COUNTRY, ccode, WLC_CNTRY_BUF_SZ) )
+	{
+		/* IL0 -> World */
+		if( !strcmp(ccode, "IL0") )
+			sprintf(buf, "00");
+
+		/* YU -> RS */
+		else if( !strcmp(ccode, "YU") )
+			sprintf(buf, "RS");
+
+		else
+			memcpy(buf, ccode, 2);
+
 		return 0;
+	}
 
 	return -1;
 }
