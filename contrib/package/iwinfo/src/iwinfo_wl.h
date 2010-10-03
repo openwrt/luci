@@ -19,6 +19,8 @@
 #ifndef __IWINFO_WL_H_
 #define __IWINFO_WL_H_
 
+#include <fcntl.h>
+
 #include "iwinfo.h"
 #include "include/broadcom.h"
 

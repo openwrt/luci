@@ -19,6 +19,8 @@
 #ifndef __IWINFO_WEXT_SCAN_H_
 #define __IWINFO_WEXT_SCAN_H_
 
+#include <fcntl.h>
+
 #include "iwinfo.h"
 #include "include/wext.h"
 
@@ -320,7 +322,7 @@ static const struct iw_ioctl_description standard_event_descr[] = {
 		.header_type	= IW_HEADER_TYPE_ADDR,
 	},
 	[IWEVEXPIRED	- IWEVFIRST] = {
-		.header_type	= IW_HEADER_TYPE_ADDR, 
+		.header_type	= IW_HEADER_TYPE_ADDR,
 	},
 	[IWEVGENIE	- IWEVFIRST] = {
 		.header_type	= IW_HEADER_TYPE_POINT,
@@ -328,7 +330,7 @@ static const struct iw_ioctl_description standard_event_descr[] = {
 		.max_tokens	= IW_GENERIC_IE_MAX,
 	},
 	[IWEVMICHAELMICFAILURE	- IWEVFIRST] = {
-		.header_type	= IW_HEADER_TYPE_POINT, 
+		.header_type	= IW_HEADER_TYPE_POINT,
 		.token_size	= 1,
 		.max_tokens	= sizeof(struct iw_michaelmicfailure),
 	},

@@ -30,7 +30,10 @@ static int wl_ioctl(const char *name, int cmd, void *buf, int len)
 
 	/* prepare socket */
 	if( ioctl_socket == -1 )
+	{
 		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
+		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
+	}
 
 	/* do it */
 	ioc.cmd = cmd;

@@ -19,6 +19,8 @@
 #ifndef __IWINFO_WEXT_H_
 #define __IWINFO_WEXT_H_
 
+#include <fcntl.h>
+
 #include "iwinfo.h"
 #include "include/wext.h"
 

@@ -20,6 +20,7 @@
 #define __IWINFO_NL80211_H_
 
 #include <errno.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>

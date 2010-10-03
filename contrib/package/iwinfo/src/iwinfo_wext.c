@@ -89,7 +89,10 @@ static int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
 {
 	/* prepare socket */
 	if( ioctl_socket == -1 )
+	{
 		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
+		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
+	}
 
 	if( !strncmp(ifname, "mon.", 4) )
 		strncpy(wrq->ifr_name, &ifname[4], IFNAMSIZ);

@@ -19,6 +19,8 @@
 #ifndef __IWINFO_MADWIFI_H_
 #define __IWINFO_MADWIFI_H_
 
+#include <fcntl.h>
+
 #include "iwinfo.h"
 #include "include/madwifi.h"
 

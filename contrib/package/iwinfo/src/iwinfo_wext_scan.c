@@ -29,7 +29,10 @@ static int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
 {
 	/* prepare socket */
 	if( ioctl_socket == -1 )
+	{
 		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
+		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
+	}
 
   	strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
 	return ioctl(ioctl_socket, cmd, wrq);
@@ -249,7 +252,7 @@ static inline void wext_fill_wpa(unsigned char *iebuf, int buflen, struct iwinfo
 
 		case 0xdd:      /* WPA or else */
 			wpa_oui = wpa1_oui;
-			/* Not all IEs that start with 0xdd are WPA. 
+			/* Not all IEs that start with 0xdd are WPA.
 			*        * So check that the OUI is valid. */
 			if((ielen < 8) || ((memcmp(&iebuf[offset], wpa_oui, 3) != 0)
 				&& (iebuf[offset+3] == 0x01)))
@@ -477,7 +480,7 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 
 	wrq.u.data.pointer = (caddr_t) &range;
 	wrq.u.data.length  = sizeof(struct iw_range);
-	wrq.u.data.flags   = 0;	
+	wrq.u.data.flags   = 0;
 
 	if( wext_ioctl(ifname, SIOCGIWRANGE, &wrq) >= 0 )
 	{
@@ -650,4 +653,3 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 
 	return -1;
 }
-

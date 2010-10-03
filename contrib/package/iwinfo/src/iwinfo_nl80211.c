@@ -32,7 +32,7 @@ static struct nl80211_state *nls = NULL;
 
 static int nl80211_init(void)
 {
-	int err;
+	int err, fd;
 
 	if( !nls )
 	{
@@ -50,6 +50,13 @@ static int nl80211_init(void)
 
 		if( genl_connect(nls->nl_sock)) {
 			err = -ENOLINK;
+			goto err;
+		}
+
+		fd = nl_socket_get_fd(nls->nl_sock);
+		if( fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC) < 0 )
+		{
+			err = -EINVAL;
 			goto err;
 		}
 
@@ -331,6 +338,9 @@ static char * nl80211_wpasupp_info(const char *ifname, const char *cmd)
 	remote.sun_family = AF_UNIX;
 	remote_length = sizeof(remote.sun_family) + sprintf(remote.sun_path,
 		"/var/run/wpa_supplicant-%s/%s", ifname, ifname);
+
+	if( fcntl(sock, F_SETFD, fcntl(sock, F_GETFD) | FD_CLOEXEC) < 0 )
+		goto out;
 
 	if( connect(sock, (struct sockaddr *) &remote, remote_length) )
 		goto out;
