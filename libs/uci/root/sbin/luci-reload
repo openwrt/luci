@@ -5,7 +5,9 @@ apply_config() {
 	config_get init "$1" init
 	config_get exec "$1" exec
 	config_get test "$1" test
-	
+
+	echo "$2" > "/var/run/luci-reload-status"
+
 	[ -n "$init" ] && reload_init "$2" "$init" "$test"
 	[ -n "$exec" ] && reload_exec "$2" "$exec" "$test"
 }
@@ -26,9 +28,13 @@ reload_init() {
 	}
 }
 
+lock "/var/run/luci-reload"
+
 config_load ucitrack
 
-for i in $*
-do
+for i in $*; do
 	config_foreach apply_config $i $i
 done
+
+rm -f "/var/run/luci-reload-status"
+lock -u "/var/run/luci-reload"
