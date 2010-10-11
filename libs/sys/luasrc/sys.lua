@@ -584,14 +584,26 @@ user = {}
 --				{ "uid", "gid", "name", "passwd", "dir", "shell", "gecos" }
 user.getuser = nixio.getpw
 
+--- Retrieve the current user password hash.
+-- @param username	String containing the username to retrieve the password for
+-- @return			String containing the hash or nil if no password is set.
+function user.getpasswd(username)
+	local pwe = nixio.getsp and nixio.getsp(username) or nixio.getpw(username)
+	local pwh = pwe and (pwe.pwdp or pwe.passwd)
+	if not pwh or #pwh < 1 or pwh == "!" or pwh == "x" then
+		return nil
+	else
+		return pwh
+	end
+end
+
 --- Test whether given string matches the password of a given system user.
 -- @param username	String containing the Unix user name
 -- @param pass		String containing the password to compare
 -- @return			Boolean indicating wheather the passwords are equal
 function user.checkpasswd(username, pass)
-	local pwe = nixio.getsp and nixio.getsp(username) or nixio.getpw(username)
-	local pwh = pwe and (pwe.pwdp or pwe.passwd)
-	if not pwh or #pwh < 1 or pwh ~= "!" and nixio.crypt(pass, pwh) ~= pwh then
+	local pwh = user.getpasswd(username)
+	if not pwh or nixio.crypt(pass, pwh) ~= pwh then
 		return false
 	else
 		return true
