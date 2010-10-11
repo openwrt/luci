@@ -19,23 +19,44 @@ $Id$
 	<%- if self._apply then -%>
 		<fieldset class="cbi-section" id="cbi-apply-<%=self.config%>">
 			<legend><%:Applying changes%></legend>
-			<ul class="cbi-apply"><%-
-				local fp = self._apply()
-				self._apply = nil
-				local line = fp:read()
-				while line do
-					write("<li>" .. pcdata(line) .. "</li>\n")
-					line = fp:read()
-				end
-				fp:close()
-			-%></ul>
+			<script type="text/javascript"><![CDATA[
+				var apply_xhr = new XHR();
+
+				apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "restart", table.concat(self.parsechain, ","))%>', null,
+					function() {
+						var intv = window.setInterval(
+							function() {
+								apply_xhr.abort();
+								apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "status")%>', null,
+									function(x) {
+										if( x.responseText == 'finish' )
+										{
+											window.clearInterval(intv);
+
+											var e = document.getElementById('cbi-apply-<%=self.config%>-status');
+											if( e )
+											{
+												e.innerHTML = '<%:Configuration applied.%>';
+												window.setTimeout(function() { e.parentNode.style.display = 'none' }, 1000);
+											}
+										}
+										else
+										{
+											var e = document.getElementById('cbi-apply-<%=self.config%>-status');
+											if( e && x.responseText ) e.innerHTML = x.responseText;
+
+										}
+									}
+								);
+							}, 1000
+						)
+					}
+				);
+			]]></script>
+
+			<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+			<span id="cbi-apply-<%=self.config%>-status"><%:Waiting for router...%></span>
 		</fieldset>
-		<script type="text/javascript">
-			window.setTimeout(function() {
-				var e = document.getElementById('cbi-apply-<%=self.config%>');
-				if(e) e.style.display = 'none';
-			}, 750);
-		</script>
 	<%- end -%>
 	<%- self:render_children() %>
 	<br />
