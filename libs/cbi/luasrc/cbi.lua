@@ -165,7 +165,7 @@ end
 function Node._run_hook(self, hook)
 	if type(self[hook]) == "function" then
 		return self[hook](self)
-	end 
+	end
 end
 
 function Node._run_hooks(self, ...)
@@ -356,7 +356,7 @@ end
 function Map.render(self, ...)
 	self:_run_hooks("on_init")
 	Node.render(self, ...)
-	if self._apply then
+	if false and self._apply then
 		local fp = self._apply()
 		fp:read("*a")
 		fp:close()
@@ -514,7 +514,7 @@ function Delegator.parse(self, ...)
 			return FORM_DONE
 		end
 	end
-	
+
 	if not Map.formvalue(self, "cbi.delg.current") then
 		self:_run_hooks("on_init")
 	end
@@ -524,11 +524,11 @@ function Delegator.parse(self, ...)
 	self.current = self.current or self:get_active()
 	self.active = self.active or self:get(self.current)
 	assert(self.active, "Invalid state")
-	
+
 	local stat = FORM_DONE
 	if type(self.active) ~= "function" then
 		self.active:populate_delegator(self)
-		stat = self.active:parse() 
+		stat = self.active:parse()
 	else
 		self:active()
 	end
@@ -542,11 +542,11 @@ function Delegator.parse(self, ...)
 	elseif stat < FORM_PROCEED then
 		return stat
 	end
-	
+
 
 	if not Map.formvalue(self, "cbi.submit") then
 		return FORM_NODATA
-	elseif stat > FORM_PROCEED 
+	elseif stat > FORM_PROCEED
 	and (not newcurrent or not self:get(newcurrent)) then
 		return self:_run_hook("on_done") or FORM_DONE
 	else
@@ -1264,7 +1264,7 @@ function AbstractValue.parse(self, section, novld)
 				table.insert(self.section.error[section], "invalid")
 			else
 				self.section.error = {[section] = {"invalid"}}
-			end 
+			end
 			self.map.save = false
 		end
 		if fvalue and not (fvalue == cvalue) then
