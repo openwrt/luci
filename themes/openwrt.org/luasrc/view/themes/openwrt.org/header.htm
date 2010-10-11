@@ -168,3 +168,10 @@ else -%>
 			<%:You must enable Java Script in your browser or LuCI will not work properly.%>
 		</div>
 	</noscript>
+
+	<%- if not luci.sys.user.getpasswd("root") then -%>
+	<div class="errorbox">
+		<strong><%:No password set!%></strong><br />
+		<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
+	</div>
+	<%- end -%>
