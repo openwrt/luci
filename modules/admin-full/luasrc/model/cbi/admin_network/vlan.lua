@@ -12,13 +12,56 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 m = Map("network", translate("Switch"), translate("The network ports on your router can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
 
 m.uci:foreach("network", "switch",
 	function(x)
+		local switch_name = x.name or x['.name']
+		local has_vlan4k  = nil
+		local has_ptpvid  = nil
+		local max_vid     = 16
+		local num_vlans   = 16
+		local num_ports   = 5
+		local cpu_port    = 5
+
+		local swc = io.popen("swconfig dev %q help 2>/dev/null" % switch_name)
+		if swc then
+
+			local is_port_attr = false
+			local is_vlan_attr = false
+
+			while true do
+				local line = swc:read("*l")
+				if not line then break end
+
+				if line:match("^%s+%-%-vlan") then
+					is_vlan_attr = true
+
+				elseif line:match("^%s+%-%-port") then
+					is_vlan_attr = false
+					is_port_attr = true
+
+				elseif line:match("^Switch %d+:") then
+					num_ports, cpu_port, num_vlans =
+						line:match("ports: (%d+) %(cpu @ (%d+)%), vlans: (%d+)")
+
+					num_ports = tonumber(num_ports or  5)
+					num_vlans = tonumber(num_vlans or 16)
+					cpu_port  = tonumber(cpu_port  or  5)
+
+				elseif line:match("%-%-pvid") or line:match("%-%-tag") or line:match("%-%-vid") then
+					if is_vlan_attr then has_vlan4k = line:match("%-%-(%w+)") end
+					if is_port_attr then has_ptpvid = line:match("%-%-(%w+)") end
+
+				end
+			end
+
+			swc:close()
+		end
 
 		-- Switch properties
-		s = m:section(NamedSection, x['.name'], "switch", "Switch: %s" % x['.name'])
+		s = m:section(NamedSection, x['.name'], "switch", "Switch %q" % switch_name)
 		s.addremove = false
 
 		s:option(Flag, "enable", "Enable this switch")
@@ -32,30 +75,21 @@ m.uci:foreach("network", "switch",
 
 
 		-- VLAN table
-		s = m:section(TypedSection, "switch_vlan", "VLANs: %s" % x['.name'])
+		s = m:section(TypedSection, "switch_vlan", "VLANs on %q" % switch_name)
 		s.template = "cbi/tblsection"
-		s.rowcolors = true
 		s.addremove = true
-
-		s.sectiontitle = function(self, section)
-			return "VLAN #%d" % (m.uci:get("network", section, "vlan") or 0)
-		end
-
-		s.filter = function(self, section)
-			return m.uci:get("network", section, "device") == x['.name']
-				or m.uci:get("network", section, "device") == nil -- needed for just created vlan sections
-		end
+		s.anonymous = true
 
 		s.cfgsections = function(self)
 			local osections = TypedSection.cfgsections(self)
 			local sections = { }
-			local section	
+			local section
 
 			for _, section in luci.util.spairs(
 				osections,
 				function(a, b)
-					return (tonumber(m.uci:get("network", osections[a], "vlan")) or 0)
-						<  (tonumber(m.uci:get("network", osections[b], "vlan")) or 0)
+					return (tonumber(m.uci:get("network", osections[a], has_vlan4k or "vlan") or 9999) or 0)
+						<  (tonumber(m.uci:get("network", osections[b], has_vlan4k or "vlan") or 9999) or 0)
 				end
 			) do
 				sections[#sections+1] = section
@@ -64,55 +98,84 @@ m.uci:foreach("network", "switch",
 			return sections
 		end
 
-		s.create = function(self, section)
-			local n = tonumber(section and section:match("(%d+)"))
-			if n ~= nil and n >= 0 then
-				local sn = "%s_%d" %{ x['.name'], n }
-				local rv = TypedSection.create(self, sn)
-				m.uci:set("network", sn, "device", x['.name'])
-				m.uci:set("network", sn, "vlan", n)
-				return rv
+		local port_opts = { }
+		local untagged  = { }
+
+		local portvalue = function(self, section)
+			local pt
+			for pt in (m.uci:get("network", section, "ports") or ""):gmatch("%w+") do
+				local pc, tu = pt:match("^(%d+)([tu]*)")
+				if pc == self.option then return (#tu > 0) and tu or "u" end
 			end
-			return nil
+			return ""
+		end
+
+		local portvalidate = function(self, value, section)
+			if value == "u" then
+				if not untagged[self.option] then
+					untagged[self.option] = true
+				else
+					return nil,
+						translatef("Port %d is untagged in multiple VLANs!", tonumber(self.option) + 1)
+				end
+			end
+			return value
 		end
 
 
-		p0 = s:option(Flag, "0", "Port 0")
-		p1 = s:option(Flag, "1", "Port 1")
-		p2 = s:option(Flag, "2", "Port 2")
-		p3 = s:option(Flag, "3", "Port 3")
-		p4 = s:option(Flag, "4", "Port 4")
-		p5 = s:option(Flag, "5", "CPU"   )
+		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID")
 
+		vid.required = true
+		vid.optional = false
 
-		p0.cfgvalue = function(self, section)
-			local pts = (m.uci:get("network", section, "ports") or "")
-			return (pts:match("%f[%w]" .. self.option .. "%f[%W]") and self.enabled or self.disabled)
+		vid.validate = function(self, value, section)
+			local v = tonumber(value)
+			local m = has_vlan4k and 4094 or (num_vlans - 1)
+			if v ~= nil and v > 0 and v <= m then
+				return value
+			else
+				return nil,
+					translatef("Invalid VLAN ID given! Only IDs between 1 and %d are allowed.", m)
+			end
 		end
 
-		p1.cfgvalue = p0.cfgvalue
-		p2.cfgvalue = p0.cfgvalue
-		p3.cfgvalue = p0.cfgvalue
-		p4.cfgvalue = p0.cfgvalue
-		p5.cfgvalue = p0.cfgvalue
+		vid.parse = function(self, section)
+			local o
+			local p = { }
 
+			for _, o in ipairs(port_opts) do
+				local v = o:formvalue(section)
+				if v == "t" then
+					p[#p+1] = o.option .. v
+				elseif v == "u" then
+					p[#p+1] = o.option
+				end
+			end
 
-		p0.parse = function(self, section)
-			local pts = { }
-			if p0:formvalue(section) then pts[#pts+1] = 0 end
-			if p1:formvalue(section) then pts[#pts+1] = 1 end
-			if p2:formvalue(section) then pts[#pts+1] = 2 end
-			if p3:formvalue(section) then pts[#pts+1] = 3 end
-			if p4:formvalue(section) then pts[#pts+1] = 4 end
-			if p5:formvalue(section) then pts[#pts+1] = 5 end
-			m.uci:set("network", section, "ports", table.concat(pts, " "))
+			m.uci:set("network", section, "ports", table.concat(p, " "))
+			return Value.parse(self, section)
 		end
 
-		p1.parse = function() end
-		p2.parse = p1.parse
-		p3.parse = p1.parse
-		p4.parse = p1.parse
-		p5.parse = p1.parse
+		vid.formvalue = function(self, section)
+			local v = Value.formvalue(self, section)
+			return (v and #v > 0) and v or "x"
+		end
+
+
+		local pt
+		for pt = 0, num_ports - 1 do
+			po = s:option(ListValue, tostring(pt),
+				(pt == cpu_port) and "CPU" or "Port %d" % (pt + 1))
+
+			po:value("", translate("off"))
+			po:value("u" % pt, translate("untagged"))
+			po:value("t" % pt, translate("tagged"))
+
+			po.cfgvalue = portvalue
+			po.validate = portvalidate
+
+			port_opts[#port_opts+1] = po
+		end
 	end
 )
 
