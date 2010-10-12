@@ -136,6 +136,12 @@ static void nl80211_free(struct nl80211_msg_conveyor *cv)
 
 	if( cv && cv->msg )
 		nlmsg_free(cv->msg);
+
+	if( cv )
+	{
+		cv->cb  = NULL;
+		cv->msg = NULL;
+	}
 }
 
 static struct nl80211_msg_conveyor * nl80211_msg(const char *ifname, int cmd, int flags)
@@ -578,6 +584,7 @@ int nl80211_get_signal(const char *ifname, int *buf)
 
 int nl80211_get_noise(const char *ifname, int *buf)
 {
+	int rv = -1;
 	struct nl80211_msg_conveyor *req, *res;
 	struct nlattr *si[NL80211_SURVEY_INFO_MAX + 1];
 
@@ -595,10 +602,11 @@ int nl80211_get_noise(const char *ifname, int *buf)
 			if( res->attr[NL80211_ATTR_SURVEY_INFO] )
 			{
 				if( !nla_parse_nested(si, NL80211_SURVEY_INFO_MAX,
-						res->attr[NL80211_ATTR_SURVEY_INFO], sp) )
+						res->attr[NL80211_ATTR_SURVEY_INFO], sp) &&
+					si[NL80211_SURVEY_INFO_NOISE] )
 				{
 					*buf = (int8_t)nla_get_u8(si[NL80211_SURVEY_INFO_NOISE]);
-					return 0;
+					rv = 0;
 				}
 			}
 			nl80211_free(res);
@@ -606,7 +614,7 @@ int nl80211_get_noise(const char *ifname, int *buf)
 		nl80211_free(req);
 	}
 
-	return -1;
+	return rv;
 }
 
 int nl80211_get_quality(const char *ifname, int *buf)
