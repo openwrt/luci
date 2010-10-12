@@ -1138,7 +1138,7 @@ static void nl80211_get_scancrypto(const char *spec,
 
 int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 {
-	int freq, rssi, qmax, count;
+	int freq, rssi, qmax, count, is_tmp = 0;
 	char *res;
 	char cmd[256];
 	char ssid[128] = { 0 };
@@ -1245,40 +1245,55 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 	{
 		if( (res = nl80211_ifname2phy(ifname)) != NULL )
 		{
-			/*
-			 * This is a big ugly hack, just look away.
-			 */
+			/* Got a temp interface, don't create yet another one */
+			if( !strncmp(ifname, "tmp.", 4) )
+			{
+				sprintf(cmd, "ifconfig %s up 2>/dev/null", ifname);
+				if( WEXITSTATUS(system(cmd)) )
+					return -1;
 
-			sprintf(cmd, "ifconfig %s down 2>/dev/null", ifname);
-			if( WEXITSTATUS(system(cmd)) )
-				goto out;
+				wext_get_scanlist(ifname, buf, len);
 
-			sprintf(cmd, "iw phy %s interface add scan.%s "
-				"type station 2>/dev/null", res, ifname);
-			if( WEXITSTATUS(system(cmd)) )
-				goto out;
+				sprintf(cmd, "ifconfig %s down 2>/dev/null", ifname);
+				(void) WEXITSTATUS(system(cmd));
 
-			sprintf(cmd, "ifconfig scan.%s up 2>/dev/null", ifname);
-			if( WEXITSTATUS(system(cmd)) )
-				goto out;
+				return 0;
+			}
 
-			sprintf(cmd, "scan.%s", ifname);
-			wext_get_scanlist(cmd, buf, len);
+			/* Spawn a new scan interface */
+			else
+			{
+				sprintf(cmd, "ifconfig %s down 2>/dev/null", ifname);
+				if( WEXITSTATUS(system(cmd)) )
+					goto out;
 
-	out:
-			sprintf(cmd, "ifconfig scan.%s down 2>/dev/null", ifname);
-			(void) WEXITSTATUS(system(cmd));
+				sprintf(cmd, "iw phy %s interface add scan.%s "
+					"type station 2>/dev/null", res, ifname);
+				if( WEXITSTATUS(system(cmd)) )
+					goto out;
 
-			sprintf(cmd, "iw dev scan.%s del 2>/dev/null", ifname);
-			(void) WEXITSTATUS(system(cmd));
+				sprintf(cmd, "ifconfig scan.%s up 2>/dev/null", ifname);
+				if( WEXITSTATUS(system(cmd)) )
+					goto out;
 
-			sprintf(cmd, "ifconfig %s up 2>/dev/null", ifname);
-			(void) WEXITSTATUS(system(cmd));
+				sprintf(cmd, "scan.%s", ifname);
+				wext_get_scanlist(cmd, buf, len);
 
-			sprintf(cmd, "killall -HUP hostapd 2>/dev/null");
-			(void) WEXITSTATUS(system(cmd));
+			out:
+				sprintf(cmd, "ifconfig scan.%s down 2>/dev/null", ifname);
+				(void) WEXITSTATUS(system(cmd));
 
-			return 0;
+				sprintf(cmd, "iw dev scan.%s del 2>/dev/null", ifname);
+				(void) WEXITSTATUS(system(cmd));
+
+				sprintf(cmd, "ifconfig %s up 2>/dev/null", ifname);
+				(void) WEXITSTATUS(system(cmd));
+
+				sprintf(cmd, "killall -HUP hostapd 2>/dev/null");
+				(void) WEXITSTATUS(system(cmd));
+
+				return 0;
+			}
 		}
 	}
 
