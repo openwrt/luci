@@ -1138,7 +1138,7 @@ static void nl80211_get_scancrypto(const char *spec,
 
 int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 {
-	int freq, rssi, qmax, count, is_tmp = 0;
+	int freq, rssi, qmax, count;
 	char *res;
 	char cmd[256];
 	char ssid[128] = { 0 };
