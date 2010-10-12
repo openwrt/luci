@@ -51,7 +51,7 @@ struct iwinfo_iso3166_label ISO3166_Names[] = {
 	{ 0x4248 /* BH */, "Bahrain" },
 	{ 0x4249 /* BI */, "Burundi" },
 	{ 0x424A /* BJ */, "Benin" },
-	{ 0x424C /* BL */, "Saint Barthélemy" },
+	{ 0x424C /* BL */, "Saint Barthelemy" },
 	{ 0x424D /* BM */, "Bermuda" },
 	{ 0x424E /* BN */, "Brunei Darussalam" },
 	{ 0x424F /* BO */, "Bolivia" },

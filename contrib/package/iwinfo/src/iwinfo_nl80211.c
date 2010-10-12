@@ -131,14 +131,14 @@ static int nl80211_msg_response(struct nl_msg *msg, void *arg)
 
 static void nl80211_free(struct nl80211_msg_conveyor *cv)
 {
-	if( cv && cv->cb )
-		nl_cb_put(cv->cb);
-
-	if( cv && cv->msg )
-		nlmsg_free(cv->msg);
-
 	if( cv )
 	{
+		if( cv->cb )
+			nl_cb_put(cv->cb);
+
+		if( cv->msg )
+			nlmsg_free(cv->msg);
+
 		cv->cb  = NULL;
 		cv->msg = NULL;
 	}
@@ -924,7 +924,7 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 	};
 
 	if( nl80211_get_channel(ifname, &ch_cur) )
-		return -1;
+		ch_cur = 0;
 
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if( req )
@@ -947,7 +947,7 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 					ch_cmp = nl80211_freq2channel(
 						nla_get_u32(freqs[NL80211_FREQUENCY_ATTR_FREQ]));
 
-					if( (ch_cmp == ch_cur) &&
+					if( (!ch_cur || (ch_cmp == ch_cur)) &&
 					    freqs[NL80211_FREQUENCY_ATTR_MAX_TX_POWER] )
 					{
 						dbm_max = (int)(0.01 * nla_get_u32(

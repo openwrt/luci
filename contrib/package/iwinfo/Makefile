@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiwinfo
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -58,4 +58,3 @@ define Package/libiwinfo/install
 endef
 
 $(eval $(call BuildPackage,libiwinfo))
-
