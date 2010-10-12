@@ -158,17 +158,6 @@ endif
 
 
 ### Libraries ###
-define Package/luci-uci
-  $(call Package/luci/libtemplate)
-  DEPENDS+=+libuci-lua
-  TITLE:=High-Level UCI API
-endef
-
-define Package/luci-uci/install
-	$(call Package/luci/install/template,$(1),libs/uci)
-endef
-
-
 define Package/luci-fastindex
   $(call Package/luci/libtemplate)
   TITLE:=Fastindex indexing module
@@ -315,7 +304,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-sys +luci-nixio +luci-uci \
+  DEPENDS+=+luci-sys +luci-nixio +luci-core \
   	+luci-sgi-cgi +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,auto,Default Language)
@@ -332,7 +321,7 @@ endef
 
 define Package/luci-uvl
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-sys +luci-uci +luci-core
+  DEPENDS+=+luci-sys +luci-core
   TITLE:=UVL - UCI Validation Layer
 endef
 
@@ -1075,9 +1064,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-px5g),)
 	PKG_SELECTED_MODULES+=libs/px5g
 endif
-ifneq ($(CONFIG_PACKAGE_luci-uci),)
-	PKG_SELECTED_MODULES+=libs/uci
-endif
 ifneq ($(CONFIG_PACKAGE_luci-sys),)
 	PKG_SELECTED_MODULES+=libs/sys
 endif
@@ -1292,7 +1278,6 @@ $(eval $(call BuildPackage,luci-luanet))
 $(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
 $(eval $(call BuildPackage,luci-px5g))
-$(eval $(call BuildPackage,luci-uci))
 $(eval $(call BuildPackage,luci-sys))
 $(eval $(call BuildPackage,luci-web))
 $(eval $(call BuildPackage,luci-uvl))
