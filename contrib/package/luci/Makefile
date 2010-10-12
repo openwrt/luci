@@ -179,20 +179,10 @@ define Package/luci-fastindex/install
 endef
 
 
-define Package/luci-http
-  $(call Package/luci/libtemplate)
-  TITLE:=HTTP Protocol implementation
-endef
-
-define Package/luci-http/install
-	$(call Package/luci/install/template,$(1),libs/http)
-endef
-
-
 define Package/luci-httpclient
   $(call Package/luci/libtemplate)
   TITLE:=HTTP(S) client library
-  DEPENDS+=+luci-http +luci-nixio
+  DEPENDS+=+luci-web +luci-nixio
 endef
 
 define Package/luci-httpclient/install
@@ -244,7 +234,7 @@ endef
 define Package/luci-lucid
   $(call Package/luci/webservertemplate)
   TITLE:=LuCId Full-Stack Webserver
-  DEPENDS+=+luci-nixio +luci-http +luci-px5g
+  DEPENDS+=+luci-nixio +luci-web +luci-px5g
 endef
 
 define Package/luci-lucid/install
@@ -325,7 +315,7 @@ endef
 
 define Package/luci-web
   $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-http +luci-sys +luci-nixio +luci-uci \
+  DEPENDS+=+luci-sys +luci-nixio +luci-uci \
   	+luci-sgi-cgi +luci-lmo
   TITLE:=MVC Webframework
   $(call Config,luci.main.lang,string,auto,Default Language)
@@ -1061,9 +1051,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-fastindex),)
 	PKG_SELECTED_MODULES+=libs/fastindex
 endif
-ifneq ($(CONFIG_PACKAGE_luci-http),)
-	PKG_SELECTED_MODULES+=libs/http
-endif
 ifneq ($(CONFIG_PACKAGE_luci-httpclient),)
 	PKG_SELECTED_MODULES+=libs/httpclient
 endif
@@ -1297,7 +1284,6 @@ MAKE_FLAGS += \
 
 $(eval $(call BuildPackage,luci-core))
 $(eval $(call BuildPackage,luci-fastindex))
-$(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-httpclient))
 $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
