@@ -385,6 +385,93 @@ out:
 	return rv;
 }
 
+static char * nl80211_phy2ifname(const char *ifname)
+{
+	int fd, phyidx = 0;
+	char buffer[64];
+	static char nif[IFNAMSIZ] = { 0 };
+
+	DIR *d;
+	struct dirent *e;
+
+	if( !strncmp(ifname, "radio", 5) )
+	{
+		phyidx = atoi(&ifname[5]);
+
+		if( (d = opendir("/sys/class/net")) != NULL )
+		{
+			while( (e = readdir(d)) != NULL )
+			{
+				snprintf(buffer, sizeof(buffer),
+					"/sys/class/net/%s/phy80211/index", e->d_name);
+
+				if( (fd = open(buffer, O_RDONLY)) > 0 )
+				{
+					if( (read(fd, buffer, sizeof(buffer)) > 0) &&
+					    (atoi(buffer) == phyidx) )
+					{
+						strncpy(nif, e->d_name, sizeof(nif));
+					}
+
+					close(fd);
+				}
+
+				if( nif[0] )
+					break;
+			}
+
+			closedir(d);
+		}
+	}
+
+	return nif[0] ? nif : NULL;
+}
+
+static char * nl80211_add_tempif(const char *ifname)
+{
+	int phyidx;
+	char *rv = NULL;
+	static char nif[IFNAMSIZ] = { 0 };
+	struct nl80211_msg_conveyor *req, *res;
+
+	req = nl80211_msg(ifname, NL80211_CMD_NEW_INTERFACE, 0);
+	if( req )
+	{
+		snprintf(nif, sizeof(nif), "tmp.%s", ifname);
+
+		NLA_PUT_STRING(req->msg, NL80211_ATTR_IFNAME, nif);
+		NLA_PUT_U32(req->msg, NL80211_ATTR_IFTYPE, NL80211_IFTYPE_STATION);
+
+		res = nl80211_send(req);
+		if( res )
+		{
+			rv = nif;
+			nl80211_free(res);
+		}
+
+	nla_put_failure:
+		nl80211_free(req);
+	}
+
+	return rv;
+}
+
+static void nl80211_del_tempif(const char *ifname)
+{
+	struct nl80211_msg_conveyor *req, *res;
+
+	req = nl80211_msg(ifname, NL80211_CMD_DEL_INTERFACE, 0);
+	if( req )
+	{
+		NLA_PUT_STRING(req->msg, NL80211_ATTR_IFNAME, ifname);
+
+		nl80211_free(nl80211_send(req));
+
+	nla_put_failure:
+		nl80211_free(req);
+	}
+}
+
 
 int nl80211_probe(const char *ifname)
 {
@@ -1057,6 +1144,24 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 	char ssid[128] = { 0 };
 	char bssid[18] = { 0 };
 	char cipher[256] = { 0 };
+
+	/* Got a radioX pseudo interface, find some interface on it or create one */
+	if( !strncmp(ifname, "radio", 5) )
+	{
+		/* Reuse existing interface */
+		if( (res = nl80211_phy2ifname(ifname)) != NULL )
+		{
+			return nl80211_get_scanlist(res, buf, len);
+		}
+
+		/* Need to spawn a temporary iface for scanning */
+		else if( (res = nl80211_add_tempif(ifname)) != NULL )
+		{
+			count = nl80211_get_scanlist(res, buf, len);
+			nl80211_del_tempif(res);
+			return count;
+		}
+	}
 
 	struct iwinfo_scanlist_entry *e = (struct iwinfo_scanlist_entry *)buf;
 
