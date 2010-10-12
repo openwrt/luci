@@ -158,17 +158,6 @@ endif
 
 
 ### Libraries ###
-define Package/luci-cbi
-  $(call Package/luci/libtemplate)
-  DEPENDS+=+luci-web +luci-uci
-  TITLE:=Configuration Binding Interface
-endef
-
-define Package/luci-cbi/install
-	$(call Package/luci/install/template,$(1),libs/cbi)
-endef
-
-
 define Package/luci-uci
   $(call Package/luci/libtemplate)
   DEPENDS+=+libuci-lua
@@ -396,7 +385,7 @@ endef
 
 define Package/luci-admin-core
   $(call Package/luci/webtemplate)
-  DEPENDS+=+luci-web +luci-cbi +luci-i18n-english
+  DEPENDS+=+luci-web +luci-i18n-english
   TITLE:=Web UI Core Module
 endef
 
@@ -1079,9 +1068,6 @@ endef
 ifneq ($(CONFIG_PACKAGE_luci-core),)
 	PKG_SELECTED_MODULES+=libs/core
 endif
-ifneq ($(CONFIG_PACKAGE_luci-cbi),)
-	PKG_SELECTED_MODULES+=libs/cbi
-endif
 ifneq ($(CONFIG_PACKAGE_luci-fastindex),)
 	PKG_SELECTED_MODULES+=libs/fastindex
 endif
@@ -1323,7 +1309,6 @@ MAKE_FLAGS += \
 
 
 $(eval $(call BuildPackage,luci-core))
-$(eval $(call BuildPackage,luci-cbi))
 $(eval $(call BuildPackage,luci-fastindex))
 $(eval $(call BuildPackage,luci-http))
 $(eval $(call BuildPackage,luci-httpclient))
