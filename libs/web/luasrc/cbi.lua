@@ -1253,18 +1253,20 @@ function AbstractValue.parse(self, section, novld)
 	end
 
 	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
-		fvalue = self:transform(self:validate(fvalue, section))
+		local val_err
+		fvalue, val_err = self:validate(fvalue, section)
+		fvalue = self:transform(fvalue)
+
 		if not fvalue and not novld then
-			if self.error then
-				self.error[section] = "invalid"
-			else
-				self.error = { [section] = "invalid" }
-			end
-			if self.section.error then
-				table.insert(self.section.error[section], "invalid")
-			else
-				self.section.error = {[section] = {"invalid"}}
-			end
+			val_err = val_err or "invalid"
+
+			self.error = self.error or { }
+			self.error[section] = val_err
+
+			self.section.error = self.section.error or { }
+			self.section.error[section] = self.section.error[section] or { }
+			table.insert(self.section.error[section], val_err)
+
 			self.map.save = false
 		end
 		if fvalue and not (fvalue == cvalue) then
