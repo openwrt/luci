@@ -241,16 +241,6 @@ define Package/luci-luanet/install
 endef
 
 
-define Package/luci-iwinfo
-  $(call Package/luci/libtemplate)
-  TITLE:=Wireless abstration library
-endef
-
-define Package/luci-iwinfo/install
-	$(call Package/luci/install/template,$(1),libs/iwinfo)
-endef
-
-
 define Package/luci-lucid
   $(call Package/luci/webservertemplate)
   TITLE:=LuCId Full-Stack Webserver
@@ -325,7 +315,7 @@ endef
 define Package/luci-sys
   $(call Package/luci/libtemplate)
   TITLE:=LuCI Linux/POSIX system library
-  DEPENDS:=+luci-iwinfo
+  DEPENDS:=+libiwinfo
 endef
 
 define Package/luci-sys/install
@@ -1089,9 +1079,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-luanet),)
 	PKG_SELECTED_MODULES+=libs/luanet
 endif
-ifneq ($(CONFIG_PACKAGE_luci-iwinfo),)
-	PKG_SELECTED_MODULES+=libs/iwinfo
-endif
 ifneq ($(CONFIG_PACKAGE_luci-lucid),)
 	PKG_SELECTED_MODULES+=libs/lucid libs/lucid-http
 endif
@@ -1316,7 +1303,6 @@ $(eval $(call BuildPackage,luci-ipkg))
 $(eval $(call BuildPackage,luci-json))
 $(eval $(call BuildPackage,luci-lmo))
 $(eval $(call BuildPackage,luci-luanet))
-$(eval $(call BuildPackage,luci-iwinfo))
 $(eval $(call BuildPackage,luci-lucid))
 $(eval $(call BuildPackage,luci-nixio))
 $(eval $(call BuildPackage,luci-px5g))
