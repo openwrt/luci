@@ -183,14 +183,14 @@ $Id$
 						<td class="cbi-value-field"><img src="<%=guess_wifi_signal(net:signal_level(info.signal, info.noise))%>" title="Signal: <%=info.signal%> dBm / Noise: <%=info.noise%> dBm" /></td>
 						<td class="cbi-value-field"><%=net:active_ssid()%></td>
 						<td class="cbi-value-field"><%=mac%></td>
-						<td class="cbi-value-field"><%=arpcache[mac] or "n/a"%></td>
+						<td class="cbi-value-field"><%=arpcache[mac:lower()] or "n/a"%></td>
 						<td class="cbi-value-field"><%=info.signal%> dBm</td>
 						<td class="cbi-value-field"><%=info.noise%> dBm</td>
 					</tr>
 					<% end %>
 				<% end %>
 			<% end %>
-			<% if count <= 0 then %>
+			<% if count < 0 then %>
 			<tr class="cbi-section-table-row cbi-rowstyle-2">
 				<td class="cbi-value-field" colspan="6">
 					<em>No information available</em>
