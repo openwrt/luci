@@ -94,12 +94,14 @@ end
 s:taboption("general", DummyValue, "type", translate("Type"))
 
 local hwtype = m:get(arg[1], "type")
+local htcaps = m:get(arg[1], "ht_capab") and true or false
+
 -- NanoFoo
 local nsantenna = m:get(arg[1], "antenna")
 
 ch = s:taboption("general", Value, "channel", translate("Channel"))
 ch:value("auto", translate("auto"))
-for _, f in ipairs(luci.sys.wifi.channels()) do
+for _, f in ipairs(iw and iw.freqlist or luci.sys.wifi.channels()) do
 	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
 end
 
@@ -112,32 +114,46 @@ if hwtype == "mac80211" then
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	for _, p in ipairs(iw and iw.txpwrlist or {}) do
+	tp.default = tostring(iw and iw.txpower or tx_powers[#tx_powers])
+	for _, p in ipairs(tx_powers or {}) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end
-	
+
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
 	mode:value("", translate("auto"))
 	mode:value("11b", "802.11b")
 	mode:value("11g", "802.11g")
 	mode:value("11a", "802.11a")
-	mode:value("11ng", "802.11g+n")
-	mode:value("11na", "802.11a+n")
 
-	htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode"))
-	htmode:depends("hwmode", "11na")
-	htmode:depends("hwmode", "11ng")
-	htmode:value("HT20", "20MHz")
-	htmode:value("HT40-", translate("40MHz 2nd channel below"))
-	htmode:value("HT40+", translate("40MHz 2nd channel above"))
+	if htcaps then
+		mode:value("11ng", "802.11g+n")
+		mode:value("11na", "802.11a+n")
 
-	--htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
-	--htcapab:depends("hwmode", "11na")
-	--htcapab:depends("hwmode", "11ng")
+		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode"))
+		htmode:depends("hwmode", "11na")
+		htmode:depends("hwmode", "11ng")
+		htmode:value("HT20", "20MHz")
+		htmode:value("HT40-", translate("40MHz 2nd channel below"))
+		htmode:value("HT40+", translate("40MHz 2nd channel above"))
 
-	s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+		--htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
+		--htcapab:depends("hwmode", "11na")
+		--htcapab:depends("hwmode", "11ng")
+	end
+
+	local cl = iw and iw.countrylist
+	if cl and #cl > 0 then
+		cc = s:taboption("advanced", ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+		cc.default = tostring(iw and iw.country or "00")
+		for _, c in ipairs(cl) do
+			cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+		end
+	else
+		s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	end
+
 	s:taboption("advanced", Value, "distance", translate("Distance Optimization"),
-		translate("Distance to farthest network member in meters."))	
+		translate("Distance to farthest network member in meters."))
 end
 
 
@@ -211,7 +227,7 @@ if hwtype == "broadcom" then
 	tp.rmempty = true
 	for _, p in ipairs(iw.txpwrlist) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
-	end	
+	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
 	mode:value("11bg", "802.11b+g")
@@ -333,10 +349,10 @@ if wnet then
 
 		s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 		s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
-		
+
 		mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
-		mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})		
-		
+		mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})
+
 		function mode.write(self, section, value)
 			if value == "ap-wds" then
 				ListValue.write(self, section, "ap")
@@ -362,10 +378,10 @@ if wnet then
 				return mode
 			end
 		end
-		
+
 		hidden = s:taboption("general", Flag, "hidden", translate("Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
 		hidden:depends({mode="ap"})
-		hidden:depends({mode="ap-wds"})				
+		hidden:depends({mode="ap-wds"})
 	end
 
 
