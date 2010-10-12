@@ -308,6 +308,21 @@ static int iwinfo_L_type(lua_State *L)
 	return 1;
 }
 
+/* Shutdown backends */
+static int iwinfo_L__gc(lua_State *L)
+{
+#ifdef USE_WL
+	wl_close();
+#endif
+#ifdef USE_MADWIFI
+	madwifi_close();
+#endif
+#ifdef USE_NL80211
+	nl80211_close();
+#endif
+	wext_close();
+}
+
 /*
  * Build a short textual description of the crypto info
  */
@@ -930,6 +945,7 @@ static const luaL_reg R_wext[] = {
 /* Common */
 static const luaL_reg R_common[] = {
 	{ "type", iwinfo_L_type },
+	{ "__gc", iwinfo_L__gc  },
 	{ NULL, NULL }
 };
 

@@ -113,6 +113,14 @@ int wext_probe(const char *ifname)
 	return 0;
 }
 
+void wext_close(void)
+{
+	wext_scan_close();
+
+	if( ioctl_socket > -1 )
+		close(ioctl_socket);
+}
+
 int wext_get_mode(const char *ifname, char *buf)
 {
 	struct iwreq wrq;

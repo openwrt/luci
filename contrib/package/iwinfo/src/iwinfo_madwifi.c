@@ -292,6 +292,12 @@ int madwifi_probe(const char *ifname)
 	return ( !!madwifi_isvap(ifname, NULL) || madwifi_iswifi(ifname) );
 }
 
+void madwifi_close(void)
+{
+	if( ioctl_socket > -1 )
+		close(ioctl_socket);
+}
+
 int madwifi_get_mode(const char *ifname, char *buf)
 {
 	return wext_get_mode(ifname, buf);

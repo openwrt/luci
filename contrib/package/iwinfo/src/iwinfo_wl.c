@@ -75,6 +75,12 @@ int wl_probe(const char *ifname)
 	return 0;
 }
 
+void wl_close(void)
+{
+	if( ioctl_socket > -1 )
+		close(ioctl_socket);
+}
+
 int wl_get_mode(const char *ifname, char *buf)
 {
 	int ret = -1;

@@ -653,3 +653,9 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 
 	return -1;
 }
+
+void wext_scan_close(void)
+{
+	if( ioctl_socket > -1 )
+		close(ioctl_socket);
+}

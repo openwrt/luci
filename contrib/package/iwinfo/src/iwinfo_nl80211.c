@@ -77,17 +77,7 @@ static int nl80211_init(void)
 
 
 err:
-	if( nls && nls->nl_sock )
-		nl_socket_free(nls->nl_sock);
-
-	if( nls && nls->nl_cache )
-		nl_cache_free(nls->nl_cache);
-
-	if( nls )
-		free(nls);
-
-	nls = NULL;
-
+	nl80211_close();
 	return err;
 }
 
@@ -148,19 +138,21 @@ static struct nl80211_msg_conveyor * nl80211_msg(const char *ifname, int cmd, in
 {
 	static struct nl80211_msg_conveyor cv;
 
-	int ifidx;
+	int ifidx = -1, phyidx = -1;
 	struct nl_msg *req = NULL;
 	struct nl_cb *cb = NULL;
 
 	if( nl80211_init() < 0 )
 		goto err;
 
-	if( !strncmp(ifname, "mon.", 4) )
+	if( !strncmp(ifname, "radio", 5) )
+		phyidx = atoi(&ifname[5]);
+	else if( !strncmp(ifname, "mon.", 4) )
 		ifidx = if_nametoindex(&ifname[4]);
 	else
 		ifidx = if_nametoindex(ifname);
 
-	if( ifidx < 0 )
+	if( (ifidx < 0) && (phyidx < 0) )
 		return NULL;
 
 	req = nlmsg_alloc();
@@ -174,7 +166,11 @@ static struct nl80211_msg_conveyor * nl80211_msg(const char *ifname, int cmd, in
 	genlmsg_put(req, 0, 0, genl_family_get_id(nls->nl80211), 0,
 		flags, cmd, 0);
 
-	NLA_PUT_U32(req, NL80211_ATTR_IFINDEX, ifidx);
+	if( ifidx > -1 )
+		NLA_PUT_U32(req, NL80211_ATTR_IFINDEX, ifidx);
+
+	if( phyidx > -1 )
+		NLA_PUT_U32(req, NL80211_ATTR_WIPHY, phyidx);
 
 	nlmsg_get(req);
 
@@ -393,6 +389,21 @@ out:
 int nl80211_probe(const char *ifname)
 {
 	return !!nl80211_ifname2phy(ifname);
+}
+
+void nl80211_close(void)
+{
+	if( nls )
+	{
+		if( nls->nl_sock )
+			nl_socket_free(nls->nl_sock);
+
+		if( nls->nl_cache )
+			nl_cache_free(nls->nl_cache);
+
+		free(nls);
+		nls = NULL;
+	}
 }
 
 int nl80211_get_mode(const char *ifname, char *buf)
@@ -1171,7 +1182,63 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 
 int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 {
-	return wext_get_freqlist(ifname, buf, len);
+	char *phy;
+	int count = 0, bands_remain, freqs_remain;
+	struct nl80211_msg_conveyor *req, *res;
+	struct nlattr *bands[NL80211_BAND_ATTR_MAX + 1];
+	struct nlattr *freqs[NL80211_FREQUENCY_ATTR_MAX + 1];
+	struct nlattr *band, *freq;
+	struct iwinfo_freqlist_entry *e = (struct iwinfo_freqlist_entry *)buf;
+
+	static struct nla_policy freq_policy[NL80211_FREQUENCY_ATTR_MAX + 1] = {
+		[NL80211_FREQUENCY_ATTR_FREQ]         = { .type = NLA_U32  },
+		[NL80211_FREQUENCY_ATTR_DISABLED]     = { .type = NLA_FLAG },
+		[NL80211_FREQUENCY_ATTR_PASSIVE_SCAN] = { .type = NLA_FLAG },
+		[NL80211_FREQUENCY_ATTR_NO_IBSS]      = { .type = NLA_FLAG },
+		[NL80211_FREQUENCY_ATTR_RADAR]        = { .type = NLA_FLAG },
+		[NL80211_FREQUENCY_ATTR_MAX_TX_POWER] = { .type = NLA_U32  },
+	};
+
+	if( !wext_get_freqlist(ifname, buf, len) )
+		return 0;
+
+	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
+	if( req )
+	{
+		res = nl80211_send(req);
+		if( res )
+		{
+			nla_for_each_nested(band,
+				res->attr[NL80211_ATTR_WIPHY_BANDS], bands_remain)
+			{
+				nla_parse(bands, NL80211_BAND_ATTR_MAX, nla_data(band),
+					  nla_len(band), NULL);
+
+				nla_for_each_nested(freq,
+					bands[NL80211_BAND_ATTR_FREQS], freqs_remain)
+				{
+					nla_parse(freqs, NL80211_FREQUENCY_ATTR_MAX,
+						nla_data(freq), nla_len(freq), freq_policy);
+
+					e->mhz = nla_get_u32(freqs[NL80211_FREQUENCY_ATTR_FREQ]);
+					e->channel = nl80211_freq2channel(e->mhz);
+
+					e++;
+					count++;
+				}
+			}
+			nl80211_free(res);
+		}
+		nl80211_free(req);
+	}
+
+	if( count > 0 )
+	{
+		*len = count * sizeof(struct iwinfo_freqlist_entry);
+		return 0;
+	}
+
+	return -1;
 }
 
 int nl80211_get_country(const char *ifname, char *buf)
