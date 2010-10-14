@@ -98,6 +98,30 @@ m.uci:foreach("network", "switch",
 			return sections
 		end
 
+		s.create = function(self, section)
+			local sid = TypedSection.create(self, section)
+
+			local max_nr = 0
+			local max_id = 0
+
+			m.uci:foreach("network", "switch_vlan",
+				function(s)
+					local nr = tonumber(s.vlan)
+					local id = has_vlan4k and tonumber(s[has_vlan4k])
+					if nr ~= nil and nr > max_nr then max_nr = nr end
+					if id ~= nil and id > max_id then max_id = id end
+				end)
+
+			m.uci:set("network", sid, "vlan", max_nr + 1)
+
+			if has_vlan4k then
+				m.uci:set("network", sid, has_vlan4k, max_id + 1)
+			end
+
+			return sid
+		end
+
+
 		local port_opts = { }
 		local untagged  = { }
 
@@ -111,6 +135,7 @@ m.uci:foreach("network", "switch",
 		end
 
 		local portvalidate = function(self, value, section)
+			-- ensure that the ports appears untagged only once
 			if value == "u" then
 				if not untagged[self.option] then
 					untagged[self.option] = true
@@ -125,8 +150,7 @@ m.uci:foreach("network", "switch",
 
 		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID")
 
-		vid.required = true
-		vid.optional = false
+		vid.rmempty = false
 
 		vid.validate = function(self, value, section)
 			local v = tonumber(value)
@@ -135,11 +159,11 @@ m.uci:foreach("network", "switch",
 				return value
 			else
 				return nil,
-					translatef("Invalid VLAN ID given! Only IDs between 1 and %d are allowed.", m)
+					translatef("Invalid VLAN ID given! Only IDs between %d and %d are allowed.", 1, m)
 			end
 		end
 
-		vid.parse = function(self, section)
+		vid.write = function(self, section, value)
 			local o
 			local p = { }
 
@@ -153,18 +177,13 @@ m.uci:foreach("network", "switch",
 			end
 
 			m.uci:set("network", section, "ports", table.concat(p, " "))
-			return Value.parse(self, section)
-		end
-
-		vid.formvalue = function(self, section)
-			local v = Value.formvalue(self, section)
-			return (v and #v > 0) and v or "x"
+			return Value.write(self, section, value)
 		end
 
 
 		local pt
 		for pt = 0, num_ports - 1 do
-			po = s:option(ListValue, tostring(pt),
+			local po = s:option(ListValue, tostring(pt),
 				(pt == cpu_port) and "CPU" or "Port %d" % (pt + 1))
 
 			po:value("", translate("off"))
