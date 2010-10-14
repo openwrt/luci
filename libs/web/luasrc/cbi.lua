@@ -304,9 +304,11 @@ function Map.parse(self, readinput, ...)
 	Node.parse(self, ...)
 
 	if self.save then
+		self:_run_hooks("on_save", "on_before_save")
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
+		self:_run_hooks("on_after_save")
 		if self:submitstate() and ((not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply")) then
 			self:_run_hooks("on_before_commit")
 			for i, config in ipairs(self.parsechain) do
@@ -1402,6 +1404,11 @@ function Value.__init__(self, ...)
 	self.vallist = {}
 end
 
+function Value.reset_values(self)
+	self.keylist = {}
+	self.vallist = {}
+end
+
 function Value.value(self, key, val)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
@@ -1487,6 +1494,11 @@ function ListValue.__init__(self, ...)
 	self.widget = "select"
 end
 
+function ListValue.reset_values(self)
+	self.keylist = {}
+	self.vallist = {}
+end
+
 function ListValue.value(self, key, val, ...)
 	if luci.util.contains(self.keylist, key) then
 		return
@@ -1535,6 +1547,11 @@ function MultiValue.render(self, ...)
 	end
 
 	AbstractValue.render(self, ...)
+end
+
+function MultiValue.reset_values(self)
+	self.keylist = {}
+	self.vallist = {}
 end
 
 function MultiValue.value(self, key, val)
@@ -1609,6 +1626,11 @@ function DynamicList.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/dynlist"
 	self.cast = "table"
+	self.keylist = {}
+	self.vallist = {}
+end
+
+function DynamicList.reset_values(self)
 	self.keylist = {}
 	self.vallist = {}
 end
