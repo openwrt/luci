@@ -976,6 +976,7 @@ define Package/luci-i18n-vietnamese/install
 	$(call Package/luci/install/template,$(1),i18n/vietnamese)
 endef
 
+
 define Package/luci-i18n-malay
   $(call Package/luci/i18ntemplate)
   TITLE:=Malay (by Teow Wai Chet)
@@ -983,6 +984,16 @@ endef
 
 define Package/luci-i18n-malay/install
 	$(call Package/luci/install/template,$(1),i18n/malay)
+endef
+
+
+define Package/luci-i18n-norwegian
+  $(call Package/luci/i18ntemplate)
+  TITLE:=Norwegian (by Lars Hardy)
+endef
+
+define Package/luci-i18n-norwegian/install
+	$(call Package/luci/install/template,$(1),i18n/norwegian)
 endef
 
 
@@ -1257,6 +1268,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_luci-i18n-malay),)
 	PKG_SELECTED_MODULES+=i18n/malay
 endif
+ifneq ($(CONFIG_PACKAGE_luci-i18n-norwegian),)
+	PKG_SELECTED_MODULES+=i18n/norwegian
+endif
 
 
 MAKE_FLAGS += \
@@ -1345,6 +1359,7 @@ $(eval $(call BuildPackage,luci-i18n-portuguese))
 $(eval $(call BuildPackage,luci-i18n-spanish))
 $(eval $(call BuildPackage,luci-i18n-vietnamese))
 $(eval $(call BuildPackage,luci-i18n-malay))
+$(eval $(call BuildPackage,luci-i18n-norwegian))
 
 $(eval $(call BuildPackage,luci))
 $(eval $(call BuildPackage,luci-ssl))
