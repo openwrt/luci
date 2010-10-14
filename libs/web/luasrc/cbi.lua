@@ -1232,6 +1232,24 @@ function AbstractValue.mandatory(self, value)
 	self.rmempty = not value
 end
 
+function AbstractValue.add_error(self, section, type, msg)
+	self.error = self.error or { }
+	self.error[section] = msg or type
+
+	self.section.error = self.section.error or { }
+	self.section.error[section] = self.section.error[section] or { }
+	table.insert(self.section.error[section], msg or type)
+
+	if type == "invalid" then
+		self.tag_invalid[section] = true
+	elseif type == "missing" then
+		self.tag_missing[section] = true
+	end
+
+	self.tag_error[section] = true
+	self.map.save = false
+end
+
 function AbstractValue.parse(self, section, novld)
 	local fvalue = self:formvalue(section)
 	local cvalue = self:cfgvalue(section)
@@ -1258,17 +1276,9 @@ function AbstractValue.parse(self, section, novld)
 		fvalue = self:transform(fvalue)
 
 		if not fvalue and not novld then
-			val_err = val_err or "invalid"
-
-			self.error = self.error or { }
-			self.error[section] = val_err
-
-			self.section.error = self.section.error or { }
-			self.section.error[section] = self.section.error[section] or { }
-			table.insert(self.section.error[section], val_err)
-
-			self.map.save = false
+			self:add_error(section, "invalid", val_err)
 		end
+
 		if fvalue and not (fvalue == cvalue) then
 			if self:write(section, fvalue) then
 				-- Push events
@@ -1284,13 +1294,9 @@ function AbstractValue.parse(self, section, novld)
 				--luci.util.append(self.map.events, self.events)
 			end
 		elseif cvalue ~= fvalue and not novld then
-			self:write(section, fvalue or "")
-			if self.error then
-				self.error[section] = "missing"
-			else
-				self.error = { [section] = "missing" }
-			end
-			self.map.save = false
+			-- trigger validator with nil value to get custom user error msg.
+			local _, val_err = self:validate(nil, section)
+			self:add_error(section, "missing", val_err)
 		end
 	end
 end
@@ -1328,8 +1334,13 @@ end
 
 -- Return the UCI value of this object
 function AbstractValue.cfgvalue(self, section)
-	local value = (self.error and self.error[section] == "invalid")
-		and self:formvalue(section) or self.map:get(section, self.option)
+	local value
+	if self.tag_error[section] then
+		value = self:formvalue(section)
+	else
+		value = self.map:get(section, self.option)
+	end
+
 	if not value then
 		return nil
 	elseif not self.cast or self.cast == type(value) then
