@@ -15,17 +15,19 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:Configuration%></a></h2>
-<p><strong><%:Changes%>:</strong></p>
+<h2><a id="content" name="content"><%:Configuration / Changes%></a></h2>
 
-<div class="cbi-section">
-	<code><%=changes%></code>
-</div>
+<% if changes then %>
+	<%+admin_uci/changelog%>
+	<%- uci_changelog(changes) -%>
+<% else %>
+	<p><strong><%:There are no pending changes!%></strong></p>
+<% end %>
 
 <div class="cbi-page-actions">
 	<div style="float:left">
 		<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
-			<input class="cbi-button" style="float:left; margin:0" type="submit" value="« <%:back%>" />
+			<input class="cbi-button" style="float:left; margin:0" type="submit" value="<%:« Back%>" />
 		</form>
 	</div>
 

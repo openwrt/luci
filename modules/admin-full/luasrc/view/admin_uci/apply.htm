@@ -12,31 +12,21 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+
 <%+header%>
 
-<h2><a id="content" name="content"><%:Configuration%></a></h2>
-<p><strong><%:The following changes have been applied%>:</strong></p>
+<h2><a id="content" name="content"><%:Configuration / Apply%></a></h2>
 
-<div class="cbi-section">
-	<code><%=(changes or "-")%></code>
-</div>
+<% if changes then %>
+	<%+cbi/apply_xhr%>
+	<%+admin_uci/changelog%>
 
-<fieldset class="cbi-section">
-	<ul class="cbi-apply"><%-
-		local fp = reload()
-		local line = fp:read()
-		while line do
-			write("<li>" .. luci.util.pcdata(line) .. "</li>\n")
-			line = fp:read()
-		end
-		fp:close()
-	-%></ul>
-</fieldset>
+	<%- cbi_apply_xhr('uci-apply', configs) -%>
 
-<div class="cbi-page-actions">
-	<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
-		<input class="cbi-button" style="margin:0" type="submit" value="« <%:back%>" />
-	</form>
-</div>
+	<p><strong><%:The following changes have been comitted%>:</strong></p>
+	<%- uci_changelog(changes) -%>
+<% else %>
+	<p><strong><%:There are no pending changes to apply!%></strong></p>
+<% end %>
 
 <%+footer%>

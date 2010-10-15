@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,13 +12,14 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.admin.uci", package.seeall)
 
 function index()
 	local i18n = luci.i18n.translate
-	local redir = luci.http.formvalue("redir", true) or 
+	local redir = luci.http.formvalue("redir", true) or
 	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
-	
+
 	entry({"admin", "uci"}, nil, i18n("Configuration"))
 	entry({"admin", "uci", "changes"}, call("action_changes"), i18n("Changes"), 40).query = {redir=redir}
 	entry({"admin", "uci", "revert"}, call("action_revert"), i18n("Revert"), 30).query = {redir=redir}
@@ -25,29 +27,13 @@ function index()
 	entry({"admin", "uci", "saveapply"}, call("action_apply"), i18n("Save & Apply"), 10).query = {redir=redir}
 end
 
-function convert_changes(changes)
-	local util = require "luci.util"
-	
-	local ret
-	for r, tbl in pairs(changes) do
-		for s, os in pairs(tbl) do
-			for o, v in pairs(os) do
-				ret = (ret and ret.."\n" or "") .. "%s%s.%s%s%s" % {
-					v == "" and "-" or "",
-					r,
-					s,
-					o ~= ".type" and "."..o or "",
-					v ~= "" and "="..util.pcdata(v) or ""
-				}
-			end
-		end
-	end
-	return ret
-end
-
 function action_changes()
-	local changes = convert_changes(luci.model.uci.cursor():changes())
-	luci.template.render("admin_uci/changes", {changes=changes})
+	local uci = luci.model.uci.cursor()
+	local changes = uci:changes()
+
+	luci.template.render("admin_uci/changes", {
+		changes = next(changes) and changes
+	})
 end
 
 function action_apply()
@@ -65,13 +51,11 @@ function action_apply()
 			uci:unload(r)
 		end
 	end
-	
-	local function _reload()
-		local cmd = uci:apply(reload, true)
-		return io.popen(cmd)
-	end
-	
-	luci.template.render("admin_uci/apply", {changes=convert_changes(changes), reload=_reload})
+
+	luci.template.render("admin_uci/apply", {
+		changes = next(changes) and changes,
+		configs = reload
+	})
 end
 
 
@@ -85,6 +69,8 @@ function action_revert()
 		uci:revert(r)
 		uci:unload(r)
 	end
-	
-	luci.template.render("admin_uci/revert", {changes=convert_changes(changes)})
+
+	luci.template.render("admin_uci/revert", {
+		changes = next(changes) and changes
+	})
 end
