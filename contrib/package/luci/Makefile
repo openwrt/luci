@@ -29,13 +29,12 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 LUA_TARGET:=source
 LUCI_CFLAGS:=
-PKG_SELECTED_MODULES:=
+LUCI_BUILD_PACKAGES:=
+LUCI_SELECTED_MODULES:=
 
 ifeq ($(BOARD),brcm-2.4)
   MAKE_FLAGS += CRAP="1"
 endif
-
-BUILD_PACKAGES:=
 
 
 include $(INCLUDE_DIR)/package.mk
@@ -55,7 +54,7 @@ define Build/Configure
 endef
 
 MAKE_FLAGS += \
-	MODULES="$(PKG_SELECTED_MODULES)" \
+	MODULES="$(LUCI_SELECTED_MODULES)" \
 	LUA_TARGET="$(LUA_TARGET)" \
 	LUA_SHLIBS="-llua -lm -ldl -lcrypt" \
 	CFLAGS="$(TARGET_CFLAGS) $(LUCI_CFLAGS) -I$(STAGING_DIR)/usr/include" \
@@ -121,10 +120,10 @@ ifneq ($(CONFIG_PACKAGE_luci-lib-core_zipped),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-lib-core),)
-  PKG_SELECTED_MODULES+=libs/core
+  LUCI_SELECTED_MODULES+=libs/core
 endif
 
-BUILD_PACKAGES += luci-lib-core
+LUCI_BUILD_PACKAGES += luci-lib-core
 
 
 ### Libraries ###
@@ -146,10 +145,10 @@ define library
   endef
 
   ifneq ($(CONFIG_PACKAGE_luci-lib-$(1)),)
-    PKG_SELECTED_MODULES+=libs/$(1)
+    LUCI_SELECTED_MODULES+=libs/$(1)
   endif
 
-  BUILD_PACKAGES += luci-lib-$(1)
+  LUCI_BUILD_PACKAGES += luci-lib-$(1)
 endef
 
 define Package/luci-lib-lucid/extra-install
@@ -236,10 +235,10 @@ define Package/luci-mod-freifunk-community/install
 endef
 
 ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk-community),)
-	PKG_SELECTED_MODULES+=applications/freifunk-community
+	LUCI_SELECTED_MODULES+=applications/freifunk-community
 endif
 
-BUILD_PACKAGES += luci-mod-freifunk-community
+LUCI_BUILD_PACKAGES += luci-mod-freifunk-community
 
 
 ### Modules ###
@@ -261,10 +260,10 @@ define module
   endef
 
   ifneq ($(CONFIG_PACKAGE_luci-mod-$(1)),)
-    PKG_SELECTED_MODULES+=modules/$(1)
+    LUCI_SELECTED_MODULES+=modules/$(1)
   endif
 
-  BUILD_PACKAGES += luci-mod-$(1)
+  LUCI_BUILD_PACKAGES += luci-mod-$(1)
 endef
 
 
@@ -302,10 +301,10 @@ define application
   endef
 
   ifneq ($(CONFIG_PACKAGE_luci-app-$(1)),)
-    PKG_SELECTED_MODULES+=applications/luci-$(1)
+    LUCI_SELECTED_MODULES+=applications/luci-$(1)
   endif
 
-  BUILD_PACKAGES += luci-app-$(1)
+  LUCI_BUILD_PACKAGES += luci-app-$(1)
 endef
 
 define Package/luci-app-splash/conffiles
@@ -440,10 +439,10 @@ define sgi
   endef
 
   ifneq ($(CONFIG_PACKAGE_luci-sgi-$(1)),)
-    PKG_SELECTED_MODULES+=libs/sgi-$(1)
+    LUCI_SELECTED_MODULES+=libs/sgi-$(1)
   endif
 
-  BUILD_PACKAGES += luci-sgi-$(1)
+  LUCI_BUILD_PACKAGES += luci-sgi-$(1)
 endef
 
 $(eval $(call sgi,cgi,CGI Gateway behind existing Webserver))
@@ -469,10 +468,10 @@ define theme
   endef
 
   ifneq ($(CONFIG_PACKAGE_luci-theme-$(1)),)
-    PKG_SELECTED_MODULES+=themes/$(1)
+    LUCI_SELECTED_MODULES+=themes/$(1)
   endif
 
-  BUILD_PACKAGES += luci-theme-$(1)
+  LUCI_BUILD_PACKAGES += luci-theme-$(1)
 endef
 
 $(eval $(call theme,base,Common base for all themes,,+luci-lib-web))
@@ -507,10 +506,10 @@ define translation
   endef
 
   ifneq ($(CONFIG_PACKAGE_luci-i18n-$(1)),)
-    PKG_SELECTED_MODULES+=i18n/$(1)
+    LUCI_SELECTED_MODULES+=i18n/$(1)
   endif
 
-  BUILD_PACKAGES += luci-i18n-$(1)
+  LUCI_BUILD_PACKAGES += luci-i18n-$(1)
 endef
 
 $(eval $(call translation,german,German))
@@ -546,7 +545,7 @@ define collection
 	true
   endef
 
-  BUILD_PACKAGES += luci$(if $(1),-$(1))
+  LUCI_BUILD_PACKAGES += luci$(if $(1),-$(1))
 endef
 
 $(eval $(call collection,,\
@@ -569,5 +568,5 @@ $(eval $(call collection,light,\
 
 
 ### Compile ###
-PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(BUILD_PACKAGES))
-$(foreach b,$(BUILD_PACKAGES),$(eval $(call BuildPackage,$(b))))
+PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(LUCI_BUILD_PACKAGES))
+$(foreach b,$(LUCI_BUILD_PACKAGES),$(eval $(call BuildPackage,$(b))))
