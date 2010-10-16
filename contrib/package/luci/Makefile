@@ -71,7 +71,7 @@ endef
 
 
 ### Core package ###
-define Package/luci-core
+define Package/luci-lib-core
   SECTION:=luci
   CATEGORY:=LuCI
   TITLE:=LuCI - Lua Configuration Interface
@@ -82,7 +82,7 @@ define Package/luci-core
   TITLE:=LuCI core libraries
 endef
 
-define Package/luci-core/install
+define Package/luci-lib-core/install
 	$(call Package/luci/install/template,$(1),libs/core)
 	$(PKG_BUILD_DIR)/build/mkversion.sh $(1)/usr/lib/lua/luci/version.lua \
 		"OpenWrt Firmware" \
@@ -91,45 +91,45 @@ define Package/luci-core/install
 		"$(PKG_VERSION)"
 endef
 
-define Package/luci-core/config
+define Package/luci-lib-core/config
        choice
                prompt "Build Target"
-               default PACKAGE_luci-core_source
+               default PACKAGE_luci-lib-core_source
 
-       config PACKAGE_luci-core_compile
+       config PACKAGE_luci-lib-core_compile
                bool "Precompiled"
 
-       config PACKAGE_luci-core_stripped
+       config PACKAGE_luci-lib-core_stripped
                bool "Stripped"
 
-       config PACKAGE_luci-core_source
+       config PACKAGE_luci-lib-core_source
                bool "Full Source"
 
        endchoice
 endef
 
-ifneq ($(CONFIG_PACKAGE_luci-core_compile),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-core_compile),)
   LUA_TARGET:=compile
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-core_stripped),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-core_stripped),)
   LUA_TARGET:=strip
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-core_zipped),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-core_zipped),)
   LUA_TARGET:=gzip
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-core),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-core),)
   PKG_SELECTED_MODULES+=libs/core
 endif
 
-BUILD_PACKAGES += luci-core
+BUILD_PACKAGES += luci-lib-core
 
 
 ### Libraries ###
 define library
-  define Package/luci-$(1)
+  define Package/luci-lib-$(1)
     SECTION:=luci
     CATEGORY:=LuCI
     TITLE:=LuCI - Lua Configuration Interface
@@ -137,45 +137,45 @@ define library
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
     SUBMENU:=Libraries
     TITLE:=$(if $(2),$(2),LuCI $(1) library)
-    $(if $(3),DEPENDS:=+luci-core $(3))
+    $(if $(3),DEPENDS:=+luci-lib-core $(3))
   endef
 
-  define Package/luci-$(1)/install
+  define Package/luci-lib-$(1)/install
 	$(call Package/luci/install/template,$$(1),libs/$(1))
-	$(call Package/luci-$(1)/extra-install)
+	$(call Package/luci-lib-$(1)/extra-install)
   endef
 
-  ifneq ($(CONFIG_PACKAGE_luci-$(1)),)
+  ifneq ($(CONFIG_PACKAGE_luci-lib-$(1)),)
     PKG_SELECTED_MODULES+=libs/$(1)
   endif
 
-  BUILD_PACKAGES += luci-$(1)
+  BUILD_PACKAGES += luci-lib-$(1)
 endef
 
-define Package/luci-lucid/extra-install
+define Package/luci-lib-lucid/extra-install
 	$(call Package/luci/install/template,$(1),libs/lucid-http)
 endef
 
-define Package/luci-web/conffiles
+define Package/luci-lib-web/conffiles
 /etc/config/luci
 endef
 
-define Package/luci-nixio/config
+define Package/luci-lib-nixio/config
 	choice
 		prompt "TLS Provider"
-		default PACKAGE_luci-nixio_notls
+		default PACKAGE_luci-lib-nixio_notls
 
-		config PACKAGE_luci-nixio_notls
+		config PACKAGE_luci-lib-nixio_notls
 			bool "Disabled"
 
-		config PACKAGE_luci-nixio_axtls
+		config PACKAGE_luci-lib-nixio_axtls
 			bool "Builtin (axTLS)"
 
-		config PACKAGE_luci-nixio_cyassl
+		config PACKAGE_luci-lib-nixio_cyassl
 			bool "CyaSSL"
 			select PACKAGE_libcyassl
 
-		config PACKAGE_luci-nixio_openssl
+		config PACKAGE_luci-lib-nixio_openssl
 			bool "OpenSSL"
 			select PACKAGE_libopenssl
 	endchoice
@@ -184,32 +184,32 @@ endef
 
 NIXIO_TLS:=
 
-ifneq ($(CONFIG_PACKAGE_luci-nixio_axtls),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-nixio_axtls),)
   NIXIO_TLS:=axtls
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-nixio_openssl),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-nixio_openssl),)
   NIXIO_TLS:=openssl
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-nixio_cyassl),)
+ifneq ($(CONFIG_PACKAGE_luci-lib-nixio_cyassl),)
   NIXIO_TLS:=cyassl
   LUCI_CFLAGS+=-I$(STAGING_DIR)/usr/include/cyassl
 endif
 
 
 $(eval $(call library,fastindex,Fastindex indexing module))
-$(eval $(call library,httpclient,HTTP(S) client library,+luci-web +luci-nixio))
+$(eval $(call library,httpclient,HTTP(S) client library,+luci-lib-web +luci-lib-nixio))
 $(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
 $(eval $(call library,json,LuCI JSON library))
 $(eval $(call library,lmo,LuCI LMO I18N library))
 $(eval $(call library,luanet,LuCI luanet library,+libiw))
-$(eval $(call library,lucid,LuCId Full-Stack Webserver,+luci-nixio +luci-web +luci-px5g))
-$(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-nixio_openssl:libopenssl +PACKAGE_luci-nixio_cyassl:libcyassl))
-$(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-nixio))
+$(eval $(call library,lucid,LuCId Full-Stack Webserver,+luci-lib-nixio +luci-lib-web +luci-lib-px5g))
+$(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
+$(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
 $(eval $(call library,sys,LuCI Linux/POSIX system library,+libiwinfo))
-$(eval $(call library,web,MVC Webframework,+luci-sys +luci-nixio +luci-core +luci-sgi-cgi +luci-lmo))
-$(eval $(call library,uvl,UVL - UCI Validation Layer,+luci-sys +luci-core))
+$(eval $(call library,web,MVC Webframework,+luci-lib-sys +luci-lib-nixio +luci-lib-core +luci-sgi-cgi +luci-lib-lmo))
+$(eval $(call library,uvl,UVL - UCI Validation Layer,+luci-lib-sys +luci-lib-core))
 
 
 ### Community Packages ###
@@ -222,7 +222,7 @@ define Package/luci-mod-freifunk-community
   SUBMENU:=Freifunk
   TITLE:=Freifunk Community Meta-Package
   DEPENDS+= \
-   +luci-web +luci-app-splash \
+   +luci-lib-web +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-i18n-german \
    +PACKAGE_luci-mod-freifunk-community:olsrd-luci +PACKAGE_luci-mod-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
@@ -276,11 +276,11 @@ define Package/luci-mod-freifunk/conffiles
 /etc/config/freifunk
 endef
 
-$(eval $(call module,admin-core,Web UI Core module,+luci-web +luci-i18n-english))
+$(eval $(call module,admin-core,Web UI Core module,+luci-lib-web +luci-i18n-english))
 $(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendly,+luci-mod-admin-core))
-$(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-ipkg))
-$(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-json))
-$(eval $(call module,freifunk,LuCI Freifunk module,+luci-mod-admin-full +luci-json +PACKAGE_luci-mod-freifunk:freifunk-firewall))
+$(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-lib-ipkg))
+$(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-lib-json))
+$(eval $(call module,freifunk,LuCI Freifunk module,+luci-mod-admin-full +luci-lib-json +PACKAGE_luci-mod-freifunk:freifunk-firewall))
 $(eval $(call module,niu,NIU - Next Generation Interface,+luci-mod-admin-core @BROKEN))
 
 
@@ -336,7 +336,7 @@ $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
 
 $(eval $(call application,splash,Freifunk DHCP-Splash application,\
-	+PACKAGE_luci-app-splash:luci-nixio +PACKAGE_luci-app-splash:tc \
+	+luci-lib-nixio +PACKAGE_luci-app-splash:tc \
 	+PACKAGE_luci-app-splash:kmod-sched +PACKAGE_luci-app-splash:iptables-mod-nat-extra \
 	+PACKAGE_luci-app-splash:iptables-mod-ipopt))
 
@@ -461,7 +461,7 @@ define theme
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
 	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
 	DEPENDS:=$(ifneq $(1),base,+luci-theme-base) $(4)
-	$(if $(5),DEFAULT:=y if PACKAGE_luci-core)
+	$(if $(5),DEFAULT:=y if PACKAGE_luci-lib-core)
   endef
 
   define Package/luci-theme-$(1)/install
@@ -475,7 +475,7 @@ define theme
   BUILD_PACKAGES += luci-theme-$(1)
 endef
 
-$(eval $(call theme,base,Common base for all themes,,+luci-web))
+$(eval $(call theme,base,Common base for all themes,,+luci-lib-web))
 $(eval $(call theme,openwrt,OpenWrt.org (default),,,1))
 $(eval $(call theme,openwrtlight,OpenWrt.org - light variant without images))
 $(eval $(call theme,fledermaus,Fledermaus Theme))
