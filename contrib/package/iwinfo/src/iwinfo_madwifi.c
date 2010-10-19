@@ -886,6 +886,33 @@ int madwifi_get_countrylist(const char *ifname, char *buf, int *len)
 	return 0;
 }
 
+int madwifi_get_hwmodelist(const char *ifname, int *buf)
+{
+	char chans[IWINFO_BUFSIZE] = { 0 };
+	struct iwinfo_freqlist_entry *e = NULL;
+	int len = 0;
+
+	if( !madwifi_get_freqlist(ifname, &chans, &len) )
+	{
+		for( e = (struct iwinfo_freqlist_entry *)chans; e->channel; e++ )
+		{
+			if( e->channel <= 14 )
+			{
+				*buf |= IWINFO_80211_B;
+				*buf |= IWINFO_80211_G;
+			}
+			else
+			{
+				*buf |= IWINFO_80211_A;
+			}
+		}
+
+		return 0;
+	}
+
+	return -1;
+}
+
 int madwifi_get_mbssid_support(const char *ifname, int *buf)
 {
 	/* We assume that multi bssid is always possible */

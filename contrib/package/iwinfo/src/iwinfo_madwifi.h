@@ -43,6 +43,7 @@ int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len);
 int madwifi_get_scanlist(const char *ifname, char *buf, int *len);
 int madwifi_get_freqlist(const char *ifname, char *buf, int *len);
 int madwifi_get_countrylist(const char *ifname, char *buf, int *len);
+int madwifi_get_hwmodelist(const char *ifname, int *buf);
 int madwifi_get_mbssid_support(const char *ifname, int *buf);
 void madwifi_close(void);
 

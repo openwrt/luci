@@ -44,6 +44,7 @@ int wl_get_txpwrlist(const char *ifname, char *buf, int *len);
 int wl_get_scanlist(const char *ifname, char *buf, int *len);
 int wl_get_freqlist(const char *ifname, char *buf, int *len);
 int wl_get_countrylist(const char *ifname, char *buf, int *len);
+int wl_get_hwmodelist(const char *ifname, int *buf);
 int wl_get_mbssid_support(const char *ifname, int *buf);
 void wl_close(void);
 

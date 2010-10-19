@@ -47,6 +47,7 @@ int wext_get_txpwrlist(const char *ifname, char *buf, int *len);
 int wext_get_scanlist(const char *ifname, char *buf, int *len);
 int wext_get_freqlist(const char *ifname, char *buf, int *len);
 int wext_get_countrylist(const char *ifname, char *buf, int *len);
+int wext_get_hwmodelist(const char *ifname, int *buf);
 int wext_get_mbssid_support(const char *ifname, int *buf);
 void wext_scan_close(void);
 void wext_close(void);

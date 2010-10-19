@@ -1302,22 +1302,12 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 
 int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 {
-	char *phy;
 	int count = 0, bands_remain, freqs_remain;
 	struct nl80211_msg_conveyor *req, *res;
 	struct nlattr *bands[NL80211_BAND_ATTR_MAX + 1];
 	struct nlattr *freqs[NL80211_FREQUENCY_ATTR_MAX + 1];
 	struct nlattr *band, *freq;
 	struct iwinfo_freqlist_entry *e = (struct iwinfo_freqlist_entry *)buf;
-
-	static struct nla_policy freq_policy[NL80211_FREQUENCY_ATTR_MAX + 1] = {
-		[NL80211_FREQUENCY_ATTR_FREQ]         = { .type = NLA_U32  },
-		[NL80211_FREQUENCY_ATTR_DISABLED]     = { .type = NLA_FLAG },
-		[NL80211_FREQUENCY_ATTR_PASSIVE_SCAN] = { .type = NLA_FLAG },
-		[NL80211_FREQUENCY_ATTR_NO_IBSS]      = { .type = NLA_FLAG },
-		[NL80211_FREQUENCY_ATTR_RADAR]        = { .type = NLA_FLAG },
-		[NL80211_FREQUENCY_ATTR_MAX_TX_POWER] = { .type = NLA_U32  },
-	};
 
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if( req )
@@ -1335,9 +1325,10 @@ int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 					bands[NL80211_BAND_ATTR_FREQS], freqs_remain)
 				{
 					nla_parse(freqs, NL80211_FREQUENCY_ATTR_MAX,
-						nla_data(freq), nla_len(freq), freq_policy);
+						nla_data(freq), nla_len(freq), NULL);
 
-					if( freqs[NL80211_FREQUENCY_ATTR_DISABLED] )
+					if( !freqs[NL80211_FREQUENCY_ATTR_FREQ] ||
+					    freqs[NL80211_FREQUENCY_ATTR_DISABLED] )
 						continue;
 
 					e->mhz = nla_get_u32(freqs[NL80211_FREQUENCY_ATTR_FREQ]);
@@ -1406,6 +1397,62 @@ int nl80211_get_countrylist(const char *ifname, char *buf, int *len)
 
 	*len = (count * sizeof(struct iwinfo_country_entry));
 	return 0;
+}
+
+int nl80211_get_hwmodelist(const char *ifname, int *buf)
+{
+	int bands_remain, freqs_remain;
+	struct nl80211_msg_conveyor *req, *res;
+	struct nlattr *bands[NL80211_BAND_ATTR_MAX + 1];
+	struct nlattr *freqs[NL80211_FREQUENCY_ATTR_MAX + 1];
+	struct nlattr *band, *freq;
+	uint16_t caps = 0;
+
+	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
+	if( req )
+	{
+		res = nl80211_send(req);
+		if( res )
+		{
+			nla_for_each_nested(band,
+				res->attr[NL80211_ATTR_WIPHY_BANDS], bands_remain)
+			{
+				nla_parse(bands, NL80211_BAND_ATTR_MAX, nla_data(band),
+					  nla_len(band), NULL);
+
+				if( bands[NL80211_BAND_ATTR_HT_CAPA] )
+					caps = nla_get_u16(bands[NL80211_BAND_ATTR_HT_CAPA]);
+
+				/* Treat HT20/HT40 as 11n */
+				if( caps & (1 << 1) )
+					*buf |= IWINFO_80211_N;
+
+				nla_for_each_nested(freq,
+					bands[NL80211_BAND_ATTR_FREQS], freqs_remain)
+				{
+					nla_parse(freqs, NL80211_FREQUENCY_ATTR_MAX,
+						nla_data(freq), nla_len(freq), NULL);
+
+					if( !freqs[NL80211_FREQUENCY_ATTR_FREQ] )
+						continue;
+
+					if( nla_get_u32(freqs[NL80211_FREQUENCY_ATTR_FREQ]) < 2485 )
+					{
+						*buf |= IWINFO_80211_B;
+						*buf |= IWINFO_80211_G;
+					}
+					else
+					{
+						*buf |= IWINFO_80211_A;
+					}
+				}
+			}
+			nl80211_free(res);
+		}
+		nl80211_free(req);
+	}
+
+	return *buf ? 0 : -1;
 }
 
 int nl80211_get_mbssid_support(const char *ifname, int *buf)

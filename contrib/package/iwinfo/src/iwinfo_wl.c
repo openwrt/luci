@@ -544,6 +544,11 @@ int wl_get_countrylist(const char *ifname, char *buf, int *len)
 	return -1;
 }
 
+int wl_get_hwmodelist(const char *ifname, int *buf)
+{
+	return wext_get_hwmodelist(ifname, buf);
+}
+
 int wl_get_mbssid_support(const char *ifname, int *buf)
 {
 	wlc_rev_info_t revinfo;

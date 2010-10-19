@@ -697,6 +697,34 @@ static int iwinfo_L_encryption(lua_State *L, int (*func)(const char *, char *))
 	return 0;
 }
 
+/* Wrapper for hwmode list */
+static int iwinfo_L_hwmodelist(lua_State *L, int (*func)(const char*, int *))
+{
+	const char *ifname = luaL_checkstring(L, 1);
+	int hwmodes = 0;
+
+	if( !(*func)(ifname, &hwmodes) )
+	{
+		lua_newtable(L);
+
+		lua_pushboolean(L, hwmodes & IWINFO_80211_A);
+		lua_setfield(L, -2, "a");
+
+		lua_pushboolean(L, hwmodes & IWINFO_80211_B);
+		lua_setfield(L, -2, "b");
+
+		lua_pushboolean(L, hwmodes & IWINFO_80211_G);
+		lua_setfield(L, -2, "g");
+
+		lua_pushboolean(L, hwmodes & IWINFO_80211_N);
+		lua_setfield(L, -2, "n");
+
+		return 1;
+	}
+
+	return 0;
+}
+
 /* Wrapper for country list */
 static char * iwinfo_L_country_lookup(char *buf, int len, int iso3166)
 {
@@ -774,6 +802,7 @@ LUA_WRAP_LIST(wl,txpwrlist)
 LUA_WRAP_LIST(wl,scanlist)
 LUA_WRAP_LIST(wl,freqlist)
 LUA_WRAP_LIST(wl,countrylist)
+LUA_WRAP_LIST(wl,hwmodelist)
 LUA_WRAP_LIST(wl,encryption)
 #endif
 
@@ -797,6 +826,7 @@ LUA_WRAP_LIST(madwifi,txpwrlist)
 LUA_WRAP_LIST(madwifi,scanlist)
 LUA_WRAP_LIST(madwifi,freqlist)
 LUA_WRAP_LIST(madwifi,countrylist)
+LUA_WRAP_LIST(madwifi,hwmodelist)
 LUA_WRAP_LIST(madwifi,encryption)
 #endif
 
@@ -820,6 +850,7 @@ LUA_WRAP_LIST(nl80211,txpwrlist)
 LUA_WRAP_LIST(nl80211,scanlist)
 LUA_WRAP_LIST(nl80211,freqlist)
 LUA_WRAP_LIST(nl80211,countrylist)
+LUA_WRAP_LIST(nl80211,hwmodelist)
 LUA_WRAP_LIST(nl80211,encryption)
 #endif
 
@@ -842,6 +873,7 @@ LUA_WRAP_LIST(wext,txpwrlist)
 LUA_WRAP_LIST(wext,scanlist)
 LUA_WRAP_LIST(wext,freqlist)
 LUA_WRAP_LIST(wext,countrylist)
+LUA_WRAP_LIST(wext,hwmodelist)
 LUA_WRAP_LIST(wext,encryption)
 
 #ifdef USE_WL
@@ -864,6 +896,7 @@ static const luaL_reg R_wl[] = {
 	LUA_REG(wl,scanlist),
 	LUA_REG(wl,freqlist),
 	LUA_REG(wl,countrylist),
+	LUA_REG(wl,hwmodelist),
 	LUA_REG(wl,encryption),
 	LUA_REG(wl,mbssid_support),
 	{ NULL, NULL }
@@ -890,6 +923,7 @@ static const luaL_reg R_madwifi[] = {
 	LUA_REG(madwifi,scanlist),
 	LUA_REG(madwifi,freqlist),
 	LUA_REG(madwifi,countrylist),
+	LUA_REG(madwifi,hwmodelist),
 	LUA_REG(madwifi,encryption),
 	LUA_REG(madwifi,mbssid_support),
 	{ NULL, NULL }
@@ -916,6 +950,7 @@ static const luaL_reg R_nl80211[] = {
 	LUA_REG(nl80211,scanlist),
 	LUA_REG(nl80211,freqlist),
 	LUA_REG(nl80211,countrylist),
+	LUA_REG(nl80211,hwmodelist),
 	LUA_REG(nl80211,encryption),
 	LUA_REG(nl80211,mbssid_support),
 	{ NULL, NULL }
@@ -941,6 +976,7 @@ static const luaL_reg R_wext[] = {
 	LUA_REG(wext,scanlist),
 	LUA_REG(wext,freqlist),
 	LUA_REG(wext,countrylist),
+	LUA_REG(wext,hwmodelist),
 	LUA_REG(wext,encryption),
 	LUA_REG(wext,mbssid_support),
 	{ NULL, NULL }

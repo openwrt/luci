@@ -26,14 +26,31 @@ function print_info(api, dev)
 	local iw = iwinfo[api]
 	local enc = iw.encryption(dev)
 
-	printf("%-9s Type: %s  ESSID: \"%s\"",
-		dev, api, s(iw.ssid(dev)))
+	local function hwmode()
+		local m = iw.hwmodelist(dev)
+		if m then
+			local s = "802.11"
+			if m.a then s = s.."a" end
+			if m.b then s = s.."b" end
+			if m.g then s = s.."g" end
+			if m.n then s = s.."n" end
+			return s
+		else
+			return "?"
+		end
+	end
+
+	printf("%-9s ESSID: \"%s\"",
+		dev, s(iw.ssid(dev)))
 
 	printf("          Access Point: %s",
 		s(iw.bssid(dev)))
 
+	printf("          Type: %s  HW Mode(s): %s",
+		api, hwmode())
+
 	printf("          Mode: %s  Channel: %d (%.3f GHz)",
-		iw.mode(dev), n(iw.channel(dev)), n(iw.frequency(dev)) / 1000)
+		s(iw.mode(dev)), n(iw.channel(dev)), n(iw.frequency(dev)) / 1000)
 
 	printf("          Tx-Power: %s dBm  Link Quality: %s/%s",
 		s(iw.txpower(dev)), s(iw.quality(dev)), s(iw.quality_max(dev)))
