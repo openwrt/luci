@@ -58,16 +58,9 @@ end
 m.title = ww:get_i18n(wnet)
 
 
-local iw = nil
-local tx_powers = nil
+local iw = luci.sys.wifi.getiwinfo(arg[1])
+local tx_powers = iw.txpwrlist or { }
 
-m.uci:foreach("wireless", "wifi-iface",
-	function(s)
-		if s.device == arg[1] and not iw then
-			iw = luci.sys.wifi.getiwinfo(s.ifname or s.device)
-			tx_powers = iw.txpwrlist or { }
-		end
-	end)
 
 s = m:section(NamedSection, arg[1], "wifi-device", translate("Device Configuration"))
 s.addremove = false
@@ -82,7 +75,11 @@ back.value = ""
 back.titleref = luci.dispatcher.build_url("admin", "network", "wireless")
 ]]
 
-en = s:taboption("general", Flag, "disabled", translate("enable"))
+st = s:taboption("general", DummyValue, "__status", translate("Status"))
+st.template = "admin_network/wifi_status"
+st.ifname   = arg[1]
+
+en = s:taboption("general", Flag, "disabled", translate("Enable device"))
 en.enabled = "0"
 en.disabled = "1"
 en.rmempty = false
@@ -91,7 +88,6 @@ function en.cfgvalue(self, section)
 	return Flag.cfgvalue(self, section) or "0"
 end
 
-s:taboption("general", DummyValue, "type", translate("Type"))
 
 local hwtype = m:get(arg[1], "type")
 local htcaps = m:get(arg[1], "ht_capab") and true or false
@@ -102,7 +98,9 @@ local nsantenna = m:get(arg[1], "antenna")
 ch = s:taboption("general", Value, "channel", translate("Channel"))
 ch:value("auto", translate("auto"))
 for _, f in ipairs(iw and iw.freqlist or luci.sys.wifi.channels()) do
-	ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
+	if not f.restricted then
+		ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
+	end
 end
 
 
@@ -626,9 +624,9 @@ if wnet then
 		nasid.rmempty = true
 
 		eaptype = s:taboption("encryption", ListValue, "eap_type", translate("EAP-Method"))
-		eaptype:value("TLS")
-		eaptype:value("TTLS")
-		eaptype:value("PEAP")
+		eaptype:value("tls")
+		eaptype:value("ttls")
+		eaptype:value("peap")
 		eaptype:depends({mode="sta", encryption="wpa"})
 		eaptype:depends({mode="sta", encryption="wpa2"})
 
@@ -637,12 +635,12 @@ if wnet then
 		cacert:depends({mode="sta", encryption="wpa2"})
 
 		privkey = s:taboption("encryption", FileUpload, "priv_key", translate("Path to Private Key"))
-		privkey:depends({mode="sta", eap_type="TLS", encryption="wpa2"})
-		privkey:depends({mode="sta", eap_type="TLS", encryption="wpa"})
+		privkey:depends({mode="sta", eap_type="tls", encryption="wpa2"})
+		privkey:depends({mode="sta", eap_type="tls", encryption="wpa"})
 
 		privkeypwd = s:taboption("encryption", Value, "priv_key_pwd", translate("Password of Private Key"))
-		privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa2"})
-		privkeypwd:depends({mode="sta", eap_type="TLS", encryption="wpa"})
+		privkeypwd:depends({mode="sta", eap_type="tls", encryption="wpa2"})
+		privkeypwd:depends({mode="sta", eap_type="tls", encryption="wpa"})
 
 
 		auth = s:taboption("encryption", Value, "auth", translate("Authentication"))
@@ -650,23 +648,23 @@ if wnet then
 		auth:value("CHAP")
 		auth:value("MSCHAP")
 		auth:value("MSCHAPV2")
-		auth:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
-		auth:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
-		auth:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
-		auth:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
+		auth:depends({mode="sta", eap_type="peap", encryption="wpa2"})
+		auth:depends({mode="sta", eap_type="peap", encryption="wpa"})
+		auth:depends({mode="sta", eap_type="ttls", encryption="wpa2"})
+		auth:depends({mode="sta", eap_type="ttls", encryption="wpa"})
 
 
 		identity = s:taboption("encryption", Value, "identity", translate("Identity"))
-		identity:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
-		identity:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
-		identity:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
-		identity:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
+		identity:depends({mode="sta", eap_type="peap", encryption="wpa2"})
+		identity:depends({mode="sta", eap_type="peap", encryption="wpa"})
+		identity:depends({mode="sta", eap_type="ttls", encryption="wpa2"})
+		identity:depends({mode="sta", eap_type="ttls", encryption="wpa"})
 
 		password = s:taboption("encryption", Value, "password", translate("Password"))
-		password:depends({mode="sta", eap_type="PEAP", encryption="wpa2"})
-		password:depends({mode="sta", eap_type="PEAP", encryption="wpa"})
-		password:depends({mode="sta", eap_type="TTLS", encryption="wpa2"})
-		password:depends({mode="sta", eap_type="TTLS", encryption="wpa"})
+		password:depends({mode="sta", eap_type="peap", encryption="wpa2"})
+		password:depends({mode="sta", eap_type="peap", encryption="wpa"})
+		password:depends({mode="sta", eap_type="ttls", encryption="wpa2"})
+		password:depends({mode="sta", eap_type="ttls", encryption="wpa"})
 	end
 end
 

@@ -41,17 +41,22 @@ function index()
 	end
 
 	if has_wifi and has_wifi.size > 0 then
-		local page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
+		local page
+
+		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
 		page.leaf = true
 		page.subindex = true
 
-		local page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
+		page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
 		page.leaf = true
 
-		local page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil, 16)
+		page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil, 16)
 		page.leaf = true
 
-		local page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
+		page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
+		page.leaf = true
+
+		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil, 16)
 		page.leaf = true
 	end
 
@@ -127,7 +132,7 @@ function wifi_join()
 end
 
 function wifi_add()
-	local dev = luci.http.formvalue("device") 
+	local dev = luci.http.formvalue("device")
 	local uci = require "luci.model.uci".cursor()
 	local wlm = require "luci.model.wireless"
 
@@ -155,4 +160,61 @@ function wifi_delete(network)
 
 	uci:save("wireless")
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
+end
+
+function wifi_status()
+	local function jsondump(x)
+		if x == nil then
+			luci.http.write("null")
+		elseif type(x) == "table" then
+			local k, v
+			if type(next(x)) == "number" then
+				luci.http.write("[ ")
+				for k, v in ipairs(x) do
+					jsondump(v)
+					if next(x, k) then
+						luci.http.write(", ")
+					end
+				end
+				luci.http.write(" ]")
+			else
+				luci.http.write("{ ")
+				for k, v in pairs(x) do
+				luci.http.write("%q: " % k)
+					jsondump(v)
+					if next(x, k) then
+						luci.http.write(", ")
+					end
+				end
+				luci.http.write(" }")
+			end
+		elseif type(x) == "number" or type(x) == "boolean" then
+			luci.http.write(tostring(x))
+		elseif type(x) == "string" then
+			luci.http.write("%q" % tostring(x))
+		end
+	end
+
+
+	local path = luci.dispatcher.context.requestpath
+	local dev  = path[#path]
+	local iw   = luci.sys.wifi.getiwinfo(dev)
+
+	if iw then
+		local f
+		local j = { }
+		for _, f in ipairs({
+			"channel", "frequency", "txpower", "bitrate", "signal", "noise",
+			"quality", "quality_max", "mode", "ssid", "bssid", "country",
+			"encryption", "mbssid_support", "ifname"
+		}) do
+			j[f] = iw[f]
+		end
+
+		luci.http.prepare_content("application/json")
+		jsondump(j)
+		return
+	end
+
+	luci.http.status(404, "No such device")
 end
