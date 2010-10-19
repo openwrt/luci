@@ -59,7 +59,8 @@ m.title = ww:get_i18n(wnet)
 
 
 local iw = luci.sys.wifi.getiwinfo(arg[1])
-local tx_powers = iw.txpwrlist or { }
+local tx_powers = iw.txpwrlist  or { }
+local hw_modes  = iw.hwmodelist or { }
 
 
 s = m:section(NamedSection, arg[1], "wifi-device", translate("Device Configuration"))
@@ -119,13 +120,13 @@ if hwtype == "mac80211" then
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
 	mode:value("", translate("auto"))
-	mode:value("11b", "802.11b")
-	mode:value("11g", "802.11g")
-	mode:value("11a", "802.11a")
+	if hw_modes.b then mode:value("11b", "802.11b") end
+	if hw_modes.g then mode:value("11g", "802.11g") end
+	if hw_modes.a then mode:value("11a", "802.11a") end
 
 	if htcaps then
-		mode:value("11ng", "802.11g+n")
-		mode:value("11na", "802.11a+n")
+		if hw_modes.g and hw_modes.n then mode:value("11ng", "802.11g+n") end
+		if hw_modes.a and hw_modes.n then mode:value("11na", "802.11a+n") end
 
 		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode"))
 		htmode:depends("hwmode", "11na")
@@ -169,12 +170,12 @@ if hwtype == "atheros" then
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
 	mode:value("", translate("auto"))
-	mode:value("11b", "802.11b")
-	mode:value("11g", "802.11g")
-	mode:value("11a", "802.11a")
-	mode:value("11bg", "802.11b+g")
-	mode:value("11gst", "802.11g + Turbo")
-	mode:value("11ast", "802.11a + Turbo")
+	if hw_modes.b then mode:value("11b", "802.11b") end
+	if hw_modes.g then mode:value("11g", "802.11g") end
+	if hw_modes.a then mode:value("11a", "802.11a") end
+	if hw_modes.g then mode:value("11bg", "802.11b+g") end
+	if hw_modes.g then mode:value("11gst", "802.11g + Turbo") end
+	if hw_modes.a then mode:value("11ast", "802.11a + Turbo") end
 	mode:value("fh", translate("Frequency Hopping"))
 
 	s:taboption("advanced", Flag, "diversity", translate("Diversity")).rmempty = false
