@@ -671,6 +671,10 @@ static int iwinfo_L_freqlist(lua_State *L, int (*func)(const char *, char *, int
 			lua_pushinteger(L, e->channel);
 			lua_setfield(L, -2, "channel");
 
+			/* Restricted (DFS/TPC/Radar) */
+			lua_pushboolean(L, e->restricted);
+			lua_setfield(L, -2, "restricted");
+
 			lua_rawseti(L, -2, x);
 		}
 	}

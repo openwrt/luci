@@ -805,8 +805,9 @@ int madwifi_get_freqlist(const char *ifname, char *buf, int *len)
 
 		for( i = 0; i < chans.ic_nchans; i++ )
 		{
-			entry.mhz     = chans.ic_chans[i].ic_freq;
-			entry.channel = chans.ic_chans[i].ic_ieee;
+			entry.mhz        = chans.ic_chans[i].ic_freq;
+			entry.channel    = chans.ic_chans[i].ic_ieee;
+			entry.restricted = 0;
 
 			memcpy(&buf[bl], &entry, sizeof(struct iwinfo_freqlist_entry));
 			bl += sizeof(struct iwinfo_freqlist_entry);

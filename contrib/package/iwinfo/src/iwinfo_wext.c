@@ -444,8 +444,9 @@ int wext_get_freqlist(const char *ifname, char *buf, int *len)
 
 		for(i = 0; i < range.num_frequency; i++)
 		{
-			entry.mhz     = wext_freq2mhz(&range.freq[i]);
-			entry.channel = range.freq[i].i;
+			entry.mhz        = wext_freq2mhz(&range.freq[i]);
+			entry.channel    = range.freq[i].i;
+			entry.restricted = 0;
 
 			memcpy(&buf[bl], &entry, sizeof(struct iwinfo_freqlist_entry));
 			bl += sizeof(struct iwinfo_freqlist_entry);

@@ -1319,9 +1319,6 @@ int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 		[NL80211_FREQUENCY_ATTR_MAX_TX_POWER] = { .type = NLA_U32  },
 	};
 
-	if( !wext_get_freqlist(ifname, buf, len) )
-		return 0;
-
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if( req )
 	{
@@ -1340,8 +1337,17 @@ int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 					nla_parse(freqs, NL80211_FREQUENCY_ATTR_MAX,
 						nla_data(freq), nla_len(freq), freq_policy);
 
+					if( freqs[NL80211_FREQUENCY_ATTR_DISABLED] )
+						continue;
+
 					e->mhz = nla_get_u32(freqs[NL80211_FREQUENCY_ATTR_FREQ]);
 					e->channel = nl80211_freq2channel(e->mhz);
+
+					e->restricted = (
+						freqs[NL80211_FREQUENCY_ATTR_PASSIVE_SCAN] ||
+						freqs[NL80211_FREQUENCY_ATTR_NO_IBSS]      ||
+						freqs[NL80211_FREQUENCY_ATTR_RADAR]
+					) ? 1 : 0;
 
 					e++;
 					count++;

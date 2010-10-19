@@ -105,9 +105,10 @@ function print_freqlist(api, dev)
 
 	if fl and #fl > 0 then
 		for _, fe in ipairs(fl) do
-			printf("%s %.3f GHz (Channel %d)",
+			printf("%s %.3f GHz (Channel %d)%s",
 				(cc == fe.channel) and "*" or " ",
-				n(fe.mhz) / 1000, n(fe.channel))
+				n(fe.mhz) / 1000, n(fe.channel),
+				fe.restricted and " [restricted]" or "")
 		end
 	else
 		print("No frequency information available")
