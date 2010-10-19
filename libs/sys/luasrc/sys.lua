@@ -31,6 +31,7 @@ local table  = require "table"
 local nixio  = require "nixio"
 local fs     = require "nixio.fs"
 local iwinfo = require "iwinfo"
+local uci    = require "luci.model.uci"
 
 local luci  = {}
 luci.util   = require "luci.util"
@@ -638,14 +639,45 @@ wifi = {}
 -- @param ifname        String containing the interface name
 -- @return              A wrapped iwinfo object instance
 function wifi.getiwinfo(ifname)
-	local t = iwinfo.type(ifname)
-	if t then
-		local x = iwinfo[t]
-		return setmetatable({}, {
-			__index = function(t, k)
-				if x[k] then return x[k](ifname) end
-			end
-		})
+	if ifname then
+		local c = 0
+		local u = uci.cursor_state()
+		local d, n = ifname:match("^(%w+)%.network(%d+)")
+		if d and n then
+			n = tonumber(n)
+			u:foreach("wireless", "wifi-iface",
+				function(s)
+					if s.device == d then
+						c = c + 1
+						if c == n then
+							ifname = s.ifname or s.device
+							return false
+						end
+					end
+				end)
+		elseif u:get("wireless", ifname) == "wifi-device" then
+			u:foreach("wireless", "wifi-iface",
+				function(s)
+					if s.device == ifname and s.ifname then
+						ifname = s.ifname
+						return false
+					end
+				end)
+		end
+
+		local t = iwinfo.type(ifname)
+		if t then
+			local x = iwinfo[t]
+			return setmetatable({}, {
+				__index = function(t, k)
+					if k == "ifname" then
+						return ifname
+					elseif x[k] then
+						return x[k](ifname)
+					end
+				end
+			})
+		end
 	end
 end
 
@@ -705,7 +737,7 @@ end
 function wifi.channels(iface)
 	local t = iwinfo.type(iface or "")
 	local cns
-	if t and iwinfo[t] then
+	if iface and t and iwinfo[t] then
 		cns = iwinfo[t].freqlist(iface)
 	end
 
