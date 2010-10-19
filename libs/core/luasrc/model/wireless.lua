@@ -36,28 +36,29 @@ function init(cursor)
 	st = uci.cursor_state()
 	ifs = { }
 
-	local count = 0
+	local count = { }
 
 	ub.uci:foreach("wireless", "wifi-iface",
 		function(s)
-			count = count + 1
+			if s.device then
+				count[s.device] = count[s.device] and count[s.device] + 1 or 1
 
-			local id = "%s.network%d" %{ s.device, count }
+				local id = "%s.network%d" %{ s.device, count[s.device] }
 
-			ifs[id] = {
-				id    = id,
-				sid   = s['.name'],
-				count = count
-			}
+				ifs[id] = {
+					id    = id,
+					sid   = s['.name'],
+					count = count
+				}
 
-			local dev = st:get("wireless", s['.name'], "ifname")
-				or st:get("wireless", s['.name'], "device")
+				local dev = st:get("wireless", s['.name'], "ifname")
+					or st:get("wireless", s['.name'], "device")
 
-			local wtype = dev and iwi.type(dev)
-
-			if dev and wtype then
-				ifs[id].winfo = iwi[wtype]
-				ifs[id].wdev  = dev
+				local wtype = dev and iwi.type(dev)
+				if dev and wtype then
+					ifs[id].winfo = iwi[wtype]
+					ifs[id].wdev  = dev
+				end
 			end
 		end)
 end
@@ -129,7 +130,7 @@ end
 function shortname(self, iface)
 	if iface.wdev and iface.winfo then
 		return "%s %q" %{
-			i18n.translate(iface:active_mode()), 
+			i18n.translate(iface:active_mode()),
 			iface:active_ssid() or i18n.translate("(hidden)")
 		}
 	else
@@ -230,7 +231,7 @@ network:property("bssid")
 network:property("network")
 
 function network._init(self, sid)
-	local count = 0
+	local count =  { }
 
 	local parent_dev = st:get("wireless", sid, "device")
 		or ub.uci:get("wireless", sid, "device")
@@ -241,14 +242,17 @@ function network._init(self, sid)
 	if dev then
 		ub.uci:foreach("wireless", "wifi-iface",
 			function(s)
-				count = count + 1
-				if s['.name'] == sid then
-					self.id = "%s.network%d" %{ parent_dev, count }
+				if s.device then
+					count[s.device] = count[s.device]
+						and count[s.device] + 1 or 1
+					if s['.name'] == sid then
+						self.id = "%s.network%d" %{ parent_dev, count[s.device] }
 
-					local wtype = iwi.type(dev)
-					if dev and wtype then
-						self.winfo = iwi[wtype]
-						self.wdev  = dev
+						local wtype = iwi.type(dev)
+						if dev and wtype then
+							self.winfo = iwi[wtype]
+							self.wdev  = dev
+						end
 					end
 				end
 			end)
@@ -302,7 +306,8 @@ function network.active_bssid(self)
 end
 
 function network.active_encryption(self)
-	return self.winfo and self.winfo.enctype(self.wdev) or "-"
+	local enc = self.winfo and self.winfo.encryption(self.wdev)
+	return enc and enc.description or "-"
 end
 
 function network.assoclist(self)
@@ -360,4 +365,3 @@ function network.signal_percent(self)
 		return 0
 	end
 end
-
