@@ -437,6 +437,8 @@ function cbi_t_switch(section, tab) {
 }
 
 function cbi_t_update() {
+	var hl_tabs = [ ];
+
 	for( var sid in cbi_t )
 		for( var tid in cbi_t[sid] )
 			if( cbi_c[cbi_t[sid][tid].cid] == 0 ) {
@@ -446,9 +448,15 @@ function cbi_t_update() {
 				cbi_t[sid][tid].tab.style.display = '';
 
 				var t = cbi_t[sid][tid].tab;
-				window.setTimeout(function() { t.className = t.className.replace(/ cbi-tab-highlighted/g, '') }, 750);
-				cbi_t[sid][tid].tab.className += ' cbi-tab-highlighted';
+				t.className += ' cbi-tab-highlighted';
+				hl_tabs.push(t);
 			}
+
+	if( hl_tabs.length > 0 )
+		window.setTimeout(function() {
+			for( var i = 0; i < hl_tabs.length; i++ )
+				hl_tabs[i].className = hl_tabs[i].className.replace(/ cbi-tab-highlighted/g, '');
+		}, 750);
 }
 
 
