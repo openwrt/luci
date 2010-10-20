@@ -19,12 +19,13 @@ local fw = require "luci.model.firewall"
 
 arg[1] = arg[1] or ""
 
-local has_3g    = fs.access("/usr/bin/gcom")
-local has_pptp  = fs.access("/usr/sbin/pptp")
-local has_pppd  = fs.access("/usr/sbin/pppd")
-local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
-local has_pppoa = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
-local has_ipv6  = fs.access("/proc/net/ipv6_route")
+local has_3g     = fs.access("/usr/bin/gcom")
+local has_pptp   = fs.access("/usr/sbin/pptp")
+local has_pppd   = fs.access("/usr/sbin/pppd")
+local has_pppoe  = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
+local has_pppoa  = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
+local has_ipv6   = fs.access("/proc/net/ipv6_route")
+local has_6in4   = fs.access("/lib/network/6in4.sh")
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("firewall")
@@ -37,8 +38,9 @@ s = m:section(NamedSection, arg[1], "interface", translate("Common Configuration
 s.addremove = false
 
 s:tab("general", translate("General Setup"))
-if has_ipv6 then s:tab("ipv6", translate("IPv6 Setup")) end
-if has_pppd then s:tab("ppp", translate("PPP Settings")) end
+if has_ipv6  then s:tab("ipv6", translate("IPv6 Setup")) end
+if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
+if has_pppoa then s:tab("atm", translate("ATM Settings")) end
 s:tab("physical", translate("Physical Settings"))
 s:tab("firewall", translate("Firewall Settings"))
 
@@ -251,17 +253,22 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 end
 
 if has_pppoa then
-	encaps = s:taboption("ppp", ListValue, "encaps", translate("PPPoA Encapsulation"))
+	encaps = s:taboption("atm", ListValue, "encaps", translate("PPPoA Encapsulation"))
 	encaps:depends("proto", "pppoa")
-	encaps:value("", translate("-- Please choose --"))
-	encaps:value("vc", "VC")
+	encaps:value("vc", "VC-Mux")
 	encaps:value("llc", "LLC")
 
-	vpi = s:taboption("ppp", Value, "vpi", "VPI")
-	vpi:depends("proto", "pppoa")
+	atmdev = s:taboption("atm", Value, "atmdev", translate("ATM device number"))
+	atmdev:depends("proto", "pppoa")
+	atmdev.default = "0"
 
-	vci = s:taboption("ppp", Value, "vci", "VCI")
+	vci = s:taboption("atm", Value, "vci", translate("ATM Virtual Channel Identifier (VCI)"))
 	vci:depends("proto", "pppoa")
+	vci.default = "35"
+
+	vpi = s:taboption("atm", Value, "vpi", translate("ATM Virtual Path Identifier (VPI)"))
+	vpi:depends("proto", "pppoa")
+	vpi.default = "8"
 end
 
 if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
@@ -395,6 +402,7 @@ end
 
 s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
 s.addremove = false
+s.anonymous = true
 s:tab("general",  translate("General Setup"))
 s:tab("advanced", translate("Advanced Settings"))
 
