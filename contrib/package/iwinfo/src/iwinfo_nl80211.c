@@ -236,12 +236,15 @@ static int nl80211_freq2channel(int freq)
     return (freq / 5) - 1000;
 }
 
-static char * nl80211_getval(const char *buf, const char *key)
+static char * nl80211_getval(const char *ifname, const char *buf, const char *key)
 {
 	int i, len;
 	char lkey[64] = { 0 };
 	const char *ln = buf;
 	static char lval[256] = { 0 };
+
+	int matched_if = ifname ? 0 : 1;
+
 
 	for( i = 0, len = strlen(buf); i < len; i++ )
 	{
@@ -256,12 +259,20 @@ static char * nl80211_getval(const char *buf, const char *key)
 		}
 		else if( buf[i] == '\n' )
 		{
-			if( lkey[0] && !strcmp(lkey, key) )
+			if( lkey[0] )
 			{
 				memcpy(lval, ln + strlen(lkey) + 1,
 					min(sizeof(lval) - 1, &buf[i] - ln - strlen(lkey) - 1));
 
-				return lval;
+				if( (ifname != NULL ) &&
+				    (!strcmp(lkey, "interface") || !strcmp(lkey, "bss")) )
+				{
+					matched_if = !strcmp(lval, ifname);
+				}
+				else if( matched_if && !strcmp(lkey, key) )
+				{
+					return lval;
+				}
 			}
 
 			ln = &buf[i+1];
@@ -507,7 +518,7 @@ int nl80211_get_ssid(const char *ifname, char *buf)
 		return 0;
 	}
 	else if( (ssid = nl80211_hostapd_info(ifname)) &&
-	         (ssid = nl80211_getval(ssid, "ssid")) )
+	         (ssid = nl80211_getval(ifname, ssid, "ssid")) )
 	{
 		memcpy(buf, ssid, strlen(ssid));
 		return 0;
@@ -526,7 +537,7 @@ int nl80211_get_bssid(const char *ifname, char *buf)
 		return 0;
 	}
 	else if( (bssid = nl80211_hostapd_info(ifname)) &&
-	         (bssid = nl80211_getval(bssid, "bssid")) )
+	         (bssid = nl80211_getval(ifname, bssid, "bssid")) )
 	{
 		mac[0] = strtol(&bssid[0],  NULL, 16);
 		mac[1] = strtol(&bssid[3],  NULL, 16);
@@ -768,10 +779,9 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 	struct iwinfo_crypto_entry *c = (struct iwinfo_crypto_entry *)buf;
 
 	/* Hostapd */
-	if( (res = nl80211_hostapd_info(ifname)) &&
-	    nl80211_getval(res, "interface") )
+	if( (res = nl80211_hostapd_info(ifname)) )
 	{
-		if( (val = nl80211_getval(res, "auth_algs")) && (val > 0) )
+		if( (val = nl80211_getval(ifname, res, "auth_algs")) && (val > 0) )
 		{
 			c->auth_suites |= IWINFO_KMGMT_NONE;
 
@@ -797,7 +807,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 			{
 				snprintf(k, sizeof(k), "wep_key%d", i);
 
-				if( (val = nl80211_getval(res, k)) )
+				if( (val = nl80211_getval(ifname, res, k)) )
 				{
 					if( (strlen(val) == 5) || (strlen(val) == 10) )
 						c->pair_ciphers |= IWINFO_CIPHER_WEP40;
@@ -813,11 +823,11 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 		}
 
 
-		if( (val = nl80211_getval(res, "wpa")) != NULL )
+		if( (val = nl80211_getval(ifname, res, "wpa")) != NULL )
 			c->wpa_version = atoi(val);
 
 
-		val = nl80211_getval(res, "wpa_key_mgmt");
+		val = nl80211_getval(ifname, res, "wpa_key_mgmt");
 
 		if( !val || strstr(val, "PSK") )
 			c->auth_suites |= IWINFO_KMGMT_PSK;
@@ -829,7 +839,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 			c->auth_suites |= IWINFO_KMGMT_NONE;
 
 
-		if( (val = nl80211_getval(res, "wpa_pairwise")) != NULL )
+		if( (val = nl80211_getval(ifname, res, "wpa_pairwise")) != NULL )
 		{
 			if( strstr(val, "TKIP") )
 				c->pair_ciphers |= IWINFO_CIPHER_TKIP;
@@ -850,7 +860,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 
 	/* WPA supplicant */
 	else if( (res = nl80211_wpasupp_info(ifname, "STATUS")) &&
-	         (val = nl80211_getval(res, "pairwise_cipher")) )
+	         (val = nl80211_getval(NULL, res, "pairwise_cipher")) )
 	{
 		/* WEP */
 		if( strstr(val, "WEP") )
@@ -887,7 +897,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 				c->pair_ciphers |= IWINFO_CIPHER_WEP104;
 
 
-			if( (val = nl80211_getval(res, "group_cipher")) )
+			if( (val = nl80211_getval(NULL, res, "group_cipher")) )
 			{
 				if( strstr(val, "TKIP") )
 					c->group_ciphers |= IWINFO_CIPHER_TKIP;
@@ -906,7 +916,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 			}
 
 
-			if( (val = nl80211_getval(res, "key_mgmt")) )
+			if( (val = nl80211_getval(NULL, res, "key_mgmt")) )
 			{
 				if( strstr(val, "WPA2") )
 					c->wpa_version = 2;
