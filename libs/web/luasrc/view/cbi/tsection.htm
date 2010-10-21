@@ -21,7 +21,7 @@ $Id$
 	<% local isempty = true for i, k in ipairs(self:cfgsections()) do -%>
 		<% if self.addremove then -%>
 			<div class="cbi-section-remove right">
-				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" value="<%:Delete%>" />
+				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" onclick="this.form.cbi_state='del-section'; return true" value="<%:Delete%>" />
 			</div>
 		<%- end %>
 
@@ -51,7 +51,7 @@ $Id$
 			<%- else -%>
 				<% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
 				<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
-				<input type="submit" class="cbi-button cbi-button-add" value="<%:Add%>" />
+				<input type="submit" class="cbi-button cbi-button-add" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" />
 				<% if self.invalid_cts then -%>
 					<br /><%:Invalid%></div>
 				<%- end %>
