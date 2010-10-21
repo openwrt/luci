@@ -70,34 +70,25 @@ var cbi_validators = {
 					addr = addr.substr(0, off) + ':0:0';
 				}
 
-				if( addr.indexOf('::') < 0 )
+				if( addr.indexOf('::') >= 0 )
 				{
-					return (addr.match(/^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/) != null);
+					var colons = 0;
+					var fill = '0';
+
+					for( var i = 0; i < addr.length; i++ )
+						if( addr.charAt(i) == ':' )
+							colons++;
+
+					if( colons > 7 )
+						return false;
+
+					for( var i = 0; i < (7 - colons); i++ )
+						fill += ':0';
+
+					addr = addr.replace(/::/, ':' + fill + ':');
 				}
 
-				var fields = 0;
-
-				for( var i = 0, last = 0, comp = false; i <= addr.length; i++ )
-				{
-					if( (addr.charAt(i) == ':') || (i == addr.length) )
-					{
-						if( (i == last) && !comp )
-						{
-							comp = true;
-						}
-						else
-						{
-							var f = addr.substring(last, i);
-							if( !(f && f.match(/^[a-fA-F0-9]{1,4}$/)) )
-								return false;
-						}
-
-						fields++;
-						last = i + 1;
-					}
-				}
-
-				return (fields == 8);
+				return (addr.match(/^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/) != null);
 			}
 		}
 
@@ -462,6 +453,10 @@ function cbi_t_update() {
 
 function cbi_validate_form(form, errmsg)
 {
+	/* if triggered by a section removal or addition, don't validate */
+	if( form.cbi_state == 'add-section' || form.cbi_state == 'del-section' )
+		return true;
+
 	if( form.cbi_validators )
 	{
 		for( var i = 0; i < form.cbi_validators.length; i++ )
@@ -494,7 +489,7 @@ function cbi_validate_field(cbid, optional, type)
 
 	if( field && vldcb )
 	{
-		var validator = function(reset)
+		var validator = function()
 		{
 			// is not detached
 			if( field.form )
