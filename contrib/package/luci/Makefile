@@ -476,7 +476,7 @@ endef
 
 $(eval $(call theme,base,Common base for all themes,,+luci-lib-web))
 $(eval $(call theme,openwrt,OpenWrt.org (default),,,1))
-$(eval $(call theme,openwrtlight,OpenWrt.org - light variant without images))
+$(eval $(call theme,openwrt-light,OpenWrt.org - light variant without images))
 $(eval $(call theme,fledermaus,Fledermaus Theme))
 
 $(eval $(call theme,freifunk,alternative Freifunk Theme,\
@@ -560,11 +560,11 @@ $(eval $(call collection,ssl,\
 
 $(eval $(call collection,medium,\
 	Medium package set using only admin full and a theme without graphics,\
-	+uhttpd +luci-mod-admin-full +luci-theme-openwrtlight))
+	+uhttpd +luci-mod-admin-full +luci-theme-openwrt-light))
 
 $(eval $(call collection,light,\
 	Minimum package set using only admin mini and a theme without graphics,\
-	+uhttpd +luci-mod-admin-mini +luci-theme-openwrtlight))
+	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt-light))
 
 
 ### Compile ###
