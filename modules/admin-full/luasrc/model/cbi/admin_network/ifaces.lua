@@ -41,6 +41,7 @@ s:tab("general", translate("General Setup"))
 if has_ipv6  then s:tab("ipv6", translate("IPv6 Setup")) end
 if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
 if has_pppoa then s:tab("atm", translate("ATM Settings")) end
+if has_6in4  then s:tab("tunnel", translate("Tunnel Settings")) end
 s:tab("physical", translate("Physical Settings"))
 s:tab("firewall", translate("Firewall Settings"))
 
@@ -60,6 +61,7 @@ if has_pppoe then p:value("pppoe", "PPPoE")   end
 if has_pppoa then p:value("pppoa", "PPPoA")   end
 if has_3g    then p:value("3g",    "UMTS/3G") end
 if has_pptp  then p:value("pptp",  "PPTP")    end
+if has_6in4  then p:value("6in4",  "6in4")    end
 p:value("none", translate("none"))
 
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
@@ -69,6 +71,9 @@ end
 br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
 br.enabled = "bridge"
 br.rmempty = true
+br:depends("proto", "static")
+br:depends("proto", "dhcp")
+br:depends("proto", "none")
 
 stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
 	translate("Enables the Spanning Tree Protocol on this bridge"))
@@ -81,7 +86,11 @@ ifname_single.widget = "radio"
 ifname_single.nobridges = true
 ifname_single.network = arg[1]
 ifname_single.rmempty = true
-ifname_single:depends("type", "")
+ifname_single:depends({ type = "", proto = "static" })
+ifname_single:depends({ type = "", proto = "dhcp"   })
+ifname_single:depends({ type = "", proto = "pppoe"  })
+ifname_single:depends({ type = "", proto = "pppoa"  })
+ifname_single:depends({ type = "", proto = "none"   })
 
 function ifname_single.cfgvalue(self, s)
 	return self.map.uci:get("network", s, "ifname")
@@ -151,30 +160,39 @@ function fwzone.write(self, section, value)
 	end
 end
 
-
 ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ipaddr.rmempty = true
+ipaddr.datatype = "ip4addr"
 ipaddr:depends("proto", "static")
 
 nm = s:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
 nm.rmempty = true
+nm.datatype = "ip4addr"
 nm:depends("proto", "static")
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
 gw = s:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
+gw.optional = true
+gw.datatype = "ip4addr"
 gw:depends("proto", "static")
-gw.rmempty = true
 
 bcast = s:taboption("general", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
+bcast.optional = true
+bcast.datatype = "ip4addr"
 bcast:depends("proto", "static")
 
 if has_ipv6 then
 	ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
+	ip6addr.rmempty = true
+	ip6addr.datatype = "ip6addr"
 	ip6addr:depends("proto", "static")
+	ip6addr:depends("proto", "6in4")
 
 	ip6gw = s:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
+	ip6gw.optional = true
+	ip6gw.datatype = "ip6addr"
 	ip6gw:depends("proto", "static")
 end
 
@@ -182,17 +200,36 @@ dns = s:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name 
 	translate("You can specify multiple DNS servers separated by space here. Servers entered here will override " ..
 		"automatically assigned ones."))
 
+dns.optional = true
+dns.datatype = "ipaddr"
 dns:depends("peerdns", "")
 
 mtu = s:taboption("physical", Value, "mtu", "MTU")
-mtu.isinteger = true
-
-mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-
+mtu.optional = true
+mtu.datatype = "uinteger"
 
 srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
 srv:depends("proto", "pptp")
-srv.rmempty = true
+srv.optional = false
+srv.datatype = "ip4addr"
+
+if has_6in4 then
+	peer = s:taboption("general", Value, "peeraddr", translate("Server IPv4-Address"))
+	peer.optional = false
+	peer.datatype = "ip4addr"
+	peer:depends("proto", "6in4")
+
+	ttl = s:taboption("physical", Value, "ttl", translate("TTL"))
+	ttl.default = "64"
+	ttl.optional = true
+	ttl.datatype = "uinteger"
+	ttl:depends("proto", "6in4")
+end
+
+mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
+mac:depends("proto", "none")
+mac:depends("proto", "static")
+mac:depends("proto", "dhcp")
 
 if has_3g then
 	service = s:taboption("general", ListValue, "service", translate("Service type"))
@@ -213,7 +250,14 @@ if has_3g then
 	pincode:depends("proto", "3g")
 end
 
-if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
+if has_6in4 then
+	tunid = s:taboption("general", Value, "tunnelid", translate("HE.net Tunnel ID"))
+	tunid.optional = true
+	tunid.datatype = "uinteger"
+	tunid:depends("proto", "6in4")
+end
+
+if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp or has_6in4 then
 	user = s:taboption("general", Value, "username", translate("Username"))
 	user.rmempty = true
 	user:depends("proto", "pptp")
@@ -221,6 +265,7 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	user:depends("proto", "pppoa")
 	user:depends("proto", "ppp")
 	user:depends("proto", "3g")
+	user:depends("proto", "6in4")
 
 	pass = s:taboption("general", Value, "password", translate("Password"))
 	pass.rmempty = true
@@ -230,6 +275,7 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	pass:depends("proto", "pppoa")
 	pass:depends("proto", "ppp")
 	pass:depends("proto", "3g")
+	pass:depends("proto", "6in4")
 
 	ka = s:taboption("ppp", Value, "keepalive",
 	 translate("Keep-Alive"),
@@ -245,6 +291,8 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	 translate("Automatic Disconnect"),
 	 translate("Time (in seconds) after which an unused connection will be closed")
 	)
+	demand.optional = true
+	demand.datatype = "uinteger"
 	demand:depends("proto", "pptp")
 	demand:depends("proto", "pppoe")
 	demand:depends("proto", "pppoa")
@@ -261,14 +309,17 @@ if has_pppoa then
 	atmdev = s:taboption("atm", Value, "atmdev", translate("ATM device number"))
 	atmdev:depends("proto", "pppoa")
 	atmdev.default = "0"
+	atmdev.datatype = "uinteger"
 
 	vci = s:taboption("atm", Value, "vci", translate("ATM Virtual Channel Identifier (VCI)"))
 	vci:depends("proto", "pppoa")
 	vci.default = "35"
+	vci.datatype = "uinteger"
 
 	vpi = s:taboption("atm", Value, "vpi", translate("ATM Virtual Path Identifier (VPI)"))
 	vpi:depends("proto", "pppoa")
 	vpi.default = "8"
+	vpi.datatype = "uinteger"
 end
 
 if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
@@ -351,6 +402,9 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	 translate("Seconds to wait for the modem to become ready before attempting to connect")
 	)
 	maxwait:depends("proto", "3g")
+	maxwait.default  = "0"
+	maxwait.optional = true
+	maxwait.datatype = "uinteger"
 end
 
 s2 = m:section(TypedSection, "alias", translate("IP-Aliases"))
@@ -362,25 +416,42 @@ s2.defaults.interface = arg[1]
 s2:tab("general", translate("General Setup"))
 s2.defaults.proto = "static"
 
-s2:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address")).rmempty = true
+ip = s2:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
+ip.optional = true
+ip.datatype = "ip4addr"
 
 nm = s2:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
-nm.rmempty = true
+nm.optional = true
+nm.datatype = "ip4addr"
 nm:value("255.255.255.0")
 nm:value("255.255.0.0")
 nm:value("255.0.0.0")
 
-s2:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway")).rmempty = true
+gw = s2:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
+gw.optional = true
+gw.datatype = "ip4addr"
 
 if has_ipv6 then
 	s2:tab("ipv6", translate("IPv6 Setup"))
-	s2:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
-	s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
+
+	ip6 = s2:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
+	ip6.optional = true
+	ip6.datatype = "ip6addr"
+
+	gw6 = s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
+	gw6.optional = true
+	gw6.datatype = "ip6addr"
 end
 
 s2:tab("advanced", translate("Advanced Settings"))
-s2:taboption("advanced", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
-s2:taboption("advanced", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
+
+bcast = s2:taboption("advanced", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
+bcast.optional = true
+bcast.datatype = "ip4addr"
+
+dns = s2:taboption("advanced", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
+dns.optional = true
+dns.datatype = "ip4addr"
 
 
 m2 = Map("dhcp", "", "")
@@ -419,12 +490,14 @@ ignore.rmempty = false
 
 local start = s:taboption("general", Value, "start", translate("Start"),
 	translate("Lowest leased address as offset from the network address."))
-start.rmempty = true
+start.optional = true
+start.datatype = "uinteger"
 start.default = "100"
 
 local limit = s:taboption("general", Value, "limit", translate("Limit"),
 	translate("Maximum number of leased addresses."))
-limit.rmempty = true
+limit.optional = true
+limit.datatype = "uinteger"
 limit.default = "150"
 
 local ltime = s:taboption("general", Value, "leasetime", translate("Leasetime"),
@@ -449,10 +522,13 @@ s:taboption("advanced", Flag, "force", translate("Force"),
 --s:taboption("advanced", Value, "name", translate("Name"),
 --	translate("Define a name for this network."))
 
-s:taboption("advanced", Value, "netmask",
+mask = s:taboption("advanced", Value, "netmask",
 	translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"),
 	translate("Override the netmask sent to clients. Normally it is calculated " ..
 		"from the subnet that is served."))
+
+mask.optional = true
+mask.datatype = "ip4addr"
 
 s:taboption("advanced", DynamicList, "dhcp_option", translate("DHCP-Options"),
 	translate("Define additional DHCP options, for example \"<code>6,192.168.2.1," ..
