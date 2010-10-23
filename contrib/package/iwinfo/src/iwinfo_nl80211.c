@@ -490,7 +490,7 @@ static char * nl80211_ifadd(const char *ifname)
 
 static void nl80211_ifdel(const char *ifname)
 {
-	struct nl80211_msg_conveyor *req, *res;
+	struct nl80211_msg_conveyor *req;
 
 	req = nl80211_msg(ifname, NL80211_CMD_DEL_INTERFACE, 0);
 	if( req )
@@ -1547,7 +1547,7 @@ int nl80211_get_hwmodelist(const char *ifname, int *buf)
 
 int nl80211_get_mbssid_support(const char *ifname, int *buf)
 {
-	/* test whether we can create another interface */
+	/* Test whether we can create another interface */
 	char *nif = nl80211_ifadd(ifname);
 
 	if( nif )

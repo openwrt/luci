@@ -55,6 +55,27 @@
 #define	IEEE80211_IOCTL_GETCHANLIST	(SIOCIWFIRSTPRIV+7)
 #define	IEEE80211_IOCTL_GETCHANINFO	(SIOCIWFIRSTPRIV+13)
 
+#define	SIOC80211IFCREATE			(SIOCDEVPRIVATE+7)
+#define	SIOC80211IFDESTROY	 		(SIOCDEVPRIVATE+8)
+
+#define	IEEE80211_CLONE_BSSID	0x0001	/* allocate unique mac/bssid */
+#define	IEEE80211_NO_STABEACONS	0x0002	/* Do not setup the station beacon timers */
+
+struct ieee80211_clone_params {
+	char icp_name[IFNAMSIZ];		/* device name */
+	u_int16_t icp_opmode;			/* operating mode */
+	u_int16_t icp_flags;			/* see below */
+};
+
+enum ieee80211_opmode {
+	IEEE80211_M_STA		= 1,	/* infrastructure station */
+	IEEE80211_M_IBSS 	= 0,	/* IBSS (adhoc) station */
+	IEEE80211_M_AHDEMO	= 3,	/* Old lucent compatible adhoc demo */
+	IEEE80211_M_HOSTAP	= 6,	/* Software Access Point */
+	IEEE80211_M_MONITOR	= 8,	/* Monitor mode */
+	IEEE80211_M_WDS		= 2,	/* WDS link */
+};
+
 enum {
 	IEEE80211_PARAM_AUTHMODE		= 3,	/* authentication mode */
 	IEEE80211_PARAM_MCASTCIPHER		= 5,	/* multicast/default cipher */

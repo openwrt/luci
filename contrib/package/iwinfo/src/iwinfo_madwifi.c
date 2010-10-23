@@ -198,16 +198,27 @@ static struct ISO3166_to_CCode
 
 static int ioctl_socket = -1;
 
-static int madwifi_ioctl(struct iwreq *wrq, const char *ifname, int cmd, void *data, size_t len)
+static int madwifi_socket(void)
 {
-	/* prepare socket */
+	/* Prepare socket */
 	if( ioctl_socket == -1 )
 	{
 		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
 		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
 	}
 
-  	strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
+	return ioctl_socket;
+}
+
+static int madwifi_ioctl(int cmd, void *ifr)
+{
+	int s = madwifi_socket();
+	return ioctl(s, cmd, ifr);
+}
+
+static int madwifi_wrq(struct iwreq *wrq, const char *ifname, int cmd, void *data, size_t len)
+{
+	strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
 
 	if( data != NULL )
 	{
@@ -222,14 +233,14 @@ static int madwifi_ioctl(struct iwreq *wrq, const char *ifname, int cmd, void *d
 		}
 	}
 
-	return ioctl(ioctl_socket, cmd, wrq);
+	return madwifi_ioctl(cmd, wrq);
 }
 
 static int get80211priv(const char *ifname, int op, void *data, size_t len)
 {
 	struct iwreq iwr;
 
-	if( madwifi_ioctl(&iwr, ifname, op, data, len) < 0 )
+	if( madwifi_wrq(&iwr, ifname, op, data, len) < 0 )
 		return -1;
 
 	return iwr.u.data.length;
@@ -286,6 +297,70 @@ static int madwifi_iswifi(const char *ifname)
 	return ret;
 }
 
+static char * madwifi_ifadd(const char *ifname)
+{
+	char *wifidev = NULL;
+	struct ifreq ifr = { 0 };
+	struct ieee80211_clone_params cp = { 0 };
+	static char nif[IFNAMSIZ] = { 0 };
+
+	if( !(wifidev = madwifi_isvap(ifname, NULL)) && madwifi_iswifi(ifname) )
+		wifidev = (char *)ifname;
+
+	if( wifidev )
+	{
+		snprintf(nif, sizeof(nif), "tmp.%s", ifname);
+
+		strncpy(cp.icp_name, nif, IFNAMSIZ);
+		cp.icp_opmode = IEEE80211_M_MONITOR;
+		cp.icp_flags  = IEEE80211_CLONE_BSSID;
+
+		strncpy(ifr.ifr_name, wifidev, IFNAMSIZ);
+		ifr.ifr_data  = (void *)&cp;
+
+		if( !madwifi_ioctl(SIOC80211IFCREATE, &ifr) )
+			return nif;
+	}
+
+	return NULL;
+}
+
+static void madwifi_ifdel(const char *ifname)
+{
+	struct ifreq ifr = { 0 };
+
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+	madwifi_ioctl(SIOC80211IFDESTROY, &ifr);
+}
+
+static int madwifi_ifup(const char *ifname)
+{
+	struct ifreq ifr;
+
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+	if( madwifi_ioctl(SIOCGIFFLAGS, &ifr) )
+		return 0;
+
+	ifr.ifr_flags |= (IFF_UP | IFF_RUNNING);
+
+	return !madwifi_ioctl(SIOCSIFFLAGS, &ifr);
+}
+
+static int madwifi_ifdown(const char *ifname)
+{
+	struct ifreq ifr;
+
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+	if( madwifi_ioctl(SIOCGIFFLAGS, &ifr) )
+		return 0;
+
+	ifr.ifr_flags &= ~(IFF_UP | IFF_RUNNING);
+
+	return !madwifi_ioctl(SIOCSIFFLAGS, &ifr);
+}
+
 
 int madwifi_probe(const char *ifname)
 {
@@ -320,7 +395,7 @@ int madwifi_get_channel(const char *ifname, int *buf)
 	struct iwreq wrq;
 	struct ieee80211req_chaninfo chans;
 
-	if( madwifi_ioctl(&wrq, ifname, SIOCGIWFREQ, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, SIOCGIWFREQ, NULL, 0) >= 0 )
 	{
 		/* Madwifi returns a Hz frequency, get it's freq list to find channel index */
 		freq = (uint16_t)(wrq.u.freq.m / 100000);
@@ -349,7 +424,7 @@ int madwifi_get_frequency(const char *ifname, int *buf)
 {
 	struct iwreq wrq;
 
-	if( madwifi_ioctl(&wrq, ifname, SIOCGIWFREQ, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, SIOCGIWFREQ, NULL, 0) >= 0 )
 	{
 		*buf = (uint16_t)(wrq.u.freq.m / 100000);
 		return 0;
@@ -371,7 +446,7 @@ int madwifi_get_bitrate(const char *ifname, int *buf)
 	struct iwreq wrq;
 	struct ieee80211req_sta_info *si;
 
-	if( madwifi_ioctl(&wrq, ifname, SIOCGIWMODE, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, SIOCGIWMODE, NULL, 0) >= 0 )
 	{
 		mode = wrq.u.mode;
 
@@ -417,7 +492,7 @@ int madwifi_get_signal(const char *ifname, int *buf)
 	struct iwreq wrq;
 	struct ieee80211req_sta_info *si;
 
-	if( madwifi_ioctl(&wrq, ifname, SIOCGIWMODE, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, SIOCGIWMODE, NULL, 0) >= 0 )
 	{
 		mode = wrq.u.mode;
 
@@ -468,7 +543,7 @@ int madwifi_get_quality(const char *ifname, int *buf)
 	struct iwreq wrq;
 	struct ieee80211req_sta_info *si;
 
-	if( madwifi_ioctl(&wrq, ifname, SIOCGIWMODE, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, SIOCGIWMODE, NULL, 0) >= 0 )
 	{
 		mode = wrq.u.mode;
 
@@ -534,12 +609,12 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 
 	/* Get wpa protocol version */
 	wrq.u.mode = IEEE80211_PARAM_WPA;
-	if( madwifi_ioctl(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 		c->wpa_version = wrq.u.mode;
 
 	/* Get authentication suites */
 	wrq.u.mode = IEEE80211_PARAM_AUTHMODE;
-	if( madwifi_ioctl(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 	{
 		switch(wrq.u.mode) {
 			case IEEE80211_AUTH_8021X:
@@ -558,12 +633,12 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 
 	/* Get group key length */
 	wrq.u.mode = IEEE80211_PARAM_MCASTKEYLEN;
-	if( madwifi_ioctl(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 		key_len = wrq.u.mode;
 
 	/* Get used pairwise ciphers */
 	wrq.u.mode = IEEE80211_PARAM_UCASTCIPHERS;
-	if( madwifi_ioctl(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 	{
 		ciphers = wrq.u.mode;
 
@@ -601,7 +676,7 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 
 	/* Get used group cipher */
 	wrq.u.mode = IEEE80211_PARAM_MCASTCIPHER;
-	if( madwifi_ioctl(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
+	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 	{
 		ciphers = wrq.u.mode;
 
@@ -690,18 +765,15 @@ int madwifi_get_assoclist(const char *ifname, char *buf, int *len)
 int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len)
 {
 	int rc = -1;
-	char cmd[256];
+	char *res;
 
 	/* A wifiX device? */
 	if( madwifi_iswifi(ifname) )
 	{
-		sprintf(cmd, "wlanconfig ath-txpwr create nounit "
-			"wlandev %s wlanmode ap >/dev/null", ifname);
-
-		if( ! WEXITSTATUS(system(cmd)) )
+		if( (res = madwifi_ifadd(ifname)) != NULL )
 		{
-			rc = wext_get_txpwrlist("ath-txpwr", buf, len);
-			(void) WEXITSTATUS(system("wlanconfig ath-txpwr destroy"));
+			rc = wext_get_txpwrlist(res, buf, len);
+			madwifi_ifdel(res);
 		}
 	}
 
@@ -717,7 +789,7 @@ int madwifi_get_txpwrlist(const char *ifname, char *buf, int *len)
 int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 {
 	int ret;
-	char cmd[256];
+	char *res;
 	DIR *proc;
 	struct dirent *e;
 
@@ -732,9 +804,7 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 			{
 				if( !!madwifi_isvap(e->d_name, ifname) )
 				{
-					sprintf(cmd, "ifconfig %s up", e->d_name);
-
-					if( ! WEXITSTATUS(system(cmd)) )
+					if( madwifi_ifup(e->d_name) )
 					{
 						ret = wext_get_scanlist(e->d_name, buf, len);
 						break;
@@ -748,15 +818,13 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 		/* Still nothing found, try to create a vap */
 		if( ret == -1 )
 		{
-			sprintf(cmd, "wlanconfig ath-scan create nounit "
-				"wlandev %s wlanmode sta >/dev/null", ifname);
-
-			if( ! WEXITSTATUS(system(cmd)) && ! WEXITSTATUS(system("ifconfig ath-scan up")) )
+			if( (res = madwifi_ifadd(ifname)) != NULL )
 			{
-				ret = wext_get_scanlist("ath-scan", buf, len);
+				if( madwifi_ifup(res) )
+					ret = wext_get_scanlist(res, buf, len);
 
-				(void) WEXITSTATUS(system("ifconfig ath-scan down"));
-				(void) WEXITSTATUS(system("wlanconfig ath-scan destroy"));
+				madwifi_ifdown(res);
+				madwifi_ifdel(res);
 			}
 		}
 	}
@@ -774,27 +842,27 @@ int madwifi_get_freqlist(const char *ifname, char *buf, int *len)
 {
 	int i, bl;
 	int rc = -1;
-	char cmd[256];
+	char *res;
 	struct ieee80211req_chaninfo chans;
 	struct iwinfo_freqlist_entry entry;
 
 	/* A wifiX device? */
 	if( madwifi_iswifi(ifname) )
 	{
-		sprintf(cmd, "wlanconfig ath-channels create nounit "
-			"wlandev %s wlanmode ap >/dev/null", ifname);
-
-		if( ! WEXITSTATUS(system(cmd)) )
+		if( (res = madwifi_ifadd(ifname)) != NULL )
 		{
-			rc = get80211priv("ath-channels", IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans));
-			(void) WEXITSTATUS(system("wlanconfig ath-channels destroy"));
+			rc = get80211priv(res, IEEE80211_IOCTL_GETCHANINFO,
+							  &chans, sizeof(chans));
+
+			madwifi_ifdel(res);
 		}
 	}
 
 	/* Its an athX ... */
 	else if( !!madwifi_isvap(ifname, NULL) )
 	{
-		rc = get80211priv(ifname, IEEE80211_IOCTL_GETCHANINFO, &chans, sizeof(chans));
+		rc = get80211priv(ifname, IEEE80211_IOCTL_GETCHANINFO,
+						  &chans, sizeof(chans));
 	}
 
 
@@ -892,7 +960,7 @@ int madwifi_get_hwmodelist(const char *ifname, int *buf)
 	struct iwinfo_freqlist_entry *e = NULL;
 	int len = 0;
 
-	if( !madwifi_get_freqlist(ifname, &chans, &len) )
+	if( !madwifi_get_freqlist(ifname, chans, &len) )
 	{
 		for( e = (struct iwinfo_freqlist_entry *)chans; e->channel; e++ )
 		{
@@ -915,7 +983,18 @@ int madwifi_get_hwmodelist(const char *ifname, int *buf)
 
 int madwifi_get_mbssid_support(const char *ifname, int *buf)
 {
-	/* We assume that multi bssid is always possible */
-	*buf = 1;
-	return 0;
+	/* Test whether we can create another interface */
+	char *nif = madwifi_ifadd(ifname);
+
+	if( nif )
+	{
+		*buf = madwifi_ifup(nif);
+
+		madwifi_ifdown(nif);
+		madwifi_ifdel(nif);
+
+		return 0;
+	}
+
+	return -1;
 }
