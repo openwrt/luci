@@ -432,6 +432,10 @@ static char * iwinfo_crypto_desc(struct iwinfo_crypto_entry *c)
 						break;
 				}
 			}
+			else
+			{
+				sprintf(desc, "None");
+			}
 		}
 		else
 		{
@@ -694,11 +698,12 @@ static int iwinfo_L_encryption(lua_State *L, int (*func)(const char *, char *))
 		return 1;
 	}
 
-	return 0;
+	lua_pushnil(L);
+	return 1;
 }
 
 /* Wrapper for hwmode list */
-static int iwinfo_L_hwmodelist(lua_State *L, int (*func)(const char*, int *))
+static int iwinfo_L_hwmodelist(lua_State *L, int (*func)(const char *, int *))
 {
 	const char *ifname = luaL_checkstring(L, 1);
 	int hwmodes = 0;
@@ -722,7 +727,24 @@ static int iwinfo_L_hwmodelist(lua_State *L, int (*func)(const char*, int *))
 		return 1;
 	}
 
-	return 0;
+	lua_pushnil(L);
+	return 1;
+}
+
+/* Wrapper for mbbsid_support */
+static int iwinfo_L_mbssid_support(lua_State *L, int (*func)(const char *, int *))
+{
+	const char *ifname = luaL_checkstring(L, 1);
+	int support = 0;
+
+	if( !(*func)(ifname, &support) )
+	{
+		lua_pushboolean(L, support);
+		return 1;
+	}
+
+	lua_pushnil(L);
+	return 1;
 }
 
 /* Wrapper for country list */
@@ -792,7 +814,6 @@ LUA_WRAP_INT(wl,signal)
 LUA_WRAP_INT(wl,noise)
 LUA_WRAP_INT(wl,quality)
 LUA_WRAP_INT(wl,quality_max)
-LUA_WRAP_INT(wl,mbssid_support)
 LUA_WRAP_STRING(wl,mode)
 LUA_WRAP_STRING(wl,ssid)
 LUA_WRAP_STRING(wl,bssid)
@@ -804,6 +825,7 @@ LUA_WRAP_LIST(wl,freqlist)
 LUA_WRAP_LIST(wl,countrylist)
 LUA_WRAP_LIST(wl,hwmodelist)
 LUA_WRAP_LIST(wl,encryption)
+LUA_WRAP_LIST(wl,mbssid_support)
 #endif
 
 #ifdef USE_MADWIFI
@@ -816,7 +838,6 @@ LUA_WRAP_INT(madwifi,signal)
 LUA_WRAP_INT(madwifi,noise)
 LUA_WRAP_INT(madwifi,quality)
 LUA_WRAP_INT(madwifi,quality_max)
-LUA_WRAP_INT(madwifi,mbssid_support)
 LUA_WRAP_STRING(madwifi,mode)
 LUA_WRAP_STRING(madwifi,ssid)
 LUA_WRAP_STRING(madwifi,bssid)
@@ -828,6 +849,7 @@ LUA_WRAP_LIST(madwifi,freqlist)
 LUA_WRAP_LIST(madwifi,countrylist)
 LUA_WRAP_LIST(madwifi,hwmodelist)
 LUA_WRAP_LIST(madwifi,encryption)
+LUA_WRAP_LIST(madwifi,mbssid_support)
 #endif
 
 #ifdef USE_NL80211
@@ -840,7 +862,6 @@ LUA_WRAP_INT(nl80211,signal)
 LUA_WRAP_INT(nl80211,noise)
 LUA_WRAP_INT(nl80211,quality)
 LUA_WRAP_INT(nl80211,quality_max)
-LUA_WRAP_INT(nl80211,mbssid_support)
 LUA_WRAP_STRING(nl80211,mode)
 LUA_WRAP_STRING(nl80211,ssid)
 LUA_WRAP_STRING(nl80211,bssid)
@@ -852,6 +873,7 @@ LUA_WRAP_LIST(nl80211,freqlist)
 LUA_WRAP_LIST(nl80211,countrylist)
 LUA_WRAP_LIST(nl80211,hwmodelist)
 LUA_WRAP_LIST(nl80211,encryption)
+LUA_WRAP_LIST(nl80211,mbssid_support)
 #endif
 
 /* Wext */
@@ -863,7 +885,6 @@ LUA_WRAP_INT(wext,signal)
 LUA_WRAP_INT(wext,noise)
 LUA_WRAP_INT(wext,quality)
 LUA_WRAP_INT(wext,quality_max)
-LUA_WRAP_INT(wext,mbssid_support)
 LUA_WRAP_STRING(wext,mode)
 LUA_WRAP_STRING(wext,ssid)
 LUA_WRAP_STRING(wext,bssid)
@@ -875,6 +896,7 @@ LUA_WRAP_LIST(wext,freqlist)
 LUA_WRAP_LIST(wext,countrylist)
 LUA_WRAP_LIST(wext,hwmodelist)
 LUA_WRAP_LIST(wext,encryption)
+LUA_WRAP_LIST(wext,mbssid_support)
 
 #ifdef USE_WL
 /* Broadcom table */

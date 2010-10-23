@@ -62,7 +62,10 @@ function print_info(api, dev)
 		n(iw.bitrate(dev)) / 1000)
 
 	printf("          Encryption: %s",
-		s(enc and enc.description))
+		s(enc and enc.description or "None"))
+
+	printf("          Supports VAPs: %s",
+		iw.mbssid_support(dev) and "yes" or "no")
 
 	print("")
 end
@@ -85,7 +88,7 @@ function print_scan(api, dev)
 				s(se.signal), n(se.quality), n(se.quality_max))
 
 			printf("          Encryption: %s",
-				s(se.encryption.description))
+				s(se.encryption.description or "None"))
 
 			print("")
 		end

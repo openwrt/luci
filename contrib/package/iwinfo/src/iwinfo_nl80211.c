@@ -159,7 +159,9 @@ static struct nl80211_msg_conveyor * nl80211_msg(const char *ifname, int cmd, in
 	if( nl80211_init() < 0 )
 		goto err;
 
-	if( !strncmp(ifname, "radio", 5) )
+	if( !strncmp(ifname, "phy", 3) )
+		phyidx = atoi(&ifname[3]);
+	else if( !strncmp(ifname, "radio", 5) )
 		phyidx = atoi(&ifname[5]);
 	else if( !strncmp(ifname, "mon.", 4) )
 		ifidx = if_nametoindex(&ifname[4]);
@@ -414,17 +416,20 @@ out:
 
 static char * nl80211_phy2ifname(const char *ifname)
 {
-	int fd, phyidx = 0;
+	int fd, phyidx = -1;
 	char buffer[64];
 	static char nif[IFNAMSIZ] = { 0 };
 
 	DIR *d;
 	struct dirent *e;
 
-	if( !strncmp(ifname, "radio", 5) )
-	{
+	if( !strncmp(ifname, "phy", 3) )
+		phyidx = atoi(&ifname[3]);
+	else if( !strncmp(ifname, "radio", 5) )
 		phyidx = atoi(&ifname[5]);
 
+	if( phyidx > -1 )
+	{
 		if( (d = opendir("/sys/class/net")) != NULL )
 		{
 			while( (e = readdir(d)) != NULL )
@@ -546,7 +551,7 @@ static void nl80211_hostapd_hup(const char *ifname)
 {
 	int fd, pid = 0;
 	char buf[32];
-	char *phy = strncmp(ifname, "phy", 3) ? nl80211_ifname2phy(ifname) : ifname;
+	char *phy = nl80211_ifname2phy(ifname);
 
 	if( phy )
 	{
@@ -1508,8 +1513,8 @@ int nl80211_get_hwmodelist(const char *ifname, int *buf)
 				if( bands[NL80211_BAND_ATTR_HT_CAPA] )
 					caps = nla_get_u16(bands[NL80211_BAND_ATTR_HT_CAPA]);
 
-				/* Treat HT20/HT40 as 11n */
-				if( caps & (1 << 1) )
+				/* Treat any nonzero capability as 11n */
+				if( caps > 0 )
 					*buf |= IWINFO_80211_N;
 
 				nla_for_each_nested(freq,
@@ -1542,7 +1547,18 @@ int nl80211_get_hwmodelist(const char *ifname, int *buf)
 
 int nl80211_get_mbssid_support(const char *ifname, int *buf)
 {
-	/* We assume that multi bssid is always possible */
-	*buf = 1;
-	return 0;
+	/* test whether we can create another interface */
+	char *nif = nl80211_ifadd(ifname);
+
+	if( nif )
+	{
+		*buf = (nl80211_ifmac(nif) && nl80211_ifup(nif));
+
+		nl80211_ifdown(nif);
+		nl80211_ifdel(nif);
+
+		return 0;
+	}
+
+	return -1;
 }
