@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <dirent.h>
+#include <signal.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <net/if.h>

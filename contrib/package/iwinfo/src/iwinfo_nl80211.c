@@ -29,6 +29,7 @@
 
 extern struct iwinfo_iso3166_label ISO3166_Names[];
 static struct nl80211_state *nls = NULL;
+static int nl80211_ioctlsock = -1;
 
 static int nl80211_init(void)
 {
@@ -36,6 +37,19 @@ static int nl80211_init(void)
 
 	if( !nls )
 	{
+		nl80211_ioctlsock = socket(AF_INET, SOCK_DGRAM, 0);
+		if( nl80211_ioctlsock < 0 )
+		{
+			err = -ENOLINK;
+			goto err;
+		}
+		else if( fcntl(nl80211_ioctlsock, F_SETFD,
+					   fcntl(nl80211_ioctlsock, F_GETFD) | FD_CLOEXEC) < 0 )
+		{
+			err = -EINVAL;
+			goto err;
+		}
+
 		nls = malloc(sizeof(struct nl80211_state));
 		if( !nls ) {
 			err = -ENOMEM;
@@ -391,7 +405,9 @@ static char * nl80211_wpasupp_info(const char *ifname, const char *cmd)
 
 out:
 	close(sock);
-	unlink(local.sun_path);
+
+	if( local.sun_family )
+		unlink(local.sun_path);
 
 	return rv;
 }
@@ -438,7 +454,7 @@ static char * nl80211_phy2ifname(const char *ifname)
 	return nif[0] ? nif : NULL;
 }
 
-static char * nl80211_add_tempif(const char *ifname)
+static char * nl80211_ifadd(const char *ifname)
 {
 	int phyidx;
 	char *rv = NULL;
@@ -467,7 +483,7 @@ static char * nl80211_add_tempif(const char *ifname)
 	return rv;
 }
 
-static void nl80211_del_tempif(const char *ifname)
+static void nl80211_ifdel(const char *ifname)
 {
 	struct nl80211_msg_conveyor *req, *res;
 
@@ -483,6 +499,71 @@ static void nl80211_del_tempif(const char *ifname)
 	}
 }
 
+static int nl80211_ifup(const char *ifname)
+{
+	struct ifreq ifr;
+
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+	if( ioctl(nl80211_ioctlsock, SIOCGIFFLAGS, &ifr) )
+		return 0;
+
+	ifr.ifr_flags |= (IFF_UP | IFF_RUNNING);
+
+	return !ioctl(nl80211_ioctlsock, SIOCSIFFLAGS, &ifr);
+}
+
+static int nl80211_ifdown(const char *ifname)
+{
+	struct ifreq ifr;
+
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+	if( ioctl(nl80211_ioctlsock, SIOCGIFFLAGS, &ifr) )
+		return 0;
+
+	ifr.ifr_flags &= ~(IFF_UP | IFF_RUNNING);
+
+	return !ioctl(nl80211_ioctlsock, SIOCSIFFLAGS, &ifr);
+}
+
+static int nl80211_ifmac(const char *ifname)
+{
+	struct ifreq ifr;
+
+	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+	if( ioctl(nl80211_ioctlsock, SIOCGIFHWADDR, &ifr) )
+		return 0;
+
+	ifr.ifr_hwaddr.sa_data[1]++;
+	ifr.ifr_hwaddr.sa_data[2]++;
+
+	return !ioctl(nl80211_ioctlsock, SIOCSIFHWADDR, &ifr);
+}
+
+static void nl80211_hostapd_hup(const char *ifname)
+{
+	int fd, pid = 0;
+	char buf[32];
+	char *phy = strncmp(ifname, "phy", 3) ? nl80211_ifname2phy(ifname) : ifname;
+
+	if( phy )
+	{
+		snprintf(buf, sizeof(buf), "/var/run/wifi-%s.pid", phy);
+		if( (fd = open(buf, O_RDONLY)) > 0 )
+		{
+			if( read(fd, buf, sizeof(buf)) > 0 )
+				pid = atoi(buf);
+
+			close(fd);
+		}
+
+		if( pid > 0 )
+			kill(pid, 1);
+	}
+}
+
 
 int nl80211_probe(const char *ifname)
 {
@@ -491,6 +572,11 @@ int nl80211_probe(const char *ifname)
 
 void nl80211_close(void)
 {
+	if( nl80211_ioctlsock > -1 )
+	{
+		close(nl80211_ioctlsock);
+	}
+
 	if( nls )
 	{
 		if( nls->nl_sock )
@@ -1150,7 +1236,6 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 {
 	int freq, rssi, qmax, count;
 	char *res;
-	char cmd[256];
 	char ssid[128] = { 0 };
 	char bssid[18] = { 0 };
 	char cipher[256] = { 0 };
@@ -1165,10 +1250,10 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 		}
 
 		/* Need to spawn a temporary iface for scanning */
-		else if( (res = nl80211_add_tempif(ifname)) != NULL )
+		else if( (res = nl80211_ifadd(ifname)) != NULL )
 		{
 			count = nl80211_get_scanlist(res, buf, len);
-			nl80211_del_tempif(res);
+			nl80211_ifdel(res);
 			return count;
 		}
 	}
@@ -1253,57 +1338,47 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 	/* AP scan */
 	else
 	{
-		if( (res = nl80211_ifname2phy(ifname)) != NULL )
+		/* Got a temp interface, don't create yet another one */
+		if( !strncmp(ifname, "tmp.", 4) )
 		{
-			/* Got a temp interface, don't create yet another one */
-			if( !strncmp(ifname, "tmp.", 4) )
+			if( !nl80211_ifup(ifname) )
+				return -1;
+
+			wext_get_scanlist(ifname, buf, len);
+			nl80211_ifdown(ifname);
+			return 0;
+		}
+
+		/* Spawn a new scan interface */
+		else
+		{
+			if( !(res = nl80211_ifadd(ifname)) )
+				goto out;
+
+			if( !nl80211_ifmac(res) )
+				goto out;
+
+			/* if we can take the new interface up, the driver supports an
+			 * additional interface and there's no need to tear down the ap */
+			if( nl80211_ifup(res) )
 			{
-				sprintf(cmd, "ifconfig %s up 2>/dev/null", ifname);
-				if( WEXITSTATUS(system(cmd)) )
-					return -1;
-
-				wext_get_scanlist(ifname, buf, len);
-
-				sprintf(cmd, "ifconfig %s down 2>/dev/null", ifname);
-				(void) WEXITSTATUS(system(cmd));
-
-				return 0;
+				wext_get_scanlist(res, buf, len);
+				nl80211_ifdown(res);
 			}
 
-			/* Spawn a new scan interface */
-			else
+			/* driver cannot create secondary interface, take down ap
+			 * during scan */
+			else if( nl80211_ifdown(ifname) && nl80211_ifup(res) )
 			{
-				sprintf(cmd, "ifconfig %s down 2>/dev/null", ifname);
-				if( WEXITSTATUS(system(cmd)) )
-					goto out;
-
-				sprintf(cmd, "iw phy %s interface add scan.%s "
-					"type station 2>/dev/null", res, ifname);
-				if( WEXITSTATUS(system(cmd)) )
-					goto out;
-
-				sprintf(cmd, "ifconfig scan.%s up 2>/dev/null", ifname);
-				if( WEXITSTATUS(system(cmd)) )
-					goto out;
-
-				sprintf(cmd, "scan.%s", ifname);
-				wext_get_scanlist(cmd, buf, len);
-
-			out:
-				sprintf(cmd, "ifconfig scan.%s down 2>/dev/null", ifname);
-				(void) WEXITSTATUS(system(cmd));
-
-				sprintf(cmd, "iw dev scan.%s del 2>/dev/null", ifname);
-				(void) WEXITSTATUS(system(cmd));
-
-				sprintf(cmd, "ifconfig %s up 2>/dev/null", ifname);
-				(void) WEXITSTATUS(system(cmd));
-
-				sprintf(cmd, "killall -HUP hostapd 2>/dev/null");
-				(void) WEXITSTATUS(system(cmd));
-
-				return 0;
+				wext_get_scanlist(res, buf, len);
+				nl80211_ifdown(res);
+				nl80211_ifup(ifname);
+				nl80211_hostapd_hup(ifname);
 			}
+
+		out:
+			nl80211_ifdel(res);
+			return 0;
 		}
 	}
 
