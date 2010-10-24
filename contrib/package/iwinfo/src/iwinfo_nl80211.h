@@ -25,15 +25,14 @@
 #include <string.h>
 #include <dirent.h>
 #include <signal.h>
-#include <sys/socket.h>
 #include <sys/un.h>
-#include <net/if.h>
 #include <netlink/netlink.h>
 #include <netlink/genl/genl.h>
 #include <netlink/genl/family.h>
 #include <netlink/genl/ctrl.h>
 
 #include "iwinfo.h"
+#include "iwinfo_utils.h"
 #include "include/nl80211.h"
 
 struct nl80211_state {

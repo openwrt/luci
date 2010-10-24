@@ -29,7 +29,6 @@
 
 extern struct iwinfo_iso3166_label ISO3166_Names[];
 static struct nl80211_state *nls = NULL;
-static int nl80211_ioctlsock = -1;
 
 static int nl80211_init(void)
 {
@@ -37,19 +36,6 @@ static int nl80211_init(void)
 
 	if( !nls )
 	{
-		nl80211_ioctlsock = socket(AF_INET, SOCK_DGRAM, 0);
-		if( nl80211_ioctlsock < 0 )
-		{
-			err = -ENOLINK;
-			goto err;
-		}
-		else if( fcntl(nl80211_ioctlsock, F_SETFD,
-					   fcntl(nl80211_ioctlsock, F_GETFD) | FD_CLOEXEC) < 0 )
-		{
-			err = -EINVAL;
-			goto err;
-		}
-
 		nls = malloc(sizeof(struct nl80211_state));
 		if( !nls ) {
 			err = -ENOMEM;
@@ -504,49 +490,6 @@ static void nl80211_ifdel(const char *ifname)
 	}
 }
 
-static int nl80211_ifup(const char *ifname)
-{
-	struct ifreq ifr;
-
-	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
-
-	if( ioctl(nl80211_ioctlsock, SIOCGIFFLAGS, &ifr) )
-		return 0;
-
-	ifr.ifr_flags |= (IFF_UP | IFF_RUNNING);
-
-	return !ioctl(nl80211_ioctlsock, SIOCSIFFLAGS, &ifr);
-}
-
-static int nl80211_ifdown(const char *ifname)
-{
-	struct ifreq ifr;
-
-	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
-
-	if( ioctl(nl80211_ioctlsock, SIOCGIFFLAGS, &ifr) )
-		return 0;
-
-	ifr.ifr_flags &= ~(IFF_UP | IFF_RUNNING);
-
-	return !ioctl(nl80211_ioctlsock, SIOCSIFFLAGS, &ifr);
-}
-
-static int nl80211_ifmac(const char *ifname)
-{
-	struct ifreq ifr;
-
-	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
-
-	if( ioctl(nl80211_ioctlsock, SIOCGIFHWADDR, &ifr) )
-		return 0;
-
-	ifr.ifr_hwaddr.sa_data[1]++;
-	ifr.ifr_hwaddr.sa_data[2]++;
-
-	return !ioctl(nl80211_ioctlsock, SIOCSIFHWADDR, &ifr);
-}
-
 static void nl80211_hostapd_hup(const char *ifname)
 {
 	int fd, pid = 0;
@@ -577,11 +520,6 @@ int nl80211_probe(const char *ifname)
 
 void nl80211_close(void)
 {
-	if( nl80211_ioctlsock > -1 )
-	{
-		close(nl80211_ioctlsock);
-	}
-
 	if( nls )
 	{
 		if( nls->nl_sock )
@@ -1169,13 +1107,13 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 		     dbm_cur += 2, dbm_cnt++ )
 		{
 			entry.dbm = dbm_cur;
-			entry.mw  = wext_dbm2mw(dbm_cur);
+			entry.mw  = iwinfo_dbm2mw(dbm_cur);
 
 			memcpy(&buf[dbm_cnt * sizeof(entry)], &entry, sizeof(entry));
 		}
 
 		entry.dbm = dbm_max;
-		entry.mw  = wext_dbm2mw(dbm_max);
+		entry.mw  = iwinfo_dbm2mw(dbm_max);
 
 		memcpy(&buf[dbm_cnt * sizeof(entry)], &entry, sizeof(entry));
 		dbm_cnt++;
@@ -1266,8 +1204,7 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 	struct iwinfo_scanlist_entry *e = (struct iwinfo_scanlist_entry *)buf;
 
 	/* WPA supplicant */
-	if( (res = nl80211_wpasupp_info(ifname, "SCAN")) &&
-	    !strcmp(res, "OK\n") )
+	if( (res = nl80211_wpasupp_info(ifname, "SCAN")) && !strcmp(res, "OK\n") )
 	{
 		sleep(2);
 
@@ -1346,11 +1283,11 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 		/* Got a temp interface, don't create yet another one */
 		if( !strncmp(ifname, "tmp.", 4) )
 		{
-			if( !nl80211_ifup(ifname) )
+			if( !iwinfo_ifup(ifname) )
 				return -1;
 
 			wext_get_scanlist(ifname, buf, len);
-			nl80211_ifdown(ifname);
+			iwinfo_ifdown(ifname);
 			return 0;
 		}
 
@@ -1360,24 +1297,24 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 			if( !(res = nl80211_ifadd(ifname)) )
 				goto out;
 
-			if( !nl80211_ifmac(res) )
+			if( !iwinfo_ifmac(res) )
 				goto out;
 
 			/* if we can take the new interface up, the driver supports an
 			 * additional interface and there's no need to tear down the ap */
-			if( nl80211_ifup(res) )
+			if( iwinfo_ifup(res) )
 			{
 				wext_get_scanlist(res, buf, len);
-				nl80211_ifdown(res);
+				iwinfo_ifdown(res);
 			}
 
 			/* driver cannot create secondary interface, take down ap
 			 * during scan */
-			else if( nl80211_ifdown(ifname) && nl80211_ifup(res) )
+			else if( iwinfo_ifdown(ifname) && iwinfo_ifup(res) )
 			{
 				wext_get_scanlist(res, buf, len);
-				nl80211_ifdown(res);
-				nl80211_ifup(ifname);
+				iwinfo_ifdown(res);
+				iwinfo_ifup(ifname);
 				nl80211_hostapd_hup(ifname);
 			}
 
@@ -1552,9 +1489,9 @@ int nl80211_get_mbssid_support(const char *ifname, int *buf)
 
 	if( nif )
 	{
-		*buf = (nl80211_ifmac(nif) && nl80211_ifup(nif));
+		*buf = (iwinfo_ifmac(nif) && iwinfo_ifup(nif));
 
-		nl80211_ifdown(nif);
+		iwinfo_ifdown(nif);
 		nl80211_ifdel(nif);
 
 		return 0;

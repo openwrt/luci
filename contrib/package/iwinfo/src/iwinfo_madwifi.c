@@ -1,7 +1,7 @@
 /*
  * iwinfo - Wireless Information Library - Madwifi Backend
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2010 Jo-Philipp Wich <xm@subsignal.org>
  *
  * The iwinfo library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2
@@ -196,26 +196,6 @@ static struct ISO3166_to_CCode
 };
 
 
-static int ioctl_socket = -1;
-
-static int madwifi_socket(void)
-{
-	/* Prepare socket */
-	if( ioctl_socket == -1 )
-	{
-		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
-		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
-	}
-
-	return ioctl_socket;
-}
-
-static int madwifi_ioctl(int cmd, void *ifr)
-{
-	int s = madwifi_socket();
-	return ioctl(s, cmd, ifr);
-}
-
 static int madwifi_wrq(struct iwreq *wrq, const char *ifname, int cmd, void *data, size_t len)
 {
 	strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
@@ -233,7 +213,7 @@ static int madwifi_wrq(struct iwreq *wrq, const char *ifname, int cmd, void *dat
 		}
 	}
 
-	return madwifi_ioctl(cmd, wrq);
+	return iwinfo_ioctl(cmd, wrq);
 }
 
 static int get80211priv(const char *ifname, int op, void *data, size_t len)
@@ -318,7 +298,7 @@ static char * madwifi_ifadd(const char *ifname)
 		strncpy(ifr.ifr_name, wifidev, IFNAMSIZ);
 		ifr.ifr_data  = (void *)&cp;
 
-		if( !madwifi_ioctl(SIOC80211IFCREATE, &ifr) )
+		if( !iwinfo_ioctl(SIOC80211IFCREATE, &ifr) )
 			return nif;
 	}
 
@@ -330,35 +310,7 @@ static void madwifi_ifdel(const char *ifname)
 	struct ifreq ifr = { 0 };
 
 	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
-	madwifi_ioctl(SIOC80211IFDESTROY, &ifr);
-}
-
-static int madwifi_ifup(const char *ifname)
-{
-	struct ifreq ifr;
-
-	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
-
-	if( madwifi_ioctl(SIOCGIFFLAGS, &ifr) )
-		return 0;
-
-	ifr.ifr_flags |= (IFF_UP | IFF_RUNNING);
-
-	return !madwifi_ioctl(SIOCSIFFLAGS, &ifr);
-}
-
-static int madwifi_ifdown(const char *ifname)
-{
-	struct ifreq ifr;
-
-	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
-
-	if( madwifi_ioctl(SIOCGIFFLAGS, &ifr) )
-		return 0;
-
-	ifr.ifr_flags &= ~(IFF_UP | IFF_RUNNING);
-
-	return !madwifi_ioctl(SIOCSIFFLAGS, &ifr);
+	iwinfo_ioctl(SIOC80211IFDESTROY, &ifr);
 }
 
 
@@ -369,8 +321,7 @@ int madwifi_probe(const char *ifname)
 
 void madwifi_close(void)
 {
-	if( ioctl_socket > -1 )
-		close(ioctl_socket);
+	/* Nop */
 }
 
 int madwifi_get_mode(const char *ifname, char *buf)
@@ -804,7 +755,7 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 			{
 				if( !!madwifi_isvap(e->d_name, ifname) )
 				{
-					if( madwifi_ifup(e->d_name) )
+					if( iwinfo_ifup(e->d_name) )
 					{
 						ret = wext_get_scanlist(e->d_name, buf, len);
 						break;
@@ -820,10 +771,10 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 		{
 			if( (res = madwifi_ifadd(ifname)) != NULL )
 			{
-				if( madwifi_ifup(res) )
+				if( iwinfo_ifup(res) )
 					ret = wext_get_scanlist(res, buf, len);
 
-				madwifi_ifdown(res);
+				iwinfo_ifdown(res);
 				madwifi_ifdel(res);
 			}
 		}
@@ -988,9 +939,9 @@ int madwifi_get_mbssid_support(const char *ifname, int *buf)
 
 	if( nif )
 	{
-		*buf = madwifi_ifup(nif);
+		*buf = iwinfo_ifup(nif);
 
-		madwifi_ifdown(nif);
+		iwinfo_ifdown(nif);
 		madwifi_ifdel(nif);
 
 		return 0;

@@ -1,7 +1,7 @@
 /*
  * iwinfo - Wireless Information Library - Linux Wireless Extension Headers
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2010 Jo-Philipp Wich <xm@subsignal.org>
  *
  * The iwinfo library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2
@@ -22,6 +22,7 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
+#include "iwinfo_utils.h"
 #include "include/wext.h"
 
 

@@ -22,6 +22,7 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
+#include "iwinfo_utils.h"
 #include "include/madwifi.h"
 
 int madwifi_probe(const char *ifname);

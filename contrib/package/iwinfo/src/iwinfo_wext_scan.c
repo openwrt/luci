@@ -1,7 +1,7 @@
 /*
  * iwinfo - Wireless Information Library - Linux Wireless Extension Backend
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2010 Jo-Philipp Wich <xm@subsignal.org>
  *
  * The iwinfo library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2
@@ -23,22 +23,13 @@
 #include "iwinfo_wext_scan.h"
 
 
-static int ioctl_socket = -1;
-
 static int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
 {
-	/* prepare socket */
-	if( ioctl_socket == -1 )
-	{
-		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
-		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
-	}
-
-  	strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
-	return ioctl(ioctl_socket, cmd, wrq);
+	strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
+	return iwinfo_ioctl(cmd, wrq);
 }
 
-static double wext_freq2float(const struct iw_freq *in)
+static inline double wext_freq2float(const struct iw_freq *in)
 {
 	int		i;
 	double	res = (double) in->m;
@@ -46,7 +37,7 @@ static double wext_freq2float(const struct iw_freq *in)
 	return res;
 }
 
-static int wext_extract_event(struct stream_descr *stream, struct iw_event *iwe, int wev)
+static inline int wext_extract_event(struct stream_descr *stream, struct iw_event *iwe, int wev)
 {
 	const struct iw_ioctl_description *descr = NULL;
 	int event_type = 0;
@@ -652,10 +643,4 @@ int wext_get_scanlist(const char *ifname, char *buf, int *len)
 	}
 
 	return -1;
-}
-
-void wext_scan_close(void)
-{
-	if( ioctl_socket > -1 )
-		close(ioctl_socket);
 }

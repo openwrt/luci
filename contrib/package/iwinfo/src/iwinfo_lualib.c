@@ -321,6 +321,7 @@ static int iwinfo_L__gc(lua_State *L)
 	nl80211_close();
 #endif
 	wext_close();
+	iwinfo_close();
 }
 
 /*

@@ -21,28 +21,20 @@
 #include "iwinfo_wl.h"
 #include "iwinfo_wext.h"
 
-static int ioctl_socket = -1;
-
 static int wl_ioctl(const char *name, int cmd, void *buf, int len)
 {
 	struct ifreq ifr;
 	wl_ioctl_t ioc;
 
-	/* prepare socket */
-	if( ioctl_socket == -1 )
-	{
-		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
-		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
-	}
-
 	/* do it */
 	ioc.cmd = cmd;
 	ioc.buf = buf;
 	ioc.len = len;
+
 	strncpy(ifr.ifr_name, name, IFNAMSIZ);
 	ifr.ifr_data = (caddr_t) &ioc;
 
-	return ioctl(ioctl_socket, SIOCDEVPRIVATE, &ifr);
+	return iwinfo_ioctl(SIOCDEVPRIVATE, &ifr);
 }
 
 static struct wl_maclist * wl_read_assoclist(const char *ifname)
@@ -77,8 +69,7 @@ int wl_probe(const char *ifname)
 
 void wl_close(void)
 {
-	if( ioctl_socket > -1 )
-		close(ioctl_socket);
+	/* Nop */
 }
 
 int wl_get_mode(const char *ifname, char *buf)

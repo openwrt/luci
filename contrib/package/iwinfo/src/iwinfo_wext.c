@@ -22,10 +22,6 @@
 #include "iwinfo.h"
 #include "iwinfo_wext.h"
 
-#define LOG10_MAGIC	1.25892541179
-
-static int ioctl_socket = -1;
-
 static double wext_freq2float(const struct iw_freq *in)
 {
 	int		i;
@@ -34,7 +30,7 @@ static double wext_freq2float(const struct iw_freq *in)
 	return res;
 }
 
-static int wext_freq2mhz(const struct iw_freq *in)
+static inline int wext_freq2mhz(const struct iw_freq *in)
 {
 	int i, mhz;
 
@@ -52,54 +48,14 @@ static int wext_freq2mhz(const struct iw_freq *in)
 	}
 }
 
-int wext_dbm2mw(int in)
+static inline int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
 {
-	double res = 1.0;
-	int ip = in / 10;
-	int fp = in % 10;
-	int k;
-
-	for(k = 0; k < ip; k++) res *= 10;
-	for(k = 0; k < fp; k++) res *= LOG10_MAGIC;
-
-	return (int)res;
-}
-
-int wext_mw2dbm(int in)
-{
-	double fin = (double) in;
-	int res = 0;
-
-	while(fin > 10.0)
-	{
-		res += 10;
-		fin /= 10.0;
-	}
-
-	while(fin > 1.000001)
-	{
-		res += 1;
-		fin /= LOG10_MAGIC;
-	}
-
-	return (int)res;
-}
-
-static int wext_ioctl(const char *ifname, int cmd, struct iwreq *wrq)
-{
-	/* prepare socket */
-	if( ioctl_socket == -1 )
-	{
-		ioctl_socket = socket(AF_INET, SOCK_DGRAM, 0);
-		fcntl(ioctl_socket, F_SETFD, fcntl(ioctl_socket, F_GETFD) | FD_CLOEXEC);
-	}
-
 	if( !strncmp(ifname, "mon.", 4) )
 		strncpy(wrq->ifr_name, &ifname[4], IFNAMSIZ);
 	else
 		strncpy(wrq->ifr_name, ifname, IFNAMSIZ);
 
-	return ioctl(ioctl_socket, cmd, wrq);
+	return iwinfo_ioctl(cmd, wrq);
 }
 
 
@@ -115,10 +71,7 @@ int wext_probe(const char *ifname)
 
 void wext_close(void)
 {
-	wext_scan_close();
-
-	if( ioctl_socket > -1 )
-		close(ioctl_socket);
+	/* Nop */
 }
 
 int wext_get_mode(const char *ifname, char *buf)
@@ -296,7 +249,7 @@ int wext_get_txpower(const char *ifname, int *buf)
 	if(wext_ioctl(ifname, SIOCGIWTXPOW, &wrq) >= 0)
 	{
 		if(wrq.u.txpower.flags & IW_TXPOW_MWATT)
-			*buf = wext_mw2dbm(wrq.u.txpower.value);
+			*buf = iwinfo_mw2dbm(wrq.u.txpower.value);
 		else
 			*buf = wrq.u.txpower.value;
 
@@ -407,7 +360,7 @@ int wext_get_txpwrlist(const char *ifname, char *buf, int *len)
 		{
 			if( range.txpower_capa & IW_TXPOW_MWATT )
 			{
-				entry.dbm = wext_mw2dbm(range.txpower[i]);
+				entry.dbm = iwinfo_mw2dbm(range.txpower[i]);
 				entry.mw  = range.txpower[i];
 			}
 
@@ -416,7 +369,7 @@ int wext_get_txpwrlist(const char *ifname, char *buf, int *len)
 			else /* if( range.txpower_capa & IW_TXPOW_DBM ) */
 			{
 				entry.dbm = range.txpower[i];
-				entry.mw  = wext_dbm2mw(range.txpower[i]);
+				entry.mw  = iwinfo_dbm2mw(range.txpower[i]);
 			}
 
 			memcpy(&buf[i*sizeof(entry)], &entry, sizeof(entry));

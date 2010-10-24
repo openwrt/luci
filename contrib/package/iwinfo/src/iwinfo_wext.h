@@ -1,7 +1,7 @@
 /*
  * iwinfo - Wireless Information Library - Linux Wireless Extension Headers
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2010 Jo-Philipp Wich <xm@subsignal.org>
  *
  * The iwinfo library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2
@@ -22,11 +22,9 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
+#include "iwinfo_utils.h"
 #include "include/wext.h"
 
-
-int wext_dbm2mw(int in);
-int wext_mw2dbm(int in);
 
 int wext_probe(const char *ifname);
 int wext_get_mode(const char *ifname, char *buf);
@@ -49,7 +47,6 @@ int wext_get_freqlist(const char *ifname, char *buf, int *len);
 int wext_get_countrylist(const char *ifname, char *buf, int *len);
 int wext_get_hwmodelist(const char *ifname, int *buf);
 int wext_get_mbssid_support(const char *ifname, int *buf);
-void wext_scan_close(void);
 void wext_close(void);
 
 #endif
