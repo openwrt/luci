@@ -265,22 +265,19 @@ function cbi_d_update() {
 }
 
 function cbi_bind(obj, type, callback, mode) {
-	if (typeof mode == "undefined") {
-		mode = false;
-	}
 	if (!obj.addEventListener) {
-		ieCallback = function(){
-			var e = window.event;
-			if (!e.target && e.srcElement) {
-				e.target = e.srcElement;
-			};
-			e.target['_eCB' + type + callback] = callback;
-			e.target['_eCB' + type + callback](e);
-			e.target['_eCB' + type + callback] = null;
-		};
-		obj.attachEvent('on' + type, ieCallback);
+		obj.attachEvent('on' + type,
+			function(){
+				var e = window.event;
+
+				if (!e.target && e.srcElement)
+					e.target = e.srcElement;
+
+				return !!callback(e);
+			}
+		);
 	} else {
-		obj.addEventListener(type, callback, mode);
+		obj.addEventListener(type, callback, !!mode);
 	}
 	return obj;
 }
@@ -345,7 +342,9 @@ function cbi_combobox(id, values, def, man) {
 			obj.focus();
 		} else {
 			obj.value = sel.options[sel.selectedIndex].value;
-			sel.className = (!obj.validate || obj.validate())
+
+			var vld = obj.getAttribute("cbi_validate");
+			sel.className = (!vld || vld())
 				? 'cbi-input-select' : 'cbi-input-select cbi-input-invalid';
 		}
 
@@ -373,6 +372,152 @@ function cbi_filebrowser(id, url, defpath) {
 	);
 
 	browser.focus();
+}
+
+function cbi_dynlist_init(name)
+{
+	function cbi_dynlist_renumber(e)
+	{
+		var count = 1;
+		var childs = e.parentNode.childNodes;
+
+		for( var i = 0; i < childs.length; i++ )
+			if( childs[i].name == name )
+				childs[i].id = name + '.' + (count++);
+
+		e.focus();
+	}
+
+	function cbi_dynlist_keypress(ev)
+	{
+		ev = ev ? ev : window.event;
+
+		var se = ev.target ? ev.target : ev.srcElement;
+
+		if (se.nodeType == 3)
+			se = se.parentNode;
+
+		switch (ev.keyCode)
+		{
+			/* backspace, delete */
+			case 8:
+			case 46:
+				if (se.value.length == 0)
+				{
+					if (ev.preventDefault)
+						ev.preventDefault();
+
+					return false;
+				}
+
+				return true;
+
+			/* enter, arrow up, arrow down */
+			case 13:
+			case 38:
+			case 40:
+				if (ev.preventDefault)
+					ev.preventDefault();
+
+				return false;
+		}
+
+		return true;
+	}
+
+	function cbi_dynlist_keydown(ev)
+	{
+		ev = ev ? ev : window.event;
+
+		var se = ev.target ? ev.target : ev.srcElement;
+
+		if (se.nodeType == 3)
+			se = se.parentNode;
+
+		var prev = se.previousSibling;
+		while (prev && prev.name != name)
+			prev = prev.previousSibling;
+
+		var next = se.nextSibling;
+		while (next && next.name != name)
+			next = next.nextSibling;
+
+		switch (ev.keyCode)
+		{
+			/* backspace, delete */
+			case 8:
+			case 46:
+				var jump = (ev.keyCode == 8)
+					? (prev || next) : (next || prev);
+
+				if (se.value.length == 0 && jump)
+				{
+					se.parentNode.removeChild(se.nextSibling);
+					se.parentNode.removeChild(se);
+
+					cbi_dynlist_renumber(jump);
+
+					if (ev.preventDefault)
+						ev.preventDefault();
+
+					return false;
+				}
+
+				break;
+
+			/* enter */
+			case 13:
+				var n = document.createElement('input');
+					n.name       = se.name;
+					n.type       = se.type;
+
+				cbi_bind(n, 'keydown',  cbi_dynlist_keydown);
+				cbi_bind(n, 'keypress', cbi_dynlist_keypress);
+
+				if (next)
+				{
+					se.parentNode.insertBefore(n, next);
+					se.parentNode.insertBefore(document.createElement('br'), next);
+				}
+				else
+				{
+					se.parentNode.appendChild(n);
+					se.parentNode.appendChild(document.createElement('br'));
+				}
+
+				var dt = se.getAttribute('cbi_datatype');
+				var op = se.getAttribute('cbi_optional') == 'true';
+
+				if (dt)
+					cbi_validate_field(n, op, dt);
+
+				cbi_dynlist_renumber(n);
+				break;
+
+			/* arrow up */
+			case 38:
+				if (prev)
+					prev.focus();
+
+				break;
+
+			/* arrow down */
+			case 40:
+				if (next)
+					next.focus();
+
+				break;
+		}
+
+		return true;
+	}
+
+	var inputs = document.getElementsByName(name);
+	for( var i = 0; i < inputs.length; i++ )
+	{
+		cbi_bind(inputs[i], 'keydown',  cbi_dynlist_keydown);
+		cbi_bind(inputs[i], 'keypress', cbi_dynlist_keypress);
+	}
 }
 
 //Hijacks the CBI form to send via XHR (requires Prototype)
@@ -484,7 +629,7 @@ function cbi_validate_reset(form)
 
 function cbi_validate_field(cbid, optional, type)
 {
-	var field = document.getElementById(cbid);
+	var field = (typeof cbid == "string") ? document.getElementById(cbid) : cbid;
 	var vldcb = cbi_validators[type];
 
 	if( field && vldcb )
@@ -513,7 +658,13 @@ function cbi_validate_field(cbid, optional, type)
 			field.form.cbi_validators = [ ];
 
 		field.form.cbi_validators.push(validator);
-		field.onblur = field.onkeyup = field.validate = validator;
+
+		cbi_bind(field, "blur",  validator);
+		cbi_bind(field, "keyup", validator);
+
+		field.setAttribute("cbi_validate", validator);
+		field.setAttribute("cbi_datatype", type);
+		field.setAttribute("cbi_optional", (!!optional).toString());
 
 		validator();
 	}

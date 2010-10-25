@@ -1641,25 +1641,48 @@ function DynamicList.value(self, key, val)
 	table.insert(self.vallist, tostring(val))
 end
 
-function DynamicList.write(self, ...)
-	self.map.proceed = true
-	return AbstractValue.write(self, ...)
+function DynamicList.write(self, section, value)
+	if self.cast == "string" and type(value) == "table" then
+		value = table.concat(value, " ")
+	elseif self.cast == "table" and type(value) == "string" then
+		local x, t = { }
+		for x in value:gmatch("%S+") do
+			t[#t+1] = x
+		end
+		value = t
+	end
+
+	return AbstractValue.write(self, section, value)
+end
+
+function DynamicList.cfgvalue(self, section)
+	local value = AbstractValue.cfgvalue(self, section)
+
+	if type(value) == "string" then
+		local x
+		local t = { }
+		for x in value:gmatch("%S+") do
+			t[#t+1] = x
+		end
+		value = t
+	end
+
+	return value
 end
 
 function DynamicList.formvalue(self, section)
 	local value = AbstractValue.formvalue(self, section)
-	value = (type(value) == "table") and value or {value}
 
-	local valid = {}
-	for i, v in ipairs(value) do
-		if v and #v > 0
-		 and not self.map:formvalue("cbi.rle."..section.."."..self.option.."."..i)
-		 and not self.map:formvalue("cbi.rle."..section.."."..self.option.."."..i..".x") then
-			table.insert(valid, v)
+	if type(value) == "string" then
+		local x
+		local t = { }
+		for x in value:gmatch("%S+") do
+			t[#t+1] = x
 		end
+		value = t
 	end
 
-	return valid
+	return value
 end
 
 

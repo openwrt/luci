@@ -13,40 +13,31 @@ $Id$
 
 -%>
 <%+cbi/valueheader%>
+<div>
 <%
 	local vals = self:cfgvalue(section) or {}
 	for i=1, #vals + 1 do
 		local val = vals[i]
 %>
-	<input class="cbi-input-text" value="<%=pcdata(val)%>" onchange="cbi_d_update(this.id)" type="text"<%= attr("id", cbid .. "." .. i) .. attr("name", cbid) .. ifattr(self.size, "size")%> />
-	<% if i <= #vals then %>
-		<input class="cbi-input-image" type="image" value="<%:Delete%>" name="cbi.rle.<%=section .. "." .. self.option .. "." .. i%>" alt="<%:Delete%>" title="<%:Delete%>" src="<%=resource%>/cbi/remove.gif" />
-	<% else %>
-		<input class="cbi-input-image" type="image" value="<%:Add%>" name="cbi.ale.<%=section .. "." .. self.option%>" alt="<%:Add%>" title="<%:Add%>" src="<%=resource%>/cbi/add.gif" />
-	<% end %>
-	<% if #self.keylist > 0 then -%>
-		<script type="text/javascript">
-			cbi_combobox_init('<%=cbid .. "." .. i%>', {
-			<%-
-				for i, k in ipairs(self.keylist) do
-			-%>
-				<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>
-				<%-if i<#self.keylist then-%>,<%-end-%>
-			<%-
-				end
-			-%>
-			}, '<%- if not self.rmempty and not self.optional then -%>
-				<%-:cbi_select-%>
-			<%- end -%>', '<%: -- custom -- %>');
-		</script>
-	<% end -%>
-<% if i <= #vals then %><br />
-<% end end %>
+	<input class="cbi-input-text" value="<%=pcdata(val)%>" onchange="cbi_d_update(this.id)" type="text"<%= attr("id", cbid .. "." .. i) .. attr("name", cbid) .. ifattr(self.size, "size")%> /><br />
+<% end %>
+</div>
+<script type="text/javascript">
+cbi_dynlist_init('<%=cbid%>');
 <% if self.datatype then -%>
-	<script type="text/javascript">
-		<% for i=1, #vals + 1 do -%>
-		cbi_validate_field('<%=cbid%>.<%=i%>', <%=tostring(self.optional == true or i > #vals)%>, '<%=self.datatype%>');
-		<%- end %>
-	</script>
+	<% if #self.keylist > 0 then -%>
+		cbi_combobox_init('<%=cbid .. "." .. i%>', {
+		<%- for i, k in ipairs(self.keylist) do -%>
+			<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>
+			<%-if i<#self.keylist then-%>,<%-end-%>
+		<%-	end	-%>
+		}, '<%- if not self.rmempty and not self.optional then -%>
+			<%-:cbi_select-%>
+		<%- end -%>', '<%: -- custom -- %>');
+	<% end -%>
+	<% for i=1, #vals + 1 do -%>
+	cbi_validate_field('<%=cbid%>.<%=i%>', <%=tostring(self.optional == true or i > #vals)%>, '<%=self.datatype%>');
+	<%- end %>
 <% end -%>
+</script>
 <%+cbi/valuefooter%>
