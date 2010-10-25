@@ -276,7 +276,9 @@ if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp or has_6in4 then
 	pass:depends("proto", "ppp")
 	pass:depends("proto", "3g")
 	pass:depends("proto", "6in4")
+end
 
+if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
 	ka = s:taboption("ppp", Value, "keepalive",
 	 translate("Keep-Alive"),
 	 translate("Number of failed connection tests to initiate automatic reconnect")
