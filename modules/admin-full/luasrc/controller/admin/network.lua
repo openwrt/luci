@@ -27,22 +27,22 @@ function index()
 		end
 	)
 
-	local page  = node("admin", "network")
+	local page
+
+	page = node("admin", "network")
 	page.target = alias("admin", "network", "network")
 	page.title  = i18n("Network")
 	page.order  = 50
 	page.index  = true
 
 	if has_switch then
-		local page  = node("admin", "network", "vlan")
+		page  = node("admin", "network", "vlan")
 		page.target = cbi("admin_network/vlan")
 		page.title  = i18n("Switch")
 		page.order  = 20
 	end
 
 	if has_wifi and has_wifi.size > 0 then
-		local page
-
 		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
 		page.leaf = true
 		page.subindex = true
@@ -60,11 +60,14 @@ function index()
 		page.leaf = true
 	end
 
-	local page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
+	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
 	page.leaf   = true
 	page.subindex = true
 
-	local page = entry({"admin", "network", "add"}, cbi("admin_network/iface_add"), nil)
+	page = entry({"admin", "network", "add"}, cbi("admin_network/iface_add"), nil)
+	page.leaf = true
+
+	page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
 	page.leaf = true
 
 	uci:foreach("network", "interface",
@@ -79,18 +82,18 @@ function index()
 	)
 
 	if nixio.fs.access("/etc/config/dhcp") then
-		local page  = node("admin", "network", "dhcpleases")
+		page  = node("admin", "network", "dhcpleases")
 		page.target = cbi("admin_network/dhcpleases")
 		page.title  = i18n("DHCP Leases")
 		page.order  = 30
 	end
 
-	local page  = node("admin", "network", "hosts")
+	page  = node("admin", "network", "hosts")
 	page.target = cbi("admin_network/hosts")
 	page.title  = i18n("Hostnames")
 	page.order  = 40
 
-	local page  = node("admin", "network", "routes")
+	page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
 	page.title  = i18n("Static Routes")
 	page.order  = 50
@@ -162,40 +165,90 @@ function wifi_delete(network)
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 end
 
-function wifi_status()
-	local function jsondump(x)
-		if x == nil then
-			luci.http.write("null")
-		elseif type(x) == "table" then
-			local k, v
-			if type(next(x)) == "number" then
-				luci.http.write("[ ")
-				for k, v in ipairs(x) do
-					jsondump(v)
-					if next(x, k) then
-						luci.http.write(", ")
-					end
+function jsondump(x)
+	if x == nil then
+		luci.http.write("null")
+	elseif type(x) == "table" then
+		local k, v
+		if type(next(x)) == "number" then
+			luci.http.write("[ ")
+			for k, v in ipairs(x) do
+				jsondump(v)
+				if next(x, k) then
+					luci.http.write(", ")
 				end
-				luci.http.write(" ]")
-			else
-				luci.http.write("{ ")
-				for k, v in pairs(x) do
-				luci.http.write("%q: " % k)
-					jsondump(v)
-					if next(x, k) then
-						luci.http.write(", ")
-					end
-				end
-				luci.http.write(" }")
 			end
-		elseif type(x) == "number" or type(x) == "boolean" then
-			luci.http.write(tostring(x))
-		elseif type(x) == "string" then
-			luci.http.write("%q" % tostring(x))
+			luci.http.write(" ]")
+		else
+			luci.http.write("{ ")
+			for k, v in pairs(x) do
+			luci.http.write("%q: " % k)
+				jsondump(v)
+				if next(x, k) then
+					luci.http.write(", ")
+				end
+			end
+			luci.http.write(" }")
+		end
+	elseif type(x) == "number" or type(x) == "boolean" then
+		luci.http.write(tostring(x))
+	elseif type(x) == "string" then
+		luci.http.write("%q" % tostring(x))
+	end
+end
+
+
+function iface_status()
+	local path  = luci.dispatcher.context.requestpath
+	local iface = path[#path]
+	local data  = { }
+	local info
+	local x = luci.model.uci.cursor_state()
+
+	local dev = x:get("network", iface, "device") or ""
+	if #dev == 0 or dev:match("^%d") or dev:match("%W") then
+		dev = x:get("network", iface, "ifname") or ""
+		dev = dev:match("%S+")
+	end
+
+	for _, info in ipairs(nixio.getifaddrs()) do
+		local name = info.name:match("[^:]+")
+		if name == dev then
+			if info.family == "packet" then
+				data.flags   = info.flags
+				data.stats   = info.data
+				data.macaddr = info.addr
+				data.ifname  = name
+			elseif info.family == "inet" then
+				data.ipaddrs = data.ipaddrs or { }
+				data.ipaddrs[#data.ipaddrs+1] = {
+					addr      = info.addr,
+					broadaddr = info.broadaddr,
+					dstaddr   = info.dstaddr,
+					netmask   = info.netmask,
+					prefix    = info.prefix
+				}
+			elseif info.family == "inet6" then
+				data.ip6addrs = data.ip6addrs or { }
+				data.ip6addrs[#data.ip6addrs+1] = {
+					addr    = info.addr,
+					netmask = info.netmask,
+					prefix  = info.prefix
+				}
+			end
 		end
 	end
 
+	if next(data) then
+		luci.http.prepare_content("application/json")
+		jsondump(data)
+		return
+	end
 
+	luci.http.status(404, "No such device")
+end
+
+function wifi_status()
 	local path = luci.dispatcher.context.requestpath
 	local dev  = path[#path]
 	local iw   = luci.sys.wifi.getiwinfo(dev)
@@ -206,7 +259,7 @@ function wifi_status()
 		for _, f in ipairs({
 			"channel", "frequency", "txpower", "bitrate", "signal", "noise",
 			"quality", "quality_max", "mode", "ssid", "bssid", "country",
-			"encryption", "mbssid_support", "ifname"
+			"encryption", "ifname"
 		}) do
 			j[f] = iw[f]
 		end

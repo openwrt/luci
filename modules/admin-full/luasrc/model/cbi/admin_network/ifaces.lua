@@ -45,6 +45,10 @@ if has_6in4  then s:tab("tunnel", translate("Tunnel Settings")) end
 s:tab("physical", translate("Physical Settings"))
 s:tab("firewall", translate("Firewall Settings"))
 
+st = s:taboption("general", DummyValue, "__status", translate("Status"))
+st.template = "admin_network/iface_status"
+st.network  = arg[1]
+
 --[[
 back = s:taboption("general", DummyValue, "_overview", translate("Overview"))
 back.value = ""
@@ -161,12 +165,12 @@ function fwzone.write(self, section, value)
 end
 
 ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
-ipaddr.rmempty = true
+ipaddr.optional = true
 ipaddr.datatype = "ip4addr"
 ipaddr:depends("proto", "static")
 
 nm = s:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
-nm.rmempty = true
+nm.optional = true
 nm.datatype = "ip4addr"
 nm:depends("proto", "static")
 nm:value("255.255.255.0")
@@ -185,7 +189,7 @@ bcast:depends("proto", "static")
 
 if has_ipv6 then
 	ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
-	ip6addr.rmempty = true
+	ip6addr.optional = true
 	ip6addr.datatype = "ip6addr"
 	ip6addr:depends("proto", "static")
 	ip6addr:depends("proto", "6in4")
@@ -196,11 +200,12 @@ if has_ipv6 then
 	ip6gw:depends("proto", "static")
 end
 
-dns = s:taboption("general", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"),
-	translate("You can specify multiple DNS servers separated by space here. Servers entered here will override " ..
+dns = s:taboption("general", DynamicList, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"),
+	translate("You can specify multiple DNS servers here, press enter to add a new entry. Servers entered here will override " ..
 		"automatically assigned ones."))
 
 dns.optional = true
+dns.cast = "string"
 dns.datatype = "ipaddr"
 dns:depends("peerdns", "")
 
