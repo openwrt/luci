@@ -28,9 +28,12 @@ style = (style and #style > 0) and style or "s"
 -- render image
 --
 if iface then
+	style = style:gsub("[^%w]", "")
+	iface = iface:gsub("[^%w%.%-]", "")
+
 	luci.http.prepare_content("image/png")
 
-	local png = io.popen("vnstati -i %q -%q -o -" % { iface, style })
+	local png = io.popen("vnstati -i '%s' '-%s' -o -" % { iface, style })
 	luci.http.write(png:read("*a"))
 	png:close()
 
@@ -79,10 +82,18 @@ dbdir = dbdir or "/var/lib/vnstat"
 <br /><hr /><br />
 
 <div style="text-align:center">
-<% for iface in fs.dir(dbdir) do if iface:sub(1,1) ~= "." then %>
+<% empty = true
+   for iface in fs.dir(dbdir) do if iface:sub(1,1) ~= "." then
+     empty = false
+%>
 	<img src="<%=REQUEST_URI%>?iface=<%=iface%>&amp;style=<%=param('style')%>" alt="" />
 	<br /><br />
 <% end end %>
+
+<% if empty then %>
+<p><em><%:No database has been set up yet. Go to the VnStat configuration and enable monitoring for one or more interfaces.%></em></p>
+<% end %>
+
 </div>
 
 <%+footer%>
