@@ -400,9 +400,26 @@ out:
 	return rv;
 }
 
+static inline int nl80211_readint(const char *path)
+{
+	int fd;
+	int rv = -1;
+	char buffer[16];
+
+	if( (fd = open(path, O_RDONLY)) > -1 )
+	{
+		if( read(fd, buffer, sizeof(buffer)) > 0 )
+			rv = atoi(buffer);
+
+		close(fd);
+	}
+
+	return rv;
+}
+
 static char * nl80211_phy2ifname(const char *ifname)
 {
-	int fd, phyidx = -1;
+	int fd, ifidx = -1, cifidx = -1, phyidx = -1;
 	char buffer[64];
 	static char nif[IFNAMSIZ] = { 0 };
 
@@ -423,19 +440,18 @@ static char * nl80211_phy2ifname(const char *ifname)
 				snprintf(buffer, sizeof(buffer),
 					"/sys/class/net/%s/phy80211/index", e->d_name);
 
-				if( (fd = open(buffer, O_RDONLY)) > 0 )
+				if( nl80211_readint(buffer) == phyidx )
 				{
-					if( (read(fd, buffer, sizeof(buffer)) > 0) &&
-					    (atoi(buffer) == phyidx) )
+					snprintf(buffer, sizeof(buffer),
+						"/sys/class/net/%s/ifindex", e->d_name);
+
+					if( (cifidx = nl80211_readint(buffer)) >= 0 &&
+					    ((ifidx < 0) || (cifidx < ifidx)) )
 					{
+						ifidx = cifidx;
 						strncpy(nif, e->d_name, sizeof(nif));
 					}
-
-					close(fd);
 				}
-
-				if( nif[0] )
-					break;
 			}
 
 			closedir(d);
@@ -586,12 +602,28 @@ int nl80211_get_bssid(const char *ifname, char *buf)
 
 int nl80211_get_channel(const char *ifname, int *buf)
 {
-	return wext_get_channel(ifname, buf);
+	char *first;
+
+	if( wext_get_channel(ifname, buf) &&
+	    NULL != (first = nl80211_phy2ifname(nl80211_ifname2phy(ifname))) )
+	{
+		return wext_get_channel(first, buf);
+	}
+
+	return -1;
 }
 
 int nl80211_get_frequency(const char *ifname, int *buf)
 {
-	return wext_get_frequency(ifname, buf);
+	char *first;
+
+	if( wext_get_channel(ifname, buf) &&
+	    NULL != (first = nl80211_phy2ifname(nl80211_ifname2phy(ifname))) )
+	{
+		return wext_get_frequency(first, buf);
+	}
+
+	return -1;
 }
 
 int nl80211_get_txpower(const char *ifname, int *buf)
