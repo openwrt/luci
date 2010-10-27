@@ -426,7 +426,9 @@ static char * nl80211_phy2ifname(const char *ifname)
 	DIR *d;
 	struct dirent *e;
 
-	if( !strncmp(ifname, "phy", 3) )
+	if( !ifname )
+		return NULL;
+	else if( !strncmp(ifname, "phy", 3) )
 		phyidx = atoi(&ifname[3]);
 	else if( !strncmp(ifname, "radio", 5) )
 		phyidx = atoi(&ifname[5]);
@@ -604,11 +606,11 @@ int nl80211_get_channel(const char *ifname, int *buf)
 {
 	char *first;
 
-	if( wext_get_channel(ifname, buf) &&
-	    NULL != (first = nl80211_phy2ifname(nl80211_ifname2phy(ifname))) )
-	{
+	if( !wext_get_channel(ifname, buf) )
+		return 0;
+
+	else if( (first = nl80211_phy2ifname(nl80211_ifname2phy(ifname))) != NULL )
 		return wext_get_channel(first, buf);
-	}
 
 	return -1;
 }
@@ -617,11 +619,11 @@ int nl80211_get_frequency(const char *ifname, int *buf)
 {
 	char *first;
 
-	if( wext_get_channel(ifname, buf) &&
-	    NULL != (first = nl80211_phy2ifname(nl80211_ifname2phy(ifname))) )
-	{
+	if( !wext_get_frequency(ifname, buf) )
+		return 0;
+
+	else if( (first = nl80211_phy2ifname(nl80211_ifname2phy(ifname))) != NULL )
 		return wext_get_frequency(first, buf);
-	}
 
 	return -1;
 }
