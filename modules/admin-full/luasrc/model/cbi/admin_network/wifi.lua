@@ -28,10 +28,6 @@ m = Map("wireless", "",
 
 m:chain("network")
 
-m.breadcrumb = {
-	{ luci.dispatcher.build_url("admin/network/wireless"), translate("Wireless Networks") }
-}
-
 local ifsection
 
 function m.on_commit(map)
@@ -78,7 +74,7 @@ back.titleref = luci.dispatcher.build_url("admin", "network", "wireless")
 
 st = s:taboption("general", DummyValue, "__status", translate("Status"))
 st.template = "admin_network/wifi_status"
-st.ifname   = arg[1]
+st.ifname   = arg[2]
 
 en = s:taboption("general", Flag, "disabled", translate("Enable device"))
 en.enabled = "0"
@@ -319,7 +315,7 @@ if wnet then
 			if value == '-' then
 				value = m:formvalue(self:cbid(section) .. ".newnet")
 				if value and #value > 0 then
-					local n = nw:add_network(value, {type="bridge", proto="none"})
+					local n = nw:add_network(value, {proto="none"})
 					if n then n:add_interface(i) end
 				else
 					local n = i:get_network()
@@ -539,7 +535,8 @@ if wnet then
 	encr:depends({mode="mesh"})
 
 	encr:value("none", "No Encryption")
-	encr:value("wep", "WEP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+	encr:value("wep-open",   translate("WEP Open System"), {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+	encr:value("wep-shared", translate("WEP Shared Key"),  {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 
 	if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 		local supplicant = fs.access("/usr/sbin/wpa_supplicant")
@@ -625,9 +622,9 @@ if wnet then
 		nasid.rmempty = true
 
 		eaptype = s:taboption("encryption", ListValue, "eap_type", translate("EAP-Method"))
-		eaptype:value("tls")
-		eaptype:value("ttls")
-		eaptype:value("peap")
+		eaptype:value("tls",  "TLS")
+		eaptype:value("ttls", "TTLS")
+		eaptype:value("peap", "PEAP")
 		eaptype:depends({mode="sta", encryption="wpa"})
 		eaptype:depends({mode="sta", encryption="wpa2"})
 
