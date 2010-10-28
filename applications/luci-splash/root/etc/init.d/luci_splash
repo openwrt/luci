@@ -24,29 +24,29 @@ ipt_log() {
 
 iface_add() {
 	local cfg="$1"
-	
+
 	config_get zone "$cfg" zone
 	[ -n "$zone" ] || return 0
-	
+
 	config_get net "$cfg" network
 	[ -n "$net" ] || return 0
 
 	config_get ifname "$net" ifname
 	[ -n "$ifname" ] || return 0
-	
+
 	config_get ipaddr "$net" ipaddr
 	[ -n "$ipaddr" ] || return 0
-	
+
 	config_get netmask "$net" netmask
 	[ -n "$netmask" ] || return 0
-	
+
 	config_get parentiface "$net" interface
 	[ -n "$parentiface" ] && {
 		config_get parentproto   "$parentiface" proto
 		config_get parentipaddr  "$parentiface" ipaddr
 		config_get parentnetmask "$parentiface" netmask
 	}
-	
+
 	eval "$(ipcalc.sh $ipaddr $netmask)"
 
 	### Add interface specific chain entry rules
@@ -67,7 +67,7 @@ iface_add() {
 }
 
 iface_del() {
-	config_get zone "$1" zone                                                                
+	config_get zone "$1" zone
 	[ -n "$zone" ] || return 0
 
 	config_get net "$1" network
@@ -92,10 +92,10 @@ mac_add() {
 
 subnet_add() {
 	local cfg="$1"
-	
+
 	config_get ipaddr  "$cfg" ipaddr
 	config_get netmask "$cfg" netmask
-	
+
 	[ -n "$ipaddr" ] && {
 		iptables -t nat    -I luci_splash_prerouting -d "$ipaddr/${netmask:-32}" -j RETURN
 		iptables -t filter -I luci_splash_forwarding -d "$ipaddr/${netmask:-32}" -j RETURN
@@ -134,7 +134,7 @@ qos_iface_add() {
 		# set client upload speed
 		tc filter add dev "$iface" parent ffff: protocol ip prio 1 \
 			handle 79 fw police rate ${LIMIT_UP}kbit mtu 6k burst 6k drop
-	fi	
+	fi
 }
 
 qos_iface_del() {
@@ -147,20 +147,16 @@ qos_iface_del() {
 
 boot() {
 	### Setup splash-relay
-	uci get lucid.splashr 2>/dev/null || {
+        uci get uhttpd.splash 2>/dev/null || {
 uci batch <<EOF
-	set lucid.splashr=daemon
-	set lucid.splashr.slave=httpd
-	add_list lucid.splashr.address=8082
-	add_list lucid.splashr.publisher=splashredir
-	set lucid.splashr.enabled=1
+	set uhttpd.splash=uhttpd
+	set uhttpd.splash.home="/www/cgi-bin/splash/"
+	set uhttpd.splash.interpreter=".sh=/bin/ash"
+	set uhttpd.splash.listen_http="8082"
+	set uhttpd.splash.index_page="splash.sh"
+	set uhttpd.splash.error_page="/splash.sh"
 
-	set lucid.splashredir=Redirector
-	set lucid.splashredir.name=Splashd
-	set lucid.splashredir.virtual='/'
-	set lucid.splashredir.physical=':80/luci/splash'
-
-	commit lucid
+        commit uhttpd
 EOF
 	}
 
@@ -248,7 +244,7 @@ stop() {
 
 	silent iptables -t mangle -D PREROUTING  -j luci_splash_mark_out
 	silent iptables -t mangle -D POSTROUTING -j luci_splash_mark_in
-        
+
 	### Clear subchains
 	silent iptables -t nat    -F luci_splash_prerouting
 	silent iptables -t nat    -F luci_splash_leases
@@ -256,7 +252,7 @@ stop() {
 	silent iptables -t filter -F luci_splash_filter
 	silent iptables -t mangle -F luci_splash_mark_out
 	silent iptables -t mangle -F luci_splash_mark_in
-	
+
 	### Delete subchains
 	silent iptables -t nat    -X luci_splash_prerouting
 	silent iptables -t nat    -X luci_splash_leases
@@ -264,7 +260,7 @@ stop() {
 	silent iptables -t filter -X luci_splash_filter
 	silent iptables -t mangle -X luci_splash_mark_out
 	silent iptables -t mangle -X luci_splash_mark_in
-	
+
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
 
 	lock -u $LOCK
