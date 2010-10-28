@@ -179,6 +179,7 @@ start() {
 
 	### Load required modules
 	[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
+		silent insmod act_police
 		silent insmod cls_fw
 		silent insmod cls_u32
 		silent insmod sch_htb
