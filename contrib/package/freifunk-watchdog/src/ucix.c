@@ -40,7 +40,11 @@ static inline int ucix_get_ptr(struct uci_context *ctx, const char *p, const cha
 struct uci_context* ucix_init(const char *config_file)
 {
 	struct uci_context *ctx = uci_alloc_context();
+#ifdef uci_to_delta
+	uci_add_delta_path(ctx, "/var/state");
+#else
 	uci_add_history_path(ctx, "/var/state");
+#endif
 	if(uci_load(ctx, config_file, NULL) != UCI_OK)
 	{
 		return NULL;
