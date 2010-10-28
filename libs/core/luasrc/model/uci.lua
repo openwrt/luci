@@ -227,6 +227,32 @@ function Cursor._affected(self, configlist)
 	return reloadlist
 end
 
+--- Create a sub-state of this cursor. The sub-state is tied to the parent
+-- curser, means it the parent unloads or loads configs, the sub state will
+-- do so as well.
+-- @return			UCI state cursor tied to the parent cursor
+function Cursor.substate(self)
+	Cursor._substates = Cursor._substates or { }
+	Cursor._substates[self] = Cursor._substates[self] or cursor_state()
+	return Cursor._substates[self]
+end
+
+local _load = Cursor.load
+function Cursor.load(self, ...)
+	if Cursor._substates and Cursor._substates[self] then
+		_load(Cursor._substates[self], ...)
+	end
+	return _load(self, ...)
+end
+
+local _unload = Cursor.unload
+function Cursor.unload(self, ...)
+	if Cursor._substates and Cursor._substates[self] then
+		_unload(Cursor._substates[self], ...)
+	end
+	return _unload(self, ...)
+end
+
 
 --- Add an anonymous section.
 -- @class function
