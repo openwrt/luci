@@ -290,16 +290,20 @@ function cbi_combobox(id, values, def, man) {
 
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
-	sel.id = selid;
-	sel.className = 'cbi-input-select';
-	if (obj.className && obj.className.match(/cbi-input-invalid/)) {
-		sel.className += ' cbi-input-invalid';
-	}
+		sel.id = selid;
+		sel.className = 'cbi-input-select';
+
 	if (obj.nextSibling) {
 		obj.parentNode.insertBefore(sel, obj.nextSibling);
 	} else {
 		obj.parentNode.appendChild(sel);
 	}
+
+	var dt = obj.getAttribute('cbi_datatype');
+	var op = obj.getAttribute('cbi_optional');
+
+	if (dt)
+		cbi_validate_field(sel, op == 'true', dt);
 
 	if (!values[obj.value]) {
 		if (obj.value == "") {
@@ -342,10 +346,6 @@ function cbi_combobox(id, values, def, man) {
 			obj.focus();
 		} else {
 			obj.value = sel.options[sel.selectedIndex].value;
-
-			var vld = obj.getAttribute("cbi_validate");
-			sel.className = (!vld || vld())
-				? 'cbi-input-select' : 'cbi-input-select cbi-input-invalid';
 		}
 
 		try {
@@ -642,7 +642,9 @@ function cbi_validate_field(cbid, optional, type)
 				field.className = field.className.replace(/ cbi-input-invalid/g, '');
 
 				// validate value
-				var value = (field.options) ? field.options[field.options.selectedIndex].value : field.value;
+				var value = (field.options && field.options.selectedIndex > -1)
+					? field.options[field.options.selectedIndex].value : field.value;
+
 				if( !(((value.length == 0) && optional) || vldcb(value)) )
 				{
 					// invalid
@@ -662,11 +664,21 @@ function cbi_validate_field(cbid, optional, type)
 		cbi_bind(field, "blur",  validator);
 		cbi_bind(field, "keyup", validator);
 
+		if (field.nodeName == 'SELECT')
+		{
+			cbi_bind(field, "change", validator);
+			cbi_bind(field, "click",  validator);
+		}
+
 		field.setAttribute("cbi_validate", validator);
 		field.setAttribute("cbi_datatype", type);
 		field.setAttribute("cbi_optional", (!!optional).toString());
 
 		validator();
+
+		var fcbox = document.getElementById('cbi.combobox.' + field.id);
+		if (fcbox)
+			cbi_validate_field(fcbox, optional, type);
 	}
 }
 
