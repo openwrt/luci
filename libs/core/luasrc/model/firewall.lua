@@ -181,7 +181,10 @@ function rename_zone(self, old, new)
 	if _valid_id(new) and not self:get_zone(new) then
 		uci_r:foreach("firewall", "zone",
 			function(s)
-				if n and s.name == old then
+				if old and s.name == old then
+					if not s.network then
+						uci_r:set("firewall", s['.name'], "network", old)
+					end
 					uci_r:set("firewall", s['.name'], "name", new)
 					r = true
 					return false
@@ -209,10 +212,10 @@ function rename_zone(self, old, new)
 					end
 				end)
 
-			ub.uci:foreach("firewall", "forwarding",
+			uci_r:foreach("firewall", "forwarding",
 				function(s)
 					if s.src == old then
-						ub.uci:set("firewall", s['.name'], "src", new)
+						uci_r:set("firewall", s['.name'], "src", new)
 					end
 					if s.dest == old then
 						uci_r:set("firewall", s['.name'], "dest", new)
