@@ -152,6 +152,10 @@ var cbi_validators = {
 			return (v.length == 5) || (v.length == 13);
 	},
 
+	'uciname': function(v)
+	{
+		return (v.match(/^[a-zA-Z0-9_]+$/) != null);
+	}
 };
 
 

@@ -204,3 +204,7 @@ function device( val, seen )
 
 	return false
 end
+
+function uciname(val)
+	return (val:match("^[a-zA-Z0-9_]+$") != nil)
+end
