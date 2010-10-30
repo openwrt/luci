@@ -156,7 +156,7 @@ end
 function wifi_delete(network)
 	local ntm = require "luci.model.network".init()
 
-	ntm:del_network(network)
+	ntm:del_wifinet(network)
 	ntm:save("wireless")
 
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
