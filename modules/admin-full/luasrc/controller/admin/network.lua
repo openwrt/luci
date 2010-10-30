@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.admin.network", package.seeall)
 
 function index()
@@ -136,32 +137,28 @@ end
 
 function wifi_add()
 	local dev = luci.http.formvalue("device")
-	local uci = require "luci.model.uci".cursor()
-	local wlm = require "luci.model.wireless"
+	local ntm = require "luci.model.network".init()
+
+	dev = dev and ntm:get_wifidev(dev)
 
 	if dev then
-		wlm.init(uci)
-
-		local net = wlm:add_network({
-			device     = dev,
+		local net = dev:add_wifinet({
 			mode       = "ap",
 			ssid       = "OpenWrt",
 			encryption = "none"
 		})
 
-		uci:save("wireless")
-		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", dev, net:name()))
+		ntm:save("wireless")
+		luci.http.redirect(net:adminlink())
 	end
 end
 
 function wifi_delete(network)
-	local uci = require "luci.model.uci".cursor()
-	local wlm = require "luci.model.wireless"
+	local ntm = require "luci.model.network".init()
 
-	wlm.init(uci)
-	wlm:del_network(network)
+	ntm:del_network(network)
+	ntm:save("wireless")
 
-	uci:save("wireless")
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 end
 
@@ -199,49 +196,56 @@ end
 
 
 function iface_status()
-	local path  = luci.dispatcher.context.requestpath
-	local iface = path[#path]
-	local data  = { }
-	local info
-	local x = luci.model.uci.cursor_state()
+	local path = luci.dispatcher.context.requestpath
+	local x    = luci.model.uci.cursor_state()
+	local rv   = { }
 
-	local dev = x:get("network", iface, "device") or ""
-	if #dev == 0 or dev:match("^%d") or dev:match("%W") then
-		dev = x:get("network", iface, "ifname") or ""
-		dev = dev:match("%S+")
-	end
+	local iface
+	for iface in path[#path]:gmatch("[%w%.%-]+") do
+		local dev = x:get("network", iface, "device") or ""
+		if #dev == 0 or dev:match("^%d") or dev:match("%W") then
+			dev = x:get("network", iface, "ifname") or ""
+			dev = dev:match("%S+")
+		end
 
-	for _, info in ipairs(nixio.getifaddrs()) do
-		local name = info.name:match("[^:]+")
-		if name == dev then
-			if info.family == "packet" then
-				data.flags   = info.flags
-				data.stats   = info.data
-				data.macaddr = info.addr
-				data.ifname  = name
-			elseif info.family == "inet" then
-				data.ipaddrs = data.ipaddrs or { }
-				data.ipaddrs[#data.ipaddrs+1] = {
-					addr      = info.addr,
-					broadaddr = info.broadaddr,
-					dstaddr   = info.dstaddr,
-					netmask   = info.netmask,
-					prefix    = info.prefix
-				}
-			elseif info.family == "inet6" then
-				data.ip6addrs = data.ip6addrs or { }
-				data.ip6addrs[#data.ip6addrs+1] = {
-					addr    = info.addr,
-					netmask = info.netmask,
-					prefix  = info.prefix
-				}
+		local info
+		local data = { }
+		for _, info in ipairs(nixio.getifaddrs()) do
+			local name = info.name:match("[^:]+")
+			if name == dev then
+				if info.family == "packet" then
+					data.flags   = info.flags
+					data.stats   = info.data
+					data.macaddr = info.addr
+					data.ifname  = name
+				elseif info.family == "inet" then
+					data.ipaddrs = data.ipaddrs or { }
+					data.ipaddrs[#data.ipaddrs+1] = {
+						addr      = info.addr,
+						broadaddr = info.broadaddr,
+						dstaddr   = info.dstaddr,
+						netmask   = info.netmask,
+						prefix    = info.prefix
+					}
+				elseif info.family == "inet6" then
+					data.ip6addrs = data.ip6addrs or { }
+					data.ip6addrs[#data.ip6addrs+1] = {
+						addr    = info.addr,
+						netmask = info.netmask,
+						prefix  = info.prefix
+					}
+				end
 			end
+		end
+
+		if next(data) then
+			rv[#rv+1] = data
 		end
 	end
 
-	if next(data) then
+	if #rv > 0 then
 		luci.http.prepare_content("application/json")
-		jsondump(data)
+		jsondump(rv)
 		return
 	end
 
@@ -250,22 +254,29 @@ end
 
 function wifi_status()
 	local path = luci.dispatcher.context.requestpath
-	local dev  = path[#path]
-	local iw   = luci.sys.wifi.getiwinfo(dev)
+	local rv   = { }
 
-	if iw then
-		local f
-		local j = { }
-		for _, f in ipairs({
-			"channel", "frequency", "txpower", "bitrate", "signal", "noise",
-			"quality", "quality_max", "mode", "ssid", "bssid", "country",
-			"encryption", "ifname"
-		}) do
-			j[f] = iw[f]
+	local dev
+	for dev in path[#path]:gmatch("[%w%.%-]+") do
+		local iw = luci.sys.wifi.getiwinfo(dev)
+		if iw then
+			local f
+			local j = { }
+			for _, f in ipairs({
+				"channel", "frequency", "txpower", "bitrate", "signal", "noise",
+				"quality", "quality_max", "mode", "ssid", "bssid", "country",
+				"encryption", "ifname"
+			}) do
+				j[f] = iw[f]
+			end
+
+			rv[#rv+1] = j
 		end
+	end
 
+	if #rv > 0 then
 		luci.http.prepare_content("application/json")
-		jsondump(j)
+		jsondump(rv)
 		return
 	end
 
