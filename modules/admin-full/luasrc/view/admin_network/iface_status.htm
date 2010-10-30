@@ -7,7 +7,7 @@
 			function(x)
 			{
 				var ifc = x.responseText ? eval('(' + x.responseText + ')') : { };
-				if (ifc)
+				if (ifc && (ifc = ifc[0]))
 				{
 					var is_up = (ifc.flags && ifc.flags.up);
 					var rxb = ifc.stats ? (ifc.stats["rx_bytes"] / 1024) : 0;

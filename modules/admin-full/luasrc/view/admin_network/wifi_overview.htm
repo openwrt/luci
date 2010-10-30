@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008-2009 Steven Barth <steven@midlink.org>
-Copyright 2008-2009 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ $Id$
 	local sys = require "luci.sys"
 	local utl = require "luci.util"
 	local uci = require "luci.model.uci".cursor()
-	local wlm = require "luci.model.wireless"
+	local ntm = require "luci.model.network"
 
-	wlm.init(uci)
+	ntm.init(uci)
 
 	function guess_wifi_hw(ifname)
 		local name, idx = ifname:match("^([a-z]+)(%d+)")
@@ -92,7 +92,7 @@ $Id$
 		return icon
 	end
 
-	local devices  = wlm:get_devices()
+	local devices  = ntm:get_wifidevs()
 	local arpcache = { }
 	sys.net.arptable(function(e) arpcache[e["HW address"]] = e["IP address"] end)
 -%>
@@ -103,7 +103,7 @@ $Id$
 
 <div class="cbi-map">
 
-	<% for _, dev in ipairs(devices) do local nets = dev:get_networks() %>
+	<% for _, dev in ipairs(devices) do local nets = dev:get_wifinets() %>
 	<!-- device <%=dev:name()%> -->
 	<fieldset class="cbi-section">
 		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
@@ -140,8 +140,8 @@ $Id$
 						<strong>Encryption:</strong> <%=net:active_encryption()%>
 					</td>
 					<td class="cbi-value-field" style="width:40px">
-						<a href="<%=REQUEST_URI%>/<%=dev:name()%>/<%=net:name()%>"><img style="border:none" src="<%=resource%>/cbi/edit.gif" alt="Edit this network" title="Edit this network" /></a>
-						<a href="<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:name())%>"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="Delete this network" title="Delete this network" /></a>
+						<a href="<%=net:adminlink()%>"><img style="border:none" src="<%=resource%>/cbi/edit.gif" alt="Edit this network" title="Edit this network" /></a>
+						<a href="<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="Delete this network" title="Delete this network" /></a>
 					</td>
 				</tr>
 				<% end %>
@@ -176,7 +176,7 @@ $Id$
 			</tr>
 
 			<% local count = -1 %>
-			<% for _, dev in ipairs(devices) do local nets = dev:get_networks() %>
+			<% for _, dev in ipairs(devices) do local nets = dev:get_wifinets() %>
 				<% for _, net in ipairs(nets) do %>
 					<% for mac, info in utl.kspairs(net:assoclist()) do count = count + 1 %>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=1 + (count % 2)%>">
