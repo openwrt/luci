@@ -14,7 +14,8 @@ $Id$
 <%+cbi/valueheader%>
 
 <%-
-	local nwm = require "luci.model.network"
+	local utl = require "luci.util"
+	local nwm = require "luci.model.network".init()
 
 	local net, iface
 	local networks = nwm:get_networks()
@@ -23,13 +24,23 @@ $Id$
 	if not value or value == "-" then
 		value = self:cfgvalue(section) or self.default
 	end
+
+	local checked = { }
+	for value in utl.imatch(value) do
+		checked[value] = true
+	end
 -%>
 
 <ul style="margin:0; list-style-type:none; text-align:left">
 	<% for _, net in ipairs(networks) do
 	       if net:name() ~= "loopback" then %>
 	<li style="padding:0.25em 0">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. net:name()) .. attr("name", cbid) .. attr("value", net:name()) .. ifattr(value == net:name(), "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+			attr("type", self.widget or "radio") ..
+			attr("id", cbid .. "." .. net:name()) ..
+			attr("name", cbid) .. attr("value", net:name()) ..
+			ifattr(checked[net:name()], "checked", "checked")
+		%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. net:name())%>>
 			&nbsp;<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
 				<%

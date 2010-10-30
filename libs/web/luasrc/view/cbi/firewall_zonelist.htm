@@ -15,8 +15,8 @@ $Id$
 
 <%-
 	local utl = require "luci.util"
-	local fwm = require "luci.model.firewall"
-	local nwm = require "luci.model.network"
+	local fwm = require "luci.model.firewall".init()
+	local nwm = require "luci.model.network".init()
 
 	local zone, net, iface
 	local zones = fwm:get_zones()
@@ -33,7 +33,7 @@ $Id$
 			checked[value] = true
 		end
 	elseif value then
-		checked[value] = true		
+		checked[value] = true
 	end
 -%>
 

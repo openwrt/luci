@@ -14,16 +14,16 @@ $Id$
 <%+cbi/valueheader%>
 
 <%-
-	local net = require "luci.model.network"
+	local utl = require "luci.util"
+	local net = require "luci.model.network".init()
 
 	local iface
 	local ifaces = net:get_interfaces()
-	local value = (self:formvalue(section) or self.default or "")
+	local value = (self:formvalue(section) or self.default)
 	local checked = { }
 
-	if value and #value > 0 then
-		if type(value) == "table" then value = table.concat(value, " ") end
-		for value in value:gmatch("%S+") do
+	if value then
+		for value in utl.imatch(value) do
 			checked[value] = true
 		end
 	else
@@ -42,7 +42,12 @@ $Id$
 	     local link = iface:adminlink()
          if not self.nobridges or not iface:is_bridge() then %>
 	<li>
-		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. iface:name()) .. attr("name", cbid) .. attr("value", iface:name()) .. ifattr(checked[iface:name()], "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+			attr("type", self.widget or "radio") ..
+			attr("id", cbid .. "." .. iface:name()) ..
+			attr("name", cbid) .. attr("value", iface:name()) ..
+			ifattr(checked[iface:name()], "checked", "checked")
+		%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<% if link then -%><a href="<%=link%>"><% end -%>
 			<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
