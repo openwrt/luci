@@ -1281,7 +1281,7 @@ function AbstractValue.parse(self, section, novld)
 			self:add_error(section, "invalid", val_err)
 		end
 
-		if fvalue and not (fvalue == cvalue) then
+		if fvalue and (self.forcewrite or not (fvalue == cvalue)) then
 			if self:write(section, fvalue) then
 				-- Push events
 				self.section.changed = true
