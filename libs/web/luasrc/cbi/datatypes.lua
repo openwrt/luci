@@ -206,5 +206,5 @@ function device( val, seen )
 end
 
 function uciname(val)
-	return (val:match("^[a-zA-Z0-9_]+$") != nil)
+	return (val:match("^[a-zA-Z0-9_]+$") ~= nil)
 end
