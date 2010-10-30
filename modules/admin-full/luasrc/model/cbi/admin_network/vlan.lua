@@ -199,6 +199,7 @@ m.uci:foreach("network", "switch",
 		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID")
 
 		vid.rmempty = false
+		vid.forcewrite = true
 
 		-- Validate user provided VLAN ID, make sure its within the bounds
 		-- allowed by the switch.
@@ -250,6 +251,7 @@ m.uci:foreach("network", "switch",
 
 			po.cfgvalue = portvalue
 			po.validate = portvalidate
+			po.write    = function() end
 
 			port_opts[#port_opts+1] = po
 		end
