@@ -33,6 +33,7 @@ function m.on_commit(map)
 	local wnet = nw:get_wifinet(arg[2])
 	if ifsection and wnet then
 		ifsection.section = wnet.sid
+		m.title = wnet:get_i18n()
 	end
 end
 
