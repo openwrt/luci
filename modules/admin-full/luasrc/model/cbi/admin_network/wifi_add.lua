@@ -14,7 +14,6 @@ $Id$
 
 local nw   = require "luci.model.network"
 local fw   = require "luci.model.firewall"
-local wl   = require "luci.model.wireless"
 local uci  = require "luci.model.uci".cursor()
 local http = require "luci.http"
 
@@ -34,7 +33,6 @@ end
 
 nw.init(uci)
 fw.init(uci)
-wl.init(uci)
 
 m.hidden = {
 	device      = http.formvalue("device"),
@@ -145,14 +143,15 @@ function attachnet.parse(self, section)
 		if not net then
 			self.error = { [section] = "missing" }
 		else
-			local wdev = wl:get_device(m.hidden.device)
-			wdev:disabled(false)
-			wdev:channel(m.hidden.channel)
+			local wdev = nw:get_wifidev(m.hidden.device)
+
+			wdev:set("disabled", false)
+			wdev:set("channel", m.hidden.channel)
 
 			if replace:formvalue(section) then
 				local n
-				for _, n in ipairs(wdev:get_networks()) do
-					wl:del_network(n:name())
+				for _, n in ipairs(wdev:get_wifinets()) do
+					wdev:del_wifinet(n)
 				end
 			end
 
@@ -177,8 +176,7 @@ function attachnet.parse(self, section)
 				wconf.bssid = m.hidden.bssid
 			end
 
-			local wnet = wl:add_network(wconf)
-
+			local wnet = wdev:add_wifinet(wconf)
 			if wnet then
 				if zone then
 					fw:del_network(net:name())

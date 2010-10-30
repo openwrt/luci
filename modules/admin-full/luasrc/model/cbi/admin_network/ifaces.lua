@@ -34,6 +34,11 @@ m:chain("wireless")
 nw.init(m.uci)
 fw.init(m.uci)
 
+--function m.on_commit(map)
+--	nw.init(map.uci)
+--	fw.init(map.uci)
+--end
+
 s = m:section(NamedSection, arg[1], "interface", translate("Common Configuration"))
 s.addremove = false
 
@@ -107,7 +112,15 @@ function ifname_single.write(self, s, val)
 		for _, i in ipairs(n:get_interfaces()) do
 			n:del_interface(i)
 		end
-		n:add_interface(val)
+
+		for i in val:gmatch("%S+") do
+			n:add_interface(i)
+
+			-- if this is not a bridge, only assign first interface
+			if self.option == "ifname_single" then
+				break
+			end
+		end
 	end
 end
 
