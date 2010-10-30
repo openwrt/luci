@@ -22,24 +22,61 @@ local type, pairs, ipairs, table, luci, math
 
 local lmo = require "lmo"
 local utl = require "luci.util"
-local uct = require "luci.model.uci.bind"
+local uci = require "luci.model.uci"
 
 module "luci.model.firewall"
 
 
-local ub = uct.bind("firewall")
+local uci_r, uci_s
 
-function init(cursor)
-	if cursor then
-		cursor:unload("firewall")
-		cursor:load("firewall")
-		ub:init(cursor)
+function _strlist(x)
+	if x == nil then
+		x = ""
+	elseif type(x) == "table" then
+		x = table.concat(x, " ")
+	end
+
+	return x:gmatch("%S+")
+end
+
+function _valid_id(x)
+	return (x and #x > 0 and x:match("^[a-zA-Z0-9_]+$"))
+end
+
+function _get(c, s, o)
+	return uci_r:get(c, s, o)
+end
+
+function _set(c, s, o, v)
+	if v ~= nil then
+		if type(v) == "boolean" then v = v and "1" or "0" end
+		return uci_r:set(c, s, o, v)
+	else
+		return uci_r:del(c, s, o, v)
 	end
 end
 
+
+function init(cursor)
+	uci_r = cursor or uci_r or uci.cursor()
+	uci_s = uci_r:substate()
+
+	return _M
+end
+
+function save(self, ...)
+	uci_r:save(...)
+	uci_r:load(...)
+end
+
+function commit(self, ...)
+	uci_r:commit(...)
+	uci_r:load(...)
+end
+
 function add_zone(self, n)
-	if n and #n > 0 and n:match("^[a-zA-Z0-9_]+$") and not self:get_zone(n) then
-		local z = ub.uci:section("firewall", "zone", nil, {
+	if _valid_id(n) and not self:get_zone(n) then
+		local z = uci_r:section("firewall", "zone", nil, {
 			name    = n,
 			network = " ",
 			input   = defaults:input()   or "DROP",
@@ -52,35 +89,48 @@ function add_zone(self, n)
 end
 
 function get_zone(self, n)
-	local z
-	ub.uci:foreach("firewall", "zone",
-		function(s)
-			if n and s.name == n then
-				z = s['.name']
-				return false
-			end
-		end)
-	return z and zone(z)
+	if uci_r:get("firewall", n) == "zone" then
+		return zone(n)
+	else
+		local z
+		uci_r:foreach("firewall", "zone",
+			function(s)
+				if n and s.name == n then
+					z = s['.name']
+					return false
+				end
+			end)
+		return z and zone(z)
+	end
 end
 
 function get_zones(self)
 	local zones = { }
-	ub.uci:foreach("firewall", "zone",
+	local znl = { }
+
+	uci_r:foreach("firewall", "zone",
 		function(s)
 			if s.name then
-				zones[#zones+1] = zone(s['.name'])
+				znl[s.name] = zone(s['.name'])
 			end
 		end)
+
+	local z
+	for z in utl.kspairs(znl) do
+		zones[#zones+1] = znl[z]
+	end
+
 	return zones
 end
 
 function get_zone_by_network(self, net)
 	local z
-	ub.uci:foreach("firewall", "zone",
+
+	uci_r:foreach("firewall", "zone",
 		function(s)
 			if s.name and net then
 				local n
-				for _, n in ipairs(ub:list(s.network or s.name)) do
+				for n in _strlist(s.network or s.name) do
 					if n == net then
 						z = s['.name']
 						return false
@@ -88,75 +138,99 @@ function get_zone_by_network(self, net)
 				end
 			end
 		end)
+
 	return z and zone(z)
 end
 
 function del_zone(self, n)
 	local r = false
-	ub.uci:foreach("firewall", "zone",
-		function(s)
-			if n and s.name == n then
-				r = ub.uci:delete("firewall", s['.name'])
-				return false
-			end
-		end)
-	if r then
-		ub.uci:foreach("firewall", "rule",
+
+	if uci_r:get("firewall", n) == "zone" then
+		local z = uci_r:get("firewall", n, "name")
+		r = uci_r:delete("firwall", n)
+		n = z
+	else
+		uci_r:foreach("firewall", "zone",
 			function(s)
-				if s.src == n or s.dest == n then
-					ub.uci:delete("firewall", s['.name'])
-				end
-			end)
-		ub.uci:foreach("firewall", "redirect",
-			function(s)
-				if s.src == n then
-					ub.uci:delete("firewall", s['.name'])
-				end
-			end)
-		ub.uci:foreach("firewall", "forwarding",
-			function(s)
-				if s.src == n then
-					ub.uci:delete("firewall", s['.name'])
+				if n and s.name == n then
+					r = uci_r:delete("firewall", s['.name'])
+					return false
 				end
 			end)
 	end
+
+	if r then
+		uci_r:foreach("firewall", "rule",
+			function(s)
+				if s.src == n or s.dest == n then
+					uci_r:delete("firewall", s['.name'])
+				end
+			end)
+
+		uci_r:foreach("firewall", "redirect",
+			function(s)
+				if s.src == n then
+					uci_r:delete("firewall", s['.name'])
+				end
+			end)
+
+		uci_r:foreach("firewall", "forwarding",
+			function(s)
+				if s.src == n then
+					uci_r:delete("firewall", s['.name'])
+				end
+			end)
+	end
+
 	return r
 end
 
 function rename_zone(self, old, new)
 	local r = false
-	if new and #new > 0 and new:match("^[a-zA-Z0-9_]+$") and not self:get_zone(new) then
-		ub.uci:foreach("firewall", "zone",
+
+	if _valid_id(new) and not self:get_zone(new) then
+		uci_r:foreach("firewall", "zone",
 			function(s)
 				if n and s.name == old then
-					ub.uci:set("firewall", s['.name'], "name", new)
+					uci_r:set("firewall", s['.name'], "name", new)
 					r = true
 					return false
 				end
 			end)
+
 		if r then
-			ub.uci:foreach("firewall", "rule",
+			uci_r:foreach("firewall", "rule",
 				function(s)
 					if s.src == old then
-						ub.uci:set("firewall", s['.name'], "src", new)
-					elseif s.dest == old then
-						ub.uci:set("firewall", s['.name'], "dest", new)
+						uci_r:set("firewall", s['.name'], "src", new)
+					end
+					if s.dest == old then
+						uci_r:set("firewall", s['.name'], "dest", new)
 					end
 				end)
-			ub.uci:foreach("firewall", "redirect",
+
+			uci_r:foreach("firewall", "redirect",
 				function(s)
 					if s.src == old then
-						ub.uci:set("firewall", s['.name'], "src", new)
+						uci_r:set("firewall", s['.name'], "src", new)
+					end
+					if s.dest == old then
+						uci_r:set("firewall", s['.name'], "dest", new)
 					end
 				end)
+
 			ub.uci:foreach("firewall", "forwarding",
 				function(s)
 					if s.src == old then
 						ub.uci:set("firewall", s['.name'], "src", new)
 					end
+					if s.dest == old then
+						uci_r:set("firewall", s['.name'], "dest", new)
+					end
 				end)
 		end
 	end
+
 	return r
 end
 
@@ -170,100 +244,205 @@ function del_network(self, net)
 end
 
 
-defaults = ub:usection("defaults")
-defaults:property_bool("syn_flood")
-defaults:property_bool("drop_invalid")
-defaults:property("input")
-defaults:property("forward")
-defaults:property("output")
+defaults = utl.class()
+function defaults.__init__(self)
+	uci_r:foreach("firewall", "defaults",
+		function(s)
+			self.sid  = s['.name']
+			return false
+		end)
+
+	self.sid = self.sid or uci_r:section("firewall", "defaults", nil, { })
+end
+
+function defaults.get(self, opt)
+	return _get("firewall", self.sid, opt)
+end
+
+function defaults.set(self, opt, val)
+	return _set("firewall", self.sid, opt, val)
+end
+
+function defaults.syn_flood(self)
+	return (self:get("syn_flood") == "1")
+end
+
+function defaults.drop_invalid(self)
+	return (self:get("drop_invalid") == "1")
+end
+
+function defaults.input(self)
+	return self:get("input") or "DROP"
+end
+
+function defaults.forward(self)
+	return self:get("forward") or "DROP"
+end
+
+function defaults.output(self)
+	return self:get("output") or "DROP"
+end
 
 
-zone = ub:section("zone")
-zone:property_bool("masq")
-zone:property("name")
-zone:property("network")
-zone:property("input")
-zone:property("forward")
-zone:property("output")
+zone = utl.class()
+function zone.__init__(self, z)
+	if uci_r:get("firewall", z) == "zone" then
+		self.sid  = z
+		self.data = uci_r:get_all("firewall", z)
+	else
+		uci_r:foreach("firewall", "zone",
+			function(s)
+				if s.name == z then
+					self.sid  = s['.name']
+					self.data = s
+					return false
+				end
+			end)
+	end
+end
+
+function zone.get(self, opt)
+	return _get("firewall", self.sid, opt)
+end
+
+function zone.set(self, opt, val)
+	return _set("firewall", self.sid, opt, val)
+end
+
+function zone.masq(self)
+	return (self:get("masq") == "1")
+end
+
+function zone.name(self)
+	return self:get("name")
+end
+
+function zone.network(self)
+	return self:get("network")
+end
+
+function zone.input(self)
+	return self:get("input") or "DROP"
+end
+
+function zone.forward(self)
+	return self:get("forward") or "DROP"
+end
+
+function zone.output(self)
+	return self:get("output") or "DROP"
+end
 
 function zone.add_network(self, net)
-	if ub.uci:get("network", net) == "interface" then
-		local networks = ub:list(self:network() or self:name(), net)
-		if #networks > 0 then
-			self:network(table.concat(networks, " "))
+	if uci_r:get("network", net) == "interface" then
+		local nets = { }
+
+		local n
+		for n in _strlist(self:get("network") or self:get("name")) do
+			if n ~= net then
+				nets[#nets+1] = n
+			end
+		end
+
+		nets[#nets+1] = net
+
+		if #nets > 0 then
+			self:set("network", table.concat(nets, " "))
 		else
-			self:network(" ")
+			self:set("network", " ")
 		end
 	end
 end
 
 function zone.del_network(self, net)
-	local networks = ub:list(self:network() or self:name(), nil, net)
-	if #networks > 0 then
-		self:network(table.concat(networks, " "))
+	local nets = { }
+
+	local n
+	for n in _strlist(self:get("network") or self:get("name")) do
+		if n ~= net then
+			nets[#nets+1] = n
+		end
+	end
+
+	if #nets > 0 then
+		self:set("network", table.concat(nets, " "))
 	else
-		self:network(" ")
+		self:set("network", " ")
 	end
 end
 
 function zone.get_networks(self)
-	return ub:list(self:network() or self:name())
+	local nets = { }
+
+	local n
+	for n in _strlist(self:get("network") or self:get("name")) do
+		nets[#nets+1] = n
+	end
+
+	return nets
 end
 
 function zone.get_forwardings_by(self, what)
 	local name = self:name()
 	local forwards = { }
-	ub.uci:foreach("firewall", "forwarding",
+
+	uci_r:foreach("firewall", "forwarding",
 		function(s)
 			if s.src and s.dest and s[what] == name then
 				forwards[#forwards+1] = forwarding(s['.name'])
 			end
 		end)
+
 	return forwards
 end
 
-function zone.add_forwarding_to(self, dest, with_mtu_fix)
+function zone.add_forwarding_to(self, dest)
 	local exist, forward
+
 	for _, forward in ipairs(self:get_forwardings_by('src')) do
 		if forward:dest() == dest then
 			exist = true
 			break
 		end
 	end
+
 	if not exist and dest ~= self:name() then
-		local s = ub.uci:section("firewall", "forwarding", nil, {
+		local s = uci_r:section("firewall", "forwarding", nil, {
 			src     = self:name(),
-			dest    = dest,
-			mtu_fix = with_mtu_fix and "1" or "0"
+			dest    = dest
 		})
+
 		return s and forwarding(s)
 	end
 end
 
-function zone.add_forwarding_from(self, src, with_mtu_fix)
+function zone.add_forwarding_from(self, src)
 	local exist, forward
+
 	for _, forward in ipairs(self:get_forwardings_by('dest')) do
 		if forward:src() == src then
 			exist = true
 			break
 		end
 	end
+
 	if not exist and src ~= self:name() then
-		local s = ub.uci:section("firewall", "forwarding", nil, {
+		local s = uci_r:section("firewall", "forwarding", nil, {
 			src     = src,
-			dest    = self:name(),
-			mtu_fix = with_mtu_fix and "1" or "0"
+			dest    = self:name()
 		})
+
 		return s and forwarding(s)
 	end
 end
 
 function zone.del_forwardings_by(self, what)
 	local name = self:name()
-	ub.uci:foreach("firewall", "forwarding",
+
+	uci_r:foreach("firewall", "forwarding",
 		function(s)
 			if s.src and s.dest and s[what] == name then
-				ub.uci:delete("firewall", s['.name'])
+				uci_r:delete("firewall", s['.name'])
 			end
 		end)
 end
@@ -271,14 +450,16 @@ end
 function zone.add_redirect(self, options)
 	options = options or { }
 	options.src = self:name()
-	local s = ub.uci:section("firewall", "redirect", nil, options)
+
+	local s = uci_r:section("firewall", "redirect", nil, options)
 	return s and redirect(s)
 end
 
 function zone.add_rule(self, options)
 	options = options or { }
 	options.src = self:name()
-	local s = ub.uci:section("firewall", "rule", nil, options)
+
+	local s = uci_r:section("firewall", "rule", nil, options)
 	return s and rule(s)
 end
 
@@ -310,10 +491,18 @@ function zone.get_color(self)
 end
 
 
-forwarding = ub:section("forwarding")
-forwarding:property_bool("mtu_fix")
-forwarding:property("src")
-forwarding:property("dest")
+forwarding = utl.class()
+function forwarding.__init__(self, f)
+	self.sid = f
+end
+
+function forwarding.src(self)
+	return uci_r:get("firewall", self.sid, "src")
+end
+
+function forwarding.dest(self)
+	return uci_r:get("firewall", self.sid, "dest")
+end
 
 function forwarding.src_zone(self)
 	return zone(self:src())
@@ -324,33 +513,61 @@ function forwarding.dest_zone(self)
 end
 
 
-rule = ub:section("rule")
-rule:property("src")
-rule:property("src_ip")
-rule:property("src_mac")
-rule:property("src_port")
-rule:property("dest")
-rule:property("dest_ip")
-rule:property("dest_port")
-rule:property("proto")
-rule:property("target")
+rule = utl.class()
+function rule.__init__(self, f)
+	self.sid = f
+end
+
+function rule.get(self, opt)
+	return _get("firewall", self.sid, opt)
+end
+
+function rule.set(self, opt, val)
+	return _set("firewall", self.sid, opt, val)
+end
+
+function rule.src(self)
+	return uci_r:get("firewall", self.sid, "src")
+end
+
+function rule.dest(self)
+	return uci_r:get("firewall", self.sid, "dest")
+end
 
 function rule.src_zone(self)
 	return zone(self:src())
 end
 
+function rule.dest_zone(self)
+	return zone(self:dest())
+end
 
-redirect = ub:section("redirect")
-redirect:property("src")
-redirect:property("src_ip")
-redirect:property("src_mac")
-redirect:property("src_port")
-redirect:property("src_dport")
-redirect:property("dest_ip")
-redirect:property("dest_port")
-redirect:property("proto")
+
+redirect = utl.class()
+function redirect.__init__(self, f)
+	self.sid = f
+end
+
+function redirect.get(self, opt)
+	return _get("firewall", self.sid, opt)
+end
+
+function redirect.set(self, opt, val)
+	return _set("firewall", self.sid, opt, val)
+end
+
+function redirect.src(self)
+	return uci_r:get("firewall", self.sid, "src")
+end
+
+function redirect.dest(self)
+	return uci_r:get("firewall", self.sid, "dest")
+end
 
 function redirect.src_zone(self)
 	return zone(self:src())
 end
 
+function redirect.dest_zone(self)
+	return zone(self:dest())
+end
