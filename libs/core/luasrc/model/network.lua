@@ -161,8 +161,8 @@ end
 
 
 function init(cursor)
-	uci_r = cursor or luci.model.uci.cursor()
-	uci_s = cursor:substate()
+	uci_r = cursor or uci.cursor()
+	uci_s = uci_r:substate()
 
 	ifs = { }
 	brs = { }
@@ -898,9 +898,9 @@ function wifidev.add_wifinet(self, options)
 	options = options or { }
 	options.device = self.sid
 
-	local wnet = uci_r:section("wifidev", "wifi-iface", nil, options)
+	local wnet = uci_r:section("wireless", "wifi-iface", nil, options)
 	if wnet then
-		return wifinet(wnet)
+		return wifinet(wnet, options)
 	end
 end
 
@@ -921,7 +921,7 @@ end
 
 
 wifinet = utl.class()
-function wifinet.__init__(self, net)
+function wifinet.__init__(self, net, data)
 	self.sid = net
 
 	local dev = uci_s:get("wireless", self.sid, "ifname")
@@ -940,8 +940,9 @@ function wifinet.__init__(self, net)
 	end
 
 	self.wdev   = dev
-	self.iwdata = uci_s:get_all("wireless", self.sid) or { }
 	self.iwinfo = dev and sys.wifi.getiwinfo(dev) or { }
+	self.iwdata = data or uci_s:get_all("wireless", self.sid) or
+		uci_r:get_all("wireless", self.sid) or { }
 end
 
 function wifinet.get(self, opt)
@@ -1008,7 +1009,7 @@ function wifinet.active_ssid(self)
 end
 
 function wifinet.active_bssid(self)
-	return _stror(self.iwinfo.bssid, self.iwinfo.bssid) or "00:00:00:00:00:00"
+	return _stror(self.iwinfo.bssid, self.iwdata.bssid) or "00:00:00:00:00:00"
 end
 
 function wifinet.active_encryption(self)
