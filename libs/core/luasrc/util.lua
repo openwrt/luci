@@ -200,7 +200,7 @@ local function _pcdata_repl(c)
 	   ( i >= 0x0E and i <= 0x1F ) or ( i == 0x7F )
 	then
 		return ""
-		
+
 	elseif ( i == 0x26 ) or ( i == 0x27 ) or ( i == 0x22 ) or
 	       ( i == 0x3C ) or ( i == 0x3E )
 	then
@@ -280,6 +280,22 @@ function cmatch(str, pat)
 	local count = 0
 	for _ in str:gmatch(pat) do count = count + 1 end
 	return count
+end
+
+--- Return a matching iterator for the given value. The iterator will return
+-- one token per invocation, the tokens are separated by whitespace. If the
+-- input value is a table, it is transformed into a string first. A nil value
+-- will result in a valid interator which aborts with the first invocation.
+-- @param val		The value to scan (table, string or nil)
+-- @return			Iterator which returns one token per call
+function imatch(v)
+	if v == nil then
+		v = ""
+	elseif type(v) == "table" then
+		v = table.concat(v, " ")
+	end
+
+	return v:gmatch("%S+")
 end
 
 --- Parse certain units from the given string and return the canonical integer
