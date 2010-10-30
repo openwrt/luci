@@ -93,16 +93,6 @@ function _stror(s1, s2)
 	end
 end
 
-function _strlist(x)
-	if x == nil then
-		x = ""
-	elseif type(x) == "table" then
-		x = table.concat(x, " ")
-	end
-
-	return x:gmatch("%S+")
-end
-
 function _get(c, s, o)
 	return uci_r:get(c, s, o)
 end
@@ -619,7 +609,7 @@ function network.get_interfaces(self)
 		ifaces = { interface(ifn) }
 	else
 		local nfs = { }
-		for ifn in _strlist(self:get("ifname")) do
+		for ifn in utl.imatch(self:get("ifname")) do
 			ifn = ifn:match("[^:]+")
 			nfs[ifn] = interface(ifn)
 		end
@@ -661,7 +651,7 @@ function network.contains_interface(self, ifname)
 		ifn = self:proto() .. "-" .. self.sid
 		return ifname == ifn
 	else
-		for ifn in _strlist(self:get("ifname")) do
+		for ifn in utl.imatch(self:get("ifname")) do
 			ifn = ifn:match("[^:]+")
 			if ifn == ifname then
 				return true

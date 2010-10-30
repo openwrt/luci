@@ -29,16 +29,6 @@ module "luci.model.firewall"
 
 local uci_r, uci_s
 
-function _strlist(x)
-	if x == nil then
-		x = ""
-	elseif type(x) == "table" then
-		x = table.concat(x, " ")
-	end
-
-	return x:gmatch("%S+")
-end
-
 function _valid_id(x)
 	return (x and #x > 0 and x:match("^[a-zA-Z0-9_]+$"))
 end
@@ -130,7 +120,7 @@ function get_zone_by_network(self, net)
 		function(s)
 			if s.name and net then
 				local n
-				for n in _strlist(s.network or s.name) do
+				for n in utl.imatch(s.network or s.name) do
 					if n == net then
 						z = s['.name']
 						return false
@@ -338,7 +328,7 @@ function zone.add_network(self, net)
 		local nets = { }
 
 		local n
-		for n in _strlist(self:get("network") or self:get("name")) do
+		for n in utl.imatch(self:get("network") or self:get("name")) do
 			if n ~= net then
 				nets[#nets+1] = n
 			end
@@ -358,7 +348,7 @@ function zone.del_network(self, net)
 	local nets = { }
 
 	local n
-	for n in _strlist(self:get("network") or self:get("name")) do
+	for n in utl.imatch(self:get("network") or self:get("name")) do
 		if n ~= net then
 			nets[#nets+1] = n
 		end
@@ -375,7 +365,7 @@ function zone.get_networks(self)
 	local nets = { }
 
 	local n
-	for n in _strlist(self:get("network") or self:get("name")) do
+	for n in utl.imatch(self:get("network") or self:get("name")) do
 		nets[#nets+1] = n
 	end
 
