@@ -14,7 +14,6 @@ $Id$
 <%+cbi/valueheader%>
 
 <%-
-	local utl = require "luci.util"
 	local nwm = require "luci.model.network"
 
 	local net, iface
@@ -27,7 +26,7 @@ $Id$
 -%>
 
 <ul style="margin:0; list-style-type:none; text-align:left">
-	<% for _, net in utl.spairs(networks, function(a,b) return (networks[a]:name() < networks[b]:name()) end) do
+	<% for _, net in ipairs(networks) do
 	       if net:name() ~= "loopback" then %>
 	<li style="padding:0.25em 0">
 		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. net:name()) .. attr("name", cbid) .. attr("value", net:name()) .. ifattr(value == net:name(), "checked", "checked")%> /> &nbsp;

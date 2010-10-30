@@ -14,7 +14,6 @@ $Id$
 <%+cbi/valueheader%>
 
 <%-
-	local utl = require "luci.util"
 	local net = require "luci.model.network"
 
 	local iface
@@ -26,7 +25,7 @@ $Id$
 		if type(value) == "table" then value = table.concat(value, " ") end
 		for value in value:gmatch("%S+") do
 			checked[value] = true
-		end		
+		end
 	else
 		local n = self.network and net:get_network(self.network)
 		if n then
@@ -39,13 +38,16 @@ $Id$
 -%>
 
 <ul style="margin:0; list-style-type:none">
-	<% for _, iface in utl.spairs(ifaces, function(a,b) return (ifaces[a]:type() < ifaces[b]:type()) end) do
+	<% for _, iface in ipairs(ifaces) do
+	     local link = iface:adminlink()
          if not self.nobridges or not iface:is_bridge() then %>
 	<li>
 		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. iface:name()) .. attr("name", cbid) .. attr("value", iface:name()) .. ifattr(checked[iface:name()], "checked", "checked")%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
+			<% if link then -%><a href="<%=link%>"><% end -%>
 			<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
-			<%=iface:get_i18n()%><% local n = iface:get_network(); if n then %> (<%=n:name()%>)<% end %>
+			<% if link then -%></a><% end -%>
+			<%=iface:get_i18n()%><% local n = iface:get_network(); if n then %> (<a href="<%=n:adminlink()%>"><%=n:name()%></a>)<% end %>
 		</label>
 	</li>
 	<% end end %>
