@@ -93,6 +93,16 @@ function _stror(s1, s2)
 	end
 end
 
+function _strlist(x)
+	if x == nil then
+		x = ""
+	elseif type(x) == "table" then
+		x = table.concat(x, " ")
+	end
+
+	return x:gmatch("%S+")
+end
+
 function _get(c, s, o)
 	return uci_r:get(c, s, o)
 end
@@ -161,7 +171,7 @@ end
 
 
 function init(cursor)
-	uci_r = cursor or uci.cursor()
+	uci_r = cursor or uci_r or uci.cursor()
 	uci_s = uci_r:substate()
 
 	ifs = { }
@@ -609,7 +619,7 @@ function network.get_interfaces(self)
 		ifaces = { interface(ifn) }
 	else
 		local nfs = { }
-		for ifn in self:_get("ifname"):gmatch("%S+") do
+		for ifn in _strlist(self:get("ifname")) do
 			ifn = ifn:match("[^:]+")
 			nfs[ifn] = interface(ifn)
 		end
@@ -651,7 +661,7 @@ function network.contains_interface(self, ifname)
 		ifn = self:proto() .. "-" .. self.sid
 		return ifname == ifn
 	else
-		for ifn in self:_get("ifname"):gmatch("%S+") do
+		for ifn in _strlist(self:get("ifname")) do
 			ifn = ifn:match("[^:]+")
 			if ifn == ifname then
 				return true
@@ -686,7 +696,7 @@ function interface.name(self)
 end
 
 function interface.mac(self)
-	return self.dev and self.dev or "00:00:00:00:00:00"
+	return self.dev and self.dev.macaddr or "00:00:00:00:00:00"
 end
 
 function interface.ipaddrs(self)
