@@ -14,6 +14,7 @@ $Id$
 ]]--
 
 local fs = require "nixio.fs"
+local ut = require "luci.util"
 local nw = require "luci.model.network"
 local fw = require "luci.model.firewall"
 
@@ -34,10 +35,16 @@ m:chain("wireless")
 nw.init(m.uci)
 fw.init(m.uci)
 
---function m.on_commit(map)
---	nw.init(map.uci)
---	fw.init(map.uci)
---end
+
+local net = nw:get_network(arg[1])
+
+-- redirect to overview page if network does not exist anymore (e.g. after a revert)
+if not net then
+	luci.http.redirect(luci.dispatcher.build_url("admin/network/network"))
+	return
+end
+
+local ifc = net:get_interfaces()[1]
 
 s = m:section(NamedSection, arg[1], "interface", translate("Common Configuration"))
 s.addremove = false
@@ -86,7 +93,7 @@ br:depends("proto", "none")
 
 stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
 	translate("Enables the Spanning Tree Protocol on this bridge"))
-stp:depends("type", "1")
+stp:depends("type", "bridge")
 stp.rmempty = true
 
 ifname_single = s:taboption("physical", Value, "ifname_single", translate("Interface"))
@@ -113,7 +120,7 @@ function ifname_single.write(self, s, val)
 			n:del_interface(i)
 		end
 
-		for i in val:gmatch("%S+") do
+		for i in ut.imatch(val) do
 			n:add_interface(i)
 
 			-- if this is not a bridge, only assign first interface
@@ -124,23 +131,14 @@ function ifname_single.write(self, s, val)
 	end
 end
 
-
-ifname_multi = s:taboption("physical", MultiValue, "ifname_multi", translate("Interface"))
+ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
 ifname_multi.template = "cbi/network_ifacelist"
 ifname_multi.nobridges = true
 ifname_multi.network = arg[1]
 ifname_multi.widget = "checkbox"
-ifname_multi:depends("type", "1")
+ifname_multi:depends("type", "bridge")
 ifname_multi.cfgvalue = ifname_single.cfgvalue
 ifname_multi.write = ifname_single.write
-
-
-for _, d in ipairs(nw:get_interfaces()) do
-	if not d:is_bridge() then
-		ifname_single:value(d:name())
-		ifname_multi:value(d:name())
-	end
-end
 
 
 local fwd_to, fwd_from
@@ -225,6 +223,7 @@ dns:depends("peerdns", "")
 mtu = s:taboption("physical", Value, "mtu", "MTU")
 mtu.optional = true
 mtu.datatype = "uinteger"
+mtu.placeholder = 1500
 
 srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
 srv:depends("proto", "pptp")
@@ -248,6 +247,7 @@ mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media A
 mac:depends("proto", "none")
 mac:depends("proto", "static")
 mac:depends("proto", "dhcp")
+mac.placeholder = ifc and ifc:mac():upper()
 
 if has_3g then
 	service = s:taboption("general", ListValue, "service", translate("Service type"))
