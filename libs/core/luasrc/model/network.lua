@@ -102,7 +102,7 @@ function _set(c, s, o, v)
 		if type(v) == "boolean" then v = v and "1" or "0" end
 		return uci_r:set(c, s, o, v)
 	else
-		return uci_r:del(c, s, o, v)
+		return uci_r:delete(c, s, o)
 	end
 end
 
@@ -372,10 +372,21 @@ end
 function get_interfaces(self)
 	local iface
 	local ifaces = { }
+	local seen = { }
 
 	-- find normal interfaces
+	uci_r:foreach("network", "interface",
+		function(s)
+			for iface in utl.imatch(s.ifname) do
+				if not _iface_ignore(iface) and not _wifi_iface(iface) then
+					seen[iface] = true
+					ifaces[#ifaces+1] = interface(iface)
+				end
+			end
+		end)
+
 	for iface in utl.kspairs(ifs) do
-		if not _iface_ignore(iface) and not _wifi_iface(iface) then
+		if not (seen[iface] or _iface_ignore(iface) or _wifi_iface(iface)) then
 			ifaces[#ifaces+1] = interface(iface)
 		end
 	end
