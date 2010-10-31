@@ -56,6 +56,20 @@ $Id$
 		</label>
 	</li>
 	<% end end %>
+	<% if not self.nocreate then %>
+	<li>
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+			attr("type", self.widget or "radio") ..
+			attr("id", cbid .. "_custom") ..
+			attr("name", cbid)
+		%> /> &nbsp;
+		<label<%=attr("for", cbid .. "_custom")%>>
+			<img title="<%:Custom Interface%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.png" />
+			<%:Custom Interface%>:
+		</label>
+		<input type="text" style="width:50px" onfocus="document.getElementById('<%=cbid%>_custom').checked=true" onblur="var x=document.getElementById('<%=cbid%>_custom'); x.value=this.value; x.checked=true" />
+	</li>
+	<% end %>
 </ul>
 
 <%+cbi/valuefooter%>
