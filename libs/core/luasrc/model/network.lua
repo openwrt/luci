@@ -373,6 +373,7 @@ function get_interfaces(self)
 	local iface
 	local ifaces = { }
 	local seen = { }
+	local nfs = { }
 
 	-- find normal interfaces
 	uci_r:foreach("network", "interface",
@@ -380,15 +381,19 @@ function get_interfaces(self)
 			for iface in utl.imatch(s.ifname) do
 				if not _iface_ignore(iface) and not _wifi_iface(iface) then
 					seen[iface] = true
-					ifaces[#ifaces+1] = interface(iface)
+					nfs[iface] = interface(iface)
 				end
 			end
 		end)
 
 	for iface in utl.kspairs(ifs) do
 		if not (seen[iface] or _iface_ignore(iface) or _wifi_iface(iface)) then
-			ifaces[#ifaces+1] = interface(iface)
+			nfs[iface] = interface(iface)
 		end
+	end
+
+	for iface in utl.kspairs(nfs) do
+		ifaces[#ifaces+1] = nfs[iface]
 	end
 
 	-- find wifi interfaces
