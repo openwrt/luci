@@ -12,7 +12,7 @@ $Id$
 
 -%>
 
-<% export("cbi_apply_xhr", function(id, configs) -%>
+<% export("cbi_apply_xhr", function(id, configs, redirect) -%>
 <fieldset class="cbi-section" id="cbi-apply-<%=id%>">
 	<legend><%:Applying changes%></legend>
 	<script type="text/javascript"><![CDATA[
@@ -33,7 +33,10 @@ $Id$
 									if( e )
 									{
 										e.innerHTML = '<%:Configuration applied.%>';
-										window.setTimeout(function() { e.parentNode.style.display = 'none' }, 1000);
+										window.setTimeout(function() {
+											e.parentNode.style.display = 'none';
+											<% if redirect then %>location.href='<%=redirect%>';<% end %>
+										}, 1000);
 									}
 								}
 								else
