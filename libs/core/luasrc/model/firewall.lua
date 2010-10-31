@@ -42,7 +42,7 @@ function _set(c, s, o, v)
 		if type(v) == "boolean" then v = v and "1" or "0" end
 		return uci_r:set(c, s, o, v)
 	else
-		return uci_r:del(c, s, o, v)
+		return uci_r:delete(c, s, o)
 	end
 end
 
