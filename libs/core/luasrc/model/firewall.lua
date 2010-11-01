@@ -339,11 +339,8 @@ function zone.add_network(self, net)
 
 		nets[#nets+1] = net
 
-		if #nets > 0 then
-			self:set("network", table.concat(nets, " "))
-		else
-			self:set("network", " ")
-		end
+		_M:del_network(net)
+		self:set("network", table.concat(nets, " "))
 	end
 end
 
@@ -375,6 +372,10 @@ function zone.get_networks(self)
 	return nets
 end
 
+function zone.clear_networks(self)
+	self:set("network", " ")
+end
+
 function zone.get_forwardings_by(self, what)
 	local name = self:name()
 	local forwards = { }
@@ -399,7 +400,7 @@ function zone.add_forwarding_to(self, dest)
 		end
 	end
 
-	if not exist and dest ~= self:name() then
+	if not exist and dest ~= self:name() and _valid_id(dest) then
 		local s = uci_r:section("firewall", "forwarding", nil, {
 			src     = self:name(),
 			dest    = dest
@@ -419,7 +420,7 @@ function zone.add_forwarding_from(self, src)
 		end
 	end
 
-	if not exist and src ~= self:name() then
+	if not exist and src ~= self:name() and _valid_id(src) then
 		local s = uci_r:section("firewall", "forwarding", nil, {
 			src     = src,
 			dest    = self:name()
@@ -432,11 +433,9 @@ end
 function zone.del_forwardings_by(self, what)
 	local name = self:name()
 
-	uci_r:foreach("firewall", "forwarding",
+	uci_r:delete_all("firewall", "forwarding",
 		function(s)
-			if s.src and s.dest and s[what] == name then
-				uci_r:delete("firewall", s['.name'])
-			end
+			return (s.src and s.dest and s[what] == name)
 		end)
 end
 
