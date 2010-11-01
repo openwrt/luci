@@ -64,14 +64,31 @@ function commit(self, ...)
 	uci_r:load(...)
 end
 
+function get_defaults()
+	return defaults()
+end
+
+function new_zone(self)
+	local name = "newzone"
+	local count = 1
+
+	while self:get_zone(name) do
+		count = count + 1
+		name = "newzone%d" % count
+	end
+
+	return self:add_zone(name)
+end
+
 function add_zone(self, n)
 	if _valid_id(n) and not self:get_zone(n) then
+		local d = defaults()
 		local z = uci_r:section("firewall", "zone", nil, {
 			name    = n,
 			network = " ",
-			input   = defaults:input()   or "DROP",
-			forward = defaults:forward() or "DROP",
-			output  = defaults:output()  or "DROP"
+			input   = d:input()   or "DROP",
+			forward = d:forward() or "DROP",
+			output  = d:output()  or "DROP"
 		})
 
 		return z and zone(z)
@@ -315,15 +332,15 @@ function zone.network(self)
 end
 
 function zone.input(self)
-	return self:get("input") or "DROP"
+	return self:get("input") or defaults():input() or "DROP"
 end
 
 function zone.forward(self)
-	return self:get("forward") or "DROP"
+	return self:get("forward") or defaults():forward() or "DROP"
 end
 
 function zone.output(self)
-	return self:get("output") or "DROP"
+	return self:get("output") or defaults():output() or "DROP"
 end
 
 function zone.add_network(self, net)
