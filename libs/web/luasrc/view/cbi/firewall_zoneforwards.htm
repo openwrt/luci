@@ -1,0 +1,78 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2009 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: firewall_zonelist.htm 5651 2009-12-26 00:09:47Z jow $
+
+-%>
+
+<%+cbi/valueheader%>
+
+<%-
+	local utl = require "luci.util"
+	local fwm = require "luci.model.firewall".init()
+	local nwm = require "luci.model.network".init()
+
+	local zone, fwd, fz
+	local value = self:formvalue(section)
+	if not value or value == "-" then
+		value = self:cfgvalue(section) or self.default
+	end
+
+	local def  = fwm:get_defaults()
+	local zone = fwm:get_zone(value)
+	local empty = true
+-%>
+
+<% if zone then %>
+<div style="padding:0.5em">
+	<label style="background-color:<%=zone:get_color()%>; padding:0.4em">
+		<strong><%=zone:name()%>:</strong>
+		<%
+			local zempty = true
+			for _, net in ipairs(zone:get_networks()) do
+				net = nwm:get_network(net)
+				if net then
+					zempty = false
+		%>
+			&nbsp;
+			<%- if net:name() == self.network then -%>
+				<span style="background-color:#FFFFFF; border:1px solid #000000; padding:2px; font-weight:bold"><%=net:name()%>:
+			<%- else -%>
+				<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
+			<%- end -%>
+			<%
+				local nempty = true
+				for _, iface in ipairs(net and net:get_interfaces() or {}) do
+					nempty = false
+			 %>
+				<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+			<% end %>
+			<% if nempty then %><em><%:(empty)%></em><% end %>
+			</span>
+		<% end end %>
+		<% if zempty then %><em><%:(empty)%></em><% end %>
+	</label>
+	&nbsp;&rArr;&nbsp;
+	<% for _, fwd in ipairs(zone:get_forwardings_by("src")) do
+		fz = fwd:dest_zone()
+		empty = false %>
+		<label style="background-color:<%=fz:get_color()%>; padding:0.4em">
+			<strong><%=fz:name()%></strong>
+		</label>&nbsp;
+	<% end %>
+	<% if empty then %>
+		<label style="border:1px dashed #AAAAAA; color:#AAAAAA; padding:0.3em">
+			<strong><small><em><%=zone:forward():upper()%></em></small></strong>
+		</label>
+	<% end %>
+</div>
+<% end %>
+
+<%+cbi/valuefooter%>
