@@ -9,6 +9,8 @@ endif
 PKG_NAME:=luci
 PKG_RELEASE:=1
 
+PKG_BUILD_PARALLEL:=0
+
 ifeq ($(USELOCAL),1)
   PKG_VERSION:=0.10+svn
 else
