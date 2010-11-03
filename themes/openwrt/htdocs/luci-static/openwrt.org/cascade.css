@@ -24,6 +24,71 @@ body {
 	padding: 0;
 }
 
+ul.tabmenu {
+	margin: 0;
+	clear: both;
+	display: block;
+	vertical-align: bottom;
+	font-size: 90%;
+	padding: 5px 0 0 5px;
+}
+
+div.tabmenu2 {
+	background-color: #AAAAAA;
+	background-image: url(tabbg.png);
+	background-repeat: repeat-x;
+	margin-top: -1px;
+	border: 1px solid #444444;
+	border-bottom: none;
+}
+
+div.tabmenu3,
+div.tabmenu4,
+div.tabmenu5 {
+	background-color: #AAAAAA;
+	background-image: url(tabbg.png);
+	background-repeat: repeat-x;
+	border: none;
+}
+
+ul.tabmenu li {
+	float: left;
+	display: block;
+	overflow: hidden;
+}
+
+ul.tabmenu li a {
+	text-decoration: none;
+	color: #444444;
+	display: block;
+	padding: 3px 8px;
+	margin: 0 2px;
+	line-height: 1.3em;
+	border: 1px solid transparent;
+	border-bottom: none;
+	font-size: 85%;
+}
+
+ul.tabmenu li.active a {
+	font-weight: bold;
+	color: #000000;
+	background: #f5f5f5;
+	border: 1px solid #AAAAAA;
+	border-bottom: none;
+}
+
+ul.tabmenu li a:hover {
+	color: #444444;
+	border-color: #444444;
+}
+
+ul.l1 li a {
+	background-color: #AAAAAA;
+	background-image: url(tabbg.png);
+	background-repeat: repeat-x;
+	border-color: #444444;
+}
+
 abbr,
 acronym {
 	font-style: normal;
@@ -79,106 +144,13 @@ code {
 	background-color: white;
 }
 
-#header {
-	min-height: 98px;
-	background-image: url(header.png);
-	background-repeat: no-repeat;
-	background-position: left center;
-	background-color: #557788;
-	color: #ffffff;
-	text-align: right;
-}
-
-#header h1 {
-	padding: 1em 1em 0 1em;
-}
-
-#header p {
-	padding: 0 1em 1em 1em;
-}
-
-#header h1,
-#header p {
-	font-size: 70%;
-	font-weight: normal;
-	line-height: 160%;
-	text-align: right;
-}
-
-ul.dropdowns {
+div.hostinfo {
 	float: left;
 	margin: 0;
 	padding: 0;
 	width: auto;
-	list-style: none;
-}
-
-html>body ul.dropdowns {
-	position: relative;
-}
-
-ul.dropdowns li,
-ul.dropdowns ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-ul.dropdowns li {
-	float: left;
-	position: relative;
-	white-space: nowrap;
-}
-
-ul.dropdowns li ul {
-	position: absolute;
-	z-index: 1000;
-	top: auto;
-	min-width: 10em;
-}
-
-ul.dropdowns li li {
-	float: none;
-	position: relative;
-}
-
-ul.dropdowns li a {
-	display: block;
-}
-
-ul.dropdowns ul li ul {
-	top: 0;
-}
-
-ul.dropdowns li ul,
-ul.dropdowns li.over ul ul,
-ul.dropdowns li.focus ul ul,
-ul.dropdowns li:hover ul ul,
-ul.dropdowns li.over ul ul ul,
-ul.dropdowns li.focus ul ul ul,
-ul.dropdowns li:hover ul ul ul,
-ul.dropdowns li.over ul ul ul ul,
-ul.dropdowns li.focus ul ul ul ul,
-ul.dropdowns li:hover ul ul ul ul {
-	left: -3000px;
-}
-
-ul.dropdowns li.over ul,
-ul.dropdowns li.focus ul,
-ul.dropdowns li:hover ul {
-	left: 0;
-}
-
-ul.dropdowns ul li.over ul,
-ul.dropdowns ul li.focus ul,
-ul.dropdowns ul li:hover ul,
-ul.dropdowns ul ul li.over ul,
-ul.dropdowns ul ul li.focus ul,
-ul.dropdowns ul ul li:hover ul,
-ul.dropdowns ul ul ul li.over ul,
-ul.dropdowns ul ul ul li.focus ul,
-ul.dropdowns ul ul ul li:hover ul {
-	left: 100%;
+	font-size: 80%;
+	padding: 0.5em;
 }
 
 #menubar {
@@ -191,24 +163,6 @@ ul.dropdowns ul ul ul li:hover ul {
 #menubar .warning {
 	color: red;
 	background-color: #557788;
-}
-
-#menubar ul.dropdowns {
-	min-height: 1.8em;
-	background: #000000;
-	color: #ffffff;
-}
-
-#menubar ul.dropdowns li ul {
-	background: #000000;
-	color: #ffffff;
-	border-width: 0 1px 1px 1px;
-	border-style: solid;
-	border-color: #444444;
-}
-
-#menubar ul.dropdowns ul li ul {
-	border-width: 1px;
 }
 
 html #menubar a:link,
@@ -251,63 +205,6 @@ html #menubar a:visited.warning {
 	font-weight: bold;
 }
 
-#menubar ul.dropdowns li.over>a,
-#menubar ul.dropdowns li.focus>a,
-#menubar ul.dropdowns li:hover>a {
-	font-weight: bold;
-}
-
-.lang_de #submenu_mini_system { min-width: 13.3em; }
-* html .lang_de #submenu_mini_system { width: 13.3em; }
-
-.lang_pt-br #submenu_mini_network { min-width: 14em; }
-* html .lang_pt-br #submenu_mini_network { width: 14em; }
-
-.lang_pt-br #submenu_mini_system { min-width: 11.5em; }
-* html .lang_pt-br #submenu_mini_system { width: 11.5em; }
-
-.lang_ru #submenu_mini_system { min-width: 18em; }
-* html .lang_ru #submenu_mini_system { width: 18em; }
-
-.lang_pt-br #submenu_admin_index { min-width: 11em; }
-* html .lang_pt-br #submenu_admin_index { width: 11em; }
-
-.lang_ru #submenu_admin_index { min-width: 15.5em; }
-* html .lang_ru #submenu_admin_index { width: 15.5em; }
-
-.lang_ru #submenu_admin_status { min-width: 10.5em; }
-* html .lang_ru #submenu_admin_status { width: 10.5em; }
-
-.lang_de #submenu_admin_system { min-width: 13.3em; }
-* html .lang_de #submenu_admin_system { width: 13.3em; }
-
-.lang_fr #submenu_admin_system { min-width: 14.5em; }
-* html .lang_fr #submenu_admin_system { width: 14.5em; }
-
-.lang_pt-br #submenu_admin_system { min-width: 11.5em; }
-* html .lang_pt-br #submenu_admin_system { width: 11.5em; }
-
-.lang_ru #submenu_admin_system { min-width: 18em; }
-* html .lang_ru #submenu_admin_system { width: 18em; }
-
-#submenu_admin_services_chillispot { min-width: 15.5em; }
-* html #submenu_admin_services_chillispot { width: 15.5em; }
-
-#submenu_admin_services_coovachilli { min-width: 15em; }
-* html #submenu_admin_services_coovachilli { width: 15em; }
-
-.lang_ru #submenu_admin_network_routes { min-width: 15.3em; }
-* html .lang_ru #submenu_admin_network_routes { width: 15.3em; }
-
-#submenu_admin_network_firewall { min-width: 14em; }
-* html #submenu_admin_network_firewall { width: 14em; }
-
-.lang_de #submenu_admin_network_firewall { min-width: 16.5em; }
-* html .lang_de #submenu_admin_network_firewall { width: 16.5em; }
-
-.lang_pt-br #submenu_admin_network_firewall { min-width: 15em; }
-* html .lang_pt-br #submenu_admin_network_firewall { width: 15em; }
-
 #modemenu {
 	width: auto;
 	background: #000000;
@@ -342,17 +239,20 @@ textarea#syslog {
 	font-family: monospace;
 }
 
-#maincontent {
+#maincontainer {
 	clear: both;
 	width: 80%;
 	margin: 0 auto;
+}
+
+#maincontent {
 	padding: 0.5em;
 	background: #f5f5f5;
 	color: #000000;
+	font-size: 80%;
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
 	border-color: #444444;
-	font-size: 80%;
 }
 
 #maincontent h2 {
