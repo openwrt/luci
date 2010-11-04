@@ -422,6 +422,7 @@ $(eval $(call application,vnstat,LuCI Support for VnStat,\
 	+PACKAGE_luci-app-vnstat:vnstat \
     +PACKAGE_luci-app-vnstat:vnstati))
 
+$(eval $(call application,lqtapifoss,Lantiq voip))
 
 ### Server Gateway Interfaces ###
 define sgi
