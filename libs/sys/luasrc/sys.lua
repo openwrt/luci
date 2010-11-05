@@ -604,7 +604,7 @@ end
 -- @return			Boolean indicating wheather the passwords are equal
 function user.checkpasswd(username, pass)
 	local pwh = user.getpasswd(username)
-	if not pwh or nixio.crypt(pass, pwh) ~= pwh then
+	if pwh and nixio.crypt(pass, pwh) ~= pwh then
 		return false
 	else
 		return true
