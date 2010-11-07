@@ -21,103 +21,185 @@ s = m:section(TypedSection, "dnsmasq", translate("Settings"))
 s.anonymous = true
 s.addremove = false
 
-s:option(Flag, "domainneeded",
+s:tab("general", translate("General Settings"))
+s:tab("files", translate("Resolv and Hosts Files"))
+s:tab("tftp", translate("TFTP Settings"))
+s:tab("advanced", translate("Advanced Settings"))
+
+s:taboption("general", Flag, "domainneeded",
 	translate("Domain required"),
 	translate("Don't forward <abbr title=\"Domain Name System\">DNS</abbr>-Requests without " ..
 		"<abbr title=\"Domain Name System\">DNS</abbr>-Name"))
 
-s:option(Flag, "authoritative",
+s:taboption("general", Flag, "authoritative",
 	translate("Authoritative"),
 	translate("This is the only <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</" ..
 		"abbr> in the local network"))
 
-s:option(Flag, "boguspriv",
-	translate("Filter private"),
-	translate("Don't forward reverse lookups for local networks"))
 
-s:option(Flag, "filterwin2k",
-	translate("Filter useless"),
-	translate("filter useless <abbr title=\"Domain Name System\">DNS</abbr>-queries of " ..
-		"Windows-systems"))
-
-s:option(Flag, "localise_queries",
-	translate("Localise queries"),
-	translate("localises the hostname depending on its subnet"))
-
-s:option(Value, "local",
-	translate("Local Server"))
-
-s:option(Value, "domain",
-	translate("Local Domain"))
-
-s:option(Flag, "expandhosts",
-	translate("Expand Hosts"),
-	translate("adds domain names to hostentries in the resolv file"))
-
-s:option(Flag, "nonegcache",
-	translate("don't cache unknown"),
-	translate("prevents caching of negative <abbr title=\"Domain Name System\">DNS</abbr>-" ..
-		"replies"))
-
-s:option(Flag, "readethers",
+s:taboption("files", Flag, "readethers",
 	translate("Use <code>/etc/ethers</code>"),
 	translate("Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host " ..
 		"Configuration Protocol\">DHCP</abbr>-Server"))
 
-s:option(Value, "leasefile",
+s:taboption("files", Value, "leasefile",
 	translate("Leasefile"),
 	translate("file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</" ..
 		"abbr>-leases will be stored"))
 
-s:option(Value, "resolvfile",
-	translate("Resolvfile"),
-	translate("local <abbr title=\"Domain Name System\">DNS</abbr> file"))
-
-s:option(Flag, "nohosts",
-	translate("Ignore <code>/etc/hosts</code>")).optional = true
-
-s:option(Flag, "strictorder",
-	translate("Strict order"),
-	translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server will be queried in the " ..
-		"order of the resolvfile")).optional = true
-
-s:option(Flag, "logqueries",
-	translate("Log queries")).optional = true
-
-s:option(Flag, "noresolv",
+s:taboption("files", Flag, "noresolv",
 	translate("Ignore resolve file")).optional = true
 
-s:option(Value, "dnsforwardmax",
-	translate("concurrent queries")).optional = true
+rf = s:taboption("files", Value, "resolvfile",
+	translate("Resolve file"),
+	translate("local <abbr title=\"Domain Name System\">DNS</abbr> file"))
 
-s:option(Value, "port",
-	translate("<abbr title=\"Domain Name System\">DNS</abbr>-Port")).optional = true
+rf:depends("noresolv", "")
+rf.optional = true
 
-s:option(Value, "ednspacket_max",
-	translate("<abbr title=\"maximal\">max.</abbr> <abbr title=\"Extension Mechanisms for " ..
-		"Domain Name System\">EDNS0</abbr> paket size")).optional = true
 
-s:option(Value, "dhcpleasemax",
-	translate("<abbr title=\"maximal\">max.</abbr> <abbr title=\"Dynamic Host Configuration " ..
-		"Protocol\">DHCP</abbr>-Leases")).optional = true
+s:taboption("files", Flag, "nohosts",
+	translate("Ignore Hosts files")).optional = true
 
-s:option(DynamicList, "addnhosts",
-	translate("additional hostfile")).optional = true
+hf = s:taboption("files", DynamicList, "addnhosts",
+	translate("Additional Hosts files"))
 
-s:option(Value, "queryport",
-	translate("query port")).optional = true
+hf:depends("nohosts", "")
+hf.optional = true
 
-s:option(Flag, "enable_tftp",
-	translate("Enable TFTP-Server")).optional = true
 
-s:option(Value, "tftp_root",
-	translate("TFTP-Server Root")).optional = true
+s:taboption("advanced", Flag, "boguspriv",
+	translate("Filter private"),
+	translate("Do not forward reverse lookups for local networks"))
 
-s:option(Value, "dhcp_boot",
-	translate("Network Boot Image")).optional = true
+s:taboption("advanced", Flag, "filterwin2k",
+	translate("Filter useless"),
+	translate("Do not forward requests that cannot be answered by public name servers"))
 
-s:option(DynamicList, "server", translate("DNS forward"),
-        translate("List of <abbr title=\"Domain Name System\">DNS</abbr> " ..
-                "servers to forward requests to")).optional = true
+s:taboption("advanced", Flag, "localise_queries",
+	translate("Localise queries"),
+	translate("Localise hostname depending on the requesting subnet if multiple IPs are available"))
+
+s:taboption("general", Value, "local",
+	translate("Local server"),
+	translate("Local domain specification. Names matching this domain are never forwared and resolved from DHCP or hosts files only"))
+
+s:taboption("general", Value, "domain",
+	translate("Local domain"),
+	translate("Local domain suffix appended to DHCP names and hosts file entries"))
+
+s:taboption("advanced", Flag, "expandhosts",
+	translate("Expand hosts"),
+	translate("Add local domain suffix to names served from hosts files"))
+
+s:taboption("advanced", Flag, "nonegcache",
+	translate("No negative cache"),
+	translate("Do not cache negative replies, e.g. for not existing domains"))
+
+s:taboption("advanced", Flag, "strictorder",
+	translate("Strict order"),
+	translate("<abbr title=\"Domain Name System\">DNS</abbr> servers will be queried in the " ..
+		"order of the resolvfile")).optional = true
+
+s:taboption("general", Flag, "logqueries",
+	translate("Log queries"),
+	translate("Write received DNS requests to syslog")).optional = true
+
+df = s:taboption("general", DynamicList, "server", translate("DNS forwardings"),
+	translate("List of <abbr title=\"Domain Name System\">DNS</abbr> " ..
+			"servers to forward requests to"))
+
+df.optional = true
+df.placeholder = "/example.org/10.1.2.3"
+
+
+rp = s:taboption("general", Flag, "rebind_protection",
+	translate("Rebind protection"),
+	translate("Discard upstream RFC1918 responses"))
+
+
+rl = s:taboption("general", Flag, "rebind_localhost",
+	translate("Allow localhost"),
+	translate("Allow upstream responses in the 127.0.0.0/8 range, e.g. for RBL services"))
+
+rl:depends("rebind_protection", "1")
+
+
+rd = s:taboption("general", DynamicList, "rebind_domain",
+	translate("Domain whitelist"),
+	translate("List of domains to allow RFC1918 responses for"))
+
+rd:depends("rebind_protection", "1")
+rd.datatype = "host"
+rd.placeholder = "ihost.netflix.com"
+
+
+pt = s:taboption("advanced", Value, "port",
+	translate("<abbr title=\"Domain Name System\">DNS</abbr> server port"),
+	translate("Listening port for inbound DNS queries"))
+
+pt.optional = true
+pt.datatype = "port"
+pt.placeholder = 53
+
+
+qp = s:taboption("advanced", Value, "queryport",
+	translate("<abbr title=\"Domain Name System\">DNS</abbr> query port"),
+	translate("Fixed source port for outbound DNS queries"))
+
+qp.optional = true
+qp.datatype = "port"
+qp.placeholder = translate("any")
+
+
+lm = s:taboption("advanced", Value, "dhcpleasemax",
+	translate("<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Dynamic Host Configuration " ..
+		"Protocol\">DHCP</abbr> leases"),
+	translate("Maximum allowed number of active DHCP leases"))
+
+lm.optional = true
+lm.datatype = "uinteger"
+lm.placeholder = translate("unlimited")
+
+
+em = s:taboption("advanced", Value, "ednspacket_max",
+	translate("<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Extension Mechanisms for " ..
+		"Domain Name System\">EDNS0</abbr> paket size"),
+	translate("Maximum allowed size of EDNS.0 UDP packets"))
+
+em.optional = true
+em.datatype = "uinteger"
+em.placeholder = 1280
+
+
+cq = s:taboption("advanced", Value, "dnsforwardmax",
+	translate("<abbr title=\"maximal\">Max.</abbr> concurrent queries"),
+	translate("Maximum allowed number of concurrent DNS queries"))
+
+cq.optional = true
+cq.datatype = "uinteger"
+cq.placeholder = 150
+
+
+s:taboption("tftp", Flag, "enable_tftp",
+	translate("Enable TFTP server")).optional = true
+
+tr = s:taboption("tftp", Value, "tftp_root",
+	translate("TFTP server root"),
+	translate("Root directory for files served via TFTP"))
+
+tr.optional = true
+tr:depends("enable_tftp", "1")
+tr.placeholder = "/"
+
+
+db = s:taboption("tftp", Value, "dhcp_boot",
+	translate("Network boot image"),
+	translate("Filename of the boot image advertised to clients"))
+
+db.optional = true
+db:depends("enable_tftp", "1")
+db.placeholder = "pxelinux.0"
+
 
 return m
