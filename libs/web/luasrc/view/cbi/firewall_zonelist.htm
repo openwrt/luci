@@ -21,23 +21,31 @@ $Id$
 	local zone, net, iface
 	local zones = fwm:get_zones()
 	local value = self:formvalue(section)
-	if not value or value == "-" then value = self:cfgvalue(section) or self.default end
+	if not value or value == "-" then
+		value = self:cfgvalue(section) or self.default
+	end
 
 	local selected = false
 	local checked = { }
 
-	if value and #value == 0 then
-		value = nil
-	elseif type(value) == "table" then
-		for _, value in ipairs(value) do
-			checked[value] = true
-		end
-	elseif value then
+	for value in utl.imatch(value) do
 		checked[value] = true
+	end
+
+	if not next(checked) then
+		checked[""] = true
 	end
 -%>
 
 <ul style="margin:0; list-style-type:none; text-align:left">
+	<% if self.allowlocal then %>
+	<li style="padding:0.5em">
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "_empty") .. attr("name", cbid) .. attr("value", "") .. ifattr(checked[""], "checked", "checked")%> /> &nbsp;
+		<label<%=attr("for", cbid .. "_empty")%> style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em">
+			<strong><%:Device%></strong>
+		</label>
+	</li>
+	<% end %>
 	<%
 		for _, zone in utl.spairs(zones, function(a,b) return (zones[a]:name() < zones[b]:name()) end) do
 			if zone:name() ~= self.exclude then
@@ -67,10 +75,10 @@ $Id$
 				 %>
 					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 				<% end %>
-				<% if nempty then %><em><%:(no interfaces attached)%></em><% end %>
+				<% if nempty then %><em><%:(empty)%></em><% end %>
 				</span>
 			<% end end %>
-			<% if zempty then %><em><%:(no interfaces attached)%></em><% end %>
+			<% if zempty then %><em><%:(empty)%></em><% end %>
 		</label>
 	</li>
 	<% end end %>
