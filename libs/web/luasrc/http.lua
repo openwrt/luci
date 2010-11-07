@@ -12,9 +12,9 @@ Copyright 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,8 +29,10 @@ local protocol = require "luci.http.protocol"
 local util  = require "luci.util"
 local string = require "string"
 local coroutine = require "coroutine"
+local table = require "table"
 
-local pairs, tostring, error = pairs, tostring, error
+local ipairs, pairs, next, type, tostring, error =
+	ipairs, pairs, next, type, tostring, error
 
 --- LuCI Web Framework high-level HTTP functions.
 module "luci.http"
@@ -45,14 +47,14 @@ function Request.__init__(self, env, sourcein, sinkerr)
 
 	-- File handler
 	self.filehandler = function() end
-	
+
 	-- HTTP-Message table
 	self.message = {
 		env = env,
 		headers = {},
 		params = protocol.urldecode_params(env.QUERY_STRING or ""),
 	}
-	
+
 	self.parsed_input = false
 end
 
@@ -60,7 +62,7 @@ function Request.formvalue(self, name, noparse)
 	if not noparse and not self.parsed_input then
 		self:_parse_input()
 	end
-	
+
 	if name then
 		return self.message.params[name]
 	else
@@ -71,18 +73,18 @@ end
 function Request.formvaluetable(self, prefix)
 	local vals = {}
 	prefix = prefix and prefix .. "." or "."
-	
+
 	if not self.parsed_input then
 		self:_parse_input()
 	end
-	
+
 	local void = self.message.params[nil]
 	for k, v in pairs(self.message.params) do
 		if k:find(prefix, 1, true) == 1 then
 			vals[k:sub(#prefix + 1)] = tostring(v)
 		end
 	end
-	
+
 	return vals
 end
 
@@ -90,7 +92,7 @@ function Request.content(self)
 	if not self.parsed_input then
 		self:_parse_input()
 	end
-	
+
 	return self.message.content, self.message.content_length
 end
 
@@ -128,7 +130,7 @@ function close()
 		context.eoh = true
 		coroutine.yield(3)
 	end
-	
+
 	if not context.closed then
 		context.closed = true
 		coroutine.yield(5)
@@ -164,7 +166,7 @@ function getcookie(name)
 	return context.request:getcookie(name)
 end
 
---- Get the value of a certain HTTP environment variable 
+--- Get the value of a certain HTTP environment variable
 -- or the environment table itself.
 -- @param name		Environment variable
 -- @return			HTTP environment value or environment table
@@ -248,8 +250,8 @@ function write(content, src_err)
 				header("Cache-Control", "no-cache")
 				header("Expires", "0")
 			end
-			
-			
+
+
 			context.eoh = true
 			coroutine.yield(3)
 		end
@@ -276,14 +278,18 @@ end
 --- Create a querystring out of a table of key - value pairs.
 -- @param table		Query string source table
 -- @return			Encoded HTTP query string
-function build_querystring(table)
-	local s="?"
-	
-	for k, v in pairs(table) do
-		s = s .. urlencode(k) .. "=" .. urlencode(v) .. "&"
+function build_querystring(q)
+	local s = { "?" }
+
+	for k, v in pairs(q) do
+		if #s > 1 then s[#s+1] = "&" end
+
+		s[#s+1] = urldecode(k)
+		s[#s+1] = "="
+		s[#s+1] = urldecode(v)
 	end
-	
-	return s
+
+	return table.concat(s, "")
 end
 
 --- Return the URL-decoded equivalent of a string.
@@ -298,3 +304,37 @@ urldecode = protocol.urldecode
 -- @return			URL-encoded string
 -- @see urldecode
 urlencode = protocol.urlencode
+
+--- Send the given data as JSON encoded string.
+-- @param data		Data to send
+function write_json(x)
+	if x == nil then
+		write("null")
+	elseif type(x) == "table" then
+		local k, v
+		if type(next(x)) == "number" then
+			write("[ ")
+			for k, v in ipairs(x) do
+				write_json(v)
+				if next(x, k) then
+					write(", ")
+				end
+			end
+			write(" ]")
+		else
+			write("{ ")
+			for k, v in pairs(x) do
+			write("%q: " % k)
+				write_json(v)
+				if next(x, k) then
+					write(", ")
+				end
+			end
+			write(" }")
+		end
+	elseif type(x) == "number" or type(x) == "boolean" then
+		write(tostring(x))
+	elseif type(x) == "string" then
+		write("%q" % tostring(x))
+	end
+end
