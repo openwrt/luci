@@ -87,6 +87,9 @@ function index()
 		page.target = cbi("admin_network/dhcpleases")
 		page.title  = i18n("DHCP Leases")
 		page.order  = 30
+
+		page = entry({"admin", "network", "dhcplease_status"}, call("lease_status"), nil)
+		page.leaf = true
 	end
 
 	page  = node("admin", "network", "hosts")
@@ -248,4 +251,44 @@ function wifi_status()
 	end
 
 	luci.http.status(404, "No such device")
+end
+
+function lease_status()
+	local rv = { }
+	local leasefile = "/var/dhcp.leases"
+
+	local uci = require "luci.model.uci".cursor()
+	local nfs = require "nixio.fs"
+
+	uci:foreach("dhcp", "dnsmasq",
+		function(s)
+			if s.leasefile and nfs.access(s.leasefile) then
+				leasefile = s.leasefile
+				return false
+			end
+		end)
+
+	local fd = io.open(leasefile, "r")
+	if fd then
+		while true do
+			local ln = fd:read("*l")
+			if not ln then
+				break
+			else
+				local ts, mac, ip, name = ln:match("^(%d+) (%S+) (%S+) (%S+)")
+				if ts and mac and ip and name then
+					rv[#rv+1] = {
+						expires  = os.difftime(tonumber(ts) or 0, os.time()),
+						macaddr  = mac,
+						ipaddr   = ip,
+						hostname = (name ~= "*") and name
+					}
+				end
+			end
+		end
+		fd:close()
+	end
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
 end
