@@ -53,7 +53,7 @@ src.template = "cbi/firewall_zonelist"
 
 dest = s:taboption("advanced", Value, "dest", translate("Destination zone"))
 dest.nocreate = true
-dest.default = "lan"
+dest.allowlocal = true
 dest.template = "cbi/firewall_zonelist"
 
 proto = s:taboption("general", Value, "proto", translate("Protocol"))
@@ -107,10 +107,12 @@ icmpt:value("address-mask-reply")
 src_ip = s:taboption("general", Value, "src_ip", translate("Source address"))
 src_ip.optional = true
 src_ip.datatype = has_v2 and "ipaddr" or "ip4addr"
+src_ip.placeholder = translate("any")
 
 sport = s:taboption("general", Value, "src_port", translate("Source port"))
 sport.optional = true
 sport.datatype = "portrange"
+sport.placeholder = "0-65535"
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
@@ -118,6 +120,7 @@ sport:depends("proto", "tcpudp")
 dest_ip = s:taboption("general", Value, "dest_ip", translate("Destination address"))
 dest_ip.optional = true
 dest_ip.datatype = has_v2 and "ipaddr" or "ip4addr"
+dest_ip.placeholder = translate("any")
 
 dport = s:taboption("general", Value, "dest_port", translate("Destination port"))
 dport.optional = true
@@ -125,6 +128,7 @@ dport.datatype = "portrange"
 dport:depends("proto", "tcp")
 dport:depends("proto", "udp")
 dport:depends("proto", "tcpudp")
+dport.placeholder = "0-65535"
 
 jump = s:taboption("general", ListValue, "target", translate("Action"))
 jump.rmempty = true
@@ -134,7 +138,10 @@ jump:value("ACCEPT", translate("accept"))
 jump:value("REJECT", translate("reject"))
 
 
-s:taboption("advanced", Value, "src_mac", translate("Source MAC-address")).optional = true
+smac = s:taboption("advanced", Value, "src_mac", translate("Source MAC address"))
+smac.optional = true
+smac.datatype = "macaddr"
+smac.placeholder = translate("any")
 
 if has_v2 then
 	family = s:taboption("advanced", ListValue, "family", translate("Restrict to address family"))

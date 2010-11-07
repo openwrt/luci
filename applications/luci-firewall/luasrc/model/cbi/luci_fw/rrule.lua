@@ -92,8 +92,7 @@ toport = s:taboption("general", Value, "dest_port", translate("Internal port (op
 	translate("Redirect matched incoming traffic to the given port on " ..
 		"the internal host"))
 toport.optional = true
-toport.size = 5
-
+toport.placeholder = "0-65535"
 
 target = s:taboption("advanced", ListValue, "target", translate("Redirection type"))
 target:value("DNAT")
@@ -113,20 +112,24 @@ src_dip = s:taboption("advanced", Value, "src_dip",
 
 src_dip.optional = true
 src_dip.datatype = "ip4addr"
+src_dip.placeholder = translate("any")
 
 src_mac = s:taboption("advanced", Value, "src_mac", translate("Source MAC address"))
 src_mac.optional = true
 src_mac.datatype = "macaddr"
+src_mac.placeholder = translate("any")
 
 src_ip = s:taboption("advanced", Value, "src_ip", translate("Source IP address"))
 src_ip.optional = true
 src_ip.datatype = "ip4addr"
+src_ip.placeholder = translate("any")
 
 sport = s:taboption("advanced", Value, "src_port", translate("Source port"),
 	translate("Match incoming traffic originating from the given " ..
 		"source port or port range on the client host"))
 sport.optional = true
 sport.datatype = "portrange"
+sport.placeholder = "0-65536"
 sport:depends("proto", "tcp")
 sport:depends("proto", "udp")
 sport:depends("proto", "tcpudp")
