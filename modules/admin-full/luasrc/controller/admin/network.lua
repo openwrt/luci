@@ -162,39 +162,6 @@ function wifi_delete(network)
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 end
 
-function jsondump(x)
-	if x == nil then
-		luci.http.write("null")
-	elseif type(x) == "table" then
-		local k, v
-		if type(next(x)) == "number" then
-			luci.http.write("[ ")
-			for k, v in ipairs(x) do
-				jsondump(v)
-				if next(x, k) then
-					luci.http.write(", ")
-				end
-			end
-			luci.http.write(" ]")
-		else
-			luci.http.write("{ ")
-			for k, v in pairs(x) do
-			luci.http.write("%q: " % k)
-				jsondump(v)
-				if next(x, k) then
-					luci.http.write(", ")
-				end
-			end
-			luci.http.write(" }")
-		end
-	elseif type(x) == "number" or type(x) == "boolean" then
-		luci.http.write(tostring(x))
-	elseif type(x) == "string" then
-		luci.http.write("%q" % tostring(x))
-	end
-end
-
-
 function iface_status()
 	local path = luci.dispatcher.context.requestpath
 	local x    = luci.model.uci.cursor_state()
@@ -245,7 +212,7 @@ function iface_status()
 
 	if #rv > 0 then
 		luci.http.prepare_content("application/json")
-		jsondump(rv)
+		luci.http.write_json(rv)
 		return
 	end
 
@@ -276,7 +243,7 @@ function wifi_status()
 
 	if #rv > 0 then
 		luci.http.prepare_content("application/json")
-		jsondump(rv)
+		luci.http.write_json(rv)
 		return
 	end
 
