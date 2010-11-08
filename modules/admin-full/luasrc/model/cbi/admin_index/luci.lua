@@ -87,7 +87,7 @@ d.cfgvalue = function(s)
 		return table.concat(files, "")
 	end
 
-	return "<em>No files found</em>"
+	return "<em>" .. translate("No files found") .. "</em>"
 end
 
 c = f:taboption("custom", TextValue, "_custom", translate("Custom files"))
