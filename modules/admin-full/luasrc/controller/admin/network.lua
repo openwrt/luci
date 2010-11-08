@@ -231,7 +231,7 @@ function wifi_status()
 		local iw = luci.sys.wifi.getiwinfo(dev)
 		if iw then
 			local f
-			local j = { }
+			local j = { id = dev }
 			for _, f in ipairs({
 				"channel", "frequency", "txpower", "bitrate", "signal", "noise",
 				"quality", "quality_max", "mode", "ssid", "bssid", "country",
