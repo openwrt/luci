@@ -235,7 +235,7 @@ function wifi_status()
 			for _, f in ipairs({
 				"channel", "frequency", "txpower", "bitrate", "signal", "noise",
 				"quality", "quality_max", "mode", "ssid", "bssid", "country",
-				"encryption", "ifname"
+				"encryption", "ifname", "assoclist"
 			}) do
 				j[f] = iw[f]
 			end
