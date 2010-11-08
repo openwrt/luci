@@ -109,11 +109,14 @@ $Id$
 						while (assoctable.rows.length > 1)
 							assoctable.rows[1].parentNode.removeChild(assoctable.rows[1]);
 
+					var devup = { };
+
 					for( var i = 0; i < st.length; i++ )
 					{
 						var iw = st[i];
+						var is_assoc = (iw.bssid && iw.channel);
 						var p = (100 / iw.quality_max * iw.quality);
-						var q = (iw.bssid && iw.channel) ? p : -1;
+						var q = is_assoc ? p : -1;
 
 						var icon;
 						if (q < 0)
@@ -129,6 +132,9 @@ $Id$
 						else
 							icon = "<%=resource%>/icons/signal-75-100.png";
 
+						if (!devup[wifidevs[iw.id]])
+							devup[wifidevs[iw.id]] = is_assoc;
+
 						var sig = document.getElementById(iw.id + '-iw-signal');
 						if (sig)
 							sig.innerHTML = String.format(
@@ -138,24 +144,34 @@ $Id$
 
 						var info = document.getElementById(iw.id + '-iw-status');
 						if (info)
-							info.innerHTML = String.format(
-								'<strong><%:SSID%>:</strong> %s | ' +
-								'<strong><%:Mode%>:</strong> %s<br />' +
-								'<strong><%:BSSID%>:</strong> %s | ' +
-								'<strong><%:Encryption%>:</strong> %s',
-									iw.ssid, iw.mode, iw.bssid,
-									iw.encryption ? iw.encryption.description : '<%:None%>'
-							);
+						{
+							if (is_assoc)
+								info.innerHTML = String.format(
+									'<strong><%:SSID%>:</strong> %s | ' +
+									'<strong><%:Mode%>:</strong> %s<br />' +
+									'<strong><%:BSSID%>:</strong> %s | ' +
+									'<strong><%:Encryption%>:</strong> %s',
+										iw.ssid, iw.mode, iw.bssid,
+										iw.encryption ? iw.encryption.description : '<%:None%>'
+								);
+							else
+								info.innerHTML = '<em><%:Wireless is disabled or not associated%></em>';
+						}
 
 						var dev = document.getElementById(wifidevs[iw.id] + '-iw-devinfo');
 						if (dev)
-							dev.innerHTML = String.format(
-								'<strong><%:Channel%>:</strong> %s (%s GHz) | ' +
-								'<strong><%:Bitrate%>:</strong> %s Mb/s',
-									iw.channel ? iw.channel : '?',
-									iw.frequency ? iw.frequency / 1000 : '?',
-									iw.bitrate ? iw.bitrate / 1000 : '?'
-							);
+						{
+							if (is_assoc)
+								dev.innerHTML = String.format(
+									'<strong><%:Channel%>:</strong> %s (%s GHz) | ' +
+									'<strong><%:Bitrate%>:</strong> %s Mb/s',
+										iw.channel ? iw.channel : '?',
+										iw.frequency ? iw.frequency / 1000 : '?',
+										iw.bitrate ? iw.bitrate / 1000 : '?'
+								);
+							else
+								dev.innerHTML = '';
+						}
 
 						if (assoctable)
 						{
@@ -218,6 +234,13 @@ $Id$
 
 						assoctable.rows[0].parentNode.appendChild(tr);
 					}
+
+					for (var dev in devup)
+					{
+						var img = document.getElementById(dev + '-iw-upstate');
+						if (img)
+							img.src = '<%=resource%>/icons/wifi' + (devup[dev] ? '' : '_disabled') + '.png';
+					}
 				}
 			}
 		)
@@ -236,7 +259,7 @@ $Id$
 		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
 			<!-- physical device -->
 			<tr>
-				<td style="width:34px"><img src="<%=resource%>/icons/wifi<%=dev:is_up() and "" or "_disabled"%>.png" style="float:left; margin-right:10px" /></td>
+				<td style="width:34px"><img src="<%=resource%>/icons/wifi_disabled.png" style="float:left; margin-right:10px" id="<%=dev:name()%>-iw-upstate" /></td>
 				<td colspan="2" style="text-align:left">
 					<big><strong><%=guess_wifi_hw(dev:name())%> (<%=dev:name()%>)</strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>

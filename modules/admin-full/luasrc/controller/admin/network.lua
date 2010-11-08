@@ -224,14 +224,15 @@ end
 
 function wifi_status()
 	local path = luci.dispatcher.context.requestpath
+	local arp  = luci.sys.net.arptable()
 	local rv   = { }
 
 	local dev
 	for dev in path[#path]:gmatch("[%w%.%-]+") do
+		local j = { id = dev }
 		local iw = luci.sys.wifi.getiwinfo(dev)
 		if iw then
 			local f
-			local j = { id = dev }
 			for _, f in ipairs({
 				"channel", "frequency", "txpower", "bitrate", "signal", "noise",
 				"quality", "quality_max", "mode", "ssid", "bssid", "country",
@@ -239,9 +240,8 @@ function wifi_status()
 			}) do
 				j[f] = iw[f]
 			end
-
-			rv[#rv+1] = j
 		end
+		rv[#rv+1] = j
 	end
 
 	if #rv > 0 then
