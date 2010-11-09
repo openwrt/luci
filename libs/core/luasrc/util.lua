@@ -787,19 +787,19 @@ function copcall(f, ...)
 end
 
 -- Handle return value of protected call
-function handleReturnValue(err, co, status, arg1, arg2, arg3, arg4, arg5)
+function handleReturnValue(err, co, status, ...)
 	if not status then
-		return false, err(debug.traceback(co, arg1), arg1, arg2, arg3, arg4, arg5)
+		return false, err(debug.traceback(co, (...)), ...)
 	end
 
 	if coroutine.status(co) ~= 'suspended' then
-		return true, arg1, arg2, arg3, arg4, arg5
+		return true, ...
 	end
 
-	return performResume(err, co, coroutine.yield(arg1, arg2, arg3, arg4, arg5))
+	return performResume(err, co, coroutine.yield(...))
 end
 
 -- Resume execution of protected function call
-function performResume(err, co, arg1, arg2, arg3, arg4, arg5)
-	return handleReturnValue(err, co, coroutine.resume(co, arg1, arg2, arg3, arg4, arg5))
+function performResume(err, co, ...)
+	return handleReturnValue(err, co, coroutine.resume(co, ...))
 end
