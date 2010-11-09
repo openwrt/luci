@@ -265,8 +265,8 @@ $Id$
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</td>
 				<td style="width:40px">
-					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_join?device="..dev:name())%>"><img style="border:none" src="<%=resource%>/cbi/find.gif" alt="Find and join network" title="Find and join network" /></a>
-					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_add?device="..dev:name())%>"><img style="border:none" src="<%=resource%>/cbi/add.gif" alt="Provide new network" title="Provide new network" /></a>
+					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_join?device="..dev:name())%>"><img style="border:none" src="<%=resource%>/cbi/find.gif" alt="<%:Find and join network%>" title="<%:Find and join network%>" /></a>
+					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_add?device="..dev:name())%>"><img style="border:none" src="<%=resource%>/cbi/add.gif" alt="<%:Provide new network%>" title="<%:Provide new network%>" /></a>
 				</td>
 			</tr>
 			<!-- /physical device -->
@@ -285,7 +285,7 @@ $Id$
 					</td>
 					<td class="cbi-value-field" style="width:40px">
 						<a href="<%=net:adminlink()%>"><img style="border:none" src="<%=resource%>/cbi/edit.gif" alt="Edit this network" title="Edit this network" /></a>
-						<a href="<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="Delete this network" title="Delete this network" /></a>
+						<a href="<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="<%:Delete this network%>" title="<%:Delete this network%>" /></a>
 					</td>
 				</tr>
 				<% end %>
@@ -293,7 +293,7 @@ $Id$
 				<tr class="cbi-section-table-row cbi-rowstyle-2">
 					<td></td>
 					<td colspan="3" class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px">
-						<em>(No network configured on this device)</em>
+						<em><%:No network configured on this device%></em>
 					</td>
 				</tr>
 			<% end %>
