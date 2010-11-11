@@ -362,7 +362,7 @@ $(eval $(call application,diag-devinfo,LuCI Diagnostics Tools (Device Info),\
 
 $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 
-$(eval $(call application,voide-diag,LuCI Voice Software (Diagnostics),\
+$(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),\
 	+luci-app-voice-core +luci-app-diag-devinfo))
 
 
