@@ -204,7 +204,6 @@ $(eval $(call library,httpclient,HTTP(S) client library,+luci-lib-web +luci-lib-
 $(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
 $(eval $(call library,json,LuCI JSON library))
 $(eval $(call library,lmo,LuCI LMO I18N library))
-$(eval $(call library,luanet,LuCI luanet library,+libiw))
 $(eval $(call library,lucid,LuCId Full-Stack Webserver,+luci-lib-nixio +luci-lib-web +luci-lib-px5g))
 $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
