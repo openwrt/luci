@@ -153,10 +153,6 @@ define library
   LUCI_BUILD_PACKAGES += luci-lib-$(1)
 endef
 
-define Package/luci-lib-lucid/extra-install
-	$(call Package/luci/install/template,$(1),libs/lucid-http)
-endef
-
 define Package/luci-lib-web/conffiles
 /etc/config/luci
 endef
@@ -205,6 +201,8 @@ $(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
 $(eval $(call library,json,LuCI JSON library))
 $(eval $(call library,lmo,LuCI LMO I18N library))
 $(eval $(call library,lucid,LuCId Full-Stack Webserver,+luci-lib-nixio +luci-lib-web +luci-lib-px5g))
+$(eval $(call library,lucid-http,LuCId HTTP Backend,+luci-lib-lucid))
+$(eval $(call library,lucid-rpc,LuCId RPC Backend,+luci-lib-lucid))
 $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
 $(eval $(call library,sys,LuCI Linux/POSIX system library,+libiwinfo))
