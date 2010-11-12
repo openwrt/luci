@@ -54,14 +54,50 @@ int template_L_parse(lua_State *L)
 	return 3;
 }
 
+int template_L_sanitize_utf8(lua_State *L)
+{
+	size_t len = 0;
+	const char *str = luaL_checklstring(L, 1, &len);
+	char *res = sanitize_utf8(str, len);
+
+	if (res != NULL)
+	{
+		lua_pushstring(L, res);
+		free(res);
+
+		return 1;
+	}
+
+	return 0;
+}
+
+int template_L_sanitize_pcdata(lua_State *L)
+{
+	size_t len = 0;
+	const char *str = luaL_checklstring(L, 1, &len);
+	char *res = sanitize_pcdata(str, len);
+
+	if (res != NULL)
+	{
+		lua_pushstring(L, res);
+		free(res);
+
+		return 1;
+	}
+
+	return 0;
+}
+
+
 /* module table */
 static const luaL_reg R[] = {
-	{"parse",	template_L_parse},
-	{NULL,		NULL}
+	{ "parse",				template_L_parse },
+	{ "sanitize_utf8",		template_L_sanitize_utf8 },
+	{ "sanitize_pcdata",	template_L_sanitize_pcdata },
+	{ NULL,					NULL }
 };
 
 LUALIB_API int luaopen_luci_template_parser(lua_State *L) {
 	luaL_register(L, TEMPLATE_LUALIB_META, R);
 	return 1;
 }
-

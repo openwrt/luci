@@ -1,7 +1,7 @@
 /*
- * LuCI Template - Lua library header
+ * LuCI Template - Utility header
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,14 +16,23 @@
  *  limitations under the License.
  */
 
-#ifndef _TEMPLATE_LUALIB_H_
-#define _TEMPLATE_LUALIB_H_
+#ifndef _TEMPLATE_UTILS_H_
+#define _TEMPLATE_UTILS_H_
 
-#include "template_parser.h"
-#include "template_utils.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-#define TEMPLATE_LUALIB_META  "template.parser"
 
-LUALIB_API int luaopen_luci_template_parser(lua_State *L);
+/* buffer object */
+struct template_buffer {
+	unsigned char *data;
+	unsigned char *dptr;
+	unsigned int size;
+	unsigned int fill;
+};
+
+char * sanitize_utf8(const char *s, unsigned int l);
+char * sanitize_pcdata(const char *s, unsigned int l);
 
 #endif
