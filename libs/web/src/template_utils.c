@@ -181,70 +181,67 @@ static int _validate_utf8(unsigned char **s, int l, struct template_buffer *buf)
 	unsigned char *ptr = *s;
 	unsigned int o = 0, v, n;
 
-	//for (o = 0; o < l; o++)
+	/* ascii byte without null */
+	if ((*(ptr+0) >= 0x01) && (*(ptr+0) <= 0x7F))
 	{
-		/* ascii byte without null */
-		if ((*(ptr+0) >= 0x01) && (*(ptr+0) <= 0x7F))
+		if (!buf_putchar(buf, *ptr++))
+			return 0;
+
+		o = 1;
+	}
+
+	/* multi byte sequence */
+	else if ((n = mb_num_chars(*ptr)) > 1)
+	{
+		/* count valid chars */
+		for (v = 1; (v <= n) && ((o+v) < l) && mb_is_cont(*(ptr+v)); v++);
+
+		switch (n)
 		{
-			if (!buf_putchar(buf, *ptr++))
-				return 0;
+			case 6:
+			case 5:
+				/* five and six byte sequences are always invalid */
+				if (!buf_putchar(buf, '?'))
+					return 0;
 
-			o = 1;
-		}
+				break;
 
-		/* multi byte sequence */
-		else if ((n = mb_num_chars(*ptr)) > 1)
-		{
-			/* count valid chars */
-			for (v = 1; (v <= n) && ((o+v) < l) && mb_is_cont(*(ptr+v)); v++);
+			default:
+				/* if the number of valid continuation bytes matches the
+				 * expected number and if the sequence is legal, copy
+				 * the bytes to the destination buffer */
+				if ((v == n) && mb_is_shortest(ptr, n) &&
+					!mb_is_surrogate(ptr, n) && !mb_is_illegal(ptr, n))
+				{
+					/* copy sequence */
+					if (!buf_append(buf, ptr, n))
+						return 0;
+				}
 
-			switch (n)
-			{
-				case 6:
-				case 5:
-					/* five and six byte sequences are always invalid */
+				/* the found sequence is illegal, skip it */
+				else
+				{
+					/* invalid sequence */
 					if (!buf_putchar(buf, '?'))
 						return 0;
+				}
 
-					break;
-
-				default:
-					/* if the number of valid continuation bytes matches the
-					 * expected number and if the sequence is legal, copy
-					 * the bytes to the destination buffer */
-					if ((v == n) && mb_is_shortest(ptr, n) &&
-						!mb_is_surrogate(ptr, n) && !mb_is_illegal(ptr, n))
-					{
-						/* copy sequence */
-						if (!buf_append(buf, ptr, n))
-							return 0;
-					}
-
-					/* the found sequence is illegal, skip it */
-					else
-					{
-						/* invalid sequence */
-						if (!buf_putchar(buf, '?'))
-							return 0;
-					}
-
-					break;
-			}
-
-			/* advance beyound the last found valid continuation char */
-			o = v;
-			ptr += v;
+				break;
 		}
 
-		/* invalid byte (0x00) */
-		else
-		{
-			if (!buf_putchar(buf, '?')) /* or 0xEF, 0xBF, 0xBD */
-				return 0;
+		/* advance beyound the last found valid continuation char */
+		o = v;
+		ptr += v;
+	}
 
-			o = 1;
-			ptr++;
-		}
+	/* invalid byte (0x00) */
+	else
+	{
+		if (!buf_putchar(buf, '?')) /* or 0xEF, 0xBF, 0xBD */
+			return 0;
+
+		o = 1;
+		ptr++;
 	}
 
 	*s = ptr;
@@ -256,15 +253,28 @@ char * sanitize_utf8(const char *s, unsigned int l)
 {
 	struct template_buffer *buf = buf_init();
 	unsigned char *ptr = (unsigned char *)s;
+	unsigned int v, o;
 
 	if (!buf)
 		return NULL;
 
-	if (!_validate_utf8(&ptr, l, buf))
+	for (o = 0; o < l; o++)
 	{
-		free(buf->data);
-		free(buf);
-		return NULL;
+		/* ascii char */
+		if ((*ptr >= 0x01) && (*ptr <= 0x7F))
+		{
+			if (!buf_putchar(buf, *ptr++))
+				break;
+		}
+
+		/* invalid byte or multi byte sequence */
+		else
+		{
+			if (!(v = _validate_utf8(&ptr, l - o, buf)))
+				break;
+
+			o += (v - 1);
+		}
 	}
 
 	return buf_destroy(buf);
