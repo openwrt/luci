@@ -31,6 +31,7 @@ local debug = require "debug"
 local ldebug = require "luci.debug"
 local string = require "string"
 local coroutine = require "coroutine"
+local tparser = require "luci.template.parser"
 
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
@@ -193,25 +194,8 @@ end
 --- Create valid XML PCDATA from given string.
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
-local function _pcdata_repl(c)
-	local i = string.byte(c)
-
-	if ( i >= 0x00 and i <= 0x08 ) or ( i >= 0x0B and i <= 0x0C ) or
-	   ( i >= 0x0E and i <= 0x1F ) or ( i == 0x7F )
-	then
-		return ""
-
-	elseif ( i == 0x26 ) or ( i == 0x27 ) or ( i == 0x22 ) or
-	       ( i == 0x3C ) or ( i == 0x3E )
-	then
-		return string.format("&#%i;", i)
-	end
-
-	return c
-end
-
 function pcdata(value)
-	return value and tostring(value):gsub("[&\"'<>%c]", _pcdata_repl)
+	return value and tparser.sanitize_pcdata(tostring(value))
 end
 
 --- Strip HTML tags from given string.
@@ -293,6 +277,8 @@ function imatch(v)
 		v = ""
 	elseif type(v) == "table" then
 		v = table.concat(v, " ")
+	elseif type(v) ~= "string" then
+		v = tostring(v)
 	end
 
 	return v:gmatch("%S+")
