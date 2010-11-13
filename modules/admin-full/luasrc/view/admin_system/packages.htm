@@ -61,7 +61,7 @@ local free_byte = space_free * fstat.frsize
 				<div class="cbi-value">
 					<label class="cbi-value-title"><%:Filter%>:</label>
 					<div class="cbi-value-field">
-						<input type="text" name="query" size="20" value="<%=query%>" />
+						<input type="text" name="query" size="20" value="<%=pcdata(query)%>" />
 						<input type="submit" class="cbi-input-find" name="search" value="<%:Find package%>" />
 					</div>
 				</div>
@@ -94,7 +94,7 @@ local free_byte = space_free * fstat.frsize
 		</fieldset>
 		<br />
 
-		<h3><%:Installed packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h3>
+		<h3><%:Installed packages%><% if query then %> (<%=pcdata(query)%>)<% end %></h3>
 
 		<fieldset class="cbi-section">
 			<table class="cbi-section-table" style="width:100%">
@@ -122,7 +122,7 @@ local free_byte = space_free * fstat.frsize
 		<br />
 
 
-		<h3><%:Available packages%><% if query then %> (<%=luci.util.pcdata(query)%>)<% end %></h3>
+		<h3><%:Available packages%><% if query then %> (<%=pcdata(query)%>)<% end %></h3>
 
 		<fieldset class="cbi-section">
 			<table class="cbi-section-table" style="width:100%">
