@@ -52,11 +52,25 @@ local fi
 -- @return 		Relative URL
 function build_url(...)
 	local path = {...}
-	local sn = http.getenv("SCRIPT_NAME") or ""
+	local url = { http.getenv("SCRIPT_NAME") or "" }
+
+	local k, v
 	for k, v in pairs(context.urltoken) do
-		sn = sn .. "/;" .. k .. "=" .. http.urlencode(v)
+		url[#url+1] = "/;"
+		url[#url+1] = http.urlencode(k)
+		url[#url+1] = "="
+		url[#url+1] = http.urlencode(v)
 	end
-	return sn .. ((#path > 0) and "/" .. table.concat(path, "/") or "")
+
+	local p
+	for _, p in ipairs(path) do
+		if p:match("^[a-zA-Z0-9_%-%./,;]+$") then
+			url[#url+1] = "/"
+			url[#url+1] = p
+		end
+	end
+
+	return table.concat(url, "")
 end
 
 --- Send a 404 error code and render the "error404" template if available.
@@ -181,7 +195,7 @@ function dispatch(request)
 	for i, s in ipairs(request) do
 		local tkey, tval
 		if t then
-			tkey, tval = s:match(";(%w+)=(.*)")
+			tkey, tval = s:match(";(%w+)=([a-fA-F0-9]*)")
 		end
 
 		if tkey then
