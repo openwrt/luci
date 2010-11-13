@@ -64,7 +64,7 @@ local free_byte = space_free * fstat.frsize
 				<div class="cbi-value">
 					<label class="cbi-value-title"><%:filter%>:</label>
 					<div class="cbi-value-field">
-						<input type="text" name="query" size="20" value="<%=query%>" />
+						<input type="text" name="query" size="20" value="<%=luci.util.pcdata(query)%>" />
 						<input type="submit" class="cbi-input-find" name="search" value="<%:a_s_packages_search%>" />
 					</div>
 				</div>
