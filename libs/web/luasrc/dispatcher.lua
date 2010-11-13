@@ -64,7 +64,7 @@ function build_url(...)
 
 	local p
 	for _, p in ipairs(path) do
-		if p:match("^[a-zA-Z0-9_%-%./,;]+$") then
+		if p:match("^[a-zA-Z0-9_%-%.%%/,;]+$") then
 			url[#url+1] = "/"
 			url[#url+1] = p
 		end
