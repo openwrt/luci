@@ -27,6 +27,7 @@ local has_pppoe  = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 local has_pppoa  = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 local has_ipv6   = fs.access("/proc/net/ipv6_route")
 local has_6in4   = fs.access("/lib/network/6in4.sh")
+local has_6to4   = fs.access("/lib/network/6to4.sh")
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("firewall")
@@ -53,7 +54,7 @@ s:tab("general", translate("General Setup"))
 if has_ipv6  then s:tab("ipv6", translate("IPv6 Setup")) end
 if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
 if has_pppoa then s:tab("atm", translate("ATM Settings")) end
-if has_6in4  then s:tab("tunnel", translate("Tunnel Settings")) end
+if has_6in4 or has_6to4 then s:tab("tunnel", translate("Tunnel Settings")) end
 s:tab("physical", translate("Physical Settings"))
 s:tab("firewall", translate("Firewall Settings"))
 
@@ -78,6 +79,7 @@ if has_pppoa then p:value("pppoa", "PPPoA")   end
 if has_3g    then p:value("3g",    "UMTS/3G") end
 if has_pptp  then p:value("pptp",  "PPTP")    end
 if has_6in4  then p:value("6in4",  "6in4")    end
+if has_6to4  then p:value("6to4",  "6to4")    end
 p:value("none", translate("none"))
 
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
@@ -218,7 +220,11 @@ dns = s:taboption("general", DynamicList, "dns", translate("<abbr title=\"Domain
 dns.optional = true
 dns.cast = "string"
 dns.datatype = "ipaddr"
-dns:depends("peerdns", "")
+dns:depends({ peerdns = "", proto = "static" })
+dns:depends({ peerdns = "", proto = "dhcp"   })
+dns:depends({ peerdns = "", proto = "pppoe"  })
+dns:depends({ peerdns = "", proto = "pppoa"  })
+dns:depends({ peerdns = "", proto = "none"   })
 
 mtu = s:taboption("physical", Value, "mtu", "MTU")
 mtu.optional = true
@@ -235,12 +241,35 @@ if has_6in4 then
 	peer.optional = false
 	peer.datatype = "ip4addr"
 	peer:depends("proto", "6in4")
+end
 
+if has_6in4 or has_6to4 then
 	ttl = s:taboption("physical", Value, "ttl", translate("TTL"))
 	ttl.default = "64"
 	ttl.optional = true
 	ttl.datatype = "uinteger"
 	ttl:depends("proto", "6in4")
+	ttl:depends("proto", "6to4")
+
+	advi = s:taboption("general", Value, "adv_interface", translate("Advertise IPv6 on network"))
+	advi.widget = "radio"
+	advi.exclude = arg[1]
+	advi.default = "lan"
+	advi.template = "cbi/network_netlist"
+	advi.nocreate = true
+	advi.nobridges = true
+
+	advn = s:taboption("general", Value, "adv_subnet", translate("Advertised network ID"), translate("Allowed range is 1 to FFFF"))
+	advn.default = "1"
+
+	function advn.write(self, section, value)
+		value = tonumber(value, 16) or 1
+
+		if value > 65535 then value = 65535
+		elseif value < 1 then value = 1 end
+
+		Value.write(self, section, "%X" % value)
+	end
 end
 
 mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
