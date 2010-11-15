@@ -154,8 +154,8 @@ function _iface_ignore(x)
 	return (
 		x:match("^wmaster%d") or x:match("^wifi%d") or x:match("^hwsim%d") or
 		x:match("^imq%d") or x:match("^mon.wlan%d") or x:match("^6in4-%w") or
-		x:match("^3g-%w") or x:match("^ppp-%w") or x:match("^pppoe-%w") or
-		x:match("^pppoa-%w") or	x == "lo"
+		x:match("^6to4-%w") or x:match("^3g-%w") or x:match("^ppp-%w") or
+		x:match("^pppoe-%w") or x:match("^pppoa-%w") or	x == "lo"
 	)
 end
 
@@ -546,7 +546,7 @@ end
 function network.is_virtual(self)
 	local p = self:proto()
 	return (
-		p == "3g" or p == "6in4" or p == "ppp" or
+		p == "3g" or p == "6in4" or p == "6to4" or p == "ppp" or
 		p == "pppoe" or p == "pppoa"
 	)
 end
