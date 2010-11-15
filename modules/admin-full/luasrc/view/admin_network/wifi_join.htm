@@ -77,7 +77,7 @@ $Id$
 	<fieldset class="cbi-section">
 		<table class="cbi-section-table" style="empty-cells:hide">
 			<!-- scan list -->
-			<% for i, net in ipairs(iw.scanlist) do %>
+			<% for i, net in ipairs(iw.scanlist) do net.encryption = net.encryption or { } %>
 			<tr class="cbi-section-table-row cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
 				<td class="cbi-value-field" style="width:16px; padding:3px">
 					<abbr title="Signal: <%=net.signal%> dB / Quality: <%=net.quality%>/<%=net.quality_max%>">
@@ -90,7 +90,7 @@ $Id$
 					<strong>Channel:</strong> <%=net.channel%> |
 					<strong>Mode:</strong> <%=net.mode%> |
 					<strong>BSSID:</strong> <%=net.bssid%> |
-					<strong>Encryption:</strong> <%=format_wifi_encryption(net)%>
+					<strong>Encryption:</strong> <%=net.encryption.description or translate("Open")%>
 				</td>
 				<td class="cbi-value-field" style="width:40px">
 					<form action="<%=REQUEST_URI%>" method="post">
@@ -99,13 +99,15 @@ $Id$
 						<input type="hidden" name="mode" value="<%=net.mode%>" />
 						<input type="hidden" name="bssid" value="<%=net.bssid%>" />
 						<input type="hidden" name="channel" value="<%=net.channel%>" />
-						<input type="hidden" name="wep" value="<%=net.wep and 1 or 0%>" />
-						<% if net.wpa then %>
-						<input type="hidden" name="wpa_version" value="<%=net.wpa%>" />
-						<% for _, v in ipairs(net.auth_suites) do %><input type="hidden" name="wpa_suites" value="<%=v%>" />
-						<% end; for _, v in ipairs(net.group_ciphers) do %><input type="hidden" name="wpa_group" value="<%=v%>" />
-						<% end; for _, v in ipairs(net.pair_ciphers) do %><input type="hidden" name="wpa_pairwise" value="<%=v%>" />
+						<input type="hidden" name="wep" value="<%=net.encryption.wep and 1 or 0%>" />
+						<% if net.encryption.wpa then %>
+						<input type="hidden" name="wpa_version" value="<%=net.encryption.wpa%>" />
+						<% for _, v in ipairs(net.encryption.auth_suites) do %><input type="hidden" name="wpa_suites" value="<%=v%>" />
+						<% end; for _, v in ipairs(net.encryption.group_ciphers) do %><input type="hidden" name="wpa_group" value="<%=v%>" />
+						<% end; for _, v in ipairs(net.encryption.pair_ciphers) do %><input type="hidden" name="wpa_pairwise" value="<%=v%>" />
 						<% end; end %>
+
+						<input type="hidden" name="clbridge" value="<%=iw.type == "wl" and 1 or 0%>" />
 
 						<input class="cbi-button-apply" type="submit" value="Join Network" />
 					</form>

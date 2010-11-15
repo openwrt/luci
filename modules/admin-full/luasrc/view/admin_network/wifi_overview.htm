@@ -99,9 +99,8 @@ $Id$
 
 	(function() {
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "wireless_status", table.concat(netlist, ","))%>', null,
-			function(x)
+			function(x, st)
 			{
-				var st = x.responseText ? eval('(' + x.responseText + ')') : null;
 				if (st)
 				{
 					var assoctable = document.getElementById('iw-assoclist');

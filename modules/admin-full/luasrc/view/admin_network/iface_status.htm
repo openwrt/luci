@@ -4,9 +4,8 @@
 	var iwxhr = new XHR();
 	(function() {
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
-			function(x)
+			function(x, ifc)
 			{
-				var ifc = x.responseText ? eval('(' + x.responseText + ')') : { };
 				if (ifc && (ifc = ifc[0]))
 				{
 					var is_up = (ifc.flags && ifc.flags.up);
