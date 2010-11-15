@@ -17,11 +17,9 @@
 	var stxhr = new XHR();
 	(function() {
 		stxhr.get('<%=luci.dispatcher.build_url("admin", "services", "upnp", "status")%>', null,
-			function(x)
+			function(x, st)
 			{
-				var st = x.responseText ? eval('(' + x.responseText + ')') : null;
 				var tb = document.getElementById('upnp_status_table');
-
 				if (st && tb)
 				{
 					/* clear all rows */
