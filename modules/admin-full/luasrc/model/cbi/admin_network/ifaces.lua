@@ -250,7 +250,9 @@ if has_6in4 or has_6to4 then
 	ttl.datatype = "uinteger"
 	ttl:depends("proto", "6in4")
 	ttl:depends("proto", "6to4")
+end
 
+if has_6to4 then
 	advi = s:taboption("general", Value, "adv_interface", translate("Advertise IPv6 on network"))
 	advi.widget = "radio"
 	advi.exclude = arg[1]
@@ -258,9 +260,11 @@ if has_6in4 or has_6to4 then
 	advi.template = "cbi/network_netlist"
 	advi.nocreate = true
 	advi.nobridges = true
+	advi:depends("proto", "6to4")
 
 	advn = s:taboption("general", Value, "adv_subnet", translate("Advertised network ID"), translate("Allowed range is 1 to FFFF"))
 	advn.default = "1"
+	advn:depends("proto", "6to4")
 
 	function advn.write(self, section, value)
 		value = tonumber(value, 16) or 1
