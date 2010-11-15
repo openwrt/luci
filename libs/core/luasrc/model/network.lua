@@ -275,26 +275,14 @@ end
 function del_network(self, n)
 	local r = uci_r:delete("network", n)
 	if r then
-		uci_r:foreach("network", "alias",
-			function(s)
-				if s.interface == n then
-					uci_r:delete("network", s['.name'])
-				end
-			end)
+		uci_r:delete_all("network", "alias",
+			function(s) return (s.interface == n) end)
 
-		uci_r:foreach("network", "route",
-			function(s)
-				if s.interface == n then
-					uci_r:delete("network", s['.name'])
-				end
-			end)
+		uci_r:delete_all("network", "route",
+			function(s) return (s.interface == n) end)
 
-		uci_r:foreach("network", "route6",
-			function(s)
-				if s.interface == n then
-					uci_r:delete("network", s['.name'])
-				end
-			end)
+		uci_r:delete_all("network", "route6",
+			function(s) return (s.interface == n) end)
 
 		uci_r:foreach("wireless", "wifi-iface",
 			function(s)
@@ -302,8 +290,6 @@ function del_network(self, n)
 					uci_r:delete("wireless", s['.name'], "network")
 				end
 			end)
-
-		uci_r:delete("network", n)
 	end
 	return r
 end
@@ -990,7 +976,11 @@ function wifinet.name(self)
 end
 
 function wifinet.ifname(self)
-	return self.iwinfo.ifname or self.wdev
+	local ifname = self.iwinfo.ifname
+	if not ifname or ifname:match("^wifi%d") or ifname:match("^radio%d") then
+		ifname = self.wdev
+	end
+	return ifname
 end
 
 function wifinet.get_device(self)
