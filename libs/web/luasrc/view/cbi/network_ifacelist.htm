@@ -40,7 +40,7 @@ $Id$
 <ul style="margin:0; list-style-type:none">
 	<% for _, iface in ipairs(ifaces) do
 	     local link = iface:adminlink()
-         if not self.nobridges or not iface:is_bridge() then %>
+         if (not self.nobridges or not iface:is_bridge()) and iface:name() ~= self.exclude then %>
 	<li>
 		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
 			attr("type", self.widget or "radio") ..
