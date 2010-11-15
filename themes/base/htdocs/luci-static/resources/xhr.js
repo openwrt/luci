@@ -56,8 +56,18 @@ XHR = function()
 
 		xhr.onreadystatechange = function()
 		{
+			var json = null;
+			if( xhr.getResponseHeader("Content-Type") == "application/json" ) {
+				try {
+					json = eval('(' + xhr.responseText + ')');
+				}
+				catch(e) {
+					json = null;
+				}
+			}
+
 			if( xhr.readyState == 4 ) {
-				callback( xhr );
+				callback( xhr, json );
 			}
 		}
 
