@@ -61,14 +61,23 @@ function index()
 		page.leaf = true
 	end
 
-	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
+	page = entry({"admin", "network", "network"}, arcombine(template("admin_network/iface_overview"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
 	page.leaf   = true
 	page.subindex = true
 
-	page = entry({"admin", "network", "add"}, cbi("admin_network/iface_add"), nil)
+	page = entry({"admin", "network", "iface_add"}, cbi("admin_network/iface_add"), nil)
+	page.leaf = true
+
+	page = entry({"admin", "network", "iface_delete"}, call("iface_delete"), nil)
 	page.leaf = true
 
 	page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
+	page.leaf = true
+
+	page = entry({"admin", "network", "iface_reconnect"}, call("iface_reconnect"), nil)
+	page.leaf = true
+
+	page = entry({"admin", "network", "iface_shutdown"}, call("iface_shutdown"), nil)
 	page.leaf = true
 
 	uci:foreach("network", "interface",
@@ -172,14 +181,20 @@ function iface_status()
 
 	local iface
 	for iface in path[#path]:gmatch("[%w%.%-]+") do
-		local dev = x:get("network", iface, "device") or ""
+		local dev
+		if x:get("network", iface, "type") == "bridge" then
+			dev = "br-" .. iface
+		else
+			dev = x:get("network", iface, "device") or ""
+		end
+
 		if #dev == 0 or dev:match("^%d") or dev:match("%W") then
 			dev = x:get("network", iface, "ifname") or ""
 			dev = dev:match("%S+")
 		end
 
 		local info
-		local data = { }
+		local data = { id = iface }
 		for _, info in ipairs(nixio.getifaddrs()) do
 			local name = info.name:match("[^:]+")
 			if name == dev then
@@ -220,6 +235,70 @@ function iface_status()
 	end
 
 	luci.http.status(404, "No such device")
+end
+
+function iface_reconnect()
+	local path  = luci.dispatcher.context.requestpath
+	local iface = path[#path]
+	local netmd = require "luci.model.network".init()
+
+	local net = netmd:get_network(iface)
+	if net then
+		local ifn
+		for _, ifn in ipairs(net:get_interfaces()) do
+			local wnet = ifn:get_wifinet()
+			if wnet then
+				local wdev = wnet:get_device()
+				if wdev then
+					luci.sys.call(
+						"env -i /sbin/wifi up %q >/dev/null 2>/dev/null"
+							% wdev:name()
+					)
+
+					luci.http.status(200, "Reconnected")
+					return
+				end
+			end
+		end
+
+		luci.sys.call("env -i /sbin/ifup %q >/dev/null 2>/dev/null" % iface)
+		luci.http.status(200, "Reconnected")
+		return
+	end
+
+	luci.http.status(404, "No such interface")
+end
+
+function iface_shutdown()
+	local path  = luci.dispatcher.context.requestpath
+	local iface = path[#path]
+	local netmd = require "luci.model.network".init()
+
+	local net = netmd:get_network(iface)
+	if net then
+		luci.sys.call("env -i /sbin/ifdown %q >/dev/null 2>/dev/null" % iface)
+		luci.http.status(200, "Shutdown")
+		return
+	end
+
+	luci.http.status(404, "No such interface")
+end
+
+function iface_delete()
+	local path  = luci.dispatcher.context.requestpath
+	local iface = path[#path]
+	local netmd = require "luci.model.network".init()
+
+	local net = netmd:del_network(iface)
+	if net then
+		luci.sys.call("env -i /sbin/ifdown %q >/dev/null 2>/dev/null" % iface)
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/network"))
+		netmd:commit("network")
+		netmd:commit("wireless")
+		return
+	end
+
+	luci.http.status(404, "No such interface")
 end
 
 function wifi_status()
