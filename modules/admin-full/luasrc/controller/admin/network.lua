@@ -61,7 +61,7 @@ function index()
 		page.leaf = true
 	end
 
-	page = entry({"admin", "network", "network"}, arcombine(template("admin_network/iface_overview"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
+	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
 	page.leaf   = true
 	page.subindex = true
 

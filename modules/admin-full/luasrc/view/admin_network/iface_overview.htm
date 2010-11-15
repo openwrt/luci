@@ -24,8 +24,6 @@ $Id$
 	end
 -%>
 
-<%+header%>
-
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript"><![CDATA[
 	function iface_shutdown(id, reconnect) {
@@ -170,8 +168,6 @@ $Id$
 	})();
 ]]></script>
 
-<h2><a id="content" name="content"><%:Interface Overview%></a></h2>
-
 <fieldset class="cbi-section" style="display:none">
 	<legend><%:Reconnecting interface%></legend>
 	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
@@ -180,6 +176,8 @@ $Id$
 
 <div class="cbi-map">
 	<fieldset class="cbi-section">
+		<legend><%:Interface Overview%></legend>
+
 		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell">&nbsp;</th>
@@ -215,12 +213,9 @@ $Id$
 				</tr>
 			<% end %>
 		</table>
+
+		<form action="<%=luci.dispatcher.build_url("admin/network/iface_add")%>" method="post">
+			<input type="submit" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" />
+		</form>
 	</fieldset>
-
-	<form action="<%=luci.dispatcher.build_url("admin/network/iface_add")%>" method="post">
-		<br />
-		<input type="submit" class="cbi-button cbi-button-apply" value="<%:Add new interface...%>" />
-	</form>
 </div>
-
-<%+footer%>
