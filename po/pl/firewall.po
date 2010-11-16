@@ -12,130 +12,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/zones.lua      #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-msgid "Firewall"
-msgstr ""
-
-msgid ""
-"The firewall creates zones over your network interfaces to control network "
-"traffic flow."
-msgstr ""
-
-msgid "Enable SYN-flood protection"
-msgstr ""
-
-msgid "Drop invalid packets"
-msgstr ""
-
-msgid "Input"
-msgstr ""
-
-msgid "Output"
-msgstr ""
-
-msgid "Forward"
-msgstr ""
-
-msgid "reject"
-msgstr ""
-
-msgid "drop"
-msgstr ""
-
-msgid "accept"
-msgstr ""
-
-msgid "Zones"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Masquerading"
-msgstr ""
-
-msgid "MSS clamping"
-msgstr ""
-
-msgid "Network"
-msgstr ""
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/traffic.lua    #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-msgid "Traffic Control"
-msgstr ""
-
-msgid "Zone-to-Zone traffic"
-msgstr ""
-
-msgid ""
-"Here you can specify which network traffic is allowed to flow between "
-"network zones. Only new connections will be matched.  Packets belonging to "
-"already open connections are automatically allowed to pass the firewall. If "
-"you experience occasional connection problems try enabling MSS Clamping "
-"otherwise disable it for performance reasons."
-msgstr ""
-
-msgid "Source"
-msgstr ""
-
-msgid "Destination"
-msgstr ""
-
-msgid "Rules"
-msgstr ""
-
-msgid "Protocol"
-msgstr ""
-
-msgid "Device"
+msgid "(optional)"
 msgstr ""
 
 msgid "Action"
 msgstr ""
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua   #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-msgid "Traffic Redirection"
-msgstr ""
-
-msgid ""
-"Traffic redirection allows you to change the destination address of "
-"forwarded packets."
-msgstr ""
-
-msgid "(optional)"
-msgstr ""
-
-msgid "Zone"
-msgstr ""
-
-msgid "Source port"
-msgstr ""
-
-msgid "Destination IP"
-msgstr ""
-
-msgid "IP address"
-msgstr ""
-
-msgid "Destination port"
+msgid "Advanced Options"
 msgstr ""
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -172,31 +55,204 @@ msgstr ""
 msgid "Advanced Rules"
 msgstr ""
 
+msgid "Advanced Settings"
+msgstr ""
+
 msgid ""
 "Advanced rules let you customize the firewall to your needs. Only new "
 "connections will be matched. Packets belonging to already open connections "
 "are automatically allowed to pass the firewall."
 msgstr ""
 
-msgid "Overview"
+msgid "Allow forward from <em>source zones</em>:"
 msgstr ""
 
-msgid "Source zone"
+msgid "Allow forward to <em>destination zones</em>:"
 msgstr ""
 
-msgid "Destination zone"
+msgid "Any"
 msgstr ""
 
-msgid "any"
+msgid "Covered networks"
 msgstr ""
 
-msgid "Source address"
+msgid "Custom Rules"
+msgstr ""
+
+msgid "Custom Rules (/etc/firewall.user)"
+msgstr ""
+
+msgid "Destination"
 msgstr ""
 
 msgid "Destination address"
 msgstr ""
 
-msgid "Source MAC-address"
+msgid "Destination port"
+msgstr ""
+
+msgid "Destination zone"
+msgstr ""
+
+msgid "Device"
+msgstr ""
+
+msgid "Drop invalid packets"
+msgstr ""
+
+msgid "Enable NAT Loopback"
+msgstr ""
+
+msgid "Enable SYN-flood protection"
+msgstr ""
+
+msgid "Enable logging on this zone"
+msgstr ""
+
+msgid "External port"
+msgstr ""
+
+msgid "Family"
+msgstr ""
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/zones.lua      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+msgid "Firewall"
+msgstr ""
+
+msgid "Firewall - Zone Settings"
+msgstr ""
+
+msgid ""
+"For DNAT, match incoming traffic directed at the given destination ip "
+"address. For SNAT rewrite the source address to the given address."
+msgstr ""
+
+msgid "Force connection tracking"
+msgstr ""
+
+msgid "Forward"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "IPv4 and IPv6"
+msgstr ""
+
+msgid "IPv4 only"
+msgstr ""
+
+msgid "IPv6 only"
+msgstr ""
+
+msgid "Input"
+msgstr ""
+
+msgid "Intended destination address"
+msgstr ""
+
+msgid "Inter-Zone Forwarding"
+msgstr ""
+
+msgid "Internal IP address"
+msgstr ""
+
+msgid "Internal port"
+msgstr ""
+
+msgid "Internal port (optional)"
+msgstr ""
+
+msgid "Limit log messages"
+msgstr ""
+
+msgid "MSS clamping"
+msgstr ""
+
+msgid "Masquerading"
+msgstr ""
+
+msgid "Match ICMP type"
+msgstr ""
+
+msgid ""
+"Match incoming traffic directed at the given destination port or port range "
+"on this host"
+msgstr ""
+
+msgid ""
+"Match incoming traffic originating from the given source port or port range "
+"on the client host"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Output"
+msgstr ""
+
+msgid "Overview"
+msgstr ""
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "(optional)"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
+# msgid "External port"
+# msgstr ""
+#
+# msgid "Internal IP address"
+# msgstr ""
+#
+msgid "Port forwarding"
+msgstr ""
+
+msgid ""
+"Port forwarding allows to provide network services in the internal network "
+"to an external network."
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+msgid ""
+"Redirect matched incoming traffic to the given port on the internal host"
+msgstr ""
+
+msgid "Redirect matched incoming traffic to the specified internal host"
+msgstr ""
+
+msgid "Redirection type"
+msgstr ""
+
+msgid "Redirections"
+msgstr ""
+
+msgid "Restrict Masquerading to given destination subnets"
+msgstr ""
+
+msgid "Restrict Masquerading to given source subnets"
+msgstr ""
+
+msgid "Restrict to address family"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid "Source"
 msgstr ""
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -232,58 +288,78 @@ msgstr ""
 msgid "Source IP address"
 msgstr ""
 
-msgid ""
-"Match incoming traffic originating from the given source port or port range "
-"on the client host"
+msgid "Source MAC address"
 msgstr ""
 
-msgid "External port"
+msgid "Source address"
 msgstr ""
 
-msgid ""
-"Match incoming traffic directed at the given destination port or port range "
-"on this host"
+msgid "Source port"
 msgstr ""
 
-msgid "Internal IP address"
-msgstr ""
-
-msgid "Redirect matched incoming traffic to the specified internal host"
-msgstr ""
-
-msgid "Internal port (optional)"
+msgid "Source zone"
 msgstr ""
 
 msgid ""
-"Redirect matched incoming traffic to the given port on the internal host"
+"The firewall creates zones over your network interfaces to control network "
+"traffic flow."
+msgstr ""
+
+msgid ""
+"The options below control the forwarding policies between this zone (%s) and "
+"other zones. <em>Destination zones</em> cover forwarded traffic "
+"<strong>originating from %q</strong>. <em>Source zones</em> match forwarded "
+"traffic from other zones <strong>targeted at %q</strong>. The forwarding "
+"rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
+"<em>not</em> imply a permission to forward from wan to lan as well."
+msgstr ""
+
+msgid ""
+"This section defines common properties of %q. The <em>input</em> and "
+"<em>output</em> options set the default policies for traffic entering and "
+"leaving this zone while the <em>forward</em> option describes the policy for "
+"forwarded traffic between different networks within the zone. <em>Covered "
+"networks</em> specifies which available networks are member of this zone."
 msgstr ""
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua #
+# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua   #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
 # msgid "Name"
 # msgstr ""
 #
-# msgid "(optional)"
-# msgstr ""
-#
 # msgid "Protocol"
 # msgstr ""
 #
-# msgid "External port"
-# msgstr ""
-#
-# msgid "Internal IP address"
-# msgstr ""
-#
-msgid "Port forwarding"
+msgid "Traffic Redirection"
 msgstr ""
 
 msgid ""
-"Port forwarding allows to provide network services in the internal network "
-"to an external network."
+"Traffic redirection allows you to change the destination address of "
+"forwarded packets."
 msgstr ""
 
-msgid "Internal port"
+msgid "Via"
+msgstr ""
+
+msgid "Zone %q"
+msgstr ""
+
+msgid "Zone ⇒ Forwardings"
+msgstr ""
+
+msgid "Zones"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "any"
+msgstr ""
+
+msgid "drop"
+msgstr ""
+
+msgid "reject"
 msgstr ""
