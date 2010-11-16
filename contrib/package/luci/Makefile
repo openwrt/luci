@@ -459,7 +459,7 @@ define theme
     SUBMENU:=Themes
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
 	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
-	DEPENDS:=$(ifneq $(1),base,+luci-theme-base) $(4)
+	DEPENDS:=$(if $(filter-out base,$(1)),+luci-theme-base) $(4)
 	$(if $(5),DEFAULT:=y if PACKAGE_luci-lib-core)
   endef
 
