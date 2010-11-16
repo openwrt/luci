@@ -1,4 +1,4 @@
-PO = luci-fw
+PO = firewall
 
 include ../../build/config.mk
 include ../../build/module.mk
