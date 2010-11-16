@@ -67,6 +67,11 @@ $Id$
 
 	local dev = luci.http.formvalue("device")
 	local iw = luci.sys.wifi.getiwinfo(dev)
+
+	if not iw then
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
+		return
+	end
 -%>
 
 <%+header%>

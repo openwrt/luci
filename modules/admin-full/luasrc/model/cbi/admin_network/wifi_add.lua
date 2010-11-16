@@ -19,6 +19,11 @@ local http = require "luci.http"
 
 local iw = luci.sys.wifi.getiwinfo(http.formvalue("device"))
 
+if not iw then
+	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
+	return
+end
+
 m = SimpleForm("network", translate("Join Network: Settings"))
 m.cancel = translate("Back to scan results")
 m.reset = false
@@ -48,6 +53,8 @@ m.hidden = {
 if iw and iw.mbssid_support then
 	replace = m:field(Flag, "replace", translate("Replace wireless configuration"),
 		translate("An additional network will be created if you leave this unchecked."))
+
+	function replace.cfgvalue() return "1" end
 else
 	replace = m:field(DummyValue, "replace", translate("Replace wireless configuration"))
 	replace.default = translate("The hardware is not multi-SSID capable and existing " ..
@@ -61,144 +68,102 @@ if http.formvalue("wep") == "1" then
 		translate("Specify the secret encryption key here."))
 
 	key.password = true
+	key.datatype = "wepkey"
 
-elseif (tonumber(m.hidden.wpa_version) or 0) > 0 and m.hidden.wpa_suites == "PSK" then
+elseif (tonumber(m.hidden.wpa_version) or 0) > 0 and
+	(m.hidden.wpa_suites == "PSK" or m.hidden.wpa_suites == "PSK2")
+then
 	key = m:field(Value, "key", translate("WPA passphrase"),
 		translate("Specify the secret encryption key here."))
 
 	key.password = true
+	key.datatype = "wpakey"
 	--m.hidden.wpa_suite = (tonumber(http.formvalue("wpa_version")) or 0) >= 2 and "psk2" or "psk"
 end
-
-attachnet = m:field(Flag, "_attach", translate("Attach to existing network"),
-	translate("If the interface is attached to an existing network it will be <em>bridged</em> " ..
-		"to the existing interfaces and is covered by the firewall zone of the choosen network. " ..
-		"Uncheck this option to define a new standalone network."
-	))
-
-attachnet.rmempty = false
-attachnet.default = http.formvalue("cbi.submit") and nil or "1"
-
-function attachnet.formvalue(self, section)
-	if not http.formvalue("cbi.submit") then
-		return m.hidden.mode == "Ad-Hoc" and "0" or "1"
-	else
-		return Value.formvalue(self, section) and "1" or "0"
-	end
-end
-
-attachnet.cfgvalue = attachnet.formvalue
 
 newnet = m:field(Value, "_netname_new", translate("Name of the new network"),
 	translate("The allowed characters are: <code>A-Z</code>, <code>a-z</code>, " ..
 		"<code>0-9</code> and <code>_</code>"
 	))
 
-newnet:depends("_attach", "")
-newnet.default = m.hidden.mode == "Ad-Hoc" and "mesh"
-
-addnet = m:field(Value, "_netname_attach",
-	translate("Network to attach interface to"))
-
-addnet.template = "cbi/network_netlist"
-addnet.widget = "radio"
-addnet.default = "wan"
-addnet.nocreate = true
-addnet:depends("_attach", "1")
+newnet.default = m.hidden.mode == "Ad-Hoc" and "mesh" or "wwan"
+newnet.datatype = "uciname"
 
 fwzone = m:field(Value, "_fwzone",
 	translate("Create / Assign firewall-zone"),
 	translate("Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it."))
 
 fwzone.template = "cbi/firewall_zonelist"
-fwzone:depends("_attach", "")
-fwzone.default = m.hidden.mode == "Ad-Hoc" and "mesh"
+fwzone.default = m.hidden.mode == "Ad-Hoc" and "mesh" or "wan"
 
-function attachnet.parse(self, section)
-	Flag.parse(self, section)
+function newnet.parse(self, section)
+	local net, zone
+	local value = self:formvalue(section)
+	local zval  = fwzone:formvalue(section)
 
-	if http.formvalue("cbi.submit") then
-		local net, zone
-		local value = self:formvalue(section)
+	net = nw:add_network(value, { proto = "dhcp" })
+	zone = fw:get_zone(zval)
 
-		if value == "1" then
-			net = nw:get_network(addnet:formvalue(section))
-			if net then
-				net:type("bridge")
-			end
-		else
-			local zval = fwzone:formvalue(section)
+	if not zone and zval == '-' then
+		zval = m:formvalue(fwzone:cbid(section) .. ".newzone")
+		if zval and #zval > 0 then
+			zone = fw:add_zone(zval)
+		end
+	end
 
-			net = nw:add_network(newnet:formvalue(section), { proto = "dhcp" })
-			zone = fw:get_zone(zval)
+	if not net then
+		self.error = { [section] = "missing" }
+	else
+		local wdev = nw:get_wifidev(m.hidden.device)
 
-			if not zone and zval == '-' then
-				zval = m:formvalue(fwzone:cbid(section) .. ".newzone")
-				if zval and #zval > 0 then
-					zone = fw:add_zone(zval)
-				end
+		wdev:set("disabled", false)
+		wdev:set("channel", m.hidden.channel)
+
+		if replace:formvalue(section) then
+			local n
+			for _, n in ipairs(wdev:get_wifinets()) do
+				wdev:del_wifinet(n)
 			end
 		end
 
-		if not net then
-			self.error = { [section] = "missing" }
+		local wconf = {
+			device  = m.hidden.device,
+			ssid    = m.hidden.join,
+			mode    = (m.hidden.mode == "Ad-Hoc" and "adhoc" or "sta"),
+			network = net:name()
+		}
+
+		if m.hidden.wep == "1" then
+			wconf.encryption = "wep"
+			wconf.key        = key and key:formvalue(section) or ""
+		elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
+			wconf.encryption = (tonumber(m.hidden.wpa_version) or 0) >= 2 and "psk2" or "psk"
+			wconf.key        = key and key:formvalue(section) or ""
 		else
-			local wdev = nw:get_wifidev(m.hidden.device)
+			wconf.encryption = "none"
+		end
 
-			wdev:set("disabled", false)
-			wdev:set("channel", m.hidden.channel)
+		if wconf.mode == "adhoc" then
+			wconf.bssid = m.hidden.bssid
+		end
 
-			if replace:formvalue(section) then
-				local n
-				for _, n in ipairs(wdev:get_wifinets()) do
-					wdev:del_wifinet(n)
-				end
+		local wnet = wdev:add_wifinet(wconf)
+		if wnet then
+			if zone then
+				fw:del_network(net:name())
+				zone:add_network(net:name())
 			end
 
-			local wconf = {
-				device  = m.hidden.device,
-				ssid    = m.hidden.join,
-				mode    = (m.hidden.mode == "Ad-Hoc" and "adhoc" or "sta"),
-				network = net:name()
-			}
+			uci:save("wireless")
+			uci:save("network")
+			uci:save("firewall")
 
-			if m.hidden.wep == "1" then
-				wconf.encryption = "wep"
-				wconf.key        = key and key:formvalue(section) or ""
-			elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
-				wconf.encryption = (tonumber(m.hidden.wpa_version) or 0) >= 2 and "psk2" or "psk"
-				wconf.key        = key and key:formvalue(section) or ""
-			else
-				wconf.encryption = "none"
-			end
-
-			if wconf.mode == "adhoc" then
-				wconf.bssid = m.hidden.bssid
-			end
-
-			local wnet = wdev:add_wifinet(wconf)
-			if wnet then
-				if zone then
-					fw:del_network(net:name())
-					zone:add_network(net:name())
-				end
-
-				uci:save("wireless")
-				uci:save("network")
-				uci:save("firewall")
-
-				uci:commit("wireless")
-				uci:commit("network")
-				uci:commit("firewall")
-
-				luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless",
-					wdev:name(), wnet:name()))
-			end
+			luci.http.redirect(luci.dispatcher.build_url(
+				"admin/network/wireless", wdev:name(), wnet:ifname()
+			))
 		end
 	end
 end
-
-attachnet.remove = attachnet.write
 
 function fwzone.cfgvalue(self, section)
 	self.iface = section
