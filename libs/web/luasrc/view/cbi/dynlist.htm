@@ -39,7 +39,7 @@ cbi_dynlist_init('<%=cbid%>');
 		<%- end -%>', '<%: -- custom -- %>');
 	<% end -%>
 	<% for i=1, #vals + 1 do -%>
-	cbi_validate_field('<%=cbid%>.<%=i%>', <%=tostring(self.optional == true or i > #vals)%>, '<%=self.datatype%>');
+	cbi_validate_field('<%=cbid%>.<%=i%>', <%=tostring((self.optional or self.rmempty) == true or i > #vals)%>, '<%=self.datatype%>');
 	<%- end %>
 <% end -%>
 </script>

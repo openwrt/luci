@@ -40,7 +40,7 @@ $Id$
 		<%- end -%>');
 		<%- end %>
 		<% if self.datatype then -%>
-		cbi_validate_field('<%=cbid%>', <%=tostring(self.optional == true)%>, '<%=self.datatype%>');
+		cbi_validate_field('<%=cbid%>', <%=tostring((self.optional or self.rmempty) == true)%>, '<%=self.datatype%>');
 		<%- end %>
 	</script>
 	<% end -%>
