@@ -558,7 +558,7 @@ $(eval $(call collection,ssl,\
 	+luci-app-firewall +luci-app-initmgr))
 
 $(eval $(call collection,light,\
-	Minimum package set using only admin mini and athe standard theme,\
+	Minimum package set using only admin mini and the standard theme,\
 	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt-light))
 
 
