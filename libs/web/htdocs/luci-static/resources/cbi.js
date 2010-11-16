@@ -155,6 +155,18 @@ var cbi_validators = {
 	'uciname': function(v)
 	{
 		return (v.match(/^[a-zA-Z0-9_]+$/) != null);
+	},
+
+	'range': function(v, args)
+	{
+		var min = parseInt(args[0]);
+		var max = parseInt(args[1]);
+		var val = parseInt(v);
+
+		if (!isNaN(min) && !isNaN(max) && !isNaN(val))
+			return ((val >= min) && (val <= max));
+
+		return false;
 	}
 };
 
@@ -634,6 +646,14 @@ function cbi_validate_reset(form)
 function cbi_validate_field(cbid, optional, type)
 {
 	var field = (typeof cbid == "string") ? document.getElementById(cbid) : cbid;
+	var vargs;
+
+	if( type.match(/^(\w+)\(([^\(\)]+)\)/) )
+	{
+		type  = RegExp.$1;
+		vargs = RegExp.$2.split(/\s*,\s*/);
+	}
+
 	var vldcb = cbi_validators[type];
 
 	if( field && vldcb )
@@ -649,7 +669,7 @@ function cbi_validate_field(cbid, optional, type)
 				var value = (field.options && field.options.selectedIndex > -1)
 					? field.options[field.options.selectedIndex].value : field.value;
 
-				if( !(((value.length == 0) && optional) || vldcb(value)) )
+				if( !(((value.length == 0) && optional) || vldcb(value, vargs)) )
 				{
 					// invalid
 					field.className += ' cbi-input-invalid';

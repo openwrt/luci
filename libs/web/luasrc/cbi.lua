@@ -1358,20 +1358,35 @@ end
 
 -- Validate the form value
 function AbstractValue.validate(self, value)
-	if self.datatype and value and datatypes[self.datatype] then
-		if type(value) == "table" then
-			local v
-			for _, v in ipairs(value) do
-				if v and #v > 0 and not datatypes[self.datatype](v) then
+	if self.datatype and value then
+		local args = { }
+		local dt, ar = self.datatype:match("^(%w+)%(([^%(%)]+)%)")
+
+		if dt and ar then
+			local a
+			for a in ar:gmatch("[^%s,]+") do
+				args[#args+1] = a
+			end
+		else
+			dt = self.datatype
+		end
+
+		if dt and datatypes[dt] then
+			if type(value) == "table" then
+				local v
+				for _, v in ipairs(value) do
+					if v and #v > 0 and not datatypes[dt](v, unpack(args)) then
+						return nil
+					end
+				end
+			else
+				if not datatypes[dt](value, unpack(args)) then
 					return nil
 				end
 			end
-		else
-			if not datatypes[self.datatype](value) then
-				return nil
-			end
 		end
 	end
+
 	return value
 end
 

@@ -208,3 +208,15 @@ end
 function uciname(val)
 	return (val:match("^[a-zA-Z0-9_]+$") ~= nil)
 end
+
+function range(val, min, max)
+	val = tonumber(val)
+	min = tonumber(min)
+	max = tonumber(max)
+
+	if val ~= nil and min ~= nil and max ~= nil then
+		return ((val >= min) and (val <= max))
+	end
+
+	return false
+end
