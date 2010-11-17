@@ -1,0 +1,85 @@
+<%+header%>
+
+<%
+require("luci.fs")
+require("luci.util")
+
+-- check if nameservice plugin is enabled and where to find the services file
+local has_services = false
+local uci = require "luci.model.uci".cursor()
+uci:foreach("olsrd", "LoadPlugin", function(s)
+	if s.library == "olsrd_nameservice.so.0.3" then
+		if s.services_file then
+			has_services = true
+			services_file = s.services_file
+		else
+			has_services = true
+			services_file = "/var/run/services_olsr"
+		end
+	end
+end)
+
+
+function fetch_services()
+	local rawdata = luci.fs.readfile(services_file)
+
+	if #rawdata == 0 then
+		return nil
+	end
+
+	local data = {}
+
+	local tables = luci.util.split(luci.util.trim(rawdata), "\n", nil, true)
+	-- remove the first 3 lines
+	table.remove(tables,1)
+	table.remove(tables,1)
+	table.remove(tables,1)
+
+        -- store last line in last_update and remove it, then remove another empty line at the end
+        last_update=table.remove(tables)
+	table.remove(tables)
+
+	for i, tbl in ipairs(tables) do
+		local lines = luci.util.split(tbl, "\n", nil, true)
+	end
+	
+	return tables
+end
+
+%>
+
+<% if has_services then %>
+	<h2><a id="content" name="content"><%:Services%></a></h2>
+	<br />
+
+	<table class="smalltext" cellspacing="0" cellpadding="6">
+	<tr>
+	<th><%:Url%></th>
+	<th><%:Source%></th>
+	</tr>
+
+	<%
+	table=fetch_services()
+	for k, line in ipairs(table) do
+	local field = {}
+	-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
+	local field = luci.util.split(line, "[#|]", split, true)
+	%>
+	<tr><td>
+	<a href="<%=field[1]%>"><%=field[3]%></a>
+	</td>
+	<td>
+	<%=field[4]%>
+	</td>
+	</tr>
+	<%end%>
+
+	</table>
+	<br />
+	<%=last_update%>
+
+<%else%>
+	<%:No services can be shown, because olsrd is not running or the olsrd-nameservice Plugin is not loaded.%>
+<%end%>
+
+<%+footer%>

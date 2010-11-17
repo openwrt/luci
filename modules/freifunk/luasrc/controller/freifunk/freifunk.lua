@@ -74,6 +74,10 @@ function index()
 
 	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("Karte"), 50)
 	entry({"freifunk", "map", "content"}, template("freifunk-map/map"), nil, 51)
+
+	entry({"freifunk", "services"}, template("freifunk-services/services"), i18n("Services"), 60)
+	entry({"freifunk", "services", "content"}, template("freifunk-services/services"), nil, 61)
+
 end
 
 local function fetch_olsrd()
