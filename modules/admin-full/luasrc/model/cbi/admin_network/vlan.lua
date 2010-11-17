@@ -93,13 +93,13 @@ m.uci:foreach("network", "switch",
 		s = m:section(NamedSection, x['.name'], "switch", translatef("Switch %q", switch_name))
 		s.addremove = false
 
-		s:option(Flag, "enable", "Enable this switch")
+		s:option(Flag, "enable", translate("Enable this switch"))
 			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
 
-		s:option(Flag, "enable_vlan", "Enable VLAN functionality")
+		s:option(Flag, "enable_vlan", translate("Enable VLAN functionality"))
 			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
 
-		s:option(Flag, "reset", "Reset switch during setup")
+		s:option(Flag, "reset", translate("Reset switch during setup"))
 			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
 
 
@@ -266,8 +266,7 @@ m.uci:foreach("network", "switch",
 			s = m:section(TypedSection, "switch",
 				translatef("Port PVIDs on %q", switch_name),
 				translate("Port <abbr title=\"Primary VLAN IDs\">PVIDs</abbr> specify " ..
-					"the default VLAN ID added to received untagged frames.<br />" ..
-					"Leave the ID field empty to disable auto tagging on the associated port."))
+					"the default VLAN ID added to received untagged frames."))
 
 			s.template  = "cbi/tblsection"
 			s.addremove = false
