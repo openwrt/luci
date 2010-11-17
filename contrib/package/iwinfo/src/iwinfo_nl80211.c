@@ -754,10 +754,11 @@ int nl80211_get_signal(const char *ifname, int *buf)
 	return -1;
 }
 
-int nl80211_get_noise(const char *ifname, int *buf)
+static int nl80211_get_noise_cb(struct nl_msg *msg, void *arg)
 {
-	int rv = -1;
-	struct nl80211_msg_conveyor *req, *res;
+	int8_t *noise = arg;
+	struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
+	struct nlattr *tb[NL80211_ATTR_MAX + 1];
 	struct nlattr *si[NL80211_SURVEY_INFO_MAX + 1];
 
 	static struct nla_policy sp[NL80211_SURVEY_INFO_MAX + 1] = {
@@ -765,28 +766,48 @@ int nl80211_get_noise(const char *ifname, int *buf)
 		[NL80211_SURVEY_INFO_NOISE]     = { .type = NLA_U8  },
 	};
 
+	nla_parse(tb, NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
+		genlmsg_attrlen(gnlh, 0), NULL);
+
+	if (!tb[NL80211_ATTR_SURVEY_INFO])
+		return NL_SKIP;
+
+	if (nla_parse_nested(si, NL80211_SURVEY_INFO_MAX,
+						 tb[NL80211_ATTR_SURVEY_INFO], sp))
+		return NL_SKIP;
+
+	if (!si[NL80211_SURVEY_INFO_NOISE])
+		return NL_SKIP;
+
+	if (!*noise || si[NL80211_SURVEY_INFO_IN_USE])
+		*noise = (int8_t)nla_get_u8(si[NL80211_SURVEY_INFO_NOISE]);
+
+	return NL_SKIP;
+}
+
+
+int nl80211_get_noise(const char *ifname, int *buf)
+{
+	int8_t noise;
+	struct nl80211_msg_conveyor *req;
+
 	req = nl80211_msg(ifname, NL80211_CMD_GET_SURVEY, NLM_F_DUMP);
-	if( req )
+	if (req)
 	{
-		res = nl80211_send(req);
-		if( res )
-		{
-			if( res->attr[NL80211_ATTR_SURVEY_INFO] )
-			{
-				if( !nla_parse_nested(si, NL80211_SURVEY_INFO_MAX,
-						res->attr[NL80211_ATTR_SURVEY_INFO], sp) &&
-					si[NL80211_SURVEY_INFO_NOISE] )
-				{
-					*buf = (int8_t)nla_get_u8(si[NL80211_SURVEY_INFO_NOISE]);
-					rv = 0;
-				}
-			}
-			nl80211_free(res);
-		}
+		noise = 0;
+
+		nl80211_cb(req, nl80211_get_noise_cb, &noise);
+		nl80211_send(req);
 		nl80211_free(req);
+
+		if (noise)
+		{
+			*buf = noise;
+			return 0;
+		}
 	}
 
-	return rv;
+	return -1;
 }
 
 int nl80211_get_quality(const char *ifname, int *buf)
@@ -844,10 +865,34 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 	/* Hostapd */
 	if( (res = nl80211_hostapd_info(ifname)) )
 	{
-		if( (val = nl80211_getval(ifname, res, "auth_algs")) && (val > 0) )
-		{
+		if( (val = nl80211_getval(ifname, res, "wpa")) != NULL )
+			c->wpa_version = atoi(val);
+
+		val = nl80211_getval(ifname, res, "wpa_key_mgmt");
+
+		if( !val || strstr(val, "PSK") )
+			c->auth_suites |= IWINFO_KMGMT_PSK;
+
+		if( val && strstr(val, "EAP") )
+			c->auth_suites |= IWINFO_KMGMT_8021x;
+
+		if( val && strstr(val, "NONE") )
 			c->auth_suites |= IWINFO_KMGMT_NONE;
 
+		if( (val = nl80211_getval(ifname, res, "wpa_pairwise")) != NULL )
+		{
+			if( strstr(val, "TKIP") )
+				c->pair_ciphers |= IWINFO_CIPHER_TKIP;
+
+			if( strstr(val, "CCMP") )
+				c->pair_ciphers |= IWINFO_CIPHER_CCMP;
+
+			if( strstr(val, "NONE") )
+				c->pair_ciphers |= IWINFO_CIPHER_NONE;
+		}
+
+		if( (val = nl80211_getval(ifname, res, "auth_algs")) != NULL )
+		{
 			switch(atoi(val)) {
 				case 1:
 					c->auth_algs |= IWINFO_AUTH_OPEN;
@@ -879,41 +924,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 						c->pair_ciphers |= IWINFO_CIPHER_WEP104;
 				}
 			}
-
-			c->group_ciphers = c->pair_ciphers;
-
-			return 0;
 		}
-
-
-		if( (val = nl80211_getval(ifname, res, "wpa")) != NULL )
-			c->wpa_version = atoi(val);
-
-
-		val = nl80211_getval(ifname, res, "wpa_key_mgmt");
-
-		if( !val || strstr(val, "PSK") )
-			c->auth_suites |= IWINFO_KMGMT_PSK;
-
-		if( val && strstr(val, "EAP") )
-			c->auth_suites |= IWINFO_KMGMT_8021x;
-
-		if( val && strstr(val, "NONE") )
-			c->auth_suites |= IWINFO_KMGMT_NONE;
-
-
-		if( (val = nl80211_getval(ifname, res, "wpa_pairwise")) != NULL )
-		{
-			if( strstr(val, "TKIP") )
-				c->pair_ciphers |= IWINFO_CIPHER_TKIP;
-
-			if( strstr(val, "CCMP") )
-				c->pair_ciphers |= IWINFO_CIPHER_CCMP;
-
-			if( strstr(val, "NONE") )
-				c->pair_ciphers |= IWINFO_CIPHER_NONE;
-		}
-
 
 		c->group_ciphers = c->pair_ciphers;
 		c->enabled = (c->auth_algs || c->auth_suites) ? 1 : 0;

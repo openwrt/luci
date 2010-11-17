@@ -539,7 +539,7 @@ int madwifi_get_quality_max(const char *ifname, int *buf)
 
 int madwifi_get_encryption(const char *ifname, char *buf)
 {
-	int ciphers = 0, key_type = 0, key_len = 0;
+	int ciphers = 0, key_len = 0;
 	struct iwinfo_crypto_entry *c = (struct iwinfo_crypto_entry *)buf;
 	struct iwreq wrq;
 	struct ieee80211req_key wk;
@@ -547,16 +547,6 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 	memset(&wrq, 0, sizeof(wrq));
 	memset(&wk, 0, sizeof(wk));
 	memset(wk.ik_macaddr, 0xff, IEEE80211_ADDR_LEN);
-
-	/* Get key information */
-	if( get80211priv(ifname, IEEE80211_IOCTL_GETKEY, &wk, sizeof(wk)) >= 0 )
-	{
-		key_type = wk.ik_type;
-
-		/* Type 0 == WEP */
-		if( key_type == 0 )
-			c->auth_algs = (IWINFO_AUTH_OPEN | IWINFO_AUTH_SHARED);
-	}
 
 	/* Get wpa protocol version */
 	wrq.u.mode = IEEE80211_PARAM_WPA;
@@ -576,10 +566,26 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 				c->auth_suites |= IWINFO_KMGMT_PSK;
 				break;
 
+			case IEEE80211_AUTH_OPEN:
+				c->auth_algs |= IWINFO_AUTH_OPEN;
+				break;
+
+			case IEEE80211_AUTH_SHARED:
+				c->auth_algs |= IWINFO_AUTH_SHARED;
+				break;
+
 			default:
 				c->auth_suites |= IWINFO_KMGMT_NONE;
 				break;
 		}
+	}
+
+	/* Get key information */
+	if( get80211priv(ifname, IEEE80211_IOCTL_GETKEY, &wk, sizeof(wk)) >= 0 )
+	{
+		/* Type 0 == WEP */
+		if( (wk.ik_type == 0) && (c->auth_algs == 0) )
+			c->auth_algs = (IWINFO_AUTH_OPEN | IWINFO_AUTH_SHARED);
 	}
 
 	/* Get group key length */
