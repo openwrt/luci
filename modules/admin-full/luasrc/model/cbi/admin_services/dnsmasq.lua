@@ -117,6 +117,8 @@ rp = s:taboption("general", Flag, "rebind_protection",
 	translate("Rebind protection"),
 	translate("Discard upstream RFC1918 responses"))
 
+rp.rmempty = false
+
 
 rl = s:taboption("general", Flag, "rebind_localhost",
 	translate("Allow localhost"),
