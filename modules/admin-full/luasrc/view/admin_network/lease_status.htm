@@ -1,6 +1,6 @@
 <script type="text/javascript"><![CDATA[
 	var stxhr = new XHR();
-	(function() {
+	var update_status = function() {
 		stxhr.get('<%=luci.dispatcher.build_url("admin", "network", "dhcplease_status")%>', null,
 			function(x, st)
 			{
@@ -72,11 +72,13 @@
 						tb.rows[0].parentNode.appendChild(tr);
 					}
 				}
+
+				window.setTimeout(update_status, 5000);
 			}
 		)
+	};
 
-		window.setTimeout(arguments.callee, 5000);
-	})();
+	update_status();
 ]]></script>
 
 <fieldset class="cbi-section">

@@ -2,7 +2,7 @@
 
 <script type="text/javascript"><![CDATA[
 	var iwxhr = new XHR();
-	(function() {
+	var update_status = function() {
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
 			function(x, ifc)
 			{
@@ -71,11 +71,13 @@
 					else if (d)
 						d.innerHTML = '<%:Interface not present or not connected yet.%>';
 				}
+
+				window.setTimeout(update_status, 5000);
 			}
 		)
+	};
 
-		window.setTimeout(arguments.callee, 5000);
-	})();
+	update_status();
 ]]></script>
 
 <table>

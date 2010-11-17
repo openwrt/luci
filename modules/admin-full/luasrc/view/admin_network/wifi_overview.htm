@@ -97,7 +97,7 @@ $Id$
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
-	(function() {
+	var update_status = function() {
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "wireless_status", table.concat(netlist, ","))%>', null,
 			function(x, st)
 			{
@@ -241,11 +241,13 @@ $Id$
 							img.src = '<%=resource%>/icons/wifi' + (devup[dev] ? '' : '_disabled') + '.png';
 					}
 				}
+
+				window.setTimeout(update_status, 5000);
 			}
 		)
+	};
 
-		window.setTimeout(arguments.callee, 5000);
-	})();
+	update_status();
 ]]></script>
 
 <h2><a id="content" name="content"><%:Wireless Overview%></a></h2>
