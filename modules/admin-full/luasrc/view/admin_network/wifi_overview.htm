@@ -238,7 +238,7 @@ $Id$
 					{
 						var img = document.getElementById(dev + '-iw-upstate');
 						if (img)
-							img.src = '<%=resource%>/icons/wifi' + (devup[dev] ? '' : '_disabled') + '.png';
+							img.src = '<%=resource%>/icons/wifi_big' + (devup[dev] ? '' : '_disabled') + '.png';
 					}
 				}
 
@@ -260,7 +260,7 @@ $Id$
 		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
 			<!-- physical device -->
 			<tr>
-				<td style="width:34px"><img src="<%=resource%>/icons/wifi_disabled.png" style="float:left; margin-right:10px" id="<%=dev:name()%>-iw-upstate" /></td>
+				<td style="width:34px"><img src="<%=resource%>/icons/wifi_big_disabled.png" style="float:left; margin-right:10px" id="<%=dev:name()%>-iw-upstate" /></td>
 				<td colspan="2" style="text-align:left">
 					<big><strong><%=guess_wifi_hw(dev:name())%> (<%=dev:name()%>)</strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
