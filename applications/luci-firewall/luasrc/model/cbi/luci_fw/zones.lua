@@ -62,6 +62,7 @@ function custom.cfgvalue(self, section)
 end
 
 function custom.write(self, section, value)
+	value = value:gsub("\r\n?", "\n")
 	nixio.fs.writefile("/etc/firewall.user", value)
 end
 
