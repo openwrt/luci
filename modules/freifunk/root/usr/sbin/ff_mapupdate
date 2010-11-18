@@ -1,15 +1,17 @@
 #!/usr/bin/lua
 
+require("luci.fs")
 local uci = require "luci.model.uci"
 local x = uci.cursor()
 
-local update_url = "http://www.layereight.de/freifunkmap.php?update=%.15f,%.15f&olsrip=%s&note=%s&robot=%s"
+local update_url = "http://map.berlin.freifunk.net/freifunkmap.php?update=%.15f,%.15f&note=%s&olsrip=%s"
 local update_all = ( arg[1] and arg[1] == "all" ) and true or false
 
 local file
 x:foreach("olsrd", "LoadPlugin", function(s)
 	if s.library == "olsrd_nameservice.so.0.3" then
-		file = io.open(s.latlon_file)
+		luci.fs.copy (s.latlon_file, "/tmp/ff_mapupdate.latlon")
+		file = io.open("/tmp/ff_mapupdate.latlon")
 	end
 end)
 
@@ -26,7 +28,7 @@ if file then
 		
 			if ip and lat ~= 0.0 and lon ~= 0.0 and note then
 				note = note:gsub("[^%w%-%.]+", "_")
-				os.execute("wget -qO/dev/null %q" % string.format(update_url, lat, lon, ip, note, "luci-massupdate"))
+				os.execute("wget -qO/dev/null %q" % string.format(update_url, lat, lon, note, ip))
 				count = count + 1
 			end
 
@@ -37,7 +39,7 @@ if file then
 			
 			if ip and lat ~= 0.0 and lon ~= 0.0 and note then
 				note = note:gsub("[^%w%-%.]+", "_")
-				os.execute("wget -qO/dev/null %q" % string.format(update_url, lat, lon, ip, note, "luci-selfupdate"))
+				os.execute("wget -qO/dev/null %q" % string.format(update_url, lat, lon, note, ip))
 				count = count + 1
 			end
 		end
