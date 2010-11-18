@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">//<![CDATA[
 	var iwxhr = new XHR();
 	var update_status = function() {
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
@@ -78,7 +78,7 @@
 	};
 
 	update_status();
-]]></script>
+//]]></script>
 
 <table>
 	<tr class="cbi-section-table">

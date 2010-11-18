@@ -1,4 +1,4 @@
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">//<![CDATA[
 	var stxhr = new XHR();
 	var update_status = function() {
 		stxhr.get('<%=luci.dispatcher.build_url("admin", "network", "dhcplease_status")%>', null,
@@ -9,7 +9,7 @@
 				{
 					/* clear all rows */
 					while( tb.rows.length > 1 )
-						tb.rows[1].parentNode.removeChild(tb.rows[1]);
+						tb.deleteRow(1);
 
 					for( var i = 0; i < st.length; i++ )
 					{
@@ -46,30 +46,23 @@
 								: String.format('%dh %dm %ds', h, m, s);
 						}
 
-						var tr = document.createElement('tr');
+						var tr = tb.insertRow(-1);
 							tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
-						tr.innerHTML = String.format(
-							'<td class="cbi-section-table-cell">%s</td>' +
-							'<td class="cbi-section-table-cell">%s</td>' +
-							'<td class="cbi-section-table-cell">%s</td>' +
-							'<td class="cbi-section-table-cell">%s</td>',
-								st[i].hostname ? st[i].hostname : '?',
-								st[i].ipaddr,
-								st[i].macaddr,
-								timestr
-						);
-
-						tb.rows[0].parentNode.appendChild(tr);
+						tr.insertCell(-1).innerHTML = st[i].hostname ? st[i].hostname : '?';
+						tr.insertCell(-1).innerHTML = st[i].ipaddr;
+						tr.insertCell(-1).innerHTML = st[i].macaddr;
+						tr.insertCell(-1).innerHTML = timestr;
 					}
 
 					if( tb.rows.length == 1 )
 					{
-						var tr = document.createElement('tr');
+						var tr = tb.insertRow(-1);
 							tr.className = 'cbi-section-table-row';
-							tr.innerHTML = '<td colspan="4"><em><br /><%:There are no active leases.%></em></td>';
 
-						tb.rows[0].parentNode.appendChild(tr);
+						var td = tr.insertCell(-1);
+							td.colSpan = 4;
+							td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
 					}
 				}
 
@@ -79,7 +72,7 @@
 	};
 
 	update_status();
-]]></script>
+//]]></script>
 
 <fieldset class="cbi-section">
 	<legend><%:Active Leases%></legend>

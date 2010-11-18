@@ -92,7 +92,7 @@ $Id$
 <%+header%>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">//<![CDATA[
 	var iwxhr = new XHR();
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
@@ -248,7 +248,7 @@ $Id$
 	};
 
 	update_status();
-]]></script>
+//]]></script>
 
 <h2><a id="content" name="content"><%:Wireless Overview%></a></h2>
 

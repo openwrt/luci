@@ -25,7 +25,7 @@ $Id$
 -%>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">//<![CDATA[
 	function iface_shutdown(id, reconnect) {
 		if (!reconnect && !confirm(String.format('<%_Really shutdown interface "%s" ?\nYou might loose access to this router if you are connected via this interface.%>', id)))
 			return;
@@ -168,7 +168,7 @@ $Id$
 	};
 
 	update_status();
-]]></script>
+//]]></script>
 
 <fieldset class="cbi-section" style="display:none">
 	<legend><%:Reconnecting interface%></legend>
