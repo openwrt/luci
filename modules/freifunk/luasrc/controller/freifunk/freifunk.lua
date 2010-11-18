@@ -41,11 +41,9 @@ function index()
 	page.target = template("freifunk/contact")
 	page.title  = "Kontakt"
 
-	entry({"freifunk", "status"}, alias("freifunk", "status", "status"), "Status", 20)
-
-	local page  = node("freifunk", "status", "status")
+	local page  = node("freifunk", "status")
 	page.target = form("freifunk/public_status")
-	page.title  = i18n("Overview")
+	page.title  = i18n("Status")
 	page.order  = 20
 	page.i18n   = "base"
 	page.setuser  = false
@@ -66,6 +64,11 @@ function index()
 	page.target = cbi("freifunk/freifunk")
 	page.title  = "Freifunk"
 	page.order  = 30
+
+	local page  = node("admin", "freifunk", "Index-Page")
+	page.target = cbi("freifunk/user_index")
+	page.title  = "Index-Page"
+	page.order  = 35
 
 	local page  = node("admin", "freifunk", "contact")
 	page.target = cbi("freifunk/contact")
