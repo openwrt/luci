@@ -28,7 +28,7 @@ enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_ping.hosts (Host)
-hosts = s:option( Value, "Hosts", translate("Monitor hosts") )
+hosts = s:option( Value, "Hosts", translate("Monitor hosts"), translate ("Add multiple hosts separated by space."))
 hosts.default = "127.0.0.1"
 hosts:depends( "enable", 1 )
 
@@ -37,5 +37,11 @@ ttl = s:option( Value, "TTL", translate("TTL for ping packets") )
 ttl.isinteger = true
 ttl.default   = 128
 ttl:depends( "enable", 1 )
+
+-- collectd_ping.interval (Interval)
+interval = s:option( Value, "Interval", translate("Interval for pings"), translate ("Seconds") )
+interval.isinteger = true
+interval.default   = 30
+interval:depends( "enable", 1 )
 
 return m
