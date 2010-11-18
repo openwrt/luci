@@ -15,7 +15,7 @@ $Id$
 <% export("cbi_apply_xhr", function(id, configs, redirect) -%>
 <fieldset class="cbi-section" id="cbi-apply-<%=id%>">
 	<legend><%:Applying changes%></legend>
-	<script type="text/javascript"><![CDATA[
+	<script type="text/javascript">//<![CDATA[
 		var apply_xhr = new XHR();
 
 		apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "restart", table.concat(configs, ","))%>', null,
@@ -49,7 +49,7 @@ $Id$
 				window.setTimeout(checkfinish, 1000);
 			}
 		);
-	]]></script>
+	//]]></script>
 
 	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
 	<span id="cbi-apply-<%=id%>-status"><%:Waiting for router...%></span>
