@@ -56,17 +56,17 @@ XHR = function()
 
 		xhr.onreadystatechange = function()
 		{
-			var json = null;
-			if( xhr.getResponseHeader("Content-Type") == "application/json" ) {
-				try {
-					json = eval('(' + xhr.responseText + ')');
-				}
-				catch(e) {
-					json = null;
-				}
-			}
-
 			if( xhr.readyState == 4 ) {
+				var json = null;
+				if( xhr.getResponseHeader("Content-Type") == "application/json" ) {
+					try {
+						json = eval('(' + xhr.responseText + ')');
+					}
+					catch(e) {
+						json = null;
+					}
+				}
+
 				callback( xhr, json );
 			}
 		}
@@ -144,6 +144,9 @@ XHR = function()
 
 	this._encode = function(obj)
 	{
+		obj = obj ? obj : { };
+		obj['_'] = Math.random();
+
 		if( typeof obj == 'object' )
 		{
 			var code = '';
@@ -152,6 +155,7 @@ XHR = function()
 			for( var k in obj )
 				code += ( code ? '&' : '' ) +
 					k + '=' + encodeURIComponent( obj[k] );
+
 			return code;
 		}
 
