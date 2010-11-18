@@ -14,7 +14,7 @@ $Id$
 
 luci.i18n.loadc("freifunk")
 
-m = Map("freifunk", translate("contact"), translate("contact1"))
+m = Map("freifunk", translate("Contact"), translate("Please fill in your contact details below."))
 
 c = m:section(NamedSection, "contact", "public", "")
 
@@ -25,10 +25,10 @@ c:option(Value, "phone", translate("Phone"))
 c:option(Value, "location", translate("Location"))
 c:option(Value, "note", translate("Notice"))
 
-m2 = Map("system", translate("geo"))
+m2 = Map("system", translate("Coordinates"))
 
 s = m2:section(TypedSection, "system", "")
-s:option(Value, "latitude", translate("Breite")).rmempty = true
-s:option(Value, "longitude", translate("Länge")).rmempty = true
+s:option(Value, "latitude", translate("Latitude")).rmempty = true
+s:option(Value, "longitude", translate("Longitude")).rmempty = true
 
 return m, m2
