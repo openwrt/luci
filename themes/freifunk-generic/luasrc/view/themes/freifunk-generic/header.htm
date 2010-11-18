@@ -179,13 +179,12 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 		end
 	end
 -%>
-<ul id="savemenu" class="dropdowns">
-<li><% if ucic > 0 then %><a class="warning" href="<%=controller%>/<%=category%>/uci/changes/"><%:unsavedchanges%>: <%=ucic%></a><%
-submenu("/" .. category .. "/uci/", tree.nodes[category].nodes["uci"])
-else -%>
-<a href="#"><%:changes%>: 0</a><% end -%>
-</li>
-</ul><% end %>
+
+<div id="savemenu">
+	<% if ucic > 0 then %>
+		<a class="warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=luci.http.urlencode(tree.nodes[category].nodes["uci"].query)%>"><%:Unsaved Changes%>: <%=ucic%></a>
+	<% end -%>
+</div><% end %>
 
 <div class="clear"></div>
 </div>
