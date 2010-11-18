@@ -1,6 +1,4 @@
-<script type="text/javascript"><![CDATA[
-
-
+<script type="text/javascript">//<![CDATA[
 	function upnp_delete_fwd(idx) {
 		var dlxhr = new XHR();
 
@@ -24,38 +22,32 @@
 				{
 					/* clear all rows */
 					while( tb.rows.length > 1 )
-						tb.rows[1].parentNode.removeChild(tb.rows[1]);
+						tb.deleteRow(1);
 
 					for( var i = 0; i < st.length; i++ )
 					{
-						var tr = document.createElement('tr');
+						var tr = tb.insertRow(-1);
 							tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
-						tr.innerHTML = String.format(
-							'<td class="cbi-section-table-cell">%s</td>' +
-							'<td class="cbi-section-table-cell">%d</td>' +
-							'<td class="cbi-section-table-cell">%s</td>' +
-							'<td class="cbi-section-table-cell">%d</td>' +
-							'<td class="cbi-section-table-cell">' +
-								'<input class="cbi-input-remove" type="button" value="<%:Delete Redirect%>" onclick="upnp_delete_fwd(%d)" />' +
-							'</td>',
-								st[i].proto,
-								st[i].extport,
-								st[i].intaddr,
-								st[i].intport,
+						tr.insertCell(-1).innerHTML = st[i].proto;
+						tr.insertCell(-1).innerHTML = st[i].extport;
+						tr.insertCell(-1).innerHTML = st[i].intaddr;
+						tr.insertCell(-1).innerHTML = st[i].intport;
+
+						tr.insertCell(-1).innerHTML = String.format(
+							'<input class="cbi-input-remove" type="button" value="<%:Delete Redirect%>" onclick="upnp_delete_fwd(%d)" />',
 								st[i].num
 						);
-
-						tb.rows[0].parentNode.appendChild(tr);
 					}
 
 					if( tb.rows.length == 1 )
 					{
-						var tr = document.createElement('tr');
+						var tr = tb.insertRow(-1);
 							tr.className = 'cbi-section-table-row';
-							tr.innerHTML = '<td colspan="5"><em><br /><%:There are no active redirects.%></em></td>';
 
-						tb.rows[0].parentNode.appendChild(tr);
+						var td = tr.insertCell(-1);
+							td.colSpan = 5;
+							td.innerHTML = '<em><br /><%:There are no active redirects.%></em>';
 					}
 				}
 
@@ -65,7 +57,7 @@
 	};
 
 	update_status();
-]]></script>
+//]]></script>
 
 <fieldset class="cbi-section">
 	<legend><%:Active UPnP Redirects%></legend>
