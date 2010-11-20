@@ -1662,7 +1662,9 @@ function DynamicList.write(self, section, value)
 	elseif self.cast == "table" and type(value) == "string" then
 		local x, t = { }
 		for x in value:gmatch("%S+") do
-			t[#t+1] = x
+			if #x > 0 then
+				t[#t+1] = x
+			end
 		end
 		value = t
 	end
@@ -1677,7 +1679,9 @@ function DynamicList.cfgvalue(self, section)
 		local x
 		local t = { }
 		for x in value:gmatch("%S+") do
-			t[#t+1] = x
+			if #x > 0 then
+				t[#t+1] = x
+			end
 		end
 		value = t
 	end
