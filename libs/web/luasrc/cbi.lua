@@ -1657,15 +1657,27 @@ function DynamicList.value(self, key, val)
 end
 
 function DynamicList.write(self, section, value)
-	if self.cast == "string" and type(value) == "table" then
-		value = table.concat(value, " ")
-	elseif self.cast == "table" and type(value) == "string" then
-		local x, t = { }
-		for x in value:gmatch("%S+") do
-			if #x > 0 then
+	local t = { }
+
+	if type(value) == "table" then
+		local x
+		for _, x in ipairs(value) do
+			if x and #x > 0 then
 				t[#t+1] = x
 			end
 		end
+	elseif self.cast == "table" then
+		local x
+		for x in util.imatch(value) do
+			t[#t+1] = x
+		end
+	else
+		t = { value }
+	end
+
+	if self.cast == "string" then
+		value = table.concat(t, " ")
+	else
 		value = t
 	end
 
