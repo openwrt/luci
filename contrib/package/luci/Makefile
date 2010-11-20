@@ -460,7 +460,7 @@ define theme
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
 	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
 	DEPENDS:=$(if $(filter-out base,$(1)),+luci-theme-base) $(4)
-	$(if $(5),DEFAULT:=y if PACKAGE_luci-lib-core)
+	$(if $(5),DEFAULT:=PACKAGE_luci-lib-core)
   endef
 
   define Package/luci-theme-$(1)/install
