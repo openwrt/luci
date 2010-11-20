@@ -66,7 +66,7 @@ src.nocreate = true
 src.default = "wan"
 src.template = "cbi/firewall_zonelist"
 
-proto = s:taboption("general", ListValue, "proto", translate("Protocol"))
+proto = s:taboption("general", Value, "proto", translate("Protocol"))
 proto.optional = true
 proto:value("tcpudp", "TCP+UDP")
 proto:value("tcp", "TCP")
@@ -93,6 +93,10 @@ toport = s:taboption("general", Value, "dest_port", translate("Internal port (op
 		"the internal host"))
 toport.optional = true
 toport.placeholder = "0-65535"
+toport.datatype = "portrange"
+toport:depends("proto", "tcp")
+toport:depends("proto", "udp")
+toport:depends("proto", "tcpudp")
 
 target = s:taboption("advanced", ListValue, "target", translate("Redirection type"))
 target:value("DNAT")
