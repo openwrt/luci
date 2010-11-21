@@ -718,6 +718,7 @@ local function _cbi(self, ...)
 		end
 	end
 
+	local redirect
 	local pageaction = true
 	http.header("X-CBI-State", state or 0)
 	if not config.noheader then
@@ -728,9 +729,18 @@ local function _cbi(self, ...)
 		if res.pageaction == false then
 			pageaction = false
 		end
+		if res.redirect then
+			redirect = redirect or res.redirect
+		end
 	end
 	if not config.nofooter then
-		tpl.render("cbi/footer", {flow = config, pageaction=pageaction, state = state, autoapply = config.autoapply})
+		tpl.render("cbi/footer", {
+			flow       = config,
+			pageaction = pageaction,
+			redirect   = redirect,
+			state      = state,
+			autoapply  = config.autoapply
+		})
 	end
 end
 
