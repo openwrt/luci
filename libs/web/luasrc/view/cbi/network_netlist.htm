@@ -35,7 +35,7 @@ $Id$
 	<% for _, net in ipairs(networks) do
 	       if net:name() ~= "loopback" and net:name() ~= self.exclude then %>
 	<li style="padding:0.25em 0">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "." .. net:name()) ..
 			attr("name", cbid) .. attr("value", net:name()) ..
@@ -59,10 +59,23 @@ $Id$
 
 	<% if self.widget ~= "checkbox" and not self.nocreate then %>
 	<li style="padding:0.25em 0">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
 		<div style="padding:0.5em; display:inline">
 			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&nbsp;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newnet")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
+		</div>
+	</li>
+	<% elseif self.widget ~= "checkbox" and self.unspecified then %>
+	<li style="padding:0.25em 0">
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+			attr("type", self.widget or "radio") ..
+			attr("id", cbid .. "_uns") ..
+			attr("name", cbid) ..
+			attr("value", "") ..
+			ifattr(not value or #value == 0, "checked", "checked")
+		%> /> &nbsp;
+		<div style="padding:0.5em; display:inline">
+			<label<%=attr("for", cbid .. "_uns")%>><em><%:unspecified%></em></label>
 		</div>
 	</li>
 	<% end %>
