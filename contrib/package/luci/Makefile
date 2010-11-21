@@ -397,9 +397,6 @@ $(eval $(call application,initmgr,LuCI Initscript Management,\
 $(eval $(call application,livestats,LuCI Realtime Statistics,\
 	+luci-mod-rpc))
 
-$(eval $(call application,asterisk,LuCI Support for Asterisk PBX,\
-	@BROKEN +PACKAGE_luci-app-asterisk:asterisk14-xip-core))
-
 $(eval $(call application,polipo,LuCI Support for the Polipo Proxy,\
 	+PACKAGE_luci-app-polipo:polipo))
 
@@ -418,6 +415,9 @@ $(eval $(call application,wol,LuCI Support for Wake-on-LAN,\
 $(eval $(call application,vnstat,LuCI Support for VnStat,\
 	+PACKAGE_luci-app-vnstat:vnstat \
     +PACKAGE_luci-app-vnstat:vnstati))
+
+$(eval $(call application,radvd,LuCI Support for Radvd,\
+	+luci-mod-admin-full +PACKAGE_luci-app-radvd:radvd))
 
 $(eval $(call application,lqtapifoss,Lantiq voip))
 
