@@ -561,7 +561,7 @@ $(eval $(call collection,ssl,\
 
 $(eval $(call collection,light,\
 	Minimum package set using only admin mini and the standard theme,\
-	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt-light))
+	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt))
 
 
 ### Compile ###
