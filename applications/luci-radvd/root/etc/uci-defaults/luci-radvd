@@ -1,0 +1,8 @@
+#!/bin/sh
+
+uci batch <<-EOF
+	delete ucitrack.@radvd[-1]
+	add ucitrack radvd
+	set ucitrack.@radvd[-1].init=radvd
+	commit ucitrack
+EOF
