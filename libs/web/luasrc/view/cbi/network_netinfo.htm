@@ -1,0 +1,42 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+-%>
+
+<%+cbi/valueheader%>
+
+<%-
+	local value = self:formvalue(section)
+	if not value or value == "-" then
+		value = self:cfgvalue(section) or self.default
+	end
+
+	local nwm = require "luci.model.network".init()
+	local net = nwm:get_network(value)
+-%>
+
+<% if net then %>
+<div style="padding:0.5em">
+	<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
+		<%
+			local empty = true
+			for _, iface in ipairs(net:get_interfaces()) do
+				if not iface:is_bridge() then
+					empty = false
+		 %>
+			<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+		<% end end %>
+		<% if empty then %><em><%:(no interfaces attached)%></em><% end %>
+	</span>
+</div>
+<% end %>
+
+<%+cbi/valuefooter%>
