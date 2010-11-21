@@ -36,16 +36,18 @@ function s.create(...)
 end
 
 function s.remove(self, section)
-	local iface = m.uci:get("radvd", section, "interface")
-	if iface then
-		m.uci:delete_all("radvd", "prefix",
-			function(s) return s.interface == iface end)
+	if m.uci:get("radvd", section) == "interface" then
+		local iface = m.uci:get("radvd", section, "interface")
+		if iface then
+			m.uci:delete_all("radvd", "prefix",
+				function(s) return s.interface == iface end)
 
-		m.uci:delete_all("radvd", "route",
-			function(s) return s.interface == iface end)
+			m.uci:delete_all("radvd", "route",
+				function(s) return s.interface == iface end)
 
-		m.uci:delete_all("radvd", "rdnss",
-			function(s) return s.interface == iface end)
+			m.uci:delete_all("radvd", "rdnss",
+				function(s) return s.interface == iface end)
+		end
 	end
 
 	return TypedSection.remove(self, section)
