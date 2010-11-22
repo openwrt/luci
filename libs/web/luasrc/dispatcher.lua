@@ -718,21 +718,45 @@ local function _cbi(self, ...)
 		end
 	end
 
-	local redirect
-	local pageaction = true
 	http.header("X-CBI-State", state or 0)
+
 	if not config.noheader then
 		tpl.render("cbi/header", {state = state})
 	end
+
+	local redirect
+	local applymap   = false
+	local pageaction = true
+	local parsechain = { }
+
 	for i, res in ipairs(maps) do
-		res:render()
-		if res.pageaction == false then
-			pageaction = false
+		if res.apply_needed and res.parsechain then
+			local c
+			for _, c in ipairs(res.parsechain) do
+				parsechain[#parsechain+1] = c
+			end
+			applymap = true
 		end
+
 		if res.redirect then
 			redirect = redirect or res.redirect
 		end
+
+		if res.pageaction == false then
+			pageaction = false
+		end
 	end
+
+	for i, res in ipairs(maps) do
+		res:render({
+			firstmap   = (i == 1),
+			applymap   = applymap,
+			redirect   = redirect,
+			pageaction = pageaction,
+			parsechain = parsechain
+		})
+	end
+
 	if not config.nofooter then
 		tpl.render("cbi/footer", {
 			flow       = config,

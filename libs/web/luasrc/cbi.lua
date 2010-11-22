@@ -322,10 +322,10 @@ function Map.parse(self, readinput, ...)
 				self.uci:apply(self.parsechain)
 				self:_run_hooks("on_apply", "on_after_apply")
 			else
-				self._apply = function()
-					local cmd = self.uci:apply(self.parsechain, true)
-					return io.popen(cmd)
-				end
+				-- This is evaluated by the dispatcher and delegated to the
+				-- template which in turn fires XHR to perform the actual
+				-- apply actions.
+				self.apply_needed = true
 			end
 
 			-- Reparse sections
@@ -358,12 +358,6 @@ end
 function Map.render(self, ...)
 	self:_run_hooks("on_init")
 	Node.render(self, ...)
-	if false and self._apply then
-		local fp = self._apply()
-		fp:read("*a")
-		fp:close()
-		self:_run_hooks("on_apply")
-	end
 end
 
 -- Creates a child section
