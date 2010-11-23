@@ -9,11 +9,15 @@ html {
 
 body {
 	color: #cccccc;
-	background:#fff url(bg.jpg) repeat-x bottom center;
+	background:#e5eef5 url(bg.jpg) repeat-x top left;
 	font-family: Verdana, Arial, sans-serif;
 	font-size: 100%;
 	line-height: 100%;
 	padding-bottom: 1.5em;
+}
+
+html, body {
+height: 99%;
 }
 
 * {
@@ -359,7 +363,7 @@ textarea#syslog {
 	padding: 0.5em;
 	color: #000000;
 	font-size: 80%;
-	background: #fff url(bg.jpg) repeat-x center bottom;
+	background: #ffffff url(bg.jpg) repeat-x center bottom;
 	border: 1px dashed #CCCCCC;
 }
 
@@ -810,16 +814,25 @@ td.cbi-value-error {
 	text-align: right;
 }
 
-.luci {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	text-align: right;
+.footer, .push {
+height: 2em;
+}
+
+.footer {
+width: 99%;
+padding: 0.3em;
+}
+
+.wrapper {
+min-height: 100%;
+height: auto !important;
+height: 100%;
+margin: 0 auto -2em;
 }
 
 .luci a:link,
-.luci a:visited {
-	background-color: transparent;
+.luci a:visited,
+.exectime {
 	color: #666666;
 	text-decoration: none;
 	font-size: 70%;

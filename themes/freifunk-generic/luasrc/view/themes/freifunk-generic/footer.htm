@@ -12,10 +12,17 @@ You may obtain a copy of the License at
 $Id: footer.htm 4185 2009-01-30 14:00:35Z jow $
 
 -%>
+<% local xtime = (string.format("%.2fs", os.clock() - exectime)) %>
+</div>
 <div class="clear"></div>
+<div class="push"></div>
 </div>
 
+<div class="footer">
 <p class="luci"><a href="<%=controller%>/about">Powered by <%= luci.__appname__ .. " (v" .. luci.__version__ .. ")" %></a></p>
+<p class="exectime">Script execution time: <%=xtime%></p>
+</div>
+
 </body>
 </html>
 

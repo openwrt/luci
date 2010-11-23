@@ -23,6 +23,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ]]--
+exectime = os.clock()
 module("luci.sgi.cgi", package.seeall)
 local ltn12 = require("luci.ltn12")
 require("nixio.util")
