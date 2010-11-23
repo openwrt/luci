@@ -22,7 +22,6 @@ local cattree  = category and luci.dispatcher.node(category)
 local node     = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
 
-
 local c = luci.model.uci.cursor():get_all("freifunk", "community")
 
 if c and c.name then
@@ -67,6 +66,8 @@ require("luci.http").prepare_content("application/xhtml+xml")
 
 <body class="lang_<%=luci.i18n.context.lang%>">
 
+<div class="wrapper">
+
 <!--[if lt IE 7]>
 <div class="warning"><div style="background-color: #cccccc;padding: 2px 10px 2px 10px">
 <%: Your Internet Explorer is too old to display this page correctly. Please upgrade it to at least version 7 or use another browser like Firefox, Opera or Safari.%>
@@ -80,21 +81,15 @@ require("luci.http").prepare_content("application/xhtml+xml")
 </p>
 
 <div id="header">
-<span id="ff_logo">
-<a href="<%=homepage%>" style="text.decoration=none"><img src="/luci-static/freifunk-generic/logo.jpg" border="0" alt="FF Logo" align="left" /></a>
-</span>
-
-<span id="header_left">
-<a href="<%=homepage%>"><%=community%></a>
-</span>
-
-<h1><%=luci.version.distname%></h1>
-<p>
-<%=luci.version.distversion%><br />
-<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
-<%:Hostname%>: <%=hostname%>
-<br />
-</p>
+	<span id="header_left">
+		<a href="<%=homepage%>"><img src="/luci-static/freifunk-generic/logo.jpg" alt="FF Logo" /></a>
+		<a href="<%=homepage%>"><%=community%></a>
+	</span>
+	<p>
+		<%=luci.version.distversion%><br />
+		<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
+		<%:Hostname%>: <%=hostname%><br />
+	</p>
 </div>
 
 <div id="menubar">

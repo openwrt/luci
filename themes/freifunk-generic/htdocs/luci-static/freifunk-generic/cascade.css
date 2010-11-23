@@ -8,7 +8,7 @@ html {
 }
 
 body {
-	color: #cccccc;
+	color: #ccc;
 	background:#e5eef5 url(bg.jpg) repeat-x top left;
 	font-family: Verdana, Arial, sans-serif;
 	font-size: 100%;
@@ -77,35 +77,33 @@ code {
 }
 
 .error {
-	color: #ff0000;
+	color: #f00;
 	background-color: white;
 }
 
 #header {
-	min-height: 98px;
+	min-height: 100px;
 	background: #FFF url(header.jpg) repeat-x left bottom;
-	color: #cccccc;
+	color: #ccc;
 	font-weight: bold;
+	text-align:right;
+}
+
+#header img {
+	border: 0;
+	padding-left: 10px;
 }
 
 #header_left{
-position: absolute;
 text-align:left;
 top: 42px;
+float:left;
 }
 
 #header_left a{
 color: #dc0067;
 font: bold 28px Helvetica;
 text-decoration: none;
-}
-
-#header_right{
-text-align:right;
-}
-
-#header h1 {
-	padding: 1em 1em 0 1em;
 }
 
 #header p {
@@ -324,7 +322,7 @@ html #menubar a:visited.warning {
 #modemenu {
 	width: auto;
 	background: #000;
-	color: #ffffff;
+	color: #fff;
 	list-style: none;
 	margin-right: 1px;
 }
@@ -350,7 +348,7 @@ html #menubar a:visited.warning {
 textarea#syslog {
 	width: 98%;
 	min-height: 500px;
-	border: 3px solid #cccccc;
+	border: 3px solid #ccc;
 	padding: 5px;
 	font-family: monospace;
 }
@@ -363,8 +361,8 @@ textarea#syslog {
 	padding: 0.5em;
 	color: #000;
 	font-size: 80%;
-	background: #ffffff url(bg.jpg) repeat-x center bottom;
-	border: 1px dashed #CCCCCC;
+	background: #fff url(bg.jpg) repeat-x center bottom;
+	border: 1px dashed #ccc;
 }
 
 #maincontent h2 {
@@ -388,8 +386,8 @@ textarea#syslog {
 .cbi-section {
 	margin-bottom: 0.5em;
 	padding: 0.5em 1em;
-	border: 1px dotted #555555;
-	background-color: #ffffff;
+	border: 1px dotted #555;
+	background-color: #fff;
 	color: #000;
 }
 
@@ -409,7 +407,7 @@ textarea#syslog {
 .cbi-section h3 {
 	text-decoration: none !important;
 	font-weight: bold !important;
-	color: #555555 !important;
+	color: #555 !important;
 	margin: 0.25em !important;
 	font-size: 100% !important;
 }
@@ -451,8 +449,8 @@ ul.cbi-tabmenu li.cbi-tab-disabled a {
         margin-right: 3px;
         border: 1px outset #000;
         border-bottom: none;
-        background-color: #EEEEEE;
-        color: #BBBBBB;
+        background-color: #eee;
+        color: #bbb;
 }
 
 ul.cbi-tabmenu li.cbi-tab-highlighted a {
@@ -469,14 +467,14 @@ ul.cbi-tabmenu li.cbi-tab a {
         top: 1px;
         padding-top: 4px;
         color: #000;
-        background-color: #FFFFFF;
+        background-color: #fff;
 }
 
 div.cbi-tab-descr {
         background-image: url(/luci-static/resources/cbi/help.gif);
         background-position: 0.25em 50%;
         background-repeat: no-repeat;
-        border-bottom: 1px solid #CCCCCC;
+        border-bottom: 1px solid #ccc;
         margin: 0.25em 0.25em 2em;
         padding: 0.5em 0.5em 0.5em 2em;
 }
@@ -493,9 +491,9 @@ input[type=button] {
 select,
 input,
 textarea {
-	background: #ffffff;
+	background: #fff;
 	color: #000;
-	border: 1px solid #cccccc;
+	border: 1px solid #ccc;
 }
 
 input[type=image] {
@@ -508,7 +506,7 @@ select:focus,
 select:hover,
 textarea:focus,
 textarea:hover {
-	background-color: #ffffff;
+	background-color: #fff;
 	color: #000;
 }
 
@@ -643,7 +641,7 @@ table th {
 table.smalltext {
 	background: #f5f5f5;
 	color: #000;
-	border: 1px solid #666666;
+	border: 1px solid #666;
 	font-size: 90%;
 	width: 80%;
 	margin-left: auto;
@@ -658,14 +656,14 @@ table.smalltext tr:hover td {
 
 table.smalltext tr th {
 	padding: 0 0.25em;
-	border-left: 1px solid #666666;
+	border-left: 1px dotted #666;
 	text-align: left;
 }
 
 table.smalltext tr td {
-	padding: 0 0.25em;
-	border-top: 1px solid #666666;
-	border-left: 1px solid #666666;
+	padding: 0.2em;
+	border-top: 1px dotted #666;
+	border-left: 1px dotted #666;
 }
 
 table.cbi-section-table .cbi-rowstyle-1,
@@ -676,7 +674,7 @@ table.cbi-section-table .cbi-rowstyle-1 * {
 
 .cbi-section .cbi-rowstyle-1 h3 {
 	background-color: #f1f6fa;
-	color: #555555;
+	color: #555;
 }
 
 .cbi-rowstyle-2 {
@@ -687,7 +685,7 @@ div.cbi-value {
 	clear: left;
 	vertical-align: middle;
 	padding-left: 0.25em;
-	border-bottom: 1px dashed #bbbbbb;
+	border-bottom: 1px dashed #bbb;
 }
 
 div.cbi-value:hover {
@@ -719,7 +717,7 @@ div.cbi-section-create {
 }
 
 div.cbi-tblsection-create {
-	border-bottom: 1px dotted #bbbbbb;
+	border-bottom: 1px dotted #bbb;
 }
 
 div.cbi-section-create .cbi-button {
@@ -727,16 +725,15 @@ div.cbi-section-create .cbi-button {
 }
 
 input.cbi-section-create-name {
-    border: ;
 	margin-right: -0.25em;
 	border-top-width: 1px;
 	border-right-width: 1px;
 	border-bottom-width: 1px;
 	border-left-width: 1px;
-	border-top-color: #999999;
-	border-right-color: #999999;
-	border-bottom-color: #999999;
-	border-left-color: #999999;
+	border-top-color: #999;
+	border-right-color: #999;
+	border-bottom-color: #999;
+	border-left-color: #999;
 }
 
 div.cbi-map-descr {
@@ -745,7 +742,7 @@ div.cbi-map-descr {
 
 div.cbi-optionals {
 	padding: 0.25em;
-	border-bottom: 1px dotted #bbbbbb;
+	border-bottom: 1px dotted #bbb;
 }
 
 div.cbi-section-remove {
@@ -754,9 +751,9 @@ div.cbi-section-remove {
 
 .cbi-section-node {
 	clear: both;
-	border-top: 1px dotted #bbbbbb;
-	border-left: 1px dotted #bbbbbb;
-	border-right: 1px dotted #bbbbbb;
+	border-top: 1px dotted #bbb;
+	border-left: 1px dotted #bbb;
+	border-right: 1px dotted #bbb;
 	border-bottom: none;
 	padding-bottom: 0;
 }
@@ -797,8 +794,8 @@ td.cbi-section-table-optionals {
 div.cbi-error {
 	font-size: 95%;
 	font-weight: bold;
-	color: #ff0000;
-	background-color: #ffffff;
+	color: #f00;
+	background-color: #fff;
 }
 
 td.cbi-value-error {
@@ -808,7 +805,7 @@ td.cbi-value-error {
 .cbi-value-error input,
 .cbi-value-error select {
 	color: red;
-	background-color: #ffcccc;
+	background-color: #fcc;
 }
 
 .cbi-section-error {
@@ -843,7 +840,7 @@ margin: 0 auto -2em;
 .luci a:link,
 .luci a:visited,
 .exectime {
-	color: #666666;
+	color: #666;
 	text-decoration: none;
 	font-size: 70%;
 }
@@ -854,9 +851,9 @@ margin: 0 auto -2em;
 
 .error500 {
 	white-space: normal;
-	border: 1px dotted #ff0000;
-	background-color: #ffffff;
+	border: 1px dotted #f00;
+	background-color: #fff;
 	color: #000;
 	padding: 0.5em;
 }
-
+}
