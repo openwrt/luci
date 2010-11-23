@@ -12,12 +12,15 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
+local fs   = require "nixio.fs"
 local nw   = require "luci.model.network"
 local fw   = require "luci.model.firewall"
 local uci  = require "luci.model.uci".cursor()
 local http = require "luci.http"
 
 local iw = luci.sys.wifi.getiwinfo(http.formvalue("device"))
+
+local has_firewall = fs.access("/etc/config/firewall")
 
 if not iw then
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
@@ -89,25 +92,30 @@ newnet = m:field(Value, "_netname_new", translate("Name of the new network"),
 newnet.default = m.hidden.mode == "Ad-Hoc" and "mesh" or "wwan"
 newnet.datatype = "uciname"
 
-fwzone = m:field(Value, "_fwzone",
-	translate("Create / Assign firewall-zone"),
-	translate("Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it."))
+if has_firewall then
+	fwzone = m:field(Value, "_fwzone",
+		translate("Create / Assign firewall-zone"),
+		translate("Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it."))
 
-fwzone.template = "cbi/firewall_zonelist"
-fwzone.default = m.hidden.mode == "Ad-Hoc" and "mesh" or "wan"
+	fwzone.template = "cbi/firewall_zonelist"
+	fwzone.default = m.hidden.mode == "Ad-Hoc" and "mesh" or "wan"
+end
 
 function newnet.parse(self, section)
 	local net, zone
+
 	local value = self:formvalue(section)
-	local zval  = fwzone:formvalue(section)
-
 	net = nw:add_network(value, { proto = "dhcp" })
-	zone = fw:get_zone(zval)
 
-	if not zone and zval == '-' then
-		zval = m:formvalue(fwzone:cbid(section) .. ".newzone")
-		if zval and #zval > 0 then
-			zone = fw:add_zone(zval)
+	if has_firewall then
+		local zval  = fwzone:formvalue(section)
+		zone = fw:get_zone(zval)
+
+		if not zone and zval == '-' then
+			zval = m:formvalue(fwzone:cbid(section) .. ".newzone")
+			if zval and #zval > 0 then
+				zone = fw:add_zone(zval)
+			end
 		end
 	end
 
@@ -165,10 +173,12 @@ function newnet.parse(self, section)
 	end
 end
 
-function fwzone.cfgvalue(self, section)
-	self.iface = section
-	local z = fw:get_zone_by_network(section)
-	return z and z:name()
+if has_firewall then
+	function fwzone.cfgvalue(self, section)
+		self.iface = section
+		local z = fw:get_zone_by_network(section)
+		return z and z:name()
+	end
 end
 
 return m

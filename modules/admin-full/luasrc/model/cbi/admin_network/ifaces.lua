@@ -20,6 +20,9 @@ local fw = require "luci.model.firewall"
 
 arg[1] = arg[1] or ""
 
+local has_dnsmasq  = fs.access("/etc/config/dhcp")
+local has_firewall = fs.access("/etc/config/firewall")
+
 local has_3g     = fs.access("/usr/bin/gcom")
 local has_pptp   = fs.access("/usr/sbin/pptp")
 local has_pppd   = fs.access("/usr/sbin/pppd")
@@ -30,8 +33,11 @@ local has_6in4   = fs.access("/lib/network/6in4.sh")
 local has_6to4   = fs.access("/lib/network/6to4.sh")
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
-m:chain("firewall")
 m:chain("wireless")
+
+if has_firewall then
+	m:chain("firewall")
+end
 
 nw.init(m.uci)
 fw.init(m.uci)
@@ -56,7 +62,7 @@ if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
 if has_pppoa then s:tab("atm", translate("ATM Settings")) end
 if has_6in4 or has_6to4 then s:tab("tunnel", translate("Tunnel Settings")) end
 s:tab("physical", translate("Physical Settings"))
-s:tab("firewall", translate("Firewall Settings"))
+if has_firewall then s:tab("firewall", translate("Firewall Settings")) end
 
 st = s:taboption("general", DummyValue, "__status", translate("Status"))
 st.template = "admin_network/iface_status"
@@ -143,37 +149,37 @@ ifname_multi.cfgvalue = ifname_single.cfgvalue
 ifname_multi.write = ifname_single.write
 
 
-local fwd_to, fwd_from
+if has_firewall then
+	fwzone = s:taboption("firewall", Value, "_fwzone",
+		translate("Create / Assign firewall-zone"),
+		translate("Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it."))
 
-fwzone = s:taboption("firewall", Value, "_fwzone",
-	translate("Create / Assign firewall-zone"),
-	translate("Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it."))
+	fwzone.template = "cbi/firewall_zonelist"
+	fwzone.network = arg[1]
+	fwzone.rmempty = false
 
-fwzone.template = "cbi/firewall_zonelist"
-fwzone.network = arg[1]
-fwzone.rmempty = false
-
-function fwzone.cfgvalue(self, section)
-	self.iface = section
-	local z = fw:get_zone_by_network(section)
-	return z and z:name()
-end
-
-function fwzone.write(self, section, value)
-	local zone = fw:get_zone(value)
-
-	if not zone and value == '-' then
-		value = m:formvalue(self:cbid(section) .. ".newzone")
-		if value and #value > 0 then
-			zone = fw:add_zone(value)
-		else
-			fw:del_network(section)
-		end
+	function fwzone.cfgvalue(self, section)
+		self.iface = section
+		local z = fw:get_zone_by_network(section)
+		return z and z:name()
 	end
 
-	if zone then
-		fw:del_network(section)
-		zone:add_network(section)
+	function fwzone.write(self, section, value)
+		local zone = fw:get_zone(value)
+
+		if not zone and value == '-' then
+			value = m:formvalue(self:cbid(section) .. ".newzone")
+			if value and #value > 0 then
+				zone = fw:add_zone(value)
+			else
+				fw:del_network(section)
+			end
+		end
+
+		if zone then
+			fw:del_network(section)
+			zone:add_network(section)
+		end
 	end
 end
 
@@ -507,89 +513,95 @@ dns.optional = true
 dns.datatype = "ip4addr"
 
 
-m2 = Map("dhcp", "", "")
-function m2.on_parse()
-	local has_section = false
+--
+-- Display DNS settings if dnsmasq is available
+--
 
-	m2.uci:foreach("dhcp", "dhcp", function(s)
-		if s.interface == arg[1] then
-			has_section = true
-			return false
+if has_dnsmasq then
+	m2 = Map("dhcp", "", "")
+	function m2.on_parse()
+		local has_section = false
+
+		m2.uci:foreach("dhcp", "dhcp", function(s)
+			if s.interface == arg[1] then
+				has_section = true
+				return false
+			end
+		end)
+
+		if not has_section then
+			m2.uci:section("dhcp", "dhcp", nil, { interface = arg[1], ignore = "1" })
+			m2.uci:save("dhcp")
 		end
-	end)
-
-	if not has_section then
-		m2.uci:section("dhcp", "dhcp", nil, { interface = arg[1], ignore = "1" })
-		m2.uci:save("dhcp")
 	end
-end
 
-s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
-s.addremove = false
-s.anonymous = true
-s:tab("general",  translate("General Setup"))
-s:tab("advanced", translate("Advanced Settings"))
+	s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
+	s.addremove = false
+	s.anonymous = true
+	s:tab("general",  translate("General Setup"))
+	s:tab("advanced", translate("Advanced Settings"))
 
-function s.filter(self, section)
-	return m2.uci:get("dhcp", section, "interface") == arg[1]
-end
+	function s.filter(self, section)
+		return m2.uci:get("dhcp", section, "interface") == arg[1]
+	end
 
-local ignore = s:taboption("general", Flag, "ignore",
-	translate("Ignore interface"),
-	translate("Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for " ..
-		"this interface."))
+	local ignore = s:taboption("general", Flag, "ignore",
+		translate("Ignore interface"),
+		translate("Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for " ..
+			"this interface."))
 
-ignore.rmempty = false
+	ignore.rmempty = false
 
-local start = s:taboption("general", Value, "start", translate("Start"),
-	translate("Lowest leased address as offset from the network address."))
-start.optional = true
-start.datatype = "uinteger"
-start.default = "100"
+	local start = s:taboption("general", Value, "start", translate("Start"),
+		translate("Lowest leased address as offset from the network address."))
+	start.optional = true
+	start.datatype = "uinteger"
+	start.default = "100"
 
-local limit = s:taboption("general", Value, "limit", translate("Limit"),
-	translate("Maximum number of leased addresses."))
-limit.optional = true
-limit.datatype = "uinteger"
-limit.default = "150"
+	local limit = s:taboption("general", Value, "limit", translate("Limit"),
+		translate("Maximum number of leased addresses."))
+	limit.optional = true
+	limit.datatype = "uinteger"
+	limit.default = "150"
 
-local ltime = s:taboption("general", Value, "leasetime", translate("Leasetime"),
-	translate("Expiry time of leased addresses, minimum is 2 Minutes (<code>2m</code>)."))
-ltime.rmempty = true
-ltime.default = "12h"
+	local ltime = s:taboption("general", Value, "leasetime", translate("Leasetime"),
+		translate("Expiry time of leased addresses, minimum is 2 Minutes (<code>2m</code>)."))
+	ltime.rmempty = true
+	ltime.default = "12h"
 
-local dd = s:taboption("advanced", Flag, "dynamicdhcp",
-	translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
-	translate("Dynamically allocate DHCP addresses for clients. If disabled, only " ..
-		"clients having static leases will be served."))
+	local dd = s:taboption("advanced", Flag, "dynamicdhcp",
+		translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
+		translate("Dynamically allocate DHCP addresses for clients. If disabled, only " ..
+			"clients having static leases will be served."))
 
-dd.rmempty = false
-function dd.cfgvalue(self, section)
-	return Flag.cfgvalue(self, section) or "1"
-end
+	dd.rmempty = false
+	function dd.cfgvalue(self, section)
+		return Flag.cfgvalue(self, section) or "1"
+	end
 
-s:taboption("advanced", Flag, "force", translate("Force"),
-	translate("Force DHCP on this network even if another server is detected."))
+	s:taboption("advanced", Flag, "force", translate("Force"),
+		translate("Force DHCP on this network even if another server is detected."))
 
--- XXX: is this actually useful?
---s:taboption("advanced", Value, "name", translate("Name"),
---	translate("Define a name for this network."))
+	-- XXX: is this actually useful?
+	--s:taboption("advanced", Value, "name", translate("Name"),
+	--	translate("Define a name for this network."))
 
-mask = s:taboption("advanced", Value, "netmask",
-	translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"),
-	translate("Override the netmask sent to clients. Normally it is calculated " ..
-		"from the subnet that is served."))
+	mask = s:taboption("advanced", Value, "netmask",
+		translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"),
+		translate("Override the netmask sent to clients. Normally it is calculated " ..
+			"from the subnet that is served."))
 
-mask.optional = true
-mask.datatype = "ip4addr"
+	mask.optional = true
+	mask.datatype = "ip4addr"
 
-s:taboption("advanced", DynamicList, "dhcp_option", translate("DHCP-Options"),
-	translate("Define additional DHCP options, for example \"<code>6,192.168.2.1," ..
-		"192.168.2.2</code>\" which advertises different DNS servers to clients."))
+	s:taboption("advanced", DynamicList, "dhcp_option", translate("DHCP-Options"),
+		translate("Define additional DHCP options, for example \"<code>6,192.168.2.1," ..
+			"192.168.2.2</code>\" which advertises different DNS servers to clients."))
 
-for i, n in ipairs(s.children) do
-	if n ~= ignore then
-		n:depends("ignore", "")
+	for i, n in ipairs(s.children) do
+		if n ~= ignore then
+			n:depends("ignore", "")
+		end
 	end
 end
 
