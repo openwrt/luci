@@ -17,7 +17,7 @@ module("luci.controller.admin.system", package.seeall)
 function index()
 	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
-	
+
 	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("System"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("System"), 1)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
@@ -49,11 +49,11 @@ function action_packages()
 	-- Search query
 	local query = luci.http.formvalue("query")
 	query = (query ~= '') and query or nil
-	
-	
+
+
 	-- Packets to be installed
 	local ninst = submit and luci.http.formvalue("install")
-	local uinst = nil	
+	local uinst = nil
 
 	-- Install from URL
 	local url = luci.http.formvalue("url")
@@ -74,34 +74,34 @@ function action_packages()
 
 	-- Remove packets
 	local rem = submit and luci.http.formvalue("remove")
-	if rem then	
+	if rem then
 		_, remove[rem] = ipkg.remove(rem)
 		changes = true
 	end
 
-	
+
 	-- Update all packets
 	local update = luci.http.formvalue("update")
 	if update then
 		_, update = ipkg.update()
 	end
-	
-	
+
+
 	-- Upgrade all packets
 	local upgrade = luci.http.formvalue("upgrade")
 	if upgrade then
 		_, upgrade = ipkg.upgrade()
 	end
 
-	
+
 	luci.template.render("admin_system/packages", {
 		query=query, install=install, remove=remove, update=update, upgrade=upgrade
 	})
- 
+
 	-- Remove index cache
 	if changes then
 		nixio.fs.unlink("/tmp/luci-indexcache")
-	end	
+	end
 end
 
 function action_backup()
@@ -109,7 +109,7 @@ function action_backup()
 	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
 	local backup_cmd  = "tar -cz %s 2>/dev/null"
 
-	local restore_fpi 
+	local restore_fpi
 	luci.http.setfilehandler(
 		function(meta, chunk, eof)
 			if not restore_fpi then
@@ -123,11 +123,11 @@ function action_backup()
 			end
 		end
 	)
-		  
+
 	local upload = luci.http.formvalue("archive")
 	local backup = luci.http.formvalue("backup")
 	local reset  = reset_avail and luci.http.formvalue("reset")
-	
+
 	if upload and #upload > 0 then
 		luci.template.render("admin_system/applyreboot")
 		luci.sys.reboot()
@@ -149,7 +149,7 @@ function action_passwd()
 	local p1 = luci.http.formvalue("pwd1")
 	local p2 = luci.http.formvalue("pwd2")
 	local stat = nil
-	
+
 	if p1 or p2 then
 		if p1 == p2 then
 			stat = luci.sys.user.setpasswd("root", p1)
@@ -157,7 +157,7 @@ function action_passwd()
 			stat = 10
 		end
 	end
-	
+
 	luci.template.render("admin_system/passwd", {stat=stat})
 end
 
@@ -173,7 +173,7 @@ function action_upgrade()
 	require("luci.model.uci")
 
 	local tmpfile = "/tmp/firmware.img"
-	
+
 	local function image_supported()
 		-- XXX: yay...
 		return ( 0 == os.execute(
@@ -183,11 +183,11 @@ function action_upgrade()
 				% tmpfile
 		) )
 	end
-	
+
 	local function image_checksum()
 		return (luci.sys.exec("md5sum %q" % tmpfile):match("^([^%s]+)"))
 	end
-	
+
 	local function storage_size()
 		local size = 0
 		if nixio.fs.access("/proc/mtd") then
@@ -235,26 +235,24 @@ function action_upgrade()
 	local has_support  = image_supported()
 	local has_platform = nixio.fs.access("/lib/upgrade/platform.sh")
 	local has_upload   = luci.http.formvalue("image")
-	
+
 	-- This does the actual flashing which is invoked inside an iframe
-	-- so don't produce meaningful errors here because the the 
+	-- so don't produce meaningful errors here because the the
 	-- previous pages should arrange the stuff as required.
 	if step == 4 then
 		if has_platform and has_image and has_support then
 			-- Mimetype text/plain
 			luci.http.prepare_content("text/plain")
-			luci.http.write("Starting luci-flash...\n")
+			luci.http.write("Starting sysupgrade...\n")
+
+			io.flush()
 
 			-- Now invoke sysupgrade
 			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
-			local flash = ltn12_popen("/sbin/luci-flash %s %q" %{
-				keepcfg and "-k %q" % _keep_pattern() or "", tmpfile
-			})
+			--local flash = ltn12_popen("/sbin/sysupgrade %q" % tmpfile)
+			local flash = ltn12_popen("hexdump %q" % tmpfile)
 
 			luci.ltn12.pump.all(flash, luci.http.write)
-
-			-- Make sure the device is rebooted
-			luci.sys.reboot()
 		end
 
 
@@ -270,7 +268,7 @@ function action_upgrade()
 		if has_image then
 			nixio.fs.unlink(tmpfile)
 		end
-			
+
 		luci.template.render("admin_system/upgrade", {
 			step=1,
 			bad_image=(has_image and not has_support or false),
@@ -287,28 +285,14 @@ function action_upgrade()
 			flashsize=storage_size(),
 			keepconfig=(keep_avail and luci.http.formvalue("keepcfg") == "1")
 		} )
-	
+
 	-- Step 3: load iframe which calls the actual flash procedure
 	elseif step == 3 then
 		luci.template.render("admin_system/upgrade", {
 			step=3,
 			keepconfig=(keep_avail and luci.http.formvalue("keepcfg") == "1")
 		} )
-	end	
-end
-
-function _keep_pattern()
-	local kpattern = ""
-	local files = luci.model.uci.cursor():get_all("luci", "flash_keep")
-	if files then
-		kpattern = ""
-		for k, v in pairs(files) do
-			if k:sub(1,1) ~= "." and nixio.fs.glob(v)() then
-				kpattern = kpattern .. " " ..  v
-			end
-		end
 	end
-	return kpattern
 end
 
 function ltn12_popen(command)

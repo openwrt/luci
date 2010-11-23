@@ -92,19 +92,19 @@ function index()
 	)
 
 	if nixio.fs.access("/etc/config/dhcp") then
-		page  = node("admin", "network", "dhcpleases")
+		page = node("admin", "network", "dhcpleases")
 		page.target = cbi("admin_network/dhcpleases")
 		page.title  = i18n("DHCP Leases")
 		page.order  = 30
 
 		page = entry({"admin", "network", "dhcplease_status"}, call("lease_status"), nil)
 		page.leaf = true
-	end
 
-	page  = node("admin", "network", "hosts")
-	page.target = cbi("admin_network/hosts")
-	page.title  = i18n("Hostnames")
-	page.order  = 40
+		page = node("admin", "network", "hosts")
+		page.target = cbi("admin_network/hosts")
+		page.title  = i18n("Hostnames")
+		page.order  = 40
+	end
 
 	page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
