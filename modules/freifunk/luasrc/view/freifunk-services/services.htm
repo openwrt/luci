@@ -45,36 +45,36 @@ function fetch_services()
 	
 	return tables
 end
-
 %>
 
 <% if has_services then %>
+<div class="cbi-map">
 	<h2><a id="content" name="content"><%:Services%></a></h2>
-	<br />
+	<div class="cbi-map-descr"/>
+                <div class="cbi-section">
+                        <div class="cbi-section-node">
+                                <table class="cbi-section-table">
+                                        <tr class="cbi-section-table-titles">
+						<th class="cbi-section-table-cell"><%:Url%></th>
+						<th class="cbi-section-table-cell"><%:Source%></th>
+					</tr>
 
-	<table class="smalltext" cellspacing="0" cellpadding="6">
-	<tr>
-	<th><%:Url%></th>
-	<th><%:Source%></th>
-	</tr>
-
-	<%
-	table=fetch_services()
+	<% table=fetch_services()
+	local i = 1
 	for k, line in ipairs(table) do
-	local field = {}
-	-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
-	local field = luci.util.split(line, "[#|]", split, true)
-	%>
-	<tr><td>
-	<a href="<%=field[1]%>"><%=field[3]%></a>
-	</td>
-	<td>
-	<%=field[4]%>
-	</td>
-	</tr>
+		local field = {}
+		-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
+		local field = luci.util.split(line, "[#|]", split, true) %>
+					<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+						<td class="cbi-section-table-cell"><a href="<%=field[1]%>"><%=field[3]%></a></td>
+						<td class="cbi-section-table-cell"><%=field[4]%></td>
+					</tr>
+	<% if i == 1 then i = 0 elseif i == 0 then i = 1 end %>
 	<%end%>
-
-	</table>
+				</table>
+			</div>
+		</div>
+	</div>
 	<br />
 	<%=last_update%>
 
