@@ -75,7 +75,7 @@ var cbi_validators = {
 					var colons = 0;
 					var fill = '0';
 
-					for( var i = 0; i < addr.length; i++ )
+					for( var i = 1; i < (addr.length-1); i++ )
 						if( addr.charAt(i) == ':' )
 							colons++;
 
@@ -85,7 +85,9 @@ var cbi_validators = {
 					for( var i = 0; i < (7 - colons); i++ )
 						fill += ':0';
 
-					addr = addr.replace(/::/, ':' + fill + ':');
+					if (addr.match(/^(.*?)::(.*?)$/))
+						addr = (RegExp.$1 ? RegExp.$1 + ':' : '') + fill +
+						       (RegExp.$2 ? ':' + RegExp.$2 : '');
 				}
 
 				return (addr.match(/^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/) != null);
