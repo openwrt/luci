@@ -48,7 +48,7 @@ if has_ewk then
 	end
 
 	iface:value("", translate("Broadcast on all interfaces"))
-	
+
 	for _, e in ipairs(sys.net.devices()) do
 		if e ~= "lo" then iface:value(e) end
 	end
@@ -86,7 +86,7 @@ end
 
 function host.write(self, s, val)
 	local host = luci.http.formvalue("cbid.wol.1.mac")
-	if host and #host > 0 then
+	if host and #host > 0 and host:match("^[a-fA-F0-9:]+$") then
 		local cmd
 		local util = luci.http.formvalue("cbid.wol.1.binary") or (
 			has_ewk and "/usr/bin/etherwake" or "/usr/bin/wol"
@@ -127,4 +127,3 @@ end
 
 
 return m
-
