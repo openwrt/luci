@@ -1,0 +1,93 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%+header%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	var stxhr = new XHR();
+
+	function update_status(field)
+	{
+		var tool = field.name;
+		var addr = field.value;
+
+		var legend = document.getElementById('diag-rc-legend');
+		var output = document.getElementById('diag-rc-output');
+
+		if (legend && output)
+		{
+			output.innerHTML =
+				'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> ' +
+				'<%:Waiting for router...%>'
+			;
+
+			legend.style.display = null;
+			legend.parentNode.style.display = 'block';
+
+			stxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/diag_' + tool + '/' + addr, null,
+				function(x)
+				{
+					if (x.responseText)
+					{
+						legend.style.display = 'none';
+						output.innerHTML = String.format('<pre>%h</pre>', x.responseText);
+					}
+					else
+					{
+						legend.style.display = 'none';
+						output.innerHTML = '<span class="error"><%:Bad address specified!%></span>';
+					}
+				}
+			);
+		}
+	}
+//]]></script>
+
+<form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+	<div class="cbi-map">
+		<h2><a id="content" name="content"><%:Diagnostics%></a></h2>
+
+		<fieldset class="cbi-section">
+			<legend><%:Network Utilities%></legend>
+
+			<br />
+
+			<div style="width:30%; float:left; text-align:center">
+				<input class="cbi-input-text" type="text" value="openwrt.org" name="ping" />
+				<input type="button" value="Ping" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping)" />
+			</div>
+
+			<div style="width:30%; float:left; text-align:center">
+				<input class="cbi-input-text" type="text" value="openwrt.org" name="traceroute" />
+				<input type="button" value="Traceroute" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute)" />
+			</div>
+
+			<div style="width:30%; float:left; text-align:center">
+				<input class="cbi-input-text" type="text" value="openwrt.org" name="nslookup" />
+				<input type="button" value="Nslookup" class="cbi-button cbi-button-apply" onclick="update_status(this.form.nslookup)" />
+			</div>
+
+			<br style="clear:both" /><br />
+
+		</fieldset>
+	</div>
+
+	<fieldset class="cbi-section" style="display:none">
+		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
+		<span id="diag-rc-output"></span>
+	</fieldset>
+</form>
+
+<%+footer%>

@@ -111,6 +111,19 @@ function index()
 	page.title  = i18n("Static Routes")
 	page.order  = 50
 
+	page = node("admin", "network", "diagnostics")
+	page.target = template("admin_network/diagnostics")
+	page.title  = i18n("Diagnostics")
+	page.order  = 60
+
+	page = entry({"admin", "network", "diag_ping"}, call("diag_ping"), nil)
+	page.leaf = true
+
+	page = entry({"admin", "network", "diag_nslookup"}, call("diag_nslookup"), nil)
+	page.leaf = true
+
+	page = entry({"admin", "network", "diag_traceroute"}, call("diag_traceroute"), nil)
+	page.leaf = true
 end
 
 function wifi_join()
@@ -370,4 +383,41 @@ function lease_status()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(rv)
+end
+
+function diag_command(cmd)
+	local path = luci.dispatcher.context.requestpath
+	local addr = path[#path]
+
+	if addr and addr:match("^[a-zA-Z0-9%-%.:_]+$") then
+		luci.http.prepare_content("text/plain")
+
+		local util = io.popen(cmd % addr)
+		if util then
+			while true do
+				local ln = util:read("*l")
+				if not ln then break end
+				luci.http.write(ln)
+				luci.http.write("\n")
+			end
+
+			util:close()
+		end
+
+		return
+	end
+
+	luci.http.status(500, "Bad address")
+end
+
+function diag_ping()
+	diag_command("ping -c 5 -W 1 %q 2>&1")
+end
+
+function diag_traceroute()
+	diag_command("traceroute -q 1 -w 1 -n %q 2>&1")
+end
+
+function diag_nslookup()
+	diag_command("nslookup %q 2>&1")
 end
