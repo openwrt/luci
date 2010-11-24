@@ -2,6 +2,5 @@
 
 [ -n "${IPKG_INSTROOT}" ] || {
 	/etc/init.d/luci_splash enabled || /etc/init.d/luci_splash enable
-	uci set luci.flash_keep.splashtext="/usr/lib/luci-splash/splashtext.html";uci commit
 	exit 0
 }
