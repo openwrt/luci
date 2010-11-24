@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.admin.system", package.seeall)
 
 function index()
@@ -105,9 +106,12 @@ function action_packages()
 end
 
 function action_backup()
+	local sys = require "luci.sys"
+	local fs  = require "luci.fs"
+
 	local reset_avail = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
-	local backup_cmd  = "tar -cz %s 2>/dev/null"
+	local backup_cmd  = "tar -czT %s 2>/dev/null"
 
 	local restore_fpi
 	luci.http.setfilehandler(
@@ -132,11 +136,22 @@ function action_backup()
 		luci.template.render("admin_system/applyreboot")
 		luci.sys.reboot()
 	elseif backup then
-		local reader = ltn12_popen(backup_cmd:format(_keep_pattern()))
-		luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
-			luci.sys.hostname(), os.date("%Y-%m-%d")})
-		luci.http.prepare_content("application/x-targz")
-		luci.ltn12.pump.all(reader, luci.http.write)
+		local filelist = "/tmp/luci-backup-list.%d" % os.time()
+
+		sys.call(
+			"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
+			"/lib/upgrade/keep.d/* 2>/dev/null) -type f 2>/dev/null; " ..
+			"opkg list-changed-conffiles ) | sort -u > %s" % filelist
+		)
+
+		if fs.access(filelist) then
+			local reader = ltn12_popen(backup_cmd:format(filelist))
+			luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
+				luci.sys.hostname(), os.date("%Y-%m-%d")})
+			luci.http.prepare_content("application/x-targz")
+			luci.ltn12.pump.all(reader, luci.http.write)
+			fs.unlink(filelist)
+		end
 	elseif reset then
 		luci.template.render("admin_system/applyreboot")
 		luci.util.exec("mtd -r erase rootfs_data")
