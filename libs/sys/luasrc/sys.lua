@@ -60,20 +60,6 @@ end
 -- @return			String containg the return the output of the command
 exec = luci.util.exec
 
---- Invoke the luci-flash executable to write an image to the flash memory.
--- @param image		Local path or URL to image file
--- @param kpattern	Pattern of files to keep over flash process
--- @return			Return value of os.execute()
-function flash(image, kpattern)
-	local cmd = "luci-flash "
-	if kpattern then
-		cmd = cmd .. "-k '" .. kpattern:gsub("'", "") .. "' "
-	end
-	cmd = cmd .. "'" .. image:gsub("'", "") .. "' >/dev/null 2>&1"
-
-	return os.execute(cmd)
-end
-
 --- Retrieve information about currently mounted file systems.
 -- @return 	Table containing mount information
 function mounts()
