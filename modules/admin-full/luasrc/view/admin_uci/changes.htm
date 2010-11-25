@@ -27,18 +27,21 @@ $Id$
 <div class="cbi-page-actions">
 	<div style="float:left">
 		<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
-			<input class="cbi-button" style="float:left; margin:0" type="submit" value="<%:« Back%>" />
+			<input class="cbi-button cbi-button-link" style="float:left; margin:0" type="submit" value="<%:Back%>" />
 		</form>
 	</div>
 
 	<div style="text-align:right">
 		<form class="inline" method="get" action="<%=controller%>/admin/uci/apply">
+			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-apply" type="submit" value="<%:Apply%>" />
 		</form>
 		<form class="inline" method="get" action="<%=controller%>/admin/uci/saveapply">
+			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-save" type="submit" value="<%:Save & Apply%>" />
 		</form>
 		<form class="inline" method="get" action="<%=controller%>/admin/uci/revert">
+			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
 		</form>
 	</div>
