@@ -81,7 +81,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 						selected_name = v.name
 					end
 		%>
-			<li<% if nnode._menu_selected or v.name == leaf then %> class="active"<% end %>>
+			<li class="tabmenu-item-<%=v.name%><% if nnode._menu_selected or (node.leaf and v.name == leaf) then %> active<% end %>">
 				<a href="<%=nodeurl(prefix, v.name, nnode.query)%>"><%=striptags(nnode.title)%></a>
 			</li>
 		<%
