@@ -19,9 +19,7 @@ local memory = string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
 )
 
 -- wireless
-local uci = require "luci.model.uci".cursor()
-local ntm = require "luci.model.network"
-ntm.init(uci)
+local ntm = require "luci.model.network".init()
 local devices  = ntm:get_wifidevs()
 local netlist = { }
 local netdevs = { }
@@ -71,8 +69,8 @@ local defroutev6 = sys.net.defaultroute6 ()
 			netdevs[net:ifname()] = dev:name()
 
 			if net.iwdata.ifname then
-			local signal = net.iwinfo.signal or "N/A"
-			local noise = net.iwinfo.noise or "N/A"
+				local signal = net.iwinfo.signal or "N/A"
+				local noise = net.iwinfo.noise or "N/A"
 				local q = net.iwinfo.quality or "0"
 				local qmax = net.iwinfo.quality_max or "100"
 				local qperc = q / qmax * 100
@@ -133,7 +131,7 @@ local defroutev6 = sys.net.defaultroute6 ()
 				<table class="cbi-section-table">
 
 <% if not defroutev4 and not defroutev6 then %>
-	<%:No default routes known.%>
+	<%:No defaultroutes known.%>
 <%else%>
 						<tr class="cbi-section-table-titles">
 							<th class="cbi-section-table-cell"><%:Network%></th>
@@ -170,4 +168,3 @@ local defroutev6 = sys.net.defaultroute6 ()
 <% end %>
 
 <%+footer%>
-
