@@ -42,12 +42,12 @@ function index()
 	page.title  = "Kontakt"
 
 	local page  = node("freifunk", "status")
-	page.target = form("freifunk/public_status")
+	page.target = template("freifunk/public_status")
 	page.title  = i18n("Status")
 	page.order  = 20
 	page.i18n   = "base"
 	page.setuser  = false
-	page.setgroup = false
+        page.setgroup = false
 
 	entry({"freifunk", "status.json"}, call("jsonstatus"))
 	entry({"freifunk", "status", "zeroes"}, call("zeroes"), "Testdownload") 
