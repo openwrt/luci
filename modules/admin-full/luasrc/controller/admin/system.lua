@@ -264,7 +264,9 @@ function action_upgrade()
 
 			-- Now invoke sysupgrade
 			local keepcfg = keep_avail and luci.http.formvalue("keepcfg") == "1"
-			local flash = ltn12_popen("/sbin/sysupgrade %q" % tmpfile)
+			local flash = ltn12_popen("/sbin/sysupgrade %s %q" %{
+				keepcfg and "" or "-n", tmpfile
+			})
 
 			luci.ltn12.pump.all(flash, luci.http.write)
 		end
