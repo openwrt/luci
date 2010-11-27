@@ -20,7 +20,7 @@ define Package/libiwinfo
   SUBMENU:=Libraries
   TITLE:=Generalized Wireless Information Library (iwinfo)
   DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +liblua +lua
-  DEFAULT:=PACKAGE_luci-lib-core
+  DEFAULT:=PACKAGE_luci-lib-sys
 endef
 
 define Package/libiwinfo/description
