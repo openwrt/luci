@@ -30,15 +30,14 @@ local os     = require "os"
 local table  = require "table"
 local nixio  = require "nixio"
 local fs     = require "nixio.fs"
-local iwinfo = require "iwinfo"
 local uci    = require "luci.model.uci"
 
 local luci  = {}
 luci.util   = require "luci.util"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type, next, setmetatable =
-	tonumber, ipairs, pairs, pcall, type, next, setmetatable
+local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require =
+	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -625,6 +624,8 @@ wifi = {}
 -- @param ifname        String containing the interface name
 -- @return              A wrapped iwinfo object instance
 function wifi.getiwinfo(ifname)
+	local iwinfo = require "iwinfo"
+
 	if ifname then
 		local c = 0
 		local u = uci.cursor_state()
