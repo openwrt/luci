@@ -139,7 +139,12 @@ if arg[1] then
 		},
 
 		["olsrd_mdns.so.1.0.0"] = {
-			{ DynamicList,	"NonOlsrIf",			"br-lan" }
+			{ DynamicList,	"NonOlsrIf",			"lan" }
+		},
+
+		["olsrd_p2pd.so.0.1.0"] = {
+			{ DynamicList,	"NonOlsrIf",			"lan" },
+			{ Value,	"P2pdTtl",			"10" }
 		},
 
 		["olsrd_arprefresh.so.0.1"]		= {},
