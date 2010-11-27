@@ -13,6 +13,10 @@ $Id$
 
 -%>
 
+<%- if firstmap and messages then local msg; for _, msg in ipairs(messages) do -%>
+	<div class="errorbox"><%=pcdata(msg)%></div>
+<%- end end -%>
+
 <%-+cbi/apply_xhr-%>
 
 <div class="cbi-map" id="cbi-<%=self.config%>">
