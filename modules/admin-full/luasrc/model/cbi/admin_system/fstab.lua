@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 require("luci.tools.webadmin")
 
 local fs   = require "nixio.fs"
@@ -62,27 +63,94 @@ mount = m:section(TypedSection, "mount", translate("Mount Points"), translate("M
 mount.anonymous = true
 mount.addremove = true
 mount.template = "cbi/tblsection"
+mount.extedit  = luci.dispatcher.build_url("admin/system/fstab/mount/%s")
 
-mount:option(Flag, "enabled", translate("enable")).rmempty = false
-dev = mount:option(Value, "device", translate("Device"), translate("The device file of the memory or partition (<abbr title=\"for example\">e.g.</abbr> <code>/dev/sda1</code>)"))
-for i, d in ipairs(devices) do
-	dev:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
+mount.create = function(...)
+	local sid = TypedSection.create(...)
+	if sid then
+		luci.http.redirect(mount.extedit % sid)
+		return
+	end
 end
 
-mount:option(Value, "target", translate("Mount Point"))
-mount:option(Value, "fstype", translate("Filesystem"), translate("The filesystem that was used to format the memory (<abbr title=\"for example\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem\">ext3</abbr></samp>)"))
-mount:option(Value, "options", translate("Options"), translate("See \"mount\" manpage for details"))
+
+mount:option(Flag, "enabled", translate("Enabled")).rmempty = false
+
+dev = mount:option(DummyValue, "device", translate("Device"))
+dev.cfgvalue = function(self, section)
+	local v
+
+	v = m.uci:get("fstab", section, "uuid")
+	if v then return "UUID: %s" % v end
+
+	v = m.uci:get("fstab", section, "label")
+	if v then return "Label: %s" % v end
+
+	v = Value.cfgvalue(self, section) or "?"
+	return size[v] and "%s (%s MB)" % {v, size[v]} or v
+end
+
+mp = mount:option(DummyValue, "target", translate("Mount Point"))
+mp.cfgvalue = function(self, section)
+	if m.uci:get("fstab", section, "is_rootfs") == "1" then
+		return "/overlay"
+	else
+		return Value.cfgvalue(self, section) or "?"
+	end
+end
+
+fs = mount:option(DummyValue, "fstype", translate("Filesystem"))
+fs.cfgvalue = function(self, section)
+	return Value.cfgvalue(self, section) or "?"
+end
+
+op = mount:option(DummyValue, "options", translate("Options"))
+op.cfgvalue = function(self, section)
+	return Value.cfgvalue(self, section) or "defaults"
+end
+
+rf = mount:option(DummyValue, "is_rootfs", translate("Root"))
+rf.cfgvalue = function(self, section)
+	return Value.cfgvalue(self, section) == "1"
+		and translate("yes") or translate("no")
+end
+
+ck = mount:option(DummyValue, "enabled_fsck", translate("Check"))
+ck.cfgvalue = function(self, section)
+	return Value.cfgvalue(self, section) == "1"
+		and translate("yes") or translate("no")
+end
 
 
 swap = m:section(TypedSection, "swap", "SWAP", translate("If your physical memory is insufficient unused data can be temporarily swapped to a swap-device resulting in a higher amount of usable <abbr title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very slow process as the swap-device cannot be accessed with the high datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."))
 swap.anonymous = true
 swap.addremove = true
 swap.template = "cbi/tblsection"
+swap.extedit  = luci.dispatcher.build_url("admin/system/fstab/swap/%s")
 
-swap:option(Flag, "enabled", translate("enable")).rmempty = false
-dev = swap:option(Value, "device", translate("Device"), translate("The device file of the memory or partition (<abbr title=\"for example\">e.g.</abbr> <code>/dev/sda1</code>)"))
-for i, d in ipairs(devices) do
-	dev:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
+swap.create = function(...)
+	local sid = TypedSection.create(...)
+	if sid then
+		luci.http.redirect(swap.extedit % sid)
+		return
+	end
+end
+
+
+swap:option(Flag, "enabled", translate("Enabled")).rmempty = false
+
+dev = swap:option(DummyValue, "device", translate("Device"))
+dev.cfgvalue = function(self, section)
+	local v
+
+	v = m.uci:get("fstab", section, "uuid")
+	if v then return "UUID: %s" % v end
+
+	v = m.uci:get("fstab", section, "label")
+	if v then return "Label: %s" % v end
+
+	v = Value.cfgvalue(self, section) or "?"
+	return size[v] and "%s (%s MB)" % {v, size[v]} or v
 end
 
 return m
