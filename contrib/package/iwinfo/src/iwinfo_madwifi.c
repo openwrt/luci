@@ -292,14 +292,23 @@ static char * madwifi_ifadd(const char *ifname)
 		snprintf(nif, sizeof(nif), "tmp.%s", ifname);
 
 		strncpy(cp.icp_name, nif, IFNAMSIZ);
-		cp.icp_opmode = IEEE80211_M_MONITOR;
+		cp.icp_opmode = IEEE80211_M_STA;
 		cp.icp_flags  = IEEE80211_CLONE_BSSID;
 
 		strncpy(ifr.ifr_name, wifidev, IFNAMSIZ);
 		ifr.ifr_data  = (void *)&cp;
 
 		if( !iwinfo_ioctl(SIOC80211IFCREATE, &ifr) )
+		{
 			return nif;
+		}
+		else
+		{
+			cp.icp_opmode = IEEE80211_M_MONITOR;
+
+			if( !iwinfo_ioctl(SIOC80211IFCREATE, &ifr) )
+				return nif;
+		}
 	}
 
 	return NULL;
@@ -778,7 +787,15 @@ int madwifi_get_scanlist(const char *ifname, char *buf, int *len)
 			if( (res = madwifi_ifadd(ifname)) != NULL )
 			{
 				if( iwinfo_ifup(res) )
+				{
+					wext_get_scanlist(res, buf, len);
+					sleep(1);
+
+					wext_get_scanlist(res, buf, len);
+					sleep(1);
+
 					ret = wext_get_scanlist(res, buf, len);
+				}
 
 				iwinfo_ifdown(res);
 				madwifi_ifdel(res);
