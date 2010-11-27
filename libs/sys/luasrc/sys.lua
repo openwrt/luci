@@ -624,7 +624,7 @@ wifi = {}
 -- @param ifname        String containing the interface name
 -- @return              A wrapped iwinfo object instance
 function wifi.getiwinfo(ifname)
-	local iwinfo = require "iwinfo"
+	local stat, iwinfo = pcall(require, "iwinfo")
 
 	if ifname then
 		local c = 0
@@ -652,19 +652,17 @@ function wifi.getiwinfo(ifname)
 				end)
 		end
 
-		local t = iwinfo.type(ifname)
-		if t then
-			local x = iwinfo[t]
-			return setmetatable({}, {
-				__index = function(t, k)
-					if k == "ifname" then
-						return ifname
-					elseif x[k] then
-						return x[k](ifname)
-					end
+		local t = stat and iwinfo.type(ifname)
+		local x = t and iwinfo[t] or { }
+		return setmetatable({}, {
+			__index = function(t, k)
+				if k == "ifname" then
+					return ifname
+				elseif x[k] then
+					return x[k](ifname)
 				end
-			})
-		end
+			end
+		})
 	end
 end
 
