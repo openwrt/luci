@@ -87,9 +87,18 @@ $Id$
 			netdevs[net:ifname()] = dev:name()
 		end
 	end
+
+	local has_iwinfo = pcall(require, "iwinfo")
 -%>
 
 <%+header%>
+
+<% if not has_iwinfo then %>
+	<div class="errorbox">
+		<strong><%:Package libiwinfo required!%></strong><br />
+		<%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%>
+	</div>
+<% end %>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
