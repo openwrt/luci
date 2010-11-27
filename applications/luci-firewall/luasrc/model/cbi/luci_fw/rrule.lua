@@ -53,10 +53,6 @@ s.addremove = false
 s:tab("general", translate("General Settings"))
 s:tab("advanced", translate("Advanced Settings"))
 
-back = s:taboption("general", DummyValue, "_overview", translate("Overview"))
-back.value = ""
-back.titleref = luci.dispatcher.build_url("admin", "network", "firewall", "redirect")
-
 name = s:taboption("general", Value, "_name", translate("Name"))
 name.rmempty = true
 name.size = 10

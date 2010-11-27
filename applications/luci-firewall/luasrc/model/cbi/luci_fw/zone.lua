@@ -22,6 +22,7 @@ local out, inp
 
 require("luci.tools.webadmin")
 m = Map("firewall", translate("Firewall - Zone Settings"))
+m.redirect = luci.dispatcher.build_url("admin/network/firewall")
 
 fw.init(m.uci)
 nw.init(m.uci)
