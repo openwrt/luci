@@ -725,6 +725,7 @@ local function _cbi(self, ...)
 	end
 
 	local redirect
+	local messages
 	local applymap   = false
 	local pageaction = true
 	local parsechain = { }
@@ -745,6 +746,11 @@ local function _cbi(self, ...)
 		if res.pageaction == false then
 			pageaction = false
 		end
+
+		if res.message then
+			messages = messages or { }
+			messages[#messages+1] = res.message
+		end
 	end
 
 	for i, res in ipairs(maps) do
@@ -752,6 +758,7 @@ local function _cbi(self, ...)
 			firstmap   = (i == 1),
 			applymap   = applymap,
 			redirect   = redirect,
+			messages   = messages,
 			pageaction = pageaction,
 			parsechain = parsechain
 		})
