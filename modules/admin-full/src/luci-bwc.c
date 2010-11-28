@@ -35,12 +35,16 @@
 #define STEP_TIME	1
 
 #define DB_PATH		"/var/lib/luci-bwc"
-#define DB_FILE		DB_PATH "/%s"
+#define DB_IF_FILE	DB_PATH "/if/%s"
+#define DB_LD_FILE	DB_PATH "/load"
 
-#define SCAN_PATTERN \
+#define IF_SCAN_PATTERN \
 	" %[^ :]:%" SCNu64 " %" SCNu64 \
 	" %*d %*d %*d %*d %*d %*d" \
 	" %" SCNu64 " %" SCNu64
+
+#define LD_SCAN_PATTERN \
+	"%f %f %f"
 
 
 struct traffic_entry {
@@ -50,6 +54,14 @@ struct traffic_entry {
 	uint64_t txb;
 	uint64_t txp;
 };
+
+struct load_entry {
+	uint64_t time;
+	uint16_t load1;
+	uint16_t load5;
+	uint16_t load15;
+};
+
 
 static uint64_t htonll(uint64_t value)
 {
@@ -65,14 +77,9 @@ static uint64_t htonll(uint64_t value)
 #define ntohll htonll
 
 
-static int init_minutely(const char *ifname)
+static int init_directory(char *path)
 {
-	int i, file;
-	char path[1024];
-	char *p;
-	struct traffic_entry e = { 0 };
-
-	snprintf(path, sizeof(path), DB_FILE, ifname);
+	char *p = path;
 
 	for (p = &path[1]; *p; p++)
 	{
@@ -86,6 +93,48 @@ static int init_minutely(const char *ifname)
 			*p = '/';
 		}
 	}
+
+	return 0;
+}
+
+static int update_file(const char *path, void *entry, int esize)
+{
+	int rv = -1;
+	int file;
+	char *map;
+
+	if ((file = open(path, O_RDWR)) >= 0)
+	{
+		map = mmap(NULL, esize * STEP_COUNT, PROT_READ | PROT_WRITE,
+				   MAP_SHARED | MAP_LOCKED, file, 0);
+
+		if ((map != NULL) && (map != MAP_FAILED))
+		{
+			memmove(map, map + esize, esize * (STEP_COUNT-1));
+			memcpy(map + esize * (STEP_COUNT-1), entry, esize);
+
+			munmap(map, esize * STEP_COUNT);
+
+			rv = 0;
+		}
+
+		close(file);
+	}
+
+	return rv;
+}
+
+
+static int init_ifstat(const char *ifname)
+{
+	int i, file;
+	char path[1024];
+	struct traffic_entry e = { 0 };
+
+	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
+
+	if (init_directory(path))
+		return -1;
 
 	if ((file = open(path, O_WRONLY | O_CREAT, 0600)) >= 0)
 	{
@@ -103,65 +152,96 @@ static int init_minutely(const char *ifname)
 	return -1;
 }
 
-static int update_minutely(
+static int update_ifstat(
 	const char *ifname, uint64_t rxb, uint64_t rxp, uint64_t txb, uint64_t txp
 ) {
-	int rv = -1;
-
-	int file;
-	int entrysize = sizeof(struct traffic_entry);
-	int mapsize = STEP_COUNT * entrysize;
-
 	char path[1024];
-	char *map;
 
 	struct stat s;
 	struct traffic_entry e;
 
-	snprintf(path, sizeof(path), DB_FILE, ifname);
+	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
 
 	if (stat(path, &s))
 	{
-		if (init_minutely(ifname))
+		if (init_ifstat(ifname))
 		{
 			fprintf(stderr, "Failed to init %s: %s\n",
 					path, strerror(errno));
 
-			return rv;
+			return -1;
 		}
 	}
 
-	if ((file = open(path, O_RDWR)) >= 0)
+	e.time = htonll(time(NULL));
+	e.rxb  = htonll(rxb);
+	e.rxp  = htonll(rxp);
+	e.txb  = htonll(txb);
+	e.txp  = htonll(txp);
+
+	return update_file(path, &e, sizeof(struct traffic_entry));
+}
+
+static int init_ldstat(void)
+{
+	int i, file;
+	char path[1024];
+	struct load_entry e = { 0 };
+
+	snprintf(path, sizeof(path), DB_LD_FILE);
+
+	if (init_directory(path))
+		return -1;
+
+	if ((file = open(path, O_WRONLY | O_CREAT, 0600)) >= 0)
 	{
-		map = mmap(NULL, mapsize, PROT_READ | PROT_WRITE,
-				   MAP_SHARED | MAP_LOCKED, file, 0);
-
-		if ((map != NULL) && (map != MAP_FAILED))
+		for (i = 0; i < STEP_COUNT; i++)
 		{
-			e.time = htonll(time(NULL));
-			e.rxb  = htonll(rxb);
-			e.rxp  = htonll(rxp);
-			e.txb  = htonll(txb);
-			e.txp  = htonll(txp);
-
-			memmove(map, map + entrysize, mapsize - entrysize);
-			memcpy(map + mapsize - entrysize, &e, entrysize);
-
-			munmap(map, mapsize);
-
-			rv = 0;
+			if (write(file, &e, sizeof(struct load_entry)) < 0)
+				break;
 		}
 
 		close(file);
+
+		return 0;
 	}
 
-	return rv;
+	return -1;
+}
+
+static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
+{
+	char path[1024];
+
+	struct stat s;
+	struct load_entry e;
+
+	snprintf(path, sizeof(path), DB_LD_FILE);
+
+	if (stat(path, &s))
+	{
+		if (init_ldstat())
+		{
+			fprintf(stderr, "Failed to init %s: %s\n",
+					path, strerror(errno));
+
+			return -1;
+		}
+	}
+
+	e.time   = htonll(time(NULL));
+	e.load1  = htons(load1);
+	e.load5  = htons(load5);
+	e.load15 = htons(load15);
+
+	return update_file(path, &e, sizeof(struct load_entry));
 }
 
 static int run_daemon(int nofork)
 {
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
+	float lf1, lf5, lf15;
 	char line[1024];
 	char ifname[16];
 
@@ -202,11 +282,23 @@ static int run_daemon(int nofork)
 				if (strchr(line, '|'))
 					continue;
 
-				if (sscanf(line, SCAN_PATTERN, ifname, &rxb, &rxp, &txb, &txp))
+				if (sscanf(line, IF_SCAN_PATTERN, ifname, &rxb, &rxp, &txb, &txp))
 				{
 					if (strncmp(ifname, "lo", sizeof(ifname)))
-						update_minutely(ifname, rxb, rxp, txb, txp);
+						update_ifstat(ifname, rxb, rxp, txb, txp);
 				}
+			}
+
+			fclose(info);
+		}
+
+		if ((info = fopen("/proc/loadavg", "r")) != NULL)
+		{
+			if (fscanf(info, LD_SCAN_PATTERN, &lf1, &lf5, &lf15))
+			{
+				update_ldstat((uint16_t)(lf1  * 100),
+							  (uint16_t)(lf5  * 100),
+							  (uint16_t)(lf15 * 100));
 			}
 
 			fclose(info);
@@ -216,7 +308,7 @@ static int run_daemon(int nofork)
 	}
 }
 
-static int run_dump(const char *ifname)
+static int run_dump_ifname(const char *ifname)
 {
 	int rv = 1;
 
@@ -229,7 +321,7 @@ static int run_dump(const char *ifname)
 
 	struct traffic_entry *e;
 
-	snprintf(path, sizeof(path), DB_FILE, ifname);
+	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
 
 	if ((file = open(path, O_RDONLY)) >= 0)
 	{
@@ -266,16 +358,65 @@ static int run_dump(const char *ifname)
 	return rv;
 }
 
+static int run_dump_load(void)
+{
+	int rv = 1;
+
+	int i, file;
+	int entrysize = sizeof(struct load_entry);
+	int mapsize = STEP_COUNT * entrysize;
+
+	char path[1024];
+	char *map;
+
+	struct load_entry *e;
+
+	snprintf(path, sizeof(path), DB_LD_FILE);
+
+	if ((file = open(path, O_RDONLY)) >= 0)
+	{
+		map = mmap(NULL, mapsize, PROT_READ, MAP_SHARED | MAP_LOCKED, file, 0);
+
+		if ((map != NULL) && (map != MAP_FAILED))
+		{
+			for (i = 0; i < mapsize; i += entrysize)
+			{
+				e = (struct load_entry *) &map[i];
+
+				if (!e->time)
+					continue;
+
+				printf("[ %" PRIu64 ", %u, %u, %u ]%s\n",
+					ntohll(e->time),
+					ntohs(e->load1), ntohs(e->load5), ntohs(e->load15),
+					((i + entrysize) < mapsize) ? "," : "");
+			}
+
+			munmap(map, mapsize);
+			rv = 0;
+		}
+
+		close(file);
+	}
+	else
+	{
+		fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
+	}
+
+	return rv;
+}
+
 
 int main(int argc, char *argv[])
 {
 	int opt;
 	int daemon = 0;
 	int nofork = 0;
-	int dprint = 0;
+	int iprint = 0;
+	int lprint = 0;
 	char *ifname = NULL;
 
-	while ((opt = getopt(argc, argv, "dfp:")) > -1)
+	while ((opt = getopt(argc, argv, "dfi:l")) > -1)
 	{
 		switch (opt)
 		{
@@ -287,9 +428,13 @@ int main(int argc, char *argv[])
 				nofork = 1;
 				break;
 
-			case 'p':
-				dprint = 1;
+			case 'i':
+				iprint = 1;
 				ifname = optarg;
+				break;
+
+			case 'l':
+				lprint = 1;
 				break;
 
 			default:
@@ -300,15 +445,19 @@ int main(int argc, char *argv[])
 	if (daemon)
 		return run_daemon(nofork);
 
-	else if (dprint && ifname)
-		return run_dump(ifname);
+	else if (iprint && ifname)
+		return run_dump_ifname(ifname);
+
+	else if (lprint)
+		return run_dump_load();
 
 	else
 		fprintf(stderr,
 			"Usage:\n"
 			"	%s -d [-f]\n"
-			"	%s -p ifname\n",
-				argv[0], argv[0]
+			"	%s -i ifname\n"
+			"	%s -l\n",
+				argv[0], argv[0], argv[0]
 		);
 
 	return 1;
