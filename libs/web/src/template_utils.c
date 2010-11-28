@@ -136,23 +136,38 @@ static inline int mb_is_shortest(unsigned char *s, int n)
 	{
 		case 2:
 			/* 1100000x (10xxxxxx) */
-			return ((*s & 0x1E) > 0);
+			return !(((*s >> 1) == 0x60) &&
+					 ((*(s+1) >> 6) == 0x02));
 
 		case 3:
 			/* 11100000 100xxxxx (10xxxxxx) */
-			return ((*s & 0x1F) > 0) && ((*(s+1) & 0x60) > 0);
+			return !((*s == 0xE0) &&
+					 ((*(s+1) >> 5) == 0x04) &&
+					 ((*(s+2) >> 6) == 0x02));
 
 		case 4:
 			/* 11110000 1000xxxx (10xxxxxx 10xxxxxx) */
-			return ((*s & 0x0F) > 0) && ((*(s+1) & 0x70) > 0);
+			return !((*s == 0xF0) &&
+					 ((*(s+1) >> 4) == 0x08) &&
+					 ((*(s+2) >> 6) == 0x02) &&
+					 ((*(s+3) >> 6) == 0x02));
 
 		case 5:
 			/* 11111000 10000xxx (10xxxxxx 10xxxxxx 10xxxxxx) */
-			return ((*s & 0x07) > 0) && ((*(s+1) & 0x78) > 0);
+			return !((*s == 0xF8) &&
+					 ((*(s+1) >> 3) == 0x10) &&
+					 ((*(s+2) >> 6) == 0x02) &&
+					 ((*(s+3) >> 6) == 0x02) &&
+					 ((*(s+4) >> 6) == 0x02));
 
 		case 6:
 			/* 11111100 100000xx (10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx) */
-			return ((*s & 0x03) > 0) && ((*(s+1) & 0x7C) > 0);
+			return !((*s == 0xF8) &&
+					 ((*(s+1) >> 2) == 0x20) &&
+					 ((*(s+2) >> 6) == 0x02) &&
+					 ((*(s+3) >> 6) == 0x02) &&
+					 ((*(s+4) >> 6) == 0x02) &&
+					 ((*(s+5) >> 6) == 0x02));
 	}
 
 	return 1;
