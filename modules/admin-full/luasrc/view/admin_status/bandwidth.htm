@@ -17,7 +17,7 @@ $Id$
 
 	local dev
 	local devices = { }
-	for _, dev in luci.util.kspairs(luci.sys.net.devices()) do
+	for _, dev in luci.util.vspairs(luci.sys.net.devices()) do
 		if dev ~= "lo" and not ntm:ignore_interface(dev) then
 			devices[#devices+1] = dev
 		end
