@@ -25,6 +25,9 @@ function index()
 	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("System Log"), 5)
 	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("Kernel Log"), 6)
 
+	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), i18n("Realtime Traffic"), 7).leaf = true
+	entry({"admin", "status", "bandwidth_status"}, call("action_bandwidth")).leaf = true
+
 end
 
 function action_syslog()
@@ -51,4 +54,32 @@ function action_iptables()
 	else
 		luci.template.render("admin_status/iptables")
 	end
+end
+
+function action_bandwidth()
+	local path  = luci.dispatcher.context.requestpath
+	local iface = path[#path]
+
+	local fs = require "luci.fs"
+	if fs.access("/var/lib/luci-bwc/%s" % iface) then
+		luci.http.prepare_content("application/json")
+
+		local bwc = io.popen("luci-bwc -p %q 2>/dev/null" % iface)
+		if bwc then
+			luci.http.write("[")
+
+			while true do
+				local ln = bwc:read("*l")
+				if not ln then break end
+				luci.http.write(ln)
+			end
+
+			luci.http.write("]")
+			bwc:close()
+		end
+
+		return
+	end
+
+	luci.http.status(404, "No such interface")
 end
