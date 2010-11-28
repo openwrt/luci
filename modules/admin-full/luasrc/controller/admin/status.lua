@@ -31,6 +31,8 @@ function index()
 	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), i18n("Realtime Traffic"), 8).leaf = true
 	entry({"admin", "status", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
+	entry({"admin", "status", "connections"}, template("admin_status/connections"), i18n("Realtime Connections"), 9).leaf = true
+	entry({"admin", "status", "connections_status"}, call("action_connections")).leaf = true
 end
 
 function action_syslog()
@@ -93,6 +95,31 @@ function action_load()
 		luci.http.prepare_content("application/json")
 
 		local bwc = io.popen("luci-bwc -l 2>/dev/null")
+		if bwc then
+			luci.http.write("[")
+
+			while true do
+				local ln = bwc:read("*l")
+				if not ln then break end
+				luci.http.write(ln)
+			end
+
+			luci.http.write("]")
+			bwc:close()
+		end
+
+		return
+	end
+
+	luci.http.status(404, "No data available")
+end
+
+function action_connections()
+	local fs = require "luci.fs"
+	if fs.access("/var/lib/luci-bwc/connections") then
+		luci.http.prepare_content("application/json")
+
+		local bwc = io.popen("luci-bwc -c 2>/dev/null")
 		if bwc then
 			luci.http.write("[")
 

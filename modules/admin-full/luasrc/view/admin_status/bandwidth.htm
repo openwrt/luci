@@ -202,7 +202,15 @@ $Id$
 	/* wait for SVG */
 	window.setTimeout(
 		function() {
-			G = document.embeds["bwsvg"].getSVGDocument();
+			var svg = document.getElementById('bwsvg');
+
+			try {
+				G = svg.getSVGDocument
+					? svg.getSVGDocument() : svg.contentDocument;
+			}
+			catch(e) {
+				G = document.embeds['bwsvg'].getSVGDocument();
+			}
 
 			if (!G)
 			{
@@ -211,8 +219,8 @@ $Id$
 			else
 			{
 				/* find sizes */
-				width       = document.embeds["bwsvg"].offsetWidth  - 2;
-				height      = document.embeds["bwsvg"].offsetHeight - 2;
+				width       = svg.offsetWidth  - 2;
+				height      = svg.offsetHeight - 2;
 				data_wanted = Math.ceil(width / step);
 
 				/* prefill datasets */

@@ -1,0 +1,261 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+
+<%+header%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	var bwxhr = new XHR();
+
+	var G;
+	var TIME = 0;
+	var UDP  = 1;
+	var TCP  = 2;
+
+	var width  = 760;
+	var height = 300;
+	var step   = 5;
+
+	var data_wanted = Math.floor(width / step);
+	var data_fill   = 0;
+	var data_stamp  = 0;
+
+	var data_udp = [ ];
+	var data_tcp = [ ];
+
+	var line_udp;
+	var line_tcp;
+
+	var label_25;
+	var label_50;
+	var label_75;
+
+	var label_rx_cur;
+	var label_rx_avg;
+	var label_rx_peak;
+
+	var label_tx_cur;
+	var label_tx_avg;
+	var label_tx_peak;
+
+	var label_scale;
+
+
+	function update_graph()
+	{
+		bwxhr.get('<%=build_url("admin/status/connections_status")%>', null,
+			function(x, data)
+			{
+				var data_max   = 0;
+				var data_scale = 0;
+
+				var data_udp_avg = 0;
+				var data_tcp_avg = 0;
+
+				var data_udp_peak = 0;
+				var data_tcp_peak = 0;
+
+				for (var i = data_stamp ? 0 : 1; i < data.length; i++)
+				{
+					/* skip overlapping entries */
+					if (data[i][TIME] <= data_stamp)
+						continue;
+
+					data_udp.push(data[i][UDP]);
+					data_tcp.push(data[i][TCP]);
+				}
+
+				/* cut off outdated entries */
+				data_udp = data_udp.slice(data_udp.length - data_wanted, data_udp.length);
+				data_tcp = data_tcp.slice(data_tcp.length - data_wanted, data_tcp.length);
+
+				/* find peak */
+				for (var i = 0; i < data_udp.length; i++)
+				{
+					data_max = Math.max(data_max, data_udp[i]);
+					data_max = Math.max(data_max, data_tcp[i]);
+
+					data_udp_peak = Math.max(data_udp_peak, data_udp[i]);
+					data_tcp_peak = Math.max(data_tcp_peak, data_tcp[i]);
+
+					if (i > 0)
+					{
+						data_udp_avg = (data_udp_avg + data_udp[i]) / 2;
+						data_tcp_avg = (data_tcp_avg + data_tcp[i]) / 2;
+					}
+					else
+					{
+						data_udp_avg = data_udp[i];
+						data_tcp_avg = data_tcp[i];
+					}
+				}
+
+				/* remember current timestamp, calculate horizontal scale */
+				data_stamp = data[data.length-1][TIME];
+				data_scale = height / (data_max * 1.1);
+
+
+				/* plot data */
+				var pt_rx = '0,' + height;
+				var pt_tx = '0,' + height;
+
+				var y_rx = 0;
+				var y_tx = 0;
+
+				for (var i = 0; i < data_udp.length; i++)
+				{
+					var x = i * step;
+
+					y_rx = height - Math.floor(data_udp[i] * data_scale);
+					y_tx = height - Math.floor(data_tcp[i] * data_scale);
+
+					pt_rx += ' ' + x + ',' + y_rx;
+					pt_tx += ' ' + x + ',' + y_tx;
+				}
+
+				pt_rx += ' ' + width + ',' + y_rx + ' ' + width + ',' + height;
+				pt_tx += ' ' + width + ',' + y_tx + ' ' + width + ',' + height;
+
+
+				line_udp.setAttribute('points', pt_rx);
+				line_tcp.setAttribute('points', pt_tx);
+
+				label_25.firstChild.data = Math.floor(1.1 * 0.25 * data_max);
+				label_50.firstChild.data = Math.floor(1.1 * 0.50 * data_max);
+				label_75.firstChild.data = Math.floor(1.1 * 0.75 * data_max);
+
+				label_rx_cur.innerHTML = Math.floor(data_udp[data_udp.length-1]);
+				label_tx_cur.innerHTML = Math.floor(data_tcp[data_tcp.length-1]);
+
+				label_rx_avg.innerHTML = Math.floor(data_udp_avg);
+				label_tx_avg.innerHTML = Math.floor(data_tcp_avg);
+
+				label_rx_peak.innerHTML = Math.floor(data_udp_peak);
+				label_tx_peak.innerHTML = Math.floor(data_tcp_peak);
+
+				/* reset timer */
+				window.setTimeout(update_graph, 1000);
+			}
+		)
+	}
+
+	/* wait for SVG */
+	window.setTimeout(
+		function() {
+			var svg = document.getElementById('bwsvg');
+			
+			try {
+				G = svg.getSVGDocument
+					? svg.getSVGDocument() : svg.contentDocument;
+			}
+			catch(e) {
+				G = document.embeds['bwsvg'].getSVGDocument();
+			}
+
+			if (!G)
+			{
+				window.setTimeout(arguments.callee, 1000);
+			}
+			else
+			{
+				/* find sizes */
+				width       = svg.offsetWidth  - 2;
+				height      = svg.offsetHeight - 2;
+				data_wanted = Math.ceil(width / step);
+
+				/* prefill datasets */
+				for (var i = 0; i < data_wanted; i++)
+				{
+					data_udp[i] = 0;
+					data_tcp[i] = 0;
+				}
+
+				/* find svg elements */
+				line_udp = G.getElementById('udp');
+				line_tcp = G.getElementById('tcp');
+
+				label_25 = G.getElementById('label_25');
+				label_50 = G.getElementById('label_50');
+				label_75 = G.getElementById('label_75');
+
+				label_rx_cur  = document.getElementById('lb_udp_cur');
+				label_rx_avg  = document.getElementById('lb_udp_avg');
+				label_rx_peak = document.getElementById('lb_udp_peak');
+
+				label_tx_cur  = document.getElementById('lb_tcp_cur');
+				label_tx_avg  = document.getElementById('lb_tcp_avg');
+				label_tx_peak = document.getElementById('lb_tcp_peak');
+
+				label_scale   = document.getElementById('scale');
+
+
+				/* plot horizontal time interval lines */
+				for (var i = step * 60; i < width; i += step * 60)
+				{
+					var line = G.createElementNS('http://www.w3.org/2000/svg', 'line');
+						line.setAttribute('x1', i);
+						line.setAttribute('y1', 0);
+						line.setAttribute('x2', i);
+						line.setAttribute('y2', '100%');
+						line.setAttribute('style', 'stroke:black;stroke-width:0.1');
+
+					var text = G.createElementNS('http://www.w3.org/2000/svg', 'text');
+						text.setAttribute('x', i + 5);
+						text.setAttribute('y', 15);
+						text.setAttribute('style', 'fill:#999999; font-size:9pt');
+						text.appendChild(G.createTextNode(Math.round(i / step / 60) + 'm'));
+
+					label_25.parentNode.appendChild(line);
+					label_25.parentNode.appendChild(text);
+				}
+
+				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 1);
+
+				/* render datasets, start update interval */
+				update_graph();
+			}
+		}, 1000
+	);
+//]]></script>
+
+<h2><a id="content" name="content"><%:Realtime Connections%></a></h2>
+
+<embed id="bwsvg" style="width:100%; height:300px; border:1px solid #000000; background-color:#FFFFFF" src="<%=resource%>/connections.svg" />
+<div style="text-align:right"><small id="scale">-</small></div>
+<br />
+
+<table style="width:100%; table-layout:fixed" cellspacing="5">
+	<tr>
+		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:UDP:%></strong></td>
+		<td id="lb_udp_cur">0</td>
+
+		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
+		<td id="lb_udp_avg">0</td>
+
+		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
+		<td id="lb_udp_peak">0</td>
+	</tr>
+	<tr>
+		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid green"><%:TCP:%></strong></td>
+		<td id="lb_tcp_cur">0</td>
+
+		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
+		<td id="lb_tcp_avg">0</td>
+
+		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
+		<td id="lb_tcp_peak">0</td>
+	</tr>
+</table>
+
+<%+footer%>

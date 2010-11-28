@@ -36,6 +36,7 @@
 
 #define DB_PATH		"/var/lib/luci-bwc"
 #define DB_IF_FILE	DB_PATH "/if/%s"
+#define DB_CN_FILE	DB_PATH "/connections"
 #define DB_LD_FILE	DB_PATH "/load"
 
 #define IF_SCAN_PATTERN \
@@ -47,12 +48,24 @@
 	"%f %f %f"
 
 
+struct file_map {
+	int fd;
+	int size;
+	char *mmap;
+};
+
 struct traffic_entry {
 	uint64_t time;
 	uint64_t rxb;
 	uint64_t rxp;
 	uint64_t txb;
 	uint64_t txp;
+};
+
+struct conn_entry {
+	uint64_t time;
+	uint32_t udp;
+	uint32_t tcp;
 };
 
 struct load_entry {
@@ -97,6 +110,30 @@ static int init_directory(char *path)
 	return 0;
 }
 
+static int init_file(char *path, int esize)
+{
+	int i, file;
+	char buf[sizeof(struct traffic_entry)] = { 0 };
+
+	if (init_directory(path))
+		return -1;
+
+	if ((file = open(path, O_WRONLY | O_CREAT, 0600)) >= 0)
+	{
+		for (i = 0; i < STEP_COUNT; i++)
+		{
+			if (write(file, buf, esize) < 0)
+				break;
+		}
+
+		close(file);
+
+		return 0;
+	}
+
+	return -1;
+}
+
 static int update_file(const char *path, void *entry, int esize)
 {
 	int rv = -1;
@@ -124,33 +161,34 @@ static int update_file(const char *path, void *entry, int esize)
 	return rv;
 }
 
-
-static int init_ifstat(const char *ifname)
+static int mmap_file(const char *path, int esize, struct file_map *m)
 {
-	int i, file;
-	char path[1024];
-	struct traffic_entry e = { 0 };
+	m->fd   = -1;
+	m->size = -1;
+	m->mmap = NULL;
 
-	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
-
-	if (init_directory(path))
-		return -1;
-
-	if ((file = open(path, O_WRONLY | O_CREAT, 0600)) >= 0)
+	if ((m->fd = open(path, O_RDONLY)) >= 0)
 	{
-		for (i = 0; i < STEP_COUNT; i++)
-		{
-			if (write(file, &e, sizeof(struct traffic_entry)) < 0)
-				break;
-		}
+		m->size = STEP_COUNT * esize;
+		m->mmap = mmap(NULL, m->size, PROT_READ,
+					   MAP_SHARED | MAP_LOCKED, m->fd, 0);
 
-		close(file);
-
-		return 0;
+		if ((m->mmap != NULL) && (m->mmap != MAP_FAILED))
+			return 0;
 	}
 
 	return -1;
 }
+
+static void umap_file(struct file_map *m)
+{
+	if ((m->mmap != NULL) && (m->mmap != MAP_FAILED))
+		munmap(m->mmap, m->size);
+
+	if (m->fd > -1)
+		close(m->fd);
+}
+
 
 static int update_ifstat(
 	const char *ifname, uint64_t rxb, uint64_t rxp, uint64_t txb, uint64_t txp
@@ -164,7 +202,7 @@ static int update_ifstat(
 
 	if (stat(path, &s))
 	{
-		if (init_ifstat(ifname))
+		if (init_file(path, sizeof(struct traffic_entry)))
 		{
 			fprintf(stderr, "Failed to init %s: %s\n",
 					path, strerror(errno));
@@ -182,31 +220,31 @@ static int update_ifstat(
 	return update_file(path, &e, sizeof(struct traffic_entry));
 }
 
-static int init_ldstat(void)
+static int update_cnstat(uint32_t udp, uint32_t tcp)
 {
-	int i, file;
 	char path[1024];
-	struct load_entry e = { 0 };
 
-	snprintf(path, sizeof(path), DB_LD_FILE);
+	struct stat s;
+	struct conn_entry e;
 
-	if (init_directory(path))
-		return -1;
+	snprintf(path, sizeof(path), DB_CN_FILE);
 
-	if ((file = open(path, O_WRONLY | O_CREAT, 0600)) >= 0)
+	if (stat(path, &s))
 	{
-		for (i = 0; i < STEP_COUNT; i++)
+		if (init_file(path, sizeof(struct conn_entry)))
 		{
-			if (write(file, &e, sizeof(struct load_entry)) < 0)
-				break;
+			fprintf(stderr, "Failed to init %s: %s\n",
+					path, strerror(errno));
+
+			return -1;
 		}
-
-		close(file);
-
-		return 0;
 	}
 
-	return -1;
+	e.time = htonll(time(NULL));
+	e.udp  = htonl(udp);
+	e.tcp  = htonl(tcp);
+
+	return update_file(path, &e, sizeof(struct conn_entry));
 }
 
 static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
@@ -220,7 +258,7 @@ static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
 
 	if (stat(path, &s))
 	{
-		if (init_ldstat())
+		if (init_file(path, sizeof(struct load_entry)))
 		{
 			fprintf(stderr, "Failed to init %s: %s\n",
 					path, strerror(errno));
@@ -241,6 +279,7 @@ static int run_daemon(int nofork)
 {
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
+	uint32_t udp, tcp;
 	float lf1, lf5, lf15;
 	char line[1024];
 	char ifname[16];
@@ -292,6 +331,33 @@ static int run_daemon(int nofork)
 			fclose(info);
 		}
 
+		if ((info = fopen("/proc/net/ip_conntrack", "r")) != NULL)
+		{
+			udp = 0;
+			tcp = 0;
+
+			while (fgets(line, sizeof(line), info))
+			{
+				switch (line[0])
+				{
+					case 't':
+						tcp++;
+						break;
+
+					case 'u':
+						udp++;
+						break;
+
+					default:
+						break;
+				}
+			}
+
+			update_cnstat(udp, tcp);
+
+			fclose(info);
+		}
+
 		if ((info = fopen("/proc/loadavg", "r")) != NULL)
 		{
 			if (fscanf(info, LD_SCAN_PATTERN, &lf1, &lf5, &lf15))
@@ -310,100 +376,102 @@ static int run_daemon(int nofork)
 
 static int run_dump_ifname(const char *ifname)
 {
-	int rv = 1;
-
-	int i, file;
-	int entrysize = sizeof(struct traffic_entry);
-	int mapsize = STEP_COUNT * entrysize;
-
+	int i;
 	char path[1024];
-	char *map;
-
+	struct file_map m;
 	struct traffic_entry *e;
 
 	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
 
-	if ((file = open(path, O_RDONLY)) >= 0)
-	{
-		map = mmap(NULL, mapsize, PROT_READ, MAP_SHARED | MAP_LOCKED, file, 0);
-
-		if ((map != NULL) && (map != MAP_FAILED))
-		{
-			for (i = 0; i < mapsize; i += entrysize)
-			{
-				e = (struct traffic_entry *) &map[i];
-
-				if (!e->time)
-					continue;
-
-				printf("[ %" PRIu64 ", %" PRIu64 ", %" PRIu64
-					   ", %" PRIu64 ", %" PRIu64 " ]%s\n",
-					ntohll(e->time),
-					ntohll(e->rxb), ntohll(e->rxp),
-					ntohll(e->txb), ntohll(e->txp),
-					((i + entrysize) < mapsize) ? "," : "");
-			}
-
-			munmap(map, mapsize);
-			rv = 0;
-		}
-
-		close(file);
-	}
-	else
+	if (mmap_file(path, sizeof(struct traffic_entry), &m))
 	{
 		fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
+		return 1;
 	}
 
-	return rv;
+	for (i = 0; i < m.size; i += sizeof(struct traffic_entry))
+	{
+		e = (struct traffic_entry *) &m.mmap[i];
+
+		if (!e->time)
+			continue;
+
+		printf("[ %" PRIu64 ", %" PRIu64 ", %" PRIu64
+			   ", %" PRIu64 ", %" PRIu64 " ]%s\n",
+			ntohll(e->time),
+			ntohll(e->rxb), ntohll(e->rxp),
+			ntohll(e->txb), ntohll(e->txp),
+			((i + sizeof(struct traffic_entry)) < m.size) ? "," : "");
+	}
+
+	umap_file(&m);
+
+	return 0;
+}
+
+static int run_dump_conns(void)
+{
+	int i;
+	char path[1024];
+	struct file_map m;
+	struct conn_entry *e;
+
+	snprintf(path, sizeof(path), DB_CN_FILE);
+
+	if (mmap_file(path, sizeof(struct conn_entry), &m))
+	{
+		fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
+		return 1;
+	}
+
+	for (i = 0; i < m.size; i += sizeof(struct conn_entry))
+	{
+		e = (struct conn_entry *) &m.mmap[i];
+
+		if (!e->time)
+			continue;
+
+		printf("[ %" PRIu64 ", %u, %u ]%s\n",
+			ntohll(e->time), ntohl(e->udp), ntohl(e->tcp),
+			((i + sizeof(struct conn_entry)) < m.size) ? "," : "");
+	}
+
+	umap_file(&m);
+
+	return 0;
 }
 
 static int run_dump_load(void)
 {
-	int rv = 1;
-
-	int i, file;
-	int entrysize = sizeof(struct load_entry);
-	int mapsize = STEP_COUNT * entrysize;
-
+	int i;
 	char path[1024];
-	char *map;
-
+	struct file_map m;
 	struct load_entry *e;
 
 	snprintf(path, sizeof(path), DB_LD_FILE);
 
-	if ((file = open(path, O_RDONLY)) >= 0)
-	{
-		map = mmap(NULL, mapsize, PROT_READ, MAP_SHARED | MAP_LOCKED, file, 0);
-
-		if ((map != NULL) && (map != MAP_FAILED))
-		{
-			for (i = 0; i < mapsize; i += entrysize)
-			{
-				e = (struct load_entry *) &map[i];
-
-				if (!e->time)
-					continue;
-
-				printf("[ %" PRIu64 ", %u, %u, %u ]%s\n",
-					ntohll(e->time),
-					ntohs(e->load1), ntohs(e->load5), ntohs(e->load15),
-					((i + entrysize) < mapsize) ? "," : "");
-			}
-
-			munmap(map, mapsize);
-			rv = 0;
-		}
-
-		close(file);
-	}
-	else
+	if (mmap_file(path, sizeof(struct load_entry), &m))
 	{
 		fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
+		return 1;
 	}
 
-	return rv;
+	for (i = 0; i < m.size; i += sizeof(struct load_entry))
+	{
+		e = (struct load_entry *) &m.mmap[i];
+
+		if (!e->time)
+			continue;
+
+		printf("[ %" PRIu64 ", %u, %u, %u ]%s\n",
+			ntohll(e->time),
+			ntohs(e->load1), ntohs(e->load5), ntohs(e->load15),
+			((i + sizeof(struct load_entry)) < m.size) ? "," : "");
+	}
+
+	umap_file(&m);
+
+	return 0;
 }
 
 
@@ -412,11 +480,8 @@ int main(int argc, char *argv[])
 	int opt;
 	int daemon = 0;
 	int nofork = 0;
-	int iprint = 0;
-	int lprint = 0;
-	char *ifname = NULL;
 
-	while ((opt = getopt(argc, argv, "dfi:l")) > -1)
+	while ((opt = getopt(argc, argv, "dfi:cl")) > -1)
 	{
 		switch (opt)
 		{
@@ -429,13 +494,15 @@ int main(int argc, char *argv[])
 				break;
 
 			case 'i':
-				iprint = 1;
-				ifname = optarg;
+				if (optarg)
+					return run_dump_ifname(optarg);
 				break;
 
+			case 'c':
+				return run_dump_conns();
+
 			case 'l':
-				lprint = 1;
-				break;
+				return run_dump_load();
 
 			default:
 				break;
@@ -445,19 +512,14 @@ int main(int argc, char *argv[])
 	if (daemon)
 		return run_daemon(nofork);
 
-	else if (iprint && ifname)
-		return run_dump_ifname(ifname);
-
-	else if (lprint)
-		return run_dump_load();
-
 	else
 		fprintf(stderr,
 			"Usage:\n"
 			"	%s -d [-f]\n"
 			"	%s -i ifname\n"
+			"	%s -c\n"
 			"	%s -l\n",
-				argv[0], argv[0], argv[0]
+				argv[0], argv[0], argv[0], argv[0]
 		);
 
 	return 1;
