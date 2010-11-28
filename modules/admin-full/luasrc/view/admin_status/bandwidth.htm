@@ -13,10 +13,12 @@ $Id$
 -%>
 
 <%-
+	local ntm = require "luci.model.network".init()
+
 	local dev
 	local devices = { }
 	for _, dev in luci.util.kspairs(luci.sys.net.devices()) do
-		if dev ~= "lo" then
+		if dev ~= "lo" and not ntm:ignore_interface(dev) then
 			devices[#devices+1] = dev
 		end
 	end
