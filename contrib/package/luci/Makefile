@@ -395,9 +395,6 @@ $(eval $(call application,tinyproxy,Tinyproxy - HTTP(S)-Proxy configuration,\
 $(eval $(call application,initmgr,LuCI Initscript Management,\
 	+luci-mod-admin-full))
 
-$(eval $(call application,livestats,LuCI Realtime Statistics,\
-	+luci-mod-rpc))
-
 $(eval $(call application,polipo,LuCI Support for the Polipo Proxy,\
 	+PACKAGE_luci-app-polipo:polipo))
 
