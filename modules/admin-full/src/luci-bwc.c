@@ -66,6 +66,7 @@ struct conn_entry {
 	uint64_t time;
 	uint32_t udp;
 	uint32_t tcp;
+	uint32_t other;
 };
 
 struct load_entry {
@@ -220,7 +221,7 @@ static int update_ifstat(
 	return update_file(path, &e, sizeof(struct traffic_entry));
 }
 
-static int update_cnstat(uint32_t udp, uint32_t tcp)
+static int update_cnstat(uint32_t udp, uint32_t tcp, uint32_t other)
 {
 	char path[1024];
 
@@ -240,9 +241,10 @@ static int update_cnstat(uint32_t udp, uint32_t tcp)
 		}
 	}
 
-	e.time = htonll(time(NULL));
-	e.udp  = htonl(udp);
-	e.tcp  = htonl(tcp);
+	e.time  = htonll(time(NULL));
+	e.udp   = htonl(udp);
+	e.tcp   = htonl(tcp);
+	e.other = htonl(other);
 
 	return update_file(path, &e, sizeof(struct conn_entry));
 }
@@ -279,11 +281,14 @@ static int run_daemon(int nofork)
 {
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
-	uint32_t udp, tcp;
+	uint32_t udp, tcp, other;
 	float lf1, lf5, lf15;
 	char line[1024];
 	char ifname[16];
 
+	struct stat s;
+	const char *ipc = stat("/proc/net/nf_conntrack", &s)
+		? "/proc/net/ip_conntrack" : "/proc/net/nf_conntrack";
 
 	if (!nofork)
 	{
@@ -331,29 +336,26 @@ static int run_daemon(int nofork)
 			fclose(info);
 		}
 
-		if ((info = fopen("/proc/net/ip_conntrack", "r")) != NULL)
+		if ((info = fopen(ipc, "r")) != NULL)
 		{
-			udp = 0;
-			tcp = 0;
+			udp   = 0;
+			tcp   = 0;
+			other = 0;
 
 			while (fgets(line, sizeof(line), info))
 			{
-				switch (line[0])
+				if (sscanf(line, "%*s %*d %s", ifname) || sscanf(line, "%s %*d", ifname))
 				{
-					case 't':
+					if (!strcmp(ifname, "tcp"))
 						tcp++;
-						break;
-
-					case 'u':
+					else if (!strcmp(ifname, "udp"))
 						udp++;
-						break;
-
-					default:
-						break;
+					else
+						other++;
 				}
 			}
 
-			update_cnstat(udp, tcp);
+			update_cnstat(udp, tcp, other);
 
 			fclose(info);
 		}
@@ -431,8 +433,9 @@ static int run_dump_conns(void)
 		if (!e->time)
 			continue;
 
-		printf("[ %" PRIu64 ", %u, %u ]%s\n",
-			ntohll(e->time), ntohl(e->udp), ntohl(e->tcp),
+		printf("[ %" PRIu64 ", %u, %u, %u ]%s\n",
+			ntohll(e->time), ntohl(e->udp),
+			ntohl(e->tcp), ntohl(e->other),
 			((i + sizeof(struct conn_entry)) < m.size) ? "," : "");
 	}
 
