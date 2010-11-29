@@ -28,7 +28,7 @@ s.anonymous = false
 s:option(Flag, "enabled", translate("Enable"))
 
 svc = s:option(ListValue, "service_name", translate("Service"))
-svc.rmempty = true
+svc.rmempty = false
 
 local services = { }
 local fd = io.open("/usr/lib/ddns/services", "r")
@@ -47,10 +47,27 @@ for _, v in luci.util.vspairs(services) do
 	svc:value(v)
 end
 
-svc:value("", "-- "..translate("custom").." --")
+function svc.cfgvalue(...)
+	local v = Value.cfgvalue(...)
+	if not v or #v == 0 then
+		return "-"
+	else
+		return v
+	end
+end
+
+function svc.write(self, section, value)
+	if value == "-" then
+		m.uci:delete("ddns", section, self.option)
+	else
+		Value.write(self, section, value)
+	end
+end
+
+svc:value("-", "-- "..translate("custom").." --")
 
 url = s:option(Value, "update_url", translate("Custom update-URL"))
-url:depends("service_name", "")
+url:depends("service_name", "-")
 url.rmempty = true
 
 s:option(Value, "domain", translate("Hostname")).rmempty = true
