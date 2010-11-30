@@ -1173,11 +1173,7 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 static void nl80211_get_scancrypto(const char *spec,
 	struct iwinfo_crypto_entry *c)
 {
-	if( strstr(spec, "OPEN") )
-	{
-		c->enabled = 0;
-	}
-	else
+	if( strstr(spec, "WPA") || strstr(spec, "WEP") )
 	{
 		c->enabled = 1;
 
@@ -1217,6 +1213,10 @@ static void nl80211_get_scancrypto(const char *spec,
 			c->pair_ciphers |= IWINFO_CIPHER_WEP104;
 
 		c->group_ciphers = c->pair_ciphers;
+	}
+	else
+	{
+		c->enabled = 0;
 	}
 }
 
