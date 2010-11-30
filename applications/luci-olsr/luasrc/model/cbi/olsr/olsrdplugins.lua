@@ -74,45 +74,51 @@ if arg[1] then
 
 	local knownPlParams = {
 		["olsrd_bmf.so.1.5.3"] = {
-			{ Value, 		"BmfInterface",			"bmf0" },
-			{ Value, 		"BmfInterfaceIp",		"10.10.10.234/24" },
-			{ Flag,  		"DoLocalBroadcast",		"no" },
-			{ Flag,  		"CapturePacketsOnOlsrInterfaces", "yes" },
+			{ Value,	"BmfInterface",			"bmf0" },
+			{ Value, 	"BmfInterfaceIp",		"10.10.10.234/24" },
+			{ Flag,  	"DoLocalBroadcast",		"no" },
+			{ Flag,  	"CapturePacketsOnOlsrInterfaces", "yes" },
 			{ ListValue, 	"BmfMechanism",			{ "UnicastPromiscuous", "Broadcast" } },
-			{ Value, 		"BroadcastRetransmitCount",	"2" },
-			{ Value, 		"FanOutLimit",			"4" },
+			{ Value, 	"BroadcastRetransmitCount",	"2" },
+			{ Value, 	"FanOutLimit",			"4" },
 			{ DynamicList,	"NonOlsrIf",			"br-lan" }
 		},
 
 		["olsrd_dyn_gw.so.0.4"] = {
-			{ Value,		"Interval",				"40" },
-			{ DynamicList,  "Ping",					"141.1.1.1" },
-			{ DynamicList,	"HNA",					"192.168.80.0/24", IpMask2Cidr, Cidr2IpMask }
+			{ Value,	"Interval",			"40" },
+			{ DynamicList,  "Ping",				"141.1.1.1" },
+			{ DynamicList,	"HNA",				"192.168.80.0/24", IpMask2Cidr, Cidr2IpMask }
 		},
 
 		["olsrd_httpinfo.so.0.1"] = {
-			{ Value,		"port",					"80" },
-			{ DynamicList,	"Host",					"163.24.87.3" },
-			{ DynamicList,	"Net",					"0.0.0.0/0", IpMask2Cidr, Cidr2IpMask }
+			{ Value,	"port",				"80" },
+			{ DynamicList,	"Host",				"163.24.87.3" },
+--			{ DynamicList,	"Net",				"0.0.0.0/0", IpMask2Cidr, Cidr2IpMask }
+			{ DynamicList,  "Net",				"0.0.0.0/0", Cidr2IpMask }
 		},
 
 		["olsrd_nameservice.so.0.3"] = {
-			{ DynamicList,	"name",					"my-name.mesh" },
-			{ DynamicList,	"hosts",				"1.2.3.4 name-for-other-interface.mesh" },
-			{ Value,		"suffix",				".olsr" },
-			{ Value,		"hosts_file",			"/path/to/hosts_file" },
-			{ Value,		"add_hosts",			"/path/to/file" },
-			{ Value,		"dns_server",			"141.1.1.1" },
-			{ Value,		"resolv_file",			"/path/to/resolv.conf" },
-			{ Value,		"interval",				"120" },
-			{ Value,		"timeout",				"240" },
-			{ Value,		"lat",					"12.123" },
-			{ Value,		"lon",					"12.123" },
-			{ Value,		"latlon_file",			"/var/run/latlon.js" },
-			{ Value,		"latlon_infile",		"/var/run/gps.txt" },
-			{ Value,		"sighup_pid_file",		"/var/run/dnsmasq.pid" },
-			{ Value,		"name_change_script",	"/usr/local/bin/announce_new_hosts.sh" },
-			{ Value,		"services_change_script",	"/usr/local/bin/announce_new_services.sh" }
+			{ DynamicList,	"name",				"my-name.mesh" },
+			{ DynamicList,	"hosts",			"1.2.3.4 name-for-other-interface.mesh" },
+			{ Value,	"suffix",			".olsr" },
+			{ Value,	"hosts_file",			"/path/to/hosts_file" },
+			{ Value,	"add_hosts",			"/path/to/file" },
+			{ Value,	"dns_server",			"141.1.1.1" },
+			{ Value,	"resolv_file",			"/path/to/resolv.conf" },
+			{ Value,	"interval",			"120" },
+			{ Value,	"timeout",			"240" },
+			{ Value,	"lat",				"12.123" },
+			{ Value,	"lon",				"12.123" },
+			{ Value,	"latlon_file",			"/var/run/latlon.js" },
+			{ Value,	"latlon_infile",		"/var/run/gps.txt" },
+			{ Value,	"sighup_pid_file",		"/var/run/dnsmasq.pid" },
+			{ Value,	"name_change_script",		"/usr/local/bin/announce_new_hosts.sh" },
+			{ DynamicList,	"service",			"http://me.olsr:80|tcp|my little homepage" },
+			{ Value,	"services_file",		"/var/run/services_olsr" },
+			{ Value,	"services_change_script",	"/usr/local/bin/announce_new_services.sh" },
+                        { DynamicList,	"mac",				"xx:xx:xx:xx:xx:xx[,0-255]" },
+			{ Value,	"macs_file",			"/path/to/macs_file" },
+			{ Value,	"macs_change_script",		"/path/to/script" }
 		},
 
 		["olsrd_quagga.so.0.2.2"] = {
@@ -121,21 +127,21 @@ if arg[1] then
 				"ospf6", "isis", "bgp", "hsls"
 			} },
 			{ ListValue,	"ExportRoutes",			{ "only", "both" } },
-			{ Flag,			"LocalPref",			"true" },
-			{ Value,		"Distance",				Range(0,255) }
+			{ Flag,		"LocalPref",			"true" },
+			{ Value,	"Distance",			Range(0,255) }
 		},
 
 		["olsrd_secure.so.0.5"] = {
-			{ Value,		"Keyfile",				"/etc/private-olsr.key" }
+			{ Value,	"Keyfile",			"/etc/private-olsr.key" }
 		},
 
 		["olsrd_txtinfo.so.0.1"] = {
-			{ Value,		"accept",				"10.247.200.4" }
+			{ Value,	"accept",			"10.247.200.4" }
 		},
 
 		["olsrd_watchdog.so.0.1"] = {
-			{ Value,		"file",					"/var/run/olsrd.watchdog" },
-			{ Value,		"interval",				"30" }
+			{ Value,	"file",				"/var/run/olsrd.watchdog" },
+			{ Value,	"interval",			"30" }
 		},
 
 		["olsrd_mdns.so.1.0.0"] = {
