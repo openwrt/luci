@@ -481,6 +481,7 @@ function network.ifname(self)
 	elseif self:is_virtual() then
 		return p .. "-" .. self.sid
 	else
+		local num = { }
 		local dev = self:_get("ifname") or
 			uci_r:get("network", self.sid, "ifname")
 
@@ -523,6 +524,15 @@ end
 
 function network.name(self)
 	return self.sid
+end
+
+function network.uptime(self)
+	local cnt = tonumber(uci_s:get("network", self.sid, "connect_time"))
+	if cnt ~= nil then
+		return nxo.sysinfo().uptime - cnt
+	else
+		return 0
+	end
 end
 
 function network.is_bridge(self)
