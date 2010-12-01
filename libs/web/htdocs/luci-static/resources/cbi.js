@@ -90,6 +90,7 @@ var cbi_validators = {
 						       (RegExp.$2 ? ':' + RegExp.$2 : '');
 				}
 
+				window.status = addr;
 				return (addr.match(/^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/) != null);
 			}
 		}
@@ -778,7 +779,7 @@ if( ! String.format )
 
 		var str = arguments[0];
 		var out = '';
-		var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j))/;
+		var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t))/;
 		var a = b = [], numSubstitutions = 0, numMatches = 0;
 
 		while( a = re.exec(str) )
@@ -839,7 +840,7 @@ if( ! String.format )
 
 						case 'f':
 							subst = (precision > -1)
-								? Math.round((parseFloat(param) || 0.0) * Math.pow(10, precision)) / Math.pow(10, precision)
+								? ((parseFloat(param) || 0.0)).toFixed(precision)
 								: (parseFloat(param) || 0.0);
 							break;
 
@@ -869,6 +870,33 @@ if( ! String.format )
 
 						case 'j':
 							subst = String.serialize(param);
+							break;
+
+						case 't':
+							var td = 0;
+							var th = 0;
+							var tm = 0;
+							var ts = (param || 0);
+
+							if (ts > 60) {
+								tm = Math.floor(ts / 60);
+								ts = (ts % 60);
+							}
+
+							if (tm > 60) {
+								th = Math.floor(tm / 60);
+								tm = (tm % 60);
+							}
+
+							if (th > 24) {
+								td = Math.floor(th / 24);
+								th = (th % 24);
+							}
+
+							subst = (td > 0)
+								? String.format('%dd %dh %dm %ds', td, th, tm, ts)
+								: String.format('%dh %dm %ds', th, tm, ts);
+
 							break;
 					}
 				}
