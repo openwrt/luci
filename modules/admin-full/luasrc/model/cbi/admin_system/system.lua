@@ -27,11 +27,6 @@ function m.on_parse()
 			has_rdate = true
 			return false
 		end)
-
-	if not has_rdate then
-		m.uci:section("system", "rdate", nil, { })
-		m.uci:save("system")
-	end
 end
 
 
@@ -100,10 +95,12 @@ s:option(Value, "log_port", translate("External system log server port")).option
 s:option(Value, "conloglevel", translate("Log output level")).optional = true
 s:option(Value, "cronloglevel", translate("Cron Log Level")).optional = true
 
-s2 = m:section(TypedSection, "rdate", translate("Time Server (rdate)"))
-s2.anonymous = true
-s2.addremove = false
+if has_rdate then
+	s2 = m:section(TypedSection, "rdate", translate("Time Server (rdate)"))
+	s2.anonymous = true
+	s2.addremove = false
 
-s2:option(DynamicList, "server", translate("Server"))
+	s2:option(DynamicList, "server", translate("Server"))
+end
 
 return m
