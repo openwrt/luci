@@ -14,12 +14,20 @@
 					var rxp = ifc.stats ? ifc.stats["rx_packets"] : 0;
 					var txp = ifc.stats ? ifc.stats["tx_packets"] : 0;
 					var mac = ifc.macaddr ? ifc.macaddr : '00:00:00:00:00:00';
+					var upt = '-';
 
 					var icon;
 					if (is_up)
+					{
+						if (ifc.uptime)
+							upt = String.format('%t', ifc.uptime);
+
 						icon = "<%=resource%>/icons/ethernet.png";
+					}
 					else
+					{
 						icon = "<%=resource%>/icons/ethernet_disabled.png";
+					}
 
 					var s = document.getElementById('<%=self.option%>-ifc-signal');
 					if (s)
@@ -32,10 +40,11 @@
 					if (d && ifc.ifname)
 					{
 						d.innerHTML = String.format(
+							'<strong><%:Uptime%>:</strong> %s<br />' +
 							'<strong><%:MAC Address%>:</strong> %s<br />' +
 							'<strong><%:RX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />' +
 							'<strong><%:TX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />',
-								mac, rxb, rxp, txb, txp
+								upt, mac, rxb, rxp, txb, txp
 						);
 
 						if (ifc.ipaddrs && ifc.ipaddrs.length)
