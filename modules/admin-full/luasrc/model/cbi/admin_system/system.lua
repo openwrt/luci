@@ -19,15 +19,13 @@ require("luci.fs")
 
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 
-function m.on_parse()
-	local has_rdate = false
+local has_rdate = false
 
-	m.uci:foreach("system", "rdate",
-		function()
-			has_rdate = true
-			return false
-		end)
-end
+m.uci:foreach("system", "rdate",
+	function()
+		has_rdate = true
+		return false
+	end)
 
 
 s = m:section(TypedSection, "system", "")
