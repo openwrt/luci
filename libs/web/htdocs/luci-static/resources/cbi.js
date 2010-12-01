@@ -90,7 +90,6 @@ var cbi_validators = {
 						       (RegExp.$2 ? ':' + RegExp.$2 : '');
 				}
 
-				window.status = addr;
 				return (addr.match(/^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/) != null);
 			}
 		}
