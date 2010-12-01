@@ -189,55 +189,47 @@ end
 
 function iface_status()
 	local path = luci.dispatcher.context.requestpath
-	local x    = luci.model.uci.cursor_state()
+	local netm = require "luci.model.network".init()
 	local rv   = { }
 
 	local iface
 	for iface in path[#path]:gmatch("[%w%.%-]+") do
-		local dev
-		if x:get("network", iface, "type") == "bridge" then
-			dev = "br-" .. iface
-		else
-			dev = x:get("network", iface, "device") or ""
-		end
-
-		if #dev == 0 or dev:match("^%d") or dev:match("%W") then
-			dev = x:get("network", iface, "ifname") or ""
-			dev = dev:match("%S+")
-		end
-
-		local info
-		local data = { id = iface }
-		for _, info in ipairs(nixio.getifaddrs()) do
-			local name = info.name:match("[^:]+")
-			if name == dev then
-				if info.family == "packet" then
-					data.flags   = info.flags
-					data.stats   = info.data
-					data.macaddr = info.addr
-					data.ifname  = name
-				elseif info.family == "inet" then
-					data.ipaddrs = data.ipaddrs or { }
-					data.ipaddrs[#data.ipaddrs+1] = {
-						addr      = info.addr,
-						broadaddr = info.broadaddr,
-						dstaddr   = info.dstaddr,
-						netmask   = info.netmask,
-						prefix    = info.prefix
-					}
-				elseif info.family == "inet6" then
-					data.ip6addrs = data.ip6addrs or { }
-					data.ip6addrs[#data.ip6addrs+1] = {
-						addr    = info.addr,
-						netmask = info.netmask,
-						prefix  = info.prefix
-					}
+		local net = netm:get_network(iface)
+		if net then
+			local info
+			local dev  = net:ifname()
+			local data = { id = iface, uptime = net:uptime() }
+			for _, info in ipairs(nixio.getifaddrs()) do
+				local name = info.name:match("[^:]+")
+				if name == dev then
+					if info.family == "packet" then
+						data.flags   = info.flags
+						data.stats   = info.data
+						data.macaddr = info.addr
+						data.ifname  = name
+					elseif info.family == "inet" then
+						data.ipaddrs = data.ipaddrs or { }
+						data.ipaddrs[#data.ipaddrs+1] = {
+							addr      = info.addr,
+							broadaddr = info.broadaddr,
+							dstaddr   = info.dstaddr,
+							netmask   = info.netmask,
+							prefix    = info.prefix
+						}
+					elseif info.family == "inet6" then
+						data.ip6addrs = data.ip6addrs or { }
+						data.ip6addrs[#data.ip6addrs+1] = {
+							addr    = info.addr,
+							netmask = info.netmask,
+							prefix  = info.prefix
+						}
+					end
 				end
 			end
-		end
 
-		if next(data) then
-			rv[#rv+1] = data
+			if next(data) then
+				rv[#rv+1] = data
+			end
 		end
 	end
 
