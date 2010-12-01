@@ -1,7 +1,6 @@
 <%
 local sys = require "luci.sys"
 local twa = require "luci.tools.webadmin"
-
 -- System
 local system, model, memtotal, memcached, membuffers, memfree = sys.sysinfo()
 local uptime = twa.date_format(tonumber(sys.uptime()))
@@ -24,6 +23,7 @@ local devices  = ntm:get_wifidevs()
 local netlist = { }
 local netdevs = { }
 local dev
+local has_iwinfo = pcall(require, "iwinfo")
 
 -- Routes
 local defroutev4 = sys.net.defaultroute()
@@ -48,6 +48,14 @@ local defroutev6 = sys.net.defaultroute6 ()
 
 <div class="cbi-map">
 	<h2><%:Wireless Overview%></h2>
+	
+		<% if not has_iwinfo then %>
+			<div class="errorbox">
+				<strong><%:Package libiwinfo required!%></strong><br />
+				<%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%>
+			</div>
+		<% end %>
+
 		<div class="cbi-section">
 			<div class="cbi-section-node">
 				<table class="cbi-section-table">
