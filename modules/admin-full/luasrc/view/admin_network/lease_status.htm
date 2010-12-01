@@ -21,29 +21,7 @@
 						}
 						else
 						{
-							var d = 0;
-							var h = 0;
-							var m = 0;
-							var s = st[i].expires;
-
-							if (s > 60) {
-								m = Math.floor(s / 60);
-								s = (s % 60);
-							}
-
-							if (m > 60) {
-								h = Math.floor(m / 60);
-								m = (m % 60);
-							}
-
-							if (h > 24) {
-								d = Math.floor(h / 24);
-								h = (h % 24);
-							}
-
-							timestr = (d > 0)
-								? String.format('%dd %dh %dm %ds', d, h, m, s)
-								: String.format('%dh %dm %ds', h, m, s);
+							timestr = String.format('%t', st[i].expires);
 						}
 
 						var tr = tb.insertRow(-1);
