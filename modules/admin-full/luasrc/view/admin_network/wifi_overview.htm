@@ -20,15 +20,29 @@ $Id$
 	local uci = require "luci.model.uci".cursor()
 	local ntm = require "luci.model.network"
 
+	local has_iwinfo = pcall(require, "iwinfo")
+
 	ntm.init(uci)
 
 	function guess_wifi_hw(ifname)
+		local bands = ""
 		local name, idx = ifname:match("^([a-z]+)(%d+)")
 		idx = tonumber(idx)
 
+		if has_iwinfo then
+			local iw = luci.sys.wifi.getiwinfo(ifname)
+			local bl = iw.hwmodelist
+			if bl and next(bl) then
+				if bl.a then bands = bands .. "a" end
+				if bl.b then bands = bands .. "b" end
+				if bl.g then bands = bands .. "g" end
+				if bl.n then bands = bands .. "n" end
+			end
+		end
+
 		-- wl.o
 		if name == "wl" then
-			local name = "Broadcom 802.11 Wireless Controller"
+			local name = "Broadcom 802.11%s Wireless Controller" % bands
 			local nm   = 0
 
 			local fd = nixio.open("/proc/bus/pci/devices", "r")
@@ -56,19 +70,19 @@ $Id$
 
 		-- madwifi
 		elseif name == "ath" or name == "wifi" then
-			return "Atheros 802.11 Wireless Controller"
+			return "Atheros 802.11%s Wireless Controller" % bands
 
 		-- ralink
 		elseif name == "ra" then
-			return "RaLink 802.11 Wireless Controller"
+			return "RaLink 802.11%s Wireless Controller" % bands
 
 		-- prism?
 		elseif name == "eth" then
-			return "Prism 802.11 Wireless Controller"
+			return "Prism 802.11%s Wireless Controller" % bands
 
 		-- dunno yet
 		else
-			return "Generic 802.11 Wireless Controller"
+			return "Generic 802.11%s Wireless Controller" % bands
 		end
 	end
 
@@ -87,8 +101,6 @@ $Id$
 			netdevs[net:ifname()] = dev:name()
 		end
 	end
-
-	local has_iwinfo = pcall(require, "iwinfo")
 -%>
 
 <%+header%>
