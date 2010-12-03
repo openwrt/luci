@@ -1346,7 +1346,7 @@ function AbstractValue.cfgvalue(self, section)
 			return value[1]
 		end
 	elseif self.cast == "table" then
-		return luci.util.split(value, "%s+", nil, true)
+		return { value }
 	end
 end
 
@@ -1660,11 +1660,6 @@ function DynamicList.write(self, section, value)
 				t[#t+1] = x
 			end
 		end
-	elseif self.cast == "table" then
-		local x
-		for x in util.imatch(value) do
-			t[#t+1] = x
-		end
 	else
 		t = { value }
 	end
@@ -1699,12 +1694,16 @@ function DynamicList.formvalue(self, section)
 	local value = AbstractValue.formvalue(self, section)
 
 	if type(value) == "string" then
-		local x
-		local t = { }
-		for x in value:gmatch("%S+") do
-			t[#t+1] = x
+		if self.cast == "string" then
+			local x
+			local t = { }
+			for x in value:gmatch("%S+") do
+				t[#t+1] = x
+			end
+			value = t
+		else
+			value = { value }
 		end
-		value = t
 	end
 
 	return value
