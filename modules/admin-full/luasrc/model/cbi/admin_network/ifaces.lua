@@ -260,7 +260,7 @@ end
 
 if has_6to4 then
 	advi = s:taboption("general", Value, "adv_interface", translate("Advertise IPv6 on network"))
-	advi.widget = "radio"
+	advi.widget = "checkbox"
 	advi.exclude = arg[1]
 	advi.default = "lan"
 	advi.template = "cbi/network_netlist"
