@@ -549,13 +549,23 @@ int madwifi_get_quality_max(const char *ifname, int *buf)
 int madwifi_get_encryption(const char *ifname, char *buf)
 {
 	int ciphers = 0, key_len = 0;
+	char keybuf[IW_ENCODING_TOKEN_MAX];
 	struct iwinfo_crypto_entry *c = (struct iwinfo_crypto_entry *)buf;
 	struct iwreq wrq;
 	struct ieee80211req_key wk;
 
 	memset(&wrq, 0, sizeof(wrq));
-	memset(&wk, 0, sizeof(wk));
-	memset(wk.ik_macaddr, 0xff, IEEE80211_ADDR_LEN);
+
+	/* Obtain key info */
+	if( madwifi_wrq(&wrq, ifname, SIOCGIWENCODE, keybuf, sizeof(keybuf)) < 0 )
+		return -1;
+
+	/* Have any encryption? */
+	if( (wrq.u.data.flags & IW_ENCODE_DISABLED) || (wrq.u.data.length == 0) )
+		return 0;
+
+	/* Save key len */
+	key_len = wrq.u.data.length;
 
 	/* Get wpa protocol version */
 	wrq.u.mode = IEEE80211_PARAM_WPA;
@@ -589,6 +599,9 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 		}
 	}
 
+	memset(&wk, 0, sizeof(wk));
+	memset(wk.ik_macaddr, 0xff, IEEE80211_ADDR_LEN);
+
 	/* Get key information */
 	if( get80211priv(ifname, IEEE80211_IOCTL_GETKEY, &wk, sizeof(wk)) >= 0 )
 	{
@@ -597,27 +610,22 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 			c->auth_algs = (IWINFO_AUTH_OPEN | IWINFO_AUTH_SHARED);
 	}
 
-	/* Get group key length */
-	wrq.u.mode = IEEE80211_PARAM_MCASTKEYLEN;
-	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
-		key_len = wrq.u.mode;
-
 	/* Get used pairwise ciphers */
 	wrq.u.mode = IEEE80211_PARAM_UCASTCIPHERS;
 	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 	{
 		ciphers = wrq.u.mode;
 
-		if( ciphers & (1 << IEEE80211_CIPHER_TKIP) )
+		if( c->wpa_version && ciphers & (1 << IEEE80211_CIPHER_TKIP) )
 			c->pair_ciphers |= IWINFO_CIPHER_TKIP;
 
-		if( ciphers & (1 << IEEE80211_CIPHER_AES_CCM) )
+		if( c->wpa_version && ciphers & (1 << IEEE80211_CIPHER_AES_CCM) )
 			c->pair_ciphers |= IWINFO_CIPHER_CCMP;
 
-		if( ciphers & (1 << IEEE80211_CIPHER_AES_OCB) )
+		if( c->wpa_version && ciphers & (1 << IEEE80211_CIPHER_AES_OCB) )
 			c->pair_ciphers |= IWINFO_CIPHER_AESOCB;
 
-		if( ciphers & (1 << IEEE80211_CIPHER_CKIP) )
+		if( c->wpa_version && ciphers & (1 << IEEE80211_CIPHER_CKIP) )
 			c->pair_ciphers |= IWINFO_CIPHER_CKIP;
 
 		if( ciphers & (1 << IEEE80211_CIPHER_WEP) )
@@ -632,6 +640,8 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 					break;
 
 				default:
+					c->pair_ciphers = IWINFO_CIPHER_WEP40 |
+						IWINFO_CIPHER_WEP104;
 					break;
 			}
 		}
@@ -644,9 +654,9 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 	wrq.u.mode = IEEE80211_PARAM_MCASTCIPHER;
 	if( madwifi_wrq(&wrq, ifname, IEEE80211_IOCTL_GETPARAM, NULL, 0) >= 0 )
 	{
-		ciphers = wrq.u.mode;
+		ciphers = c->wpa_version ? wrq.u.mode : IEEE80211_CIPHER_WEP;
 
-		switch(wrq.u.mode) {
+		switch(ciphers) {
 			case IEEE80211_CIPHER_TKIP:
 				c->group_ciphers |= IWINFO_CIPHER_TKIP;
 				break;

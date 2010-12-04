@@ -333,18 +333,37 @@ static char * nl80211_hostapd_info(const char *ifname)
 	return NULL;
 }
 
-static char * nl80211_wpasupp_info(const char *ifname, const char *cmd)
+static inline int nl80211_wpactl_recv(int sock, char *buf, int blen)
 {
-	int sock = -1, len;
+	fd_set rfds;
+	struct timeval tv = { 2, 0 };
+
+	FD_ZERO(&rfds);
+	FD_SET(sock, &rfds);
+
+	memset(buf, 0, blen);
+
+
+	if( select(sock + 1, &rfds, NULL, NULL, &tv) < 0 )
+		return -1;
+
+	if( !FD_ISSET(sock, &rfds) )
+		return -1;
+
+	return recv(sock, buf, blen, 0);
+}
+
+static char * nl80211_wpactl_info(const char *ifname, const char *cmd,
+								   const char *event)
+{
+	int sock = -1;
 	char *rv = NULL;
 	size_t remote_length, local_length;
-	static char buffer[1024] = { 0 };
+	static char buffer[10240] = { 0 };
 
-	struct timeval tv = { 2, 0 };
 	struct sockaddr_un local = { 0 };
 	struct sockaddr_un remote = { 0 };
 
-	fd_set rfds;
 
 	sock = socket(PF_UNIX, SOCK_DGRAM, 0);
 	if( sock < 0 )
@@ -367,25 +386,26 @@ static char * nl80211_wpasupp_info(const char *ifname, const char *cmd)
 	if( bind(sock, (struct sockaddr *) &local, local_length) )
 		goto out;
 
+
+	send(sock, "ATTACH", 6, 0);
+
+	if( nl80211_wpactl_recv(sock, buffer, sizeof(buffer)) <= 0 )
+		goto out;
+
+
 	send(sock, cmd, strlen(cmd), 0);
 
 	while( 1 )
 	{
-		FD_ZERO(&rfds);
-		FD_SET(sock, &rfds);
+		if( nl80211_wpactl_recv(sock, buffer, sizeof(buffer)) <= 0 )
+		{
+			if( event )
+				continue;
 
-		if( select(sock + 1, &rfds, NULL, NULL, &tv) < 0 )
-			goto out;
-
-		if( !FD_ISSET(sock, &rfds) )
 			break;
+		}
 
-		if( (len = recv(sock, buffer, sizeof(buffer), 0)) <= 0 )
-			goto out;
-
-		buffer[len] = 0;
-
-		if( buffer[0] != '<' )
+		if( (!event && buffer[0] != '<') || strstr(buffer, event) )
 			break;
 	}
 
@@ -933,7 +953,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 	}
 
 	/* WPA supplicant */
-	else if( (res = nl80211_wpasupp_info(ifname, "STATUS")) &&
+	else if( (res = nl80211_wpactl_info(ifname, "STATUS", NULL)) &&
 	         (val = nl80211_getval(NULL, res, "pairwise_cipher")) )
 	{
 		/* WEP */
@@ -1249,11 +1269,9 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 	struct iwinfo_scanlist_entry *e = (struct iwinfo_scanlist_entry *)buf;
 
 	/* WPA supplicant */
-	if( (res = nl80211_wpasupp_info(ifname, "SCAN")) && !strcmp(res, "OK\n") )
+	if( (res = nl80211_wpactl_info(ifname, "SCAN", "CTRL-EVENT-SCAN-RESULTS")) )
 	{
-		sleep(2);
-
-		if( (res = nl80211_wpasupp_info(ifname, "SCAN_RESULTS")) )
+		if( (res = nl80211_wpactl_info(ifname, "SCAN_RESULTS", NULL)) )
 		{
 			nl80211_get_quality_max(ifname, &qmax);
 
@@ -1262,7 +1280,7 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 
 			count = 0;
 
-			while( sscanf(res, "%17s %d %d %255s %127[^\n]\n",
+			while( sscanf(res, "%17s %d %d %255s%*[ \t]%127[^\n]\n",
 			              bssid, &freq, &rssi, cipher, ssid) > 0 )
 			{
 				/* BSSID */
@@ -1315,6 +1333,10 @@ int nl80211_get_scanlist(const char *ifname, char *buf, int *len)
 
 				count++;
 				e++;
+
+				memset(ssid, 0, sizeof(ssid));
+				memset(bssid, 0, sizeof(bssid));
+				memset(cipher, 0, sizeof(cipher));
 			}
 
 			*len = count * sizeof(struct iwinfo_scanlist_entry);
