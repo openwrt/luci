@@ -223,9 +223,9 @@ define Package/luci-mod-freifunk-community
    +luci-lib-web +luci-app-splash \
    +luci-app-ffwizard-leipzig \
    +luci-i18n-german \
-   +PACKAGE_luci-mod-freifunk-community:olsrd-luci +PACKAGE_luci-mod-freifunk-community:olsrd-luci-mod-dyn-gw-plain \
-   +PACKAGE_luci-mod-freifunk-community:olsrd-luci-mod-txtinfo +PACKAGE_luci-mod-freifunk-community:olsrd-luci-mod-nameservice \
-   +PACKAGE_luci-mod-freifunk-community:olsrd-luci-mod-watchdog +PACKAGE_luci-mod-freifunk-community:kmod-tun \
+   +PACKAGE_luci-mod-freifunk-community:olsrd +PACKAGE_luci-mod-freifunk-community:olsrd-mod-dyn-gw-plain \
+   +PACKAGE_luci-mod-freifunk-community:olsrd-mod-txtinfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
+   +PACKAGE_luci-mod-freifunk-community:olsrd-mod-watchdog +PACKAGE_luci-mod-freifunk-community:kmod-tun \
    +PACKAGE_luci-mod-freifunk-community:ip +PACKAGE_luci-mod-freifunk-community:freifunk-watchdog +luci-app-olsr
 endef
 
@@ -329,7 +329,7 @@ $(eval $(call application,firewall,Firmware and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
 $(eval $(call application,olsr,OLSR configuration and status module,\
-	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd-luci +PACKAGE_luci-app-olsr:olsrd-luci-mod-txtinfo))
+	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
 
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
@@ -563,5 +563,5 @@ $(eval $(call collection,light,\
 
 
 ### Compile ###
-PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(LUCI_BUILD_PACKAGES))
+PKG_CONFIG_DEPENDS=$(patsubst %,CONFIG_PACKAGE_%,$(LUCI_BUILD_PACKAGES))
 $(foreach b,$(LUCI_BUILD_PACKAGES),$(eval $(call BuildPackage,$(b))))
