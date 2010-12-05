@@ -378,10 +378,14 @@ end
 
 -- UCI set
 function Map.set(self, section, option, value)
-	if option then
-		return self.uci:set(self.config, section, option, value)
+	if type(value) ~= "table" or #value > 0 then
+		if option then
+			return self.uci:set(self.config, section, option, value)
+		else
+			return self.uci:set(self.config, section, value)
+		end
 	else
-		return self.uci:set(self.config, section, value)
+		return Map.del(self, section, option)
 	end
 end
 
