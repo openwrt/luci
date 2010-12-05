@@ -550,16 +550,16 @@ endef
 $(eval $(call collection,,\
 	Standard OpenWrt set including full and mini admin and the standard theme,\
 	+uhttpd +luci-mod-admin-full +luci-theme-openwrt +luci-app-firewall \
-	+luci-app-initmgr))
+	+luci-app-initmgr +libiwinfo))
 
 $(eval $(call collection,ssl,\
 	Standard OpenWrt set with HTTPS support,\
 	+uhttpd +uhttpd-mod-tls +px5g +luci-mod-admin-full +luci-theme-openwrt \
-	+luci-app-firewall +luci-app-initmgr))
+	+luci-app-firewall +luci-app-initmgr +libiwinfo))
 
 $(eval $(call collection,light,\
 	Minimum package set using only admin mini and the standard theme,\
-	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt))
+	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt @BROKEN))
 
 
 ### Compile ###
