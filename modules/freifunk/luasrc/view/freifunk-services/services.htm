@@ -65,7 +65,7 @@ end
 		local field = {}
 		-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
 		local field = luci.util.split(line, "[#|]", split, true)
-		url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
+		local url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
 		%>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
 						<td class="cbi-section-table-cell"><a href="<%=url%>"><%=descr%></a></td>
