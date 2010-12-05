@@ -35,7 +35,7 @@ function bool(val)
 	return false
 end
 
-function uint(val)
+function uinteger(val)
 	local n = tonumber(val)
 	if n ~= nil and math.floor(n) == n and n >= 0 then
 		return true
@@ -44,13 +44,18 @@ function uint(val)
 	return false
 end
 
-function int(val)
+function integer(val)
 	local n = tonumber(val)
 	if n ~= nil and math.floor(n) == n then
 		return true
 	end
 
 	return false
+end
+
+function ufloat(val)
+	local n = tonumber(val)
+	return ( n ~= nil and n >= 0 )
 end
 
 function float(val)

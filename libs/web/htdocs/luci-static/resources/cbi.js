@@ -27,6 +27,16 @@ var cbi_validators = {
 		return (cbi_validators.integer(v) && (v >= 0));
 	},
 
+	'float': function(v)
+	{
+		return !isNaN(parseFloat(v));
+	},
+
+	'ufloat': function(v)
+	{
+		return (cbi_validators['float'](v) && (v >= 0));
+	},
+
 	'ipaddr': function(v)
 	{
 		return cbi_validators.ip4addr(v) || cbi_validators.ip6addr(v);
