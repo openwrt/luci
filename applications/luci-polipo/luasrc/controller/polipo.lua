@@ -17,12 +17,12 @@ function index()
 	if not nixio.fs.access("/etc/config/polipo") then
 		return
 	end
-	
-	require("luci.i18n")
-	luci.i18n.loadc("polipo")
+
+	require("luci.i18n").loadc("polipo")
 	local i18n = luci.i18n.translate
-	
-	local p = entry({"admin", "services", "polipo"}, cbi("polipo"), i18n("Polipo"))
-	p.dependent = true
-	p.i18n = "polipo"
+
+	entry({"admin", "services", "polipo"}, alias("admin", "services", "polipo", "config"), "Polipo").i18n = "polipo"
+	entry({"admin", "services", "polipo", "status"}, template("polipo_status"), i18n("Status"))
+	entry({"admin", "services", "polipo", "config"}, cbi("polipo"), i18n("Configuration"))
 end
+
