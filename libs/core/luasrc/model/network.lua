@@ -936,21 +936,22 @@ wifinet = utl.class()
 function wifinet.__init__(self, net, data)
 	self.sid = net
 
-	local dev = uci_s:get("wireless", self.sid, "ifname")
-	if not dev then
-		local num = { }
-		uci_r:foreach("wireless", "wifi-iface",
-			function(s)
-				if s.device then
-					num[s.device] = num[s.device] and num[s.device] + 1 or 1
-					if s['.name'] == self.sid then
-						dev = "%s.network%d" %{ s.device, num[s.device] }
-						return false
-					end
+	local num = { }
+	local netid
+	uci_r:foreach("wireless", "wifi-iface",
+		function(s)
+			if s.device then
+				num[s.device] = num[s.device] and num[s.device] + 1 or 1
+				if s['.name'] == self.sid then
+					netid = "%s.network%d" %{ s.device, num[s.device] }
+					return false
 				end
-			end)
-	end
+			end
+		end)
 
+	local dev = uci_s:get("wireless", self.sid, "ifname") or netid
+
+	self.netid  = netid
 	self.wdev   = dev
 	self.iwinfo = dev and sys.wifi.getiwinfo(dev) or { }
 	self.iwdata = data or uci_s:get_all("wireless", self.sid) or
@@ -1109,7 +1110,7 @@ end
 
 function wifinet.adminlink(self)
 	return dsp.build_url("admin", "network", "wireless",
-		self.iwdata.device, self.wdev)
+		self.iwdata.device, self.netid)
 end
 
 function wifinet.get_network(self)
