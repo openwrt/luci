@@ -42,6 +42,11 @@ function index()
 	ol.subindex = true
 
 	entry(
+		{"admin", "services", "olsrd", "iface"},
+		cbi("olsr/olsrdiface")
+	).leaf = true
+
+	entry(
 		{"admin", "services", "olsrd", "hna"},
 		cbi("olsr/olsrdhna"), "HNA Announcements"
 	)

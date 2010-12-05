@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,74 +21,80 @@ m = Map("olsrd", translate("OLSR Daemon"),
 	"It runs on any wifi card that supports ad-hoc mode and of course on any ethernet device. "..
 	"Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and documentation."))
 
+function m.on_parse()
+	local has_defaults = false
+
+	m.uci:foreach("olsrd", "InterfaceDefaults",
+		function(s)
+			has_defaults = true
+			return false
+		end)
+
+	if not has_defaults then
+		m.uci:section("olsrd", "InterfaceDefaults")
+	end
+end
+
 s = m:section(TypedSection, "olsrd", translate("General settings"))
-s.dynamic = true
+--s.dynamic = true
 s.anonymous = true
 
-ipv = s:option(ListValue, "IpVersion", translate("Internet protocol"),
+s:tab("general",  translate("General Settings"))
+s:tab("lquality", translate("Link Quality Settings"))
+s:tab("advanced", translate("Advanced Settings"))
+
+
+ipv = s:taboption("general", ListValue, "IpVersion", translate("Internet protocol"),
 	translate("IP-version to use. If 6and4 is selected then one olsrd instance is started for each protocol."))
 ipv:value("4", "IPv4")
 ipv:value("6", "IPv6")
 ipv:value("6and4", "6and4")
 
-debug = s:option(ListValue, "DebugLevel", translate("Debugmode"), translate("Debug level to use. This should usually stay at 0."))
-for i=0, 9 do
-	debug:value(i)
-end
-debug.optional = true
 
-clrscr = s:option(Flag, "ClearScreen", translate ("Clear screen"),
-	translate("Clear the screen each time the internal state changes. Default is \"yes\"."))
-clrscr.default = "yes"
-clrscr.enabled = "yes"
-clrscr.disabled = "no"
-clrscr.optional = true
+poll = s:taboption("advanced", Value, "Pollrate", translate("Pollrate"),
+	translate("Polling rate for OLSR sockets in seconds. Default is 0.05."))
+poll.optional = true
+poll.datatype = "ufloat"
+poll.placeholder = "0.05"
 
-noint = s:option(Flag, "AllowNoInt", translate("Start without network"),
-	translate("If this is set to \"yes\" then olsrd also starts when no network devices are found."))
-noint.default = "yes"
-noint.enabled = "yes"
-noint.disabled = "no"
-noint.optional = true
+nicc = s:taboption("advanced", Value, "NicChgsPollInt", translate("Nic changes poll interval"),
+	translate("Interval to poll network interfaces for configuration changes (in seconds). Default is \"2.5\"."))
+nicc.optional = true
+nicc.datatype = "ufloat"
+nicc.placeholder = "2.5"
 
-s:option(Value, "Pollrate", translate("Pollrate"),
-	translate("Polling rate for OLSR sockets in seconds. Default is 0.05.")).optional = true
+tos = s:taboption("advanced", Value, "TosValue", translate("TOS value"),
+	translate("Type of service value for the IP header of control traffic. Default is \"16\"."))
+tos.optional = true
+tos.datatype = "uinteger"
+tos.placeholder = "16"
 
-s:option(Value, "NicChgsPollInt", translate("Nic changes poll interval"),
-	translate("Interval to poll network interfaces for configuration changes (in seconds). Default is \"2.5\".")).optional = true
-
-s:option(Value, "TosValue", translate("TOS value"),
-	translate("Type of service value for the IP header of control traffic. Default is \"16\".")).optional = true
-
-fib = s:option(ListValue, "FIBMetric", translate("FIB metric"),
+fib = s:taboption("general", ListValue, "FIBMetric", translate("FIB metric"),
 	translate ("FIBMetric controls the metric value of the host-routes OLSRd sets. "..
 	"\"flat\" means that the metric value is always 2. This is the preferred value "..
 	"because it helps the linux kernel routing to clean up older routes. "..
 	"\"correct\" uses the hopcount as the metric value. "..
 	"\"approx\" use the hopcount as the metric value too, but does only update the hopcount if the nexthop changes too. "..
 	"Default is \"flat\"."))
-fib.optional = true
 fib:value("flat")
 fib:value("correct")
 fib:value("approx")
-fib.optional = true
 
-lql = s:option(ListValue, "LinkQualityLevel", translate("LQ level"),
+lql = s:taboption("lquality", ListValue, "LinkQualityLevel", translate("LQ level"),
 	translate("Link quality level switch between hopcount and cost-based (mostly ETX) routing.<br />"..
 	"<b>0</b> = do not use link quality<br />"..
 	"<b>2</b> = use link quality for MPR selection and routing<br />"..
 	"Default is \"2\""))
 lql:value("2")
 lql:value("0")
-lql.optional = true
 
-lqage = s:option(Value, "LinkQualityAging", translate("LQ aging"),
+lqage = s:taboption("lquality", Value, "LinkQualityAging", translate("LQ aging"),
 	translate("Link quality aging factor (only for lq level 2). Tuning parameter for etx_float and etx_fpm, smaller values "..
 	"mean slower changes of ETX value. (allowed values are between 0.01 and 1.0)"))
 lqage.optional = true
 lqage:depends("LinkQualityLevel", "2")
 
-lqa = s:option(ListValue, "LinkQualityAlgorithm", translate("LQ algorithm"),
+lqa = s:taboption("lquality", ListValue, "LinkQualityAlgorithm", translate("LQ algorithm"),
 	translate("Link quality algorithm (only for lq level 2).<br />"..
 	"<b>etx_float</b>: floating point ETX with exponential aging<br />"..
 	"<b>etx_fpm</b>  : same as ext_float, but with integer arithmetic<br />"..
@@ -95,19 +102,19 @@ lqa = s:option(ListValue, "LinkQualityAlgorithm", translate("LQ algorithm"),
 	"<b>etx_ffeth</b>: incompatible variant of etx_ff that allows ethernet links with ETX 0.1.<br />"..
 	"Defaults to \"etx_ff\""))
 lqa.optional = true
-lqa:value("etx_ff") 
+lqa:value("etx_ff")
 lqa:value("etx_fpm")
 lqa:value("etx_float")
 lqa:value("etx_ffeth")
 lqa:depends("LinkQualityLevel", "2")
 lqa.optional = true
 
-lqfish = s:option(Flag, "LinkQualityFishEye", translate("LQ fisheye"),
+lqfish = s:taboption("lquality", Flag, "LinkQualityFishEye", translate("LQ fisheye"),
 	translate("Fisheye mechanism for TCs (checked means on). Default is \"on\""))
 lqfish.default = "1"
 lqfish.optional = true
 
-hyst = s:option(Flag, "UseHysteresis", translate("Use hysteresis"),
+hyst = s:taboption("lquality", Flag, "UseHysteresis", translate("Use hysteresis"),
 	translate("Hysteresis for link sensing (only for hopcount metric). Hysteresis adds more robustness to the link sensing "..
 	"but delays neighbor registration. Defaults is \"yes\""))
 hyst.default = "yes"
@@ -116,27 +123,30 @@ hyst.disabled = "no"
 hyst:depends("LinkQualityLevel", "0")
 hyst.optional = true
 
-port = s:option(Value, "OlsrPort", translate("Port"),
+port = s:taboption("general", Value, "OlsrPort", translate("Port"),
         translate("The port OLSR uses. This should usually stay at the IANA assigned port 698. It can have a value between 1 and 65535."))
 port.optional = true
 port.default = "698"
 port.rmempty = true
 
-mainip = s:option(Value, "MainIp", translate("Main IP"),
+mainip = s:taboption("general", Value, "MainIp", translate("Main IP"),
         translate("Sets the main IP (originator ip) of the router. This IP will NEVER change during the uptime of olsrd. "..
 	"Default is 0.0.0.0, which triggers usage of the IP of the first interface."))
 mainip.optional = true
 mainip.rmempty = true
+mainip.datatype = "ipaddr"
+mainip.placeholder = "0.0.0.0"
 
-willingness = s:option(ListValue, "Willingness", translate("Willingness"),
+willingness = s:taboption("advanced", ListValue, "Willingness", translate("Willingness"),
 		translate("The fixed willingness to use. If not set willingness will be calculated dynamically based on battery/power status. Default is \"3\"."))
 for i=0,7 do
 	willingness:value(i)
 end
 willingness.optional = true
+willingness.default = "3"
 
-natthr = s:option(Value, "NatThreshold", translate("NAT threshold"),
-	translate("If the route to the current gateway is to be changed, the ETX value of this gateway is ".. 
+natthr = s:taboption("advanced", Value, "NatThreshold", translate("NAT threshold"),
+	translate("If the route to the current gateway is to be changed, the ETX value of this gateway is "..
 	"multiplied with this value before it is compared to the new one. "..
 	"The parameter can be a value between 0.1 and 1.0, but should be close to 1.0 if changed.<br />"..
 	"<b>WARNING:</b> This parameter should not be used together with the etx_ffeth metric!<br />"..
@@ -150,65 +160,35 @@ natthr:depends("LinkQualityAlgorithm", "etx_fpm")
 natthr.default = 1
 natthr.optional = true
 
-i = m:section(TypedSection, "Interface", translate("Interfaces"))
+
+i = m:section(TypedSection, "InterfaceDefaults", translate("Interfaces Defaults"))
 i.anonymous = true
-i.addremove = true
-i.dynamic = true
+i.addremove = false
 
-ign = i:option(Flag, "ignore", translate("Enable"),
-	translate("Enable this interface."))
-ign.enabled  = "0"
-ign.disabled = "1"
-ign.rmempty = false
-function ign.cfgvalue(self, section)
-	return Flag.cfgvalue(self, section) or "0"
-end
+i:tab("general", translate("General Settings"))
+i:tab("addrs",   translate("IP Addresses"))
+i:tab("timing",  translate("Timing and Validity"))
 
-network = i:option(ListValue, "interface", translate("Network"),
-	translate("The interface where OLSRd should run. If \"Default\" is selected then the settings made "..
-	"here are used for all other interfaces unless overwritten."))
-luci.tools.webadmin.cbi_add_networks(network)
-network:value("Default")
-
-mode = i:option(ListValue, "Mode", translate("Mode"),
+mode = i:taboption("general", ListValue, "Mode", translate("Mode"),
 	translate("Interface Mode is used to prevent unnecessary packet forwarding on switched ethernet interfaces. "..
 	"valid Modes are \"mesh\" and \"ether\". Default is \"mesh\"."))
-mode:value("mesh")  
+mode:value("mesh")
 mode:value("ether")
 mode.optional = true
 mode.rmempty = true
 
-i:option(Value, "Ip4Broadcast", translate("IPv4 broadcast"),
-	translate("IPv4 broadcast address for outgoing OLSR packets. One useful example would be 255.255.255.255. "..
-	"Default is \"0.0.0.0\", which triggers the usage of the interface broadcast IP.")).optional = true
 
-i:option(Value, "IPv6Multicast", translate("IPv6 multicast"),
-	translate("IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal multicast.")).optional = true
-
-i:option(Value, "IPv4Src", translate("IPv4 source"),
-	translate("IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which triggers usage of the interface IP.")).optional = true
-
-i:option(Value, "IPv6Src", translate("IPv6 source"),
-	translate("IPv6 src prefix. OLSRd will choose one of the interface IPs which matches the prefix of this parameter. "..
-	"Default is \"0::/0\", which triggers the usage of a not-linklocal interface IP.")).optional = true
-
-i:option(Value, "HelloInterval", translate("Hello interval")).optional = true
-i:option(Value, "HelloValidityTime", translate("Hello validity time")).optional = true
-i:option(Value, "TcInterval", translate("TC interval")).optional = true
-i:option(Value, "TcValidityTime", translate("TC validity time")).optional = true
-i:option(Value, "MidInterval", translate("MID interval")).optional = true
-i:option(Value, "MidValidityTime", translate("MID validity time")).optional = true
-i:option(Value, "HnaInterval", translate("HNA interval")).optional = true
-i:option(Value, "HnaValidityTime", translate("HNA validity time")).optional = true
-
-i:option(Value, "Weight", translate("Weight"),
+weight = i:taboption("general", Value, "Weight", translate("Weight"),
 	translate("When multiple links exist between hosts the weight of interface is used to determine the link to use. "..
 	"Normally the weight is automatically calculated by olsrd based on the characteristics of the interface, "..
 	"but here you can specify a fixed value. Olsrd will choose links with the lowest value.<br />"..
 	"<b>Note:</b> Interface weight is used only when LinkQualityLevel is set to 0. "..
-	"For any other value of LinkQualityLevel, the interface ETX value is used instead.")).optional = true
+	"For any other value of LinkQualityLevel, the interface ETX value is used instead."))
+weight.optional = true
+weight.datatype = "uinteger"
+weight.placeholder = "0"
 
-lqmult = i:option(DynamicList, "LinkQualityMult", translate("LinkQuality Multiplicator"),
+lqmult = i:taboption("general", DynamicList, "LinkQualityMult", translate("LinkQuality Multiplicator"),
 	translate("Multiply routes with the factor given here. Allowed values are between 0.01 and 1. "..
 	"It is only used when LQ-Level is greater than 0. Examples:<br />"..
 	"reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />"..
@@ -216,5 +196,125 @@ lqmult = i:option(DynamicList, "LinkQualityMult", translate("LinkQuality Multipl
 lqmult.optional = true
 lqmult.rmempty = true
 lqmult.cast = "table"
+lqmult.placeholder = "default 1.0"
+
+
+ip4b = i:taboption("addrs", Value, "Ip4Broadcast", translate("IPv4 broadcast"),
+	translate("IPv4 broadcast address for outgoing OLSR packets. One useful example would be 255.255.255.255. "..
+	"Default is \"0.0.0.0\", which triggers the usage of the interface broadcast IP."))
+ip4b.optional = true
+ip4b.datatype = "ip4addr"
+ip4b.placeholder = "0.0.0.0"
+
+ip6m = i:taboption("addrs", Value, "IPv6Multicast", translate("IPv6 multicast"),
+	translate("IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal multicast."))
+ip6m.optional = true
+ip6m.datatype = "ip6addr"
+ip6m.placeholder = "FF02::6D"
+
+ip4s = i:taboption("addrs", Value, "IPv4Src", translate("IPv4 source"),
+	translate("IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which triggers usage of the interface IP."))
+ip4s.optional = true
+ip4s.datatype = "ip4addr"
+ip4s.placeholder = "0.0.0.0"
+
+ip6s = i:taboption("addrs", Value, "IPv6Src", translate("IPv6 source"),
+	translate("IPv6 src prefix. OLSRd will choose one of the interface IPs which matches the prefix of this parameter. "..
+	"Default is \"0::/0\", which triggers the usage of a not-linklocal interface IP."))
+ip6s.optional = true
+ip6s.datatype = "ip6addr"
+ip6s.placeholder = "0::/0"
+
+
+hi = i:taboption("timing", Value, "HelloInterval", translate("Hello interval"))
+hi.optional = true
+hi.datatype = "ufloat"
+hi.placeholder = "5.0"
+
+hv = i:taboption("timing", Value, "HelloValidityTime", translate("Hello validity time"))
+hv.optional = true
+hv.datatype = "ufloat"
+hv.placeholder = "40.0"
+
+ti = i:taboption("timing", Value, "TcInterval", translate("TC interval"))
+ti.optional = true
+ti.datatype = "ufloat"
+ti.placeholder = "2.0"
+
+tv = i:taboption("timing", Value, "TcValidityTime", translate("TC validity time"))
+tv.optional = true
+tv.datatype = "ufloat"
+tv.placeholder = "256.0"
+
+mi = i:taboption("timing", Value, "MidInterval", translate("MID interval"))
+mi.optional = true
+mi.datatype = "ufloat"
+mi.placeholder = "18.0"
+
+mv = i:taboption("timing", Value, "MidValidityTime", translate("MID validity time"))
+mv.optional = true
+mv.datatype = "ufloat"
+mv.placeholder = "324.0"
+
+ai = i:taboption("timing", Value, "HnaInterval", translate("HNA interval"))
+ai.optional = true
+ai.datatype = "ufloat"
+ai.placeholder = "18.0"
+
+av = i:taboption("timing", Value, "HnaValidityTime", translate("HNA validity time"))
+av.optional = true
+av.datatype = "ufloat"
+av.placeholder = "108.0"
+
+
+ifs = m:section(TypedSection, "Interface", translate("Interfaces"))
+ifs.addremove = true
+ifs.anonymous = true
+ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd/iface/%s")
+ifs.template  = "cbi/tblsection"
+
+ign = ifs:option(Flag, "ignore", translate("Enable"))
+ign.enabled  = "0"
+ign.disabled = "1"
+ign.rmempty = false
+function ign.cfgvalue(self, section)
+	return Flag.cfgvalue(self, section) or "0"
+end
+
+network = ifs:option(DummyValue, "interface", translate("Network"))
+network.template = "cbi/network_netinfo"
+
+mode = ifs:option(DummyValue, "Mode", translate("Mode"))
+function mode.cfgvalue(...)
+	return Value.cfgvalue(...) or "mesh"
+end
+
+hello = ifs:option(DummyValue, "_hello", translate("Hello"))
+function hello.cfgvalue(self, section)
+	local i = tonumber(m.uci:get("olsrd", section, "HelloInterval"))     or 5
+	local v = tonumber(m.uci:get("olsrd", section, "HelloValidityTime")) or 40
+	return "%.01fs / %.01fs" %{ i, v }
+end
+
+tc = ifs:option(DummyValue, "_tc", translate("TC"))
+function tc.cfgvalue(self, section)
+	local i = tonumber(m.uci:get("olsrd", section, "TcInterval"))     or 2
+	local v = tonumber(m.uci:get("olsrd", section, "TcValidityTime")) or 256
+	return "%.01fs / %.01fs" %{ i, v }
+end
+
+mid = ifs:option(DummyValue, "_mid", translate("MID"))
+function mid.cfgvalue(self, section)
+	local i = tonumber(m.uci:get("olsrd", section, "MidInterval"))     or 18
+	local v = tonumber(m.uci:get("olsrd", section, "MidValidityTime")) or 324
+	return "%.01fs / %.01fs" %{ i, v }
+end
+
+hna = ifs:option(DummyValue, "_hna", translate("HNA"))
+function hna.cfgvalue(self, section)
+	local i = tonumber(m.uci:get("olsrd", section, "HnaInterval"))     or 18
+	local v = tonumber(m.uci:get("olsrd", section, "HnaValidityTime")) or 108
+	return "%.01fs / %.01fs" %{ i, v }
+end
 
 return m
