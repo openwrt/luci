@@ -121,7 +121,8 @@ end
 					<input class="cbi-button cbi-button-add" type="submit" value="<%:Add%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" title="<%:Add%>" />
 				<% else %>
 					<% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
-					<input type="text" class="cbi-section-create-name" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>" />
+					<script type="text/javascript">cbi_validate_field('cbi.cts.<%=self.config%>.<%=self.sectiontype%>', true, 'uciname');</script>
 					<input class="cbi-button cbi-button-add" type="submit" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" title="<%:Add%>" />
 					<% if self.invalid_cts then -%>
 						<br /><%:Invalid%></div>
