@@ -20,7 +20,7 @@ function index()
 		return
 	end
 
-	require("luci.i18n").loadc("vnstat")
+	require("luci.i18n").loadc("tinyproxy")
 	local i18n = luci.i18n.translate
 
 	entry({"admin", "services", "tinyproxy"}, alias("admin", "services", "tinyproxy", "config"), "Tinyproxy").i18n = "tinyproxy"
