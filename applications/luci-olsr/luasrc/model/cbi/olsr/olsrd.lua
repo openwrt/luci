@@ -273,6 +273,11 @@ ifs.anonymous = true
 ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd/iface/%s")
 ifs.template  = "cbi/tblsection"
 
+function ifs.create(...)
+	local sid = TypedSection.create(...)
+	luci.http.redirect(ifs.extedit % sid)
+end
+
 ign = ifs:option(Flag, "ignore", translate("Enable"))
 ign.enabled  = "0"
 ign.disabled = "1"
