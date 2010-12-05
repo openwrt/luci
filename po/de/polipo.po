@@ -11,47 +11,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Pootle 1.1.0\n"
 
-#. Polipo
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:1
-msgid "Polipo"
-msgstr "Polipo"
+msgid "Advanced Settings"
+msgstr ""
 
-#. On-Disk Cache
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:2
-msgid "On-Disk Cache"
-msgstr "Festplatten-Cache"
-
-# Verteilt? Gemeinsam?
-#. Shared cache
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:3
 #, fuzzy
-msgid "Shared cache"
-msgstr "Verteilter Cache"
+msgid "Allowed clients"
+msgstr "Zugelassene Endgeräte"
+
+msgid "Always use system DNS resolver"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Basic HTTP authentication supported. Provide username and password in "
+"username:password format."
+msgstr ""
+"Grund-Authentifizierung mittels Benutzernamen und Passwort über HTTP im "
+"Format benutzername:passwort"
+
+msgid "DNS and Query Settings"
+msgstr ""
+
+msgid "DNS server address"
+msgstr "Adresse des DNS-Servers"
+
+msgid "Delete cache files time"
+msgstr ""
+
+msgid "Disk cache location"
+msgstr "Cache-Verzeichnis"
+
+msgid "Do not query IPv6"
+msgstr ""
 
 # Klingt komisch
-#. Enable if cache (proxy) is shared by multiple users.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:4
 #, fuzzy
 msgid "Enable if cache (proxy) is shared by multiple users."
 msgstr "Cache hat mehrere Benutzer"
 
-#. To enable polipo on-disk cache cleaning (highly recommended), you should add a cron job in Scheduled Tasks services that will execute /usr/sbin/polipo_purge script. For example to perform disk cache cleanup every day at 6:00 in the morning you should add the following line in Scheduled Tasks \"0 6 * * *	/usr/sbin/polipo_purge\" (without quotes).
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:5
-msgid ""
-"To enable polipo on-disk cache cleaning (highly recommended), you should add "
-"a cron job in Scheduled Tasks services that will execute /usr/sbin/"
-"polipo_purge script. For example to perform disk cache cleanup every day at "
-"6:00 in the morning you should add the following line in Scheduled Tasks \"0 "
-"6 * * *\\t/usr/sbin/polipo_purge\" (without quotes)."
+msgid "First PMM segment size (in bytes)"
+msgstr "Größe des ersten PMM - Segment in bytes"
+
+msgid "General Settings"
 msgstr ""
 
-#. Disk cache location
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:6
-msgid "Disk cache location"
-msgstr "Cache-Verzeichnis"
+#, fuzzy
+msgid "How much RAM should Polipo use for its cache."
+msgstr "Wie viel Arbeitsspeicher Polipo für den Puffer benutzen soll."
 
-#. Location where polipo will cache files permanently. Use of external storage devices is recommended, because the cache can grow considerably. Leave it empty to disable on-disk cache.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:7
+#, fuzzy
+msgid "In RAM cache size (in bytes)"
+msgstr "Größe des Pufferspeichers im Arbeitsspeicher (bytes)"
+
+#, fuzzy
+msgid "Listen address"
+msgstr "Aktivierte Adressen/ Schnittstellen"
+
+#, fuzzy
+msgid "Listen port"
+msgstr "Aktiver Port"
+
 msgid ""
 "Location where polipo will cache files permanently. Use of external storage "
 "devices is recommended, because the cache can grow considerably. Leave it "
@@ -61,181 +80,33 @@ msgstr ""
 "externen Datenträgern empfohlen, da der Cache sehr groß werden kann. Lassen "
 "Sie diese Option leer um den Cache zu deaktivieren."
 
-#. Truncate cache files size (in bytes)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:8
-msgid "Truncate cache files size (in bytes)"
-msgstr ""
-
-#. Size to which cached files should be truncated. (default value: 1048576)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:9
-msgid ""
-"Size to which cached files should be truncated. (default value: 1048576)"
-msgstr ""
-
-#. Truncate cache files time
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:10
-msgid "Truncate cache files time"
-msgstr ""
-
-#. Time after which cached files will be truncated. (default value: 4d12h)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:11
-msgid "Time after which cached files will be truncated. (default value: 4d12h)"
-msgstr ""
-
-#. Delete cache files time
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:12
-msgid "Delete cache files time"
-msgstr ""
-
-#. Time after which cached files will be deleted. (default value: 32d)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:13
-#, fuzzy
-msgid "Time after which cached files will be deleted. (default value: 32d)"
-msgstr ""
-"Speicherort für permanent gespeicherte Dateien. Es wird die Benutzung von "
-"externen Datenträgern empfohlen, da der Cache sehr groß werden kann. Lassen "
-"Sie diese Option leer um den Cache zu deaktivieren."
-
-#. Polipo is a small and fast caching web proxy.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:14
-msgid "Polipo is a small and fast caching web proxy."
-msgstr "Polipo ist ein kleiner und schneller Webproxy."
-
-#. General
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:15
-msgid "General"
-msgstr "Allgemein"
-
-#. Allowed clients
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:16
-#, fuzzy
-msgid "Allowed clients"
-msgstr "Zugelassene Endgeräte"
-
-#. When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients that are allowed to connect. The format is IP address or network address (192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6)).
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:17
-#, fuzzy
-msgid ""
-"When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients "
-"that are allowed to connect. The format is IP address or network address "
-"(192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))."
-msgstr ""
-"Wenn der Server auf alle Anfragen (0.0.0.0 bzw. ::) hört, dann müssen die "
-"zugelassenen Gegenpunkte, die berechtig sind eine Verbindung aufzubauen, "
-"hier eingetragen werden. Als Format hier bitte die IP-Adresse oder "
-"Nerzwerkmaske auswählen (192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 "
-"(IPv6))"
-
-#. In RAM cache size (in bytes)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:18
-#, fuzzy
-msgid "In RAM cache size (in bytes)"
-msgstr "Größe des Pufferspeichers im Arbeitsspeicher (bytes)"
-
-#. How much RAM should Polipo use for its cache.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:19
-#, fuzzy
-msgid "How much RAM should Polipo use for its cache."
-msgstr "Wie viel Arbeitsspeicher Polipo für den Puffer benutzen soll."
-
-#. DNS server address
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:20
-msgid "DNS server address"
-msgstr "Adresse des DNS-Servers"
-
-#. Set the DNS server address to use, if you want Polipo to use different DNS server than the host system.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:21
-#, fuzzy
-msgid ""
-"Set the DNS server address to use, if you want Polipo to use different DNS "
-"server than the host system."
-msgstr ""
-"Geben Sie einen DNS-Server an, wenn Polipo diesen Server statt den DNS-"
-"Server für das System verwenden soll."
-
-#. Query DNS for IPv6
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:22
-#, fuzzy
-msgid "Query DNS for IPv6"
-msgstr "DNS-Anfragen für IPv6"
-
-#. false = Do not query IPv6; reluctantly = Query both, prefer IPv4; happily = Query both, prefer IPv6; true = Query only IPv6
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:23
-#, fuzzy
-msgid ""
-"false = Do not query IPv6; reluctantly = Query both, prefer IPv4; happily = "
-"Query both, prefer IPv6; true = Query only IPv6"
-msgstr ""
-"false = Beachtet IPv6 nicht, nur IPv4 möglich; reluctantly = Beachtet sowohl "
-"IPv4 als auch IPv6, IPv4 wird bevorzugt; happily = Beachtet sowohl IPv4 als "
-"auch IPv6, IPv6 wird bevorzugt; true = Beachtet IPv4 nicht, nur IPv6 möglich"
-
-#. Query DNS by hostname
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:24
-msgid "Query DNS by hostname"
-msgstr ""
-
-#. false = Never use system DNS resolver; reluctantly = Query DNS directly, if DNS server is unavailable fail to system DNS resolver; happily = Query DNS directly, if host could not be found fallback to system DNS resolver; true = Always use system DNS resolver
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:25
-msgid ""
-"false = Never use system DNS resolver; reluctantly = Query DNS directly, if "
-"DNS server is unavailable fail to system DNS resolver; happily = Query DNS "
-"directly, if host could not be found fallback to system DNS resolver; true = "
-"Always use system DNS resolver"
-msgstr ""
-
-#. Syslog facility
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:26
-#, fuzzy
-msgid "Syslog facility"
-msgstr "Einstellungen zur Protokollierungsdatei"
-
-#. Log file location
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:27
 #, fuzzy
 msgid "Log file location"
 msgstr "Ort der Protokollierungsdatei"
 
-#. Use of external storage device is recommended, because the log file is written frequently and can grow considerably.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:28
-#, fuzzy
-msgid ""
-"Use of external storage device is recommended, because the log file is "
-"written frequently and can grow considerably."
-msgstr ""
-"Es sollte ein Externes Speichermedium verwendet werden, da die "
-"Protokolldatei regelmäßig geschrieben wird und dadurch sehr groß werden kann."
-
-#. Log to syslog
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:29
 #, fuzzy
 msgid "Log to syslog"
 msgstr "Protokoll im Systemprotokoll (syslog) speichern"
 
-#. Parent proxy authentication
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:30
-#, fuzzy
-msgid "Parent proxy authentication"
-msgstr "Authentifizierung für übergeordneten Proxyserver"
-
-#. Basic HTTP authentication supported. Provide username and password in username:password format.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:31
-#, fuzzy
-msgid ""
-"Basic HTTP authentication supported. Provide username and password in "
-"username:password format."
+msgid "Logging and RAM"
 msgstr ""
-"Grund-Authentifizierung mittels Benutzernamen und Passwort über HTTP im "
-"Format benutzername:passwort"
 
-#. Parent proxy address
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:32
+msgid "Never use system DNS resolver"
+msgstr ""
+
+msgid "On-Disk Cache"
+msgstr "Festplatten-Cache"
+
+msgid "PMM segments size (in bytes)"
+msgstr "Größe des normalen PMM - Segment in bytes"
+
+msgid "Parent Proxy"
+msgstr ""
+
 #, fuzzy
 msgid "Parent proxy address"
 msgstr "Adresse des Übergeordneten Proxyservers"
 
-#. Parent proxy address (in host:port format), to which Polipo will forward the requests.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:33
 #, fuzzy
 msgid ""
 "Parent proxy address (in host:port format), to which Polipo will forward the "
@@ -244,14 +115,81 @@ msgstr ""
 "Adresse des Übergeordneten Proxyservers (in host:port Format), zu dem Polipo "
 "die Anfragen weiterleiten soll"
 
-#. Listen address
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:34
 #, fuzzy
-msgid "Listen address"
-msgstr "Aktivierte Adressen/ Schnittstellen"
+msgid "Parent proxy authentication"
+msgstr "Authentifizierung für übergeordneten Proxyserver"
 
-#. The interface on which Polipo will listen. To listen on all interfaces use 0.0.0.0 or :: (IPv6).
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:35
+msgid "Polipo"
+msgstr "Polipo"
+
+msgid "Polipo is a small and fast caching web proxy."
+msgstr "Polipo ist ein kleiner und schneller Webproxy."
+
+msgid "Poor Man's Multiplexing"
+msgstr "<abbr title=\"Poor Mans Multiplexing\">PMM</abbr>"
+
+msgid ""
+"Poor Man's Multiplexing (PMM) is a technique that simulates multiplexing by "
+"requesting an instance in multiple segments. It tries to lower the latency "
+"caused by the weakness of HTTP protocol. NOTE: some sites may not work with "
+"PMM enabled."
+msgstr ""
+
+msgid "Port on which Polipo will listen"
+msgstr ""
+
+msgid "Proxy"
+msgstr ""
+
+msgid "Query DNS by hostname"
+msgstr ""
+
+msgid "Query DNS directly, fallback to system resolver"
+msgstr ""
+
+msgid "Query DNS directly, for unknown hosts fall back to system resolver"
+msgstr ""
+
+#, fuzzy
+msgid "Query DNS for IPv6"
+msgstr "DNS-Anfragen für IPv6"
+
+msgid "Query IPv4 and IPv6, prefer IPv4"
+msgstr ""
+
+msgid "Query IPv4 and IPv6, prefer IPv6"
+msgstr ""
+
+msgid "Query only IPv6"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Set the DNS server address to use, if you want Polipo to use different DNS "
+"server than the host system."
+msgstr ""
+"Geben Sie einen DNS-Server an, wenn Polipo diesen Server statt den DNS-"
+"Server für das System verwenden soll."
+
+# Verteilt? Gemeinsam?
+#, fuzzy
+msgid "Shared cache"
+msgstr "Verteilter Cache"
+
+msgid ""
+"Size of the first PMM segment. If not defined, it defaults to twice the PMM "
+"segment size."
+msgstr ""
+"Größe des ersten Segments. Wenn diese Option leer ist, wird hierfür die "
+"Doppelte Größe des PMM-Segments angenommen"
+
+msgid "Size to which cached files should be truncated"
+msgstr ""
+
+#, fuzzy
+msgid "Syslog facility"
+msgstr "Einstellungen zur Protokollierungsdatei"
+
 #, fuzzy
 msgid ""
 "The interface on which Polipo will listen. To listen on all interfaces use "
@@ -260,54 +198,72 @@ msgstr ""
 "Auf diesen Schnittstellen soll Polipo aktiviert sein. Um Polipo auf allen "
 "Schnittstellen zu aktivieren bitte 0.0.0.0 bzw. :: (IPv6) angeben"
 
-#. Listen port
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:36
-#, fuzzy
-msgid "Listen port"
-msgstr "Aktiver Port"
-
-#. Port on which Polipo will listen. (default value: 8123)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:37
-#, fuzzy
-msgid "Port on which Polipo will listen. (default value: 8123)"
-msgstr ""
-"Beschreibt, welcher Port von Polipo genutzt werden soll. Grundeinstellung: "
-"Port 8123"
-
-#. Poor Man&#39;s Multiplexing
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:38
-msgid "Poor Man's Multiplexing"
-msgstr "<abbr title=\"Poor Mans Multiplexing\">PMM</abbr>"
-
-#. Poor Man&#39;s Multiplexing (PMM) is a technique that simulates multiplexing by requesting an instance in multiple segments. It tries to lower the latency caused by the weakness of HTTP protocol. NOTE: some sites may not work with PMM enabled.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:39
-msgid ""
-"Poor Man's Multiplexing (PMM) is a technique that simulates multiplexing by "
-"requesting an instance in multiple segments. It tries to lower the latency "
-"caused by the weakness of HTTP protocol. NOTE: some sites may not work with "
-"PMM enabled."
+msgid "Time after which cached files will be deleted"
 msgstr ""
 
-#. First PMM segment size (in bytes)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:40
-msgid "First PMM segment size (in bytes)"
-msgstr "Größe des ersten PMM - Segment in bytes"
-
-#. Size of the first PMM segment. If not defined, it defaults to twice the PMM segment size.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:41
-msgid ""
-"Size of the first PMM segment. If not defined, it defaults to twice the PMM "
-"segment size."
+msgid "Time after which cached files will be truncated"
 msgstr ""
-"Größe des ersten Segments. Wenn diese Option leer ist, wird hierfür die "
-"Doppelte Größe des PMM-Segments angenommen"
 
-#. PMM segments size (in bytes)
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:42
-msgid "PMM segments size (in bytes)"
-msgstr "Größe des normalen PMM - Segment in bytes"
-
-#. To enable PMM, PMM segment size must be set to some positive value.
-#: applications/luci-polipo/luasrc/i18n/polipo.en.lua:43
 msgid "To enable PMM, PMM segment size must be set to some positive value."
 msgstr "Um PMM zu aktivieren muss hier ein Wert eingetragen werden"
+
+msgid "Truncate cache files size (in bytes)"
+msgstr ""
+
+msgid "Truncate cache files time"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Use of external storage device is recommended, because the log file is "
+"written frequently and can grow considerably."
+msgstr ""
+"Es sollte ein Externes Speichermedium verwendet werden, da die "
+"Protokolldatei regelmäßig geschrieben wird und dadurch sehr groß werden kann."
+
+msgid ""
+"When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients "
+"that are allowed to connect. The format is IP address or network address "
+"(192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))"
+msgstr ""
+
+msgid "enable"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Time after which cached files will be deleted. (default value: 32d)"
+#~ msgstr ""
+#~ "Speicherort für permanent gespeicherte Dateien. Es wird die Benutzung von "
+#~ "externen Datenträgern empfohlen, da der Cache sehr groß werden kann. "
+#~ "Lassen Sie diese Option leer um den Cache zu deaktivieren."
+
+#~ msgid "General"
+#~ msgstr "Allgemein"
+
+#, fuzzy
+#~ msgid ""
+#~ "When listen address is set to 0.0.0.0 or :: (IPv6), you must list clients "
+#~ "that are allowed to connect. The format is IP address or network address "
+#~ "(192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))."
+#~ msgstr ""
+#~ "Wenn der Server auf alle Anfragen (0.0.0.0 bzw. ::) hört, dann müssen die "
+#~ "zugelassenen Gegenpunkte, die berechtig sind eine Verbindung aufzubauen, "
+#~ "hier eingetragen werden. Als Format hier bitte die IP-Adresse oder "
+#~ "Nerzwerkmaske auswählen (192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 "
+#~ "(IPv6))"
+
+#, fuzzy
+#~ msgid ""
+#~ "false = Do not query IPv6; reluctantly = Query both, prefer IPv4; happily "
+#~ "= Query both, prefer IPv6; true = Query only IPv6"
+#~ msgstr ""
+#~ "false = Beachtet IPv6 nicht, nur IPv4 möglich; reluctantly = Beachtet "
+#~ "sowohl IPv4 als auch IPv6, IPv4 wird bevorzugt; happily = Beachtet sowohl "
+#~ "IPv4 als auch IPv6, IPv6 wird bevorzugt; true = Beachtet IPv4 nicht, nur "
+#~ "IPv6 möglich"
+
+#, fuzzy
+#~ msgid "Port on which Polipo will listen. (default value: 8123)"
+#~ msgstr ""
+#~ "Beschreibt, welcher Port von Polipo genutzt werden soll. "
+#~ "Grundeinstellung: Port 8123"
