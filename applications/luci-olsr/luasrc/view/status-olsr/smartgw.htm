@@ -1,0 +1,62 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: mid.htm 5448 2009-10-31 15:54:11Z jow $
+
+-%>
+<%
+require("luci.model.uci")
+local uci = luci.model.uci.cursor_state()
+
+uci:foreach("olsrd", "olsrd", function(s)
+        if s.SmartGateway and s.SmartGateway == "yes" then has_smartgw  = true end
+end)
+%>
+
+<%+header%>
+
+<h2><a id="content" name="content"><%:SmartGW announcements%></a></h2>
+<% if has_smartgw then %>
+<p><%:Overview of smart gateways in this network%></p>
+<br />
+<table class="smalltext" cellspacing="0" cellpadding="6">
+<tr>
+<th><%:Gateway%></th>
+<th><%:Status%></th>
+<th><%:ETX%></th>
+<th><%:Hops%></th>
+<th><%:Uplink%></th>
+<th><%:Downlink%></th>
+<th><%:IPv4%></th>
+<th><%:IPv6%></th>
+<th><%:Prefix%></th>
+
+</tr>
+<% for k, gw in ipairs(gws) do %>
+<tr>
+<td><a href="http://<%=gw["Gateway IP"]%>/cgi-bin-status.html"><%=gw["Gateway IP"]%></a></td>
+<td><%=gw.Status%></td>
+<td><%=gw.ETX%></td>
+<td><%=gw.Hopcnt%></td>
+<td><%=gw.Uplink%></td>
+<td><%=gw.Downlnk%></td>
+<td><%=gw.IPv4%></td>
+<td><%=gw.IPv6%></td>
+<td><%=gw.Prefix%></td>
+</tr>
+<% end %>
+</table>
+<br />
+
+<% else %>
+SmartGateway is not configured on this system.
+<% end %>
+<%+footer%>

@@ -34,6 +34,11 @@ function index()
 	page.title  = "MID"
 	page.order  = 50
 
+	local page  = node("admin", "status", "olsr", "smartgw")
+	page.target = call("action_smartgw")
+	page.title  = "SmartGW"
+	page.order  = 60
+
 	local ol = entry(
 		{"admin", "services", "olsrd"},
 		cbi("olsr/olsrd"), "OLSR"
