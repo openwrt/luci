@@ -13,6 +13,13 @@ $Id$
 
 ]]--
 
+function write_float(self, section, value)
+    local n = tonumber(value)
+    if n ~= nil then
+        return Value.write(self, section, "%.1f" % n)
+    end
+end
+
 m = Map("olsrd", translate("OLSR Daemon - Interface"),
         translate("The OLSR daemon is an implementation of the Optimized Link State Routing protocol. "..
 	"As such it allows mesh routing for any network equipment. "..
@@ -106,46 +113,52 @@ ip6s.optional = true
 ip6s.datatype = "ip6addr"
 ip6s.placeholder = "0::/0"
 
-
 hi = i:taboption("timing", Value, "HelloInterval", translate("Hello interval"))
 hi.optional = true
 hi.datatype = "ufloat"
 hi.placeholder = "5.0"
+hi.write = write_float
 
 hv = i:taboption("timing", Value, "HelloValidityTime", translate("Hello validity time"))
 hv.optional = true
 hv.datatype = "ufloat"
 hv.placeholder = "40.0"
+hv.write = write_float
 
 ti = i:taboption("timing", Value, "TcInterval", translate("TC interval"))
 ti.optional = true
 ti.datatype = "ufloat"
 ti.placeholder = "2.0"
+ti.write = write_float
 
 tv = i:taboption("timing", Value, "TcValidityTime", translate("TC validity time"))
 tv.optional = true
 tv.datatype = "ufloat"
 tv.placeholder = "256.0"
+tv.write = write_float
 
 mi = i:taboption("timing", Value, "MidInterval", translate("MID interval"))
 mi.optional = true
 mi.datatype = "ufloat"
 mi.placeholder = "18.0"
+mi.write = write_float
 
 mv = i:taboption("timing", Value, "MidValidityTime", translate("MID validity time"))
 mv.optional = true
 mv.datatype = "ufloat"
 mv.placeholder = "324.0"
+mv.write = write_float
 
 ai = i:taboption("timing", Value, "HnaInterval", translate("HNA interval"))
 ai.optional = true
 ai.datatype = "ufloat"
 ai.placeholder = "18.0"
+ai.write = write_float
 
 av = i:taboption("timing", Value, "HnaValidityTime", translate("HNA validity time"))
 av.optional = true
 av.datatype = "ufloat"
 av.placeholder = "108.0"
-
+av.write = write_float
 
 return m
