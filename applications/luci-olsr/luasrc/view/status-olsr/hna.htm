@@ -24,7 +24,12 @@ $Id$
 <% for k, route in ipairs(routes) do %>
 <tr>
 <td><%=route.Destination%></td>
-<td><a href="http://<%=route.Gateway%>"><%=route.Gateway%></a></td>
+<td>
+<a href="http://<%=route.Gateway%>/cgi-bin-status.html"><%=route.Gateway%></a>
+<% if route.Hostname then %>
+        / <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>
+<% end %>
+</td>
 </tr>
 <% end %>
 </table>

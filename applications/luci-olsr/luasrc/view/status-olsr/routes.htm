@@ -40,7 +40,12 @@ $Id$
 %>
 <tr>
 <td><%=route.Destination%></td>
-<td><%=route["Gateway IP"]%></td>
+<td>
+<a href="http://<%=route["Gateway IP"]%>/cgi-bin-status.html"><%=route["Gateway IP"]%></a>
+<% if route.Hostname then %>
+	/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>  
+<% end %>
+</td>
 <td><%=route.Interface%></td>
 <td><%=route.Metric%></td>
 <td style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>

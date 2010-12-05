@@ -19,7 +19,9 @@ $Id$
 <table class="smalltext" cellspacing="0" cellpadding="6">
 <tr>
 <th><%:Neighbour IP%></th>
+<th><%:Hostname%></th>
 <th><%:Local interface IP%></th>
+<th><%:Device%></th>
 <th>LQ</th>
 <th>NLQ</th>
 <th>ETX</th>
@@ -39,8 +41,10 @@ $Id$
 	end
 %>
 <tr>
-<td><a href="http://<%=link["Remote IP"]%>/cgi-bin-nodes.html"><%=link["Remote IP"]%></a></td>
+<td><a href="http://<%=link["Remote IP"]%>/cgi-bin-status.html"><%=link["Remote IP"]%></a></td>
+<td><a href="http://<%=link["Hostname"]%>/cgi-bin-status.html"><%=link["Hostname"]%></a></td>
 <td><%=link["Local IP"]%></td>
+<td><%=link["Local Device"]%></td>
 <td><%=link.LQ%></td>
 <td><%=link.NLQ%></td>
 <td style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
