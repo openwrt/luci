@@ -155,7 +155,7 @@ function _iface_ignore(x)
 		x:match("^wmaster%d") or x:match("^wifi%d") or x:match("^hwsim%d") or
 		x:match("^imq%d") or x:match("^mon.wlan%d") or x:match("^6in4-%w") or
 		x:match("^6to4-%w") or x:match("^3g-%w") or x:match("^ppp-%w") or
-		x:match("^pppoe-%w") or x:match("^pppoa-%w") or	x == "lo"
+		x:match("^pppoe-%w") or x:match("^pppoa-%w") or	x == "sit0" or x == "lo"
 	)
 end
 
