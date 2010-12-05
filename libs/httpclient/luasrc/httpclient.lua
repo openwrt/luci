@@ -194,7 +194,7 @@ function request_raw(uri, options)
 			local cdo = c.flags.domain
 			local cpa = c.flags.path
 			if   (cdo == host or cdo == "."..host or host:sub(-#cdo) == cdo) 
-			 and (cpa == "/" or cpa .. "/" == path:sub(#cpa+1))
+			 and (cpa == path or cpa == "/" or cpa .. "/" == path:sub(#cpa+1))
 			 and (not c.flags.secure or pr == "https")
 			then
 				message[#message+1] = "Cookie: " .. c.key .. "=" .. c.value
@@ -242,9 +242,9 @@ function request_raw(uri, options)
 	while line and line ~= "" do
 		local key, val = line:match("^([%w-]+)%s?:%s?(.*)")
 		if key and key ~= "Status" then
-			if type(response[key]) == "string" then
+			if type(response.headers[key]) == "string" then
 				response.headers[key] = {response.headers[key], val}
-			elseif type(response[key]) == "table" then
+			elseif type(response.headers[key]) == "table" then
 				response.headers[key][#response.headers[key]+1] = val
 			else
 				response.headers[key] = val
