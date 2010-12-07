@@ -1,12 +1,11 @@
 <%
-require "luci.sys"
-require "luci.tools.webadmin"
-
+local sys = require "luci.sys"
+local twa = require "luci.tools.webadmin"
 -- System
-
-local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
-local uptime = luci.sys.uptime()
-local load1, load5, load15 = luci.sys.loadavg()
+local system, model, memtotal, memcached, membuffers, memfree = sys.sysinfo()
+local uptime = twa.date_format(tonumber(sys.uptime()))
+local_time = os.date("%c")
+local load1, load5, load15 = sys.loadavg()
 local load = string.format("%.2f, %.2f, %.2f", load1, load5, load15)
 local memory = string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
         tonumber(memtotal) / 1024,
@@ -17,24 +16,18 @@ local memory = string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
         100 * memfree / memtotal,
         tostring(translate("free"))
 )
-local_time = os.date("%c")
-local uptime = luci.tools.webadmin.date_format(tonumber(uptime))
 
--- Wireless
-local uci = require "luci.model.uci".cursor()
-ifaces = {}
-uci:foreach("wireless", "wifi-iface", function(s)
-	if s.network then
-		table.insert(ifaces, s.network)
-		if (uci:get("network", s.network, "ifname")) then
-			has_ifaces = true
-		end
-	end
-end)
+-- wireless
+local ntm = require "luci.model.network".init()
+local devices  = ntm:get_wifidevs()
+local netlist = { }
+local netdevs = { }
+local dev
+local has_iwinfo = pcall(require, "iwinfo")
 
 -- Routes
-local defroutev4 = luci.sys.net.defaultroute()
-local defroutev6 = luci.sys.net.defaultroute6 ()
+local defroutev4 = sys.net.defaultroute()
+local defroutev6 = sys.net.defaultroute6 ()
 
 %>
 <%+header%>
@@ -51,9 +44,18 @@ local defroutev6 = luci.sys.net.defaultroute6 ()
 	</div>
 </div>
 
-<% if has_ifaces == true then %>
+<% if devices[1] then %>
+
 <div class="cbi-map">
 	<h2><%:Wireless Overview%></h2>
+	
+		<% if not has_iwinfo then %>
+			<div class="errorbox">
+				<strong><%:Package libiwinfo required!%></strong><br />
+				<%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%>
+			</div>
+		<% end %>
+
 		<div class="cbi-section">
 			<div class="cbi-section-node">
 				<table class="cbi-section-table">
@@ -63,54 +65,68 @@ local defroutev6 = luci.sys.net.defaultroute6 ()
 						<th class="cbi-section-table-cell"><%:SSID%></th>
 						<th class="cbi-section-table-cell"><%:BSSID%></th>
 						<th class="cbi-section-table-cell"><%:Channel%></th>
-						<th class="cbi-section-table-cell"><%:Mode%></th><th><%:TX%>-<%:Power%></th>
+						<th class="cbi-section-table-cell"><%:Mode%></th>
+						<th class="cbi-section-table-cell"><%:TX%>-<%:Power%></th>
+						<th class="cbi-section-table-cell"><%:Interface%></th>
 					</tr>
+	<% 
+	for _, dev in ipairs(devices) do
+	local net
+		for _, net in ipairs(dev:get_wifinets()) do
+			netlist[#netlist+1] = net:ifname()
+			netdevs[net:ifname()] = dev:name()
 
-					
-	<% for k,v in pairs(ifaces) do
-	local iface = uci:get("network", v, "ifname")
-		if iface then
-		        iwinf = luci.sys.wifi.getiwinfo(iface)
-			local signal = iwinf.signal
-			local noise = iwinf.noise
-			local q = iwinf.quality
-			local qmax = iwinf.quality_max
-			local qperc = q / qmax * 100
-			
-			if qperc == 0 then
-                                icon = "signal-none.png"
-			elseif qperc < 26 then
-				icon = "signal-0-25.png"
-			elseif qperc < 51 then
-				icon = "signal-25-50.png"
-			elseif qperc < 76 then
-                                icon = "signal-50-75.png"
-			elseif qperc < 100 then
-                                icon = "signal-75-100.png"
-			else
-				icon = "signal-0.png"
-			end
+			if net.iwdata.ifname then
+				local signal = net.iwinfo.signal or "N/A"
+				local noise = net.iwinfo.noise or "N/A"
+				local q = net.iwinfo.quality or "0"
+				local qmax = net.iwinfo.quality_max or "100"
+				local qperc = q / qmax * 100
 
-			signal_string = "<img src='"..resource.."/icons/"..icon.."' title='Signal: "..signal.." db / Noise: "..noise.." db' alt='Signal Quality'></img>"
+				if qperc == 0 then
+					icon = "signal-none.png"
+				elseif qperc < 26 then
+					icon = "signal-0-25.png"
+				elseif qperc < 51 then
+					icon = "signal-25-50.png"
+				elseif qperc < 76 then
+					icon = "signal-50-75.png"
+				elseif qperc < 100 then
+					icon = "signal-75-100.png"
+				else
+					icon = "signal-0.png"
+				end
 
-			local ssid = iwinf.ssid
-			local bssid = iwinf.bssid	
-			local chan = iwinf.channel
-			local mode = iwinf.mode
-			local txpwr = iwinf.txpower.." dbm"
-			local bitrate = (iwinf.bitrate / 1000).."Mb/s"
-			%>
-					<tr class="cbi-section-table-row cbi-rowstyle-1">
+				signal_string = "<img src='"..resource.."/icons/"..icon.."' title='Signal: "..signal.." db / Noise: "..noise.." db' alt='Signal Quality'></img>"
+
+				local ssid = net.iwinfo.ssid or "N/A"
+				local bssid = net.iwinfo.bssid or "N/A"
+				local chan = net.iwinfo.channel or "N/A"
+				local mode = net.iwinfo.mode or "N/A"
+				local txpwr = net.iwinfo.txpower or "N/A"
+				if txpwr ~= "N/A" then
+					txpwr = txpwr.." dbm"
+				end
+				local bitrate = net.iwinfo.bitrate or "N/A"
+				if bitrate ~= "N/A" then
+					bitrate = ( bitrate / 1000 ).."Mb/s"
+				end
+				local interface = net.iwdata.ifname or "N/A"
+	%>
+						<tr class="cbi-section-table-row cbi-rowstyle-1">
 						<td class="cbi-value-field"><%=signal_string%></td>
 						<td class="cbi-value-field"><%=bitrate%></td>
 						<td class="cbi-value-field"><%=ssid%></td>
 						<td class="cbi-value-field"><%=bssid%></td>
 						<td class="cbi-value-field"><%=chan%></td>
-						<td class="cbi-value-field"><%=mode%></td><td><%=txpwr%></td>
+						<td class="cbi-value-field"><%=mode%></td>
+						<td class="cbi-value-field"><%=txpwr%></td>
+						<td class="cbi-value-field"><%=interface%></td>
 					</tr>
-		<% end %>
-	<% end %>
-				</table>
+			<% end
+		end
+	end %>
+			</table>
 		</div>
 	</div>
 </div>
@@ -119,39 +135,44 @@ local defroutev6 = luci.sys.net.defaultroute6 ()
 <div class="cbi-map">
 	<h2><%:Default routes%></h2>
 		<div class="cbi-section">
-                        <div class="cbi-section-node">
-                                <table class="cbi-section-table">
-					<% if not defroutev4 and not defroutev6 then %>
-						<%:No defaultroutes known.%>
-					<%else%>
+			<div class="cbi-section-node">
+				<table class="cbi-section-table">
+
+<% if not defroutev4 and not defroutev6 then %>
+	<%:No default routes known.%>
+<%else%>
 						<tr class="cbi-section-table-titles">
 							<th class="cbi-section-table-cell"><%:Network%></th>
 							<th class="cbi-section-table-cell"><%:Interface%></th>
 							<th class="cbi-section-table-cell"><%:Gateway%></th>
 							<th class="cbi-section-table-cell"><%:Metric%></th>
 						</tr>
+
 	<% if defroutev4 then %>
+
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
 							<td class="cbi-value-field"><%=defroutev4.dest:string()%></td>
 							<td class="cbi-value-field"><%=defroutev4.device%></td>
 							<td class="cbi-value-field"><%=defroutev4.gateway:string()%></td>
 							<td class="cbi-value-field"><%=defroutev4.metric%></td>
 						</tr>
-	<% end %>
-	<% if defroutev6 then %>
+
+	<% end
+	if defroutev6 then %>
+
 						<tr class="cbi-section-table-row cbi-rowstyle-2">
 							<td class="cbi-value-field"><%=defroutev6.dest:string()%></td>
 							<td class="cbi-value-field"><%=defroutev6.device%></td>
 							<td class="cbi-value-field"><%=defroutev6.nexthop:string()%></td>
 							<td class="cbi-value-field"><%=defroutev6.metric%></td>
 						</tr>
+
 	<% end %>
+
 				</table>
 		</div>
 	</div>
 </div>
-
 <% end %>
 
 <%+footer%>
-
