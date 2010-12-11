@@ -32,7 +32,7 @@ sub dec_tpl_str
 }
 
 
-if( open F, "find @ARGV -type f '(' -name '*.htm' -or -name '*.lua' ')' |" )
+if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 {
 	while( defined( my $file = readline F ) )
 	{

@@ -23,7 +23,7 @@ luasource:
 	cp -pR luasrc/* dist$(LUCI_MODULEDIR) 2>/dev/null || true
 	cp -pR lua/* dist$(LUA_MODULEDIR) 2>/dev/null || true
 	cp -pR htdocs/* dist$(HTDOCS) 2>/dev/null || true
-	for i in $$(find dist -name .svn -or -name .gitignore); do rm -rf $$i || true; done
+	for i in $$(find dist -name .svn -o -name .gitignore); do rm -rf $$i || true; done
   ifneq ($(PO),)
 	mkdir -p dist$(LUCI_I18NDIR)
 	for file in $(PO); do \
