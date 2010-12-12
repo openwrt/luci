@@ -457,16 +457,16 @@ function createindex_plain(path, suffixes)
 	index = {}
 
 	for i,c in ipairs(controllers) do
-		local module = "luci.controller." .. c:sub(#path+1, #c):gsub("/", ".")
+		local modname = "luci.controller." .. c:sub(#path+1, #c):gsub("/", ".")
 		for _, suffix in ipairs(suffixes) do
-			module = module:gsub(suffix.."$", "")
+			modname = modname:gsub(suffix.."$", "")
 		end
 
-		local mod = require(module)
+		local mod = require(modname)
 		local idx = mod.index
 
 		if type(idx) == "function" then
-			index[module] = idx
+			index[modname] = idx
 		end
 	end
 
