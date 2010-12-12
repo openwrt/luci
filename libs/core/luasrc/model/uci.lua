@@ -30,8 +30,9 @@ local table = require "table"
 
 
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
-local error, pairs, ipairs, tostring = error, pairs, ipairs, tostring
-local require, getmetatable, type = require, getmetatable, type
+local require, getmetatable = require, getmetatable
+local error, pairs, ipairs = error, pairs, ipairs
+local type, tostring, tonumber = type, tostring, tonumber
 
 --- LuCI UCI model library.
 -- The typical workflow for UCI is:  Get a cursor instance from the
@@ -165,6 +166,34 @@ function Cursor.get_list(self, config, section, option)
 		return ( type(val) == "table" and val or { val } )
 	end
 	return nil
+end
+
+--- Get the given option from the first section with the given type.
+-- @param config	UCI config
+-- @param type		UCI section type
+-- @param option	UCI option (optional)
+-- @param default	Default value (optional)
+-- @return			UCI value
+function Cursor.get_first(self, conf, stype, opt, def)
+	local rv = def
+
+	self:foreach(conf, stype,
+		function(s)
+			local val = not opt and s['.name'] or s[opt]
+
+			if type(def) == "number" then
+				val = tonumber(val)
+			elseif type(def) == "boolean" then
+				val = (val == "1" or val == "true" or val == "enabled")
+			end
+
+			if val ~= nil then
+				rv = val
+				return false
+			end
+		end)
+
+	return rv
 end
 
 --- Set given values as list.
