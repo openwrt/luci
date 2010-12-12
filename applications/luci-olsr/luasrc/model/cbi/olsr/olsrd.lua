@@ -307,34 +307,34 @@ network.template = "cbi/network_netinfo"
 
 mode = ifs:option(DummyValue, "Mode", translate("Mode"))
 function mode.cfgvalue(...)
-	return Value.cfgvalue(...) or "mesh"
+	return Value.cfgvalue(...) or m.uci:get_first("olsrd", "InterfaceDefaults", "Mode", "mesh")
 end
 
 hello = ifs:option(DummyValue, "_hello", translate("Hello"))
 function hello.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "HelloInterval"))     or 5
-	local v = tonumber(m.uci:get("olsrd", section, "HelloValidityTime")) or 40
+	local i = tonumber(m.uci:get("olsrd", section, "HelloInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HelloInterval", 5))
+	local v = tonumber(m.uci:get("olsrd", section, "HelloValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HelloValidityTime", 40))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
 tc = ifs:option(DummyValue, "_tc", translate("TC"))
 function tc.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "TcInterval"))     or 2
-	local v = tonumber(m.uci:get("olsrd", section, "TcValidityTime")) or 256
+	local i = tonumber(m.uci:get("olsrd", section, "TcInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "TcInterval", 2))
+	local v = tonumber(m.uci:get("olsrd", section, "TcValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "TcValidityTime", 256))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
 mid = ifs:option(DummyValue, "_mid", translate("MID"))
 function mid.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "MidInterval"))     or 18
-	local v = tonumber(m.uci:get("olsrd", section, "MidValidityTime")) or 324
+	local i = tonumber(m.uci:get("olsrd", section, "MidInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "MidInterval", 18))
+	local v = tonumber(m.uci:get("olsrd", section, "MidValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "MidValidityTime", 324))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
 hna = ifs:option(DummyValue, "_hna", translate("HNA"))
 function hna.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "HnaInterval"))     or 18
-	local v = tonumber(m.uci:get("olsrd", section, "HnaValidityTime")) or 108
+	local i = tonumber(m.uci:get("olsrd", section, "HnaInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HnaInterval", 18))
+	local v = tonumber(m.uci:get("olsrd", section, "HnaValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HnaValidityTime", 108))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
