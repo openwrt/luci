@@ -331,6 +331,9 @@ $(eval $(call application,firewall,Firmware and Portforwarding application,\
 $(eval $(call application,olsr,OLSR configuration and status module,\
 	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
 
+$(eval $(call application,olsr-viz,OLSR Visualisation,\
+	+PACKAGE_luci-app-olsr-viz:luci-app-olsr +PACKAGE_luci-app-olsr-viz:olsrd-mod-txtinfo))
+
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
 
@@ -363,7 +366,6 @@ $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 
 $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),\
 	+luci-app-voice-core +luci-app-diag-devinfo))
-
 
 $(eval $(call application,upnp,Universal Plug & Play configuration module,\
 	+PACKAGE_luci-app-upnp:miniupnpd))
