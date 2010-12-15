@@ -17,7 +17,7 @@ limitations under the License.
 
 ]]--
 
-
+exectime = os.clock()
 require "nixio.util"
 require "luci.http"
 require "luci.sys"
