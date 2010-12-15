@@ -166,6 +166,7 @@ end
 -- @return	String containing the memory used for caching in kB
 -- @return	String containing the memory used for buffering in kB
 -- @return	String containing the free memory amount in kB
+-- @return	String containing the cpu bogomips (number)
 function sysinfo()
 	local cpuinfo = fs.readfile("/proc/cpuinfo")
 	local meminfo = fs.readfile("/proc/meminfo")
@@ -176,6 +177,7 @@ function sysinfo()
 	local memcached = tonumber(meminfo:match("\nCached:%s*(%d+)"))
 	local memfree = tonumber(meminfo:match("MemFree:%s*(%d+)"))
 	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
+	local bogomips = tonumber(cpuinfo:match("BogoMIPS.-:%s*([^\n]+)"))
 
 	if not system then
 		system = nixio.uname().machine
@@ -187,7 +189,7 @@ function sysinfo()
 		model = cpuinfo:match("cpu model.-:%s*([^\n]+)")
 	end
 
-	return system, model, memtotal, memcached, membuffers, memfree
+	return system, model, memtotal, memcached, membuffers, memfree, bogomips
 end
 
 --- Retrieves the output of the "logread" command.

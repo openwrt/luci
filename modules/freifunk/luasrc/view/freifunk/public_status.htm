@@ -2,20 +2,32 @@
 local sys = require "luci.sys"
 local twa = require "luci.tools.webadmin"
 -- System
-local system, model, memtotal, memcached, membuffers, memfree = sys.sysinfo()
+local system, model, memtotal, memcached, membuffers, memfree, bogomips = sys.sysinfo()
 local uptime = twa.date_format(tonumber(sys.uptime()))
 local_time = os.date("%c")
 local load1, load5, load15 = sys.loadavg()
 local load = string.format("%.2f, %.2f, %.2f", load1, load5, load15)
-local memory = string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
-        tonumber(memtotal) / 1024,
-        100 * memcached / memtotal,
-        tostring(translate("cached")),
-        100 * membuffers / memtotal,
-        tostring(translate("buffered")),
-        100 * memfree / memtotal,
-        tostring(translate("free"))
+
+local mem = string.format("%.2f MB (%.2f %s, %.2f %s, %.2f %s, %.2f %s)",
+tonumber(memtotal) / 1024,
+tonumber(memtotal - memfree) / 1024,
+tostring(i18n.translate("used")),
+memfree / 1024,
+tostring(i18n.translate("free")),
+memcached / 1024,
+tostring(i18n.translate("cached")),
+membuffers / 1024,
+tostring(i18n.translate("buffered"))
 )
+
+-- update interval
+local bogomips = bogomips or 100
+local interval
+if bogomips > 350 then
+	interval = "5000"
+else
+	interval = "10000"
+end
 
 -- wireless
 local ntm = require "luci.model.network".init()
@@ -23,24 +35,174 @@ local devices  = ntm:get_wifidevs()
 local netlist = { }
 local netdevs = { }
 local dev
+for _, dev in ipairs(devices) do
+	local net
+	for _, net in ipairs(dev:get_wifinets()) do
+		netlist[#netlist+1] = net:ifname()
+		netdevs[net:ifname()] = dev:name()
+	end
+end
 local has_iwinfo = pcall(require, "iwinfo")
 
 -- Routes
 local defroutev4 = sys.net.defaultroute()
 local defroutev6 = sys.net.defaultroute6 ()
-
 %>
+
 <%+header%>
+
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+
+<script type="text/javascript">//<![CDATA[
+	var iwxhr = new XHR();
+
+	var update_wifi_status = function() {
+		iwxhr.get('<%=luci.dispatcher.build_url("freifunk", "status", "public_status_json", table.concat(netlist, ","))%>', null,
+			function(x, st)
+			{
+				if (st)
+				{
+					for( var i = 0; i < st.length; i++ )
+					{
+						var iw = st[i];
+						var is_assoc = (iw.bssid && iw.channel);
+						var p = (100 / iw.quality_max * iw.quality);
+						var q = is_assoc ? p : -1;
+
+						var icon;
+						if (q < 0)
+							icon = "<%=resource%>/icons/signal-none.png";
+						else if (q == 0)
+							icon = "<%=resource%>/icons/signal-0.png";
+						else if (q < 25)
+							icon = "<%=resource%>/icons/signal-0-25.png";
+						else if (q < 50)
+							icon = "<%=resource%>/icons/signal-25-50.png";
+						else if (q < 75)
+							icon = "<%=resource%>/icons/signal-50-75.png";
+						else
+							icon = "<%=resource%>/icons/signal-75-100.png";
+
+						var power = document.getElementById(iw.id + '-txpower');
+						if (power)
+							power.innerHTML = String.format('%s dbm', iw.txpower);
+
+						var signal = document.getElementById(iw.id + '-signal');
+						if (signal)
+							signal.innerHTML = String.format(
+							'<img src="%s" title="Signal: %s db / Noise: %s db" alt="Signal Quality"</img>', icon, iw.signal, iw.noise);
+
+						var bitrate = document.getElementById(iw.id + '-bitrate');
+						if (bitrate)
+							bitrate.innerHTML = String.format('%s Mb/s', iw.bitrate ? iw.bitrate / 1000 : '?');
+
+						var ssid = document.getElementById(iw.id + '-ssid');
+						if (ssid)
+							ssid.innerHTML = iw.ssid;
+
+						var bssid = document.getElementById(iw.id + '-bssid');
+						if (bssid)
+							bssid.innerHTML = iw.bssid;
+
+						var channel = document.getElementById(iw.id + '-channel');
+						if (channel)
+							channel.innerHTML = iw.channel;
+
+						var mode = document.getElementById(iw.id + '-mode');
+						if (mode)
+						mode.innerHTML = iw.mode;
+					}
+
+					i = st.length - 1
+					var u = document.getElementById('dynuptime');
+					if (u)
+					{
+					u.innerHTML = st[i].uptime;
+					}
+
+					var u = document.getElementById('dynload');
+					if (u)
+					{
+					u.innerHTML = st[i].load;
+					}
+
+					var u = document.getElementById('dynmem');
+					if (u)
+					{
+					u.innerHTML = st[i].mem;
+					}
+
+					var u = document.getElementById('v4dst');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev4.dest;
+					}
+
+					var u = document.getElementById('v4gw');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev4.gateway;
+					}
+
+					var u = document.getElementById('v4dev');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev4.dev;
+					}
+
+					var u = document.getElementById('v4metr');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev4.metr;
+					}
+
+					var u = document.getElementById('v6dst');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev6.dest;
+					}
+
+					var u = document.getElementById('v6gw');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev6.gateway;
+					}
+
+					var u = document.getElementById('v6dev');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev6.dev;
+					}
+
+					var u = document.getElementById('v6metr');
+					if (u)
+					{
+					u.innerHTML = st[i].defroutev6.metr;
+					}
+
+					var u = document.getElementById('dyntime');
+					if (u)
+					{
+					u.innerHTML = st[i].time;
+					}
+				}
+				window.setTimeout(update_wifi_status, <%=interval%>);
+			}
+		)
+	};
+update_wifi_status();
+//]]></script>
 
 <div class="cbi-map">
 	<h2><%:System%></h2>
 	<div class="cbi-section-node">
 		<div class="cbi-value"><label class="cbi-value-title"><%:System%></label><div class="cbi-value-field"><%=system%></div></div>
 		<div class="cbi-value"><label class="cbi-value-title"><%:Processor%></label><div class="cbi-value-field"><%=model%></div></div>
-		<div class="cbi-value"><label class="cbi-value-title"><%:Load%></label><div class="cbi-value-field"><%=load%></div></div>
-		<div class="cbi-value"><label class="cbi-value-title"><%:Memory%></label><div class="cbi-value-field"><%=memory%></div></div>
-		<div class="cbi-value"><label class="cbi-value-title"><%:Local Time%></label><div class="cbi-value-field"><%=local_time%></div></div>
-		<div class="cbi-value"><label class="cbi-value-title"><%:Uptime%></label><div class="cbi-value-field"><%=uptime%></div></div>
+		<div class="cbi-value"><label class="cbi-value-title"><%:Load%></label><div class="cbi-value-field" id="dynload"><%=load%></div></div>
+		<div class="cbi-value"><label class="cbi-value-title"><%:Memory%></label><div class="cbi-value-field" id="dynmem"><%=mem%></div></div>
+		<div class="cbi-value"><label class="cbi-value-title"><%:Local Time%></label><div class="cbi-value-field" id="dyntime"><%=local_time%></div></div>
+		<div class="cbi-value"><label class="cbi-value-title"><%:Uptime%></label><div class="cbi-value-field" id="dynuptime"><%=uptime%></div></div>
 	</div>
 </div>
 
@@ -114,13 +276,13 @@ local defroutev6 = sys.net.defaultroute6 ()
 				local interface = net.iwdata.ifname or "N/A"
 	%>
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
-						<td class="cbi-value-field"><%=signal_string%></td>
-						<td class="cbi-value-field"><%=bitrate%></td>
-						<td class="cbi-value-field"><%=ssid%></td>
-						<td class="cbi-value-field"><%=bssid%></td>
-						<td class="cbi-value-field"><%=chan%></td>
-						<td class="cbi-value-field"><%=mode%></td>
-						<td class="cbi-value-field"><%=txpwr%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-signal"><%=signal_string%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-bitrate"><%=bitrate%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-ssid"><%=ssid%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-bssid"><%=bssid%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-channel"><%=chan%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-mode"><%=mode%></td>
+						<td class="cbi-value-field" id="<%=net:ifname()%>-txpower"><%=txpwr%></td>
 						<td class="cbi-value-field"><%=interface%></td>
 					</tr>
 			<% end
@@ -151,20 +313,20 @@ local defroutev6 = sys.net.defaultroute6 ()
 	<% if defroutev4 then %>
 
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
-							<td class="cbi-value-field"><%=defroutev4.dest:string()%></td>
-							<td class="cbi-value-field"><%=defroutev4.device%></td>
-							<td class="cbi-value-field"><%=defroutev4.gateway:string()%></td>
-							<td class="cbi-value-field"><%=defroutev4.metric%></td>
+							<td class="cbi-value-field" id="v4dst"><%=defroutev4.dest:string()%></td>
+							<td class="cbi-value-field" id="v4dev"><%=defroutev4.device%></td>
+							<td class="cbi-value-field" id="v4gw"><%=defroutev4.gateway:string()%></td>
+							<td class="cbi-value-field" id="v4metr"><%=defroutev4.metric%></td>
 						</tr>
 
 	<% end
 	if defroutev6 then %>
 
 						<tr class="cbi-section-table-row cbi-rowstyle-2">
-							<td class="cbi-value-field"><%=defroutev6.dest:string()%></td>
-							<td class="cbi-value-field"><%=defroutev6.device%></td>
-							<td class="cbi-value-field"><%=defroutev6.nexthop:string()%></td>
-							<td class="cbi-value-field"><%=defroutev6.metric%></td>
+							<td class="cbi-value-field" id="v6dst"><%=defroutev6.dest:string()%></td>
+							<td class="cbi-value-field" id="v6dev"><%=defroutev6.device%></td>
+							<td class="cbi-value-field" id="v6gw"><%=defroutev6.nexthop:string()%></td>
+							<td class="cbi-value-field" id="v6metr"><%=defroutev6.metric%></td>
 						</tr>
 
 	<% end %>
@@ -174,5 +336,4 @@ local defroutev6 = sys.net.defaultroute6 ()
 	</div>
 </div>
 <% end %>
-
 <%+footer%>
