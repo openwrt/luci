@@ -17,7 +17,6 @@ limitations under the License.
 
 ]]--
 
-exectime = os.clock()
 require "nixio.util"
 require "luci.http"
 require "luci.sys"
@@ -25,6 +24,7 @@ require "luci.dispatcher"
 require "luci.ltn12"
 
 function handle_request(env)
+	exectime = os.clock()
 	local renv = {
 		CONTENT_LENGTH  = env.CONTENT_LENGTH,
 		CONTENT_TYPE    = env.CONTENT_TYPE,
