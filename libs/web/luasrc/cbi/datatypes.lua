@@ -154,7 +154,7 @@ function wepkey(val)
 	if (#val == 10) or (#val == 26) then
 		return (val:match("^[a-fA-F0-9]+$") ~= nil)
 	else
-		return (#v == 5) or (#v == 13)
+		return (#val == 5) or (#val == 13)
 	end
 end
 
