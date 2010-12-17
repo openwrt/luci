@@ -1,0 +1,178 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2010 Manuel Munz <freifunk at somakoma dot de>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+-%>
+
+<%
+local sys = require "luci.sys"
+local utl = require "luci.util"
+local fs = require "luci.fs"
+ 
+function get_version()
+        local data = utl.split((utl.trim(sys.exec("/rom/usr/sbin/olsrd -v"))))
+        local buildfull = utl.trim(utl.split(data[2],": ")[2])
+        local ver = {
+                version = utl.trim(utl.split(data[1]," - ")[2]),
+                date = utl.trim(utl.split(buildfull, " ")[1]),
+                time = utl.trim(utl.split(buildfull, " ")[2]),
+                host = utl.trim(utl.split(buildfull, " ")[4])
+        }
+        return ver
+end
+local ver = get_version()
+
+local ifaces = fetch_txtinfo("int")
+if not ifaces or not ifaces.Interfaces then
+	luci.template.render("status-olsr/error_olsr")
+	return nil
+end
+local interfaces = ""
+for k,v in pairs(ifaces.Interfaces) do
+	interfaces = utl.trim(interfaces.." "..v.Name)
+end
+interfaces = string.gsub(interfaces, " ", ", ")
+local nr_ifaces = #ifaces.Interfaces
+
+local links = fetch_txtinfo("links")
+local nr_neigh = #links.Links
+local neighbors = ""
+for k,v in pairs(links.Links) do
+	local link
+	if v.Hostname then
+		link = v.Hostname
+	else
+		link = v["Remote IP"]
+	end
+	neighbors = utl.trim("<a href=http://"..link.."/cgi-bin-status.html>"..link.."</a> "..neighbors)
+end
+
+local data = fetch_txtinfo("topology")
+local nr_topo = #data.Topology
+local utable = {}
+for k,v in pairs(data.Topology) do
+	if utl.contains(utable, v["Dest. IP"]) == false then
+		table.insert(utable, v["Dest. IP"])
+	end
+end
+local nr_nodes = #utable
+
+local data = fetch_txtinfo("hna")
+local nr_hna = #data.HNA
+
+local meshfactor = string.format("%.2f", nr_topo / nr_nodes)
+
+local ipv = luci.model.uci.cursor():get_first("olsrd", "olsrd", "IpVersion", "4")
+
+function write_conf(conf, file)
+	if fs.access(conf) then
+		luci.http.header("Content-Disposition", "attachment; filename="..file)
+		luci.http.prepare_content("text/plain")
+		luci.http.write(fs.readfile(conf))
+	end
+end
+
+conf = luci.http.formvalue()
+
+if conf.openwrt then
+	write_conf("/etc/config/olsrd", "olsrd")
+	return false
+end
+
+if conf.conf_v4 then   
+	write_conf("/var/etc/olsrd.conf.ipv4", "olsrd.conf.ipv4")
+	return false
+end
+
+if conf.conf_v6 then
+	write_conf("/var/etc/olsrd.conf.ipv6", "olsrd.conf.ipv6")
+	return false
+end
+
+if conf.conf then
+	write_conf("/var/etc/olsrd.conf", "olsrd.conf")
+	return false
+end
+
+%>
+
+<%+header%>
+<h2><a id="content" name="content">OLSR <%:Overview%></a></h2>
+
+<div class="cbi-map">
+	<div class="cbi-section-node">
+		<div class="cbi-value"><label class="cbi-value-title"><%:Interfaces%></label>
+			<div class="cbi-value-field">
+				<div style="width: 6em; float:left;">
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "interfaces")%>"><%=nr_ifaces%></a>
+				</div>
+				<div style="padding-left: 6em;">
+					<%=interfaces%>
+				</div>
+			</div>
+		</div>
+	
+		<div class="cbi-value"><label class="cbi-value-title"><%:Neighbors%></label>
+			<div class="cbi-value-field">
+				<div style="width: 6em; float:left;">
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "neighbors")%>"><%=nr_neigh%></a>
+				</div>
+				<div style="padding-left: 6em;">
+					<%=neighbors%>
+				</div>
+			</div>
+		</div>
+
+		<div class="cbi-value"><label class="cbi-value-title"><%:Nodes%></label>
+			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>"><%=nr_nodes%></a>
+			</div>
+		</div>
+
+		<div class="cbi-value"><label class="cbi-value-title"><%:HNA%></label>
+			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "hna")%>"><%=nr_hna%></a>
+			</div>
+		</div>
+
+		<div class="cbi-value"><label class="cbi-value-title"><%:Links total%></label>
+			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>"><%=nr_topo%></a>
+			</div>
+		</div>
+
+		<div class="cbi-value"><label class="cbi-value-title"><%:Links per node (average)%></label>
+			<div class="cbi-value-field"><%=meshfactor%>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h2><a id="content" name="content">OLSR <%:Configuration%></a></h2>
+
+<div class="cbi-map">
+	<div class="cbi-section-node">
+		<div class="cbi-value"><label class="cbi-value-title"><%:Version%></label>
+			<div class="cbi-value-field"><%=ver.version%> (built <%=ver.date%> on <%=ver.host%>)
+			</div>
+		</div>
+
+		<div class="cbi-value"><label class="cbi-value-title"><%:Download Config%></label>
+			<div class="cbi-value-field">
+				<a href="<%=REQUEST_URI%>?openwrt">OpenWrt</a>,
+				<% if ipv == "6and4" then %>
+					<a href="<%=REQUEST_URI%>?conf_v4">OLSRD IPv4</a>,
+					<a href="<%=REQUEST_URI%>?conf_v6">OLSRD IPv6</a>
+				<% else %>
+					<a href="<%=REQUEST_URI%>?conf">OLSRD</a>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<%+footer%>

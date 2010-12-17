@@ -9,10 +9,16 @@ function index()
 	local i18n = luci.i18n.translate
 
 	local page  = node("admin", "status", "olsr")
-	page.target = call("action_index")
+	page.target = template("status-olsr/overview")
 	page.title  = "OLSR"
 	page.i18n   = "olsr"
 	page.subindex = true
+
+	local page  = node("admin", "status", "olsr", "neighbors")
+	page.target = call("action_neigh")
+	page.title  = i18n("Neighbors")
+	page.subindex = true
+	page.order  = 5
 
 	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
@@ -38,6 +44,11 @@ function index()
 	page.target = call("action_smartgw")
 	page.title  = "SmartGW"
 	page.order  = 60
+
+	local page  = node("admin", "status", "olsr", "interfaces")
+        page.target = call("action_interfaces")
+        page.title  = i18n("Interfaces")
+        page.order  = 70
 
 	local ol = entry(
 		{"admin", "services", "olsrd"},
@@ -77,7 +88,7 @@ function index()
 	)
 end
 
-function action_index()
+function action_neigh()
 	local data = fetch_txtinfo("links")
 
 	if not data or not data.Links then
@@ -102,7 +113,7 @@ function action_index()
 
 	table.sort(data.Links, compare)
 
-	luci.template.render("status-olsr/index", {links=data.Links})
+	luci.template.render("status-olsr/neighbors", {links=data.Links})
 end
 
 function action_routes()
@@ -201,7 +212,16 @@ function action_smartgw()
         luci.template.render("status-olsr/smartgw", {gws=data.Gateways})
 end
 
+function action_interfaces()
+        local data = fetch_txtinfo("interfaces")
 
+        if not data or not data.Interfaces then
+                luci.template.render("status-olsr/error_olsr")
+                return nil
+        end
+
+        luci.template.render("status-olsr/interfaces", {iface=data.Interfaces})
+end
 
 -- Internal
 function fetch_txtinfo(otable)

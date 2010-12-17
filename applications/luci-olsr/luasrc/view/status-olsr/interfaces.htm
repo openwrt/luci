@@ -1,0 +1,45 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2010 Manuel Munz <freifunk at somakoma dot de>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: mid.htm 5448 2009-10-31 15:54:11Z jow $
+
+-%>
+<%+header%>
+<h2><a id="content" name="content"><%:Interfaces%></a></h2>
+<p><%:Overview of interfaces where OLSR is running%></p>
+<br />
+<table class="smalltext" cellspacing="0" cellpadding="6">
+<tr>
+<th><%:Interface%></th>
+<th><%:State%></th>
+<th><%:MTU%></th>
+<th><%:WLAN%></th>
+<th><%:Source address%></th>
+<th><%:Netmask%></th>
+<th><%:Broadcast address%></th>
+</tr>
+
+<% for k, i in ipairs(iface) do %>
+<tr>
+<td><%=i.Name%></td>
+<td><%=i.State%></td>
+<td><%=i.MTU%></td>
+<td><%=i.WLAN%></td>
+<td><%=i["Src-Adress"]%></td>
+<td><%=i.Mask%></td>
+<td><%=i["Dst-Adress"]%></td>
+</tr>
+<% end %>
+
+</table>
+<br />
+<%+footer%>
