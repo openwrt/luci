@@ -256,23 +256,33 @@ function public_status_json()
 	membuffers / 1024,
 	tostring(i18n.translate("buffered"))
 	)
-	
+
 	local dr4 = sys.net.defaultroute()
 	local dr6 = sys.net.defaultroute6()
+	
+	if dr6 then
+		def6 = { 
+		gateway = dr6.nexthop:string(),
+		dest = dr6.dest:string(),
+		dev = dr6.device,
+		metr = dr6.metric }
+	end   
 
+	if dr4 then
+		def4 = { 
+		gateway = dr4.gateway:string(),
+		dest = dr4.dest:string(),
+		dev = dr4.device,
+		metr = dr4.metric }
+	end
+	
 	rv[#rv+1] = {
 		time = os.date("%c"),
 		uptime = twa.date_format(tonumber(sys.uptime())),
 		load = string.format("%.2f, %.2f, %.2f", load1, load5, load15),
 		mem = mem,
-		defroutev4 = {	gateway = dr4.gateway:string(),
-				dest = dr4.dest:string(),
-				dev = dr4.device,
-				metr = dr4.metric },
-		defroutev6 = {	gateway = dr6.nexthop:string(),
-				dest = dr6.dest:string(),
-				dev = dr6.device,
-				metr = dr6.metric }
+		defroutev4 = def4,
+		defroutev6 = def6
 	}
 
 	luci.http.prepare_content("application/json")

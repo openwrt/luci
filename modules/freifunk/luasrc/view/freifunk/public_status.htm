@@ -133,59 +133,66 @@ local defroutev6 = sys.net.defaultroute6 ()
 					u.innerHTML = st[i].mem;
 					}
 
-					var u = document.getElementById('v4dst');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev4.dest;
-					}
-
-					var u = document.getElementById('v4gw');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev4.gateway;
-					}
-
-					var u = document.getElementById('v4dev');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev4.dev;
-					}
-
-					var u = document.getElementById('v4metr');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev4.metr;
-					}
-
-					var u = document.getElementById('v6dst');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev6.dest;
-					}
-
-					var u = document.getElementById('v6gw');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev6.gateway;
-					}
-
-					var u = document.getElementById('v6dev');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev6.dev;
-					}
-
-					var u = document.getElementById('v6metr');
-					if (u)
-					{
-					u.innerHTML = st[i].defroutev6.metr;
-					}
-
 					var u = document.getElementById('dyntime');
 					if (u)
 					{
 					u.innerHTML = st[i].time;
 					}
+
+					if (st[i].defroutev4)
+					{
+						var u = document.getElementById('v4dst');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev4.dest;
+						}
+
+						var u = document.getElementById('v4gw');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev4.gateway;
+						}
+
+						var u = document.getElementById('v4dev');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev4.dev;
+						}
+
+						var u = document.getElementById('v4metr');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev4.metr;
+						}
+					}
+
+					if (st[i].defroutev6)
+					{
+						var u = document.getElementById('v6dst');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev6.dest;
+						}
+
+						var u = document.getElementById('v6gw');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev6.gateway;
+						}
+
+						var u = document.getElementById('v6dev');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev6.dev;
+						}
+
+						var u = document.getElementById('v6metr');
+						if (u)
+						{
+						u.innerHTML = st[i].defroutev6.metr;
+						}
+					}
+
 				}
 				window.setTimeout(update_wifi_status, <%=interval%>);
 			}
