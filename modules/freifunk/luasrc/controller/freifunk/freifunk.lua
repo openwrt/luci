@@ -15,6 +15,7 @@ module("luci.controller.freifunk.freifunk", package.seeall)
 
 function index()
 	local i18n = luci.i18n.translate
+	local uci = require "luci.model.uci".cursor()
 
 	local page  = node()
 	page.lock   = true
@@ -79,9 +80,15 @@ function index()
 	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("Karte"), 50)
 	entry({"freifunk", "map", "content"}, template("freifunk-map/map"), nil, 51)
 
-	entry({"freifunk", "services"}, template("freifunk-services/services"), i18n("Services"), 60)
-	entry({"freifunk", "services", "content"}, template("freifunk-services/services"), nil, 61)
+	uci:foreach("olsrd", "LoadPlugin", function(s)
+		if s.library == "olsrd_nameservice.so.0.3" then
+			has_serv = true
+		end
+	end)
 
+	if has_serv then
+		entry({"freifunk", "services"}, template("freifunk-services/services"), i18n("Services"), 60)
+	end
 end
 
 local function fetch_olsrd()
