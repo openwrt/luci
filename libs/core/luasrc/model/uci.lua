@@ -184,7 +184,8 @@ function Cursor.get_first(self, conf, stype, opt, def)
 			if type(def) == "number" then
 				val = tonumber(val)
 			elseif type(def) == "boolean" then
-				val = (val == "1" or val == "true" or val == "enabled")
+				val = (val == "1" or val == "true" or
+				       val == "yes" or val == "on")
 			end
 
 			if val ~= nil then
