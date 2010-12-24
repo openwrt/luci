@@ -482,10 +482,11 @@ function network.ifname(self)
 		return p .. "-" .. self.sid
 	else
 		local num = { }
-		local dev = self:_get("ifname") or
-			uci_r:get("network", self.sid, "ifname")
+		local dev = uci_r:get("network", self.sid, "ifname") or
+			uci_s:get("network", self.sid, "ifname")
 
-		dev = dev and dev:match("%S+")
+		dev = (type(dev) == "table") and dev[1] or dev
+		dev = (dev ~= nil) and dev:match("%S+")
 
 		if not dev then
 			uci_r:foreach("wireless", "wifi-iface",
@@ -507,10 +508,18 @@ function network.ifname(self)
 end
 
 function network.device(self)
-	local dev = self:_get("device")
+	local dev = uci_r:get("network", self.sid, "device") or
+		uci_s:get("network", self.sid, "device")
+
+	dev = (type(dev) == "table") and dev[1] or dev
+
 	if not dev or dev:match("[^%w%-%.%s]") then
-		dev = uci_r:get("network", self.sid, "ifname")
+		dev = uci_r:get("network", self.sid, "ifname") or
+			uci_s:get("network", self.sid, "ifname")
+
+		dev = (type(dev) == "table") and dev[1] or dev
 	end
+
 	return dev
 end
 
