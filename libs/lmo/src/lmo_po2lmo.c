@@ -1,7 +1,7 @@
 /*
  * lmo - Lua Machine Objects - PO to LMO conversion tool
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2011 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -59,7 +59,6 @@ static int extract_string(const char *src, char *dest, int len)
 			{
 				off++;
 				esc = 1;
-				
 			}
 			else if( src[pos] != '"' )
 			{
@@ -85,6 +84,7 @@ int main(int argc, char *argv[])
 	int state  = 0;
 	int offset = 0;
 	int length = 0;
+	uint32_t key_id, val_id;
 
 	FILE *in;
 	FILE *out;
@@ -155,25 +155,31 @@ int main(int argc, char *argv[])
 		{
 			if( strlen(key) > 0 && strlen(val) > 0 )
 			{
-				if( (entry = (lmo_entry_t *) malloc(sizeof(lmo_entry_t))) != NULL )
+				key_id = sfh_hash(key, strlen(key));
+				val_id = sfh_hash(val, strlen(val));
+
+				if( key_id != val_id )
 				{
-					memset(entry, 0, sizeof(entry));
-					length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
+					if( (entry = (lmo_entry_t *) malloc(sizeof(lmo_entry_t))) != NULL )
+					{
+						memset(entry, 0, sizeof(entry));
+						length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
 
-					entry->key_id = htonl(sfh_hash(key, strlen(key)));
-					entry->val_id = htonl(sfh_hash(val, strlen(val)));
-					entry->offset = htonl(offset);
-					entry->length = htonl(strlen(val));
+						entry->key_id = htonl(key_id);
+						entry->val_id = htonl(val_id);
+						entry->offset = htonl(offset);
+						entry->length = htonl(strlen(val));
 
-					print(val, length, 1, out);
-					offset += length;
+						print(val, length, 1, out);
+						offset += length;
 
-					entry->next = head;
-					head = entry;
-				}
-				else
-				{
-					die("Out of memory");
+						entry->next = head;
+						head = entry;
+					}
+					else
+					{
+						die("Out of memory");
+					}
 				}
 			}
 
