@@ -6,6 +6,9 @@
 use strict;
 
 my %TZ;
+my $tzdir = $ARGV[0] || "/usr/share/zoneinfo";
+
+chdir($tzdir) || die "chdir($tzdir): $!\n";
 
 local $/ = "\012";
 open( ZTAB, "< ./zone.tab" ) || die "Unable to open zone.tab: $!";
