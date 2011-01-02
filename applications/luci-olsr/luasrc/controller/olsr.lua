@@ -233,11 +233,21 @@ function fetch_txtinfo(otable)
 	local data = {}
 	local dataindex = 0
 	local name = ""
+	local defaultgw
 
 	if #rawdata ~= 0 then
-	    local tables = luci.util.split(luci.util.trim(rawdata), "\r?\n\r?\n", nil, true)
+		local tables = luci.util.split(luci.util.trim(rawdata), "\r?\n\r?\n", nil, true)
 
-	    for i, tbl in ipairs(tables) do
+		if otable == "links" then
+			local route = {}
+			for i, route in ipairs(luci.sys.net.routes()) do
+				if route.dest:prefix() == 0 then
+					defaultgw = route.gateway:string()
+				end
+			end
+		end
+
+		for i, tbl in ipairs(tables) do
 			local lines = luci.util.split(tbl, "\r?\n", nil, true)
 			name  = table.remove(lines, 1):sub(8)
 			local keys  = luci.util.split(table.remove(lines, 1), "\t")
@@ -253,12 +263,15 @@ function fetch_txtinfo(otable)
 				data[name][di] = {}
 				for k, key in pairs(keys) do
 					if key == "Remote IP" or key == "Dest. IP" or key == "Gateway IP" or key == "Gateway" then
+						data[name][di][key] = fields[k]
 						hostname = nixio.getnameinfo(fields[k], "inet")
 						if hostname then
-							data[name][di][key] = fields[k]
 							data[name][di]["Hostname"] = hostname
-						else
-							data[name][di][key] = fields[k]
+						end
+						if key == "Remote IP" and defaultgw then
+							if defaultgw == fields[k] then
+								data[name][di]["defaultgw"] = 1
+							end
 						end
 					elseif key == "Local IP" then
 						data[name][di][key] = fields[k]
@@ -284,74 +297,72 @@ function fetch_txtinfo(otable)
 			        end
 				end
 				if data[name][di].Linkcost then
-				  data[name][di].LinkQuality,
-				  data[name][di].NLQ,
-				  data[name][di].ETX =
-				  data[name][di].Linkcost:match("([%w.]+)/([%w.]+)[%s]+([%w.]+)")
+					data[name][di].LinkQuality,
+					data[name][di].NLQ,
+					data[name][di].ETX =
+					data[name][di].Linkcost:match("([%w.]+)/([%w.]+)[%s]+([%w.]+)")
 				end
 			end
 		end
 	end
 
 	if #rawdatav6 ~= 0 then
-	    local tables = luci.util.split(luci.util.trim(rawdatav6), "\r?\n\r?\n", nil, true)
-	    for i, tbl in ipairs(tables) do
-		  local lines = luci.util.split(tbl, "\r?\n", nil, true)
-		  name  = table.remove(lines, 1):sub(8)
-		  local keys  = luci.util.split(table.remove(lines, 1), "\t")
-		  local split = #keys - 1
-		  if not data[name] then
-			data[name] = {}
-		  end
-		  for j, line in ipairs(lines) do
-			dataindex = ( dataindex + 1 )
-			di = dataindex
-			local fields = luci.util.split(line, "\t", split)
-			data[name][di] = {}
-			for k, key in pairs(keys) do
-				if key == "Remote IP" then
-					hostname = nixio.getnameinfo(fields[k], "inet6")
-					if hostname then
-						data[name][di][key] = "[" .. fields[k] .. "]"
-						data[name][di]["Hostname"] = hostname
-					else
-						data[name][di][key] = "[" .. fields[k] .. "]"
-					end
-				elseif key == "Local IP" then
-					data[name][di][key] = fields[k]
-					data[name][di]['Local Device'] = fields[k]
-					uci:foreach("network", "interface",
-					function(s)
-						local localip = string.gsub(fields[k], '	', '')
-						if s.ip6addr then
-							local ip6addr = string.gsub(s.ip6addr, '\/.*', '')
-							if ip6addr == localip then
-								data[name][di]['Local Device'] = s['.name'] or s.interface
-							end
-						end
-					end)
-				elseif key == "Dest. IP" then
-				    data[name][di][key] = "[" .. fields[k] .. "]"
-				elseif key == "Last hop IP" then
-				    data[name][di][key] = "[" .. fields[k] .. "]"
-				elseif key == "IP address" then
-				    data[name][di][key] = "[" .. fields[k] .. "]"
-				elseif key == "Gateway" then
-				    data[name][di][key] = "[" .. fields[k] .. "]"
-				else
-				    data[name][di][key] = fields[k]
-				end
+		local tables = luci.util.split(luci.util.trim(rawdatav6), "\r?\n\r?\n", nil, true)
+		for i, tbl in ipairs(tables) do
+			local lines = luci.util.split(tbl, "\r?\n", nil, true)
+			name  = table.remove(lines, 1):sub(8)
+			local keys  = luci.util.split(table.remove(lines, 1), "\t")
+			local split = #keys - 1
+			if not data[name] then
+				data[name] = {}
 			end
-			
-			if data[name][di].Linkcost then
-				data[name][di].LinkQuality,
-				data[name][di].NLQ,
-				data[name][di].ETX =
-				data[name][di].Linkcost:match("([%w.]+)/([%w.]+)[%s]+([%w.]+)")
+			for j, line in ipairs(lines) do
+				dataindex = ( dataindex + 1 )
+				di = dataindex
+				local fields = luci.util.split(line, "\t", split)
+				data[name][di] = {}
+				for k, key in pairs(keys) do
+					if key == "Remote IP" then
+						data[name][di][key] = "[" .. fields[k] .. "]"
+						hostname = nixio.getnameinfo(fields[k], "inet6")
+						if hostname then
+							data[name][di]["Hostname"] = hostname
+						end
+					elseif key == "Local IP" then
+						data[name][di][key] = fields[k]
+						data[name][di]['Local Device'] = fields[k]
+						uci:foreach("network", "interface",
+						function(s)
+							local localip = string.gsub(fields[k], '	', '')
+							if s.ip6addr then
+								local ip6addr = string.gsub(s.ip6addr, '\/.*', '')
+								if ip6addr == localip then
+									data[name][di]['Local Device'] = s['.name'] or s.interface
+								end
+							end
+						end)
+					elseif key == "Dest. IP" then
+						data[name][di][key] = "[" .. fields[k] .. "]"
+					elseif key == "Last hop IP" then
+						data[name][di][key] = "[" .. fields[k] .. "]"
+					elseif key == "IP address" then
+						data[name][di][key] = "[" .. fields[k] .. "]"
+					elseif key == "Gateway" then
+						data[name][di][key] = "[" .. fields[k] .. "]"
+					else
+						data[name][di][key] = fields[k]
+					end
+				end
+
+				if data[name][di].Linkcost then
+					data[name][di].LinkQuality,
+					data[name][di].NLQ,
+					data[name][di].ETX =
+					data[name][di].Linkcost:match("([%w.]+)/([%w.]+)[%s]+([%w.]+)")
+				end
 			end
 		end
 	end
-end
 
 
 	if data then
