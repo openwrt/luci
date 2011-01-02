@@ -207,7 +207,6 @@ $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
 $(eval $(call library,sys,LuCI Linux/POSIX system library))
 $(eval $(call library,web,MVC Webframework,+luci-lib-sys +luci-lib-nixio +luci-lib-core +luci-sgi-cgi +luci-lib-lmo))
-$(eval $(call library,uvl,UVL - UCI Validation Layer,+luci-lib-sys +luci-lib-core))
 
 
 ### Community Packages ###
