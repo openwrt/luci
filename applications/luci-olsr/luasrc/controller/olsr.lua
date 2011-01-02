@@ -240,11 +240,7 @@ function fetch_txtinfo(otable)
 
 		if otable == "links" then
 			local route = {}
-			for i, route in ipairs(luci.sys.net.routes()) do
-				if route.dest:prefix() == 0 then
-					defaultgw = route.gateway:string()
-				end
-			end
+			luci.sys.net.routes(function(r) if r.dest:prefix() == 0 then defaultgw = r.gateway:string() end end)
 		end
 
 		for i, tbl in ipairs(tables) do
