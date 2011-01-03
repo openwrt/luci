@@ -1,6 +1,8 @@
 <%
+
 local sys = require "luci.sys"
 local twa = require "luci.tools.webadmin"
+
 -- System
 local system, model, memtotal, memcached, membuffers, memfree, bogomips = sys.sysinfo()
 local uptime = twa.date_format(tonumber(sys.uptime()))
@@ -8,16 +10,17 @@ local_time = os.date("%c")
 local load1, load5, load15 = sys.loadavg()
 local load = string.format("%.2f, %.2f, %.2f", load1, load5, load15)
 
-local mem = string.format("%.2f MB (%.2f %s, %.2f %s, %.2f %s, %.2f %s)",
-tonumber(memtotal) / 1024,
-tonumber(memtotal - memfree) / 1024,
-tostring(i18n.translate("used")),
-memfree / 1024,
-tostring(i18n.translate("free")),
-memcached / 1024,
-tostring(i18n.translate("cached")),
-membuffers / 1024,
-tostring(i18n.translate("buffered"))
+local mem = string.format(
+	"%.2f MB (%.2f %s, %.2f %s, %.2f %s, %.2f %s)",
+	tonumber(memtotal) / 1024,
+	tonumber(memtotal - memfree) / 1024,
+	tostring(i18n.translate("used")),
+	memfree / 1024,
+	tostring(i18n.translate("free")),
+	memcached / 1024,
+	tostring(i18n.translate("cached")),
+	membuffers / 1024,
+	tostring(i18n.translate("buffered"))
 )
 
 -- update interval
@@ -46,8 +49,9 @@ local has_iwinfo = pcall(require, "iwinfo")
 
 -- Routes
 local defroutev4 = sys.net.defaultroute()
-local defroutev6 = sys.net.defaultroute6 ()
-%>
+local defroutev6 = sys.net.defaultroute6()
+
+-%>
 
 <%+header%>
 
@@ -91,7 +95,9 @@ local defroutev6 = sys.net.defaultroute6 ()
 						var signal = document.getElementById(iw.id + '-signal');
 						if (signal)
 							signal.innerHTML = String.format(
-							'<img src="%s" title="Signal: %s db / Noise: %s db" alt="Signal Quality"</img>', icon, iw.signal, iw.noise);
+								'<img src="%s" title="Signal: %s db / Noise: %s db" alt="Signal Quality" />',
+								icon, iw.signal, iw.noise
+							);
 
 						var bitrate = document.getElementById(iw.id + '-bitrate');
 						if (bitrate)
@@ -115,90 +121,57 @@ local defroutev6 = sys.net.defaultroute6 ()
 					}
 
 					i = st.length - 1
-					var u = document.getElementById('dynuptime');
-					if (u)
-					{
-					u.innerHTML = st[i].uptime;
-					}
+					var u
+					
+					if (u = document.getElementById('dynuptime'))
+						u.innerHTML = st[i].uptime;
 
-					var u = document.getElementById('dynload');
-					if (u)
-					{
-					u.innerHTML = st[i].load;
-					}
+					if (u = document.getElementById('dynload'))
+						u.innerHTML = st[i].load;
 
-					var u = document.getElementById('dynmem');
-					if (u)
-					{
-					u.innerHTML = st[i].mem;
-					}
+					if (u = document.getElementById('dynmem'))
+						u.innerHTML = st[i].mem;
 
-					var u = document.getElementById('dyntime');
-					if (u)
-					{
-					u.innerHTML = st[i].time;
-					}
+					if (u = document.getElementById('dyntime'))
+						u.innerHTML = st[i].time;
 
 					if (st[i].defroutev4)
 					{
-						var u = document.getElementById('v4dst');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev4.dest;
-						}
+						if (u = document.getElementById('v4dst'))
+							u.innerHTML = st[i].defroutev4.dest;
 
-						var u = document.getElementById('v4gw');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev4.gateway;
-						}
+						if (u = document.getElementById('v4gw'))
+							u.innerHTML = st[i].defroutev4.gateway;
 
-						var u = document.getElementById('v4dev');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev4.dev;
-						}
+						if (u = document.getElementById('v4dev'))
+							u.innerHTML = st[i].defroutev4.dev;
 
-						var u = document.getElementById('v4metr');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev4.metr;
-						}
+						if (u = document.getElementById('v4metr'))
+							u.innerHTML = st[i].defroutev4.metr;
 					}
 
 					if (st[i].defroutev6)
 					{
-						var u = document.getElementById('v6dst');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev6.dest;
-						}
+						if (u = document.getElementById('v6dst'))
+							u.innerHTML = st[i].defroutev6.dest;
 
-						var u = document.getElementById('v6gw');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev6.gateway;
-						}
+						if (u = document.getElementById('v6gw'))
+							u.innerHTML = st[i].defroutev6.gateway);
 
-						var u = document.getElementById('v6dev');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev6.dev;
-						}
+						if (u = document.getElementById('v6dev'))
+							u.innerHTML = st[i].defroutev6.dev);
 
-						var u = document.getElementById('v6metr');
-						if (u)
-						{
-						u.innerHTML = st[i].defroutev6.metr;
-						}
+						if (u = document.getElementById('v6metr'))
+							u.innerHTML = st[i].defroutev6.metr);
 					}
-
 				}
+
 				window.setTimeout(update_wifi_status, <%=interval%>);
 			}
 		)
 	};
-update_wifi_status();
+
+	update_wifi_status();
 //]]></script>
 
 <div class="cbi-map">
