@@ -321,6 +321,9 @@ endef
 
 $(eval $(call application,ffwizard-leipzig,Freifunk Leipzig configuration wizard))
 
+$(eval $(call application,ffwizard,Freifunk configuration wizard,
+	+PACKAGE_luci-mod-freifunk))
+
 $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))
 
