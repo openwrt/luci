@@ -201,7 +201,7 @@ gw.optional = true
 gw.datatype = "ip4addr"
 gw:depends("proto", "static")
 
-bcast = s:taboption("general", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
+bcast = s:taboption("general", Value, "broadcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
 bcast.optional = true
 bcast.datatype = "ip4addr"
 bcast:depends("proto", "static")
