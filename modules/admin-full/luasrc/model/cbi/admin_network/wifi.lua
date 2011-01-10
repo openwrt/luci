@@ -593,19 +593,70 @@ port:depends({mode="ap-wds", encryption="wpa"})
 port:depends({mode="ap-wds", encryption="wpa2"})
 port.rmempty = true
 
-key = s:taboption("encryption", Value, "key", translate("Key"))
-key:depends("encryption", "wep-open")
-key:depends("encryption", "wep-shared")
-key:depends("encryption", "psk")
-key:depends("encryption", "psk2")
-key:depends("encryption", "psk+psk2")
-key:depends("encryption", "psk-mixed")
-key:depends({mode="ap", encryption="wpa"})
-key:depends({mode="ap", encryption="wpa2"})
-key:depends({mode="ap-wds", encryption="wpa"})
-key:depends({mode="ap-wds", encryption="wpa2"})
-key.rmempty = true
-key.password = true
+wpakey = s:taboption("encryption", Value, "_wpa_key", translate("Key"))
+wpakey:depends("encryption", "psk")
+wpakey:depends("encryption", "psk2")
+wpakey:depends("encryption", "psk+psk2")
+wpakey:depends("encryption", "psk-mixed")
+wpakey:depends({mode="ap", encryption="wpa"})
+wpakey:depends({mode="ap", encryption="wpa2"})
+wpakey:depends({mode="ap-wds", encryption="wpa"})
+wpakey:depends({mode="ap-wds", encryption="wpa2"})
+wpakey.datatype = "wpakey"
+wpakey.rmempty = true
+wpakey.password = true
+
+wpakey.cfgvalue = function(self, section, value)
+	local key = m.uci:get("wireless", section, "key")
+	if key == "1" or key == "2" or key == "3" or key == "4" then
+		return nil
+	end
+	return key
+end
+
+wpakey.write = function(self, section, value)
+	self.map.uci:set("wireless", section, "key", value)
+	self.map.uci:delete("wireless", section, "key1")
+end
+
+
+wepslot = s:taboption("encryption", ListValue, "_wep_key", translate("Used Key Slot"))
+wepslot:depends("encryption", "wep-open")
+wepslot:depends("encryption", "wep-shared")
+wepslot:value("1", translatef("Key #%d", 1))
+wepslot:value("2", translatef("Key #%d", 2))
+wepslot:value("3", translatef("Key #%d", 3))
+wepslot:value("4", translatef("Key #%d", 4))
+
+wepslot.cfgvalue = function(self, section)
+	local slot = tonumber(m.uci:get("wireless", section, "key"))
+	if not slot or slot < 1 or slot > 4 then
+		return 1
+	end
+	return slot		
+end
+
+wepslot.write = function(self, section, value)
+	self.map.uci:set("wireless", section, "key", value)
+end
+
+local slot
+for slot=1,4 do
+	wepkey = s:taboption("encryption", Value, "key" .. slot, translatef("Key #%d", slot))
+	wepkey:depends("encryption", "wep-open")
+	wepkey:depends("encryption", "wep-shared")
+	wepkey.datatype = "wepkey"
+	wepkey.rmempty = true
+	wepkey.password = true
+	
+	function wepkey.write(self, section, value)
+		if value and (#value == 5 or #value == 13) then
+			value = "s:" .. value
+		end
+		return Value.write(self, section, value)
+	end
+end
+
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"))
