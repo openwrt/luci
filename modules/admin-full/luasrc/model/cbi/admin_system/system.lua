@@ -38,6 +38,9 @@ local uptime = luci.sys.uptime()
 s:option(DummyValue, "_system", translate("System")).value = system
 s:option(DummyValue, "_cpu", translate("Processor")).value = model
 
+s:option(DummyValue, "_kernel", translate("Kernel")).value =
+ luci.util.exec("uname -r") or "?"
+
 local load1, load5, load15 = luci.sys.loadavg()
 s:option(DummyValue, "_la", translate("Load")).value =
  string.format("%.2f, %.2f, %.2f", load1, load5, load15)
