@@ -64,11 +64,12 @@ wa.cbi_add_knownips(dsth)
 l7 = s:option(ListValue, "layer7", translate("Service"))
 l7.rmempty = true
 l7:value("", translate("all"))
-local pats = fs.dir("/etc/l7-protocols")
+local pats = fs.glob("/etc/l7-protocols/*/*.pat")
 if pats then
 	for f in pats do
-		if f:sub(-4) == ".pat" then
-			l7:value(f:sub(1, #f-4))
+		f = f:match("([^/]+)%.pat$")
+		if f then
+			l7:value(f)
 		end
 	end
 end
