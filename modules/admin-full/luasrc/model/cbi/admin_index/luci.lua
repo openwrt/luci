@@ -100,6 +100,7 @@ c.cfgvalue = function(self, section)
 end
 
 c.write = function(self, section, value)
+	value = value:gsub("\r\n?", "\n")
 	return nixio.fs.writefile("/etc/sysupgrade.conf", value)
 end
 
