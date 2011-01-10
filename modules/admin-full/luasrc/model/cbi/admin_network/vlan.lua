@@ -25,6 +25,8 @@ m.uci:foreach("network", "switch",
 		local num_ports   = 5
 		local cpu_port    = 5
 
+		local enable_vlan4k = false
+
 		-- Parse some common switch properties from swconfig help output.
 		local swc = io.popen("swconfig dev %q help 2>/dev/null" % switch_name)
 		if swc then
@@ -54,6 +56,9 @@ m.uci:foreach("network", "switch",
 				elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
 					if is_vlan_attr then has_vlan4k = line:match(": (%w+)") end
 					if is_port_attr then has_ptpvid = line:match(": (%w+)") end
+
+				elseif line:match(": enable_vlan4k") then
+					enable_vlan4k = true
 
 				end
 			end
@@ -98,6 +103,10 @@ m.uci:foreach("network", "switch",
 
 		s:option(Flag, "enable_vlan", translate("Enable VLAN functionality"))
 			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
+
+		if enable_vlan4k then
+			s:option(Flag, "enable_vlan4k", translate("Enable 4K VLANs"))
+		end
 
 		s:option(Flag, "reset", translate("Reset switch during setup"))
 			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
