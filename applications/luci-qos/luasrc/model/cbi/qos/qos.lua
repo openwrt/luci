@@ -35,9 +35,9 @@ s:option(Flag, "overhead", translate("Calculate overhead"))
 
 s:option(Flag, "halfduplex", translate("Half-duplex"))
 
-s:option(Value, "download", translate("Download speed (kb/s)"))
+s:option(Value, "download", translate("Download speed (kbit/s)"))
 
-s:option(Value, "upload", translate("Upload speed (kb/s)"))
+s:option(Value, "upload", translate("Upload speed (kbit/s)"))
 
 s = m:section(TypedSection, "classify", translate("Classification Rules"))
 s.template = "cbi/tblsection"

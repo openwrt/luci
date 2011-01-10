@@ -21,8 +21,8 @@ m = Map("qos")
 s = m:section(NamedSection, "wan", "interface", translate("Internet Connection"))
 
 s:option(Flag, "enabled", translate("Quality of Service"))
-s:option(Value, "download", translate("Downlink"), "kb/s")
-s:option(Value, "upload", translate("Uplink"), "kb/s")
+s:option(Value, "download", translate("Downlink"), "kbit/s")
+s:option(Value, "upload", translate("Uplink"), "kbit/s")
 
 s = m:section(TypedSection, "classify")
 s.template = "cbi/tblsection"
