@@ -24,7 +24,6 @@ local sys = require "luci.sys"
 local ip = require "luci.ip"
 local fs  = require "nixio.fs"
 
-
 local has_pptp  = fs.access("/usr/sbin/pptp")
 local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 local has_l2gvpn  = fs.access("/usr/sbin/node")
@@ -32,6 +31,7 @@ local has_radvd  = fs.access("/etc/config/radvd")
 local has_rom  = fs.access("/rom/etc")
 local has_autoipv6  = fs.access("/usr/bin/auto-ipv6")
 local has_qos  = fs.access("/etc/init.d/qos")
+local has_ipv6 = fs.access("/proc/sys/net/ipv6")
 
 luci.i18n.loadc("freifunk")
 
@@ -108,6 +108,7 @@ net_lat = f:field(ListValue, "net_lat", "", "")
 net_lat:depends("net", "0")
 net_lon = f:field(ListValue, "net_lon", "", "")
 net_lon:depends("net", "0")
+
 uci:foreach("freifunk", "community", function(s)
 	if s.latitude then
 		net_lat:value(s[".name"], "%s" % {s.latitude or "?"})
@@ -219,12 +220,15 @@ uci:foreach("wireless", "wifi-device",
 					uci:save("freifunk")
 				end
 			end
-		local meship6 = f:field(Value, "meship6_" .. device, device:upper() .. "  Mesh IPv6 Adresse einrichten", "Ihre Mesh IP Adresse wird automatisch berechnet")
+		if has_ipv6 then
+			local meship6 = f:field(Value, "meship6_" .. device, device:upper() .. "  Mesh IPv6 Adresse einrichten", "Ihre Mesh IP Adresse wird automatisch berechnet")
 			meship6:depends("device_" .. device, "1")
 			meship6.rmempty = true
 			function meship6.cfgvalue(self, section)
 				return get_ula(get_mac(device))
 			end
+		end
+	
 		local client = f:field(Flag, "client_" .. device, device:upper() .. "  DHCP anbieten", "DHCP weist verbundenen Benutzern automatisch eine Adresse zu. Diese Option sollten Sie unbedingt aktivieren, wenn Sie Nutzer an der drahtlosen Schnittstelle erwarten.")
 			client:depends("device_" .. device, "1")
 			client.rmempty = false
@@ -292,12 +296,15 @@ uci:foreach("network", "interface",
 				function meship.write(self, sec, value)
 					uci:set("freifunk", "wizard", "meship_" .. device, value)
 				end
-			meship6 = f:field(Value, "meship6_" .. device, device:upper() .. "  Mesh IPv6 Adresse einrichten", "Ihre Mesh IP Adresse wird automatisch berechnet")
+			if has_ipv6 then
+				meship6 = f:field(Value, "meship6_" .. device, device:upper() .. "  Mesh IPv6 Adresse einrichten", "Ihre Mesh IP Adresse wird automatisch berechnet")
 				meship6:depends("device_" .. device, "1")
 				meship6.rmempty = true
 				function meship6.cfgvalue(self, section)
 					return get_ula(get_mac(ifname))
 				end
+			end
+
 			client = f:field(Flag, "client_" .. device, device:upper() .. "  DHCP anbieten","DHCP weist verbundenen Benutzern automatisch eine Adresse zu. Diese Option sollten Sie unbedingt aktivieren, wenn Sie Nutzer an der drahtlosen Schnittstelle erwarten.")
 				client:depends("device_" .. device, "1")
 				client.rmempty = false
@@ -609,7 +616,9 @@ function f.handle(self, state, data)
 			if has_radvd then
 				uci:commit("radvd")
 			end
-			luci.http.redirect(luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path), "system", "reboot") .. "?reboot=1")
+-- the following line didn't work without admin-mini, for now i just replaced it with sys.exec... soma
+--			luci.http.redirect(luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path), "system", "reboot") .. "?reboot=1")
+			sys.exec("reboot")
 		end
 		return false
 	elseif state == FORM_INVALID then
@@ -636,6 +645,7 @@ function main.write(self, section, value)
 	end
 	-- Collect IP-Address
 	local community = net:formvalue(section)
+	suffix = uci:get("freifunk", community, "suffix") or "olsr"
 
 	-- Invalidate fields
 	if not community then
@@ -691,7 +701,11 @@ function main.write(self, section, value)
 	local olsrbase
 	olsrbase = uci:get_all("freifunk", "olsrd") or {}
 	util.update(olsrbase, uci:get_all(external, "olsrd") or {})
-	olsrbase.IpVersion='6and4'
+	if has_ipv6 then
+		olsrbase.IpVersion='6and4'
+	else
+		olsrbase.IpVersion='4'
+	end
 	uci:section("olsrd", "olsrd", nil, olsrbase)
 	-- Delete olsrdv4 old p2pd settings
 	uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_mdns.so.1.0.0"})
@@ -717,7 +731,9 @@ function main.write(self, section, value)
 			return
 		end
 		node_ip = luci.http.formvalue("cbid.ffwizward.1.meship_" .. device) and ip.IPv4(luci.http.formvalue("cbid.ffwizward.1.meship_" .. device))
-		node_ip6 = luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device) and ip.IPv6(luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device))
+		if has_ipv6 then
+			node_ip6 = luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device) and ip.IPv6(luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device))
+		end
 		if not node_ip or not network or not network:contains(node_ip) then
 			meship.tag_missing[section] = true
 			node_ip = nil
@@ -826,7 +842,9 @@ function main.write(self, section, value)
 		util.update(netconfig, uci:get_all(external, "interface") or {})
 		netconfig.proto = "static"
 		netconfig.ipaddr = node_ip:string()
-		netconfig.ip6addr = node_ip6:string()
+		if has_ipv6 then
+			netconfig.ip6addr = node_ip6:string()
+		end
 		uci:section("network", "interface", nif, netconfig)
 		if has_radvd then
 			uci:section("radvd", "interface", nil, {
@@ -1021,7 +1039,9 @@ function main.write(self, section, value)
 		if device ~= "loopback" and not string.find(device, "wifi") and not string.find(device, "wl") and not string.find(device, "wlan") and not string.find(device, "wireless") and not string.find(device, "radio") then
 			local node_ip
 			node_ip = luci.http.formvalue("cbid.ffwizward.1.meship_" .. device) and ip.IPv4(luci.http.formvalue("cbid.ffwizward.1.meship_" .. device))
-			node_ip6 = luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device) and ip.IPv6(luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device))
+			if has_ipv6 then
+				node_ip6 = luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device) and ip.IPv6(luci.http.formvalue("cbid.ffwizward.1.meship6_" .. device))
+			end
 			if not node_ip or not network or not network:contains(node_ip) then
 				meship.tag_missing[section] = true
 				node_ip = nil
@@ -1049,7 +1069,9 @@ function main.write(self, section, value)
 			util.update(netconfig, uci:get_all(external, "interface") or {})
 			netconfig.proto = "static"
 			netconfig.ipaddr = node_ip:string()
-			netconfig.ip6addr = node_ip6:string()
+			if has_ipv6 then
+				netconfig.ip6addr = node_ip6:string()
+			end
 			uci:section("network", "interface", device, netconfig)
 			uci:save("network")
 			if has_radvd then
@@ -1314,7 +1336,7 @@ function main.write(self, section, value)
 	-- Write new nameservice settings
 	uci:section("olsrd", "LoadPlugin", nil, {
 		library     = "olsrd_nameservice.so.0.3",
-		suffix      = ".olsr",
+		suffix      = "." .. suffix ,
 		hosts_file  = "/var/etc/hosts.olsr",
 		latlon_file = "/var/run/latlon.js",
 		lat         = latval and string.format("%.15f", latval) or "",
@@ -1325,8 +1347,8 @@ function main.write(self, section, value)
 	-- Import hosts and set domain
 	uci:foreach("dhcp", "dnsmasq", function(s)
 		uci:set_list("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
-		uci:set("dhcp", s[".name"], "local", "/olsr/")
-		uci:set("dhcp", s[".name"], "domain", "olsr")
+		uci:set("dhcp", s[".name"], "local", "/" .. suffix .. "/")
+		uci:set("dhcp", s[".name"], "domain", suffix)
 	end)
 
 	-- Make sure that OLSR is enabled
@@ -1336,8 +1358,15 @@ function main.write(self, section, value)
 	uci:save("dhcp")
 	-- Import hosts and set domain
 	uci:foreach("dhcp", "dnsmasq", function(s)
-		uci:set_list("dhcp", s[".name"], "addnhosts", {"/var/etc/hosts.olsr","/var/etc/hosts.olsr.ipv6"})
+		uci:set_list("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
 	end)
+
+	if has_ipv6 then
+	        uci:foreach("dhcp", "dnsmasq", function(s)
+	                uci:set_list("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr.ipv6")
+	        end)
+	end
+
 
 	uci:save("dhcp")
 
@@ -1346,10 +1375,14 @@ function main.write(self, section, value)
 	if share_value == "1" then
 		uci:set("freifunk", "wizard", "netconfig", "1")
 		uci:section("firewall", "forwarding", nil, {src="freifunk", dest="wan"})
-		-- Set autoipv6 tunnel mode
-		uci:set("autoipv6", "olsr_node", "enable", "0")
-		uci:set("autoipv6", "tunnel", "enable", "1")
-		uci:save("autoipv6")
+
+		if has_autoipv6 then
+			-- Set autoipv6 tunnel mode
+			uci:set("autoipv6", "olsr_node", "enable", "0")
+			uci:set("autoipv6", "tunnel", "enable", "1")
+			uci:save("autoipv6")
+		end
+
 		-- Delete/Disable gateway plugin
 		uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_dyn_gw.so.0.5"})
 		uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_dyn_gw_plain.so.0.4"})
@@ -1372,10 +1405,12 @@ function main.write(self, section, value)
 	else
 		uci:set("freifunk", "wizard", "netconfig", "0")
 		uci:save("freifunk")
-		-- Set autoipv6 olsrd mode
-		uci:set("autoipv6", "olsr_node", "enable", "1")
-		uci:set("autoipv6", "tunnel", "enable", "0")
-		uci:save("autoipv6")
+		if has_autoipv6 then
+			-- Set autoipv6 olsrd mode
+			uci:set("autoipv6", "olsr_node", "enable", "1")
+			uci:set("autoipv6", "tunnel", "enable", "0")
+			uci:save("autoipv6")
+		end
 		-- Delete gateway plugins
 		uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_dyn_gw.so.0.5"})
 		uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_dyn_gw_plain.so.0.4"})
