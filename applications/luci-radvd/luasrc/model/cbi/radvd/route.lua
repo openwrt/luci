@@ -35,6 +35,19 @@ s.addremove = false
 -- General
 --
 
+o = s:option(Flag, "ignore", translate("Enable"))
+o.rmempty = false
+
+function o.cfgvalue(...)
+	local v = Flag.cfgvalue(...)
+	return v == "1" and "0" or "1"
+end
+
+function o.write(self, section, value)
+	Flag.write(self, section, value == "1" and "0" or "1")
+end
+
+
 o = s:option(Value, "interface", translate("Interface"),
 	translate("Specifies the logical interface name this section belongs to"))
 
