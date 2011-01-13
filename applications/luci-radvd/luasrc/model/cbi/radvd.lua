@@ -53,9 +53,20 @@ function s.remove(self, section)
 	return TypedSection.remove(self, section)
 end
 
+o = s:option(Flag, "ignore", translate("Enable"))
+o.rmempty = false
+o.width   = "30px"
+function o.cfgvalue(...)
+	local v = Flag.cfgvalue(...)
+	return v == "1" and "0" or "1"
+end
+function o.write(self, section, value)
+	Flag.write(self, section, value == "1" and "0" or "1")
+end
 
 o = s:option(DummyValue, "interface", translate("Interface"))
 o.template = "cbi/network_netinfo"
+o.width    = "10%"
 
 o = s:option(DummyValue, "UnicastOnly", translate("Multicast"))
 function o.cfgvalue(...)
@@ -104,10 +115,23 @@ function s2.create(...)
 end
 
 
+o = s2:option(Flag, "ignore", translate("Enable"))
+o.rmempty = false
+o.width   = "30px"
+function o.cfgvalue(...)
+	local v = Flag.cfgvalue(...)
+	return v == "1" and "0" or "1"
+end
+function o.write(self, section, value)
+	Flag.write(self, section, value == "1" and "0" or "1")
+end
+
 o = s2:option(DummyValue, "interface", translate("Interface"))
 o.template = "cbi/network_netinfo"
+o.width    = "10%"
 
 o = s2:option(DummyValue, "prefix", translate("Prefix"))
+o.width = "60%"
 function o.cfgvalue(self, section)
 	local v = Value.cfgvalue(self, section)
 	if not v then
@@ -168,10 +192,23 @@ function s3.create(...)
 end
 
 
+o = s3:option(Flag, "ignore", translate("Enable"))
+o.rmempty = false
+o.width   = "30px"
+function o.cfgvalue(...)
+	local v = Flag.cfgvalue(...)
+	return v == "1" and "0" or "1"
+end
+function o.write(self, section, value)
+	Flag.write(self, section, value == "1" and "0" or "1")
+end
+
 o = s3:option(DummyValue, "interface", translate("Interface"))
 o.template = "cbi/network_netinfo"
+o.width    = "10%"
 
 o = s3:option(DummyValue, "prefix", translate("Prefix"))
+o.width = "60%"
 function o.cfgvalue(self, section)
 	local v = Value.cfgvalue(self, section)
 	if v then
@@ -210,10 +247,23 @@ function s.create(...)
 end
 
 
+o = s4:option(Flag, "ignore", translate("Enable"))
+o.rmempty = false
+o.width   = "30px"
+function o.cfgvalue(...)
+	local v = Flag.cfgvalue(...)
+	return v == "1" and "0" or "1"
+end
+function o.write(self, section, value)
+	Flag.write(self, section, value == "1" and "0" or "1")
+end
+
 o = s4:option(DummyValue, "interface", translate("Interface"))
 o.template = "cbi/network_netinfo"
+o.width    = "10%"
 
 o = s4:option(DummyValue, "addr", translate("Address"))
+o.width = "60%"
 function o.cfgvalue(self, section)
 	local v = Value.cfgvalue(self, section)
 	if not v then
