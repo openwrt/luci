@@ -1357,16 +1357,15 @@ function main.write(self, section, value)
 	uci:save("olsrd")
 	uci:save("dhcp")
 	-- Import hosts and set domain
-	uci:foreach("dhcp", "dnsmasq", function(s)
-		uci:set_list("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
-	end)
-
 	if has_ipv6 then
 	        uci:foreach("dhcp", "dnsmasq", function(s)
-	                uci:set_list("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr.ipv6")
+	                uci:set_list("dhcp", s[".name"], "addnhosts", {"/var/etc/hosts.olsr","/var/etc/hosts.olsr.ipv6"})
 	        end)
+	else
+	        uci:foreach("dhcp", "dnsmasq", function(s)
+	                uci:set_list("dhcp", s[".name"], "addnhosts", "/var/etc/hosts.olsr")
+        	end)
 	end
-
 
 	uci:save("dhcp")
 
