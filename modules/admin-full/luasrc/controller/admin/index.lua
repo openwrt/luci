@@ -22,35 +22,17 @@ function index()
 		root.target = alias("admin")
 		root.index = true
 	end
-	
-	entry({"about"}, template("about"))
-	
+
 	local page   = node("admin")
-	page.target  = alias("admin", "index")
+	page.target  = alias("admin", "status")
 	page.title   = i18n("Administration")
 	page.order   = 10
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
 	page.index = true
-	
-	local page  = node("admin", "index")
-	page.target = template("admin_index/index")
-	page.title  = i18n("Overview")
-	page.order  = 10
-	page.index = true
 
-	local page  = node("admin", "index", "luci")
-	page.target = cbi("admin_index/luci")
-	page.title  = i18n("User Interface")
-	page.order  = 10
-
-	entry({"admin", "index", "components"}, call("redir_components"), i18n("LuCI Components"), 20)
-	entry({"admin", "index", "logout"}, call("action_logout"), i18n("Logout"), 90)
-end
-
-function redir_components()
-	luci.http.redirect(luci.dispatcher.build_url("admin", "system", "packages")..'?update=1&query=luci')
+	entry({"admin", "logout"}, call("action_logout"), i18n("Logout"), 90)
 end
 
 function action_logout()
