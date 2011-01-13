@@ -32,6 +32,7 @@ local has_rom  = fs.access("/rom/etc")
 local has_autoipv6  = fs.access("/usr/bin/auto-ipv6")
 local has_qos  = fs.access("/etc/init.d/qos")
 local has_ipv6 = fs.access("/proc/sys/net/ipv6")
+local has_hb = fs.access("/sbin/heartbeat")
 
 luci.i18n.loadc("freifunk")
 
@@ -557,15 +558,17 @@ if has_l2gvpn then
 	end
 end
 
-hb = f:field(Flag, "hb", "Heartbeat aktivieren","Dem Gerät erlauben anonyme Statistiken zu übertragen. (empfohlen)")
-hb.rmempty = false
-hb:depends("netconfig", "1")
-function hb.cfgvalue(self, section)
-	return uci:get("freifunk", "wizard", "hb")
-end
-function hb.write(self, section, value)
-	uci:set("freifunk", "wizard", "hb", value)
-	uci:save("freifunk")
+if has_hb then
+	hb = f:field(Flag, "hb", "Heartbeat aktivieren","Dem Gerät erlauben anonyme Statistiken zu übertragen. (empfohlen)")
+	hb.rmempty = false
+	hb:depends("netconfig", "1")
+	function hb.cfgvalue(self, section)
+		return uci:get("freifunk", "wizard", "hb")
+	end
+	function hb.write(self, section, value)
+		uci:set("freifunk", "wizard", "hb", value)
+		uci:save("freifunk")
+	end
 end
 
 -------------------- Control --------------------
@@ -694,8 +697,10 @@ function main.write(self, section, value)
 		end)
 	end
 	uci:save("firewall")
-	uci:delete("manager", "heartbeat", "interface")
-	uci:save("manager")
+	if has_hb then
+		uci:delete("manager", "heartbeat", "interface")
+		uci:save("manager")
+	end
 	-- Delete olsrdv4
 	uci:delete_all("olsrd", "olsrd")
 	local olsrbase
@@ -878,10 +883,12 @@ function main.write(self, section, value)
 		local client = luci.http.formvalue("cbid.ffwizward.1.client_" .. device)
 		if client then
 			local dhcpmeshnet = luci.http.formvalue("cbid.ffwizward.1.dhcpmesh_" .. device) and ip.IPv4(luci.http.formvalue("cbid.ffwizward.1.dhcpmesh_" .. device))
-			local ifacelist = uci:get_list("manager", "heartbeat", "interface") or {}
-			table.insert(ifacelist,nif .. "dhcp")
-			uci:set_list("manager", "heartbeat", "interface", ifacelist)
-			uci:save("manager")
+			if has_hb then
+				local ifacelist = uci:get_list("manager", "heartbeat", "interface") or {}
+				table.insert(ifacelist,nif .. "dhcp")
+				uci:set_list("manager", "heartbeat", "interface", ifacelist)
+				uci:save("manager")
+			end
 			if dhcpmeshnet then
 				if not dhcpmeshnet:minhost() or not dhcpmeshnet:mask() then
 					dhcpmesh.tag_missing[section] = true
@@ -1107,10 +1114,12 @@ function main.write(self, section, value)
 			local client = luci.http.formvalue("cbid.ffwizward.1.client_" .. device)
 			if client then
 				local dhcpmeshnet = luci.http.formvalue("cbid.ffwizward.1.dhcpmesh_" .. device) and ip.IPv4(luci.http.formvalue("cbid.ffwizward.1.dhcpmesh_" .. device))
-				local ifacelist = uci:get_list("manager", "heartbeat", "interface") or {}
-				table.insert(ifacelist,device .. "dhcp")
-				uci:set_list("manager", "heartbeat", "interface", ifacelist)
-				uci:save("manager")
+				if has_hb then
+					local ifacelist = uci:get_list("manager", "heartbeat", "interface") or {}
+					table.insert(ifacelist,device .. "dhcp")
+					uci:set_list("manager", "heartbeat", "interface", ifacelist)
+					uci:save("manager")
+				end
 				if dhcpmeshnet then
 					if not dhcpmeshnet:minhost() or not dhcpmeshnet:mask() then
 						dhcpmesh.tag_missing[section] = true
@@ -1254,18 +1263,19 @@ function main.write(self, section, value)
 	local new_hostname = uci:get("freifunk", "wizard", "hostname")
 	local old_hostname = sys.hostname()
 
-	local dhcphb = hb:formvalue(section)
-	if dhcphb then
-		uci:set("manager", "heartbeat", "enabled", "1")
-		-- Make sure that heartbeat is enabled
-		sys.init.enable("machash")
-
-	else
-		uci:set("manager", "heartbeat", "enabled", "0")
-		-- Make sure that heartbeat is enabled
-		sys.init.disable("machash")
+	if has_hb then
+		local dhcphb = hb:formvalue(section)
+		if dhcphb then
+			uci:set("manager", "heartbeat", "enabled", "1")
+			-- Make sure that heartbeat is enabled
+			sys.init.enable("machash")
+		else
+			uci:set("manager", "heartbeat", "enabled", "0")
+			-- Make sure that heartbeat is enabled
+			sys.init.disable("machash")
+		end
+		uci:save("manager")
 	end
-	uci:save("manager")
 
 	local custom_hostname = hostname:formvalue(section)
 	uci:foreach("system", "system",
