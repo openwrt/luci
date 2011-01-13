@@ -15,14 +15,6 @@ end
 uci_model.inst = uci_model.cursor()
 uci_model.inst_state = uci_model.cursor_state()
 
--- override uvl access
-local uvl_model = require "luci.uvl"
-local uvl_init  = uvl_model.UVL.__init__
-
-uvl_model.UVL.__init__ = function(self, schemedir)
-	uvl_init(self, schemedir or SYSROOT .. "/lib/uci/schema")
-end
-
 -- allow any password in local sdk
 local sys = require "luci.sys"
 sys.user.checkpasswd = function() return true end
