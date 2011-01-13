@@ -18,6 +18,16 @@ function rowstyle()
 	rowcnt = rowcnt + 1
 	return (rowcnt % 2) + 1
 end
+
+function width(o)
+	if o.width then
+		if type(o.width) == 'number' then
+			return ' style="width:%dpx"' % o.width
+		end
+		return ' style="width:%s"' % o.width
+	end
+	return ''
+end
 -%>
 
 <!-- tblsection -->
@@ -38,7 +48,7 @@ end
 				<%- end -%>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
-				<th class="cbi-section-table-cell">
+				<th class="cbi-section-table-cell"<%=width(k)%>>
 				<%- if k.titleref then -%><a title="<%=self.titledesc or translate('Go to relevant configuration page')%>" class="cbi-title-ref" href="<%=k.titleref%>"><%- end -%>
 					<%-=k.title-%>
 				<%- if k.titleref then -%></a><%- end -%>
@@ -56,7 +66,7 @@ end
 				<%- end -%>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
-				<th class="cbi-section-table-cell"><%=k.description%></th>
+				<th class="cbi-section-table-cell"<%=width(k)%>><%=k.description%></th>
 			<%- end; end; if self.extedit or self.addremove then -%>
 				<th class="cbi-section-table-cell"></th>
 			<%- end -%>
@@ -82,7 +92,7 @@ end
 				-%>
 
 				<%- if self.extedit or self.addremove then -%>
-					<td class="cbi-section-table-cell">
+					<td class="cbi-section-table-cell" style="width:50px">
 						<%- if self.extedit then -%>
 							<a href="
 							<%- if type(self.extedit) == "string" then -%>
