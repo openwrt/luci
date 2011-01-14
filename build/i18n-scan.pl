@@ -72,7 +72,7 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 
 			$text = $raw;
 
-			while( $text =~ s/ ^ .*? <% [:_] -? /<%/sgx )
+			while( $text =~ s/ ^ .*? <% -? [:_] /<%/sgx )
 			{
 				( my $code, $text ) = extract_tagged($text, '<%', '%>');
 
