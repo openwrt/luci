@@ -17,7 +17,7 @@ local utl = require "luci.util"
 local fs = require "luci.fs"
  
 function get_version()
-        local data = utl.split((utl.trim(sys.exec("/rom/usr/sbin/olsrd -v"))))
+        local data = utl.split((utl.trim(sys.exec("/usr/sbin/olsrd -v"))))
         local buildfull = utl.trim(utl.split(data[2],": ")[2])
         local ver = {
                 version = utl.trim(utl.split(data[1]," - ")[2]),
