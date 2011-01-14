@@ -1,6 +1,6 @@
 #!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
-	( . /etc/uci-defaults/luci-mmc_over_gpio ) && rm -f /etc/uci-defaults/luci-mmc_over_gpio
+	( . /etc/uci-defaults/luci-mmc-over-gpio ) && rm -f /etc/uci-defaults/luci-mmc-over-gpio
 	/etc/init.d/mmc_over_gpio enabled || /etc/init.d/mmc_over_gpio enable
 	exit 0
 }
