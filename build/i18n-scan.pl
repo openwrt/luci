@@ -12,10 +12,10 @@ my %stringtable;
 sub dec_lua_str
 {
 	my $s = shift;
-	$s =~ s/\\n/\n/g;
-	$s =~ s/\\t/\n/g;
-	$s =~ s/\\(.)/$1/g;
 	$s =~ s/[\s\n]+/ /g;
+	$s =~ s/\\n/\n/g;
+	$s =~ s/\\t/\t/g;
+	$s =~ s/\\(.)/$1/g;
 	$s =~ s/^ //;
 	$s =~ s/ $//;
 	return $s;
@@ -50,23 +50,39 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 			while( $text =~ s/ ^ .*? (?:translate|translatef|i18n|_) [\n\s]* \( /(/sgx )
 			{
 				( my $code, $text ) = extract_bracketed($text, q{('")});
-				$code =~ s/^\(//; $code =~ s/\)$//;
+
+				$code =~ s/^\([\n\s]*//;
+				$code =~ s/[\n\s]*\)$//;
 
 				my $res = "";
 				my $sub = "";
 
-				while( defined $sub )
+				if( $code =~ /^['"]/ )
 				{
-					( $sub, $code ) = extract_delimited($code, q{'"}, q{\s*(?:\.\.\s*)?});
-
-					if( defined $sub )
+					while( defined $sub )
 					{
-						$res .= substr $sub, 1, length($sub) - 2;
+						( $sub, $code ) = extract_delimited($code, q{'"}, q{\s*(?:\.\.\s*)?});
+
+						if( defined $sub )
+						{
+							$res .= substr $sub, 1, length($sub) - 2;
+						}
 					}
+				}
+				elsif( $code =~ /^(\[=*\[)/ )
+				{
+					my $stag = quotemeta $1;
+					my $etag = $stag;
+					   $etag =~ s/\[/]/g;
+
+					( $res ) = extract_tagged($code, $stag, $etag);
+
+					$res =~ s/^$stag//;
+					$res =~ s/$etag$//;
 				}
 
 				$res = dec_lua_str($res);
-				$stringtable{$res}++;
+				$stringtable{$res}++ if $res;
 			}
 
 
