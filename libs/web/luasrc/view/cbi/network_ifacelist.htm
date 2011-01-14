@@ -19,7 +19,12 @@ $Id$
 
 	local iface
 	local ifaces = net:get_interfaces()
-	local value = (self:formvalue(section) or self.default)
+	local value = self:formvalue(section)
+
+	if not value or value == "" then
+		value = self:cfgvalue(section) or self.default
+	end
+
 	local checked = { }
 
 	if value then
@@ -46,7 +51,8 @@ $Id$
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "." .. iface:name()) ..
 			attr("name", cbid) .. attr("value", iface:name()) ..
-			ifattr(checked[iface:name()], "checked", "checked")
+			ifattr(checked[iface:name()], "checked", "checked") ..
+			ifattr(iface:type() == "wifi" and not iface:is_up(), "disabled", "disabled")
 		%> /> &nbsp;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<% if link then -%><a href="<%=link%>"><% end -%>
