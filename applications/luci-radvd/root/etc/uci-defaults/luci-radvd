@@ -1,8 +1,11 @@
 #!/bin/sh
 
-uci batch <<-EOF
+uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@radvd[-1]
 	add ucitrack radvd
 	set ucitrack.@radvd[-1].init=radvd
 	commit ucitrack
 EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

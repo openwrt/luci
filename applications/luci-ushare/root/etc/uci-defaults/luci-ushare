@@ -1,7 +1,11 @@
 #!/bin/sh
 
-uci batch <<-EOF
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@ushare[-1]
 	add ucitrack ushare
 	set ucitrack.@ushare[-1].init=ushare
 	commit ucitrack
 EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

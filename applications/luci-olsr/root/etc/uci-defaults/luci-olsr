@@ -1,7 +1,11 @@
 #!/bin/sh
 
-uci batch <<-EOF
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@olsrd[-1]
 	add ucitrack olsrd
 	set ucitrack.@olsrd[-1].init=olsrd
 	commit ucitrack
 EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

@@ -1,9 +1,11 @@
 #!/bin/sh
 
-uci batch <<-EOF 2>/dev/null
+uci -q batch <<-EOF >/dev/null
+	delete citrack.@freifunk_p2pblock[-1]
 	add ucitrack freifunk_p2pblock
 	set ucitrack.@freifunk_p2pblock[-1].init=freifunk-p2pblock
 	commit ucitrack
 EOF
 
+rm -f /tmp/luci-indexcache
 exit 0
