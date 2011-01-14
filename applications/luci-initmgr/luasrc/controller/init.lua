@@ -26,4 +26,8 @@ function index()
 		{"admin", "services", "init"}, form("init/init"),
 		luci.i18n.translate("Initscripts"), 0
 	).i18n = "initmgr"
+
+	entry(
+		{"admin", "services", "init", "startup" },form("init/startup"),
+		luci.i18n.translate("Local Startup"), 10).i18n = "initmgr"
 end
