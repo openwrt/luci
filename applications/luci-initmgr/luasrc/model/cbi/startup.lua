@@ -15,7 +15,7 @@ You may obtain a copy of the License at
 local fs = require "nixio.fs"
 local rc = "/etc/rc.local" 
 
-f = SimpleForm("rc", translate("Startup"), translate([[This is the content of /etc/rc.local. Insert your own commands here
+f = SimpleForm("rc", translate("Local Startup"), translate([[This is the content of /etc/rc.local. Insert your own commands here
 	 (in front of 'exit 0') to execute them at the end of the boot process.]]))
 
 t = f:field(TextValue, "rcs")
