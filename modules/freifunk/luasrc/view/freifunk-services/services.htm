@@ -1,27 +1,30 @@
 <%+header%>
 
 <%
-require("luci.fs")
-require("luci.util")
+local fs  = require "luci.fs"
+local utl = require "luci.util"
 
 -- check if nameservice plugin is enabled and where to find the services file
 local has_services = false
+
 local uci = require "luci.model.uci".cursor()
 uci:foreach("olsrd", "LoadPlugin", function(s)
 	if s.library == "olsrd_nameservice.so.0.3" then
-		if s.services_file then
+		if s.services_file and fs.access(s.services_file) then
 			has_services = true
 			services_file = s.services_file
 		else
-			has_services = true
-			services_file = "/var/run/services_olsr"
+			if fs.access("/var/run/services_olsr") then
+				has_services = true
+				services_file = "/var/run/services_olsr"
+			end
 		end
 	end
 end)
 
 
 function fetch_services()
-	local rawdata = luci.fs.readfile(services_file)
+	local rawdata = fs.readfile(services_file)
 
 	if #rawdata == 0 then
 		return nil
@@ -29,7 +32,7 @@ function fetch_services()
 
 	local data = {}
 
-	local tables = luci.util.split(luci.util.trim(rawdata), "\n", nil, true)
+	local tables = utl.split(utl.trim(rawdata), "\n", nil, true)
 	-- remove the first 3 lines
 	table.remove(tables,1)
 	table.remove(tables,1)
@@ -40,7 +43,7 @@ function fetch_services()
 	table.remove(tables)
 
 	for i, tbl in ipairs(tables) do
-		local lines = luci.util.split(tbl, "\n", nil, true)
+		local lines = utl.split(tbl, "\n", nil, true)
 	end
 	
 	return tables
@@ -64,7 +67,7 @@ end
 	for k, line in ipairs(table) do
 		local field = {}
 		-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
-		local field = luci.util.split(line, "[#|]", split, true)
+		local field = utl.split(line, "[#|]", split, true)
 		local url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
 		%>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
