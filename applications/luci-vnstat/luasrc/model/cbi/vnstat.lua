@@ -1,7 +1,7 @@
 --[[
 LuCI - Lua Configuration Interface
 
-Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2010-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ end
 dbdir = dbdir or "/var/lib/vnstat"
 
 
-m = SimpleForm("vnstat", translate("VnStat"),
+m = Map("vnstat", translate("VnStat"),
 	translate("VnStat is a network traffic monitor for Linux that keeps a log of network traffic for the selected interface(s)."))
 
 m.submit = translate("Restart VnStat")
@@ -49,14 +49,16 @@ for _, iface in ipairs(sys.net.devices()) do
 end
 
 
-local s = m:section(SimpleSection)
+local s = m:section(TypedSection, "vnstat")
+s.anonymous = true
+s.addremove = false
 
-mon_ifaces = s:option(Value, "ifaces", translate("Monitor selected interfaces"))
+mon_ifaces = s:option(Value, "interface", translate("Monitor selected interfaces"))
 mon_ifaces.template = "cbi/network_ifacelist"
 mon_ifaces.widget   = "checkbox"
-mon_ifaces.default  = utl.keys(enabled)
+mon_ifaces.cast     = "table"
 
-function mon_ifaces.write(self, s, val)
+function mon_ifaces.write(self, section, val)
 	local i
 	local s = { }
 
@@ -67,24 +69,19 @@ function mon_ifaces.write(self, s, val)
 	end
 
 	for i, _ in pairs(ifaces) do
-		if s[i] then
-			sys.call("vnstat -u -i %q" % i)
-		else
+		if not s[i] then
 			fs.unlink(dbdir .. "/" .. i)
 			fs.unlink(dbdir .. "/." .. i)
 		end
 	end
 
-
-	sys.call("/etc/init.d/vnstat restart >/dev/null 2>/dev/null")
-
-	m.message = "<p><strong>%s</strong></p>"
-		% translate("The VnStat service has been restarted."), cmd
-
-	self.default = utl.keys(s)
+	if next(s) then
+		m.uci:set_list("vnstat", section, "interface", utl.keys(s))
+	else
+		m.uci:delete("vnstat", section, "interface")
+	end
 end
 
 mon_ifaces.remove = mon_ifaces.write
 
 return m
-

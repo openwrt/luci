@@ -82,13 +82,22 @@ dbdir = dbdir or "/var/lib/vnstat"
 <br /><hr /><br />
 
 <div style="text-align:center">
-<% empty = true
-   for iface in fs.dir(dbdir) do if iface:sub(1,1) ~= "." then
-     empty = false
+<%
+   empty = true
+   ifdir = fs.dir(dbdir)
+
+   if ifdir then
+     for iface in ifdir do
+       if iface:sub(1,1) ~= "." then
+         empty = false
 %>
 	<img src="<%=REQUEST_URI%>?iface=<%=iface%>&amp;style=<%=param('style')%>" alt="" />
 	<br /><br />
-<% end end %>
+<%
+       end
+     end
+   end 
+%>
 
 <% if empty then %>
 <p><em><%:No database has been set up yet. Go to the VnStat configuration and enable monitoring for one or more interfaces.%></em></p>

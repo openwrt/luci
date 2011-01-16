@@ -1,9 +1,8 @@
 #!/bin/sh
 
 # register commit handler
-[ -f /etc/config/ucitrack ] && \
-[ "$(uci get ucitrack.@luci_statistics[0] 2>/dev/null)" != "luci_statistics" ] && \
-uci batch <<-EOF >/dev/null 2>/dev/null
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@luci_statistics[-1]
 	add ucitrack luci_statistics
 	set ucitrack.@luci_statistics[-1].init=luci_statistics
 	commit ucitrack
@@ -11,8 +10,9 @@ EOF
 
 # register LuCId virtual path handler
 [ -f /etc/config/lucid ] && \
-[ "$(uci get lucid.statistics 2>/dev/null)" != "DirectoryPublisher" ] && \
-uci batch <<-EOF >/dev/null 2>/dev/null
+uci -q batch <<-EOF >/dev/null
+	delete lucid.statistics
+
 	set lucid.statistics=DirectoryPublisher
 	set lucid.statistics.name='RRDTool Image Cache'
 	set lucid.statistics.physical=/tmp/rrdimg
@@ -32,4 +32,5 @@ EOF
 # restart LuCId service
 [ -x /etc/init.d/lucid ] && /etc/init.d/lucid enabled && /etc/init.d/lucid restart
 
+rm -f /tmp/luci-indexcache
 exit 0

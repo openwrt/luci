@@ -29,25 +29,45 @@
  */
 static int nixio_sock__sendto(lua_State *L, int to) {
 	nixio_sock *sock = nixio__checksock(L);
+	struct sockaddr_storage addr_in;
+#ifndef __WINNT__
+	struct sockaddr_un addr_un;
+#endif
 	struct sockaddr *addr = NULL;
 	socklen_t alen = 0;
 	int argoff = 2;
 
 	if (to) {
 		argoff += 2;
-		const char *address = luaL_checkstring(L, 3);
-		struct sockaddr_storage addrstor;
-		addr = (struct sockaddr*)&addrstor;
+		if (sock->domain == AF_INET || sock->domain == AF_INET6) {
+			const char *address = luaL_checkstring(L, 3);
+			addr = (struct sockaddr*)&addr_in;
+			alen = sizeof(addr_in);
 
-		nixio_addr naddr;
-		memset(&naddr, 0, sizeof(naddr));
-		strncpy(naddr.host, address, sizeof(naddr.host) - 1);
-		naddr.port = (uint16_t)luaL_checkinteger(L, 4);
-		naddr.family = sock->domain;
+			nixio_addr naddr;
+			memset(&naddr, 0, sizeof(naddr));
+			strncpy(naddr.host, address, sizeof(naddr.host) - 1);
+			naddr.port = (uint16_t)luaL_checkinteger(L, 4);
+			naddr.family = sock->domain;
 
-		if (nixio__addr_write(&naddr, addr)) {
-			return nixio__perror_s(L);
+			if (nixio__addr_write(&naddr, addr)) {
+				return nixio__perror_s(L);
+			}
 		}
+
+#ifndef __WINNT__
+		else if (sock->domain == AF_UNIX) {
+			size_t pathlen;
+			const char *path = luaL_checklstring(L, 3, &pathlen);
+
+			addr_un.sun_family = AF_UNIX;
+			luaL_argcheck(L, pathlen < sizeof(addr_un.sun_path), 3, "out of range");
+			strncpy(addr_un.sun_path, path, sizeof(addr_un.sun_path));
+
+			addr = (struct sockaddr*)&addr_un;
+			alen = sizeof(addr_un);
+		}
+#endif
 	}
 
 	size_t len;
@@ -103,16 +123,25 @@ static int nixio_sock_sendto(lua_State *L) {
 static int nixio_sock__recvfrom(lua_State *L, int from) {
 	nixio_sock *sock = nixio__checksock(L);
 	char buffer[NIXIO_BUFFERSIZE];
-	struct sockaddr_storage addrobj;
+	struct sockaddr_storage addr_in;
+#ifndef __WINNT__
+	struct sockaddr_un addr_un;
+#endif
+	struct sockaddr *addr = NULL;
+	socklen_t alen = 0;
 	uint req = luaL_checkinteger(L, 2);
 	int readc;
 
-	if (from && sock->domain != AF_INET && sock->domain != AF_INET6) {
-		return luaL_argerror(L, 1, "supported families: inet, inet6");
+	if (sock->domain == AF_INET || sock->domain == AF_INET6) {
+		addr = (from) ? (struct sockaddr*)&addr_in : NULL;
+		alen = (from) ? sizeof(addr_in) : 0;
 	}
-
-	struct sockaddr *addr = (from) ? (struct sockaddr*)&addrobj : NULL;
-	socklen_t alen = (from) ? sizeof(addrobj) : 0;
+#ifndef __WINNT__
+	else if (sock->domain == AF_UNIX) {
+		addr = (from) ? (struct sockaddr*)&addr_un : NULL;
+		alen = (from) ? sizeof(addr_un) : 0;
+	}
+#endif
 
 	/* We limit the readsize to NIXIO_BUFFERSIZE */
 	req = (req > NIXIO_BUFFERSIZE) ? NIXIO_BUFFERSIZE : req;
@@ -137,9 +166,11 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 
 		if (!from) {
 			return 1;
-		} else {
+		}
+		/* push address. */
+		if (sock->domain == AF_INET || sock->domain == AF_INET6) {
 			nixio_addr naddr;
-			if (!nixio__addr_parse(&naddr, (struct sockaddr *)&addrobj)) {
+			if (!nixio__addr_parse(&naddr, (struct sockaddr *)&addr_in)) {
 				lua_pushstring(L, naddr.host);
 				lua_pushinteger(L, naddr.port);
 				return 3;
@@ -147,7 +178,14 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 				return 1;
 			}
 		}
+#ifndef __WINNT__
+		else if (sock->domain == AF_UNIX) {
+			lua_pushstring(L, addr_un.sun_path);
+			return 2;
+		}
+#endif
 	}
+	return 1;
 }
 
 /**

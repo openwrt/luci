@@ -1,9 +1,9 @@
 #!/bin/sh
 
 uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@polipo[-1]
-	add ucitrack polipo
-	set ucitrack.@polipo[-1].init=polipo
+	delete ucitrack.@vnstat[-1]
+	add ucitrack vnstat
+	set ucitrack.@vnstat[-1].init=vnstat
 	commit ucitrack
 EOF
 

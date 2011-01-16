@@ -6,56 +6,62 @@ set_default_config()
 	config_get type "$cfg" "type"
 	case $type in
 		atheros)
-			uci set freifunk.wifi_device.channel=1
-			uci set freifunk.wifi_device.diversity=0
-			uci set freifunk.wifi_device.txantenna=1
-			uci set freifunk.wifi_device.rxantenna=1
-			uci set freifunk.wifi_device.disabled=0
-			uci set freifunk.wifi_device.txpower=""
-			uci set freifunk.wifi_device.country=276
-			uci set freifunk.wifi_device.regdomain="0x37"
-			uci set freifunk.wifi_device.outdoor="1"
-			uci set freifunk.wifi_device.hwmode=11g
-			uci set freifunk.wifi_device.distance=1000
-			uci set freifunk.wifi_iface=defaults
-			uci set freifunk.wifi_iface.mode=adhoc
-			uci set freifunk.wifi_iface.bssid="02:CA:FF:EE:BA:BE"
-			uci set freifunk.wifi_iface.sw_merge=1
-			uci set freifunk.wifi_iface.mcast_rate=5500
-			uci set freifunk.wifi_iface.probereq=1
-			uci commit freifunk
+			uci -q batch <<-EOF
+				set freifunk.wifi_device.channel=1
+				set freifunk.wifi_device.diversity=0
+				set freifunk.wifi_device.txantenna=1
+				set freifunk.wifi_device.rxantenna=1
+				set freifunk.wifi_device.disabled=0
+				set freifunk.wifi_device.txpower=""
+				set freifunk.wifi_device.country=276
+				set freifunk.wifi_device.regdomain="0x37"
+				set freifunk.wifi_device.outdoor="1"
+				set freifunk.wifi_device.hwmode=11g
+				set freifunk.wifi_device.distance=1000
+				set freifunk.wifi_iface=defaults
+				set freifunk.wifi_iface.mode=adhoc
+				set freifunk.wifi_iface.bssid="02:CA:FF:EE:BA:BE"
+				set freifunk.wifi_iface.sw_merge=1
+				set freifunk.wifi_iface.mcast_rate=5500
+				set freifunk.wifi_iface.probereq=1
+				commit freifunk
+			EOF
 		;;
 		mac80211)
-			uci set freifunk.wifi_device.channel=1
-			uci set freifunk.wifi_device.diversity=""
-			uci set freifunk.wifi_device.disabled=0
-			uci set freifunk.wifi_device.txpower=""
-			uci set freifunk.wifi_device.country=DE
-			uci set freifunk.wifi_device.distance=1000
-			uci set freifunk.wifi_device.htmode='HT40-'
-			uci set freifunk.wifi_device.hwmode=11ng
-			uci set freifunk.wifi_iface=defaults
-			uci set freifunk.wifi_iface.mode=adhoc
-			uci set freifunk.wifi_iface.bssid="02:CA:FF:EE:BA:BE"
-			uci set freifunk.wifi_iface.sw_merge=""
-			uci commit freifunk
+			uci -q batch <<-EOF
+				set freifunk.wifi_device.channel=1
+				set freifunk.wifi_device.diversity=""
+				set freifunk.wifi_device.disabled=0
+				set freifunk.wifi_device.txpower=""
+				set freifunk.wifi_device.country=DE
+				set freifunk.wifi_device.distance=1000
+				set freifunk.wifi_device.htmode='HT40-'
+				set freifunk.wifi_device.hwmode=11ng
+				set freifunk.wifi_iface=defaults
+				set freifunk.wifi_iface.mode=adhoc
+				set freifunk.wifi_iface.bssid="02:CA:FF:EE:BA:BE"
+				set freifunk.wifi_iface.sw_merge=""
+				commit freifunk
+			EOF
 		;;
 		broadcom)
-			uci set freifunk.wifi_device.channel=1
-			uci set freifunk.wifi_device.diversity=""
-			uci set freifunk.wifi_device.disabled=0
-			uci set freifunk.wifi_device.txpower=""
-			uci set freifunk.wifi_device.country=DE
-			uci set freifunk.wifi_device.txantenna=0
-			uci set freifunk.wifi_device.rxantenna=0
-			uci set freifunk.wifi_device.hwmode=11g
-			uci set freifunk.wifi_device.distance=1000
-			uci set freifunk.wifi_iface=defaults
-			uci set freifunk.wifi_iface.encryption=none
-			uci set freifunk.wifi_iface.mode=adhoc
-			uci set freifunk.wifi_iface.bssid="02:CA:FF:EE:BA:BE"
-			uci set freifunk.wifi_iface.sw_merge=""
-			uci commit freifunk
+			uci -q batch <<-EOF
+				set freifunk.wifi_device.channel=1
+				set freifunk.wifi_device.diversity=""
+				set freifunk.wifi_device.disabled=0
+				set freifunk.wifi_device.txpower=""
+				set freifunk.wifi_device.country=DE
+				set freifunk.wifi_device.txantenna=0
+				set freifunk.wifi_device.rxantenna=0
+				set freifunk.wifi_device.hwmode=11g
+				set freifunk.wifi_device.distance=1000
+				set freifunk.wifi_iface=defaults
+				set freifunk.wifi_iface.encryption=none
+				set freifunk.wifi_iface.mode=adhoc
+				set freifunk.wifi_iface.bssid="02:CA:FF:EE:BA:BE"
+				set freifunk.wifi_iface.sw_merge=""
+				commit freifunk
+			EOF
 		;;
 	esac
 }
