@@ -18,9 +18,9 @@ function index()
 	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 
-	entry({"servicectl"}, alias("servicectl", "status"), "", 1).sysauth = "root"
-	entry({"servicectl", "status"}, call("action_status"), "", 2).leaf = true
-	entry({"servicectl", "restart"}, call("action_restart"), "", 3).leaf = true
+	entry({"servicectl"}, alias("servicectl", "status"), nil, 1).sysauth = "root"
+	entry({"servicectl", "status"}, call("action_status"), nil, 2).leaf = true
+	entry({"servicectl", "restart"}, call("action_restart"), nil, 3).leaf = true
 end
 
 function action_status()
