@@ -356,6 +356,7 @@ static inline int nl80211_wpactl_recv(int sock, char *buf, int blen)
 static char * nl80211_wpactl_info(const char *ifname, const char *cmd,
 								   const char *event)
 {
+	int numtry = 0;
 	int sock = -1;
 	char *rv = NULL;
 	size_t remote_length, local_length;
@@ -395,7 +396,7 @@ static char * nl80211_wpactl_info(const char *ifname, const char *cmd,
 
 	send(sock, cmd, strlen(cmd), 0);
 
-	while( 1 )
+	while( numtry++ < 5 )
 	{
 		if( nl80211_wpactl_recv(sock, buffer, sizeof(buffer)) <= 0 )
 		{
