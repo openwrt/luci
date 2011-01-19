@@ -795,6 +795,8 @@ function main.write(self, section, value)
 				local chan = tonumber(channel)
 				if chan >= 0 and chan < 10 then
 					bssid = channel .. "2:CA:FF:EE:BA:BE"
+				elseif chan == 10 then 
+					bssid = "02:CA:FF:EE:BA:BE" 
 				elseif chan >= 11 and chan <= 14 then
 					bssid = string.format("%X",channel) .. "2:CA:FF:EE:BA:BE"
 				elseif chan >= 36 and chan <= 64 then
