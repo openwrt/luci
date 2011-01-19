@@ -240,7 +240,7 @@ mtu.placeholder = 1500
 srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
 srv:depends("proto", "pptp")
 srv.optional = false
-srv.datatype = "ip4addr"
+srv.datatype = "host"
 
 if has_6in4 then
 	peer = s:taboption("general", Value, "peeraddr", translate("Server IPv4-Address"))
