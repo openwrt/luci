@@ -751,7 +751,7 @@ function cbi_row_swap(elem, up, store)
 			/cbi-rowstyle-[12]/, 'cbi-rowstyle-' + (1 + (idx % 2))
 		);
 
-		if (table.rows[idx].id && table.rows[idx].id.match(/-(cfg[0-9a-f]+)$/) )
+		if (table.rows[idx].id && table.rows[idx].id.match(/-([^\-]+)$/) )
 			ids.push(RegExp.$1);
 	}
 
