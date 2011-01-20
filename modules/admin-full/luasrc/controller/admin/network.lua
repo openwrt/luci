@@ -17,6 +17,7 @@ module("luci.controller.admin.network", package.seeall)
 function index()
 	require("luci.i18n")
 	local uci = require("luci.model.uci").cursor()
+	local net = require "luci.model.network".init(uci)
 	local i18n = luci.i18n.translate
 	local has_wifi = nixio.fs.stat("/etc/config/wireless")
 	local has_switch = false
@@ -59,6 +60,18 @@ function index()
 
 		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil, 16)
 		page.leaf = true
+
+		local wdev
+		for _, wdev in ipairs(net:get_wifidevs()) do
+			local wnet
+			for _, wnet in ipairs(wdev:get_wifinets()) do
+				entry(
+					{"admin", "network", "wireless", wnet.netid},
+					alias("admin", "network", "wireless"),
+					wdev:name() .. ": " .. wnet:shortname()
+				)
+			end
+		end
 	end
 
 	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
@@ -307,6 +320,7 @@ function iface_delete()
 end
 
 function wifi_status()
+	local netm  = require "luci.model.network".init()
 	local path = luci.dispatcher.context.requestpath
 	local arp  = luci.sys.net.arptable()
 	local rv   = { }
@@ -314,17 +328,22 @@ function wifi_status()
 	local dev
 	for dev in path[#path]:gmatch("[%w%.%-]+") do
 		local j = { id = dev }
-		local iw = luci.sys.wifi.getiwinfo(dev)
+		local wn = netm:get_wifinet(dev)
+		local iw = wn and wn.iwinfo
 		if iw then
 			local f
 			for _, f in ipairs({
 				"channel", "frequency", "txpower", "bitrate", "signal", "noise",
-				"quality", "quality_max", "mode", "ssid", "bssid", "country",
+				"quality", "quality_max", "bssid", "country",
 				"encryption", "ifname", "assoclist"
 			}) do
 				j[f] = iw[f]
 			end
 		end
+
+		j.mode = wn and wn:active_mode() or "?"
+		j.ssid = wn and wn:active_ssid() or "?"
+
 		rv[#rv+1] = j
 	end
 
