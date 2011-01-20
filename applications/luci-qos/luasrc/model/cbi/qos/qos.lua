@@ -23,6 +23,7 @@ m = Map("qos", translate("Quality of Service"),
 s = m:section(TypedSection, "interface", translate("Interfaces"))
 s.addremove = true
 s.anonymous = false
+s.template  = "cbi/tblsection"
 
 e = s:option(Flag, "enabled", translate("Enable"))
 e.rmempty = false
@@ -64,14 +65,20 @@ wa.cbi_add_knownips(dsth)
 l7 = s:option(ListValue, "layer7", translate("Service"))
 l7.rmempty = true
 l7:value("", translate("all"))
-local pats = fs.glob("/etc/l7-protocols/*/*.pat")
+
+local pats = io.popen("find /etc/l7-protocols/ -type f -name '*.pat'")
 if pats then
-	for f in pats do
-		f = f:match("([^/]+)%.pat$")
-		if f then
-			l7:value(f)
+	local l
+	while true do
+		l = pats:read("*l")
+		if not l then break end
+
+		l = l:match("([^/]+)%.pat$")
+		if l then
+			l7:value(l)
 		end
 	end
+	pats:close()
 end
 
 p = s:option(Value, "proto", translate("Protocol"))
