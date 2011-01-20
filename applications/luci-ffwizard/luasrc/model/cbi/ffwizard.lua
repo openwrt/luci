@@ -603,7 +603,7 @@ function f.handle(self, state, data)
 				uci:commit("radvd")
 			end
 
-			sys.exec("for s in network dnsmasq luci_splash firewall uhttpd olsrd radvd l2gvpn; do /etc/init.d/$s restart;done > /dev/null &")
+			sys.exec("for s in network dnsmasq luci_splash firewall uhttpd olsrd radvd l2gvpn; do [ -x /etc/init.d/$s ] && /etc/init.d/$s restart;done > /dev/null &")
 			luci.http.redirect(luci.dispatcher.build_url(luci.dispatcher.context.path[1], "freifunk", "ffwizard"))
 		end
 		return false
