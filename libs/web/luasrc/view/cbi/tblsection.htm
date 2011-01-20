@@ -35,6 +35,9 @@ end
 	<% if self.title and #self.title > 0 then -%>
 		<legend><%=self.title%></legend>
 	<%- end %>
+	<%- if self.sortable then -%>
+		<input type="hidden" id="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" name="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" value="" />
+	<%- end -%>
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
 		<%- local count = 0 -%>
@@ -90,6 +93,13 @@ end
 						end
 					end
 				-%>
+
+				<%- if self.sortable then -%>
+					<td class="cbi-section-table-cell" style="width:50px">
+						<a href="#" onclick="return cbi_row_swap(this, true,  'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>"><img src="<%=resource%>/cbi/up.gif" alt="<%:Move up%>" /></a>
+						<a href="#" onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move down%>"><img src="<%=resource%>/cbi/down.gif" alt="<%:Move down%>" /></a>
+					</td>
+				<%- end -%>
 
 				<%- if self.extedit or self.addremove then -%>
 					<td class="cbi-section-table-cell" style="width:50px">

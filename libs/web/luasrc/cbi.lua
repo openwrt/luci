@@ -50,6 +50,7 @@ AUTO = true
 
 CREATE_PREFIX = "cbi.cts."
 REMOVE_PREFIX = "cbi.rts."
+RESORT_PREFIX = "cbi.sts."
 
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap, ...)
@@ -1118,6 +1119,20 @@ function TypedSection.parse(self, novld)
 
 		if created then
 			AbstractSection.parse_optionals(self, created)
+		end
+	end
+
+	if self.sortable then
+		local stval = RESORT_PREFIX .. self.config .. "." .. self.sectiontype
+		local order = self.map:formvalue(stval)
+		if order and #order > 0 then
+			local sid
+			local num = 0
+			for sid in util.imatch(order) do
+				self.map.uci:reorder(self.config, sid, num)
+				num = num + 1
+			end
+			self.changed = (num > 0)
 		end
 	end
 

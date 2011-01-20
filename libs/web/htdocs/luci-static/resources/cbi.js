@@ -718,6 +718,50 @@ function cbi_validate_field(cbid, optional, type)
 	}
 }
 
+function cbi_row_swap(elem, up, store)
+{
+	var tr = elem.parentNode;
+	while (tr && tr.nodeName != 'tr')
+		tr = tr.parentNode;
+
+	var table = tr.parentNode;
+	while (table && table.nodeName != 'table')
+		table = table.parentNode;
+
+	var s = up ? 3 : 2;
+	var e = up ? table.rows.length : table.rows.length - 1;
+
+	for (var idx = s; idx < e; idx++)
+	{
+		if (table.rows[idx] == tr)
+		{
+			if (up)
+				tr.parentNode.insertBefore(table.rows[idx], table.rows[idx-1]);
+			else
+				tr.parentNode.insertBefore(table.rows[idx+1], table.rows[idx]);
+
+			break;
+		}
+	}
+
+	var ids = [ ];
+	for (idx = 2; idx < table.rows.length; idx++)
+	{
+		table.rows[idx].className = table.rows[idx].className.replace(
+			/cbi-rowstyle-[12]/, 'cbi-rowstyle-' + (1 + (idx % 2))
+		);
+
+		if (table.rows[idx].id && table.rows[idx].id.match(/-(cfg[0-9a-f]+)$/) )
+			ids.push(RegExp.$1);
+	}
+
+	var input = document.getElementById(store);
+	if (input)
+		input.value = ids.join(' ');
+
+	return false;
+}
+
 if( ! String.serialize )
 	String.serialize = function(o)
 	{
