@@ -602,9 +602,9 @@ function f.handle(self, state, data)
 			if has_radvd then
 				uci:commit("radvd")
 			end
--- the following line didn't work without admin-mini, for now i just replaced it with sys.exec... soma
---			luci.http.redirect(luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path), "system", "reboot") .. "?reboot=1")
-			sys.exec("reboot")
+
+			sys.exec("for s in network dnsmasq luci_splash firewall uhttpd olsrd radvd l2gvpn; do /etc/init.d/$s restart;done > /dev/null &")
+			luci.http.redirect(luci.dispatcher.build_url(luci.dispatcher.context.path[1], "freifunk", "ffwizard"))
 		end
 		return false
 	elseif state == FORM_INVALID then
