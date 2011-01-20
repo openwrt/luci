@@ -66,30 +66,20 @@ end
 -------------------- View --------------------
 f = SimpleForm("ffwizward", "Freifunkassistent",
  "Dieser Assistent unterstützt Sie bei der Einrichtung des Routers für das Freifunknetz.")
--- main netconfig
-local newpsswd = has_rom and sys.exec("diff /rom/etc/passwd /etc/passwd")
-if newpsswd ~= "" then
-	pw = f:field(Flag, "pw", "Router Passwort", "Setzen Sie den Haken, um Ihr Passwort zu ändern.")
-	function pw.cfgvalue(self, section)
-		return 1
+
+-- if password is not set or default then force the user to set a new one
+if sys.exec("diff /rom/etc/passwd /etc/passwd") == "" then
+	pw1 = f:field(Value, "pw1", translate("password"))
+	pw1.password = true
+	pw1.rmempty = false
+
+	pw2 = f:field(Value, "pw2", translate("confirmation"))
+	pw2.password = true
+	pw2.rmempty = false
+
+	function pw2.validate(self, value, section)
+		return pw1:formvalue(section) == value and value
 	end
-end
-
-pw1 = f:field(Value, "pw1", translate("password"))
-pw1.password = true
-pw1.rmempty = false
-
-pw2 = f:field(Value, "pw2", translate("confirmation"))
-pw2.password = true
-pw2.rmempty = false
-
-function pw2.validate(self, value, section)
-	return pw1:formvalue(section) == value and value
-end
-
-if newpsswd ~= "" then
-	pw1:depends("pw", "1")
-	pw2:depends("pw", "1")
 end
 
 net = f:field(ListValue, "net", "Freifunk Community", "Nutzen Sie die Einstellungen der Freifunk Gemeinschaft in ihrer Nachbarschaft.")
@@ -589,11 +579,7 @@ function f.handle(self, state, data)
 		else
 			if data.pw1 then
 				local stat = luci.sys.user.setpasswd("root", data.pw1) == 0
---				if stat then
---					f.message = translate("a_s_changepw_changed")
---			else
---				f.errmessage = translate("unknownerror")
-				end
+			end
 			data.pw1 = nil
 			data.pw2 = nil
 			uci:commit("freifunk")
