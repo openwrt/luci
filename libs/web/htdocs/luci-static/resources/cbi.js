@@ -721,12 +721,18 @@ function cbi_validate_field(cbid, optional, type)
 function cbi_row_swap(elem, up, store)
 {
 	var tr = elem.parentNode;
-	while (tr && tr.nodeName != 'tr')
+	while (tr && tr.nodeName.toLowerCase() != 'tr')
 		tr = tr.parentNode;
 
+	if (!tr)
+		return false;
+
 	var table = tr.parentNode;
-	while (table && table.nodeName != 'table')
+	while (table && table.nodeName.toLowerCase() != 'table')
 		table = table.parentNode;
+
+	if (!table)
+		return false;
 
 	var s = up ? 3 : 2;
 	var e = up ? table.rows.length : table.rows.length - 1;
