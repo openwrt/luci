@@ -113,6 +113,7 @@ s = m:section(TypedSection, "redirect", translate("Redirections"))
 s.template  = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
+s.sortable  = true
 s.extedit   = ds.build_url("admin", "network", "firewall", "redirect", "%s")
 
 function s.create(self, section)
@@ -191,6 +192,7 @@ end
 s = m:section(TypedSection, "rule", translate("Rules"))
 s.addremove = true
 s.anonymous = true
+s.sortable  = true
 s.template = "cbi/tblsection"
 s.extedit   = ds.build_url("admin", "network", "firewall", "rule", "%s")
 s.defaults.target = "ACCEPT"
