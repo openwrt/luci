@@ -167,7 +167,7 @@ $Id$
 						{
 							if (is_assoc)
 								info.innerHTML = String.format(
-									'<strong><%:SSID%>:</strong> %s | ' +
+									'<strong><%:SSID%>:</strong> %h | ' +
 									'<strong><%:Mode%>:</strong> %s<br />' +
 									'<strong><%:BSSID%>:</strong> %s | ' +
 									'<strong><%:Encryption%>:</strong> %s',
@@ -175,7 +175,12 @@ $Id$
 										iw.encryption ? iw.encryption.description : '<%:None%>'
 								);
 							else
-								info.innerHTML = '<em><%:Wireless is disabled or not associated%></em>';
+								info.innerHTML = String.format(
+									'<strong><%:SSID%>:</strong> %h | ' +
+									'<strong><%:Mode%>:</strong> %s<br />' +
+									'<em><%:Wireless is disabled or not associated%></em>',
+										iw.ssid || '?', iw.mode
+								);
 						}
 
 						var dev = document.getElementById(wifidevs[iw.id] + '-iw-devinfo');
