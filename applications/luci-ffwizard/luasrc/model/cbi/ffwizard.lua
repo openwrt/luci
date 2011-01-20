@@ -121,9 +121,7 @@ function hostname.write(self, section, value)
 	uci:save("freifunk")
 end
 function hostname.validate(self, value)
-	if (#value > 16) then
-		return
-	elseif (string.find(value, "[^%w%_%-]")) then
+	if (#value > 24) or string.find(value, "[^%w%.%-]") or string.find(string.sub(value, value:len()), "[%.%-]") or string.find(string.sub(value, 1), "[%.%-]") then
 		return
 	else
 		return value
