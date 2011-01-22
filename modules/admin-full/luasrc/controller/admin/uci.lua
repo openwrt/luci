@@ -24,7 +24,7 @@ function index()
 	entry({"admin", "uci", "changes"}, call("action_changes"), i18n("Changes"), 40).query = {redir=redir}
 	entry({"admin", "uci", "revert"}, call("action_revert"), i18n("Revert"), 30).query = {redir=redir}
 	entry({"admin", "uci", "apply"}, call("action_apply"), i18n("Apply"), 20).query = {redir=redir}
-	entry({"admin", "uci", "saveapply"}, call("action_apply"), i18n("Save & Apply"), 10).query = {redir=redir}
+	entry({"admin", "uci", "saveapply"}, call("action_apply"), i18n("Save &#38; Apply"), 10).query = {redir=redir}
 end
 
 function action_changes()
