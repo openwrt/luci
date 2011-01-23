@@ -136,6 +136,7 @@ jump.default = "ACCEPT"
 jump:value("DROP", translate("drop"))
 jump:value("ACCEPT", translate("accept"))
 jump:value("REJECT", translate("reject"))
+jump:value("NOTRACK", translate("don't track"))
 
 
 smac = s:taboption("advanced", Value, "src_mac", translate("Source MAC address"))
