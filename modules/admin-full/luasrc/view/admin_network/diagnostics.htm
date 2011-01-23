@@ -33,8 +33,8 @@ $Id$
 				'<%:Waiting for router...%>'
 			;
 
-			legend.style.display = null;
 			legend.parentNode.style.display = 'block';
+			legend.style.display = 'inline';
 
 			stxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/diag_' + tool + '/' + addr, null,
 				function(x)

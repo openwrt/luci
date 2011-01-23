@@ -74,6 +74,12 @@ require("luci.http").prepare_content("application/xhtml+xml")
 </div></div>
 <![endif]-->
 
+<%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
+	<div class="warning">
+		<strong><%:No password set!%></strong><br />
+		<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
+	</div>
+<%- end -%>
 
 <p class="skiplink">
 <span id="skiplink1"><a href="#navigation"><%:skiplink1 Skip to navigation%></a></span>

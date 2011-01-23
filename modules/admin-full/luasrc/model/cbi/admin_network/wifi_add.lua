@@ -166,9 +166,7 @@ function newnet.parse(self, section)
 			uci:save("network")
 			uci:save("firewall")
 
-			luci.http.redirect(luci.dispatcher.build_url(
-				"admin/network/wireless", wdev:name(), wnet:ifname()
-			))
+			luci.http.redirect(wnet:adminlink())
 		end
 	end
 end

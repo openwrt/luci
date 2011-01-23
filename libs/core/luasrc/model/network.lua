@@ -242,10 +242,19 @@ function has_ipv6(self)
 end
 
 function add_network(self, n, options)
-	if n and #n > 0 and n:match("^[a-zA-Z0-9_]+$") and not self:get_network(n) then
+	local oldnet = self:get_network(n)
+	if n and #n > 0 and n:match("^[a-zA-Z0-9_]+$") and not oldnet then
 		if uci_r:section("network", "interface", n, options) then
 			return network(n)
 		end
+	elseif oldnet and oldnet:is_empty() then
+		if options then
+			local k, v
+			for k, v in pairs(options) do
+				oldnet:set(k, v)
+			end
+		end
+		return oldnet
 	end
 end
 
@@ -1016,7 +1025,7 @@ end
 function wifinet.active_mode(self)
 	local m = _stror(self.iwinfo.mode, self.iwdata.mode) or "ap"
 
-	if     m == "ap"      then m = "AP"
+	if     m == "ap"      then m = "Master"
 	elseif m == "sta"     then m = "Client"
 	elseif m == "adhoc"   then m = "Ad-Hoc"
 	elseif m == "mesh"    then m = "Mesh"
@@ -1118,8 +1127,7 @@ function wifinet.get_i18n(self)
 end
 
 function wifinet.adminlink(self)
-	return dsp.build_url("admin", "network", "wireless",
-		self.iwdata.device, self.netid)
+	return dsp.build_url("admin", "network", "wireless", self.netid)
 end
 
 function wifinet.get_network(self)

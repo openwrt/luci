@@ -66,30 +66,20 @@ end
 -------------------- View --------------------
 f = SimpleForm("ffwizward", "Freifunkassistent",
  "Dieser Assistent unterstützt Sie bei der Einrichtung des Routers für das Freifunknetz.")
--- main netconfig
-local newpsswd = has_rom and sys.exec("diff /rom/etc/passwd /etc/passwd")
-if newpsswd ~= "" then
-	pw = f:field(Flag, "pw", "Router Passwort", "Setzen Sie den Haken, um Ihr Passwort zu ändern.")
-	function pw.cfgvalue(self, section)
-		return 1
+
+-- if password is not set or default then force the user to set a new one
+if sys.exec("diff /rom/etc/passwd /etc/passwd") == "" then
+	pw1 = f:field(Value, "pw1", translate("password"))
+	pw1.password = true
+	pw1.rmempty = false
+
+	pw2 = f:field(Value, "pw2", translate("confirmation"))
+	pw2.password = true
+	pw2.rmempty = false
+
+	function pw2.validate(self, value, section)
+		return pw1:formvalue(section) == value and value
 	end
-end
-
-pw1 = f:field(Value, "pw1", translate("password"))
-pw1.password = true
-pw1.rmempty = false
-
-pw2 = f:field(Value, "pw2", translate("confirmation"))
-pw2.password = true
-pw2.rmempty = false
-
-function pw2.validate(self, value, section)
-	return pw1:formvalue(section) == value and value
-end
-
-if newpsswd ~= "" then
-	pw1:depends("pw", "1")
-	pw2:depends("pw", "1")
 end
 
 net = f:field(ListValue, "net", "Freifunk Community", "Nutzen Sie die Einstellungen der Freifunk Gemeinschaft in ihrer Nachbarschaft.")
@@ -131,9 +121,7 @@ function hostname.write(self, section, value)
 	uci:save("freifunk")
 end
 function hostname.validate(self, value)
-	if (#value > 16) then
-		return
-	elseif (string.find(value, "[^%w%_%-]")) then
+	if (#value > 24) or string.find(value, "[^%w%.%-]") or string.find(string.sub(value, value:len()), "[%.%-]") or string.find(string.sub(value, 1), "[%.%-]") then
 		return
 	else
 		return value
@@ -186,23 +174,22 @@ uci:foreach("wireless", "wifi-device",
 			function chan.cfgvalue(self, section)
 				return uci:get("freifunk", "wizard", "chan_" .. device)
 			end
+
 			chan:value('default')
-			for i = 1, 14, 1 do
-				chan:value(i)
+			for _, f in ipairs(sys.wifi.channels(device)) do
+				if not f.restricted then
+					chan:value(f.channel)
+				end
 			end
-			for i = 36, 64, 4 do
-				chan:value(i)
-			end
-			for i = 100, 140, 4 do
-				chan:value(i)
-			end
+
 			function chan.write(self, sec, value)
 				if value then
 					uci:set("freifunk", "wizard", "chan_" .. device, value)
 					uci:save("freifunk")
 				end
 			end
-		local meship = f:field(Value, "meship_" .. device, device:upper() .. "  Mesh IP Adresse einrichten", "Ihre Mesh IP Adresse erhalten Sie von der Freifunk Gemeinschaft in Ihrer Nachbarschaft. Es ist eine netzweit eindeutige Identifikation, z.B. 104.1.1.1.")
+
+			local meship = f:field(Value, "meship_" .. device, device:upper() .. "  Mesh IP Adresse einrichten", "Ihre Mesh IP Adresse erhalten Sie von der Freifunk Gemeinschaft in Ihrer Nachbarschaft. Es ist eine netzweit eindeutige Identifikation, z.B. 104.1.1.1.")
 			meship:depends("device_" .. device, "1")
 			meship.rmempty = true
 			function meship.cfgvalue(self, section)
@@ -590,11 +577,7 @@ function f.handle(self, state, data)
 		else
 			if data.pw1 then
 				local stat = luci.sys.user.setpasswd("root", data.pw1) == 0
---				if stat then
---					f.message = translate("a_s_changepw_changed")
---			else
---				f.errmessage = translate("unknownerror")
-				end
+			end
 			data.pw1 = nil
 			data.pw2 = nil
 			uci:commit("freifunk")
@@ -619,9 +602,9 @@ function f.handle(self, state, data)
 			if has_radvd then
 				uci:commit("radvd")
 			end
--- the following line didn't work without admin-mini, for now i just replaced it with sys.exec... soma
---			luci.http.redirect(luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path), "system", "reboot") .. "?reboot=1")
-			sys.exec("reboot")
+
+			sys.exec("for s in network dnsmasq luci_splash firewall uhttpd olsrd radvd l2gvpn; do [ -x /etc/init.d/$s ] && /etc/init.d/$s restart;done > /dev/null &")
+			luci.http.redirect(luci.dispatcher.build_url(luci.dispatcher.context.path[1], "freifunk", "ffwizard"))
 		end
 		return false
 	elseif state == FORM_INVALID then
@@ -782,50 +765,39 @@ function main.write(self, section, value)
 		end
 		-- New Config
 		-- Tune wifi device
-		local ssiduci = uci:get("freifunk", community, "ssid")
-		local ssiddot = string.find(ssiduci,'%..*')
-		local ssidshort
-		if ssiddot then
-			ssidshort = string.sub(ssiduci,ssiddot)
-		else
-			ssidshort = ssiduci
-		end
+		local ssid = uci:get("freifunk", community, "ssid") or "olsr.freifunk.net"
 		local devconfig = uci:get_all("freifunk", "wifi_device")
 		util.update(devconfig, uci:get_all(external, "wifi_device") or {})
-		local ssid = uci:get("freifunk", community, "ssid")
 		local channel = luci.http.formvalue("cbid.ffwizward.1.chan_" .. device)
 		local hwmode = "11bg"
-		local bssid = "02:CA:FF:EE:BA:BE"
+		local bssid = uci:get_all(external, "wifi_iface", "bssid") or "02:CA:FF:EE:BA:BE"
 		local mrate = 5500
+		-- set bssid, see https://kifuse02.pberg.freifunk.net/moin/channel-bssid-essid for schema
 		if channel and channel ~= "default" then
 			if devconfig.channel ~= channel then
 				devconfig.channel = channel
 				local chan = tonumber(channel)
 				if chan >= 0 and chan < 10 then
 					bssid = channel .. "2:CA:FF:EE:BA:BE"
-					ssid = "ch" .. channel .. ssidshort
-				elseif chan == 10 then
-					bssid = "02:CA:FF:EE:BA:BE"
-					ssid = "ch" .. channel .. ssidshort
+				elseif chan == 10 then 
+					bssid = "02:CA:FF:EE:BA:BE" 
 				elseif chan >= 11 and chan <= 14 then
 					bssid = string.format("%X",channel) .. "2:CA:FF:EE:BA:BE"
-					ssid = "ch" .. channel .. ssidshort
 				elseif chan >= 36 and chan <= 64 then
 					hwmode = "11a"
 					mrate = ""
 					outdoor = 0
 					bssid = "00:" .. channel ..":CA:FF:EE:EE"
-					ssid = "ch" .. channel .. ssidshort
 				elseif chan >= 100 and chan <= 140 then
 					hwmode = "11a"
 					mrate = ""
 					outdoor = 1
 					bssid = "01:" .. string.sub(channel, 2) .. ":CA:FF:EE:EE"
-					ssid = "ch" .. channel .. ssidshort
 				end
 				devconfig.hwmode = hwmode
 				devconfig.outdoor = outdoor
 			end
+			ssid = ssid .. " - ch" .. channel
 		end
 		uci:tset("wireless", device, devconfig)
 		-- Create wifi iface
@@ -833,13 +805,7 @@ function main.write(self, section, value)
 		util.update(ifconfig, uci:get_all(external, "wifi_iface") or {})
 		ifconfig.device = device
 		ifconfig.network = nif
-		if ssid then
-			-- See Table https://kifuse02.pberg.freifunk.net/moin/channel-bssid-essid 
-			ifconfig.ssid = ssid
-		else
-			ifconfig.ssid = "olsr.freifunk.net"
-		end
-		-- See Table https://kifuse02.pberg.freifunk.net/moin/channel-bssid-essid	
+		ifconfig.ssid = ssid
 		ifconfig.bssid = bssid
 		ifconfig.encryption="none"
 		-- Read Preset 
@@ -947,8 +913,8 @@ function main.write(self, section, value)
 						device     =device,
 						mode       ="ap",
 						encryption ="none",
-						network    =nif.."dhcp",
-						ssid       ="AP"..ssidshort
+						network    =nif .. "dhcp",
+						ssid       ="AP-" .. ssid
 					})
 					if has_radvd then
 						uci:section("radvd", "interface", nil, {
