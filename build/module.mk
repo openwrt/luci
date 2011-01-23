@@ -32,6 +32,9 @@ luasource:
   endif
 
 
+luadiet: luasource
+	for i in $$(find dist -type f -name '*.lua'); do $(LUA) ../../contrib/luasrcdiet/lua/LuaSrcDiet.lua $$i -o $$i.diet && mv $$i.diet $$i; done
+
 luastrip: luasource
 	for i in $$(find dist -type f -name '*.lua'); do perl -e 'undef $$/; open( F, "< $$ARGV[0]" ) || die $$!; $$src = <F>; close F; $$src =~ s/--\[\[.*?\]\](--)?//gs; $$src =~ s/^\s*--.*?\n//gm; open( F, "> $$ARGV[0]" ) || die $$!; print F $$src; close F' $$i; done
 

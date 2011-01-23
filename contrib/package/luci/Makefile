@@ -103,6 +103,9 @@ define Package/luci-lib-core/config
        config PACKAGE_luci-lib-core_stripped
                bool "Stripped"
 
+       config PACKAGE_luci-lib-core_srcdiet
+               bool "Compressed Source"
+
        config PACKAGE_luci-lib-core_source
                bool "Full Source"
 
@@ -117,8 +120,8 @@ ifneq ($(CONFIG_PACKAGE_luci-lib-core_stripped),)
   LUA_TARGET:=strip
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-lib-core_zipped),)
-  LUA_TARGET:=gzip
+ifneq ($(CONFIG_PACKAGE_luci-lib-core_srcdiet),)
+  LUA_TARGET:=diet
 endif
 
 ifneq ($(CONFIG_PACKAGE_luci-lib-core),)
