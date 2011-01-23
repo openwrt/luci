@@ -27,7 +27,7 @@ $Id$
 <% end end %>
 </div>
 <script type="text/javascript">
-cbi_dynlist_init('<%=cbid%>');
+cbi_dynlist_init('<%=cbid%>', '<%=resource%>');
 <% if self.datatype then -%>
 	<% if #self.keylist > 0 then -%>
 		cbi_combobox_init('<%=cbid .. "." .. i%>', {

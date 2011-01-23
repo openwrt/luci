@@ -402,16 +402,24 @@ function cbi_filebrowser(id, url, defpath) {
 	browser.focus();
 }
 
-function cbi_dynlist_init(name)
+function cbi_dynlist_init(name, respath)
 {
 	function cbi_dynlist_renumber(e)
 	{
-		var count = 1;
-		var childs = e.parentNode.childNodes;
+		/* in a perfect world, we could just getElementsByName() - but not if
+		 * MSIE is involved... */
+		var inputs = [ ]; // = document.getElementsByName(name);
+		for (var i = 0; i < e.parentNode.childNodes.length; i++)
+			if (e.parentNode.childNodes[i].name == name)
+				inputs.push(e.parentNode.childNodes[i]);
 
-		for( var i = 0; i < childs.length; i++ )
-			if( childs[i].name == name )
-				childs[i].id = name + '.' + (count++);
+		for (var i = 0; i < inputs.length; i++)
+		{
+			inputs[i].id = name + '.' + (i + 1);
+			inputs[i].nextSibling.src = respath + (
+				(i+1) < inputs.length ? '/cbi/remove.gif' : '/cbi/add.gif'
+			);
+		}
 
 		e.focus();
 	}
@@ -480,6 +488,7 @@ function cbi_dynlist_init(name)
 
 				if (se.value.length == 0 && jump)
 				{
+					se.parentNode.removeChild(se.nextSibling.nextSibling);
 					se.parentNode.removeChild(se.nextSibling);
 					se.parentNode.removeChild(se);
 
@@ -487,6 +496,9 @@ function cbi_dynlist_init(name)
 
 					if (ev.preventDefault)
 						ev.preventDefault();
+
+					/* IE Quirk, needs double focus somehow */
+					jump.focus();
 
 					return false;
 				}
@@ -499,17 +511,22 @@ function cbi_dynlist_init(name)
 					n.name       = se.name;
 					n.type       = se.type;
 
+				var b = document.createElement('img');
+
 				cbi_bind(n, 'keydown',  cbi_dynlist_keydown);
 				cbi_bind(n, 'keypress', cbi_dynlist_keypress);
+				cbi_bind(b, 'click',    cbi_dynlist_btnclick);
 
 				if (next)
 				{
 					se.parentNode.insertBefore(n, next);
+					se.parentNode.insertBefore(b, next);
 					se.parentNode.insertBefore(document.createElement('br'), next);
 				}
 				else
 				{
 					se.parentNode.appendChild(n);
+					se.parentNode.appendChild(b);
 					se.parentNode.appendChild(document.createElement('br'));
 				}
 
@@ -540,11 +557,45 @@ function cbi_dynlist_init(name)
 		return true;
 	}
 
+	function cbi_dynlist_btnclick(ev)
+	{
+		ev = ev ? ev : window.event;
+
+		var se = ev.target ? ev.target : ev.srcElement;
+
+		if (se.src.indexOf('remove') > -1)
+		{
+			se.previousSibling.value = '';
+
+			cbi_dynlist_keydown({
+				target:  se.previousSibling,
+				keyCode: 8
+			});
+		}
+		else
+		{
+			cbi_dynlist_keydown({
+				target:  se.previousSibling,
+				keyCode: 13
+			});
+		}
+
+		return false;
+	}
+
 	var inputs = document.getElementsByName(name);
 	for( var i = 0; i < inputs.length; i++ )
 	{
+		var btn = document.createElement('img');
+			btn.src = respath + (
+				(i+1) < inputs.length ? '/cbi/remove.gif' : '/cbi/add.gif'
+			);
+
+		inputs[i].parentNode.insertBefore(btn, inputs[i].nextSibling);
+
 		cbi_bind(inputs[i], 'keydown',  cbi_dynlist_keydown);
 		cbi_bind(inputs[i], 'keypress', cbi_dynlist_keypress);
+		cbi_bind(btn,       'click',    cbi_dynlist_btnclick);
 	}
 }
 
