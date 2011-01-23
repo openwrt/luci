@@ -23,7 +23,6 @@ m = Map("qos", translate("Quality of Service"),
 s = m:section(TypedSection, "interface", translate("Interfaces"))
 s.addremove = true
 s.anonymous = false
-s.template  = "cbi/tblsection"
 
 e = s:option(Flag, "enabled", translate("Enable"))
 e.rmempty = false
