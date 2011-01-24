@@ -51,9 +51,12 @@ m.title = luci.util.pcdata(wnet:get_i18n())
 
 
 local iw = luci.sys.wifi.getiwinfo(arg[1])
-local tx_powers = iw.txpwrlist  or { }
 local hw_modes  = iw.hwmodelist or { }
-
+local tx_powers = iw.txpwrlist  or { }
+local tx_power  = tostring(
+	(iw.txpower and iw.txpower > 0 and iw.txpower) or
+	(#tx_powers > 0 and tx_powers[#tx_powers].dbm)
+)
 
 s = m:section(NamedSection, wdev:name(), "wifi-device", translate("Device Configuration"))
 s.addremove = false
@@ -105,7 +108,7 @@ if hwtype == "mac80211" then
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	tp.default = tostring(iw and iw.txpower or tx_powers[#tx_powers])
+	tp.default = tx_power
 	for _, p in ipairs(tx_powers or {}) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end
@@ -156,7 +159,8 @@ if hwtype == "atheros" then
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	for _, p in ipairs(iw.txpwrlist) do
+	tp.default = tx_power
+	for _, p in ipairs(tx_powers or {}) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end
 
@@ -216,7 +220,8 @@ if hwtype == "broadcom" then
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	for _, p in ipairs(iw.txpwrlist) do
+	tp.default = tx_power
+	for _, p in ipairs(tx_powers or {}) do
 		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
 	end
 
