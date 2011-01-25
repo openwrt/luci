@@ -13,15 +13,23 @@ $Id$
 
 -%>
 <%+header%>
-<% local contact = luci.model.uci.cursor():get_all("freifunk", "contact") %>
+
+<% 
+local uci = require "luci.model.uci".cursor()
+local contact = uci:get_all("freifunk", "contact")
+local location = uci:get_first("system", "system", "location")
+local lon = uci:get_first("system", "system", "longitude")
+local lat = uci:get_first("system", "system", "latitude")
+%>
+
 <h2><a id="content" name="content"><%:Contact%></a></h2>
 <table cellspacing="0" cellpadding="6">
 	<tr><th><%:Nickname%>:</th><td><%=contact.nickname%></td></tr>
 	<tr><th><%:Realname%>:</th><td><%=contact.name%></td></tr>
 	<tr><th><%:E-Mail%>:</th><td><%=contact.mail%></td></tr>
 	<tr><th><%:Phone%>:</th><td><%=contact.phone%></td></tr>
-	<tr><th><%:Location%>:</th><td><%=contact.location%></td></tr>
-	<tr><th><%:Coordinates%>:</th><td><%=contact.geo%></td></tr>
+	<tr><th><%:Location%>:</th><td><%=location%></td></tr>
+	<tr><th><%:Coordinates%>:</th><td><%=lat%> <%=lon%></td></tr>
 	<tr><th><%:Notice%>:</th><td><%=contact.note%></td></tr>
 </table>
 <%+footer%>

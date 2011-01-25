@@ -14,7 +14,16 @@ $Id$
 -%>
 <%+header%>
 <% 
-local ff = luci.model.uci.cursor():get_all("freifunk")
+local uci = require "luci.model.uci".cursor()
+local ff = uci:get_all("freifunk")
+if not ff.community.name then
+	ff.community.name = ""
+end
+local co = "profile_" .. ff.community.name
+local community = uci:get_first(co, "community", "name") or "Freifunk"
+local url = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
+
+
 require("luci.fs")
 local usertext = luci.fs.readfile("/www/luci-static/index_user.html")
 
@@ -23,7 +32,7 @@ if (ff.community.DefaultText or "") ~= "disabled" then
 	defaulttext = '<h2><a id="content" name="content">'..
 	(translate("Hello and welcome in the network of"))..
 	' '..
-	(ff.community.name or "Freifunk Deutschland")..
+	(community or "Freifunk Deutschland")..
 	'!</a></h2><p>'..
 	translate("We are an initiative to establish a free, independent and open wireless mesh network.")..
 	'<br />'..
@@ -31,20 +40,16 @@ if (ff.community.DefaultText or "") ~= "disabled" then
 	' '..
 	luci.sys.hostname()..
 	'. '..
-	translate("It is operated by")..
+	translate("It is operated by ")..
 	'<a href="'..
 	luci.dispatcher.build_url("freifunk", "index", "contact")..
-	'"> '..
-	(ff.contact.nickname or "Anonymous")..
+	'">'..
+	(ff.contact.nickname or translate("Please set your contact information"))..
 	'</a>.</p><p>'..
 	translate("You can find further information about the global Freifunk initiative at")..
 	' <a href="http://freifunk.net">Freifunk.net</a>.<br />'..
 	translate("If you are interested in our project then contact the local community")..
-	' <a href="'..
-	(ff.community.homepage or "http//freifunk.net")..
-	'">'..
-	(ff.community.name or "Freifunk")..
-	'</a>.</p><p><strong>'..
+	' <a href="'..url..'">'..community..'</a>.</p><p><strong>'..
 	translate("Notice")..
 	'</strong>: '..
 	translate("Internet access depends on technical and organisational conditions and may or may not work for you.")..

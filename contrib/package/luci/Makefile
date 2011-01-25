@@ -223,7 +223,7 @@ define Package/luci-mod-freifunk-community
   TITLE:=Freifunk Community Meta-Package
   DEPENDS+= \
    +luci-lib-web +luci-app-splash \
-   +luci-app-ffwizard-leipzig \
+   +luci-app-ffwizard \
    +luci-i18n-german \
    +PACKAGE_luci-mod-freifunk-community:olsrd +PACKAGE_luci-mod-freifunk-community:olsrd-mod-dyn-gw-plain \
    +PACKAGE_luci-mod-freifunk-community:olsrd-mod-txtinfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
@@ -322,10 +322,8 @@ define Package/luci-app-diag-devinfo/conffiles
 endef
 
 
-$(eval $(call application,ffwizard-leipzig,Freifunk Leipzig configuration wizard))
-
 $(eval $(call application,ffwizard,Freifunk configuration wizard,\
-	+luci-mod-freifunk))
+	+PACKAGE_luci-mod-freifunk))
 
 $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))

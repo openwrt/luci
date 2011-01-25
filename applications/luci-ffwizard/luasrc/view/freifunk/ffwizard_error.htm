@@ -1,0 +1,27 @@
+<%+header%>
+
+<%
+local uci = require "luci.model.uci".cursor()
+local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "freifunk", "basics")
+local hostname = uci:get_first ("system", "system", "hostname")
+local latitude = uci:get_first ("system", "system", "latitude")
+local longitude = uci:get_first ("system", "system", "longitude")
+local location = uci:get_first ("system", "system", "location")
+%>
+
+<h2><%:Error%></h2>
+
+<%:You can not use the wizard because some necessary values are not set.%>
+<p/>
+
+<%
+local co = uci:get("freifunk", "community", "name")
+if not (co and hostname and latitude and longitude and location) then
+%>
+<%:Basic settings are missing. Please go to this page and fill all required fields: %>
+<a href='<%=basicsurl%>'><%:Basic settings%></a>
+<p/>
+<% end %>
+
+
+<%+footer%>

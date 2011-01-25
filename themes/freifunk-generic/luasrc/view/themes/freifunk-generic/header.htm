@@ -22,19 +22,16 @@ local cattree  = category and luci.dispatcher.node(category)
 local node     = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
 
-local c = luci.model.uci.cursor():get_all("freifunk", "community")
 
-if c and c.name then
-	community = c.name
-else
-	community = "Freifunk"
+local uci = require "luci.model.uci".cursor()
+local ff = uci:get("freifunk", "community", "name")
+if not ff then
+        ff = ""
 end
+local co = "profile_" .. ff
+local community = uci:get_first(co, "community", "name") or "Freifunk"
+local hp = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
 
-if c and c.homepage then
-	homepage = c.homepage
-else
-	homepage = "http://freifunk.net"
-end
 
 local c = tree
 for i,r in ipairs(request) do
@@ -88,8 +85,8 @@ require("luci.http").prepare_content("application/xhtml+xml")
 
 <div id="header">
 	<span id="header_left">
-		<a href="<%=homepage%>"><img src="/luci-static/freifunk-generic/logo.jpg" alt="FF Logo" /></a>
-		<a href="<%=homepage%>"><%=community%></a>
+		<a href="<%=hp%>"><img src="/luci-static/freifunk-generic/logo.jpg" alt="FF Logo" /></a>
+		<a href="<%=hp%>"><%=community%></a>
 	</span>
 	<p>
 		<%=luci.version.distversion%><br />
