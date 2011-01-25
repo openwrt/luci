@@ -604,16 +604,17 @@ end
 -- @return			Number containing 0 on success and >= 1 on error
 function user.setpasswd(username, password)
 	if password then
-		password = password:gsub("'", "")
+		password = password:gsub("'", [['"'"']])
 	end
 
 	if username then
-		username = username:gsub("'", "")
+		username = username:gsub("'", [['"'"']])
 	end
 
-	local cmd = "(echo '"..password.."';sleep 1;echo '"..password.."')|"
-	cmd = cmd .. "passwd '"..username.."' >/dev/null 2>&1"
-	return os.execute(cmd)
+	return os.execute(
+		"(echo '" .. password .. "'; sleep 1; echo '" .. password .. "') | " ..
+		"passwd '" .. username .. "' >/dev/null 2>&1"
+	)
 end
 
 
