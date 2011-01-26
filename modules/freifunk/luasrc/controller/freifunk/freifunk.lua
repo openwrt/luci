@@ -17,6 +17,7 @@ function index()
 	local i18n = luci.i18n.translate
 	local uci = require "luci.model.uci".cursor()
 
+	-- Frontend
 	local page  = node()
 	page.lock   = true
 	page.target = alias("freifunk")
@@ -41,6 +42,7 @@ function index()
 	local page  = node("freifunk", "index", "contact")
 	page.target = template("freifunk/contact")
 	page.title  = "Kontakt"
+	page.order    = 10
 
 	local page  = node("freifunk", "status")
 	page.target = template("freifunk/public_status")
@@ -60,22 +62,39 @@ function index()
 		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, i18n("Statistics"), 40)
 	end
 
-	assign({"mini", "freifunk"}, {"admin", "freifunk"}, "Freifunk", 15)
-	entry({"admin", "freifunk"}, alias("admin", "freifunk", "index"), "Freifunk", 15)
-	local page  = node("admin", "freifunk", "index")
-	page.target = cbi("freifunk/freifunk")
+	-- backend
+	assign({"mini", "freifunk"}, {"admin", "freifunk"}, "Freifunk", 5)
+	entry({"admin", "freifunk"}, alias("admin", "freifunk", "index"), "Freifunk", 5)
+
+	local page  = node("admin", "freifunk")
+	page.target = template("freifunk/adminindex")
 	page.title  = "Freifunk"
-	page.order  = 30
+	page.order  = 5
+
+	local page  = node("admin", "freifunk", "basics")
+	page.target = cbi("freifunk/basics")
+	page.title  = "Grundeinstellungen"
+	page.order  = 5
+	
+	local page  = node("admin", "freifunk", "basics", "profile")
+	page.target = cbi("freifunk/profile")
+	page.title  = "Profile"
+	page.order  = 10
+
+	local page  = node("admin", "freifunk", "basics", "profile_expert")
+	page.target = cbi("freifunk/profile_expert")
+	page.title  = "Profile (Expert)"
+	page.order  = 20
 
 	local page  = node("admin", "freifunk", "Index-Page")
 	page.target = cbi("freifunk/user_index")
 	page.title  = "Index-Page"
-	page.order  = 35
+	page.order  = 50
 
 	local page  = node("admin", "freifunk", "contact")
 	page.target = cbi("freifunk/contact")
 	page.title  = "Kontakt"
-	page.order  = 40
+	page.order  = 15
 
 	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("Karte"), 50)
 	entry({"freifunk", "map", "content"}, template("freifunk-map/map"), nil, 51)
@@ -85,7 +104,6 @@ function index()
 			has_serv = true
 		end
 	end)
-
 	if has_serv then
 		entry({"freifunk", "services"}, template("freifunk-services/services"), i18n("Services"), 60)
 	end
@@ -296,4 +314,3 @@ function public_status_json()
 	luci.http.write_json(rv)
 	return
 end
-
