@@ -1,7 +1,5 @@
 #!/bin/sh
 
-local variant
-
 if [ "${4%%/*}" = "branches" ]; then
 	variant="LuCI ${4##*[-/]} Branch"
 elif [ "${4%%/*}" = "tags" ]; then
