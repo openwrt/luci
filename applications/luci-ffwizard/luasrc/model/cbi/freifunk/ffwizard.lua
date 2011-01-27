@@ -101,15 +101,15 @@ end
 
 -------------------- View --------------------
 f = SimpleForm("ffwizward", "Freifunkassistent",
- "Dieser Assistent unterstützt Sie bei der Einrichtung des Routers für das Freifunknetz.")
+ translate("This wizard will assist you in setting up your router for your local Freifunk network or another similar wireless community network."))
 
 -- if password is not set or default then force the user to set a new one
 if sys.exec("diff /rom/etc/passwd /etc/passwd") == "" then
-	pw1 = f:field(Value, "pw1", translate("password"))
+	pw1 = f:field(Value, "pw1", translate("Password"))
 	pw1.password = true
 	pw1.rmempty = false
 
-	pw2 = f:field(Value, "pw2", translate("confirmation"))
+	pw2 = f:field(Value, "pw2", translate("Confirmation"))
 	pw2.password = true
 	pw2.rmempty = false
 
@@ -122,13 +122,13 @@ end
 
 local cc = uci:get(community, "wifi_device", "country") or "DE"
 
-main = f:field(Flag, "netconfig", "Netzwerk einrichten", "Setzen Sie den Haken, wenn Sie Ihr Freifunk Netzwerk einrichten wollen.")
+main = f:field(Flag, "netconfig", translate("Configure network"), translate("Select this checkbox to configure your network interfaces."))
 uci:foreach("wireless", "wifi-device",
 	function(section)
 		local device = section[".name"]
 		local hwtype = section.type
+		local syscc = section.country
 
-		local syscc  = uci:get("wireless", device, "country")
 		if not syscc then
 			if hwtype == "atheros" then
 				cc = sys.exec("grep -i '" .. cc .. "' /lib/wifi/cc_translate.txt |cut -d ' ' -f 2") or 0
@@ -136,7 +136,6 @@ uci:foreach("wireless", "wifi-device",
 			elseif hwtype == "mac80211" then
 				sys.exec("iw reg set " .. cc)
 			elseif hwtype == "broadcom" then
-				-- verify that ot works!
 				sys.exec ("wlc country " .. cc)
 			end
 		else
@@ -662,6 +661,14 @@ function main.write(self, section, value)
 		local hwmode = "11bg"
 		local bssid = uci:get_all(community, "wifi_iface", "bssid") or "02:CA:FF:EE:BA:BE"
 		local mrate = 5500
+		devconfig.diversity = sec.diversity or "1"
+		if sec.txantenna then
+			devconfig.txantenna = sec.txantenna
+		end
+                if sec.rxantenna then
+                        devconfig.rxantenna = sec.rxantenna
+                end
+
 		-- set bssid, see https://kifuse02.pberg.freifunk.net/moin/channel-bssid-essid for schema
 		if channel and channel ~= "default" then
 			if devconfig.channel ~= channel then
