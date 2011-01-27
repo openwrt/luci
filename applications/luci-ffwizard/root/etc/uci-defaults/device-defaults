@@ -8,9 +8,7 @@ set_default_config()
 		atheros)
 			uci -q batch <<-EOF
 				set freifunk.wifi_device.channel=1
-				set freifunk.wifi_device.diversity=0
-				set freifunk.wifi_device.txantenna=1
-				set freifunk.wifi_device.rxantenna=1
+				set freifunk.wifi_device.diversity=1
 				set freifunk.wifi_device.disabled=0
 				set freifunk.wifi_device.txpower=""
 				set freifunk.wifi_device.hwmode=11g
@@ -27,7 +25,7 @@ set_default_config()
 		mac80211)
 			uci -q batch <<-EOF
 				set freifunk.wifi_device.channel=1
-				set freifunk.wifi_device.diversity=""
+				set freifunk.wifi_device.diversity=1
 				set freifunk.wifi_device.disabled=0
 				set freifunk.wifi_device.txpower=""
 				set freifunk.wifi_device.distance=1000
@@ -43,11 +41,9 @@ set_default_config()
 		broadcom)
 			uci -q batch <<-EOF
 				set freifunk.wifi_device.channel=1
-				set freifunk.wifi_device.diversity=""
+				set freifunk.wifi_device.diversity=1
 				set freifunk.wifi_device.disabled=0
 				set freifunk.wifi_device.txpower=""
-				set freifunk.wifi_device.txantenna=0
-				set freifunk.wifi_device.rxantenna=0
 				set freifunk.wifi_device.hwmode=11g
 				set freifunk.wifi_device.distance=1000
 				set freifunk.wifi_iface=defaults
