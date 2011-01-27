@@ -26,8 +26,17 @@ local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "fr
 <% if not (contact.nickname and contact.name and contact.mail) then%>
 <div class="error">
 	<%:Contact information missing. Please go to this page and fill all required fields: %>
-	<a href='<%=contacturl%>'><%:Contact%></a>
+	<a href='<%=contacturl%>'><%:Contact%></a><p />
 </div>
 <%end%>
+
+<% uci:foreach("wireless", "wifi-device", function(section)
+	local device = section[".name"]
+	local url = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "network", "wireless")
+	if section.diversity ~= "0" and section.disabled ~= "1" then
+		print('<div class="error">Diversity is enabled for device <b>' .. device .. '</b>. Go to <a href="' .. url .. '">wireless settings</a> to change that.</div><p />')
+	end
+end) %>
+
 
 <%+footer%>
