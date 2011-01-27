@@ -665,9 +665,9 @@ function main.write(self, section, value)
 		if sec.txantenna then
 			devconfig.txantenna = sec.txantenna
 		end
-                if sec.rxantenna then
-                        devconfig.rxantenna = sec.rxantenna
-                end
+		if sec.rxantenna then
+			devconfig.rxantenna = sec.rxantenna
+		end
 
 		-- set bssid, see https://kifuse02.pberg.freifunk.net/moin/channel-bssid-essid for schema
 		if channel and channel ~= "default" then
