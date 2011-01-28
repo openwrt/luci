@@ -15,16 +15,16 @@ local community = "profile_" .. uci:get("freifunk", "community", "name")
 --local community = "profile_augsburg"
 
 
-m = Map(community, translate("Community settings"), translate("These are the settings of your local community"))
+m = Map(community, translate("Community settings"), translate("These are the settings of your local community."))
 
-c = m:section(NamedSection, "profile", "community", "foobar")
+c = m:section(NamedSection, "profile", "community")
 
 name = c:option(Value, "name", "Name")
 name.rmempty = false
 
-homepage = c:option(Value, "homepage", "Webseite")
+homepage = c:option(Value, "homepage", translate("Homepage"))
 
-cc = c:option(Value, "country", "Countrycode")
+cc = c:option(Value, "country", translate("Country code"))
 function cc.cfgvalue(self, section)
 	return uci:get(community, "wifi_device", "country")
 end
@@ -35,21 +35,21 @@ function cc.write(self, sec, value)
 	end
 end
 
-ssid = c:option(Value, "ssid", "ESSID")
+ssid = c:option(Value, "ssid", translate("ESSID"))
 ssid.rmempty = false
 
-prefix = c:option(Value, "mesh_network", "Netzprefix")
+prefix = c:option(Value, "mesh_network", translate("Mesh prefix"))
 prefix.rmempty = false
 
-splash_net = c:option(Value, "splash_network", "Netzwerk für Client-DHCP-Adressen")
+splash_net = c:option(Value, "splash_network", translate("Network for client DHCP addresses"))
 splash_net.rmempty = false
 
-splash_prefix = c:option(Value, "splash_prefix", "Netzgröße für Clientnetze")
+splash_prefix = c:option(Value, "splash_prefix", translate("Client network size"))
 splash_prefix.rmempty = false
 
-lat = c:option(Value, "latitude", "Latitude")
+lat = c:option(Value, "latitude", translate("Latitude"))
 lat.rmempty = false
 
-lon = c:option(Value, "longitude", "longitude")
+lon = c:option(Value, "longitude", translate("Longitude"))
 lon.rmempty = false
 return m

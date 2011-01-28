@@ -6,7 +6,7 @@ m = Map("freifunk", translate("Edit index page"), translate("You can display add
 s = m:section(NamedSection, "community", "public", "")
 s.anonymous = true
 
-di = s:option(Flag, "DefaultText", translate("Disable default content"), translate("If checked then the default content element is not shown."))
+di = s:option(Flag, "DefaultText", translate("Disable default content"), translate("If selected then the default content element is not shown."))
 di.enabled = "disabled"
 di.disabled = "enabled"
 di.rmempty = false

@@ -8,21 +8,19 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id: freifunk.lua 3291 2008-09-14 21:59:14Z Cyrus $
-]]--
+]]
 
 local fs = require "luci.fs"
 local util = require "luci.util"
 local uci = require "luci.model.uci".cursor()
 local profiles = "/etc/config/profile_"
 
-m = Map("freifunk", "Freifunk")
-c = m:section(NamedSection, "community", "public", "Gemeinschaft", [[Dies sind die Grundeinstellungen
-für die lokale Freifunkgemeinschaft. Diese Werte wirken sich NICHT auf die Konfiguration
-des Routers aus, sondern definieren nur die Vorgaben für den Freifunkassistenten.]])
+m = Map("freifunk", translate ("Community"))
+c = m:section(NamedSection, "community", "public", nil, translate([[These are the basic
+settings for your local wireless community. These settings define the default values for the wizard
+and DO NOT affect the actual configuration of the router.]]))
 
-community = c:option(ListValue, "name", "Gemeinschaft")
+community = c:option(ListValue, "name", translate ("Community"))
 community.rmempty = false
 
 local list = { }
@@ -35,7 +33,7 @@ for k,v in ipairs(list) do
 end
 
 n = Map("system", translate("Basic system settings"))
-b = n:section(TypedSection, "system", "Basic system settings")
+b = n:section(TypedSection, "system")
 b.anonymous = true
 
 hn = b:option(Value, "hostname", "hostname")

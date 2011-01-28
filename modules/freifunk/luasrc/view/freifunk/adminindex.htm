@@ -17,16 +17,14 @@ local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "fr
 
 <% if not (hostname and latitude and longitude and location) then%>
 <div class="error">
-        <%:Basic settings are missing. Please go to this page and fill all required fields: %>
-        <a href='<%=basicsurl%>'><%:Basic settings%></a>
+        <%:Basic settings are incomplete. Please go to <a href='<%=basicsurl%>'><%:Basic settings%></a> and fill out all required fields.%></p>
 </div>
 <%end%>
 <p />
 
 <% if not (contact.nickname and contact.name and contact.mail) then%>
 <div class="error">
-	<%:Contact information missing. Please go to this page and fill all required fields: %>
-	<a href='<%=contacturl%>'><%:Contact%></a><p />
+	<%:Contact information is incomplete. Please go to <a href='<%=contacturl%>'><%:Contact%></a> and fill out all required fields.%></p>
 </div>
 <%end%>
 
@@ -34,7 +32,7 @@ local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "fr
 	local device = section[".name"]
 	local url = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "network", "wireless")
 	if section.diversity ~= "0" and section.disabled ~= "1" then
-		print('<div class="error">Diversity is enabled for device <b>' .. device .. '</b>. Go to <a href="' .. url .. '">wireless settings</a> to change that.</div><p />')
+		print('<div class="error">Diversity is enabled for device <b>' .. device .. '</b>. Go to <a href="' .. url .. '">wireless settings</a> to disable it.</div><p />')
 	end
 end) %>
 

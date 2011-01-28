@@ -14,7 +14,8 @@ local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 local community = "/etc/config/profile_" .. uci:get("freifunk", "community", "name")
 
-f = SimpleForm("community", translate("Community profile"), translate("This is the complete content of the selected community profile."))
+f = SimpleForm("community", translate("Community profile"), 
+	translate("You can manually edit the selected community profile here."))
 
 t = f:field(TextValue, "cop")
 t.rmempty = true
