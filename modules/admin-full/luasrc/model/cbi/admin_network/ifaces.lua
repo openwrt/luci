@@ -398,10 +398,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	defaultroute:depends("proto", "pppoe")
 	defaultroute:depends("proto", "pptp")
 	defaultroute:depends("proto", "3g")
-	defaultroute.rmempty = false
-	function defaultroute.cfgvalue(...)
-		return ( AbstractValue.cfgvalue(...) or '1' )
-	end
+	defaultroute.default = defaultroute.enabled
 
 	peerdns = s:taboption("ppp", Flag, "peerdns",
 	 translate("Use peer DNS"),
@@ -412,10 +409,7 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	peerdns:depends("proto", "pppoe")
 	peerdns:depends("proto", "pptp")
 	peerdns:depends("proto", "3g")
-	peerdns.rmempty = false
-	function peerdns.cfgvalue(...)
-		return ( AbstractValue.cfgvalue(...) or '1' )
-	end
+	peerdns.default = peerdns.enabled
 
 	if has_ipv6 then
 		ipv6 = s:taboption("ppp", Flag, "ipv6", translate("Enable IPv6 on PPP link") )
@@ -573,11 +567,7 @@ if has_dnsmasq then
 		translate("Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
 		translate("Dynamically allocate DHCP addresses for clients. If disabled, only " ..
 			"clients having static leases will be served."))
-
-	dd.rmempty = false
-	function dd.cfgvalue(self, section)
-		return Flag.cfgvalue(self, section) or "1"
-	end
+	dd.default = dd.enabled
 
 	s:taboption("advanced", Flag, "force", translate("Force"),
 		translate("Force DHCP on this network even if another server is detected."))
