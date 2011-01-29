@@ -215,6 +215,13 @@ function IptParser.resync( self )
 end
 
 
+--- Find the names of all tables.
+-- @return		Table of table names.
+function IptParser.tables( self )
+	return self._tables
+end
+
+
 --- Find the names of all chains within the given table name.
 -- @param table	String containing the table name
 -- @return		Table of chain names in the order they occur.
@@ -304,6 +311,11 @@ function IptParser._parse_rules( self )
 					-- cope with rules that have no target assigned
 					if rule:match("^%d+%s+%d+%s+%d+%s%s") then
 						table.insert(rule_parts, 4, nil)
+					end
+
+					-- ip6tables opt column is usually zero-width
+					if self._family == 6 then
+						table.insert(rule_parts, 6, "--")
 					end
 
 					rule_details["table"]       = tbl
