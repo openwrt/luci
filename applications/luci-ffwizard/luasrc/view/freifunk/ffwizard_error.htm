@@ -11,15 +11,14 @@ local location = uci:get_first ("system", "system", "location")
 
 <h2><%:Error%></h2>
 
-<%:You can not use the wizard because some necessary values are not set.%>
+<%:You can not use the wizard because some necessary values are missing.%>
 <p/>
 
 <%
 local co = uci:get("freifunk", "community", "name")
 if not (co and hostname and latitude and longitude and location) then
 %>
-<%:Basic settings are missing. Please go to this page and fill all required fields: %>
-<a href='<%=basicsurl%>'><%:Basic settings%></a>
+<%:Basic settings are incomplete. Please go to%> <a href='<%=basicsurl%>'><%:Basic settings%></a> <%:and fill out all required fields.%>
 <p/>
 <% end %>
 
