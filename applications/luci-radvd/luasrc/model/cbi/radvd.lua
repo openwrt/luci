@@ -263,7 +263,7 @@ s4.extedit  = luci.dispatcher.build_url("admin/network/radvd/rdnss/%s")
 s4.addremove = true
 s4.anonymous = true
 
-function s.create(...)
+function s4.create(...)
 	local id = TypedSection.create(...)
 	luci.http.redirect(s4.extedit % id)
 end
@@ -331,19 +331,19 @@ end
 -- DNSSL
 --
 
-s4 = m:section(TypedSection, "dnssl", translate("DNSSL"))
-s4.template = "cbi/tblsection"
-s4.extedit  = luci.dispatcher.build_url("admin/network/radvd/dnssl/%s")
-s4.addremove = true
-s4.anonymous = true
+s5 = m:section(TypedSection, "dnssl", translate("DNSSL"))
+s5.template = "cbi/tblsection"
+s5.extedit  = luci.dispatcher.build_url("admin/network/radvd/dnssl/%s")
+s5.addremove = true
+s5.anonymous = true
 
-function s.create(...)
+function s5.create(...)
 	local id = TypedSection.create(...)
-	luci.http.redirect(s4.extedit % id)
+	luci.http.redirect(s5.extedit % id)
 end
 
 
-o = s4:option(Flag, "ignore", translate("Enable"))
+o = s5:option(Flag, "ignore", translate("Enable"))
 o.rmempty = false
 o.width   = "30px"
 function o.cfgvalue(...)
@@ -354,11 +354,11 @@ function o.write(self, section, value)
 	Flag.write(self, section, value == "1" and "0" or "1")
 end
 
-o = s4:option(DummyValue, "interface", translate("Interface"))
+o = s5:option(DummyValue, "interface", translate("Interface"))
 o.template = "cbi/network_netinfo"
 o.width    = "10%"
 
-o = s4:option(DummyValue, "suffix", translate("Suffix"))
+o = s5:option(DummyValue, "suffix", translate("Suffix"))
 o.width = "60%"
 function o.cfgvalue(self, section)
 	local v = m.uci:get_list("radvd", section, "suffix")
@@ -375,7 +375,7 @@ function o.cfgvalue(self, section)
 	return table.concat(l, ", ")
 end
 
-o = s4:option(DummyValue, "AdvDNSSLLifetime", translate("Lifetime"))
+o = s5:option(DummyValue, "AdvDNSSLLifetime", translate("Lifetime"))
 function o.cfgvalue(self, section)
 	local v = Value.cfgvalue(self, section) or "1200"
 	return translate(v)
