@@ -13,6 +13,7 @@ $Id$
 ]]--
 
 local sid = arg[1]
+local utl = require "luci.util"
 
 m = Map("radvd", translatef("Radvd - RDNSS"),
 	translate("Radvd is a router advertisement daemon for IPv6. " ..
@@ -72,16 +73,21 @@ function o.write(self, section, value)
 end
 
 
-o = s:option(Value, "addr", translate("Address"),
+o = s:option(DynamicList, "addr", translate("Addresses"),
 	translate("Advertised IPv6 RDNSS. If empty, the current IPv6 address of the interface is used"))
 
-o.optional = false
-o.rmempty  = true
-o.datatype = "ip6addr"
-
-
-o = s:option(Flag, "AdvRDNSSOpen", translate("Open"),
-	translate("Indicates whether that RDNSS continues to be available to hosts even if they moved to a different subnet "))
+o.optional    = false
+o.rmempty     = true
+o.datatype    = "ip6addr"
+o.placeholder = translate("default")
+function o.cfgvalue(self, section)
+	local l = { }
+	local v = m.uci:get_list("radvd", section, "prefix")
+	for v in utl.imatch(v) do
+		l[#l+1] = v
+	end
+	return l
+end
 
 
 o = s:option(Value, "AdvRDNSSLifetime", translate("Lifetime"),
