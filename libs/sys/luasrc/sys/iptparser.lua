@@ -28,12 +28,25 @@ module("luci.sys.iptparser")
 --- Create a new iptables parser object.
 -- @class	function
 -- @name	IptParser
+-- @param	family	Number specifying the address family. 4 for IPv4, 6 for IPv6
 -- @return	IptParser instance
 IptParser = luci.util.class()
 
-function IptParser.__init__( self, ... )
+function IptParser.__init__( self, family )
+	self._family = (tonumber(family) == 6) and 6 or 4
 	self._rules  = { }
 	self._chains = { }
+
+	if self._family == 4 then
+		self._nulladdr = "0.0.0.0/0"
+		self._tables   = { "filter", "nat", "mangle", "raw" }
+		self._command  = "iptables -t %s --line-numbers -nxvL"
+	else
+		self._nulladdr = "::/0"
+		self._tables   = { "filter", "mangle", "raw" }
+		self._command  = "ip6tables -t %s --line-numbers -nxvL"
+	end
+
 	self:_parse_rules()
 end
 
@@ -49,9 +62,9 @@ end
 --  <li> protocol	 - Match rules that match the given protocol, rules with
 -- 						protocol "all" are always matched
 --  <li> source		 - Match rules with the given source, rules with source
--- 						"0.0.0.0/0" are always matched
+-- 						"0.0.0.0/0" (::/0) are always matched
 --  <li> destination - Match rules with the given destination, rules with
--- 						destination "0.0.0.0/0" are always matched
+-- 						destination "0.0.0.0/0" (::/0) are always matched
 --  <li> inputif	 - Match rules with the given input interface, rules
 -- 						with input	interface "*" (=all) are always matched
 --  <li> outputif	 - Match rules with the given output interface, rules
@@ -76,8 +89,8 @@ end
 -- 						or "*" for all interfaces
 --  <li> outputif	 - Output interface of the rule,e.g. "eth0.0"
 -- 						or "*" for all interfaces
---  <li> source		 - The source ip range, e.g. "0.0.0.0/0"
---  <li> destination - The destination ip range, e.g. "0.0.0.0/0"
+--  <li> source		 - The source ip range, e.g. "0.0.0.0/0" (::/0)
+--  <li> destination - The destination ip range, e.g. "0.0.0.0/0" (::/0)
 --  <li> options	 - A list of specific options of the rule,
 -- 						e.g. { "reject-with", "tcp-reset" }
 --  <li> packets	 - The number of packets matched by the rule
@@ -102,8 +115,8 @@ function IptParser.find( self, args )
 	local args = args or { }
 	local rv   = { }
 
-	args.source      = args.source      and luci.ip.IPv4(args.source)
-	args.destination = args.destination and luci.ip.IPv4(args.destination)
+	args.source      = args.source      and self:_parse_addr(args.source)
+	args.destination = args.destination and self:_parse_addr(args.destination)
 
 	for i, rule in ipairs(self._rules) do
 		local match = true
@@ -137,16 +150,16 @@ function IptParser.find( self, args )
 
 		-- match source
 		if not ( match == true and (
-			not args.source or rule.source == "0.0.0.0/0" or
-			luci.ip.IPv4(rule.source):contains(args.source)
+			not args.source or rule.source == self._nulladdr or
+			self:_parse_addr(rule.source):contains(args.source)
 		) ) then
 			match = false
 		end
 
 		-- match destination
 		if not ( match == true and (
-			not args.destination or rule.destination == "0.0.0.0/0" or
-			luci.ip.IPv4(rule.destination):contains(args.destination)
+			not args.destination or rule.destination == self._nulladdr or
+			self:_parse_addr(rule.destination):contains(args.destination)
 		) ) then
 			match = false
 		end
@@ -241,26 +254,35 @@ function IptParser.is_custom_target( self, target )
 end
 
 
+-- [internal] Parse address according to family.
+function IptParser._parse_addr( self, addr )
+	if self._family == 4 then
+		return luci.ip.IPv4(addr)
+	else
+		return luci.ip.IPv6(addr)
+	end
+end
+
 -- [internal] Parse iptables output from all tables.
 function IptParser._parse_rules( self )
 
-	for i, tbl in ipairs({ "filter", "nat", "mangle" }) do
+	for i, tbl in ipairs(self._tables) do
 
 		self._chains[tbl] = { }
 
-		for i, rule in ipairs(luci.util.execl("iptables -t " .. tbl .. " --line-numbers -nxvL")) do
+		for i, rule in ipairs(luci.util.execl(self._command % tbl)) do
 
-			if rule:find( "Chain " ) == 1 then
+			if rule:find( "^Chain " ) == 1 then
 
 				local crefs
 				local cname, cpol, cpkt, cbytes = rule:match(
-					"Chain ([^%s]*) %(policy (%w+) " ..
+					"^Chain ([^%s]*) %(policy (%w+) " ..
 					"(%d+) packets, (%d+) bytes%)"
 				)
 
 				if not cname then
 					cname, crefs = rule:match(
-						"Chain ([^%s]*) %((%d+) references%)"
+						"^Chain ([^%s]*) %((%d+) references%)"
 					)
 				end
 
