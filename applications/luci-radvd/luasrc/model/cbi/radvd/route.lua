@@ -13,6 +13,7 @@ $Id$
 ]]--
 
 local sid = arg[1]
+local utl = require "luci.util"
 
 m = Map("radvd", translatef("Radvd - Route"),
 	translate("Radvd is a router advertisement daemon for IPv6. " ..
@@ -72,11 +73,20 @@ function o.write(self, section, value)
 end
 
 
-o = s:option(Value, "prefix", translate("Prefix"),
-	translate("Advertised IPv6 prefix"))
+o = s:option(DynamicList, "prefix", translate("Prefixes"),
+	translate("Advertised IPv6 prefixes"))
 
-o.rmempty = false
-o.datatype = "ip6addr"
+o.rmempty     = false
+o.datatype    = "ip6addr"
+o.placeholder = translate("default")
+function o.cfgvalue(self, section)
+	local l = { }
+	local v = m.uci:get_list("radvd", section, "prefix")
+	for v in utl.imatch(v) do
+		l[#l+1] = v
+	end
+	return l
+end
 
 
 o = s:option(Value, "AdvRouteLifetime", translate("Lifetime"),

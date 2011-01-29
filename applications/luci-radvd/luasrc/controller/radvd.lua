@@ -24,4 +24,5 @@ function index()
 	entry({"admin", "network", "radvd", "prefix"}, cbi("radvd/prefix"), nil).leaf = true
 	entry({"admin", "network", "radvd", "route"}, cbi("radvd/route"), nil).leaf = true
 	entry({"admin", "network", "radvd", "rdnss"}, cbi("radvd/rdnss"), nil).leaf = true
+	entry({"admin", "network", "radvd", "dnssl"}, cbi("radvd/dnssl"), nil).leaf = true
 end
