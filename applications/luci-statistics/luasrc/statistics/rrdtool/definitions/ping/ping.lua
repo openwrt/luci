@@ -21,6 +21,13 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		data = {
 			sources = {
 				ping = { "ping" }
+			},
+
+			options = {
+				ping__ping = {
+					overlay = true,
+					noarea  = true
+				}
 			}
 		}
 	}
