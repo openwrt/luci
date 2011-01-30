@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ function index()
 
 	entry({"admin", "status"}, template("admin_status/index"), i18n("Status"), 20).index = true
 	entry({"admin", "status", "interfaces"}, template("admin_status/interfaces"), i18n("Interfaces"), 1)
-	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("Firewall"), 2)
+	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("Firewall"), 2).leaf = true
 	entry({"admin", "status", "conntrack"}, template("admin_status/conntrack"), i18n("Active Connections"), 3)
 	entry({"admin", "status", "routes"}, template("admin_status/routes"), i18n("Routes"), 4)
 	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("System Log"), 5)
@@ -46,8 +47,12 @@ function action_dmesg()
 end
 
 function action_iptables()
-	if luci.http.formvalue("zero") == "1" then
-		luci.util.exec("iptables -Z")
+	if luci.http.formvalue("zero") then
+		if luci.http.formvalue("zero") == "6" then
+			luci.util.exec("ip6tables -Z")
+		else
+			luci.util.exec("iptables -Z")
+		end
 		luci.http.redirect(
 			luci.dispatcher.build_url("admin", "status", "iptables")
 		)
