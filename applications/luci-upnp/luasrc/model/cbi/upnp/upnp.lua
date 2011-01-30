@@ -38,6 +38,7 @@ function e.write(self, section, value)
 	Value.write(self, section, value)
 end
 
+s:option(Flag, "enable_natpmp", translate("Enable NAT-PMP")).rmempty = true
 s:option(Flag, "secure_mode", translate("Enable secure mode")).rmempty = true
 s:option(Flag, "log_output", translate("Log output")).rmempty = true
 s:option(Value, "download", translate("Downlink"), "kByte/s").rmempty = true
