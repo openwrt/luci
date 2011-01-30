@@ -15,6 +15,7 @@ m = Map("dropbear", "Dropbear SSHd", translate("Dropbear offers <abbr title=\"Se
 
 s = m:section(TypedSection, "dropbear", "")
 s.anonymous = true
+s.addremove = true
 
 port = s:option(Value, "Port", translate("Port"))
 port.isinteger = true
