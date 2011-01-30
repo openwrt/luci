@@ -322,7 +322,7 @@ function network.write(self, section, value)
 		else
 			local n = nw:get_network(value)
 			if n then
-				n:type("bridge")
+				n:set("type", "bridge")
 				n:add_interface(i)
 			end
 		end
