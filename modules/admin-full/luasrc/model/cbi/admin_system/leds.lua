@@ -46,7 +46,7 @@ for k, v in ipairs(leds) do
 	sysfs:value(v)
 end
 
-s:option(Flag, "default", translate("Default state")).rmempty = true
+s:option(Flag, "default", translate("Default state")).rmempty = false
 
 
 trigger = s:option(ListValue, "trigger", translate("Trigger"))
@@ -54,7 +54,7 @@ trigger = s:option(ListValue, "trigger", translate("Trigger"))
 local triggers = fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
 	trigger:value(t, translate(t:gsub("-", "")))
-end 
+end
 
 
 delayon = s:option(Value, "delayon", translate ("On-State Delay"))
