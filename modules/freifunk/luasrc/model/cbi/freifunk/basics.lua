@@ -36,7 +36,7 @@ n = Map("system", translate("Basic system settings"))
 b = n:section(TypedSection, "system")
 b.anonymous = true
 
-hn = b:option(Value, "hostname", "hostname")
+hn = b:option(Value, "hostname", translate("Hostname"))
 hn.rmempty = false
 function hn.validate(self, value)
 	if value == nil then
@@ -48,13 +48,13 @@ function hn.validate(self, value)
 	end
 end
 
-loc = b:option(Value, "location", "Location")
+loc = b:option(Value, "location", translate("Location"))
 loc.rmempty = false
 
-lat = b:option(Value, "latitude", "latitude")
+lat = b:option(Value, "latitude", translate("Latitude"), translate("e.g.") .. " 48.12345")
 lat.rmempty = false
 
-lon = b:option(Value, "longitude", "longitude")
+lon = b:option(Value, "longitude", translate("Longitude"), translate("e.g.") .. " 10.12345")
 lon.rmempty = false
 
 --[[
@@ -63,6 +63,7 @@ Makes use of resources/OSMLatLon.htm and htdocs/resources/osm.js
 (is that the right place for files like these?)
 ]]--
 
+--[[ this needs to be fixed
 local class = util.class
 local co = "profile_augsburg"
 local syslat = uci:get_first(co, "community", "latitude")
@@ -108,6 +109,6 @@ end
 
 osm.displaytext="OpenStreetMap anzeigen"
 osm.hidetext="OpenStreetMap verbergen"
-
+]]
 
 return m, n
