@@ -278,11 +278,11 @@ local defroutev6 = sys.net.defaultroute6()
 	<h2><%:Default routes%></h2>
 		<div class="cbi-section">
 			<div class="cbi-section-node">
-				<table class="cbi-section-table">
 
 <% if not defroutev4 and not defroutev6 then %>
 	<%:No default routes known.%>
 <%else%>
+				<table class="cbi-section-table">
 						<tr class="cbi-section-table-titles">
 							<th class="cbi-section-table-cell"><%:Network%></th>
 							<th class="cbi-section-table-cell"><%:Interface%></th>
@@ -312,8 +312,8 @@ local defroutev6 = sys.net.defaultroute6()
 	<% end %>
 
 				</table>
+<% end %>
 		</div>
 	</div>
 </div>
-<% end %>
 <%+footer%>
