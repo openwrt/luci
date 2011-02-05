@@ -1170,7 +1170,7 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 	{
 		for( dbm_cur = 0, dbm_cnt = 0;
 		     dbm_cur < dbm_max;
-		     dbm_cur += 2, dbm_cnt++ )
+		     dbm_cur++, dbm_cnt++ )
 		{
 			entry.dbm = dbm_cur;
 			entry.mw  = iwinfo_dbm2mw(dbm_cur);
