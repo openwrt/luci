@@ -232,8 +232,6 @@ $Id$
 			<% end %>
 		</table>
 
-		<form action="<%=luci.dispatcher.build_url("admin/network/iface_add")%>" method="post">
-			<input type="submit" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" />
-		</form>
+		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/iface_add")%>'" />
 	</fieldset>
 </div>

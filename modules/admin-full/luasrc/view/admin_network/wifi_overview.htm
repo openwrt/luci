@@ -211,8 +211,8 @@ $Id$
 
 							for( var j = 0; j < assoclist.length; j++ )
 							{
-								var tr = document.createElement('tr');
-									tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((j % 2) + (i % 2));
+								var tr = assoctable.insertRow(-1);
+								    tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((j % 2) + (i % 2));
 
 								var icon;
 								var q = (-1 * (assoclist[j].noise - assoclist[j].signal)) / 5;
@@ -227,37 +227,31 @@ $Id$
 								else
 									icon = "<%=resource%>/icons/signal-75-100.png";
 
-								tr.innerHTML = String.format(
-									'<td class="cbi-value-field">' +
-										'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />' +
-									'</td>' +
-									'<td class="cbi-value-field">%s</td>' +
-									'<td class="cbi-value-field">%s</td>' +
-									'<td class="cbi-value-field">%s</td>' +
-									'<td class="cbi-value-field">%d dBm</td>' +
-									'<td class="cbi-value-field">%d dBm</td>',
-										icon,
-										assoclist[j].signal, assoclist[j].noise,
-										iw.ssid ? iw.ssid : '?',
-										assoclist[j].bssid,
-										arptable[assoclist[j].bssid]
-											? arptable[assoclist[j].bssid] : '?',
-										assoclist[j].signal, assoclist[j].noise
+								tr.insertCell(-1).innerHTML = String.format(
+									'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
+									icon, assoclist[j].signal, assoclist[j].noise
 								);
 
-								assoctable.rows[0].parentNode.appendChild(tr);
+								tr.insertCell(-1).innerHTML = iw.ssid ? iw.ssid : '?';
+								tr.insertCell(-1).innerHTML = assoclist[j].bssid;
+
+								tr.insertCell(-1).innerHTML = arptable[assoclist[j].bssid]
+									? arptable[assoclist[j].bssid] : '?';
+
+								tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].signal);
+								tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].noise);
 							}
 						}
 					}
 
 					if (assoctable && assoctable.rows.length == 1)
 					{
-						var tr = document.createElement('tr');
-							tr.className = 'cbi-section-table-row';
+						var tr = assoctable.insertRow(-1);
+						    tr.className = 'cbi-section-table-row';
 
-						tr.innerHTML = '<td class="cbi-value-field" colspan="6"><br /><em><%:No information available%></em></td>';
-
-						assoctable.rows[0].parentNode.appendChild(tr);
+						var td = tr.insertCell(-1);
+						    td.colSpan = 6;
+						    td.innerHTML = '<br /><em><%:No information available%></em>';
 					}
 
 					for (var dev in devup)
