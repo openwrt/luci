@@ -852,7 +852,9 @@ function interface.get_network(self)
 	if not self.network then
 		local net
 		for _, net in ipairs(_M:get_networks()) do
-			if net:contains_interface(self.ifname) then
+			if net:contains_interface(self.ifname) or
+			   net:ifname() == self.ifname
+			then
 				self.network = net
 				return net
 			end
