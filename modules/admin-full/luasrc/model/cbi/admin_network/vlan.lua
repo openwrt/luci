@@ -98,19 +98,14 @@ m.uci:foreach("network", "switch",
 		s = m:section(NamedSection, x['.name'], "switch", translatef("Switch %q", switch_name))
 		s.addremove = false
 
-		s:option(Flag, "enable", translate("Enable this switch"))
-			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
-
-		s:option(Flag, "enable_vlan", translate("Enable VLAN functionality"))
-			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
+		s:option(Flag, "enable", translate("Enable this switch")).default = "1"
+		s:option(Flag, "enable_vlan", translate("Enable VLAN functionality")).default = "1"
 
 		if enable_vlan4k then
 			s:option(Flag, "enable_vlan4k", translate("Enable 4K VLANs"))
 		end
 
-		s:option(Flag, "reset", translate("Reset switch during setup"))
-			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
-
+		s:option(Flag, "reset", translate("Reset switch during setup")).default = "1"
 
 		-- VLAN table
 		s = m:section(TypedSection, "switch_vlan", translatef("VLANs on %q", switch_name))
