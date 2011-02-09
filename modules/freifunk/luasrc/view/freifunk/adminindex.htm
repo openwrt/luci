@@ -17,7 +17,7 @@ local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "fr
 
 <% if not (hostname and latitude and longitude and location) then%>
 <div class="error">
-        <%:Basic settings are incomplete. Please go to%> <a href='<%=basicsurl%>'<%:Basic settings%></a> <%:and fill out all required fields.%></p>
+	<%:Basic settings are incomplete. Please go to%> <a href='<%=basicsurl%>'><%:Basic settings%></a> <%:and fill out all required fields.%>
 </div>
 <%end%>
 <p />
