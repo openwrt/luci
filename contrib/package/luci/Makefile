@@ -228,7 +228,7 @@ define Package/luci-mod-freifunk-community
    +PACKAGE_luci-mod-freifunk-community:olsrd +PACKAGE_luci-mod-freifunk-community:olsrd-mod-dyn-gw-plain \
    +PACKAGE_luci-mod-freifunk-community:olsrd-mod-txtinfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
    +PACKAGE_luci-mod-freifunk-community:olsrd-mod-watchdog +PACKAGE_luci-mod-freifunk-community:kmod-tun \
-   +PACKAGE_luci-mod-freifunk-community:ip +PACKAGE_luci-mod-freifunk-community:freifunk-watchdog +luci-app-olsr
+   +PACKAGE_luci-mod-freifunk-community:ip +PACKAGE_luci-mod-freifunk-community:freifunk-watchdog +luci-app-olsr +luci-app-olsr-services
 endef
 
 define Package/luci-mod-freifunk-community/install
@@ -336,6 +336,9 @@ $(eval $(call application,olsr,OLSR configuration and status module,\
 
 $(eval $(call application,olsr-viz,OLSR Visualisation,\
 	+PACKAGE_luci-app-olsr-viz:luci-app-olsr +PACKAGE_luci-app-olsr-viz:olsrd-mod-txtinfo))
+
+$(eval $(call application,olsr-services,Show services announced with the nameservice plugin,\
+	+PACKAGE_luci-app-olsr-services:olsrd-mod-nameservice +luci-mod-freifunk +PACKAGE_luci-app-olsr-services:luci-app-olsr))
 
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
