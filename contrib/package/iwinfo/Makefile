@@ -38,6 +38,8 @@ endef
 
 IWINFO_BACKENDS := \
 	$(if $(CONFIG_PACKAGE_kmod-brcm-wl),wl) \
+	$(if $(CONFIG_PACKAGE_kmod-brcm-wl-mini),wl) \
+	$(if $(CONFIG_PACKAGE_kmod-brcm-wl-mimo),wl) \
 	$(if $(CONFIG_PACKAGE_kmod-madwifi),madwifi) \
 	$(if $(CONFIG_PACKAGE_kmod-mac80211),nl80211)
 
