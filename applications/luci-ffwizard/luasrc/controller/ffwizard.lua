@@ -18,8 +18,11 @@ $Id$
 module "luci.controller.ffwizard"
 
 function index()
-	entry({"admin", "freifunk", "ffwizard"}, form("freifunk/ffwizard"), "Freifunkassistent", 40)
-	assign({"mini", "freifunk", "ffwizard"}, {"admin", "freifunk", "ffwizard"}, "Freifunkassistent", 40)
+        require("luci.i18n").loadc("ffwizard")
+        local i18n = luci.i18n.translate
+
+	entry({"admin", "freifunk", "ffwizard"}, form("freifunk/ffwizard"), i18n("Wizard"), 40)
+	assign({"mini", "freifunk", "ffwizard"}, {"admin", "freifunk", "ffwizard"}, i18n("Wizard"), 40)
 	
 	entry({"admin", "freifunk", "ffwizard_error"}, template("freifunk/ffwizard_error"))
 	assign({"mini", "freifunk", "ffwizard_error"}, {"admin", "freifunk", "ffwizard_error"})
