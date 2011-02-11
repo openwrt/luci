@@ -7,48 +7,267 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
-#. OLSR Daemon
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:1
-msgid "OLSR Daemon"
-msgstr "Servidor OLSR"
+msgid "Active MID announcements"
+msgstr "Anuncios MID activos"
 
-#. Neighbour IP
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:2
-msgid "Neighbour IP"
-msgstr "Endereço IP do Vizinho"
+msgid "Active OLSR nodes"
+msgstr "Nós OLSR activos"
 
-#. Local interface IP
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:3
-msgid "Local interface IP"
-msgstr "Endereço IP do interface local"
+#, fuzzy
+msgid "Active host net announcements"
+msgstr "Anuncios activos de hosts"
 
-#. Announced network
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:4
+msgid "Advanced Settings"
+msgstr ""
+
 msgid "Announced network"
 msgstr "Rede anunciada"
 
-#. OLSR gateway
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:5
-msgid "OLSR gateway"
-msgstr "gateway OLSR"
+msgid "Broadcast address"
+msgstr ""
 
-#. OLSR node
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:6
-msgid "OLSR node"
-msgstr "Nó OLSR"
+msgid "Configuration"
+msgstr ""
 
-#. Unable to connect to the OLSR daemon!
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:7
-msgid "Unable to connect to the OLSR daemon!"
-msgstr "Não foi possivel ligar ao servidor OLSR!"
+msgid "Device"
+msgstr ""
 
-#. Make sure that OLSRd is running, the &quot;txtinfo&quot; plugin is loaded, configured on port 2006 and accepts connections from &quot;127.0.0.1&quot;.
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:8
+msgid "Downlink"
+msgstr ""
+
+msgid "Download Config"
+msgstr ""
+
+msgid "ETX"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Enable this interface."
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Expected retransmission count"
+msgstr "Contagem esperada de retransmissões"
+
+msgid "FIB metric"
+msgstr "métrica FIB"
+
+msgid ""
+"FIBMetric controls the metric value of the host-routes OLSRd sets. \"flat\" "
+"means that the metric value is always 2. This is the preferred value because "
+"it helps the linux kernel routing to clean up older routes. \"correct\" uses "
+"the hopcount as the metric value. \"approx\" use the hopcount as the metric "
+"value too, but does only update the hopcount if the nexthop changes too. "
+"Default is \"flat\"."
+msgstr ""
+
+msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
+msgstr ""
+
+msgid "Gateway"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "General settings"
+msgstr "Definições gerais"
+
+msgid "HNA"
+msgstr ""
+
+msgid "HNA interval"
+msgstr "Intervalo entre HNA"
+
+msgid "HNA validity time"
+msgstr "Validade de HNA"
+
+msgid "Hello"
+msgstr ""
+
+msgid "Hello interval"
+msgstr "Intervalo entre Hello"
+
+msgid "Hello validity time"
+msgstr "Validade de Hello"
+
+msgid "Hops"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid ""
+"Hysteresis for link sensing (only for hopcount metric). Hysteresis adds more "
+"robustness to the link sensing but delays neighbor registration. Defaults is "
+"\"yes\""
+msgstr ""
+
+msgid "IP Addresses"
+msgstr ""
+
+msgid ""
+"IP-version to use. If 6and4 is selected then one olsrd instance is started "
+"for each protocol."
+msgstr ""
+
+msgid "IPv4"
+msgstr ""
+
+msgid "IPv4 broadcast"
+msgstr "Endereço IPv4 de Broadcast"
+
+msgid ""
+"IPv4 broadcast address for outgoing OLSR packets. One useful example would "
+"be 255.255.255.255. Default is \"0.0.0.0\", which triggers the usage of the "
+"interface broadcast IP."
+msgstr ""
+
+msgid "IPv4 source"
+msgstr ""
+
+msgid ""
+"IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
+"triggers usage of the interface IP."
+msgstr ""
+
+msgid "IPv6"
+msgstr ""
+
+msgid "IPv6 multicast"
+msgstr ""
+
+msgid ""
+"IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
+"multicast."
+msgstr ""
+
+msgid "IPv6 source"
+msgstr ""
+
+msgid ""
+"IPv6 src prefix. OLSRd will choose one of the interface IPs which matches "
+"the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
+"of a not-linklocal interface IP."
+msgstr ""
+
+msgid ""
+"If the route to the current gateway is to be changed, the ETX value of this "
+"gateway is multiplied with this value before it is compared to the new one. "
+"The parameter can be a value between 0.1 and 1.0, but should be close to 1.0 "
+"if changed.<br /><b>WARNING:</b> This parameter should not be used together "
+"with the etx_ffeth metric!<br />Defaults to \"1.0\"."
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid ""
+"Interface Mode is used to prevent unnecessary packet forwarding on switched "
+"ethernet interfaces. valid Modes are \"mesh\" and \"ether\". Default is "
+"\"mesh\"."
+msgstr ""
+
+msgid "Interfaces"
+msgstr ""
+
+msgid "Interfaces Defaults"
+msgstr ""
+
+msgid "Internet protocol"
+msgstr "Versão IP"
+
+msgid ""
+"Interval to poll network interfaces for configuration changes (in seconds). "
+"Default is \"2.5\"."
+msgstr ""
+
+msgid "Known OLSR routes"
+msgstr "Rotas OLSR conhecidas"
+
+msgid "LQ aging"
+msgstr "Envelhecimento LQ"
+
+msgid "LQ algorithm"
+msgstr "Algoritmo LQ"
+
+#, fuzzy
+msgid "LQ fisheye"
+msgstr "LQ Fisheye"
+
+msgid "LQ level"
+msgstr "Nível LQ"
+
+msgid "Last hop"
+msgstr "Ultimo salto"
+
+msgid "Legend"
+msgstr ""
+
+msgid "Library"
+msgstr "Biblioteca"
+
+msgid "Link Quality Settings"
+msgstr ""
+
+msgid ""
+"Link quality aging factor (only for lq level 2). Tuning parameter for "
+"etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
+"(allowed values are between 0.01 and 1.0)"
+msgstr ""
+
+msgid ""
+"Link quality algorithm (only for lq level 2).<br /><b>etx_float</b>: "
+"floating point ETX with exponential aging<br /><b>etx_fpm</b> : same as "
+"ext_float, but with integer arithmetic<br /><b>etx_ff</b> : ETX freifunk, an "
+"etx variant which use all OLSR traffic (instead of only hellos) for ETX "
+"calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
+"allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
+msgstr ""
+
+msgid ""
+"Link quality level switch between hopcount and cost-based (mostly ETX) "
+"routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
+"quality for MPR selection and routing<br />Default is \"2\""
+msgstr ""
+
+msgid "LinkQuality Multiplicator"
+msgstr ""
+
+msgid "Links per node (average)"
+msgstr ""
+
+msgid "Links total"
+msgstr ""
+
+msgid "Local interface IP"
+msgstr "Endereço IP do interface local"
+
+msgid "MID"
+msgstr ""
+
+msgid "MID interval"
+msgstr "Intervalo de MID"
+
+msgid "MID validity time"
+msgstr "Validade de MID"
+
+msgid "MTU"
+msgstr ""
+
+msgid "Main IP"
+msgstr ""
+
 msgid ""
 "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
 "configured on port 2006 and accepts connections from \"127.0.0.1\"."
@@ -57,631 +276,208 @@ msgstr ""
 "\" está carregado e configurado para a porta 2006 e que aceita ligações a "
 "partir de \"127.0.0.1\"."
 
-#. OLSR - HNA-Announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:9
-msgid "OLSR - HNA-Announcements"
-msgstr "OLSR - Anuncios HNA4"
+msgid "Metric"
+msgstr ""
 
-#. OLSR - Plugins
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:10
-msgid "OLSR - Plugins"
-msgstr "OLSR - Plugins"
+msgid "Mode"
+msgstr ""
 
-#. OLSR connections
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:11
-msgid "OLSR connections"
-msgstr "OLSR - Ligações"
-
-#. Overview of currently established OLSR connections
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:12
-msgid "Overview of currently established OLSR connections"
-msgstr "Resumo das ligações OLSR actualmente estabelecidas"
-
-#. Expected retransmission count
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:13
-msgid "Expected retransmission count"
-msgstr "Contagem esperada de retransmissões"
-
-#. Success rate of sent packages
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:14
-msgid "Success rate of sent packages"
-msgstr "Racio de sucesso de pacotes enviados"
-
-#. Success rate of received packages
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:15
-msgid "Success rate of received packages"
-msgstr "Racio de sucesso de pacotes recebidos"
-
-#. Known OLSR routes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:16
-msgid "Known OLSR routes"
-msgstr "Rotas OLSR conhecidas"
-
-#. Overview of currently known routes to other OLSR nodes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:17
-msgid "Overview of currently known routes to other OLSR nodes"
-msgstr "Resumo das rotas conhecidas para outros nós OLSR"
-
-#. Active OLSR nodes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:18
-msgid "Active OLSR nodes"
-msgstr "Nós OLSR activos"
-
-#. Overview of currently known OLSR nodes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:19
-msgid "Overview of currently known OLSR nodes"
-msgstr "Resumo dos nós OLSR conhecidos"
-
-#. Last hop
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:20
-msgid "Last hop"
-msgstr "Ultimo salto"
-
-#. Active host net announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:21
-#, fuzzy
-msgid "Active host net announcements"
-msgstr "Anuncios activos de hosts"
-
-#. Overview of currently active OLSR host net announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:22
-#, fuzzy
-msgid "Overview of currently active OLSR host net announcements"
-msgstr "Resumo de anuncios activos de hosts"
-
-#. Active MID announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:23
-msgid "Active MID announcements"
-msgstr "Anuncios MID activos"
-
-#. Overview of known multiple interface announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:24
-msgid "Overview of known multiple interface announcements"
-msgstr "Resumo de anuncios de nós com multiplos interfaces activos"
-
-#. Secondary OLSR interfaces
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:25
-msgid "Secondary OLSR interfaces"
-msgstr "Interfaces OLSR secundários"
-
-#. Freifunk
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:26
-msgid "Freifunk"
-msgstr "Freifunk"
-
-#. floating point
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:27
-msgid "floating point"
-msgstr "Virgula flutuante"
-
-#. fixed point math
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:28
-msgid "fixed point math"
-msgstr "Matemática de virgula fixa"
-
-#. General settings
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:29
-msgid "General settings"
-msgstr "Definições gerais"
-
-#. Start without network
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:30
-msgid "Start without network"
-msgstr "Iniciar sem rede"
-
-#. Clear screen
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:31
-msgid "Clear screen"
-msgstr "Limpar ecran"
-
-#. Debugmode
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:32
-msgid "Debugmode"
-msgstr "Nível de mensagens de diagnóstico"
-
-#. FIB metric
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:33
-msgid "FIB metric"
-msgstr "métrica FIB"
-
-#. Internet protocol
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:34
-msgid "Internet protocol"
-msgstr "Versão IP"
-
-#. LQ aging
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:35
-msgid "LQ aging"
-msgstr "Envelhecimento LQ"
-
-#. LQ algorithm
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:36
-msgid "LQ algorithm"
-msgstr "Algoritmo LQ"
-
-#. LQ Dijkstra limit
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:37
-msgid "LQ Dijkstra limit"
-msgstr "Limite Dijkstra LQ"
-
-#. LQ fisheye
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:38
-#, fuzzy
-msgid "LQ fisheye"
-msgstr "LQ Fisheye"
-
-#. LQ level
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:39
-msgid "LQ level"
-msgstr "Nível LQ"
-
-#. MPR selection
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:40
-#, fuzzy
-msgid "MPR selection"
-msgstr "Selecção MPR"
-
-#. MPR selection and routing
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:41
-#, fuzzy
-msgid "MPR selection and routing"
-msgstr "Selecção e Routing MPR"
-
-#. LQ window size
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:42
-#, fuzzy
-msgid "LQ window size"
-msgstr "Janela de Amostragem LQ"
-
-#. MPR coverage
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:43
-msgid "MPR coverage"
-msgstr "Cobertura MPR"
-
-#. Pollrate
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:44
-msgid "Pollrate"
-msgstr "Pollrate"
-
-#. TC redundancy
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:45
-msgid "TC redundancy"
-msgstr "Redundância TC"
-
-#. MPR selectors
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:46
-msgid "MPR selectors"
-msgstr "Selectores MPR"
-
-#. MPR selectors and MPR
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:47
-msgid "MPR selectors and MPR"
-msgstr "MPR e selectores MPR"
-
-#. all neighbours
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:48
-msgid "all neighbours"
-msgstr "Todos os vizinhos"
-
-#. Use hysteresis
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:49
-msgid "Use hysteresis"
-msgstr "Usar histerese"
-
-#. Willingness
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:50
-msgid "Willingness"
-msgstr "Disponibilidade"
-
-#. Hello interval
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:51
-msgid "Hello interval"
-msgstr "Intervalo entre Hello"
-
-#. Hello validity time
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:52
-msgid "Hello validity time"
-msgstr "Validade de Hello"
-
-#. HNA interval
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:53
-msgid "HNA interval"
-msgstr "Intervalo entre HNA"
-
-#. HNA validity time
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:54
-msgid "HNA validity time"
-msgstr "Validade de HNA"
-
-#. IPv4 broadcast
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:55
-msgid "IPv4 broadcast"
-msgstr "Endereço IPv4 de Broadcast"
-
-#. MID interval
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:56
-msgid "MID interval"
-msgstr "Intervalo de MID"
-
-#. MID validity time
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:57
-msgid "MID validity time"
-msgstr "Validade de MID"
-
-#. TC interval
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:58
-msgid "TC interval"
-msgstr "Intervalo de TC"
-
-#. TC validity time
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:59
-msgid "TC validity time"
-msgstr "Validade de TC"
-
-#. IPv6 address type
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:60
-msgid "IPv6 address type"
-msgstr "Tipo de Endereço IPv6"
-
-#. IPC settings
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:61
-msgid "IPC settings"
-msgstr "Definições IPC"
-
-#. IPC connections enable you to remote-control the local OLSRd instance using external programs
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:62
 msgid ""
-"IPC connections enable you to remote-control the local OLSRd instance using "
-"external programs"
+"Multiply routes with the factor given here. Allowed values are between 0.01 "
+"and 1. It is only used when LQ-Level is greater than 0. Examples:<br /"
+">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
+"nodes on this interface by 20%: default 0.8"
 msgstr ""
-"As ligações IPC permitem-lhe controlar a instancia local de OLSRd com "
-"aplicações externas"
-
-#. Allowed host addresses
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:63
-msgid "Allowed host addresses"
-msgstr "Endereços de hosts permitidos"
-
-#. Multiple separated by spaces
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:64
-msgid "Multiple separated by spaces"
-msgstr "Multiplas entradas, separadas por espaços"
-
-#. Maxmimum connection count
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:65
-msgid "Maxmimum connection count"
-msgstr "Máximo de ligações permitidas"
-
-#. Set to 0 to disable IPC
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:66
-msgid "Set to 0 to disable IPC"
-msgstr "Defina 0 para desactivar IPC"
-
-#. Allowed subnets
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:67
-msgid "Allowed subnets"
-msgstr "Subredes permitidas"
-
-#. Address Mask; multiple separated by space
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:68
-msgid "Address Mask; multiple separated by space"
-msgstr "Máscara de subrede; multiplas entradas, separadas por espaços"
-
-#. IPv4 HNA announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:69
-#, fuzzy
-msgid "IPv4 HNA announcements"
-msgstr "OLSR - Anuncios HNA4"
-
-#. Hna4 entries allow you to propagate local IPv4 host- and network-routes into the mesh network
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:70
-#, fuzzy
-msgid ""
-"Hna4 entries allow you to propagate local IPv4 host- and network-routes into "
-"the mesh network"
-msgstr "Resumo de anuncios activos de hosts"
-
-#. Netmask
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:73
-msgid "Netmask"
-msgstr "Máscara de subrede"
-
-#. IPv6 HNA announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:75
-#, fuzzy
-msgid "IPv6 HNA announcements"
-msgstr "OLSR - Anuncios HNA4"
-
-#. Hna6 entries allow you to propagate local IPv6 host- and network-routes into the mesh network
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:76
-#, fuzzy
-msgid ""
-"Hna6 entries allow you to propagate local IPv6 host- and network-routes into "
-"the mesh network"
-msgstr "Resumo de anuncios activos de hosts"
-
-#. IPv6 address
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:78
-msgid "IPv6 address"
-msgstr "Endereço IPv6"
-
-#. Prefix
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:79
-msgid "Prefix"
-msgstr "Prefixo"
-
-#. IPv6 prefix
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:80
-msgid "IPv6 prefix"
-msgstr "Prefixo IPv6"
-
-#. Plugin configuration
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:81
-msgid "Plugin configuration"
-msgstr "Configuração de Plugin"
-
-#. Enable plugin
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:82
-msgid "Enable plugin"
-msgstr "Activar Plugin"
-
-#. Library
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:83
-msgid "Library"
-msgstr "Biblioteca"
-
-#. Allow connections from this hosts
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:84
-msgid "Allow connections from this hosts"
-msgstr "Aceitar ligações a partir destes hosts"
-
-#. Ping test addresses
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:85
-msgid "Ping test addresses"
-msgstr "Endereços a testar por ping"
-
-#. Interval
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:86
-msgid "Refresh interval in seconds"
-msgstr "Intervalo"
-
-#. HNA announcements
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:87
-msgid "HNA announcements"
-msgstr "Anúncios HNA"
-
-#. Format: IP-Address Netmask / OLSR will announce this network once it is reachable
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:88
-msgid ""
-"Format: IP-Address Netmask / OLSR will announce this network once it is "
-"reachable"
-msgstr ""
-"Formato: \"Endereço IP\" \"máscara de subrede\" / o OLSR anunciará esta rede "
-"logo que esta seja acessível "
-
-#. Alternative \"hosts\" file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:89
-msgid "Alternative \"hosts\" file"
-msgstr "Ficheiro de \"hosts\" alternativo"
-
-#. The contents of this file will be appended to the autogenerated \"hosts\" file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:90
-msgid ""
-"The contents of this file will be appended to the autogenerated \"hosts\" "
-"file"
-msgstr ""
-"Os conteúdos deste ficheiro serão acrescentados ao ficheiro automaticamente "
-"gerado de \"hosts\""
-
-#. DNS server
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:91
-msgid "DNS server"
-msgstr "Servidor de DNS"
-
-#. Alternative hostnames
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:92
-msgid "Alternative hostnames"
-msgstr "Hostnames alternativos"
-
-#. Format: Interface-IP Hostname
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:93
-msgid "Format: Interface-IP Hostname"
-msgstr "Formato: \"Endereço IP do interface\" \"hostname\""
-
-#. Path to the \"hosts\" file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:94
-msgid "Path to the \"hosts\" file"
-msgstr "Caminho completo do ficheiro de \"hosts\""
-
-#. Latitude
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:95
-msgid "Latitude"
-msgstr "Latitude"
-
-#. Output file for coordinates
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:96
-msgid "Output file for coordinates"
-msgstr "Ficheiro para output das coordenadas"
-
-#. OLSR will write received coordinates of other nodes to this file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:97
-msgid "OLSR will write received coordinates of other nodes to this file"
-msgstr ""
-"O OLSR irá escrever as coordenadas que receba de outros hosts neste ficheiro"
-
-#. Input file for coordinates
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:98
-msgid "Input file for coordinates"
-msgstr "Ficheiro de entrada para coordenadas"
-
-#. OLSR periodically checks this file for new coordinates and propagates them
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:99
-msgid ""
-"OLSR periodically checks this file for new coordinates and propagates them"
-msgstr ""
-"O OLSR verifica periodicamente este ficheiro por novas coordenadas e propaga-"
-"as"
-
-#. Longitude
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:100
-msgid "Longitude"
-msgstr "Longitude"
-
-#. Hostnames
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:101
-msgid "Hostnames"
-msgstr "Hostnames"
-
-#. Command for name changes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:102
-msgid "Command for name changes"
-msgstr "Comando para alterações de nome"
-
-#. OLSR executes this command once entries in the \"hosts\" are changed
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:103
-msgid "OLSR executes this command once entries in the \"hosts\" are changed"
-msgstr ""
-"O OLSR executa este comando logo que existam alterações no ficheiro de hosts"
-
-#. Path to the \"resolv\" file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:104
-msgid "Path to the \"resolv\" file"
-msgstr "Caminho para o ficheiro \"resolv.conf\""
-
-#. Command for service changes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:105
-msgid "Command for service changes"
-msgstr "Comando para alterações ao serviço"
-
-#. OLSR excutes this command once new service announcements are received
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:106
-msgid "OLSR excutes this command once new service announcements are received"
-msgstr ""
-"O OLSR executa este comando sempre que sejam recebidos novos anuncios de "
-"serviços"
-
-#. PID file for SIGHUP signals
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:107
-msgid "PID file for SIGHUP signals"
-msgstr "Ficheiro PID para sinais SIGHUP"
-
-#. OLSR sends a HUP signal to this PID once the \"hosts\" oder \"resolv\" file is changed
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:108
-msgid ""
-"OLSR sends a HUP signal to this PID once the \"hosts\" oder \"resolv\" file "
-"is changed"
-msgstr ""
-"O OLSR envia um sinal HUP a este PID sempre que o ficheiro \\\"hosts\\\" ou "
-"\\\"resolv.conf\\\" seja alterado"
-
-#. Domain suffix
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:109
-msgid "Domain suffix"
-msgstr "Sufixo de domínio"
-
-#. Timeout
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:110
-msgid "Timeout"
-msgstr "Timeout"
-
-#. Name of the BMF interface
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:111
-msgid "Name of the BMF interface"
-msgstr "Nome do interface BMF"
-
-#. IP address of the BMF interface
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:112
-msgid "IP address of the BMF interface"
-msgstr "Endereço IP do interface BMF"
-
-#. Redirect local broadcasts
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:113
-msgid "Redirect local broadcasts"
-msgstr "Redireccionar broadcasts locais"
-
-#. Also redirect broadcasts from OLSR interfaces
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:114
-msgid "Also redirect broadcasts from OLSR interfaces"
-msgstr "Também redireccionar broadcasts de interfaces OLSR"
-
-#. Propagation mechanism
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:115
-msgid "Propagation mechanism"
-msgstr "Mecanismo de propagação"
-
-#. Number of retransmissions per package
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:116
-msgid "Number of retransmissions per package"
-msgstr "Número de retransmissões por pacote"
-
-#. Minimum number of neighbours for broadcast redirection
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:117
-msgid "Minimum number of neighbours for broadcast redirection"
-msgstr "Número mínimo de vizinhos para redireccionamento de broadcasts"
-
-#. Non-OLSR interfaces
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:118
-msgid "Non-OLSR interfaces"
-msgstr "Interfaces não-OLSR"
-
-#. Used port
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:119
-msgid "Used port"
-msgstr "Porta utilizada"
-
-#. Allow connections from hosts
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:120
-msgid "Allow connections from hosts"
-msgstr "Permitir ligações de hosts"
-
-#. Allow connections from subnets
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:121
-msgid "Allow connections from subnets"
-msgstr "permitir ligações de subredes"
-
-#. Format: IP-AddresseNetmask
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:122
-msgid "Format: IP-AddresseNetmask"
-msgstr "Formato: \\\"Endereço IP\\\" \\\"Máscara de subrede\\\""
-
-#. Used protocols
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:123
-msgid "Used protocols"
-msgstr "Protocolos utilizados"
-
-#. Only export routes to Quagga or to kernel too
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:124
-msgid "Only export routes to Quagga or to kernel too"
-msgstr "Exportar rotas apenas para quagga ou kernel"
-
-#. Always prefer local routes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:125
-msgid "Always prefer local routes"
-msgstr "Preferir sempre as rotas locais"
-
-#. Distance of exported routes
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:126
-msgid "Distance of exported routes"
-msgstr "Distância das rotas exportadas"
-
-#. Key file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:127
-msgid "Key file"
-msgstr "Ficheiro de chave"
-
-#. Watchdog timestamp file
-#: applications/luci-olsr/luasrc/i18n/olsr.en.lua:128
-msgid "Watchdog timestamp file"
-msgstr "Ficheiro da timestamp do watchdog"
 
 msgid "NAT threshold"
 msgstr ""
 
-msgid "Autodetect changes"
+msgid "Neighbors"
+msgstr ""
+
+msgid "Neighbour IP"
+msgstr "Endereço IP do Vizinho"
+
+msgid "Netmask"
+msgstr "Máscara de subrede"
+
+msgid "Network"
 msgstr ""
 
 msgid "Network address"
 msgstr ""
 
+msgid "Nic changes poll interval"
+msgstr ""
+
+msgid "Nodes"
+msgstr ""
+
+msgid "OLSR - HNA-Announcements"
+msgstr "OLSR - Anuncios HNA4"
+
+msgid "OLSR - Plugins"
+msgstr "OLSR - Plugins"
+
+msgid "OLSR Daemon"
+msgstr "Servidor OLSR"
+
+msgid "OLSR Daemon - Interface"
+msgstr ""
+
+msgid "OLSR connections"
+msgstr "OLSR - Ligações"
+
+msgid "OLSR gateway"
+msgstr "gateway OLSR"
+
+msgid "OLSR node"
+msgstr "Nó OLSR"
+
+msgid "Overview"
+msgstr ""
+
+#, fuzzy
+msgid "Overview of currently active OLSR host net announcements"
+msgstr "Resumo de anuncios activos de hosts"
+
+msgid "Overview of currently established OLSR connections"
+msgstr "Resumo das ligações OLSR actualmente estabelecidas"
+
+msgid "Overview of currently known OLSR nodes"
+msgstr "Resumo dos nós OLSR conhecidos"
+
+msgid "Overview of currently known routes to other OLSR nodes"
+msgstr "Resumo das rotas conhecidas para outros nós OLSR"
+
+msgid "Overview of interfaces where OLSR is running"
+msgstr ""
+
+msgid "Overview of known multiple interface announcements"
+msgstr "Resumo de anuncios de nós com multiplos interfaces activos"
+
+msgid "Overview of smart gateways in this network"
+msgstr ""
+
+msgid "Plugin configuration"
+msgstr "Configuração de Plugin"
+
 msgid "Plugins"
 msgstr ""
+
+msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
+msgstr ""
+
+msgid "Pollrate"
+msgstr "Pollrate"
+
+msgid "Port"
+msgstr ""
+
+msgid "Prefix"
+msgstr "Prefixo"
+
+msgid "Routen"
+msgstr ""
+
+msgid "Secondary OLSR interfaces"
+msgstr "Interfaces OLSR secundários"
+
+msgid ""
+"Sets the main IP (originator ip) of the router. This IP will NEVER change "
+"during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
+"IP of the first interface."
+msgstr ""
+
+msgid "SmartGW announcements"
+msgstr ""
+
+msgid "Source address"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Success rate of packages received from the neighbour"
+msgstr ""
+
+msgid "Success rate of packages sent to the neighbour"
+msgstr ""
+
+msgid "TC"
+msgstr ""
+
+msgid "TC interval"
+msgstr "Intervalo de TC"
+
+msgid "TC validity time"
+msgstr "Validade de TC"
+
+msgid "TOS value"
+msgstr ""
+
+msgid ""
+"The OLSR daemon is an implementation of the Optimized Link State Routing "
+"protocol. As such it allows mesh routing for any network equipment. It runs "
+"on any wifi card that supports ad-hoc mode and of course on any ethernet "
+"device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
+"documentation."
+msgstr ""
+
+msgid ""
+"The fixed willingness to use. If not set willingness will be calculated "
+"dynamically based on battery/power status. Default is \"3\"."
+msgstr ""
+
+msgid "The interface OLSRd should serve."
+msgstr ""
+
+msgid ""
+"The port OLSR uses. This should usually stay at the IANA assigned port 698. "
+"It can have a value between 1 and 65535."
+msgstr ""
+
+msgid "Timing and Validity"
+msgstr ""
+
+msgid "Topologie"
+msgstr ""
+
+msgid ""
+"Type of service value for the IP header of control traffic. Default is "
+"\"16\"."
+msgstr ""
+
+msgid "Unable to connect to the OLSR daemon!"
+msgstr "Não foi possivel ligar ao servidor OLSR!"
+
+msgid "Uplink"
+msgstr ""
+
+msgid "Use hysteresis"
+msgstr "Usar histerese"
+
+msgid "Version"
+msgstr ""
+
+msgid "WLAN"
+msgstr ""
+
+msgid "Weight"
+msgstr ""
+
+msgid ""
+"When multiple links exist between hosts the weight of interface is used to "
+"determine the link to use. Normally the weight is automatically calculated "
+"by olsrd based on the characteristics of the interface, but here you can "
+"specify a fixed value. Olsrd will choose links with the lowest value.<br /"
+"><b>Note:</b> Interface weight is used only when LinkQualityLevel is set to "
+"0. For any other value of LinkQualityLevel, the interface ETX value is used "
+"instead."
+msgstr ""
+
+msgid "Willingness"
+msgstr "Disponibilidade"
