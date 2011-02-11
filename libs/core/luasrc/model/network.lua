@@ -475,6 +475,24 @@ function network._get(self, opt)
 	return v or ""
 end
 
+function network._ip(self, opt, family, list)
+	local ip = uci_s:get("network", self.sid, opt)
+	local fc = (family == 6) and ipc.IPv6 or ipc.IPv4
+	if ip then
+		if list then
+			local l = { }
+			for ip in utl.imatch(ip) do
+				ip = fc(ip)
+				if ip then l[#l+1] = ip:string() end
+			end
+			return l
+		else
+			ip = fc(ip)
+			return ip and ip:string()
+		end
+	end
+end
+
 function network.get(self, opt)
 	return _get("network", self.sid, opt)
 end
@@ -551,6 +569,69 @@ function network.uptime(self)
 	else
 		return 0
 	end
+end
+
+function network.expires(self)
+	local a = tonumber(uci_s:get("network", self.sid, "lease_acquired"))
+	local l = tonumber(uci_s:get("network", self.sid, "lease_lifetime"))
+	if a and l then
+		l = l - (nxo.sysinfo().uptime - a)
+		return l > 0 and l or 0
+	end
+	return -1
+end
+
+function network.metric(self)
+	return tonumber(uci_s:get("network", self.sid, "metric")) or 0
+end
+
+function network.ipaddr(self)
+	return self:_ip("ipaddr", 4)
+end
+
+function network.netmask(self)
+	return self:_ip("netmask", 4)
+end
+
+function network.gwaddr(self)
+	return self:_ip("gateway", 4)
+end
+
+function network.dnsaddrs(self)
+	return self:_ip("dns", 4, true)
+end
+
+function network.ip6addr(self)
+	local ip6 = self:_ip("ip6addr", 6)
+	if not ip6 then
+		local ifc = ifs[self:ifname()]
+		local llr = ipc.IPv6("fe80::/10")
+		if ifc and ifc.ip6addrs then
+			local a
+			for _, a in ipairs(ifc.ip6addrs) do
+				if not llr:contains(a) then
+					ip6 = a:string()
+					break
+				end
+			end
+		end
+	end
+	return ip6
+end
+
+function network.gw6addr(self)
+	local ip6 = self:_ip("ip6gw", 6)
+	if not ip6 then
+		local dr6 = sys.net.defaultroute6()
+		if dr6 and dr6.device == self:ifname() then
+			return dr6.nexthop:string()
+		end
+	end
+	return ip6
+end
+
+function network.dns6addrs(self)
+	return self:_ip("dns", 6, true)
 end
 
 function network.is_bridge(self)
