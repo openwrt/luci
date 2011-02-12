@@ -127,7 +127,7 @@ function macaddr(val)
 end
 
 function hostname(val)
-	if val and (#val < 25) and val.match(val, "^[a-zA-Z0-9][a-zA-Z0-9%-%.]*[a-zA-Z0-9]$") then
+	if val and (#val < 254) and val.match(val, "^[a-zA-Z0-9][a-zA-Z0-9%-%.]*[a-zA-Z0-9]$") then
 		return true
 	end
 	return false
