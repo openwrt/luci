@@ -605,11 +605,10 @@ function network.ip6addr(self)
 	local ip6 = self:_ip("ip6addr", 6)
 	if not ip6 then
 		local ifc = ifs[self:ifname()]
-		local llr = ipc.IPv6("fe80::/10")
 		if ifc and ifc.ip6addrs then
 			local a
 			for _, a in ipairs(ifc.ip6addrs) do
-				if not llr:contains(a) then
+				if not a:is6linklocal() then
 					ip6 = a:string()
 					break
 				end
