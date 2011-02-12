@@ -1045,15 +1045,6 @@ function main.write(self, section, value)
 			uci:set("system", s['.name'], "zonename", "Europe/Berlin")
 			uci:set("system", s['.name'], "timezone", 'CET-1CEST,M3.5.0,M10.5.0/3')
 		end)
-
-	-- Create time rdate_servers
-	local rdate = uci:get_all("freifunk", "time")
-	uci:delete_all("system", "time")
-	uci:section("system", "time", "rdate_servers", rdate)
-	rdate.server = rdate.rdate_servers
-	rdate.rdate_servers = ""
-	uci:delete_all("system", "rdate", nil)
-	uci:section("system", "rdate", nil, rdate)
 	uci:save("system")
 
 	-- Delete old watchdog settings
