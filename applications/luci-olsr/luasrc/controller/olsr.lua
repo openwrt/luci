@@ -10,39 +10,39 @@ function index()
 
 	local page  = node("admin", "status", "olsr")
 	page.target = template("status-olsr/overview")
-	page.title  = "OLSR"
+	page.title  = i18n("OLSR")
 	page.i18n   = "olsr"
 	page.subindex = true
 
 	local page  = node("admin", "status", "olsr", "neighbors")
 	page.target = call("action_neigh")
-	page.title  = i18n("Neighbors")
+	page.title  = i18n("Neighbours")
 	page.subindex = true
 	page.order  = 5
 
 	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
-	page.title  = i18n("Routen")
+	page.title  = i18n("Routes")
 	page.order  = 10
 
 	local page  = node("admin", "status", "olsr", "topology")
 	page.target = call("action_topology")
-	page.title  = i18n("Topologie")
+	page.title  = i18n("Topology")
 	page.order  = 20
 
 	local page  = node("admin", "status", "olsr", "hna")
 	page.target = call("action_hna")
-	page.title  = "HNA"
+	page.title  = i18n("HNA")
 	page.order  = 30
 
 	local page  = node("admin", "status", "olsr", "mid")
 	page.target = call("action_mid")
-	page.title  = "MID"
+	page.title  = i18n("MID")
 	page.order  = 50
 
 	local page  = node("admin", "status", "olsr", "smartgw")
 	page.target = call("action_smartgw")
-	page.title  = "SmartGW"
+	page.title  = i18n("SmartGW")
 	page.order  = 60
 
 	local page  = node("admin", "status", "olsr", "interfaces")
@@ -64,13 +64,19 @@ function index()
 
 	entry(
 		{"admin", "services", "olsrd", "hna"},
-		cbi("olsr/olsrdhna"), "HNA Announcements"
+		cbi("olsr/olsrdhna"), i18n("HNA Announcements")
 	)
 
 	oplg = entry(
 		{"admin", "services", "olsrd", "plugins"},
-		cbi("olsr/olsrdplugins"), "Plugins"
+		cbi("olsr/olsrdplugins"), i18n("Plugins")
 	)
+
+	odsp = entry(
+		{"admin", "services", "olsrd", "display"},
+		cbi("olsr/olsrddisplay"), i18n("Display")
+		)
+
 	oplg.i18n = "olsr"
 	oplg.leaf = true
 	oplg.subindex = true
@@ -227,6 +233,7 @@ end
 function fetch_txtinfo(otable)
 	require("luci.sys")
 	local uci = require "luci.model.uci".cursor_state()
+	local resolve = uci:get("luci_olsr", "general", "resolve")
 	otable = otable or ""
  	local rawdata = luci.sys.httpget("http://127.0.0.1:2006/"..otable)
  	local rawdatav6 = luci.sys.httpget("http://[::1]:2006/"..otable)
@@ -260,9 +267,11 @@ function fetch_txtinfo(otable)
 				for k, key in pairs(keys) do
 					if key == "Remote IP" or key == "Dest. IP" or key == "Gateway IP" or key == "Gateway" then
 						data[name][di][key] = fields[k]
-						hostname = nixio.getnameinfo(fields[k], "inet")
-						if hostname then
-							data[name][di]["Hostname"] = hostname
+						if resolve == "1" then
+							hostname = nixio.getnameinfo(fields[k], "inet")
+							if hostname then
+								data[name][di]["Hostname"] = hostname
+							end
 						end
 						if key == "Remote IP" and defaultgw then
 							if defaultgw == fields[k] then
@@ -320,9 +329,11 @@ function fetch_txtinfo(otable)
 				for k, key in pairs(keys) do
 					if key == "Remote IP" then
 						data[name][di][key] = "[" .. fields[k] .. "]"
-						hostname = nixio.getnameinfo(fields[k], "inet6")
-						if hostname then
-							data[name][di]["Hostname"] = hostname
+						if resolve == "1" then
+							hostname = nixio.getnameinfo(fields[k], "inet6")
+							if hostname then
+								data[name][di]["Hostname"] = hostname
+							end
 						end
 					elseif key == "Local IP" then
 						data[name][di][key] = fields[k]
