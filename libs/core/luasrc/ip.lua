@@ -334,11 +334,40 @@ function cidr.is4( self )
 	return self[1] == FAMILY_INET4
 end
 
+--- Test whether this instance is an IPv4 RFC1918 private address
+-- @return	Boolean indicating whether this instance is an RFC1918 address
+function cidr.is4rfc1918( self )
+	if self[1] == FAMILY_INET4 then
+		return ((self[2][1] >= 0x0A00) and (self[2][1] <= 0x0AFF)) or
+		       ((self[2][1] >= 0xAC10) and (self[2][1] <= 0xAC1F)) or
+			   (self[2][1] == 0xC0A8)
+	end
+	return false
+end
+
+--- Test whether this instance is an IPv4 link-local address (Zeroconf)
+-- @return	Boolean indicating whether this instance is IPv4 link-local
+function cidr.is4linklocal( self )
+	if self[1] == FAMILY_INET4 then
+		return (self[2][1] == 0xA9FE)
+	end
+	return false
+end
+
 --- Test whether the instance is a IPv6 address.
 -- @return	Boolean indicating a IPv6 address type
 -- @see		cidr.is4
 function cidr.is6( self )
 	return self[1] == FAMILY_INET6
+end
+
+--- Test whether this instance is an IPv6 link-local address
+-- @return	Boolean indicating whether this instance is IPv6 link-local
+function cidr.is6linklocal( self )
+	if self[1] == FAMILY_INET6 then
+		return (self[2][1] >= 0xFE80) and (self[2][1] <= 0xFEBF)
+	end
+	return false
 end
 
 --- Return a corresponding string representation of the instance.
