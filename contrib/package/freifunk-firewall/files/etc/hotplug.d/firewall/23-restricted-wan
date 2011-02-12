@@ -18,8 +18,8 @@ clear_restricted_gw()
 		config_get gateway "$state" gateway
 
 		logger -t firewall.freifunk "removing local restriction to $iface($gateway)"
-		iptables -D "zone_${INTERFACE}_ACCEPT" -i ! $ifname -o $ifname -d $ipaddr/$netmask -j REJECT
-		iptables -D "zone_${INTERFACE}_ACCEPT" -i ! $ifname -o $ifname -d $gateway -j ACCEPT
+		iptables -D "zone_${INTERFACE}_ACCEPT" ! -i $ifname -o $ifname -d $ipaddr/$netmask -j REJECT
+		iptables -D "zone_${INTERFACE}_ACCEPT" ! -i $ifname -o $ifname -d $gateway -j ACCEPT
 
 		uci_revert_state firewall "$state"
 	fi
@@ -56,8 +56,8 @@ if [ "$ACTION" = add ]; then
 
 		if [ "$local_restrict" = 1 ]; then
 			logger -t firewall.freifunk "restricting local access to $DEVICE($gateway)"
-			iptables -I "zone_${INTERFACE}_ACCEPT" -i ! $DEVICE -o $DEVICE -d $ipaddr/$netmask -j REJECT
-			iptables -I "zone_${INTERFACE}_ACCEPT" -i ! $DEVICE -o $DEVICE -d $gateway -j ACCEPT
+			iptables -I "zone_${INTERFACE}_ACCEPT" ! -i $DEVICE -o $DEVICE -d $ipaddr/$netmask -j REJECT
+			iptables -I "zone_${INTERFACE}_ACCEPT" ! -i $DEVICE -o $DEVICE -d $gateway -j ACCEPT
 
 			local state="restricted_gw_${INTERFACE}"
 			uci_set_state firewall "$state" "" restricted_gw_state
