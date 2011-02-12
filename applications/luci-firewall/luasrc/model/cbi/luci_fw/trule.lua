@@ -66,7 +66,7 @@ proto:value("icmp", "ICMP")
 
 icmpt = s:taboption("general", Value, "icmp_type", translate("Match ICMP type"))
 icmpt:depends("proto", "icmp")
-icmpt:value("any")
+icmpt:value("", "any")
 icmpt:value("echo-reply")
 icmpt:value("destination-unreachable")
 icmpt:value("network-unreachable")
