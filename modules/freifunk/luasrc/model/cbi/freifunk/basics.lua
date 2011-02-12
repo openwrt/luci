@@ -38,15 +38,7 @@ b.anonymous = true
 
 hn = b:option(Value, "hostname", translate("Hostname"))
 hn.rmempty = false
-function hn.validate(self, value)
-	if value == nil then
-		return
-	elseif (#value > 24) or string.match(value, "[^%w%.%-]") or string.match(value, "^[%-%.]") or string.match(value, "[%-%.]$") then
-		return nil, translate("Hostname may contain up to 24 alphanumeric characters. Minus and period are also allowed, but not in the beginning or the end of the hostname.")
-	else
-		return value
-	end
-end
+hn.datatype = "hostname"
 
 loc = b:option(Value, "location", translate("Location"))
 loc.rmempty = false

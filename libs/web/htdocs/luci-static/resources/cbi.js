@@ -141,8 +141,8 @@ var cbi_validators = {
 	},
 
 	'hostname': function(v)
-	{
-		return (v.match(/^[a-zA-Z_][a-zA-Z0-9_\-.]*$/) != null);
+	{	if ( v.length <= 24 )
+			return (v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) != null);
 	},
 
 	'wpakey': function(v)
