@@ -186,7 +186,7 @@ function sysinfo()
 		cpuinfo:match("machine\t+: ([^\n]+)") or
 		cpuinfo:match("Hardware\t+: ([^\n]+)") or
 		fs.readfile("/proc/diag/model") or
-		nixio.uname().machine() or
+		nixio.uname().machine or
 		system
 
 	return system, model, memtotal, memcached, membuffers, memfree, bogomips
