@@ -127,10 +127,9 @@ function macaddr(val)
 end
 
 function hostname(val)
-	if val and val:match("[a-zA-Z0-9_][a-zA-Z0-9_%-%.]*") then
-		return true	-- XXX: ToDo: need better solution
+	if val and (#val < 25) and val.match(val, "^[a-zA-Z0-9][a-zA-Z0-9%-%.]*[a-zA-Z0-9]$") then
+		return true
 	end
-
 	return false
 end
 

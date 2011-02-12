@@ -63,7 +63,7 @@ s:option(DummyValue, "_uptime", translate("Uptime")).value =
  luci.tools.webadmin.date_format(tonumber(uptime))
 
 hn = s:option(Value, "hostname", translate("Hostname"))
-
+hn.datatype = "hostname"
 function hn.write(self, section, value)
 	Value.write(self, section, value)
 	luci.sys.hostname(value)
