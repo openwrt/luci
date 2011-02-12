@@ -144,9 +144,8 @@ function o.cfgvalue(self, section)
 			local ifc = nm:get_interface(net:ifname())
 			if ifc then
 				local adr
-				local lla = luci.ip.IPv6("fe80::/10")
 				for _, adr in ipairs(ifc:ip6addrs()) do
-					if not lla:contains(adr) then
+					if not adr:is6linklocal() then
 						v = adr:string()
 						break
 					end
@@ -295,9 +294,8 @@ function o.cfgvalue(self, section)
 			local ifc = nm:get_interface(net:ifname())
 			if ifc then
 				local adr
-				local lla = luci.ip.IPv6("fe80::/10")
 				for _, adr in ipairs(ifc:ip6addrs()) do
-					if not lla:contains(adr) then
+					if not adr:is6linklocal() then
 						v = adr:network(128):string()
 						break
 					end
