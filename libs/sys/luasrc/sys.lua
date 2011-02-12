@@ -171,23 +171,23 @@ function sysinfo()
 	local cpuinfo = fs.readfile("/proc/cpuinfo")
 	local meminfo = fs.readfile("/proc/meminfo")
 
-	local system = cpuinfo:match("system typ.-:%s*([^\n]+)")
-	local model = ""
 	local memtotal = tonumber(meminfo:match("MemTotal:%s*(%d+)"))
 	local memcached = tonumber(meminfo:match("\nCached:%s*(%d+)"))
 	local memfree = tonumber(meminfo:match("MemFree:%s*(%d+)"))
 	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
 	local bogomips = tonumber(cpuinfo:match("BogoMIPS.-:%s*([^\n]+)"))
 
-	if not system then
-		system = nixio.uname().machine
-		model = cpuinfo:match("model name.-:%s*([^\n]+)")
-		if not model then
-			model = cpuinfo:match("Processor.-:%s*([^\n]+)")
-		end
-	else
-		model = cpuinfo:match("cpu model.-:%s*([^\n]+)")
-	end
+	local system =
+		cpuinfo:match("system type\t+: ([^\n]+)") or
+		cpuinfo:match("Processor\t+: ([^\n]+)") or
+		cpuinfo:match("model name\t+: ([^\n]+)")
+
+	local model =
+		cpuinfo:match("machine\t+: ([^\n]+)") or
+		cpuinfo:match("Hardware\t+: ([^\n]+)") or
+		fs.readfile("/proc/diag/model") or
+		nixio.uname().machine() or
+		system
 
 	return system, model, memtotal, memcached, membuffers, memfree, bogomips
 end
@@ -306,6 +306,17 @@ function net.defaultroute6()
 			route = rt
 		end
 	end)
+
+	if not route then
+		local global_unicast = luci.ip.IPv6("2000::/3")
+		net.routes6(function(rt)
+			if rt.dest:equal(global_unicast) and
+			   (not route or route.metric > rt.metric)
+			then
+				route = rt
+			end
+		end)
+	end
 
 	return route
 end
