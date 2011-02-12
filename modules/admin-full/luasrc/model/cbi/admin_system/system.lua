@@ -189,10 +189,12 @@ if has_rdate then
 	s.anonymous = true
 	s.addremove = true
 	s.template = "cbi/tblsection"
-	s.rmempty = true
 
-	s:option(Value, "hostname", translate("Name"))
+	h = s:option(Value, "hostname", translate("Name"))
+	h.rmempty = true
+	h.datatype = host
 	i = s:option(ListValue, "interface", translate("Interface"))
+	i.rmempty = true
 	i:value("", translate("Default"))
 	m3.uci:foreach("network", "interface",
 		function (section)
