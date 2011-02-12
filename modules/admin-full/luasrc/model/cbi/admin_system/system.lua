@@ -184,11 +184,24 @@ end
 --
 
 if has_rdate then
-	s2 = m:section(TypedSection, "rdate", translate("Time Server (rdate)"))
-	s2.anonymous = true
-	s2.addremove = false
+	m3= Map("timeserver", translate("Time Server (rdate)"))
+	s = m3:section(TypedSection, "timeserver")
+	s.anonymous = true
+	s.addremove = true
+	s.template = "cbi/tblsection"
+	s.rmempty = true
 
-	s2:option(DynamicList, "server", translate("Server"))
+	s:option(Value, "hostname", translate("Name"))
+	i = s:option(ListValue, "interface", translate("Interface"))
+	i:value("", translate("Default"))
+	m3.uci:foreach("network", "interface",
+		function (section)
+			local ifc = section[".name"]
+			if ifc ~= "loopback" then
+				i:value(ifc)
+			end
+		end
+	)
 end
 
 
@@ -249,4 +262,4 @@ c.write = function(self, section, value)
 end
 
 
-return m, m2
+return m, m3, m2
