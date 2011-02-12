@@ -340,7 +340,7 @@ function cidr.is4rfc1918( self )
 	if self[1] == FAMILY_INET4 then
 		return ((self[2][1] >= 0x0A00) and (self[2][1] <= 0x0AFF)) or
 		       ((self[2][1] >= 0xAC10) and (self[2][1] <= 0xAC1F)) or
-			   (self[2][1] == 0xC0A8)
+		        (self[2][1] == 0xC0A8)
 	end
 	return false
 end
