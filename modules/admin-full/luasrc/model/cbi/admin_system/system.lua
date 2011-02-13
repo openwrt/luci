@@ -97,11 +97,26 @@ s:option(Value, "conloglevel", translate("Log output level")).optional = true
 s:option(Value, "cronloglevel", translate("Cron Log Level")).optional = true
 
 if has_rdate then
-	s2 = m:section(TypedSection, "rdate", translate("Time Server (rdate)"))
-	s2.anonymous = true
-	s2.addremove = false
+	m3 = Map("timeserver", translate("Time Server (rdate)"))
+	s = m3:section(TypedSection, "timeserver")
+	s.anonymous = true
+	s.addremove = true
+	s.template = "cbi/tblsection"
 
-	s2:option(DynamicList, "server", translate("Server"))
+	h = s:option(Value, "hostname", translate("Name"))
+	h.rmempty = true
+	h.datatype = host
+	i = s:option(ListValue, "interface", translate("Interface"))
+	i.rmempty = true
+	i:value("", translate("Default"))
+	m3.uci:foreach("network", "interface",
+		function (section)
+			local ifc = section[".name"]
+			if ifc ~= "loopback" then
+				i:value(ifc)
+			end
+		end
+	)
 end
 
-return m
+return m, m3
