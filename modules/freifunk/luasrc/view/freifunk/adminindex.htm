@@ -35,7 +35,7 @@ local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "fr
 	if section.diversity ~= "0" and section.disabled ~= "1" then
 		print('<div class="error">' .. translate("Diversity is enabled for device") .. ' <b>' .. device .. '</b>. '
 		.. translate("Go to") .. ' <a href="' .. url .. '">' .. translate("wireless settings") .. '</a> ' ..
-		translate(" to disable it.") .. '</div><p />')
+		translate("to disable it.") .. '</div><p />')
 	end
 end) %>
 
