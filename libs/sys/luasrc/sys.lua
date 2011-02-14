@@ -185,7 +185,7 @@ function sysinfo()
 	local model =
 		cpuinfo:match("machine\t+: ([^\n]+)") or
 		cpuinfo:match("Hardware\t+: ([^\n]+)") or
-		fs.readfile("/proc/diag/model") or
+		luci.util.pcdata(fs.readfile("/proc/diag/model")) or
 		nixio.uname().machine or
 		system
 
