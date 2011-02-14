@@ -175,7 +175,7 @@ function sysinfo()
 	local memcached = tonumber(meminfo:match("\nCached:%s*(%d+)"))
 	local memfree = tonumber(meminfo:match("MemFree:%s*(%d+)"))
 	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
-	local bogomips = tonumber(cpuinfo:match("BogoMIPS.-:%s*([^\n]+)"))
+	local bogomips = tonumber(cpuinfo:match("[Bb]ogo[Mm][Ii][Pp][Ss].-: ([^\n]+)")) or 0
 
 	local system =
 		cpuinfo:match("system type\t+: ([^\n]+)") or
