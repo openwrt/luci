@@ -91,41 +91,52 @@ a img {
 	padding: 5px;
 }
 
-#header {
-	min-height: 100px;
+#header {height: auto;
 	background: #FFF url(header.jpg) repeat-x left bottom;
 	color: #ccc;
 	font-weight: bold;
 	text-align:right;
 }
 
-#header img {
-	border: 0;
-	padding-left: 10px;
+.header_left img {
+	padding: 10px 10px 0px 10px;
 }
 
-#header_left{
+.header_banner {
+	overflow:hidden;
+	padding-bottom: 6px;
 	text-align:left;
-	top: 42px;
-	float:left;
 }
 
-#header_left a{
+.header_banner img{
+	padding: 0px;
+}
+
+.header_left{
+	text-align:left;
+}
+
+.header_left a{
 	color: #dc0067;
-	font: bold 28px Helvetica;
+	font: bold 36px Helvetica;
 	text-decoration: none;
 }
 
-#header p {
-	padding: 0 1em 1em 1em;
+.header_left .spacer {
+height: 12px;
+min-height:12px;
+width:99%;
 }
 
 #header h1,
-#header p {
+.header_right {
+	position: absolute;
+	text-align: right;
+	top: 10px;
+	right: 10px;
 	font-size: 70%;
 	font-weight: normal;
 	line-height: 160%;
-	text-align: right;
 }
 
 ul.dropdowns {
