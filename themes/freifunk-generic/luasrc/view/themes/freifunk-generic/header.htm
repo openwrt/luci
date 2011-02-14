@@ -8,12 +8,13 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id: header.htm 4079 2009-01-17 17:59:11Z Cyrus $
-
 -%>
+
 <%
 require("luci.sys")
+local uci = require "luci.model.uci".cursor()
+local fs = require "luci.fs"
+
 local load1, load5, load15 = luci.sys.loadavg()
 local request  = require("luci.dispatcher").context.path
 local category = request[1]
@@ -21,17 +22,31 @@ local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
 local node     = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
-
-
-local uci = require "luci.model.uci".cursor()
-local ff = uci:get("freifunk", "community", "name")
-if not ff then
-        ff = ""
-end
+local ff = uci:get("freifunk", "community", "name") or ""
 local co = "profile_" .. ff
 local community = uci:get_first(co, "community", "name") or "Freifunk"
 local hp = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
+local logo = "/luci-static/freifunk-generic/logo.jpg"
+local banner = false
+local show_comm = true
 
+local lo = fs.glob("/www/luci-static/resources/custom_logo.*")
+if lo[1] then
+	logo = string.gsub(lo[1], "/www", "")
+end
+
+local lon = fs.glob("/www/luci-static/resources/custom_logo_only.*")
+if lon[1] then
+	logo = string.gsub(lon[1], "/www", "")
+	show_comm = false
+end
+
+local hea = fs.glob("/www/luci-static/resources/custom_header.*")
+if hea[1] then
+	logo = string.gsub(hea[1], "/www", "")
+	show_comm = false
+	banner = true
+end 
 
 local c = tree
 for i,r in ipairs(request) do
@@ -84,15 +99,25 @@ require("luci.http").prepare_content("application/xhtml+xml")
 </p>
 
 <div id="header">
-	<span id="header_left">
-		<a href="<%=hp%>"><img src="/luci-static/freifunk-generic/logo.jpg" alt="FF Logo" /></a>
-		<a href="<%=hp%>"><%=community%></a>
-	</span>
-	<p>
-		<%=luci.version.distversion%><br />
-		<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
-		<%:Hostname%>: <%=hostname%><br />
-	</p>
+	<%if banner then%>
+		<div class="header_banner">
+			<a href="<%=hp%>"><img src="<%=logo%>" alt="Header" /></a>
+		</div>
+	<%else%>
+		<div class="header_left">
+			<a href="<%=hp%>"><img src="<%=logo%>" alt="Logo" /></a>
+			<%if show_comm then%>
+				<a href="<%=hp%>"><%=community%></a>
+				<br/>
+			<%end%>
+		<div class = "spacer"></div>
+		</div>
+		<div class="header_right">
+			<%=luci.version.distversion%><br />
+			<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
+			<%:Hostname%>: <%=hostname%><br />
+		</div>
+	<%end%>
 </div>
 
 <div id="menubar">
