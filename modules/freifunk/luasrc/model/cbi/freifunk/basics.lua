@@ -16,9 +16,7 @@ local uci = require "luci.model.uci".cursor()
 local profiles = "/etc/config/profile_"
 
 m = Map("freifunk", translate ("Community"))
-c = m:section(NamedSection, "community", "public", nil, translate([[These are the basic
-settings for your local wireless community. These settings define the default values for the wizard
-and DO NOT affect the actual configuration of the router.]]))
+c = m:section(NamedSection, "community", "public", nil, translate("These are the basic settings for your local wireless community. These settings define the default values for the wizard and DO NOT affect the actual configuration of the router."))
 
 community = c:option(ListValue, "name", translate ("Community"))
 community.rmempty = false
