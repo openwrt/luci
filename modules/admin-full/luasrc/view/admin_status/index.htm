@@ -85,7 +85,7 @@ $Id$
 		return
 	end
 
-	local system, model, _, _, _, _, bogomips = luci.sys.sysinfo()
+	local system, model = luci.sys.sysinfo()
 -%>
 
 <%+header%>
@@ -273,15 +273,6 @@ $Id$
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
-	</table>
-</fieldset>
-
-<fieldset class="cbi-section">
-	<legend><%:CPU%></legend>
-
-	<table width="100%" cellspacing="10">
-		<tr><td width="33%"><%:CPU Model%></td><td><%=system or "?" %></td></tr>
-		<tr><td width="33%"><%:CPU Speed%></td><td><%=math.floor((bogomips + 5) / 10) * 10 %> MHz</td></tr>
 	</table>
 </fieldset>
 
