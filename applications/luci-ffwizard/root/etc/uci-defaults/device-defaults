@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# prevent running on sdk
+type config_get >/dev/null 2>/dev/null || exit 0
+
 set_default_config()
 {
 	local cfg="$1"
