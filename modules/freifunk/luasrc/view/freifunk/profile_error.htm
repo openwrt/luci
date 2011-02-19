@@ -1,0 +1,11 @@
+<%+header%>
+
+<%
+local profileurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "freifunk", "basics")
+%>
+
+<h2><%:Error%></h2>
+<%:You need to select a profile before you can edit it. To select a profile go to%> <a href='<%=profileurl%>'><%:Basic settings%></a>.
+<p/>
+
+<%+footer%>
