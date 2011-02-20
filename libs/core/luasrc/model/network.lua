@@ -478,7 +478,7 @@ end
 function network._ip(self, opt, family, list)
 	local ip = uci_s:get("network", self.sid, opt)
 	local fc = (family == 6) and ipc.IPv6 or ipc.IPv4
-	if ip then
+	if ip or list then
 		if list then
 			local l = { }
 			for ip in utl.imatch(ip) do
