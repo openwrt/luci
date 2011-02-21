@@ -280,6 +280,12 @@ function iface_reconnect()
 		end
 
 		luci.sys.call("env -i /sbin/ifup %q >/dev/null 2>/dev/null" % iface)
+
+		require "luci.fs"
+		if luci.fs.access("/etc/config/radvd") then
+			luci.sys.call("/etc/init.d/radvd restart >/dev/null 2>/dev/null")
+		end
+
 		luci.http.status(200, "Reconnected")
 		return
 	end

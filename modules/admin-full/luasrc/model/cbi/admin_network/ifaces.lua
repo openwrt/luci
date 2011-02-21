@@ -22,6 +22,7 @@ arg[1] = arg[1] or ""
 
 local has_dnsmasq  = fs.access("/etc/config/dhcp")
 local has_firewall = fs.access("/etc/config/firewall")
+local has_radvd  = fs.access("/etc/config/radvd")
 
 local has_3g     = fs.access("/usr/bin/gcom")
 local has_pptp   = fs.access("/usr/sbin/pptp")
@@ -37,6 +38,10 @@ m:chain("wireless")
 
 if has_firewall then
 	m:chain("firewall")
+end
+
+if has_radvd then
+	m:chain("radvd")
 end
 
 nw.init(m.uci)
