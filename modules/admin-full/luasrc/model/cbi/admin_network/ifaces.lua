@@ -22,7 +22,7 @@ arg[1] = arg[1] or ""
 
 local has_dnsmasq  = fs.access("/etc/config/dhcp")
 local has_firewall = fs.access("/etc/config/firewall")
-local has_radvd  = fs.access("/etc/config/radvd")
+local has_radvd    = fs.access("/etc/config/radvd")
 
 local has_3g     = fs.access("/usr/bin/gcom")
 local has_pptp   = fs.access("/usr/sbin/pptp")
@@ -32,6 +32,7 @@ local has_pppoa  = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
 local has_ipv6   = fs.access("/proc/net/ipv6_route")
 local has_6in4   = fs.access("/lib/network/6in4.sh")
 local has_6to4   = fs.access("/lib/network/6to4.sh")
+local has_relay  = fs.access("/lib/network/relay.sh")
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("wireless")
@@ -66,6 +67,7 @@ if has_ipv6  then s:tab("ipv6", translate("IPv6 Setup")) end
 if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
 if has_pppoa then s:tab("atm", translate("ATM Settings")) end
 if has_6in4 or has_6to4 then s:tab("tunnel", translate("Tunnel Settings")) end
+if has_relay then s:tab("relay", translate("Relay Settings")) end
 s:tab("physical", translate("Physical Settings"))
 if has_firewall then s:tab("firewall", translate("Firewall Settings")) end
 
@@ -91,6 +93,7 @@ if has_3g    then p:value("3g",    "UMTS/3G") end
 if has_pptp  then p:value("pptp",  "PPTP")    end
 if has_6in4  then p:value("6in4",  "6in4")    end
 if has_6to4  then p:value("6to4",  "6to4")    end
+if has_relay then p:value("relay", "Relay")   end
 p:value("none", translate("none"))
 
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
@@ -222,6 +225,19 @@ if has_ipv6 then
 	ip6gw.optional = true
 	ip6gw.datatype = "ip6addr"
 	ip6gw:depends("proto", "static")
+
+
+	ra = s:taboption("ipv6", Flag, "accept_ra", translate("Accept Router Advertisements"))
+	ra.default = m.uci:get("network", arg[1], "proto") == "dhcp" and ra.enabled or ra.disabled
+	ra:depends("proto", "static")
+	ra:depends("proto", "dhcp")
+	ra:depends("proto", "none")
+
+	rs = s:taboption("ipv6", Flag, "send_rs", translate("Send Router Solicitiations"))
+	rs.default = m.uci:get("network", arg[1], "proto") ~= "dhcp" and rs.enabled or rs.disabled
+	rs:depends("proto", "static")
+	rs:depends("proto", "dhcp")
+	rs:depends("proto", "none")
 end
 
 dns = s:taboption("general", DynamicList, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"),
@@ -241,6 +257,13 @@ mtu = s:taboption("physical", Value, "mtu", "MTU")
 mtu.optional = true
 mtu.datatype = "uinteger"
 mtu.placeholder = 1500
+mtu:depends("proto", "static")
+mtu:depends("proto", "dhcp")
+mtu:depends("proto", "pppoe")
+mtu:depends("proto", "pppoa")
+mtu:depends("proto", "6in4")
+mtu:depends("proto", "6to4")
+mtu:depends("proto", "none")
 
 srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
 srv:depends("proto", "pptp")
@@ -285,6 +308,16 @@ if has_6to4 then
 
 		Value.write(self, section, "%X" % value)
 	end
+end
+
+if has_relay then
+	rnet = s:taboption("general", Value, "network", translate("Relay between networks"))
+	rnet.widget = "checkbox"
+	rnet.exclude = arg[1]
+	rnet.template = "cbi/network_netlist"
+	rnet.nocreate = true
+	rnet.nobridges = true
+	rnet:depends("proto", "relay")
 end
 
 mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
@@ -465,58 +498,89 @@ if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
 	maxwait.datatype = "uinteger"
 end
 
-s2 = m:section(TypedSection, "alias", translate("IP-Aliases"))
-s2.addremove = true
+if has_relay then
+	fb = s:taboption("relay", Flag, "forward_bcast", translate("Forward broadcasts"))
+	fb.default = fb.enabled
 
-s2:depends("interface", arg[1])
-s2.defaults.interface = arg[1]
+	fd = s:taboption("relay", Flag, "forward_dhcp", translate("Forward DHCP"))
+	fd.default = fd.enabled
 
-s2:tab("general", translate("General Setup"))
-s2.defaults.proto = "static"
+	gw = s:taboption("relay", Value, "gateway", translate("Override Gateway"))
+	gw.optional    = true
+	gw.placeholder = "0.0.0.0"
+	gw.datatype    = "ip4addr"
 
-ip = s2:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
-ip.optional = true
-ip.datatype = "ip4addr"
+	expiry = s:taboption("relay", Value, "expiry", translate("Host expiry timeout"))
+	expiry.optional    = true
+	expiry.placeholder = 30
+	expiry.datatype    = "uinteger"
 
-nm = s2:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
-nm.optional = true
-nm.datatype = "ip4addr"
-nm:value("255.255.255.0")
-nm:value("255.255.0.0")
-nm:value("255.0.0.0")
+	retry = s:taboption("relay", Value, "retry", translate("ARP ping retries"))
+	retry.optional     = true
+	retry.placeholder  = 5
+	retry.datatype     = "uinteger"
 
-gw = s2:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
-gw.optional = true
-gw.datatype = "ip4addr"
-
-if has_ipv6 then
-	s2:tab("ipv6", translate("IPv6 Setup"))
-
-	ip6 = s2:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
-	ip6.optional = true
-	ip6.datatype = "ip6addr"
-
-	gw6 = s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
-	gw6.optional = true
-	gw6.datatype = "ip6addr"
+	table = s:taboption("relay", Value, "table", translate("Routing table ID"))
+	table.optional     = true
+	table.placeholder  = 16800
+	table.datatype     = "uinteger"
 end
 
-s2:tab("advanced", translate("Advanced Settings"))
 
-bcast = s2:taboption("advanced", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
-bcast.optional = true
-bcast.datatype = "ip4addr"
+if net:proto() ~= "relay" then
+	s2 = m:section(TypedSection, "alias", translate("IP-Aliases"))
+	s2.addremove = true
 
-dns = s2:taboption("advanced", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
-dns.optional = true
-dns.datatype = "ip4addr"
+	s2:depends("interface", arg[1])
+	s2.defaults.interface = arg[1]
+
+	s2:tab("general", translate("General Setup"))
+	s2.defaults.proto = "static"
+
+	ip = s2:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
+	ip.optional = true
+	ip.datatype = "ip4addr"
+
+	nm = s2:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
+	nm.optional = true
+	nm.datatype = "ip4addr"
+	nm:value("255.255.255.0")
+	nm:value("255.255.0.0")
+	nm:value("255.0.0.0")
+
+	gw = s2:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
+	gw.optional = true
+	gw.datatype = "ip4addr"
+
+	if has_ipv6 then
+		s2:tab("ipv6", translate("IPv6 Setup"))
+
+		ip6 = s2:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
+		ip6.optional = true
+		ip6.datatype = "ip6addr"
+
+		gw6 = s2:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
+		gw6.optional = true
+		gw6.datatype = "ip6addr"
+	end
+
+	s2:tab("advanced", translate("Advanced Settings"))
+
+	bcast = s2:taboption("advanced", Value, "bcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
+	bcast.optional = true
+	bcast.datatype = "ip4addr"
+
+	dns = s2:taboption("advanced", Value, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"))
+	dns.optional = true
+	dns.datatype = "ip4addr"
+end
 
 
 --
 -- Display DNS settings if dnsmasq is available
 --
 
-if has_dnsmasq then
+if has_dnsmasq and net:proto() == "static" then
 	m2 = Map("dhcp", "", "")
 	function m2.on_parse()
 		local has_section = false
