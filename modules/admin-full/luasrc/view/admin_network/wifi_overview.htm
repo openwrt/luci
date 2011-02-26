@@ -16,6 +16,7 @@ $Id$
 <%-
 
 	local sys = require "luci.sys"
+	local fs = require "luci.fs"
 	local utl = require "luci.util"
 	local uci = require "luci.model.uci".cursor()
 	local ntm = require "luci.model.network"
@@ -76,9 +77,13 @@ $Id$
 		elseif name == "ra" then
 			return "RaLink 802.11%s Wireless Controller" % bands
 
-		-- prism?
+		-- hermes
 		elseif name == "eth" then
 			return "Prism 802.11%s Wireless Controller" % bands
+
+		-- hostap
+		elseif name == "wlan" and fs.isdirectory("/proc/net/hostap/" .. ifname) then
+			return "Prism2/2.5/3 802.11%s Wireless Controller" % bands
 
 		-- dunno yet
 		else
