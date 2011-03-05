@@ -54,10 +54,10 @@ $Id$
 		require("luci.dispatcher")
 
 		local field   = luci.http.formvalue('field')
-		local request = luci.dispatcher.context.path
+		local request = luci.dispatcher.context.args
 		local path    = { '' }
 
-		for i = 3, #request do
+		for i = 1, #request do
 			if request[i] ~= '..' and #request[i] > 0 then
 				path[#path+1] = request[i]
 			end
@@ -103,7 +103,7 @@ $Id$
 				if stat and stat.type == 'dir' then
 			-%>
 				<li class="dir">
-					<img src="/luci-static/resources/cbi/folder.png" alt="Directory" />
+					<img src="<%=resource%>/cbi/folder.gif" alt="<%:Directory%>" />
 					<a href="<%=baseurl%>/<%=e%>?field=<%=field%>"><%=e%>/</a>
 				</li>
 			<% end end -%>
@@ -113,7 +113,7 @@ $Id$
 				if stat and stat.type ~= 'dir' then
 			-%>
 				<li class="file">
-					<img src="/luci-static/resources/cbi/file.png" alt="File" />
+					<img src="<%=resource%>/cbi/file.gif" alt="<%:File%>" />
 					<a href="#" onclick="callback('<%=filepath..e%>')"><%=e%></a>
 				</li>
 			<% end end -%>

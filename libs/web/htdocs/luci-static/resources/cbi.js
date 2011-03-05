@@ -402,6 +402,23 @@ function cbi_filebrowser(id, url, defpath) {
 	browser.focus();
 }
 
+function cbi_browser_init(id, respath, url, defpath)
+{
+	function cbi_browser_btnclick(e) {
+		cbi_filebrowser(id, url, defpath);
+		return false;
+	}
+
+	var field = document.getElementById(id);
+
+	var btn = document.createElement('img');
+	btn.className = 'cbi-image-button';
+	btn.src = respath + '/cbi/folder.gif';
+	field.parentNode.insertBefore(btn, field.nextSibling);
+
+	cbi_bind(btn, 'click', cbi_browser_btnclick);
+}
+
 function cbi_dynlist_init(name, respath)
 {
 	function cbi_dynlist_renumber(e)
@@ -587,6 +604,7 @@ function cbi_dynlist_init(name, respath)
 	for( var i = 0; i < inputs.length; i++ )
 	{
 		var btn = document.createElement('img');
+			btn.className = 'cbi-image-button';
 			btn.src = respath + (
 				(i+1) < inputs.length ? '/cbi/remove.gif' : '/cbi/add.gif'
 			);
