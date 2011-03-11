@@ -150,13 +150,19 @@ function _wifi_lookup(ifn)
 	end
 end
 
+function _iface_virtual(x)
+	return (
+		x:match("^6in4-%w") or x:match("^6to4-%w") or x:match("^3g-%w") or
+		x:match("^ppp-%w") or x:match("^pppoe-%w") or x:match("^pppoa-%w") or
+		x:match("^relay-%w")
+	)
+end
+
 function _iface_ignore(x)
 	return (
 		x:match("^wmaster%d") or x:match("^wifi%d") or x:match("^hwsim%d") or
-		x:match("^imq%d") or x:match("^mon.wlan%d") or x:match("^6in4-%w") or
-		x:match("^6to4-%w") or x:match("^3g-%w") or x:match("^ppp-%w") or
-		x:match("^pppoe-%w") or x:match("^pppoa-%w") or	x:match("^relay-%w") or
-		x == "sit0" or x == "lo"
+		x:match("^imq%d") or x:match("^mon.wlan%d") or
+		x == "sit0" or x == "lo" or _iface_virtual(x)
 	)
 end
 
@@ -175,7 +181,7 @@ function init(cursor)
 		local name = i.name:match("[^:]+")
 		local prnt = name:match("^([^%.]+)%.")
 
-		if not _iface_ignore(name) then
+		if _iface_virtual(name) or not _iface_ignore(name) then
 			ifs[name] = ifs[name] or {
 				idx      = i.ifindex or n,
 				name     = name,
