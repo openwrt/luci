@@ -39,31 +39,6 @@ ifeq ($(BOARD),brcm-2.4)
 endif
 
 
-include $(INCLUDE_DIR)/package.mk
-
-ifeq ($(USELOCAL),1)
-  define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
-	$(TAR) c -C ../../../ . \
-		--exclude=.pc --exclude=.svn --exclude=.git \
-		--exclude='boa-0*' --exclude='*.o' --exclude='*.so' \
-		--exclude=dist | \
-			tar x -C $(PKG_BUILD_DIR)/
-  endef
-endif
-
-define Build/Configure
-endef
-
-MAKE_FLAGS += \
-	MODULES="$(LUCI_SELECTED_MODULES)" \
-	LUA_TARGET="$(LUA_TARGET)" \
-	LUA_SHLIBS="-llua -lm -ldl -lcrypt" \
-	CFLAGS="$(TARGET_CFLAGS) $(LUCI_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
-	NIXIO_TLS="$(NIXIO_TLS)" OS="Linux"
-
-
 ### Templates ###
 define Package/luci/install/template
 	$(CP) -a $(PKG_BUILD_DIR)/$(2)/dist/* $(1)/ -R
@@ -572,4 +547,30 @@ $(eval $(call collection,light,\
 
 ### Compile ###
 PKG_CONFIG_DEPENDS=$(patsubst %,CONFIG_PACKAGE_%,$(LUCI_BUILD_PACKAGES))
+
+include $(INCLUDE_DIR)/package.mk
+
+ifeq ($(USELOCAL),1)
+  define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	$(TAR) c -C ../../../ . \
+		--exclude=.pc --exclude=.svn --exclude=.git \
+		--exclude='boa-0*' --exclude='*.o' --exclude='*.so' \
+		--exclude=dist | \
+			tar x -C $(PKG_BUILD_DIR)/
+  endef
+endif
+
+define Build/Configure
+endef
+
+MAKE_FLAGS += \
+	MODULES="$(LUCI_SELECTED_MODULES)" \
+	LUA_TARGET="$(LUA_TARGET)" \
+	LUA_SHLIBS="-llua -lm -ldl -lcrypt" \
+	CFLAGS="$(TARGET_CFLAGS) $(LUCI_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
+	NIXIO_TLS="$(NIXIO_TLS)" OS="Linux"
+
+
 $(foreach b,$(LUCI_BUILD_PACKAGES),$(eval $(call BuildPackage,$(b))))
