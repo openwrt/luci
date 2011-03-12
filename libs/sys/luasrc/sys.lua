@@ -302,7 +302,9 @@ function net.defaultroute6()
 	local route
 
 	net.routes6(function(rt)
-		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
+		if rt.dest:prefix() == 0 and rt.device ~= "lo" and 
+		   (not route or route.metric > rt.metric)
+		then
 			route = rt
 		end
 	end)
