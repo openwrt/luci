@@ -83,7 +83,9 @@ function wifi_networks()
 				noise      = net:noise(),
 				bitrate    = net:bitrate(),
 				ifname     = net:ifname(),
-				assoclist  = net:assoclist()
+				assoclist  = net:assoclist(),
+				country    = net:country(),
+				txpower    = net:txpower()
 			}
 		end
 
@@ -91,4 +93,40 @@ function wifi_networks()
 	end
 
 	return rv
+end
+
+function wifi_network(id)
+	local ntm = require "luci.model.network".init()
+	local net = ntm:get_wifinet(id)
+	if net then
+		local dev = net:get_device()
+		if dev then
+			return {
+				id         = id,
+				name       = net:shortname(),
+				link       = net:adminlink(),
+				up         = net:is_up(),
+				mode       = net:active_mode(),
+				ssid       = net:active_ssid(),
+				bssid      = net:active_bssid(),
+				encryption = net:active_encryption(),
+				frequency  = net:frequency(),
+				channel    = net:channel(),
+				signal     = net:signal(),
+				quality    = net:signal_percent(),
+				noise      = net:noise(),
+				bitrate    = net:bitrate(),
+				ifname     = net:ifname(),
+				assoclist  = net:assoclist(),
+				country    = net:country(),
+				txpower    = net:txpower(),
+				device     = {
+					up     = dev:is_up(),
+					device = dev:name(),
+					name   = dev:get_i18n()
+				}
+			}
+		end
+	end
+	return { }
 end
