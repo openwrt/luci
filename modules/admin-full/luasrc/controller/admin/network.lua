@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -326,30 +327,13 @@ function iface_delete()
 end
 
 function wifi_status()
-	local netm  = require "luci.model.network".init()
 	local path = luci.dispatcher.context.requestpath
+	local s    = require "luci.tools.status"
 	local rv   = { }
 
 	local dev
 	for dev in path[#path]:gmatch("[%w%.%-]+") do
-		local j = { id = dev }
-		local wn = netm:get_wifinet(dev)
-		local iw = wn and wn.iwinfo
-		if iw then
-			local f
-			for _, f in ipairs({
-				"channel", "frequency", "txpower", "bitrate", "signal", "noise",
-				"quality", "quality_max", "bssid", "country",
-				"encryption", "ifname", "assoclist"
-			}) do
-				j[f] = iw[f]
-			end
-		end
-
-		j.mode = wn and wn:active_mode() or "?"
-		j.ssid = wn and wn:active_ssid() or "?"
-
-		rv[#rv+1] = j
+		rv[#rv+1] = s.wifi_network(dev)
 	end
 
 	if #rv > 0 then

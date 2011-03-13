@@ -8,8 +8,8 @@
 			{
 				if (iw && (iw = iw[0]))
 				{
-					var is_assoc = (iw.bssid && iw.channel);
-					var p = (100 / iw.quality_max * iw.quality);
+					var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel);
+					var p = iw.quality;
 					var q = is_assoc ? p : -1;
 
 					var icon;
@@ -47,10 +47,10 @@
 							'<strong><%:Bit Rate%>:</strong> %.1f MBit/s | ' +
 							'<strong><%:Country%>:</strong> %s',
 								iw.mode, iw.ssid, iw.bssid,
-								iw.encryption ? iw.encryption.description : '<%:None%>',
-								iw.channel, iw.frequency ? (iw.frequency / 1000) : 0,
+								iw.encryption ? iw.encryption : '<%:None%>',
+								iw.channel, iw.frequency ? iw.frequency : 0,
 								iw.txpower, iw.signal, iw.noise,
-								iw.bitrate ? (iw.bitrate / 1000) : 0, iw.country
+								iw.bitrate ? iw.bitrate : 0, iw.country
 						);
 					else if (d)
 						d.innerHTML = String.format(
