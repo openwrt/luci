@@ -1121,6 +1121,10 @@ function wifinet.network(self)
 	return uci_s:get("wifinet", self.sid, "network")
 end
 
+function wifinet.id(self)
+	return self.netid
+end
+
 function wifinet.name(self)
 	return self.sid
 end
