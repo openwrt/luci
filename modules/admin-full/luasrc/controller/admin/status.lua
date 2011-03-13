@@ -18,8 +18,8 @@ function index()
 	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
 
-	entry({"admin", "status"}, template("admin_status/index"), i18n("Status"), 20).index = true
-	entry({"admin", "status", "interfaces"}, template("admin_status/interfaces"), i18n("Interfaces"), 1)
+	entry({"admin", "status"}, alias("admin", "status", "interfaces"), i18n("Status"), 20).index = true
+	entry({"admin", "status", "interfaces"}, template("admin_status/index"), i18n("Overview"), 1)
 	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("Firewall"), 2).leaf = true
 	entry({"admin", "status", "conntrack"}, template("admin_status/conntrack"), i18n("Active Connections"), 3)
 	entry({"admin", "status", "routes"}, template("admin_status/routes"), i18n("Routes"), 4)
