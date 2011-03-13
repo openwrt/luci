@@ -907,7 +907,7 @@ if( ! String.format )
 
 		var str = arguments[0];
 		var out = '';
-		var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t))/;
+		var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
 		var a = b = [], numSubstitutions = 0, numMatches = 0;
 
 		while( a = re.exec(str) )
@@ -1025,6 +1025,20 @@ if( ! String.format )
 								? String.format('%dd %dh %dm %ds', td, th, tm, ts)
 								: String.format('%dh %dm %ds', th, tm, ts);
 
+							break;
+
+						case 'm':
+							var mf = pMinLength ? parseInt(pMinLength) : 1000;
+							var pr = pPrecision ? Math.floor(10*parseFloat('0'+pPrecision)) : 2;
+
+							var i = 0;
+							var val = (param || 0);
+							var units = [ '', 'K', 'M', 'G', 'T', 'P', 'E' ];
+
+							for (i = 0; (i < units.length) && (val > mf); i++)
+								val /= mf;
+
+							subst = val.toFixed(pr) + ' ' + units[i];
 							break;
 					}
 				}
