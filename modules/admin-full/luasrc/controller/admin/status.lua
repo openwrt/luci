@@ -21,18 +21,17 @@ function index()
 	entry({"admin", "status"}, alias("admin", "status", "interfaces"), i18n("Status"), 20).index = true
 	entry({"admin", "status", "interfaces"}, template("admin_status/index"), i18n("Overview"), 1)
 	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("Firewall"), 2).leaf = true
-	entry({"admin", "status", "conntrack"}, template("admin_status/conntrack"), i18n("Active Connections"), 3)
-	entry({"admin", "status", "routes"}, template("admin_status/routes"), i18n("Routes"), 4)
-	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("System Log"), 5)
-	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("Kernel Log"), 6)
+	entry({"admin", "status", "routes"}, template("admin_status/routes"), i18n("Routes"), 3)
+	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("System Log"), 4)
+	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("Kernel Log"), 5)
 
-	entry({"admin", "status", "load"}, template("admin_status/load"), i18n("Realtime Load"), 7).leaf = true
+	entry({"admin", "status", "load"}, template("admin_status/load"), i18n("Realtime Load"), 6).leaf = true
 	entry({"admin", "status", "load_status"}, call("action_load")).leaf = true
 
-	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), i18n("Realtime Traffic"), 8).leaf = true
+	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), i18n("Realtime Traffic"), 7).leaf = true
 	entry({"admin", "status", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
-	entry({"admin", "status", "connections"}, template("admin_status/connections"), i18n("Realtime Connections"), 9).leaf = true
+	entry({"admin", "status", "connections"}, template("admin_status/connections"), i18n("Realtime Connections"), 8).leaf = true
 	entry({"admin", "status", "connections_status"}, call("action_connections")).leaf = true
 end
 
@@ -120,13 +119,18 @@ function action_load()
 end
 
 function action_connections()
-	local fs = require "luci.fs"
-	if fs.access("/var/lib/luci-bwc/connections") then
-		luci.http.prepare_content("application/json")
+	local fs  = require "luci.fs"
+	local sys = require "luci.sys"
 
+	luci.http.prepare_content("application/json")
+
+	luci.http.write("{ connections: ")
+	luci.http.write_json(sys.net.conntrack())
+
+	if fs.access("/var/lib/luci-bwc/connections") then
 		local bwc = io.popen("luci-bwc -c 2>/dev/null")
 		if bwc then
-			luci.http.write("[")
+			luci.http.write(", statistics: [")
 
 			while true do
 				local ln = bwc:read("*l")
@@ -137,9 +141,7 @@ function action_connections()
 			luci.http.write("]")
 			bwc:close()
 		end
-
-		return
 	end
 
-	luci.http.status(404, "No data available")
+	luci.http.write(" }")
 end
