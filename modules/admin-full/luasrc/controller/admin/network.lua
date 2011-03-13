@@ -211,7 +211,13 @@ function iface_status()
 		if net then
 			local info
 			local dev  = net:ifname()
-			local data = { id = iface, uptime = net:uptime() }
+			local data = {
+				id       = iface,
+				proto    = net:proto(),
+				uptime   = net:uptime(),
+				gwaddr   = net:gwaddr(),
+				dnsaddrs = net:dnsaddrs()
+			}
 			for _, info in ipairs(nixio.getifaddrs()) do
 				local name = info.name:match("[^:]+")
 				if name == dev then
@@ -280,12 +286,6 @@ function iface_reconnect()
 		end
 
 		luci.sys.call("env -i /sbin/ifup %q >/dev/null 2>/dev/null" % iface)
-
-		require "luci.fs"
-		if luci.fs.access("/etc/config/radvd") then
-			luci.sys.call("/etc/init.d/radvd restart >/dev/null 2>/dev/null")
-		end
-
 		luci.http.status(200, "Reconnected")
 		return
 	end
@@ -328,7 +328,6 @@ end
 function wifi_status()
 	local netm  = require "luci.model.network".init()
 	local path = luci.dispatcher.context.requestpath
-	local arp  = luci.sys.net.arptable()
 	local rv   = { }
 
 	local dev
@@ -363,43 +362,10 @@ function wifi_status()
 end
 
 function lease_status()
-	local rv = { }
-	local leasefile = "/var/dhcp.leases"
-
-	local uci = require "luci.model.uci".cursor()
-	local nfs = require "nixio.fs"
-
-	uci:foreach("dhcp", "dnsmasq",
-		function(s)
-			if s.leasefile and nfs.access(s.leasefile) then
-				leasefile = s.leasefile
-				return false
-			end
-		end)
-
-	local fd = io.open(leasefile, "r")
-	if fd then
-		while true do
-			local ln = fd:read("*l")
-			if not ln then
-				break
-			else
-				local ts, mac, ip, name = ln:match("^(%d+) (%S+) (%S+) (%S+)")
-				if ts and mac and ip and name then
-					rv[#rv+1] = {
-						expires  = os.difftime(tonumber(ts) or 0, os.time()),
-						macaddr  = mac,
-						ipaddr   = ip,
-						hostname = (name ~= "*") and name
-					}
-				end
-			end
-		end
-		fd:close()
-	end
+	local s = require "luci.tools.status"
 
 	luci.http.prepare_content("application/json")
-	luci.http.write_json(rv)
+	luci.http.write_json(s.dhcp_leases())
 end
 
 function diag_command(cmd)
