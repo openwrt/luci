@@ -67,7 +67,7 @@ function index()
 			local wnet
 			for _, wnet in ipairs(wdev:get_wifinets()) do
 				entry(
-					{"admin", "network", "wireless", wnet.netid},
+					{"admin", "network", "wireless", wnet:id()},
 					alias("admin", "network", "wireless"),
 					wdev:name() .. ": " .. wnet:shortname()
 				)
