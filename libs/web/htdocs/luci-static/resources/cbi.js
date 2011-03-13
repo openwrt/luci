@@ -1032,7 +1032,7 @@ if( ! String.format )
 							var pr = pPrecision ? Math.floor(10*parseFloat('0'+pPrecision)) : 2;
 
 							var i = 0;
-							var val = (param || 0);
+							var val = parseFloat(param || 0);
 							var units = [ '', 'K', 'M', 'G', 'T', 'P', 'E' ];
 
 							for (i = 0; (i < units.length) && (val > mf); i++)
