@@ -76,8 +76,8 @@ $Id$
 					{
 						var ifc = ifcs[i];
 						var is_up = (ifc.flags && ifc.flags.up);
-						var rxb = ifc.stats ? (ifc.stats["rx_bytes"] / 1024) : 0;
-						var txb = ifc.stats ? (ifc.stats["tx_bytes"] / 1024) : 0;
+						var rxb = ifc.stats ? ifc.stats["rx_bytes"] : 0;
+						var txb = ifc.stats ? ifc.stats["tx_bytes"] : 0;
 						var rxp = ifc.stats ? ifc.stats["rx_packets"] : 0;
 						var txp = ifc.stats ? ifc.stats["tx_packets"] : 0;
 						var mac = ifc.macaddr ? ifc.macaddr : '00:00:00:00:00:00';
@@ -168,8 +168,8 @@ $Id$
 						if (t)
 						{
 							t.innerHTML = String.format(
-								'<strong><%:RX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />' +
-								'<strong><%:TX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />',
+								'<strong><%:RX%></strong>: %1024.2mB (%d <%:Pkts.%>)<br />' +
+								'<strong><%:TX%></strong>: %1024.2mB (%d <%:Pkts.%>)<br />',
 									rxb, rxp, txb, txp
 							);
 						}
