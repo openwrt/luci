@@ -14,6 +14,14 @@ $Id$
 -%>
 
 <%
+	require "luci.fs"
+	require "luci.tools.status"
+
+	local has_ipv6 = luci.fs.access("/proc/net/ipv6_route")
+	local has_dhcp = luci.fs.access("/etc/config/dhcp")
+	local has_wifi = luci.fs.stat("/etc/config/wireless")
+	      has_wifi = has_wifi and has_wifi.size > 0
+
 	if luci.http.formvalue("status") == "1" then
 		local ntm = require "luci.model.network".init()
 		local dr4 = luci.sys.net.defaultroute()
@@ -51,7 +59,9 @@ $Id$
 			membuffers = membuffers,
 			memfree    = memfree,
 			connmax    = conn_max,
-			conncount  = conn_count
+			conncount  = conn_count,
+			leases     = luci.tools.status.dhcp_leases(),
+			wifinets   = luci.tools.status.wifi_networks()
 		}
 
 		if wan then
@@ -102,7 +112,7 @@ $Id$
 			'<div style="width:200px; position:relative; border:1px solid #999999">' +
 				'<div style="background-color:#CCCCCC; width:%d%%; height:15px">' +
 					'<div style="position:absolute; left:0; top:0; text-align:center; width:100%%; color:#000000">' +
-						'<small>%d / %d (%d%%)</small>' +
+						'<small>%s / %s (%d%%)</small>' +
 					'</div>' +
 				'</div>' +
 			'</div>', pc, v, m, pc
@@ -170,6 +180,7 @@ $Id$
 					ss.innerHTML = '<em>Not connected</em>';
 				}
 
+				<% if has_ipv6 then %>
 				var si6 = document.getElementById('wan6_i');
 				var ss6 = document.getElementById('wan6_s');
 				var ifc6 = info.wan6;
@@ -210,6 +221,203 @@ $Id$
 					si6.innerHTML = '<img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small>';
 					ss6.innerHTML = '<em>Not connected</em>';
 				}
+				<% end %>
+
+				<% if has_dhcp then %>
+				var ls = document.getElementById('lease_status_table');
+				if (ls)
+				{
+					/* clear all rows */
+					while( ls.rows.length > 1 )
+						ls.rows[0].parentNode.deleteRow(1);
+
+					for( var i = 0; i < info.leases.length; i++ )
+					{
+						var timestr;
+
+						if (info.leases[i].expires <= 0)
+							timestr = '<em><%:expired%></em>';
+						else
+							timestr = String.format('%t', info.leases[i].expires);
+
+						var tr = ls.rows[0].parentNode.insertRow(-1);
+							tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
+
+						tr.insertCell(-1).innerHTML = info.leases[i].hostname ? info.leases[i].hostname : '?';
+						tr.insertCell(-1).innerHTML = info.leases[i].ipaddr;
+						tr.insertCell(-1).innerHTML = info.leases[i].macaddr;
+						tr.insertCell(-1).innerHTML = timestr;
+					}
+
+					if( ls.rows.length == 1 )
+					{
+						var tr = ls.rows[0].parentNode.insertRow(-1);
+							tr.className = 'cbi-section-table-row';
+
+						var td = tr.insertCell(-1);
+							td.colSpan = 4;
+							td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
+					}
+				}
+				<% end %>
+
+				<% if has_wifi then %>
+				var assoclist = [ ];
+
+				var ws = document.getElementById('wifi_status_table');
+				if (ws)
+				{
+					var wsbody = ws.rows[0].parentNode;
+					while (ws.rows.length > 0)
+						wsbody.deleteRow(0);
+
+					for (var didx = 0; didx < info.wifinets.length; didx++)
+					{
+						var dev = info.wifinets[didx];
+
+						var tr = wsbody.insertRow(-1);
+						var td;
+
+						td = tr.insertCell(-1);
+						td.width     = "33%";
+						td.innerHTML = dev.name;
+						td.style.verticalAlign = "top";
+
+						td = tr.insertCell(-1);
+
+						var s = '';
+
+						for (var nidx = 0; nidx < dev.networks.length; nidx++)
+						{
+							var net = dev.networks[nidx];
+							var is_assoc = (net.bssid != '00:00:00:00:00:00' && net.channel);
+
+							var icon;
+							if (!is_assoc)
+								icon = "<%=resource%>/icons/signal-none.png";
+							else if (net.quality == 0)
+								icon = "<%=resource%>/icons/signal-0.png";
+							else if (net.quality < 25)
+								icon = "<%=resource%>/icons/signal-0-25.png";
+							else if (net.quality < 50)
+								icon = "<%=resource%>/icons/signal-25-50.png";
+							else if (net.quality < 75)
+								icon = "<%=resource%>/icons/signal-50-75.png";
+							else
+								icon = "<%=resource%>/icons/signal-75-100.png";
+
+							s += String.format(
+								'<table><tr><td style="text-align:center; width:32px; padding:3px">' +
+									'<img src="%s" title="<%:Signal%>: %d dBm / Noise: <%:Noise%>: %d dBm" />' +
+									'<br /><small>%d%%</small>' +
+								'</td><td style="text-align:left; padding:3px"><small>' +
+									'<strong><%:SSID%>:</strong> %h<br />' +
+									'<strong><%:Mode%>:</strong> %s<br />' +
+									'<strong><%:Channel%>:</strong> %d (%.2f GHz)<br />' +
+									'<strong><%:Bitrate%>:</strong> %s Mb/s<br />',
+									icon, net.signal, net.noise,
+									net.quality,
+									net.ssid,
+									net.mode,
+									net.channel, net.frequency,
+									net.bitrate || '?'
+							);
+
+							if (is_assoc)
+							{
+								s += String.format(
+									'<strong><%:BSSID%>:</strong> %s<br />' +
+									'<strong><%:Encryption%>:</strong> %s',
+										net.bssid,
+										net.encryption
+								);
+							}
+							else
+							{
+								s += '<em><%:Wireless is disabled or not associated%></em>';
+							}
+
+							s += '</small></td></tr></table>';
+
+							for (var bssid in net.assoclist)
+							{
+								assoclist.push({
+									bssid:  bssid,
+									signal: net.assoclist[bssid].signal,
+									noise:  net.assoclist[bssid].noise,
+									link:   net.link,
+									name:   net.name
+								});
+							}
+						}
+
+						if (!s)
+							s = '<em><%:No information available%></em>';
+
+						td.innerHTML = s;
+					}
+				}
+
+				var ac = document.getElementById('wifi_assoc_table');
+				if (ac)
+				{
+					/* clear all rows */
+					while( ac.rows.length > 1 )
+						ac.rows[0].parentNode.deleteRow(1);
+
+					assoclist.sort(function(a, b) {
+						return (a.name == b.name)
+							? (a.bssid < b.bssid)
+							: (a.name  > b.name )
+						;
+					});
+
+					for( var i = 0; i < assoclist.length; i++ )
+					{
+						var tr = ac.rows[0].parentNode.insertRow(-1);
+							tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
+
+						var icon;
+						var q = (-1 * (assoclist[i].noise - assoclist[i].signal)) / 5;
+						if (q < 1)
+							icon = "<%=resource%>/icons/signal-0.png";
+						else if (q < 2)
+							icon = "<%=resource%>/icons/signal-0-25.png";
+						else if (q < 3)
+							icon = "<%=resource%>/icons/signal-25-50.png";
+						else if (q < 4)
+							icon = "<%=resource%>/icons/signal-50-75.png";
+						else
+							icon = "<%=resource%>/icons/signal-75-100.png";
+
+						tr.insertCell(-1).innerHTML = String.format(
+							'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
+							icon, assoclist[i].signal, assoclist[i].noise
+						);
+
+						tr.insertCell(-1).innerHTML = assoclist[i].bssid;
+
+						tr.insertCell(-1).innerHTML = String.format(
+							'<a href="%s">%h</a>',
+								assoclist[i].link,
+								assoclist[i].name
+						);
+
+						tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].signal);
+						tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].noise);
+					}
+
+					if (ac.rows.length == 0)
+					{
+						var tr = ac.rows[0].parentNode.insertRow(-1);
+						    tr.className = 'cbi-section-table-row';
+
+						var td = tr.insertCell(-1);
+						    td.colSpan = 5;
+						    td.innerHTML = '<br /><em><%:No information available%></em>';
+					}
+				}
+				<% end %>
 
 				var e;
 
@@ -245,9 +453,7 @@ $Id$
 					);
 
 				if (e = document.getElementById('conns'))
-					e.innerHTML = progressbar(
-						info.conncount + " kB", info.connmax + " kB"
-					);
+					e.innerHTML = progressbar(info.conncount, info.connmax);
 
 				window.setTimeout(update_status, 5000);
 			}
@@ -269,7 +475,7 @@ $Id$
 			<%=pcdata(luci.version.distname)%> <%=pcdata(luci.version.distversion)%> /
 			<%=pcdata(luci.version.luciname)%> <%=pcdata(luci.version.luciversion)%>
 		</td></tr>
-		<tr><td width="33%"><%:Kernel%></td><td><%=luci.sys.exec("uname -r")%></td></tr>
+		<tr><td width="33%"><%:Kernel Version%></td><td><%=luci.sys.exec("uname -r")%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
@@ -297,14 +503,61 @@ $Id$
 				<td id="wan4_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></td>
 			</tr></table>
 		</td></tr>
+		<% if has_ipv6 then %>
 		<tr><td width="33%" style="vertical-align:top"><%:IPv6 WAN Status%></td><td>
 			<table><tr>
 				<td id="wan6_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></td>
 				<td id="wan6_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></td>
 			</tr></table>
 		</td></tr>
+		<% end %>
 		<tr><td width="33%"><%:Active IP Connections%></td><td id="conns">-</td></tr>
 	</table>
 </fieldset>
+
+<% if has_dhcp then %>
+<fieldset class="cbi-section">
+	<legend><%:DHCP Leases%></legend>
+
+	<table class="cbi-section-table" id="lease_status_table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Hostname%></th>
+			<th class="cbi-section-table-cell"><%:IPv4-Address%></th>
+			<th class="cbi-section-table-cell"><%:MAC-Address%></th>
+			<th class="cbi-section-table-cell"><%:Leasetime remaining%></th>
+		</tr>
+		<tr class="cbi-section-table-row">
+			<td colspan="4"><em><br /><%:Collecting data...%></em></td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
+
+<% if has_wifi then %>
+<fieldset class="cbi-section">
+	<legend><%:Wireless%></legend>
+
+	<table id="wifi_status_table" width="100%" cellspacing="10">
+		<tr><td><em><%:Collecting data...%></em></td></tr>
+	</table>
+</fieldset>
+
+<fieldset class="cbi-section">
+	<legend><%:Associated Stations%></legend>
+
+	<table class="cbi-section-table" id="wifi_assoc_table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell">&nbsp;</th>
+			<th class="cbi-section-table-cell"><%:BSSID%></th>
+			<th class="cbi-section-table-cell"><%:Network%></th>
+			<th class="cbi-section-table-cell"><%:Signal%></th>
+			<th class="cbi-section-table-cell"><%:Noise%></th>
+		</tr>
+		<tr class="cbi-section-table-row">
+			<td colspan="5"><em><br /><%:Collecting data...%></em></td>
+		</tr>
+	</table>
+</fieldset>
+<% end %>
 
 <%+footer%>
