@@ -240,32 +240,36 @@ function net.conntrack(callback)
 		for line in io.lines("/proc/net/nf_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
-			entry.layer3 = flags[1]
-			entry.layer4 = flags[3]
-			for i=1, #entry do
-				entry[i] = nil
-			end
+			if flags[6] ~= "TIME_WAIT" then
+				entry.layer3 = flags[1]
+				entry.layer4 = flags[3]
+				for i=1, #entry do
+					entry[i] = nil
+				end
 
-			if callback then
-				callback(entry)
-			else
-				connt[#connt+1] = entry
+				if callback then
+					callback(entry)
+				else
+					connt[#connt+1] = entry
+				end
 			end
 		end
 	elseif fs.access("/proc/net/ip_conntrack", "r") then
 		for line in io.lines("/proc/net/ip_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
-			entry.layer3 = "ipv4"
-			entry.layer4 = flags[1]
-			for i=1, #entry do
-				entry[i] = nil
-			end
+			if flags[4] ~= "TIME_WAIT" then
+				entry.layer3 = "ipv4"
+				entry.layer4 = flags[1]
+				for i=1, #entry do
+					entry[i] = nil
+				end
 
-			if callback then
-				callback(entry)
-			else
-				connt[#connt+1] = entry
+				if callback then
+					callback(entry)
+				else
+					connt[#connt+1] = entry
+				end
 			end
 		end
 	else
