@@ -170,8 +170,9 @@ $Id$
 
 					ss.innerHTML = String.format('<small>%s</small>', s);
 					si.innerHTML = String.format(
-						'<a href="%s"><img src="<%=resource%>/icons/ethernet.png" /></a>' +
-						'<br /><small>%s</small>', ifc.link, ifc.ifname
+						'<img src="<%=resource%>/icons/ethernet.png" />' +
+						'<br /><small><a href="%s">%s</a></small>',
+							ifc.link, ifc.ifname
 					);
 				}
 				else
@@ -212,8 +213,9 @@ $Id$
 
 					ss6.innerHTML = String.format('<small>%s</small>', s);
 					si6.innerHTML = String.format(
-						'<a href="%s"><img src="<%=resource%>/icons/ethernet.png" /></a>' +
-						'<br /><small>%s</small>', ifc6.link, ifc6.ifname
+						'<img src="<%=resource%>/icons/ethernet.png" />' +
+						'<br /><small><a href="%s">%s</a></small>',
+							ifc6.link, ifc6.ifname
 					);
 				}
 				else
@@ -311,13 +313,13 @@ $Id$
 									'<img src="%s" title="<%:Signal%>: %d dBm / Noise: <%:Noise%>: %d dBm" />' +
 									'<br /><small>%d%%</small>' +
 								'</td><td style="text-align:left; padding:3px"><small>' +
-									'<strong><%:SSID%>:</strong> %h<br />' +
+									'<strong><%:SSID%>:</strong> <a href="%s">%h</a><br />' +
 									'<strong><%:Mode%>:</strong> %s<br />' +
 									'<strong><%:Channel%>:</strong> %d (%.2f GHz)<br />' +
 									'<strong><%:Bitrate%>:</strong> %s Mb/s<br />',
 									icon, net.signal, net.noise,
 									net.quality,
-									net.ssid,
+									net.link, net.ssid,
 									net.mode,
 									net.channel, net.frequency,
 									net.bitrate || '?'
