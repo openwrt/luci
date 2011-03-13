@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008-2009 Steven Barth <steven@midlink.org>
-Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -61,8 +61,16 @@ $Id$
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
 					<td class="cbi-value-field"><%=c.layer3:upper()%></td>
 					<td class="cbi-value-field"><%=c.layer4:upper()%></td>
-					<td class="cbi-value-field"><%=c.src%></td>
-					<td class="cbi-value-field"><%=c.dst%></td>
+					<td class="cbi-value-field"><%=
+						c.layer3 == "ipv6"
+							and "[%s]:%d" %{ c.src, c.sport }
+							or  "%s:%d"   %{ c.src, c.sport }
+					%></td>
+					<td class="cbi-value-field"><%=
+						c.layer3 == "ipv6"
+							and "[%s]:%d" %{ c.dst, c.dport }
+							or  "%s:%d"   %{ c.dst, c.dport }
+					%></td>
 				</tr>
 				<% style = not style; end) %>
 			</table>
@@ -70,6 +78,5 @@ $Id$
 	</fieldset>
 	<br />
 </div>
-	
-<%+footer%>
 
+<%+footer%>
