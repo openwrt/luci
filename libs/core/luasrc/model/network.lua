@@ -1204,6 +1204,14 @@ function wifinet.noise(self)
 	return self.iwinfo.noise or 0
 end
 
+function wifinet.country(self)
+	return self.iwinfo.country or "00"
+end
+
+function wifinet.txpower(self)
+	return self.iwinfo.txpower or 0
+end
+
 function wifinet.signal_level(self, s, n)
 	if self:active_bssid() ~= "00:00:00:00:00:00" then
 		local signal = s or self:signal()
