@@ -501,29 +501,44 @@ end
 if has_relay then
 	fb = s:taboption("relay", Flag, "forward_bcast", translate("Forward broadcasts"))
 	fb.default = fb.enabled
+	fb:depends("proto", "relay")
 
 	fd = s:taboption("relay", Flag, "forward_dhcp", translate("Forward DHCP"))
 	fd.default = fd.enabled
+	fd:depends("proto", "relay")
 
-	gw = s:taboption("relay", Value, "gateway", translate("Override Gateway"))
+	gw = s:taboption("relay", Value, "relay_gateway", translate("Override Gateway"))
 	gw.optional    = true
 	gw.placeholder = "0.0.0.0"
 	gw.datatype    = "ip4addr"
+	gw:depends("proto", "relay")
+	function gw.cfgvalue(self, section)
+		return m.uci:get("network", section, "gateway")
+	end
+	function gw.write(self, section, value)
+		return m.uci:set("network", section, "gateway", value)
+	end
+	function gw.delete(self, section)
+		return m.uci:delete("network", section, "gateway")
+	end
 
 	expiry = s:taboption("relay", Value, "expiry", translate("Host expiry timeout"))
 	expiry.optional    = true
 	expiry.placeholder = 30
 	expiry.datatype    = "uinteger"
+	expiry:depends("proto", "relay")
 
 	retry = s:taboption("relay", Value, "retry", translate("ARP ping retries"))
 	retry.optional     = true
 	retry.placeholder  = 5
 	retry.datatype     = "uinteger"
+	retry:depends("proto", "relay")
 
 	table = s:taboption("relay", Value, "table", translate("Routing table ID"))
 	table.optional     = true
 	table.placeholder  = 16800
 	table.datatype     = "uinteger"
+	table:depends("proto", "relay")
 end
 
 
