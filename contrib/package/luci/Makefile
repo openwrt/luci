@@ -306,6 +306,9 @@ $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 $(eval $(call application,firewall,Firmware and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
+$(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
+        +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting +luci-mod-freifunk))
+
 $(eval $(call application,olsr,OLSR configuration and status module,\
 	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
 

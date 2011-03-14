@@ -1,0 +1,72 @@
+if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "wan" ]; then
+	pr=`uci get freifunk-policyrouting.pr.enable`
+	strict=`uci get freifunk-policyrouting.pr.strict`
+	zones=`uci get freifunk-policyrouting.pr.zones`
+
+	if [ $pr = "1" ]; then
+
+		# The wan device name
+		if  [ -n "`uci -p /var/state get network.wan.ifname`" ]; then
+			wandev=`uci -p /var/state get network.wan.ifname`
+		else
+			wandev=`uci -p /var/state get network.wan.device`
+		fi
+
+		iptables -t mangle -D PREROUTING -j prerouting_policy > /dev/null 2>&1
+		iptables -t mangle -F prerouting_policy > /dev/null 2>&1
+		iptables -t mangle -N prerouting_policy > /dev/null 2>&1
+	        iptables -t mangle -I PREROUTING -j prerouting_policy > /dev/null 2>&1
+
+		# If no route is in table olsr-default, then usually the hosts local default route is used.
+		# If set to strict then we add a filter which prevents this
+		if [ "$strict" == "1" ]; then
+			ln=$(( `iptables -L FORWARD -v --line-numbers | grep -m 1 reject | awk {' print $1 '}` - 1 ))
+			if [ ! $ln -gt 0 ]; then
+				ln=1
+			fi
+			if [ -z "`iptables -L |grep 'Chain forward_policy'`" ]; then
+				iptables -N forward_policy
+			fi
+			if [ -z "`iptables -L FORWARD -v |grep forward_policy`" ]; then
+				iptables -I FORWARD $ln -m mark --mark 1 -j forward_policy
+			fi
+			iptables -F forward_policy
+			iptables -I forward_policy -o $wandev -j REJECT --reject-with icmp-net-prohibited
+		fi
+
+		# set mark 1 for all packets coming in via enabled zones
+	        for i in $zones; do
+			# find out which interfaces belong to this zone
+			zone=`uci show firewall |grep "name=$i" |awk {' FS="."; print $1"."$2 '}`
+			interfaces=`uci get $zone.network`
+			if [ "$interfaces" == "" ]; then
+				interfaces=$i
+			fi
+			for int in $interfaces; do
+				if [ "`uci -q get network.$int.type`" == "bridge" ]; then 
+					dev="br-$int"
+				else
+			                dev=`uci get network.$int.ifname`
+				fi
+				logger -t policyrouting "Add mark 1 to packages coming in via interface $dev"
+				iptables -t mangle -I prerouting_policy -i $dev -j MARK --set-mark 1
+			done
+		done
+	else
+	        # Cleanup policy routing stuff that might be lingering around
+	        if [ -n "`iptables -t mangle -L PREROUTING |grep _policy`" ]; then
+			logger -t policyrouting "Delete prerouting_policy chain in table mangle"
+	                iptables -t mangle -D PREROUTING -j prerouting_policy
+	                iptables -t mangle -F prerouting_policy
+	                iptables -t mangle -X prerouting_policy
+	        fi
+		if [ -n "`iptables -L FORWARD |grep forward_policy`" ]; then
+			logger -t policyrouting "Delete strict forwarding rules"
+			iptables -D FORWARD -m mark --mark 1 -j forward_policy
+			iptables -F forward_policy
+			iptables -X forward_policy
+		fi
+		logger -t policyrouting "All firewall rules for policyrouting removed."
+	fi
+fi
+

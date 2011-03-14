@@ -1,0 +1,78 @@
+[ "$INTERFACE" != "wan" ] && exit 0
+
+case $ACTION in
+        ifup)
+		pr=`uci get freifunk-policyrouting.pr.enable`
+		if [ $pr = "1" ]; then
+			logger -t policyrouting "Starting policy routing on $INTERFACE"
+
+			# Setup new tables
+			tables="/etc/iproute2/rt_tables"
+			if [ -z "`grep "111" $tables`" ]; then
+				echo "111 olsr" >> $tables
+			fi
+			if [ -z "`grep "112" $tables`" ]; then
+				echo "112 olsr-default" >> $tables
+			fi
+
+			# Make sure Rt_tables in olsrd are in place
+			if [ ! "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ ! "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
+				uci set olsrd.@olsrd[0].RtTable='111'
+				uci set olsrd.@olsrd[0].RtTableDefault='112'
+				uci commit
+				/etc/init.d/olsrd restart
+			fi
+
+			# Disable dyn_gw and dyngw_plain
+			dyngwlib=`uci show olsrd |grep dyn_gw.so |awk {' FS="."; print $1"."$2 '}`
+			if [ -n "$dyngwlib" ]; then
+				uci set $dyngwlib.ignore=1
+				uci commit
+			fi
+
+			dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
+			if [ -n "$dyngwplainlib" ]; then
+				uci set $dyngwplainlib.ignore=1
+				uci commit
+			fi
+	
+			gw=`uci -p /var/state get network.wan.gateway`
+			netmask=`uci -p /var/state get network.wan.netmask`
+			if [ -z "$netmask" ]; then
+				NETMASK="255.255.255.255"
+			fi
+
+			if  [ -n "`uci -p /var/state get network.wan.ifname`" ]; then
+				device=`uci -p /var/state get network.wan.ifname`
+			else
+				device=`uci -p /var/state get network.wan.device`
+			fi
+
+			eval `ipcalc.sh $gw $netmask`
+
+			test -n "`ip r s t default`" && ip r d default t default
+			test -n "`ip r s |grep default`" && ip route del default
+			ip route add $NETWORK/$NETMASK dev $device table default
+			ip route add default via $gw dev $device table default
+
+			ip rule del lookup main
+			ip rule add fwmark 1 lookup olsr-default
+			ip rule add lookup main
+			ip rule add lookup olsr
+		else
+			# Remove custom routing tables from olsrd
+			if [ "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
+				uci delete olsrd.@olsrd[0].RtTable
+				uci delete olsrd.@olsrd[0].RtTableDefault
+				uci commit
+				/etc/init.d/olsrd restart
+			fi
+		fi
+	;;
+
+	ifdown)
+	logger -t policyrouting "Deleting policy rules for $INTERFACE"
+	ip rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
+	ip rule del lookup olsr	> /dev/null 2>&1
+	;;
+esac
