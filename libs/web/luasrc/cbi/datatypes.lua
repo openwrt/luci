@@ -94,7 +94,7 @@ end
 
 function port(val)
 	val = tonumber(val)
-	return ( val and val >= 1 and val <= 65535 )
+	return ( val and val >= 0 and val <= 65535 )
 end
 
 function portrange(val)
