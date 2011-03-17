@@ -43,8 +43,11 @@ end
 s:taboption("general", Flag, "enable_upnp", translate("Enable UPnP functionality")).default = "1"
 s:taboption("general", Flag, "enable_natpmp", translate("Enable NAT-PMP functionality")).default = "1"
 
-s:taboption("general", Flag, "secure_mode", translate("Enable secure mode")).default = "1"
-s:taboption("general", Flag, "log_output", translate("Log output")).default = "1"
+s:taboption("general", Flag, "secure_mode", translate("Enable secure mode"),
+	translate("Allow adding forwards only to requesting ip addresses")).default = "1"
+
+s:taboption("general", Flag, "log_output", translate("Enable additional logging"),
+	translate("Puts extra debugging information into the system log")).default = "1"
 
 s:taboption("general", Value, "download", translate("Downlink"), 
 	translate("Value in KByte/s, informational only")).rmempty = true
