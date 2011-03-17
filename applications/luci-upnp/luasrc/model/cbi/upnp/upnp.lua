@@ -46,8 +46,11 @@ s:taboption("general", Flag, "enable_natpmp", translate("Enable NAT-PMP function
 s:taboption("general", Flag, "secure_mode", translate("Enable secure mode")).default = "1"
 s:taboption("general", Flag, "log_output", translate("Log output")).default = "1"
 
-s:taboption("general", Value, "download", translate("Downlink"), "kByte/s").rmempty = true
-s:taboption("general", Value, "upload", translate("Uplink"), "kByte/s").rmempty = true
+s:taboption("general", Value, "download", translate("Downlink"), 
+	translate("Value in KByte/s, informational only")).rmempty = true
+
+s:taboption("general", Value, "upload", translate("Uplink"),
+	translate("Value in KByte/s, informational only")).rmempty = true
 
 port = s:taboption("general", Value, "port", translate("Port"))
 port.datatype = "port"
