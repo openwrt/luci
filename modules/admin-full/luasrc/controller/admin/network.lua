@@ -207,7 +207,7 @@ function iface_status()
 	local rv   = { }
 
 	local iface
-	for iface in path[#path]:gmatch("[%w%.%-]+") do
+	for iface in path[#path]:gmatch("[%w%.%-_]+") do
 		local net = netm:get_network(iface)
 		if net then
 			local info
