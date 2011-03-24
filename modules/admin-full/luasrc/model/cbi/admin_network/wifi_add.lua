@@ -143,7 +143,8 @@ function newnet.parse(self, section)
 
 		if m.hidden.wep == "1" then
 			wconf.encryption = "wep"
-			wconf.key        = key and key:formvalue(section) or ""
+			wconf.key        = "1"
+			wconf.key1       = key and key:formvalue(section) or ""
 		elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 			wconf.encryption = (tonumber(m.hidden.wpa_version) or 0) >= 2 and "psk2" or "psk"
 			wconf.key        = key and key:formvalue(section) or ""
