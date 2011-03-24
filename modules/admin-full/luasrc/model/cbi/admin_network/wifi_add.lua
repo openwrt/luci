@@ -142,7 +142,7 @@ function newnet.parse(self, section)
 		}
 
 		if m.hidden.wep == "1" then
-			wconf.encryption = "wep"
+			wconf.encryption = "wep-open"
 			wconf.key        = "1"
 			wconf.key1       = key and key:formvalue(section) or ""
 		elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
