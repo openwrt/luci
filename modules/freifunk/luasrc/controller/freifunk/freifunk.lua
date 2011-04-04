@@ -294,7 +294,7 @@ function public_status_json()
 	end
 	
 	rv[#rv+1] = {
-		time = os.date("%c"),
+		time = os.date("%a, %d %b %Y %H:%M:%S UTC"),
 		uptime = twa.date_format(tonumber(sys.uptime())),
 		load = string.format("%.2f, %.2f, %.2f", load1, load5, load15),
 		mem = mem,
