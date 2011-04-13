@@ -44,6 +44,7 @@ require("luci.http").prepare_content("text/html")
 	<link rel="shortcut icon" href="<%=media%>/images/favicon.ico" />
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
+	<script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 	<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 
 	<!--[if lt IE 7]>
@@ -68,6 +69,12 @@ require("luci.http").prepare_content("text/html")
 <center>
 
 <div id="wrapper">
+<%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
+	<div class="warning">
+		<strong><%:No password set!%></strong><br />
+		<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
+	</div>
+<%- end -%>
 <div id="main">
 
 
@@ -193,4 +200,13 @@ end
 
 	<br class="clear" />
 </div>
+
 <div id="maincontent">
+<% if category ~= "freifunk" and category ~= "splash" then %>
+<noscript>
+	<div class="errorbox">
+		<strong><%:Java Script required!%></strong><br />
+		<%:You must enable Java Script in your browser or LuCI will not work properly.%>
+	</div>
+</noscript>
+<% end %>
