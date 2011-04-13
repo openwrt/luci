@@ -121,7 +121,7 @@ src_mac.placeholder = translate("any")
 
 src_ip = s:taboption("advanced", Value, "src_ip", translate("Source IP address"))
 src_ip.optional = true
-src_ip.datatype = "ip4addr"
+src_ip.datatype = "neg_ip4addr"
 src_ip.placeholder = translate("any")
 
 sport = s:taboption("advanced", Value, "src_port", translate("Source port"),

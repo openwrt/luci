@@ -42,6 +42,11 @@ var cbi_validators = {
 		return cbi_validators.ip4addr(v) || cbi_validators.ip6addr(v);
 	},
 
+	'neg_ipaddr': function(v)
+	{
+		return cbi_validators.ip4addr(v.replace(/^\s*!/, "")) || cbi_validators.ip6addr(v.replace(/^\s*!/, ""));
+	},
+
 	'ip4addr': function(v)
 	{
 		if( v.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)(\/(\d+))?$/) )
@@ -55,6 +60,11 @@ var cbi_validators = {
 		}
 
 		return false;
+	},
+
+	'neg_ip4addr': function(v)
+	{
+		return cbi_validators.ip4addr(v.replace(/^\s*!/, ""));
 	},
 
 	'ip6addr': function(v)

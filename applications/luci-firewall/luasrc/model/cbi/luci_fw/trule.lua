@@ -106,7 +106,7 @@ icmpt:value("address-mask-reply")
 
 src_ip = s:taboption("general", Value, "src_ip", translate("Source address"))
 src_ip.optional = true
-src_ip.datatype = has_v2 and "ipaddr" or "ip4addr"
+src_ip.datatype = has_v2 and "neg_ipaddr" or "neg_ip4addr"
 src_ip.placeholder = translate("any")
 
 sport = s:taboption("general", Value, "src_port", translate("Source port"))
@@ -119,7 +119,7 @@ sport:depends("proto", "tcpudp")
 
 dest_ip = s:taboption("general", Value, "dest_ip", translate("Destination address"))
 dest_ip.optional = true
-dest_ip.datatype = has_v2 and "ipaddr" or "ip4addr"
+dest_ip.datatype = has_v2 and "neg_ipaddr" or "neg_ip4addr"
 dest_ip.placeholder = translate("any")
 
 dport = s:taboption("general", Value, "dest_port", translate("Destination port"))

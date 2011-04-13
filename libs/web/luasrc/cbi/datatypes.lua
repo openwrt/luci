@@ -17,8 +17,8 @@ local fs = require "nixio.fs"
 local ip = require "luci.ip"
 local math = require "math"
 local util = require "luci.util"
+local tonumber, type = tonumber, type
 
-local tonumber = tonumber
 
 module "luci.cbi.datatypes"
 
@@ -66,12 +66,26 @@ function ipaddr(val)
 	return ip4addr(val) or ip6addr(val)
 end
 
+function neg_ipaddr(v)
+	if type(v) == "string" then
+		v = v:gsub("^%s*!", "")
+	end
+	return v and ipaddr(v)
+end
+
 function ip4addr(val)
 	if val then
 		return ip.IPv4(val) and true or false
 	end
 
 	return false
+end
+
+function neg_ip4addr(v)
+	if type(v) == "string" then
+		v = v:gsub("^%s*!", "")
+	end
+		return v and ip4addr(v)
 end
 
 function ip4prefix(val)
