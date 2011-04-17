@@ -82,7 +82,7 @@ function encode(obj, ...)
 	repeat
 		chnk, err = e()
 		out[#out+1] = chnk
-	until chnk
+	until not chnk
 	return not err and table.concat(out) or nil
 end
 
@@ -141,7 +141,7 @@ end
 
 function Encoder.put(self, chunk)
 	if self.buffersize < 2 then
-		corountine.yield(chunk)
+		coroutine.yield(chunk)
 	else
 		if #self.buffer + #chunk > self.buffersize then
 			local written = 0
