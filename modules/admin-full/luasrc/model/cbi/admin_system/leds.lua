@@ -46,7 +46,7 @@ for k, v in ipairs(leds) do
 	sysfs:value(v)
 end
 
-s:option(Flag, "default", translate("Default state")).rmempty = false
+s:option(Flag, "default", translate("Default state")).rmempty = true
 
 
 trigger = s:option(ListValue, "trigger", translate("Trigger"))
@@ -54,7 +54,7 @@ trigger = s:option(ListValue, "trigger", translate("Trigger"))
 local triggers = fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
 	trigger:value(t, translate(t:gsub("-", "")))
-end
+end 
 
 
 delayon = s:option(Value, "delayon", translate ("On-State Delay"))
@@ -64,10 +64,26 @@ delayoff = s:option(Value, "delayoff", translate ("Off-State Delay"))
 delayoff:depends("trigger", "timer")
 
 
-dev = s:option(ListValue, "dev", translate("Device"))
+dev = s:option(ListValue, "_net_dev", translate("Device"))
 dev.rmempty = true
 dev:value("")
 dev:depends("trigger", "netdev")
+
+function dev.cfgvalue(self, section)
+	return m.uci:get("system", section, "dev")
+end
+
+function dev.write(self, section, value)
+	m.uci:set("system", section, "dev", value)
+end
+
+function dev.remove(self, section)
+	local t = trigger:formvalue(section)
+	if t ~= "netdev" and t ~= "usbdev" then
+		m.uci:delete("system", section, "dev")
+	end
+end
+
 for k, v in pairs(luci.sys.net.devices()) do
 	if v ~= "lo" then
 		dev:value(v)
@@ -81,5 +97,33 @@ mode:depends("trigger", "netdev")
 mode:value("link", translate("Link On"))
 mode:value("tx", translate("Transmit"))
 mode:value("rx", translate("Receive"))
+
+
+usbdev = s:option(ListValue, "_usb_dev", translate("USB Device"))
+usbdev:depends("trigger", "usbdev")
+usbdev.rmempty = true
+usbdev:value("")
+
+function usbdev.cfgvalue(self, section)
+	return m.uci:get("system", section, "dev")
+end
+
+function usbdev.write(self, section, value)
+	m.uci:set("system", section, "dev", value)
+end
+
+function usbdev.remove(self, section)
+	local t = trigger:formvalue(section)
+	if t ~= "netdev" and t ~= "usbdev" then
+		m.uci:delete("system", section, "dev")
+	end
+end
+
+for p in nixio.fs.glob("/sys/bus/usb/devices/[0-9]*/manufacturer") do
+	local id = p:match("%d+-%d+")
+	local mf = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/manufacturer")
+	local pr = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/product")
+	usbdev:value(id, "%s (%s - %s)" %{ id, mf, pr })
+end
 
 return m
