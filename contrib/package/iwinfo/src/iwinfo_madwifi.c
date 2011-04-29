@@ -560,9 +560,11 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 	if( madwifi_wrq(&wrq, ifname, SIOCGIWENCODE, keybuf, sizeof(keybuf)) < 0 )
 		return -1;
 
+#if 0
 	/* Have any encryption? */
 	if( (wrq.u.data.flags & IW_ENCODE_DISABLED) || (wrq.u.data.length == 0) )
 		return 0;
+#endif
 
 	/* Save key len */
 	key_len = wrq.u.data.length;
@@ -628,7 +630,7 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 		if( c->wpa_version && ciphers & (1 << IEEE80211_CIPHER_CKIP) )
 			c->pair_ciphers |= IWINFO_CIPHER_CKIP;
 
-		if( ciphers & (1 << IEEE80211_CIPHER_WEP) )
+		if( !c->pair_ciphers && ciphers & (1 << IEEE80211_CIPHER_WEP) )
 		{
 			switch(key_len) {
 				case 13:
