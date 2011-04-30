@@ -655,7 +655,7 @@ int nl80211_get_txpower(const char *ifname, int *buf)
 }
 
 
-static int nl80211_get_signal_cb(struct nl_msg *msg, void *arg)
+static int nl80211_fill_signal_cb(struct nl_msg *msg, void *arg)
 {
 	int8_t dbm;
 	int16_t mbit;
@@ -719,29 +719,52 @@ static int nl80211_get_signal_cb(struct nl_msg *msg, void *arg)
 	return NL_SKIP;
 }
 
+static void nl80211_fill_signal(const char *ifname, struct nl80211_rssi_rate *r)
+{
+	DIR *d;
+	struct dirent *de;
+	struct nl80211_msg_conveyor *req;
+
+	r->rssi = 0;
+	r->rate = 0;
+
+	if ((d = opendir("/sys/class/net")) != NULL)
+	{
+		while ((de = readdir(d)) != NULL)
+		{
+			if (!strncmp(de->d_name, ifname, strlen(ifname)) &&
+				(!de->d_name[strlen(ifname)] ||
+				 !strncmp(&de->d_name[strlen(ifname)], ".sta", 4)))
+			{
+				req = nl80211_msg(de->d_name, NL80211_CMD_GET_STATION,
+								  NLM_F_DUMP);
+
+				if (req)
+				{
+					nl80211_cb(req, nl80211_fill_signal_cb, r);
+					nl80211_send(req);
+					nl80211_free(req);
+				}
+			}
+		}
+
+		closedir(d);
+	}
+}
+
 int nl80211_get_bitrate(const char *ifname, int *buf)
 {
 	struct nl80211_rssi_rate rr;
-	struct nl80211_msg_conveyor *req;
 
 	if( !wext_get_bitrate(ifname, buf) )
 		return 0;
 
-	req = nl80211_msg(ifname, NL80211_CMD_GET_STATION, NLM_F_DUMP);
-	if( req )
+	nl80211_fill_signal(ifname, &rr);
+
+	if (rr.rate)
 	{
-		rr.rssi = 0;
-		rr.rate = 0;
-
-		nl80211_cb(req, nl80211_get_signal_cb, &rr);
-		nl80211_send(req);
-		nl80211_free(req);
-
-		if( rr.rate )
-		{
-			*buf = (rr.rate * 100);
-			return 0;
-		}
+		*buf = (rr.rate * 100);
+		return 0;
 	}
 
 	return -1;
@@ -750,26 +773,16 @@ int nl80211_get_bitrate(const char *ifname, int *buf)
 int nl80211_get_signal(const char *ifname, int *buf)
 {
 	struct nl80211_rssi_rate rr;
-	struct nl80211_msg_conveyor *req;
 
 	if( !wext_get_signal(ifname, buf) )
 		return 0;
 
-	req = nl80211_msg(ifname, NL80211_CMD_GET_STATION, NLM_F_DUMP);
-	if( req )
+	nl80211_fill_signal(ifname, &rr);
+
+	if (rr.rssi)
 	{
-		rr.rssi = 0;
-		rr.rate = 0;
-
-		nl80211_cb(req, nl80211_get_signal_cb, &rr);
-		nl80211_send(req);
-		nl80211_free(req);
-
-		if( rr.rssi )
-		{
-			*buf = rr.rssi;
-			return 0;
-		}
+		*buf = rr.rssi;
+		return 0;
 	}
 
 	return -1;
@@ -1085,20 +1098,37 @@ static int nl80211_get_assoclist_cb(struct nl_msg *msg, void *arg)
 
 int nl80211_get_assoclist(const char *ifname, char *buf, int *len)
 {
+	DIR *d;
+	struct dirent *de;
 	struct nl80211_assoc_count ac;
 	struct nl80211_msg_conveyor *req;
 
-	nl80211_get_noise(ifname, &ac.noise);
-
-	req = nl80211_msg(ifname, NL80211_CMD_GET_STATION, NLM_F_DUMP);
-	if( req )
+	if ((d = opendir("/sys/class/net")) != NULL)
 	{
 		ac.count = 0;
 		ac.entry = (struct iwinfo_assoclist_entry *)buf;
 
-		nl80211_cb(req, nl80211_get_assoclist_cb, &ac);
-		nl80211_send(req);
-		nl80211_free(req);
+		nl80211_get_noise(ifname, &ac.noise);
+
+		while ((de = readdir(d)) != NULL)
+		{
+			if (!strncmp(de->d_name, ifname, strlen(ifname)) &&
+				(!de->d_name[strlen(ifname)] ||
+				 !strncmp(&de->d_name[strlen(ifname)], ".sta", 4)))
+			{
+				req = nl80211_msg(de->d_name, NL80211_CMD_GET_STATION,
+								  NLM_F_DUMP);
+
+				if (req)
+				{
+					nl80211_cb(req, nl80211_get_assoclist_cb, &ac);
+					nl80211_send(req);
+					nl80211_free(req);
+				}
+			}
+		}
+
+		closedir(d);
 
 		*len = (ac.count * sizeof(struct iwinfo_assoclist_entry));
 		return 0;
