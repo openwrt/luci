@@ -135,6 +135,7 @@ $Id$
 							assoctable.rows[1].parentNode.removeChild(assoctable.rows[1]);
 
 					var devup = { };
+					var rowstyle = 1;
 
 					for( var i = 0; i < st.length; i++ )
 					{
@@ -217,7 +218,7 @@ $Id$
 							for( var j = 0; j < assoclist.length; j++ )
 							{
 								var tr = assoctable.insertRow(-1);
-								    tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((j % 2) + (i % 2));
+								    tr.className = 'cbi-section-table-row cbi-rowstyle-' + rowstyle;
 
 								var icon;
 								var q = (-1 * (assoclist[j].noise - assoclist[j].signal)) / 5;
@@ -245,6 +246,8 @@ $Id$
 
 								tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].signal);
 								tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].noise);
+
+								rowstyle = (rowstyle == 1) ? 2 : 1;
 							}
 						}
 					}
