@@ -40,7 +40,7 @@ $Id$
 <ul style="margin:0; list-style-type:none; text-align:left">
 	<% if self.allowlocal then %>
 	<li style="padding:0.5em">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "_empty") .. attr("name", cbid) .. attr("value", "") .. ifattr(checked[""], "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "_empty") .. attr("name", cbid) .. attr("value", "") .. ifattr(checked[""], "checked", "checked")%> /> &#160;
 		<label<%=attr("for", cbid .. "_empty")%> style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em">
 			<strong><%:Device%></strong>
 		</label>
@@ -52,7 +52,7 @@ $Id$
 				selected = selected or (value == zone:name())
  	%>
 	<li style="padding:0.5em">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(checked[zone:name()], "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "." .. zone:name()) .. attr("name", cbid) .. attr("value", zone:name()) .. ifattr(checked[zone:name()], "checked", "checked")%> /> &#160;
 		<label<%=attr("for", cbid .. "." .. zone:name())%> style="background-color:<%=zone:get_color()%>; padding:0.5em">
 			<strong><%=zone:name()%>:</strong>
 			<%
@@ -62,7 +62,7 @@ $Id$
 					if net then
 						zempty = false
 			%>
-				&nbsp;
+				&#160;
 				<%- if net:name() == self.network then -%>
 					<span style="background-color:#FFFFFF; border:1px solid #000000; padding:2px; font-weight:bold"><%=net:name()%>:
 				<%- else -%>
@@ -85,9 +85,9 @@ $Id$
 
 	<% if self.widget ~= "checkbox" and not self.nocreate then %>
 	<li style="padding:0.5em">
-		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not selected, "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not selected, "checked", "checked")%> /> &#160;
 		<div style="background-color:<%=fwm.zone.get_color()%>; padding:0.5em; display:inline">
-			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&nbsp;</em></label>
+			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&#160;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newzone") .. ifattr(not selected, "value", luci.http.formvalue(cbid .. ".newzone") or self.default)%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>

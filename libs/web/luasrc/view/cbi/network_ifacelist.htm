@@ -53,7 +53,7 @@ $Id$
 			attr("name", cbid) .. attr("value", iface:name()) ..
 			ifattr(checked[iface:name()], "checked", "checked") ..
 			ifattr(iface:type() == "wifi" and not iface:is_up(), "disabled", "disabled")
-		%> /> &nbsp;
+		%> /> &#160;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<% if link then -%><a href="<%=link%>"><% end -%>
 			<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
@@ -68,7 +68,7 @@ $Id$
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "_custom") ..
 			attr("name", cbid)
-		%> /> &nbsp;
+		%> /> &#160;
 		<label<%=attr("for", cbid .. "_custom")%>>
 			<img title="<%:Custom Interface%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.png" />
 			<%:Custom Interface%>:

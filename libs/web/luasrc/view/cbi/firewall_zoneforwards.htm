@@ -41,7 +41,7 @@ $Id: firewall_zonelist.htm 5651 2009-12-26 00:09:47Z jow $
 				if net then
 					zempty = false
 		%>
-			&nbsp;
+			&#160;
 			<%- if net:name() == self.network then -%>
 				<span style="background-color:#FFFFFF; border:1px solid #000000; padding:2px; font-weight:bold"><%=net:name()%>:
 			<%- else -%>
@@ -59,13 +59,13 @@ $Id: firewall_zonelist.htm 5651 2009-12-26 00:09:47Z jow $
 		<% end end %>
 		<% if zempty then %><em><%:(empty)%></em><% end %>
 	</label>
-	&nbsp;&rArr;&nbsp;
+	&#160;&rArr;&#160;
 	<% for _, fwd in ipairs(zone:get_forwardings_by("src")) do
 		fz = fwd:dest_zone()
 		empty = false %>
 		<label style="background-color:<%=fz:get_color()%>; padding:0.4em">
 			<strong><%=fz:name()%></strong>
-		</label>&nbsp;
+		</label>&#160;
 	<% end %>
 	<% if empty then %>
 		<label style="border:1px dashed #AAAAAA; color:#AAAAAA; padding:0.3em">

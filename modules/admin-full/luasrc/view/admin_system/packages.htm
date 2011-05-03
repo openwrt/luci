@@ -73,7 +73,7 @@ local free_byte = space_free * fstat.frsize
 		<fieldset class="cbi-section">
 			<%:Free space%>: <strong><%=(100-used_perc)%>%</strong> (<strong><%=wa.byte_format(free_byte)%></strong>)
 			<div style="margin:3px 0; width:300px; height:10px; border:1px solid #000000; background-color:#80C080">
-				<div style="background-color:#F08080; border-right:1px solid #000000; height:100%; width:<%=used_perc%>%">&nbsp;</div>
+				<div style="background-color:#F08080; border-right:1px solid #000000; height:100%; width:<%=used_perc%>%">&#160;</div>
 			</div>
 
 			<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
@@ -99,7 +99,7 @@ local free_byte = space_free * fstat.frsize
 		<fieldset class="cbi-section">
 			<table class="cbi-section-table" style="width:100%">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell" style="text-align:left">&nbsp;</th>
+					<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
 				</tr>
@@ -112,7 +112,7 @@ local free_byte = space_free * fstat.frsize
 				<% end) %>
 				<% if empty then %>
 				<tr class="cbi-section-table-row">
-					<td style="text-align:left">&nbsp;</td>
+					<td style="text-align:left">&#160;</td>
 					<td style="text-align:left"><em><%:none%></em></td>
 					<td style="text-align:left"><em><%:none%></em></td>
 				</tr>
@@ -127,7 +127,7 @@ local free_byte = space_free * fstat.frsize
 		<fieldset class="cbi-section">
 			<table class="cbi-section-table" style="width:100%">
 				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell" style="text-align:left">&nbsp;</th>
+					<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
@@ -142,7 +142,7 @@ local free_byte = space_free * fstat.frsize
 				<% end) %>
 				<% if empty then %>
 				<tr class="cbi-section-table-row">
-					<td style="text-align:left">&nbsp;</td>
+					<td style="text-align:left">&#160;</td>
 					<td style="text-align:left"><em><%:none%></em></td>
 					<td style="text-align:left"><em><%:none%></em></td>
 					<td style="text-align:left"><em><%:none%></em></td>
