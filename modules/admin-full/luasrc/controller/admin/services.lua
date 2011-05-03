@@ -27,11 +27,4 @@ function index()
 	page.title  = i18n("Services")
 	page.order  = 40
 	page.index  = true
-
-	if nixio.fs.access("/etc/config/dhcp") then
-		local page  = node("admin", "services", "dnsmasq")
-		page.target = cbi("admin_services/dnsmasq")
-		page.title  = "Dnsmasq"
-		page.order  = 30
-	end
 end
