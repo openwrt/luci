@@ -21,10 +21,9 @@ function index()
 
 	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("System"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("System"), 1)
+	entry({"admin", "system", "admin"}, form("admin_system/admin"), i18n("Administration"), 2)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
-	entry({"admin", "system", "passwd"}, form("admin_system/passwd"), i18n("Admin Password"), 20)
-	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("<abbr title=\"Secure Shell\">SSH</abbr>-Keys"), 30)
 	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("Processes"), 45)
 
 	if nixio.fs.access("/etc/config/fstab") then

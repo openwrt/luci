@@ -16,7 +16,7 @@ module("luci.controller.admin.services", package.seeall)
 function index()
 	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
-	
+
 	local page  = node("admin", "services", "crontab")
 	page.target = form("admin_services/crontab")
 	page.title  = i18n("Scheduled Tasks")
@@ -24,10 +24,10 @@ function index()
 
 	local page  = node("admin", "services")
 	page.target = template("admin_services/index")
-	page.title  = i18n("Services")  
+	page.title  = i18n("Services")
 	page.order  = 40
 	page.index  = true
-	
+
 	if nixio.fs.access("/etc/config/lucittpd") then
 		local page  = node("admin", "services", "lucittpd")
 		page.target = cbi("admin_services/lucittpd")
@@ -41,13 +41,8 @@ function index()
 		page.title  = "Busybox HTTPd"
 		page.order  = 11
 	end
-	
-	local page  = node("admin", "services", "dropbear")
-	page.target = cbi("admin_services/dropbear")
-	page.title  = "Dropbear SSHd"
-	page.order  = 20
 
-	if nixio.fs.access("/etc/config/dhcp") then	
+	if nixio.fs.access("/etc/config/dhcp") then
 		local page  = node("admin", "services", "dnsmasq")
 		page.target = cbi("admin_services/dnsmasq")
 		page.title  = "Dnsmasq"
