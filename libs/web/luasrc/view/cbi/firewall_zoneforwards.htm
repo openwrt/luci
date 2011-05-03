@@ -59,7 +59,7 @@ $Id: firewall_zonelist.htm 5651 2009-12-26 00:09:47Z jow $
 		<% end end %>
 		<% if zempty then %><em><%:(empty)%></em><% end %>
 	</label>
-	&#160;&rArr;&#160;
+	&#160;&#8658;&#160;
 	<% for _, fwd in ipairs(zone:get_forwardings_by("src")) do
 		fz = fwd:dest_zone()
 		empty = false %>
