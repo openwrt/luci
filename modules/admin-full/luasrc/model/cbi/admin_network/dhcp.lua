@@ -14,13 +14,13 @@ $Id$
 
 local sys = require "luci.sys"
 
-m = Map("dhcp", translate("DHCP Server"),
+m = Map("dhcp", translate("DHCP and DNS"),
 	translate("Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol" ..
 		"\">DHCP</abbr>-Server and <abbr title=\"Domain Name System\">DNS</abbr>-" ..
 		"Forwarder for <abbr title=\"Network Address Translation\">NAT</abbr> " ..
 		"firewalls"))
 
-s = m:section(TypedSection, "dnsmasq", translate("Settings"))
+s = m:section(TypedSection, "dnsmasq", translate("Server Settings"))
 s.anonymous = true
 s.addremove = false
 
@@ -207,14 +207,12 @@ db:depends("enable_tftp", "1")
 db.placeholder = "pxelinux.0"
 
 
-m2 = Map("dhcp", translate("DHCP Leases"),
+m:section(SimpleSection).template = "admin_network/lease_status"
+
+s = m:section(TypedSection, "host", translate("Static Leases"),
 	translate("Static leases are used to assign fixed IP addresses and symbolic hostnames to " ..
 		"DHCP clients. They are also required for non-dynamic interface configurations where " ..
-		"only hosts with a corresponding lease are served."))
-
-m2:section(SimpleSection).template = "admin_network/lease_status"
-
-s = m2:section(TypedSection, "host", translate("Static Leases"),
+		"only hosts with a corresponding lease are served.") .. "<br />" ..
 	translate("Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</em> " ..
 		"indentifies the host, the <em>IPv4-Address</em> specifies to the fixed address to " ..
 		"use and the <em>Hostname</em> is assigned as symbolic name to the requesting host."))
@@ -242,4 +240,4 @@ sys.net.arptable(function(entry)
 end)
 
 
-return m, m2
+return m
