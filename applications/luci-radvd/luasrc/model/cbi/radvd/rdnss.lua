@@ -82,7 +82,7 @@ o.datatype    = "ip6addr"
 o.placeholder = translate("default")
 function o.cfgvalue(self, section)
 	local l = { }
-	local v = m.uci:get_list("radvd", section, "prefix")
+	local v = m.uci:get_list("radvd", section, "addr")
 	for v in utl.imatch(v) do
 		l[#l+1] = v
 	end

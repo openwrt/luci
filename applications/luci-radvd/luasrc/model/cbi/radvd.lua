@@ -132,13 +132,13 @@ o = s2:option(DummyValue, "interface", translate("Interface"))
 o.template = "cbi/network_netinfo"
 o.width    = "10%"
 
-o = s2:option(DummyValue, "prefix", translate("Prefix"))
-o.width = "60%"
-function o.cfgvalue(self, section)
-	local v = m.uci:get_list("radvd", section, "prefix")
+pfx = s2:option(DummyValue, "prefix", translate("Prefix"))
+pfx.width = "60%"
+function pfx.cfgvalue(self, section)
+	local v = m.uci:get_list("radvd", section, self.option)
 	local l = { }
 
-	if not v then
+	if not v or #v == 0 or (#v == 1 and #v[1] == 0) then
 		local net = nm:get_network(m.uci:get("radvd", section, "interface"))
 		if net then
 			local ifc = nm:get_interface(net:ifname())
@@ -220,24 +220,7 @@ o.width    = "10%"
 
 o = s3:option(DummyValue, "prefix", translate("Prefix"))
 o.width = "60%"
-function o.cfgvalue(self, section)
-	local v = m.uci:get_list("radvd", section, "prefix")
-	local l = { }
-	if v then
-		for v in ut.imatch(v) do
-			v = luci.ip.IPv6(v)
-			if v then
-				l[#l+1] = v:string()
-			end
-		end
-	end
-
-	if #l == 0 then
-		l[1] = "?"
-	end
-
-	return table.concat(l, ", ")
-end
+o.cfgvalue = pfx.cfgvalue
 
 o = s3:option(DummyValue, "AdvRouteLifetime", translate("Lifetime"))
 function o.cfgvalue(self, section)
@@ -285,38 +268,7 @@ o.width    = "10%"
 
 o = s4:option(DummyValue, "addr", translate("Address"))
 o.width = "60%"
-function o.cfgvalue(self, section)
-	local v = m.uci:get_list("radvd", section, "addr")
-	local l = { }
-	if not v then
-		local net = nm:get_network(m.uci:get("radvd", section, "interface"))
-		if net then
-			local ifc = nm:get_interface(net:ifname())
-			if ifc then
-				local adr
-				for _, adr in ipairs(ifc:ip6addrs()) do
-					if not adr:is6linklocal() then
-						v = adr:network(128):string()
-						break
-					end
-				end
-			end
-		end
-	end
-
-	for v in ut.imatch(v) do
-		v = luci.ip.IPv6(v)
-		if v then
-			l[#l+1] = v:network(128):string()
-		end
-	end
-
-	if #l == 0 then
-		l[1] = "?"
-	end
-
-	return table.concat(l, ", ")
-end
+o.cfgvalue = pfx.cfgvalue
 
 o = s4:option(DummyValue, "AdvRDNSSLifetime", translate("Lifetime"))
 function o.cfgvalue(self, section)
