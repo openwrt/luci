@@ -21,9 +21,10 @@ function index()
 
 	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("System"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("System"), 1)
-	entry({"admin", "system", "admin"}, form("admin_system/admin"), i18n("Administration"), 2)
+	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), i18n("Administration"), 2)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
+	entry({"admin", "system", "startup"}, form("admin_system/startup"), i18n("Startup"), 45)
 
 	if nixio.fs.access("/etc/config/fstab") then
 		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("Mount Points"), 50)
