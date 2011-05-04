@@ -24,7 +24,6 @@ function index()
 	entry({"admin", "system", "admin"}, form("admin_system/admin"), i18n("Administration"), 2)
 	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
-	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("Processes"), 45)
 
 	if nixio.fs.access("/etc/config/fstab") then
 		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("Mount Points"), 50)
