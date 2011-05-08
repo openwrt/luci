@@ -25,6 +25,15 @@ msgstr "Active host net announcements"
 msgid "Advanced Settings"
 msgstr ""
 
+msgid "Allow gateways with NAT"
+msgstr ""
+
+msgid "Allow the selection of an outgoing ipv4 gateway with NAT"
+msgstr ""
+
+msgid "Announce uplink"
+msgstr ""
+
 msgid "Announced network"
 msgstr "Announced network"
 
@@ -50,6 +59,11 @@ msgid "ETX"
 msgstr ""
 
 msgid "Enable"
+msgstr ""
+
+msgid ""
+"Enable SmartGateway. If it is disabled, then all other SmartGateway "
+"parameters are ignored. Default is \"no\"."
 msgstr ""
 
 msgid "Enable this interface."
@@ -166,12 +180,19 @@ msgid ""
 "of a not-linklocal interface IP."
 msgstr ""
 
+msgid "IPv6-Prefix of the uplink"
+msgstr ""
+
 msgid ""
 "If the route to the current gateway is to be changed, the ETX value of this "
 "gateway is multiplied with this value before it is compared to the new one. "
 "The parameter can be a value between 0.1 and 1.0, but should be close to 1.0 "
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
+msgstr ""
+
+msgid ""
+"If this Node uses NAT for connections to the internet. Default is \"yes\"."
 msgstr ""
 
 msgid "Interface"
@@ -397,9 +418,6 @@ msgid ""
 "really slow. In this case disable it here."
 msgstr ""
 
-msgid "Routen"
-msgstr ""
-
 msgid "Routes"
 msgstr ""
 
@@ -422,6 +440,14 @@ msgid "SmartGateway is not configured on this system."
 msgstr ""
 
 msgid "Source address"
+msgstr ""
+
+msgid ""
+"Specifies the speed of the uplink in kilobits/s. First parameter is "
+"upstream, second parameter is downstream. Default is \"128 1024\"."
+msgstr ""
+
+msgid "Speed of the uplink"
 msgstr ""
 
 msgid "State"
@@ -469,10 +495,14 @@ msgid ""
 "It can have a value between 1 and 65535."
 msgstr ""
 
-msgid "Timing and Validity"
+msgid ""
+"This can be used to signal the external IPv6 prefix of the uplink to the "
+"clients. This might allow a client to change it's local IPv6 address to use "
+"the IPv6 gateway without any kind of address translation. The maximum prefix "
+"length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
 
-msgid "Topologie"
+msgid "Timing and Validity"
 msgstr ""
 
 msgid "Topology"
@@ -489,6 +519,9 @@ msgstr "Unable to connect to the OLSR daemon!"
 msgid "Uplink"
 msgstr ""
 
+msgid "Uplink uses NAT"
+msgstr ""
+
 msgid "Use hysteresis"
 msgstr "Use hysteresis"
 
@@ -496,6 +529,11 @@ msgid "Version"
 msgstr ""
 
 msgid "WLAN"
+msgstr ""
+
+msgid ""
+"Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
+"work, please install it."
 msgstr ""
 
 msgid "Weight"
@@ -509,6 +547,12 @@ msgid ""
 "><b>Note:</b> Interface weight is used only when LinkQualityLevel is set to "
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
+msgstr ""
+
+msgid ""
+"Which kind of uplink is exported to the other mesh nodes. An uplink is "
+"detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
+"Default setting is \"both\"."
 msgstr ""
 
 msgid "Willingness"

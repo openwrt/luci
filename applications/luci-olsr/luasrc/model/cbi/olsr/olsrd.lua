@@ -14,6 +14,9 @@ $Id$
 ]]--
 
 require("luci.tools.webadmin")
+local fs  = require "nixio.fs"
+
+local has_ipip  = fs.glob("/etc/modules.d/[0-9]*-ipip")()
 
 m = Map("olsrd", translate("OLSR Daemon"),
         translate("The OLSR daemon is an implementation of the Optimized Link State Routing protocol. "..
@@ -47,8 +50,8 @@ s.anonymous = true
 
 s:tab("general",  translate("General Settings"))
 s:tab("lquality", translate("Link Quality Settings"))
+s:tab("smartgw", translate("SmartGW"), not has_ipip and translate("Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not work, please install it."))
 s:tab("advanced", translate("Advanced Settings"))
-
 
 ipv = s:taboption("general", ListValue, "IpVersion", translate("Internet protocol"),
 	translate("IP-version to use. If 6and4 is selected then one olsrd instance is started for each protocol."))
@@ -143,6 +146,59 @@ mainip.optional = true
 mainip.rmempty = true
 mainip.datatype = "ipaddr"
 mainip.placeholder = "0.0.0.0"
+
+sgw = s:taboption("smartgw", Flag, "SmartGateway", translate("Enable"), translate("Enable SmartGateway. If it is disabled, then " ..
+	"all other SmartGateway parameters are ignored. Default is \"no\"."))
+sgw.default="no"
+sgw.enabled="yes"
+sgw.disabled="no"
+sgw.rmempty = true
+
+sgwnat = s:taboption("smartgw", Flag, "SmartGatewayAllowNAT", translate("Allow gateways with NAT"), translate("Allow the selection of an outgoing ipv4 gateway with NAT"))
+sgwnat:depends("SmartGateway", "yes")
+sgwnat.default="yes"
+sgwnat.enabled="yes"
+sgwnat.disabled="no"
+sgwnat.optional = true
+sgwnat.rmempty = true
+
+sgwuplink = s:taboption("smartgw", ListValue, "SmartGatewayUplink", translate("Announce uplink"), translate("Which kind of uplink is exported to the other mesh nodes. " ..
+	"An uplink is detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. Default setting is \"both\"."))
+sgwuplink:value("none")
+sgwuplink:value("ipv4")
+sgwuplink:value("ipv6")
+sgwuplink:value("both")
+sgwuplink:depends("SmartGateway", "yes")
+sgwuplink.default="both"
+sgwuplink.optional = true
+sgwuplink.rmempty = true
+
+sgwulnat = s:taboption("smartgw", Flag, "SmartGatewayUplinkNAT", translate("Uplink uses NAT"), translate("If this Node uses NAT for connections to the internet. " ..
+	"Default is \"yes\"."))
+sgwulnat:depends("SmartGatewayUplink", "ipv4")
+sgwulnat:depends("SmartGatewayUplink", "both")
+sgwulnat.default="yes"
+sgwulnat.enabled="yes"
+sgwulnat.disabled="no"
+sgwnat.optional = true
+sgwnat.rmempty = true
+
+sgwspeed = s:taboption("smartgw", Value, "SmartGatewaySpeed", translate("Speed of the uplink"), translate("Specifies the speed of "..
+	"the uplink in kilobits/s. First parameter is upstream, second parameter is downstream. Default is \"128 1024\"."))
+sgwspeed:depends("SmartGatewayUplink", "ipv4")
+sgwspeed:depends("SmartGatewayUplink", "ipv6")
+sgwspeed:depends("SmartGatewayUplink", "both")
+sgwspeed.optional = true
+sgwspeed.rmempty = true
+
+sgwprefix = s:taboption("smartgw", Value, "SmartGatewayPrefix", translate("IPv6-Prefix of the uplink"), translate("This can be used " ..
+	"to signal the external IPv6 prefix of the uplink to the clients. This might allow a client to change it's local IPv6 address to " ..
+	"use the IPv6 gateway without any kind of address translation. The maximum prefix length is 64 bits. " ..
+	"Default is \"::/0\" (no prefix)."))
+sgwprefix:depends("SmartGatewayUplink", "ipv6")
+sgwprefix:depends("SmartGatewayUplink", "both")
+sgwprefix.optional = true
+sgwprefix.rmempty = true
 
 willingness = s:taboption("advanced", ListValue, "Willingness", translate("Willingness"),
 		translate("The fixed willingness to use. If not set willingness will be calculated dynamically based on battery/power status. Default is \"3\"."))
