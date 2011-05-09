@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<head>
+	<title>OpenStreetMap</title>
+	<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+	<script type="text/javascript" src="osm.js"></script>
+</head>
+<body onload="init();drawmap();" style="padding:0px; margin:0px">				
+		<div id="map"></div>
+		<div style="position:absolute; bottom:0%; width:100%; background:url('cbi/black_60.png'); font-size:10px; color:#fff;z-index:1000">
+			Map by <a href="http://www.openstreetmap.org" title="www.openstreetmap.org" style="color:#fff;" >openstreetmap.org</a>, License CC-BY-SA 
+			&#160;&#160;&#160;&#160;
+			<span id="osm">
+				Latitude: <input id="osmlat" name="osmlat" type="text" size="20" style="font-size:10px;">
+				Longitude: <input id="osmlon" name="osmlon" type="text" size="20" style="font-size:10px;">
+			</span>
+		</div>
+
+</body>

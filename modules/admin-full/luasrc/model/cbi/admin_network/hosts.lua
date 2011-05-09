@@ -23,7 +23,13 @@ s.anonymous = true
 s.template = "cbi/tblsection"
 
 hn = s:option(Value, "name", translate("Hostname"))
+hn.datatype = "hostname"
+hn.rmempty  = true
+
 ip = s:option(Value, "ip", translate("IP address"))
+ip.datatype = "ipaddr"
+ip.rmempty  = true
+
 for i, dataset in ipairs(luci.sys.net.arptable()) do
 	ip:value(
 		dataset["IP address"],

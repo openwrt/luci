@@ -18,12 +18,32 @@ m = Map("samba", translate("Network Shares"))
 s = m:section(TypedSection, "samba", "Samba")
 s.anonymous = true
 
-s:option(Value, "name", translate("Hostname"))
-s:option(Value, "description", translate("Description"))
-s:option(Value, "workgroup", translate("Workgroup"))
-s:option(Flag, "homes", translate("Share home-directories"),
+s:tab("general",  translate("General Settings"))
+s:tab("template", translate("Edit Template"))
+
+s:taboption("general", Value, "name", translate("Hostname"))
+s:taboption("general", Value, "description", translate("Description"))
+s:taboption("general", Value, "workgroup", translate("Workgroup"))
+s:taboption("general", Value, "homes", translate("Share home-directories"),
         translate("Allow system users to reach their home directories via " ..
                 "network shares"))
+
+tmpl = s:taboption("template", Value, "_tmpl",
+	translate("Edit the template that is used for generating the samba configuration."), 
+	translate("This is the content of the file '/etc/samba/smb.conf.template' from which your samba configuration will be generated. " ..
+		"Values enclosed by pipe symbols ('|') should not be changed. They get their values from the 'General Settings' tab."))
+
+tmpl.template = "cbi/tvalue"
+tmpl.rows = 20
+
+function tmpl.cfgvalue(self, section)
+	return nixio.fs.readfile("/etc/samba/smb.conf.template")
+end
+
+function tmpl.write(self, section, value)
+	value = value:gsub("\r\n?", "\n")
+	nixio.fs.writefile("//etc/samba/smb.conf.template", value)
+end
 
 
 s = m:section(TypedSection, "sambashare", translate("Shared Directories"))

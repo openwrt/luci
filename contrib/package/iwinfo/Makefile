@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
+# Copyright (C) 2010-2011 Jo-Philipp Wich <xm@subsignal.org>
 #
 # This is free software, licensed under the GPL 2 license.
 #
@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiwinfo
-PKG_RELEASE:=13
+PKG_RELEASE:=15
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -38,6 +38,8 @@ endef
 
 IWINFO_BACKENDS := \
 	$(if $(CONFIG_PACKAGE_kmod-brcm-wl),wl) \
+	$(if $(CONFIG_PACKAGE_kmod-brcm-wl-mini),wl) \
+	$(if $(CONFIG_PACKAGE_kmod-brcm-wl-mimo),wl) \
 	$(if $(CONFIG_PACKAGE_kmod-madwifi),madwifi) \
 	$(if $(CONFIG_PACKAGE_kmod-mac80211),nl80211)
 

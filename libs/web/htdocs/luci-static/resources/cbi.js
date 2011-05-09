@@ -42,6 +42,11 @@ var cbi_validators = {
 		return cbi_validators.ip4addr(v) || cbi_validators.ip6addr(v);
 	},
 
+	'neg_ipaddr': function(v)
+	{
+		return cbi_validators.ip4addr(v.replace(/^\s*!/, "")) || cbi_validators.ip6addr(v.replace(/^\s*!/, ""));
+	},
+
 	'ip4addr': function(v)
 	{
 		if( v.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)(\/(\d+))?$/) )
@@ -55,6 +60,11 @@ var cbi_validators = {
 		}
 
 		return false;
+	},
+
+	'neg_ip4addr': function(v)
+	{
+		return cbi_validators.ip4addr(v.replace(/^\s*!/, ""));
 	},
 
 	'ip6addr': function(v)
@@ -402,6 +412,23 @@ function cbi_filebrowser(id, url, defpath) {
 	browser.focus();
 }
 
+function cbi_browser_init(id, respath, url, defpath)
+{
+	function cbi_browser_btnclick(e) {
+		cbi_filebrowser(id, url, defpath);
+		return false;
+	}
+
+	var field = document.getElementById(id);
+
+	var btn = document.createElement('img');
+	btn.className = 'cbi-image-button';
+	btn.src = respath + '/cbi/folder.gif';
+	field.parentNode.insertBefore(btn, field.nextSibling);
+
+	cbi_bind(btn, 'click', cbi_browser_btnclick);
+}
+
 function cbi_dynlist_init(name, respath)
 {
 	function cbi_dynlist_renumber(e)
@@ -587,6 +614,7 @@ function cbi_dynlist_init(name, respath)
 	for( var i = 0; i < inputs.length; i++ )
 	{
 		var btn = document.createElement('img');
+			btn.className = 'cbi-image-button';
 			btn.src = respath + (
 				(i+1) < inputs.length ? '/cbi/remove.gif' : '/cbi/add.gif'
 			);
@@ -889,7 +917,7 @@ if( ! String.format )
 
 		var str = arguments[0];
 		var out = '';
-		var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t))/;
+		var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
 		var a = b = [], numSubstitutions = 0, numMatches = 0;
 
 		while( a = re.exec(str) )
@@ -1007,6 +1035,20 @@ if( ! String.format )
 								? String.format('%dd %dh %dm %ds', td, th, tm, ts)
 								: String.format('%dh %dm %ds', th, tm, ts);
 
+							break;
+
+						case 'm':
+							var mf = pMinLength ? parseInt(pMinLength) : 1000;
+							var pr = pPrecision ? Math.floor(10*parseFloat('0'+pPrecision)) : 2;
+
+							var i = 0;
+							var val = parseFloat(param || 0);
+							var units = [ '', 'K', 'M', 'G', 'T', 'P', 'E' ];
+
+							for (i = 0; (i < units.length) && (val > mf); i++)
+								val /= mf;
+
+							subst = val.toFixed(pr) + ' ' + units[i];
 							break;
 					}
 				}

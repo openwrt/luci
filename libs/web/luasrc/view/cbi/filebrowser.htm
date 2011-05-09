@@ -1,18 +1,3 @@
-<%#
-LuCI - Lua Configuration Interface
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
--%>
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -54,10 +39,10 @@ $Id$
 		require("luci.dispatcher")
 
 		local field   = luci.http.formvalue('field')
-		local request = luci.dispatcher.context.path
+		local request = luci.dispatcher.context.args
 		local path    = { '' }
 
-		for i = 3, #request do
+		for i = 1, #request do
 			if request[i] ~= '..' and #request[i] > 0 then
 				path[#path+1] = request[i]
 			end
@@ -103,7 +88,7 @@ $Id$
 				if stat and stat.type == 'dir' then
 			-%>
 				<li class="dir">
-					<img src="/luci-static/resources/cbi/folder.png" alt="Directory" />
+					<img src="<%=resource%>/cbi/folder.gif" alt="<%:Directory%>" />
 					<a href="<%=baseurl%>/<%=e%>?field=<%=field%>"><%=e%>/</a>
 				</li>
 			<% end end -%>
@@ -113,7 +98,7 @@ $Id$
 				if stat and stat.type ~= 'dir' then
 			-%>
 				<li class="file">
-					<img src="/luci-static/resources/cbi/file.png" alt="File" />
+					<img src="<%=resource%>/cbi/file.gif" alt="<%:File%>" />
 					<a href="#" onclick="callback('<%=filepath..e%>')"><%=e%></a>
 				</li>
 			<% end end -%>

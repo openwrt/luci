@@ -57,12 +57,35 @@ $Id$
 
 	var label_scale;
 
+	var conn_table;
+
 
 	function update_graph()
 	{
 		bwxhr.get('<%=build_url("admin/status/connections_status")%>', null,
-			function(x, data)
+			function(x, json)
 			{
+				var conn = json.connections;
+
+				while (conn_table.rows.length > 1)
+					conn_table.rows[0].parentNode.deleteRow(-1);
+
+				for (var i = 0; i < conn.length; i++)
+				{
+					var c  = conn[i];
+					var tr = conn_table.rows[0].parentNode.insertRow(-1);
+					    tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
+
+					tr.insertCell(-1).innerHTML = c.layer3.toUpperCase();
+					tr.insertCell(-1).innerHTML = c.layer4.toUpperCase();
+					tr.insertCell(-1).innerHTML = String.format(c.layer3 == 'ipv6' ? '[%s]:%d' : '%s:%d', c.src, c.sport);
+					tr.insertCell(-1).innerHTML = String.format(c.layer3 == 'ipv6' ? '[%s]:%d' : '%s:%d', c.dst, c.dport);
+					tr.insertCell(-1).innerHTML = String.format('%1024.2mB (%d <%:Pkts.%>)', c.bytes, c.packets);
+				}
+
+
+				var data = json.statistics;
+
 				var data_max   = 0;
 				var data_scale = 0;
 
@@ -177,7 +200,7 @@ $Id$
 	window.setTimeout(
 		function() {
 			var svg = document.getElementById('bwsvg');
-			
+
 			try {
 				G = svg.getSVGDocument
 					? svg.getSVGDocument() : svg.contentDocument;
@@ -226,7 +249,9 @@ $Id$
 				label_otr_avg  = document.getElementById('lb_otr_avg');
 				label_otr_peak = document.getElementById('lb_otr_peak');
 
-				label_scale   = document.getElementById('scale');
+				label_scale    = document.getElementById('scale');
+
+				conn_table     = document.getElementById('connections');
 
 
 				/* plot horizontal time interval lines */
@@ -260,41 +285,62 @@ $Id$
 
 <h2><a id="content" name="content"><%:Realtime Connections%></a></h2>
 
-<embed id="bwsvg" style="width:100%; height:300px; border:1px solid #000000; background-color:#FFFFFF" src="<%=resource%>/connections.svg" />
-<div style="text-align:right"><small id="scale">-</small></div>
-<br />
+<div class="cbi-map-descr"><%:This page gives an overview over currently active network connections.%></div>
 
-<table style="width:100%; table-layout:fixed" cellspacing="5">
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:UDP:%></strong></td>
-		<td id="lb_udp_cur">0</td>
+<fieldset class="cbi-section" id="cbi-table-table">
+	<legend><%:Active Connections%></legend>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="lb_udp_avg">0</td>
+	<embed id="bwsvg" style="width:100%; height:300px; border:1px solid #000000; background-color:#FFFFFF" src="<%=resource%>/connections.svg" />
+	<div style="text-align:right"><small id="scale">-</small></div>
+	<br />
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="lb_udp_peak">0</td>
-	</tr>
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid green"><%:TCP:%></strong></td>
-		<td id="lb_tcp_cur">0</td>
+	<table style="width:100%; table-layout:fixed" cellspacing="5">
+		<tr>
+			<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:UDP:%></strong></td>
+			<td id="lb_udp_cur">0</td>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="lb_tcp_avg">0</td>
+			<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
+			<td id="lb_udp_avg">0</td>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="lb_tcp_peak">0</td>
-	</tr>
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid red"><%:Other:%></strong></td>
-		<td id="lb_otr_cur">0</td>
+			<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
+			<td id="lb_udp_peak">0</td>
+		</tr>
+		<tr>
+			<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid green"><%:TCP:%></strong></td>
+			<td id="lb_tcp_cur">0</td>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="lb_otr_avg">0</td>
+			<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
+			<td id="lb_tcp_avg">0</td>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="lb_otr_peak">0</td>
-	</tr>
-</table>
+			<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
+			<td id="lb_tcp_peak">0</td>
+		</tr>
+		<tr>
+			<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid red"><%:Other:%></strong></td>
+			<td id="lb_otr_cur">0</td>
+
+			<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
+			<td id="lb_otr_avg">0</td>
+
+			<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
+			<td id="lb_otr_peak">0</td>
+		</tr>
+	</table>
+	<br />
+
+	<div class="cbi-section-node">
+		<table class="cbi-section-table" id="connections">
+			<tr class="cbi-section-table-titles">
+				<th class="cbi-section-table-cell"><%:Network%></th>
+				<th class="cbi-section-table-cell"><%:Protocol%></th>
+				<th class="cbi-section-table-cell"><%:Source%></th>
+				<th class="cbi-section-table-cell"><%:Destination%></th>
+				<th class="cbi-section-table-cell"><%:Transfer%></th>
+			</tr>
+
+			<tr><td colspan="5"><em><%:Collecting data...%></em></td></tr>
+		</table>
+	</div>
+</fieldset>
 
 <%+footer%>

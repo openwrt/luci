@@ -36,11 +36,11 @@ local lat = uci:get_first("system", "system", "latitude")
 local lon = uci:get_first("system", "system", "longitude")
 local suffix = uci:get_first(community, "community", "suffix") or "olsr"
 
-luci.i18n.loadc("ffwizard")
+luci.i18n.loadc("freifunk")
 
 -- Check if all necessary variables are available
 if not (community ~= "profile_na" and lat and lon) then
-	luci.http.redirect(luci.dispatcher.build_url("admin", "freifunk", "ffwizard_error"))
+	luci.http.redirect(luci.dispatcher.build_url(unpack(luci.dispatcher.context.requested.path), "freifunk", "ffwizard_error"))
 	return
 end
 
@@ -117,7 +117,7 @@ function cbi_meship6(dev)
 end
 
 function cbi_netconf(dev)
-	local d = f:field(Flag, "device_" .. dev , " <b>"  .. dev:upper() .. "</b>", translate("Configure this interface."))
+	local d = f:field(Flag, "device_" .. dev , " <b>"  .. dev:upper() .. "</b>", "Configure this interface.")
 	d:depends("netconfig", "1")
 	d.rmempty = false
 	function d.cfgvalue(self, section)
@@ -321,7 +321,7 @@ function wanproto.write(self, section, value)
 	uci:set("network", "wan", "proto", value)
 	uci:save("network")
 end
-wanip = f:field(Value, "wanipaddr", translate("IP address"))
+wanip = f:field(Value, "wanipaddr", translate("Ip address"))
 wanip:depends("wanproto", "static")
 function wanip.cfgvalue(self, section)
 	return uci:get("network", "wan", "ipaddr")
@@ -381,7 +381,7 @@ function wanpwd.write(self, section, value)
 	uci:save("network")
 end
 
-wansec = f:field(Flag, "wansec", translate("Protect LAN"), translate("Check this to protect your LAN from other nodes or clients") .. " (" .. translate("recommended") .. ").")
+wansec = f:field(Flag, "wansec", translate("Protect LAN"), translate("Check this to protect your LAN from other nodes or clients" .. " (" .. translate("recommended") .. ")."))
 wansec.default = "1"
 wansec.rmempty = false
 wansec:depends("wanproto", "static")
@@ -437,7 +437,7 @@ if has_l2gvpn then
 end
 
 if has_hb then
-	hb = f:field(Flag, "hb", translate("Heartbeat"), translate("Allow to transfer anonymous statistics about this node") .. " (" .. translate("recommended") .. ").")
+	hb = f:field(Flag, "hb", translate("Heartbeat"), translate("Allow to transfer anonymous statistics about this node" .. " (" .. translate("recommended") .. ")."))
 	hb.rmempty = false
 	hb:depends("netconfig", "1")
 	function hb.cfgvalue(self, section)
@@ -457,9 +457,9 @@ function f.handle(self, state, data)
 			if data.pw1 then
 				local stat = luci.sys.user.setpasswd("root", data.pw1) == 0
 				if stat then
-					f.message = translate("Password successfully changed")
+					f.message = translate("a_s_changepw_changed")
 				else
-					f.errmessage = translate("Unknown Error")
+					f.errmessage = translate("unknownerror")
 				end
 			end
 			data.pw1 = nil
@@ -1045,6 +1045,15 @@ function main.write(self, section, value)
 			uci:set("system", s['.name'], "zonename", "Europe/Berlin")
 			uci:set("system", s['.name'], "timezone", 'CET-1CEST,M3.5.0,M10.5.0/3')
 		end)
+
+	-- Create time rdate_servers
+	local rdate = uci:get_all("freifunk", "time")
+	uci:delete_all("system", "time")
+	uci:section("system", "time", "rdate_servers", rdate)
+	rdate.server = rdate.rdate_servers
+	rdate.rdate_servers = ""
+	uci:delete_all("system", "rdate", nil)
+	uci:section("system", "rdate", nil, rdate)
 	uci:save("system")
 
 	-- Delete old watchdog settings

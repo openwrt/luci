@@ -6,7 +6,7 @@ uci_get_one() {
 	done
 }
 
-local servers="$(uci_get_one 'network.wan.lease_timesrv') $(uci show timeserver |grep hostname |cut -d '=' -f 2 |tr '\n' ' ')"
+local servers="$(uci_get_one 'network.wan.lease_timesrv') $(uci show timeserver | sed -ne 's/.*hostname=//p')"
 
 if [ -n "$servers" ]; then
 	for server in $servers; do

@@ -344,6 +344,9 @@ static int run_daemon(int nofork)
 
 			while (fgets(line, sizeof(line), info))
 			{
+				if (strstr(line, "TIME_WAIT"))
+					continue;
+
 				if (sscanf(line, "%*s %*d %s", ifname) || sscanf(line, "%s %*d", ifname))
 				{
 					if (!strcmp(ifname, "tcp"))

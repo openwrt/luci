@@ -1,0 +1,7 @@
+#!/bin/sh
+uci batch <<-EOF
+        add ucitrack freifunk-policyrouting
+        add_list ucitrack.@freifunk-policyrouting[-1].affects="network"
+        commit ucitrack
+EOF
+

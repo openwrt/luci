@@ -64,8 +64,8 @@ struct iwinfo_assoclist_entry {
 };
 
 struct iwinfo_txpwrlist_entry {
-	uint8_t	dbm;
-	uint8_t	mw;
+	uint8_t  dbm;
+	uint16_t mw;
 };
 
 struct iwinfo_freqlist_entry {

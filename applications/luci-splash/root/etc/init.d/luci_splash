@@ -9,10 +9,6 @@ LIMIT_UP=0
 IPT_REPLAY=/var/run/luci_splash.iptlog
 LOCK=/var/run/luci_splash.lock
 
-include /lib/network
-scan_interfaces
-config_load luci_splash
-
 silent() {
 	"$@" 2>/dev/null
 }
@@ -167,6 +163,10 @@ EOF
 start() {
 	lock -w $LOCK && lock $LOCK
 
+	include /lib/network
+	scan_interfaces
+	config_load luci_splash
+
 	### Find QoS limits
 	config_get LIMIT_UP general limit_up
 	config_get LIMIT_DOWN general limit_down
@@ -239,6 +239,10 @@ start() {
 
 stop() {
 	lock -w $LOCK && lock $LOCK
+
+	include /lib/network
+	scan_interfaces
+	config_load luci_splash
 
 	### Clear interface rules
 	config_foreach iface_del iface

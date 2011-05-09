@@ -1,17 +1,3 @@
-<%#
-LuCI - Lua Configuration Interface
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
--%>
 <%+cbi/valueheader%>
 <% if self.widget == "select" then %>
 	<select class="cbi-input-select" onchange="cbi_d_update(this.id)"<%= attr("id", cbid) .. attr("name", cbid) .. ifattr(self.size, "size") %>>
@@ -26,7 +12,7 @@ $Id$
 %>
 	<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%= attr("id", cbid..c) .. attr("name", cbid) .. attr("value", key) .. ifattr((self:cfgvalue(section) or self.default) == key, "checked", "checked") %> />
 	<label<%= attr("for", cbid..c) %>><%=self.vallist[i]%></label>
-<% if c == self.size then c = 0 %><% if self.orientation == "horizontal" then %>&nbsp;<% else %><br /><% end %>
+<% if c == self.size then c = 0 %><% if self.orientation == "horizontal" then %>&#160;<% else %><br /><% end %>
 <% end end %>
 <% end %>
 <%+cbi/valuefooter%>

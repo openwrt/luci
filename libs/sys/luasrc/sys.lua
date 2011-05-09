@@ -171,23 +171,23 @@ function sysinfo()
 	local cpuinfo = fs.readfile("/proc/cpuinfo")
 	local meminfo = fs.readfile("/proc/meminfo")
 
-	local system = cpuinfo:match("system typ.-:%s*([^\n]+)")
-	local model = ""
 	local memtotal = tonumber(meminfo:match("MemTotal:%s*(%d+)"))
 	local memcached = tonumber(meminfo:match("\nCached:%s*(%d+)"))
 	local memfree = tonumber(meminfo:match("MemFree:%s*(%d+)"))
 	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
-	local bogomips = tonumber(cpuinfo:match("BogoMIPS.-:%s*([^\n]+)"))
+	local bogomips = tonumber(cpuinfo:match("[Bb]ogo[Mm][Ii][Pp][Ss].-: ([^\n]+)")) or 0
 
-	if not system then
-		system = nixio.uname().machine
-		model = cpuinfo:match("model name.-:%s*([^\n]+)")
-		if not model then
-			model = cpuinfo:match("Processor.-:%s*([^\n]+)")
-		end
-	else
-		model = cpuinfo:match("cpu model.-:%s*([^\n]+)")
-	end
+	local system =
+		cpuinfo:match("system type\t+: ([^\n]+)") or
+		cpuinfo:match("Processor\t+: ([^\n]+)") or
+		cpuinfo:match("model name\t+: ([^\n]+)")
+
+	local model =
+		cpuinfo:match("machine\t+: ([^\n]+)") or
+		cpuinfo:match("Hardware\t+: ([^\n]+)") or
+		luci.util.pcdata(fs.readfile("/proc/diag/model")) or
+		nixio.uname().machine or
+		system
 
 	return system, model, memtotal, memcached, membuffers, memfree, bogomips
 end
@@ -240,32 +240,36 @@ function net.conntrack(callback)
 		for line in io.lines("/proc/net/nf_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
-			entry.layer3 = flags[1]
-			entry.layer4 = flags[3]
-			for i=1, #entry do
-				entry[i] = nil
-			end
+			if flags[6] ~= "TIME_WAIT" then
+				entry.layer3 = flags[1]
+				entry.layer4 = flags[3]
+				for i=1, #entry do
+					entry[i] = nil
+				end
 
-			if callback then
-				callback(entry)
-			else
-				connt[#connt+1] = entry
+				if callback then
+					callback(entry)
+				else
+					connt[#connt+1] = entry
+				end
 			end
 		end
 	elseif fs.access("/proc/net/ip_conntrack", "r") then
 		for line in io.lines("/proc/net/ip_conntrack") do
 			line = line:match "^(.-( [^ =]+=).-)%2"
 			local entry, flags = _parse_mixed_record(line, " +")
-			entry.layer3 = "ipv4"
-			entry.layer4 = flags[1]
-			for i=1, #entry do
-				entry[i] = nil
-			end
+			if flags[4] ~= "TIME_WAIT" then
+				entry.layer3 = "ipv4"
+				entry.layer4 = flags[1]
+				for i=1, #entry do
+					entry[i] = nil
+				end
 
-			if callback then
-				callback(entry)
-			else
-				connt[#connt+1] = entry
+				if callback then
+					callback(entry)
+				else
+					connt[#connt+1] = entry
+				end
 			end
 		end
 	else
@@ -302,10 +306,23 @@ function net.defaultroute6()
 	local route
 
 	net.routes6(function(rt)
-		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
+		if rt.dest:prefix() == 0 and rt.device ~= "lo" and 
+		   (not route or route.metric > rt.metric)
+		then
 			route = rt
 		end
 	end)
+
+	if not route then
+		local global_unicast = luci.ip.IPv6("2000::/3")
+		net.routes6(function(rt)
+			if rt.dest:equal(global_unicast) and
+			   (not route or route.metric > rt.metric)
+			then
+				route = rt
+			end
+		end)
+	end
 
 	return route
 end

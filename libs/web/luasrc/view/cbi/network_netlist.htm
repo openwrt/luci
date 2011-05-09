@@ -1,16 +1,3 @@
-<%#
-LuCI - Lua Configuration Interface
-Copyright 2009 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
--%>
 <%+cbi/valueheader%>
 
 <%-
@@ -40,9 +27,9 @@ $Id$
 			attr("id", cbid .. "." .. net:name()) ..
 			attr("name", cbid) .. attr("value", net:name()) ..
 			ifattr(checked[net:name()], "checked", "checked")
-		%> /> &nbsp;
+		%> /> &#160;
 		<label<%=attr("for", cbid .. "." .. net:name())%>>
-			&nbsp;<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
+			&#160;<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
 				<%
 					local empty = true
 					for _, iface in ipairs(net:get_interfaces()) do
@@ -59,9 +46,9 @@ $Id$
 
 	<% if self.widget ~= "checkbox" and not self.nocreate then %>
 	<li style="padding:0.25em 0">
-		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &nbsp;
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%=attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &#160;
 		<div style="padding:0.5em; display:inline">
-			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&nbsp;</em></label>
+			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&#160;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newnet")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>
@@ -73,7 +60,7 @@ $Id$
 			attr("name", cbid) ..
 			attr("value", "") ..
 			ifattr(not value or #value == 0, "checked", "checked")
-		%> /> &nbsp;
+		%> /> &#160;
 		<div style="padding:0.5em; display:inline">
 			<label<%=attr("for", cbid .. "_uns")%>><em><%:unspecified%></em></label>
 		</div>

@@ -306,6 +306,9 @@ $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 $(eval $(call application,firewall,Firmware and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
+$(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
+        +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting +luci-mod-freifunk))
+
 $(eval $(call application,olsr,OLSR configuration and status module,\
 	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
 
@@ -374,9 +377,6 @@ $(eval $(call application,hd-idle,Hard Disk Idle Spin-Down module,\
 
 $(eval $(call application,tinyproxy,Tinyproxy - HTTP(S)-Proxy configuration,\
 	+luci-mod-admin-full +PACKAGE_luci-app-tinyproxy:tinyproxy))
-
-$(eval $(call application,initmgr,LuCI Initscript Management,\
-	+luci-mod-admin-full))
 
 $(eval $(call application,polipo,LuCI Support for the Polipo Proxy,\
 	+PACKAGE_luci-app-polipo:polipo))
@@ -534,12 +534,12 @@ endef
 $(eval $(call collection,,\
 	Standard OpenWrt set including full and mini admin and the standard theme,\
 	+uhttpd +luci-mod-admin-full +luci-theme-openwrt +luci-app-firewall \
-	+luci-app-initmgr +libiwinfo))
+	+libiwinfo))
 
 $(eval $(call collection,ssl,\
 	Standard OpenWrt set with HTTPS support,\
 	+uhttpd +uhttpd-mod-tls +px5g +luci-mod-admin-full +luci-theme-openwrt \
-	+luci-app-firewall +luci-app-initmgr +libiwinfo))
+	+luci-app-firewall +libiwinfo))
 
 $(eval $(call collection,light,\
 	Minimum package set using only admin mini and the standard theme,\

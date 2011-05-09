@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-02-12 14:23+0100\n"
+"PO-Revision-Date: 2011-05-09 00:52+0100\n"
 "Last-Translator: Manuel Munz <freifunk@somakoma.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -23,6 +23,15 @@ msgstr "Aktive HNA-Ankündigungen"
 
 msgid "Advanced Settings"
 msgstr ""
+
+msgid "Allow gateways with NAT"
+msgstr "Gateways mit NAT erlauben"
+
+msgid "Allow the selection of an outgoing ipv4 gateway with NAT"
+msgstr "Auswahl von IPv4-Gateways erlauben, die zum Internet hin NAT verwenden"
+
+msgid "Announce uplink"
+msgstr "Uplink ankündigen"
 
 msgid "Announced network"
 msgstr "Angekündigtes Netzwerk"
@@ -50,6 +59,13 @@ msgstr ""
 
 msgid "Enable"
 msgstr ""
+
+msgid ""
+"Enable SmartGateway. If it is disabled, then all other SmartGateway "
+"parameters are ignored. Default is \"no\"."
+msgstr ""
+"SmartGateway aktivieren. Ist diese Option deaktiviert, dann werden alle "
+"folgenden SmartGateway Einstellungen ignoriert. Der Defaultwert ist \"no\"."
 
 msgid "Enable this interface."
 msgstr "Dieses Interface benutzen."
@@ -189,6 +205,9 @@ msgstr ""
 "angegebenen Prefix liegt. Der Defaultwert ist \"0::/0\", damit wird eine "
 "IPv6-Adresse des Interfaces verwendet die nicht linklocal ist."
 
+msgid "IPv6-Prefix of the uplink"
+msgstr "IPv6-Präfix des Uplinks"
+
 msgid ""
 "If the route to the current gateway is to be changed, the ETX value of this "
 "gateway is multiplied with this value before it is compared to the new one. "
@@ -202,6 +221,12 @@ msgstr ""
 "Wert kann zwischen 0.1 und 1.0 liegen, sollte aber nahe bei 1.0 sein.<br /"
 "><b>ACHTUNG:</b> Diese Einstellung darf nicht zusammen mit der etx_ffeth "
 "Metrik verwendet werden!<br />Der Defaultwert ist \"1.0\"."
+
+msgid ""
+"If this Node uses NAT for connections to the internet. Default is \"yes\"."
+msgstr ""
+"Benutzt dieser Knoten NAT für die Verbindung zum Internet? Der Defaultwert "
+"ist \"yes\"."
 
 msgid "Interface"
 msgstr ""
@@ -453,9 +478,6 @@ msgstr ""
 "dann werden die OLSR-Statusseiten nur sehr langsam laden. In diesem Fall "
 "sollte man diese Option deaktivieren."
 
-msgid "Routen"
-msgstr ""
-
 msgid "Routes"
 msgstr "Routen"
 
@@ -482,6 +504,17 @@ msgstr "SmartGateway ist auf diesem System nicht konfiguriert."
 
 msgid "Source address"
 msgstr ""
+
+msgid ""
+"Specifies the speed of the uplink in kilobits/s. First parameter is "
+"upstream, second parameter is downstream. Default is \"128 1024\"."
+msgstr ""
+"Hiermit kann man die Geschwindigkeit des Uplinks dieses Knotens ankündigen. "
+"Der erste Wert ist die Upload-, der zweite Wert die Downloadgeschwindigkeit. "
+"Der Defaultwert ist \"128 1024\"."
+
+msgid "Speed of the uplink"
+msgstr "Geschwindigkeit des Uplinks"
 
 msgid "State"
 msgstr ""
@@ -536,10 +569,18 @@ msgstr ""
 "Port, den OLSRd benutzt. Dieser sollte in der Regel auf dem Defaultwert 698 "
 "bleiben, was dem von IANA zugewiesenen Port für OLSRd entspricht."
 
-msgid "Timing and Validity"
+msgid ""
+"This can be used to signal the external IPv6 prefix of the uplink to the "
+"clients. This might allow a client to change it's local IPv6 address to use "
+"the IPv6 gateway without any kind of address translation. The maximum prefix "
+"length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Hiermit kann der externe IPv6-Präfix an Clients signalisiert werden. Dadurch "
+"können Clients ihre lokale IP-Adresse ändern, um diesen IPv6-Gateway ohne "
+"Übersetzung der IPv6-Adresse zu benutzen. Die maximale erlaubte Länge des "
+"Präfix ist 64 bit. Der Defaultwert ist \"::/0\" (kein Präfix)."
 
-msgid "Topologie"
+msgid "Timing and Validity"
 msgstr ""
 
 msgid "Topology"
@@ -557,6 +598,9 @@ msgstr "Es konnte keine Verbindung zum OLSR-Daemon hergestellt werden!"
 msgid "Uplink"
 msgstr ""
 
+msgid "Uplink uses NAT"
+msgstr "Der Uplink benutzt NAT."
+
 msgid "Use hysteresis"
 msgstr "Hysterese aktivieren"
 
@@ -565,6 +609,13 @@ msgstr ""
 
 msgid "WLAN"
 msgstr ""
+
+msgid ""
+"Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
+"work, please install it."
+msgstr ""
+"WARNUNG: kmod-ipip ist nicht installiert. Ohne kmod-ipip wird SmartGateway "
+"nicht funktionieren!"
 
 msgid "Weight"
 msgstr ""
@@ -585,6 +636,16 @@ msgstr ""
 "<br /><b>Hinweis:</b> Diese Gewichtung ist nur möglich wenn "
 "LinkQualityLevel= 0 ist. Für alle anderen Werte von LinkQualityLevel wird "
 "stattdessen der ETX-Wert verwendet."
+
+msgid ""
+"Which kind of uplink is exported to the other mesh nodes. An uplink is "
+"detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
+"Default setting is \"both\"."
+msgstr ""
+"Welche Art von Uplink im Mesh angekündigt wird. Ein Uplink wird automatisch "
+"anhand der lokal angekündigten HNA erkannt (0.0.0.0/0, ::ffff:0:0/96 oder "
+"2000::/3). Der Defaultwert ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
+"ankündigen sofern verfügbar)."
 
 msgid "Willingness"
 msgstr "Bereitschaft"

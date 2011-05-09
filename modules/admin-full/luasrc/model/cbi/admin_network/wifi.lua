@@ -135,6 +135,16 @@ if hwtype == "mac80211" then
 		--htcapab:depends("hwmode", "11ng")
 	end
 
+	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
+	mp:value("", translate("disable"))
+	mp:value("allow", translate("Allow listed only"))
+	mp:value("deny", translate("Allow all except listed"))
+
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
+	ml.datatype = "macaddr"
+	ml:depends({macfilter="allow"})
+	ml:depends({macfilter="deny"})
+
 	local cl = iw and iw.countrylist
 	if cl and #cl > 0 then
 		cc = s:taboption("advanced", ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
@@ -235,7 +245,9 @@ if hwtype == "broadcom" then
 	mp:value("", translate("disable"))
 	mp:value("allow", translate("Allow listed only"))
 	mp:value("deny", translate("Allow all except listed"))
+
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
+	ml.datatype = "macaddr"
 	ml:depends({macfilter="allow"})
 	ml:depends({macfilter="deny"})
 
@@ -436,7 +448,9 @@ if hwtype == "atheros" then
 	mp:value("", translate("disable"))
 	mp:value("deny", translate("Allow listed only"))
 	mp:value("allow", translate("Allow all except listed"))
+
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
+	ml.datatype = "macaddr"
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
 

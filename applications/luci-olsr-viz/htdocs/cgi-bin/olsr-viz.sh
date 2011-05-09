@@ -21,12 +21,12 @@ STYLE="width: 100%; height: 93%; border: 1px solid #ccc; margin-left:auto; margi
 </DIV>
 <DIV STYLE="z-index:99">
 <FORM ACTION="">
-<P><B TITLE="Bestimmt die Vergrößerungsstufe.">Zoom</B>&nbsp;<A HREF="javascript:set_scale(scale+0.1)">+</A>&nbsp;<A HREF="javascript:set_scale(scale-0.1)">&ndash;</A>&nbsp;<INPUT ID="zoom" NAME="zoom" TYPE="text" VALUE="2.0" SIZE="5" ONCHANGE="set_scale()">&nbsp;
-| &nbsp;<B TITLE="Beschränkt die Anzeige auf eine maximale Hop-Entfernung.">Metrik</B>&nbsp;<A HREF="javascript:set_maxmetric(maxmetric+1)">+</A>&nbsp;<A HREF="javascript:if(0<maxmetric)set_maxmetric(maxmetric-1)">&ndash;</A>&nbsp;<INPUT ID="maxmetric" NAME="maxmetric" TYPE="text" VALUE="3" SIZE="4" ONCHANGE="set_maxmetric(this.value)">&nbsp;
-| &nbsp;<B TITLE="Schaltet die automatischen Layout-Optimierung ein.">Optimierung</B><INPUT ID="auto_declump" NAME="auto_declump" TYPE="checkbox" ONCHANGE="set_autodeclump(this.checked)" CHECKED="CHECKED">&nbsp;
-| &nbsp;<B TITLE="Zeige Hostnamen an.">Hostnamen</B><INPUT ID="show_hostnames" NAME="show_hostnames" TYPE="checkbox" ONCHANGE="set_showdesc(this.checked)" CHECKED="CHECKED">&nbsp;
-| &nbsp;<A HREF="javascript:viz_save()" TITLE="Speichert die aktuellen Einstellungen in einem Cookie.">Speichern</A>&nbsp;
-| &nbsp;<A HREF="javascript:viz_reset()" TITLE="Startet das Viz-Skriptprogramm neu.">Zur&uuml;cksetzen</A></P>
+<P><B TITLE="Bestimmt die Vergrößerungsstufe.">Zoom</B>&#160;<A HREF="javascript:set_scale(scale+0.1)">+</A>&#160;<A HREF="javascript:set_scale(scale-0.1)">&ndash;</A>&#160;<INPUT ID="zoom" NAME="zoom" TYPE="text" VALUE="2.0" SIZE="5" ONCHANGE="set_scale()">&#160;
+| &#160;<B TITLE="Beschränkt die Anzeige auf eine maximale Hop-Entfernung.">Metrik</B>&#160;<A HREF="javascript:set_maxmetric(maxmetric+1)">+</A>&#160;<A HREF="javascript:if(0<maxmetric)set_maxmetric(maxmetric-1)">&ndash;</A>&#160;<INPUT ID="maxmetric" NAME="maxmetric" TYPE="text" VALUE="3" SIZE="4" ONCHANGE="set_maxmetric(this.value)">&#160;
+| &#160;<B TITLE="Schaltet die automatischen Layout-Optimierung ein.">Optimierung</B><INPUT ID="auto_declump" NAME="auto_declump" TYPE="checkbox" ONCHANGE="set_autodeclump(this.checked)" CHECKED="CHECKED">&#160;
+| &#160;<B TITLE="Zeige Hostnamen an.">Hostnamen</B><INPUT ID="show_hostnames" NAME="show_hostnames" TYPE="checkbox" ONCHANGE="set_showdesc(this.checked)" CHECKED="CHECKED">&#160;
+| &#160;<A HREF="javascript:viz_save()" TITLE="Speichert die aktuellen Einstellungen in einem Cookie.">Speichern</A>&#160;
+| &#160;<A HREF="javascript:viz_reset()" TITLE="Startet das Viz-Skriptprogramm neu.">Zur&uuml;cksetzen</A></P>
 </FORM></DIV>
 <SPAN ID="debug" STYLE="visibility:hidden;"></SPAN>
 <IFRAME ID="RSIFrame" NAME="RSIFrame" STYLE="border:0px; width:0px; height:0px; visibility:hidden;">

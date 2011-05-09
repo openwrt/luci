@@ -1,4 +1,4 @@
-IWINFO_BACKENDS   = $(if $(BACKENDS),$(BACKENDS),madwifi nl80211)
+IWINFO_BACKENDS   = $(BACKENDS)
 IWINFO_LDFLAGS    = $(LDFLAGS) -shared -llua
 IWINFO_CFLAGS     = $(CFLAGS) -std=gnu99 -fstrict-aliasing
 IWINFO_SO         = iwinfo.so

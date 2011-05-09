@@ -20,6 +20,7 @@ m.uci:foreach("network", "switch",
 		local switch_name = x.name or x['.name']
 		local has_vlan4k  = nil
 		local has_ptpvid  = nil
+		local has_jumbo3  = nil
 		local max_vid     = 16
 		local num_vlans   = 16
 		local num_ports   = 5
@@ -49,9 +50,9 @@ m.uci:foreach("network", "switch",
 					num_ports, cpu_port, num_vlans =
 						line:match("ports: (%d+) %(cpu @ (%d+)%), vlans: (%d+)")
 
-					num_ports = tonumber(num_ports or  5)
-					num_vlans = tonumber(num_vlans or 16)
-					cpu_port  = tonumber(cpu_port  or  5)
+					num_ports = tonumber(num_ports) or  5
+					num_vlans = tonumber(num_vlans) or 16
+					cpu_port  = tonumber(cpu_port)  or  5
 
 				elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
 					if is_vlan_attr then has_vlan4k = line:match(": (%w+)") end
@@ -60,6 +61,8 @@ m.uci:foreach("network", "switch",
 				elseif line:match(": enable_vlan4k") then
 					enable_vlan4k = true
 
+				elseif line:match(": max_length") then
+					has_jumbo3 = true
 				end
 			end
 
@@ -98,19 +101,20 @@ m.uci:foreach("network", "switch",
 		s = m:section(NamedSection, x['.name'], "switch", translatef("Switch %q", switch_name))
 		s.addremove = false
 
-		s:option(Flag, "enable", translate("Enable this switch"))
-			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
-
-		s:option(Flag, "enable_vlan", translate("Enable VLAN functionality"))
-			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
+		s:option(Flag, "enable", translate("Enable this switch")).default = "1"
+		s:option(Flag, "enable_vlan", translate("Enable VLAN functionality")).default = "1"
 
 		if enable_vlan4k then
 			s:option(Flag, "enable_vlan4k", translate("Enable 4K VLANs"))
 		end
 
-		s:option(Flag, "reset", translate("Reset switch during setup"))
-			.cfgvalue = function(self, section) return Flag.cfgvalue(self, section) or self.enabled end
+		if has_jumbo3 then
+			j = s:option(Flag, "max_length", translate("Enable Jumbo Frame passthrough"))
+			j.enabled = "3"
+			j.rmempty = true
+		end
 
+		s:option(Flag, "reset", translate("Reset switch during setup")).default = "1"
 
 		-- VLAN table
 		s = m:section(TypedSection, "switch_vlan", translatef("VLANs on %q", switch_name))

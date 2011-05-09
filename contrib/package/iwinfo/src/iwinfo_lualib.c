@@ -417,19 +417,22 @@ static char * iwinfo_crypto_desc(struct iwinfo_crypto_entry *c)
 					case 3:
 						sprintf(desc, "mixed WPA/WPA2 %s (%s)",
 							iwinfo_crypto_print_suites(c->auth_suites),
-							iwinfo_crypto_print_ciphers(c->pair_ciphers));
+							iwinfo_crypto_print_ciphers(
+								c->pair_ciphers & c->group_ciphers));
 						break;
 
 					case 2:
 						sprintf(desc, "WPA2 %s (%s)",
 							iwinfo_crypto_print_suites(c->auth_suites),
-							iwinfo_crypto_print_ciphers(c->pair_ciphers));
+							iwinfo_crypto_print_ciphers(
+								c->pair_ciphers & c->group_ciphers));
 						break;
 
 					case 1:
 						sprintf(desc, "WPA %s (%s)",
 							iwinfo_crypto_print_suites(c->auth_suites),
-							iwinfo_crypto_print_ciphers(c->pair_ciphers));
+							iwinfo_crypto_print_ciphers(
+								c->pair_ciphers & c->group_ciphers));
 						break;
 				}
 			}

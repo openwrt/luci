@@ -37,10 +37,12 @@ local ifaces = { }
 local enabled = { }
 local iface
 
-for iface in fs.dir(dbdir) do
-	if iface:sub(1,1) ~= '.' then
-		ifaces[iface] = iface
-		enabled[iface] = iface
+if fs.access(dbdir) then
+	for iface in fs.dir(dbdir) do
+		if iface:sub(1,1) ~= '.' then
+			ifaces[iface] = iface
+			enabled[iface] = iface
+		end
 	end
 end
 
