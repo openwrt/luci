@@ -121,8 +121,8 @@ end
 
 for p in nixio.fs.glob("/sys/bus/usb/devices/[0-9]*/manufacturer") do
 	local id = p:match("%d+-%d+")
-	local mf = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/manufacturer")
-	local pr = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/product")
+	local mf = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/manufacturer") or "?"
+	local pr = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/product")      or "?"
 	usbdev:value(id, "%s (%s - %s)" %{ id, mf, pr })
 end
 
