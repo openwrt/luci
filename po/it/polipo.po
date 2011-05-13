@@ -19,15 +19,21 @@ msgid "Allowed clients"
 msgstr ""
 
 msgid "Always use system DNS resolver"
-msgstr ""
+msgstr "Cache condivisa"
 
 msgid ""
 "Basic HTTP authentication supported. Provide username and password in "
 "username:password format."
-msgstr ""
+msgstr "Abilita se la cache (proxy) è condivisa tra più utenti."
 
 msgid "DNS and Query Settings"
 msgstr ""
+"Per abilitare la pulizia polipo sul disco (strettamente consigliato), si "
+"dovrebbe aggiungere un \"cron job\"(operazione) nello Scheduled Task services "
+"che eseguirà /usr/sbin/polipo_purge script. Per esempio, per eseguire una "
+"pulizia della cache sul disco ogni giorno alle 6:00 di mattina, si deve "
+"aggiugere la seguente riga nello Skeduled Tasks \"0 6 * * *\t"
+"/usr/sbin/polipo_purge\" (senza virgolette)."
 
 msgid "DNS server address"
 msgstr ""
@@ -36,7 +42,7 @@ msgid "Delete cache files time"
 msgstr ""
 
 msgid "Disk cache location"
-msgstr ""
+msgstr "Percorso della cache del disco"
 
 msgid "Do not query IPv6"
 msgstr ""
@@ -67,35 +73,46 @@ msgid ""
 "devices is recommended, because the cache can grow considerably. Leave it "
 "empty to disable on-disk cache."
 msgstr ""
+"Percorso dove polipo memorizzerà i files permanentemente. L'uso di un "
+"dispositivo di memorizzazione esterno (es. memory pen) è strettamente "
+"consigliato. Lasciare vuoto per disabilitare questa opzione (on-disk cache)."
 
 msgid "Log file location"
 msgstr ""
+"Suddividere la dimensione dei files nella cache (esprimere la dimensione in "
+"bytes)"
 
 msgid "Log to syslog"
 msgstr ""
+"Dimensione per la quale i files memorizzati dovrebbero essere divisi (valore "
+"standard:1048576)"
 
 msgid "Logging and RAM"
 msgstr ""
 
 msgid "Never use system DNS resolver"
 msgstr ""
+"tempo dopo il quale i files memorizzati devono essere divisi (tempo "
+"predefinito:4gg 12h)"
 
 msgid "On-Disk Cache"
 msgstr ""
 
 msgid "PMM segments size (in bytes)"
 msgstr ""
+"tempo dopo il quale i files memorizzati saranno cancellati (tempo "
+"predefinito:32gg)"
 
 msgid "Parent Proxy"
-msgstr ""
+msgstr "Polipo è un piccolo e veloce web proxy di memorizzazione (caching)"
 
 msgid "Parent proxy address"
-msgstr ""
+msgstr "Generale"
 
 msgid ""
 "Parent proxy address (in host:port format), to which Polipo will forward the "
 "requests."
-msgstr ""
+msgstr "clients abilitati (permessi)"
 
 msgid "Parent proxy authentication"
 msgstr ""
@@ -104,10 +121,10 @@ msgid "Polipo"
 msgstr ""
 
 msgid "Polipo is a small and fast caching web proxy."
-msgstr ""
+msgstr "Ram che Polipo utilizza per la sua cache"
 
 msgid "Poor Man's Multiplexing"
-msgstr ""
+msgstr "Indirizzo server DNS"
 
 msgid ""
 "Poor Man's Multiplexing (PMM) is a technique that simulates multiplexing by "
@@ -115,9 +132,11 @@ msgid ""
 "caused by the weakness of HTTP protocol. NOTE: some sites may not work with "
 "PMM enabled."
 msgstr ""
+"Impostare l'indirizzo DNS da usare, se si vuole polipo usa un server DNS "
+"diverso dal sistema ospite (router)."
 
 msgid "Port on which Polipo will listen"
-msgstr ""
+msgstr "Query DNS per IPv6"
 
 msgid "Proxy"
 msgstr ""
