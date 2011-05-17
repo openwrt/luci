@@ -37,7 +37,7 @@ net6 = hna6:option(Value, "netaddr", translate("Network address"))
 net6.datatype = "ip6addr"
 net6.placeholder = "fec0:2200:106:0:0:0:0:0"
 msk6 = hna6:option(Value, "prefix", translate("Prefix"))
-msk6.datatype = "integer"
+msk6.datatype = "range(0,128)"
 msk6.placeholder = "48"
 
 
