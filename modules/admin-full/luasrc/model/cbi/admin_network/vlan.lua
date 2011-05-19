@@ -21,6 +21,7 @@ m.uci:foreach("network", "switch",
 		local has_vlan4k  = nil
 		local has_ptpvid  = nil
 		local has_jumbo3  = nil
+		local min_vid     = 1
 		local max_vid     = 16
 		local num_vlans   = 16
 		local num_ports   = 5
@@ -67,6 +68,10 @@ m.uci:foreach("network", "switch",
 			end
 
 			swc:close()
+
+		-- We have no swconfig, assume /proc/switch
+		else
+			min_vid = 0
 		end
 
 
@@ -219,11 +224,11 @@ m.uci:foreach("network", "switch",
 		vid.validate = function(self, value, section)
 			local v = tonumber(value)
 			local m = has_vlan4k and 4094 or (num_vlans - 1)
-			if v ~= nil and v > 0 and v <= m then
+			if v ~= nil and v >= min_vid and v <= m then
 				return value
 			else
 				return nil,
-					translatef("Invalid VLAN ID given! Only IDs between %d and %d are allowed.", 1, m)
+					translatef("Invalid VLAN ID given! Only IDs between %d and %d are allowed.", min_vid, m)
 			end
 		end
 
