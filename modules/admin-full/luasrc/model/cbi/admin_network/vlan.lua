@@ -21,7 +21,7 @@ m.uci:foreach("network", "switch",
 		local has_vlan4k  = nil
 		local has_ptpvid  = nil
 		local has_jumbo3  = nil
-		local min_vid     = 1
+		local min_vid     = 0
 		local max_vid     = 16
 		local num_vlans   = 16
 		local num_ports   = 5
@@ -54,6 +54,7 @@ m.uci:foreach("network", "switch",
 					num_ports = tonumber(num_ports) or  5
 					num_vlans = tonumber(num_vlans) or 16
 					cpu_port  = tonumber(cpu_port)  or  5
+					min_vid   = 1
 
 				elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
 					if is_vlan_attr then has_vlan4k = line:match(": (%w+)") end
@@ -68,10 +69,6 @@ m.uci:foreach("network", "switch",
 			end
 
 			swc:close()
-
-		-- We have no swconfig, assume /proc/switch
-		else
-			min_vid = 0
 		end
 
 
