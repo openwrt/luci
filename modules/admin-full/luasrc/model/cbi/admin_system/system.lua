@@ -264,4 +264,4 @@ c.write = function(self, section, value)
 end
 
 
-return m, m3, m2
+return m, m3 or m2, m3 and m2
