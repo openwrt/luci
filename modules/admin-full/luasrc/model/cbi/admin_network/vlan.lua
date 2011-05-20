@@ -24,6 +24,7 @@ m.uci:foreach("network", "switch",
 		local has_learn   = nil 
 		local has_vlan4k  = nil
 		local has_ptpvid  = nil
+		local has_jumbo3  = nil
 		local min_vid     = 0
 		local max_vid     = 16
 		local num_vlans   = 16
@@ -76,6 +77,8 @@ m.uci:foreach("network", "switch",
 				elseif line:match(": enable_vlan4k") then
 					enable_vlan4k = true
 
+				elseif line:match(": max_length") then
+					has_jumbo3 = "max_length"
 				end
 			end
 
@@ -131,6 +134,12 @@ m.uci:foreach("network", "switch",
 		if has_learn then
 			x = s:option(Flag, has_learn, translate("Enable learning and aging"))
 			x.default = x.enabled
+		end
+
+		if has_jumbo3 then
+			x = s:option(Flag, has_jumbo3, translate("Enable Jumbo Frame passthrough"))
+			x.enabled = "3"
+			x.rmempty = true
 		end
 
 		if has_reset then
