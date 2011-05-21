@@ -791,7 +791,7 @@ end
 -- @return		Boolean indicating whether init is enabled
 function init.enabled(name)
 	if fs.access(init.dir..name) then
-		return ( call(init.dir..name.." enabled") == 0 )
+		return ( call(init.dir..name.." enabled >/dev/null") == 0 )
 	end
 	return false
 end
@@ -801,7 +801,7 @@ end
 -- @return		Numeric index value
 function init.index(name)
 	if fs.access(init.dir..name) then
-		return call("source "..init.dir..name.." enabled; exit $START")
+		return call("source "..init.dir..name.." enabled >/dev/null; exit $START")
 	end
 end
 
@@ -810,7 +810,7 @@ end
 -- @return		Boolean indicating success
 function init.enable(name)
 	if fs.access(init.dir..name) then
-		return ( call(init.dir..name.." enable") == 1 )
+		return ( call(init.dir..name.." enable >/dev/null") == 1 )
 	end
 end
 
@@ -819,7 +819,7 @@ end
 -- @return		Boolean indicating success
 function init.disable(name)
 	if fs.access(init.dir..name) then
-		return ( call(init.dir..name.." disable") == 0 )
+		return ( call(init.dir..name.." disable >/dev/null") == 0 )
 	end
 end
 
