@@ -13,10 +13,15 @@ apply_config() {
 }
 
 reload_exec() {
-	[ -x $2 ] && {
-		echo "Reloading $1... "
-		$2 >/dev/null 2>&1
-		[ -n "$3" -a "$?" != "$3" ] && echo '!!! Failed to reload' $1 '!!!'
+	local service="$1"
+	local ok="$3"
+	set -- $2
+	local cmd="$1"; shift
+	
+	[ -x "$cmd" ] && {
+		echo "Reloading $service... "
+		( $cmd "$@" ) 2>/dev/null 1>&2
+		[ -n "$ok" -a "$?" != "$ok" ] && echo '!!! Failed to reload' $service '!!!'
 	}
 }
 
