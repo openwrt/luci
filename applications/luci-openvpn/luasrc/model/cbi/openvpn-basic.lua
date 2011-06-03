@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 $Id$
 ]]--
@@ -17,36 +17,36 @@ require("luci.model.uci")
 
 
 local basicParams = {
+	--								
+	-- Widget, Name, Default(s), Description
 	--
-	-- Widget		Name					Optn.	Default(s)
-	--
+					
+	{ ListValue, "verb", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }, translate("Set output verbosity") },
+	{ Value, "nice",0, translate("Change process priority") },
+	{ Value,"port",1194, translate("TCP/UDP port # for both local and remote") },
+	{ ListValue,"dev_type",{ "tun", "tap" }, translate("Type of used device") },
+	{ Flag,"tun_ipv6",0, translate("Make tun device IPv6 capable") },
 
-	{ ListValue,	"verb",					{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 } },
-	{ Value,		"nice",					0 },
-	{ Value,		"port",					1194 },
-	{ ListValue,	"dev_type",				{ "tun", "tap" } },
-	{ Flag,			"tun_ipv6",				0 },
+	{ Value,"ifconfig","10.200.200.3 10.200.200.1", translate("") },
+	{ Value,"server","10.200.200.0 255.255.255.0", translate("Configure server mode") },
+	{ Value,"server_bridge","192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254", translate("Configure server bridge") },
+	{ Flag,"nobind",0, translate("Do not bind to local address and port") },
 
-	{ Value,		"ifconfig",				"10.200.200.3 10.200.200.1" },
-	{ Value,		"server",				"10.200.200.0 255.255.255.0" },
-	{ Value,		"server_bridge",		"192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254" },
-	{ Flag,			"nobind",				0 },
+	{ Flag,"comp_lzo",0, translate("Use fast LZO compression") },
+	{ Value,"keepalive","10 60", translate("") },
 
-	{ Flag,			"comp_lzo",				0 },
-	{ Value,		"keepalive",			"10 60" },
+	{ ListValue,"proto",{ "udp", "tcp" }, translate("Use protocol") },
 
-	{ ListValue,	"proto",				{ "udp", "tcp" } },
+	{ Flag,"client",0, translate("Configure client mode") },
+	{ Flag,"client_to_client",0, translate("Allow client-to-client traffic") },
+	{ DynamicList,"remote","vpnserver.example.org", translate("Remote host name or ip address") },
 
-	{ Flag,			"client",				0 },
-	{ Flag,			"client_to_client",		0 },
-	{ DynamicList,	"remote",				"vpnserver.example.org" },
-
-	{ FileUpload,	"secret",				"/etc/openvpn/secret.key 1" },
-	{ FileUpload,	"pkcs12",				"/etc/easy-rsa/keys/some-client.pk12" },
-	{ FileUpload,	"ca",					"/etc/easy-rsa/keys/ca.crt" },
-	{ FileUpload,	"dh",					"/etc/easy-rsa/keys/dh1024.pem" },
-	{ FileUpload,	"cert",					"/etc/easy-rsa/keys/some-client.crt" },
-	{ FileUpload,	"key",					"/etc/easy-rsa/keys/some-client.key" },
+	{ FileUpload,"secret","/etc/openvpn/secret.key 1", translate("Enable Static Key encryption mode (non-TLS)") },
+	{ FileUpload,"pkcs12","/etc/easy-rsa/keys/some-client.pk12", translate("PKCS#12 file containing keys") },
+	{ FileUpload,"ca","/etc/easy-rsa/keys/ca.crt", translate("Certificate authority") },
+	{ FileUpload,"dh","/etc/easy-rsa/keys/dh1024.pem", translate("Diffie Hellman parameters") },
+	{ FileUpload,"cert","/etc/easy-rsa/keys/some-client.crt", translate("Local certificate") },
+	{ FileUpload,"key","/etc/easy-rsa/keys/some-client.key", translate("Local private key") },
 }
 
 
@@ -63,8 +63,7 @@ local s = m:section( NamedSection, arg[1], "openvpn" )
 for _, option in ipairs(basicParams) do
 	local o = s:option(
 		option[1], option[2],
-		translate("openvpn_param_%s" % option[2]),
-		translate("openvpn_param_%s_desc" % option[2])
+		option[2], option[4]
 	)
 	
 	o.optional = true
@@ -100,3 +99,4 @@ for _, option in ipairs(basicParams) do
 end
 
 return m
+
