@@ -2,765 +2,1140 @@
 #  generated from ./applications/luci-statistics/luasrc/i18n/statistics.en.lua
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: PACKAGE VERSION\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-10 03:40+0200\n"
+"PO-Revision-Date: 2011-03-02 16:27+0100\n"
+"Last-Translator: Stanislaw Markisz <stanislaw.markisz@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 1.1.0\n"
+
+#. Statistics
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:1
+msgid "stat_statistics"
+msgstr "Statystyki"
 
 #. The statistics package is based on <a href=\"http://collectd.org/index.shtml\">Collectd</a> and uses <a href=\"http://oss.oetiker.ch/rrdtool/\">RRD Tool</a> to render diagram images from collected data.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:2
-msgid ""
-"The statistics package is based on <a href=\"http://collectd.org/index.shtml"
-"\">Collectd</a> and uses <a href=\"http://oss.oetiker.ch/rrdtool/\">RRD "
-"Tool</a> to render diagram images from collected data."
+msgid "stat_desc"
 msgstr ""
+"Paczka statystyki bazuje na projekcie <a "
+"href=\\\"http://collectd.org/index.shtml\\\">Collectd</a> i do generowania "
+"wykresów z zebranych danych używa narzędzia <a "
+"href=\\\"http://oss.oetiker.ch/rrdtool/\\\">RRD Tool</a>."
 
 #. System plugins
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:3
-msgid "System plugins"
-msgstr ""
+msgid "stat_systemplugins"
+msgstr "Wtyczki systemowe"
 
 #. Network plugins
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:4
-msgid "Network plugins"
-msgstr ""
+msgid "stat_networkplugins"
+msgstr "Wtyczki sieciowe"
 
 #. Output plugins
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:5
-msgid "Output plugins"
-msgstr ""
+msgid "stat_outputplugins"
+msgstr "Wtyczki wyjścia"
 
 #. Display timespan
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:6
-msgid "Display timespan »"
-msgstr ""
+msgid "stat_showtimespan"
+msgstr "Przedziały czasowe"
 
 #. Graphs
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:7
-msgid "Graphs"
-msgstr ""
+msgid "stat_graphs"
+msgstr "Wykresy"
 
 #. Collectd
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:8
-msgid "Collectd"
-msgstr ""
+msgid "stat_collectd"
+msgstr "Collectd"
 
 #. Processor
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:9
-msgid "Processor"
-msgstr ""
+msgid "stat_cpu"
+msgstr "Procesor"
 
 #. Ping
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:10
-msgid "Ping"
-msgstr ""
-
-#. Interval of pings
-msgid "Interval for pings"
-msgstr ""
+msgid "stat_ping"
+msgstr "Ping"
 
 #. Firewall
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:11
-msgid "Firewall"
-msgstr ""
+msgid "stat_iptables"
+msgstr "Firewall"
 
 #. Netlink
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:12
-msgid "Netlink"
-msgstr ""
+msgid "stat_netlink"
+msgstr "Netlink"
 
 #. Processes
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:13
-msgid "Processes"
-msgstr ""
+msgid "stat_processes"
+msgstr "Procesy"
 
 #. Wireless
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:14
-msgid "Wireless"
-msgstr ""
+msgid "stat_wireless"
+msgstr "Sieć bezprzewodowa"
 
 #. TCP Connections
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:15
-msgid "TCP Connections"
-msgstr ""
+msgid "stat_tcpconns"
+msgstr "Połączenia TCP"
 
 #. Interfaces
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:16
-msgid "Interfaces"
-msgstr ""
+msgid "stat_interface"
+msgstr "Interfejsy"
 
 #. Disk Space Usage
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:17
-msgid "Disk Space Usage"
-msgstr ""
+msgid "stat_df"
+msgstr "Użycie przestrzeni dysku"
 
 #. Interrupts
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:18
-msgid "Interrupts"
-msgstr ""
+msgid "stat_irq"
+msgstr "Zakłócenia"
 
 #. Disk Usage
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:19
-msgid "Disk Usage"
-msgstr ""
+msgid "stat_disk"
+msgstr "Użycie dysku"
 
 #. Exec
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:20
-msgid "Exec"
-msgstr ""
+msgid "stat_exec"
+msgstr "Exec"
 
 #. RRDTool
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:21
-msgid "RRDTool"
-msgstr ""
+msgid "stat_rrdtool"
+msgstr "RRDTool"
 
 #. Network
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:22
-msgid "Network"
-msgstr ""
+msgid "stat_network"
+msgstr "Sieć"
 
 #. CSV Output
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:23
-msgid "CSV Output"
-msgstr ""
+msgid "stat_csv"
+msgstr "Wyjście do formatu CSV"
 
 #. System Load
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:24
-msgid "System Load"
-msgstr ""
+msgid "stat_load"
+msgstr "Obciążenie systemu"
 
 #. DNS
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:25
-msgid "DNS"
-msgstr ""
+msgid "stat_dns"
+msgstr "DNS"
 
 #. Email
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:26
-msgid "Email"
-msgstr ""
+msgid "stat_email"
+msgstr "E-mail"
 
 #. UnixSock
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:27
-msgid "UnixSock"
-msgstr ""
+msgid "stat_unixsock"
+msgstr "UnixSock"
+
+#. Statistics
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:28
+msgid "lucistatistics"
+msgstr "Statystyki"
 
 #. Collectd Settings
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:29
-msgid "Collectd Settings"
-msgstr ""
+msgid "lucistatistics_collectd"
+msgstr "Ustawienia Collectd"
 
 #. Collectd is a small daeomon for collecting data from various sources through different plugins. On this page you can change general settings for the collectd daemon.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:30
-msgid ""
-"Collectd is a small daeomon for collecting data from various sources through "
-"different plugins. On this page you can change general settings for the "
-"collectd daemon."
+msgid "lucistatistics_collectd_desc"
 msgstr ""
+"Collectd to mały demon do zbierania danych z różnorodnych źródeł przy użyciu "
+"różnego rodzaju wtyczek. Na tej stronie można zmienić ustawienia ogólne "
+"demona collectd."
 
 #. Hostname
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:31
-msgid "Hostname"
-msgstr ""
+msgid "lucistatistics_collectd_hostname"
+msgstr "Nazwa hosta"
 
 #. Base Directory
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:32
-msgid "Base Directory"
-msgstr ""
+msgid "lucistatistics_collectd_basedir"
+msgstr "Katalog podstawowy"
 
 #. Directory for sub-configurations
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:33
-msgid "Directory for sub-configurations"
-msgstr ""
+msgid "lucistatistics_collectd_include"
+msgstr "Katalog konfiguracji podrzędnych"
 
 #. Directory for collectd plugins
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:34
-msgid "Directory for collectd plugins"
-msgstr ""
+msgid "lucistatistics_collectd_plugindir"
+msgstr "Katalog wtyczek collectd"
 
 #. Used PID file
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:35
-msgid "Used PID file"
-msgstr ""
+msgid "lucistatistics_collectd_pidfile"
+msgstr "Używany plik PID"
 
 #. Datasets definition file
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:36
-msgid "Datasets definition file"
-msgstr ""
+msgid "lucistatistics_collectd_typesdb"
+msgstr "Plik definicji zestawów danych"
 
 #. Data collection interval
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:37
-msgid "Data collection interval"
-msgstr ""
+msgid "lucistatistics_collectd_interval"
+msgstr "Interwał zbierania danych"
 
 #. Seconds
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:38
-msgid "Seconds"
-msgstr ""
+msgid "lucistatistics_collectd_interval_desc"
+msgstr "Sekundy"
 
 #. Number of threads for data collection
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:39
-msgid "Number of threads for data collection"
-msgstr ""
+msgid "lucistatistics_collectd_readthreads"
+msgstr "Liczba wątków zbierania danych"
 
 #. Try to lookup fully qualified hostname
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:40
-msgid "Try to lookup fully qualified hostname"
-msgstr ""
+msgid "lucistatistics_collectd_fqdnlookup"
+msgstr "Spróbuj wyszukać w pełni kwalifikowaną nazwę hosta"
 
 #. CPU Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:41
-msgid "CPU Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdcpu"
+msgstr "Konfiguracja wtyczki CPU"
 
 #. The cpu plugin collects basic statistics about the processor usage.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:42
-msgid "The cpu plugin collects basic statistics about the processor usage."
+msgid "lucistatistics_collectdcpu_desc"
 msgstr ""
+"Wtyczka CPU zbiera podstawowe statystyki dotyczące wykorzystania procesora."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:43
+msgid "lucistatistics_collectdcpu_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. CSV Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:44
-msgid "CSV Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdcsv"
+msgstr "Konfiguracja wtyczki CSV"
 
 #. The csv plugin stores collected data in csv file format for further processing by external programs.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:45
-msgid ""
-"The csv plugin stores collected data in csv file format for further "
-"processing by external programs."
+msgid "lucistatistics_collectdcsv_desc"
 msgstr ""
+"Wtyczka CSV przechowuje zebrane dane w formacie pliku csv do dalszego "
+"przetwarzania przez zewnętrzne programy."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:46
+msgid "lucistatistics_collectdcsv_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Storage directory for the csv files
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:47
-msgid "Storage directory for the csv files"
-msgstr ""
+msgid "lucistatistics_collectdcsv_datadir"
+msgstr "Katalog do przechowywania plików csv"
 
 #. Store data values as rates instead of absolute values
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:48
-msgid "Store data values as rates instead of absolute values"
+msgid "lucistatistics_collectdcsv_storerates"
 msgstr ""
+"Przechowuj wartości danych jako wskaźniki zamiast wartości bezwzględnych"
 
 #. DF Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:49
-msgid "DF Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectddf"
+msgstr "Konfiguracja wtyczki DF"
 
 #. The df plugin collects statistics about the disk space usage on different devices, mount points or filesystem types.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:50
-msgid ""
-"The df plugin collects statistics about the disk space usage on different "
-"devices, mount points or filesystem types."
+msgid "lucistatistics_collectddf_desc"
 msgstr ""
+"Wtyczka DF zbiera statystyki na temat: wykorzystania przestrzeni dyskowej na "
+"różnych urządzeniach, punktach montowania oraz typach plików systemowych."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:51
+msgid "lucistatistics_collectddf_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Monitor devices
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:52
-msgid "Monitor devices"
-msgstr ""
+msgid "lucistatistics_collectddf_devices"
+msgstr "Monitoruj urządzenia"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:53
+msgid "lucistatistics_collectddf_devices_desc"
+msgstr "kilka oddzielone spacją"
 
 #. Monitor mount points
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:54
-msgid "Monitor mount points"
-msgstr ""
+msgid "lucistatistics_collectddf_mountpoints"
+msgstr "Monitoruj punkty montowania"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:55
+msgid "lucistatistics_collectddf_mountpoints_desc"
+msgstr "kilka oddzielone spacją"
 
 #. Monitor filesystem types
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:56
-msgid "Monitor filesystem types"
-msgstr ""
+msgid "lucistatistics_collectddf_fstypes"
+msgstr "Monitoruj typy plików systemowych"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:57
+msgid "lucistatistics_collectddf_fstypes_desc"
+msgstr "kilka oddzielone spacją"
+
+#. Monitor all except selected ones
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:58
+msgid "lucistatistics_collectddf_ignoreselected"
+msgstr "Monitoruj wszystko poza zaznaczonymi"
 
 #. Disk Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:59
-msgid "Disk Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectddisk"
+msgstr "Konfiguracja wtyczki dysk"
 
 #. The disk plugin collects detailled usage statistics for selected partitions or whole disks.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:60
-msgid ""
-"The disk plugin collects detailled usage statistics for selected partitions "
-"or whole disks."
+msgid "lucistatistics_collectddisk_desc"
 msgstr ""
+"Wtyczka dysk zbiera szczegółowe statystyki wykorzystania wybranych partycji "
+"lub całych dysków."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:61
+msgid "lucistatistics_collectddisk_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Monitor disks and partitions
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:62
-msgid "Monitor disks and partitions"
-msgstr ""
+msgid "lucistatistics_collectddisk_disks"
+msgstr "Monitoruj dyski i partycje"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:63
+msgid "lucistatistics_collectddisk_disks_desc"
+msgstr "kilka oddzielone spacją"
+
+#. Monitor all except selected ones
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:64
+msgid "lucistatistics_collectddisk_ignoreselected"
+msgstr "Monitoruj wszystko poza zaznaczonymi"
 
 #. DNS Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:65
-msgid "DNS Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectddns"
+msgstr "Konfiguracja wtyczki DNS"
 
 #. The dns plugin collects detailled statistics about dns related traffic on selected interfaces.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:66
-msgid ""
-"The dns plugin collects detailled statistics about dns related traffic on "
-"selected interfaces."
+msgid "lucistatistics_collectddns_desc"
 msgstr ""
+"Wtyczka DNS zbiera szczegółowe statystyki dotyczące ruchu związanego z DNS "
+"na wybranych interfejsach."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:67
+msgid "lucistatistics_collectddns_enable"
+msgstr "Włącz tę wtyczkę"
+
+#. Monitor interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:68
+msgid "lucistatistics_collectddns_interfaces"
+msgstr "Monitoruj interfejsy"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:69
+msgid "lucistatistics_collectddns_interfaces_desc"
+msgstr "kilka oddzielone spacją"
 
 #. Ignore source addresses
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:70
-msgid "Ignore source addresses"
-msgstr ""
+msgid "lucistatistics_collectddns_ignoresources"
+msgstr "Ignoruj adresy źródłowe"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:71
+msgid "lucistatistics_collectddns_ignoresources_desc"
+msgstr "aby zaznaczyć kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
 
 #. E-Mail Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:72
-msgid "E-Mail Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdemail"
+msgstr "Konfiguracja wtyczki E-Mail"
 
 #. The email plugin creates a unix socket which can be used to transmit email-statistics to a running collectd daemon. This plugin is primarily intended to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can be used in other ways as well.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:73
-msgid ""
-"The email plugin creates a unix socket which can be used to transmit email-"
-"statistics to a running collectd daemon. This plugin is primarily intended "
-"to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can "
-"be used in other ways as well."
+msgid "lucistatistics_collectdemail_desc"
 msgstr ""
+"Wtyczka e-mail tworzy unix socket, który może być użyty do przesyłania "
+"statystyk e-mail do działającego demona collectd. Wtyczka ta jest "
+"przeznaczona przede wszystkim do stosowania w połączeniu z "
+"Mail::SpamAssasin::Plugin::Collectd, ale może być również wykorzystana w "
+"inny sposób."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:74
+msgid "lucistatistics_collectdemail_enable"
+msgstr "Włącz tę wtyczkę"
+
+#. Filepath of the unix socket
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:75
+msgid "lucistatistics_collectdemail_socketfile"
+msgstr "Ścieżka pliku unix socket"
+
+#. Group ownership of the unix socket
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:76
+msgid "lucistatistics_collectdemail_socketgroup"
+msgstr "Własność grupy unix socket"
+
+#. group name
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:77
+msgid "lucistatistics_collectdemail_socketgroup_desc"
+msgstr "nazwa grupy"
+
+#. File permissions of the unix socket
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:78
+msgid "lucistatistics_collectdemail_socketperms"
+msgstr "Uprawnienia plików unix socket"
+
+#. octal
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:79
+msgid "lucistatistics_collectdemail_socketperms_desc"
+msgstr "ósemkowy"
 
 #. Maximum allowed connections
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:80
-msgid "Maximum allowed connections"
-msgstr ""
+msgid "lucistatistics_collectdemail_maxconns"
+msgstr "Maksymalna dozwolona liczba połączeń"
 
 #. Exec Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:81
-msgid "Exec Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdexec"
+msgstr "Konfiguracja wtyczki Exec"
 
 #. The exec plugin starts external commands to read values from or to notify external processes when certain threshold values have been reached.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:82
-msgid ""
-"The exec plugin starts external commands to read values from or to notify "
-"external processes when certain threshold values have been reached."
+msgid "lucistatistics_collectdexec_desc"
 msgstr ""
+"Wtyczka Exec, gdy niektóre wartości progowe zostaną osiągnięte, uruchamia "
+"zewnętrzne komendy do odczytu wartości lub do powiadomienia zewnętrznych "
+"procesów."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:83
+msgid "lucistatistics_collectdexec_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Add command for reading values
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:84
-msgid "Add command for reading values"
-msgstr ""
+msgid "lucistatistics_collectdexecinput"
+msgstr "Dodaj komendę do odczytu wartości"
 
 #. Here you can define external commands which will be started by collectd in order to read certain values. The values will be read from stdout.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:85
-msgid ""
-"Here you can define external commands which will be started by collectd in "
-"order to read certain values. The values will be read from stdout."
+msgid "lucistatistics_collectdexecinput_desc"
 msgstr ""
+"Tutaj możesz zdefiniować zewnętrzne komendy, które będą uruchomione przez "
+"Collectd w celu odczytania określonych wartości. Wartości będą odczytywane z "
+"stdout."
+
+#. Commandline
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:86
+msgid "lucistatistics_collectdexecinput_cmdline"
+msgstr "Linia komend"
+
+#. Run as user
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:87
+msgid "lucistatistics_collectdexecinput_cmduser"
+msgstr "Uruchom jako użytkownik"
+
+#. Run as group
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:88
+msgid "lucistatistics_collectdexecinput_cmdgroup"
+msgstr "Uruchom jako grupa"
 
 #. Add notification command
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:89
-msgid "Add notification command"
-msgstr ""
+msgid "lucistatistics_collectdexecnotify"
+msgstr "Dodaj polecenie powiadamiania"
 
 #. Here you can define external commands which will be started by collectd when certain threshold values have been reached. The values leading to invokation will be feeded to the the called programs stdin.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:90
-msgid ""
-"Here you can define external commands which will be started by collectd when "
-"certain threshold values have been reached. The values leading to invokation "
-"will be feeded to the the called programs stdin."
+msgid "lucistatistics_collectdexecnotify_desc"
 msgstr ""
+"Tutaj można zdefiniować zewnętrzne komendy, które zostaną uruchomione przez "
+"Collectd, gdy zostaną osiągnięte określone wartości progowe. Wartości "
+"prowadzące do wywołania zostaną wysłane do standardowego strumienia wejścia "
+"(stdin) wywołującego programu."
+
+#. Commandline
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:91
+msgid "lucistatistics_collectdexecnotify_cmdline"
+msgstr "Linia komend"
+
+#. Run as user
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:92
+msgid "lucistatistics_collectdexecnotify_cmduser"
+msgstr "Uruchom jako użytkownik"
+
+#. Run as group
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:93
+msgid "lucistatistics_collectdexecnotify_cmdgroup"
+msgstr "Uruchom jako grupa"
 
 #. Interface Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:94
-msgid "Interface Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdinterface"
+msgstr "Konfiguracja wtyczki interfejs"
 
 #. The interface plugin collects traffic statistics on selected interfaces.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:95
-msgid ""
-"The interface plugin collects traffic statistics on selected interfaces."
-msgstr ""
+msgid "lucistatistics_collectdinterface_desc"
+msgstr "Wtyczka interfejs zbiera statystyki ruchu na wybranych interfejsach."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:96
+msgid "lucistatistics_collectdinterface_enable"
+msgstr "Włącz tę wtyczkę"
+
+#. Monitor interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:97
+msgid "lucistatistics_collectdinterface_interfaces"
+msgstr "Monitoruj interfejsy"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:98
+msgid "lucistatistics_collectdinterface_interfaces_desc"
+msgstr "aby wybrać kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
+
+#. Monitor all except selected ones
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:99
+msgid "lucistatistics_collectdinterface_ignoreselected"
+msgstr "Monitoruj wszystkie poza zaznaczonymi"
 
 #. Iptables Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:100
-msgid "Iptables Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdiptables"
+msgstr "Konfiguracja wtyczki iptables"
 
 #. The iptables plugin will monitor selected firewall rules and collect informations about processed bytes and packets per rule.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:101
-msgid ""
-"The iptables plugin will monitor selected firewall rules and collect "
-"informations about processed bytes and packets per rule."
+msgid "lucistatistics_collectdiptables_desc"
 msgstr ""
+"Wtyczka iptables monitoruje wybrane reguły zapory oraz zbiera informacje na "
+"temat przetworzonych bajtów i pakietów dla danej reguły."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:102
+msgid "lucistatistics_collectdiptables_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Add matching rule
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:103
-msgid "Add matching rule"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch"
+msgstr "Dodaj pasującą regułę"
 
 #. Here you can define various criteria by which the monitored iptables rules are selected.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:104
-msgid ""
-"Here you can define various criteria by which the monitored iptables rules "
-"are selected."
+msgid "lucistatistics_collectdiptablesmatch_desc"
 msgstr ""
+"Tutaj można zdefiniować różne kryteria, według których wybierane są "
+"monitorowane reguły iptables."
 
 #. Name of the rule
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:105
-msgid "Name of the rule"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_name"
+msgstr "Nazwa reguły"
 
 #. max. 16 chars
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:106
-msgid "max. 16 chars"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_name_desc"
+msgstr "maks. 16 znaków"
 
 #. Table
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:107
-msgid "Table"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_table"
+msgstr "Tabela"
 
 #. Chain
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:108
-msgid "Chain"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_chain"
+msgstr "Łańcuch"
 
 #. Action (target)
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:109
-msgid "Action (target)"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_target"
+msgstr "Działanie (cel)"
 
 #. Network protocol
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:110
-msgid "Network protocol"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_protocol"
+msgstr "Protokół sieciowy"
 
 #. Source ip range
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:111
-msgid "Source ip range"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_source"
+msgstr "Zakres ip źródłowego"
+
+#. CIDR notation
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:112
+msgid "lucistatistics_collectdiptablesmatch_source_desc"
+msgstr "Notacja CIDR"
 
 #. Destination ip range
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:113
-msgid "Destination ip range"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_destination"
+msgstr "Zakres ip docelowego"
+
+#. CIDR notation
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:114
+msgid "lucistatistics_collectdiptablesmatch_destination_desc"
+msgstr "Notacja CIDR"
 
 #. Incoming interface
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:115
-msgid "Incoming interface"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_inputif"
+msgstr "Interfejs przychodzący"
 
 #. e.g. br-lan
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:116
-msgid "e.g. br-lan"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_inputif_desc"
+msgstr "np. br-lan"
 
 #. Outgoing interface
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:117
-msgid "Outgoing interface"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_outputif"
+msgstr "Interfejs wychodzący"
 
 #. e.g. br-ff
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:118
-msgid "e.g. br-ff"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_outputif_desc"
+msgstr "np. br-ff"
 
 #. Options
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:119
-msgid "Options"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_options"
+msgstr "Opcje"
 
 #. e.g. reject-with tcp-reset
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:120
-msgid "e.g. reject-with tcp-reset"
-msgstr ""
+msgid "lucistatistics_collectdiptablesmatch_options_desc"
+msgstr "np. reject-with tcp-reset"
 
 #. IRQ Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:121
-msgid "IRQ Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdirq"
+msgstr "Konfiguracja wtyczki IRQ"
 
 #. The irq plugin will monitor the rate of issues per second for each selected interrupt. If no interrupt is selected then all interrupts are monitored.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:122
-msgid ""
-"The irq plugin will monitor the rate of issues per second for each selected "
-"interrupt. If no interrupt is selected then all interrupts are monitored."
+#, fuzzy
+msgid "lucistatistics_collectdirq_desc"
 msgstr ""
+"Wtyczka irq monitoruje ###the rate of issues### na sekundę dla każdego z "
+"wybranych przerwania. Jeśli nie jest zaznaczone żadne przerwanie, wszystkie "
+"przerwania są monitorowane."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:123
+msgid "lucistatistics_collectdirq_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Monitor interrupts
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:124
-msgid "Monitor interrupts"
-msgstr ""
+msgid "lucistatistics_collectdirq_irqs"
+msgstr "Monitoruj przerwania"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:125
+msgid "lucistatistics_collectdirq_irqs_desc"
+msgstr "kilka oddzielone spacją"
+
+#. Monitor all except selected ones
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:126
+msgid "lucistatistics_collectdirq_ignoreselected"
+msgstr "Monitoruj wszystko poza zaznaczonymi"
 
 #. Load Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:127
-msgid "Load Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdload"
+msgstr "Konfiguracja wtyczki obciążenie"
 
 #. The load plugin collects statistics about the general system load.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:128
-msgid "The load plugin collects statistics about the general system load."
+msgid "lucistatistics_collectdload_desc"
 msgstr ""
+"Wtyczka obciążenie zbiera statystyki na temat ogólnego obciążenia systemu."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:129
+msgid "lucistatistics_collectdload_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Netlink Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:130
-msgid "Netlink Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdnetlink"
+msgstr "Konfiguracja wtyczki netlink"
 
 #. The netlink plugin collects extended informations like qdisc-, class- and filter-statistics for selected interfaces.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:131
-msgid ""
-"The netlink plugin collects extended informations like qdisc-, class- and "
-"filter-statistics for selected interfaces."
+msgid "lucistatistics_collectdnetlink_desc"
 msgstr ""
+"Wtyczka netlink zbiera informacje w szerokim zakresie, takie jak statystyki "
+"qdisc-, class- i filter- dla wybranych interfejsów."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:132
+msgid "lucistatistics_collectdnetlink_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Basic monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:133
-msgid "Basic monitoring"
-msgstr ""
+msgid "lucistatistics_collectdnetlink_interfaces"
+msgstr "Monitorowanie podstawowe"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:134
+msgid "lucistatistics_collectdnetlink_interfaces_desc"
+msgstr "aby zaznaczyć kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
 
 #. Verbose monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:135
-msgid "Verbose monitoring"
-msgstr ""
+msgid "lucistatistics_collectdnetlink_verboseinterfaces"
+msgstr "Monitorowanie pełne"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:136
+msgid "lucistatistics_collectdnetlink_verboseinterfaces_desc"
+msgstr "aby zaznaczyć kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
 
 #. Qdisc monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:137
-msgid "Qdisc monitoring"
-msgstr ""
+msgid "lucistatistics_collectdnetlink_qdiscs"
+msgstr "Monitorowanie qdisk"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:138
+msgid "lucistatistics_collectdnetlink_qdiscs_desc"
+msgstr "aby zaznaczyć kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
 
 #. Shaping class monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:139
-msgid "Shaping class monitoring"
-msgstr ""
+msgid "lucistatistics_collectdnetlink_classes"
+msgstr "Monitorowanie klas kształtujących"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:140
+msgid "lucistatistics_collectdnetlink_classes_desc"
+msgstr "aby zaznaczyć kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
 
 #. Filter class monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:141
-msgid "Filter class monitoring"
-msgstr ""
+msgid "lucistatistics_collectdnetlink_filters"
+msgstr "Monitorowanie klas filtrujących"
+
+#. hold Ctrl while clicking to select multiple interfaces
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:142
+msgid "lucistatistics_collectdnetlink_filters_desc"
+msgstr "aby zaznaczyć kilka interfejsów, klikając przytrzymaj klawisz Ctrl"
+
+#. Monitor all except selected ones
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:143
+msgid "lucistatistics_collectdnetlink_ignoreselected"
+msgstr "Monitoruj wszystko poza zaznaczonymi"
 
 #. Network Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:144
-msgid "Network Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdnetwork"
+msgstr "Konfiguracja wtyczki sieć"
 
 #. The network plugin provides network based communication between different collectd instances. Collectd can operate both in client and server mode. In client mode locally collected date is transferred to a collectd server instance, in server mode the local instance receives data from other hosts.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:145
-msgid ""
-"The network plugin provides network based communication between different "
-"collectd instances. Collectd can operate both in client and server mode. In "
-"client mode locally collected date is transferred to a collectd server "
-"instance, in server mode the local instance receives data from other hosts."
+msgid "lucistatistics_collectdnetwork_desc"
 msgstr ""
+"Wtyczka sieć umożliwia komunikację bazującą na sieci pomiędzy różnymi "
+"instancjami collectd. Collectd może pracować zarówno w trybie serwera, jak i "
+"klienta. W trybie klienta lokalnie zebrane dane przekazywane są do "
+"instancji collectd pracującej w trybie serwera. W trybie serwera lokalna "
+"instancja odbiera dane z innych hostów."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:146
+msgid "lucistatistics_collectdnetwork_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Listener interfaces
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:147
-msgid "Listener interfaces"
-msgstr ""
+msgid "lucistatistics_collectdnetworklisten"
+msgstr "Nasłuchujące interfejsy"
 
 #. This section defines on which interfaces collectd will wait for incoming connections.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:148
-msgid ""
-"This section defines on which interfaces collectd will wait for incoming "
-"connections."
+msgid "lucistatistics_collectdnetworklisten_desc"
 msgstr ""
+"Sekcja ta określa interfejsy, na których collectd będzie czekał na "
+"połączenia przychodzące."
 
 #. Listen host
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:149
-msgid "Listen host"
-msgstr ""
+msgid "lucistatistics_collectdnetworklisten_host"
+msgstr "Nasłuchujący host"
 
+#. host-, ip- or ip6 address
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:150
+msgid "lucistatistics_collectdnetworklisten_host_desc"
+msgstr "adres hosta, ip lub ip6"
+
+# Nasłuchiwane porty
 #. Listen port
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:151
-msgid "Listen port"
-msgstr ""
+msgid "lucistatistics_collectdnetworklisten_port"
+msgstr "Nasłuchujący port"
+
+#. 0 - 65535
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:152
+msgid "lucistatistics_collectdnetworklisten_port_desc"
+msgstr "0 - 65535"
 
 #. server interfaces
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:153
-msgid "server interfaces"
-msgstr ""
+msgid "lucistatistics_collectdnetworkserver"
+msgstr "interfejsy serwera"
 
 #. This section defines to which servers the locally collected data is sent to.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:154
-msgid ""
-"This section defines to which servers the locally collected data is sent to."
+msgid "lucistatistics_collectdnetworkserver_desc"
 msgstr ""
+"Sekcja ta określa do którego z serwerów wysyłane są lokalnie zebrane dane."
 
 #. Server host
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:155
-msgid "Server host"
-msgstr ""
+msgid "lucistatistics_collectdnetworkserver_host"
+msgstr "Host serwera"
+
+#. host-, ip- or ip6 address
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:156
+msgid "lucistatistics_collectdnetworkserver_host_desc"
+msgstr "adres hosta, ip lub ip6"
 
 #. Server port
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:157
-msgid "Server port"
-msgstr ""
+msgid "lucistatistics_collectdnetworkserver_port"
+msgstr "Port serwera"
+
+#. 0 - 65535
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:158
+msgid "lucistatistics_collectdnetworkserver_port_desc"
+msgstr "0 - 65535"
 
 #. TTL for network packets
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:159
-msgid "TTL for network packets"
-msgstr ""
+msgid "lucistatistics_collectdnetwork_timetolive"
+msgstr "TTL dla pakietów sieciowych"
+
+#. 0 - 255
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:160
+msgid "lucistatistics_collectdnetwork_timetolive_desc"
+msgstr "0 - 255"
 
 #. Forwarding between listen and server addresses
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:161
-msgid "Forwarding between listen and server addresses"
-msgstr ""
+msgid "lucistatistics_collectdnetwork_forward"
+msgstr "Przekazywanie pomiędzy adresami nasłuchiwanym i serwera"
 
 #. Cache flush interval
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:162
-msgid "Cache flush interval"
-msgstr ""
+msgid "lucistatistics_collectdnetwork_cacheflush"
+msgstr "Interwał czyszczenia pamięci cache"
+
+#. seconds
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:163
+msgid "lucistatistics_collectdnetwork_cacheflush_desc"
+msgstr "sekundy"
 
 #. Ping Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:164
-msgid "Ping Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdping"
+msgstr "Konfiguracja wtyczki ping"
 
 #. The ping plugin will send icmp echo replies to selected hosts and measure the roundtrip time for each host.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:165
-msgid ""
-"The ping plugin will send icmp echo replies to selected hosts and measure "
-"the roundtrip time for each host."
+msgid "lucistatistics_collectdping_desc"
 msgstr ""
+"Wtyczka ping wysyła zapytania icmp echo do określonych hostów i mierzy czas "
+"dla każdego z nich."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:166
+msgid "lucistatistics_collectdping_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Monitor hosts
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:167
-msgid "Monitor hosts"
-msgstr ""
+msgid "lucistatistics_collectdping_hosts"
+msgstr "Monitoruj hosty"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:168
+msgid "lucistatistics_collectdping_hosts_desc"
+msgstr "kilka oddzielone spacją"
 
 #. TTL for ping packets
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:169
-msgid "TTL for ping packets"
-msgstr ""
+msgid "lucistatistics_collectdping_ttl"
+msgstr "TTL dla pakietów ping"
+
+#. 0 - 255
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:170
+msgid "lucistatistics_collectdping_ttl_desc"
+msgstr "0 - 255"
 
 #. Processes Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:171
-msgid "Processes Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdprocesses"
+msgstr "Konfiguracja wtyczki procesy"
 
 #. The processes plugin collects informations like cpu time, page faults and memory usage of selected processes.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:172
-msgid ""
-"The processes plugin collects informations like cpu time, page faults and "
-"memory usage of selected processes."
+msgid "lucistatistics_collectdprocesses_desc"
 msgstr ""
+"Wtyczka procesy zbiera informacje takie jak: czas procesora, błędy strony "
+"oraz użycie pamięci dla wybranych procesów."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:173
+msgid "lucistatistics_collectdprocesses_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Monitor processes
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:174
-msgid "Monitor processes"
-msgstr ""
+msgid "lucistatistics_collectdprocesses_processes"
+msgstr "Monitoruj procesy"
+
+#. multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:175
+msgid "lucistatistics_collectdprocesses_processes_desc"
+msgstr "kilka oddzielone spacją"
 
 #. RRDTool Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:176
-msgid "RRDTool Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool"
+msgstr "Konfiguracja wtyczki RRDTool"
 
 #. The rrdtool plugin stores the collected data in rrd database files, the foundation of the diagrams.<br /><br /><strong>Warning: Setting the wrong values will result in a very high memory consumption in the temporary directory. This can render the device unusable!</strong>
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:177
-msgid ""
-"The rrdtool plugin stores the collected data in rrd database files, the "
-"foundation of the diagrams.<br /><br /><strong>Warning: Setting the wrong "
-"values will result in a very high memory consumption in the temporary "
-"directory. This can render the device unusable!</strong>"
+msgid "lucistatistics_collectdrrdtool_desc"
 msgstr ""
+"Wtyczka rrdtool przechowuje zebrane dane w plikach bazy danych rrd, które są "
+"podstawą do tworzenia wykresów.<br /><br /><strong>Uwaga: Ustawienie "
+"niewłaściwych wartości może spowodować bardzo duże zużycie pamięci w "
+"katalogu tymczasowym. Z tego powodu urządzenie może nie nadawać się do "
+"użytku!</strong>"
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:178
+msgid "lucistatistics_collectdrrdtool_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Storage directory
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:179
-msgid "Storage directory"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_datadir"
+msgstr "Katalog przechowywania"
 
 #. RRD step interval
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:180
-msgid "RRD step interval"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_stepsize"
+msgstr "Odstęp pomiędzy krokami RRD"
+
+#. seconds
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:181
+msgid "lucistatistics_collectdrrdtool_stepsize_desc"
+msgstr "sekundy"
 
 #. RRD heart beat interval
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:182
-msgid "RRD heart beat interval"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_heartbeat"
+msgstr "Odstęp RRD heart beat"
+
+#. seconds
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:183
+msgid "lucistatistics_collectdrrdtool_heartbeat_desc"
+msgstr "sekundy"
 
 #. Only create average RRAs
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:184
-msgid "Only create average RRAs"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_rrasingle"
+msgstr "Twórz tylko średnie <abbr title=\"Round Robin Archives\">RRA</abbr>"
 
 #. reduces rrd size
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:185
-msgid "reduces rrd size"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_rrasingle_desc"
+msgstr "zmniejsza rozmiar <abbr title=\"Round Robin Database\">rrd</abbr>"
 
 #. Stored timespans
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:186
-msgid "Stored timespans"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_rratimespans"
+msgstr "Zapisane przedziały czasowe"
 
 #. seconds; multiple separated by space
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:187
-msgid "seconds; multiple separated by space"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_rratimespans_desc"
+msgstr "sekundy; kilka oddzielone spacją"
 
 #. Rows per RRA
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:188
-msgid "Rows per RRA"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_rrarows"
+msgstr "Liczba wierszy na <abbr title=\"Round Robin Archives\">RRA</abbr>"
 
 #. RRD XFiles Factor
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:189
-msgid "RRD XFiles Factor"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_xff"
+msgstr "RRD XFiles Factor"
 
 #. Cache collected data for
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:190
-msgid "Cache collected data for"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_cachetimeout"
+msgstr "Zapisuj w pamięci cache zebrane dane dla"
+
+#. seconds
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:191
+msgid "lucistatistics_collectdrrdtool_cachetimeout_desc"
+msgstr "sekundy"
 
 #. Flush cache after
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:192
-msgid "Flush cache after"
-msgstr ""
+msgid "lucistatistics_collectdrrdtool_cacheflush"
+msgstr "Wyczyść pamięć cache po"
+
+#. seconds
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:193
+msgid "lucistatistics_collectdrrdtool_cacheflush_desc"
+msgstr "sekundy"
 
 #. TCPConns Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:194
-msgid "TCPConns Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdtcpconns"
+msgstr "Konfiguracja wtyczki TCPConns"
 
 #. The tcpconns plugin collects informations about open tcp connections on selected ports.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:195
-msgid ""
-"The tcpconns plugin collects informations about open tcp connections on "
-"selected ports."
+msgid "lucistatistics_collectdtcpconns_desc"
 msgstr ""
+"Wtyczka tcpconns zbiera informacje na temat otwartych połączeń TCP na "
+"wybranych portach."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:196
+msgid "lucistatistics_collectdtcpconns_enable"
+msgstr "Włącz tę wtyczkę"
 
 #. Monitor all local listen ports
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:197
-msgid "Monitor all local listen ports"
-msgstr ""
+msgid "lucistatistics_collectdtcpconns_listeningports"
+msgstr "Monitoruj wszystkie nasłuchujące porty"
 
 #. Monitor local ports
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:198
-msgid "Monitor local ports"
-msgstr ""
+msgid "lucistatistics_collectdtcpconns_localports"
+msgstr "Monitoruj porty lokalne"
+
+#. 0 - 65535; multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:199
+msgid "lucistatistics_collectdtcpconns_localports_desc"
+msgstr "0 - 65535; kilka oddzielone spacją"
 
 #. Monitor remote ports
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:200
-msgid "Monitor remote ports"
-msgstr ""
+msgid "lucistatistics_collectdtcpconns_remoteports"
+msgstr "Monitoruj porty zdalne"
+
+#. 0 - 65535; multiple separated by space
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:201
+msgid "lucistatistics_collectdtcpconns_remoteports_desc"
+msgstr "0 - 65535; kilka oddzielone spacją"
 
 #. Unixsock Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:202
-msgid "Unixsock Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdunixsock"
+msgstr "Konfiguracja wtyczki Unixsock"
 
 #. The unixsock plugin creates a unix socket which can be used to read collected data from a running collectd instance.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:203
-msgid ""
-"The unixsock plugin creates a unix socket which can be used to read "
-"collected data from a running collectd instance."
+msgid "lucistatistics_collectdunixsock_desc"
 msgstr ""
+"Wtyczka unixsock tworzy unix socket, który będzie wykorzystywany do odczytu "
+"zgromadzonych danych z działającej instancji collectd."
+
+#. Enable this plugin
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:204
+msgid "lucistatistics_collectdunixsock_enable"
+msgstr "Włącz tę wtyczkę"
+
+#. Filepath of the unix socket
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:205
+msgid "lucistatistics_collectdunixsock_socketfile"
+msgstr "Ścieżka plików dla unix socket"
+
+#. Group ownership of the unix socket
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:206
+msgid "lucistatistics_collectdunixsock_socketgroup"
+msgstr "Własność grupy dla unix socket"
+
+#. group name
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:207
+msgid "lucistatistics_collectdunixsock_socketgroup_desc"
+msgstr "nazwa grupy"
+
+#. File permissions of the unix socket
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:208
+msgid "lucistatistics_collectdunixsock_socketperms"
+msgstr "Uprawnienia pliku dla unix socket"
+
+#. octal
+#: applications/luci-statistics/luasrc/i18n/statistics.en.lua:209
+msgid "lucistatistics_collectdunixsock_socketperms_desc"
+msgstr "ósemkowy"
 
 #. Wireless Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:210
-msgid "Wireless Plugin Configuration"
-msgstr ""
+msgid "lucistatistics_collectdwireless"
+msgstr "Konfiguracja wtyczki sieć bezprzewodowa"
 
 #. The wireless plugin collects statistics about wireless signal strength, noise and quality.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:211
-msgid ""
-"The wireless plugin collects statistics about wireless signal strength, "
-"noise and quality."
+msgid "lucistatistics_collectdwireless_desc"
 msgstr ""
+"Wtyczka sieć bezprzewodowa zbiera statystyki na temat mocy sygnału sieci "
+"bezprzewodowej, zakłóceniach i jakości."
 
 #. Enable this plugin
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:212
-msgid "Enable this plugin"
-msgstr ""
+msgid "lucistatistics_collectdwireless_enable"
+msgstr "Włącz tę wtyczkę"
