@@ -400,6 +400,9 @@ $(eval $(call application,vnstat,LuCI Support for VnStat,\
 $(eval $(call application,radvd,LuCI Support for Radvd,\
 	+luci-mod-admin-full +PACKAGE_luci-app-radvd:radvd))
 
+$(eval $(call application,ahcp,LuCI Support for AHCPd,\
+	+luci-mod-admin-full +PACKAGE_luci-app-ahcp:ahcpd))
+
 $(eval $(call application,lqtapifoss,Lantiq voip))
 
 ### Server Gateway Interfaces ###
