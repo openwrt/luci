@@ -33,6 +33,7 @@ local has_ipv6   = fs.access("/proc/net/ipv6_route")
 local has_6in4   = fs.access("/lib/network/6in4.sh")
 local has_6to4   = fs.access("/lib/network/6to4.sh")
 local has_relay  = fs.access("/lib/network/relay.sh")
+local has_ahcp   = fs.access("/lib/network/ahcp.sh")
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("wireless")
@@ -68,6 +69,7 @@ if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
 if has_pppoa then s:tab("atm", translate("ATM Settings")) end
 if has_6in4 or has_6to4 then s:tab("tunnel", translate("Tunnel Settings")) end
 if has_relay then s:tab("relay", translate("Relay Settings")) end
+if has_ahcp then s:tab("ahcp", translate("AHCP Settings")) end
 s:tab("physical", translate("Physical Settings"))
 if has_firewall then s:tab("firewall", translate("Firewall Settings")) end
 
@@ -94,6 +96,7 @@ if has_pptp  then p:value("pptp",  "PPTP")    end
 if has_6in4  then p:value("6in4",  "6in4")    end
 if has_6to4  then p:value("6to4",  "6to4")    end
 if has_relay then p:value("relay", "Relay")   end
+if has_ahcp  then p:value("ahcp",  "AHCP")    end
 p:value("none", translate("none"))
 
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
@@ -122,6 +125,7 @@ ifname_single:depends({ type = "", proto = "static" })
 ifname_single:depends({ type = "", proto = "dhcp"   })
 ifname_single:depends({ type = "", proto = "pppoe"  })
 ifname_single:depends({ type = "", proto = "pppoa"  })
+ifname_single:depends({ type = "", proto = "ahcp"   })
 ifname_single:depends({ type = "", proto = "none"   })
 
 function ifname_single.cfgvalue(self, s)
@@ -541,6 +545,64 @@ if has_relay then
 	table:depends("proto", "relay")
 end
 
+if has_ahcp then
+	mca = s:taboption("ahcp", Value, "multicast_address", translate("Multicast address"))
+	mca.optional    = true
+	mca.placeholder = "ff02::cca6:c0f9:e182:5359"
+	mca.datatype    = "ip6addr"
+	mca:depends("proto", "ahcp")
+
+	port = s:taboption("ahcp", Value, "port", translate("Port"))
+	port.optional    = true
+	port.placeholder = 5359
+	port.datatype    = "port"
+	port:depends("proto", "ahcp")
+
+	fam = s:taboption("ahcp", ListValue, "_family", translate("Protocol family"))
+	fam:value("", translate("IPv4 and IPv6"))
+	fam:value("ipv4", translate("IPv4 only"))
+	fam:value("ipv6", translate("IPv6 only"))
+	fam:depends("proto", "ahcp")
+
+	function fam.cfgvalue(self, section)
+		local v4 = m.uci:get_bool("network", section, "ipv4_only")
+		local v6 = m.uci:get_bool("network", section, "ipv6_only")
+		if v4 then
+			return "ipv4"
+		elseif v6 then
+			return "ipv6"
+		end
+		return ""
+	end
+
+	function fam.write(self, section, value)
+		if value == "ipv4" then
+			m.uci:set("network", section, "ipv4_only", "true")
+			m.uci:delete("network", section, "ipv6_only")
+		elseif value == "ipv6" then
+			m.uci:set("network", section, "ipv6_only", "true")
+			m.uci:delete("network", section, "ipv4_only")
+		end
+	end
+
+	function fam.remove(self, section)
+		m.uci:delete("network", section, "ipv4_only")
+		m.uci:delete("network", section, "ipv6_only")
+	end
+
+	nodns = s:taboption("ahcp", Flag, "no_dns", translate("Disable DNS setup"))
+	nodns.optional = true
+	nodns.enabled  = "true"
+	nodns.disabled = "false"
+	nodns.default  = nodns.disabled
+	nodns:depends("proto", "ahcp")
+
+	ltime = s:taboption("ahcp", Value, "lease_time", translate("Lease validity time"))
+	ltime.optional    = true
+	ltime.placeholder = 3666
+	ltime.datatype    = "uinteger"
+	ltime:depends("proto", "ahcp")
+end
 
 if net:proto() ~= "relay" then
 	s2 = m:section(TypedSection, "alias", translate("IP-Aliases"))

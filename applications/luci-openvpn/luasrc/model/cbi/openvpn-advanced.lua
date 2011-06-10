@@ -58,6 +58,7 @@ local knownParams = {
 		{ Flag,			"client_disconnect",		0 },
 		{ Value,		"learn_address",			"/usr/bin/ovpn-learnaddress" },
 		{ Value,		"auth_user_pass_verify",	"/usr/bin/ovpn-userpass via-env" },
+		{ ListValue,		"script_security",		{ 0, 1, 2, 3 }, {mode="server" } },
 	} },
 
 	{ "networking", {
@@ -115,6 +116,7 @@ local knownParams = {
 		{ Flag,			"management_query_passwords",	0 },	-- management
 		{ Flag,			"management_hold",		0 },	-- management
 		{ Flag,			"management_log_cache",		100 },	-- management
+		{ ListValue,		"topology",			{ "net30", "p2p", "subnet" }, {dev_type="tun" } },
 	} },
 
 	{ "vpn", {
