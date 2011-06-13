@@ -43,8 +43,7 @@ XHR = function()
 		var xhr  = this._xmlHttp;
 		var code = this._encode( data );
 
-		url = location.protocol + '//' + (location.host || location.hostname) +
-			( location.port ? ':' + location.port : '' ) + url;
+		url = location.protocol + '//' + location.host + url;
 
 		if( code )
 			if( url.substr(url.length-1,1) == '&' )
