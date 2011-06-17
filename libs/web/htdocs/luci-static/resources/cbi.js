@@ -2,7 +2,7 @@
 	LuCI - Lua Configuration Interface
 
 	Copyright 2008 Steven Barth <steven@midlink.org>
-	Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
+	Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -153,6 +153,8 @@ var cbi_validators = {
 	'hostname': function(v)
 	{	if ( v.length <= 253 )
 			return (v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) != null);
+
+		return false;
 	},
 
 	'wpakey': function(v)
@@ -179,6 +181,12 @@ var cbi_validators = {
 		return (v.match(/^[a-zA-Z0-9_]+$/) != null);
 	},
 
+	'neg_network_ip4addr': function(v)
+	{
+		v = v.replace(/^\s*!/, "");
+		return cbi_validators.uciname(v) || cbi_validators.ip4addr(v);		
+	},
+
 	'range': function(v, args)
 	{
 		var min = parseInt(args[0]);
@@ -187,6 +195,28 @@ var cbi_validators = {
 
 		if (!isNaN(min) && !isNaN(max) && !isNaN(val))
 			return ((val >= min) && (val <= max));
+
+		return false;
+	},
+
+	'min': function(v, args)
+	{
+		var min = parseInt(args[0]);
+		var val = parseInt(v);
+
+		if (!isNaN(min) && !isNaN(val))
+			return (val >= min);
+
+		return false;
+	},
+
+	'max': function(v, args)
+	{
+		var max = parseInt(args[0]);
+		var val = parseInt(v);
+
+		if (!isNaN(max) && !isNaN(val))
+			return (val <= max);
 
 		return false;
 	}

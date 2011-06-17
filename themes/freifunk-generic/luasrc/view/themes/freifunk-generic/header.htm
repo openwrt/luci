@@ -68,6 +68,8 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
+<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="<%=media%>/mobile.css" type="text/css" />
+<link rel="stylesheet" media="handheld" href="<%=media%>/mobile.css" type="text/css" /> 
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>

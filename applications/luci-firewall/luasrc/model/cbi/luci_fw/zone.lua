@@ -129,7 +129,7 @@ msrc = s:taboption("advanced", DynamicList, "masq_src",
 	translate("Restrict Masquerading to given source subnets"))
 
 msrc.optional = true
-msrc.datatype = "host" -- XXX: ipaddr & uciname
+msrc.datatype = "neg_network_ip4addr"
 msrc.placeholder = "0.0.0.0/0"
 msrc:depends("family", "")
 msrc:depends("family", "ipv4")
@@ -138,7 +138,7 @@ mdest = s:taboption("advanced", DynamicList, "masq_dest",
 	translate("Restrict Masquerading to given destination subnets"))
 
 mdest.optional = true
-mdest.datatype = "host" -- XXX: ipaddr & uciname
+mdest.datatype = "neg_network_ip4addr"
 mdest.placeholder = "0.0.0.0/0"
 mdest:depends("family", "")
 mdest:depends("family", "ipv4")
