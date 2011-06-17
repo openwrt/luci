@@ -37,6 +37,8 @@ local space_used  = space_total - space_free
 local used_perc = math.floor(0.5 + ((space_total > 0) and ((100 / space_total) * space_used) or 100))
 local free_byte = space_free * fstat.frsize
 
+local filter = { }
+
 -%>
 <%+header%>
 <h2><a id="content" name="content"><%:System%> - <%:Software%></a></h2>
@@ -103,7 +105,7 @@ local free_byte = space_free * fstat.frsize
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
 				</tr>
-				<% local empty = true; luci.model.ipkg.list_installed(query, function(n, v, d) empty = false %>
+				<% local empty = true; luci.model.ipkg.list_installed(query, function(n, v, d) empty = false; filter[n] = true %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
 					<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:Remove%></a></td>
 					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
@@ -132,7 +134,7 @@ local free_byte = space_free * fstat.frsize
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
 					<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
 				</tr>
-				<% local empty = true; luci.model.ipkg.list_all(query, function(n, v, d) empty = false %>
+				<% local empty = true; luci.model.ipkg.list_all(query, function(n, v, d) if filter[n] then return end; empty = false %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
 					<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:Install%></a></td>
 					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
