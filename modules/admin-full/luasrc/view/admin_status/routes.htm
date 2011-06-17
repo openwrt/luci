@@ -58,15 +58,13 @@ $Id$
 				<tr class="cbi-section-table-titles">
 					<th class="cbi-section-table-cell"><%:Network%></th>
 					<th class="cbi-section-table-cell"><%:Target%></th>
-					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask%></th>
 					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Gateway%></th>
 					<th class="cbi-section-table-cell"><%:Metric%></th>
 				</tr>
 				<% luci.sys.net.routes(function(rt) %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
 					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(rt.device) or rt.device%></td>
-					<td class="cbi-value-field"><%=rt.dest:network():string()%></td>
-					<td class="cbi-value-field"><%=rt.dest:mask():string()%></td>
+					<td class="cbi-value-field"><%=rt.dest:string()%></td>
 					<td class="cbi-value-field"><%=rt.gateway:string()%></td>
 					<td class="cbi-value-field"><%=rt.metric%></td>
 				</tr>
@@ -76,7 +74,10 @@ $Id$
 	</fieldset>
 	<br />
 
-	<% if nixio.fs.access("/proc/net/ipv6_route") then style = true %>
+	<% if nixio.fs.access("/proc/net/ipv6_route") then
+		style = true
+		fe80 = luci.ip.IPv6("fe80::/10")
+	%>
 	<fieldset class="cbi-section" id="cbi-table-table">
 		<legend><%_Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes%></legend>
 
@@ -88,7 +89,7 @@ $Id$
 					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 6">IPv6</abbr>-Gateway%></th>
 					<th class="cbi-section-table-cell"><%:Metric%></th>
 				</tr>
-				<% luci.sys.net.routes6(function(rt) %>
+				<% luci.sys.net.routes6(function(rt) if fe80:contains(rt.dest) then return end %>
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
 					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(rt.device) or '(' .. rt.device .. ')'%></td>
 					<td class="cbi-value-field"><%=rt.dest:string()%></td>
