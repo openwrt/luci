@@ -227,6 +227,13 @@ function uciname(val)
 	return (val:match("^[a-zA-Z0-9_]+$") ~= nil)
 end
 
+function neg_network_ip4addr(val)
+	if type(v) == "string" then
+		v = v:gsub("^%s*!", "")
+		return (uciname(v) or ip4addr(v))
+	end	
+end
+
 function range(val, min, max)
 	val = tonumber(val)
 	min = tonumber(min)
@@ -234,6 +241,28 @@ function range(val, min, max)
 
 	if val ~= nil and min ~= nil and max ~= nil then
 		return ((val >= min) and (val <= max))
+	end
+
+	return false
+end
+
+function min(val, min)
+	val = tonumber(val)
+	min = tonumber(min)
+
+	if val ~= nil and min ~= nil then
+		return (val >= min)
+	end
+
+	return false
+end
+
+function max(val, max)
+	val = tonumber(val)
+	max = tonumber(max)
+
+	if val ~= nil and max ~= nil then
+		return (val <= max)
 	end
 
 	return false
