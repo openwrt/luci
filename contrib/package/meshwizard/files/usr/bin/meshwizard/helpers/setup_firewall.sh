@@ -11,8 +11,6 @@ config_load firewall
 # Get some variables
 type="$(uci -q get wireless.$net.type)"
 vap="$(uci -q get meshwizard.netconfig.$net\_vap)"
-lan_ip="$(uci -q get network.lan.ipaddr)"
-lan_mask="$(uci -q get network.lan.netmask)"
 
 # Delete old firewall zone for freifunk
 handle_fwzone() {
@@ -95,8 +93,6 @@ echo "    network: $network
 
 echo "    + Setup masquerading rules"
 
-eval $(ipcalc.sh $lan_ip $lan_mask)
-
 handle_interface() {
         config_get interface "$1" interface
         if [ "$interface" == "lan" ]; then
@@ -117,7 +113,7 @@ config_foreach handle_hna Hna4
 currms=$(uci -q get firewall.zone_freifunk.masq_src)
 if [ ! "$no_masq_lan" == "1" ]; then
 	uci set firewall.zone_freifunk.masq="1" && echo "    Enabled masquerading." || echo -e "\033[1mWarning:\033[0m: Could not enable masquerading."
-	[ -z "$(echo $currms |grep $NETWORK/$PREFIX)" ] && uci add_list firewall.zone_freifunk.masq_src="$NETWORK/$PREFIX"
+	[ -z "$(echo $currms |grep lan)" ] && uci add_list firewall.zone_freifunk.masq_src="lan"
 fi
 
 # If wifi-interfaces are outside of the mesh network they should be natted
@@ -128,7 +124,7 @@ for i in $networks; do
         # check if the dhcprange is inside meshnet
         dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
         if [ ! "$dhcpinmesh" == 1 ]; then
-                [ -z "$(echo $currms |grep $dhcprange)" ] && uci add_list firewall.zone_freifunk.masq_src="$dhcprange"
+                [ -z "$(echo $currms |grep ${net}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${net}dhcp"
         fi
 done
 
