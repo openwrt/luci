@@ -1,0 +1,8 @@
+#!/bin/sh
+[ -n "${IPKG_INSTROOT}" ] || {
+	uci set ucitrack.meshwizard="meshwizard"
+	uci set ucitrack.meshwizard.exec="/etc/init.d/wizard restart"
+	uci commit
+	exit 0
+}
+
