@@ -1,7 +1,7 @@
 --[[
 LuCI - Lua Configuration Interface
 
-(c) 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
 (c) 2008 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ local table = table
 local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite --autoremove"
 local icfg = "/etc/opkg.conf"
 
---- LuCI IPKG/OPKG call abstraction library
+--- LuCI OPKG call abstraction library
 module "luci.model.ipkg"
 
 
@@ -37,15 +37,21 @@ local function _action(cmd, ...)
 		pkg = pkg .. " '" .. v:gsub("'", "") .. "'"
 	end
 
-	local c = ipkg.." "..cmd.." "..pkg.." >/dev/null 2>&1"
+	local c = "%s %s %s >/tmp/opkg.stdout 2>/tmp/opkg.stderr" %{ ipkg, cmd, pkg }
 	local r = os.execute(c)
-	return (r == 0), r
+	local e = fs.readfile("/tmp/opkg.stderr")
+	local o = fs.readfile("/tmp/opkg.stdout")
+
+	fs.unlink("/tmp/opkg.stderr")
+	fs.unlink("/tmp/opkg.stdout")
+
+	return r, o or "", e or ""
 end
 
 -- Internal parser function
 local function _parselist(rawdata)
 	if type(rawdata) ~= "function" then
-		error("IPKG: Invalid rawdata given")
+		error("OPKG: Invalid rawdata given")
 	end
 
 	local data = {}
@@ -86,7 +92,7 @@ local function _lookup(act, pkg)
 		cmd = cmd .. " '" .. pkg:gsub("'", "") .. "'"
 	end
 
-	-- IPKG sometimes kills the whole machine because it sucks
+	-- OPKG sometimes kills the whole machine because it sucks
 	-- Therefore we have to use a sucky approach too and use
 	-- tmpfiles instead of directly reading the output
 	local tmpfile = os.tmpname()
@@ -115,7 +121,7 @@ end
 --- Install one or more packages.
 -- @param ... List of packages to install
 -- @return Boolean indicating the status of the action
--- @return IPKG return code
+-- @return OPKG return code, STDOUT and STDERR
 function install(...)
 	return _action("install", ...)
 end
@@ -131,21 +137,21 @@ end
 --- Remove one or more packages.
 -- @param ... List of packages to install
 -- @return Boolean indicating the status of the action
--- @return IPKG return code
+-- @return OPKG return code, STDOUT and STDERR
 function remove(...)
 	return _action("remove", ...)
 end
 
 --- Update package lists.
 -- @return Boolean indicating the status of the action
--- @return IPKG return code
+-- @return OPKG return code, STDOUT and STDERR
 function update()
 	return _action("update")
 end
 
 --- Upgrades all installed packages.
 -- @return Boolean indicating the status of the action
--- @return IPKG return code
+-- @return OPKG return code, STDOUT and STDERR
 function upgrade()
 	return _action("upgrade")
 end
