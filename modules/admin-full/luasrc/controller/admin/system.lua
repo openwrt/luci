@@ -47,6 +47,9 @@ function action_packages()
 	local changes = false
 	local install = { }
 	local remove  = { }
+	local stdout  = { "" }
+	local stderr  = { "" }
+	local out, err
 
 	-- Search query
 	local query = luci.http.formvalue("query")
@@ -65,19 +68,25 @@ function action_packages()
 
 	-- Do install
 	if ninst then
-		_, install[ninst] = ipkg.install(ninst)
+		install[ninst], out, err = ipkg.install(ninst)
+		stdout[#stdout+1] = out
+		stderr[#stderr+1] = err
 		changes = true
 	end
 
 	if uinst then
-		_, install[uinst] = ipkg.install(uinst)
+		install[uinst], out, err = ipkg.install(uinst)
+		stdout[#stdout+1] = out
+		stderr[#stderr+1] = err
 		changes = true
 	end
 
 	-- Remove packets
 	local rem = submit and luci.http.formvalue("remove")
 	if rem then
-		_, remove[rem] = ipkg.remove(rem)
+		remove[rem], out, err = ipkg.remove(rem)
+		stdout[#stdout+1] = out
+		stderr[#stderr+1] = err
 		changes = true
 	end
 
@@ -85,19 +94,29 @@ function action_packages()
 	-- Update all packets
 	local update = luci.http.formvalue("update")
 	if update then
-		_, update = ipkg.update()
+		update, out, err = ipkg.update()
+		stdout[#stdout+1] = out
+		stderr[#stderr+1] = err
 	end
 
 
 	-- Upgrade all packets
 	local upgrade = luci.http.formvalue("upgrade")
 	if upgrade then
-		_, upgrade = ipkg.upgrade()
+		upgrade, out, err = ipkg.upgrade()
+		stdout[#stdout+1] = out
+		stderr[#stderr+1] = err
 	end
 
 
 	luci.template.render("admin_system/packages", {
-		query=query, install=install, remove=remove, update=update, upgrade=upgrade
+		query   = query,
+		install = install,
+		remove  = remove,
+		update  = update,
+		upgrade = upgrade,
+		stdout  = table.concat(stdout, ""),
+		stderr  = table.concat(stderr, "")
 	})
 
 	-- Remove index cache
