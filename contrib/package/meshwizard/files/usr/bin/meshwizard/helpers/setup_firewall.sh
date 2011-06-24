@@ -124,7 +124,7 @@ for i in $networks; do
         # check if the dhcprange is inside meshnet
         dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
         if [ ! "$dhcpinmesh" == 1 ]; then
-                [ -z "$(echo $currms |grep ${net}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${net}dhcp"
+                [ -z "$(echo $currms |grep ${netrenamed}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}dhcp"
         fi
 done
 
