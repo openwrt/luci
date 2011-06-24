@@ -1,0 +1,6 @@
+#!/bin/sh
+uci batch <<EOF
+set ucitrack.meshwizard="meshwizard"
+set ucitrack.meshwizard.exec="/etc/init.d/wizard boot"
+commit ucitrack
+EOF
