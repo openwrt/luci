@@ -88,9 +88,11 @@ for net in $networks; do
 done
 
 ##### Restart services
-services="network olsrd dnsmasq luci_splash"
-echo "  Restarting services:"
-for s in $services; do
-	/etc/init.d/$s restart >/dev/null 2>&1
-	echo "    * $s"
-done
+#services="network olsrd dnsmasq luci_splash"
+#echo "  Restarting services:"
+#for s in $services; do
+#	/etc/init.d/$s restart >/dev/null 2>&1
+#	echo "    * $s"
+#done
+
+reboot
