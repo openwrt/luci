@@ -513,6 +513,7 @@ $(eval $(call translation,spanish,Spanish (by Guillermo Javier Nardoni)))
 $(eval $(call translation,vietnamese,Vietnamese (by Hong Phuc Dang)))
 $(eval $(call translation,malay,Malay (by Teow Wai Chet)))
 $(eval $(call translation,norwegian,Norwegian (by Lars Hardy)))
+$(eval $(call translation,hebrew,Hebrew))
 
 
 ### Collections ###
