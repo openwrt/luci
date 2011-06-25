@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -659,20 +659,16 @@ end
 
 if has_dnsmasq and net:proto() == "static" then
 	m2 = Map("dhcp", "", "")
-	function m2.on_parse()
-		local has_section = false
+	
+	local section_id = "-"
 
+	function m2.on_parse()
 		m2.uci:foreach("dhcp", "dhcp", function(s)
 			if s.interface == arg[1] then
-				has_section = true
+				section_id = s['.name']
 				return false
 			end
 		end)
-
-		if not has_section then
-			m2.uci:section("dhcp", "dhcp", nil, { interface = arg[1], ignore = "1" })
-			m2.uci:save("dhcp")
-		end
 	end
 
 	s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
@@ -681,8 +677,8 @@ if has_dnsmasq and net:proto() == "static" then
 	s:tab("general",  translate("General Setup"))
 	s:tab("advanced", translate("Advanced Settings"))
 
-	function s.filter(self, section)
-		return m2.uci:get("dhcp", section, "interface") == arg[1]
+	function s.cfgsections(self)
+		return { section_id }
 	end
 
 	local ignore = s:taboption("general", Flag, "ignore",
@@ -691,6 +687,18 @@ if has_dnsmasq and net:proto() == "static" then
 			"this interface."))
 
 	ignore.rmempty = false
+
+	function ignore.cfgvalue(self, section)
+		return (section == "-") and self.enabled or Flag.cfgvalue(self, section)
+	end
+
+	function ignore.write(self, section, value)
+		section_id = m2.uci:section("dhcp", "dhcp", nil, {
+			ignore    = value,
+			interface = arg[1]
+		})
+	end 
+
 
 	local start = s:taboption("general", Value, "start", translate("Start"),
 		translate("Lowest leased address as offset from the network address."))
@@ -734,9 +742,20 @@ if has_dnsmasq and net:proto() == "static" then
 		translate("Define additional DHCP options, for example \"<code>6,192.168.2.1," ..
 			"192.168.2.2</code>\" which advertises different DNS servers to clients."))
 
+
+	local function write_opt(self, section, value)
+		return getmetatable(self).__index.write(self, section_id, value)
+	end
+
+	local function remove_opt(self, section, value)
+		return getmetatable(self).__index.remove(self, section_id, value)
+	end
+
 	for i, n in ipairs(s.children) do
 		if n ~= ignore then
 			n:depends("ignore", "")
+			n.write  = write_opt
+			n.remove = remove_opt
 		end
 	end
 end
