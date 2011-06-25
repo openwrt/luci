@@ -43,6 +43,7 @@ s = m:section(TypedSection, "classify", translate("Classification Rules"))
 s.template = "cbi/tblsection"
 s.anonymous = true
 s.addremove = true
+s.sortable  = true
 
 t = s:option(ListValue, "target", translate("Target"))
 t:value("Priority", translate("priority"))
