@@ -135,16 +135,6 @@ if hwtype == "mac80211" then
 		--htcapab:depends("hwmode", "11ng")
 	end
 
-	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
-	mp:value("", translate("disable"))
-	mp:value("allow", translate("Allow listed only"))
-	mp:value("deny", translate("Allow all except listed"))
-
-	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
-	ml.datatype = "macaddr"
-	ml:depends({macfilter="allow"})
-	ml:depends({macfilter="deny"})
-
 	local cl = iw and iw.countrylist
 	if cl and #cl > 0 then
 		cc = s:taboption("advanced", ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
@@ -240,16 +230,6 @@ if hwtype == "broadcom" then
 	mode:value("11b", "802.11b")
 	mode:value("11g", "802.11g")
 	mode:value("11gst", "802.11g + Turbo")
-
-	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
-	mp:value("", translate("disable"))
-	mp:value("allow", translate("Allow listed only"))
-	mp:value("deny", translate("Allow all except listed"))
-
-	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
-	ml.datatype = "macaddr"
-	ml:depends({macfilter="allow"})
-	ml:depends({macfilter="deny"})
 
 	ant1 = s:taboption("advanced", ListValue, "txantenna", translate("Transmitter Antenna"))
 	ant1.widget = "radio"
@@ -354,6 +334,16 @@ if hwtype == "mac80211" then
 
 	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
+	
+	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
+	mp:value("", translate("disable"))
+	mp:value("allow", translate("Allow listed only"))
+	mp:value("deny", translate("Allow all except listed"))
+
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
+	ml.datatype = "macaddr"
+	ml:depends({macfilter="allow"})
+	ml:depends({macfilter="deny"})
 
 	mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
 	mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})
