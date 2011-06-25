@@ -19,7 +19,7 @@ define Package/freifunk-p2pblock
   CATEGORY:=LuCI
   SUBMENU:=Freifunk
   TITLE:=Freifunk p2pblock Addon
-  DEPENDS:=+iptables-mod-filter +l7-protocols +iptables-mod-conntrack-extra +kmod-ipt-compat-xtables +kmod-ipt-ipp2p
+  DEPENDS:=+iptables-mod-filter +iptables-mod-ipp2p +l7-protocols +iptables-mod-conntrack-extra
 endef
 
 define Package/freifunk-p2pblock/description
