@@ -436,8 +436,8 @@ if hwtype == "atheros" then
 
 	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
-	mp:value("deny", translate("Allow listed only"))
-	mp:value("allow", translate("Allow all except listed"))
+	mp:value("allow", translate("Allow listed only"))
+	mp:value("deny", translate("Allow all except listed"))
 
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
 	ml.datatype = "macaddr"
@@ -511,8 +511,8 @@ if hwtype == "prism2" then
 
 	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
-	mp:value("deny", translate("Allow listed only"))
-	mp:value("allow", translate("Allow all except listed"))
+	mp:value("allow", translate("Allow listed only"))
+	mp:value("deny", translate("Allow all except listed"))
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
