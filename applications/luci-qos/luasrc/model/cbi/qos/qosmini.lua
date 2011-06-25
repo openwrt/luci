@@ -29,6 +29,7 @@ s.template = "cbi/tblsection"
 
 s.anonymous = true
 s.addremove = true
+s.sortable  = true
 
 t = s:option(ListValue, "target")
 t:value("Priority", translate("priority"))
