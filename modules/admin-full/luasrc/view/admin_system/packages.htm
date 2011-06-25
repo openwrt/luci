@@ -24,11 +24,6 @@ function rowstyle()
 	return (rowcnt % 2) + 1
 end
 
-function opkg_error(code)
-	code = bit.rshift(tonumber(code), 8)
-	return translate("OPKG error code %i" % code)
-end
-
 local fstat = fs.statvfs(opkg.overlay_root())
 local space_total = fstat and fstat.blocks or 0
 local space_free  = fstat and fstat.bfree  or 0
@@ -80,18 +75,8 @@ local filter = { }
 
 			<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
 				<br /><hr /><br />
-				<% if update then %>
-					<%:Package lists updated%>: <% if update == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(update)%>)</span><% end %><br />
-				<% end %>
-				<% if upgrade then%>
-					<%:Upgrade installed packages%>: <% if upgrade == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(upgrade)%>)</span><% end %><br />
-				<% end %>
-				<% if install then for k,v in pairs(install) do %>
-					<%:Install%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(v)%>)</span><% end %><br />
-				<% end end %>
-				<% if remove then for k,v in pairs(remove) do %>
-					<%:Remove%> '<%=k%>': <% if v == 0 then %><span class="ok"><%:OK%></span><% else %><span class="error"><%:Error%> (<%=opkg_error(v)%>)</span><% end %><br />
-				<% end end %>
+				<% if #stdout > 0 then %><pre><%=pcdata(stdout)%></pre><% end %>
+				<% if #stderr > 0 then %><pre class="error"><%=pcdata(stderr)%></pre><% end %>
 			<% end %>
 		</fieldset>
 		<br />

@@ -197,9 +197,7 @@ define Package/luci-mod-freifunk-community
   SUBMENU:=Freifunk
   TITLE:=Freifunk Community Meta-Package
   DEPENDS+= \
-   +luci-lib-web +luci-app-splash \
-   +luci-app-ffwizard \
-   +luci-i18n-german \
+   +luci-lib-web +luci-app-splash +luci-i18n-german \
    +PACKAGE_luci-mod-freifunk-community:olsrd +PACKAGE_luci-mod-freifunk-community:olsrd-mod-dyn-gw-plain \
    +PACKAGE_luci-mod-freifunk-community:olsrd-mod-txtinfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
    +PACKAGE_luci-mod-freifunk-community:olsrd-mod-watchdog +PACKAGE_luci-mod-freifunk-community:kmod-tun \
@@ -308,6 +306,9 @@ $(eval $(call application,firewall,Firmware and Portforwarding application,\
 
 $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
         +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting +luci-mod-freifunk))
+
+$(eval $(call application,meshwizard, Shellscript based wizard to setup mesh networks,\
+        +meshwizard +luci-mod-freifunk))
 
 $(eval $(call application,olsr,OLSR configuration and status module,\
 	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
@@ -512,6 +513,7 @@ $(eval $(call translation,spanish,Spanish (by Guillermo Javier Nardoni)))
 $(eval $(call translation,vietnamese,Vietnamese (by Hong Phuc Dang)))
 $(eval $(call translation,malay,Malay (by Teow Wai Chet)))
 $(eval $(call translation,norwegian,Norwegian (by Lars Hardy)))
+$(eval $(call translation,hebrew,Hebrew))
 
 
 ### Collections ###
