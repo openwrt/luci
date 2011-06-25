@@ -103,6 +103,9 @@ if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
 	p.description = translate("You need to install \"comgt\" for UMTS/GPRS, \"ppp-mod-pppoe\" for PPPoE, \"ppp-mod-pppoa\" for PPPoA or \"pptp\" for PPtP support")
 end
 
+auto = s:taboption("physical", Flag, "auto", translate("Bring up on boot"))                                                                                            
+auto.default = (m.uci:get("network", arg[1], "proto") == "none") and auto.disabled or auto.enabled
+
 br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
 br.enabled = "bridge"
 br.rmempty = true
