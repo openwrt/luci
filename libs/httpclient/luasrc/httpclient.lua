@@ -92,7 +92,7 @@ function request_to_source(uri, options)
 	if not status then
 		return status, response, buffer
 	elseif status ~= 200 and status ~= 206 then
-		return nil, status, response
+		return nil, status, buffer
 	end
 	
 	if response.headers["Transfer-Encoding"] == "chunked" then
