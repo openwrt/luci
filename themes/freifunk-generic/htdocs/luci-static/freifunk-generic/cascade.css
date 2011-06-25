@@ -220,6 +220,7 @@ ul.dropdowns ul ul ul li:hover ul {
 	width: 100%;
 	background: #FFF;
 	color: #004a9c;
+	border-bottom: 1px dotted #5A5A5A;
 }
 
 #menubar .warning {
@@ -237,7 +238,7 @@ ul.dropdowns ul ul ul li:hover ul {
 	background: #FFF;
 	color: #004a9c;
 	border-width: 0 1px 1px 1px;
-	border-style: dashed;
+	border-style: dotted;
 	border-color: #5a5a5a;
 }
 
@@ -375,14 +376,11 @@ textarea#syslog {
 
 #maincontent {
 	clear: both;
-	width: 80%;
+	width: 90%;
 	margin: 0 auto;
-	margin-top: 2em;
 	padding: 0.5em;
 	color: #000;
 	font-size: 80%;
-	background: #fff url(bg.jpg) repeat-x center bottom;
-	border: 1px dashed #ccc;
 }
 
 #maincontent h2 {
@@ -415,7 +413,7 @@ textarea#syslog {
 	font-size: 110%;
 	font-weight: bold;
 	height: 1em;
-	padding: 0 0.25em;
+	padding: 0.5em 0.25em;
 	background-color: transparent;
 	color: #404040 ;
 }
@@ -467,7 +465,7 @@ ul.cbi-tabmenu li.cbi-tab-disabled a {
 	text-decoration: none;
 	padding: 3px 7px;
 	margin-right: 3px;
-	border: 1px outset #000;
+	border: 1px dotted #bbb;
 	border-bottom: none;
 	background-color: #eee;
 	color: #bbb;
@@ -565,6 +563,7 @@ input.cbi-input-find {
 	background-color: inherit;
 	color: #000;
 	padding-left: 17px;
+	border: none;
 }
 
 input.cbi-input-reload {
@@ -572,6 +571,7 @@ input.cbi-input-reload {
 	background-color: inherit;
 	color: #000;
 	padding-left: 17px;
+	border: none;
 }
 
 input.cbi-button{
@@ -623,7 +623,8 @@ input.cbi-button-apply {
 	background-color: inherit; 
 	color: #000; 
 	padding-left: 17px; 
-	padding-right: 1px; 
+	padding-right: 1px;
+	border: none; 
 } 
 
 input.cbi-input-link, 
@@ -726,7 +727,7 @@ div.cbi-value {
 	clear: left;
 	vertical-align: middle;
 	padding-left: 0.25em;
-	border-bottom: 1px dashed #bbb;
+	border-bottom: 1px dotted #bbb;
 }
 
 div.cbi-value:hover {
@@ -897,4 +898,73 @@ td.cbi-value-error {
 	color: #000;
 	padding: 0.5em;
 }
+
+.uci-change-list {                 
+        font-family: monospace;    
+}                                  
+                                   
+.uci-change-list ins,              
+.uci-change-legend-label ins {     
+        text-decoration: none;     
+        border: 1px solid #00FF00; 
+        background-color: #CCFFCC; 
+        display: block;            
+        padding: 2px;              
+}                                 
+                                           
+.uci-change-list del,               
+.uci-change-legend-label del {                  
+        text-decoration: none;    
+        border: 1px solid #FF0000;
+        background-color: #FFCCCC;
+        display: block;           
+        font-style: normal;       
+        padding: 2px;             
+}                                 
+                                  
+.uci-change-list var,             
+.uci-change-legend-label var {    
+        text-decoration: none;    
+        border: 1px solid #CCCCCC;
+        background-color: #EEEEEE;
+        display: block;           
+        font-style: normal;       
+        padding: 2px;             
+}                                 
+                                  
+.uci-change-list var ins,         
+.uci-change-list var del {        
+        /*display: inline;*/      
+        border: none;             
+        white-space: pre;         
+        font-style: normal;       
+        padding: 0px;             
+}                                 
+                                  
+.uci-change-legend {              
+        padding: 5px;             
+}                                 
+                                         
+.uci-change-legend-label {          
+        width: 150px;             
+        float: left;              
+        font-size: 80%;           
+}                                 
+
+.uci-change-legend-label>ins,     
+.uci-change-legend-label>del,     
+.uci-change-legend-label>var {    
+        float: left;              
+        margin-right: 4px;        
+        width: 10px;              
+        height: 10px;             
+        display: block;           
+}                                        
+                                    
+.uci-change-legend-label var ins, 
+.uci-change-legend-label var del {
+        line-height: 6px;         
+        border: none;             
 }
+
+} 
