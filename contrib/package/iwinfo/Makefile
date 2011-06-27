@@ -45,7 +45,8 @@ IWINFO_BACKENDS := \
 
 TARGET_CFLAGS += \
 	-I$(STAGING_DIR)/usr/include/libnl-tiny \
-	-I$(STAGING_DIR)/usr/include
+	-I$(STAGING_DIR)/usr/include \
+	-D_GNU_SOURCE
 
 MAKE_FLAGS += \
 	FPIC="$(FPIC)" \
