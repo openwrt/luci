@@ -30,3 +30,6 @@ EOF
 echo "    network: ${netrenamed}dhcp"
 
 uci commit
+
+/etc/init.d/luci_splash enable
+
