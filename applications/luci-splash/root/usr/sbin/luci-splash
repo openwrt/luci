@@ -14,7 +14,7 @@ local limit_up = 0
 local limit_down = 0
 
 function lock()
-	os.execute("lock -w /var/run/luci_splash.lock && lock /var/run/luci_splash.lock")
+	os.execute("lock /var/run/luci_splash.lock")
 end
 
 function unlock()
