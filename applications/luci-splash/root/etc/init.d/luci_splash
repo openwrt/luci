@@ -161,7 +161,7 @@ EOF
 }
 
 start() {
-	lock -w $LOCK && lock $LOCK
+	lock $LOCK
 
 	include /lib/network
 	scan_interfaces
@@ -238,7 +238,7 @@ start() {
 }
 
 stop() {
-	lock -w $LOCK && lock $LOCK
+	lock $LOCK
 
 	include /lib/network
 	scan_interfaces
