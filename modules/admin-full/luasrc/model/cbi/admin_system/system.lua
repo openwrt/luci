@@ -123,14 +123,14 @@ o.placeholder = 514
 o.datatype    = "port"
 
 o = s:taboption("logging", ListValue, "conloglevel", translate("Log output level"))
-o:value(7, translate("Debug"))
-o:value(6, translate("Info"))
-o:value(5, translate("Notice"))
-o:value(4, translate("Warning"))
-o:value(3, translate("Error"))
-o:value(2, translate("Critical"))
-o:value(1, translate("Alert"))
-o:value(0, translate("Emergency"))
+o:value(8, translate("Debug"))
+o:value(7, translate("Info"))
+o:value(6, translate("Notice"))
+o:value(5, translate("Warning"))
+o:value(4, translate("Error"))
+o:value(3, translate("Critical"))
+o:value(2, translate("Alert"))
+o:value(1, translate("Emergency"))
 
 o = s:taboption("logging", ListValue, "cronloglevel", translate("Cron Log Level"))
 o.default = 8
