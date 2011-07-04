@@ -32,7 +32,7 @@ export networks
 
 [ -z "$networks" ] && echo "Error: No networks to setup could be found in /etc/config/meshwizard, aborting now." && exit 1
 
-echo "+++ wizard 0.0.1 +++
+echo "+++ wizard 0.0.2 +++
 Community=$community
 Network(s)=$networks"
 
@@ -48,6 +48,9 @@ done < /tmp/meshwizard.tmp
 # dnsmasq
 	echo "++++ dnsmasq config"
 	$dir/helpers/setup_dnsmasq.sh
+
+# system
+	$dir/helpers/setup_system.sh
 
 # Configure found networks
 for net in $networks; do
@@ -87,12 +90,6 @@ for net in $networks; do
 	echo "  Configuration of $net finished."
 done
 
-##### Restart services
-#services="network olsrd dnsmasq luci_splash"
-#echo "  Restarting services:"
-#for s in $services; do
-#	/etc/init.d/$s restart >/dev/null 2>&1
-#	echo "    * $s"
-#done
+##### Reboot the router (because simply restarting services gave errors)
 
 reboot
