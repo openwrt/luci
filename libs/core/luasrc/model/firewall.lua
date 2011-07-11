@@ -154,7 +154,7 @@ function del_zone(self, n)
 
 	if uci_r:get("firewall", n) == "zone" then
 		local z = uci_r:get("firewall", n, "name")
-		r = uci_r:delete("firwall", n)
+		r = uci_r:delete("firewall", n)
 		n = z
 	else
 		uci_r:foreach("firewall", "zone",
@@ -176,14 +176,14 @@ function del_zone(self, n)
 
 		uci_r:foreach("firewall", "redirect",
 			function(s)
-				if s.src == n then
+				if s.src == n or s.dest == n then
 					uci_r:delete("firewall", s['.name'])
 				end
 			end)
 
 		uci_r:foreach("firewall", "forwarding",
 			function(s)
-				if s.src == n then
+				if s.src == n or s.dest == n then
 					uci_r:delete("firewall", s['.name'])
 				end
 			end)
