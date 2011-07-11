@@ -82,6 +82,10 @@ function s.create(self)
 	end
 end
 
+function s.remove(self, section)
+	return fw:del_zone(section)
+end
+
 info = s:option(DummyValue, "_info", translate("Zone ⇒ Forwardings"))
 info.template = "cbi/firewall_zoneforwards"
 function info.cfgvalue(self, section)
