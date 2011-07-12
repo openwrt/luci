@@ -12,6 +12,15 @@ config_load firewall
 type="$(uci -q get wireless.$net.type)"
 vap="$(uci -q get meshwizard.netconfig.$net\_vap)"
 
+# Add local_restrict to wan firewall zone
+handle_zonewan() {
+	config_get name "$1" name
+	if [ "$name" == "wan" ]; then
+		uci set firewall.$1.local_restrict=1
+	fi
+}
+config_foreach handle_zonewan zone && echo "    + Enable local_restrict for zone wan"
+
 # Delete old firewall zone for freifunk
 handle_fwzone() {
 	config_get name "$1" name

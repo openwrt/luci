@@ -23,10 +23,13 @@ config_foreach handle_splash iface
 
 uci batch << EOF
 set luci_splash.${netrenamed}dhcp="iface"
-set luci_splash.${netrenamed}dhcp.network="${net}dhcp"
+set luci_splash.${netrenamed}dhcp.network="${netrenamed}dhcp"
 set luci_splash.${netrenamed}dhcp.zone="freifunk"
 EOF
 
 echo "    network: ${netrenamed}dhcp"
 
 uci commit
+
+/etc/init.d/luci_splash enable
+

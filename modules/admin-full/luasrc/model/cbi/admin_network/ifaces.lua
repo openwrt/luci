@@ -663,8 +663,7 @@ end
 if has_dnsmasq and net:proto() == "static" then
 	m2 = Map("dhcp", "", "")
 	
-	local section_id = "-"
-
+	local section_id
 	function m2.on_parse()
 		m2.uci:foreach("dhcp", "dhcp", function(s)
 			if s.interface == arg[1] then
@@ -672,6 +671,15 @@ if has_dnsmasq and net:proto() == "static" then
 				return false
 			end
 		end)
+
+		if not section_id then
+			local c = 1
+			section_id = arg[1]
+			while m2.uci:get("dhcp", section_id) do
+				section_id = arg[1] .. c
+				c = c + 1
+			end
+		end
 	end
 
 	s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
@@ -690,17 +698,16 @@ if has_dnsmasq and net:proto() == "static" then
 			"this interface."))
 
 	ignore.rmempty = false
-
-	function ignore.cfgvalue(self, section)
-		return (section == "-") and self.enabled or Flag.cfgvalue(self, section)
-	end
+	ignore.default = ignore.enabled
 
 	function ignore.write(self, section, value)
-		section_id = m2.uci:section("dhcp", "dhcp", nil, {
-			ignore    = value,
-			interface = arg[1]
-		})
-	end 
+		if m2.uci:get("dhcp", section) ~= "dhcp" then
+			m2.uci:section("dhcp", "dhcp", section, {
+				interface = arg[1]
+			})
+		end
+		m2.uci:set("dhcp", section, "ignore", (value == "1") and "1" or "0")
+	end
 
 
 	local start = s:taboption("general", Value, "start", translate("Start"),
@@ -746,19 +753,9 @@ if has_dnsmasq and net:proto() == "static" then
 			"192.168.2.2</code>\" which advertises different DNS servers to clients."))
 
 
-	local function write_opt(self, section, value)
-		return getmetatable(self).__index.write(self, section_id, value)
-	end
-
-	local function remove_opt(self, section, value)
-		return getmetatable(self).__index.remove(self, section_id, value)
-	end
-
 	for i, n in ipairs(s.children) do
 		if n ~= ignore then
 			n:depends("ignore", "")
-			n.write  = write_opt
-			n.remove = remove_opt
 		end
 	end
 end

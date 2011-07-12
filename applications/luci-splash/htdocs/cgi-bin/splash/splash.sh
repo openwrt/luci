@@ -2,24 +2,22 @@
 echo -en "Cache-Control: no-cache, max-age=0, no-store, must-revalidate\r\n"
 echo -en "Pragma: no-cache\r\n"
 echo -en "Expires: -1\r\n"
-echo -en "Status: 403 Forbidden\r\n"
-echo -en "Content-Type: text/html\r\n\r\n"
-#echo -en "Status: 307 Temporary Redirect\r\n"
-#echo -en "Location: http://$SERVER_ADDR/cgi-bin/luci/splash\r\n\r\n" 
+echo -en "Status: 307 Temporary Redirect\r\n"
+echo -en "Location: http://$SERVER_ADDR/cgi-bin/luci/splash\r\n" 
+echo -en "\r\n"
 
 cat <<EOT
-<html>
-	<head>
-		<title>Splash</title>
-		<meta http-equiv="refresh" content="0; url=http://$SERVER_ADDR/cgi-bin/luci/splash" />
-	</head>
-	<body style="font-family:sans-serif">
-		<h1>Splash on $(cat /proc/sys/kernel/hostname)</h1>
-		<p>
-			Redirecting to authentication for $REMOTE_ADDR on $SERVER_ADDR.<br /><br />
-			[<a href="http://$SERVER_ADDR/cgi-bin/luci/splash">Click here to continue...</a>]
-		</p>
-	</body>
-</html>
+<?xml version="1.0" encoding="UTF-8"?>
+<WISPAccessGatewayParam xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.wballiance.net/wispr_2_0.xsd">
+	<Redirect>
+		<MessageType>100</MessageType>
+		<ResponseCode>0</ResponseCode>
+		<AccessProcedure>1.0</AccessProcedure>
+		<AccessLocation>12</AccessLocation>
+		<LocationName>$SERVER_ADDR</LocationName>
+		<LoginURL>http://$SERVER_ADDR/cgi-bin/luci/splash?wispr=1</LoginURL>
+		<AbortLoginURL>http://$SERVER_ADDR/</AbortLoginURL>
+	</Redirect>
+</WISPAccessGatewayParam>
 EOT
 

@@ -33,5 +33,5 @@ boot() {
 		done
 	}
 
-	( /usr/sbin/ff_rdate; /etc/init.d/cron restart ) &
+	( sleep 40; /usr/sbin/ff_rdate; /etc/init.d/cron restart ) &
 }
