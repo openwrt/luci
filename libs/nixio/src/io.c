@@ -179,7 +179,7 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 			}
 		}
 #ifndef __WINNT__
-		else if (sock->domain == AF_UNIX) {
+		else if (sock->domain == AF_UNIX && alen > sizeof(sa_family_t)) {
 			lua_pushstring(L, addr_un.sun_path);
 			return 2;
 		}
