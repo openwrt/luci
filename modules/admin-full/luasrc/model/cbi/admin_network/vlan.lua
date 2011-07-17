@@ -62,14 +62,14 @@ m.uci:foreach("network", "switch",
 					if is_vlan_attr then has_vlan4k = line:match(": (%w+)") end
 					if is_port_attr then has_ptpvid = line:match(": (%w+)") end
 
+				elseif line:match(": enable_vlan4k") then
+					enable_vlan4k = true
+
 				elseif line:match(": enable_vlan") then
 					has_vlan = "enable_vlan"
 
 				elseif line:match(": enable_learning") then
 					has_learn = "enable_learning"
-
-				elseif line:match(": enable_vlan4k") then
-					enable_vlan4k = true
 
 				elseif line:match(": max_length") then
 					has_jumbo3 = "max_length"
