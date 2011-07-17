@@ -18,8 +18,6 @@ m = Map("network", translate("Switch"), translate("The network ports on your rou
 m.uci:foreach("network", "switch",
 	function(x)
 		local switch_name = x.name or x['.name']
-		local has_enable  = "enable"
-		local has_reset   = nil
 		local has_vlan    = nil
 		local has_learn   = nil 
 		local has_vlan4k  = nil
@@ -55,11 +53,10 @@ m.uci:foreach("network", "switch",
 					num_ports, cpu_port, num_vlans =
 						line:match("ports: (%d+) %(cpu @ (%d+)%), vlans: (%d+)")
 
-					num_ports  = tonumber(num_ports or  6)
-					num_vlans  = tonumber(num_vlans or 16)
-					cpu_port   = tonumber(cpu_port  or  5)
+					num_ports  = tonumber(num_ports) or  6
+					num_vlans  = tonumber(num_vlans) or 16
+					cpu_port   = tonumber(cpu_port)  or  5
 					min_vid    = 1
-					has_enable = nil
 
 				elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
 					if is_vlan_attr then has_vlan4k = line:match(": (%w+)") end
@@ -70,9 +67,6 @@ m.uci:foreach("network", "switch",
 
 				elseif line:match(": enable_learning") then
 					has_learn = "enable_learning"
-
-				elseif line:match(": reset") then
-					has_reset = "reset"
 
 				elseif line:match(": enable_vlan4k") then
 					enable_vlan4k = true
@@ -117,14 +111,8 @@ m.uci:foreach("network", "switch",
 		s = m:section(NamedSection, x['.name'], "switch", translatef("Switch %q", switch_name))
 		s.addremove = false
 
-		if has_enable then
-			x = s:option(Flag, has_enable, translate("Enable this switch"))
-			x.default = x.enabled
-		end
-
 		if has_vlan then
-			x = s:option(Flag, has_vlan, translate("Enable VLAN functionality"))
-			x.default = x.enabled
+			s:option(Flag, has_vlan, translate("Enable VLAN functionality"))
 		end
 
 		if enable_vlan4k then
@@ -140,11 +128,6 @@ m.uci:foreach("network", "switch",
 			x = s:option(Flag, has_jumbo3, translate("Enable Jumbo Frame passthrough"))
 			x.enabled = "3"
 			x.rmempty = true
-		end
-
-		if has_reset then
-			x = s:option(Flag, has_reset, translate("Reset switch during setup"))
-			x.default = x.enabled
 		end
 
 
