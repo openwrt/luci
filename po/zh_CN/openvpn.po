@@ -3,13 +3,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2011-04-22 01:14-0800\n"
-"Last-Translator: Our Teammates\n"
+"PO-Revision-Date: 2011-07-16 19:23+0200\n"
+"Last-Translator: codeblue <amplatzer@gmail.com>\n"
 "Language-Team: QQ Group 75543259 <axishero@foxmail.com>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.4\n"
 
 #. OpenVPN
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:1
@@ -29,7 +31,7 @@ msgstr "高级配置 »"
 #. Enabled
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:6
 msgid "Enabled"
-msgstr "打开"
+msgstr "启用"
 
 #. Started
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:7
@@ -194,12 +196,12 @@ msgstr "TCP/UDP 端口 # 同时针对本地和远程"
 #. TCP/UDP port # for local (default=1194)
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:43
 msgid "TCP/UDP port # for local (default=1194)"
-msgstr "TCP/UDP 端口 # 本地l (默认值=1194)"
+msgstr "TCP/UDP 端口 # 本地 (默认 1194)"
 
 #. TCP/UDP port # for remote (default=1194)
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:44
 msgid "TCP/UDP port # for remote (default=1194)"
-msgstr "TCP/UDP 端口  # for 远程 (默认值=1194)"
+msgstr "TCP/UDP 端口 # 远程 (默认 1194)"
 
 #. Bind to local address and port
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:45
@@ -219,7 +221,7 @@ msgstr "tun/tap 设备"
 #. Type of used device
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:48
 msgid "Type of used device"
-msgstr "已用设备的类型"
+msgstr "使用设备类型"
 
 #. Use tun/tap device node
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:49
@@ -289,7 +291,7 @@ msgstr "不自动添加路由"
 #. Don't pull options from server
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:62
 msgid "Don't pull options from server"
-msgstr "Don't pull options from server"
+msgstr "不从服务器获取设置参数"
 
 #. Automatically redirect default route
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:63
@@ -354,27 +356,28 @@ msgstr "重映射SIGUSR1信号"
 #. Keep tun/tap device open on restart
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:75
 msgid "Keep tun/tap device open on restart"
-msgstr "系统重启时自动打开 tun/tap 设备"
+msgstr "服务重启时自动打开 tun/tap 设备"
 
 #. Keep remote IP address on restart
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:76
 msgid "Keep remote IP address on restart"
-msgstr "系统重启时保存远程IP地址"
+msgstr "服务重启时保持远程IP地址"
 
 #. Keep local IP address on restart
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:77
 msgid "Keep local IP address on restart"
-msgstr "系统重启时保存本地IP地址"
+msgstr "服务重启时保持本地IP地址"
 
 #. Don't re-read key on restart
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:78
 msgid "Don't re-read key on restart"
-msgstr "系统重启时不重密钥值"
+msgstr "服务重启时不重读密钥值"
 
 #. TOS passthrough (applies to IPv4 only)
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:79
+#, fuzzy
 msgid "TOS passthrough (applies to IPv4 only)"
-msgstr "TOS passthrough (applies to IPv4 only)"
+msgstr "TOS 穿透 (applies to IPv4 only)"
 
 #. Set tun/tap device MTU
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:80
@@ -394,7 +397,7 @@ msgstr "设置TCP/UDP的MTU值"
 #. Enable Path MTU discovery
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:83
 msgid "Enable Path MTU discovery"
-msgstr "允许路径MTU发现"
+msgstr "启用路径MTU发现"
 
 #. Empirically measure MTU
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:84
@@ -454,7 +457,7 @@ msgstr "TUN/TAP关闭前关闭命令行及脚本"
 #. Run up/down scripts for all restarts
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:95
 msgid "Run up/down scripts for all restarts"
-msgstr "每次重启时运行脚本的开和关"
+msgstr "每次重启都执行启动/关闭脚本"
 
 #. Set UID to user
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:96
@@ -554,7 +557,7 @@ msgstr "特殊的压力测试模式"
 #. Use fast LZO compression
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:115
 msgid "Use fast LZO compression"
-msgstr "利用快速的LZO压缩"
+msgstr "使用快速LZO压缩"
 
 #. Don't use adaptive lzo compression
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:116
@@ -563,8 +566,9 @@ msgstr "不用自适应的lzo压缩"
 
 #. Enable management interface on <em>IP</em> <em>port</em>
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:117
+#, fuzzy
 msgid "Enable management interface on <em>IP</em> <em>port</em>"
-msgstr "允许<em>IP</em> <em>端口</em>的接口管理"
+msgstr "在<em>IP</em> <em>port</em>上启用可接口管理"
 
 #. Management interface will connect as a TCP client
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:118
@@ -724,20 +728,22 @@ msgstr "以脚本的方式验证客户端虚拟地址"
 #. Allowed maximum of new connections
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:149
 msgid "Allowed maximum of new connections"
-msgstr "允许的最大连接数"
+msgstr "允许最大新建连接数"
 
 #. Allowed maximum of connected clients
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:150
 msgid "Allowed maximum of connected clients"
-msgstr "允许最大的已客户端连接数"
+msgstr "允许最大已连接客户端数"
 
 #. Allowed maximum of internal
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:151
+#, fuzzy
 msgid "Allowed maximum of internal"
 msgstr "Allowed maximum of internal"
 
 #. Proxy incoming HTTPS sessions
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:152
+#, fuzzy
 msgid "Proxy incoming HTTPS sessions"
 msgstr "在代理中引入HTTPs会话"
 
@@ -769,7 +775,7 @@ msgstr "断开连接时向客户端发送通知"
 #. Enable Static Key encryption mode (non-TLS)
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:158
 msgid "Enable Static Key encryption mode (non-TLS)"
-msgstr "允许静态密码加密模式(non-TLS)"
+msgstr "允许静态密钥加密模式"
 
 #. HMAC authentication for packets
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:159
@@ -848,6 +854,7 @@ msgstr "信任证书的目录(CAs and CRLs)"
 
 #. Diffie Hellman parameters
 #: applications/luci-openvpn/luasrc/i18n/openvpn.en.lua:174
+#, fuzzy
 msgid "Diffie Hellman parameters"
 msgstr "Diffie Hellman parameters"
 
