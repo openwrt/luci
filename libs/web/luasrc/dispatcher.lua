@@ -437,7 +437,7 @@ function createindex_plain(path, suffixes)
 		if cachedate then
 			local realdate = 0
 			for _, obj in ipairs(controllers) do
-				local omtime = fs.stat(path .. "/" .. obj, "mtime")
+				local omtime = fs.stat(obj, "mtime")
 				realdate = (omtime and omtime > realdate) and omtime or realdate
 			end
 
