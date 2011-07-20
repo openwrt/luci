@@ -269,7 +269,12 @@ function dispatch(request)
 	end
 
 	track.dependent = (track.dependent ~= false)
-	assert(not track.dependent or not track.auto, "Access Violation")
+	assert(not track.dependent or not track.auto,
+		"Access Violation\nThe page at '" .. table.concat(request, "/") .. "/' " ..
+		"has no parent node so the access to this location has been denied.\n" ..
+		"This is a software bug, please report this message at " ..
+		"http://luci.subsignal.org/trac/newticket"
+	)
 
 	if track.sysauth then
 		local sauth = require "luci.sauth"
@@ -386,7 +391,16 @@ function dispatch(request)
 			target(unpack(args))
 		end
 	else
-		error404()
+		local root = node()
+		if not root or not root.target then
+			error404("No root node was registered, this usually happens if no module was installed.\n" ..
+			         "Install luci-admin-full and retry. " ..
+			         "If the module is already installed, try removing the /tmp/luci-indexcache file.")
+		else
+			error404("No page is registered at '" .. table.concat(request, "/") .. "/'.\n" ..
+			         "If this url belongs to an extension, make sure it is properly installed.\n" ..
+			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.")
+		end
 	end
 end
 
