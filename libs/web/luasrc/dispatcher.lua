@@ -269,7 +269,12 @@ function dispatch(request)
 	end
 
 	track.dependent = (track.dependent ~= false)
-	assert(not track.dependent or not track.auto, "Access Violation")
+	assert(not track.dependent or not track.auto,
+		"Access Violation\nThe page at '" .. table.concat(request, "/") .. "/' " ..
+		"has no parent node so the access to this location has been denied.\n" ..
+		"This is a software bug, please report this message at " ..
+		"http://luci.subsignal.org/trac/newticket"
+	)
 
 	if track.sysauth then
 		local sauth = require "luci.sauth"
@@ -380,13 +385,27 @@ function dispatch(request)
 			setfenv(target, env)
 		end)
 
+		local ok, err
 		if type(c.target) == "table" then
-			target(c.target, unpack(args))
+			ok, err = util.copcall(target, c.target, unpack(args))
 		else
-			target(unpack(args))
+			ok, err = util.copcall(target, unpack(args))
 		end
+		assert(ok,
+		       "Failed to execute " .. (type(c.target) == "function" and "function" or c.target.type or "unknown") ..
+		       " dispatcher target for entry '/" .. table.concat(request, "/") .. "'.\n" ..
+		       "The called action terminated with an exception:\n" .. tostring(err or "(unknown)"))
 	else
-		error404()
+		local root = node()
+		if not root or not root.target then
+			error404("No root node was registered, this usually happens if no module was installed.\n" ..
+			         "Install luci-admin-full and retry. " ..
+			         "If the module is already installed, try removing the /tmp/luci-indexcache file.")
+		else
+			error404("No page is registered at '/" .. table.concat(request, "/") .. "'.\n" ..
+			         "If this url belongs to an extension, make sure it is properly installed.\n" ..
+			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.")
+		end
 	end
 end
 
@@ -463,11 +482,20 @@ function createindex_plain(path, suffixes)
 		end
 
 		local mod = require(modname)
+		assert(mod ~= true,
+		       "Invalid controller file found\n" ..
+		       "The file '" .. c .. "' contains an invalid module line.\n" ..
+		       "Please verify whether the module name is set to '" .. modname ..
+		       "' - It must correspond to the file path!")
+		
 		local idx = mod.index
+		assert(type(idx) == "function",
+		       "Invalid controller file found\n" ..
+		       "The file '" .. c .. "' contains no index() function.\n" ..
+		       "Please make sure that the controller contains a valid " ..
+		       "index function and verify the spelling!")
 
-		if type(idx) == "function" then
-			index[modname] = idx
-		end
+		index[modname] = idx
 	end
 
 	if indexcache then

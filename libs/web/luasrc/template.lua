@@ -78,7 +78,10 @@ function Template.__init__(self, name)
 
 		-- If we have no valid template throw error, otherwise cache the template
 		if not self.template then
-			error(err)
+			error("Failed to load template '" .. name .. "'.\n" ..
+			      "Error while parsing template '" .. sourcefile .. "'.\n" ..
+			      "A syntax error occured near '" ..
+			      (err or "(nil)"):gsub("\t", "\\t"):gsub("\n", "\\n") .. "'.")
 		else
 			self.cache[name] = self.template
 		end
@@ -99,6 +102,7 @@ function Template.render(self, scope)
 	-- Now finally render the thing
 	local stat, err = util.copcall(self.template)
 	if not stat then
-		error("Error in template %s: %s" % {self.name, err})
+		error("Failed to execute template '" .. self.name .. "'.\n" ..
+		      "A runtime error occured: " .. tostring(err or "(nil)"))
 	end
 end
