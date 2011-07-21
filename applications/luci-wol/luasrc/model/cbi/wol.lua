@@ -72,7 +72,14 @@ end
 uci:foreach("dhcp", "host",
 	function(s)
 		if s.mac and s.ip then
-			arp[s.mac:upper()] = { s.ip, s.name }
+			if type(s.mac) == "table" then
+				local m
+				for _, m in ipairs(s.mac) do
+					arp[m:upper()] = { s.ip, s.name }
+				end
+			else
+				arp[s.mac:upper()] = { s.ip, s.name }
+			end
 		end
 	end)
 
