@@ -1438,7 +1438,7 @@ int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 	if( req )
 	{
 		res = nl80211_send(req);
-		if( res )
+		if( res && res->attr[NL80211_ATTR_WIPHY_BANDS] )
 		{
 			nla_for_each_nested(band,
 				res->attr[NL80211_ATTR_WIPHY_BANDS], bands_remain)
@@ -1537,7 +1537,7 @@ int nl80211_get_hwmodelist(const char *ifname, int *buf)
 	if( req )
 	{
 		res = nl80211_send(req);
-		if( res )
+		if( res && res->attr[NL80211_ATTR_WIPHY_BANDS] )
 		{
 			nla_for_each_nested(band,
 				res->attr[NL80211_ATTR_WIPHY_BANDS], bands_remain)
