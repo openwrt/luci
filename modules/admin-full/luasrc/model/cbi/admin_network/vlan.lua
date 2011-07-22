@@ -172,6 +172,7 @@ m.uci:foreach("network", "switch",
 					if id ~= nil and id > max_id then max_id = id end
 				end)
 
+			m.uci:set("network", sid, "device", switch_name)
 			m.uci:set("network", sid, "vlan", max_nr + 1)
 
 			if has_vlan4k then
