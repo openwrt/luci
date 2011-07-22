@@ -136,7 +136,6 @@ function run()
 			end
 		elseif stat == 0 then
 			ifaddrs = nixio.getifaddrs()
-			collectgarbage("collect")
 		end
 		
 		for _, cb in ipairs(tickt) do
@@ -231,6 +230,8 @@ function create_process(threadcb, waitcb)
 	if threadlimit and tcount >= threadlimit then
 		nixio.syslog("warning", "Cannot create thread: process limit reached")
 		return nil
+	else
+		collectgarbage("collect")
 	end
 	local pid, code, err = nixio.fork()
 	if pid and pid ~= 0 then
