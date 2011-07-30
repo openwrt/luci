@@ -23,6 +23,10 @@ local translate = luci.i18n.translate
 local DummyValue = luci.cbi.DummyValue
 local SimpleSection = luci.cbi.SimpleSection
 
+function index()
+	return -- no-op
+end
+
 function get_params()
 
    local smapnets_uci = luci.model.uci.cursor()
