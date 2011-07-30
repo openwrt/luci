@@ -1048,13 +1048,15 @@ function main.write(self, section, value)
 
 	-- Create time rdate_servers
 	local rdate = uci:get_all("freifunk", "time")
-	uci:delete_all("system", "time")
-	uci:section("system", "time", "rdate_servers", rdate)
-	rdate.server = rdate.rdate_servers
-	rdate.rdate_servers = ""
-	uci:delete_all("system", "rdate", nil)
-	uci:section("system", "rdate", nil, rdate)
-	uci:save("system")
+	if rdate then
+		uci:delete_all("system", "time")
+		uci:section("system", "time", "rdate_servers", rdate)
+		rdate.server = rdate.rdate_servers
+		rdate.rdate_servers = ""
+		uci:delete_all("system", "rdate", nil)
+		uci:section("system", "rdate", nil, rdate)
+		uci:save("system")
+	end
 
 	-- Delete old watchdog settings
 	uci:delete_all("olsrd", "LoadPlugin", {library="olsrd_watchdog.so.0.1"})
