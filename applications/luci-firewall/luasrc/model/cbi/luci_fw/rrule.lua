@@ -136,6 +136,7 @@ sport:depends("proto", "tcpudp")
 
 reflection = s:taboption("advanced", Flag, "reflection", translate("Enable NAT Loopback"))
 reflection.rmempty = true
+reflection.default = reflection.enabled
 reflection:depends({ target = "DNAT", src = wan_zone })
 reflection.cfgvalue = function(...)
 	return Flag.cfgvalue(...) or "1"
