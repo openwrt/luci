@@ -180,7 +180,7 @@ static int nixio_sock__bind_connect(lua_State *L, int do_bind) {
 			}
 
 			/* on success */
-			if (!status) {
+			if (!status || errno == EINPROGRESS) {
 				break;
 			}
 		}
