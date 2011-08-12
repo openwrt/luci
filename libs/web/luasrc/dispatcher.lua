@@ -612,28 +612,23 @@ function node(...)
 	return c
 end
 
-function _create_node(path, cache)
+function _create_node(path)
 	if #path == 0 then
 		return context.tree
 	end
 
-	cache = cache or context.treecache
 	local name = table.concat(path, ".")
-	local c = cache[name]
+	local c = context.treecache[name]
 
 	if not c then
-		local new = {nodes={}, auto=true, path=util.clone(path)}
 		local last = table.remove(path)
+		local parent = _create_node(path)
 
-		c = _create_node(path, cache)
-
-		c.nodes[last] = new
-		cache[name] = new
-
-		return new
-	else
-		return c
+		c = {nodes={}, auto=true}
+		parent.nodes[last] = c
+		context.treecache[name] = c
 	end
+	return c
 end
 
 -- Subdispatchers --
