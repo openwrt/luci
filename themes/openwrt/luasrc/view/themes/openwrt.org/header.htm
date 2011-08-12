@@ -82,7 +82,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 					end
 		%>
 			<li class="tabmenu-item-<%=v.name%><% if nnode._menu_selected or (node.leaf and v.name == leaf) then %> active<% end %>">
-				<a href="<%=nodeurl(prefix, v.name, nnode.query)%>"><%=striptags(nnode.title)%></a>
+				<a href="<%=nodeurl(prefix, v.name, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
 			</li>
 		<%
 				end
@@ -116,7 +116,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
-<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
+<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
 
@@ -136,7 +136,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <ul id="modemenu"><%
 for k,node in pairs(tree.nodes) do
 	if node.title and not node.hidden then %>
-<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(node.title)%></a></li><%
+<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(translate(node.title))%></a></li><%
 	end
 end
 %>
