@@ -250,7 +250,7 @@ function dispatch(request)
 		tpl.context.viewns = setmetatable({
 		   write       = luci.http.write;
 		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
-		   translate   = function(...) return require("luci.i18n").translate(...) end;
+		   translate   = i18n.translate;
 		   export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
 		   striptags   = util.striptags;
 		   pcdata      = util.pcdata;
@@ -853,3 +853,9 @@ end
 function form(model)
 	return {type = "cbi", model = model, target = _form}
 end
+
+--- Access the luci.i18n translate() api.
+-- @class  function
+-- @name   translate
+-- @param  text    Text to translate
+translate = i18n.translate
