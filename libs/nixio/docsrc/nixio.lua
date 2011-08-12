@@ -37,6 +37,39 @@ module "nixio"
 -- <li>ifindex = Interface Index (Linux, "packet"-family)</li>
 -- </ul>
 
+--- Get protocol entry by name.
+-- @usage This function returns nil if the given protocol is unknown.
+-- @class function
+-- @name nixio.getprotobyname
+-- @param name		protocol name to lookup
+-- @return			Table containing the following fields: <ul>
+-- <li>name = Protocol Name</li>
+-- <li>proto = Protocol Number</li>
+-- <li>aliases = Table of alias names</li>
+-- </ul>
+
+--- Get protocol entry by number.
+-- @usage This function returns nil if the given protocol is unknown.
+-- @class function
+-- @name nixio.getprotobynumber
+-- @param proto		protocol number to lookup
+-- @return			Table containing the following fields: <ul>
+-- <li>name = Protocol Name</li>
+-- <li>proto = Protocol Number</li>
+-- <li>aliases = Table of alias names</li>
+-- </ul>
+
+--- Get all or a specifc proto entry.
+-- @class function
+-- @name nixio.getproto
+-- @param proto		protocol number or name to lookup (optional)
+-- @return			Table (or if no parameter is given, a table of tables)
+--                  containing the following fields: <ul>
+-- <li>name = Protocol Name</li>
+-- <li>proto = Protocol Number</li>
+-- <li>aliases = Table of alias names</li>
+-- </ul>
+
 --- Create a new socket and bind it to a network address.
 -- This function is a shortcut for calling nixio.socket and then bind()
 -- on the socket object.

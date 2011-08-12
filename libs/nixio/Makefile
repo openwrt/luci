@@ -21,8 +21,8 @@ else
 endif
 
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
-	    src/poll.o src/io.o src/file.o src/splice.o src/process.o src/syslog.o \
-	    src/bit.o src/binary.o src/fs.o src/user.o \
+	    src/protoent.o src/poll.o src/io.o src/file.o src/splice.o src/process.o \
+	    src/syslog.o src/bit.o src/binary.o src/fs.o src/user.o \
 	    $(if $(NIXIO_TLS),src/tls-crypto.o src/tls-context.o src/tls-socket.o,)
 
 ifeq ($(NIXIO_TLS),axtls)
