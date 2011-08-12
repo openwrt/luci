@@ -130,6 +130,8 @@ function httpdispatch(request, prefix)
 
 	local r = {}
 	context.request = r
+	context.urltoken = {}
+	
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
 	if prefix then
@@ -138,8 +140,18 @@ function httpdispatch(request, prefix)
 		end
 	end
 
+	local tokensok = true
 	for node in pathinfo:gmatch("[^/]+") do
-		r[#r+1] = node
+		local tkey, tval
+		if tokensok then
+			tkey, tval = node:match(";(%w+)=([a-fA-F0-9]*)")
+		end
+		if tkey then
+			context.urltoken[tkey] = tval
+		else
+			tokensok = false
+			r[#r+1] = node
+		end
 	end
 
 	local stat, err = util.coxpcall(function()
@@ -157,7 +169,6 @@ function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
 	ctx.path = request
-	ctx.urltoken   = ctx.urltoken or {}
 
 	local conf = require "luci.config"
 	assert(conf.main,
@@ -187,34 +198,23 @@ function dispatch(request)
 	ctx.args = args
 	ctx.requestargs = ctx.requestargs or args
 	local n
-	local t = true
 	local token = ctx.urltoken
 	local preq = {}
 	local freq = {}
 
 	for i, s in ipairs(request) do
-		local tkey, tval
-		if t then
-			tkey, tval = s:match(";(%w+)=([a-fA-F0-9]*)")
+		preq[#preq+1] = s
+		freq[#freq+1] = s
+		c = c.nodes[s]
+		n = i
+		if not c then
+			break
 		end
 
-		if tkey then
-			token[tkey] = tval
-		else
-			t = false
-			preq[#preq+1] = s
-			freq[#freq+1] = s
-			c = c.nodes[s]
-			n = i
-			if not c then
-				break
-			end
+		util.update(track, c)
 
-			util.update(track, c)
-
-			if c.leaf then
-				break
-			end
+		if c.leaf then
+			break
 		end
 	end
 
@@ -513,7 +513,7 @@ function createtree()
 	end
 
 	local ctx  = context
-	local tree = {nodes={}}
+	local tree = {nodes={}, inreq=true}
 	local modi = {}
 
 	ctx.treecache = setmetatable({}, {__mode="v"})
@@ -625,6 +625,11 @@ function _create_node(path)
 		local parent = _create_node(path)
 
 		c = {nodes={}, auto=true}
+		-- the node is "in request" if the request path matches
+		-- at least up to the length of the node path
+		if parent.inreq and context.path[#path+1] == last then
+		  c.inreq = true
+		end
 		parent.nodes[last] = c
 		context.treecache[name] = c
 	end
