@@ -150,6 +150,7 @@ function run()
 				if tpids[pid] ~= true then
 					tpids[pid](pid, stat, code)
 				end
+				tpids[pid] = nil
 			end
 			pid, stat, code = nixio.wait(-1, "nohang")
 		end

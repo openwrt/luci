@@ -28,7 +28,9 @@
 #include <pwd.h>
 
 #ifndef BSD
+#ifndef NO_SHADOW
 #include <shadow.h>
+#endif
 #include <crypt.h>
 #endif
 
@@ -162,6 +164,7 @@ static int nixio_getpw(lua_State *L) {
 }
 
 #ifndef BSD
+#ifndef NO_SHADOW
 static int nixio__push_spwd(lua_State *L, struct spwd *sp) {
 	lua_createtable(L, 0, 9);
 	lua_pushstring(L, sp->sp_namp);
@@ -216,6 +219,7 @@ static int nixio_getsp(lua_State *L) {
 		return nixio__push_spwd(L, sp);
 	}
 }
+#endif /* !NO_SHADOW */
 #endif /* !BSD */
 
 static int nixio_crypt(lua_State *L) {
@@ -239,7 +243,9 @@ static const luaL_reg R[] = {
 	{"getgr",		nixio_getgr},
 	{"getpw",		nixio_getpw},
 #ifndef BSD
+#ifndef NO_SHADOW
 	{"getsp",		nixio_getsp},
+#endif
 #endif
 	{NULL,			NULL}
 };

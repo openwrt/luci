@@ -10,6 +10,7 @@ AXTLS_VERSION = 1.2.1
 AXTLS_DIR     = axTLS
 AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VERSION).tar.gz
 NIXIO_TLS    ?= openssl
+NIXIO_SHADOW ?= $(shell echo 'int main(void){ return !getspnam("root"); }' | $(CC) -include shadow.h -xc -o/dev/null - 2>/dev/null && echo yes)
 NIXIO_SO      = nixio.so
 NIXIO_LDFLAGS =
 
@@ -20,8 +21,8 @@ else
 endif
 
 NIXIO_OBJ = src/nixio.o src/socket.o src/sockopt.o src/bind.o src/address.o \
-	    src/poll.o src/io.o src/file.o src/splice.o src/process.o src/syslog.o \
-	    src/bit.o src/binary.o src/fs.o src/user.o \
+	    src/protoent.o src/poll.o src/io.o src/file.o src/splice.o src/process.o \
+	    src/syslog.o src/bit.o src/binary.o src/fs.o src/user.o \
 	    $(if $(NIXIO_TLS),src/tls-crypto.o src/tls-context.o src/tls-socket.o,)
 
 ifeq ($(NIXIO_TLS),axtls)
@@ -43,6 +44,10 @@ endif
 
 ifeq ($(NIXIO_TLS),)
 	NIXIO_CFLAGS += -DNO_TLS
+endif
+
+ifneq ($(NIXIO_SHADOW),yes)
+	NIXIO_CFLAGS += -DNO_SHADOW
 endif
 
 
