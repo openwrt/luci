@@ -12,29 +12,27 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.admin.status", package.seeall)
 
 function index()
-	luci.i18n.loadc("base")
-	local i18n = luci.i18n.translate
+	entry({"admin", "status"}, alias("admin", "status", "overview"), _("Status"), 20).index = true
+	entry({"admin", "status", "overview"}, template("admin_status/index"), _("Overview"), 1)
+	entry({"admin", "status", "iptables"}, call("action_iptables"), _("Firewall"), 2).leaf = true
+	entry({"admin", "status", "routes"}, template("admin_status/routes"), _("Routes"), 3)
+	entry({"admin", "status", "syslog"}, call("action_syslog"), _("System Log"), 4)
+	entry({"admin", "status", "dmesg"}, call("action_dmesg"), _("Kernel Log"), 5)
 
-	entry({"admin", "status"}, alias("admin", "status", "overview"), i18n("Status"), 20).index = true
-	entry({"admin", "status", "overview"}, template("admin_status/index"), i18n("Overview"), 1)
-	entry({"admin", "status", "iptables"}, call("action_iptables"), i18n("Firewall"), 2).leaf = true
-	entry({"admin", "status", "routes"}, template("admin_status/routes"), i18n("Routes"), 3)
-	entry({"admin", "status", "syslog"}, call("action_syslog"), i18n("System Log"), 4)
-	entry({"admin", "status", "dmesg"}, call("action_dmesg"), i18n("Kernel Log"), 5)
-
-	entry({"admin", "status", "load"}, template("admin_status/load"), i18n("Realtime Load"), 6).leaf = true
+	entry({"admin", "status", "load"}, template("admin_status/load"), _("Realtime Load"), 6).leaf = true
 	entry({"admin", "status", "load_status"}, call("action_load")).leaf = true
 
-	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), i18n("Realtime Traffic"), 7).leaf = true
+	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), _("Realtime Traffic"), 7).leaf = true
 	entry({"admin", "status", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
-	entry({"admin", "status", "connections"}, template("admin_status/connections"), i18n("Realtime Connections"), 8).leaf = true
+	entry({"admin", "status", "connections"}, template("admin_status/connections"), _("Realtime Connections"), 8).leaf = true
 	entry({"admin", "status", "connections_status"}, call("action_connections")).leaf = true
 
-	entry({"admin", "status", "processes"}, cbi("admin_status/processes"), i18n("Processes"), 20)
+	entry({"admin", "status", "processes"}, cbi("admin_status/processes"), _("Processes"), 20)
 end
 
 function action_syslog()

@@ -20,10 +20,7 @@ function index()
 		return
 	end
 
-	require("luci.i18n").loadc("tinyproxy")
-	local i18n = luci.i18n.translate
-
-	entry({"admin", "services", "tinyproxy"}, alias("admin", "services", "tinyproxy", "config"), "Tinyproxy").i18n = "tinyproxy"
-	entry({"admin", "services", "tinyproxy", "status"}, template("tinyproxy_status"), i18n("Status"))
-	entry({"admin", "services", "tinyproxy", "config"}, cbi("tinyproxy"), i18n("Configuration"))
+	entry({"admin", "services", "tinyproxy"}, alias("admin", "services", "tinyproxy", "config"), _("Tinyproxy")).i18n = "tinyproxy"
+	entry({"admin", "services", "tinyproxy", "status"}, template("tinyproxy_status"), _("Status"))
+	entry({"admin", "services", "tinyproxy", "config"}, cbi("tinyproxy"), _("Configuration"))
 end

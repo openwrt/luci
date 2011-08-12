@@ -12,21 +12,21 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.ntpc", package.seeall)
 
 function index()
-	require("luci.i18n")
-	luci.i18n.loadc("ntpc")
 	if not nixio.fs.access("/etc/config/ntpclient") then
 		return
 	end
 	
-	local page = entry({"admin", "system", "ntpc"}, cbi("ntpc/ntpc"), luci.i18n.translate("Time Synchronisation"), 50)
+	local page
+
+	page = entry({"admin", "system", "ntpc"}, cbi("ntpc/ntpc"), _("Time Synchronisation"), 50)
 	page.i18n = "ntpc"
 	page.dependent = true
-	
-	
-	local page = entry({"mini", "system", "ntpc"}, cbi("ntpc/ntpcmini", {autoapply=true}), luci.i18n.translate("Time Synchronisation"), 50)
+
+	page = entry({"mini", "system", "ntpc"}, cbi("ntpc/ntpcmini", {autoapply=true}), _("Time Synchronisation"), 50)
 	page.i18n = "ntpc"
 	page.dependent = true
 end

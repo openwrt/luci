@@ -11,12 +11,10 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.admin.index", package.seeall)
 
 function index()
-	luci.i18n.loadc("base")
-	local i18n = luci.i18n.translate
-
 	local root = node()
 	if not root.target then
 		root.target = alias("admin")
@@ -25,14 +23,14 @@ function index()
 
 	local page   = node("admin")
 	page.target  = alias("admin", "status")
-	page.title   = i18n("Administration")
+	page.title   = _("Administration")
 	page.order   = 10
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
 	page.index = true
 
-	entry({"admin", "logout"}, call("action_logout"), i18n("Logout"), 90)
+	entry({"admin", "logout"}, call("action_logout"), _("Logout"), 90)
 end
 
 function action_logout()

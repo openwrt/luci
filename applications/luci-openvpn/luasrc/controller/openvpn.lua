@@ -12,13 +12,11 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.openvpn", package.seeall)
 
 function index()
-	require("luci.i18n")
-	luci.i18n.loadc("openvpn")
-
-	entry( {"admin", "services", "openvpn"}, cbi("openvpn"), luci.i18n.translate("OpenVPN") ).i18n = "openvpn"
+	entry( {"admin", "services", "openvpn"}, cbi("openvpn"), _("OpenVPN") ).i18n = "openvpn"
 	entry( {"admin", "services", "openvpn", "basic"},    cbi("openvpn-basic"),    nil ).leaf = true
 	entry( {"admin", "services", "openvpn", "advanced"}, cbi("openvpn-advanced"), nil ).leaf = true
 end

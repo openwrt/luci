@@ -5,49 +5,46 @@ function index()
 		return
 	end
 
-	require("luci.i18n").loadc("olsr")
-	local i18n = luci.i18n.translate
-
 	local page  = node("admin", "status", "olsr")
 	page.target = template("status-olsr/overview")
-	page.title  = i18n("OLSR")
+	page.title  = _("OLSR")
 	page.i18n   = "olsr"
 	page.subindex = true
 
 	local page  = node("admin", "status", "olsr", "neighbors")
 	page.target = call("action_neigh")
-	page.title  = i18n("Neighbours")
+	page.title  = _("Neighbours")
 	page.subindex = true
 	page.order  = 5
 
 	local page  = node("admin", "status", "olsr", "routes")
 	page.target = call("action_routes")
-	page.title  = i18n("Routes")
+	page.title  = _("Routes")
 	page.order  = 10
 
 	local page  = node("admin", "status", "olsr", "topology")
 	page.target = call("action_topology")
-	page.title  = i18n("Topology")
+	page.title  = _("Topology")
 	page.order  = 20
 
 	local page  = node("admin", "status", "olsr", "hna")
 	page.target = call("action_hna")
-	page.title  = i18n("HNA")
+	page.title  = _("HNA")
 	page.order  = 30
 
 	local page  = node("admin", "status", "olsr", "mid")
 	page.target = call("action_mid")
-	page.title  = i18n("MID")
+	page.title  = _("MID")
 	page.order  = 50
 
 	local page  = node("admin", "status", "olsr", "smartgw")
 	page.target = call("action_smartgw")
-	page.title  = i18n("SmartGW")
+	page.title  = _("SmartGW")
 	page.order  = 60
 
 	local page  = node("admin", "status", "olsr", "interfaces")
         page.target = call("action_interfaces")
-        page.title  = i18n("Interfaces")
+        page.title  = _("Interfaces")
         page.order  = 70
 
 	local ol = entry(
@@ -64,17 +61,17 @@ function index()
 
 	entry(
 		{"admin", "services", "olsrd", "hna"},
-		cbi("olsr/olsrdhna"), i18n("HNA Announcements")
+		cbi("olsr/olsrdhna"), _("HNA Announcements")
 	)
 
 	oplg = entry(
 		{"admin", "services", "olsrd", "plugins"},
-		cbi("olsr/olsrdplugins"), i18n("Plugins")
+		cbi("olsr/olsrdplugins"), _("Plugins")
 	)
 
 	odsp = entry(
 		{"admin", "services", "olsrd", "display"},
-		cbi("olsr/olsrddisplay"), i18n("Display")
+		cbi("olsr/olsrddisplay"), _("Display")
 		)
 
 	oplg.i18n = "olsr"

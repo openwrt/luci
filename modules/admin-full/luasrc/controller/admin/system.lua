@@ -16,29 +16,26 @@ $Id$
 module("luci.controller.admin.system", package.seeall)
 
 function index()
-	luci.i18n.loadc("base")
-	local i18n = luci.i18n.translate
-
-	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("System"), 30).index = true
-	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("System"), 1)
-	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), i18n("Administration"), 2)
-	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
+	entry({"admin", "system"}, alias("admin", "system", "system"), _("System"), 30).index = true
+	entry({"admin", "system", "system"}, cbi("admin_system/system"), _("System"), 1)
+	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), _("Administration"), 2)
+	entry({"admin", "system", "packages"}, call("action_packages"), _("Software"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
-	entry({"admin", "system", "startup"}, form("admin_system/startup"), i18n("Startup"), 45)
+	entry({"admin", "system", "startup"}, form("admin_system/startup"), _("Startup"), 45)
 
 	if nixio.fs.access("/etc/config/fstab") then
-		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("Mount Points"), 50)
+		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), _("Mount Points"), 50)
 		entry({"admin", "system", "fstab", "mount"}, cbi("admin_system/fstab/mount"), nil).leaf = true
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
 	end
 
 	if nixio.fs.access("/sys/class/leds") then
-		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
+		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
 
-	entry({"admin", "system", "backup"}, call("action_backup"), i18n("Backup / Restore"), 70)
-	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("Flash Firmware"), 80)
-	entry({"admin", "system", "reboot"}, call("action_reboot"), i18n("Reboot"), 90)
+	entry({"admin", "system", "backup"}, call("action_backup"), _("Backup / Restore"), 70)
+	entry({"admin", "system", "upgrade"}, call("action_upgrade"), _("Flash Firmware"), 80)
+	entry({"admin", "system", "reboot"}, call("action_reboot"), _("Reboot"), 90)
 end
 
 function action_packages()

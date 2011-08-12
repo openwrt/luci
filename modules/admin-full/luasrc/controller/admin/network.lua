@@ -16,10 +16,8 @@ $Id$
 module("luci.controller.admin.network", package.seeall)
 
 function index()
-	require("luci.i18n")
 	local uci = require("luci.model.uci").cursor()
 	local net = require "luci.model.network".init(uci)
-	local i18n = luci.i18n.translate
 	local has_wifi = nixio.fs.stat("/etc/config/wireless")
 	local has_switch = false
 
@@ -34,19 +32,19 @@ function index()
 
 	page = node("admin", "network")
 	page.target = alias("admin", "network", "network")
-	page.title  = i18n("Network")
+	page.title  = _("Network")
 	page.order  = 50
 	page.index  = true
 
 	if has_switch then
 		page  = node("admin", "network", "vlan")
 		page.target = cbi("admin_network/vlan")
-		page.title  = i18n("Switch")
+		page.title  = _("Switch")
 		page.order  = 20
 	end
 
 	if has_wifi and has_wifi.size > 0 then
-		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
+		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wifi"), 15)
 		page.leaf = true
 		page.subindex = true
 
@@ -75,7 +73,7 @@ function index()
 		end
 	end
 
-	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
+	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
 	page.leaf   = true
 	page.subindex = true
 
@@ -108,7 +106,7 @@ function index()
 	if nixio.fs.access("/etc/config/dhcp") then
 		page = node("admin", "network", "dhcp")
 		page.target = cbi("admin_network/dhcp")
-		page.title  = i18n("DHCP and DNS")
+		page.title  = _("DHCP and DNS")
 		page.order  = 30
 
 		page = entry({"admin", "network", "dhcplease_status"}, call("lease_status"), nil)
@@ -116,18 +114,18 @@ function index()
 
 		page = node("admin", "network", "hosts")
 		page.target = cbi("admin_network/hosts")
-		page.title  = i18n("Hostnames")
+		page.title  = _("Hostnames")
 		page.order  = 40
 	end
 
 	page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
-	page.title  = i18n("Static Routes")
+	page.title  = _("Static Routes")
 	page.order  = 50
 
 	page = node("admin", "network", "diagnostics")
 	page.target = template("admin_network/diagnostics")
-	page.title  = i18n("Diagnostics")
+	page.title  = _("Diagnostics")
 	page.order  = 60
 
 	page = entry({"admin", "network", "diag_ping"}, call("diag_ping"), nil)

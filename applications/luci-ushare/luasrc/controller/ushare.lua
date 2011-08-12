@@ -16,13 +16,13 @@ $Id$
 module("luci.controller.ushare", package.seeall)
 
 function index()
-       require("luci.i18n")
-       luci.i18n.loadc("ushare")
-       if not nixio.fs.access("/etc/config/ushare") then
-               return
-       end
+	if not nixio.fs.access("/etc/config/ushare") then
+		return
+	end
 
-       local page = entry({"admin", "services", "ushare"}, cbi("ushare"), luci.i18n.translate("uShare"), 60)
-       page.i18n = "uvc_streamer"
-       page.dependent = true
+	local page
+
+	page = entry({"admin", "services", "ushare"}, cbi("ushare"), _("uShare"), 60)
+	page.i18n = "ushare"
+	page.dependent = true
 end

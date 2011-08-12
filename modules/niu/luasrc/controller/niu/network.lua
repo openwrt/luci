@@ -12,7 +12,6 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local require = require
 module "luci.controller.niu.network"
 
 function index()

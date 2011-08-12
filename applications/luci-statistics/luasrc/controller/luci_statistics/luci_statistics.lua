@@ -19,12 +19,7 @@ function index()
 
 	require("nixio.fs")
 	require("luci.util")
-	require("luci.i18n")
 	require("luci.statistics.datatree")
-
-	-- load language files
-	luci.i18n.loadc("rrdtool")
-	luci.i18n.loadc("statistics")
 
 	-- get rrd data tree
 	local tree = luci.statistics.datatree.Instance()
@@ -37,32 +32,30 @@ function index()
 		end
 	end
 
-	local translate = luci.i18n.translate
-
 	local labels = {
-		s_output	= translate("Output plugins"),
-		s_system	= translate("System plugins"),
-		s_network	= translate("Network plugins"),
+		s_output	= _("Output plugins"),
+		s_system	= _("System plugins"),
+		s_network	= _("Network plugins"),
 
-		rrdtool		= translate("RRDTool"),
-		network		= translate("Network"),
-		unixsock	= translate("UnixSock"),
-		csv			= translate("CSV Output"),
-		exec		= translate("Exec"),
-		email		= translate("Email"),
-		cpu			= translate("Processor"),
-		df			= translate("Disk Space Usage"),
-		disk		= translate("Disk Usage"),
-		irq			= translate("Interrupts"),
-		processes	= translate("Processes"),
-		load		= translate("System Load"),
-		interface	= translate("Interfaces"),
-		netlink		= translate("Netlink"),
-		iptables	= translate("Firewall"),
-		tcpconns	= translate("TCP Connections"),
-		ping		= translate("Ping"),
-		dns			= translate("DNS"),
-		wireless	= translate("Wireless")
+		rrdtool		= _("RRDTool"),
+		network		= _("Network"),
+		unixsock	= _("UnixSock"),
+		csv			= _("CSV Output"),
+		exec		= _("Exec"),
+		email		= _("Email"),
+		cpu			= _("Processor"),
+		df			= _("Disk Space Usage"),
+		disk		= _("Disk Usage"),
+		irq			= _("Interrupts"),
+		processes	= _("Processes"),
+		load		= _("System Load"),
+		interface	= _("Interfaces"),
+		netlink		= _("Netlink"),
+		iptables	= _("Firewall"),
+		tcpconns	= _("TCP Connections"),
+		ping		= _("Ping"),
+		dns			= _("DNS"),
+		wireless	= _("Wireless")
 	}
 
 	-- our collectd menu
@@ -73,21 +66,24 @@ function index()
 	}
 
 	-- create toplevel menu nodes
-	local st = entry({"admin", "statistics"}, call("statistics_index"), translate("Statistics"), 80)
+	local st = entry({"admin", "statistics"}, call("statistics_index"), _("Statistics"), 80)
 	st.i18n = "statistics"
 	st.index = true
 	
-	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), translate("Collectd"), 10).subindex = true
+	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _("Collectd"), 10).subindex = true
 	
 
 	-- populate collectd plugin menu
 	local index = 1
 	for section, plugins in luci.util.kspairs( collectd_menu ) do
-		entry(
+		local e = entry(
 			{ "admin", "statistics", "collectd", section },
 			call( "statistics_" .. section .. "plugins" ),
 			labels["s_"..section], index * 10
-		).index = true
+		)
+
+		e.index = true
+		e.i18n  = "rrdtool"
 
 		for j, plugin in luci.util.vspairs( plugins ) do
 			_entry(
@@ -101,7 +97,7 @@ function index()
 	end
 
 	-- output views
-	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), translate("Graphs"), 80)
+	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), _("Graphs"), 80)
 	      page.i18n     = "statistics"
 	      page.setuser  = "nobody"
 	      page.setgroup = "nogroup"
@@ -140,10 +136,10 @@ end
 function statistics_outputplugins()
 	local translate = luci.i18n.translate
 	local plugins = {
-		rrdtool		= translate("RRDTool"),
-		network		= translate("Network"),
-		unixsock	= translate("UnixSock"),
-		csv			= translate("CSV Output")
+		rrdtool		= _("RRDTool"),
+		network		= _("Network"),
+		unixsock	= _("UnixSock"),
+		csv			= _("CSV Output")
 	}
 
 	luci.template.render("admin_statistics/outputplugins", {plugins=plugins})
@@ -152,14 +148,14 @@ end
 function statistics_systemplugins()
 	local translate = luci.i18n.translate
 	local plugins = {
-		exec		= translate("Exec"),
-		email		= translate("Email"),
-		cpu			= translate("Processor"),
-		df			= translate("Disk Space Usage"),
-		disk		= translate("Disk Usage"),
-		irq			= translate("Interrupts"),
-		processes	= translate("Processes"),
-		load		= translate("System Load"),
+		exec		= _("Exec"),
+		email		= _("Email"),
+		cpu			= _("Processor"),
+		df			= _("Disk Space Usage"),
+		disk		= _("Disk Usage"),
+		irq			= _("Interrupts"),
+		processes	= _("Processes"),
+		load		= _("System Load"),
 	}
 
 	luci.template.render("admin_statistics/systemplugins", {plugins=plugins})
@@ -168,13 +164,13 @@ end
 function statistics_networkplugins()
 	local translate = luci.i18n.translate
 	local plugins = {
-		interface	= translate("Interfaces"),
-		netlink		= translate("Netlink"),
-		iptables	= translate("Firewall"),
-		tcpconns	= translate("TCP Connections"),
-		ping		= translate("Ping"),
-		dns			= translate("DNS"),
-		wireless	= translate("Wireless")
+		interface	= _("Interfaces"),
+		netlink		= _("Netlink"),
+		iptables	= _("Firewall"),
+		tcpconns	= _("TCP Connections"),
+		ping		= _("Ping"),
+		dns			= _("DNS"),
+		wireless	= _("Wireless")
 	}
 
 	luci.template.render("admin_statistics/networkplugins", {plugins=plugins})

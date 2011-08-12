@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.qos", package.seeall)
 
 function index()
@@ -18,12 +19,13 @@ function index()
 		return
 	end
 	
-	local page = entry({"admin", "network", "qos"}, cbi("qos/qos"), "QoS")
+	local page
+
+	page = entry({"admin", "network", "qos"}, cbi("qos/qos"), _("QoS"))
 	page.i18n = "qos"
 	page.dependent = true
-	
-	
-	local page = entry({"mini", "network", "qos"}, cbi("qos/qosmini", {autoapply=true}), "QoS")
+
+	page = entry({"mini", "network", "qos"}, cbi("qos/qosmini", {autoapply=true}), _("QoS"))
 	page.i18n = "qos"
 	page.dependent = true
 end

@@ -1,17 +1,19 @@
 module("luci.controller.splash.splash", package.seeall)
 
 function index()
-	require("luci.i18n")
-	luci.i18n.loadc("freifunk")
+	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90).i18n = "freifunk"
+	entry({"admin", "services", "splash", "splashtext" }, form("splash/splashtext"), _("Splashtext"), 10)
 
-	entry({"admin", "services", "splash"}, cbi("splash/splash"), luci.i18n.translate("Client-Splash"), 90)
-	entry({"admin", "services", "splash", "splashtext" }, form("splash/splashtext"), luci.i18n.translate("Splashtext"), 10)
+	local e
+	
+	e = node("splash")
+	e.target = call("action_dispatch")
+	e.i18n = "freifunk"
 
-	node("splash").target = call("action_dispatch")
 	node("splash", "activate").target = call("action_activate")
 	node("splash", "splash").target   = template("splash_splash/splash")
 
-	entry({"admin", "status", "splash"}, call("action_status_admin"), "Client-Splash")
+	entry({"admin", "status", "splash"}, call("action_status_admin"), _("Client-Splash")).i18n = "freifunk"
 end
 
 function action_dispatch()

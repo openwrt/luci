@@ -11,6 +11,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.polipo", package.seeall)
 
 function index()
@@ -18,11 +19,8 @@ function index()
 		return
 	end
 
-	require("luci.i18n").loadc("polipo")
-	local i18n = luci.i18n.translate
-
-	entry({"admin", "services", "polipo"}, alias("admin", "services", "polipo", "config"), "Polipo").i18n = "polipo"
-	entry({"admin", "services", "polipo", "status"}, template("polipo_status"), i18n("Status"))
-	entry({"admin", "services", "polipo", "config"}, cbi("polipo"), i18n("Configuration"))
+	entry({"admin", "services", "polipo"}, alias("admin", "services", "polipo", "config"), _("Polipo")).i18n = "polipo"
+	entry({"admin", "services", "polipo", "status"}, template("polipo_status"), _("Status"))
+	entry({"admin", "services", "polipo", "config"}, cbi("polipo"), _("Configuration"))
 end
 

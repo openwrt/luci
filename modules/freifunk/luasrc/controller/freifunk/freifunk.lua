@@ -11,21 +11,22 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.freifunk.freifunk", package.seeall)
 
 function index()
-	local i18n = luci.i18n.translate
 	local uci = require "luci.model.uci".cursor()
+	local page
 
 	-- Frontend
-	local page  = node()
-	page.lock   = true
-	page.target = alias("freifunk")
+	page          = node()
+	page.lock     = true
+	page.target   = alias("freifunk")
 	page.subindex = true
-	page.index = false
+	page.index    = false
 
-	local page    = node("freifunk")
-	page.title    = i18n("Freifunk")
+	page          = node("freifunk")
+	page.title    = _("Freifunk")
 	page.target   = alias("freifunk", "index")
 	page.order    = 5
 	page.setuser  = "nobody"
@@ -33,70 +34,70 @@ function index()
 	page.i18n     = "freifunk"
 	page.index    = true
 
-	local page  = node("freifunk", "index")
-	page.target = template("freifunk/index")
-	page.title  = i18n("Overview")
-	page.order  = 10
+	page          = node("freifunk", "index")
+	page.target   = template("freifunk/index")
+	page.title    = _("Overview")
+	page.order    = 10
 	page.indexignore = true
 
-	local page  = node("freifunk", "index", "contact")
-	page.target = template("freifunk/contact")
-	page.title  = i18n("Contact")
+	page          = node("freifunk", "index", "contact")
+	page.target   = template("freifunk/contact")
+	page.title    = _("Contact")
 	page.order    = 10
 
-	local page  = node("freifunk", "status")
-	page.target = template("freifunk/public_status")
-	page.title  = i18n("Status")
-	page.order  = 20
-	page.i18n   = "base"
+	page          = node("freifunk", "status")
+	page.target   = template("freifunk/public_status")
+	page.title    = _("Status")
+	page.order    = 20
+	page.i18n     = "base"
 	page.setuser  = false
-        page.setgroup = false
+    page.setgroup = false
 
 	entry({"freifunk", "status.json"}, call("jsonstatus"))
 	entry({"freifunk", "status", "zeroes"}, call("zeroes"), "Testdownload")
 	entry({"freifunk", "status", "public_status_json"}, call("public_status_json")).leaf = true
 
-	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, i18n("OLSR"), 30)
+	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, _("OLSR"), 30)
 
 	if nixio.fs.access("/etc/config/luci_statistics") then
-		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, i18n("Statistics"), 40)
+		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, _("Statistics"), 40)
 	end
 
 	-- backend
-	assign({"mini", "freifunk"}, {"admin", "freifunk"}, i18n("Freifunk"), 5)
-	entry({"admin", "freifunk"}, alias("admin", "freifunk", "index"), i18n("Freifunk"), 5)
+	assign({"mini", "freifunk"}, {"admin", "freifunk"}, _("Freifunk"), 5)
+	entry({"admin", "freifunk"}, alias("admin", "freifunk", "index"), _("Freifunk"), 5)
 
-	local page  = node("admin", "freifunk")
+	page        = node("admin", "freifunk")
 	page.target = template("freifunk/adminindex")
-	page.title  = i18n("Freifunk")
+	page.title  = _("Freifunk")
 	page.order  = 5
 
-	local page  = node("admin", "freifunk", "basics")
+	page        = node("admin", "freifunk", "basics")
 	page.target = cbi("freifunk/basics")
-	page.title  = i18n("Basic Settings")
+	page.title  = _("Basic Settings")
 	page.order  = 5
 	
-	local page  = node("admin", "freifunk", "basics", "profile")
+	page        = node("admin", "freifunk", "basics", "profile")
 	page.target = cbi("freifunk/profile")
-	page.title  = i18n("Profile")
+	page.title  = _("Profile")
 	page.order  = 10
 
-	local page  = node("admin", "freifunk", "basics", "profile_expert")
+	page        = node("admin", "freifunk", "basics", "profile_expert")
 	page.target = cbi("freifunk/profile_expert")
-	page.title  = i18n("Profile (Expert)")
+	page.title  = _("Profile (Expert)")
 	page.order  = 20
 
-	local page  = node("admin", "freifunk", "Index-Page")
+	page        = node("admin", "freifunk", "Index-Page")
 	page.target = cbi("freifunk/user_index")
-	page.title  = i18n("Index Page")
+	page.title  = _("Index Page")
 	page.order  = 50
 
-	local page  = node("admin", "freifunk", "contact")
+	page        = node("admin", "freifunk", "contact")
 	page.target = cbi("freifunk/contact")
-	page.title  = i18n("Contact")
+	page.title  = _("Contact")
 	page.order  = 15
 
-	entry({"freifunk", "map"}, template("freifunk-map/frame"), i18n("Map"), 50)
+	entry({"freifunk", "map"}, template("freifunk-map/frame"), _("Map"), 50)
 	entry({"freifunk", "map", "content"}, template("freifunk-map/map"), nil, 51)
 	entry({"admin", "freifunk", "profile_error"}, template("freifunk/profile_error"))
 end

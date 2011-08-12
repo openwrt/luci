@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.upnp", package.seeall)
 
 function index()
@@ -21,11 +22,11 @@ function index()
 
 	local page
 
-	page = entry({"admin", "services", "upnp"}, cbi("upnp/upnp"), "UPNP")
+	page = entry({"admin", "services", "upnp"}, cbi("upnp/upnp"), _("UPNP"))
 	page.i18n = "upnp"
 	page.dependent = true
 
-	page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini", {autoapply=true}), "UPNP")
+	page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini", {autoapply=true}), _("UPNP"))
 	page.i18n = "upnp"
 	page.dependent = true
 

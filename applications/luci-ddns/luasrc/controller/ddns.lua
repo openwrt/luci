@@ -12,21 +12,21 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.ddns", package.seeall)
 
 function index()
-	require("luci.i18n")
-	luci.i18n.loadc("ddns")
 	if not nixio.fs.access("/etc/config/ddns") then
 		return
 	end
 	
-	local page = entry({"admin", "services", "ddns"}, cbi("ddns/ddns"), luci.i18n.translate("Dynamic DNS"), 60)
+	local page
+
+	page = entry({"admin", "services", "ddns"}, cbi("ddns/ddns"), _("Dynamic DNS"), 60)
 	page.i18n = "ddns"
 	page.dependent = true
-	
-	
-	local page = entry({"mini", "network", "ddns"}, cbi("ddns/ddns", {autoapply=true}), luci.i18n.translate("Dynamic DNS"), 60)
+
+	page = entry({"mini", "network", "ddns"}, cbi("ddns/ddns", {autoapply=true}), _("Dynamic DNS"), 60)
 	page.i18n = "ddns"
 	page.dependent = true
 end
