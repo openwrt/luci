@@ -859,3 +859,10 @@ end
 -- @name   translate
 -- @param  text    Text to translate
 translate = i18n.translate
+
+--- No-op function used to mark translation entries for menu labels.
+-- This function does not actually translate the given argument but
+-- is used by build/i18n-scan.pl to find translatable entries.
+function _(text)
+	return text
+end
