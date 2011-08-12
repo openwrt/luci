@@ -229,7 +229,7 @@ function dispatch(request)
 	ctx.path = preq
 
 	if track.i18n then
-		require("luci.i18n").loadc(track.i18n)
+		i18n.loadc(track.i18n)
 	end
 
 	-- Init template engine
