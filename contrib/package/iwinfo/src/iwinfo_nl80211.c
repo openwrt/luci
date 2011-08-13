@@ -896,79 +896,9 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 	char *val, *res;
 	struct iwinfo_crypto_entry *c = (struct iwinfo_crypto_entry *)buf;
 
-	/* Hostapd */
-	if( (res = nl80211_hostapd_info(ifname)) )
-	{
-		if( (val = nl80211_getval(ifname, res, "wpa")) != NULL )
-			c->wpa_version = atoi(val);
-
-		val = nl80211_getval(ifname, res, "wpa_key_mgmt");
-
-		if( !val || strstr(val, "PSK") )
-			c->auth_suites |= IWINFO_KMGMT_PSK;
-
-		if( val && strstr(val, "EAP") )
-			c->auth_suites |= IWINFO_KMGMT_8021x;
-
-		if( val && strstr(val, "NONE") )
-			c->auth_suites |= IWINFO_KMGMT_NONE;
-
-		if( (val = nl80211_getval(ifname, res, "wpa_pairwise")) != NULL )
-		{
-			if( strstr(val, "TKIP") )
-				c->pair_ciphers |= IWINFO_CIPHER_TKIP;
-
-			if( strstr(val, "CCMP") )
-				c->pair_ciphers |= IWINFO_CIPHER_CCMP;
-
-			if( strstr(val, "NONE") )
-				c->pair_ciphers |= IWINFO_CIPHER_NONE;
-		}
-
-		if( (val = nl80211_getval(ifname, res, "auth_algs")) != NULL )
-		{
-			switch(atoi(val)) {
-				case 1:
-					c->auth_algs |= IWINFO_AUTH_OPEN;
-					break;
-
-				case 2:
-					c->auth_algs |= IWINFO_AUTH_SHARED;
-					break;
-
-				case 3:
-					c->auth_algs |= IWINFO_AUTH_OPEN;
-					c->auth_algs |= IWINFO_AUTH_SHARED;
-					break;
-
-				default:
-					break;
-			}
-
-			for( i = 0; i < 4; i++ )
-			{
-				snprintf(k, sizeof(k), "wep_key%d", i);
-
-				if( (val = nl80211_getval(ifname, res, k)) )
-				{
-					if( (strlen(val) == 5) || (strlen(val) == 10) )
-						c->pair_ciphers |= IWINFO_CIPHER_WEP40;
-
-					else if( (strlen(val) == 13) || (strlen(val) == 26) )
-						c->pair_ciphers |= IWINFO_CIPHER_WEP104;
-				}
-			}
-		}
-
-		c->group_ciphers = c->pair_ciphers;
-		c->enabled = (c->auth_algs || c->auth_suites) ? 1 : 0;
-
-		return 0;
-	}
-
 	/* WPA supplicant */
-	else if( (res = nl80211_wpactl_info(ifname, "STATUS", NULL)) &&
-	         (val = nl80211_getval(NULL, res, "pairwise_cipher")) )
+	if( (res = nl80211_wpactl_info(ifname, "STATUS", NULL)) &&
+	    (val = nl80211_getval(NULL, res, "pairwise_cipher")) )
 	{
 		/* WEP */
 		if( strstr(val, "WEP") )
@@ -1045,6 +975,76 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 
 			c->enabled = (c->wpa_version && c->auth_suites) ? 1 : 0;
 		}
+
+		return 0;
+	}
+
+	/* Hostapd */
+	else if( (res = nl80211_hostapd_info(ifname)) )
+	{
+		if( (val = nl80211_getval(ifname, res, "wpa")) != NULL )
+			c->wpa_version = atoi(val);
+
+		val = nl80211_getval(ifname, res, "wpa_key_mgmt");
+
+		if( !val || strstr(val, "PSK") )
+			c->auth_suites |= IWINFO_KMGMT_PSK;
+
+		if( val && strstr(val, "EAP") )
+			c->auth_suites |= IWINFO_KMGMT_8021x;
+
+		if( val && strstr(val, "NONE") )
+			c->auth_suites |= IWINFO_KMGMT_NONE;
+
+		if( (val = nl80211_getval(ifname, res, "wpa_pairwise")) != NULL )
+		{
+			if( strstr(val, "TKIP") )
+				c->pair_ciphers |= IWINFO_CIPHER_TKIP;
+
+			if( strstr(val, "CCMP") )
+				c->pair_ciphers |= IWINFO_CIPHER_CCMP;
+
+			if( strstr(val, "NONE") )
+				c->pair_ciphers |= IWINFO_CIPHER_NONE;
+		}
+
+		if( (val = nl80211_getval(ifname, res, "auth_algs")) != NULL )
+		{
+			switch(atoi(val)) {
+				case 1:
+					c->auth_algs |= IWINFO_AUTH_OPEN;
+					break;
+
+				case 2:
+					c->auth_algs |= IWINFO_AUTH_SHARED;
+					break;
+
+				case 3:
+					c->auth_algs |= IWINFO_AUTH_OPEN;
+					c->auth_algs |= IWINFO_AUTH_SHARED;
+					break;
+
+				default:
+					break;
+			}
+
+			for( i = 0; i < 4; i++ )
+			{
+				snprintf(k, sizeof(k), "wep_key%d", i);
+
+				if( (val = nl80211_getval(ifname, res, k)) )
+				{
+					if( (strlen(val) == 5) || (strlen(val) == 10) )
+						c->pair_ciphers |= IWINFO_CIPHER_WEP40;
+
+					else if( (strlen(val) == 13) || (strlen(val) == 26) )
+						c->pair_ciphers |= IWINFO_CIPHER_WEP104;
+				}
+			}
+		}
+
+		c->group_ciphers = c->pair_ciphers;
+		c->enabled = (c->auth_algs || c->auth_suites) ? 1 : 0;
 
 		return 0;
 	}
