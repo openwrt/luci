@@ -11,7 +11,9 @@ community=$2
 # Try to get BSSID from profile first
 config_load profile_$community
 config_get bssid bssidscheme $channel
-config_get bssid_all bssidscheme "all" && bssid="$bssid_all"
+if [ -z "$bssid" ]; then
+	config_get bssid bssidscheme "all"
+fi
 
 if [ -z "$bssid" ]; then
 	case $channel in
