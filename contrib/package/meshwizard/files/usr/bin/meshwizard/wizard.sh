@@ -50,7 +50,12 @@ done < /tmp/meshwizard.tmp
 	$dir/helpers/setup_dnsmasq.sh
 
 # system
+	echo "++++ system config"
 	$dir/helpers/setup_system.sh
+
+# freifunk
+	echo "++++ /etc/config/freifunk config"
+        $dir/helpers/setup_freifunk.sh
 
 # Configure found networks
 for net in $networks; do
