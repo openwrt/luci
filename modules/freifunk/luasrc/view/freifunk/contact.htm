@@ -17,7 +17,7 @@ $Id$
 <% 
 local uci = require "luci.model.uci".cursor()
 local contact = uci:get_all("freifunk", "contact")
-local location = uci:get_first("system", "system", "location")
+local location = uci:get_first("system", "system", "location") or contact.location
 local lon = uci:get_first("system", "system", "longitude")
 local lat = uci:get_first("system", "system", "latitude")
 %>
