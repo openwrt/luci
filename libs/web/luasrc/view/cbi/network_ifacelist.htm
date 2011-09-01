@@ -45,7 +45,7 @@
 			<% if link then -%><a href="<%=link%>"><% end -%>
 			<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 			<% if link then -%></a><% end -%>
-			<%=iface:get_i18n()%><% local n = iface:get_network(); if n then %> (<a href="<%=n:adminlink()%>"><%=n:name()%></a>)<% end %>
+			<%=pcdata(iface:get_i18n())%><% local n = iface:get_network(); if n then %> (<a href="<%=n:adminlink()%>"><%=n:name()%></a>)<% end %>
 		</label>
 	</li>
 	<% end end %>
