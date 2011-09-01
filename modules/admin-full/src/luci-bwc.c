@@ -142,6 +142,10 @@ static void reset_countdown(int sig)
 }
 
 
+static char *progname;
+static int prognamelen;
+
+
 static int init_directory(char *path)
 {
 	char *p = path;
@@ -336,7 +340,7 @@ static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
 	return update_file(path, &e, sizeof(struct load_entry));
 }
 
-static int run_daemon(char *progname)
+static int run_daemon(void)
 {
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
@@ -390,7 +394,8 @@ static int run_daemon(char *progname)
 	for (reset_countdown(0); countdown >= 0; countdown--)
 	{
 		/* alter progname for ps, top */
-		sprintf(progname, "luci-bwc %d", countdown);
+		memset(progname, 0, prognamelen);
+		snprintf(progname, prognamelen, "luci-bwc %d", countdown);
 
 		if ((info = fopen("/proc/net/dev", "r")) != NULL)
 		{
@@ -456,44 +461,38 @@ static int run_daemon(char *progname)
 	return 0;
 }
 
-static int check_daemon(char *progname)
+static void check_daemon(void)
 {
 	int pid;
 
 	if ((pid = readpid()) < 0 || kill(pid, 0) < 0)
 	{
 		/* daemon ping failed, try to start it up */
-		if (run_daemon(progname))
+		if (run_daemon())
 		{
 			fprintf(stderr,
 				"Failed to ping daemon and unable to start it up: %s\n",
 				strerror(errno));
 
-			return 1;
+			exit(1);
 		}
 	}
 	else if (kill(pid, SIGUSR1))
 	{
 		fprintf(stderr, "Failed to send signal: %s\n", strerror(errno));
-		return 1;
+		exit(2);
 	}
-
-	return 0;
 }
 
-static int run_dump_ifname(char *progname, const char *ifname)
+static int run_dump_ifname(const char *ifname)
 {
 	int i;
 	char path[1024];
 	struct file_map m;
 	struct traffic_entry *e;
 
+	check_daemon();
 	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
-
-	if (check_daemon(progname))
-	{
-		return 1;
-	}
 
 	if (mmap_file(path, sizeof(struct traffic_entry), &m))
 	{
@@ -521,19 +520,15 @@ static int run_dump_ifname(char *progname, const char *ifname)
 	return 0;
 }
 
-static int run_dump_conns(char *progname)
+static int run_dump_conns(void)
 {
 	int i;
 	char path[1024];
 	struct file_map m;
 	struct conn_entry *e;
 
+	check_daemon();
 	snprintf(path, sizeof(path), DB_CN_FILE);
-
-	if (check_daemon(progname))
-	{
-		return 1;
-	}
 
 	if (mmap_file(path, sizeof(struct conn_entry), &m))
 	{
@@ -559,19 +554,15 @@ static int run_dump_conns(char *progname)
 	return 0;
 }
 
-static int run_dump_load(char *progname)
+static int run_dump_load(void)
 {
 	int i;
 	char path[1024];
 	struct file_map m;
 	struct load_entry *e;
 
+	check_daemon();
 	snprintf(path, sizeof(path), DB_LD_FILE);
-
-	if (check_daemon(progname))
-	{
-		return 1;
-	}
 
 	if (mmap_file(path, sizeof(struct load_entry), &m))
 	{
@@ -602,6 +593,12 @@ int main(int argc, char *argv[])
 {
 	int opt;
 
+	progname = argv[0];
+	prognamelen = -1;
+
+	for (opt = 0; opt < argc; opt++)
+		prognamelen += 1 + strlen(argv[opt]);
+
 	while ((opt = getopt(argc, argv, "t:i:cl")) > -1)
 	{
 		switch (opt)
@@ -612,14 +609,14 @@ int main(int argc, char *argv[])
 
 			case 'i':
 				if (optarg)
-					return run_dump_ifname(argv[0], optarg);
+					return run_dump_ifname(optarg);
 				break;
 
 			case 'c':
-				return run_dump_conns(argv[0]);
+				return run_dump_conns();
 
 			case 'l':
-				return run_dump_load(argv[0]);
+				return run_dump_load();
 
 			default:
 				break;
