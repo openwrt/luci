@@ -69,57 +69,42 @@ function action_bandwidth()
 	local path  = luci.dispatcher.context.requestpath
 	local iface = path[#path]
 
-	local fs = require "luci.fs"
-	if fs.access("/var/lib/luci-bwc/if/%s" % iface) then
-		luci.http.prepare_content("application/json")
+	luci.http.prepare_content("application/json")
 
-		local bwc = io.popen("luci-bwc -i %q 2>/dev/null" % iface)
-		if bwc then
-			luci.http.write("[")
+	local bwc = io.popen("luci-bwc -i %q 2>/dev/null" % iface)
+	if bwc then
+		luci.http.write("[")
 
-			while true do
-				local ln = bwc:read("*l")
-				if not ln then break end
-				luci.http.write(ln)
-			end
-
-			luci.http.write("]")
-			bwc:close()
+		while true do
+			local ln = bwc:read("*l")
+			if not ln then break end
+			luci.http.write(ln)
 		end
 
-		return
+		luci.http.write("]")
+		bwc:close()
 	end
-
-	luci.http.status(404, "No data available")
 end
 
 function action_load()
-	local fs = require "luci.fs"
-	if fs.access("/var/lib/luci-bwc/load") then
-		luci.http.prepare_content("application/json")
+	luci.http.prepare_content("application/json")
 
-		local bwc = io.popen("luci-bwc -l 2>/dev/null")
-		if bwc then
-			luci.http.write("[")
+	local bwc = io.popen("luci-bwc -l 2>/dev/null")
+	if bwc then
+		luci.http.write("[")
 
-			while true do
-				local ln = bwc:read("*l")
-				if not ln then break end
-				luci.http.write(ln)
-			end
-
-			luci.http.write("]")
-			bwc:close()
+		while true do
+			local ln = bwc:read("*l")
+			if not ln then break end
+			luci.http.write(ln)
 		end
 
-		return
+		luci.http.write("]")
+		bwc:close()
 	end
-
-	luci.http.status(404, "No data available")
 end
 
 function action_connections()
-	local fs  = require "luci.fs"
 	local sys = require "luci.sys"
 
 	luci.http.prepare_content("application/json")
@@ -127,20 +112,18 @@ function action_connections()
 	luci.http.write("{ connections: ")
 	luci.http.write_json(sys.net.conntrack())
 
-	if fs.access("/var/lib/luci-bwc/connections") then
-		local bwc = io.popen("luci-bwc -c 2>/dev/null")
-		if bwc then
-			luci.http.write(", statistics: [")
+	local bwc = io.popen("luci-bwc -c 2>/dev/null")
+	if bwc then
+		luci.http.write(", statistics: [")
 
-			while true do
-				local ln = bwc:read("*l")
-				if not ln then break end
-				luci.http.write(ln)
-			end
-
-			luci.http.write("]")
-			bwc:close()
+		while true do
+			local ln = bwc:read("*l")
+			if not ln then break end
+			luci.http.write(ln)
 		end
+
+		luci.http.write("]")
+		bwc:close()
 	end
 
 	luci.http.write(" }")
