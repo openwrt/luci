@@ -25,6 +25,7 @@
 #include <time.h>
 #include <errno.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include <sys/stat.h>
 #include <sys/mman.h>
@@ -33,6 +34,9 @@
 
 #define STEP_COUNT	60
 #define STEP_TIME	1
+#define TIMEOUT		10
+
+#define PID_PATH	"/var/run/luci-bwc.pid"
 
 #define DB_PATH		"/var/lib/luci-bwc"
 #define DB_IF_FILE	DB_PATH "/if/%s"
@@ -90,6 +94,57 @@ static uint64_t htonll(uint64_t value)
 
 #define ntohll htonll
 
+static int readpid(void)
+{
+	int fd;
+	int pid = -1;
+	char buf[9] = { 0 };
+
+	if ((fd = open(PID_PATH, O_RDONLY)) > -1)
+	{
+		if (read(fd, buf, sizeof(buf)))
+		{
+			buf[8] = 0;
+			pid = atoi(buf);
+		}
+
+		close(fd);
+	}
+
+	return pid;
+}
+
+static int writepid(void)
+{
+	int fd;
+	int wlen;
+	char buf[9] = { 0 };
+
+	if ((fd = open(PID_PATH, O_WRONLY | O_CREAT | O_TRUNC, 0600)) > -1)
+	{
+		wlen = snprintf(buf, sizeof(buf), "%i", getpid());
+		write(fd, buf, wlen);
+		close(fd);
+
+		return 0;
+	}
+
+	return -1;
+}
+
+static int timeout = TIMEOUT;
+static int countdown = -1;
+
+static void reset_countdown(int sig)
+{
+	countdown = timeout;
+
+}
+
+
+static char *progname;
+static int prognamelen;
+
 
 static int init_directory(char *path)
 {
@@ -135,6 +190,11 @@ static int init_file(char *path, int esize)
 	return -1;
 }
 
+static inline uint64_t timeof(void *entry)
+{
+	return ((struct traffic_entry *)entry)->time;
+}
+
 static int update_file(const char *path, void *entry, int esize)
 {
 	int rv = -1;
@@ -148,8 +208,11 @@ static int update_file(const char *path, void *entry, int esize)
 
 		if ((map != NULL) && (map != MAP_FAILED))
 		{
-			memmove(map, map + esize, esize * (STEP_COUNT-1));
-			memcpy(map + esize * (STEP_COUNT-1), entry, esize);
+			if (timeof(entry) > timeof(map + esize * (STEP_COUNT-1)))
+			{
+				memmove(map, map + esize, esize * (STEP_COUNT-1));
+				memcpy(map + esize * (STEP_COUNT-1), entry, esize);
+			}
 
 			munmap(map, esize * STEP_COUNT);
 
@@ -277,7 +340,7 @@ static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
 	return update_file(path, &e, sizeof(struct load_entry));
 }
 
-static int run_daemon(int nofork)
+static int run_daemon(void)
 {
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
@@ -286,39 +349,54 @@ static int run_daemon(int nofork)
 	char line[1024];
 	char ifname[16];
 
+	struct sigaction sa;
+
 	struct stat s;
 	const char *ipc = stat("/proc/net/nf_conntrack", &s)
 		? "/proc/net/ip_conntrack" : "/proc/net/nf_conntrack";
 
-	if (!nofork)
+	switch (fork())
 	{
-		switch (fork())
-		{
-			case -1:
-				perror("fork()");
-				return -1;
+		case -1:
+			perror("fork()");
+			return -1;
 
-			case 0:
-				if (chdir("/") < 0)
-				{
-					perror("chdir()");
-					exit(1);
-				}
+		case 0:
+			if (chdir("/") < 0)
+			{
+				perror("chdir()");
+				exit(1);
+			}
 
-				close(0);
-				close(1);
-				close(2);
-				break;
+			close(0);
+			close(1);
+			close(2);
+			break;
 
-			default:
-				exit(0);
-		}
+		default:
+			return 0;
 	}
 
+	/* setup USR1 signal handler to reset timer */
+	sa.sa_handler = reset_countdown;
+	sa.sa_flags   = SA_RESTART;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+
+	/* write pid */
+	if (writepid())
+	{
+		fprintf(stderr, "Failed to write pid file: %s\n", strerror(errno));
+		return 1;
+	}
 
 	/* go */
-	while (1)
+	for (reset_countdown(0); countdown >= 0; countdown--)
 	{
+		/* alter progname for ps, top */
+		memset(progname, 0, prognamelen);
+		snprintf(progname, prognamelen, "luci-bwc %d", countdown);
+
 		if ((info = fopen("/proc/net/dev", "r")) != NULL)
 		{
 			while (fgets(line, sizeof(line), info))
@@ -377,6 +455,33 @@ static int run_daemon(int nofork)
 
 		sleep(STEP_TIME);
 	}
+
+	unlink(PID_PATH);
+
+	return 0;
+}
+
+static void check_daemon(void)
+{
+	int pid;
+
+	if ((pid = readpid()) < 0 || kill(pid, 0) < 0)
+	{
+		/* daemon ping failed, try to start it up */
+		if (run_daemon())
+		{
+			fprintf(stderr,
+				"Failed to ping daemon and unable to start it up: %s\n",
+				strerror(errno));
+
+			exit(1);
+		}
+	}
+	else if (kill(pid, SIGUSR1))
+	{
+		fprintf(stderr, "Failed to send signal: %s\n", strerror(errno));
+		exit(2);
+	}
 }
 
 static int run_dump_ifname(const char *ifname)
@@ -386,6 +491,7 @@ static int run_dump_ifname(const char *ifname)
 	struct file_map m;
 	struct traffic_entry *e;
 
+	check_daemon();
 	snprintf(path, sizeof(path), DB_IF_FILE, ifname);
 
 	if (mmap_file(path, sizeof(struct traffic_entry), &m))
@@ -421,6 +527,7 @@ static int run_dump_conns(void)
 	struct file_map m;
 	struct conn_entry *e;
 
+	check_daemon();
 	snprintf(path, sizeof(path), DB_CN_FILE);
 
 	if (mmap_file(path, sizeof(struct conn_entry), &m))
@@ -454,6 +561,7 @@ static int run_dump_load(void)
 	struct file_map m;
 	struct load_entry *e;
 
+	check_daemon();
 	snprintf(path, sizeof(path), DB_LD_FILE);
 
 	if (mmap_file(path, sizeof(struct load_entry), &m))
@@ -484,19 +592,19 @@ static int run_dump_load(void)
 int main(int argc, char *argv[])
 {
 	int opt;
-	int daemon = 0;
-	int nofork = 0;
 
-	while ((opt = getopt(argc, argv, "dfi:cl")) > -1)
+	progname = argv[0];
+	prognamelen = -1;
+
+	for (opt = 0; opt < argc; opt++)
+		prognamelen += 1 + strlen(argv[opt]);
+
+	while ((opt = getopt(argc, argv, "t:i:cl")) > -1)
 	{
 		switch (opt)
 		{
-			case 'd':
-				daemon = 1;
-				break;
-
-			case 'f':
-				nofork = 1;
+			case 't':
+				timeout = atoi(optarg);
 				break;
 
 			case 'i':
@@ -515,18 +623,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (daemon)
-		return run_daemon(nofork);
-
-	else
-		fprintf(stderr,
-			"Usage:\n"
-			"	%s -d [-f]\n"
-			"	%s -i ifname\n"
-			"	%s -c\n"
-			"	%s -l\n",
-				argv[0], argv[0], argv[0], argv[0]
-		);
+	fprintf(stderr,
+		"Usage:\n"
+		"	%s [-t timeout] -i ifname\n"
+		"	%s [-t timeout] -c\n"
+		"	%s [-t timeout] -l\n",
+			argv[0], argv[0], argv[0]
+	);
 
 	return 1;
 }

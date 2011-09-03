@@ -39,7 +39,7 @@ luastrip: luasource
 	for i in $$(find dist -type f -name '*.lua'); do perl -e 'undef $$/; open( F, "< $$ARGV[0]" ) || die $$!; $$src = <F>; close F; $$src =~ s/--\[\[.*?\]\](--)?//gs; $$src =~ s/^\s*--.*?\n//gm; open( F, "> $$ARGV[0]" ) || die $$!; print F $$src; close F' $$i; done
 
 luacompile: luasource
-	for i in $$(find dist -name *.lua -not -name debug.lua); do $(LUAC) $(LUAC_OPTIONS) -o $$i $$i; done
+	for i in $$(find dist -name *.lua -not -name debug.lua| sort); do if ! $(LUAC) $(LUAC_OPTIONS) -o $$i $$i; then echo "Error compiling $$i"; exit 1; fi; done
 
 luaclean:
 	rm -rf dist

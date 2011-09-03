@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2011-07-20 11:14+0200\n"
-"Last-Translator: Kamal <kamal.aliev@epscom.ru>\n"
+"PO-Revision-Date: 2011-07-21 17:32+0200\n"
+"Last-Translator: stanislav.fomichev <s@fomichev.me>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,16 @@ msgid ""
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
 msgstr ""
+"<em>Через прокси</em> перенаправляет запросы на заданные узлы через "
+"указанный прокси, <em>Отклонять доступ</em> отключает использование прокси "
+"для всех узлов"
 
 msgid ""
 "Adds an \"X-Tinyproxy\" HTTP header with the client IP address to forwarded "
 "requests"
 msgstr ""
+"Добавляет \"X-Tinyproxy\" HTTP заголовок с IP адресом клиента ко всем "
+"перенаправленным запросам"
 
 msgid "Allowed clients"
 msgstr "Разрешенные клиенты"
@@ -39,96 +44,107 @@ msgid ""
 "activate extended regular expressions"
 msgstr ""
 "Разрешить использование расширенных регулярных выражений для фильтрации. По "
-"умолчанию, используются основные POSIX выражения."
+"умолчанию, используются основные POSIX выражения"
 
 msgid ""
 "By default, filter strings are treated as case-insensitive. Enable this to "
 "make the matching case-sensitive"
 msgstr ""
+"По умолчанию, строки фильтрации регистро-независимы. Включите эту опцию, "
+"чтобы сделать сравнение регистро-зависимым"
 
 msgid ""
 "By default, filtering is done based on domain names. Enable this to match "
 "against URLs instead"
 msgstr ""
+"По умолчанию, фильтрация выполняется на базе имени домена. Включите эту "
+"опцию, чтобы фильтровать используя URL"
 
 msgid ""
 "By default, the filter rules act as blacklist. Enable this option to only "
 "allow matched URLs or domain names"
 msgstr ""
+"По умолчанию, фильтрация работает в режиме черного списка. Включите эту "
+"опцию, чтобы разрешить только определенные URL или доменные имена"
 
 msgid ""
 "Can be either an IP address or range, a domain name or \".\" for any host "
 "without domain"
 msgstr ""
+"Может быть IP адресом, диапазоном, именем домена или \".\" для хоста без "
+"домена"
 
 msgid "Connection timeout"
-msgstr ""
+msgstr "Тайм-аут соединения"
 
 msgid "Default deny"
-msgstr ""
+msgstr "Запретить по умолчанию"
 
 msgid "Enable Tinyproxy server"
-msgstr ""
+msgstr "Включить сервер Tinyproxy"
 
 msgid "Error page"
-msgstr ""
+msgstr "Страница ошибки"
 
 msgid "Filter by RegExp"
-msgstr ""
+msgstr "Фильтровать используя регулярные выражения"
 
 msgid "Filter by URLs"
-msgstr ""
+msgstr "Фильтровать по URL"
 
 msgid "Filter case-sensitive"
 msgstr "Фильтровать с учетом регистра"
 
 msgid "Filter file"
-msgstr ""
+msgstr "Файл фильтрации"
 
 msgid "Filtering and ACLs"
-msgstr ""
+msgstr "Фильтрация и ACL"
 
 msgid "General settings"
 msgstr "Общие настройки"
 
 msgid "Group"
-msgstr ""
+msgstr "Группа"
 
 msgid "HTML template file to serve for stat host requests"
-msgstr ""
+msgstr "HTML шаблон для статистики хостов"
 
 msgid "HTML template file to serve when HTTP errors occur"
-msgstr ""
+msgstr "HTML шаблон для вывода ошибок HTTP"
 
 msgid "Header whitelist"
-msgstr ""
+msgstr "Белый список заголовков"
 
 msgid ""
 "List of IP addresses or ranges which are allowed to use the proxy server"
 msgstr ""
+"Список или диапазон IP адресов, которым разрешено использовать прокси сервер"
 
 msgid ""
 "List of allowed ports for the CONNECT method. A single value \"0\" allows "
 "all ports"
 msgstr ""
+"Список разрешенных портов для метода CONNECT. Значение \"0\" означает все "
+"порты"
 
 msgid "Listen address"
-msgstr ""
+msgstr "Адрес"
 
 msgid "Listen port"
-msgstr ""
+msgstr "Порт"
 
 msgid "Log file"
-msgstr ""
+msgstr "Файл журналирования"
 
 msgid "Log file to use for dumping messages"
-msgstr ""
+msgstr "Файл для записи сообщений"
 
 msgid "Log level"
-msgstr ""
+msgstr "Уровень журналирования"
 
 msgid "Logging verbosity of the Tinyproxy process"
-msgstr ""
+msgstr "Количество дополнительных сообщений процесса Tinyproxy"
 
 msgid "Max. clients"
 msgstr "Макс. кол-во клиентов"
@@ -137,33 +153,37 @@ msgid "Max. requests per server"
 msgstr "Макс. кол-во запросов на сервер"
 
 msgid "Max. spare servers"
-msgstr ""
+msgstr "Макс. кол-во серверов ожидания"
 
 msgid "Maximum allowed number of concurrently connected clients"
-msgstr ""
+msgstr "Максимально допустимое количество одновременно подключенных клиентов"
 
 msgid ""
 "Maximum allowed number of requests per process. If it is exeeded, the "
 "process is restarted. Zero means unlimited."
 msgstr ""
+"Максимально допустимое количество запросов на процесс. Если превышено, "
+"процесс будет перезапущен. Ноль значит не ограничено."
 
 msgid "Maximum number of prepared idle processes"
-msgstr ""
+msgstr "Максимальное количество готовых к обработке процессов"
 
 msgid "Maximum number of seconds an inactive connection is held open"
 msgstr ""
+"Максимальное количество секунд в течение которых неактивное соединение "
+"остается открытым"
 
 msgid "Min. spare servers"
-msgstr ""
+msgstr "Мин. кол-во серверов ожидания"
 
 msgid "Minimum number of prepared idle processes"
-msgstr ""
+msgstr "Минимальное количество готовых к обработке процессов"
 
 msgid "Number of idle processes to start when launching Tinyproxy"
-msgstr ""
+msgstr "Количество готовых к обработке процессов при старте Tinyproxy"
 
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
-msgstr ""
+msgstr "Файл с URL или доменами для фильтрации. Одна запись на строку"
 
 msgid "Policy"
 msgstr "Политика"
@@ -184,39 +204,45 @@ msgid ""
 "Specifies HTTP header names which are allowed to pass-through, all others "
 "are discarded. Leave empty to disable header filtering"
 msgstr ""
+"Определяет HTTP заголовки, которым разрешено проходить через прокси. "
+"Оставьте пустым чтобы не фильтровать заголовки"
 
 msgid "Specifies the HTTP port Tinyproxy is listening on for requests"
-msgstr ""
+msgstr "Определяет HTTP порт, на котором Tinyproxy ожидает запросы"
 
 msgid "Specifies the Tinyproxy hostname to use in the Via HTTP header"
 msgstr ""
+"Определяет имя хоста Tinyproxy, которое будет использовано в Via HTTP "
+"заголовке"
 
 msgid ""
 "Specifies the address Tinyproxy binds to for outbound forwarded requests"
 msgstr ""
+"Определяет адрес, к которому подключается Tinyproxy для перенаправления "
+"исходящих запросов"
 
 msgid "Specifies the addresses Tinyproxy is listening on for requests"
-msgstr ""
+msgstr "Определяет адрес, на котором Tinyproxy ожидает запросы"
 
 msgid "Specifies the group name the Tinyproxy process is running as"
-msgstr ""
+msgstr "Определяет имя группы, в который работает Tinyproxy"
 
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
 "<code>address:port</code>"
-msgstr ""
+msgstr "Определяет прокси для доступа к хосту. Формат <code>адрес:порт</code>"
 
 msgid "Specifies the user name the Tinyproxy process is running as"
-msgstr ""
+msgstr "Определяет пользователя, от имени которого работает Tinyproxy"
 
 msgid "Start spare servers"
-msgstr ""
+msgstr "Запустить указанное количество готовых к обработке процессов"
 
 msgid "Statistics page"
 msgstr "Страница статистики"
 
 msgid "Target host"
-msgstr ""
+msgstr "Хост назначения"
 
 msgid "Tinyproxy"
 msgstr "Tinyproxy"
@@ -225,12 +251,14 @@ msgid "Tinyproxy is a small and fast non-caching HTTP(S)-Proxy"
 msgstr "Tinyproxy - быстрый HTTP(S)-прокси не использующий кэш"
 
 msgid "Upstream Proxies"
-msgstr ""
+msgstr "Прокси для исходящего трафика"
 
 msgid ""
 "Upstream proxy rules define proxy servers to use when accessing certain IP "
 "addresses or domains."
 msgstr ""
+"Прокси для исходящего трафика при обращении к определенным IP адресам или "
+"доменам."
 
 msgid "Use syslog"
 msgstr "Использовать syslog"
@@ -245,7 +273,7 @@ msgid "Via proxy"
 msgstr "Через прокси"
 
 msgid "Writes log messages to syslog instead of a log file"
-msgstr ""
+msgstr "Записывать сообщения журнала в syslog вместо файла"
 
 msgid "X-Tinyproxy header"
-msgstr ""
+msgstr "X-Tinyproxy заголовок"
