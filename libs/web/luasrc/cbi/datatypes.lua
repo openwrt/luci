@@ -267,3 +267,11 @@ function max(val, max)
 
 	return false
 end
+
+function neg(val, what)
+	if what and type(_M[what]) == "function" then
+		return _M[what](val:gsub("^%s*!%s*", ""))
+	end
+
+	return false
+end

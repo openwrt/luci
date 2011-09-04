@@ -219,6 +219,14 @@ var cbi_validators = {
 			return (val <= max);
 
 		return false;
+	},
+
+	'neg': function(v, args)
+	{
+		if (args[0] && typeof cbi_validators[args[0]] == "function")
+			return cbi_validators[args[0]](v.replace(/^\s*!\s*/, ''));
+
+		return false;
 	}
 };
 
