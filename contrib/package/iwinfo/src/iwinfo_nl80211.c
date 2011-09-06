@@ -742,7 +742,7 @@ static void nl80211_fill_signal(const char *ifname, struct nl80211_rssi_rate *r)
 				if (req)
 				{
 					nl80211_cb(req, nl80211_fill_signal_cb, r);
-					nl80211_send(req);
+					nl80211_free(nl80211_send(req));
 					nl80211_free(req);
 				}
 			}
@@ -831,7 +831,7 @@ int nl80211_get_noise(const char *ifname, int *buf)
 		noise = 0;
 
 		nl80211_cb(req, nl80211_get_noise_cb, &noise);
-		nl80211_send(req);
+		nl80211_free(nl80211_send(req));
 		nl80211_free(req);
 
 		if (noise)
@@ -1122,7 +1122,7 @@ int nl80211_get_assoclist(const char *ifname, char *buf, int *len)
 				if (req)
 				{
 					nl80211_cb(req, nl80211_get_assoclist_cb, &ac);
-					nl80211_send(req);
+					nl80211_free(nl80211_send(req));
 					nl80211_free(req);
 				}
 			}
