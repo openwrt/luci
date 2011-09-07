@@ -45,8 +45,6 @@ struct nl80211_msg_conveyor {
 	int custom_cb;
 	struct nl_msg *msg;
 	struct nl_cb *cb;
-	struct genlmsghdr *hdr;
-	struct nlattr *attr[NL80211_ATTR_MAX + 1];
 };
 
 struct nl80211_rssi_rate {
@@ -57,6 +55,11 @@ struct nl80211_rssi_rate {
 struct nl80211_assoc_count {
 	struct iwinfo_assoclist_entry *entry;
 	int noise;
+	int count;
+};
+
+struct nl80211_arraybuf {
+	void *buf;
 	int count;
 };
 
