@@ -1046,7 +1046,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 
 static int nl80211_get_assoclist_cb(struct nl_msg *msg, void *arg)
 {
-	struct nl80211_arraybuf *arr = arg;
+	struct nl80211_array_buf *arr = arg;
 	struct iwinfo_assoclist_entry *e = arr->buf;
 	struct nlattr **attr = nl80211_parse(msg);
 	struct nlattr *sinfo[NL80211_STA_INFO_MAX + 1];
@@ -1092,7 +1092,7 @@ int nl80211_get_assoclist(const char *ifname, char *buf, int *len)
 	int i, noise = 0;
 	struct dirent *de;
 	struct nl80211_msg_conveyor *req;
-	struct nl80211_arraybuf arr = { .buf = buf, .count = 0 };
+	struct nl80211_array_buf arr = { .buf = buf, .count = 0 };
 	struct iwinfo_assoclist_entry *e;
 
 	if ((d = opendir("/sys/class/net")) != NULL)
@@ -1434,7 +1434,7 @@ static int nl80211_get_freqlist_cb(struct nl_msg *msg, void *arg)
 {
 	int bands_remain, freqs_remain;
 
-	struct nl80211_arraybuf *arr = arg;
+	struct nl80211_array_buf *arr = arg;
 	struct iwinfo_freqlist_entry *e = arr->buf;
 
 	struct nlattr **attr = nl80211_parse(msg);
@@ -1486,7 +1486,7 @@ static int nl80211_get_freqlist_cb(struct nl_msg *msg, void *arg)
 int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 {
 	struct nl80211_msg_conveyor *req;
-	struct nl80211_arraybuf arr = { .buf = buf, .count = 0 };
+	struct nl80211_array_buf arr = { .buf = buf, .count = 0 };
 
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if (req)

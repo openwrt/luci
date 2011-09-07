@@ -52,13 +52,7 @@ struct nl80211_rssi_rate {
 	int8_t  rssi;
 };
 
-struct nl80211_assoc_count {
-	struct iwinfo_assoclist_entry *entry;
-	int noise;
-	int count;
-};
-
-struct nl80211_arraybuf {
+struct nl80211_array_buf {
 	void *buf;
 	int count;
 };
