@@ -8,6 +8,7 @@ local latitude = uci:get_first ("system", "system", "latitude")
 local longitude = uci:get_first ("system", "system", "longitude")
 local location = uci:get_first ("system", "system", "location")
 local basicsurl = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "freifunk", "basics")
+luci.i18n.loadc("freifunk")
 %>
 
 <h2><%:Freifunk Overview%></h2>

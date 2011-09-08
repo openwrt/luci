@@ -1,4 +1,4 @@
-PO = mesh-wizard
+PO = meshwizard
 
 include ../../build/config.mk
 include ../../build/module.mk
