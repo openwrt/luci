@@ -12,5 +12,5 @@ start() {
 }
 
 stop() {
-	[[ -w /etc/init.d/luci_fixtime ]] && touch /etc/init.d/luci_fixtime
+	[[ -w /etc/init.d/luci_fixtime ]] && cat /dev/null >> /etc/init.d/luci_fixtime && touch /etc/init.d/luci_fixtime
 }

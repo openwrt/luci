@@ -115,7 +115,7 @@ local knownParams = {
 		{ Value,		"management",			"127.0.0.1 31194 /etc/openvpn/mngmt-pwds" },
 		{ Flag,			"management_query_passwords",	0 },	-- management
 		{ Flag,			"management_hold",		0 },	-- management
-		{ Flag,			"management_log_cache",		100 },	-- management
+		{ Value,			"management_log_cache",		100 },	-- management
 		{ ListValue,		"topology",			{ "net30", "p2p", "subnet" }, {dev_type="tun" } },
 	} },
 

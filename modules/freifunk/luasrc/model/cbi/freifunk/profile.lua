@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 
 local uci = require "luci.model.uci".cursor()
 local community = uci:get("freifunk", "community", "name")
+luci.i18n.loadc("freifunk")
 
 if community == nil then
 	luci.http.redirect(luci.dispatcher.build_url("admin", "freifunk", "profile_error"))
