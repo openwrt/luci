@@ -163,9 +163,8 @@ static struct nl80211_msg_conveyor * nl80211_msg(const char *ifname, int cmd, in
 	if (phyidx > -1)
 		NLA_PUT_U32(req, NL80211_ATTR_WIPHY, phyidx);
 
-	cv.msg       = req;
-	cv.cb        = cb;
-	cv.custom_cb = 0;
+	cv.msg = req;
+	cv.cb  = cb;
 
 	return &cv;
 
@@ -180,19 +179,16 @@ nla_put_failure:
 	return NULL;
 }
 
-static void nl80211_cb(struct nl80211_msg_conveyor *cv,
-	int (*cb)(struct nl_msg *, void *), void *arg)
-{
-	cv->custom_cb = 1;
-	nl_cb_set(cv->cb, NL_CB_VALID, NL_CB_CUSTOM, cb, arg);
-}
-
-static struct nl80211_msg_conveyor * nl80211_send(struct nl80211_msg_conveyor *cv)
-{
+static struct nl80211_msg_conveyor * nl80211_send(
+	struct nl80211_msg_conveyor *cv,
+	int (*cb_func)(struct nl_msg *, void *), void *cb_arg
+) {
 	static struct nl80211_msg_conveyor rcv;
 	int err = 1;
 
-	if (!cv->custom_cb)
+	if (cb_func)
+		nl_cb_set(cv->cb, NL_CB_VALID, NL_CB_CUSTOM, cb_func, cb_arg);
+	else
 		nl_cb_set(cv->cb, NL_CB_VALID, NL_CB_CUSTOM, nl80211_msg_response, &rcv);
 
 	if (nl_send_auto_complete(nls->nl_sock, cv->msg) < 0)
@@ -305,8 +301,7 @@ static char * nl80211_ifname2phy(const char *ifname)
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if (req)
 	{
-		nl80211_cb(req, nl80211_ifname2phy_cb, phy);
-		nl80211_send(req);
+		nl80211_send(req, nl80211_ifname2phy_cb, phy);
 		nl80211_free(req);
 	}
 
@@ -502,7 +497,7 @@ static char * nl80211_ifadd(const char *ifname)
 		NLA_PUT_STRING(req->msg, NL80211_ATTR_IFNAME, nif);
 		NLA_PUT_U32(req->msg, NL80211_ATTR_IFTYPE, NL80211_IFTYPE_STATION);
 
-		nl80211_send(req);
+		nl80211_send(req, NULL, NULL);
 
 		rv = nif;
 
@@ -522,7 +517,7 @@ static void nl80211_ifdel(const char *ifname)
 	{
 		NLA_PUT_STRING(req->msg, NL80211_ATTR_IFNAME, ifname);
 
-		nl80211_send(req);
+		nl80211_send(req, NULL, NULL);
 
 	nla_put_failure:
 		nl80211_free(req);
@@ -736,8 +731,7 @@ static void nl80211_fill_signal(const char *ifname, struct nl80211_rssi_rate *r)
 
 				if (req)
 				{
-					nl80211_cb(req, nl80211_fill_signal_cb, r);
-					nl80211_send(req);
+					nl80211_send(req, nl80211_fill_signal_cb, r);
 					nl80211_free(req);
 				}
 			}
@@ -821,8 +815,7 @@ int nl80211_get_noise(const char *ifname, int *buf)
 	{
 		noise = 0;
 
-		nl80211_cb(req, nl80211_get_noise_cb, &noise);
-		nl80211_send(req);
+		nl80211_send(req, nl80211_get_noise_cb, &noise);
 		nl80211_free(req);
 
 		if (noise)
@@ -1108,8 +1101,7 @@ int nl80211_get_assoclist(const char *ifname, char *buf, int *len)
 
 				if (req)
 				{
-					nl80211_cb(req, nl80211_get_assoclist_cb, &arr);
-					nl80211_send(req);
+					nl80211_send(req, nl80211_get_assoclist_cb, &arr);
 					nl80211_free(req);
 				}
 
@@ -1196,8 +1188,7 @@ int nl80211_get_txpwrlist(const char *ifname, char *buf, int *len)
 		/* initialize the value pointer with channel for callback */
 		dbm_max = ch_cur;
 
-		nl80211_cb(req, nl80211_get_txpwrlist_cb, &dbm_max);
-		nl80211_send(req);
+		nl80211_send(req, nl80211_get_txpwrlist_cb, &dbm_max);
 		nl80211_free(req);
 	}
 
@@ -1491,8 +1482,7 @@ int nl80211_get_freqlist(const char *ifname, char *buf, int *len)
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if (req)
 	{
-		nl80211_cb(req, nl80211_get_freqlist_cb, &arr);
-		nl80211_send(req);
+		nl80211_send(req, nl80211_get_freqlist_cb, &arr);
 		nl80211_free(req);
 	}
 
@@ -1526,8 +1516,7 @@ int nl80211_get_country(const char *ifname, char *buf)
 	req = nl80211_msg(ifname, NL80211_CMD_GET_REG, 0);
 	if (req)
 	{
-		nl80211_cb(req, nl80211_get_country_cb, buf);
-		nl80211_send(req);
+		nl80211_send(req, nl80211_get_country_cb, buf);
 		nl80211_free(req);
 
 		if (buf[0])
@@ -1612,8 +1601,7 @@ int nl80211_get_hwmodelist(const char *ifname, int *buf)
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if (req)
 	{
-		nl80211_cb(req, nl80211_get_hwmodelist_cb, buf);
-		nl80211_send(req);
+		nl80211_send(req, nl80211_get_hwmodelist_cb, buf);
 		nl80211_free(req);
 	}
 

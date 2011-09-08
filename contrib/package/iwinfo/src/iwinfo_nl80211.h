@@ -42,7 +42,6 @@ struct nl80211_state {
 };
 
 struct nl80211_msg_conveyor {
-	int custom_cb;
 	struct nl_msg *msg;
 	struct nl_cb *cb;
 };
