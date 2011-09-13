@@ -16,6 +16,8 @@ $Id$
 module("luci.controller.admin.status", package.seeall)
 
 function index()
+	local function _(x) return x end
+
 	entry({"admin", "status"}, alias("admin", "status", "overview"), _("Status"), 20).index = true
 	entry({"admin", "status", "overview"}, template("admin_status/index"), _("Overview"), 1)
 	entry({"admin", "status", "iptables"}, call("action_iptables"), _("Firewall"), 2).leaf = true
@@ -29,7 +31,10 @@ function index()
 	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), _("Realtime Traffic"), 7).leaf = true
 	entry({"admin", "status", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
-	entry({"admin", "status", "connections"}, template("admin_status/connections"), _("Realtime Connections"), 8).leaf = true
+	entry({"admin", "status", "wireless"}, template("admin_status/wireless"), _("Realtime Wireless"), 8).leaf = true
+	entry({"admin", "status", "wireless_status"}, call("action_wireless")).leaf = true
+
+	entry({"admin", "status", "connections"}, template("admin_status/connections"), _("Realtime Connections"), 9).leaf = true
 	entry({"admin", "status", "connections_status"}, call("action_connections")).leaf = true
 
 	entry({"admin", "status", "processes"}, cbi("admin_status/processes"), _("Processes"), 20)
@@ -72,6 +77,27 @@ function action_bandwidth()
 	luci.http.prepare_content("application/json")
 
 	local bwc = io.popen("luci-bwc -i %q 2>/dev/null" % iface)
+	if bwc then
+		luci.http.write("[")
+
+		while true do
+			local ln = bwc:read("*l")
+			if not ln then break end
+			luci.http.write(ln)
+		end
+
+		luci.http.write("]")
+		bwc:close()
+	end
+end
+
+function action_wireless()
+	local path  = luci.dispatcher.context.requestpath
+	local iface = path[#path]
+
+	luci.http.prepare_content("application/json")
+
+	local bwc = io.popen("luci-bwc -r %q 2>/dev/null" % iface)
 	if bwc then
 		luci.http.write("[")
 
