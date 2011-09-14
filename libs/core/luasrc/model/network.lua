@@ -394,6 +394,24 @@ function get_interfaces(self)
 		end
 	end
 
+	-- find vlan interfaces
+	uci_r:foreach("network", "switch_vlan",
+		function(s)
+			local base = s.device or "-"
+			if not base:match("^eth%d") then
+				base = "eth0"
+			end
+
+			local vid = tonumber(s.vid or s.vlan)
+			if vid ~= nil and vid >= 0 and vid <= 4095 then
+				local iface = "%s.%d" %{ base, vid }
+				if not seen[iface] then
+					seen[iface] = true
+					nfs[iface] = interface(iface)
+				end
+			end
+		end)
+
 	for iface in utl.kspairs(nfs) do
 		ifaces[#ifaces+1] = nfs[iface]
 	end
@@ -823,7 +841,9 @@ function interface.type(self)
 		return "wifi"
 	elseif brs[self.ifname] then
 		return "bridge"
-	elseif sws[self.ifname] or self.ifname:match("%.") then
+	elseif self.ifname:match("%.") then
+		return "vlan"
+	elseif sws[self.ifname] then
 		return "switch"
 	else
 		return "ethernet"
@@ -861,6 +881,8 @@ function interface.get_type_i18n(self)
 		return i18n.translate("Bridge")
 	elseif x == "switch" then
 		return i18n.translate("Ethernet Switch")
+	elseif x == "vlan" then
+		return i18n.translate("VLAN Interface")
 	else
 		return i18n.translate("Ethernet Adapter")
 	end
