@@ -123,7 +123,6 @@ ifname_single.template = "cbi/network_ifacelist"
 ifname_single.widget = "radio"
 ifname_single.nobridges = true
 ifname_single.network = arg[1]
-ifname_single.rmempty = true
 ifname_single:depends({ type = "", proto = "static" })
 ifname_single:depends({ type = "", proto = "dhcp"   })
 ifname_single:depends({ type = "", proto = "pppoe"  })
@@ -132,7 +131,8 @@ ifname_single:depends({ type = "", proto = "ahcp"   })
 ifname_single:depends({ type = "", proto = "none"   })
 
 function ifname_single.cfgvalue(self, s)
-	return self.map.uci:get("network", s, "ifname")
+	-- let the template figure out the related ifaces through the network model
+	return nil
 end
 
 function ifname_single.write(self, s, val)
@@ -154,6 +154,11 @@ function ifname_single.write(self, s, val)
 	end
 end
 
+function ifname_single.remove(self, s)
+	self:write(s, "")
+end
+
+
 ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
 ifname_multi.template = "cbi/network_ifacelist"
 ifname_multi.nobridges = true
@@ -162,6 +167,7 @@ ifname_multi.widget = "checkbox"
 ifname_multi:depends("type", "bridge")
 ifname_multi.cfgvalue = ifname_single.cfgvalue
 ifname_multi.write = ifname_single.write
+ifname_multi.remove = ifname_single.remove
 
 
 if has_firewall then
