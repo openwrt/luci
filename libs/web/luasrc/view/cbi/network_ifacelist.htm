@@ -3,12 +3,15 @@
 <%-
 	local utl = require "luci.util"
 	local net = require "luci.model.network".init()
+	local cbeid = luci.cbi.FEXIST_PREFIX .. self.config .. "." .. section .. "." .. self.option
 
 	local iface
 	local ifaces = net:get_interfaces()
-	local value = self:formvalue(section)
-
-	if not value or value == "" then
+	local value
+	
+	if self.map:formvalue(cbeid) == "1" then
+		value = self:formvalue(section) or self.default or ""
+	else
 		value = self:cfgvalue(section) or self.default
 	end
 
@@ -29,6 +32,7 @@
 	end
 -%>
 
+<input type="hidden" name="<%=cbeid%>" value="1" />
 <ul style="margin:0; list-style-type:none">
 	<% for _, iface in ipairs(ifaces) do
 	     local link = iface:adminlink()
