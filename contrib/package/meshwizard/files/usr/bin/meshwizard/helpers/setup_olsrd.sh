@@ -5,7 +5,6 @@
 net=$1
 
 . /etc/functions.sh
-
 . $dir/functions.sh
 
 # Clean or delete interface defaults
@@ -24,9 +23,9 @@ config_foreach handle_interfacedefaults InterfaceDefaults
 
 # Setup new InterfaceDefaults
 
-echo "    + Setup InterfaceDefaults"
 uci set olsrd.InterfaceDefaults=InterfaceDefaults
 set_defaults "olsr_interfacedefaults_" olsrd.InterfaceDefaults
+uci_commitverbose "Setup olsr interface defaults" olsrd
 
 # Delete old interface for $netrenamed
 handle_interface() {
@@ -44,14 +43,11 @@ config_foreach handle_interface Interface
 
 # Setup new interface for $netrenamed
 
-echo "    + Setup Interface"
-
 uci set olsrd.$netrenamed=Interface
-
 set_defaults "olsr_interface_" olsrd.$net
-
 uci set olsrd.$netrenamed.interface="$netrenamed"
-echo "    interface: $netrenamed"
+
+uci_commitverbose "Setup olsr interface for $netrenamed." olsrd
 
 # If dhcp-network is inside the mesh_network then add HNA for it
 dhcprange=$(uci get meshwizard.netconfig.$net\_dhcprange)
@@ -63,19 +59,16 @@ uci -q delete olsrd.${netrenamed}clients
 dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
 
 if [ "$dhcpinmesh" == 1 ]; then
-	echo "    + Setting up HNA"
 	uci set olsrd.${netrenamed}clients="Hna4"
 	eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange)
 	uci set olsrd.${netrenamed}clients.netaddr="$NETWORK"
 	uci set olsrd.${netrenamed}clients.netmask="$NETMASK"
-	echo "    netaddr: $NETWORK"
-	echo "    natmask: $NETMASK"
+	uci_commitverbose "Setup HNA for network $dhcprange" olsrd
 fi
 
 
 # Delete nameservice, dyngw and httpinfo plugins
 
-echo "    + Configure Plugins"
 handle_plugin() {
         config_get library "$1" library
 	if [ "$cleanup" == 1 ]; then
@@ -105,7 +98,7 @@ set olsrd.olsrd_nameservice.sighup_pid_file="/var/run/dnsmasq.pid"
 set olsrd.olsrd_nameservice.suffix="$suffix"
 EOF
 
-echo "    Nameservice Plugin configured."
+uci_commitverbose "Setup olsr nameservice plugin" olsrd
 
 # Setup dyngw_plain
 
@@ -117,10 +110,9 @@ if [ -n "$(uci -q get olsrd.dyngw_plain.library)" ]; then
 fi
 
 if [ "$sharenet" == 1 ]; then
-	echo "    + Setup dyngw_plain"
 	uci set olsrd.dyngw_plain=LoadPlugin
 	uci set olsrd.dyngw_plain.ignore=0
 	uci set olsrd.dyngw_plain.library="olsrd_dyn_gw_plain.so.0.4"
+	uci_commitverbose "Setup olsrd_dyngw_plain plugin"
 fi
 
-uci commit

@@ -8,8 +8,6 @@ net="$1"
 
 ##### wifi-device #####
 
-echo "    + Setup wifi-device"
-
 # Get the type before we delete the wifi-device
 config_load wireless
 config_get type $net type
@@ -45,12 +43,9 @@ set wireless.${net}.type="$type"
 set wireless.${net}.channel="$channel"
 EOF
 
-echo "    Type: $type"
-echo "    Channel: $channel"
+uci_commitverbose "Setup wifi device for $netrenamed" wireless
 
 ##### wifi iface
-
-echo "    + Setup wifi-iface"
 
 # Delete old wifi-iface for $net
 handle_interface() {
@@ -75,17 +70,19 @@ set_defaults "wifi_iface_" wireless.$net\_iface
 
 # overwrite defaults
 bssid="$($dir/helpers/gen_bssid.sh $channel $community)"
+ssid="$profile_ssid"
+if [ "$profile_ssid_scheme" == "addchannel" ]; then
+	ssid="$ssid - ch$channel"
+fi
+
 uci batch << EOF
 set wireless.$net\_iface.device="${net}"
 set wireless.$net\_iface.network="$netrenamed"
-set wireless.$net\_iface.ssid="$profile_ssid - ch$channel"
+set wireless.$net\_iface.ssid="$ssid"
 set wireless.$net\_iface.bssid="$bssid"
 EOF
 
-echo "    device: $net
-    network: $netrenamed
-    ssid: $profile_ssid - ch$channel
-    bssid: $bssid"
+uci_commitverbose "Setup wifi interface for $netrenamed" wireless
 
 ## VAP
 ip4addr="$(uci get meshwizard.netconfig.$net\_ip4addr)"
@@ -98,10 +95,6 @@ set wireless.$net\_iface_dhcp.encryption="none"
 set wireless.$net\_iface_dhcp.network="${netrenamed}dhcp"
 set wireless.$net\_iface_dhcp.ssid="FF-AP-$ip4addr"
 EOF
-	echo "    + Setting up VAP interface for $net
-    device: $net
-    network: ${netrenamed}dhcp
-    ssid: AP-$profile_ssid-$ip4addr"
+	uci_commitverbose "Setup VAP interface for $netrenamed" wireless
 fi
 
-uci commit

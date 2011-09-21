@@ -14,7 +14,6 @@ fi
 
 ipaddr=$(uci get meshwizard.netconfig.$net\_ip4addr)
 [ -z "$ipaddr" ] && msg_missing_value meshwizard $net\_ip4addr
-
 [ -z "$interface_netmask" ] && interface netmask="255.255.0.0"
 
 uci batch << EOF
@@ -25,8 +24,7 @@ set network.$netrenamed.netmask="$interface_netmask"
 set network.$netrenamed.dns="$interface_dns"
 EOF
 
-echo "    IP address: $ipaddr"
-echo "    Netmask   : $interface_netmask"
+uci_commitverbose "Setup interface $netrenamed" network
 
 # setup dhcp alias/interface
 
@@ -68,10 +66,8 @@ if [ "$net_dhcp" == 1 ]; then
 	# Setup alias for $net
 
 	if [ "$vap" == 1 ]; then
-		echo "    + Setup interface ${netrenamed}dhcp."
 		uci set network.${netrenamed}dhcp=interface
 	else
-		echo "    + Setup alias interface ${netrenamed}dhcp."
 		uci set network.${netrenamed}dhcp=alias
 		uci set network.${netrenamed}dhcp.interface="$netrenamed"
 	fi
@@ -82,10 +78,6 @@ set network.${netrenamed}dhcp.ipaddr="$START"
 set network.${netrenamed}dhcp.netmask="$NETMASK"
 EOF
 
-	echo "    interface: $net
-    ipaddr: $START
-    netmask: $NETMASK"
-
 fi
 
-uci commit
+uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network

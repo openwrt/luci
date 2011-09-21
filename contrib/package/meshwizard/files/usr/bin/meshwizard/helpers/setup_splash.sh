@@ -27,9 +27,7 @@ set luci_splash.${netrenamed}dhcp.network="${netrenamed}dhcp"
 set luci_splash.${netrenamed}dhcp.zone="freifunk"
 EOF
 
-echo "    network: ${netrenamed}dhcp"
-
-uci commit
+uci_commitverbose "Setup dhcpsplash for ${netrenamed}dhcp" luci_splash
 
 /etc/init.d/luci_splash enable
 

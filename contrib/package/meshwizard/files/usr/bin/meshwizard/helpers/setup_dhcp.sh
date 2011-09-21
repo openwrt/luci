@@ -23,11 +23,10 @@ config_foreach handle_dnsmasq dhcp
 
 uci batch << EOF
 set dhcp.${netrenamed}dhcp="dhcp"
-set dhcp.${netrenamed}dhcp.leasetime="${dhcp_leasetime}"
-set dhcp.${netrenamed}dhcp.force="1"
+set dhcp.${netrenamed}dhcp.leasetime="$dhcp_leasetime"
+set dhcp.${netrenamed}dhcp.force="$dhcp_force"
 set dhcp.${netrenamed}dhcp.interface="${netrenamed}dhcp"
 EOF
 
-echo "    leasetime: ${dhcp_leasetime}
-    interface: ${netrenamed}dhcp"
+uci_commitverbose "Setup DHCP for $netrenamed" dhcp
 

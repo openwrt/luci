@@ -4,17 +4,21 @@
 
 . /etc/functions.sh
 
+echo "
+Meshwizard 0.0.3
+"
+
 # config
 export dir="/usr/bin/meshwizard"
 . $dir/functions.sh
 debug=1
 
 # Rename wifi interfaces
-	echo "++++ Renaming wifi-devices in /etc/config/meshwizard"
+	echo "+ Renaming wifi-devices in /etc/config/meshwizard"
 	$dir/helpers/rename-wifi.sh
 
 # Firstboot/initial config
-	echo "++++ Initial config"
+	echo "+ Initial config"
 	$dir/helpers/initial_config.sh
 
 # Get community
@@ -32,9 +36,8 @@ export networks
 
 [ -z "$networks" ] && echo "Error: No networks to setup could be found in /etc/config/meshwizard, aborting now." && exit 1
 
-echo "+++ wizard 0.0.2 +++
-Community=$community
-Network(s)=$networks"
+echo "    Community=$community
+    Network(s)=$networks"
 
 # Read default values (first from /etc/config/freifunk, then from /etc/config/profile_$community,
 # last will overwrite first
@@ -45,17 +48,9 @@ while read line; do
 	export "${line//\"/}"
 done < /tmp/meshwizard.tmp
 
-# dnsmasq
-	echo "++++ dnsmasq config"
-	$dir/helpers/setup_dnsmasq.sh
-
-# system
-	echo "++++ system config"
-	$dir/helpers/setup_system.sh
-
-# freifunk
-	echo "++++ /etc/config/freifunk config"
-        $dir/helpers/setup_freifunk.sh
+$dir/helpers/setup_dnsmasq.sh
+$dir/helpers/setup_system.sh
+$dir/helpers/setup_freifunk.sh
 
 # Configure found networks
 for net in $networks; do
@@ -63,36 +58,17 @@ for net in $networks; do
 	netrenamed="${net/radio/wireless}"
 	export netrenamed
 
-	echo "++++ Configure interface $net"
-
-	config="network"
-	echo "$(msg_start $config)"
 	$dir/helpers/setup_network.sh $net
-
-	config="wireless"
-	echo "$(msg_start $config)"
 	$dir/helpers/setup_wifi.sh $net
-
-	config="OLSRd"
-	echo "$(msg_start $config)"
 	$dir/helpers/setup_olsrd.sh $net
 
 	net_dhcp=$(uci -q get meshwizard.netconfig.${net}_dhcp)
 	if [ "$net_dhcp" == 1 ]; then
-		config="DHCP"
-		echo "$(msg_start $config)"
 		$dir/helpers/setup_dhcp.sh $net
 	fi
 
-	config="luci_splash"
-	echo "$(msg_start $config)"
 	$dir/helpers/setup_splash.sh $net
-
-	config="firewall"
-	echo "$(msg_start $config)"
 	$dir/helpers/setup_firewall.sh $net
-
-	echo "  Configuration of $net finished."
 done
 
 ##### Reboot the router (because simply restarting services gave errors)

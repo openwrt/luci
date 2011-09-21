@@ -12,11 +12,21 @@ uci_remove_list_element() {
 	done
 }
 
+# Takes 2 arguments
+# $1 = text to be displayed in the output for this section
+# $2 = section (optional)
+uci_commitverbose() {
+	echo "+ $1"
+	uci changes $2 | while read line; do
+		echo "    $line"
+	done
+	uci commit $2
+}
+
 set_defaults() {
 	for def in $(env |grep "^$1"); do
 		option=${def/$1/}
 		uci set $2.$option
-		echo "    ${option/=/: }"
 	done
 }
 
@@ -28,10 +38,6 @@ section_cleanup() {
 # 3 arguements: 1=config name 2=oldname 3=newname
 section_rename() {
 	uci -q rename $1.$2=$3 && msg_rename $1.$2 $1.$3 || msg_rename_error $1.2 $1.$3
-}
-
-msg_start() {
-	echo "  Starting configuration of $1"
 }
 
 msg_cleanup() {

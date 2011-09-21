@@ -19,7 +19,7 @@ handle_zonewan() {
 		uci set firewall.$1.local_restrict=1
 	fi
 }
-config_foreach handle_zonewan zone && echo "    + Enable local_restrict for zone wan"
+config_foreach handle_zonewan zone && uci_commitverbose "Enable local_restrict for zone wan" firewall
 
 # Delete old firewall zone for freifunk
 handle_fwzone() {
@@ -69,8 +69,6 @@ fi
 
 # setup freifunk firewall zone
 
-echo "    + Setup firewall zone."
-
 # add $netrenamed and if needed ${netrenamed}dhcp to the networks for this zone
 config_get network zone_freifunk network
 
@@ -93,14 +91,9 @@ set firewall.zone_freifunk.forward="$zone_freifunk_forward"
 set firewall.zone_freifunk.output="$zone_freifunk_output"
 EOF
 
-echo "    network: $network
-    input: $zone_freifunk_input
-    forward: $zone_freifunk_forward
-    output: $zone_freifunk_output"
+uci_commitverbose "Setup freifunk firewall zone" firewall
 
 # Usually we need to setup masquerading for lan, except lan is an olsr interface or has an olsr hna
-
-echo "    + Setup masquerading rules"
 
 handle_interface() {
         config_get interface "$1" interface
@@ -121,7 +114,7 @@ config_foreach handle_hna Hna4
 
 currms=$(uci -q get firewall.zone_freifunk.masq_src)
 if [ ! "$no_masq_lan" == "1" ]; then
-	uci set firewall.zone_freifunk.masq="1" && echo "    Enabled masquerading." || echo -e "\033[1mWarning:\033[0m: Could not enable masquerading."
+	uci set firewall.zone_freifunk.masq="1"
 	[ -z "$(echo $currms |grep lan)" ] && uci add_list firewall.zone_freifunk.masq_src="lan"
 fi
 
@@ -137,10 +130,10 @@ for i in $networks; do
         fi
 done
 
+uci_commitverbose "Setup masquerading rules" firewall
+
 # Rules, Forwardings, advanced config and includes
 # Clear firewall configuration
-
-echo "    + Setup rules, forwardings, advanced config and includes."
 
 for config in freifunk profile_$community; do
 
@@ -158,4 +151,4 @@ for config in freifunk profile_$community; do
 	done
 done
 
-uci commit
+uci_commitverbose "Setup rules, forwardings, advanced config and includes." firewall
