@@ -211,7 +211,9 @@ end
 
 -- Render the children
 function Node.render_children(self, ...)
+	local k, node
 	for k, node in ipairs(self.children) do
+		node.last_child = (k == #self.children)
 		node:render(...)
 	end
 end
@@ -805,7 +807,9 @@ function AbstractSection.render_tab(self, tab, ...)
 	assert(tab and self.tabs and self.tabs[tab],
 		"Cannot render not existing tab %q" % tostring(tab))
 
-	for _, node in ipairs(self.tabs[tab].childs) do
+	local k, node
+	for k, node in ipairs(self.tabs[tab].childs) do
+		node.last_child = (k == #self.tabs[tab].childs)
 		node:render(...)
 	end
 end
