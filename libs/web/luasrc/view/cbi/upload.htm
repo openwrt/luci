@@ -7,7 +7,7 @@
 	<% if s then %>
 		<%:Uploaded File%> (<%=t.byte_format(s.size)%>)
 		<input type="hidden"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
-		<input class="cbi-input-image" type="image" value="<%:Replace entry%>" name="cbi.rlf.<%=section .. "." .. self.option%>" alt="<%:Replace entry%>" title="<%:Replace entry%>" src="<%=resource%>/cbi/reload.gif" />
+		<input class="cbi-button cbi-input-image" type="image" value="<%:Replace entry%>" name="cbi.rlf.<%=section .. "." .. self.option%>" alt="<%:Replace entry%>" title="<%:Replace entry%>" src="<%=resource%>/cbi/reload.gif" />
 	<% else %>
 		<input class="cbi-input-file" type="file"<%= attr("name", cbid) .. attr("id", cbid) %> />
 	<% end %>

@@ -19,7 +19,7 @@ $Id$
 		<% end %>
 
 		<% if self.popup then %>
-			<input class="cbi-input-button" type="button"<%= attr("name", cbid..".button")..attr("id", cbid..".button")..attr("value", self.displaytext)%> 
+			<input class="cbi-button cbi-input-button" type="button"<%= attr("name", cbid..".button")..attr("id", cbid..".button")..attr("value", self.displaytext)%> 
 					onclick="
 						popup=window.open('/luci-static/resources/OSMLatLon.htm', '<%=cbid%>.window', 'innerWidth=<%=self.width%>, innerHeight=<%=self.height%>, location=no, menubar=no, scrollbars=no, status=no, toolbar=no');
 						popup.focus();
@@ -28,7 +28,7 @@ $Id$
 	</div>
 	<div>		
 		<% else %>
-			<input class="cbi-input-button" type="button"<%= attr("name", cbid..".displayosm")..attr("id", cbid..".displayosm")..attr("value", self.displaytext)%> 
+			<input class="cbi-button cbi-input-button" type="button"<%= attr("name", cbid..".displayosm")..attr("id", cbid..".displayosm")..attr("value", self.displaytext)%> 
 					onclick="
 						document.getElementById('<%=cbid..".hideosm"%>').style.display='inline';
 						document.getElementById('<%=cbid..".displayosm"%>').style.display='none';
@@ -40,7 +40,7 @@ $Id$
                                                 }
 					"
 			/>
-			<input class="cbi-input-button" style="display:none" type="button"<%= attr("name", cbid..".hideosm")..attr("id", cbid..".hideosm")..attr("value", self.hidetext)%> 
+			<input class="cbi-button cbi-input-button" style="display:none" type="button"<%= attr("name", cbid..".hideosm")..attr("id", cbid..".hideosm")..attr("value", self.hidetext)%> 
 					onclick="
 						document.getElementById('<%=cbid..".displayosm"%>').style.display='inline';
 						document.getElementById('<%=cbid..".hideosm"%>').style.display='none';
