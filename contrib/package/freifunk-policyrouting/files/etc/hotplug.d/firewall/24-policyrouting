@@ -46,7 +46,11 @@ if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "wan" ]; then
 				if [ "`uci -q get network.$int.type`" == "bridge" ]; then 
 					dev="br-$int"
 				else
-			                dev=`uci get network.$int.ifname`
+					if  [ -n "`uci -p /var/state get network.$int.ifname`" ]; then
+						dev=`uci -p /var/state get network.$int.ifname`
+					else
+						dev=`uci -p /var/state get network.$int.device`
+					fi
 				fi
 				logger -t policyrouting "Add mark 1 to packages coming in via interface $dev"
 				iptables -t mangle -I prerouting_policy -i $dev -j MARK --set-mark 1
