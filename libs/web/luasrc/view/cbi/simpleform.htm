@@ -32,17 +32,17 @@
 	<input class="cbi-button cbi-button-skip" type="submit" name="cbi.skip" value="<%:Skip%>" />
 <% end %>
 <%- if self.submit ~= false then %>
-	<input class="cbi-button-save" type="submit" value="
+	<input class="cbi-button cbi-button-save" type="submit" value="
 		<%- if not self.submit then -%><%-:Submit-%><%-else-%><%=self.submit%><%end-%>
 	" />
 <% end %>
 <%- if self.reset ~= false then %>
-	<input class="cbi-button-reset" type="reset" value="
+	<input class="cbi-button cbi-button-reset" type="reset" value="
 		<%- if not self.reset then -%><%-:Reset-%><%-else-%><%=self.reset%><%end-%>
 	" />
 <% end %>
 <%- if self.cancel ~= false and self.on_cancel then %>
-	<input class="cbi-button-reset" type="submit" name="cbi.cancel" value="
+	<input class="cbi-button cbi-button-reset" type="submit" name="cbi.cancel" value="
 		<%- if not self.cancel then -%><%-:Cancel-%><%-else-%><%=self.cancel%><%end-%>
 	" />
 <% end %>
