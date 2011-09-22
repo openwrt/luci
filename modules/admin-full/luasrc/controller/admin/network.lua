@@ -343,6 +343,26 @@ function wifi_status()
 	luci.http.status(404, "No such device")
 end
 
+function wifi_reconnect()
+	local path  = luci.dispatcher.context.requestpath
+	local mode  = path[#path-1]
+	local wnet  = path[#path]
+	local netmd = require "luci.model.network".init()
+
+	local net = netmd:get_wifinet(wnet)
+	if net then
+		net:set("disabled", (mode == "wireless_shutdown") and 1 or nil)
+		netmd:commit("wireless")
+
+		luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
+		luci.http.status(200, (mode == "wireless_shutdown") and "Shutdown" or "Reconnected")
+
+		return
+	end
+
+	luci.http.status(404, "No such radio")
+end
+
 function lease_status()
 	local s = require "luci.tools.status"
 

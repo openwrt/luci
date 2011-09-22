@@ -47,6 +47,22 @@ if not wnet or not wdev then
 	return
 end
 
+-- wireless toggle was requested, commit and reload page
+if m:formvalue("cbid.wireless.%s.__toggle" % wdev:name()) then
+	if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
+		wnet:set("disabled", nil)
+	else
+		wnet:set("disabled", "1")
+	end
+	wdev:set("disabled", nil)
+
+	nw:commit("wireless")
+	luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
+
+	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
+	return
+end
+
 m.title = luci.util.pcdata(wnet:get_i18n())
 
 
@@ -75,13 +91,16 @@ st = s:taboption("general", DummyValue, "__status", translate("Status"))
 st.template = "admin_network/wifi_status"
 st.ifname   = arg[1]
 
-en = s:taboption("general", Flag, "disabled", translate("Enable device"))
-en.enabled = "0"
-en.disabled = "1"
-en.rmempty = false
+en = s:taboption("general", Button, "__toggle")
 
-function en.cfgvalue(self, section)
-	return Flag.cfgvalue(self, section) or "0"
+if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
+	en.title      = translate("Wireless network is disabled")
+	en.inputtitle = translate("Enable")
+	en.inputstyle = "apply"
+else
+	en.title      = translate("Wireless network is enabled")
+	en.inputtitle = translate("Disable")
+	en.inputstyle = "reset"
 end
 
 

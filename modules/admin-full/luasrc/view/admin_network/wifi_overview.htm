@@ -123,6 +123,49 @@ $Id$
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
+	var is_reconnecting = false;
+
+	function wifi_shutdown(id, toggle) {
+		var reconnect = (toggle.getAttribute('active') == 'false');
+
+		if (!reconnect && !confirm(String.format('<%:Really shutdown network ?\nYou might loose access to this router if you are connected via this interface.%>')))
+			return;
+
+		is_reconnecting = true;
+
+		var s = document.getElementById('iw-rc-status');
+		if (s)
+		{
+			s.parentNode.style.display = 'block';
+			s.innerHTML = '<%:Waiting for router...%>';
+		}
+
+		for (var net in wifidevs)
+		{
+			var st = document.getElementById(net + '-iw-status');
+			if (st)
+				st.innerHTML = '<em><%:Wireless is restarting...%></em>';
+		}
+
+		var rcxhr = new XHR();
+		rcxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/wireless_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
+			function(x)
+			{
+				if (s)
+				{
+					s.innerHTML = reconnect
+						? '<%:Wireless restarted%>'
+						: '<%:Wireless shut down%>';
+
+					window.setTimeout(function() {
+						s.parentNode.style.display = 'none';
+						is_reconnecting = false;
+					}, 1000);
+				}
+			}
+		);
+	}
+
 	var update_status = function() {
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "wireless_status", table.concat(netlist, ","))%>', null,
 			function(x, st)
@@ -168,6 +211,26 @@ $Id$
 								'<small>%d%%</small>', icon, iw.signal, iw.noise, p
 							);
 
+						var toggle = document.getElementById(iw.id + '-iw-toggle');
+						if (toggle)
+						{
+							if (is_assoc)
+							{
+								toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reset.gif)';
+								toggle.value = '<%:Disable%>';
+								toggle.title = '<%:Shutdown this network%>';
+							}
+							else
+							{
+								toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reload.gif)';
+								toggle.value = '<%:Enable%>';
+								toggle.title = '<%:Activate this network%>';
+
+							}
+
+							toggle.setAttribute('active', is_assoc);
+						}
+
 						var info = document.getElementById(iw.id + '-iw-status');
 						if (info)
 						{
@@ -184,8 +247,11 @@ $Id$
 								info.innerHTML = String.format(
 									'<strong><%:SSID%>:</strong> %h | ' +
 									'<strong><%:Mode%>:</strong> %s<br />' +
-									'<em><%:Wireless is disabled or not associated%></em>',
-										iw.ssid || '?', iw.mode
+									'<em>%s</em>',
+										iw.ssid || '?', iw.mode,
+										is_reconnecting
+											? '<em><%:Wireless is restarting...%></em>'
+											: '<em><%:Wireless is disabled or not associated%></em>'
 								);
 						}
 
@@ -280,6 +346,12 @@ $Id$
 
 <h2><a id="content" name="content"><%:Wireless Overview%></a></h2>
 
+<fieldset class="cbi-section" style="display:none">
+	<legend><%:Reconnecting interface%></legend>
+	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+	<span id="iw-rc-status"><%:Waiting for router...%></span>
+</fieldset>
+
 <div class="cbi-map">
 
 	<% for _, dev in ipairs(devices) do local nets = dev:get_wifinets() %>
@@ -293,9 +365,9 @@ $Id$
 					<big><strong><%=guess_wifi_hw(dev:name())%> (<%=dev:name()%>)</strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</td>
-				<td style="width:40px">
-					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_join")%>?device=<%=dev:name()%>"><img style="border:none" src="<%=resource%>/cbi/find.gif" alt="<%:Find and join network%>" title="<%:Find and join network%>" /></a>
-					<a href="<%=luci.dispatcher.build_url("admin/network/wireless_add")%>?device=<%=dev:name()%>"><img style="border:none" src="<%=resource%>/cbi/add.gif" alt="<%:Provide new network%>" title="<%:Provide new network%>" /></a>
+				<td style="width:170px;text-align:right">
+					<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/find.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_join")%>?device=<%=dev:name()%>'" title="<%:Find and join network%>" value="<%:Scan%>" />
+					<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/add.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_add")%>?device=<%=dev:name()%>'" title="<%:Provide new network%>" value="<%:Add%>" />
 				</td>
 			</tr>
 			<!-- /physical device -->
@@ -312,9 +384,10 @@ $Id$
 					<td class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px" id="<%=net:id()%>-iw-status">
 						<em><%:Collecting data...%></em>
 					</td>
-					<td class="cbi-value-field" style="width:40px">
-						<a href="<%=net:adminlink()%>"><img style="border:none" src="<%=resource%>/cbi/edit.gif" alt="<%:Edit this network%>" title="<%:Edit this network%>" /></a>
-						<a href="<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>" onclick="return confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might loose access to this router if you are connected via this network.%>')"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="<%:Delete this network%>" title="<%:Delete this network%>" /></a>
+					<td class="cbi-value-field" style="width:340px;text-align:right">
+						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/reload.gif)" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
+						<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/edit.gif)" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
+						<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/remove.gif)" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might loose access to this router if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
 					</td>
 				</tr>
 				<% end %>
