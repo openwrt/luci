@@ -674,6 +674,10 @@ function network.is_virtual(self)
 	)
 end
 
+function network.is_floating(self)
+	return (self:is_virtual() and self:proto() ~= "pppoe")
+end
+
 function network.is_empty(self)
 	if self:is_virtual() then
 		return false
@@ -697,7 +701,7 @@ function network.is_empty(self)
 end
 
 function network.add_interface(self, ifname)
-	if not self:is_virtual() then
+	if not self:is_floating() then
 		if type(ifname) ~= "string" then
 			ifname = ifname:name()
 		else
@@ -723,7 +727,7 @@ function network.add_interface(self, ifname)
 end
 
 function network.del_interface(self, ifname)
-	if not self:is_virtual() then
+	if not self:is_floating() then
 		if utl.instanceof(ifname, interface) then
 			ifname = ifname:name()
 		else
@@ -739,40 +743,67 @@ function network.del_interface(self, ifname)
 	end
 end
 
-function network.get_interfaces(self)
-	local ifaces = { }
-
-	local ifn
+function network.get_interface(self)
 	if self:is_virtual() then
-		ifn = self:proto() .. "-" .. self.sid
-		ifaces = { interface(ifn) }
+		return interface(self:proto() .. "-" .. self.sid)
+	elseif self:is_bridge() then
+		return interface("br-" .. self.sid)
 	else
-		local nfs = { }
-		for ifn in utl.imatch(self:get("ifname")) do
-			ifn = ifn:match("[^:]+")
-			nfs[ifn] = interface(ifn)
-		end
-
-		for ifn in utl.kspairs(nfs) do
-			ifaces[#ifaces+1] = nfs[ifn]
-		end
-
+		local ifn = nil
 		local num = { }
-		local wfs = { }
-		uci_r:foreach("wireless", "wifi-iface",
+		for ifn in utl.imatch(uci_s:get("network", self.sid, "ifname")) do
+			ifn = ifn:match("^[^:/]+")
+			return ifn and interface(ifn)
+		end
+		ifn = nil
+		uci_s:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
 					if s.network == self.sid then
-						ifn = "%s.network%d" %{ s.device, num[s.device] }
-						wfs[ifn] = interface(ifn)
+						ifn = s.ifname or "%s.network%d" %{ s.device, num[s.device] }
+						return false
 					end
 				end
 			end)
+		return ifn and interface(ifn)
+	end
+end
 
-		for ifn in utl.kspairs(wfs) do
-			ifaces[#ifaces+1] = wfs[ifn]
-		end
+function network.get_interfaces(self)
+	local ifaces = { }
+
+	local ifn
+	local nfs = { }
+	for ifn in utl.imatch(self:get("ifname")) do
+		ifn = ifn:match("^[^:/]+")
+		nfs[ifn] = interface(ifn)
+	end
+
+	for ifn in utl.kspairs(nfs) do
+		ifaces[#ifaces+1] = nfs[ifn]
+	end
+
+	local num = { }
+	local wfs = { }
+	uci_r:foreach("wireless", "wifi-iface",
+		function(s)
+			if s.device then
+				num[s.device] = num[s.device] and num[s.device] + 1 or 1
+				if s.network == self.sid then
+					ifn = "%s.network%d" %{ s.device, num[s.device] }
+					wfs[ifn] = interface(ifn)
+				end
+			end
+		end)
+
+	for ifn in utl.kspairs(wfs) do
+		ifaces[#ifaces+1] = wfs[ifn]
+
+		-- only bridges may cover more than one interface
+		--if not self:is_bridge() then
+		--	break
+		--end
 	end
 
 	return ifaces
@@ -785,11 +816,12 @@ function network.contains_interface(self, ifname)
 		ifname = ifname:match("[^%s:]+")
 	end
 
-	local ifn
-	if self:is_virtual() then
-		ifn = self:proto() .. "-" .. self.sid
-		return ifname == ifn
+	if self:is_virtual() and self:proto() .. "-" .. self.sid == ifname then
+		return true
+	elseif self:is_bridge() and "br-" .. self.sid == ifname then
+		return true
 	else
+		local ifn
 		for ifn in utl.imatch(self:get("ifname")) do
 			ifn = ifn:match("[^:]+")
 			if ifn == ifname then
