@@ -350,7 +350,9 @@ function wifi_reconnect()
 	local netmd = require "luci.model.network".init()
 
 	local net = netmd:get_wifinet(wnet)
-	if net then
+	local dev = net:get_device()
+	if dev and net then
+		dev:set("disabled", nil)
 		net:set("disabled", (mode == "wireless_shutdown") and 1 or nil)
 		netmd:commit("wireless")
 
