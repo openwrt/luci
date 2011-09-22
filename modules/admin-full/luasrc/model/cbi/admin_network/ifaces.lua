@@ -72,7 +72,7 @@ if m:formvalue("cbid.dhcp._enable._enable") then
 	return
 end
 
-local ifc = net:get_interfaces()[1]
+local ifc = net:get_interface()
 
 s = m:section(NamedSection, arg[1], "interface", translate("Common Configuration"))
 s.addremove = false
@@ -117,7 +117,7 @@ if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
 	p.description = translate("You need to install \"comgt\" for UMTS/GPRS, \"ppp-mod-pppoe\" for PPPoE, \"ppp-mod-pppoa\" for PPPoA or \"pptp\" for PPtP support")
 end
 
-auto = s:taboption("physical", Flag, "auto", translate("Bring up on boot"))                                                                                            
+auto = s:taboption("physical", Flag, "auto", translate("Bring up on boot"))
 auto.default = (m.uci:get("network", arg[1], "proto") == "none") and auto.disabled or auto.enabled
 
 br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
@@ -136,6 +136,7 @@ ifname_single = s:taboption("physical", Value, "ifname_single", translate("Inter
 ifname_single.template = "cbi/network_ifacelist"
 ifname_single.widget = "radio"
 ifname_single.nobridges = true
+ifname_single.rmempty = false
 ifname_single.network = arg[1]
 ifname_single:depends({ type = "", proto = "static" })
 ifname_single:depends({ type = "", proto = "dhcp"   })
@@ -153,35 +154,49 @@ function ifname_single.write(self, s, val)
 	local n = nw:get_network(s)
 	if n then
 		local i
+		local new_ifs = { }
+		local old_ifs = { }
+
 		for _, i in ipairs(n:get_interfaces()) do
-			n:del_interface(i)
+			old_ifs[#old_ifs+1] = i:name()
 		end
 
 		for i in ut.imatch(val) do
-			n:add_interface(i)
+			new_ifs[#new_ifs+1] = i
 
 			-- if this is not a bridge, only assign first interface
 			if self.option == "ifname_single" then
 				break
 			end
 		end
-	end
-end
 
-function ifname_single.remove(self, s)
-	self:write(s, "")
+		table.sort(old_ifs)
+		table.sort(new_ifs)
+
+		for i = 1, math.max(#old_ifs, #new_ifs) do
+			if old_ifs[i] ~= new_ifs[i] then
+				for i = 1, #old_ifs do
+					n:del_interface(old_ifs[i])
+				end
+				for i = 1, #new_ifs do
+					n:add_interface(new_ifs[i])
+				end
+				break
+			end
+		end
+	end
 end
 
 
 ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
 ifname_multi.template = "cbi/network_ifacelist"
 ifname_multi.nobridges = true
+ifname_multi.rmempty = false
 ifname_multi.network = arg[1]
 ifname_multi.widget = "checkbox"
 ifname_multi:depends("type", "bridge")
 ifname_multi.cfgvalue = ifname_single.cfgvalue
 ifname_multi.write = ifname_single.write
-ifname_multi.remove = ifname_single.remove
 
 
 if has_firewall then
@@ -235,6 +250,7 @@ gw = s:taboption("general", Value, "gateway", translate("<abbr title=\"Internet 
 gw.optional = true
 gw.datatype = "ip4addr"
 gw:depends("proto", "static")
+gw:depends("proto", "dhcp")
 
 bcast = s:taboption("general", Value, "broadcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
 bcast.optional = true
