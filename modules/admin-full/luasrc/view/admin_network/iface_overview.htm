@@ -27,7 +27,7 @@ $Id$
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	function iface_shutdown(id, reconnect) {
-		if (!reconnect && !confirm(String.format('<%_Really shutdown interface "%s" ?\nYou might loose access to this router if you are connected via this interface.%>', id)))
+		if (!reconnect && !confirm(String.format('<%_Really shutdown interface "%s" ?\nYou might lose access to this router if you are connected via this interface.%>', id)))
 			return;
 
 		var a = document.getElementById(id + '-ifc-addrs');
@@ -226,7 +226,7 @@ $Id$
 					</td>
 					<td>
 						<a href="<%=luci.dispatcher.build_url("admin/network/network", net)%>"><img style="border:none" src="<%=resource%>/cbi/edit.gif" alt="<%:Edit this interface%>" title="<%:Edit this interface%>" /></a>
-						<a href="<%=luci.dispatcher.build_url("admin/network/iface_delete", net)%>" onclick="return confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might loose access to this router if you are connected via this interface.%>')"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="<%:Delete this interface%>" title="<%:Delete this interface%>" /></a>
+						<a href="<%=luci.dispatcher.build_url("admin/network/iface_delete", net)%>" onclick="return confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this interface.%>')"><img style="border:none" src="<%=resource%>/cbi/remove.gif" alt="<%:Delete this interface%>" title="<%:Delete this interface%>" /></a>
 					</td>
 				</tr>
 			<% end %>
