@@ -1,0 +1,4 @@
+#!/bin/sh
+[ -n "${IPKG_INSTROOT}" ] || {
+	( . /etc/uci-defaults/freifunk-gwcheck ) && rm -f /etc/uci-defaults/freifunk-gwcheck
+}
