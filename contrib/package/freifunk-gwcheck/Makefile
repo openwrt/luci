@@ -15,7 +15,7 @@ define Package/freifunk-gwcheck
   CATEGORY:=LuCI
   SUBMENU:=Freifunk
   TITLE:=Freifunk gateway check script
-  DEPENDS:=+firewall +ip +iptables-mod-ipopt
+  DEPENDS:=+firewall +ip +iptables-mod-ipopt +olsrd-mod-dyn-gw-plain
 endef
 
 define Package/freifunk-gwcheck/description
