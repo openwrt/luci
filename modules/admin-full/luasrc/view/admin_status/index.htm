@@ -475,7 +475,7 @@ $Id$
 		<tr><td width="33%"><%:Router Model%></td><td><%=pcdata(model or "?")%></td></tr>
 		<tr><td width="33%"><%:Firmware Version%></td><td>
 			<%=pcdata(luci.version.distname)%> <%=pcdata(luci.version.distversion)%> /
-			<%=pcdata(luci.version.luciname)%> <%=pcdata(luci.version.luciversion)%>
+			<%=pcdata(luci.version.luciname)%> (<%=pcdata(luci.version.luciversion)%>)
 		</td></tr>
 		<tr><td width="33%"><%:Kernel Version%></td><td><%=luci.sys.exec("uname -r")%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
