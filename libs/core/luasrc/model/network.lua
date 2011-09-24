@@ -30,7 +30,7 @@ local uci = require "luci.model.uci"
 module "luci.model.network"
 
 
-local ifs, brs, sws, uci_r, uci_s
+local ifs, brs, sws, tns, uci_r, uci_s
 
 function _list_del(c, s, o, r)
 	local val = uci_r:get(c, s, o)
@@ -174,6 +174,7 @@ function init(cursor)
 	ifs = { }
 	brs = { }
 	sws = { }
+	tns = { }
 
 	-- read interface information
 	local n, i
@@ -181,7 +182,11 @@ function init(cursor)
 		local name = i.name:match("[^:]+")
 		local prnt = name:match("^([^%.]+)%.")
 
-		if _iface_virtual(name) or not _iface_ignore(name) then
+		if _iface_virtual(name) then
+			tns[name] = true
+		end
+
+		if tns[name] or not _iface_ignore(name) then
 			ifs[name] = ifs[name] or {
 				idx      = i.ifindex or n,
 				name     = name,
@@ -745,15 +750,17 @@ end
 
 function network.get_interface(self)
 	if self:is_virtual() then
-		return interface(self:proto() .. "-" .. self.sid)
+		tns[self:proto() .. "-" .. self.sid] = true
+		return interface(self:proto() .. "-" .. self.sid, self)
 	elseif self:is_bridge() then
-		return interface("br-" .. self.sid)
+		brs["br-" .. self.sid] = true
+		return interface("br-" .. self.sid, self)
 	else
 		local ifn = nil
 		local num = { }
 		for ifn in utl.imatch(uci_s:get("network", self.sid, "ifname")) do
 			ifn = ifn:match("^[^:/]+")
-			return ifn and interface(ifn)
+			return ifn and interface(ifn, self)
 		end
 		ifn = nil
 		uci_s:foreach("wireless", "wifi-iface",
@@ -766,7 +773,7 @@ function network.get_interface(self)
 					end
 				end
 			end)
-		return ifn and interface(ifn)
+		return ifn and interface(ifn, self)
 	end
 end
 
@@ -777,7 +784,7 @@ function network.get_interfaces(self)
 	local nfs = { }
 	for ifn in utl.imatch(self:get("ifname")) do
 		ifn = ifn:match("^[^:/]+")
-		nfs[ifn] = interface(ifn)
+		nfs[ifn] = interface(ifn, self)
 	end
 
 	for ifn in utl.kspairs(nfs) do
@@ -792,7 +799,7 @@ function network.get_interfaces(self)
 				num[s.device] = num[s.device] and num[s.device] + 1 or 1
 				if s.network == self.sid then
 					ifn = "%s.network%d" %{ s.device, num[s.device] }
-					wfs[ifn] = interface(ifn)
+					wfs[ifn] = interface(ifn, self)
 				end
 			end
 		end)
@@ -844,12 +851,13 @@ end
 
 
 interface = utl.class()
-function interface.__init__(self, ifname)
+function interface.__init__(self, ifname, network)
 	local wif = _wifi_lookup(ifname)
 	if wif then self.wif = wifinet(wif) end
 
-	self.ifname = self.ifname or ifname
-	self.dev    = ifs[self.ifname]
+	self.ifname  = self.ifname or ifname
+	self.dev     = ifs[self.ifname]
+	self.network = network
 end
 
 function interface.name(self)
@@ -857,7 +865,7 @@ function interface.name(self)
 end
 
 function interface.mac(self)
-	return self.dev and self.dev.macaddr or "00:00:00:00:00:00"
+	return (self.dev and self.dev.macaddr or "00:00:00:00:00:00"):upper()
 end
 
 function interface.ipaddrs(self)
@@ -873,6 +881,8 @@ function interface.type(self)
 		return "wifi"
 	elseif brs[self.ifname] then
 		return "bridge"
+	elseif tns[self.ifname] then
+		return "tunnel"
 	elseif self.ifname:match("%.") then
 		return "vlan"
 	elseif sws[self.ifname] then
@@ -915,6 +925,8 @@ function interface.get_type_i18n(self)
 		return i18n.translate("Ethernet Switch")
 	elseif x == "vlan" then
 		return i18n.translate("VLAN Interface")
+	elseif x == "tunnel" then
+		return i18n.translate("Tunnel Interface")
 	else
 		return i18n.translate("Ethernet Adapter")
 	end
@@ -990,8 +1002,10 @@ function interface.rx_packets(self)
 end
 
 function interface.get_network(self)
-	if self.dev and self.dev.network then
-		self.network = _M:get_network(self.dev.network)
+	if not self.network then
+		if self.dev and self.dev.network then
+			self.network = _M:get_network(self.dev.network)
+		end
 	end
 
 	if not self.network then
