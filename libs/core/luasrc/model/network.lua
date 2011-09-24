@@ -791,26 +791,23 @@ function network.get_interfaces(self)
 		ifaces[#ifaces+1] = nfs[ifn]
 	end
 
-	local num = { }
-	local wfs = { }
-	uci_r:foreach("wireless", "wifi-iface",
-		function(s)
-			if s.device then
-				num[s.device] = num[s.device] and num[s.device] + 1 or 1
-				if s.network == self.sid then
-					ifn = "%s.network%d" %{ s.device, num[s.device] }
-					wfs[ifn] = interface(ifn, self)
+	if self:is_bridge() then
+		local num = { }
+		local wfs = { }
+		uci_r:foreach("wireless", "wifi-iface",
+			function(s)
+				if s.device then
+					num[s.device] = num[s.device] and num[s.device] + 1 or 1
+					if s.network == self.sid then
+						ifn = "%s.network%d" %{ s.device, num[s.device] }
+						wfs[ifn] = interface(ifn, self)
+					end
 				end
-			end
-		end)
+			end)
 
-	for ifn in utl.kspairs(wfs) do
-		ifaces[#ifaces+1] = wfs[ifn]
-
-		-- only bridges may cover more than one interface
-		--if not self:is_bridge() then
-		--	break
-		--end
+		for ifn in utl.kspairs(wfs) do
+			ifaces[#ifaces+1] = wfs[ifn]
+		end
 	end
 
 	return ifaces
