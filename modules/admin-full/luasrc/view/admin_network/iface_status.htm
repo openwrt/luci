@@ -4,7 +4,7 @@
 	var iwxhr = new XHR();
 
 	function iface_shutdown(id, reconnect) {
-		if (!reconnect && !confirm(String.format('<%_Really shutdown network ?\nYou might loose access to this router if you are connected via this interface.%>', id)))
+		if (!reconnect && !confirm(String.format('<%_Really shutdown network ?\nYou might lose access to this router if you are connected via this interface.%>', id)))
 			return;
 
 		var a = document.getElementById(id + '-ifc-addrs');
@@ -49,26 +49,7 @@
 			{
 				if (ifc && (ifc = ifc[0]))
 				{
-					var rxb = ifc.rx_bytes || 0;
-					var txb = ifc.tx_bytes || 0;
-					var rxp = ifc.rx_packets || 0;
-					var txp = ifc.tx_packets || 0;
-					var mac = ifc.macaddr;
-
 					var html = '';
-					var upt, icon;
-
-					if (ifc.is_up)
-					{
-						if (ifc.uptime)
-							upt = String.format('%t', ifc.uptime);
-
-						icon = "<%=resource%>/icons/%s.png";
-					}
-					else
-					{
-						icon = "<%=resource%>/icons/%s_disabled.png";
-					}
 
 					var s = document.getElementById('<%=self.option%>-ifc-signal');
 					if (s)
@@ -80,22 +61,23 @@
 						);
 
 					var d = document.getElementById('<%=self.option%>-ifc-description');
-					if (d && ifc.ifname && mac != '00:00:00:00:00:00')
+					if (d && ifc.ifname && ifc.macaddr != '00:00:00:00:00:00')
 					{
-						if (upt)
+						if (ifc.is_up)
 						{
-							html += String.format('<strong><%:Uptime%>:</strong> %s<br />', upt);
+							html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 						}
 
 						if (ifc.type != 'tunnel')
 						{
-							html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', mac);
+							html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', ifc.macaddr);
 						}
 
 						html += String.format(
 							'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
 							'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
-								rxb, rxp, txb, txp
+								ifc.rx_bytes, ifc.rx_packets,
+								ifc.tx_bytes, ifc.tx_packets
 						);
 
 						if (ifc.ipaddrs && ifc.ipaddrs.length)

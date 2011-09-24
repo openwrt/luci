@@ -77,27 +77,7 @@ $Id$
 					for (var i = 0; i < ifcs.length; i++)
 					{
 						var ifc = ifcs[i];
-						var rxb = ifc.rx_bytes || 0;
-						var txb = ifc.tx_bytes || 0;
-						var rxp = ifc.rx_packets || 0;
-						var txp = ifc.tx_packets || 0;
-						var mac = ifc.macaddr;
-						var upt = null;
-
 						var html = '';
-
-						var icon;
-						if (ifc.is_up)
-						{
-							if (ifc.uptime)
-								upt = String.format('%t', ifc.uptime);
-
-							icon = "<%=resource%>/icons/%s.png";
-						}
-						else
-						{
-							icon = "<%=resource%>/icons/%s_disabled.png";
-						}
 
 						var s = document.getElementById(ifc.id + '-ifc-devices');
 						if (s)
@@ -138,20 +118,21 @@ $Id$
 						var d = document.getElementById(ifc.id + '-ifc-description');
 						if (d && ifc.ifname)
 						{
-							if (upt)
+							if (ifc.is_up)
 							{
-								html += String.format('<strong><%:Uptime%>:</strong> %s<br />', upt);
+								html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 							}
 
 							if (ifc.type != 'tunnel')
 							{
-								html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', mac);
+								html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', ifc.macaddr);
 							}
 
 							html += String.format(
 								'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
 								'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
-									rxb, rxp, txb, txp
+									ifc.rx_bytes, ifc.rx_packets,
+									ifc.tx_bytes, ifc.tx_packets
 							);
 
 							if (ifc.ipaddrs && ifc.ipaddrs.length)
