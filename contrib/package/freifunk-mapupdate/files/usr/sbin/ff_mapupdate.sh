@@ -34,7 +34,12 @@ FFNOTE="$(uci -q get freifunk.contact.note)"
 [ -n "$FFNOTE" ] && NOTE="$NOTE $FFNOTE"
 NOTE="<h3><a href='http://$OLSR_IP' target='_blank'>$HOSTNAME</a></h3><p>$NOTE"
 NOTE=`echo -e "$NOTE" | sed -e 's/\ /%20/g' -e 's/&/%26/g' -e 's/"/%22/g'`
+
 UPDATESTRING="$(echo $SELF |awk '{ FS=",";print $2 }'), $(echo $SELF |awk '{ FS=",";print $3 }')"
+
+# write our coordinates to mygooglemapscoords.txt to make Freifunk Firmware happy
+echo "$UPDATESTRING" > /tmp/mygooglemapscoords.txt
+[ ! -L /www/mygooglemapscoords.txt ] && ln -s /tmp/mygooglemapscoords.txt /www/mygooglemapscoords.txt
 
 # get neighbor Info (lat, lon, lq)
 while read line; do
