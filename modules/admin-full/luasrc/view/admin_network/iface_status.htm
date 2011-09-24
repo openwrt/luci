@@ -2,91 +2,144 @@
 
 <script type="text/javascript">//<![CDATA[
 	var iwxhr = new XHR();
-	var update_status = function() {
+
+	function iface_shutdown(id, reconnect) {
+		if (!reconnect && !confirm(String.format('<%_Really shutdown network ?\nYou might loose access to this router if you are connected via this interface.%>', id)))
+			return;
+
+		var a = document.getElementById(id + '-ifc-addrs');
+		if (a)
+		{
+			a.innerHTML = reconnect
+				? '<em><%:Interface is reconnecting...%></em>'
+				: '<em><%:Interface is shutting down...%></em>';
+		}
+
+		var s = document.getElementById('ifc-rc-status');
+		if (s)
+		{
+			s.parentNode.style.display = 'block';
+			s.innerHTML = '<%:Waiting for router...%>';
+		}
+
+		var rcxhr = new XHR();
+		rcxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/iface_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
+			function(x)
+			{
+				if (s)
+				{
+					s.innerHTML = reconnect
+						? '<%:Interface reconnected%>'
+						: '<%:Interface shut down%>';
+
+					window.setTimeout(function() {
+						s.parentNode.style.display = 'none';
+					}, 1000);
+				}
+			}
+		);
+	}
+
+
+	(function() {
+		var func = arguments.callee;
+
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
 			function(x, ifc)
 			{
 				if (ifc && (ifc = ifc[0]))
 				{
-					var is_up = (ifc.flags && ifc.flags.up);
-					var rxb = ifc.stats ? (ifc.stats["rx_bytes"] / 1024) : 0;
-					var txb = ifc.stats ? (ifc.stats["tx_bytes"] / 1024) : 0;
-					var rxp = ifc.stats ? ifc.stats["rx_packets"] : 0;
-					var txp = ifc.stats ? ifc.stats["tx_packets"] : 0;
-					var mac = ifc.macaddr ? ifc.macaddr : '00:00:00:00:00:00';
-					var upt = '-';
+					var rxb = ifc.rx_bytes || 0;
+					var txb = ifc.tx_bytes || 0;
+					var rxp = ifc.rx_packets || 0;
+					var txp = ifc.tx_packets || 0;
+					var mac = ifc.macaddr;
 
-					var icon;
-					if (is_up)
+					var html = '';
+					var upt, icon;
+
+					if (ifc.is_up)
 					{
 						if (ifc.uptime)
 							upt = String.format('%t', ifc.uptime);
 
-						icon = "<%=resource%>/icons/ethernet.png";
+						icon = "<%=resource%>/icons/%s.png";
 					}
 					else
 					{
-						icon = "<%=resource%>/icons/ethernet_disabled.png";
+						icon = "<%=resource%>/icons/%s_disabled.png";
 					}
 
 					var s = document.getElementById('<%=self.option%>-ifc-signal');
 					if (s)
 						s.innerHTML = String.format(
-							'<img src="%s" style="width:16px; height:16px" /><br />' +
-							'<small>%s</small>', icon, ifc.ifname ? ifc.ifname : '?'
+							'<img src="%s" style="width:16px; height:16px" />' +
+							'<br /><small>%s</small>',
+								String.format(icon, ifc.type),
+								ifc.ifname ? ifc.ifname : '?'
 						);
 
 					var d = document.getElementById('<%=self.option%>-ifc-description');
-					if (d && ifc.ifname)
+					if (d && ifc.ifname && mac != '00:00:00:00:00:00')
 					{
-						d.innerHTML = String.format(
-							'<strong><%:Uptime%>:</strong> %s<br />' +
-							'<strong><%:MAC Address%>:</strong> %s<br />' +
-							'<strong><%:RX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />' +
-							'<strong><%:TX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />',
-								upt, mac, rxb, rxp, txb, txp
+						if (upt)
+						{
+							html += String.format('<strong><%:Uptime%>:</strong> %s<br />', upt);
+						}
+
+						if (ifc.type != 'tunnel')
+						{
+							html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', mac);
+						}
+
+						html += String.format(
+							'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
+							'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
+								rxb, rxp, txb, txp
 						);
 
 						if (ifc.ipaddrs && ifc.ipaddrs.length)
 						{
-							d.innerHTML += '<strong><%:IPv4%>: </strong>';
+							html += '<strong><%:IPv4%>: </strong>';
 
 							for (var i = 0; i < ifc.ipaddrs.length; i++)
-								d.innerHTML += String.format(
+								html += String.format(
 									'%s%s/%d',
 									i ? ', ' : '',
 									ifc.ipaddrs[i].addr,
 									ifc.ipaddrs[i].prefix
 								);
 
-							d.innerHTML += '<br />';
+							html += '<br />';
 						}
 
 						if (ifc.ip6addrs && ifc.ip6addrs.length)
 						{
-							d.innerHTML += '<strong><%:IPv6%>: </strong>';
+							html += '<strong><%:IPv6%>: </strong>';
 
 							for (var i = 0; i < ifc.ip6addrs.length; i++)
-								d.innerHTML += String.format(
+								html += String.format(
 									'%s%s/%d',
 									i ? ', ' : '',
 									ifc.ip6addrs[i].addr.toUpperCase(),
 									ifc.ip6addrs[i].prefix
 								);
 
-							d.innerHTML += '<br />';
+							html += '<br />';
 						}
+
+						d.innerHTML = html;
 					}
 					else if (d)
-						d.innerHTML = '<%:Interface not present or not connected yet.%>';
+					{
+						d.innerHTML = '<em><%:Interface not present or not connected yet.%></em>';
+					}
 				}
 
-				window.setTimeout(update_status, 5000);
+				window.setTimeout(func, 5000);
 			}
 		)
-	};
-
-	update_status();
+	})();
 //]]></script>
 
 <table>
