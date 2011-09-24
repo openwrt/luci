@@ -32,7 +32,7 @@
 			&#160;<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
 				<%
 					local empty = true
-					for _, iface in ipairs(net:get_interfaces()) do
+					for _, iface in ipairs(net:is_bridge() and net:get_interfaces() or { net:get_interface() }) do
 						if not iface:is_bridge() then
 							empty = false
 				 %>
