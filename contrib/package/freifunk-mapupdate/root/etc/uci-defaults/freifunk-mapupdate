@@ -1,0 +1,6 @@
+#!/bin/sh
+test -f /etc/crontabs/root || touch /etc/crontabs/root
+SEED="$( dd if=/dev/urandom bs=2 count=1 2>&- | hexdump | if read line; then echo 0x${line#* }; fi )"
+MIN="$(( $SEED % 59 ))"
+grep -q "ff_mapupdate.sh" /etc/crontabs/root || echo "$MIN * * * *	/usr/sbin/ff_mapupdate.sh" >> /etc/crontabs/root
+/etc/init.d/cron restart
