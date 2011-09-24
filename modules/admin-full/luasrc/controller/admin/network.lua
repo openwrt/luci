@@ -207,47 +207,62 @@ function iface_status()
 	local iface
 	for iface in path[#path]:gmatch("[%w%.%-_]+") do
 		local net = netm:get_network(iface)
-		if net then
-			local info
-			local dev  = net:ifname()
-			local data = {
-				id       = iface,
-				proto    = net:proto(),
-				uptime   = net:uptime(),
-				gwaddr   = net:gwaddr(),
-				dnsaddrs = net:dnsaddrs()
+		local device = net and net:get_interface()
+		if device then
+			local device = net:get_interface()
+			local data   = {
+				id         = iface,
+				proto      = net:proto(),
+				uptime     = net:uptime(),
+				gwaddr     = net:gwaddr(),
+				dnsaddrs   = net:dnsaddrs(),
+				name       = device:shortname(),
+				type       = device:type(),
+				ifname     = device:name(),
+				macaddr    = device:mac(),
+				is_up      = device:is_up(),
+				rx_bytes   = device:rx_bytes(),
+				tx_bytes   = device:tx_bytes(),
+				rx_packets = device:rx_packets(),
+				tx_packets = device:tx_packets(),
+
+				ipaddrs    = { },
+				ip6addrs   = { },
+				subdevices = { }
 			}
-			for _, info in ipairs(nixio.getifaddrs()) do
-				local name = info.name:match("[^:]+")
-				if name == dev then
-					if info.family == "packet" then
-						data.flags   = info.flags
-						data.stats   = info.data
-						data.macaddr = info.addr
-						data.ifname  = name
-					elseif info.family == "inet" then
-						data.ipaddrs = data.ipaddrs or { }
-						data.ipaddrs[#data.ipaddrs+1] = {
-							addr      = info.addr,
-							broadaddr = info.broadaddr,
-							dstaddr   = info.dstaddr,
-							netmask   = info.netmask,
-							prefix    = info.prefix
-						}
-					elseif info.family == "inet6" then
-						data.ip6addrs = data.ip6addrs or { }
-						data.ip6addrs[#data.ip6addrs+1] = {
-							addr    = info.addr,
-							netmask = info.netmask,
-							prefix  = info.prefix
-						}
-					end
-				end
+
+			local _, a
+			for _, a in ipairs(device:ipaddrs()) do
+				data.ipaddrs[#data.ipaddrs+1] = {
+					addr      = a:host():string(),
+					netmask   = a:mask():string(),
+					prefix    = a:prefix()
+				}
+			end
+			for _, a in ipairs(device:ip6addrs()) do
+				data.ip6addrs[#data.ip6addrs+1] = {
+					addr      = a:host():string(),
+					netmask   = a:mask():string(),
+					prefix    = a:prefix()
+				}
 			end
 
-			if next(data) then
-				rv[#rv+1] = data
+			for _, device in ipairs(net:get_interfaces()) do
+				data.subdevices[#data.subdevices+1] = {
+					name       = device:shortname(),
+					type       = device:type(),
+					ifname     = device:name(),
+					macaddr    = device:mac(),
+					macaddr    = device:mac(),
+					is_up      = device:is_up(),
+					rx_bytes   = device:rx_bytes(),
+					tx_bytes   = device:tx_bytes(),
+					rx_packets = device:rx_packets(),
+					tx_packets = device:tx_packets(),
+				}
 			end
+
+			rv[#rv+1] = data
 		end
 	end
 
