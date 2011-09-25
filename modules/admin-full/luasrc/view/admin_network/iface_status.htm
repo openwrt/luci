@@ -19,7 +19,7 @@
 							'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px" />' +
 							'<br /><small>%s</small>',
 								ifc.type, ifc.is_up ? '' : '_disabled',
-								ifc.name
+								ifc.is_up ? ifc.ifname : '?'
 						);
 
 					var d = document.getElementById('<%=self.option%>-ifc-description');

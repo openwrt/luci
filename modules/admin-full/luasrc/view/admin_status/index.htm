@@ -123,7 +123,9 @@ $Id$
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
-	var update_status = function() {
+	(function() {
+		var func = arguments.callee;
+
 		iwxhr.get('<%=REQUEST_URI%>', { status: 1 },
 			function(x, info)
 			{
@@ -457,12 +459,10 @@ $Id$
 				if (e = document.getElementById('conns'))
 					e.innerHTML = progressbar(info.conncount, info.connmax);
 
-				window.setTimeout(update_status, 5000);
+				window.setTimeout(func, 5000);
 			}
 		)
-	};
-
-	update_status();
+	})();
 //]]></script>
 
 <h2><a id="content" name="content"><%:Status%></a></h2>
