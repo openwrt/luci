@@ -13,7 +13,9 @@
 	}
 
 	var stxhr = new XHR();
-	var update_status = function() {
+	(function() {
+		var func = arguments.callee;
+
 		stxhr.get('<%=luci.dispatcher.build_url("admin", "services", "upnp", "status")%>', null,
 			function(x, st)
 			{
@@ -51,12 +53,10 @@
 					}
 				}
 
-				window.setTimeout(update_status, 5000);
+				window.setTimeout(func, 5000);
 			}
 		)
-	};
-
-	update_status();
+	})();
 //]]></script>
 
 <fieldset class="cbi-section">
