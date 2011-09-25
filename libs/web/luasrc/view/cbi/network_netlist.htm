@@ -36,7 +36,7 @@
 						if not iface:is_bridge() then
 							empty = false
 				 %>
-					<img<%=attr("title", pcdata(iface:get_i18n()))%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 				<% end end %>
 				<% if empty then %><em><%:(no interfaces attached)%></em><% end %>
 			</span>

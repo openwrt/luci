@@ -25,7 +25,7 @@
 		local n = self.network and net:get_network(self.network)
 		if n then
 			local i
-			for _, i in ipairs(n:is_bridge() and n:get_interfaces() or { n:get_interface() }) do
+			for _, i in ipairs(n:get_interfaces() or { n:get_interface() }) do
 				checked[i:name()] = true
 			end
 		end
