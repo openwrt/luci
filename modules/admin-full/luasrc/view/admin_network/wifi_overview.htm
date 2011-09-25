@@ -166,7 +166,9 @@ $Id$
 		);
 	}
 
-	var update_status = function() {
+	(function() {
+		var func = arguments.callee;
+
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "wireless_status", table.concat(netlist, ","))%>', null,
 			function(x, st)
 			{
@@ -336,12 +338,10 @@ $Id$
 					}
 				}
 
-				window.setTimeout(update_status, 5000);
+				window.setTimeout(func, 5000);
 			}
 		)
-	};
-
-	update_status();
+	})();
 //]]></script>
 
 <h2><a id="content" name="content"><%:Wireless Overview%></a></h2>
