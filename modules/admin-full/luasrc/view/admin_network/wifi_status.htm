@@ -2,7 +2,10 @@
 
 <script type="text/javascript">//<![CDATA[
 	var iwxhr = new XHR();
-	var update_status = function() {
+
+	(function() {
+		var func = arguments.callee;
+
 		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "wireless_status", self.ifname)%>', null,
 			function(x, iw)
 			{
@@ -61,12 +64,10 @@
 						);
 				}
 
-				window.setTimeout(update_status, 5000);
+				window.setTimeout(func, 5000);
 			}
 		)
-	};
-
-	update_status();
+	})();
 //]]></script>
 
 <table>
