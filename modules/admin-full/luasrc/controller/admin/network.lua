@@ -282,23 +282,6 @@ function iface_reconnect()
 
 	local net = netmd:get_network(iface)
 	if net then
-		local ifn
-		for _, ifn in ipairs(net:get_interfaces()) do
-			local wnet = ifn:get_wifinet()
-			if wnet then
-				local wdev = wnet:get_device()
-				if wdev then
-					luci.sys.call(
-						"env -i /sbin/wifi up %q >/dev/null 2>/dev/null"
-							% wdev:name()
-					)
-
-					luci.http.status(200, "Reconnected")
-					return
-				end
-			end
-		end
-
 		luci.sys.call("env -i /sbin/ifup %q >/dev/null 2>/dev/null" % iface)
 		luci.http.status(200, "Reconnected")
 		return
