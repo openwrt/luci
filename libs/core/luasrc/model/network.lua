@@ -778,20 +778,20 @@ function network.get_interface(self)
 end
 
 function network.get_interfaces(self)
-	local ifaces = { }
+	if self:is_bridge() or (self:is_virtual() and not self:is_floating()) then
+		local ifaces = { }
 
-	local ifn
-	local nfs = { }
-	for ifn in utl.imatch(self:get("ifname")) do
-		ifn = ifn:match("^[^:/]+")
-		nfs[ifn] = interface(ifn, self)
-	end
+		local ifn
+		local nfs = { }
+		for ifn in utl.imatch(self:get("ifname")) do
+			ifn = ifn:match("^[^:/]+")
+			nfs[ifn] = interface(ifn, self)
+		end
 
-	for ifn in utl.kspairs(nfs) do
-		ifaces[#ifaces+1] = nfs[ifn]
-	end
+		for ifn in utl.kspairs(nfs) do
+			ifaces[#ifaces+1] = nfs[ifn]
+		end
 
-	if self:is_bridge() then
 		local num = { }
 		local wfs = { }
 		uci_r:foreach("wireless", "wifi-iface",
@@ -808,9 +808,9 @@ function network.get_interfaces(self)
 		for ifn in utl.kspairs(wfs) do
 			ifaces[#ifaces+1] = wfs[ifn]
 		end
-	end
 
-	return ifaces
+		return ifaces
+	end
 end
 
 function network.contains_interface(self, ifname)
