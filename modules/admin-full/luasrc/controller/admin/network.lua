@@ -247,7 +247,7 @@ function iface_status()
 				}
 			end
 
-			for _, device in ipairs(net:get_interfaces()) do
+			for _, device in ipairs(net:get_interfaces() or {}) do
 				data.subdevices[#data.subdevices+1] = {
 					name       = device:shortname(),
 					type       = device:type(),
