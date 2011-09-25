@@ -48,16 +48,22 @@ function index()
 		page.leaf = true
 		page.subindex = true
 
-		page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
+		page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil, 16)
+		page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
+		page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil, 16)
+		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "wireless_reconnect"}, call("wifi_reconnect"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "wireless_shutdown"}, call("wifi_reconnect"), nil)
 		page.leaf = true
 
 		local wdev
