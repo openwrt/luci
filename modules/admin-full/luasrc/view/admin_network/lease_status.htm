@@ -1,56 +1,48 @@
 <script type="text/javascript">//<![CDATA[
-	var stxhr = new XHR();
-
-	(function() {
-		var func = arguments.callee;
-
-		stxhr.get('<%=luci.dispatcher.build_url("admin", "network", "dhcplease_status")%>', null,
-			function(x, st)
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "dhcplease_status")%>', null,
+		function(x, st)
+		{
+			var tb = document.getElementById('lease_status_table');
+			if (st && tb)
 			{
-				var tb = document.getElementById('lease_status_table');
-				if (st && tb)
+				/* clear all rows */
+				while( tb.rows.length > 1 )
+					tb.deleteRow(1);
+
+				for( var i = 0; i < st.length; i++ )
 				{
-					/* clear all rows */
-					while( tb.rows.length > 1 )
-						tb.deleteRow(1);
+					var timestr;
 
-					for( var i = 0; i < st.length; i++ )
+					if (st[i].expires <= 0)
 					{
-						var timestr;
-
-						if (st[i].expires <= 0)
-						{
-							timestr = '<em><%:expired%></em>';
-						}
-						else
-						{
-							timestr = String.format('%t', st[i].expires);
-						}
-
-						var tr = tb.insertRow(-1);
-							tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
-
-						tr.insertCell(-1).innerHTML = st[i].hostname ? st[i].hostname : '?';
-						tr.insertCell(-1).innerHTML = st[i].ipaddr;
-						tr.insertCell(-1).innerHTML = st[i].macaddr;
-						tr.insertCell(-1).innerHTML = timestr;
+						timestr = '<em><%:expired%></em>';
+					}
+					else
+					{
+						timestr = String.format('%t', st[i].expires);
 					}
 
-					if( tb.rows.length == 1 )
-					{
-						var tr = tb.insertRow(-1);
-							tr.className = 'cbi-section-table-row';
+					var tr = tb.insertRow(-1);
+						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
-						var td = tr.insertCell(-1);
-							td.colSpan = 4;
-							td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
-					}
+					tr.insertCell(-1).innerHTML = st[i].hostname ? st[i].hostname : '?';
+					tr.insertCell(-1).innerHTML = st[i].ipaddr;
+					tr.insertCell(-1).innerHTML = st[i].macaddr;
+					tr.insertCell(-1).innerHTML = timestr;
 				}
 
-				window.setTimeout(func, 5000);
+				if( tb.rows.length == 1 )
+				{
+					var tr = tb.insertRow(-1);
+						tr.className = 'cbi-section-table-row';
+
+					var td = tr.insertCell(-1);
+						td.colSpan = 4;
+						td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
+				}
 			}
-		)
-	})();
+		}
+	);
 //]]></script>
 
 <fieldset class="cbi-section">

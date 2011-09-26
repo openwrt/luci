@@ -119,350 +119,344 @@ $Id$
 		);
 	}
 
-	var iwxhr = new XHR();
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
-	(function() {
-		var func = arguments.callee;
+	XHR.poll(5, '<%=REQUEST_URI%>', { status: 1 },
+		function(x, info)
+		{
+			var si = document.getElementById('wan4_i');
+			var ss = document.getElementById('wan4_s');
+			var ifc = info.wan;
 
-		iwxhr.get('<%=REQUEST_URI%>', { status: 1 },
-			function(x, info)
+			if (ifc && ifc.ifname && ifc.proto != 'none')
 			{
-				var si = document.getElementById('wan4_i');
-				var ss = document.getElementById('wan4_s');
-				var ifc = info.wan;
+				var s = String.format(
+					'<strong><%:Type%>: </strong>%s<br />' +
+					'<strong><%:Address%>: </strong>%s<br />' +
+					'<strong><%:Netmask%>: </strong>%s<br />' +
+					'<strong><%:Gateway%>: </strong>%s<br />',
+						ifc.proto,
+						(ifc.ipaddr) ? ifc.ipaddr : '0.0.0.0',
+						(ifc.netmask && ifc.netmask != ifc.ipaddr) ? ifc.netmask : '255.255.255.255',
+						(ifc.gwaddr) ? ifc.gwaddr : '0.0.0.0'
+				);
 
-				if (ifc && ifc.ifname && ifc.proto != 'none')
+				for (var i = 0; i < ifc.dns.length; i++)
 				{
-					var s = String.format(
-						'<strong><%:Type%>: </strong>%s<br />' +
-						'<strong><%:Address%>: </strong>%s<br />' +
-						'<strong><%:Netmask%>: </strong>%s<br />' +
-						'<strong><%:Gateway%>: </strong>%s<br />',
-							ifc.proto,
-							(ifc.ipaddr) ? ifc.ipaddr : '0.0.0.0',
-							(ifc.netmask && ifc.netmask != ifc.ipaddr) ? ifc.netmask : '255.255.255.255',
-							(ifc.gwaddr) ? ifc.gwaddr : '0.0.0.0'
-					);
-
-					for (var i = 0; i < ifc.dns.length; i++)
-					{
-						s += String.format(
-							'<strong><%:DNS%> %d: </strong>%s<br />',
-							i + 1, ifc.dns[i]
-						);
-					}
-
-					if (ifc.expires > -1)
-					{
-						s += String.format(
-							'<strong><%:Expires%>: </strong>%t<br />',
-							ifc.expires
-						);
-					}
-
-					if (ifc.uptime > 0)
-					{
-						s += String.format(
-							'<strong><%:Connected%>: </strong>%t<br />',
-							ifc.uptime
-						);
-					}
-
-					ss.innerHTML = String.format('<small>%s</small>', s);
-					si.innerHTML = String.format(
-						'<img src="<%=resource%>/icons/ethernet.png" />' +
-						'<br /><small><a href="%s">%s</a></small>',
-							ifc.link, ifc.ifname
+					s += String.format(
+						'<strong><%:DNS%> %d: </strong>%s<br />',
+						i + 1, ifc.dns[i]
 					);
 				}
-				else
+
+				if (ifc.expires > -1)
 				{
-					si.innerHTML = '<img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small>';
-					ss.innerHTML = '<em>Not connected</em>';
-				}
-
-				<% if has_ipv6 then %>
-				var si6 = document.getElementById('wan6_i');
-				var ss6 = document.getElementById('wan6_s');
-				var ifc6 = info.wan6;
-
-				if (ifc6 && ifc6.ifname && ifc6.proto != 'none')
-				{
-					var s = String.format(
-						'<strong><%:Address%>: </strong>%s<br />' +
-						'<strong><%:Gateway%>: </strong>%s<br />',
-							(ifc6.ip6addr) ? ifc6.ip6addr : '::',
-							(ifc6.gw6addr) ? ifc6.gw6addr : '::'
-					);
-
-					for (var i = 0; i < ifc6.dns.length; i++)
-					{
-						s += String.format(
-							'<strong><%:DNS%> %d: </strong>%s<br />',
-							i + 1, ifc6.dns[i]
-						);
-					}
-
-					if (ifc6.uptime > 0)
-					{
-						s += String.format(
-							'<strong><%:Connected%>: </strong>%t<br />',
-							ifc6.uptime
-						);
-					}
-
-					ss6.innerHTML = String.format('<small>%s</small>', s);
-					si6.innerHTML = String.format(
-						'<img src="<%=resource%>/icons/ethernet.png" />' +
-						'<br /><small><a href="%s">%s</a></small>',
-							ifc6.link, ifc6.ifname
+					s += String.format(
+						'<strong><%:Expires%>: </strong>%t<br />',
+						ifc.expires
 					);
 				}
-				else
+
+				if (ifc.uptime > 0)
 				{
-					si6.innerHTML = '<img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small>';
-					ss6.innerHTML = '<em>Not connected</em>';
-				}
-				<% end %>
-
-				<% if has_dhcp then %>
-				var ls = document.getElementById('lease_status_table');
-				if (ls)
-				{
-					/* clear all rows */
-					while( ls.rows.length > 1 )
-						ls.rows[0].parentNode.deleteRow(1);
-
-					for( var i = 0; i < info.leases.length; i++ )
-					{
-						var timestr;
-
-						if (info.leases[i].expires <= 0)
-							timestr = '<em><%:expired%></em>';
-						else
-							timestr = String.format('%t', info.leases[i].expires);
-
-						var tr = ls.rows[0].parentNode.insertRow(-1);
-							tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
-
-						tr.insertCell(-1).innerHTML = info.leases[i].hostname ? info.leases[i].hostname : '?';
-						tr.insertCell(-1).innerHTML = info.leases[i].ipaddr;
-						tr.insertCell(-1).innerHTML = info.leases[i].macaddr;
-						tr.insertCell(-1).innerHTML = timestr;
-					}
-
-					if( ls.rows.length == 1 )
-					{
-						var tr = ls.rows[0].parentNode.insertRow(-1);
-							tr.className = 'cbi-section-table-row';
-
-						var td = tr.insertCell(-1);
-							td.colSpan = 4;
-							td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
-					}
-				}
-				<% end %>
-
-				<% if has_wifi then %>
-				var assoclist = [ ];
-
-				var ws = document.getElementById('wifi_status_table');
-				if (ws)
-				{
-					var wsbody = ws.rows[0].parentNode;
-					while (ws.rows.length > 0)
-						wsbody.deleteRow(0);
-
-					for (var didx = 0; didx < info.wifinets.length; didx++)
-					{
-						var dev = info.wifinets[didx];
-
-						var tr = wsbody.insertRow(-1);
-						var td;
-
-						td = tr.insertCell(-1);
-						td.width     = "33%";
-						td.innerHTML = dev.name;
-						td.style.verticalAlign = "top";
-
-						td = tr.insertCell(-1);
-
-						var s = '';
-
-						for (var nidx = 0; nidx < dev.networks.length; nidx++)
-						{
-							var net = dev.networks[nidx];
-							var is_assoc = (net.bssid != '00:00:00:00:00:00' && net.channel);
-
-							var icon;
-							if (!is_assoc)
-								icon = "<%=resource%>/icons/signal-none.png";
-							else if (net.quality == 0)
-								icon = "<%=resource%>/icons/signal-0.png";
-							else if (net.quality < 25)
-								icon = "<%=resource%>/icons/signal-0-25.png";
-							else if (net.quality < 50)
-								icon = "<%=resource%>/icons/signal-25-50.png";
-							else if (net.quality < 75)
-								icon = "<%=resource%>/icons/signal-50-75.png";
-							else
-								icon = "<%=resource%>/icons/signal-75-100.png";
-
-							s += String.format(
-								'<table><tr><td style="text-align:center; width:32px; padding:3px">' +
-									'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />' +
-									'<br /><small>%d%%</small>' +
-								'</td><td style="text-align:left; padding:3px"><small>' +
-									'<strong><%:SSID%>:</strong> <a href="%s">%h</a><br />' +
-									'<strong><%:Mode%>:</strong> %s<br />' +
-									'<strong><%:Channel%>:</strong> %d (%.2f GHz)<br />' +
-									'<strong><%:Bitrate%>:</strong> %s Mb/s<br />',
-									icon, net.signal, net.noise,
-									net.quality,
-									net.link, net.ssid,
-									net.mode,
-									net.channel, net.frequency,
-									net.bitrate || '?'
-							);
-
-							if (is_assoc)
-							{
-								s += String.format(
-									'<strong><%:BSSID%>:</strong> %s<br />' +
-									'<strong><%:Encryption%>:</strong> %s',
-										net.bssid,
-										net.encryption
-								);
-							}
-							else
-							{
-								s += '<em><%:Wireless is disabled or not associated%></em>';
-							}
-
-							s += '</small></td></tr></table>';
-
-							for (var bssid in net.assoclist)
-							{
-								assoclist.push({
-									bssid:  bssid,
-									signal: net.assoclist[bssid].signal,
-									noise:  net.assoclist[bssid].noise,
-									link:   net.link,
-									name:   net.name
-								});
-							}
-						}
-
-						if (!s)
-							s = '<em><%:No information available%></em>';
-
-						td.innerHTML = s;
-					}
+					s += String.format(
+						'<strong><%:Connected%>: </strong>%t<br />',
+						ifc.uptime
+					);
 				}
 
-				var ac = document.getElementById('wifi_assoc_table');
-				if (ac)
+				ss.innerHTML = String.format('<small>%s</small>', s);
+				si.innerHTML = String.format(
+					'<img src="<%=resource%>/icons/ethernet.png" />' +
+					'<br /><small><a href="%s">%s</a></small>',
+						ifc.link, ifc.ifname
+				);
+			}
+			else
+			{
+				si.innerHTML = '<img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small>';
+				ss.innerHTML = '<em>Not connected</em>';
+			}
+
+			<% if has_ipv6 then %>
+			var si6 = document.getElementById('wan6_i');
+			var ss6 = document.getElementById('wan6_s');
+			var ifc6 = info.wan6;
+
+			if (ifc6 && ifc6.ifname && ifc6.proto != 'none')
+			{
+				var s = String.format(
+					'<strong><%:Address%>: </strong>%s<br />' +
+					'<strong><%:Gateway%>: </strong>%s<br />',
+						(ifc6.ip6addr) ? ifc6.ip6addr : '::',
+						(ifc6.gw6addr) ? ifc6.gw6addr : '::'
+				);
+
+				for (var i = 0; i < ifc6.dns.length; i++)
 				{
-					/* clear all rows */
-					while( ac.rows.length > 1 )
-						ac.rows[0].parentNode.deleteRow(1);
+					s += String.format(
+						'<strong><%:DNS%> %d: </strong>%s<br />',
+						i + 1, ifc6.dns[i]
+					);
+				}
 
-					assoclist.sort(function(a, b) {
-						return (a.name == b.name)
-							? (a.bssid < b.bssid)
-							: (a.name  > b.name )
-						;
-					});
+				if (ifc6.uptime > 0)
+				{
+					s += String.format(
+						'<strong><%:Connected%>: </strong>%t<br />',
+						ifc6.uptime
+					);
+				}
 
-					for( var i = 0; i < assoclist.length; i++ )
+				ss6.innerHTML = String.format('<small>%s</small>', s);
+				si6.innerHTML = String.format(
+					'<img src="<%=resource%>/icons/ethernet.png" />' +
+					'<br /><small><a href="%s">%s</a></small>',
+						ifc6.link, ifc6.ifname
+				);
+			}
+			else
+			{
+				si6.innerHTML = '<img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small>';
+				ss6.innerHTML = '<em>Not connected</em>';
+			}
+			<% end %>
+
+			<% if has_dhcp then %>
+			var ls = document.getElementById('lease_status_table');
+			if (ls)
+			{
+				/* clear all rows */
+				while( ls.rows.length > 1 )
+					ls.rows[0].parentNode.deleteRow(1);
+
+				for( var i = 0; i < info.leases.length; i++ )
+				{
+					var timestr;
+
+					if (info.leases[i].expires <= 0)
+						timestr = '<em><%:expired%></em>';
+					else
+						timestr = String.format('%t', info.leases[i].expires);
+
+					var tr = ls.rows[0].parentNode.insertRow(-1);
+						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
+
+					tr.insertCell(-1).innerHTML = info.leases[i].hostname ? info.leases[i].hostname : '?';
+					tr.insertCell(-1).innerHTML = info.leases[i].ipaddr;
+					tr.insertCell(-1).innerHTML = info.leases[i].macaddr;
+					tr.insertCell(-1).innerHTML = timestr;
+				}
+
+				if( ls.rows.length == 1 )
+				{
+					var tr = ls.rows[0].parentNode.insertRow(-1);
+						tr.className = 'cbi-section-table-row';
+
+					var td = tr.insertCell(-1);
+						td.colSpan = 4;
+						td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
+				}
+			}
+			<% end %>
+
+			<% if has_wifi then %>
+			var assoclist = [ ];
+
+			var ws = document.getElementById('wifi_status_table');
+			if (ws)
+			{
+				var wsbody = ws.rows[0].parentNode;
+				while (ws.rows.length > 0)
+					wsbody.deleteRow(0);
+
+				for (var didx = 0; didx < info.wifinets.length; didx++)
+				{
+					var dev = info.wifinets[didx];
+
+					var tr = wsbody.insertRow(-1);
+					var td;
+
+					td = tr.insertCell(-1);
+					td.width     = "33%";
+					td.innerHTML = dev.name;
+					td.style.verticalAlign = "top";
+
+					td = tr.insertCell(-1);
+
+					var s = '';
+
+					for (var nidx = 0; nidx < dev.networks.length; nidx++)
 					{
-						var tr = ac.rows[0].parentNode.insertRow(-1);
-							tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
+						var net = dev.networks[nidx];
+						var is_assoc = (net.bssid != '00:00:00:00:00:00' && net.channel);
 
 						var icon;
-						var q = (-1 * (assoclist[i].noise - assoclist[i].signal)) / 5;
-						if (q < 1)
+						if (!is_assoc)
+							icon = "<%=resource%>/icons/signal-none.png";
+						else if (net.quality == 0)
 							icon = "<%=resource%>/icons/signal-0.png";
-						else if (q < 2)
+						else if (net.quality < 25)
 							icon = "<%=resource%>/icons/signal-0-25.png";
-						else if (q < 3)
+						else if (net.quality < 50)
 							icon = "<%=resource%>/icons/signal-25-50.png";
-						else if (q < 4)
+						else if (net.quality < 75)
 							icon = "<%=resource%>/icons/signal-50-75.png";
 						else
 							icon = "<%=resource%>/icons/signal-75-100.png";
 
-						tr.insertCell(-1).innerHTML = String.format(
-							'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
-							icon, assoclist[i].signal, assoclist[i].noise
+						s += String.format(
+							'<table><tr><td style="text-align:center; width:32px; padding:3px">' +
+								'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />' +
+								'<br /><small>%d%%</small>' +
+							'</td><td style="text-align:left; padding:3px"><small>' +
+								'<strong><%:SSID%>:</strong> <a href="%s">%h</a><br />' +
+								'<strong><%:Mode%>:</strong> %s<br />' +
+								'<strong><%:Channel%>:</strong> %d (%.2f GHz)<br />' +
+								'<strong><%:Bitrate%>:</strong> %s Mb/s<br />',
+								icon, net.signal, net.noise,
+								net.quality,
+								net.link, net.ssid,
+								net.mode,
+								net.channel, net.frequency,
+								net.bitrate || '?'
 						);
 
-						tr.insertCell(-1).innerHTML = assoclist[i].bssid;
+						if (is_assoc)
+						{
+							s += String.format(
+								'<strong><%:BSSID%>:</strong> %s<br />' +
+								'<strong><%:Encryption%>:</strong> %s',
+									net.bssid,
+									net.encryption
+							);
+						}
+						else
+						{
+							s += '<em><%:Wireless is disabled or not associated%></em>';
+						}
 
-						tr.insertCell(-1).innerHTML = String.format(
-							'<a href="%s">%h</a>',
-								assoclist[i].link,
-								assoclist[i].name
-						);
+						s += '</small></td></tr></table>';
 
-						tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].signal);
-						tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].noise);
+						for (var bssid in net.assoclist)
+						{
+							assoclist.push({
+								bssid:  bssid,
+								signal: net.assoclist[bssid].signal,
+								noise:  net.assoclist[bssid].noise,
+								link:   net.link,
+								name:   net.name
+							});
+						}
 					}
 
-					if (ac.rows.length == 1)
-					{
-						var tr = ac.rows[0].parentNode.insertRow(-1);
-						    tr.className = 'cbi-section-table-row';
+					if (!s)
+						s = '<em><%:No information available%></em>';
 
-						var td = tr.insertCell(-1);
-						    td.colSpan = 5;
-						    td.innerHTML = '<br /><em><%:No information available%></em>';
-					}
+					td.innerHTML = s;
 				}
-				<% end %>
-
-				var e;
-
-				if (e = document.getElementById('localtime'))
-					e.innerHTML = info.localtime;
-
-				if (e = document.getElementById('uptime'))
-					e.innerHTML = String.format('%t', info.uptime);
-
-				if (e = document.getElementById('loadavg'))
-					e.innerHTML = String.format('%.02f, %.02f, %.02f',
-						info.loadavg[0], info.loadavg[1], info.loadavg[2]);
-
-				if (e = document.getElementById('memtotal'))
-					e.innerHTML = progressbar(
-						(info.memfree + info.membuffers + info.memcached) + " kB",
-						info.memtotal + " kB"
-					);
-
-				if (e = document.getElementById('memfree'))
-					e.innerHTML = progressbar(
-						info.memfree + " kB", info.memtotal + " kB"
-					);
-
-				if (e = document.getElementById('memcache'))
-					e.innerHTML = progressbar(
-						info.memcached + " kB", info.memtotal + " kB"
-					);
-
-				if (e = document.getElementById('membuff'))
-					e.innerHTML = progressbar(
-						info.membuffers + " kB", info.memtotal + " kB"
-					);
-
-				if (e = document.getElementById('conns'))
-					e.innerHTML = progressbar(info.conncount, info.connmax);
-
-				window.setTimeout(func, 5000);
 			}
-		)
-	})();
+
+			var ac = document.getElementById('wifi_assoc_table');
+			if (ac)
+			{
+				/* clear all rows */
+				while( ac.rows.length > 1 )
+					ac.rows[0].parentNode.deleteRow(1);
+
+				assoclist.sort(function(a, b) {
+					return (a.name == b.name)
+						? (a.bssid < b.bssid)
+						: (a.name  > b.name )
+					;
+				});
+
+				for( var i = 0; i < assoclist.length; i++ )
+				{
+					var tr = ac.rows[0].parentNode.insertRow(-1);
+						tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
+
+					var icon;
+					var q = (-1 * (assoclist[i].noise - assoclist[i].signal)) / 5;
+					if (q < 1)
+						icon = "<%=resource%>/icons/signal-0.png";
+					else if (q < 2)
+						icon = "<%=resource%>/icons/signal-0-25.png";
+					else if (q < 3)
+						icon = "<%=resource%>/icons/signal-25-50.png";
+					else if (q < 4)
+						icon = "<%=resource%>/icons/signal-50-75.png";
+					else
+						icon = "<%=resource%>/icons/signal-75-100.png";
+
+					tr.insertCell(-1).innerHTML = String.format(
+						'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
+						icon, assoclist[i].signal, assoclist[i].noise
+					);
+
+					tr.insertCell(-1).innerHTML = assoclist[i].bssid;
+
+					tr.insertCell(-1).innerHTML = String.format(
+						'<a href="%s">%h</a>',
+							assoclist[i].link,
+							assoclist[i].name
+					);
+
+					tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].signal);
+					tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].noise);
+				}
+
+				if (ac.rows.length == 1)
+				{
+					var tr = ac.rows[0].parentNode.insertRow(-1);
+						tr.className = 'cbi-section-table-row';
+
+					var td = tr.insertCell(-1);
+						td.colSpan = 5;
+						td.innerHTML = '<br /><em><%:No information available%></em>';
+				}
+			}
+			<% end %>
+
+			var e;
+
+			if (e = document.getElementById('localtime'))
+				e.innerHTML = info.localtime;
+
+			if (e = document.getElementById('uptime'))
+				e.innerHTML = String.format('%t', info.uptime);
+
+			if (e = document.getElementById('loadavg'))
+				e.innerHTML = String.format('%.02f, %.02f, %.02f',
+					info.loadavg[0], info.loadavg[1], info.loadavg[2]);
+
+			if (e = document.getElementById('memtotal'))
+				e.innerHTML = progressbar(
+					(info.memfree + info.membuffers + info.memcached) + " kB",
+					info.memtotal + " kB"
+				);
+
+			if (e = document.getElementById('memfree'))
+				e.innerHTML = progressbar(
+					info.memfree + " kB", info.memtotal + " kB"
+				);
+
+			if (e = document.getElementById('memcache'))
+				e.innerHTML = progressbar(
+					info.memcached + " kB", info.memtotal + " kB"
+				);
+
+			if (e = document.getElementById('membuff'))
+				e.innerHTML = progressbar(
+					info.membuffers + " kB", info.memtotal + " kB"
+				);
+
+			if (e = document.getElementById('conns'))
+				e.innerHTML = progressbar(info.conncount, info.connmax);
+
+		}
+	);
 //]]></script>
 
 <h2><a id="content" name="content"><%:Status%></a></h2>

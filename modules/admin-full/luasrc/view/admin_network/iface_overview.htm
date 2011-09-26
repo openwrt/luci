@@ -44,8 +44,7 @@ $Id$
 			s.innerHTML = '<%:Waiting for router...%>';
 		}
 
-		var rcxhr = new XHR();
-		rcxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/iface_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
+		XHR.get('<%=luci.dispatcher.build_url("admin", "network")%>/iface_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
 			function(x)
 			{
 				if (s)
@@ -67,117 +66,112 @@ $Id$
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
-	(function() {
-		var func = arguments.callee;
-		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "iface_status", table.concat(netlist, ","))%>', null,
-			function(x, ifcs)
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "iface_status", table.concat(netlist, ","))%>', null,
+		function(x, ifcs)
+		{
+			if (ifcs)
 			{
-				if (ifcs)
+				for (var idx = 0; idx < ifcs.length; idx++)
 				{
-					for (var idx = 0; idx < ifcs.length; idx++)
+					var ifc = ifcs[idx];
+					var html = '';
+
+					var s = document.getElementById(ifc.id + '-ifc-devices');
+					if (s)
 					{
-						var ifc = ifcs[idx];
-						var html = '';
+						var stat = String.format(
+							'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px; vertical-align:middle" />',
+								ifc.type,
+								ifc.is_up ? '' : '_disabled'
+						);
 
-						var s = document.getElementById(ifc.id + '-ifc-devices');
-						if (s)
+						if (ifc.subdevices && ifc.subdevices.length)
 						{
-							var stat = String.format(
-								'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px; vertical-align:middle" />',
-									ifc.type,
-									ifc.is_up ? '' : '_disabled'
-							);
+							stat += ' <strong>(';
 
-							if (ifc.subdevices && ifc.subdevices.length)
+							for (var j = 0; j < ifc.subdevices.length; j++)
 							{
-								stat += ' <strong>(';
+								var sif = ifc.subdevices[j];
 
-								for (var j = 0; j < ifc.subdevices.length; j++)
-								{
-									var sif = ifc.subdevices[j];
-
-									stat += String.format(
-										'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px; vertical-align:middle" title="%q" />',
-											sif.type,
-											sif.is_up ? '' : '_disabled',
-											sif.name
-									);
-								}
-
-								stat += ')</strong>';
+								stat += String.format(
+									'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px; vertical-align:middle" title="%q" />',
+										sif.type,
+										sif.is_up ? '' : '_disabled',
+										sif.name
+								);
 							}
 
-							stat += String.format(
-								'<br /><small>%s</small>',
-									ifc.name
-							);
-
-							s.innerHTML = stat;
+							stat += ')</strong>';
 						}
 
-						var d = document.getElementById(ifc.id + '-ifc-description');
-						if (d && ifc.ifname)
+						stat += String.format(
+							'<br /><small>%s</small>',
+								ifc.name
+						);
+
+						s.innerHTML = stat;
+					}
+
+					var d = document.getElementById(ifc.id + '-ifc-description');
+					if (d && ifc.ifname)
+					{
+						if (ifc.is_up)
 						{
-							if (ifc.is_up)
-							{
-								html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
-							}
-
-							if (ifc.type != 'tunnel')
-							{
-								html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', ifc.macaddr);
-							}
-
-							html += String.format(
-								'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
-								'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
-									ifc.rx_bytes, ifc.rx_packets,
-									ifc.tx_bytes, ifc.tx_packets
-							);
-
-							if (ifc.ipaddrs && ifc.ipaddrs.length)
-							{
-								html += '<strong><%:IPv4%>: </strong>';
-
-								for (var i = 0; i < ifc.ipaddrs.length; i++)
-									html += String.format(
-										'%s%s/%d',
-										i ? ', ' : '',
-										ifc.ipaddrs[i].addr,
-										ifc.ipaddrs[i].prefix
-									);
-
-								html += '<br />';
-							}
-
-							if (ifc.ip6addrs && ifc.ip6addrs.length)
-							{
-								html += '<strong><%:IPv6%>: </strong>';
-
-								for (var i = 0; i < ifc.ip6addrs.length; i++)
-									html += String.format(
-										'%s%s/%d',
-										i ? ', ' : '',
-										ifc.ip6addrs[i].addr.toUpperCase(),
-										ifc.ip6addrs[i].prefix
-									);
-
-								html += '<br />';
-							}
-
-							d.innerHTML = html;
+							html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 						}
-						else if (d)
+
+						if (ifc.type != 'tunnel')
 						{
-							d.innerHTML = '<em><%:Interface not present or not connected yet.%></em>';
+							html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', ifc.macaddr);
 						}
+
+						html += String.format(
+							'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
+							'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
+								ifc.rx_bytes, ifc.rx_packets,
+								ifc.tx_bytes, ifc.tx_packets
+						);
+
+						if (ifc.ipaddrs && ifc.ipaddrs.length)
+						{
+							html += '<strong><%:IPv4%>: </strong>';
+
+							for (var i = 0; i < ifc.ipaddrs.length; i++)
+								html += String.format(
+									'%s%s/%d',
+									i ? ', ' : '',
+									ifc.ipaddrs[i].addr,
+									ifc.ipaddrs[i].prefix
+								);
+
+							html += '<br />';
+						}
+
+						if (ifc.ip6addrs && ifc.ip6addrs.length)
+						{
+							html += '<strong><%:IPv6%>: </strong>';
+
+							for (var i = 0; i < ifc.ip6addrs.length; i++)
+								html += String.format(
+									'%s%s/%d',
+									i ? ', ' : '',
+									ifc.ip6addrs[i].addr.toUpperCase(),
+									ifc.ip6addrs[i].prefix
+								);
+
+							html += '<br />';
+						}
+
+						d.innerHTML = html;
+					}
+					else if (d)
+					{
+						d.innerHTML = '<em><%:Interface not present or not connected yet.%></em>';
 					}
 				}
-
-				window.setTimeout(func, 5000);
 			}
-		)
-	})();
+		}
+	);
 //]]></script>
 
 <fieldset class="cbi-section" style="display:none">

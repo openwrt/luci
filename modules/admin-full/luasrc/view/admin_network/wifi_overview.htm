@@ -119,7 +119,6 @@ $Id$
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
-	var iwxhr = new XHR();
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
@@ -147,8 +146,7 @@ $Id$
 				st.innerHTML = '<em><%:Wireless is restarting...%></em>';
 		}
 
-		var rcxhr = new XHR();
-		rcxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/wireless_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
+		XHR.get('<%=luci.dispatcher.build_url("admin", "network")%>/wireless_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
 			function(x)
 			{
 				if (s)
@@ -166,182 +164,175 @@ $Id$
 		);
 	}
 
-	(function() {
-		var func = arguments.callee;
-
-		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "wireless_status", table.concat(netlist, ","))%>', null,
-			function(x, st)
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "wireless_status", table.concat(netlist, ","))%>', null,
+		function(x, st)
+		{
+			if (st)
 			{
-				if (st)
+				var assoctable = document.getElementById('iw-assoclist');
+				if (assoctable)
+					while (assoctable.rows.length > 1)
+						assoctable.rows[1].parentNode.removeChild(assoctable.rows[1]);
+
+				var devup = { };
+				var rowstyle = 1;
+
+				for( var i = 0; i < st.length; i++ )
 				{
-					var assoctable = document.getElementById('iw-assoclist');
-					if (assoctable)
-						while (assoctable.rows.length > 1)
-							assoctable.rows[1].parentNode.removeChild(assoctable.rows[1]);
+					var iw = st[i];
+					var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel);
+					var p = iw.quality;
+					var q = is_assoc ? p : -1;
 
-					var devup = { };
-					var rowstyle = 1;
+					var icon;
+					if (q < 0)
+						icon = "<%=resource%>/icons/signal-none.png";
+					else if (q == 0)
+						icon = "<%=resource%>/icons/signal-0.png";
+					else if (q < 25)
+						icon = "<%=resource%>/icons/signal-0-25.png";
+					else if (q < 50)
+						icon = "<%=resource%>/icons/signal-25-50.png";
+					else if (q < 75)
+						icon = "<%=resource%>/icons/signal-50-75.png";
+					else
+						icon = "<%=resource%>/icons/signal-75-100.png";
 
-					for( var i = 0; i < st.length; i++ )
+					if (!devup[wifidevs[iw.id]])
+						devup[wifidevs[iw.id]] = is_assoc;
+
+					var sig = document.getElementById(iw.id + '-iw-signal');
+					if (sig)
+						sig.innerHTML = String.format(
+							'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" /><br />' +
+							'<small>%d%%</small>', icon, iw.signal, iw.noise, p
+						);
+
+					var toggle = document.getElementById(iw.id + '-iw-toggle');
+					if (toggle)
 					{
-						var iw = st[i];
-						var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel);
-						var p = iw.quality;
-						var q = is_assoc ? p : -1;
-
-						var icon;
-						if (q < 0)
-							icon = "<%=resource%>/icons/signal-none.png";
-						else if (q == 0)
-							icon = "<%=resource%>/icons/signal-0.png";
-						else if (q < 25)
-							icon = "<%=resource%>/icons/signal-0-25.png";
-						else if (q < 50)
-							icon = "<%=resource%>/icons/signal-25-50.png";
-						else if (q < 75)
-							icon = "<%=resource%>/icons/signal-50-75.png";
+						if (is_assoc)
+						{
+							toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reset.gif)';
+							toggle.value = '<%:Disable%>';
+							toggle.title = '<%:Shutdown this network%>';
+						}
 						else
-							icon = "<%=resource%>/icons/signal-75-100.png";
+						{
+							toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reload.gif)';
+							toggle.value = '<%:Enable%>';
+							toggle.title = '<%:Activate this network%>';
+						}
 
-						if (!devup[wifidevs[iw.id]])
-							devup[wifidevs[iw.id]] = is_assoc;
+						toggle.setAttribute('active', is_assoc);
+					}
 
-						var sig = document.getElementById(iw.id + '-iw-signal');
-						if (sig)
-							sig.innerHTML = String.format(
-								'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" /><br />' +
-								'<small>%d%%</small>', icon, iw.signal, iw.noise, p
+					var info = document.getElementById(iw.id + '-iw-status');
+					if (info)
+					{
+						if (is_assoc)
+							info.innerHTML = String.format(
+								'<strong><%:SSID%>:</strong> %h | ' +
+								'<strong><%:Mode%>:</strong> %s<br />' +
+								'<strong><%:BSSID%>:</strong> %s | ' +
+								'<strong><%:Encryption%>:</strong> %s',
+									iw.ssid, iw.mode, iw.bssid,
+									iw.encryption ? iw.encryption : '<%:None%>'
+							);
+						else
+							info.innerHTML = String.format(
+								'<strong><%:SSID%>:</strong> %h | ' +
+								'<strong><%:Mode%>:</strong> %s<br />' +
+								'<em>%s</em>',
+									iw.ssid || '?', iw.mode,
+									is_reconnecting
+										? '<em><%:Wireless is restarting...%></em>'
+										: '<em><%:Wireless is disabled or not associated%></em>'
+							);
+					}
+
+					var dev = document.getElementById(wifidevs[iw.id] + '-iw-devinfo');
+					if (dev)
+					{
+						if (is_assoc)
+							dev.innerHTML = String.format(
+								'<strong><%:Channel%>:</strong> %s (%s GHz) | ' +
+								'<strong><%:Bitrate%>:</strong> %s Mb/s',
+									iw.channel ? iw.channel : '?',
+									iw.frequency ? iw.frequency : '?',
+									iw.bitrate ? iw.bitrate : '?'
+							);
+						else
+							dev.innerHTML = '';
+					}
+
+					if (assoctable)
+					{
+						var assoclist = [ ];
+						for( var bssid in iw.assoclist )
+						{
+							assoclist.push(iw.assoclist[bssid]);
+							assoclist[assoclist.length-1].bssid = bssid;
+						}
+
+						assoclist.sort(function(a, b) { a.bssid < b.bssid });
+
+						for( var j = 0; j < assoclist.length; j++ )
+						{
+							var tr = assoctable.insertRow(-1);
+							    tr.className = 'cbi-section-table-row cbi-rowstyle-' + rowstyle;
+
+							var icon;
+							var q = (-1 * (assoclist[j].noise - assoclist[j].signal)) / 5;
+							if (q < 1)
+								icon = "<%=resource%>/icons/signal-0.png";
+							else if (q < 2)
+								icon = "<%=resource%>/icons/signal-0-25.png";
+							else if (q < 3)
+								icon = "<%=resource%>/icons/signal-25-50.png";
+							else if (q < 4)
+								icon = "<%=resource%>/icons/signal-50-75.png";
+							else
+								icon = "<%=resource%>/icons/signal-75-100.png";
+
+							tr.insertCell(-1).innerHTML = String.format(
+								'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
+								icon, assoclist[j].signal, assoclist[j].noise
 							);
 
-						var toggle = document.getElementById(iw.id + '-iw-toggle');
-						if (toggle)
-						{
-							if (is_assoc)
-							{
-								toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reset.gif)';
-								toggle.value = '<%:Disable%>';
-								toggle.title = '<%:Shutdown this network%>';
-							}
-							else
-							{
-								toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reload.gif)';
-								toggle.value = '<%:Enable%>';
-								toggle.title = '<%:Activate this network%>';
+							tr.insertCell(-1).innerHTML = iw.ssid ? iw.ssid : '?';
+							tr.insertCell(-1).innerHTML = assoclist[j].bssid;
 
-							}
+							tr.insertCell(-1).innerHTML = arptable[assoclist[j].bssid]
+								? arptable[assoclist[j].bssid] : '?';
 
-							toggle.setAttribute('active', is_assoc);
+							tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].signal);
+							tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].noise);
+
+							rowstyle = (rowstyle == 1) ? 2 : 1;
 						}
-
-						var info = document.getElementById(iw.id + '-iw-status');
-						if (info)
-						{
-							if (is_assoc)
-								info.innerHTML = String.format(
-									'<strong><%:SSID%>:</strong> %h | ' +
-									'<strong><%:Mode%>:</strong> %s<br />' +
-									'<strong><%:BSSID%>:</strong> %s | ' +
-									'<strong><%:Encryption%>:</strong> %s',
-										iw.ssid, iw.mode, iw.bssid,
-										iw.encryption ? iw.encryption : '<%:None%>'
-								);
-							else
-								info.innerHTML = String.format(
-									'<strong><%:SSID%>:</strong> %h | ' +
-									'<strong><%:Mode%>:</strong> %s<br />' +
-									'<em>%s</em>',
-										iw.ssid || '?', iw.mode,
-										is_reconnecting
-											? '<em><%:Wireless is restarting...%></em>'
-											: '<em><%:Wireless is disabled or not associated%></em>'
-								);
-						}
-
-						var dev = document.getElementById(wifidevs[iw.id] + '-iw-devinfo');
-						if (dev)
-						{
-							if (is_assoc)
-								dev.innerHTML = String.format(
-									'<strong><%:Channel%>:</strong> %s (%s GHz) | ' +
-									'<strong><%:Bitrate%>:</strong> %s Mb/s',
-										iw.channel ? iw.channel : '?',
-										iw.frequency ? iw.frequency : '?',
-										iw.bitrate ? iw.bitrate : '?'
-								);
-							else
-								dev.innerHTML = '';
-						}
-
-						if (assoctable)
-						{
-							var assoclist = [ ];
-							for( var bssid in iw.assoclist )
-							{
-								assoclist.push(iw.assoclist[bssid]);
-								assoclist[assoclist.length-1].bssid = bssid;
-							}
-
-							assoclist.sort(function(a, b) { a.bssid < b.bssid });
-
-							for( var j = 0; j < assoclist.length; j++ )
-							{
-								var tr = assoctable.insertRow(-1);
-								    tr.className = 'cbi-section-table-row cbi-rowstyle-' + rowstyle;
-
-								var icon;
-								var q = (-1 * (assoclist[j].noise - assoclist[j].signal)) / 5;
-								if (q < 1)
-									icon = "<%=resource%>/icons/signal-0.png";
-								else if (q < 2)
-									icon = "<%=resource%>/icons/signal-0-25.png";
-								else if (q < 3)
-									icon = "<%=resource%>/icons/signal-25-50.png";
-								else if (q < 4)
-									icon = "<%=resource%>/icons/signal-50-75.png";
-								else
-									icon = "<%=resource%>/icons/signal-75-100.png";
-
-								tr.insertCell(-1).innerHTML = String.format(
-									'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
-									icon, assoclist[j].signal, assoclist[j].noise
-								);
-
-								tr.insertCell(-1).innerHTML = iw.ssid ? iw.ssid : '?';
-								tr.insertCell(-1).innerHTML = assoclist[j].bssid;
-
-								tr.insertCell(-1).innerHTML = arptable[assoclist[j].bssid]
-									? arptable[assoclist[j].bssid] : '?';
-
-								tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].signal);
-								tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].noise);
-
-								rowstyle = (rowstyle == 1) ? 2 : 1;
-							}
-						}
-					}
-
-					if (assoctable && assoctable.rows.length == 1)
-					{
-						var tr = assoctable.insertRow(-1);
-						    tr.className = 'cbi-section-table-row';
-
-						var td = tr.insertCell(-1);
-						    td.colSpan = 6;
-						    td.innerHTML = '<br /><em><%:No information available%></em>';
-					}
-
-					for (var dev in devup)
-					{
-						var img = document.getElementById(dev + '-iw-upstate');
-						if (img)
-							img.src = '<%=resource%>/icons/wifi_big' + (devup[dev] ? '' : '_disabled') + '.png';
 					}
 				}
 
-				window.setTimeout(func, 5000);
+				if (assoctable && assoctable.rows.length == 1)
+				{
+					var tr = assoctable.insertRow(-1);
+					    tr.className = 'cbi-section-table-row';
+
+					var td = tr.insertCell(-1);
+					    td.colSpan = 6;
+					    td.innerHTML = '<br /><em><%:No information available%></em>';
+				}
+
+				for (var dev in devup)
+				{
+					var img = document.getElementById(dev + '-iw-upstate');
+					if (img)
+						img.src = '<%=resource%>/icons/wifi_big' + (devup[dev] ? '' : '_disabled') + '.png';
+				}
 			}
-		)
-	})();
+		}
+	);
 //]]></script>
 
 <h2><a id="content" name="content"><%:Wireless Overview%></a></h2>
