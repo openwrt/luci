@@ -11,25 +11,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zoneinfo
-PKG_VERSION:=2009c
-PKG_RELEASE:=2
+PKG_VERSION:=2011i
+PKG_RELEASE:=1
 
 PKG_SOURCE:=tzdata$(PKG_VERSION).tar.gz
 PKG_SOURCE_CODE:=tzcode${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://source.icu-project.org/repos/icu/data/trunk/tzdata/mirror/
-PKG_MD5SUM:=ec8fa00a07f3e1d598d5d722cc0ab697
+PKG_MD5SUM:=c7a86ec34f30f8d6aa77ef94902a3047
 
 include $(INCLUDE_DIR)/package.mk
 
 define Download/tzcode
    FILE=$(PKG_SOURCE_CODE)
    URL=$(PKG_SOURCE_URL)
-   MD5SUM=5a6aa9cbf477334f31e427cb59adf72f
+   MD5SUM=cf7f4335b7c8682899fa2814e711c1b2
 endef
 
 $(eval $(call Download,tzcode))
 
-define Package/zoneinfo/default
+define Package/zoneinfo/Default
   SUBMENU:=ZoneInfo
   TITLE:=Zone Information
   SECTION:=luci
