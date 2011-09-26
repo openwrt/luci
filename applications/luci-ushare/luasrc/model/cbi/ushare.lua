@@ -31,7 +31,7 @@ for _, nif in ipairs(luci.sys.net.devices()) do
         if nif ~= "lo" then dif:value(nif) end                          
 end 
 
-s:option(Value, "content_directories", translate("Content directories"))
+s:option(DynamicList, "content_directories", translate("Content directories"))
 
 s:option(Flag, "disable_webif", translate("Disable webinterface"))
 
