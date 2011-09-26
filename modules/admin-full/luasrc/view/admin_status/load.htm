@@ -59,121 +59,6 @@ $Id$
 	var label_scale;
 
 
-	function update_graph()
-	{
-		bwxhr.get('<%=build_url("admin/status/load_status")%>', null,
-			function(x, data)
-			{
-				var data_max   = 0;
-				var data_scale = 0;
-
-				var data_01_avg = 0;
-				var data_05_avg = 0;
-				var data_15_avg = 0;
-
-				var data_01_peak = 0;
-				var data_05_peak = 0;
-				var data_15_peak = 0;
-
-				for (var i = data_stamp ? 0 : 1; i < data.length; i++)
-				{
-					/* skip overlapping entries */
-					if (data[i][TIME] <= data_stamp)
-						continue;
-
-					data_01.push(data[i][L01]);
-					data_05.push(data[i][L05]);
-					data_15.push(data[i][L15]);
-				}
-
-				/* cut off outdated entries */
-				data_01 = data_01.slice(data_01.length - data_wanted, data_01.length);
-				data_05 = data_05.slice(data_05.length - data_wanted, data_05.length);
-				data_15 = data_15.slice(data_15.length - data_wanted, data_15.length);
-
-				/* find peak */
-				for (var i = 0; i < data_01.length; i++)
-				{
-					data_max = Math.max(data_max, data_01[i]);
-					data_max = Math.max(data_max, data_05[i]);
-					data_max = Math.max(data_max, data_15[i]);
-
-					data_01_peak = Math.max(data_01_peak, data_01[i]);
-					data_05_peak = Math.max(data_05_peak, data_05[i]);
-					data_15_peak = Math.max(data_15_peak, data_15[i]);
-
-					if (i > 0)
-					{
-						data_01_avg = (data_01_avg + data_01[i]) / 2;
-						data_05_avg = (data_05_avg + data_05[i]) / 2;
-						data_15_avg = (data_15_avg + data_15[i]) / 2;
-					}
-					else
-					{
-						data_01_avg = data_01[i];
-						data_05_avg = data_05[i];
-						data_15_avg = data_15[i];
-					}
-				}
-
-				/* remember current timestamp, calculate horizontal scale */
-				data_stamp = data[data.length-1][TIME];
-				data_scale = height / (data_max * 1.1);
-
-
-				/* plot data */
-				var pt_01 = '0,' + height;
-				var pt_05 = '0,' + height;
-				var pt_15 = '0,' + height;
-
-				var y_01 = 0;
-				var y_05 = 0;
-				var y_15 = 0;
-
-				for (var i = 0; i < data_01.length; i++)
-				{
-					var x = i * step;
-
-					y_01 = height - Math.floor(data_01[i] * data_scale);
-					y_05 = height - Math.floor(data_05[i] * data_scale);
-					y_15 = height - Math.floor(data_15[i] * data_scale);
-
-					pt_01 += ' ' + x + ',' + y_01;
-					pt_05 += ' ' + x + ',' + y_05;
-					pt_15 += ' ' + x + ',' + y_15;
-				}
-
-				pt_01 += ' ' + width + ',' + y_01 + ' ' + width + ',' + height;
-				pt_05 += ' ' + width + ',' + y_05 + ' ' + width + ',' + height;
-				pt_15 += ' ' + width + ',' + y_15 + ' ' + width + ',' + height;
-
-
-				line_01.setAttribute('points', pt_01);
-				line_05.setAttribute('points', pt_05);
-				line_15.setAttribute('points', pt_15);
-
-				label_25.firstChild.data = (1.1 * 0.25 * data_max / 100).toFixed(2);
-				label_50.firstChild.data = (1.1 * 0.50 * data_max / 100).toFixed(2);
-				label_75.firstChild.data = (1.1 * 0.75 * data_max / 100).toFixed(2);
-
-				label_01_cur.innerHTML = (data_01[data_01.length-1] / 100).toFixed(2);
-				label_05_cur.innerHTML = (data_05[data_05.length-1] / 100).toFixed(2);
-				label_15_cur.innerHTML = (data_01[data_15.length-1] / 100).toFixed(2);
-
-				label_01_avg.innerHTML = (data_01_avg / 100).toFixed(2);
-				label_05_avg.innerHTML = (data_05_avg / 100).toFixed(2);
-				label_15_avg.innerHTML = (data_15_avg / 100).toFixed(2);
-
-				label_01_peak.innerHTML = (data_01_peak / 100).toFixed(2);
-				label_05_peak.innerHTML = (data_05_peak / 100).toFixed(2);
-				label_15_peak.innerHTML = (data_15_peak / 100).toFixed(2);
-
-				/* reset timer */
-				window.setTimeout(update_graph, 1000);
-			}
-		)
-	}
-
 	/* wait for SVG */
 	window.setTimeout(
 		function() {
@@ -250,10 +135,120 @@ $Id$
 					label_25.parentNode.appendChild(text);
 				}
 
-				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 1);
+				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 3);
 
 				/* render datasets, start update interval */
-				update_graph();
+				XHR.poll(3, '<%=build_url("admin/status/load_status")%>', null,
+					function(x, data)
+					{
+						var data_max   = 0;
+						var data_scale = 0;
+
+						var data_01_avg = 0;
+						var data_05_avg = 0;
+						var data_15_avg = 0;
+
+						var data_01_peak = 0;
+						var data_05_peak = 0;
+						var data_15_peak = 0;
+
+						for (var i = data_stamp ? 0 : 1; i < data.length; i++)
+						{
+							/* skip overlapping entries */
+							if (data[i][TIME] <= data_stamp)
+								continue;
+
+							data_01.push(data[i][L01]);
+							data_05.push(data[i][L05]);
+							data_15.push(data[i][L15]);
+						}
+
+						/* cut off outdated entries */
+						data_01 = data_01.slice(data_01.length - data_wanted, data_01.length);
+						data_05 = data_05.slice(data_05.length - data_wanted, data_05.length);
+						data_15 = data_15.slice(data_15.length - data_wanted, data_15.length);
+
+						/* find peak */
+						for (var i = 0; i < data_01.length; i++)
+						{
+							data_max = Math.max(data_max, data_01[i]);
+							data_max = Math.max(data_max, data_05[i]);
+							data_max = Math.max(data_max, data_15[i]);
+
+							data_01_peak = Math.max(data_01_peak, data_01[i]);
+							data_05_peak = Math.max(data_05_peak, data_05[i]);
+							data_15_peak = Math.max(data_15_peak, data_15[i]);
+
+							if (i > 0)
+							{
+								data_01_avg = (data_01_avg + data_01[i]) / 2;
+								data_05_avg = (data_05_avg + data_05[i]) / 2;
+								data_15_avg = (data_15_avg + data_15[i]) / 2;
+							}
+							else
+							{
+								data_01_avg = data_01[i];
+								data_05_avg = data_05[i];
+								data_15_avg = data_15[i];
+							}
+						}
+
+						/* remember current timestamp, calculate horizontal scale */
+						data_stamp = data[data.length-1][TIME];
+						data_scale = height / (data_max * 1.1);
+
+
+						/* plot data */
+						var pt_01 = '0,' + height;
+						var pt_05 = '0,' + height;
+						var pt_15 = '0,' + height;
+
+						var y_01 = 0;
+						var y_05 = 0;
+						var y_15 = 0;
+
+						for (var i = 0; i < data_01.length; i++)
+						{
+							var x = i * step;
+
+							y_01 = height - Math.floor(data_01[i] * data_scale);
+							y_05 = height - Math.floor(data_05[i] * data_scale);
+							y_15 = height - Math.floor(data_15[i] * data_scale);
+
+							pt_01 += ' ' + x + ',' + y_01;
+							pt_05 += ' ' + x + ',' + y_05;
+							pt_15 += ' ' + x + ',' + y_15;
+						}
+
+						pt_01 += ' ' + width + ',' + y_01 + ' ' + width + ',' + height;
+						pt_05 += ' ' + width + ',' + y_05 + ' ' + width + ',' + height;
+						pt_15 += ' ' + width + ',' + y_15 + ' ' + width + ',' + height;
+
+
+						line_01.setAttribute('points', pt_01);
+						line_05.setAttribute('points', pt_05);
+						line_15.setAttribute('points', pt_15);
+
+						label_25.firstChild.data = (1.1 * 0.25 * data_max / 100).toFixed(2);
+						label_50.firstChild.data = (1.1 * 0.50 * data_max / 100).toFixed(2);
+						label_75.firstChild.data = (1.1 * 0.75 * data_max / 100).toFixed(2);
+
+						label_01_cur.innerHTML = (data_01[data_01.length-1] / 100).toFixed(2);
+						label_05_cur.innerHTML = (data_05[data_05.length-1] / 100).toFixed(2);
+						label_15_cur.innerHTML = (data_01[data_15.length-1] / 100).toFixed(2);
+
+						label_01_avg.innerHTML = (data_01_avg / 100).toFixed(2);
+						label_05_avg.innerHTML = (data_05_avg / 100).toFixed(2);
+						label_15_avg.innerHTML = (data_15_avg / 100).toFixed(2);
+
+						label_01_peak.innerHTML = (data_01_peak / 100).toFixed(2);
+						label_05_peak.innerHTML = (data_05_peak / 100).toFixed(2);
+						label_15_peak.innerHTML = (data_15_peak / 100).toFixed(2);
+
+						/* reset timer */
+						window.setTimeout(update_graph, 1000);
+					}
+				);
 			}
 		}, 1000
 	);

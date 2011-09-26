@@ -74,152 +74,6 @@ $Id$
 	var label_scale;
 
 
-	function update_graph()
-	{
-		bwxhr.get('<%=build_url("admin/status/wireless_status", curdev)%>', null,
-			function(x, data)
-			{
-				var noise_floor = 255;
-				var rate_floor = 60000;
-
-				for (var i = 0; i < data.length; i++) {
-					noise_floor = Math.min(noise_floor, data[i][NOISE]);
-					rate_floor = Math.min(rate_floor, data[i][RATE]);
-				}
-
-				noise_floor -= 5;
-
-				var data_max   = 0;
-				var data_scale = 0;
-				var data_max_2   = 0;
-				var data_scale_2 = 0;
-
-				var data_rssi_avg = 0;
-				var data_noise_avg = 0;
-				var data_rate_avg = 0;
-
-				var data_rssi_peak = 0;
-				var data_noise_peak = 0;
-				var data_rate_peak = 0;
-
-				for (var i = data_stamp ? 0 : 1; i < data.length; i++)
-				{
-					/* skip overlapping entries */
-					if (data[i][TIME] <= data_stamp)
-						continue;
-
-					data_rssi.push(data[i][RSSI] - noise_floor);
-					data_noise.push(data[i][NOISE] - noise_floor);
-					data_rate.push(Math.floor(data[i][RATE] / 100));
-				}
-
-				/* cut off outdated entries */
-				data_rssi = data_rssi.slice(data_rssi.length - data_wanted, data_rssi.length);
-				data_noise = data_noise.slice(data_noise.length - data_wanted, data_noise.length);
-				data_rate = data_rate.slice(data_rate.length - data_wanted, data_rate.length);
-
-				/* find peak */
-				for (var i = 0; i < data_rssi.length; i++)
-				{
-					data_max = Math.max(data_max, data_rssi[i]);
-					data_max_2 = Math.max(data_max_2, data_rate[i]);
-
-					data_rssi_peak = Math.max(data_rssi_peak, data_rssi[i]);
-					data_noise_peak = Math.max(data_noise_peak, data_noise[i]);
-					data_rate_peak = Math.max(data_rate_peak, data_rate[i]);
-
-					if (i > 0)
-					{
-						data_rssi_avg = (data_rssi_avg + data_rssi[i]) / 2;
-						data_noise_avg = (data_noise_avg + data_noise[i]) / 2;
-						data_rate_avg = (data_rate_avg + data_rate[i]) / 2;
-					}
-					else
-					{
-						data_rssi_avg = data_rssi[i];
-						data_noise_avg = data_noise[i];
-						data_rate_avg = data_rate[i];
-					}
-				}
-
-				/* remember current timestamp, calculate horizontal scale */
-				data_stamp = data[data.length-1][TIME];
-				data_scale = (height / (data_max * 1.1)).toFixed(1);
-				data_scale_2 = (height / (data_max_2 * 1.1)).toFixed(1);
-
-				/* plot data */
-				var pt_rssi = '0,' + height;
-				var pt_noise = '0,' + height;
-				var pt_rate = '0,' + height;
-
-				var y_rssi = 0;
-				var y_noise = 0;
-				var y_rate = 0;
-
-				for (var i = 0; i < data_rssi.length; i++)
-				{
-					var x = i * step;
-
-					y_rssi = height - Math.floor(data_rssi[i] * data_scale);
-					y_noise = height - Math.floor(data_noise[i] * data_scale);
-					y_rate = height - Math.floor(data_rate[i] * data_scale_2);
-
-					y_rssi -= Math.floor(y_rssi % (1/data_scale));
-					y_noise -= Math.floor(y_noise % (1/data_scale));
-
-					pt_rssi += ' ' + x + ',' + y_rssi;
-					pt_noise += ' ' + x + ',' + y_noise;
-					pt_rate += ' ' + x + ',' + y_rate;
-				}
-
-				pt_rssi += ' ' + width + ',' + y_rssi + ' ' + width + ',' + height;
-				pt_noise += ' ' + width + ',' + y_noise + ' ' + width + ',' + height;
-				pt_rate += ' ' + width + ',' + y_rate + ' ' + width + ',' + height;
-
-				line_rssi.setAttribute('points', pt_rssi);
-				line_noise.setAttribute('points', pt_noise);
-				line_rate.setAttribute('points', pt_rate);
-
-				function wireless_label(dbm, noise)
-				{
-					if (noise)
-						return String.format("%d dBm (SNR %d dBm)", noise_floor + dbm - 255, dbm - noise);
-					else
-						return String.format("%d dBm", noise_floor + dbm - 255);
-				}
-
-				function rate_label(mbit)
-				{
-					return String.format("%d MBit/s", mbit);
-				}
-
-				label_25.firstChild.data = wireless_label(1.1 * 0.25 * data_max);
-				label_50.firstChild.data = wireless_label(1.1 * 0.50 * data_max);
-				label_75.firstChild.data = wireless_label(1.1 * 0.75 * data_max);
-
-				label_25_2.firstChild.data = rate_label(1.1 * 0.25 * data_max_2);
-				label_50_2.firstChild.data = rate_label(1.1 * 0.50 * data_max_2);
-				label_75_2.firstChild.data = rate_label(1.1 * 0.75 * data_max_2);
-
-				label_rssi_cur.innerHTML = wireless_label(data_rssi[data_rssi.length-1], data_noise[data_noise.length-1]);
-				label_noise_cur.innerHTML = wireless_label(data_noise[data_noise.length-1]);
-
-				label_rssi_avg.innerHTML = wireless_label(data_rssi_avg, data_noise_avg);
-				label_noise_avg.innerHTML = wireless_label(data_noise_avg);
-
-				label_rssi_peak.innerHTML = wireless_label(data_rssi_peak, data_noise_peak);
-				label_noise_peak.innerHTML = wireless_label(data_noise_peak);
-
-				label_rate_cur.innerHTML = rate_label(data_rate[data_rate.length-1]);
-				label_rate_avg.innerHTML = rate_label(data_rate_avg);
-				label_rate_peak.innerHTML = rate_label(data_rate_peak);
-
-				/* reset timer */
-				window.setTimeout(update_graph, 1000);
-			}
-		)
-	}
-
 	/* wait for SVG */
 	window.setTimeout(
 		function() {
@@ -321,11 +175,149 @@ $Id$
 					label_25_2.parentNode.appendChild(text2);
 				}
 
-				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 1);
-				label_scale_2.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 1);
+				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 3);
+				label_scale_2.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 3);
 
 				/* render datasets, start update interval */
-				update_graph();
+				XHR.poll(3, '<%=build_url("admin/status/wireless_status", curdev)%>', null,
+					function(x, data)
+					{
+						var noise_floor = 255;
+						var rate_floor = 60000;
+
+						for (var i = 0; i < data.length; i++) {
+							noise_floor = Math.min(noise_floor, data[i][NOISE]);
+							rate_floor = Math.min(rate_floor, data[i][RATE]);
+						}
+
+						noise_floor -= 5;
+
+						var data_max   = 0;
+						var data_scale = 0;
+						var data_max_2   = 0;
+						var data_scale_2 = 0;
+
+						var data_rssi_avg = 0;
+						var data_noise_avg = 0;
+						var data_rate_avg = 0;
+
+						var data_rssi_peak = 0;
+						var data_noise_peak = 0;
+						var data_rate_peak = 0;
+
+						for (var i = data_stamp ? 0 : 1; i < data.length; i++)
+						{
+							/* skip overlapping entries */
+							if (data[i][TIME] <= data_stamp)
+								continue;
+
+							data_rssi.push(data[i][RSSI] - noise_floor);
+							data_noise.push(data[i][NOISE] - noise_floor);
+							data_rate.push(Math.floor(data[i][RATE] / 100));
+						}
+
+						/* cut off outdated entries */
+						data_rssi = data_rssi.slice(data_rssi.length - data_wanted, data_rssi.length);
+						data_noise = data_noise.slice(data_noise.length - data_wanted, data_noise.length);
+						data_rate = data_rate.slice(data_rate.length - data_wanted, data_rate.length);
+
+						/* find peak */
+						for (var i = 0; i < data_rssi.length; i++)
+						{
+							data_max = Math.max(data_max, data_rssi[i]);
+							data_max_2 = Math.max(data_max_2, data_rate[i]);
+
+							data_rssi_peak = Math.max(data_rssi_peak, data_rssi[i]);
+							data_noise_peak = Math.max(data_noise_peak, data_noise[i]);
+							data_rate_peak = Math.max(data_rate_peak, data_rate[i]);
+
+							if (i > 0)
+							{
+								data_rssi_avg = (data_rssi_avg + data_rssi[i]) / 2;
+								data_noise_avg = (data_noise_avg + data_noise[i]) / 2;
+								data_rate_avg = (data_rate_avg + data_rate[i]) / 2;
+							}
+							else
+							{
+								data_rssi_avg = data_rssi[i];
+								data_noise_avg = data_noise[i];
+								data_rate_avg = data_rate[i];
+							}
+						}
+
+						/* remember current timestamp, calculate horizontal scale */
+						data_stamp = data[data.length-1][TIME];
+						data_scale = (height / (data_max * 1.1)).toFixed(1);
+						data_scale_2 = (height / (data_max_2 * 1.1)).toFixed(1);
+
+						/* plot data */
+						var pt_rssi = '0,' + height;
+						var pt_noise = '0,' + height;
+						var pt_rate = '0,' + height;
+
+						var y_rssi = 0;
+						var y_noise = 0;
+						var y_rate = 0;
+
+						for (var i = 0; i < data_rssi.length; i++)
+						{
+							var x = i * step;
+
+							y_rssi = height - Math.floor(data_rssi[i] * data_scale);
+							y_noise = height - Math.floor(data_noise[i] * data_scale);
+							y_rate = height - Math.floor(data_rate[i] * data_scale_2);
+
+							y_rssi -= Math.floor(y_rssi % (1/data_scale));
+							y_noise -= Math.floor(y_noise % (1/data_scale));
+
+							pt_rssi += ' ' + x + ',' + y_rssi;
+							pt_noise += ' ' + x + ',' + y_noise;
+							pt_rate += ' ' + x + ',' + y_rate;
+						}
+
+						pt_rssi += ' ' + width + ',' + y_rssi + ' ' + width + ',' + height;
+						pt_noise += ' ' + width + ',' + y_noise + ' ' + width + ',' + height;
+						pt_rate += ' ' + width + ',' + y_rate + ' ' + width + ',' + height;
+
+						line_rssi.setAttribute('points', pt_rssi);
+						line_noise.setAttribute('points', pt_noise);
+						line_rate.setAttribute('points', pt_rate);
+
+						function wireless_label(dbm, noise)
+						{
+							if (noise)
+								return String.format("%d dBm (SNR %d dBm)", noise_floor + dbm - 255, dbm - noise);
+							else
+								return String.format("%d dBm", noise_floor + dbm - 255);
+						}
+
+						function rate_label(mbit)
+						{
+							return String.format("%d MBit/s", mbit);
+						}
+
+						label_25.firstChild.data = wireless_label(1.1 * 0.25 * data_max);
+						label_50.firstChild.data = wireless_label(1.1 * 0.50 * data_max);
+						label_75.firstChild.data = wireless_label(1.1 * 0.75 * data_max);
+
+						label_25_2.firstChild.data = rate_label(1.1 * 0.25 * data_max_2);
+						label_50_2.firstChild.data = rate_label(1.1 * 0.50 * data_max_2);
+						label_75_2.firstChild.data = rate_label(1.1 * 0.75 * data_max_2);
+
+						label_rssi_cur.innerHTML = wireless_label(data_rssi[data_rssi.length-1], data_noise[data_noise.length-1]);
+						label_noise_cur.innerHTML = wireless_label(data_noise[data_noise.length-1]);
+
+						label_rssi_avg.innerHTML = wireless_label(data_rssi_avg, data_noise_avg);
+						label_noise_avg.innerHTML = wireless_label(data_noise_avg);
+
+						label_rssi_peak.innerHTML = wireless_label(data_rssi_peak, data_noise_peak);
+						label_noise_peak.innerHTML = wireless_label(data_noise_peak);
+
+						label_rate_cur.innerHTML = rate_label(data_rate[data_rate.length-1]);
+						label_rate_avg.innerHTML = rate_label(data_rate_avg);
+						label_rate_peak.innerHTML = rate_label(data_rate_peak);
+					}
+				);
 			}
 		}, 1000
 	);
