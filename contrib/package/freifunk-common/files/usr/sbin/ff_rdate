@@ -1,0 +1,20 @@
+#!/bin/sh
+
+uci_get_one() {
+	for var in "$@"; do
+		uci -P /var/state get "$var" 2>/dev/null && break
+	done
+}
+
+local servers="$(uci_get_one 'network.wan.lease_timesrv') $(uci show timeserver | sed -ne 's/.*hostname=//p')"
+
+if [ -n "$servers" ]; then
+	for server in $servers; do
+		rdate -s $server >/dev/null 2>/dev/null && \
+			logger -t rdate "Synced with $server" && break
+
+		logger -t rdate "Failed to sync with $server"
+	done
+else
+	logger -t rdate "No usable time server found"
+fi

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+test "$1" = "-h" && echo -e "Usage:\n\t$0 -h\n\t$0 [ { ip | hostname } ]" >&2 && exit 1
+
+host="${1:-leipzig.freifunk.net}"
+
+wget -O /dev/null http://$host/cgi-bin-dev-zero.bin
+test "$?" = "1" && wget -O /dev/null http://$host/cgi-bin/dev-zero.bin
+test "$?" = "1" && wget -O /dev/null http://$host/cgi-bin/luci/freifunk/status/zeroes
+test "$?" = "1" && echo "$host: no zero download found..." && exit 1

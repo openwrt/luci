@@ -1,0 +1,29 @@
+#!/usr/bin/lua
+
+require "os"
+require "io"
+require "uci"
+local fs = require "nixio.fs"
+
+if fs.access("/var/run/olsrd.pid") then
+	local stamp, intv
+	local x = uci.cursor()
+
+	x:foreach("olsrd", "LoadPlugin",
+		function(s)
+			if s.library == "olsrd_watchdog.so.0.1" then
+				intv  = tonumber(s.interval)
+				stamp = s.file
+			end
+		end)
+
+	if intv and fs.access(stamp) then
+		local systime = os.time()
+		local wdgtime = tonumber(io.lines(stamp)())
+
+		if not wdgtime or ( systime - wdgtime ) > ( intv * 2 ) then
+			os.execute("logger -t 'OLSR watchdog' 'Process died - restarting!'")
+			os.execute("/etc/init.d/olsrd restart")
+		end
+	end
+end
