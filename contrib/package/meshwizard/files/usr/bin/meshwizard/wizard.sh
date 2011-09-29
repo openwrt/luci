@@ -13,6 +13,12 @@ export dir="/usr/bin/meshwizard"
 . $dir/functions.sh
 debug=1
 
+# Check which packages we have installed
+export has_luci=FALSE
+opkg list_installed |grep luci-mod-admin > /dev/null && export has_luci=TRUE
+export has_luci_splash=FALSE
+opkg list_installed |grep luci-app-splash > /dev/null && export has_luci_splash=TRUE
+
 # Rename wifi interfaces
 	echo "+ Renaming wifi-devices in /etc/config/meshwizard"
 	$dir/helpers/rename-wifi.sh

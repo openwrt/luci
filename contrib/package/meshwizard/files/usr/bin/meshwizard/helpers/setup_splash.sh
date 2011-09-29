@@ -6,6 +6,11 @@
 
 net=$1
 
+if [ ! "$has_luci_splash" == TRUE ]; then
+	echo "    Luci Splash is not installed, skipping setup of it."
+	exit
+fi
+
 handle_splash() {
 	config_get network "$1" network
 	if [ "$network" == "${netrenamed}dhcp" ]; then

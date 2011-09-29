@@ -45,13 +45,15 @@ if [ -n "$(uci -q get meshwizard.contact)" ]; then
 	uci -q delete meshwizard.contact
 fi
 
-if [ -n "$(uci -q get meshwizard.luci_main)" ]; then
-	echo "    + Setup luci"
-	uci show meshwizard.luci_main |sed -e 's/^meshwizard/luci/g' -e 's/luci_main/main/' | while read line; do 
-		eval uci set $line
-		echo "    $line"
-	done
-	uci -q delete meshwizard.luci_main
+if [ "$has_luci" == TRUE ]; then
+	if [ -n "$(uci -q get meshwizard.luci_main)" ]; then
+		echo "    + Setup luci"
+		uci show meshwizard.luci_main |sed -e 's/^meshwizard/luci/g' -e 's/luci_main/main/' | while read line; do 
+			eval uci set $line
+			echo "    $line"
+		done
+		uci -q delete meshwizard.luci_main
+	fi
 fi
 
 uci commit
