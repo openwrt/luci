@@ -12,7 +12,7 @@
 			</div>
 		<%- end %>
 		<%+cbi/tabmenu%>
-		<div class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
+		<div class="cbi-section-node<% if self.tabs then %> cbi-section-node-tabbed<% end %>" id="cbi-<%=self.config%>-<%=section%>">
 			<%+cbi/ucisection%>
 		</div>
 		<br />

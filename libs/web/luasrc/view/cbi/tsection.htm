@@ -18,7 +18,7 @@
 
 		<%+cbi/tabmenu%>
 
-		<fieldset class="cbi-section-node" id="cbi-<%=self.config%>-<%=section%>">
+		<fieldset class="cbi-section-node<% if self.tabs then %> cbi-section-node-tabbed<% end %>" id="cbi-<%=self.config%>-<%=section%>">
 			<%+cbi/ucisection%>
 		</fieldset>
 		<br />
