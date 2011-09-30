@@ -172,13 +172,22 @@ XHR.get = function(url, data, callback)
 
 XHR.poll = function(interval, url, data, callback)
 {
-	if (isNaN(interval) || interval <= 1)
+	if (isNaN(interval) || interval < 1)
 		interval = 5;
 
 	if (!XHR._q)
 	{
 		XHR._t = 0;
 		XHR._q = [ ];
+		XHR._r = function() {
+			for (var i = 0, e = XHR._q[0]; i < XHR._q.length; e = XHR._q[++i])
+			{
+				if (!(XHR._t % e.interval) && !e.xhr.busy())
+					e.xhr.get(e.url, e.data, e.callback);
+			}
+
+			XHR._t++;
+		};
 	}
 
 	XHR._q.push({
@@ -189,16 +198,44 @@ XHR.poll = function(interval, url, data, callback)
 		xhr:      new XHR()
 	});
 
-	if (!XHR._i)
-	{
-		XHR._i = window.setInterval(function() {
-			for (var i = 0, e = XHR._q[0]; i < XHR._q.length; e = XHR._q[++i])
-			{
-				if (!(XHR._t % e.interval) && !e.xhr.busy())
-					e.xhr.get(e.url, e.data, e.callback);
-			}
+	XHR.run();
+}
 
-			XHR._t++;
-		}, 1000);
+XHR.halt = function()
+{
+	if (XHR._i)
+	{
+		/* show & set poll indicator */
+		try {
+			document.getElementById('xhr_poll_status').style.display = '';
+			document.getElementById('xhr_poll_status_on').style.display = 'none';
+			document.getElementById('xhr_poll_status_off').style.display = '';
+		} catch(e) { }
+
+		window.clearInterval(XHR._i);
+		XHR._i = null;
 	}
+}
+
+XHR.run = function()
+{
+	if (XHR._r && !XHR._i)
+	{
+		/* show & set poll indicator */
+		try {
+			document.getElementById('xhr_poll_status').style.display = '';
+			document.getElementById('xhr_poll_status_on').style.display = '';
+			document.getElementById('xhr_poll_status_off').style.display = 'none';
+		} catch(e) { }
+
+		/* kick first round manually to prevent one second lag when setting up
+		 * the poll interval */
+		XHR._r();
+		XHR._i = window.setInterval(XHR._r, 1000);
+	}
+}
+
+XHR.running = function()
+{
+	return !!(XHR._r && XHR._i);
 }
