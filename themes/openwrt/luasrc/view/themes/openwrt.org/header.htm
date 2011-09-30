@@ -25,10 +25,18 @@ local node     = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
 
 local c = tree
+local i, r
 for i,r in ipairs(request) do
 	if c.nodes and c.nodes[r] then
 		c = c.nodes[r]
 		c._menu_selected = true
+	end
+end
+
+local has_categories = 0
+for i,r in pairs(tree.nodes) do
+	if r.title and not r.hidden then
+		has_categories = has_categories + 1
 	end
 end
 
@@ -138,6 +146,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 	</span>
 </div>
 
+<% if has_categories > 1 then %>
 <ul id="modemenu"><%
 for k,node in pairs(tree.nodes) do
 	if node.title and not node.hidden then %>
@@ -146,6 +155,7 @@ for k,node in pairs(tree.nodes) do
 end
 %>
 </ul>
+<% end %>
 
 <%
 if tree.nodes[category] and tree.nodes[category].ucidata then
