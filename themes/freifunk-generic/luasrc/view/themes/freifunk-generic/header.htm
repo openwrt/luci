@@ -119,7 +119,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 			<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
 			<%:Hostname%>: <%=hostname%><br />
 			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()"> 
-				| <%:Auto Refresh%>: 
+				<%:Auto Refresh%>: 
 				<span id="xhr_poll_status_on"><%:on%></span> 
 				<span id="xhr_poll_status_off" style="display:none"><%:off%></span> 
 			</span> 
