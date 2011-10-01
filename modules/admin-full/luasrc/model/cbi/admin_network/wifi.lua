@@ -48,19 +48,22 @@ if not wnet or not wdev then
 end
 
 -- wireless toggle was requested, commit and reload page
-if m:formvalue("cbid.wireless.%s.__toggle" % wdev:name()) then
-	if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
-		wnet:set("disabled", nil)
-	else
-		wnet:set("disabled", "1")
+function m.parse(map)
+	if m:formvalue("cbid.wireless.%s.__toggle" % wdev:name()) then
+		if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
+			wnet:set("disabled", nil)
+		else
+			wnet:set("disabled", "1")
+		end
+		wdev:set("disabled", nil)
+
+		nw:commit("wireless")
+		luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
+
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
+		return
 	end
-	wdev:set("disabled", nil)
-
-	nw:commit("wireless")
-	luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
-
-	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
-	return
+	Map.parse(map)
 end
 
 m.title = luci.util.pcdata(wnet:get_i18n())
@@ -353,7 +356,7 @@ if hwtype == "mac80211" then
 
 	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
-	
+
 	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
 	mp:value("", translate("disable"))
 	mp:value("allow", translate("Allow listed only"))
