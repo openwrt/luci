@@ -356,9 +356,9 @@ $Id$
 					<big><strong><%=guess_wifi_hw(dev:name())%> (<%=dev:name()%>)</strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</td>
-				<td style="width:250px;text-align:right">
-					<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/find.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_join")%>?device=<%=dev:name()%>'" title="<%:Find and join network%>" value="<%:Scan%>" />
-					<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/add.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_add")%>?device=<%=dev:name()%>'" title="<%:Provide new network%>" value="<%:Add%>" />
+				<td style="width:310px;text-align:right">
+					<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/find.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_join")%>?device=<%=dev:name()%>'" title="<%:Find and join network%>" value="<%:Scan%>" />
+					<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/add.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_add")%>?device=<%=dev:name()%>'" title="<%:Provide new network%>" value="<%:Add%>" />
 				</td>
 			</tr>
 			<!-- /physical device -->
@@ -375,10 +375,10 @@ $Id$
 					<td class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px" id="<%=net:id()%>-iw-status">
 						<em><%:Collecting data...%></em>
 					</td>
-					<td class="cbi-value-field" style="width:250px;text-align:right">
-						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/reload.gif)" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
-						<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/edit.gif)" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
-						<input type="button" class="cbi-button cbi-button-add" style="width:80px;background-image:url(<%=resource%>/cbi/remove.gif)" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
+					<td class="cbi-value-field" style="width:310px;text-align:right">
+						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/reload.gif)" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
+						<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/edit.gif)" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
+						<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/remove.gif)" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
 					</td>
 				</tr>
 				<% end %>
