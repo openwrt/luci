@@ -25,11 +25,9 @@ local mem = string.format(
 
 -- update interval
 local bogomips = bogomips or 100
-local interval
+local interval = 10
 if bogomips > 350 then
-	interval = "5000"
-else
-	interval = "10000"
+	interval = 5
 end
 
 -- wireless
