@@ -20,7 +20,10 @@ limitations under the License.
 local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n
 	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n
 
+local require = require
+
 local nxo = require "nixio"
+local nfs = require "nixio.fs"
 local ipc = require "luci.ip"
 local sys = require "luci.sys"
 local utl = require "luci.util"
@@ -30,10 +33,19 @@ local uci = require "luci.model.uci"
 module "luci.model.network"
 
 
-local ifs, brs, sws, tns, uci_r, uci_s
+IFACE_PATTERNS_VIRTUAL  = { }
+IFACE_PATTERNS_IGNORE   = { "^wmaster%d", "^wifi%d", "^hwsim%d", "^imq%d", "^ifb%d", "^mon%.wlan%d", "^sit%d", "^lo$" }
+IFACE_PATTERNS_WIRELESS = { "^wlan%d", "^wl%d", "^ath%d", "^%w+%.network%d" }
 
-function _list_del(c, s, o, r)
-	local val = uci_r:get(c, s, o)
+
+proto = { }
+proto.generic = utl.class()
+
+local _interfaces, _bridge, _switch, _tunnel
+local _uci_real, _uci_state
+
+function _filter(c, s, o, r)
+	local val = _uci_real:get(c, s, o)
 	if val then
 		local l = { }
 		if type(val) == "string" then
@@ -43,9 +55,9 @@ function _list_del(c, s, o, r)
 				end
 			end
 			if #l > 0 then
-				uci_r:set(c, s, o, table.concat(l, " "))
+				_uci_real:set(c, s, o, table.concat(l, " "))
 			else
-				uci_r:delete(c, s, o)
+				_uci_real:delete(c, s, o)
 			end
 		elseif type(val) == "table" then
 			for _, val in ipairs(val) do
@@ -54,16 +66,16 @@ function _list_del(c, s, o, r)
 				end
 			end
 			if #l > 0 then
-				uci_r:set(c, s, o, l)
+				_uci_real:set(c, s, o, l)
 			else
-				uci_r:delete(c, s, o)
+				_uci_real:delete(c, s, o)
 			end
 		end
 	end
 end
 
-function _list_add(c, s, o, a)
-	local val = uci_r:get(c, s, o) or ""
+function _append(c, s, o, a)
+	local val = _uci_real:get(c, s, o) or ""
 	if type(val) == "string" then
 		local l = { }
 		for val in val:gmatch("%S+") do
@@ -72,7 +84,7 @@ function _list_add(c, s, o, a)
 			end
 		end
 		l[#l+1] = a
-		uci_r:set(c, s, o, table.concat(l, " "))
+		_uci_real:set(c, s, o, table.concat(l, " "))
 	elseif type(val) == "table" then
 		local l = { }
 		for _, val in ipairs(val) do
@@ -81,7 +93,7 @@ function _list_add(c, s, o, a)
 			end
 		end
 		l[#l+1] = a
-		uci_r:set(c, s, o, l)
+		_uci_real:set(c, s, o, l)
 	end
 end
 
@@ -94,23 +106,26 @@ function _stror(s1, s2)
 end
 
 function _get(c, s, o)
-	return uci_r:get(c, s, o)
+	return _uci_real:get(c, s, o)
 end
 
 function _set(c, s, o, v)
 	if v ~= nil then
 		if type(v) == "boolean" then v = v and "1" or "0" end
-		return uci_r:set(c, s, o, v)
+		return _uci_real:set(c, s, o, v)
 	else
-		return uci_r:delete(c, s, o)
+		return _uci_real:delete(c, s, o)
 	end
 end
 
 function _wifi_iface(x)
-	return (
-		x:match("^wlan%d") or x:match("^wl%d") or x:match("^ath%d") or
-		x:match("^%w+%.network%d")
-	)
+	local _, p
+	for _, p in ipairs(IFACE_PATTERNS_WIRELESS) do
+		if x:match(p) then
+			return true
+		end
+	end
+	return false
 end
 
 function _wifi_lookup(ifn)
@@ -121,7 +136,7 @@ function _wifi_lookup(ifn)
 		local num = 0
 
 		ifnidx = tonumber(ifnidx)
-		uci_r:foreach("wireless", "wifi-iface",
+		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device == radio then
 					num = num + 1
@@ -138,7 +153,7 @@ function _wifi_lookup(ifn)
 	elseif _wifi_iface(ifn) then
 		local sid = nil
 
-		uci_s:foreach("wireless", "wifi-iface",
+		_uci_state:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.ifname == ifn then
 					sid = s['.name']
@@ -151,30 +166,34 @@ function _wifi_lookup(ifn)
 end
 
 function _iface_virtual(x)
-	return (
-		x:match("^6in4-%w") or x:match("^6to4-%w") or x:match("^3g-%w") or
-		x:match("^ppp-%w") or x:match("^pppoe-%w") or x:match("^pppoa-%w") or
-		x:match("^relay-%w")
-	)
+	local _, p
+	for _, p in ipairs(IFACE_PATTERNS_VIRTUAL) do
+		if x:match(p) then
+			return true
+		end
+	end
+	return false
 end
 
 function _iface_ignore(x)
-	return (
-		x:match("^wmaster%d") or x:match("^wifi%d") or x:match("^hwsim%d") or
-		x:match("^imq%d") or x:match("^mon.wlan%d") or
-		x == "sit0" or x == "lo" or _iface_virtual(x)
-	)
+	local _, p
+	for _, p in ipairs(IFACE_PATTERNS_IGNORE) do
+		if x:match(p) then
+			return true
+		end
+	end
+	return _iface_virtual(x)
 end
 
 
 function init(cursor)
-	uci_r = cursor or uci_r or uci.cursor()
-	uci_s = uci_r:substate()
+	_uci_real  = cursor or _uci_real or uci.cursor()
+	_uci_state = _uci_real:substate()
 
-	ifs = { }
-	brs = { }
-	sws = { }
-	tns = { }
+	_interfaces = { }
+	_bridge     = { }
+	_switch     = { }
+	_tunnel     = { }
 
 	-- read interface information
 	local n, i
@@ -183,11 +202,11 @@ function init(cursor)
 		local prnt = name:match("^([^%.]+)%.")
 
 		if _iface_virtual(name) then
-			tns[name] = true
+			_tunnel[name] = true
 		end
 
-		if tns[name] or not _iface_ignore(name) then
-			ifs[name] = ifs[name] or {
+		if _tunnel[name] or not _iface_ignore(name) then
+			_interfaces[name] = _interfaces[name] or {
 				idx      = i.ifindex or n,
 				name     = name,
 				rawname  = i.name,
@@ -197,18 +216,18 @@ function init(cursor)
 			}
 
 			if prnt then
-				sws[name] = true
-				sws[prnt] = true
+				_switch[name] = true
+				_switch[prnt] = true
 			end
 
 			if i.family == "packet" then
-				ifs[name].flags   = i.flags
-				ifs[name].stats   = i.data
-				ifs[name].macaddr = i.addr
+				_interfaces[name].flags   = i.flags
+				_interfaces[name].stats   = i.data
+				_interfaces[name].macaddr = i.addr
 			elseif i.family == "inet" then
-				ifs[name].ipaddrs[#ifs[name].ipaddrs+1] = ipc.IPv4(i.addr, i.netmask)
+				_interfaces[name].ipaddrs[#_interfaces[name].ipaddrs+1] = ipc.IPv4(i.addr, i.netmask)
 			elseif i.family == "inet6" then
-				ifs[name].ip6addrs[#ifs[name].ip6addrs+1] = ipc.IPv6(i.addr, i.netmask)
+				_interfaces[name].ip6addrs[#_interfaces[name].ip6addrs+1] = ipc.IPv6(i.addr, i.netmask)
 			end
 		end
 	end
@@ -223,14 +242,14 @@ function init(cursor)
 					name    = r[1],
 					id      = r[2],
 					stp     = r[3] == "yes",
-					ifnames = { ifs[r[4]] }
+					ifnames = { _interfaces[r[4]] }
 				}
 				if b.ifnames[1] then
 					b.ifnames[1].bridge = b
 				end
-				brs[r[1]] = b
+				_bridge[r[1]] = b
 			elseif b then
-				b.ifnames[#b.ifnames+1] = ifs[r[2]]
+				b.ifnames[#b.ifnames+1] = _interfaces[r[2]]
 				b.ifnames[#b.ifnames].bridge = b
 			end
 		end
@@ -240,13 +259,23 @@ function init(cursor)
 end
 
 function save(self, ...)
-	uci_r:save(...)
-	uci_r:load(...)
+	_uci_real:save(...)
+	_uci_real:load(...)
 end
 
 function commit(self, ...)
-	uci_r:commit(...)
-	uci_r:load(...)
+	_uci_real:commit(...)
+	_uci_real:load(...)
+end
+
+function ifnameof(self, x)
+	if utl.instanceof(x, interface) then
+		return x:name()
+	elseif utl.instanceof(x, proto.generic) then
+		return x:ifname()
+	elseif type(x) == "string" then
+		return x:match("^[^:]+")
+	end
 end
 
 function has_ipv6(self)
@@ -256,7 +285,7 @@ end
 function add_network(self, n, options)
 	local oldnet = self:get_network(n)
 	if n and #n > 0 and n:match("^[a-zA-Z0-9_]+$") and not oldnet then
-		if uci_r:section("network", "interface", n, options) then
+		if _uci_real:section("network", "interface", n, options) then
 			return network(n)
 		end
 	elseif oldnet and oldnet:is_empty() then
@@ -271,7 +300,7 @@ function add_network(self, n, options)
 end
 
 function get_network(self, n)
-	if n and uci_r:get("network", n) == "interface" then
+	if n and _uci_real:get("network", n) == "interface" then
 		return network(n)
 	end
 end
@@ -280,7 +309,7 @@ function get_networks(self)
 	local nets = { }
 	local nls = { }
 
-	uci_r:foreach("network", "interface",
+	_uci_real:foreach("network", "interface",
 		function(s)
 			nls[s['.name']] = network(s['.name'])
 		end)
@@ -294,21 +323,21 @@ function get_networks(self)
 end
 
 function del_network(self, n)
-	local r = uci_r:delete("network", n)
+	local r = _uci_real:delete("network", n)
 	if r then
-		uci_r:delete_all("network", "alias",
+		_uci_real:delete_all("network", "alias",
 			function(s) return (s.interface == n) end)
 
-		uci_r:delete_all("network", "route",
+		_uci_real:delete_all("network", "route",
 			function(s) return (s.interface == n) end)
 
-		uci_r:delete_all("network", "route6",
+		_uci_real:delete_all("network", "route6",
 			function(s) return (s.interface == n) end)
 
-		uci_r:foreach("wireless", "wifi-iface",
+		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.network == n then
-					uci_r:delete("wireless", s['.name'], "network")
+					_uci_real:delete("wireless", s['.name'], "network")
 				end
 			end)
 	end
@@ -318,50 +347,50 @@ end
 function rename_network(self, old, new)
 	local r
 	if new and #new > 0 and new:match("^[a-zA-Z0-9_]+$") and not self:get_network(new) then
-		r = uci_r:section("network", "interface", new, uci_r:get_all("network", old))
+		r = _uci_real:section("network", "interface", new, _uci_real:get_all("network", old))
 
 		if r then
-			uci_r:foreach("network", "alias",
+			_uci_real:foreach("network", "alias",
 				function(s)
 					if s.interface == old then
-						uci_r:set("network", s['.name'], "interface", new)
+						_uci_real:set("network", s['.name'], "interface", new)
 					end
 				end)
 
-			uci_r:foreach("network", "route",
+			_uci_real:foreach("network", "route",
 				function(s)
 					if s.interface == old then
-						uci_r:set("network", s['.name'], "interface", new)
+						_uci_real:set("network", s['.name'], "interface", new)
 					end
 				end)
 
-			uci_r:foreach("network", "route6",
+			_uci_real:foreach("network", "route6",
 				function(s)
 					if s.interface == old then
-						uci_r:set("network", s['.name'], "interface", new)
+						_uci_real:set("network", s['.name'], "interface", new)
 					end
 				end)
 
-			uci_r:foreach("wireless", "wifi-iface",
+			_uci_real:foreach("wireless", "wifi-iface",
 				function(s)
 					if s.network == old then
-						uci_r:set("wireless", s['.name'], "network", new)
+						_uci_real:set("wireless", s['.name'], "network", new)
 					end
 				end)
 
-			uci_r:delete("network", old)
+			_uci_real:delete("network", old)
 		end
 	end
 	return r or false
 end
 
 function get_interface(self, i)
-	if ifs[i] or _wifi_iface(i) then
+	if _interfaces[i] or _wifi_iface(i) then
 		return interface(i)
 	else
 		local ifc
 		local num = { }
-		uci_r:foreach("wireless", "wifi-iface",
+		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
@@ -383,7 +412,7 @@ function get_interfaces(self)
 	local nfs = { }
 
 	-- find normal interfaces
-	uci_r:foreach("network", "interface",
+	_uci_real:foreach("network", "interface",
 		function(s)
 			for iface in utl.imatch(s.ifname) do
 				if not _iface_ignore(iface) and not _wifi_iface(iface) then
@@ -393,14 +422,14 @@ function get_interfaces(self)
 			end
 		end)
 
-	for iface in utl.kspairs(ifs) do
+	for iface in utl.kspairs(_interfaces) do
 		if not (seen[iface] or _iface_ignore(iface) or _wifi_iface(iface)) then
 			nfs[iface] = interface(iface)
 		end
 	end
 
 	-- find vlan interfaces
-	uci_r:foreach("network", "switch_vlan",
+	_uci_real:foreach("network", "switch_vlan",
 		function(s)
 			local base = s.device or "-"
 			if not base:match("^eth%d") then
@@ -424,7 +453,7 @@ function get_interfaces(self)
 	-- find wifi interfaces
 	local num = { }
 	local wfs = { }
-	uci_r:foreach("wireless", "wifi-iface",
+	_uci_real:foreach("wireless", "wifi-iface",
 		function(s)
 			if s.device then
 				num[s.device] = num[s.device] and num[s.device] + 1 or 1
@@ -445,7 +474,7 @@ function ignore_interface(self, x)
 end
 
 function get_wifidev(self, dev)
-	if uci_r:get("wireless", dev) == "wifi-device" then
+	if _uci_real:get("wireless", dev) == "wifi-device" then
 		return wifidev(dev)
 	end
 end
@@ -454,7 +483,7 @@ function get_wifidevs(self)
 	local devs = { }
 	local wfd  = { }
 
-	uci_r:foreach("wireless", "wifi-device",
+	_uci_real:foreach("wireless", "wifi-device",
 		function(s) wfd[#wfd+1] = s['.name'] end)
 
 	local dev
@@ -474,9 +503,9 @@ end
 
 function add_wifinet(self, net, options)
 	if type(options) == "table" and options.device and
-		uci_r:get("wireless", options.device) == "wifi-device"
+		_uci_real:get("wireless", options.device) == "wifi-device"
 	then
-		local wnet = uci_r:section("wireless", "wifi-iface", nil, options)
+		local wnet = _uci_real:section("wireless", "wifi-iface", nil, options)
 		return wifinet(wnet)
 	end
 end
@@ -484,29 +513,35 @@ end
 function del_wifinet(self, net)
 	local wnet = _wifi_lookup(net)
 	if wnet then
-		uci_r:delete("wireless", wnet)
+		_uci_real:delete("wireless", wnet)
 		return true
 	end
 	return false
 end
 
 
-network = utl.class()
+function network(name)
+	if name then
+		local p = _uci_real:get("network", name, "proto")
+		local c = p and proto[p] or proto.generic
+		return c(name)
+	end
+end
 
-function network.__init__(self, name)
+function proto.generic.__init__(self, name)
 	self.sid = name
 end
 
-function network._get(self, opt)
-	local v = uci_r:get("network", self.sid, opt)
+function proto.generic._get(self, opt)
+	local v = _uci_real:get("network", self.sid, opt)
 	if type(v) == "table" then
 		return table.concat(v, " ")
 	end
 	return v or ""
 end
 
-function network._ip(self, opt, family, list)
-	local ip = uci_s:get("network", self.sid, opt)
+function proto.generic._ip(self, opt, family, list)
+	local ip = _uci_state:get("network", self.sid, opt)
 	local fc = (family == 6) and ipc.IPv6 or ipc.IPv4
 	if ip or list then
 		if list then
@@ -523,32 +558,30 @@ function network._ip(self, opt, family, list)
 	end
 end
 
-function network.get(self, opt)
+function proto.generic.get(self, opt)
 	return _get("network", self.sid, opt)
 end
 
-function network.set(self, opt, val)
+function proto.generic.set(self, opt, val)
 	return _set("network", self.sid, opt, val)
 end
 
-function network.ifname(self)
+function proto.generic.ifname(self)
 	local p = self:proto()
 	if self:is_bridge() then
 		return "br-" .. self.sid
-	elseif self:proto() == "relay" then
-		return uci_s:get("network", self.sid, "up") == "1" and "lo" or nil
 	elseif self:is_virtual() then
 		return p .. "-" .. self.sid
 	else
 		local num = { }
-		local dev = uci_r:get("network", self.sid, "ifname") or
-			uci_s:get("network", self.sid, "ifname")
+		local dev = _uci_real:get("network", self.sid, "ifname") or
+			_uci_state:get("network", self.sid, "ifname")
 
 		dev = (type(dev) == "table") and dev[1] or dev
 		dev = (dev ~= nil) and dev:match("%S+")
 
 		if not dev then
-			uci_r:foreach("wireless", "wifi-iface",
+			_uci_real:foreach("wireless", "wifi-iface",
 				function(s)
 					if s.device then
 						num[s.device] = num[s.device]
@@ -566,38 +599,20 @@ function network.ifname(self)
 	end
 end
 
-function network.device(self)
-	local dev = uci_r:get("network", self.sid, "device") or
-		uci_s:get("network", self.sid, "device")
-
-	dev = (type(dev) == "table") and dev[1] or dev
-
-	if not dev or dev:match("[^%w%-%.%s]") then
-		dev = uci_r:get("network", self.sid, "ifname") or
-			uci_s:get("network", self.sid, "ifname")
-
-		dev = (type(dev) == "table") and dev[1] or dev
-	end
-
-	for dev in utl.imatch(dev) do
-		return dev
-	end
-end
-
-function network.proto(self)
+function proto.generic.proto(self)
 	return self:_get("proto") or "none"
 end
 
-function network.type(self)
+function proto.generic.type(self)
 	return self:_get("type")
 end
 
-function network.name(self)
+function proto.generic.name(self)
 	return self.sid
 end
 
-function network.uptime(self)
-	local cnt = tonumber(uci_s:get("network", self.sid, "connect_time"))
+function proto.generic.uptime(self)
+	local cnt = tonumber(_uci_state:get("network", self.sid, "connect_time"))
 	if cnt ~= nil then
 		return nxo.sysinfo().uptime - cnt
 	else
@@ -605,9 +620,9 @@ function network.uptime(self)
 	end
 end
 
-function network.expires(self)
-	local a = tonumber(uci_s:get("network", self.sid, "lease_acquired"))
-	local l = tonumber(uci_s:get("network", self.sid, "lease_lifetime"))
+function proto.generic.expires(self)
+	local a = tonumber(_uci_state:get("network", self.sid, "lease_acquired"))
+	local l = tonumber(_uci_state:get("network", self.sid, "lease_lifetime"))
 	if a and l then
 		l = l - (nxo.sysinfo().uptime - a)
 		return l > 0 and l or 0
@@ -615,30 +630,30 @@ function network.expires(self)
 	return -1
 end
 
-function network.metric(self)
-	return tonumber(uci_s:get("network", self.sid, "metric")) or 0
+function proto.generic.metric(self)
+	return tonumber(_uci_state:get("network", self.sid, "metric")) or 0
 end
 
-function network.ipaddr(self)
+function proto.generic.ipaddr(self)
 	return self:_ip("ipaddr", 4)
 end
 
-function network.netmask(self)
+function proto.generic.netmask(self)
 	return self:_ip("netmask", 4)
 end
 
-function network.gwaddr(self)
+function proto.generic.gwaddr(self)
 	return self:_ip("gateway", 4)
 end
 
-function network.dnsaddrs(self)
+function proto.generic.dnsaddrs(self)
 	return self:_ip("dns", 4, true)
 end
 
-function network.ip6addr(self)
+function proto.generic.ip6addr(self)
 	local ip6 = self:_ip("ip6addr", 6)
 	if not ip6 then
-		local ifc = ifs[self:ifname()]
+		local ifc = _interfaces[self:ifname()]
 		if ifc and ifc.ip6addrs then
 			local a
 			for _, a in ipairs(ifc.ip6addrs) do
@@ -652,7 +667,7 @@ function network.ip6addr(self)
 	return ip6
 end
 
-function network.gw6addr(self)
+function proto.generic.gw6addr(self)
 	local ip6 = self:_ip("ip6gw", 6)
 	if not ip6 then
 		local dr6 = sys.net.defaultroute6()
@@ -663,27 +678,23 @@ function network.gw6addr(self)
 	return ip6
 end
 
-function network.dns6addrs(self)
+function proto.generic.dns6addrs(self)
 	return self:_ip("dns", 6, true)
 end
 
-function network.is_bridge(self)
+function proto.generic.is_bridge(self)
 	return (self:type() == "bridge")
 end
 
-function network.is_virtual(self)
-	local p = self:proto()
-	return (
-		p == "3g" or p == "6in4" or p == "6to4" or p == "ppp" or
-		p == "pppoe" or p == "pppoa" or p == "relay"
-	)
+function proto.generic.is_virtual(self)
+	return false
 end
 
-function network.is_floating(self)
-	return (self:is_virtual() and self:proto() ~= "pppoe")
+function proto.generic.is_floating(self)
+	return false
 end
 
-function network.is_empty(self)
+function proto.generic.is_empty(self)
 	if self:is_virtual() then
 		return false
 	else
@@ -693,7 +704,7 @@ function network.is_empty(self)
 			rv = false
 		end
 
-		uci_r:foreach("wireless", "wifi-iface",
+		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.network == self.sid then
 					rv = false
@@ -705,65 +716,55 @@ function network.is_empty(self)
 	end
 end
 
-function network.add_interface(self, ifname)
-	if not self:is_floating() then
-		if type(ifname) ~= "string" then
-			ifname = ifname:name()
-		else
-			ifname = ifname:match("[^%s:]+")
-		end
-
+function proto.generic.add_interface(self, ifname)
+	ifname = _M:ifnameof(ifname)
+	if ifname and not self:is_floating() then
 		-- remove the interface from all ifaces
-		uci_r:foreach("network", "interface",
+		_uci_real:foreach("network", "interface",
 			function(s)
-				_list_del("network", s['.name'], "ifname", ifname)
+				_filter("network", s['.name'], "ifname", ifname)
 			end)
 
 		-- if its a wifi interface, change its network option
 		local wif = _wifi_lookup(ifname)
 		if wif then
-			uci_r:set("wireless", wif, "network", self.sid)
+			_uci_real:set("wireless", wif, "network", self.sid)
 
 		-- add iface to our iface list
 		else
-			_list_add("network", self.sid, "ifname", ifname)
+			_append("network", self.sid, "ifname", ifname)
 		end
 	end
 end
 
-function network.del_interface(self, ifname)
-	if not self:is_floating() then
-		if utl.instanceof(ifname, interface) then
-			ifname = ifname:name()
-		else
-			ifname = ifname:match("[^%s:]+")
-		end
-
+function proto.generic.del_interface(self, ifname)
+	ifname = _M:ifnameof(ifname)
+	if ifname and not self:is_floating() then
 		-- if its a wireless interface, clear its network option
 		local wif = _wifi_lookup(ifname)
-		if wif then	uci_r:delete("wireless", wif, "network") end
+		if wif then	_uci_real:delete("wireless", wif, "network") end
 
 		-- remove the interface
-		_list_del("network", self.sid, "ifname", ifname)
+		_filter("network", self.sid, "ifname", ifname)
 	end
 end
 
-function network.get_interface(self)
+function proto.generic.get_interface(self)
 	if self:is_virtual() then
-		tns[self:proto() .. "-" .. self.sid] = true
+		_tunnel[self:proto() .. "-" .. self.sid] = true
 		return interface(self:proto() .. "-" .. self.sid, self)
 	elseif self:is_bridge() then
-		brs["br-" .. self.sid] = true
+		_bridge["br-" .. self.sid] = true
 		return interface("br-" .. self.sid, self)
 	else
 		local ifn = nil
 		local num = { }
-		for ifn in utl.imatch(uci_s:get("network", self.sid, "ifname")) do
+		for ifn in utl.imatch(_uci_state:get("network", self.sid, "ifname")) do
 			ifn = ifn:match("^[^:/]+")
 			return ifn and interface(ifn, self)
 		end
 		ifn = nil
-		uci_s:foreach("wireless", "wifi-iface",
+		_uci_state:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
@@ -777,7 +778,7 @@ function network.get_interface(self)
 	end
 end
 
-function network.get_interfaces(self)
+function proto.generic.get_interfaces(self)
 	if self:is_bridge() or (self:is_virtual() and not self:is_floating()) then
 		local ifaces = { }
 
@@ -794,7 +795,7 @@ function network.get_interfaces(self)
 
 		local num = { }
 		local wfs = { }
-		uci_r:foreach("wireless", "wifi-iface",
+		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
@@ -813,14 +814,11 @@ function network.get_interfaces(self)
 	end
 end
 
-function network.contains_interface(self, ifname)
-	if type(ifname) ~= "string" then
-		ifname = ifname:name()
-	else
-		ifname = ifname:match("[^%s:]+")
-	end
-
-	if self:is_virtual() and self:proto() .. "-" .. self.sid == ifname then
+function proto.generic.contains_interface(self, ifname)
+	ifname = _M:ifnameof(ifname)
+	if not ifname then
+		return false
+	elseif self:is_virtual() and self:proto() .. "-" .. self.sid == ifname then
 		return true
 	elseif self:is_bridge() and "br-" .. self.sid == ifname then
 		return true
@@ -835,25 +833,26 @@ function network.contains_interface(self, ifname)
 
 		local wif = _wifi_lookup(ifname)
 		if wif then
-			return (uci_r:get("wireless", wif, "network") == self.sid)
+			return (_uci_real:get("wireless", wif, "network") == self.sid)
 		end
 	end
 
 	return false
 end
 
-function network.adminlink(self)
+function proto.generic.adminlink(self)
 	return dsp.build_url("admin", "network", "network", self.sid)
 end
 
 
 interface = utl.class()
+
 function interface.__init__(self, ifname, network)
 	local wif = _wifi_lookup(ifname)
 	if wif then self.wif = wifinet(wif) end
 
 	self.ifname  = self.ifname or ifname
-	self.dev     = ifs[self.ifname]
+	self.dev     = _interfaces[self.ifname]
 	self.network = network
 end
 
@@ -876,13 +875,13 @@ end
 function interface.type(self)
 	if self.wif or _wifi_iface(self.ifname) then
 		return "wifi"
-	elseif brs[self.ifname] then
+	elseif _bridge[self.ifname] then
 		return "bridge"
-	elseif tns[self.ifname] then
+	elseif _tunnel[self.ifname] then
 		return "tunnel"
 	elseif self.ifname:match("%.") then
 		return "vlan"
-	elseif sws[self.ifname] then
+	elseif _switch[self.ifname] then
 		return "switch"
 	else
 		return "ethernet"
@@ -1026,6 +1025,7 @@ end
 
 
 wifidev = utl.class()
+
 function wifidev.__init__(self, dev)
 	self.sid    = dev
 	self.iwinfo = dev and sys.wifi.getiwinfo(dev) or { }
@@ -1073,7 +1073,7 @@ end
 function wifidev.is_up(self)
 	local up = false
 
-	uci_s:foreach("wireless", "wifi-iface",
+	_uci_state:foreach("wireless", "wifi-iface",
 		function(s)
 			if s.device == self.sid then
 				if s.up == "1" then
@@ -1087,7 +1087,7 @@ function wifidev.is_up(self)
 end
 
 function wifidev.get_wifinet(self, net)
-	if uci_r:get("wireless", net) == "wifi-iface" then
+	if _uci_real:get("wireless", net) == "wifi-iface" then
 		return wifinet(net)
 	else
 		local wnet = _wifi_lookup(net)
@@ -1100,7 +1100,7 @@ end
 function wifidev.get_wifinets(self)
 	local nets = { }
 
-	uci_r:foreach("wireless", "wifi-iface",
+	_uci_real:foreach("wireless", "wifi-iface",
 		function(s)
 			if s.device == self.sid then
 				nets[#nets+1] = wifinet(s['.name'])
@@ -1114,7 +1114,7 @@ function wifidev.add_wifinet(self, options)
 	options = options or { }
 	options.device = self.sid
 
-	local wnet = uci_r:section("wireless", "wifi-iface", nil, options)
+	local wnet = _uci_real:section("wireless", "wifi-iface", nil, options)
 	if wnet then
 		return wifinet(wnet, options)
 	end
@@ -1123,12 +1123,12 @@ end
 function wifidev.del_wifinet(self, net)
 	if utl.instanceof(net, wifinet) then
 		net = net.sid
-	elseif uci_r:get("wireless", net) ~= "wifi-iface" then
+	elseif _uci_real:get("wireless", net) ~= "wifi-iface" then
 		net = _wifi_lookup(net)
 	end
 
-	if net and uci_r:get("wireless", net, "device") == self.sid then
-		uci_r:delete("wireless", net)
+	if net and _uci_real:get("wireless", net, "device") == self.sid then
+		_uci_real:delete("wireless", net)
 		return true
 	end
 
@@ -1137,12 +1137,13 @@ end
 
 
 wifinet = utl.class()
+
 function wifinet.__init__(self, net, data)
 	self.sid = net
 
 	local num = { }
 	local netid
-	uci_r:foreach("wireless", "wifi-iface",
+	_uci_real:foreach("wireless", "wifi-iface",
 		function(s)
 			if s.device then
 				num[s.device] = num[s.device] and num[s.device] + 1 or 1
@@ -1153,13 +1154,13 @@ function wifinet.__init__(self, net, data)
 			end
 		end)
 
-	local dev = uci_s:get("wireless", self.sid, "ifname") or netid
+	local dev = _uci_state:get("wireless", self.sid, "ifname") or netid
 
 	self.netid  = netid
 	self.wdev   = dev
 	self.iwinfo = dev and sys.wifi.getiwinfo(dev) or { }
-	self.iwdata = data or uci_s:get_all("wireless", self.sid) or
-		uci_r:get_all("wireless", self.sid) or { }
+	self.iwdata = data or _uci_state:get_all("wireless", self.sid) or
+		_uci_real:get_all("wireless", self.sid) or { }
 end
 
 function wifinet.get(self, opt)
@@ -1171,19 +1172,19 @@ function wifinet.set(self, opt, val)
 end
 
 function wifinet.mode(self)
-	return uci_s:get("wireless", self.sid, "mode") or "ap"
+	return _uci_state:get("wireless", self.sid, "mode") or "ap"
 end
 
 function wifinet.ssid(self)
-	return uci_s:get("wireless", self.sid, "ssid")
+	return _uci_state:get("wireless", self.sid, "ssid")
 end
 
 function wifinet.bssid(self)
-	return uci_s:get("wireless", self.sid, "bssid")
+	return _uci_state:get("wireless", self.sid, "bssid")
 end
 
 function wifinet.network(self)
-	return uci_s:get("wifinet", self.sid, "network")
+	return _uci_state:get("wifinet", self.sid, "network")
 end
 
 function wifinet.id(self)
@@ -1262,7 +1263,7 @@ end
 
 function wifinet.channel(self)
 	return self.iwinfo.channel or
-		tonumber(uci_s:get("wireless", self.iwdata.device, "channel"))
+		tonumber(_uci_state:get("wireless", self.iwdata.device, "channel"))
 end
 
 function wifinet.signal(self)
@@ -1329,11 +1330,23 @@ function wifinet.adminlink(self)
 end
 
 function wifinet.get_network(self)
-	if uci_r:get("network", self.iwdata.network) == "interface" then
+	if _uci_real:get("network", self.iwdata.network) == "interface" then
 		return network(self.iwdata.network)
 	end
 end
 
 function wifinet.get_interface(self)
 	return interface(self:ifname())
+end
+
+
+-- load protocol extensions
+local exts = nfs.dir(utl.libpath() .. "/model/network")
+if exts then
+	local ext
+	for ext in exts do
+		if ext:match("%.lua$") then
+			require("luci.model.network." .. ext:gsub("%.lua$", ""))
+		end
+	end
 end
