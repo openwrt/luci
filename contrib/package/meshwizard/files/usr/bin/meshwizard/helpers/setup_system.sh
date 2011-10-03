@@ -9,4 +9,5 @@ if [ -n "$(env | grep '^system_')" ]; then
 	done
 fi
 
+uci -q delete meshwizard.system && uci commit meshwizard
 uci_commitverbose "System config" system

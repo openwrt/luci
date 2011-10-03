@@ -23,12 +23,9 @@ opkg list_installed |grep luci-app-splash > /dev/null && export has_luci_splash=
 	echo "+ Renaming wifi-devices in /etc/config/meshwizard"
 	$dir/helpers/rename-wifi.sh
 
-# Firstboot/initial config
-	echo "+ Initial config"
-	$dir/helpers/initial_config.sh
-
 # Get community
-export community=$(uci get freifunk.community.name)
+export community=$(uci -q get meshwizard.community.name)
+[ -z "$community" ] && community=$(uci -q get freifunk.community.name)
 [ -z "$community" ] && echo "Error: Community is not set in /etc/config/freifunk, aborting now." && exit 1
 
 # Check whether we want to cleanup uci config before setting new options or not
@@ -45,14 +42,19 @@ export networks
 echo "    Community=$community
     Network(s)=$networks"
 
-# Read default values (first from /etc/config/freifunk, then from /etc/config/profile_$community,
+# Read default values (first from /etc/config/freifunk, then from /etc/config/profile_$community
+# then /etc/config/meshwizard
 # last will overwrite first
-
 
 $dir/helpers/read_defaults.sh $community > /tmp/meshwizard.tmp
 while read line; do
 	export "${line//\"/}"
 done < /tmp/meshwizard.tmp
+
+# Firstboot/initial config
+	echo "+ Initial config"
+	$dir/helpers/initial_config.sh
+
 
 $dir/helpers/setup_dnsmasq.sh
 $dir/helpers/setup_system.sh

@@ -18,3 +18,8 @@ done
 for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_interfacedefaults profile zone_freifunk include; do
 	get_var profile_$community.$v
 done
+
+# read values from meshwizard
+for v in system luci_main contact community; do
+        get_var meshwizard.$v
+done

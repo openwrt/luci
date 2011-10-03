@@ -4,11 +4,10 @@
 . $dir/functions.sh
 
 # Set community homepage
-hp=$(uci -q get profile_$community.profile.homepage)
 
-if [ -n "$hp" ]; then
-	uci set freifunk.community.homepage="$hp"
+if [ -n "$profile_homepage" ]; then
+	uci set freifunk.community.homepage="$profile_homepage"
 fi
 
-uci_commitverbose "/etc/init.d/freifunk config" freifunk
+uci_commitverbose freifunk
 

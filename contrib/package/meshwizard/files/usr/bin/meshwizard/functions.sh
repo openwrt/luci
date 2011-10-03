@@ -24,9 +24,12 @@ uci_commitverbose() {
 }
 
 set_defaults() {
-	for def in $(env |grep "^$1"); do
-		option=${def/$1/}
-		uci set $2.$option
+	for def in $(env |grep "^$1" | sed 's/ /_/g'); do
+		option="${def/$1/}"
+		a="$(echo $option |cut -d '=' -f1)"
+		b="$(echo $option |cut -d '=' -f2)"
+		b="${b//_/ }"
+		uci set $2.$a="$b"
 	done
 }
 

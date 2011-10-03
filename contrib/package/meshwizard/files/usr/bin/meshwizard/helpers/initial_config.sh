@@ -18,42 +18,23 @@ handle_system() {
 }
 config_foreach handle_system system
 
-if [ -n "$(uci -q get meshwizard.system)" ]; then
-	echo "    + Setup system"
-	uci show meshwizard.system | sed 's/^meshwizard/uci set system/g' | while read line; do
-		eval $line
-		echo "    $line"
-	done
-	uci -q delete meshwizard.system
-fi
-
 if [ -n "$(uci -q get meshwizard.community)" ]; then
 	echo "    + Setup community"
-	uci show meshwizard.community | sed 's/^meshwizard/freifunk/g' | while read line; do
-		eval uci set $line
-		echo "    $line"
-	done
+	set_defaults "community_" freifunk.community
 	uci -q delete meshwizard.community
+	uci_commitverbose freifunk
 fi
 
 if [ -n "$(uci -q get meshwizard.contact)" ]; then
 	echo "    + Setup contact"
-	uci show meshwizard.contact | sed 's/^meshwizard/freifunk/g' | while read line; do
-		eval uci set $line
-		echo "    $line"
-	done
-	uci -q delete meshwizard.contact
+	set_defaults "contact_" freifunk.contact
+	uci -q delete meshwizard.contact && uci_commitverbose freifunk
 fi
 
 if [ "$has_luci" == TRUE ]; then
-	if [ -n "$(uci -q get meshwizard.luci_main)" ]; then
-		echo "    + Setup luci"
-		uci show meshwizard.luci_main |sed -e 's/^meshwizard/luci/g' -e 's/luci_main/main/' | while read line; do 
-			eval uci set $line
-			echo "    $line"
-		done
-		uci -q delete meshwizard.luci_main
-	fi
+	echo "    + Setup luci"
+	set_defaults "luci_main_" luci.main
+	uci -q delete meshwizard.luci_main && uci_commitverbose luci
 fi
 
 uci commit
