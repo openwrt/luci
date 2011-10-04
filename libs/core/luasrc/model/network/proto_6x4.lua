@@ -18,35 +18,47 @@ limitations under the License.
 ]]--
 
 local netmod = luci.model.network
-local proto  = luci.util.class(netmod.proto.generic)
 
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^6to4-%w"
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^6in4-%w"
+local _, p
+for _, p in ipairs({"6in4", "6to4"}) do
 
-function proto.__init__(self, name)
-	self.sid = name
+	local proto = netmod:register_protocol(p)
+
+	function proto.get_i18n(self)
+		if p == "6in4" then
+			return luci.i18n.translate("IPv6-in-IPv4 (RFC4213)")
+		elseif p == "6to4" then
+			return luci.i18n.translate("IPv6-over-IPv4")
+		end
+	end
+
+	function proto.ifname(self)
+		return p .. "-" .. self.sid
+	end
+
+	function proto.opkg_package(self)
+		return p
+	end
+
+	function proto.is_installed(self)
+		return nixio.fs.access("/lib/network/" .. p .. ".sh")
+	end
+
+	function proto.is_floating(self)
+		return true
+	end
+
+	function proto.is_virtual(self)
+		return true
+	end
+
+	function proto.get_interfaces(self)
+		return nil
+	end
+
+	function proto.contains_interface(self, ifname)
+		return (netmod:ifnameof(ifc) == self:ifname())
+	end
+
+	netmod:register_pattern_virtual("^%s-%%w" % p)
 end
-
-function proto.ifname(self)
-	return self:proto() .. "-" .. self.sid
-end
-
-function proto.is_floating(self)
-	return true
-end
-
-function proto.is_virtual(self)
-	return true
-end
-
-function proto.get_interfaces(self)
-	return nil
-end
-
-function proto.contains_interface(self, ifname)
-	return (netmod:ifnameof(ifc) == self:ifname())
-end
-
-
-netmod.proto["6to4"] = proto
-netmod.proto["6in4"] = proto

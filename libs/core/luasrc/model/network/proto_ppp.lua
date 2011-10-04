@@ -18,49 +18,69 @@ limitations under the License.
 ]]--
 
 local netmod = luci.model.network
-local proto  = luci.util.class(netmod.proto.generic)
 
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^3g-%w"
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^ppp-%w"
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^pptp-%w"
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^pppoe-%w"
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^pppoa-%w"
+local _, p
+for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 
-function proto.__init__(self, name)
-	self.sid = name
-end
+	local proto = netmod:register_protocol(p)
 
-function proto.ifname(self)
-	return self:proto() .. "-" .. self.sid
-end
-
-function proto.is_floating(self)
-	return (self:proto() ~= "pppoe")
-end
-
-function proto.is_virtual(self)
-	return true
-end
-
-function proto.get_interfaces(self)
-	if self:is_floating() then
-		return nil
-	else
-		return netmod.proto.generic.get_interfaces(self)
+	function proto.get_i18n(self)
+		if p == "ppp" then
+			return luci.i18n.translate("PPP")
+		elseif p == "pptp" then
+			return luci.i18n.translate("PPtP")
+		elseif p == "3g" then
+			return luci.i18n.translate("UMTS/GPRS/EV-DO")
+		elseif p == "pppoe" then
+			return luci.i18n.translate("PPPoE")
+		elseif p == "pppoa" then
+			return luci.i18n.translate("PPPoATM")
+		end
 	end
-end
 
-function proto.contains_interface(self, ifc)
-	if self:is_floating() then
-		return (netmod:ifnameof(ifc) == self:ifname())
-	else
-		return netmod.proto.generic.contains_interface(self, ifname)
+	function proto.ifname(self)
+		return p .. "-" .. self.sid
 	end
+
+	function proto.opkg_package(self)
+		if p == "ppp" or p == "pptp" then
+			return p
+		elseif p == "3g" then
+			return "comgt"
+		elseif p == "pppoe" then
+			return "ppp-mod-pppoe"
+		elseif p == "pppoa" then
+			return "ppp-mod-pppoa"
+		end
+	end
+
+	function proto.is_installed(self)
+		return nixio.fs.access("/lib/network/" .. p .. ".sh")
+	end
+
+	function proto.is_floating(self)
+		return (p ~= "pppoe")
+	end
+
+	function proto.is_virtual(self)
+		return true
+	end
+
+	function proto.get_interfaces(self)
+		if self:is_floating() then
+			return nil
+		else
+			return netmod.protocol.get_interfaces(self)
+		end
+	end
+
+	function proto.contains_interface(self, ifc)
+		if self:is_floating() then
+			return (netmod:ifnameof(ifc) == self:ifname())
+		else
+			return netmod.protocol.contains_interface(self, ifname)
+		end
+	end
+
+	netmod:register_pattern_virtual("^%s-%%w" % p)
 end
-
-
-netmod.proto["3g"]    = proto
-netmod.proto["ppp"]   = proto
-netmod.proto["pptp"]  = proto
-netmod.proto["pppoe"] = proto
-netmod.proto["pppoa"] = proto

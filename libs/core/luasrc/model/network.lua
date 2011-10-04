@@ -38,8 +38,9 @@ IFACE_PATTERNS_IGNORE   = { "^wmaster%d", "^wifi%d", "^hwsim%d", "^imq%d", "^ifb
 IFACE_PATTERNS_WIRELESS = { "^wlan%d", "^wl%d", "^ath%d", "^%w+%.network%d" }
 
 
-proto = { }
-proto.generic = utl.class()
+protocol = utl.class()
+
+local _protocols = { }
 
 local _interfaces, _bridge, _switch, _tunnel
 local _uci_real, _uci_state
@@ -271,12 +272,43 @@ end
 function ifnameof(self, x)
 	if utl.instanceof(x, interface) then
 		return x:name()
-	elseif utl.instanceof(x, proto.generic) then
+	elseif utl.instanceof(x, protocol) then
 		return x:ifname()
 	elseif type(x) == "string" then
 		return x:match("^[^:]+")
 	end
 end
+
+function get_protocols(self)
+	local p = { }
+	local _, v
+	for _, v in ipairs(_protocols) do
+		p[#p+1] = v("__dummy__")
+	end
+	return p
+end
+
+function register_protocol(self, protoname)
+	local proto = utl.class(protocol)
+
+	function proto.__init__(self, name)
+		self.sid = name
+	end
+
+	function proto.proto(self)
+		return protoname
+	end
+
+	_protocols[#_protocols+1] = proto
+	_protocols[protoname]     = proto
+
+	return proto
+end
+
+function register_pattern_virtual(self, pat)
+	IFACE_PATTERNS_VIRTUAL[#IFACE_PATTERNS_VIRTUAL+1] = pat
+end
+
 
 function has_ipv6(self)
 	return nfs.access("/proc/net/ipv6_route")
@@ -520,19 +552,19 @@ function del_wifinet(self, net)
 end
 
 
-function network(name)
+function network(name, proto)
 	if name then
-		local p = _uci_real:get("network", name, "proto")
-		local c = p and proto[p] or proto.generic
+		local p = proto or _uci_real:get("network", name, "proto")
+		local c = p and _protocols[p] or protocol
 		return c(name)
 	end
 end
 
-function proto.generic.__init__(self, name)
+function protocol.__init__(self, name)
 	self.sid = name
 end
 
-function proto.generic._get(self, opt)
+function protocol._get(self, opt)
 	local v = _uci_real:get("network", self.sid, opt)
 	if type(v) == "table" then
 		return table.concat(v, " ")
@@ -540,7 +572,7 @@ function proto.generic._get(self, opt)
 	return v or ""
 end
 
-function proto.generic._ip(self, opt, family, list)
+function protocol._ip(self, opt, family, list)
 	local ip = _uci_state:get("network", self.sid, opt)
 	local fc = (family == 6) and ipc.IPv6 or ipc.IPv4
 	if ip or list then
@@ -558,15 +590,15 @@ function proto.generic._ip(self, opt, family, list)
 	end
 end
 
-function proto.generic.get(self, opt)
+function protocol.get(self, opt)
 	return _get("network", self.sid, opt)
 end
 
-function proto.generic.set(self, opt, val)
+function protocol.set(self, opt, val)
 	return _set("network", self.sid, opt, val)
 end
 
-function proto.generic.ifname(self)
+function protocol.ifname(self)
 	local p = self:proto()
 	if self:is_bridge() then
 		return "br-" .. self.sid
@@ -599,19 +631,32 @@ function proto.generic.ifname(self)
 	end
 end
 
-function proto.generic.proto(self)
-	return self:_get("proto") or "none"
+function protocol.proto(self)
+	return "none"
 end
 
-function proto.generic.type(self)
+function protocol.get_i18n(self)
+	local p = self:proto()
+	if p == "none" then
+		return i18n.translate("Unmanaged")
+	elseif p == "static" then
+		return i18n.translate("Static address")
+	elseif p == "dhcp" then
+		return i18n.translate("DHCP client")
+	else
+		return i18n.translate("Unknown")
+	end
+end
+
+function protocol.type(self)
 	return self:_get("type")
 end
 
-function proto.generic.name(self)
+function protocol.name(self)
 	return self.sid
 end
 
-function proto.generic.uptime(self)
+function protocol.uptime(self)
 	local cnt = tonumber(_uci_state:get("network", self.sid, "connect_time"))
 	if cnt ~= nil then
 		return nxo.sysinfo().uptime - cnt
@@ -620,7 +665,7 @@ function proto.generic.uptime(self)
 	end
 end
 
-function proto.generic.expires(self)
+function protocol.expires(self)
 	local a = tonumber(_uci_state:get("network", self.sid, "lease_acquired"))
 	local l = tonumber(_uci_state:get("network", self.sid, "lease_lifetime"))
 	if a and l then
@@ -630,27 +675,27 @@ function proto.generic.expires(self)
 	return -1
 end
 
-function proto.generic.metric(self)
+function protocol.metric(self)
 	return tonumber(_uci_state:get("network", self.sid, "metric")) or 0
 end
 
-function proto.generic.ipaddr(self)
+function protocol.ipaddr(self)
 	return self:_ip("ipaddr", 4)
 end
 
-function proto.generic.netmask(self)
+function protocol.netmask(self)
 	return self:_ip("netmask", 4)
 end
 
-function proto.generic.gwaddr(self)
+function protocol.gwaddr(self)
 	return self:_ip("gateway", 4)
 end
 
-function proto.generic.dnsaddrs(self)
+function protocol.dnsaddrs(self)
 	return self:_ip("dns", 4, true)
 end
 
-function proto.generic.ip6addr(self)
+function protocol.ip6addr(self)
 	local ip6 = self:_ip("ip6addr", 6)
 	if not ip6 then
 		local ifc = _interfaces[self:ifname()]
@@ -667,7 +712,7 @@ function proto.generic.ip6addr(self)
 	return ip6
 end
 
-function proto.generic.gw6addr(self)
+function protocol.gw6addr(self)
 	local ip6 = self:_ip("ip6gw", 6)
 	if not ip6 then
 		local dr6 = sys.net.defaultroute6()
@@ -678,23 +723,31 @@ function proto.generic.gw6addr(self)
 	return ip6
 end
 
-function proto.generic.dns6addrs(self)
+function protocol.dns6addrs(self)
 	return self:_ip("dns", 6, true)
 end
 
-function proto.generic.is_bridge(self)
-	return (self:type() == "bridge")
+function protocol.is_bridge(self)
+	return (not self:is_virtual() and self:type() == "bridge")
 end
 
-function proto.generic.is_virtual(self)
+function protocol.opkg_package(self)
+	return nil
+end
+
+function protocol.is_installed(self)
+	return true
+end
+
+function protocol.is_virtual(self)
 	return false
 end
 
-function proto.generic.is_floating(self)
+function protocol.is_floating(self)
 	return false
 end
 
-function proto.generic.is_empty(self)
+function protocol.is_empty(self)
 	if self:is_virtual() then
 		return false
 	else
@@ -716,7 +769,7 @@ function proto.generic.is_empty(self)
 	end
 end
 
-function proto.generic.add_interface(self, ifname)
+function protocol.add_interface(self, ifname)
 	ifname = _M:ifnameof(ifname)
 	if ifname and not self:is_floating() then
 		-- remove the interface from all ifaces
@@ -737,7 +790,7 @@ function proto.generic.add_interface(self, ifname)
 	end
 end
 
-function proto.generic.del_interface(self, ifname)
+function protocol.del_interface(self, ifname)
 	ifname = _M:ifnameof(ifname)
 	if ifname and not self:is_floating() then
 		-- if its a wireless interface, clear its network option
@@ -749,7 +802,7 @@ function proto.generic.del_interface(self, ifname)
 	end
 end
 
-function proto.generic.get_interface(self)
+function protocol.get_interface(self)
 	if self:is_virtual() then
 		_tunnel[self:proto() .. "-" .. self.sid] = true
 		return interface(self:proto() .. "-" .. self.sid, self)
@@ -778,7 +831,7 @@ function proto.generic.get_interface(self)
 	end
 end
 
-function proto.generic.get_interfaces(self)
+function protocol.get_interfaces(self)
 	if self:is_bridge() or (self:is_virtual() and not self:is_floating()) then
 		local ifaces = { }
 
@@ -814,7 +867,7 @@ function proto.generic.get_interfaces(self)
 	end
 end
 
-function proto.generic.contains_interface(self, ifname)
+function protocol.contains_interface(self, ifname)
 	ifname = _M:ifnameof(ifname)
 	if not ifname then
 		return false
@@ -840,7 +893,7 @@ function proto.generic.contains_interface(self, ifname)
 	return false
 end
 
-function proto.generic.adminlink(self)
+function protocol.adminlink(self)
 	return dsp.build_url("admin", "network", "network", self.sid)
 end
 
@@ -1339,6 +1392,11 @@ function wifinet.get_interface(self)
 	return interface(self:ifname())
 end
 
+
+-- setup base protocols
+_M:register_protocol("static")
+_M:register_protocol("dhcp")
+_M:register_protocol("none")
 
 -- load protocol extensions
 local exts = nfs.dir(utl.libpath() .. "/model/network")

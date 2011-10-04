@@ -18,17 +18,26 @@ limitations under the License.
 ]]--
 
 local netmod = luci.model.network
-local proto  = luci.util.class(netmod.proto.generic)
 local device = luci.util.class(netmod.interface)
 
-netmod.IFACE_PATTERNS_VIRTUAL[#netmod.IFACE_PATTERNS_VIRTUAL+1] = "^relay-%w"
+netmod:register_pattern_virtual("^relay-%w")
 
-function proto.__init__(self, name)
-	self.sid = name
+local proto = netmod:register_protocol("relay")
+
+function proto.get_i18n(self)
+	return luci.i18n.translate("Relay bridge")
 end
 
 function proto.ifname(self)
 	return "relay-" .. self.sid
+end
+
+function proto.opkg_package(self)
+	return "relayd"
+end
+
+function proto.is_installed(self)
+	return nixio.fs.access("/lib/network/relay.sh")
 end
 
 function proto.is_floating(self)
@@ -154,6 +163,3 @@ end
 function device.get_type_i18n(self)
 	return luci.i18n.translate("Relay Bridge")
 end
-
-
-netmod.proto.relay = proto
