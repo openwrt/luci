@@ -358,6 +358,8 @@ if hwtype == "mac80211" then
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
 
 	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
+	mp:depends({mode="ap"})
+	mp:depends({mode="ap-wds"})
 	mp:value("", translate("disable"))
 	mp:value("allow", translate("Allow listed only"))
 	mp:value("deny", translate("Allow all except listed"))
