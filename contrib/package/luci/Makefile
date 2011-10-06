@@ -511,6 +511,7 @@ $(eval $(call translation,vietnamese,Vietnamese (by Hong Phuc Dang)))
 $(eval $(call translation,malay,Malay (by Teow Wai Chet)))
 $(eval $(call translation,norwegian,Norwegian (by Lars Hardy)))
 $(eval $(call translation,hebrew,Hebrew))
+$(eval $(call translation,romanian,Romanian))
 
 
 ### Collections ###
