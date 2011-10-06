@@ -7,33 +7,25 @@ net=$1
 . /etc/functions.sh
 . $dir/functions.sh
 
-# Clean or delete interface defaults
+# Rename interface defaults
 handle_interfacedefaults() {
-	if [ "$cleanup" == 1 ]; then
-		section_cleanup olsrd.$1
-	else
-		if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-			section_rename olsrd $1 InterfaceDefaults
-		 fi
+	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+		section_rename olsrd $1 InterfaceDefaults
 	fi
 }
-
 config_load olsrd
 config_foreach handle_interfacedefaults InterfaceDefaults
 
 # Setup new InterfaceDefaults
-
 uci set olsrd.InterfaceDefaults=InterfaceDefaults
 set_defaults "olsr_interfacedefaults_" olsrd.InterfaceDefaults
 uci_commitverbose "Setup olsr interface defaults" olsrd
 
-# Delete old interface for $netrenamed
+# Rename interface for $netrenamed
 handle_interface() {
 	config_get interface "$1" Interface
 	if [ "$interface" == "$netrenamed" ]; then
-		if [ "$cleanup" == 1 ]; then
-			section_cleanup olsrd.$1
-		elif [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+		if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
 			section_rename olsrd $1 $netrenamed
 		fi
 	fi
@@ -58,6 +50,7 @@ uci -q delete olsrd.${netrenamed}clients
 # check if the dhcprange is inside meshnet
 dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
 
+# If it is setup hna for it
 if [ "$dhcpinmesh" == 1 ]; then
 	uci set olsrd.${netrenamed}clients="Hna4"
 	eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange)
@@ -67,16 +60,11 @@ if [ "$dhcpinmesh" == 1 ]; then
 fi
 
 
-# Delete nameservice, dyngw and httpinfo plugins
+# Rename nameservice, dyngw and httpinfo plugins
 
 handle_plugin() {
         config_get library "$1" library
-	if [ "$cleanup" == 1 ]; then
-		case library in
-			olsrd_*)
-				section_cleanup olsrd.$1
-		esac
-	elif [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
 		new="$(echo $library | cut -d '.' -f 1)"
 		section_rename olsrd $1 $new
 	fi		
@@ -105,14 +93,10 @@ uci_commitverbose "Setup olsr nameservice plugin" olsrd
 # If Sharing of Internet is enabled then enable dyngw_plain plugin
 sharenet=$(uci -q get meshwizard.general.sharenet)
 
-if [ -n "$(uci -q get olsrd.dyngw_plain.library)" ]; then
-	section_cleanup olsrd.dyngw_plain
-fi
-
 if [ "$sharenet" == 1 ]; then
 	uci set olsrd.dyngw_plain=LoadPlugin
 	uci set olsrd.dyngw_plain.ignore=0
 	uci set olsrd.dyngw_plain.library="olsrd_dyn_gw_plain.so.0.4"
-	uci_commitverbose "Setup olsrd_dyngw_plain plugin"
+	uci_commitverbose "Setup olsrd_dyngw_plain plugin" olsrd
 fi
 

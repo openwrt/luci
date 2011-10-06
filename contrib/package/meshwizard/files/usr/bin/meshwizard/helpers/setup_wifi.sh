@@ -12,15 +12,11 @@ net="$1"
 config_load wireless
 config_get type $net type
 
-# Delete old wifi-device for $net
+# Rename wifi-device for $net
 
 handle_wifidevice() {
-	if [ "$1" == "$net" -a "$cleanup" == 1 ]; then
-		section_cleanup wireless.${net}
-	else
-		if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-			section_rename wireless $1 $net
-		fi
+	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+		section_rename wireless $1 $net
 	fi
 }
 config_foreach handle_wifidevice wifi-device
@@ -47,16 +43,12 @@ uci_commitverbose "Setup wifi device for $netrenamed" wireless
 
 ##### wifi iface
 
-# Delete old wifi-iface for $net
+# Rename wifi-iface for $net
 handle_interface() {
 	config_get device "$1" device
 	if [ "$device" == "$net" ]; then
-		if [ "$cleanup" == 1 ]; then
-			section_cleanup wireless.${net}_iface
-		else
-			if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-				section_rename wireless $1 ${net}_iface
-			fi
+		if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+			section_rename wireless $1 ${net}_iface
 		fi
 	fi
 } 
@@ -70,6 +62,7 @@ set_defaults "wifi_iface_" wireless.$net\_iface
 
 # overwrite defaults
 bssid="$($dir/helpers/gen_bssid.sh $channel $community)"
+
 ssid="$profile_ssid"
 if [ "$profile_ssid_scheme" == "addchannel" ]; then
 	ssid="$ssid - ch$channel"

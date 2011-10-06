@@ -2,11 +2,8 @@
 # This is only run once (usually after flashing an image from the imagebuilder)
 # It sets up the initial config for this node.
 
-
 . /etc/functions.sh
 . $dir/functions.sh
-
-### System config
 
 config_load system
 
@@ -19,24 +16,18 @@ handle_system() {
 config_foreach handle_system system
 
 if [ -n "$(uci -q get meshwizard.community)" ]; then
-	echo "    + Setup community"
 	set_defaults "community_" freifunk.community
 	uci -q delete meshwizard.community
-	uci_commitverbose freifunk
 fi
+[ -n "$profile_homepage" ] && uci set freifunk.community.homepage="$profile_homepage"
+uci_commitverbose "Setup community" freifunk
 
 if [ -n "$(uci -q get meshwizard.contact)" ]; then
-	echo "    + Setup contact"
 	set_defaults "contact_" freifunk.contact
-	uci -q delete meshwizard.contact && uci_commitverbose freifunk
+	uci -q delete meshwizard.contact && uci_commitverbose "Setup contact" freifunk
 fi
 
 if [ "$has_luci" == TRUE ]; then
-	echo "    + Setup luci"
 	set_defaults "luci_main_" luci.main
-	uci -q delete meshwizard.luci_main && uci_commitverbose luci
+	uci -q delete meshwizard.luci_main && uci_commitverbose "Setup luci" luci
 fi
-
-uci commit
-
-

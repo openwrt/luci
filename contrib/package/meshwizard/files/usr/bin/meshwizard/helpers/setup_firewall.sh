@@ -27,48 +27,24 @@ handle_fwzone() {
 	config_get network "$1" network
 
 	if [ "$2" == "zoneconf" ]; then
-		# clean zone
 		if [ "$name" == "freifunk" ]; then
-			if [ "$cleanup" == 1 ]; then
-				section_cleanup firewall.$1
-			else
-				# rename section if unnamed
-				if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-					section_rename firewall $1 zone_freifunk
-				fi
+			# rename section if unnamed
+			if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+				section_rename firewall $1 zone_freifunk
 			fi
 		else
-
-			if [ "$name" == "$netrenamed" ]; then
-				section_cleanup firewall.$1
-			fi
 			if [ -n "$netrenamed" -a -n "$(echo $network | grep $netrenamed)" ] && [ ! "$name" == "freifunk" ]; then
 				echo "    Removed $netrenamed from firewall zone $name."
 				network_new=$(echo $network | sed -e 's/'$netrenamed'//' -e 's/^ //' -e 's/  / /' -e 's/ $//')
 				uci set firewall.$1.network="$network_new"
 			fi
 		fi
-	else
-		# clean fw_rule, fw_forwarding, include and advanced
-		for option in src tcp_ecn path; do
-			config_get $option $1 $option
-		done
-		if [ "$src" == "freifunk" -o "$path" == "/etc/firewall.freifunk" -o -n "$tcpecn" ]; then
-			section_cleanup firewall.$1
-		fi
 	fi
 }
 
 config_foreach handle_fwzone zone zoneconf
 
-if [ "$cleanup" == 1 ]; then
-	for target in include advanced rule forwarding; do
-		config_foreach handle_fwzone $target
-	done
-fi
-
 # setup freifunk firewall zone
-
 # add $netrenamed and if needed ${netrenamed}dhcp to the networks for this zone
 config_get network zone_freifunk network
 
@@ -152,3 +128,4 @@ for config in freifunk profile_$community; do
 done
 
 uci_commitverbose "Setup rules, forwardings, advanced config and includes." firewall
+

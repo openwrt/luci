@@ -14,12 +14,8 @@ fi
 handle_splash() {
 	config_get network "$1" network
 	if [ "$network" == "${netrenamed}dhcp" ]; then
-		if [ "$cleanup" == 1 ]; then
-			section_cleanup luci_splash.$1
-		else
-			if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-				section_rename luci_splash $1 ${netrenamed}dhcp
-			fi
+		if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+			section_rename luci_splash $1 ${netrenamed}dhcp
 		fi
 	fi
 }

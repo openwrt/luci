@@ -33,22 +33,9 @@ set_defaults() {
 	done
 }
 
-# 1 argument: section to remove
-section_cleanup() {
-	uci -q delete $1 && msg_cleanup $1 || msg_cleanup_error $1
-}
-
 # 3 arguements: 1=config name 2=oldname 3=newname
 section_rename() {
 	uci -q rename $1.$2=$3 && msg_rename $1.$2 $1.$3 || msg_rename_error $1.2 $1.$3
-}
-
-msg_cleanup() {
-	echo "    Cleanup: Removed section $1."
-}
-
-msg_cleanup_error() {
-	echo -e "    \033[1mWarning:\033[0m Cleanup of $1 failed."
 }
 
 msg_missing_value() {

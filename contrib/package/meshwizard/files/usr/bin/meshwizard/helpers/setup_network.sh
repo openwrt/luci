@@ -5,11 +5,6 @@ net="$1"
 . /etc/functions.sh
 . $dir/functions.sh
 
-# Delete the network interface section for $net
-if [ "$cleanup" == 1 ]; then
-	section_cleanup network.$netrenamed
-fi
-
 # Setup a (new) interface section for $net
 
 ipaddr=$(uci get meshwizard.netconfig.$net\_ip4addr)
@@ -20,10 +15,8 @@ uci batch << EOF
 set network.$netrenamed="interface"
 set network.$netrenamed.proto="static"
 set network.$netrenamed.ipaddr="$ipaddr"
-set network.$netrenamed.netmask="$interface_netmask"
-set network.$netrenamed.dns="$interface_dns"
 EOF
-
+set_defaults "interface_" network.$netrenamed
 uci_commitverbose "Setup interface $netrenamed" network
 
 # setup dhcp alias/interface
@@ -36,16 +29,12 @@ if [ "$net_dhcp" == 1 ]; then
 	interface_ip="$(uci -q get meshwizard.netconfig.${net}_ip4addr)"
 	vap=$(uci -q get meshwizard.netconfig.${net}_vap)
 
-	# Clean/rename config
+	# Rename config
 	handle_dhcpalias() {
 			config_get interface "$1" interface
 			if [ "$interface" == "$netrenamed" ]; then
-				if [ "$cleanup" == 1 ]; then
-					section_cleanup network.$1
-				else
-					if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-						section_rename network $1 ${netrenamed}dhcp
-					fi
+				if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+					section_rename network $1 ${netrenamed}dhcp
 				fi
 			fi
 	}
