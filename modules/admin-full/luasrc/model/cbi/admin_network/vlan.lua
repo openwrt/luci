@@ -17,9 +17,10 @@ m = Map("network", translate("Switch"), translate("The network ports on your rou
 
 m.uci:foreach("network", "switch",
 	function(x)
-		local switch_name = x.name or x['.name']
+		local sid         = x['.name']
+		local switch_name = x.name or sid
 		local has_vlan    = nil
-		local has_learn   = nil 
+		local has_learn   = nil
 		local has_vlan4k  = nil
 		local has_ptpvid  = nil
 		local has_jumbo3  = nil
@@ -91,9 +92,11 @@ m.uci:foreach("network", "switch",
 			local vlan_ids = { }
 			m.uci:foreach("network", "switch_vlan",
 				function(s)
-					local vid = s[has_vlan4k or "vlan"] or s["vlan"]
-					if vid ~= nil then
-						vlan_ids[#vlan_ids+1] = vid
+					if s.device == switch_name then
+						local vid = s[has_vlan4k or "vlan"] or s["vlan"]
+						if vid ~= nil then
+							vlan_ids[#vlan_ids+1] = vid
+						end
 					end
 				end)
 
@@ -137,6 +140,12 @@ m.uci:foreach("network", "switch",
 		s.addremove = true
 		s.anonymous = true
 
+		-- Filter by switch
+		s.filter = function(self, section)
+			local device = m:get(section, "device")
+			return (device and device == switch_name)
+		end
+
 		-- Override cfgsections callback to enforce row ordering by vlan id.
 		s.cfgsections = function(self)
 			local osections = TypedSection.cfgsections(self)
@@ -146,8 +155,8 @@ m.uci:foreach("network", "switch",
 			for _, section in luci.util.spairs(
 				osections,
 				function(a, b)
-					return (tonumber(m.uci:get("network", osections[a], has_vlan4k or "vlan")) or 9999)
-						<  (tonumber(m.uci:get("network", osections[b], has_vlan4k or "vlan")) or 9999)
+					return (tonumber(m:get(osections[a], has_vlan4k or "vlan")) or 9999)
+						<  (tonumber(m:get(osections[b], has_vlan4k or "vlan")) or 9999)
 				end
 			) do
 				sections[#sections+1] = section
@@ -158,7 +167,12 @@ m.uci:foreach("network", "switch",
 
 		-- When creating a new vlan, preset it with the highest found vid + 1.
 		-- Repopulate the PVID choice lists afterwards.
-		s.create = function(self, section)
+		s.create = function(self, section, origin)
+			-- Filter by switch
+			if m:get(origin, "device") ~= switch_name then
+				return
+			end
+
 			local sid = TypedSection.create(self, section)
 
 			local max_nr = 0
@@ -166,10 +180,12 @@ m.uci:foreach("network", "switch",
 
 			m.uci:foreach("network", "switch_vlan",
 				function(s)
-					local nr = tonumber(s.vlan)
-					local id = has_vlan4k and tonumber(s[has_vlan4k])
-					if nr ~= nil and nr > max_nr then max_nr = nr end
-					if id ~= nil and id > max_id then max_id = id end
+					if s.device == switch_name then
+						local nr = tonumber(s.vlan)
+						local id = has_vlan4k and tonumber(s[has_vlan4k])
+						if nr ~= nil and nr > max_nr then max_nr = nr end
+						if id ~= nil and id > max_id then max_id = id end
+					end
 				end)
 
 			m.uci:set("network", sid, "device", switch_name)
@@ -202,7 +218,7 @@ m.uci:foreach("network", "switch",
 		-- Parse current tagging state from the "ports" option.
 		local portvalue = function(self, section)
 			local pt
-			for pt in (m.uci:get("network", section, "ports") or ""):gmatch("%w+") do
+			for pt in (m:get(section, "ports") or ""):gmatch("%w+") do
 				local pc, tu = pt:match("^(%d+)([tu]*)")
 				if pc == self.option then return (#tu > 0) and tu or "u" end
 			end
@@ -264,8 +280,8 @@ m.uci:foreach("network", "switch",
 
 		-- Fallback to "vlan" option if "vid" option is supported but unset.
 		vid.cfgvalue = function(self, section)
-			return m.uci:get("network", section, has_vlan4k or "vlan")
-				or m.uci:get("network", section, "vlan")
+			return m:get(section, has_vlan4k or "vlan")
+				or m:get(section, "vlan")
 		end
 
 		-- Build per-port off/untagged/tagged choice lists.
@@ -300,6 +316,11 @@ m.uci:foreach("network", "switch",
 			s.template  = "cbi/tblsection"
 			s.addremove = false
 			s.anonymous = true
+
+			-- Filter by switch
+			function s.filter(self, section)
+				return (m:get(section, "name") == switch_name)
+			end
 
 			-- Build port list, store pointers to the option objects in the
 			-- pvid_opts array so that other callbacks can repopulate their
