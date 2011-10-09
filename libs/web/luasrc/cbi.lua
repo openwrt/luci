@@ -1095,10 +1095,10 @@ function TypedSection.parse(self, novld)
 		-- Create
 		local created
 		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
-		local name  = self.map:formvalue(crval)
+		local origin, name = next(self.map:formvaluetable(crval))
 		if self.anonymous then
 			if name then
-				created = self:create()
+				created = self:create(nil, origin)
 			end
 		else
 			if name then
@@ -1114,7 +1114,7 @@ function TypedSection.parse(self, novld)
 				end
 
 				if name and #name > 0 then
-					created = self:create(name) and name
+					created = self:create(name, origin) and name
 					if not created then
 						self.invalid_cts = true
 					end
