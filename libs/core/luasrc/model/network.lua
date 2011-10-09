@@ -279,6 +279,13 @@ function ifnameof(self, x)
 	end
 end
 
+function get_protocol(self, protoname, netname)
+	local v = _protocols[protoname]
+	if v then
+		return v(netname or "__dummy__")
+	end
+end
+
 function get_protocols(self)
 	local p = { }
 	local _, v
