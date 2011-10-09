@@ -78,7 +78,7 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 		if self:is_floating() then
 			return (netmod:ifnameof(ifc) == self:ifname())
 		else
-			return netmod.protocol.contains_interface(self, ifname)
+			return netmod.protocol.contains_interface(self, ifc)
 		end
 	end
 
