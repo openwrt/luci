@@ -20,6 +20,7 @@ limitations under the License.
 local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n
 	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n
 
+local error = error
 local require = require
 
 local nxo = require "nixio"
@@ -449,6 +450,7 @@ function get_interfaces(self)
 	local ifaces = { }
 	local seen = { }
 	local nfs = { }
+	local baseof = { }
 
 	-- find normal interfaces
 	_uci_real:foreach("network", "interface",
@@ -470,9 +472,26 @@ function get_interfaces(self)
 	-- find vlan interfaces
 	_uci_real:foreach("network", "switch_vlan",
 		function(s)
-			local base = s.device or "-"
-			if not base:match("^eth%d") then
-				base = "eth0"
+			if not s.device then
+				return
+			end
+
+			local base = baseof[s.device]
+			if not base then
+				if not s.device:match("^eth%d") then
+					local l
+					for l in utl.execi("swconfig dev %q help 2>/dev/null" % s.device) do
+						if not base then
+							base = l:match("^%w+: (%w+)")
+						end
+					end
+					if not base or not base:match("^eth%d") then
+						base = "eth0"
+					end
+				else
+					base = s.device
+				end
+				baseof[s.device] = base
 			end
 
 			local vid = tonumber(s.vid or s.vlan)
