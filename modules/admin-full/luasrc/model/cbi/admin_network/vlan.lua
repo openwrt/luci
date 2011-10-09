@@ -205,6 +205,7 @@ m.uci:foreach("network", "switch",
 
 		vid.rmempty = false
 		vid.forcewrite = true
+		vid.vlan_used = { }
 
 		-- Validate user provided VLAN ID, make sure its within the bounds
 		-- allowed by the switch.
@@ -212,7 +213,13 @@ m.uci:foreach("network", "switch",
 			local v = tonumber(value)
 			local m = has_vlan4k and 4094 or (num_vlans - 1)
 			if v ~= nil and v >= min_vid and v <= m then
-				return value
+				if not self.vlan_used[v] then
+					self.vlan_used[v] = true
+					return value
+				else
+					return nil,
+						translatef("Invalid VLAN ID given! Only unique IDs are allowed")
+				end
 			else
 				return nil,
 					translatef("Invalid VLAN ID given! Only IDs between %d and %d are allowed.", min_vid, m)
@@ -246,13 +253,21 @@ m.uci:foreach("network", "switch",
 
 		-- Build per-port off/untagged/tagged choice lists.
 		local pt
+		local off = 1
 		for pt = 0, num_ports - 1 do
-			local po = s:option(ListValue, tostring(pt),
-				(pt == cpu_port) and translate("CPU") or translatef("Port %d", (pt + 1)))
+			local title
+			if pt == cpu_port then
+				off   = 0
+				title = translate("CPU")
+			else
+				title = translatef("Port %d", pt + off)
+			end
 
-			po:value("", translate("off"))
-			po:value("u" % pt, translate("untagged"))
-			po:value("t" % pt, translate("tagged"))
+			local po = s:option(ListValue, tostring(pt), title)
+
+			po:value("",  translate("off"))
+			po:value("u", translate("untagged"))
+			po:value("t", translate("tagged"))
 
 			po.cfgvalue = portvalue
 			po.validate = portvalidate
