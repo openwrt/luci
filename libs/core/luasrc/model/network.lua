@@ -20,7 +20,6 @@ limitations under the License.
 local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n
 	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n
 
-local error = error
 local require = require
 
 local nxo = require "nixio"
