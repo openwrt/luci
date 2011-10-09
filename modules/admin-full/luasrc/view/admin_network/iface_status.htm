@@ -14,11 +14,11 @@
 						'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px" />' +
 						'<br /><small>%s</small>',
 							ifc.type, ifc.is_up ? '' : '_disabled',
-							ifc.is_up ? ifc.ifname : '?'
+							ifc.name
 					);
 
 				var d = document.getElementById('<%=self.option%>-ifc-description');
-				if (d && ifc.ifname && ifc.macaddr != '00:00:00:00:00:00')
+				if (d && ifc.ifname)
 				{
 					if (ifc.is_up)
 					{
