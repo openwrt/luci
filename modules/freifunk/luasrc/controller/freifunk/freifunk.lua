@@ -51,7 +51,7 @@ function index()
 	page.order    = 20
 	page.i18n     = "base"
 	page.setuser  = false
-    page.setgroup = false
+	page.setgroup = false
 
 	entry({"freifunk", "status.json"}, call("jsonstatus"))
 	entry({"freifunk", "status", "zeroes"}, call("zeroes"), "Testdownload")
@@ -292,7 +292,18 @@ function public_status_json()
 		dest = dr4.dest:string(),
 		dev = dr4.device,
 		metr = dr4.metric }
-	end
+	else
+		local dr = sys.exec("ip r s t olsr-default")
+		if dr then
+			local dest, gateway, dev, metr = dr:match("^(%w+) via (%d+.%d+.%d+.%d+) dev (%w+) +metric (%d+)")
+			def4 = {
+				dest = dest,
+				gateway = gateway,
+				dev = dev,
+				metr = metr
+			}
+		end
+        end
 	
 	rv[#rv+1] = {
 		time = os.date("%a, %d %b %Y, %H:%M:%S"),

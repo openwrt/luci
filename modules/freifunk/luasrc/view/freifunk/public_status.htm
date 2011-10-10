@@ -49,6 +49,18 @@ local has_iwinfo = pcall(require, "iwinfo")
 local defroutev4 = sys.net.defaultroute()
 local defroutev6 = sys.net.defaultroute6()
 
+if defroutev4 then
+	defroutev4.dest = defroutev4.dest:string()
+	defroutev4.gateway = defroutev4.gateway:string()
+else
+	local dr4 = sys.exec("ip r s t olsr-default")
+	if dr4 then
+		defroutev4 = { }
+		defroutev4.dest, defroutev4.gateway, defroutev4.device, defroutev4.metric = dr4:match("^(%w+) via (%d+.%d+.%d+.%d+) dev (%w+) +metric (%d+)$
+	end
+end
+
+
 -%>
 
 <%+header%>
@@ -283,9 +295,9 @@ local defroutev6 = sys.net.defaultroute6()
 	<% if defroutev4 then %>
 
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
-							<td class="cbi-value-field" id="v4dst"><%=defroutev4.dest:string()%></td>
+							<td class="cbi-value-field" id="v4dst"><%=defroutev4.dest%></td>
 							<td class="cbi-value-field" id="v4dev"><%=defroutev4.device%></td>
-							<td class="cbi-value-field" id="v4gw"><%=defroutev4.gateway:string()%></td>
+							<td class="cbi-value-field" id="v4gw"><%=defroutev4.gateway%></td>
 							<td class="cbi-value-field" id="v4metr"><%=defroutev4.metric%></td>
 						</tr>
 
