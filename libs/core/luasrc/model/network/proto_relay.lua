@@ -41,7 +41,7 @@ function proto.is_installed(self)
 end
 
 function proto.is_floating(self)
-	return false
+	return true
 end
 
 function proto.is_virtual(self)
