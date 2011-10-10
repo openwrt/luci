@@ -20,7 +20,10 @@
 
 <ul style="margin:0; list-style-type:none; text-align:left">
 	<% for _, net in ipairs(networks) do
-	       if net:name() ~= "loopback" and net:name() ~= self.exclude then %>
+	       if (net:name() ~= "loopback") and
+		      (net:name() ~= self.exclude) and
+		      (not self.novirtual or not net:is_virtual())
+		   then %>
 	<li style="padding:0.25em 0">
 		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
 			attr("type", self.widget or "radio") ..
