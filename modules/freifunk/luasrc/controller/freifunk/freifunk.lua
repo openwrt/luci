@@ -40,10 +40,10 @@ function index()
 	page.order    = 10
 	page.indexignore = true
 
-	page          = node("freifunk", "index", "contact")
+	page          = node("freifunk", "contact")
 	page.target   = template("freifunk/contact")
 	page.title    = _("Contact")
-	page.order    = 10
+	page.order    = 15
 
 	page          = node("freifunk", "status")
 	page.target   = template("freifunk/public_status")
