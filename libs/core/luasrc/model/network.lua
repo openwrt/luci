@@ -773,7 +773,7 @@ function protocol.is_floating(self)
 end
 
 function protocol.is_empty(self)
-	if self:is_virtual() then
+	if self:is_floating() then
 		return false
 	else
 		local rv = true
@@ -837,12 +837,12 @@ function protocol.get_interface(self)
 	else
 		local ifn = nil
 		local num = { }
-		for ifn in utl.imatch(_uci_state:get("network", self.sid, "ifname")) do
+		for ifn in utl.imatch(_uci_real:get("network", self.sid, "ifname")) do
 			ifn = ifn:match("^[^:/]+")
 			return ifn and interface(ifn, self)
 		end
 		ifn = nil
-		_uci_state:foreach("wireless", "wifi-iface",
+		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
