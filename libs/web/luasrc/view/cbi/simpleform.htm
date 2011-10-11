@@ -16,7 +16,7 @@
 <%- end %>
 <%- if self.errmessage then %>
 	<div class="error"><%=self.errmessage%></div>
-<%- end %>	
+<%- end %>
 <% if not self.embedded then %>
 	<div>
 <%-
@@ -28,6 +28,11 @@
 		end
 	end
 %>
+<% if redirect then %>
+	<div style="float:left">
+		<input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" />
+	</div>
+<% end %>
 <%- if self.flow and self.flow.skip then %>
 	<input class="cbi-button cbi-button-skip" type="submit" name="cbi.skip" value="<%:Skip%>" />
 <% end %>
