@@ -22,18 +22,6 @@ arg[1] = arg[1] or ""
 
 local has_dnsmasq  = fs.access("/etc/config/dhcp")
 local has_firewall = fs.access("/etc/config/firewall")
-local has_radvd    = fs.access("/etc/config/radvd")
-
-local has_3g     = fs.access("/usr/bin/gcom")
-local has_pptp   = fs.access("/usr/sbin/pptp")
-local has_pppd   = fs.access("/usr/sbin/pppd")
-local has_pppoe  = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
-local has_pppoa  = fs.glob("/usr/lib/pppd/*/pppoatm.so")()
-local has_ipv6   = fs.access("/proc/net/ipv6_route")
-local has_6in4   = fs.access("/lib/network/6in4.sh")
-local has_6to4   = fs.access("/lib/network/6to4.sh")
-local has_relay  = fs.access("/lib/network/relay.sh")
-local has_ahcp   = fs.access("/lib/network/ahcp.sh")
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("wireless")
@@ -42,20 +30,116 @@ if has_firewall then
 	m:chain("firewall")
 end
 
-if has_radvd then
-	m:chain("radvd")
-end
-
 nw.init(m.uci)
 fw.init(m.uci)
 
 
 local net = nw:get_network(arg[1])
 
+local function backup_ifnames(is_bridge)
+	if not net:is_floating() and not m:get(net:name(), "_orig_ifname") then
+		local ifcs = net:get_interfaces() or { net:get_interface() }
+		if ifcs then
+			local _, ifn
+			local ifns = { }
+			for _, ifn in ipairs(ifcs) do
+				ifns[#ifns+1] = ifn:name()
+			end
+			if #ifns > 0 then
+				m:set(net:name(), "_orig_ifname", table.concat(ifns, " "))
+				m:set(net:name(), "_orig_bridge", tostring(net:is_bridge()))
+			end
+		end
+	end
+end
+
+
 -- redirect to overview page if network does not exist anymore (e.g. after a revert)
 if not net then
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/network"))
 	return
+end
+
+-- protocol switch was requested, rebuild interface config and reload page
+if m:formvalue("cbid.network.%s._switch" % net:name()) then
+	-- get new protocol
+	local ptype = m:formvalue("cbid.network.%s.proto" % net:name()) or "-"
+	local proto = nw:get_protocol(ptype, net:name())
+	if proto then
+		-- backup default
+		backup_ifnames()
+
+		-- if current proto is not floating and target proto is not floating,
+		-- then attempt to retain the ifnames
+		--error(net:proto() .. " > " .. proto:proto())
+		if not net:is_floating() and not proto:is_floating() then
+			-- if old proto is a bridge and new proto not, then clip the
+			-- interface list to the first ifname only
+			if net:is_bridge() and proto:is_virtual() then
+				local _, ifn
+				local first = true
+				for _, ifn in ipairs(net:get_interfaces() or { net:get_interface() }) do
+					if first then
+						first = false
+					else
+						net:del_interface(ifn)
+					end
+				end
+				m:del(net:name(), "type")
+			end
+
+		-- if the current proto is floating, the target proto not floating,
+		-- then attempt to restore ifnames from backup
+		elseif net:is_floating() and not proto:is_floating() then
+			-- if we have backup data, then re-add all orphaned interfaces
+			-- from it and restore the bridge choice
+			local br = (m:get(net:name(), "_orig_bridge") == "true")
+			local ifn
+			local ifns = { }
+			for ifn in ut.imatch(m:get(net:name(), "_orig_ifname")) do
+				ifn = nw:get_interface(ifn)
+				if ifn and not ifn:get_network() then
+					proto:add_interface(ifn)
+					if not br then
+						break
+					end
+				end
+			end
+			if br then
+				m:set(net:name(), "type", "bridge")
+			end
+
+		-- in all other cases clear the ifnames
+		else
+			local _, ifc
+			for _, ifc in ipairs(net:get_interfaces() or { net:get_interface() }) do
+				net:del_interface(ifc)
+			end
+			m:del(net:name(), "type")
+		end
+
+		-- clear options
+		local k, v
+		for k, v in pairs(m:get(net:name())) do
+			if k:sub(1,1) ~= "." and
+			   k ~= "type" and
+			   k ~= "ifname" and
+			   k ~= "_orig_ifname" and
+			   k ~= "_orig_bridge"
+			then
+				m:del(net:name(), k)
+			end
+		end
+
+		-- set proto
+		m:set(net:name(), "proto", proto:proto())
+		m.uci:save("network")
+		m.uci:save("wireless")
+
+		-- reload page
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/network", arg[1]))
+		return
+	end
 end
 
 -- dhcp setup was requested, create section and reload page
@@ -77,87 +161,99 @@ local ifc = net:get_interface()
 s = m:section(NamedSection, arg[1], "interface", translate("Common Configuration"))
 s.addremove = false
 
-s:tab("general", translate("General Setup"))
-if has_ipv6  then s:tab("ipv6", translate("IPv6 Setup")) end
-if has_pppd  then s:tab("ppp", translate("PPP Settings")) end
-if has_pppoa then s:tab("atm", translate("ATM Settings")) end
-if has_6in4 or has_6to4 then s:tab("tunnel", translate("Tunnel Settings")) end
-if has_relay then s:tab("relay", translate("Relay Settings")) end
-if has_ahcp then s:tab("ahcp", translate("AHCP Settings")) end
+s:tab("general",  translate("General Setup"))
+s:tab("advanced", translate("Advanced Settings"))
 s:tab("physical", translate("Physical Settings"))
-if has_firewall then s:tab("firewall", translate("Firewall Settings")) end
 
-st = s:taboption("general", DummyValue, "__status", translate("Status"))
-st.template = "admin_network/iface_status"
-st.network  = arg[1]
+if has_firewall then
+	s:tab("firewall", translate("Firewall Settings"))
+end
 
---[[
-back = s:taboption("general", DummyValue, "_overview", translate("Overview"))
-back.value = ""
-back.titleref = luci.dispatcher.build_url("admin", "network", "network")
-]]
+
+-- if current network is empty, print a warning
+if not net:is_floating() and net:is_empty() then
+	st = s:taboption("general", DummyValue, "__status", translate("Status"))
+	st.value = translate("There is no device assigned yet, please attach a network device in the \"Physical Settings\" tab")
+else
+	st = s:taboption("general", DummyValue, "__status", translate("Status"))
+	st.template = "admin_network/iface_status"
+	st.network  = arg[1]
+end
+
 
 p = s:taboption("general", ListValue, "proto", translate("Protocol"))
-p.override_scheme = true
-p.default = "static"
-p:value("static", translate("static"))
-p:value("dhcp", "DHCP")
-if has_pppd  then p:value("ppp",   "PPP")     end
-if has_pppoe then p:value("pppoe", "PPPoE")   end
-if has_pppoa then p:value("pppoa", "PPPoA")   end
-if has_3g    then p:value("3g",    "UMTS/3G") end
-if has_pptp  then p:value("pptp",  "PPTP")    end
-if has_6in4  then p:value("6in4",  "6in4")    end
-if has_6to4  then p:value("6to4",  "6to4")    end
-if has_relay then p:value("relay", "Relay")   end
-if has_ahcp  then p:value("ahcp",  "AHCP")    end
-p:value("none", translate("none"))
+p.default = net:proto()
 
-if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
-	p.description = translate("You need to install \"comgt\" for UMTS/GPRS, \"ppp-mod-pppoe\" for PPPoE, \"ppp-mod-pppoa\" for PPPoA or \"pptp\" for PPtP support")
+
+if not net:is_installed() then
+	p_install = s:taboption("general", Button, "_install")
+	p_install.title      = translate("Protocol support is not installed")
+	p_install.inputtitle = translate("Install package %q" % net:opkg_package())
+	p_install.inputstyle = "apply"
+	p_install:depends("proto", net:proto())
+
+	function p_install.write()
+		return luci.http.redirect(
+			luci.dispatcher.build_url("admin/system/packages") ..
+			"?submit=1&install=%s" % net:opkg_package()
+		)
+	end
 end
 
-auto = s:taboption("physical", Flag, "auto", translate("Bring up on boot"))
-auto.default = (m.uci:get("network", arg[1], "proto") == "none") and auto.disabled or auto.enabled
 
-br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
-br.enabled = "bridge"
-br.rmempty = true
-br:depends("proto", "static")
-br:depends("proto", "dhcp")
-br:depends("proto", "none")
+p_switch = s:taboption("general", Button, "_switch")
+p_switch.title      = translate("Really switch protocol?")
+p_switch.inputtitle = translate("Switch protocol")
+p_switch.inputstyle = "apply"
 
-stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
-	translate("Enables the Spanning Tree Protocol on this bridge"))
-stp:depends("type", "bridge")
-stp.rmempty = true
-
-ifname_single = s:taboption("physical", Value, "ifname_single", translate("Interface"))
-ifname_single.template = "cbi/network_ifacelist"
-ifname_single.widget = "radio"
-ifname_single.nobridges = true
-ifname_single.rmempty = false
-ifname_single.network = arg[1]
-ifname_single:depends({ type = "", proto = "static" })
-ifname_single:depends({ type = "", proto = "dhcp"   })
-ifname_single:depends({ type = "", proto = "pppoe"  })
-ifname_single:depends({ type = "", proto = "pppoa"  })
-ifname_single:depends({ type = "", proto = "ahcp"   })
-ifname_single:depends({ type = "", proto = "none"   })
-
-function ifname_single.cfgvalue(self, s)
-	-- let the template figure out the related ifaces through the network model
-	return nil
+local _, pr
+for _, pr in ipairs(nw:get_protocols()) do
+	p:value(pr:proto(), pr:get_i18n())
+	if pr:proto() ~= net:proto() then
+		p_switch:depends("proto", pr:proto())
+	end
 end
 
-function ifname_single.write(self, s, val)
-	local n = nw:get_network(s)
-	if n then
+
+auto = s:taboption("advanced", Flag, "auto", translate("Bring up on boot"))
+auto.default = (net:proto() == "none") and auto.disabled or auto.enabled
+
+
+if not net:is_virtual() then
+	br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
+	br.enabled = "bridge"
+	br.rmempty = true
+	br:depends("proto", "static")
+	br:depends("proto", "dhcp")
+	br:depends("proto", "none")
+
+	stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
+		translate("Enables the Spanning Tree Protocol on this bridge"))
+	stp:depends("type", "bridge")
+	stp.rmempty = true
+end
+
+
+if not net:is_floating() then
+	ifname_single = s:taboption("physical", Value, "ifname_single", translate("Interface"))
+	ifname_single.template = "cbi/network_ifacelist"
+	ifname_single.widget = "radio"
+	ifname_single.nobridges = true
+	ifname_single.rmempty = false
+	ifname_single.network = arg[1]
+	ifname_single:depends("type", "")
+
+	function ifname_single.cfgvalue(self, s)
+		-- let the template figure out the related ifaces through the network model
+		return nil
+	end
+
+	function ifname_single.write(self, s, val)
 		local i
 		local new_ifs = { }
 		local old_ifs = { }
 
-		for _, i in ipairs(n:get_interfaces() or { n:get_interface() }) do
+		for _, i in ipairs(net:get_interfaces() or { net:get_interface() }) do
 			old_ifs[#old_ifs+1] = i:name()
 		end
 
@@ -175,11 +271,12 @@ function ifname_single.write(self, s, val)
 
 		for i = 1, math.max(#old_ifs, #new_ifs) do
 			if old_ifs[i] ~= new_ifs[i] then
+				backup_ifnames()
 				for i = 1, #old_ifs do
-					n:del_interface(old_ifs[i])
+					net:del_interface(old_ifs[i])
 				end
 				for i = 1, #new_ifs do
-					n:add_interface(new_ifs[i])
+					net:add_interface(new_ifs[i])
 				end
 				break
 			end
@@ -188,15 +285,17 @@ function ifname_single.write(self, s, val)
 end
 
 
-ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
-ifname_multi.template = "cbi/network_ifacelist"
-ifname_multi.nobridges = true
-ifname_multi.rmempty = false
-ifname_multi.network = arg[1]
-ifname_multi.widget = "checkbox"
-ifname_multi:depends("type", "bridge")
-ifname_multi.cfgvalue = ifname_single.cfgvalue
-ifname_multi.write = ifname_single.write
+if not net:is_virtual() then
+	ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
+	ifname_multi.template = "cbi/network_ifacelist"
+	ifname_multi.nobridges = true
+	ifname_multi.rmempty = false
+	ifname_multi.network = arg[1]
+	ifname_multi.widget = "checkbox"
+	ifname_multi:depends("type", "bridge")
+	ifname_multi.cfgvalue = ifname_single.cfgvalue
+	ifname_multi.write = ifname_single.write
+end
 
 
 if has_firewall then
@@ -233,417 +332,59 @@ if has_firewall then
 	end
 end
 
-ipaddr = s:taboption("general", Value, "ipaddr", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
-ipaddr.optional = true
-ipaddr.datatype = "ip4addr"
-ipaddr:depends("proto", "static")
 
-nm = s:taboption("general", Value, "netmask", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
-nm.optional = true
-nm.datatype = "ip4addr"
-nm:depends("proto", "static")
-nm:value("255.255.255.0")
-nm:value("255.255.0.0")
-nm:value("255.0.0.0")
+function p.write() end
+function p.remove() end
+function p.validate(self, value, section)
+	if value == net:proto() then
+		if not net:is_floating() and net:is_empty() then
+			local ifn = ((br and (br:formvalue(section) == "bridge"))
+				and ifname_multi:formvalue(section)
+			     or ifname_single:formvalue(section))
 
-gw = s:taboption("general", Value, "gateway", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"))
-gw.optional = true
-gw.datatype = "ip4addr"
-gw:depends("proto", "static")
-gw:depends("proto", "dhcp")
-
-bcast = s:taboption("general", Value, "broadcast", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"))
-bcast.optional = true
-bcast.datatype = "ip4addr"
-bcast:depends("proto", "static")
-
-if has_ipv6 then
-	ip6addr = s:taboption("ipv6", Value, "ip6addr", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
-	ip6addr.optional = true
-	ip6addr.datatype = "ip6addr"
-	ip6addr:depends("proto", "static")
-	ip6addr:depends("proto", "6in4")
-
-	ip6gw = s:taboption("ipv6", Value, "ip6gw", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"))
-	ip6gw.optional = true
-	ip6gw.datatype = "ip6addr"
-	ip6gw:depends("proto", "static")
-
-
-	ra = s:taboption("ipv6", Flag, "accept_ra", translate("Accept Router Advertisements"))
-	ra.default = m.uci:get("network", arg[1], "proto") == "dhcp" and ra.enabled or ra.disabled
-	ra:depends("proto", "static")
-	ra:depends("proto", "dhcp")
-	ra:depends("proto", "none")
-
-	rs = s:taboption("ipv6", Flag, "send_rs", translate("Send Router Solicitiations"))
-	rs.default = m.uci:get("network", arg[1], "proto") ~= "dhcp" and rs.enabled or rs.disabled
-	rs:depends("proto", "static")
-	rs:depends("proto", "dhcp")
-	rs:depends("proto", "none")
-end
-
-dns = s:taboption("general", DynamicList, "dns", translate("<abbr title=\"Domain Name System\">DNS</abbr>-Server"),
-	translate("You can specify multiple DNS servers here, press enter to add a new entry. Servers entered here will override " ..
-		"automatically assigned ones."))
-
-dns.optional = true
-dns.cast = "string"
-dns.datatype = "ipaddr"
-dns:depends({ peerdns = "", proto = "static" })
-dns:depends({ peerdns = "", proto = "dhcp"   })
-dns:depends({ peerdns = "", proto = "pppoe"  })
-dns:depends({ peerdns = "", proto = "pppoa"  })
-dns:depends({ peerdns = "", proto = "none"   })
-
-mtu = s:taboption("physical", Value, "mtu", "MTU")
-mtu.optional = true
-mtu.datatype = "uinteger"
-mtu.placeholder = 1500
-mtu:depends("proto", "static")
-mtu:depends("proto", "dhcp")
-mtu:depends("proto", "pppoe")
-mtu:depends("proto", "pppoa")
-mtu:depends("proto", "6in4")
-mtu:depends("proto", "6to4")
-mtu:depends("proto", "none")
-
-srv = s:taboption("general", Value, "server", translate("<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"))
-srv:depends("proto", "pptp")
-srv.optional = false
-srv.datatype = "host"
-
-if has_6in4 then
-	peer = s:taboption("general", Value, "peeraddr", translate("Server IPv4-Address"))
-	peer.optional = false
-	peer.datatype = "ip4addr"
-	peer:depends("proto", "6in4")
-end
-
-if has_6in4 or has_6to4 then
-	ttl = s:taboption("physical", Value, "ttl", translate("TTL"))
-	ttl.default = "64"
-	ttl.optional = true
-	ttl.datatype = "uinteger"
-	ttl:depends("proto", "6in4")
-	ttl:depends("proto", "6to4")
-end
-
-if has_6to4 then
-	advi = s:taboption("general", Value, "adv_interface", translate("Advertise IPv6 on network"))
-	advi.widget = "checkbox"
-	advi.exclude = arg[1]
-	advi.default = "lan"
-	advi.template = "cbi/network_netlist"
-	advi.nocreate = true
-	advi.nobridges = true
-	advi:depends("proto", "6to4")
-
-	advn = s:taboption("general", Value, "adv_subnet", translate("Advertised network ID"), translate("Allowed range is 1 to FFFF"))
-	advn.default = "1"
-	advn:depends("proto", "6to4")
-
-	function advn.write(self, section, value)
-		value = tonumber(value, 16) or 1
-
-		if value > 65535 then value = 65535
-		elseif value < 1 then value = 1 end
-
-		Value.write(self, section, "%X" % value)
-	end
-end
-
-if has_relay then
-	rnet = s:taboption("general", DynamicList, "network", translate("Relay between networks"))
-	rnet.widget = "checkbox"
-	rnet.exclude = arg[1]
-	rnet.template = "cbi/network_netlist"
-	rnet.nocreate = true
-	rnet.nobridges = true
-	rnet:depends("proto", "relay")
-end
-
-mac = s:taboption("physical", Value, "macaddr", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-mac:depends("proto", "none")
-mac:depends("proto", "static")
-mac:depends("proto", "dhcp")
-mac.placeholder = ifc and ifc:mac()
-
-if has_3g then
-	service = s:taboption("general", ListValue, "service", translate("Service type"))
-	service:value("", translate("-- Please choose --"))
-	service:value("umts", "UMTS/GPRS")
-	service:value("cdma", "CDMA")
-	service:value("evdo", "EV-DO")
-	service:depends("proto", "3g")
-	service.rmempty = true
-
-	apn = s:taboption("general", Value, "apn", translate("Access point (APN)"))
-	apn:depends("proto", "3g")
-
-	pincode = s:taboption("general", Value, "pincode",
-	 translate("PIN code"),
-	 translate("Make sure that you provide the correct pin code here or you might lock your sim card!")
-	)
-	pincode:depends("proto", "3g")
-end
-
-if has_6in4 then
-	tunid = s:taboption("general", Value, "tunnelid", translate("HE.net Tunnel ID"))
-	tunid.optional = true
-	tunid.datatype = "uinteger"
-	tunid:depends("proto", "6in4")
-end
-
-if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp or has_6in4 then
-	user = s:taboption("general", Value, "username", translate("Username"))
-	user.rmempty = true
-	user:depends("proto", "pptp")
-	user:depends("proto", "pppoe")
-	user:depends("proto", "pppoa")
-	user:depends("proto", "ppp")
-	user:depends("proto", "3g")
-	user:depends("proto", "6in4")
-
-	pass = s:taboption("general", Value, "password", translate("Password"))
-	pass.rmempty = true
-	pass.password = true
-	pass:depends("proto", "pptp")
-	pass:depends("proto", "pppoe")
-	pass:depends("proto", "pppoa")
-	pass:depends("proto", "ppp")
-	pass:depends("proto", "3g")
-	pass:depends("proto", "6in4")
-end
-
-if has_pppd or has_pppoe or has_pppoa or has_3g or has_pptp then
-	ka = s:taboption("ppp", Value, "keepalive",
-	 translate("Keep-Alive"),
-	 translate("Number of failed connection tests to initiate automatic reconnect")
-	)
-	ka:depends("proto", "pptp")
-	ka:depends("proto", "pppoe")
-	ka:depends("proto", "pppoa")
-	ka:depends("proto", "ppp")
-	ka:depends("proto", "3g")
-
-	demand = s:taboption("ppp", Value, "demand",
-	 translate("Automatic Disconnect"),
-	 translate("Time (in seconds) after which an unused connection will be closed")
-	)
-	demand.optional = true
-	demand.datatype = "uinteger"
-	demand:depends("proto", "pptp")
-	demand:depends("proto", "pppoe")
-	demand:depends("proto", "pppoa")
-	demand:depends("proto", "ppp")
-	demand:depends("proto", "3g")
-end
-
-if has_pppoa then
-	encaps = s:taboption("atm", ListValue, "encaps", translate("PPPoA Encapsulation"))
-	encaps:depends("proto", "pppoa")
-	encaps:value("vc", "VC-Mux")
-	encaps:value("llc", "LLC")
-
-	atmdev = s:taboption("atm", Value, "atmdev", translate("ATM device number"))
-	atmdev:depends("proto", "pppoa")
-	atmdev.default = "0"
-	atmdev.datatype = "uinteger"
-
-	vci = s:taboption("atm", Value, "vci", translate("ATM Virtual Channel Identifier (VCI)"))
-	vci:depends("proto", "pppoa")
-	vci.default = "35"
-	vci.datatype = "uinteger"
-
-	vpi = s:taboption("atm", Value, "vpi", translate("ATM Virtual Path Identifier (VPI)"))
-	vpi:depends("proto", "pppoa")
-	vpi.default = "8"
-	vpi.datatype = "uinteger"
-end
-
-if has_pptp or has_pppd or has_pppoe or has_pppoa or has_3g then
-	device = s:taboption("general", Value, "device",
-	 translate("Modem device"),
-	 translate("The device node of your modem, e.g. /dev/ttyUSB0")
-	)
-	device:depends("proto", "ppp")
-	device:depends("proto", "3g")
-
-	defaultroute = s:taboption("ppp", Flag, "defaultroute",
-	 translate("Replace default route"),
-	 translate("Let pppd replace the current default route to use the PPP interface after successful connect")
-	)
-	defaultroute:depends("proto", "ppp")
-	defaultroute:depends("proto", "pppoa")
-	defaultroute:depends("proto", "pppoe")
-	defaultroute:depends("proto", "pptp")
-	defaultroute:depends("proto", "3g")
-	defaultroute.default = defaultroute.enabled
-
-	peerdns = s:taboption("ppp", Flag, "peerdns",
-	 translate("Use peer DNS"),
-	 translate("Configure the local DNS server to use the name servers adverticed by the PPP peer")
-	)
-	peerdns:depends("proto", "ppp")
-	peerdns:depends("proto", "pppoa")
-	peerdns:depends("proto", "pppoe")
-	peerdns:depends("proto", "pptp")
-	peerdns:depends("proto", "3g")
-	peerdns.default = peerdns.enabled
-
-	if has_ipv6 then
-		ipv6 = s:taboption("ppp", Flag, "ipv6", translate("Enable IPv6 on PPP link") )
-		ipv6:depends("proto", "ppp")
-		ipv6:depends("proto", "pppoa")
-		ipv6:depends("proto", "pppoe")
-		ipv6:depends("proto", "pptp")
-		ipv6:depends("proto", "3g")
-	end
-
-	connect = s:taboption("ppp", Value, "connect",
-	 translate("Connect script"),
-	 translate("Let pppd run this script after establishing the PPP link")
-	)
-	connect:depends("proto", "ppp")
-	connect:depends("proto", "pppoe")
-	connect:depends("proto", "pppoa")
-	connect:depends("proto", "pptp")
-	connect:depends("proto", "3g")
-
-	disconnect = s:taboption("ppp", Value, "disconnect",
-	 translate("Disconnect script"),
-	 translate("Let pppd run this script before tearing down the PPP link")
-	)
-	disconnect:depends("proto", "ppp")
-	disconnect:depends("proto", "pppoe")
-	disconnect:depends("proto", "pppoa")
-	disconnect:depends("proto", "pptp")
-	disconnect:depends("proto", "3g")
-
-	pppd_options = s:taboption("ppp", Value, "pppd_options",
-	 translate("Additional pppd options"),
-	 translate("Specify additional command line arguments for pppd here")
-	)
-	pppd_options:depends("proto", "ppp")
-	pppd_options:depends("proto", "pppoa")
-	pppd_options:depends("proto", "pppoe")
-	pppd_options:depends("proto", "pptp")
-	pppd_options:depends("proto", "3g")
-
-	maxwait = s:taboption("ppp", Value, "maxwait",
-	 translate("Setup wait time"),
-	 translate("Seconds to wait for the modem to become ready before attempting to connect")
-	)
-	maxwait:depends("proto", "3g")
-	maxwait.default  = "0"
-	maxwait.optional = true
-	maxwait.datatype = "uinteger"
-end
-
-if has_relay then
-	fb = s:taboption("relay", Flag, "forward_bcast", translate("Forward broadcasts"))
-	fb.default = fb.enabled
-	fb:depends("proto", "relay")
-
-	fd = s:taboption("relay", Flag, "forward_dhcp", translate("Forward DHCP"))
-	fd.default = fd.enabled
-	fd:depends("proto", "relay")
-
-	gw = s:taboption("relay", Value, "relay_gateway", translate("Override Gateway"))
-	gw.optional    = true
-	gw.placeholder = "0.0.0.0"
-	gw.datatype    = "ip4addr"
-	gw:depends("proto", "relay")
-	function gw.cfgvalue(self, section)
-		return m.uci:get("network", section, "gateway")
-	end
-	function gw.write(self, section, value)
-		return m.uci:set("network", section, "gateway", value)
-	end
-	function gw.delete(self, section)
-		return m.uci:delete("network", section, "gateway")
-	end
-
-	expiry = s:taboption("relay", Value, "expiry", translate("Host expiry timeout"))
-	expiry.optional    = true
-	expiry.placeholder = 30
-	expiry.datatype    = "uinteger"
-	expiry:depends("proto", "relay")
-
-	retry = s:taboption("relay", Value, "retry", translate("ARP ping retries"))
-	retry.optional     = true
-	retry.placeholder  = 5
-	retry.datatype     = "uinteger"
-	retry:depends("proto", "relay")
-
-	tableid = s:taboption("relay", Value, "table", translate("Routing table ID"))
-	tableid.optional     = true
-	tableid.placeholder  = 16800
-	tableid.datatype     = "uinteger"
-	tableid:depends("proto", "relay")
-end
-
-if has_ahcp then
-	mca = s:taboption("ahcp", Value, "multicast_address", translate("Multicast address"))
-	mca.optional    = true
-	mca.placeholder = "ff02::cca6:c0f9:e182:5359"
-	mca.datatype    = "ip6addr"
-	mca:depends("proto", "ahcp")
-
-	port = s:taboption("ahcp", Value, "port", translate("Port"))
-	port.optional    = true
-	port.placeholder = 5359
-	port.datatype    = "port"
-	port:depends("proto", "ahcp")
-
-	fam = s:taboption("ahcp", ListValue, "_family", translate("Protocol family"))
-	fam:value("", translate("IPv4 and IPv6"))
-	fam:value("ipv4", translate("IPv4 only"))
-	fam:value("ipv6", translate("IPv6 only"))
-	fam:depends("proto", "ahcp")
-
-	function fam.cfgvalue(self, section)
-		local v4 = m.uci:get_bool("network", section, "ipv4_only")
-		local v6 = m.uci:get_bool("network", section, "ipv6_only")
-		if v4 then
-			return "ipv4"
-		elseif v6 then
-			return "ipv6"
-		end
-		return ""
-	end
-
-	function fam.write(self, section, value)
-		if value == "ipv4" then
-			m.uci:set("network", section, "ipv4_only", "true")
-			m.uci:delete("network", section, "ipv6_only")
-		elseif value == "ipv6" then
-			m.uci:set("network", section, "ipv6_only", "true")
-			m.uci:delete("network", section, "ipv4_only")
+			for ifn in ut.imatch(ifn) do
+				return value
+			end
+			return nil, translate("The selected protocol needs a device assigned")
 		end
 	end
-
-	function fam.remove(self, section)
-		m.uci:delete("network", section, "ipv4_only")
-		m.uci:delete("network", section, "ipv6_only")
-	end
-
-	nodns = s:taboption("ahcp", Flag, "no_dns", translate("Disable DNS setup"))
-	nodns.optional = true
-	nodns.enabled  = "true"
-	nodns.disabled = "false"
-	nodns.default  = nodns.disabled
-	nodns:depends("proto", "ahcp")
-
-	ltime = s:taboption("ahcp", Value, "lease_time", translate("Lease validity time"))
-	ltime.optional    = true
-	ltime.placeholder = 3666
-	ltime.datatype    = "uinteger"
-	ltime:depends("proto", "ahcp")
+	return value
 end
 
-if net:proto() ~= "relay" then
+
+local form, ferr = loadfile(
+	ut.libpath() .. "/model/cbi/admin_network/proto_%s.lua" % net:proto()
+)
+
+if not form then
+	s:taboption("general", DummyValue, "_error",
+		translate("Missing protocol extension for proto %q" % net:proto())
+	).value = ferr
+else
+	setfenv(form, getfenv(1))(m, s, net)
+end
+
+
+local _, field
+for _, field in ipairs(s.children) do
+	if field ~= st and field ~= p and field ~= p_install and field ~= p_switch then
+		if next(field.deps) then
+			local _, dep
+			for _, dep in ipairs(field.deps) do
+				dep.deps.proto = net:proto()
+			end
+		else
+			field:depends("proto", net:proto())
+		end
+	end
+end
+
+
+--
+-- Display IP Aliases
+--
+
+if not net:is_floating() then
 	s2 = m:section(TypedSection, "alias", translate("IP-Aliases"))
 	s2.addremove = true
 
@@ -786,5 +527,6 @@ if has_dnsmasq and net:proto() == "static" then
 
 	end
 end
+
 
 return m, m2
