@@ -109,7 +109,10 @@ m.uci:foreach("network", "switch",
 
 
 		-- VLAN table
-		s = m:section(TypedSection, "switch_vlan", translatef("VLANs on %q", switch_name))
+		s = m:section(TypedSection, "switch_vlan",
+			switch_title and translatef("VLANs on %q (%s)", switch_name, switch_title)
+						  or translatef("VLANs on %q", switch_name))
+
 		s.template = "cbi/tblsection"
 		s.addremove = true
 		s.anonymous = true
