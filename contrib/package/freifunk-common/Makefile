@@ -15,7 +15,6 @@ define Package/freifunk-common
   CATEGORY:=LuCI
   SUBMENU:=Freifunk
   TITLE:=Freifunk common files
-  DEPENDS:=freifunk-common
 endef
 
 define Package/freifunk-common/description
