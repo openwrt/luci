@@ -187,6 +187,38 @@ $(eval $(call library,sys,LuCI Linux/POSIX system library))
 $(eval $(call library,web,MVC Webframework,+luci-lib-sys +luci-lib-nixio +luci-lib-core +luci-sgi-cgi +luci-lib-lmo))
 
 
+### Protocols ###
+define protocol
+  define Package/luci-proto-$(1)
+    SECTION:=luci
+    CATEGORY:=LuCI
+    TITLE:=LuCI - Lua Configuration Interface
+    URL:=http://luci.subsignal.org/
+    MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
+    SUBMENU:=Protocols
+    TITLE:=$(if $(2),$(2),LuCI $(1) protocol support)
+    $(if $(3),DEPENDS:=+luci-proto-core $(3))
+  endef
+
+  define Package/luci-proto-$(1)/install
+	$(call Package/luci/install/template,$$(1),protocols/$(1))
+  endef
+
+  ifneq ($(CONFIG_PACKAGE_luci-proto-$(1)),)
+    LUCI_SELECTED_MODULES+=protocols/$(1)
+  endif
+
+  LUCI_BUILD_PACKAGES += luci-proto-$(1)
+endef
+
+$(eval $(call protocol,core,Support for static/dhcp/none))
+$(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA,+PACKAGE_luci-proto-ppp:ppp-mod-pppoe +PACKAGE_luci-proto-ppp:ppp-mod-pppoa))
+$(eval $(call protocol,pptp,Support for PPtP,+PACKAGE_luci-proto-pptp:pptp))
+$(eval $(call protocol,6x4,Support for 6in4/6to4,+PACKAGE_luci-proto-6x4:6in4 +PACKAGE_luci-proto-6x4:6to4))
+$(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
+$(eval $(call protocol,relay,Support for relayd pseudo bridges,+PACKAGE_luci-proto-relay:relayd))
+
+
 ### Community Packages ###
 define Package/luci-mod-freifunk-community
   SECTION:=luci
@@ -246,7 +278,7 @@ define Package/luci-mod-admin-core/extra-install
 	touch $(1)/etc/init.d/luci_fixtime || true
 endef
 
-$(eval $(call module,admin-core,Web UI Core module,+luci-lib-web +luci-i18n-english))
+$(eval $(call module,admin-core,Web UI Core module,+luci-lib-web +luci-proto-core +luci-proto-ppp +luci-i18n-english))
 $(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendly,+luci-mod-admin-core @BROKEN))
 $(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-lib-ipkg))
 $(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-lib-json))
@@ -264,7 +296,7 @@ define application
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
     SUBMENU:=Applications
     TITLE:=$(if $(2),$(2),LuCI $(1) application)
-	DEPENDS:=+luci-mod-admin-core $(3)
+	DEPENDS:=$(3)
   endef
 
   define Package/luci-app-$(1)/install
@@ -292,8 +324,7 @@ define Package/luci-app-diag-devinfo/conffiles
 endef
 
 
-$(eval $(call application,ffwizard,Freifunk configuration wizard,\
-	+luci-mod-freifunk))
+$(eval $(call application,ffwizard,Freifunk configuration wizard))
 
 $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))
@@ -302,19 +333,19 @@ $(eval $(call application,firewall,Firmware and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
 $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
-        +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting +luci-mod-freifunk))
+        +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting))
 
 $(eval $(call application,meshwizard, Shellscript based wizard to setup mesh networks,\
-        +meshwizard +luci-mod-freifunk))
+        +PACKAGE_luci-app-freifunk-meshwizard:meshwizard))
 
 $(eval $(call application,olsr,OLSR configuration and status module,\
-	+luci-mod-admin-full +PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
+	+PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
 
 $(eval $(call application,olsr-viz,OLSR Visualisation,\
-	+PACKAGE_luci-app-olsr-viz:luci-app-olsr +PACKAGE_luci-app-olsr-viz:olsrd-mod-txtinfo))
+	luci-app-olsr +PACKAGE_luci-app-olsr-viz:olsrd-mod-txtinfo))
 
 $(eval $(call application,olsr-services,Show services announced with the nameservice plugin,\
-	+PACKAGE_luci-app-olsr-services:olsrd-mod-nameservice +luci-mod-freifunk +PACKAGE_luci-app-olsr-services:luci-app-olsr))
+	luci-app-olsr +PACKAGE_luci-app-olsr-services:olsrd-mod-nameservice))
 
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
@@ -325,7 +356,7 @@ $(eval $(call application,splash,Freifunk DHCP-Splash application,\
 	+PACKAGE_luci-app-splash:iptables-mod-ipopt))
 
 $(eval $(call application,statistics,LuCI Statistics Application,\
-	+luci-mod-admin-full +PACKAGE_luci-app-statistics:collectd \
+	+PACKAGE_luci-app-statistics:collectd \
 	+PACKAGE_luci-app-statistics:rrdtool1 \
 	+PACKAGE_luci-app-statistics:collectd-mod-rrdtool \
 	+PACKAGE_luci-app-statistics:collectd-mod-wireless \
@@ -347,7 +378,7 @@ $(eval $(call application,diag-devinfo,LuCI Diagnostics Tools (Device Info),\
 $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 
 $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),\
-	+luci-app-voice-core +luci-app-diag-devinfo))
+	luci-app-diag-devinfo))
 
 $(eval $(call application,upnp,Universal Plug & Play configuration module,\
 	+PACKAGE_luci-app-upnp:miniupnpd))
@@ -359,22 +390,22 @@ $(eval $(call application,ddns,Dynamic DNS configuration module,\
 	+PACKAGE_luci-app-ddns:ddns-scripts))
 
 $(eval $(call application,samba,Network Shares - Samba SMB/CIFS module,\
-	+luci-mod-admin-full +PACKAGE_luci-app-samba:samba3))
+	+PACKAGE_luci-app-samba:samba3))
 
 $(eval $(call application,mmc-over-gpio,MMC-over-GPIO configuration module,\
-	+luci-mod-admin-full +PACKAGE_luci-app-mmc-over-gpio:kmod-mmc-over-gpio))
+	+PACKAGE_luci-app-mmc-over-gpio:kmod-mmc-over-gpio))
 
 $(eval $(call application,p910nd,p910nd - Printer server module,\
-	+luci-mod-admin-full +PACKAGE_luci-app-p910nd:p910nd))
+	+PACKAGE_luci-app-p910nd:p910nd))
 
 $(eval $(call application,ushare,uShare - UPnP A/V & DLNA Media Server,\
-	+luci-mod-admin-full +PACKAGE_luci-app-ushare:ushare))
+	+PACKAGE_luci-app-ushare:ushare))
 
 $(eval $(call application,hd-idle,Hard Disk Idle Spin-Down module,\
-	+luci-mod-admin-full +PACKAGE_luci-app-hd-idle:hd-idle))
+	+PACKAGE_luci-app-hd-idle:hd-idle))
 
 $(eval $(call application,tinyproxy,Tinyproxy - HTTP(S)-Proxy configuration,\
-	+luci-mod-admin-full +PACKAGE_luci-app-tinyproxy:tinyproxy))
+	+PACKAGE_luci-app-tinyproxy:tinyproxy))
 
 $(eval $(call application,polipo,LuCI Support for the Polipo Proxy,\
 	+PACKAGE_luci-app-polipo:polipo))
@@ -396,10 +427,10 @@ $(eval $(call application,vnstat,LuCI Support for VnStat,\
     +PACKAGE_luci-app-vnstat:vnstati))
 
 $(eval $(call application,radvd,LuCI Support for Radvd,\
-	+luci-mod-admin-full +PACKAGE_luci-app-radvd:radvd))
+	+PACKAGE_luci-app-radvd:radvd))
 
 $(eval $(call application,ahcp,LuCI Support for AHCPd,\
-	+luci-mod-admin-full +PACKAGE_luci-app-ahcp:ahcpd))
+	+PACKAGE_luci-app-ahcp:ahcpd))
 
 $(eval $(call application,lqtapifoss,Lantiq voip))
 
