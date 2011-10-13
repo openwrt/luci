@@ -212,7 +212,7 @@ define protocol
 endef
 
 $(eval $(call protocol,core,Support for static/dhcp/none))
-$(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA,+PACKAGE_luci-proto-ppp:ppp-mod-pppoe +PACKAGE_luci-proto-ppp:ppp-mod-pppoa))
+$(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA,+PACKAGE_luci-proto-ppp:ppp-mod-pppoe))
 $(eval $(call protocol,pptp,Support for PPtP,+PACKAGE_luci-proto-pptp:pptp))
 $(eval $(call protocol,6x4,Support for 6in4/6to4,+PACKAGE_luci-proto-6x4:6in4 +PACKAGE_luci-proto-6x4:6to4))
 $(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
