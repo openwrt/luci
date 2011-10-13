@@ -54,7 +54,7 @@ peerdns.default = peerdns.enabled
 
 
 dns = section:taboption("advanced", DynamicList, "dns",
-	translate("Use DNS servers"))
+	translate("Use custom DNS servers"))
 
 dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
