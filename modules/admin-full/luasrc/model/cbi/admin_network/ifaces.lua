@@ -170,15 +170,23 @@ if has_firewall then
 end
 
 
--- if current network is empty, print a warning
-if not net:is_floating() and net:is_empty() then
-	st = s:taboption("general", DummyValue, "__status", translate("Status"))
-	st.value = translate("There is no device assigned yet, please attach a network device in the \"Physical Settings\" tab")
-else
-	st = s:taboption("general", DummyValue, "__status", translate("Status"))
-	st.template = "admin_network/iface_status"
-	st.network  = arg[1]
+st = s:taboption("general", DummyValue, "__status", translate("Status"))
+
+local function set_status()
+	-- if current network is empty, print a warning
+	if not net:is_floating() and net:is_empty() then
+		st.template = "cbi/dvalue"
+		st.network  = nil
+		st.value    = translate("There is no device assigned yet, please attach a network device in the \"Physical Settings\" tab")
+	else
+		st.template = "admin_network/iface_status"
+		st.network  = arg[1]
+		st.value    = nil
+	end
 end
+
+m.on_init = set_status
+m.on_after_save = set_status
 
 
 p = s:taboption("general", ListValue, "proto", translate("Protocol"))
