@@ -23,7 +23,7 @@ local pairs = pairs
 local error = error
 local table = table
 
-local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite --autoremove"
+local ipkg = "opkg --force-removal-of-dependent-packages --force-overwrite"
 local icfg = "/etc/opkg.conf"
 
 --- LuCI OPKG call abstraction library
@@ -229,4 +229,3 @@ function overlay_root()
 
 	return od
 end
-
