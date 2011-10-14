@@ -21,7 +21,7 @@ local knownParams = {
 	--	Widget			Name							Default(s)	Option(s)	Description 
 	--
 
-	{ "service", {
+	{ "Service", {
 		-- initialisation and daemon options
 		{ ListValue,	"verb",							{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }, translate("Set output verbosity") },
 		{ Flag,			"mlock",						0, translate("Disable Paging") },
@@ -62,7 +62,7 @@ local knownParams = {
 		{ ListValue,	"script_security",				{ 0, 1, 2, 3 },	{mode="server" }, translate("Policy level over usage of external programs and scripts") },
 	} },
 
-	{ "networking", {
+	{ "Networking", {
 		-- socket config
 		{ ListValue,	"mode",							{ "p2p", "server" }, translate("Major mode") },
 		{ Value,		"local",						"0.0.0.0", translate("Local host name or ip address") },
@@ -120,7 +120,7 @@ local knownParams = {
 		{ ListValue,	"topology",						{ "net30", "p2p", "subnet" },	{dev_type="tun" }, translate("'net30', 'p2p', or 'subnet'") },
 	} },
 
-	{ "vpn", {
+	{ "VPN", {
 		{ Value,		"server",						"10.200.200.0 255.255.255.0",	{ server_mode="1" }, translate("Configure server mode") },
 		{ Value,		"server_bridge",				"10.200.200.1 255.255.255.0 10.200.200.200 10.200.200.250",	{ server_mode="1" }, translate("Configure server bridge") },
 		{ DynamicList,	"push",							{ "redirect-gateway", "comp-lzo" },	{ server_mode="1" }, translate("Push options to peer") },
@@ -163,7 +163,7 @@ local knownParams = {
 		{ ListValue,	"redirect_gateway",				{ "", "local", "def1", "local def1" },	{ client="1" }, translate("Automatically redirect default route") }, -- client
 	} },
 
-	{ "cryptography", {
+	{ "Cryptography", {
 		{ Value,		"secret",						"/etc/openvpn/secret.key 1", translate("Enable Static Key encryption mode (non-TLS)") },
 		{ Value,		"auth",							"SHA1", translate("HMAC authentication for packets") }, -- parse
 		{ Value,		"cipher",						"BF-CBC", translate("Encryption cipher for packets") }, -- parse
@@ -211,7 +211,7 @@ local p = m:section( SimpleSection )
 p.template = "openvpn/pageswitch"
 p.mode     = "advanced"
 p.instance = arg[1]
-p.category = arg[2] or "service"
+p.category = arg[2] or "Service"
 
 for _, c in ipairs(knownParams) do
 	cts[#cts+1] = c[1]
@@ -223,11 +223,10 @@ p.categories = cts
 
 local s = m:section(
 	NamedSection, arg[1], "openvpn",
-	translate("openvpn_%s" % arg[2]),
-	translate("openvpn_%s_desc" % arg[2])
+	translate("%s" % arg[2])
 )
 
-s.title     = translate("openvpn_%s" % arg[2])
+s.title     = translate("%s" % arg[2])
 s.addremove = false
 s.anonymous = true
 

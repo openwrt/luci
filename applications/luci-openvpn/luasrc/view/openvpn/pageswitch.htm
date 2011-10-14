@@ -11,6 +11,12 @@ You may obtain a copy of the License at
 
 $Id$
 
+These strings need to be here to be included in the translation template
+translate("Service")
+translate("Networking")
+translate("VPN")
+translate("Cryptography")
+
 -%>
 
 <fieldset class="cbi-section">
@@ -20,7 +26,7 @@ $Id$
 	</legend>
 
 	<% if self.mode == "basic" then %>
-		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "advanced", self.instance)%>"><%:Switch to advanced configuration »%></a>
+		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "advanced", self.instance, "Service")%>"><%:Switch to advanced configuration »%></a>
 	<% else %>
 		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "basic", self.instance)%>"><%:« Switch to basic configuration%></a>
 		<hr style="margin:0.5em 0" />
