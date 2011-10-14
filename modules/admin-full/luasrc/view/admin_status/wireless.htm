@@ -213,7 +213,7 @@ $Id$
 
 							data_rssi.push(data[i][RSSI] - noise_floor);
 							data_noise.push(data[i][NOISE] - noise_floor);
-							data_rate.push(Math.floor(data[i][RATE] / 100));
+							data_rate.push(Math.floor(data[i][RATE] / 1000));
 						}
 
 						/* cut off outdated entries */

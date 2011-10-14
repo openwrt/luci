@@ -188,11 +188,14 @@ $Id$
 								continue;
 
 							/* normalize difference against time interval */
-							var time_delta = data[i][TIME] - data[i-1][TIME];
-							if (time_delta)
+							if (i > 0)
 							{
-								data_rx.push((data[i][RXB] - data[i-1][RXB]) / time_delta);
-								data_tx.push((data[i][TXB] - data[i-1][TXB]) / time_delta);
+								var time_delta = data[i][TIME] - data[i-1][TIME];
+								if (time_delta)
+							{
+									data_rx.push((data[i][RXB] - data[i-1][RXB]) / time_delta);
+									data_tx.push((data[i][TXB] - data[i-1][TXB]) / time_delta);
+								}
 							}
 						}
 
