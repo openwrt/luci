@@ -141,7 +141,7 @@ $Id$
 				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 3);
 
 				/* render datasets, start update interval */
-				XHR.poll(3, '<%=build_url("admin/status/connections_status")%>', null,
+				XHR.poll(3, '<%=build_url("admin/status/realtime/connections_status")%>', null,
 					function(x, json)
 					{
 						var conn = json.connections;

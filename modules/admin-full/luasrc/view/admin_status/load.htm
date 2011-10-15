@@ -138,7 +138,7 @@ $Id$
 				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 3);
 
 				/* render datasets, start update interval */
-				XHR.poll(3, '<%=build_url("admin/status/load_status")%>', null,
+				XHR.poll(3, '<%=build_url("admin/status/realtime/load_status")%>', null,
 					function(x, data)
 					{
 						var data_max   = 0;
