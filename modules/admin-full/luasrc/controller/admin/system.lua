@@ -83,10 +83,13 @@ function action_packages()
 	end
 
 	if uinst then
-		install[uinst], out, err = ipkg.install(uinst)
-		stdout[#stdout+1] = out
-		stderr[#stderr+1] = err
-		changes = true
+		local pkg
+		for pkg in luci.util.imatch(uinst) do
+			install[uinst], out, err = ipkg.install(pkg)
+			stdout[#stdout+1] = out
+			stderr[#stderr+1] = err
+			changes = true
+		end
 	end
 
 	-- Remove packets
