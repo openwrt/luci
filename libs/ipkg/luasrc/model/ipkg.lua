@@ -158,7 +158,9 @@ end
 
 -- List helper
 function _list(action, pat, cb)
-	local fd = io.popen(ipkg .. " " .. action .. (pat and " '*" .. pat:gsub("'", "") .. "*'" or ""))
+	local fd = io.popen(ipkg .. " " .. action ..
+		(pat and (" '%s'" % pat:gsub("'", "")) or "")) -- .. " | grep -vE '^ '")
+
 	if fd then
 		local name, version, desc
 		while true do
