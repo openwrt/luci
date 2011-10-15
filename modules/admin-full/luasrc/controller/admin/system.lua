@@ -52,6 +52,13 @@ function action_packages()
 	local stderr  = { "" }
 	local out, err
 
+	-- Display
+	local display = luci.http.formvalue("display") or "installed"
+
+	-- Letter
+	local letter = string.byte(luci.http.formvalue("letter") or "A", 1)
+	letter = (letter == 35 or (letter >= 65 and letter <= 90)) and letter or 65
+
 	-- Search query
 	local query = luci.http.formvalue("query")
 	query = (query ~= '') and query or nil
@@ -111,6 +118,8 @@ function action_packages()
 
 
 	luci.template.render("admin_system/packages", {
+		display = display,
+		letter  = letter,
 		query   = query,
 		install = install,
 		remove  = remove,

@@ -34,6 +34,19 @@ local free_byte = space_free * fstat.frsize
 
 local filter = { }
 
+
+local querypat
+if query and #query > 0 then
+	querypat = "*%s*" % query
+end
+
+local letterpat
+if letter == 35 then
+	letterpat = "[^a-zA-Z]*"
+else
+	letterpat = string.char(91, letter, letter + 32, 93, 42) -- '[' 'A' 'a' ']' '*'
+end
+
 -%>
 <%+header%>
 <h2><a id="content" name="content"><%:System%> - <%:Software%></a></h2>
@@ -55,9 +68,10 @@ local filter = { }
 					</div>
 				</div>
 
-				<div class="cbi-value">
+				<div class="cbi-value cbi-value-last">
 					<label class="cbi-value-title"><%:Filter%>:</label>
 					<div class="cbi-value-field">
+						<input type="hidden" name="display" value="<%=pcdata(display)%>" />
 						<input type="text" name="query" size="20" value="<%=pcdata(query)%>" />
 						<input type="submit" class="cbi-button cbi-input-find" name="search" value="<%:Find package%>" />
 					</div>
@@ -73,6 +87,12 @@ local filter = { }
 				<div style="background-color:#F08080; border-right:1px solid #000000; height:100%; width:<%=used_perc%>%">&#160;</div>
 			</div>
 
+			<% if querypat then %>
+				<br /><hr /><br />
+				<%:Displaying only packages containing%> <strong>"<%=pcdata(query)%>"</strong>
+				<input type="button" onclick="location.href='?display=<%=pcdata(display)%>'" href="#" class="cbi-button cbi-button-reset" style="margin-left:3em" value="Reset" />
+			<% end %>
+
 			<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
 				<br /><hr /><br />
 				<% if #stdout > 0 then %><pre><%=pcdata(stdout)%></pre><% end %>
@@ -81,62 +101,75 @@ local filter = { }
 		</fieldset>
 		<br />
 
-		<h3><%:Installed packages%><% if query then %> (<%=pcdata(query)%>)<% end %></h3>
-
-		<fieldset class="cbi-section">
-			<table class="cbi-section-table" style="width:100%">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
-				</tr>
-				<% local empty = true; luci.model.ipkg.list_installed(query, function(n, v, d) empty = false; filter[n] = true %>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:Remove%></a></td>
-					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
-					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
-				</tr>
-				<% end) %>
-				<% if empty then %>
-				<tr class="cbi-section-table-row">
-					<td style="text-align:left">&#160;</td>
-					<td style="text-align:left"><em><%:none%></em></td>
-					<td style="text-align:left"><em><%:none%></em></td>
-				</tr>
-				<% end %>
-			</table>
-		</fieldset>
-		<br />
-
-
-		<h3><%:Available packages%><% if query then %> (<%=pcdata(query)%>)<% end %></h3>
-
-		<fieldset class="cbi-section">
-			<table class="cbi-section-table" style="width:100%">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
-				</tr>
-				<% local empty = true; luci.model.ipkg.list_all(query, function(n, v, d) if filter[n] then return end; empty = false %>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:Install%></a></td>
-					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
-					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
-					<td style="text-align:left"><%=luci.util.pcdata(d)%></td>
-				</tr>
-				<% end) %>
-				<% if empty then %>
-				<tr class="cbi-section-table-row">
-					<td style="text-align:left">&#160;</td>
-					<td style="text-align:left"><em><%:none%></em></td>
-					<td style="text-align:left"><em><%:none%></em></td>
-					<td style="text-align:left"><em><%:none%></em></td>
-				</tr>
-				<% end %>
-			</table>
-		</fieldset>
+		<ul class="cbi-tabmenu">
+			<li class="cbi-tab<% if display ~= "installed" then %>-disabled<% end %>"><a href="?display=installed&amp;query=<%=pcdata(query)%>"><%:Installed packages%><% if query then %> (<%=pcdata(query)%>)<% end %></a></li>
+			<li class="cbi-tab<% if display ~= "available" then %>-disabled<% end %>"><a href="?display=available&amp;query=<%=pcdata(query)%>"><%:Available packages%><% if query then %> (<%=pcdata(query)%>)<% end %></a></li>
+		</ul>
+		
+		<% if display ~= "available" then %>
+			<fieldset class="cbi-section">
+				<table class="cbi-section-table" style="width:100%">
+					<tr class="cbi-section-table-titles">
+						<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
+						<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
+						<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
+					</tr>
+					<% local empty = true; luci.model.ipkg.list_installed(querypat, function(n, v, d) empty = false; filter[n] = true %>
+					<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+						<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:Remove%></a></td>
+						<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
+						<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
+					</tr>
+					<% end) %>
+					<% if empty then %>
+					<tr class="cbi-section-table-row">
+						<td style="text-align:left">&#160;</td>
+						<td style="text-align:left"><em><%:none%></em></td>
+						<td style="text-align:left"><em><%:none%></em></td>
+					</tr>
+					<% end %>
+				</table>
+			</fieldset>
+		<% else %>
+			<fieldset class="cbi-section">
+			<% if not querypat then %>
+				<ul class="cbi-tabmenu">
+					<% local i; for i = 65, 90 do %>
+					<li class="cbi-tab<% if letter ~= i then %>-disabled<% end %>"><a href="?display=available&amp;letter=<%=string.char(i)%>"><%=string.char(i)%></a></li>
+					<% end %>
+					<li class="cbi-tab<% if letter ~= 35 then %>-disabled<% end %>"><a href="?display=available&amp;letter=%23">#</a></li>
+				</ul>
+				<div class="cbi-section-node">
+			<% end %>
+				<table class="cbi-section-table" style="width:100%">
+					<tr class="cbi-section-table-titles">
+						<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
+						<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
+						<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
+						<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
+					</tr>
+					<% local empty = true; luci.model.ipkg.list_all(querypat or letterpat, function(n, v, d) if filter[n] then return end; empty = false %>
+					<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+						<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:Install%></a></td>
+						<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
+						<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
+						<td style="text-align:left"><%=luci.util.pcdata(d)%></td>
+					</tr>
+					<% end) %>
+					<% if empty then %>
+					<tr class="cbi-section-table-row">
+						<td style="text-align:left">&#160;</td>
+						<td style="text-align:left"><em><%:none%></em></td>
+						<td style="text-align:left"><em><%:none%></em></td>
+						<td style="text-align:left"><em><%:none%></em></td>
+					</tr>
+					<% end %>
+				</table>
+			<% if not querypat then %>
+				</div>
+			<% end %>
+			</fieldset>
+		<% end %>
 	</div>
 </form>
 <%+footer%>
