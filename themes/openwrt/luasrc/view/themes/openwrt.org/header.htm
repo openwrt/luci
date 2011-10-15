@@ -195,6 +195,7 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 		<%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 		<div class="errorbox">
 			<strong><%:No password set!%></strong><br />
-			<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
+			<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%><br />
+			<a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
 		</div>
 		<%- end -%>
