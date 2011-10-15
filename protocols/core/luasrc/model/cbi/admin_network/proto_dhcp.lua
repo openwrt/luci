@@ -14,7 +14,7 @@ local map, section, net = ...
 local ifc = net:get_interface()
 
 local hostname, accept_ra, send_rs
-local bcast, no_gw, metric, clientid, vendorclass
+local bcast, no_gw, no_dns, dns, metric, clientid, vendorclass
 
 
 hostname = section:taboption("general", Value, "hostname",
@@ -60,6 +60,34 @@ function no_gw.write(self, section, value)
 		m:set(section, "gateway", "0.0.0.0")
 	end
 end
+
+
+no_dns = section:taboption("advanced", Flag, "_no_dns",
+	translate("Use DNS servers advertised by peer"),
+	translate("If unchecked, the advertised DNS server addresses are ignored"))
+
+no_dns.default = no_dns.enabled
+
+function no_dns.cfgvalue(self, section)
+	local addr
+	for addr in luci.util.imatch(m:get(section, "dns")) do
+		return self.disabled
+	end
+	return self.enabled
+end
+
+function no_dns.remove(self, section)
+	return m:del(section, "dns")
+end
+
+function no_dns.write() end
+
+
+dns = section:taboption("advanced", DynamicList, "dns",
+	translate("Use custom DNS servers"))
+
+dns:depends("_no_dns", "")
+dns.datatype = "ipaddr"
 
 
 metric = section:taboption("advanced", Value, "metric",

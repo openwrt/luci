@@ -13,7 +13,7 @@ You may obtain a copy of the License at
 local map, section, net = ...
 local ifc = net:get_interface()
 
-local ipaddr, netmask, gateway, broadcast, accept_ra, send_rs, ip6addr, ip6gw
+local ipaddr, netmask, gateway, broadcast, dns, accept_ra, send_rs, ip6addr, ip6gw
 local macaddr, mtu, metric
 
 
@@ -38,6 +38,12 @@ broadcast = section:taboption("general", Value, "broadcast", translate("IPv4 bro
 broadcast.datatype = "ip4addr"
 
 
+dns = section:taboption("general", DynamicList, "dns",
+	translate("Use custom DNS servers"))
+
+dns.datatype = "ipaddr"
+
+
 if luci.model.network:has_ipv6() then
 
 	accept_ra = s:taboption("general", Flag, "accept_ra", translate("Accept router advertisements"))
@@ -57,7 +63,7 @@ if luci.model.network:has_ipv6() then
 	ip6gw = section:taboption("general", Value, "ip6gw", translate("IPv6 gateway"))
 	ip6gw.datatype = "ip6addr"
 	ip6gw:depends("accept_ra", "")
-	
+
 end
 
 
