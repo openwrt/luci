@@ -26,7 +26,11 @@ s:option(Flag, "enabled", translate("enable"))
 
 s:option(Value, "device", translate("Device")).rmempty = true
 
-s:option(Value, "port", translate("Port"), translate("port_help")).rmempty = true
+p = s:option(ListValue, "port", translate("Port"), translate("TCP listener port."))
+p.rmempty = true
+for i=0,9 do
+	p:value(i, 9100+i)
+end
 
 s:option(Flag, "bidirectional", translate("Bidirectional mode"))
 
