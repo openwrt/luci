@@ -1,24 +1,31 @@
--- ToDo: Translate, Add descriptions and help texts
+--[[
+LuCI - Lua Configuration Interface
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+]]--
+
 require("luci.model.uci")
+luci.i18n.loadc("splash")
 
-m = Map("luci_splash", "Client-Splash", [[Client-Splash ist das Freifunk Hotspot-Authentifizierungs-System.]])
+m = Map("luci_splash", translate("Client-Splash"), translate("Client-Splash is a hotspot authentification system for wireless mesh networks."))
 
-s = m:section(NamedSection, "general", "core", "Allgemein")
+s = m:section(NamedSection, "general", "core", translate("General"))
 s.addremove = false
 
-s:option(Value, "leasetime", "Freigabezeit", "h")
+s:option(Value, "leasetime", translate("Clearance time"), translate("Clients that have accepted the splash are allowed to use the network for that many hours."))
 
-s:option(Value, "limit_up", "Upload-Limitierung", "Kilobyte/s - limitiert die Upload-Geschwindigkeit von Clients")
-s:option(Value, "limit_down", "Download-Limitierung", "Kilobyte/s - limitiert die Download-Geschwindigkeit von Clients")
+s:option(Value, "limit_up", translate("Upload limit"), translate("Clients upload speed is limited to this value (kbyte/s)"))
+s:option(Value, "limit_down", translate("Download limit"), translate("Clients download speed is limited to this value (kbyte/s)"))
 
 s:option(DummyValue, "_tmp", "",
-	"Bandbreitenlimitierung für Clients wird aktiviert wenn sowohl Up- als auch " ..
-	"Download-Geschwindigkeit angegeben werden. Auf 0 setzen um die Limitierung zu deaktivieren. " ..
-	"Clients in der Whitelist werden nicht limitiert.")
+	translate("Bandwidth limit for clients is only activated when both up- and download limit are set. " ..
+	"Use a value of 0 here to completely disable this limitation. Whitelisted clients are not limited."))
 
-s = m:section(TypedSection, "iface", "Schnittstellen",
-	"Bestimmt die Schnittstellen auf denen Splashing aktiviert werden soll. " ..
-	"Diese Einstellungen müssen normalerweise nicht angepasst werden.")
+s = m:section(TypedSection, "iface", translate("Interfaces"), translate("Interfaces that are used for Splash."))
 
 s.template = "cbi/tblsection"
 s.addremove = true
@@ -26,16 +33,16 @@ s.anonymous = true
 
 local uci = luci.model.uci.cursor()
 
-zone = s:option(ListValue, "zone", "Firewallzone",
-	"Splash-Regeln in der angegebenen Zone eingliedern")
+zone = s:option(ListValue, "zone", translate("Firewall zone"),
+	translate("Splash rules are integrated in this firewall zone"))
 
 uci:foreach("firewall", "zone",
 	function (section)
 		zone:value(section.name)
 	end)
 	
-iface = s:option(ListValue, "network", "Netzwerk",
-	"Client-Verkehr auf der angegebenen Schnittstelle abfangen")
+iface = s:option(ListValue, "network", translate("Network"),
+	translate("Intercept client traffic on this Interface"))
 
 uci:foreach("network", "interface",
 	function (section)
@@ -50,34 +57,30 @@ uci:foreach("network", "alias",
 	end)
 
 
-s = m:section(TypedSection, "whitelist", "Whitelist",
-	"MAC-Adressen in dieser Liste werden automatisch freigegeben und unterliegen " ..
-	"keiner Bandbreitenlimitierung.")
+s = m:section(TypedSection, "whitelist", translate("Whitelist"),
+	translate("MAC addresses of whitelisted clients. These do not need to accept the splash and and are not bandwidth limited."))
 
 s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
-s:option(Value, "mac", "MAC-Adresse")
+s:option(Value, "mac", translate ("MAC Address"))
 
 
-s = m:section(TypedSection, "blacklist", "Blacklist",
-	"MAC-Adressen in dieser Liste werden automatisch gesperrt. Verkehr von diesen " ..
-	"Adressen wird komplett verworfen und es wird kein Verbindungsaufbau via WLAN " ..
-	"zugelassen.")
+s = m:section(TypedSection, "blacklist", translate("Blacklist"),
+	translate("MAC addresses in this list are blocked."))
 
 s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
-s:option(Value, "mac", "MAC-Adresse")
+s:option(Value, "mac", translate ("MAC Address"))
 
-s = m:section(TypedSection, "subnet", "Freigegebene Subnetze",
-	"Hier eingetragene Subnetze oder Host-Adressen sind vom Splash-Vorgang ausgenommen.")
+s = m:section(TypedSection, "subnet", translate("Allowed hosts/subnets"),
+	translate("Hosts and Networks that are listed here are excluded from splashing, i.e. they are always allowed."))
 
 s.template = "cbi/tblsection"
 s.addremove = true
 s.anonymous = true
-s:option(Value, "ipaddr", "IP-Adresse")
-s:option(Value, "netmask", "Netzmaske", "optional bei Host-Adressen").rmempty = true
-
+s:option(Value, "ipaddr", translate("IP Address"))
+s:option(Value, "netmask", translate("Netmask"), translate("optional when using host addresses")).rmempty = true
 	
 return m

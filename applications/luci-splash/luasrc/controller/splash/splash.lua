@@ -1,4 +1,5 @@
 module("luci.controller.splash.splash", package.seeall)
+luci.i18n.loadc("splash")
 
 function index()
 	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90).i18n = "freifunk"

@@ -19,6 +19,7 @@ local ipt = require "luci.sys.iptparser".IptParser()
 local uci = require "luci.model.uci".cursor_state()
 local wat = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
+luci.i18n.loadc("splash")
 
 local clients = { }
 local leasetime = tonumber(uci:get("luci_splash", "general", "leasetime") or 1) * 60 * 60
