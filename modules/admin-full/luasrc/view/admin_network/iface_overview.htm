@@ -113,7 +113,7 @@ $Id$
 					}
 
 					var d = document.getElementById(ifc.id + '-ifc-description');
-					if (d && ifc.ifname)
+					if (d && ifc.proto && ifc.ifname)
 					{
 						if (ifc.is_up)
 						{
@@ -163,6 +163,18 @@ $Id$
 						}
 
 						d.innerHTML = html;
+					}
+					else if (d && !ifc.proto)
+					{
+						var e = document.getElementById(ifc.id + '-ifc-edit');
+						if (e)
+							e.disabled = true;
+
+						d.innerHTML = String.format(
+							'<em><%:Unsupported protocol type.%></em><br />' +
+							'<a href="%h"><%:Install protocol extensions...%></a>',
+								'<%=luci.dispatcher.build_url("admin/system/packages")%>?query=luci-proto&display=available'
+						);
 					}
 					else if (d)
 					{
@@ -214,7 +226,7 @@ $Id$
 					<td style="width:420px">
 						<input type="button" class="cbi-button cbi-button-add" style="width:100px; background-image:url(<%=resource%>/cbi/reload.gif)" onclick="iface_shutdown('<%=net%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
 						<input type="button" class="cbi-button cbi-button-add" style="width:100px; background-image:url(<%=resource%>/cbi/reset.gif)" onclick="iface_shutdown('<%=net%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
-						<input type="button" class="cbi-button cbi-button-add" style="width:100px; background-image:url(<%=resource%>/cbi/edit.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/network", net)%>'" title="<%:Edit this interface%>" value="<%:Edit%>" />
+						<input type="button" class="cbi-button cbi-button-add" style="width:100px; background-image:url(<%=resource%>/cbi/edit.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/network", net)%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net%>-ifc-edit" />
 						<input type="button" class="cbi-button cbi-button-add" style="width:100px; background-image:url(<%=resource%>/cbi/remove.gif)" onclick="if (confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this interface.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/iface_delete", net)%>'" title="<%:Delete this interface%>" value="<%:Delete%>" />
 					</td>
 				</tr>

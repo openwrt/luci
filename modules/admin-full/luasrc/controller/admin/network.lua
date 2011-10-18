@@ -269,6 +269,12 @@ function iface_status()
 			end
 
 			rv[#rv+1] = data
+		else
+			rv[#rv+1] = {
+				id   = iface,
+				name = iface,
+				type = "ethernet"
+			}
 		end
 	end
 
