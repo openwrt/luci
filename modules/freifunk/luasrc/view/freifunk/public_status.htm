@@ -56,7 +56,7 @@ else
 	local dr4 = sys.exec("ip r s t olsr-default")
 	if dr4 then
 		defroutev4 = { }
-		defroutev4.dest, defroutev4.gateway, defroutev4.device, defroutev4.metric = dr4:match("^(%w+) via (%d+.%d+.%d+.%d+) dev (%w+) +metric (%d+)$
+		defroutev4.dest, defroutev4.gateway, defroutev4.device, defroutev4.metric = dr4:match("^(%w+) via (%d+.%d+.%d+.%d+) dev (%w+) +metric (%d+)")
 	end
 end
 
