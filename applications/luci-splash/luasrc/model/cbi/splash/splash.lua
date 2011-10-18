@@ -58,7 +58,7 @@ uci:foreach("network", "alias",
 
 
 s = m:section(TypedSection, "whitelist", translate("Whitelist"),
-	translate("MAC addresses of whitelisted clients. These do not need to accept the splash and and are not bandwidth limited."))
+	translate("MAC addresses of whitelisted clients. These do not need to accept the splash and are not bandwidth limited."))
 
 s.template = "cbi/tblsection"
 s.addremove = true
