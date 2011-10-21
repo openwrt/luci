@@ -399,7 +399,7 @@ function dispatch(request)
 		local root = node()
 		if not root or not root.target then
 			error404("No root node was registered, this usually happens if no module was installed.\n" ..
-			         "Install luci-admin-full and retry. " ..
+			         "Install luci-mod-admin-full and retry. " ..
 			         "If the module is already installed, try removing the /tmp/luci-indexcache file.")
 		else
 			error404("No page is registered at '/" .. table.concat(request, "/") .. "'.\n" ..
