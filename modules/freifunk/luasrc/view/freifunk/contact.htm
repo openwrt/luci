@@ -2,16 +2,15 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
 -%>
+
 <%+header%>
 
 <% 
@@ -23,13 +22,32 @@ local lat = uci:get_first("system", "system", "latitude")
 %>
 
 <h2><a id="content" name="content"><%:Contact%></a></h2>
-<table cellspacing="0" cellpadding="6">
-	<tr><th><%:Nickname%>:</th><td><%=contact.nickname%></td></tr>
-	<tr><th><%:Realname%>:</th><td><%=contact.name%></td></tr>
-	<tr><th><%:E-Mail%>:</th><td><%=contact.mail%></td></tr>
-	<tr><th><%:Phone%>:</th><td><%=contact.phone%></td></tr>
-	<tr><th><%:Location%>:</th><td><%=location%></td></tr>
-	<tr><th><%:Coordinates%>:</th><td><%=lat%> <%=lon%></td></tr>
-	<tr><th><%:Notice%>:</th><td><%=contact.note%></td></tr>
-</table>
+
+<fieldset xmlns="http://www.w3.org/1999/xhtml" class="cbi-section">
+<legend><%:Operator%></legend>
+	<table cellspacing="10" width="100%" style="text-align:left">
+		<tr><th width="33%"><%:Nickname%>:</th><td><%=contact.nickname%></td></tr>
+		<tr><th width="33%"><%:Realname%>:</th><td><%=contact.name%></td></tr>
+		<tr><th width="33%"><%:E-Mail%>:</th><td><a href="mailto:<%=contact.mail%>"><%=contact.mail%></a></td></tr>
+		<tr><th width="33%"><%:Phone%>:</th><td><%=contact.phone%></td></tr>
+	</table>
+</fieldset>
+
+<fieldset xmlns="http://www.w3.org/1999/xhtml" class="cbi-section">
+<legend><%:Location%></legend>
+	<table cellspacing="10" width="100%" style="text-align:left">
+		<tr><th width="33%"><%:Location%>:</th><td><%=location%></td></tr>
+		<tr><th width="33%"><%:Coordinates%>:</th><td><%=lat%> <%=lon%> (<a href="<%=pcdata(luci.dispatcher.build_url("freifunk/map"))%>"><%:Show on map%>)</a></td></tr>
+	</table>
+</fieldset>
+
+<% if contact.note then %>
+<fieldset xmlns="http://www.w3.org/1999/xhtml" class="cbi-section">
+<legend><%:Notice%></legend>
+	<table cellspacing="10" width="100%" style="text-align:left">
+		<tr><td><%=contact.note%></td></tr>
+	</table>
+</fieldset>
+<%end%>
+
 <%+footer%>
