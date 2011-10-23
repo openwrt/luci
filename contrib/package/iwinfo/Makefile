@@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libiwinfo
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Libraries
+  SUBMENU:=8. Libraries
   TITLE:=Generalized Wireless Information Library (iwinfo)
   DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +liblua +lua
   DEFAULT:=PACKAGE_luci-lib-sys

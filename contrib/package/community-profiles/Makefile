@@ -13,7 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/community-profiles
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Community profiles
   DEPENDS:=freifunk-common
 endef

@@ -53,7 +53,7 @@ define Package/luci-lib-core
   TITLE:=LuCI - Lua Configuration Interface
   URL:=http://luci.subsignal.org/
   MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-  SUBMENU:=Libraries
+  SUBMENU:=8. Libraries
   DEPENDS:=+lua +libuci-lua
   TITLE:=LuCI core libraries
 endef
@@ -114,7 +114,7 @@ define library
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Libraries
+    SUBMENU:=8. Libraries
     TITLE:=$(if $(2),$(2),LuCI $(1) library)
     $(if $(3),DEPENDS:=+luci-lib-core $(3))
   endef
@@ -195,9 +195,9 @@ define protocol
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Protocols
+    SUBMENU:=6. Protocols
     TITLE:=$(if $(2),$(2),LuCI $(1) protocol support)
-    $(if $(3),DEPENDS:=+luci-proto-core $(3))
+    DEPENDS:=$(3)
   endef
 
   define Package/luci-proto-$(1)/install
@@ -212,11 +212,11 @@ define protocol
 endef
 
 $(eval $(call protocol,core,Support for static/dhcp/none))
-$(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA,+PACKAGE_luci-proto-ppp:ppp-mod-pppoe))
-$(eval $(call protocol,pptp,Support for PPtP,+PACKAGE_luci-proto-pptp:pptp))
-$(eval $(call protocol,6x4,Support for 6in4/6to4,+PACKAGE_luci-proto-6x4:6in4 +PACKAGE_luci-proto-6x4:6to4))
-$(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
-$(eval $(call protocol,relay,Support for relayd pseudo bridges,+PACKAGE_luci-proto-relay:relayd))
+$(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA))
+$(eval $(call protocol,pptp,Support for PPtP,+pptp))
+$(eval $(call protocol,6x4,Support for 6in4/6to4,+6in4 +6to4))
+$(eval $(call protocol,3g,Support for 3G,+comgt))
+$(eval $(call protocol,relay,Support for relayd pseudo bridges,+relayd))
 
 
 ### Community Packages ###
@@ -226,7 +226,7 @@ define Package/luci-mod-freifunk-community
   TITLE:=LuCI - Lua Configuration Interface
   URL:=http://luci.subsignal.org/
   MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk Community Meta-Package
   DEPENDS+= \
    +luci-lib-web +luci-app-splash +luci-i18n-german \
@@ -256,7 +256,7 @@ define module
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Modules
+    SUBMENU:=2. Modules
     TITLE:=$(if $(2),$(2),LuCI $(1) module)
     $(if $(3),DEPENDS+=$(3))
   endef
@@ -278,7 +278,7 @@ define Package/luci-mod-admin-core/extra-install
 	touch $(1)/etc/init.d/luci_fixtime || true
 endef
 
-$(eval $(call module,admin-core,Web UI Core module,+luci-lib-web +luci-proto-core +luci-proto-ppp +luci-i18n-english))
+$(eval $(call module,admin-core,Web UI Core module,+luci-lib-web +luci-proto-core +luci-i18n-english))
 $(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendly,+luci-mod-admin-core @BROKEN))
 $(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-lib-ipkg))
 $(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-lib-json))
@@ -294,7 +294,7 @@ define application
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Applications
+    SUBMENU:=3. Applications
     TITLE:=$(if $(2),$(2),LuCI $(1) application)
 	DEPENDS:=$(3)
   endef
@@ -339,21 +339,19 @@ $(eval $(call application,meshwizard, Shellscript based wizard to setup mesh net
         +PACKAGE_luci-app-freifunk-meshwizard:meshwizard))
 
 $(eval $(call application,olsr,OLSR configuration and status module,\
-	+PACKAGE_luci-app-olsr:olsrd +PACKAGE_luci-app-olsr:olsrd-mod-txtinfo))
+	+olsrd-mod-txtinfo))
 
 $(eval $(call application,olsr-viz,OLSR Visualisation,\
-	luci-app-olsr +PACKAGE_luci-app-olsr-viz:olsrd-mod-txtinfo))
+	luci-app-olsr +olsrd-mod-txtinfo))
 
 $(eval $(call application,olsr-services,Show services announced with the nameservice plugin,\
-	luci-app-olsr +PACKAGE_luci-app-olsr-services:olsrd-mod-nameservice))
+	luci-app-olsr +olsrd-mod-nameservice))
 
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
 
 $(eval $(call application,splash,Freifunk DHCP-Splash application,\
-	+luci-lib-nixio +PACKAGE_luci-app-splash:tc \
-	+PACKAGE_luci-app-splash:kmod-sched +PACKAGE_luci-app-splash:iptables-mod-nat-extra \
-	+PACKAGE_luci-app-splash:iptables-mod-ipopt))
+	+luci-lib-nixio +tc +kmod-sched +iptables-mod-nat-extra +iptables-mod-ipopt))
 
 $(eval $(call application,statistics,LuCI Statistics Application,\
 	+PACKAGE_luci-app-statistics:collectd \
@@ -414,10 +412,10 @@ $(eval $(call application,openvpn,LuCI Support for OpenVPN,\
 	+PACKAGE_luci-app-openvpn:openvpn))
 
 $(eval $(call application,p2pblock,LuCI Support for the Freifunk P2P-Block addon,\
-	+luci-app-firewall +PACKAGE_luci-app-p2pblock:freifunk-p2pblock))
+	luci-app-firewall +PACKAGE_luci-app-p2pblock:freifunk-p2pblock))
 
 $(eval $(call application,multiwan,LuCI Support for the OpenWrt MultiWAN agent,\
-	+luci-app-firewall +PACKAGE_luci-app-multiwan:multiwan))
+	luci-app-firewall +PACKAGE_luci-app-multiwan:multiwan))
 
 $(eval $(call application,wol,LuCI Support for Wake-on-LAN,\
 	+PACKAGE_luci-app-wol:etherwake))
@@ -445,9 +443,9 @@ define sgi
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Server Interfaces
+    SUBMENU:=7. Server Interfaces
     TITLE:=$(if $(2),$(2),LuCI $(1) server gateway interface)
-	$(if $(3),DEPENDS:=$(3))
+	DEPENDS:=$(3)
   endef
 
   define Package/luci-sgi-$(1)/install
@@ -472,7 +470,7 @@ define theme
     CATEGORY:=LuCI
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
-    SUBMENU:=Themes
+    SUBMENU:=4. Themes
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
 	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
 	DEPENDS:=$(if $(filter-out base,$(1)),+luci-theme-base) $(4)
@@ -490,7 +488,7 @@ define theme
   LUCI_BUILD_PACKAGES += luci-theme-$(1)
 endef
 
-$(eval $(call theme,base,Common base for all themes,,+luci-lib-web))
+$(eval $(call theme,base,Common base for all themes))
 $(eval $(call theme,openwrt,OpenWrt.org (default),,,1))
 $(eval $(call theme,fledermaus,Fledermaus Theme))
 
@@ -514,7 +512,7 @@ define translation
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Translations
+    SUBMENU:=5. Translations
     TITLE:=$(if $(2),$(2),$(1))
   endef
 
@@ -556,7 +554,7 @@ define collection
     TITLE:=LuCI - Lua Configuration Interface
     URL:=http://luci.subsignal.org/
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=Collections
+    SUBMENU:=1. Collections
     TITLE:=$(if $(2),$(2),LuCI $(if $(1),$(1),general) collection)
     $(if $(3),DEPENDS:=$(3))
   endef
@@ -569,14 +567,14 @@ define collection
 endef
 
 $(eval $(call collection,,\
-	Standard OpenWrt set including full and mini admin and the standard theme,\
+	Standard OpenWrt set including full admin with ppp support and the \
+	default OpenWrt theme,\
 	+uhttpd +luci-mod-admin-full +luci-theme-openwrt +luci-app-firewall \
-	+libiwinfo))
+	+luci-proto-core +luci-proto-ppp +libiwinfo))
 
 $(eval $(call collection,ssl,\
 	Standard OpenWrt set with HTTPS support,\
-	+uhttpd +uhttpd-mod-tls +px5g +luci-mod-admin-full +luci-theme-openwrt \
-	+luci-app-firewall +libiwinfo))
+	+luci +uhttpd-mod-tls +px5g))
 
 $(eval $(call collection,light,\
 	Minimum package set using only admin mini and the standard theme,\

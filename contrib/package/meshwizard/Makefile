@@ -13,7 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/meshwizard
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Shell script based wizard for Mesh networks
   DEPENDS:=+firewall
 endef

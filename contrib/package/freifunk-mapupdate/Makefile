@@ -13,7 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freifunk-mapupdate
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Update script for freifunkmap
   DEPENDS:=+olsrd-mod-nameservice
 endef

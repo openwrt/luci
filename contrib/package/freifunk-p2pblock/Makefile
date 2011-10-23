@@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freifunk-p2pblock
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk p2pblock Addon
   DEPENDS:=+iptables-mod-filter +iptables-mod-ipp2p +l7-protocols +iptables-mod-conntrack-extra
 endef

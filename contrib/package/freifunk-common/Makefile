@@ -13,7 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freifunk-common
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk common files
 endef
 

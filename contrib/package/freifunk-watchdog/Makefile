@@ -18,7 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freifunk-watchdog
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk Ad-Hoc watchdog daemon
   DEPENDS:=libuci
 endef
