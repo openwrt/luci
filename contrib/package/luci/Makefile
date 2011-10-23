@@ -324,8 +324,6 @@ define Package/luci-app-diag-devinfo/conffiles
 endef
 
 
-$(eval $(call application,ffwizard,Freifunk configuration wizard))
-
 $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))
 
