@@ -44,38 +44,13 @@ s:tab("language", translate("Language and Style"))
 -- System Properties
 --
 
-local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
-local uptime = luci.sys.uptime()
+clock = s:taboption("general", DummyValue, "_systime", translate("Local Time"))
+clock.template = "admin_system/clock_status"
 
-s:taboption("general", DummyValue, "_system", translate("System")).value = system
-s:taboption("general", DummyValue, "_cpu", translate("Processor")).value = model
-
-s:taboption("general", DummyValue, "_kernel", translate("Kernel")).value =
- luci.util.exec("uname -r") or "?"
-
-local load1, load5, load15 = luci.sys.loadavg()
-s:taboption("general", DummyValue, "_la", translate("Load")).value =
- string.format("%.2f, %.2f, %.2f", load1, load5, load15)
-
-s:taboption("general", DummyValue, "_memtotal", translate("Memory")).value =
- string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
-  tonumber(memtotal) / 1024,
-  100 * memcached / memtotal,
-  tostring(translate("cached")),
-  100 * membuffers / memtotal,
-  tostring(translate("buffered")),
-  100 * memfree / memtotal,
-  tostring(translate("free"))
-)
-
-s:taboption("general", DummyValue, "_systime", translate("Local Time")).value =
- os.date("%c")
-
-s:taboption("general", DummyValue, "_uptime", translate("Uptime")).value =
- luci.tools.webadmin.date_format(tonumber(uptime))
 
 hn = s:taboption("general", Value, "hostname", translate("Hostname"))
 hn.datatype = "hostname"
+
 function hn.write(self, section, value)
 	Value.write(self, section, value)
 	luci.sys.hostname(value)
@@ -184,8 +159,8 @@ end
 --
 
 if has_rdate then
-	m3= Map("timeserver", translate("Time Server (rdate)"))
-	s = m3:section(TypedSection, "timeserver")
+	m2 = Map("timeserver", translate("Time Server (rdate)"))
+	s = m2:section(TypedSection, "timeserver")
 	s.anonymous = true
 	s.addremove = true
 	s.template = "cbi/tblsection"
@@ -196,7 +171,7 @@ if has_rdate then
 	i = s:option(ListValue, "interface", translate("Interface"))
 	i.rmempty = true
 	i:value("", translate("Default"))
-	m3.uci:foreach("network", "interface",
+	m2.uci:foreach("network", "interface",
 		function (section)
 			local ifc = section[".name"]
 			if ifc ~= "loopback" then
@@ -207,61 +182,4 @@ if has_rdate then
 end
 
 
-m2 = Map("luci")
-
-f = m2:section(NamedSection, "main", "core", translate("Files to be kept when flashing a new firmware"))
-
-f:tab("detected", translate("Detected Files"),
-	translate("The following files are detected by the system and will be kept automatically during sysupgrade"))
-
-f:tab("custom", translate("Custom Files"),
-	translate("This is a list of shell glob patterns for matching files and directories to include during sysupgrade"))
-
-d = f:taboption("detected", DummyValue, "_detected", translate("Detected files"))
-d.rawhtml = true
-d.cfgvalue = function(s)
-	local list = io.popen(
-		"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
-		"/lib/upgrade/keep.d/* 2>/dev/null) -type f 2>/dev/null; " ..
-		"opkg list-changed-conffiles ) | sort -u"
-	)
-
-	if list then
-		local files = { "<ul>" }
-
-		while true do
-			local ln = list:read("*l")
-			if not ln then
-				break
-			else
-				files[#files+1] = "<li>"
-				files[#files+1] = luci.util.pcdata(ln)
-				files[#files+1] = "</li>"
-			end
-		end
-
-		list:close()
-		files[#files+1] = "</ul>"
-
-		return table.concat(files, "")
-	end
-
-	return "<em>" .. translate("No files found") .. "</em>"
-end
-
-c = f:taboption("custom", TextValue, "_custom", translate("Custom files"))
-c.rmempty = false
-c.cols = 70
-c.rows = 30
-
-c.cfgvalue = function(self, section)
-	return nixio.fs.readfile("/etc/sysupgrade.conf")
-end
-
-c.write = function(self, section, value)
-	value = value:gsub("\r\n?", "\n")
-	return nixio.fs.writefile("/etc/sysupgrade.conf", value)
-end
-
-
-return m, m3 or m2, m3 and m2
+return m, m2

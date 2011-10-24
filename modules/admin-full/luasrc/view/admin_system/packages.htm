@@ -53,13 +53,55 @@ end
 
 <form method="post" action="<%=REQUEST_URI%>">
 	<div class="cbi-map">
+
+		<ul class="cbi-tabmenu">
+			<li class="cbi-tab"><a href="#"><%:Actions%></a></li>
+			<li class="cbi-tab-disabled"><a href="<%=REQUEST_URI%>/ipkg"><%:Configuration%></a></li>
+		</ul>
+
 		<fieldset class="cbi-section">
-			<ul>
-				<li><a href="<%=REQUEST_URI%>/ipkg"><%:Edit package lists and installation targets%></a></li>
-				<li><a href="<%=REQUEST_URI%>?update=1"><%:Update package lists%></a></li>
-			</ul>
-			<br />
+
+
 			<fieldset class="cbi-section-node">
+				<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
+				<div class="cbi-value">
+					<% if #stdout > 0 then %><pre><%=pcdata(stdout)%></pre><% end %>
+					<% if #stderr > 0 then %><pre class="error"><%=pcdata(stderr)%></pre><% end %>
+				</div>
+				<% end %>
+
+				<% if querypat then %>
+				<div class="cbi-value">
+					<%:Displaying only packages containing%> <strong>"<%=pcdata(query)%>"</strong>
+					<input type="button" onclick="location.href='?display=<%=pcdata(display)%>'" href="#" class="cbi-button cbi-button-reset" style="margin-left:1em" value="<%:Reset%>" />
+					<br style="clear:both" />
+				</div>
+				<% end %>
+
+				<% if no_lists or old_lists then %>
+				<div class="cbi-value">
+					<% if old_lists then %>
+						<%:Package lists are older than 24 hours%>
+					<% else %>
+						<%:No package lists available%>
+					<% end %>
+					<input type="button" onclick="location.href='?update=1'" href="#" class="cbi-button cbi-button-apply" style="margin-left:3em" value="<%:Update lists%>" />
+				</div>
+				<% end %>
+
+				<div class="cbi-value cbi-value-last">
+					<%:Free space%>: <strong><%=(100-used_perc)%>%</strong> (<strong><%=wa.byte_format(free_byte)%></strong>)
+					<div style="margin:3px 0; width:300px; height:10px; border:1px solid #000000; background-color:#80C080">
+						<div style="background-color:#F08080; border-right:1px solid #000000; height:100%; width:<%=used_perc%>%">&#160;</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<br />
+
+			<fieldset class="cbi-section-node">
+				<input type="hidden" name="display" value="<%=pcdata(display)%>" />
+
 				<div class="cbi-value">
 					<label class="cbi-value-title"><%:Download and install package%>:</label>
 					<div class="cbi-value-field">
@@ -71,7 +113,6 @@ end
 				<div class="cbi-value cbi-value-last">
 					<label class="cbi-value-title"><%:Filter%>:</label>
 					<div class="cbi-value-field">
-						<input type="hidden" name="display" value="<%=pcdata(display)%>" />
 						<input type="text" name="query" size="20" value="<%=pcdata(query)%>" />
 						<input type="submit" class="cbi-button cbi-input-find" name="search" value="<%:Find package%>" />
 					</div>
@@ -81,31 +122,13 @@ end
 		<br />
 
 		<h3><%:Status%></h3>
-		<fieldset class="cbi-section">
-			<%:Free space%>: <strong><%=(100-used_perc)%>%</strong> (<strong><%=wa.byte_format(free_byte)%></strong>)
-			<div style="margin:3px 0; width:300px; height:10px; border:1px solid #000000; background-color:#80C080">
-				<div style="background-color:#F08080; border-right:1px solid #000000; height:100%; width:<%=used_perc%>%">&#160;</div>
-			</div>
 
-			<% if querypat then %>
-				<br /><hr /><br />
-				<%:Displaying only packages containing%> <strong>"<%=pcdata(query)%>"</strong>
-				<input type="button" onclick="location.href='?display=<%=pcdata(display)%>'" href="#" class="cbi-button cbi-button-reset" style="margin-left:3em" value="Reset" />
-			<% end %>
-
-			<% if (install and next(install)) or (remove and next(remove)) or update or upgrade then %>
-				<br /><hr /><br />
-				<% if #stdout > 0 then %><pre><%=pcdata(stdout)%></pre><% end %>
-				<% if #stderr > 0 then %><pre class="error"><%=pcdata(stderr)%></pre><% end %>
-			<% end %>
-		</fieldset>
-		<br />
 
 		<ul class="cbi-tabmenu">
 			<li class="cbi-tab<% if display ~= "installed" then %>-disabled<% end %>"><a href="?display=installed&amp;query=<%=pcdata(query)%>"><%:Installed packages%><% if query then %> (<%=pcdata(query)%>)<% end %></a></li>
 			<li class="cbi-tab<% if display ~= "available" then %>-disabled<% end %>"><a href="?display=available&amp;query=<%=pcdata(query)%>"><%:Available packages%><% if query then %> (<%=pcdata(query)%>)<% end %></a></li>
 		</ul>
-		
+
 		<% if display ~= "available" then %>
 			<fieldset class="cbi-section">
 				<table class="cbi-section-table" style="width:100%">
