@@ -638,6 +638,35 @@ end
 
 -- Subdispatchers --
 
+function _firstchild()
+   local path = { unpack(context.path) }
+   local name = table.concat(path, ".")
+   local node = context.treecache[name]
+
+   local lowest
+   if node and node.nodes and next(node.nodes) then
+	  local k, v
+	  for k, v in pairs(node.nodes) do
+		 if not lowest or
+			(v.order or 100) < (node.nodes[lowest].order or 100)
+		 then
+			lowest = k
+		 end
+	  end
+   end
+
+   assert(lowest ~= nil,
+		  "The requested node contains no childs, unable to redispatch")
+
+   path[#path+1] = lowest
+   dispatch(path)
+end
+
+--- Alias the first (lowest order) page automatically
+function firstchild()
+   return { type = "firstchild", target = _firstchild }
+end
+
 --- Create a redirect to another dispatching node.
 -- @param	...		Virtual path destination
 function alias(...)
