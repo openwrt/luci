@@ -12,7 +12,7 @@
 . /etc/functions.sh
 
 echo "
-/* Meshwizard 0.0.4 */
+/* Meshwizard 0.0.5 */
 "
 
 # config
@@ -55,6 +55,8 @@ done < /tmp/meshwizard.tmp
 $dir/helpers/initial_config.sh
 $dir/helpers/setup_dnsmasq.sh
 $dir/helpers/setup_system.sh
+$dir/helpers/setup_olsrd.sh
+$dir/helpers/setup_firewall.sh
 
 # Configure found networks
 for net in $networks; do
@@ -62,8 +64,10 @@ for net in $networks; do
 	netrenamed="${net/radio/wireless}"
 	export netrenamed
 	$dir/helpers/setup_network.sh $net
-	$dir/helpers/setup_wifi.sh $net
-	$dir/helpers/setup_olsrd.sh $net
+	if [ ! "$net" == "wan" ]; then
+		$dir/helpers/setup_wifi.sh $net
+	fi
+	$dir/helpers/setup_olsrd_interface.sh $net
 
 	net_dhcp=$(uci -q get meshwizard.netconfig.${net}_dhcp)
 	if [ "$net_dhcp" == 1 ]; then
@@ -71,9 +75,9 @@ for net in $networks; do
 	fi
 
 	$dir/helpers/setup_splash.sh $net
-	$dir/helpers/setup_firewall.sh $net
+	$dir/helpers/setup_firewall_interface.sh $net
 done
 
 ##### Reboot the router (because simply restarting services gave errors)
 
-reboot
+#reboot

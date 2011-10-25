@@ -61,12 +61,12 @@ if [ "$net_dhcp" == 1 ]; then
 		uci set network.${netrenamed}dhcp.interface="$netrenamed"
 	fi
 
-	uci batch << EOF
+uci batch << EOF
 set network.${netrenamed}dhcp.proto=static
 set network.${netrenamed}dhcp.ipaddr="$START"
 set network.${netrenamed}dhcp.netmask="$NETMASK"
+uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
 EOF
 
 fi
 
-uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
