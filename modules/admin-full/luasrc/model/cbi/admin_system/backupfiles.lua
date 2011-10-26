@@ -21,7 +21,7 @@ elseif luci.http.formvalue("cbid.luci.1._edit") then
 	return
 end
 
-m = SimpleForm("luci", "%s - %s - %s" %{ translate("System"), translate("Flash operations"), translate("Backup file list") })
+m = SimpleForm("luci", translate("Backup file list"))
 m:append(Template("admin_system/backupfiles"))
 
 if luci.http.formvalue("display") ~= "list" then

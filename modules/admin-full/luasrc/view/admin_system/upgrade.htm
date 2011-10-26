@@ -15,7 +15,7 @@ $Id$
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:System%> - <%:Flash Firmware%> - <%:Verify%></a></h2>
+<h2><a id="content" name="content"><%:Flash Firmware%> - <%:Verify%></a></h2>
 <p>
 	<%_ The flash image was uploaded.
 		Below is the checksum and file size listed,
@@ -55,12 +55,12 @@ $Id$
 
 <div class="cbi-page-actions right">
 	<form style="display:inline" action="<%=REQUEST_URI%>" method="post">
+		<input class="cbi-button cbi-button-reset" type="submit" value="<%:Cancel%>" />
+	</form>
+	<form style="display:inline" action="<%=REQUEST_URI%>" method="post">
 		<input type="hidden" name="step" value="2" />
 		<input type="hidden" name="keep" value="<%=keep and "1" or ""%>" />
 		<input class="cbi-button cbi-button-apply" type="submit" value="<%:Proceed%>" />
-	</form>
-	<form style="display:inline" action="<%=REQUEST_URI%>" method="post">
-		<input class="cbi-button cbi-button-reset" type="submit" value="<%:Cancel%>" />
 	</form>
 </div>
 

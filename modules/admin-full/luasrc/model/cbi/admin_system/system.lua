@@ -19,16 +19,12 @@ require("luci.tools.webadmin")
 require("luci.fs")
 require("luci.config")
 
+local m, s, o
+local has_ntpd = luci.fs.access("/usr/sbin/ntpd")
+
+
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 m:chain("luci")
-
-local has_rdate = false
-
-m.uci:foreach("system", "rdate",
-	function()
-		has_rdate = true
-		return false
-	end)
 
 
 s = m:section(TypedSection, "system", translate("System Properties"))
@@ -44,27 +40,27 @@ s:tab("language", translate("Language and Style"))
 -- System Properties
 --
 
-clock = s:taboption("general", DummyValue, "_systime", translate("Local Time"))
-clock.template = "admin_system/clock_status"
+o = s:taboption("general", DummyValue, "_systime", translate("Local Time"))
+o.template = "admin_system/clock_status"
 
 
-hn = s:taboption("general", Value, "hostname", translate("Hostname"))
-hn.datatype = "hostname"
+o = s:taboption("general", Value, "hostname", translate("Hostname"))
+o.datatype = "hostname"
 
-function hn.write(self, section, value)
+function o.write(self, section, value)
 	Value.write(self, section, value)
 	luci.sys.hostname(value)
 end
 
 
-tz = s:taboption("general", ListValue, "zonename", translate("Timezone"))
-tz:value("UTC")
+o = s:taboption("general", ListValue, "zonename", translate("Timezone"))
+o:value("UTC")
 
 for i, zone in ipairs(luci.sys.zoneinfo.TZ) do
-	tz:value(zone[1])
+	o:value(zone[1])
 end
 
-function tz.write(self, section, value)
+function o.write(self, section, value)
 	local function lookup_zone(title)
 		for _, zone in ipairs(luci.sys.zoneinfo.TZ) do
 			if zone[1] == title then return zone[2] end
@@ -155,31 +151,40 @@ end
 
 
 --
--- Rdate
+-- NTP
 --
 
-if has_rdate then
-	m2 = Map("timeserver", translate("Time Server (rdate)"))
-	s = m2:section(TypedSection, "timeserver")
+if has_ntpd then
+	s = m:section(TypedSection, "timeserver", translate("Time Synchronization"))
 	s.anonymous = true
-	s.addremove = true
-	s.template = "cbi/tblsection"
+	s.addremove = false
 
-	h = s:option(Value, "hostname", translate("Name"))
-	h.rmempty = true
-	h.datatype = host
-	i = s:option(ListValue, "interface", translate("Interface"))
-	i.rmempty = true
-	i:value("", translate("Default"))
-	m2.uci:foreach("network", "interface",
-		function (section)
-			local ifc = section[".name"]
-			if ifc ~= "loopback" then
-				i:value(ifc)
-			end
+	o = s:option(Flag, "enable", translate("Enable builtin NTP server"))
+	o.rmempty = false
+
+	function o.cfgvalue(self)
+		return luci.sys.init.enabled("sysntpd")
+			and self.enabled or self.disabled
+	end
+
+	function o.write(self, section, value)
+		if value == self.enabled then
+			luci.sys.init.enable("sysntpd")
+			luci.sys.call("env -i /etc/init.d/sysntpd start >/dev/null")
+		else
+			luci.sys.call("env -i /etc/init.d/sysntpd stop >/dev/null")
+			luci.sys.init.disable("sysntpd")
 		end
-	)
+	end
+
+
+	o = s:option(DynamicList, "server", translate("NTP server candidates"))
+	o.datatype = "host"
+	o:depends("enable", "1")
+
+	-- retain server list even if disabled
+	function o.remove() end
 end
 
 
-return m, m2
+return m
