@@ -31,7 +31,7 @@ function index()
 	local page
 
 	page = node("admin", "network")
-	page.target = alias("admin", "network", "network")
+	page.target = firstchild()
 	page.title  = _("Network")
 	page.order  = 50
 	page.index  = true
