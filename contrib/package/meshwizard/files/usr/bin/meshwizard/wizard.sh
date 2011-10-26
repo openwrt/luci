@@ -12,7 +12,7 @@
 . /etc/functions.sh
 
 echo "
-/* Meshwizard 0.0.5 */
+/* Meshwizard 0.0.4 */
 "
 
 # config
@@ -36,6 +36,7 @@ $dir/helpers/rename-wifi.sh
 community=$(uci -q get meshwizard.community.name || uci -q get freifunk.community.name)
 [ -z "$community" ] && echo "Error: Community is not set in /etc/config/freifunk, aborting now." && exit 1
 export community="$community"
+echo $community
 
 # Get a list of networks we need to setup
 networks=$(uci show meshwizard.netconfig | grep -v "netconfig=" | sed -e 's/meshwizard.netconfig\.\(.*\)\_.*/\1/' |sort|uniq)
@@ -57,6 +58,10 @@ $dir/helpers/setup_dnsmasq.sh
 $dir/helpers/setup_system.sh
 $dir/helpers/setup_olsrd.sh
 $dir/helpers/setup_firewall.sh
+
+if [ "$wan_proto" == "static" ] && [ -n "$wan_ip4addr" ] && [ -n "$wan_netmask" ]; then
+	$dir/helpers/setup_wan_static.sh
+fi
 
 # Configure found networks
 for net in $networks; do
@@ -80,4 +85,4 @@ done
 
 ##### Reboot the router (because simply restarting services gave errors)
 
-#reboot
+reboot
