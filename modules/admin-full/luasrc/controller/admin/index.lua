@@ -17,12 +17,12 @@ module("luci.controller.admin.index", package.seeall)
 function index()
 	local root = node()
 	if not root.target then
-		root.target = alias("admin")
+		root.target = firstchild()
 		root.index = true
 	end
 
 	local page   = node("admin")
-	page.target  = alias("admin", "status")
+	page.target  = firstchild()
 	page.title   = _("Administration")
 	page.order   = 10
 	page.sysauth = "root"
