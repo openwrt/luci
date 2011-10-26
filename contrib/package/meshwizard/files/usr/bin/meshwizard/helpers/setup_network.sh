@@ -12,10 +12,11 @@ ipaddr=$(uci get meshwizard.netconfig.$net\_ip4addr)
 [ -z "$interface_netmask" ] && interface netmask="255.255.0.0"
 
 uci batch << EOF
-set network.$netrenamed="interface"
-set network.$netrenamed.proto="static"
-set network.$netrenamed.ipaddr="$ipaddr"
+	set network.$netrenamed="interface"
+	set network.$netrenamed.proto="static"
+	set network.$netrenamed.ipaddr="$ipaddr"
 EOF
+
 set_defaults "interface_" network.$netrenamed
 uci_commitverbose "Setup interface $netrenamed" network
 
@@ -61,12 +62,12 @@ if [ "$net_dhcp" == 1 ]; then
 		uci set network.${netrenamed}dhcp.interface="$netrenamed"
 	fi
 
-	uci batch << EOF
-	set network.${netrenamed}dhcp.proto=static
-	set network.${netrenamed}dhcp.ipaddr="$START"
-	set network.${netrenamed}dhcp.netmask="$NETMASK"
-	uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
-EOF
+	uci batch <<- EOF
+		set network.${netrenamed}dhcp.proto=static
+		set network.${netrenamed}dhcp.ipaddr="$START"
+		set network.${netrenamed}dhcp.netmask="$NETMASK"
+		uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
+	EOF
 
 fi
 

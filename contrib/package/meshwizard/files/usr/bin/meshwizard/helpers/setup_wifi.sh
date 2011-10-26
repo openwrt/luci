@@ -35,8 +35,8 @@ if [ -z "$channel" -o "$channel" == "default" ]; then
 fi
 
 uci batch << EOF
-set wireless.${net}.type="$type"
-set wireless.${net}.channel="$channel"
+	set wireless.${net}.type="$type"
+	set wireless.${net}.channel="$channel"
 EOF
 
 uci_commitverbose "Setup wifi device for $netrenamed" wireless
@@ -69,10 +69,10 @@ if [ "$profile_ssid_scheme" == "addchannel" ]; then
 fi
 
 uci batch << EOF
-set wireless.$net\_iface.device="${net}"
-set wireless.$net\_iface.network="$netrenamed"
-set wireless.$net\_iface.ssid="$ssid"
-set wireless.$net\_iface.bssid="$bssid"
+	set wireless.$net\_iface.device="${net}"
+	set wireless.$net\_iface.network="$netrenamed"
+	set wireless.$net\_iface.ssid="$ssid"
+	set wireless.$net\_iface.bssid="$bssid"
 EOF
 
 uci_commitverbose "Setup wifi interface for $netrenamed" wireless
@@ -80,14 +80,14 @@ uci_commitverbose "Setup wifi interface for $netrenamed" wireless
 ## VAP
 ip4addr="$(uci get meshwizard.netconfig.$net\_ip4addr)"
 if [ "$type" == "atheros" -a "$vap" == 1 ]; then
-	uci batch << EOF
-set wireless.$net\_iface_dhcp="wifi-iface"
-set wireless.$net\_iface_dhcp.device="$net"
-set wireless.$net\_iface_dhcp.mode="ap"
-set wireless.$net\_iface_dhcp.encryption="none"
-set wireless.$net\_iface_dhcp.network="${netrenamed}dhcp"
-set wireless.$net\_iface_dhcp.ssid="FF-AP-$ip4addr"
-EOF
+	uci batch <<- EOF
+		set wireless.$net\_iface_dhcp="wifi-iface"
+		set wireless.$net\_iface_dhcp.device="$net"
+		set wireless.$net\_iface_dhcp.mode="ap"
+		set wireless.$net\_iface_dhcp.encryption="none"
+		set wireless.$net\_iface_dhcp.network="${netrenamed}dhcp"
+		set wireless.$net\_iface_dhcp.ssid="FF-AP-$ip4addr"
+	EOF
 	uci_commitverbose "Setup VAP interface for $netrenamed" wireless
 fi
 

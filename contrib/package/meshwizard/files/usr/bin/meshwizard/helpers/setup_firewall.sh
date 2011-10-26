@@ -48,11 +48,11 @@ handle_fwzone() {
 config_foreach handle_fwzone zone
 
 uci batch << EOF
-set firewall.zone_freifunk="zone"
-set firewall.zone_freifunk.name="freifunk"
-set firewall.zone_freifunk.input="$zone_freifunk_input"
-set firewall.zone_freifunk.forward="$zone_freifunk_forward"
-set firewall.zone_freifunk.output="$zone_freifunk_output"
+	set firewall.zone_freifunk="zone"
+	set firewall.zone_freifunk.name="freifunk"
+	set firewall.zone_freifunk.input="$zone_freifunk_input"
+	set firewall.zone_freifunk.forward="$zone_freifunk_forward"
+	set firewall.zone_freifunk.output="$zone_freifunk_output"
 EOF
 
 uci_commitverbose "Setup firewall zones" firewall

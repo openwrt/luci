@@ -13,8 +13,10 @@ handle_dhcp() {
 config_load dhcp
 config_foreach handle_dhcp dnsmasq
 
-uci set dhcp.dnsmasq.local="/$profile_suffix/"
-uci set dhcp.dnsmasq.domain="$profile_suffix"
+uci batch << EOF
+	set dhcp.dnsmasq.local="/$profile_suffix/"
+	set dhcp.dnsmasq.domain="$profile_suffix"
+EOF
 
 config_get addnhosts dnsmasq addnhosts
 if [ -z "${addnhosts/\var\/etc\/hosts.olsr/}" ]; then

@@ -25,9 +25,11 @@ if [ "$dhcp_range" == 1 ]; then
 	config_load luci_splash
 	config_foreach handle_splash iface
 
-	uci set luci_splash.${netrenamed}dhcp="iface"
-	uci set luci_splash.${netrenamed}dhcp.network="${netrenamed}dhcp"
-	uci set luci_splash.${netrenamed}dhcp.zone="freifunk"
+	uci batch <<- EOF
+		set luci_splash.${netrenamed}dhcp="iface"
+		set luci_splash.${netrenamed}dhcp.network="${netrenamed}dhcp"
+		set luci_splash.${netrenamed}dhcp.zone="freifunk"
+	EOF
 
 	uci_commitverbose "Setup dhcpsplash for ${netrenamed}dhcp" luci_splash
 	/etc/init.d/luci_splash enable

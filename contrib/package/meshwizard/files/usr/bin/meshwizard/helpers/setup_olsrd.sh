@@ -37,12 +37,12 @@ else
 	suffix=".olsr"
 fi
 uci batch << EOF
-set olsrd.olsrd_nameservice=LoadPlugin
-set olsrd.olsrd_nameservice.library="olsrd_nameservice.so.0.3"
-set olsrd.olsrd_nameservice.latlon_file="/var/run/latlon.js"
-set olsrd.olsrd_nameservice.hosts_file="/var/etc/hosts.olsr"
-set olsrd.olsrd_nameservice.sighup_pid_file="/var/run/dnsmasq.pid"
-set olsrd.olsrd_nameservice.suffix="$suffix"
+	set olsrd.olsrd_nameservice=LoadPlugin
+	set olsrd.olsrd_nameservice.library="olsrd_nameservice.so.0.3"
+	set olsrd.olsrd_nameservice.latlon_file="/var/run/latlon.js"
+	set olsrd.olsrd_nameservice.hosts_file="/var/etc/hosts.olsr"
+	set olsrd.olsrd_nameservice.sighup_pid_file="/var/run/dnsmasq.pid"
+	set olsrd.olsrd_nameservice.suffix="$suffix"
 EOF
 
 uci_commitverbose "Setup olsr nameservice plugin" olsrd
