@@ -25,6 +25,7 @@ m = Map("wireless", "",
 		"like encryption or operation mode are grouped in the <em>Interface Configuration</em>."))
 
 m:chain("network")
+m:chain("firewall")
 
 local ifsection
 

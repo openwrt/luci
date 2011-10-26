@@ -104,9 +104,6 @@ end
 function newnet.parse(self, section)
 	local net, zone
 
-	local value = self:formvalue(section)
-	net = nw:add_network(value, { proto = "dhcp" })
-
 	if has_firewall then
 		local zval  = fwzone:formvalue(section)
 		zone = fw:get_zone(zval)
@@ -119,42 +116,46 @@ function newnet.parse(self, section)
 		end
 	end
 
+	local wdev = nw:get_wifidev(m.hidden.device)
+
+	wdev:set("disabled", false)
+	wdev:set("channel", m.hidden.channel)
+
+	if replace:formvalue(section) then
+		local n
+		for _, n in ipairs(wdev:get_wifinets()) do
+			wdev:del_wifinet(n)
+		end
+	end
+
+	local wconf = {
+		device  = m.hidden.device,
+		ssid    = m.hidden.join,
+		mode    = (m.hidden.mode == "Ad-Hoc" and "adhoc" or "sta")
+	}
+
+	if m.hidden.wep == "1" then
+		wconf.encryption = "wep-open"
+		wconf.key        = "1"
+		wconf.key1       = key and key:formvalue(section) or ""
+	elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
+		wconf.encryption = (tonumber(m.hidden.wpa_version) or 0) >= 2 and "psk2" or "psk"
+		wconf.key        = key and key:formvalue(section) or ""
+	else
+		wconf.encryption = "none"
+	end
+
+	if wconf.mode == "adhoc" then
+		wconf.bssid = m.hidden.bssid
+	end
+
+	local value = self:formvalue(section)
+	net = nw:add_network(value, { proto = "dhcp" })
+
 	if not net then
 		self.error = { [section] = "missing" }
 	else
-		local wdev = nw:get_wifidev(m.hidden.device)
-
-		wdev:set("disabled", false)
-		wdev:set("channel", m.hidden.channel)
-
-		if replace:formvalue(section) then
-			local n
-			for _, n in ipairs(wdev:get_wifinets()) do
-				wdev:del_wifinet(n)
-			end
-		end
-
-		local wconf = {
-			device  = m.hidden.device,
-			ssid    = m.hidden.join,
-			mode    = (m.hidden.mode == "Ad-Hoc" and "adhoc" or "sta"),
-			network = net:name()
-		}
-
-		if m.hidden.wep == "1" then
-			wconf.encryption = "wep-open"
-			wconf.key        = "1"
-			wconf.key1       = key and key:formvalue(section) or ""
-		elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
-			wconf.encryption = (tonumber(m.hidden.wpa_version) or 0) >= 2 and "psk2" or "psk"
-			wconf.key        = key and key:formvalue(section) or ""
-		else
-			wconf.encryption = "none"
-		end
-
-		if wconf.mode == "adhoc" then
-			wconf.bssid = m.hidden.bssid
-		end
+		wconf.network = net:name()
 
 		local wnet = wdev:add_wifinet(wconf)
 		if wnet then
