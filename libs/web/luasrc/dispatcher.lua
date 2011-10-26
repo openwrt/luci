@@ -92,18 +92,21 @@ end
 -- @param node	Dispatch node
 -- @return		Ordered table of child node names
 function node_childs(node)
-   local rv = { }
-   local k, v
-   for k, v in util.spairs(node.nodes,
-	  function(a, b)
-	    return (node.nodes[a].order or 100) < (node.nodes[b].order or 100)
-	  end)
-   do
-	  if node_visible(v) then
-		 rv[#rv+1] = k
-	  end
-   end
-   return rv
+	local rv = { }
+	if node then
+		local k, v
+		for k, v in util.spairs(node.nodes,
+			function(a, b)
+				return (node.nodes[a].order or 100)
+				     < (node.nodes[b].order or 100)
+			end)
+		do
+			if node_visible(v) then
+				rv[#rv+1] = k
+			end
+		end
+	end
+	return rv
 end
 
 
