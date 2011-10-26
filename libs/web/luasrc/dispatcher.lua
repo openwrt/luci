@@ -281,6 +281,20 @@ function dispatch(request)
 			assert(media, "No valid theme found")
 		end
 
+		local function ifattr(cond, key, val)
+			if cond then
+				local env = getfenv(1)
+				return string.format(
+					' %s="%s"', tostring(key),
+					luci.util.pcdata(tostring( val
+					 or (type(env[key]) ~= "function" and env[key])
+					 or "" ))
+				)
+			else
+				return ''
+			end
+		end
+
 		tpl.context.viewns = setmetatable({
 		   write       = luci.http.write;
 		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
@@ -290,7 +304,9 @@ function dispatch(request)
 		   pcdata      = util.pcdata;
 		   media       = media;
 		   theme       = fs.basename(media);
-		   resource    = luci.config.main.resourcebase
+		   resource    = luci.config.main.resourcebase;
+		   ifattr      = ifattr;
+		   attr        = function(...) return ifattr(true, ...) end
 		}, {__index=function(table, key)
 			if key == "controller" then
 				return build_url()

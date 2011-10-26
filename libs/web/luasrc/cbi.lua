@@ -1325,29 +1325,8 @@ end
 function AbstractValue.render(self, s, scope)
 	if not self.optional or self.section:has_tabs() or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
-		scope.section   = s
-		scope.cbid      = self:cbid(s)
-		scope.striptags = luci.util.striptags
-		scope.pcdata	= luci.util.pcdata
-
-		scope.ifattr = function(cond,key,val)
-			if cond then
-				return string.format(
-					' %s="%s"', tostring(key),
-					luci.util.pcdata(tostring( val
-					 or scope[key]
-					 or (type(self[key]) ~= "function" and self[key])
-					 or "" ))
-				)
-			else
-				return ''
-			end
-		end
-
-		scope.attr = function(...)
-			return scope.ifattr( true, ... )
-		end
-
+		scope.section = s
+		scope.cbid    = self:cbid(s)
 		Node.render(self, scope)
 	end
 end
