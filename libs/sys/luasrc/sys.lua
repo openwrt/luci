@@ -526,6 +526,9 @@ function process.list()
 		end
 
 		k = luci.util.split(luci.util.trim(line), "%s+", nil, true)
+		if k[6] == "%VSZ" then
+			k[6] = "%MEM"
+		end
 		if k[1] == "PID" then
 			break
 		end
