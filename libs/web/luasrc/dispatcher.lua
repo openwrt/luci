@@ -73,6 +73,40 @@ function build_url(...)
 	return table.concat(url, "")
 end
 
+--- Check whether a dispatch node shall be visible
+-- @param node	Dispatch node
+-- @return		Boolean indicating whether the node should be visible
+function node_visible(node)
+   if node then
+	  return not (
+		 (not node.title or #node.title == 0) or
+		 (not node.target or node.hidden == true) or
+		 (type(node.target) == "table" and node.target.type == "firstchild" and
+		  (type(node.nodes) ~= "table" or not next(node.nodes)))
+	  )
+   end
+   return false
+end
+
+--- Return a sorted table of visible childs within a given node
+-- @param node	Dispatch node
+-- @return		Ordered table of child node names
+function node_childs(node)
+   local rv = { }
+   local k, v
+   for k, v in util.spairs(node.nodes,
+	  function(a, b)
+	    return (node.nodes[a].order or 100) < (node.nodes[b].order or 100)
+	  end)
+   do
+	  if node_visible(v) then
+		 rv[#rv+1] = k
+	  end
+   end
+   return rv
+end
+
+
 --- Send a 404 error code and render the "error404" template if available.
 -- @param message	Custom error message (optional)
 -- @return			false
@@ -131,7 +165,7 @@ function httpdispatch(request, prefix)
 	local r = {}
 	context.request = r
 	context.urltoken = {}
-	
+
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
 	if prefix then
@@ -487,7 +521,7 @@ function createindex_plain(path, suffixes)
 		       "The file '" .. c .. "' contains an invalid module line.\n" ..
 		       "Please verify whether the module name is set to '" .. modname ..
 		       "' - It must correspond to the file path!")
-		
+
 		local idx = mod.index
 		assert(type(idx) == "function",
 		       "Invalid controller file found\n" ..
