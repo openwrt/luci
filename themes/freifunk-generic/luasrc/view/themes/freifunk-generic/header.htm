@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -11,54 +11,60 @@ You may obtain a copy of the License at
 -%>
 
 <%
-require("luci.sys")
-local uci = require "luci.model.uci".cursor()
-local fs = require "luci.fs"
+	local fs   = require "luci.fs"
+	local sys  = require "luci.sys"
+	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
 
-local load1, load5, load15 = luci.sys.loadavg()
-local request  = require("luci.dispatcher").context.path
-local category = request[1]
-local tree     = luci.dispatcher.node()
-local cattree  = category and luci.dispatcher.node(category)
-local node     = luci.dispatcher.context.dispatched
-local hostname = luci.sys.hostname()
-local ff = uci:get("freifunk", "community", "name") or ""
-local co = "profile_" .. ff
-local community = uci:get_first(co, "community", "name") or "Freifunk"
-local hp = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
-local logo = "/luci-static/freifunk-generic/logo.jpg"
-local banner = false
-local show_comm = true
+	local hostname = sys.hostname()
+	local load1, load5, load15 = sys.loadavg()
 
-local lo = fs.glob("/www/luci-static/resources/custom_logo.*")
-if lo[1] then
-	logo = string.gsub(lo[1], "/www", "")
-end
+	local request  = disp.context.path
+	local category = request[1]
+	local cattree  = category and disp.node(category)
 
-local lon = fs.glob("/www/luci-static/resources/custom_logo_only.*")
-if lon[1] then
-	logo = string.gsub(lon[1], "/www", "")
-	show_comm = false
-end
+	local tree = disp.node()
+	local node = disp.context.dispatched
 
-local hea = fs.glob("/www/luci-static/resources/custom_header.*")
-if hea[1] then
-	logo = string.gsub(hea[1], "/www", "")
-	show_comm = false
-	banner = true
-end 
+	local categories = disp.node_childs(tree)
 
-local c = tree
-for i,r in ipairs(request) do
-	if c.nodes and c.nodes[r] then
-		c = c.nodes[r]
-		c._menu_selected = true
+	local c = tree
+	local i, r
+
+	-- tag all nodes leading to this page
+	for i, r in ipairs(request) do
+		if c.nodes and c.nodes[r] then
+			c = c.nodes[r]
+			c._menu_selected = true
+		end
 	end
-end
 
-require("luci.i18n").loadc("default")
-require("luci.http").prepare_content("application/xhtml+xml")
+	local uci  = require "luci.model.uci".cursor()
+	local ff = uci:get("freifunk", "community", "name") or ""
+	local co = "profile_" .. ff
+	local community = uci:get_first(co, "community", "name") or "Freifunk"
+	local hp = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
+	local logo = "/luci-static/freifunk-generic/logo.jpg"
+	local banner = false
+	local show_comm = true
 
+	local lo = fs.glob("/www/luci-static/resources/custom_logo.*")
+	if lo[1] then
+		logo = string.gsub(lo[1], "/www", "")
+	end
+
+	local lon = fs.glob("/www/luci-static/resources/custom_logo_only.*")
+	if lon[1] then
+		logo = string.gsub(lon[1], "/www", "")
+		show_comm = false
+	end
+
+	local hea = fs.glob("/www/luci-static/resources/custom_header.*")
+	if hea[1] then
+		logo = string.gsub(hea[1], "/www", "")
+		show_comm = false
+		banner = true
+	end
 -%>
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -69,7 +75,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
 <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="<%=media%>/mobile.css" type="text/css" />
-<link rel="stylesheet" media="handheld" href="<%=media%>/mobile.css" type="text/css" /> 
+<link rel="stylesheet" media="handheld" href="<%=media%>/mobile.css" type="text/css" />
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
@@ -118,86 +124,71 @@ require("luci.http").prepare_content("application/xhtml+xml")
 			<%=luci.version.distversion%><br />
 			<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
 			<%:Hostname%>: <%=hostname%><br />
-			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()"> 
-				<%:Auto Refresh%>: 
-				<span id="xhr_poll_status_on"><%:on%></span> 
-				<span id="xhr_poll_status_off" style="display:none"><%:off%></span> 
-			</span> 
+			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+				<%:Auto Refresh%>:
+				<span id="xhr_poll_status_on"><%:on%></span>
+				<span id="xhr_poll_status_off" style="display:none"><%:off%></span>
+			</span>
 		</div>
 	<%end%>
 </div>
 
+<%-
+	local function submenu(prefix, node)
+		local childs = disp.node_childs(node)
+		if #childs > 0 then
+%>
+	<ul id="submenu_<%=string.gsub(string.gsub(prefix, "/", "_"), "^_(.-)_$", "%1")%>">
+		<%-
+			for i, r in ipairs(childs) do
+				local nnode = node.nodes[r]
+				local href  = controller .. prefix .. r .. "/" ..
+					(nnode.query and http.build_querystring(nnode.query) or "")
+		%>
+			<li>
+				<a<%=ifattr(nnode._menu_selected, "class", "active")%> href="<%=luci.util.pcdata(href)%>"><%=translate(nnode.title)%></a>
+				<%- submenu(prefix .. r .. "/", nnode) %>
+			</li>
+		<%-
+			end
+		%>
+	</ul>
+<%
+		end
+	end
+%>
+
 <div id="menubar">
 <h2 class="navigation"><a id="navigation" name="navigation"><%:navigation Navigation%></a></h2>
 <ul id="mainmenu" class="dropdowns">
-<%-
-local function submenu(prefix, node)
-	if not node.nodes or node.hidden then
-		return false
-	end
-	local index = {}
-	local count = 0
-	for k, n in pairs(node.nodes) do
-		if n.title and n.target then
-			table.insert(index, {name=k, order=n.order or 100})
-			count = count + 1
-		end
-	end
-
-	table.sort(index, function(a, b) return a.order < b.order end)
-
-	if count > 0 then
-%>
-<ul id="submenu_<%=string.gsub(string.gsub(prefix, "/", "_"), "^_(.-)_$", "%1")%>">
-<%-
-		for j, v in pairs(index) do
-			if #v.name > 0 then
-				local nnode = node.nodes[v.name]
-				local href = controller .. prefix .. v.name .. "/"
-				href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
-%>
-<li><a<% if nnode._menu_selected then %> class="active"<%end%> href="<%=luci.util.pcdata(href)%>"><%=translate(nnode.title)%></a><%-
-submenu(prefix .. v.name .. "/", nnode)
-%></li>
-<%-
+	<%
+		local childs = disp.node_childs(cattree)
+		if #childs > 0 then
+			for i, r in ipairs(childs) do
+				local nnode = cattree.nodes[r]
+				local href  = controller .. "/" .. category .. "/" .. r ..
+					(nnode.query and http.build_querystring(k.query) or "")
+	%>
+		<li>
+			<a<%=ifattr(nnode._menu_selected, "class", "preactive")%> href="<%=href%>"><%=translate(nnode.title)%></a>
+			<%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+		</li>
+	<%
 			end
 		end
-%>
+	%>
+	<li></li>
 </ul>
-<%
-	end
-end
 
-if cattree and cattree.nodes then
-	local index = {}
-	for k, node in pairs(cattree.nodes) do
-		table.insert(index, {name=k, order=node.order or 100})
-	end
-
-	table.sort(index, function(a, b) return a.order < b.order end)
-
-	for i, k in ipairs(index) do
-		node = cattree.nodes[k.name]
-		if node.title and node.target and not node.hidden then
-			local href = controller.."/"..category.."/"..k.name.."/"
-			href = (k.query) and href .. luci.http.build_querystring(k.query) or href
-%>
-<li><a<% if node._menu_selected then %> class="preactive"<%end%> href="<%=href%>"><%=translate(node.title)%></a><%
-submenu("/" .. category .. "/" .. k.name .. "/", node)
-%></li><% end
-	end
-end
-%>
-<li></li></ul>
-
-<ul id="modemenu"><%
-for k,node in pairs(tree.nodes) do
-	if node.title and not node.hidden then %>
-<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=translate(node.title)%></a></li><%
-	end
-end
-%>
-</ul>
+<% if #categories > 1 then %>
+<div class="modemenu">
+	<ul>
+	<% for i, r in ipairs(categories) do %>
+		<li><a<%=ifattr(request[1] == r, "class", "active")%> href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a></li>
+	<% end %>
+	</ul>
+</div>
+<% end %>
 
 <%
 if tree.nodes[category] and tree.nodes[category].ucidata then
@@ -210,12 +201,12 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 		end
 	end
 -%>
-
-<div id="savemenu">
-	<% if ucic > 0 then %>
-		<a class="warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=luci.http.urlencode(luci.http.formvalue("redir") or REQUEST_URI)%>"><%:Unsaved Changes%>: <%=ucic%></a>
-	<% end -%>
-</div><% end %>
+	<div id="savemenu">
+		<% if ucic > 0 then %>
+			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=http.urlencode(http.formvalue("redir") or REQUEST_URI)%>"><%:Unsaved Changes%>: <%=ucic%></a>
+		<% end -%>
+	</div>
+<% end %>
 
 <div class="clear"></div>
 </div>
