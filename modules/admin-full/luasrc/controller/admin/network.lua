@@ -198,9 +198,17 @@ end
 
 function wifi_delete(network)
 	local ntm = require "luci.model.network".init()
+	local net = ntm:get_wifinet(network)
 
-	ntm:del_wifinet(network)
-	ntm:save("wireless")
+	if net then
+		local dev = net:get_device()
+		if dev then
+			luci.sys.call("env -i /sbin/wifi down %q" % dev:name())
+			ntm:del_wifinet(network)
+			ntm:commit("wireless")
+			luci.sys.call("env -i /sbin/wifi up %q" % dev:name())
+		end
+	end
 
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 end
