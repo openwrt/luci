@@ -17,7 +17,7 @@ module("luci.controller.admin.index", package.seeall)
 function index()
 	local root = node()
 	if not root.target then
-		root.target = firstchild()
+		root.target = alias("admin")
 		root.index = true
 	end
 
