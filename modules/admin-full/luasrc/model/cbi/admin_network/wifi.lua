@@ -114,14 +114,30 @@ local htcaps = wdev:get("ht_capab") and true or false
 -- NanoFoo
 local nsantenna = wdev:get("antenna")
 
-ch = s:taboption("general", Value, "channel", translate("Channel"))
-ch:value("auto", translate("auto"))
-for _, f in ipairs(iw and iw.freqlist or luci.sys.wifi.channels()) do
-	if not f.restricted then
-		ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
+-- Check whether there is a client interface on the same radio,
+-- if yes, lock the channel choice as the station will dicatate the freq
+local has_sta = nil
+local _, net
+for _, net in ipairs(wdev:get_wifinets()) do
+	if net:mode() == "sta" and net:id() ~= wnet:id() then
+		has_sta = net
+		break
 	end
 end
 
+if has_sta then
+	ch = s:taboption("general", DummyValue, "choice", translate("Channel"))
+	ch.value = translatef("Locked to channel %d used by %s",
+		has_sta:channel(), has_sta:shortname())
+else
+	ch = s:taboption("general", Value, "channel", translate("Channel"))
+	ch:value("auto", translate("auto"))
+	for _, f in ipairs(iw and iw.freqlist or luci.sys.wifi.channels()) do
+		if not f.restricted then
+			ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
+		end
+	end
+end
 
 ------------------- MAC80211 Device ------------------
 
