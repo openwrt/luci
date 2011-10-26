@@ -15,16 +15,6 @@ $Id$
 module("luci.controller.admin.services", package.seeall)
 
 function index()
-	local page
-
-	page        = node("admin", "services", "crontab")
-	page.target = form("admin_services/crontab")
-	page.title  = _("Scheduled Tasks")
-	page.order  = 50
-
-	page        = node("admin", "services")
-	page.target = template("admin_services/index")
-	page.title  = _("Services")
-	page.order  = 40
-	page.index  = true
+	entry({"admin", "services"}, firstchild(), _("Services"), 40).index = true
+	entry({"admin", "services", "crontab"}, form("admin_services/crontab"), _("Scheduled Tasks"), 50)
 end
