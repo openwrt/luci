@@ -92,10 +92,6 @@ m.uci:foreach("network", "switch",
 			s:option(Flag, has_vlan, translate("Enable VLAN functionality"))
 		end
 
-		if enable_vlan4k then
-			s:option(Flag, "enable_vlan4k", translate("Enable 4K VLANs"))
-		end
-
 		if has_learn then
 			x = s:option(Flag, has_learn, translate("Enable learning and aging"))
 			x.default = x.enabled
@@ -164,11 +160,11 @@ m.uci:foreach("network", "switch",
 					end
 				end)
 
-			m.uci:set("network", sid, "device", switch_name)
-			m.uci:set("network", sid, "vlan", max_nr + 1)
+			m:set(sid, "device", switch_name)
+			m:set(sid, "vlan", max_nr + 1)
 
 			if has_vlan4k then
-				m.uci:set("network", sid, has_vlan4k, max_id + 1)
+				m:set(sid, has_vlan4k, max_id + 1)
 			end
 
 			return sid
@@ -244,7 +240,11 @@ m.uci:foreach("network", "switch",
 				end
 			end
 
-			m.uci:set("network", section, "ports", table.concat(p, " "))
+			if enable_vlan4k then
+				m:set(sid, "enable_vlan4k", "1")
+			end
+
+			m:set(section, "ports", table.concat(p, " "))
 			return Value.write(self, section, value)
 		end
 
