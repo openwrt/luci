@@ -56,18 +56,26 @@ uci_commitverbose "Add '$netrenamed' to freifunk firewall zone" firewall
 currms=$(uci -q get firewall.zone_freifunk.masq_src)
 
 # If interfaces are outside of the mesh network they should be natted
-for i in $networks; do
-        # Get dhcprange and meshnet
-        dhcprange=$(uci -q get meshwizard.netconfig.$i\_dhcprange)
-	if [ -n "$dhcprange" ]; then
-	        meshnet="$(uci get profile_$community.profile.mesh_network)"
-	        # check if the dhcprange is inside meshnet
-	        dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
-	        if [ ! "$dhcpinmesh" == 1 ]; then
-			uci set firewall.zone_freifunk.masq="1"
-	                [ -z "$(echo $currms |grep ${netrenamed}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}dhcp"
-	        fi
+
+# Get dhcprange and meshnet
+if_ip="$(uci -q get network.${netrenamed}dhcp.ipaddr)"
+if_mask="$(uci -q get network.${netrenamed}dhcp.netmask)"
+
+[ -n "$if_ip" -a "$if_mask" ] && export $(ipcalc.sh $if_ip $if_mask)
+[ -n "$NETWORK" -a "$PREFIX" ] && dhcprange="$NETWORK/$PREFIX"
+
+if [ -n "$dhcprange" ]; then
+	meshnet="$(uci get profile_$community.profile.mesh_network)"
+	# check if the dhcprange is inside meshnet
+	dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
+	if [ ! "$dhcpinmesh" == 1 ]; then
+		uci set firewall.zone_freifunk.masq=1
+		[ -z "$(echo $currms |grep ${netrenamed}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}dhcp"
 	fi
+fi
+
+for i in IP NETMASK BROADCAST NETWORK PREFIX; do
+	unset $i
 done
 
 uci_commitverbose "Setup masquerading rules for '$netrenamed'" firewall
