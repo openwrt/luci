@@ -181,13 +181,11 @@ You may obtain a copy of the License at
 </ul>
 
 <% if #categories > 1 then %>
-<div class="modemenu">
-	<ul>
+	<ul id="modemenu">
 	<% for i, r in ipairs(categories) do %>
 		<li><a<%=ifattr(request[1] == r, "class", "active")%> href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a></li>
 	<% end %>
 	</ul>
-</div>
 <% end %>
 
 <%
