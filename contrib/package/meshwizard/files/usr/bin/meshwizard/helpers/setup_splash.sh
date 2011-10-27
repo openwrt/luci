@@ -13,7 +13,7 @@ fi
 
 dhcprange=$(uci -q get meshwizard.netconfig.$net\_dhcprange)
 
-if [ "$dhcp_range" == 1 ]; then
+if [ "$(uci -q get meshwizard.netconfig.$net\_dhcp)" == 1 ] && [ -n "$dhcprange" ]; then
 	handle_splash() {
 		config_get network "$1" network
 		if [ "$network" == "${netrenamed}dhcp" ]; then

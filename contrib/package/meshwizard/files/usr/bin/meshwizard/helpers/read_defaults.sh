@@ -20,6 +20,6 @@ for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_
 done
 
 # read values from meshwizard
-for v in system luci_main contact community wan; do
+for v in system luci_main contact community wan lan; do
         get_var meshwizard.$v
 done

@@ -1,6 +1,6 @@
 # setup entry in /etc/config/network for a interface
 # Argument $1: network interface
-
+ 
 net="$1"
 . /etc/functions.sh
 . $dir/functions.sh
@@ -9,15 +9,20 @@ net="$1"
 
 ipaddr=$(uci get meshwizard.netconfig.$net\_ip4addr)
 [ -z "$ipaddr" ] && msg_missing_value meshwizard $net\_ip4addr
-[ -z "$interface_netmask" ] && interface netmask="255.255.0.0"
+
+netmask=$(uci -q get meshwizard.netconfig.$net\_netmask)
+[ -z "$netmask" ] && netmask="$interface_netmask"
+[ -z "$netmask" ] && netmask="255.255.0.0"
+
+uci set network.$netrenamed="interface"
+set_defaults "interface_" network.$netrenamed
 
 uci batch << EOF
-	set network.$netrenamed="interface"
 	set network.$netrenamed.proto="static"
 	set network.$netrenamed.ipaddr="$ipaddr"
+	set network.$netrenamed.netmask="$netmask"
 EOF
 
-set_defaults "interface_" network.$netrenamed
 uci_commitverbose "Setup interface $netrenamed" network
 
 # setup dhcp alias/interface
@@ -66,8 +71,7 @@ if [ "$net_dhcp" == 1 ]; then
 		set network.${netrenamed}dhcp.proto=static
 		set network.${netrenamed}dhcp.ipaddr="$START"
 		set network.${netrenamed}dhcp.netmask="$NETMASK"
-		uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
 	EOF
+	uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
 
 fi
-

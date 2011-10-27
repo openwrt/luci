@@ -1,30 +1,20 @@
 #!/bin/sh
 # Add "freifunk" firewall zone
-# If wan is used for olsr then delete wan zone and all wan rules
+# If wan/lan is used for olsr then remove these networks from wan/lan zones
 # Also setup rules defined in /etc/config/freifunk and /etc/config/profile_<community>
 
 . /etc/functions.sh
 . $dir/functions.sh
 
 wan_is_olsr=$(uci -q get meshwizard.netconfig.wan_config)
+lan_is_olsr=$(uci -q get meshwizard.netconfig.lan_config)
 
 config_load firewall
 
-# Add local_restrict to wan firewall zone (if wan is not used for olsr)
-# If wan is used for olsr then remove the firewall zone wan
-handle_zonewan() {
-	config_get name "$1" name
-	if [ "$name" == "wan" ]; then
-		if  [ "$wan_is_olsr" == 1 ]; then
-			uci del firewall.$1 && uci_commitverbose "WAN is used for olsr, delete firewall zone wan" firewall
-		else
-			uci set firewall.$1.local_restrict=1 && uci_commitverbose "Enable local_restrict for zone wan" firewall
-		fi
-	fi
-}
-config_foreach handle_zonewan zone
+# Rename firewall zone for freifunk if unnamed
+# If wan is used for olsr then set network for the firewall zone wan to ' ' to remove the wan interface from it, else add local restrict to it
+# If lan is used for olsr then set network for the firewall zone lan to ' ' to remove the lan interface from it
 
-# Rename firewall zone for freifunk if unnamed and delete wan zone if it is used for olsr; else enable local restrict
 handle_fwzone() {
 	config_get name "$1" name
 	config_get network "$1" network
@@ -38,10 +28,14 @@ handle_fwzone() {
 
 	if [ "$name" == "wan" ]; then
 		if  [ "$wan_is_olsr" == 1 ]; then
-			uci del firewall.$1 && uci_commitverbose "WAN is used for olsr, delete firewall zone wan" firewall
+			uci set firewall.$1.network=' ' && uci_commitverbose "WAN is used for olsr, removed the wan interface from zone wan" firewall
 		else
 			uci set firewall.$1.local_restrict=1 && uci_commitverbose "Enable local_restrict for zone wan" firewall
 		fi
+	fi
+
+	if [ "$name" == "lan" ] && [ "$lan_is_olsr" == 1 ]; then
+			uci set firewall.$1.network=' ' && uci_commitverbose "LAN is used for olsr, removed the lan interface from zone lan" firewall
 	fi
 }
 
@@ -80,7 +74,7 @@ if [ -n "$LANIP" ]; then
 fi
 
 currms=$(uci -q get firewall.zone_freifunk.masq_src)
-if [ ! "$no_masq_lan" == "1" ]; then
+if [ ! "$no_masq_lan" == "1" ] && [ ! "$(uci -q get meshwizard.netconfig.lan_config)" == 1 ]; then
 	uci set firewall.zone_freifunk.masq="1"
 	[ -z "$(echo $currms |grep lan)" ] && uci add_list firewall.zone_freifunk.masq_src="lan"
 fi
@@ -104,21 +98,3 @@ for config in freifunk profile_$community; do
 	done
 done
 uci_commitverbose "Setup rules, forwardings, advanced config and includes." firewall
-
-# If wan is used for olsr we need to cleanup old wan (forward) rules
-
-if  [ "$wan_is_olsr" == 1 ]; then
-	handle_wanrules() {
-	config_get src "$1" src
-		config_get dest "$1" dest
-		if [ "$src" == "wan" ] || [ "$dest" == "wan" ]; then
-			uci del firewall.$1
-		fi
-	}
-	for i in rule forwarding; do
-		config_load firewall
-		config_foreach handle_wanrules $i
-	done
-	uci_commitverbose "Wan is used for olsr, delete wan firewall rules and forwardings" firewall
-fi
-

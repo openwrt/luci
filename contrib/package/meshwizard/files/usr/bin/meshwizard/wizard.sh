@@ -63,13 +63,17 @@ if [ "$wan_proto" == "static" ] && [ -n "$wan_ip4addr" ] && [ -n "$wan_netmask" 
 	$dir/helpers/setup_wan_static.sh
 fi
 
+if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" ]; then
+	$dir/helpers/setup_lan_static.sh
+fi
+
 # Configure found networks
 for net in $networks; do
 	# radioX devices need to be renamed
 	netrenamed="${net/radio/wireless}"
 	export netrenamed
 	$dir/helpers/setup_network.sh $net
-	if [ ! "$net" == "wan" ]; then
+	if [ ! "$net" == "wan" ] && [ ! "$net" == "lan" ]; then
 		$dir/helpers/setup_wifi.sh $net
 	fi
 	$dir/helpers/setup_olsrd_interface.sh $net
