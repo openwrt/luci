@@ -57,7 +57,7 @@
 				<%- end -%>
 				<%
 					local nempty = true
-					for _, iface in ipairs(net and net:get_interfaces() or {}) do
+					for _, iface in ipairs(net:is_bridge() and net:get_interfaces() or { net:get_interface() }) do
 						nempty = false
 				 %>
 					<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />

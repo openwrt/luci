@@ -16,15 +16,14 @@ $Id$
 module("luci.controller.admin.uci", package.seeall)
 
 function index()
-	local i18n = luci.i18n.translate
 	local redir = luci.http.formvalue("redir", true) or
 	  luci.dispatcher.build_url(unpack(luci.dispatcher.context.request))
 
-	entry({"admin", "uci"}, nil, i18n("Configuration"))
-	entry({"admin", "uci", "changes"}, call("action_changes"), i18n("Changes"), 40).query = {redir=redir}
-	entry({"admin", "uci", "revert"}, call("action_revert"), i18n("Revert"), 30).query = {redir=redir}
-	entry({"admin", "uci", "apply"}, call("action_apply"), i18n("Apply"), 20).query = {redir=redir}
-	entry({"admin", "uci", "saveapply"}, call("action_apply"), i18n("Save &#38; Apply"), 10).query = {redir=redir}
+	entry({"admin", "uci"}, nil, _("Configuration"))
+	entry({"admin", "uci", "changes"}, call("action_changes"), _("Changes"), 40).query = {redir=redir}
+	entry({"admin", "uci", "revert"}, call("action_revert"), _("Revert"), 30).query = {redir=redir}
+	entry({"admin", "uci", "apply"}, call("action_apply"), _("Apply"), 20).query = {redir=redir}
+	entry({"admin", "uci", "saveapply"}, call("action_apply"), _("Save &#38; Apply"), 10).query = {redir=redir}
 end
 
 function action_changes()

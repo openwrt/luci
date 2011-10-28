@@ -1,0 +1,6 @@
+#!/bin/sh
+[ -n "${IPKG_INSTROOT}" ] || {
+	( . /etc/uci-defaults/wshaper ) && rm -f /etc/uci-defaults/wshaper
+	exit 0
+}
+

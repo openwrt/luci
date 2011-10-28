@@ -16,7 +16,6 @@ local req = require
 module "luci.controller.niu.dashboard"
 
 function index()
-	local translate = require "luci.i18n".translate
 	local uci = require "luci.model.uci"
 
 	local root = node()

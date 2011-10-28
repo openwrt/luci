@@ -211,7 +211,9 @@ end
 
 -- Render the children
 function Node.render_children(self, ...)
+	local k, node
 	for k, node in ipairs(self.children) do
+		node.last_child = (k == #self.children)
 		node:render(...)
 	end
 end
@@ -805,7 +807,9 @@ function AbstractSection.render_tab(self, tab, ...)
 	assert(tab and self.tabs and self.tabs[tab],
 		"Cannot render not existing tab %q" % tostring(tab))
 
-	for _, node in ipairs(self.tabs[tab].childs) do
+	local k, node
+	for k, node in ipairs(self.tabs[tab].childs) do
+		node.last_child = (k == #self.tabs[tab].childs)
 		node:render(...)
 	end
 end
@@ -1091,10 +1095,10 @@ function TypedSection.parse(self, novld)
 		-- Create
 		local created
 		local crval = CREATE_PREFIX .. self.config .. "." .. self.sectiontype
-		local name  = self.map:formvalue(crval)
+		local origin, name = next(self.map:formvaluetable(crval))
 		if self.anonymous then
 			if name then
-				created = self:create()
+				created = self:create(nil, origin)
 			end
 		else
 			if name then
@@ -1110,7 +1114,7 @@ function TypedSection.parse(self, novld)
 				end
 
 				if name and #name > 0 then
-					created = self:create(name) and name
+					created = self:create(name, origin) and name
 					if not created then
 						self.invalid_cts = true
 					end
@@ -1321,29 +1325,8 @@ end
 function AbstractValue.render(self, s, scope)
 	if not self.optional or self.section:has_tabs() or self:cfgvalue(s) or self:formcreated(s) then
 		scope = scope or {}
-		scope.section   = s
-		scope.cbid      = self:cbid(s)
-		scope.striptags = luci.util.striptags
-		scope.pcdata	= luci.util.pcdata
-
-		scope.ifattr = function(cond,key,val)
-			if cond then
-				return string.format(
-					' %s="%s"', tostring(key),
-					luci.util.pcdata(tostring( val
-					 or scope[key]
-					 or (type(self[key]) ~= "function" and self[key])
-					 or "" ))
-				)
-			else
-				return ''
-			end
-		end
-
-		scope.attr = function(...)
-			return scope.ifattr( true, ... )
-		end
-
+		scope.section = s
+		scope.cbid    = self:cbid(s)
 		Node.render(self, scope)
 	end
 end

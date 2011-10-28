@@ -2,9 +2,12 @@
 # This script renames IB_wifi_ interface names into real interface names used on this system.
 # E.g. wireless.IB_wifi0 would become wireless.wifi0 on madwifi and wireless.radio0 on mac80211
 
+. $dir/functions.sh
+
 posIB=-1
 
 IBwifis="$(uci show meshwizard.netconfig | grep -v 'netconfig=netconfig' | sed 's/meshwizard.netconfig\.\(IB_wifi.*\)_.*/\1/' |uniq)"
+[ -z "$(echo $IBwifis |grep IB_wifi)" ] && exit
 
 for w in $IBwifis; do
 	posIB=$(( $posIB + 1 ))
@@ -40,4 +43,4 @@ for i in `seq 0 $posIB`; do
 	fi
 done
 
-uci commit
+uci_commitverbose "Renaming wifi-devices in /etc/config/meshwizard" meshwizard

@@ -1,0 +1,5 @@
+#!/bin/sh
+[ -n "${IPKG_INSTROOT}" ] || {
+	sed -i '/ff_mapupdate.sh/d' /etc/crontabs/root
+	/etc/init.d/cron restart
+}

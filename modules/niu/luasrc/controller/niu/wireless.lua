@@ -12,7 +12,6 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-local require = require
 module "luci.controller.niu.wireless"
 
 function index()
@@ -20,22 +19,21 @@ function index()
 		return
 	end
 
-
 	local toniu = {on_success_to={"niu"}}
 	
-	local e = entry({"niu", "wireless"}, alias("niu"), i18n.translate("Wireless"), 20)
+	local e = entry({"niu", "wireless"}, alias("niu"), _("Wireless"), 20)
 	--e.niu_dbtemplate = "niu/wireless"
 	e.niu_dbtasks = true
 	e.niu_dbicon = "icons32/network-wireless.png"
 
 	entry({"niu", "wireless", "ap"}, 
-	cbi("niu/wireless/ap", toniu), i18n.translate("Configure Private Access Point"), 1)
+	cbi("niu/wireless/ap", toniu), _("Configure Private Access Point"), 1)
 	
 	local bridge = false
 	uci.inst:foreach("wireless", "wifi-device", function(s)
 		if not bridge and (s.type == "mac80211" or s.type == "atheros") then
 			entry({"niu", "wireless", "bridge"}, 
-			cbi("niu/wireless/bridge", toniu), i18n.translate("Join a local WDS network"), 2)
+			cbi("niu/wireless/bridge", toniu), _("Join a local WDS network"), 2)
 			bridge = true
 		end
 	end)

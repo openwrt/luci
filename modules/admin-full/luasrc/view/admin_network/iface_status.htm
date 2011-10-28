@@ -1,92 +1,81 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	var iwxhr = new XHR();
-	var update_status = function() {
-		iwxhr.get('<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
-			function(x, ifc)
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
+		function(x, ifc)
+		{
+			if (ifc && (ifc = ifc[0]))
 			{
-				if (ifc && (ifc = ifc[0]))
+				var html = '';
+
+				var s = document.getElementById('<%=self.option%>-ifc-signal');
+				if (s)
+					s.innerHTML = String.format(
+						'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px" />' +
+						'<br /><small>%s</small>',
+							ifc.type, ifc.is_up ? '' : '_disabled',
+							ifc.name
+					);
+
+				var d = document.getElementById('<%=self.option%>-ifc-description');
+				if (d && ifc.ifname)
 				{
-					var is_up = (ifc.flags && ifc.flags.up);
-					var rxb = ifc.stats ? (ifc.stats["rx_bytes"] / 1024) : 0;
-					var txb = ifc.stats ? (ifc.stats["tx_bytes"] / 1024) : 0;
-					var rxp = ifc.stats ? ifc.stats["rx_packets"] : 0;
-					var txp = ifc.stats ? ifc.stats["tx_packets"] : 0;
-					var mac = ifc.macaddr ? ifc.macaddr : '00:00:00:00:00:00';
-					var upt = '-';
-
-					var icon;
-					if (is_up)
+					if (ifc.is_up)
 					{
-						if (ifc.uptime)
-							upt = String.format('%t', ifc.uptime);
-
-						icon = "<%=resource%>/icons/ethernet.png";
-					}
-					else
-					{
-						icon = "<%=resource%>/icons/ethernet_disabled.png";
+						html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 					}
 
-					var s = document.getElementById('<%=self.option%>-ifc-signal');
-					if (s)
-						s.innerHTML = String.format(
-							'<img src="%s" style="width:16px; height:16px" /><br />' +
-							'<small>%s</small>', icon, ifc.ifname ? ifc.ifname : '?'
-						);
-
-					var d = document.getElementById('<%=self.option%>-ifc-description');
-					if (d && ifc.ifname)
+					if (ifc.type != 'tunnel')
 					{
-						d.innerHTML = String.format(
-							'<strong><%:Uptime%>:</strong> %s<br />' +
-							'<strong><%:MAC Address%>:</strong> %s<br />' +
-							'<strong><%:RX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />' +
-							'<strong><%:TX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />',
-								upt, mac, rxb, rxp, txb, txp
-						);
-
-						if (ifc.ipaddrs && ifc.ipaddrs.length)
-						{
-							d.innerHTML += '<strong><%:IPv4%>: </strong>';
-
-							for (var i = 0; i < ifc.ipaddrs.length; i++)
-								d.innerHTML += String.format(
-									'%s%s/%d',
-									i ? ', ' : '',
-									ifc.ipaddrs[i].addr,
-									ifc.ipaddrs[i].prefix
-								);
-
-							d.innerHTML += '<br />';
-						}
-
-						if (ifc.ip6addrs && ifc.ip6addrs.length)
-						{
-							d.innerHTML += '<strong><%:IPv6%>: </strong>';
-
-							for (var i = 0; i < ifc.ip6addrs.length; i++)
-								d.innerHTML += String.format(
-									'%s%s/%d',
-									i ? ', ' : '',
-									ifc.ip6addrs[i].addr.toUpperCase(),
-									ifc.ip6addrs[i].prefix
-								);
-
-							d.innerHTML += '<br />';
-						}
+						html += String.format('<strong><%:MAC Address%>:</strong> %s<br />', ifc.macaddr);
 					}
-					else if (d)
-						d.innerHTML = '<%:Interface not present or not connected yet.%>';
+
+					html += String.format(
+						'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
+						'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
+							ifc.rx_bytes, ifc.rx_packets,
+							ifc.tx_bytes, ifc.tx_packets
+					);
+
+					if (ifc.ipaddrs && ifc.ipaddrs.length)
+					{
+						html += '<strong><%:IPv4%>: </strong>';
+
+						for (var i = 0; i < ifc.ipaddrs.length; i++)
+							html += String.format(
+								'%s%s/%d',
+								i ? ', ' : '',
+								ifc.ipaddrs[i].addr,
+								ifc.ipaddrs[i].prefix
+							);
+
+						html += '<br />';
+					}
+
+					if (ifc.ip6addrs && ifc.ip6addrs.length)
+					{
+						html += '<strong><%:IPv6%>: </strong>';
+
+						for (var i = 0; i < ifc.ip6addrs.length; i++)
+							html += String.format(
+								'%s%s/%d',
+								i ? ', ' : '',
+								ifc.ip6addrs[i].addr.toUpperCase(),
+								ifc.ip6addrs[i].prefix
+							);
+
+						html += '<br />';
+					}
+
+					d.innerHTML = html;
 				}
-
-				window.setTimeout(update_status, 5000);
+				else if (d)
+				{
+					d.innerHTML = '<em><%:Interface not present or not connected yet.%></em>';
+				}
 			}
-		)
-	};
-
-	update_status();
+		}
+	);
 //]]></script>
 
 <table>

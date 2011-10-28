@@ -1,16 +1,17 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-10-11 21:13+0200\n"
+"Last-Translator: Luiz Angelo <luizluca@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Pootle 2.0.4\n"
 
 #. The statistics package is based on <a href=\"http://collectd.org/index.shtml\">Collectd</a> and uses <a href=\"http://oss.oetiker.ch/rrdtool/\">RRD Tool</a> to render diagram images from collected data.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:2
@@ -26,7 +27,7 @@ msgstr ""
 #. System plugins
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:3
 msgid "System plugins"
-msgstr "Plugis de Sistema"
+msgstr "Plugins de sistema"
 
 #. Network plugins
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:4
@@ -330,9 +331,10 @@ msgid ""
 "be used in other ways as well."
 msgstr ""
 "O plugin de email cria um socket unix que pode ser usado para transmitir "
-"estatísticas de email o daemon collectd. Este plugin é essencialmente "
-"destinado a ser utilizado em conjunto com o plugin Mail::SpamAssasin::"
-"Plugin::Collectd mas pode ser utilizado de outras maneiras também."
+"estatísticas de email para o collectd. Este plugin é essencialmente "
+"destinado a ser utilizado em conjunto com o plugin "
+"Mail::SpamAssasin::Plugin::Collectd mas pode ser utilizado de outras "
+"maneiras também."
 
 #. Maximum allowed connections
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:80
@@ -380,7 +382,7 @@ msgid ""
 "will be feeded to the the called programs stdin."
 msgstr ""
 "Aqui você pode definir os comandos externos que serão iniciados pelo "
-"collectd quando determinados valores limite forem  atingidos. Os valores "
+"collectd quando determinados valores limite forem atingidos. Os valores "
 "passados ao comando serão enviados para o stdin."
 
 #. Interface Plugin Configuration
@@ -432,7 +434,7 @@ msgstr "Nome da regra"
 #. max. 16 chars
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:106
 msgid "max. 16 chars"
-msgstr "max. 16 caract."
+msgstr "máx. 16 caracteres"
 
 #. Table
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:107
@@ -457,12 +459,12 @@ msgstr "Protocolo de rede"
 #. Source ip range
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:111
 msgid "Source ip range"
-msgstr "IP de origem"
+msgstr "Faixa de IP de origem"
 
 #. Destination ip range
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:113
 msgid "Destination ip range"
-msgstr "IP de destino"
+msgstr "Faixa IP de destino"
 
 #. Incoming interface
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:115
@@ -472,7 +474,7 @@ msgstr "Interface de entrada"
 #. e.g. br-lan
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:116
 msgid "e.g. br-lan"
-msgstr "ex. br-lan"
+msgstr "ex: br-lan"
 
 #. Outgoing interface
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:117
@@ -482,7 +484,7 @@ msgstr "Interface de saída"
 #. e.g. br-ff
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:118
 msgid "e.g. br-ff"
-msgstr "ex. br-ff"
+msgstr "ex: br-ff"
 
 #. Options
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:119
@@ -492,7 +494,7 @@ msgstr "Opções"
 #. e.g. reject-with tcp-reset
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:120
 msgid "e.g. reject-with tcp-reset"
-msgstr "ex. rejeitar-com tcp-reset"
+msgstr "ex: rejeitar-com tcp-reset"
 
 #. IRQ Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:121
@@ -505,9 +507,9 @@ msgid ""
 "The irq plugin will monitor the rate of issues per second for each selected "
 "interrupt. If no interrupt is selected then all interrupts are monitored."
 msgstr ""
-"O plugin irq irá monitorar a taxa de erros por segundo de cada interrupção "
-"selecionada. Se nenhuma interrupção for selecionada então todas as "
-"interrupções serão monitoradas."
+"O plugin irq irá monitorar a taxa de ocorrências por segundo de cada "
+"interrupção selecionada. Se nenhuma interrupção for selecionada então todas "
+"as interrupções serão monitoradas."
 
 #. Monitor interrupts
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:124
@@ -522,7 +524,7 @@ msgstr "Configuração do plugin carga"
 #. The load plugin collects statistics about the general system load.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:128
 msgid "The load plugin collects statistics about the general system load."
-msgstr "O plugin carga coleta estatísticas gerais sobre a carga do sistema."
+msgstr "O plugin de carga coleta estatísticas gerais sobre a carga do sistema."
 
 #. Netlink Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:130
@@ -535,8 +537,8 @@ msgid ""
 "The netlink plugin collects extended informations like qdisc-, class- and "
 "filter-statistics for selected interfaces."
 msgstr ""
-"O plugin Netlink coleta informações detalhadas como qdisc-, classe- e filtro "
-"de estatísticas das interfaces selecionadas."
+"O plugin Netlink coleta informações detalhadas como qdisc-, classe- e "
+"estatísticas de filtro das interfaces selecionadas."
 
 #. Basic monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:133
@@ -546,7 +548,7 @@ msgstr "Monitoramento básico"
 #. Verbose monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:135
 msgid "Verbose monitoring"
-msgstr "Monitoramento no modo verbose"
+msgstr "Monitoramento no modo detalhado"
 
 #. Qdisc monitoring
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:137
@@ -579,8 +581,8 @@ msgstr ""
 "O plugin rede fornece informações de rede baseadas na comunicação entre as "
 "diferentes instâncias do collectd. O Collectd pode operar tanto no modo "
 "cliente quanto no modo servidor. No modo cliente os dados coletados "
-"localmente são transferidos para um servidor collectd, no modo de servidor a "
-"instância local recebe dados de outros hosts."
+"localmente são transferidos para um servidor collectd. No modo de servidor, "
+"o servidor local recebe os dados de outros servidores."
 
 #. Listener interfaces
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:147
@@ -609,7 +611,7 @@ msgstr "Porta de escuta"
 #. server interfaces
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:153
 msgid "server interfaces"
-msgstr "Interfaces do servidor"
+msgstr "interfaces do servidor"
 
 #. This section defines to which servers the locally collected data is sent to.
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:154
@@ -622,7 +624,7 @@ msgstr ""
 #. Server host
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:155
 msgid "Server host"
-msgstr "IP/Hostname do servidor"
+msgstr "Endereço do servidor"
 
 #. Server port
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:157
@@ -637,7 +639,7 @@ msgstr "TTL para os pacotes de rede"
 #. Forwarding between listen and server addresses
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:161
 msgid "Forwarding between listen and server addresses"
-msgstr "Transmissão entre o endereço de escuta e dos servidores"
+msgstr "Encaminhamento entre o endereço de escuta e os endereços dos servidores"
 
 #. Cache flush interval
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:162
@@ -679,8 +681,8 @@ msgid ""
 "The processes plugin collects informations like cpu time, page faults and "
 "memory usage of selected processes."
 msgstr ""
-"O plugin processo coleta informações como o tempo da cpu, página falhas e "
-"uso de memória dos processos selecionados."
+"O plugin de processos coleta informações como o tempo da cpu, falha de "
+"página e uso de memória dos processos selecionados."
 
 #. Monitor processes
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:174
@@ -748,7 +750,7 @@ msgstr "Linhas por RRA"
 #. RRD XFiles Factor
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:189
 msgid "RRD XFiles Factor"
-msgstr "Arquivos RRD XFiles Factor"
+msgstr "Fator RRD XFiles"
 
 #. Cache collected data for
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:190
@@ -801,7 +803,7 @@ msgid ""
 "collected data from a running collectd instance."
 msgstr ""
 "O plugin unixsock cria um socket unix, que pode ser usado para ler os dados "
-"coletados a partir de uma instância do collectd."
+"coletados a partir de uma collectd em execução."
 
 #. Wireless Plugin Configuration
 #: applications/luci-statistics/luasrc/i18n/statistics.en.lua:210

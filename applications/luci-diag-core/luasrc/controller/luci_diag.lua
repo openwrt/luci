@@ -16,16 +16,15 @@ require("luci.i18n")
 module("luci.controller.luci_diag", package.seeall)
 
 function index()
-   require("luci.i18n")
-   luci.i18n.loadc("diag_core")
+	local e
 
-   local e = entry({"admin", "network", "diag_config"}, template("diag/network_config_index") , luci.i18n.translate("Configure Diagnostics"), 120)
-   e.index = true
-   e.i18n = "diag_core"
-   e.dependent = true
+	e = entry({"admin", "network", "diag_config"}, template("diag/network_config_index") , _("Configure Diagnostics"), 120)
+	e.index = true
+	e.i18n = "diag_core"
+	e.dependent = true
 
-   e = entry({"mini", "diag"}, template("diag/index"), luci.i18n.translate("l_d_diag"), 120)
-   e.index = true
-   e.i18n = "diag_core"
-   e.dependent = true
+	e = entry({"mini", "diag"}, template("diag/index"), _("Diagnostics"), 120)
+	e.index = true
+	e.i18n = "diag_core"
+	e.dependent = true
 end

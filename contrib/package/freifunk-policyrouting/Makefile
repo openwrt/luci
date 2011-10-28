@@ -13,7 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freifunk-policyrouting
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk policy routing addon
   DEPENDS:=+firewall +ip
 endef

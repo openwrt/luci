@@ -17,11 +17,11 @@ m = Map("network", translate("Switch"), translate("The network ports on your rou
 
 m.uci:foreach("network", "switch",
 	function(x)
-		local switch_name = x.name or x['.name']
+		local sid         = x['.name']
+		local switch_name = x.name or sid
 		local has_vlan    = nil
-		local has_learn   = nil 
+		local has_learn   = nil
 		local has_vlan4k  = nil
-		local has_ptpvid  = nil
 		local has_jumbo3  = nil
 		local min_vid     = 0
 		local max_vid     = 16
@@ -29,6 +29,7 @@ m.uci:foreach("network", "switch",
 		local num_ports   = 6
 		local cpu_port    = 5
 
+		local switch_title
 		local enable_vlan4k = false
 
 		-- Parse some common switch properties from swconfig help output.
@@ -49,7 +50,8 @@ m.uci:foreach("network", "switch",
 					is_vlan_attr = false
 					is_port_attr = true
 
-				elseif line:match("^Switch %d+:") then
+				elseif line:match("cpu @") then
+					switch_title = line:match("^switch%d: %w+%((.-)%)")
 					num_ports, cpu_port, num_vlans =
 						line:match("ports: (%d+) %(cpu @ (%d+)%), vlans: (%d+)")
 
@@ -60,7 +62,6 @@ m.uci:foreach("network", "switch",
 
 				elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
 					if is_vlan_attr then has_vlan4k = line:match(": (%w+)") end
-					if is_port_attr then has_ptpvid = line:match(": (%w+)") end
 
 				elseif line:match(": enable_vlan4k") then
 					enable_vlan4k = true
@@ -80,43 +81,15 @@ m.uci:foreach("network", "switch",
 		end
 
 
-		-- The PVID options (if any) are added to this table so that
-		-- section create below can add the just created vlan to the
-		-- choice list of the PVID options...
-		local pvid_opts = { }
-
-		-- This function re-reads all existing vlan ids and populates
-		-- PVID options choice lists
-		local function populate_pvids()
-			local vlan_ids = { }
-			m.uci:foreach("network", "switch_vlan",
-				function(s)
-					local vid = s[has_vlan4k or "vlan"] or s["vlan"]
-					if vid ~= nil then
-						vlan_ids[#vlan_ids+1] = vid
-					end
-				end)
-
-			local opt, vid
-			for _, opt in ipairs(pvid_opts) do
-				opt:reset_values()
-				opt:value("", translate("none"))
-				for _, vid in luci.util.vspairs(vlan_ids) do
-					opt:value(vid, translatef("VLAN %d", tonumber(vid)))
-				end
-			end
-		end
-
 		-- Switch properties
-		s = m:section(NamedSection, x['.name'], "switch", translatef("Switch %q", switch_name))
+		s = m:section(NamedSection, x['.name'], "switch",
+			switch_title and translatef("Switch %q (%s)", switch_name, switch_title)
+					      or translatef("Switch %q", switch_name))
+
 		s.addremove = false
 
 		if has_vlan then
 			s:option(Flag, has_vlan, translate("Enable VLAN functionality"))
-		end
-
-		if enable_vlan4k then
-			s:option(Flag, "enable_vlan4k", translate("Enable 4K VLANs"))
 		end
 
 		if has_learn then
@@ -132,10 +105,19 @@ m.uci:foreach("network", "switch",
 
 
 		-- VLAN table
-		s = m:section(TypedSection, "switch_vlan", translatef("VLANs on %q", switch_name))
+		s = m:section(TypedSection, "switch_vlan",
+			switch_title and translatef("VLANs on %q (%s)", switch_name, switch_title)
+						  or translatef("VLANs on %q", switch_name))
+
 		s.template = "cbi/tblsection"
 		s.addremove = true
 		s.anonymous = true
+
+		-- Filter by switch
+		s.filter = function(self, section)
+			local device = m:get(section, "device")
+			return (device and device == switch_name)
+		end
 
 		-- Override cfgsections callback to enforce row ordering by vlan id.
 		s.cfgsections = function(self)
@@ -146,8 +128,8 @@ m.uci:foreach("network", "switch",
 			for _, section in luci.util.spairs(
 				osections,
 				function(a, b)
-					return (tonumber(m.uci:get("network", osections[a], has_vlan4k or "vlan")) or 9999)
-						<  (tonumber(m.uci:get("network", osections[b], has_vlan4k or "vlan")) or 9999)
+					return (tonumber(m:get(osections[a], has_vlan4k or "vlan")) or 9999)
+						<  (tonumber(m:get(osections[b], has_vlan4k or "vlan")) or 9999)
 				end
 			) do
 				sections[#sections+1] = section
@@ -157,8 +139,12 @@ m.uci:foreach("network", "switch",
 		end
 
 		-- When creating a new vlan, preset it with the highest found vid + 1.
-		-- Repopulate the PVID choice lists afterwards.
-		s.create = function(self, section)
+		s.create = function(self, section, origin)
+			-- Filter by switch
+			if m:get(origin, "device") ~= switch_name then
+				return
+			end
+
 			local sid = TypedSection.create(self, section)
 
 			local max_nr = 0
@@ -166,33 +152,22 @@ m.uci:foreach("network", "switch",
 
 			m.uci:foreach("network", "switch_vlan",
 				function(s)
-					local nr = tonumber(s.vlan)
-					local id = has_vlan4k and tonumber(s[has_vlan4k])
-					if nr ~= nil and nr > max_nr then max_nr = nr end
-					if id ~= nil and id > max_id then max_id = id end
+					if s.device == switch_name then
+						local nr = tonumber(s.vlan)
+						local id = has_vlan4k and tonumber(s[has_vlan4k])
+						if nr ~= nil and nr > max_nr then max_nr = nr end
+						if id ~= nil and id > max_id then max_id = id end
+					end
 				end)
 
-			m.uci:set("network", sid, "device", switch_name)
-			m.uci:set("network", sid, "vlan", max_nr + 1)
+			m:set(sid, "device", switch_name)
+			m:set(sid, "vlan", max_nr + 1)
 
 			if has_vlan4k then
-				m.uci:set("network", sid, has_vlan4k, max_id + 1)
+				m:set(sid, has_vlan4k, max_id + 1)
 			end
 
-			-- add newly created vlan to the pvid choice list
-			populate_pvids()
-
 			return sid
-		end
-
-		-- Repopulate PVId choice lists if a vlan gets removed.
-		s.remove = function(self, section)
-			local rv = TypedSection.remove(self, section)
-
-			-- repopulate pvid choices
-			populate_pvids()
-
-			return rv
 		end
 
 
@@ -202,7 +177,7 @@ m.uci:foreach("network", "switch",
 		-- Parse current tagging state from the "ports" option.
 		local portvalue = function(self, section)
 			local pt
-			for pt in (m.uci:get("network", section, "ports") or ""):gmatch("%w+") do
+			for pt in (m:get(section, "ports") or ""):gmatch("%w+") do
 				local pc, tu = pt:match("^(%d+)([tu]*)")
 				if pc == self.option then return (#tu > 0) and tu or "u" end
 			end
@@ -229,6 +204,7 @@ m.uci:foreach("network", "switch",
 
 		vid.rmempty = false
 		vid.forcewrite = true
+		vid.vlan_used = { }
 
 		-- Validate user provided VLAN ID, make sure its within the bounds
 		-- allowed by the switch.
@@ -236,7 +212,13 @@ m.uci:foreach("network", "switch",
 			local v = tonumber(value)
 			local m = has_vlan4k and 4094 or (num_vlans - 1)
 			if v ~= nil and v >= min_vid and v <= m then
-				return value
+				if not self.vlan_used[v] then
+					self.vlan_used[v] = true
+					return value
+				else
+					return nil,
+						translatef("Invalid VLAN ID given! Only unique IDs are allowed")
+				end
 			else
 				return nil,
 					translatef("Invalid VLAN ID given! Only IDs between %d and %d are allowed.", min_vid, m)
@@ -258,136 +240,43 @@ m.uci:foreach("network", "switch",
 				end
 			end
 
-			m.uci:set("network", section, "ports", table.concat(p, " "))
+			if enable_vlan4k then
+				m:set(sid, "enable_vlan4k", "1")
+			end
+
+			m:set(section, "ports", table.concat(p, " "))
 			return Value.write(self, section, value)
 		end
 
 		-- Fallback to "vlan" option if "vid" option is supported but unset.
 		vid.cfgvalue = function(self, section)
-			return m.uci:get("network", section, has_vlan4k or "vlan")
-				or m.uci:get("network", section, "vlan")
+			return m:get(section, has_vlan4k or "vlan")
+				or m:get(section, "vlan")
 		end
 
 		-- Build per-port off/untagged/tagged choice lists.
 		local pt
+		local off = 1
 		for pt = 0, num_ports - 1 do
-			local po = s:option(ListValue, tostring(pt),
-				(pt == cpu_port) and translate("CPU") or translatef("Port %d", (pt + 1)))
+			local title
+			if pt == cpu_port then
+				off   = 0
+				title = translate("CPU")
+			else
+				title = translatef("Port %d", pt + off)
+			end
 
-			po:value("", translate("off"))
-			po:value("u" % pt, translate("untagged"))
-			po:value("t" % pt, translate("tagged"))
+			local po = s:option(ListValue, tostring(pt), title)
+
+			po:value("",  translate("off"))
+			po:value("u", translate("untagged"))
+			po:value("t", translate("tagged"))
 
 			po.cfgvalue = portvalue
 			po.validate = portvalidate
 			po.write    = function() end
 
 			port_opts[#port_opts+1] = po
-		end
-
-
-		-- Does this switch support PVIDs?
-		if has_ptpvid then
-
-			-- Spawn a "virtual" section. We just attach it to the global
-			-- switch section here, the overrides below take care of writing
-			-- the actual values to the correct uci sections.
-			s = m:section(TypedSection, "switch",
-				translatef("Port PVIDs on %q", switch_name),
-				translate("Port <abbr title=\"Primary VLAN IDs\">PVIDs</abbr> specify " ..
-					"the default VLAN ID added to received untagged frames."))
-
-			s.template  = "cbi/tblsection"
-			s.addremove = false
-			s.anonymous = true
-
-			-- Build port list, store pointers to the option objects in the
-			-- pvid_opts array so that other callbacks can repopulate their
-			-- choice lists.
-			local pt
-			for pt = 0, num_ports - 1 do
-				local po = s:option(ListValue, tostring(pt),
-					(pt == cpu_port) and translate("CPU") or translatef("Port %d", (pt + 1)))
-
-				-- When cbi queries the current config value for this post,
-				-- lookup the associated switch_port section (if any) and
-				-- return its "pvid" or "vlan" option value.
-				po.cfgvalue = function(self, section)
-					local val
-					m.uci:foreach("network", "switch_port",
-						function(s)
-							if s.port == self.option then
-								val = s[has_ptpvid]
-								return false
-							end
-						end)
-					return val
-				end
-
-				-- On write, find the actual switch_port section associated
-				-- to this port and set the value there. Create a new
-				-- switch_port section for this port if there is none yet.
-				po.write = function(self, section, value)
-					local found = false
-
-					m.uci:foreach("network", "switch_port",
-						function(s)
-							if s.port == self.option then
-								m.uci:set("network", s['.name'], has_ptpvid, value)
-								found = true
-								return false
-							end
-						end)
-
-					if not found then
-						m.uci:section("network", "switch_port", nil, {
-							["port"]     = self.option,
-							[has_ptpvid] = value
-						})
-					end
-				end
-
-				-- If the user cleared the PVID value on this port, find
-				-- the associated switch_port section and clear it.
-				-- If the section does not contain any other unrelated
-				-- options (like led or blinkrate) then remove it completely,
-				-- else just clear out the "pvid" option.
-				po.remove = function(self, section)
-					m.uci:foreach("network", "switch_port",
-						function(s)
-							if s.port == self.option then
-								local k, found
-								local empty = true
-
-								for k, _ in pairs(s) do
-									if k:sub(1,1) ~= "." and k ~= "port" and k ~= has_ptpvid then
-										empty = false
-										break
-									end
-								end
-
-								if empty then
-									m.uci:delete("network", s['.name'])
-								else
-									m.uci:delete("network", s['.name'], has_ptpvid)
-								end
-
-								return false
-							end
-						end)
-				end
-
-				-- The referenced VLAN might just have been removed, simply
-				-- return "" (none) in this case to avoid triggering a
-				-- validation error.
-				po.validate = function(...)
-					return ListValue.validate(...) or ""
-				end
-
-				pvid_opts[#pvid_opts+1] = po
-			end
-
-			populate_pvids()
 		end
 	end
 )

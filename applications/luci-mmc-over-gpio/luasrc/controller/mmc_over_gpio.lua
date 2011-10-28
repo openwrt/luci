@@ -16,13 +16,13 @@ $Id$
 module("luci.controller.mmc_over_gpio", package.seeall)
 
 function index()
-       require("luci.i18n")
-       luci.i18n.loadc("mmc_over_gpio")
-       if not nixio.fs.access("/etc/config/mmc_over_gpio") then
-               return
-       end
+	if not nixio.fs.access("/etc/config/mmc_over_gpio") then
+		return
+	end
 
-       local page = entry({"admin", "system", "mmc_over_gpio"}, cbi("mmc_over_gpio"), luci.i18n.translate("MMC/SD driver configuration"), 60)
-       page.i18n = "mmc_over_gpio"
-       page.dependent = true
+	local page
+
+	page = entry({"admin", "system", "mmc_over_gpio"}, cbi("mmc_over_gpio"), _("MMC/SD driver configuration"), 60)
+	page.i18n = "mmc_over_gpio"
+	page.dependent = true
 end

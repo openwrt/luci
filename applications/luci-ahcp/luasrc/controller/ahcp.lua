@@ -19,10 +19,7 @@ function index()
 		return
 	end
 
-	require("luci.i18n")
-	luci.i18n.loadc("ahcp")
-
-	entry({"admin", "network", "ahcpd"}, cbi("ahcp"), luci.i18n.translate("AHCP Server"), 90).i18n = "ahcp"
+	entry({"admin", "network", "ahcpd"}, cbi("ahcp"), _("AHCP Server"), 90).i18n = "ahcp"
 	entry({"admin", "network", "ahcpd", "status"}, call("ahcp_status"))
 end
 

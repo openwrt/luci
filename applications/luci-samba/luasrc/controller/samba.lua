@@ -12,16 +12,17 @@ You may obtain a copy of the License at
 
 $Id$
 ]]--
+
 module("luci.controller.samba", package.seeall)
 
 function index()
 	if not nixio.fs.access("/etc/config/samba") then
 		return
 	end
-	require("luci.i18n")
-	luci.i18n.loadc("samba")
-	
-	local page = entry({"admin", "services", "samba"}, cbi("samba"), luci.i18n.translate("Network Shares"))
+
+	local page
+
+	page = entry({"admin", "services", "samba"}, cbi("samba"), _("Network Shares"))
 	page.i18n = "samba"
 	page.dependent = true
 end

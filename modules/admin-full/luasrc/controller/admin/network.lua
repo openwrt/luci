@@ -16,10 +16,8 @@ $Id$
 module("luci.controller.admin.network", package.seeall)
 
 function index()
-	require("luci.i18n")
 	local uci = require("luci.model.uci").cursor()
 	local net = require "luci.model.network".init(uci)
-	local i18n = luci.i18n.translate
 	local has_wifi = nixio.fs.stat("/etc/config/wireless")
 	local has_switch = false
 
@@ -33,33 +31,39 @@ function index()
 	local page
 
 	page = node("admin", "network")
-	page.target = alias("admin", "network", "network")
-	page.title  = i18n("Network")
+	page.target = firstchild()
+	page.title  = _("Network")
 	page.order  = 50
 	page.index  = true
 
 	if has_switch then
 		page  = node("admin", "network", "vlan")
 		page.target = cbi("admin_network/vlan")
-		page.title  = i18n("Switch")
+		page.title  = _("Switch")
 		page.order  = 20
 	end
 
 	if has_wifi and has_wifi.size > 0 then
-		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
+		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wifi"), 15)
 		page.leaf = true
 		page.subindex = true
 
-		page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil, 16)
+		page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil, 16)
+		page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil, 16)
+		page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil, 16)
+		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "wireless_reconnect"}, call("wifi_reconnect"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "wireless_shutdown"}, call("wifi_reconnect"), nil)
 		page.leaf = true
 
 		local wdev
@@ -75,7 +79,7 @@ function index()
 		end
 	end
 
-	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
+	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
 	page.leaf   = true
 	page.subindex = true
 
@@ -108,7 +112,7 @@ function index()
 	if nixio.fs.access("/etc/config/dhcp") then
 		page = node("admin", "network", "dhcp")
 		page.target = cbi("admin_network/dhcp")
-		page.title  = i18n("DHCP and DNS")
+		page.title  = _("DHCP and DNS")
 		page.order  = 30
 
 		page = entry({"admin", "network", "dhcplease_status"}, call("lease_status"), nil)
@@ -116,18 +120,18 @@ function index()
 
 		page = node("admin", "network", "hosts")
 		page.target = cbi("admin_network/hosts")
-		page.title  = i18n("Hostnames")
+		page.title  = _("Hostnames")
 		page.order  = 40
 	end
 
 	page  = node("admin", "network", "routes")
 	page.target = cbi("admin_network/routes")
-	page.title  = i18n("Static Routes")
+	page.title  = _("Static Routes")
 	page.order  = 50
 
 	page = node("admin", "network", "diagnostics")
 	page.target = template("admin_network/diagnostics")
-	page.title  = i18n("Diagnostics")
+	page.title  = _("Diagnostics")
 	page.order  = 60
 
 	page = entry({"admin", "network", "diag_ping"}, call("diag_ping"), nil)
@@ -194,9 +198,21 @@ end
 
 function wifi_delete(network)
 	local ntm = require "luci.model.network".init()
-
-	ntm:del_wifinet(network)
-	ntm:save("wireless")
+	local wnet = ntm:get_wifinet(network)
+	if wnet then
+		local dev = wnet:get_device()
+		local net = wnet:get_network()
+		if dev then
+			luci.sys.call("env -i /sbin/wifi down %q" % dev:name())
+			ntm:del_wifinet(network)
+			ntm:commit("wireless")
+			if net:is_empty() then
+				ntm:del_network(net:name())
+				ntm:commit("network")
+			end
+			luci.sys.call("env -i /sbin/wifi up %q" % dev:name())
+		end
+	end
 
 	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 end
@@ -209,47 +225,68 @@ function iface_status()
 	local iface
 	for iface in path[#path]:gmatch("[%w%.%-_]+") do
 		local net = netm:get_network(iface)
-		if net then
-			local info
-			local dev  = net:ifname()
-			local data = {
-				id       = iface,
-				proto    = net:proto(),
-				uptime   = net:uptime(),
-				gwaddr   = net:gwaddr(),
-				dnsaddrs = net:dnsaddrs()
+		local device = net and net:get_interface()
+		if device then
+			local device = net:get_interface()
+			local data   = {
+				id         = iface,
+				proto      = net:proto(),
+				uptime     = net:uptime(),
+				gwaddr     = net:gwaddr(),
+				dnsaddrs   = net:dnsaddrs(),
+				name       = device:shortname(),
+				type       = device:type(),
+				ifname     = device:name(),
+				macaddr    = device:mac(),
+				is_up      = device:is_up(),
+				rx_bytes   = device:rx_bytes(),
+				tx_bytes   = device:tx_bytes(),
+				rx_packets = device:rx_packets(),
+				tx_packets = device:tx_packets(),
+
+				ipaddrs    = { },
+				ip6addrs   = { },
+				subdevices = { }
 			}
-			for _, info in ipairs(nixio.getifaddrs()) do
-				local name = info.name:match("[^:]+")
-				if name == dev then
-					if info.family == "packet" then
-						data.flags   = info.flags
-						data.stats   = info.data
-						data.macaddr = info.addr
-						data.ifname  = name
-					elseif info.family == "inet" then
-						data.ipaddrs = data.ipaddrs or { }
-						data.ipaddrs[#data.ipaddrs+1] = {
-							addr      = info.addr,
-							broadaddr = info.broadaddr,
-							dstaddr   = info.dstaddr,
-							netmask   = info.netmask,
-							prefix    = info.prefix
-						}
-					elseif info.family == "inet6" then
-						data.ip6addrs = data.ip6addrs or { }
-						data.ip6addrs[#data.ip6addrs+1] = {
-							addr    = info.addr,
-							netmask = info.netmask,
-							prefix  = info.prefix
-						}
-					end
-				end
+
+			local _, a
+			for _, a in ipairs(device:ipaddrs()) do
+				data.ipaddrs[#data.ipaddrs+1] = {
+					addr      = a:host():string(),
+					netmask   = a:mask():string(),
+					prefix    = a:prefix()
+				}
+			end
+			for _, a in ipairs(device:ip6addrs()) do
+				data.ip6addrs[#data.ip6addrs+1] = {
+					addr      = a:host():string(),
+					netmask   = a:mask():string(),
+					prefix    = a:prefix()
+				}
 			end
 
-			if next(data) then
-				rv[#rv+1] = data
+			for _, device in ipairs(net:get_interfaces() or {}) do
+				data.subdevices[#data.subdevices+1] = {
+					name       = device:shortname(),
+					type       = device:type(),
+					ifname     = device:name(),
+					macaddr    = device:mac(),
+					macaddr    = device:mac(),
+					is_up      = device:is_up(),
+					rx_bytes   = device:rx_bytes(),
+					tx_bytes   = device:tx_bytes(),
+					rx_packets = device:rx_packets(),
+					tx_packets = device:tx_packets(),
+				}
 			end
+
+			rv[#rv+1] = data
+		else
+			rv[#rv+1] = {
+				id   = iface,
+				name = iface,
+				type = "ethernet"
+			}
 		end
 	end
 
@@ -269,23 +306,6 @@ function iface_reconnect()
 
 	local net = netmd:get_network(iface)
 	if net then
-		local ifn
-		for _, ifn in ipairs(net:get_interfaces()) do
-			local wnet = ifn:get_wifinet()
-			if wnet then
-				local wdev = wnet:get_device()
-				if wdev then
-					luci.sys.call(
-						"env -i /sbin/wifi up %q >/dev/null 2>/dev/null"
-							% wdev:name()
-					)
-
-					luci.http.status(200, "Reconnected")
-					return
-				end
-			end
-		end
-
 		luci.sys.call("env -i /sbin/ifup %q >/dev/null 2>/dev/null" % iface)
 		luci.http.status(200, "Reconnected")
 		return
@@ -343,6 +363,28 @@ function wifi_status()
 	end
 
 	luci.http.status(404, "No such device")
+end
+
+function wifi_reconnect()
+	local path  = luci.dispatcher.context.requestpath
+	local mode  = path[#path-1]
+	local wnet  = path[#path]
+	local netmd = require "luci.model.network".init()
+
+	local net = netmd:get_wifinet(wnet)
+	local dev = net:get_device()
+	if dev and net then
+		dev:set("disabled", nil)
+		net:set("disabled", (mode == "wireless_shutdown") and 1 or nil)
+		netmd:commit("wireless")
+
+		luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
+		luci.http.status(200, (mode == "wireless_shutdown") and "Shutdown" or "Reconnected")
+
+		return
+	end
+
+	luci.http.status(404, "No such radio")
 end
 
 function lease_status()

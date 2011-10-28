@@ -16,13 +16,13 @@ $Id$
 module("luci.controller.hd_idle", package.seeall)
 
 function index()
-       require("luci.i18n")
-       luci.i18n.loadc("hd_idle")
-       if not nixio.fs.access("/etc/config/hd-idle") then
-               return
-       end
+	if not nixio.fs.access("/etc/config/hd-idle") then
+		return
+	end
 
-       local page = entry({"admin", "services", "hd_idle"}, cbi("hd_idle"), luci.i18n.translate("hd-idle"), 60)
-       page.i18n = "hd_idle"
-       page.dependent = true
+	local page
+
+	page = entry({"admin", "services", "hd_idle"}, cbi("hd_idle"), _("hd-idle"), 60)
+	page.i18n = "hd_idle"
+	page.dependent = true
 end

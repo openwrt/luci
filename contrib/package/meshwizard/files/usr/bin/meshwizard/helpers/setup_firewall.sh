@@ -1,106 +1,57 @@
 #!/bin/sh
-# This will add $net to the zone firewall (and remove it from other zones where it is referenced)
-# It will also setup rules defined in /etc/config/freifunk and /etc/config/profile_<community>
-# Arg $1 = $net
+# Add "freifunk" firewall zone
+# If wan/lan is used for olsr then remove these networks from wan/lan zones
+# Also setup rules defined in /etc/config/freifunk and /etc/config/profile_<community>
 
-net=$1
 . /etc/functions.sh
 . $dir/functions.sh
+
+wan_is_olsr=$(uci -q get meshwizard.netconfig.wan_config)
+lan_is_olsr=$(uci -q get meshwizard.netconfig.lan_config)
+
 config_load firewall
 
-# Get some variables
-type="$(uci -q get wireless.$net.type)"
-vap="$(uci -q get meshwizard.netconfig.$net\_vap)"
+# Rename firewall zone for freifunk if unnamed
+# If wan is used for olsr then set network for the firewall zone wan to ' ' to remove the wan interface from it, else add local restrict to it
+# If lan is used for olsr then set network for the firewall zone lan to ' ' to remove the lan interface from it
 
-# Add local_restrict to wan firewall zone
-handle_zonewan() {
-	config_get name "$1" name
-	if [ "$name" == "wan" ]; then
-		uci set firewall.$1.local_restrict=1
-	fi
-}
-config_foreach handle_zonewan zone && echo "    + Enable local_restrict for zone wan"
-
-# Delete old firewall zone for freifunk
 handle_fwzone() {
 	config_get name "$1" name
 	config_get network "$1" network
 
-	if [ "$2" == "zoneconf" ]; then
-		# clean zone
-		if [ "$name" == "freifunk" ]; then
-			if [ "$cleanup" == 1 ]; then
-				section_cleanup firewall.$1
-			else
-				# rename section if unnamed
-				if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
-					section_rename firewall $1 zone_freifunk
-				fi
-			fi
-		else
+	if [ "$name" == "freifunk" ]; then
+		# rename section if unnamed
+		if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+			section_rename firewall $1 zone_freifunk
+		fi
+	fi
 
-			if [ "$name" == "$netrenamed" ]; then
-				section_cleanup firewall.$1
-			fi
-			if [ -n "$netrenamed" -a -n "$(echo $network | grep $netrenamed)" ] && [ ! "$name" == "freifunk" ]; then
-				echo "    Removed $netrenamed from firewall zone $name."
-				network_new=$(echo $network | sed -e 's/'$netrenamed'//' -e 's/^ //' -e 's/  / /' -e 's/ $//')
-				uci set firewall.$1.network="$network_new"
-			fi
+	if [ "$name" == "wan" ]; then
+		if  [ "$wan_is_olsr" == 1 ]; then
+			uci set firewall.$1.network=' ' && uci_commitverbose "WAN is used for olsr, removed the wan interface from zone wan" firewall
+		else
+			uci set firewall.$1.local_restrict=1 && uci_commitverbose "Enable local_restrict for zone wan" firewall
 		fi
-	else
-		# clean fw_rule, fw_forwarding, include and advanced
-		for option in src tcp_ecn path; do
-			config_get $option $1 $option
-		done
-		if [ "$src" == "freifunk" -o "$path" == "/etc/firewall.freifunk" -o -n "$tcpecn" ]; then
-			section_cleanup firewall.$1
-		fi
+	fi
+
+	if [ "$name" == "lan" ] && [ "$lan_is_olsr" == 1 ]; then
+			uci set firewall.$1.network=' ' && uci_commitverbose "LAN is used for olsr, removed the lan interface from zone lan" firewall
 	fi
 }
 
-config_foreach handle_fwzone zone zoneconf
-
-if [ "$cleanup" == 1 ]; then
-	for target in include advanced rule forwarding; do
-		config_foreach handle_fwzone $target
-	done
-fi
-
-# setup freifunk firewall zone
-
-echo "    + Setup firewall zone."
-
-# add $netrenamed and if needed ${netrenamed}dhcp to the networks for this zone
-config_get network zone_freifunk network
-
-# remove ${netrenamed}dhcp from networks list
-[ -n "$network" -a -n "$net" ] && network="${network/${netrenamed}dhcp/}"
-network=$(echo $network) # Removes leading and trailing whitespaces
-
-[ -n "$netrenamed" ] && [ -z "$(echo $network | grep $netrenamed)" ] && network="$network $netrenamed"
-
-if [ "$type" == "atheros" -a "$vap" == 1 ]; then
-        [ -n "$netrenamed" ] && [ "$network" == "${network/${netrenamed}dhcp/}" ] && network="$network ${netrenamed}dhcp"
-fi
+config_foreach handle_fwzone zone
 
 uci batch << EOF
-set firewall.zone_freifunk="zone"
-set firewall.zone_freifunk.name="freifunk"
-set firewall.zone_freifunk.network="$network"
-set firewall.zone_freifunk.input="$zone_freifunk_input"
-set firewall.zone_freifunk.forward="$zone_freifunk_forward"
-set firewall.zone_freifunk.output="$zone_freifunk_output"
+	set firewall.zone_freifunk="zone"
+	set firewall.zone_freifunk.name="freifunk"
+	set firewall.zone_freifunk.input="$zone_freifunk_input"
+	set firewall.zone_freifunk.forward="$zone_freifunk_forward"
+	set firewall.zone_freifunk.output="$zone_freifunk_output"
 EOF
 
-echo "    network: $network
-    input: $zone_freifunk_input
-    forward: $zone_freifunk_forward
-    output: $zone_freifunk_output"
+uci_commitverbose "Setup firewall zones" firewall
 
-# Usually we need to setup masquerading for lan, except lan is an olsr interface or has an olsr hna
-
-echo "    + Setup masquerading rules"
+# Usually we need to setup masquerading for lan, except lan is an olsr interface or has an olsr hna-entry
 
 handle_interface() {
         config_get interface "$1" interface
@@ -111,36 +62,25 @@ handle_interface() {
 config_load olsrd
 config_foreach handle_interface Interface
 
-handle_hna() {
-        config_get netaddr "$1" netaddr
-        if [ "$NETWORK" == "$netaddr" ]; then
-                no_masq_lan=1
-        fi
-}
-config_foreach handle_hna Hna4
+LANIP="$(uci -q get network.lan.ipaddr)"
+if [ -n "$LANIP" ]; then
+	handle_hna() {
+		config_get netaddr "$1" netaddr
+			if [ "$LANIP" == "$netaddr" ]; then
+			no_masq_lan=1
+		fi
+	}
+	config_foreach handle_hna Hna4
+fi
 
 currms=$(uci -q get firewall.zone_freifunk.masq_src)
-if [ ! "$no_masq_lan" == "1" ]; then
-	uci set firewall.zone_freifunk.masq="1" && echo "    Enabled masquerading." || echo -e "\033[1mWarning:\033[0m: Could not enable masquerading."
+if [ ! "$no_masq_lan" == "1" ] && [ ! "$(uci -q get meshwizard.netconfig.lan_config)" == 1 ]; then
+	uci set firewall.zone_freifunk.masq="1"
 	[ -z "$(echo $currms |grep lan)" ] && uci add_list firewall.zone_freifunk.masq_src="lan"
 fi
 
-# If wifi-interfaces are outside of the mesh network they should be natted
-for i in $networks; do
-        # Get dhcprange and meshnet
-        dhcprange=$(uci get meshwizard.netconfig.$i\_dhcprange)
-        meshnet="$(uci get profile_$community.profile.mesh_network)"
-        # check if the dhcprange is inside meshnet
-        dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
-        if [ ! "$dhcpinmesh" == 1 ]; then
-                [ -z "$(echo $currms |grep ${netrenamed}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}dhcp"
-        fi
-done
 
 # Rules, Forwardings, advanced config and includes
-# Clear firewall configuration
-
-echo "    + Setup rules, forwardings, advanced config and includes."
 
 for config in freifunk profile_$community; do
 
@@ -157,5 +97,4 @@ for config in freifunk profile_$community; do
 		config_foreach handle_firewall $section
 	done
 done
-
-uci commit
+uci_commitverbose "Setup rules, forwardings, advanced config and includes." firewall

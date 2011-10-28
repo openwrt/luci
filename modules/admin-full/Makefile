@@ -2,7 +2,7 @@ include ../../build/config.mk
 include ../../build/module.mk
 include ../../build/gccconfig.mk
 
-BWC_LDFLAGS    =
+BWC_LDFLAGS    = -ldl
 BWC_CFLAGS     =
 BWC_BIN        = luci-bwc
 BWC_OBJ        = src/luci-bwc.o

@@ -16,13 +16,13 @@ $Id$
 module("luci.controller.p910nd", package.seeall)
 
 function index()
-       require("luci.i18n")
-       luci.i18n.loadc("p910nd")
-       if not nixio.fs.access("/etc/config/p910nd") then
-               return
-       end
+	if not nixio.fs.access("/etc/config/p910nd") then
+		return
+	end
 
-       local page = entry({"admin", "services", "p910nd"}, cbi("p910nd"), luci.i18n.translate("p910nd - Printer server"), 60)
-       page.i18n = "p910nd"
-       page.dependent = true
+	local page
+
+	page = entry({"admin", "services", "p910nd"}, cbi("p910nd"), _("p910nd - Printer server"), 60)
+	page.i18n = "p910nd"
+	page.dependent = true
 end

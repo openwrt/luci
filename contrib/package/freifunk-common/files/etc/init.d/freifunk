@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+# Freifunk Init
+# $Id$
+
+START=99
+
+boot() {
+	test -f /etc/crontabs/root || touch /etc/crontabs/root
+
+	grep -q 'killall -HUP dnsmasq' /etc/crontabs/root || {
+		echo "*/5 * * * *	killall -HUP dnsmasq" >> /etc/crontabs/root
+	}
+
+	grep -q '/usr/sbin/ff_olsr_watchdog' /etc/crontabs/root || {
+		echo "*/5 * * * *	/usr/sbin/ff_olsr_watchdog" >> /etc/crontabs/root
+	}
+
+	grep -q '/usr/sbin/ff_rdate' /etc/crontabs/root || {
+		echo "0 */4 * * *	/usr/sbin/ff_rdate" >> /etc/crontabs/root
+	}
+
+	[ -d /etc/rc.local.d ] && {
+		for file in /etc/rc.local.d/*; do
+			test -f "$file" && . "$file"
+		done
+	}
+
+	( sleep 40; /usr/sbin/ff_rdate; /etc/init.d/cron restart ) &
+}

@@ -215,6 +215,20 @@ ul.dropdowns ul ul ul li:hover ul {
 	left: 100%;
 }
 
+#xhr_poll_status { 
+	cursor: pointer; 
+} 
+
+#xhr_poll_status #xhr_poll_status_off { 
+	font-weight: bold; 
+	color: #FF0000; 
+} 
+
+#xhr_poll_status #xhr_poll_status_on { 
+	font-weight: bold; 
+	color: #00FF00; 
+} 
+
 #menubar {
 	position: relative;
 	width: 100%;
@@ -703,10 +717,15 @@ table.smalltext tr td {
 	border-left: 1px dotted #666;
 }
 
-table.cbi-section-table .cbi-rowstyle-1,
-table.cbi-section-table .cbi-rowstyle-1 * {
+table.cbi-section-table .cbi-rowstyle-1 {
 	background-color: #f1f6fa;
 	color: #000;
+}
+
+table.cbi-section-table .cbi-rowstyle-1:hover,
+table.cbi-section-table .cbi-rowstyle-2:hover {
+	background-color: #b2c8d4;
+	color: #000000;
 }
 
 .cbi-section .cbi-rowstyle-1 h3 {

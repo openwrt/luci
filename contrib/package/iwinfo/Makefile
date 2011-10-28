@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiwinfo
-PKG_RELEASE:=15
+PKG_RELEASE:=16
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libiwinfo
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Libraries
+  SUBMENU:=8. Libraries
   TITLE:=Generalized Wireless Information Library (iwinfo)
   DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +liblua +lua
   DEFAULT:=PACKAGE_luci-lib-sys

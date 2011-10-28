@@ -8,7 +8,7 @@
 echo -n "Updating po/templates/base.pot ... "
 
 ./build/i18n-scan.pl \
-	libs/core/ libs/web/ \
+	libs/core/ libs/web/ protocols/ \
 	modules/admin-core/ modules/admin-full/ \
 	themes/base/ themes/openwrt/ \
 > po/templates/base.pot

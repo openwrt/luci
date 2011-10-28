@@ -1,0 +1,5 @@
+#!/bin/sh
+[ -n "${IPKG_INSTROOT}" ] || {
+	sed -i '/gw-check/d' /etc/iproute2/rt_tables
+	sed -i '/ff_olsr_test_gw.sh/d' /etc/crontabs/root
+}

@@ -56,9 +56,11 @@ s.anonymous = true
 s.addremove = false
 
 mon_ifaces = s:option(Value, "interface", translate("Monitor selected interfaces"))
-mon_ifaces.template = "cbi/network_ifacelist"
-mon_ifaces.widget   = "checkbox"
-mon_ifaces.cast     = "table"
+mon_ifaces.template   = "cbi/network_ifacelist"
+mon_ifaces.widget     = "checkbox"
+mon_ifaces.cast       = "table"
+mon_ifaces.noinactive = true
+mon_ifaces.nocreate   = true
 
 function mon_ifaces.write(self, section, val)
 	local i

@@ -10,14 +10,9 @@ You may obtain a copy of the License at
 http://www.apache.org/licenses/LICENSE-2.0
 ]]--
 
-
 module "luci.controller.freifunk.policy-routing"
 
 function index()
-	require("luci.i18n").loadc("freifunk-policyrouting")
-	local i18n = luci.i18n.translate
-
-	entry({"admin", "freifunk", "policyrouting"}, cbi("freifunk/policyrouting"), i18n("Policy Routing"), 60)
+	entry({"admin", "freifunk", "policyrouting"}, cbi("freifunk/policyrouting"),
+		_("Policy Routing"), 60).i18n = "freifunk-policyrouting"
 end
-
-

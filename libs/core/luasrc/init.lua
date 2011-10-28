@@ -35,5 +35,5 @@ module "luci"
 
 local v = require "luci.version"
 
-__version__ = v.luciversion or "0.9"
+__version__ = v.luciversion or "trunk"
 __appname__ = v.luciname    or "LuCI"

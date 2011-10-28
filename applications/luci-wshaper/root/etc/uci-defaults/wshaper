@@ -1,0 +1,11 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@wshaper[-1]
+	set ucitrack.wshaper="wshaper"
+	set ucitrack.wshaper.exec='/etc/init.d/wshaper start'
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

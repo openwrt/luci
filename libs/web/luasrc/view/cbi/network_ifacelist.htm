@@ -3,12 +3,15 @@
 <%-
 	local utl = require "luci.util"
 	local net = require "luci.model.network".init()
+	local cbeid = luci.cbi.FEXIST_PREFIX .. self.config .. "." .. section .. "." .. self.option
 
 	local iface
 	local ifaces = net:get_interfaces()
-	local value = self:formvalue(section)
+	local value
 
-	if not value or value == "" then
+	if self.map:formvalue(cbeid) == "1" then
+		value = self:formvalue(section) or self.default or ""
+	else
 		value = self:cfgvalue(section) or self.default
 	end
 
@@ -22,24 +25,27 @@
 		local n = self.network and net:get_network(self.network)
 		if n then
 			local i
-			for _, i in ipairs(n:get_interfaces()) do
+			for _, i in ipairs(n:get_interfaces() or { n:get_interface() }) do
 				checked[i:name()] = true
 			end
 		end
 	end
 -%>
 
+<input type="hidden" name="<%=cbeid%>" value="1" />
 <ul style="margin:0; list-style-type:none">
 	<% for _, iface in ipairs(ifaces) do
 	     local link = iface:adminlink()
-         if (not self.nobridges or not iface:is_bridge()) and iface:name() ~= self.exclude then %>
+         if (not self.nobridges  or not iface:is_bridge()) and
+		    (not self.noinactive or iface:is_up()) and
+		    iface:name() ~= self.exclude
+		 then %>
 	<li>
 		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "." .. iface:name()) ..
 			attr("name", cbid) .. attr("value", iface:name()) ..
-			ifattr(checked[iface:name()], "checked", "checked") ..
-			ifattr(iface:type() == "wifi" and not iface:is_up(), "disabled", "disabled")
+			ifattr(checked[iface:name()], "checked", "checked")
 		%> /> &#160;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<% if link then -%><a href="<%=link%>"><% end -%>
@@ -54,7 +60,8 @@
 		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "_custom") ..
-			attr("name", cbid)
+			attr("name", cbid) ..
+			attr("value", " ")
 		%> /> &#160;
 		<label<%=attr("for", cbid .. "_custom")%>>
 			<img title="<%:Custom Interface%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.png" />

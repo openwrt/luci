@@ -1,0 +1,19 @@
+config 'community' 'profile'
+        option 'name' 'Guifi Bages'
+        option 'homepage' 'http://guifi.net/PlaBages'
+        option 'ssid' 'guifibages'
+        option 'mesh_network' '10.224.3.0/16'
+        option 'splash_network' '10.104.0.0/16'
+	option 'theme' 'luci-theme-freifunk-generic'
+        option 'latitude' '41.718437'
+        option 'longitude' '1.826477'
+        option 'suffix' 'guifibages.cat'
+        option 'splash_prefix' '27'
+	option 'extrapackages' 'luci-app-olsr-viz luci-i18n-catalan'
+
+config 'defaults' 'interface'
+        option 'netmask' '255.255.0.0'
+
+config 'defaults' 'bssidscheme'
+	option 'all'	'12:34:56:78:9a:bc'
+

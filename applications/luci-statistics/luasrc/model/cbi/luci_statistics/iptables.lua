@@ -20,8 +20,10 @@ chains  = { }
 targets = { }
 
 for i, rule in ipairs( ip:find() ) do 
-	chains[rule.chain] = true
-	targets[rule.target] = true
+	if rule.chain and rule.target then
+		chains[rule.chain] = true
+		targets[rule.target] = true
+	end
 end
 
 

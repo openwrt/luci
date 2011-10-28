@@ -16,7 +16,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/remote-update
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk remote update utility.
   DEPENDS:=@TARGET_atheros||@TARGET_ar71xx||@TARGET_brcm_2_4
 endef

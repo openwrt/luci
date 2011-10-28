@@ -16,7 +16,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freifunk-firewall
   SECTION:=luci
   CATEGORY:=LuCI
-  SUBMENU:=Freifunk
+  SUBMENU:=9. Freifunk
   TITLE:=Freifunk Firewall Addon
   DEPENDS:=+firewall
 endef

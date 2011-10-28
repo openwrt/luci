@@ -1,0 +1,71 @@
+<script type="text/javascript">//<![CDATA[
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "multiwan", "status")%>', null,
+		function(x, st)
+		{
+			var tx = document.getElementById('multiwan_status_text');
+			if (tx)
+			{
+				if (st && st.wans)
+				{
+					var temp = '';
+
+					for( var i = 0; i < st.wans.length; i++ )
+					{
+						var stat = '<%:Unknown%>';
+						var cssc = '';
+
+						switch (st.wans[i].status)
+						{
+							case 'ok':
+								stat = '<%:OK%>';
+								cssc = 'wanok';
+								break;
+
+							case 'ko':
+								stat = '<%:KO%>';
+								cssc = 'wanko';
+								break;
+
+							case 'recovering':
+								stat = String.format('<%:Recovering%>(%d)', st.wans[i].count);
+								cssc = 'wanrecov';
+								break;
+
+							case 'failing':
+								stat = String.format('<%:Failing%>(%d)', st.wans[i].count);
+								cssc = 'wanfail';
+								break;
+						}
+
+						temp += String.format(
+							'<span class="%s"><strong>%s (<a href="%q">%s</a>) :</strong> %s</span>',
+								cssc, st.wans[i].name, st.wans[i].link, st.wans[i].ifname, stat
+						);
+					}
+					
+					tx.innerHTML = temp;
+				}
+				else
+				{
+					tx.innerHTML = '';
+				}
+			}
+		}
+	);
+//]]></script>
+
+<style type="text/css">
+  .wanok { background-color: rgb(144, 240, 144); }
+  .wanko { background-color: rgb(240, 144, 144); }
+  .wanrecov { background-color: rgb(240, 240, 0); }
+  .wanfail { background-color: rgb(255, 165, 0); }
+  .wanko, .wanok, .wanrecov, .wanfail {
+	padding: 0.4em;
+	margin: 0.4em;
+  }
+</style>
+
+<fieldset class="cbi-section">
+	<legend><%:Multi-WAN Status%></legend>
+	<div id="multiwan_status_text" style="text-align:center;"><em><%:Collecting data...%></em></div>
+</fieldset>

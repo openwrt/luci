@@ -2,11 +2,8 @@
 # This is only run once (usually after flashing an image from the imagebuilder)
 # It sets up the initial config for this node.
 
-
 . /etc/functions.sh
 . $dir/functions.sh
-
-### System config
 
 config_load system
 
@@ -18,42 +15,19 @@ handle_system() {
 }
 config_foreach handle_system system
 
-if [ -n "$(uci -q get meshwizard.system)" ]; then
-	echo "    + Setup system"
-	uci show meshwizard.system | sed 's/^meshwizard/uci set system/g' | while read line; do
-		eval $line
-		echo "    $line"
-	done
-	uci -q delete meshwizard.system
-fi
-
 if [ -n "$(uci -q get meshwizard.community)" ]; then
-	echo "    + Setup community"
-	uci show meshwizard.community | sed 's/^meshwizard/freifunk/g' | while read line; do
-		eval uci set $line
-		echo "    $line"
-	done
+	set_defaults "community_" freifunk.community
 	uci -q delete meshwizard.community
 fi
+[ -n "$profile_homepage" ] && uci set freifunk.community.homepage="$profile_homepage"
+uci_commitverbose "Setup community" freifunk
 
 if [ -n "$(uci -q get meshwizard.contact)" ]; then
-	echo "    + Setup contact"
-	uci show meshwizard.contact | sed 's/^meshwizard/freifunk/g' | while read line; do
-		eval uci set $line
-		echo "    $line"
-	done
-	uci -q delete meshwizard.contact
+	set_defaults "contact_" freifunk.contact
+	uci -q delete meshwizard.contact && uci_commitverbose "Setup contact" freifunk
 fi
 
-if [ -n "$(uci -q get meshwizard.luci_main)" ]; then
-	echo "    + Setup luci"
-	uci show meshwizard.luci_main |sed -e 's/^meshwizard/luci/g' -e 's/luci_main/main/' | while read line; do 
-		eval uci set $line
-		echo "    $line"
-	done
-	uci -q delete meshwizard.luci_main
+if [ "$has_luci" == TRUE ]; then
+	set_defaults "luci_main_" luci.main
+	uci -q delete meshwizard.luci_main && uci_commitverbose "Setup luci" luci
 fi
-
-uci commit
-
-

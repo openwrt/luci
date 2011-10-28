@@ -27,13 +27,13 @@ local basicParams = {
 	{ ListValue,"dev_type",{ "tun", "tap" }, translate("Type of used device") },
 	{ Flag,"tun_ipv6",0, translate("Make tun device IPv6 capable") },
 
-	{ Value,"ifconfig","10.200.200.3 10.200.200.1", translate("") },
+	{ Value,"ifconfig","10.200.200.3 10.200.200.1", translate("Set tun/tap adapter parameters") },
 	{ Value,"server","10.200.200.0 255.255.255.0", translate("Configure server mode") },
 	{ Value,"server_bridge","192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254", translate("Configure server bridge") },
 	{ Flag,"nobind",0, translate("Do not bind to local address and port") },
 
 	{ Flag,"comp_lzo",0, translate("Use fast LZO compression") },
-	{ Value,"keepalive","10 60", translate("") },
+	{ Value,"keepalive","10 60", translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
 
 	{ ListValue,"proto",{ "udp", "tcp" }, translate("Use protocol") },
 

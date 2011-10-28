@@ -16,9 +16,6 @@ $Id$
 module("luci.controller.mini.index", package.seeall)
 
 function index()
-	luci.i18n.loadc("base")
-	local i18n = luci.i18n.translate
-
 	local root = node()
 	if not root.lock then
 		root.target = alias("mini")
@@ -27,15 +24,15 @@ function index()
 	
 	entry({"about"}, template("about"))
 	
-	local page   = entry({"mini"}, alias("mini", "index"), i18n("Essentials"), 10)
+	local page   = entry({"mini"}, alias("mini", "index"), _("Essentials"), 10)
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.index = true
 	
-	entry({"mini", "index"}, alias("mini", "index", "index"), i18n("Overview"), 10).index = true
-	entry({"mini", "index", "index"}, form("mini/index"), i18n("General"), 1).ignoreindex = true
-	entry({"mini", "index", "luci"}, cbi("mini/luci", {autoapply=true}), i18n("Settings"), 10)
-	entry({"mini", "index", "logout"}, call("action_logout"), i18n("Logout"))
+	entry({"mini", "index"}, alias("mini", "index", "index"), _("Overview"), 10).index = true
+	entry({"mini", "index", "index"}, form("mini/index"), _("General"), 1).ignoreindex = true
+	entry({"mini", "index", "luci"}, cbi("mini/luci", {autoapply=true}), _("Settings"), 10)
+	entry({"mini", "index", "logout"}, call("action_logout"), _("Logout"))
 end
 
 function action_logout()

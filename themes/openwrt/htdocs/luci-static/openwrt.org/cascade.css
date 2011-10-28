@@ -166,6 +166,20 @@ div.hostinfo {
 	padding: 0.5em;
 }
 
+#xhr_poll_status {
+	cursor: pointer;
+}
+
+#xhr_poll_status #xhr_poll_status_off {
+	font-weight: bold;
+	color: #FF0000;
+}
+
+#xhr_poll_status #xhr_poll_status_on {
+	font-weight: bold;
+	color: #00FF00;
+}
+
 #menubar {
 	position: relative;
 	width: 100%;
@@ -224,6 +238,8 @@ html #menubar a:visited.warning {
 	color: #ffffff;
 	list-style: none;
 	margin-right: 1px;
+	margin-left: 2em;
+	float: right;
 }
 
 #modemenu li {
@@ -233,7 +249,6 @@ html #menubar a:visited.warning {
 
 #savemenu {
 	float: right;
-	margin-right: 2em;
 }
 
 .lang_de #submenu_admin_uci {
@@ -369,9 +384,7 @@ input[type=image] {
 input:focus,
 input:hover,
 select:focus,
-select:hover,
-textarea:focus,
-textarea:hover {
+select:hover {
 	background-color: #ffffff;
 	color: #000000;
 }
@@ -394,38 +407,57 @@ img.cbi-image-button {
 	vertical-align: middle;
 }
 
+input.cbi-button {
+	background-color: #EEEEEE;
+	background-repeat: no-repeat;
+	background-position: 1px center;
+	border: 1px solid #CCCCCC;
+	border-radius: 3px;
+}
+
+input.cbi-button:hover {
+	border-color: #4A6B7C;
+	background-color: #FFFFFF;
+}
+
+input.cbi-button[disabled] {
+	color: #CCCCCC;
+	border-color: #CCCCCC;
+	background-color: #EEEEEE;
+	cursor: default;
+}
+
 input.cbi-input-user {
-	background: url('../resources/cbi/user.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/user.gif');
+	background-repeat: no-repeat;
+	background-position: 1px center;
 	color: #000000;
 	text-indent: 17px;
 }
 
 input.cbi-input-password {
-	background: url('../resources/cbi/key.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/key.gif');
+	background-repeat: no-repeat;
+	background-position: 1px center;
 	color: #000000;
 	text-indent: 17px;
 }
 
 input.cbi-input-find {
-	background: url('../resources/cbi/find.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/find.gif');
 	color: #000000;
 	padding-left: 17px;
 }
 
 input.cbi-input-reload {
-	background: url('../resources/cbi/reload.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/reload.gif');
 	color: #000000;
 	padding-left: 17px;
 }
 
 input.cbi-input-add,
 input.cbi-button-add {
-	background: url('../resources/cbi/add.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/add.gif');
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -433,8 +465,7 @@ input.cbi-button-add {
 
 input.cbi-input-fieldadd,
 input.cbi-button-fieldadd {
-	background: url(../resources/cbi/fieldadd.gif) no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url(../resources/cbi/fieldadd.gif);
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -442,8 +473,7 @@ input.cbi-button-fieldadd {
 
 input.cbi-input-reset,
 input.cbi-button-reset {
-	background: url('../resources/cbi/reset.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/reset.gif');
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -451,8 +481,7 @@ input.cbi-button-reset {
 
 input.cbi-input-save,
 input.cbi-button-save {
-	background: url('../resources/cbi/save.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/save.gif');
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -460,8 +489,7 @@ input.cbi-button-save {
 
 input.cbi-input-apply,
 input.cbi-button-apply {
-	background: url('../resources/cbi/apply.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/apply.gif');
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -469,8 +497,7 @@ input.cbi-button-apply {
 
 input.cbi-input-link,
 input.cbi-button-link {
-	background: url('../resources/cbi/link.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/link.gif');
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -478,8 +505,7 @@ input.cbi-button-link {
 
 input.cbi-input-remove,
 div.cbi-section-remove input {
-	background: url('../resources/cbi/remove.gif') no-repeat scroll 1px center;
-	background-color: inherit;
+	background-image: url('../resources/cbi/remove.gif');
 	color: #000000;
 	padding-left: 17px;
 	padding-right: 1px;
@@ -543,9 +569,14 @@ table.smalltext tr td {
 	border-left: 1px solid #666666;
 }
 
-table.cbi-section-table .cbi-rowstyle-1,
-table.cbi-section-table .cbi-rowstyle-1>* {
+table.cbi-section-table .cbi-rowstyle-1 {
 	background-color: #eeeeff;
+	color: #000000;
+}
+
+table.cbi-section-table .cbi-rowstyle-1:hover,
+table.cbi-section-table .cbi-rowstyle-2:hover {
+	background-color: #b2c8d4;
 	color: #000000;
 }
 
@@ -561,7 +592,7 @@ table.cbi-section-table .cbi-rowstyle-1>* {
 div.cbi-value {
 	clear: left;
 	vertical-align: middle;
-	padding: 0.25em;
+	padding: 0.25em 0.6em;
 	border-bottom: 1px dotted #bbbbbb;
 }
 
@@ -593,10 +624,6 @@ div.cbi-section-create {
 	vertical-align: top;
 }
 
-div.cbi-tblsection-create {
-	border-bottom: 1px dotted #bbbbbb;
-}
-
 div.cbi-section-create .cbi-button {
 	margin: 0.25em;
 }
@@ -620,11 +647,18 @@ div.cbi-section-remove {
 
 .cbi-section-node {
 	clear: both;
-	border-top: 1px dotted #bbbbbb;
-	border-left: 1px dotted #bbbbbb;
-	border-right: 1px dotted #bbbbbb;
-	border-bottom: none;
+	border: 1px solid #BBBBBB;
+	border-radius: 3px;
 	padding-bottom: 0;
+	position: relative;
+}
+
+.cbi-section-node-tabbed {
+	border-top-left-radius: 0;
+}
+
+.cbi-section-node .cbi-value-last {
+	border-bottom: none;
 }
 
 .cbi-section-node table div {
@@ -689,8 +723,11 @@ td.cbi-value-error {
 ul.cbi-tabmenu {
 	padding: 3px 0;
 	margin-left: 0 !important;
-	margin-bottom: -1px;
 	list-style-type: none;
+	position: relative;
+	z-index: 10;
+	top: 4px;
+	line-height: 20px;
 }
 
 ul.cbi-tabmenu li.cbi-tab,
@@ -704,8 +741,9 @@ ul.cbi-tabmenu li.cbi-tab-disabled a {
 	text-decoration: none;
 	padding: 3px 7px;
 	margin-right: 3px;
-	border: 1px outset #000000;
+	border: 1px solid #BBBBBB;
 	border-bottom: none;
+	border-radius: 3px 3px 0 0;
 	background-color: #EEEEEE;
 	color: #BBBBBB;
 }
@@ -720,8 +758,6 @@ ul.cbi-tabmenu li a:hover {
 }
 
 ul.cbi-tabmenu li.cbi-tab a {
-	position: relative;
-	top: 1px;
 	padding-top: 4px;
 	color: #000000;
 	background-color: #FFFFFF;
@@ -747,6 +783,7 @@ div.cbi-tab-descr {
 	height: 1.5em;
 	font-size: 80%;
 }
+
 .luci a:link,
 .luci a:visited {
 	background-color: transparent;
@@ -773,6 +810,11 @@ div.cbi-tab-descr {
 	padding: 5px;
 	margin-bottom: 5px;
 }
+
+.errorbox a {
+	color: #000000 !important;
+}
+
 
 .uci-change-list {
 	font-family: monospace;

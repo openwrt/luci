@@ -31,6 +31,8 @@
 #include <sys/mman.h>
 #include <arpa/inet.h>
 
+#include <dlfcn.h>
+
 
 #define STEP_COUNT	60
 #define STEP_TIME	1
@@ -40,6 +42,7 @@
 
 #define DB_PATH		"/var/lib/luci-bwc"
 #define DB_IF_FILE	DB_PATH "/if/%s"
+#define DB_RD_FILE	DB_PATH "/radio/%s"
 #define DB_CN_FILE	DB_PATH "/connections"
 #define DB_LD_FILE	DB_PATH "/load"
 
@@ -78,6 +81,13 @@ struct load_entry {
 	uint16_t load1;
 	uint16_t load5;
 	uint16_t load15;
+};
+
+struct radio_entry {
+	uint64_t time;
+	uint16_t rate;
+	uint8_t  rssi;
+	uint8_t  noise;
 };
 
 
@@ -144,6 +154,10 @@ static void reset_countdown(int sig)
 
 static char *progname;
 static int prognamelen;
+
+static int (*iw_get_rate)(const char *, int *) = NULL;
+static int (*iw_get_rssi)(const char *, int *) = NULL;
+static int (*iw_get_noise)(const char *, int *) = NULL;
 
 
 static int init_directory(char *path)
@@ -253,6 +267,63 @@ static void umap_file(struct file_map *m)
 		close(m->fd);
 }
 
+static void * iwinfo_open(void)
+{
+	return dlopen("/usr/lib/lua/iwinfo.so", RTLD_LAZY);
+}
+
+static int iwinfo_update(
+	void *iw, const char *ifname, uint16_t *rate, uint8_t *rssi, uint8_t *noise
+) {
+	int (*probe)(const char *);
+	int val;
+
+	if (!iw_get_rate)
+	{
+		if ((probe = dlsym(iw, "nl80211_probe")) != NULL && probe(ifname))
+		{
+			iw_get_rate  = dlsym(iw, "nl80211_get_bitrate");
+			iw_get_rssi  = dlsym(iw, "nl80211_get_signal");
+			iw_get_noise = dlsym(iw, "nl80211_get_noise");
+		}
+		else if ((probe = dlsym(iw, "madwifi_probe")) != NULL && probe(ifname))
+		{
+			iw_get_rate  = dlsym(iw, "madwifi_get_bitrate");
+			iw_get_rssi  = dlsym(iw, "madwifi_get_signal");
+			iw_get_noise = dlsym(iw, "madwifi_get_noise");
+		}
+		else if ((probe = dlsym(iw, "wl_probe")) != NULL && probe(ifname))
+		{
+			iw_get_rate  = dlsym(iw, "wl_get_bitrate");
+			iw_get_rssi  = dlsym(iw, "wl_get_signal");
+			iw_get_noise = dlsym(iw, "wl_get_noise");
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	*rate = (iw_get_rate && !iw_get_rate(ifname, &val)) ? val : 0;
+	*rssi = (iw_get_rssi && !iw_get_rssi(ifname, &val)) ? val : 0;
+	*noise = (iw_get_noise && !iw_get_noise(ifname, &val)) ? val : 0;
+
+	return 1;
+}
+
+static void iwinfo_close(void *iw)
+{
+	void (*do_close)(void);
+
+	if ((do_close = dlsym(iw, "nl80211_close")) != NULL) do_close();
+	if ((do_close = dlsym(iw, "madwifi_close")) != NULL) do_close();
+	if ((do_close = dlsym(iw, "wl_close"))      != NULL) do_close();
+	if ((do_close = dlsym(iw, "wext_close"))    != NULL) do_close();
+	if ((do_close = dlsym(iw, "iwinfo_close"))  != NULL) do_close();
+
+	dlclose(iw);
+}
+
 
 static int update_ifstat(
 	const char *ifname, uint64_t rxb, uint64_t rxp, uint64_t txb, uint64_t txp
@@ -282,6 +353,35 @@ static int update_ifstat(
 	e.txp  = htonll(txp);
 
 	return update_file(path, &e, sizeof(struct traffic_entry));
+}
+
+static int update_radiostat(
+	const char *ifname, uint16_t rate, uint8_t rssi, uint8_t noise
+) {
+	char path[1024];
+
+	struct stat s;
+	struct radio_entry e;
+
+	snprintf(path, sizeof(path), DB_RD_FILE, ifname);
+
+	if (stat(path, &s))
+	{
+		if (init_file(path, sizeof(struct radio_entry)))
+		{
+			fprintf(stderr, "Failed to init %s: %s\n",
+					path, strerror(errno));
+
+			return -1;
+		}
+	}
+
+	e.time  = htonll(time(NULL));
+	e.rate  = htons(rate);
+	e.rssi  = rssi;
+	e.noise = noise;
+
+	return update_file(path, &e, sizeof(struct radio_entry));
 }
 
 static int update_cnstat(uint32_t udp, uint32_t tcp, uint32_t other)
@@ -345,10 +445,13 @@ static int run_daemon(void)
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
 	uint32_t udp, tcp, other;
+	uint16_t rate;
+	uint8_t rssi, noise;
 	float lf1, lf5, lf15;
 	char line[1024];
 	char ifname[16];
-
+	int i;
+	void *iw;
 	struct sigaction sa;
 
 	struct stat s;
@@ -390,6 +493,9 @@ static int run_daemon(void)
 		return 1;
 	}
 
+	/* initialize iwinfo */
+	iw = iwinfo_open();
+
 	/* go */
 	for (reset_countdown(0); countdown >= 0; countdown--)
 	{
@@ -412,6 +518,26 @@ static int run_daemon(void)
 			}
 
 			fclose(info);
+		}
+
+		if (iw)
+		{
+			for (i = 0; i < 5; i++)
+			{
+#define iwinfo_checkif(pattern) \
+				do {                                                      \
+					snprintf(ifname, sizeof(ifname), pattern, i);         \
+					if (iwinfo_update(iw, ifname, &rate, &rssi, &noise))  \
+					{                                                     \
+						update_radiostat(ifname, rate, rssi, noise);      \
+						continue;                                         \
+					}                                                     \
+				} while(0)
+
+				iwinfo_checkif("wlan%d");
+				iwinfo_checkif("ath%d");
+				iwinfo_checkif("wl%d");
+			}
 		}
 
 		if ((info = fopen(ipc, "r")) != NULL)
@@ -457,6 +583,9 @@ static int run_daemon(void)
 	}
 
 	unlink(PID_PATH);
+
+	if (iw)
+		iwinfo_close(iw);
 
 	return 0;
 }
@@ -513,6 +642,40 @@ static int run_dump_ifname(const char *ifname)
 			ntohll(e->rxb), ntohll(e->rxp),
 			ntohll(e->txb), ntohll(e->txp),
 			((i + sizeof(struct traffic_entry)) < m.size) ? "," : "");
+	}
+
+	umap_file(&m);
+
+	return 0;
+}
+
+static int run_dump_radio(const char *ifname)
+{
+	int i;
+	char path[1024];
+	struct file_map m;
+	struct radio_entry *e;
+
+	check_daemon();
+	snprintf(path, sizeof(path), DB_RD_FILE, ifname);
+
+	if (mmap_file(path, sizeof(struct radio_entry), &m))
+	{
+		fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
+		return 1;
+	}
+
+	for (i = 0; i < m.size; i += sizeof(struct radio_entry))
+	{
+		e = (struct radio_entry *) &m.mmap[i];
+
+		if (!e->time)
+			continue;
+
+		printf("[ %" PRIu64 ", %d, %d, %d ]%s\n",
+			ntohll(e->time),
+			e->rate, e->rssi, e->noise,
+			((i + sizeof(struct radio_entry)) < m.size) ? "," : "");
 	}
 
 	umap_file(&m);
@@ -599,7 +762,7 @@ int main(int argc, char *argv[])
 	for (opt = 0; opt < argc; opt++)
 		prognamelen += 1 + strlen(argv[opt]);
 
-	while ((opt = getopt(argc, argv, "t:i:cl")) > -1)
+	while ((opt = getopt(argc, argv, "t:i:r:cl")) > -1)
 	{
 		switch (opt)
 		{
@@ -610,6 +773,11 @@ int main(int argc, char *argv[])
 			case 'i':
 				if (optarg)
 					return run_dump_ifname(optarg);
+				break;
+
+			case 'r':
+				if (optarg)
+					return run_dump_radio(optarg);
 				break;
 
 			case 'c':
@@ -626,9 +794,10 @@ int main(int argc, char *argv[])
 	fprintf(stderr,
 		"Usage:\n"
 		"	%s [-t timeout] -i ifname\n"
+		"	%s [-t timeout] -r radiodev\n"
 		"	%s [-t timeout] -c\n"
 		"	%s [-t timeout] -l\n",
-			argv[0], argv[0], argv[0]
+			argv[0], argv[0], argv[0], argv[0]
 	);
 
 	return 1;

@@ -14,12 +14,12 @@ You may obtain a copy of the License at
 module("luci.controller.freifunk.remote_update", package.seeall)
 
 function index()
-	local i18n = luci.i18n.translate
 	if not nixio.fs.access("/usr/sbin/remote-update") then
 		return
 	end
+
 	entry({"admin", "system", "remote_update"}, call("act_remote_update"),
-		i18n("Freifunk Remote Update"), 90)
+		_("Freifunk Remote Update"), 90)
 end
 
 function act_remote_update()

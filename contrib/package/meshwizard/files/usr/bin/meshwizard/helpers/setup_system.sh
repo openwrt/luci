@@ -1,12 +1,7 @@
 #!/bin/sh
-# Sets values from /etc/config/freifunk and/or the community profile in /etc/config/system
 
-if [ -n "$(env | grep '^system_')" ]; then
-	echo "++++ Setup system"
-	env | grep "^system_" | sed "s/system_/uci set system.system./g" | while read line; do
-		eval $line
-		echo "    $line"
-	done
-fi
+. $dir/functions.sh
 
-uci commit system
+set_defaults "system_" system.system
+uci -q delete meshwizard.system && uci commit meshwizard
+uci_commitverbose "System config" system
