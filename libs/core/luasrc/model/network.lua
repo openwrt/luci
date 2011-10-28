@@ -847,7 +847,7 @@ function protocol.get_interface(self)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
 					if s.network == self.sid then
-						ifn = s.ifname or "%s.network%d" %{ s.device, num[s.device] }
+						ifn = "%s.network%d" %{ s.device, num[s.device] }
 						return false
 					end
 				end
@@ -927,7 +927,10 @@ interface = utl.class()
 
 function interface.__init__(self, ifname, network)
 	local wif = _wifi_lookup(ifname)
-	if wif then self.wif = wifinet(wif) end
+	if wif then 
+		self.wif    = wifinet(wif) 
+		self.ifname = _uci_state:get("wireless", wif, "ifname")
+	end
 
 	self.ifname  = self.ifname or ifname
 	self.dev     = _interfaces[self.ifname]
