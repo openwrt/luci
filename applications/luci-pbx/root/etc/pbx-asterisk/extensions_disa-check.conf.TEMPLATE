@@ -1,0 +1,1 @@
+exten => s,n,Gotoif($[ "${CALLERID(NUM)}" =~ ".*|NUMBER|" ]?disa-call-context,|NUMBER|,1)
