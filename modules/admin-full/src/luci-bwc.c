@@ -33,7 +33,6 @@
 
 #include <dlfcn.h>
 
-
 #define STEP_COUNT	60
 #define STEP_TIME	1
 #define TIMEOUT		10
@@ -47,9 +46,9 @@
 #define DB_LD_FILE	DB_PATH "/load"
 
 #define IF_SCAN_PATTERN \
-	" %[^ :]:%" SCNu64 " %" SCNu64 \
+	" %[^ :]:%u %u" \
 	" %*d %*d %*d %*d %*d %*d" \
-	" %" SCNu64 " %" SCNu64
+	" %u %u"
 
 #define LD_SCAN_PATTERN \
 	"%f %f %f"
@@ -62,47 +61,33 @@ struct file_map {
 };
 
 struct traffic_entry {
-	uint64_t time;
-	uint64_t rxb;
-	uint64_t rxp;
-	uint64_t txb;
-	uint64_t txp;
+	uint32_t time;
+	uint32_t rxb;
+	uint32_t rxp;
+	uint32_t txb;
+	uint32_t txp;
 };
 
 struct conn_entry {
-	uint64_t time;
+	uint32_t time;
 	uint32_t udp;
 	uint32_t tcp;
 	uint32_t other;
 };
 
 struct load_entry {
-	uint64_t time;
+	uint32_t time;
 	uint16_t load1;
 	uint16_t load5;
 	uint16_t load15;
 };
 
 struct radio_entry {
-	uint64_t time;
+	uint32_t time;
 	uint16_t rate;
 	uint8_t  rssi;
 	uint8_t  noise;
 };
-
-
-static uint64_t htonll(uint64_t value)
-{
-	int num = 1;
-
-	if (*(char *)&num == 1)
-		return htonl((uint32_t)(value & 0xFFFFFFFF)) |
-		       htonl((uint32_t)(value >> 32));
-
-	return value;
-}
-
-#define ntohll htonll
 
 static int readpid(void)
 {
@@ -204,9 +189,9 @@ static int init_file(char *path, int esize)
 	return -1;
 }
 
-static inline uint64_t timeof(void *entry)
+static inline uint32_t timeof(void *entry)
 {
-	return ((struct traffic_entry *)entry)->time;
+	return ntohl(((struct traffic_entry *)entry)->time);
 }
 
 static int update_file(const char *path, void *entry, int esize)
@@ -326,7 +311,7 @@ static void iwinfo_close(void *iw)
 
 
 static int update_ifstat(
-	const char *ifname, uint64_t rxb, uint64_t rxp, uint64_t txb, uint64_t txp
+	const char *ifname, uint32_t rxb, uint32_t rxp, uint32_t txb, uint32_t txp
 ) {
 	char path[1024];
 
@@ -346,11 +331,11 @@ static int update_ifstat(
 		}
 	}
 
-	e.time = htonll(time(NULL));
-	e.rxb  = htonll(rxb);
-	e.rxp  = htonll(rxp);
-	e.txb  = htonll(txb);
-	e.txp  = htonll(txp);
+	e.time = htonl(time(NULL));
+	e.rxb  = htonl(rxb);
+	e.rxp  = htonl(rxp);
+	e.txb  = htonl(txb);
+	e.txp  = htonl(txp);
 
 	return update_file(path, &e, sizeof(struct traffic_entry));
 }
@@ -376,7 +361,7 @@ static int update_radiostat(
 		}
 	}
 
-	e.time  = htonll(time(NULL));
+	e.time  = htonl(time(NULL));
 	e.rate  = htons(rate);
 	e.rssi  = rssi;
 	e.noise = noise;
@@ -404,7 +389,7 @@ static int update_cnstat(uint32_t udp, uint32_t tcp, uint32_t other)
 		}
 	}
 
-	e.time  = htonll(time(NULL));
+	e.time  = htonl(time(NULL));
 	e.udp   = htonl(udp);
 	e.tcp   = htonl(tcp);
 	e.other = htonl(other);
@@ -432,7 +417,7 @@ static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
 		}
 	}
 
-	e.time   = htonll(time(NULL));
+	e.time   = htonl(time(NULL));
 	e.load1  = htons(load1);
 	e.load5  = htons(load5);
 	e.load15 = htons(load15);
@@ -443,7 +428,7 @@ static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
 static int run_daemon(void)
 {
 	FILE *info;
-	uint64_t rxb, txb, rxp, txp;
+	uint32_t rxb, txb, rxp, txp;
 	uint32_t udp, tcp, other;
 	uint16_t rate;
 	uint8_t rssi, noise;
@@ -636,11 +621,11 @@ static int run_dump_ifname(const char *ifname)
 		if (!e->time)
 			continue;
 
-		printf("[ %" PRIu64 ", %" PRIu64 ", %" PRIu64
-			   ", %" PRIu64 ", %" PRIu64 " ]%s\n",
-			ntohll(e->time),
-			ntohll(e->rxb), ntohll(e->rxp),
-			ntohll(e->txb), ntohll(e->txp),
+		printf("[ %u, %u, %" PRIu32
+			   ", %u, %u ]%s\n",
+			ntohl(e->time),
+			ntohl(e->rxb), ntohl(e->rxp),
+			ntohl(e->txb), ntohl(e->txp),
 			((i + sizeof(struct traffic_entry)) < m.size) ? "," : "");
 	}
 
@@ -672,8 +657,8 @@ static int run_dump_radio(const char *ifname)
 		if (!e->time)
 			continue;
 
-		printf("[ %" PRIu64 ", %d, %d, %d ]%s\n",
-			ntohll(e->time),
+		printf("[ %u, %d, %d, %d ]%s\n",
+			ntohl(e->time),
 			e->rate, e->rssi, e->noise,
 			((i + sizeof(struct radio_entry)) < m.size) ? "," : "");
 	}
@@ -706,8 +691,8 @@ static int run_dump_conns(void)
 		if (!e->time)
 			continue;
 
-		printf("[ %" PRIu64 ", %u, %u, %u ]%s\n",
-			ntohll(e->time), ntohl(e->udp),
+		printf("[ %u, %u, %u, %u ]%s\n",
+			ntohl(e->time), ntohl(e->udp),
 			ntohl(e->tcp), ntohl(e->other),
 			((i + sizeof(struct conn_entry)) < m.size) ? "," : "");
 	}
@@ -740,8 +725,8 @@ static int run_dump_load(void)
 		if (!e->time)
 			continue;
 
-		printf("[ %" PRIu64 ", %u, %u, %u ]%s\n",
-			ntohll(e->time),
+		printf("[ %u, %u, %u, %u ]%s\n",
+			ntohl(e->time),
 			ntohs(e->load1), ntohs(e->load5), ntohs(e->load15),
 			((i + sizeof(struct load_entry)) < m.size) ? "," : "");
 	}
