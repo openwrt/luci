@@ -28,18 +28,15 @@ uci set olsrd.$netrenamed.interface="$netrenamed"
 uci_commitverbose "Setup olsr interface for $netrenamed." olsrd
 
 # If dhcp-network is inside the mesh_network then add HNA for it
-dhcprange=$(uci -q get meshwizard.netconfig.$net\_dhcprange)
 
+dhcprange=$(uci -q get meshwizard.netconfig.$net\_dhcprange)
 uci -q delete olsrd.${netrenamed}clients
 
-# check if the dhcprange is inside meshnet
-
-if [ "$dhcp_range" == 1 ]; then
-	dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
+if [ -n "$dhcprange" ]; then
 	meshnet="$(uci get profile_$community.profile.mesh_network)"
+	dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
 
-	# If it is setup hna for it
-	if [ "$dhcpinmesh" == 1 ]; then
+	if [ "$dhcpinmesh" == 1 ] && [ -n "$meshnet" ]; then
 		uci set olsrd.${netrenamed}clients="Hna4"
 		eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange)
 		uci set olsrd.${netrenamed}clients.netaddr="$NETWORK"
@@ -47,4 +44,3 @@ if [ "$dhcp_range" == 1 ]; then
 		uci_commitverbose "Setup HNA for network $dhcprange" olsrd
 	fi
 fi
-

@@ -17,6 +17,8 @@ handle_dnsmasq() {
 config_load dhcp
 config_foreach handle_dnsmasq dhcp
 
+[ "$net" == "lan" ] && uci -q delete dhcp.lan
+
 uci batch << EOF
 	set dhcp.${netrenamed}dhcp="dhcp"
 	set dhcp.${netrenamed}dhcp.interface="${netrenamed}dhcp"
