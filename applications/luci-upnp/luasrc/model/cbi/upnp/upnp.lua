@@ -47,9 +47,9 @@ s:taboption("general", Flag, "secure_mode", translate("Enable secure mode"),
 	translate("Allow adding forwards only to requesting ip addresses")).default = "1"
 
 s:taboption("general", Flag, "log_output", translate("Enable additional logging"),
-	translate("Puts extra debugging information into the system log")).default = "1"
+	translate("Puts extra debugging information into the system log"))
 
-s:taboption("general", Value, "download", translate("Downlink"), 
+s:taboption("general", Value, "download", translate("Downlink"),
 	translate("Value in KByte/s, informational only")).rmempty = true
 
 s:taboption("general", Value, "upload", translate("Uplink"),
