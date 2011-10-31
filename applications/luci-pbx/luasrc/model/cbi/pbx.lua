@@ -17,6 +17,8 @@
     along with luci-pbx.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
+modulename = "pbx"
+
 if     nixio.fs.access("/etc/init.d/asterisk")   then
    server = "asterisk"
 elseif nixio.fs.access("/etc/init.d/freeswitch") then
@@ -25,8 +27,8 @@ else
    server = ""
 end
 
-modulename = "pbx"
-
+-- My implementation of the function which splits a string into tokens
+-- at the specified separator and returns a table containing the tokens.
 function mysplit(inputstr, sep)
         if sep == nil then
                 sep = "%s"
@@ -39,56 +41,63 @@ function mysplit(inputstr, sep)
         return t
 end
 
-function format_two_indices(string, ind1, ind2)
-	lines=mysplit(string, "\n")
+-- Returns formatted output of string containing only the words at the indices
+-- specified in the table "indices".
+function format_indices(string, indices)
+   if indices == nil then
+      return "Error: No indices to format specified.\n" 
+   end
 
-	words={}
-	for index,value in ipairs(lines) do
-	        words[index]=mysplit(value)
-	end
+   -- Split input into separate lines.
+   lines = {}
+   lines = mysplit(string, "\n")
+   
+   -- Split lines into separate words.
+   splitlines = {}
+   for lpos,line in ipairs(lines) do
+      splitlines[lpos] = mysplit(line)
+   end
+   
+   -- For each split line, if the word at all indices specified
+   -- to be formatted are not null, add the formatted line to the
+   -- gathered output.
+   output = ""
+   for lpos,splitline in ipairs(splitlines) do
+      loutput = ""
+      for ipos,index in ipairs(indices) do
+	 if splitline[index] ~= nil then
+	    loutput = loutput .. string.format("%-50s", splitline[index])
+	 else
+	    loutput = nil
+	    break
+	 end
+      end
 
-	output = ""
-	for index,value in ipairs(words) do
-	        if value[ind1] ~= nil and value[ind2] ~= nil then
-	                output = output .. string.format("%-40s \t %-20s\n", value[ind1], value[ind2])
-	        end
-	end
-	return output
+      if loutput ~= nil then
+	 output = output .. loutput .. "\n"
+      end
+   end
+   return output
 end
 
-function format_one_index(string, ind1)
-	lines=mysplit(string, "\n")
-
-	words={}
-	for index,value in ipairs(lines) do
-	        words[index]=mysplit(value)
-	end
-
-	output = ""
-	for index,value in ipairs(words) do
-	        if value[ind1] ~= nil then
-	                output = output .. string.format("%-40s\n", value[ind1])
-	        end
-	end
-	return output
-end
 
 m = Map (modulename, translate("PBX Main Page"),
-	 translate("This configuration page allows you to configure a phone system (PBX) service which\
+ translate("This configuration page allows you to configure a phone system (PBX) service which\
       permits making phone calls through multiple Google and SIP (like Sipgate,\
       SipSorcery, and Betamax) accounts and sharing them among many SIP devices. \
       Note that Google accounts, SIP accounts, and local user accounts are configured in the \
       \"Google Accounts\", \"SIP Accounts\", and \"User Accounts\" sub-sections. \
-      You must add at least one User Account to this PBX, and then configure a SIP device or softphone \
-      to use the account, in order to make and receive calls with your Google/SIP accounts. \
-      Configuring multiple users will allow you to make free calls between all users, and share the configured \
-      Google and SIP accounts. If you have more than one Google and SIP accounts set up, \
-      you should probably configure how calls to and from them are routed in the \"Call Routing\" page. \
-      If you're interested in using your own PBX from anywhere in the world, \
-      then visit the \"Remote Usage\" section in the \"Advanced Settings\" page."))
+      You must add at least one User Account to this PBX, and then configure a SIP device or \
+      softphone to use the account, in order to make and receive calls with your Google/SIP \
+      accounts. Configuring multiple users will allow you to make free calls between all users,\
+      and share the configured Google and SIP accounts. If you have more than one Google and SIP \
+      accounts set up, you should probably configure how calls to and from them are routed in \
+      the \"Call Routing\" page. If you're interested in using your own PBX from anywhere in the\
+      world, then visit the \"Remote Usage\" section in the \"Advanced Settings\" page."))
 
-----------------------------------------------------------------------------------------------------
-s = m:section(NamedSection, "connection_status", "main", translate("Service Control and Connection Status"))
+-----------------------------------------------------------------------------------------
+s = m:section(NamedSection, "connection_status", "main",
+	      translate("Service Control and Connection Status"))
 s.anonymous = true
 
 s:option (DummyValue, "status", translate("Service Status"))
@@ -100,12 +109,15 @@ sts.rows = 20
 function sts.cfgvalue(self, section)
 
    if server == "asterisk" then
-      reg  = luci.sys.exec("asterisk -rx 'sip show registry' | sed 's/peer-//'")
-      jab  = luci.sys.exec("asterisk -rx 'jabber show connections' | grep onnected")
+      regs = luci.sys.exec("asterisk -rx 'sip show registry' | sed 's/peer-//'")
+      jabs = luci.sys.exec("asterisk -rx 'jabber show connections' | grep onnected")
       usrs = luci.sys.exec("asterisk -rx 'sip show users'")
       chan = luci.sys.exec("asterisk -rx 'core show channels'")
-      return format_two_indices(reg, 1, 5) .. format_two_indices(jab, 2, 4) .. "\n" 
-             .. format_one_index(usrs, 1) .. "\n" .. chan
+
+      return format_indices(regs, {1, 5}) ..
+             format_indices(jabs, {2, 4}) .. "\n" ..
+	     format_indices(usrs, {1}   ) .. "\n" .. chan
+
    elseif server == "freeswitch" then
       return "Freeswitch is not supported yet.\n"
    else
