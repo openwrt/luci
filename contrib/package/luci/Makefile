@@ -216,7 +216,7 @@ $(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA))
 $(eval $(call protocol,pptp,Support for PPtP,+pptp))
 $(eval $(call protocol,6x4,Support for 6in4/6to4,+6in4 +6to4))
 $(eval $(call protocol,3g,Support for 3G,+comgt))
-$(eval $(call protocol,relay,Support for relayd pseudo bridges,+relayd))
+$(eval $(call protocol,relay,Support for relayd pseudo bridges,+PACKAGE_luci-proto-relay:relayd))
 
 
 ### Community Packages ###
