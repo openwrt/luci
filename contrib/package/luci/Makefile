@@ -431,6 +431,8 @@ $(eval $(call application,ahcp,LuCI Support for AHCPd,\
 $(eval $(call application,wshaper,LuCI Support for wshaper,\
 	+PACKAGE_luci-app-wshaper:wshaper))
 
+$(eval $(call application,pbx,LuCI PBX Administration))
+
 $(eval $(call application,lqtapifoss,Lantiq voip))
 
 ### Server Gateway Interfaces ###
