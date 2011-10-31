@@ -75,16 +75,16 @@ end
 
 m = Map (modulename, translate("PBX Main Page"),
 	 translate("This configuration page allows you to configure a phone system (PBX) service which\
-		   permits making phone calls with, and sharing multiple Google and SIP (like Sipgate,\
-                   SipSorcery, and Betamax) accounts among many SIP devices. Note that Google\
-		   accounts, SIP accounts, and local user accounts are configured in the\
-		   \"Google Accounts\", \"SIP Accounts\", and \"User Accounts\" sub-sections.\
-      You must configure at least one local SIP account\
-      on this PBX, to make and receive calls with your Google/SIP accounts.\
-      Configuring multiple users will allow you to make free calls between users, and share the configured\
-      Google and SIP accounts. If you have more than one Google and SIP accounts set up,\
-      you should probably configure how calls to and from them are routed in the \"Call Routing\" page.\
-      If you're interested in using your own PBX from anywhere in the world,\
+      permits making phone calls through multiple Google and SIP (like Sipgate,\
+      SipSorcery, and Betamax) accounts and sharing them among many SIP devices. \
+      Note that Google accounts, SIP accounts, and local user accounts are configured in the \
+      \"Google Accounts\", \"SIP Accounts\", and \"User Accounts\" sub-sections. \
+      You must add at least one User Account to this PBX, and then configure a SIP device or softphone \
+      to use the account, in order to make and receive calls with your Google/SIP accounts. \
+      Configuring multiple users will allow you to make free calls between all users, and share the configured \
+      Google and SIP accounts. If you have more than one Google and SIP accounts set up, \
+      you should probably configure how calls to and from them are routed in the \"Call Routing\" page. \
+      If you're interested in using your own PBX from anywhere in the world, \
       then visit the \"Remote Usage\" section in the \"Advanced Settings\" page."))
 
 ----------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ function sts.cfgvalue(self, section)
       usrs = luci.sys.exec("asterisk -rx 'sip show users'")
       chan = luci.sys.exec("asterisk -rx 'core show channels'")
       return format_two_indices(reg, 1, 5) .. format_two_indices(jab, 2, 4) .. "\n" 
-             .. format_one_index(usrs,1) .. "\n" .. chan
+             .. format_one_index(usrs, 1) .. "\n" .. chan
    elseif server == "freeswitch" then
       return "Freeswitch is not supported yet.\n"
    else

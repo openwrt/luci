@@ -33,8 +33,6 @@ ASTGROUP=nogroup
 ASTDIRSRECURSIVE="/var/run/asterisk /var/log/asterisk /var/spool/asterisk"
 ASTDIRS="/usr/lib/asterisk"
 
-FIREWALL_PATH="/etc/asterisk/firewall.$MODULENAME"
-
 TEMPLATEDIR=/etc/${MODULENAME}-asterisk
 ASTERISKDIR=/etc/asterisk
 WORKDIR=/tmp/$MODULENAME.$$
@@ -73,7 +71,6 @@ TMPL_EXTOUTGTALK=$TEMPLATEDIR/extensions_outgoing_gtalk.conf.TEMPLATE
 TMPL_EXTOUTLOCAL=$TEMPLATEDIR/extensions_outgoing_dial_local_user.conf.TEMPLATE
 TMPL_EXTOUTSIP=$TEMPLATEDIR/extensions_outgoing_sip.conf.TEMPLATE
 
-TMPL_FIREWALL=$TEMPLATEDIR/firewall.$MODULENAME.TEMPLATE
 TMPL_JABBER=$TEMPLATEDIR/jabber.conf.TEMPLATE
 TMPL_JABBERUSER=$TEMPLATEDIR/jabber_users.conf.TEMPLATE
 TMPL_SIP=$TEMPLATEDIR/sip.conf.TEMPLATE
@@ -557,47 +554,6 @@ pbx_fix_ownership()
 	chown $ASTUSER:$ASTGROUP -R $ASTDIRSRECURSIVE
 }
 
-# Creates firewall configuration. However, since this functionality is now
-# taken over by pbx-advanced.lua, this function is unused.
-create_firewall_config()
-{
-	local bindport
-	local rtpstart
-	local rtpend
-	local externhost
-
-	config_get bindport advanced bindport
-	config_get externhost advanced externhost
-	config_get rtpstart advanced rtpstart
-	config_get rtpend   advanced rtpend
-
-	# We need all of these parameters to be set in order to consider inserting firewall rules.
-	if [ -z "$externhost" -o -z "$bindport" -o -z "$rtpstart" -o -z "$rtpend" ] ; then
-		rm -f $FIREWALL_PATH
-		return
-	fi
-
-	sed "s/|SIPPORT|/$bindport/g" $TMPL_FIREWALL |\
-	     sed "s/|RTPRANGE|/$rtpstart:$rtpend/g" > $WORKDIR/firewall.$MODULENAME
-
-	# Make sure there is an include section in the firewall configuration
-	# to include the file we just created.
-	i=0 ; found_path=0
-	while p=`uci get firewall.@include[$i].path 2>/dev/null` ; do
-		if [ "$p" = "$FIREWALL_PATH" ] ; then
-			found_path=1
-			break
-		fi
-		i=`expr $i + 1`
-	done
-
-	# If no include section was found which mentions $FIREWALL_PATH, add one.
-	if [ $found_path -eq 0 ] ; then
-		uci add firewall include   1>/dev/null 2>/dev/null
-		uci set firewall.@include[-1].path="$FIREWALL_PATH"
-		uci commit firewall
-	fi
-}
 
 start() {
 	mkdir -p $WORKDIR
