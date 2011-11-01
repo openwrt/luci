@@ -29,44 +29,19 @@ modulename       = "pbx-calls"
 voipmodulename   = "pbx-voip"
 googlemodulename = "pbx-google"
 usersmodulename  = "pbx-users"
+validoutaccounts = {}
+allvalidusers    = {}
 
--- This function builds and returns a table with all the entries in a given "module" and "section".
-function get_existing_entries(module, section)
-   i = 1
-   existing_entries = {}
-   m.uci:foreach(module, section,
-		 function(s1)
-		    existing_entries[i] = s1
-		    i = i + 1
-		 end)
-   return existing_entries
-end
-
--- This function is used to build and return a table where the name field for
--- every element in a table entries are the indexes to the table (used to check
--- validity of user input.
-function get_valid_names(entries)
-   validnames={}
-   for index,value in ipairs(entries) do
-      validnames[entries[index].name] = true
-   end
-   return validnames
-end
-
--- This function is used to build and return a table where the defaultuser field for
--- every element in a table entries are the indexes to the table (used to check
--- validity of user input.
-function get_valid_defaultusers(entries)
-   validnames={}
-   for index,value in ipairs(entries) do
-      validnames[entries[index].defaultuser] = true
-   end
-   return validnames
-end
-
+-- Checks whether the entered extension is valid syntactically.
 function is_valid_extension(exten)
    return (exten:match("[#*+0-9NXZ]+$") ~= nil)
 end
+
+-- Gets rid of leading and trailing whitespace.
+function trim(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
 
 m = Map (modulename, translate("Call Routing"),
 	 translate("This is where you indicate which Google/SIP accounts are used to call what \
@@ -103,6 +78,9 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
 		    s1.make_outgoing_calls == "yes" then
 		    patt = s:option(DynamicList, s1.name, s1.username)
 
+		    -- Add provider to the associative array of valid accounts.
+		    validoutaccounts[s1.name] = s1.username
+
 		    -- If the saved field is empty, we return a string
 		    -- telling the user that this account would dial any exten.
 		    function patt.cfgvalue(self, section)
@@ -120,8 +98,9 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  if is_valid_extension(value[index]) == true then
-			     newvalue[nindex] = value[index]
+			  val = trim(value[index])
+			  if is_valid_extension(val) == true then
+			     newvalue[nindex] = val
 			     nindex = nindex + 1
 			  end
 		       end
@@ -136,6 +115,9 @@ m.uci:foreach(voipmodulename, "voip_provider",
 		    s1.name ~= nil        and s1.make_outgoing_calls == "yes" then
 		    patt = s:option(DynamicList, s1.name, s1.defaultuser .. "@" .. s1.host)
 
+		    -- Add provider to the associative array of valid accounts.
+		    validoutaccounts[s1.name] = s1.defaultuser .. "@" .. s1.host
+
 		    -- If the saved field is empty, we return a string
 		    -- telling the user that this account would dial any exten.
 		    function patt.cfgvalue(self, section)
@@ -153,8 +135,9 @@ m.uci:foreach(voipmodulename, "voip_provider",
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  if is_valid_extension(value[index]) == true then
-			     newvalue[nindex] = value[index]
+			  val = trim(value[index])
+			  if is_valid_extension(val) == true then
+			     newvalue[nindex] = val
 			     nindex = nindex + 1
 			  end
 		       end
@@ -194,12 +177,12 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
 
 		    -- Write only valid user names.
 		    function gtalkaccts.write(self, section, value)
-		       users=get_valid_defaultusers(get_existing_entries(usersmodulename, "local_user"))
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  if users[value[index]] == true then
-			     newvalue[nindex] = value[index]
+			  trimuser = trim(value[index])
+			  if allvalidusers[trimuser] == true then
+			     newvalue[nindex] = trimuser
 			     nindex = nindex + 1
 			  end
 		       end
@@ -229,12 +212,12 @@ m.uci:foreach(voipmodulename, "voip_provider",
 
 		    -- Write only valid user names.
 		    function voipaccts.write(self, section, value)
-		       users=get_valid_defaultusers(get_existing_entries(usersmodulename, "local_user"))
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  if users[value[index]] == true then
-			     newvalue[nindex] = value[index]
+			  trimuser = trim(value[index])
+			  if allvalidusers[trimuser] == true then
+			     newvalue[nindex] = trimuser
 			     nindex = nindex + 1
 			  end
 		       end
@@ -250,14 +233,15 @@ s = m:section(NamedSection, "providers_user_can_use", "call_routing",
 	calls. By default all users can use all providers. To show up in the list below the user should\
 	be allowed to make outgoing calls in the \"User Accounts\" page. Enter VoIP providers in the format\
 	username@some.host.name, as listed in \"Outgoing Calls\" above. It's easiest to copy and paste\
-	the providers from above. Invalid entries will be rejected silently. Also, any entries automatically\
-	change to this PBX's internal naming scheme, with \"_\" replacing all non-alphanumeric characters.\
-	Entries can be made in a space-separated list, and/or one per line by hitting enter after every\
-	one."))
+	the providers from above. Invalid entries will be rejected silently. Entries can be made in a \
+	space-separated list, and/or one per line by hitting enter after every one."))
 s.anonymous = true
 
-m.uci:foreach(usersmodulename, "local_user", 
+m.uci:foreach(usersmodulename, "local_user",
 	      function(s1)
+		 -- Add user to list of all valid users.
+		 if s1.defaultuser ~= nil then allvalidusers[s1.defaultuser] = true end
+
 		 if s1.defaultuser ~= nil and s1.can_call == "yes" then
 		    providers = s:option(DynamicList, s1.defaultuser, s1.defaultuser)
 		    
@@ -265,25 +249,28 @@ m.uci:foreach(usersmodulename, "local_user",
 		    -- telling the user that this account would dial any exten.
 		    function providers.cfgvalue(self, section)
 		       value = self.map:get(section, self.option)
-		       
+
 		       if value == nil then
 			  return {"Uses all provider accounts"}
 		       else
-			  return value
+			  newvalue = {}
+			  -- Convert internal names to user@host values.
+			  for i,v in ipairs(value) do
+			     newvalue[i] = validoutaccounts[v]
+			  end
+			  return newvalue
 		       end
 		    end
 		    
 		    -- Cook the new values prior to entering them into the config file.
 		    -- Also, enter them only if they are valid.
 		    function providers.write(self, section, value)
-		       validvoip=get_valid_names(get_existing_entries(voipmodulename, "voip_provider"))
-		       validgoog=get_valid_names(get_existing_entries(googlemodulename, "gtalk_jabber"))
 		       cookedvalue = {}
 		       cindex = 1
 		       for index, field in ipairs(value) do
-			  cooked = string.gsub(value[index], "%W", "_")
-			  if validvoip[cooked] == true or validgoog[cooked] == true then
-			     cookedvalue[cindex] = string.gsub(value[index], "%W", "_")
+			  cooked = string.gsub(trim(value[index]), "%W", "_")
+			  if validoutaccounts[cooked] ~= nil then
+			     cookedvalue[cindex] = cooked
 			     cindex = cindex + 1
 			  end
 		       end
@@ -308,12 +295,12 @@ p:value("no",  translate("No"))
 p.default = "yes"
 
 user = s:option(Value, "defaultuser",  translate("User Name"),
-	 translate("The number(s) specified above will be able to dial outwith this user's providers.\
+	 translate("The number(s) specified above will be able to dial out with this user's providers.\
 		   Invalid usernames are dropped silently, please verify that the entry was accepted."))
 function user.write(self, section, value)
-   users=get_valid_defaultusers(get_existing_entries(usersmodulename, "local_user"))
-   if users[value] == true then
-      Value.write(self, section, value)
+   trimuser = trim(value)
+   if allvalidusers[trimuser] == true then
+      Value.write(self, section, trimuser)
    end
 end
 
