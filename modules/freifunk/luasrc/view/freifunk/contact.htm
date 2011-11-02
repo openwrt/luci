@@ -16,9 +16,20 @@ You may obtain a copy of the License at
 <% 
 local uci = require "luci.model.uci".cursor()
 local contact = uci:get_all("freifunk", "contact")
-local location = uci:get_first("system", "system", "location") or contact.location
+local nickname, name, mail, phone, location, note
 local lon = uci:get_first("system", "system", "longitude")
 local lat = uci:get_first("system", "system", "latitude")
+
+if not contact then
+	nickname, name, mail, phone, location, note = ""
+else
+	nickname = contact.nickname or ""
+	name = contact.name or ""
+	mail = contact.mail or ""
+	phone = contact.phone or ""
+	location = uci:get_first("system", "system", "location") or contact.location
+	note = contact.note or ""
+end
 %>
 
 <h2><a id="content" name="content"><%:Contact%></a></h2>
@@ -26,10 +37,10 @@ local lat = uci:get_first("system", "system", "latitude")
 <fieldset xmlns="http://www.w3.org/1999/xhtml" class="cbi-section">
 <legend><%:Operator%></legend>
 	<table cellspacing="10" width="100%" style="text-align:left">
-		<tr><th width="33%"><%:Nickname%>:</th><td><%=contact.nickname%></td></tr>
-		<tr><th width="33%"><%:Realname%>:</th><td><%=contact.name%></td></tr>
-		<tr><th width="33%"><%:E-Mail%>:</th><td><a href="mailto:<%=contact.mail%>"><%=contact.mail%></a></td></tr>
-		<tr><th width="33%"><%:Phone%>:</th><td><%=contact.phone%></td></tr>
+		<tr><th width="33%"><%:Nickname%>:</th><td><%=nickname%></td></tr>
+		<tr><th width="33%"><%:Realname%>:</th><td><%=name%></td></tr>
+		<tr><th width="33%"><%:E-Mail%>:</th><td><a href="mailto:<%=mail%>"><%=mail%></a></td></tr>
+		<tr><th width="33%"><%:Phone%>:</th><td><%=phone%></td></tr>
 	</table>
 </fieldset>
 
@@ -41,11 +52,11 @@ local lat = uci:get_first("system", "system", "latitude")
 	</table>
 </fieldset>
 
-<% if contact.note then %>
+<% if note then %>
 <fieldset xmlns="http://www.w3.org/1999/xhtml" class="cbi-section">
 <legend><%:Notice%></legend>
 	<table cellspacing="10" width="100%" style="text-align:left">
-		<tr><td><%=contact.note%></td></tr>
+		<tr><td><%=note%></td></tr>
 	</table>
 </fieldset>
 <%end%>
