@@ -58,3 +58,4 @@ dns = section:taboption("advanced", DynamicList, "dns",
 
 dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
+dns.cast     = "string"
