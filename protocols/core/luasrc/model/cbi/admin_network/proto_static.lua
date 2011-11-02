@@ -42,6 +42,7 @@ dns = section:taboption("general", DynamicList, "dns",
 	translate("Use custom DNS servers"))
 
 dns.datatype = "ipaddr"
+dns.cast     = "string"
 
 
 if luci.model.network:has_ipv6() then

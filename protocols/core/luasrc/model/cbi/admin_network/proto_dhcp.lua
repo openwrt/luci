@@ -88,6 +88,7 @@ dns = section:taboption("advanced", DynamicList, "dns",
 
 dns:depends("_no_dns", "")
 dns.datatype = "ipaddr"
+dns.cast     = "string"
 
 
 metric = section:taboption("advanced", Value, "metric",

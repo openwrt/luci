@@ -97,6 +97,7 @@ dns = section:taboption("advanced", DynamicList, "dns",
 
 dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
+dns.cast     = "string"
 
 
 keepalive_failure = section:taboption("advanced", Value, "_keepalive_failure",
