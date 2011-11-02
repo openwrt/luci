@@ -227,8 +227,7 @@ function iface_status()
 		local net = netm:get_network(iface)
 		local device = net and net:get_interface()
 		if device then
-			local device = net:get_interface()
-			local data   = {
+			local data = {
 				id         = iface,
 				proto      = net:proto(),
 				uptime     = net:uptime(),
@@ -374,11 +373,13 @@ function wifi_reconnect()
 	local net = netmd:get_wifinet(wnet)
 	local dev = net:get_device()
 	if dev and net then
+		luci.sys.call("env -i /sbin/wifi down >/dev/null 2>/dev/null")
+
 		dev:set("disabled", nil)
 		net:set("disabled", (mode == "wireless_shutdown") and 1 or nil)
 		netmd:commit("wireless")
 
-		luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
+		luci.sys.call("env -i /sbin/wifi up >/dev/null 2>/dev/null")
 		luci.http.status(200, (mode == "wireless_shutdown") and "Shutdown" or "Reconnected")
 
 		return
