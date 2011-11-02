@@ -67,6 +67,13 @@ if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" 
 	$dir/helpers/setup_lan_static.sh
 fi
 
+# Setup policyrouting if internet sharing is disabled and wan is not used for olsrd
+# Always disable it first to make sure its disabled when the user decied to share his internet
+uci set freifunk-policyrouting.pr.enable=0
+if [ ! "$sharenet" == 1 ] && [ ! "$(uci -q get meshwizard.netconfig.wan_proto)" == "olsr" ]; then
+	$dir/helpers/setup_policyrouting.sh
+fi
+
 # Configure found networks
 for net in $networks; do
 	# radioX devices need to be renamed

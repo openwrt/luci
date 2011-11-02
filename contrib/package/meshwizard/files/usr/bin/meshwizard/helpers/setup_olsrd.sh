@@ -50,9 +50,8 @@ uci_commitverbose "Setup olsr nameservice plugin" olsrd
 # Setup dyngw_plain
 
 # If Sharing of Internet is enabled then enable dyngw_plain plugin
-sharenet=$(uci -q get meshwizard.general.sharenet)
 
-if [ "$sharenet" == 1 ]; then
+if [ "$general_sharenet" == 1 ]; then
 	uci set olsrd.dyngw_plain=LoadPlugin
 	uci set olsrd.dyngw_plain.ignore=0
 	uci set olsrd.dyngw_plain.library="olsrd_dyn_gw_plain.so.0.4"
