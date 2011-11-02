@@ -15,19 +15,28 @@ $Id$
 <%+header%>
 <% 
 local uci = require "luci.model.uci".cursor()
+local ff = {}
 local ff = uci:get_all("freifunk")
-if not ff.community.name then
-	ff.community.name = ""
+
+if not ff or not ff.community.name then
+	community = "Freifunk"
+	DefaultText = ""
+	nickname = "No Nickname set"
+else
+	community = ff.community.name
+	DefaultText = ff.community.DefaultText
+	nickname = ff.contact.nickname
 end
-local co = "profile_" .. ff.community.name
-local community = uci:get_first(co, "community", "name") or "Freifunk"
+
+local co = "profile_" .. community
+--local community = uci:get_first(co, "community", "name") or "Freifunk"
 local url = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
 
 
 require("luci.fs")
 local usertext = luci.fs.readfile("/www/luci-static/index_user.html")
 
-if (ff.community.DefaultText or "") ~= "disabled" then
+if DefaultText ~= "disabled" then
 
 	defaulttext = '<h2><a id="content" name="content">'..
 	(translate("Hello and welcome in the network of"))..
@@ -44,7 +53,7 @@ if (ff.community.DefaultText or "") ~= "disabled" then
 	' <a href="'..
 	luci.dispatcher.build_url("freifunk", "contact")..
 	'">'..
-	(ff.contact.nickname or translate("Please set your contact information"))..
+	(nickname or translate("Please set your contact information"))..
 	'</a>.</p><p>'..
 	translate("You can find further information about the global Freifunk initiative at")..
 	' <a href="http://freifunk.net">Freifunk.net</a>.<br />'..
