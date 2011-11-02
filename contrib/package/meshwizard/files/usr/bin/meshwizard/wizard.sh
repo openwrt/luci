@@ -70,7 +70,7 @@ fi
 # Setup policyrouting if internet sharing is disabled and wan is not used for olsrd
 # Always disable it first to make sure its disabled when the user decied to share his internet
 uci set freifunk-policyrouting.pr.enable=0
-if [ ! "$sharenet" == 1 ] && [ ! "$(uci -q get meshwizard.netconfig.wan_proto)" == "olsr" ]; then
+if [ ! "$general_sharenet" == 1 ] && [ ! "$(uci -q get meshwizard.netconfig.wan_proto)" == "olsr" ]; then
 	$dir/helpers/setup_policyrouting.sh
 fi
 
