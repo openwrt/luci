@@ -300,7 +300,7 @@ $Id$
 								icon, assoclist[j].signal, assoclist[j].noise
 							);
 
-							tr.insertCell(-1).innerHTML = iw.ssid ? iw.ssid : '?';
+							tr.insertCell(-1).innerHTML = String.format('%h', iw.ssid ? iw.ssid : '?');
 							tr.insertCell(-1).innerHTML = assoclist[j].bssid;
 
 							tr.insertCell(-1).innerHTML = arptable[assoclist[j].bssid]
