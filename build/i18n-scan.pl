@@ -51,6 +51,7 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 			{
 				( my $code, $text ) = extract_bracketed($text, q{('")});
 
+				$code =~ s/\\\n/ /g;
 				$code =~ s/^\([\n\s]*//;
 				$code =~ s/[\n\s]*\)$//;
 
