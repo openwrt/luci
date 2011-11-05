@@ -19,6 +19,7 @@
 
 modulename = "pbx"
 
+
 if     nixio.fs.access("/etc/init.d/asterisk")   then
    server = "asterisk"
 elseif nixio.fs.access("/etc/init.d/freeswitch") then
@@ -27,19 +28,6 @@ else
    server = ""
 end
 
--- My implementation of the function which splits a string into tokens
--- at the specified separator and returns a table containing the tokens.
-function mysplit(inputstr, sep)
-        if sep == nil then
-                sep = "%s"
-        end
-        t={} ; i=1
-        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-                t[i] = str
-                i = i + 1
-        end
-        return t
-end
 
 -- Returns formatted output of string containing only the words at the indices
 -- specified in the table "indices".
@@ -49,12 +37,12 @@ function format_indices(string, indices)
    end
 
    -- Split input into separate lines.
-   lines = mysplit(string, "\n")
+   lines = luci.util.split(luci.util.trim(string), "\n")
    
    -- Split lines into separate words.
    splitlines = {}
    for lpos,line in ipairs(lines) do
-      splitlines[lpos] = mysplit(line, " ")
+      splitlines[lpos] = luci.util.split(luci.util.trim(line), "%s+", nil, true)
    end
    
    -- For each split line, if the word at all indices specified
