@@ -49,13 +49,12 @@ function format_indices(string, indices)
    end
 
    -- Split input into separate lines.
-   lines = {}
    lines = mysplit(string, "\n")
    
    -- Split lines into separate words.
    splitlines = {}
    for lpos,line in ipairs(lines) do
-      splitlines[lpos] = mysplit(line)
+      splitlines[lpos] = mysplit(line, " ")
    end
    
    -- For each split line, if the word at all indices specified

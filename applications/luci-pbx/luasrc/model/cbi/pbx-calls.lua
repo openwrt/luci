@@ -37,11 +37,6 @@ function is_valid_extension(exten)
    return (exten:match("[#*+0-9NXZ]+$") ~= nil)
 end
 
--- Gets rid of leading and trailing whitespace.
-function trim(s)
-  return (s:gsub("^%s*(.-)%s*$", "%1"))
-end
-
 
 m = Map (modulename, translate("Call Routing"),
 	 translate("This is where you indicate which Google/SIP accounts are used to call what \
@@ -98,7 +93,7 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  val = trim(value[index])
+			  val = luci.util.trim(value[index])
 			  if is_valid_extension(val) == true then
 			     newvalue[nindex] = val
 			     nindex = nindex + 1
@@ -135,7 +130,7 @@ m.uci:foreach(voipmodulename, "voip_provider",
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  val = trim(value[index])
+			  val = luci.util.trim(value[index])
 			  if is_valid_extension(val) == true then
 			     newvalue[nindex] = val
 			     nindex = nindex + 1
@@ -180,7 +175,7 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  trimuser = trim(value[index])
+			  trimuser = luci.util.trim(value[index])
 			  if allvalidusers[trimuser] == true then
 			     newvalue[nindex] = trimuser
 			     nindex = nindex + 1
@@ -215,7 +210,7 @@ m.uci:foreach(voipmodulename, "voip_provider",
 		       newvalue = {}
 		       nindex = 1
 		       for index, field in ipairs(value) do
-			  trimuser = trim(value[index])
+			  trimuser = luci.util.trim(value[index])
 			  if allvalidusers[trimuser] == true then
 			     newvalue[nindex] = trimuser
 			     nindex = nindex + 1
@@ -268,7 +263,7 @@ m.uci:foreach(usersmodulename, "local_user",
 		       cookedvalue = {}
 		       cindex = 1
 		       for index, field in ipairs(value) do
-			  cooked = string.gsub(trim(value[index]), "%W", "_")
+			  cooked = string.gsub(luci.util.trim(value[index]), "%W", "_")
 			  if validoutaccounts[cooked] ~= nil then
 			     cookedvalue[cindex] = cooked
 			     cindex = cindex + 1
@@ -298,7 +293,7 @@ user = s:option(Value, "defaultuser",  translate("User Name"),
 	 translate("The number(s) specified above will be able to dial out with this user's providers.\
 		   Invalid usernames are dropped silently, please verify that the entry was accepted."))
 function user.write(self, section, value)
-   trimuser = trim(value)
+   trimuser = luci.util.trim(value)
    if allvalidusers[trimuser] == true then
       Value.write(self, section, trimuser)
    end
