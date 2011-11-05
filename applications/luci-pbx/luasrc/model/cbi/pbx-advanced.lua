@@ -199,9 +199,9 @@ function maintain_firewall_rules()
 end
 
 m = Map (modulename, translate("Advanced Settings"),
-         translate("This section contains settings which do not need to be changed under\
-         normal circumstances. In addition, here you can configure your system\
-         for use with remote SIP devices, and resolve call quality issues by enabling\
+         translate("This section contains settings which do not need to be changed under \
+         normal circumstances. In addition, here you can configure your system \
+         for use with remote SIP devices, and resolve call quality issues by enabling \
          the insertion of QoS rules."))
 
 -- Recreate the voip server config, and restart necessary services after changes are commited
@@ -229,13 +229,13 @@ s.anonymous = true
 
 s:tab("general",  translate("General Settings"))
 s:tab("remote_usage", translate("Remote Usage"),
-      translatef("You can use your SIP devices/softphones with this system from a remote location\
-      as well, as long as your Internet Service Provider gives you a public IP.\
-      You will be able to call other local users for free (e.g. other Analog Telephone Adapters (ATAs))\
-      and use your VoIP providers to make calls as if you were at local to the PBX.\
-      After configuring this tab, go back to where users are configured and see the new\
-      Server and Port setting you need to configure the SIP devices with. Please note that by default\
-      %s uses UDP port range %d to %d for RTP traffic (which carries voice), in case you need to configure\
+      translatef("You can use your SIP devices/softphones with this system from a remote location \
+      as well, as long as your Internet Service Provider gives you a public IP. \
+      You will be able to call other local users for free (e.g. other Analog Telephone Adapters (ATAs)) \
+      and use your VoIP providers to make calls as if you were at local to the PBX. \
+      After configuring this tab, go back to where users are configured and see the new \
+      Server and Port setting you need to configure the SIP devices with. Please note that by default \
+      %s uses UDP port range %d to %d for RTP traffic (which carries voice), in case you need to configure \
       NAT or QoS on another device.", appname, defaultrtpstart, defaultrtpend))
 
 s:tab("qos",  translate("QoS Settings"), 
@@ -247,28 +247,28 @@ s:tab("qos",  translate("QoS Settings"),
       and Upload speed."))
 
 ua = s:taboption("general", Value, "useragent", translate("User Agent String"),
-                 translate("This is the name that the VoIP server will use to identify itself when\
-                 registering to VoIP (SIP) providers. Some providers require this to a specific\
+                 translate("This is the name that the VoIP server will use to identify itself when \
+                 registering to VoIP (SIP) providers. Some providers require this to a specific \
                  string matching a hardware SIP device."))
 ua.default = appname
 
 h = s:taboption("remote_usage", Value, "externhost", translate("Domain Name/Dynamic Domain Name"),
-                translate("You should either have registered a domain name and have a static IP\
-                address, or have configured Dynamic DNS on this router. Enter a\
+                translate("You should either have registered a domain name and have a static IP \
+                address, or have configured Dynamic DNS on this router. Enter a \
                 domain name which resolves to your external IP address."))
 h.datatype = "hostname"
 
 p = s:taboption("remote_usage", Value, "bindport", translate("External SIP Port"),
-                translate("Pick a random port number between 6500 and 9500 for the service to listen on.\
-                Do not pick the standard 5060, because it is often subject to brute-force attacks.\
-                When finished, (1) click \"Save and Apply\", and (2) click the \"Restart VoIP Service\"\
-                button above. Finally, (3) look in the \"SIP Device/Softphone Accounts\" section for\
+                translate("Pick a random port number between 6500 and 9500 for the service to listen on. \
+                Do not pick the standard 5060, because it is often subject to brute-force attacks. \
+                When finished, (1) click \"Save and Apply\", and (2) click the \"Restart VoIP Service\" \
+                button above. Finally, (3) look in the \"SIP Device/Softphone Accounts\" section for \
                 updated Server and Port settings for your SIP Devices/Softphones."))
 p.datatype = "port"
 
 p = s:taboption("remote_usage", Value, "rtpstart", translate("RTP Port Range Start"),
-                translate("RTP traffic carries actual voice packets. This is the start of the port range\
-                which will be used for setting up RTP communication. It's usually OK to leave this\
+                translate("RTP traffic carries actual voice packets. This is the start of the port range \
+                which will be used for setting up RTP communication. It's usually OK to leave this \
                 at the default value."))
 p.datatype = "port"
 p.default = defaultrtpstart

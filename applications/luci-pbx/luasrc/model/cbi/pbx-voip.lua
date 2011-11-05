@@ -28,9 +28,9 @@ end
 modulename = "pbx-voip"
 
 m = Map (modulename, translate("SIP Accounts"),
-         translate("This is where you set up your SIP (VoIP) accounts ts like Sipgate, SipSorcery,\
+         translate("This is where you set up your SIP (VoIP) accounts ts like Sipgate, SipSorcery, \
         the popular Betamax providers, and any other providers with SIP settings in order to start \
-        using them for dialing and receiving calls (SIP uri and real phone calls). Click \"Add\" to\
+        using them for dialing and receiving calls (SIP uri and real phone calls). Click \"Add\" to \
         add as many accounts as you wish."))
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
@@ -60,8 +60,8 @@ s.addremove = true
 
 s:option(Value, "defaultuser",  translate("User Name"))
 pwd = s:option(Value, "secret", translate("Password"),
-               translate("When your password is saved, it disappears from this field and is not displayed\
-                         for your protection. The previously saved password will be changed only when you\
+               translate("When your password is saved, it disappears from this field and is not displayed \
+                         for your protection. The previously saved password will be changed only when you \
                          enter a value different from the saved one."))
 
 
@@ -87,8 +87,8 @@ h = s:option(Value, "host", translate("SIP Server/Registrar"))
 h.datatype = "host"
 
 p = s:option(ListValue, "register", translate("Enable Incoming Calls (Register via SIP)"),
-             translate("This option should be set to \"Yes\" if you have a DID \(real telephone number\)\
-                        associated with this SIP account or want to receive SIP uri calls through this\
+             translate("This option should be set to \"Yes\" if you have a DID \(real telephone number\) \
+                        associated with this SIP account or want to receive SIP uri calls through this \
                         provider.")) 
 p:value("yes", translate("Yes"))
 p:value("no",  translate("No"))

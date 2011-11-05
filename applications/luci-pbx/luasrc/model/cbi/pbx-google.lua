@@ -31,8 +31,8 @@ defaultstatus        = "dnd"
 defaultstatusmessage = "PBX online, may lose messages"
 
 m = Map (modulename, translate("Google Accounts"),
-         translate("This is where you set up your Google (Talk and Voice) Accounts, in order to start\
-                using them for dialing and receiving calls (voice chat and real phone calls). Click \"Add\"\
+         translate("This is where you set up your Google (Talk and Voice) Accounts, in order to start \
+                using them for dialing and receiving calls (voice chat and real phone calls). Click \"Add\" \
                 to add as many accounts as you wish."))
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
@@ -63,8 +63,8 @@ s.addremove = true
 s:option(Value, "username",     translate("Email"))
 
 pwd = s:option(Value, "secret", translate("Password"),
-               translate("When your password is saved, it disappears from this field and is not displayed\
-                         for your protection. The previously saved password will be changed only when you\
+               translate("When your password is saved, it disappears from this field and is not displayed \
+                         for your protection. The previously saved password will be changed only when you \
                          enter a value different from the saved one."))
 pwd.password = true
 pwd.rmempty = false
@@ -86,21 +86,21 @@ end
 
 p = s:option(ListValue, "register",
              translate("Enable Incoming Calls (See Status, Message below)"),
-             translate("When somebody starts voice chat with your GTalk account or calls the GVoice,\
-                       number (if you have Google Voice), the call will be forwarded to any users\
-                        that are online (registered using a SIP device or softphone) and permitted to\
-                        receive the call. If you have Google Voice, you must go to your GVoice settings and\
-                        forward calls to Google chat in order to actually receive calls made to your\
-                        GVoice number. If you have trouble receiving calls from GVoice, experiment\
-                        with the Call Screening option in your GVoice Settings. Finally, make sure no other\
-                        client is online with this account (browser in gmail, mobile/desktop Google Talk\
+             translate("When somebody starts voice chat with your GTalk account or calls the GVoice, \
+                       number (if you have Google Voice), the call will be forwarded to any users \
+                        that are online (registered using a SIP device or softphone) and permitted to \
+                        receive the call. If you have Google Voice, you must go to your GVoice settings and \
+                        forward calls to Google chat in order to actually receive calls made to your \
+                        GVoice number. If you have trouble receiving calls from GVoice, experiment \
+                        with the Call Screening option in your GVoice Settings. Finally, make sure no other \
+                        client is online with this account (browser in gmail, mobile/desktop Google Talk \
                         App) as it may interfere."))
 p:value("yes", translate("Yes"))
 p:value("no",  translate("No"))
 p.default = "yes"
 
 p = s:option(ListValue, "make_outgoing_calls", translate("Enable Outgoing Calls"),
-             translate("Use this account to make outgoing calls as configured in the \"Call Routing\" section."))
+      translate("Use this account to make outgoing calls as configured in the \"Call Routing\" section."))
 p:value("yes", translate("Yes"))
 p:value("no",  translate("No"))
 p.default = "yes"
