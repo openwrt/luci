@@ -88,6 +88,7 @@ INCLUDED_FILES="$WORKDIR/extensions_blacklist.conf $WORKDIR/extensions_callthrou
 # In this string, we concatenate all local users enabled to receive calls
 # readily formatted for the Dial command.
 localusers_to_ring=""
+
 # In this string, we keep a list of all users that are enabled for outgoing
 # calls. It is used at the end to create the user contexts.
 localusers_can_dial=""
@@ -101,12 +102,12 @@ outbound_providers=""
 # Copies the template files which we don't edit.
 copy_unedited_templates_over()
 {
-	cp $TMPL_ASTERISK    $WORKDIR/asterisk.conf
-	cp $TMPL_GTALK       $WORKDIR/gtalk.conf
-	cp $TMPL_INDICATIONS $WORKDIR/indications.conf
-        cp $TMPL_LOGGER      $WORKDIR/logger.conf
-	cp $TMPL_MANAGER     $WORKDIR/manager.conf
-	cp $TMPL_MODULES     $WORKDIR/modules.conf
+    cp $TMPL_ASTERISK    $WORKDIR/asterisk.conf
+    cp $TMPL_GTALK       $WORKDIR/gtalk.conf
+    cp $TMPL_INDICATIONS $WORKDIR/indications.conf
+    cp $TMPL_LOGGER      $WORKDIR/logger.conf
+    cp $TMPL_MANAGER     $WORKDIR/manager.conf
+    cp $TMPL_MODULES     $WORKDIR/modules.conf
 }
 
 # Touches all the included files, to prevent asterisk from refusing to
@@ -119,48 +120,48 @@ create_included_files()
 # Puts together all the extensions.conf related configuration.
 pbx_create_extensions_config()
 {
-	sed "s/|LOCALUSERS|/$localusers_to_ring/g" $TMPL_EXTENSIONS > $WORKDIR/extensions.conf
-	mv  $WORKDIR/inext.TMP                         $WORKDIR/extensions_incoming.conf
-	cp  $TMPL_EXTINCNTXTGTALKHDR                   $WORKDIR/extensions_incoming_gtalk.conf
-	cat $WORKDIR/outextgtalk.TMP                >> $WORKDIR/extensions_incoming_gtalk.conf 2>/dev/null
-	rm -f $WORKDIR/outextgtalk.TMP
-	mv  $WORKDIR/blacklist.TMP                     $WORKDIR/extensions_blacklist.conf
-	mv  $WORKDIR/userext.TMP                       $WORKDIR/extensions_user.conf
-	cp  $TMPL_EXTCTHRUHDR                          $WORKDIR/extensions_callthrough.conf
-	cat $WORKDIR/callthrough.TMP                >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
-	rm -f $WORKDIR/callthrough.TMP
-	cat $TMPL_EXTCTHRUCHECKHDR                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
-	cat $WORKDIR/callthroughcheck.TMP           >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
-	rm -f $WORKDIR/callthroughcheck.TMP
-	cat $TMPL_EXTCTHRUCHECKFTR                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
-	rm -f $WORKDIR/outext-*.TMP
-	rm -f $WORKDIR/localext.TMP
+    sed "s/|LOCALUSERS|/$localusers_to_ring/g" $TMPL_EXTENSIONS > $WORKDIR/extensions.conf
+    mv  $WORKDIR/inext.TMP                         $WORKDIR/extensions_incoming.conf
+    cp  $TMPL_EXTINCNTXTGTALKHDR                   $WORKDIR/extensions_incoming_gtalk.conf
+    cat $WORKDIR/outextgtalk.TMP                >> $WORKDIR/extensions_incoming_gtalk.conf 2>/dev/null
+    rm -f $WORKDIR/outextgtalk.TMP
+    mv  $WORKDIR/blacklist.TMP                     $WORKDIR/extensions_blacklist.conf
+    mv  $WORKDIR/userext.TMP                       $WORKDIR/extensions_user.conf
+    cp  $TMPL_EXTCTHRUHDR                          $WORKDIR/extensions_callthrough.conf
+    cat $WORKDIR/callthrough.TMP                >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    rm -f $WORKDIR/callthrough.TMP
+    cat $TMPL_EXTCTHRUCHECKHDR                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    cat $WORKDIR/callthroughcheck.TMP           >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    rm -f $WORKDIR/callthroughcheck.TMP
+    cat $TMPL_EXTCTHRUCHECKFTR                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    rm -f $WORKDIR/outext-*.TMP
+    rm -f $WORKDIR/localext.TMP
 }
 
 # Puts together all the sip.conf related configuration.
 pbx_create_sip_config()
 {
-	mv $WORKDIR/sip_regs.TMP    $WORKDIR/sip_registrations.conf
-	mv $WORKDIR/sip_peers.TMP   $WORKDIR/sip_peers.conf
-	mv $WORKDIR/sip_users.TMP   $WORKDIR/sip_users.conf
+    mv $WORKDIR/sip_regs.TMP    $WORKDIR/sip_registrations.conf
+    mv $WORKDIR/sip_peers.TMP   $WORKDIR/sip_peers.conf
+    mv $WORKDIR/sip_users.TMP   $WORKDIR/sip_users.conf
 }
 
 # Creates the jabber.conf related config
 pbx_create_jabber_config()
 {
-	cp  $TMPL_JABBER        $WORKDIR/jabber.conf
-	mv  $WORKDIR/jabber.TMP $WORKDIR/jabber_users.conf
+    cp  $TMPL_JABBER        $WORKDIR/jabber.conf
+    mv  $WORKDIR/jabber.TMP $WORKDIR/jabber_users.conf
 }
 
 # Gets rid of any config files from $ASTERISKDIR not found in $WORKDIR.
 clean_up_asterisk_config_dir()
 {
-        for f in $ASTERISKDIR/* ; do
-                basef="`basename $f`"
-                if [ ! -e "$WORKDIR/$basef" ] ; then
-                        rm -rf "$f"
-                fi
-        done
+    for f in $ASTERISKDIR/* ; do
+        basef="`basename $f`"
+        if [ ! -e "$WORKDIR/$basef" ] ; then
+            rm -rf "$f"
+        fi
+    done
 }
 
 # Compares md5sums of the config files in $WORKDIR to those
@@ -168,22 +169,22 @@ clean_up_asterisk_config_dir()
 # wear on flash in embedded devices.
 compare_configs_and_copy_changed()
 {
-	# First, compute md5sums of the config files in $WORKDIR.
-	cd $WORKDIR/
-	md5sum * > $MD5SUMSFILE
+    # First, compute md5sums of the config files in $WORKDIR.
+    cd $WORKDIR/
+    md5sum * > $MD5SUMSFILE
 
-	# Now, check the files in $ASTERISKDIR against the md5sums.
-	cd $ASTERISKDIR/
-	changed_files="`md5sum -c $MD5SUMSFILE 2>/dev/null | fgrep ": FAILED" | awk -F: '{print $1}'`"
+    # Now, check the files in $ASTERISKDIR against the md5sums.
+    cd $ASTERISKDIR/
+    changed_files="`md5sum -c $MD5SUMSFILE 2>/dev/null | fgrep ": FAILED" | awk -F: '{print $1}'`"
 
-	rm -f $MD5SUMSFILE
+    rm -f $MD5SUMSFILE
 
-	[ -z "$changed_files" ] && return
+    [ -z "$changed_files" ] && return
 
-	# Now copy over the changed files.
-	for f in $changed_files ; do
-		cp "$WORKDIR/$f" "$ASTERISKDIR/$f"
-	done
+    # Now copy over the changed files.
+    for f in $changed_files ; do
+        cp "$WORKDIR/$f" "$ASTERISKDIR/$f"
+    done
 }
 
 # Calls the functions that create the final config files
@@ -192,72 +193,72 @@ compare_configs_and_copy_changed()
 # Gets rid of $WORKDIR
 pbx_assemble_and_copy_config()
 {
-	mkdir -p $ASTERISKDIR
+    mkdir -p $ASTERISKDIR
 
-	copy_unedited_templates_over
-	create_included_files
-	pbx_create_extensions_config
-	pbx_create_sip_config
-	pbx_create_jabber_config
+    copy_unedited_templates_over
+    create_included_files
+    pbx_create_extensions_config
+    pbx_create_sip_config
+    pbx_create_jabber_config
 
-	touch    $WORKDIR/features.conf
+    touch    $WORKDIR/features.conf
 
-	# At this point, $WORKDIR should contain a complete, working config.
-	clean_up_asterisk_config_dir
+    # At this point, $WORKDIR should contain a complete, working config.
+    clean_up_asterisk_config_dir
 
-	compare_configs_and_copy_changed
+    compare_configs_and_copy_changed
 
-	[ ! -d $ASTERISKDIR/manager.d ] && mkdir -p $ASTERISKDIR/manager.d/
+    [ ! -d $ASTERISKDIR/manager.d ] && mkdir -p $ASTERISKDIR/manager.d/
 
-	# Get rid of the working directory
-	rm -rf $WORKDIR/
+    # Get rid of the working directory
+    rm -rf $WORKDIR/
 }
 
 # Creates configuration for a user and adds it to the temporary file that holds
 # all users configured so far.
 pbx_add_user()
 {
-	local fullname
-	local defaultuser
-	local secret
-	local ring
-	local can_call
+    local fullname
+    local defaultuser
+    local secret
+    local ring
+    local can_call
 
-	config_get fullname $1 fullname
-	config_get defaultuser $1 defaultuser
-	config_get secret $1 secret
-	config_get ring $1 ring
-	config_get can_call $1 can_call
+    config_get fullname $1 fullname
+    config_get defaultuser $1 defaultuser
+    config_get secret $1 secret
+    config_get ring $1 ring
+    config_get can_call $1 can_call
 
-	[ -z "$defaultuser" -o -z "$secret" ] && return
-	[ -z "$fullname" ] && fullname="$defaultuser"
+    [ -z "$defaultuser" -o -z "$secret" ] && return
+    [ -z "$fullname" ] && fullname="$defaultuser"
 
-	sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_SIPUSR > $WORKDIR/sip_user.tmp
+    sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_SIPUSR > $WORKDIR/sip_user.tmp
 
-	if [ "$can_call" = "yes" ] ; then
-		# Add user to list of all users that are allowed to make calls.
-		localusers_can_dial="$localusers_can_dial $defaultuser"
-		sed -i "s/|CONTEXTNAME|/$defaultuser/g"     $WORKDIR/sip_user.tmp
-	else
-		sed -i "s/|CONTEXTNAME|/$HANGUPCNTXT/g"     $WORKDIR/sip_user.tmp
-	fi
+    if [ "$can_call" = "yes" ] ; then
+        # Add user to list of all users that are allowed to make calls.
+        localusers_can_dial="$localusers_can_dial $defaultuser"
+        sed -i "s/|CONTEXTNAME|/$defaultuser/g"     $WORKDIR/sip_user.tmp
+    else
+        sed -i "s/|CONTEXTNAME|/$HANGUPCNTXT/g"     $WORKDIR/sip_user.tmp
+    fi
 
-	# Add this user's configuration to the temp file containing all user configs.
-	sed "s/|FULLNAME|/$fullname/" $WORKDIR/sip_user.tmp |\
-	     sed "s/|SECRET|/$secret/g"                  >> $WORKDIR/sip_users.TMP
+    # Add this user's configuration to the temp file containing all user configs.
+    sed "s/|FULLNAME|/$fullname/" $WORKDIR/sip_user.tmp |\
+             sed "s/|SECRET|/$secret/g"                  >> $WORKDIR/sip_users.TMP
 
-	if [ "$ring" = "yes" ] ; then
-		if [ -z "$localusers_to_ring" ] ; then
-			localusers_to_ring="SIP\/$defaultuser"
-		else
-			localusers_to_ring="$localusers_to_ring\&SIP\/$defaultuser"
-		fi
-	fi
+    if [ "$ring" = "yes" ] ; then
+        if [ -z "$localusers_to_ring" ] ; then
+            localusers_to_ring="SIP\/$defaultuser"
+        else
+            localusers_to_ring="$localusers_to_ring\&SIP\/$defaultuser"
+        fi
+    fi
 
-	# Add configuration which allows local users to call each other.
-	sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_EXTOUTLOCAL >> $WORKDIR/localext.TMP
+    # Add configuration which allows local users to call each other.
+    sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_EXTOUTLOCAL >> $WORKDIR/localext.TMP
 
-	rm -f $WORKDIR/sip_user.tmp
+    rm -f $WORKDIR/sip_user.tmp
 }
 
 # Creates configuration for a Google account, and adds it to the temporary file that holds
@@ -265,84 +266,84 @@ pbx_add_user()
 # Also creates the outgoing extensions which are used in users' outgoing contexts.
 pbx_add_jabber()
 {
-	local username
-	local secret
-	local numprefix
-	local register
-	local make_outgoing_calls
-	local name
-	local users_to_ring
-	local status
-	local statusmessage
+    local username
+    local secret
+    local numprefix
+    local register
+    local make_outgoing_calls
+    local name
+    local users_to_ring
+    local status
+    local statusmessage
 
-	config_get username $1 username
-	config_get secret $1 secret
-	config_get numprefix $1 numprefix
-	config_get register $1 register
-	config_get make_outgoing_calls $1 make_outgoing_calls
-	config_get name $1 name
-	config_get status $1 status
-	config_get statusmessage $1 statusmessage
+    config_get username $1 username
+    config_get secret $1 secret
+    config_get numprefix $1 numprefix
+    config_get register $1 register
+    config_get make_outgoing_calls $1 make_outgoing_calls
+    config_get name $1 name
+    config_get status $1 status
+    config_get statusmessage $1 statusmessage
 
-	[ -z "$username" -o -z "$secret" ] && return
+    [ -z "$username" -o -z "$secret" ] && return
 
-	# Construct a jabber entry for this provider.
-	sed     "s/|USERNAME|/$username/g" $TMPL_JABBERUSER |\
-	    sed "s/|NAME|/$name/g"                            > $WORKDIR/jabber.tmp
+    # Construct a jabber entry for this provider.
+    sed     "s/|USERNAME|/$username/g" $TMPL_JABBERUSER |\
+            sed "s/|NAME|/$name/g"                            > $WORKDIR/jabber.tmp
 
-	if [ "$register" = yes ] ; then
-		# If this provider is enabled for incoming calls, we need to set the
-		# status of the user to something other than unavailable in order to receive calls.
-		sed -i "s/|STATUS|/$status/g"                   $WORKDIR/jabber.tmp
-		sed -i "s/|STATUSMESSAGE|/\"$statusmessage\"/g" $WORKDIR/jabber.tmp
+    if [ "$register" = yes ] ; then
+        # If this provider is enabled for incoming calls, we need to set the
+        # status of the user to something other than unavailable in order to receive calls.
+        sed -i "s/|STATUS|/$status/g"                   $WORKDIR/jabber.tmp
+        sed -i "s/|STATUSMESSAGE|/\"$statusmessage\"/g" $WORKDIR/jabber.tmp
 
-		users_to_ring="`uci -q get ${MODULENAME}-calls.incoming_calls.$name`"
-		# If no users have been specified to ring, we ring all users enabled for incoming calls.
-		if [ -z "$users_to_ring" ] ; then
-			users_to_ring=$localusers_to_ring
-		else
-		# Else, we cook up a string formatted for the Dial command
-		# with the specified users (SIP/user1&SIP/user2&...). We do it
-		# with set, shift and a loop in order to be more tolerant of ugly whitespace
-		# messes entered by users.
-			set $users_to_ring
-			users_to_ring="SIP\/$1" && shift
-			for u in $@ ; do users_to_ring=$users_to_ring\\\&SIP\\\/$u ; done
-		fi
+        users_to_ring="`uci -q get ${MODULENAME}-calls.incoming_calls.$name`"
+        # If no users have been specified to ring, we ring all users enabled for incoming calls.
+        if [ -z "$users_to_ring" ] ; then
+            users_to_ring=$localusers_to_ring
+        else
+            # Else, we cook up a string formatted for the Dial command
+            # with the specified users (SIP/user1&SIP/user2&...). We do it
+            # with set, shift and a loop in order to be more tolerant of ugly whitespace
+            # messes entered by users.
+            set $users_to_ring
+            users_to_ring="SIP\/$1" && shift
+            for u in $@ ; do users_to_ring=$users_to_ring\\\&SIP\\\/$u ; done
+        fi
 
-		# Now, we add this account to the gtalk incoming context.
-		sed    "s/|USERNAME|/$username/g" $TMPL_EXTINCNTXTGTALK |\
-		   sed "s/|LOCALUSERS|/$users_to_ring/g"    >> $WORKDIR/outextgtalk.TMP
-	else
-		sed -i "s/|STATUS|/$GTALKUNVL/g"               $WORKDIR/jabber.tmp
-		sed -i "s/|STATUSMESSAGE|/\"\"/g"              $WORKDIR/jabber.tmp
-	fi
+        # Now, we add this account to the gtalk incoming context.
+        sed    "s/|USERNAME|/$username/g" $TMPL_EXTINCNTXTGTALK |\
+                   sed "s/|LOCALUSERS|/$users_to_ring/g"    >> $WORKDIR/outextgtalk.TMP
+    else
+        sed -i "s/|STATUS|/$GTALKUNVL/g"               $WORKDIR/jabber.tmp
+        sed -i "s/|STATUSMESSAGE|/\"\"/g"              $WORKDIR/jabber.tmp
+    fi
 
-	# Add this account's configuration to the temp file containing all account configs.
-	sed "s/|SECRET|/$secret/g" $WORKDIR/jabber.tmp      >> $WORKDIR/jabber.TMP
+    # Add this account's configuration to the temp file containing all account configs.
+    sed "s/|SECRET|/$secret/g" $WORKDIR/jabber.tmp      >> $WORKDIR/jabber.TMP
 
-	# If this provider is enabled for outgoing calls.
-	if [ "$make_outgoing_calls" = "yes" ] ; then
+    # If this provider is enabled for outgoing calls.
+    if [ "$make_outgoing_calls" = "yes" ] ; then
 
-		numprefix="`uci -q get ${MODULENAME}-calls.outgoing_calls.$name`"
+        numprefix="`uci -q get ${MODULENAME}-calls.outgoing_calls.$name`"
 
-		# If no prefixes are specified, then we use "X" which matches any prefix.
-		[ -z "$numprefix" ]  && numprefix="X"
+        # If no prefixes are specified, then we use "X" which matches any prefix.
+        [ -z "$numprefix" ]  && numprefix="X"
 
-		for p in $numprefix ; do
-			sed "s/|NUMPREFIX|/$p/g" $TMPL_EXTOUTGTALK |\
-			    sed "s/|NAME|/$name/g"            >> $WORKDIR/outext-$name.TMP
-		done
+        for p in $numprefix ; do
+            sed "s/|NUMPREFIX|/$p/g" $TMPL_EXTOUTGTALK |\
+                            sed "s/|NAME|/$name/g"            >> $WORKDIR/outext-$name.TMP
+        done
 
-		# Add this provider to the list of enabled outbound providers.
-		if [ -z "$outbound_providers" ] ; then
-			outbound_providers="$name"
-		else
-			outbound_providers="$outbound_providers $name"
-		fi
-	fi
+        # Add this provider to the list of enabled outbound providers.
+        if [ -z "$outbound_providers" ] ; then
+            outbound_providers="$name"
+        else
+            outbound_providers="$outbound_providers $name"
+        fi
+    fi
 
-	rm -f $WORKDIR/jabber.tmp
+    rm -f $WORKDIR/jabber.tmp
 }
 
 # Creates configuration for a SIP provider account, and adds it to the temporary file that holds
@@ -350,92 +351,92 @@ pbx_add_jabber()
 # Also creates the outgoing extensions which are used in users' outgoing contexts.
 pbx_add_peer()
 {
-	local defaultuser
-	local secret
-	local host
-	local fromdomain
-	local register
-	local numprefix
-	local make_outgoing_calls
-	local name
-	local users_to_ring
-	local port
-	local outboundproxy
+    local defaultuser
+    local secret
+    local host
+    local fromdomain
+    local register
+    local numprefix
+    local make_outgoing_calls
+    local name
+    local users_to_ring
+    local port
+    local outboundproxy
 
-	config_get defaultuser $1 defaultuser
-	config_get secret $1 secret
-	config_get host $1 host
-	config_get port $1 port
-	config_get outbountproxy $1 outboundproxy
-	config_get fromdomain $1 fromdomain
-	config_get register $1 register
-	config_get numprefix $1 numprefix
-	config_get make_outgoing_calls $1 make_outgoing_calls
-	config_get name $1 name
+    config_get defaultuser $1 defaultuser
+    config_get secret $1 secret
+    config_get host $1 host
+    config_get port $1 port
+    config_get outbountproxy $1 outboundproxy
+    config_get fromdomain $1 fromdomain
+    config_get register $1 register
+    config_get numprefix $1 numprefix
+    config_get make_outgoing_calls $1 make_outgoing_calls
+    config_get name $1 name
 
-	[ -z "$defaultuser" -o -z "$secret" -o -z "$host" ] && return
-	[ -z "$fromdomain" ]    && fromdomain=$host
-	[ -n "$port" ]          && port="port=$port"
-	[ -n "$outboundproxy" ] && outboundproxy="outboundproxy=$outboundproxy"
+    [ -z "$defaultuser" -o -z "$secret" -o -z "$host" ] && return
+    [ -z "$fromdomain" ]    && fromdomain=$host
+    [ -n "$port" ]          && port="port=$port"
+    [ -n "$outboundproxy" ] && outboundproxy="outboundproxy=$outboundproxy"
 
-	# Construct a sip peer entry for this provider.
-	sed    "s/|DEFAULTUSER|/$defaultuser/" $TMPL_SIPPEER  >  $WORKDIR/sip_peer.tmp
-	sed -i "s/|NAME|/$name/"                                 $WORKDIR/sip_peer.tmp
-	sed -i "s/|FROMUSER|/$defaultuser/"                      $WORKDIR/sip_peer.tmp
-	sed -i "s/|SECRET|/$secret/"                             $WORKDIR/sip_peer.tmp
-	sed -i "s/|HOST|/$host/"                                 $WORKDIR/sip_peer.tmp
-	sed -i "s/|PORT|/$port/"                                 $WORKDIR/sip_peer.tmp
-	sed -i "s/|OUTBOUNDPROXY|/$outboundproxy/"               $WORKDIR/sip_peer.tmp
-	# Add this account's configuration to the temp file containing all account configs.
-	sed    "s/|FROMDOMAIN|/$host/" $WORKDIR/sip_peer.tmp >>  $WORKDIR/sip_peers.TMP
+    # Construct a sip peer entry for this provider.
+    sed    "s/|DEFAULTUSER|/$defaultuser/" $TMPL_SIPPEER  >  $WORKDIR/sip_peer.tmp
+    sed -i "s/|NAME|/$name/"                                 $WORKDIR/sip_peer.tmp
+    sed -i "s/|FROMUSER|/$defaultuser/"                      $WORKDIR/sip_peer.tmp
+    sed -i "s/|SECRET|/$secret/"                             $WORKDIR/sip_peer.tmp
+    sed -i "s/|HOST|/$host/"                                 $WORKDIR/sip_peer.tmp
+    sed -i "s/|PORT|/$port/"                                 $WORKDIR/sip_peer.tmp
+    sed -i "s/|OUTBOUNDPROXY|/$outboundproxy/"               $WORKDIR/sip_peer.tmp
+    # Add this account's configuration to the temp file containing all account configs.
+    sed    "s/|FROMDOMAIN|/$host/" $WORKDIR/sip_peer.tmp >>  $WORKDIR/sip_peers.TMP
 
-	# If this provider is enabled for incoming calls.
-        if [ "$register" = "yes" ] ; then
-		# Then we create a registration string for this provider.
-		sed    "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_SIPREG         > $WORKDIR/sip_reg.tmp
-		sed -i "s/|SECRET|/$secret/g"                                  $WORKDIR/sip_reg.tmp
-		sed    "s/|NAME|/$name/g" $WORKDIR/sip_reg.tmp              >> $WORKDIR/sip_regs.TMP
+    # If this provider is enabled for incoming calls.
+    if [ "$register" = "yes" ] ; then
+        # Then we create a registration string for this provider.
+        sed    "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_SIPREG         > $WORKDIR/sip_reg.tmp
+        sed -i "s/|SECRET|/$secret/g"                                  $WORKDIR/sip_reg.tmp
+        sed    "s/|NAME|/$name/g" $WORKDIR/sip_reg.tmp              >> $WORKDIR/sip_regs.TMP
 
-		users_to_ring="`uci -q get ${MODULENAME}-calls.incoming_calls.$name`"
-		# If no users have been specified to ring, we ring all users enabled for incoming calls.
-		if [ -z "$users_to_ring" ] ; then
-			users_to_ring=$localusers_to_ring
-		else
-		# Else, we cook up a string formatted for the Dial command
-		# with the specified users (SIP/user1&SIP/user2&...). We do it
-		# with set, shift and a loop in order to be more tolerant of ugly whitespace
-		# messes entered by users.
-			set $users_to_ring
-			users_to_ring="SIP\/$1" && shift
-			for u in $@ ; do users_to_ring=$users_to_ring\\\&SIP\\\/$u ; done
-		fi
+        users_to_ring="`uci -q get ${MODULENAME}-calls.incoming_calls.$name`"
+        # If no users have been specified to ring, we ring all users enabled for incoming calls.
+        if [ -z "$users_to_ring" ] ; then
+            users_to_ring=$localusers_to_ring
+        else
+            # Else, we cook up a string formatted for the Dial command
+            # with the specified users (SIP/user1&SIP/user2&...). We do it
+            # with set, shift and a loop in order to be more tolerant of ugly whitespace
+            # messes entered by users.
+            set $users_to_ring
+            users_to_ring="SIP\/$1" && shift
+            for u in $@ ; do users_to_ring=$users_to_ring\\\&SIP\\\/$u ; done
+        fi
 
-		# And we create an incoming calls context for this provider.
-		sed    "s/|NAME|/$name/g"                          $TMPL_EXTINCNTXTSIP |\
-		    sed "s/|LOCALUSERS|/$users_to_ring/g"       >> $WORKDIR/inext.TMP
-	fi
+        # And we create an incoming calls context for this provider.
+        sed    "s/|NAME|/$name/g"                          $TMPL_EXTINCNTXTSIP |\
+                    sed "s/|LOCALUSERS|/$users_to_ring/g"       >> $WORKDIR/inext.TMP
+    fi
 
-	# If this provider is enabled for outgoing calls.
-	if [ "$make_outgoing_calls" = "yes" ] ; then
+    # If this provider is enabled for outgoing calls.
+    if [ "$make_outgoing_calls" = "yes" ] ; then
 
-		numprefix="`uci -q get ${MODULENAME}-calls.outgoing_calls.$name`"
-		# If no prefixes are specified, then we use "X" which matches any prefix.
-		[ -z "$numprefix" ]  && numprefix="X"
-		for p in $numprefix ; do
-			sed "s/|NUMPREFIX|/$p/g" $TMPL_EXTOUTSIP |\
-			    sed "s/|NAME|/$name/g"              >> $WORKDIR/outext-$name.TMP
-		done
+        numprefix="`uci -q get ${MODULENAME}-calls.outgoing_calls.$name`"
+        # If no prefixes are specified, then we use "X" which matches any prefix.
+        [ -z "$numprefix" ]  && numprefix="X"
+        for p in $numprefix ; do
+            sed "s/|NUMPREFIX|/$p/g" $TMPL_EXTOUTSIP |\
+                            sed "s/|NAME|/$name/g"              >> $WORKDIR/outext-$name.TMP
+        done
 
-		# Add this provider to the list of enabled outbound providers.
-		if [ -z "$outbound_providers" ] ; then
-			outbound_providers="$name"
-		else
-			outbound_providers="$outbound_providers $name"
-		fi
-	fi
+        # Add this provider to the list of enabled outbound providers.
+        if [ -z "$outbound_providers" ] ; then
+            outbound_providers="$name"
+        else
+            outbound_providers="$outbound_providers $name"
+        fi
+    fi
 
-	rm -f $WORKDIR/sip_peer.tmp
-	rm -f $WORKDIR/sip_reg.tmp
+    rm -f $WORKDIR/sip_peer.tmp
+    rm -f $WORKDIR/sip_reg.tmp
 }
 
 # For all local users enabled for outbound calls, creates a context
@@ -443,93 +444,93 @@ pbx_add_peer()
 # allowed to use.
 pbx_create_user_contexts()
 {
-	local providers
+    local providers
 
-	for u in $localusers_can_dial ; do
-		sed "s/|DEFAULTUSER|/$u/g" $TMPL_EXTUSERCNTXTHDR                >> $WORKDIR/userext.TMP
-		cat $WORKDIR/localext.TMP                                       >> $WORKDIR/userext.TMP
-		providers="`uci -q get ${MODULENAME}-calls.providers_user_can_use.$u`"
-		[ -z "$providers" ] && providers="$outbound_providers"
+    for u in $localusers_can_dial ; do
+        sed "s/|DEFAULTUSER|/$u/g" $TMPL_EXTUSERCNTXTHDR                >> $WORKDIR/userext.TMP
+        cat $WORKDIR/localext.TMP                                       >> $WORKDIR/userext.TMP
+        providers="`uci -q get ${MODULENAME}-calls.providers_user_can_use.$u`"
+        [ -z "$providers" ] && providers="$outbound_providers"
 
-		# For each provider, cat the contents of outext-$name.TMP into the user's outgoing calls extension
-		for p in $providers ; do
-			[ -f $WORKDIR/outext-$p.TMP ] && cat $WORKDIR/outext-$p.TMP >> $WORKDIR/userext.TMP
-		done
-		cat $TMPL_EXTUSERCNTXTFTR                                       >> $WORKDIR/userext.TMP
-	done
+        # For each provider, cat the contents of outext-$name.TMP into the user's outgoing calls extension
+        for p in $providers ; do
+            [ -f $WORKDIR/outext-$p.TMP ] && cat $WORKDIR/outext-$p.TMP >> $WORKDIR/userext.TMP
+        done
+        cat $TMPL_EXTUSERCNTXTFTR                                       >> $WORKDIR/userext.TMP
+    done
 }
 
 # Creates the blacklist context which hangs up on blacklisted numbers.
 pbx_add_blacklist()
 {
-	local blacklist1
-	local blacklist2
+    local blacklist1
+    local blacklist2
 
-	config_get blacklist1 blacklisting blacklist1
-	config_get blacklist2 blacklisting blacklist2
+    config_get blacklist1 blacklisting blacklist1
+    config_get blacklist2 blacklisting blacklist2
 
-	# We create the blacklist context no matter whether the blacklist
-	# actually contains entries or not, since the PBX will send calls
-	# to the context for a check against the list anyway.
-	cp $TMPL_EXTBLKLISTHDR                                   $WORKDIR/blacklist.TMP
-	for n in $blacklist1 $blacklist2 ; do
-		sed "s/|BLACKLISTITEM|/$n/g" $TMPL_EXTBLKLIST >> $WORKDIR/blacklist.TMP 
-	done
-	cat $TMPL_EXTBLKLISTFTR                               >> $WORKDIR/blacklist.TMP
+    # We create the blacklist context no matter whether the blacklist
+    # actually contains entries or not, since the PBX will send calls
+    # to the context for a check against the list anyway.
+    cp $TMPL_EXTBLKLISTHDR                                   $WORKDIR/blacklist.TMP
+    for n in $blacklist1 $blacklist2 ; do
+        sed "s/|BLACKLISTITEM|/$n/g" $TMPL_EXTBLKLIST >> $WORKDIR/blacklist.TMP 
+    done
+    cat $TMPL_EXTBLKLISTFTR                               >> $WORKDIR/blacklist.TMP
 }
 
 # Creates the callthrough context which allows specified numbers to get
 # into the PBX and dial out as the configured user.
 pbx_add_callthrough()
 {
-	local callthrough_number_list
-	local defaultuser
-	local pin
-	local enabled
+    local callthrough_number_list
+    local defaultuser
+    local pin
+    local enabled
 
-	config_get callthrough_number_list $1 callthrough_number_list
-	config_get defaultuser $1 defaultuser
-	config_get pin $1 pin
-	config_get enabled $1 enabled
+    config_get callthrough_number_list $1 callthrough_number_list
+    config_get defaultuser $1 defaultuser
+    config_get pin $1 pin
+    config_get enabled $1 enabled
 
-	[ "$enabled" = "no" ]   && return
-	[ "$defaultuser" = "" ] && return
+    [ "$enabled" = "no" ]   && return
+    [ "$defaultuser" = "" ] && return
 
-	for callthrough_number in $callthrough_number_list ; do
-		sed "s/|NUMBER|/$callthrough_number/g" $TMPL_EXTCTHRUCHECK >> $WORKDIR/callthroughcheck.TMP
+    for callthrough_number in $callthrough_number_list ; do
+        sed "s/|NUMBER|/$callthrough_number/g" $TMPL_EXTCTHRUCHECK >> $WORKDIR/callthroughcheck.TMP
 
-		sed "s/|NUMBER|/$callthrough_number/g" $TMPL_EXTCTHRU |\
-		    sed "s/|DEFAULTUSER|/$defaultuser/"               |\
-		        sed "s/|PIN|/$pin/"                                >> $WORKDIR/callthrough.TMP
-	done
+        sed "s/|NUMBER|/$callthrough_number/g" $TMPL_EXTCTHRU |\
+                    sed "s/|DEFAULTUSER|/$defaultuser/"               |\
+                        sed "s/|PIN|/$pin/"                                >> $WORKDIR/callthrough.TMP
+    done
 }
 
 # Creates sip.conf from its template.
 pbx_cook_sip_template()
 {
-	local useragent
-	local externhost
-	local bindport
+    local useragent
+    local externhost
+    local bindport
 
-	config_get useragent advanced useragent
-	config_get externhost advanced externhost
-	config_get bindport advanced bindport
+    config_get useragent advanced useragent
+    config_get externhost advanced externhost
+    config_get bindport advanced bindport
 
-	[ -z "$useragent" ] && useragent="$USERAGENT"
+    [ -z "$useragent" ] && useragent="$USERAGENT"
 
-	sed "s/|USERAGENT|/$useragent/g" $TMPL_SIP  > $WORKDIR/sip.conf
+    sed "s/|USERAGENT|/$useragent/g" $TMPL_SIP  > $WORKDIR/sip.conf
 
-	if [ -z "$externhost" ] ; then
-		sed -i "s/externhost=|EXTERNHOST|//g" $WORKDIR/sip.conf
-	else
-		sed -i "s/|EXTERNHOST|/$externhost/g" $WORKDIR/sip.conf
-	fi
+    if [ -z "$externhost" ] ; then
+        sed -i "s/externhost=|EXTERNHOST|//g" $WORKDIR/sip.conf
+    else
+        sed -i "s/|EXTERNHOST|/$externhost/g" $WORKDIR/sip.conf
+    fi
 
-	if [ -z "$bindport" ] ; then
-		sed -i "s/bindport=|BINDPORT|//g"     $WORKDIR/sip.conf
-	else
-		sed -i "s/|BINDPORT|/$bindport/g"     $WORKDIR/sip.conf
-	fi
+    if [ -z "$bindport" ] ; then
+        sed -i "s/bindport=|BINDPORT|//g"     $WORKDIR/sip.conf
+    else
+        sed -i "s/|BINDPORT|/$bindport/g"     $WORKDIR/sip.conf
+    fi
 
 
 }
@@ -537,58 +538,57 @@ pbx_cook_sip_template()
 # Creates rtp.conf from its template.
 pbx_cook_rtp_template()
 {
-	local rtpstart
-	local rtpend
+    local rtpstart
+    local rtpend
 
-	config_get rtpstart advanced rtpstart
-	config_get rtpend   advanced rtpend
+    config_get rtpstart advanced rtpstart
+    config_get rtpend   advanced rtpend
 
-	sed "s/|RTPSTART|/$rtpstart/" $TMPL_RTP |\
-	    sed "s/|RTPEND|/$rtpend/"               > $WORKDIR/rtp.conf
+    sed "s/|RTPSTART|/$rtpstart/" $TMPL_RTP |\
+            sed "s/|RTPEND|/$rtpend/"               > $WORKDIR/rtp.conf
 }
 
 # Makes sure the ownership of specified directories is proper.
 pbx_fix_ownership()
 {
-	chown $ASTUSER:$ASTGROUP    $ASTDIRS
-	chown $ASTUSER:$ASTGROUP -R $ASTDIRSRECURSIVE
+    chown $ASTUSER:$ASTGROUP    $ASTDIRS
+    chown $ASTUSER:$ASTGROUP -R $ASTDIRSRECURSIVE
 }
 
 
 start() {
-	mkdir -p $WORKDIR
+    mkdir -p $WORKDIR
 
-	# Create the users.
-	config_load ${MODULENAME}-users
-	config_foreach pbx_add_user local_user
+    # Create the users.
+    config_load ${MODULENAME}-users
+    config_foreach pbx_add_user local_user
 
-	# Create configuration for each google account.
-	config_unset
-	config_load ${MODULENAME}-google
-	config_foreach pbx_add_jabber gtalk_jabber
+    # Create configuration for each google account.
+    config_unset
+    config_load ${MODULENAME}-google
+    config_foreach pbx_add_jabber gtalk_jabber
 
-	# Create configuration for each voip provider.
-	config_unset
-	config_load ${MODULENAME}-voip
-	config_foreach pbx_add_peer voip_provider
+    # Create configuration for each voip provider.
+    config_unset
+    config_load ${MODULENAME}-voip
+    config_foreach pbx_add_peer voip_provider
 
-	# Create the user contexts, and phone blacklist.
-	config_unset
-	config_load ${MODULENAME}-calls
-	pbx_create_user_contexts
-	pbx_add_blacklist
-	config_foreach pbx_add_callthrough callthrough_numbers
+    # Create the user contexts, and phone blacklist.
+    config_unset
+    config_load ${MODULENAME}-calls
+    pbx_create_user_contexts
+    pbx_add_blacklist
+    config_foreach pbx_add_callthrough callthrough_numbers
 
-	# Prepare sip.conf using settings from the "advanced" section.
-	config_unset
-	config_load ${MODULENAME}-advanced
-	pbx_cook_sip_template
-	pbx_cook_rtp_template
+    # Prepare sip.conf using settings from the "advanced" section.
+    config_unset
+    config_load ${MODULENAME}-advanced
+    pbx_cook_sip_template
+    pbx_cook_rtp_template
 
-	# Assemble the configuration, and copy changed files over.
-	pbx_assemble_and_copy_config
+    # Assemble the configuration, and copy changed files over.
+    pbx_assemble_and_copy_config
 
-	# Enforce ownership of specified files and directories.
-	pbx_fix_ownership
+    # Enforce ownership of specified files and directories.
+    pbx_fix_ownership
 }
-

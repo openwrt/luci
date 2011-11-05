@@ -28,35 +28,20 @@ end
 modulename         = "pbx-users"
 modulenamecalls    = "pbx-calls"
 modulenameadvanced = "pbx-advanced"
-	
+
+        
 m = Map (modulename, translate("User Accounts"), 
-	translate("Here you must configure at least one SIP account, which you\
-		will use to register with this service. Use this account either in an analog telephony\
-		adapter (ATA), or in a SIP softphone like CSipSimple, Linphone, or Sipdroid on your\
-		Android smartphone, or X-lite or Ekiga on your computer. By default, all SIP accounts\
-		will ring simultaneously if a call is made to one of your VoIP provider accounts or GV\
-		numbers."))
+        translate("Here you must configure at least one SIP account, which you\
+                will use to register with this service. Use this account either in an analog telephony\
+                adapter (ATA), or in a SIP softphone like CSipSimple, Linphone, or Sipdroid on your\
+                Android smartphone, or X-lite or Ekiga on your computer. By default, all SIP accounts\
+                will ring simultaneously if a call is made to one of your VoIP provider accounts or GV\
+                numbers."))
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
 function m.on_after_commit(self)
-	--allusers = ""
-	--ringusers = ""
-	--
-	---- Create two lists of users - one of all users and one of users enabled for incoming calls.
-	--m.uci:foreach(modulename, "local_user",
-	--	function(s1)
-	--		allusers = allusers .. " " .. s1.defaultuser
-	--		if s1.ring == "yes" then
-	--			ringusers = ringusers .. " " .. s1.defaultuser
-	--		end
-	--	end)
-	--
-	--m.uci:set (modulenamecalls, "valid_users", "allusers",  allusers)
-	--m.uci:set (modulenamecalls, "valid_users", "ringusers", ringusers)
-	--m.uci:commit (modulenamecalls)
-
-	luci.sys.call("/etc/init.d/pbx-" .. server .. " restart 1\>/dev/null 2\>/dev/null")
-	luci.sys.call("/etc/init.d/"     .. server .. " restart 1\>/dev/null 2\>/dev/null")
+        luci.sys.call("/etc/init.d/pbx-" .. server .. " restart 1\>/dev/null 2\>/dev/null")
+        luci.sys.call("/etc/init.d/"     .. server .. " restart 1\>/dev/null 2\>/dev/null")
 end
 
 externhost = m.uci:get(modulenameadvanced, "advanced", "externhost")
@@ -77,8 +62,8 @@ if bindport ~= nil then
 end
 
 s:option(DummyValue, "ipaddr", translate("Server Setting for Local SIP Devices"),
-	 translate("Enter this IP (or IP:port) in the Server/Registrar setting of SIP devices you will\
-		   use ONLY locally and never from a remote location.")).default = ipaddr
+         translate("Enter this IP (or IP:port) in the Server/Registrar setting of SIP devices you will\
+                   use ONLY locally and never from a remote location.")).default = ipaddr
 
 if externhost ~= nil then
    if bindport ~= nil then
@@ -86,20 +71,20 @@ if externhost ~= nil then
       externhost = externhost .. ":" .. bindport
    end
    s:option(DummyValue, "externhost", translate("Server Setting for Remote SIP Devices"),
-	    translate("Enter this hostname (or hostname:port) in the Server/Registrar setting of SIP\
-		      devices you will use from a remote location (they will work locally too).")
-		     ).default = externhost
+            translate("Enter this hostname (or hostname:port) in the Server/Registrar setting of SIP\
+                      devices you will use from a remote location (they will work locally too).")
+                     ).default = externhost
 end
 
 if bindport ~= nil then
-	s:option(DummyValue, "bindport", translate("Port Setting for SIP Devices"),
-	translatef("If setting Server/Registrar to %s or %s does not work for you, try setting\
-	it to %s or %s and entering this port number in a separate field which specifies the\
-	Server/Registrar port number. Beware that some devices have a confusing\
-	setting which sets the port where SIP requests originate from on the SIP\
-	device itself (bind port). The port specified on this page is NOT this bind port\
-	but the this service listens on.", 
-	ipaddr, externhost, just_ipaddr, just_externhost)).default = bindport
+        s:option(DummyValue, "bindport", translate("Port Setting for SIP Devices"),
+        translatef("If setting Server/Registrar to %s or %s does not work for you, try setting\
+        it to %s or %s and entering this port number in a separate field which specifies the\
+        Server/Registrar port number. Beware that some devices have a confusing\
+        setting which sets the port where SIP requests originate from on the SIP\
+        device itself (bind port). The port specified on this page is NOT this bind port\
+        but the this service listens on.", 
+        ipaddr, externhost, just_ipaddr, just_externhost)).default = bindport
 end
 
 -----------------------------------------------------------------------------
@@ -108,16 +93,16 @@ s.anonymous = true
 s.addremove = true
 
 s:option(Value, "fullname", translate("Full Name"),
-	 translate("You can specify a real name to show up in the Caller ID here."))
+         translate("You can specify a real name to show up in the Caller ID here."))
 
 du = s:option(Value, "defaultuser",  translate("User Name"),
-	 translate("Use (four to five digit) numeric user name if you are connecting normal telephones\
-		   with ATAs to this system (so they can dial user names)."))
+         translate("Use (four to five digit) numeric user name if you are connecting normal telephones\
+                   with ATAs to this system (so they can dial user names)."))
 du.datatype = "uciname"
 
 pwd = s:option(Value, "secret", translate("Password"),
-	       translate("Your password disappears when saved for your protection. It will be changed\
-			 only when you enter a value different from the saved one."))
+               translate("Your password disappears when saved for your protection. It will be changed\
+                         only when you enter a value different from the saved one."))
 pwd.password = true
 pwd.rmempty = false
 

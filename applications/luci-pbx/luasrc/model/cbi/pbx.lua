@@ -52,16 +52,16 @@ function format_indices(string, indices)
    for lpos,splitline in ipairs(splitlines) do
       loutput = ""
       for ipos,index in ipairs(indices) do
-	 if splitline[index] ~= nil then
-	    loutput = loutput .. string.format("%-50s", splitline[index])
-	 else
-	    loutput = nil
-	    break
-	 end
+         if splitline[index] ~= nil then
+            loutput = loutput .. string.format("%-50s", splitline[index])
+         else
+            loutput = nil
+            break
+         end
       end
-
+      
       if loutput ~= nil then
-	 output = output .. loutput .. "\n"
+         output = output .. loutput .. "\n"
       end
    end
    return output
@@ -69,7 +69,7 @@ end
 
 
 m = Map (modulename, translate("PBX Main Page"),
- translate("This configuration page allows you to configure a phone system (PBX) service which\
+      translate("This configuration page allows you to configure a phone system (PBX) service which\
       permits making phone calls through multiple Google and SIP (like Sipgate,\
       SipSorcery, and Betamax) accounts and sharing them among many SIP devices. \
       Note that Google accounts, SIP accounts, and local user accounts are configured in the \
@@ -84,7 +84,7 @@ m = Map (modulename, translate("PBX Main Page"),
 
 -----------------------------------------------------------------------------------------
 s = m:section(NamedSection, "connection_status", "main",
-	      translate("Service Control and Connection Status"))
+              translate("Service Control and Connection Status"))
 s.anonymous = true
 
 s:option (DummyValue, "status", translate("Service Status"))
@@ -103,7 +103,7 @@ function sts.cfgvalue(self, section)
 
       return format_indices(regs, {1, 5}) ..
              format_indices(jabs, {2, 4}) .. "\n" ..
-	     format_indices(usrs, {1}   ) .. "\n" .. chan
+             format_indices(usrs, {1}   ) .. "\n" .. chan
 
    elseif server == "freeswitch" then
       return "Freeswitch is not supported yet.\n"

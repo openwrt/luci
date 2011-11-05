@@ -28,25 +28,25 @@ end
 modulename = "pbx-voip"
 
 m = Map (modulename, translate("SIP Accounts"),
-	 translate("This is where you set up your SIP (VoIP) accounts ts like Sipgate, SipSorcery,\
-	the popular Betamax providers, and any other providers with SIP settings in order to start \
-	using them for dialing and receiving calls (SIP uri and real phone calls). Click \"Add\" to\
-	add as many accounts as you wish."))
+         translate("This is where you set up your SIP (VoIP) accounts ts like Sipgate, SipSorcery,\
+        the popular Betamax providers, and any other providers with SIP settings in order to start \
+        using them for dialing and receiving calls (SIP uri and real phone calls). Click \"Add\" to\
+        add as many accounts as you wish."))
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
 function m.on_after_commit(self)
    commit = false
    -- Create a field "name" for each account which identifies the account in the backend.
    m.uci:foreach(modulename, "voip_provider", 
-		 function(s1)
-		    if s1.defaultuser ~= nil and s1.host ~= nil then
-		       name=string.gsub(s1.defaultuser.."_"..s1.host, "%W", "_")
-		       if s1.name ~= name then
-			  m.uci:set(modulename, s1['.name'], "name", name)
-			  commit = true
-		       end
-		    end
-		 end)
+                 function(s1)
+                    if s1.defaultuser ~= nil and s1.host ~= nil then
+                       name=string.gsub(s1.defaultuser.."_"..s1.host, "%W", "_")
+                       if s1.name ~= name then
+                          m.uci:set(modulename, s1['.name'], "name", name)
+                          commit = true
+                       end
+                    end
+                 end)
    if commit == true then m.uci:commit(modulename) end
 
    luci.sys.call("/etc/init.d/pbx-" .. server .. " restart 1\>/dev/null 2\>/dev/null")
@@ -60,9 +60,9 @@ s.addremove = true
 
 s:option(Value, "defaultuser",  translate("User Name"))
 pwd = s:option(Value, "secret", translate("Password"),
-	       translate("When your password is saved, it disappears from this field and is not displayed\
-			 for your protection. The previously saved password will be changed only when you\
-			 enter a value different from the saved one."))
+               translate("When your password is saved, it disappears from this field and is not displayed\
+                         for your protection. The previously saved password will be changed only when you\
+                         enter a value different from the saved one."))
 
 
 
@@ -87,21 +87,21 @@ h = s:option(Value, "host", translate("SIP Server/Registrar"))
 h.datatype = "host"
 
 p = s:option(ListValue, "register", translate("Enable Incoming Calls (Register via SIP)"),
-	     translate("This option should be set to \"Yes\" if you have a DID \(real telephone number\)\
-	     		associated with this SIP account or want to receive SIP uri calls through this\
-			provider.")) 
+             translate("This option should be set to \"Yes\" if you have a DID \(real telephone number\)\
+                        associated with this SIP account or want to receive SIP uri calls through this\
+                        provider.")) 
 p:value("yes", translate("Yes"))
 p:value("no",  translate("No"))
 p.default = "yes"
 
 p = s:option(ListValue, "make_outgoing_calls", translate("Enable Outgoing Calls"),
-	     translate("Use this account to make outgoing calls."))
+             translate("Use this account to make outgoing calls."))
 p:value("yes", translate("Yes"))
 p:value("no",  translate("No"))
 p.default = "yes"
 
 from = s:option(Value, "fromdomain",
-		translate("SIP Realm (needed by some providers)"))
+                translate("SIP Realm (needed by some providers)"))
 from.optional = true
 from.datatype = "host"
 
