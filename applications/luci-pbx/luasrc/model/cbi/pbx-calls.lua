@@ -29,7 +29,9 @@ modulename       = "pbx-calls"
 voipmodulename   = "pbx-voip"
 googlemodulename = "pbx-google"
 usersmodulename  = "pbx-users"
+allvalidaccounts = {}
 validoutaccounts = {}
+validinaccounts  = {}
 allvalidusers    = {}
 
 -- Checks whether the entered extension is valid syntactically.
@@ -50,6 +52,44 @@ function m.on_after_commit(self)
         luci.sys.call("/etc/init.d/"     .. server .. " restart 1\>/dev/null 2\>/dev/null")
 end
 
+-- Add Google accounts to all valid accounts, and accounts valid for incoming and outgoing calls.
+m.uci:foreach(googlemodulename, "gtalk_jabber", 
+              function(s1)
+                 -- Add this provider to list of valid accounts.
+                 if s1.username ~= nil and s1.name ~= nil then
+                    allvalidaccounts[s1.name] = s1.username
+
+                    if s1.make_outgoing_calls == "yes" then
+                       -- Add provider to the associative array of valid outgoing accounts.
+                       validoutaccounts[s1.name] = s1.username
+                    end
+
+                    if s1.register == "yes" then
+                       -- Add provider to the associative array of valid outgoing accounts.
+                       validinaccounts[s1.name]  = s1.username                
+                    end
+                 end
+              end)
+
+-- Add SIP accounts to all valid accounts, and accounts valid for incoming and outgoing calls.
+m.uci:foreach(voipmodulename, "voip_provider", 
+              function(s1)
+                 -- Add this provider to list of valid accounts.
+                 if s1.defaultuser ~= nil and s1.host ~= nil and s1.name ~= nil then
+                    allvalidaccounts[s1.name] = s1.defaultuser .. "@" .. s1.host
+
+                    if s1.make_outgoing_calls == "yes" then
+                       -- Add provider to the associative array of valid outgoing accounts.
+                       validoutaccounts[s1.name] = s1.defaultuser .. "@" .. s1.host
+                    end
+
+                    if s1.register == "yes" then
+                       -- Add provider to the associative array of valid outgoing accounts.
+                       validinaccounts[s1.name]  = s1.defaultuser .. "@" .. s1.host
+                    end
+                 end
+              end)
+
 ----------------------------------------------------------------------------------------------------
 s = m:section(NamedSection, "outgoing_calls", "call_routing", translate("Outgoing Calls"),
         translate("If you have more than one account which can make outgoing calls, you \
@@ -67,14 +107,13 @@ s = m:section(NamedSection, "outgoing_calls", "call_routing", translate("Outgoin
                 list, and/or one per line by hitting enter after every one."))
 s.anonymous = true
 
+
 m.uci:foreach(googlemodulename, "gtalk_jabber", 
               function(s1)
+                 -- If this provider is valid AND is enabled for outgoing calls, add it to the section.
                  if s1.username ~= nil and s1.name ~= nil and
                     s1.make_outgoing_calls == "yes" then
                     patt = s:option(DynamicList, s1.name, s1.username)
-                    
-                    -- Add provider to the associative array of valid accounts.
-                    validoutaccounts[s1.name] = s1.username
                     
                     -- If the saved field is empty, we return a string
                     -- telling the user that this account would dial any exten.
@@ -106,13 +145,12 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
 
 m.uci:foreach(voipmodulename, "voip_provider", 
               function(s1)
+
+                 -- If this provider is valid AND is enabled for outgoing calls, add it to the section.
                  if s1.defaultuser ~= nil and s1.host ~= nil and 
                     s1.name ~= nil        and s1.make_outgoing_calls == "yes" then
                     patt = s:option(DynamicList, s1.name, s1.defaultuser .. "@" .. s1.host)
                     
-                    -- Add provider to the associative array of valid accounts.
-                    validoutaccounts[s1.name] = s1.defaultuser .. "@" .. s1.host
-
                     -- If the saved field is empty, we return a string
                     -- telling the user that this account would dial any exten.
                     function patt.cfgvalue(self, section)
@@ -140,6 +178,15 @@ m.uci:foreach(voipmodulename, "voip_provider",
                     end
                  end
               end)
+
+-- If there are no accounts enabled for outgoing calls.
+if     # allvalidaccounts == 0 then
+   warn = s:option(DummyValue, "warn")
+   warn.default = "NOTE: There are no Google or SIP provider accounts configured."
+elseif # validoutaccounts == 0 then
+   warn.s:option(DummyValue, "warn")
+   warn.default = "NOTE: There are no Google or SIP provider accounts enabled for outgoing calls."
+end
 
 ----------------------------------------------------------------------------------------------------
 s = m:section(NamedSection, "incoming_calls", "call_routing", translate("Incoming Calls"),
@@ -220,6 +267,7 @@ m.uci:foreach(voipmodulename, "voip_provider",
                     end
                  end
               end)
+
 
 ----------------------------------------------------------------------------------------------------
 s = m:section(NamedSection, "providers_user_can_use", "call_routing",
