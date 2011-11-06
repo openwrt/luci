@@ -30,9 +30,14 @@ voipmodulename   = "pbx-voip"
 googlemodulename = "pbx-google"
 usersmodulename  = "pbx-users"
 allvalidaccounts = {}
+nallvalidaccounts = 0
 validoutaccounts = {}
+nvalidoutaccounts = 0
 validinaccounts  = {}
+nvalidinaccounts  = 0
 allvalidusers    = {}
+nallvalidusers    = 0
+
 
 -- Checks whether the entered extension is valid syntactically.
 function is_valid_extension(exten)
@@ -58,15 +63,18 @@ m.uci:foreach(googlemodulename, "gtalk_jabber",
                  -- Add this provider to list of valid accounts.
                  if s1.username ~= nil and s1.name ~= nil then
                     allvalidaccounts[s1.name] = s1.username
+                    nallvalidaccounts = nallvalidaccounts + 1
 
                     if s1.make_outgoing_calls == "yes" then
                        -- Add provider to the associative array of valid outgoing accounts.
                        validoutaccounts[s1.name] = s1.username
+                       nvalidoutaccounts = nvalidoutaccounts + 1
                     end
 
                     if s1.register == "yes" then
                        -- Add provider to the associative array of valid outgoing accounts.
-                       validinaccounts[s1.name]  = s1.username                
+                       validinaccounts[s1.name]  = s1.username
+                       nvalidinaccounts = nvalidinaccounts + 1
                     end
                  end
               end)
@@ -77,36 +85,48 @@ m.uci:foreach(voipmodulename, "voip_provider",
                  -- Add this provider to list of valid accounts.
                  if s1.defaultuser ~= nil and s1.host ~= nil and s1.name ~= nil then
                     allvalidaccounts[s1.name] = s1.defaultuser .. "@" .. s1.host
+                    nallvalidaccounts = nallvalidaccounts + 1
 
                     if s1.make_outgoing_calls == "yes" then
                        -- Add provider to the associative array of valid outgoing accounts.
                        validoutaccounts[s1.name] = s1.defaultuser .. "@" .. s1.host
+                       nvalidoutaccounts = nvalidoutaccounts + 1
                     end
 
                     if s1.register == "yes" then
                        -- Add provider to the associative array of valid outgoing accounts.
                        validinaccounts[s1.name]  = s1.defaultuser .. "@" .. s1.host
+                       nvalidinaccounts = nvalidinaccounts + 1
                     end
                  end
               end)
 
 ----------------------------------------------------------------------------------------------------
-s = m:section(NamedSection, "outgoing_calls", "call_routing", translate("Outgoing Calls"),
-        translate("If you have more than one account which can make outgoing calls, you \
-                should enter a list of phone numbers and prefixes in the following fields for each \
-                provider listed. Invalid prefixes are removed silently, and only 0-9, X, Z, N, #, *, \
-                and + are valid characters. The letter X matches 0-9, Z matches 1-9, and N matches 2-9. \
-                For example to make calls to Germany through a provider, you can enter 49. To make calls \
-                to North America, you can enter 1NXXNXXXXXX. If one of your providers can make \"local\" \
-                calls to an area code like New York's 646, you can enter 646NXXXXXX for that \
-                provider. You should leave one account with an empty list to make calls with \
-                it by default, if no other provider's prefixes match. The system will automatically \
-                replace an empty list with a message that the provider dials all numbers. Be as specific as \
-                possible (i.e. 1NXXNXXXXXX is better than 1). Please note all international dial codes \
-                are discarded (e.g. 00, 011, 010, 0011). Entries can be made in a space-separated \
-                list, and/or one per line by hitting enter after every one."))
-s.anonymous = true
+-- If there are no accounts configured, or no accountsenabled for outgoing calls, display a warning.
+-- Otherwise, display the usual help text within the section.
+if     nallvalidaccounts == 0 then
+   text = "NOTE: There are no Google or SIP provider accounts configured."
+elseif nvalidoutaccounts == 0 then
+   text = "NOTE: There are no Google or SIP provider accounts enabled for outgoing calls."
+else
+   text = "If you have more than one account which can make outgoing calls, you \
+   should enter a list of phone numbers and prefixes in the following fields for each \
+   provider listed. Invalid prefixes are removed silently, and only 0-9, X, Z, N, #, *, \
+   and + are valid characters. The letter X matches 0-9, Z matches 1-9, and N matches 2-9. \
+   For example to make calls to Germany through a provider, you can enter 49. To make calls \
+   to North America, you can enter 1NXXNXXXXXX. If one of your providers can make \"local\" \
+   calls to an area code like New York's 646, you can enter 646NXXXXXX for that \
+   provider. You should leave one account with an empty list to make calls with \
+   it by default, if no other provider's prefixes match. The system will automatically \
+   replace an empty list with a message that the provider dials all numbers. Be as specific as \
+   possible (i.e. 1NXXNXXXXXX is better than 1). Please note all international dial codes \
+   are discarded (e.g. 00, 011, 010, 0011). Entries can be made in a space-separated \
+   list, and/or one per line by hitting enter after every one."
+end
 
+s = m:section(NamedSection, "outgoing_calls", "call_routing", translate("Outgoing Calls"),
+              translate(text))
+s.anonymous = true
 
 m.uci:foreach(googlemodulename, "gtalk_jabber", 
               function(s1)
@@ -178,15 +198,6 @@ m.uci:foreach(voipmodulename, "voip_provider",
                     end
                  end
               end)
-
--- If there are no accounts enabled for outgoing calls.
-if     # allvalidaccounts == 0 then
-   warn = s:option(DummyValue, "warn")
-   warn.default = "NOTE: There are no Google or SIP provider accounts configured."
-elseif # validoutaccounts == 0 then
-   warn.s:option(DummyValue, "warn")
-   warn.default = "NOTE: There are no Google or SIP provider accounts enabled for outgoing calls."
-end
 
 ----------------------------------------------------------------------------------------------------
 s = m:section(NamedSection, "incoming_calls", "call_routing", translate("Incoming Calls"),
