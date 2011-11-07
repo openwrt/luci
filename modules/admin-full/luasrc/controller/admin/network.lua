@@ -17,16 +17,6 @@ module("luci.controller.admin.network", package.seeall)
 
 function index()
 	local uci = require("luci.model.uci").cursor()
-	local net = require "luci.model.network".init(uci)
-	local has_wifi = nixio.fs.stat("/etc/config/wireless")
-	local has_switch = false
-
-	uci:foreach("network", "switch",
-		function(s)
-			has_switch = true
-			return false
-		end
-	)
 
 	local page
 
@@ -36,112 +26,136 @@ function index()
 	page.order  = 50
 	page.index  = true
 
-	if has_switch then
-		page  = node("admin", "network", "vlan")
-		page.target = cbi("admin_network/vlan")
-		page.title  = _("Switch")
-		page.order  = 20
-	end
+	if page.inreq then
+		local has_switch = false
 
-	if has_wifi and has_wifi.size > 0 then
-		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wifi"), 15)
+		uci:foreach("network", "switch",
+			function(s)
+				has_switch = true
+				return false
+			end)
+
+		if has_switch then
+			page  = node("admin", "network", "vlan")
+			page.target = cbi("admin_network/vlan")
+			page.title  = _("Switch")
+			page.order  = 20
+		end
+
+
+		local has_wifi = false
+		
+		uci:foreach("wireless", "wifi-device",
+			function(s)
+				has_wifi = true
+				return false
+			end)
+		
+		if has_wifi then
+			page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless_reconnect"}, call("wifi_reconnect"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless_shutdown"}, call("wifi_reconnect"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wifi"), 15)
+			page.leaf = true
+			page.subindex = true
+
+			if page.inreq then
+				local wdev
+				local net = require "luci.model.network".init(uci)
+				for _, wdev in ipairs(net:get_wifidevs()) do
+					local wnet
+					for _, wnet in ipairs(wdev:get_wifinets()) do
+						entry(
+							{"admin", "network", "wireless", wnet:id()},
+							alias("admin", "network", "wireless"),
+							wdev:name() .. ": " .. wnet:shortname()
+						)
+					end
+				end
+			end
+		end
+
+
+		page = entry({"admin", "network", "iface_add"}, cbi("admin_network/iface_add"), nil)
 		page.leaf = true
+
+		page = entry({"admin", "network", "iface_delete"}, call("iface_delete"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "iface_reconnect"}, call("iface_reconnect"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "iface_shutdown"}, call("iface_shutdown"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
+		page.leaf   = true
 		page.subindex = true
 
-		page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "wireless_add"}, call("wifi_add"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "wireless_delete"}, call("wifi_delete"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "wireless_reconnect"}, call("wifi_reconnect"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "wireless_shutdown"}, call("wifi_reconnect"), nil)
-		page.leaf = true
-
-		local wdev
-		for _, wdev in ipairs(net:get_wifidevs()) do
-			local wnet
-			for _, wnet in ipairs(wdev:get_wifinets()) do
-				entry(
-					{"admin", "network", "wireless", wnet:id()},
-					alias("admin", "network", "wireless"),
-					wdev:name() .. ": " .. wnet:shortname()
-				)
-			end
+		if page.inreq then
+			uci:foreach("network", "interface",
+				function (section)
+					local ifc = section[".name"]
+					if ifc ~= "loopback" then
+						entry({"admin", "network", "network", ifc},
+						true, ifc:upper())
+					end
+				end)
 		end
-	end
 
-	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
-	page.leaf   = true
-	page.subindex = true
 
-	page = entry({"admin", "network", "iface_add"}, cbi("admin_network/iface_add"), nil)
-	page.leaf = true
+		if nixio.fs.access("/etc/config/dhcp") then
+			page = node("admin", "network", "dhcp")
+			page.target = cbi("admin_network/dhcp")
+			page.title  = _("DHCP and DNS")
+			page.order  = 30
 
-	page = entry({"admin", "network", "iface_delete"}, call("iface_delete"), nil)
-	page.leaf = true
+			page = entry({"admin", "network", "dhcplease_status"}, call("lease_status"), nil)
+			page.leaf = true
 
-	page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
-	page.leaf = true
-
-	page = entry({"admin", "network", "iface_reconnect"}, call("iface_reconnect"), nil)
-	page.leaf = true
-
-	page = entry({"admin", "network", "iface_shutdown"}, call("iface_shutdown"), nil)
-	page.leaf = true
-
-	uci:foreach("network", "interface",
-		function (section)
-			local ifc = section[".name"]
-			if ifc ~= "loopback" then
-				entry({"admin", "network", "network", ifc},
-				 true,
-				 ifc:upper())
-			end
+			page = node("admin", "network", "hosts")
+			page.target = cbi("admin_network/hosts")
+			page.title  = _("Hostnames")
+			page.order  = 40
 		end
-	)
 
-	if nixio.fs.access("/etc/config/dhcp") then
-		page = node("admin", "network", "dhcp")
-		page.target = cbi("admin_network/dhcp")
-		page.title  = _("DHCP and DNS")
-		page.order  = 30
+		page  = node("admin", "network", "routes")
+		page.target = cbi("admin_network/routes")
+		page.title  = _("Static Routes")
+		page.order  = 50
 
-		page = entry({"admin", "network", "dhcplease_status"}, call("lease_status"), nil)
+		page = node("admin", "network", "diagnostics")
+		page.target = template("admin_network/diagnostics")
+		page.title  = _("Diagnostics")
+		page.order  = 60
+
+		page = entry({"admin", "network", "diag_ping"}, call("diag_ping"), nil)
 		page.leaf = true
 
-		page = node("admin", "network", "hosts")
-		page.target = cbi("admin_network/hosts")
-		page.title  = _("Hostnames")
-		page.order  = 40
+		page = entry({"admin", "network", "diag_nslookup"}, call("diag_nslookup"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "diag_traceroute"}, call("diag_traceroute"), nil)
+		page.leaf = true
 	end
-
-	page  = node("admin", "network", "routes")
-	page.target = cbi("admin_network/routes")
-	page.title  = _("Static Routes")
-	page.order  = 50
-
-	page = node("admin", "network", "diagnostics")
-	page.target = template("admin_network/diagnostics")
-	page.title  = _("Diagnostics")
-	page.order  = 60
-
-	page = entry({"admin", "network", "diag_ping"}, call("diag_ping"), nil)
-	page.leaf = true
-
-	page = entry({"admin", "network", "diag_nslookup"}, call("diag_nslookup"), nil)
-	page.leaf = true
-
-	page = entry({"admin", "network", "diag_traceroute"}, call("diag_traceroute"), nil)
-	page.leaf = true
 end
 
 function wifi_join()
