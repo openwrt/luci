@@ -17,7 +17,6 @@ module("luci.controller.admin.network", package.seeall)
 
 function index()
 	local uci = require("luci.model.uci").cursor()
-
 	local page
 
 	page = node("admin", "network")
@@ -26,7 +25,7 @@ function index()
 	page.order  = 50
 	page.index  = true
 
-	if page.inreq then
+--	if page.inreq then
 		local has_switch = false
 
 		uci:foreach("network", "switch",
@@ -155,7 +154,7 @@ function index()
 
 		page = entry({"admin", "network", "diag_traceroute"}, call("diag_traceroute"), nil)
 		page.leaf = true
-	end
+--	end
 end
 
 function wifi_join()
