@@ -577,11 +577,56 @@ encr:depends({mode="ap-wds"})
 encr:depends({mode="sta-wds"})
 encr:depends({mode="mesh"})
 
+cipher = s:taboption("encryption", ListValue, "cipher", translate("Cipher"))
+cipher.rmempty = false
+cipher:depends({encryption="wpa"})
+cipher:depends({encryption="wpa2"})
+cipher:depends({encryption="psk"})
+cipher:depends({encryption="psk2"})
+cipher:depends({encryption="wpa-mixed"})
+cipher:depends({encryption="psk-mixed"})
+cipher:value("auto", translate("auto"))
+cipher:value("ccmp", translate("Force CCMP (AES)"))
+cipher:value("tkip", translate("Force TKIP"))
+cipher:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
+
+function encr.cfgvalue(self, section)
+	local v = tostring(ListValue.cfgvalue(self, section))
+	if v == "wep" then
+		return "wep-open"
+	elseif v and v:match("%+") then
+		return (v:gsub("%+.+$", ""))
+	end
+	return v
+end
+
 function encr.write(self, section, value)
+	local e = tostring(encr:formvalue(section))
+	local c = tostring(cipher:formvalue(section))
 	if value == "wpa" or value == "wpa2"  then
 		self.map.uci:delete("wireless", section, "key")
 	end
-	self.map.uci:set("wireless", section, "encryption", value)
+	if e and (c == "tkip" or c == "ccmp" or c == "tkip+ccmp") then
+		e = e .. "+" .. c
+	end
+	self.map:set(section, "encryption", e)
+end
+
+function cipher.cfgvalue(self, section)
+	local v = tostring(ListValue.cfgvalue(encr, section))
+	if v and v:match("%+") then
+		v = v:gsub("^[^%+]+%+", "")
+		if v == "aes" then v = "ccmp"
+		elseif v == "tkip+aes" then v = "tkip+ccmp"
+		elseif v == "aes+tkip" then v = "tkip+ccmp"
+		elseif v == "ccmp+tkip" then v = "tkip+ccmp"
+		end
+	end
+	return v
+end
+
+function cipher.write(self, section)
+	return encr:write(section)
 end
 
 
