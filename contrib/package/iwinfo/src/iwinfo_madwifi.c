@@ -641,6 +641,9 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 					c->pair_ciphers |= IWINFO_CIPHER_WEP40;
 					break;
 
+				case 0:
+					break;
+
 				default:
 					c->pair_ciphers = IWINFO_CIPHER_WEP40 |
 						IWINFO_CIPHER_WEP104;
@@ -699,7 +702,7 @@ int madwifi_get_encryption(const char *ifname, char *buf)
 		}
 	}
 
-	c->enabled = (c->wpa_version || c->auth_algs) ? 1 : 0;
+	c->enabled = (c->wpa_version || (c->auth_algs && c->pair_ciphers)) ? 1 : 0;
 
 	return 0;
 }
