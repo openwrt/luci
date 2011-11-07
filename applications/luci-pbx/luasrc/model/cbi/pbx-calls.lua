@@ -25,18 +25,20 @@ else
    server = ""
 end
 
-modulename       = "pbx-calls"
-voipmodulename   = "pbx-voip"
-googlemodulename = "pbx-google"
-usersmodulename  = "pbx-users"
-allvalidaccounts = {}
+modulename        = "pbx-calls"
+voipmodulename    = "pbx-voip"
+googlemodulename  = "pbx-google"
+usersmodulename   = "pbx-users"
+allvalidaccounts  = {}
 nallvalidaccounts = 0
-validoutaccounts = {}
+validoutaccounts  = {}
 nvalidoutaccounts = 0
-validinaccounts  = {}
+validinaccounts   = {}
 nvalidinaccounts  = 0
-allvalidusers    = {}
+allvalidusers     = {}
 nallvalidusers    = 0
+validoutusers     = {}
+nvalidoutusers    = 0
 
 
 -- Checks whether the entered extension is valid syntactically.
@@ -101,15 +103,31 @@ m.uci:foreach(voipmodulename, "voip_provider",
                  end
               end)
 
+-- Add Local User accounts to all valid users, and users allowed to make outgoing calls.
+m.uci:foreach(usersmodulename, "local_user",
+              function(s1)
+                 -- Add user to list of all valid users.
+                 if s1.defaultuser ~= nil then
+                    allvalidusers[s1.defaultuser] = true
+                    nallvalidusers = nallvalidusers + 1
+                    
+                    if s1.can_call == "yes" then
+                       validoutusers[s1.defaultuser] = true
+                       nvalidoutusers = nvalidoutusers + 1
+                    end
+                 end
+              end)
+
+
 ----------------------------------------------------------------------------------------------------
--- If there are no accounts configured, or no accountsenabled for outgoing calls, display a warning.
+-- If there are no accounts configured, or no accounts enabled for outgoing calls, display a warning.
 -- Otherwise, display the usual help text within the section.
 if     nallvalidaccounts == 0 then
-   text = "NOTE: There are no Google or SIP provider accounts configured."
+   text = translate("NOTE: There are no Google or SIP provider accounts configured.")
 elseif nvalidoutaccounts == 0 then
-   text = "NOTE: There are no Google or SIP provider accounts enabled for outgoing calls."
+   text = translate("NOTE: There are no Google or SIP provider accounts enabled for outgoing calls.")
 else
-   text = "If you have more than one account which can make outgoing calls, you \
+   text = translate("If you have more than one account which can make outgoing calls, you \
    should enter a list of phone numbers and prefixes in the following fields for each \
    provider listed. Invalid prefixes are removed silently, and only 0-9, X, Z, N, #, *, \
    and + are valid characters. The letter X matches 0-9, Z matches 1-9, and N matches 2-9. \
@@ -121,217 +139,152 @@ else
    replace an empty list with a message that the provider dials all numbers. Be as specific as \
    possible (i.e. 1NXXNXXXXXX is better than 1). Please note all international dial codes \
    are discarded (e.g. 00, 011, 010, 0011). Entries can be made in a space-separated \
-   list, and/or one per line by hitting enter after every one."
+   list, and/or one per line by hitting enter after every one.")
 end
 
-s = m:section(NamedSection, "outgoing_calls", "call_routing", translate("Outgoing Calls"),
-              translate(text))
+
+s = m:section(NamedSection, "outgoing_calls", "call_routing", translate("Outgoing Calls"), text)
 s.anonymous = true
 
-m.uci:foreach(googlemodulename, "gtalk_jabber", 
-              function(s1)
-                 -- If this provider is valid AND is enabled for outgoing calls, add it to the section.
-                 if s1.username ~= nil and s1.name ~= nil and
-                    s1.make_outgoing_calls == "yes" then
-                    patt = s:option(DynamicList, s1.name, s1.username)
-                    
-                    -- If the saved field is empty, we return a string
-                    -- telling the user that this account would dial any exten.
-                    function patt.cfgvalue(self, section)
-                       value = self.map:get(section, self.option)
-                       
-                       if value == nil then
-                          return {"Dials any number"}
-                       else
-                          return value
-                       end
-                    end
-                    
-                    -- Write only valid extensions into the config file.
-                    function patt.write(self, section, value)
-                       newvalue = {}
-                       nindex = 1
-                       for index, field in ipairs(value) do
-                          val = luci.util.trim(value[index])
-                          if is_valid_extension(val) == true then
-                             newvalue[nindex] = val
-                             nindex = nindex + 1
-                          end
-                       end
-                       DynamicList.write(self, section, newvalue)
-                    end
-                 end
-              end)
-
-m.uci:foreach(voipmodulename, "voip_provider", 
-              function(s1)
-
-                 -- If this provider is valid AND is enabled for outgoing calls, add it to the section.
-                 if s1.defaultuser ~= nil and s1.host ~= nil and 
-                    s1.name ~= nil        and s1.make_outgoing_calls == "yes" then
-                    patt = s:option(DynamicList, s1.name, s1.defaultuser .. "@" .. s1.host)
-                    
-                    -- If the saved field is empty, we return a string
-                    -- telling the user that this account would dial any exten.
-                    function patt.cfgvalue(self, section)
-                       value = self.map:get(section, self.option)
-
-                       if value == nil then
-                          return {"Dials any number"}
-                       else
-                          return value
-                       end
-                    end
-
-                    -- Write only valid extensions into the config file.
-                    function patt.write(self, section, value)
-                       newvalue = {}
-                       nindex = 1
-                       for index, field in ipairs(value) do
-                          val = luci.util.trim(value[index])
-                          if is_valid_extension(val) == true then
-                             newvalue[nindex] = val
-                             nindex = nindex + 1
-                          end
-                       end
-                       DynamicList.write(self, section, newvalue)
-                    end
-                 end
-              end)
+for k,v in pairs(validoutaccounts) do
+   patterns = s:option(DynamicList, k, v)
+   
+   -- If the saved field is empty, we return a string
+   -- telling the user that this account would dial any exten.
+   function patterns.cfgvalue(self, section)
+      value = self.map:get(section, self.option)
+      
+      if value == nil then
+         return {translate("Dials any number")}
+      else
+         return value
+      end
+   end
+   
+   -- Write only valid extensions into the config file.
+   function patterns.write(self, section, value)
+      newvalue = {}
+      nindex = 1
+      for index, field in ipairs(value) do
+         val = luci.util.trim(value[index])
+         if is_valid_extension(val) == true then
+            newvalue[nindex] = val
+            nindex = nindex + 1
+         end
+      end
+      DynamicList.write(self, section, newvalue)
+   end
+end
 
 ----------------------------------------------------------------------------------------------------
-s = m:section(NamedSection, "incoming_calls", "call_routing", translate("Incoming Calls"),
-        translate("For each provider that receives calls, here you can restrict which users to ring \
+-- If there are no accounts configured, or no accounts enabled for incoming calls, display a warning.
+-- Otherwise, display the usual help text within the section.
+if     nallvalidaccounts == 0 then
+   text = translate("NOTE: There are no Google or SIP provider accounts configured.")
+elseif nvalidinaccounts == 0 then
+   text = translate("NOTE: There are no Google or SIP provider accounts enabled for incoming calls.")
+else
+   text = translate("For each provider that receives calls, here you can restrict which users to ring \
                 on incoming calls. If the list is empty, the system will indicate that all users \
                 which are enabled for incoming calls will ring. Invalid usernames will be rejected \
                 silently. Also, entering a username here overrides the user's setting to not receive \
-                incoming calls, so this way, you can make users ring only for select providers. \
-                Entries can be made in a space-separated list, and/or one per \
-                line by hitting enter after every one."))
+                incoming calls. This way, you can make certain users ring only for specific providers. \
+                Entries can be made in a space-separated list, and/or one per line by hitting enter after \
+                every one.")
+end
+
+
+s = m:section(NamedSection, "incoming_calls", "call_routing", translate("Incoming Calls"), text)
 s.anonymous = true
 
-m.uci:foreach(googlemodulename, "gtalk_jabber", 
-              function(s1)
-                 if s1.username ~= nil and s1.register == "yes" then
-                    field_name=string.gsub(s1.username, "%W", "_")
-                    gtalkaccts = s:option(DynamicList, field_name, s1.username)
-                    
-                    -- If the saved field is empty, we return a string
-                    -- telling the user that this account would dial any exten.
-                    function gtalkaccts.cfgvalue(self, section)
-                       value = self.map:get(section, self.option)
-                       
-                       if value == nil then
-                          return {"Rings all users"}
-                       else
-                          return value
-                       end
-                    end
-
-                    -- Write only valid user names.
-                    function gtalkaccts.write(self, section, value)
-                       newvalue = {}
-                       nindex = 1
-                       for index, field in ipairs(value) do
-                          trimuser = luci.util.trim(value[index])
-                          if allvalidusers[trimuser] == true then
-                             newvalue[nindex] = trimuser
-                             nindex = nindex + 1
-                          end
-                       end
-                       DynamicList.write(self, section, newvalue)
-                    end
-                 end
-              end)
-
-
-m.uci:foreach(voipmodulename, "voip_provider", 
-              function(s1)
-                 if s1.defaultuser ~= nil and s1.host ~= nil and s1.register == "yes" then
-                    field_name=string.gsub(s1.defaultuser .. "_" .. s1.host, "%W", "_")
-                    voipaccts = s:option(DynamicList, field_name, s1.defaultuser .. "@" .. s1.host)
-                    
-                    -- If the saved field is empty, we return a string
-                    -- telling the user that this account would dial any exten.
-                    function voipaccts.cfgvalue(self, section)
-                       value = self.map:get(section, self.option)
-                       
-                       if value == nil then
-                          return {"Rings all users"}
-                       else
-                          return value
-                       end
-                    end
-
-                    -- Write only valid user names.
-                    function voipaccts.write(self, section, value)
-                       newvalue = {}
-                       nindex = 1
-                       for index, field in ipairs(value) do
-                          trimuser = luci.util.trim(value[index])
-                          if allvalidusers[trimuser] == true then
-                             newvalue[nindex] = trimuser
-                             nindex = nindex + 1
-                          end
-                       end
-                       DynamicList.write(self, section, newvalue)
-                    end
-                 end
-              end)
+for k,v in pairs(validinaccounts) do
+   users = s:option(DynamicList, k, v)
+   
+   -- If the saved field is empty, we return a string
+   -- telling the user that this account would dial any exten.
+   function users.cfgvalue(self, section)
+      value = self.map:get(section, self.option)
+      
+      if value == nil then
+         return {translate("Rings all users enabled for incoming calls")}
+      else
+         return value
+      end
+   end
+   
+   -- Write only valid user names.
+   function users.write(self, section, value)
+      newvalue = {}
+      nindex = 1
+      for index, field in ipairs(value) do
+         trimuser = luci.util.trim(value[index])
+         if allvalidusers[trimuser] == true then
+            newvalue[nindex] = trimuser
+            nindex = nindex + 1
+         end
+      end
+      DynamicList.write(self, section, newvalue)
+   end
+end
 
 
 ----------------------------------------------------------------------------------------------------
+-- If there are no user accounts configured, no user accounts enabled for outgoing calls,
+-- display a warning. Otherwise, display the usual help text within the section.
+if     nallvalidusers == 0 then
+   text = translate("NOTE: There are no local user accounts configured.")
+elseif nvalidoutusers == 0 then
+   text = translate("NOTE: There are no local user accounts enabled for outgoing calls.")
+else
+   text = translate("If you would like, you could restrict which providers users are allowed to use for \
+        outgoing calls. By default all users can use all providers. To show up in the list below the user \
+        should be allowed to make outgoing calls in the \"User Accounts\" page. Enter VoIP providers in the \
+        format username@some.host.name, as listed in \"Outgoing Calls\" above. It's easiest to copy and \
+        paste the providers from above. Invalid entries, including providers not enabled for outgoing \
+        calls, will be rejected silently. Entries can be made in a space-separated list, and/or one per \
+        line by hitting enter after every one.")
+end
+
+
 s = m:section(NamedSection, "providers_user_can_use", "call_routing",
-     translate("Providers Used for Outgoing Calls"),
-     translate("If you would like, you could restrict which providers users are allowed to use for outgoing \
-        calls. By default all users can use all providers. To show up in the list below the user should \
-        be allowed to make outgoing calls in the \"User Accounts\" page. Enter VoIP providers in the format \
-        username@some.host.name, as listed in \"Outgoing Calls\" above. It's easiest to copy and paste \
-        the providers from above. Invalid entries will be rejected silently. Entries can be made in a \
-        space-separated list, and/or one per line by hitting enter after every one."))
+     translate("Providers Used for Outgoing Calls"), text)
 s.anonymous = true
 
-m.uci:foreach(usersmodulename, "local_user",
-              function(s1)
-                 -- Add user to list of all valid users.
-                 if s1.defaultuser ~= nil then allvalidusers[s1.defaultuser] = true end
-                 
-                 if s1.defaultuser ~= nil and s1.can_call == "yes" then
-                    providers = s:option(DynamicList, s1.defaultuser, s1.defaultuser)
-                    
-                    -- If the saved field is empty, we return a string
-                    -- telling the user that this account would dial any exten.
-                    function providers.cfgvalue(self, section)
-                       value = self.map:get(section, self.option)
+for k,v in pairs(validoutusers) do
+   providers = s:option(DynamicList, k, k)
 
-                       if value == nil then
-                          return {"Uses all provider accounts"}
-                       else
-                          newvalue = {}
-                          -- Convert internal names to user@host values.
-                          for i,v in ipairs(value) do
-                             newvalue[i] = validoutaccounts[v]
-                          end
-                          return newvalue
-                       end
-                    end
-                    
-                    -- Cook the new values prior to entering them into the config file.
-                    -- Also, enter them only if they are valid.
-                    function providers.write(self, section, value)
-                       cookedvalue = {}
-                       cindex = 1
-                       for index, field in ipairs(value) do
-                          cooked = string.gsub(luci.util.trim(value[index]), "%W", "_")
-                          if validoutaccounts[cooked] ~= nil then
-                             cookedvalue[cindex] = cooked
-                             cindex = cindex + 1
-                          end
-                       end
-                       DynamicList.write(self, section, cookedvalue)
-                    end
-                 end
-              end)
+   -- If the saved field is empty, we return a string
+   -- telling the user that this account would dial any exten.
+   function providers.cfgvalue(self, section)
+      value = self.map:get(section, self.option)
+      
+      if value == nil then
+         return {translate("Uses all providers enabled for outgoing calls")}
+      else
+         newvalue = {}
+         -- Convert internal names to user@host values.
+         for i,v in ipairs(value) do
+            newvalue[i] = validoutaccounts[v]
+         end
+         return newvalue
+      end
+   end
+   
+   -- Cook the new values prior to entering them into the config file.
+   -- Also, enter them only if they are valid.
+   function providers.write(self, section, value)
+      cookedvalue = {}
+      cindex = 1
+      for index, field in ipairs(value) do
+         cooked = string.gsub(luci.util.trim(value[index]), "%W", "_")
+         if validoutaccounts[cooked] ~= nil then
+            cookedvalue[cindex] = cooked
+            cindex = cindex + 1
+         end
+      end
+      DynamicList.write(self, section, cookedvalue)
+   end
+end
 
 ----------------------------------------------------------------------------------------------------
 s = m:section(TypedSection, "callthrough_numbers", translate("Call-through Numbers"),
@@ -350,7 +303,8 @@ p.default = "yes"
 
 user = s:option(Value, "defaultuser",  translate("User Name"),
          translate("The number(s) specified above will be able to dial out with this user's providers. \
-                   Invalid usernames are dropped silently, please verify that the entry was accepted."))
+                   Invalid usernames, including users not enabled for outgoing calls, are dropped silently. \
+                   Please verify that the entry was accepted."))
 function user.write(self, section, value)
    trimuser = luci.util.trim(value)
    if allvalidusers[trimuser] == true then
