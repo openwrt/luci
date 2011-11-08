@@ -1028,7 +1028,7 @@ int nl80211_get_encryption(const char *ifname, char *buf)
 		}
 
 		c->group_ciphers = c->pair_ciphers;
-		c->enabled = (c->auth_algs || c->auth_suites) ? 1 : 0;
+		c->enabled = (c->wpa_version || c->pair_ciphers) ? 1 : 0;
 
 		return 0;
 	}
