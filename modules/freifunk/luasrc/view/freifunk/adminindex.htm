@@ -43,7 +43,7 @@ luci.i18n.loadc("freifunk")
 	local device = section[".name"]
 	local url = luci.dispatcher.build_url(luci.dispatcher.context.path[1], "network", "wireless")
 	if section.diversity ~= "0" and section.disabled ~= "1" and section.type ~= "mac80211" then
-		print('<div class="error">' .. translate("Diversity is enabled for device") .. ' <b>' .. device .. '</b>. '
+		print('<div class="error">' .. translate("Diversity is enabled for device") .. ' <b>' .. section[".name"] .. '</b>. '
 		.. translate("Go to") .. ' <a href="' .. url .. '">' .. translate("wireless settings") .. '</a> ' ..
 		translate("to disable it.") .. '</div><p />')
 	end
