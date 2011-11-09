@@ -1,8 +1,20 @@
-<%+header%>
+<%#
+LuCI - Lua Configuration Interface
+
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+-%>
 
 <%
 local fs  = require "luci.fs"
 local utl = require "luci.util"
+local i = 1
 
 -- check if nameservice plugin is enabled and where to find the services file
 local has_services = false
@@ -21,7 +33,6 @@ uci:foreach("olsrd", "LoadPlugin", function(s)
 		end
 	end
 end)
-
 
 function fetch_services()
 	local rawdata = fs.readfile(services_file)
@@ -48,40 +59,93 @@ function fetch_services()
 	
 	return tables
 end
+local table = fetch_services()
+
+if luci.http.formvalue("status") == "1" then
+	local rv = {}
+	for k, line in ipairs(table) do
+		local field = utl.split(line, "[#|]", split, true)
+		local url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
+		local rs = i
+		rv[#rv+1] = {
+			url = url,
+			origin = origin,
+			descr = descr,
+			rs = rs
+			}
+		if i == 1 then i = 0 elseif i == 0 then i = 1 end
+	end
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
+	return
+end
+
 %>
 
 <% if has_services then %>
-<div class="cbi-map">
-	<h2><a id="content" name="content"><%:Services%></a></h2>
-	<div class="cbi-map-descr"/>
-                <div class="cbi-section">
-                        <div class="cbi-section-node">
-                                <table class="cbi-section-table">
-                                        <tr class="cbi-section-table-titles">
-						<th class="cbi-section-table-cell"><%:Url%></th>
-						<th class="cbi-section-table-cell"><%:Source%></th>
-					</tr>
 
-	<% table=fetch_services()
-	local i = 1
-	for k, line in ipairs(table) do
-		local field = {}
-		-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
-		local field = utl.split(line, "[#|]", split, true)
-		local url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
-		%>
-					<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-						<td class="cbi-section-table-cell"><a href="<%=url%>"><%=descr%></a></td>
-						<td class="cbi-section-table-cell"><%=origin%></td>
-					</tr>
-	<% if i == 1 then i = 0 elseif i == 0 then i = 1 end %>
-	<%end%>
-				</table>
-			</div>
-		</div>
-	</div>
+<%+header%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+
+	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 },
+		function(x, info)
+		{
+		var tbody = document.getElementById('olsr_services');
+			if (tbody)
+			{
+				var s = '';
+				for (var idx = 0; idx < info.length; idx++)
+				{
+				var service = info[idx];
+				s += String.format(
+					'<tr class="cbi-section-table-row cbi-rowstyle-%s">' +
+						'<td class="cbi-section-table-cell"><a href="%s">%s</a></td>' +
+						'<td class="cbi-section-table-cell">%s</td>' +
+					'</tr>',
+					service.rs, service.url, service.descr,  service.origin || '?'
+					);
+				}
+				tbody.innerHTML = s;
+			}
+		}
+	);
+//]]></script>
+	
+
+
+
+	<h2><a id="content" name="content"><%:Services%></a></h2>
+
+	<fieldset class="cbi-section">
+	<legend><%:Internal services%></legend>
+	<table class="cbi-section-table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Url%></th>
+			<th class="cbi-section-table-cell"><%:Source%></th>
+		</tr>
+
+		<tbody id="olsr_services">
+	<%
+		for k, line in ipairs(table) do
+			local field = {}
+			-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
+			local field = utl.split(line, "[#|]", split, true)
+			local url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
+			%>
+
+			<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+				<td class="cbi-section-table-cell"><a href="<%=url%>"><%=descr%></a></td>
+				<td class="cbi-section-table-cell"><%=origin%></td>
+		</tr>
+			<% if i == 1 then i = 0 elseif i == 0 then i = 1 end
+		end %>
+		</tbody>
+	</table>
 	<br />
 	<%=last_update%>
+	</fieldset>
 
 <%else%>
 	<%:No services can be shown, because olsrd is not running or the olsrd-nameservice Plugin is not loaded.%>
