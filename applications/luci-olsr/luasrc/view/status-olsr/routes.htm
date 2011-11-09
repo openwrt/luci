@@ -2,55 +2,129 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
 -%>
-<%+header%>
-<h2><a id="content" name="content"><%:Known OLSR routes%></a></h2>
-<p><%:Overview of currently known routes to other OLSR nodes%></p>
-<br />
-<table class="smalltext" cellspacing="0" cellpadding="6">
-<tr>
-<th><%:Announced network%></th>
-<th><%:OLSR gateway%></th>
-<th><%:Interface%></th>
-<th><%:Metric%></th>
-<th>ETX</th>
-</tr>
-<% for k, route in ipairs(routes) do
-	local color = "#bb3333"
 
-	route.ETX = tonumber(route.ETX)
-	if route.ETX == 0 then
-		color = "#bb3333"
-	elseif route.ETX < 4 then
-		color = "#00cc00"
-	elseif route.ETX < 10 then
-		color = "#ffcb05"
-	elseif route.ETX < 100 then
-		color = "#ff6600"
+<%
+
+local olsrtools = require "luci.tools.olsr"
+local i = 1
+
+if luci.http.formvalue("status") == "1" then
+	local rv = {}
+	for k, route in ipairs(routes) do
+		rv[#rv+1] = {
+			hostname = route.Hostname,
+	                dest = route.Destination,
+			gw = route["Gateway IP"],
+			interface = route.Interface,
+			metric = route.Metric,
+			etx = tonumber(route.ETX),
+			color = olsrtools.etx_color(tonumber(route.ETX)),
+			rs = i
+		}
+		if i == 1 then i = 0 elseif i == 0 then i = 1 end	
 	end
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
+	return
+end
+
 %>
-<tr>
-<td><%=route.Destination%></td>
-<td>
-<a href="http://<%=route["Gateway IP"]%>/cgi-bin-status.html"><%=route["Gateway IP"]%></a>
-<% if route.Hostname then %>
-	/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>  
-<% end %>
-</td>
-<td><%=route.Interface%></td>
-<td><%=route.Metric%></td>
-<td style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
-</tr>
-<% end %>
+
+<%+header%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[  
+
+XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
+		function(x, info)
+		{
+
+		var rt = document.getElementById('olsrd_routes');
+			if (rt)
+			{
+				var s = '';
+				for (var idx = 0; idx < info.length; idx++)
+				{
+					var route = info[idx];
+
+					s += String.format(
+						'<tr class="cbi-section-table-row cbi-rowstyle-%s">' +
+							'<td class="cbi-section-table-cell">%s</td>' +
+							'<td class="cbi-section-table-cell">' +
+			                	                '<a href="http://%s/cgi-bin-status.html">%s</a>',
+								route.rs, route.dest, route.gw, route.gw
+						)
+
+					if (route.hostname)
+						{
+						s += String.format(
+			                                        ' / <a href="http://%s/cgi-bin-status.html">%s</a>',
+								route.hostname, route.hostname || '?'
+								);
+						}
+					s += String.format(
+				                        '</td>' +
+							'<td class="cbi-section-table-cell">%s</td>' +
+							'<td class="cbi-section-table-cell">%s</td>' +
+							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
+						'</tr>',
+						route.interface, route.metric, route.color, route.etx || '?'
+					);
+				}
+                        }
+			 rt.innerHTML = s;
+
+		}
+	);
+//]]></script>
+
+
+
+<h2><a id="content" name="content"><%:Known OLSR routes%></a></h2>
+
+<fieldset class="cbi-section">
+<legend><%:Overview of currently known routes to other OLSR nodes%></legend>
+
+<table class="cbi-section-table">
+	<tr class="cbi-section-table-titles">
+		<th class="cbi-section-table-cell"><%:Announced network%></th>
+		<th class="cbi-section-table-cell"><%:OLSR gateway%></th>
+		<th class="cbi-section-table-cell"><%:Interface%></th>
+		<th class="cbi-section-table-cell"><%:Metric%></th>
+		<th class="cbi-section-table-cell">ETX</th>
+	</tr>
+
+	<tbody id="olsrd_routes">
+
+	<% for k, route in ipairs(routes) do
+		color = olsrtools.etx_color(tonumber(route.ETX))
+	%>
+
+		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+			<td class="cbi-section-table-cell"><%=route.Destination%></td>
+			<td class="cbi-section-table-cell">
+				<a href="http://<%=route["Gateway IP"]%>/cgi-bin-status.html"><%=route["Gateway IP"]%></a>
+				<% if route.Hostname then %>
+					/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>  
+				<% end %>
+			</td>
+			<td class="cbi-section-table-cell"><%=route.Interface%></td>
+			<td class="cbi-section-table-cell"><%=route.Metric%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
+		</tr>
+	<% 
+	if i == 1 then i = 0 elseif i == 0 then i = 1 end
+	end %>
+	</tbody>
 </table>
-<br />
+
+</fieldset>
 <%+footer%>

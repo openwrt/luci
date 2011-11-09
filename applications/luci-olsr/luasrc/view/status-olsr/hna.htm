@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -12,26 +13,36 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+<%
+local i = 1
+%>
+
 <%+header%>
+
 <h2><a id="content" name="content"><%:Active host net announcements%></a></h2>
-<p><%:Overview of currently active OLSR host net announcements%></p>
-<br />
-<table class="smalltext" cellspacing="0" cellpadding="6">
-<tr>
-<th><%:Announced network%></th>
-<th><%:OLSR gateway%></th>
-</tr>
-<% for k, route in ipairs(routes) do %>
-<tr>
-<td><%=route.Destination%></td>
-<td>
-<a href="http://<%=route.Gateway%>/cgi-bin-status.html"><%=route.Gateway%></a>
-<% if route.Hostname then %>
-        / <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>
-<% end %>
-</td>
-</tr>
-<% end %>
-</table>
-<br />
+
+<fieldset class="cbi-section">
+	<legend><%:Overview of currently active OLSR host net announcements%></legend>
+	<table class="cbi-section-table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Announced network%></th>
+			<th class="cbi-section-table-cell"><%:OLSR gateway%></th>
+		</tr>
+
+		<% for k, route in ipairs(routes) do %>
+
+		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+			<td class="cbi-section-table-cell"><%=route.Destination%></td>
+			<td class="cbi-section-table-cell">
+				<a href="http://<%=route.Gateway%>/cgi-bin-status.html"><%=route.Gateway%></a>
+				<% if route.Hostname then %>
+				        / <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>
+				<% end %>
+			</td>
+		</tr>
+
+		<% if i == 1 then i = 0 elseif i == 0 then i = 1 end
+		end %>
+	</table>
+</fieldset>
 <%+footer%>

@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-Copyright 2010 Manuel Munz <freifunk at somakoma dot de>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,33 +13,42 @@ You may obtain a copy of the License at
 $Id: mid.htm 5448 2009-10-31 15:54:11Z jow $
 
 -%>
+
+<%
+local i = 1
+%>
+
 <%+header%>
+
 <h2><a id="content" name="content"><%:Interfaces%></a></h2>
-<p><%:Overview of interfaces where OLSR is running%></p>
-<br />
-<table class="smalltext" cellspacing="0" cellpadding="6">
-<tr>
-<th><%:Interface%></th>
-<th><%:State%></th>
-<th><%:MTU%></th>
-<th><%:WLAN%></th>
-<th><%:Source address%></th>
-<th><%:Netmask%></th>
-<th><%:Broadcast address%></th>
-</tr>
 
-<% for k, i in ipairs(iface) do %>
-<tr>
-<td><%=i.Name%></td>
-<td><%=i.State%></td>
-<td><%=i.MTU%></td>
-<td><%=i.WLAN%></td>
-<td><%=i["Src-Adress"]%></td>
-<td><%=i.Mask%></td>
-<td><%=i["Dst-Adress"]%></td>
-</tr>
-<% end %>
+<fieldset class="cbi-section">
+	<legend><%:Overview of interfaces where OLSR is running%></legend>
 
-</table>
-<br />
+	<table class="cbi-section-table">
+		<tr>
+			<th class="cbi-section-table-cell"><%:Interface%></th>
+			<th class="cbi-section-table-cell"><%:State%></th>
+			<th class="cbi-section-table-cell"><%:MTU%></th>
+			<th class="cbi-section-table-cell"><%:WLAN%></th>
+			<th class="cbi-section-table-cell"><%:Source address%></th>
+			<th class="cbi-section-table-cell"><%:Netmask%></th>
+			<th class="cbi-section-table-cell"><%:Broadcast address%></th>
+		</tr>
+
+		<% for k, iface in ipairs(iface) do %>
+
+		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+			<td class="cbi-section-table-cell"><%=iface.Name%></td>
+			<td class="cbi-section-table-cell"><%=iface.State%></td>
+			<td class="cbi-section-table-cell"><%=iface.MTU%></td>
+			<td class="cbi-section-table-cell"><%=iface.WLAN%></td>
+			<td class="cbi-section-table-cell"><%=iface["Src-Adress"]%></td>
+			<td class="cbi-section-table-cell"><%=iface.Mask%></td>
+			<td class="cbi-section-table-cell"><%=iface["Dst-Adress"]%></td>
+		</tr>
+		<% if i == 1 then i = 0 elseif i == 0 then i = 1 end
+		end %>
+	</table>
+</fieldset>
 <%+footer%>

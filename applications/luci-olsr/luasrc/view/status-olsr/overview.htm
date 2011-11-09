@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-Copyright 2010 Manuel Munz <freifunk at somakoma dot de>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -69,6 +69,23 @@ local nr_hna = #data.HNA
 
 local meshfactor = string.format("%.2f", nr_topo / nr_nodes)
 
+if luci.http.formvalue("status") == "1" then
+	rv = {
+		nr_neighbors = nr_neigbors,
+		neighbors = neighbors,
+		interfaces = interfaces,
+		nr_ifaces = nr_ifaces,
+		nr_links = nr_links,
+		nr_topo = nr_topo,
+		nr_nodes = nr_nodes,
+		meshfactor = meshfactor
+	}
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
+	return
+end
+	
+
 local ipv = luci.model.uci.cursor():get_first("olsrd", "olsrd", "IpVersion", "4")
 
 function write_conf(conf, file)
@@ -104,6 +121,43 @@ end
 %>
 
 <%+header%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+
+XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
+                function(x, info)
+                {
+		var e;
+
+		if (e = document.getElementById('nr_neighbors'))
+			e.innerHTML = info.nr_neighbors;
+
+		if (e = document.getElementById('neighbors'))
+			e.innerHTML = info.neighbors;
+
+		if (e = document.getElementById('nr_ifaces'))
+			e.innerHTML = info.nr_ifaces;
+
+		if (e = document.getElementById('interfaces'))
+			e.innerHTML = info.interfaces;
+
+		if (e = document.getElementById('nr_links'))
+			e.innerHTML = info.nr_links;
+
+		if (e = document.getElementById('nr_topo'))
+			e.innerHTML = info.nr_topo;
+
+		if (e = document.getElementById('nr_nodes'))
+			e.innerHTML = info.nr_nodes;
+
+		if (e = document.getElementById('meshfactor'))
+			e.innerHTML = info.meshfactor;
+		}
+	);
+//]]></script>
+
+
 <h2><a id="content" name="content">OLSR <%:Overview%></a></h2>
 
 <div class="cbi-map">
@@ -111,10 +165,15 @@ end
 		<div class="cbi-value"><label class="cbi-value-title"><%:Interfaces%></label>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "interfaces")%>"><%=nr_ifaces%></a>
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "interfaces")%>">
+						<span id="nr_ifaces">
+							<%=nr_ifaces%></a>
+						<span>
 				</div>
 				<div style="padding-left: 6em;">
-					<%=interfaces%>
+					<span id="interfaces">
+						<%=interfaces%>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -122,31 +181,48 @@ end
 		<div class="cbi-value"><label class="cbi-value-title"><%:Neighbors%></label>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "neighbors")%>"><%=nr_neigh%></a>
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "neighbors")%>">
+						<span id="nr_neigh">
+							<%=nr_neigh%></a>
+						</span>
 				</div>
 				<div style="padding-left: 6em;">
-					<%=neighbors%>
+					<span id="neighbors">
+						<%=neighbors%>
+					</span>
 				</div>
 			</div>
 		</div>
 
 		<div class="cbi-value"><label class="cbi-value-title"><%:Nodes%></label>
-			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>"><%=nr_nodes%></a>
+			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
+				<span id="nr_nodes">
+					<%=nr_nodes%></a>
+				</span>
 			</div>
 		</div>
 
 		<div class="cbi-value"><label class="cbi-value-title"><%:HNA%></label>
-			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "hna")%>"><%=nr_hna%></a>
+			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "hna")%>">
+				<span id="nr_hna">
+					<%=nr_hna%></a>
+				</span>
 			</div>
 		</div>
 
 		<div class="cbi-value"><label class="cbi-value-title"><%:Links total%></label>
-			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>"><%=nr_topo%></a>
+			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
+				<span id="nr_topo">
+					<%=nr_topo%></a>
+				</span>
 			</div>
 		</div>
 
 		<div class="cbi-value"><label class="cbi-value-title"><%:Links per node (average)%></label>
-			<div class="cbi-value-field"><%=meshfactor%>
+			<div class="cbi-value-field">
+				<span id="meshfactor">
+					<%=meshfactor%>
+				</span>
 			</div>
 		</div>
 	</div>

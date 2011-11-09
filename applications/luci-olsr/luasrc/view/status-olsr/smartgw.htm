@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-Copyright 2010 Manuel Munz <freifunk at somakoma dot de>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -12,6 +12,7 @@ You may obtain a copy of the License at
 -%>
 
 <%
+local i = 1
 require("luci.model.uci")
 local uci = luci.model.uci.cursor_state()
 
@@ -23,39 +24,48 @@ end)
 <%+header%>
 
 <h2><a id="content" name="content"><%:SmartGW announcements%></a></h2>
-<% if has_smartgw then %>
-<p><%:Overview of smart gateways in this network%></p>
-<br />
-<table class="smalltext" cellspacing="0" cellpadding="6">
-<tr>
-<th><%:Gateway%></th>
-<th><%:Status%></th>
-<th><%:ETX%></th>
-<th><%:Hops%></th>
-<th><%:Uplink%></th>
-<th><%:Downlink%></th>
-<th><%:IPv4%></th>
-<th><%:IPv6%></th>
-<th><%:Prefix%></th>
 
-</tr>
-<% for k, gw in ipairs(gws) do %>
-<tr>
-<td><a href="http://<%=gw["Gateway IP"]%>/cgi-bin-status.html"><%=gw["Gateway IP"]%></a></td>
-<td><%=gw.Status%></td>
-<td><%=gw.ETX%></td>
-<td><%=gw.Hopcnt%></td>
-<td><%=gw.Uplink%></td>
-<td><%=gw.Downlnk%></td>
-<td><%=gw.IPv4%></td>
-<td><%=gw.IPv6%></td>
-<td><%=gw.Prefix%></td>
-</tr>
-<% end %>
-</table>
-<br />
+<% if has_smartgw then %>
+
+	<fieldset class="cbi-section">
+		<legend><%:Overview of smart gateways in this network%></legend>
+		<table class="cbi-section-table">
+			<tr class="cbi-section-table-titles">
+				<th class="cbi-section-table-cell"><%:Gateway%></th>
+				<th class="cbi-section-table-cell"><%:Status%></th>
+				<th class="cbi-section-table-cell"><%:ETX%></th>
+				<th class="cbi-section-table-cell"><%:Hops%></th>
+				<th class="cbi-section-table-cell"><%:Uplink%></th>
+				<th class="cbi-section-table-cell"><%:Downlink%></th>
+				<th class="cbi-section-table-cell"><%:IPv4%></th>
+				<th class="cbi-section-table-cell"><%:IPv6%></th>
+				<th class="cbi-section-table-cell"><%:Prefix%></th>
+
+			</tr>
+
+			<% for k, gw in ipairs(gws) do %>
+
+			<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+				<td class="cbi-section-table-cell"><a href="http://<%=gw["Gateway IP"]%>/cgi-bin-status.html"><%=gw["Gateway IP"]%></a></td>
+				<td class="cbi-section-table-cell"><%=gw.Status%></td>
+				<td class="cbi-section-table-cell"><%=gw.ETX%></td>
+				<td class="cbi-section-table-cell"><%=gw.Hopcnt%></td>
+				<td class="cbi-section-table-cell"><%=gw.Uplink%></td>
+				<td class="cbi-section-table-cell"><%=gw.Downlnk%></td>
+				<td class="cbi-section-table-cell"><%=gw.IPv4%></td>
+				<td class="cbi-section-table-cell"><%=gw.IPv6%></td>
+				<td class="cbi-section-table-cell"><%=gw.Prefix%></td>
+			</tr>
+
+			<% if i == 1 then i = 0 elseif i == 0 then i = 1 end
+			end %>
+		</table>
+	</fieldset>
 
 <% else %>
-<%:SmartGateway is not configured on this system.%>
+
+	<%:SmartGateway is not configured on this system.%>
+
 <% end %>
+
 <%+footer%>

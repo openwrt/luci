@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -12,21 +13,30 @@ You may obtain a copy of the License at
 $Id$
 
 -%>
+<%
+local i = 1
+%>
+
 <%+header%>
 <h2><a id="content" name="content"><%:Active MID announcements%></a></h2>
-<p><%:Overview of known multiple interface announcements%></p>
-<br />
-<table class="smalltext" cellspacing="0" cellpadding="6">
-<tr>
-<th><%:OLSR node%></th>
-<th><%:Secondary OLSR interfaces%></th>
-</tr>
-<% for k, mid in ipairs(mids) do %>
-<tr>
-<td><a href="http://<%=mid["IP address"]%>"><%=mid["IP address"]%></a></td>
-<td><%=mid.Aliases%></td>
-</tr>
-<% end %>
-</table>
-<br />
+
+<fieldset class="cbi-section">
+	<legend><%:Overview of known multiple interface announcements%></legend>
+	<table class="cbi-section-table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:OLSR node%></th>
+			<th class="cbi-section-table-cell" ><%:Secondary OLSR interfaces%></th>
+		</tr>
+
+		<% for k, mid in ipairs(mids) do %>
+
+		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+			<td class="cbi-section-table-cell"><a href="http://<%=mid["IP address"]%>/cgi-bin-status.html"><%=mid["IP address"]%></a></td>
+			<td class="cbi-section-table-cell"><%=mid.Aliases%></td>
+		</tr>
+
+		<% if i == 1 then i = 0 elseif i == 0 then i = 1 end
+		end %>
+	</table>
+</fieldset>
 <%+footer%>
