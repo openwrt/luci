@@ -140,11 +140,13 @@ end
 function print_assoclist(api, dev)
 	local iw = iwinfo[api]
 	local al = iw.assoclist(dev)
+	local ns = iw.noise(dev)
 	local ai, ae
 
 	if al and next(al) then
 		for ai, ae in pairs(al) do
-			printf("%s  %s dBm", ai, s(ae.signal))
+			printf("%s  %s dBm / %d dBm (SNR %d)",
+				ai, s(ae.signal), ns, n(ae.signal) - ns)
 		end
 	else
 		print("No client connected or no information available")
