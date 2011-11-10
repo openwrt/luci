@@ -154,50 +154,66 @@ end
 --
 
 if has_ntpd then
-	s = m:section(TypedSection, "timeserver", translate("Time Synchronization"))
-	s.anonymous = true
-	s.addremove = false
 
-	function m.on_parse()
-		local has_section = false
+	-- timeserver setup was requested, create section and reload page
+	if m:formvalue("cbid.system._timeserver._enable") then
+		m.uci:section("system", "timeserver", "ntp")
+		m.uci:save("system")
+		luci.http.redirect(luci.dispatcher.build_url("admin/system", arg[1]))
+		return
+	end
 
-		m.uci:foreach("system", "timeserver",
-			function(s)
-				has_section = true
-				return false
-		end)
+	local has_section = false
+	m.uci:foreach("system", "timeserver", 
+		function(s) 
+			has_section = true 
+			return false
+	end)
 
-		if not has_section then
-			m.uci:section("system", "timeserver", "ntp")
+	if not has_section then
+
+		s = m:section(TypedSection, "timeserver", translate("Time Synchronization"))
+		s.anonymous   = true
+		s.cfgsections = function() return { "_timeserver" } end
+
+		x = s:option(Button, "_enable")
+		x.title      = translate("Time Synchronization is not configured yet.")
+		x.inputtitle = translate("Setup Time Synchronization")
+		x.inputstyle = "apply"
+
+	else
+		
+		s = m:section(TypedSection, "timeserver", translate("Time Synchronization"))
+		s.anonymous = true
+		s.addremove = false
+
+		o = s:option(Flag, "enable", translate("Enable builtin NTP server"))
+		o.rmempty = false
+
+		function o.cfgvalue(self)
+			return luci.sys.init.enabled("sysntpd")
+				and self.enabled or self.disabled
 		end
-	end
 
-	o = s:option(Flag, "enable", translate("Enable builtin NTP server"))
-	o.rmempty = false
-
-	function o.cfgvalue(self)
-		return luci.sys.init.enabled("sysntpd")
-			and self.enabled or self.disabled
-	end
-
-	function o.write(self, section, value)
-		if value == self.enabled then
-			luci.sys.init.enable("sysntpd")
-			luci.sys.call("env -i /etc/init.d/sysntpd start >/dev/null")
-		else
-			luci.sys.call("env -i /etc/init.d/sysntpd stop >/dev/null")
-			luci.sys.init.disable("sysntpd")
+		function o.write(self, section, value)
+			if value == self.enabled then
+				luci.sys.init.enable("sysntpd")
+				luci.sys.call("env -i /etc/init.d/sysntpd start >/dev/null")
+			else
+				luci.sys.call("env -i /etc/init.d/sysntpd stop >/dev/null")
+				luci.sys.init.disable("sysntpd")
+			end
 		end
+
+
+		o = s:option(DynamicList, "server", translate("NTP server candidates"))
+		o.datatype = "host"
+		o:depends("enable", "1")
+
+		-- retain server list even if disabled
+		function o.remove() end
+
 	end
-
-
-	o = s:option(DynamicList, "server", translate("NTP server candidates"))
-	o.datatype = "host"
-	o:depends("enable", "1")
-
-	-- retain server list even if disabled
-	function o.remove() end
 end
-
 
 return m
