@@ -157,7 +157,12 @@ if has_ntpd then
 
 	-- timeserver setup was requested, create section and reload page
 	if m:formvalue("cbid.system._timeserver._enable") then
-		m.uci:section("system", "timeserver", "ntp")
+		m.uci:section("system", "timeserver", "ntp",
+			{
+                	server = { "0.openwrt.pool.ntp.org", "1.openwrt.pool.ntp.org", "2.openwrt.pool.ntp.org", "3.openwrt.pool.ntp.org" }
+			}
+		)
+
 		m.uci:save("system")
 		luci.http.redirect(luci.dispatcher.build_url("admin/system", arg[1]))
 		return
