@@ -22,7 +22,6 @@ require("luci.config")
 local m, s, o
 local has_ntpd = luci.fs.access("/usr/sbin/ntpd")
 
-
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 m:chain("luci")
 
@@ -158,6 +157,20 @@ if has_ntpd then
 	s = m:section(TypedSection, "timeserver", translate("Time Synchronization"))
 	s.anonymous = true
 	s.addremove = false
+
+	function m.on_parse()
+		local has_section = false
+
+		m.uci:foreach("system", "timeserver",
+			function(s)
+				has_section = true
+				return false
+		end)
+
+		if not has_section then
+			m.uci:section("system", "timeserver", "ntp")
+		end
+	end
 
 	o = s:option(Flag, "enable", translate("Enable builtin NTP server"))
 	o.rmempty = false
