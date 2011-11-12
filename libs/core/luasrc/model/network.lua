@@ -1411,8 +1411,9 @@ function wifinet.adminlink(self)
 end
 
 function wifinet.get_network(self)
-	if _uci_real:get("network", self.iwdata.network) == "interface" then
-		return network(self.iwdata.network)
+	local net = tostring(self.iwdata.network)
+	if net and _uci_real:get("network", net) == "interface" then
+		return network(net)
 	end
 end
 
