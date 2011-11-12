@@ -35,7 +35,16 @@ $Id$
 					ret[#ret+1] = "<ins>%s.%s=<strong>%s</strong>" %{ r, s, os['.type'] }
 					for o, v in util.kspairs(os) do
 						if o:sub(1,1) ~= "." then
-							ret[#ret+1] = "<br />%s.%s.%s=<strong>%s</strong>" %{ r, s, o, util.pcdata(v) }
+							if type(v) == "table" then
+								local i
+								for i = 1, #v do
+									ret[#ret+1] = "<br />%s.%s.%s+=<strong>%s</strong>"
+										%{ r, s, o, util.pcdata(v[i]) }
+								end
+							else
+								ret[#ret+1] = "<br />%s.%s.%s=<strong>%s</strong>"
+									%{ r, s, o, util.pcdata(v) }
+							end
 						end
 					end
 					ret[#ret+1] = "</ins><br />"
@@ -49,8 +58,20 @@ $Id$
 					ret[#ret+1] = "<var>%s.%s<br />" %{ r, s }
 					for o, v in util.kspairs(os) do
 						if o:sub(1,1) ~= "." then
-							if v and v ~= "" then
-								ret[#ret+1] = "<ins>%s.%s.%s=<strong>%s</strong><br /></ins>" %{ r, s, o, util.pcdata(v) }
+							if v and #v > 0 then
+								ret[#ret+1] = "<ins>"
+								if type(v) == "table" then
+									local i
+									for i = 1, #v do
+										ret[#ret+1] = "%s.%s.%s+=<strong>%s</strong><br />"
+											%{ r, s, o, util.pcdata(v[i]) }
+									end
+									
+								else
+									ret[#ret+1] = "%s.%s.%s=<strong>%s</strong><br />"
+										%{ r, s, o, util.pcdata(v) }
+								end
+								ret[#ret+1] = "</ins>"
 							else
 								ret[#ret+1] = "<del>%s.%s.<strong>%s</strong><br /></del>" %{ r, s, o }
 							end
