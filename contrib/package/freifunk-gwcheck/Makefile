@@ -34,6 +34,7 @@ endef
 
 define Package/freifunk-gwcheck/install
 	$(CP) ./files/* $(1)/
+	$(CP) ./root/* $(1)/
 endef
 
 $(eval $(call BuildPackage,freifunk-gwcheck))
