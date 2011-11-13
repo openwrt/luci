@@ -452,6 +452,8 @@ static char * nl80211_phy2ifname(const char *ifname)
 	else if (!strncmp(ifname, "radio", 5))
 		phyidx = atoi(&ifname[5]);
 
+	memset(nif, 0, sizeof(nif));
+
 	if (phyidx > -1)
 	{
 		if ((d = opendir("/sys/class/net")) != NULL)
