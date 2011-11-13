@@ -57,7 +57,7 @@ end)
 				<td class="cbi-section-table-cell"><%=gw.Prefix%></td>
 			</tr>
 
-			<% if i == 1 then i = 0 elseif i == 0 then i = 1 end
+			<% i = ((i % 2) + 1)
 			end %>
 		</table>
 	</fieldset>

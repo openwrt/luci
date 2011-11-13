@@ -27,9 +27,7 @@ if luci.http.formvalue("status") == "1" then
 			metric = route.Metric,
 			etx = tonumber(route.ETX),
 			color = olsrtools.etx_color(tonumber(route.ETX)),
-			rs = i
 		}
-		if i == 1 then i = 0 elseif i == 0 then i = 1 end	
 	end
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(rv)
@@ -56,11 +54,11 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 					var route = info[idx];
 
 					s += String.format(
-						'<tr class="cbi-section-table-row cbi-rowstyle-%s">' +
+						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
 							'<td class="cbi-section-table-cell">%s</td>' +
 							'<td class="cbi-section-table-cell">' +
 			                	                '<a href="http://%s/cgi-bin-status.html">%s</a>',
-								route.rs, route.dest, route.gw, route.gw
+								route.dest, route.gw, route.gw
 						)
 
 					if (route.hostname)
@@ -94,13 +92,15 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 <legend><%:Overview of currently known routes to other OLSR nodes%></legend>
 
 <table class="cbi-section-table">
-	<tr class="cbi-section-table-titles">
-		<th class="cbi-section-table-cell"><%:Announced network%></th>
-		<th class="cbi-section-table-cell"><%:OLSR gateway%></th>
-		<th class="cbi-section-table-cell"><%:Interface%></th>
-		<th class="cbi-section-table-cell"><%:Metric%></th>
-		<th class="cbi-section-table-cell">ETX</th>
-	</tr>
+	<thead>
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Announced network%></th>
+			<th class="cbi-section-table-cell"><%:OLSR gateway%></th>
+			<th class="cbi-section-table-cell"><%:Interface%></th>
+			<th class="cbi-section-table-cell"><%:Metric%></th>
+			<th class="cbi-section-table-cell">ETX</th>
+		</tr>
+	</thead>
 
 	<tbody id="olsrd_routes">
 
@@ -121,7 +121,7 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
 		</tr>
 	<% 
-	if i == 1 then i = 0 elseif i == 0 then i = 1 end
+		i = ((i % 2) + 1)
 	end %>
 	</tbody>
 </table>

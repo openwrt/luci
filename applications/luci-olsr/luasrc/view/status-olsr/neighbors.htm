@@ -14,11 +14,10 @@ You may obtain a copy of the License at
 
 <%
 local olsrtools = require "luci.tools.olsr"
+local i = 1
 
 if luci.http.formvalue("status") == "1" then
 	local rv = {}
-	local i = 1
-
 	for k, link in ipairs(links) do
 		link.Cost = tonumber(link.Cost) or 0
 		local color = olsrtools.etx_color(link.Cost)
@@ -36,10 +35,8 @@ if luci.http.formvalue("status") == "1" then
 			nlq = link.NLQ,
 			cost = string.format("%.3f", link.Cost),
 			color = color,
-			rs = i,
 			dfgcolor = defaultgw_color
 			}
-			if i == 1 then i = 0 elseif i == 0 then i = 1 end
 	end
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(rv)
@@ -64,9 +61,9 @@ end
 					var neigh = info[idx];
 
 					s += String.format(
-						'<tr class="cbi-section-table-row cbi-rowstyle-%s">' +
+						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
 							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
-						neigh.rs, neigh.dfgcolor, neigh.rip, neigh.rip
+						neigh.dfgcolor, neigh.rip, neigh.rip
 						);
 					if (neigh.hn) {
 						s += String.format(					
@@ -105,16 +102,17 @@ end
 	<legend><%:Overview of currently established OLSR connections%></legend>
 
 	<table class="cbi-section-table">
-		<tr class="cbi-section-table-titles">
-			<th class="cbi-section-table-cell"><%:Neighbour IP%></th>
-			<th class="cbi-section-table-cell"><%:Hostname%></th>
-			<th class="cbi-section-table-cell"><%:Local interface IP%></th>
-			<th class="cbi-section-table-cell"><%:Device%></th>
-			<th class="cbi-section-table-cell">LQ</th>
-			<th class="cbi-section-table-cell">NLQ</th>
-			<th class="cbi-section-table-cell">ETX</th>
-		</tr>
-
+		<thead>
+			<tr class="cbi-section-table-titles">
+				<th class="cbi-section-table-cell"><%:Neighbour IP%></th>
+				<th class="cbi-section-table-cell"><%:Hostname%></th>
+				<th class="cbi-section-table-cell"><%:Local interface IP%></th>
+				<th class="cbi-section-table-cell"><%:Device%></th>
+				<th class="cbi-section-table-cell">LQ</th>
+				<th class="cbi-section-table-cell">NLQ</th>
+				<th class="cbi-section-table-cell">ETX</th>
+			</tr>
+		</thead>
 	
 		<tbody id="olsr_neigh_table">
 		<% 	local i = 1
@@ -138,7 +136,7 @@ end
 			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
 		</tr>
 		<% 
-			if i == 1 then i = 0 elseif i == 0 then i = 1 end
+			i = ((i % 2) + 1)
 		end %>
 		</tbody>
 	</table>
