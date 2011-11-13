@@ -578,7 +578,6 @@ encr:depends({mode="sta-wds"})
 encr:depends({mode="mesh"})
 
 cipher = s:taboption("encryption", ListValue, "cipher", translate("Cipher"))
-cipher.rmempty = false
 cipher:depends({encryption="wpa"})
 cipher:depends({encryption="wpa2"})
 cipher:depends({encryption="psk"})
