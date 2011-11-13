@@ -3,7 +3,7 @@
 #check if dyngw_plain is installed and enabled, else exit
 dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
 if [ -n "$dyngwplainlib" ]; then
-	if [ ! "$(uci -q get $dyngwplainlib.ignore)" == 0 ]; then
+	if [ "$(uci -q get $dyngwplainlib.ignore)" == 1 ]; then
 		exit 1
 	fi
 else
@@ -15,14 +15,14 @@ fi
 # check if we have a defaultroute with metric=0 in one of these tables: main table and gw-check table.
 # If not exit here.
 defroutemain="$(ip r s |grep default |grep -v metric)"
-defroutegw-check="$(ip r s t gw-check |grep default |grep -v metric)"
-if [ -z "$defroutegw-check" -a -z "$defroutemain" ]; then
+defroutegwcheck="$(ip r s t gw-check |grep default |grep -v metric)"
+if [ -z "$defroutegwcheck" -a -z "$defroutemain" ]; then
 	exit 1
 fi
 
 # get and shuffle list of testservers
 testserver="$(uci -q get freifunk-gwcheck.hosts.host)"
-[ -z "$testserver" ] && echo "No testservers found, exit" && exit 
+[ -z "$testserver" ] && echo "No testservers found, exit" && exit
 
 testserver="$(for t in $testserver; do echo $t; done | awk 'BEGIN {
 	srand();
@@ -57,16 +57,16 @@ iw=$(check_internet)
 if [ "$iw" == 0 ]; then
 	# check if we have a seperate routing table for our tests.
 	# If yes, move defaultroute to normal table and delete table gw-check
-	if [ -n "$defroutegw-check" ]; then
-		ip r a $defroutegw-check
-		ip r d $defroutegw-check t gw-check
+	if [ -n "$defroutegwcheck" ]; then
+		ip r a $defroutegwcheck
+		ip r d $defroutegwcheck t gw-check
 		ip ru del fwmark 0x2 lookup gw-check
 		for host in $testserver; do
 			iptables -t mangle -D OUTPUT -d $host -p tcp --dport 80 -j MARK --set-mark 0x2
 		done
-		logger -t gw-check "Internet is available again, restoring default route ( $defroutegw-check)"
+		logger -t gw-check "Internet is available again, restoring default route ( $defroutegwcheck)"
 	fi
-	
+
 else
 	# Check failed. If we have a defaultroute with metric=0 and it is already in table gw-check then do nothing.
 	# If there is a defaultroute with metric=0 then remove it from the main routing table and add to table gw-check.

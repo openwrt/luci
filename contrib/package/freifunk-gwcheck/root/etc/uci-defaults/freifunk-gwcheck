@@ -1,5 +1,6 @@
 #!/bin/sh
 tables="/etc/iproute2/rt_tables"
+test -d /etc/iproute2/ || mkdir -p /etc/iproute2/
 grep -q "gw-check" $tables || echo "200 gw-check" >> $tables
 test -f /etc/crontabs/root || touch /etc/crontabs/root
 grep -q "ff_olsr_test_gw.sh" /etc/crontabs/root || echo "* * * * *	/usr/sbin/ff_olsr_test_gw.sh" >> /etc/crontabs/root
