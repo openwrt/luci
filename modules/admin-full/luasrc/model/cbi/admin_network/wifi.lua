@@ -373,6 +373,7 @@ if hwtype == "mac80211" then
 	mode:value("ahdemo", translate("Pseudo Ad-Hoc (ahdemo)"))
 	mode:value("monitor", translate("Monitor"))
 	bssid:depends({mode="adhoc"})
+	bssid:depends({mode="sta"})
 
 	mp = s:taboption("macfilter", ListValue, "macfilter", translate("MAC-Address Filter"))
 	mp:depends({mode="ap"})
