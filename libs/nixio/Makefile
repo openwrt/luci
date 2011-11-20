@@ -32,7 +32,7 @@ ifeq ($(NIXIO_TLS),axtls)
 endif
 
 ifeq ($(NIXIO_TLS),openssl)
-	NIXIO_LDFLAGS += -lssl
+	NIXIO_LDFLAGS += -lssl -lcrypto
 endif
 
 ifeq ($(NIXIO_TLS),cyassl)
