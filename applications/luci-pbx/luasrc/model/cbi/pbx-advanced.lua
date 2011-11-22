@@ -232,11 +232,12 @@ s:tab("remote_usage", translate("Remote Usage"),
       translatef("You can use your SIP devices/softphones with this system from a remote location \
       as well, as long as your Internet Service Provider gives you a public IP. \
       You will be able to call other local users for free (e.g. other Analog Telephone Adapters (ATAs)) \
-      and use your VoIP providers to make calls as if you were at local to the PBX. \
+      and use your VoIP providers to make calls as if you were local to the PBX. \
       After configuring this tab, go back to where users are configured and see the new \
-      Server and Port setting you need to configure the SIP devices with. Please note that by default \
-      %s uses UDP port range %d to %d for RTP traffic (which carries voice), in case you need to configure \
-      NAT or QoS on another device.", appname, defaultrtpstart, defaultrtpend))
+      Server and Port setting you need to configure the remote SIP devices with. Please note that if this \
+      PBX is not running on your router/gateway, you will need to configure port forwarding (NAT) on your \
+      router/gateway. Please forward the ports below (SIP port and RTP range) to the IP address of the \
+      device running this PBX."))
 
 s:tab("qos",  translate("QoS Settings"), 
       translate("If you experience jittery or high latency audio during heavy downloads, you may want \
@@ -246,16 +247,21 @@ s:tab("qos",  translate("QoS Settings"),
       QoS configuration page (Network->QoS) to configure other critical QoS settings like Download \
       and Upload speed."))
 
+ringtime = s:taboption("general", Value, "ringtime", translate("Number of seconds to ring"),
+                 translate("Set the number of seconds to ring users upon incoming calls before hanging up \
+                 or going to voicemail, if the voicemail is installed and enabled."))
+ringtime.default = 30
+
 ua = s:taboption("general", Value, "useragent", translate("User Agent String"),
                  translate("This is the name that the VoIP server will use to identify itself when \
                  registering to VoIP (SIP) providers. Some providers require this to a specific \
                  string matching a hardware SIP device."))
 ua.default = appname
 
-h = s:taboption("remote_usage", Value, "externhost", translate("Domain Name/Dynamic Domain Name"),
-                translate("You should either have registered a domain name and have a static IP \
-                address, or have configured Dynamic DNS on this router. Enter a \
-                domain name which resolves to your external IP address."))
+h = s:taboption("remote_usage", Value, "externhost", translate("Domain/IP Address/Dynamic Domain"),
+                translate("You can enter your domain name, external IP address, or dynamic domain name here \
+                Please keep in mind that if your IP address is dynamic and it changes your configuration \
+                will become invalid. Hence, it's recommended to set up Dynamic DNS in this case."))
 h.datatype = "hostname"
 
 p = s:taboption("remote_usage", Value, "bindport", translate("External SIP Port"),

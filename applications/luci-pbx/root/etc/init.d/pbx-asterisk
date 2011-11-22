@@ -34,6 +34,7 @@ ASTDIRSRECURSIVE="/var/run/asterisk /var/log/asterisk /var/spool/asterisk"
 ASTDIRS="/usr/lib/asterisk"
 
 TEMPLATEDIR=/etc/${MODULENAME}-asterisk
+VMTEMPLATEDIR=/etc/${MODULENAME}-voicemail
 ASTERISKDIR=/etc/asterisk
 WORKDIR=/tmp/$MODULENAME.$$
 MD5SUMSFILE=/tmp/$MODULENAME-sums.$$
@@ -54,9 +55,15 @@ TMPL_EXTCTHRU=$TEMPLATEDIR/extensions_disa.conf.TEMPLATE
 
 TMPL_EXTENSIONS=$TEMPLATEDIR/extensions.conf.TEMPLATE
 
+TMPL_EXTVMDISABLED=$TEMPLATEDIR/extensions_voicemail_disabled.conf.TEMPLATE
+TMPL_EXTVMENABLED=$TEMPLATEDIR/extensions_voicemail_enabled.conf.TEMPLATE
+
 TMPL_EXTBLKLIST=$TEMPLATEDIR/extensions_blacklist.conf.TEMPLATE
 TMPL_EXTBLKLISTFTR=$TEMPLATEDIR/extensions_blacklist_footer.conf.TEMPLATE
 TMPL_EXTBLKLISTHDR=$TEMPLATEDIR/extensions_blacklist_header.conf.TEMPLATE
+
+TMPL_EXTDEFAULT=$TEMPLATEDIR/extensions_default.conf.TEMPLATE
+TMPL_EXTDEFAULTUSER=$TEMPLATEDIR/extensions_default_user.conf.TEMPLATE
 
 TMPL_EXTINCNTXTSIP=$TEMPLATEDIR/extensions_incoming_context_sip.conf.TEMPLATE
 TMPL_EXTINCNTXTGTALKHDR=$TEMPLATEDIR/extensions_incoming_context_gtalk_header.conf.TEMPLATE
@@ -78,11 +85,18 @@ TMPL_SIPPEER=$TEMPLATEDIR/sip_peer.TEMPLATE
 TMPL_SIPREG=$TEMPLATEDIR/sip_registration.TEMPLATE
 TMPL_SIPUSR=$TEMPLATEDIR/sip_user.TEMPLATE
 
+TMPL_MSMTPDEFAULT=$VMTEMPLATEDIR/pbx-msmtprc-defaults.TEMPLATE
+TMPL_MSMTPACCOUNT=$VMTEMPLATEDIR/pbx-msmtprc-account.TEMPLATE
+TMPL_MSMTPAUTH=$VMTEMPLATEDIR/pbx-msmtprc-account-auth.TEMPLATE
+TMPL_MSMTPACCTDFLT=$VMTEMPLATEDIR/pbx-msmtprc-account-default.TEMPLATE
+
+
 INCLUDED_FILES="$WORKDIR/extensions_blacklist.conf $WORKDIR/extensions_callthrough.conf\
                 $WORKDIR/extensions_incoming.conf  $WORKDIR/extensions_incoming_gtalk.conf\
                 $WORKDIR/extensions_user.conf      $WORKDIR/jabber_users.conf\
                 $WORKDIR/sip_peers.conf            $WORKDIR/sip_registrations.conf\
-                $WORKDIR/sip_users.conf"
+                $WORKDIR/sip_users.conf            $WORKDIR/extensions_voicemail.conf\
+                $WORKDIR/extensions_default.conf"
 
 
 # In this string, we concatenate all local users enabled to receive calls
@@ -102,12 +116,15 @@ outbound_providers=""
 # Copies the template files which we don't edit.
 copy_unedited_templates_over()
 {
-    cp $TMPL_ASTERISK    $WORKDIR/asterisk.conf
-    cp $TMPL_GTALK       $WORKDIR/gtalk.conf
-    cp $TMPL_INDICATIONS $WORKDIR/indications.conf
-    cp $TMPL_LOGGER      $WORKDIR/logger.conf
-    cp $TMPL_MANAGER     $WORKDIR/manager.conf
-    cp $TMPL_MODULES     $WORKDIR/modules.conf
+    cp $TMPL_ASTERISK      $WORKDIR/asterisk.conf
+    cp $TMPL_GTALK         $WORKDIR/gtalk.conf
+    cp $TMPL_INDICATIONS   $WORKDIR/indications.conf
+    cp $TMPL_LOGGER        $WORKDIR/logger.conf
+    cp $TMPL_MANAGER       $WORKDIR/manager.conf
+    cp $TMPL_MODULES       $WORKDIR/modules.conf
+    # If this file isn't present at this stage, voicemail is disabled.
+    [ ! -f $WORKDIR/extensions_voicemail.conf ] && \
+      cp $TMPL_EXTVMDISABLED $WORKDIR/extensions_voicemail.conf
 }
 
 # Touches all the included files, to prevent asterisk from refusing to
@@ -120,22 +137,29 @@ create_included_files()
 # Puts together all the extensions.conf related configuration.
 pbx_create_extensions_config()
 {
-    sed "s/|LOCALUSERS|/$localusers_to_ring/g" $TMPL_EXTENSIONS > $WORKDIR/extensions.conf
-    mv  $WORKDIR/inext.TMP                         $WORKDIR/extensions_incoming.conf
-    cp  $TMPL_EXTINCNTXTGTALKHDR                   $WORKDIR/extensions_incoming_gtalk.conf
-    cat $WORKDIR/outextgtalk.TMP                >> $WORKDIR/extensions_incoming_gtalk.conf 2>/dev/null
+    local ringtime
+    config_get ringtime advanced ringtime
+
+    sed "s/|RINGTIME|/$ringtime/" $TMPL_EXTENSIONS > $WORKDIR/extensions.conf
+    mv  $WORKDIR/inext.TMP                           $WORKDIR/extensions_incoming.conf
+    cp  $TMPL_EXTINCNTXTGTALKHDR                     $WORKDIR/extensions_incoming_gtalk.conf
+    cat $WORKDIR/outextgtalk.TMP                  >> $WORKDIR/extensions_incoming_gtalk.conf 2>/dev/null
     rm -f $WORKDIR/outextgtalk.TMP
-    mv  $WORKDIR/blacklist.TMP                     $WORKDIR/extensions_blacklist.conf
-    mv  $WORKDIR/userext.TMP                       $WORKDIR/extensions_user.conf
-    cp  $TMPL_EXTCTHRUHDR                          $WORKDIR/extensions_callthrough.conf
-    cat $WORKDIR/callthrough.TMP                >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    mv  $WORKDIR/blacklist.TMP                       $WORKDIR/extensions_blacklist.conf
+    mv  $WORKDIR/userext.TMP                         $WORKDIR/extensions_user.conf
+    cp  $TMPL_EXTCTHRUHDR                            $WORKDIR/extensions_callthrough.conf
+    cat $WORKDIR/callthrough.TMP                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
     rm -f $WORKDIR/callthrough.TMP
-    cat $TMPL_EXTCTHRUCHECKHDR                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
-    cat $WORKDIR/callthroughcheck.TMP           >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    cat $TMPL_EXTCTHRUCHECKHDR                    >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    cat $WORKDIR/callthroughcheck.TMP             >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
     rm -f $WORKDIR/callthroughcheck.TMP
-    cat $TMPL_EXTCTHRUCHECKFTR                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+    cat $TMPL_EXTCTHRUCHECKFTR                    >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
     rm -f $WORKDIR/outext-*.TMP
     rm -f $WORKDIR/localext.TMP
+    sed "s/|LOCALUSERS|/$localusers_to_ring/g" $TMPL_EXTDEFAULT \
+                                                   > $WORKDIR/extensions_default.conf
+    cat $WORKDIR/inextuser.TMP                    >> $WORKDIR/extensions_default.conf
+    rm -f $WORKDIR/inextuser.TMP
 }
 
 # Puts together all the sip.conf related configuration.
@@ -224,11 +248,11 @@ pbx_add_user()
     local ring
     local can_call
 
-    config_get fullname $1 fullname
+    config_get fullname    $1 fullname
     config_get defaultuser $1 defaultuser
-    config_get secret $1 secret
-    config_get ring $1 ring
-    config_get can_call $1 can_call
+    config_get secret      $1 secret
+    config_get ring        $1 ring
+    config_get can_call    $1 can_call
 
     [ -z "$defaultuser" -o -z "$secret" ] && return
     [ -z "$fullname" ] && fullname="$defaultuser"
@@ -245,7 +269,7 @@ pbx_add_user()
 
     # Add this user's configuration to the temp file containing all user configs.
     sed "s/|FULLNAME|/$fullname/" $WORKDIR/sip_user.tmp |\
-             sed "s/|SECRET|/$secret/g"                  >> $WORKDIR/sip_users.TMP
+             sed "s/|SECRET|/$secret/g"                       >> $WORKDIR/sip_users.TMP
 
     if [ "$ring" = "yes" ] ; then
         if [ -z "$localusers_to_ring" ] ; then
@@ -256,7 +280,11 @@ pbx_add_user()
     fi
 
     # Add configuration which allows local users to call each other.
-    sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_EXTOUTLOCAL >> $WORKDIR/localext.TMP
+    sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_EXTOUTLOCAL    >> $WORKDIR/localext.TMP
+
+    # Add configuration which puts calls to users through the default
+    # context, so that blacklists and voicemail take effect for this user.
+    sed "s/|DEFAULTUSER|/$defaultuser/g" $TMPL_EXTDEFAULTUSER >> $WORKDIR/inextuser.TMP
 
     rm -f $WORKDIR/sip_user.tmp
 }
@@ -556,6 +584,57 @@ pbx_fix_ownership()
 }
 
 
+# Creates voicemail config if installed and enabled.
+pbx_configure_voicemail()
+{
+    local enabled
+    local global_timeout
+    local global_email_addresses
+
+    local smtp_tls
+    local smtp_server
+    local smtp_port
+    local smtp_auth
+    local smtp_user
+    local smtp_password
+
+    config_get enabled global_voicemail enabled
+
+    # First check if voicemail is enabled.
+    [ "$enabled" != "yes" ] && exit
+
+    config_get global_timeout         global_voicemail global_timeout
+    #config_get global_email_addresses global_voicemail global_email_addresses
+    config_get smtp_auth              voicemail_smtp   smtp_auth
+    config_get smtp_tls               voicemail_smtp   smtp_tls
+    config_get smtp_server            voicemail_smtp   smtp_server
+    config_get smtp_port              voicemail_smtp   smtp_port
+    config_get smtp_user              voicemail_smtp   smtp_user
+    config_get smtp_password          voicemail_smtp   smtp_password
+
+    sed "s/|AUTH|/$smtp_auth/"   $TMPL_MSMTPDEFAULT |\
+             sed "s/|TLS|/$smtp_tls/"               >  $WORKDIR/pbx-msmtprc
+
+    sed "s/|HOST|/$smtp_server/" $TMPL_MSMTPACCOUNT |\
+             sed "s/|PORT|/$smtp_port/"             >> $WORKDIR/pbx-msmtprc
+
+    if [ "$smtp_auth" = "on" ] ; then
+        sed "s/|USER|/$smtp_user/"  $TMPL_MSMTPAUTH |\
+             sed "s/|PASSWORD|/$smtp_password/"     >> $WORKDIR/pbx-msmtprc
+    fi
+
+    cat $TMPL_MSMTPACCTDFLT                         >> $WORKDIR/pbx-msmtprc
+
+    [ ! -f /etc/pbx-msmtprc ] && cp $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc
+    diff -q  $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc 1>/dev/null \
+                                || mv $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc
+    chmod 600                                              /etc/pbx-msmtprc
+
+    # Copy over the extensions file which has voicemail enabled.
+    cp $TMPL_EXTVMENABLED                $WORKDIR/extensions_voicemail.conf
+}
+
+
 start() {
     mkdir -p $WORKDIR
 
@@ -586,7 +665,14 @@ start() {
     pbx_cook_sip_template
     pbx_cook_rtp_template
 
+    # Prepare sip.conf using settings from the "advanced" section.
+    config_unset
+    config_load ${MODULENAME}-voicemail
+    pbx_configure_voicemail    
+
     # Assemble the configuration, and copy changed files over.
+    config_unset
+    config_load ${MODULENAME}-advanced
     pbx_assemble_and_copy_config
 
     # Enforce ownership of specified files and directories.

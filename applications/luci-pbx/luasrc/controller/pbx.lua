@@ -25,5 +25,5 @@ function index()
         entry({"admin", "services", "pbx", "pbx-voip"},     cbi("pbx-voip"),     "SIP Accounts",      2)
         entry({"admin", "services", "pbx", "pbx-users"},    cbi("pbx-users"),    "User Accounts",     3)
         entry({"admin", "services", "pbx", "pbx-calls"},    cbi("pbx-calls"),    "Call Routing",      4)
-        entry({"admin", "services", "pbx", "pbx-advanced"}, cbi("pbx-advanced"), "Advanced Settings", 5)
+        entry({"admin", "services", "pbx", "pbx-advanced"}, cbi("pbx-advanced"), "Advanced Settings", 6)
 end

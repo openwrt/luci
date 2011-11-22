@@ -8,4 +8,6 @@ same => n,Set(SOURCEEXTEN=|USERNAME|)
 same => n,Goto(blacklist-call-context,s,1)
 same => n(doneblacklist),NoOp()
 same => n,Goto(disa-check-call-context,s,1)
-same => n(donedisacheck),Dial(|LOCALUSERS|,60,D(:w11111111))
+same => n(donedisacheck),Dial(|LOCALUSERS|,${RINGTIME},D(:w11111111))
+same => n,Goto(context-voicemail,s,1)
+

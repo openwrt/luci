@@ -4,6 +4,7 @@ writeprotect = yes
 clearglobalvars = no
 
 [globals]
+RINGTIME => |RINGTIME|
 
 [default]
 
@@ -14,15 +15,8 @@ exten => _X.,1,Hangup()
 [context-catch-all]
 exten   => _[!-~].,1,Dial(SIP/${EXTEN},60,r)
 
-[default-incoming-call-context]
-exten => s,1,NoOp(${CALLERID})
-exten => s,n,Set(SOURCECONTEXT=default-incoming-call-context)
-exten => s,n,Set(SOURCEEXTEN=s)
-exten => s,n,Goto(blacklist-call-context,s,1)
-exten => s,n(doneblacklist),NoOp()
-exten => s,n,Goto(disa-check-call-context,s,1)
-exten => s,n(donedisacheck),Dial(|LOCALUSERS|,60,r)
-
+#include extensions_default.conf
+#include extensions_voicemail.conf
 #include extensions_incoming.conf
 #include extensions_incoming_gtalk.conf
 #include extensions_blacklist.conf

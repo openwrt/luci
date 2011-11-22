@@ -1,7 +1,6 @@
-
-[context-incoming-|NAME|]
+[default-incoming-call-context]
 exten => s,1,NoOp(${CALLERID})
-exten => s,n,Set(SOURCECONTEXT=context-incoming-|NAME|)
+exten => s,n,Set(SOURCECONTEXT=default-incoming-call-context)
 exten => s,n,Set(SOURCEEXTEN=s)
 exten => s,n,Goto(blacklist-call-context,s,1)
 exten => s,n(doneblacklist),NoOp()

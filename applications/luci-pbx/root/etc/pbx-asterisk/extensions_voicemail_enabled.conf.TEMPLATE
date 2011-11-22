@@ -1,0 +1,15 @@
+[context-voicemail-record-greeting]
+exten =>     *789,1,Wait(2)
+exten =>     *789,n,Playback(/etc/pbx-voicemail/greeting)
+exten =>     *789,n,Wait(5)
+exten =>     *789,n,Record(/etc/pbx-voicemail/greeting:WAV,20,90,k)
+exten =>     *789,n,Wait(2)
+exten =>     *789,n,Playback(/etc/pbx-voicemail/greeting)
+
+[context-voicemail]
+exten =>     s,1,Wait(2)
+exten =>     s,2,Playback(/etc/pbx-voicemail/greeting)
+exten =>     s,3,Wait(2)
+exten =>     s,n,Record(/tmp/voicemail%d:WAV,20,180,k)
+
+exten =>     h,1,System(/etc/pbx-voicemail/pbx-send-voicemail '${RECORDED_FILE}.WAV' '${CALLERID(all)}' &)

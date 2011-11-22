@@ -84,7 +84,7 @@ m = Map (modulename, translate("PBX Main Page"),
 
 -----------------------------------------------------------------------------------------
 s = m:section(NamedSection, "connection_status", "main",
-              translate("Service Control and Connection Status"))
+              translate("PBX Service Status"))
 s.anonymous = true
 
 s:option (DummyValue, "status", translate("Service Status"))
