@@ -431,7 +431,20 @@ $(eval $(call application,ahcp,LuCI Support for AHCPd,\
 $(eval $(call application,wshaper,LuCI Support for wshaper,\
 	+PACKAGE_luci-app-wshaper:wshaper))
 
-$(eval $(call application,pbx,LuCI PBX Administration))
+$(eval $(call application,pbx,LuCI PBX Administration,\
+	+PACKAGE_luci-app-pbx:asterisk18 \
+	+PACKAGE_luci-app-pbx:asterisk18-app-authenticate \
+	+PACKAGE_luci-app-pbx:asterisk18-app-disa \
+	+PACKAGE_luci-app-pbx:asterisk18-app-setcallerid \
+	+PACKAGE_luci-app-pbx:asterisk18-app-system \
+	+PACKAGE_luci-app-pbx:asterisk18-chan-gtalk \
+	+PACKAGE_luci-app-pbx:asterisk18-codec-a-mu \
+	+PACKAGE_luci-app-pbx:asterisk18-codec-alaw \
+	+PACKAGE_luci-app-pbx:asterisk18-func-cut \
+	+PACKAGE_luci-app-pbx:asterisk18-res-clioriginate))
+
+$(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,\
+	luci-app-pbx +PACKAGE_luci-app-pbx-voicemail:msmtp))
 
 $(eval $(call application,lqtapifoss,Lantiq voip))
 
