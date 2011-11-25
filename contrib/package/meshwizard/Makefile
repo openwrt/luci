@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=meshwizard
-PKG_RELEASE:=0.0.5
+PKG_RELEASE:=0.0.6
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 

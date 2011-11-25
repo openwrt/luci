@@ -11,6 +11,9 @@ if [ ! "$has_luci_splash" == TRUE ]; then
 	exit
 fi
 
+set_defaults "luci_splash_" luci_splash.general
+uci_commitverbose "Setup general splash settings" luci_splash
+
 dhcprange=$(uci -q get meshwizard.netconfig.$net\_dhcprange)
 
 if [ "$(uci -q get meshwizard.netconfig.$net\_dhcp)" == 1 ] && [ -n "$dhcprange" ]; then

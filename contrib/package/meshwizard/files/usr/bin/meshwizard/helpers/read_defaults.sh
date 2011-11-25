@@ -15,7 +15,7 @@ for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_
 done
 
 # now read all values from the selected community profile, will override some values from the defaults before
-for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_interfacedefaults profile zone_freifunk include; do
+for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_interfacedefaults profile zone_freifunk include luci_splash; do
 	get_var profile_$community.$v
 done
 
