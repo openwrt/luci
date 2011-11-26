@@ -206,7 +206,7 @@ for k,v in pairs(validinaccounts) do
       value = self.map:get(section, self.option)
       
       if value == nil then
-         return {translate("Rings all users enabled for incoming calls")}
+         return {translate("All users enabled for incoming calls")}
       else
          return value
       end
@@ -259,7 +259,7 @@ for k,v in pairs(validoutusers) do
       value = self.map:get(section, self.option)
       
       if value == nil then
-         return {translate("Uses all providers enabled for outgoing calls")}
+         return {translate("All providers enabled for outgoing calls")}
       else
          newvalue = {}
          -- Convert internal names to user@host values.

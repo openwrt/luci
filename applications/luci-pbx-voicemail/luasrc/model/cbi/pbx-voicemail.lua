@@ -53,13 +53,8 @@ enable:value("yes", translate("Yes"))
 enable:value("no",  translate("No"))
 enable.default = "no"
 
-timeout = s:option(Value, "global_timeout",
-                   translate("Timeout before sending callers to voicemail"))
-timeout:depends("enabled", "yes")
-timeout.default = 30
-
 emails = s:option(DynamicList, "global_email_addresses",
-                  translate("Email addresses to forward to"))
+                  translate("Email addresses to forward voicemail to"))
 emails:depends("enabled", "yes")
 
 savepath = s:option(Value, "global_save_path", translate("Directory to save voicemail into"),
@@ -93,14 +88,14 @@ s = m:section(NamedSection, "voicemail_smtp", "voicemail", translate("Outgoing m
               You can also set up a GMail, Yahoo, or other 3rd party SMTP server."))
 s.anonymous = true
 
-serv = s:option(Value, "smtp_server", translate("SMTP server hostname or IP"))
+serv = s:option(Value, "smtp_server", translate("SMTP server hostname or IP address"))
 serv.datatype = "host"
 
 port = s:option(Value, "smtp_port", translate("SMTP port number"))
 port.datatype = "port"
 port.default = "25"
 
-tls = s:option(ListValue, "smtp_tls", translate("Use TLS (secure connection)"))
+tls = s:option(ListValue, "smtp_tls", translate("Secure connection using TLS"))
 tls:value("on",  translate("Yes"))
 tls:value("off", translate("No"))
 tls.default = "on"

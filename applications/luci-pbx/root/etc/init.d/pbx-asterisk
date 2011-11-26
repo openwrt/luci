@@ -601,7 +601,7 @@ pbx_configure_voicemail()
     config_get enabled global_voicemail enabled
 
     # First check if voicemail is enabled.
-    [ "$enabled" != "yes" ] && exit
+    [ "$enabled" != "yes" ] && return
 
     config_get global_timeout         global_voicemail global_timeout
     #config_get global_email_addresses global_voicemail global_email_addresses
@@ -665,7 +665,7 @@ start() {
     pbx_cook_sip_template
     pbx_cook_rtp_template
 
-    # Prepare sip.conf using settings from the "advanced" section.
+    # Prepare voicemail config.
     config_unset
     config_load ${MODULENAME}-voicemail
     pbx_configure_voicemail    
