@@ -32,8 +32,8 @@ m = Map (modulename, translate("Voicemail Setup"),
          translate("Here you can configure a global voicemail for this PBX. Since this system is \
          intended to run on embedded systems like routers, there is no local storage of voicemail - \
          it must be sent out by email. Therefore you need to configure an outgoing mail (SMTP) server \
-         (for example the SMTP server your ISP provides, or GMail), and provide a list of addresses the \
-         voicemail will be sent to."))
+         (for example your ISP's, Google's, or Yahoo's SMTP server), and provide a list of \
+         addresses that receive recorded voicemail."))
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
 function m.on_after_commit(self)
@@ -45,19 +45,19 @@ end
 ----------------------------------------------------------------------------------------------------
 s = m:section(NamedSection, "global_voicemail", "voicemail", translate("Global Voicemail Setup"),
               translate("When you enable voicemail, you will have the opportunity to specify \
-              email addresses which receive the message. You must also set up an SMTP server below."))
+              email addresses that receive recorded voicemail. You must also set up an SMTP server below."))
 s.anonymous = true
 
-enable = s:option(ListValue, "enabled", translate("Enabled"))
+enable = s:option(ListValue, "enabled", translate("Enable Voicemail"))
 enable:value("yes", translate("Yes"))
 enable:value("no",  translate("No"))
 enable.default = "no"
 
 emails = s:option(DynamicList, "global_email_addresses",
-                  translate("Email addresses to forward voicemail to"))
+                  translate("Email Addresses that Receive Voicemail"))
 emails:depends("enabled", "yes")
 
-savepath = s:option(Value, "global_save_path", translate("Directory to save voicemail into"),
+savepath = s:option(Value, "global_save_path", translate("Local Storage Directory"),
                     translate("You can also retain copies of voicemail messages on the device running \
                               your PBX. The path specified here will be created if it doesn't exist. \
                               Beware of limited space on embedded devices like routers, and enable this \
@@ -85,27 +85,27 @@ end
 s = m:section(NamedSection, "voicemail_smtp", "voicemail", translate("Outgoing mail (SMTP) Server"),
               translate("In order for this PBX to send emails containing voicemail recordings, you need to \
               set up an SMTP server here. Your ISP usually provides an SMTP server for that purpose. \
-              You can also set up a GMail, Yahoo, or other 3rd party SMTP server."))
+              You can also set up a third party SMTP server such as the one provided by Google or Yahoo."))
 s.anonymous = true
 
-serv = s:option(Value, "smtp_server", translate("SMTP server hostname or IP address"))
+serv = s:option(Value, "smtp_server", translate("SMTP Server Hostname or IP Address"))
 serv.datatype = "host"
 
-port = s:option(Value, "smtp_port", translate("SMTP port number"))
+port = s:option(Value, "smtp_port", translate("SMTP Port Number"))
 port.datatype = "port"
 port.default = "25"
 
-tls = s:option(ListValue, "smtp_tls", translate("Secure connection using TLS"))
+tls = s:option(ListValue, "smtp_tls", translate("Secure Connection Using TLS"))
 tls:value("on",  translate("Yes"))
 tls:value("off", translate("No"))
 tls.default = "on"
 
-auth = s:option(ListValue, "smtp_auth", translate("SMTP server authentication"))
+auth = s:option(ListValue, "smtp_auth", translate("SMTP Server Authentication"))
 auth:value("on",  translate("Yes"))
 auth:value("off", translate("No"))
-auth.default = "on"
+auth.default = "off"
 
-user = s:option(Value, "smtp_user", translate("SMTP user name"))
+user = s:option(Value, "smtp_user", translate("SMTP User Name"))
 user:depends("smtp_auth", "on")
 
 pwd = s:option(Value, "smtp_password", translate("SMTP Password"),
@@ -130,8 +130,7 @@ function pwd.write(self, section, value)
 end
 
 ----------------------------------------------------------------------------------------------------
-s = m:section(NamedSection, "voicemail_log", "voicemail",
-              translate("Last Sent Voicemail Log"))
+s = m:section(NamedSection, "voicemail_log", "voicemail", translate("Last Sent Voicemail Log"))
 s.anonymous = true
 
 s:option (DummyValue, "vmlog")

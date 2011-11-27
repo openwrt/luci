@@ -199,7 +199,7 @@ function maintain_firewall_rules()
 end
 
 m = Map (modulename, translate("Advanced Settings"),
-         translate("This section contains settings which do not need to be changed under \
+         translate("This section contains settings that do not need to be changed under \
          normal circumstances. In addition, here you can configure your system \
          for use with remote SIP devices, and resolve call quality issues by enabling \
          the insertion of QoS rules."))
@@ -247,7 +247,7 @@ s:tab("qos",  translate("QoS Settings"),
       QoS configuration page (Network->QoS) to configure other critical QoS settings like Download \
       and Upload speed."))
 
-ringtime = s:taboption("general", Value, "ringtime", translate("Number of seconds to ring"),
+ringtime = s:taboption("general", Value, "ringtime", translate("Number of Seconds to Ring"),
                  translate("Set the number of seconds to ring users upon incoming calls before hanging up \
                  or going to voicemail, if the voicemail is installed and enabled."))
 ringtime.default = 30
@@ -274,7 +274,7 @@ p.datatype = "port"
 
 p = s:taboption("remote_usage", Value, "rtpstart", translate("RTP Port Range Start"),
                 translate("RTP traffic carries actual voice packets. This is the start of the port range \
-                which will be used for setting up RTP communication. It's usually OK to leave this \
+                that will be used for setting up RTP communication. It's usually OK to leave this \
                 at the default value."))
 p.datatype = "port"
 p.default = defaultrtpstart

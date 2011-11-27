@@ -49,7 +49,7 @@ end
 
 m = Map (modulename, translate("Call Routing"),
          translate("This is where you indicate which Google/SIP accounts are used to call what \
-                   country/area codes, which users can use which SIP/Google accounts, how incoming \
+                   country/area codes, which users can use what SIP/Google accounts, how incoming \
                    calls are routed, what numbers can get into this PBX with a password, and what \
                    numbers are blacklisted."))
 
@@ -127,7 +127,7 @@ if     nallvalidaccounts == 0 then
 elseif nvalidoutaccounts == 0 then
    text = translate("NOTE: There are no Google or SIP provider accounts enabled for outgoing calls.")
 else
-   text = translate("If you have more than one account which can make outgoing calls, you \
+   text = translate("If you have more than one account that can make outgoing calls, you \
    should enter a list of phone numbers and prefixes in the following fields for each \
    provider listed. Invalid prefixes are removed silently, and only 0-9, X, Z, N, #, *, \
    and + are valid characters. The letter X matches 0-9, Z matches 1-9, and N matches 2-9. \
@@ -155,7 +155,7 @@ for k,v in pairs(validoutaccounts) do
       value = self.map:get(section, self.option)
       
       if value == nil then
-         return {translate("Dials any number")}
+         return {translate("Used for numbers unmatched elsewhere")}
       else
          return value
       end
@@ -184,9 +184,9 @@ if     nallvalidaccounts == 0 then
 elseif nvalidinaccounts == 0 then
    text = translate("NOTE: There are no Google or SIP provider accounts enabled for incoming calls.")
 else
-   text = translate("For each provider that receives calls, here you can restrict which users to ring \
-                on incoming calls. If the list is empty, the system will indicate that all users \
-                which are enabled for incoming calls will ring. Invalid usernames will be rejected \
+   text = translate("For each provider enabled for incoming calls, here you can restrict which users to\
+                ring on incoming calls. If the list is empty, the system will indicate that all users \
+                enabled for incoming calls will ring. Invalid usernames will be rejected \
                 silently. Also, entering a username here overrides the user's setting to not receive \
                 incoming calls. This way, you can make certain users ring only for specific providers. \
                 Entries can be made in a space-separated list, and/or one per line by hitting enter after \
@@ -236,13 +236,13 @@ if     nallvalidusers == 0 then
 elseif nvalidoutusers == 0 then
    text = translate("NOTE: There are no local user accounts enabled for outgoing calls.")
 else
-   text = translate("If you would like, you could restrict which providers users are allowed to use for \
-        outgoing calls. By default all users can use all providers. To show up in the list below the user \
-        should be allowed to make outgoing calls in the \"User Accounts\" page. Enter VoIP providers in the \
-        format username@some.host.name, as listed in \"Outgoing Calls\" above. It's easiest to copy and \
-        paste the providers from above. Invalid entries, including providers not enabled for outgoing \
-        calls, will be rejected silently. Entries can be made in a space-separated list, and/or one per \
-        line by hitting enter after every one.")
+   text = translate("For each user enabled for outgoing calls you can restrict what providers the user \
+        can use for outgoing calls. By default all users can use all providers. To show up in the list \
+        below the user should be allowed to make outgoing calls in the \"User Accounts\" page. Enter VoIP \
+        providers in the format username@some.host.name, as listed in \"Outgoing Calls\" above. It's \
+        easiest to copy and paste the providers from above. Invalid entries, including providers not \
+        enabled for outgoing calls, will be rejected silently. Entries can be made in a space-separated \
+        list, and/or one per line by hitting enter after every one.")
 end
 
 
@@ -288,7 +288,7 @@ end
 
 ----------------------------------------------------------------------------------------------------
 s = m:section(TypedSection, "callthrough_numbers", translate("Call-through Numbers"),
-        translate("Designate numbers which will be allowed to call through this system and which user's \
+        translate("Designate numbers that are allowed to call through this system and which user's \
                   privileges it will have."))
 s.anonymous = true
 s.addremove = true
@@ -335,10 +335,9 @@ end
 
 ----------------------------------------------------------------------------------------------------
 s = m:section(NamedSection, "blacklisting", "call_routing", translate("Blacklisted Numbers"),
-                 translate("Enter phone numbers that you want to decline calls from automatically. \
-                        You should probably omit the country code and any leading \
-                        zeroes, but please experiment to make sure you are blocking numbers from your \
-                        desired area successfully."))
+              translate("Enter phone numbers that you want to decline calls from automatically. \
+              You should probably omit the country code and any leading zeroes, but please \
+              experiment to make sure you are blocking numbers from your desired area successfully."))
 s.anonymous = true
 
 b = s:option(DynamicList, "blacklist1", translate("Dynamic List of Blacklisted Numbers"),

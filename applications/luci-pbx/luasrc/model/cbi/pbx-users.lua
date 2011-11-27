@@ -31,10 +31,10 @@ modulenameadvanced = "pbx-advanced"
 
         
 m = Map (modulename, translate("User Accounts"), 
-        translate("Here you must configure at least one SIP account, which you \
-                will use to register with this service. Use this account either in an analog telephony \
-                adapter (ATA), or in a SIP softphone like CSipSimple, Linphone, or Sipdroid on your \
-                Android smartphone, or X-lite or Ekiga on your computer. By default, all SIP accounts \
+        translate("Here you must configure at least one SIP account, that you \
+                will use to register with this service. Use this account either in an Analog Telephony \
+                Adapter (ATA), or in a SIP software like CSipSimple, Linphone, or Sipdroid on your \
+                smartphone, or Ekiga, Linphone, or X-Lite on your computer. By default, all SIP accounts \
                 will ring simultaneously if a call is made to one of your VoIP provider accounts or GV \
                 numbers."))
 
@@ -79,11 +79,11 @@ end
 if bindport ~= nil then
         s:option(DummyValue, "bindport", translate("Port Setting for SIP Devices"),
         translatef("If setting Server/Registrar to %s or %s does not work for you, try setting \
-        it to %s or %s and entering this port number in a separate field which specifies the \
+        it to %s or %s and entering this port number in a separate field that specifies the \
         Server/Registrar port number. Beware that some devices have a confusing \
-        setting which sets the port where SIP requests originate from on the SIP \
-        device itself (bind port). The port specified on this page is NOT this bind port \
-        but the this service listens on.", 
+        setting that sets the port where SIP requests originate from on the SIP \
+        device itself (the bind port). The port specified on this page is NOT this bind port \
+        but the port this service listens on.", 
         ipaddr, externhost, just_ipaddr, just_externhost)).default = bindport
 end
 

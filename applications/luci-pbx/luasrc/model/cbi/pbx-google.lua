@@ -37,7 +37,7 @@ m = Map (modulename, translate("Google Accounts"),
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
 function m.on_after_commit(self)
-   -- Create a field "name" for each account which identifies the account in the backend.
+   -- Create a field "name" for each account that identifies the account in the backend.
    commit = false
    m.uci:foreach(modulename, "gtalk_jabber", 
                  function(s1)
@@ -85,7 +85,7 @@ end
 
 
 p = s:option(ListValue, "register",
-             translate("Enable Incoming Calls (See Status, Message below)"),
+             translate("Enable Incoming Calls (set Status below)"),
              translate("When somebody starts voice chat with your GTalk account or calls the GVoice, \
                        number (if you have Google Voice), the call will be forwarded to any users \
                         that are online (registered using a SIP device or softphone) and permitted to \
@@ -105,14 +105,14 @@ p:value("yes", translate("Yes"))
 p:value("no",  translate("No"))
 p.default = "yes"
 
-st = s:option(ListValue, "status", translate("Account Status"))
+st = s:option(ListValue, "status", translate("Google Talk Status"))
 st:depends("register", "yes")
 st:value("dnd", translate("Do Not Disturb"))
 st:value("away",  translate("Away"))
 st:value("available",  translate("Available"))
 st.default = defaultstatus
 
-stm = s:option(Value, "statusmessage", translate("Account Status Message"),
+stm = s:option(Value, "statusmessage", translate("Google Talk Status Message"),
              translate("Avoid using anything but alpha-numeric characters, space, comma, and period."))
 stm:depends("register", "yes")
 stm.default = defaultstatusmessage

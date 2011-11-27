@@ -36,7 +36,7 @@ m = Map (modulename, translate("SIP Accounts"),
 -- Recreate the config, and restart services after changes are commited to the configuration.
 function m.on_after_commit(self)
    commit = false
-   -- Create a field "name" for each account which identifies the account in the backend.
+   -- Create a field "name" for each account that identifies the account in the backend.
    m.uci:foreach(modulename, "voip_provider", 
                  function(s1)
                     if s1.defaultuser ~= nil and s1.host ~= nil then
