@@ -2,22 +2,25 @@
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
 -%>
 <%
-require("luci.fs")
+local fs = require "luci.fs"
+local has_custom_splash = fs.access("/usr/lib/luci-splash/splashtext.html")
 
 function expand (e)        
 	return (string.gsub(e, "###([A-Z_]+)###", R))
 end
+
+local community, homepage, leasetime, limit_up, limit_down, R
+
+local contacturl = luci.dispatcher.build_url("freifunk", "contact")
 
 local c = luci.model.uci.cursor():get_all("freifunk", "community")
 if c and c.name then
@@ -33,16 +36,64 @@ else
 end
 
 local s = luci.model.uci.cursor():get_all("luci_splash", "general")
-if s and s.leasetime then
-	leasetime = s.leasetime
-else
-	leasetime = ""
+if s then
+	leasetime = s.leasetime or ""
+	limit_up = s.limit_up or nil
+	limit_down = s.limit_down or nil
 end
 
-R = {COMMUNITY = community, COMMUNITY_URL = homepage, LEASETIME = leasetime, ACCEPT = tostring(translate("Accept"))}
+local limit_text = ""
+if limit_up and limit_down then
+	limit_text = "<p>" .. translate("Your bandwidth is limited to") .. " " .. limit_down .. "/" .. limit_up ..
+	" " .. translate("KB/s (Download/Upload). You may be able to remove this limit by actively contributing " ..
+	"to this project.") .. "</p>"
+end
 
-splashtext = expand(luci.fs.readfile("/usr/lib/luci-splash/splashtext.html"))
-%>
+if has_custom_splash then
 
-<%=splashtext%>
+	R = {
+		COMMUNITY = community,
+		COMMUNITY_URL = homepage,
+		LEASETIME = leasetime,
+		ACCEPT = tostring(translate("Accept")),
+		LIMIT = limit_text,
+		CONTACTURL = contacturl
+	}
+
+	local splashtext = expand(fs.readfile("/usr/lib/luci-splash/splashtext.html"))
+	%>
+	<%=splashtext%>
+
+<% else %>
+
+	<h2><a id="content" name="content"><%:Welcome%></a></h2>
+
+	<p><%:You are now connected to the free wireless mesh network%> <a href="<%=homepage%>"><%=community%></a>.
+	<%:Please note that we are not an internet service provider but an experimental community network.%></p>
+	<p><%:Access to the internet might be possible nevertheless, because some activists of this project share their
+	private	internet connections. These few connections are shared between all users. That means available bandwidth
+	is limited and because of this we ask you not to do any of the following:%></p>
+	<ul>
+		<li><%:use filesharing applications on this network%></li>
+		<li><%:waste bandwidth with unneccesary downloads or streams%></li>
+		<li><%:perform any kind of illegal activities%></li>
+	</ul>
+	<br />
+
+	<% if limit_up and limit_down then %>
+		<%=limit_text%>
+	<% end %>
+	
+	<p><%:If you use this network on a regular basis we ask for your support:%></p>
+	<ul>
+		<li><a href="<%=homepage%>"><%:Become an active member of this community and help by operating your own node%></a></li>
+		<li><a href="<%=contacturl%>"><%:Contact%></a> <%:the owner of this access point.%></li>
+		<li><%:Donate some money to help us keep this project alive.%></li>
+		<li><%:If you operate your own wifi equipment use channels different from ours.%>
+	</ul>
+	<br/><p><%:By accepting these rules you can use this network for%> <%=leasetime%> 
+	<%:hour(s). After this time you need to accept these rules again.%>
+<% end %>
+
+
 

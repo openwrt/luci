@@ -17,7 +17,10 @@ luci.i18n.loadc("splash")
 
 local splashtextfile = "/usr/lib/luci-splash/splashtext.html" 
 
-f = SimpleForm("splashtext", translate("Edit Splash text"), translate("You can change the text that is displayed to clients here.<br /> It is possible to use the following markers: ###COMMUNITY###, ###COMMUNITY_URL###, ###LEASETIME### and ###ACCEPT###.<br />Click here to <a href='/luci/splash/'>test the splash page</a> after you saved it."))
+f = SimpleForm("splashtext", translate("Edit Splash text"),
+	translate("You can enter your own text that is displayed to clients here.<br />" ..
+	"It is possible to use the following markers: " ..
+	"###COMMUNITY###, ###COMMUNITY_URL###, ###CONTACTURL###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###."))
 
 t = f:field(TextValue, "text")
 t.rmempty = true
