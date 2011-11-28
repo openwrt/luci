@@ -41,17 +41,17 @@ exec.addremove = true
 exec.anonymous = true
 
 -- collectd_exec_input.cmdline
-exec_cmdline = exec:option( Value, "cmdline", translate("Command line") )
+exec_cmdline = exec:option( Value, "cmdline", translate("Script") )
 exec_cmdline.default = "/usr/bin/stat-dhcpusers"
 
 -- collectd_exec_input.cmdline
-exec_cmduser = exec:option( Value, "cmduser", translate("Run as user") )
+exec_cmduser = exec:option( Value, "cmduser", translate("User") )
 exec_cmduser.default  = "nobody"
 exec_cmduser.rmempty  = true
 exec_cmduser.optional = true
 
 -- collectd_exec_input.cmdline
-exec_cmdgroup = exec:option( Value, "cmdgroup", translate("Run as group") )
+exec_cmdgroup = exec:option( Value, "cmdgroup", translate("Group") )
 exec_cmdgroup.default  = "nogroup"
 exec_cmdgroup.rmempty  = true
 exec_cmdgroup.optional = true
@@ -70,17 +70,17 @@ notify.addremove = true
 notify.anonymous = true
 
 -- collectd_notify_input.cmdline
-notify_cmdline = notify:option( Value, "cmdline", translate("Command line") )
+notify_cmdline = notify:option( Value, "cmdline", translate("Script") )
 notify_cmdline.default = "/usr/bin/stat-dhcpusers"
 
 -- collectd_notify_input.cmdline
-notify_cmduser = notify:option( Value, "cmduser", translate("Run as user") )
+notify_cmduser = notify:option( Value, "cmduser", translate("User") )
 notify_cmduser.default  = "nobody"
 notify_cmduser.rmempty  = true
 notify_cmduser.optional = true
 
 -- collectd_notify_input.cmdline
-notify_cmdgroup = notify:option( Value, "cmdgroup", translate("Run as group") )
+notify_cmdgroup = notify:option( Value, "cmdgroup", translate("Group") )
 notify_cmdgroup.default  = "nogroup"
 notify_cmdgroup.rmempty  = true
 notify_cmdgroup.optional = true
