@@ -128,7 +128,7 @@ elseif nvalidoutaccounts == 0 then
    text = translate("NOTE: There are no Google or SIP provider accounts enabled for outgoing calls.")
 else
    text = translate("If you have more than one account that can make outgoing calls, you \
-   should enter a list of phone numbers and prefixes in the following fields for each \
+   should enter a list of phone numbers and/or prefixes in the following fields for each \
    provider listed. Invalid prefixes are removed silently, and only 0-9, X, Z, N, #, *, \
    and + are valid characters. The letter X matches 0-9, Z matches 1-9, and N matches 2-9. \
    For example to make calls to Germany through a provider, you can enter 49. To make calls \
@@ -136,10 +136,10 @@ else
    calls to an area code like New York's 646, you can enter 646NXXXXXX for that \
    provider. You should leave one account with an empty list to make calls with \
    it by default, if no other provider's prefixes match. The system will automatically \
-   replace an empty list with a message that the provider dials all numbers. Be as specific as \
-   possible (i.e. 1NXXNXXXXXX is better than 1). Please note all international dial codes \
-   are discarded (e.g. 00, 011, 010, 0011). Entries can be made in a space-separated \
-   list, and/or one per line by hitting enter after every one.")
+   replace an empty list with a message that the provider dials all numbers not matched by another \
+   provider's prefixes. Be as specific as possible (i.e. 1NXXNXXXXXX is better than 1). Please note \
+   all international dial codes are discarded (e.g. 00, 011, 010, 0011). Entries can be made in a \
+   space-separated list, and/or one per line by hitting enter after every one.")
 end
 
 
@@ -155,7 +155,7 @@ for k,v in pairs(validoutaccounts) do
       value = self.map:get(section, self.option)
       
       if value == nil then
-         return {translate("Used for numbers unmatched elsewhere")}
+         return {translate("Dials numbers unmatched elsewhere")}
       else
          return value
       end
@@ -206,7 +206,7 @@ for k,v in pairs(validinaccounts) do
       value = self.map:get(section, self.option)
       
       if value == nil then
-         return {translate("All users enabled for incoming calls")}
+         return {translate("Rings users enabled for incoming calls")}
       else
          return value
       end
@@ -259,7 +259,7 @@ for k,v in pairs(validoutusers) do
       value = self.map:get(section, self.option)
       
       if value == nil then
-         return {translate("All providers enabled for outgoing calls")}
+         return {translate("Uses providers enabled for outgoing calls")}
       else
          newvalue = {}
          -- Convert internal names to user@host values.

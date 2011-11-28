@@ -32,7 +32,9 @@ defaultstatusmessage = "PBX online, may lose messages"
 
 m = Map (modulename, translate("Google Accounts"),
          translate("This is where you set up your Google (Talk and Voice) Accounts, in order to start \
-                using them for dialing and receiving calls (voice chat and real phone calls). Click \"Add\" \
+                using them for dialing and receiving calls (voice chat and real phone calls). Please \
+                make at least one voice call using the Google Talk plugin installable through the \
+                GMail interface, and then log out from your account everywhere. Click \"Add\" \
                 to add as many accounts as you wish."))
 
 -- Recreate the config, and restart services after changes are commited to the configuration.
