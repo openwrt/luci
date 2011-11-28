@@ -28,8 +28,9 @@ enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_processes.processes (Process)
-processes = s:option( Value, "Processes", translate("Monitor processes") )
-processes.default = "olsrd bmxd httpd dnsmasq dropbear tinc"
+processes = s:option( Value, "Processes", translate("Monitor processes"),
+	translate("Processes to monitor seperated by space") )
 processes:depends( "enable", 1 )
+processes.default = "uhttpd dropbear dnsmasq"
 
 return m

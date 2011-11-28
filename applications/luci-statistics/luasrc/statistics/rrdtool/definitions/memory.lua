@@ -16,7 +16,7 @@ function rrdargs( graph, host, plugin, plugin_instance, dtype )
 	return {
 		title = "%H: Memory usage",
 		vlabel = "MB",
-		number_format = "%5.1lf%%",
+		number_format = "%5.1lf%s",
 		data = {
 			instances = { 
 				memory = { "free", "buffered", "cached", "used" }
