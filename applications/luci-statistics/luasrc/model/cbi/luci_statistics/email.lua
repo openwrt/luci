@@ -31,19 +31,19 @@ enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_email.socketfile (SocketFile)
-socketfile = s:option( Value, "SocketFile" )
+socketfile = s:option( Value, "SocketFile", translate("Socket file") )
 socketfile.default = "/var/run/collect-email.sock"
 socketfile:depends( "enable", 1 )
 
 -- collectd_email.socketgroup (SocketGroup)
-socketgroup = s:option( Value, "SocketGroup" )
+socketgroup = s:option( Value, "SocketGroup", translate("Socket group") )
 socketgroup.default  = "nobody"
 socketgroup.rmempty  = true
 socketgroup.optional = true
 socketgroup:depends( "enable", 1 )
 
 -- collectd_email.socketperms (SocketPerms)
-socketperms = s:option( Value, "SocketPerms" )
+socketperms = s:option( Value, "SocketPerms", translate("Socket permissions") )
 socketperms.default  = "0770"
 socketperms.rmempty  = true
 socketperms.optional = true

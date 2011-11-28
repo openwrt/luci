@@ -34,7 +34,7 @@ irqs.optional = true
 irqs:depends( "enable", 1 )
 
 -- collectd_irq.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected" )
+ignoreselected = s:option( Flag, "IgnoreSelected", translate("Monitor all except specified") )
 ignoreselected.default  = 0
 ignoreselected.optional = "true"
 ignoreselected:depends( "enable", 1 )

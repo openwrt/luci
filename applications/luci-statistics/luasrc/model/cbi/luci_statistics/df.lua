@@ -46,7 +46,7 @@ fstypes.optional = true
 fstypes:depends( "enable", 1 )
 
 -- collectd_df.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected" )
+ignoreselected = s:option( Flag, "IgnoreSelected", translate("Monitor all except specified") )
 ignoreselected.default = 0
 ignoreselected:depends( "enable", 1 )
 

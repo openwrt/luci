@@ -31,7 +31,7 @@ enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_interface.interfaces (Interface)
-interfaces = s:option( MultiValue, "Interfaces" )
+interfaces = s:option( MultiValue, "Interfaces", translate("Monitor interfaces") )
 interfaces.widget = "select"
 interfaces.size   = 5
 interfaces:depends( "enable", 1 )
@@ -40,7 +40,7 @@ for k, v in pairs(luci.sys.net.devices()) do
 end
 
 -- collectd_interface.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected" )
+ignoreselected = s:option( Flag, "IgnoreSelected", translate("Monitor all except specified") )
 ignoreselected.default = 0
 ignoreselected:depends( "enable", 1 )
 

@@ -88,7 +88,7 @@ for i, v in ipairs(devices) do
 end
 
 -- collectd_netlink.ignoreselected (IgnoreSelected)
-ignoreselected = s:option( Flag, "IgnoreSelected" )
+ignoreselected = s:option( Flag, "IgnoreSelected", translate("Monitor all except specified") )
 ignoreselected.default = 0
 ignoreselected:depends( "enable", 1 )
 

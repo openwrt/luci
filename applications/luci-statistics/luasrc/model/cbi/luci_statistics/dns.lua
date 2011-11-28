@@ -31,7 +31,7 @@ enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
 -- collectd_dns.interfaces (Interface)
-interfaces = s:option( MultiValue, "Interfaces" )
+interfaces = s:option( MultiValue, "Interfaces", translate("Monitor interfaces") )
 interfaces.widget = "select"
 interfaces.size   = 5
 interfaces:depends( "enable", 1 )
