@@ -29,7 +29,7 @@ enable.default = 0
 
 -- collectd_processes.processes (Process)
 processes = s:option( Value, "Processes", translate("Monitor processes"),
-	translate("Processes to monitor seperated by space") )
+	translate("Processes to monitor separated by space") )
 processes:depends( "enable", 1 )
 processes.default = "uhttpd dropbear dnsmasq"
 
