@@ -40,6 +40,7 @@ function index()
 		rrdtool		= _("RRDTool"),
 		network		= _("Network"),
 		unixsock	= _("UnixSock"),
+		conntrack       = _("Conntrack"),
 		csv			= _("CSV Output"),
 		exec		= _("Exec"),
 		email		= _("Email"),
@@ -50,6 +51,7 @@ function index()
 		processes	= _("Processes"),
 		load		= _("System Load"),
 		interface	= _("Interfaces"),
+		memory		= _("Memory"),
 		netlink		= _("Netlink"),
 		iptables	= _("Firewall"),
 		tcpconns	= _("TCP Connections"),
@@ -62,8 +64,8 @@ function index()
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "rrdtool", "network", "unixsock", "csv" },
-		system  = { "exec", "email", "cpu", "df", "disk", "irq", "processes", "load" },
-		network = { "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless", "olsrd" }
+		system  = { "exec", "email", "cpu", "df", "disk", "irq", "memory", "processes", "load" },
+		network = { "interface", "netlink", "iptables", "conntrack", "tcpconns", "ping", "dns", "wireless", "olsrd" }
 	}
 
 	-- create toplevel menu nodes

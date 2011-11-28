@@ -192,6 +192,7 @@ function _list_expand( c, l, nopad )
 				k = n:gsub("(%w+)s", "%1")
 			end
 
+			
 			str = str .. _expand( c[n], k, nopad )
 		end
 	end
@@ -253,6 +254,12 @@ end
 plugins = {
 	collectd = {
 		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads", "Hostname" },
+		{ },
+		{ }
+	},
+
+	conntrack = {
+		{ },
 		{ },
 		{ }
 	},
@@ -326,6 +333,8 @@ plugins = {
 		{ },
 		{ "Interfaces", "WatchAdds" }
 	},
+
+	memory = { },
 
 	netlink	= {
 		{ },
