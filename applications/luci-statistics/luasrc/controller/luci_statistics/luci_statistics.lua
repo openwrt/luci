@@ -55,14 +55,15 @@ function index()
 		tcpconns	= _("TCP Connections"),
 		ping		= _("Ping"),
 		dns			= _("DNS"),
-		wireless	= _("Wireless")
+		wireless	= _("Wireless"),
+		olsrd		= _("OLSRd")
 	}
 
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "rrdtool", "network", "unixsock", "csv" },
 		system  = { "exec", "email", "cpu", "df", "disk", "irq", "processes", "load" },
-		network = { "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless" }
+		network = { "interface", "netlink", "iptables", "tcpconns", "ping", "dns", "wireless", "olsrd" }
 	}
 
 	-- create toplevel menu nodes
@@ -170,7 +171,8 @@ function statistics_networkplugins()
 		tcpconns	= translate("TCP Connections"),
 		ping		= translate("Ping"),
 		dns			= translate("DNS"),
-		wireless	= translate("Wireless")
+		wireless	= translate("Wireless"),
+		olsrd		= translate("OLSRd")
 	}
 
 	luci.template.render("admin_statistics/networkplugins", {plugins=plugins})
@@ -190,6 +192,8 @@ function statistics_render()
 	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
 	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
+
+	local is_index = false
 
 	-- deliver image
 	if vars.img then
@@ -216,18 +220,22 @@ function statistics_render()
 
 	-- no instance requested, find all instances
 	if #instances == 0 then
-		instances = { graph.tree:plugin_instances( plugin )[1] }
+		--instances = { graph.tree:plugin_instances( plugin )[1] }
+		instances = graph.tree:plugin_instances( plugin )
+		is_index = true
 
 	-- index instance requested
 	elseif instances[1] == "-" then
 		instances[1] = ""
+		is_index = true
 	end
 
 
 	-- render graphs
 	for i, inst in ipairs( instances ) do
-		for i, img in ipairs( graph:render( plugin, inst ) ) do
+		for i, img in ipairs( graph:render( plugin, inst, is_index ) ) do
 			table.insert( images, graph:strippngpath( img ) )
+			images[images[#images]] = inst
 		end
 	end
 
@@ -235,6 +243,7 @@ function statistics_render()
 		images           = images,
 		plugin           = plugin,
 		timespans        = spans,
-		current_timespan = span
+		current_timespan = span,
+		is_index         = is_index
 	} )
 end

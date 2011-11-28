@@ -31,7 +31,9 @@ $Id$
 
 <div style="text-align: center">
 	<% for i, img in ipairs(images) do %>
+		<% if is_index then %><a href="<%=pcdata(images[img])%>"><% end %>
 		<img src="<%=REQUEST_URI%>?img=<%=img%>" />
+		<% if is_index then %></a><% end %>
 		<br />
 	<% end %>
 </div>
