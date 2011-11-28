@@ -17,7 +17,6 @@ module("luci.statistics.rrdtool", package.seeall)
 
 require("luci.statistics.datatree")
 require("luci.statistics.rrdtool.colors")
-require("luci.statistics.rrdtool.definitions")
 require("luci.statistics.i18n")
 require("luci.model.uci")
 require("luci.util")
@@ -37,7 +36,6 @@ function Graph.__init__( self, timespan, opts )
 
 	-- helper classes
 	self.colors = luci.statistics.rrdtool.colors.Instance()
-	self.defs   = luci.statistics.rrdtool.definitions.Instance()
 	self.tree   = luci.statistics.datatree.Instance()
 	self.i18n   = luci.statistics.i18n.Instance( self )
 
@@ -271,7 +269,9 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 		end
 
 		-- create line1 statement
-		_tif( _args, "LINE1:%s_%s#%s:%s", source.sname, var, line_color, legend )
+		_tif( _args, "LINE%d:%s_%s#%s:%s",
+			source.noarea and 2 or 1,
+			source.sname, var, line_color, legend )
 	end
 
 	-- local helper: create gprint statements
@@ -375,6 +375,8 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 				local dsname  = dtype .. "_" .. dinst:gsub("[^%w]","_") .. "_" .. dsource
 				local altname = dtype .. "__" .. dsource
 
+				--assert(dtype ~= "ping", dsname .. " or " .. altname)
+
 				-- find datasource options
 				local dopts = { }
 
@@ -399,6 +401,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 					total    = dopts.total   or false,
 					overlay  = dopts.overlay or false,
 					noarea   = dopts.noarea  or false,
+					title    = dopts.title   or nil,
 					ds       = dsource,
 					type     = dtype,
 					instance = dinst,
@@ -444,9 +447,9 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- store title and vlabel
 		_ti( _args, "-t" )
-		_ti( _args, opts.title  or self.i18n:title( plugin, plugin_instance, _sources[1].type, instance ) )
+		_ti( _args, self.i18n:title( plugin, plugin_instance, _sources[1].type, instance, opts.title ) )
 		_ti( _args, "-v" )
-		_ti( _args, opts.vlabel or self.i18n:label( plugin, plugin_instance, _sources[1].type, instance ) )
+		_ti( _args, self.i18n:label( plugin, plugin_instance, _sources[1].type, instance, opts.vlabel ) )
 
 		-- store additional rrd options
 		if opts.rrdopts then
@@ -494,7 +497,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 	return defs
 end
 
-function Graph.render( self, plugin, plugin_instance )
+function Graph.render( self, plugin, plugin_instance, is_index )
 
 	dtype_instances = dtype_instances or { "" }
 	local pngs = { }
@@ -509,7 +512,7 @@ function Graph.render( self, plugin, plugin_instance )
 		local _images = { }
 
 		-- get diagram definitions
-		for i, opts in ipairs( self:_forcelol( def.rrdargs( self, plugin, plugin_instance ) ) ) do
+		for i, opts in ipairs( self:_forcelol( def.rrdargs( self, plugin, plugin_instance, nil, is_index ) ) ) do
 
 			_images[i] = { }
 
@@ -531,75 +534,6 @@ function Graph.render( self, plugin, plugin_instance )
 		for y = 1, #_images[1] do
 			for x = 1, #_images do
 				table.insert( pngs, _images[x][y] )
-			end
-		end
-	else
-
-		-- no graph handler, iterate over data types
-		for i, dtype in ipairs( self.tree:data_types( plugin, plugin_instance ) ) do
-
-			-- check for data type handler
-			local dtype_def = plugin_def .. "." .. dtype
-			local stat, def = pcall( require, dtype_def )
-
-			if stat and def and type(def.rrdargs) == "function" then
-
-				-- temporary image matrix
-				local _images = { }
-
-				-- get diagram definitions
-				for i, opts in ipairs( self:_forcelol( def.rrdargs( self, plugin, plugin_instance, dtype ) ) ) do
-
-					_images[i] = { }
-
-					-- get diagram definition instances
-					local diagrams = self:_generic( opts, plugin, plugin_instance, dtype, i )
-
-					-- render all diagrams
-					for j, def in ipairs( diagrams ) do
-
-						-- remember image
-						_images[i][j] = def[1]
-
-						-- exec
-						self:_rrdtool( def )
-					end
-				end
-
-				-- remember images - XXX: fixme (will cause probs with asymmetric data)
-				for y = 1, #_images[1] do
-					for x = 1, #_images do
-						table.insert( pngs, _images[x][y] )
-					end
-				end
-			else
-
-				-- no data type handler, fall back to builtin definition
-				if type(self.defs.definitions[dtype]) == "table" then
-
-					-- iterate over data type instances
-					for i, inst in ipairs( self.tree:data_instances( plugin, plugin_instance, dtype ) ) do
-
-						local title = self.i18n:title( plugin, plugin_instance, dtype, inst )
-						local label = self.i18n:label( plugin, plugin_instance, dtype, inst )
-						local png   = self:mkpngpath( plugin, plugin_instance, dtype, inst )
-						local rrd   = self:mkrrdpath( plugin, plugin_instance, dtype, inst )
-						local args  = { png, "-t", title, "-v", label }
-
-						for i, o in ipairs(self.defs.definitions[dtype]) do
-							-- XXX: this is a somewhat ugly hack to exclude min/max RRAs when rrasingle is on
-							if not ( self.opts.rrasingle and ( o:match("_min") or o:match("_max") ) ) then
-								table.insert( args, o )
-							end
-						end
-
-						-- remember image
-						table.insert( pngs, png )
-
-						-- exec
-						self:_rrdtool( args, rrd )
-					end
-				end
 			end
 		end
 	end
