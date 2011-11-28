@@ -37,35 +37,35 @@ function index()
 		s_system	= _("System plugins"),
 		s_network	= _("Network plugins"),
 
-		rrdtool		= _("RRDTool"),
-		network		= _("Network"),
-		unixsock	= _("UnixSock"),
-		conntrack       = _("Conntrack"),
-		csv			= _("CSV Output"),
-		exec		= _("Exec"),
-		email		= _("Email"),
+		conntrack	= _("Conntrack"),
 		cpu			= _("Processor"),
+		csv			= _("CSV Output"),
 		df			= _("Disk Space Usage"),
 		disk		= _("Disk Usage"),
-		irq			= _("Interrupts"),
-		processes	= _("Processes"),
-		load		= _("System Load"),
+		dns			= _("DNS"),
+		email		= _("Email"),
+		exec		= _("Exec"),
 		interface	= _("Interfaces"),
+		iptables	= _("Firewall"),
+		irq			= _("Interrupts"),
+		load		= _("System Load"),
 		memory		= _("Memory"),
 		netlink		= _("Netlink"),
-		iptables	= _("Firewall"),
-		tcpconns	= _("TCP Connections"),
+		network		= _("Network"),
+		olsrd		= _("OLSRd"),
 		ping		= _("Ping"),
-		dns			= _("DNS"),
-		wireless	= _("Wireless"),
-		olsrd		= _("OLSRd")
+		processes	= _("Processes"),
+		rrdtool		= _("RRDTool"),
+		tcpconns	= _("TCP Connections"),
+		unixsock	= _("UnixSock"),
+		wireless	= _("Wireless")
 	}
 
 	-- our collectd menu
 	local collectd_menu = {
-		output  = { "rrdtool", "network", "unixsock", "csv" },
-		system  = { "exec", "email", "cpu", "df", "disk", "irq", "memory", "processes", "load" },
-		network = { "interface", "netlink", "iptables", "conntrack", "tcpconns", "ping", "dns", "wireless", "olsrd" }
+		output  = { "csv", "network", "rrdtool", "unixsock" },
+		system  = { "cpu", "df", "disk", "email", "exec", "irq", "load", "memory", "processes" },
+		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "ping", "tcpconns", "wireless" }
 	}
 
 	-- create toplevel menu nodes
