@@ -192,7 +192,6 @@ function _list_expand( c, l, nopad )
 				k = n:gsub("(%w+)s", "%1")
 			end
 
-			
 			str = str .. _expand( c[n], k, nopad )
 		end
 	end
@@ -334,7 +333,11 @@ plugins = {
 		{ "Interfaces", "WatchAdds" }
 	},
 
-	memory = { },
+	memory = { 
+		{ },
+		{ },
+		{ }
+	},
 
 	netlink	= {
 		{ },
