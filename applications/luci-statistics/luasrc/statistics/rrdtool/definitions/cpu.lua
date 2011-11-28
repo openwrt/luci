@@ -9,15 +9,18 @@ You may obtain a copy of the License at
 
         http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
+$Id: cpu.lua 2274 2008-06-03 23:15:16Z jow $
 
 ]]--
 
-module("luci.statistics.rrdtool.definitions.cpu.cpu",package.seeall)
+module("luci.statistics.rrdtool.definitions.cpu",package.seeall)
 
 function rrdargs( graph, host, plugin, plugin_instance, dtype )
 
 	return {
+		title = "%H: Processor usage on core #%pi",
+		vlabel = "Percent",
+		number_format = "%5.1lf%%",
 		data = {
 			instances = { 
 				cpu = { "idle", "user", "system", "nice" }

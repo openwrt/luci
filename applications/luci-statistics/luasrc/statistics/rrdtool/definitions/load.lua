@@ -9,24 +9,25 @@ You may obtain a copy of the License at
 
         http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
+$Id: load.lua 2329 2008-06-08 21:51:55Z jow $
 
 ]]--
 
-module("luci.statistics.rrdtool.definitions.load.load", package.seeall)
+module("luci.statistics.rrdtool.definitions.load", package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
-		data = {
+		title = "%H: Load", vlabel = "Load",
+		number_format = "%5.2lf", data = {
 			sources = {
 				load = { "shortterm", "midterm", "longterm" }
 			},
 
 			options = {
-				load__shortterm = { color = "ff0000" },
-				load__midterm   = { color = "ff6600" },
-				load__longterm  = { color = "ffaa00" }
+				load__shortterm = { color = "ff0000", title = "1 minute", noarea = true },
+				load__midterm   = { color = "ff6600", title = "5 minutes", noarea = true },
+				load__longterm  = { color = "ffaa00", title = "15 minutes", noarea = true }
 			}
 		}
 	}

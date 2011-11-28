@@ -26,6 +26,8 @@ function rrdargs( graph, host, plugin, plugin_instance )
 		per_instance = true,
 
 		-- diagram data description
+		title = "%H: Signal to Noise Ratio on %pi",
+		vlabel = "dBm",
 		data = {
 			types = { "signal_noise", "signal_power" },
 
@@ -33,12 +35,14 @@ function rrdargs( graph, host, plugin, plugin_instance )
 			options = {
 				signal_power = {
 					overlay = true,		-- don't summarize
-					color   = "0000ff"	-- power is blue
+					color   = "0000ff",	-- power is blue
+					title = "Signal",
 				},
 
 				signal_noise = {
 					overlay = true,		-- don't summarize
-					color   = "ff0000"	-- noise is red
+					color   = "ff0000",	-- noise is red
+					title = "Noise",
 				}
 			}
 		}
@@ -52,6 +56,8 @@ function rrdargs( graph, host, plugin, plugin_instance )
 
 		-- draw this diagram for each data instance
 		per_instance = true,
+		title = "%H: Signal Quality on %pi",
+		vlabel = "n",
 
 		-- diagram data description
 		data = {
@@ -61,7 +67,8 @@ function rrdargs( graph, host, plugin, plugin_instance )
 			options = {
 				signal_quality = {
 					noarea = true,		-- don't draw area
-					color  = "0000ff"	-- quality is blue
+					color  = "0000ff",	-- quality is blue
+					title = "Signal Quality"
 				}
 			}
 		}

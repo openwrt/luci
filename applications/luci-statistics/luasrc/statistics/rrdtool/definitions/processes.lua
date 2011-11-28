@@ -15,10 +15,12 @@ $Id$
 
 module("luci.statistics.rrdtool.definitions.processes", package.seeall)
 
-function rrdargs( graph, plugin, plugin_instance )
+function rrdargs( graph, plugin, plugin_instance, dtype, is_index )
 
-	if plugin_instance == "" then
+	if is_index then 
 		return {
+			title = "%H: Processes",
+			vlabel = "Processes/s",
 			data = {
 				instances = {
 					ps_state = {
@@ -38,8 +40,9 @@ function rrdargs( graph, plugin, plugin_instance )
 		}
 	else
 		return {
-
 			{
+				title = "%H: CPU time used by %pi",
+				vlabel = "Jiffies",
 				data = {
 					sources = {
 						ps_cputime = { "syst", "user" }
@@ -60,6 +63,8 @@ function rrdargs( graph, plugin, plugin_instance )
 			},
 
 			{
+				title = "%H: Threads and processes belonging to %pi",
+				vlabel = "Count",
 				data = {
 					sources = {
 						ps_count = { "threads", "processes" }
@@ -73,6 +78,8 @@ function rrdargs( graph, plugin, plugin_instance )
 			},
 
 			{
+				title = "%H: Page faults in %pi",
+				vlabel = "Pagefaults",
 				data = {
 					sources = {
 						ps_pagefaults = { "minflt", "majflt" }
@@ -86,8 +93,9 @@ function rrdargs( graph, plugin, plugin_instance )
 			},
 
 			{
-				number_format = "%5.1lf%s",
-
+				title = "%H: Virtual memory size of %pi",
+				vlabel = "Bytes",
+				number_format = "%5.1lf%sB",
 				data = {
 					types = { "ps_rss" },
 
