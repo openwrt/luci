@@ -50,21 +50,15 @@ function Instance._translate( self, key, alt )
 	end
 end
 
-function Instance.title( self, plugin, pinst, dtype, dinst )
+function Instance.title( self, plugin, pinst, dtype, dinst, user_title )
 
-	local title = self:_translate(
-		string.format( "stat_dg_title_%s_%s_%s", plugin, pinst, dtype ),
-		self:_translate(
-			string.format( "stat_dg_title_%s_%s", plugin, pinst ),
-			self:_translate(
-				string.format( "stat_dg_title_%s__%s", plugin, dtype ),
-				self:_translate(
-					string.format( "stat_dg_title_%s", plugin ),
-					self.graph:_mkpath( plugin, pinst, dtype )
-				)
-			)
-		)
-	)
+	local title = user_title or
+		"p=%s/pi=%s/dt=%s/di=%s" % {
+			plugin,
+			(pinst and #pinst > 0) and pinst or "(nil)",
+			(dtype and #dtype > 0) and dtype or "(nil)",
+			(dinst and #dinst > 0) and dinst or "(nil)"
+		}
 
 	return self:_subst( title, {
 		plugin = plugin,
@@ -75,21 +69,13 @@ function Instance.title( self, plugin, pinst, dtype, dinst )
 
 end
 
-function Instance.label( self, plugin, pinst, dtype, dinst )
+function Instance.label( self, plugin, pinst, dtype, dinst, user_label )
 
-	local label = self:_translate(
-		string.format( "stat_dg_label_%s_%s_%s", plugin, pinst, dtype ),
-		self:_translate(
-			string.format( "stat_dg_label_%s_%s", plugin, pinst ),
-			self:_translate(
-				string.format( "stat_dg_label_%s__%s", plugin, dtype ),
-				self:_translate(
-					string.format( "stat_dg_label_%s", plugin ),
-					self.graph:_mkpath( plugin, pinst, dtype )
-				)
-			)
-		)
-	)
+	local label = user_label or
+		"dt=%s/di=%s" % {
+			(dtype and #dtype > 0) and dtype or "(nil)",
+			(dinst and #dinst > 0) and dinst or "(nil)"
+		}
 
 	return self:_subst( label, {
 		plugin = plugin,
@@ -102,7 +88,7 @@ end
 
 function Instance.ds( self, source )
 
-	local label = self:_translate(
+	local label = source.title or self:_translate(
 		string.format( "stat_ds_%s_%s_%s", source.type, source.instance, source.ds ),
 		self:_translate(
 			string.format( "stat_ds_%s_%s", source.type, source.instance ),
@@ -121,4 +107,5 @@ function Instance.ds( self, source )
 		dinst = source.instance,
 		dsrc  = source.ds
 	} )
+
 end
