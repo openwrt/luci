@@ -761,10 +761,18 @@ end
 
 
 local function _call(self, ...)
+	local func = getfenv()[self.name]
+	assert(func ~= nil,
+	       'Cannot resolve function "' .. self.name .. '". Is it misspelled or local?')
+
+	assert(type(func) == "function",
+	       'The symbol "' .. self.name .. '" does not refer to a function but data ' ..
+	       'of type "' .. type(func) .. '".')
+
 	if #self.argv > 0 then
-		return getfenv()[self.name](unpack(self.argv), ...)
+		return func(unpack(self.argv), ...)
 	else
-		return getfenv()[self.name](...)
+		return func(...)
 	end
 end
 
