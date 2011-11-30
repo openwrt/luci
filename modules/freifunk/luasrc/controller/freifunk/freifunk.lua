@@ -57,6 +57,10 @@ function index()
 	entry({"freifunk", "status", "zeroes"}, call("zeroes"), "Testdownload")
 	entry({"freifunk", "status", "public_status_json"}, call("public_status_json")).leaf = true
 
+	if nixio.fs.access("/usr/sbin/luci-splash") then
+		assign({"freifunk", "status", "splash"}, {"splash", "publicstatus"}, _("Splash"), 40)
+	end
+
 	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, _("OLSR"), 30)
 
 	if nixio.fs.access("/etc/config/luci_statistics") then

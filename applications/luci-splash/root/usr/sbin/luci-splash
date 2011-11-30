@@ -315,7 +315,6 @@ end
 -- Add blacklist rules
 function add_blacklist_rule(mac)
 	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
-	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j DROP" % mac)
 end
 
 

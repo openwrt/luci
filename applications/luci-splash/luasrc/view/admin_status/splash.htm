@@ -124,9 +124,97 @@ local function showmac(mac)
 	return mac
 end
 
+if luci.http.formvalue("status") == "1" then
+	local rv = {}
+	for _, c in utl.spairs(clients,
+		function(a,b) if clients[a].policy == clients[b].policy then
+			return (clients[a].start > clients[b].start)
+		else
+			return (clients[a].policy > clients[b].policy)
+		end
+	end)
+	do
+		if c.ip then
+			rv[#rv+1] = {
+				hostname = c.hostname or "?",
+				ip = c.ip or "?",
+				mac = showmac(c.mac) or "?",
+				timeleft = (c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or (c.policy ~= "normal") and "-" or "expired",
+				trafficin = wat.byte_format(c.bytes_in) or "?",
+				trafficout = wat.byte_format(c.bytes_out) or "?",
+				policy = c.policy or "?"
+	                        }
+		end
+	end
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
+	return
+end
 -%>
 
+
+
 <%+header%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+
+	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 },
+		function(x, info)
+		{
+		var tbody = document.getElementById('splash_table');
+			if (tbody)
+			{
+				var s = '';
+				if (info.length == undefined) {
+					s += '<tr class="cbi-section-table-row"><td colspan="7" class="cbi-section-table-cell"><br /><em><%:No clients connected%></em><br /></td></tr>'
+				};
+				for (var idx = 0; idx < info.length; idx++)
+				{
+					var splash = info[idx];
+					s += String.format(
+						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
+						'<td class="cbi-section-table-cell">%s</td>' +
+						'<td class="cbi-section-table-cell">%s</td>' +
+						'<td class="cbi-section-table-cell">%s</td>' +
+						'<td class="cbi-section-table-cell">%s</td>' +
+						'<td class="cbi-section-table-cell">%s/%s</td>' +
+						'<td class="cbi-section-table-cell">',
+						splash.hostname, splash.ip, splash.mac, splash.timeleft, splash.trafficin, splash.trafficout);
+
+				<% if is_admin then %>
+					s += String.format('<select name="policy.%s" style="width:200px">', splash.mac.toLowerCase());
+					if (splash.policy == 'whitelist') { 	
+						s += '<option value="whitelist" selected="selected"><%:whitelisted%></option>'
+					} else {
+						s += '<option value="whitelist"><%:whitelisted%></option>'
+					};
+					if (splash.policy == 'normal') {
+						s += '<option value="normal" selected="selected"><%:splashed%></option>';
+						s += '<option value="kicked"><%:temporarily blocked%></option>'
+					} else {
+						s += 'option value="normal"><%:splashed%></option>'
+					};
+					if (splash.policy == 'blacklist') {
+						s+= '<option value="blacklist" selected="selected"><%:blacklisted%></option>'
+					} else {
+						s += '<option value="blacklist"><%:blacklisted%></option>'
+					};
+					s += String.format(
+						'</select>' +
+						'<input type="submit" class="cbi-button cbi-button-save" name="save.%s" value="<%:Save%>" />',
+						splash.mac.toLowerCase());
+				<% else %>
+					s += String.format('%s', splash.policy);
+				<% end %>
+					s += '</td></tr></tbody>'
+				}
+				tbody.innerHTML = s;
+			}
+		}
+	);
+//]]></script>
+
 
 <div id="cbi-splash-leases" class="cbi-map">
 	<h2><a id="content" name="content"><%:Client-Splash%></a></h2>
@@ -135,14 +223,16 @@ end
 		<div class="cbi-section-node">
 			<% if is_admin then %><form action="<%=REQUEST_URI%>" method="post"><% end %>
 			<table class="cbi-section-table">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:Hostname%></th>
-					<th class="cbi-section-table-cell"><%:IP Address%></th>
-					<th class="cbi-section-table-cell"><%:MAC Address%></th>
-					<th class="cbi-section-table-cell"><%:Time remaining%></th>
-					<th class="cbi-section-table-cell"><%:Traffic in/out%></th>
-					<th class="cbi-section-table-cell"><%:Policy%></th>
-				</tr>
+				<thead>
+					<tr class="cbi-section-table-titles">
+						<th class="cbi-section-table-cell"><%:Hostname%></th>
+						<th class="cbi-section-table-cell"><%:IP Address%></th>
+						<th class="cbi-section-table-cell"><%:MAC Address%></th>
+						<th class="cbi-section-table-cell"><%:Time remaining%></th>
+						<th class="cbi-section-table-cell"><%:Traffic in/out%></th>
+						<th class="cbi-section-table-cell"><%:Policy%></th>
+					</tr>
+				</thead>
 
 				<%-
 					local count = 0
@@ -158,7 +248,8 @@ end
 						if c.ip then
 							count = count + 1
 				-%>
-					<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
+					<tbody id="splash_table">
+						<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
 						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("unknown") .. "</em>"%></td>
 						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("unknown") .. "</em>"%></td>
 						<td class="cbi-section-table-cell"><%=showmac(c.mac)%></td>
@@ -182,19 +273,19 @@ end
 							<%=c.policy%>
 							<% end %>
 						</td>
-					</tr>
-				<%- 
+						</tr>
+						<%- 
+							end
 						end
-					end
-
-					if count == 0 then
-				-%>
-					<tr class="cbi-section-table-row">
-						<td colspan="7" class="cbi-section-table-cell">
-							<br /><em><%:No clients connected%></em><br />
-						</td>
-					</tr>
+						if count == 0 then
+						-%>
+						<tr class="cbi-section-table-row">
+							<td colspan="7" class="cbi-section-table-cell">
+								<br /><em><%:No clients connected%></em><br />
+							</td>
+						</tr>
 				<%- end -%>
+				</tbody>
 			</table>
 			<% if is_admin then %></form><% end %>
 		</div>
