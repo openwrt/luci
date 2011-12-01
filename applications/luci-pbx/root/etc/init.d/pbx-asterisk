@@ -31,9 +31,12 @@ ASTUSER=nobody
 ASTGROUP=nogroup
 ASTDIRSRECURSIVE="/var/run/asterisk /var/log/asterisk /var/spool/asterisk"
 ASTDIRS="/usr/lib/asterisk"
+ASTSOUNDSDIR="/usr/lib/asterisk/sounds"
 
 TEMPLATEDIR=/etc/${MODULENAME}-asterisk
+PBXSOUNDSDIR=$TEMPLATEDIR/sounds
 VMTEMPLATEDIR=/etc/${MODULENAME}-voicemail
+VMSOUNDSDIR=$VMTEMPLATEDIR/sounds
 ASTERISKDIR=/etc/asterisk
 WORKDIR=/tmp/$MODULENAME.$$
 MD5SUMSFILE=/tmp/$MODULENAME-sums.$$
@@ -575,6 +578,22 @@ pbx_cook_rtp_template()
             sed "s/|RTPEND|/$rtpend/"               > $WORKDIR/rtp.conf
 }
 
+# Links any sound files found in $PBXSOUNDSDIR and $VMSOUNDSDIR
+# into $ASTSOUNDSDIR for use by Asterisk. Does not overwrite files.
+pbx_link_sounds()
+{
+    mkdir -p $ASTSOUNDSDIR
+
+    for dir in $PBXSOUNDSDIR $VMSOUNDSDIR ; do
+        if [ -d $dir ] ; then
+            for f in $dir/* ; do
+                ln -s $f $ASTSOUNDSDIR 2>/dev/null
+            done
+        fi
+    done
+}
+
+
 # Makes sure the ownership of specified directories is proper.
 pbx_fix_ownership()
 {
@@ -667,12 +686,15 @@ start() {
     # Prepare voicemail config.
     config_unset
     config_load ${MODULENAME}-voicemail
-    pbx_configure_voicemail    
+    pbx_configure_voicemail
 
     # Assemble the configuration, and copy changed files over.
     config_unset
     config_load ${MODULENAME}-advanced
     pbx_assemble_and_copy_config
+
+    # Link sound files
+    pbx_link_sounds
 
     # Enforce ownership of specified files and directories.
     pbx_fix_ownership
