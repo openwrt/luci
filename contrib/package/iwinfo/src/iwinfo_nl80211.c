@@ -298,6 +298,8 @@ static char * nl80211_ifname2phy(const char *ifname)
 	static char phy[32] = { 0 };
 	struct nl80211_msg_conveyor *req;
 
+	memset(phy, 0, sizeof(phy));
+
 	req = nl80211_msg(ifname, NL80211_CMD_GET_WIPHY, 0);
 	if (req)
 	{
