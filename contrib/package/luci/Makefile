@@ -584,7 +584,7 @@ $(eval $(call collection,,\
 	Standard OpenWrt set including full admin with ppp support and the \
 	default OpenWrt theme,\
 	+uhttpd +luci-mod-admin-full +luci-theme-openwrt +luci-app-firewall \
-	+luci-proto-core +luci-proto-ppp +libiwinfo))
+	+luci-proto-core +luci-proto-ppp +libiwinfo-lua))
 
 $(eval $(call collection,ssl,\
 	Standard OpenWrt set with HTTPS support,\
