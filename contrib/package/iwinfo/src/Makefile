@@ -1,8 +1,13 @@
-IWINFO_BACKENDS   = $(BACKENDS)
-IWINFO_LDFLAGS    = $(LDFLAGS) -shared -llua
-IWINFO_CFLAGS     = $(CFLAGS) -std=gnu99 -fstrict-aliasing
-IWINFO_SO         = iwinfo.so
-IWINFO_OBJ        = iwinfo_utils.o iwinfo_wext.o iwinfo_wext_scan.o iwinfo_lualib.o
+IWINFO_BACKENDS    = $(BACKENDS)
+IWINFO_CFLAGS      = $(CFLAGS) -std=gnu99 -fstrict-aliasing -Iinclude
+
+IWINFO_LDFLAGS     = $(LDFLAGS) -shared
+IWINFO_SO          = libiwinfo.so
+IWINFO_OBJ         = iwinfo_utils.o iwinfo_wext.o iwinfo_wext_scan.o iwinfo_lib.o
+
+IWINFO_LUA_LDFLAGS = $(LDFLAGS) -shared -L. -liwinfo -llua
+IWINFO_LUA_SO      = iwinfo.so
+IWINFO_LUA_OBJ     = iwinfo_lualib.o
 
 ifneq ($(filter wl,$(IWINFO_BACKENDS)),)
 	IWINFO_CFLAGS  += -DUSE_WL
@@ -22,10 +27,11 @@ endif
 
 
 %.o: %.c
-	$(CC) $(IWINFO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $<
+	$(CC) $(IWINFO_CFLAGS) $(FPIC) -c -o $@ $<
 
-compile: clean $(IWINFO_OBJ)
+compile: clean $(IWINFO_OBJ) $(IWINFO_LUA_OBJ)
 	$(LD) $(IWINFO_LDFLAGS) -o $(IWINFO_SO) $(IWINFO_OBJ)
+	$(LD) $(IWINFO_LUA_LDFLAGS) -o $(IWINFO_LUA_SO) $(IWINFO_LUA_OBJ)
 
 clean:
-	rm -f *.o $(IWINFO_SO)
+	rm -f *.o $(IWINFO_SO) $(IWINFO_LUA_SO)

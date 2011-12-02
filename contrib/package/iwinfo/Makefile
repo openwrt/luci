@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiwinfo
-PKG_RELEASE:=16
+PKG_RELEASE:=17
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -15,17 +15,28 @@ include $(INCLUDE_DIR)/package.mk
 
 
 define Package/libiwinfo
-  SECTION:=luci
-  CATEGORY:=LuCI
-  SUBMENU:=8. Libraries
+  SECTION:=libs
+  CATEGORY:=Libraries
   TITLE:=Generalized Wireless Information Library (iwinfo)
-  DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +liblua +lua
-  DEFAULT:=PACKAGE_luci-lib-sys
+  DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny
 endef
 
 define Package/libiwinfo/description
   Wireless information library with consistent interface for proprietary Broadcom,
   madwifi, nl80211 and wext driver interfaces.
+endef
+
+define Package/libiwinfo-lua
+  SUBMENU:=Lua
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=libiwinfo Lua binding
+  DEPENDS:=+libiwinfo +liblua +lua
+endef
+
+define Package/libiwinfo-lua/description
+  This is the Lua binding for the iwinfo library. It provides access to all enabled
+  backends.
 endef
 
 define Build/Prepare
@@ -54,7 +65,22 @@ MAKE_FLAGS += \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	BACKENDS="$(IWINFO_BACKENDS)"
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/iwinfo
+	$(CP) $(PKG_BUILD_DIR)/include/iwinfo.h $(1)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/include/iwinfo/* $(1)/usr/include/iwinfo/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libiwinfo.so $(1)/usr/lib/libiwinfo.so
+	$(INSTALL_DIR) $(1)/usr/lib/lua
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.so $(1)/usr/lib/lua/iwinfo.so
+endef
+
 define Package/libiwinfo/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libiwinfo.so $(1)/usr/lib/libiwinfo.so
+endef
+
+define Package/libiwinfo-lua/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.lua $(1)/usr/bin/iwinfo
 	$(INSTALL_DIR) $(1)/usr/lib/lua
@@ -62,3 +88,4 @@ define Package/libiwinfo/install
 endef
 
 $(eval $(call BuildPackage,libiwinfo))
+$(eval $(call BuildPackage,libiwinfo-lua))

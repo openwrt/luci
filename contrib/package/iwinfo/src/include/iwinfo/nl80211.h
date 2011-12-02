@@ -32,8 +32,8 @@
 #include <netlink/genl/ctrl.h>
 
 #include "iwinfo.h"
-#include "iwinfo_utils.h"
-#include "include/nl80211.h"
+#include "iwinfo/utils.h"
+#include "iwinfo/api/nl80211.h"
 
 struct nl80211_state {
 	struct nl_sock *nl_sock;
@@ -78,5 +78,29 @@ int nl80211_get_countrylist(const char *ifname, char *buf, int *len);
 int nl80211_get_hwmodelist(const char *ifname, int *buf);
 int nl80211_get_mbssid_support(const char *ifname, int *buf);
 void nl80211_close(void);
+
+static const struct iwinfo_ops nl80211_ops = {
+	.channel        = nl80211_get_channel,
+	.frequency      = nl80211_get_frequency,
+	.txpower        = nl80211_get_txpower,
+	.bitrate        = nl80211_get_bitrate,
+	.signal         = nl80211_get_signal,
+	.noise          = nl80211_get_noise,
+	.quality        = nl80211_get_quality,
+	.quality_max    = nl80211_get_quality_max,
+	.mbssid_support = nl80211_get_mbssid_support,
+	.hwmodelist     = nl80211_get_hwmodelist,
+	.mode           = nl80211_get_mode,
+	.ssid           = nl80211_get_ssid,
+	.bssid          = nl80211_get_bssid,
+	.country        = nl80211_get_country,
+	.encryption     = nl80211_get_encryption,
+	.assoclist      = nl80211_get_assoclist,
+	.txpwrlist      = nl80211_get_txpwrlist,
+	.scanlist       = nl80211_get_scanlist,
+	.freqlist       = nl80211_get_freqlist,
+	.countrylist    = nl80211_get_countrylist,
+	.close          = nl80211_close
+};
 
 #endif

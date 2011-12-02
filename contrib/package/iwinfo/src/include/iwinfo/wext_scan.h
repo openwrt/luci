@@ -22,8 +22,8 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
-#include "iwinfo_utils.h"
-#include "include/wext.h"
+#include "iwinfo/utils.h"
+#include "iwinfo/api/wext.h"
 
 
 typedef struct stream_descr

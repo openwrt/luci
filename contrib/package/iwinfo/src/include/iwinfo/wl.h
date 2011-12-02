@@ -22,8 +22,8 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
-#include "iwinfo_utils.h"
-#include "include/broadcom.h"
+#include "iwinfo/utils.h"
+#include "iwinfo/api/broadcom.h"
 
 int wl_probe(const char *ifname);
 int wl_get_mode(const char *ifname, char *buf);
@@ -48,5 +48,29 @@ int wl_get_countrylist(const char *ifname, char *buf, int *len);
 int wl_get_hwmodelist(const char *ifname, int *buf);
 int wl_get_mbssid_support(const char *ifname, int *buf);
 void wl_close(void);
+
+static const struct iwinfo_ops wl_ops = {
+	.channel        = wl_get_channel,
+	.frequency      = wl_get_frequency,
+	.txpower        = wl_get_txpower,
+	.bitrate        = wl_get_bitrate,
+	.signal         = wl_get_signal,
+	.noise          = wl_get_noise,
+	.quality        = wl_get_quality,
+	.quality_max    = wl_get_quality_max,
+	.mbssid_support = wl_get_mbssid_support,
+	.hwmodelist     = wl_get_hwmodelist,
+	.mode           = wl_get_mode,
+	.ssid           = wl_get_ssid,
+	.bssid          = wl_get_bssid,
+	.country        = wl_get_country,
+	.encryption     = wl_get_encryption,
+	.assoclist      = wl_get_assoclist,
+	.txpwrlist      = wl_get_txpwrlist,
+	.scanlist       = wl_get_scanlist,
+	.freqlist       = wl_get_freqlist,
+	.countrylist    = wl_get_countrylist,
+	.close          = wl_close
+};
 
 #endif

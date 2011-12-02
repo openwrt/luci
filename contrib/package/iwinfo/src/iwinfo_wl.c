@@ -18,8 +18,8 @@
  * This code is based on the wlc.c utility published by OpenWrt.org .
  */
 
-#include "iwinfo_wl.h"
-#include "iwinfo_wext.h"
+#include "iwinfo/wl.h"
+#include "iwinfo/wext.h"
 
 static int wl_ioctl(const char *name, int cmd, void *buf, int len)
 {

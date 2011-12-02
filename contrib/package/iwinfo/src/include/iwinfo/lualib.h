@@ -24,30 +24,7 @@
 #include <lauxlib.h>
 
 #include "iwinfo.h"
-#include "iwinfo_wext_scan.h"
-
-
-const char *IWINFO_CIPHER_NAMES[] = {
-	"NONE",
-	"WEP40",
-	"TKIP",
-	"WRAP",
-	"CCMP",
-	"WEP104",
-	"AES-OCB",
-	"CKIP",
-};
-
-const char *IWINFO_KMGMT_NAMES[] = {
-	"NONE",
-	"802.1X",
-	"PSK",
-};
-
-const char *IWINFO_AUTH_NAMES[] = {
-	"OPEN",
-	"SHARED",
-};
+#include "iwinfo/wext_scan.h"
 
 
 #define IWINFO_META			"iwinfo"

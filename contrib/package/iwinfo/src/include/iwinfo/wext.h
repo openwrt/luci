@@ -22,8 +22,8 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
-#include "iwinfo_utils.h"
-#include "include/wext.h"
+#include "iwinfo/utils.h"
+#include "iwinfo/api/wext.h"
 
 
 int wext_probe(const char *ifname);
@@ -48,5 +48,29 @@ int wext_get_countrylist(const char *ifname, char *buf, int *len);
 int wext_get_hwmodelist(const char *ifname, int *buf);
 int wext_get_mbssid_support(const char *ifname, int *buf);
 void wext_close(void);
+
+static const struct iwinfo_ops wext_ops = {
+	.channel        = wext_get_channel,
+	.frequency      = wext_get_frequency,
+	.txpower        = wext_get_txpower,
+	.bitrate        = wext_get_bitrate,
+	.signal         = wext_get_signal,
+	.noise          = wext_get_noise,
+	.quality        = wext_get_quality,
+	.quality_max    = wext_get_quality_max,
+	.mbssid_support = wext_get_mbssid_support,
+	.hwmodelist     = wext_get_hwmodelist,
+	.mode           = wext_get_mode,
+	.ssid           = wext_get_ssid,
+	.bssid          = wext_get_bssid,
+	.country        = wext_get_country,
+	.encryption     = wext_get_encryption,
+	.assoclist      = wext_get_assoclist,
+	.txpwrlist      = wext_get_txpwrlist,
+	.scanlist       = wext_get_scanlist,
+	.freqlist       = wext_get_freqlist,
+	.countrylist    = wext_get_countrylist,
+	.close          = wext_close
+};
 
 #endif

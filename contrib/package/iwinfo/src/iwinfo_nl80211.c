@@ -22,12 +22,11 @@
  * Parts of this code are derived from the Linux iw utility.
  */
 
-#include "iwinfo_nl80211.h"
-#include "iwinfo_wext.h"
+#include "iwinfo/nl80211.h"
+#include "iwinfo/wext.h"
 
 #define min(x, y) ((x) < (y)) ? (x) : (y)
 
-extern struct iwinfo_iso3166_label ISO3166_Names[];
 static struct nl80211_state *nls = NULL;
 
 static int nl80211_init(void)
@@ -1533,10 +1532,10 @@ int nl80211_get_country(const char *ifname, char *buf)
 int nl80211_get_countrylist(const char *ifname, char *buf, int *len)
 {
 	int i, count;
-	struct iwinfo_iso3166_label *l;
 	struct iwinfo_country_entry *e = (struct iwinfo_country_entry *)buf;
+	const struct iwinfo_iso3166_label *l;
 
-	for( l = ISO3166_Names, count = 0; l->iso3166; l++, e++, count++ )
+	for( l = IWINFO_ISO3166_NAMES, count = 0; l->iso3166; l++, e++, count++ )
 	{
 		e->iso3166 = l->iso3166;
 		e->ccode[0] = (l->iso3166 / 256);

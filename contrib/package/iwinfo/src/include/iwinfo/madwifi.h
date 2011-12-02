@@ -22,8 +22,8 @@
 #include <fcntl.h>
 
 #include "iwinfo.h"
-#include "iwinfo_utils.h"
-#include "include/madwifi.h"
+#include "iwinfo/utils.h"
+#include "iwinfo/api/madwifi.h"
 
 int madwifi_probe(const char *ifname);
 int madwifi_get_mode(const char *ifname, char *buf);
@@ -47,5 +47,29 @@ int madwifi_get_countrylist(const char *ifname, char *buf, int *len);
 int madwifi_get_hwmodelist(const char *ifname, int *buf);
 int madwifi_get_mbssid_support(const char *ifname, int *buf);
 void madwifi_close(void);
+
+static const struct iwinfo_ops madwifi_ops = {
+	.channel        = madwifi_get_channel,
+	.frequency      = madwifi_get_frequency,
+	.txpower        = madwifi_get_txpower,
+	.bitrate        = madwifi_get_bitrate,
+	.signal         = madwifi_get_signal,
+	.noise          = madwifi_get_noise,
+	.quality        = madwifi_get_quality,
+	.quality_max    = madwifi_get_quality_max,
+	.mbssid_support = madwifi_get_mbssid_support,
+	.hwmodelist     = madwifi_get_hwmodelist,
+	.mode           = madwifi_get_mode,
+	.ssid           = madwifi_get_ssid,
+	.bssid          = madwifi_get_bssid,
+	.country        = madwifi_get_country,
+	.encryption     = madwifi_get_encryption,
+	.assoclist      = madwifi_get_assoclist,
+	.txpwrlist      = madwifi_get_txpwrlist,
+	.scanlist       = madwifi_get_scanlist,
+	.freqlist       = madwifi_get_freqlist,
+	.countrylist    = madwifi_get_countrylist,
+	.close          = madwifi_close
+};
 
 #endif

@@ -18,22 +18,9 @@
 #include <net/if.h>
 #include <errno.h>
 
-#include "iwinfo_wext.h"
-
-#ifdef USE_WL
-#include "iwinfo_wl.h"
-#endif
-
-#ifdef USE_MADWIFI
-#include "iwinfo_madwifi.h"
-#endif
-
-#ifdef USE_NL80211
-#include "iwinfo_nl80211.h"
-#endif
-
 
 #define IWINFO_BUFSIZE	24 * 1024
+#define IWINFO_ESSID_MAX_SIZE	32
 
 #define IWINFO_80211_A       (1 << 0)
 #define IWINFO_80211_B       (1 << 1)
@@ -55,6 +42,10 @@
 
 #define IWINFO_AUTH_OPEN     (1 << 0)
 #define IWINFO_AUTH_SHARED   (1 << 1)
+
+extern const char *IWINFO_CIPHER_NAMES[];
+extern const char *IWINFO_KMGMT_NAMES[];
+extern const char *IWINFO_AUTH_NAMES[];
 
 
 struct iwinfo_assoclist_entry {
@@ -85,7 +76,7 @@ struct iwinfo_crypto_entry {
 
 struct iwinfo_scanlist_entry {
 	uint8_t mac[6];
-	uint8_t ssid[IW_ESSID_MAX_SIZE+1];
+	uint8_t ssid[IWINFO_ESSID_MAX_SIZE+1];
 	uint8_t mode[8];
 	uint8_t channel;
 	uint8_t signal;
@@ -103,5 +94,50 @@ struct iwinfo_iso3166_label {
 	uint16_t iso3166;
 	uint8_t  name[28];
 };
+
+extern const struct iwinfo_iso3166_label IWINFO_ISO3166_NAMES[];
+
+
+struct iwinfo_ops {
+	int (*channel)(const char *, int *);
+	int (*frequency)(const char *, int *);
+	int (*txpower)(const char *, int *);
+	int (*bitrate)(const char *, int *);
+	int (*signal)(const char *, int *);
+	int (*noise)(const char *, int *);
+	int (*quality)(const char *, int *);
+	int (*quality_max)(const char *, int *);
+	int (*mbssid_support)(const char *, int *);
+	int (*hwmodelist)(const char *, int *);
+	int (*mode)(const char *, char *);
+	int (*ssid)(const char *, char *);
+	int (*bssid)(const char *, char *);
+	int (*country)(const char *, char *);
+	int (*encryption)(const char *, char *);
+	int (*assoclist)(const char *, char *, int *);
+	int (*txpwrlist)(const char *, char *, int *);
+	int (*scanlist)(const char *, char *, int *);
+	int (*freqlist)(const char *, char *, int *);
+	int (*countrylist)(const char *, char *, int *);
+	void (*close)(void);
+};
+
+const char * iwinfo_type(const char *ifname);
+const struct iwinfo_ops * iwinfo_backend(const char *ifname);
+void iwinfo_finish(void);
+
+#include "iwinfo/wext.h"
+
+#ifdef USE_WL
+#include "iwinfo/wl.h"
+#endif
+
+#ifdef USE_MADWIFI
+#include "iwinfo/madwifi.h"
+#endif
+
+#ifdef USE_NL80211
+#include "iwinfo/nl80211.h"
+#endif
 
 #endif
