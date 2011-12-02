@@ -7,7 +7,7 @@ IWINFO_OBJ         = iwinfo_utils.o iwinfo_wext.o iwinfo_wext_scan.o iwinfo_lib.
 
 IWINFO_LUA_LDFLAGS = $(LDFLAGS) -shared -L. -liwinfo -llua
 IWINFO_LUA_SO      = iwinfo.so
-IWINFO_LUA_OBJ     = iwinfo_lualib.o
+IWINFO_LUA_OBJ     = iwinfo_lua.o
 
 ifneq ($(filter wl,$(IWINFO_BACKENDS)),)
 	IWINFO_CFLAGS  += -DUSE_WL

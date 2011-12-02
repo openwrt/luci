@@ -16,7 +16,7 @@
  * with the iwinfo library. If not, see http://www.gnu.org/licenses/.
  */
 
-#include "iwinfo/lualib.h"
+#include "iwinfo/lua.h"
 
 
 /* Determine type */
