@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiwinfo
-PKG_RELEASE:=17
+PKG_RELEASE:=18
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -26,6 +26,7 @@ define Package/libiwinfo/description
   madwifi, nl80211 and wext driver interfaces.
 endef
 
+
 define Package/libiwinfo-lua
   SUBMENU:=Lua
   SECTION:=lang
@@ -38,6 +39,19 @@ define Package/libiwinfo-lua/description
   This is the Lua binding for the iwinfo library. It provides access to all enabled
   backends.
 endef
+
+
+define Package/iwinfo
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Generalized Wireless Information utility
+  DEPENDS:=+libiwinfo
+endef
+
+define Package/iwinfo/description
+  Command line frontend for the wireless information library.
+endef
+
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
@@ -81,11 +95,15 @@ define Package/libiwinfo/install
 endef
 
 define Package/libiwinfo-lua/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.lua $(1)/usr/bin/iwinfo
 	$(INSTALL_DIR) $(1)/usr/lib/lua
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo.so $(1)/usr/lib/lua/iwinfo.so
 endef
 
+define Package/iwinfo/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo $(1)/usr/bin/iwinfo
+endef
+
 $(eval $(call BuildPackage,libiwinfo))
 $(eval $(call BuildPackage,libiwinfo-lua))
+$(eval $(call BuildPackage,iwinfo))
