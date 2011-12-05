@@ -17,8 +17,11 @@ limitations under the License.
 
 ]]--
 
-local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n
-	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n
+local type, next, pairs, ipairs, loadfile, table
+	= type, next, pairs, ipairs, loadfile, table
+
+local tonumber, tostring, math, i18n
+	= tonumber, tostring, math, luci.i18n
 
 local require = require
 
@@ -1360,7 +1363,12 @@ function wifinet.country(self)
 end
 
 function wifinet.txpower(self)
-	return self.iwinfo.txpower or 0
+	local pwr = (self.iwinfo.txpower or 0)
+	return pwr + self:txpower_offset()
+end
+
+function wifinet.txpower_offset(self)
+	return self.iwinfo.txpower_offset or 0
 end
 
 function wifinet.signal_level(self, s, n)
