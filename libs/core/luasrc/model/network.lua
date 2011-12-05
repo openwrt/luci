@@ -1360,7 +1360,12 @@ function wifinet.country(self)
 end
 
 function wifinet.txpower(self)
-	return self.iwinfo.txpower or 0
+	local pwr = (self.iwinfo.txpower or 0)
+	return pwr + self:txpower_offset()
+end
+
+function wifinet.txpower_offset(self)
+	return self.iwinfo.txpower_offset or 0
 end
 
 function wifinet.signal_level(self, s, n)
