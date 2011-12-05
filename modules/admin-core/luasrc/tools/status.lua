@@ -85,7 +85,8 @@ function wifi_networks()
 				ifname     = net:ifname(),
 				assoclist  = net:assoclist(),
 				country    = net:country(),
-				txpower    = net:txpower()
+				txpower    = net:txpower(),
+				txpoweroff = net:txpower_offset()
 			}
 		end
 
@@ -120,6 +121,7 @@ function wifi_network(id)
 				assoclist  = net:assoclist(),
 				country    = net:country(),
 				txpower    = net:txpower(),
+				txpoweroff = net:txpower_offset(),
 				device     = {
 					up     = dev:is_up(),
 					device = dev:name(),
