@@ -70,13 +70,45 @@ end
 m.title = luci.util.pcdata(wnet:get_i18n())
 
 
+local function txpower_list(iw)
+	local list = iw.txpwrlist or { }
+	local off  = tonumber(iw.txpower_offset) or 0
+	local new  = { }
+	local prev = -1
+	local _, val
+	for _, val in ipairs(list) do
+		local dbm = val.dbm + off
+		local mw  = math.floor(10 ^ (dbm / 10))
+		if mw ~= prev then
+			prev = mw
+			new[#new+1] = {
+				display_dbm = dbm,
+				display_mw  = mw,
+				driver_dbm  = val.dbm,
+				driver_mw   = val.mw
+			}
+		end
+	end
+	return new
+end
+
+local function txpower_current(pwr, list)
+	pwr = tonumber(pwr)
+	if pwr ~= nil then
+		local _, item
+		for _, item in ipairs(list) do
+			if item.driver_dbm >= pwr then
+				return item.driver_dbm
+			end
+		end
+	end
+	return (list[#list] and list[#list].driver_dbm) or pwr or 0
+end
+
 local iw = luci.sys.wifi.getiwinfo(arg[1])
-local hw_modes  = iw.hwmodelist or { }
-local tx_powers = iw.txpwrlist  or { }
-local tx_power  = tostring(
-	(iw.txpower and iw.txpower > 0 and iw.txpower) or
-	(#tx_powers > 0 and tx_powers[#tx_powers].dbm)
-)
+local hw_modes      = iw.hwmodelist or { }
+local tx_power_list = txpower_list(iw)
+local tx_power_cur  = txpower_current(wdev:get("txpower"), tx_power_list)
 
 s = m:section(NamedSection, wdev:name(), "wifi-device", translate("Device Configuration"))
 s.addremove = false
@@ -143,13 +175,19 @@ end
 
 if hwtype == "mac80211" then
 	tp = s:taboption("general",
-		(tx_powers and #tx_powers > 0) and ListValue or Value,
+		(#tx_power_list > 0) and ListValue or Value,
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	tp.default = tx_power
-	for _, p in ipairs(tx_powers or {}) do
-		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
+	tp.default = tx_power_cur
+
+	function tp.cfgvalue(...)
+		return txpower_current(Value.cfgvalue(...), tx_power_list)
+	end
+
+	for _, p in ipairs(tx_power_list) do
+		tp:value(p.driver_dbm, "%i dBm (%i mW)"
+			%{ p.display_dbm, p.display_mw })
 	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
@@ -197,13 +235,19 @@ end
 
 if hwtype == "atheros" then
 	tp = s:taboption("general",
-		(#tx_powers > 0) and ListValue or Value,
+		(#tx_power_list > 0) and ListValue or Value,
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	tp.default = tx_power
-	for _, p in ipairs(tx_powers or {}) do
-		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
+	tp.default = tx_power_cur
+
+	function tp.cfgvalue(...)
+		return txpower_current(Value.cfgvalue(...), tx_power_list)
+	end
+
+	for _, p in ipairs(tx_power_list) do
+		tp:value(p.driver_dbm, "%i dBm (%i mW)"
+			%{ p.display_dbm, p.display_mw })
 	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
@@ -258,13 +302,19 @@ end
 
 if hwtype == "broadcom" then
 	tp = s:taboption("general",
-		(#tx_powers > 0) and ListValue or Value,
+		(#tx_power_list > 0) and ListValue or Value,
 		"txpower", translate("Transmit Power"), "dBm")
 
 	tp.rmempty = true
-	tp.default = tx_power
-	for _, p in ipairs(tx_powers or {}) do
-		tp:value(p.dbm, "%i dBm (%i mW)" %{ p.dbm, p.mw })
+	tp.default = tx_power_cur
+
+	function tp.cfgvalue(...)
+		return txpower_current(Value.cfgvalue(...), tx_power_list)
+	end
+
+	for _, p in ipairs(tx_power_list) do
+		tp:value(p.driver_dbm, "%i dBm (%i mW)"
+			%{ p.display_dbm, p.display_mw })
 	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
