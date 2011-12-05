@@ -17,8 +17,11 @@ limitations under the License.
 
 ]]--
 
-local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n
-	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n
+local type, next, pairs, ipairs, loadfile, table
+	= type, next, pairs, ipairs, loadfile, table
+
+local tonumber, tostring, math, i18n
+	= tonumber, tostring, math, luci.i18n
 
 local require = require
 
