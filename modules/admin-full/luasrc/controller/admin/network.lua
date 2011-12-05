@@ -216,14 +216,14 @@ function wifi_delete(network)
 		local dev = wnet:get_device()
 		local net = wnet:get_network()
 		if dev then
-			luci.sys.call("env -i /sbin/wifi down %q" % dev:name())
+			luci.sys.call("env -i /sbin/wifi down %q >/dev/null" % dev:name())
 			ntm:del_wifinet(network)
 			ntm:commit("wireless")
 			if net:is_empty() then
 				ntm:del_network(net:name())
 				ntm:commit("network")
 			end
-			luci.sys.call("env -i /sbin/wifi up %q" % dev:name())
+			luci.sys.call("env -i /sbin/wifi up %q >/dev/null" % dev:name())
 		end
 	end
 
