@@ -15,7 +15,7 @@ $Id: ping.lua 6810 2011-01-29 03:33:48Z jow $
 
 module("luci.statistics.rrdtool.definitions.ping", package.seeall)
 
-function rrdargs( graph, plugin, plugin_instance, dtype, is_index )
+function rrdargs( graph, plugin, plugin_instance, dtype )
 	return {
 		-- Ping roundtrip time
 		{ title = "%H: ICMP Round Trip Time", vlabel = "ms",

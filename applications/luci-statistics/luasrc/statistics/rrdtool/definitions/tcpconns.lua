@@ -28,9 +28,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 					"LAST_ACK", "TIME_WAIT", "CLOSING", "CLOSE_WAIT",
 					"CLOSED", "FIN_WAIT1", "FIN_WAIT2"
 				},
-				options = { for k, v in (tcp_connections) do
-					v = { title = "%di", noarea = true }
-					end
+				options = {
+					load__ESTABLISHED = { title = "%di", noarea = true }
 				}
 			}
 		}

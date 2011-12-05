@@ -513,20 +513,20 @@ function Graph.render( self, plugin, plugin_instance, is_index )
 
 		-- get diagram definitions
 		for i, opts in ipairs( self:_forcelol( def.rrdargs( self, plugin, plugin_instance, nil, is_index ) ) ) do
+			if not is_index or not opts.detail then
+				_images[i] = { }
 
-			_images[i] = { }
+				-- get diagram definition instances
+				local diagrams = self:_generic( opts, plugin, plugin_instance, nil, i )
 
-			-- get diagram definition instances
-			local diagrams = self:_generic( opts, plugin, plugin_instance, nil, i )
+				-- render all diagrams
+				for j, def in ipairs( diagrams ) do
+					-- remember image
+					_images[i][j] = def[1]
 
-			-- render all diagrams
-			for j, def in ipairs( diagrams ) do
-
-				-- remember image
-				_images[i][j] = def[1]
-
-				-- exec
-				self:_rrdtool( def )
+					-- exec
+					self:_rrdtool( def )
+				end
 			end
 		end
 

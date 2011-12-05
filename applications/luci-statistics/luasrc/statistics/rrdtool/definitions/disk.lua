@@ -49,6 +49,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			vlabel = "Bytes/s",
 			number_format = "%5.1lf%sB/s",
 
+			detail = true,
+
 			data = {
 				types = { "disk_octets" },
 				sources = {

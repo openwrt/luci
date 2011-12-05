@@ -53,7 +53,7 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local packets = {
 		title = "%H: Netlink - Packets on %pi",
-		vlabel = "Packets/s",
+		vlabel = "Packets/s", detail = true,
 
 		-- diagram data description
 		data = {
@@ -123,7 +123,7 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local multicast = {
 		title = "%H: Netlink - Multicast on %pi",
-		vlabel = "Packets/s",
+		vlabel = "Packets/s", detail = true,
 
 		-- diagram data description
 		data = {
@@ -147,7 +147,7 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local collisions = {
 		title = "%H: Netlink - Collisions on %pi",
-		vlabel = "Collisions/s",
+		vlabel = "Collisions/s", detail = true,
 
 		-- diagram data description
 		data = {
@@ -171,7 +171,7 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local errors = {
 		title = "%H: Netlink - Errors on %pi",
-		vlabel = "Errors/s",
+		vlabel = "Errors/s", detail = true,
 
 		-- diagram data description
 		data = {
