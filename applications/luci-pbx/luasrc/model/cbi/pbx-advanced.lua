@@ -108,22 +108,22 @@ function insert_qos_rules()
         bindport, rtprange, ipaddr, externhost = get_network_info()
 
         -- Iterate through the QoS rules, and if there is no other rule with the same port
-        -- range at the express service level, insert this rule.
+        -- range at the priority service level, insert this rule.
         commit = false
         m.uci:foreach("qos", "classify",
                 function(s1)
                         if     s1._name == 'PBX-SIP' then
-                                if s1.ports ~= bindport or s1.target ~= "Express" or s1.proto ~= "udp" then
+                                if s1.ports ~= bindport or s1.target ~= "Priority" or s1.proto ~= "udp" then
                                         m.uci:set("qos", s1['.name'], "ports",  bindport)
                                         m.uci:set("qos", s1['.name'], "proto",  "udp")
-                                        m.uci:set("qos", s1['.name'], "target", "Express")
+                                        m.uci:set("qos", s1['.name'], "target", "Priority")
                                         commit = true
                                 end
                         elseif s1._name == 'PBX-RTP' then
-                                if s1.ports ~= rtprange or s1.target ~= "Express" or s1.proto ~= "udp" then
+                                if s1.ports ~= rtprange or s1.target ~= "Priority" or s1.proto ~= "udp" then
                                         m.uci:set("qos", s1['.name'], "ports",  rtprange)
                                         m.uci:set("qos", s1['.name'], "proto",  "udp")
-                                        m.uci:set("qos", s1['.name'], "target", "Express")
+                                        m.uci:set("qos", s1['.name'], "target", "Priority")
                                         commit = true
                                 end
                         end
