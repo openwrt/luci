@@ -1,0 +1,6 @@
+exten => |NUMBER|,1,Noop()
+exten => |NUMBER|,n,Set(TIMEOUT(digit)=7)
+exten => |NUMBER|,n,Set(TIMEOUT(response)=21)
+exten => |NUMBER|,n,Authenticate(|PIN|)
+exten => |NUMBER|,n,DISA(no-password,context-user-|DEFAULTUSER|)
+

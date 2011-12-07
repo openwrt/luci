@@ -1,0 +1,10 @@
+
+[context-incoming-|NAME|]
+exten => s,1,NoOp(${CALLERID})
+exten => s,n,Set(SOURCECONTEXT=context-incoming-|NAME|)
+exten => s,n,Set(SOURCEEXTEN=s)
+exten => s,n,Goto(blacklist-call-context,s,1)
+exten => s,n(doneblacklist),NoOp()
+exten => s,n,Goto(disa-check-call-context,s,1)
+exten => s,n(donedisacheck),Dial(|LOCALUSERS|,${RINGTIME},r)
+exten => s,n,Goto(context-voicemail,s,1)

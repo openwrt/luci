@@ -1,0 +1,8 @@
+exten =>      _|NUMPREFIX|,1,Dial(SIP/${EXTEN}@peer-|NAME|,60,r)
+exten =>     _+|NUMPREFIX|,1,Dial(SIP/${EXTEN}@peer-|NAME|,60,r)
+exten =>     _|NUMPREFIX|.,1,Dial(SIP/${EXTEN}@peer-|NAME|,60,r)
+exten =>    _+|NUMPREFIX|.,1,Dial(SIP/${EXTEN:1}@peer-|NAME|,60,r)
+exten =>   _00|NUMPREFIX|.,1,Dial(SIP/${EXTEN:2}@peer-|NAME|,60,r)
+exten =>  _011|NUMPREFIX|.,1,Dial(SIP/${EXTEN:3}@peer-|NAME|,60,r)
+exten =>  _010|NUMPREFIX|.,1,Dial(SIP/${EXTEN:3}@peer-|NAME|,60,r)
+exten => _0011|NUMPREFIX|.,1,Dial(SIP/${EXTEN:4}@peer-|NAME|,60,r)

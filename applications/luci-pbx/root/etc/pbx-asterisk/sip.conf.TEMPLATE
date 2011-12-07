@@ -1,0 +1,37 @@
+[general]
+context=default-incoming-call-context
+allowoverlap=yes
+allowtransfer=yes
+realm=asterisk
+bindaddr=0.0.0.0
+srvlookup=yes
+maxexpiry=600
+minexpiry=60
+defaultexpiry=300
+qualifyfreq=55
+disallow=all
+allow=ulaw
+allow=alaw
+dtmfmode = inband
+alwaysauthreject = yes
+t1min=100
+timert1=500
+timerb=16000
+rtptimeout=600
+rtpkeepalive=30
+useragent=|USERAGENT|
+localnet=192.168.0.0/16
+localnet=10.0.0.0/8
+localnet=172.16.0.0/12
+nat=yes
+directmedia=no
+sipdebug=no
+bindport=|BINDPORT|
+externhost=|EXTERNHOST|
+
+#include sip_registrations.conf
+
+[authentication]
+
+#include sip_peers.conf
+#include sip_users.conf

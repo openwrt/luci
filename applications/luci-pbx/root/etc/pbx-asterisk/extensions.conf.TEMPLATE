@@ -1,0 +1,24 @@
+[general]
+static = yes
+writeprotect = yes
+clearglobalvars = no
+
+[globals]
+RINGTIME => |RINGTIME|
+
+[default]
+
+[context-user-hangup-call-context]
+exten =>   s,1,Hangup()
+exten => _X.,1,Hangup()
+
+[context-catch-all]
+exten   => _[!-~].,1,Dial(SIP/${EXTEN},60,r)
+
+#include extensions_default.conf
+#include extensions_voicemail.conf
+#include extensions_incoming.conf
+#include extensions_incoming_gtalk.conf
+#include extensions_blacklist.conf
+#include extensions_callthrough.conf
+#include extensions_user.conf

@@ -1,0 +1,9 @@
+exten =>      _|NUMPREFIX|,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN}@voice.google.com,60)
+exten =>     _+|NUMPREFIX|,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN:1}@voice.google.com,60)
+exten =>     _|NUMPREFIX|.,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN}@voice.google.com,60)
+exten =>    _+|NUMPREFIX|.,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN:1}@voice.google.com,60)
+exten =>   _00|NUMPREFIX|.,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN:2}@voice.google.com,60)
+exten =>  _011|NUMPREFIX|.,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN:3}@voice.google.com,60)
+exten =>  _010|NUMPREFIX|.,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN:3}@voice.google.com,60)
+exten => _0011|NUMPREFIX|.,1,Dial(Gtalk/gtalk-|NAME|/${EXTEN:4}@voice.google.com,60)
+

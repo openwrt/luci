@@ -1,0 +1,34 @@
+[modules]
+autoload=no
+load => res_jabber.so ; Used for Gtalk
+load => res_clioriginate.so ; originate calls from commandline
+load => res_rtp_asterisk.so ; rtp "engine" is now a loadable module in asterisk 1.8
+load => pbx_config.so ; Text Extension Configuration Requires N/A
+load => func_callerid.so ; Gets or sets Caller*ID data on the channel. - Requires ?
+load => func_channel.so
+load => func_logic.so ; Logic functions (if, etc.)
+load => func_strings.so ; string manipulation functions
+load => cdr_manager.so ; Asterisk Call Manager CDR Backend - Requires N/A
+load => chan_local.so ; Show status of local channels- Requires N/A
+load => chan_gtalk.so ; Use gtalk
+load => chan_sip.so ; Session Initiation Protocol (SIP) - Requires res_features.so
+load => codec_alaw.so ; A-law Coder/Decoder - Requires N/A
+load => codec_a_mu.so ; A-law and Mulaw direct Coder/Decoder - Requires N/A
+load => codec_gsm.so ; GSM/PCM16 (signed linear) Codec Translat - Requires N/A
+load => codec_ulaw.so ; Mu-law Coder/Decoder - Requires N/A
+load => format_gsm.so ; Raw GSM data - Requires N/A
+load => format_pcm.so ; Raw uLaw 8khz Audio support (PCM) - Requires N/A
+load => format_wav_gsm.so
+load => app_dial.so ; Dialing Application - Requires res_features.so, res_musiconhold.so
+load => app_parkandannounce.so ; Call Parking and Announce Application - Requires res_features.so
+load => app_playback.so ; Sound File Playback Application - Requires N/A
+load => app_record.so ; Sound File Record Application - Requires N/A
+load => app_system.so ; Execute a system command - Requires N/A
+load => app_disa.so ; Direct Inward System Access
+load => app_authenticate.so ; Authenticate via pin
+load => app_senddtmf.so ; Ability to send DTMF tones on the line.
+load => func_cut.so ; To manipulate strings
+load => func_timeout.so ; Used for DISA timeouts
+
+[global]
+chan_modem.so=no
