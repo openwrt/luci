@@ -103,7 +103,7 @@ clientid = section:taboption("advanced", Value, "clientid",
 	translate("Client ID to send when requesting DHCP"))
 
 
-vendorclass = section:taboption("advanced", Value, "vendorclass",
+vendorclass = section:taboption("advanced", Value, "vendorid",
 	translate("Vendor Class to send when requesting DHCP"))
 
 
