@@ -1,0 +1,114 @@
+#!/bin/sh
+#
+# Copyright 2011 Iordan Iordanov <iiordanov (AT) gmail.com>
+#
+#    This file is part of luci-pbx-voicemail.
+#
+#    luci-pbx-voicemail is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    luci-pbx-voicemail is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with luci-pbx-voicemail.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Thanks to http://www.zedwood.com for providing an excellent example of how to
+# properly assemble an email message with a uuencoded attachment.
+#
+
+LOGFILE=/tmp/last_sent_voicemail.log
+
+# Redirect standard error and standard output to a log file.
+rm  -f "$LOGFILE"
+exec 1>"$LOGFILE"
+exec 2>&1
+
+# Appends its second argument to a file named in the first argument.
+append_to_file ()
+{
+    echo "$2">>$1;
+}
+
+# Grab the attachment name, which should be sent as the first argument, and
+# exit with a warning if there is no voicemail to send.
+ATTACHMENT="$1"
+[ ! -f "$ATTACHMENT" ] && echo "WARNING: Found no voicemail recording to send." && exit
+
+# Grab the callerID which should have been sent as an argument.
+CALLERID="$2"
+[ -z "$CALLERID" ]   && CALLERID="An unknown caller"
+
+# Determine addresses we would like to send the voicemail to and exit if none are found.
+TO="`uci -q get pbx-voicemail.global_voicemail.global_email_addresses | tr ' ' ','`"
+[ -z "$TO" ] && echo "WARNING: Found no addresses to send voicemail to." && exit
+
+# See whether we should retain a copy of the voicemail.
+SAVEPATH="`uci -q get pbx-voicemail.global_voicemail.global_save_path`"
+
+DATE="`date +%Y-%m-%d`"
+TIME="`date +%H:%M:%S`"
+FROM="voicemail@pbx"
+REPLY="do-not-reply@pbx"
+SUBJECT="Voicemail from $CALLERID, $DATE, $TIME"
+MSGBODY="$CALLERID has left voicemail for you on $DATE at $TIME."
+MIMETYPE="audio/wav"
+TMP1="/tmp/tmpemail1.$$";
+TMP2="/tmp/tmpemail2.$$";
+BOUNDARY="`date +%s | md5sum | awk '{print $1}'`"
+FILENAME="voicemail-$DATE-$TIME.WAV"
+
+# Clean up just in case.
+rm -f $TMP1 $TMP2
+
+append_to_file $TMP1 "From: $FROM"
+append_to_file $TMP1 "To: $TO"
+append_to_file $TMP1 "Reply-To: $REPLY"
+append_to_file $TMP1 "Subject: $SUBJECT"
+append_to_file $TMP1 "Content-Type: multipart/mixed; boundary=\""$BOUNDARY"\""
+append_to_file $TMP1 ""
+append_to_file $TMP1 "This is a MIME formatted message.  If you see this text it means that your"
+append_to_file $TMP1 "email software does not support MIME formatted messages."
+append_to_file $TMP1 ""
+append_to_file $TMP1 "--$BOUNDARY"
+append_to_file $TMP1 "Content-Type: text/plain; charset=ISO-8859-1; format=flowed"
+append_to_file $TMP1 "Content-Transfer-Encoding: 7bit"
+append_to_file $TMP1 "Content-Disposition: inline"
+append_to_file $TMP1 ""
+append_to_file $TMP1 "$MSGBODY"
+append_to_file $TMP1 ""
+append_to_file $TMP1 ""
+append_to_file $TMP1 "--$BOUNDARY"
+append_to_file $TMP1 "Content-Type: $MIMETYPE; name=\"$FILENAME\""
+append_to_file $TMP1 "Content-Transfer-Encoding: base64"
+append_to_file $TMP1 "Content-Disposition: attachment; filename=\"$FILENAME\";"
+append_to_file $TMP1 ""
+
+append_to_file $TMP2 ""
+append_to_file $TMP2 ""
+append_to_file $TMP2 "--$BOUNDARY--"
+append_to_file $TMP2 ""
+append_to_file $TMP2 ""
+
+# Cat everything together and pass to msmtprc to send out.
+( cat $TMP1
+  cat "$ATTACHMENT" | uuencode --base64 /dev/stdout | sed -e '1,1d' -e '$d'
+  cat $TMP2 ) | msmtp -t -C /etc/pbx-msmtprc
+
+# Clean up email temp files.
+rm -f $TMP1 $TMP2
+
+# Either delete or move the attachment based on the SAVEPATH variable.
+if [ -z "$SAVEPATH" ]
+then
+    rm -f "$ATTACHMENT"
+else
+    mkdir -p "$SAVEPATH"
+    mv --backup=t "$ATTACHMENT" "$SAVEPATH/$FILENAME"
+fi
+
