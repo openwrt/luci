@@ -355,7 +355,7 @@ $(eval $(call application,statistics,LuCI Statistics Application,\
 	+PACKAGE_luci-app-statistics:collectd \
 	+PACKAGE_luci-app-statistics:rrdtool1 \
 	+PACKAGE_luci-app-statistics:collectd-mod-rrdtool \
-	+PACKAGE_luci-app-statistics:collectd-mod-wireless \
+	+PACKAGE_luci-app-statistics:collectd-mod-iwinfo \
 	+PACKAGE_luci-app-statistics:collectd-mod-interface \
 	+PACKAGE_luci-app-statistics:collectd-mod-load))
 
