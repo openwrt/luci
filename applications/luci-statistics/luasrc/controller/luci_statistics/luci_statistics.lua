@@ -66,7 +66,7 @@ function index()
 	}
 
 	-- create toplevel menu nodes
-	local st = entry({"admin", "statistics"}, call("statistics_index"), _("Statistics"), 80)
+	local st = entry({"admin", "statistics"}, template("admin_statistics/index"), _("Statistics"), 80)
 	st.i18n = "statistics"
 	st.index = true
 	
@@ -97,7 +97,7 @@ function index()
 	end
 
 	-- output views
-	local page = entry( { "admin", "statistics", "graph" }, call("statistics_index"), _("Graphs"), 80)
+	local page = entry( { "admin", "statistics", "graph" }, template("admin_statistics/index"), _("Graphs"), 80)
 	      page.i18n     = "statistics"
 	      page.setuser  = "nobody"
 	      page.setgroup = "nogroup"
