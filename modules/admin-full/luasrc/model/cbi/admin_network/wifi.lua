@@ -689,18 +689,26 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
 	local hostapd = fs.access("/usr/sbin/hostapd")
 
+	-- Probe EAP support                                                                                                
+	local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)                                                        
+	local has_sta_eap = (os.execute("wpa_supplicant -veap >/dev/null 2>/dev/null") == 0)
+
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK")
 		encr:value("psk2", "WPA2-PSK")
 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
-		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
-		encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+		if has_ap_eap and has_sta_eap then
+			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+		end
 	elseif hostapd and not supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
-		encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
-		encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="ap-wds"})
+		if has_ap_eap then
+			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
+			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="ap-wds"})
+		end
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
 			"and ad-hoc mode) to be installed."
@@ -709,8 +717,10 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 		encr:value("psk", "WPA-PSK", {mode="sta"}, {mode="sta-wds"})
 		encr:value("psk2", "WPA2-PSK", {mode="sta"}, {mode="sta-wds"})
 		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"}, {mode="sta-wds"})
-		encr:value("wpa", "WPA-EAP", {mode="sta"}, {mode="sta-wds"})
-		encr:value("wpa2", "WPA2-EAP", {mode="sta"}, {mode="sta-wds"})
+		if has_sta_eap then
+			encr:value("wpa", "WPA-EAP", {mode="sta"}, {mode="sta-wds"})
+			encr:value("wpa2", "WPA2-EAP", {mode="sta"}, {mode="sta-wds"})
+		end
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
 			"and ad-hoc mode) to be installed."
