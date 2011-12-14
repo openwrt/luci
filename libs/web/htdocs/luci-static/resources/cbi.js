@@ -151,8 +151,10 @@ var cbi_validators = {
 	},
 
 	'hostname': function(v)
-	{	if ( v.length <= 253 )
-			return (v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) != null);
+	{
+		if (v.length <= 253)
+			return (v.match(/^[a-zA-Z0-9]+$/) != null ||
+			        v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) != null);
 
 		return false;
 	},
