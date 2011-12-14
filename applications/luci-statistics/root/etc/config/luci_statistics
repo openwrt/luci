@@ -108,9 +108,6 @@ config 'statistics' 'collectd_unixsock'
 	option 'SocketFile' '/var/run/collectd/query.sock'
 	option 'SocketGroup' 'nogroup'
 
-config 'statistics' 'collectd_wireless'
-	option 'enable' '1'
-
 config 'statistics' 'collectd_cpu'
 	option 'enable' '1'
 
@@ -131,3 +128,6 @@ config 'statistics' 'collectd_olsrd'
 	option 'enable' '1'
 	option 'Port' '2006'
 	option 'Host' '127.0.0.1'
+
+config 'statistics' 'collectd_iwinfo'
+	option 'enable' '1'
