@@ -142,8 +142,9 @@ end
 
 function hostname(val)
 	if val and (#val < 254) and (
-	   val:match("^[a-zA-Z0-9]+$") or
-	   val:match("^[a-zA-Z0-9][a-zA-Z0-9%-%.]*[a-zA-Z0-9]$")
+	   val:match("^[a-zA-Z]+$") or
+	   (val:match("^[a-zA-Z0-9][a-zA-Z0-9%-%.]*[a-zA-Z0-9]$") and
+	    val:match("[^0-9%.]"))
 	) then
 		return true
 	end
@@ -238,7 +239,7 @@ function neg_network_ip4addr(val)
 	if type(v) == "string" then
 		v = v:gsub("^%s*!", "")
 		return (uciname(v) or ip4addr(v))
-	end	
+	end
 end
 
 function range(val, min, max)
