@@ -159,6 +159,11 @@ var cbi_validators = {
 		return false;
 	},
 
+	'network': function(v)
+	{
+		return cbi_validators.uciname(v) || cbi_validators.host(v);
+	},
+
 	'wpakey': function(v)
 	{
 		if( v.length == 64 )
