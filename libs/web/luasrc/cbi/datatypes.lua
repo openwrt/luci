@@ -154,6 +154,10 @@ function host(val)
 	return hostname(val) or ipaddr(val)
 end
 
+function network(val)
+	return uciname(val) or host(val)
+end
+
 function wpakey(val)
 	if #val == 64 then
 		return (val:match("^[a-fA-F0-9]+$") ~= nil)
