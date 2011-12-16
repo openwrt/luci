@@ -153,8 +153,9 @@ var cbi_validators = {
 	'hostname': function(v)
 	{
 		if (v.length <= 253)
-			return (v.match(/^[a-zA-Z0-9]+$/) != null ||
-			        v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) != null);
+			return (v.match(/^[a-zA-Z]+$/) != null ||
+			        (v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) &&
+			         v.match(/[^0-9.]/)));
 
 		return false;
 	},
@@ -191,7 +192,7 @@ var cbi_validators = {
 	'neg_network_ip4addr': function(v)
 	{
 		v = v.replace(/^\s*!/, "");
-		return cbi_validators.uciname(v) || cbi_validators.ip4addr(v);		
+		return cbi_validators.uciname(v) || cbi_validators.ip4addr(v);
 	},
 
 	'range': function(v, args)
