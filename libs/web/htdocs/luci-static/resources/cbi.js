@@ -234,6 +234,24 @@ var cbi_validators = {
 			return cbi_validators[args[0]](v.replace(/^\s*!\s*/, ''));
 
 		return false;
+	},
+
+	'list': function(v, args)
+	{
+		var cb = cbi_validators[args[0] || 'string'];
+		if (typeof cb == "function")
+		{
+			var cbargs = args.slice(1);
+			var values = v.match(/[^\s]+/g);
+
+			for (var i = 0; i < values.length; i++)
+				if (!cb(values[i], cbargs))
+					return false;
+
+			return true;
+		}
+
+		return false;
 	}
 };
 

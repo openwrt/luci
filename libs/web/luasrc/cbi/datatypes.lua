@@ -282,3 +282,17 @@ function neg(val, what)
 
 	return false
 end
+
+function list(val, what, ...)
+	if type(val) == "string" and what and type(_M[what]) == "function" then
+		for val in val:gmatch("%S+") do
+			if not _M[what](val, ...) then
+				return false
+			end
+		end
+
+		return true
+	end
+
+	return false
+end
