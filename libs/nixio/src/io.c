@@ -61,11 +61,11 @@ static int nixio_sock__sendto(lua_State *L, int to) {
 			const char *path = luaL_checklstring(L, 3, &pathlen);
 
 			addr_un.sun_family = AF_UNIX;
-			luaL_argcheck(L, pathlen < sizeof(addr_un.sun_path), 3, "out of range");
-			strncpy(addr_un.sun_path, path, sizeof(addr_un.sun_path));
+			luaL_argcheck(L, pathlen <= sizeof(addr_un.sun_path), 3, "out of range");
+			memcpy(addr_un.sun_path, path, pathlen);
 
 			addr = (struct sockaddr*)&addr_un;
-			alen = sizeof(addr_un);
+			alen = sizeof(sa_family_t) + pathlen;
 		}
 #endif
 	}
@@ -180,7 +180,11 @@ static int nixio_sock__recvfrom(lua_State *L, int from) {
 		}
 #ifndef __WINNT__
 		else if (sock->domain == AF_UNIX && alen > sizeof(sa_family_t)) {
-			lua_pushstring(L, addr_un.sun_path);
+			/* if first char is non-null then the path is not in the
+			   abstract namespace and alen includes the trailing null */
+			if (addr_un.sun_path[0])
+				--alen;
+			lua_pushlstring(L, addr_un.sun_path, alen - sizeof(sa_family_t));
 			return 2;
 		}
 #endif
