@@ -193,15 +193,15 @@ static int nixio_sock__bind_connect(lua_State *L, int do_bind) {
 
 		struct sockaddr_un addr;
 		addr.sun_family = AF_UNIX;
-		luaL_argcheck(L, pathlen < sizeof(addr.sun_path), 2, "out of range");
-		strncpy(addr.sun_path, path, sizeof(addr.sun_path));
+		luaL_argcheck(L, pathlen <= sizeof(addr.sun_path), 2, "out of range");
+		memcpy(addr.sun_path, path, pathlen);
+		socklen_t alen = sizeof(sa_family_t) + pathlen;
 
 		if (do_bind) {
-			status = bind(sock->fd, (struct sockaddr*)&addr, sizeof(addr));
+			status = bind(sock->fd, (struct sockaddr*)&addr, alen);
 		} else {
 			do {
-				status = connect(sock->fd, (struct sockaddr*)&addr,
-						sizeof(addr));
+				status = connect(sock->fd, (struct sockaddr*)&addr, alen);
 			} while (status == -1 && errno == EINTR);
 		}
 #endif
