@@ -13,21 +13,14 @@
 <% end end %>
 </div>
 <script type="text/javascript">
-cbi_dynlist_init('<%=cbid%>', '<%=resource%>');
-<% if self.datatype then -%>
-	<% if #self.keylist > 0 then -%>
-		cbi_combobox_init('<%=cbid .. "." .. i%>', {
+cbi_dynlist_init(
+	'<%=cbid%>', '<%=resource%>', '<%=self.datatype%>',
+	<%=tostring(self.optional or self.rmempty)%>
+	<%- if #self.keylist > 0 then -%>, [{
 		<%- for i, k in ipairs(self.keylist) do -%>
 			<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>
 			<%-if i<#self.keylist then-%>,<%-end-%>
 		<%-	end	-%>
-		}, '<%- if not self.rmempty and not self.optional then -%>
-			<%-: -- Please choose -- -%>
-		<%- end -%>', '<%: -- custom -- %>');
-	<% end -%>
-	<% for i=1, #vals + 1 do -%>
-	cbi_validate_field('<%=cbid%>.<%=i%>', <%=tostring((self.optional or self.rmempty) == true or i > #vals)%>, '<%=self.datatype%>');
-	<%- end %>
-<% end -%>
+	}, '<%: -- custom -- %>']<% end -%>);
 </script>
 <%+cbi/valuefooter%>

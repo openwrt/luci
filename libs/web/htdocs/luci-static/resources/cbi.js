@@ -494,26 +494,101 @@ function cbi_browser_init(id, respath, url, defpath)
 	cbi_bind(btn, 'click', cbi_browser_btnclick);
 }
 
-function cbi_dynlist_init(name, respath)
+function cbi_dynlist_init(name, respath, datatype, optional, choices)
 {
-	function cbi_dynlist_renumber(e)
-	{
-		/* in a perfect world, we could just getElementsByName() - but not if
-		 * MSIE is involved... */
-		var inputs = [ ]; // = document.getElementsByName(name);
-		for (var i = 0; i < e.parentNode.childNodes.length; i++)
-			if (e.parentNode.childNodes[i].name == name)
-				inputs.push(e.parentNode.childNodes[i]);
+	var input0 = document.getElementsByName(name)[0];
+	var prefix = input0.name;
+	var parent = input0.parentNode;
 
-		for (var i = 0; i < inputs.length; i++)
+	var values;
+
+	function cbi_dynlist_redraw(focus, add, del)
+	{
+		values = [ ];
+
+		while (parent.firstChild)
 		{
-			inputs[i].id = name + '.' + (i + 1);
-			inputs[i].nextSibling.src = respath + (
-				(i+1) < inputs.length ? '/cbi/remove.gif' : '/cbi/add.gif'
-			);
+			var n = parent.firstChild;
+			var i = parseInt(n.index);
+
+			if (i != del)
+			{
+				if (n.nodeName.toLowerCase() == 'input')
+					values.push(n.value || '');
+				else if (n.nodeName.toLowerCase() == 'select')
+					values[values.length-1] = n.options[n.selectedIndex].value;
+			}
+
+			parent.removeChild(n);
 		}
 
-		e.focus();
+		if (add >= 0)
+		{
+			focus = add+1;
+			values.splice(focus, 0, '');
+		}
+		else if (values.length == 0)
+		{
+			focus = 0;
+			values.push('');
+		}
+
+		for (var i = 0; i < values.length; i++)
+		{
+			var t = document.createElement('input');
+				t.id = prefix + '.' + (i+1);
+				t.name = prefix;
+				t.value = values[i];
+				t.type = 'text';
+				t.index = i;
+				t.className = 'cbi-input-text';
+
+			var b = document.createElement('img');
+				b.src = respath + ((i+1) < values.length ? '/cbi/remove.gif' : '/cbi/add.gif');
+				b.className = 'cbi-image-button';
+
+			parent.appendChild(t);
+			parent.appendChild(b);
+			parent.appendChild(document.createElement('br'));
+
+			if (datatype)
+			{
+				cbi_validate_field(t.id, ((i+1) == values.length) || optional, datatype);
+			}
+
+			if (choices)
+			{
+				cbi_combobox_init(t.id, choices[0], '', choices[1]);
+				t.nextSibling.index = i;
+
+				cbi_bind(t.nextSibling, 'keydown',  cbi_dynlist_keydown);
+				cbi_bind(t.nextSibling, 'keypress', cbi_dynlist_keypress);
+
+				if (i == focus || -i == focus)
+					t.nextSibling.focus();
+			}
+			else
+			{
+				cbi_bind(t, 'keydown',  cbi_dynlist_keydown);
+				cbi_bind(t, 'keypress', cbi_dynlist_keypress);
+
+				if (i == focus)
+				{
+					t.focus();
+				}
+				else if (-i == focus)
+				{
+					t.focus();
+
+					/* force cursor to end */
+					var v = t.value;
+					t.value = ' '
+					t.value = v;
+				}
+			}
+
+			cbi_bind(b, 'click', cbi_dynlist_btnclick);
+		}
 	}
 
 	function cbi_dynlist_keypress(ev)
@@ -570,27 +645,28 @@ function cbi_dynlist_init(name, respath)
 		while (next && next.name != name)
 			next = next.nextSibling;
 
+		/* advance one further in combobox case */
+		if (next && next.nextSibling.name == name)
+			next = next.nextSibling;
+
 		switch (ev.keyCode)
 		{
 			/* backspace, delete */
 			case 8:
 			case 46:
-				var jump = (ev.keyCode == 8)
-					? (prev || next) : (next || prev);
+				var del = (se.nodeName.toLowerCase() == 'select')
+					? true : (se.value.length == 0);
 
-				if (se.value.length == 0 && jump)
+				if (del)
 				{
-					se.parentNode.removeChild(se.nextSibling.nextSibling);
-					se.parentNode.removeChild(se.nextSibling);
-					se.parentNode.removeChild(se);
-
-					cbi_dynlist_renumber(jump);
-
 					if (ev.preventDefault)
 						ev.preventDefault();
 
-					/* IE Quirk, needs double focus somehow */
-					jump.focus();
+					var focus = se.index;
+					if (ev.keyCode == 8)
+						focus = -focus+1;
+
+					cbi_dynlist_redraw(focus, -1, se.index);
 
 					return false;
 				}
@@ -599,36 +675,7 @@ function cbi_dynlist_init(name, respath)
 
 			/* enter */
 			case 13:
-				var n = document.createElement('input');
-					n.name       = se.name;
-					n.type       = se.type;
-
-				var b = document.createElement('img');
-
-				cbi_bind(n, 'keydown',  cbi_dynlist_keydown);
-				cbi_bind(n, 'keypress', cbi_dynlist_keypress);
-				cbi_bind(b, 'click',    cbi_dynlist_btnclick);
-
-				if (next)
-				{
-					se.parentNode.insertBefore(n, next);
-					se.parentNode.insertBefore(b, next);
-					se.parentNode.insertBefore(document.createElement('br'), next);
-				}
-				else
-				{
-					se.parentNode.appendChild(n);
-					se.parentNode.appendChild(b);
-					se.parentNode.appendChild(document.createElement('br'));
-				}
-
-				var dt = se.getAttribute('cbi_datatype');
-				var op = se.getAttribute('cbi_optional') == 'true';
-
-				if (dt)
-					cbi_validate_field(n, op, dt);
-
-				cbi_dynlist_renumber(n);
+				cbi_dynlist_redraw(-1, se.index, -1);
 				break;
 
 			/* arrow up */
@@ -675,21 +722,7 @@ function cbi_dynlist_init(name, respath)
 		return false;
 	}
 
-	var inputs = document.getElementsByName(name);
-	for( var i = 0; i < inputs.length; i++ )
-	{
-		var btn = document.createElement('img');
-			btn.className = 'cbi-image-button';
-			btn.src = respath + (
-				(i+1) < inputs.length ? '/cbi/remove.gif' : '/cbi/add.gif'
-			);
-
-		inputs[i].parentNode.insertBefore(btn, inputs[i].nextSibling);
-
-		cbi_bind(inputs[i], 'keydown',  cbi_dynlist_keydown);
-		cbi_bind(inputs[i], 'keypress', cbi_dynlist_keypress);
-		cbi_bind(btn,       'click',    cbi_dynlist_btnclick);
-	}
+	cbi_dynlist_redraw(0, -1, -1);
 }
 
 //Hijacks the CBI form to send via XHR (requires Prototype)
