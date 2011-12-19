@@ -14,15 +14,16 @@ $Id$
 
 local nw = require "luci.model.network"
 local fw = require "luci.model.firewall"
-local utl = require "luci.util"
-local dsp = require "luci.dispatcher"
+local ds = require "luci.dispatcher"
+local ut = require "luci.util"
 
-local has_v2 = nixio.fs.access("/lib/firewall/fw.sh")
-local out, inp
+local m, p, i, v
+local s, name, net, family, msrc, mdest, log, lim
+local s2, out, inp
 
-require("luci.tools.webadmin")
+
 m = Map("firewall", translate("Firewall - Zone Settings"))
-m.redirect = luci.dispatcher.build_url("admin/network/firewall")
+m.redirect = luci.dispatcher.build_url("admin/network/firewall/zones")
 
 fw.init(m.uci)
 nw.init(m.uci)
@@ -30,20 +31,25 @@ nw.init(m.uci)
 
 local zone = fw:get_zone(arg[1])
 if not zone then
-	luci.http.redirect(dsp.build_url("admin", "network", "firewall"))
+	luci.http.redirect(dsp.build_url("admin/network/firewall/zones"))
 	return
+else
+	m.title = "%s - %s" %{
+		translate("Firewall - Zone Settings"),
+		translatef("Zone %q", zone:name() or "?")
+	}
 end
 
 
 s = m:section(NamedSection, zone.sid, "zone",
 	translatef("Zone %q", zone:name()),
-	translatef("This section defines common properties of %q. " ..
-		"The <em>input</em> and <em>output</em> options set the default "..
-		"policies for traffic entering and leaving this zone while the " ..
-		"<em>forward</em> option describes the policy for forwarded traffic " ..
-		"between different networks within the zone. " ..
-		"<em>Covered networks</em> specifies which available networks are " ..
-		"member of this zone.", zone:name()))
+	translatef("This section defines common properties of %q. \
+		The <em>input</em> and <em>output</em> options set the default \
+		policies for traffic entering and leaving this zone while the \
+		<em>forward</em> option describes the policy for forwarded traffic \
+		between different networks within the zone. \
+		<em>Covered networks</em> specifies which available networks are \
+		member of this zone.", zone:name()))
 
 s.anonymous = true
 s.addremove = false
@@ -73,15 +79,18 @@ function name.write(self, section, value)
 		inp.exclude = value
 	end
 
-	m.redirect = luci.dispatcher.build_url(
-		"admin", "network", "firewall", "zones", value
-	)
+	m.redirect = ds.build_url("admin/network/firewall/zones", value)
+	m.title = "%s - %s" %{
+		translate("Firewall - Zone Settings"),
+		translatef("Zone %q", value or "?")
+	}
 end
 
-p = {}
-p[1] = s:taboption("general", ListValue, "input", translate("Input"))
-p[2] = s:taboption("general", ListValue, "output", translate("Output"))
-p[3] = s:taboption("general", ListValue, "forward", translate("Forward"))
+p = {
+	s:taboption("general", ListValue, "input", translate("Input")),
+	s:taboption("general", ListValue, "output", translate("Output")),
+	s:taboption("general", ListValue, "forward", translate("Forward"))
+}
 
 for i, v in ipairs(p) do
 	v:value("REJECT", translate("reject"))
@@ -109,27 +118,25 @@ function net.write(self, section, value)
 	zone:clear_networks()
 
 	local n
-	for n in utl.imatch(value) do
+	for n in ut.imatch(value) do
 		zone:add_network(n)
 	end
 end
 
 
-if has_v2 then
-	family = s:taboption("advanced", ListValue, "family",
-		translate("Restrict to address family"))
+family = s:taboption("advanced", ListValue, "family",
+	translate("Restrict to address family"))
 
-	family.rmempty = true
-	family:value("", translate("IPv4 and IPv6"))
-	family:value("ipv4", translate("IPv4 only"))
-	family:value("ipv6", translate("IPv6 only"))
-end
+family.rmempty = true
+family:value("", translate("IPv4 and IPv6"))
+family:value("ipv4", translate("IPv4 only"))
+family:value("ipv6", translate("IPv6 only"))
 
 msrc = s:taboption("advanced", DynamicList, "masq_src",
 	translate("Restrict Masquerading to given source subnets"))
 
 msrc.optional = true
-msrc.datatype = "neg(network)"
+msrc.datatype = "neg_network_ip4addr"
 msrc.placeholder = "0.0.0.0/0"
 msrc:depends("family", "")
 msrc:depends("family", "ipv4")
@@ -138,7 +145,7 @@ mdest = s:taboption("advanced", DynamicList, "masq_dest",
 	translate("Restrict Masquerading to given destination subnets"))
 
 mdest.optional = true
-mdest.datatype = "neg(network)"
+mdest.datatype = "neg_network_ip4addr"
 mdest.placeholder = "0.0.0.0/0"
 mdest:depends("family", "")
 mdest:depends("family", "ipv4")
@@ -146,30 +153,28 @@ mdest:depends("family", "ipv4")
 s:taboption("advanced", Flag, "conntrack",
 	translate("Force connection tracking"))
 
-if has_v2 then
-	log = s:taboption("advanced", Flag, "log",
-		translate("Enable logging on this zone"))
+log = s:taboption("advanced", Flag, "log",
+	translate("Enable logging on this zone"))
 
-	log.rmempty = true
-	log.enabled = "1"
+log.rmempty = true
+log.enabled = "1"
 
-	lim = s:taboption("advanced", Value, "log_limit",
-		translate("Limit log messages"))
+lim = s:taboption("advanced", Value, "log_limit",
+	translate("Limit log messages"))
 
-	lim.placeholder = "10/minute"
-	lim:depends("log", "1")
-end
+lim.placeholder = "10/minute"
+lim:depends("log", "1")
 
 
 s2 = m:section(NamedSection, zone.sid, "fwd_out",
 	translate("Inter-Zone Forwarding"),
-	translatef("The options below control the forwarding policies between " ..
-		"this zone (%s) and other zones. <em>Destination zones</em> cover " ..
-		"forwarded traffic <strong>originating from %q</strong>. " ..
-		"<em>Source zones</em> match forwarded traffic from other zones " ..
-		"<strong>targeted at %q</strong>. The forwarding rule is " ..
-		"<em>unidirectional</em>, e.g. a forward from lan to wan does " ..
-		"<em>not</em> imply a permission to forward from wan to lan as well.",
+	translatef("The options below control the forwarding policies between \
+		this zone (%s) and other zones. <em>Destination zones</em> cover \
+		forwarded traffic <strong>originating from %q</strong>. \
+		<em>Source zones</em> match forwarded traffic from other zones \
+		<strong>targeted at %q</strong>. The forwarding rule is \
+		<em>unidirectional</em>, e.g. a forward from lan to wan does \
+		<em>not</em> imply a permission to forward from wan to lan as well.",
 		zone:name(), zone:name(), zone:name()
 
 	))
@@ -220,7 +225,7 @@ function out.write(self, section, value)
 	zone:del_forwardings_by("src")
 
 	local f
-	for f in utl.imatch(value) do
+	for f in ut.imatch(value) do
 		zone:add_forwarding_to(f)
 	end
 end
@@ -229,7 +234,7 @@ function inp.write(self, section, value)
 	zone:del_forwardings_by("dest")
 
 	local f
-	for f in utl.imatch(value) do
+	for f in ut.imatch(value) do
 		zone:add_forwarding_from(f)
 	end
 end
