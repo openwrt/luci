@@ -6,18 +6,36 @@ msgstr ""
 "PO-Revision-Date: 2011-11-23 22:20+0200\n"
 "Last-Translator: fredb <fblistes+luci@free.fr>\n"
 "Language-Team: French\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.0.4\n"
+
+msgid "(Unnamed Entry)"
+msgstr ""
+
+msgid "(Unnamed SNAT)"
+msgstr ""
 
 msgid "(optional)"
 msgstr "(optionnel)"
 
+msgid "-- Please choose --"
+msgstr ""
+
+msgid "-- custom --"
+msgstr ""
+
 msgid "Action"
 msgstr "Action"
+
+msgid "Add"
+msgstr ""
+
+msgid "Add and edit..."
+msgstr ""
 
 msgid "Advanced Options"
 msgstr "Options avancées"
@@ -87,8 +105,17 @@ msgstr "Régles spécifiques"
 msgid "Custom Rules (/etc/firewall.user)"
 msgstr "Règles spécifiques (/etc/firewall.user)"
 
+msgid ""
+"Custom rules allow you to execute arbritary iptables commands which are not "
+"otherwise covered by the firewall framework. The commands are executed after "
+"each firewall restart, right after the default ruleset has been loaded."
+msgstr ""
+
 msgid "Destination"
 msgstr "Destination"
+
+msgid "Destination IP address"
+msgstr ""
 
 msgid "Destination address"
 msgstr "Adresse de destination"
@@ -101,6 +128,9 @@ msgstr "Zone de destination"
 
 msgid "Device"
 msgstr "Équipement"
+
+msgid "Do not rewrite"
+msgstr ""
 
 msgid "Drop invalid packets"
 msgstr "Ignorer les paquets invalides"
@@ -127,6 +157,15 @@ msgstr "Famille"
 msgid "Firewall"
 msgstr "Pare-feu"
 
+msgid "Firewall - Custom Rules"
+msgstr ""
+
+msgid "Firewall - Port Forwards"
+msgstr ""
+
+msgid "Firewall - Traffic Rules"
+msgstr ""
+
 msgid "Firewall - Zone Settings"
 msgstr "Pare-feu - Configuration des zones"
 
@@ -146,11 +185,17 @@ msgstr "Transfert"
 msgid "General Settings"
 msgstr "Paramètres généraux"
 
+msgid "IPv4"
+msgstr ""
+
 msgid "IPv4 and IPv6"
 msgstr "IPv4 et IPv6"
 
 msgid "IPv4 only"
 msgstr "IPv4 seulement"
+
+msgid "IPv6"
+msgstr ""
 
 msgid "IPv6 only"
 msgstr "IPv6 seulement"
@@ -185,6 +230,9 @@ msgstr "Masquage"
 msgid "Match ICMP type"
 msgstr "Type ICMP correspondant"
 
+msgid "Match forwarded traffic to the given destination port or port range."
+msgstr ""
+
 msgid ""
 "Match incoming traffic directed at the given destination port or port range "
 "on this host"
@@ -199,14 +247,57 @@ msgstr ""
 "Prendre en compte le trafic entrant provenant du port source donné (ou la "
 "gamme de ports) sur l'hôte client"
 
+msgid ""
+"Match incoming traffic originating from the given source port or port range "
+"on the client host."
+msgstr ""
+
 msgid "Name"
 msgstr "Nom"
+
+msgid "New SNAT rule"
+msgstr ""
+
+msgid "New forward rule"
+msgstr ""
+
+msgid "New input rule"
+msgstr ""
+
+msgid "New port forward"
+msgstr ""
+
+msgid "New source NAT"
+msgstr ""
+
+msgid "Only match incoming traffic directed at the given IP address."
+msgstr ""
+
+msgid "Only match incoming traffic from these MACs."
+msgstr ""
+
+msgid "Only match incoming traffic from this IP or range."
+msgstr ""
+
+msgid ""
+"Only match incoming traffic originating from the given source port or port "
+"range on the client host"
+msgstr ""
+
+msgid "Open ports on router"
+msgstr ""
+
+msgid "Other..."
+msgstr ""
 
 msgid "Output"
 msgstr "Sortie"
 
 msgid "Overview"
 msgstr "Vue d'ensemble"
+
+msgid "Port Forwards"
+msgstr ""
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #  applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua               #
@@ -229,6 +320,11 @@ msgstr "Vue d'ensemble"
 #
 msgid "Port forwarding"
 msgstr "Redirection de port"
+
+msgid ""
+"Port forwarding allows remote computers on the Internet to connect to a "
+"specific computer or service within the private LAN."
+msgstr ""
 
 msgid ""
 "Port forwarding allows to provide network services in the internal network "
@@ -268,8 +364,25 @@ msgstr ""
 msgid "Restrict to address family"
 msgstr "Restreindre à cette famille d'adresses"
 
+msgid "Rewrite matched traffic to the given address."
+msgstr ""
+
+msgid ""
+"Rewrite matched traffic to the given source port. May be left empty to only "
+"rewrite the IP address."
+msgstr ""
+
 msgid "Rules"
 msgstr "Règles"
+
+msgid "SNAT"
+msgstr ""
+
+msgid "SNAT IP address"
+msgstr ""
+
+msgid "SNAT port"
+msgstr ""
 
 msgid "Source"
 msgstr "Source"
@@ -310,6 +423,15 @@ msgstr "Adresse IP source"
 msgid "Source MAC address"
 msgstr "Adresse MAC source"
 
+msgid "Source NAT"
+msgstr ""
+
+msgid ""
+"Source NAT is a specific form of masquerading which allows fine grained "
+"control over the source IP used for outgoing traffic, for example to map "
+"multiple WAN addresses to internal subnets."
+msgstr ""
+
 msgid "Source address"
 msgstr "Adresse source"
 
@@ -337,10 +459,20 @@ msgstr ""
 "Les options ci-dessous contrôlent les politiques de transmission entre cette "
 "zone (%s) et les autres zones. <em>Zones de destination</em> couvre le "
 "trafic transfmis <strong>venant de %q</strong>. <em>Zones source</em> "
-"correspond au trafic transféré d'autres zones <strong> à destination de %"
-"q</strong>. La règle de transmission est <em>unidirectionnelle</em>, la "
+"correspond au trafic transféré d'autres zones <strong> à destination de %q</"
+"strong>. La règle de transmission est <em>unidirectionnelle</em>, la "
 "transmission du LAN au WAN n'implique <em>pas</em> également l'autorisation "
 "de transmission du WAN au LAN."
+
+msgid ""
+"This page allows you to change advanced properties of the port forwarding "
+"entry. In most cases there is no need to modify those settings."
+msgstr ""
+
+msgid ""
+"This page allows you to change advanced properties of the traffic rule "
+"entry, such as matched source and destination hosts."
+msgstr ""
 
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
@@ -349,12 +481,18 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are member of this zone."
 msgstr ""
-"Cette section définit des propriétés communes de %q. Les options "
-"<em>entrée</em> et <em>sortie</em> définissent les politiques par défaut "
-"pour le trafic entrant et sortant de cette zone, tandis que l'option "
-"<em>transmission</em> décrit la politique pour le trafic transmis entre "
-"différents réseaux dans cette zone. Les <em>réseaux couverts</em> indiquent "
-"quels réseaux disponibles sont membre de cette zone."
+"Cette section définit des propriétés communes de %q. Les options <em>entrée</"
+"em> et <em>sortie</em> définissent les politiques par défaut pour le trafic "
+"entrant et sortant de cette zone, tandis que l'option <em>transmission</em> "
+"décrit la politique pour le trafic transmis entre différents réseaux dans "
+"cette zone. Les <em>réseaux couverts</em> indiquent quels réseaux "
+"disponibles sont membre de cette zone."
+
+msgid "To source IP"
+msgstr ""
+
+msgid "To source port"
+msgstr ""
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #  applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua                 #
@@ -369,6 +507,9 @@ msgstr ""
 msgid "Traffic Redirection"
 msgstr "Redirection du trafic"
 
+msgid "Traffic Rules"
+msgstr ""
+
 msgid ""
 "Traffic redirection allows you to change the destination address of "
 "forwarded packets."
@@ -376,8 +517,19 @@ msgstr ""
 "La redirection de trafic vous permet de changer l'adresse de destination des "
 "paquets transférés."
 
+msgid ""
+"Traffic rules define policies for packets traveling between different zones, "
+"for example to reject traffic between certain hosts or to open WAN ports on "
+"the router."
+msgstr ""
+
 msgid "Via"
 msgstr "Via"
+
+msgid ""
+"You may specify multiple by selecting \"-- custom --\" and then entering "
+"protocols separated by space."
+msgstr ""
 
 msgid "Zone %q"
 msgstr "Zone %q"
@@ -394,6 +546,9 @@ msgstr "accepter"
 #, fuzzy
 msgid "any"
 msgstr "tous"
+
+msgid "don't track"
+msgstr ""
 
 msgid "drop"
 msgstr "ignorer"
