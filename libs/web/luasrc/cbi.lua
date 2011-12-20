@@ -102,7 +102,7 @@ function load(cbimap, ...)
 				for _, field in ipairs(map.upload_fields) do
 					uploads[
 						field.config .. '.' ..
-						field.section.sectiontype .. '.' ..
+						(field.section.sectiontype or '1') .. '.' ..
 						field.option
 					] = true
 				end
@@ -124,8 +124,8 @@ function load(cbimap, ...)
 					)()
 
 					if c and s and o then
-						local t = uci:get( c, s )
-						if t and uploads[c.."."..t.."."..o] then
+						local t = uci:get( c, s ) or s
+						if uploads[c.."."..t.."."..o] then
 							local path = upldir .. field.name
 							fd = io.open(path, "w")
 							if fd then

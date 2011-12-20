@@ -1,5 +1,5 @@
 <% if not self.embedded then %>
-<form method="post" action="<%=REQUEST_URI%>">
+<form method="post" enctype="multipart/form-data" action="<%=REQUEST_URI%>">
 	<div>
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />
