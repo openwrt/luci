@@ -59,7 +59,7 @@ function s.parse(self, ...)
 		self.map:set(created, "src",       "wan")
 		self.map:set(created, "proto",     (i_p ~= "other") and i_p or "all")
 		self.map:set(created, "dest_port", i_e)
-		self.map:set(created, "_name",     i_n)
+		self.map:set(created, "name",      i_n)
 
 		if i_p ~= "other" and i_e and #i_e > 0 then
 			created = nil
@@ -71,7 +71,7 @@ function s.parse(self, ...)
 		self.map:set(created, "target", "ACCEPT")
 		self.map:set(created, "src",    f_s)
 		self.map:set(created, "dest",   f_d)
-		self.map:set(created, "_name",  f_n)
+		self.map:set(created, "name",   f_n)
 	end
 
 	if created then
@@ -82,10 +82,7 @@ function s.parse(self, ...)
 	end
 end
 
-name = s:option(DummyValue, "_name", translate("Name"))
-function name.cfgvalue(self, s)
-	return self.map:get(s, "_name") or "-"
-end
+ft.opt_name(s, DummyValue, translate("Name"))
 
 family = s:option(DummyValue, "family", translate("Family"))
 function family.cfgvalue(self, s)
@@ -170,6 +167,8 @@ function target.cfgvalue(self, s)
 	end
 end
 
+ft.opt_enabled(s, Flag, translate("Enable")).width = "1%"
+
 
 --
 -- SNAT
@@ -210,7 +209,7 @@ function s.parse(self, ...)
 		self.map:set(created, "proto",     "all")
 		self.map:set(created, "src_dip",   a)
 		self.map:set(created, "src_dport", p)
-		self.map:set(created, "_name",     n)
+		self.map:set(created, "name",      n)
 	end
 
 	if created then
@@ -225,10 +224,7 @@ function s.filter(self, sid)
 	return (self.map:get(sid, "target") == "SNAT")
 end
 
-name = s:option(DummyValue, "_name", translate("Name"))
-function name.cfgvalue(self, s)
-	return self.map:get(s, "_name") or "-"
-end
+ft.opt_name(s, DummyValue, translate("Name"))
 
 proto = s:option(DummyValue, "proto", translate("Protocol"))
 proto.rawhtml = true
@@ -284,6 +280,8 @@ function snat.cfgvalue(self, s)
 		return translatef("Rewrite to source %s", a or p)
 	end
 end
+
+ft.opt_enabled(s, Flag, translate("Enable")).width = "1%"
 
 
 return m

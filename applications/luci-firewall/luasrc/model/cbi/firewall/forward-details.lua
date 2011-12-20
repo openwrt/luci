@@ -14,6 +14,9 @@ $Id$
 
 local sys = require "luci.sys"
 local dsp = require "luci.dispatcher"
+local ft  = require "luci.tools.firewall"
+
+local m, s, o
 
 arg[1] = arg[1] or ""
 
@@ -29,7 +32,7 @@ if m.uci:get("firewall", arg[1]) ~= "redirect" then
 	luci.http.redirect(m.redirect)
 	return
 else
-	local name = m:get(arg[1], "_name")
+	local name = m:get(arg[1], "name") or m:get(arg[1], "_name")
 	if not name or #name == 0 then
 		name = translate("(Unnamed Entry)")
 	end
@@ -56,26 +59,17 @@ s = m:section(NamedSection, arg[1], "redirect", "")
 s.anonymous = true
 s.addremove = false
 
-s:tab("general", translate("General Settings"))
-s:tab("advanced", translate("Advanced Settings"))
+ft.opt_enabled(s, Button)
+ft.opt_name(s, Value, translate("Name"))
 
-name = s:taboption("general", Value, "_name", translate("Name"))
-name.rmempty = true
-name.size = 10
 
-src = s:taboption("advanced", Value, "src", translate("Source zone"))
-src.nocreate = true
-src.default = "wan"
-src.template = "cbi/firewall_zonelist"
+o = s:option(Value, "proto", translate("Protocol"))
+o:value("tcp udp", "TCP+UDP")
+o:value("tcp", "TCP")
+o:value("udp", "UDP")
+o:value("icmp", "ICMP")
 
-proto = s:taboption("general", Value, "proto", translate("Protocol"))
-proto.optional = true
-proto:value("tcp udp", "TCP+UDP")
-proto:value("tcp", "TCP")
-proto:value("udp", "UDP")
-proto:value("icmp", "ICMP")
-
-function proto.cfgvalue(...)
+function o.cfgvalue(...)
 	local v = Value.cfgvalue(...)
 	if not v or v == "tcpudp" then
 		return "tcp udp"
@@ -83,66 +77,88 @@ function proto.cfgvalue(...)
 	return v
 end
 
-dport = s:taboption("general", Value, "src_dport", translate("External port"),
-	translate("Match incoming traffic directed at the given " ..
-		"destination port or port range on this host"))
-dport.datatype = "portrange"
 
-to = s:taboption("general", Value, "dest_ip", translate("Internal IP address"),
-	translate("Redirect matched incoming traffic to the specified " ..
-		"internal host"))
-to.datatype = "ip4addr"
-for i, dataset in ipairs(sys.net.arptable()) do
-	to:value(dataset["IP address"])
-end
+o = s:option(Value, "src", translate("Source zone"))
+o.nocreate = true
+o.default = "wan"
+o.template = "cbi/firewall_zonelist"
 
-toport = s:taboption("general", Value, "dest_port", translate("Internal port (optional)"),
-	translate("Redirect matched incoming traffic to the given port on " ..
-		"the internal host"))
-toport.optional = true
-toport.placeholder = "0-65535"
-toport.datatype = "portrange"
 
-dest = s:taboption("advanced", Value, "dest", translate("Destination zone"))
-dest.nocreate = true
-dest.default = "lan"
-dest.template = "cbi/firewall_zonelist"
-
-src_dip = s:taboption("advanced", Value, "src_dip",
-	translate("Intended destination address"),
-	translate("Only match incoming traffic directed at the given IP address."))
-
-src_dip.optional = true
-src_dip.datatype = "ip4addr"
-src_dip.placeholder = translate("any")
-
-src_mac = s:taboption("advanced", DynamicList, "src_mac",
+o = s:option(DynamicList, "src_mac",
 	translate("Source MAC address"),
 	translate("Only match incoming traffic from these MACs."))
-src_mac.optional = true
-src_mac.datatype = "macaddr"
-src_mac.placeholder = translate("any")
+o.rmempty = true
+o.datatype = "macaddr"
+o.placeholder = translate("any")
 
-src_ip = s:taboption("advanced", Value, "src_ip",
+
+o = s:option(Value, "src_ip",
 	translate("Source IP address"),
 	translate("Only match incoming traffic from this IP or range."))
-src_ip.optional = true
-src_ip.datatype = "neg(ip4addr)"
-src_ip.placeholder = translate("any")
+o.rmempty = true
+o.datatype = "neg(ip4addr)"
+o.placeholder = translate("any")
 
-sport = s:taboption("advanced", Value, "src_port",
+
+o = s:option(Value, "src_port",
 	translate("Source port"),
 	translate("Only match incoming traffic originating from the given source port or port range on the client host"))
-sport.optional = true
-sport.datatype = "portrange"
-sport.placeholder = translate("any")
+o.rmempty = true
+o.datatype = "portrange"
+o.placeholder = translate("any")
 
-reflection = s:taboption("advanced", Flag, "reflection", translate("Enable NAT Loopback"))
-reflection.rmempty = true
-reflection.default = reflection.enabled
-reflection:depends({ target = "DNAT", src = wan_zone })
-reflection.cfgvalue = function(...)
+
+o = s:option(Value, "src_dip",
+	translate("External IP address"),
+	translate("Only match incoming traffic directed at the given IP address."))
+
+o.rmempty = true
+o.datatype = "ip4addr"
+o.placeholder = translate("any")
+
+
+o = s:option(Value, "src_dport", translate("External port"),
+	translate("Match incoming traffic directed at the given " ..
+		"destination port or port range on this host"))
+o.datatype = "portrange"
+
+
+
+o = s:option(Value, "dest", translate("Internal zone"))
+o.nocreate = true
+o.default = "lan"
+o.template = "cbi/firewall_zonelist"
+
+
+o = s:option(Value, "dest_ip", translate("Internal IP address"),
+	translate("Redirect matched incoming traffic to the specified \
+		internal host"))
+o.datatype = "ip4addr"
+for i, dataset in ipairs(sys.net.arptable()) do
+	o:value(dataset["IP address"])
+end
+
+
+o = s:option(Value, "dest_port",
+	translate("Internal port"),
+	translate("Redirect matched incoming traffic to the given port on \
+		the internal host"))
+o.placeholder = translate("any")
+o.datatype = "portrange"
+
+
+o = s:option(Flag, "reflection", translate("Enable NAT Loopback"))
+o.rmempty = true
+o.default = o.enabled
+o:depends("src", wan_zone)
+o.cfgvalue = function(...)
 	return Flag.cfgvalue(...) or "1"
 end
+
+
+s:option(Value, "extra",
+	translate("Extra arguments"),
+	translate("Passes additional arguments to iptables. Use with care!"))
+
 
 return m

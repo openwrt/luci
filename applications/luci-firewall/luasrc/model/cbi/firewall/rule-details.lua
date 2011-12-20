@@ -17,6 +17,7 @@ local sys = require "luci.sys"
 local dsp = require "luci.dispatcher"
 local nxo = require "nixio"
 
+local ft = require "luci.tools.firewall"
 local nw = require "luci.model.network"
 local m, s, o, k, v
 
@@ -46,7 +47,7 @@ if not rule_type then
 --
 elseif rule_type == "redirect" then
 
-	local name = m:get(arg[1], "_name")
+	local name = m:get(arg[1], "name") or m:get(arg[1], "_name")
 	if not name or #name == 0 then
 		name = translate("(Unnamed SNAT)")
 	else
@@ -76,9 +77,8 @@ elseif rule_type == "redirect" then
 	s.addremove = false
 
 
-	o = s:option(Value, "_name", translate("Name"))
-	o.rmempty = true
-	o.size = 10
+	ft.opt_enabled(s, Button)
+	ft.opt_name(s, Value, translate("Name"))
 
 
 	o = s:option(Value, "proto",
@@ -115,7 +115,7 @@ elseif rule_type == "redirect" then
 
 	o = s:option(Value, "src_ip", translate("Source IP address"))
 	o.rmempty = true
-	o.datatype = "neg(ip4addr)"
+	o.datatype = "neg(ipaddr)"
 	o.placeholder = translate("any")
 
 
@@ -176,15 +176,29 @@ elseif rule_type == "redirect" then
 	o.placeholder = translate('Do not rewrite')
 
 
+	s:option(Value, "extra",
+		translate("Extra arguments"),
+		translate("Passes additional arguments to iptables. Use with care!"))
+
+
 --
 -- Rule
 --
 else
+	local name = m:get(arg[1], "name") or m:get(arg[1], "_name")
+	if not name or #name == 0 then
+		name = translate("(Unnamed Rule)")
+	end
+
+	m.title = "%s - %s" %{ translate("Firewall - Traffic Rules"), name }
+
+
 	s = m:section(NamedSection, arg[1], "rule", "")
 	s.anonymous = true
 	s.addremove = false
 
-	s:option(Value, "_name", translate("Name").." "..translate("(optional)"))
+	ft.opt_enabled(s, Button)
+	ft.opt_name(s, Value, translate("Name"))
 
 
 	o = s:option(ListValue, "family", translate("Restrict to address family"))
@@ -295,6 +309,11 @@ else
 	o:value("ACCEPT", translate("accept"))
 	o:value("REJECT", translate("reject"))
 	o:value("NOTRACK", translate("don't track"))
+
+
+	s:option(Value, "extra",
+		translate("Extra arguments"),
+		translate("Passes additional arguments to iptables. Use with care!"))
 end
 
 return m

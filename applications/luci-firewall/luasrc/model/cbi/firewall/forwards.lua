@@ -49,7 +49,7 @@ function s.create(self, section)
 		self.map:set(created, "src_dport", e)
 		self.map:set(created, "dest_ip",   a)
 		self.map:set(created, "dest_port", i)
-		self.map:set(created, "_name",     n)
+		self.map:set(created, "name",      n)
 	end
 
 	if p ~= "other" then
@@ -71,10 +71,9 @@ function s.filter(self, sid)
 	return (self.map:get(sid, "target") ~= "SNAT")
 end
 
-name = s:option(DummyValue, "_name", translate("Name"))
-function name.cfgvalue(self, s)
-	return self.map:get(s, "_name") or "-"
-end
+
+ft.opt_name(s, DummyValue, translate("Name"))
+
 
 proto = s:option(DummyValue, "proto", translate("Protocol"))
 proto.rawhtml = true
@@ -130,5 +129,7 @@ function dest.cfgvalue(self, s)
 		return translatef("Forward to %s in %s", a, z)
 	end
 end
+
+ft.opt_enabled(s, Flag, translate("Enable")).width = "1%"
 
 return m

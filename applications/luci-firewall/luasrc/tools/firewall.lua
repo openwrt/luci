@@ -227,3 +227,61 @@ function fmt_target(x, dest)
 		end
 	end
 end
+
+
+function opt_enabled(s, t, ...)
+	if t == luci.cbi.Button then
+		local o = s:option(t, "__enabled")
+		function o.render(self, section)
+			if self.map:get(section, "enabled") ~= "0" then
+				self.title      = translate("Rule is enabled")
+				self.inputtitle = translate("Disable")
+				self.inputstyle = "reset"
+			else
+				self.title      = translate("Rule is disabled")
+				self.inputtitle = translate("Enable")
+				self.inputstyle = "apply"
+			end
+			t.render(self, section)
+		end
+		function o.write(self, section, value)
+			if self.map:get(section, "enabled") ~= "0" then
+				self.map:set(section, "enabled", "0")
+			else
+				self.map:del(section, "enabled")
+			end
+		end
+		return o
+	else
+		local o = s:option(t, "enabled", ...)
+		      o.enabled = ""
+			  o.disabled = "0"
+		      o.default = o.enabled
+		return o
+	end
+end
+
+function opt_name(s, t, ...)
+	local o = s:option(t, "name", ...)
+
+	function o.cfgvalue(self, section)
+		return self.map:get(section, "name") or
+			self.map:get(section, "_name") or "-"
+	end
+
+	function o.write(self, section, value)
+		if value ~= "-" then
+			self.map:set(section, "name", value)
+			self.map:del(section, "_name")
+		else
+			self:remove(section)
+		end
+	end
+
+	function o.remove(self, section)
+		self.map:del(section, "name")
+		self.map:del(section, "_name")
+	end
+
+	return o
+end
