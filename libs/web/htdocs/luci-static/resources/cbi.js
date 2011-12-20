@@ -49,13 +49,15 @@ var cbi_validators = {
 
 	'ip4addr': function(v)
 	{
-		if( v.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)(\/(\d+))?$/) )
+		if (v.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(\/(\S+))?$/))
 		{
 			return (RegExp.$1 >= 0) && (RegExp.$1 <= 255) &&
 			       (RegExp.$2 >= 0) && (RegExp.$2 <= 255) &&
 			       (RegExp.$3 >= 0) && (RegExp.$3 <= 255) &&
 			       (RegExp.$4 >= 0) && (RegExp.$4 <= 255) &&
-			       (!RegExp.$5 || ((RegExp.$6 >= 0) && (RegExp.$6 <= 32)))
+				   ((RegExp.$6.indexOf('.') < 0)
+						? ((RegExp.$6 >= 0) && (RegExp.$6 <= 32))
+						: (cbi_validators.ip4addr(RegExp.$6)))
 			;
 		}
 
