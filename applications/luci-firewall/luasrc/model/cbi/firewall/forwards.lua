@@ -62,7 +62,7 @@ function s.parse(self, ...)
 	if created then
 		m.uci:save("firewall")
 		luci.http.redirect(ds.build_url(
-			"admin", "network", "firewall", "redirect", created
+			"admin/network/firewall/redirect", created
 		))
 	end
 end
@@ -87,55 +87,48 @@ src = s:option(DummyValue, "src", translate("Source"))
 src.rawhtml = true
 src.width   = "20%"
 function src.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "src"))
-	local a = ft.fmt_ip(self.map:get(s, "src_ip"))
+	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
+	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
 	local m = ft.fmt_mac(self.map:get(s, "src_mac"))
 
-	local s = "From %s in %s " %{
-		(a or "<var>any host</var>"),
-		(z or "<var>any zone</var>")
-	}
-
 	if p and m then
-		s = s .. "with source %s and %s" %{ p, m }
+		return translatef("From %s in %s with source %s and %s", a, z, p, m)
 	elseif p or m then
-		s = s .. "with source %s" %( p or m )
+		return translatef("From %s in %s with source %s", a, z, p or m)
+	else
+		return translatef("From %s in %s", a, z)
 	end
-
-	return s
 end
 
 via = s:option(DummyValue, "via", translate("Via"))
 via.rawhtml = true
 via.width   = "20%"
 function via.cfgvalue(self, s)
-	local a = ft.fmt_ip(self.map:get(s, "src_dip"))
+	local a = ft.fmt_ip(self.map:get(s, "src_dip"), translate("any router IP"))
 	local p = ft.fmt_port(self.map:get(s, "src_dport"))
 
-	--local z = self.map:get(s, "src")
-	--local s = "To %s " %(a or "<var>any %s IP</var>" %( z or "router" ))
-
-	return "To %s%s" %{
-		(a or "<var>any router IP</var>"),
-		(p and " at %s" % p or "")
-	}
+	if p then
+		return translatef("To %s at %s", a, p)
+	else
+		return translatef("To %s", a)
+	end
 end
 
 dest = s:option(DummyValue, "dest", translate("Destination"))
 dest.rawhtml = true
 dest.width   = "30%"
 function dest.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "dest"))
-	local a = ft.fmt_ip(self.map:get(s, "dest_ip"))
+	local z = ft.fmt_zone(self.map:get(s, "dest"), translate("any zone"))
+	local a = ft.fmt_ip(self.map:get(s, "dest_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "dest_port")) or
 		ft.fmt_port(self.map:get(s, "src_dport"))
 
-	return "Forward to %s%s in %s " %{
-		(a or "<var>any host</var>"),
-		(p and ", %s" % p or ""),
-		(z or "<var>any zone</var>")
-	}
+	if p then
+		return translatef("Forward to %s, %s in %s", a, p, z)
+	else
+		return translatef("Forward to %s in %s", a, z)
+	end
 end
 
 return m

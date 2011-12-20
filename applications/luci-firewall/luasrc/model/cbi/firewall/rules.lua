@@ -77,7 +77,7 @@ function s.parse(self, ...)
 	if created then
 		m.uci:save("firewall")
 		luci.http.redirect(ds.build_url(
-			"admin", "network", "firewall", "rules", created
+			"admin/network/firewall/rules", created
 		))
 	end
 end
@@ -111,23 +111,18 @@ src = s:option(DummyValue, "src", translate("Source"))
 src.rawhtml = true
 src.width   = "20%"
 function src.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "src"))
-	local a = ft.fmt_ip(self.map:get(s, "src_ip"))
+	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
+	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
 	local m = ft.fmt_mac(self.map:get(s, "src_mac"))
 
-	local s = "From %s in %s " %{
-		(a or "<var>any host</var>"),
-		(z or "<var>any zone</var>")
-	}
-
 	if p and m then
-		s = s .. "with source %s and %s" %{ p, m }
+		return translatef("From %s in %s with source %s and %s", a, z, p, m)
 	elseif p or m then
-		s = s .. "with source %s" %( p or m )
+		return translatef("From %s in %s with source %s", a, z, p or m)
+	else
+		return translatef("From %s in %s", a, z)
 	end
-
-	return s
 end
 
 dest = s:option(DummyValue, "dest", translate("Destination"))
@@ -135,23 +130,27 @@ dest.rawhtml = true
 dest.width   = "20%"
 function dest.cfgvalue(self, s)
 	local z = ft.fmt_zone(self.map:get(s, "dest"))
-	local a = ft.fmt_ip(self.map:get(s, "dest_ip"))
 	local p = ft.fmt_port(self.map:get(s, "dest_port"))
 
 	-- Forward
 	if z then
-		return "To %s%s in %s" %{
-			(a or "<var>any host</var>"),
-			(p and ", %s" % p or ""),
-			z
-		}
+		local a = ft.fmt_ip(self.map:get(s, "dest_ip"), translate("any host"))
+		if p then
+			return translatef("To %s, %s in %s", a, p, z)
+		else
+			return translatef("To %s in %s", a, z)
+		end
 
 	-- Input
 	else
-		return "To %s%s on <var>this device</var>" %{
-			(a or "<var>any router IP</var>"),
-			(p and " at %s" % p or "")
-		}
+		local a = ft.fmt_ip(self.map:get(s, "dest_ip"),
+			translate("any router IP"))
+
+		if p then
+			return translatef("To %s at %s on <var>this device</var>", a, p)
+		else
+			return translatef("To %s on <var>this device</var>", a)
+		end
 	end
 end
 
@@ -160,15 +159,15 @@ target = s:option(DummyValue, "target", translate("Action"))
 target.rawhtml = true
 target.width   = "20%"
 function target.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "dest"))
-	local l = ft.fmt_limit(self.map:get(s, "limit"), self.map:get(s, "limit_burst"))
-	local t = ft.fmt_target(self.map:get(s, "target"))
+	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "dest"))
+	local l = ft.fmt_limit(self.map:get(s, "limit"),
+		self.map:get(s, "limit_burst"))
 
-	return "<var>%s</var> %s%s" %{
-		t,
-		(z and "forward" or "input"),
-		(l and " and limit to %s" % l or "")
-	}
+	if l then
+		return translatef("<var>%s</var> and limit to %s", t, l)
+	else
+		return "<var>%s</var>" % t
+	end
 end
 
 
@@ -242,39 +241,34 @@ src = s:option(DummyValue, "src", translate("Source"))
 src.rawhtml = true
 src.width   = "20%"
 function src.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "src"))
-	local a = ft.fmt_ip(self.map:get(s, "src_ip"))
+	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
+	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
 	local m = ft.fmt_mac(self.map:get(s, "src_mac"))
 
-	local s = "From %s in %s " %{
-		(a or "<var>any host</var>"),
-		(z or "<var>any zone</var>")
-	}
-
 	if p and m then
-		s = s .. "with source %s and %s" %{ p, m }
+		return translatef("From %s in %s with source %s and %s", a, z, p, m)
 	elseif p or m then
-		s = s .. "with source %s" %( p or m )
+		return translatef("From %s in %s with source %s", a, z, p or m)
+	else
+		return translatef("From %s in %s", a, z)
 	end
-
-	return s
 end
 
 dest = s:option(DummyValue, "dest", translate("Destination"))
 dest.rawhtml = true
 dest.width   = "30%"
 function dest.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "dest"))
-	local a = ft.fmt_ip(self.map:get(s, "dest_ip"))
+	local z = ft.fmt_zone(self.map:get(s, "dest"), translate("any zone"))
+	local a = ft.fmt_ip(self.map:get(s, "dest_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "dest_port")) or
 		ft.fmt_port(self.map:get(s, "src_dport"))
 
-	return "To %s%s in %s " %{
-		(a or "<var>any host</var>"),
-		(p and ", %s" % p or ""),
-		(z or "<var>any zone</var>")
-	}
+	if p then
+		return translatef("To %s, %s in %s", a, p, z)
+	else
+		return translatef("To %s in %s", a, z)
+	end
 end
 
 snat = s:option(DummyValue, "via", translate("SNAT"))
@@ -284,15 +278,10 @@ function snat.cfgvalue(self, s)
 	local a = ft.fmt_ip(self.map:get(s, "src_dip"))
 	local p = ft.fmt_port(self.map:get(s, "src_dport"))
 
-	--local z = self.map:get(s, "src")
-	--local s = "To %s " %(a or "<var>any %s IP</var>" %( z or "router" ))
-
 	if a and p then
-		return "Rewrite to source %s, %s" %{ a, p }
-	elseif a or p then
-		return "Rewrite to source %s" %( a or p )
+		return translatef("Rewrite to source %s, %s", a, p)
 	else
-		return "Bug"
+		return translatef("Rewrite to source %s", a or p)
 	end
 end
 

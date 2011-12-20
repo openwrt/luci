@@ -18,13 +18,13 @@ local ut = require "luci.util"
 local ip = require "luci.ip"
 local nx = require "nixio"
 
-local tr, trf = luci.i18n.translate, luci.i18n.translatef
+local translate, translatef = luci.i18n.translate, luci.i18n.translatef
 
 function fmt_neg(x)
 	if type(x) == "string" then
 		local v, neg = x:gsub("^ *! *", "")
 		if neg > 0 then
-			return v, "%s " % tr("not")
+			return v, "%s " % translate("not")
 		else
 			return x, ""
 		end
@@ -35,7 +35,7 @@ end
 function fmt_mac(x)
 	if x and #x > 0 then
 		local m, n
-		local l = { tr("MAC"), " " }
+		local l = { translate("MAC"), " " }
 		for m in ut.imatch(x) do
 			m, n = fmt_neg(m)
 			l[#l+1] = "<var>%s%s</var>" %{ n, m }
@@ -44,22 +44,22 @@ function fmt_mac(x)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("MACs")
+				l[1] = translate("MACs")
 			end
 			return table.concat(l, "")
 		end
 	end
 end
 
-function fmt_port(x)
+function fmt_port(x, d)
 	if x and #x > 0 then
 		local p, n
-		local l = { tr("port"), " " }
+		local l = { translate("port"), " " }
 		for p in ut.imatch(x) do
 			p, n = fmt_neg(p)
 			local a, b = p:match("(%d+)%D+(%d+)")
 			if a and b then
-				l[1] = tr("ports")
+				l[1] = translate("ports")
 				l[#l+1] = "<var>%s%d-%d</var>" %{ n, a, b }
 			else
 				l[#l+1] = "<var>%s%d</var>" %{ n, p }
@@ -69,16 +69,17 @@ function fmt_port(x)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("ports")
+				l[1] = translate("ports")
 			end
 			return table.concat(l, "")
 		end
 	end
+	return d and "<var>%s</var>" % d
 end
 
-function fmt_ip(x)
+function fmt_ip(x, d)
 	if x and #x > 0 then
-		local l = { tr("IP"), " " }
+		local l = { translate("IP"), " " }
 		local v, a, n
 		for v in ut.imatch(x) do
 			v, n = fmt_neg(v)
@@ -86,7 +87,7 @@ function fmt_ip(x)
 			a = a or v
 			a = a:match(":") and ip.IPv6(a, m) or ip.IPv4(a, m)
 			if a and (a:is6() or a:prefix() < 32) then
-				l[1] = tr("IP range")
+				l[1] = translate("IP range")
 				l[#l+1] = "<var title='%s - %s'>%s%s</var>" %{
 					a:minhost():string(),
 					a:maxhost():string(),
@@ -103,25 +104,28 @@ function fmt_ip(x)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("IPs")
+				l[1] = translate("IPs")
 			end
 			return table.concat(l, "")
 		end
 	end
+	return d and "<var>%s</var>" % d
 end
 
-function fmt_zone(x)
+function fmt_zone(x, d)
 	if x == "*" then
-		return "<var>%s</var>" % tr("any zone")
+		return "<var>%s</var>" % translate("any zone")
 	elseif x and #x > 0 then
 		return "<var>%s</var>" % x
+	elseif d then
+		return "<var>%s</var>" % d
 	end
 end
 
 function fmt_icmp_type(x)
 	if x and #x > 0 then
 		local t, v, n
-		local l = { tr("type"), " " }
+		local l = { translate("type"), " " }
 		for v in ut.imatch(x) do
 			v, n = fmt_neg(v)
 			l[#l+1] = "<var>%s%s</var>" %{ n, v }
@@ -130,7 +134,7 @@ function fmt_icmp_type(x)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("types")
+				l[1] = translate("types")
 			end
 			return table.concat(l, "")
 		end
@@ -153,7 +157,7 @@ function fmt_proto(x, icmp_types)
 				if p then
 					-- ICMP
 					if (p.proto == 1 or p.proto == 58) and t then
-						l[#l+1] = trf(
+						l[#l+1] = translatef(
 							"%s%s with %s",
 							n, p.aliases[1] or p.name, t
 						)
@@ -182,32 +186,44 @@ function fmt_limit(limit, burst)
 		u = u or "second"
 		if l then
 			if u:match("^s") then
-				u = tr("second")
+				u = translate("second")
 			elseif u:match("^m") then
-				u = tr("minute")
+				u = translate("minute")
 			elseif u:match("^h") then
-				u = tr("hour")
+				u = translate("hour")
 			elseif u:match("^d") then
-				u = tr("day")
+				u = translate("day")
 			end
 			if burst and burst > 0 then
-				return trf("<var>%d</var> pkts. per <var>%s</var>, \
+				return translatef("<var>%d</var> pkts. per <var>%s</var>, \
 				    burst <var>%d</var> pkts.", l, u, burst)
 			else
-				return trf("<var>%d</var> pkts. per <var>%s</var>", l, u)
+				return translatef("<var>%d</var> pkts. per <var>%s</var>", l, u)
 			end
 		end
 	end
 end
 
-function fmt_target(x)
-	if x == "ACCEPT" then
-		return tr("Accept")
-	elseif x == "REJECT" then
-		return tr("Refuse")
-	elseif x == "NOTRACK" then
-		return tr("Do not track")
-	else --if x == "DROP" then
-		return tr("Discard")
+function fmt_target(x, dest)
+	if dest and #dest > 0 then
+		if x == "ACCEPT" then
+			return translate("Accept forward")
+		elseif x == "REJECT" then
+			return translate("Refuse forward")
+		elseif x == "NOTRACK" then
+			return translate("Do not track forward")
+		else --if x == "DROP" then
+			return translate("Discard forward")
+		end
+	else
+		if x == "ACCEPT" then
+			return translate("Accept input")
+		elseif x == "REJECT" then
+			return translate("Refuse input")
+		elseif x == "NOTRACK" then
+			return translate("Do not track input")
+		else --if x == "DROP" then
+			return translate("Discard input")
+		end
 	end
 end
