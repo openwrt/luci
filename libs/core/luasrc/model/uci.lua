@@ -32,7 +32,7 @@ local table = require "table"
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local require, getmetatable = require, getmetatable
 local error, pairs, ipairs = error, pairs, ipairs
-local type, tostring, tonumber = type, tostring, tonumber
+local type, tostring, tonumber, unpack = type, tostring, tonumber, unpack
 
 --- LuCI UCI model library.
 -- The typical workflow for UCI is:  Get a cursor instance from the
@@ -69,9 +69,12 @@ local Cursor = getmetatable(inst)
 -- @param command			Don't apply only return the command
 function Cursor.apply(self, configlist, command)
 	configlist = self:_affected(configlist)
-	local reloadcmd = "/sbin/luci-reload " .. table.concat(configlist, " ")
-
-	return command and reloadcmd or os.execute(reloadcmd .. " >/dev/null 2>&1")
+	if command then
+		return { "/sbin/luci-reload", unpack(configlist) }
+	else
+		return os.execute("/sbin/luci-reload %s >/dev/null 2>&1"
+			% table.concat(configlist, " "))
+	end
 end
 
 
