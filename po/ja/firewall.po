@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.4\n"
 
+msgid "%s%s with %s"
+msgstr ""
+
 msgid "(Unnamed Entry)"
 msgstr ""
 
@@ -28,6 +31,21 @@ msgstr ""
 msgid "-- custom --"
 msgstr ""
 
+msgid "<var>%d</var> pkts. per <var>%s</var>"
+msgstr ""
+
+msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
+msgstr ""
+
+msgid "<var>%s</var> and limit to %s"
+msgstr ""
+
+msgid "Accept forward"
+msgstr ""
+
+msgid "Accept input"
+msgstr ""
+
 msgid "Action"
 msgstr "動作"
 
@@ -37,22 +55,8 @@ msgstr ""
 msgid "Add and edit..."
 msgstr ""
 
-msgid "Advanced Options"
-msgstr "詳細なオプション"
-
-msgid "Advanced Rules"
-msgstr "詳細なルール"
-
 msgid "Advanced Settings"
 msgstr "詳細設定"
-
-msgid ""
-"Advanced rules let you customize the firewall to your needs. Only new "
-"connections will be matched. Packets belonging to already open connections "
-"are automatically allowed to pass the firewall."
-msgstr ""
-"詳細なルール設定を行うことができます。ただし、すでに接続が行われているパケッ"
-"トに関しては、自動的にファイアウォールの通過を許可されます。"
 
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "<em>送信元ゾーン</em>からの転送を許可する:"
@@ -68,9 +72,6 @@ msgstr "対象ネットワーク"
 
 msgid "Custom Rules"
 msgstr "手動設定ルール"
-
-msgid "Custom Rules (/etc/firewall.user)"
-msgstr "手動設定ルール (/etc/firewall.user)"
 
 msgid ""
 "Custom rules allow you to execute arbritary iptables commands which are not "
@@ -93,10 +94,19 @@ msgstr "宛先ポート"
 msgid "Destination zone"
 msgstr "宛先ゾーン"
 
-msgid "Device"
-msgstr "デバイス"
+msgid "Discard forward"
+msgstr ""
+
+msgid "Discard input"
+msgstr ""
 
 msgid "Do not rewrite"
+msgstr ""
+
+msgid "Do not track forward"
+msgstr ""
+
+msgid "Do not track input"
 msgstr ""
 
 msgid "Drop invalid packets"
@@ -132,21 +142,38 @@ msgstr ""
 msgid "Firewall - Zone Settings"
 msgstr "ファイアウォール - ゾーン設定"
 
-msgid ""
-"For DNAT, match incoming traffic directed at the given destination ip "
-"address. For SNAT rewrite the source address to the given address."
-msgstr ""
-"DNATの場合、設定された宛先アドレスのトラフィックに対して合致を行います。SNAT"
-"の場合、送信元アドレスを設定されたアドレスで上書きします。"
-
 msgid "Force connection tracking"
 msgstr "強制的にコネクション追跡を行う"
 
 msgid "Forward"
 msgstr "転送"
 
+msgid "Forward to %s in %s"
+msgstr ""
+
+msgid "Forward to %s, %s in %s"
+msgstr ""
+
+msgid "From %s in %s"
+msgstr ""
+
+msgid "From %s in %s with source %s"
+msgstr ""
+
+msgid "From %s in %s with source %s and %s"
+msgstr ""
+
 msgid "General Settings"
 msgstr "一般設定"
+
+msgid "IP"
+msgstr ""
+
+msgid "IP range"
+msgstr ""
+
+msgid "IPs"
+msgstr ""
 
 msgid "IPv4"
 msgstr ""
@@ -184,6 +211,12 @@ msgstr "内部ポート（オプション）"
 msgid "Limit log messages"
 msgstr "ログを制限"
 
+msgid "MAC"
+msgstr ""
+
+msgid "MACs"
+msgstr ""
+
 msgid "MSS clamping"
 msgstr "MSSクランプ"
 
@@ -201,11 +234,6 @@ msgid ""
 "on this host"
 msgstr ""
 "設定された宛先ポート(またはポート範囲)の受信トラフィックの転送を行います"
-
-msgid ""
-"Match incoming traffic originating from the given source port or port range "
-"on the client host"
-msgstr ""
 
 msgid ""
 "Match incoming traffic originating from the given source port or port range "
@@ -253,26 +281,13 @@ msgstr ""
 msgid "Output"
 msgstr "送信"
 
-msgid "Overview"
-msgstr "概要"
-
 msgid "Port Forwards"
 msgstr ""
-
-msgid "Port forwarding"
-msgstr "ポートフォワーディング"
 
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr ""
-
-msgid ""
-"Port forwarding allows to provide network services in the internal network "
-"to an external network."
-msgstr ""
-"ポートフォワーディングを使用することで、内部ネットワークのサービスを外部に提"
-"供することができます。"
 
 msgid "Protocol"
 msgstr "プロトコル"
@@ -285,11 +300,11 @@ msgstr ""
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "ルールに一致した受信トラフィックを、設定された内部ホストへ転送します"
 
-msgid "Redirection type"
-msgstr "転送タイプ"
+msgid "Refuse forward"
+msgstr ""
 
-msgid "Redirections"
-msgstr "転送"
+msgid "Refuse input"
+msgstr ""
 
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "設定された宛先サブネットへのマスカレードを制限する"
@@ -308,8 +323,11 @@ msgid ""
 "rewrite the IP address."
 msgstr ""
 
-msgid "Rules"
-msgstr "ルール"
+msgid "Rewrite to source %s"
+msgstr ""
+
+msgid "Rewrite to source %s, %s"
+msgstr ""
 
 msgid "SNAT"
 msgstr ""
@@ -422,24 +440,32 @@ msgstr ""
 "準のポリシーになります。<em>対象ネットワーク</em>は、どのネットワーク設定がこ"
 "のゾーンに属するかを設定します。"
 
+msgid "To %s"
+msgstr ""
+
+msgid "To %s at %s"
+msgstr ""
+
+msgid "To %s at %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s in %s"
+msgstr ""
+
+msgid "To %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s, %s in %s"
+msgstr ""
+
 msgid "To source IP"
 msgstr ""
 
 msgid "To source port"
 msgstr ""
 
-msgid "Traffic Redirection"
-msgstr "トラフィック転送"
-
 msgid "Traffic Rules"
 msgstr ""
-
-msgid ""
-"Traffic redirection allows you to change the destination address of "
-"forwarded packets."
-msgstr ""
-"トラフィック転送機能を用いることで、転送したパケットの宛先アドレスを変更する"
-"ことが可能です。"
 
 msgid ""
 "Traffic rules define policies for packets traveling between different zones, "
@@ -470,11 +496,106 @@ msgstr "許可"
 msgid "any"
 msgstr "全て"
 
+msgid "any host"
+msgstr ""
+
+msgid "any router IP"
+msgstr ""
+
+msgid "any zone"
+msgstr ""
+
+msgid "day"
+msgstr ""
+
 msgid "don't track"
 msgstr ""
 
 msgid "drop"
 msgstr "遮断"
 
+msgid "hour"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "not"
+msgstr ""
+
+msgid "port"
+msgstr ""
+
+msgid "ports"
+msgstr ""
+
 msgid "reject"
 msgstr "拒否"
+
+msgid "second"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "types"
+msgstr ""
+
+#~ msgid "Advanced Options"
+#~ msgstr "詳細なオプション"
+
+#~ msgid "Advanced Rules"
+#~ msgstr "詳細なルール"
+
+#~ msgid ""
+#~ "Advanced rules let you customize the firewall to your needs. Only new "
+#~ "connections will be matched. Packets belonging to already open "
+#~ "connections are automatically allowed to pass the firewall."
+#~ msgstr ""
+#~ "詳細なルール設定を行うことができます。ただし、すでに接続が行われているパ"
+#~ "ケットに関しては、自動的にファイアウォールの通過を許可されます。"
+
+#~ msgid "Custom Rules (/etc/firewall.user)"
+#~ msgstr "手動設定ルール (/etc/firewall.user)"
+
+#~ msgid "Device"
+#~ msgstr "デバイス"
+
+#~ msgid ""
+#~ "For DNAT, match incoming traffic directed at the given destination ip "
+#~ "address. For SNAT rewrite the source address to the given address."
+#~ msgstr ""
+#~ "DNATの場合、設定された宛先アドレスのトラフィックに対して合致を行います。"
+#~ "SNATの場合、送信元アドレスを設定されたアドレスで上書きします。"
+
+#~ msgid "Overview"
+#~ msgstr "概要"
+
+#~ msgid "Port forwarding"
+#~ msgstr "ポートフォワーディング"
+
+#~ msgid ""
+#~ "Port forwarding allows to provide network services in the internal "
+#~ "network to an external network."
+#~ msgstr ""
+#~ "ポートフォワーディングを使用することで、内部ネットワークのサービスを外部に"
+#~ "提供することができます。"
+
+#~ msgid "Redirection type"
+#~ msgstr "転送タイプ"
+
+#~ msgid "Redirections"
+#~ msgstr "転送"
+
+#~ msgid "Rules"
+#~ msgstr "ルール"
+
+#~ msgid "Traffic Redirection"
+#~ msgstr "トラフィック転送"
+
+#~ msgid ""
+#~ "Traffic redirection allows you to change the destination address of "
+#~ "forwarded packets."
+#~ msgstr ""
+#~ "トラフィック転送機能を用いることで、転送したパケットの宛先アドレスを変更す"
+#~ "ることが可能です。"

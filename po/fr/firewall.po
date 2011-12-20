@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.0.4\n"
 
+msgid "%s%s with %s"
+msgstr ""
+
 msgid "(Unnamed Entry)"
 msgstr ""
 
@@ -28,6 +31,21 @@ msgstr ""
 msgid "-- custom --"
 msgstr ""
 
+msgid "<var>%d</var> pkts. per <var>%s</var>"
+msgstr ""
+
+msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
+msgstr ""
+
+msgid "<var>%s</var> and limit to %s"
+msgstr ""
+
+msgid "Accept forward"
+msgstr ""
+
+msgid "Accept input"
+msgstr ""
+
 msgid "Action"
 msgstr "Action"
 
@@ -37,55 +55,8 @@ msgstr ""
 msgid "Add and edit..."
 msgstr ""
 
-msgid "Advanced Options"
-msgstr "Options avancées"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua                    #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "(optional)"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-# msgid "Source port"
-# msgstr ""
-#
-# msgid "Destination port"
-# msgstr ""
-#
-# msgid "Action"
-# msgstr ""
-#
-# msgid "drop"
-# msgstr ""
-#
-# msgid "accept"
-# msgstr ""
-#
-# msgid "reject"
-# msgstr ""
-#
-msgid "Advanced Rules"
-msgstr "Règles avancées"
-
 msgid "Advanced Settings"
 msgstr "Paramètres avancés"
-
-msgid ""
-"Advanced rules let you customize the firewall to your needs. Only new "
-"connections will be matched. Packets belonging to already open connections "
-"are automatically allowed to pass the firewall."
-msgstr ""
-"Les règles avancées vous laissent personnaliser le pare-feu selon vos "
-"besoins. Seules les nouvelles connexions seront prises en compte. Les "
-"paquets appartenant à des connexions déjà ouvertes sont automatiquement "
-"admis à passer le pare-feu."
 
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Permettre la transmission des <em>zones source</em> :"
@@ -101,9 +72,6 @@ msgstr "Réseaux couverts"
 
 msgid "Custom Rules"
 msgstr "Régles spécifiques"
-
-msgid "Custom Rules (/etc/firewall.user)"
-msgstr "Règles spécifiques (/etc/firewall.user)"
 
 msgid ""
 "Custom rules allow you to execute arbritary iptables commands which are not "
@@ -126,10 +94,19 @@ msgstr "Port de destination"
 msgid "Destination zone"
 msgstr "Zone de destination"
 
-msgid "Device"
-msgstr "Équipement"
+msgid "Discard forward"
+msgstr ""
+
+msgid "Discard input"
+msgstr ""
 
 msgid "Do not rewrite"
+msgstr ""
+
+msgid "Do not track forward"
+msgstr ""
+
+msgid "Do not track input"
 msgstr ""
 
 msgid "Drop invalid packets"
@@ -169,21 +146,38 @@ msgstr ""
 msgid "Firewall - Zone Settings"
 msgstr "Pare-feu - Configuration des zones"
 
-msgid ""
-"For DNAT, match incoming traffic directed at the given destination ip "
-"address. For SNAT rewrite the source address to the given address."
-msgstr ""
-"Pour le DNAT, sélectionne le trafic entrant correspondant à l'adresse IP "
-"destinataire. Pour le SNAT, ré-écrit l'adresse source avec l'adresse donnée."
-
 msgid "Force connection tracking"
 msgstr "Forcer le suivi des connexions"
 
 msgid "Forward"
 msgstr "Transfert"
 
+msgid "Forward to %s in %s"
+msgstr ""
+
+msgid "Forward to %s, %s in %s"
+msgstr ""
+
+msgid "From %s in %s"
+msgstr ""
+
+msgid "From %s in %s with source %s"
+msgstr ""
+
+msgid "From %s in %s with source %s and %s"
+msgstr ""
+
 msgid "General Settings"
 msgstr "Paramètres généraux"
+
+msgid "IP"
+msgstr ""
+
+msgid "IP range"
+msgstr ""
+
+msgid "IPs"
+msgstr ""
 
 msgid "IPv4"
 msgstr ""
@@ -221,6 +215,12 @@ msgstr "Port interne (optionnel)"
 msgid "Limit log messages"
 msgstr "Limiter les messages de journalisation"
 
+msgid "MAC"
+msgstr ""
+
+msgid "MACs"
+msgstr ""
+
 msgid "MSS clamping"
 msgstr "Contrainte du MSS"
 
@@ -239,13 +239,6 @@ msgid ""
 msgstr ""
 "Prendre en compte le trafic dirigé vers le port de destination donné (ou la "
 "gamme de ports) sur cet hôte"
-
-msgid ""
-"Match incoming traffic originating from the given source port or port range "
-"on the client host"
-msgstr ""
-"Prendre en compte le trafic entrant provenant du port source donné (ou la "
-"gamme de ports) sur l'hôte client"
 
 msgid ""
 "Match incoming traffic originating from the given source port or port range "
@@ -293,45 +286,13 @@ msgstr ""
 msgid "Output"
 msgstr "Sortie"
 
-msgid "Overview"
-msgstr "Vue d'ensemble"
-
 msgid "Port Forwards"
 msgstr ""
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua               #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "(optional)"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-# msgid "External port"
-# msgstr ""
-#
-# msgid "Internal IP address"
-# msgstr ""
-#
-msgid "Port forwarding"
-msgstr "Redirection de port"
 
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr ""
-
-msgid ""
-"Port forwarding allows to provide network services in the internal network "
-"to an external network."
-msgstr ""
-"La redirection de port vous permet d'exposer des services réseaux de votre "
-"réseau local au réseau externe."
 
 msgid "Protocol"
 msgstr "Protocole"
@@ -345,11 +306,11 @@ msgstr ""
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Rediriger le trafic entrant correspondant vers l'hôte interne spécifié"
 
-msgid "Redirection type"
-msgstr "Type de redirection"
+msgid "Refuse forward"
+msgstr ""
 
-msgid "Redirections"
-msgstr "Redirections"
+msgid "Refuse input"
+msgstr ""
 
 msgid "Restrict Masquerading to given destination subnets"
 msgstr ""
@@ -372,8 +333,11 @@ msgid ""
 "rewrite the IP address."
 msgstr ""
 
-msgid "Rules"
-msgstr "Règles"
+msgid "Rewrite to source %s"
+msgstr ""
+
+msgid "Rewrite to source %s, %s"
+msgstr ""
 
 msgid "SNAT"
 msgstr ""
@@ -488,34 +452,32 @@ msgstr ""
 "cette zone. Les <em>réseaux couverts</em> indiquent quels réseaux "
 "disponibles sont membre de cette zone."
 
+msgid "To %s"
+msgstr ""
+
+msgid "To %s at %s"
+msgstr ""
+
+msgid "To %s at %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s in %s"
+msgstr ""
+
+msgid "To %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s, %s in %s"
+msgstr ""
+
 msgid "To source IP"
 msgstr ""
 
 msgid "To source port"
 msgstr ""
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua                 #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-msgid "Traffic Redirection"
-msgstr "Redirection du trafic"
-
 msgid "Traffic Rules"
 msgstr ""
-
-msgid ""
-"Traffic redirection allows you to change the destination address of "
-"forwarded packets."
-msgstr ""
-"La redirection de trafic vous permet de changer l'adresse de destination des "
-"paquets transférés."
 
 msgid ""
 "Traffic rules define policies for packets traveling between different zones, "
@@ -547,14 +509,179 @@ msgstr "accepter"
 msgid "any"
 msgstr "tous"
 
+msgid "any host"
+msgstr ""
+
+msgid "any router IP"
+msgstr ""
+
+msgid "any zone"
+msgstr ""
+
+msgid "day"
+msgstr ""
+
 msgid "don't track"
 msgstr ""
 
 msgid "drop"
 msgstr "ignorer"
 
+msgid "hour"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "not"
+msgstr ""
+
+msgid "port"
+msgstr ""
+
+msgid "ports"
+msgstr ""
+
 msgid "reject"
 msgstr "rejeter"
+
+msgid "second"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "types"
+msgstr ""
+
+#~ msgid "Advanced Options"
+#~ msgstr "Options avancées"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "(optional)"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
+# msgid "Source port"
+# msgstr ""
+#
+# msgid "Destination port"
+# msgstr ""
+#
+# msgid "Action"
+# msgstr ""
+#
+# msgid "drop"
+# msgstr ""
+#
+# msgid "accept"
+# msgstr ""
+#
+# msgid "reject"
+# msgstr ""
+#
+#~ msgid "Advanced Rules"
+#~ msgstr "Règles avancées"
+
+#~ msgid ""
+#~ "Advanced rules let you customize the firewall to your needs. Only new "
+#~ "connections will be matched. Packets belonging to already open "
+#~ "connections are automatically allowed to pass the firewall."
+#~ msgstr ""
+#~ "Les règles avancées vous laissent personnaliser le pare-feu selon vos "
+#~ "besoins. Seules les nouvelles connexions seront prises en compte. Les "
+#~ "paquets appartenant à des connexions déjà ouvertes sont automatiquement "
+#~ "admis à passer le pare-feu."
+
+#~ msgid "Custom Rules (/etc/firewall.user)"
+#~ msgstr "Règles spécifiques (/etc/firewall.user)"
+
+#~ msgid "Device"
+#~ msgstr "Équipement"
+
+#~ msgid ""
+#~ "For DNAT, match incoming traffic directed at the given destination ip "
+#~ "address. For SNAT rewrite the source address to the given address."
+#~ msgstr ""
+#~ "Pour le DNAT, sélectionne le trafic entrant correspondant à l'adresse IP "
+#~ "destinataire. Pour le SNAT, ré-écrit l'adresse source avec l'adresse "
+#~ "donnée."
+
+#~ msgid ""
+#~ "Match incoming traffic originating from the given source port or port "
+#~ "range on the client host"
+#~ msgstr ""
+#~ "Prendre en compte le trafic entrant provenant du port source donné (ou la "
+#~ "gamme de ports) sur l'hôte client"
+
+#~ msgid "Overview"
+#~ msgstr "Vue d'ensemble"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "(optional)"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
+# msgid "External port"
+# msgstr ""
+#
+# msgid "Internal IP address"
+# msgstr ""
+#
+#~ msgid "Port forwarding"
+#~ msgstr "Redirection de port"
+
+#~ msgid ""
+#~ "Port forwarding allows to provide network services in the internal "
+#~ "network to an external network."
+#~ msgstr ""
+#~ "La redirection de port vous permet d'exposer des services réseaux de "
+#~ "votre réseau local au réseau externe."
+
+#~ msgid "Redirection type"
+#~ msgstr "Type de redirection"
+
+#~ msgid "Redirections"
+#~ msgstr "Redirections"
+
+#~ msgid "Rules"
+#~ msgstr "Règles"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua                 #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# msgid "Name"
+# msgstr ""
+#
+# msgid "Protocol"
+# msgstr ""
+#
+#~ msgid "Traffic Redirection"
+#~ msgstr "Redirection du trafic"
+
+#~ msgid ""
+#~ "Traffic redirection allows you to change the destination address of "
+#~ "forwarded packets."
+#~ msgstr ""
+#~ "La redirection de trafic vous permet de changer l'adresse de destination "
+#~ "des paquets transférés."
 
 #~ msgid "Network"
 #~ msgstr "Réseau"

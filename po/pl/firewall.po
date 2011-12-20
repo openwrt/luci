@@ -14,6 +14,9 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.4\n"
 
+msgid "%s%s with %s"
+msgstr ""
+
 msgid "(Unnamed Entry)"
 msgstr ""
 
@@ -29,6 +32,21 @@ msgstr ""
 msgid "-- custom --"
 msgstr ""
 
+msgid "<var>%d</var> pkts. per <var>%s</var>"
+msgstr ""
+
+msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
+msgstr ""
+
+msgid "<var>%s</var> and limit to %s"
+msgstr ""
+
+msgid "Accept forward"
+msgstr ""
+
+msgid "Accept input"
+msgstr ""
+
 msgid "Action"
 msgstr "Działanie"
 
@@ -38,44 +56,8 @@ msgstr ""
 msgid "Add and edit..."
 msgstr ""
 
-msgid "Advanced Options"
-msgstr "Opcje zaawansowane"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua      #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# msgid "Name"
-# msgstr ""
-# msgid "(optional)"
-# msgstr ""
-# msgid "Protocol"
-# msgstr ""
-# msgid "Source port"
-# msgstr ""
-# msgid "Destination port"
-# msgstr ""
-# msgid "Action"
-# msgstr ""
-# msgid "drop"
-# msgstr ""
-# msgid "accept"
-# msgstr ""
-# msgid "reject"
-# msgstr ""
-msgid "Advanced Rules"
-msgstr "Reguły zaawansowane"
-
 msgid "Advanced Settings"
 msgstr "Ustawienia zaawansowane"
-
-msgid ""
-"Advanced rules let you customize the firewall to your needs. Only new "
-"connections will be matched. Packets belonging to already open connections "
-"are automatically allowed to pass the firewall."
-msgstr ""
-"Reguły zaawansowane pozwalają dostosować zaporę do Twoich potrzeb. Tylko "
-"nowe połączenia zostaną nimi objęte. Pakiety należące do połączeń już "
-"otwarte są automatycznie przepuszczane przez zaporę."
 
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Zezwól na przekazywanie z <em>source zones</em>:"
@@ -91,9 +73,6 @@ msgstr "Objęte sieci"
 
 msgid "Custom Rules"
 msgstr "Reguły własne"
-
-msgid "Custom Rules (/etc/firewall.user)"
-msgstr "Reguły własne (/etc/firewall.user)"
 
 msgid ""
 "Custom rules allow you to execute arbritary iptables commands which are not "
@@ -116,10 +95,19 @@ msgstr "Port docelowy"
 msgid "Destination zone"
 msgstr "Strefa docelowa"
 
-msgid "Device"
-msgstr "Urządzenie"
+msgid "Discard forward"
+msgstr ""
+
+msgid "Discard input"
+msgstr ""
 
 msgid "Do not rewrite"
+msgstr ""
+
+msgid "Do not track forward"
+msgstr ""
+
+msgid "Do not track input"
 msgstr ""
 
 msgid "Drop invalid packets"
@@ -158,21 +146,38 @@ msgstr ""
 msgid "Firewall - Zone Settings"
 msgstr "Zapora - Ustawienia strefy"
 
-msgid ""
-"For DNAT, match incoming traffic directed at the given destination ip "
-"address. For SNAT rewrite the source address to the given address."
-msgstr ""
-"Dla DNAT, dopasuj ruch przychodzący kierowane na podany adres IP. Dla SNAT "
-"zmienić adres źródłowy na podany adres."
-
 msgid "Force connection tracking"
 msgstr "Wymuś śledzenie połączeń"
 
 msgid "Forward"
 msgstr "Przekazywanie"
 
+msgid "Forward to %s in %s"
+msgstr ""
+
+msgid "Forward to %s, %s in %s"
+msgstr ""
+
+msgid "From %s in %s"
+msgstr ""
+
+msgid "From %s in %s with source %s"
+msgstr ""
+
+msgid "From %s in %s with source %s and %s"
+msgstr ""
+
 msgid "General Settings"
 msgstr "Ustawienia ogólne"
+
+msgid "IP"
+msgstr ""
+
+msgid "IP range"
+msgstr ""
+
+msgid "IPs"
+msgstr ""
 
 msgid "IPv4"
 msgstr ""
@@ -210,6 +215,12 @@ msgstr "Wewnętrzny port (opcjonalnie)"
 msgid "Limit log messages"
 msgstr "Ograniczenie logowania"
 
+msgid "MAC"
+msgstr ""
+
+msgid "MACs"
+msgstr ""
+
 msgid "MSS clamping"
 msgstr "MSS clamping"
 
@@ -225,11 +236,6 @@ msgstr ""
 msgid ""
 "Match incoming traffic directed at the given destination port or port range "
 "on this host"
-msgstr ""
-
-msgid ""
-"Match incoming traffic originating from the given source port or port range "
-"on the client host"
 msgstr ""
 
 msgid ""
@@ -278,42 +284,12 @@ msgstr ""
 msgid "Output"
 msgstr ""
 
-msgid "Overview"
-msgstr ""
-
 msgid "Port Forwards"
-msgstr ""
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "(optional)"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-# msgid "External port"
-# msgstr ""
-#
-# msgid "Internal IP address"
-# msgstr ""
-#
-msgid "Port forwarding"
 msgstr ""
 
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
-msgstr ""
-
-msgid ""
-"Port forwarding allows to provide network services in the internal network "
-"to an external network."
 msgstr ""
 
 msgid "Protocol"
@@ -326,10 +302,10 @@ msgstr ""
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr ""
 
-msgid "Redirection type"
+msgid "Refuse forward"
 msgstr ""
 
-msgid "Redirections"
+msgid "Refuse input"
 msgstr ""
 
 msgid "Restrict Masquerading to given destination subnets"
@@ -349,7 +325,10 @@ msgid ""
 "rewrite the IP address."
 msgstr ""
 
-msgid "Rules"
+msgid "Rewrite to source %s"
+msgstr ""
+
+msgid "Rewrite to source %s, %s"
 msgstr ""
 
 msgid "SNAT"
@@ -450,31 +429,31 @@ msgid ""
 "networks</em> specifies which available networks are member of this zone."
 msgstr ""
 
+msgid "To %s"
+msgstr ""
+
+msgid "To %s at %s"
+msgstr ""
+
+msgid "To %s at %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s in %s"
+msgstr ""
+
+msgid "To %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s, %s in %s"
+msgstr ""
+
 msgid "To source IP"
 msgstr ""
 
 msgid "To source port"
 msgstr ""
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua   #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-msgid "Traffic Redirection"
-msgstr ""
-
 msgid "Traffic Rules"
-msgstr ""
-
-msgid ""
-"Traffic redirection allows you to change the destination address of "
-"forwarded packets."
 msgstr ""
 
 msgid ""
@@ -506,11 +485,96 @@ msgstr ""
 msgid "any"
 msgstr ""
 
+msgid "any host"
+msgstr ""
+
+msgid "any router IP"
+msgstr ""
+
+msgid "any zone"
+msgstr ""
+
+msgid "day"
+msgstr ""
+
 msgid "don't track"
 msgstr ""
 
 msgid "drop"
 msgstr ""
 
+msgid "hour"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "not"
+msgstr ""
+
+msgid "port"
+msgstr ""
+
+msgid "ports"
+msgstr ""
+
 msgid "reject"
 msgstr ""
+
+msgid "second"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "types"
+msgstr ""
+
+#~ msgid "Advanced Options"
+#~ msgstr "Opcje zaawansowane"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# msgid "Name"
+# msgstr ""
+# msgid "(optional)"
+# msgstr ""
+# msgid "Protocol"
+# msgstr ""
+# msgid "Source port"
+# msgstr ""
+# msgid "Destination port"
+# msgstr ""
+# msgid "Action"
+# msgstr ""
+# msgid "drop"
+# msgstr ""
+# msgid "accept"
+# msgstr ""
+# msgid "reject"
+# msgstr ""
+#~ msgid "Advanced Rules"
+#~ msgstr "Reguły zaawansowane"
+
+#~ msgid ""
+#~ "Advanced rules let you customize the firewall to your needs. Only new "
+#~ "connections will be matched. Packets belonging to already open "
+#~ "connections are automatically allowed to pass the firewall."
+#~ msgstr ""
+#~ "Reguły zaawansowane pozwalają dostosować zaporę do Twoich potrzeb. Tylko "
+#~ "nowe połączenia zostaną nimi objęte. Pakiety należące do połączeń już "
+#~ "otwarte są automatycznie przepuszczane przez zaporę."
+
+#~ msgid "Custom Rules (/etc/firewall.user)"
+#~ msgstr "Reguły własne (/etc/firewall.user)"
+
+#~ msgid "Device"
+#~ msgstr "Urządzenie"
+
+#~ msgid ""
+#~ "For DNAT, match incoming traffic directed at the given destination ip "
+#~ "address. For SNAT rewrite the source address to the given address."
+#~ msgstr ""
+#~ "Dla DNAT, dopasuj ruch przychodzący kierowane na podany adres IP. Dla "
+#~ "SNAT zmienić adres źródłowy na podany adres."

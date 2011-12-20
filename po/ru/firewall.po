@@ -14,6 +14,9 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.4\n"
 
+msgid "%s%s with %s"
+msgstr ""
+
 msgid "(Unnamed Entry)"
 msgstr ""
 
@@ -29,6 +32,21 @@ msgstr ""
 msgid "-- custom --"
 msgstr ""
 
+msgid "<var>%d</var> pkts. per <var>%s</var>"
+msgstr ""
+
+msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
+msgstr ""
+
+msgid "<var>%s</var> and limit to %s"
+msgstr ""
+
+msgid "Accept forward"
+msgstr ""
+
+msgid "Accept input"
+msgstr ""
+
 msgid "Action"
 msgstr "Действие"
 
@@ -38,24 +56,8 @@ msgstr ""
 msgid "Add and edit..."
 msgstr ""
 
-msgid "Advanced Options"
-msgstr "Расширенные опции"
-
-msgid "Advanced Rules"
-msgstr "Расширенные правила"
-
 msgid "Advanced Settings"
 msgstr "Расширенные настройки"
-
-msgid ""
-"Advanced rules let you customize the firewall to your needs. Only new "
-"connections will be matched. Packets belonging to already open connections "
-"are automatically allowed to pass the firewall."
-msgstr ""
-"Расширенные правила позволяют настроить сетевой экран в соответствии с "
-"вашими потребностями. Только новые соединения будут обработаны. Пакеты, "
-"принадлежащие уже существующим соединениям, будут автоматически пропущены "
-"через сетевой экран."
 
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Разрешить прохождение от <em>зон-источников</em>:"
@@ -71,9 +73,6 @@ msgstr "Использовать сети"
 
 msgid "Custom Rules"
 msgstr "Пользовательские правила"
-
-msgid "Custom Rules (/etc/firewall.user)"
-msgstr "Пользовательские правила (/etc/firewall.user)"
 
 msgid ""
 "Custom rules allow you to execute arbritary iptables commands which are not "
@@ -96,10 +95,19 @@ msgstr "Порт назначения"
 msgid "Destination zone"
 msgstr "Зона назначения"
 
-msgid "Device"
-msgstr "Устройство"
+msgid "Discard forward"
+msgstr ""
+
+msgid "Discard input"
+msgstr ""
 
 msgid "Do not rewrite"
+msgstr ""
+
+msgid "Do not track forward"
+msgstr ""
+
+msgid "Do not track input"
 msgstr ""
 
 msgid "Drop invalid packets"
@@ -135,21 +143,38 @@ msgstr ""
 msgid "Firewall - Zone Settings"
 msgstr "Межсетевой экран - Настройка зон"
 
-msgid ""
-"For DNAT, match incoming traffic directed at the given destination ip "
-"address. For SNAT rewrite the source address to the given address."
-msgstr ""
-"Для DNAT соответствующий трафик перенаправляется на введенный адрес "
-"назначения. Для SNAT подменяется адрес источника на введенный."
-
 msgid "Force connection tracking"
 msgstr "Включить отслеживание соединений"
 
 msgid "Forward"
 msgstr "Перенаправление"
 
+msgid "Forward to %s in %s"
+msgstr ""
+
+msgid "Forward to %s, %s in %s"
+msgstr ""
+
+msgid "From %s in %s"
+msgstr ""
+
+msgid "From %s in %s with source %s"
+msgstr ""
+
+msgid "From %s in %s with source %s and %s"
+msgstr ""
+
 msgid "General Settings"
 msgstr "Общие настройки"
+
+msgid "IP"
+msgstr ""
+
+msgid "IP range"
+msgstr ""
+
+msgid "IPs"
+msgstr ""
 
 msgid "IPv4"
 msgstr ""
@@ -187,6 +212,12 @@ msgstr "Внутренний порт (необязательно)"
 msgid "Limit log messages"
 msgstr "Ограничить журнал сообщений"
 
+msgid "MAC"
+msgstr ""
+
+msgid "MACs"
+msgstr ""
+
 msgid "MSS clamping"
 msgstr "MSS clamping"
 
@@ -204,13 +235,6 @@ msgid ""
 "on this host"
 msgstr ""
 "Выбирать входящий трафик направленный на порт или диапазон портов данного "
-"хоста"
-
-msgid ""
-"Match incoming traffic originating from the given source port or port range "
-"on the client host"
-msgstr ""
-"Выбирать исходящий трафик отправленный с порта или диапазона портов внешнего "
 "хоста"
 
 msgid ""
@@ -259,26 +283,13 @@ msgstr ""
 msgid "Output"
 msgstr "Исходящий"
 
-msgid "Overview"
-msgstr "Назад к обзору"
-
 msgid "Port Forwards"
 msgstr ""
-
-msgid "Port forwarding"
-msgstr "Перенаправление портов"
 
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr ""
-
-msgid ""
-"Port forwarding allows to provide network services in the internal network "
-"to an external network."
-msgstr ""
-"Перенаправление портов позволяет открыть доступ к внутренним службам из "
-"внешней сети."
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -290,11 +301,11 @@ msgstr "Перенаправить входящий трафик на указа
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Перенаправить входящий трафик на указанный хост внутренней сети"
 
-msgid "Redirection type"
-msgstr "Тип перенаправления"
+msgid "Refuse forward"
+msgstr ""
 
-msgid "Redirections"
-msgstr "Перенаправления"
+msgid "Refuse input"
+msgstr ""
 
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Использовать маскарадинг только для указанных подсетей-получателей"
@@ -313,8 +324,11 @@ msgid ""
 "rewrite the IP address."
 msgstr ""
 
-msgid "Rules"
-msgstr "Правила"
+msgid "Rewrite to source %s"
+msgstr ""
+
+msgid "Rewrite to source %s, %s"
+msgstr ""
 
 msgid "SNAT"
 msgstr ""
@@ -417,24 +431,32 @@ msgstr ""
 "Пункт <em>использовать сети</em> позволяет указать, какие сети являются "
 "частью данной зоны."
 
+msgid "To %s"
+msgstr ""
+
+msgid "To %s at %s"
+msgstr ""
+
+msgid "To %s at %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s in %s"
+msgstr ""
+
+msgid "To %s on <var>this device</var>"
+msgstr ""
+
+msgid "To %s, %s in %s"
+msgstr ""
+
 msgid "To source IP"
 msgstr ""
 
 msgid "To source port"
 msgstr ""
 
-msgid "Traffic Redirection"
-msgstr "Перенаправление трафика"
-
 msgid "Traffic Rules"
 msgstr ""
-
-msgid ""
-"Traffic redirection allows you to change the destination address of "
-"forwarded packets."
-msgstr ""
-"Перенаправление трафика позволяет изменить адрес получателя для проходящих "
-"пакетов."
 
 msgid ""
 "Traffic rules define policies for packets traveling between different zones, "
@@ -465,11 +487,115 @@ msgstr "принимать"
 msgid "any"
 msgstr "любой"
 
+msgid "any host"
+msgstr ""
+
+msgid "any router IP"
+msgstr ""
+
+msgid "any zone"
+msgstr ""
+
+msgid "day"
+msgstr ""
+
 msgid "don't track"
 msgstr ""
 
 msgid "drop"
 msgstr "не обрабатывать"
 
+msgid "hour"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "not"
+msgstr ""
+
+msgid "port"
+msgstr ""
+
+msgid "ports"
+msgstr ""
+
 msgid "reject"
 msgstr "отвергать"
+
+msgid "second"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "types"
+msgstr ""
+
+#~ msgid "Advanced Options"
+#~ msgstr "Расширенные опции"
+
+#~ msgid "Advanced Rules"
+#~ msgstr "Расширенные правила"
+
+#~ msgid ""
+#~ "Advanced rules let you customize the firewall to your needs. Only new "
+#~ "connections will be matched. Packets belonging to already open "
+#~ "connections are automatically allowed to pass the firewall."
+#~ msgstr ""
+#~ "Расширенные правила позволяют настроить сетевой экран в соответствии с "
+#~ "вашими потребностями. Только новые соединения будут обработаны. Пакеты, "
+#~ "принадлежащие уже существующим соединениям, будут автоматически пропущены "
+#~ "через сетевой экран."
+
+#~ msgid "Custom Rules (/etc/firewall.user)"
+#~ msgstr "Пользовательские правила (/etc/firewall.user)"
+
+#~ msgid "Device"
+#~ msgstr "Устройство"
+
+#~ msgid ""
+#~ "For DNAT, match incoming traffic directed at the given destination ip "
+#~ "address. For SNAT rewrite the source address to the given address."
+#~ msgstr ""
+#~ "Для DNAT соответствующий трафик перенаправляется на введенный адрес "
+#~ "назначения. Для SNAT подменяется адрес источника на введенный."
+
+#~ msgid ""
+#~ "Match incoming traffic originating from the given source port or port "
+#~ "range on the client host"
+#~ msgstr ""
+#~ "Выбирать исходящий трафик отправленный с порта или диапазона портов "
+#~ "внешнего хоста"
+
+#~ msgid "Overview"
+#~ msgstr "Назад к обзору"
+
+#~ msgid "Port forwarding"
+#~ msgstr "Перенаправление портов"
+
+#~ msgid ""
+#~ "Port forwarding allows to provide network services in the internal "
+#~ "network to an external network."
+#~ msgstr ""
+#~ "Перенаправление портов позволяет открыть доступ к внутренним службам из "
+#~ "внешней сети."
+
+#~ msgid "Redirection type"
+#~ msgstr "Тип перенаправления"
+
+#~ msgid "Redirections"
+#~ msgstr "Перенаправления"
+
+#~ msgid "Rules"
+#~ msgstr "Правила"
+
+#~ msgid "Traffic Redirection"
+#~ msgstr "Перенаправление трафика"
+
+#~ msgid ""
+#~ "Traffic redirection allows you to change the destination address of "
+#~ "forwarded packets."
+#~ msgstr ""
+#~ "Перенаправление трафика позволяет изменить адрес получателя для "
+#~ "проходящих пакетов."
