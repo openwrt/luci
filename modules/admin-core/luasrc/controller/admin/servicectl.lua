@@ -15,12 +15,9 @@ $Id$
 module("luci.controller.admin.servicectl", package.seeall)
 
 function index()
-	luci.i18n.loadc("base")
-	local i18n = luci.i18n.translate
-
-	entry({"servicectl"}, alias("servicectl", "status"), nil, 1).sysauth = "root"
-	entry({"servicectl", "status"}, call("action_status"), nil, 2).leaf = true
-	entry({"servicectl", "restart"}, call("action_restart"), nil, 3).leaf = true
+	entry({"servicectl"}, alias("servicectl", "status")).sysauth = "root"
+	entry({"servicectl", "status"}, call("action_status")).leaf = true
+	entry({"servicectl", "restart"}, call("action_restart")).leaf = true
 end
 
 function action_status()
@@ -34,14 +31,18 @@ function action_status()
 end
 
 function action_restart()
-	if luci.dispatcher.context.requestpath[3] then
+	local uci = require "luci.model.uci".cursor()
+	local rqp = luci.dispatcher.context.requestpath
+
+	if rqp[3] then
 		local service
 		local services = { }
 
-		for service in luci.dispatcher.context.requestpath[3]:gmatch("[%w_-]+") do
+		for service in rqp[3]:gmatch("[%w_-]+") do
 			services[#services+1] = service
 		end
 
+		local command = uci:apply(services, true)
 		if nixio.fork() == 0 then
 			local i = nixio.open("/dev/null", "r")
 			local o = nixio.open("/dev/null", "w")
@@ -52,7 +53,7 @@ function action_restart()
 			i:close()
 			o:close()
 
-			nixio.exec("/bin/sh", "/sbin/luci-reload", unpack(services))
+			nixio.exec("/bin/sh", unpack(command))
 		else
 			luci.http.write("OK")
 			os.exit(0)
