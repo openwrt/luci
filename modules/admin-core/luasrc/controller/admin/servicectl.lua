@@ -38,7 +38,7 @@ function action_restart()
 		local service
 		local services = { }
 
-		for service in luci.dispatcher.context.requestpath[3]:gmatch("%w+") do
+		for service in luci.dispatcher.context.requestpath[3]:gmatch("[%w_-]+") do
 			services[#services+1] = service
 		end
 
