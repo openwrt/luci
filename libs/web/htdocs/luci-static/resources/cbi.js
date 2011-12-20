@@ -501,6 +501,7 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 	var input0 = document.getElementsByName(name)[0];
 	var prefix = input0.name;
 	var parent = input0.parentNode;
+	var holder = input0.placeholder;
 
 	var values;
 
@@ -544,6 +545,11 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 				t.type = 'text';
 				t.index = i;
 				t.className = 'cbi-input-text';
+
+			if (i == 0 && holder)
+			{
+				t.placeholder = holder;
+			}
 
 			var b = document.createElement('img');
 				b.src = respath + ((i+1) < values.length ? '/cbi/remove.gif' : '/cbi/add.gif');
