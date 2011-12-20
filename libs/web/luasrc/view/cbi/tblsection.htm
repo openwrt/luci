@@ -85,14 +85,14 @@ end
 				-%>
 
 				<%- if self.sortable then -%>
-					<td class="cbi-section-table-cell" style="width:50px">
+					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
 						<a href="#" onclick="return cbi_row_swap(this, true,  'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>"><img src="<%=resource%>/cbi/up.gif" alt="<%:Move up%>" /></a>
 						<a href="#" onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move down%>"><img src="<%=resource%>/cbi/down.gif" alt="<%:Move down%>" /></a>
 					</td>
 				<%- end -%>
 
 				<%- if self.extedit or self.addremove then -%>
-					<td class="cbi-section-table-cell" style="width:50px">
+					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
 						<%- if self.extedit then -%>
 							<a href="
 							<%- if type(self.extedit) == "string" then -%>
