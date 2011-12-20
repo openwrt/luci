@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008-2009 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -186,7 +186,7 @@ function action_flashops()
 	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 
 	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
-	local backup_cmd  = "tar -czT %s 2>/dev/null"
+	local backup_cmd  = "sysupgrade --create-backup - 2>/dev/null"
 	local image_tmp   = "/tmp/firmware.img"
 
 	local function image_supported()
@@ -249,20 +249,11 @@ function action_flashops()
 		--
 		-- Assemble file list, generate backup
 		--
-		local filelist = "/tmp/luci-backup-list.%d" % os.time()
-		sys.call(
-			"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
-			"/lib/upgrade/keep.d/* 2>/dev/null) -type f 2>/dev/null; " ..
-			"opkg list-changed-conffiles ) | sort -u > %s" % filelist
-		)
-		if fs.access(filelist) then
-			local reader = ltn12_popen(backup_cmd:format(filelist))
-			luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
-				luci.sys.hostname(), os.date("%Y-%m-%d")})
-			luci.http.prepare_content("application/x-targz")
-			luci.ltn12.pump.all(reader, luci.http.write)
-			fs.unlink(filelist)
-		end
+		local reader = ltn12_popen(backup_cmd)
+		luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
+			luci.sys.hostname(), os.date("%Y-%m-%d")})
+		luci.http.prepare_content("application/x-targz")
+		luci.ltn12.pump.all(reader, luci.http.write)
 	elseif luci.http.formvalue("restore") then
 		--
 		-- Unpack received .tar.gz
