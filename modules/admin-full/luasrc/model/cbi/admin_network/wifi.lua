@@ -682,8 +682,8 @@ end
 
 
 encr:value("none", "No Encryption")
-encr:value("wep-open",   translate("WEP Open System"), {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
-encr:value("wep-shared", translate("WEP Shared Key"),  {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+encr:value("wep-open",   translate("WEP Open System"), {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"}, {mode="ahdemo"}, {mode="wds"})
+encr:value("wep-shared", translate("WEP Shared Key"),  {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"}, {mode="ahdemo"}, {mode="wds"})
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
@@ -694,17 +694,17 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local has_sta_eap = (os.execute("wpa_supplicant -veap >/dev/null 2>/dev/null") == 0)
 
 	if hostapd and supplicant then
-		encr:value("psk", "WPA-PSK")
-		encr:value("psk2", "WPA2-PSK")
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
+		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 		if has_ap_eap and has_sta_eap then
 			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 		end
 	elseif hostapd and not supplicant then
-		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
-		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="ap-wds"}, {mode="adhoc"}, {mode="ahdemo"})
+		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="ap-wds"})
+		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="ap-wds"})
+		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="ap-wds"})
 		if has_ap_eap then
 			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="ap-wds"})
