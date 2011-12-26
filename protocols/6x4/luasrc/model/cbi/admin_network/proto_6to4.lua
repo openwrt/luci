@@ -32,6 +32,9 @@ adv_interface.nocreate = true
 adv_interface.nobridges = true
 adv_interface.novirtual = true
 
+function adv_interface.remove(self, section)
+	self:write(section, " ")
+end
 
 adv_subnet  = section:taboption("general", Value, "adv_subnet",
 	translate("Advertised network ID"),
