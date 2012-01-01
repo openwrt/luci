@@ -254,7 +254,7 @@ static void umap_file(struct file_map *m)
 
 static void * iwinfo_open(void)
 {
-	return dlopen("/usr/lib/lua/iwinfo.so", RTLD_LAZY);
+	return dlopen("/usr/lib/libiwinfo.so", RTLD_LAZY);
 }
 
 static int iwinfo_update(
