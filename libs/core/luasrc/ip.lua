@@ -220,7 +220,7 @@ function IPv6(address, netmask)
 	end
 
 	local borderl = address:sub(1, 1) == ":" and 2 or 1
-	local borderh, zeroh, chunk, block
+	local borderh, zeroh, chunk, block, i
 
 	if #address > 45 then return nil end
 
@@ -297,6 +297,7 @@ function Hex( hex, prefix, family, swap )
 	local len  = __maxlen(family)
 	local tmp  = ""
 	local data = { }
+	local i
 
 	for i = 1, (len/4) - #hex do tmp = tmp .. '0' end
 
@@ -403,6 +404,7 @@ end
 -- @see			cidr.equal
 function cidr.lower( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
+	local i
 	for i = 1, #self[2] do
 		if self[2][i] ~= addr[2][i] then
 			return self[2][i] < addr[2][i]
@@ -420,6 +422,7 @@ end
 -- @see			cidr.equal
 function cidr.higher( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
+	local i
 	for i = 1, #self[2] do
 		if self[2][i] ~= addr[2][i] then
 			return self[2][i] > addr[2][i]
@@ -437,6 +440,7 @@ end
 -- @see			cidr.higher
 function cidr.equal( self, addr )
 	assert( self[1] == addr[1], "Can't compare IPv4 and IPv6 addresses" )
+	local i
 	for i = 1, #self[2] do
 		if self[2][i] ~= addr[2][i] then
 			return false
@@ -460,6 +464,7 @@ function cidr.prefix( self, mask )
 
 		if not obj then return nil end
 
+		local _, word
 		for _, word in ipairs(obj[2]) do
 			if word == 0xFFFF then
 				prefix = prefix + 16
@@ -489,6 +494,7 @@ function cidr.network( self, bits )
 	local data = { }
 	bits = bits or self[3]
 
+	local i
 	for i = 1, math.floor( bits / 16 ) do
 		data[#data+1] = self[2][i]
 	end
@@ -578,6 +584,7 @@ end
 -- @return			CIDR representing the new address or nil on overflow error
 -- @see				cidr.sub
 function cidr.add( self, amount, inplace )
+	local pos
 	local data   = { unpack(self[2]) }
 	local shorts = __array16( amount, self[1] )
 
@@ -609,6 +616,7 @@ end
 -- @return			CIDR representing the new address or nil on underflow error
 -- @see				cidr.add
 function cidr.sub( self, amount, inplace )
+	local pos
 	local data   = { unpack(self[2]) }
 	local shorts = __array16( amount, self[1] )
 
@@ -649,6 +657,7 @@ end
 -- @see			cidr.minhost
 function cidr.maxhost( self )
 	if self[3] <= __sublen(self[1]) then
+		local i
 		local data   = { unpack(self[2]) }
 		local offset = math.floor( self[3] / 16 ) + 1
 
