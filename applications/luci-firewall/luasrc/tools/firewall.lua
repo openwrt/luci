@@ -86,7 +86,7 @@ function fmt_ip(x, d)
 			a, m = v:match("(%S+)/(%d+%.%S+)")
 			a = a or v
 			a = a:match(":") and ip.IPv6(a, m) or ip.IPv4(a, m)
-			if a and (a:is6() or a:prefix() < 32) then
+			if a and (a:is6() and a:prefix() < 128 or a:prefix() < 32) then
 				l[1] = translate("IP range")
 				l[#l+1] = "<var title='%s - %s'>%s%s</var>" %{
 					a:minhost():string(),
