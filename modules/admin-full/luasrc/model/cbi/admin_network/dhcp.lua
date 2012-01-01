@@ -235,7 +235,7 @@ name.datatype = "hostname"
 name.rmempty  = true
 
 mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-mac.datatype = "macaddr"
+mac.datatype = "list(macaddr)"
 
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ip.datatype = "ip4addr"
