@@ -3,6 +3,8 @@ include build/config.mk
 MODULES = contrib/* applications/* libs/* modules/* themes/* i18n/*
 
 OS:=$(shell uname)
+MODULES:=$(foreach item,$(wildcard $(MODULES)),$(if $(realpath $(wildcard $(item)/Makefile)),$(item)))
+
 export OS
 
 .PHONY: all build gccbuild luabuild clean host gcchost luahost hostcopy hostclean
