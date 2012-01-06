@@ -219,7 +219,7 @@ function wifi_delete(network)
 			luci.sys.call("env -i /sbin/wifi down %q >/dev/null" % dev:name())
 			ntm:del_wifinet(network)
 			ntm:commit("wireless")
-			if net:is_empty() then
+			if net and net:is_empty() then
 				ntm:del_network(net:name())
 				ntm:commit("network")
 			end
