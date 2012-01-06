@@ -38,7 +38,7 @@ function m.on_commit(map)
 
 	if v1 and v2 and #v1 > 0 and #v2 > 0 then
 		if v1 == v2 then
-			if luci.sys.user.setpasswd("root", v1) == 0 then
+			if luci.sys.user.setpasswd(luci.dispatcher.context.authuser, v1) == 0 then
 				m.message = translate("Password successfully changed!")
 			else
 				m.message = translate("Unknown Error, password not changed!")
