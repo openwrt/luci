@@ -66,26 +66,12 @@ function ipaddr(val)
 	return ip4addr(val) or ip6addr(val)
 end
 
-function neg_ipaddr(v)
-	if type(v) == "string" then
-		v = v:gsub("^%s*!", "")
-	end
-	return v and ipaddr(v)
-end
-
 function ip4addr(val)
 	if val then
 		return ip.IPv4(val) and true or false
 	end
 
 	return false
-end
-
-function neg_ip4addr(v)
-	if type(v) == "string" then
-		v = v:gsub("^%s*!", "")
-	end
-		return v and ip4addr(v)
 end
 
 function ip4prefix(val)
@@ -233,13 +219,6 @@ end
 
 function uciname(val)
 	return (val:match("^[a-zA-Z0-9_]+$") ~= nil)
-end
-
-function neg_network_ip4addr(val)
-	if type(v) == "string" then
-		v = v:gsub("^%s*!", "")
-		return (uciname(v) or ip4addr(v))
-	end
 end
 
 function range(val, min, max)

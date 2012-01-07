@@ -42,11 +42,6 @@ var cbi_validators = {
 		return cbi_validators.ip4addr(v) || cbi_validators.ip6addr(v);
 	},
 
-	'neg_ipaddr': function(v)
-	{
-		return cbi_validators.ip4addr(v.replace(/^\s*!/, "")) || cbi_validators.ip6addr(v.replace(/^\s*!/, ""));
-	},
-
 	'ip4addr': function(v)
 	{
 		if (v.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(\/(\S+))?$/))
@@ -62,11 +57,6 @@ var cbi_validators = {
 		}
 
 		return false;
-	},
-
-	'neg_ip4addr': function(v)
-	{
-		return cbi_validators.ip4addr(v.replace(/^\s*!/, ""));
 	},
 
 	'ip6addr': function(v)
@@ -189,12 +179,6 @@ var cbi_validators = {
 	'uciname': function(v)
 	{
 		return (v.match(/^[a-zA-Z0-9_]+$/) != null);
-	},
-
-	'neg_network_ip4addr': function(v)
-	{
-		v = v.replace(/^\s*!/, "");
-		return cbi_validators.uciname(v) || cbi_validators.ip4addr(v);
 	},
 
 	'range': function(v, args)
