@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2010-2011 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -136,7 +137,7 @@ msrc = s:taboption("advanced", DynamicList, "masq_src",
 	translate("Restrict Masquerading to given source subnets"))
 
 msrc.optional = true
-msrc.datatype = "neg_network_ip4addr"
+msrc.datatype = "list(neg,network)"
 msrc.placeholder = "0.0.0.0/0"
 msrc:depends("family", "")
 msrc:depends("family", "ipv4")
@@ -145,7 +146,7 @@ mdest = s:taboption("advanced", DynamicList, "masq_dest",
 	translate("Restrict Masquerading to given destination subnets"))
 
 mdest.optional = true
-mdest.datatype = "neg_network_ip4addr"
+mdest.datatype = "list(neg,network)"
 mdest.placeholder = "0.0.0.0/0"
 mdest:depends("family", "")
 mdest:depends("family", "ipv4")
