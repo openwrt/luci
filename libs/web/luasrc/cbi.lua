@@ -1432,13 +1432,11 @@ function AbstractValue.validate(self, value)
 			local v
 			for _, v in ipairs(value) do
 				if v and #v > 0 and not verify_datatype(self.datatype, v) then
-					error('F')
 					return nil
 				end
 			end
 		else
 			if not verify_datatype(self.datatype, value) then
-				error('F')
 				return nil
 			end
 		end

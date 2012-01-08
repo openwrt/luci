@@ -29,7 +29,6 @@ _M['or'] = function(v, ...)
 		local f = select(i, ...)
 		local a = select(i+1, ...)
 		if type(f) ~= "function" then
-			print("COMP", f, v)
 			if f == v then
 				return true
 			end
