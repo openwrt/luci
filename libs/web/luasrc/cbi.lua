@@ -180,8 +180,8 @@ function compile_datatype(code)
 
 					if #label > 0 and tonumber(label) then
 						stack[#stack+1] = tonumber(label)
-					elseif label:match("^'.+'$") or label:match('^".+"$') then
-						stack[#stack+1] = label:gsub("[\"'](.+)[\"']", "%1")
+					elseif label:match("^'.*'$") or label:match('^".*"$') then
+						stack[#stack+1] = label:gsub("[\"'](.*)[\"']", "%1")
 					elseif type(datatypes[label]) == "function" then
 						stack[#stack+1] = datatypes[label]
 						stack[#stack+1] = { }
