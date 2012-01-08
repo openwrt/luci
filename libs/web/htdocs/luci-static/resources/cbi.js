@@ -2,7 +2,7 @@
 	LuCI - Lua Configuration Interface
 
 	Copyright 2008 Steven Barth <steven@midlink.org>
-	Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
+	Copyright 2008-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -17,34 +17,35 @@ var cbi_c = [];
 
 var cbi_validators = {
 
-	'integer': function(v)
+	'integer': function()
 	{
-		return (v.match(/^-?[0-9]+$/) != null);
+		return (this.match(/^-?[0-9]+$/) != null);
 	},
 
-	'uinteger': function(v)
+	'uinteger': function()
 	{
-		return (cbi_validators.integer(v) && (v >= 0));
+		return (cbi_validators.integer.apply(this) && (this >= 0));
 	},
 
-	'float': function(v)
+	'float': function()
 	{
-		return !isNaN(parseFloat(v));
+		return !isNaN(parseFloat(this));
 	},
 
-	'ufloat': function(v)
+	'ufloat': function()
 	{
-		return (cbi_validators['float'](v) && (v >= 0));
+		return (cbi_validators['float'].apply(this) && (this >= 0));
 	},
 
-	'ipaddr': function(v)
+	'ipaddr': function()
 	{
-		return cbi_validators.ip4addr(v) || cbi_validators.ip6addr(v);
+		return cbi_validators.ip4addr.apply(this) ||
+			cbi_validators.ip6addr.apply(this);
 	},
 
-	'ip4addr': function(v)
+	'ip4addr': function()
 	{
-		if (v.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(\/(\S+))?$/))
+		if (this.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(\/(\S+))?$/))
 		{
 			return (RegExp.$1 >= 0) && (RegExp.$1 <= 255) &&
 			       (RegExp.$2 >= 0) && (RegExp.$2 <= 255) &&
@@ -52,16 +53,16 @@ var cbi_validators = {
 			       (RegExp.$4 >= 0) && (RegExp.$4 <= 255) &&
 			       ((RegExp.$6.indexOf('.') < 0)
 			          ? ((RegExp.$6 >= 0) && (RegExp.$6 <= 32))
-			          : (cbi_validators.ip4addr(RegExp.$6)))
+			          : (cbi_validators.ip4addr.apply(RegExp.$6)))
 			;
 		}
 
 		return false;
 	},
 
-	'ip6addr': function(v)
+	'ip6addr': function()
 	{
-		if( v.match(/^([a-fA-F0-9:.]+)(\/(\d+))?$/) )
+		if( this.match(/^([a-fA-F0-9:.]+)(\/(\d+))?$/) )
 		{
 			if( !RegExp.$2 || ((RegExp.$3 >= 0) && (RegExp.$3 <= 128)) )
 			{
@@ -76,7 +77,7 @@ var cbi_validators = {
 				{
 					var off = addr.lastIndexOf(':');
 
-					if( !(off && cbi_validators.ip4addr(addr.substr(off+1))) )
+					if( !(off && cbi_validators.ip4addr.apply(addr.substr(off+1))) )
 						return false;
 
 					addr = addr.substr(0, off) + ':0:0';
@@ -109,65 +110,72 @@ var cbi_validators = {
 		return false;
 	},
 
-	'port': function(v)
+	'port': function()
 	{
-		return cbi_validators.integer(v) && (v >= 0) && (v <= 65535);
+		return cbi_validators.integer.apply(this) &&
+			(this >= 0) && (this <= 65535);
 	},
 
-	'portrange': function(v)
+	'portrange': function()
 	{
-		if( v.match(/^(\d+)-(\d+)$/) )
+		if (this.match(/^(\d+)-(\d+)$/))
 		{
 			var p1 = RegExp.$1;
 			var p2 = RegExp.$2;
 
-			return cbi_validators.port(p1) &&
-			       cbi_validators.port(p2) &&
+			return cbi_validators.port.apply(p1) &&
+			       cbi_validators.port.apply(p2) &&
 			       (parseInt(p1) <= parseInt(p2))
 			;
 		}
 		else
 		{
-			return cbi_validators.port(v);
+			return cbi_validators.port.apply(this);
 		}
 	},
 
-	'macaddr': function(v)
+	'macaddr': function()
 	{
-		return (v.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
+		return (this.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
 	},
 
-	'host': function(v)
+	'host': function()
 	{
-		return cbi_validators.hostname(v) || cbi_validators.ipaddr(v);
+		return cbi_validators.hostname.apply(this) ||
+			cbi_validators.ipaddr.apply(this);
 	},
 
-	'hostname': function(v)
+	'hostname': function()
 	{
-		if (v.length <= 253)
-			return (v.match(/^[a-zA-Z]+$/) != null ||
-			        (v.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) &&
-			         v.match(/[^0-9.]/)));
+		if (this.length <= 253)
+			return (this.match(/^[a-zA-Z]+$/) != null ||
+			        (this.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) &&
+			         this.match(/[^0-9.]/)));
 
 		return false;
 	},
 
-	'network': function(v)
+	'network': function()
 	{
-		return cbi_validators.uciname(v) || cbi_validators.host(v);
+		return cbi_validators.uciname.apply(this) ||
+			cbi_validators.host.apply(this);
 	},
 
-	'wpakey': function(v)
+	'wpakey': function()
 	{
+		var v = this;
+
 		if( v.length == 64 )
 			return (v.match(/^[a-fA-F0-9]{64}$/) != null);
 		else
 			return (v.length >= 8) && (v.length <= 63);
 	},
 
-	'wepkey': function(v)
+	'wepkey': function()
 	{
-		if( v.substr(0,2) == 's:' )
+		var v = this;
+
+		if ( v.substr(0,2) == 's:' )
 			v = v.substr(2);
 
 		if( (v.length == 10) || (v.length == 26) )
@@ -176,69 +184,91 @@ var cbi_validators = {
 			return (v.length == 5) || (v.length == 13);
 	},
 
-	'uciname': function(v)
+	'uciname': function()
 	{
-		return (v.match(/^[a-zA-Z0-9_]+$/) != null);
+		return (this.match(/^[a-zA-Z0-9_]+$/) != null);
 	},
 
-	'range': function(v, args)
+	'range': function(min, max)
 	{
-		var min = parseInt(args[0]);
-		var max = parseInt(args[1]);
-		var val = parseInt(v);
-
+		var val = parseFloat(this);
 		if (!isNaN(min) && !isNaN(max) && !isNaN(val))
 			return ((val >= min) && (val <= max));
 
 		return false;
 	},
 
-	'min': function(v, args)
+	'min': function(min)
 	{
-		var min = parseInt(args[0]);
-		var val = parseInt(v);
-
+		var val = parseFloat(this);
 		if (!isNaN(min) && !isNaN(val))
 			return (val >= min);
 
 		return false;
 	},
 
-	'max': function(v, args)
+	'max': function(max)
 	{
-		var max = parseInt(args[0]);
-		var val = parseInt(v);
-
+		var val = parseFloat(this);
 		if (!isNaN(max) && !isNaN(val))
 			return (val <= max);
 
 		return false;
 	},
 
-	'neg': function(v, args)
+	'or': function()
 	{
-		if (args[0] && typeof cbi_validators[args[0]] == "function")
-			return cbi_validators[args[0]](v.replace(/^\s*!\s*/, ''));
-
+		for (var i = 0; i < arguments.length; i += 2)
+		{
+			if (typeof arguments[i] != 'function')
+			{
+				if (arguments[i] == this)
+					return true;
+				i--;
+			}
+			else if (arguments[i].apply(this, arguments[i+1]))
+			{
+				return true;
+			}
+		}
 		return false;
 	},
 
-	'list': function(v, args)
+	'and': function()
 	{
-		var cb = cbi_validators[args[0] || 'string'];
-		if (typeof cb == "function")
+		for (var i = 0; i < arguments.length; i += 2)
 		{
-			var cbargs = args.slice(1);
-			var values = v.match(/[^\s]+/g);
-
-			for (var i = 0; i < values.length; i++)
-				if (!cb(values[i], cbargs))
+			if (typeof arguments[i] != 'function')
+			{
+				if (arguments[i] != this)
 					return false;
-
-			return true;
+				i--;
+			}
+			else if (!arguments[i].apply(this, arguments[i+1]))
+			{
+				return false;
+			}
 		}
+		return true;
+	},
 
-		return false;
+	'neg': function()
+	{
+		return cbi_validators.or.apply(
+			this.replace(/^[ \t]*![ \t]*/, ''), arguments);
+	},
+
+	'list': function(subvalidator, subargs)
+	{
+		if (typeof subvalidator != 'function')
+			return false;
+
+		var tokens = this.match(/[^ \t]+/g);
+		for (var i = 0; i < tokens.length; i++)
+			if (!subvalidator.apply(tokens[i], subargs))
+				return false;
+
+		return true;
 	}
 };
 
@@ -832,20 +862,87 @@ function cbi_validate_reset(form)
 	return true;
 }
 
+function cbi_validate_compile(code)
+{
+	var pos = 0;
+	var esc = false;
+	var depth = 0;
+	var stack = [ ];
+
+	code += ',';
+
+	for (var i = 0; i < code.length; i++)
+	{
+		if (esc)
+		{
+			esc = false;
+			continue;
+		}
+
+		switch (code.charCodeAt(i))
+		{
+		case 92:
+			esc = true;
+			break;
+
+		case 40:
+		case 44:
+			if (depth <= 0)
+			{
+				if (pos < i)
+				{
+					var label = code.substring(pos, i);
+						label = label.replace(/\\(.)/g, '$1');
+						label = label.replace(/^[ \t]+/g, '');
+						label = label.replace(/[ \t]+$/g, '');
+
+					if (label && !isNaN(label))
+					{
+						stack.push(parseFloat(label));
+					}
+					else if (label.match(/^(['"]).*\1$/))
+					{
+						stack.push(label.replace(/^(['"])(.*)\1$/, '$2'));
+					}
+					else if (typeof cbi_validators[label] == 'function')
+					{
+						stack.push(cbi_validators[label]);
+						stack.push(null);
+					}
+					else
+					{
+						throw "Syntax error, unhandled token '"+label+"'";
+					}
+				}
+				pos = i+1;
+			}
+			depth += (code.charCodeAt(i) == 40);
+			break;
+
+		case 41:
+			if (--depth <= 0)
+			{
+				if (typeof stack[stack.length-2] != 'function')
+					throw "Syntax error, argument list follows non-function";
+
+				stack[stack.length-1] =
+					arguments.callee(code.substring(pos, i));
+
+				pos = i+1;
+			}
+			break;
+		}
+	}
+
+	return stack;
+}
+
 function cbi_validate_field(cbid, optional, type)
 {
 	var field = (typeof cbid == "string") ? document.getElementById(cbid) : cbid;
-	var vargs;
+	var vstack; try { vstack = cbi_validate_compile(type); } catch(e) { };
 
-	if( type.match(/^(\w+)\(([^\(\)]+)\)/) )
-	{
-		type  = RegExp.$1;
-		vargs = RegExp.$2.split(/\s*,\s*/);
-	}
-
-	var vldcb = cbi_validators[type];
-
-	if( field && vldcb )
+	if (field && vstack && typeof vstack[0] == "function")
 	{
 		var validator = function()
 		{
@@ -858,7 +955,7 @@ function cbi_validate_field(cbid, optional, type)
 				var value = (field.options && field.options.selectedIndex > -1)
 					? field.options[field.options.selectedIndex].value : field.value;
 
-				if( !(((value.length == 0) && optional) || vldcb(value, vargs)) )
+				if (!(((value.length == 0) && optional) || vstack[0].apply(value, vstack[1])))
 				{
 					// invalid
 					field.className += ' cbi-input-invalid';

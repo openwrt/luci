@@ -17,11 +17,63 @@ local fs = require "nixio.fs"
 local ip = require "luci.ip"
 local math = require "math"
 local util = require "luci.util"
-local tonumber, type = tonumber, type
+local tonumber, type, unpack, select = tonumber, type, unpack, select
 
 
 module "luci.cbi.datatypes"
 
+
+_M['or'] = function(v, ...)
+	local i
+	for i = 1, select('#', ...), 2 do
+		local f = select(i, ...)
+		local a = select(i+1, ...)
+		if type(f) ~= "function" then
+			print("COMP", f, v)
+			if f == v then
+				return true
+			end
+			i = i - 1
+		elseif f(v, unpack(a)) then
+			return true
+		end
+	end
+	return false
+end
+
+_M['and'] = function(v, ...)
+	local i
+	for i = 1, select('#', ...), 2 do
+		local f = select(i, ...)
+		local a = select(i+1, ...)
+		if type(f) ~= "function" then
+			if f ~= v then
+				return false
+			end
+			i = i - 1
+		elseif not f(v, unpack(a)) then
+			return false
+		end
+	end
+	return true
+end
+
+function neg(v, ...)
+	return _M['or'](v:gsub("^%s*!%s*", ""), ...)
+end
+
+function list(v, subvalidator, subargs)
+	if type(subvalidator) ~= "function" then
+		return false
+	end
+	local token
+	for token in v:gmatch("%S+") do
+		if not subvalidator(token, unpack(subargs)) then
+			return false
+		end
+	end
+	return true
+end
 
 function bool(val)
 	if val == "1" or val == "yes" or val == "on" or val == "true" then
@@ -250,28 +302,6 @@ function max(val, max)
 
 	if val ~= nil and max ~= nil then
 		return (val <= max)
-	end
-
-	return false
-end
-
-function neg(val, what)
-	if what and type(_M[what]) == "function" then
-		return _M[what](val:gsub("^%s*!%s*", ""))
-	end
-
-	return false
-end
-
-function list(val, what, ...)
-	if type(val) == "string" and what and type(_M[what]) == "function" then
-		for val in val:gmatch("%S+") do
-			if not _M[what](val, ...) then
-				return false
-			end
-		end
-
-		return true
 	end
 
 	return false
