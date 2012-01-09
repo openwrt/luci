@@ -282,7 +282,7 @@ else
 
 
 	o = s:option(Value, "src_port", translate("Source port"))
-	o.datatype = "list(neg,portrange)"
+	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
 
@@ -299,7 +299,7 @@ else
 
 
 	o = s:option(Value, "dest_port", translate("Destination port"))
-	o.datatype = "list(neg,portrange)"
+	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
 
