@@ -135,6 +135,7 @@ function Simple.handle_GET(self, request)
 								end
 
 								local headers = {
+									["Cache-Control"]  = "max-age=29030400",
 									["Last-Modified"]  = date.to_http( stat.mtime ),
 									["Content-Type"]   = mime.to_mime( file ),
 									["ETag"]           = etag,
