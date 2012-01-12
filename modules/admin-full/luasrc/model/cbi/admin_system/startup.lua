@@ -71,7 +71,7 @@ end
 start = s:option(Button, "start", translate("Start"))
 start.inputstyle = "apply"
 start.write = function(self, section)
-	luci.sys.call("/etc/init.d/%s %s" %{ inits[section].name, self.option })
+	luci.sys.call("/etc/init.d/%s %s >/dev/null" %{ inits[section].name, self.option })
 end
 
 restart = s:option(Button, "restart", translate("Restart"))
