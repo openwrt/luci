@@ -869,6 +869,12 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	cacert:depends({mode="sta-wds", encryption="wpa"})
 	cacert:depends({mode="sta-wds", encryption="wpa2"})
 
+	clientcert = s:taboption("encryption", FileUpload, "client_cert", translate("Path to Client-Certificate"))
+	clientcert:depends({mode="sta", encryption="wpa"})
+	clientcert:depends({mode="sta", encryption="wpa2"})
+	clientcert:depends({mode="sta-wds", encryption="wpa"})
+	clientcert:depends({mode="sta-wds", encryption="wpa2"})
+
 	privkey = s:taboption("encryption", FileUpload, "priv_key", translate("Path to Private Key"))
 	privkey:depends({mode="sta", eap_type="tls", encryption="wpa2"})
 	privkey:depends({mode="sta", eap_type="tls", encryption="wpa"})
