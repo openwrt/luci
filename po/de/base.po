@@ -269,6 +269,9 @@ msgstr "Antenne 1"
 msgid "Antenna 2"
 msgstr "Antenne 2"
 
+msgid "Any zone"
+msgstr ""
+
 msgid "Apply"
 msgstr "Anwenden"
 
@@ -344,6 +347,9 @@ msgstr "Bitrate"
 msgid "Bitrate"
 msgstr "Bitrate"
 
+msgid "Bogus NX Domain Override"
+msgstr ""
+
 msgid "Bridge"
 msgstr "Bridge"
 
@@ -407,6 +413,9 @@ msgid ""
 "<em>unspecified</em> to not attach any network or fill out the <em>create</"
 "em> field to define a new network."
 msgstr "Wählt die Schnittstelle die diesem Netzwerk zugeordnet wird."
+
+msgid "Cipher"
+msgstr ""
 
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
@@ -508,14 +517,8 @@ msgstr "Kritisch"
 msgid "Cron Log Level"
 msgstr "Cron Protokolllevel"
 
-msgid "Custom Files"
-msgstr "Benutzerdefinierte Dateien"
-
 msgid "Custom Interface"
 msgstr "benutzerdefinierte Schnittstelle"
-
-msgid "Custom files"
-msgstr "Benutzerdefinierte Dateien"
 
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
@@ -583,12 +586,6 @@ msgstr "Design"
 
 msgid "Destination"
 msgstr "Ziel"
-
-msgid "Detected Files"
-msgstr "Erkannte Dateien"
-
-msgid "Detected files"
-msgstr "Erkannte Dateien"
 
 msgid "Device"
 msgstr "Gerät"
@@ -809,9 +806,6 @@ msgstr "Datei"
 msgid "Filename of the boot image advertised to clients"
 msgstr "Dateiname des Boot-Images welches den Clients mitgeteilt wird."
 
-msgid "Files to be kept when flashing a new firmware"
-msgstr "Zu übernehmende Dateien bei Firmwareupgrade"
-
 msgid "Filesystem"
 msgstr "Dateisystem"
 
@@ -869,10 +863,19 @@ msgstr ""
 msgid "Force"
 msgstr "Start erzwingen"
 
+msgid "Force CCMP (AES)"
+msgstr ""
+
 msgid "Force DHCP on this network even if another server is detected."
 msgstr ""
 "DHCP-Server für dieses Netzwerk erzwingen, selbst wenn ein anderer aktiver "
 "Server erkannt wurde."
+
+msgid "Force TKIP"
+msgstr ""
+
+msgid "Force TKIP and CCMP (AES)"
+msgstr ""
 
 msgid "Forward DHCP traffic"
 msgstr ""
@@ -903,9 +906,6 @@ msgstr "Gateway"
 
 msgid "Gateway ports"
 msgstr "Gateway-Ports"
-
-msgid "General"
-msgstr "Allgemeines"
 
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
@@ -951,13 +951,6 @@ msgid ""
 msgstr ""
 "An dieser Stelle können Grundeinstellungen des Systems wie Hostname oder "
 "Zeitzone vorgenommen werden."
-
-msgid ""
-"Here you can customize the settings and the functionality of <abbr title="
-"\"Lua Configuration Interface\">LuCI</abbr>."
-msgstr ""
-"Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst "
-"werden."
 
 msgid ""
 "Here you can paste public SSH-Keys (one per line) for SSH public-key "
@@ -1256,6 +1249,9 @@ msgstr ""
 
 msgid "List of domains to allow RFC1918 responses for"
 msgstr "Liste von Domains für welche RFC1918-Antworten erlaubt sind"
+
+msgid "List of hosts that supply bogus NX domain results"
+msgstr ""
 
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
@@ -1690,6 +1686,9 @@ msgstr "Passwort erfolgreich geändert!"
 msgid "Path to CA-Certificate"
 msgstr "Pfad zum CA-Zertifikat"
 
+msgid "Path to Client-Certificate"
+msgstr ""
+
 msgid "Path to Private Key"
 msgstr "Pfad zum Privaten Schlüssel"
 
@@ -1731,9 +1730,6 @@ msgstr "Port %d"
 
 msgid "Port %d is untagged in multiple VLANs!"
 msgstr "Port %d ist untagged in mehreren VLANs!"
-
-msgid "Post-commit actions"
-msgstr "UCI-Befehle beim Anwenden"
 
 msgid "Power"
 msgstr "Leistung"
@@ -2044,6 +2040,9 @@ msgstr "Dienste"
 msgid "Setup DHCP Server"
 msgstr "DHCP Server einrichten"
 
+msgid "Setup Time Synchronization"
+msgstr ""
+
 msgid "Show current backup file list"
 msgstr ""
 
@@ -2241,8 +2240,8 @@ msgid ""
 "The <em>libiwinfo-lua</em> package is not installed. You must install this "
 "component for working wireless configuration!"
 msgstr ""
-"Das <em>libiwinfo-lua</em> Paket ist nicht installiert. Dieses Paket muss für "
-"eine funktionierende WLAN-Konfiguration vorhanden sein!"
+"Das <em>libiwinfo-lua</em> Paket ist nicht installiert. Dieses Paket muss "
+"für eine funktionierende WLAN-Konfiguration vorhanden sein!"
 
 msgid ""
 "The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
@@ -2277,13 +2276,6 @@ msgstr "Die folgenden Änderungen wurden angewendet"
 
 msgid "The following changes have been reverted"
 msgstr "Die folgenden Änderungen wurden verworfen"
-
-msgid ""
-"The following files are detected by the system and will be kept "
-"automatically during sysupgrade"
-msgstr ""
-"Die folgenden Dateien wurden vom System erkannt und werden bei einen System-"
-"Update automatisch beibehalten"
 
 msgid "The following rules are currently active on this system."
 msgstr "Die folgenden Regeln sind zur Zeit auf dem System aktiv."
@@ -2364,23 +2356,6 @@ msgstr ""
 "Root-Passwort um das Web-Interface zu schützen und SSH zu aktivieren."
 
 msgid ""
-"These commands will be executed automatically when a given <abbr title="
-"\"Unified Configuration Interface\">UCI</abbr> configuration is committed "
-"allowing changes to be applied instantly."
-msgstr ""
-"Beim Anwenden der Konfiguration aus der Oberflächliche heraus können "
-"automatisch die relevanten Dienste neugestart werden, sodass Änderungen "
-"sofort nach dem Anwenden aktiv werden und der Router nicht erst neugestartet "
-"werden muss."
-
-msgid ""
-"This is a list of shell glob patterns for matching files and directories to "
-"include during sysupgrade"
-msgstr ""
-"Dies ist eine Liste von Shell-Glob-Mustern um Dateien und Verzeichnisse zu "
-"wählen welche bei einem Systemupgrade beibehalten werden sollen"
-
-msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
 "include during sysupgrade. Modified files in /etc/config/ and certain other "
 "configurations are automatically preserved."
@@ -2432,6 +2407,9 @@ msgid "This section contains no values yet"
 msgstr "Diese Sektion enthält noch keine Einträge"
 
 msgid "Time Synchronization"
+msgstr ""
+
+msgid "Time Synchronization is not configured yet."
 msgstr ""
 
 msgid "Timezone"
@@ -2651,9 +2629,6 @@ msgstr ""
 "Warnung: Es gibt ungespeicherte Änderungen, die bei einem Neustart verloren "
 "gehen!"
 
-msgid "Web <abbr title=\"User Interface\">UI</abbr>"
-msgstr "Weboberfläche"
-
 msgid "Wifi"
 msgstr "Drahtlos"
 
@@ -2738,11 +2713,17 @@ msgid ""
 "abbr>-leases will be stored"
 msgstr "Speicherort für vergebenen DHCP-Adressen"
 
+msgid "forward"
+msgstr ""
+
 msgid "help"
 msgstr "Hilfe"
 
 msgid "if target is a network"
 msgstr "falls Ziel ein Netzwerk ist"
+
+msgid "input"
+msgstr ""
 
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
 msgstr "Lokale DNS-Datei"
@@ -2782,6 +2763,61 @@ msgstr "ja"
 
 msgid "« Back"
 msgstr "« Zurück"
+
+#~ msgid "Custom Files"
+#~ msgstr "Benutzerdefinierte Dateien"
+
+#~ msgid "Custom files"
+#~ msgstr "Benutzerdefinierte Dateien"
+
+#~ msgid "Detected Files"
+#~ msgstr "Erkannte Dateien"
+
+#~ msgid "Detected files"
+#~ msgstr "Erkannte Dateien"
+
+#~ msgid "Files to be kept when flashing a new firmware"
+#~ msgstr "Zu übernehmende Dateien bei Firmwareupgrade"
+
+#~ msgid "General"
+#~ msgstr "Allgemeines"
+
+#~ msgid ""
+#~ "Here you can customize the settings and the functionality of <abbr title="
+#~ "\"Lua Configuration Interface\">LuCI</abbr>."
+#~ msgstr ""
+#~ "Hier können Eigenschaften und die Funktionalität der Oberfläche angepasst "
+#~ "werden."
+
+#~ msgid "Post-commit actions"
+#~ msgstr "UCI-Befehle beim Anwenden"
+
+#~ msgid ""
+#~ "The following files are detected by the system and will be kept "
+#~ "automatically during sysupgrade"
+#~ msgstr ""
+#~ "Die folgenden Dateien wurden vom System erkannt und werden bei einen "
+#~ "System-Update automatisch beibehalten"
+
+#~ msgid ""
+#~ "These commands will be executed automatically when a given <abbr title="
+#~ "\"Unified Configuration Interface\">UCI</abbr> configuration is committed "
+#~ "allowing changes to be applied instantly."
+#~ msgstr ""
+#~ "Beim Anwenden der Konfiguration aus der Oberflächliche heraus können "
+#~ "automatisch die relevanten Dienste neugestart werden, sodass Änderungen "
+#~ "sofort nach dem Anwenden aktiv werden und der Router nicht erst "
+#~ "neugestartet werden muss."
+
+#~ msgid ""
+#~ "This is a list of shell glob patterns for matching files and directories "
+#~ "to include during sysupgrade"
+#~ msgstr ""
+#~ "Dies ist eine Liste von Shell-Glob-Mustern um Dateien und Verzeichnisse "
+#~ "zu wählen welche bei einem Systemupgrade beibehalten werden sollen"
+
+#~ msgid "Web <abbr title=\"User Interface\">UI</abbr>"
+#~ msgstr "Weboberfläche"
 
 #~ msgid "<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"
 #~ msgstr ""
