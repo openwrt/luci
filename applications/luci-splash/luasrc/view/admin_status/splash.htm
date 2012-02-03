@@ -233,6 +233,7 @@ end
 						<th class="cbi-section-table-cell"><%:Policy%></th>
 					</tr>
 				</thead>
+				<tbody id="splash_table">
 
 				<%-
 					local count = 0
@@ -248,7 +249,6 @@ end
 						if c.ip then
 							count = count + 1
 				-%>
-					<tbody id="splash_table">
 						<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
 						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("unknown") .. "</em>"%></td>
 						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("unknown") .. "</em>"%></td>
