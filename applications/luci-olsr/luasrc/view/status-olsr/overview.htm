@@ -162,82 +162,131 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 
 <div class="cbi-map">
 	<div class="cbi-section-node">
-		<div class="cbi-value"><label class="cbi-value-title"><%:Interfaces%></label>
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<label class="cbi-value-title"><%:Interfaces%></label>
+			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
 					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "interfaces")%>">
 						<span id="nr_ifaces">
-							<%=nr_ifaces%></a>
+							<%=nr_ifaces%>
 						<span>
+					</a>
 				</div>
-				<div style="padding-left: 6em;">
+				<div style="padding-left: 21em;">
 					<span id="interfaces">
 						<%=interfaces%>
 					</span>
 				</div>
 			</div>
+			<br/>
 		</div>
-	
-		<div class="cbi-value"><label class="cbi-value-title"><%:Neighbors%></label>
+
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:Neighbors%>
+			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
 					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "neighbors")%>">
 						<span id="nr_neigh">
-							<%=nr_neigh%></a>
+							<%=nr_neigh%>
 						</span>
+					</a>
 				</div>
-				<div style="padding-left: 6em;">
+				<div style="padding-left: 21em;">
 					<span id="neighbors">
 						<%=neighbors%>
 					</span>
 				</div>
 			</div>
+			<br/>
 		</div>
 
-		<div class="cbi-value"><label class="cbi-value-title"><%:Nodes%></label>
-			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
-				<span id="nr_nodes">
-					<%=nr_nodes%></a>
-				</span>
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:Nodes%>
 			</div>
-		</div>
-
-		<div class="cbi-value"><label class="cbi-value-title"><%:HNA%></label>
-			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "hna")%>">
-				<span id="nr_hna">
-					<%=nr_hna%></a>
-				</span>
-			</div>
-		</div>
-
-		<div class="cbi-value"><label class="cbi-value-title"><%:Links total%></label>
-			<div class="cbi-value-field"><a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
-				<span id="nr_topo">
-					<%=nr_topo%></a>
-				</span>
-			</div>
-		</div>
-
-		<div class="cbi-value"><label class="cbi-value-title"><%:Links per node (average)%></label>
 			<div class="cbi-value-field">
-				<span id="meshfactor">
-					<%=meshfactor%>
-				</span>
+				<div style="width: 6em; float:left;">
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
+						<span id="nr_nodes">
+							<%=nr_nodes%>
+						</span>
+					</a>
+				</div>
 			</div>
+			<br/>
+		</div>
+
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:HNA%>
+			</div>
+			<div class="cbi-value-field">
+				<div style="width: 6em; float:left;">
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "hna")%>">
+						<span id="nr_hna">
+							<%=nr_hna%>
+						</span>
+					</a>
+				</div>
+			</div>
+			<br/>
+		</div>
+
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:Links total%>
+			</div>
+			<div class="cbi-value-field">
+				<div style="width: 6em; float:left;">
+					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
+						<span id="nr_topo">
+							<%=nr_topo%>
+						</span>
+					</a>
+				</div>
+			</div>
+			<br/>
+		</div>
+
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:Links per node (average)%>
+			</div>
+			<div class="cbi-value-field">
+				<div style="width: 6em; float:left;">
+					<span id="meshfactor">
+						<%=meshfactor%>
+					</span>
+				</div>
+			</div>
+			<br/>
 		</div>
 	</div>
 </div>
+<br/>
 
 <h2><a id="content" name="content">OLSR <%:Configuration%></a></h2>
 
 <div class="cbi-map">
 	<div class="cbi-section-node">
-		<div class="cbi-value"><label class="cbi-value-title"><%:Version%></label>
-			<div class="cbi-value-field"><%=ver.version%> (built <%=ver.date%> on <%=ver.host%>)
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:Version%>
 			</div>
+			<div class="cbi-value-field">
+				<%=ver.version%> (built <%=ver.date%> on <%=ver.host%>)
+			</div>
+			<br/>
 		</div>
 
-		<div class="cbi-value"><label class="cbi-value-title"><%:Download Config%></label>
+		<div class="cbi-value">
+			<div style="width: 15em; float:left;">
+				<%:Download Config%>
+			</div>
 			<div class="cbi-value-field">
 				<a href="<%=REQUEST_URI%>?openwrt">OpenWrt</a>,
 				<% if ipv == "6and4" then %>
@@ -247,6 +296,7 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 					<a href="<%=REQUEST_URI%>?conf">OLSRD</a>
 				<% end %>
 			</div>
+			<br/>
 		</div>
 	</div>
 </div>
