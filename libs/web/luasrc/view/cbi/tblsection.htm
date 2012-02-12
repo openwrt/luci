@@ -86,23 +86,23 @@ end
 
 				<%- if self.sortable then -%>
 					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
-						<a href="#" onclick="return cbi_row_swap(this, true,  'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>"><img src="<%=resource%>/cbi/up.gif" alt="<%:Move up%>" /></a>
-						<a href="#" onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move down%>"><img src="<%=resource%>/cbi/down.gif" alt="<%:Move down%>" /></a>
+						<input class="cbi-button cbi-button-add" type="button" value=""  onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move up%>" title="<%:Move up%>" style="background-image:url(<%=resource%>/cbi/up.gif)" />
+						<input class="cbi-button cbi-button-add" type="button" value=""  onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move down%>" title="<%:Move down%>" style="background-image:url(<%=resource%>/cbi/down.gif)" />
 					</td>
 				<%- end -%>
 
 				<%- if self.extedit or self.addremove then -%>
 					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
 						<%- if self.extedit then -%>
-							<a href="
+							<input class="cbi-button cbi-button-add" type="button" value="<%:Edit%>" onclick="window.location='
 							<%- if type(self.extedit) == "string" then -%>
 								<%=self.extedit:format(section)%>
 							<%- elseif type(self.extedit) == "function" then -%>
 								<%=self:extedit(section)%>
 							<%- end -%>
-							" title="<%:Edit%>"><img style="border: none" src="<%=resource%>/cbi/edit.gif" alt="<%:Edit%>" /></a>
+							'" alt="<%:Edit%>" title="<%:Edit%>" style="text-align: center;background-image:url(<%=resource%>/cbi/edit.gif)" />
 						<%- end; if self.addremove then %>
-							<input type="image" value="<%:Delete%>" onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" src="<%=resource%>/cbi/remove.gif" />
+							<input class="cbi-button cbi-button-add" type="button" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" style="text-align: center;background-image:url(<%=resource%>/cbi/remove.gif)" />
 						<%- end -%>
 					</td>
 				<%- end -%>
