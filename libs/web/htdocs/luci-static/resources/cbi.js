@@ -269,6 +269,10 @@ var cbi_validators = {
 				return false;
 
 		return true;
+	},
+	'phonedigit': function()
+	{
+		return (this.match(/^[0-9\*#]+$/) != null);
 	}
 };
 

@@ -305,3 +305,7 @@ function max(val, max)
 
 	return false
 end
+
+function ponedigit(val)
+	return (val:match("^[0-9\*#]+$") ~= nil)
+end
