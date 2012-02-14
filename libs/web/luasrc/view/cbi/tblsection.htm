@@ -95,12 +95,12 @@ end
 					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
 						<%- if self.extedit then -%>
 							<input class="cbi-button cbi-button-add" type="button" value="<%:Edit%>"
-							<%- if type(self.extedit) == "string" then -%>
-								onclick="window.location='<%=self.extedit:format(section)%>'"
-							<%- elseif type(self.extedit) == "function" then -%>
-								onclick="window.location='<%=self:extedit(section)%>'"
-							<%- end -%>
-							alt="<%:Edit%>" title="<%:Edit%>" style="text-align: center;background-image:url(<%=resource%>/cbi/edit.gif)" />
+							<%- if type(self.extedit) == "string" then
+							%> onclick="window.location='<%=self.extedit:format(section)%>'"
+							<%- elseif type(self.extedit) == "function" then
+							%> onclick="window.location='<%=self:extedit(section)%>'"
+							<%- end 
+							%> alt="<%:Edit%>" title="<%:Edit%>" style="text-align: center;background-image:url(<%=resource%>/cbi/edit.gif)" />
 						<%- end; if self.addremove then %>
 							<input class="cbi-button cbi-button-add" type="button" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" style="text-align: center;background-image:url(<%=resource%>/cbi/remove.gif)" />
 						<%- end -%>
