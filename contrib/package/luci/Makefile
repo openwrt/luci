@@ -446,7 +446,7 @@ $(eval $(call application,pbx,LuCI PBX Administration,\
 $(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,\
 	luci-app-pbx +PACKAGE_luci-app-pbx-voicemail:msmtp))
 
-$(eval $(call application,lqtapifoss,Lantiq voip))
+$(eval $(call application,ltqtapi,Lantiq voip))
 
 ### Server Gateway Interfaces ###
 define sgi
