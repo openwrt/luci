@@ -86,8 +86,8 @@ end
 
 				<%- if self.sortable then -%>
 					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
-						<input class="cbi-button cbi-button-add" type="button" value=""  onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move up%>" title="<%:Move up%>" style="background-image:url(<%=resource%>/cbi/up.gif)" />
-						<input class="cbi-button cbi-button-add" type="button" value=""  onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move down%>" title="<%:Move down%>" style="background-image:url(<%=resource%>/cbi/down.gif)" />
+						<input class="cbi-button cbi-button-up" type="button" value=""  onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move up%>" title="<%:Move up%>" />
+						<input class="cbi-button cbi-button-down" type="button" value=""  onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move down%>" title="<%:Move down%>" />
 					</td>
 				<%- end -%>
 
