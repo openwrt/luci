@@ -1535,3 +1535,61 @@ td.cbi-value-field var {
   font-style: italic;
   color: #0069D6;
 }
+.uci-change-list {
+	font-family: monospace;
+}
+.uci-change-list ins,
+.uci-change-legend-label ins {
+	text-decoration: none;
+	border: 1px solid #00FF00;
+	background-color: #CCFFCC;
+	display: block;
+	padding: 2px;
+}
+.uci-change-list del,
+.uci-change-legend-label del {
+	text-decoration: none;
+	border: 1px solid #FF0000;
+	background-color: #FFCCCC;
+	display: block;
+	font-style: normal;
+	padding: 2px;
+}
+.uci-change-list var,
+.uci-change-legend-label var {
+	text-decoration: none;
+	border: 1px solid #CCCCCC;
+	background-color: #EEEEEE;
+	display: block;
+	font-style: normal;
+	padding: 2px;
+}
+.uci-change-list var ins,
+.uci-change-list var del {
+	/*display: inline;*/
+	border: none;
+	white-space: pre;
+	font-style: normal;
+	padding: 0px;
+}
+.uci-change-legend {
+	padding: 5px;
+}
+.uci-change-legend-label {
+	width: 150px;
+	float: left;
+}
+.uci-change-legend-label>ins,
+.uci-change-legend-label>del,
+.uci-change-legend-label>var {
+	float: left;
+	margin-right: 4px;
+	width: 10px;
+	height: 10px;
+	display: block;
+}
+.uci-change-legend-label var ins,
+.uci-change-legend-label var del {
+	line-height: 6px;
+	border: none;
+}
