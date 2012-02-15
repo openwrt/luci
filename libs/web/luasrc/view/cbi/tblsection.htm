@@ -96,13 +96,13 @@ end
 						<%- if self.extedit then -%>
 							<input class="cbi-button cbi-button-edit" type="button" value="<%:Edit%>"
 							<%- if type(self.extedit) == "string" then
-							%> onclick="window.location='<%=self.extedit:format(section)%>'"
+							%> onclick="location.href='<%=self.extedit:format(section)%>'"
 							<%- elseif type(self.extedit) == "function" then
-							%> onclick="window.location='<%=self:extedit(section)%>'"
+							%> onclick="location.href='<%=self:extedit(section)%>'"
 							<%- end 
 							%> alt="<%:Edit%>" title="<%:Edit%>" />
 						<%- end; if self.addremove then %>
-							<input class="cbi-button cbi-button-remove" type="button" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
+							<input class="cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
 						<%- end -%>
 					</td>
 				<%- end -%>
