@@ -511,9 +511,6 @@ $(eval $(call theme,freifunk,alternative Freifunk Theme,\
 $(eval $(call theme,freifunk-bno,Freifunk Berlin Nordost Theme,\
 	Stefan Pirwitz <stefan-at-freifunk-bno-dot-de>))
 
-$(eval $(call theme,freifunk-hannover,Freifunk Hannover Theme,\
-	Mikolas Bingemer <mickey-at-freifunk-hannover-dot-de>))
-
 $(eval $(call theme,freifunk-generic,Freifunk Generic Theme,\
 	Manuel Munz <freifunk-at-somakoma-dot-de>))
 
