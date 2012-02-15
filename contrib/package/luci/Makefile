@@ -503,6 +503,7 @@ endef
 
 $(eval $(call theme,base,Common base for all themes))
 $(eval $(call theme,openwrt,OpenWrt.org (default),,,1))
+$(eval $(call theme,bootstrap,Bootstrap Theme))
 $(eval $(call theme,fledermaus,Fledermaus Theme))
 
 $(eval $(call theme,freifunk,alternative Freifunk Theme,\
@@ -515,7 +516,7 @@ $(eval $(call theme,freifunk-hannover,Freifunk Hannover Theme,\
 	Mikolas Bingemer <mickey-at-freifunk-hannover-dot-de>))
 
 $(eval $(call theme,freifunk-generic,Freifunk Generic Theme,\
-        Manuel Munz <freifunk-at-somakoma-dot-de>))
+	Manuel Munz <freifunk-at-somakoma-dot-de>))
 
 ### Translations ###
 define translation
