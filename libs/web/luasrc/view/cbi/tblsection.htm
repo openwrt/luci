@@ -85,14 +85,14 @@ end
 				-%>
 
 				<%- if self.sortable then -%>
-					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
+					<td class="cbi-section-table-cell">
 						<input class="cbi-button cbi-button-up" type="button" value=""  onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move up%>" title="<%:Move up%>" />
 						<input class="cbi-button cbi-button-down" type="button" value=""  onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" alt="<%:Move down%>" title="<%:Move down%>" />
 					</td>
 				<%- end -%>
 
 				<%- if self.extedit or self.addremove then -%>
-					<td class="cbi-section-table-cell" style="padding:3px; white-space:nowrap">
+					<td class="cbi-section-table-cell">
 						<%- if self.extedit then -%>
 							<input class="cbi-button cbi-button-edit" type="button" value="<%:Edit%>"
 							<%- if type(self.extedit) == "string" then
