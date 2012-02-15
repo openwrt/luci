@@ -59,12 +59,7 @@
 					if net then
 						zempty = false
 			%>
-				&#160;
-				<%- if net:name() == self.network then -%>
-					<span style="background-color:#FFFFFF; border:1px solid #000000; padding:2px; font-weight:bold"><%=net:name()%>:
-				<%- else -%>
-					<span style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px"><%=net:name()%>:
-				<%- end -%>
+				<span class="ifacebadge<% if net:name() == self.network then %> ifacebadge-active<% end %>"><%=net:name()%>:
 				<%
 					local nempty = true
 					for _, iface in ipairs(net:is_bridge() and net:get_interfaces() or { net:get_interface() }) do
