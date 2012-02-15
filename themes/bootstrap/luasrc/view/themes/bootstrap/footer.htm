@@ -1,0 +1,41 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2012 David Menting <david@nut-bolt.nl>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+-%>
+<%
+	local disp = require "luci.dispatcher"
+
+	local request  = disp.context.path
+
+	local category = request[1]
+
+	local tree = disp.node()
+
+	local categories = disp.node_childs(tree)
+%>
+   <footer><a href="<%=controller%>/about">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
+
+    <%=luci.version.distversion%>
+
+    <% if #categories > 1 then %>
+     <ul class="breadcrumb pull-right" id="modemenu">
+	    <% for i, r in ipairs(categories) do %>
+		    <li<% if request[1] == r then %> class="active"<%end%>><a href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a> <span class="divider">|</span></li>
+	    <% end %>
+     </ul>
+    <% end %>
+   </footer>
+   </div>
+  </div>
+ </body>
+</html>
+
