@@ -270,11 +270,13 @@ function iface_status()
 				}
 			end
 			for _, a in ipairs(device:ip6addrs()) do
-				data.ip6addrs[#data.ip6addrs+1] = {
-					addr      = a:host():string(),
-					netmask   = a:mask():string(),
-					prefix    = a:prefix()
-				}
+				if not a:is6linklocal() then
+					data.ip6addrs[#data.ip6addrs+1] = {
+						addr      = a:host():string(),
+						netmask   = a:mask():string(),
+						prefix    = a:prefix()
+					}
+				end
 			end
 
 			for _, device in ipairs(net:get_interfaces() or {}) do
