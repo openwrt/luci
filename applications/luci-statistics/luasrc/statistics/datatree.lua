@@ -196,10 +196,12 @@ end
 function Instance.host_instances( self )
 	local hosts_path = fs.glob(self._rrddir..'/*')
 	local hosts = { }
-	k = 1
-	for v in hosts_path do
-		hosts[k] = fs.basename(v)
-		k=k+1
+
+	if hosts_path then
+		local path
+		for path in hosts_path do
+			hosts[#hosts+1] = fs.basename(path)
+		end
 	end
 
 	return hosts
