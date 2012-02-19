@@ -34,11 +34,6 @@ function Graph.__init__( self, timespan, opts )
 	local uci = luci.model.uci.cursor()
 	local sections = uci:get_all( "luci_statistics" )
 
-	-- helper classes
-	self.colors = luci.statistics.rrdtool.colors.Instance()
-	self.tree   = luci.statistics.datatree.Instance()
-	self.i18n   = luci.statistics.i18n.Instance( self )
-
 	-- options
 	opts.timespan  = timespan       or sections.rrdtool.default_timespan or 900
 	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle == "1" )
@@ -48,6 +43,11 @@ function Graph.__init__( self, timespan, opts )
 	opts.imgpath   = opts.imgpath   or sections.rrdtool.image_path       or "/tmp/rrdimg"
 	opts.rrdpath   = opts.rrdpath:gsub("/$","")
 	opts.imgpath   = opts.imgpath:gsub("/$","")
+
+	-- helper classes
+	self.colors = luci.statistics.rrdtool.colors.Instance()
+	self.tree   = luci.statistics.datatree.Instance(opts.host)
+	self.i18n   = luci.statistics.i18n.Instance( self )
 
 	-- rrdtool default args
 	self.args = {

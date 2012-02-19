@@ -15,7 +15,7 @@ $Id: cpu.lua 2274 2008-06-03 23:15:16Z jow $
 
 module("luci.statistics.rrdtool.definitions.cpu",package.seeall)
 
-function rrdargs( graph, host, plugin, plugin_instance, dtype )
+function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
 		title = "%H: Processor usage on core #%pi",

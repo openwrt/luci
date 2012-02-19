@@ -17,12 +17,18 @@ $Id$
 <h2><a id="content" name="content"><%:Statistics%></a></h2>
 
 <form action="" method="get">
+	<select name="host">
+		<% for i, host in ipairs(hosts) do %>
+			<option<% if host == current_host then %> selected="selected"<% end %>><%=pcdata(host)%></option>
+		<% end %>
+	</select>
+	<input class="cbi-button cbi-button-apply" type="submit" name="submit" value="<%:Display Host »%>" />
 	<select name="timespan">
 		<% for i, span in ipairs(timespans) do %>
 			<option<% if span == current_timespan then %> selected="selected"<% end %>><%=span%></option>
 		<% end %>
 	</select>
-	<input type="submit" name="submit" value="<%:Display timespan »%>" />
+	<input class="cbi-button cbi-button-apply" type="submit" name="submit" value="<%:Display timespan »%>" />
 </form>
 
 <br />
@@ -39,3 +45,4 @@ $Id$
 </div>
 
 <%+footer%>
+

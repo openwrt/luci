@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 
 module("luci.statistics.rrdtool.definitions.memory",package.seeall)
 
-function rrdargs( graph, host, plugin, plugin_instance, dtype )
+function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
 		title = "%H: Memory usage",

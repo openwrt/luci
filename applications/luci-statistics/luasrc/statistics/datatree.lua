@@ -192,3 +192,16 @@ function Instance.data_instances( self, plugin, instance, dtype )
 
 	return rv
 end
+
+function Instance.host_instances( self )
+	local hosts_path = fs.glob(self._rrddir..'/*')
+	local hosts = { }
+	k = 1
+	for v in hosts_path do
+		hosts[k] = fs.basename(v)
+		k=k+1
+	end
+
+	return hosts
+end
+

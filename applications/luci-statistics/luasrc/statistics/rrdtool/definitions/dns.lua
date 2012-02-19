@@ -13,7 +13,7 @@ You may obtain a copy of the License at
 
 module("luci.statistics.rrdtool.definitions.dns", package.seeall)
 
-function rrdargs( graph, host, plugin, plugin_instance )
+function rrdargs( graph, plugin, plugin_instance )
 
 	local traffic = {
 		title = "%H: DNS traffic", vlabel = "Bit/s",

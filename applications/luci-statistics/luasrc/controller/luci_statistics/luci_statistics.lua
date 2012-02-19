@@ -21,9 +21,6 @@ function index()
 	require("luci.util")
 	require("luci.statistics.datatree")
 
-	-- get rrd data tree
-	local tree = luci.statistics.datatree.Instance()
-
 	-- override entry(): check for existance <plugin>.so where <plugin> is derived from the called path
 	function _entry( path, ... )
 		local file = path[5] or path[4]
@@ -106,6 +103,10 @@ function index()
 
 	local vars = luci.http.formvalue(nil, true)
 	local span = vars.timespan or nil
+	local host = vars.host or nil
+
+	-- get rrd data tree
+	local tree = luci.statistics.datatree.Instance(host)
 
 	for i, plugin in luci.util.vspairs( tree:plugins() ) do
 
@@ -116,7 +117,7 @@ function index()
 		entry(
 			{ "admin", "statistics", "graph", plugin },
 			call("statistics_render"), labels[plugin], i
-		).query = { timespan = span }
+		).query = { timespan = span , host = host }
 
 		-- if more then one instance is found then generate submenu
 		if #instances > 1 then
@@ -125,7 +126,7 @@ function index()
 				entry(
 					{ "admin", "statistics", "graph", plugin, inst },
 					call("statistics_render"), inst, j
-				).query = { timespan = span }
+				).query = { timespan = span , host = host }
 			end
 		end
 	end
@@ -143,7 +144,10 @@ function statistics_render()
 	local uci   = luci.model.uci.cursor()
 	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
 	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
-	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ) )
+	local host  = vars.host     or uci:get( "luci_statistics", "collectd", "Hostname" ) or luci.sys.hostname()
+	local opts = { host = vars.host }
+	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ), opts )
+	local hosts = graph.tree:host_instances()
 
 	local is_index = false
 
@@ -196,6 +200,8 @@ function statistics_render()
 		plugin           = plugin,
 		timespans        = spans,
 		current_timespan = span,
+		hosts            = hosts,
+		current_host     = host,
 		is_index         = is_index
 	} )
 end

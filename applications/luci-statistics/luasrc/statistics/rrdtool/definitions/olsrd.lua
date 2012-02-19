@@ -13,8 +13,6 @@ You may obtain a copy of the License at
 
 module("luci.statistics.rrdtool.definitions.olsrd", package.seeall)
 
-local tree = luci.statistics.datatree.Instance()
-
 function rrdargs( graph, plugin, plugin_instance, dtype )
 	local g = { }
 
@@ -77,7 +75,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			}
 		}
 
-		local instances = tree:data_instances(plugin, plugin_instance, "signal_quality")
+		local instances = graph.tree:data_instances(plugin, plugin_instance, "signal_quality")
 		table.sort(instances)
 
 		-- define one diagram per host, containing the rx and lq values

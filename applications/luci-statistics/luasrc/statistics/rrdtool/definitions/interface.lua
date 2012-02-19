@@ -15,7 +15,7 @@ $Id$
 
 module("luci.statistics.rrdtool.definitions.interface", package.seeall)
 
-function rrdargs( graph, host, plugin, plugin_instance )
+function rrdargs( graph, plugin, plugin_instance )
 
 	--
 	-- traffic diagram
