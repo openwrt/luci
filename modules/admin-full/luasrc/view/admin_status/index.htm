@@ -342,11 +342,17 @@ $Id$
 						for (var bssid in net.assoclist)
 						{
 							assoclist.push({
-								bssid:  bssid,
-								signal: net.assoclist[bssid].signal,
-								noise:  net.assoclist[bssid].noise,
-								link:   net.link,
-								name:   net.name
+								bssid:    bssid,
+								signal:   net.assoclist[bssid].signal,
+								noise:    net.assoclist[bssid].noise,
+								rx_rate:  net.assoclist[bssid].rx_rate,
+								rx_mcs:   net.assoclist[bssid].rx_mcs,
+								rx_40mhz: net.assoclist[bssid].rx_40mhz,
+								tx_rate:  net.assoclist[bssid].tx_rate,
+								tx_mcs:   net.assoclist[bssid].tx_mcs,
+								tx_40mhz: net.assoclist[bssid].tx_40mhz,
+								link:     net.link,
+								name:     net.name
 							});
 						}
 					}
@@ -405,6 +411,16 @@ $Id$
 
 					tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].signal);
 					tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].noise);
+
+					tr.insertCell(-1).innerHTML = (assoclist[i].rx_mcs > -1)
+						? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20)
+						: String.format('%.1f Mbit/s', assoclist[i].rx_rate / 1000)
+					;
+
+					tr.insertCell(-1).innerHTML = (assoclist[i].tx_mcs > -1)
+						? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20)
+						: String.format('%.1f Mbit/s', assoclist[i].tx_rate / 1000)
+					;
 				}
 
 				if (ac.rows.length == 1)
@@ -413,7 +429,7 @@ $Id$
 						tr.className = 'cbi-section-table-row';
 
 					var td = tr.insertCell(-1);
-						td.colSpan = 5;
+						td.colSpan = 7;
 						td.innerHTML = '<br /><em><%:No information available%></em>';
 				}
 			}
@@ -548,9 +564,11 @@ $Id$
 			<th class="cbi-section-table-cell"><%:Network%></th>
 			<th class="cbi-section-table-cell"><%:Signal%></th>
 			<th class="cbi-section-table-cell"><%:Noise%></th>
+			<th class="cbi-section-table-cell"><%:RX Rate%></th>
+			<th class="cbi-section-table-cell"><%:TX Rate%></th>
 		</tr>
 		<tr class="cbi-section-table-row">
-			<td colspan="5"><em><br /><%:Collecting data...%></em></td>
+			<td colspan="7"><em><br /><%:Collecting data...%></em></td>
 		</tr>
 	</table>
 </fieldset>

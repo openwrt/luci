@@ -213,13 +213,13 @@ $Id$
 					{
 						if (is_assoc)
 						{
-							toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reset.gif)';
+							toggle.className = 'cbi-button cbi-button-reset';
 							toggle.value = '<%:Disable%>';
 							toggle.title = '<%:Shutdown this network%>';
 						}
 						else
 						{
-							toggle.style.backgroundImage = 'url(<%=resource%>/cbi/reload.gif)';
+							toggle.className = 'cbi-button cbi-button-reload';
 							toggle.value = '<%:Enable%>';
 							toggle.title = '<%:Activate this network%>';
 						}
@@ -309,6 +309,16 @@ $Id$
 							tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].signal);
 							tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].noise);
 
+							tr.insertCell(-1).innerHTML = (assoclist[j].rx_mcs > -1)
+								? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[j].rx_rate / 1000, assoclist[j].rx_mcs, assoclist[j].rx_40mhz ? 40 : 20)
+								: String.format('%.1f Mbit/s', assoclist[j].rx_rate / 1000)
+							;
+
+							tr.insertCell(-1).innerHTML = (assoclist[j].tx_mcs > -1)
+								? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[j].tx_rate / 1000, assoclist[j].tx_mcs, assoclist[j].tx_40mhz ? 40 : 20)
+								: String.format('%.1f Mbit/s', assoclist[j].tx_rate / 1000)
+							;
+
 							rowstyle = (rowstyle == 1) ? 2 : 1;
 						}
 					}
@@ -320,7 +330,7 @@ $Id$
 					    tr.className = 'cbi-section-table-row';
 
 					var td = tr.insertCell(-1);
-					    td.colSpan = 6;
+					    td.colSpan = 8;
 					    td.innerHTML = '<br /><em><%:No information available%></em>';
 				}
 
@@ -357,8 +367,8 @@ $Id$
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</td>
 				<td style="width:310px;text-align:right">
-					<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/find.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_join")%>?device=<%=dev:name()%>'" title="<%:Find and join network%>" value="<%:Scan%>" />
-					<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/add.gif)" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_add")%>?device=<%=dev:name()%>'" title="<%:Provide new network%>" value="<%:Add%>" />
+					<input type="button" class="cbi-button cbi-button-find" style="width:100px" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_join")%>?device=<%=dev:name()%>'" title="<%:Find and join network%>" value="<%:Scan%>" />
+					<input type="button" class="cbi-button cbi-button-add" style="width:100px" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/wireless_add")%>?device=<%=dev:name()%>'" title="<%:Provide new network%>" value="<%:Add%>" />
 				</td>
 			</tr>
 			<!-- /physical device -->
@@ -376,9 +386,9 @@ $Id$
 						<em><%:Collecting data...%></em>
 					</td>
 					<td class="cbi-value-field" style="width:310px;text-align:right">
-						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/reload.gif)" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
-						<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/edit.gif)" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
-						<input type="button" class="cbi-button cbi-button-add" style="width:100px;background-image:url(<%=resource%>/cbi/remove.gif)" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
+						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
+						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
+						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
 					</td>
 				</tr>
 				<% end %>
@@ -400,7 +410,7 @@ $Id$
 	<h2><a id="content" name="content"><%:Associated Stations%></a></h2>
 
 	<fieldset class="cbi-section">
-		<table class="cbi-section-table" style="margin:10px; width:50%" id="iw-assoclist">
+		<table class="cbi-section-table" style="margin:10px" id="iw-assoclist">
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell"></th>
 				<th class="cbi-section-table-cell"><%:SSID%></th>
@@ -408,9 +418,11 @@ $Id$
 				<th class="cbi-section-table-cell"><%:Address%></th>
 				<th class="cbi-section-table-cell"><%:Signal%></th>
 				<th class="cbi-section-table-cell"><%:Noise%></th>
+				<th class="cbi-section-table-cell"><%:RX Rate%></th>
+				<th class="cbi-section-table-cell"><%:TX Rate%></th>
 			</tr>
 			<tr class="cbi-section-table-row cbi-rowstyle-2">
-				<td class="cbi-value-field" colspan="6">
+				<td class="cbi-value-field" colspan="8">
 					<em><%:Collecting data...%></em>
 				</td>
 			</tr>
