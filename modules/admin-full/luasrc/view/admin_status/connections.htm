@@ -159,7 +159,6 @@ $Id$
 							tr.insertCell(-1).innerHTML = c.layer4.toUpperCase();
 							tr.insertCell(-1).innerHTML = String.format(c.layer3 == 'ipv6' ? '[%s]:%d' : '%s:%d', c.src, c.sport);
 							tr.insertCell(-1).innerHTML = String.format(c.layer3 == 'ipv6' ? '[%s]:%d' : '%s:%d', c.dst, c.dport);
-							tr.insertCell(-1).innerHTML = String.format('%1024.2mB (%d <%:Pkts.%>)', c.bytes, c.packets);
 						}
 
 
@@ -327,10 +326,9 @@ $Id$
 				<th class="cbi-section-table-cell"><%:Protocol%></th>
 				<th class="cbi-section-table-cell"><%:Source%></th>
 				<th class="cbi-section-table-cell"><%:Destination%></th>
-				<th class="cbi-section-table-cell"><%:Transfer%></th>
 			</tr>
 
-			<tr><td colspan="5"><em><%:Collecting data...%></em></td></tr>
+			<tr><td colspan="4"><em><%:Collecting data...%></em></td></tr>
 		</table>
 	</div>
 </fieldset>
