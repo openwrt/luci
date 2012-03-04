@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ $Id$
 			<div class="cbi-value cbi-value-last">
 				<label class="cbi-value-title"><%:Password%></label>
 				<div class="cbi-value-field">
-					<input class="cbi-input-password" type="password" name="password" />
+					<input id="focus_password" class="cbi-input-password" type="password" name="password" />
 				</div>
 			</div>
 		</fieldset></fieldset>
@@ -46,4 +46,9 @@ $Id$
 		<input type="reset" value="<%:Reset%>" class="cbi-button cbi-button-reset" />
 	</div>
 </form>
+<script type="text/javascript">//<![CDATA[
+	var input = document.getElementById('focus_password');
+	if (input)
+		input.focus();
+//]]></script>
 <%+footer%>
