@@ -72,6 +72,24 @@ $Id$
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 		return
 	end
+
+
+	function scanlist(times)
+		local i, k, v
+		local l = { }
+		local s = { }
+
+		for i = 1, times do
+			for k, v in ipairs(iw.scanlist) do
+				if not s[v.bssid] then
+					l[#l+1] = v
+					s[v.bssid] = true
+				end
+			end
+		end
+
+		return l
+	end
 -%>
 
 <%+header%>
@@ -82,7 +100,7 @@ $Id$
 	<fieldset class="cbi-section">
 		<table class="cbi-section-table" style="empty-cells:hide">
 			<!-- scan list -->
-			<% for i, net in ipairs(iw.scanlist) do net.encryption = net.encryption or { } %>
+			<% for i, net in ipairs(scanlist(3)) do net.encryption = net.encryption or { } %>
 			<tr class="cbi-section-table-row cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
 				<td class="cbi-value-field" style="width:16px; padding:3px">
 					<abbr title="Signal: <%=net.signal%> dB / Quality: <%=net.quality%>/<%=net.quality_max%>">
