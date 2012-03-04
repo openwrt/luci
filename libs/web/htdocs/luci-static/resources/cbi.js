@@ -748,7 +748,7 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 		return false;
 	}
 
-	cbi_dynlist_redraw(-1, -1, -1);
+	cbi_dynlist_redraw(NaN, -1, -1);
 }
 
 //Hijacks the CBI form to send via XHR (requires Prototype)
