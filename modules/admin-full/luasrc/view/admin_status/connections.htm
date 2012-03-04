@@ -119,7 +119,7 @@ $Id$
 
 
 				/* plot horizontal time interval lines */
-				for (var i = step * 60; i < width; i += step * 60)
+				for (var i = width % (step * 60); i < width; i += step * 60)
 				{
 					var line = G.createElementNS('http://www.w3.org/2000/svg', 'line');
 						line.setAttribute('x1', i);
@@ -132,7 +132,7 @@ $Id$
 						text.setAttribute('x', i + 5);
 						text.setAttribute('y', 15);
 						text.setAttribute('style', 'fill:#999999; font-size:9pt');
-						text.appendChild(G.createTextNode(Math.round(i / step / 60) + 'm'));
+						text.appendChild(G.createTextNode(Math.round((width - i) / step / 60) + 'm'));
 
 					label_25.parentNode.appendChild(line);
 					label_25.parentNode.appendChild(text);
