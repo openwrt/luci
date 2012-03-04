@@ -59,6 +59,8 @@ $Id$
 
 	var conn_table;
 
+	var dns_cache = { };
+
 
 	/* wait for SVG */
 	window.setTimeout(
@@ -149,18 +151,46 @@ $Id$
 						while (conn_table.rows.length > 1)
 							conn_table.rows[0].parentNode.deleteRow(-1);
 
+
+						var lookup_queue = [ ];
+
+						conn.sort(function(a, b) {
+							return b.bytes - a.bytes;
+						});
+
 						for (var i = 0; i < conn.length; i++)
 						{
 							var c  = conn[i];
 							var tr = conn_table.rows[0].parentNode.insertRow(-1);
-								tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
+							    tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
+
+							if (!dns_cache[c.src])
+								lookup_queue.push(c.src);
+
+							if (!dns_cache[c.dst])
+								lookup_queue.push(c.dst);
+
+							var src = dns_cache[c.src] || (c.layer3 == 'ipv6' ? '[' + c.src + ']' : c.src);
+							var dst = dns_cache[c.dst] || (c.layer3 == 'ipv6' ? '[' + c.dst + ']' : c.dst);
 
 							tr.insertCell(-1).innerHTML = c.layer3.toUpperCase();
 							tr.insertCell(-1).innerHTML = c.layer4.toUpperCase();
-							tr.insertCell(-1).innerHTML = String.format(c.layer3 == 'ipv6' ? '[%s]:%d' : '%s:%d', c.src, c.sport);
-							tr.insertCell(-1).innerHTML = String.format(c.layer3 == 'ipv6' ? '[%s]:%d' : '%s:%d', c.dst, c.dport);
-							tr.insertCell(-1).innerHTML = String.format('%1024.2mB (%d <%:Pkts.%>)', c.bytes, c.packets);
+							tr.insertCell(-1).innerHTML = String.format('%s:%d', src, c.sport);
+							tr.insertCell(-1).innerHTML = String.format('%s:%d', dst, c.dport);
+
+							var traf = tr.insertCell(-1);
+							    traf.style.whiteSpace = 'nowrap';
+							    traf.innerHTML = String.format('%1024.2mB (%d <%:Pkts.%>)', c.bytes, c.packets);
 						}
+
+						if (lookup_queue.length > 0)
+							XHR.get('<%=build_url("admin/status/nameinfo")%>/' + lookup_queue.slice(0, 100).join('/'), null,
+								function(x, json)
+								{
+									for (var addr in json)
+										dns_cache[addr] = json[addr];
+								}
+							);
 
 
 						var data = json.statistics;

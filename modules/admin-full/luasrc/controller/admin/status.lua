@@ -37,6 +37,8 @@ function index()
 
 	entry({"admin", "status", "realtime", "connections"}, template("admin_status/connections"), _("Connections"), 4).leaf = true
 	entry({"admin", "status", "realtime", "connections_status"}, call("action_connections")).leaf = true
+
+	entry({"admin", "status", "nameinfo"}, call("action_nameinfo")).leaf = true
 end
 
 function action_syslog()
@@ -152,4 +154,17 @@ function action_connections()
 	end
 
 	luci.http.write(" }")
+end
+
+function action_nameinfo(...)
+	local i
+	local rv = { }
+	for i = 1, select('#', ...) do
+		local addr = select(i, ...)
+		local fqdn = nixio.getnameinfo(addr)
+		rv[addr] = fqdn or (addr:match(":") and "[%s]" % addr or addr)
+	end
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
 end
