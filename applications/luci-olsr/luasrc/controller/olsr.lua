@@ -91,7 +91,21 @@ function index()
 	)
 end
 
-function action_neigh()
+local function compare_links(a, b)
+	local c = tonumber(a.Cost)
+	local d = tonumber(b.Cost)
+
+	if not c or c == 0 then
+		return false
+	end
+
+	if not d or d == 0 then
+		return true
+	end
+	return c < d
+end
+
+function action_neigh(json)
 	local data = fetch_txtinfo("links")
 
 	if not data or not data.Links then
@@ -99,22 +113,7 @@ function action_neigh()
 		return nil
 	end
 
-	local function compare(a, b)
-		local c = tonumber(a.Cost)
-		local d = tonumber(b.Cost)
-
-		if not c or c == 0 then
-			return false
-		end
-
-		if not d or d == 0 then
-			return true
-		end
-
-		return c < d
-	end
-
-	table.sort(data.Links, compare)
+	table.sort(data.Links, compare_links)
 
 	luci.template.render("status-olsr/neighbors", {links=data.Links})
 end
