@@ -4,19 +4,18 @@ m = Map("multiwan", translate("Multi-WAN"),
 	translate("Multi-WAN allows for the use of multiple uplinks for load balancing and failover."))
 
 s = m:section(NamedSection, "config", "multiwan", "")
+
 e = s:option(Flag, "enabled", translate("Enable"))
 e.rmempty = false
+e.default = e.enabled
 
 function e.write(self, section, value)
-        local cmd = (value == "1") and "enable" or "disable"
-        if value ~= "1" then
-                os.execute("/etc/init.d/multiwan stop")
-        end
-        os.execute("/etc/init.d/multiwan " .. cmd)
-end
-
-function e.cfgvalue(self, section)
-        return (os.execute("/etc/init.d/multiwan enabled") == 0) and "1" or "0"
+	if value == "0" then
+		os.execute("/etc/init.d/multiwan stop")
+	else
+		os.execute("/etc/init.d/multiwan enable")
+	end
+	Flag.write(self, section, value)
 end
 
 s = m:section(TypedSection, "interface", translate("WAN Interfaces"),
