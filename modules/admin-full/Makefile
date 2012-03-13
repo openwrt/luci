@@ -11,7 +11,7 @@ BWC_OBJ        = src/luci-bwc.o
 	$(COMPILE) $(BWC_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $<
 
 compile: build-clean $(BWC_OBJ)
-	$(LINK) $(BWC_LDFLAGS) -o src/$(BWC_BIN) $(BWC_OBJ)
+	$(LINK) -o src/$(BWC_BIN) $(BWC_OBJ) $(BWC_LDFLAGS)
 	mkdir -p dist/usr/bin
 	cp src/$(BWC_BIN) dist/usr/bin/$(BWC_BIN)
 
