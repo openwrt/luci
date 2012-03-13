@@ -18,6 +18,7 @@ uci_model.inst_state = uci_model.cursor_state()
 -- allow any password in local sdk
 local sys = require "luci.sys"
 sys.user.checkpasswd = function() return true end
+sys.user.getpasswd   = function() return "x"  end
 
 -- dummy sysinfo on Darwin
 require "nixio"
@@ -36,4 +37,10 @@ if not nixio.sysinfo then
 			totalhigh = 0
 		}
 	end
+end
+
+-- override nixio.fs.access() to check sysroot first
+local _access = nixio.fs.access
+function nixio.fs.access(file)
+	return _access(SYSROOT .. "/" .. file) or _access(file)
 end
