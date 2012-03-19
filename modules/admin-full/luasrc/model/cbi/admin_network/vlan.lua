@@ -256,14 +256,12 @@ m.uci:foreach("network", "switch",
 
 		-- Build per-port off/untagged/tagged choice lists.
 		local pt
-		local off = 1
 		for pt = 0, num_ports - 1 do
 			local title
 			if pt == cpu_port then
-				off   = 0
 				title = translate("CPU")
 			else
-				title = translatef("Port %d", pt + off)
+				title = translatef("Port %d", pt)
 			end
 
 			local po = s:option(ListValue, tostring(pt), title)
