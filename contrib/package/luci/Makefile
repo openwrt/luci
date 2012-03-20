@@ -387,7 +387,7 @@ $(eval $(call application,ddns,Dynamic DNS configuration module,\
 	+PACKAGE_luci-app-ddns:ddns-scripts))
 
 $(eval $(call application,samba,Network Shares - Samba SMB/CIFS module,\
-	+PACKAGE_luci-app-samba:samba36))
+	+PACKAGE_luci-app-samba:samba36-server))
 
 $(eval $(call application,mmc-over-gpio,MMC-over-GPIO configuration module,\
 	+PACKAGE_luci-app-mmc-over-gpio:kmod-mmc-over-gpio))
