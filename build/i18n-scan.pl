@@ -64,6 +64,10 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 					{
 						( $sub, $code ) = extract_delimited($code, q{'"}, q{\s*(?:\.\.\s*)?});
 
+						if( length($sub) < 1 ) {
+							undef $sub;
+						}
+
 						if( defined $sub )
 						{
 							$res .= substr $sub, 1, length($sub) - 2;
