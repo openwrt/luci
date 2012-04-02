@@ -30,9 +30,9 @@
 				}
 
 				if( st.uid == '00:00:00:00:00:00:00:00' )
-					tx.innerHTML = 'The AHCP Service is not running.';
+					tx.innerHTML = '<%:The AHCP Service is not running.%>';
 				else
-					tx.innerHTML = String.format('The AHCP Service is running with ID %s.', st.uid);
+					tx.innerHTML = String.format('<%:The AHCP Service is running with ID %s.%>', st.uid);
 			}
 		}
 	);
