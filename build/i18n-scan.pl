@@ -60,13 +60,17 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 
 				if( $code =~ /^['"]/ )
 				{
-					while( defined $sub && length($sub) > 0 )
+					while( defined $sub )
 					{
 						( $sub, $code ) = extract_delimited($code, q{'"}, q{\s*(?:\.\.\s*)?});
 
 						if( defined $sub && length($sub) > 2 )
 						{
 							$res .= substr $sub, 1, length($sub) - 2;
+						}
+						else
+						{
+							undef $sub;
 						}
 					}
 				}
