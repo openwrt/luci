@@ -4,7 +4,7 @@ local sys = require "luci.sys"
 local twa = require "luci.tools.webadmin"
 
 -- System
-local system, model, memtotal, memcached, membuffers, memfree, bogomips = sys.sysinfo()
+local model, system, memtotal, memcached, membuffers, memfree, bogomips = sys.sysinfo()
 local uptime = twa.date_format(tonumber(sys.uptime()))
 local_time = os.date("%a, %d %b %Y, %H:%M:%S")
 local load1, load5, load15 = sys.loadavg()
