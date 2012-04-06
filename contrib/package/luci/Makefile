@@ -449,6 +449,9 @@ $(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Suppor
 
 $(eval $(call application,ltqtapi,Lantiq voip))
 
+$(eval $(call application,minidlna,LuCI Support for miniDLNA,\
+	+PACKAGE_luci-app-minidlna:minidlna))
+
 ### Server Gateway Interfaces ###
 define sgi
   define Package/luci-sgi-$(1)
