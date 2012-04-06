@@ -1,0 +1,15 @@
+#!/bin/sh
+
+/etc/init.d/minidlna enabled && {
+	/etc/init.d/minidlna stop
+	/etc/init.d/minidlna disable
+}
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.minidlna
+	set ucitrack.minidlna=minidlna
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0
