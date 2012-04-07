@@ -24,4 +24,37 @@ function index()
 	page = entry({"admin", "services", "minidlna"}, cbi("minidlna"), _("miniDLNA"))
 	page.i18n = "minidlna"
 	page.dependent = true
+
+	entry({"admin", "services", "minidlna_status"}, call("minidlna_status"))
+end
+
+function minidlna_status()
+	local sys  = require "luci.sys"
+    local uci  = require "luci.model.uci".cursor()
+    local port = tonumber(uci:get_first("minidlna", "minidlna", "port"))
+
+    local status = {
+		running = (sys.call("pidof minidlna >/dev/null") == 0),
+        audio   = 0,
+        video   = 0,
+        image   = 0
+    }
+
+	if status.running then
+		local fd = sys.httpget("http://127.0.0.1:%d/" % (port or 8200), true)
+		if fd then
+			local ln
+			repeat
+				ln = fd:read("*l")
+				if ln and ln:match("files:") then
+					local ftype, fcount = ln:match("(.+) files: (%d+)")
+					status[ftype:lower()] = tonumber(fcount) or 0
+				end
+			until not ln
+			fd:close()
+		end
+	end
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(status)
 end
