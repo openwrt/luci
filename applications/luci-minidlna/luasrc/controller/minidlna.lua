@@ -30,15 +30,15 @@ end
 
 function minidlna_status()
 	local sys  = require "luci.sys"
-    local uci  = require "luci.model.uci".cursor()
-    local port = tonumber(uci:get_first("minidlna", "minidlna", "port"))
+	local uci  = require "luci.model.uci".cursor()
+	local port = tonumber(uci:get_first("minidlna", "minidlna", "port"))
 
-    local status = {
+	local status = {
 		running = (sys.call("pidof minidlna >/dev/null") == 0),
-        audio   = 0,
-        video   = 0,
-        image   = 0
-    }
+		audio   = 0,
+		video   = 0,
+		image   = 0
+	}
 
 	if status.running then
 		local fd = sys.httpget("http://127.0.0.1:%d/" % (port or 8200), true)

@@ -15,6 +15,8 @@ $Id$
 m = Map("minidlna", translate("miniDLNA"),
 	translate("MiniDLNA is server software with the aim of being fully compliant with DLNA/UPnP-AV clients."))
 
+m:section(SimpleSection).template  = "minidlna_status"
+
 s = m:section(TypedSection, "minidlna", "miniDLNA Settings")
 s.addremove = false
 s.anonymous = true
