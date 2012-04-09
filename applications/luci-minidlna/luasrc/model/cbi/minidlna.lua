@@ -143,16 +143,23 @@ s:taboption("general", DynamicList, "media_dir", translate("Media directories:")
 o = s:taboption("general", DynamicList, "album_art_names", translate("Album art names:"),
 	translate("This is a list of file names to check for when searching for album art."))
 o.rmempty = true
-o.placeholder = "Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg"
+o.placeholder = "Cover.jpg"
 
 function o.cfgvalue(self, section)
 	local rv = { }
+
 	local val = Value.cfgvalue(self, section)
-	if type(val) == "table" then val = table.concat(val, "/") end
+	if type(val) == "table" then
+		val = table.concat(val, "/")
+	elseif not val then
+		val = ""
+	end
+
 	local file
 	for file in val:gmatch("[^/%s]+") do
 		rv[#rv+1] = file
 	end
+
 	return rv
 end
 
