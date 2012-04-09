@@ -1,3 +1,5 @@
+<%- luci.i18n.loadc("minidlna") -%>
+
 <script type="text/javascript">//<![CDATA[
 	XHR.poll(5, '<%=luci.dispatcher.build_url("admin/services/minidlna_status")%>', null,
 		function(x, st)
@@ -14,7 +16,7 @@
 				}
 				else
 				{
-					tb.innerHTML = '<%:The miniDLNA service is not running.%>';
+					tb.innerHTML = '<em><%:The miniDLNA service is not running.%></em>';
 				}
 			}
 		}
