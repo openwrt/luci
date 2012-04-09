@@ -1,3 +1,5 @@
+<%- luci.i18n.loadc("upnp") -%>
+
 <script type="text/javascript">//<![CDATA[
 	function upnp_delete_fwd(idx) {
 		XHR.get('<%=luci.dispatcher.build_url("admin", "services", "upnp", "delete")%>/' + idx, null,
