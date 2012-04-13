@@ -306,6 +306,6 @@ function max(val, max)
 	return false
 end
 
-function ponedigit(val)
+function phonedigit(val)
 	return (val:match("^[0-9\*#]+$") ~= nil)
 end
