@@ -452,6 +452,9 @@ $(eval $(call application,ltqtapi,Lantiq voip))
 $(eval $(call application,minidlna,LuCI Support for miniDLNA,\
 	+PACKAGE_luci-app-minidlna:minidlna))
 
+$(eval $(call application,transmission,LuCI Support for Transmission,\
+        +PACKAGE_luci-app-transmission:transmission-daemon))
+
 ### Server Gateway Interfaces ###
 define sgi
   define Package/luci-sgi-$(1)
