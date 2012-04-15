@@ -5,7 +5,7 @@
 	%> />
 	<% if self.password then %><img src="<%=resource%>/cbi/reload.gif" style="vertical-align:middle" title="<%:Reveal/hide password%>" onclick="var e = document.getElementById('<%=cbid%>'); e.type = (e.type=='password') ? 'text' : 'password';" /><% end %>
 	<% if #self.keylist > 0 or self.datatype then -%>
-	<script type="text/javascript">
+	<script type="text/javascript">//<![CDATA[
 		<% if #self.keylist > 0 then -%>
 		cbi_combobox_init('<%=cbid%>', {
 		<%-
@@ -26,8 +26,8 @@
 		<%- end -%>');
 		<%- end %>
 		<% if self.datatype then -%>
-		cbi_validate_field('<%=cbid%>', <%=tostring((self.optional or self.rmempty) == true)%>, '<%=self.datatype%>');
+		cbi_validate_field('<%=cbid%>', <%=tostring((self.optional or self.rmempty) == true)%>, '<%=self.datatype:gsub("'", "\\'")%>');
 		<%- end %>
-	</script>
+	//]]></script>
 	<% end -%>
 <%+cbi/valuefooter%>
