@@ -307,7 +307,7 @@ function net.defaultroute6()
 	local route
 
 	net.routes6(function(rt)
-		if rt.dest:prefix() == 0 and rt.device ~= "lo" and 
+		if rt.dest:prefix() == 0 and rt.device ~= "lo" and
 		   (not route or route.metric > rt.metric)
 		then
 			route = rt
@@ -790,41 +790,55 @@ function init.names()
 	return names
 end
 
---- Test whether the given init script is enabled
--- @param name	Name of the init script
--- @return		Boolean indicating whether init is enabled
-function init.enabled(name)
-	if fs.access(init.dir..name) then
-		return ( call(init.dir..name.." enabled >/dev/null") == 0 )
-	end
-	return false
-end
-
 --- Get the index of he given init script
 -- @param name	Name of the init script
 -- @return		Numeric index value
 function init.index(name)
 	if fs.access(init.dir..name) then
-		return call("source "..init.dir..name.." enabled >/dev/null; exit $START")
+		return call("env -i sh -c 'source %s%s; exit $START' >/dev/null"
+			%{ init.dir, name })
 	end
+end
+
+local function init_action(action, name)
+	if fs.access(init.dir..name) then
+		return call("env -i %s%s %s >/dev/null" %{ init.dir, name, action })
+	end
+end
+
+--- Test whether the given init script is enabled
+-- @param name	Name of the init script
+-- @return		Boolean indicating whether init is enabled
+function init.enabled(name)
+	return (init_action("enabled", name) == 0)
 end
 
 --- Enable the given init script
 -- @param name	Name of the init script
 -- @return		Boolean indicating success
 function init.enable(name)
-	if fs.access(init.dir..name) then
-		return ( call(init.dir..name.." enable >/dev/null") == 1 )
-	end
+	return (init_action("enable", name) == 1)
 end
 
 --- Disable the given init script
 -- @param name	Name of the init script
 -- @return		Boolean indicating success
 function init.disable(name)
-	if fs.access(init.dir..name) then
-		return ( call(init.dir..name.." disable >/dev/null") == 0 )
-	end
+	return (init_action("disable", name) == 0)
+end
+
+--- Start the given init script
+-- @param name	Name of the init script
+-- @return		Boolean indicating success
+function init.start(name)
+	return (init_action("start", name) == 0)
+end
+
+--- Stop the given init script
+-- @param name	Name of the init script
+-- @return		Boolean indicating success
+function init.stop(name)
+	return (init_action("stop", name) == 0)
 end
 
 
