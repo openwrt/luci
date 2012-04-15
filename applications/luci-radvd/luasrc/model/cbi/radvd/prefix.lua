@@ -115,51 +115,17 @@ o = s:taboption("advanced", Flag, "AdvRouterAddr", translate("Advertise router a
 
 
 o = s:taboption("advanced", Value, "AdvValidLifetime", translate("Valid lifetime"),
-	translate("Advertises the length of time in seconds that the prefix is valid for the purpose of on-link determination. Use 0 to specify an infinite lifetime"))
+	translate("Advertises the length of time in seconds that the prefix is valid for the purpose of on-link determination."))
 
-o.datatype = "uinteger"
+o.datatype = 'or(uinteger,"infinity")'
 o.placeholder = 86400
-
-function o.cfgvalue(self, section)
-	local v = Value.cfgvalue(self, section)
-	if v == "infinity" then
-		return 0
-	else
-		return v
-	end
-end
-
-function o.write(self, section, value)
-	if value == "0" then
-		Value.write(self, section, "infinity")
-	else
-		Value.write(self, section, value)
-	end
-end
 
 
 o = s:taboption("advanced", Value, "AdvPreferredLifetime", translate("Preferred lifetime"),
-	translate("Advertises the length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred. Use 0 to specify an infinite lifetime"))
+	translate("Advertises the length of time in seconds that addresses generated from the prefix via stateless address autoconfiguration remain preferred."))
 
-o.datatype = "uinteger"
+o.datatype = 'or(uinteger,"infinity")'
 o.placeholder = 14400
-
-function o.cfgvalue(self, section)
-	local v = Value.cfgvalue(self, section)
-	if v == "infinity" then
-		return 0
-	else
-		return v
-	end
-end
-
-function o.write(self, section, value)
-	if value == "0" then
-		Value.write(self, section, "infinity")
-	else
-		Value.write(self, section, value)
-	end
-end
 
 
 o = s:taboption("advanced", Value, "Base6to4Interface", translate("6to4 interface"),
