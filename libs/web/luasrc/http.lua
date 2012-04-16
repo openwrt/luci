@@ -333,7 +333,12 @@ function write_json(x)
 			write(" }")
 		end
 	elseif type(x) == "number" or type(x) == "boolean" then
-		write(tostring(x))
+		if (x ~= x) then
+			-- NaN is the only value that doesn't equal to itself.   
+			write("Number.NaN")
+		else
+			write(tostring(x))
+		end
 	elseif type(x) == "string" then
 		write("%q" % tostring(x))
 	end
