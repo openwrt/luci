@@ -453,7 +453,10 @@ $(eval $(call application,minidlna,LuCI Support for miniDLNA,\
 	+PACKAGE_luci-app-minidlna:minidlna))
 
 $(eval $(call application,transmission,LuCI Support for Transmission,\
-        +PACKAGE_luci-app-transmission:transmission-daemon))
+	+PACKAGE_luci-app-transmission:transmission-daemon))
+
+$(eval $(call application,watchcat,LuCI Support for Watchcat,\
+	+PACKAGE_luci-app-watchcat:watchcat))
 
 ### Server Gateway Interfaces ###
 define sgi
