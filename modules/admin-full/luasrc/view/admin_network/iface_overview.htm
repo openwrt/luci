@@ -8,8 +8,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 
 <%-
@@ -163,6 +161,14 @@ $Id$
 						}
 
 						d.innerHTML = html;
+					}
+					else if (d && !ifc.ifname)                                     
+					{
+						d.innerHTML = String.format(
+							'<em><%:Network without interfaces.%></em><br />' +
+							'<a href="<%=luci.dispatcher.build_url("admin/network/network/%s")%>?tab.network.%s=physical"><%:Assign interfaces...%></a>',
+								ifc.name, ifc.name
+						);
 					}
 					else if (d && !ifc.proto)
 					{
