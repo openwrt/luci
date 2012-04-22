@@ -28,6 +28,7 @@ sub dec_tpl_str
 	$s =~ s/[\s\n]+/ /g;
 	$s =~ s/^ //;
 	$s =~ s/ $//;
+	$s =~ s/\\/\\\\/g;
 	return $s;
 }
 
