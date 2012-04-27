@@ -41,7 +41,8 @@ for _, p in ipairs({"6in4", "6to4"}) do
 	end
 
 	function proto.is_installed(self)
-		return nixio.fs.access("/lib/network/" .. p .. ".sh")
+		return nixio.fs.access("/lib/network/" .. p .. ".sh") or
+			nixio.fs.access("/lib/netifd/proto/" .. p .. ".sh")
 	end
 
 	function proto.is_floating(self)
