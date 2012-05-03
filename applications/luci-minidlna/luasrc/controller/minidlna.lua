@@ -43,14 +43,12 @@ function minidlna_status()
 	if status.running then
 		local fd = sys.httpget("http://127.0.0.1:%d/" % (port or 8200), true)
 		if fd then
-			local ln
-			repeat
-				ln = fd:read("*l")
-				if ln and ln:match("files:") then
-					local ftype, fcount = ln:match("(.+) files: (%d+)")
-					status[ftype:lower()] = tonumber(fcount) or 0
-				end
-			until not ln
+			local html = fd:read("*a")
+			if html then
+				status.audio = (tonumber(html:match("Audio files: (%d+)")) or 0)
+				status.video = (tonumber(html:match("Video files: (%d+)")) or 0)
+				status.image = (tonumber(html:match("Image files: (%d+)")) or 0)
+			end
 			fd:close()
 		end
 	end
