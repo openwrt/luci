@@ -795,7 +795,7 @@ end
 -- @return		Numeric index value
 function init.index(name)
 	if fs.access(init.dir..name) then
-		return call("env -i sh -c 'source %s%s; exit $START' >/dev/null"
+		return call("env -i sh -c 'source %s%s enabled; exit ${START:-255}' >/dev/null"
 			%{ init.dir, name })
 	end
 end
