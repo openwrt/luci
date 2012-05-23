@@ -113,14 +113,18 @@ local function arplist(opt)
 		arp[e["HW address"]:upper()] = { e["IP address"] }
 	end
 
-	for e in io.lines("/etc/ethers") do
-		mac, ip = e:match("^([a-f0-9]%S+) (%S+)")
-		if mac and ip then arp[mac:upper()] = { ip } end
+	if fs.access("/etc/ethers") then
+		for e in io.lines("/etc/ethers") do
+			mac, ip = e:match("^([a-f0-9]%S+) (%S+)")
+			if mac and ip then arp[mac:upper()] = { ip } end
+		end
 	end
 
-	for e in io.lines("/var/dhcp.leases") do
-		mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
-		if mac and ip then arp[mac:upper()] = { ip, name ~= "*" and name } end
+	if fs.access("/var/dhcp.leases") then
+		for e in io.lines("/var/dhcp.leases") do
+			mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
+			if mac and ip then arp[mac:upper()] = { ip, name ~= "*" and name } end
+		end
 	end
 
 	for mac, e in luci.util.kspairs(arp) do
