@@ -58,3 +58,12 @@ if [ "$general_sharenet" == 1 ]; then
 
 	uci_commitverbose "Setup olsrd_dyngw_plain plugin" olsrd
 fi
+
+# Setup watchdog
+uci batch << EOF
+	set olsrd.olsrd_watchdog=LoadPlugin
+	set olsrd.olsrd_watchdog.library="olsrd_watchdog.so.0.1"
+	set olsrd.olsrd_watchdog.file="/var/run/olsrd.watchdog"
+	set olsrd.olsrd_watchdog.interval=30
+EOF
+uci_commitverbose "Setup olsr watchdog plugin" olsrd
