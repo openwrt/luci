@@ -336,8 +336,9 @@ function fetch_txtinfo(otable)
 						data[name][di]['Local Device'] = fields[k]
 						uci:foreach("network", "interface",
 						function(s)
-							local localip = string.gsub(fields[k], '	', '')
+							local localip = string.gsub(fields[k], '	', ''):upper()
 							if s.ip6addr then
+								s.ip6addr = luci.ip.IPv6(s.ip6addr):string()
 								local ip6addr = string.gsub(s.ip6addr, '\/.*', '')
 								if ip6addr == localip then
 									data[name][di]['Local Device'] = s['.name'] or s.interface
