@@ -54,7 +54,7 @@ define Package/luci-lib-core
   URL:=http://luci.subsignal.org/
   MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
   SUBMENU:=8. Libraries
-  DEPENDS:=+lua +libuci-lua
+  DEPENDS:=+lua +libuci-lua +libubus-lua
   TITLE:=LuCI core libraries
 endef
 

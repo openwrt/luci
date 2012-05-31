@@ -25,6 +25,7 @@ local tonumber, tostring, math, i18n
 
 local require = require
 
+local bus = require "ubus"
 local nxo = require "nixio"
 local nfs = require "nixio.fs"
 local ipc = require "luci.ip"
@@ -46,6 +47,7 @@ protocol = utl.class()
 local _protocols = { }
 
 local _interfaces, _bridge, _switch, _tunnel
+local _ubus, _ubusnetcache, _ubusdevcache
 local _uci_real, _uci_state
 
 function _filter(c, s, o, r)
@@ -198,6 +200,10 @@ function init(cursor)
 	_bridge     = { }
 	_switch     = { }
 	_tunnel     = { }
+
+	_ubus         = bus.connect()
+	_ubusnetcache = { }
+	_ubusdevcache = { }
 
 	-- read interface information
 	local n, i
@@ -600,22 +606,14 @@ function protocol._get(self, opt)
 	return v or ""
 end
 
-function protocol._ip(self, opt, family, list)
-	local ip = _uci_state:get("network", self.sid, opt)
-	local fc = (family == 6) and ipc.IPv6 or ipc.IPv4
-	if ip or list then
-		if list then
-			local l = { }
-			for ip in utl.imatch(ip) do
-				ip = fc(ip)
-				if ip then l[#l+1] = ip:string() end
-			end
-			return l
-		else
-			ip = fc(ip)
-			return ip and ip:string()
-		end
+function protocol._ubus(self, field)
+	if not _ubusnetcache[self.sid] then
+		_ubusnetcache[self.sid] = _ubus:call("network.interface.%s" % self.sid,
+		                                  "status", { })
 	end
+
+	return _ubusnetcache[self.sid] and (field and _ubusnetcache[self.sid][field]
+	                                        or _ubusnetcache[self.sid])
 end
 
 function protocol.get(self, opt)
@@ -685,12 +683,7 @@ function protocol.name(self)
 end
 
 function protocol.uptime(self)
-	local cnt = tonumber(_uci_state:get("network", self.sid, "connect_time"))
-	if cnt ~= nil then
-		return nxo.sysinfo().uptime - cnt
-	else
-		return 0
-	end
+	return self:_ubus("uptime") or 0
 end
 
 function protocol.expires(self)
@@ -708,51 +701,60 @@ function protocol.metric(self)
 end
 
 function protocol.ipaddr(self)
-	return self:_ip("ipaddr", 4)
+	local addrs = self:_ubus("ipv4-address")
+	return addrs and #addrs > 0 and addrs[1].address
 end
 
 function protocol.netmask(self)
-	return self:_ip("netmask", 4)
+	local addrs = self:_ubus("ipv4-address")
+	return addrs and #addrs > 0 and
+		ipc.IPv4("0.0.0.0/%d" % addrs[1].mask):mask():string()
 end
 
 function protocol.gwaddr(self)
-	return self:_ip("gateway", 4)
+	local _, route
+	for _, route in ipairs(self:_ubus("route")) do
+		if route.target == "0.0.0.0" and route.mask == 0 then
+			return route.nexthop
+		end
+	end
 end
 
 function protocol.dnsaddrs(self)
-	return self:_ip("dns", 4, true)
+	local dns = { }
+	local _, addr
+	for _, addr in ipairs(self:_ubus("dns-server")) do
+		if not addr:match(":") then
+			dns[#dns+1] = addr
+		end
+	end
+	return dns
 end
 
 function protocol.ip6addr(self)
-	local ip6 = self:_ip("ip6addr", 6)
-	if not ip6 then
-		local ifc = _interfaces[self:ifname()]
-		if ifc and ifc.ip6addrs then
-			local a
-			for _, a in ipairs(ifc.ip6addrs) do
-				if not a:is6linklocal() then
-					ip6 = a:string()
-					break
-				end
-			end
-		end
-	end
-	return ip6
+	local addrs = self:_ubus("ipv6-address")
+	return addrs and #addrs > 0
+		and "%s/%d" %{ addrs[1].address, addrs[1].mask }
 end
 
 function protocol.gw6addr(self)
-	local ip6 = self:_ip("ip6gw", 6)
-	if not ip6 then
-		local dr6 = sys.net.defaultroute6()
-		if dr6 and dr6.device == self:ifname() then
-			return dr6.nexthop:string()
+	local _, route
+	for _, route in ipairs(self:_ubus("route")) do
+		if route.target == "::" and route.mask == 0 then
+			return ipc.IPv6(route.nexthop):string()
 		end
 	end
-	return ip6
 end
 
 function protocol.dns6addrs(self)
-	return self:_ip("dns", 6, true)
+	local dns = { }
+	local _, addr
+	for _, addr in ipairs(self:_ubus("dns-server")) do
+		if addr:match(":") then
+			dns[#dns+1] = addr
+		end
+	end
+	return dns
 end
 
 function protocol.is_bridge(self)
@@ -930,8 +932,8 @@ interface = utl.class()
 
 function interface.__init__(self, ifname, network)
 	local wif = _wifi_lookup(ifname)
-	if wif then 
-		self.wif    = wifinet(wif) 
+	if wif then
+		self.wif    = wifinet(wif)
 		self.ifname = _uci_state:get("wireless", wif, "ifname")
 	end
 
@@ -940,12 +942,22 @@ function interface.__init__(self, ifname, network)
 	self.network = network
 end
 
+function interface._ubus(self, field)
+	if not _ubusdevcache[self.ifname] then
+		_ubusdevcache[self.ifname] = _ubus:call("network.device", "status",
+		                                        { name = self.ifname })
+	end
+	return _ubusdevcache[self.ifname] and
+		(field and _ubusdevcache[self.ifname][field] or
+		           _ubusdevcache[self.ifname])
+end
+
 function interface.name(self)
 	return self.wif and self.wif:ifname() or self.ifname
 end
 
 function interface.mac(self)
-	return (self.dev and self.dev.macaddr or "00:00:00:00:00:00"):upper()
+	return (self:_ubus("macaddr") or "00:00:00:00:00:00"):upper()
 end
 
 function interface.ipaddrs(self)
@@ -1019,13 +1031,13 @@ function interface.adminlink(self)
 end
 
 function interface.ports(self)
-	if self.br then
-		local iface
+	local members = self:_ubus("bridge-members")
+	if members then
+		local _, iface
 		local ifaces = { }
-		for _, iface in ipairs(self.br.ifnames) do
-			ifaces[#ifaces+1] = interface(iface.name)
+		for _, iface in ipairs(members) do
+			ifaces[#ifaces+1] = interface(iface)
 		end
-		return ifaces
 	end
 end
 
@@ -1049,7 +1061,7 @@ function interface.is_up(self)
 	if self.wif then
 		return self.wif:is_up()
 	else
-		return self.dev and self.dev.flags and self.dev.flags.up or false
+		return self:_ubus("up") or false
 	end
 end
 
@@ -1061,24 +1073,28 @@ function interface.is_bridgeport(self)
 	return self.dev and self.dev.bridge and true or false
 end
 
+local function uint(x)
+	return (x < 0) and ((2^32) + x) or x
+end
+
 function interface.tx_bytes(self)
-	return self.dev and self.dev.stats
-		and self.dev.stats.tx_bytes or 0
+	local stat = self:_ubus("statistics")
+	return stat and uint(stat.tx_bytes) or 0
 end
 
 function interface.rx_bytes(self)
-	return self.dev and self.dev.stats
-		and self.dev.stats.rx_bytes or 0
+	local stat = self:_ubus("statistics")
+	return stat and uint(stat.rx_bytes) or 0
 end
 
 function interface.tx_packets(self)
-	return self.dev and self.dev.stats
-		and self.dev.stats.tx_packets or 0
+	local stat = self:_ubus("statistics")
+	return stat and uint(stat.tx_packets) or 0
 end
 
 function interface.rx_packets(self)
-	return self.dev and self.dev.stats
-		and self.dev.stats.rx_packets or 0
+	local stat = self:_ubus("statistics")
+	return stat and uint(stat.rx_packets) or 0
 end
 
 function interface.get_network(self)
