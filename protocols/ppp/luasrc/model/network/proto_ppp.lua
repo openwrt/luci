@@ -55,9 +55,7 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 	end
 
 	function proto.is_installed(self)
-		if nixio.fs.access("/lib/network/" .. p .. ".sh") then
-			return true
-		elseif p == "pppoa" then
+		if p == "pppoa" then
 			return (nixio.fs.glob("/usr/lib/pppd/*/pppoatm.so")() ~= nil)
 		elseif p == "pppoe" then
 			return (nixio.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")() ~= nil)

@@ -37,7 +37,7 @@ function proto.opkg_package(self)
 end
 
 function proto.is_installed(self)
-	return nixio.fs.access("/lib/network/relay.sh")
+	return nixio.fs.access("/etc/init.d/relayd")
 end
 
 function proto.is_floating(self)
