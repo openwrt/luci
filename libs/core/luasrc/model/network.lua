@@ -609,11 +609,12 @@ end
 function protocol._ubus(self, field)
 	if not _ubusnetcache[self.sid] then
 		_ubusnetcache[self.sid] = _ubus:call("network.interface.%s" % self.sid,
-		                                  "status", { })
+		                                     "status", { })
 	end
-
-	return _ubusnetcache[self.sid] and (field and _ubusnetcache[self.sid][field]
-	                                        or _ubusnetcache[self.sid])
+	if _ubusnetcache[self.sid] and field then
+		return _ubusnetcache[self.sid][field]
+	end
+	return _ubusnetcache[self.sid]
 end
 
 function protocol.get(self, opt)
@@ -625,36 +626,27 @@ function protocol.set(self, opt, val)
 end
 
 function protocol.ifname(self)
-	local p = self:proto()
-	if self:is_bridge() then
-		return "br-" .. self.sid
-	elseif self:is_virtual() then
-		return p .. "-" .. self.sid
+	local ifname
+	if self:is_floating() then
+		ifname = self:_ubus("l3_device")
 	else
-		local num = { }
-		local dev = _uci_real:get("network", self.sid, "ifname") or
-			_uci_state:get("network", self.sid, "ifname")
-
-		dev = (type(dev) == "table") and dev[1] or dev
-		dev = (dev ~= nil) and dev:match("%S+")
-
-		if not dev then
-			_uci_real:foreach("wireless", "wifi-iface",
-				function(s)
-					if s.device then
-						num[s.device] = num[s.device]
-							and num[s.device] + 1 or 1
-
-						if s.network == self.sid then
-							dev = "%s.network%d" %{ s.device, num[s.device] }
-							return false
-						end
-					end
-				end)
-		end
-
-		return dev
+		ifname = self:_ubus("device")
 	end
+	if not ifname then
+		_uci_real:foreach("wireless", "wifi-iface",
+			function(s)
+				if s.device then
+					num[s.device] = num[s.device]
+						and num[s.device] + 1 or 1
+
+					if s.network == self.sid then
+						ifname = "%s.network%d" %{ s.device, num[s.device] }
+						return false
+					end
+				end
+			end)
+	end
+	return ifname
 end
 
 function protocol.proto(self)
@@ -713,7 +705,7 @@ end
 
 function protocol.gwaddr(self)
 	local _, route
-	for _, route in ipairs(self:_ubus("route")) do
+	for _, route in ipairs(self:_ubus("route") or { }) do
 		if route.target == "0.0.0.0" and route.mask == 0 then
 			return route.nexthop
 		end
@@ -723,7 +715,7 @@ end
 function protocol.dnsaddrs(self)
 	local dns = { }
 	local _, addr
-	for _, addr in ipairs(self:_ubus("dns-server")) do
+	for _, addr in ipairs(self:_ubus("dns-server") or { }) do
 		if not addr:match(":") then
 			dns[#dns+1] = addr
 		end
@@ -947,9 +939,10 @@ function interface._ubus(self, field)
 		_ubusdevcache[self.ifname] = _ubus:call("network.device", "status",
 		                                        { name = self.ifname })
 	end
-	return _ubusdevcache[self.ifname] and
-		(field and _ubusdevcache[self.ifname][field] or
-		           _ubusdevcache[self.ifname])
+	if _ubusdevcache[self.ifname] and field then
+		return _ubusdevcache[self.ifname][field]
+	end
+	return _ubusdevcache[self.ifname]
 end
 
 function interface.name(self)
@@ -1074,7 +1067,10 @@ function interface.is_bridgeport(self)
 end
 
 local function uint(x)
-	return (x < 0) and ((2^32) + x) or x
+	if x then
+		return (x < 0) and ((2^32) + x) or x
+	end
+	return 0
 end
 
 function interface.tx_bytes(self)
