@@ -4,15 +4,29 @@
 . /etc/functions.sh
 . $dir/functions.sh
 
-# Rename interface defaults
+#Rename olsrd basic settings
+handle_olsrd() {
+	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
+		section_rename olsrd $1 olsrd
+	fi
+}
+config_load olsrd
+config_foreach handle_olsrd olsrd
 
+# Rename interface defaults
 handle_interfacedefaults() {
 	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
 		section_rename olsrd $1 InterfaceDefaults
 	fi
 }
-config_load olsrd
 config_foreach handle_interfacedefaults InterfaceDefaults
+
+# Set basic olsrd settings
+if [ "profile_ipv6" = 1 ]; then
+	uci set olsrd.olsrd.IpVersion="6and4"
+fi
+uci_commitverbose "Setup olsr basic settings" olsrd
+
 
 # Setup new InterfaceDefaults
 uci set olsrd.InterfaceDefaults=InterfaceDefaults

@@ -12,7 +12,7 @@
 . /etc/functions.sh
 
 echo "
-/* Meshwizard 0.0.4 */
+/* Meshwizard 0.0.7 */
 "
 
 # config
@@ -65,6 +65,14 @@ fi
 
 if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" ]; then
 	$dir/helpers/setup_lan_static.sh
+fi
+
+if [ "$profile_ipv6" == 1 ]; then
+	$dir/helpers/setup_lan_ipv6.sh
+	# Setup auto-ipv6
+	if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
+		$dir/helpers/setup_auto-ipv6.sh
+	fi
 fi
 
 # Setup policyrouting if internet sharing is disabled and wan is not used for olsrd
