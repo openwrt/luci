@@ -3,6 +3,9 @@
 case $ACTION in
         ifup)
 		pr=`uci get freifunk-policyrouting.pr.enable`
+		# check if ipv6 is enabled:
+		[ -f /proc/net/ipv6_route ] && has_ipv6=1
+
 		if [ $pr = "1" ]; then
 			logger -t policyrouting "Starting policy routing on $INTERFACE"
 
@@ -59,6 +62,12 @@ case $ACTION in
 			ip rule add fwmark 1 lookup olsr-default
 			ip rule add lookup main
 			ip rule add lookup olsr
+			if [ "$has_ipv6" = 1 ]; then
+	                        ip -6 rule del lookup main
+	                        ip -6 rule add fwmark 1 lookup olsr-default
+	                        ip -6 rule add lookup main
+	                        ip -6 rule add lookup olsr
+			fi
 		else
 			# Remove custom routing tables from olsrd
 			if [ "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
@@ -74,5 +83,9 @@ case $ACTION in
 	logger -t policyrouting "Deleting policy rules for $INTERFACE"
 	ip rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
 	ip rule del lookup olsr	> /dev/null 2>&1
+	if [ "$has_ipv6" = 1 ]; then
+		ip -6 rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
+		ip -6 rule del lookup olsr	> /dev/null 2>&1
+	fi
 	;;
 esac
