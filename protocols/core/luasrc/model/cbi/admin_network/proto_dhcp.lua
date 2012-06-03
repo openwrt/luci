@@ -1,7 +1,7 @@
 --[[
 LuCI - Lua Configuration Interface
 
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2011-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ local map, section, net = ...
 local ifc = net:get_interface()
 
 local hostname, accept_ra, send_rs
-local bcast, no_gw, no_dns, dns, metric, clientid, vendorclass
+local bcast, no_gw, peerdns, dns, metric, clientid, vendorclass
 
 
 hostname = section:taboption("general", Value, "hostname",
@@ -62,31 +62,17 @@ function no_gw.write(self, section, value)
 end
 
 
-no_dns = section:taboption("advanced", Flag, "_no_dns",
+peerdns = section:taboption("advanced", Flag, "peerdns",
 	translate("Use DNS servers advertised by peer"),
 	translate("If unchecked, the advertised DNS server addresses are ignored"))
 
-no_dns.default = no_dns.enabled
-
-function no_dns.cfgvalue(self, section)
-	local addr
-	for addr in luci.util.imatch(m:get(section, "dns")) do
-		return self.disabled
-	end
-	return self.enabled
-end
-
-function no_dns.remove(self, section)
-	return m:del(section, "dns")
-end
-
-function no_dns.write() end
+peerdns.default = peerdns.enabled
 
 
 dns = section:taboption("advanced", DynamicList, "dns",
 	translate("Use custom DNS servers"))
 
-dns:depends("_no_dns", "")
+dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
 dns.cast     = "string"
 
