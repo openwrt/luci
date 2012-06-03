@@ -4,6 +4,17 @@
 . /etc/functions.sh
 . $dir/functions.sh
 
+# Clean the config, remove httpinfo and interface wlan
+uci -q delete olsrd.olsrd_httpinfo
+handle_interface() {
+        config_get interface "$1" interface
+        if [ "$interface" = "wlan" ]; then
+		uci delete olsrd.$1
+        fi
+}
+config_foreach handle_interface Interface
+uci_commitverbose "Cleanup olsrd config" olsrd
+
 #Rename olsrd basic settings
 handle_olsrd() {
 	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
