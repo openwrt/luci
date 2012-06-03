@@ -27,11 +27,7 @@ EOF
 local ip6addr
 if [ "$profile_ipv6" = 1 ]; then
 	if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
-		# get interface mac
-		local device="$(uci -p/var/state -q get network.$netrenamed.ifname)"
-		if [ -n "device" ]; then
-			ip6addr="$($dir/helpers/gen_auto-ipv6-dhcpv6-ip.sh $device)"
-		fi
+		ip6addr="$($dir/helpers/gen_auto-ipv6-dhcpv6-ip.sh $netrenamed)"
 		uci set network.$netrenamed.ip6addr="${ip6addr}/112"
 	fi
 fi
