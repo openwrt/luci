@@ -1,7 +1,7 @@
 #!/bin/sh
 # Sets up olsrd
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 # Clean the config, remove httpinfo and interface wlan

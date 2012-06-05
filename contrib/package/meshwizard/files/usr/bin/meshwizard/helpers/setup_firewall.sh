@@ -3,7 +3,7 @@
 # If wan/lan is used for olsr then remove these networks from wan/lan zones
 # Also setup rules defined in /etc/config/freifunk and /etc/config/profile_<community>
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 wan_is_olsr=$(uci -q get meshwizard.netconfig.wan_config)

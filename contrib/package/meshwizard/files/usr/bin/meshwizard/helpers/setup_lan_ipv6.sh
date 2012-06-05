@@ -2,7 +2,7 @@
 
 [ ! "$(uci -q get network.lan)" == "interface" ] && exit
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 # Setup IPv6 for the lan interface

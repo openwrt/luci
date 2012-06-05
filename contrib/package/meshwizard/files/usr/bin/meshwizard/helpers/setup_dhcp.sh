@@ -1,7 +1,7 @@
 #!/bin/sh
 # Sets up the dhcp part of dnsmasq
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 net="$1"

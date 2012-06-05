@@ -2,7 +2,7 @@
 # Argument $1: network interface
  
 net="$1"
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 # Setup a (new) interface section for $net

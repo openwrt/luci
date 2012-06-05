@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 # Set dnsmasq config

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Setup_splash, takes 1 argument: 1=net
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 net=$1

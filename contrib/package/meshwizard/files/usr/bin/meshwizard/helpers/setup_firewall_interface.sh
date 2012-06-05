@@ -4,7 +4,7 @@
 # Arg $1 = $net
 
 net=$1
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 config_load firewall
 

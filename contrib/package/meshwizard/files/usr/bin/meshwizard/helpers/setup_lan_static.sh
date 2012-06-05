@@ -3,7 +3,7 @@
 
 [ ! "$(uci -q get network.lan)" == "interface" ] && exit
 
-. /etc/functions.sh
+. /lib/functions.sh
 . $dir/functions.sh
 
 uci batch << EOF

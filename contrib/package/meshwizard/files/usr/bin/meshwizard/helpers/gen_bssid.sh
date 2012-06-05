@@ -5,7 +5,7 @@
 channel=$1
 community=$2
 
-. /etc/functions.sh
+. /lib/functions.sh
 
 
 # Try to get BSSID from profile first
