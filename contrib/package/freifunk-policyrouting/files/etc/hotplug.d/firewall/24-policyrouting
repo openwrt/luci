@@ -2,7 +2,7 @@ if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "wan" ]; then
 	pr=`uci get freifunk-policyrouting.pr.enable`
 	strict=`uci get freifunk-policyrouting.pr.strict`
 	zones=`uci get freifunk-policyrouting.pr.zones`
-
+	[ -f /proc/net/ipv6_route ] && has_ipv6=1
 	if [ $pr = "1" ]; then
 
 		# The wan device name
@@ -16,6 +16,12 @@ if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "wan" ]; then
 		iptables -t mangle -F prerouting_policy > /dev/null 2>&1
 		iptables -t mangle -N prerouting_policy > /dev/null 2>&1
 	        iptables -t mangle -I PREROUTING -j prerouting_policy > /dev/null 2>&1
+		if [ "$has_ipv6" = 1 ]; then
+			ip6tables -t mangle -D PREROUTING -j prerouting_policy > /dev/null 2>&1
+			ip6tables -t mangle -F prerouting_policy > /dev/null 2>&1
+			ip6tables -t mangle -N prerouting_policy > /dev/null 2>&1
+		        ip6tables -t mangle -I PREROUTING -j prerouting_policy > /dev/null 2>&1
+		fi
 
 		# If no route is in table olsr-default, then usually the hosts local default route is used.
 		# If set to strict then we add a filter which prevents this
@@ -32,6 +38,22 @@ if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "wan" ]; then
 			fi
 			iptables -F forward_policy
 			iptables -I forward_policy -o $wandev -j REJECT --reject-with icmp-net-prohibited
+
+
+			if [ "$has_ipv6" = 1 ]; then
+				ln=$(( `ip6tables -L FORWARD -v --line-numbers | grep -m 1 reject | awk {' print $1 '}` - 1 ))
+				if [ ! $ln -gt 0 ]; then
+					ln=1
+				fi
+				if [ -z "`ip6tables -L |grep 'Chain forward_policy'`" ]; then
+					ip6tables -N forward_policy
+				fi
+				if [ -z "`ip6tables -L FORWARD -v |grep forward_policy`" ]; then
+					ip6tables -I FORWARD $ln -m mark --mark 1 -j forward_policy
+				fi
+				ip6tables -F forward_policy
+				ip6tables -I forward_policy -o $wandev -j REJECT
+			fi
 		fi
 
 		# set mark 1 for all packets coming in via enabled zones
@@ -54,21 +76,39 @@ if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "wan" ]; then
 				fi
 				logger -t policyrouting "Add mark 1 to packages coming in via interface $dev"
 				iptables -t mangle -I prerouting_policy -i $dev -j MARK --set-mark 1
+				if [ "$has_ipv6" = 1 ]; then
+					ip6tables -t mangle -I prerouting_policy -i $dev -j MARK --set-mark 1
+				fi	
 			done
 		done
 	else
 	        # Cleanup policy routing stuff that might be lingering around
 	        if [ -n "`iptables -t mangle -L PREROUTING |grep _policy`" ]; then
-			logger -t policyrouting "Delete prerouting_policy chain in table mangle"
+			logger -t policyrouting "Delete prerouting_policy chain in table mangle (IPv4)"
 	                iptables -t mangle -D PREROUTING -j prerouting_policy
 	                iptables -t mangle -F prerouting_policy
 	                iptables -t mangle -X prerouting_policy
 	        fi
 		if [ -n "`iptables -L FORWARD |grep forward_policy`" ]; then
-			logger -t policyrouting "Delete strict forwarding rules"
+			logger -t policyrouting "Delete strict forwarding rules (IPv4)"
 			iptables -D FORWARD -m mark --mark 1 -j forward_policy
 			iptables -F forward_policy
 			iptables -X forward_policy
+		fi
+
+		if [ "$has_ipv6" = 1 ]; then
+		        if [ -n "`ip6tables -t mangle -L PREROUTING |grep _policy`" ]; then
+				logger -t policyrouting "Delete prerouting_policy chain in table mangle (IPv6)"
+		                ip6tables -t mangle -D PREROUTING -j prerouting_policy
+		                ip6tables -t mangle -F prerouting_policy
+		                ip6tables -t mangle -X prerouting_policy
+		        fi
+			if [ -n "`ip6tables -L FORWARD |grep forward_policy`" ]; then
+				logger -t policyrouting "Delete strict forwarding rules (IPv6)"
+				ip6tables -D FORWARD -m mark --mark 1 -j forward_policy
+				ip6tables -F forward_policy
+				ip6tables -X forward_policy
+			fi
 		fi
 		logger -t policyrouting "All firewall rules for policyrouting removed."
 	fi

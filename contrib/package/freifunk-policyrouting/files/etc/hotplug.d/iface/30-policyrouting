@@ -58,15 +58,24 @@ case $ACTION in
 			ip route add $NETWORK/$NETMASK dev $device table default
 			ip route add default via $gw dev $device table default
 
+			#if [ "$has_ipv6" = 1 ]; then
+			#	local ip6gw=$(ip -6 r |grep default |cut -d " " -f 3)
+			#	test -n "`ip -6 r s t default`" && ip -6 r d default t default
+			#	test -n "`ip -6 r s |grep default`" && ip -6 route del default
+			#	ip -6 r a $ip6gw via $ip6gw dev $dev table default
+			#	ip -6 route add default via $ip6gw dev $device table default
+			#fi
+
+
 			ip rule del lookup main
 			ip rule add fwmark 1 lookup olsr-default
 			ip rule add lookup main
 			ip rule add lookup olsr
 			if [ "$has_ipv6" = 1 ]; then
 	                        ip -6 rule del lookup main
-	                        ip -6 rule add fwmark 1 lookup olsr-default
-	                        ip -6 rule add lookup main
-	                        ip -6 rule add lookup olsr
+	                        ip -6 rule add fwmark 1 lookup olsr-default prio 16385
+	                        ip -6 rule add lookup main prio 16383
+	                        ip -6 rule add lookup olsr prio 16380
 			fi
 		else
 			# Remove custom routing tables from olsrd
