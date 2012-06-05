@@ -488,7 +488,7 @@ if has_dnsmasq and net:proto() == "static" then
 		local start = s:taboption("general", Value, "start", translate("Start"),
 			translate("Lowest leased address as offset from the network address."))
 		start.optional = true
-		start.datatype = "uinteger"
+		start.datatype = "or(uinteger,ip4addr)"
 		start.default = "100"
 
 		local limit = s:taboption("general", Value, "limit", translate("Limit"),
