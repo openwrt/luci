@@ -101,11 +101,11 @@ done
 # If we use auto-ipv6-dhcp then allow 547/udp on the freifunk zone
 if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 	uci batch <<- EOF
-		firewall.dhcpv6=rule
-		firewall.dhcpv6.src=freifunk
-		firewall.dhcpv6.target=ACCEPT
-		firewall.dhcpv6.dest_port=547
-		firewall.dhcpv6.proto=udp
+		set firewall.dhcpv6=rule
+		set firewall.dhcpv6.src=freifunk
+		set firewall.dhcpv6.target=ACCEPT
+		set firewall.dhcpv6.dest_port=547
+		set firewall.dhcpv6.proto=udp
 	EOF
 fi
 

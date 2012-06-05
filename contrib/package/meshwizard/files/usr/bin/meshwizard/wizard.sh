@@ -100,8 +100,14 @@ for net in $networks; do
 
 	$dir/helpers/setup_splash.sh $net
 	$dir/helpers/setup_firewall_interface.sh $net
+
+	if [ "$profile_ipv6" == 1 ]; then
+		$dir/helpers/setup_radvd_interface.sh $net
+	fi
 done
 
 ##### Reboot the router (because simply restarting services gave errors)
+
+echo "+ The wizard has finished and the router will reboot now."
 
 reboot
