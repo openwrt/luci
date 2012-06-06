@@ -12,6 +12,7 @@ handle_interface() {
 		uci delete olsrd.$1
         fi
 }
+config_load olsrd
 config_foreach handle_interface Interface
 uci_commitverbose "Cleanup olsrd config" olsrd
 
@@ -21,7 +22,6 @@ handle_olsrd() {
 		section_rename olsrd $1 olsrd
 	fi
 }
-config_load olsrd
 config_foreach handle_olsrd olsrd
 
 # Rename interface defaults
