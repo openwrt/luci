@@ -190,7 +190,7 @@ You may obtain a copy of the License at
   </header>
 
 
-<%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
+<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 <div class="container">
 	<div class="alert-message warning">
 		<h4><%:No password set!%></h4>

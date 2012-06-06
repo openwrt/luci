@@ -94,7 +94,7 @@ You may obtain a copy of the License at
 </div></div>
 <![endif]-->
 
-<%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
+<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 	<div class="warning">
 		<strong><%:No password set!%></strong><br />
 		<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
