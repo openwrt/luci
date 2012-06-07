@@ -14,7 +14,7 @@ local map, section, net = ...
 local ifc = net:get_interface()
 
 local hostname, accept_ra, send_rs
-local bcast, no_gw, peerdns, dns, metric, clientid, vendorclass
+local bcast, defaultroute, peerdns, dns, metric, clientid, vendorclass
 
 
 hostname = section:taboption("general", Value, "hostname",
@@ -43,23 +43,11 @@ bcast = section:taboption("advanced", Flag, "broadcast",
 bcast.default = bcast.disabled
 
 
-no_gw = section:taboption("advanced", Flag, "gateway",
+defaultroute = section:taboption("advanced", Flag, "gateway",
 	translate("Use default gateway"),
 	translate("If unchecked, no default route is configured"))
 
-no_gw.default = no_gw.enabled
-
-function no_gw.cfgvalue(...)
-	return Flag.cfgvalue(...) == "0.0.0.0" and "0" or "1"
-end
-
-function no_gw.write(self, section, value)
-	if value == "1" then
-		m:set(section, "gateway", nil)
-	else
-		m:set(section, "gateway", "0.0.0.0")
-	end
-end
+defaultroute.default = defaultroute.enabled
 
 
 peerdns = section:taboption("advanced", Flag, "peerdns",
