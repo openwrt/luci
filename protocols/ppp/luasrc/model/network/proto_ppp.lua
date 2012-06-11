@@ -43,10 +43,12 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 	end
 
 	function proto.opkg_package(self)
-		if p == "ppp" or p == "pptp" then
+		if p == "ppp" then
 			return p
 		elseif p == "3g" then
 			return "comgt"
+		elseif p == "pptp" then
+			return "ppp-mod-pptp"
 		elseif p == "pppoe" then
 			return "ppp-mod-pppoe"
 		elseif p == "pppoa" then
@@ -59,6 +61,8 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 			return (nixio.fs.glob("/usr/lib/pppd/*/pppoatm.so")() ~= nil)
 		elseif p == "pppoe" then
 			return (nixio.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")() ~= nil)
+		elseif p == "pptp" then
+			return (nixio.fs.glob("/usr/lib/pppd/*/pptp.so")() ~= nil)
 		elseif p == "3g" then
 			return nixio.fs.access("/lib/netifd/proto/3g.sh")
 		else
