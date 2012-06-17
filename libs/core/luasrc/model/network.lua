@@ -633,6 +633,7 @@ function protocol.ifname(self)
 		ifname = self:_ubus("device")
 	end
 	if not ifname then
+		local num = { }
 		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
 				if s.device then
@@ -731,7 +732,7 @@ end
 
 function protocol.gw6addr(self)
 	local _, route
-	for _, route in ipairs(self:_ubus("route")) do
+	for _, route in ipairs(self:_ubus("route") or { }) do
 		if route.target == "::" and route.mask == 0 then
 			return ipc.IPv6(route.nexthop):string()
 		end
@@ -741,7 +742,7 @@ end
 function protocol.dns6addrs(self)
 	local dns = { }
 	local _, addr
-	for _, addr in ipairs(self:_ubus("dns-server")) do
+	for _, addr in ipairs(self:_ubus("dns-server") or { }) do
 		if addr:match(":") then
 			dns[#dns+1] = addr
 		end
@@ -1031,6 +1032,7 @@ function interface.ports(self)
 		for _, iface in ipairs(members) do
 			ifaces[#ifaces+1] = interface(iface)
 		end
+		return ifaces
 	end
 end
 
