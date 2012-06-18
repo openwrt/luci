@@ -191,6 +191,10 @@ function ipt_delete_all(args, comp, off)
 	end
 end
 
+-- Convert mac to uci-compatible section name
+function convert_mac_to_secname(mac)
+	return string.gsub(mac, ":", "")
+end
 
 -- Add a lease to state and invoke add_rule
 function add_lease(mac, arp, no_uci)
@@ -208,7 +212,7 @@ function add_lease(mac, arp, no_uci)
 	-- Add lease if there is an ip addr
 	if ipaddr then
 		if not no_uci then
-			uci:section("luci_splash", "lease", nil, {
+			uci:section("luci_splash", "lease", convert_mac_to_secname(mac), {
 				mac    = mac,
 				ipaddr = ipaddr,
 				start  = os.time()
@@ -241,7 +245,7 @@ end
 
 -- Add a whitelist entry
 function add_whitelist(mac)
-	uci:section("luci_splash", "whitelist", nil, { mac = mac })
+	uci:section("luci_splash", "whitelist", convert_mac_to_secname(mac), { mac = mac })
 	uci:save("luci_splash")
 	uci:commit("luci_splash")
 	add_whitelist_rule(mac)
@@ -250,7 +254,7 @@ end
 
 -- Add a blacklist entry
 function add_blacklist(mac)
-	uci:section("luci_splash", "blacklist", nil, { mac = mac })
+	uci:section("luci_splash", "blacklist", convert_mac_to_secname(mac), { mac = mac })
 	uci:save("luci_splash")
 	uci:commit("luci_splash")
 	add_blacklist_rule(mac)
@@ -342,7 +346,7 @@ function sync()
 				remove_lease_rule(v.mac, v.ipaddr)
 			else
 				-- Rewrite state
-				uci:section("luci_splash", "lease", nil, {		
+				uci:section("luci_splash", "lease", convert_mac_to_secname(v.mac), {		
 					mac    = v.mac,
 					ipaddr = v.ipaddr,
 					start  = v.start
