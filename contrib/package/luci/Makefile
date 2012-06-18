@@ -173,7 +173,7 @@ ifneq ($(CONFIG_PACKAGE_luci-lib-nixio_cyassl),)
 endif
 
 
-$(eval $(call library,fastindex,Fastindex indexing module))
+$(eval $(call library,fastindex,Fastindex indexing module,+PACKAGE_luci-lib-fastindex:liblua))
 $(eval $(call library,httpclient,HTTP(S) client library,+luci-lib-web +luci-lib-nixio))
 $(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
 $(eval $(call library,json,LuCI JSON library))
