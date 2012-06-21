@@ -20,7 +20,7 @@ limitations under the License.
 local netmod = luci.model.network
 
 local _, p
-for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
+for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp"}) do
 
 	local proto = netmod:register_protocol(p)
 
@@ -35,6 +35,8 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 			return luci.i18n.translate("PPPoE")
 		elseif p == "pppoa" then
 			return luci.i18n.translate("PPPoATM")
+		elseif p == "l2tp" then
+			return luci.i18n.translate("L2TP")
 		end
 	end
 
@@ -53,6 +55,8 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g"}) do
 			return "ppp-mod-pppoe"
 		elseif p == "pppoa" then
 			return "ppp-mod-pppoa"
+		elseif p == "l2tp" then
+			return "xl2tpd"
 		end
 	end
 
