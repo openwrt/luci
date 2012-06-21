@@ -1,5 +1,5 @@
 --[[
-LuCI - Network model - 6to4 & 6in4 protocol extension
+LuCI - Network model - 6to4, 6in4 & 6rd protocol extensions
 
 Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
 
@@ -20,7 +20,7 @@ limitations under the License.
 local netmod = luci.model.network
 
 local _, p
-for _, p in ipairs({"6in4", "6to4"}) do
+for _, p in ipairs({"6in4", "6to4", "6rd"}) do
 
 	local proto = netmod:register_protocol(p)
 
@@ -28,7 +28,9 @@ for _, p in ipairs({"6in4", "6to4"}) do
 		if p == "6in4" then
 			return luci.i18n.translate("IPv6-in-IPv4 (RFC4213)")
 		elseif p == "6to4" then
-			return luci.i18n.translate("IPv6-over-IPv4")
+			return luci.i18n.translate("IPv6-over-IPv4 (6to4)")
+		elseif p == "6rd" then
+			return luci.i18n.translate("IPv6-over-IPv4 (6rd)")
 		end
 	end
 
