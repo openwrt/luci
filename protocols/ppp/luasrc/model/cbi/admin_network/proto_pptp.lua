@@ -1,7 +1,7 @@
 --[[
 LuCI - Lua Configuration Interface
 
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2011-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@ You may obtain a copy of the License at
 local map, section, net = ...
 
 local server, username, password
-local buffering, defaultroute, metric, peerdns, dns
+local defaultroute, metric, peerdns, dns
 
 
 server = section:taboption("general", Value, "server", translate("VPN Server"))
@@ -25,10 +25,6 @@ username = section:taboption("general", Value, "username", translate("PAP/CHAP u
 
 password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
 password.password = true
-
-
-buffering = section:taboption("advanced", Flag, "buffering", translate("Enable buffering"))
-buffering.default = buffering.enabled
 
 
 defaultroute = section:taboption("advanced", Flag, "defaultroute",
