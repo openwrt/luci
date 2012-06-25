@@ -216,6 +216,33 @@ var cbi_validators = {
 		return false;
 	},
 
+	'rangelength': function(min, max)
+	{
+		var val = '' + this;
+		if (!isNaN(min) && !isNaN(max))
+			return ((val.length >= min) && (val.length <= max));
+
+		return false;
+	},
+
+	'minlength': function(min)
+	{
+		var val = '' + this;
+		if (!isNaN(min))
+			return (val.length >= min);
+
+		return false;
+	},
+
+	'maxlength': function(max)
+	{
+		var val = '' + this;
+		if (!isNaN(max))
+			return (val.length <= max);
+
+		return false;
+	},
+
 	'or': function()
 	{
 		for (var i = 0; i < arguments.length; i += 2)

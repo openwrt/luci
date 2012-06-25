@@ -17,7 +17,7 @@ local fs = require "nixio.fs"
 local ip = require "luci.ip"
 local math = require "math"
 local util = require "luci.util"
-local tonumber, type, unpack, select = tonumber, type, unpack, select
+local tonumber, tostring, type, unpack, select = tonumber, tostring, type, unpack, select
 
 
 module "luci.cbi.datatypes"
@@ -301,6 +301,40 @@ function max(val, max)
 
 	if val ~= nil and max ~= nil then
 		return (val <= max)
+	end
+
+	return false
+end
+
+function rangelength(val, min, max)
+	val = tostring(val)
+	min = tonumber(min)
+	max = tonumber(max)
+
+	if val ~= nil and min ~= nil and max ~= nil then
+		return ((#val >= min) and (#val <= max))
+	end
+
+	return false
+end
+
+function minlength(val, min)
+	val = tostring(val)
+	min = tonumber(min)
+
+	if val ~= nil and min ~= nil then
+		return (#val >= min)
+	end
+
+	return false
+end
+
+function maxlength(val, max)
+	val = tostring(val)
+	max = tonumber(max)
+
+	if val ~= nil and max ~= nil then
+		return (#val <= max)
 	end
 
 	return false
