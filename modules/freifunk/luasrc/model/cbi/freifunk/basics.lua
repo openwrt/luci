@@ -47,6 +47,7 @@ hn.datatype = "hostname"
 
 loc = b:option(Value, "location", translate("Location"))
 loc.rmempty = false
+loc.datatype = "minlength(1)"
 
 lat = b:option(Value, "latitude", translate("Latitude"), translate("e.g.") .. " 48.12345")
 lat.datatype = "float"
