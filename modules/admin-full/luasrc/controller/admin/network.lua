@@ -43,13 +43,13 @@ function index()
 
 
 		local has_wifi = false
-		
+
 		uci:foreach("wireless", "wifi-device",
 			function(s)
 				has_wifi = true
 				return false
 			end)
-		
+
 		if has_wifi then
 			page = entry({"admin", "network", "wireless_join"}, call("wifi_join"), nil)
 			page.leaf = true
@@ -214,14 +214,17 @@ function wifi_delete(network)
 	local wnet = ntm:get_wifinet(network)
 	if wnet then
 		local dev = wnet:get_device()
-		local net = wnet:get_network()
+		local nets = wnet:get_networks()
 		if dev then
 			luci.sys.call("env -i /sbin/wifi down %q >/dev/null" % dev:name())
 			ntm:del_wifinet(network)
 			ntm:commit("wireless")
-			if net and net:is_empty() then
-				ntm:del_network(net:name())
-				ntm:commit("network")
+			local _, net
+			for _, net in ipairs(nets) do
+				if net:is_empty() then
+					ntm:del_network(net:name())
+					ntm:commit("network")
+				end
 			end
 			luci.sys.call("env -i /sbin/wifi up %q >/dev/null" % dev:name())
 		end
