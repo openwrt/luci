@@ -24,19 +24,8 @@ $Id$
 
 	if luci.http.formvalue("status") == "1" then
 		local ntm = require "luci.model.network".init()
-		local dr4 = luci.sys.net.defaultroute()
-		local dr6 = luci.sys.net.defaultroute6()
-		local wan, wan6
-
-		if dr4 and dr4.device then
-			wan = ntm:get_interface(dr4.device)
-			wan = wan and wan:get_network()
-		end
-
-		if dr6 and dr6.device then
-			wan6 = ntm:get_interface(dr6.device)
-			wan6 = wan6 and wan6:get_network()
-		end
+		local wan = ntm:get_wannet()
+		local wan6 = ntm:get_wan6net()
 
 		local _, _, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 
