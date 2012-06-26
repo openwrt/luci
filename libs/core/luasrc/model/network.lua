@@ -585,6 +585,44 @@ function del_wifinet(self, net)
 	return false
 end
 
+function get_status_by_route(self, addr, mask)
+	local _, object
+	for _, object in ipairs(_ubus:objects()) do
+		local net = object:match("^network%.interface%.(.+)")
+		if net then
+			local s = _ubus:call(object, "status", {})
+			if s and s.route then
+				local rt
+				for _, rt in ipairs(s.route) do
+					if rt.target == addr and rt.mask == mask then
+						return net, s
+					end
+				end
+			end
+		end
+	end
+end
+
+function get_wannet(self)
+	local net = self:get_status_by_route("0.0.0.0", 0)
+	return net and network(net)
+end
+
+function get_wandev(self)
+	local _, stat = self:get_status_by_route("0.0.0.0", 0)
+	return stat and interface(stat.l3_device or stat.device)
+end
+
+function get_wan6net(self)
+	local net = self:get_status_by_route("::", 0)
+	return net and network(net)
+end
+
+function get_wan6dev(self)
+	local _, stat = self:get_status_by_route("::", 0)
+	return stat and interface(stat.l3_device or stat.device)
+end
+
 
 function network(name, proto)
 	if name then
