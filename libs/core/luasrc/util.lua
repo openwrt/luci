@@ -36,7 +36,7 @@ local tparser = require "luci.template.parser"
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
 local tostring, type, assert = tostring, type, assert
-local ipairs, pairs, loadstring = ipairs, pairs, loadstring
+local ipairs, pairs, next, loadstring = ipairs, pairs, next, loadstring
 local require, pcall, xpcall = require, pcall, xpcall
 local collectgarbage, get_memory_limit = collectgarbage, get_memory_limit
 
@@ -273,15 +273,27 @@ end
 -- @param val		The value to scan (table, string or nil)
 -- @return			Iterator which returns one token per call
 function imatch(v)
-	if v == nil then
-		v = ""
-	elseif type(v) == "table" then
-		v = table.concat(v, " ")
-	elseif type(v) ~= "string" then
-		v = tostring(v)
+	if type(v) == "table" then
+		local k = nil
+		return function()
+			k = next(v, k)
+			return v[k]
+		end
+
+	elseif type(v) == "number" or type(v) == "boolean" then
+		local x = true
+		return function()
+			if x then
+				x = false
+				return tostring(v)
+			end
+		end
+
+	elseif type(v) == "userdata" or type(v) == "string" then
+		return tostring(v):gmatch("%S+")
 	end
 
-	return v:gmatch("%S+")
+	return function() end
 end
 
 --- Parse certain units from the given string and return the canonical integer
