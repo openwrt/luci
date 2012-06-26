@@ -14,6 +14,7 @@ $Id$
 
 local wa = require "luci.tools.webadmin"
 local nw = require "luci.model.network"
+local ut = require "luci.util"
 local fs = require "nixio.fs"
 
 arg[1] = arg[1] or ""
@@ -415,7 +416,8 @@ network = s:taboption("general", Value, "network", translate("Network"),
 
 network.rmempty = true
 network.template = "cbi/network_netlist"
-network.widget = "radio"
+network.widget = "checkbox"
+network.novirtual = true
 
 function network.write(self, section, value)
 	local i = nw:get_interface(section)
@@ -430,10 +432,18 @@ function network.write(self, section, value)
 				if n then n:del_interface(i) end
 			end
 		else
-			local n = nw:get_network(value)
-			if n then
-				n:set("type", "bridge")
-				n:add_interface(i)
+			local v
+			for _, v in ipairs(i:get_networks()) do
+				v:del_interface(i)
+			end
+			for v in ut.imatch(value) do
+				local n = nw:get_network(v)
+				if n then
+					if not n:is_empty() then
+						n:set("type", "bridge")
+					end
+					n:add_interface(i)
+				end
 			end
 		end
 	end
@@ -718,8 +728,8 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
 	local hostapd = fs.access("/usr/sbin/hostapd")
 
-	-- Probe EAP support                                                                                                
-	local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)                                                        
+	-- Probe EAP support
+	local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)
 	local has_sta_eap = (os.execute("wpa_supplicant -veap >/dev/null 2>/dev/null") == 0)
 
 	if hostapd and supplicant then
