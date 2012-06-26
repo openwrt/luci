@@ -795,16 +795,10 @@ end
 function protocol.add_interface(self, ifname)
 	ifname = _M:ifnameof(ifname)
 	if ifname and not self:is_floating() then
-		-- remove the interface from all ifaces
-		_uci_real:foreach("network", "interface",
-			function(s)
-				_filter("network", s['.name'], "ifname", ifname)
-			end)
-
 		-- if its a wifi interface, change its network option
 		local wif = _wifi_lookup(ifname)
 		if wif then
-			_uci_real:set("wireless", wif, "network", self.sid)
+			_append("wireless", wif, "network", self.sid)
 
 		-- add iface to our iface list
 		else
@@ -818,7 +812,7 @@ function protocol.del_interface(self, ifname)
 	if ifname and not self:is_floating() then
 		-- if its a wireless interface, clear its network option
 		local wif = _wifi_lookup(ifname)
-		if wif then	_uci_real:delete("wireless", wif, "network") end
+		if wif then _filter("wireless", wif, "network", self.sid) end
 
 		-- remove the interface
 		_filter("network", self.sid, "ifname", ifname)
@@ -909,7 +903,12 @@ function protocol.contains_interface(self, ifname)
 
 		local wif = _wifi_lookup(ifname)
 		if wif then
-			return (_uci_real:get("wireless", wif, "network") == self.sid)
+			local n
+			for n in utl.imatch(_uci_real:get("wireless", wif, "network")) do
+				if n == self.sid then
+					return true
+				end
+			end
 		end
 	end
 
@@ -1032,7 +1031,6 @@ function interface.ports(self)
 		for _, iface in ipairs(members) do
 			ifaces[#ifaces+1] = interface(iface)
 		end
-		return ifaces
 	end
 end
 
@@ -1096,24 +1094,25 @@ function interface.rx_packets(self)
 end
 
 function interface.get_network(self)
-	if not self.network then
-		if self.dev and self.dev.network then
-			self.network = _M:get_network(self.dev.network)
-		end
-	end
+	return self:get_networks()[1]
+end
 
-	if not self.network then
-		local net
+function interface.get_networks(self)
+	if not self.networks then
+		local nets = { }
+		local _, net
 		for _, net in ipairs(_M:get_networks()) do
 			if net:contains_interface(self.ifname) or
 			   net:ifname() == self.ifname
 			then
-				self.network = net
-				return net
+				nets[#nets+1] = net
 			end
 		end
+		table.sort(nets, function(a, b) return a.sid < b.sid end)
+		self.networks = nets
+		return nets
 	else
-		return self.network
+		return self.networks
 	end
 end
 
@@ -1433,10 +1432,19 @@ function wifinet.adminlink(self)
 end
 
 function wifinet.get_network(self)
-	local net = tostring(self.iwdata.network)
-	if net and _uci_real:get("network", net) == "interface" then
-		return network(net)
+	return self:get_networks()[1]
+end
+
+function wifinet.get_networks(self)
+	local nets = { }
+	local net
+	for net in utl.imatch(tostring(self.iwdata.network)) do
+		if _uci_real:get("network", net) == "interface" then
+			nets[#nets+1] = network(net)
+		end
 	end
+	table.sort(nets, function(a, b) return a.sid < b.sid end)
+	return nets
 end
 
 function wifinet.get_interface(self)
