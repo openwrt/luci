@@ -782,9 +782,12 @@ function protocol.is_empty(self)
 
 		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
-				if s.network == self.sid then
-					rv = false
-					return false
+				local n
+				for n in utl.imatch(s.network) do
+					if n == self.sid then
+						rv = false
+						return false
+					end
 				end
 			end)
 
