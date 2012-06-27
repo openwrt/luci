@@ -6,7 +6,7 @@
 
 posIB=-1
 
-IBwifis="$(uci show meshwizard.netconfig | grep -v 'netconfig=netconfig' | sed 's/meshwizard.netconfig\.\(IB_wifi.*\)_.*/\1/' |uniq)"
+IBwifis="$(uci show meshwizard.netconfig | grep 'IB_' | sed 's/meshwizard.netconfig\.\(IB_wifi.*\)_.*/\1/' |uniq)"
 [ -z "$(echo $IBwifis |grep IB_wifi)" ] && exit
 
 for w in $IBwifis; do
