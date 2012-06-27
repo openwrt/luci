@@ -18,7 +18,7 @@ echo "
 # config
 export dir="/usr/bin/meshwizard"
 . $dir/functions.sh
-[ -f /proc/net/ipv6_route ] && has_ipv6=1
+[ -f /proc/net/ipv6_route ] && export has_ipv6=1
 
 # Check which packages we have installed
 export has_luci=FALSE

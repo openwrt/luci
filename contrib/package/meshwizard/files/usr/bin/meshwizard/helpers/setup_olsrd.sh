@@ -33,7 +33,7 @@ handle_interfacedefaults() {
 config_foreach handle_interfacedefaults InterfaceDefaults
 
 # Set basic olsrd settings
-if [ "$profile_ipv6" = 1 ]; then
+if [ "$profile_ipv6" = 1 ] && [ "$has_ipv6" == "1" ]; then
 	uci set olsrd.olsrd.IpVersion="6and4"
 fi
 uci_commitverbose "Setup olsr basic settings" olsrd
