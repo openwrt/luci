@@ -6,944 +6,554 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 16:19+0200\n"
 "Last-Translator: Kamal <kamal.aliev@epscom.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.4\n"
 
-#. CoovaChilli
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:1
 msgid "CoovaChilli"
 msgstr "CoovaChilli"
 
-#. General configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:2
-msgid "General configuration"
-msgstr "Общие настройки"
-
-#. General CoovaChilli settings
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:3
-msgid "General CoovaChilli settings"
-msgstr "Общие настройки CoovaChilli"
-
-#. Command socket
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:4
-msgid "Command socket"
-msgstr "Сокет команд"
-
-#. UNIX socket used for communication with chilli_query
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:5
-msgid "UNIX socket used for communication with chilli_query"
-msgstr "UNIX сокет для связи с chilli_query"
-
-#. Config refresh interval
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:6
-msgid "Config refresh interval"
-msgstr "Интервал обновления конфигурации"
-
-#. Re-read configuration file and do DNS lookups every interval seconds. This has the same effect as sending the HUP signal. If interval is 0 (zero) this feature is disabled. 
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:7
-msgid ""
-"Re-read configuration file and do DNS lookups every interval seconds. This "
-"has the same effect as sending the HUP signal. If interval is 0 (zero) this "
-"feature is disabled. "
-msgstr ""
-"Считывание файла конфигурации и запуск DNS поиска раз в указанный интервал. "
-"Достигается тот же эффект что и при отсылке HUP сигнала. Значение интервала "
-"выражено в секундах. В случае указания нулевого значения интервала, данная "
-"функция становится неактивной."
-
-#. Pid file
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:8
-msgid "Pid file"
-msgstr "Pid файл"
-
-#. Filename to put the process id
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:9
-msgid "Filename to put the process id"
-msgstr "Имя файла, который будет содержать идентификатор процесса (PID)"
-
-#. State directory
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:10
-msgid "State directory"
-msgstr "Директория состояния"
-
-#. Directory of non-volatile data
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:11
-msgid "Directory of non-volatile data"
+msgid "Network Configuration"
 msgstr ""
 
-#. TUN/TAP configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:12
-msgid "TUN/TAP configuration"
-msgstr "TUN/TAP конфигурация"
-
-#. Network/Tun configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:13
-msgid "Network/Tun configuration"
+msgid "RADIUS configuration"
 msgstr ""
 
-#. Network down script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:14
-msgid "Network down script"
-msgstr "Скрипт выключения сети"
-
-#. Script executed after a session has moved from authorized state to unauthorized
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:15
-msgid ""
-"Script executed after a session has moved from authorized state to "
-"unauthorized"
+msgid "UAM and MAC Authentication"
 msgstr ""
 
-#. Network up script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:16
-msgid "Network up script"
-msgstr "Скрипт включения сети"
-
-#. Script executed after the tun network interface has been brought up
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:17
-msgid "Script executed after the tun network interface has been brought up"
-msgstr ""
-
-#. Primary DNS Server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:18
-msgid "Primary DNS Server"
-msgstr "Первичный DNS сервер"
-
-#. Secondary DNS Server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:20
-msgid "Secondary DNS Server"
-msgstr "Вторичный DNS сервер"
-
-#. Domain name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:22
-msgid "Domain name"
-msgstr "Доменное имя"
-
-#. Is used to inform the client about the domain name to use for DNS lookups
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:23
-msgid ""
-"Is used to inform the client about the domain name to use for DNS lookups"
-msgstr "Используется, чтобы сообщить клиенту имя домена при DNS поисках"
-
-#. Dynamic IP address pool
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:24
-msgid "Dynamic IP address pool"
-msgstr "Диапазон динамических IP адресов"
-
-#. Specifies a pool of dynamic IP addresses
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:25
-msgid "Specifies a pool of dynamic IP addresses"
-msgstr "Определяет диапазон динамических IP адресов"
-
-#. IP down script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:26
-msgid "IP down script"
-msgstr "Скрипт сброса IP-адреса"
-
-#. Script executed after the tun network interface has been taken down
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:27
-msgid "Script executed after the tun network interface has been taken down"
-msgstr ""
-
-#. IP up script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:28
-msgid "IP up script"
-msgstr "Скрипт установки IP-адреса"
-
-#. Script executed after the TUN/TAP network interface has been brought up
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:29
-msgid "Script executed after the TUN/TAP network interface has been brought up"
-msgstr "Скрипт, выполняемый после включения сетевого интерфейса TUN/TAP"
-
-#. Uplink subnet
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:30
-msgid "Uplink subnet"
-msgstr "Подсеть uplink'а"
-
-#. Network address of the uplink interface (CIDR notation)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:31
-msgid "Network address of the uplink interface (CIDR notation)"
-msgstr "Сетевой адрес uplink-интерфейса (в нотации CIDR)"
-
-#. Static IP address pool
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:32
-msgid "Static IP address pool"
-msgstr "Диапазон статических IP адресов"
-
-#. Specifies a pool of static IP addresses
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:33
-msgid "Specifies a pool of static IP addresses"
-msgstr "Определяет диапазон статических IP адресов"
-
-#. TUN/TAP device
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:34
-msgid "TUN/TAP device"
-msgstr "TUN/TAP устройство"
-
-#. The specific device to use for the TUN/TAP interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:35
-msgid "The specific device to use for the TUN/TAP interface"
-msgstr "Устройство для TUN/TAP интерфейса"
-
-#. TX queue length
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:36
-msgid "TX queue length"
-msgstr "Длина очереди TX"
-
-#. The TX queue length to set on the TUN/TAP interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:37
-msgid "The TX queue length to set on the TUN/TAP interface"
-msgstr "Длина TX очереди TUN/TAP интерфейса"
-
-#. Use TAP device
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:38
-msgid "Use TAP device"
-msgstr "Использовать устройство TAP"
-
-#. Use the TAP interface instead of TUN
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:39
-msgid "Use the TAP interface instead of TUN"
-msgstr "Использовать интерфейс TAP вместо TUN"
-
-#. DHCP configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:40
-msgid "DHCP configuration"
-msgstr "Настройки DHCP"
-
-#. Set DHCP options for connecting clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:41
-msgid "Set DHCP options for connecting clients"
-msgstr "Установите параметры DHCP для подключения клиентов"
-
-#. DHCP end number
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:42
-msgid "DHCP end number"
-msgstr "Конечное значение DHCP"
-
-#. Where to stop assigning IP addresses (default 254)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:43
-msgid "Where to stop assigning IP addresses (default 254)"
-msgstr ""
-
-#. DHCP interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:44
-msgid "DHCP interface"
-msgstr "DHCP интерфейс"
-
-#. Ethernet interface to listen to for the downlink interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:45
-msgid "Ethernet interface to listen to for the downlink interface"
-msgstr "Ethernet интерфейс для прослушивания downlink-интерфеса"
-
-#. Listen MAC address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:46
-msgid "Listen MAC address"
-msgstr "Прослушиваемые MAC адреса"
-
-#. MAC address to listen to. If not specified the MAC address of the interface will be used
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:47
-msgid ""
-"MAC address to listen to. If not specified the MAC address of the interface "
-"will be used"
-msgstr ""
-
-#. DHCP start number
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:48
-msgid "DHCP start number"
-msgstr "Начальное значение DHCP"
-
-#. Where to start assigning IP addresses (default 10)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:49
-msgid "Where to start assigning IP addresses (default 10)"
-msgstr "Начать присвоения IP-адресов с (по умолчанию 10)"
-
-#. Enable IEEE 802.1x
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:50
-msgid "Enable IEEE 802.1x"
-msgstr "Включить IEEE 802.1x"
-
-#. Enable IEEE 802.1x authentication and listen for EAP requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:51
-msgid "Enable IEEE 802.1x authentication and listen for EAP requests"
-msgstr "Включить IEEE 802.1x аутентификацию и обработку запросов EAP"
-
-#. Leasetime
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:52
-msgid "Leasetime"
-msgstr "Время аренды"
-
-#. Use a DHCP lease of seconds (default 600)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:53
-msgid "Use a DHCP lease of seconds (default 600)"
-msgstr "Использовать DHCP аренду заданное время (секунды, 600 по умолчанию)"
-
-#. Allow session update through RADIUS
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:56
-msgid "Allow session update through RADIUS"
-msgstr "Разрешить обновление сессии через RADIUS"
-
-#. Allow updating of session parameters with RADIUS attributes sent in Accounting-Response
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:57
-msgid ""
-"Allow updating of session parameters with RADIUS attributes sent in "
-"Accounting-Response"
-msgstr ""
-"Разрешить обновление параметров сессии используя RADIUS атрибуты посланные "
-"через Accounting-Response"
-
-#. Admin password
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:58
-msgid "Admin password"
-msgstr "Пароль администратора"
-
-#. Password to use for Administrative-User authentication in order to pick up chilli configurations and establish a device \"system\" session
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:59
-msgid ""
-"Password to use for Administrative-User authentication in order to pick up "
-"chilli configurations and establish a device \"system\" session"
-msgstr ""
-"Пароль администратора для аутентификации пользователя и применения настроек "
-"chilli с созданием \"системной\" сессии устройства"
-
-#. Admin user
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:60
-msgid "Admin user"
-msgstr "Администратор"
-
-#. User-name to use for Administrative-User authentication in order to pick up chilli configurations and establish a device \"system\" session
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:61
-msgid ""
-"User-name to use for Administrative-User authentication in order to pick up "
-"chilli configurations and establish a device \"system\" session"
-msgstr ""
-"Имя администратора для аутентификации пользователя и применения настроек "
-"chilli с созданием \"системной\" сессии устройства"
-
-#. Do not check disconnection requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:62
-msgid "Do not check disconnection requests"
-msgstr "Не проверять запросы на разъединение"
-
-#. Do not check the source IP address of radius disconnect requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:63
-msgid "Do not check the source IP address of radius disconnect requests"
-msgstr "Не проверять IP-адрес запросов разъединения radius"
-
-#. RADIUS disconnect port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:64
-msgid "RADIUS disconnect port"
-msgstr "Порт разъединения RADIUS"
-
-#. UDP port to listen to for accepting radius disconnect requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:65
-msgid "UDP port to listen to for accepting radius disconnect requests"
-msgstr "UDP порт для запросов разъединения RADIUS"
-
-#. NAS IP
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:66
-msgid "NAS IP"
-msgstr "IP-адрес NAS"
-
-#. Value to use in RADIUS NAS-IP-Address attribute
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:67
-msgid "Value to use in RADIUS NAS-IP-Address attribute"
-msgstr "Значение RADIUS NAS-IP-Address атрибута"
-
-#. NAS MAC
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:68
-msgid "NAS MAC"
-msgstr "MAC адрес NAS"
-
-#. MAC address value to use in RADIUS Called-Station-ID attribute
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:69
-msgid "MAC address value to use in RADIUS Called-Station-ID attribute"
-msgstr "Значение MAC адреса RADIUS Called-Station-ID атрибута"
-
-#. Allow OpenID authentication
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:70
-msgid "Allow OpenID authentication"
-msgstr "Разрешить OpenID аутентификацию"
-
-#. Allows OpenID authentication by sending ChilliSpot-Config=allow-openidauth in RADIUS Access-Requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:71
-msgid ""
-"Allows OpenID authentication by sending ChilliSpot-Config=allow-openidauth "
-"in RADIUS Access-Requests"
-msgstr ""
-"Разрешает аутентификацию OpenID, посылая ChilliSpot-Config=allow-openidauth "
-"в запросах доступа RADIUS."
-
-#. RADIUS accounting port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:72
-msgid "RADIUS accounting port"
-msgstr "Порт RADIUS Accounting"
-
-#. The UDP port number to use for radius accounting requests (default 1813)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:73
-msgid ""
-"The UDP port number to use for radius accounting requests (default 1813)"
-msgstr "Порт UDP для запросов RADIUS Accounting (1813 по умолчанию)"
-
-#. RADIUS authentication port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:74
-msgid "RADIUS authentication port"
-msgstr "Порт аутентификации RADIUS"
-
-#. The UDP port number to use for radius authentication requests (default 1812)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:75
-msgid ""
-"The UDP port number to use for radius authentication requests (default 1812)"
-msgstr "UDP порт для запросов аутентификации radius (1812 по умолчанию)"
-
-#. Option radiuscalled
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:76
-msgid "Option radiuscalled"
-msgstr ""
-
-#. RADIUS listen address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:77
-msgid "RADIUS listen address"
-msgstr "Слушающий адрес RADIUS"
-
-#. Local interface IP address to use for the radius interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:78
-msgid "Local interface IP address to use for the radius interface"
-msgstr "IP адрес локального интерфейса для интерфейса radius"
-
-#. RADIUS location ID
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:79
-msgid "RADIUS location ID"
-msgstr "Идентификатор расположения RADIUS"
-
-#. WISPr Location ID
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:80
-msgid "WISPr Location ID"
-msgstr "Идентификатор расположения WISPr"
-
-#. RADIUS location name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:81
-msgid "RADIUS location name"
-msgstr "Имя расположения RADIUS"
-
-#. WISPr Location Name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:82
-msgid "WISPr Location Name"
-msgstr "Имя расположения WISPr"
-
-#. NAS ID
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:83
-msgid "NAS ID"
-msgstr "Идентификатор NAS"
-
-#. Network access server identifier
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:84
-msgid "Network access server identifier"
-msgstr "Идентификатор сервера доступа к сети (NAS)"
-
-#. Option radiusnasip
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:85
-msgid "Option radiusnasip"
-msgstr "Опция radiusnasip"
-
-#. NAS port type
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:86
-msgid "NAS port type"
-msgstr "Тип порта NAS"
-
-#. Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:87
-msgid "Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)"
-msgstr "Значение аттрибута NAS-Port-Type. По умолчанию 19 (IEEE-802.11)"
-
-#. Send RADIUS VSA
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:88
-msgid "Send RADIUS VSA"
-msgstr "Отсылать RADIUS VSA"
-
-#. Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:89
-msgid "Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request"
-msgstr "Отсылать ChilliSpot-OriginalURL RADIUS VSA в запросах доступа"
-
-#. RADIUS secret
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:90
-msgid "RADIUS secret"
-msgstr "Секрет RADIUS"
-
-#. Radius shared secret for both servers
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:91
-msgid "Radius shared secret for both servers"
-msgstr "Общий секрет RADIUS для обоих серверов"
-
-#. RADIUS server 1
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:92
-msgid "RADIUS server 1"
-msgstr "RADIUS сервер 1"
-
-#. The IP address of radius server 1
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:93
-msgid "The IP address of radius server 1"
-msgstr "IP адрес RADIUS сервера 1"
-
-#. RADIUS server 2
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:94
-msgid "RADIUS server 2"
-msgstr "RADIUS сервер 2"
-
-#. The IP address of radius server 2
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:95
-msgid "The IP address of radius server 2"
-msgstr "IP адрес RADIUS сервера 2"
-
-#. Swap octets
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:96
-msgid "Swap octets"
-msgstr "Переставлять октеты"
-
-#. Swap the meaning of \"input octets\" and \"output octets\" as it related to RADIUS attribtues
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:97
-msgid ""
-"Swap the meaning of \"input octets\" and \"output octets\" as it related to "
-"RADIUS attribtues"
-msgstr "Менять местами значения \"входной октет\" и \"выходной октет\""
-
-#. Allow WPA guests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:98
-msgid "Allow WPA guests"
-msgstr "Разрешить гостевой WPA вход"
-
-#. Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-guests in RADIUS Access-Requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:99
-msgid ""
-"Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-"
-"guests in RADIUS Access-Requests"
-msgstr ""
-"Разрешает гстевую WPA аутентификацию, отсылая ChilliSpot-Config=allow-wpa-"
-"guests в запросах доступа RADIUS"
-
-#. Proxy client
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:102
-msgid "Proxy client"
-msgstr "Клиент прокси"
-
-#. IP address from which radius requests are accepted. If omitted the server will not accept radius requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:103
-msgid ""
-"IP address from which radius requests are accepted. If omitted the server "
-"will not accept radius requests"
-msgstr ""
-"IP адрес с которого запросы radius принимаются. Если не указан, то сервер не "
-"будет принимать запросы radius"
-
-#. Proxy listen address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:104
-msgid "Proxy listen address"
-msgstr ""
-
-#. Local interface IP address to use for accepting radius requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:105
-msgid "Local interface IP address to use for accepting radius requests"
-msgstr "IP адрес локального интерфейса для приема запросов radius"
-
-#. Proxy port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:106
-msgid "Proxy port"
-msgstr "Порт прокси"
-
-#. UDP Port to listen to for accepting radius requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:107
-msgid "UDP Port to listen to for accepting radius requests"
-msgstr "Порт UDP для запросов RADIUS"
-
-#. Proxy secret
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:108
-msgid "Proxy secret"
-msgstr "Секрет прокси"
-
-#. Radius shared secret for clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:109
-msgid "Radius shared secret for clients"
-msgstr "Общий RADIUS секрет для клиентов"
-
-#. UAM configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:110
-msgid "UAM configuration"
-msgstr "Конфигурация UAM"
-
-#. Unified Configuration Method settings
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:111
-msgid "Unified Configuration Method settings"
-msgstr "Настройки UAM"
-
-#. Use Chilli XML
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:112
-msgid "Use Chilli XML"
-msgstr "Использовать Chilli XML"
-
-#. Return the so-called Chilli XML along with WISPr XML
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:113
-msgid "Return the so-called Chilli XML along with WISPr XML"
-msgstr "Возвращать так называемый Chilli XML вместе с WISPr XML"
-
-#. Default idle timeout
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:114
-msgid "Default idle timeout"
-msgstr "Таймаут ожидания по умолчанию"
-
-#. Default idle timeout unless otherwise set by RADIUS (defaults to 0)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:115
-msgid "Default idle timeout unless otherwise set by RADIUS (defaults to 0)"
-msgstr ""
-"Таймаут ожидания по умолчанию если не установлен RADIUS'ом (0 по умолчанию)"
-
-#. Default interim interval
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:116
-msgid "Default interim interval"
-msgstr ""
-
-#. Default interim-interval for RADIUS accounting unless otherwise set by RADIUS (defaults to 0)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:117
-msgid ""
-"Default interim-interval for RADIUS accounting unless otherwise set by "
-"RADIUS (defaults to 0)"
-msgstr ""
-
-#. Default session timeout
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:118
-msgid "Default session timeout"
-msgstr "Таймаут сессии (значение по умолчанию)"
-
-#. Default session timeout unless otherwise set by RADIUS (defaults to 0)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:119
-msgid "Default session timeout unless otherwise set by RADIUS (defaults to 0)"
-msgstr ""
-"Таймаут сессии по умолчанию если не установлено RADIUS'ом (0 по умолчанию)"
-
-#. Inspect DNS traffic
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:120
-msgid "Inspect DNS traffic"
-msgstr "Инспектировать траффик DNS"
-
-#. Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX records to prevent dns tunnels (experimental)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:121
-msgid ""
-"Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX "
-"records to prevent dns tunnels (experimental)"
-msgstr ""
-"Проверять DNS пакеты и отбрасывать ответы без A, CNAME, SOA, или MX записей "
-"для предотвращения DNS туннелей (экспериментальная ф-ция)."
-
-#. Local users file
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:122
-msgid "Local users file"
-msgstr "Локальный файл пользователей"
-
-#. A colon seperated file containing usernames and passwords of locally authenticated users
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:123
-msgid ""
-"A colon seperated file containing usernames and passwords of locally "
-"authenticated users"
-msgstr ""
-"Файл, содержащий логины и пароли локально авторизованных пользователей "
-"(записи разделены двоеточием)"
-
-#. Location name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:124
-msgid "Location name"
-msgstr "Имя расположения"
-
-#. Human readable location name used in JSON interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:125
-msgid "Human readable location name used in JSON interface"
-msgstr "Имя расположения, используемой в интерфейсе JSON"
-
-#. Do not redirect to UAM server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:126
-msgid "Do not redirect to UAM server"
-msgstr "Не перенаправлять на сервер UAM"
-
-#. Do not return to UAM server on login success, just redirect to original URL
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:127
-msgid ""
-"Do not return to UAM server on login success, just redirect to original URL"
-msgstr ""
-"Не возвращаться на UAM сервер при удачном входе, перенаправить на исходный "
-"URL"
-
-#. Do not do WISPr
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:128
-msgid "Do not do WISPr"
-msgstr "Не выполнять WISPr"
-
-#. Do not do any WISPr XML, assume the back-end is doing this instead
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:129
-msgid "Do not do any WISPr XML, assume the back-end is doing this instead"
-msgstr "Не выполнять WISPr XML, предполагая выполнение в бэкенд'е"
-
-#. Post auth proxy
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:130
-msgid "Post auth proxy"
-msgstr "Прокси пост-аутентификации"
-
-#. Used with postauthproxyport to define a post authentication HTTP proxy server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:131
-msgid ""
-"Used with postauthproxyport to define a post authentication HTTP proxy server"
-msgstr ""
-"Используется с портом прокси пост-аутентификации для определения HTTP "
-"прокси-сервера аутентификации"
-
-#. Post auth proxy port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:132
-msgid "Post auth proxy port"
-msgstr "Порт прокси пост-аутентификации"
-
-#. Used with postauthproxy to define a post authentication HTTP proxy server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:133
-msgid ""
-"Used with postauthproxy to define a post authentication HTTP proxy server"
-msgstr ""
-"Ипользуется с прокси пост-аутентификации для определения HTTP прокси-сервера "
-"пост-аутентификации"
-
-#. Allowed resources
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:134
-msgid "Allowed resources"
-msgstr "Разрешенные ресурсы"
-
-#. List of resources the client can access without first authenticating
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:135
-msgid "List of resources the client can access without first authenticating"
-msgstr ""
-"Список ресурсов к которым клиент может получить доступ без предварительной "
-"аутентификации"
-
-#. Allow any DNS server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:136
-msgid "Allow any DNS server"
-msgstr "Разрешить любой DNS сервер"
-
-#. Allow any DNS server for unauthenticated clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:137
-msgid "Allow any DNS server for unauthenticated clients"
-msgstr "Разрешить любой DNS сервер для клиентов не прошедших аутентификацию"
-
-#. Allow any IP address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:138
-msgid "Allow any IP address"
-msgstr "Разрешить любой IP-адрес"
-
-#. Allow clients to use any IP settings they wish by spoofing ARP (experimental)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:139
-msgid ""
-"Allow clients to use any IP settings they wish by spoofing ARP (experimental)"
-msgstr ""
-"Разрешить клиентам использовать любые настройки IP за счет \"спуфинга\" ARP "
-"(экспериментальная ф-ция)"
-
-#. Allowed domains
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:140
-msgid "Allowed domains"
-msgstr "Разрешенные домены"
-
-#. Defines a list of domain names to automatically add to the walled garden
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:141
-msgid ""
-"Defines a list of domain names to automatically add to the walled garden"
-msgstr ""
-
-#. UAM homepage
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:142
-msgid "UAM homepage"
-msgstr "Домашняя страница UAM"
-
-#. URL of homepage to redirect unauthenticated users to
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:143
-msgid "URL of homepage to redirect unauthenticated users to"
-msgstr ""
-"URL домашней страницы для перенаправления пользователей не прошедших "
-"аутентификацию"
-
-#. UAM static content port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:144
-msgid "UAM static content port"
-msgstr "Порт UAM статического контента"
-
-#. TCP port to bind to for only serving embedded content
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:145
-msgid "TCP port to bind to for only serving embedded content"
-msgstr ""
-
-#. UAM listening address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:146
-msgid "UAM listening address"
-msgstr "Слашающий адрес UAM"
-
-#. IP address to listen to for authentication of clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:147
-msgid "IP address to listen to for authentication of clients"
-msgstr "IP адрес для приема аутентификации клиентов"
-
-#. UAM logout IP
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:148
-msgid "UAM logout IP"
-msgstr "IP-адрес выхода UAM"
-
-#. Use this IP address to instantly logout a client accessing it (defaults to 1.1.1.1)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:149
-msgid ""
-"Use this IP address to instantly logout a client accessing it (defaults to "
-"1.1.1.1)"
-msgstr ""
-
-#. UAM listening port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:150
-msgid "UAM listening port"
-msgstr "Слушающий порт UAM"
-
-#. TCP port to bind to for authenticating clients (default 3990)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:151
-msgid "TCP port to bind to for authenticating clients (default 3990)"
-msgstr ""
-
-#. UAM secret
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:152
-msgid "UAM secret"
-msgstr "Секрет UAM"
-
-#. Shared secret between uamserver and chilli
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:153
-msgid "Shared secret between uamserver and chilli"
-msgstr "Общий секрет для сервера UAM и Chilli"
-
-#. UAM server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:154
-msgid "UAM server"
-msgstr "Сервер UAM"
-
-#. URL of web server to use for authenticating clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:155
-msgid "URL of web server to use for authenticating clients"
-msgstr "URL или веб-сервер для аутентификации клиентов"
-
-#. UAM user interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:156
-msgid "UAM user interface"
-msgstr "Интерфейс пользователя UAM"
-
-#. An init.d style program to handle local content on the uamuiport web server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:157
-msgid ""
-"An init.d style program to handle local content on the uamuiport web server"
-msgstr ""
-
-#. Use status file
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:158
-msgid "Use status file"
-msgstr "Использовать статус-файл"
-
-#. Write the status of clients in a non-volatile state file (experimental)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:159
-msgid "Write the status of clients in a non-volatile state file (experimental)"
-msgstr ""
-
-#. WISPr login url
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:160
-msgid "WISPr login url"
-msgstr "URL входа WISPr"
-
-#. Specific URL to be given in WISPr XML LoginURL
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:161
-msgid "Specific URL to be given in WISPr XML LoginURL"
-msgstr "Особый URL в WISPr XML LoginURL"
-
-#. CGI program
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:162
-msgid "CGI program"
-msgstr "Программа GCI"
-
-#. Executable to run as a CGI type program (like haserl) for URLs with extention .chi
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:163
-msgid ""
-"Executable to run as a CGI type program (like haserl) for URLs with "
-"extention .chi"
-msgstr ""
-
-#. Web content directory
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:164
-msgid "Web content directory"
-msgstr "Директория Web-контента"
-
-#. Directory where embedded local web content is placed
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:165
-msgid "Directory where embedded local web content is placed"
-msgstr "Директория куда будет помещен встроенный Web-контент"
-
-#. MAC configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:166
-msgid "MAC configuration"
-msgstr "Настройка MAC"
-
-#. Configure MAC authentication
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:167
-msgid "Configure MAC authentication"
-msgstr "Настройка аутентификации по MAC адресу"
-
-#. Allowed MAC addresses
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:168
-msgid "Allowed MAC addresses"
-msgstr "Разрешенные MAC адреса"
-
-#. List of MAC addresses for which MAC authentication will be performed
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:169
-msgid "List of MAC addresses for which MAC authentication will be performed"
-msgstr "Список MAC адресов для которых будет производиться аутентификация"
-
-#. Authenticate locally allowed MACs
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:170
-msgid "Authenticate locally allowed MACs"
-msgstr "Аутентифицировать локально разрешенные MAC адреса"
-
-#. Authenticate allowed MAC addresses without the use of RADIUS
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:171
-msgid "Authenticate allowed MAC addresses without the use of RADIUS"
-msgstr "Аутентифицировать разрешенные MAC адреса без использования RADIUS"
-
-#. Enable MAC authentification
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:172
-msgid "Enable MAC authentification"
-msgstr "Разрешить MAC аутентификацию"
-
-#. Try to authenticate all users based on their mac address alone
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:173
-msgid "Try to authenticate all users based on their mac address alone"
-msgstr ""
-"Пробовать аутентификацию всех пользователей только на основе их MAC адресов"
-
-#. Password
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:174
-msgid "Password"
-msgstr "Пароль"
-
-#. Password used when performing MAC authentication
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:175
-msgid "Password used when performing MAC authentication"
-msgstr "Пароль для MAC аутентификации"
-
-#. Suffix
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:176
-msgid "Suffix"
-msgstr "Суффикс"
-
-#. Suffix to add to the MAC address in order to form the User-Name, which is sent to the radius server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:177
-msgid ""
-"Suffix to add to the MAC address in order to form the User-Name, which is "
-"sent to the radius server"
-msgstr ""
-"Суффикс, добавляемый в MAC адрес, для формирования имени пользователя, "
-"которое посылается radius серверу"
+#~ msgid "General configuration"
+#~ msgstr "Общие настройки"
+
+#~ msgid "General CoovaChilli settings"
+#~ msgstr "Общие настройки CoovaChilli"
+
+#~ msgid "Command socket"
+#~ msgstr "Сокет команд"
+
+#~ msgid "UNIX socket used for communication with chilli_query"
+#~ msgstr "UNIX сокет для связи с chilli_query"
+
+#~ msgid "Config refresh interval"
+#~ msgstr "Интервал обновления конфигурации"
+
+#~ msgid ""
+#~ "Re-read configuration file and do DNS lookups every interval seconds. "
+#~ "This has the same effect as sending the HUP signal. If interval is 0 "
+#~ "(zero) this feature is disabled. "
+#~ msgstr ""
+#~ "Считывание файла конфигурации и запуск DNS поиска раз в указанный "
+#~ "интервал. Достигается тот же эффект что и при отсылке HUP сигнала. "
+#~ "Значение интервала выражено в секундах. В случае указания нулевого "
+#~ "значения интервала, данная функция становится неактивной."
+
+#~ msgid "Pid file"
+#~ msgstr "Pid файл"
+
+#~ msgid "Filename to put the process id"
+#~ msgstr "Имя файла, который будет содержать идентификатор процесса (PID)"
+
+#~ msgid "State directory"
+#~ msgstr "Директория состояния"
+
+#~ msgid "TUN/TAP configuration"
+#~ msgstr "TUN/TAP конфигурация"
+
+#~ msgid "Network down script"
+#~ msgstr "Скрипт выключения сети"
+
+#~ msgid "Network up script"
+#~ msgstr "Скрипт включения сети"
+
+#~ msgid "Primary DNS Server"
+#~ msgstr "Первичный DNS сервер"
+
+#~ msgid "Secondary DNS Server"
+#~ msgstr "Вторичный DNS сервер"
+
+#~ msgid "Domain name"
+#~ msgstr "Доменное имя"
+
+#~ msgid ""
+#~ "Is used to inform the client about the domain name to use for DNS lookups"
+#~ msgstr "Используется, чтобы сообщить клиенту имя домена при DNS поисках"
+
+#~ msgid "Dynamic IP address pool"
+#~ msgstr "Диапазон динамических IP адресов"
+
+#~ msgid "Specifies a pool of dynamic IP addresses"
+#~ msgstr "Определяет диапазон динамических IP адресов"
+
+#~ msgid "IP down script"
+#~ msgstr "Скрипт сброса IP-адреса"
+
+#~ msgid "IP up script"
+#~ msgstr "Скрипт установки IP-адреса"
+
+#~ msgid ""
+#~ "Script executed after the TUN/TAP network interface has been brought up"
+#~ msgstr "Скрипт, выполняемый после включения сетевого интерфейса TUN/TAP"
+
+#~ msgid "Uplink subnet"
+#~ msgstr "Подсеть uplink'а"
+
+#~ msgid "Network address of the uplink interface (CIDR notation)"
+#~ msgstr "Сетевой адрес uplink-интерфейса (в нотации CIDR)"
+
+#~ msgid "Static IP address pool"
+#~ msgstr "Диапазон статических IP адресов"
+
+#~ msgid "Specifies a pool of static IP addresses"
+#~ msgstr "Определяет диапазон статических IP адресов"
+
+#~ msgid "TUN/TAP device"
+#~ msgstr "TUN/TAP устройство"
+
+#~ msgid "The specific device to use for the TUN/TAP interface"
+#~ msgstr "Устройство для TUN/TAP интерфейса"
+
+#~ msgid "TX queue length"
+#~ msgstr "Длина очереди TX"
+
+#~ msgid "The TX queue length to set on the TUN/TAP interface"
+#~ msgstr "Длина TX очереди TUN/TAP интерфейса"
+
+#~ msgid "Use TAP device"
+#~ msgstr "Использовать устройство TAP"
+
+#~ msgid "Use the TAP interface instead of TUN"
+#~ msgstr "Использовать интерфейс TAP вместо TUN"
+
+#~ msgid "DHCP configuration"
+#~ msgstr "Настройки DHCP"
+
+#~ msgid "Set DHCP options for connecting clients"
+#~ msgstr "Установите параметры DHCP для подключения клиентов"
+
+#~ msgid "DHCP end number"
+#~ msgstr "Конечное значение DHCP"
+
+#~ msgid "DHCP interface"
+#~ msgstr "DHCP интерфейс"
+
+#~ msgid "Ethernet interface to listen to for the downlink interface"
+#~ msgstr "Ethernet интерфейс для прослушивания downlink-интерфеса"
+
+#~ msgid "Listen MAC address"
+#~ msgstr "Прослушиваемые MAC адреса"
+
+#~ msgid "DHCP start number"
+#~ msgstr "Начальное значение DHCP"
+
+#~ msgid "Where to start assigning IP addresses (default 10)"
+#~ msgstr "Начать присвоения IP-адресов с (по умолчанию 10)"
+
+#~ msgid "Enable IEEE 802.1x"
+#~ msgstr "Включить IEEE 802.1x"
+
+#~ msgid "Enable IEEE 802.1x authentication and listen for EAP requests"
+#~ msgstr "Включить IEEE 802.1x аутентификацию и обработку запросов EAP"
+
+#~ msgid "Leasetime"
+#~ msgstr "Время аренды"
+
+#~ msgid "Use a DHCP lease of seconds (default 600)"
+#~ msgstr "Использовать DHCP аренду заданное время (секунды, 600 по умолчанию)"
+
+#~ msgid "Allow session update through RADIUS"
+#~ msgstr "Разрешить обновление сессии через RADIUS"
+
+#~ msgid ""
+#~ "Allow updating of session parameters with RADIUS attributes sent in "
+#~ "Accounting-Response"
+#~ msgstr ""
+#~ "Разрешить обновление параметров сессии используя RADIUS атрибуты "
+#~ "посланные через Accounting-Response"
+
+#~ msgid "Admin password"
+#~ msgstr "Пароль администратора"
+
+#~ msgid ""
+#~ "Password to use for Administrative-User authentication in order to pick "
+#~ "up chilli configurations and establish a device \"system\" session"
+#~ msgstr ""
+#~ "Пароль администратора для аутентификации пользователя и применения "
+#~ "настроек chilli с созданием \"системной\" сессии устройства"
+
+#~ msgid "Admin user"
+#~ msgstr "Администратор"
+
+#~ msgid ""
+#~ "User-name to use for Administrative-User authentication in order to pick "
+#~ "up chilli configurations and establish a device \"system\" session"
+#~ msgstr ""
+#~ "Имя администратора для аутентификации пользователя и применения настроек "
+#~ "chilli с созданием \"системной\" сессии устройства"
+
+#~ msgid "Do not check disconnection requests"
+#~ msgstr "Не проверять запросы на разъединение"
+
+#~ msgid "Do not check the source IP address of radius disconnect requests"
+#~ msgstr "Не проверять IP-адрес запросов разъединения radius"
+
+#~ msgid "RADIUS disconnect port"
+#~ msgstr "Порт разъединения RADIUS"
+
+#~ msgid "UDP port to listen to for accepting radius disconnect requests"
+#~ msgstr "UDP порт для запросов разъединения RADIUS"
+
+#~ msgid "NAS IP"
+#~ msgstr "IP-адрес NAS"
+
+#~ msgid "Value to use in RADIUS NAS-IP-Address attribute"
+#~ msgstr "Значение RADIUS NAS-IP-Address атрибута"
+
+#~ msgid "NAS MAC"
+#~ msgstr "MAC адрес NAS"
+
+#~ msgid "MAC address value to use in RADIUS Called-Station-ID attribute"
+#~ msgstr "Значение MAC адреса RADIUS Called-Station-ID атрибута"
+
+#~ msgid "Allow OpenID authentication"
+#~ msgstr "Разрешить OpenID аутентификацию"
+
+#~ msgid ""
+#~ "Allows OpenID authentication by sending ChilliSpot-Config=allow-"
+#~ "openidauth in RADIUS Access-Requests"
+#~ msgstr ""
+#~ "Разрешает аутентификацию OpenID, посылая ChilliSpot-Config=allow-"
+#~ "openidauth в запросах доступа RADIUS."
+
+#~ msgid "RADIUS accounting port"
+#~ msgstr "Порт RADIUS Accounting"
+
+#~ msgid ""
+#~ "The UDP port number to use for radius accounting requests (default 1813)"
+#~ msgstr "Порт UDP для запросов RADIUS Accounting (1813 по умолчанию)"
+
+#~ msgid "RADIUS authentication port"
+#~ msgstr "Порт аутентификации RADIUS"
+
+#~ msgid ""
+#~ "The UDP port number to use for radius authentication requests (default "
+#~ "1812)"
+#~ msgstr "UDP порт для запросов аутентификации radius (1812 по умолчанию)"
+
+#~ msgid "RADIUS listen address"
+#~ msgstr "Слушающий адрес RADIUS"
+
+#~ msgid "Local interface IP address to use for the radius interface"
+#~ msgstr "IP адрес локального интерфейса для интерфейса radius"
+
+#~ msgid "RADIUS location ID"
+#~ msgstr "Идентификатор расположения RADIUS"
+
+#~ msgid "WISPr Location ID"
+#~ msgstr "Идентификатор расположения WISPr"
+
+#~ msgid "RADIUS location name"
+#~ msgstr "Имя расположения RADIUS"
+
+#~ msgid "WISPr Location Name"
+#~ msgstr "Имя расположения WISPr"
+
+#~ msgid "NAS ID"
+#~ msgstr "Идентификатор NAS"
+
+#~ msgid "Network access server identifier"
+#~ msgstr "Идентификатор сервера доступа к сети (NAS)"
+
+#~ msgid "Option radiusnasip"
+#~ msgstr "Опция radiusnasip"
+
+#~ msgid "NAS port type"
+#~ msgstr "Тип порта NAS"
+
+#~ msgid ""
+#~ "Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)"
+#~ msgstr "Значение аттрибута NAS-Port-Type. По умолчанию 19 (IEEE-802.11)"
+
+#~ msgid "Send RADIUS VSA"
+#~ msgstr "Отсылать RADIUS VSA"
+
+#~ msgid "Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request"
+#~ msgstr "Отсылать ChilliSpot-OriginalURL RADIUS VSA в запросах доступа"
+
+#~ msgid "RADIUS secret"
+#~ msgstr "Секрет RADIUS"
+
+#~ msgid "Radius shared secret for both servers"
+#~ msgstr "Общий секрет RADIUS для обоих серверов"
+
+#~ msgid "RADIUS server 1"
+#~ msgstr "RADIUS сервер 1"
+
+#~ msgid "The IP address of radius server 1"
+#~ msgstr "IP адрес RADIUS сервера 1"
+
+#~ msgid "RADIUS server 2"
+#~ msgstr "RADIUS сервер 2"
+
+#~ msgid "The IP address of radius server 2"
+#~ msgstr "IP адрес RADIUS сервера 2"
+
+#~ msgid "Swap octets"
+#~ msgstr "Переставлять октеты"
+
+#~ msgid ""
+#~ "Swap the meaning of \"input octets\" and \"output octets\" as it related "
+#~ "to RADIUS attribtues"
+#~ msgstr "Менять местами значения \"входной октет\" и \"выходной октет\""
+
+#~ msgid "Allow WPA guests"
+#~ msgstr "Разрешить гостевой WPA вход"
+
+#~ msgid ""
+#~ "Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-"
+#~ "guests in RADIUS Access-Requests"
+#~ msgstr ""
+#~ "Разрешает гстевую WPA аутентификацию, отсылая ChilliSpot-Config=allow-wpa-"
+#~ "guests в запросах доступа RADIUS"
+
+#~ msgid "Proxy client"
+#~ msgstr "Клиент прокси"
+
+#~ msgid ""
+#~ "IP address from which radius requests are accepted. If omitted the server "
+#~ "will not accept radius requests"
+#~ msgstr ""
+#~ "IP адрес с которого запросы radius принимаются. Если не указан, то сервер "
+#~ "не будет принимать запросы radius"
+
+#~ msgid "Local interface IP address to use for accepting radius requests"
+#~ msgstr "IP адрес локального интерфейса для приема запросов radius"
+
+#~ msgid "Proxy port"
+#~ msgstr "Порт прокси"
+
+#~ msgid "UDP Port to listen to for accepting radius requests"
+#~ msgstr "Порт UDP для запросов RADIUS"
+
+#~ msgid "Proxy secret"
+#~ msgstr "Секрет прокси"
+
+#~ msgid "Radius shared secret for clients"
+#~ msgstr "Общий RADIUS секрет для клиентов"
+
+#~ msgid "UAM configuration"
+#~ msgstr "Конфигурация UAM"
+
+#~ msgid "Unified Configuration Method settings"
+#~ msgstr "Настройки UAM"
+
+#~ msgid "Use Chilli XML"
+#~ msgstr "Использовать Chilli XML"
+
+#~ msgid "Return the so-called Chilli XML along with WISPr XML"
+#~ msgstr "Возвращать так называемый Chilli XML вместе с WISPr XML"
+
+#~ msgid "Default idle timeout"
+#~ msgstr "Таймаут ожидания по умолчанию"
+
+#~ msgid "Default idle timeout unless otherwise set by RADIUS (defaults to 0)"
+#~ msgstr ""
+#~ "Таймаут ожидания по умолчанию если не установлен RADIUS'ом (0 по "
+#~ "умолчанию)"
+
+#~ msgid "Default session timeout"
+#~ msgstr "Таймаут сессии (значение по умолчанию)"
+
+#~ msgid ""
+#~ "Default session timeout unless otherwise set by RADIUS (defaults to 0)"
+#~ msgstr ""
+#~ "Таймаут сессии по умолчанию если не установлено RADIUS'ом (0 по умолчанию)"
+
+#~ msgid "Inspect DNS traffic"
+#~ msgstr "Инспектировать траффик DNS"
+
+#~ msgid ""
+#~ "Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX "
+#~ "records to prevent dns tunnels (experimental)"
+#~ msgstr ""
+#~ "Проверять DNS пакеты и отбрасывать ответы без A, CNAME, SOA, или MX "
+#~ "записей для предотвращения DNS туннелей (экспериментальная ф-ция)."
+
+#~ msgid "Local users file"
+#~ msgstr "Локальный файл пользователей"
+
+#~ msgid ""
+#~ "A colon seperated file containing usernames and passwords of locally "
+#~ "authenticated users"
+#~ msgstr ""
+#~ "Файл, содержащий логины и пароли локально авторизованных пользователей "
+#~ "(записи разделены двоеточием)"
+
+#~ msgid "Location name"
+#~ msgstr "Имя расположения"
+
+#~ msgid "Human readable location name used in JSON interface"
+#~ msgstr "Имя расположения, используемой в интерфейсе JSON"
+
+#~ msgid "Do not redirect to UAM server"
+#~ msgstr "Не перенаправлять на сервер UAM"
+
+#~ msgid ""
+#~ "Do not return to UAM server on login success, just redirect to original "
+#~ "URL"
+#~ msgstr ""
+#~ "Не возвращаться на UAM сервер при удачном входе, перенаправить на "
+#~ "исходный URL"
+
+#~ msgid "Do not do WISPr"
+#~ msgstr "Не выполнять WISPr"
+
+#~ msgid "Do not do any WISPr XML, assume the back-end is doing this instead"
+#~ msgstr "Не выполнять WISPr XML, предполагая выполнение в бэкенд'е"
+
+#~ msgid "Post auth proxy"
+#~ msgstr "Прокси пост-аутентификации"
+
+#~ msgid ""
+#~ "Used with postauthproxyport to define a post authentication HTTP proxy "
+#~ "server"
+#~ msgstr ""
+#~ "Используется с портом прокси пост-аутентификации для определения HTTP "
+#~ "прокси-сервера аутентификации"
+
+#~ msgid "Post auth proxy port"
+#~ msgstr "Порт прокси пост-аутентификации"
+
+#~ msgid ""
+#~ "Used with postauthproxy to define a post authentication HTTP proxy server"
+#~ msgstr ""
+#~ "Ипользуется с прокси пост-аутентификации для определения HTTP прокси-"
+#~ "сервера пост-аутентификации"
+
+#~ msgid "Allowed resources"
+#~ msgstr "Разрешенные ресурсы"
+
+#~ msgid "List of resources the client can access without first authenticating"
+#~ msgstr ""
+#~ "Список ресурсов к которым клиент может получить доступ без "
+#~ "предварительной аутентификации"
+
+#~ msgid "Allow any DNS server"
+#~ msgstr "Разрешить любой DNS сервер"
+
+#~ msgid "Allow any DNS server for unauthenticated clients"
+#~ msgstr "Разрешить любой DNS сервер для клиентов не прошедших аутентификацию"
+
+#~ msgid "Allow any IP address"
+#~ msgstr "Разрешить любой IP-адрес"
+
+#~ msgid ""
+#~ "Allow clients to use any IP settings they wish by spoofing ARP "
+#~ "(experimental)"
+#~ msgstr ""
+#~ "Разрешить клиентам использовать любые настройки IP за счет \"спуфинга\" "
+#~ "ARP (экспериментальная ф-ция)"
+
+#~ msgid "Allowed domains"
+#~ msgstr "Разрешенные домены"
+
+#~ msgid "UAM homepage"
+#~ msgstr "Домашняя страница UAM"
+
+#~ msgid "URL of homepage to redirect unauthenticated users to"
+#~ msgstr ""
+#~ "URL домашней страницы для перенаправления пользователей не прошедших "
+#~ "аутентификацию"
+
+#~ msgid "UAM static content port"
+#~ msgstr "Порт UAM статического контента"
+
+#~ msgid "UAM listening address"
+#~ msgstr "Слашающий адрес UAM"
+
+#~ msgid "IP address to listen to for authentication of clients"
+#~ msgstr "IP адрес для приема аутентификации клиентов"
+
+#~ msgid "UAM logout IP"
+#~ msgstr "IP-адрес выхода UAM"
+
+#~ msgid "UAM listening port"
+#~ msgstr "Слушающий порт UAM"
+
+#~ msgid "UAM secret"
+#~ msgstr "Секрет UAM"
+
+#~ msgid "Shared secret between uamserver and chilli"
+#~ msgstr "Общий секрет для сервера UAM и Chilli"
+
+#~ msgid "UAM server"
+#~ msgstr "Сервер UAM"
+
+#~ msgid "URL of web server to use for authenticating clients"
+#~ msgstr "URL или веб-сервер для аутентификации клиентов"
+
+#~ msgid "UAM user interface"
+#~ msgstr "Интерфейс пользователя UAM"
+
+#~ msgid "Use status file"
+#~ msgstr "Использовать статус-файл"
+
+#~ msgid "WISPr login url"
+#~ msgstr "URL входа WISPr"
+
+#~ msgid "Specific URL to be given in WISPr XML LoginURL"
+#~ msgstr "Особый URL в WISPr XML LoginURL"
+
+#~ msgid "CGI program"
+#~ msgstr "Программа GCI"
+
+#~ msgid "Web content directory"
+#~ msgstr "Директория Web-контента"
+
+#~ msgid "Directory where embedded local web content is placed"
+#~ msgstr "Директория куда будет помещен встроенный Web-контент"
+
+#~ msgid "MAC configuration"
+#~ msgstr "Настройка MAC"
+
+#~ msgid "Configure MAC authentication"
+#~ msgstr "Настройка аутентификации по MAC адресу"
+
+#~ msgid "Allowed MAC addresses"
+#~ msgstr "Разрешенные MAC адреса"
+
+#~ msgid "List of MAC addresses for which MAC authentication will be performed"
+#~ msgstr "Список MAC адресов для которых будет производиться аутентификация"
+
+#~ msgid "Authenticate locally allowed MACs"
+#~ msgstr "Аутентифицировать локально разрешенные MAC адреса"
+
+#~ msgid "Authenticate allowed MAC addresses without the use of RADIUS"
+#~ msgstr "Аутентифицировать разрешенные MAC адреса без использования RADIUS"
+
+#~ msgid "Enable MAC authentification"
+#~ msgstr "Разрешить MAC аутентификацию"
+
+#~ msgid "Try to authenticate all users based on their mac address alone"
+#~ msgstr ""
+#~ "Пробовать аутентификацию всех пользователей только на основе их MAC "
+#~ "адресов"
+
+#~ msgid "Password"
+#~ msgstr "Пароль"
+
+#~ msgid "Password used when performing MAC authentication"
+#~ msgstr "Пароль для MAC аутентификации"
+
+#~ msgid "Suffix"
+#~ msgstr "Суффикс"
+
+#~ msgid ""
+#~ "Suffix to add to the MAC address in order to form the User-Name, which is "
+#~ "sent to the radius server"
+#~ msgstr ""
+#~ "Суффикс, добавляемый в MAC адрес, для формирования имени пользователя, "
+#~ "которое посылается radius серверу"

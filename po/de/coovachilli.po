@@ -6,1054 +6,653 @@ msgstr ""
 "PO-Revision-Date: 2012-01-26 12:10+0200\n"
 "Last-Translator: Manuel <freifunk@somakoma.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.4\n"
 
-#. CoovaChilli
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:1
 msgid "CoovaChilli"
 msgstr "CoovaChilli"
 
-#. General configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:2
-msgid "General configuration"
-msgstr "Allgemeine Einstellungen"
-
-#. General CoovaChilli settings
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:3
-msgid "General CoovaChilli settings"
-msgstr "Allgemeine Einstellungen zu CoovaChilli"
-
-#. Command socket
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:4
-#, fuzzy
-msgid "Command socket"
-msgstr "Eingabeschnittstelle"
-
-#. UNIX socket used for communication with chilli_query
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:5
-msgid "UNIX socket used for communication with chilli_query"
-msgstr "UNIX socket der fuer die Kommunikation mit chilli_query benutzt wird"
-
-#. Config refresh interval
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:6
-#, fuzzy
-msgid "Config refresh interval"
-msgstr "Zeit zwischen neuladen der Konfiguration"
-
-#. Re-read configuration file and do DNS lookups every interval seconds. This has the same effect as sending the HUP signal. If interval is 0 (zero) this feature is disabled. 
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:7
-#, fuzzy
-msgid ""
-"Re-read configuration file and do DNS lookups every interval seconds. This "
-"has the same effect as sending the HUP signal. If interval is 0 (zero) this "
-"feature is disabled. "
-msgstr "Zeit zwischen neuladen der Konfiguration"
-
-#. Pid file
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:8
-msgid "Pid file"
-msgstr "<abbr title=\"Prozessindentifikationsnummer\">Pid</abbr>-Datei"
-
-#. Filename to put the process id
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:9
-msgid "Filename to put the process id"
-msgstr ""
-"Name der Datei, in der die <abbr title=\"Prozessindentifikationsnummer"
-"\">Pid</abbr> gespeichert wird"
-
-#. State directory
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:10
-#, fuzzy
-msgid "State directory"
-msgstr "Statisches Verzeichniss"
-
-#. Directory of non-volatile data
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:11
-msgid "Directory of non-volatile data"
-msgstr "Verzeichniss für statische Daten"
-
-#. TUN/TAP configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:12
-#, fuzzy
-msgid "TUN/TAP configuration"
-msgstr "TUN/TAP Konfiguration"
-
-#. Network/Tun configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:13
-#, fuzzy
-msgid "Network/Tun configuration"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Network down script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:14
-#, fuzzy
-msgid "Network down script"
-msgstr ""
-"Script, das nach einer Umwandlung von einer autorisierten zu einer "
-"unautorisierten Sitzung ausgeführt wird"
-
-#. Script executed after a session has moved from authorized state to unauthorized
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:15
-msgid ""
-"Script executed after a session has moved from authorized state to "
-"unauthorized"
-msgstr ""
-"Skript, das nach einer Umwandlung von einer autorisierten zu einer "
-"unautorisierten Sitzung ausgeführt wird"
-
-#. Network up script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:16
-msgid "Network up script"
-msgstr "Netzwerk Up Skript"
-
-#. Script executed after the tun network interface has been brought up
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:17
-#, fuzzy
-msgid "Script executed after the tun network interface has been brought up"
-msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
-
-#. Primary DNS Server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:18
-msgid "Primary DNS Server"
-msgstr "Primärer DNS-Server"
-
-#. Secondary DNS Server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:20
-msgid "Secondary DNS Server"
-msgstr "Sekundärer DNS-Server"
-
-#. Domain name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:22
-#, fuzzy
-msgid "Domain name"
-msgstr "Domain Name"
-
-#. Is used to inform the client about the domain name to use for DNS lookups
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:23
-msgid ""
-"Is used to inform the client about the domain name to use for DNS lookups"
-msgstr ""
-"Wird benutzt um Clients ueber den zu benutzenden Domain Namen fuer DNS "
-"Anfragen zu informieren"
-
-#. Dynamic IP address pool
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:24
-msgid "Dynamic IP address pool"
-msgstr "Dynamischer IP-Adressen Pool"
-
-#. Specifies a pool of dynamic IP addresses
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:25
-msgid "Specifies a pool of dynamic IP addresses"
-msgstr "Legt einen Bereich von dynamischen IP-Adressen fest"
-
-#. IP down script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:26
-msgid "IP down script"
-msgstr "IP down Skript"
-
-#. Script executed after the tun network interface has been taken down
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:27
-#, fuzzy
-msgid "Script executed after the tun network interface has been taken down"
-msgstr ""
-"Script, das nach einer Umwandlung von einer autorisierten zu einer "
-"unautorisierten Sitzung ausgeführt wird"
-
-#. IP up script
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:28
-#, fuzzy
-msgid "IP up script"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Script executed after the TUN/TAP network interface has been brought up
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:29
-#, fuzzy
-msgid "Script executed after the TUN/TAP network interface has been brought up"
-msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
-
-#. Uplink subnet
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:30
-#, fuzzy
-msgid "Uplink subnet"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Network address of the uplink interface (CIDR notation)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:31
-#, fuzzy
-msgid "Network address of the uplink interface (CIDR notation)"
-msgstr ""
-"Zur Auflösung der Host-Namen benötigter DNS Server, die an den client "
-"übertragen wird"
-
-#. Static IP address pool
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:32
-#, fuzzy
-msgid "Static IP address pool"
-msgstr "Domain Name"
-
-#. Specifies a pool of static IP addresses
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:33
-#, fuzzy
-msgid "Specifies a pool of static IP addresses"
-msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
-
-#. TUN/TAP device
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:34
-#, fuzzy
-msgid "TUN/TAP device"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. The specific device to use for the TUN/TAP interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:35
-#, fuzzy
-msgid "The specific device to use for the TUN/TAP interface"
-msgstr ""
-"Script, das nach einer Umwandlung von einer autorisierten zu einer "
-"unautorisierten Sitzung ausgeführt wird"
-
-#. TX queue length
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:36
-#, fuzzy
-msgid "TX queue length"
-msgstr "Domain Name"
-
-#. The TX queue length to set on the TUN/TAP interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:37
-#, fuzzy
-msgid "The TX queue length to set on the TUN/TAP interface"
-msgstr ""
-"Script, das nach einer Umwandlung von einer autorisierten zu einer "
-"unautorisierten Sitzung ausgeführt wird"
-
-#. Use TAP device
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:38
-#, fuzzy
-msgid "Use TAP device"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Use the TAP interface instead of TUN
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:39
-#, fuzzy
-msgid "Use the TAP interface instead of TUN"
-msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
-
-#. DHCP configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:40
-#, fuzzy
-msgid "DHCP configuration"
-msgstr "TUN/TAP Konfiguration"
-
-#. Set DHCP options for connecting clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:41
-#, fuzzy
-msgid "Set DHCP options for connecting clients"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. DHCP end number
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:42
-#, fuzzy
-msgid "DHCP end number"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Where to stop assigning IP addresses (default 254)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:43
-#, fuzzy
-msgid "Where to stop assigning IP addresses (default 254)"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. DHCP interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:44
-#, fuzzy
-msgid "DHCP interface"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Ethernet interface to listen to for the downlink interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:45
-#, fuzzy
-msgid "Ethernet interface to listen to for the downlink interface"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Listen MAC address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:46
-#, fuzzy
-msgid "Listen MAC address"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. MAC address to listen to. If not specified the MAC address of the interface will be used
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:47
-#, fuzzy
-msgid ""
-"MAC address to listen to. If not specified the MAC address of the interface "
-"will be used"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. DHCP start number
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:48
-#, fuzzy
-msgid "DHCP start number"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Where to start assigning IP addresses (default 10)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:49
-#, fuzzy
-msgid "Where to start assigning IP addresses (default 10)"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Enable IEEE 802.1x
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:50
-#, fuzzy
-msgid "Enable IEEE 802.1x"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Enable IEEE 802.1x authentication and listen for EAP requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:51
-#, fuzzy
-msgid "Enable IEEE 802.1x authentication and listen for EAP requests"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Leasetime
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:52
-#, fuzzy
-msgid "Leasetime"
-msgstr "Vorhaltezeit"
-
-#. Use a DHCP lease of seconds (default 600)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:53
-msgid "Use a DHCP lease of seconds (default 600)"
-msgstr "Benutze eine DHCP-Vorhaltezeit in Sekunden (voreingestelllt 600)"
-
-#. Allow session update through RADIUS
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:56
-msgid "Allow session update through RADIUS"
-msgstr "Erlaube Sitzungsupdates durch RADIUS"
-
-#. Allow updating of session parameters with RADIUS attributes sent in Accounting-Response
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:57
-#, fuzzy
-msgid ""
-"Allow updating of session parameters with RADIUS attributes sent in "
-"Accounting-Response"
-msgstr ""
-"Erlaubt das Aktuallisieren der Sitzungsparameter mit RADIUS-attributen, die "
-"im der Konten-Antwort enthalten sind"
-
-#. Admin password
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:58
-msgid "Admin password"
-msgstr "Administratorkennwort"
-
-#. Password to use for Administrative-User authentication in order to pick up chilli configurations and establish a device \"system\" session
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:59
-#, fuzzy
-msgid ""
-"Password to use for Administrative-User authentication in order to pick up "
-"chilli configurations and establish a device \"system\" session"
-msgstr ""
-"Kennwort zur Administratoren-Authentifizierung um die chilli- "
-"konfigurationen aufzunehmen und eine Systemsitzung fürs Gerät zu erstellen"
-
-#. Admin user
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:60
-#, fuzzy
-msgid "Admin user"
-msgstr "Adminstratorenkennung"
-
-#. User-name to use for Administrative-User authentication in order to pick up chilli configurations and establish a device \"system\" session
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:61
-#, fuzzy
-msgid ""
-"User-name to use for Administrative-User authentication in order to pick up "
-"chilli configurations and establish a device \"system\" session"
-msgstr "Benutzername des für Administration berechtigten Benutzers. "
-
-#. Do not check disconnection requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:62
-#, fuzzy
-msgid "Do not check disconnection requests"
-msgstr "Ignoriere die Verbindungstrennungsanfragen"
-
-#. Do not check the source IP address of radius disconnect requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:63
-#, fuzzy
-msgid "Do not check the source IP address of radius disconnect requests"
-msgstr "Prüft nicht die Quell-IP einer RADIUS Verbindungstrennungsanfrage."
-
-#. RADIUS disconnect port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:64
-#, fuzzy
-msgid "RADIUS disconnect port"
-msgstr "Port f&uuml;r die Verbindungstrennung"
-
-#. UDP port to listen to for accepting radius disconnect requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:65
-#, fuzzy
-msgid "UDP port to listen to for accepting radius disconnect requests"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. NAS IP
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:66
-#, fuzzy
-msgid "NAS IP"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Value to use in RADIUS NAS-IP-Address attribute
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:67
-#, fuzzy
-msgid "Value to use in RADIUS NAS-IP-Address attribute"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. NAS MAC
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:68
-#, fuzzy
-msgid "NAS MAC"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. MAC address value to use in RADIUS Called-Station-ID attribute
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:69
-#, fuzzy
-msgid "MAC address value to use in RADIUS Called-Station-ID attribute"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Allow OpenID authentication
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:70
-#, fuzzy
-msgid "Allow OpenID authentication"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Allows OpenID authentication by sending ChilliSpot-Config=allow-openidauth in RADIUS Access-Requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:71
-#, fuzzy
-msgid ""
-"Allows OpenID authentication by sending ChilliSpot-Config=allow-openidauth "
-"in RADIUS Access-Requests"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS accounting port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:72
-#, fuzzy
-msgid "RADIUS accounting port"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. The UDP port number to use for radius accounting requests (default 1813)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:73
-#, fuzzy
-msgid ""
-"The UDP port number to use for radius accounting requests (default 1813)"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS authentication port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:74
-#, fuzzy
-msgid "RADIUS authentication port"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. The UDP port number to use for radius authentication requests (default 1812)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:75
-#, fuzzy
-msgid ""
-"The UDP port number to use for radius authentication requests (default 1812)"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Option radiuscalled
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:76
-#, fuzzy
-msgid "Option radiuscalled"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS listen address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:77
-#, fuzzy
-msgid "RADIUS listen address"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Local interface IP address to use for the radius interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:78
-#, fuzzy
-msgid "Local interface IP address to use for the radius interface"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS location ID
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:79
-#, fuzzy
-msgid "RADIUS location ID"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. WISPr Location ID
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:80
-#, fuzzy
-msgid "WISPr Location ID"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS location name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:81
-#, fuzzy
-msgid "RADIUS location name"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. WISPr Location Name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:82
-#, fuzzy
-msgid "WISPr Location Name"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. NAS ID
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:83
-#, fuzzy
-msgid "NAS ID"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Network access server identifier
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:84
-#, fuzzy
-msgid "Network access server identifier"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Option radiusnasip
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:85
-#, fuzzy
-msgid "Option radiusnasip"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. NAS port type
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:86
-#, fuzzy
-msgid "NAS port type"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:87
-#, fuzzy
-msgid "Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Send RADIUS VSA
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:88
-#, fuzzy
-msgid "Send RADIUS VSA"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:89
-#, fuzzy
-msgid "Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS secret
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:90
-#, fuzzy
-msgid "RADIUS secret"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Radius shared secret for both servers
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:91
-#, fuzzy
-msgid "Radius shared secret for both servers"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS server 1
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:92
-#, fuzzy
-msgid "RADIUS server 1"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. The IP address of radius server 1
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:93
-#, fuzzy
-msgid "The IP address of radius server 1"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. RADIUS server 2
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:94
-#, fuzzy
-msgid "RADIUS server 2"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. The IP address of radius server 2
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:95
-#, fuzzy
-msgid "The IP address of radius server 2"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Swap octets
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:96
-#, fuzzy
-msgid "Swap octets"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Swap the meaning of \"input octets\" and \"output octets\" as it related to RADIUS attribtues
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:97
-#, fuzzy
-msgid ""
-"Swap the meaning of \"input octets\" and \"output octets\" as it related to "
-"RADIUS attribtues"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Allow WPA guests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:98
-#, fuzzy
-msgid "Allow WPA guests"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-guests in RADIUS Access-Requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:99
-#, fuzzy
-msgid ""
-"Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-"
-"guests in RADIUS Access-Requests"
-msgstr "Netzwerk/TUN Konfiguration"
-
-#. Proxy client
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:102
-msgid "Proxy client"
+msgid "Network Configuration"
 msgstr ""
 
-#. IP address from which radius requests are accepted. If omitted the server will not accept radius requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:103
-msgid ""
-"IP address from which radius requests are accepted. If omitted the server "
-"will not accept radius requests"
+msgid "RADIUS configuration"
 msgstr ""
 
-#. Proxy listen address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:104
-msgid "Proxy listen address"
+msgid "UAM and MAC Authentication"
 msgstr ""
 
-#. Local interface IP address to use for accepting radius requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:105
-msgid "Local interface IP address to use for accepting radius requests"
-msgstr ""
+#~ msgid "General configuration"
+#~ msgstr "Allgemeine Einstellungen"
 
-#. Proxy port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:106
-msgid "Proxy port"
-msgstr ""
+#~ msgid "General CoovaChilli settings"
+#~ msgstr "Allgemeine Einstellungen zu CoovaChilli"
 
-#. UDP Port to listen to for accepting radius requests
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:107
-msgid "UDP Port to listen to for accepting radius requests"
-msgstr ""
-
-#. Proxy secret
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:108
-msgid "Proxy secret"
-msgstr ""
-
-#. Radius shared secret for clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:109
-msgid "Radius shared secret for clients"
-msgstr ""
-
-#. UAM configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:110
 #, fuzzy
-msgid "UAM configuration"
-msgstr "TUN/TAP Konfiguration"
+#~ msgid "Command socket"
+#~ msgstr "Eingabeschnittstelle"
 
-#. Unified Configuration Method settings
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:111
+#~ msgid "UNIX socket used for communication with chilli_query"
+#~ msgstr ""
+#~ "UNIX socket der fuer die Kommunikation mit chilli_query benutzt wird"
+
 #, fuzzy
-msgid "Unified Configuration Method settings"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Config refresh interval"
+#~ msgstr "Zeit zwischen neuladen der Konfiguration"
 
-#. Use Chilli XML
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:112
-msgid "Use Chilli XML"
-msgstr ""
-
-#. Return the so-called Chilli XML along with WISPr XML
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:113
-msgid "Return the so-called Chilli XML along with WISPr XML"
-msgstr ""
-
-#. Default idle timeout
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:114
-msgid "Default idle timeout"
-msgstr ""
-
-#. Default idle timeout unless otherwise set by RADIUS (defaults to 0)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:115
-msgid "Default idle timeout unless otherwise set by RADIUS (defaults to 0)"
-msgstr ""
-
-#. Default interim interval
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:116
-msgid "Default interim interval"
-msgstr ""
-
-#. Default interim-interval for RADIUS accounting unless otherwise set by RADIUS (defaults to 0)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:117
-msgid ""
-"Default interim-interval for RADIUS accounting unless otherwise set by "
-"RADIUS (defaults to 0)"
-msgstr ""
-
-#. Default session timeout
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:118
-msgid "Default session timeout"
-msgstr ""
-
-#. Default session timeout unless otherwise set by RADIUS (defaults to 0)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:119
-msgid "Default session timeout unless otherwise set by RADIUS (defaults to 0)"
-msgstr ""
-
-#. Inspect DNS traffic
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:120
 #, fuzzy
-msgid "Inspect DNS traffic"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid ""
+#~ "Re-read configuration file and do DNS lookups every interval seconds. "
+#~ "This has the same effect as sending the HUP signal. If interval is 0 "
+#~ "(zero) this feature is disabled. "
+#~ msgstr "Zeit zwischen neuladen der Konfiguration"
 
-#. Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX records to prevent dns tunnels (experimental)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:121
+#~ msgid "Pid file"
+#~ msgstr "<abbr title=\"Prozessindentifikationsnummer\">Pid</abbr>-Datei"
+
+#~ msgid "Filename to put the process id"
+#~ msgstr ""
+#~ "Name der Datei, in der die <abbr title=\"Prozessindentifikationsnummer"
+#~ "\">Pid</abbr> gespeichert wird"
+
 #, fuzzy
-msgid ""
-"Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX "
-"records to prevent dns tunnels (experimental)"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "State directory"
+#~ msgstr "Statisches Verzeichniss"
 
-#. Local users file
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:122
+#~ msgid "Directory of non-volatile data"
+#~ msgstr "Verzeichniss für statische Daten"
+
 #, fuzzy
-msgid "Local users file"
-msgstr "Domain Name"
+#~ msgid "TUN/TAP configuration"
+#~ msgstr "TUN/TAP Konfiguration"
 
-#. A colon seperated file containing usernames and passwords of locally authenticated users
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:123
 #, fuzzy
-msgid ""
-"A colon seperated file containing usernames and passwords of locally "
-"authenticated users"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Network/Tun configuration"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Location name
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:124
-msgid "Location name"
-msgstr ""
-
-#. Human readable location name used in JSON interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:125
 #, fuzzy
-msgid "Human readable location name used in JSON interface"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Network down script"
+#~ msgstr ""
+#~ "Script, das nach einer Umwandlung von einer autorisierten zu einer "
+#~ "unautorisierten Sitzung ausgeführt wird"
 
-#. Do not redirect to UAM server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:126
+#~ msgid ""
+#~ "Script executed after a session has moved from authorized state to "
+#~ "unauthorized"
+#~ msgstr ""
+#~ "Skript, das nach einer Umwandlung von einer autorisierten zu einer "
+#~ "unautorisierten Sitzung ausgeführt wird"
+
+#~ msgid "Network up script"
+#~ msgstr "Netzwerk Up Skript"
+
 #, fuzzy
-msgid "Do not redirect to UAM server"
-msgstr "Domain Name"
+#~ msgid "Script executed after the tun network interface has been brought up"
+#~ msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
 
-#. Do not return to UAM server on login success, just redirect to original URL
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:127
+#~ msgid "Primary DNS Server"
+#~ msgstr "Primärer DNS-Server"
+
+#~ msgid "Secondary DNS Server"
+#~ msgstr "Sekundärer DNS-Server"
+
 #, fuzzy
-msgid ""
-"Do not return to UAM server on login success, just redirect to original URL"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Domain name"
+#~ msgstr "Domain Name"
 
-#. Do not do WISPr
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:128
+#~ msgid ""
+#~ "Is used to inform the client about the domain name to use for DNS lookups"
+#~ msgstr ""
+#~ "Wird benutzt um Clients ueber den zu benutzenden Domain Namen fuer DNS "
+#~ "Anfragen zu informieren"
+
+#~ msgid "Dynamic IP address pool"
+#~ msgstr "Dynamischer IP-Adressen Pool"
+
+#~ msgid "Specifies a pool of dynamic IP addresses"
+#~ msgstr "Legt einen Bereich von dynamischen IP-Adressen fest"
+
+#~ msgid "IP down script"
+#~ msgstr "IP down Skript"
+
 #, fuzzy
-msgid "Do not do WISPr"
-msgstr "Domain Name"
+#~ msgid "Script executed after the tun network interface has been taken down"
+#~ msgstr ""
+#~ "Script, das nach einer Umwandlung von einer autorisierten zu einer "
+#~ "unautorisierten Sitzung ausgeführt wird"
 
-#. Do not do any WISPr XML, assume the back-end is doing this instead
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:129
 #, fuzzy
-msgid "Do not do any WISPr XML, assume the back-end is doing this instead"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "IP up script"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Post auth proxy
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:130
-msgid "Post auth proxy"
-msgstr ""
-
-#. Used with postauthproxyport to define a post authentication HTTP proxy server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:131
-msgid ""
-"Used with postauthproxyport to define a post authentication HTTP proxy server"
-msgstr ""
-
-#. Post auth proxy port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:132
-msgid "Post auth proxy port"
-msgstr ""
-
-#. Used with postauthproxy to define a post authentication HTTP proxy server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:133
-msgid ""
-"Used with postauthproxy to define a post authentication HTTP proxy server"
-msgstr ""
-
-#. Allowed resources
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:134
 #, fuzzy
-msgid "Allowed resources"
-msgstr "Domain Name"
+#~ msgid ""
+#~ "Script executed after the TUN/TAP network interface has been brought up"
+#~ msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
 
-#. List of resources the client can access without first authenticating
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:135
 #, fuzzy
-msgid "List of resources the client can access without first authenticating"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Uplink subnet"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Allow any DNS server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:136
 #, fuzzy
-msgid "Allow any DNS server"
-msgstr "Domain Name"
+#~ msgid "Network address of the uplink interface (CIDR notation)"
+#~ msgstr ""
+#~ "Zur Auflösung der Host-Namen benötigter DNS Server, die an den client "
+#~ "übertragen wird"
 
-#. Allow any DNS server for unauthenticated clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:137
 #, fuzzy
-msgid "Allow any DNS server for unauthenticated clients"
-msgstr "Domain Name"
+#~ msgid "Static IP address pool"
+#~ msgstr "Domain Name"
 
-#. Allow any IP address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:138
 #, fuzzy
-msgid "Allow any IP address"
-msgstr "Domain Name"
+#~ msgid "Specifies a pool of static IP addresses"
+#~ msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
 
-#. Allow clients to use any IP settings they wish by spoofing ARP (experimental)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:139
 #, fuzzy
-msgid ""
-"Allow clients to use any IP settings they wish by spoofing ARP (experimental)"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "TUN/TAP device"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Allowed domains
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:140
 #, fuzzy
-msgid "Allowed domains"
-msgstr "Domain Name"
+#~ msgid "The specific device to use for the TUN/TAP interface"
+#~ msgstr ""
+#~ "Script, das nach einer Umwandlung von einer autorisierten zu einer "
+#~ "unautorisierten Sitzung ausgeführt wird"
 
-#. Defines a list of domain names to automatically add to the walled garden
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:141
 #, fuzzy
-msgid ""
-"Defines a list of domain names to automatically add to the walled garden"
-msgstr "Domain Name"
+#~ msgid "TX queue length"
+#~ msgstr "Domain Name"
 
-#. UAM homepage
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:142
 #, fuzzy
-msgid "UAM homepage"
-msgstr "Domain Name"
+#~ msgid "The TX queue length to set on the TUN/TAP interface"
+#~ msgstr ""
+#~ "Script, das nach einer Umwandlung von einer autorisierten zu einer "
+#~ "unautorisierten Sitzung ausgeführt wird"
 
-#. URL of homepage to redirect unauthenticated users to
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:143
 #, fuzzy
-msgid "URL of homepage to redirect unauthenticated users to"
-msgstr "Domain Name"
+#~ msgid "Use TAP device"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. UAM static content port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:144
 #, fuzzy
-msgid "UAM static content port"
-msgstr "Domain Name"
+#~ msgid "Use the TAP interface instead of TUN"
+#~ msgstr "Script, dass nach erfolgreicher tun - Verbindung ausgeführt wird"
 
-#. TCP port to bind to for only serving embedded content
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:145
 #, fuzzy
-msgid "TCP port to bind to for only serving embedded content"
-msgstr "Domain Name"
+#~ msgid "DHCP configuration"
+#~ msgstr "TUN/TAP Konfiguration"
 
-#. UAM listening address
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:146
 #, fuzzy
-msgid "UAM listening address"
-msgstr "Domain Name"
+#~ msgid "Set DHCP options for connecting clients"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. IP address to listen to for authentication of clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:147
 #, fuzzy
-msgid "IP address to listen to for authentication of clients"
-msgstr "Domain Name"
+#~ msgid "DHCP end number"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. UAM logout IP
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:148
 #, fuzzy
-msgid "UAM logout IP"
-msgstr "Domain Name"
+#~ msgid "Where to stop assigning IP addresses (default 254)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Use this IP address to instantly logout a client accessing it (defaults to 1.1.1.1)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:149
 #, fuzzy
-msgid ""
-"Use this IP address to instantly logout a client accessing it (defaults to "
-"1.1.1.1)"
-msgstr "Domain Name"
+#~ msgid "DHCP interface"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. UAM listening port
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:150
 #, fuzzy
-msgid "UAM listening port"
-msgstr "Domain Name"
+#~ msgid "Ethernet interface to listen to for the downlink interface"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. TCP port to bind to for authenticating clients (default 3990)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:151
 #, fuzzy
-msgid "TCP port to bind to for authenticating clients (default 3990)"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Listen MAC address"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. UAM secret
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:152
 #, fuzzy
-msgid "UAM secret"
-msgstr "Domain Name"
+#~ msgid ""
+#~ "MAC address to listen to. If not specified the MAC address of the "
+#~ "interface will be used"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Shared secret between uamserver and chilli
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:153
 #, fuzzy
-msgid "Shared secret between uamserver and chilli"
-msgstr "Domain Name"
+#~ msgid "DHCP start number"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. UAM server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:154
 #, fuzzy
-msgid "UAM server"
-msgstr "Domain Name"
+#~ msgid "Where to start assigning IP addresses (default 10)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. URL of web server to use for authenticating clients
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:155
 #, fuzzy
-msgid "URL of web server to use for authenticating clients"
-msgstr "Domain Name"
+#~ msgid "Enable IEEE 802.1x"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. UAM user interface
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:156
 #, fuzzy
-msgid "UAM user interface"
-msgstr "Domain Name"
+#~ msgid "Enable IEEE 802.1x authentication and listen for EAP requests"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. An init.d style program to handle local content on the uamuiport web server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:157
 #, fuzzy
-msgid ""
-"An init.d style program to handle local content on the uamuiport web server"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Leasetime"
+#~ msgstr "Vorhaltezeit"
 
-#. Use status file
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:158
-msgid "Use status file"
-msgstr ""
+#~ msgid "Use a DHCP lease of seconds (default 600)"
+#~ msgstr "Benutze eine DHCP-Vorhaltezeit in Sekunden (voreingestelllt 600)"
 
-#. Write the status of clients in a non-volatile state file (experimental)
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:159
-msgid "Write the status of clients in a non-volatile state file (experimental)"
-msgstr ""
+#~ msgid "Allow session update through RADIUS"
+#~ msgstr "Erlaube Sitzungsupdates durch RADIUS"
 
-#. WISPr login url
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:160
 #, fuzzy
-msgid "WISPr login url"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid ""
+#~ "Allow updating of session parameters with RADIUS attributes sent in "
+#~ "Accounting-Response"
+#~ msgstr ""
+#~ "Erlaubt das Aktuallisieren der Sitzungsparameter mit RADIUS-attributen, "
+#~ "die im der Konten-Antwort enthalten sind"
 
-#. Specific URL to be given in WISPr XML LoginURL
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:161
-#, fuzzy
-msgid "Specific URL to be given in WISPr XML LoginURL"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Admin password"
+#~ msgstr "Administratorkennwort"
 
-#. CGI program
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:162
 #, fuzzy
-msgid "CGI program"
-msgstr "Domain Name"
+#~ msgid ""
+#~ "Password to use for Administrative-User authentication in order to pick "
+#~ "up chilli configurations and establish a device \"system\" session"
+#~ msgstr ""
+#~ "Kennwort zur Administratoren-Authentifizierung um die chilli- "
+#~ "konfigurationen aufzunehmen und eine Systemsitzung fürs Gerät zu erstellen"
 
-#. Executable to run as a CGI type program (like haserl) for URLs with extention .chi
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:163
 #, fuzzy
-msgid ""
-"Executable to run as a CGI type program (like haserl) for URLs with "
-"extention .chi"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Admin user"
+#~ msgstr "Adminstratorenkennung"
 
-#. Web content directory
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:164
 #, fuzzy
-msgid "Web content directory"
-msgstr "Domain Name"
+#~ msgid ""
+#~ "User-name to use for Administrative-User authentication in order to pick "
+#~ "up chilli configurations and establish a device \"system\" session"
+#~ msgstr "Benutzername des für Administration berechtigten Benutzers. "
 
-#. Directory where embedded local web content is placed
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:165
 #, fuzzy
-msgid "Directory where embedded local web content is placed"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Do not check disconnection requests"
+#~ msgstr "Ignoriere die Verbindungstrennungsanfragen"
 
-#. MAC configuration
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:166
 #, fuzzy
-msgid "MAC configuration"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Do not check the source IP address of radius disconnect requests"
+#~ msgstr "Prüft nicht die Quell-IP einer RADIUS Verbindungstrennungsanfrage."
 
-#. Configure MAC authentication
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:167
 #, fuzzy
-msgid "Configure MAC authentication"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "RADIUS disconnect port"
+#~ msgstr "Port f&uuml;r die Verbindungstrennung"
 
-#. Allowed MAC addresses
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:168
 #, fuzzy
-msgid "Allowed MAC addresses"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "UDP port to listen to for accepting radius disconnect requests"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. List of MAC addresses for which MAC authentication will be performed
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:169
 #, fuzzy
-msgid "List of MAC addresses for which MAC authentication will be performed"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "NAS IP"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Authenticate locally allowed MACs
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:170
 #, fuzzy
-msgid "Authenticate locally allowed MACs"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Value to use in RADIUS NAS-IP-Address attribute"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Authenticate allowed MAC addresses without the use of RADIUS
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:171
 #, fuzzy
-msgid "Authenticate allowed MAC addresses without the use of RADIUS"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "NAS MAC"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Enable MAC authentification
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:172
 #, fuzzy
-msgid "Enable MAC authentification"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "MAC address value to use in RADIUS Called-Station-ID attribute"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Try to authenticate all users based on their mac address alone
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:173
 #, fuzzy
-msgid "Try to authenticate all users based on their mac address alone"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "Allow OpenID authentication"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Password
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:174
 #, fuzzy
-msgid "Password"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid ""
+#~ "Allows OpenID authentication by sending ChilliSpot-Config=allow-"
+#~ "openidauth in RADIUS Access-Requests"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Password used when performing MAC authentication
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:175
 #, fuzzy
-msgid "Password used when performing MAC authentication"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "RADIUS accounting port"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Suffix
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:176
 #, fuzzy
-msgid "Suffix"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid ""
+#~ "The UDP port number to use for radius accounting requests (default 1813)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
 
-#. Suffix to add to the MAC address in order to form the User-Name, which is sent to the radius server
-#: applications/luci-coovachilli/luasrc/i18n/coovachilli.en.lua:177
 #, fuzzy
-msgid "coovachilli_macauth_macsuffix_desc"
-msgstr "Netzwerk/TUN Konfiguration"
+#~ msgid "RADIUS authentication port"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid ""
+#~ "The UDP port number to use for radius authentication requests (default "
+#~ "1812)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Option radiuscalled"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "RADIUS listen address"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Local interface IP address to use for the radius interface"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "RADIUS location ID"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "WISPr Location ID"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "RADIUS location name"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "WISPr Location Name"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "NAS ID"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Network access server identifier"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Option radiusnasip"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "NAS port type"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid ""
+#~ "Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Send RADIUS VSA"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Send the ChilliSpot-OriginalURL RADIUS VSA in Access-Request"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "RADIUS secret"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Radius shared secret for both servers"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "RADIUS server 1"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "The IP address of radius server 1"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "RADIUS server 2"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "The IP address of radius server 2"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Swap octets"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid ""
+#~ "Swap the meaning of \"input octets\" and \"output octets\" as it related "
+#~ "to RADIUS attribtues"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Allow WPA guests"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid ""
+#~ "Allows WPA Guest authentication by sending ChilliSpot-Config=allow-wpa-"
+#~ "guests in RADIUS Access-Requests"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "UAM configuration"
+#~ msgstr "TUN/TAP Konfiguration"
+
+#, fuzzy
+#~ msgid "Unified Configuration Method settings"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Inspect DNS traffic"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid ""
+#~ "Inspect DNS packets and drop responses with any non- A, CNAME, SOA, or MX "
+#~ "records to prevent dns tunnels (experimental)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Local users file"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "A colon seperated file containing usernames and passwords of locally "
+#~ "authenticated users"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Human readable location name used in JSON interface"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Do not redirect to UAM server"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "Do not return to UAM server on login success, just redirect to original "
+#~ "URL"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Do not do WISPr"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "Do not do any WISPr XML, assume the back-end is doing this instead"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Allowed resources"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "List of resources the client can access without first authenticating"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Allow any DNS server"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "Allow any DNS server for unauthenticated clients"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "Allow any IP address"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "Allow clients to use any IP settings they wish by spoofing ARP "
+#~ "(experimental)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Allowed domains"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "Defines a list of domain names to automatically add to the walled garden"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM homepage"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "URL of homepage to redirect unauthenticated users to"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM static content port"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "TCP port to bind to for only serving embedded content"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM listening address"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "IP address to listen to for authentication of clients"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM logout IP"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "Use this IP address to instantly logout a client accessing it (defaults "
+#~ "to 1.1.1.1)"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM listening port"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "TCP port to bind to for authenticating clients (default 3990)"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "UAM secret"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "Shared secret between uamserver and chilli"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM server"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "URL of web server to use for authenticating clients"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "UAM user interface"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "An init.d style program to handle local content on the uamuiport web "
+#~ "server"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "WISPr login url"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Specific URL to be given in WISPr XML LoginURL"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "CGI program"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid ""
+#~ "Executable to run as a CGI type program (like haserl) for URLs with "
+#~ "extention .chi"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Web content directory"
+#~ msgstr "Domain Name"
+
+#, fuzzy
+#~ msgid "Directory where embedded local web content is placed"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "MAC configuration"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Configure MAC authentication"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Allowed MAC addresses"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "List of MAC addresses for which MAC authentication will be performed"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Authenticate locally allowed MACs"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Authenticate allowed MAC addresses without the use of RADIUS"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Enable MAC authentification"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Try to authenticate all users based on their mac address alone"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Password"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Password used when performing MAC authentication"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "Suffix"
+#~ msgstr "Netzwerk/TUN Konfiguration"
+
+#, fuzzy
+#~ msgid "coovachilli_macauth_macsuffix_desc"
+#~ msgstr "Netzwerk/TUN Konfiguration"
