@@ -612,11 +612,10 @@ end
 -- @return			Boolean indicating wheather the passwords are equal
 function user.checkpasswd(username, pass)
 	local pwh = user.getpasswd(username)
-	if pwh and nixio.crypt(pass, pwh) ~= pwh then
-		return false
-	else
-		return true
+	if pwh then
+		return (nixio.crypt(pass, pwh) == pwh)
 	end
+	return false
 end
 
 --- Change the password of given user.
