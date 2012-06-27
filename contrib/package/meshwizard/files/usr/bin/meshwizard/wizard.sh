@@ -12,12 +12,13 @@
 . /lib/functions.sh
 
 echo "
-/* Meshwizard 0.0.7 */
+/* Meshwizard 0.0.8 */
 "
 
 # config
 export dir="/usr/bin/meshwizard"
 . $dir/functions.sh
+[ -f /proc/net/ipv6_route ] && has_ipv6=1
 
 # Check which packages we have installed
 export has_luci=FALSE
@@ -67,7 +68,7 @@ if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" 
 	$dir/helpers/setup_lan_static.sh
 fi
 
-if [ "$profile_ipv6" == 1 ]; then
+if [ "$profile_ipv6" == 1 ] && [ "$has_ipv6" = 1 ]; then
 	$dir/helpers/setup_lan_ipv6.sh
 	# Setup auto-ipv6
 	if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
@@ -101,7 +102,7 @@ for net in $networks; do
 	$dir/helpers/setup_splash.sh $net
 	$dir/helpers/setup_firewall_interface.sh $net
 
-	if [ "$profile_ipv6" == 1 ]; then
+	if [ "$profile_ipv6" == 1 ] && [ "$has_ipv6" = 1 ]; then
 		$dir/helpers/setup_radvd_interface.sh $net
 	fi
 done
