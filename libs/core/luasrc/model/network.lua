@@ -594,7 +594,7 @@ function get_status_by_route(self, addr, mask)
 			if s and s.route then
 				local rt
 				for _, rt in ipairs(s.route) do
-					if rt.target == addr and rt.mask == mask then
+					if rt.enabled and rt.target == addr and rt.mask == mask then
 						return net, s
 					end
 				end
