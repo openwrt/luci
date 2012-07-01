@@ -40,7 +40,7 @@ You may obtain a copy of the License at
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	function iface_shutdown(id, reconnect) {
-		if (!reconnect && !confirm(String.format('<%_Really shutdown interface "%s" ?\nYou might lose access to this router if you are connected via this interface.%>', id)))
+		if (!reconnect && !confirm(String.format('<%_Really shutdown interface "%s" ?\nYou might lose access to this device if you are connected via this interface.%>', id)))
 			return;
 
 		var d = document.getElementById(id + '-ifc-description');
@@ -53,7 +53,7 @@ You may obtain a copy of the License at
 		if (s)
 		{
 			s.parentNode.style.display = 'block';
-			s.innerHTML = '<%:Waiting for router...%>';
+			s.innerHTML = '<%:Waiting for changes to be applied...%>';
 		}
 
 		XHR.get('<%=luci.dispatcher.build_url("admin", "network")%>/iface_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
@@ -209,7 +209,7 @@ You may obtain a copy of the License at
 <fieldset class="cbi-section" style="display:none">
 	<legend><%:Reconnecting interface%></legend>
 	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
-	<span id="ifc-rc-status"><%:Waiting for router...%></span>
+	<span id="ifc-rc-status"><%:Waiting for changes to be applied...%></span>
 </fieldset>
 
 <div class="cbi-map">
@@ -247,7 +247,7 @@ You may obtain a copy of the License at
 						<input type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
 						<input type="button" class="cbi-button cbi-button-reset" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
 						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
-						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this interface.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/iface_delete", net[1])%>'" title="<%:Delete this interface%>" value="<%:Delete%>" />
+						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might lose access to this device if you are connected via this interface.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/iface_delete", net[1])%>'" title="<%:Delete this interface%>" value="<%:Delete%>" />
 					</td>
 				</tr>
 			<% end %>

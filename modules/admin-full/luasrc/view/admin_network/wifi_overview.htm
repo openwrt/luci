@@ -127,7 +127,7 @@ $Id$
 	function wifi_shutdown(id, toggle) {
 		var reconnect = (toggle.getAttribute('active') == 'false');
 
-		if (!reconnect && !confirm(String.format('<%:Really shutdown network ?\nYou might lose access to this router if you are connected via this interface.%>')))
+		if (!reconnect && !confirm(String.format('<%:Really shutdown network ?\nYou might lose access to this device if you are connected via this interface.%>')))
 			return;
 
 		is_reconnecting = true;
@@ -136,7 +136,7 @@ $Id$
 		if (s)
 		{
 			s.parentNode.style.display = 'block';
-			s.innerHTML = '<%:Waiting for router...%>';
+			s.innerHTML = '<%:Waiting for changes to be applied...%>';
 		}
 
 		for (var net in wifidevs)
@@ -350,7 +350,7 @@ $Id$
 <fieldset class="cbi-section" style="display:none">
 	<legend><%:Reconnecting interface%></legend>
 	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
-	<span id="iw-rc-status"><%:Waiting for router...%></span>
+	<span id="iw-rc-status"><%:Waiting for changes to be applied...%></span>
 </fieldset>
 
 <div class="cbi-map">
@@ -388,7 +388,7 @@ $Id$
 					<td class="cbi-value-field" style="width:310px;text-align:right">
 						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
 						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
-						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this router if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
+						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this device if you are connected via this network.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
 					</td>
 				</tr>
 				<% end %>

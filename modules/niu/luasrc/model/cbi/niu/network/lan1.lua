@@ -24,7 +24,7 @@ Make sure you to assign any address to this device that is in the same subnet
 of the other devices in your network but that is not already occupied.
 If you have a DHCP-Server in this network you may also choose DHCP for address configuration.]])
 or translate("These settings affect the devices in your local network. "..
-"Usually you do not need to change anything here for your router to work correctly."))
+"Usually you do not need to change anything here for this device to work correctly."))
 
 s = m:section(NamedSection, "lan", "interface", "Network Settings")
 s.addremove = false

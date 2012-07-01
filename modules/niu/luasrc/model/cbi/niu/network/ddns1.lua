@@ -14,7 +14,7 @@ $Id$
 ]]--
 local nxo = require "nixio"
 
-m = Map("ddns", translate("Dynamic DNS"), translate("Dynamic DNS allows that your router can be reached with a fixed hostname while having a dynamically changing IP-Address."))
+m = Map("ddns", translate("Dynamic DNS"), translate("Dynamic DNS allows that this device can be reached with a fixed hostname while having a dynamically changing IP-Address."))
 
 s = m:section(TypedSection, "service", "")
 s:depends("enabled", "1")
