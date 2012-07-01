@@ -21,4 +21,5 @@ for m in */*/Makefile; do
 	fi
 done
 
+./build/mkbasepot.sh
 ./build/i18n-update.pl po
