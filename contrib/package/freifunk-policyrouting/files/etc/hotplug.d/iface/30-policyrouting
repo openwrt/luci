@@ -1,10 +1,11 @@
 [ "$INTERFACE" != "wan" ] && exit 0
+[ -f /proc/net/ipv6_route ] && has_ipv6=1
 
 case $ACTION in
         ifup)
-		pr=`uci get freifunk-policyrouting.pr.enable`
+		pr="`uci get freifunk-policyrouting.pr.enable`"
+		fallback="`uci get freifunk-policyrouting.pr.fallback`"
 		# check if ipv6 is enabled:
-		[ -f /proc/net/ipv6_route ] && has_ipv6=1
 
 		if [ $pr = "1" ]; then
 			logger -t policyrouting "Starting policy routing on $INTERFACE"
@@ -58,24 +59,30 @@ case $ACTION in
 			ip route add $NETWORK/$NETMASK dev $device table default
 			ip route add default via $gw dev $device table default
 
-			#if [ "$has_ipv6" = 1 ]; then
-			#	local ip6gw=$(ip -6 r |grep default |cut -d " " -f 3)
-			#	test -n "`ip -6 r s t default`" && ip -6 r d default t default
-			#	test -n "`ip -6 r s |grep default`" && ip -6 route del default
-			#	ip -6 r a $ip6gw via $ip6gw dev $dev table default
-			#	ip -6 route add default via $ip6gw dev $device table default
-			#fi
-
+			if [ "$has_ipv6" = 1 ]; then
+				local ip6gw=$(ip -6 r |grep default |cut -d " " -f 3)
+				test -n "`ip -6 r s t default`" && ip -6 r d default t default
+				if [ -n "`ip -6 r s |grep default`" ]; then
+					ip -6 route del default
+					ip -6 r a $ip6gw via $ip6gw dev $dev table default
+					ip -6 route add default via $ip6gw dev $device table default
+				fi
+			fi
 
 			ip rule del lookup main
 			ip rule add fwmark 1 lookup olsr-default
 			ip rule add lookup main
 			ip rule add lookup olsr
+                        # Fallback via mesh if no ipv4 gateway is found in default table
+			[ "$fallback" = 1 ] && ip rule add lookup olsr-default prio 32800
+
 			if [ "$has_ipv6" = 1 ]; then
 	                        ip -6 rule del lookup main
-	                        ip -6 rule add fwmark 1 lookup olsr-default prio 16385
-	                        ip -6 rule add lookup main prio 16383
 	                        ip -6 rule add lookup olsr prio 16380
+	                        ip -6 rule add lookup main prio 16390
+	                        ip -6 rule add fwmark 1 lookup olsr-default prio 16400
+	                        ip -6 rule add lookup default prio 16410
+	                        [ "$fallback" = 1 ] && ip -6 rule add lookup olsr-default prio 16420
 			fi
 		else
 			# Remove custom routing tables from olsrd
@@ -89,12 +96,16 @@ case $ACTION in
 	;;
 
 	ifdown)
-	logger -t policyrouting "Deleting policy rules for $INTERFACE"
+	logger -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
 	ip rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
+	ip rule del lookup olsr-default > /dev/null 2>&1
 	ip rule del lookup olsr	> /dev/null 2>&1
 	if [ "$has_ipv6" = 1 ]; then
+		logger -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
 		ip -6 rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
-		ip -6 rule del lookup olsr	> /dev/null 2>&1
+		ip -6 rule del lookup olsr-default > /dev/null 2>&1
+		ip -6 rule del lookup olsr > /dev/null 2>&1
+                ip -6 rule del lookup default  > /dev/null 2>&1
 	fi
 	;;
 esac

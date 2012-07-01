@@ -28,6 +28,10 @@ local strict = c:option(Flag, "strict", translate("Strict Filtering"), translate
 	"select this option."))
 strict.rmempty = false
 
+local fallback = c:option(Flag, "fallback", translate("Fallback to mesh"),
+	translate("If your own gateway is not available then fallback to the mesh default gateway."))
+strict.rmempty = false
+
 local zones = c:option(MultiValue, "zones", translate("Firewall zones"), translate("All traffic from interfaces belonging to these zones will be sent via "..
 	"a gateway in the mesh network."))
 uci:foreach("firewall", "zone", function(section)
