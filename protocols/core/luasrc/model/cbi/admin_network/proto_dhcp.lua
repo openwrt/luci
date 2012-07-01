@@ -43,7 +43,7 @@ bcast = section:taboption("advanced", Flag, "broadcast",
 bcast.default = bcast.disabled
 
 
-defaultroute = section:taboption("advanced", Flag, "gateway",
+defaultroute = section:taboption("advanced", Flag, "defaultroute",
 	translate("Use default gateway"),
 	translate("If unchecked, no default route is configured"))
 
