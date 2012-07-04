@@ -14,7 +14,7 @@ local map, section, net = ...
 
 local username, password, ac, service
 local ipv6, defaultroute, metric, peerdns, dns,
-      keepalive_failure, keepalive_interval, demand
+      keepalive_failure, keepalive_interval, demand, mtu
 
 
 username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))
@@ -129,3 +129,8 @@ demand = section:taboption("advanced", Value, "demand",
 
 demand.placeholder = "0"
 demand.datatype    = "uinteger"
+
+
+mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
+mtu.placeholder = "1500"
+mtu.datatype    = "max(1500)"

@@ -13,7 +13,8 @@ You may obtain a copy of the License at
 local map, section, net = ...
 
 local server, username, password
-local defaultroute, metric, peerdns, dns
+local defaultroute, metric, peerdns, dns,
+	keepalive_failure, keepalive_interval, demand, mtu
 
 
 server = section:taboption("general", Value, "server", translate("VPN Server"))
@@ -55,3 +56,61 @@ dns = section:taboption("advanced", DynamicList, "dns",
 dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
 dns.cast     = "string"
+
+
+keepalive_failure = section:taboption("advanced", Value, "_keepalive_failure",
+	translate("LCP echo failure threshold"),
+	translate("Presume peer to be dead after given amount of LCP echo failures, use 0 to ignore failures"))
+
+function keepalive_failure.cfgvalue(self, section)
+	local v = m:get(section, "keepalive")
+	if v and #v > 0 then
+		return tonumber(v:match("^(%d+)[ ,]+%d+") or v)
+	end
+end
+
+function keepalive_failure.write() end
+function keepalive_failure.remove() end
+
+keepalive_failure.placeholder = "0"
+keepalive_failure.datatype    = "uinteger"
+
+
+keepalive_interval = section:taboption("advanced", Value, "_keepalive_interval",
+	translate("LCP echo interval"),
+	translate("Send LCP echo requests at the given interval in seconds, only effective in conjunction with failure threshold"))
+
+function keepalive_interval.cfgvalue(self, section)
+	local v = m:get(section, "keepalive")
+	if v and #v > 0 then
+		return tonumber(v:match("^%d+[ ,]+(%d+)"))
+	end
+end
+
+function keepalive_interval.write(self, section, value)
+	local f = tonumber(keepalive_failure:formvalue(section)) or 0
+	local i = tonumber(value) or 5
+	if i < 1 then i = 1 end
+	if f > 0 then
+		m:set(section, "keepalive", "%d %d" %{ f, i })
+	else
+		m:del(section, "keepalive")
+	end
+end
+
+keepalive_interval.remove      = keepalive_interval.write
+keepalive_interval.placeholder = "5"
+keepalive_interval.datatype    = "min(1)"
+
+
+demand = section:taboption("advanced", Value, "demand",
+	translate("Inactivity timeout"),
+	translate("Close inactive connection after the given amount of seconds, use 0 to persist connection"))
+
+demand.placeholder = "0"
+demand.datatype    = "uinteger"
+
+
+mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
+mtu.placeholder = "1500"
+mtu.datatype    = "max(1500)"
