@@ -13,7 +13,7 @@ You may obtain a copy of the License at
 local map, section, net = ...
 
 local server, username, password
-local buffering, defaultroute, metric, peerdns, dns
+local ipv6, defaultroute, metric, peerdns, dns, mtu
 
 
 server = section:taboption("general", Value, "server", translate("L2TP Server"))
@@ -26,6 +26,14 @@ username = section:taboption("general", Value, "username", translate("PAP/CHAP u
 password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
 password.password = true
 
+if luci.model.network:has_ipv6() then
+
+	ipv6 = section:taboption("advanced", Flag, "ipv6",
+		translate("Enable IPv6 negotiation on the PPP link"))
+
+	ipv6.default = ipv6.disabled
+
+end
 
 defaultroute = section:taboption("advanced", Flag, "defaultroute",
 	translate("Use default gateway"),
@@ -55,3 +63,7 @@ dns = section:taboption("advanced", DynamicList, "dns",
 dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
 dns.cast     = "string"
+
+mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
+mtu.placeholder = "1500"
+mtu.datatype    = "max(1500)"
