@@ -99,7 +99,7 @@ function drawmap() {
 		projection: new OpenLayers.Projection("EPSG:900913"),
 		displayProjection: new OpenLayers.Projection("EPSG:4326"),
 		controls: [
-			new OpenLayers.Control.MouseDefaults(),
+			new OpenLayers.Control.Navigation(),
 			new OpenLayers.Control.PanZoomBar()],
 		maxExtent:
 			new OpenLayers.Bounds(-20037508.34,-20037508.34, 20037508.34, 20037508.34),
