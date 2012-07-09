@@ -64,6 +64,10 @@ if [ "$wan_proto" == "static" ] && [ -n "$wan_ip4addr" ] && [ -n "$wan_netmask" 
 	$dir/helpers/setup_wan_static.sh
 fi
 
+if [ "$wan_proto" == "dhcp" ]; then
+	$dir/helpers/setup_wan_dhcp.sh
+fi
+
 if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" ]; then
 	$dir/helpers/setup_lan_static.sh
 fi

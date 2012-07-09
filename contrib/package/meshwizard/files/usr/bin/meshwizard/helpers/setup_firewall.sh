@@ -109,4 +109,31 @@ if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 	EOF
 fi
 
+# Firewall rules to allow incoming ssh and web if enabled
+
+if [ "$wan_allowssh" == 1 ]; then
+	uci batch <<- EOF
+		set firewall.wanssh=rule
+		set firewall.wanssh.src=wan
+		set firewall.wanssh.target=ACCEPT
+		set firewall.wanssh.proto=tcp
+		set firewall.wanssh.dest_port=22
+	EOF
+fi
+
+if [ "$wan_allowweb" == 1 ]; then
+	uci batch <<- EOF
+		set firewall.wanweb=rule
+		set firewall.wanweb.src=wan
+		set firewall.wanweb.target=ACCEPT
+		set firewall.wanweb.proto=tcp
+		set firewall.wanweb.dest_port=80
+		set firewall.wanwebhttps=rule
+		set firewall.wanwebhttps.src=wan
+		set firewall.wanwebhttps.target=ACCEPT
+		set firewall.wanwebhttps.proto=tcp
+		set firewall.wanwebhttps.dest_port=443
+	EOF
+fi
+
 uci_commitverbose "Setup rules, forwardings, advanced config and includes." firewall
