@@ -25,7 +25,7 @@ s:tab("filter", translate("Filtering and ACLs"))
 s:tab("limits", translate("Server limits"))
 
 
-o = s:taboption("general", Flag, "enable", translate("Enable Tinyproxy server"))
+o = s:taboption("general", Flag, "enabled", translate("Enable Tinyproxy server"))
 o.rmempty = false
 
 function o.write(self, section, value)
