@@ -70,7 +70,7 @@ function s.create(self, name)
 end
 
 
-s:option( Flag, "enable", translate("Enabled") )
+s:option( Flag, "enabled", translate("Enabled") )
 
 local active = s:option( DummyValue, "_active", translate("Started") )
 function active.cfgvalue(self, section)
