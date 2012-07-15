@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+# Copyright (C) 2009-2012 Jo-Philipp Wich <xm@subsignal.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freifunk-watchdog
-PKG_RELEASE:=7
+PKG_RELEASE:=8
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_DEPENDS := uci
@@ -46,6 +46,8 @@ endef
 define Package/freifunk-watchdog/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/freifunk-watchdog.init $(1)/etc/init.d/freifunk-watchdog
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/freifunk-watchdog.config $(1)/etc/config/freifunk-watchdog
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ffwatchd $(1)/usr/sbin/
 endef

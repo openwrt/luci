@@ -197,7 +197,7 @@ static int check_uci_update(const char *config, time_t *mtime)
 }
 
 /* Add tuple */
-static void load_wifi_uci_add_iface(const char *section, struct uci_itr_ctx *itr)
+static void load_wifi_uci_add_iface(const char *section, struct uci_wifi_iface_itr_ctx *itr)
 {
 	wifi_tuple_t *t;
 	const char *ucitmp;
@@ -253,12 +253,12 @@ static void load_wifi_uci_add_iface(const char *section, struct uci_itr_ctx *itr
 static wifi_tuple_t * load_wifi_uci(wifi_tuple_t *ifs, time_t *modtime)
 {
 	struct uci_context *ctx;
-	struct uci_itr_ctx itr;
+	struct uci_wifi_iface_itr_ctx itr;
 	wifi_tuple_t *cur, *next;
 
 	if( check_uci_update("wireless", modtime) )
 	{
-		syslog(LOG_INFO, "Config changed, reloading");
+		syslog(LOG_INFO, "Wireless config changed, reloading");
 
 		if( (ctx = ucix_init("wireless")) != NULL )
 		{
@@ -284,6 +284,78 @@ static wifi_tuple_t * load_wifi_uci(wifi_tuple_t *ifs, time_t *modtime)
 	return ifs;
 }
 
+/* Add tuple */
+static void load_watchdog_uci_add_process(const char *section, struct uci_process_itr_ctx *itr)
+{
+	process_tuple_t *t;
+	const char *ucitmp;
+	int val = 0;
+
+	if( (t = (process_tuple_t *)malloc(sizeof(process_tuple_t))) != NULL )
+	{
+		t->restart = 0;
+
+		ucitmp = ucix_get_option(itr->ctx, "freifunk-watchdog", section, "process");
+		if(ucitmp)
+		{
+			strncpy(t->process, ucitmp, sizeof(t->process));
+			val++;
+		}
+
+		ucitmp = ucix_get_option(itr->ctx, "freifunk-watchdog", section, "initscript");
+		if(ucitmp)
+		{
+			strncpy(t->initscript, ucitmp, sizeof(t->initscript));
+			val++;
+		}
+
+		if( val == 2 )
+		{
+			syslog(LOG_INFO, "Monitoring %s: initscript=%s",
+				t->process, t->initscript);
+
+				t->next = itr->list;
+				itr->list = t;
+		}
+		else
+		{
+			free(t);
+		}
+	}
+}
+
+/* Load config */
+static process_tuple_t * load_watchdog_uci(process_tuple_t *procs)
+{
+	struct uci_context *ctx;
+	struct uci_process_itr_ctx itr;
+	process_tuple_t *cur, *next;
+
+	syslog(LOG_INFO, "Loading watchdog config");
+
+	if( (ctx = ucix_init("freifunk-watchdog")) != NULL )
+	{
+		if( procs != NULL )
+		{
+			for(cur = procs; cur; cur = next)
+			{
+				next = cur->next;
+				free(cur);
+			}
+		}
+
+		itr.list = NULL;
+		itr.ctx = ctx;
+
+		ucix_for_each_section_type(ctx, "freifunk-watchdog", "process",
+			(void *)load_watchdog_uci_add_process, &itr);
+
+		return itr.list;
+	}
+
+	return procs;
+}
+
 /* Daemon implementation */
 static int do_daemon(void)
 {
@@ -296,13 +368,12 @@ static int do_daemon(void)
 	char bssid[18];
 	struct sigaction sa;
 
-	wifi_tuple_t *ifs = NULL, *curif;
-	time_t modtime = 0;
+	wifi_tuple_t *ifs = NULL, *curr_if;
+	process_tuple_t *procs = NULL, *curr_proc;
+	time_t wireless_modtime = 0;
 
 	int action_intv = 0;
 	int restart_wifi = 0;
-	int restart_cron = 0;
-	int restart_sshd = 0;
 	int loadavg_panic = 0;
 
 	openlog(SYSLOG_IDENT, 0, LOG_DAEMON);
@@ -340,6 +411,9 @@ static int do_daemon(void)
 	sa.sa_flags = 0;
 	sigaction(SIGCHLD, &sa, NULL);
 
+	/* Load watchdog configuration only once */
+	procs = load_watchdog_uci(procs);
+
 	while( 1 )
 	{
 		/* Check/increment action interval */
@@ -354,47 +428,52 @@ static int do_daemon(void)
 			else
 				loadavg_panic = 0;
 
-			/* Check crond */
-			if( find_process("crond") < 0 )
-				restart_cron++;
-			else
-				restart_cron = 0;
-
-			/* Check SSHd */
-			if( find_process("dropbear") < 0 )
-				restart_sshd++;
-			else
-				restart_sshd = 0;
-
 			/* Check wireless interfaces */
-			ifs = load_wifi_uci(ifs, &modtime);
-			for( curif = ifs; curif; curif = curif->next )
+			ifs = load_wifi_uci(ifs, &wireless_modtime);
+			for( curr_if = ifs; curr_if; curr_if = curr_if->next )
 			{
 				/* Get current channel and bssid */
-				if( (iw_get_bssid(iwfd, curif->ifname, bssid) == 0) &&
-			    (iw_get_channel(iwfd, curif->ifname, &channel) == 0) )
+				if( (iw_get_bssid(iwfd, curr_if->ifname, bssid) == 0) &&
+			    (iw_get_channel(iwfd, curr_if->ifname, &channel) == 0) )
 				{
 					/* Check BSSID */
-					if( strcasecmp(bssid, curif->bssid) != 0 )
+					if( strcasecmp(bssid, curr_if->bssid) != 0 )
 					{
 						syslog(LOG_WARNING, "BSSID mismatch on %s: current=%s wanted=%s",
-							curif->ifname, bssid, curif->bssid);
+							curr_if->ifname, bssid, curr_if->bssid);
 
 						restart_wifi++;
 					}
 
 					/* Check channel */
-					else if( channel != curif->channel )
+					else if( channel != curr_if->channel )
 					{
 						syslog(LOG_WARNING, "Channel mismatch on %s: current=%d wanted=%d",
-							curif->ifname, channel, curif->channel);
+							curr_if->ifname, channel, curr_if->channel);
 
 						restart_wifi++;
 					}
 				}
 				else
 				{
-					syslog(LOG_WARNING, "Requested interface %s not present", curif->ifname);
+					syslog(LOG_WARNING, "Requested interface %s not present", curr_if->ifname);
+				}
+			}
+
+			/* Check processes */
+			for( curr_proc = procs; curr_proc; curr_proc = curr_proc->next )
+			{
+				if( find_process(curr_proc->process) < 0 )
+					curr_proc->restart++;
+				else
+					curr_proc->restart = 0;
+
+				/* Process restart required? */
+				if( curr_proc->restart >= HYSTERESIS )
+				{
+					curr_proc->restart = 0;
+					syslog(LOG_WARNING, "The %s process died, restarting", curr_proc->process);
+					EXEC(PROC_ACTION);
 				}
 			}
 
@@ -405,22 +484,6 @@ static int do_daemon(void)
 				restart_wifi = 0;
 				syslog(LOG_WARNING, "Channel or BSSID mismatch on wireless interface, restarting");
 				EXEC(WIFI_ACTION);
-			}
-
-			/* Cron restart required? */
-			if( restart_cron >= HYSTERESIS )
-			{
-				restart_cron = 0;
-				syslog(LOG_WARNING, "The cron process died, restarting");
-				EXEC(CRON_ACTION);
-			}
-
-			/* SSHd restart required? */
-			if( restart_sshd >= HYSTERESIS )
-			{
-				restart_sshd = 0;
-				syslog(LOG_WARNING, "The ssh process died, restarting");
-				EXEC(SSHD_ACTION);
 			}
 
 			/* Is there a load problem? */

@@ -52,14 +52,11 @@
 /* How to call myself in the logs */
 #define SYSLOG_IDENT	"Freifunk Watchdog"
 
+/* Process error action */
+#define PROC_ACTION		curr_proc->initscript, curr_proc->initscript, "restart"
+
 /* Wifi error action */
 #define WIFI_ACTION		"/sbin/wifi", "/sbin/wifi"
-
-/* Crond error action */
-#define CRON_ACTION		"/etc/init.d/cron", "/etc/init.d/cron", "restart"
-
-/* SSHd error action */
-#define SSHD_ACTION		"/etc/init.d/dropbear", "/etc/init.d/dropbear", "restart"
 
 /* Watchdog device */
 #define WATCH_DEVICE	"/dev/watchdog"
@@ -85,12 +82,29 @@ struct wifi_tuple {
 };
 
 /* structure to hold tuple-list and uci context during iteration */
-struct uci_itr_ctx {
+struct uci_wifi_iface_itr_ctx {
 	struct wifi_tuple *list;
 	struct uci_context *ctx;
 };
 
 typedef struct wifi_tuple wifi_tuple_t;
+
+
+/* process name/exec tuples */
+struct process_tuple {
+	char process[PATH_MAX + 1];
+	char initscript[PATH_MAX + 1];
+	int restart;
+	struct process_tuple *next;
+};
+
+/* structure to hold tuple-list and uci context during iteration */
+struct uci_process_itr_ctx {
+	struct process_tuple *list;
+	struct uci_context *ctx;
+};
+
+typedef struct process_tuple process_tuple_t;
 
 
 /* ioctl() helper (stolen from iwlib) */
