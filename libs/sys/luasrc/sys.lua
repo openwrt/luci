@@ -451,35 +451,42 @@ function net.routes6(callback)
 				"([a-f0-9]+) +([^%s]+)"
 			)
 
-			src_ip = luci.ip.Hex(
-				src_ip, tonumber(src_prefix, 16), luci.ip.FAMILY_INET6, false
-			)
+			if dst_ip and dst_prefix and
+			   src_ip and src_prefix and
+			   nexthop and metric and
+			   refcnt and usecnt and
+			   flags and dev
+			then
+				src_ip = luci.ip.Hex(
+					src_ip, tonumber(src_prefix, 16), luci.ip.FAMILY_INET6, false
+				)
 
-			dst_ip = luci.ip.Hex(
-				dst_ip, tonumber(dst_prefix, 16), luci.ip.FAMILY_INET6, false
-			)
+				dst_ip = luci.ip.Hex(
+					dst_ip, tonumber(dst_prefix, 16), luci.ip.FAMILY_INET6, false
+				)
 
-			nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
+				nexthop = luci.ip.Hex( nexthop, 128, luci.ip.FAMILY_INET6, false )
 
-			local rt = {
-				source   = src_ip,
-				dest     = dst_ip,
-				nexthop  = nexthop,
-				metric   = tonumber(metric, 16),
-				refcount = tonumber(refcnt, 16),
-				usecount = tonumber(usecnt, 16),
-				flags    = tonumber(flags, 16),
-				device   = dev,
+				local rt = {
+					source   = src_ip,
+					dest     = dst_ip,
+					nexthop  = nexthop,
+					metric   = tonumber(metric, 16),
+					refcount = tonumber(refcnt, 16),
+					usecount = tonumber(usecnt, 16),
+					flags    = tonumber(flags, 16),
+					device   = dev,
 
-				-- lua number is too small for storing the metric
-				-- add a metric_raw field with the original content
-				metric_raw = metric
-			}
+					-- lua number is too small for storing the metric
+					-- add a metric_raw field with the original content
+					metric_raw = metric
+				}
 
-			if callback then
-				callback(rt)
-			else
-				routes[#routes+1] = rt
+				if callback then
+					callback(rt)
+				else
+					routes[#routes+1] = rt
+				end
 			end
 		end
 
