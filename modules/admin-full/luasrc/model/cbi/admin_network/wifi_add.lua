@@ -145,7 +145,7 @@ function newnet.parse(self, section)
 		wconf.encryption = "none"
 	end
 
-	if wconf.mode == "adhoc" then
+	if wconf.mode == "adhoc" or wconf.mode == "sta" then
 		wconf.bssid = m.hidden.bssid
 	end
 
