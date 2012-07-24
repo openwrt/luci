@@ -14,7 +14,7 @@ $Id$
 ]]--
 
 m = Map("ushare", translate("uShare"),
-	translate("ushare_desc"))
+	translate("uShare is a UPnP (TM) A/V & DLNA Media Server. It implements the server component that provides UPnP media devices with information on available multimedia files."))
 
 s = m:section(TypedSection, "ushare", translate("Settings"))
 s.addremove = false
