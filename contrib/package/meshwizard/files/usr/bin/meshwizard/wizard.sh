@@ -59,6 +59,7 @@ $dir/helpers/setup_dnsmasq.sh
 $dir/helpers/setup_system.sh
 $dir/helpers/setup_olsrd.sh
 $dir/helpers/setup_firewall.sh
+$dir/helpers/setup_ssh.sh
 
 if [ "$wan_proto" == "static" ] && [ -n "$wan_ip4addr" ] && [ -n "$wan_netmask" ]; then
 	$dir/helpers/setup_wan_static.sh
