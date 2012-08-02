@@ -76,7 +76,7 @@ fi
 if [ "$profile_ipv6" == 1 ] && [ "$has_ipv6" = 1 ]; then
 	$dir/helpers/setup_lan_ipv6.sh
 	# Setup auto-ipv6
-	if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
+	if [ -n "$(echo "$profile_ipv6_config" |grep auto-ipv6)" ]; then
 		$dir/helpers/setup_auto-ipv6.sh
 	fi
 fi
@@ -107,8 +107,8 @@ for net in $networks; do
 	$dir/helpers/setup_splash.sh $net
 	$dir/helpers/setup_firewall_interface.sh $net
 
-	if [ "$profile_ipv6" == 1 ] && [ "$has_ipv6" = 1 ]; then
-		$dir/helpers/setup_radvd_interface.sh $net
+	if [ -n "$(echo "$profile_ipv6_config" |grep auto-ipv6)" ]; then
+		$dir/helpers/setup_auto-ipv6-interface.sh $net
 	fi
 done
 

@@ -2,7 +2,8 @@
 
 . $dir/functions.sh
 
-if [ "$general_ipv6_config" = "auto-ipv6-fromv4" ]; then
+echo $profile_ipv6_config
+if [ "$profile_ipv6_config" = "auto-ipv6-fromv4" ]; then
 	mode="fromv4"
 else
 	mode="random"
