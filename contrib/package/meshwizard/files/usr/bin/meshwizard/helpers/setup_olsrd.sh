@@ -4,8 +4,7 @@
 . /lib/functions.sh
 . $dir/functions.sh
 
-# Clean the config, remove httpinfo and interface wlan
-uci -q delete olsrd.olsrd_httpinfo
+# Clean the config, remove interface wlan
 handle_interface() {
         config_get interface "$1" interface
         if [ "$interface" = "wlan" ]; then
@@ -14,7 +13,6 @@ handle_interface() {
 }
 config_load olsrd
 config_foreach handle_interface Interface
-uci_commitverbose "Cleanup olsrd config" olsrd
 
 #Rename olsrd basic settings
 handle_olsrd() {
@@ -36,13 +34,11 @@ config_foreach handle_interfacedefaults InterfaceDefaults
 if [ "$profile_ipv6" = 1 ] && [ "$has_ipv6" == "1" ]; then
 	uci set olsrd.olsrd.IpVersion="6and4"
 fi
-uci_commitverbose "Setup olsr basic settings" olsrd
 
 
 # Setup new InterfaceDefaults
 uci set olsrd.InterfaceDefaults=InterfaceDefaults
 set_defaults "olsr_interfacedefaults_" olsrd.InterfaceDefaults
-uci_commitverbose "Setup olsr interface defaults" olsrd
 
 # Rename nameservice, dyngw and httpinfo plugins
 
@@ -50,10 +46,15 @@ handle_plugin() {
 	config_get library "$1" library
 	if [ -z "${1/cfg[0-9a-fA-F]*/}" ]; then
 		new="$(echo $library | cut -d '.' -f 1)"
-		section_rename olsrd $1 $new
+		section_rename olsrd "$1" "$new"
 	fi
 }
 config_foreach handle_plugin LoadPlugin
+uci -q delete olsrd.olsrd_httpinfo
+uci -q delete olsrd.olsrd_dyn_gw
+
+uci_commitverbose "Cleanup olsrd config" olsrd
+
 
 # Setup nameservice plugin
 if [ -n "$profile_suffix" ]; then
