@@ -24,11 +24,13 @@ module "luci.controller.rpc"
 function index()
 	local function authenticator(validator, accs)
 		local auth = luci.http.formvalue("auth", true)
-		if auth then
+		if auth then -- if authentication token was given
 			local sdat = luci.sauth.read(auth)
-			user = loadstring(sdat)().user
-			if user and luci.util.contains(accs, user) then
-				return user, auth
+			if sdat then -- if given token is valid
+				user = loadstring(sdat)().user
+				if user and luci.util.contains(accs, user) then
+					return user, auth
+				end
 			end
 		end
 		luci.http.status(403, "Forbidden")
