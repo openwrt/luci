@@ -26,36 +26,62 @@ luci.config.sauth = luci.config.sauth or {}
 sessionpath = luci.config.sauth.sessionpath
 sessiontime = tonumber(luci.config.sauth.sessiontime) or 15 * 60
 
---- Manually clean up expired sessions.
-function clean()
-	local now   = os.time()
-	local files = fs.dir(sessionpath)
-	
-	if not files then
-		return nil
-	end
-	
-	for file in files do
-		local fname = sessionpath .. "/" .. file
-		local stat = fs.stat(fname)
-		if stat and stat.type == "reg" and stat.mtime + sessiontime < now then
-			fs.unlink(fname)
-		end 
-	end
-end
-
 --- Prepare session storage by creating the session directory.
 function prepare()
 	fs.mkdir(sessionpath, 700)
-	 
 	if not sane() then
 		error("Security Exception: Session path is not sane!")
 	end
 end
 
+function encode(t)
+	return luci.util.get_bytecode({
+		user=t.user,
+		token=t.token,
+		secret=t.secret,
+		atime=luci.sys.uptime()
+	})
+end
+
+function decode(blob)
+	local t = loadstring(blob)()
+	return {
+		user = t.user,
+		token = t.token,
+		secret = t.secret,
+		atime = t.atime
+	}
+end
+
 --- Read a session and return its content.
 -- @param id	Session identifier
 -- @return		Session data
+local function _read(id)
+	local blob = fs.readfile(sessionpath .. "/" .. id)
+	return blob
+end
+
+--- Write session data to a session file.
+-- @param id	Session identifier
+-- @param data	Session data
+local function _write(id, data)
+	local f = nixio.open(sessionpath .. "/" .. id, "w", 600)
+	f:writeall(data)
+	f:close()
+end
+
+function write(id, data)
+	if not sane() then
+		prepare()
+	end
+
+	if not id or #id == 0 or not id:match("^%w+$") then
+		error("Session ID is not sane!")
+	end
+
+	_write(id, data)
+end
+
 function read(id)
 	if not id or #id == 0 then
 		return
@@ -63,12 +89,19 @@ function read(id)
 	if not id:match("^%w+$") then
 		error("Session ID is not sane!")
 	end
-	clean()
 	if not sane(sessionpath .. "/" .. id) then
 		return
 	end
-	fs.utimes(sessionpath .. "/" .. id)
-	return fs.readfile(sessionpath .. "/" .. id)
+
+	local blob = _read(id)
+	if decode(blob).atime + sessiontime < luci.sys.uptime()then
+		fs.unlink(sessionpath .. "/" .. id)
+		return
+	end
+	-- refresh atime in session
+	refreshed = encode(decode(blob))
+	write(id, refreshed)
+	return blob
 end
 
 
@@ -80,24 +113,6 @@ function sane(file)
 		and fs.stat(file or sessionpath, "modestr")
 			== (file and "rw-------" or "rwx------")
 end
-
-
---- Write session data to a session file.
--- @param id	Session identifier
--- @param data	Session data
-function write(id, data)
-	if not sane() then
-		prepare()
-	end
-	if not id:match("^%w+$") then
-		error("Session ID is not sane!")
-	end
-	
-	local f = nixio.open(sessionpath .. "/" .. id, "w", 600)
-	f:writeall(data)
-	f:close()
-end
-
 
 --- Kills a session
 -- @param id	Session identifier

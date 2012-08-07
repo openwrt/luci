@@ -27,7 +27,7 @@ function index()
 		if auth then -- if authentication token was given
 			local sdat = luci.sauth.read(auth)
 			if sdat then -- if given token is valid
-				user = loadstring(sdat)().user
+				user = luci.sauth.decode(sdat).user
 				if user and luci.util.contains(accs, user) then
 					return user, auth
 				end
@@ -68,7 +68,7 @@ function rpc_auth()
 			secret = sys.uniqueid(16)
 
 			http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-			sauth.write(sid, util.get_bytecode({
+			sauth.write(sid, sauth.encode({
 				user=user,
 				token=token,
 				secret=secret
