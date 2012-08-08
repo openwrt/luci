@@ -36,8 +36,8 @@ local luci  = {}
 luci.util   = require "luci.util"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require =
-	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require
+local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select =
+	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select
 
 
 --- LuCI Linux and POSIX system utilities.
@@ -231,6 +231,145 @@ net = {}
 --			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
 function net.arptable(callback)
 	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+", callback)
+end
+
+local function _nethints(what, callback)
+	local _, k, e, mac, ip, name
+	local ifn = { }
+	local hosts = { }
+
+	local function _add(i, ...)
+		local k = select(i, ...)
+		if k then
+			if not hosts[k] then hosts[k] = { } end
+			hosts[k][1] = select(1, ...) or hosts[k][1]
+			hosts[k][2] = select(2, ...) or hosts[k][2]
+			hosts[k][3] = select(3, ...) or hosts[k][3]
+			hosts[k][4] = select(4, ...) or hosts[k][4]
+		end
+	end
+
+	if fs.access("/proc/net/arp") then
+		for e in io.lines("/proc/net/arp") do
+			ip, mac = e:match("^([%d%.]+)%s+%S+%s+%S+%s+([a-fA-F0-9:]+)%s+")
+			if ip and mac then
+				_add(what, mac:upper(), ip, nil, nil)
+			end
+		end
+	end
+
+	if fs.access("/etc/ethers") then
+		for e in io.lines("/etc/ethers") do
+			mac, ip = e:match("^([a-f0-9]%S+) (%S+)")
+			if mac and ip then
+				_add(what, mac:upper(), ip, nil, nil)
+			end
+		end
+	end
+
+	if fs.access("/var/dhcp.leases") then
+		for e in io.lines("/var/dhcp.leases") do
+			mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
+			if mac and ip then
+				_add(what, mac:upper(), ip, nil, name ~= "*" and name)
+			end
+		end
+	end
+
+	for _, e in ipairs(nixio.getifaddrs()) do
+		if e.name ~= "lo" then
+			ifn[e.name] = ifn[e.name] or { }
+			if e.family == "packet" and e.addr and #e.addr == 17 then
+				ifn[e.name][1] = e.addr:upper()
+			elseif e.family == "inet" then
+				ifn[e.name][2] = e.addr
+			elseif e.family == "inet6" then
+				ifn[e.name][3] = e.addr
+			end
+		end
+	end
+
+	for _, e in pairs(ifn) do
+		if e[what] and (e[2] or e[3]) then
+			_add(what, e[1], e[2], e[3], e[4])
+		end
+	end
+
+	for _, e in luci.util.kspairs(hosts) do
+		callback(e[1], e[2], e[3], e[4])
+	end
+end
+
+--- Returns a two-dimensional table of mac address hints.
+-- @return  Table of table containing known hosts from various sources.
+--          Each entry contains the values in the following order:
+--          [ "mac", "name" ]
+function net.mac_hints(callback)
+	if callback then
+		_nethints(1, function(mac, v4, v6, name)
+			name = name or nixio.getnameinfo(v4 or v6) or v4
+			if name and name ~= mac then
+				callback(mac, name or nixio.getnameinfo(v4 or v6) or v4)
+			end
+		end)
+	else
+		local rv = { }
+		_nethints(1, function(mac, v4, v6, name)
+			name = name or nixio.getnameinfo(v4 or v6) or v4
+			if name and name ~= mac then
+				rv[#rv+1] = { mac, name or nixio.getnameinfo(v4 or v6) or v4 }
+			end
+		end)
+		return rv
+	end
+end
+
+--- Returns a two-dimensional table of IPv4 address hints.
+-- @return  Table of table containing known hosts from various sources.
+--          Each entry contains the values in the following order:
+--          [ "ip", "name" ]
+function net.ipv4_hints(callback)
+	if callback then
+		_nethints(2, function(mac, v4, v6, name)
+			name = name or nixio.getnameinfo(v4) or mac
+			if name and name ~= v4 then
+				callback(v4, name)
+			end
+		end)
+	else
+		local rv = { }
+		_nethints(2, function(mac, v4, v6, name)
+			name = name or nixio.getnameinfo(v4) or mac
+			if name and name ~= v4 then
+				rv[#rv+1] = { v4, name }
+			end
+		end)
+		return rv
+	end
+end
+
+--- Returns a two-dimensional table of IPv6 address hints.
+-- @return  Table of table containing known hosts from various sources.
+--          Each entry contains the values in the following order:
+--          [ "ip", "name" ]
+function net.ipv6_hints(callback)
+	if callback then
+		_nethints(3, function(mac, v4, v6, name)
+			name = name or nixio.getnameinfo(v6) or mac
+			if name and name ~= v6 then
+				callback(v6, name)
+			end
+		end)
+	else
+		local rv = { }
+		_nethints(3, function(mac, v4, v6, name)
+			name = name or nixio.getnameinfo(v6) or mac
+			if name and name ~= v6 then
+				rv[#rv+1] = { v6, name }
+			end
+		end)
+		return rv
+	end
 end
 
 --- Returns conntrack information
