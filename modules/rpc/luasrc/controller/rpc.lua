@@ -27,20 +27,19 @@ function index()
 		if auth then -- if authentication token was given
 			local sdat = luci.sauth.read(auth)
 			if sdat then -- if given token is valid
-				user = luci.sauth.decode(sdat).user
-				if user and luci.util.contains(accs, user) then
-					return user, auth
+				if sdat.user and luci.util.contains(accs, sdat.user) then
+					return sdat.user, auth
 				end
 			end
 		end
 		luci.http.status(403, "Forbidden")
 	end
-	
+
 	local rpc = node("rpc")
 	rpc.sysauth = "root"
 	rpc.sysauth_authenticator = authenticator
 	rpc.notemplate = true
-	
+
 	entry({"rpc", "uci"}, call("rpc_uci"))
 	entry({"rpc", "fs"}, call("rpc_fs"))
 	entry({"rpc", "sys"}, call("rpc_sys"))
@@ -55,9 +54,9 @@ function rpc_auth()
 	local sys     = require "luci.sys"
 	local ltn12   = require "luci.ltn12"
 	local util    = require "luci.util"
-	
+
 	local loginstat
-	
+
 	local server = {}
 	server.challenge = function(user, pass)
 		local sid, token, secret
@@ -68,13 +67,14 @@ function rpc_auth()
 			secret = sys.uniqueid(16)
 
 			http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-			sauth.write(sid, sauth.encode({
+			sauth.reap()
+			sauth.write(sid, {
 				user=user,
 				token=token,
 				secret=secret
-			}))
+			})
 		end
-		
+
 		return sid and {sid=sid, token=token, secret=secret}
 	end
 
@@ -82,7 +82,7 @@ function rpc_auth()
 		local challenge = server.challenge(...)
 		return challenge and challenge.sid
 	end
-	
+
 	http.prepare_content("application/json")
 	ltn12.pump.all(jsonrpc.handle(server, http.source()), http.write)
 end
@@ -96,7 +96,7 @@ function rpc_uci()
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local ltn12   = require "luci.ltn12"
-	
+
 	http.prepare_content("application/json")
 	ltn12.pump.all(jsonrpc.handle(uci, http.source()), http.write)
 end
@@ -125,7 +125,7 @@ function rpc_fs()
 		local source = ltn12.source.chain(ltn12.source.file(fp), mime.encode("base64"))
 		return ltn12.pump.all(source, sink) and table.concat(output)
 	end
-	
+
 	function fs2.writefile(filename, data)
 		local stat, mime = pcall(require, "mime")
 		if not stat then
@@ -136,7 +136,7 @@ function rpc_fs()
 		local  sink = file and ltn12.sink.chain(mime.decode("base64"), ltn12.sink.file(file))
 		return sink and ltn12.pump.all(ltn12.source.string(data), sink) or false
 	end
-	
+
 	http.prepare_content("application/json")
 	ltn12.pump.all(jsonrpc.handle(fs2, http.source()), http.write)
 end
@@ -146,7 +146,7 @@ function rpc_sys()
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local ltn12   = require "luci.ltn12"
-	
+
 	http.prepare_content("application/json")
 	ltn12.pump.all(jsonrpc.handle(sys, http.source()), http.write)
 end
