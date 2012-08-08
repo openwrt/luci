@@ -30,13 +30,13 @@ local nsantenna = cursor:get("wireless", device, "antenna")
 
 local iw = nil
 local tx_powers = {}
-local chan = sys.wifi.channels()
+local chan = {}
 
 state:foreach("wireless", "wifi-iface",
 	function(s)
 		if s.device == device and not iw then
 			iw = sys.wifi.getiwinfo(s.ifname or s.device)
-			chan = sys.wifi.channels(s.ifname or s.device)
+			chan = iw and iw.freqlist or { }
 			tx_powers = iw.txpwrlist or { }
 		end
 	end)
