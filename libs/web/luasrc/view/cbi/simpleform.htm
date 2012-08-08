@@ -18,7 +18,7 @@
 	<div class="error"><%=self.errmessage%></div>
 <%- end %>
 <% if not self.embedded then %>
-	<div>
+	<div class="cbi-page-actions">
 <%-
 	if type(self.hidden) == "table" then
 		for k, v in pairs(self.hidden) do
