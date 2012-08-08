@@ -27,7 +27,6 @@ end
 
 local wlcursor = luci.model.uci.cursor_state()
 local wireless = wlcursor:get_all("wireless")
-local wifidata = sys.wifi.getiwconfig()
 local wifidevs = {}
 local ifaces = {}
 
@@ -55,7 +54,8 @@ s = m:section(Table, ifaces, translate("Networks"))
 link = s:option(DummyValue, "_link", translate("Link"))
 function link.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
-	return wifidata[ifname] and wifidata[ifname]["Link Quality"] or "-"
+	local iwinfo = sys.wifi.getiwinfo(ifname)
+	return iwinfo and "%d/%d" %{ iwinfo.quality, iwinfo.quality_max } or "-"
 end
 
 essid = s:option(DummyValue, "ssid", "ESSID")
@@ -63,8 +63,8 @@ essid = s:option(DummyValue, "ssid", "ESSID")
 bssid = s:option(DummyValue, "_bsiid", "BSSID")
 function bssid.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
-	return (wifidata[ifname] and (wifidata[ifname].Cell
-	 or wifidata[ifname]["Access Point"])) or "-"
+	local iwinfo = sys.wifi.getiwinfo(ifname)
+	return iwinfo and iwinfo.bssid or "-"
 end
 
 channel = s:option(DummyValue, "channel", translate("Channel"))
@@ -84,7 +84,8 @@ encryption = s:option(DummyValue, "encryption", translate("<abbr title=\"Encrypt
 power = s:option(DummyValue, "_power", translate("Power"))
 function power.cfgvalue(self, section)
 	local ifname = self.map:get(section, "ifname")
-	return wifidata[ifname] and wifidata[ifname]["Tx-Power"] or "-"
+	local iwinfo = sys.wifi.getiwinfo(ifname)
+	return iwinfo and "%d dBm" % iwinfo.txpower or "-"
 end
 
 scan = s:option(Button, "_scan", translate("Scan"))
