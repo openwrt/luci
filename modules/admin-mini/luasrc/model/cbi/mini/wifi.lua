@@ -102,7 +102,21 @@ function scan.write(self, section)
 	m.autoapply = false
 	t2.render = t2._render
 	local ifname = self.map:get(section, "ifname")
-	luci.util.update(t2.data, sys.wifi.iwscan(ifname))
+	local iwinfo = sys.wifi.getiwinfo(ifname)
+	if iwinfo then
+		local _, cell
+		for _, cell in ipairs(iwinfo.scanlist) do
+			t2.data[#t2.data+1] = {
+				Quality = "%d/%d" %{ cell.quality, cell.quality_max },
+				ESSID   = cell.ssid,
+				Address = cell.bssid,
+				Mode    = cell.mode,
+				["Encryption key"] = cell.encryption.enabled and "On" or "Off",
+				["Signal level"]   = "%d dBm" % cell.signal,
+				["Noise level"]    = "%d dBm" % iwinfo.noise
+			}
+		end
+	end
 end
 
 t2._render = t2.render
