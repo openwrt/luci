@@ -219,7 +219,6 @@ function jsonstatus()
 	root.network = {}
 	root.wireless = {devices = {}, interfaces = {}, status = {}}
 	local wifs = root.wireless.interfaces
-	local wifidata = luci.sys.wifi.getiwconfig() or {}
 	local netdata = luci.sys.net.deviceinfo() or {}
 
 	for _, vif in ipairs(ffwifs) do
@@ -229,7 +228,18 @@ function jsonstatus()
 			if s.device == vif and s.network == vif then
 				wifs[#wifs+1] = s
 				if s.ifname then
-					root.wireless.status[s.ifname] = wifidata[s.ifname]
+					local iwinfo = luci.sys.wifi.getiwinfo(s.ifname)
+					if iwinfo then
+						root.wireless.status[s.ifname] = { }
+
+						local _, f
+						for _, f in ipairs({
+							"channel", "txpower", "bitrate", "signal", "noise",
+							"quality", "quality_max", "mode", "ssid", "bssid", "encryption", "ifname"
+						}) do
+							root.wireless.status[s.ifname][f] = iwinfo[f]
+						end
+					end
 				end
 			end
 		end)
