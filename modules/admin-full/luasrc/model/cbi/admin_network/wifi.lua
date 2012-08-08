@@ -15,6 +15,7 @@ $Id$
 local wa = require "luci.tools.webadmin"
 local nw = require "luci.model.network"
 local ut = require "luci.util"
+local nt = require "luci.sys".net
 local fs = require "nixio.fs"
 
 arg[1] = arg[1] or ""
@@ -104,33 +105,6 @@ local function txpower_current(pwr, list)
 		end
 	end
 	return (list[#list] and list[#list].driver_dbm) or pwr or 0
-end
-
-local function arplist(opt)
-	local _, e, mac, ip, name
-	local arp = { }
-
-	for _, e in ipairs(luci.sys.net.arptable()) do
-		arp[e["HW address"]:upper()] = { e["IP address"] }
-	end
-
-	if fs.access("/etc/ethers") then
-		for e in io.lines("/etc/ethers") do
-			mac, ip = e:match("^([a-f0-9]%S+) (%S+)")
-			if mac and ip then arp[mac:upper()] = { ip } end
-		end
-	end
-
-	if fs.access("/var/dhcp.leases") then
-		for e in io.lines("/var/dhcp.leases") do
-			mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
-			if mac and ip then arp[mac:upper()] = { ip, name ~= "*" and name } end
-		end
-	end
-
-	for mac, e in luci.util.kspairs(arp) do
-		opt:value(mac, "%s (%s)" %{ mac, e[2] or e[1] })
-	end
 end
 
 local iw = luci.sys.wifi.getiwinfo(arg[1])
@@ -473,7 +447,7 @@ if hwtype == "mac80211" then
 	ml.datatype = "macaddr"
 	ml:depends({macfilter="allow"})
 	ml:depends({macfilter="deny"})
-	arplist(ml)
+	nt.mac_hints(function(mac, name) ml:value(mac, "%s (%s)" %{ mac, name }) end)
 
 	mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
 	mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})
@@ -578,7 +552,7 @@ if hwtype == "atheros" then
 	ml.datatype = "macaddr"
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
-	arplist(ml)
+	nt.mac_hints(function(mac, name) ml:value(mac, "%s (%s)" %{ mac, name }) end)
 
 	s:taboption("advanced", Value, "rate", translate("Transmission Rate"))
 	s:taboption("advanced", Value, "mcast_rate", translate("Multicast Rate"))
@@ -652,7 +626,7 @@ if hwtype == "prism2" then
 	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
 	ml:depends({macpolicy="allow"})
 	ml:depends({macpolicy="deny"})
-	arplist(ml)
+	nt.mac_hints(function(mac, name) ml:value(mac, "%s (%s)" %{ mac, name }) end)
 
 	s:taboption("advanced", Value, "rate", translate("Transmission Rate"))
 	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
