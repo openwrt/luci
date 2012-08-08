@@ -34,76 +34,68 @@ function prepare()
 	end
 end
 
-function encode(t)
-	return luci.util.get_bytecode({
-		user=t.user,
-		token=t.token,
-		secret=t.secret,
-		atime=luci.sys.uptime()
-	})
-end
-
-function decode(blob)
-	local t = loadstring(blob)()
-	return {
-		user = t.user,
-		token = t.token,
-		secret = t.secret,
-		atime = t.atime
-	}
-end
-
---- Read a session and return its content.
--- @param id	Session identifier
--- @return		Session data
 local function _read(id)
 	local blob = fs.readfile(sessionpath .. "/" .. id)
 	return blob
 end
 
---- Write session data to a session file.
--- @param id	Session identifier
--- @param data	Session data
 local function _write(id, data)
 	local f = nixio.open(sessionpath .. "/" .. id, "w", 600)
 	f:writeall(data)
 	f:close()
 end
 
+local function _checkid(id)
+	return not not (id and #id == 32 and id:match("^[a-fA-F0-9]+$"))
+end
+
+--- Write session data to a session file.
+-- @param id	Session identifier
+-- @param data	Session data table
 function write(id, data)
 	if not sane() then
 		prepare()
 	end
 
-	if not id or #id == 0 or not id:match("^%w+$") then
-		error("Session ID is not sane!")
-	end
+	assert(_checkid(id), "Security Exception: Session ID is invalid!")
+	assert(type(data) == "table", "Security Exception: Session data invalid!")
 
-	_write(id, data)
+	data.atime = luci.sys.uptime()
+
+	_write(id, luci.util.get_bytecode(data))
 end
 
+--- Read a session and return its content.
+-- @param id	Session identifier
+-- @return		Session data table or nil if the given id is not found
 function read(id)
 	if not id or #id == 0 then
-		return
+		return nil
 	end
-	if not id:match("^%w+$") then
-		error("Session ID is not sane!")
-	end
+
+	assert(_checkid(id), "Security Exception: Session ID is invalid!")
+
 	if not sane(sessionpath .. "/" .. id) then
-		return
+		return nil
 	end
 
 	local blob = _read(id)
-	if decode(blob).atime + sessiontime < luci.sys.uptime()then
-		fs.unlink(sessionpath .. "/" .. id)
-		return
-	end
-	-- refresh atime in session
-	refreshed = encode(decode(blob))
-	write(id, refreshed)
-	return blob
-end
+	local func = loadstring(blob)
+	setfenv(func, {})
 
+	local sess = func()
+	assert(type(sess) == "table", "Session data invalid!")
+
+	if sess.atime and sess.atime + sessiontime < luci.sys.uptime() then
+		kill(id)
+		return nil
+	end
+
+	-- refresh atime in session
+	write(id, sess)
+
+	return sess
+end
 
 --- Check whether Session environment is sane.
 -- @return Boolean status
@@ -117,8 +109,19 @@ end
 --- Kills a session
 -- @param id	Session identifier
 function kill(id)
-	if not id:match("^%w+$") then
-		error("Session ID is not sane!")
-	end
+	assert(_checkid(id), "Security Exception: Session ID is invalid!")
 	fs.unlink(sessionpath .. "/" .. id)
+end
+
+--- Remove all expired session data files
+function reap()
+	if sane() then
+		local id
+		for id in nixio.fs.dir(sessionpath) do
+			if _checkid(id) then
+				-- reading the session will kill it if it is expired
+				read(id)
+			end
+		end
+	end
 end
