@@ -352,9 +352,6 @@ function dispatch(request)
 		local user
 
 		if sdat then
-			sdat = loadstring(sdat)
-			setfenv(sdat, {})
-			sdat = sdat()
 			if not verifytoken or ctx.urltoken.stok == sdat.token then
 				user = sdat.user
 			end
@@ -376,11 +373,12 @@ function dispatch(request)
 					local sid = sess or luci.sys.uniqueid(16)
 					if not sess then
 						local token = luci.sys.uniqueid(16)
-						sauth.write(sid, util.get_bytecode({
+						sauth.reap()
+						sauth.write(sid, {
 							user=user,
 							token=token,
 							secret=luci.sys.uniqueid(16)
-						}))
+						})
 						ctx.urltoken.stok = token
 					end
 					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
