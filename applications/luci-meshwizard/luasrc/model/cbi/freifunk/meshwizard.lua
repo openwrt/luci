@@ -98,9 +98,12 @@ uci:foreach("wireless", "wifi-device", function(section)
 	chan:depends(device .. "_config", 1)
 	chan:value('default')
 
-	for _, f in ipairs(sys.wifi.channels(device)) do
-		if not f.restricted then
-			chan:value(f.channel)
+	local iwinfo = sys.wifi.getiwinfo(device)
+	if iwinfo then
+		for _, f in ipairs(iwinfo.freqlist) do
+			if not f.restricted then
+				chan:value(f.channel)
+			end
 		end
 	end
 	-- IPv4 address
