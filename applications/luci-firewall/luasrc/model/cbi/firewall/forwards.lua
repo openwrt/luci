@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2010-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -9,7 +10,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 local ds = require "luci.dispatcher"
@@ -75,17 +75,15 @@ end
 ft.opt_name(s, DummyValue, translate("Name"))
 
 
-proto = s:option(DummyValue, "proto", translate("Protocol"))
-proto.rawhtml = true
-function proto.cfgvalue(self, s)
-	return ft.fmt_proto(self.map:get(s, "proto")) or "Any"
+local function forward_proto_txt(self, s)
+	return "%s-%s" %{
+		translate("IPv4"),
+		ft.fmt_proto(self.map:get(s, "proto"),
+	                 self.map:get(s, "icmp_type")) or "TCP+UDP"
+	}
 end
 
-
-src = s:option(DummyValue, "src", translate("Source"))
-src.rawhtml = true
-src.width   = "20%"
-function src.cfgvalue(self, s)
+local function forward_src_txt(self, s)
 	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
 	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
@@ -100,23 +98,32 @@ function src.cfgvalue(self, s)
 	end
 end
 
-via = s:option(DummyValue, "via", translate("Via"))
-via.rawhtml = true
-via.width   = "20%"
-function via.cfgvalue(self, s)
+local function forward_via_txt(self, s)
 	local a = ft.fmt_ip(self.map:get(s, "src_dip"), translate("any router IP"))
 	local p = ft.fmt_port(self.map:get(s, "src_dport"))
 
 	if p then
-		return translatef("To %s at %s", a, p)
+		return translatef("Via %s at %s", a, p)
 	else
-		return translatef("To %s", a)
+		return translatef("Via %s", a)
 	end
 end
 
-dest = s:option(DummyValue, "dest", translate("Destination"))
+match = s:option(DummyValue, "match", translate("Match"))
+match.rawhtml = true
+match.width   = "50%"
+function match.cfgvalue(self, s)
+	return "<small>%s<br />%s<br />%s</small>" % {
+		forward_proto_txt(self, s),
+		forward_src_txt(self, s),
+		forward_via_txt(self, s)
+	}
+end
+
+
+dest = s:option(DummyValue, "dest", translate("Forward to"))
 dest.rawhtml = true
-dest.width   = "30%"
+dest.width   = "40%"
 function dest.cfgvalue(self, s)
 	local z = ft.fmt_zone(self.map:get(s, "dest"), translate("any zone"))
 	local a = ft.fmt_ip(self.map:get(s, "dest_ip"), translate("any host"))
@@ -124,9 +131,9 @@ function dest.cfgvalue(self, s)
 		ft.fmt_port(self.map:get(s, "src_dport"))
 
 	if p then
-		return translatef("Forward to %s, %s in %s", a, p, z)
+		return translatef("%s, %s in %s", a, p, z)
 	else
-		return translatef("Forward to %s in %s", a, z)
+		return translatef("%s in %s", a, z)
 	end
 end
 

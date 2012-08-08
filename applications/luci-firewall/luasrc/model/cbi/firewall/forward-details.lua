@@ -91,6 +91,10 @@ o.rmempty = true
 o.datatype = "macaddr"
 o.placeholder = translate("any")
 
+luci.sys.net.mac_hints(function(mac, name)
+	o:value(mac, "%s (%s)" %{ mac, name })
+end)
+
 
 o = s:option(Value, "src_ip",
 	translate("Source IP address"),
@@ -98,6 +102,10 @@ o = s:option(Value, "src_ip",
 o.rmempty = true
 o.datatype = "neg(ip4addr)"
 o.placeholder = translate("any")
+
+luci.sys.net.ipv4_hints(function(ip, name)
+	o:value(ip, "%s (%s)" %{ ip, name })
+end)
 
 
 o = s:option(Value, "src_port",
@@ -111,6 +119,11 @@ o.placeholder = translate("any")
 o = s:option(Value, "src_dip",
 	translate("External IP address"),
 	translate("Only match incoming traffic directed at the given IP address."))
+
+luci.sys.net.ipv4_hints(function(ip, name)
+	o:value(ip, "%s (%s)" %{ ip, name })
+end)
+
 
 o.rmempty = true
 o.datatype = "ip4addr"
@@ -134,9 +147,10 @@ o = s:option(Value, "dest_ip", translate("Internal IP address"),
 	translate("Redirect matched incoming traffic to the specified \
 		internal host"))
 o.datatype = "ip4addr"
-for i, dataset in ipairs(sys.net.arptable()) do
-	o:value(dataset["IP address"])
-end
+
+luci.sys.net.ipv4_hints(function(ip, name)
+	o:value(ip, "%s (%s)" %{ ip, name })
+end)
 
 
 o = s:option(Value, "dest_port",

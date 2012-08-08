@@ -45,9 +45,9 @@
 		cbi_validate_field('_newfwd.intport', true, 'portrange');
 
 		cbi_combobox_init('_newfwd.intaddr', {
-			<% local i, e; for i, e in ipairs(luci.sys.net.arptable()) do -%>
-				<%- if i > 1 then %>,<% end -%>'<%=e["IP address"]%>': '<%=e["IP address"]%>'
-			<%- end %> }, '', '<%: -- custom -- %>');
+			<% first = true; luci.sys.net.ipv4_hints(function(ip, name) %>
+				<%- if first then first = false else %>,<% end -%>'<%=ip%>': '<%=ip%> (<%=name%>)'
+			<%- end) %> }, '', '<%: -- custom -- %>');
 
 		cbi_bind(document.getElementById('_newfwd.extport'), 'blur',
 			function() {

@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2010-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -10,7 +10,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 local sys = require "luci.sys"
@@ -112,11 +111,19 @@ elseif rule_type == "redirect" then
 	o.datatype = "neg(macaddr)"
 	o.placeholder = translate("any")
 
+	luci.sys.net.mac_hints(function(mac, name)
+		o:value(mac, "%s (%s)" %{ mac, name })
+	end)
+
 
 	o = s:option(Value, "src_ip", translate("Source IP address"))
 	o.rmempty = true
 	o.datatype = "neg(ipaddr)"
 	o.placeholder = translate("any")
+
+	luci.sys.net.ipv4_hints(function(ip, name)
+		o:value(ip, "%s (%s)" %{ ip, name })
+	end)
 
 
 	o = s:option(Value, "src_port",
@@ -137,9 +144,9 @@ elseif rule_type == "redirect" then
 	o = s:option(Value, "dest_ip", translate("Destination IP address"))
 	o.datatype = "neg(ip4addr)"
 
-	for i, dataset in ipairs(luci.sys.net.arptable()) do
-		o:value(dataset["IP address"])
-	end
+	luci.sys.net.ipv4_hints(function(ip, name)
+		o:value(ip, "%s (%s)" %{ ip, name })
+	end)
 
 
 	o = s:option(Value, "dest_port",
@@ -275,10 +282,18 @@ else
 	o.datatype = "list(macaddr)"
 	o.placeholder = translate("any")
 
+	luci.sys.net.mac_hints(function(mac, name)
+		o:value(mac, "%s (%s)" %{ mac, name })
+	end)
+
 
 	o = s:option(Value, "src_ip", translate("Source address"))
 	o.datatype = "neg(ipaddr)"
 	o.placeholder = translate("any")
+
+	luci.sys.net.ipv4_hints(function(ip, name)
+		o:value(ip, "%s (%s)" %{ ip, name })
+	end)
 
 
 	o = s:option(Value, "src_port", translate("Source port"))
@@ -296,6 +311,10 @@ else
 	o = s:option(Value, "dest_ip", translate("Destination address"))
 	o.datatype = "neg(ipaddr)"
 	o.placeholder = translate("any")
+
+	luci.sys.net.ipv4_hints(function(ip, name)
+		o:value(ip, "%s (%s)" %{ ip, name })
+	end)
 
 
 	o = s:option(Value, "dest_port", translate("Destination port"))

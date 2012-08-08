@@ -2,6 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2010-2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -9,7 +10,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 local ds = require "luci.dispatcher"
@@ -84,30 +84,21 @@ end
 
 ft.opt_name(s, DummyValue, translate("Name"))
 
-family = s:option(DummyValue, "family", translate("Family"))
-function family.cfgvalue(self, s)
+local function rule_proto_txt(self, s)
 	local f = self.map:get(s, "family")
+	local p = ft.fmt_proto(self.map:get(s, "proto"),
+	                       self.map:get(s, "icmp_type")) or "TCP+UDP"
+
 	if f and f:match("4") then
-		return translate("IPv4")
+		return "%s-%s" %{ translate("IPv4"), p }
 	elseif f and f:match("6") then
-		return translate("IPv6")
+		return "%s-%s" %{ translate("IPv6"), p }
 	else
-		return translate("Any")
+		return "%s %s" %{ translate("Any"), p }
 	end
 end
 
-proto = s:option(DummyValue, "proto", translate("Protocol"))
-proto.rawhtml = true
-proto.width   = "20%"
-function proto.cfgvalue(self, s)
-	return ft.fmt_proto(self.map:get(s, "proto"), self.map:get(s, "icmp_type"))
-		or "TCP+UDP"
-end
-
-src = s:option(DummyValue, "src", translate("Source"))
-src.rawhtml = true
-src.width   = "20%"
-function src.cfgvalue(self, s)
+local function rule_src_txt(self, s)
 	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
 	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
@@ -122,10 +113,7 @@ function src.cfgvalue(self, s)
 	end
 end
 
-dest = s:option(DummyValue, "dest", translate("Destination"))
-dest.rawhtml = true
-dest.width   = "20%"
-function dest.cfgvalue(self, s)
+local function rule_dest_txt(self, s)
 	local z = ft.fmt_zone(self.map:get(s, "dest"))
 	local p = ft.fmt_port(self.map:get(s, "dest_port"))
 
@@ -151,6 +139,30 @@ function dest.cfgvalue(self, s)
 	end
 end
 
+local function snat_dest_txt(self, s)
+	local z = ft.fmt_zone(self.map:get(s, "dest"), translate("any zone"))
+	local a = ft.fmt_ip(self.map:get(s, "dest_ip"), translate("any host"))
+	local p = ft.fmt_port(self.map:get(s, "dest_port")) or
+		ft.fmt_port(self.map:get(s, "src_dport"))
+
+	if p then
+		return translatef("To %s, %s in %s", a, p, z)
+	else
+		return translatef("To %s in %s", a, z)
+	end
+end
+
+
+match = s:option(DummyValue, "match", translate("Match"))
+match.rawhtml = true
+match.width   = "70%"
+function match.cfgvalue(self, s)
+	return "<small>%s<br />%s<br />%s</small>" % {
+		rule_proto_txt(self, s),
+		rule_src_txt(self, s),
+		rule_dest_txt(self, s)
+	}
+end
 
 target = s:option(DummyValue, "target", translate("Action"))
 target.rawhtml = true
@@ -226,48 +238,18 @@ end
 
 ft.opt_name(s, DummyValue, translate("Name"))
 
-proto = s:option(DummyValue, "proto", translate("Protocol"))
-proto.rawhtml = true
-function proto.cfgvalue(self, s)
-	return ft.fmt_proto(self.map:get(s, "proto")) or "TCP+UDP"
+match = s:option(DummyValue, "match", translate("Match"))
+match.rawhtml = true
+match.width   = "70%"
+function match.cfgvalue(self, s)
+	return "<small>%s<br />%s<br />%s</small>" % {
+		rule_proto_txt(self, s),
+		rule_src_txt(self, s),
+		snat_dest_txt(self, s)
+	}
 end
 
-
-src = s:option(DummyValue, "src", translate("Source"))
-src.rawhtml = true
-src.width   = "20%"
-function src.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
-	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
-	local p = ft.fmt_port(self.map:get(s, "src_port"))
-	local m = ft.fmt_mac(self.map:get(s, "src_mac"))
-
-	if p and m then
-		return translatef("From %s in %s with source %s and %s", a, z, p, m)
-	elseif p or m then
-		return translatef("From %s in %s with source %s", a, z, p or m)
-	else
-		return translatef("From %s in %s", a, z)
-	end
-end
-
-dest = s:option(DummyValue, "dest", translate("Destination"))
-dest.rawhtml = true
-dest.width   = "30%"
-function dest.cfgvalue(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "dest"), translate("any zone"))
-	local a = ft.fmt_ip(self.map:get(s, "dest_ip"), translate("any host"))
-	local p = ft.fmt_port(self.map:get(s, "dest_port")) or
-		ft.fmt_port(self.map:get(s, "src_dport"))
-
-	if p then
-		return translatef("To %s, %s in %s", a, p, z)
-	else
-		return translatef("To %s in %s", a, z)
-	end
-end
-
-snat = s:option(DummyValue, "via", translate("SNAT"))
+snat = s:option(DummyValue, "via", translate("Action"))
 snat.rawhtml = true
 snat.width   = "20%"
 function snat.cfgvalue(self, s)
