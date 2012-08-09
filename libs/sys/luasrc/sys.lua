@@ -230,11 +230,39 @@ net = {}
 --			The following fields are defined for arp entry objects:
 --			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
 function net.arptable(callback)
-	return _parse_delimited_table(io.lines("/proc/net/arp"), "%s%s+", callback)
+	local arp, e, r, v
+	if fs.access("/proc/net/arp") then
+		for e in io.lines("/proc/net/arp") do
+			local r = { }, v
+			for v in e:gmatch("%S+") do
+				r[#r+1] = v
+			end
+
+			if r[1] ~= "IP" then
+				local x = {
+					["IP address"] = r[1],
+					["HW type"]    = r[2],
+					["Flags"]      = r[3],
+					["HW address"] = r[4],
+					["Mask"]       = r[5],
+					["Device"]     = r[6]
+				}
+
+				if callback then
+					callback(x)
+				else
+					arp = arp or { }
+					arp[#arp+1] = x
+				end
+			end
+		end
+	end
+	return arp
 end
 
 local function _nethints(what, callback)
 	local _, k, e, mac, ip, name
+	local cur = uci.cursor()
 	local ifn = { }
 	local hosts = { }
 
@@ -275,6 +303,13 @@ local function _nethints(what, callback)
 			end
 		end
 	end
+
+	cur:foreach("dhcp", "host",
+		function(s)
+			for mac in luci.util.imatch(s.mac) do
+				_add(what, mac:upper(), s.ip, nil, s.name)
+			end
+		end)
 
 	for _, e in ipairs(nixio.getifaddrs()) do
 		if e.name ~= "lo" then
@@ -906,39 +941,6 @@ end
 
 
 -- Internal functions
-
-function _parse_delimited_table(iter, delimiter, callback)
-	delimiter = delimiter or "%s+"
-
-	local data  = {}
-	local trim  = luci.util.trim
-	local split = luci.util.split
-
-	local keys = split(trim(iter()), delimiter, nil, true)
-	for i, j in pairs(keys) do
-		keys[i] = trim(keys[i])
-	end
-
-	for line in iter do
-		local row = {}
-		line = trim(line)
-		if #line > 0 then
-			for i, j in pairs(split(line, delimiter, nil, true)) do
-				if keys[i] then
-					row[keys[i]] = j
-				end
-			end
-		end
-
-		if callback then
-			callback(row)
-		else
-			data[#data+1] = row
-		end
-	end
-
-	return data
-end
 
 function _parse_mixed_record(cnt, delimiter)
 	delimiter = delimiter or "  "
