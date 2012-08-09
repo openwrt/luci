@@ -10,8 +10,6 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 ]]--
 
-local uci = require "luci.model.uci".cursor()
-local utl = require "luci.util"
 local sys = require "luci.sys"
 local fs  = require "nixio.fs"
 
@@ -27,9 +25,6 @@ local has_wol = fs.access("/usr/bin/wol")
 
 
 s = m:section(SimpleSection)
-
-local arp = { }
-local e, ip, mac, name
 
 if has_ewk and has_wol then
 	bin = s:option(ListValue, "binary", translate("WoL program"),
@@ -55,40 +50,12 @@ if has_ewk then
 end
 
 
-for _, e in ipairs(sys.net.arptable()) do
-	arp[e["HW address"]:upper()] = { e["IP address"] }
-end
-
-for e in io.lines("/etc/ethers") do
-	mac, ip = e:match("^([a-f0-9]%S+) (%S+)")
-	if mac and ip then arp[mac:upper()] = { ip } end
-end
-
-for e in io.lines("/var/dhcp.leases") do
-	mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
-	if mac and ip then arp[mac:upper()] = { ip, name ~= "*" and name } end
-end
-
-uci:foreach("dhcp", "host",
-	function(s)
-		if s.mac and s.ip then
-			if type(s.mac) == "table" then
-				local m
-				for _, m in ipairs(s.mac) do
-					arp[m:upper()] = { s.ip, s.name }
-				end
-			else
-				arp[s.mac:upper()] = { s.ip, s.name }
-			end
-		end
-	end)
-
 host = s:option(Value, "mac", translate("Host to wake up"),
 	translate("Choose the host to wake up or enter a custom MAC address to use"))
 
-for mac, ip in utl.kspairs(arp) do
-	host:value(mac, "%s (%s)" %{ mac, ip[2] or ip[1] })
-end
+sys.net.mac_hints(function(mac, name)
+	host:value(mac, "%s (%s)" %{ mac, name })
+end)
 
 
 function host.write(self, s, val)
