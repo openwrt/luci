@@ -88,7 +88,7 @@ o = s:option(DynamicList, "src_mac",
 	translate("Source MAC address"),
 	translate("Only match incoming traffic from these MACs."))
 o.rmempty = true
-o.datatype = "macaddr"
+o.datatype = "neg(macaddr)"
 o.placeholder = translate("any")
 
 luci.sys.net.mac_hints(function(mac, name)
@@ -112,7 +112,7 @@ o = s:option(Value, "src_port",
 	translate("Source port"),
 	translate("Only match incoming traffic originating from the given source port or port range on the client host"))
 o.rmempty = true
-o.datatype = "portrange"
+o.datatype = "neg(portrange)"
 o.placeholder = translate("any")
 
 
@@ -126,14 +126,14 @@ end)
 
 
 o.rmempty = true
-o.datatype = "ip4addr"
+o.datatype = "neg(ip4addr)"
 o.placeholder = translate("any")
 
 
 o = s:option(Value, "src_dport", translate("External port"),
 	translate("Match incoming traffic directed at the given " ..
 		"destination port or port range on this host"))
-o.datatype = "portrange"
+o.datatype = "neg(portrange)"
 
 
 

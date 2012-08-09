@@ -156,7 +156,7 @@ elseif rule_type == "redirect" then
 
 	o.rmempty = true
 	o.placeholder = translate("any")
-	o.datatype = "portrange"
+	o.datatype = "neg(portrange)"
 
 
 	o = s:option(Value, "src_dip",
