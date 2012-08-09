@@ -52,10 +52,11 @@
 
 		<script type="text/javascript">//<![CDATA[
 			cbi_validate_field('_newsnat.dport', true, 'portrange');
+			cbi_validate_field('_newsnat.dip', true, 'ip4addr');
 			cbi_combobox_init('_newsnat.dip', {
 				<% local c, k, v = 0; for k, v in ipairs(nw:get_interfaces()) do -%>
 					<%- local a; for k, a in ipairs(v:ipaddrs()) do c = c + 1 -%>
-						<% if c > 1 then %>,<% end %>'<%=a:host():string()%>': '<%=a:host():string()%> (<%=v:shortname()%>)',
+						<% if c > 1 then %>,<% end %>'<%=a:host():string()%>': '<%=a:host():string()%> (<%=v:shortname()%>)'
 					<%- end %>
 				<%- end %> }, '<%: -- Please choose -- %>', '<%: -- custom -- %>');
 		//]]></script>
