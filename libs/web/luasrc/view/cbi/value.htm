@@ -18,6 +18,8 @@
 		-%>
 		}, '<%- if not self.rmempty and not self.optional then -%>
 			<%-: -- Please choose -- -%>
+			<%- elseif self.placeholder then -%>
+			<%-= pcdata(self.placeholder) -%>
 		<%- end -%>', '
 		<%- if self.combobox_manual then -%>
 			<%-=self.combobox_manual-%>

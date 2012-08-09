@@ -441,7 +441,7 @@ function cbi_combobox(id, values, def, man) {
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
 		sel.id = selid;
-		sel.className = 'cbi-input-select';
+		sel.className = obj.className.replace(/cbi-input-text/, 'cbi-input-select');
 
 	if (obj.nextSibling) {
 		obj.parentNode.insertBefore(sel, obj.nextSibling);
@@ -504,6 +504,10 @@ function cbi_combobox(id, values, def, man) {
 			//Do nothing
 		}
 	})
+
+	// Retrigger validation in select
+	sel.focus();
+	sel.blur();
 }
 
 function cbi_combobox_init(id, values, def, man) {
