@@ -384,9 +384,8 @@ mode:value("adhoc", translate("Ad-Hoc"))
 bssid = s:taboption("general", Value, "bssid", translate("<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"))
 
 network = s:taboption("general", Value, "network", translate("Network"),
-	translate("Choose the network you want to attach to this wireless interface. " ..
-		"Select <em>unspecified</em> to not attach any network or fill out the " ..
-		"<em>create</em> field to define a new network."))
+	translate("Choose the network(s) you want to attach to this wireless interface or " ..
+		"fill out the <em>create</em> field to define a new network."))
 
 network.rmempty = true
 network.template = "cbi/network_netlist"
