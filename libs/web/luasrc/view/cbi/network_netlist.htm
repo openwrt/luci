@@ -49,9 +49,14 @@
 
 	<% if not self.nocreate then %>
 	<li style="padding:0.25em 0">
-		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value, "checked", "checked")%> /> &#160;
+		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value and self.widget ~= "checkbox", "checked", "checked")%> /> &#160;
 		<div style="padding:0.5em; display:inline">
-			<label<%=attr("for", cbid .. "_new")%>><em><%:unspecified -or- create:%>&#160;</em></label>
+			<label<%=attr("for", cbid .. "_new")%>><em>
+				<%- if self.widget == "checkbox" then -%>
+					<%:create:%>
+				<%- else -%>
+					<%:unspecified -or- create:%>
+				<%- end -%>&#160;</em></label>
 			<input style="width:6em" type="text"<%=attr("name", cbid .. ".newnet")%> onfocus="document.getElementById('<%=cbid%>_new').checked=true" />
 		</div>
 	</li>
