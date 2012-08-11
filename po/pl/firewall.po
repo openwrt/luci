@@ -295,21 +295,26 @@ msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Przekieruj ruch przychodzący do wskazanego hosta w sieci wewnętrznej"
 
 msgid "Restrict Masquerading to given destination subnets"
-msgstr ""
+msgstr "Ogranicz maskaradę do wskazanych sieci docelowych"
 
 msgid "Restrict Masquerading to given source subnets"
-msgstr ""
+msgstr "Ogranicz maskaradę do wskazanych sieci żródłowych"
 
+# Wstawiłem rodzinę gdyż gdzieś wcześniej było tak opisane ale klasa pasuje mi tu bardziej
 msgid "Restrict to address family"
-msgstr ""
+msgstr "Ogranicz do rodziny adresów"
 
+# Dosłownie przetłumaczone, nie bardzo wiem czy chodzi o czynność przepisywania pakietu przez usługę czy to jakieś ogólne sformułowanie...
 msgid "Rewrite matched traffic to the given address."
-msgstr ""
+msgstr "Przepisz dopasowany ruch do wskazanych adresów."
 
+# Jak wyżej chodzi o przepisanie pakietu przez usługę?
 msgid ""
 "Rewrite matched traffic to the given source port. May be left empty to only "
 "rewrite the IP address."
 msgstr ""
+"Przepisz dopasowany ruch do danego portu żródłowego. Można zostawić puste "
+"aby przepisać tylko adres IP"
 
 msgid "Rewrite to source %s"
 msgstr ""
@@ -318,10 +323,10 @@ msgid "Rewrite to source %s, %s"
 msgstr ""
 
 msgid "SNAT IP address"
-msgstr ""
+msgstr "Adres IP SNAT"
 
 msgid "SNAT port"
-msgstr ""
+msgstr "Port SNAT"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/rrule.lua      #
@@ -351,13 +356,18 @@ msgid "Source MAC address"
 msgstr "Źródłowy adres MAC"
 
 msgid "Source NAT"
-msgstr ""
+msgstr "NAT żródłowy"
 
+# http://www.digipedia.pl/def/doc/id/677604507/name/SNAT/
 msgid ""
 "Source NAT is a specific form of masquerading which allows fine grained "
 "control over the source IP used for outgoing traffic, for example to map "
 "multiple WAN addresses to internal subnets."
 msgstr ""
+"SNAT używany jest wtedy, gdy zmieniane są adresy pakietów połączenia "
+"wychodzącego, czyli pakiety żródłowe. Wykonywany jest zawsze po routowaniu "
+"(POSTROUTING), a więc w chwili, gdy pakiety są gotowe opuścić host. "
+"IPmasquerading jest formą SNAT."
 
 msgid "Source address"
 msgstr "Adres źródłowy"
