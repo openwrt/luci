@@ -32,6 +32,14 @@ adv_interface.nocreate = true
 adv_interface.nobridges = true
 adv_interface.novirtual = true
 
+function adv_interface.write(self, section, value)
+	if type(value) == "table" then
+		Value.write(self, section, table.concat(value, " "))
+	else
+		Value.write(self, section, value)
+	end
+end
+
 function adv_interface.remove(self, section)
 	self:write(section, " ")
 end
