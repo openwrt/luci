@@ -1,6 +1,5 @@
 [ "$INTERFACE" != "wan" ] && exit 0
 [ -f /proc/net/ipv6_route ] && has_ipv6=1
-
 case $ACTION in
         ifup)
 		pr="`uci get freifunk-policyrouting.pr.enable`"
@@ -8,7 +7,7 @@ case $ACTION in
 		# check if ipv6 is enabled:
 
 		if [ $pr = "1" ]; then
-			logger -t policyrouting "Starting policy routing on $INTERFACE"
+			logger -s -t policyrouting "Starting policy routing on $INTERFACE"
 
 			# Setup new tables
 			tables="/etc/iproute2/rt_tables"
@@ -40,23 +39,16 @@ case $ACTION in
 				uci commit
 			fi
 	
-			gw=`uci -p /var/state get network.wan.gateway`
-			netmask=`uci -p /var/state get network.wan.netmask`
-			if [ -z "$netmask" ]; then
-				NETMASK="255.255.255.255"
-			fi
-
-			if  [ -n "`uci -p /var/state get network.wan.ifname`" ]; then
-				device=`uci -p /var/state get network.wan.ifname`
-			else
-				device=`uci -p /var/state get network.wan.device`
-			fi
-
-			eval `ipcalc.sh $gw $netmask`
+			gw="$(ip r |grep default | cut -d " " -f 3)"
+			# if no gateway was found stop now
+			[ -z "$gw" ] && logger -s -t policyrouting "No gateway found" && exit 1
+			
+			device="`uci -q -p /var/state get network.wan.ifname`"
+			[ -z "$device" ] && device="`uci -q -p /var/state get network.wan.device`"
+			[ -z "$device" ] && logger -s -t policyrouting "No device found for wan." && exit 1
 
 			test -n "`ip r s t default`" && ip r d default t default
 			test -n "`ip r s |grep default`" && ip route del default
-			ip route add $NETWORK/$NETMASK dev $device table default
 			ip route add default via $gw dev $device table default
 
 			if [ "$has_ipv6" = 1 ]; then
@@ -96,12 +88,12 @@ case $ACTION in
 	;;
 
 	ifdown)
-	logger -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
+	logger -s -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
 	ip rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
 	ip rule del lookup olsr-default > /dev/null 2>&1
 	ip rule del lookup olsr	> /dev/null 2>&1
 	if [ "$has_ipv6" = 1 ]; then
-		logger -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
+		logger -s -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
 		ip -6 rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
 		ip -6 rule del lookup olsr-default > /dev/null 2>&1
 		ip -6 rule del lookup olsr > /dev/null 2>&1
