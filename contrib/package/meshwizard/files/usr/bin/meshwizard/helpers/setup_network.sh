@@ -7,7 +7,8 @@ net="$1"
 
 # Setup a (new) interface section for $net
 
-ipaddr=$(uci get meshwizard.netconfig.$net\_ip4addr)
+ipaddr=$(uci -q get meshwizard.netconfig.$net\_ip4addr)
+ip6addr=$(uci -q get meshwizard.netconfig.$net\_ip6addr)
 [ -z "$ipaddr" ] && msg_missing_value meshwizard $net\_ip4addr
 
 netmask=$(uci -q get meshwizard.netconfig.$net\_netmask)
@@ -29,6 +30,9 @@ if [ "$profile_ipv6" = 1 ]; then
 	if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 		ip6addr="$($dir/helpers/gen_auto-ipv6-dhcpv6-ip.sh $netrenamed)"
 		uci set network.$netrenamed.ip6addr="${ip6addr}/112"
+	fi
+	if [ "$profile_ipv6_config" = "static" ] && [ -n "$ip6addr" ]; then
+		uci set network.$netrenamed.ip6addr="$ip6addr"
 	fi
 fi
 
