@@ -178,7 +178,7 @@ lm.placeholder = translate("unlimited")
 
 em = s:taboption("advanced", Value, "ednspacket_max",
 	translate("<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Extension Mechanisms for " ..
-		"Domain Name System\">EDNS0</abbr> paket size"),
+		"Domain Name System\">EDNS0</abbr> packet size"),
 	translate("Maximum allowed size of EDNS.0 UDP packets"))
 
 em.optional = true
