@@ -836,6 +836,7 @@ function wifi.getiwinfo(ifname)
 		local u = uci.cursor_state()
 		local d, n = ifname:match("^(%w+)%.network(%d+)")
 		if d and n then
+			ifname = d
 			n = tonumber(n)
 			u:foreach("wireless", "wifi-iface",
 				function(s)
