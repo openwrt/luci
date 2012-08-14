@@ -50,18 +50,20 @@ $Id$
 	end
 
 	function format_wifi_encryption(info)
-		if info.wep == true and not info.wpa_version then
+		if info.wep == true then
 			return "WEP"
-		elseif info.wpa then
-			return "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>" % {
+		elseif info.wpa > 0 then
+			return translatef("<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>",
 				table.concat(info.pair_ciphers, ", "),
 				table.concat(info.group_ciphers, ", "),
-				(info.wpa == 3) and "mixed WPA/WPA2"
+				(info.wpa == 3) and translate("mixed WPA/WPA2")
 					or (info.wpa == 2 and "WPA2" or "WPA"),
 				table.concat(info.auth_suites, ", ")
-			}
+			)
+		elseif info.enabled then
+			return "<em>%s</em>" % translate("unknown")
 		else
-			return "<em>None</em>"
+			return "<em>%s</em>" % translate("open")
 		end
 	end
 
@@ -113,7 +115,7 @@ $Id$
 					<strong>Channel:</strong> <%=net.channel%> |
 					<strong>Mode:</strong> <%=net.mode%> |
 					<strong>BSSID:</strong> <%=net.bssid%> |
-					<strong>Encryption:</strong> <%=net.encryption.description or translate("Open")%>
+					<strong>Encryption:</strong> <%=format_wifi_encryption(net.encryption)%>
 				</td>
 				<td class="cbi-value-field" style="width:40px">
 					<form action="<%=REQUEST_URI%>" method="post">
