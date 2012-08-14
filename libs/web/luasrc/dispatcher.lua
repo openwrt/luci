@@ -304,6 +304,7 @@ function dispatch(request)
 		   write       = luci.http.write;
 		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
 		   translate   = i18n.translate;
+		   translatef  = i18n.translatef;
 		   export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
 		   striptags   = util.striptags;
 		   pcdata      = util.pcdata;
