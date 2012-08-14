@@ -286,14 +286,14 @@ $Id$
 						function wireless_label(dbm, noise)
 						{
 							if (noise)
-								return String.format("%d dBm (SNR %d dBm)", noise_floor + dbm - 255, dbm - noise);
+								return String.format("%d <%:dBm%> (SNR %d <%:dBm%>)", noise_floor + dbm - 255, dbm - noise);
 							else
-								return String.format("%d dBm", noise_floor + dbm - 255);
+								return String.format("%d <%:dBm%>", noise_floor + dbm - 255);
 						}
 
 						function rate_label(mbit)
 						{
-							return String.format("%d MBit/s", mbit);
+							return String.format("%d <%:Mbit/s%>", mbit);
 						}
 
 						label_25.firstChild.data = wireless_label(1.1 * 0.25 * data_max);
@@ -338,23 +338,23 @@ $Id$
 <table style="width:100%; table-layout:fixed" cellspacing="5">
 	<tr>
 		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:Signal:%></strong></td>
-		<td id="rssi_bw_cur">0 dBm</td>
+		<td id="rssi_bw_cur">0 <%:dBm%></td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="rssi_bw_avg">0 dBm</td>
+		<td id="rssi_bw_avg">0 <%:dBm%></td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="rssi_bw_peak">0 dBm</td>
+		<td id="rssi_bw_peak">0 <%:dBm%></td>
 	</tr>
 	<tr>
 		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid red"><%:Noise:%></strong></td>
-		<td id="noise_bw_cur">0 dBm</td>
+		<td id="noise_bw_cur">0 <%:dBm%></td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="noise_bw_avg">0 dBm</td>
+		<td id="noise_bw_avg">0 <%:dBm%></td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="noise_bw_peak">0 dBm</td>
+		<td id="noise_bw_peak">0 <%:dBm%></td>
 	</tr>
 </table>
 

@@ -43,7 +43,7 @@ $Id$
 
 		-- wl.o
 		if name == "wl" then
-			local name = "Broadcom 802.11%s Wireless Controller" % bands
+			local name = translatef("Broadcom 802.11%s Wireless Controller", bands)
 			local nm   = 0
 
 			local fd = nixio.open("/proc/bus/pci/devices", "r")
@@ -53,7 +53,7 @@ $Id$
 					if ln:match("wl$") then
 						if nm == idx then
 							local version = ln:match("^%S+%s+%S%S%S%S([0-9a-f]+)")
-							name = string.format(
+							name = translatef(
 								"Broadcom BCM%04x 802.11 Wireless Controller",
 								tonumber(version, 16)
 							)
@@ -71,23 +71,23 @@ $Id$
 
 		-- madwifi
 		elseif name == "ath" or name == "wifi" then
-			return "Atheros 802.11%s Wireless Controller" % bands
+			return translatef("Atheros 802.11%s Wireless Controller", bands)
 
 		-- ralink
 		elseif name == "ra" then
-			return "RaLink 802.11%s Wireless Controller" % bands
+			return translatef("RaLink 802.11%s Wireless Controller", bands)
 
 		-- hermes
 		elseif name == "eth" then
-			return "Hermes 802.11b Wireless Controller"
+			return translate("Hermes 802.11b Wireless Controller")
 
 		-- hostap
 		elseif name == "wlan" and fs.isdirectory("/proc/net/hostap/" .. ifname) then
-			return "Prism2/2.5/3 802.11b Wireless Controller"
+			return translate("Prism2/2.5/3 802.11b Wireless Controller")
 
 		-- dunno yet
 		else
-			return "Generic 802.11%s Wireless Controller" % bands
+			return translatef("Generic 802.11%s Wireless Controller", bands)
 		end
 	end
 
@@ -204,7 +204,7 @@ $Id$
 					var sig = document.getElementById(iw.id + '-iw-signal');
 					if (sig)
 						sig.innerHTML = String.format(
-							'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" /><br />' +
+							'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" /><br />' +
 							'<small>%d%%</small>', icon, iw.signal, iw.noise, p
 						);
 
@@ -256,8 +256,8 @@ $Id$
 					{
 						if (is_assoc)
 							dev.innerHTML = String.format(
-								'<strong><%:Channel%>:</strong> %s (%s GHz) | ' +
-								'<strong><%:Bitrate%>:</strong> %s Mb/s',
+								'<strong><%:Channel%>:</strong> %s (%s <%:GHz%>) | ' +
+								'<strong><%:Bitrate%>:</strong> %s <%:Mbit/s%>',
 									iw.channel ? iw.channel : '?',
 									iw.frequency ? iw.frequency : '?',
 									iw.bitrate ? iw.bitrate : '?'
@@ -296,7 +296,7 @@ $Id$
 								icon = "<%=resource%>/icons/signal-75-100.png";
 
 							tr.insertCell(-1).innerHTML = String.format(
-								'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
+								'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" />',
 								icon, assoclist[j].signal, assoclist[j].noise
 							);
 
@@ -306,17 +306,17 @@ $Id$
 							tr.insertCell(-1).innerHTML = arptable[assoclist[j].bssid]
 								? arptable[assoclist[j].bssid] : '?';
 
-							tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].signal);
-							tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[j].noise);
+							tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[j].signal);
+							tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[j].noise);
 
 							tr.insertCell(-1).innerHTML = (assoclist[j].rx_mcs > -1)
-								? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[j].rx_rate / 1000, assoclist[j].rx_mcs, assoclist[j].rx_40mhz ? 40 : 20)
-								: String.format('%.1f Mbit/s', assoclist[j].rx_rate / 1000)
+								? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[j].rx_rate / 1000, assoclist[j].rx_mcs, assoclist[j].rx_40mhz ? 40 : 20)
+								: String.format('%.1f <%:Mbit/s%>', assoclist[j].rx_rate / 1000)
 							;
 
 							tr.insertCell(-1).innerHTML = (assoclist[j].tx_mcs > -1)
-								? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[j].tx_rate / 1000, assoclist[j].tx_mcs, assoclist[j].tx_40mhz ? 40 : 20)
-								: String.format('%.1f Mbit/s', assoclist[j].tx_rate / 1000)
+								? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[j].tx_rate / 1000, assoclist[j].tx_mcs, assoclist[j].tx_40mhz ? 40 : 20)
+								: String.format('%.1f <%:Mbit/s%>', assoclist[j].tx_rate / 1000)
 							;
 
 							rowstyle = (rowstyle == 1) ? 2 : 1;
@@ -414,8 +414,8 @@ $Id$
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell"></th>
 				<th class="cbi-section-table-cell"><%:SSID%></th>
-				<th class="cbi-section-table-cell"><%:MAC%></th>
-				<th class="cbi-section-table-cell"><%:Address%></th>
+				<th class="cbi-section-table-cell"><%:MAC-Address%></th>
+				<th class="cbi-section-table-cell"><%:IPv4-Address%></th>
 				<th class="cbi-section-table-cell"><%:Signal%></th>
 				<th class="cbi-section-table-cell"><%:Noise%></th>
 				<th class="cbi-section-table-cell"><%:RX Rate%></th>

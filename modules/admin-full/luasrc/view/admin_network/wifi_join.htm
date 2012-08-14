@@ -105,13 +105,13 @@ $Id$
 			<% for i, net in ipairs(scanlist(3)) do net.encryption = net.encryption or { } %>
 			<tr class="cbi-section-table-row cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
 				<td class="cbi-value-field" style="width:16px; padding:3px">
-					<abbr title="Signal: <%=net.signal%> dB / Quality: <%=net.quality%>/<%=net.quality_max%>">
+					<abbr title="<%:Signal%>: <%=net.signal%> <%:dB%> / <%:Quality%>: <%=net.quality%>/<%=net.quality_max%>">
 						<img src="<%=guess_wifi_signal(net)%>" /><br />
 						<small><%=percent_wifi_signal(net)%>%</small>
 					</abbr>
 				</td>
 				<td class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px">
-					<big><strong><%=net.ssid and utl.pcdata(net.ssid) or "<em>hidden</em>"%></strong></big><br />
+					<big><strong><%=net.ssid and utl.pcdata(net.ssid) or "<em>%s</em>" % translate("hidden")%></strong></big><br />
 					<strong>Channel:</strong> <%=net.channel%> |
 					<strong>Mode:</strong> <%=net.mode%> |
 					<strong>BSSID:</strong> <%=net.bssid%> |

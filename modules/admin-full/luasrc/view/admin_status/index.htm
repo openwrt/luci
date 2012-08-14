@@ -302,8 +302,8 @@ $Id$
 							'</td><td style="text-align:left; padding:3px"><small>' +
 								'<strong><%:SSID%>:</strong> <a href="%s">%h</a><br />' +
 								'<strong><%:Mode%>:</strong> %s<br />' +
-								'<strong><%:Channel%>:</strong> %d (%.3f GHz)<br />' +
-								'<strong><%:Bitrate%>:</strong> %s Mb/s<br />',
+								'<strong><%:Channel%>:</strong> %d (%.3f <%:GHz%>)<br />' +
+								'<strong><%:Bitrate%>:</strong> %s <%:Mbit/s%><br />',
 								icon, net.signal, net.noise,
 								net.quality,
 								net.link, net.ssid,
@@ -386,7 +386,7 @@ $Id$
 						icon = "<%=resource%>/icons/signal-75-100.png";
 
 					tr.insertCell(-1).innerHTML = String.format(
-						'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" />',
+						'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" />',
 						icon, assoclist[i].signal, assoclist[i].noise
 					);
 
@@ -398,17 +398,17 @@ $Id$
 							assoclist[i].name
 					);
 
-					tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].signal);
-					tr.insertCell(-1).innerHTML = String.format('%d dBm', assoclist[i].noise);
+					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].signal);
+					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].noise);
 
 					tr.insertCell(-1).innerHTML = (assoclist[i].rx_mcs > -1)
-						? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20)
-						: String.format('%.1f Mbit/s', assoclist[i].rx_rate / 1000)
+						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20)
+						: String.format('%.1f <%:Mbit/s%>', assoclist[i].rx_rate / 1000)
 					;
 
 					tr.insertCell(-1).innerHTML = (assoclist[i].tx_mcs > -1)
-						? String.format('%.1f Mbit/s, MCS %d, %dMHz', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20)
-						: String.format('%.1f Mbit/s', assoclist[i].tx_rate / 1000)
+						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20)
+						: String.format('%.1f <%:Mbit/s%>', assoclist[i].tx_rate / 1000)
 					;
 				}
 
@@ -438,23 +438,23 @@ $Id$
 
 			if (e = document.getElementById('memtotal'))
 				e.innerHTML = progressbar(
-					(info.memfree + info.membuffers + info.memcached) + " kB",
-					info.memtotal + " kB"
+					(info.memfree + info.membuffers + info.memcached) + " <%:kB%>",
+					info.memtotal + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('memfree'))
 				e.innerHTML = progressbar(
-					info.memfree + " kB", info.memtotal + " kB"
+					info.memfree + " <%:kB%>", info.memtotal + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('memcache'))
 				e.innerHTML = progressbar(
-					info.memcached + " kB", info.memtotal + " kB"
+					info.memcached + " <%:kB%>", info.memtotal + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('membuff'))
 				e.innerHTML = progressbar(
-					info.membuffers + " kB", info.memtotal + " kB"
+					info.membuffers + " <%:kB%>", info.memtotal + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('conns'))

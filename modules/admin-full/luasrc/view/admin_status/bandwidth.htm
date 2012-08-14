@@ -71,25 +71,25 @@ $Id$
 
 	function bandwidth_label(bytes, br)
 	{
-		var uby = 'KByte';
+		var uby = '<%:kB/s%>';
 		var kby = (bytes / 1024);
 
 		if (kby >= 1024)
 		{
-			uby = 'MByte';
+			uby = '<%:MB/s%>';
 			kby = kby / 1024;
 		}
 
-		var ubi = 'KBit';
+		var ubi = '<%:kbit/s%>';
 		var kbi = (bytes * 8 / 1024);
 
 		if (kbi >= 1024)
 		{
-			ubi = 'MBit';
+			ubi = '<%:Mbit/s%>';
 			kbi = kbi / 1024;
 		}
 
-		return String.format("%f %s/s%s(%f %s/s)",
+		return String.format("%f %s%s(%f %s)",
 			kbi.toFixed(2), ubi,
 			br ? '<br />' : ' ',
 			kby.toFixed(2), uby
@@ -288,23 +288,23 @@ $Id$
 <table style="width:100%; table-layout:fixed" cellspacing="5">
 	<tr>
 		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:Inbound:%></strong></td>
-		<td id="rx_bw_cur">0 kbit/s<br />(0 KB/s)</td>
+		<td id="rx_bw_cur">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="rx_bw_avg">0 kbit/s<br />(0 KB/s)</td>
+		<td id="rx_bw_avg">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="rx_bw_peak">0 kbit/s<br />(0 KB/s)</td>
+		<td id="rx_bw_peak">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
 	</tr>
 	<tr>
 		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid green"><%:Outbound:%></strong></td>
-		<td id="tx_bw_cur">0 kbit/s<br />(0 KB/s)</td>
+		<td id="tx_bw_cur">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="tx_bw_avg">0 kbit/s<br />(0 KB/s)</td>
+		<td id="tx_bw_avg">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
 
 		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="tx_bw_peak">0 kbit/s<br />(0 KB/s)</td>
+		<td id="tx_bw_peak">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
 	</tr>
 </table>
 

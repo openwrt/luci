@@ -27,7 +27,7 @@
 				var s = document.getElementById('<%=self.option%>-iw-signal');
 				if (s)
 					s.innerHTML = String.format(
-						'<img src="%s" title="<%:Signal%>: %d dBm / <%:Noise%>: %d dBm" /><br />' +
+						'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" /><br />' +
 						'<small>%d%%</small>', icon, iw.signal, iw.noise, p
 					);
 
@@ -38,11 +38,11 @@
 						'<strong><%:SSID%>:</strong> %h<br />' +
 						'<strong><%:BSSID%>:</strong> %s | ' +
 						'<strong><%:Encryption%>:</strong> %s<br />' +
-						'<strong><%:Channel%>:</strong> %d (%.3f GHz) | ' +
-						'<strong><%:Tx-Power%>:</strong> %d dBm<br />' +
-						'<strong><%:Signal%>:</strong> %d dBm | ' +
-						'<strong><%:Noise%>:</strong> %d dBm<br />' +
-						'<strong><%:Bit Rate%>:</strong> %.1f MBit/s | ' +
+						'<strong><%:Channel%>:</strong> %d (%.3f <%:GHz%>) | ' +
+						'<strong><%:Tx-Power%>:</strong> %d <%:dBm%><br />' +
+						'<strong><%:Signal%>:</strong> %d <%:dBm%> | ' +
+						'<strong><%:Noise%>:</strong> %d <%:dBm%><br />' +
+						'<strong><%:Bitrate%>:</strong> %.1f <%:Mbit/s%> | ' +
 						'<strong><%:Country%>:</strong> %s',
 							iw.mode, iw.ssid, iw.bssid,
 							iw.encryption ? iw.encryption : '<%:None%>',
