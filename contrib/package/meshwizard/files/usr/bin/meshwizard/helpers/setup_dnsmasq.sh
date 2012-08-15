@@ -21,7 +21,7 @@ EOF
 config_get addnhosts dnsmasq addnhosts
 if [ -z "${addnhosts/\var\/etc\/hosts.olsr/}" ]; then
 	uci add_list dhcp.dnsmasq.addnhosts="/var/etc/hosts.olsr"
-	if [ "$profile_ipv6" = 1 ]; then
+	if [ "$ipv6_enabled" = 1 ]; then
 		uci add_list dhcp.dnsmasq.addnhosts="/var/etc/hosts.olsr.ipv6"
 	fi
 fi

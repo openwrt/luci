@@ -1,7 +1,6 @@
 #!/bin/sh
 . $dir/functions.sh
-
-if [ "$profile_ipv6" = 1 ]; then
+if [ "$ipv6_enabled" = "1" ]; then
 	uci batch <<- EOF
 		set uhttpd.main.listen_http=":80"
 		set uhttpd.main.listen_https=:"443"

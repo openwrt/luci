@@ -1,7 +1,7 @@
 #!/bin/sh
 netrenamed=$1
 
-local PREFIX="$(echo $profile_ipv6_prefix| cut -d "/" -f 1| sed 's/::/:/')"
+local PREFIX="$(echo $ipv6_prefix| cut -d "/" -f 1| sed 's/::/:/')"
 
 # Get the devices mac address
 local device="$(uci -p/var/state -q get network.$1.ifname)"

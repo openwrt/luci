@@ -99,7 +99,7 @@ for config in freifunk profile_$community; do
 done
 
 # If we use auto-ipv6-dhcp then allow 547/udp on the freifunk zone
-if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
+if [ "$ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 	uci batch <<- EOF
 		set firewall.dhcpv6=rule
 		set firewall.dhcpv6.src=freifunk

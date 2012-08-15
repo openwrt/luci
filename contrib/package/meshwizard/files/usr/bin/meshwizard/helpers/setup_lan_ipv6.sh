@@ -8,7 +8,7 @@
 # Setup IPv6 for the lan interface
 
 local ip6addr=""
-if [ "$profile_ipv6_config" = "auto-ipv6-dhcpv6" ]; then
+if [ "$ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 	# get lan mac
 	local device="$(uci -p/var/state -q get network.lan.ifname)"
 	if [ -n "device" ]; then

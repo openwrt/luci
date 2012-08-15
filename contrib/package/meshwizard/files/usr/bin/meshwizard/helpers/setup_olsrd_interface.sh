@@ -44,3 +44,17 @@ if [ -n "$dhcprange" ]; then
 		uci_commitverbose "Setup HNA for network $dhcprange" olsrd
 	fi
 fi
+
+# Set Hna entry for ipv6 net for static ipv6 config
+uci -q delete olsrd.${netrenamed}static
+if [ "$ipv6_enabled" = "1" ] && [ "$ipv6_config" = "static" ]; then
+	local v6range="$(uci -q get meshwizard.netconfig.$net\_ip6addr)"
+	local v6net="$(echo $v6range | cut -d '/' -f 1)"
+	local v6mask="$(echo $v6range | cut -d '/' -f 2)"
+	if [ -n "$v6net" ] && [ -n "$v6mask" ]; then
+		uci set olsrd.${netrenamed}static="Hna6"
+		uci set olsrd.${netrenamed}static.netaddr="$v6net"
+		uci set olsrd.${netrenamed}static.prefix="$v6mask"
+		uci_commitverbose "Setup HNA for network $v6range" olsrd
+	fi
+fi
