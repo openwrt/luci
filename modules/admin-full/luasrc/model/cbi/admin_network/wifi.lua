@@ -227,6 +227,18 @@ if hwtype == "mac80211" then
 	s:taboption("advanced", Value, "distance", translate("Distance Optimization"),
 		translate("Distance to farthest network member in meters."))
 
+	-- external antenna profiles
+	local eal = iw and iw.extant
+	if eal and #eal > 0 then
+		ea = s:taboption("advanced", ListValue, "extant", translate("Antenna Configuration"))
+		for _, eap in ipairs(eal) do
+			ea:value(eap.id, "%s (%s)" %{ eap.name, eap.description })
+			if eap.selected then
+				ea.default = eap.id
+			end
+		end
+	end
+
 	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
 end
