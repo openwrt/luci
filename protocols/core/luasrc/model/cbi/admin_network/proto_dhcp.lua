@@ -70,7 +70,6 @@ metric = section:taboption("advanced", Value, "metric",
 
 metric.placeholder = "0"
 metric.datatype    = "uinteger"
-metric:depends("gateway", "1")
 
 
 clientid = section:taboption("advanced", Value, "clientid",
