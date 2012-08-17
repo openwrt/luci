@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2012-08-17 19:19+0300\n"
+"PO-Revision-Date: 2012-08-17 19:58+0300\n"
 "Last-Translator: Roman A. aka BasicXP <x12ozmouse@ya.ru>\n"
 "Language-Team: Russian <x12ozmouse@ya.ru>\n"
 "Language: ru\n"
@@ -28,7 +28,7 @@ msgid "(no interfaces attached)"
 msgstr "(нет связанных интерфейсов)"
 
 msgid "-- Additional Field --"
-msgstr "-- Дополнительная вкладка --"
+msgstr "-- Дополнительное поле --"
 
 msgid "-- Please choose --"
 msgstr "-- Пожалуйста, выберите --"
@@ -115,8 +115,9 @@ msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr ""
 "<abbr title=\"максимальное\">Макс.</abbr> кол-во одновременных запросов"
 
+# Парный шифр используется для одноадресной передачи, а групповой - для широковещательной и мультикаста
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-msgstr ""
+msgstr "<abbr title='Парный: %s / Групповой: %s'>%s - %s</abbr>"
 
 msgid "APN"
 msgstr "APN"
@@ -350,9 +351,8 @@ msgstr ""
 msgid "Bitrate"
 msgstr "Скорость"
 
-#, fuzzy
 msgid "Bogus NX Domain Override"
-msgstr "Замена домена Bogus NX"
+msgstr "Переопределение поддельного NX-домена"
 
 msgid "Bridge"
 msgstr "Мост"
@@ -757,9 +757,8 @@ msgstr "Включить поддержку VLAN"
 msgid "Enable builtin NTP server"
 msgstr "Включить встроенный NTP-сервер"
 
-#, fuzzy
 msgid "Enable learning and aging"
-msgstr "Включить learning и aging"
+msgstr "Включить изучение и устаревание (learning/aging)"
 
 msgid "Enable this mount"
 msgstr "Включить эту точку монтирования"
@@ -933,7 +932,6 @@ msgstr "Основные настройки"
 msgid "Generate archive"
 msgstr "Создать архив"
 
-#, fuzzy
 msgid "Generic 802.11%s Wireless Controller"
 msgstr "Беспроводной 802.11%s контроллер"
 
@@ -961,9 +959,9 @@ msgstr "Режим HT"
 msgid "Handler"
 msgstr "Обработчик"
 
-# Send a SIGHUP to a process
+# Вообще, SIGHUP означает, что "пользователь отключился от терминала". Но чаще всего сигнал используется для перезапуска, так что переведу именно так.
 msgid "Hang Up"
-msgstr ""
+msgstr "Перезапустить"
 
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -1075,10 +1073,8 @@ msgstr "IPv6 через IPv4 (6rd)"
 msgid "IPv6-over-IPv4 (6to4)"
 msgstr "IPv6 через IPv4 (6to4)"
 
-# Has something to do with EAP
-#, fuzzy
 msgid "Identity"
-msgstr "Идентификатор"
+msgstr "Идентификация EAP"
 
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
@@ -1297,9 +1293,8 @@ msgstr ""
 msgid "List of domains to allow RFC1918 responses for"
 msgstr "Список доменов, для которых разрешены ответы RFC1918"
 
-#, fuzzy
 msgid "List of hosts that supply bogus NX domain results"
-msgstr "Список хостов, поставляющих результаты домена Bogus NX"
+msgstr "Список хостов, поставляющих поддельные результаты домена NX"
 
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "Слушать только на данном интерфейсе или, если не определено, на всех"
@@ -1462,7 +1457,6 @@ msgstr "Точка монтирования"
 msgid "Mount Points"
 msgstr "Точки монтирования"
 
-#, fuzzy
 msgid "Mount Points - Mount Entry"
 msgstr "Точки монтирования - Запись"
 
@@ -1593,9 +1587,8 @@ msgstr "Примечание: конфигурационные файлы буд
 msgid "Notice"
 msgstr "Заметка"
 
-#, fuzzy
 msgid "Nslookup"
-msgstr "Nslookup"
+msgstr "DNS-запрос"
 
 msgid "OK"
 msgstr "OK"
@@ -1760,9 +1753,8 @@ msgstr "Скорость:"
 msgid "Physical Settings"
 msgstr "Настройки канала"
 
-#, fuzzy
 msgid "Ping"
-msgstr "Ping"
+msgstr "Эхо-запрос"
 
 msgid "Pkts."
 msgstr "Пакетов."
@@ -2537,9 +2529,8 @@ msgstr ""
 msgid "Total Available"
 msgstr "Всего доступно"
 
-#, fuzzy
 msgid "Traceroute"
-msgstr "Traceroute"
+msgstr "Трассировка"
 
 msgid "Traffic"
 msgstr "Трафик"
@@ -2592,9 +2583,8 @@ msgstr "USB-устройство"
 msgid "UUID"
 msgstr "UUID"
 
-#, fuzzy
 msgid "Unable to dispatch"
-msgstr "Невозможно отправить"
+msgstr "Невозможно обработать запрос для"
 
 msgid "Unknown"
 msgstr "Неизвестно"
@@ -2694,7 +2684,6 @@ msgstr "Используемый слот ключа"
 msgid "Username"
 msgstr "Имя пользователя"
 
-#, fuzzy
 msgid "VC-Mux"
 msgstr "VC-Mux"
 
@@ -2710,9 +2699,9 @@ msgstr "VLANы на %q (%s)"
 msgid "VPN Server"
 msgstr "Сервер VPN"
 
-#, fuzzy
 msgid "Vendor Class to send when requesting DHCP"
-msgstr "Отправляемые Vendor Class при DHCP-запросах"
+msgstr ""
+"Класс производителя (Vendor class), который отправлять при DHCP-запросах"
 
 msgid "Verify"
 msgstr "Проверить"
@@ -2893,7 +2882,6 @@ msgstr "выключено"
 msgid "on"
 msgstr "включено"
 
-#, fuzzy
 msgid "open"
 msgstr "открытая"
 
