@@ -15,6 +15,7 @@ $Id$
 
 local fs = require "nixio.fs"
 local ut = require "luci.util"
+local pt = require "luci.tools.proto"
 local nw = require "luci.model.network"
 local fw = require "luci.model.firewall"
 
