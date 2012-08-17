@@ -13,9 +13,6 @@ You may obtain a copy of the License at
 
 module("luci.tools.proto", package.seeall)
 
-local uci = require "luci.model.uci".cursor()
-local net = require "luci.model.network"
-
 function opt_macaddr(s, ifc, ...)
 	local v = luci.cbi.Value
 	local o = s:taboption("advanced", v, "macaddr", ...)
