@@ -16,7 +16,7 @@ module("luci.tools.status", package.seeall)
 
 local uci = require "luci.model.uci".cursor()
 
-function dhcp_leases()
+local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
 	local leasefile = "/var/dhcp.leases"
@@ -36,14 +36,23 @@ function dhcp_leases()
 			if not ln then
 				break
 			else
-				local ts, mac, ip, name = ln:match("^(%d+) (%S+) (%S+) (%S+)")
-				if ts and mac and ip and name then
-					rv[#rv+1] = {
-						expires  = os.difftime(tonumber(ts) or 0, os.time()),
-						macaddr  = mac,
-						ipaddr   = ip,
-						hostname = (name ~= "*") and name
-					}
+				local ts, mac, ip, name, duid = ln:match("^(%d+) (%S+) (%S+) (%S+) (%S+)")
+				if ts and mac and ip and name and duid then
+					if family == 4 and not ip:match(":") then
+						rv[#rv+1] = {
+							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							macaddr  = mac,
+							ipaddr   = ip,
+							hostname = (name ~= "*") and name
+						}
+					elseif family == 6 and ip:match(":") then
+						rv[#rv+1] = {
+							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							ip6addr  = ip,
+							duid     = (duid ~= "*") and duid,
+							hostname = (name ~= "*") and name
+						}
+					end
 				end
 			end
 		end
@@ -51,6 +60,18 @@ function dhcp_leases()
 	end
 
 	return rv
+end
+
+function dhcp_leases()
+	return dhcp_leases_common(4)
+end
+
+function dhcp6_leases()
+	if luci.sys.call("dnsmasq --version 2>/dev/null | grep -q ' DHCPv6 '") == 0 then
+		return dhcp_leases_common(6)
+	else
+		return nil
+	end
 end
 
 function wifi_networks()

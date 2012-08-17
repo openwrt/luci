@@ -50,6 +50,7 @@ $Id$
 			connmax    = conn_max,
 			conncount  = conn_count,
 			leases     = luci.tools.status.dhcp_leases(),
+			leases6    = luci.tools.status.dhcp6_leases(),
 			wifinets   = luci.tools.status.wifi_networks()
 		}
 
@@ -241,6 +242,44 @@ $Id$
 				if( ls.rows.length == 1 )
 				{
 					var tr = ls.rows[0].parentNode.insertRow(-1);
+						tr.className = 'cbi-section-table-row';
+
+					var td = tr.insertCell(-1);
+						td.colSpan = 4;
+						td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
+				}
+			}
+
+			var ls6 = document.getElementById('lease6_status_table');
+			if (ls6 && info.leases6)
+			{
+				ls6.parentNode.style.display = 'block';
+
+				/* clear all rows */
+				while( ls6.rows.length > 1 )
+					ls6.rows[0].parentNode.deleteRow(1);
+
+				for( var i = 0; i < info.leases6.length; i++ )
+				{
+					var timestr;
+
+					if (info.leases6[i].expires <= 0)
+						timestr = '<em><%:expired%></em>';
+					else
+						timestr = String.format('%t', info.leases6[i].expires);
+
+					var tr = ls6.rows[0].parentNode.insertRow(-1);
+						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
+
+					tr.insertCell(-1).innerHTML = info.leases6[i].hostname ? info.leases6[i].hostname : '?';
+					tr.insertCell(-1).innerHTML = info.leases6[i].ip6addr;
+					tr.insertCell(-1).innerHTML = info.leases6[i].duid;
+					tr.insertCell(-1).innerHTML = timestr;
+				}
+
+				if( ls6.rows.length == 1 )
+				{
+					var tr = ls6.rows[0].parentNode.insertRow(-1);
 						tr.className = 'cbi-section-table-row';
 
 					var td = tr.insertCell(-1);
@@ -525,6 +564,22 @@ $Id$
 			<th class="cbi-section-table-cell"><%:Hostname%></th>
 			<th class="cbi-section-table-cell"><%:IPv4-Address%></th>
 			<th class="cbi-section-table-cell"><%:MAC-Address%></th>
+			<th class="cbi-section-table-cell"><%:Leasetime remaining%></th>
+		</tr>
+		<tr class="cbi-section-table-row">
+			<td colspan="4"><em><br /><%:Collecting data...%></em></td>
+		</tr>
+	</table>
+</fieldset>
+
+<fieldset class="cbi-section" style="display:none">
+	<legend><%:DHCPv6 Leases%></legend>
+
+	<table class="cbi-section-table" id="lease6_status_table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Hostname%></th>
+			<th class="cbi-section-table-cell"><%:IPv6-Address%></th>
+			<th class="cbi-section-table-cell"><%:DUID%></th>
 			<th class="cbi-section-table-cell"><%:Leasetime remaining%></th>
 		</tr>
 		<tr class="cbi-section-table-row">
