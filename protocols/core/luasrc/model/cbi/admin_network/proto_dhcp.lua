@@ -80,9 +80,7 @@ vendorclass = section:taboption("advanced", Value, "vendorid",
 	translate("Vendor Class to send when requesting DHCP"))
 
 
-macaddr = section:taboption("advanced", Value, "macaddr", translate("Override MAC address"))
-macaddr.placeholder = ifc and ifc:mac() or "00:00:00:00:00:00"
-macaddr.datatype    = "macaddr"
+luci.tools.proto.opt_macaddr(section, ifc, translate("Override MAC address"))
 
 
 mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))

@@ -14,7 +14,7 @@ local map, section, net = ...
 local ifc = net:get_interface()
 
 local ipaddr, netmask, gateway, broadcast, dns, accept_ra, send_rs, ip6addr, ip6gw
-local macaddr, mtu, metric
+local mtu, metric
 
 
 ipaddr = section:taboption("general", Value, "ipaddr", translate("IPv4 address"))
@@ -68,9 +68,7 @@ if luci.model.network:has_ipv6() then
 end
 
 
-macaddr = section:taboption("advanced", Value, "macaddr", translate("Override MAC address"))
-macaddr.placeholder = ifc and ifc:mac() or "00:00:00:00:00:00"
-macaddr.datatype    = "macaddr"
+luci.tools.proto.opt_macaddr(section, ifc, translate("Override MAC address"))
 
 
 mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
