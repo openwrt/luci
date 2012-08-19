@@ -41,6 +41,6 @@ function opt_macaddr(s, ifc, ...)
 	end
 
 	function o.remove(self, section)
-		self:write(self, section, nil)
+		self:write(section, nil)
 	end
 end
