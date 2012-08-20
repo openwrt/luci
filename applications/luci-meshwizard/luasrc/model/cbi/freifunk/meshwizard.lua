@@ -6,19 +6,22 @@ local util = require "luci.util"
 local ip = require "luci.ip"
 
 local community = "profile_" .. (uci:get("freifunk", "community", "name") or "Freifunk")
-mesh_network = ip.IPv4(uci:get_first(community, "community", "mesh_network") or "10.0.0.0/8")
+local mesh_network = ip.IPv4(uci:get_first(community, "community", "mesh_network") or "10.0.0.0/8")
+local community_ipv6 = uci:get_first(community, "community", "ipv6") or 0
+local community_ipv6mode = uci:get_first(community, "community", "ipv6_config") or "static"
+local meshkit_ipv6 = uci:get("meshwizard", "ipv6", "enabled") or 0
 
 m = Map("meshwizard", translate("Wizard"), translate("This wizard will assist you in setting up your router for Freifunk " ..
 	"or another similar wireless community network."))
---m:chain("meshwizard")
 
-n = m:section(TypedSection, "netconfig", translate("Interfaces"))
+n = m:section(NamedSection, "netconfig", nil, translate("Interfaces"))
 n.anonymous = true
 
 -- common functions
 
 function cbi_configure(device)
-	local configure = n:taboption(device, Flag, device .. "_config", translate("Configure this interface"))
+	local configure = n:taboption(device, Flag, device .. "_config", translate("Configure this interface"),
+		translate("Note: this will setup this interface for mesh operation, i.e. add to zone 'freifunk' and enable olsr."))
 end
 
 function cbi_ip4addr(device)
@@ -37,11 +40,26 @@ function cbi_ip4addr(device)
 	end
 end
 
+function cbi_ip6addr(device)
+	local ip6addr = n:taboption(device, Value, device .. "_ip6addr", translate("Mesh IPv6 address"),
+		translate("This is a unique IPv6 address in CIDR notation (e.g. 2001:1:2:3::1/64) and has to be registered at your local community."))
+		ip6addr:depends(device .. "_config", 1)
+		ip6addr.datatype = "ip6addr"
+end
+
+
 function cbi_dhcp(device)
 	local dhcp = n:taboption(device, Flag, device .. "_dhcp", translate("Enable DHCP"),
 		translate("DHCP will automatically assign ip addresses to clients"))
 	dhcp:depends(device .. "_config", 1)
 	dhcp.rmempty = true
+end
+
+function cbi_ra(device)
+	local ra = n:taboption(device, Flag, device .. "_ipv6ra", translate("Enable RA"),
+		translate("Send router advertisements on this device."))
+	ra:depends(device .. "_config", 1)
+	ra.rmempty = true
 end
 
 function cbi_dhcprange(device)
@@ -63,7 +81,7 @@ end)
 local wired_nets = {}
 uci:foreach("network", "interface", function(section)
 	local device = section[".name"]
-	if not util.contains(nets, device) and device ~= "loopback" then
+	if not util.contains(nets, device) and device ~= "loopback" and not device:find("wireless") then
 		table.insert(nets, device)
 		table.insert(wired_nets, device)
 	end
@@ -115,6 +133,14 @@ uci:foreach("wireless", "wifi-device", function(section)
 	-- DHCP range
 	cbi_dhcprange(device)
 
+	-- IPv6 addr and RA
+	if community_ipv6 == "1" then
+		if community_ipv6mode == "static" then
+			cbi_ip6addr(device)
+		end
+		cbi_ra(device)
+	end
+
 	-- Enable VAP
 	if hwtype == "atheros" then
 		local vap = n:taboption(device, Flag, device .. "_vap", translate("Virtual Access Point (VAP)"),
@@ -129,8 +155,16 @@ for _, device in pairs(wired_nets) do
 	cbi_ip4addr(device)
 	cbi_dhcp(device)
 	cbi_dhcprange(device)
+	-- IPv6 addr and RA
+	if community_ipv6 == "1" then
+		if community_ipv6mode == "static" then
+			cbi_ip6addr(device)
+		end
+		cbi_ra(device)
+	end
 end
 
+-- General settings
 g = m:section(TypedSection, "general", translate("General Settings"))
 g.anonymous = true
 
@@ -145,8 +179,13 @@ local share = g:option(Flag, "sharenet", translate("Share your internet connecti
 	translate("Select this to allow others to use your connection to access the internet."))
 	share.rmempty = true
 
---function m.on_after_commit (self)
---	sys.call("/usr/bin/mesh-wizard/wizard.sh >/dev/null")
---end
+-- IPv6 config
+if community_ipv6 == "1" then
+	v6 = m:section(NamedSection, "ipv6", nil, translate("IPv6 Settings"))
+	local enabled = v6:option(Flag, "enabled", translate("Enabled"),
+        	translate("Activate or deactivate IPv6 config globally."))
+	enabled.default = meshkit_ipv6
+	enabled.rmempty = false
+end
 
 return m
