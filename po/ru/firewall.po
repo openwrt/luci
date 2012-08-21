@@ -1,27 +1,28 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: LuCI: firewall\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2012-04-02 16:23+0200\n"
-"Last-Translator: Kamal <kamal.aliev@epscom.ru>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2012-08-20 13:07+0300\n"
+"Last-Translator: Roman A. aka BasicXP <x12ozmouse@ya.ru>\n"
+"Language-Team: Russian <x12ozmouse@ya.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "%s in %s"
-msgstr ""
+msgstr "%s в %s"
 
 msgid "%s%s with %s"
 msgstr "%s%s с %s"
 
 msgid "%s, %s in %s"
-msgstr ""
+msgstr "%s, %s в %s"
 
 msgid "(Unnamed Entry)"
 msgstr "(Запись без имени)"
@@ -33,10 +34,10 @@ msgid "(Unnamed SNAT)"
 msgstr "(SNAT без имени)"
 
 msgid "-- Please choose --"
-msgstr "-- Выбрать --"
+msgstr "-- Пожалуйста, выберите --"
 
 msgid "-- custom --"
-msgstr "-- настроить --"
+msgstr "-- пользовательский --"
 
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> пакетов за <var>%s</var>"
@@ -60,10 +61,10 @@ msgid "Advanced Settings"
 msgstr "Расширенные настройки"
 
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "Разрешить прохождение от <em>зон-источников</em>:"
+msgstr "Разрешить перенаправление из <em>зон-источников</em>:"
 
 msgid "Allow forward to <em>destination zones</em>:"
-msgstr "Разрешить прохождение к <em>зонам-получателям</em>:"
+msgstr "Разрешить перенаправление в <em>зоны назначения</em>:"
 
 msgid "Any"
 msgstr "Любой"
@@ -79,9 +80,13 @@ msgid ""
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
+"Пользовательские правила позволяют выполнять произвольные команды iptables, "
+"которые так или иначе не покрываются данным фреймворком межсетевого экрана. "
+"Команды выполняются при каждом перезапуске межсетевого экрана, сразу после "
+"того, как загружен набор правил по умолчанию."
 
 msgid "Destination IP address"
-msgstr "IP адрес назначения"
+msgstr "IP-адрес назначения"
 
 msgid "Destination address"
 msgstr "Адрес назначения"
@@ -101,17 +106,18 @@ msgstr "Не пропускать некорректные пакеты"
 msgid "Enable"
 msgstr "Включить"
 
+#, fuzzy
 msgid "Enable NAT Loopback"
 msgstr "Включить NAT Loopback"
 
 msgid "Enable SYN-flood protection"
-msgstr "Включить защиту от SYN-flood"
+msgstr "Включить защиту от SYN-flood атак"
 
 msgid "Enable logging on this zone"
 msgstr "Включить журналирование в этой зоне"
 
 msgid "External IP address"
-msgstr "Внешний IP адрес"
+msgstr "Внешний IP-адрес"
 
 msgid "External port"
 msgstr "Внешний порт"
@@ -141,16 +147,16 @@ msgid "Forward"
 msgstr "Перенаправление"
 
 msgid "Forward to"
-msgstr ""
+msgstr "Перенаправлять в"
 
 msgid "From %s in %s"
-msgstr ""
+msgstr "Из %s в %s"
 
 msgid "From %s in %s with source %s"
-msgstr ""
+msgstr "Из %s в %s с источником %s"
 
 msgid "From %s in %s with source %s and %s"
-msgstr ""
+msgstr "Из %s в %s с источниками %s и %s"
 
 msgid "General Settings"
 msgstr "Общие настройки"
@@ -174,10 +180,10 @@ msgid "Input"
 msgstr "Входящий"
 
 msgid "Inter-Zone Forwarding"
-msgstr "Перенаправление через зоны"
+msgstr "Перенаправление между зонами"
 
 msgid "Internal IP address"
-msgstr "Внутренний IP адрес"
+msgstr "Внутренний IP-адрес"
 
 msgid "Internal port"
 msgstr "Внутренний порт"
@@ -189,16 +195,18 @@ msgid "Limit log messages"
 msgstr "Ограничить журнал сообщений"
 
 msgid "MSS clamping"
-msgstr "MSS clamping"
+msgstr "Ограничение MSS"
 
 msgid "Masquerading"
 msgstr "Маскарадинг"
 
+#, fuzzy
 msgid "Match"
-msgstr ""
+msgstr "Выбирать"
 
+#, fuzzy
 msgid "Match ICMP type"
-msgstr "Выбирать ICMP трафик"
+msgstr "Выбирать ICMP типа"
 
 msgid "Match forwarded traffic to the given destination port or port range."
 msgstr ""
@@ -209,13 +217,15 @@ msgid ""
 "Match incoming traffic directed at the given destination port or port range "
 "on this host"
 msgstr ""
-"Выбирать входящий трафик направленный на порт или диапазон портов данного "
+"Выбирать входящий трафик, направленный на порт или диапазон портов данного "
 "хоста"
 
 msgid ""
 "Match incoming traffic originating from the given source port or port range "
 "on the client host."
 msgstr ""
+"Выбирать входящий трафик, исходящий из порта или диапазона портов "
+"клиентского хоста."
 
 msgid "Name"
 msgstr "Имя"
@@ -233,21 +243,24 @@ msgid "New port forward"
 msgstr "Новое перенаправление порта"
 
 msgid "New source NAT"
-msgstr "Новый источник NAT"
+msgstr "Новый SNAT"
 
 msgid "Only match incoming traffic directed at the given IP address."
-msgstr ""
+msgstr "Выбирать только входящий трафик, направленный на указанный IP-адрес."
 
 msgid "Only match incoming traffic from these MACs."
-msgstr ""
+msgstr "Выбирать только входящий трафик от этих MAC-адресов."
 
 msgid "Only match incoming traffic from this IP or range."
 msgstr ""
+"Выбирать только входящий трафик от этого IP-адреса или диапазона адресов."
 
 msgid ""
 "Only match incoming traffic originating from the given source port or port "
 "range on the client host"
 msgstr ""
+"Выбирать только входящий трафик, исходящий из указанного порта или диапазона "
+"портов клиентского хоста"
 
 msgid "Open ports on router"
 msgstr "Открыть порты на маршрутизаторе"
@@ -292,21 +305,23 @@ msgid "Restrict to address family"
 msgstr "Использовать только семейство протоколов"
 
 msgid "Rewrite matched traffic to the given address."
-msgstr "Перенаправлять трафик повторно к этому адресу."
+msgstr "Перенаправлять соответствующий трафик к указанному адресу."
 
 msgid ""
 "Rewrite matched traffic to the given source port. May be left empty to only "
 "rewrite the IP address."
 msgstr ""
+"Перенаправлять соответствующий трафик к указанному порту источника. Может "
+"быть пустым в случае, если необходимо перенаправить только IP-адрес."
 
 msgid "Rewrite to source %s"
 msgstr "Перенаправлять к источнику %s"
 
 msgid "Rewrite to source %s, %s"
-msgstr ""
+msgstr "Перенаправлять к источнику %s, %s"
 
 msgid "SNAT IP address"
-msgstr "IP адрес SNAT"
+msgstr "IP-адрес SNAT"
 
 msgid "SNAT port"
 msgstr "Порт SNAT"
@@ -348,7 +363,8 @@ msgid ""
 msgstr ""
 "SNAT - это особая форма маскарадинга (masquerading), позволяющая "
 "осуществлять детальный контроль над IP-адресом источника для исходящего "
-"траффика, например, отображение нескольких WAN-адресов на внутреннюю подсеть."
+"трафика, например, перенаправление нескольких WAN-адресов во внутреннюю "
+"подсеть."
 
 msgid "Source address"
 msgstr "Адрес источника"
@@ -408,16 +424,16 @@ msgstr ""
 "частью данной зоны."
 
 msgid "To %s at %s on <var>this device</var>"
-msgstr ""
+msgstr "К %s, порту %s на <var>этом устройстве</var>"
 
 msgid "To %s in %s"
-msgstr "к %s в %s"
+msgstr "К %s в %s"
 
 msgid "To %s on <var>this device</var>"
-msgstr ""
+msgstr "К %s на <var>этом устройстве</var>"
 
 msgid "To %s, %s in %s"
-msgstr ""
+msgstr "К %s, %s в %s"
 
 msgid "To source IP"
 msgstr "К IP-адресу источника"
@@ -426,29 +442,29 @@ msgid "To source port"
 msgstr "К порту источника"
 
 msgid "Traffic Rules"
-msgstr "Правила для траффика"
+msgstr "Правила для трафика"
 
 msgid ""
 "Traffic rules define policies for packets traveling between different zones, "
 "for example to reject traffic between certain hosts or to open WAN ports on "
 "the router."
 msgstr ""
-"Правила для траффика определяют политику прохождения пакетов между разными "
-"зонами, например, запрет траффика между некоторыми хостами или открытие WAN-"
+"Правила для трафика определяют политику прохождения пакетов между разными "
+"зонами, например, запрет трафика между некоторыми хостами или открытие WAN-"
 "портов маршрутизатора."
 
 msgid "Via %s"
-msgstr ""
+msgstr "Через %s"
 
 msgid "Via %s at %s"
-msgstr ""
+msgstr "Через %s, порт %s"
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
 "protocols separated by space."
 msgstr ""
-"Вы можете указать несколько, выбрав \"-- custom --\" и перечислив через "
-"пробел названия протоколов."
+"Вы можете указать несколько, выбрав \"-- пользовательский --\" и перечислив "
+"через пробел названия протоколов."
 
 msgid "Zone %q"
 msgstr "Зона %q"
@@ -466,13 +482,13 @@ msgid "any"
 msgstr "любой"
 
 msgid "any host"
-msgstr "любой хост"
+msgstr "любого хоста"
 
 msgid "any router IP"
 msgstr "любой IP-адрес маршрутизатора"
 
 msgid "any zone"
-msgstr "любая зона"
+msgstr "любой зоны"
 
 msgid "don't track"
 msgstr "не отслеживать"
