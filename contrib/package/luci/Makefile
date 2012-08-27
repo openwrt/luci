@@ -562,6 +562,7 @@ $(eval $(call translation,hebrew,Hebrew))
 $(eval $(call translation,romanian,Romanian))
 $(eval $(call translation,ukrainian,Ukrainian))
 $(eval $(call translation,hungarian,Hungarian))
+$(eval $(call translation,polish,Polish))
 
 
 ### Collections ###
