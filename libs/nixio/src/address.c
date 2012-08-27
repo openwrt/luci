@@ -23,6 +23,15 @@
 #include <string.h>
 
 #ifdef __linux__
+
+#include <signal.h>
+#include <setjmp.h>
+#include <unistd.h>
+
+/* setjmp() / longjmp() stuff */
+static jmp_buf nixio__jump_alarm;
+static void nixio__handle_alarm(int sig) { longjmp(nixio__jump_alarm, 1); }
+
 #include <linux/netdevice.h>
 
 /* struct net_device_stats is buggy on amd64, redefine it */
@@ -271,11 +280,38 @@ static int nixio_getaddrinfo(lua_State *L) {
 }
 
 /**
- * getnameinfo(address, family)
+ * getnameinfo(address, family[, timeout])
  */
 static int nixio_getnameinfo(lua_State *L) {
 	const char *ip = luaL_checkstring(L, 1);
 	const char *family = luaL_optstring(L, 2, NULL);
+
+#ifdef __linux__
+	struct sigaction sa_new, sa_old;
+	int timeout = luaL_optnumber(L, 3, 0);
+	if (timeout > 0 && timeout < 1000)
+	{
+		sa_new.sa_handler = nixio__handle_alarm;
+		sa_new.sa_flags   = 0;
+		sigemptyset(&sa_new.sa_mask);
+		sigaction(SIGALRM, &sa_new, &sa_old);
+
+		/* user timeout exceeded */
+		if (setjmp(nixio__jump_alarm))
+		{
+			sigaction(SIGALRM, &sa_old, NULL);
+
+			lua_pushnil(L);
+			lua_pushinteger(L, EAI_AGAIN);
+			lua_pushstring(L, gai_strerror(EAI_AGAIN));
+
+			return 3;
+		}
+
+		ualarm(timeout * 1000, 0);
+	}
+#endif
+
 	char host[NI_MAXHOST];
 
 	struct sockaddr_storage saddr;
@@ -297,6 +333,12 @@ static int nixio_getnameinfo(lua_State *L) {
 
 	int res = getnameinfo((struct sockaddr *)&saddr, sizeof(saddr),
 	 host, sizeof(host), NULL, 0, NI_NAMEREQD);
+
+#ifdef __linux__
+	if (timeout > 0 && timeout < 1000)
+		sigaction(SIGALRM, &sa_old, NULL);
+#endif
+
 	if (res) {
 		lua_pushnil(L);
 		lua_pushinteger(L, res);
