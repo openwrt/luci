@@ -337,7 +337,7 @@ static int nixio_getnameinfo(lua_State *L) {
 #ifdef __linux__
 	if (timeout > 0 && timeout < 1000)
 	{
-		ualarm(0);
+		ualarm(0, 0);
 		sigaction(SIGALRM, &sa_old, NULL);
 	}
 #endif
