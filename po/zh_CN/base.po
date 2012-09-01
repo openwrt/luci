@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-21 23:08+0200\n"
-"PO-Revision-Date: 2012-08-28 17:12+0200\n"
+"PO-Revision-Date: 2012-09-01 16:48+0200\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: QQ Group:75543259\n"
 "Language: zh_CN\n"
@@ -23,10 +23,10 @@ msgid "(empty)"
 msgstr "(空)"
 
 msgid "(no interfaces attached)"
-msgstr "(no interfaces attached)"
+msgstr "(未连接接口)"
 
 msgid "-- Additional Field --"
-msgstr "-- Additional Field --"
+msgstr "-- 更多选项 --"
 
 msgid "-- Please choose --"
 msgstr "-- 请选择 --"
@@ -41,10 +41,10 @@ msgid "15 Minute Load:"
 msgstr "15分钟负载:"
 
 msgid "40MHz 2nd channel above"
-msgstr "40MHz HT40+"
+msgstr "40MHz HT40+ (仅1-7频道可用）"
 
 msgid "40MHz 2nd channel below"
-msgstr "40MHz HT40-"
+msgstr "40MHz HT40- (仅5-13频道可用）"
 
 msgid "5 Minute Load:"
 msgstr "5分钟负载:"
@@ -73,13 +73,13 @@ msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-网关"
 
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
-msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-掩码"
+msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-子网掩码"
 
 msgid ""
 "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address or Network "
 "(CIDR)"
 msgstr ""
-"<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-地址或网络 (<abbr "
+"<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-地址或超网() (<abbr "
 "title=\"无类别域间路由\">CIDR</abbr>)"
 
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"
@@ -105,7 +105,7 @@ msgid ""
 msgstr "最大<abbr title=\"DNS扩展名\">EDNS0</abbr>数据包大小"
 
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
-msgstr "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
+msgstr "<abbr title=\"maximal\">最大</abbr>并发查询数"
 
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
@@ -114,7 +114,7 @@ msgid "APN"
 msgstr "APN"
 
 msgid "AR Support"
-msgstr "AR Support"
+msgstr "AR支持"
 
 msgid "ARP retry threshold"
 msgstr "ARP重试阈值"
@@ -132,10 +132,7 @@ msgid ""
 "ATM bridges expose encapsulated ethernet in AAL5 connections as virtual "
 "Linux network interfaces which can be used in conjunction with DHCP or PPP "
 "to dial into the provider network."
-msgstr ""
-"ATM bridges expose encapsulated ethernet in AAL5 connections as virtual "
-"Linux network interfaces which can be used in conjunction with DHCP or PPP "
-"to dial into the provider network."
+msgstr "ATM桥是以AAL5协议封装以太网的虚拟Linux网桥，用于协同DHCP或PPP来拨号连接到网络运营商。"
 
 msgid "ATM device number"
 msgstr "ATM设备号码"
@@ -156,7 +153,7 @@ msgid "Actions"
 msgstr "动作"
 
 msgid "Activate this network"
-msgstr "Activate this network"
+msgstr "激活此网络"
 
 msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
 msgstr "活动的<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-链路"
@@ -168,10 +165,10 @@ msgid "Active Connections"
 msgstr "活动连接"
 
 msgid "Active DHCP Leases"
-msgstr "活动DHCP主机"
+msgstr "已分配的DHCP租约"
 
 msgid "Active DHCPv6 Leases"
-msgstr "活动DHCPv6主机"
+msgstr "已分配的DHCPv6租约"
 
 msgid "Ad-Hoc"
 msgstr "点对点Ad-Hoc"
@@ -180,13 +177,13 @@ msgid "Add"
 msgstr "添加"
 
 msgid "Add local domain suffix to names served from hosts files"
-msgstr "Add local domain suffix to names served from hosts files"
+msgstr "添加本地域名后缀到HOSTS文件中的域名"
 
 msgid "Add new interface..."
 msgstr "添加新接口..."
 
 msgid "Additional Hosts files"
-msgstr "Additional Hosts files"
+msgstr "额外的HOSTS文件"
 
 msgid "Address"
 msgstr "地址"
@@ -207,7 +204,7 @@ msgid "Advertised network ID"
 msgstr "通告的网络ID"
 
 msgid "Alert"
-msgstr "Alert"
+msgstr "警戒"
 
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "允许<abbr title=\"Secure Shell\">SSH</abbr>密码验证"
@@ -232,8 +229,7 @@ msgstr "允许<em>root</em>用户凭密码登录"
 
 msgid ""
 "Allow upstream responses in the 127.0.0.0/8 range, e.g. for RBL services"
-msgstr ""
-"Allow upstream responses in the 127.0.0.0/8 range, e.g. for RBL services"
+msgstr "允许127.0.0.0/8回环范围内的上行响应，例如：RBL服务"
 
 msgid "Allowed range is 1 to 65535"
 msgstr "允许的范围：1 到 65535"
@@ -257,10 +253,10 @@ msgid "Apply"
 msgstr "应用"
 
 msgid "Applying changes"
-msgstr "正在提交更改"
+msgstr "正在应用更改"
 
 msgid "Assign interfaces..."
-msgstr "分配端口..."
+msgstr "分配接口..."
 
 msgid "Associated Stations"
 msgstr "已连接站点"
@@ -272,7 +268,7 @@ msgid "Authentication"
 msgstr "认证"
 
 msgid "Authoritative"
-msgstr "认证的"
+msgstr "授权的唯一DHCP服务器"
 
 msgid "Authorization Required"
 msgstr "需要授权"
@@ -317,16 +313,16 @@ msgid "Backup / Restore"
 msgstr "备份/恢复"
 
 msgid "Backup file list"
-msgstr "Backup file list"
+msgstr "文件备份列表"
 
 msgid "Bad address specified!"
-msgstr "Bad address specified!"
+msgstr "指定了错误的地址！"
 
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
-msgstr "下面是确定要备份的文件的列表。它包含已更改的配置文件和必要的基础文件以及用户定义的需要备份的文件。"
+msgstr "下面是待备份的文件清单。包含了更改的配置文件、必要的基础文件和用户自定义的需备份文件。"
 
 msgid "Bitrate"
 msgstr "传输速率"
@@ -430,13 +426,13 @@ msgid "Collecting data..."
 msgstr "正在收集数据..."
 
 msgid "Command"
-msgstr "Command"
+msgstr "进程命令"
 
 msgid "Common Configuration"
 msgstr "一般设置"
 
 msgid "Compression"
-msgstr "Compression"
+msgstr "压缩"
 
 msgid "Configuration"
 msgstr "配置"
@@ -445,7 +441,7 @@ msgid "Configuration applied."
 msgstr "配置已应用"
 
 msgid "Configuration files will be kept."
-msgstr "Configuration files will be kept."
+msgstr "配置文件将被保留。"
 
 msgid "Configures this mount as overlay storage for block-extroot"
 msgstr "设置挂载为extroot"
@@ -460,7 +456,7 @@ msgid "Connected"
 msgstr "已连接"
 
 msgid "Connection Limit"
-msgstr "Connection Limit"
+msgstr "连接数限制"
 
 msgid "Connections"
 msgstr "链接"
@@ -472,10 +468,10 @@ msgid "Country Code"
 msgstr "国家代码"
 
 msgid "Cover the following interface"
-msgstr "Cover the following interface"
+msgstr "包括以下接口"
 
 msgid "Cover the following interfaces"
-msgstr "Cover the following interfaces"
+msgstr "包括以下接口"
 
 msgid "Create / Assign firewall-zone"
 msgstr "创建/分配 防火墙区域"
@@ -487,10 +483,10 @@ msgid "Create a bridge over multiple interfaces"
 msgstr "在多个接口上创建桥接"
 
 msgid "Critical"
-msgstr "Critical"
+msgstr "致命错误"
 
 msgid "Cron Log Level"
-msgstr "Cron Log Level"
+msgstr "Cron日志级别"
 
 msgid "Custom Interface"
 msgstr "自定义接口"
@@ -522,7 +518,7 @@ msgid "DNS"
 msgstr "DNS"
 
 msgid "DNS forwardings"
-msgstr "DNS forwardings"
+msgstr "DNS转发"
 
 msgid "DUID"
 msgstr "DUID（DHCP唯一标识符）"
@@ -546,7 +542,8 @@ msgid ""
 "Define additional DHCP options, for example "
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
-msgstr "设置DHCP的附加选项。"
+msgstr ""
+"设置DHCP的附加选项，例如设定\"<code>6,192.168.2.1,192.168.2.2</code>\"表示通告不同的DNS服务器给客户端。"
 
 msgid "Delete"
 msgstr "删除"
@@ -597,10 +594,10 @@ msgid "Disabled"
 msgstr "禁用"
 
 msgid "Discard upstream RFC1918 responses"
-msgstr "Discard upstream RFC1918 responses"
+msgstr "丢弃RFC1918上行响应数据"
 
 msgid "Displaying only packages containing"
-msgstr "Displaying only packages containing"
+msgstr "只显示有内容的软件包"
 
 msgid "Distance Optimization"
 msgstr "距离优化"
@@ -622,16 +619,16 @@ msgid "Do not cache negative replies, e.g. for not existing domains"
 msgstr "不缓存无用的回应, 比如：不存在的域。"
 
 msgid "Do not forward requests that cannot be answered by public name servers"
-msgstr "Do not forward requests that cannot be answered by public name servers"
+msgstr "不转发公共域名服务器无法回应的请求"
 
 msgid "Do not forward reverse lookups for local networks"
-msgstr "Do not forward reverse lookups for local networks"
+msgstr "不转发反向查询本地网络的Lookups命令"
 
 msgid "Do not send probe responses"
-msgstr "Do not send probe responses"
+msgstr "不回送探测响应"
 
 msgid "Domain required"
-msgstr "Domain required"
+msgstr "忽略空域名解析"
 
 msgid "Domain whitelist"
 msgstr "域名白名单"
@@ -653,7 +650,9 @@ msgstr "Dropbear设置"
 msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
-msgstr "Dropbear提供基于<abbr title=\"Secure Shell\">SSH</abbr>的shell访问"
+msgstr ""
+"Dropbear提供了集成的<abbr title=\"Secure Copy\">SCP</abbr>服务器和基于<abbr title=\"Secure "
+"Shell\">SSH</abbr>的shell访问"
 
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr "动态<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -664,7 +663,7 @@ msgstr "动态隧道"
 msgid ""
 "Dynamically allocate DHCP addresses for clients. If disabled, only clients "
 "having static leases will be served."
-msgstr "动态分配DHCP地址。"
+msgstr "动态分配DHCP地址。如果禁用，则只能为静态租用表中的客户端提供网络服务。"
 
 msgid "EAP-Method"
 msgstr "EAP-Method"
@@ -679,7 +678,7 @@ msgid "Edit this network"
 msgstr "修改这个网络"
 
 msgid "Emergency"
-msgstr "Emergency"
+msgstr "紧急"
 
 msgid "Enable"
 msgstr "启用"
@@ -730,7 +729,7 @@ msgid "Encryption"
 msgstr "加密"
 
 msgid "Erasing..."
-msgstr "Erasing..."
+msgstr "擦除中..."
 
 msgid "Error"
 msgstr "错误"
@@ -742,7 +741,7 @@ msgid "Ethernet Switch"
 msgstr "以太网交换机"
 
 msgid "Expand hosts"
-msgstr "Expand hosts"
+msgstr "扩展HOSTS文件中的主机后缀"
 
 msgid "Expires"
 msgstr "到期时间"
@@ -752,10 +751,10 @@ msgid ""
 msgstr "地址租期，最小2分钟(<code>2m</code>)。"
 
 msgid "External system log server"
-msgstr "外部log服务器"
+msgstr "远程log服务器"
 
 msgid "External system log server port"
-msgstr "外部log服务器端口"
+msgstr "远程log服务器端口"
 
 msgid "Fast Frames"
 msgstr "快速帧"
@@ -764,7 +763,7 @@ msgid "File"
 msgstr "文件"
 
 msgid "Filename of the boot image advertised to clients"
-msgstr "Filename of the boot image advertised to clients"
+msgstr "向客户端通告的启动镜像文件名"
 
 msgid "Filesystem"
 msgstr "文件系统"
@@ -773,10 +772,10 @@ msgid "Filter"
 msgstr "过滤器"
 
 msgid "Filter private"
-msgstr "Filter private"
+msgstr "过滤本地包"
 
 msgid "Filter useless"
-msgstr "Filter useless"
+msgstr "过滤无用包"
 
 msgid "Find and join network"
 msgstr "搜索并加入网络"
@@ -806,19 +805,19 @@ msgid "Flags"
 msgstr "标识"
 
 msgid "Flash Firmware"
-msgstr "升级固件"
+msgstr "刷新固件"
 
 msgid "Flash image..."
-msgstr "刷新固件..."
+msgstr "刷写固件..."
 
 msgid "Flash new firmware image"
-msgstr "刷新固件"
+msgstr "刷写新的固件"
 
 msgid "Flash operations"
 msgstr "刷新操作"
 
 msgid "Flashing..."
-msgstr "Flashing..."
+msgstr "刷写中..."
 
 msgid "Force"
 msgstr "强制开启DHCP"
@@ -848,10 +847,10 @@ msgid "Fragmentation Threshold"
 msgstr "分片阈值"
 
 msgid "Frame Bursting"
-msgstr "Frame Bursting"
+msgstr "帧突发"
 
 msgid "Free"
-msgstr "空闲"
+msgstr "空闲数"
 
 msgid "Free space"
 msgstr "空闲空间"
@@ -896,13 +895,13 @@ msgid "HE.net user ID"
 msgstr "HE.net用户ID"
 
 msgid "HT capabilities"
-msgstr "HT capabilities"
+msgstr "HT功能"
 
 msgid "HT mode"
 msgstr "HT模式"
 
 msgid "Handler"
-msgstr "Handler"
+msgstr "处理程序"
 
 msgid "Hang Up"
 msgstr "挂起"
@@ -930,7 +929,7 @@ msgid "Host expiry timeout"
 msgstr "主机到期超时"
 
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
-msgstr "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
+msgstr "主机IP或网络"
 
 msgid "Hostname"
 msgstr "主机名"
@@ -966,7 +965,7 @@ msgid "IPv4 gateway"
 msgstr "IPv4网关"
 
 msgid "IPv4 netmask"
-msgstr "IPv4掩码"
+msgstr "IPv4子网掩码"
 
 msgid "IPv4 only"
 msgstr "仅IPv4"
@@ -981,7 +980,7 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "IPv6 Firewall"
-msgstr "IPv6 Firewall"
+msgstr "IPv6防火墙"
 
 msgid "IPv6 WAN Status"
 msgstr "IPv6 WAN状态"
@@ -1040,19 +1039,19 @@ msgid ""
 msgstr "如果物理内存不足，闲置数据可交换到swap设备暂存，以提高可用内存。"
 
 msgid "Ignore Hosts files"
-msgstr "Ignore Hosts files"
+msgstr "忽略HOSTS文件"
 
 msgid "Ignore interface"
 msgstr "关闭DHCP"
 
 msgid "Ignore resolve file"
-msgstr "Ignore resolve file"
+msgstr "忽略解析文件"
 
 msgid "Image"
 msgstr "固件文件"
 
 msgid "In"
-msgstr "In"
+msgstr "入口"
 
 msgid "Inactivity timeout"
 msgstr "活动超时"
@@ -1112,7 +1111,7 @@ msgid "Internal Server Error"
 msgstr "内部服务器错误"
 
 msgid "Invalid"
-msgstr "Invalid"
+msgstr "无效"
 
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
 msgstr "无效的VLAN ID! 只有 %d 和 %d 之间的ID有效。"
@@ -1129,7 +1128,7 @@ msgid ""
 msgstr "将要刷新的固件与本路由器不兼容，请重新验证固件文件。"
 
 msgid "Java Script required!"
-msgstr "Java Script required!"
+msgstr "需要Java Script！"
 
 msgid "Join Network"
 msgstr "加入网络"
@@ -1186,7 +1185,7 @@ msgid "Lease validity time"
 msgstr "有效租期"
 
 msgid "Leasefile"
-msgstr "Leasefile"
+msgstr "租约文件"
 
 msgid "Leasetime"
 msgstr "租用时间"
@@ -1201,7 +1200,7 @@ msgid "Leave empty to use the current WAN address"
 msgstr "留空则使用当前WAN地址"
 
 msgid "Legend:"
-msgstr "Legend:"
+msgstr "图例："
 
 msgid "Limit"
 msgstr "限制"
@@ -1218,7 +1217,7 @@ msgid "List of domains to allow RFC1918 responses for"
 msgstr "允许RFC1918响应的域名列表"
 
 msgid "List of hosts that supply bogus NX domain results"
-msgstr "允许虚假空域名响应的服务器列表"
+msgstr "返回虚假空域名响应的服务器列表"
 
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "监听指定的接口；未指定则监听全部"
@@ -1253,32 +1252,31 @@ msgstr "本地域名"
 msgid ""
 "Local domain specification. Names matching this domain are never forwared "
 "and resolved from DHCP or hosts files only"
-msgstr "本地域名定义。符合该域的域名将不会被转发或从DHCP查询到。只有 hosts 文件设置不会被覆盖。"
+msgstr "本地域名规则。从不转发和处理只源自DHCP或HOSTS文件的本地域名数据"
 
 msgid "Local domain suffix appended to DHCP names and hosts file entries"
-msgstr "Local domain suffix appended to DHCP names and hosts file entries"
+msgstr "本地域名后缀追加到DHCP和HOSTS文件条目"
 
 msgid "Local server"
-msgstr "Local server"
+msgstr "本地服务器"
 
 msgid ""
 "Localise hostname depending on the requesting subnet if multiple IPs are "
 "available"
-msgstr ""
-"Localise hostname depending on the requesting subnet if multiple IPs are "
-"available"
+msgstr "如果有多个IP可用，则根据请求来源的子网来本地化主机名"
 
 msgid "Localise queries"
-msgstr "Localise queries"
+msgstr "本地化查询"
 
+# 请不要随便修改，翻译会造成桥接网络后无法正常打开后面的无线网络配置
 msgid "Locked to channel %d used by %s"
 msgstr "Locked to channel %d used by %s"
 
 msgid "Log output level"
-msgstr "Log output level"
+msgstr "日志记录等级"
 
 msgid "Log queries"
-msgstr "Log queries"
+msgstr "日志查询"
 
 msgid "Logging"
 msgstr "日志"
@@ -1290,7 +1288,7 @@ msgid "Logout"
 msgstr "退出"
 
 msgid "Lowest leased address as offset from the network address."
-msgstr "网址的分配基址。"
+msgstr "网络地址的起始分配基址。"
 
 msgid "MAC-Address"
 msgstr "MAC-地址"
@@ -1317,19 +1315,19 @@ msgid "Maximum Rate"
 msgstr "最高速率"
 
 msgid "Maximum allowed number of active DHCP leases"
-msgstr "Maximum allowed number of active DHCP leases"
+msgstr "允许的最大DHCP租用数"
 
 msgid "Maximum allowed number of concurrent DNS queries"
-msgstr "Maximum allowed number of concurrent DNS queries"
+msgstr "允许的最大并发DNS查询数"
 
 msgid "Maximum allowed size of EDNS.0 UDP packets"
-msgstr "Maximum allowed size of EDNS.0 UDP packets"
+msgstr "允许的最大EDNS.0 UDP报文大小"
 
 msgid "Maximum amount of seconds to wait for the modem to become ready"
-msgstr "modem就绪的最大等待时间(秒)"
+msgstr "调制解调器就绪的最大等待时间(秒)"
 
 msgid "Maximum hold time"
-msgstr "Maximum hold time"
+msgstr "最大持续时间"
 
 msgid "Maximum number of leased addresses."
 msgstr "最大地址分配数量。"
@@ -1350,19 +1348,19 @@ msgid "Minimum Rate"
 msgstr "最低速率"
 
 msgid "Minimum hold time"
-msgstr "Minimum hold time"
+msgstr "最低持续时间"
 
 msgid "Missing protocol extension for proto %q"
-msgstr "Missing protocol extension for proto %q"
+msgstr "缺少协议%q的协议扩展"
 
 msgid "Mode"
 msgstr "模式"
 
 msgid "Modem device"
-msgstr "Modem设备"
+msgstr "调制解调器节点"
 
 msgid "Modem init timeout"
-msgstr "modem初始化超时"
+msgstr "调制解调器初始化超时"
 
 msgid "Monitor"
 msgstr "监听Monitor"
@@ -1397,16 +1395,16 @@ msgid "Mounted file systems"
 msgstr "已挂载的文件系统"
 
 msgid "Move down"
-msgstr "Move down"
+msgstr "下移"
 
 msgid "Move up"
-msgstr "Move up"
+msgstr "上移"
 
 msgid "Multicast Rate"
-msgstr "组播速率"
+msgstr "多播速率"
 
 msgid "Multicast address"
-msgstr "组播地址"
+msgstr "多播地址"
 
 msgid "NAS ID"
 msgstr "NAS ID"
@@ -1418,16 +1416,16 @@ msgid "Name"
 msgstr "名称"
 
 msgid "Name of the new interface"
-msgstr "Name of the new interface"
+msgstr "新接口的名称"
 
 msgid "Name of the new network"
-msgstr "Name of the new network"
+msgstr "新网络的名称"
 
 msgid "Navigation"
-msgstr "Navigation"
+msgstr "导航"
 
 msgid "Netmask"
-msgstr "掩码"
+msgstr "子网掩码"
 
 msgid "Network"
 msgstr "网络"
@@ -1436,46 +1434,46 @@ msgid "Network Utilities"
 msgstr "网络工具"
 
 msgid "Network boot image"
-msgstr "Network boot image"
+msgstr "网络启动镜像"
 
 msgid "Network without interfaces."
-msgstr "Network without interfaces."
+msgstr "无接口的网络。"
 
 msgid "Next »"
 msgstr "下一步 »"
 
 msgid "No DHCP Server configured for this interface"
-msgstr "No DHCP Server configured for this interface"
+msgstr "本接口未配置DHCP服务器"
 
 msgid "No chains in this table"
-msgstr "No chains in this table"
+msgstr "本表中没有链"
 
 msgid "No files found"
-msgstr "No files found"
+msgstr "未找到文件"
 
 msgid "No information available"
-msgstr "No information available"
+msgstr "无可用信息"
 
 msgid "No negative cache"
-msgstr "No negative cache"
+msgstr "禁用无效信息缓存"
 
 msgid "No network configured on this device"
-msgstr "No network configured on this device"
+msgstr "本设备未配置网络"
 
 msgid "No network name specified"
-msgstr "No network name specified"
+msgstr "未指定网络名"
 
 msgid "No package lists available"
-msgstr "No package lists available"
+msgstr "无可用软件列表"
 
 msgid "No password set!"
 msgstr "未设置密码！"
 
 msgid "No rules in this chain"
-msgstr "No rules in this chain"
+msgstr "本链没有规则"
 
 msgid "No zone assigned"
-msgstr "No zone assigned"
+msgstr "未指定区域"
 
 msgid "Noise"
 msgstr "噪声"
@@ -1484,25 +1482,25 @@ msgid "Noise:"
 msgstr "噪声:"
 
 msgid "None"
-msgstr "None"
+msgstr "无"
 
 msgid "Normal"
 msgstr "Normal"
 
 msgid "Not Found"
-msgstr "Not Found"
+msgstr "未找到"
 
 msgid "Not associated"
-msgstr "Not associated"
+msgstr "未关联"
 
 msgid "Not connected"
-msgstr "Not connected"
+msgstr "未连接"
 
 msgid "Note: Configuration files will be erased."
-msgstr "Note: Configuration files will be erased."
+msgstr "注意：配置文件将被删除。"
 
 msgid "Notice"
-msgstr "Notice"
+msgstr "注意"
 
 msgid "Nslookup"
 msgstr "Nslookup"
@@ -1514,7 +1512,7 @@ msgid "OPKG-Configuration"
 msgstr "OPKG-配置"
 
 msgid "Off-State Delay"
-msgstr "Off-State Delay"
+msgstr "关闭时间"
 
 msgid ""
 "On this page you can configure the network interfaces. You can bridge "
@@ -1526,43 +1524,43 @@ msgid ""
 msgstr "配置网络接口信息。"
 
 msgid "On-State Delay"
-msgstr "On-State Delay"
+msgstr "通电时间"
 
 msgid "One or more fields contain invalid values!"
-msgstr "One or more fields contain invalid values!"
+msgstr "一个或多个选项值有误！"
 
 msgid "One or more required fields have no value!"
-msgstr "One or more required fields have no value!"
+msgstr "一个或多个必选项值为空！"
 
 msgid "Open list..."
-msgstr "Open list..."
+msgstr "打开列表..."
 
 msgid "Option changed"
-msgstr "Option changed"
+msgstr "修改的选项"
 
 msgid "Option removed"
-msgstr "Option removed"
+msgstr "移除的选项"
 
 msgid "Options"
-msgstr "Options"
+msgstr "选项"
 
 msgid "Other:"
 msgstr "其余:"
 
 msgid "Out"
-msgstr "Out"
+msgstr "出口"
 
 msgid "Outbound:"
 msgstr "出站:"
 
 msgid "Outdoor Channels"
-msgstr "Outdoor Channels"
+msgstr "户外频道"
 
 msgid "Override MAC address"
-msgstr "更新MAC地址"
+msgstr "克隆MAC地址"
 
 msgid "Override MTU"
-msgstr "更新MTU"
+msgstr "设置MTU"
 
 msgid "Override the gateway in DHCP responses"
 msgstr "更新网关"
@@ -1570,16 +1568,16 @@ msgstr "更新网关"
 msgid ""
 "Override the netmask sent to clients. Normally it is calculated from the "
 "subnet that is served."
-msgstr "更新掩码。"
+msgstr "更新子网掩码。"
 
 msgid "Override the table used for internal routes"
-msgstr "Override the table used for internal routes"
+msgstr "更新内部路由表"
 
 msgid "Overview"
 msgstr "总览"
 
 msgid "Owner"
-msgstr "Owner"
+msgstr "所有者"
 
 msgid "PAP/CHAP password"
 msgstr "PAP/CHAP密码"
@@ -1609,16 +1607,16 @@ msgid "PPtP"
 msgstr "PPtP"
 
 msgid "Package libiwinfo required!"
-msgstr "Package libiwinfo required!"
+msgstr "需要libiwinfo软件包！"
 
 msgid "Package lists are older than 24 hours"
-msgstr "Package lists are older than 24 hours"
+msgstr "软件包列表已超过24小时未更新"
 
 msgid "Package name"
 msgstr "软件包名称"
 
 msgid "Packets"
-msgstr "Packets"
+msgstr "数据包"
 
 msgid "Part of zone %q"
 msgstr "区域 %q"
@@ -1633,19 +1631,19 @@ msgid "Password of Private Key"
 msgstr "私有密钥"
 
 msgid "Password successfully changed!"
-msgstr "Password successfully changed!"
+msgstr "密码修改成功！"
 
 msgid "Path to CA-Certificate"
-msgstr "Path to CA-Certificate"
+msgstr "CA证书路径"
 
 msgid "Path to Client-Certificate"
-msgstr "Path to Client-Certificate"
+msgstr "客户端证书路径"
 
 msgid "Path to Private Key"
-msgstr "Path to Private Key"
+msgstr "私钥路径"
 
 msgid "Path to executable which handles the button event"
-msgstr "Path to executable which handles the button event"
+msgstr "处理按键动作的可执行文件路径"
 
 msgid "Peak:"
 msgstr "峰值:"
@@ -1657,7 +1655,7 @@ msgid "Perform reset"
 msgstr "执行复位"
 
 msgid "Phy Rate:"
-msgstr "速率:"
+msgstr "物理速率:"
 
 msgid "Physical Settings"
 msgstr "物理设置"
@@ -1672,19 +1670,19 @@ msgid "Please enter your username and password."
 msgstr "请输入用户名和密码。"
 
 msgid "Please wait: Device rebooting..."
-msgstr "Please wait: Device rebooting..."
+msgstr "请稍等：设备重启中..."
 
 msgid "Policy"
-msgstr "Policy"
+msgstr "策略"
 
 msgid "Port"
 msgstr "端口"
 
 msgid "Port %d"
-msgstr "Port %d"
+msgstr "端口 %d"
 
 msgid "Port %d is untagged in multiple VLANs!"
-msgstr "Port %d is untagged in multiple VLANs!"
+msgstr "端口 %d 在多个VLAN中均未关联！"
 
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
@@ -1692,7 +1690,7 @@ msgid ""
 msgstr "在指定数量的LCP响应故障后假定链路已断开，0为忽略故障"
 
 msgid "Prevents client-to-client communication"
-msgstr "Prevents client-to-client communication"
+msgstr "禁止客户端间通信"
 
 msgid "Prism2/2.5/3 802.11b Wireless Controller"
 msgstr "Prism2/2.5/3 802.11b Wireless Controller"
@@ -1704,28 +1702,28 @@ msgid "Processes"
 msgstr "系统进程"
 
 msgid "Prot."
-msgstr "Prot."
+msgstr "协议"
 
 msgid "Protocol"
 msgstr "协议"
 
 msgid "Protocol family"
-msgstr "Protocol family"
+msgstr "协议族"
 
 msgid "Protocol of the new interface"
-msgstr "Protocol of the new interface"
+msgstr "新接口的协议"
 
 msgid "Protocol support is not installed"
-msgstr "Protocol support is not installed"
+msgstr "未安装协议支持"
 
 msgid "Provide new network"
-msgstr "Provide new network"
+msgstr "添加新网络"
 
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "伪装Ad-Hoc(ahdemo)"
 
 msgid "Quality"
-msgstr "Quality"
+msgstr "质量"
 
 msgid "RTS/CTS Threshold"
 msgstr "RTS/CTS阈值"
@@ -1740,60 +1738,60 @@ msgid "RaLink 802.11%s Wireless Controller"
 msgstr "RaLink 802.11%s Wireless Controller"
 
 msgid "Radius-Accounting-Port"
-msgstr "Radius-Accounting-Port"
+msgstr "Radius 计费端口"
 
 msgid "Radius-Accounting-Secret"
-msgstr "Radius-Accounting-Secret"
+msgstr "Radius 计费密钥"
 
 msgid "Radius-Accounting-Server"
-msgstr "Radius-Accounting-Server"
+msgstr "Radius 计费服务器"
 
 msgid "Radius-Authentication-Port"
-msgstr "Radius-Authentication-Port"
+msgstr "Radius 认证端口"
 
 msgid "Radius-Authentication-Secret"
-msgstr "Radius-Authentication-Secret"
+msgstr "Radius 认证密钥"
 
 msgid "Radius-Authentication-Server"
-msgstr "Radius-Authentication-Server"
+msgstr "Radius 认证服务器"
 
 msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
 "Configuration Protocol\">DHCP</abbr>-Server"
 msgstr ""
-"Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
-"Configuration Protocol\">DHCP</abbr>-Server"
+"根据<code>/etc/ethers</code>来配置<abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr>-服务器"
 
 msgid ""
 "Really delete this interface? The deletion cannot be undone!\\nYou might "
 "lose access to this device if you are connected via this interface."
 msgstr ""
-"Really delete this interface? The deletion cannot be undone!\n"
-"You might lose access to this device if you are connected via this interface."
+"确定要删除此接口？删除操作无法撤销！\\\n"
+"删除此接口，可能导致无法再访问路由器！"
 
 msgid ""
 "Really delete this wireless network? The deletion cannot be undone!\\nYou "
 "might lose access to this device if you are connected via this network."
 msgstr ""
-"Really delete this wireless network? The deletion cannot be undone!\n"
-"You might lose access to this device if you are connected via this network."
+"确定要删除此无线网络？删除操作无法撤销！\\\n"
+"删除此无线网络，可能导致无法再访问路由器！"
 
 msgid "Really reset all changes?"
-msgstr "Really reset all changes?"
+msgstr "确定要放弃所有更改？"
 
 msgid ""
 "Really shutdown interface \"%s\" ?\\nYou might lose access to this device if "
 "you are connected via this interface."
 msgstr ""
-"Really shutdown interface \"%s\" ?\n"
-"You might lose access to this device if you are connected via this interface."
+"确定要关闭接口\"%s\" ？\\\n"
+"删除此网络，可能导致无法再访问路由器！"
 
 msgid ""
 "Really shutdown network ?\\nYou might lose access to this device if you are "
 "connected via this interface."
 msgstr ""
-"Really shutdown network ?\n"
-"You might lose access to this device if you are connected via this interface."
+"确定要关闭此网络？\\\n"
+"关闭此网络，可能导致无法再访问路由器！"
 
 msgid "Really switch protocol?"
 msgstr "确定要切换协议？"
@@ -1814,13 +1812,13 @@ msgid "Realtime Wireless"
 msgstr "实时无线"
 
 msgid "Rebind protection"
-msgstr "Rebind protection"
+msgstr "重绑定保护"
 
 msgid "Reboot"
 msgstr "重启"
 
 msgid "Rebooting..."
-msgstr "Rebooting..."
+msgstr "重启中..."
 
 msgid "Reboots the operating system of your device"
 msgstr "重启OpenWrt"
@@ -1829,31 +1827,31 @@ msgid "Receive"
 msgstr "接收"
 
 msgid "Receiver Antenna"
-msgstr "Receiver Antenna"
+msgstr "接收天线"
 
 msgid "Reconnect this interface"
-msgstr "Reconnect this interface"
+msgstr "重连此接口"
 
 msgid "Reconnecting interface"
-msgstr "Reconnecting interface"
+msgstr "重连接口中..."
 
 msgid "References"
-msgstr "References"
+msgstr "引用"
 
 msgid "Regulatory Domain"
-msgstr "Regulatory Domain"
+msgstr "无线网络国家区域"
 
 msgid "Relay"
-msgstr "Relay"
+msgstr "中继"
 
 msgid "Relay Bridge"
-msgstr "Relay Bridge"
+msgstr "中继桥"
 
 msgid "Relay between networks"
 msgstr "网络间中继"
 
 msgid "Relay bridge"
-msgstr "Relay bridge"
+msgstr "中继桥"
 
 msgid "Remote IPv4 address"
 msgstr "远程IPv4地址"
@@ -1868,37 +1866,37 @@ msgid "Replace entry"
 msgstr "重置条目"
 
 msgid "Replace wireless configuration"
-msgstr "Replace wireless configuration"
+msgstr "重置无线配置"
 
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
-msgstr "某些ISP需要"
+msgstr "某些ISP需要，例如:同轴线网络DOCSIS 3"
 
 msgid "Reset"
 msgstr "复位"
 
 msgid "Reset Counters"
-msgstr "Reset Counters"
+msgstr "复位计数器"
 
 msgid "Reset to defaults"
-msgstr "复位系统"
+msgstr "恢复到出厂设置"
 
 msgid "Resolv and Hosts Files"
-msgstr "Resolv and Hosts Files"
+msgstr "HOSTS和解析文件"
 
 msgid "Resolve file"
-msgstr "Resolve file"
+msgstr "解析文件"
 
 msgid "Restart"
 msgstr "重启"
 
 msgid "Restart Firewall"
-msgstr "Restart Firewall"
+msgstr "重启防火墙"
 
 msgid "Restore backup"
 msgstr "恢复配置"
 
 msgid "Reveal/hide password"
-msgstr "Reveal/hide password"
+msgstr "显示/隐藏 密码"
 
 msgid "Revert"
 msgstr "放弃"
@@ -1907,7 +1905,7 @@ msgid "Root"
 msgstr "Root"
 
 msgid "Root directory for files served via TFTP"
-msgstr "Root directory for files served via TFTP"
+msgstr "TFTP服务器的根目录"
 
 msgid "Router Model"
 msgstr "路由型号"
@@ -1927,7 +1925,7 @@ msgid ""
 msgstr "路由表描述了数据包的可达路径。"
 
 msgid "Rule #"
-msgstr "Rule #"
+msgstr "规则 #"
 
 msgid "Run a filesystem check before mounting the device"
 msgstr "挂载设备前运行文件系统检查"
@@ -1960,18 +1958,18 @@ msgid "Scheduled Tasks"
 msgstr "计划任务"
 
 msgid "Section added"
-msgstr "Section added"
+msgstr "添加的区域"
 
 msgid "Section removed"
-msgstr "Section removed"
+msgstr "移除的区域"
 
 msgid "See \"mount\" manpage for details"
-msgstr "google：\"mount\""
+msgstr "详参\"mount\"联机帮助"
 
 msgid ""
 "Send LCP echo requests at the given interval in seconds, only effective in "
 "conjunction with failure threshold"
-msgstr "定时发送LCP响应(秒)"
+msgstr "定时发送LCP响应(秒)，仅在结合了故障阈值时有效"
 
 msgid "Send router solicitations"
 msgstr "发送路由请求"
@@ -1983,7 +1981,7 @@ msgid "Separate WDS"
 msgstr "隔离WDS"
 
 msgid "Server Settings"
-msgstr "Server Settings"
+msgstr "服务器设置"
 
 msgid "Service Name"
 msgstr "服务名"
@@ -1995,19 +1993,19 @@ msgid "Services"
 msgstr "服务"
 
 msgid "Setup DHCP Server"
-msgstr "Setup DHCP Server"
+msgstr "配置DHCP服务器"
 
 msgid "Setup Time Synchronization"
-msgstr "Setup Time Synchronization"
+msgstr "设置时间同步"
 
 msgid "Show current backup file list"
-msgstr "Show current backup file list"
+msgstr "显示当前文件备份列表"
 
 msgid "Shutdown this interface"
-msgstr "Shutdown this interface"
+msgstr "关闭此接口"
 
 msgid "Shutdown this network"
-msgstr "Shutdown this network"
+msgstr "关闭此网络"
 
 msgid "Signal"
 msgstr "信号"
@@ -2022,10 +2020,10 @@ msgid "Skip"
 msgstr "跳过"
 
 msgid "Skip to content"
-msgstr "Skip to content"
+msgstr "跳到内容"
 
 msgid "Skip to navigation"
-msgstr "Skip to navigation"
+msgstr "跳转到导航"
 
 msgid "Slot time"
 msgstr "时隙"
@@ -2034,43 +2032,40 @@ msgid "Software"
 msgstr "软件包"
 
 msgid "Some fields are invalid, cannot save values!"
-msgstr "Some fields are invalid, cannot save values!"
+msgstr "一些项目的值无效，无法保存！"
 
 msgid "Sorry, the object you requested was not found."
-msgstr "Sorry, the object you requested was not found."
+msgstr "对不起，请求的目标未找到。"
 
 msgid "Sorry, the server encountered an unexpected error."
-msgstr "Sorry, the server encountered an unexpected error."
+msgstr "对不起，服务器遇到未知错误。"
 
 msgid ""
 "Sorry, there is no sysupgrade support present, a new firmware image must be "
 "flashed manually. Please refer to the OpenWrt wiki for device specific "
 "install instructions."
-msgstr ""
-"Sorry, there is no sysupgrade support present, a new firmware image must be "
-"flashed manually. Please refer to the OpenWrt wiki for device specific "
-"install instructions."
+msgstr "抱歉，当前系统不支持sysupgrade升级，需手动刷新固件。请参考OpenWrt Wiki中此设备特定的安装向导。"
 
 msgid "Sort"
 msgstr "排序"
 
 msgid "Source"
-msgstr "Source"
+msgstr "源地址"
 
 msgid "Specifies the advertised preferred prefix lifetime in seconds"
-msgstr "Specifies the advertised preferred prefix lifetime in seconds"
+msgstr "指定通告的首选前缀生存时间(秒)"
 
 msgid "Specifies the advertised valid prefix lifetime in seconds"
-msgstr "Specifies the advertised valid prefix lifetime in seconds"
+msgstr "指定通告的有效前缀生存时间(秒)"
 
 msgid "Specifies the button state to handle"
-msgstr "Specifies the button state to handle"
+msgstr "指定要处理的按键状态"
 
 msgid "Specifies the directory the device is attached to"
 msgstr "指定设备的挂载目录"
 
 msgid "Specifies the listening port of this <em>Dropbear</em> instance"
-msgstr "指定此<em>Dropbear</em>的监听端口"
+msgstr "指定<em>Dropbear</em>的监听端口"
 
 msgid ""
 "Specifies the maximum amount of failed ARP requests until hosts are presumed "
@@ -2083,7 +2078,7 @@ msgid ""
 msgstr "指定假设主机已丢失的最大时间(秒)"
 
 msgid "Specify the secret encryption key here."
-msgstr "Specify the secret encryption key here."
+msgstr "在此指定密钥。"
 
 msgid "Start"
 msgstr "开始"
@@ -2101,7 +2096,7 @@ msgid "Static IPv6 Routes"
 msgstr "静态IPv6路由"
 
 msgid "Static Leases"
-msgstr "Static Leases"
+msgstr "静态地址分配"
 
 msgid "Static Routes"
 msgstr "静态路由"
@@ -2110,16 +2105,13 @@ msgid "Static WDS"
 msgstr "静态WDS"
 
 msgid "Static address"
-msgstr "Static address"
+msgstr "静态地址"
 
 msgid ""
 "Static leases are used to assign fixed IP addresses and symbolic hostnames "
 "to DHCP clients. They are also required for non-dynamic interface "
 "configurations where only hosts with a corresponding lease are served."
-msgstr ""
-"Static leases are used to assign fixed IP addresses and symbolic hostnames "
-"to DHCP clients. They are also required for non-dynamic interface "
-"configurations where only hosts with a corresponding lease are served."
+msgstr "静态租约用于给DHCP客户端分配固定的IP地址和主机标识。只有指定的主机才能连接，并且接口须为非动态配置。"
 
 msgid "Status"
 msgstr "状态"
@@ -2128,7 +2120,7 @@ msgid "Stop"
 msgstr "关闭"
 
 msgid "Strict order"
-msgstr "Strict order"
+msgstr "严谨查序"
 
 msgid "Submit"
 msgstr "提交"
@@ -2140,10 +2132,10 @@ msgid "Switch"
 msgstr "交换机"
 
 msgid "Switch %q"
-msgstr "Switch %q"
+msgstr "交换机 %q"
 
 msgid "Switch %q (%s)"
-msgstr "Switch %q (%s)"
+msgstr "交换机%q (%s)"
 
 msgid "Switch protocol"
 msgstr "切换协议"
@@ -2152,7 +2144,7 @@ msgid "Sync with browser"
 msgstr "同步浏览器时间"
 
 msgid "Synchronizing..."
-msgstr "Synchronizing..."
+msgstr "同步中..."
 
 msgid "System"
 msgstr "系统"
@@ -2164,16 +2156,16 @@ msgid "System Properties"
 msgstr "系统属性"
 
 msgid "System log buffer size"
-msgstr "System log buffer size"
+msgstr "系统日志缓冲区大小"
 
 msgid "TCP:"
 msgstr "TCP:"
 
 msgid "TFTP Settings"
-msgstr "TFTP Settings"
+msgstr "TFTP设置"
 
 msgid "TFTP server root"
-msgstr "TFTP server root"
+msgstr "TFTP服务器根目录"
 
 msgid "TX"
 msgstr "发送"
@@ -2182,10 +2174,10 @@ msgid "TX Rate"
 msgstr "发送速率"
 
 msgid "Table"
-msgstr "Table"
+msgstr "表"
 
 msgid "Target"
-msgstr "Target"
+msgstr "对象"
 
 msgid "Terminate"
 msgstr "终止"
@@ -2196,37 +2188,38 @@ msgid ""
 "shared among all defined wireless networks (if the radio hardware is multi-"
 "SSID capable). Per network settings like encryption or operation mode are "
 "grouped in the <em>Interface Configuration</em>."
-msgstr "配置无线模块的软硬件参数。"
+msgstr ""
+"<em>设备配置</em>区域可配置无线的硬件参数，比如信道、发射功率或发射天线(如果此无线模块硬件支持多SSID，则全部SSID共用此设备配置)。<e"
+"m>接口配置</em>区域则可配置此网络的工作模式和加密等。"
 
 msgid ""
 "The <em>libiwinfo-lua</em> package is not installed. You must install this "
 "component for working wireless configuration!"
-msgstr ""
-"The <em>libiwinfo-lua</em> package is not installed. You must install this "
-"component for working wireless configuration!"
+msgstr "软件包<em>libiwinfo-lua</em>未安装。必需安装此组件以配置无线！"
 
 msgid ""
 "The IPv6 prefix assigned to the provider, usually ends with <code>::</code>"
-msgstr ""
-"The IPv6 prefix assigned to the provider, usually ends with <code>::</code>"
+msgstr "运营商特定的IPv6前缀，通常以<code>::</code>为结尾"
 
 msgid ""
 "The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
 "code> and <code>_</code>"
 msgstr ""
-"The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
-"code> and <code>_</code>"
+"合法字符：<code>A-Z</code>, <code>a-z</code>, <code>0-9</code> 和 <code>_</code>"
 
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
 "</abbr> <code>/dev/sda1</code>)"
-msgstr "存储器或分区的设备文件"
+msgstr ""
+"存储器或分区的设备节点，(<abbr title=\"for example\">例如</abbr> <code>/dev/sda1</code>)"
 
 msgid ""
 "The filesystem that was used to format the memory (<abbr title=\"for example"
 "\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem\">ext3</abbr></"
 "samp>)"
-msgstr "格式化存储器的文件系统"
+msgstr ""
+"用于格式化存储器的文件系统，(<abbr title=\"for example\">例如</abbr> <samp><abbr title=\"Third "
+"Extended Filesystem\">ext3</abbr></samp>)"
 
 msgid ""
 "The flash image was uploaded. Below is the checksum and file size listed, "
@@ -2235,23 +2228,21 @@ msgid ""
 msgstr "固件已上传，请注意核对文件大小和校验值！<br />刷新过程切勿断电！"
 
 msgid "The following changes have been committed"
-msgstr "The following changes have been committed"
+msgstr "以下更改已提交"
 
 msgid "The following changes have been reverted"
-msgstr "The following changes have been reverted"
+msgstr "以下更改已放弃"
 
 msgid "The following rules are currently active on this system."
 msgstr "系统中的活跃连接。"
 
 msgid "The given network name is not unique"
-msgstr "The given network name is not unique"
+msgstr "给定的网络名重复"
 
 msgid ""
 "The hardware is not multi-SSID capable and existing configuration will be "
 "replaced if you proceed."
-msgstr ""
-"The hardware is not multi-SSID capable and existing configuration will be "
-"replaced if you proceed."
+msgstr "本机的硬件不支持多SSID，继续进行将会覆盖现有配置。"
 
 msgid ""
 "The length of the IPv4 prefix in bits, the remainder is used in the IPv6 "
@@ -2271,55 +2262,48 @@ msgid ""
 "segments. Often there is by default one Uplink port for a connection to the "
 "next greater network like the internet and other ports for a local network."
 msgstr ""
-"The network ports on this device can be combined to several <abbr title="
-"\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
-"communicate directly with each other. <abbr title=\"Virtual Local Area "
-"Network\">VLAN</abbr>s are often used to separate different network "
-"segments. Often there is by default one Uplink port for a connection to the "
-"next greater network like the internet and other ports for a local network."
+"本设备可以划分为多个<abbr title=\"Virtual Local Area "
+"Network\">VLAN</abbr>，并支持电脑间的直接通讯。<abbr title=\"Virtual Local Area "
+"Network\">VLAN</abbr>也常用于分割不同网段。默认通常是一条上行端口连接ISP，其余端口为本地子网。"
 
 msgid "The selected protocol needs a device assigned"
-msgstr "The selected protocol needs a device assigned"
+msgstr "所选的协议需要分配设备"
 
 msgid ""
 "The system is erasing the configuration partition now and will reboot itself "
 "when finished."
-msgstr ""
-"The system is erasing the configuration partition now and will reboot itself "
-"when finished."
+msgstr "系统正在删除配置分区，完成后会自动重启。"
 
 msgid ""
 "The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a "
 "few minutes until you try to reconnect. It might be necessary to renew the "
 "address of your computer to reach the device again, depending on your "
 "settings."
-msgstr "正在刷新系统...<br />切勿关闭电源! DO NOT POWER OFF THE DEVICE!"
+msgstr ""
+"正在刷新系统...<br />切勿关闭电源! DO NOT POWER OFF THE DEVICE!<br "
+"/>稍等数分钟即可重新连接到路由。可能需要更改计算机的IP地址以重新连接。"
 
 msgid ""
 "The uploaded image file does not contain a supported format. Make sure that "
 "you choose the generic image format for your platform."
-msgstr ""
-"The uploaded image file does not contain a supported format. Make sure that "
-"you choose the generic image format for your platform."
+msgstr "不支持所上传的文件格式。请确认选择的文件无误。"
 
 msgid "There are no active leases."
-msgstr "There are no active leases."
+msgstr "没有已分配的租约。"
 
 msgid "There are no pending changes to apply!"
-msgstr "There are no pending changes to apply!"
+msgstr "没有待生效的更改！"
 
 msgid "There are no pending changes to revert!"
-msgstr "There are no pending changes to revert!"
+msgstr "没有可放弃的更改！"
 
 msgid "There are no pending changes!"
-msgstr "There are no pending changes!"
+msgstr "没有待生效的更改！"
 
 msgid ""
 "There is no device assigned yet, please attach a network device in the "
 "\"Physical Settings\" tab"
-msgstr ""
-"There is no device assigned yet, please attach a network device in the "
-"\"Physical Settings\" tab"
+msgstr "尚未分配设备，请在\"物理设置\"选项卡中选择网络设备"
 
 msgid ""
 "There is no password set on this router. Please configure a root password to "
@@ -2333,13 +2317,10 @@ msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
 "include during sysupgrade. Modified files in /etc/config/ and certain other "
 "configurations are automatically preserved."
-msgstr ""
-"This is a list of shell glob patterns for matching files and directories to "
-"include during sysupgrade. Modified files in /etc/config/ and certain other "
-"configurations are automatically preserved."
+msgstr "系统升级时要保存的配置文件和目录的清单。目录/etc/config/内修改过的文件以及部分其他配置会被自动保存。"
 
 msgid "This is the 32 byte hex encoded user ID, not the login name"
-msgstr "This is the 32 byte hex encoded user ID, not the login name"
+msgstr "这是32 byte hex编码的用户ID，不是登录名"
 
 msgid ""
 "This is the content of /etc/rc.local. Insert your own commands here (in "
@@ -2349,24 +2330,20 @@ msgstr "启动脚本插入到'exit 0'之前即可随系统启动运行。"
 msgid ""
 "This is the local endpoint address assigned by the tunnel broker, it usually "
 "ends with <code>:2</code>"
-msgstr ""
-"This is the local endpoint address assigned by the tunnel broker, it usually "
-"ends with <code>:2</code>"
+msgstr "隧道代理分配的本地终端地址，通常以<code>:2</code>结尾"
 
 msgid ""
 "This is the only <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr> in the local network"
 msgstr ""
-"This is the only <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
-"abbr> in the local network"
+"这是内网中唯一的<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>服务器"
 
 msgid "This is the system crontab in which scheduled tasks can be defined."
 msgstr "自定义系统crontab中的计划任务。"
 
 msgid ""
 "This is usually the address of the nearest PoP operated by the tunnel broker"
-msgstr ""
-"This is usually the address of the nearest PoP operated by the tunnel broker"
+msgstr "这通常是隧道代理所管理的最近的PoP的地址"
 
 msgid ""
 "This list gives an overview over currently running system processes and "
@@ -2380,13 +2357,13 @@ msgid "This page gives an overview over currently active network connections."
 msgstr "活跃的网络连接概况。"
 
 msgid "This section contains no values yet"
-msgstr "This section contains no values yet"
+msgstr "尚无任何配置"
 
 msgid "Time Synchronization"
 msgstr "时间同步"
 
 msgid "Time Synchronization is not configured yet."
-msgstr "Time Synchronization is not configured yet."
+msgstr "尚未配置时间同步"
 
 msgid "Timezone"
 msgstr "时区"
@@ -2409,16 +2386,16 @@ msgid "Transfer"
 msgstr "传输"
 
 msgid "Transmission Rate"
-msgstr "发送速率"
+msgstr "传送速率"
 
 msgid "Transmit"
-msgstr "发送"
+msgstr "传送"
 
 msgid "Transmit Power"
-msgstr "发射功率"
+msgstr "无线电功率"
 
 msgid "Transmitter Antenna"
-msgstr "Transmitter Antenna"
+msgstr "传送天线"
 
 msgid "Trigger"
 msgstr "触发"
@@ -2430,10 +2407,10 @@ msgid "Tunnel ID"
 msgstr "隧道ID"
 
 msgid "Tunnel Interface"
-msgstr "Tunnel Interface"
+msgstr "隧道接口"
 
 msgid "Turbo Mode"
-msgstr "Turbo Mode"
+msgstr "Turbo模式"
 
 msgid "Tx-Power"
 msgstr "传输功率"
@@ -2457,19 +2434,19 @@ msgid "Unable to dispatch"
 msgstr "Unable to dispatch"
 
 msgid "Unknown"
-msgstr "Unknown"
+msgstr "未知"
 
 msgid "Unknown Error, password not changed!"
-msgstr "Unknown Error, password not changed!"
+msgstr "未知错误，密码未更改！"
 
 msgid "Unmanaged"
-msgstr "Unmanaged"
+msgstr "不配置协议"
 
 msgid "Unsaved Changes"
 msgstr "未保存的配置"
 
 msgid "Unsupported protocol type."
-msgstr "Unsupported protocol type."
+msgstr "不支持的协议类型"
 
 msgid "Update lists"
 msgstr "刷新列表"
@@ -2490,7 +2467,7 @@ msgid "Uptime"
 msgstr "运行时间"
 
 msgid "Use <code>/etc/ethers</code>"
-msgstr "Use <code>/etc/ethers</code>"
+msgstr "使用<code>/etc/ethers</code>配置"
 
 msgid "Use DHCP gateway"
 msgstr "使用DHCP网关"
@@ -2508,7 +2485,7 @@ msgid "Use TTL on tunnel interface"
 msgstr "隧道接口的TTL"
 
 msgid "Use as root filesystem"
-msgstr "挂载到根文件系统"
+msgstr "设置为根文件系统"
 
 msgid "Use broadcast flag"
 msgstr "使用广播标签"
@@ -2526,7 +2503,7 @@ msgid "Use preferred lifetime"
 msgstr "使用首选生存时间"
 
 msgid "Use routing table"
-msgstr "Use routing table"
+msgstr "使用路由表"
 
 msgid ""
 "Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</"
@@ -2534,10 +2511,8 @@ msgid ""
 "address to use and the <em>Hostname</em> is assigned as symbolic name to the "
 "requesting host."
 msgstr ""
-"Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</"
-"em> indentifies the host, the <em>IPv4-Address</em> specifies to the fixed "
-"address to use and the <em>Hostname</em> is assigned as symbolic name to the "
-"requesting host."
+"使用<em>添加</em>来增加新的租约条目。使用<em>MAC-地址</em>鉴别主机，<em>IPv4-地址</em>分配地址，<em>主机名</e"
+"m>分配标识。"
 
 msgid "Use valid lifetime"
 msgstr "使用有效生存时间"
@@ -2558,10 +2533,10 @@ msgid "VLAN Interface"
 msgstr "VLAN接口"
 
 msgid "VLANs on %q"
-msgstr "VLANs on %q"
+msgstr "%q上的VLAN"
 
 msgid "VLANs on %q (%s)"
-msgstr "VLANs on %q (%s)"
+msgstr "%q (%s)上的VLAN"
 
 msgid "VPN Server"
 msgstr "VPN服务器"
@@ -2579,41 +2554,39 @@ msgid "WDS"
 msgstr "WDS"
 
 msgid "WEP Open System"
-msgstr "WEP Open System"
+msgstr "WEP开放认证"
 
 msgid "WEP Shared Key"
-msgstr "WEP Shared Key"
+msgstr "WEP共享密钥"
 
 msgid "WEP passphrase"
-msgstr "WEP passphrase"
+msgstr "WEP密钥"
 
 msgid "WMM Mode"
 msgstr "WMM"
 
 msgid "WPA passphrase"
-msgstr "WPA passphrase"
+msgstr "WPA密钥"
 
 msgid ""
 "WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
 "and ad-hoc mode) to be installed."
-msgstr ""
-"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
-"and ad-hoc mode) to be installed."
+msgstr "WPA加密需要安装wpa_supplicant(客户端模式)或安装hostapd(接入点AP、点对点ad-hoc模式)。"
 
 msgid "Waiting for changes to be applied..."
-msgstr "Waiting for changes to be applied..."
+msgstr "正在应用更改..."
 
 msgid "Waiting for command to complete..."
-msgstr "Waiting for command to complete..."
+msgstr "正在执行命令..."
 
 msgid "Waiting for router..."
-msgstr "Waiting for router..."
+msgstr "等待路由器..."
 
 msgid "Warning"
-msgstr "Warning"
+msgstr "警告"
 
 msgid "Warning: There are unsaved changes that will be lost while rebooting!"
-msgstr "Warning: There are unsaved changes that will be lost while rebooting!"
+msgstr "警告: 有尚未保存的更改，重启将丢失!"
 
 msgid "Wifi"
 msgstr "无线"
@@ -2634,48 +2607,49 @@ msgid "Wireless Security"
 msgstr "无线安全"
 
 msgid "Wireless is disabled or not associated"
-msgstr "Wireless is disabled or not associated"
+msgstr "未开启或未关联无线"
 
 msgid "Wireless is restarting..."
-msgstr "Wireless is restarting..."
+msgstr "重启无线中..."
 
 msgid "Wireless network is disabled"
 msgstr "无线已禁用"
 
 msgid "Wireless network is enabled"
-msgstr "无线已启用"
+msgstr "无线网络开关"
 
 msgid "Wireless restarted"
-msgstr "Wireless restarted"
+msgstr "无线已重启"
 
 msgid "Wireless shut down"
-msgstr "Wireless shut down"
+msgstr "无线已关闭"
 
 msgid "Write received DNS requests to syslog"
-msgstr "Write received DNS requests to syslog"
+msgstr "将收到的DNS请求写入系统日志"
 
 msgid "XR Support"
-msgstr "XR Support"
+msgstr "XR支持"
 
 msgid ""
 "You can enable or disable installed init scripts here. Changes will applied "
 "after a device reboot.<br /><strong>Warning: If you disable essential init "
 "scripts like \"network\", your device might become inaccesable!</strong>"
-msgstr "启用或禁用已安装的启动脚本。"
+msgstr ""
+"启用或禁用已安装的启动脚本。更改在设备重启后生效。<br "
+"/><strong>警告：如果禁用了必要的启动脚本，比如\"network\"，可能会导致设备无法访问！</strong>"
 
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
-msgstr ""
-"You must enable Java Script in your browser or LuCI will not work properly."
+msgstr "LUCI的正常运行需要开启浏览器的Java Script支持。"
 
 msgid "any"
-msgstr "any"
+msgstr "任意"
 
 msgid "auto"
-msgstr "auto"
+msgstr "自动"
 
 msgid "bridged"
-msgstr "bridged"
+msgstr "桥接的"
 
 msgid "create:"
 msgstr "创建:"
@@ -2693,26 +2667,24 @@ msgid "disable"
 msgstr "禁用"
 
 msgid "expired"
-msgstr "expired"
+msgstr "过期时间"
 
 msgid ""
 "file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr>-leases will be stored"
-msgstr ""
-"file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
-"abbr>-leases will be stored"
+msgstr "存放<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>租约的文件"
 
 msgid "forward"
 msgstr "转发"
 
 msgid "help"
-msgstr "help"
+msgstr "帮助"
 
 msgid "hidden"
-msgstr "hidden"
+msgstr "隐藏"
 
 msgid "if target is a network"
-msgstr "if target is a network"
+msgstr "如果对象是一个网络"
 
 msgid "input"
 msgstr "输入"
@@ -2727,34 +2699,34 @@ msgid "kbit/s"
 msgstr "kbit/s"
 
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
-msgstr "local <abbr title=\"Domain Name System\">DNS</abbr> file"
+msgstr "本地<abbr title=\"Domain Name System\">DNS</abbr>解析文件"
 
 msgid "no"
 msgstr "no"
 
 msgid "none"
-msgstr "none"
+msgstr "无"
 
 msgid "off"
-msgstr "off"
+msgstr "关"
 
 msgid "on"
-msgstr "on"
+msgstr "开"
 
 msgid "open"
-msgstr "open"
+msgstr "开放式"
 
 msgid "routed"
-msgstr "routed"
+msgstr "已路由"
 
 msgid "tagged"
-msgstr "tagged"
+msgstr "关联"
 
 msgid "unknown"
-msgstr "unknown"
+msgstr "未知"
 
 msgid "unlimited"
-msgstr "unlimited"
+msgstr "无限制"
 
 msgid "unspecified"
 msgstr "未指定"
@@ -2763,10 +2735,10 @@ msgid "unspecified -or- create:"
 msgstr "未指定 // 创建:"
 
 msgid "untagged"
-msgstr "untagged"
+msgstr "不关联"
 
 msgid "yes"
-msgstr "yes"
+msgstr "是"
 
 msgid "« Back"
 msgstr "« 后退"
