@@ -14,11 +14,11 @@ You may obtain a copy of the License at
 local fs = require "luci.fs"
 local has_custom_splash = fs.access("/usr/lib/luci-splash/splashtext.html")
 
-function expand (e)        
+function expand (e, R)        
 	return (string.gsub(e, "###([A-Z_]+)###", R))
 end
 
-local community, homepage, leasetime, limit_up, limit_down, R
+local community, homepage, leasetime, limit_up, limit_down
 
 local contacturl = luci.dispatcher.build_url("freifunk", "contact")
 
@@ -50,8 +50,7 @@ if limit_up and limit_down then
 end
 
 if has_custom_splash then
-
-	R = {
+	local R = {
 		COMMUNITY = community,
 		COMMUNITY_URL = homepage,
 		LEASETIME = leasetime,
@@ -59,8 +58,7 @@ if has_custom_splash then
 		LIMIT = limit_text,
 		CONTACTURL = contacturl
 	}
-
-	local splashtext = expand(fs.readfile("/usr/lib/luci-splash/splashtext.html"))
+	local splashtext = expand(fs.readfile("/usr/lib/luci-splash/splashtext.html"), R)
 	%>
 	<%=splashtext%>
 

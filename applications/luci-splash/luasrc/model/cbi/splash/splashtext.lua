@@ -33,6 +33,8 @@ function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.text then
 			fs.writefile(splashtextfile, data.text:gsub("\r\n", "\n"))
+		else
+			fs.unlink(splashtextfile)
 		end
 	end
 	return true
