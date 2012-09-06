@@ -208,6 +208,13 @@ function _expand( s, n, nopad )
 		end
 
 		return str
+
+	elseif type(s) == "table" then
+		local str = ""
+
+		for i, v in ipairs(s) do
+			str = str .. _string( v, n, nopad )
+		end
 	end
 end
 
