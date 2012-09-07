@@ -200,22 +200,19 @@ function _list_expand( c, l, nopad )
 end
 
 function _expand( s, n, nopad )
-	if type(s) == "string" then
-		local str = ""
+	local str = ""
 
+	if type(s) == "string" then
 		for i, v in ipairs( luci.util.split( s, "%s+", nil, true ) ) do
 			str = str .. _string( v, n, nopad )
 		end
-
-		return str
-
 	elseif type(s) == "table" then
-		local str = ""
-
 		for i, v in ipairs(s) do
 			str = str .. _string( v, n, nopad )
 		end
 	end
+
+	return str
 end
 
 function _bool( s, n, nopad )
