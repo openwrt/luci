@@ -9,7 +9,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 module("luci.tools.status", package.seeall)
@@ -152,4 +151,37 @@ function wifi_network(id)
 		end
 	end
 	return { }
+end
+
+function switch_status(dev)
+	local ports = { }
+	local swc = io.popen("swconfig dev %q show" % dev, "r")
+	if swc then
+		local l
+		repeat
+			l = swc:read("*l")
+			if l then
+				local port, up = l:match("port:(%d+) link:(%w+)")
+				if port then
+					local speed  = l:match(" speed:(%d+)")
+					local duplex = l:match(" (%w+)-duplex")
+					local txflow = l:match(" (txflow)")
+					local rxflow = l:match(" (rxflow)")
+					local auto   = l:match(" (auto)")
+
+					ports[#ports+1] = {
+						port   = tonumber(port) or 0,
+						speed  = tonumber(speed) or 0,
+						link   = (up == "up"),
+						duplex = (duplex == "full"),
+						rxflow = (not not rxflow),
+						txflow = (not not txflow),
+						auto   = (not not auto)
+					}
+				end
+			end
+		until not l
+		swc:close()
+	end
+	return ports
 end

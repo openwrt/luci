@@ -1,0 +1,44 @@
+<script type="text/javascript">//<![CDATA[
+	var tb;
+	var ths = document.getElementsByTagName('th');
+	for (var i = 0; i < ths.length; i++)
+		if (ths[i].className = 'cbi-section-table-cell' && !ths[i].innerHTML)
+		{
+			ths[i].innerHTML = '<%:Port status:%>';
+			tb = ths[i].parentNode;
+			break;
+		}
+
+	if (tb)
+	{
+		XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "switch_status", self.switch)%>', null,
+			function(x, st)
+			{
+				if (st && st.length)
+				{
+					for (var i = 0; i < st.length; i++)
+					{
+						var th = tb.childNodes[i+1];
+
+						if (st[i].link)
+						{
+							th.innerHTML = String.format(
+								'<small><img src="<%=resource%>/icons/port_up.png" />' +
+								'<br />%d<%:baseT%> %s</small>',
+								st[i].speed, st[i].duplex
+									? '<%:full-duplex%>' : '<%:half-duplex%>'
+							);
+						}
+						else
+						{
+							th.innerHTML = String.format(
+								'<small><img src="<%=resource%>/icons/port_down.png" />' +
+								'<br /><%:no link%></small>'
+							);
+						}
+					}
+				}
+			}
+		);
+	}
+//]]></script>

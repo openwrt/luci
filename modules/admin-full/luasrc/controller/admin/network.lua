@@ -10,7 +10,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 module("luci.controller.admin.network", package.seeall)
@@ -39,6 +38,9 @@ function index()
 			page.target = cbi("admin_network/vlan")
 			page.title  = _("Switch")
 			page.order  = 20
+
+			page = entry({"admin", "network", "switch_status"}, call("switch_status"), nil)
+			page.leaf = true
 		end
 
 
@@ -415,6 +417,14 @@ function lease_status()
 	luci.http.write(',')
 	luci.http.write_json(s.dhcp6_leases())
 	luci.http.write(']')
+end
+
+function switch_status()
+	local path = luci.dispatcher.context.requestpath
+	local s = require "luci.tools.status"
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(s.switch_status(path[#path]))
 end
 
 function diag_command(cmd)

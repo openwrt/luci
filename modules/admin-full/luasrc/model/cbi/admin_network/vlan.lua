@@ -10,7 +10,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 m = Map("network", translate("Switch"), translate("The network ports on this device can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
@@ -276,6 +275,12 @@ m.uci:foreach("network", "switch",
 
 			port_opts[#port_opts+1] = po
 		end
+
+
+        -- Switch status template
+        s = m:section(SimpleSection)
+        s.template = "admin_network/switch_status"
+        s.switch = switch_name
 	end
 )
 
