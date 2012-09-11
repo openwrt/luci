@@ -1,13 +1,28 @@
+<%-
+	local fw = require "luci.model.firewall".init()
+	local izl = { }
+	local ezl = { }
+	local _, z
+	for _, z in ipairs(fw:get_zones()) do
+		if z:name() ~= "wan" then
+			izl[#izl+1] = z
+		elseif z:name() ~= "lan" then
+			ezl[#ezl+1] = z
+		end
+	end
+-%>
 <div class="cbi-section-create cbi-tblsection-create">
 	<br />
-	<table class="cbi-section-table" style="width:700px; margin-left:5px">
+	<table class="cbi-section-table" style="width:810px; margin-left:5px">
 		<tr class="cbi-section-table-titles">
-			<th class="cbi-section-table-cell" colspan="6"><%:New port forward%>:</th>
+			<th class="cbi-section-table-cell" colspan="8"><%:New port forward%>:</th>
 		</tr>
 		<tr class="cbi-section-table-descr">
 			<th class="cbi-section-table-cell"><%:Name%></th>
 			<th class="cbi-section-table-cell"><%:Protocol%></th>
+			<th class="cbi-section-table-cell"><%:External zone%></th>
 			<th class="cbi-section-table-cell"><%:External port%></th>
+			<th class="cbi-section-table-cell"><%:Internal zone%></th>
 			<th class="cbi-section-table-cell"><%:Internal IP address%></th>
 			<th class="cbi-section-table-cell"><%:Internal port%></th>
 			<th class="cbi-section-table-cell"></th>
@@ -24,8 +39,18 @@
 					<option value="other"><%:Other...%></option>
 				</select>
 			</td>
+			<td class="cbi-section-table-cell" style="width:55px">
+				<select class="cbi-input-select" id="_newfwd.extzone" name="_newfwd.extzone">
+					<% for _, z in ipairs(ezl) do -%><option value="<%=z:name()%>"><%=z:name()%></option><%- end %>
+				</select>
+			</td>
 			<td class="cbi-section-table-cell" style="width:110px">
 				<input type="text" class="cbi-input-text" id="_newfwd.extport" name="_newfwd.extport" />
+			</td>
+			<td class="cbi-section-table-cell" style="width:55px">
+				<select class="cbi-input-select" id="_newfwd.intzone" name="_newfwd.intzone">
+					<% for _, z in ipairs(izl) do -%><option value="<%=z:name()%>"><%=z:name()%></option><%- end %>
+				</select>
 			</td>
 			<td class="cbi-section-table-cell" style="width:110px">
 				<input type="text" class="cbi-input-text" id="_newfwd.intaddr" name="_newfwd.intaddr" />
