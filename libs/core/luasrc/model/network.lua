@@ -384,7 +384,17 @@ function del_network(self, n)
 
 		_uci_real:foreach("wireless", "wifi-iface",
 			function(s)
-				if s.network == n then
+				local net
+				local rest = { }
+				for net in utl.imatch(s.network) do
+					if net ~= n then
+						rest[#rest+1] = net
+					end
+				end
+				if #rest > 0 then
+					_uci_real:set("wireless", s['.name'], "network",
+					              table.concat(rest, " "))
+				else
 					_uci_real:delete("wireless", s['.name'], "network")
 				end
 			end)
@@ -421,8 +431,18 @@ function rename_network(self, old, new)
 
 			_uci_real:foreach("wireless", "wifi-iface",
 				function(s)
-					if s.network == old then
-						_uci_real:set("wireless", s['.name'], "network", new)
+					local net
+					local list = { }
+					for net in utl.imatch(s.network) do
+						if net == old then
+							list[#list+1] = new
+						else
+							list[#list+1] = net
+						end
+					end
+					if #list > 0 then
+						_uci_real:set("wireless", s['.name'], "network",
+						              table.concat(list, " "))
 					end
 				end)
 
@@ -678,9 +698,12 @@ function protocol.ifname(self)
 					num[s.device] = num[s.device]
 						and num[s.device] + 1 or 1
 
-					if s.network == self.sid then
-						ifname = "%s.network%d" %{ s.device, num[s.device] }
-						return false
+					local net
+					for net in utl.imatch(s.network) do
+						if net == self.sid then
+							ifname = "%s.network%d" %{ s.device, num[s.device] }
+							return false
+						end
 					end
 				end
 			end)
@@ -879,9 +902,13 @@ function protocol.get_interface(self)
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
-					if s.network == self.sid then
-						ifn = "%s.network%d" %{ s.device, num[s.device] }
-						return false
+
+					local net
+					for net in utl.imatch(s.network) do
+						if net == self.sid then
+							ifn = "%s.network%d" %{ s.device, num[s.device] }
+							return false
+						end
 					end
 				end
 			end)
@@ -910,9 +937,13 @@ function protocol.get_interfaces(self)
 			function(s)
 				if s.device then
 					num[s.device] = num[s.device] and num[s.device] + 1 or 1
-					if s.network == self.sid then
-						ifn = "%s.network%d" %{ s.device, num[s.device] }
-						wfs[ifn] = interface(ifn, self)
+
+					local net
+					for net in utl.imatch(s.network) do
+						if net == self.sid then
+							ifn = "%s.network%d" %{ s.device, num[s.device] }
+							wfs[ifn] = interface(ifn, self)
+						end
 					end
 				end
 			end)
