@@ -339,7 +339,7 @@ function write_json(x)
 		else
 			write(tostring(x))
 		end
-	elseif type(x) == "string" then
+	else
 		write("%q" % tostring(x))
 	end
 end
