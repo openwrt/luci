@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+.lang_he {
+	direction: RTL;
+	unicode-bidi: embed;
+}
+
 @media all {
 
 html {
@@ -62,6 +67,10 @@ ul.tabmenu li {
 	overflow: hidden;
 }
 
+.lang_he ul.tabmenu li {
+	float: right;
+}
+
 ul.tabmenu li a {
 	text-decoration: none;
 	color: #444444;
@@ -96,6 +105,10 @@ ul.l1 li a {
 
 ul.l1 li.tabmenu-item-logout a {
 	margin-left: 30px;
+}
+
+.lang_he ul.l1 li.tabmenu-item-logout a {
+	margin-right: 30px;
 }
 
 abbr,
@@ -160,6 +173,10 @@ div.hostinfo {
 	width: auto;
 	font-size: 80%;
 	padding: 0.5em;
+}
+
+.lang_he div.hostinfo {
+	float: right;
 }
 
 #xhr_poll_status {
@@ -247,6 +264,10 @@ html #menubar a:visited.warning {
 	float: right;
 }
 
+.lang_he #savemenu {
+	float: left;
+}
+
 .lang_de #submenu_admin_uci {
 	width: 12em;
 }
@@ -278,6 +299,10 @@ textarea#syslog {
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
 	border-color: #444444;
+}
+
+.lang_he #maincontent {
+	direction: rtl;
 }
 
 #maincontent h2 {
