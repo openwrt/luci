@@ -15,6 +15,8 @@ $Id$
 <%+header%>
 <% 
 local uci = require "luci.model.uci".cursor()
+local tpl = require "luci.template"
+local fs = require "luci.fs"
 local ff = {}
 local ff = uci:get_all("freifunk")
 
@@ -33,8 +35,7 @@ local co = "profile_" .. community
 local url = uci:get_first(co, "community", "homepage") or "http://www.freifunk.net"
 
 
-require("luci.fs")
-local usertext = luci.fs.readfile("/www/luci-static/index_user.html")
+local usertext = fs.readfile("/www/luci-static/index_user.html")
 
 if DefaultText ~= "disabled" then
 
@@ -69,4 +70,28 @@ end
 <%=defaulttext%>
 <%=usertext%>
 
+<%
+-- add custom widgets from view/freifunk/widgets
+local widgets = {}
+local dir = "/usr/lib/lua/luci/view/freifunk/widgets"
+
+uci:foreach("freifunk-widgets", "widget",
+			function(s)
+				if s.enabled == "1" then
+					local name = s[".name"] 
+					widgets[name] = s
+				end
+			end)
+
+local function cmp(a, b)
+	return (widgets[a].order or 100) > (widgets[b].order or 100)
+end
+
+for k, v in luci.util.spairs(widgets, function(a,b) return (tonumber(widgets[a].order) < tonumber(widgets[b].order)) end) do
+	if v['template'] and fs.access(dir .. "/" .. v['template'] .. "/main.htm") then
+		tpl.render("freifunk/widgets/" .. v['template'] .. "/main", { name = k, data = v })
+	end
+end
+
+%>
 <%+footer%>
