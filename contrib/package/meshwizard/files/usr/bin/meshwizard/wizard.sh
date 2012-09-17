@@ -118,4 +118,4 @@ done
 
 echo "+ The wizard has finished and the router will reboot now."
 
-#reboot
+reboot
