@@ -332,6 +332,9 @@ $(eval $(call application,firewall,Firmware and Portforwarding application,\
 $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
         +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting))
 
+$(eval $(call application,freifunk-widgets,Widgets for the Freifunk index page,\
+        +PACKAGE_luci-app-freifunk-widgets:luci-mod-freifunk))
+
 $(eval $(call application,meshwizard, Shellscript based wizard to setup mesh networks,\
         +PACKAGE_luci-app-freifunk-meshwizard:meshwizard))
 

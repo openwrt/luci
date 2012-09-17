@@ -1,0 +1,32 @@
+<%
+local utl = require "luci.util"
+local title = luci.i18n.translate(data.title or "Search")
+local width = data.width or "100%"
+
+if type(width) == "number" then
+        width = width .. "px"
+end
+%>
+
+<div id="<%=name%>" style="width:<%=width%>;float:left">
+	<h2><%=title%></h2>
+	<div id="form_<%=name%>">
+		<form name="searchform" id="search_<%=name%>" action="<%=luci.dispatcher.build_url('freifunk', 'search_redirect')%>">
+			<input type="text" name="searchterms" style="margin-bottom:15px; width: 90%"><br />
+			<%
+			local checked = " checked"
+			for k, v in ipairs(data.engine) do
+				local e = utl.split(v, "|")
+				local name = e[1]
+				local url = e[2]
+				if name and url then
+			%>
+			<input name="engine" type="radio" value="<%=url%>"<%=checked%>> <%=name%><br />
+	<%	end
+		checked = ""
+	end
+%>
+			<input type="submit" name="SearchSubmit" value="Search" style="margin-top: 15px">
+		</form>
+	</div>
+</div>

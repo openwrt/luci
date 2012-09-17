@@ -1,0 +1,28 @@
+<%
+--local utl = require "luci.util"
+local fs = require "luci.fs"
+local title = data.title
+local file = "/usr/share/customtext/" .. name .. ".html"
+local text = fs.readfile(file)
+local width = data.width or "100%"
+local pr = data.paddingright or "0"
+if type(width) == "number" then
+        width = width .. "px"
+end
+
+%>
+
+<div id="<%=name%>" style="width:<%=width%>;float:left">
+	<div style="padding-right: <%=pr%>">
+		<% if title then %>
+			<h2><%=title%></h2>
+		<% end %>
+		<% if text then %>
+			<%=text%>
+		<%else%>
+			<%:Could not load the custom text from%> "<%=file%>!"
+		<%end%>
+
+		<%=data.text%>
+	</div>
+</div>

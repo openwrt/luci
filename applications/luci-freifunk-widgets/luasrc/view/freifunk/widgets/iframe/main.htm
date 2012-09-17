@@ -1,0 +1,31 @@
+<%
+local url = data['url']
+local title = data['title'] or "No title set"
+local height = data['height'] or "400px"
+if type(height) == "number" then
+	height = height .. "px"
+end
+local width = data['width'] or "100%"
+if type(width) == "number" then
+	width = width .. "px"
+end
+
+%>
+
+<div id="<%=name%>" style="width:<%=width%>;float:left;">
+<h2><%=title%></h2>
+
+<% if not url then %>
+
+<%:No url set.%>
+
+<% else %>
+<div style="height:<%=height%>;min-height:<%=height%>">
+<object type="text/html" data="<%=url%>" width="100%" height="<%=height%>" name="widget_<%=name%>" id="widget_<%=name%>">
+<param name="src" value="<%=url%>" />
+<%:Sorry, your browser doesn't support the object tag and cannot display this page:%><br />
+<a href="<%=url%>"><%=url%></a>
+</object>
+</div>
+</div>
+<%end%>
