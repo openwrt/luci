@@ -61,6 +61,7 @@ $dir/helpers/setup_olsrd.sh
 $dir/helpers/setup_firewall.sh
 $dir/helpers/setup_ssh.sh
 $dir/helpers/setup_uhttpd.sh
+$dir/helpers/setup_widgets.sh
 
 if [ "$wan_proto" == "static" ] && [ -n "$wan_ip4addr" ] && [ -n "$wan_netmask" ]; then
 	$dir/helpers/setup_wan_static.sh
@@ -117,4 +118,4 @@ done
 
 echo "+ The wizard has finished and the router will reboot now."
 
-reboot
+#reboot
