@@ -44,25 +44,19 @@ for k, v in ipairs(fs.dir('/usr/lib/lua/luci/view/freifunk/widgets/')) do
 end
 
 local title = wdg:option(Value, "title", translate("Title"))
---title.rmempty = true
-
-
-local order = wdg:option(Value, "order", translate("Order"))
-order.default = "100"
-order.placeholder = "100"
-order.datatype = "integer"
+title.rmempty = true
 
 local width = wdg:option(Value, "width", translate("Width"))
---width.rmempty = true
+width.rmempty = true
 
 local height = wdg:option(Value, "height", translate("Height"))
---height.rmempty = true
+height.rmempty = true
 
 local pr = wdg:option(Value, "paddingright", translate("Padding right"))
 pr.rmempty = true
 
 function m.on_commit(self)
-    -- clean custom text files for elements which may have been deleted
+	-- clean custom text files whose config has been deleted
 	local dir = "/usr/share/customtext/"
 	local active = {}
 	uci:foreach("freifunk-widgets", "widget", function(s)
@@ -79,4 +73,3 @@ function m.on_commit(self)
 end
 
 return m
-

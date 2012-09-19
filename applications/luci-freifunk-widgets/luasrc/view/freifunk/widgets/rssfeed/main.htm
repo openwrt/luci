@@ -1,4 +1,17 @@
 <%
+--[[
+LuCI - Lua Configuration Interface
+
+Copyright 2012 Manuel Munz <freifunk at somakoma dot de>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+]]--
+
 local sys = require "luci.sys"
 local utl = require "luci.util"
 local fs = require "luci.fs"
@@ -13,58 +26,59 @@ local width = data.width or "100%"
 if type(width) == "number" then
 	width = width .. "px"
 end
+local name = data['.name']
 local cachetime = tonumber(data.cache) or 3600
 cachefile = "/tmp/" .. name .. ".cache"
 %>
 <div id="<%=name%>" style="width:<%=width%>;float:left">
-<div style="padding-right: <%=pr%>">
-<h2><%=title%></h2>
+	<div style="padding-right: <%=pr%>">
+	<h2><%=title%></h2>
 
-<% if not url then %>
-	<%:No url found in config%>
-<% else
-	local mtime = luci.fs.mtime(cachefile) or 0
-	local now = os.time()
-	expire = mtime + cachetime
+	<% if not url then %>
+		<%:No url found in config%>
+	<% else
+		local mtime = luci.fs.mtime(cachefile) or 0
+		local now = os.time()
+		expire = mtime + cachetime
 
-	if not fs.access(cachefile) or expire < now then
-		rss = sys.httpget(url)
-		if #rss == 0 then
-		%>
-			 <%:Could not get rss data from%> <a href="<%=url%>"><%=url%></a>
-		<%
-		else
-			local count = 0
-			for item in string.gmatch(rss, "<item>(.-)</item>") do
-				if count < max then
-					local title = item:match("<title>(.-)</title>")
-					local link = item:match("<link>(.-)</link>")
-					local desc = item:match("<description>(.-)</description>") or ""
-					if title and link then
-						table.insert(output, { title = utl.pcdata(title), link = utl.pcdata(link) })
+		if not fs.access(cachefile) or expire < now then
+			rss = sys.httpget(url)
+			if #rss == 0 then
+	%>
+			<%:Could not get rss data from%> <a href="<%=url%>"><%=url%></a>
+	<%
+			else
+				local count = 0
+				for item in string.gmatch(rss, "<item>(.-)</item>") do
+					if count < max then
+						local title = item:match("<title>(.-)</title>")
+						local link = item:match("<link>(.-)</link>")
+						local desc = item:match("<description>(.-)</description>") or ""
+						if title and link then
+							table.insert(output, { title = utl.pcdata(title), link = utl.pcdata(link) })
+						end
+						count = count + 1
 					end
-					count = count + 1
+				end
+				if count > 0 then
+					local file = io.open(cachefile, "w")
+					file:write(utl.serialize_data(output))
+					file:close()
 				end
 			end
-			local file = io.open(cachefile, "w")
-			file:write(utl.serialize_data(output))
-			file:close()
+		else
+			local file = assert(io.open(cachefile))
+			output = utl.restore_data(file:read'*a')
 		end
-	else
-		local file = assert(io.open(cachefile))
-		output = utl.restore_data(file:read'*a')
 	end
-end
 
-if #output > 0 then
-%>
-<ul>
-<%
-	for k, v in ipairs(output) do
-%>
-		<li><a href="<%=v.link%>"><%=v.title%></a></li>
-<% end %>
-</ul>
+	if #output > 0 then
+	%>
+		<ul>
+		<% for k, v in ipairs(output) do %>
+			<li><a href="<%=v.link%>"><%=v.title%></a></li>
+		<% end %>
+		</ul>
+	<%end%>
+	</div>
 </div>
-</div>
-<%end%>

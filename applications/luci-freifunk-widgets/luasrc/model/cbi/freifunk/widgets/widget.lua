@@ -36,12 +36,6 @@ en.rmempty = false
 local title = wdg:option(Value, "title", translate("Title"))
 title.rmempty = true
 
-local order = wdg:option(Value, "order", translate("Order"))
-order.default = "100"
-order.placeholder = "100"
-order.datatype = "integer"
-
-
 local form = loadfile(
 	utl.libpath() .. "/model/cbi/freifunk/widgets/%s.lua" % widget
 )
@@ -49,5 +43,6 @@ local form = loadfile(
 if form then
 	setfenv(form, getfenv(1))(m, wdg)
 end
+
 return m
 
