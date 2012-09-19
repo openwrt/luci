@@ -78,18 +78,13 @@ local dir = "/usr/lib/lua/luci/view/freifunk/widgets"
 uci:foreach("freifunk-widgets", "widget",
 			function(s)
 				if s.enabled == "1" then
-					local name = s[".name"] 
-					widgets[name] = s
+					table.insert(widgets, s)
 				end
 			end)
 
-local function cmp(a, b)
-	return (widgets[a].order or 100) > (widgets[b].order or 100)
-end
-
-for k, v in luci.util.spairs(widgets, function(a,b) return (tonumber(widgets[a].order) < tonumber(widgets[b].order)) end) do
+for k, v in ipairs(widgets) do
 	if v['template'] and fs.access(dir .. "/" .. v['template'] .. "/main.htm") then
-		tpl.render("freifunk/widgets/" .. v['template'] .. "/main", { name = k, data = v })
+		tpl.render("freifunk/widgets/" .. v['template'] .. "/main", { data = v })
 	end
 end
 
