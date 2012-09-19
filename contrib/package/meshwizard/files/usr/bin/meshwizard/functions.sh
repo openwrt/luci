@@ -27,7 +27,7 @@ set_defaults() {
 	for def in $(env |grep "^$1" | sed 's/ /_/g'); do
 		option="${def/$1/}"
 		a="$(echo $option |cut -d '=' -f1)"
-		b="$(echo $option |cut -d '=' -f2)"
+		b="$(echo $option |cut -d '=' -f2-)"
 		b="${b//_/ }"
 		uci set $2.$a="$b"
 	done
