@@ -1,0 +1,26 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2012 Daniel Golle <dgolle@allnet.de>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+<%+header%>
+<h2><a id="content" name="content"><%:System%></a></h2>
+<h3><%:Reboot%></h3>
+<p><%:Reboots the operating system of your device%></p>
+<%- if not reboot then -%>
+<p><a href="<%=controller%>/failsafe/reboot?reboot=1"><%:Perform reboot%></a></p>
+<%- else -%>
+<p><%:Please wait: Device rebooting...%></p>
+<script type="text/javascript">setTimeout("location='<%=controller%>'", 60000)</script>
+<%- end -%>
+<%+footer%>
