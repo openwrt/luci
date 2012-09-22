@@ -11,7 +11,7 @@ get_var() {
 }
 
 handle_widgets() {
-        widgets="$1 $widgets"
+        widgets="$widgets $1"
 }
 config_load freifunk
 config_foreach handle_widgets widget
