@@ -166,7 +166,7 @@ if has_sta then
 else
 	ch = s:taboption("general", Value, "channel", translate("Channel"))
 	ch:value("auto", translate("auto"))
-	for _, f in ipairs(iw and iw.freqlist) do
+	for _, f in ipairs(iw and iw.freqlist or { }) do
 		if not f.restricted then
 			ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
 		end
