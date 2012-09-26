@@ -82,7 +82,7 @@ $Id$
 		local s = { }
 
 		for i = 1, times do
-			for k, v in ipairs(iw.scanlist) do
+			for k, v in ipairs(iw.scanlist or { }) do
 				if not s[v.bssid] then
 					l[#l+1] = v
 					s[v.bssid] = true
