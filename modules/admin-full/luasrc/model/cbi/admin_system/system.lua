@@ -192,7 +192,7 @@ if has_ntpd then
 		s.anonymous = true
 		s.addremove = false
 
-		o = s:option(Flag, "enable", translate("Enable builtin NTP server"))
+		o = s:option(Flag, "enable", translate("Enable NTP client"))
 		o.rmempty = false
 
 		function o.cfgvalue(self)
@@ -209,6 +209,10 @@ if has_ntpd then
 				luci.sys.init.disable("sysntpd")
 			end
 		end
+
+
+		o = s:option(Flag, "enable_server", translate("Provide NTP server"))
+		o:depends("enable", "1")
 
 
 		o = s:option(DynamicList, "server", translate("NTP server candidates"))
