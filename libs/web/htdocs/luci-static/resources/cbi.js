@@ -148,8 +148,8 @@ var cbi_validators = {
 	'hostname': function()
 	{
 		if (this.length <= 253)
-			return (this.match(/^[a-zA-Z]+$/) != null ||
-			        (this.match(/^[a-zA-Z0-9][a-zA-Z0-9\-.]*[a-zA-Z0-9]$/) &&
+			return (this.match(/^[a-zA-Z0-9]+$/) != null ||
+			        (this.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]$/) &&
 			         this.match(/[^0-9.]/)));
 
 		return false;
