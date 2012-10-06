@@ -179,8 +179,8 @@ end
 
 function hostname(val)
 	if val and (#val < 254) and (
-	   val:match("^[a-zA-Z]+$") or
-	   (val:match("^[a-zA-Z0-9][a-zA-Z0-9%-%.]*[a-zA-Z0-9]$") and
+	   val:match("^[a-zA-Z_]+$") or
+	   (val:match("^[a-zA-Z0-9_][a-zA-Z0-9_%-%.]*[a-zA-Z0-9]$") and
 	    val:match("[^0-9%.]"))
 	) then
 		return true
