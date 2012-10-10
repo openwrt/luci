@@ -16,7 +16,7 @@ start() {
 
 	if [ ! -s "$LOCK" ]; then
 		logger -s -t "$ME" 'starting p2pblock...'
-		
+
 		config_load network
 		config_get wan wan ifname
 
@@ -34,7 +34,7 @@ start() {
 
 			# create new p2p-chain
 			iptables -N p2pblock
-			# pipe all incomming FORWARD with source-/destination-port 1024-65535 throu p2p-chain 
+			# pipe all incoming FORWARD with source-/destination-port 1024-65535 throu p2p-chain
 			ipt_add "FORWARD -i $wan -p tcp --sport $portrange --dport $portrange -j p2pblock"
 			ipt_add "FORWARD -i $wan -p udp --sport $portrange --dport $portrange -j p2pblock"
 
@@ -55,13 +55,13 @@ start() {
 			done
 
 			# insert whitelisted ips
-			for ip in $WHITELIST; do
+			for ip in $whitelist; do
 				ipt_add "p2pblock -d $ip -j RETURN"
 			done
 
 			logger -s -t "$ME" 'Done.'; return 0
 		else
-			logger -s -t "$ME" 'No wan interface present.'; return 0	
+			logger -s -t "$ME" 'No wan interface present.'; return 0
 		fi
 	else
 		logger -s -t "$ME" 'WARNING! already running - Aborting!'; return 2
