@@ -35,7 +35,6 @@ ip6addr = s:taboption("general", Value, "ip6addr",
 	translate("Local IPv6 address"),
 	translate("This is the local endpoint address assigned by the tunnel broker, it usually ends with <code>:2</code>"))
 
-ip6addr.rmempty  = false
 ip6addr.datatype = "ip6addr"
 
 
