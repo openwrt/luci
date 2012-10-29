@@ -65,14 +65,14 @@ int nixio__exec(lua_State *L, int m) {
 					return luaL_error(L, "stack overflow");
 				}
 
-				if (!lua_type(L, -2) != LUA_TSTRING || !lua_isstring(L, -1)) {
+				if (lua_type(L, -2) != LUA_TSTRING || !lua_isstring(L, -1)) {
 					return luaL_argerror(L, 3, "invalid environment");
 				}
 
 				lua_pushfstring(L, "%s=%s",
 						lua_tostring(L, -2), lua_tostring(L, -1));
 
-				lua_insert(L, 4);
+				lua_insert(L, 5);
 				lua_pop(L, 1);
 				argn++;
 			}
@@ -80,8 +80,8 @@ int nixio__exec(lua_State *L, int m) {
 			char **env = lua_newuserdata(L, sizeof(char*) * (argn + 1));
 			env[argn] = NULL;
 
-			for (i = 1; i < argn; i++) {
-				env[i-1] = (char *)lua_tostring(L, -i);
+			for (i = 1; i <= argn; i++) {
+				env[i-1] = (char *)lua_tostring(L, -(i+1));
 			}
 
 			execve(path, args, env);

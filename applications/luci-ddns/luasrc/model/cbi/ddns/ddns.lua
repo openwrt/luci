@@ -13,6 +13,8 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
+require("luci.tools.webadmin")
+
 local is_mini = (luci.dispatcher.context.path[1] == "mini")
 
 
@@ -26,6 +28,10 @@ s.addremove = true
 s.anonymous = false
 
 s:option(Flag, "enabled", translate("Enable"))
+
+interface = s:option(ListValue, "interface", translate("Event interface"), translate("On which interface up should start the ddns script process."))
+luci.tools.webadmin.cbi_add_networks(interface)
+interface.default = "wan"
 
 svc = s:option(ListValue, "service_name", translate("Service"))
 svc.rmempty = false
@@ -81,7 +87,6 @@ if is_mini then
 	s.defaults.ip_source = "network"
 	s.defaults.ip_network = "wan"
 else
-	require("luci.tools.webadmin")
 
 	src = s:option(ListValue, "ip_source",
 		translate("Source of IP address"))

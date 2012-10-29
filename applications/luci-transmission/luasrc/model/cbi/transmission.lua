@@ -22,7 +22,7 @@ local running = (luci.sys.call("pidof transmission-daemon > /dev/null") == 0)
 local webinstalled = luci.model.ipkg.installed("transmission-web") 
 local button = ""
 if running and webinstalled then
-	button = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\" " .. translate("Open Web Interface") .. " \" onclick=\"window.open('http://'+window.location.host+':" .. trport .. "')\"/>"
+	button = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\" " .. translate("Open Web Interface") .. " \" onclick=\"window.open('http://'+window.location.hostname+':" .. trport .. "')\"/>"
 end
 
 m = Map("transmission", "Transmission", translate("Transmission daemon is a simple bittorrent client, here you can configure the settings.") .. button)
