@@ -208,6 +208,12 @@ if hwtype == "mac80211" then
 		htmode:value("HT40-", translate("40MHz 2nd channel below"))
 		htmode:value("HT40+", translate("40MHz 2nd channel above"))
 
+		noscan = s:taboption("advanced", Flag, "noscan", translate("Force 40MHz mode"),
+			translate("Always use 40MHz channels even if the secondary channel overlaps. Using this option does not comply with IEEE 802.11n-2009!"))
+		noscan:depends("htmode", "HT40+")
+		noscan:depends("htmode", "HT40-")
+		noscan.default = noscan.disabled
+
 		--htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
 		--htcapab:depends("hwmode", "11na")
 		--htcapab:depends("hwmode", "11ng")
