@@ -202,10 +202,12 @@ m.uci:foreach("network", "switch",
 
 
 		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID", "<div id='portstatus-%s'></div>" % switch_name)
+		local mx_vid = has_vlan4k and 4094 or (num_vlans - 1) 
 
 		vid.rmempty = false
 		vid.forcewrite = true
 		vid.vlan_used = { }
+		vid.datatype = "and(uinteger,range("..min_vid..","..mx_vid.."))"
 
 		-- Validate user provided VLAN ID, make sure its within the bounds
 		-- allowed by the switch.

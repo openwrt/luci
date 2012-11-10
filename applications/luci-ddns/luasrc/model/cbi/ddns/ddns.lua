@@ -112,14 +112,19 @@ else
 end
 
 
-s:option(Value, "check_interval",
-	translate("Check for changed IP every")).default = 10
+ci = s:option(Value, "check_interval", translate("Check for changed IP every"))
+ci.datatype = "and(uinteger,min(1))"
+ci.default = 10
+
 unit = s:option(ListValue, "check_unit", translate("Check-time unit"))
 unit.default = "minutes"
 unit:value("minutes", translate("min"))
 unit:value("hours", translate("h"))
 
-s:option(Value, "force_interval", translate("Force update every")).default = 72
+fi = s:option(Value, "force_interval", translate("Force update every"))
+fi.datatype = "and(uinteger,min(1))"
+fi.default = 72
+
 unit = s:option(ListValue, "force_unit", translate("Force-time unit"))
 unit.default = "hours"
 unit:value("minutes", translate("min"))
