@@ -14,17 +14,32 @@ $Id$
 
 <%+header%>
 
+<%
+local fs   = require "nixio.fs"
+local has_ping6 = fs.access("/bin/ping6") or fs.access("/usr/bin/ping6")
+local has_traceroute6 = fs.access("/usr/bin/traceroute6")
+%>
+
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	var stxhr = new XHR();
 
-	function update_status(field)
+	function update_status(field,proto)
 	{
 		var tool = field.name;
 		var addr = field.value;
+		var protocol = ""
 
 		var legend = document.getElementById('diag-rc-legend');
 		var output = document.getElementById('diag-rc-output');
+
+		if (typeof proto != 'undefined') {
+			for(var i = 0; i < proto.length; i++) {
+				if(proto[i].checked) {
+					protocol = proto[i].value;
+				}
+			}
+		}
 
 		if (legend && output)
 		{
@@ -36,7 +51,7 @@ $Id$
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/diag_' + tool + '/' + addr, null,
+			stxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/diag_' + tool + protocol + '/' + addr, null,
 				function(x)
 				{
 					if (x.responseText)
@@ -64,17 +79,29 @@ $Id$
 
 			<br />
 
-			<div style="width:30%; float:left; text-align:center">
+			<div style="width:30%; float:left">
 				<input style="width: 50%" type="text" value="openwrt.org" name="ping" />
-				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping)" />
+				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping,this.form.proto)" />
+				<% if has_ping6 then %>
+				<div style="width:100%; margin-top: 10px;">
+					<input type="radio" name="proto" value="" checked> <%:IPv4%>
+					<input type="radio" name="proto" value="6"> <%:IPv6%>
+				</div>
+				<%end%>
 			</div>
 
-			<div style="width:30%; float:left; text-align:center">
+			<div style="width:33%; float:left">
 				<input style="width: 50%" type="text" value="openwrt.org" name="traceroute" />
-				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute)" />
+				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute,this.form.trproto)" />
+				<% if has_traceroute6 then %>
+				<div style="width:100%; margin-top: 10px;">
+					<input type="radio" name="trproto" value="" checked> <%:IPv4%>
+					<input type="radio" name="trproto" value="6"> <%:IPv6%>
+				</div>
+				<%end%>
 			</div>
 
-			<div style="width:30%; float:left; text-align:center">
+			<div style="width:33%; float:left;">
 				<input style="width: 50%" type="text" value="openwrt.org" name="nslookup" />
 				<input type="button" value="<%:Nslookup%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.nslookup)" />
 			</div>
