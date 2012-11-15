@@ -84,8 +84,8 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping,this.form.proto)" />
 				<% if has_ping6 then %>
 				<div style="width:100%; margin-top: 10px;">
-					<input type="radio" name="proto" value="" checked> <%:IPv4%>
-					<input type="radio" name="proto" value="6"> <%:IPv6%>
+					<input type="radio" name="proto" value="" checked="checked" /> <%:IPv4%>
+					<input type="radio" name="proto" value="6" /> <%:IPv6%>
 				</div>
 				<%end%>
 			</div>
@@ -95,8 +95,8 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute,this.form.trproto)" />
 				<% if has_traceroute6 then %>
 				<div style="width:100%; margin-top: 10px;">
-					<input type="radio" name="trproto" value="" checked> <%:IPv4%>
-					<input type="radio" name="trproto" value="6"> <%:IPv6%>
+					<input type="radio" name="trproto" value="" checked="checked" /> <%:IPv4%>
+					<input type="radio" name="trproto" value="6" /> <%:IPv6%>
 				</div>
 				<%end%>
 			</div>
