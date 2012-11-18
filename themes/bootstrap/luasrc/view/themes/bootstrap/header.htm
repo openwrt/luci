@@ -79,7 +79,7 @@ You may obtain a copy of the License at
 				end
                 if level > 2 then
 		%>
-			<li class="tabmenu-item-<%=v%><%- if nnode._menu_selected or (node.leaf and v == leaf) then -%> active<% end %>">
+			<li class="tabmenu-item-<%=v%><%- if nnode._menu_selected or (node.leaf and v == leaf) then %> active<% end %>">
 			    <a href="<%=nodeurl(prefix, v, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
 			</li>
 		<%      end
