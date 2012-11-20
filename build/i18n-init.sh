@@ -4,7 +4,8 @@ PATTERN=$1
 SCM=
 
 [ -d .svn ] && SCM="svn"
-[ -d .git ] && SCM="git"
+git=$( which git 2>/dev/null )
+[ "$git" ] && "$git" status >/dev/null && SCM="git"
 
 [ -z "$SCM" ] && {
 	echo "Unsupported SCM tool" >&2
