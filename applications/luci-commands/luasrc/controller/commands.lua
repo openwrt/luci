@@ -141,9 +141,7 @@ local function parse_args(str)
 end
 
 local function parse_cmdline(cmdid, args)
-	local uci  = require "luci.model.uci".cursor()
-	local path = luci.dispatcher.context.requestpath
-
+	local uci = require "luci.model.uci".cursor()
 	if uci:get("luci", cmdid) == "command" then
 		local cmd = uci:get_all("luci", cmdid)
 		local argv = parse_args(cmd.command)
@@ -228,7 +226,8 @@ end
 
 function action_public(cmdid, args)
 	local uci = require "luci.model.uci".cursor()
-	if uci:get("luci", cmdid) == "command" and
+	if cmdid and
+	   uci:get("luci", cmdid) == "command" and
 	   uci:get("luci", cmdid, "public") == "1"
 	then
 		action_download(cmdid, args)

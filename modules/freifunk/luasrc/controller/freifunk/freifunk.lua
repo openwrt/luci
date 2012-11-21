@@ -251,15 +251,14 @@ function jsonstatus()
 	ltn12.pump.all(json.Encoder(root):source(), http.write)
 end
 
-function public_status_json()
+function public_status_json(devs)
 	local twa	= require "luci.tools.webadmin"
 	local sys	= require "luci.sys"
 	local i18n	= require "luci.i18n"
-	local path	= luci.dispatcher.context.requestpath
 	local rv 	= { }
 
 	local dev
-	for dev in path[#path]:gmatch("[%w%.%-]+") do
+	for dev in devs:gmatch("[%w%.%-]+") do
 		local j = { id = dev }
 		local iw = luci.sys.wifi.getiwinfo(dev)
 		if iw then

@@ -69,10 +69,8 @@ function act_status()
 	end
 end
 
-function act_delete()
-	local path = luci.dispatcher.context.requestpath
-	local idx = tonumber(path[#path])
-
+function act_delete(idx)
+	idx = tonumber(idx)
 	if idx and idx > 0 then
 		luci.sys.call("iptables -t filter -D MINIUPNPD %d 2>/dev/null" % idx)
 		luci.sys.call("iptables -t nat -D MINIUPNPD %d 2>/dev/null" % idx)

@@ -71,10 +71,7 @@ function action_iptables()
 	end
 end
 
-function action_bandwidth()
-	local path  = luci.dispatcher.context.requestpath
-	local iface = path[#path]
-
+function action_bandwidth(iface)
 	luci.http.prepare_content("application/json")
 
 	local bwc = io.popen("luci-bwc -i %q 2>/dev/null" % iface)
@@ -92,10 +89,7 @@ function action_bandwidth()
 	end
 end
 
-function action_wireless()
-	local path  = luci.dispatcher.context.requestpath
-	local iface = path[#path]
-
+function action_wireless(iface)
 	luci.http.prepare_content("application/json")
 
 	local bwc = io.popen("luci-bwc -r %q 2>/dev/null" % iface)
