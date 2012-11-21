@@ -121,7 +121,7 @@ You may obtain a copy of the License at
 				<h3><%=pcdata(command.name)%></h3>
 				<p><%:Command:%> <code><%=pcdata(command.command)%></code></p>
 				<% if command.param == "1" then %>
-					<p><%:Arguments:%> <input style="width: 50%" type="text" value="openwrt.org" id="<%=command['.name']%>" /></p>
+					<p><%:Arguments:%> <input style="width: 50%" type="text" id="<%=command['.name']%>" /></p>
 				<% end %>
 				<div style="position:absolute; left:0; bottom:20px">
 					<input type="button" value="<%:Run%>" class="cbi-button cbi-button-apply" onclick="command_run('<%=command['.name']%>')" />
