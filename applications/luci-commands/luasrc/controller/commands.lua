@@ -195,6 +195,7 @@ function action_run(...)
 end
 
 function action_download(...)
+	local fs   = require "nixio.fs"
 	local argv = parse_cmdline(...)
 	if argv then
 		local fd = io.popen(table.concat(argv, " ") .. " 2>/dev/null")
@@ -203,11 +204,11 @@ function action_download(...)
 			local name
 			if chunk:match("[%z\1-\8\14-\31]") then
 				luci.http.header("Content-Disposition", "attachment; filename=%s"
-				                 % argv[1]:gsub("%W+", ".") .. ".bin")
+				                 % fs.basename(argv[1]):gsub("%W+", ".") .. ".bin")
 				luci.http.prepare_content("application/octet-stream")
 			else
 				luci.http.header("Content-Disposition", "attachment; filename=%s"
-				                 % argv[1]:gsub("%W+", ".") .. ".txt")
+				                 % fs.basename(argv[1]):gsub("%W+", ".") .. ".txt")
 				luci.http.prepare_content("text/plain")
 			end
 
