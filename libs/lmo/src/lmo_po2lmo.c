@@ -52,12 +52,19 @@ static int extract_string(const char *src, char *dest, int len)
 		{
 			if( esc == 1 )
 			{
+				switch (src[pos])
+				{
+				case '"':
+				case '\\':
+					off++;
+					break;
+				}
 				dest[pos-off] = src[pos];
 				esc = 0;
 			}
 			else if( src[pos] == '\\' )
 			{
-				off++;
+				dest[pos-off] = src[pos];
 				esc = 1;
 			}
 			else if( src[pos] != '"' )

@@ -1,7 +1,7 @@
 /*
  * lmo - Lua Machine Objects - Lua library header
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2012 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+#include <ctype.h>
 
 #include "lmo.h"
 

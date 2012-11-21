@@ -1,7 +1,7 @@
 /*
  * lmo - Lua Machine Objects - Lua binding
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2012 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -46,9 +46,41 @@ static int lmo_L_open(lua_State *L) {
 	return 2;
 }
 
+static uint32_t _lmo_hash_string(lua_State *L, int n) {
+	size_t len;
+	const char *str = luaL_checklstring(L, n, &len);
+	char res[4096];
+	char *ptr, prev;
+
+	if (!str || len >= sizeof(res))
+		return 0;
+
+	while (*str && isspace(*str))
+		str++;
+
+	for (prev = 0, ptr = res; *str; prev = *str, str++)
+	{
+		if (isspace(*str))
+		{
+			if (isspace(prev))
+				continue;
+
+			*ptr++ = ' ';
+		}
+		else
+		{
+			*ptr++ = *str;
+		}
+	}
+
+	while ((ptr > res) && isspace(*ptr))
+		ptr--;
+
+	return sfh_hash(res, ptr - res);
+}
+
 static int lmo_L_hash(lua_State *L) {
-	const char *data = luaL_checkstring(L, 1);
-	uint32_t hash = sfh_hash(data, strlen(data));
+	uint32_t hash = _lmo_hash_string(L, 1);
 	lua_pushinteger(L, (lua_Integer)hash);
 	return 1;
 }
@@ -104,8 +136,7 @@ static int lmo_L_get(lua_State *L) {
 
 static int lmo_L_lookup(lua_State *L) {
 	lmo_archive_t **ar = luaL_checkudata(L, 1, LMO_ARCHIVE_META);
-	const char *key = luaL_checkstring(L, 2);
-	uint32_t hash = sfh_hash(key, strlen(key));
+	uint32_t hash = _lmo_hash_string(L, 2);
 	return _lmo_lookup(L, *ar, hash);
 }
 
