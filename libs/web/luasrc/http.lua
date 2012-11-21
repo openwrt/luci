@@ -4,9 +4,6 @@ LuCI - HTTP-Interaction
 Description:
 HTTP-Header manipulator and form variable preprocessor
 
-FileId:
-$Id$
-
 License:
 Copyright 2008 Steven Barth <steven@midlink.org>
 
@@ -334,12 +331,14 @@ function write_json(x)
 		end
 	elseif type(x) == "number" or type(x) == "boolean" then
 		if (x ~= x) then
-			-- NaN is the only value that doesn't equal to itself.   
+			-- NaN is the only value that doesn't equal to itself.
 			write("Number.NaN")
 		else
 			write(tostring(x))
 		end
 	else
-		write("%q" % tostring(x))
+		write('"%s"' % tostring(x):gsub('["%z\1-\31]', function(c)
+			return '\\u%04x' % c:byte(1)
+		end))
 	end
 end
