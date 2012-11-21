@@ -41,6 +41,10 @@ require("luci.http").prepare_content("text/html")
 <head>
 	<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
 	<% if node and node.css then %><link rel="stylesheet" type="text/css" href="<%=resource%>/<%=node.css%>" /><% end %>
+	<% if css then %><style title="text/css">
+	<%-= css %>
+	</style>
+	<% end -%>
 	<link rel="shortcut icon" href="<%=media%>/images/favicon.ico" />
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />

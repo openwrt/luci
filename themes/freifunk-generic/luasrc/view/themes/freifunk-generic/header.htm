@@ -79,6 +79,10 @@ You may obtain a copy of the License at
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
+<% if css then %><style title="text/css">
+<%= css %>
+</style>
+<% end -%>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(tostring(node.title)) or '')) %> - LuCI</title>

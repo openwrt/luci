@@ -106,6 +106,10 @@ You may obtain a copy of the License at
   <link rel="shortcut icon" href="<%=media%>/favicon.ico">
   <% if node and node.css then %><link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
   <% end -%>
+  <% if css then %><style title="text/css">
+  <%-= css %>
+  </style>
+  <% end -%>
   <script src="<%=resource%>/xhr.js"></script>
  </head>
 
