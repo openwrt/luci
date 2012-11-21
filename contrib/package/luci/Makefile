@@ -380,6 +380,8 @@ $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),\
 	luci-app-diag-devinfo))
 
+$(eval $(call application,commands,LuCI Shell Command Module))
+
 $(eval $(call application,upnp,Universal Plug & Play configuration module,\
 	+PACKAGE_luci-app-upnp:miniupnpd))
 
