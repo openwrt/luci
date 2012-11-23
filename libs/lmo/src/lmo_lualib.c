@@ -55,17 +55,12 @@ static uint32_t _lmo_hash_string(lua_State *L, int n) {
 	if (!str || len >= sizeof(res))
 		return 0;
 
-	while (*str && isspace(*str))
-		str++;
-
-	for (prev = 0, ptr = res; *str; prev = *str, str++)
+	for (prev = ' ', ptr = res; *str; prev = *str, str++)
 	{
 		if (isspace(*str))
 		{
-			if (isspace(prev))
-				continue;
-
-			*ptr++ = ' ';
+			if (!isspace(prev))
+				*ptr++ = ' ';
 		}
 		else
 		{
@@ -73,7 +68,7 @@ static uint32_t _lmo_hash_string(lua_State *L, int n) {
 		}
 	}
 
-	while ((ptr > res) && isspace(*ptr))
+	if ((ptr > res) && isspace(*(ptr-1)))
 		ptr--;
 
 	return sfh_hash(res, ptr - res);
