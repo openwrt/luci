@@ -1,7 +1,7 @@
 /*
  * LuCI Template - Parser implementation
  *
- *   Copyright (C) 2009 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2012 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,17 +17,21 @@
  */
 
 #include "template_parser.h"
+#include "template_utils.h"
+#include "template_lmo.h"
 
 
 /* leading and trailing code for different types */
-const char * gen_code[7][2] = {
+const char *gen_code[9][2] = {
+	{ NULL,					NULL			},
 	{ "write(\"",			"\")"			},
 	{ NULL,					NULL			},
 	{ "write(tostring(",	" or \"\"))"	},
 	{ "include(\"",			"\")"			},
-	{ "write(pcdata(translate(\"",	"\")))"	},
-	{ "write(translate(\"",	"\"))"			},
-	{ NULL,					" "				}
+	{ "write(\"",			"\")"			},
+	{ "write(\"",			"\")"			},
+	{ NULL,					" "				},
+	{ NULL,					NULL			},
 };
 
 /* Simple strstr() like function that takes len arguments for both haystack and needle. */
@@ -59,407 +63,326 @@ static char *strfind(char *haystack, int hslen, const char *needle, int ndlen)
 	return NULL;
 }
 
-/*
- * Inspect current read buffer and find the number of "vague" characters at the end
- * which could indicate an opening token. Returns the number of "vague" chars.
- * The last continuous sequence of whitespace, optionally followed by a "<" is
- * treated as "vague" because whitespace may be discarded if the upcoming opening
- * token indicates pre-whitespace-removal ("<%-"). A single remaining "<" char
- * can't be differentiated from an opening token ("<%"), so it's kept to be processed
- * in the next cycle.
- */
-static int stokscan(struct template_parser *data, int off, int no_whitespace)
+struct template_parser * template_open(const char *file)
 {
-	int i;
-	int skip = 0;
-	int tokoff = data->bufsize - 1;
+	struct stat s;
+	static struct template_parser *parser;
 
-	for( i = tokoff; i >= off; i-- )
+	if (!(parser = malloc(sizeof(*parser))))
+		goto err;
+
+	memset(parser, 0, sizeof(*parser));
+	parser->fd = -1;
+	parser->file = file;
+
+	if (stat(file, &s))
+		goto err;
+
+	if ((parser->fd = open(file, O_RDONLY)) < 0)
+		goto err;
+
+	parser->size = s.st_size;
+	parser->mmap = mmap(NULL, parser->size, PROT_READ, MAP_PRIVATE,
+						parser->fd, 0);
+
+	if (parser->mmap != MAP_FAILED)
 	{
-		if( data->buf[i] == T_TOK_START[0] )
-		{
-			skip = tokoff - i + 1;
-			tokoff = i - 1;
-			break;
-		}
+		parser->off = parser->mmap;
+		parser->cur_chunk.type = T_TYPE_INIT;
+		parser->cur_chunk.s    = parser->mmap;
+		parser->cur_chunk.e    = parser->mmap;
+
+		return parser;
 	}
 
-	if( !no_whitespace )
-	{
-		for( i = tokoff; i >= off; i-- )
-		{
-			if( isspace(data->buf[i]) )
-				skip++;
-			else
-				break;
-		}
-	}
-
-	return skip;
-}
-
-/*
- * Similar to stokscan() but looking for closing token indicators.
- * Matches "-", optionally followed by a "%" char.
- */
-static int etokscan(struct template_parser *data)
-{
-	int skip = 0;
-
-	if( (data->bufsize > 0) && (data->buf[data->bufsize-1] == T_TOK_END[0]) )
-		skip++;
-
-	if( (data->bufsize > skip) && (data->buf[data->bufsize-skip-1] == T_TOK_SKIPWS[0]) )
-		skip++;
-
-	return skip;
-}
-
-/*
- * Generate Lua expressions from the given raw code, write it into the
- * output buffer and set the lua_Reader specific size pointer.
- * Takes parser-state, lua_Reader's size pointer and generator flags
- * as parameter. The given flags indicate whether leading or trailing
- * code should be added. Returns a pointer to the output buffer.
- */
-static const char * generate_expression(struct template_parser *data, size_t *sz, int what)
-{
-	char tmp[T_OUTBUFSZ];
-	int i;
-	int size = 0;
-	int start = 0;
-	int whitespace = 0;
-
-	memset(tmp, 0, T_OUTBUFSZ);
-
-	/* Inject leading expression code (if any) */
-	if( (what & T_GEN_START) && (gen_code[data->type][0] != NULL) )
-	{
-		memcpy(tmp, gen_code[data->type][0], strlen(gen_code[data->type][0]));
-		size += strlen(gen_code[data->type][0]);
-	}
-
-	/* Parse source buffer */
-	for( i = 0; i < data->outsize; i++ )
-	{
-		/* Skip leading whitespace for non-raw and non-expr chunks */
-		if( !start && isspace(data->out[i]) && (data->type == T_TYPE_I18N ||
-           data->type == T_TYPE_I18N_RAW || data->type == T_TYPE_INCLUDE) )
-			continue;
-		else if( !start )
-			start = 1;
-
-		/* Found whitespace after i18n key */
-		if( data->type == T_TYPE_I18N || data->type == T_TYPE_I18N_RAW )
-		{
-			/* Is initial whitespace, insert space */
-			if( !whitespace && isspace(data->out[i]) )
-			{
-				tmp[size++] = ' ';
-				whitespace = 1;
-			}
-
-			/* Suppress subsequent whitespace, escape special chars */
-			else if( !isspace(data->out[i]) )
-			{
-				if( data->out[i] == '\\' || data->out[i] == '"' )
-					tmp[size++] = '\\';
-
-				tmp[size++] = data->out[i];
-				whitespace = 0;
-			}
-		}
-
-		/* Escape quotes, backslashes and newlines for plain and include expressions */
-		else if( (data->type == T_TYPE_TEXT || data->type == T_TYPE_INCLUDE) &&
-		    (data->out[i] == '\\' || data->out[i] == '"' || data->out[i] == '\n' || data->out[i] == '\t') )
-		{
-			tmp[size++] = '\\';
-
-			switch(data->out[i])
-			{
-				case '\n':
-					tmp[size++] = 'n';
-					break;
-
-				case '\t':
-					tmp[size++] = 't';
-					break;
-
-				default:
-					tmp[size++] = data->out[i];
-			}
-		}
-
-		/* Normal char */
-		else
-		{
-			tmp[size++] = data->out[i];
-		}
-	}
-
-	/* Inject trailing expression code (if any) */
-	if( (what & T_GEN_END) && (gen_code[data->type][1] != NULL) )
-	{
-		/* Strip trailing space for i18n expressions */
-		if( data->type == T_TYPE_I18N || data->type == T_TYPE_I18N_RAW )
-			if( (size > 0) && (tmp[size-1] == ' ') )
-				size--;
-
-		memcpy(&tmp[size], gen_code[data->type][1], strlen(gen_code[data->type][1]));
-		size += strlen(gen_code[data->type][1]);
-	}
-
-	*sz = data->outsize = size;
-	memset(data->out, 0, T_OUTBUFSZ);
-	memcpy(data->out, tmp, size);
-
-	//printf("<<<%i|%i|%i|%s>>>\n", what, data->type, *sz, data->out);
-
-	return data->out;
-}
-
-/*
- * Move the number of bytes specified in data->bufsize from the
- * given source pointer to the beginning of the read buffer.
- */
-static void bufmove(struct template_parser *data, const char *src)
-{
-	if( data->bufsize > 0 )
-		memmove(data->buf, src, data->bufsize);
-	else if( data->bufsize < 0 )
-		data->bufsize = 0;
-
-	data->buf[data->bufsize] = 0;
-}
-
-/*
- * Move the given amount of bytes from the given source pointer
- * to the output buffer and set data->outputsize.
- */
-static void bufout(struct template_parser *data, const char *src, int len)
-{
-	if( len >= 0 )
-	{
-		memset(data->out, 0, T_OUTBUFSZ);
-		memcpy(data->out, src, len);
-		data->outsize = len;
-	}
-	else
-	{
-		data->outsize = 0;
-	}
-}
-
-/*
- * lua_Reader compatible function that parses template code on demand from
- * the given file handle.
- */
-const char *template_reader(lua_State *L, void *ud, size_t *sz)
-{
-	struct template_parser *data = ud;
-	char *match = NULL;
-	int off = 0;
-	int ignore = 0;
-	int genflags = 0;
-	int readlen = 0;
-	int vague = 0;
-
-	while( !(data->flags & T_FLAG_EOF) || (data->bufsize > 0) )
-	{
-		/* Fill buffer */
-		if( !(data->flags & T_FLAG_EOF) && (data->bufsize < T_READBUFSZ) )
-		{
-			if( (readlen = read(data->fd, &data->buf[data->bufsize], T_READBUFSZ - data->bufsize)) > 0 )
-				data->bufsize += readlen;
-			else if( readlen == 0 )
-				data->flags |= T_FLAG_EOF;
-			else
-				return NULL;
-		}
-
-		/* Evaluate state */
-		switch(data->state)
-		{
-			/* Plain text chunk (before "<%") */
-			case T_STATE_TEXT_INIT:
-			case T_STATE_TEXT_NEXT:
-				off = 0; ignore = 0; *sz = 0;
-				data->type = T_TYPE_TEXT;
-
-				/* Skip leading whitespace if requested */
-				if( data->flags & T_FLAG_SKIPWS )
-				{
-					data->flags &= ~T_FLAG_SKIPWS;
-					while( (off < data->bufsize) && isspace(data->buf[off]) )
-						off++;
-				}
-
-				/* Found "<%" */
-				if( (match = strfind(&data->buf[off], data->bufsize - off - 1, T_TOK_START, strlen(T_TOK_START))) != NULL )
-				{
-					readlen = (int)(match - &data->buf[off]);
-					data->bufsize -= (readlen + strlen(T_TOK_START) + off);
-					match += strlen(T_TOK_START);
-
-					/* Check for leading '-' */
-					if( match[0] == T_TOK_SKIPWS[0] )
-					{
-						data->bufsize--;
-						match++;
-
-						while( (readlen > 1) && isspace(data->buf[off+readlen-1]) )
-						{
-							readlen--;
-						}
-					}
-
-					bufout(data, &data->buf[off], readlen);
-					bufmove(data, match);
-					data->state = T_STATE_CODE_INIT;
-				}
-
-				/* Maybe plain chunk */
-				else
-				{
-					/* Preserve trailing "<" or white space, maybe a start token */
-					vague = stokscan(data, off, 0);
-
-					/* We can process some bytes ... */
-					if( vague < data->bufsize )
-					{
-						readlen = data->bufsize - vague - off;
-					}
-
-					/* No bytes to process, so try to remove at least whitespace ... */
-					else
-					{
-						/* ... but try to preserve trailing "<" ... */
-						vague = stokscan(data, off, 1);
-
-						if( vague < data->bufsize )
-						{
-							readlen = data->bufsize - vague - off;
-						}
-
-						/* ... no chance, push out buffer */
-						else
-						{
-							readlen = vague - off;
-							vague   = 0;
-						}
-					}
-
-					bufout(data, &data->buf[off], readlen);
-
-					data->state   = T_STATE_TEXT_NEXT;
-					data->bufsize = vague;
-					bufmove(data, &data->buf[off+readlen]);
-				}
-
-				if( ignore || data->outsize == 0 )
-					continue;
-				else
-					return generate_expression(data, sz, T_GEN_START | T_GEN_END);
-
-				break;
-
-			/* Ignored chunk (inside "<%# ... %>") */
-			case T_STATE_SKIP:
-				ignore = 1;
-
-			/* Initial code chunk ("<% ...") */
-			case T_STATE_CODE_INIT:
-				off = 0;
-
-				/* Check for leading '-' */
-				if( data->buf[off] == T_TOK_SKIPWS[0] )
-					off++;
-
-				/* Determine code type */
-				switch(data->buf[off])
-				{
-					case '#':
-						ignore = 1;
-						off++;
-						data->type = T_TYPE_COMMENT;
-						break;
-
-					case '=':
-						off++;
-						data->type = T_TYPE_EXPR;
-						break;
-
-					case '+':
-						off++;
-						data->type = T_TYPE_INCLUDE;
-						break;
-
-					case ':':
-						off++;
-						data->type = T_TYPE_I18N;
-						break;
-
-					case '_':
-						off++;
-						data->type = T_TYPE_I18N_RAW;
-						break;
-
-					default:
-						data->type = T_TYPE_CODE;
-						break;
-				}
-
-			/* Subsequent code chunk ("..." or "... %>") */ 
-			case T_STATE_CODE_NEXT:
-				/* Found "%>" */
-				if( (match = strfind(&data->buf[off], data->bufsize - off, T_TOK_END, strlen(T_TOK_END))) != NULL )
-				{
-					genflags = ( data->state == T_STATE_CODE_INIT )
-						? (T_GEN_START | T_GEN_END) : T_GEN_END;
-
-					readlen = (int)(match - &data->buf[off]);
-
-					/* Check for trailing '-' */
-					if( (match > data->buf) && (*(match-1) == T_TOK_SKIPWS[0]) )
-					{
-						readlen--;
-						data->flags |= T_FLAG_SKIPWS;
-					}
-
-					bufout(data, &data->buf[off], readlen);
-
-					data->state = T_STATE_TEXT_INIT;
-					data->bufsize -= ((int)(match - &data->buf[off]) + strlen(T_TOK_END) + off);
-					bufmove(data, &match[strlen(T_TOK_END)]);
-				}
-
-				/* Code chunk */
-				else
-				{
-					genflags = ( data->state == T_STATE_CODE_INIT ) ? T_GEN_START : 0;
-
-					/* Preserve trailing "%" and "-", maybe an end token */
-					vague   = etokscan(data);
-					readlen = data->bufsize - off - vague;
-					bufout(data, &data->buf[off], readlen);
-
-					data->state   = T_STATE_CODE_NEXT;
-					data->bufsize = vague;
-					bufmove(data, &data->buf[readlen+off]);
-				}
-
-				if( ignore || (data->outsize == 0 && !genflags) )
-					continue;
-				else
-					return generate_expression(data, sz, genflags);
-
-				break;
-		}
-	}
-
-	*sz = 0;
+err:
+	template_close(parser);
 	return NULL;
 }
 
+void template_close(struct template_parser *parser)
+{
+	if (!parser)
+		return;
 
+	if (parser->gc != NULL)
+		free(parser->gc);
+
+	if ((parser->mmap != NULL) && (parser->mmap != MAP_FAILED))
+		munmap(parser->mmap, parser->size);
+
+	if (parser->fd >= 0)
+		close(parser->fd);
+
+	free(parser);
+}
+
+void template_text(struct template_parser *parser, const char *e)
+{
+	const char *s = parser->off;
+
+	if (s < (parser->mmap + parser->size))
+	{
+		if (parser->strip_after)
+		{
+			while ((s <= e) && isspace(*s))
+				s++;
+		}
+
+		parser->cur_chunk.type = T_TYPE_TEXT;
+	}
+	else
+	{
+		parser->cur_chunk.type = T_TYPE_EOF;
+	}
+
+	parser->cur_chunk.line = parser->line;
+	parser->cur_chunk.s = s;
+	parser->cur_chunk.e = e;
+}
+
+void template_code(struct template_parser *parser, const char *e)
+{
+	const char *s = parser->off;
+
+	parser->strip_before = 0;
+	parser->strip_after = 0;
+
+	if (*s == '-')
+	{
+		parser->strip_before = 1;
+		for (s++; (s <= e) && (*s == ' ' || *s == '\t'); s++);
+	}
+
+	if (*(e-1) == '-')
+	{
+		parser->strip_after = 1;
+		for (e--; (e >= s) && (*e == ' ' || *e == '\t'); e--);
+	}
+
+	switch (*s)
+	{
+		/* comment */
+		case '#':
+			s++;
+			parser->cur_chunk.type = T_TYPE_COMMENT;
+			break;
+
+		/* include */
+		case '+':
+			s++;
+			parser->cur_chunk.type = T_TYPE_INCLUDE;
+			break;
+
+		/* translate */
+		case ':':
+			s++;
+			parser->cur_chunk.type = T_TYPE_I18N;
+			break;
+
+		/* translate raw */
+		case '_':
+			s++;
+			parser->cur_chunk.type = T_TYPE_I18N_RAW;
+			break;
+
+		/* expr */
+		case '=':
+			s++;
+			parser->cur_chunk.type = T_TYPE_EXPR;
+			break;
+
+		/* code */
+		default:
+			parser->cur_chunk.type = T_TYPE_CODE;
+			break;
+	}
+
+	parser->cur_chunk.line = parser->line;
+	parser->cur_chunk.s = s;
+	parser->cur_chunk.e = e;
+}
+
+static const char *
+template_format_chunk(struct template_parser *parser, size_t *sz)
+{
+	const char *s, *p;
+	const char *head, *tail;
+	struct template_chunk *c = &parser->prv_chunk;
+	struct template_buffer *buf;
+
+	*sz = 0;
+	s = parser->gc = NULL;
+
+	if (parser->strip_before && c->type == T_TYPE_TEXT)
+	{
+		while ((c->e > c->s) && isspace(*(c->e - 1)))
+			c->e--;
+	}
+
+	/* empty chunk */
+	if (c->s == c->e)
+	{
+		if (c->type == T_TYPE_EOF)
+		{
+			*sz = 0;
+			s = NULL;
+		}
+		else
+		{
+			*sz = 1;
+			s = " ";
+		}
+	}
+
+	/* format chunk */
+	else if ((buf = buf_init(c->e - c->s)) != NULL)
+	{
+		if ((head = gen_code[c->type][0]) != NULL)
+			buf_append(buf, head, strlen(head));
+
+		switch (c->type)
+		{
+			case T_TYPE_TEXT:
+				escape_luastr(buf, c->s, c->e - c->s, 0);
+				break;
+
+			case T_TYPE_EXPR:
+				buf_append(buf, c->s, c->e - c->s);
+				for (p = c->s; p < c->e; p++)
+					parser->line += (*p == '\n');
+				break;
+
+			case T_TYPE_INCLUDE:
+				escape_luastr(buf, c->s, c->e - c->s, 0);
+				break;
+
+			case T_TYPE_I18N:
+				translate_luastr(buf, c->s, c->e - c->s, 1);
+				break;
+
+			case T_TYPE_I18N_RAW:
+				translate_luastr(buf, c->s, c->e - c->s, 0);
+				break;
+
+			case T_TYPE_CODE:
+				buf_append(buf, c->s, c->e - c->s);
+				for (p = c->s; p < c->e; p++)
+					parser->line += (*p == '\n');
+				break;
+		}
+
+		if ((tail = gen_code[c->type][1]) != NULL)
+			buf_append(buf, tail, strlen(tail));
+
+		*sz = buf_length(buf);
+		s = parser->gc = buf_destroy(buf);
+
+		if (!*sz)
+		{
+			*sz = 1;
+			s = " ";
+		}
+	}
+
+	return s;
+}
+
+const char *template_reader(lua_State *L, void *ud, size_t *sz)
+{
+	struct template_parser *parser = ud;
+	int rem = parser->size - (parser->off - parser->mmap);
+	char *tag;
+
+	parser->prv_chunk = parser->cur_chunk;
+
+	/* free previous string */
+	if (parser->gc)
+	{
+		free(parser->gc);
+		parser->gc = NULL;
+	}
+
+	/* before tag */
+	if (!parser->in_expr)
+	{
+		if ((tag = strfind(parser->off, rem, "<%", 2)) != NULL)
+		{
+			template_text(parser, tag);
+			parser->off = tag + 2;
+			parser->in_expr = 1;
+		}
+		else
+		{
+			template_text(parser, parser->mmap + parser->size);
+			parser->off = parser->mmap + parser->size;
+		}
+	}
+
+	/* inside tag */
+	else
+	{
+		if ((tag = strfind(parser->off, rem, "%>", 2)) != NULL)
+		{
+			template_code(parser, tag);
+			parser->off = tag + 2;
+			parser->in_expr = 0;
+		}
+		else
+		{
+			/* unexpected EOF */
+			template_code(parser, parser->mmap + parser->size);
+
+			*sz = 1;
+			return "\033";
+		}
+	}
+
+	return template_format_chunk(parser, sz);
+}
+
+int template_error(lua_State *L, struct template_parser *parser)
+{
+	const char *err = luaL_checkstring(L, -1);
+	const char *off = parser->prv_chunk.s;
+	const char *ptr;
+	char msg[1024];
+	int line = 0;
+	int chunkline = 0;
+
+	fprintf(stderr, "E[%s]\n", err);
+
+	if ((ptr = strfind((char *)err, strlen(err), "]:", 2)) != NULL)
+	{
+		chunkline = atoi(ptr + 2) - parser->prv_chunk.line;
+
+		while (*ptr)
+		{
+			if (*ptr++ == ' ')
+			{
+				err = ptr;
+				break;
+			}
+		}
+	}
+
+	if (strfind((char *)err, strlen(err), "'char(27)'", 10) != NULL)
+	{
+		off = parser->mmap + parser->size;
+		err = "'%>' expected before end of file";
+		chunkline = 0;
+	}
+
+	for (ptr = parser->mmap; ptr < off; ptr++)
+		if (*ptr == '\n')
+			line++;
+
+	snprintf(msg, sizeof(msg), "Syntax error in %s:%d: %s",
+			 parser->file, line + chunkline, err ? err : "(unknown error)");
+
+	lua_pushnil(L);
+	lua_pushinteger(L, line + chunkline);
+	lua_pushstring(L, msg);
+
+	return 3;
+}

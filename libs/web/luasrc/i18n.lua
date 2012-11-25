@@ -27,7 +27,8 @@ limitations under the License.
 --- LuCI translation library.
 module("luci.i18n", package.seeall)
 require("luci.util")
-require("lmo")
+
+local tparser = require "luci.template.parser"
 
 table   = {}
 i18ndir = luci.util.libpath() .. "/i18n/"
@@ -37,7 +38,6 @@ default = "en"
 
 --- Clear the translation table.
 function clear()
-	table = {}
 end
 
 --- Load a translation and copy its data into the translation table.
@@ -46,33 +46,6 @@ end
 -- @param force	Force reload even if already loaded (optional)
 -- @return		Success status
 function load(file, lang, force)
-	lang = lang and lang:gsub("_", "-") or ""
-	if force or not loaded[lang] or not loaded[lang][file] then
-		local f = lmo.open(i18ndir .. file .. "." .. lang .. ".lmo")
-		if f then
-			if not table[lang] then
-				table[lang] = { f }
-				setmetatable(table[lang], {
-					__index = function(tbl, key)
-						for i = 1, #tbl do
-							local s = rawget(tbl, i):lookup(key)
-							if s then return s end
-						end
-					end
-				})
-			else
-				table[lang][#table[lang]+1] = f
-			end
-
-			loaded[lang] = loaded[lang] or {}
-			loaded[lang][file] = true
-			return true
-		else
-			return false
-		end
-	else
-		return true
-	end
 end
 
 --- Load a translation file using the default translation language.
@@ -80,9 +53,6 @@ end
 -- @param file	Language file
 -- @param force	Force reload even if already loaded (optional)
 function loadc(file, force)
-	load(file, default, force)
-	if context.parent then load(file, context.parent, force) end
-	return load(file, context.lang, force)
 end
 
 --- Set the context default translation language.
@@ -90,16 +60,18 @@ end
 function setlanguage(lang)
 	context.lang   = lang:gsub("_", "-")
 	context.parent = (context.lang:match("^([a-z][a-z])_"))
+	if not tparser.load_catalog(context.lang, i18ndir) then
+		if context.parent then
+			tparser.load_catalog(context.parent, i18ndir)
+		end
+	end
 end
 
 --- Return the translated value for a specific translation key.
 -- @param key	Default translation text
 -- @return		Translated string
 function translate(key)
-	return (table[context.lang] and table[context.lang][key])
-		or (table[context.parent] and table[context.parent][key])
-		or (table[default] and table[default][key])
-		or key
+	return tparser.translate(key) or key
 end
 
 --- Return the translated value for a specific translation key and use it as sprintf pattern.

@@ -1,7 +1,7 @@
 /*
  * lmo - Lua Machine Objects - PO to LMO conversion tool
  *
- *   Copyright (C) 2009-2011 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2009-2012 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-#include "lmo.h"
+#include "template_lmo.h"
 
 static void die(const char *msg)
 {
@@ -82,6 +82,34 @@ static int extract_string(const char *src, char *dest, int len)
 	return (off > -1) ? strlen(dest) : -1;
 }
 
+static int cmp_index(const void *a, const void *b)
+{
+	uint32_t x = ntohl(((const lmo_entry_t *)a)->key_id);
+	uint32_t y = ntohl(((const lmo_entry_t *)b)->key_id);
+
+	if (x < y)
+		return -1;
+	else if (x > y)
+		return 1;
+
+	return 0;
+}
+
+static void print_index(void *array, int n, FILE *out)
+{
+	lmo_entry_t *e;
+
+	qsort(array, n, sizeof(*e), cmp_index);
+
+	for (e = array; n > 0; n--, e++)
+	{
+		print(&e->key_id, sizeof(uint32_t), 1, out);
+		print(&e->val_id, sizeof(uint32_t), 1, out);
+		print(&e->offset, sizeof(uint32_t), 1, out);
+		print(&e->length, sizeof(uint32_t), 1, out);
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	char line[4096];
@@ -91,13 +119,13 @@ int main(int argc, char *argv[])
 	int state  = 0;
 	int offset = 0;
 	int length = 0;
+	int n_entries = 0;
+	void *array = NULL;
+	lmo_entry_t *entry = NULL;
 	uint32_t key_id, val_id;
 
 	FILE *in;
 	FILE *out;
-
-	lmo_entry_t *head  = NULL;
-	lmo_entry_t *entry = NULL;
 
 	if( (argc != 3) || ((in = fopen(argv[1], "r")) == NULL) || ((out = fopen(argv[2], "w")) == NULL) )
 		usage(argv[0]);
@@ -167,26 +195,22 @@ int main(int argc, char *argv[])
 
 				if( key_id != val_id )
 				{
-					if( (entry = (lmo_entry_t *) malloc(sizeof(lmo_entry_t))) != NULL )
-					{
-						memset(entry, 0, sizeof(entry));
-						length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
+					n_entries++;
+					array = realloc(array, n_entries * sizeof(lmo_entry_t));
+					entry = (lmo_entry_t *)array + n_entries - 1;
 
-						entry->key_id = htonl(key_id);
-						entry->val_id = htonl(val_id);
-						entry->offset = htonl(offset);
-						entry->length = htonl(strlen(val));
-
-						print(val, length, 1, out);
-						offset += length;
-
-						entry->next = head;
-						head = entry;
-					}
-					else
-					{
+					if (!array)
 						die("Out of memory");
-					}
+
+					entry->key_id = htonl(key_id);
+					entry->val_id = htonl(val_id);
+					entry->offset = htonl(offset);
+					entry->length = htonl(strlen(val));
+
+					length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
+
+					print(val, length, 1, out);
+					offset += length;
 				}
 			}
 
@@ -198,15 +222,7 @@ int main(int argc, char *argv[])
 		memset(line, 0, sizeof(line));
 	}
 
-	entry = head;
-	while( entry != NULL )
-	{
-		print(&entry->key_id, sizeof(uint32_t), 1, out);
-		print(&entry->val_id, sizeof(uint32_t), 1, out);
-		print(&entry->offset, sizeof(uint32_t), 1, out);
-		print(&entry->length, sizeof(uint32_t), 1, out);
-		entry = entry->next;
-	}
+	print_index(array, n_entries, out);
 
 	if( offset > 0 )
 	{

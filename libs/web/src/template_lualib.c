@@ -21,37 +21,27 @@
 int template_L_parse(lua_State *L)
 {
 	const char *file = luaL_checkstring(L, 1);
-	struct template_parser parser;
-	int lua_status;
+	struct template_parser *parser = template_open(file);
+	int lua_status, rv;
 
-	if( (parser.fd = open(file, O_RDONLY)) > 0 )
+	if (!parser)
 	{
-		parser.flags   = 0;
-		parser.bufsize = 0;
-		parser.state   = T_STATE_TEXT_NEXT;
-
-		lua_status = lua_load(L, template_reader, &parser, file);
-
-		(void) close(parser.fd);
-
-
-		if( lua_status == 0 )
-		{
-			return 1;
-		}
-		else
-		{
-			lua_pushnil(L);
-			lua_pushinteger(L, lua_status);
-			lua_pushlstring(L, parser.out, parser.outsize);
-			return 3;
-		}
+		lua_pushnil(L);
+		lua_pushinteger(L, errno);
+		lua_pushstring(L, strerror(errno));
+		return 3;
 	}
 
-	lua_pushnil(L);
-	lua_pushinteger(L, 255);
-	lua_pushstring(L, "No such file or directory");
-	return 3;
+	lua_status = lua_load(L, template_reader, parser, file);
+
+	if (lua_status == 0)
+		rv = 1;
+	else
+		rv = template_error(L, parser);
+
+	template_close(parser);
+
+	return rv;
 }
 
 int template_L_sanitize_utf8(lua_State *L)
@@ -88,12 +78,64 @@ int template_L_sanitize_pcdata(lua_State *L)
 	return 0;
 }
 
+static int template_L_load_catalog(lua_State *L) {
+	const char *lang = luaL_optstring(L, 1, "en");
+	const char *dir  = luaL_optstring(L, 2, NULL);
+	lua_pushboolean(L, !lmo_load_catalog(lang, dir));
+	return 1;
+}
+
+static int template_L_close_catalog(lua_State *L) {
+	const char *lang = luaL_optstring(L, 1, "en");
+	lmo_close_catalog(lang);
+	return 0;
+}
+
+static int template_L_change_catalog(lua_State *L) {
+	const char *lang = luaL_optstring(L, 1, "en");
+	lua_pushboolean(L, !lmo_change_catalog(lang));
+	return 1;
+}
+
+static int template_L_translate(lua_State *L) {
+	size_t len;
+	char *tr;
+	int trlen;
+	const char *key = luaL_checklstring(L, 1, &len);
+
+	switch (lmo_translate(key, len, &tr, &trlen))
+	{
+		case 0:
+			lua_pushlstring(L, tr, trlen);
+			return 1;
+
+		case -1:
+			return 0;
+	}
+
+	lua_pushnil(L);
+	lua_pushstring(L, "no catalog loaded");
+	return 2;
+}
+
+static int template_L_hash(lua_State *L) {
+	size_t len;
+	const char *key = luaL_checklstring(L, 1, &len);
+	lua_pushinteger(L, sfh_hash(key, len));
+	return 1;
+}
+
 
 /* module table */
 static const luaL_reg R[] = {
 	{ "parse",				template_L_parse },
 	{ "sanitize_utf8",		template_L_sanitize_utf8 },
 	{ "sanitize_pcdata",	template_L_sanitize_pcdata },
+	{ "load_catalog",		template_L_load_catalog },
+	{ "close_catalog",		template_L_close_catalog },
+	{ "change_catalog",		template_L_change_catalog },
+	{ "translate",			template_L_translate },
+	{ "hash",				template_L_hash },
 	{ NULL,					NULL }
 };
 

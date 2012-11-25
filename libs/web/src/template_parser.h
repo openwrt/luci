@@ -21,61 +21,59 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
 
 
-#define T_READBUFSZ			1024
-#define T_OUTBUFSZ			T_READBUFSZ * 3
-
-/* parser states */
-#define T_STATE_TEXT_INIT	0
-#define T_STATE_TEXT_NEXT	1
-#define T_STATE_CODE_INIT	2
-#define T_STATE_CODE_NEXT	3
-#define T_STATE_SKIP 		4
-
-/* parser flags */
-#define T_FLAG_EOF			0x01
-#define T_FLAG_SKIPWS		0x02
-
-/* tokens used in matching and expression generation */
-#define T_TOK_START			"<%"
-#define T_TOK_END			"%>"
-#define T_TOK_SKIPWS		"-"
-
-/* generator flags */
-#define T_GEN_START			0x01
-#define T_GEN_END			0x02
-
 /* code types */
-#define T_TYPE_TEXT			0
-#define T_TYPE_COMMENT		1
-#define T_TYPE_EXPR			2
-#define T_TYPE_INCLUDE 		3
-#define T_TYPE_I18N			4
-#define T_TYPE_I18N_RAW		5
-#define T_TYPE_CODE			6
+#define T_TYPE_INIT			0
+#define T_TYPE_TEXT			1
+#define T_TYPE_COMMENT		2
+#define T_TYPE_EXPR			3
+#define T_TYPE_INCLUDE 		4
+#define T_TYPE_I18N			5
+#define T_TYPE_I18N_RAW		6
+#define T_TYPE_CODE			7
+#define T_TYPE_EOF			8
+
+
+struct template_chunk {
+	const char *s;
+	const char *e;
+	int type;
+	int line;
+};
 
 /* parser state */
 struct template_parser {
 	int fd;
-	int bufsize;
-	int outsize;
-	int state;
-	int flags;
-	int type;
-	char buf[T_READBUFSZ];
-	char out[T_OUTBUFSZ];
+	uint32_t size;
+	char *mmap;
+	char *off;
+	char *gc;
+	int line;
+	int in_expr;
+	int strip_before;
+	int strip_after;
+	struct template_chunk prv_chunk;
+	struct template_chunk cur_chunk;
+	const char *file;
 };
 
+struct template_parser * template_open(const char *file);
+void template_close(struct template_parser *parser);
 
 const char *template_reader(lua_State *L, void *ud, size_t *sz);
+int template_error(lua_State *L, struct template_parser *parser);
 
 #endif

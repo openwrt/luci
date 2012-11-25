@@ -17,19 +17,23 @@
  */
 
 #include "template_utils.h"
+#include "template_lmo.h"
 
 /* initialize a buffer object */
-static struct template_buffer * buf_init(void)
+struct template_buffer * buf_init(int size)
 {
 	struct template_buffer *buf;
+
+	if (size <= 0)
+		size = 1024;
 
 	buf = (struct template_buffer *)malloc(sizeof(struct template_buffer));
 
 	if (buf != NULL)
 	{
 		buf->fill = 0;
-		buf->size = 1024;
-		buf->data = (unsigned char *)malloc(buf->size);
+		buf->size = size;
+		buf->data = malloc(buf->size);
 
 		if (buf->data != NULL)
 		{
@@ -46,17 +50,21 @@ static struct template_buffer * buf_init(void)
 }
 
 /* grow buffer */
-static int buf_grow(struct template_buffer *buf)
+int buf_grow(struct template_buffer *buf, int size)
 {
 	unsigned int off = (buf->dptr - buf->data);
-	unsigned char *data =
-		(unsigned char *)realloc(buf->data, buf->size + 1024);
+	char *data;
+
+	if (size <= 0)
+		size = 1024;
+
+	data = realloc(buf->data, buf->size + size);
 
 	if (data != NULL)
 	{
 		buf->data  = data;
 		buf->dptr  = data + off;
-		buf->size += 1024;
+		buf->size += size;
 
 		return buf->size;
 	}
@@ -65,9 +73,9 @@ static int buf_grow(struct template_buffer *buf)
 }
 
 /* put one char into buffer object */
-static int buf_putchar(struct template_buffer *buf, unsigned char c)
+int buf_putchar(struct template_buffer *buf, char c)
 {
-	if( ((buf->fill + 1) >= buf->size) && !buf_grow(buf) )
+	if( ((buf->fill + 1) >= buf->size) && !buf_grow(buf, 0) )
 		return 0;
 
 	*(buf->dptr++) = c;
@@ -78,11 +86,11 @@ static int buf_putchar(struct template_buffer *buf, unsigned char c)
 }
 
 /* append data to buffer */
-static int buf_append(struct template_buffer *buf, unsigned char *s, int len)
+int buf_append(struct template_buffer *buf, const char *s, int len)
 {
-	while ((buf->fill + len + 1) >= buf->size)
+	if ((buf->fill + len + 1) >= buf->size)
 	{
-		if (!buf_grow(buf))
+		if (!buf_grow(buf, len + 1))
 			return 0;
 	}
 
@@ -95,13 +103,19 @@ static int buf_append(struct template_buffer *buf, unsigned char *s, int len)
 	return len;
 }
 
-/* destroy buffer object and return pointer to data */
-static char * buf_destroy(struct template_buffer *buf)
+/* read buffer length */
+int buf_length(struct template_buffer *buf)
 {
-	unsigned char *data = buf->data;
+	return buf->fill;
+}
+
+/* destroy buffer object and return pointer to data */
+char * buf_destroy(struct template_buffer *buf)
+{
+	char *data = buf->data;
 
 	free(buf);
-	return (char *)data;
+	return data;
 }
 
 
@@ -229,7 +243,7 @@ static int _validate_utf8(unsigned char **s, int l, struct template_buffer *buf)
 					!mb_is_surrogate(ptr, n) && !mb_is_illegal(ptr, n))
 				{
 					/* copy sequence */
-					if (!buf_append(buf, ptr, n))
+					if (!buf_append(buf, (char *)ptr, n))
 						return 0;
 				}
 
@@ -266,7 +280,7 @@ static int _validate_utf8(unsigned char **s, int l, struct template_buffer *buf)
 /* sanitize given string and replace all invalid UTF-8 sequences with "?" */
 char * sanitize_utf8(const char *s, unsigned int l)
 {
-	struct template_buffer *buf = buf_init();
+	struct template_buffer *buf = buf_init(l);
 	unsigned char *ptr = (unsigned char *)s;
 	unsigned int v, o;
 
@@ -278,7 +292,7 @@ char * sanitize_utf8(const char *s, unsigned int l)
 		/* ascii char */
 		if ((*ptr >= 0x01) && (*ptr <= 0x7F))
 		{
-			if (!buf_putchar(buf, *ptr++))
+			if (!buf_putchar(buf, (char)*ptr++))
 				break;
 		}
 
@@ -300,7 +314,7 @@ char * sanitize_utf8(const char *s, unsigned int l)
  * Escape XML control chars */
 char * sanitize_pcdata(const char *s, unsigned int l)
 {
-	struct template_buffer *buf = buf_init();
+	struct template_buffer *buf = buf_init(l);
 	unsigned char *ptr = (unsigned char *)s;
 	unsigned int o, v;
 	char esq[8];
@@ -329,7 +343,7 @@ char * sanitize_pcdata(const char *s, unsigned int l)
 		{
 			esl = snprintf(esq, sizeof(esq), "&#%i;", *ptr);
 
-			if (!buf_append(buf, (unsigned char *)esq, esl))
+			if (!buf_append(buf, esq, esl))
 				break;
 
 			ptr++;
@@ -338,7 +352,7 @@ char * sanitize_pcdata(const char *s, unsigned int l)
 		/* ascii char */
 		else if (*ptr <= 0x7F)
 		{
-			buf_putchar(buf, *ptr++);
+			buf_putchar(buf, (char)*ptr++);
 		}
 
 		/* multi byte sequence */
@@ -352,4 +366,69 @@ char * sanitize_pcdata(const char *s, unsigned int l)
 	}
 
 	return buf_destroy(buf);
+}
+
+void escape_luastr(struct template_buffer *out, const char *s, unsigned int l,
+				   int escape_xml)
+{
+	int esl;
+	char esq[8];
+	char *ptr;
+
+	for (ptr = (char *)s; ptr < (s + l); ptr++)
+	{
+		switch (*ptr)
+		{
+		case '\\':
+			buf_append(out, "\\\\", 2);
+			break;
+
+		case '"':
+			if (escape_xml)
+				buf_append(out, "&#34;", 5);
+			else
+				buf_append(out, "\\\"", 2);
+			break;
+
+		case '\n':
+			buf_append(out, "\\n", 2);
+			break;
+
+		case '\'':
+		case '&':
+		case '<':
+		case '>':
+			if (escape_xml)
+			{
+				esl = snprintf(esq, sizeof(esq), "&#%i;", *ptr);
+				buf_append(out, esq, esl);
+				break;
+			}
+
+		default:
+			buf_putchar(out, *ptr);
+		}
+	}
+}
+
+void translate_luastr(struct template_buffer *out, const char *s, unsigned int l,
+					  int escape_xml)
+{
+	char *tr;
+	int trlen;
+
+	switch (lmo_translate(s, l, &tr, &trlen))
+	{
+		case 0:
+			escape_luastr(out, tr, trlen, escape_xml);
+			break;
+
+		case -1:
+			escape_luastr(out, s, l, escape_xml);
+			break;
+
+		default:
+			/* no catalog loaded */
+			break;
+	}
 }
