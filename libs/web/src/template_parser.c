@@ -350,8 +350,6 @@ int template_error(lua_State *L, struct template_parser *parser)
 	int line = 0;
 	int chunkline = 0;
 
-	fprintf(stderr, "E[%s]\n", err);
-
 	if ((ptr = strfind((char *)err, strlen(err), "]:", 2)) != NULL)
 	{
 		chunkline = atoi(ptr + 2) - parser->prv_chunk.line;
