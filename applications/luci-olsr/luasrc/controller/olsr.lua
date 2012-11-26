@@ -8,7 +8,6 @@ function index()
 	local page  = node("admin", "status", "olsr")
 	page.target = template("status-olsr/overview")
 	page.title  = _("OLSR")
-	page.i18n   = "olsr"
 	page.subindex = true
 
 	local page  = node("admin", "status", "olsr", "neighbors")
@@ -51,7 +50,6 @@ function index()
 		{"admin", "services", "olsrd"},
 		cbi("olsr/olsrd"), "OLSR"
 	)
-	ol.i18n = "olsr"
 	ol.subindex = true
 
 	entry(
@@ -74,7 +72,6 @@ function index()
 		cbi("olsr/olsrddisplay"), _("Display")
 		)
 
-	oplg.i18n = "olsr"
 	oplg.leaf = true
 	oplg.subindex = true
 

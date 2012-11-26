@@ -15,7 +15,6 @@ local fs = require "luci.fs"
 local util = require "luci.util"
 local uci = require "luci.model.uci".cursor()
 local profiles = "/etc/config/profile_"
-luci.i18n.loadc("freifunk")
 
 m = Map("freifunk", translate ("Community"))
 c = m:section(NamedSection, "community", "public", nil, translate("These are the basic settings for your local wireless community. These settings define the default values for the wizard and DO NOT affect the actual configuration of the router."))

@@ -9,13 +9,11 @@ function index()
 	local page
 
 	page = entry({"admin", "network", "multiwan"}, cbi("multiwan/multiwan"), _("Multi-WAN"))
-	page.i18n = "multiwan"
 	page.dependent = true
 	
 	entry({"admin", "network", "multiwan", "status"}, call("multiwan_status"))
 
 	page = entry({"mini", "network", "multiwan"}, cbi("multiwan/multiwanmini", {autoapply=true}), _("Multi-WAN"))
-	page.i18n = "multiwan"
 	page.dependent = true
 end
 function multiwan_status()

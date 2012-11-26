@@ -11,8 +11,6 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 ]]--
 
-luci.i18n.loadc("freifunk")
-
 m = Map("freifunk", translate("Contact"), translate("Please fill in your contact details below."))
 
 c = m:section(NamedSection, "contact", "public", "")

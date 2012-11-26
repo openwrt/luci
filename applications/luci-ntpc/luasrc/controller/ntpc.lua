@@ -23,10 +23,8 @@ function index()
 	local page
 
 	page = entry({"admin", "system", "ntpc"}, cbi("ntpc/ntpc"), _("Time Synchronisation"), 50)
-	page.i18n = "ntpc"
 	page.dependent = true
 
 	page = entry({"mini", "system", "ntpc"}, cbi("ntpc/ntpcmini", {autoapply=true}), _("Time Synchronisation"), 50)
-	page.i18n = "ntpc"
 	page.dependent = true
 end

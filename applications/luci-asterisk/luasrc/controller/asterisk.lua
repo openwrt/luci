@@ -17,7 +17,7 @@ module("luci.controller.asterisk", package.seeall)
 
 function index()
 
-	entry({"admin", "services", "asterisk"}, 				  cbi("asterisk"), 			  "Asterisk",				80).i18n = "asterisk"
+	entry({"admin", "services", "asterisk"}, 				  cbi("asterisk"), 			  "Asterisk",				80)
 
 	entry({"admin", "services", "asterisk", "voice"},         cbi("asterisk-voice"),      "Voice Functions",        1)
 	entry({"admin", "services", "asterisk", "meetme"},        cbi("asterisk-meetme"),     "Meetme Conferences",     2)

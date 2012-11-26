@@ -74,8 +74,6 @@ function load(cbimap, ...)
 
 	assert(func, err)
 
-	luci.i18n.loadc("base")
-
 	local env = {
 		translate=i18n.translate,
 		translatef=i18n.translatef,

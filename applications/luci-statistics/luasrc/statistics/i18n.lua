@@ -25,9 +25,6 @@ Instance = luci.util.class()
 function Instance.__init__( self, graph )
 	self.i18n  = luci.i18n
 	self.graph = graph
-
-	self.i18n.loadc("rrdtool")
-	self.i18n.loadc("statistics")
 end
 
 function Instance._subst( self, str, val )

@@ -14,5 +14,5 @@ module "luci.controller.freifunk.policy-routing"
 
 function index()
 	entry({"admin", "freifunk", "policyrouting"}, cbi("freifunk/policyrouting"),
-		_("Policy Routing"), 60).i18n = "freifunk-policyrouting"
+		_("Policy Routing"), 60)
 end

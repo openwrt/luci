@@ -19,7 +19,7 @@ function index()
 		return
 	end
 
-	entry({"admin", "services", "polipo"}, alias("admin", "services", "polipo", "config"), _("Polipo")).i18n = "polipo"
+	entry({"admin", "services", "polipo"}, alias("admin", "services", "polipo", "config"), _("Polipo"))
 	entry({"admin", "services", "polipo", "status"}, template("polipo_status"), _("Status"))
 	entry({"admin", "services", "polipo", "config"}, cbi("polipo"), _("Configuration"))
 end

@@ -19,7 +19,7 @@ function index()
 		return
 	end
 
-	entry({"admin", "network", "radvd"}, cbi("radvd"), _("Radvd"), 61).i18n = "radvd"
+	entry({"admin", "network", "radvd"}, cbi("radvd"), _("Radvd"), 61)
 	entry({"admin", "network", "radvd", "interface"}, cbi("radvd/interface"), nil).leaf = true
 	entry({"admin", "network", "radvd", "prefix"}, cbi("radvd/prefix"), nil).leaf = true
 	entry({"admin", "network", "radvd", "route"}, cbi("radvd/route"), nil).leaf = true

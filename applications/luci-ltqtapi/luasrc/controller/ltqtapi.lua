@@ -22,7 +22,6 @@ function index()
 	page.target = firstchild()
 	page.title  = _("VoIP")
 	page.order  = 90
-	page.i18n = "telephony"
 
 	entry({"admin", "telephony", "account"}, cbi("luci_ltqtapi/account") , _("Account"), 10)
 	entry({"admin", "telephony", "contact"}, cbi("luci_ltqtapi/contact") , _("Contacts"), 20)

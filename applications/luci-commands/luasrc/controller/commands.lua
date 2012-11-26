@@ -14,7 +14,7 @@ You may obtain a copy of the License at
 module("luci.controller.commands", package.seeall)
 
 function index()
-	entry({"admin", "system", "commands"}, firstchild(), _("Custom Commands"), 80).i18n = "commands"
+	entry({"admin", "system", "commands"}, firstchild(), _("Custom Commands"), 80)
 	entry({"admin", "system", "commands", "dashboard"}, template("commands"), _("Dashboard"), 1)
 	entry({"admin", "system", "commands", "config"}, cbi("commands"), _("Configure"), 2)
 	entry({"admin", "system", "commands", "run"}, call("action_run"), nil, 3).leaf = true

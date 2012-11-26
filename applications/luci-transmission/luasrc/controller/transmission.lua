@@ -15,14 +15,11 @@ $Id$
 module("luci.controller.transmission", package.seeall)
 
 function index()
-	require("luci.i18n")
-	luci.i18n.loadc("transmission")
 	if not nixio.fs.access("/etc/config/transmission") then
 		return
 	end
 
 	local page = entry({"admin", "services", "transmission"}, cbi("transmission"), _("Transmission"))
-	page.i18n = "transmission"
 	page.dependent = true
 
 end

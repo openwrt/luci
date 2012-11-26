@@ -1,6 +1,5 @@
 local fs = require "nixio.fs"
 local file = "/www/luci-static/index_user.html"
-luci.i18n.loadc("freifunk")
 
 m = Map("freifunk", translate("Edit index page"), translate("You can display additional content on the public index page by inserting valid XHTML in the form below.<br />Headlines should be enclosed between &lt;h2&gt; and &lt;/h2&gt;."))
 

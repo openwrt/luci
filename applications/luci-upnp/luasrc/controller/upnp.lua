@@ -23,11 +23,9 @@ function index()
 	local page
 
 	page = entry({"admin", "services", "upnp"}, cbi("upnp/upnp"), _("UPNP"))
-	page.i18n = "upnp"
 	page.dependent = true
 
 	page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini", {autoapply=true}), _("UPNP"))
-	page.i18n = "upnp"
 	page.dependent = true
 
 	entry({"admin", "services", "upnp", "status"}, call("act_status")).leaf = true

@@ -1,28 +1,25 @@
 module("luci.controller.splash.splash", package.seeall)
-luci.i18n.loadc("splash")
 
 local uci = luci.model.uci.cursor()
 local util = require "luci.util"
 
 function index()
-	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90).i18n = "freifunk"
+	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90)
 	entry({"admin", "services", "splash", "splashtext" }, form("splash/splashtext"), _("Splashtext"), 10)
 
 	local e
 	
 	e = node("splash")
 	e.target = call("action_dispatch")
-	e.i18n = "freifunk"
 
 	node("splash", "activate").target = call("action_activate")
 	node("splash", "splash").target   = template("splash_splash/splash")
 	node("splash", "blocked").target  = template("splash/blocked")
 
-	entry({"admin", "status", "splash"}, call("action_status_admin"), _("Client-Splash")).i18n = "freifunk"
+	entry({"admin", "status", "splash"}, call("action_status_admin"), _("Client-Splash"))
 
 	local page  = node("splash", "publicstatus")
 	page.target = call("action_status_public")
-	page.i18n   = "freifunk"
 	page.leaf   = true
 end
 
