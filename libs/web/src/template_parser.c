@@ -244,7 +244,7 @@ template_format_chunk(struct template_parser *parser, size_t *sz)
 		switch (c->type)
 		{
 			case T_TYPE_TEXT:
-				escape_luastr(buf, c->s, c->e - c->s, 0);
+				luastr_escape(buf, c->s, c->e - c->s, 0);
 				break;
 
 			case T_TYPE_EXPR:
@@ -254,15 +254,15 @@ template_format_chunk(struct template_parser *parser, size_t *sz)
 				break;
 
 			case T_TYPE_INCLUDE:
-				escape_luastr(buf, c->s, c->e - c->s, 0);
+				luastr_escape(buf, c->s, c->e - c->s, 0);
 				break;
 
 			case T_TYPE_I18N:
-				translate_luastr(buf, c->s, c->e - c->s, 1);
+				luastr_translate(buf, c->s, c->e - c->s, 1);
 				break;
 
 			case T_TYPE_I18N_RAW:
-				translate_luastr(buf, c->s, c->e - c->s, 0);
+				luastr_translate(buf, c->s, c->e - c->s, 0);
 				break;
 
 			case T_TYPE_CODE:

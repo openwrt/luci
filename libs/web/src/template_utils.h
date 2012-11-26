@@ -39,10 +39,11 @@ int buf_append(struct template_buffer *buf, const char *s, int len);
 int buf_length(struct template_buffer *buf);
 char * buf_destroy(struct template_buffer *buf);
 
-char * sanitize_utf8(const char *s, unsigned int l);
-char * sanitize_pcdata(const char *s, unsigned int l);
+char * utf8(const char *s, unsigned int l);
+char * pcdata(const char *s, unsigned int l);
+char * striptags(const char *s, unsigned int l);
 
-void escape_luastr(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
-void translate_luastr(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
+void luastr_escape(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
+void luastr_translate(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
 
 #endif

@@ -44,11 +44,11 @@ int template_L_parse(lua_State *L)
 	return rv;
 }
 
-int template_L_sanitize_utf8(lua_State *L)
+int template_L_utf8(lua_State *L)
 {
 	size_t len = 0;
 	const char *str = luaL_checklstring(L, 1, &len);
-	char *res = sanitize_utf8(str, len);
+	char *res = utf8(str, len);
 
 	if (res != NULL)
 	{
@@ -61,11 +61,28 @@ int template_L_sanitize_utf8(lua_State *L)
 	return 0;
 }
 
-int template_L_sanitize_pcdata(lua_State *L)
+int template_L_pcdata(lua_State *L)
 {
 	size_t len = 0;
 	const char *str = luaL_checklstring(L, 1, &len);
-	char *res = sanitize_pcdata(str, len);
+	char *res = pcdata(str, len);
+
+	if (res != NULL)
+	{
+		lua_pushstring(L, res);
+		free(res);
+
+		return 1;
+	}
+
+	return 0;
+}
+
+int template_L_striptags(lua_State *L)
+{
+	size_t len = 0;
+	const char *str = luaL_checklstring(L, 1, &len);
+	char *res = striptags(str, len);
 
 	if (res != NULL)
 	{
@@ -129,8 +146,9 @@ static int template_L_hash(lua_State *L) {
 /* module table */
 static const luaL_reg R[] = {
 	{ "parse",				template_L_parse },
-	{ "sanitize_utf8",		template_L_sanitize_utf8 },
-	{ "sanitize_pcdata",	template_L_sanitize_pcdata },
+	{ "utf8",				template_L_utf8 },
+	{ "pcdata",				template_L_pcdata },
+	{ "striptags",			template_L_striptags },
 	{ "load_catalog",		template_L_load_catalog },
 	{ "close_catalog",		template_L_close_catalog },
 	{ "change_catalog",		template_L_change_catalog },

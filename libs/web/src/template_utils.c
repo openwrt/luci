@@ -278,7 +278,7 @@ static int _validate_utf8(unsigned char **s, int l, struct template_buffer *buf)
 }
 
 /* sanitize given string and replace all invalid UTF-8 sequences with "?" */
-char * sanitize_utf8(const char *s, unsigned int l)
+char * utf8(const char *s, unsigned int l)
 {
 	struct template_buffer *buf = buf_init(l);
 	unsigned char *ptr = (unsigned char *)s;
@@ -312,7 +312,7 @@ char * sanitize_utf8(const char *s, unsigned int l)
 /* Sanitize given string and strip all invalid XML bytes
  * Validate UTF-8 sequences
  * Escape XML control chars */
-char * sanitize_pcdata(const char *s, unsigned int l)
+char * pcdata(const char *s, unsigned int l)
 {
 	struct template_buffer *buf = buf_init(l);
 	unsigned char *ptr = (unsigned char *)s;
@@ -368,7 +368,67 @@ char * sanitize_pcdata(const char *s, unsigned int l)
 	return buf_destroy(buf);
 }
 
-void escape_luastr(struct template_buffer *out, const char *s, unsigned int l,
+char * striptags(const char *s, unsigned int l)
+{
+	struct template_buffer *buf = buf_init(l);
+	unsigned char *ptr = (unsigned char *)s;
+	unsigned char *end = ptr + l;
+	unsigned char *tag;
+	unsigned char prev;
+	char esq[8];
+	int esl;
+
+	for (prev = ' '; ptr < end; ptr++)
+	{
+		if ((*ptr == '<') && ((ptr + 2) < end) &&
+			((*(ptr + 1) == '/') || isalpha(*(ptr + 1))))
+		{
+			for (tag = ptr; tag < end; tag++)
+			{
+				if (*tag == '>')
+				{
+					if (!isspace(prev))
+						buf_putchar(buf, ' ');
+
+					ptr = tag;
+					prev = ' ';
+					break;
+				}
+			}
+		}
+		else if (isspace(*ptr))
+		{
+			if (!isspace(prev))
+				buf_putchar(buf, *ptr);
+
+			prev = *ptr;
+		}
+		else
+		{
+			switch(*ptr)
+			{
+				case '"':
+				case '\'':
+				case '<':
+				case '>':
+				case '&':
+					esl = snprintf(esq, sizeof(esq), "&#%i;", *ptr);
+					buf_append(buf, esq, esl);
+					break;
+
+				default:
+					buf_putchar(buf, *ptr);
+					break;
+			}
+
+			prev = *ptr;
+		}
+	}
+
+	return buf_destroy(buf);
+}
+
+void luastr_escape(struct template_buffer *out, const char *s, unsigned int l,
 				   int escape_xml)
 {
 	int esl;
@@ -411,7 +471,7 @@ void escape_luastr(struct template_buffer *out, const char *s, unsigned int l,
 	}
 }
 
-void translate_luastr(struct template_buffer *out, const char *s, unsigned int l,
+void luastr_translate(struct template_buffer *out, const char *s, unsigned int l,
 					  int escape_xml)
 {
 	char *tr;
@@ -420,11 +480,11 @@ void translate_luastr(struct template_buffer *out, const char *s, unsigned int l
 	switch (lmo_translate(s, l, &tr, &trlen))
 	{
 		case 0:
-			escape_luastr(out, tr, trlen, escape_xml);
+			luastr_escape(out, tr, trlen, escape_xml);
 			break;
 
 		case -1:
-			escape_luastr(out, s, l, escape_xml);
+			luastr_escape(out, s, l, escape_xml);
 			break;
 
 		default:
