@@ -8,8 +8,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 
 <%+header%>
@@ -161,6 +159,10 @@ $Id$
 						for (var i = 0; i < conn.length; i++)
 						{
 							var c  = conn[i];
+
+							if (c.src == '127.0.0.1' && c.dst == '127.0.0.1')
+								continue;
+
 							var tr = conn_table.rows[0].parentNode.insertRow(-1);
 							    tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
 
