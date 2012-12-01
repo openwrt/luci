@@ -16,11 +16,11 @@ function etx_color(etx)
 	local color = "#bb3333"
 	if etx == 0 then
 		color = "#bb3333"
-	elseif etx < 4 then
+	elseif etx < 2 then
 		color = "#00cc00"
-	elseif etx < 10 then
+	elseif etx < 4 then
 		color = "#ffcb05"
-	elseif etx < 100 then
+	elseif etx < 10 then
 		color = "#ff6600"
 	end
 	return color
