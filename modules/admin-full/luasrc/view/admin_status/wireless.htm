@@ -8,8 +8,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 
 <%-
@@ -304,14 +302,14 @@ $Id$
 						label_50_2.firstChild.data = rate_label(1.1 * 0.50 * data_max_2);
 						label_75_2.firstChild.data = rate_label(1.1 * 0.75 * data_max_2);
 
-						label_rssi_cur.innerHTML = wireless_label(data_rssi[data_rssi.length-1], data_noise[data_noise.length-1]);
-						label_noise_cur.innerHTML = wireless_label(data_noise[data_noise.length-1]);
+						label_rssi_cur.innerHTML = wireless_label(data_rssi[data_rssi.length-1], data_noise[data_noise.length-1]).nobr();
+						label_noise_cur.innerHTML = wireless_label(data_noise[data_noise.length-1]).nobr();
 
-						label_rssi_avg.innerHTML = wireless_label(data_rssi_avg, data_noise_avg);
-						label_noise_avg.innerHTML = wireless_label(data_noise_avg);
+						label_rssi_avg.innerHTML = wireless_label(data_rssi_avg, data_noise_avg).nobr();
+						label_noise_avg.innerHTML = wireless_label(data_noise_avg).nobr();
 
-						label_rssi_peak.innerHTML = wireless_label(data_rssi_peak, data_noise_peak);
-						label_noise_peak.innerHTML = wireless_label(data_noise_peak);
+						label_rssi_peak.innerHTML = wireless_label(data_rssi_peak, data_noise_peak).nobr();
+						label_noise_peak.innerHTML = wireless_label(data_noise_peak).nobr();
 
 						label_rate_cur.innerHTML = rate_label(data_rate[data_rate.length-1]);
 						label_rate_avg.innerHTML = rate_label(data_rate_avg);
