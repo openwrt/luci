@@ -63,8 +63,10 @@ function setlanguage(lang)
 	if not tparser.load_catalog(context.lang, i18ndir) then
 		if context.parent then
 			tparser.load_catalog(context.parent, i18ndir)
+			return context.parent
 		end
 	end
+	return context.lang
 end
 
 --- Return the translated value for a specific translation key.
