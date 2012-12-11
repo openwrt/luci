@@ -85,8 +85,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	local timeleft = {
 		title = "%H: Time left on UPS \"%pi\"",
-		vlabel = "seconds",
-		number_format = "%7lfs",
+		vlabel = "Minutes",
+		number_format = "%7lfm",
 		data = {
 			sources = {
 				timeleft = { "timeleft" }
