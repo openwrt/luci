@@ -50,7 +50,7 @@ function index()
 		memory		= _("Memory"),
 		netlink		= _("Netlink"),
 		network		= _("Network"),
-		nut		= _("UPS"),
+		nut			= _("UPS"),
 		olsrd		= _("OLSRd"),
 		ping		= _("Ping"),
 		processes	= _("Processes"),
@@ -62,7 +62,7 @@ function index()
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "csv", "network", "rrdtool", "unixsock" },
-		system  = { "cpu", "df", "disk", "email", "exec", "irq", "load", "memory", "processes" },
+		system  = { "cpu", "df", "disk", "email", "exec", "irq", "load", "memory", "nut", "processes" },
 		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "ping", "tcpconns", "iwinfo" }
 	}
 
