@@ -50,6 +50,7 @@ function index()
 		memory		= _("Memory"),
 		netlink		= _("Netlink"),
 		network		= _("Network"),
+		nut		= _("UPS"),
 		olsrd		= _("OLSRd"),
 		ping		= _("Ping"),
 		processes	= _("Processes"),
