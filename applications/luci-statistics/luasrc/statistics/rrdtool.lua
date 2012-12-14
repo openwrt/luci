@@ -180,20 +180,23 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- is first source in stack or overlay source: source_stk = source_nnl
 		if not prev or source.overlay then
-			-- create cdef statement
+			-- create cdef statement for cumulative stack (no NaNs) and also
+                        -- for display (preserving NaN where no points should be displayed)
 			_tif( _args, "CDEF:%s_stk=%s_nnl", source.sname, source.sname )
+			_tif( _args, "CDEF:%s_plot=%s_avg", source.sname, source.sname )
 
 		-- is subsequent source without overlay: source_stk = source_nnl + previous_stk
 		else
 			-- create cdef statement
 			_tif( _args, "CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev )
+			_tif( _args, "CDEF:%s_plot=%s_avg,%s_stk,+", source.sname, source.sname, prev )
 		end
 
 		-- create multiply by minus one cdef if flip is enabled
 		if source.flip then
 
 			-- create cdef statement: source_stk = source_stk * -1
-			_tif( _args, "CDEF:%s_neg=%s_stk,-1,*", source.sname, source.sname )
+			_tif( _args, "CDEF:%s_neg=%s_plot,-1,*", source.sname, source.sname )
 
 			-- push to negative stack if overlay is disabled
 			if not source.overlay then
@@ -253,11 +256,11 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 		-- derive area background color from line color
 		area_color = self.colors:to_string( self.colors:faded( area_color ) )
 
-		-- choose source_stk or source_neg variable depending on flip state
+		-- choose source_plot or source_neg variable depending on flip state
 		if source.flip then
 			var = "neg"
 		else
-			var = "stk"
+			var = "plot"
 		end
 
 		-- create legend
