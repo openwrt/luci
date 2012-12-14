@@ -156,11 +156,14 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		if not ds or ds:len() == 0 then ds = "value" end
 
-		_tif( _args, "DEF:%s_avg=%s:%s:AVERAGE", inst, rrd, ds )
+		_tif( _args, "DEF:%s_avg_raw=%s:%s:AVERAGE", inst, rrd, ds )
+		_tif( _args, "CDEF:%s_avg=%s_avg_raw,%s", inst, inst, source.transform_rpn )
 
 		if not self.opts.rrasingle then
-			_tif( _args, "DEF:%s_min=%s:%s:MIN", inst, rrd, ds )
-			_tif( _args, "DEF:%s_max=%s:%s:MAX", inst, rrd, ds )
+			_tif( _args, "DEF:%s_min_raw=%s:%s:MIN", inst, rrd, ds )
+			_tif( _args, "CDEF:%s_min=%s_min_raw,%s", inst, inst, source.transform_rpn )
+			_tif( _args, "DEF:%s_max_raw=%s:%s:MAX", inst, rrd, ds )
+			_tif( _args, "CDEF:%s_max=%s_max_raw,%s", inst, inst, source.transform_rpn )
 		end
 
 		_tif( _args, "CDEF:%s_nnl=%s_avg,UN,0,%s_avg,IF", inst, inst, inst )
@@ -403,6 +406,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 					flip     = dopts.flip    or false,
 					total    = dopts.total   or false,
 					overlay  = dopts.overlay or false,
+					transform_rpn = dopts.transform_rpn or "0,+",
 					noarea   = dopts.noarea  or false,
 					title    = dopts.title   or nil,
 					ds       = dsource,

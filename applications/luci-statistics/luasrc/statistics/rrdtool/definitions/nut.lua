@@ -86,7 +86,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 	local timeleft = {
 		title = "%H: Time left on UPS \"%pi\"",
 		vlabel = "Minutes",
-		number_format = "%7lfm",
+		number_format = "%.1lfm",
 		data = {
 			sources = {
 				timeleft = { "timeleft" }
@@ -95,7 +95,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				timeleft = { "battery" }
 			},
 			options = {
-				timeleft_battery = { color = "0000ff", title = "Time left"}
+				timeleft_battery = { color = "0000ff", title = "Time left", transform_rpn = "60,/" }
 			}
 		}
 	}
