@@ -53,6 +53,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 	local percentage = {
 		title = "%H: Battery charge on UPS \"%pi\"",
 		vlabel = "Percent",
+		y_min = "0",
+		y_max = "100",
 		number_format = "%5.1lf%%",
 		data = {
 		        sources = {

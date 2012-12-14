@@ -457,6 +457,18 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 		_ti( _args, self.i18n:title( plugin, plugin_instance, _sources[1].type, instance, opts.title ) )
 		_ti( _args, "-v" )
 		_ti( _args, self.i18n:label( plugin, plugin_instance, _sources[1].type, instance, opts.vlabel ) )
+		if opts.y_max then
+			_ti ( _args, "-u" )
+			_ti ( _args, opts.y_max )
+		end
+		if opts.y_min then
+			_ti ( _args, "-l" )
+			_ti ( _args, opts.y_min )
+		end
+		if opts.units_exponent then
+			_ti ( _args, "-X" )
+			_ti ( _args, opts.units_exponent )
+		end
 
 		-- store additional rrd options
 		if opts.rrdopts then
