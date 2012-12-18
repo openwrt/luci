@@ -94,7 +94,6 @@ function command_function(outnets, i)
 end
 
 function action_links(smapmap, mini) 
-   luci.i18n.loadc("diag_devinfo")
    s = smapmap:section(SimpleSection, "", translate("Actions")) 
    b = s:option(DummyValue, "_config", translate("Configure Scans"))
    b.value = ""

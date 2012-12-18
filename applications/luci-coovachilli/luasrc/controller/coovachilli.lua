@@ -18,7 +18,6 @@ function index()
 	local cc
 
 	cc = entry( { "admin", "services", "coovachilli" },       cbi("coovachilli"),         _("CoovaChilli"),                90)
-	cc.i18n = "coovachilli"
 	cc.subindex = true
 
 	entry( { "admin", "services", "coovachilli", "network" }, cbi("coovachilli_network"), _("Network Configuration"),      10)

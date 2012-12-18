@@ -19,7 +19,7 @@ function index()
 		return
 	end
 
-	entry({"admin", "network", "ahcpd"}, cbi("ahcp"), _("AHCP Server"), 90).i18n = "ahcp"
+	entry({"admin", "network", "ahcpd"}, cbi("ahcp"), _("AHCP Server"), 90)
 	entry({"admin", "network", "ahcpd", "status"}, call("ahcp_status"))
 end
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2012-09-13 18:30+0200\n"
-"Last-Translator: Gábor <vargalex@freemail.hu>\n"
+"PO-Revision-Date: 2012-11-20 18:52+0200\n"
+"Last-Translator: juhosg <juhosg@openwrt.org>\n"
 "Language-Team: none\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -174,10 +174,10 @@ msgid "Active Connections"
 msgstr "Aktív kapcsolatok"
 
 msgid "Active DHCP Leases"
-msgstr ""
+msgstr "Aktív DHCP bérletek"
 
 msgid "Active DHCPv6 Leases"
-msgstr ""
+msgstr "Aktív DHCPv6 bérletek"
 
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
@@ -248,6 +248,11 @@ msgstr ""
 
 msgid "Allowed range is 1 to 65535"
 msgstr "Engedélyezett tartomány 1-től 65535-ig"
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
+msgstr ""
 
 msgid "An additional network will be created if you leave this unchecked."
 msgstr "Amennyiben ezt jelöletlenül hagyja, egy további hálózat jön létre"
@@ -422,6 +427,9 @@ msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>create</em> field to define a new network."
 msgstr ""
+"Válassza ki azokat a hálózatokat, amelyeket csatlakoztatni akar ehhez a "
+"vezetéknélküli interfészhez, vagy töltse ki az <em>új</em> mezőt egy új "
+"hálózat definiálásához."
 
 msgid "Cipher"
 msgstr "Titkosító"
@@ -744,7 +752,7 @@ msgid "Enable Jumbo Frame passthrough"
 msgstr "Óriás keretek átengedésének engedélyezése"
 
 msgid "Enable NTP client"
-msgstr ""
+msgstr "NTP-kliens engedélyezése"
 
 msgid "Enable TFTP server"
 msgstr "TFTP kiszolgáló engedélyezése"
@@ -870,6 +878,9 @@ msgstr "Flash-elés..."
 msgid "Force"
 msgstr "Kényszerítés"
 
+msgid "Force 40MHz mode"
+msgstr ""
+
 msgid "Force CCMP (AES)"
 msgstr "CCMP (AES) kényszerítése"
 
@@ -912,7 +923,7 @@ msgid "GHz"
 msgstr ""
 
 msgid "GPRS only"
-msgstr ""
+msgstr "Csak GPRS"
 
 msgid "Gateway"
 msgstr "Átjáró"
@@ -1016,7 +1027,7 @@ msgid "IPv4 and IPv6"
 msgstr "IPv4 és IPv6"
 
 msgid "IPv4 broadcast"
-msgstr "IPv4 broagcast"
+msgstr "IPv4 broadcast"
 
 msgid "IPv4 gateway"
 msgstr "IPv4 átjáró"
@@ -1028,7 +1039,7 @@ msgid "IPv4 only"
 msgstr "csak IPv4"
 
 msgid "IPv4 prefix length"
-msgstr ""
+msgstr "IPv4 prefix hossza"
 
 msgid "IPv4-Address"
 msgstr "IPv4-cím"
@@ -1055,10 +1066,10 @@ msgid "IPv6 prefix"
 msgstr ""
 
 msgid "IPv6 prefix length"
-msgstr ""
+msgstr "IPv6 prefix hossz"
 
 msgid "IPv6-Address"
-msgstr ""
+msgstr "IPv6-cím"
 
 msgid "IPv6-in-IPv4 (RFC4213)"
 msgstr "IPv6 IPv4-ben (RFC4213)"
@@ -1349,7 +1360,7 @@ msgid "Localise queries"
 msgstr ""
 
 msgid "Locked to channel %d used by %s"
-msgstr "Zárolt a %s által használt %d csatornára"
+msgstr "Zárolt a %d csatornára az %s által."
 
 msgid "Log output level"
 msgstr "Napló kimeneti szintje"
@@ -1569,7 +1580,7 @@ msgid "Normal"
 msgstr "Normál"
 
 msgid "Not Found"
-msgstr ""
+msgstr "Nem található"
 
 msgid "Not associated"
 msgstr "Nincs hozzárendelve"
@@ -1810,7 +1821,7 @@ msgid "Protocol support is not installed"
 msgstr "Protokoll támogatás nincs telepítve"
 
 msgid "Provide NTP server"
-msgstr ""
+msgstr "NTP kiszolgáló"
 
 msgid "Provide new network"
 msgstr "Új hálózat nyújtása"
@@ -1819,7 +1830,7 @@ msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "Ál Ad-hoc (ahdemo)"
 
 msgid "Quality"
-msgstr ""
+msgstr "Minőség"
 
 msgid "RTS/CTS Threshold"
 msgstr "RTS/CTS küszöbérték"
@@ -1862,11 +1873,17 @@ msgid ""
 "Really delete this interface? The deletion cannot be undone!\\nYou might "
 "lose access to this device if you are connected via this interface."
 msgstr ""
+"Biztosan törli az interfészt? A törlés nem visszavonható!\n"
+" Lehet, hogy elveszti a hozzáférést az eszközhöz, amennyiben ezen az "
+"interfészen keresztül kapcsolódik."
 
 msgid ""
 "Really delete this wireless network? The deletion cannot be undone!\\nYou "
 "might lose access to this device if you are connected via this network."
 msgstr ""
+"Biztosan törli ezt a vezetéknélküli hálózatot? A törlés nem visszavonható!\n"
+"Lehet, hogy elveszti a hozzáférést az eszközhöz, amennyiben ezen a hálózaton "
+"keresztül kapcsolódik."
 
 msgid "Really reset all changes?"
 msgstr "Biztos, hogy visszavonja az összes módosítást?"
@@ -1875,11 +1892,17 @@ msgid ""
 "Really shutdown interface \"%s\" ?\\nYou might lose access to this device if "
 "you are connected via this interface."
 msgstr ""
+"Biztos, hogy leállítja a \"%s\" interfészt?\n"
+" Lehet, hogy elveszti a hozzáférést az eszközhöz, amennyiben ezen az "
+"interfészen keresztül kapcsolódik."
 
 msgid ""
 "Really shutdown network ?\\nYou might lose access to this device if you are "
 "connected via this interface."
 msgstr ""
+"Biztos, hogy leállítja a hálózatot?!\n"
+" Lehet, hogy elveszti a hozzáférést az eszközhöz, amennyiben ezen a "
+"hálózaton keresztül kapcsolódik."
 
 msgid "Really switch protocol?"
 msgstr "Biztos, hogy cserélni szeretné a protokollt?"
@@ -2019,10 +2042,10 @@ msgid "Rule #"
 msgstr "Szabály #"
 
 msgid "Run a filesystem check before mounting the device"
-msgstr "Fájlrendszer elleőrzés futtatása az eszköz csatolása előtt"
+msgstr "Fájlrendszer ellenőrzés futtatása az eszköz csatolása előtt"
 
 msgid "Run filesystem check"
-msgstr "Fájlrendszer elleőrzés futtatása"
+msgstr "Fájlrendszer ellenőrzés futtatása"
 
 msgid "SSH Access"
 msgstr "SSH hozzáférés"
@@ -2128,10 +2151,10 @@ msgid "Some fields are invalid, cannot save values!"
 msgstr "Néhán mező érvénytelen, az értékek nem menthetők!"
 
 msgid "Sorry, the object you requested was not found."
-msgstr ""
+msgstr "Sajnálom, a kért objektum nem található."
 
 msgid "Sorry, the server encountered an unexpected error."
-msgstr ""
+msgstr "Sajnálom, a szerver váratlan hibát észlelt."
 
 msgid ""
 "Sorry, there is no sysupgrade support present, a new firmware image must be "
@@ -2719,9 +2742,6 @@ msgstr ""
 msgid "Waiting for command to complete..."
 msgstr ""
 
-msgid "Waiting for router..."
-msgstr "Várakozás a routerre..."
-
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
@@ -2801,7 +2821,7 @@ msgid "bridged"
 msgstr "áthidalt"
 
 msgid "create:"
-msgstr ""
+msgstr "új:"
 
 msgid "creates a bridge over specified interface(s)"
 msgstr "híd létrehozása a megadott interfész(ek) között"
@@ -2902,6 +2922,9 @@ msgstr "igen"
 
 msgid "« Back"
 msgstr "« Vissza"
+
+#~ msgid "Waiting for router..."
+#~ msgstr "Várakozás a routerre..."
 
 #~ msgid "Enable builtin NTP server"
 #~ msgstr "Beépített NTP kiszolgáló engedélyezése"

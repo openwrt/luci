@@ -23,11 +23,9 @@ function index()
 	local page
 
 	page = entry({"admin", "services", "upnp"}, cbi("upnp/upnp"), _("UPNP"))
-	page.i18n = "upnp"
 	page.dependent = true
 
 	page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini", {autoapply=true}), _("UPNP"))
-	page.i18n = "upnp"
 	page.dependent = true
 
 	entry({"admin", "services", "upnp", "status"}, call("act_status")).leaf = true
@@ -69,10 +67,8 @@ function act_status()
 	end
 end
 
-function act_delete()
-	local path = luci.dispatcher.context.requestpath
-	local idx = tonumber(path[#path])
-
+function act_delete(idx)
+	idx = tonumber(idx)
 	if idx and idx > 0 then
 		luci.sys.call("iptables -t filter -D MINIUPNPD %d 2>/dev/null" % idx)
 		luci.sys.call("iptables -t nat -D MINIUPNPD %d 2>/dev/null" % idx)

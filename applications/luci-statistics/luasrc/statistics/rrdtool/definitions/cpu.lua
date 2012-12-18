@@ -19,6 +19,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
 		title = "%H: Processor usage on core #%pi",
+		y_min = "0",
 		vlabel = "Percent",
 		number_format = "%5.1lf%%",
 		data = {

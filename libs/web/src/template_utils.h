@@ -1,7 +1,7 @@
 /*
  * LuCI Template - Utility header
  *
- *   Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
+ *   Copyright (C) 2010-2012 Jo-Philipp Wich <xm@subsignal.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,13 +26,24 @@
 
 /* buffer object */
 struct template_buffer {
-	unsigned char *data;
-	unsigned char *dptr;
+	char *data;
+	char *dptr;
 	unsigned int size;
 	unsigned int fill;
 };
 
-char * sanitize_utf8(const char *s, unsigned int l);
-char * sanitize_pcdata(const char *s, unsigned int l);
+struct template_buffer * buf_init(int size);
+int buf_grow(struct template_buffer *buf, int size);
+int buf_putchar(struct template_buffer *buf, char c);
+int buf_append(struct template_buffer *buf, const char *s, int len);
+int buf_length(struct template_buffer *buf);
+char * buf_destroy(struct template_buffer *buf);
+
+char * utf8(const char *s, unsigned int l);
+char * pcdata(const char *s, unsigned int l);
+char * striptags(const char *s, unsigned int l);
+
+void luastr_escape(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
+void luastr_translate(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
 
 #endif

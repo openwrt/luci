@@ -623,6 +623,32 @@ function get_status_by_route(self, addr, mask)
 	end
 end
 
+function get_status_by_address(self, addr)
+	local _, object
+	for _, object in ipairs(_ubus:objects()) do
+		local net = object:match("^network%.interface%.(.+)")
+		if net then
+			local s = _ubus:call(object, "status", {})
+			if s and s['ipv4-address'] then
+				local a
+				for _, a in ipairs(s['ipv4-address']) do
+					if a.address == addr then
+						return net, s
+					end
+				end
+			end
+			if s and s['ipv6-address'] then
+				local a
+				for _, a in ipairs(s['ipv6-address']) do
+					if a.address == addr then
+						return net, s
+					end
+				end
+			end
+		end
+	end
+end
+
 function get_wannet(self)
 	local net = self:get_status_by_route("0.0.0.0", 0)
 	return net and network(net)

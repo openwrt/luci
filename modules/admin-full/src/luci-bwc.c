@@ -536,6 +536,10 @@ static int run_daemon(void)
 				if (strstr(line, "TIME_WAIT"))
 					continue;
 
+				if (strstr(line, "src=127.0.0.1 ") &&
+				    strstr(line, "dst=127.0.0.1 "))
+					continue;
+
 				if (sscanf(line, "%*s %*d %s", ifname) || sscanf(line, "%s %*d", ifname))
 				{
 					if (!strcmp(ifname, "tcp"))

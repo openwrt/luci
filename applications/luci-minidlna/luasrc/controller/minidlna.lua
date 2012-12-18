@@ -22,7 +22,6 @@ function index()
 	local page
 
 	page = entry({"admin", "services", "minidlna"}, cbi("minidlna"), _("miniDLNA"))
-	page.i18n = "minidlna"
 	page.dependent = true
 
 	entry({"admin", "services", "minidlna_status"}, call("minidlna_status"))

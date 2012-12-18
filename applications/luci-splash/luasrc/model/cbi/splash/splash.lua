@@ -9,7 +9,6 @@ You may obtain a copy of the License at
 ]]--
 
 require("luci.model.uci")
-luci.i18n.loadc("splash")
 
 m = Map("luci_splash", translate("Client-Splash"), translate("Client-Splash is a hotspot authentification system for wireless mesh networks."))
 

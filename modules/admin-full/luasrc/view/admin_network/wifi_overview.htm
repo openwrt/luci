@@ -9,8 +9,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 
 <%-
@@ -123,6 +121,10 @@ $Id$
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
 	var is_reconnecting = false;
+
+	function nowrap(s) {
+		return s.replace(/ /g, '&#160;');
+	}
 
 	function wifi_shutdown(id, toggle) {
 		var reconnect = (toggle.getAttribute('active') == 'false');
@@ -300,24 +302,24 @@ $Id$
 								icon, assoclist[j].signal, assoclist[j].noise
 							);
 
-							tr.insertCell(-1).innerHTML = String.format('%h', iw.ssid ? iw.ssid : '?');
+							tr.insertCell(-1).innerHTML = nowrap(String.format('%h', iw.ssid ? iw.ssid : '?'));
 							tr.insertCell(-1).innerHTML = assoclist[j].bssid;
 
 							tr.insertCell(-1).innerHTML = arptable[assoclist[j].bssid]
 								? arptable[assoclist[j].bssid] : '?';
 
-							tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[j].signal);
-							tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[j].noise);
+							tr.insertCell(-1).innerHTML = nowrap(String.format('%d <%:dBm%>', assoclist[j].signal));
+							tr.insertCell(-1).innerHTML = nowrap(String.format('%d <%:dBm%>', assoclist[j].noise));
 
-							tr.insertCell(-1).innerHTML = (assoclist[j].rx_mcs > -1)
+							tr.insertCell(-1).innerHTML = nowrap((assoclist[j].rx_mcs > -1)
 								? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[j].rx_rate / 1000, assoclist[j].rx_mcs, assoclist[j].rx_40mhz ? 40 : 20)
 								: String.format('%.1f <%:Mbit/s%>', assoclist[j].rx_rate / 1000)
-							;
+							);
 
-							tr.insertCell(-1).innerHTML = (assoclist[j].tx_mcs > -1)
+							tr.insertCell(-1).innerHTML = nowrap((assoclist[j].tx_mcs > -1)
 								? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[j].tx_rate / 1000, assoclist[j].tx_mcs, assoclist[j].tx_40mhz ? 40 : 20)
 								: String.format('%.1f <%:Mbit/s%>', assoclist[j].tx_rate / 1000)
-							;
+							);
 
 							rowstyle = (rowstyle == 1) ? 2 : 1;
 						}

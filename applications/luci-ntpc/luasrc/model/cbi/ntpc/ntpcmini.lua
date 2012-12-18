@@ -21,8 +21,9 @@ s.addremove = false
 
 s:option(DummyValue, "_time", translate("Current system time")).value = os.date("%c")
 
-s:option(Value, "interval", translate("Update interval (in seconds)")).rmempty = true
-
+interval = s:option(Value, "interval", translate("Update interval (in seconds)"))
+interval.datatype = "and(uinteger,min(1))"
+interval.rmempty = true
 
 s3 = m:section(TypedSection, "ntpserver", translate("Time Server"))
 s3.anonymous = true
@@ -30,6 +31,8 @@ s3.addremove = true
 s3.template = "cbi/tblsection"
 
 s3:option(Value, "hostname", translate("Hostname"))
-s3:option(Value, "port", translate("Port")).rmempty = true
+port = s3:option(Value, "port", translate("Port"))
+port.datatype = "port"
+port.rmempty = true
 
 return m

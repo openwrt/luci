@@ -30,7 +30,8 @@ ip = s:option(Value, "ip", translate("IP address"))
 ip.datatype = "ipaddr"
 ip.rmempty  = true
 
-for i, dataset in ipairs(luci.sys.net.arptable()) do
+local arptable = luci.sys.net.arptable() or {}
+for i, dataset in ipairs(arptable) do
 	ip:value(
 		dataset["IP address"],
 		"%s (%s)" %{ dataset["IP address"], dataset["HW address"] }

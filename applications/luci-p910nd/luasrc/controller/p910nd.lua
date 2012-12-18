@@ -23,6 +23,5 @@ function index()
 	local page
 
 	page = entry({"admin", "services", "p910nd"}, cbi("p910nd"), _("p910nd - Printer server"), 60)
-	page.i18n = "p910nd"
 	page.dependent = true
 end

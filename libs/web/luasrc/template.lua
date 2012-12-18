@@ -79,9 +79,8 @@ function Template.__init__(self, name)
 		-- If we have no valid template throw error, otherwise cache the template
 		if not self.template then
 			error("Failed to load template '" .. name .. "'.\n" ..
-			      "Error while parsing template '" .. sourcefile .. "'.\n" ..
-			      "A syntax error occured near '" ..
-			      (err or "(nil)"):gsub("\t", "\\t"):gsub("\n", "\\n") .. "'.")
+			      "Error while parsing template '" .. sourcefile .. "':\n" ..
+			      (err or "Unknown syntax error"))
 		else
 			self.cache[name] = self.template
 		end

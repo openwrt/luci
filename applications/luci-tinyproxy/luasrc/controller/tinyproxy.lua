@@ -20,7 +20,7 @@ function index()
 		return
 	end
 
-	entry({"admin", "services", "tinyproxy"}, alias("admin", "services", "tinyproxy", "config"), _("Tinyproxy")).i18n = "tinyproxy"
+	entry({"admin", "services", "tinyproxy"}, alias("admin", "services", "tinyproxy", "config"), _("Tinyproxy"))
 	entry({"admin", "services", "tinyproxy", "status"}, template("tinyproxy_status"), _("Status"))
 	entry({"admin", "services", "tinyproxy", "config"}, cbi("tinyproxy"), _("Configuration"))
 end

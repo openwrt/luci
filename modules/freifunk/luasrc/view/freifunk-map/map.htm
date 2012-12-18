@@ -43,11 +43,22 @@
 				if (null != alias[fromip]) fromip = alias[fromip];
 				if (null != points[fromip] && null != points[toip])
 				{
-					var w = 1;
-					if (etx < 4) w++;
-					if (etx < 2) w++;
+					var color;
+					var red = 240;
+					var green = 0;
+					var blue = 0;
+					var w = 1
+
+					if (etx < 100) {red=252;green=102;blue=0;w=2};
+					if (etx < 10) {red=255;green=203;blue=5;w=3};
+					if (etx < 4) {red=240;green=255;blue=0;w=4};
+					if (etx < 2) {red=0;green=204;blue=0;w=5};
+					if (etx < 1) {red=80;green=0;blue=0;w=1};
+
 					map.AddPolyline(new VEPolyline('id'+lineid, [points[fromip], points[toip]],
-					new VEColor(102,Math.floor(lq*255.0),Math.floor(nlq*255.0),1.0), w));
+					new VEColor(red, green, blue, 0.5), w));
+
+
 				}
 				else
 				{

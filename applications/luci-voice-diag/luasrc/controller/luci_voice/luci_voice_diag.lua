@@ -18,6 +18,5 @@ function index()
 
 	e = entry({"admin", "voice", "diag"}, template("luci_voice/diag_index"), _("Diagnostics"), 90)
 	e.index = true
-	e.i18n = "voice_diag"
 	e.dependent = true
 end

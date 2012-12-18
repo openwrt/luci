@@ -9,8 +9,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 
 <%
@@ -432,22 +430,22 @@ $Id$
 					tr.insertCell(-1).innerHTML = assoclist[i].bssid;
 
 					tr.insertCell(-1).innerHTML = String.format(
-						'<a href="%s">%h</a>',
+						'<a href="%s">%s</a>',
 							assoclist[i].link,
-							assoclist[i].name
+							'%h'.format(assoclist[i].name).nobr()
 					);
 
-					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].signal);
-					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].noise);
+					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].signal).nobr();
+					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].noise).nobr();
 
 					tr.insertCell(-1).innerHTML = (assoclist[i].rx_mcs > -1)
-						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20)
-						: String.format('%.1f <%:Mbit/s%>', assoclist[i].rx_rate / 1000)
+						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20).nobr()
+						: String.format('%.1f <%:Mbit/s%>', assoclist[i].rx_rate / 1000).nobr()
 					;
 
 					tr.insertCell(-1).innerHTML = (assoclist[i].tx_mcs > -1)
-						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20)
-						: String.format('%.1f <%:Mbit/s%>', assoclist[i].tx_rate / 1000)
+						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20).nobr()
+						: String.format('%.1f <%:Mbit/s%>', assoclist[i].tx_rate / 1000).nobr()
 					;
 				}
 

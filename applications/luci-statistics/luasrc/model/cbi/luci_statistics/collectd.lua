@@ -19,7 +19,7 @@ require("luci.sys")
 m = Map("luci_statistics",
 	translate("Collectd Settings"),
 	translate(
-		"Collectd is a small daeomon for collecting data from " ..
+		"Collectd is a small daemon for collecting data from " ..
 		"various sources through different plugins. On this page " ..
 		"you can change general settings for the collectd daemon."
 	))

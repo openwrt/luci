@@ -14,6 +14,8 @@ You may obtain a copy of the License at
 
 m = Map("network", translate("Switch"), translate("The network ports on this device can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
 
+local switches = { }
+
 m.uci:foreach("network", "switch",
 	function(x)
 		local sid         = x['.name']
@@ -199,11 +201,13 @@ m.uci:foreach("network", "switch",
 		end
 
 
-		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID")
+		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID", "<div id='portstatus-%s'></div>" % switch_name)
+		local mx_vid = has_vlan4k and 4094 or (num_vlans - 1) 
 
 		vid.rmempty = false
 		vid.forcewrite = true
 		vid.vlan_used = { }
+		vid.datatype = "and(uinteger,range("..min_vid..","..mx_vid.."))"
 
 		-- Validate user provided VLAN ID, make sure its within the bounds
 		-- allowed by the switch.
@@ -276,12 +280,13 @@ m.uci:foreach("network", "switch",
 			port_opts[#port_opts+1] = po
 		end
 
-
-        -- Switch status template
-        s = m:section(SimpleSection)
-        s.template = "admin_network/switch_status"
-        s.switch = switch_name
+		switches[#switches+1] = switch_name
 	end
 )
+
+-- Switch status template
+s = m:section(SimpleSection)
+s.template = "admin_network/switch_status"
+s.switches = switches
 
 return m

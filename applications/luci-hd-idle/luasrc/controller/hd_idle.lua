@@ -23,6 +23,5 @@ function index()
 	local page
 
 	page = entry({"admin", "services", "hd_idle"}, cbi("hd_idle"), _("hd-idle"), 60)
-	page.i18n = "hd_idle"
 	page.dependent = true
 end

@@ -182,27 +182,18 @@ end
 -- String and data manipulation routines
 --
 
---- Escapes all occurrences of the given character in given string.
--- @param s	String value containing unescaped characters
--- @param c	String value with character to escape (optional, defaults to "\")
--- @return	String value with each occurrence of character escaped with "\"
-function escape(s, c)
-	c = c or "\\"
-	return s:gsub(c, "\\" .. c)
-end
-
 --- Create valid XML PCDATA from given string.
 -- @param value	String value containing the data to escape
 -- @return		String value containing the escaped data
 function pcdata(value)
-	return value and tparser.sanitize_pcdata(tostring(value))
+	return value and tparser.pcdata(tostring(value))
 end
 
 --- Strip HTML tags from given string.
 -- @param value	String containing the HTML text
 -- @return	String with HTML tags stripped of
-function striptags(s)
-	return pcdata(tostring(s):gsub("</?[A-Za-z][A-Za-z0-9:_%-]*[^>]*>", " "):gsub("%s+", " "))
+function striptags(value)
+	return value and tparser.striptags(tostring(value))
 end
 
 --- Splits given string on a defined separator sequence and return a table
@@ -356,7 +347,6 @@ function parse_units(ustr)
 end
 
 -- also register functions above in the central string class for convenience
-string.escape      = escape
 string.pcdata      = pcdata
 string.striptags   = striptags
 string.split       = split

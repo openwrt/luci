@@ -19,6 +19,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
 		title = "%H: Load", vlabel = "Load",
+		y_min = "0",
+		units_exponent = "0",
 		number_format = "%5.2lf", data = {
 			sources = {
 				load = { "shortterm", "midterm", "longterm" }

@@ -69,6 +69,8 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp"}) do
 			return (nixio.fs.glob("/usr/lib/pppd/*/pptp.so")() ~= nil)
 		elseif p == "3g" then
 			return nixio.fs.access("/lib/netifd/proto/3g.sh")
+		elseif p == "l2tp" then
+			return nixio.fs.access("/lib/netifd/proto/l2tp.sh")
 		else
 			return nixio.fs.access("/lib/netifd/proto/ppp.sh")
 		end

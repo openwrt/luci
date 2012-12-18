@@ -11,8 +11,6 @@ You may obtain a copy of the License at
 
 ]]--
 
-require("luci.i18n")
-
 module("luci.controller.luci_diag", package.seeall)
 
 function index()
@@ -20,11 +18,9 @@ function index()
 
 	e = entry({"admin", "network", "diag_config"}, template("diag/network_config_index") , _("Configure Diagnostics"), 120)
 	e.index = true
-	e.i18n = "diag_core"
 	e.dependent = true
 
 	e = entry({"mini", "diag"}, template("diag/index"), _("Diagnostics"), 120)
 	e.index = true
-	e.i18n = "diag_core"
 	e.dependent = true
 end

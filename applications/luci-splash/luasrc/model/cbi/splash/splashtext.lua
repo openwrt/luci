@@ -13,7 +13,6 @@ You may obtain a copy of the License at
 ]]--
 
 local fs = require "nixio.fs"
-luci.i18n.loadc("splash")
 
 local splashtextfile = "/usr/lib/luci-splash/splashtext.html" 
 

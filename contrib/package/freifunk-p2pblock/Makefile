@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2009 Andreas Seidler <tetzlav@subsignal.org>
+# Copyright (C) 2012 Jo-Philipp Wich <xm@subsignal.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freifunk-p2pblock
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 

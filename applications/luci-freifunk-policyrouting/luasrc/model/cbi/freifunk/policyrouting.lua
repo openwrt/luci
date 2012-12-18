@@ -10,7 +10,6 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 ]]--
 
-luci.i18n.loadc("freifunk")
 local uci = require "luci.model.uci".cursor()
 
 m = Map("freifunk-policyrouting", translate("Policy Routing"), translate("These pages can be used to setup policy routing for certain firewall zones. "..

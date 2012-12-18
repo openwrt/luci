@@ -18,18 +18,14 @@ function index()
 
    e = entry({"admin", "voice"}, template("luci_voice/index") , _("Voice"), 90)
    e.index = true
-   e.i18n = "voice_core"
 
    e = entry({"mini", "voice"}, template("luci_voice/index"), _("Voice"), 90)
    e.index = true
-   e.i18n = "voice_core"
 
    e = entry({"mini", "voice", "phones"}, template("luci_voice/phone_index"), _("Phones"), 90)
    e.index = true
-   e.i18n = "voice_core"
 
    e = entry({"admin", "voice", "phones"}, template("luci_voice/phone_index"), _("Phones"), 90)
    e.index = true
-   e.i18n = "voice_core"
 
 end

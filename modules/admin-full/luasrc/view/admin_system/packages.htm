@@ -9,8 +9,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 <%-
 local bit = require "bit"
@@ -35,16 +33,18 @@ local free_byte = space_free * fstat.frsize
 local filter = { }
 
 
+local opkg_list = luci.model.ipkg.list_all
 local querypat
 if query and #query > 0 then
-	querypat = "*%s*" % query
+	querypat = '*%s*' % query
+	opkg_list = luci.model.ipkg.find
 end
 
 local letterpat
 if letter == 35 then
-	letterpat = "[^a-zA-Z]*"
+	letterpat = "[^a-z]*"
 else
-	letterpat = string.char(91, letter, letter + 32, 93, 42) -- '[' 'A' 'a' ']' '*'
+	letterpat = string.char(letter, 42) -- 'A' '*'
 end
 
 -%>
@@ -173,7 +173,7 @@ end
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
 					</tr>
-					<% local empty = true; luci.model.ipkg.list_all(querypat or letterpat, function(n, v, d) if filter[n] then return end; empty = false %>
+					<% local empty = true; opkg_list(querypat or letterpat, function(n, v, d) if filter[n] then return end; empty = false %>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
 						<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:Install%></a></td>
 						<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
