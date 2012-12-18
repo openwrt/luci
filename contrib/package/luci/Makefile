@@ -326,7 +326,7 @@ endef
 $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))
 
-$(eval $(call application,firewall,Firmware and Portforwarding application,\
+$(eval $(call application,firewall,Firewall and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
 $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
