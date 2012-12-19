@@ -37,7 +37,7 @@ function cache_enable(cachepath, mode)
 	mode = mode or "r--r--r--"
 
 	local loader = package.loaders[2]
-	local uid    = nixio.getpid("uid")
+	local uid    = nixio.getuid()
 
 	if not fs.stat(cachepath) then
 		fs.mkdir(cachepath)
@@ -53,7 +53,7 @@ function cache_enable(cachepath, mode)
 
 	local function _load_sane(file)
 		local stat = fs.stat(file)
-		if stat and stat.uid == uid and stat.mode == mode then
+		if stat and stat.uid == uid and stat.modestr == mode then
 			return loadfile(file)
 		end
 	end
