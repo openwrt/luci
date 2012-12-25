@@ -2,14 +2,13 @@
 
 Luci statistics - statistics controller module
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2012 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
         http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
 
 ]]--
 
@@ -69,9 +68,9 @@ function index()
 	-- create toplevel menu nodes
 	local st = entry({"admin", "statistics"}, template("admin_statistics/index"), _("Statistics"), 80)
 	st.index = true
-	
+
 	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _("Collectd"), 10).subindex = true
-	
+
 
 	-- populate collectd plugin menu
 	local index = 1
@@ -106,7 +105,8 @@ function index()
 	-- get rrd data tree
 	local tree = luci.statistics.datatree.Instance(host)
 
-	for i, plugin in luci.util.vspairs( tree:plugins() ) do
+	local _, plugin, idx
+	for _, plugin, idx in luci.util.vspairs( tree:plugins() ) do
 
 		-- get plugin instances
 		local instances = tree:plugin_instances( plugin )
@@ -114,16 +114,17 @@ function index()
 		-- plugin menu entry
 		entry(
 			{ "admin", "statistics", "graph", plugin },
-			call("statistics_render"), labels[plugin], i
+			call("statistics_render"), labels[plugin], idx
 		).query = { timespan = span , host = host }
 
 		-- if more then one instance is found then generate submenu
 		if #instances > 1 then
-			for j, inst in luci.util.vspairs(instances) do
+			local _, inst, idx2
+			for _, inst, idx2 in luci.util.vspairs(instances) do
 				-- instance menu entry
 				entry(
 					{ "admin", "statistics", "graph", plugin, inst },
-					call("statistics_render"), inst, j
+					call("statistics_render"), inst, idx2
 				).query = { timespan = span , host = host }
 			end
 		end
@@ -148,6 +149,7 @@ function statistics_render()
 	local hosts = graph.tree:host_instances()
 
 	local is_index = false
+	local i, p, inst, idx
 
 	-- deliver image
 	if vars.img then
@@ -186,8 +188,8 @@ function statistics_render()
 
 
 	-- render graphs
-	for i, inst in ipairs( instances ) do
-		for i, img in ipairs( graph:render( plugin, inst, is_index ) ) do
+	for i, inst in luci.util.vspairs( instances ) do
+		for i, img in luci.util.vspairs( graph:render( plugin, inst, is_index ) ) do
 			table.insert( images, graph:strippngpath( img ) )
 			images[images[#images]] = inst
 		end
