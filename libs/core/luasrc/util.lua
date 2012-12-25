@@ -4,9 +4,6 @@ LuCI - Utility library
 Description:
 Several common useful Lua functions
 
-FileId:
-$Id$
-
 License:
 Copyright 2008 Steven Barth <steven@midlink.org>
 
@@ -609,6 +606,7 @@ end
 function _sortiter( t, f )
 	local keys = { }
 
+	local k, v
 	for k, v in pairs(t) do
 		keys[#keys+1] = k
 	end
@@ -620,7 +618,7 @@ function _sortiter( t, f )
 	return function()
 		_pos = _pos + 1
 		if _pos <= #keys then
-			return keys[_pos], t[keys[_pos]]
+			return keys[_pos], t[keys[_pos]], _pos
 		end
 	end
 end
