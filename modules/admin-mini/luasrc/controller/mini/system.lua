@@ -81,7 +81,7 @@ function action_upgrade()
 	local function image_supported()
 		-- XXX: yay...
 		return ( 0 == os.execute(
-			". /etc/functions.sh; " ..
+			". /lib/functions.sh; " ..
 			"include /lib/upgrade; " ..
 			"platform_check_image %q >/dev/null"
 				% tmpfile

@@ -176,14 +176,6 @@ You may obtain a copy of the License at
 
 						d.innerHTML = html;
 					}
-					else if (d && !ifc.ifname)
-					{
-						d.innerHTML = String.format(
-							'<em><%:Network without interfaces.%></em><br />' +
-							'<a href="<%=luci.dispatcher.build_url("admin/network/network/%s")%>?tab.network.%s=physical"><%:Assign interfaces...%></a>',
-								ifc.name, ifc.name
-						);
-					}
 					else if (d && !ifc.proto)
 					{
 						var e = document.getElementById(ifc.id + '-ifc-edit');
@@ -194,6 +186,14 @@ You may obtain a copy of the License at
 							'<em><%:Unsupported protocol type.%></em><br />' +
 							'<a href="%h"><%:Install protocol extensions...%></a>',
 								'<%=luci.dispatcher.build_url("admin/system/packages")%>?query=luci-proto&display=available'
+						);
+					}
+					else if (d && !ifc.ifname)
+					{
+						d.innerHTML = String.format(
+							'<em><%:Network without interfaces.%></em><br />' +
+							'<a href="<%=luci.dispatcher.build_url("admin/network/network/%s")%>?tab.network.%s=physical"><%:Assign interfaces...%></a>',
+								ifc.name, ifc.name
 						);
 					}
 					else if (d)

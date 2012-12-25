@@ -13,7 +13,7 @@ You may obtain a copy of the License at
 $Id$
 ]]--
 
-m = Map("upnpd", translate("Universal Plug & Play"),
+m = Map("upnpd", luci.util.pcdata(translate("Universal Plug & Play")),
 	translate("UPnP allows clients in the local network to automatically configure the router."))
 
 m:section(SimpleSection).template  = "upnp_status"

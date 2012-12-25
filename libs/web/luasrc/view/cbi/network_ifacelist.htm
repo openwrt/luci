@@ -49,7 +49,7 @@
 		%> /> &#160;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<% if link then -%><a href="<%=link%>"><% end -%>
-			<img title="<%=iface:get_type_i18n()%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+			<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 			<% if link then -%></a><% end -%>
 			<%=pcdata(iface:get_i18n())%>
 			<% local ns = iface:get_networks(); if #ns > 0 then %>(
