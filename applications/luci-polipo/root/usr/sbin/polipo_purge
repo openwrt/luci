@@ -5,7 +5,7 @@ PIDFILE=`uci get polipo.daemon.pidFile`
 CFGFILE=/var/etc/polipo.conf
 
 [ -e "$PIDFILE" ] && {
-	PID=`cat $PID_FILE`
+	PID=`cat $PIDFILE`
 
 	# send Polipo USR1 signal to write its in-memory cache to disk
 	kill -USR1 $PID
