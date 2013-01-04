@@ -1,7 +1,7 @@
 <%#
 LuCI - Lua Configuration Interface
 Copyright 2008-2009 Steven Barth <steven@midlink.org>
-Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2008-2013 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,19 +23,24 @@ You may obtain a copy of the License at
 
 	ntm.init(uci)
 
-	function guess_wifi_hw(ifname)
+	function guess_wifi_hw(dev)
 		local bands = ""
+		local ifname = dev:name()
 		local name, idx = ifname:match("^([a-z]+)(%d+)")
 		idx = tonumber(idx)
 
 		if has_iwinfo then
-			local iw = luci.sys.wifi.getiwinfo(ifname)
-			local bl = iw.hwmodelist
+			local bl = dev.iwinfo.hwmodelist
 			if bl and next(bl) then
 				if bl.a then bands = bands .. "a" end
 				if bl.b then bands = bands .. "b" end
 				if bl.g then bands = bands .. "g" end
 				if bl.n then bands = bands .. "n" end
+			end
+
+			local hw = dev.iwinfo.hardware_name
+			if hw then
+				return "%s 802.11%s" %{ hw, bands }
 			end
 		end
 
@@ -365,7 +370,7 @@ You may obtain a copy of the License at
 			<tr>
 				<td style="width:34px"><img src="<%=resource%>/icons/wifi_big_disabled.png" style="float:left; margin-right:10px" id="<%=dev:name()%>-iw-upstate" /></td>
 				<td colspan="2" style="text-align:left">
-					<big><strong><%=guess_wifi_hw(dev:name())%> (<%=dev:name()%>)</strong></big><br />
+					<big><strong><%=guess_wifi_hw(dev)%> (<%=dev:name()%>)</strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</td>
 				<td style="width:310px;text-align:right">
