@@ -24,22 +24,14 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 <script type="text/javascript">//<![CDATA[
 	var stxhr = new XHR();
 
-	function update_status(field,proto)
+	function update_status(field, proto)
 	{
 		var tool = field.name;
 		var addr = field.value;
-		var protocol = ""
+		var protocol = proto ? "6" : "";
 
 		var legend = document.getElementById('diag-rc-legend');
 		var output = document.getElementById('diag-rc-output');
-
-		if (typeof proto != 'undefined') {
-			for(var i = 0; i < proto.length; i++) {
-				if(proto[i].checked) {
-					protocol = proto[i].value;
-				}
-			}
-		}
 
 		if (legend && output)
 		{
@@ -80,29 +72,29 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			<br />
 
 			<div style="width:30%; float:left">
-				<input style="width: 50%" type="text" value="openwrt.org" name="ping" />
-				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping,this.form.proto)" />
+				<input style="margin: 5px 0" type="text" value="openwrt.org" name="ping" /><br />
 				<% if has_ping6 then %>
-				<div style="width:100%; margin-top: 10px;">
-					<input type="radio" name="proto" value="" checked="checked" /> <%:IPv4%>
-					<input type="radio" name="proto" value="6" /> <%:IPv6%>
-				</div>
-				<%end%>
+				<select name="ping_proto" style="width:auto">
+					<option value="" selected="selected"><%:IPv4%></option>
+					<option value="6"><%:IPv6%></option>
+				</select>
+				<% end %>
+				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping, this.form.ping_proto.selectedIndex)" />
 			</div>
 
 			<div style="width:33%; float:left">
-				<input style="width: 50%" type="text" value="openwrt.org" name="traceroute" />
-				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute,this.form.trproto)" />
+				<input style="margin: 5px 0" type="text" value="openwrt.org" name="traceroute" /><br />
 				<% if has_traceroute6 then %>
-				<div style="width:100%; margin-top: 10px;">
-					<input type="radio" name="trproto" value="" checked="checked" /> <%:IPv4%>
-					<input type="radio" name="trproto" value="6" /> <%:IPv6%>
-				</div>
-				<%end%>
+				<select name="traceroute_proto" style="width:auto">
+					<option value="" selected="selected"><%:IPv4%></option>
+					<option value="6"><%:IPv6%></option>
+				</select>
+				<% end %>
+				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute, this.form.traceroute_proto.selectedIndex)" />
 			</div>
 
 			<div style="width:33%; float:left;">
-				<input style="width: 50%" type="text" value="openwrt.org" name="nslookup" />
+				<input style="margin: 5px 0" type="text" value="openwrt.org" name="nslookup" /><br />
 				<input type="button" value="<%:Nslookup%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.nslookup)" />
 			</div>
 
