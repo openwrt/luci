@@ -108,9 +108,13 @@ img {
 button,
 input,
 select,
+option,
 textarea {
 	font-size: 100%;
 	margin: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 	vertical-align: baseline;
 	*vertical-align: middle;
 }
@@ -449,7 +453,7 @@ textarea {
 
 form .input,
 form .cbi-value-field {
-	margin-left: 150px;
+	margin-left: 200px;
 }
 
 form .cbi-value label.cbi-value-title {
@@ -457,7 +461,7 @@ form .cbi-value label.cbi-value-title {
 	font-size: 13px;
 	line-height: 18px;
 	float: left;
-	width: 130px;
+	width: 180px;
 	text-align: right;
 	color: #404040;
 }
@@ -472,7 +476,7 @@ select,
 .uneditable-input {
 	display: inline-block;
 	width: 210px;
-	height: 18px;
+	height: 30px;
 	padding: 4px;
 	font-size: 13px;
 	line-height: 18px;
@@ -507,6 +511,7 @@ input[type=file] {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
+	width: auto !important;
 }
 
 input[type=button], input[type=reset], input[type=submit] {
@@ -515,9 +520,7 @@ input[type=button], input[type=reset], input[type=submit] {
 }
 
 select, input[type=file] {
-	height: 27px;
 	*height: auto;
-	line-height: 27px;
 	*margin-top: 4px;
 	/* For IE7, add top margin to align select with labels */
 }
@@ -1758,6 +1761,10 @@ table.cbi-section-table select {
 table.cbi-section-table td.cbi-section-table-cell {
 	white-space: nowrap;
 	text-align: right;
+}
+
+table.cbi-section-table td.cbi-section-table-cell select {
+	width: inherit;
 }
 
 .cbi-value-description { display: inline; }
