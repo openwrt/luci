@@ -21,7 +21,7 @@ enable.default = 0
 
 host = s:option(Value, "Host", translate("Host"), translate("IP or hostname where to get the txtinfo output from"))
 host.placeholder = "127.0.0.1"
-host.datatype = "hostname"
+host.datatype = "host"
 host.rmempty = true
 
 port = s:option(Value, "Port", translate("Port"))
