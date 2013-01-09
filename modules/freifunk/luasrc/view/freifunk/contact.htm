@@ -21,10 +21,11 @@ local lon = uci:get_first("system", "system", "longitude")
 local lat = uci:get_first("system", "system", "latitude")
 
 if not contact then
-	nickname, name, mail, phone, location, note = ""
+	nickname, name, homepage, mail, phone, location, note = ""
 else
 	nickname = contact.nickname or ""
 	name = contact.name or ""
+	homepage = contact.homepage or {}
 	mail = contact.mail or ""
 	phone = contact.phone or ""
 	location = uci:get_first("system", "system", "location") or contact.location
@@ -39,6 +40,11 @@ end
 	<table cellspacing="10" width="100%" style="text-align:left">
 		<tr><th width="33%"><%:Nickname%>:</th><td><%=nickname%></td></tr>
 		<tr><th width="33%"><%:Realname%>:</th><td><%=name%></td></tr>
+		<tr><th width="33%"><%:Homepage%>:</th><td>
+			<% for k, v in ipairs(homepage) do %>
+			<a href="<%=v%>"><%=v%></a><br />
+			<% end %>
+		</td></tr>
 		<tr><th width="33%"><%:E-Mail%>:</th><td><a href="mailto:<%=mail%>"><%=mail%></a></td></tr>
 		<tr><th width="33%"><%:Phone%>:</th><td><%=phone%></td></tr>
 	</table>
