@@ -78,8 +78,10 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 					<option value="" selected="selected"><%:IPv4%></option>
 					<option value="6"><%:IPv6%></option>
 				</select>
-				<% end %>
 				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping, this.form.ping_proto.selectedIndex)" />
+				<% else %>
+				<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping)" />
+				<% end %>
 			</div>
 
 			<div style="width:33%; float:left">
@@ -89,8 +91,14 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 					<option value="" selected="selected"><%:IPv4%></option>
 					<option value="6"><%:IPv6%></option>
 				</select>
-				<% end %>
 				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute, this.form.traceroute_proto.selectedIndex)" />
+				<% else %>
+				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute)" />
+				<% end %>
+				<% if not has_traceroute6 then %>
+					<p>&nbsp;</p>
+					<p><%:Install iputils-traceroute6 for IPv6 traceroute%></p>
+				<% end %>
 			</div>
 
 			<div style="width:33%; float:left;">
