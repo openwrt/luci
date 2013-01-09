@@ -344,6 +344,9 @@ $(eval $(call application,olsr,OLSR configuration and status module,\
 $(eval $(call application,olsr-viz,OLSR Visualisation,\
 	luci-app-olsr +olsrd-mod-txtinfo))
 
+$(eval $(call application,olsr-freifunk-diagnostics,Tools for network diagnosis like traceroute and ping,\
+	luci-app-freifunk-diagnostics))
+
 $(eval $(call application,olsr-services,Show services announced with the nameservice plugin,\
 	luci-app-olsr +olsrd-mod-nameservice))
 
