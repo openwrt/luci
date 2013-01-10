@@ -43,7 +43,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/diag_' + tool + protocol + '/' + addr, null,
+			stxhr.get('<%=luci.dispatcher.build_url("freifunk", "status")%>/diag_' + tool + protocol + '/' + addr, null,
 				function(x)
 				{
 					if (x.responseText)
