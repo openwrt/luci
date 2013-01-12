@@ -80,17 +80,9 @@ uci_commitverbose "Setup wifi interface for $netrenamed" wireless
 ## VAP
 ip4addr="$(uci get meshwizard.netconfig.$net\_ip4addr)"
 
+# check if this hardware supports VAPs
 supports_vap="0"
-if [ "$type" = "atheros" ]; then
-        supports_vap="1"
-elif [ "$type" = "mac80211" ]; then
-	# get driver in use
-	netindex="$(echo $net |sed 's/[a-zA-z]*//')"
-	driver="$(basename $(ls -l /sys/class/net/wlan${netindex}/device/driver/module | sed -ne 's/.* -> //p'))"
-	if [ "$driver" = "ath9k" -o  "$driver" = "ath5k" ]; then
-		supports_vap="1"
-	fi
-fi
+$dir/helpers/supports_vap.sh $net $type && supports_vap=1
 
 if [ "$supports_vap" == "1" -a "$vap" == 1 ]; then
 	uci batch <<- EOF
