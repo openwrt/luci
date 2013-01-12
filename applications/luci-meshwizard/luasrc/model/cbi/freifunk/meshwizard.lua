@@ -142,7 +142,11 @@ uci:foreach("wireless", "wifi-device", function(section)
 	end
 
 	-- Enable VAP
-	if hwtype == "atheros" then
+	local supports_vap = 0
+	if sys.call("/usr/bin/meshwizard/helpers/supports_vap.sh " .. device .. " " .. hwtype) == 0 then
+		supports_vap = 1
+	end
+	if supports_vap == 1 then
 		local vap = n:taboption(device, Flag, device .. "_vap", translate("Virtual Access Point (VAP)"),
 			translate("This will setup a new virtual wireless interface in Access Point mode."))
 		vap:depends(device .. "_dhcp", "1")
