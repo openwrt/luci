@@ -96,7 +96,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 				<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute)" />
 				<% end %>
 				<% if not has_traceroute6 then %>
-					<p>&nbsp;</p>
+					<p>&#160;</p>
 					<p><%:Install iputils-traceroute6 for IPv6 traceroute%></p>
 				<% end %>
 			</div>
