@@ -236,6 +236,7 @@ name.rmempty  = true
 
 mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 mac.datatype = "list(macaddr)"
+mac.rmempty  = true
 
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ip.datatype = "ip4addr"
@@ -247,6 +248,15 @@ sys.net.arptable(function(entry)
 		entry["HW address"] .. " (" .. entry["IP address"] .. ")"
 	)
 end)
+
+function ip.validate(self, value, section)
+	local m = mac:formvalue(section) or ""
+	local n = name:formvalue(section) or ""
+	if value and #n == 0 and #m == 0 then
+		return nil, translate("One of hostname or mac address must be specified!")
+	end
+	return Value.validate(self, value, section)
+end
 
 
 return m

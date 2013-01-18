@@ -1164,31 +1164,24 @@ function interface.is_bridgeport(self)
 	return self.dev and self.dev.bridge and true or false
 end
 
-local function uint(x)
-	if x then
-		return (x < 0) and ((2^32) + x) or x
-	end
-	return 0
-end
-
 function interface.tx_bytes(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.tx_bytes) or 0
+	return stat and stat.tx_bytes or 0
 end
 
 function interface.rx_bytes(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.rx_bytes) or 0
+	return stat and stat.rx_bytes or 0
 end
 
 function interface.tx_packets(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.tx_packets) or 0
+	return stat and stat.tx_packets or 0
 end
 
 function interface.rx_packets(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.rx_packets) or 0
+	return stat and stat.rx_packets or 0
 end
 
 function interface.get_network(self)

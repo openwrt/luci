@@ -168,7 +168,7 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "interfaces")%>">
+					<a href="<%=REQUEST_URI%>/interfaces">
 						<span id="nr_ifaces">
 							<%=nr_ifaces%>
 						<span>
@@ -189,7 +189,7 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "neighbors")%>">
+					<a href="<%=REQUEST_URI%>/neighbors">
 						<span id="nr_neigh">
 							<%=nr_neigh%>
 						</span>
@@ -210,7 +210,7 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
+					<a href="<%=REQUEST_URI%>/topology">
 						<span id="nr_nodes">
 							<%=nr_nodes%>
 						</span>
@@ -226,7 +226,7 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "hna")%>">
+					<a href="<%=REQUEST_URI%>/hna">
 						<span id="nr_hna">
 							<%=nr_hna%>
 						</span>
@@ -242,7 +242,7 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 			</div>
 			<div class="cbi-value-field">
 				<div style="width: 6em; float:left;">
-					<a href="<%=luci.dispatcher.build_url("freifunk", "olsr", "topology")%>">
+					<a href="<%=REQUEST_URI%>/topology">
 						<span id="nr_topo">
 							<%=nr_topo%>
 						</span>

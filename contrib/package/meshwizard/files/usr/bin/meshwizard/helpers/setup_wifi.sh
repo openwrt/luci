@@ -79,7 +79,16 @@ uci_commitverbose "Setup wifi interface for $netrenamed" wireless
 
 ## VAP
 ip4addr="$(uci get meshwizard.netconfig.$net\_ip4addr)"
-if [ "$type" == "atheros" -a "$vap" == 1 ]; then
+
+# check if this hardware supports VAPs
+# the interface needs to be up before the check can happen
+
+/sbin/wifi
+
+supports_vap="0"
+$dir/helpers/supports_vap.sh $net $type && supports_vap=1
+
+if [ "$supports_vap" == "1" -a "$vap" == 1 ]; then
 	uci batch <<- EOF
 		set wireless.$net\_iface_dhcp="wifi-iface"
 		set wireless.$net\_iface_dhcp.device="$net"

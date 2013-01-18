@@ -10,7 +10,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
 module("luci.controller.upnp", package.seeall)
@@ -23,9 +22,6 @@ function index()
 	local page
 
 	page = entry({"admin", "services", "upnp"}, cbi("upnp/upnp"), _("UPNP"))
-	page.dependent = true
-
-	page = entry({"mini", "network", "upnp"}, cbi("upnp/upnpmini", {autoapply=true}), _("UPNP"))
 	page.dependent = true
 
 	entry({"admin", "services", "upnp", "status"}, call("act_status")).leaf = true
@@ -67,11 +63,20 @@ function act_status()
 	end
 end
 
-function act_delete(idx)
-	idx = tonumber(idx)
+function act_delete(num)
+	local idx = tonumber(num)
+	local uci = luci.model.uci.cursor()
+
 	if idx and idx > 0 then
 		luci.sys.call("iptables -t filter -D MINIUPNPD %d 2>/dev/null" % idx)
 		luci.sys.call("iptables -t nat -D MINIUPNPD %d 2>/dev/null" % idx)
+
+		local lease_file = uci:get("upnpd", "config", "upnp_lease_file")
+		if lease_file and nixio.fs.access(lease_file) then
+			luci.sys.call("sed -i -e '%dd' %q" %{ idx, lease_file })
+		end
+
+		luci.http.status(200, "OK")
 		return
 	end
 

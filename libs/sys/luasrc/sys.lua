@@ -695,38 +695,29 @@ end
 function process.list()
 	local data = {}
 	local k
-	local ps = luci.util.execi("top -bn1")
+	local ps = luci.util.execi("/bin/busybox top -bn1")
 
 	if not ps then
 		return
 	end
 
-	while true do
-		local line = ps()
-		if not line then
-			return
-		end
-
-		k = luci.util.split(luci.util.trim(line), "%s+", nil, true)
-		if k[6] == "%VSZ" then
-			k[6] = "%MEM"
-		end
-		if k[1] == "PID" then
-			break
-		end
-	end
-
 	for line in ps do
-		local row = {}
+		local pid, ppid, user, stat, vsz, mem, cpu, cmd = line:match(
+			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][W ][<N ]) +(%d+) +(%d+%%) +(%d+%%) +(.+)"
+		)
 
-		line = luci.util.trim(line)
-		for i, value in ipairs(luci.util.split(line, "%s+", #k-1, true)) do
-			row[k[i]] = value
-		end
-
-		local pid = tonumber(row[k[1]])
-		if pid then
-			data[pid] = row
+		local idx = tonumber(pid)
+		if idx then
+			data[idx] = {
+				['PID']     = pid,
+				['PPID']    = ppid,
+				['USER']    = user,
+				['STAT']    = stat,
+				['VSZ']     = vsz,
+				['%MEM']    = mem,
+				['%CPU']    = cpu,
+				['COMMAND'] = cmd
+			}
 		end
 	end
 
