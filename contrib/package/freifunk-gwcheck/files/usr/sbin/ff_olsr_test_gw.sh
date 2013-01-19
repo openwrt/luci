@@ -1,5 +1,14 @@
 #!/bin/sh
 
+. /lib/functions/network.sh
+
+#Exit if this script is already running
+pid="$(pidof ff_olsr_test_gw.sh)"
+if [ ${#pid} -gt 5 ]; then
+	logger -t gwcheck "Gateway check script is already running, exit now"
+	exit 1
+fi
+
 #check if dyngw_plain is installed and enabled, else exit
 dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
 if [ -n "$dyngwplainlib" ]; then
@@ -52,31 +61,70 @@ check_internet() {
 	done
 }
 
+resolve() {
+	echo "$(nslookup $1 2>/dev/null |grep 'Address' |grep -v '127.0.0.1' |awk '{ print $3 }')"
+}
+
+get_dnsservers() {
+	# this gets all dns servers for the wan interface. If ubus is not present (like on older
+	# openwrt versions before Attitude fallback to get these from /var/state/network.
+
+	dns=""
+	if [ -x /bin/ubus ]; then
+		network_get_dnsserver dns wan
+	else
+		dns="$(grep network.wan.resolv_dns /var/state/network | cut -d "=" -f 2)"
+	fi
+}
+
 iw=$(check_internet)
+
 
 if [ "$iw" == 0 ]; then
 	# check if we have a seperate routing table for our tests.
 	# If yes, move defaultroute to normal table and delete table gw-check
+	# Also delete ip rules to use table gw-check for our testhosts and wan dns servers
+	
 	if [ -n "$defroutegwcheck" ]; then
 		ip r a $defroutegwcheck
 		ip r d $defroutegwcheck t gw-check
 		ip ru del fwmark 0x2 lookup gw-check
 		for host in $testserver; do
-			iptables -t mangle -D OUTPUT -d $host -p tcp --dport 80 -j MARK --set-mark 0x2
+			ips="$(resolve $host)"
+			for ip in $ips; do
+				[ -n "$(ip ru s | grep "to $ip lookup gw-check")" ] && ip rule del to $ip table gw-check
+			done
 		done
+
+		get_dnsservers
+		for d in $dns; do
+			[ -n "$(ip ru s | grep "to $d lookup gw-check")" ] && ip rule del to $d table gw-check
+		done
+
+		#ip r d default via 127.0.0.1 metric 100000
 		logger -t gw-check "Internet is available again, restoring default route ( $defroutegwcheck)"
 	fi
 
 else
 	# Check failed. If we have a defaultroute with metric=0 and it is already in table gw-check then do nothing.
 	# If there is a defaultroute with metric=0 then remove it from the main routing table and add to table gw-check.
+	# Also setup ip rules to use table gw-check for our testhosts and wan dns servers
+
 	if [ -z "$(ip ru s | grep gw-check)" -a -n "$defroutemain" ]; then
 		ip rule add fwmark 0x2 lookup gw-check
-		for host in $testserver; do
-			iptables -t mangle -I OUTPUT -d $host -p tcp --dport 80 -j MARK --set-mark 0x2
-		done
 		ip r a $defroutemain table gw-check
 		ip r d $defroutemain
-		logger -t gw-check "Internet is not available, deactivating the default route ( $defroutemain)"
 	fi
+	for host in $testserver; do
+		ips="$(resolve $host)"
+		for ip in $ips; do
+			[ -z "$(ip ru s | grep "to $ip lookup gw-check")" ] && ip rule add to $ip table gw-check
+		done
+	done
+	get_dnsservers
+	for d in $dns; do
+		[ -z "$(ip ru s | grep "to $d lookup gw-check")" ] && ip rule add to $d table gw-check
+	done
+	#ip r a default via 127.0.0.1 metric 100000
+	logger -t gw-check "Internet is not available, deactivating the default route ( $defroutemain)"
 fi
