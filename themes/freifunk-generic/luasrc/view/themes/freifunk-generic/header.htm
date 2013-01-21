@@ -75,6 +75,7 @@ You may obtain a copy of the License at
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
 <link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
+<link rel="stylesheet" media="only screen and (max-width: 854px)" href="<%=media%>/smallscreen.css" type="text/css" />
 <link rel="stylesheet" media="handheld" href="<%=media%>/mobile.css" type="text/css" />
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
@@ -83,6 +84,7 @@ You may obtain a copy of the License at
 <%= css %>
 </style>
 <% end -%>
+<meta name="viewport" content="initial-scale=1.0">
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(tostring(node.title)) or '')) %> - LuCI</title>
@@ -117,12 +119,11 @@ You may obtain a copy of the License at
 		</div>
 	<%else%>
 		<div class="header_left">
-			<a href="<%=hp%>"><img src="<%=logo%>" alt="Logo" /></a>
+			<a href="<%=hp%>"><img src="<%=logo%>" id="mainlogo" alt="Logo" /></a>
 			<%if show_comm then%>
 				<a href="<%=hp%>"><%=community%></a>
 				<br/>
 			<%end%>
-		<div class = "spacer"></div>
 		</div>
 		<div class="header_right">
 			<%=luci.version.distversion%><br />
@@ -134,6 +135,8 @@ You may obtain a copy of the License at
 				<span id="xhr_poll_status_off" style="display:none"><%:off%></span>
 			</span>
 		</div>
+		<div class="clear"></div>
+
 	<%end%>
 </div>
 
