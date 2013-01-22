@@ -12,8 +12,7 @@ You may obtain a copy of the License at
 
 local map, section, net = ...
 
-local ipaddr, adv_interface, adv_subnet
-local adv_valid_lifetime, adv_preferred_lifetime, defaultroute, metric, ttl, mtu
+local ipaddr, defaultroute, metric, ttl, mtu
 
 
 ipaddr = section:taboption("general", Value, "ipaddr",
@@ -21,67 +20,6 @@ ipaddr = section:taboption("general", Value, "ipaddr",
 	translate("Leave empty to use the current WAN address"))
 
 ipaddr.datatype = "ip4addr"
-
-
-adv_interface = section:taboption("general", Value, "adv_interface", translate("Advertise IPv6 on network"))
-adv_interface.widget = "checkbox"
-adv_interface.exclude = arg[1]
-adv_interface.default = "lan"
-adv_interface.template = "cbi/network_netlist"
-adv_interface.nocreate = true
-adv_interface.nobridges = true
-adv_interface.novirtual = true
-
-function adv_interface.write(self, section, value)
-	if type(value) == "table" then
-		Value.write(self, section, table.concat(value, " "))
-	else
-		Value.write(self, section, value)
-	end
-end
-
-function adv_interface.remove(self, section)
-	self:write(section, " ")
-end
-
-adv_subnet  = section:taboption("general", Value, "adv_subnet",
-	translate("Advertised network ID"),
-	translate("Allowed range is 1 to 65535"))
-
-adv_subnet.placeholder = "1"
-adv_subnet.datatype    = "range(1,65535)"
-
-function adv_subnet.cfgvalue(self, section)
-	local v = Value.cfgvalue(self, section)
-	return v and tonumber(v, 16)
-end
-
-function adv_subnet .write(self, section, value)
-	value = tonumber(value) or 1
-
-	if value > 65535 then value = 65535
-	elseif value < 1 then value = 1 end
-
-	Value.write(self, section, "%X" % value)
-end
-
-
-adv_valid_lifetime = section:taboption("advanced", Value, "adv_valid_lifetime",
-	translate("Use valid lifetime"),
-	translate("Specifies the advertised valid prefix lifetime in seconds"))
-
-adv_valid_lifetime.placeholder = "300"
-adv_valid_lifetime.datatype    = "uinteger"
-
-
-adv_preferred_lifetime = section:taboption("advanced", Value, "adv_preferred_lifetime",
-	translate("Use preferred lifetime"),
-	translate("Specifies the advertised preferred prefix lifetime in seconds"))
-
-adv_preferred_lifetime.placeholder = "120"
-adv_preferred_lifetime.datatype    = "uinteger"
-
-
 
 defaultroute = section:taboption("advanced", Flag, "defaultroute",
 	translate("Use default gateway"),

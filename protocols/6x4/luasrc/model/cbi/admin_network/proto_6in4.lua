@@ -38,6 +38,13 @@ ip6addr = s:taboption("general", Value, "ip6addr",
 ip6addr.datatype = "ip6addr"
 
 
+local ip6prefix = s:taboption("general", Value, "ip6prefix",
+	translate("IPv6 routed prefix"),
+	translate("This is the prefix routed to you by the tunnel broker for use by clients"))
+
+ip6prefix.datatype = "ip6addr"
+
+
 local update = section:taboption("general", Flag, "_update",
 	translate("Dynamic tunnel"),
 	translate("Enable HE.net dynamic endpoint update"))
