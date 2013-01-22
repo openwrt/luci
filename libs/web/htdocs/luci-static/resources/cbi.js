@@ -335,7 +335,7 @@ function cbi_d_checkvalue(target, ref) {
 	if (!t) {
 		var tl = document.getElementsByName(target);
 
-		if( tl.length > 0 && tl[0].type == 'radio' )
+		if( tl.length > 0 && (tl[0].type == 'radio' || tl[0].type == 'checkbox'))
 			for( var i = 0; i < tl.length; i++ )
 				if( tl[i].checked ) {
 					value = tl[i].value;

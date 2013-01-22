@@ -1,7 +1,7 @@
 <% local v = self:valuelist(section) or {} -%>
 <%+cbi/valueheader%>
 <% if self.widget == "select" then %>
-	<select class="cbi-input-select" multiple="multiple"<%= attr("name", cbid) .. ifattr(self.size, "size") %>>
+	<select class="cbi-input-select" multiple="multiple" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%= attr("name", cbid) .. ifattr(self.size, "size") %>>
 	<% for i, key in pairs(self.keylist) do -%>
 		<option<%= attr("value", key) .. ifattr(luci.util.contains(v, key), "selected", "selected") %>><%=striptags(self.vallist[i])%></option>
 	<%- end %>
@@ -11,7 +11,7 @@
 	for i, key in pairs(self.keylist) do
 	c = c + 1
 %>
-	<input class="cbi-input-checkbox" type="checkbox"<%= attr("id", cbid..c) .. attr("name", cbid) .. attr("value", key) .. ifattr(luci.util.contains(v, key), "checked", "checked") %> />
+	<input class="cbi-input-checkbox" type="checkbox" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%= attr("id", cbid..c) .. attr("name", cbid) .. attr("value", key) .. ifattr(luci.util.contains(v, key), "checked", "checked") %> />
 	<label<%= attr("for", cbid..c) %>><%=self.vallist[i]%></label><br />
 <% if c == self.size then c = 0 %><br />
 <% end end %>
