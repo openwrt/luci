@@ -1,5 +1,16 @@
 [ "$INTERFACE" != "wan" ] && exit 0
 [ -f /proc/net/ipv6_route ] && has_ipv6=1
+
+olsrd_rmtables() {
+	# Remove custom routing tables from olsrd
+	if [ "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
+		uci delete olsrd.@olsrd[0].RtTable
+		uci delete olsrd.@olsrd[0].RtTableDefault
+		uci commit
+		/etc/init.d/olsrd restart
+	fi
+}
+
 case $ACTION in
         ifup)
 		pr="`uci get freifunk-policyrouting.pr.enable`"
@@ -77,18 +88,13 @@ case $ACTION in
 	                        [ "$fallback" = 1 ] && ip -6 rule add lookup olsr-default prio 16420
 			fi
 		else
-			# Remove custom routing tables from olsrd
-			if [ "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
-				uci delete olsrd.@olsrd[0].RtTable
-				uci delete olsrd.@olsrd[0].RtTableDefault
-				uci commit
-				/etc/init.d/olsrd restart
-			fi
+			olsrd_rmtables
 		fi
 	;;
 
 	ifdown)
 	logger -s -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
+	olsrd_rmtables
 	ip rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
 	ip rule del lookup olsr-default > /dev/null 2>&1
 	ip rule del lookup olsr	> /dev/null 2>&1
