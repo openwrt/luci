@@ -123,8 +123,8 @@ lmo_archive_t * lmo_open(const char *file)
 		if ((ar->mmap = mmap(NULL, ar->size, PROT_READ, MAP_SHARED, ar->fd, 0)) == MAP_FAILED)
 			goto err;
 
-		idx_offset = *((const uint32_t *)
-					   (ar->mmap + ar->size - sizeof(uint32_t)));
+		idx_offset = ntohl(*((const uint32_t *)
+		                     (ar->mmap + ar->size - sizeof(uint32_t))));
 
 		if (idx_offset >= ar->size)
 			goto err;
