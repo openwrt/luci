@@ -84,8 +84,8 @@ static int extract_string(const char *src, char *dest, int len)
 
 static int cmp_index(const void *a, const void *b)
 {
-	uint32_t x = ntohl(((const lmo_entry_t *)a)->key_id);
-	uint32_t y = ntohl(((const lmo_entry_t *)b)->key_id);
+	uint32_t x = ((const lmo_entry_t *)a)->key_id;
+	uint32_t y = ((const lmo_entry_t *)b)->key_id;
 
 	if (x < y)
 		return -1;
@@ -93,6 +93,12 @@ static int cmp_index(const void *a, const void *b)
 		return 1;
 
 	return 0;
+}
+
+static void print_uint32(uint32_t x, FILE *out)
+{
+	uint32_t y = htonl(x);
+	print(&y, sizeof(uint32_t), 1, out);
 }
 
 static void print_index(void *array, int n, FILE *out)
@@ -103,10 +109,10 @@ static void print_index(void *array, int n, FILE *out)
 
 	for (e = array; n > 0; n--, e++)
 	{
-		print(&e->key_id, sizeof(uint32_t), 1, out);
-		print(&e->val_id, sizeof(uint32_t), 1, out);
-		print(&e->offset, sizeof(uint32_t), 1, out);
-		print(&e->length, sizeof(uint32_t), 1, out);
+		print_uint32(e->key_id, out);
+		print_uint32(e->val_id, out);
+		print_uint32(e->offset, out);
+		print_uint32(e->length, out);
 	}
 }
 
@@ -202,10 +208,10 @@ int main(int argc, char *argv[])
 					if (!array)
 						die("Out of memory");
 
-					entry->key_id = htonl(key_id);
-					entry->val_id = htonl(val_id);
-					entry->offset = htonl(offset);
-					entry->length = htonl(strlen(val));
+					entry->key_id = key_id;
+					entry->val_id = val_id;
+					entry->offset = offset;
+					entry->length = strlen(val);
 
 					length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
 
@@ -226,8 +232,7 @@ int main(int argc, char *argv[])
 
 	if( offset > 0 )
 	{
-		offset = htonl(offset);
-		print(&offset, sizeof(uint32_t), 1, out);
+		print_uint32(offset, out);
 		fsync(fileno(out));
 		fclose(out);
 	}

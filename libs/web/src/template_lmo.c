@@ -123,8 +123,8 @@ lmo_archive_t * lmo_open(const char *file)
 		if ((ar->mmap = mmap(NULL, ar->size, PROT_READ, MAP_SHARED, ar->fd, 0)) == MAP_FAILED)
 			goto err;
 
-		idx_offset = *((const uint32_t *)
-					   (ar->mmap + ar->size - sizeof(uint32_t)));
+		idx_offset = ntohl(*((const uint32_t *)
+		                     (ar->mmap + ar->size - sizeof(uint32_t))));
 
 		if (idx_offset >= ar->size)
 			goto err;
@@ -244,6 +244,7 @@ int lmo_change_catalog(const char *lang)
 static lmo_entry_t * lmo_find_entry(lmo_archive_t *ar, uint32_t hash)
 {
 	unsigned int m, l, r;
+	uint32_t k;
 
 	l = 0;
 	r = ar->length - 1;
@@ -255,10 +256,12 @@ static lmo_entry_t * lmo_find_entry(lmo_archive_t *ar, uint32_t hash)
 		if (r < l)
 			break;
 
-		if (ar->index[m].key_id == hash)
+		k = ntohl(ar->index[m].key_id);
+
+		if (k == hash)
 			return &ar->index[m];
 
-		if (ar->index[m].key_id > hash)
+		if (k > hash)
 		{
 			if (!m)
 				break;
@@ -283,14 +286,14 @@ int lmo_translate(const char *key, int keylen, char **out, int *outlen)
 	if (!key || !_lmo_active_catalog)
 		return -2;
 
-	hash = htonl(lmo_canon_hash(key, keylen));
+	hash = lmo_canon_hash(key, keylen);
 
 	for (ar = _lmo_active_catalog->archives; ar; ar = ar->next)
 	{
 		if ((e = lmo_find_entry(ar, hash)) != NULL)
 		{
-			*out = ar->mmap + e->offset;
-			*outlen = e->length;
+			*out = ar->mmap + ntohl(e->offset);
+			*outlen = ntohl(e->length);
 			return 0;
 		}
 	}
