@@ -1,11 +1,11 @@
 #!/bin/sh /etc/rc.common
 
 START=60
-
+. /lib/functions/network.sh
 boot()
 {
 	prenabled=$(uci get freifunk-policyrouting.pr.enable)
-	if [ ! "$prenabled" = "1" ]; then
+	if [ ! "$prenabled" = "1" ] || ! network_is_up wan; then
 		uci -q delete olsrd.@olsrd[0].RtTable
 		uci -q delete olsrd.@olsrd[0].RtTableDefault
 		uci commit olsrd
