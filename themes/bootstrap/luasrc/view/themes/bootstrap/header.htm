@@ -102,7 +102,9 @@ You may obtain a copy of the License at
   <meta charset="utf-8">
   <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
   <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
+  <meta name="viewport" content="initial-scale=1.0">
   <link rel="stylesheet" href="<%=media%>/cascade.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
   <link rel="shortcut icon" href="<%=media%>/favicon.ico">
   <% if node and node.css then %><link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
   <% end -%>
@@ -192,7 +194,6 @@ You may obtain a copy of the License at
     </div>
    </div>
   </header>
-
 
 <%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 <div class="container">
