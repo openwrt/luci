@@ -58,7 +58,7 @@ if [ "$net_dhcp" == 1 ]; then
 			fi
 	}
 	config_load network
-	config_foreach handle_dhcpalias alias
+	config_foreach handle_dhcpalias interface
 
 	# Get IP/netmask and start-ip for $net dhcp
 	# If no dhcprange is given in /etc/config/meshwizard we autogenerate one
@@ -69,15 +69,15 @@ if [ "$net_dhcp" == 1 ]; then
 	fi
 	eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange 1 0)
 
-	# setup wifi-dhcp interface or alias
+	# setup wifi-dhcp interface or alias (using interface notation)
 
 	# Setup alias for $net
 
 	if [ "$vap" == 1 ]; then
 		uci set network.${netrenamed}dhcp=interface
 	else
-		uci set network.${netrenamed}dhcp=alias
-		uci set network.${netrenamed}dhcp.interface="$netrenamed"
+		uci set network.${netrenamed}dhcp=interface
+		uci set network.${netrenamed}dhcp.ifname="@${netrenamed}"
 	fi
 
 	uci batch <<- EOF
@@ -86,5 +86,4 @@ if [ "$net_dhcp" == 1 ]; then
 		set network.${netrenamed}dhcp.netmask="$NETMASK"
 	EOF
 	uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
-
 fi
