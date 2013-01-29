@@ -339,7 +339,7 @@ $(eval $(call application,meshwizard, Shellscript based wizard to setup mesh net
         +PACKAGE_luci-app-freifunk-meshwizard:meshwizard))
 
 $(eval $(call application,olsr,OLSR configuration and status module,\
-	+olsrd-mod-txtinfo))
+	+olsrd +olsrd-mod-txtinfo))
 
 $(eval $(call application,olsr-viz,OLSR Visualisation,\
 	luci-app-olsr +olsrd-mod-txtinfo))
