@@ -19,13 +19,16 @@ You may obtain a copy of the License at
 	local has_dhcp = luci.fs.access("/etc/config/dhcp")
 	local has_wifi = luci.fs.stat("/etc/config/wireless")
 	      has_wifi = has_wifi and has_wifi.size > 0
+	local _, _, memtotal, memcached, membuffers, memfree, _, swaptotal, swapcached, swapfree = luci.sys.sysinfo()
+	local has_swap
+	if swaptotal > 0 then
+		has_swap = 1
+	end
 
 	if luci.http.formvalue("status") == "1" then
 		local ntm = require "luci.model.network".init()
 		local wan = ntm:get_wannet()
 		local wan6 = ntm:get_wan6net()
-
-		local _, _, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 
 		local conn_count = tonumber((
 			luci.sys.exec("wc -l /proc/net/nf_conntrack") or
@@ -45,6 +48,9 @@ You may obtain a copy of the License at
 			memcached  = memcached,
 			membuffers = membuffers,
 			memfree    = memfree,
+			swaptotal  = swaptotal,
+			swapcached = swapcached,
+			swapfree   = swapfree,
 			connmax    = conn_max,
 			conncount  = conn_count,
 			leases     = luci.tools.status.dhcp_leases(),
@@ -494,6 +500,22 @@ You may obtain a copy of the License at
 					info.membuffers + " <%:kB%>", info.memtotal + " <%:kB%>"
 				);
 
+			if (e = document.getElementById('swapcache'))
+				e.innerHTML = progressbar(
+					info.swapcached + " <%:kB%>", info.swaptotal + " <%:kB%>"
+				);
+
+			if (e = document.getElementById('swaptotal'))
+				e.innerHTML = progressbar(
+					(info.swapfree + info.swapcached) + " <%:kB%>",
+					info.swaptotal + " <%:kB%>"
+				);
+
+			if (e = document.getElementById('swapfree'))
+				e.innerHTML = progressbar(
+					info.swapfree + " <%:kB%>", info.swaptotal + " <%:kB%>"
+				);
+
 			if (e = document.getElementById('conns'))
 				e.innerHTML = progressbar(info.conncount, info.connmax);
 
@@ -530,6 +552,18 @@ You may obtain a copy of the License at
 		<tr><td width="33%"><%:Buffered%></td><td id="membuff">-</td></tr>
 	</table>
 </fieldset>
+
+<% if has_swap then %>
+<fieldset class="cbi-section">
+	<legend><%:Swap%></legend>
+
+	<table width="100%" cellspacing="10">
+		<tr><td width="33%"><%:Total Available%></td><td id="swaptotal">-</td></tr>
+		<tr><td width="33%"><%:Free%></td><td id="swapfree">-</td></tr>
+		<tr><td width="33%"><%:Cached%></td><td id="swapcache">-</td></tr>
+	</table>
+</fieldset>
+<% end %>
 
 <fieldset class="cbi-section">
 	<legend><%:Network%></legend>

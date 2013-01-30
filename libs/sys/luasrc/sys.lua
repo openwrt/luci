@@ -176,6 +176,9 @@ function sysinfo()
 	local memfree = tonumber(meminfo:match("MemFree:%s*(%d+)"))
 	local membuffers = tonumber(meminfo:match("Buffers:%s*(%d+)"))
 	local bogomips = tonumber(cpuinfo:match("[Bb]ogo[Mm][Ii][Pp][Ss].-: ([^\n]+)")) or 0
+	local swaptotal = tonumber(meminfo:match("SwapTotal:%s*(%d+)"))
+	local swapcached = tonumber(meminfo:match("SwapCached:%s*(%d+)"))
+	local swapfree = tonumber(meminfo:match("SwapFree:%s*(%d+)"))
 
 	local system =
 		cpuinfo:match("system type\t+: ([^\n]+)") or
@@ -190,7 +193,7 @@ function sysinfo()
 		nixio.uname().machine or
 		system
 
-	return system, model, memtotal, memcached, membuffers, memfree, bogomips
+	return system, model, memtotal, memcached, membuffers, memfree, bogomips, swaptotal, swapcached, swapfree
 end
 
 --- Retrieves the output of the "logread" command.
