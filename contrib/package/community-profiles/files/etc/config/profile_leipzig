@@ -13,3 +13,32 @@ config 'defaults' 'interface'
 
 config 'defaults' 'bssidscheme'
 	option '1' '02:CA:FF:EE:BA:BE'
+
+config widget 'customindex'
+    option enabled '1'
+    option width '50%'
+    option paddingright '5%'
+    option template 'html'
+
+config widget 'rssffl'
+    option enabled '1'
+    option max '10'
+    option cache '3600'
+    option width '50%'
+    option title 'interner Freifunk Leipzig Blog'
+    option template 'rssfeed'
+    option url 'http://104.61.0.101/wordpress/'
+
+config widget 'rssbundesweit'
+    option cache '3600'
+    option width '50%'
+    option title 'bundesweiter Freifunk Blog'
+    option template 'rssfeed'
+    option enabled '1'
+    option max '10'
+    option url 'http://blog.freifunk.net/rss.xml'
+
+
+config widget 'clear1'
+    option template 'clear'
+    option enabled '1'
