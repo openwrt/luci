@@ -299,7 +299,7 @@ var cbi_validators = {
 	},
 	'phonedigit': function()
 	{
-		return (this.match(/^[0-9\*#]+$/) != null);
+		return (this.match(/^[0-9\*#!\.]+$/) != null);
 	}
 };
 
