@@ -36,10 +36,12 @@ iface_add() {
 	config_get netmask "$net" netmask
 	[ -n "$netmask" ] || return 0
 
-	parentiface="$(uci -q get network.${net}.ifname)"
-	parentiface=${parentiface#@}
+	config_get type "$net" type
 
-	[ -n "$parentiface" ] && {
+	parentiface="$(uci -q get network.${net}.ifname)"
+
+	[ -n "$parentiface" ] && [ ! "$type" = "bridge" ] && {
+		parentiface=${parentiface#@}
 		config_get parentproto   "$parentiface" proto
 		config_get parentipaddr  "$parentiface" ipaddr
 		config_get parentnetmask "$parentiface" netmask
