@@ -529,8 +529,8 @@ You may obtain a copy of the License at
 	<legend><%:System%></legend>
 
 	<table width="100%" cellspacing="10">
-		<tr><td width="33%"><%:Router Name%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
-		<tr><td width="33%"><%:Router Model%></td><td><%=pcdata(model or "?")%></td></tr>
+		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
+		<tr><td width="33%"><%:Model%></td><td><%=pcdata(model or "?")%></td></tr>
 		<tr><td width="33%"><%:Firmware Version%></td><td>
 			<%=pcdata(luci.version.distname)%> <%=pcdata(luci.version.distversion)%> /
 			<%=pcdata(luci.version.luciname)%> (<%=pcdata(luci.version.luciversion)%>)
