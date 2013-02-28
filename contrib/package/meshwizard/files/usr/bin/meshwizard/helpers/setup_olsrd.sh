@@ -93,3 +93,10 @@ uci batch << EOF
 	set olsrd.olsrd_watchdog.interval=30
 EOF
 uci_commitverbose "Setup olsr watchdog plugin" olsrd
+
+# Setup jsoninfo
+uci batch << EOF
+	set olsrd.olsrd_jsoninfo=LoadPlugin
+	set olsrd.olsrd_jsoninfo.library="olsrd_jsoninfo.so.0.0"
+EOF
+uci_commitverbose "Setup olsr jsoninfo plugin" olsrd
