@@ -19,7 +19,16 @@ if [ -n "$(uci -q get meshwizard.community)" ]; then
 	set_defaults "community_" freifunk.community
 	uci -q delete meshwizard.community
 fi
+
 [ -n "$profile_homepage" ] && uci set freifunk.community.homepage="$profile_homepage"
+
+[ -n "$profile_mapserver" ] && {
+	uci -q delete freifunk.community.mapserver
+	for m in $profile_mapserver; do
+		uci add_list freifunk.community.mapserver="$m"
+	done
+}
+
 uci_commitverbose "Setup community" freifunk
 
 if [ -n "$(uci -q get meshwizard.contact)" ]; then
