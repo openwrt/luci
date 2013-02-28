@@ -12,7 +12,7 @@
 . /lib/functions.sh
 
 echo "
-/* Meshwizard 0.0.8 */
+/* Meshwizard 0.0.9 */
 "
 
 # config
