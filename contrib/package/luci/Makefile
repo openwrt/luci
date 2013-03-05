@@ -327,7 +327,7 @@ $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))
 
 $(eval $(call application,firewall,Firewall and Portforwarding application,\
-	+PACKAGE_luci-app-firewall:firewall))
+	+PACKAGE_luci-app-firewall:firewall3))
 
 $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
         +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting))
