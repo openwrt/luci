@@ -150,7 +150,7 @@ for k,v in pairs(validoutaccounts) do
    patterns = s:option(DynamicList, k, v)
    
    -- If the saved field is empty, we return a string
-   -- telling the user that this account would dial any exten.
+   -- telling the user that this provider would dial any exten.
    function patterns.cfgvalue(self, section)
       value = self.map:get(section, self.option)
       
@@ -200,8 +200,8 @@ s.anonymous = true
 for k,v in pairs(validinaccounts) do
    users = s:option(DynamicList, k, v)
    
-   -- If the saved field is empty, we return a string
-   -- telling the user that this account would dial any exten.
+   -- If the saved field is empty, we return a string telling the user that
+   -- this provider would ring all users configured for incoming calls.
    function users.cfgvalue(self, section)
       value = self.map:get(section, self.option)
       
@@ -253,8 +253,8 @@ s.anonymous = true
 for k,v in pairs(validoutusers) do
    providers = s:option(DynamicList, k, k)
 
-   -- If the saved field is empty, we return a string
-   -- telling the user that this account would dial any exten.
+   -- If the saved field is empty, we return a string telling the user
+   -- that this user uses all providers enavled for outgoing calls.
    function providers.cfgvalue(self, section)
       value = self.map:get(section, self.option)
       
@@ -289,11 +289,14 @@ end
 ----------------------------------------------------------------------------------------------------
 s = m:section(TypedSection, "callthrough_numbers", translate("Call-through Numbers"),
         translate("Designate numbers that are allowed to call through this system and which user's \
-                  privileges it will have."))
+                  privileges they will have."))
 s.anonymous = true
 s.addremove = true
 
-num = s:option(DynamicList, "callthrough_number_list", translate("Call-through Numbers"))
+num = s:option(DynamicList, "callthrough_number_list", translate("Call-through Numbers"),
+        translate("Specify numbers individually here. Press enter to add more numbers. \
+        You will have to experiment with what country and area codes you need to add \
+        to the number."))
 num.datatype = "uinteger"
 
 p = s:option(ListValue, "enabled", translate("Enabled"))
@@ -329,6 +332,74 @@ end
 function pwd.write(self, section, value)
     local orig_pwd = m:get(section, self.option)
     if value and #value > 0 and orig_pwd ~= value then
+        Value.write(self, section, value)
+    end
+end
+
+----------------------------------------------------------------------------------------------------
+s = m:section(TypedSection, "callback_numbers", translate("Call-back Numbers"),
+        translate("Designate numbers to whom the system will hang up and call back, which provider will \
+                   be used to call them, and which user's privileges will be granted to them."))
+s.anonymous = true
+s.addremove = true
+
+num = s:option(DynamicList, "callback_number_list", translate("Call-back Numbers"),
+        translate("Specify numbers individually here. Press enter to add more numbers. \
+        You will have to experiment with what country and area codes you need to add \
+        to the number."))
+num.datatype = "uinteger"
+
+p = s:option(ListValue, "enabled", translate("Enabled"))
+p:value("yes", translate("Yes"))
+p:value("no",  translate("No"))
+p.default = "yes"
+
+delay = s:option(Value, "callback_hangup_delay", translate("Hang-up Delay"),
+            translate("How long to wait before hanging up. If the provider you use to dial automatically forwards \
+            to voicemail, you can set this value to a delay that will allow you to hang up before your call gets \
+            forwarded and you get billed for it."))
+delay.datatype = "uinteger"
+delay.default = 0
+
+user = s:option(Value, "defaultuser",  translate("User Name"),
+         translate("The number(s) specified above will be able to dial out with this user's providers. \
+                   Invalid usernames, including users not enabled for outgoing calls, are dropped silently. \
+                   Please verify that the entry was accepted."))
+function user.write(self, section, value)
+   trimuser = luci.util.trim(value)
+   if allvalidusers[trimuser] == true then
+      Value.write(self, section, trimuser)
+   end
+end
+
+pwd = s:option(Value, "pin", translate("PIN"),
+               translate("Your PIN disappears when saved for your protection. It will be changed \
+                         only when you enter a value different from the saved one. Leaving the PIN \
+                         empty is possible, but please beware of the security implications."))
+pwd.password = true
+pwd.rmempty = false
+
+-- We skip reading off the saved value and return nothing.
+function pwd.cfgvalue(self, section)
+    return "" 
+end
+
+-- We check the entered value against the saved one, and only write if the entered value is
+-- something other than the empty string, and it differes from the saved value.
+function pwd.write(self, section, value)
+    local orig_pwd = m:get(section, self.option)
+    if value and #value > 0 and orig_pwd ~= value then
+        Value.write(self, section, value)
+    end
+end
+
+provider = s:option(Value, "callback_provider",  translate("Call-back Provider"),
+         translate("Enter a VoIP provider to use for call-back in the format username@some.host.name, as listed in \
+         \"Outgoing Calls\" above. It's easiest to copy and paste the providers from above. Invalid entries, including \
+         providers not enabled for outgoing calls, will be rejected silently."))
+function provider.write(self, section, value)
+    cooked = string.gsub(luci.util.trim(value), "%W", "_")
+    if validoutaccounts[cooked] ~= nil then
         Value.write(self, section, value)
     end
 end

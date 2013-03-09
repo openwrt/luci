@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Check if there are more than one instance of this command
+# with the same command line running at the same time for some
+# reason, then quit. We are checking for the same
+# commandline in order to permit two different callback
+# attempts simultaneously.
+
+if ! grep -q "$@" /dev/shm/delayedcallback.[0-9]* 2>/dev/null
+then
+  echo "$@" > /dev/shm/delayedcallback.$$
+  sleep 25
+  asterisk -r -x "$1 $2 \"$3\" $4 $5 $6"
+  rm /dev/shm/delayedcallback.$$
+#  echo "`date` $@": >> /dev/shm/delayedcallback.log
+#else
+#  echo "`date` ERROR: There appears to be a callback attempt in progress to: $@" >> /dev/shm/delayedcallback.err
+fi

@@ -64,20 +64,23 @@ savepath = s:option(Value, "global_save_path", translate("Local Storage Director
                               option only if you know what you are doing."))
 savepath.optional = true
 
-if     nixio.fs.access("/etc/pbx-voicemail/greeting.WAV")   then
+if     nixio.fs.access("/etc/pbx-voicemail/recordings/greeting.gsm")   then
    m1 = s:option(DummyValue, "_m1")
    m1:depends("enabled", "yes")
    m1.default = "NOTE: Found a voicemail greeting. To check or change your voicemail greeting, dial *789 \
-                 and the system will play your current message. You have 5 seconds to hangup, otherwise a \
-                 new recording will begin and your old message will be overwritten. Hang up or press # to \
-                 stop recording. When you press #, the system will play back the new recording."
+                 and the system will play back your current greeting. After that, a long beep will sound and \
+                 you can press * in order to record a new message. Hang up to avoid recording a message. \
+                 If you press *, a second long beep will sound, and you can record a new greeting. \
+                 Hang up or press # to stop recording. When # is pressed the system will play back the \
+                 new greeting."
 else
    m1 = s:option(DummyValue, "_m1")
    m1:depends("enabled", "yes")
    m1.default = "WARNING: Could not find voicemail greeting. Callers will hear only a beep before \
-                 recording starts. To record a greeting, dial *789 and record a greeting after the beep. \
+                 recording starts. To record a greeting, dial *789, and press * after the long beep. \
+                 If you press *, a second long beep will sound, and you can record a new greeting. \
                  Hang up or press # to stop recording. When # is pressed the system will play back the \
-                 recording."
+                 new greeting."
 end
 
 

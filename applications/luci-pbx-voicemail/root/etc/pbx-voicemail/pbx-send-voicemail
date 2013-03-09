@@ -19,10 +19,10 @@
 #
 #
 # Thanks to http://www.zedwood.com for providing an excellent example of how to
-# properly assemble an email message with a uuencoded attachment.
+# properly assemble an email message with a base64 encoded attachment.
 #
 
-LOGFILE=/tmp/last_sent_voicemail.log
+LOGFILE=/tmp/voicemail/last_sent_voicemail.log
 
 # Redirect standard error and standard output to a log file.
 rm  -f "$LOGFILE"
@@ -58,8 +58,8 @@ REPLY="do-not-reply@pbx"
 SUBJECT="Voicemail from $CALLERID, $DATE, $TIME"
 MSGBODY="$CALLERID has left voicemail for you on $DATE at $TIME."
 MIMETYPE="audio/wav"
-TMP1="/tmp/tmpemail1.$$";
-TMP2="/tmp/tmpemail2.$$";
+TMP1="/tmp/voicemail/tmpemail1.$$";
+TMP2="/tmp/voicemail/tmpemail2.$$";
 BOUNDARY="`date +%s | md5sum | awk '{print $1}'`"
 FILENAME="voicemail-$DATE-$TIME.WAV"
 
@@ -97,7 +97,7 @@ append_to_file $TMP2 ""
 
 # Cat everything together and pass to msmtprc to send out.
 ( cat $TMP1
-  cat "$ATTACHMENT" | uuencode --base64 /dev/stdout | sed -e '1,1d' -e '$d'
+  cat "$ATTACHMENT" | base64
   cat $TMP2 ) | msmtp -t -C /etc/pbx-msmtprc
 
 # Clean up email temp files.

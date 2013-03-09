@@ -1,0 +1,1 @@
+exten => s,n,Gotoif($[ "${CALLERID(NUM)}" =~ ".*|NUMBER|" ]?context-user-callback,|NUMBER|,1)

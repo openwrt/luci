@@ -448,10 +448,16 @@ $(eval $(call application,pbx,LuCI PBX Administration,\
 	+PACKAGE_luci-app-pbx:asterisk18-codec-a-mu \
 	+PACKAGE_luci-app-pbx:asterisk18-codec-alaw \
 	+PACKAGE_luci-app-pbx:asterisk18-func-cut \
-	+PACKAGE_luci-app-pbx:asterisk18-res-clioriginate))
+	+PACKAGE_luci-app-pbx:asterisk18-res-clioriginate \
+	+PACKAGE_luci-app-pbx:asterisk18-func-channel \
+	+PACKAGE_luci-app-pbx:asterisk18-chan-local \
+	+PACKAGE_luci-app-pbx:asterisk18-app-record \
+	+PACKAGE_luci-app-pbx:asterisk18-app-senddtmf \
+	+PACKAGE_luci-app-pbx:asterisk18-res-crypto))
 
 $(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,\
-	luci-app-pbx +PACKAGE_luci-app-pbx-voicemail:msmtp))
+	luci-app-pbx +PACKAGE_luci-app-pbx-voicemail:msmtp \
+	+PACKAGE_luci-app-pbx-voicemail:coreutils-base64))
 
 $(eval $(call application,ltqtapi,Lantiq voip))
 

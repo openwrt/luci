@@ -1,0 +1,4 @@
+exten => |NUMBER|,1,System(/etc/pbx-asterisk/delayedcallback "channel originate SIP/|NUMBER|@peer-|CALLBACKPROVIDER| extension |NUMBER|@disa-call-context" &)
+exten => |NUMBER|,n,Wait(|CALLBACKHUPDELAY|)
+exten => |NUMBER|,n,Hangup()
+

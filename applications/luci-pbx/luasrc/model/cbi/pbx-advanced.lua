@@ -250,6 +250,7 @@ s:tab("qos",  translate("QoS Settings"),
 ringtime = s:taboption("general", Value, "ringtime", translate("Number of Seconds to Ring"),
                  translate("Set the number of seconds to ring users upon incoming calls before hanging up \
                  or going to voicemail, if the voicemail is installed and enabled."))
+ringtime.datatype = "port"
 ringtime.default = 30
 
 ua = s:taboption("general", Value, "useragent", translate("User Agent String"),
@@ -259,17 +260,18 @@ ua = s:taboption("general", Value, "useragent", translate("User Agent String"),
 ua.default = appname
 
 h = s:taboption("remote_usage", Value, "externhost", translate("Domain/IP Address/Dynamic Domain"),
-                translate("You can enter your domain name, external IP address, or dynamic domain name here \
-                Please keep in mind that if your IP address is dynamic and it changes your configuration \
-                will become invalid. Hence, it's recommended to set up Dynamic DNS in this case."))
-h.datatype = "hostname"
+                translate("You can enter your domain name, external IP address, or dynamic domain name here. \
+                The best thing to input is a static IP address. If your IP address is dynamic and it changes, \
+                your configuration will become invalid. Hence, it's recommended to set up Dynamic DNS in this case. \
+                and enter your Dynamic DNS hostname here. You can configure Dynamic DNS with the luci-app-ddns package."))
+h.datatype = "host"
 
 p = s:taboption("remote_usage", Value, "bindport", translate("External SIP Port"),
                 translate("Pick a random port number between 6500 and 9500 for the service to listen on. \
                 Do not pick the standard 5060, because it is often subject to brute-force attacks. \
-                When finished, (1) click \"Save and Apply\", and (2) click the \"Restart VoIP Service\" \
-                button above. Finally, (3) look in the \"SIP Device/Softphone Accounts\" section for \
-                updated Server and Port settings for your SIP Devices/Softphones."))
+                When finished, (1) click \"Save and Apply\", and (2) look in the \
+                \"SIP Device/Softphone Accounts\" section for updated Server and Port settings \
+                for your SIP Devices/Softphones."))
 p.datatype = "port"
 
 p = s:taboption("remote_usage", Value, "rtpstart", translate("RTP Port Range Start"),

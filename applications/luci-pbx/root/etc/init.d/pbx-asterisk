@@ -54,6 +54,14 @@ TMPL_EXTCTHRUCHECK=$TEMPLATEDIR/extensions_disa-check.conf.TEMPLATE
 TMPL_EXTCTHRUCHECKFTR=$TEMPLATEDIR/extensions_disa-check_footer.conf.TEMPLATE
 TMPL_EXTCTHRUHDR=$TEMPLATEDIR/extensions_disa_header.conf.TEMPLATE
 TMPL_EXTCTHRU=$TEMPLATEDIR/extensions_disa.conf.TEMPLATE
+TMPL_EXTCTHRUNOPIN=$TEMPLATEDIR/extensions_disa-nopin.conf.TEMPLATE
+
+TMPL_EXTCBACKCHECKHDR=$TEMPLATEDIR/extensions_callback-check_header.conf.TEMPLATE
+TMPL_EXTCBACKCHECK=$TEMPLATEDIR/extensions_callback-check.conf.TEMPLATE
+TMPL_EXTCBACKCHECKFTR=$TEMPLATEDIR/extensions_callback-check_footer.conf.TEMPLATE
+TMPL_EXTCBACKHDR=$TEMPLATEDIR/extensions_callback_header.conf.TEMPLATE
+TMPL_EXTCBACKSIP=$TEMPLATEDIR/extensions_callback_sip.conf.TEMPLATE
+TMPL_EXTCBACKGTALK=$TEMPLATEDIR/extensions_callback_gtalk.conf.TEMPLATE
 
 TMPL_EXTENSIONS=$TEMPLATEDIR/extensions.conf.TEMPLATE
 
@@ -114,6 +122,18 @@ localusers_can_dial=""
 # which will be used to dial out by default (whose outgoing contexts will
 # be included in users' contexts by default.
 outbound_providers=""
+sip_outbound_providers=""
+gtalk_outbound_providers=""
+
+# Function which escapes non-alpha-numeric characters in a string
+escape_non_alpha() {
+    echo $@ | sed 's/\([^a-zA-Z0-9]\)/\\\1/g'
+}
+
+# Function which replaces non-alpha-numeric characters with an underscore
+sub_underscore_for_non_alpha() {
+    echo $@ | sed 's/[^a-zA-Z0-9]/_/g'
+}
 
 # Copies the template files which we don't edit.
 copy_unedited_templates_over()
@@ -149,6 +169,7 @@ pbx_create_extensions_config()
     rm -f $WORKDIR/outextgtalk.TMP
     mv  $WORKDIR/blacklist.TMP                       $WORKDIR/extensions_blacklist.conf
     mv  $WORKDIR/userext.TMP                         $WORKDIR/extensions_user.conf
+
     cp  $TMPL_EXTCTHRUHDR                            $WORKDIR/extensions_callthrough.conf
     cat $WORKDIR/callthrough.TMP                  >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
     rm -f $WORKDIR/callthrough.TMP
@@ -156,6 +177,15 @@ pbx_create_extensions_config()
     cat $WORKDIR/callthroughcheck.TMP             >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
     rm -f $WORKDIR/callthroughcheck.TMP
     cat $TMPL_EXTCTHRUCHECKFTR                    >> $WORKDIR/extensions_callthrough.conf 2>/dev/null
+
+    cp  $TMPL_EXTCBACKHDR                            $WORKDIR/extensions_callback.conf
+    cat $WORKDIR/callback.TMP                     >> $WORKDIR/extensions_callback.conf 2>/dev/null
+    rm -f $WORKDIR/callback.TMP
+    cat $TMPL_EXTCBACKCHECKHDR                    >> $WORKDIR/extensions_callback.conf 2>/dev/null
+    cat $WORKDIR/callbackcheck.TMP                >> $WORKDIR/extensions_callback.conf 2>/dev/null
+    rm -f $WORKDIR/callbackcheck.TMP
+    cat $TMPL_EXTCBACKCHECKFTR                    >> $WORKDIR/extensions_callback.conf 2>/dev/null
+
     rm -f $WORKDIR/outext-*.TMP
     rm -f $WORKDIR/localext.TMP
     sed "s/|LOCALUSERS|/$localusers_to_ring/g" $TMPL_EXTDEFAULT \
@@ -246,13 +276,17 @@ pbx_add_user()
 {
     local fullname
     local defaultuser
+    local rawdefaultuser
     local secret
     local ring
     local can_call
 
     config_get fullname    $1 fullname
-    config_get defaultuser $1 defaultuser
+    fullname=`escape_non_alpha $fullname`
+    config_get rawdefaultuser $1 defaultuser
+    defaultuser=`escape_non_alpha $rawdefaultuser`
     config_get secret      $1 secret
+    secret=`escape_non_alpha $secret`
     config_get ring        $1 ring
     config_get can_call    $1 can_call
 
@@ -263,7 +297,7 @@ pbx_add_user()
 
     if [ "$can_call" = "yes" ] ; then
         # Add user to list of all users that are allowed to make calls.
-        localusers_can_dial="$localusers_can_dial $defaultuser"
+        localusers_can_dial="$localusers_can_dial $rawdefaultuser"
         sed -i "s/|CONTEXTNAME|/$defaultuser/g"     $WORKDIR/sip_user.tmp
     else
         sed -i "s/|CONTEXTNAME|/$HANGUPCNTXT/g"     $WORKDIR/sip_user.tmp
@@ -307,13 +341,18 @@ pbx_add_jabber()
     local statusmessage
 
     config_get username $1 username
+    username=`escape_non_alpha $username`
     config_get secret $1 secret
+    secret=`escape_non_alpha $secret`
+    #TODO: Is this really necessary here? Numprefix is retrieved below.
     config_get numprefix $1 numprefix
     config_get register $1 register
     config_get make_outgoing_calls $1 make_outgoing_calls
     config_get name $1 name
     config_get status $1 status
+    status=`escape_non_alpha $status`
     config_get statusmessage $1 statusmessage
+    statusmessage=`escape_non_alpha $statusmessage`
 
     [ -z "$username" -o -z "$secret" ] && return
 
@@ -338,7 +377,7 @@ pbx_add_jabber()
             # messes entered by users.
             set $users_to_ring
             users_to_ring="SIP\/$1" && shift
-            for u in $@ ; do users_to_ring=$users_to_ring\\\&SIP\\\/$u ; done
+            for u in $@ ; do u=`escape_non_alpha $u` ; users_to_ring=$users_to_ring\\\&SIP\\\/$u ; done
         fi
 
         # Now, we add this account to the gtalk incoming context.
@@ -361,6 +400,7 @@ pbx_add_jabber()
         [ -z "$numprefix" ]  && numprefix="X"
 
         for p in $numprefix ; do
+            p=`escape_non_alpha $p`
             sed "s/|NUMPREFIX|/$p/g" $TMPL_EXTOUTGTALK |\
                             sed "s/|NAME|/$name/g"            >> $WORKDIR/outext-$name.TMP
         done
@@ -370,6 +410,13 @@ pbx_add_jabber()
             outbound_providers="$name"
         else
             outbound_providers="$outbound_providers $name"
+        fi
+
+        # Add this provider to the list of enabled gtalk outbound providers.
+        if [ -z "$gtalk_outbound_providers" ] ; then
+            gtalk_outbound_providers="$name"
+        else
+            gtalk_outbound_providers="$gtalk_outbound_providers $name"
         fi
     fi
 
@@ -394,11 +441,16 @@ pbx_add_peer()
     local outboundproxy
 
     config_get defaultuser $1 defaultuser
+    defaultuser=`escape_non_alpha $defaultuser`
     config_get secret $1 secret
+    secret=`escape_non_alpha $secret`
     config_get host $1 host
+    host=`escape_non_alpha $host`
     config_get port $1 port
     config_get outbountproxy $1 outboundproxy
+    outbountproxy=`escape_non_alpha $outbountproxy`
     config_get fromdomain $1 fromdomain
+    fromdomain=`escape_non_alpha $fromdomain`
     config_get register $1 register
     config_get numprefix $1 numprefix
     config_get make_outgoing_calls $1 make_outgoing_calls
@@ -453,6 +505,7 @@ pbx_add_peer()
         # If no prefixes are specified, then we use "X" which matches any prefix.
         [ -z "$numprefix" ]  && numprefix="X"
         for p in $numprefix ; do
+            p=`escape_non_alpha $p`
             sed "s/|NUMPREFIX|/$p/g" $TMPL_EXTOUTSIP |\
                             sed "s/|NAME|/$name/g"              >> $WORKDIR/outext-$name.TMP
         done
@@ -462,6 +515,13 @@ pbx_add_peer()
             outbound_providers="$name"
         else
             outbound_providers="$outbound_providers $name"
+        fi
+
+        # Add this provider to the list of enabled sip outbound providers.
+        if [ -z "$sip_outbound_providers" ] ; then
+            sip_outbound_providers="$name"
+        else
+            sip_outbound_providers="$sip_outbound_providers $name"
         fi
     fi
 
@@ -477,6 +537,7 @@ pbx_create_user_contexts()
     local providers
 
     for u in $localusers_can_dial ; do
+        u=`escape_non_alpha $u`
         sed "s/|DEFAULTUSER|/$u/g" $TMPL_EXTUSERCNTXTHDR                >> $WORKDIR/userext.TMP
         cat $WORKDIR/localext.TMP                                       >> $WORKDIR/userext.TMP
         providers="`uci -q get ${MODULENAME}-calls.providers_user_can_use.$u`"
@@ -504,6 +565,7 @@ pbx_add_blacklist()
     # to the context for a check against the list anyway.
     cp $TMPL_EXTBLKLISTHDR                                   $WORKDIR/blacklist.TMP
     for n in $blacklist1 $blacklist2 ; do
+        n=`escape_non_alpha $n`
         sed "s/|BLACKLISTITEM|/$n/g" $TMPL_EXTBLKLIST >> $WORKDIR/blacklist.TMP 
     done
     cat $TMPL_EXTBLKLISTFTR                               >> $WORKDIR/blacklist.TMP
@@ -517,10 +579,13 @@ pbx_add_callthrough()
     local defaultuser
     local pin
     local enabled
+    local F
 
     config_get callthrough_number_list $1 callthrough_number_list
     config_get defaultuser $1 defaultuser
+    defaultuser=`escape_non_alpha $defaultuser`
     config_get pin $1 pin
+    pin=`escape_non_alpha $pin`
     config_get enabled $1 enabled
 
     [ "$enabled" = "no" ]   && return
@@ -529,11 +594,65 @@ pbx_add_callthrough()
     for callthrough_number in $callthrough_number_list ; do
         sed "s/|NUMBER|/$callthrough_number/g" $TMPL_EXTCTHRUCHECK >> $WORKDIR/callthroughcheck.TMP
 
-        sed "s/|NUMBER|/$callthrough_number/g" $TMPL_EXTCTHRU |\
-                    sed "s/|DEFAULTUSER|/$defaultuser/"               |\
-                        sed "s/|PIN|/$pin/"                                >> $WORKDIR/callthrough.TMP
+	if [ -n "$pin" ] ; then F=$TMPL_EXTCTHRU ; else F=$TMPL_EXTCTHRUNOPIN ; fi
+        sed "s/|NUMBER|/$callthrough_number/g" $F             |\
+                    sed "s/|DEFAULTUSER|/$defaultuser/"       |\
+                        sed "s/|PIN|/$pin/"                        >> $WORKDIR/callthrough.TMP
     done
 }
+
+
+# Creates the callback context which allows specified numbers to get
+# a callback into the PBX and dial out as the configured user.
+pbx_add_callback()
+{
+    local callback_number_list
+    local defaultuser
+    local pin
+    local enabled
+    local callback_provider
+    local callback_hangup_delay
+    local FB
+    local FT
+
+    config_get callback_number_list $1 callback_number_list
+    config_get defaultuser $1 defaultuser
+    defaultuser=`escape_non_alpha $defaultuser`
+    config_get pin $1 pin
+    pin=`escape_non_alpha $pin`
+    config_get enabled $1 enabled
+    config_get callback_provider $1 callback_provider
+    callback_provider=`sub_underscore_for_non_alpha $callback_provider`
+    config_get callback_hangup_delay $1 callback_hangup_delay
+
+    [ "$enabled" = "no" ]   && return
+    [ "$defaultuser" = "" ] && return
+
+    # If the provider is a SIP provider, set the file to use to $TMPL_EXTCBACKSIP
+    # otherwise, set it to $TMPL_EXTCBACKGTALK
+    if echo $sip_outbound_providers | grep -q $callback_provider 2>/dev/null
+    then
+        FB=$TMPL_EXTCBACKSIP
+    else
+        FB=$TMPL_EXTCBACKGTALK
+    fi
+
+    for callback_number in $callback_number_list ; do
+        sed "s/|NUMBER|/$callback_number/g" $TMPL_EXTCBACKCHECK    >> $WORKDIR/callbackcheck.TMP
+
+        sed "s/|NUMBER|/$callback_number/g" $FB            |\
+            sed "s/|CALLBACKPROVIDER|/$callback_provider/" |\
+                sed "s/|CALLBACKHUPDELAY|/$callback_hangup_delay/" >> $WORKDIR/callback.TMP
+
+        # Perhaps a bit confusingly, we create "callthrough" configuration for callback
+        # numbers, because we use the same DISA construct as for callthrough.
+        if [ -n "$pin" ] ; then FT=$TMPL_EXTCTHRU ; else FT=$TMPL_EXTCTHRUNOPIN ; fi
+        sed "s/|NUMBER|/$callback_number/g" $FT            |\
+            sed "s/|DEFAULTUSER|/$defaultuser/"            |\
+                sed "s/|PIN|/$pin/"                                >> $WORKDIR/callthrough.TMP
+    done
+}
+
 
 # Creates sip.conf from its template.
 pbx_cook_sip_template()
@@ -543,6 +662,7 @@ pbx_cook_sip_template()
     local bindport
 
     config_get useragent advanced useragent
+    useragent=`escape_non_alpha $useragent`
     config_get externhost advanced externhost
     config_get bindport advanced bindport
 
@@ -628,7 +748,9 @@ pbx_configure_voicemail()
     config_get smtp_server            voicemail_smtp   smtp_server
     config_get smtp_port              voicemail_smtp   smtp_port
     config_get smtp_user              voicemail_smtp   smtp_user
+    smtp_user=`escape_non_alpha $smtp_user`
     config_get smtp_password          voicemail_smtp   smtp_password
+    smtp_password=`escape_non_alpha $smtp_password`
 
     sed "s/|AUTH|/$smtp_auth/"   $TMPL_MSMTPDEFAULT |\
              sed "s/|TLS|/$smtp_tls/"               >  $WORKDIR/pbx-msmtprc
@@ -644,12 +766,25 @@ pbx_configure_voicemail()
     cat $TMPL_MSMTPACCTDFLT                         >> $WORKDIR/pbx-msmtprc
 
     [ ! -f /etc/pbx-msmtprc ] && cp $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc
-    diff -q  $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc 1>/dev/null \
+    cmp -s  $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc 1>/dev/null \
                                 || mv $WORKDIR/pbx-msmtprc /etc/pbx-msmtprc
     chmod 600                                              /etc/pbx-msmtprc
+    chown nobody                                           /etc/pbx-msmtprc
 
     # Copy over the extensions file which has voicemail enabled.
     cp $TMPL_EXTVMENABLED                $WORKDIR/extensions_voicemail.conf
+
+    # Create the voicemail directory in /tmp
+    mkdir -p     /tmp/voicemail
+    chown nobody /tmp/voicemail
+
+    # Create the recordings directory
+    mkdir -p     /etc/pbx-voicemail/recordings
+    chown nobody /etc/pbx-voicemail/recordings
+
+    # Working around a bug in OpenWRT 12.09-rc1
+    # TODO: REMOVE AS SOON AS POSSIBLE
+    chmod ugo+w /tmp
 }
 
 
@@ -670,12 +805,13 @@ start() {
     config_load ${MODULENAME}-voip
     config_foreach pbx_add_peer voip_provider
 
-    # Create the user contexts, and phone blacklist.
+    # Create the user contexts, callthroug/back, and phone blacklist.
     config_unset
     config_load ${MODULENAME}-calls
     pbx_create_user_contexts
     pbx_add_blacklist
     config_foreach pbx_add_callthrough callthrough_numbers
+    config_foreach pbx_add_callback callback_numbers
 
     # Prepare sip.conf using settings from the "advanced" section.
     config_unset

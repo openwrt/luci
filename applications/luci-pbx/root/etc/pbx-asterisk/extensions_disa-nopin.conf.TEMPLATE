@@ -1,0 +1,5 @@
+exten => |NUMBER|,1,Noop()
+exten => |NUMBER|,n,Set(TIMEOUT(digit)=15)
+exten => |NUMBER|,n,Set(TIMEOUT(response)=40)
+exten => |NUMBER|,n,DISA(no-password,context-user-|DEFAULTUSER|)
+

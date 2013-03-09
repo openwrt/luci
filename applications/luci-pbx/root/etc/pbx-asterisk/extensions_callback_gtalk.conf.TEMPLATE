@@ -1,0 +1,4 @@
+exten => |NUMBER|,1,System(/etc/pbx-asterisk/delayedcallback "channel originate Gtalk/gtalk-|CALLBACKPROVIDER|/|NUMBER|@voice.google.com extension |NUMBER|@disa-call-context" &)
+exten => |NUMBER|,n,Wait(|CALLBACKHUPDELAY|)
+exten => |NUMBER|,n,Hangup()
+
