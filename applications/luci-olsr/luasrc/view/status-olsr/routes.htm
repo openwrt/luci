@@ -19,14 +19,16 @@ local i = 1
 if luci.http.formvalue("status") == "1" then
 	local rv = {}
 	for k, route in ipairs(routes) do
+		local ETX = string.format("%.3f", tonumber(route.rtpMetricCost)/1024 or 0)
 		rv[#rv+1] = {
-			hostname = route.Hostname,
-	                dest = route.Destination,
-			gw = route["Gateway IP"],
-			interface = route.Interface,
-			metric = route.Metric,
-			etx = tonumber(route.ETX),
-			color = olsrtools.etx_color(tonumber(route.ETX)),
+			hostname = route.hostname,
+	                dest = route.destination,
+			genmask = route.genmask,
+			gw = route.gateway,
+			interface = route.networkInterface,
+			metric = route.metric,
+			etx = ETX,
+			color = olsrtools.etx_color(tonumber(ETX))
 		}
 	end
 	luci.http.prepare_content("application/json")
@@ -54,20 +56,27 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 					var route = info[idx];
 
 					s += String.format(
-						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-							'<td class="cbi-section-table-cell">%s</td>' +
+						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
+							'<td class="cbi-section-table-cell">%s/%s</td>' +
 							'<td class="cbi-section-table-cell">' +
 			                	                '<a href="http://%s/cgi-bin-status.html">%s</a>',
-								route.dest, route.gw, route.gw
+								route.proto, route.dest, route.genmask, route.gw, route.gw
 						)
 
-					if (route.hostname)
-						{
-						s += String.format(
+					if (route.hostname) {
+						if (hna.proto == '6') {
+							s += String.format(
+			                                        ' / <a href="http://[%s]/cgi-bin-status.html">%s</a>',
+								route.hostname, route.hostname || '?'
+								);
+						} else {
+							s += String.format(
 			                                        ' / <a href="http://%s/cgi-bin-status.html">%s</a>',
 								route.hostname, route.hostname || '?'
 								);
 						}
+
+					}
 					s += String.format(
 				                        '</td>' +
 							'<td class="cbi-section-table-cell">%s</td>' +
@@ -88,6 +97,8 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 
 <h2><a id="content" name="content"><%:Known OLSR routes%></a></h2>
 
+<div id="togglebuttons"></div>
+
 <fieldset class="cbi-section">
 <legend><%:Overview of currently known routes to other OLSR nodes%></legend>
 
@@ -105,20 +116,25 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 	<tbody id="olsrd_routes">
 
 	<% for k, route in ipairs(routes) do
-		color = olsrtools.etx_color(tonumber(route.ETX))
+		ETX = tonumber(route.rtpMetricCost)/1024 or '0'
+		color = olsrtools.etx_color(ETX)
 	%>
 
-		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-			<td class="cbi-section-table-cell"><%=route.Destination%></td>
+		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=route.proto%>">
+			<td class="cbi-section-table-cell"><%=route.destination%>/<%=route.genmask%></td>
 			<td class="cbi-section-table-cell">
-				<a href="http://<%=route["Gateway IP"]%>/cgi-bin-status.html"><%=route["Gateway IP"]%></a>
-				<% if route.Hostname then %>
-					/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>  
+				<% if route.proto == '6' then %>
+				<a href="http://[<%=route.gateway%>]/cgi-bin-status.html"><%=route.gateway%></a>
+				<% else  %>
+				<a href="http://<%=route.gateway%>/cgi-bin-status.html"><%=route.gateway%></a>
+				<% end %>
+				<% if route.hostname then %>
+					/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.hostname%></a>  
 				<% end %>
 			</td>
-			<td class="cbi-section-table-cell"><%=route.Interface%></td>
-			<td class="cbi-section-table-cell"><%=route.Metric%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
+			<td class="cbi-section-table-cell"><%=route.networkInterface%></td>
+			<td class="cbi-section-table-cell"><%=route.metric%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", ETX)%></td>
 		</tr>
 	<% 
 		i = ((i % 2) + 1)
@@ -126,5 +142,7 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 	</tbody>
 </table>
 
+<%+status-olsr/legend%>
 </fieldset>
+<%+status-olsr/common_js%>
 <%+footer%>

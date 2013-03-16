@@ -19,23 +19,26 @@ local i = 1
 if luci.http.formvalue("status") == "1" then
 	local rv = {}
 	for k, link in ipairs(links) do
-		link.Cost = tonumber(link.Cost) or 0
-		local color = olsrtools.etx_color(link.Cost)
+		link.linkCost = tonumber(link.linkCost)/1024 or 0
+		if link.linkCost == 4096 then
+			link.linkCost = 0
+		end
+		local color = olsrtools.etx_color(link.linkCost)
 		defaultgw_color = ""
 		if link.defaultgw == 1 then
 			defaultgw_color = "#ffff99"
 		end
 
 		rv[#rv+1] = {
-			rip = link["Remote IP"],
-			hn = link["Hostname"],
-			lip = link["Local IP"],
-			dev = link["Local Device"],
-			lq = link.LQ,
-			nlq = link.NLQ,
-			cost = string.format("%.3f", link.Cost),
+			rip = link.remoteIP,
+			hn = link.hostname,
+			lip = link.localIP,
+			lq = string.format("%.3f", link.linkQuality),
+			nlq = string.format("%.3f",link.neighborLinkQuality),
+			cost = string.format("%.3f", link.linkCost),
 			color = color,
-			dfgcolor = defaultgw_color
+			dfgcolor = defaultgw_color,
+			proto = link.proto
 			}
 	end
 	luci.http.prepare_content("application/json")
@@ -60,11 +63,19 @@ end
 				{
 					var neigh = info[idx];
 
-					s += String.format(
-						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
-						neigh.dfgcolor, neigh.rip, neigh.rip
-						);
+					if (neigh.proto == '6') {
+						s += String.format(
+							'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
+								'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://[%s]/cgi-bin-status.html">%s</a></td>',
+							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip
+							);
+					} else {
+						s += String.format(
+							'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
+								'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
+							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip
+							);
+					}
 					if (neigh.hn) {
 						s += String.format(					
 							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
@@ -82,10 +93,9 @@ end
 							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
 							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
 							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
 						'</tr>',
 							
-							neigh.dfgcolor, neigh.lip, neigh.dfgcolor, neigh.dev, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost || '?'
+							neigh.dfgcolor, neigh.lip, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost || '?'
 						);
 				}
 
@@ -98,6 +108,8 @@ end
 
 <h2><a id="content" name="content"><%:OLSR connections%></a></h2>
 
+<div id="togglebuttons"></div>
+
 <fieldset class="cbi-section">
 	<legend><%:Overview of currently established OLSR connections%></legend>
 
@@ -107,7 +119,6 @@ end
 				<th class="cbi-section-table-cell"><%:Neighbour IP%></th>
 				<th class="cbi-section-table-cell"><%:Hostname%></th>
 				<th class="cbi-section-table-cell"><%:Local interface IP%></th>
-				<th class="cbi-section-table-cell"><%:Device%></th>
 				<th class="cbi-section-table-cell">LQ</th>
 				<th class="cbi-section-table-cell">NLQ</th>
 				<th class="cbi-section-table-cell">ETX</th>
@@ -117,8 +128,12 @@ end
 		<tbody id="olsr_neigh_table">
 		<% 	local i = 1
 			for k, link in ipairs(links) do
-			link.Cost = tonumber(link.Cost) or 0
-			color = olsrtools.etx_color(link.Cost)
+			link.linkCost = tonumber(link.linkCost)/1024 or 0
+			if link.linkCost == 4096 then
+				link.linkCost = 0
+			end
+
+			color = olsrtools.etx_color(link.linkCost)
 
 			defaultgw_color = ""
 			if link.defaultgw == 1 then
@@ -126,14 +141,17 @@ end
 			end
 		%>
 
-		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Remote IP"]%>/cgi-bin-status.html"><%=link["Remote IP"]%></a></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link["Hostname"]%>/cgi-bin-status.html"><%=link["Hostname"]%></a></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link["Local IP"]%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link["Local Device"]%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.LQ%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.NLQ%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.Cost)%></td>
+		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=link.proto%>">
+			<% if link.proto == "6" then %>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://[<%=link.remoteIP%>]/cgi-bin-status.html"><%=link.remoteIP%></a></td>
+			<% else %>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.remoteIP%>/cgi-bin-status.html"><%=link.remoteIP%></a></td>
+			<% end %>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.hostname%>/cgi-bin-status.html"><%=link.hostname%></a></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.localIP%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.linkQuality)%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.neighborLinkQuality)%></td>
+			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.linkCost)%></td>
 		</tr>
 		<% 
 			i = ((i % 2) + 1)
@@ -142,15 +160,7 @@ end
 	</table>
 <br />
 
-<h3><%:Legend%>:</h3>
-<ul>
-	<li><strong>LQ: </strong><%:Success rate of packages received from the neighbour%></li>
-	<li><strong>NLQ: </strong><%:Success rate of packages sent to the neighbour%></li>
-	<li><strong>ETX: </strong><%:Expected retransmission count%></li>
-	<li><strong><span style="color:#00cc00"><%:Green%></span></strong>:<%:Very good (ETX < 2)%></li> 
-	<li><strong><span style="color:#ffcb05"><%:Yellow%></span></strong>:<%:Good (2 < ETX < 4)%></li> 
-	<li><strong><span style="color:#ff6600"><%:Orange%></span></strong>:<%:Still usable (4 < ETX < 10)%></li> 
-	<li><strong><span style="color:#bb3333"><%:Red%></span></strong>:<%:Bad (ETX > 10)%></li> 
-</ul>
+<%+status-olsr/legend%>
 </fieldset>
+<%+status-olsr/common_js%>
 <%+footer%>

@@ -12,83 +12,10 @@ You may obtain a copy of the License at
 -%>
 
 <%
-local sys = require "luci.sys"
-local utl = require "luci.util"
-local fs = require "luci.fs"
- 
-function get_version()
-        local data = utl.split((utl.trim(sys.exec("/usr/sbin/olsrd -v"))))
-        local buildfull = utl.trim(utl.split(data[2],": ")[2])
-        local ver = {
-                version = utl.trim(utl.split(data[1]," - ")[2]),
-                date = utl.trim(utl.split(buildfull, " ")[1]),
-                time = utl.trim(utl.split(buildfull, " ")[2]),
-                host = utl.trim(utl.split(buildfull, " ")[4])
-        }
-        return ver
-end
-local ver = get_version()
-
-local ifaces = fetch_txtinfo("int")
-if not ifaces or not ifaces.Interfaces then
-	luci.template.render("status-olsr/error_olsr")
-	return nil
-end
-local interfaces = ""
-for k,v in pairs(ifaces.Interfaces) do
-	interfaces = utl.trim(interfaces.." "..v.Name)
-end
-interfaces = string.gsub(interfaces, " ", ", ")
-local nr_ifaces = #ifaces.Interfaces
-
-local links = fetch_txtinfo("links")
-local nr_neigh = #links.Links
-local neighbors = ""
-for k,v in pairs(links.Links) do
-	local link
-	if v.Hostname then
-		link = v.Hostname
-	else
-		link = v["Remote IP"]
-	end
-	neighbors = utl.trim("<a href=http://"..link.."/cgi-bin-status.html>"..link.."</a> "..neighbors)
-end
-
-local data = fetch_txtinfo("topology")
-local nr_topo = #data.Topology
-local utable = {}
-for k,v in pairs(data.Topology) do
-	if utl.contains(utable, v["Dest. IP"]) == false then
-		table.insert(utable, v["Dest. IP"])
-	end
-end
-local nr_nodes = #utable
-
-local data = fetch_txtinfo("hna")
-local nr_hna = #data.HNA
-
-local meshfactor = string.format("%.2f", nr_topo / nr_nodes)
-
-if luci.http.formvalue("status") == "1" then
-	rv = {
-		nr_neighbors = nr_neigbors,
-		neighbors = neighbors,
-		interfaces = interfaces,
-		nr_ifaces = nr_ifaces,
-		nr_links = nr_links,
-		nr_topo = nr_topo,
-		nr_nodes = nr_nodes,
-		meshfactor = meshfactor
-	}
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(rv)
-	return
-end
-	
-
 local ipv = luci.model.uci.cursor():get_first("olsrd", "olsrd", "IpVersion", "4")
 
 function write_conf(conf, file)
+	local fs = require "luci.fs"
 	if fs.access(conf) then
 		luci.http.header("Content-Disposition", "attachment; filename="..file)
 		luci.http.prepare_content("text/plain")
@@ -125,169 +52,161 @@ end
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
-XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
+XHR.poll(10, '<%=REQUEST_URI%>/json', { },
                 function(x, info)
                 {
 		var e;
 
-		if (e = document.getElementById('nr_neighbors'))
-			e.innerHTML = info.nr_neighbors;
+		if (! info) {
+			document.getElementById('error').innerHTML = '<%:Could not get any data. Make sure the jsoninfo plugin is installed and allows connections from localhost.%>';
+			return
+		}
+		document.getElementById('error').innerHTML = '';
 
-		if (e = document.getElementById('neighbors'))
-			e.innerHTML = info.neighbors;
+		if (e = document.getElementById('version'))
+			var version;
+			var date;
+			if (info.v4.config.olsrdVersion != undefined) {
+				version = info.v4.config.olsrdVersion
+				date = info.v4.config.olsrdBuildDate
+			} else if (info.v6.config.olsrdVersion != undefined) {
+				version = info.v6.config.olsrdVersion
+				date = info.v6.config.olsrdBuildDate
+
+			} else {
+				version = 'unknown'
+				date = 'unknown'
+			}		
+			e.innerHTML = version + '<br />' + date;
+
+		if (e = document.getElementById('nr_neigh'))
+			var neigh = 0;
+			if (info.v4.links.length != undefined) {
+				neigh = neigh + info.v4.links.length
+			}
+			if (info.v6.links.length != undefined) {
+				neigh = neigh + info.v6.links.length
+			}
+			e.innerHTML = neigh;
+
+
+		if (e = document.getElementById('nr_hna'))
+			var hna = 0;
+			if (info.v4.hna.length != undefined) {
+				hna = hna + info.v4.hna.length
+			}
+			if (info.v6.hna.length != undefined) {
+				hna = hna + info.v6.hna.length
+			}
+			e.innerHTML = hna;
+
 
 		if (e = document.getElementById('nr_ifaces'))
-			e.innerHTML = info.nr_ifaces;
+			var nrint = 0
+			if (info.v4.interfaces.length != undefined) {
+				nrint = nrint + info.v4.interfaces.length
+			}
+			if (info.v6.interfaces.length != undefined) {
+				nrint = nrint + info.v6.interfaces.length
+			}
+			e.innerHTML = nrint
 
-		if (e = document.getElementById('interfaces'))
-			e.innerHTML = info.interfaces;
-
-		if (e = document.getElementById('nr_links'))
-			e.innerHTML = info.nr_links;
 
 		if (e = document.getElementById('nr_topo'))
-			e.innerHTML = info.nr_topo;
+			var topo = 0;
+			var nodes = [];
 
-		if (e = document.getElementById('nr_nodes'))
-			e.innerHTML = info.nr_nodes;
+			Array.prototype.contains = function (element) {
+				for (var i = 0; i < this.length; i++) {
+					if (this[i] == element) {
+						return true;
+					}
+				}
+				return false;
+			}
 
-		if (e = document.getElementById('meshfactor'))
-			e.innerHTML = info.meshfactor;
+			if (info.v4.topology.length != undefined) {
+				topo = topo + info.v4.topology.length;
+				for (var i = 0; i < info.v4.topology.length; i++) {
+					var destip = info.v4.topology[i].destinationIP
+					if (! nodes.contains(destip) ) {
+						nodes.push(destip)
+					}
+				}
+			}
+
+			if (info.v6.topology.length != undefined) {
+				topo = topo + info.v6.topology.length
+				for (var i = 0; i < info.v6.topology.length; i++) {
+					var destip = info.v6.topology[i].destinationIP
+					if (! nodes.contains(destip) ) {
+						nodes.push(destip)
+					}
+				}
+
+			}
+			e.innerHTML = topo;
+
+			if (e = document.getElementById('nr_nodes'))
+				e.innerHTML = nodes.length;
+
+			if (e = document.getElementById('meshfactor'))
+				var meshfactor = topo / nodes.length
+				e.innerHTML = meshfactor.toFixed(2)
 		}
 	);
 //]]></script>
 
 
+<div id="error" class="error"></div>
+
 <h2><a id="content" name="content">OLSR <%:Overview%></a></h2>
 
-<div class="cbi-map">
-	<div class="cbi-section-node">
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<label class="cbi-value-title"><%:Interfaces%></label>
-			</div>
-			<div class="cbi-value-field">
-				<div style="width: 6em; float:left;">
-					<a href="<%=REQUEST_URI%>/interfaces">
-						<span id="nr_ifaces">
-							<%=nr_ifaces%>
-						<span>
-					</a>
-				</div>
-				<div style="padding-left: 21em;">
-					<span id="interfaces">
-						<%=interfaces%>
-					</span>
-				</div>
-			</div>
-			<br/>
-		</div>
+<fieldset class="cbi-section">
+        <legend><%:Network%></legend>
 
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:Neighbors%>
-			</div>
-			<div class="cbi-value-field">
-				<div style="width: 6em; float:left;">
-					<a href="<%=REQUEST_URI%>/neighbors">
-						<span id="nr_neigh">
-							<%=nr_neigh%>
-						</span>
-					</a>
-				</div>
-				<div style="padding-left: 21em;">
-					<span id="neighbors">
-						<%=neighbors%>
-					</span>
-				</div>
-			</div>
-			<br/>
-		</div>
+        <table width="100%" cellspacing="10">
+                <tr><td width="33%"><%:Interfaces%></td><td>
+			<a href="<%=REQUEST_URI%>/interfaces">
+				<span id="nr_ifaces">-<span>
+			</a>
+		</td></tr>
+                <tr><td width="33%"><%:Neighbors%></td><td>
+			<a href="<%=REQUEST_URI%>/neighbors">
+				<span id="nr_neigh">-</span>
+			</a>
+		</td></tr>
+                <tr><td width="33%"><%:Nodes%></td><td>
+			<a href="<%=REQUEST_URI%>/topology">
+				<span id="nr_nodes">-</span>
+			</a>
+		</td></tr>
+                <tr><td width="33%"><%:HNA%></td><td>
+			<a href="<%=REQUEST_URI%>/hna">
+				<span id="nr_hna">-</span>
+			</a>
+		</td></tr>
+                <tr><td width="33%"><%:Links total%></td><td>
+			<a href="<%=REQUEST_URI%>/topology">
+				<span id="nr_topo">-</span>
+			</a>
+		</td></tr>
+                <tr><td width="33%"><%:Links per node (average)%></td><td>
+			<span id="meshfactor">-</span>
+		</td></tr>
 
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:Nodes%>
-			</div>
-			<div class="cbi-value-field">
-				<div style="width: 6em; float:left;">
-					<a href="<%=REQUEST_URI%>/topology">
-						<span id="nr_nodes">
-							<%=nr_nodes%>
-						</span>
-					</a>
-				</div>
-			</div>
-			<br/>
-		</div>
 
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:HNA%>
-			</div>
-			<div class="cbi-value-field">
-				<div style="width: 6em; float:left;">
-					<a href="<%=REQUEST_URI%>/hna">
-						<span id="nr_hna">
-							<%=nr_hna%>
-						</span>
-					</a>
-				</div>
-			</div>
-			<br/>
-		</div>
+        </table>
+</fieldset>
 
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:Links total%>
-			</div>
-			<div class="cbi-value-field">
-				<div style="width: 6em; float:left;">
-					<a href="<%=REQUEST_URI%>/topology">
-						<span id="nr_topo">
-							<%=nr_topo%>
-						</span>
-					</a>
-				</div>
-			</div>
-			<br/>
-		</div>
 
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:Links per node (average)%>
-			</div>
-			<div class="cbi-value-field">
-				<div style="width: 6em; float:left;">
-					<span id="meshfactor">
-						<%=meshfactor%>
-					</span>
-				</div>
-			</div>
-			<br/>
-		</div>
-	</div>
-</div>
-<br/>
-
-<h2><a id="content" name="content">OLSR <%:Configuration%></a></h2>
-
-<div class="cbi-map">
-	<div class="cbi-section-node">
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:Version%>
-			</div>
-			<div class="cbi-value-field">
-				<%=ver.version%> (built <%=ver.date%> on <%=ver.host%>)
-			</div>
-			<br/>
-		</div>
-
-		<div class="cbi-value">
-			<div style="width: 15em; float:left;">
-				<%:Download Config%>
-			</div>
-			<div class="cbi-value-field">
+<fieldset class="cbi-section">
+        <legend>OLSR <%:Configuration%></legend>
+        <table width="100%" cellspacing="10">
+                <tr><td width="33%"><%:Version%></td><td>
+			<span id="version">-<span>
+		</td></tr>
+                <tr><td width="33%"><%:Download Config%></td><td>
 				<a href="<%=REQUEST_URI%>?openwrt">OpenWrt</a>,
 				<% if ipv == "6and4" then %>
 					<a href="<%=REQUEST_URI%>?conf_v4">OLSRD IPv4</a>,
@@ -295,10 +214,8 @@ XHR.poll(30, '<%=REQUEST_URI%>', { status: 1 },
 				<% else %>
 					<a href="<%=REQUEST_URI%>?conf">OLSRD</a>
 				<% end %>
-			</div>
-			<br/>
-		</div>
-	</div>
-</div>
+		</td></tr>
+	</table>
+</fieldset>
 
 <%+footer%>
