@@ -105,55 +105,6 @@ function index()
 	entry({"admin", "freifunk", "profile_error"}, template("freifunk/profile_error"))
 end
 
-local function fetch_olsrd()
-	local sys = require "luci.sys"
-	local util = require "luci.util"
-	local table = require "table"
-	local rawdata = sys.httpget("http://127.0.0.1:2006/")
-
-	if #rawdata == 0 then
-		if nixio.fs.access("/proc/net/ipv6_route", "r") then
-			rawdata = sys.httpget("http://[::1]:2006/")
-			if #rawdata == 0 then
-				return nil
-			end
-		else
-			return nil
-		end
-	end
-
-	local data = {}
-
-	local tables = util.split(util.trim(rawdata), "\r?\n\r?\n", nil, true)
-
-
-	for i, tbl in ipairs(tables) do
-		local lines = util.split(tbl, "\r?\n", nil, true)
-		local name  = table.remove(lines, 1):sub(8)
-		local keys  = util.split(table.remove(lines, 1), "\t")
-		local split = #keys - 1
-
-		data[name] = {}
-
-		for j, line in ipairs(lines) do
-			local fields = util.split(line, "\t", split)
-			data[name][j] = {}
-			for k, key in pairs(keys) do
-				data[name][j][key] = fields[k]
-			end
-
-			if data[name][j].Linkcost then
-				data[name][j].LinkQuality,
-				data[name][j].NLQ,
-				data[name][j].ETX =
-				data[name][j].Linkcost:match("([%w.]+)/([%w.]+)[%s]+([%w.]+)")
-			end
-		end
-	end
-
-	return data
-end
-
 function zeroes()
 	local string = require "string"
 	local http = require "luci.http"
@@ -243,8 +194,6 @@ function jsonstatus()
 			end
 		end)
 	end
-
-	root.olsrd = fetch_olsrd()
 
 	http.prepare_content("application/json")
 	ltn12.pump.all(json.Encoder(root):source(), http.write)
