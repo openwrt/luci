@@ -134,7 +134,7 @@ function action_neigh(json)
 
 	for k, v in ipairs(data) do
 		if resolve == "1" then
-			hostname = nixio.getnameinfo(v.remoteIP)
+			hostname = nixio.getnameinfo(v.remoteIP, nil, 100)
 			if hostname then
 				v.hostname = hostname
 			end
@@ -159,7 +159,7 @@ function action_routes()
 
 	for k, v in ipairs(data) do
 		if resolve == "1" then
-			local hostname = nixio.getnameinfo(v.gateway)
+			local hostname = nixio.getnameinfo(v.gateway, nil, 100)
 			if hostname then
 				v.hostname = hostname
 			end
@@ -215,7 +215,7 @@ function action_hna()
 
 	for k, v in ipairs(data) do
 		if resolve == "1" then
-			hostname = nixio.getnameinfo(v.gateway)
+			hostname = nixio.getnameinfo(v.gateway, nil, 100)
 			if hostname then
 				v.hostname = hostname
 			end
