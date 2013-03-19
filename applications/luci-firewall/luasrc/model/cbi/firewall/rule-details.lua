@@ -106,16 +106,6 @@ elseif rule_type == "redirect" then
 	o.template = "cbi/firewall_zonelist"
 
 
-	o = s:option(DynamicList, "src_mac", translate("Source MAC address"))
-	o.rmempty = true
-	o.datatype = "neg(macaddr)"
-	o.placeholder = translate("any")
-
-	luci.sys.net.mac_hints(function(mac, name)
-		o:value(mac, "%s (%s)" %{ mac, name })
-	end)
-
-
 	o = s:option(Value, "src_ip", translate("Source IP address"))
 	o.rmempty = true
 	o.datatype = "neg(ipaddr)"
