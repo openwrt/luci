@@ -23,7 +23,4 @@ function index()
 
 	page = entry({"admin", "network", "qos"}, cbi("qos/qos"), _("QoS"))
 	page.dependent = true
-
-	page = entry({"mini", "network", "qos"}, cbi("qos/qosmini", {autoapply=true}), _("QoS"))
-	page.dependent = true
 end
