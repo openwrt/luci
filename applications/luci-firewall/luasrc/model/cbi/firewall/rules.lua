@@ -87,7 +87,7 @@ ft.opt_name(s, DummyValue, translate("Name"))
 local function rule_proto_txt(self, s)
 	local f = self.map:get(s, "family")
 	local p = ft.fmt_proto(self.map:get(s, "proto"),
-	                       self.map:get(s, "icmp_type")) or "TCP+UDP"
+	                       self.map:get(s, "icmp_type")) or translate("traffic")
 
 	if f and f:match("4") then
 		return "%s-%s" %{ translate("IPv4"), p }
