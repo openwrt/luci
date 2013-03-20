@@ -1,13 +1,143 @@
 #!/bin/sh /etc/rc.common
 
-START=60
+START=15
 . /lib/functions/network.sh
-boot()
-{
-	prenabled=$(uci get freifunk-policyrouting.pr.enable)
-	if [ ! "$prenabled" = "1" ] || ! network_is_up wan; then
-		uci -q delete olsrd.@olsrd[0].RtTable
-		uci -q delete olsrd.@olsrd[0].RtTableDefault
+. /lib/functions.sh
+
+proto="4"
+[ -f /proc/net/ipv6_route ] && proto="4 6"
+
+config_load freifunk-policyrouting
+config_get enable pr enable
+config_get fallback pr fallback
+config_get zones pr zones
+
+olsrd_rmtables() {
+	# Remove custom routing tables from olsrd
+	if [ "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
+		uci delete olsrd.@olsrd[0].RtTable
+		uci delete olsrd.@olsrd[0].RtTableDefault
+		uci commit
+	fi
+}
+
+olsrd_intalltables() {
+	if [ ! "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ ! "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
+		uci set olsrd.@olsrd[0].RtTable='111'
+		uci set olsrd.@olsrd[0].RtTableDefault='112'
+		uci commit olsrd
+		/etc/init.d/olsrd restart
+	fi
+}
+
+
+rt_tables() {
+	tables="/etc/iproute2/rt_tables"
+	if [ -z "`grep "111" $tables`" ]; then
+		echo "111 olsr" >> $tables
+	fi
+	if [ -z "`grep "112" $tables`" ]; then
+		echo "112 olsr-default" >> $tables
+	fi
+}
+
+disable_dyngw() {
+	dyngwlib=`uci show olsrd |grep dyn_gw.so |awk {' FS="."; print $1"."$2 '}`
+	if [ -n "$dyngwlib" ]; then
+		uci set $dyngwlib.ignore=1
 		uci commit olsrd
 	fi
+
+	dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
+	if [ -n "$dyngwplainlib" ]; then
+		uci set $dyngwplainlib.ignore=1
+		uci commit olsrd
+	fi
+}
+
+restart_services() {
+	wifi
+	/etc/init.d/network restart
+	/etc/init.d/olsrd restart
+}
+
+boot() {
+	if [ "$enable" = "1" ]; then
+		[ -d /var/state ] || mkdir -p /var/state
+		touch /var/state/freifunk-policyrouting
+		start
+	else
+		olsrd_rmtables
+	fi
+}
+start() {
+	if [ $enable = "1" ]; then
+		logger -s -t policyrouting "Starting policy routing."
+		rt_tables
+		olsrd_intalltables
+		disable_dyngw
+
+		for p in $proto; do
+			if [ ! "$(ip -$p ru s | grep "1000:	from all lookup olsr")" ]; then
+				ip -$p rule add lookup olsr prio 1000
+				if [ "$?" = "0" ]; then
+					logger -s -t policyrouting "Added rule: lookup olsr prio 1000 (IPv$p)"
+				else
+					logger -s -t policyrouting "Error! Could not add rule: lookup olsr prio 1000 (IPv$p)"
+				fi
+			fi
+		done
+
+		# add unreachable with high metric so packets stop here if they find no gateway
+		# in table olsr-default
+		if [ "$strict" != 0 ]; then
+			for p in $proto; do
+				[ ! "$(ip -$p r s t olsr-default |grep "unreachable default")" ] && {
+					ip -$p route add unreachable default table olsr-default metric 65535
+					if [ "$?" = "0" ]; then
+						logger -s -t policyrouting "Added route: unreachable default table olsr-default metric 65535 (IPv$p)"
+					else
+						logger -s -t policyrouting "Error! Could not add route: unreachable default table olsr-default metric 65535 (IPv$p)"
+					fi
+				}
+			done
+
+		fi
+		if [ "$fallback" = 1 ]; then
+			for p in $proto; do
+				[ ! "$(ip -$p ru s |grep "from all lookup olsr-default")" ] && {
+					ip -$p rule add lookup olsr-default prio 33000
+					if [ "$?" = "0" ]; then
+						logger -s -t policyrouting "Added rule: olsr-default prio 33000 (IPv$p)"
+					else
+						logger -s -t policyrouting "Error! Could not add rule: olsr-default prio 33000 (IPv$p)"
+					fi
+				}
+			done
+		fi
+	fi
+}
+
+stop() {
+	logger -s -t policyrouting "Stopping policy routing"
+	olsrd_rmtables
+	for p in $proto; do
+		ip -$p route flush table olsr-default	
+		ip -$p rule del lookup olsr-default > /dev/null 2>&1
+		ip -$p rule del lookup olsr	> /dev/null 2>&1
+	done
+	restart_services
+	echo "Hint: To completely disable freifunk-policyrouting set enable=0 in /etc/config/freifunk-policyrouting."
+}
+
+restart() {
+	logger -s -t policyrouting "Restarting policy routing"
+	olsrd_rmtables
+	for p in $proto; do
+		ip -$p route flush table olsr-default	
+		ip -$p rule del lookup olsr-default > /dev/null 2>&1
+		ip -$p rule del lookup olsr	> /dev/null 2>&1
+	done
+	start
+	restart_services
 }

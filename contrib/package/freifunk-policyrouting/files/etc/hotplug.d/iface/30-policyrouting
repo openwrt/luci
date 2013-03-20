@@ -1,109 +1,99 @@
-[ "$INTERFACE" != "wan" ] && exit 0
-[ -f /proc/net/ipv6_route ] && has_ipv6=1
+#!/bin/sh
 
-olsrd_rmtables() {
-	# Remove custom routing tables from olsrd
-	if [ "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
-		uci delete olsrd.@olsrd[0].RtTable
-		uci delete olsrd.@olsrd[0].RtTableDefault
-		uci commit
-		/etc/init.d/olsrd restart
-	fi
-}
+. /lib/functions.sh
+. /lib/functions/network.sh
 
-case $ACTION in
-        ifup)
-		pr="`uci get freifunk-policyrouting.pr.enable`"
-		fallback="`uci get freifunk-policyrouting.pr.fallback`"
-		# check if ipv6 is enabled:
+proto="4"
+[ -f /proc/net/ipv6_route ] && proto="4 6"
 
-		if [ $pr = "1" ]; then
-			logger -s -t policyrouting "Starting policy routing on $INTERFACE"
+config_load freifunk-policyrouting
+config_get enable pr enable
+config_get fallback pr fallback
+config_get zones pr zones
 
-			# Setup new tables
-			tables="/etc/iproute2/rt_tables"
-			if [ -z "`grep "111" $tables`" ]; then
-				echo "111 olsr" >> $tables
-			fi
-			if [ -z "`grep "112" $tables`" ]; then
-				echo "112 olsr-default" >> $tables
-			fi
+if [ "$ACTION" = "ifup" ] && [ "$enable" = "1" ]; then
+	network_get_subnet net $INTERFACE
+	network_get_subnet6 net6 $INTERFACE
+	network_get_physdev dev $INTERFACE
 
-			# Make sure Rt_tables in olsrd are in place
-			if [ ! "`uci -q get olsrd.@olsrd[0].RtTable`" == "111" ] || [ ! "`uci -q get olsrd.@olsrd[0].RtTableDefault`" == "112" ]; then
-				uci set olsrd.@olsrd[0].RtTable='111'
-				uci set olsrd.@olsrd[0].RtTableDefault='112'
-				uci commit
-				/etc/init.d/olsrd restart
-			fi
-
-			# Disable dyn_gw and dyngw_plain
-			dyngwlib=`uci show olsrd |grep dyn_gw.so |awk {' FS="."; print $1"."$2 '}`
-			if [ -n "$dyngwlib" ]; then
-				uci set $dyngwlib.ignore=1
-				uci commit
-			fi
-
-			dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
-			if [ -n "$dyngwplainlib" ]; then
-				uci set $dyngwplainlib.ignore=1
-				uci commit
-			fi
-	
-			gw="$(ip r |grep default | cut -d " " -f 3)"
-			# if no gateway was found stop now
-			[ -z "$gw" ] && logger -s -t policyrouting "No gateway found" && exit 1
-			
-			device="`uci -q -p /var/state get network.wan.ifname`"
-			[ -z "$device" ] && device="`uci -q -p /var/state get network.wan.device`"
-			[ -z "$device" ] && logger -s -t policyrouting "No device found for wan." && exit 1
-
-			test -n "`ip r s t default`" && ip r d default t default
-			test -n "`ip r s |grep default`" && ip route del default
-			ip route add default via $gw dev $device table default
-
-			if [ "$has_ipv6" = 1 ]; then
-				local ip6gw=$(ip -6 r |grep default |cut -d " " -f 3)
-				test -n "`ip -6 r s t default`" && ip -6 r d default t default
-				if [ -n "`ip -6 r s |grep default`" ]; then
-					ip -6 route del default
-					ip -6 r a $ip6gw via $ip6gw dev $dev table default
-					ip -6 route add default via $ip6gw dev $device table default
+	if [ "$net" != "" -a -n "$dev" ]; then
+		eval $(/bin/ipcalc.sh $net)
+		if [ "$PREFIX" != "0" ]; then
+			if [ ! "$(ip r s t olsr-default |grep "throw $NETWORK/$PREFIX")" ]; then
+				ip r a throw $NETWORK/$PREFIX table olsr-default
+				if [ "$?" = 0 ]; then
+					logger -s -t policyrouting "Add route: throw $NETWORK/$PREFIX table olsr-default"
+				else
+					logger -s -t policyrouting "Error! Could not add route: throw $NETWORK/$PREFIX table olsr-default"
 				fi
 			fi
-
-			ip rule del lookup main
-			ip rule add fwmark 1 lookup olsr-default
-			ip rule add lookup main
-			ip rule add lookup olsr
-                        # Fallback via mesh if no ipv4 gateway is found in default table
-			[ "$fallback" = 1 ] && ip rule add lookup olsr-default prio 32800
-
-			if [ "$has_ipv6" = 1 ]; then
-	                        ip -6 rule del lookup main
-	                        ip -6 rule add lookup olsr prio 16380
-	                        ip -6 rule add lookup main prio 16390
-	                        ip -6 rule add fwmark 1 lookup olsr-default prio 16400
-	                        ip -6 rule add lookup default prio 16410
-	                        [ "$fallback" = 1 ] && ip -6 rule add lookup olsr-default prio 16420
-			fi
-		else
-			olsrd_rmtables
 		fi
-	;;
 
-	ifdown)
-	logger -s -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
-	olsrd_rmtables
-	ip rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
-	ip rule del lookup olsr-default > /dev/null 2>&1
-	ip rule del lookup olsr	> /dev/null 2>&1
-	if [ "$has_ipv6" = 1 ]; then
-		logger -s -t policyrouting "Deleting ipv4 policy rules for $INTERFACE"
-		ip -6 rule del fwmark 1 lookup olsr-default > /dev/null 2>&1
-		ip -6 rule del lookup olsr-default > /dev/null 2>&1
-		ip -6 rule del lookup olsr > /dev/null 2>&1
-                ip -6 rule del lookup default  > /dev/null 2>&1
+		if [ -n "$net6" ]; then
+			if [ ! "$(ip -6 r s t olsr-default |grep "throw $net6")" ]; then
+				rule="throw $net6 table olsr-default dev $dev"
+				ip -6 r a $rule
+				if [ "$?" = 0 ]; then
+					logger -s -t policyrouting "Add route: $rule (IPv6)"
+				else
+					logger -s -t policyrouting "Error! Could not add route: $rule (IPv6)"
+				fi
+			fi
+		fi
+
+		networks=""
+		for z in $zones; do
+			network_zone="$(uci -q get firewall.zone_${z}.network)"
+			if [ -z "$network_zone" ]; then
+				network_zone="$z"
+			fi
+			networks="$networks $network_zone"
+		done
+		for n in $networks; do
+			if [ "$INTERFACE" = "$n" ]; then
+				for p in $proto; do
+					if [ ! "$(ip -$p ru s | grep "from all iif $dev lookup olsr-default")" ]; then
+						ip -$p rule add dev "$dev" lookup olsr-default prio 20000
+						if [ "$?" = 0 ]; then
+							logger -s -t policyrouting "Use mesh gateway for interface $dev (IPv$p)"
+							if [ -z "$(uci -P /var/state get freifunk-policyrouting.${INTERFACE})" ]; then
+								uci -P /var/state set freifunk-policyrouting.${INTERFACE}="state"
+							fi
+							uci -P /var/state set freifunk-policyrouting.${INTERFACE}.device="$dev"
+						else
+							logger -s -t policyrouting "Error: Could not add rule: dev "$dev" lookup olsr-default prio 20000 (IPv$p)"
+						fi
+					fi
+				done
+			fi
+		done
 	fi
-	;;
-esac
+fi
+
+if [ "$ACTION" = "ifdown" ]; then
+	dev="$(uci -q -P /var/state get freifunk-policyrouting.${INTERFACE}.device)"
+	if [ -n "$dev" ]; then
+		networks=""
+		for z in $zones; do
+			network_zone="$(uci -q get firewall.zone_${z}.network)"
+			if [ -z "$network_zone" ]; then
+				network_zone="$z"
+			fi
+			networks="$networks $network_zone"
+		done
+		for n in $networks; do
+			if [ "$INTERFACE" = "$n" ]; then
+				for p in $proto; do
+					if [ "$(ip -$p ru s | grep "from all iif $dev lookup olsr-default")" ]; then
+						ip -$p rule del dev "$dev" lookup olsr-default prio 20000
+						if [ "$?" = 0 ]; then
+							logger -s -t policyrouting "Remove rule: dev "$dev" lookup olsr-default prio 20000 (IPv$p)"
+						else
+							logger -s -t policyrouting "Error! Could not remove rule: dev "$dev" lookup olsr-default prio 20000 (IPv$p)"
+						fi
+					fi
+				done
+			fi
+		done
+	fi
+fi

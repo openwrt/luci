@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freifunk-policyrouting
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -15,7 +15,7 @@ define Package/freifunk-policyrouting
   CATEGORY:=LuCI
   SUBMENU:=9. Freifunk
   TITLE:=Freifunk policy routing addon
-  DEPENDS:=+firewall +ip
+  DEPENDS:=+ip
 endef
 
 define Package/freifunk-policyrouting/description
