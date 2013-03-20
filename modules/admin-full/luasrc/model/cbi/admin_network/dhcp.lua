@@ -239,7 +239,7 @@ mac.datatype = "list(macaddr)"
 mac.rmempty  = true
 
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
-ip.datatype = "ip4addr"
+ip.datatype = "or(ip4addr,'ignore')"
 
 sys.net.arptable(function(entry)
 	ip:value(entry["IP address"])
