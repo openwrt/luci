@@ -2,7 +2,7 @@
 LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2008-2013 Jo-Philipp Wich <xm@subsignal.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.crons then
 			fs.writefile(cronfile, data.crons:gsub("\r\n", "\n"))
+			luci.sys.call("/usr/bin/crontab %q" % cronfile)
 		end
 	end
 	return true
