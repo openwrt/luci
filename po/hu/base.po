@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2012-11-20 18:52+0200\n"
-"Last-Translator: juhosg <juhosg@openwrt.org>\n"
+"PO-Revision-Date: 2013-01-24 19:26+0200\n"
+"Last-Translator: Gábor <vargalex@freemail.hu>\n"
 "Language-Team: none\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -253,6 +253,9 @@ msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
 "option does not comply with IEEE 802.11n-2009!"
 msgstr ""
+"40 MHz csatornaszélesség használata akkor is, ha a másodlagos csatorna "
+"átfedésben van. Ezen opció használata nem felel meg az IEE 902.11n-2009 "
+"szabványnak!"
 
 msgid "An additional network will be created if you leave this unchecked."
 msgstr "Amennyiben ezt jelöletlenül hagyja, egy további hálózat jön létre"
@@ -879,7 +882,7 @@ msgid "Force"
 msgstr "Kényszerítés"
 
 msgid "Force 40MHz mode"
-msgstr ""
+msgstr "40 MHz mód erőltetése"
 
 msgid "Force CCMP (AES)"
 msgstr "CCMP (AES) kényszerítése"
@@ -1185,7 +1188,7 @@ msgid "Interfaces"
 msgstr "Interfészek"
 
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Belső szerverhiba"
 
 msgid "Invalid"
 msgstr "Érvénytelen"
@@ -1787,7 +1790,7 @@ msgid "Port %d is untagged in multiple VLANs!"
 msgstr "A %d port egyszerre több VLAN-ban is cimkézetlen!"
 
 msgid "Port status:"
-msgstr ""
+msgstr "Port állapot:"
 
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
@@ -2318,6 +2321,11 @@ msgid ""
 "SSID capable). Per network settings like encryption or operation mode are "
 "grouped in the <em>Interface Configuration</em>."
 msgstr ""
+"Az <em>Eszköz beállítások</em> szakasz a rádió hardver fizikai beállításait, "
+"úgymint csatorna, adóteljesítmény vagy antenna választás teszi lehetővé, "
+"amelyen az összes definiált vezeték nélküli hálózat (ha a rádió hardver "
+"multi-SSID képes) osztozik. A hálózatonkénti beállítások, mint az "
+"titkosítás, mód az <em>Interfész beállítások</em> alá vannak csoportosítva."
 
 msgid ""
 "The <em>libiwinfo-lua</em> package is not installed. You must install this "
@@ -2398,6 +2406,13 @@ msgid ""
 "segments. Often there is by default one Uplink port for a connection to the "
 "next greater network like the internet and other ports for a local network."
 msgstr ""
+"Az eszközön található hálózati portok kombinálhatók több <abbr "
+"title=\"Virtual Local Area Network\">VLAN</abbr>-ba, amelyekben a számítógépek "
+"közvetlenül kommunikálhatnak egmással. A <abbr title=\"Virtual Local Area "
+"Network\">VLAN</abbr>-ok gyakran a hálózati szegmensek elkülönítésére "
+"használják. Gyakran van egy alapértelmezett Uplink port a következő nagyobb "
+"hálózathoz (pl. az internet) való kapcsolódásra és a többi port a helyi "
+"hálózathoz."
 
 msgid "The selected protocol needs a device assigned"
 msgstr "A kiválasztott protokoll eszköz hozzárendelést igényel"
@@ -2532,7 +2547,7 @@ msgid "Total Available"
 msgstr "Összes elérhető"
 
 msgid "Traceroute"
-msgstr ""
+msgstr "Traceroute"
 
 msgid "Traffic"
 msgstr "Forgalom"
@@ -2577,7 +2592,7 @@ msgid "UDP:"
 msgstr "UDP:"
 
 msgid "UMTS only"
-msgstr ""
+msgstr "Csak UTMS"
 
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
@@ -2589,7 +2604,7 @@ msgid "UUID"
 msgstr "UUID"
 
 msgid "Unable to dispatch"
-msgstr ""
+msgstr "Nem indiítható"
 
 msgid "Unknown"
 msgstr "Ismeretlen"
@@ -2691,7 +2706,7 @@ msgid "Username"
 msgstr "Felhasználónév"
 
 msgid "VC-Mux"
-msgstr ""
+msgstr "VC-Mux"
 
 msgid "VLAN Interface"
 msgstr "VLAN interfész"
@@ -2740,10 +2755,10 @@ msgstr ""
 "ad-hoc módnál 'hostapd' telepítése szükséges."
 
 msgid "Waiting for changes to be applied..."
-msgstr ""
+msgstr "Várakozás a változtatások alklamazására..."
 
 msgid "Waiting for command to complete..."
-msgstr ""
+msgstr "Várakozás a parancs befejezésére..."
 
 msgid "Warning"
 msgstr "Figyelmeztetés"
@@ -2818,7 +2833,7 @@ msgid "auto"
 msgstr "automatikus"
 
 msgid "baseT"
-msgstr ""
+msgstr "baseT"
 
 msgid "bridged"
 msgstr "áthidalt"
@@ -2830,10 +2845,10 @@ msgid "creates a bridge over specified interface(s)"
 msgstr "híd létrehozása a megadott interfész(ek) között"
 
 msgid "dB"
-msgstr ""
+msgstr "dB"
 
 msgid "dBm"
-msgstr ""
+msgstr "dBm"
 
 msgid "disable"
 msgstr "letiltás"
@@ -2852,16 +2867,16 @@ msgid "forward"
 msgstr "továbbítás"
 
 msgid "full-duplex"
-msgstr ""
+msgstr "full-duplex"
 
 msgid "half-duplex"
-msgstr ""
+msgstr "half-duplex"
 
 msgid "help"
 msgstr "súgó"
 
 msgid "hidden"
-msgstr ""
+msgstr "rejtett"
 
 msgid "if target is a network"
 msgstr "ha a cél hálózat"
@@ -2870,13 +2885,13 @@ msgid "input"
 msgstr "bemenet"
 
 msgid "kB"
-msgstr ""
+msgstr "kB"
 
 msgid "kB/s"
-msgstr ""
+msgstr "kB/s"
 
 msgid "kbit/s"
-msgstr ""
+msgstr "kbit/s"
 
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
 msgstr "helyi <abbr title=\"Domain Name System\">DNS</abbr> fájl"
@@ -2885,7 +2900,7 @@ msgid "no"
 msgstr "nem"
 
 msgid "no link"
-msgstr ""
+msgstr "nincs link"
 
 msgid "none"
 msgstr "nincs"
@@ -2897,7 +2912,7 @@ msgid "on"
 msgstr "be"
 
 msgid "open"
-msgstr ""
+msgstr "nyitás"
 
 msgid "routed"
 msgstr "irányított"
@@ -2906,7 +2921,7 @@ msgid "tagged"
 msgstr "cimkézett"
 
 msgid "unknown"
-msgstr ""
+msgstr "ismeretlen"
 
 msgid "unlimited"
 msgstr "korlátlan"
