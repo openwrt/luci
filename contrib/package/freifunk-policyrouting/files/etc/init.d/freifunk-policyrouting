@@ -33,12 +33,16 @@ olsrd_intalltables() {
 
 rt_tables() {
 	tables="/etc/iproute2/rt_tables"
+	if [ -z "`grep "110" $tables`" ]; then
+		echo "110 localnets" >> $tables
+	fi
 	if [ -z "`grep "111" $tables`" ]; then
 		echo "111 olsr" >> $tables
 	fi
 	if [ -z "`grep "112" $tables`" ]; then
 		echo "112 olsr-default" >> $tables
 	fi
+
 }
 
 disable_dyngw() {
@@ -80,6 +84,9 @@ start() {
 		for p in $proto; do
 			if [ ! "$(ip -$p ru s | grep "1000:	from all lookup olsr")" ]; then
 				ip -$p rule add lookup olsr prio 1000
+				# add table for routes to local networks
+				ip -$p rule add lookup localnets prio 2000
+
 				if [ "$?" = "0" ]; then
 					logger -s -t policyrouting "Added rule: lookup olsr prio 1000 (IPv$p)"
 				else

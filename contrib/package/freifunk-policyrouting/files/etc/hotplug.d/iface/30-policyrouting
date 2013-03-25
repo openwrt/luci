@@ -11,6 +11,7 @@ config_get enable pr enable
 config_get fallback pr fallback
 config_get zones pr zones
 
+
 if [ "$ACTION" = "ifup" ] && [ "$enable" = "1" ]; then
 	network_get_subnet net $INTERFACE
 	network_get_subnet6 net6 $INTERFACE
@@ -18,27 +19,26 @@ if [ "$ACTION" = "ifup" ] && [ "$enable" = "1" ]; then
 
 	if [ "$net" != "" -a -n "$dev" ]; then
 		eval $(/bin/ipcalc.sh $net)
-		if [ "$PREFIX" != "0" ]; then
-			if [ ! "$(ip r s t olsr-default |grep "throw $NETWORK/$PREFIX")" ]; then
-				ip r a throw $NETWORK/$PREFIX table olsr-default
+		if [ "$PREFIX" != "0" -a "$NETWORK" != "127.0.0.0" ]; then
+			if [ ! "$(ip r s t localnets |grep "$NETWORK/$PREFIX dev")" ]; then
+				cmd="ip r a $NETWORK/$PREFIX dev $dev table localnets"
+				$cmd
 				if [ "$?" = 0 ]; then
-					logger -s -t policyrouting "Add route: throw $NETWORK/$PREFIX table olsr-default"
+					logger -s -t policyrouting "Add route: $cmd"
 				else
-					logger -s -t policyrouting "Error! Could not add route: throw $NETWORK/$PREFIX table olsr-default"
+					logger -s -t policyrouting "Error! Could not add route: $cmd"
 				fi
 			fi
+
 		fi
 
 		if [ -n "$net6" ]; then
-			if [ ! "$(ip -6 r s t olsr-default |grep "throw $net6")" ]; then
-				rule="throw $net6 table olsr-default dev $dev"
-				ip -6 r a $rule
-				if [ "$?" = 0 ]; then
-					logger -s -t policyrouting "Add route: $rule (IPv6)"
-				else
-					logger -s -t policyrouting "Error! Could not add route: $rule (IPv6)"
-				fi
+			cmd="ip -6 r a $net6 dev $dev table localnets"
+			$cmd 2>&1 > /dev/null
+			if [ "$?" = 0 ]; then
+				logger -s -t policyrouting "Add route: $cmd (IPv6)"
 			fi
+
 		fi
 
 		networks=""
@@ -68,6 +68,7 @@ if [ "$ACTION" = "ifup" ] && [ "$enable" = "1" ]; then
 			fi
 		done
 	fi
+
 fi
 
 if [ "$ACTION" = "ifdown" ]; then
