@@ -9,9 +9,12 @@ require("luci.sys.iptparser")
 local uci = luci.model.uci.cursor_state()
 local ipt = luci.sys.iptparser.IptParser()
 local net = luci.sys.net
+local fs = require "luci.fs"
 
 local limit_up = 0
 local limit_down = 0
+
+local has_ipv6 = fs.access("/proc/net/ipv6_route") and fs.access("/usr/sbin/ip6tables")
 
 function lock()
 	os.execute("lock /var/run/luci_splash.lock")
@@ -191,6 +194,22 @@ function ipt_delete_all(args, comp, off)
 	end
 end
 
+function ipt6_delete_all(args, comp, off)
+	off = off or { }
+	for i, r in ipairs(ipt:find(args)) do
+		if comp == nil or comp(r) then
+			off[r.table] = off[r.table] or { }
+			off[r.table][r.chain] = off[r.table][r.chain] or 0
+
+			os.execute("ip6tables -t %q -D %q %d 2>/dev/null"
+				%{ r.table, r.chain, r.index - off[r.table][r.chain] })
+
+			off[r.table][r.chain] = off[r.table][r.chain] + 1
+		end
+	end
+end
+
+
 -- Convert mac to uci-compatible section name
 function convert_mac_to_secname(mac)
 	return string.gsub(mac, ":", "")
@@ -290,8 +309,12 @@ function add_lease_rule(mac, ipaddr)
 		os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
 	end
 
+
 	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
 	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
+	if has_ipv6 then
+		os.execute("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+	end
 end
 
 
@@ -306,6 +329,9 @@ function remove_lease_rule(mac, ipaddr)
 
 	ipt_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
 	ipt_delete_all({table="nat",    chain="luci_splash_leases",   options={"MAC", mac:upper()}})
+	if has_ipv6 then
+		ipt6_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
+	end
 end
 
 
@@ -313,12 +339,18 @@ end
 function add_whitelist_rule(mac)
 	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
 	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
+	if has_ipv6 then
+		os.execute("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+	end
 end
 
 
 -- Add blacklist rules
 function add_blacklist_rule(mac)
 	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
+	if has_ipv6 then
+		os.execute("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
+	end
 end
 
 
@@ -365,15 +397,21 @@ function sync()
 
 	ipt_delete_all({table="filter", chain="luci_splash_filter", options={"MAC"}},
 		function(r) return not macs[r.options[2]:lower()] end)
-
 	ipt_delete_all({table="nat", chain="luci_splash_leases", options={"MAC"}},
 		function(r) return not macs[r.options[2]:lower()] end)
-
 	ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
 		function(r) return not macs[r.options[2]:lower()] end)
-
 	ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"MARK", "set"}},
 		function(r) return not ips[r.destination] end)
+
+	if has_ipv6 then
+		ipt6_delete_all({table="filter", chain="luci_splash_filter", options={"MAC"}},
+			function(r) return not macs[r.options[2]:lower()] end)
+		ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
+			function(r) return not macs[r.options[2]:lower()] end)
+		ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"MARK", "set"}},
+			function(r) return not ips[r.destination] end)
+	end
 
 	unlock()
 end

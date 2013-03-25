@@ -8,6 +8,7 @@ LIMIT_UP=0
 
 IPT_REPLAY=/var/run/luci_splash.iptlog
 LOCK=/var/run/luci_splash.lock
+[ -x /usr/sbin/ip6tables ] && [ -f /proc/net/ipv6_route ] && HAS_IPV6=1
 
 silent() {
 	"$@" 2>/dev/null
@@ -17,6 +18,13 @@ ipt_log() {
 	iptables -I "$@"
 	echo iptables -D "$@" >> $IPT_REPLAY
 }
+
+ipt6_log() {
+	[ "$HAS_IPV6" = 1 ] || return
+	ip6tables -I "$@"
+	echo ip6tables -D "$@" >> $IPT_REPLAY
+}
+
 
 iface_add() {
 	local cfg="$1"
@@ -32,6 +40,9 @@ iface_add() {
 
 	config_get ipaddr "$net" ipaddr
 	[ -n "$ipaddr" ] || return 0
+
+	config_get ip6addr "$net" ip6addr
+	#[ -n "$ipaddr" ] || return 0
 
 	config_get netmask "$net" netmask
 	[ -n "$netmask" ] || return 0
@@ -52,6 +63,10 @@ iface_add() {
 	### Add interface specific chain entry rules
 	ipt_log "zone_${zone}_prerouting" -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_prerouting -t nat
 	ipt_log "zone_${zone}_forward"    -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_forwarding -t filter
+
+	if [ "$HAS_IPV6" = 1 ]; then
+		ipt6_log "zone_${zone}_forward"    -i "${ifname%:*}" -s "$ip6addr" -j luci_splash_forwarding -t filter
+	fi
 
 	### Allow traffic to the same subnet
 	iptables -t nat    -I luci_splash_prerouting -d "$ipaddr/${netmask:-32}" -j RETURN
@@ -197,6 +212,11 @@ start() {
 	iptables -t filter -N luci_splash_forwarding
 	iptables -t filter -N luci_splash_filter
 
+	if [ "$HAS_IPV6" = 1 ]; then
+		ip6tables -t filter -N luci_splash_forwarding
+		ip6tables -t filter -N luci_splash_filter
+	fi
+
 	### Clear iptables replay log
 	[ -s $IPT_REPLAY ] && . $IPT_REPLAY
 	echo -n > $IPT_REPLAY
@@ -215,12 +235,24 @@ start() {
 	iptables -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
 	iptables -t filter -A luci_splash_filter -j REJECT --reject-with icmp-net-prohibited
 
+	if [ "$HAS_IPV6" = 1 ]; then
+		ip6tables -t filter -A luci_splash_forwarding -j luci_splash_filter
+		ip6tables -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
+		ip6tables -t filter -A luci_splash_filter -j REJECT --reject-with adm-prohibited
+	fi
+
 	### Add QoS chain
 	[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
 		iptables -t mangle -N luci_splash_mark_out
 		iptables -t mangle -N luci_splash_mark_in
 		iptables -t mangle -I PREROUTING  -j luci_splash_mark_out
 		iptables -t mangle -I POSTROUTING -j luci_splash_mark_in
+		if [ "$HAS_IPV6" = 1 ]; then
+			ip6tables -t mangle -N luci_splash_mark_out
+			ip6tables -t mangle -N luci_splash_mark_in
+			ip6tables -t mangle -I PREROUTING  -j luci_splash_mark_out
+			ip6tables -t mangle -I POSTROUTING -j luci_splash_mark_in
+		fi
 	}
 
 	### Find active mac addresses
@@ -254,6 +286,11 @@ stop() {
 	silent iptables -t mangle -D PREROUTING  -j luci_splash_mark_out
 	silent iptables -t mangle -D POSTROUTING -j luci_splash_mark_in
 
+	if [ "$HAS_IPV6" = 1 ]; then
+		silent ip6tables -t mangle -D PREROUTING  -j luci_splash_mark_out
+		silent ip6tables -t mangle -D POSTROUTING -j luci_splash_mark_in
+	fi
+
 	### Clear subchains
 	silent iptables -t nat    -F luci_splash_prerouting
 	silent iptables -t nat    -F luci_splash_leases
@@ -262,6 +299,13 @@ stop() {
 	silent iptables -t mangle -F luci_splash_mark_out
 	silent iptables -t mangle -F luci_splash_mark_in
 
+	if [ "$HAS_IPV6" = 1 ]; then
+		ip6tables -t filter -F luci_splash_forwarding
+		ip6tables -t filter -F luci_splash_filter
+		ip6tables -t mangle -F luci_splash_mark_out
+		ip6tables -t mangle -F luci_splash_mark_in
+	fi
+
 	### Delete subchains
 	silent iptables -t nat    -X luci_splash_prerouting
 	silent iptables -t nat    -X luci_splash_leases
@@ -269,7 +313,12 @@ stop() {
 	silent iptables -t filter -X luci_splash_filter
 	silent iptables -t mangle -X luci_splash_mark_out
 	silent iptables -t mangle -X luci_splash_mark_in
-
+	if [ "$HAS_IPV6" = 1 ]; then
+		ip6tables -t filter -X luci_splash_forwarding
+		ip6tables -t filter -X luci_splash_filter
+		ip6tables -t mangle -X luci_splash_mark_out
+		ip6tables -t mangle -X luci_splash_mark_in
+	fi
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
 
 	lock -u $LOCK
