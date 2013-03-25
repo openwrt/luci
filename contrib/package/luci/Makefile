@@ -1,32 +1,16 @@
 include $(TOPDIR)/rules.mk
 
-PKG_BRANCH:=trunk
-
-ifeq ($(DUMP),)
-  USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
-endif
+LUCI_TOPDIR=../../..
 
 PKG_NAME:=luci
 PKG_RELEASE:=1
 
 PKG_BUILD_PARALLEL:=0
 
-ifeq ($(USELOCAL),1)
-  PKG_VERSION:=trunk+svn
-else
-  PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
-  ifeq ($(DUMP),)
-    PKG_REV:=$(shell LC_ALL=C svn info $(CURDIR) | sed -ne's/^Revision: //p')
-    PKG_VERSION:=trunk+svn$(PKG_REV)
-  endif
-  PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-  PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
-  PKG_SOURCE_PROTO:=svn
-  PKG_SOURCE_VERSION:=$(PKG_REV)
-endif
+PKG_VERSION:=$(shell $(LUCI_TOPDIR)/build/mkrevision.sh 2>/dev/null || echo unknown)
 
 PKG_BUILD_DEPENDS:=$(if $(STAGING_DIR_ROOT),lua/host)
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 LUA_TARGET:=source
@@ -63,7 +47,7 @@ define Package/luci-lib-core/install
 	$(PKG_BUILD_DIR)/build/mkversion.sh $(1)/usr/lib/lua/luci/version.lua \
 		"OpenWrt Firmware" \
 		"$(OPENWRTVERSION)" \
-		"$(PKG_BRANCH)" \
+		"trunk" \
 		"$(PKG_VERSION)"
 endef
 
@@ -618,16 +602,20 @@ PKG_CONFIG_DEPENDS=$(patsubst %,CONFIG_PACKAGE_%,$(LUCI_BUILD_PACKAGES))
 
 include $(INCLUDE_DIR)/package.mk
 
-ifeq ($(USELOCAL),1)
-  define Build/Prepare
+define Build/Prepare
+	@if [ ! -x $(LUCI_TOPDIR)/build/mkrevision.sh ]; then \
+		echo "*** Repository layout changed!" >&2; \
+		echo "*** Please change the LuCI url in feeds.conf to http://svn.luci.subsignal.org/luci/trunk and reinstall the feed with" >&2; \
+		echo "*** ./scripts/feeds update luci; ./scripts/feeds install -a -p luci" >&2; \
+		exit 1; \
+	fi
 	mkdir -p $(PKG_BUILD_DIR)
-	$(TAR) c -C ../../../ . \
+	$(TAR) c -C $(LUCI_TOPDIR) . \
 		--exclude=.pc --exclude=.svn --exclude=.git \
 		--exclude='boa-0*' --exclude='*.o' --exclude='*.so' \
 		--exclude=dist | \
 			tar x -C $(PKG_BUILD_DIR)/
-  endef
-endif
+endef
 
 define Build/Configure
 endef
