@@ -108,8 +108,16 @@ function action_json()
 
         local jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
         local jsonreq6 = utl.exec("echo /status | nc ::1 9090")
-
 	http.prepare_content("application/json")
+
+	if #jsonreq4 < 1 then
+		jsonreq4 = "{}"
+	end
+
+	if #jsonreq6 < 1 then
+		jsonreq6 = "{}"
+	end
+
 	http.write("{v4:" .. jsonreq4 .. ", v6:" .. jsonreq6 .. "}")
 end
 

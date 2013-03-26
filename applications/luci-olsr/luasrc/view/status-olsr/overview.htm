@@ -72,7 +72,6 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 			} else if (info.v6.config.olsrdVersion != undefined) {
 				version = info.v6.config.olsrdVersion
 				date = info.v6.config.olsrdBuildDate
-
 			} else {
 				version = 'unknown'
 				date = 'unknown'
@@ -81,10 +80,10 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 
 		if (e = document.getElementById('nr_neigh'))
 			var neigh = 0;
-			if (info.v4.links.length != undefined) {
+			if (info.v4.links != undefined) {
 				neigh = neigh + info.v4.links.length
 			}
-			if (info.v6.links.length != undefined) {
+			if (info.v6.links != undefined) {
 				neigh = neigh + info.v6.links.length
 			}
 			e.innerHTML = neigh;
@@ -92,10 +91,10 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 
 		if (e = document.getElementById('nr_hna'))
 			var hna = 0;
-			if (info.v4.hna.length != undefined) {
+			if (info.v4.hna != undefined) {
 				hna = hna + info.v4.hna.length
 			}
-			if (info.v6.hna.length != undefined) {
+			if (info.v6.hna != undefined) {
 				hna = hna + info.v6.hna.length
 			}
 			e.innerHTML = hna;
@@ -103,10 +102,10 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 
 		if (e = document.getElementById('nr_ifaces'))
 			var nrint = 0
-			if (info.v4.interfaces.length != undefined) {
+			if (info.v4.interfaces != undefined) {
 				nrint = nrint + info.v4.interfaces.length
 			}
-			if (info.v6.interfaces.length != undefined) {
+			if (info.v6.interfaces != undefined) {
 				nrint = nrint + info.v6.interfaces.length
 			}
 			e.innerHTML = nrint
@@ -125,7 +124,7 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 				return false;
 			}
 
-			if (info.v4.topology.length != undefined) {
+			if (info.v4.topology != undefined) {
 				topo = topo + info.v4.topology.length;
 				for (var i = 0; i < info.v4.topology.length; i++) {
 					var destip = info.v4.topology[i].destinationIP
@@ -135,7 +134,7 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 				}
 			}
 
-			if (info.v6.topology.length != undefined) {
+			if (info.v6.topology != undefined) {
 				topo = topo + info.v6.topology.length
 				for (var i = 0; i < info.v6.topology.length; i++) {
 					var destip = info.v6.topology[i].destinationIP
