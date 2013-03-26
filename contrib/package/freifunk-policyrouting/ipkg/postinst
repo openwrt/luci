@@ -1,0 +1,6 @@
+#!/bin/sh
+
+[ -n "${IPKG_INSTROOT}" ] || {
+	/etc/init.d/freifunk-policyrouting enabled || /etc/init.d/freifunk-policyrouting enable
+	exit 0
+}
