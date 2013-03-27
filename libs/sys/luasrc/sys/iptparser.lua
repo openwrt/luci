@@ -332,8 +332,10 @@ function IptParser._parse_rules( self )
 					rule_details["destination"] = rule_parts[10]
 					rule_details["options"]     = { }
 
-					for i = 11, #rule_parts - 1 do
-						rule_details["options"][i-10] = rule_parts[i]
+					for i = 11, #rule_parts  do
+						if #rule_parts[i] > 0 then
+							rule_details["options"][i-10] = rule_parts[i]
+						end
 					end
 
 					self._rules[#self._rules+1] = rule_details
