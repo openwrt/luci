@@ -8,6 +8,8 @@
 	local networks = nwm:get_networks()
 	local value = self:formvalue(section)
 
+	self.cast = nil
+
 	if not value or value == "-" then
 		value = self:cfgvalue(section) or self.default
 	end
