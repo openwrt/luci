@@ -45,6 +45,11 @@ o = section:taboption("advanced", Flag, "peerdns",
 o.default = o.enabled
 
 
+o = section:taboption("advanced", Value, "ip6prefix",
+	translate("Custom delegated IPv6-prefix"))
+o.dataype = "ip6addr"
+
+
 o = section:taboption("advanced", DynamicList, "dns",
 	translate("Use custom DNS servers"))
 o:depends("peerdns", "")

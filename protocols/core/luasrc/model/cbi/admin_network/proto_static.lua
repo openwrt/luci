@@ -53,6 +53,8 @@ if luci.model.network:has_ipv6() then
 	ip6assign:value("64")
 	ip6assign.datatype = "max(64)"
 
+	local ip6hint = section:taboption("general", Value, "ip6hint", translate("IPv6 assignment hint"),
+		translate("Assign prefix parts using this hexadecimal subprefix ID for this interface."))
 
 	ip6addr = section:taboption("general", Value, "ip6addr", translate("IPv6 address"))
 	ip6addr.datatype = "ip6addr"
