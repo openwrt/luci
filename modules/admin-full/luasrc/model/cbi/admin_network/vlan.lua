@@ -14,6 +14,7 @@ You may obtain a copy of the License at
 
 m = Map("network", translate("Switch"), translate("The network ports on this device can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
 
+local fs = require "nixio.fs"
 local switches = { }
 
 m.uci:foreach("network", "switch",
@@ -28,7 +29,7 @@ m.uci:foreach("network", "switch",
 		local max_vid     = 16
 		local num_vlans   = 16
 		local num_ports   = 6
-		local cpu_port    = 5
+		local cpu_port    = tonumber(fs.readfile("/proc/switch/eth0/cpuport") or 5)
 
 		local switch_title
 		local enable_vlan4k = false
