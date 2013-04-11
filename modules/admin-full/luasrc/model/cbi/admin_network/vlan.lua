@@ -28,8 +28,8 @@ m.uci:foreach("network", "switch",
 		local min_vid     = 0
 		local max_vid     = 16
 		local num_vlans   = 16
-		local num_ports   = 6
 		local cpu_port    = tonumber(fs.readfile("/proc/switch/eth0/cpuport") or 5)
+		local num_ports   = cpu_port + 1
 
 		local switch_title
 		local enable_vlan4k = false
@@ -203,7 +203,7 @@ m.uci:foreach("network", "switch",
 
 
 		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID", "<div id='portstatus-%s'></div>" % switch_name)
-		local mx_vid = has_vlan4k and 4094 or (num_vlans - 1) 
+		local mx_vid = has_vlan4k and 4094 or (num_vlans - 1)
 
 		vid.rmempty = false
 		vid.forcewrite = true
