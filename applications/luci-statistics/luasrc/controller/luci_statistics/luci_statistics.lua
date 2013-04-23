@@ -55,13 +55,14 @@ function index()
 		processes	= _("Processes"),
 		rrdtool		= _("RRDTool"),
 		tcpconns	= _("TCP Connections"),
-		unixsock	= _("UnixSock")
+		unixsock	= _("UnixSock"),
+		uptime		= _("Uptime")
 	}
 
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "csv", "network", "rrdtool", "unixsock" },
-		system  = { "cpu", "df", "disk", "email", "exec", "irq", "load", "memory", "nut", "processes" },
+		system  = { "cpu", "df", "disk", "email", "exec", "irq", "load", "memory", "nut", "processes", "uptime" },
 		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "ping", "tcpconns", "iwinfo" }
 	}
 
