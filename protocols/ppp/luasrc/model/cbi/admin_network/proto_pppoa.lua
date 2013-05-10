@@ -139,4 +139,4 @@ demand.datatype    = "uinteger"
 
 mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
 mtu.placeholder = "1500"
-mtu.datatype    = "max(1500)"
+mtu.datatype    = "max(9200)"

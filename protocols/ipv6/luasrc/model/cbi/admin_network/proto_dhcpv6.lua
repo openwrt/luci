@@ -64,4 +64,4 @@ luci.tools.proto.opt_macaddr(section, ifc, translate("Override MAC address"))
 
 o = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
 o.placeholder = "1500"
-o.datatype    = "max(1500)"
+o.datatype    = "max(9200)"

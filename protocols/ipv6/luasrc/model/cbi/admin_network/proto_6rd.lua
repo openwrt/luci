@@ -78,4 +78,4 @@ ttl.datatype    = "range(1,255)"
 
 mtu = section:taboption("advanced", Value, "mtu", translate("Use MTU on tunnel interface"))
 mtu.placeholder = "1280"
-mtu.datatype    = "max(1500)"
+mtu.datatype    = "max(9200)"
