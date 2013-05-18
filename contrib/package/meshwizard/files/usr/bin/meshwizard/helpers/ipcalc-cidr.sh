@@ -28,6 +28,7 @@ BEGIN {
 	print "NETMASK="int2ip(netmask)
 	print "BROADCAST="int2ip(broadcast)
 	print "NETWORK="int2ip(network)
+	print "NEXTNET="int2ip(broadcast + 1)
 	print "PREFIX="32-bitcount(compl(netmask))
 	
 	# range calculations:

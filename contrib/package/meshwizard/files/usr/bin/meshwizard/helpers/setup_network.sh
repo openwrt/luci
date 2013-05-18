@@ -67,23 +67,48 @@ if [ "$net_dhcp" == 1 ]; then
 		dhcprange="$($dir/helpers/gen_dhcp_ip.sh $interface_ip)/24"
 		uci set meshwizard.netconfig.${net}_dhcprange="$dhcprange"
 	fi
-	eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange 1 0)
 
-	# setup wifi-dhcp interface or alias (using interface notation)
-
-	# Setup alias for $net
+	# If we use VAP then cut the dhcp range in two halves
+	# one for the adhoc, one for the managed VAP interface
 
 	if [ "$vap" == 1 ]; then
-		uci set network.${netrenamed}dhcp=interface
+		local network
+		local mask
+		network=${dhcprange%%/*}
+		mask=${dhcprange##*/}
+		# Divide network size by adding 1 to the netmask
+		mask=$(($mask + 1))
+		# Get first ip and netmask for the adhoc dhcp network
+		eval $(sh $dir/helpers/ipcalc-cidr.sh ${network}/${mask} 1 0)
+		STARTADHOC=$START
+		NETMASKADHOC=$NETMASK
+		# Get first ip and netmask for the managed dhcp network
+		eval $(sh $dir/helpers/ipcalc-cidr.sh ${NEXTNET}/${mask} 1 0)
+		STARTVAP=$START
+		NETMASKVAP=$NETMASK
+		# Add dhcp interface
+		uci batch <<- EOF
+			set network.${netrenamed}dhcp=interface
+			set network.${netrenamed}dhcp.proto=static
+			set network.${netrenamed}dhcp.ipaddr="$STARTVAP"
+			set network.${netrenamed}dhcp.netmask="$NETMASKVAP"
+		EOF
+		uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
+
 	else
-		uci set network.${netrenamed}dhcp=interface
-		uci set network.${netrenamed}dhcp.ifname="@${netrenamed}"
+		eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange 1 0)
+		STARTADHOC=$START
+		NETMASKADHOC=$NETMASK
 	fi
 
+	# Setup alias for $net adhoc interface
+
 	uci batch <<- EOF
-		set network.${netrenamed}dhcp.proto=static
-		set network.${netrenamed}dhcp.ipaddr="$START"
-		set network.${netrenamed}dhcp.netmask="$NETMASK"
+		set network.${netrenamed}ahdhcp=interface
+		set network.${netrenamed}ahdhcp.ifname="@${netrenamed}"
+		set network.${netrenamed}ahdhcp.proto=static
+		set network.${netrenamed}ahdhcp.ipaddr="$STARTADHOC"
+		set network.${netrenamed}ahdhcp.netmask="$NETMASKADHOC"
 	EOF
-	uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
+	uci_commitverbose  "Setup interface for ${netrenamed}ahdhcp" network
 fi

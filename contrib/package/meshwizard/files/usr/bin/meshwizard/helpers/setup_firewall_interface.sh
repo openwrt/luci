@@ -61,17 +61,41 @@ currms=$(uci -q get firewall.zone_freifunk.masq_src)
 
 # If interfaces are outside of the mesh network they should be natted
 
-# Get dhcprange and meshnet
-if_ip="$(uci -q get network.${netrenamed}dhcp.ipaddr)"
-if_mask="$(uci -q get network.${netrenamed}dhcp.netmask)"
+if [ "$vap" == 1 ]; then
+	# Get dhcprange and meshnet for the dhcp interface
+	if_ip="$(uci -q get network.${netrenamed}dhcp.ipaddr)"
+	if_mask="$(uci -q get network.${netrenamed}dhcp.netmask)"
+
+	[ -n "$if_ip" -a "$if_mask" ] && export $(ipcalc.sh $if_ip $if_mask)
+	[ -n "$NETWORK" -a "$PREFIX" ] && dhcprange="$NETWORK/$PREFIX"
+
+	if [ -n "$dhcprange" ]; then
+		meshnet="$(uci get profile_$community.profile.mesh_network)"
+		# check if the dhcprange is inside meshnet
+		dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
+		if [ "$dhcpinmesh" == 1 ]; then
+			# needed or splash will not work
+			if [ "$has_luci_splash" == TRUE ]; then
+				uci set firewall.zone_freifunk.contrack="1"
+			fi
+		else
+			uci set firewall.zone_freifunk.masq=1
+			[ -z "$(echo $currms |grep ${netrenamed}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}dhcp"
+		fi
+	fi
+fi
+
+# Get dhcprange and meshnet for the adhoc dhcp interface
+if_ip="$(uci -q get network.${netrenamed}ahdhcp.ipaddr)"
+if_mask="$(uci -q get network.${netrenamed}ahdhcp.netmask)"
 
 [ -n "$if_ip" -a "$if_mask" ] && export $(ipcalc.sh $if_ip $if_mask)
-[ -n "$NETWORK" -a "$PREFIX" ] && dhcprange="$NETWORK/$PREFIX"
+[ -n "$NETWORK" -a "$PREFIX" ] && dhcprangeah="$NETWORK/$PREFIX"
 
-if [ -n "$dhcprange" ]; then
+if [ -n "$dhcprangeah" ]; then
 	meshnet="$(uci get profile_$community.profile.mesh_network)"
 	# check if the dhcprange is inside meshnet
-	dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprange $meshnet)"
+	dhcpinmesh="$($dir/helpers/check-range-in-range.sh $dhcprangeah $meshnet)"
 	if [ "$dhcpinmesh" == 1 ]; then
 		# needed or splash will not work
 		if [ "$has_luci_splash" == TRUE ]; then
@@ -79,9 +103,10 @@ if [ -n "$dhcprange" ]; then
 		fi
 	else
 		uci set firewall.zone_freifunk.masq=1
-		[ -z "$(echo $currms |grep ${netrenamed}dhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}dhcp"
+		[ -z "$(echo $currms |grep ${netrenamed}ahdhcp)" ] && uci add_list firewall.zone_freifunk.masq_src="${netrenamed}ahdhcp"
 	fi
 fi
+
 
 for i in IP NETMASK BROADCAST NETWORK PREFIX; do
 	unset $i
