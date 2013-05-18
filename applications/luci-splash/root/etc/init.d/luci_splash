@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
 
+set -x
 START=70
 EXTRA_COMMANDS=clear_leases
 LIMIT_DOWN=0
@@ -64,7 +65,7 @@ iface_add() {
 	ipt_log "zone_${zone}_prerouting" -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_prerouting -t nat
 	ipt_log "zone_${zone}_forward"    -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_forwarding -t filter
 
-	if [ "$HAS_IPV6" = 1 ]; then
+	if [ "$HAS_IPV6" = 1 ] && [ -n "$ip6addr" ]; then
 		ipt6_log "zone_${zone}_forward"    -i "${ifname%:*}" -s "$ip6addr" -j luci_splash_forwarding -t filter
 	fi
 
