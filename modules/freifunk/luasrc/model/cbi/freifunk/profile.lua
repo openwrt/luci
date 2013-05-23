@@ -70,6 +70,9 @@ else
 	ipv6_prefix.datatype = "ip6addr"
 	ipv6_prefix.rmempty = true
 
+	local vap = c:option(Flag, "vap", translate("VAP"), translate("Enable a virtual access point (VAP) by default if possible."))
+	vap.rmempty = true
+
 	local lat = c:option(Value, "latitude", translate("Latitude"))
 	lat.datatype = "range(-180, 180)"
 	lat.rmempty = false
