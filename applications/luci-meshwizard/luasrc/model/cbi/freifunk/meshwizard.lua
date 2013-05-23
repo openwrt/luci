@@ -10,6 +10,7 @@ local mesh_network = ip.IPv4(uci:get_first(community, "community", "mesh_network
 local community_ipv6 = uci:get_first(community, "community", "ipv6") or 0
 local community_ipv6mode = uci:get_first(community, "community", "ipv6_config") or "static"
 local meshkit_ipv6 = uci:get("meshwizard", "ipv6", "enabled") or 0
+local community_vap = uci:get_first(community, "community", "vap") or 0
 
 m = Map("meshwizard", translate("Wizard"), translate("This wizard will assist you in setting up your router for Freifunk " ..
 	"or another similar wireless community network."))
@@ -151,6 +152,9 @@ uci:foreach("wireless", "wifi-device", function(section)
 			translate("This will setup a new virtual wireless interface in Access Point mode."))
 		vap:depends(device .. "_dhcp", "1")
                 vap.rmempty = true
+                if community_vap == "1" then
+			vap.default = "1"
+		end
 	end
 end)
 
