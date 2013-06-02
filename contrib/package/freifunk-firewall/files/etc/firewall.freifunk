@@ -1,7 +1,7 @@
 #!/bin/sh
 # Freifunk Firewall addons
-# $Id$
 
+. /lib/functions.sh
 
 #
 # Apply advanced settings
@@ -35,8 +35,6 @@ apply_advanced() {
 }
 
 config_foreach apply_advanced advanced
-
-[ -x /etc/init.d/luci_splash ] && ( sleep 3; /etc/init.d/luci_splash restart )&
 
 [ -x /etc/init.d/freifunk-p2pblock ] && /etc/init.d/freifunk-p2pblock enabled && \
 	( sleep 3; /etc/init.d/freifunk-p2pblock restart )&

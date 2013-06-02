@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freifunk-firewall
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -18,7 +18,7 @@ define Package/freifunk-firewall
   CATEGORY:=LuCI
   SUBMENU:=9. Freifunk
   TITLE:=Freifunk Firewall Addon
-  DEPENDS:=+firewall
+  DEPENDS:=+firewall3
 endef
 
 define Package/freifunk-firewall/description
