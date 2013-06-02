@@ -1,0 +1,10 @@
+#!/bin/sh
+
+[ "$ACTION" = ifup ] || exit 0
+
+/etc/init.d/firewall enabled || exit 0
+
+if [ -x /etc/init.d/luci_splash ]; then
+	logger -t splash "Reloading splash firewall rules due to ifup of $INTERFACE ($DEVICE)"
+	/etc/init.d/luci_splash restart
+fi
