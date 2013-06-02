@@ -1,6 +1,5 @@
 #!/bin/sh /etc/rc.common
 
-set -x
 START=70
 EXTRA_COMMANDS=clear_leases
 LIMIT_DOWN=0
@@ -42,11 +41,10 @@ iface_add() {
 	config_get ipaddr "$net" ipaddr
 	[ -n "$ipaddr" ] || return 0
 
-	config_get ip6addr "$net" ip6addr
-	#[ -n "$ipaddr" ] || return 0
-
 	config_get netmask "$net" netmask
 	[ -n "$netmask" ] || return 0
+
+	config_get ip6addr "$net" ip6addr
 
 	config_get type "$net" type
 
@@ -61,12 +59,14 @@ iface_add() {
 
 	eval "$(ipcalc.sh $ipaddr $netmask)"
 
+	logger -s -p info -t splash "Add $NETWORK/$PREFIX ($ifname) to splashed networks."
+
 	### Add interface specific chain entry rules
-	ipt_log "zone_${zone}_prerouting" -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_prerouting -t nat
-	ipt_log "zone_${zone}_forward"    -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_forwarding -t filter
+	ipt_log "prerouting_${zone}_rule" -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_prerouting -t nat
+	ipt_log "forwarding_${zone}_rule"    -i "${ifname%:*}" -s "$NETWORK/$PREFIX" -j luci_splash_forwarding -t filter
 
 	if [ "$HAS_IPV6" = 1 ] && [ -n "$ip6addr" ]; then
-		ipt6_log "zone_${zone}_forward"    -i "${ifname%:*}" -s "$ip6addr" -j luci_splash_forwarding -t filter
+		ipt6_log "forwarding_${zone}_rule"    -i "${ifname%:*}" -s "$ip6addr" -j luci_splash_forwarding -t filter
 	fi
 
 	### Allow traffic to the same subnet
@@ -94,6 +94,7 @@ iface_del() {
 
 	# Clear interface specific rules
 	[ -s $IPT_REPLAY ] && {
+		logger -s -p info -t splash "Remove $ifname from splashed networks."
 		grep -- "-i ${ifname%:*}" $IPT_REPLAY | while read ln; do silent $ln; done
 		sed -ie "/-i ${ifname%:*}/d" $IPT_REPLAY
 	}
@@ -182,8 +183,9 @@ EOF
 
 start() {
 	lock $LOCK
-
+	logger -s -p info -t splash "Starting luci-splash"
 	include /lib/network
+	. /lib/functions/network.sh
 	scan_interfaces
 	config_load luci_splash
 
