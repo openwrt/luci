@@ -26,10 +26,9 @@ olsrd_intalltables() {
 		uci set olsrd.@olsrd[0].RtTable='111'
 		uci set olsrd.@olsrd[0].RtTableDefault='112'
 		uci commit olsrd
-		/etc/init.d/olsrd restart
+		/etc/init.d/olsrd restart 2&> /dev/null
 	fi
 }
-
 
 rt_tables() {
 	tables="/etc/iproute2/rt_tables"
@@ -60,20 +59,52 @@ disable_dyngw() {
 }
 
 restart_services() {
-	wifi
-	/etc/init.d/network restart
-	/etc/init.d/olsrd restart
+	logger -s -t policyrouting -p info "Restarting services"
+	/etc/init.d/network restart 2&> /dev/null
+	/etc/init.d/olsrd restart 2&> /dev/null
 }
 
 boot() {
 	if [ "$enable" = "1" ]; then
 		[ -d /var/state ] || mkdir -p /var/state
 		touch /var/state/freifunk-policyrouting
-		start
+		start noservicerestart
 	else
 		olsrd_rmtables
 	fi
 }
+
+add_lookup_rule() {
+	name=${1/-/_}
+	lookup=$2
+	prio=$3
+
+	if [ -z "$name" -o -z "$lookup" -o -z "$prio" ]; then
+		logger -s -t policyrouting "Missing parameters for add_rule!"
+	else
+		for p in $proto; do
+			if [ "$p" = "6" ]; then
+				rule="rule6"
+			else
+				rule="rule"
+			fi
+			
+			uci batch <<- EOF
+				set network.${name}ipv${p}="$rule"
+				set network.${name}ipv${p}.lookup="$lookup"
+				set network.${name}ipv${p}.priority="$prio"
+			EOF
+		done
+	fi
+}
+
+del_lookup_rule() {
+	name=${1/-/_}
+	for p in $proto; do
+		uci -q delete network.${name}ipv${p}
+	done
+}
+
 start() {
 	if [ $enable = "1" ]; then
 		logger -s -t policyrouting "Starting policy routing."
@@ -81,58 +112,26 @@ start() {
 		olsrd_intalltables
 		disable_dyngw
 
-		for p in $proto; do
-			if [ ! "$(ip -$p ru s | grep "1000:	from all lookup olsr")" ]; then
-				ip -$p rule add lookup olsr prio 1000
-				# add table for routes to local networks
-				ip -$p rule add lookup localnets prio 2000
+		add_lookup_rule olsr olsr 1000
+		add_lookup_rule localnets localnets 2000
 
-				if [ "$?" = "0" ]; then
-					logger -s -t policyrouting "Added rule: lookup olsr prio 1000 (IPv$p)"
-				else
-					logger -s -t policyrouting "Error! Could not add rule: lookup olsr prio 1000 (IPv$p)"
-				fi
-			fi
-		done
-
-		# add unreachable with high metric so packets stop here if they find no gateway
-		# in table olsr-default
-		if [ "$strict" != 0 ]; then
-			for p in $proto; do
-				[ ! "$(ip -$p r s t olsr-default |grep "unreachable default")" ] && {
-					ip -$p route add unreachable default table olsr-default metric 65535
-					if [ "$?" = "0" ]; then
-						logger -s -t policyrouting "Added route: unreachable default table olsr-default metric 65535 (IPv$p)"
-					else
-						logger -s -t policyrouting "Error! Could not add route: unreachable default table olsr-default metric 65535 (IPv$p)"
-					fi
-				}
-			done
-
-		fi
 		if [ "$fallback" = 1 ]; then
-			for p in $proto; do
-				[ ! "$(ip -$p ru s |grep "from all lookup olsr-default")" ] && {
-					ip -$p rule add lookup olsr-default prio 33000
-					if [ "$?" = "0" ]; then
-						logger -s -t policyrouting "Added rule: olsr-default prio 33000 (IPv$p)"
-					else
-						logger -s -t policyrouting "Error! Could not add rule: olsr-default prio 33000 (IPv$p)"
-					fi
-				}
-			done
+			add_lookup_rule olsr-default olsr-default 33000
 		fi
+	fi
+	uci commit network
+	if [ ! "$1" = "noservicerestart" ]; then
+		restart_services
 	fi
 }
 
 stop() {
 	logger -s -t policyrouting "Stopping policy routing"
 	olsrd_rmtables
-	for p in $proto; do
-		ip -$p route flush table olsr-default	
-		ip -$p rule del lookup olsr-default > /dev/null 2>&1
-		ip -$p rule del lookup olsr	> /dev/null 2>&1
-	done
+	del_lookup_rule olsr-default
+	del_lookup_rule olsr
+	del_lookup_rule localnets
+	uci commit network
 	restart_services
 	echo "Hint: To completely disable freifunk-policyrouting set enable=0 in /etc/config/freifunk-policyrouting."
 }
@@ -140,11 +139,9 @@ stop() {
 restart() {
 	logger -s -t policyrouting "Restarting policy routing"
 	olsrd_rmtables
-	for p in $proto; do
-		ip -$p route flush table olsr-default	
-		ip -$p rule del lookup olsr-default > /dev/null 2>&1
-		ip -$p rule del lookup olsr	> /dev/null 2>&1
-	done
+	del_lookup_rule olsr-default
+	del_lookup_rule olsr
+	del_lookup_rule localnets
+	uci commit network
 	start
-	restart_services
 }

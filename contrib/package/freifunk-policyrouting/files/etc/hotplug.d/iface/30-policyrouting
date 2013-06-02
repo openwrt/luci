@@ -9,8 +9,8 @@ proto="4"
 config_load freifunk-policyrouting
 config_get enable pr enable
 config_get fallback pr fallback
+config_get strict pr strict
 config_get zones pr zones
-
 
 if [ "$ACTION" = "ifup" ] && [ "$enable" = "1" ]; then
 	network_get_subnet net $INTERFACE
@@ -54,6 +54,9 @@ if [ "$ACTION" = "ifup" ] && [ "$enable" = "1" ]; then
 				for p in $proto; do
 					if [ ! "$(ip -$p ru s | grep "from all iif $dev lookup olsr-default")" ]; then
 						ip -$p rule add dev "$dev" lookup olsr-default prio 20000
+						if [ "$strict" != 0 ]; then
+							ip -$p rule add dev "$dev" unreachable prio 20001
+						fi
 						if [ "$?" = 0 ]; then
 							logger -s -t policyrouting "Use mesh gateway for interface $dev (IPv$p)"
 							if [ -z "$(uci -P /var/state get freifunk-policyrouting.${INTERFACE})" ]; then
@@ -87,6 +90,7 @@ if [ "$ACTION" = "ifdown" ]; then
 				for p in $proto; do
 					if [ "$(ip -$p ru s | grep "from all iif $dev lookup olsr-default")" ]; then
 						ip -$p rule del dev "$dev" lookup olsr-default prio 20000
+						ip -$p rule del dev "$dev" unreachable prio 20001
 						if [ "$?" = 0 ]; then
 							logger -s -t policyrouting "Remove rule: dev "$dev" lookup olsr-default prio 20000 (IPv$p)"
 						else
