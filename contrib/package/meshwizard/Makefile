@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=meshwizard
-PKG_RELEASE:=0.0.10-1
+PKG_RELEASE:=0.0.11
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -15,7 +15,7 @@ define Package/meshwizard
   CATEGORY:=LuCI
   SUBMENU:=9. Freifunk
   TITLE:=Shell script based wizard for Mesh networks
-  DEPENDS:=+firewall
+  DEPENDS:=+firewall3
 endef
 
 define Package/meshwizard/description
