@@ -245,18 +245,16 @@ start() {
 	fi
 
 	### Add QoS chain
-	[ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ] && {
-		iptables -t mangle -N luci_splash_mark_out
-		iptables -t mangle -N luci_splash_mark_in
-		iptables -t mangle -I PREROUTING  -j luci_splash_mark_out
-		iptables -t mangle -I POSTROUTING -j luci_splash_mark_in
-		if [ "$HAS_IPV6" = 1 ]; then
-			ip6tables -t mangle -N luci_splash_mark_out
-			ip6tables -t mangle -N luci_splash_mark_in
-			ip6tables -t mangle -I PREROUTING  -j luci_splash_mark_out
-			ip6tables -t mangle -I POSTROUTING -j luci_splash_mark_in
-		fi
-	}
+    iptables -t mangle -N luci_splash_mark_out
+    iptables -t mangle -N luci_splash_mark_in
+    iptables -t mangle -I PREROUTING  -j luci_splash_mark_out
+    iptables -t mangle -I POSTROUTING -j luci_splash_mark_in
+    if [ "$HAS_IPV6" = 1 ]; then
+        ip6tables -t mangle -N luci_splash_mark_out
+        ip6tables -t mangle -N luci_splash_mark_in
+        ip6tables -t mangle -I PREROUTING  -j luci_splash_mark_out
+        ip6tables -t mangle -I POSTROUTING -j luci_splash_mark_in
+    fi
 
 	### Find active mac addresses
 	MACS=""

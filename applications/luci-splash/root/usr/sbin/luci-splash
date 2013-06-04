@@ -304,9 +304,11 @@ end
 
 -- Add an iptables rule
 function add_lease_rule(mac, ipaddr)
-	if limit_up > 0 and limit_down > 0 then
-		os.execute("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
-		os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
+    os.execute("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+    os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
+	if has_ipv6 then
+        os.execute("ip6tables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+        os.execute("ip6tables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
 	end
 
 
