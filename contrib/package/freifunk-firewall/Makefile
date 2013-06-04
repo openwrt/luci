@@ -18,7 +18,7 @@ define Package/freifunk-firewall
   CATEGORY:=LuCI
   SUBMENU:=9. Freifunk
   TITLE:=Freifunk Firewall Addon
-  DEPENDS:=+firewall3
+  DEPENDS:=+firewall
 endef
 
 define Package/freifunk-firewall/description

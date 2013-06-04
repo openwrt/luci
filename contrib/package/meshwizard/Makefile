@@ -15,7 +15,7 @@ define Package/meshwizard
   CATEGORY:=LuCI
   SUBMENU:=9. Freifunk
   TITLE:=Shell script based wizard for Mesh networks
-  DEPENDS:=+firewall3
+  DEPENDS:=+firewall
 endef
 
 define Package/meshwizard/description
