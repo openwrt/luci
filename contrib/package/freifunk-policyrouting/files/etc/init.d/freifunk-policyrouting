@@ -88,7 +88,7 @@ add_lookup_rule() {
 			else
 				rule="rule"
 			fi
-			
+
 			uci batch <<- EOF
 				set network.${name}ipv${p}="$rule"
 				set network.${name}ipv${p}.lookup="$lookup"
@@ -116,7 +116,7 @@ start() {
 		add_lookup_rule localnets localnets 2000
 
 		if [ "$fallback" = 1 ]; then
-			add_lookup_rule olsr-default olsr-default 33000
+			add_lookup_rule olsr-default olsr-default 100000
 		fi
 	fi
 	uci commit network
