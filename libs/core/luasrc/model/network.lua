@@ -749,8 +749,6 @@ function protocol.get_i18n(self)
 		return lng.translate("Static address")
 	elseif p == "dhcp" then
 		return lng.translate("DHCP client")
-	elseif p == "dhcpv6" then
-		return lng.translate("DHCPv6 client")
 	else
 		return lng.translate("Unknown")
 	end
@@ -1548,14 +1546,7 @@ end
 -- setup base protocols
 _M:register_protocol("static")
 _M:register_protocol("dhcp")
-
-local dhcpv6 = _M:register_protocol("dhcpv6")
-function dhcpv6.is_installed(self)
-	return nfs.access("/lib/netifd/proto/dhcpv6.sh")
-end
-
 _M:register_protocol("none")
-
 
 -- load protocol extensions
 local exts = nfs.dir(utl.libpath() .. "/model/network")
