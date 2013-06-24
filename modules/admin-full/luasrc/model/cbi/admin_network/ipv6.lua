@@ -9,20 +9,21 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
 ]]--
 
-local m = Map("6relayd", translate("IPv6 RA and DHCPv6"),
+local m, s, o
+
+m = Map("6relayd", translate("IPv6 RA and DHCPv6"),
 	translate("6relayd is a lightweight router advertisement daemon and provides " ..
 	 "stateless DHCPv6 service where size matters. It can also be used as a relay " ..
 	 "for the aforementioned services."))
 
-local s = m:section(TypedSection, "server", translate("Server Settings"))
-s.addremove = true
+s = m:section(TypedSection, "server", translate("Server Settings"))
+s.addremove = false
+s.anonymous = true
 
 
-
-local o = s:option(DynamicList, "network", translate("Service Interfaces"),
+o = s:option(DynamicList, "network", translate("Service Interfaces"),
 	translate("Interfaces to provide services on or to relay services to."))
 o.widget = "checkbox"
 o.template = "cbi/network_netlist"
@@ -55,9 +56,19 @@ o = s:option(Value, "master", translate("Master Interface"),
 	translate("Specifies the master interface for services that are relayed."))
 o.template = "cbi/network_netlist"
 o.nocreate = true
+o:depends("rd", "relay")
+o:depends("dhcpv6", "relay")
+o:depends("ndp", "relay")
+o:depends("fallback_relay", "rd")
+o:depends("fallback_relay", "dhcpv6")
+o:depends("fallback_relay", "ndp")
 
 o = s:option(Flag, "always_rewrite_dns", translate("Always announce local DNS"),
 	translate("Announce the local router as DNS server even in relay mode."))
+o:depends("rd", "relay")
+o:depends("dhcpv6", "relay")
+o:depends("fallback_relay", "rd")
+o:depends("fallback_relay", "dhcpv6")
 
 o = s:option(Flag, "always_assume_default", translate("Always announce default router"),
 	translate("Announce as default router even if no public prefix is available."))
