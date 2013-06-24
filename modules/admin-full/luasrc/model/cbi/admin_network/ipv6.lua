@@ -14,9 +14,11 @@ You may obtain a copy of the License at
 local m, s, o
 
 m = Map("6relayd", translate("IPv6 RA and DHCPv6"),
-	translate("6relayd is a lightweight router advertisement daemon and provides " ..
-	 "stateless DHCPv6 service where size matters. It can also be used as a relay " ..
-	 "for the aforementioned services."))
+	translate("6relayd is a daemon for serving and relaying IPv6 management protocols to "..
+	"configure clients and downstream routers. "..
+	"It provides server services for RA, stateless and stateful DHCPv6, "..
+	"prefix delegation and can be used to relay RA, DHCPv6 and NDP between routed "..
+	"(non-bridged) interfaces in case no delegated prefixes are available."))
 
 s = m:section(TypedSection, "server", translate("Server Settings"))
 s.addremove = false
@@ -42,15 +44,20 @@ o:value("", translate("disabled"))
 o:value("server", translate("server mode"))
 o:value("relay", translate("relay mode"))
 
+o = s:option(ListValue, "mamangement_level", translate("DHCPv6-Mode"))
+o:value("", translate("stateless"))
+o:value("1", translate("stateless + stateful"))
+o:value("2", translate("stateful-only"))
+o:depends("dhcpv6", "server")
+
 o = s:option(ListValue, "ndp", translate("NDP-Proxy"))
 o:value("", translate("disabled"))
 o:value("relay", translate("relay mode"))
 
-o = s:option(MultiValue, "fallback_relay", translate("Fallback to relay"),
+o = s:option(Flag, "fallback_relay", translate("Fallback to relay"),
 	translate("Relay services from master to server interfaces when there is no public prefix available."))
-o:value("rd", translate("Router Advertisement"))
-o:value("dhcpv6", translate("DHCPV6"))
-o:value("ndp", translate("NDP-Proxy"))
+o.enabled = "rd dhcpv6 ndp"
+o.disabled = ""
 
 o = s:option(Value, "master", translate("Master Interface"),
 	translate("Specifies the master interface for services that are relayed."))
@@ -59,16 +66,13 @@ o.nocreate = true
 o:depends("rd", "relay")
 o:depends("dhcpv6", "relay")
 o:depends("ndp", "relay")
-o:depends("fallback_relay", "rd")
-o:depends("fallback_relay", "dhcpv6")
-o:depends("fallback_relay", "ndp")
+o:depends("fallback_relay", "rd dhcpv6 ndp")
 
 o = s:option(Flag, "always_rewrite_dns", translate("Always announce local DNS"),
 	translate("Announce the local router as DNS server even in relay mode."))
 o:depends("rd", "relay")
 o:depends("dhcpv6", "relay")
-o:depends("fallback_relay", "rd")
-o:depends("fallback_relay", "dhcpv6")
+o:depends("fallback_relay", "rd dhcpv6 ndp")
 
 o = s:option(Value, "rewrite_dns_addr", translate("Override announced DNS-server"),
 	translate("Announce a custom DNS-server instead of the local one."))
