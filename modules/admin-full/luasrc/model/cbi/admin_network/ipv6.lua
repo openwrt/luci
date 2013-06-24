@@ -44,7 +44,7 @@ o:value("", translate("disabled"))
 o:value("server", translate("server mode"))
 o:value("relay", translate("relay mode"))
 
-o = s:option(ListValue, "mamangement_level", translate("DHCPv6-Mode"))
+o = s:option(ListValue, "management_level", translate("DHCPv6-Mode"))
 o:value("", translate("stateless"))
 o:value("1", translate("stateless + stateful"))
 o:value("2", translate("stateful-only"))
