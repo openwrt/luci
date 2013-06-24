@@ -47,23 +47,24 @@ dns.cast     = "string"
 
 if luci.model.network:has_ipv6() then
 
-	accept_ra = s:taboption("general", Flag, "accept_ra", translate("Accept router advertisements"))
-	accept_ra.default = accept_ra.disabled
-
-
-	send_rs = s:taboption("general", Flag, "send_rs", translate("Send router solicitations"))
-	send_rs.default = send_rs.enabled
-	send_rs:depends("accept_ra", "")
+	local ip6assign = section:taboption("general", Value, "ip6assign", translate("IPv6 assignment length"),
+		translate("Assign a part of given length of every public IPv6-prefix to this interface"))
+	ip6assign:value("", translate("disabled"))
+	ip6assign:value("64")
+	ip6assign.datatype = "max(64)"
 
 
 	ip6addr = section:taboption("general", Value, "ip6addr", translate("IPv6 address"))
 	ip6addr.datatype = "ip6addr"
-	ip6addr:depends("accept_ra", "")
 
 
 	ip6gw = section:taboption("general", Value, "ip6gw", translate("IPv6 gateway"))
 	ip6gw.datatype = "ip6addr"
-	ip6gw:depends("accept_ra", "")
+
+
+	local ip6prefix = s:taboption("general", Value, "ip6prefix", translate("IPv6 routed prefix"),
+		translate("Public prefix routed to this device for distribution to clients."))
+	ip6prefix.datatype = "ip6addr"
 
 end
 

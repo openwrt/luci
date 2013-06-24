@@ -24,18 +24,6 @@ hostname.placeholder = luci.sys.hostname()
 hostname.datatype    = "hostname"
 
 
-if luci.model.network:has_ipv6() then
-
-	accept_ra = s:taboption("general", Flag, "accept_ra", translate("Accept router advertisements"))
-	accept_ra.default = accept_ra.enabled
-
-
-	send_rs = s:taboption("general", Flag, "send_rs", translate("Send router solicitations"))
-	send_rs.default = send_rs.disabled
-	send_rs:depends("accept_ra", "")
-
-end
-
 bcast = section:taboption("advanced", Flag, "broadcast",
 	translate("Use broadcast flag"),
 	translate("Required for certain ISPs, e.g. Charter with DOCSIS 3"))
