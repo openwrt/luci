@@ -84,4 +84,19 @@ o:depends("rd", "server")
 o = s:option(Flag, "compat_ula", translate("ULA-preference compatibility"),
 	translate("Work around IPv6 address-selection issues of some devices."))
 
+m:section(SimpleSection).template = "admin_network/lease_status"
+
+s = m:section(TypedSection, "lease", translate("Static Leases"),
+        translate("Static leases are used to assign fixed IPv6 Interface-IDs to clients. Interface-IDs are appended to available prefixes to form IPv6-addresses. " ..
+            " (e.g. a prefix of 2001:db80::/64 combined with Interface-ID 123456 will form the address 2001:db80::12:3456)") .. "<br />" ..
+        translate("Use the <em>Add</em> Button to add a new lease entry. The <em>DUID</em> " ..
+            "indentifies the host, the <em>Interface-ID</em> specifies the ID to use in addresses."))
+
+s.addremove = true
+s.anonymous = true
+s.template = "cbi/tblsection"
+
+s:option(Value, "duid", translate("DUID")).optional = false
+s:option(Value, "id", translate("Interface-ID")).optional = false
+
 return m
