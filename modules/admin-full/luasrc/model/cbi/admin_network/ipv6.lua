@@ -70,8 +70,14 @@ o:depends("dhcpv6", "relay")
 o:depends("fallback_relay", "rd")
 o:depends("fallback_relay", "dhcpv6")
 
+o = s:option(Value, "rewrite_dns_addr", translate("Override announced DNS-server"),
+	translate("Announce a custom DNS-server instead of the local one."))
+
 o = s:option(Flag, "always_assume_default", translate("Always announce default router"),
 	translate("Announce as default router even if no public prefix is available."))
 o:depends("rd", "server")
+
+o = s:option(Flag, "compat_ula", translate("ULA-preference compatibility"),
+	translate("Work around IPv6 address-selection issues of some devices."))
 
 return m
