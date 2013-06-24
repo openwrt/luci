@@ -28,5 +28,5 @@ function proto.is_installed(self)
 end
 
 function proto.opkg_package(self)
-	return "ipv6-support"
+	return "odhcp6c"
 end
