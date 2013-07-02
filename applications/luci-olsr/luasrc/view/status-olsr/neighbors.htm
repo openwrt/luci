@@ -74,35 +74,34 @@ end
 							'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
 							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://[%s]/cgi-bin-status.html">%s/%s</a></td>',
 							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip, neigh.rmac
-							);
+						);
 					} else {
 						s += String.format(
 							'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
 							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s/%s</a></td>',
 							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip, neigh.rmac
-							);
+						);
 					}
 					if (neigh.hn) {
 						s += String.format(
-							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>' +
+							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
 							neigh.dfgcolor, neigh.hn, neigh.hn
-							);
-						}
-					else	{
+						);
+					} else {
 						s += String.format(
 							'<td class="cbi-section-table-titles" style="background-color:%s">?</td>',
 							neigh.dfgcolor
-							);
-						}
-					s += String.format(
-							'<td class="cbi-section-table-titles" style="background-color:%s">%s/%s/%s</td>' +
-							'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-titles" style="background-color:%s" title="Signal: %s Noise: %s">%s</td>' +
-							'</tr>',
-							neigh.dfgcolor, neigh.ifn, neigh.lip, neigh.lmac, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.color, neigh.signal, neigh.noise, neigh.snr || '?'
 						);
+					}
+					s += String.format(
+						'<td class="cbi-section-table-titles" style="background-color:%s">%s/%s/%s</td>' +
+						'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
+						'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
+						'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
+						'<td class="cbi-section-table-titles" style="background-color:%s" title="Signal: %s Noise: %s">%s</td>' +
+						'</tr>',
+						neigh.dfgcolor, neigh.ifn, neigh.lip, neigh.lmac, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.color, neigh.signal, neigh.noise, neigh.snr || '?'
+					);
 				}
 
 				nt.innerHTML = s;
