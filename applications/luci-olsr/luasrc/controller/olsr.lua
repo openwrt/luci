@@ -9,7 +9,7 @@ function index()
 	local uci = luci.model.uci.cursor_state()
 
 	uci:foreach("olsrd", "olsrd", function(s)
-        	if s.SmartGateway and s.SmartGateway == "yes" then has_smartgw  = true end
+		if s.SmartGateway and s.SmartGateway == "yes" then has_smartgw  = true end
 	end)
 
 	local page  = node("admin", "status", "olsr")
@@ -56,9 +56,9 @@ function index()
 	end
 
 	local page  = node("admin", "status", "olsr", "interfaces")
-        page.target = call("action_interfaces")
-        page.title  = _("Interfaces")
-        page.order  = 70
+	page.target = call("action_interfaces")
+	page.title  = _("Interfaces")
+	page.order  = 70
 
 	local ol = entry(
 		{"admin", "services", "olsrd"},
@@ -84,7 +84,7 @@ function index()
 	odsp = entry(
 		{"admin", "services", "olsrd", "display"},
 		cbi("olsr/olsrddisplay"), _("Display")
-		)
+	)
 
 	oplg.leaf = true
 	oplg.subindex = true
@@ -106,8 +106,8 @@ function action_json()
 	local http = require "luci.http"
 	local utl = require "luci.util"
 
-        local jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
-        local jsonreq6 = utl.exec("echo /status | nc ::1 9090")
+	local jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
+	local jsonreq6 = utl.exec("echo /status | nc ::1 9090")
 	http.prepare_content("application/json")
 
 	if #jsonreq4 < 1 then
@@ -130,7 +130,16 @@ function action_neigh(json)
 
 	local uci = require "luci.model.uci".cursor_state()
 	local resolve = uci:get("luci_olsr", "general", "resolve")
-	luci.sys.net.routes(function(r) if r.dest:prefix() == 0 then defaultgw = r.gateway:string() end end)
+	local ntm = require "luci.model.network".init()
+	local devices  = ntm:get_wifidevs()
+	local sys = require "luci.sys"
+	local assoclist = {}
+
+	luci.sys.net.routes(function(r) 
+		if r.dest:prefix() == 0 then 
+			defaultgw = r.gateway:string() 
+		end
+	end)
 
 	local function compare(a,b)
 		if a.proto == b.proto then
@@ -140,13 +149,80 @@ function action_neigh(json)
 		end
 	end
 
+	for _, dev in ipairs(devices) do
+		for _, net in ipairs(dev:get_wifinets()) do
+			assoclist[#assoclist+1] = {} 
+			assoclist[#assoclist]['ifname'] = net.iwdata.ifname
+			assoclist[#assoclist]['network'] = net.iwdata.network
+			assoclist[#assoclist]['device'] = net.iwdata.device
+			assoclist[#assoclist]['list'] = net.iwinfo.assoclist
+		end
+	end
+
 	for k, v in ipairs(data) do
+		local interface
+		local snr = 1
+		local signal = 1
+		local noise = 1
+		local arptable = sys.net.arptable()
+		local mac
+		local rmac
+		local lmac
+		local ip
+		
 		if resolve == "1" then
 			hostname = nixio.getnameinfo(v.remoteIP, nil, 100)
 			if hostname then
 				v.hostname = hostname
 			end
 		end
+		if v.proto == '4' then
+			uci:foreach("network", "interface",function(vif)
+				if vif.ipaddr and vif.ipaddr == v.localIP then
+					interface = vif['.name'] or vif.interface
+					lmac = string.lower(vif.macaddr or "")
+					return
+				end
+			end)
+			for _, arpt in ipairs(arptable) do
+				ip = arpt['IP address']
+				if ip == v.remoteIP then
+					rmac = string.lower(arpt['HW address'] or "")
+				end
+			end
+			for _, val in ipairs(assoclist) do
+				if val.network == interface and val.list then
+					for assocmac, assot in pairs(val.list) do
+						assocmac = string.lower(assocmac or "")
+						if rmac == assocmac then
+							signal = tonumber(assot.signal)
+							noise = tonumber(assot.noise)
+							snr = signal/noise
+						end
+					end
+				end
+			end
+		elseif v.proto == '6' then
+			uci:foreach("network", "interface",function(vif)
+				if vif.ip6addr and string.gsub(vif.ip6addr, "/64", "") == v.localIP then
+					interface = vif['.name'] or vif.interface
+					return
+				end
+			end)
+		end
+		if interface then
+			v.interface = interface
+		end
+		v.snr = snr
+		v.signal = signal
+		v.noise = noise
+		if rmac then
+			v.remoteMAC = rmac
+		end
+		if lmac then
+			v.localMAC = lmac
+		end
+
 		if defaultgw == v.remoteIP then
 			v.defaultgw = 1
 		end
@@ -229,7 +305,7 @@ function action_hna()
 			end
 		end
 		if v.validityTime then
-	                v.validityTime = tonumber(string.format("%.0f", v.validityTime / 1000))
+			v.validityTime = tonumber(string.format("%.0f", v.validityTime / 1000))
 		end
 	end
 
@@ -289,12 +365,13 @@ end
 
 -- Internal
 function fetch_jsoninfo(otable)
+	local uci = require "luci.model.uci".cursor_state()
 	local utl = require "luci.util"
 	local json = require "luci.json"
-        local jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
-        local jsondata4 = {}
-        local jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
-        local jsondata6 = {}
+	local jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
+	local jsondata4 = {}
+	local jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
+	local jsondata6 = {}
 	local data4 = {}
 	local data6 = {}
 	local has_v4 = False
@@ -305,36 +382,37 @@ function fetch_jsoninfo(otable)
 		return nil, 0, 0, true
 	end
 
-        if #jsonreq4 ~= 0 then
+	if #jsonreq4 ~= 0 then
 		has_v4 = 1
-                jsondata4 = json.decode(jsonreq4)
+		jsondata4 = json.decode(jsonreq4)
 		if otable == 'status' then
-			data4 = jsondata4
+			data4 = jsondata4 or {}
 		else
-			data4 = jsondata4[otable]
+			data4 = jsondata4[otable] or {}
 		end
 
-                for k, v in ipairs(data4) do
-                    data4[k]['proto'] = '4'
+		for k, v in ipairs(data4) do
+			data4[k]['proto'] = '4'
 		end
-        end
-        if #jsonreq6 ~= 0 then
+
+	end
+	if #jsonreq6 ~= 0 then
 		has_v6 = 1
-                jsondata6 = json.decode(jsonreq6)
+		jsondata6 = json.decode(jsonreq6)
 		if otable == 'status' then
-	                data6 = jsondata6
+			data6 = jsondata6 or {}
 		else
-	                data6 = jsondata6[otable]
+			data6 = jsondata6[otable] or {}
 		end
-                for k, v in ipairs(data6) do
-                    data6[k]['proto'] = '6'
-                end
-        end
+		for k, v in ipairs(data6) do
+			data6[k]['proto'] = '6'
+		end
+	end
 
 	for k, v in ipairs(data6) do
 		table.insert(data4, v)
 	end
 
-        return data4, has_v4, has_v6, false
+	return data4, has_v4, has_v6, false
 end
 

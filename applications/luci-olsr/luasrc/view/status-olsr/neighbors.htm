@@ -3,7 +3,7 @@ LuCI - Lua Configuration Interface
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
 Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
-   
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -31,11 +31,17 @@ if luci.http.formvalue("status") == "1" then
 
 		rv[#rv+1] = {
 			rip = link.remoteIP,
+			rmac = link.remoteMAC,
 			hn = link.hostname,
 			lip = link.localIP,
+			lmac = link.localMAC,
+			ifn = link.interface,
 			lq = string.format("%.3f", link.linkQuality),
 			nlq = string.format("%.3f",link.neighborLinkQuality),
 			cost = string.format("%.3f", link.linkCost),
+			snr = string.format("%.3f", link.snr),
+			signal = string.format("%.3f", link.signal),
+			noise = string.format("%.3f", link.noise),
 			color = color,
 			dfgcolor = defaultgw_color,
 			proto = link.proto
@@ -66,36 +72,36 @@ end
 					if (neigh.proto == '6') {
 						s += String.format(
 							'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
-								'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://[%s]/cgi-bin-status.html">%s</a></td>',
-							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip
+							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://[%s]/cgi-bin-status.html">%s/%s</a></td>',
+							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip, neigh.rmac
 							);
 					} else {
 						s += String.format(
 							'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
-								'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
-							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip
+							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s/%s</a></td>',
+							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip, neigh.rmac
 							);
 					}
 					if (neigh.hn) {
-						s += String.format(					
-							'<td class="cbi-section-table-cell" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>',
+						s += String.format(
+							'<td class="cbi-section-table-titles" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></td>' +
 							neigh.dfgcolor, neigh.hn, neigh.hn
 							);
 						}
 					else	{
 						s += String.format(
-							'<td class="cbi-section-table-cell" style="background-color:%s">?</td>',
+							'<td class="cbi-section-table-titles" style="background-color:%s">?</td>',
 							neigh.dfgcolor
 							);
 						}
 					s += String.format(
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-							'<td class="cbi-section-table-cell" style="background-color:%s">%s</td>' +
-						'</tr>',
-							
-							neigh.dfgcolor, neigh.lip, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost || '?'
+							'<td class="cbi-section-table-titles" style="background-color:%s">%s/%s/%s</td>' +
+							'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
+							'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
+							'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
+							'<td class="cbi-section-table-titles" style="background-color:%s" title="Signal: %s Noise: %s">%s</td>' +
+							'</tr>',
+							neigh.dfgcolor, neigh.ifn, neigh.lip, neigh.lmac, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.color, neigh.signal, neigh.noise, neigh.snr || '?'
 						);
 				}
 
@@ -122,6 +128,7 @@ end
 				<th class="cbi-section-table-cell">LQ</th>
 				<th class="cbi-section-table-cell">NLQ</th>
 				<th class="cbi-section-table-cell">ETX</th>
+				<th class="cbi-section-table-cell">SNR</th>
 			</tr>
 		</thead>
 	
@@ -143,15 +150,16 @@ end
 
 		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=link.proto%>">
 			<% if link.proto == "6" then %>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://[<%=link.remoteIP%>]/cgi-bin-status.html"><%=link.remoteIP%></a></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><a href="http://[<%=link.remoteIP%>]/cgi-bin-status.html"><%=link.remoteIP%>/<%=link.remoteMAC%></a></td>
 			<% else %>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.remoteIP%>/cgi-bin-status.html"><%=link.remoteIP%></a></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.remoteIP%>/cgi-bin-status.html"><%=link.remoteIP%>/<%=link.remoteMAC%></a></td>
 			<% end %>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.hostname%>/cgi-bin-status.html"><%=link.hostname%></a></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=link.localIP%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.linkQuality)%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.neighborLinkQuality)%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", link.linkCost)%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.hostname%>/cgi-bin-status.html"><%=link.hostname%></a></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=link.interface%>/<%=link.localIP%>/<%=link.localMAC%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.linkQuality)%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.neighborLinkQuality)%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=color%>"><%=string.format("%.3f", link.linkCost)%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=color%>" title="Signal: <%=string.format("%.3f", link.signal)%> Noise: <%=string.format("%.3f", link.noise)%>"><%=string.format("%.3f", link.snr)%></td>
 		</tr>
 		<% 
 			i = ((i % 2) + 1)
