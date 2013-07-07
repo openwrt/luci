@@ -134,6 +134,7 @@ function action_neigh(json)
 	local devices  = ntm:get_wifidevs()
 	local sys = require "luci.sys"
 	local assoclist = {}
+	local neightbl = require "neightbl"
 
 	luci.sys.net.routes(function(r) 
 		if r.dest:prefix() == 0 then 
@@ -165,10 +166,11 @@ function action_neigh(json)
 		local signal = 1
 		local noise = 1
 		local arptable = sys.net.arptable()
-		local mac
-		local rmac
-		local lmac
+		local mac = ""
+		local rmac = ""
+		local lmac = ""
 		local ip
+		local neihgt = {}
 		
 		if resolve == "1" then
 			hostname = nixio.getnameinfo(v.remoteIP, nil, 100)
@@ -180,7 +182,7 @@ function action_neigh(json)
 			uci:foreach("network", "interface",function(vif)
 				if vif.ipaddr and vif.ipaddr == v.localIP then
 					interface = vif['.name'] or vif.interface
-					lmac = string.lower(vif.macaddr or "")
+					lmac = string.lower(vif.macaddr or "") 
 					return
 				end
 			end)
@@ -190,25 +192,47 @@ function action_neigh(json)
 					rmac = string.lower(arpt['HW address'] or "")
 				end
 			end
-			for _, val in ipairs(assoclist) do
-				if val.network == interface and val.list then
-					for assocmac, assot in pairs(val.list) do
-						assocmac = string.lower(assocmac or "")
-						if rmac == assocmac then
-							signal = tonumber(assot.signal)
-							noise = tonumber(assot.noise)
-							snr = signal/noise
-						end
-					end
-				end
-			end
 		elseif v.proto == '6' then
+			local uprefix = uci:get("network", "globals", "ula_prefix") or ""
+			uprefix = string.gsub(uprefix, "::/.*", "")
+			ip6assign_c = 0
 			uci:foreach("network", "interface",function(vif)
-				if vif.ip6addr and string.gsub(vif.ip6addr, "/64", "") == v.localIP then
+				local ip6assign = vif.ip6assign or 0
+				if ip6assign ~= 0 then
+					if ip6assign_c == 0 then
+						ip6assign_addr = uprefix.."::1"
+					else
+						ip6assign_addr = uprefix..":"..ip6assign_c.."::1"
+					end
+					ip6assign_c = ip6assign_c + 1
+				end
+				if ip6assign_addr == v.localIP then
 					interface = vif['.name'] or vif.interface
+					neihgt = neightbl.get(vif.ifname) or {}
+					return
+				elseif vif.ip6addr and string.gsub(vif.ip6addr, "/"..ip6assign, "") == v.localIP then
+					interface = vif['.name'] or vif.interface
+					neihgt = neightbl.get(vif.ifname) or {}
 					return
 				end
 			end)
+			for ip,mac in pairs(neihgt) do
+				if ip == v.remoteIP then
+					rmac = mac
+				end
+			end
+		end
+		for _, val in ipairs(assoclist) do
+			if val.network == interface and val.list then
+				for assocmac, assot in pairs(val.list) do
+					assocmac = string.lower(assocmac or "")
+					if rmac == assocmac then
+						signal = tonumber(assot.signal)
+						noise = tonumber(assot.noise)
+						snr = signal/noise
+					end
+				end
+			end
 		end
 		if interface then
 			v.interface = interface
