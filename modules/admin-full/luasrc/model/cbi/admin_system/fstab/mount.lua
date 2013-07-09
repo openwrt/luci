@@ -15,8 +15,8 @@ $Id$
 local fs   = require "nixio.fs"
 local util = require "nixio.util"
 
-local has_extroot = fs.access("/lib/preinit/00_extroot.conf")
-local has_fscheck = fs.access("/lib/functions/fsck.sh")
+local has_extroot = fs.access("/sbin/block")
+local has_fscheck = fs.access("/usr/sbin/e2fsck")
 
 local devices = {}
 util.consume((fs.glob("/dev/sd*")), devices)
