@@ -227,9 +227,9 @@ function action_neigh(json)
 				for assocmac, assot in pairs(val.list) do
 					assocmac = string.lower(assocmac or "")
 					if rmac == assocmac then
-						signal = tonumber(assot.signal)
-						noise = tonumber(assot.noise)
-						snr = signal/noise
+						signal = tonumber(assot.signal)*-1
+						noise = tonumber(assot.noise)*-1
+						snr = noise - signal
 					end
 				end
 			end

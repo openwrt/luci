@@ -24,6 +24,7 @@ if luci.http.formvalue("status") == "1" then
 			link.linkCost = 0
 		end
 		local color = olsrtools.etx_color(link.linkCost)
+		local snr_color = olsrtools.snr_color(link.snr)
 		defaultgw_color = ""
 		if link.defaultgw == 1 then
 			defaultgw_color = "#ffff99"
@@ -43,6 +44,7 @@ if luci.http.formvalue("status") == "1" then
 			signal = string.format("%.3f", link.signal),
 			noise = string.format("%.3f", link.noise),
 			color = color,
+			snr_color = snr_color,
 			dfgcolor = defaultgw_color,
 			proto = link.proto
 			}
@@ -100,7 +102,7 @@ end
 						'<td class="cbi-section-table-titles" style="background-color:%s">%s</td>' +
 						'<td class="cbi-section-table-titles" style="background-color:%s" title="Signal: %s Noise: %s">%s</td>' +
 						'</tr>',
-						neigh.dfgcolor, neigh.ifn, neigh.lip, neigh.lmac, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.color, neigh.signal, neigh.noise, neigh.snr || '?'
+						neigh.dfgcolor, neigh.ifn, neigh.lip, neigh.lmac, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.snr_color, neigh.signal, neigh.noise, neigh.snr || '?'
 					);
 				}
 
@@ -140,6 +142,7 @@ end
 			end
 
 			color = olsrtools.etx_color(link.linkCost)
+			snr_color = olsrtools.snr_color(link.snr)
 
 			defaultgw_color = ""
 			if link.defaultgw == 1 then
@@ -158,7 +161,7 @@ end
 			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.linkQuality)%></td>
 			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.neighborLinkQuality)%></td>
 			<td class="cbi-section-table-titles" style="background-color:<%=color%>"><%=string.format("%.3f", link.linkCost)%></td>
-			<td class="cbi-section-table-titles" style="background-color:<%=color%>" title="Signal: <%=string.format("%.3f", link.signal)%> Noise: <%=string.format("%.3f", link.noise)%>"><%=string.format("%.3f", link.snr)%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=snr_color%>" title="Signal: <%=string.format("%.3f", link.signal)%> Noise: <%=string.format("%.3f", link.noise)%>"><%=string.format("%.3f", link.snr)%></td>
 		</tr>
 		<% 
 			i = ((i % 2) + 1)
