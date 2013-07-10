@@ -40,9 +40,9 @@ if luci.http.formvalue("status") == "1" then
 			lq = string.format("%.3f", link.linkQuality),
 			nlq = string.format("%.3f",link.neighborLinkQuality),
 			cost = string.format("%.3f", link.linkCost),
-			snr = string.format("%.3f", link.snr),
-			signal = string.format("%.3f", link.signal),
-			noise = string.format("%.3f", link.noise),
+			snr = link.snr,
+			signal = link.signal,
+			noise = link.noise,
 			color = color,
 			snr_color = snr_color,
 			dfgcolor = defaultgw_color,
@@ -161,7 +161,7 @@ end
 			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.linkQuality)%></td>
 			<td class="cbi-section-table-titles" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.neighborLinkQuality)%></td>
 			<td class="cbi-section-table-titles" style="background-color:<%=color%>"><%=string.format("%.3f", link.linkCost)%></td>
-			<td class="cbi-section-table-titles" style="background-color:<%=snr_color%>" title="Signal: <%=string.format("%.3f", link.signal)%> Noise: <%=string.format("%.3f", link.noise)%>"><%=string.format("%.3f", link.snr)%></td>
+			<td class="cbi-section-table-titles" style="background-color:<%=snr_color%>" title="Signal: <%=link.signal%> Noise: <%=link.noise%>"><%=link.snr%></td>
 		</tr>
 		<% 
 			i = ((i % 2) + 1)
