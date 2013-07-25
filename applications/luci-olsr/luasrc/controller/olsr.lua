@@ -135,6 +135,7 @@ function action_neigh(json)
 	local sys = require "luci.sys"
 	local assoclist = {}
 	local neightbl = require "neightbl"
+	local ipc = require "luci.ip"
 
 	luci.sys.net.routes(function(r) 
 		if r.dest:prefix() == 0 then 
@@ -193,27 +194,18 @@ function action_neigh(json)
 				end
 			end
 		elseif v.proto == '6' then
-			local uprefix = uci:get("network", "globals", "ula_prefix") or ""
-			uprefix = string.gsub(uprefix, "::/.*", "")
-			ip6assign_c = 0
 			uci:foreach("network", "interface",function(vif)
-				local ip6assign = vif.ip6assign or 0
-				if ip6assign ~= 0 then
-					if ip6assign_c == 0 then
-						ip6assign_addr = uprefix.."::1"
-					else
-						ip6assign_addr = uprefix..":"..ip6assign_c.."::1"
+				local name = vif['.name']
+				local net = ntm:get_network(name)
+				local device = net and net:get_interface()
+				local locip = ipc.IPv6(v.localIP)
+				for _, a in ipairs(device:ip6addrs()) do
+					if not a:is6linklocal() then
+						if a:host() == locip:host() then
+							interface = name
+							neihgt = neightbl.get(device.ifname) or {}
+						end
 					end
-					ip6assign_c = ip6assign_c + 1
-				end
-				if ip6assign_addr == v.localIP then
-					interface = vif['.name'] or vif.interface
-					neihgt = neightbl.get(vif.ifname) or {}
-					return
-				elseif vif.ip6addr and string.gsub(vif.ip6addr, "/"..ip6assign, "") == v.localIP then
-					interface = vif['.name'] or vif.interface
-					neihgt = neightbl.get(vif.ifname) or {}
-					return
 				end
 			end)
 			for ip,mac in pairs(neihgt) do
