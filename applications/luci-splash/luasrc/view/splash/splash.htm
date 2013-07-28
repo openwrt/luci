@@ -13,6 +13,7 @@ You may obtain a copy of the License at
 <%
 local fs = require "luci.fs"
 local has_custom_splash = fs.access("/usr/lib/luci-splash/splashtext.html")
+local has_custom_splashinclude = fs.access("/usr/lib/luci-splash/splashtextinclude.html")
 
 function expand (e, R)        
 	return (string.gsub(e, "###([A-Z_]+)###", R))
@@ -24,7 +25,12 @@ local contacturl = luci.dispatcher.build_url("freifunk", "contact")
 
 local c = luci.model.uci.cursor():get_all("freifunk", "community")
 if c and c.name then
-	community = c.name
+        name = luci.model.uci.cursor():get('profile_' .. c.name, 'profile', 'name')
+	if name then
+		community = name
+	else
+		community = c.name
+	end
 else
 	community = "Freifunk"
 end
@@ -48,6 +54,10 @@ if limit_up and limit_down then
 	" " .. translate("KB/s (Download/Upload). You may be able to remove this limit by actively contributing " ..
 	"to this project.") .. "</p>"
 end
+
+contact = translatef('Get in %s with the operator of this access point.' % ('<a href="' .. contacturl .. '">' .. translatef('Contact') .. '</a>'))
+accepttext = translatef('By accepting these rules you can use this network for %s hour(s). After this time you need to accept these rules again.' % leasetime)
+
 
 if has_custom_splash then
 	local R = {
@@ -85,12 +95,41 @@ if has_custom_splash then
 	<p><%:If you use this network on a regular basis we ask for your support:%></p>
 	<ul>
 		<li><a href="<%=homepage%>"><%:Become an active member of this community and help by operating your own node%></a></li>
-		<li><a href="<%=contacturl%>"><%:Contact%></a> <%:the owner of this access point.%></li>
+		<li><%=contact%></li>
 		<li><%:Donate some money to help us keep this project alive.%></li>
 		<li><%:If you operate your own wifi equipment use channels different from ours.%></li>
 	</ul>
-	<br/><p><%:By accepting these rules you can use this network for%> <%=leasetime%> 
-	<%:hour(s). After this time you need to accept these rules again.%></p>
+
+	<%
+	if has_custom_splashinclude then
+		local splashtextinclude = fs.readfile("/usr/lib/luci-splash/splashtextinclude.html")
+	%>
+		<%=splashtextinclude%>
+	<% end %>
+
+	<h2><%:Usage Agreement%></h2>
+	<p>
+	<%:The open and free wireless network of volunteers ("Operators") provides the necessary equipment and Internet connections ("Infrastructure") at their own expense.%>
+	<%:These Terms of Use govern the use of the network by its participants' computer, PDA, or similar device ("Devices") within the network.%>
+	<%:Access to the network is not guaranteed. It can be interrupted at any time without notice for any reason, for certain devices, and/or may be blocked for certain users.%>
+	</p>
+
+	<h3><%:Legally Prohibited Activities%></h3>
+	<p><%:The participant agrees to not perform any action and refrain from acts which may violate the law or infringe upon the rights of third parties.%></p>
+ 
+	<h3><%:Legally Prohibited content%></h3>
+	<p><%:The participant agrees to not transfer content over the network which violates the law.%></p>
+ 
+	<h3><%:Fair Use Policy%></h3>
+	<p><%:The participant agrees to not use the network in any way which will harm the infrastructure, the network itself, its operators or other participants.%></p>
+ 
+	<h3><%:Safety%></h3>
+	<p>The network, like the Internet, is unencrypted and open. Each participant is responsible for the safety of their own connections and devices.</p>
+ 
+	<h3>Disclaimer</h3>
+	<p><%:The operator claims no liability for loss of data, unauthorized access/damage to devices, or financial losses that participants may suffer from the use of the network.%></p>
+
+	<br /><p><b><%=accepttext%></b></p>
 <% end %>
 
 

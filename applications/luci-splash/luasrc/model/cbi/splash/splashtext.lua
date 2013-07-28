@@ -15,8 +15,10 @@ You may obtain a copy of the License at
 local fs = require "nixio.fs"
 
 local splashtextfile = "/usr/lib/luci-splash/splashtext.html" 
+local splashtextinclude = "/usr/lib/luci-splash/splashtextinclude.html" 
 
-f = SimpleForm("splashtext", translate("Edit Splash text"),
+
+f = SimpleForm("splashtext", translate("Edit the complete splash text"),
 	translate("You can enter your own text that is displayed to clients here.<br />" ..
 	"It is possible to use the following markers: " ..
 	"###COMMUNITY###, ###COMMUNITY_URL###, ###CONTACTURL###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###."))
@@ -39,4 +41,26 @@ function f.handle(self, state, data)
 	return true
 end
 
-return f
+g = SimpleForm("splashtextinclude", translate("Include your own text in the default splash"),
+	translate("As an alternative to editing the complete splash text you can also just include some custom text in the default splash page by entering it here."))
+
+t = g:field(TextValue, "text")
+t.rmempty = true
+t.rows = 30
+function t.cfgvalue()
+	return fs.readfile(splashtextinclude) or ""
+end
+
+function g.handle(self, state, data)
+	if state == FORM_VALID then
+		if data.text then
+			fs.writefile(splashtextinclude, data.text:gsub("\r\n", "\n"))
+		else
+			fs.unlink(splashtextinclude)
+		end
+	end
+	return true
+end
+
+
+return f, g

@@ -297,6 +297,7 @@ endef
 define Package/luci-app-splash/conffiles
 /etc/config/luci_splash
 /usr/lib/luci-splash/splashtext.html
+/usr/lib/luci-splash/splashtextinclude.html
 endef
 
 define Package/luci-app-statistics/conffiles
