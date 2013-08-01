@@ -163,9 +163,9 @@ function action_neigh(json)
 
 	for k, v in ipairs(data) do
 		local interface
-		local snr = 1
-		local signal = 1
-		local noise = 1
+		local snr = 0
+		local signal = 0
+		local noise = 0
 		local arptable = sys.net.arptable()
 		local mac = ""
 		local rmac = ""
