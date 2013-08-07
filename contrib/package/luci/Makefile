@@ -214,7 +214,7 @@ define Package/luci-mod-freifunk-community
   DEPENDS+= \
    +luci-lib-web +luci-app-splash +luci-i18n-german \
    +PACKAGE_luci-mod-freifunk-community:olsrd +PACKAGE_luci-mod-freifunk-community:olsrd-mod-dyn-gw-plain \
-   +PACKAGE_luci-mod-freifunk-community:olsrd-mod-txtinfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
+   +PACKAGE_luci-mod-freifunk-community:olsrd-mod-jsoninfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
    +PACKAGE_luci-mod-freifunk-community:olsrd-mod-watchdog +PACKAGE_luci-mod-freifunk-community:kmod-tun \
    +PACKAGE_luci-mod-freifunk-community:ip +PACKAGE_luci-mod-freifunk-community:freifunk-watchdog +luci-app-olsr \
    +luci-app-olsr-services +freifunk-gwcheck +freifunk-mapupdate

@@ -105,18 +105,18 @@ end
 function action_json()
 	local http = require "luci.http"
 	local utl = require "luci.util"
+	local uci = require "luci.model.uci".cursor_state()
+	local jsonreq4 = ""
+	local jsonreq6 = ""
 
-	local jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
-	local jsonreq6 = utl.exec("echo /status | nc ::1 9090")
+	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
+	if IpVersion == "4" or IpVersion == "6and4" then
+		jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
+	end
+	if IpVersion == "6" or IpVersion == "6and4" then
+		jsonreq6 = utl.exec("echo /status | nc ::1 9090")
+	end
 	http.prepare_content("application/json")
-
-	if #jsonreq4 < 1 then
-		jsonreq4 = "{}"
-	end
-
-	if #jsonreq6 < 1 then
-		jsonreq6 = "{}"
-	end
 
 	http.write("{v4:" .. jsonreq4 .. ", v6:" .. jsonreq6 .. "}")
 end
@@ -384,9 +384,16 @@ function fetch_jsoninfo(otable)
 	local uci = require "luci.model.uci".cursor_state()
 	local utl = require "luci.util"
 	local json = require "luci.json"
-	local jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
+	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
+	local jsonreq4 = ""
+	local jsonreq6 = ""
+	if IpVersion == "4" or IpVersion == "6and4" then
+		jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
+	end
+	if IpVersion == "6" or IpVersion == "6and4" then
+		jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
+	end
 	local jsondata4 = {}
-	local jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
 	local jsondata6 = {}
 	local data4 = {}
 	local data6 = {}
@@ -398,7 +405,7 @@ function fetch_jsoninfo(otable)
 		return nil, 0, 0, true
 	end
 
-	if #jsonreq4 ~= 0 then
+	if jsonreq4 ~= "" then
 		has_v4 = 1
 		jsondata4 = json.decode(jsonreq4)
 		if otable == 'status' then
@@ -412,7 +419,7 @@ function fetch_jsoninfo(otable)
 		end
 
 	end
-	if #jsonreq6 ~= 0 then
+	if jsonreq6 ~= "" then
 		has_v6 = 1
 		jsondata6 = json.decode(jsonreq6)
 		if otable == 'status' then
