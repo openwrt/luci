@@ -199,11 +199,13 @@ function action_neigh(json)
 				local net = ntm:get_network(name)
 				local device = net and net:get_interface()
 				local locip = ipc.IPv6(v.localIP)
-				for _, a in ipairs(device:ip6addrs()) do
-					if not a:is6linklocal() then
-						if a:host() == locip:host() then
-							interface = name
-							neihgt = neightbl.get(device.ifname) or {}
+				if device and device:ip6addrs() and locip then
+					for _, a in ipairs(device:ip6addrs()) do
+						if not a:is6linklocal() then
+							if a:host() == locip:host() then
+								interface = name
+								neihgt = neightbl.get(device.ifname) or {}
+							end
 						end
 					end
 				end
