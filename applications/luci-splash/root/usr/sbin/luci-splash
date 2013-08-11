@@ -167,17 +167,6 @@ function get_known_macs(list)
 end
 
 
--- Get a list of known ip addresses
-function get_known_ips(macs, arp)
-	local leased_ips = { }
-	if not macs then macs = get_known_macs() end
-	for _, e in ipairs(arp or net.arptable()) do
-		if macs[e["HW address"]:lower()] then leased_ips[e["IP address"]] = true end
-	end
-	return leased_ips
-end
-
-
 -- Helper to delete iptables rules
 function ipt_delete_all(args, comp, off)
 	off = off or { }
@@ -304,11 +293,13 @@ end
 
 -- Add an iptables rule
 function add_lease_rule(mac, ipaddr)
-    os.execute("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
-    os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
+	os.execute("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+	os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80 -m comment --comment %s" % {ipaddr, mac:upper()})
+
 	if has_ipv6 then
-        os.execute("ip6tables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
-        os.execute("ip6tables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80" % ipaddr)
+	        os.execute("ip6tables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+		-- not working yet, needs the ip6addr
+		--os.execute("ip6tables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80 -m comment --comment %s" % {ipaddr, mac:upper()})
 	end
 
 
@@ -323,15 +314,13 @@ end
 -- Remove lease, black- or whitelist rules
 function remove_lease_rule(mac, ipaddr)
 	ipt:resync()
-
-	if ipaddr then
-		ipt_delete_all({table="mangle", chain="luci_splash_mark_in",  destination=ipaddr})
-		ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", mac:upper()}})
-	end
-
+	ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", mac:upper()}})
+	ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", mac:upper()}})
 	ipt_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
 	ipt_delete_all({table="nat",    chain="luci_splash_leases",   options={"MAC", mac:upper()}})
 	if has_ipv6 then
+		--ipt6_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", mac:upper()}})
+		ipt6_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", mac:upper()}})
 		ipt6_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
 	end
 end
@@ -391,9 +380,8 @@ function sync()
 
 	uci:save("luci_splash_leases")
 
-	-- Get current IPs and MAC addresses
+	-- Get the mac addresses of current leases
 	local macs = get_known_macs()
-	local ips  = get_known_ips(macs)
 
 	ipt:resync()
 
@@ -403,16 +391,17 @@ function sync()
 		function(r) return not macs[r.options[2]:lower()] end)
 	ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
 		function(r) return not macs[r.options[2]:lower()] end)
-	ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"MARK", "set"}},
-		function(r) return not ips[r.destination] end)
+	ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", "MARK", "set"}},
+		function(r) return not macs[r.options[2]:lower()] end)
+
 
 	if has_ipv6 then
 		ipt6_delete_all({table="filter", chain="luci_splash_filter", options={"MAC"}},
 			function(r) return not macs[r.options[2]:lower()] end)
-		ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
+		ipt6_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
 			function(r) return not macs[r.options[2]:lower()] end)
-		ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"MARK", "set"}},
-			function(r) return not ips[r.destination] end)
+		--ipt6_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", "MARK", "set"}},
+		--	function(r) return not macs[r.options[2]:lower()] end)
 	end
 
 	unlock()
