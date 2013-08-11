@@ -30,7 +30,7 @@ uci:foreach("dhcp", "dnsmasq",
 	end)
 
 
-uci:foreach("luci_splash", "lease",
+uci:foreach("luci_splash_leases", "lease",
 	function(s)
 		if s.start and s.mac then
 			clients[s.mac:lower()] = {
