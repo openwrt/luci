@@ -185,7 +185,7 @@ uci batch <<EOF
 	set uhttpd.splash.listen_http="8082"
 	set uhttpd.splash.index_page="splash.sh"
 	set uhttpd.splash.error_page="/splash.sh"
-
+	set uhttpd.splash.http_keepalive='0'
         commit uhttpd
 EOF
 	}
