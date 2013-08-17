@@ -23,8 +23,8 @@ if [ ${#pid} -gt 5 ]; then
 fi
 
 # exit if there is no defaultroute with metric=0 in main or gw-check table.
-defroutemain="$(ip r s |grep default |grep -v metric)"
-defroutegwcheck="$(ip r s t gw-check |grep default |grep -v metric)"
+defroutemain="$(ip route show |grep default |grep -v metric)"
+defroutegwcheck="$(ip route show table gw-check |grep default |grep -v metric)"
 if [ -z "$defroutegwcheck" -a -z "$defroutemain" ]; then
 	exit 1
 fi
@@ -84,37 +84,37 @@ iw=$(check_internet)
 if [ "$iw" == 0 ]; then
 	# Internet available again, restore default route and remove ip rules
 	if [ -n "$defroutegwcheck" ]; then
-		ip r a $defroutegwcheck
-		ip r d $defroutegwcheck t gw-check
+		ip route add $defroutegwcheck
+		ip route del $defroutegwcheck table gw-check
 		for host in $testserver; do
 			ips="$(resolve $host)"
 			for ip in $ips; do
-				[ -n "$(ip ru s | grep "to $ip lookup gw-check")" ] && ip rule del to $ip table gw-check
+				[ -n "$(ip rule show | grep "to $ip lookup gw-check")" ] && ip rule del to $ip table gw-check
 			done
 		done
 		get_dnsservers
 		for d in $dns; do
-			[ -n "$(ip ru s | grep "to $d lookup gw-check")" ] && ip rule del to $d table gw-check
+			[ -n "$(ip rule show | grep "to $d lookup gw-check")" ] && ip rule del to $d table gw-check
 		done
 		logger -p err -t gw-check "Internet is available again, default route restored ( $defroutegwcheck)"
 	fi
 
 else
 	# Check failed. Move default route to table gw-check and setup ip rules.
-	if [ -z "$(ip ru s | grep gw-check)" -a -n "$defroutemain" ]; then
-		ip r a $defroutemain table gw-check
-		ip r d $defroutemain
+	if [ -z "$(ip rule show | grep gw-check)" -a -n "$defroutemain" ]; then
+		ip route add $defroutemain table gw-check
+		ip route del $defroutemain
 		logger -p err -t gw-check "Internet is not available, default route deactivated ( $defroutemain)"
 	fi
 	for host in $testserver; do
 		ips="$(resolve $host)"
 		for ip in $ips; do
-			[ -z "$(ip ru s | grep "to $ip lookup gw-check")" ] && ip rule add to $ip table gw-check
+			[ -z "$(ip rule show | grep "to $ip lookup gw-check")" ] && ip rule add to $ip table gw-check
 		done
 	done
 	get_dnsservers
 	for d in $dns; do
-		[ -z "$(ip ru s | grep "to $d lookup gw-check")" ] && ip rule add to $d table gw-check
+		[ -z "$(ip rule show | grep "to $d lookup gw-check")" ] && ip rule add to $d table gw-check
 	done
 	logger -p err -t gw-check "Check your internet connection!"
 fi
