@@ -1,18 +1,19 @@
 #!/usr/bin/lua
 
-require("luci.util")
+utl = require "luci.util"
+sys = require "luci.sys"
+
 require("luci.model.uci")
-require("luci.sys")
 require("luci.sys.iptparser")
 
 -- Init state session
 local uci = luci.model.uci.cursor_state()
 local ipt = luci.sys.iptparser.IptParser()
-local net = luci.sys.net
+local net = sys.net
 local fs = require "luci.fs"
+local ip = require "luci.ip"
 
-local limit_up = 0
-local limit_down = 0
+local debug = false
 
 local has_ipv6 = fs.access("/proc/net/ipv6_route") and fs.access("/usr/sbin/ip6tables")
 
@@ -24,12 +25,80 @@ function unlock()
 	os.execute("lock -u /var/run/luci_splash.lock")
 end
 
+function exec(cmd)
+	local ret = sys.exec(cmd)
+	if debug then
+		print('+ ' .. cmd)
+		if ret and ret ~= "" then
+			print(ret)
+		end
+	end
+end
+
+function get_id(ip)
+	local o3, o4 = ip:match("[0-9]+%.[0-9]+%.([0-9]+)%.([0-9]+)")
+	if o3 and 04 then
+		return string.format("%02X%s", tonumber(o3), "") .. string.format("%02X%s", tonumber(o4), "")
+	else
+		return false
+	end
+end
+
+function get_device_for_ip(ipaddr)
+	local dev
+	uci:foreach("network", "interface", function(s)
+		if s.ipaddr and s.netmask then
+			local network = ip.IPv4(s.ipaddr, s.netmask)
+			if network:contains(ip.IPv4(ipaddr)) then
+				-- this should be rewritten to luci functions if possible
+				dev = utl.trim(sys.exec(". /lib/functions/network.sh; network_get_device IFNAME '" ..  s['.name'] .. "'; echo $IFNAME"))
+			end
+		end
+	end)
+	return dev
+end
+
+function get_physdev(interface)
+	local dev
+	dev = utl.trim(sys.exec(". /lib/functions/network.sh; network_get_device IFNAME '" ..  interface .. "'; echo $IFNAME"))
+	return dev
+end
+
+
+
+function get_filter_handle(parent, direction, device)
+	local input = utl.split(sys.exec('/usr/sbin/tc filter show dev ' .. device .. ' parent ' .. parent) or {})
+	local tbl = {}
+	local handle
+	for k, v in pairs(input) do
+		handle = v:match('filter protocol ip pref %d+ u32 fh (%d*:%d*:%d*) order')
+		if handle then
+			local mac1, mac2, mac3, mac4, mac5, mac6
+			if direction == 'src' then
+				mac1, mac2, mac3, mac4 = input[k+1]:match('match ([%a%d][%a%d])([%a%d][%a%d])([%a%d][%a%d])([%a%d][%a%d])/ffffffff')
+				mac5, mac6 = input[k+2]:match('match ([%a%d][%a%d])([%a%d][%a%d])0000/ffff0000')
+			else
+				mac1, mac2 = input[k+1]:match('match 0000([%a%d][%a%d])([%a%d][%a%d])/0000ffff')
+				mac3, mac4, mac5, mac6 = input[k+2]:match('match ([%a%d][%a%d])([%a%d][%a%d])([%a%d][%a%d])([%a%d][%a%d])/ffffffff')
+			end
+			if mac1 and mac2 and mac3 and mac4 and mac5 and mac6 then
+				mac = "%s:%s:%s:%s:%s:%s" % { mac1, mac2, mac3, mac4, mac5, mac6 }
+				tbl[mac] = handle
+			end
+		end
+	end
+	if tbl[mac:lower()] then
+		handle = tbl[mac:lower()]
+	end
+	return handle
+end
+
 function main(argv)
 	local cmd = table.remove(argv, 1)
 	local arg = argv[1]
 
-	limit_up = tonumber(uci:get("luci_splash", "general", "limit_up")) or 0
-	limit_down = tonumber(uci:get("luci_splash", "general", "limit_down")) or 0
+	limit_up = (tonumber(uci:get("luci_splash", "general", "limit_up")) or 0) * 8
+	limit_down = (tonumber(uci:get("luci_splash", "general", "limit_down")) or 0) * 8
 
 	if ( cmd == "lease" or cmd == "add-rules" or cmd == "remove" or
 	     cmd == "whitelist" or cmd == "blacklist" or cmd == "status" ) and #argv > 0
@@ -175,7 +244,7 @@ function ipt_delete_all(args, comp, off)
 			off[r.table] = off[r.table] or { }
 			off[r.table][r.chain] = off[r.table][r.chain] or 0
 
-			os.execute("iptables -t %q -D %q %d 2>/dev/null"
+			exec("iptables -t %q -D %q %d 2>/dev/null"
 				%{ r.table, r.chain, r.index - off[r.table][r.chain] })
 
 			off[r.table][r.chain] = off[r.table][r.chain] + 1
@@ -190,7 +259,7 @@ function ipt6_delete_all(args, comp, off)
 			off[r.table] = off[r.table] or { }
 			off[r.table][r.chain] = off[r.table][r.chain] or 0
 
-			os.execute("ip6tables -t %q -D %q %d 2>/dev/null"
+			exec("ip6tables -t %q -D %q %d 2>/dev/null"
 				%{ r.table, r.chain, r.index - off[r.table][r.chain] })
 
 			off[r.table][r.chain] = off[r.table][r.chain] + 1
@@ -219,15 +288,19 @@ function add_lease(mac, arp, no_uci)
 
 	-- Add lease if there is an ip addr
 	if ipaddr then
+		local device = get_device_for_ip(ipaddr)
 		if not no_uci then
 			uci:section("luci_splash_leases", "lease", convert_mac_to_secname(mac), {
 				mac    = mac,
 				ipaddr = ipaddr,
+				device = device,
+				limit_up = limit_up,
+				limit_down = limit_down,
 				start  = os.time()
 			})
 			uci:save("luci_splash_leases")
 		end
-		add_lease_rule(mac, ipaddr)
+		add_lease_rule(mac, ipaddr, device)
 	else
 		print("Found no active IP for %s, lease not added" % mac)
 	end
@@ -241,7 +314,7 @@ function remove_lease(mac)
 	uci:delete_all("luci_splash_leases", "lease",
 		function(s)
 			if s.mac:lower() == mac then
-				remove_lease_rule(mac, s.ipaddr)
+				remove_lease_rule(mac, s.ipaddr, s.device, tonumber(s.limit_up), tonumber(s.limit_down))
 				return true
 			end
 			return false
@@ -277,8 +350,21 @@ function remove_whitelist(mac)
 	uci:save("luci_splash")
 	uci:commit("luci_splash")
 	remove_lease_rule(mac)
+	remove_whitelist_tc(mac)
 end
 
+function remove_whitelist_tc(mac)
+	if debug then
+		print("Removing whitelist filters for " .. mac)
+	end
+        uci:foreach("luci_splash", "iface", function(s)
+		local device = get_physdev(s['.name'])
+		local handle = get_filter_handle('ffff:', 'src', device, mac)
+		exec('tc filter del dev "%s" parent ffff: protocol ip prio 1 handle %s u32' % { device, handle })
+		local handle = get_filter_handle('1:', 'dest', device, mac)
+		exec('tc filter del dev "%s" parent 1:0 protocol ip prio 1 handle %s u32' % { device, handle })
+        end)
+end
 
 -- Remove a blacklist entry
 function remove_blacklist(mac)
@@ -292,55 +378,94 @@ end
 
 
 -- Add an iptables rule
-function add_lease_rule(mac, ipaddr)
-	os.execute("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
-	os.execute("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80 -m comment --comment %s" % {ipaddr, mac:upper()})
+function add_lease_rule(mac, ipaddr, device)
+	local id
+	if ipaddr then
+		id = get_id(ipaddr)
+	end
+
+	exec("iptables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j RETURN" % mac)
+
+	if id and device then
+		exec("iptables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 0x1%s -m comment --comment %s" % {ipaddr, id, mac:upper()})
+	end
 
 	if has_ipv6 then
-	        os.execute("ip6tables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
+		exec("ip6tables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
 		-- not working yet, needs the ip6addr
-		--os.execute("ip6tables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80 -m comment --comment %s" % {ipaddr, mac:upper()})
+		--exec("ip6tables -t mangle -I luci_splash_mark_in -d %q -j MARK --set-mark 80 -m comment --comment %s" % {ipaddr, mac:upper()})
 	end
 
 
-	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
-	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
+	if device and tonumber(limit_up) > 0 then
+		exec('tc filter add dev "%s" parent ffff: protocol ip prio 2 u32 match ether src %s police rate %skbit mtu 6k burst 6k drop' % {device, mac, limit_up})
+	end
+
+	if id and device and tonumber(limit_down) > 0 then
+		exec("tc class add dev %s parent 1: classid 1:0x%s htb rate %skbit" % { device, id, limit_down })
+		exec("tc qdisc add dev %s parent 1:%s sfq perturb 10" % { device, id })
+	end
+
+	exec("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+	exec("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
 	if has_ipv6 then
-		os.execute("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+		exec("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
 	end
 end
 
 
 -- Remove lease, black- or whitelist rules
-function remove_lease_rule(mac, ipaddr)
+function remove_lease_rule(mac, ipaddr, device, limit_up, limit_down)
+	local id
+	if ipaddr then
+		id = get_id(ipaddr)
+	end
+
 	ipt:resync()
 	ipt_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", mac:upper()}})
 	ipt_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", mac:upper()}})
 	ipt_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
 	ipt_delete_all({table="nat",    chain="luci_splash_leases",   options={"MAC", mac:upper()}})
 	if has_ipv6 then
-		--ipt6_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", mac:upper()}})
 		ipt6_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", mac:upper()}})
 		ipt6_delete_all({table="filter", chain="luci_splash_filter",   options={"MAC", mac:upper()}})
 	end
+	if device and tonumber(limit_up) > 0 then
+		local handle = get_filter_handle('ffff:', 'src', device, mac)
+		if handle then
+			exec('tc filter del dev "%s" parent ffff: protocol ip prio 2 handle %s u32 police rate %skbit mtu 6k burst 6k drop' % {device, handle, limit_up})
+		end
+	end
+
+	-- remove clients class
+	if device and id then
+		exec('tc class del dev "%s" classid 1:%s' % {device, id})
+		exec('tc qdisc del dev "%s" parent 1:%s sfq perturb 10' % { device, id })
+	end
+
 end
 
 
 -- Add whitelist rules
 function add_whitelist_rule(mac)
-	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
-	os.execute("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
+	exec("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+	exec("iptables -t nat    -I luci_splash_leases -m mac --mac-source %q -j RETURN" % mac)
 	if has_ipv6 then
-		os.execute("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
+		exec("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j RETURN" % mac)
 	end
+        uci:foreach("luci_splash", "iface", function(s)
+		local device = get_physdev(s['.name'])
+		exec('tc filter add dev "%s" parent ffff: protocol ip prio 1 u32 match ether src %s police pass' % { device, mac })
+		exec('tc filter add dev "%s" parent 1:0 protocol ip prio 1 u32 match ether dst %s classid 1:1' % { device, mac })
+        end)
 end
 
 
 -- Add blacklist rules
 function add_blacklist_rule(mac)
-	os.execute("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
+	exec("iptables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
 	if has_ipv6 then
-		os.execute("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
+		exec("ip6tables -t filter -I luci_splash_filter -m mac --mac-source %q -j DROP" % mac)
 	end
 end
 
@@ -366,12 +491,15 @@ function sync()
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
 				-- Remove expired
-				remove_lease_rule(v.mac, v.ipaddr)
+				remove_lease_rule(v.mac, v.ipaddr, v.device, tonumber(v.limit_up), tonumber(v.limit_down))
 			else
 				-- Rewrite state
 				uci:section("luci_splash_leases", "lease", convert_mac_to_secname(v.mac), {		
 					mac    = v.mac,
 					ipaddr = v.ipaddr,
+					device = v.device,
+					limit_up = limit_up,
+					limit_down = limit_down,
 					start  = v.start
 				})
 			end
@@ -400,8 +528,6 @@ function sync()
 			function(r) return not macs[r.options[2]:lower()] end)
 		ipt6_delete_all({table="mangle", chain="luci_splash_mark_out", options={"MAC", "MARK", "set"}},
 			function(r) return not macs[r.options[2]:lower()] end)
-		--ipt6_delete_all({table="mangle", chain="luci_splash_mark_in", options={"/*", "MARK", "set"}},
-		--	function(r) return not macs[r.options[2]:lower()] end)
 	end
 
 	unlock()
@@ -453,7 +579,7 @@ function list()
 	end
 
 	-- Whitelist, Blacklist
-	for _, s in luci.util.spairs(leases,
+	for _, s in utl.spairs(leases,
 		function(a,b) return leases[a][".type"] > leases[b][".type"] end
 	) do
 		if (s[".type"] == "whitelist" or s[".type"] == "blacklist") and s.mac then

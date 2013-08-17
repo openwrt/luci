@@ -5,24 +5,27 @@ EXTRA_COMMANDS=clear_leases
 LIMIT_DOWN=0
 LIMIT_DOWN_BURST=0
 LIMIT_UP=0
+TC=/usr/sbin/tc
+IPT=/usr/sbin/iptables
+IPT6=/usr/sbin/ip6tables
 
 IPT_REPLAY=/var/run/luci_splash.iptlog
 LOCK=/var/run/luci_splash.lock
-[ -x /usr/sbin/ip6tables ] && [ -f /proc/net/ipv6_route ] && HAS_IPV6=1
+[ -x $IPT6 ] && [ -f /proc/net/ipv6_route ] && HAS_IPV6=1
 
 silent() {
 	"$@" 2>/dev/null
 }
 
 ipt_log() {
-	iptables -I "$@"
-	echo iptables -D "$@" >> $IPT_REPLAY
+	$IPT -I "$@"
+	echo $IPT -D "$@" >> $IPT_REPLAY
 }
 
 ipt6_log() {
 	[ "$HAS_IPV6" = 1 ] || return
-	ip6tables -I "$@"
-	echo ip6tables -D "$@" >> $IPT_REPLAY
+	$IPT6 -I "$@"
+	echo $IPT6 -D "$@" >> $IPT_REPLAY
 }
 
 
@@ -70,16 +73,16 @@ iface_add() {
 	fi
 
 	### Allow traffic to the same subnet
-	iptables -t nat    -I luci_splash_prerouting -d "$ipaddr/${netmask:-32}" -j RETURN
-	iptables -t filter -I luci_splash_forwarding -d "$ipaddr/${netmask:-32}" -j RETURN
+	$IPT -t nat    -I luci_splash_prerouting -d "$ipaddr/${netmask:-32}" -j RETURN
+	$IPT -t filter -I luci_splash_forwarding -d "$ipaddr/${netmask:-32}" -j RETURN
 
 	### Allow traffic to the mesh subnet
 	[ "$parentproto" = "static" -a -n "$parentipaddr" ] && {
-		iptables -t nat    -I luci_splash_prerouting -d "$parentipaddr/${parentnetmask:-32}" -j RETURN
-		iptables -t filter -I luci_splash_forwarding -d "$parentipaddr/${parentnetmask:-32}" -j RETURN
+		$IPT -t nat    -I luci_splash_prerouting -d "$parentipaddr/${parentnetmask:-32}" -j RETURN
+		$IPT -t filter -I luci_splash_forwarding -d "$parentipaddr/${parentnetmask:-32}" -j RETURN
 	}
 
-	qos_iface_add "$ifname"
+	qos_iface_add "$ifname" "$NETWORK" "$PREFIX"
 }
 
 iface_del() {
@@ -107,6 +110,14 @@ mac_add() {
 	append MACS "$mac"
 }
 
+whitelist_add() {
+	config_get mac "$1" mac
+	iface=$2
+	$TC filter add dev "$iface" parent ffff: protocol ip prio 1 u32 match ether src $mac police pass
+	$TC filter add dev "$iface" parent 1:0 protocol ip prio 1 u32 match ether dst classid 1:1
+}
+
+
 subnet_add() {
 	local cfg="$1"
 
@@ -114,52 +125,54 @@ subnet_add() {
 	config_get netmask "$cfg" netmask
 
 	[ -n "$ipaddr" ] && {
-		iptables -t nat    -I luci_splash_prerouting -d "$ipaddr/${netmask:-32}" -j RETURN
-		iptables -t filter -I luci_splash_forwarding -d "$ipaddr/${netmask:-32}" -j RETURN
+		$IPT -t nat    -I luci_splash_prerouting -d "$ipaddr/${netmask:-32}" -j RETURN
+		$IPT -t filter -I luci_splash_forwarding -d "$ipaddr/${netmask:-32}" -j RETURN
 	}
 }
 
 qos_iface_add() {
 	local iface="$1"
+	local network="$2"
+	local prefix="$3"
 
-	# 77 -> download root qdisc
-	# 78 -> upload root qdisc
-	# 79 -> fwmark: client->inet
-	# 80 -> fwmark: inet->client
+	# 77   -> download root qdisc
+	# ffff -> upload root qdisc
 
-	silent tc qdisc del dev "$iface" root handle 77:
+	silent $TC qdisc del dev "$iface" root handle 1:
+	silent $TC class del dev "$iface" parent 1: classid 1:ffff
+	silent $TC class del dev "$iface" parent 1: classid 1:1
+	silent $TC filter del dev "$iface" parent ffff: protocol ip prio 1 u32
+	silent $TC filter del dev "$iface" parent ffff: protocol ip prio 2 u32
+	silent $TC filter del dev "$iface" parent ffff: protocol ip prio 3 u32
 
 	if [ "$LIMIT_UP" -gt 0 -a "$LIMIT_DOWN" -gt 0 ]; then
-		tc qdisc add dev "$iface" root handle 77: htb
+		# Setup qdiscs
+		$TC qdisc add dev "$iface" root handle 1: htb default 1
+		silent $TC qdisc add dev "$iface" ingress
 
-		# assume maximum rate of 20.000 kilobit for wlan
-		tc class add dev "$iface" parent 77: classid 77:1 htb rate 20000kbit
+		# Default class - all clients which are not otherwise handled are put in that class
+		# and share that bandwidth.
+		$TC class add dev "$iface" parent 1: classid 1:ffff htb rate ${LIMIT_DOWN}kbit
 
-		# set download limit and burst
-		tc class add dev "$iface" parent 77:1 classid 77:10 htb \
-			rate ${LIMIT_DOWN}kbit ceil ${LIMIT_DOWN_BURST}kbit prio 2
+		# default class and class for whitelisted clients = unlimited
+		$TC class add dev "$iface" parent 1: classid 1:1 htb rate 100mbit
 
-		tc qdisc add dev "$iface" parent 77:10 handle 78: sfq perturb 10
+		# All traffic to the dhcp subnet is put into the limited class
+		$TC filter add dev "$iface" parent 1:0 protocol ip prio 3 u32 match ip dst $network/$prefix classid 1:ffff
+		$TC qdisc add dev "$iface" parent 1:ffff sfq perturb 10
+                $TC filter add dev "$iface" parent ffff: protocol ip prio 3 u32 match ip src $network/$prefix police rate ${LIMIT_UP}kbit mtu 6k burst 6k drop
 
-		# adding ingress can result in "File exists" if qos-scripts are active
-		silent tc qdisc add dev "$iface" ingress
+		# classify packets by their iptables MARK set in luci_splash_mark_in (mangle table)
+		# every client gets his own class and so his own bandwidth limit
+		$TC filter add dev "$iface" parent 1:0 protocol ip prio 2 fw
 
-		# set client download speed
-		tc filter add dev "$iface" parent 77: protocol ip prio 2 \
-			handle 80 fw flowid 77:10
-
-		# set client upload speed
-		tc filter add dev "$iface" parent ffff: protocol ip prio 1 \
-			handle 79 fw police rate ${LIMIT_UP}kbit mtu 6k burst 6k drop
+		config_foreach whitelist_add whitelist $iface
 	fi
 }
 
 qos_iface_del() {
 	local iface="$1"
-
-	silent tc qdisc del dev "$iface" root handle 77:
-	silent tc qdisc del dev "$iface" root handle 78:
-	silent tc filter del dev "$iface" parent ffff: protocol ip prio 1 handle 79 fw
+	silent $TC qdisc del dev "$iface" root handle 77:
 }
 
 boot() {
@@ -210,57 +223,62 @@ start() {
 	}
 
 	### Create subchains
-	iptables -t nat    -N luci_splash_prerouting
-	iptables -t nat    -N luci_splash_leases
-	iptables -t filter -N luci_splash_forwarding
-	iptables -t filter -N luci_splash_filter
+	$IPT -t nat    -N luci_splash_prerouting
+	$IPT -t nat    -N luci_splash_leases
+	$IPT -t filter -N luci_splash_forwarding
+	$IPT -t filter -N luci_splash_filter
 
 	if [ "$HAS_IPV6" = 1 ]; then
-		ip6tables -t filter -N luci_splash_forwarding
-		ip6tables -t filter -N luci_splash_filter
+		$IPT6 -t filter -N luci_splash_forwarding
+		$IPT6 -t filter -N luci_splash_filter
 	fi
 
 	### Clear iptables replay log
 	[ -s $IPT_REPLAY ] && . $IPT_REPLAY
 	echo -n > $IPT_REPLAY
 
+	### Add interface independant prerouting rules
+	$IPT -t nat -A luci_splash_prerouting -j luci_splash_leases
+	$IPT -t nat -A luci_splash_leases -p udp --dport 53 -j REDIRECT --to-ports 53
+	$IPT -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
+
+	### Add interface independant forwarding rules
+	$IPT -t filter -A luci_splash_forwarding -j luci_splash_filter
+	$IPT -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
+	$IPT -t filter -A luci_splash_filter -j REJECT --reject-with icmp-net-prohibited
+
+	if [ "$HAS_IPV6" = 1 ]; then
+		$IPT6 -t filter -A luci_splash_forwarding -j luci_splash_filter
+		$IPT6 -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
+		$IPT6 -t filter -A luci_splash_filter -j REJECT --reject-with adm-prohibited
+	fi
+
+	### Add QoS chain
+	$IPT -t mangle -N luci_splash_mark_out
+	$IPT -t mangle -N luci_splash_mark_in
+	$IPT -t mangle -I PREROUTING  -j luci_splash_mark_out
+	$IPT -t mangle -I POSTROUTING -j luci_splash_mark_in
+
+	if [ "$HAS_IPV6" = 1 ]; then
+		$IPT6 -t mangle -N luci_splash_mark_out
+		$IPT6 -t mangle -N luci_splash_mark_in
+		$IPT6 -t mangle -I PREROUTING  -j luci_splash_mark_out
+		$IPT6 -t mangle -I POSTROUTING -j luci_splash_mark_in
+	fi
+
 	### Build the main and portal rule
 	config_foreach iface_add iface
 	config_foreach subnet_add subnet
 
-	### Add interface independant prerouting rules
-	iptables -t nat -A luci_splash_prerouting -j luci_splash_leases
-	iptables -t nat -A luci_splash_leases -p udp --dport 53 -j REDIRECT --to-ports 53
-	iptables -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
-
-	### Add interface independant forwarding rules
-	iptables -t filter -A luci_splash_forwarding -j luci_splash_filter
-	iptables -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
-	iptables -t filter -A luci_splash_filter -j REJECT --reject-with icmp-net-prohibited
-
-	if [ "$HAS_IPV6" = 1 ]; then
-		ip6tables -t filter -A luci_splash_forwarding -j luci_splash_filter
-		ip6tables -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
-		ip6tables -t filter -A luci_splash_filter -j REJECT --reject-with adm-prohibited
-	fi
-
-	### Add QoS chain
-    iptables -t mangle -N luci_splash_mark_out
-    iptables -t mangle -N luci_splash_mark_in
-    iptables -t mangle -I PREROUTING  -j luci_splash_mark_out
-    iptables -t mangle -I POSTROUTING -j luci_splash_mark_in
-    if [ "$HAS_IPV6" = 1 ]; then
-        ip6tables -t mangle -N luci_splash_mark_out
-        ip6tables -t mangle -N luci_splash_mark_in
-        ip6tables -t mangle -I PREROUTING  -j luci_splash_mark_out
-        ip6tables -t mangle -I POSTROUTING -j luci_splash_mark_in
-    fi
-
 	### Find active mac addresses
 	MACS=""
-	config_foreach mac_add lease
+
+	
 	config_foreach mac_add blacklist
 	config_foreach mac_add whitelist
+
+	#config_load luci_splash_leases
+	config_foreach mac_add lease
 
 	### Add crontab entry
 	test -f /etc/crontabs/root || touch /etc/crontabs/root
@@ -284,41 +302,41 @@ stop() {
 	### Clear interface rules
 	config_foreach iface_del iface
 
-	silent iptables -t mangle -D PREROUTING  -j luci_splash_mark_out
-	silent iptables -t mangle -D POSTROUTING -j luci_splash_mark_in
+	silent $IPT -t mangle -D PREROUTING  -j luci_splash_mark_out
+	silent $IPT -t mangle -D POSTROUTING -j luci_splash_mark_in
 
 	if [ "$HAS_IPV6" = 1 ]; then
-		silent ip6tables -t mangle -D PREROUTING  -j luci_splash_mark_out
-		silent ip6tables -t mangle -D POSTROUTING -j luci_splash_mark_in
+		silent $IPT6 -t mangle -D PREROUTING  -j luci_splash_mark_out
+		silent $IPT6 -t mangle -D POSTROUTING -j luci_splash_mark_in
 	fi
 
 	### Clear subchains
-	silent iptables -t nat    -F luci_splash_prerouting
-	silent iptables -t nat    -F luci_splash_leases
-	silent iptables -t filter -F luci_splash_forwarding
-	silent iptables -t filter -F luci_splash_filter
-	silent iptables -t mangle -F luci_splash_mark_out
-	silent iptables -t mangle -F luci_splash_mark_in
+	silent $IPT -t nat    -F luci_splash_prerouting
+	silent $IPT -t nat    -F luci_splash_leases
+	silent $IPT -t filter -F luci_splash_forwarding
+	silent $IPT -t filter -F luci_splash_filter
+	silent $IPT -t mangle -F luci_splash_mark_out
+	silent $IPT -t mangle -F luci_splash_mark_in
 
 	if [ "$HAS_IPV6" = 1 ]; then
-		ip6tables -t filter -F luci_splash_forwarding
-		ip6tables -t filter -F luci_splash_filter
-		ip6tables -t mangle -F luci_splash_mark_out
-		ip6tables -t mangle -F luci_splash_mark_in
+		$IPT6 -t filter -F luci_splash_forwarding
+		$IPT6 -t filter -F luci_splash_filter
+		$IPT6 -t mangle -F luci_splash_mark_out
+		$IPT6 -t mangle -F luci_splash_mark_in
 	fi
 
 	### Delete subchains
-	silent iptables -t nat    -X luci_splash_prerouting
-	silent iptables -t nat    -X luci_splash_leases
-	silent iptables -t filter -X luci_splash_forwarding
-	silent iptables -t filter -X luci_splash_filter
-	silent iptables -t mangle -X luci_splash_mark_out
-	silent iptables -t mangle -X luci_splash_mark_in
+	silent $IPT -t nat    -X luci_splash_prerouting
+	silent $IPT -t nat    -X luci_splash_leases
+	silent $IPT -t filter -X luci_splash_forwarding
+	silent $IPT -t filter -X luci_splash_filter
+	silent $IPT -t mangle -X luci_splash_mark_out
+	silent $IPT -t mangle -X luci_splash_mark_in
 	if [ "$HAS_IPV6" = 1 ]; then
-		ip6tables -t filter -X luci_splash_forwarding
-		ip6tables -t filter -X luci_splash_filter
-		ip6tables -t mangle -X luci_splash_mark_out
-		ip6tables -t mangle -X luci_splash_mark_in
+		$IPT6 -t filter -X luci_splash_forwarding
+		$IPT6 -t filter -X luci_splash_filter
+		$IPT6 -t mangle -X luci_splash_mark_out
+		$IPT6 -t mangle -X luci_splash_mark_in
 	fi
 	sed -ie '/\/usr\/sbin\/luci-splash sync/d' /var/spool/cron/crontabs/root
 
