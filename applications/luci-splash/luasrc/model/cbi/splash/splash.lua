@@ -16,6 +16,8 @@ s = m:section(NamedSection, "general", "core", translate("General"))
 s.addremove = false
 
 s:option(Value, "leasetime", translate("Clearance time"), translate("Clients that have accepted the splash are allowed to use the network for that many hours."))
+local redir = s:option(Value, "redirect_url", translate("Redirect target"), translate("Clients are redirected to this page after they have accepted the splash. If this is left empty they are redirected to the page they had requested."))
+redir.rmempty = true
 
 s:option(Value, "limit_up", translate("Upload limit"), translate("Clients upload speed is limited to this value (kbyte/s)"))
 s:option(Value, "limit_down", translate("Download limit"), translate("Clients download speed is limited to this value (kbyte/s)"))
@@ -74,7 +76,7 @@ s.anonymous = true
 s:option(Value, "mac", translate ("MAC Address"))
 
 s = m:section(TypedSection, "subnet", translate("Allowed hosts/subnets"),
-	translate("Hosts and Networks that are listed here are excluded from splashing, i.e. they are always allowed."))
+	translate("Destination hosts and networks that are excluded from splashing, i.e. they are always allowed."))
 
 s.template = "cbi/tblsection"
 s.addremove = true

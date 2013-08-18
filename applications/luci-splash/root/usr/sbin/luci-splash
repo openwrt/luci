@@ -66,14 +66,14 @@ end
 
 
 
-function get_filter_handle(parent, direction, device)
+function get_filter_handle(parent, direction, device, mac)
 	local input = utl.split(sys.exec('/usr/sbin/tc filter show dev ' .. device .. ' parent ' .. parent) or {})
 	local tbl = {}
 	local handle
 	for k, v in pairs(input) do
 		handle = v:match('filter protocol ip pref %d+ u32 fh (%d*:%d*:%d*) order')
 		if handle then
-			local mac1, mac2, mac3, mac4, mac5, mac6
+			local mac, mac1, mac2, mac3, mac4, mac5, mac6
 			if direction == 'src' then
 				mac1, mac2, mac3, mac4 = input[k+1]:match('match ([%a%d][%a%d])([%a%d][%a%d])([%a%d][%a%d])([%a%d][%a%d])/ffffffff')
 				mac5, mac6 = input[k+2]:match('match ([%a%d][%a%d])([%a%d][%a%d])0000/ffff0000')
@@ -87,8 +87,8 @@ function get_filter_handle(parent, direction, device)
 			end
 		end
 	end
-	if tbl[mac:lower()] then
-		handle = tbl[mac:lower()]
+	if tbl[mac] then
+		handle = tbl[mac]
 	end
 	return handle
 end

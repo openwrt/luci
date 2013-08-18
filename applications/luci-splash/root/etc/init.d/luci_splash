@@ -270,6 +270,14 @@ start() {
 	config_foreach iface_add iface
 	config_foreach subnet_add subnet
 
+	### Add the community homepage to the list of allowed destination subnets
+	hp=$(uci -q get freifunk.community.homepage) && {
+		chp=${hp#http*://}
+		chp=${chp%%/*}
+		$IPT -t nat    -I luci_splash_prerouting -d "${chp}/32" -j RETURN
+		$IPT -t filter -I luci_splash_forwarding -d "${chp}/32" -j RETURN
+	}
+
 	### Find active mac addresses
 	MACS=""
 
