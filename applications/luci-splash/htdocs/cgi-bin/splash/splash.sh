@@ -1,4 +1,15 @@
 #!/bin/sh
+
+$(uci -q get luci_splash.general.redirect_url) || {
+	set -x
+	touch /var/state/luci_splash_locations
+	touch /etc/config/luci_splash_locations
+	MAC=$(grep "$REMOTE_HOST" /proc/net/arp | awk '{print $4}')
+	uci -P /var/state set luci_splash_locations.${MAC//:/}=redirect
+	uci -P /var/state set luci_splash_locations.${MAC//:/}.location="http://${HTTP_HOST}${REQUEST_URI}"
+	set +x
+}
+
 echo -en "Cache-Control: no-cache, max-age=0, no-store, must-revalidate\r\n"
 echo -en "Pragma: no-cache\r\n"
 echo -en "Expires: -1\r\n"
@@ -20,4 +31,5 @@ cat <<EOT
 	</Redirect>
 </WISPAccessGatewayParam>
 EOT
+
 
