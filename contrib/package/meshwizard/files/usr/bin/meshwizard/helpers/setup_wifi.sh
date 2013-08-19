@@ -95,7 +95,7 @@ if [ "$supports_vap" == "1" -a "$vap" == 1 ]; then
 		set wireless.$net\_iface_dhcp.mode="ap"
 		set wireless.$net\_iface_dhcp.encryption="none"
 		set wireless.$net\_iface_dhcp.network="${netrenamed}dhcp"
-		set wireless.$net\_iface_dhcp.ssid="FF-AP-$ip4addr"
+		set wireless.$net\_iface_dhcp.ssid="Freifunk-$ip4addr"
 	EOF
 	uci_commitverbose "Setup VAP interface for $netrenamed" wireless
 fi
