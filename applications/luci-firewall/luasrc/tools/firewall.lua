@@ -258,9 +258,7 @@ function opt_enabled(s, t, ...)
 		return o
 	else
 		local o = s:option(t, "enabled", ...)
-		      o.enabled = ""
-			  o.disabled = "0"
-		      o.default = o.enabled
+		o.default = "1"
 		return o
 	end
 end
