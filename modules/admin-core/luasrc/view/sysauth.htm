@@ -9,8 +9,6 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id$
-
 -%>
 
 <%+header%>
@@ -51,4 +49,32 @@ $Id$
 	if (input)
 		input.focus();
 //]]></script>
+
+<%
+local uci  = require "luci.model.uci".cursor()
+local fs  = require "nixio.fs"
+local https_key = uci:get("uhttpd", "main", "key")
+local https_port = uci:get("uhttpd", "main", "listen_https")
+if type(https_port) == "table" then
+	https_port = https_port[1]
+end
+
+if https_port and fs.access(https_key) then
+	https_port = https_port:match("(%d+)$")
+%>
+
+<script type="text/javascript">//<![CDATA[
+	if (document.location.protocol != 'https:') {
+		var url = 'https://' + window.location.hostname + ':' + '<%=https_port%>' + window.location.pathname;
+		var img=new Image;
+		img.onload=function(){window.location = url};
+		img.src='https://' + window.location.hostname + ':' + '<%=https_port%>' + '<%=resource%>/cbi/up.gif?' + Math.random();;
+		setTimeout(function(){
+			img.src=''
+		}, 5000);
+	}
+//]]></script>
+
+<% end %>
+
 <%+footer%>
