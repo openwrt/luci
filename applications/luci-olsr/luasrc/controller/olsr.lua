@@ -106,8 +106,8 @@ function action_json()
 	local http = require "luci.http"
 	local utl = require "luci.util"
 	local uci = require "luci.model.uci".cursor_state()
-	local jsonreq4 = ""
-	local jsonreq6 = ""
+	local jsonreq4
+	local jsonreq6
 
 	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
 	if IpVersion == "4" or IpVersion == "6and4" then
@@ -117,8 +117,13 @@ function action_json()
 		jsonreq6 = utl.exec("echo /status | nc ::1 9090")
 	end
 	http.prepare_content("application/json")
-
-	http.write("{v4:" .. jsonreq4 .. ", v6:" .. jsonreq6 .. "}")
+	if not jsonreq4 or jsonreq4 == "" then
+		jsonreq4 = "{}"
+	end
+	if not jsonreq6 or jsonreq6 == "" then
+		jsonreq6 = "{}"
+	end
+	http.write('{"v4":' .. jsonreq4 .. ', "v6":' .. jsonreq6 .. '}')
 end
 
 function action_neigh(json)
