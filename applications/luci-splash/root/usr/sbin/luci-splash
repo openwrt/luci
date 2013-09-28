@@ -505,7 +505,7 @@ function sync()
 			end
 		end
 	end
-
+	
 	uci:save("luci_splash_leases")
 
 	-- Get the mac addresses of current leases
@@ -557,6 +557,7 @@ function list()
 
 	-- Print listings
 	local leases = uci:get_all("luci_splash_leases")
+	local blackwhitelist = uci:get_all("luci_splash")
 
 	print(string.format(
 		"%-17s  %-15s  %-9s  %-4s  %-7s  %20s",
@@ -579,8 +580,8 @@ function list()
 	end
 
 	-- Whitelist, Blacklist
-	for _, s in utl.spairs(leases,
-		function(a,b) return leases[a][".type"] > leases[b][".type"] end
+	for _, s in utl.spairs(blackwhitelist,
+		function(a,b) return blackwhitelist[a][".type"] > blackwhitelist[b][".type"] end
 	) do
 		if (s[".type"] == "whitelist" or s[".type"] == "blacklist") and s.mac then
 			local mac = s.mac:lower()
