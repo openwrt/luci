@@ -213,6 +213,15 @@ function main(argv)
 	end
 end
 
+-- Get current arp cache
+function get_arpcache()
+	local arpcache = { }
+	for _, entry in ipairs(net.arptable()) do
+		arpcache[entry["HW address"]:lower()] = { entry["Device"]:lower(), entry["IP address"]:lower() }
+	end
+	return arpcache
+end
+
 -- Get a list of known mac addresses
 function get_known_macs(list)
 	local leased_macs = { }
@@ -487,12 +496,14 @@ function sync()
 	uci:revert("luci_splash_leases")
 	
 	-- For all leases
+	local leasecount = 0
 	for k, v in pairs(leases) do
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
 				-- Remove expired
 				remove_lease_rule(v.mac, v.ipaddr, v.device, tonumber(v.limit_up), tonumber(v.limit_down))
 			else
+				leasecount = count + 1
 				-- Rewrite state
 				uci:section("luci_splash_leases", "lease", convert_mac_to_secname(v.mac), {		
 					mac    = v.mac,
@@ -506,10 +517,49 @@ function sync()
 		end
 	end
 	
-	uci:save("luci_splash_leases")
-
 	-- Get the mac addresses of current leases
 	local macs = get_known_macs()
+	local arpcache = get_arpcache()
+
+	local blackwhitelist = uci:get_all("luci_splash")
+	local whitelist_total = 0
+	local whitelist_online = 0
+	local blacklist_total = 0
+	local blacklist_online = 0
+
+	-- Whitelist, Blacklist
+	for _, s in utl.spairs(blackwhitelist,
+		function(a,b) return blackwhitelist[a][".type"] > blackwhitelist[b][".type"] end
+	) do
+		if (s[".type"] == "whitelist") then
+			whitelist_total = whitelist_total + 1
+			if s.mac then
+				local mac = s.mac:lower()
+				if arpcache[mac] then
+					whitelist_online = whitelist_online + 1
+				end
+			end
+		end
+		if (s[".type"] == "blacklist") then
+			blacklist_total = blacklist_total + 1
+			if s.mac then
+				local mac = s.mac:lower()
+				if arpcache[mac] then
+					blacklist_online = blacklist_online + 1
+				end
+			end
+		end
+	end
+
+	uci:section("luci_splash_leases", "stats", "stats", {
+		leases    = leasecount,
+		whitelisttotal = whitelist_total,
+		whitelistonline = whitelist_online,
+		blacklisttotal = blacklist_total,
+		blacklistonline = blacklist_online,
+	})
+
+	uci:save("luci_splash_leases")
 
 	ipt:resync()
 
@@ -535,12 +585,7 @@ end
 
 -- Show client info
 function list()
-	-- Get current arp cache
-	local arpcache = { }
-	for _, entry in ipairs(net.arptable()) do
-		arpcache[entry["HW address"]:lower()] = { entry["Device"]:lower(), entry["IP address"]:lower() }
-	end
-
+	local arpcache = get_arpcache()
 	-- Find traffic usage
 	local function traffic(lease)
 		local traffic_in  = 0
