@@ -44,6 +44,19 @@ function get_id(ip)
 	end
 end
 
+function update_stats(leased, whitelisted, whitelisttotal, blacklisted, blacklisttotal) 
+	local leases = uci:get_all("luci_splash_leases", "stats")
+	uci:delete("luci_splash_leases", "stats")
+	uci:section("luci_splash_leases", "stats", "stats", {
+		leases    = leased or (leases and leases.leases) or 0,
+		whitelisttotal = whitelisttotal or (leased and leases.whitelisttotal) or 0,
+		whitelistonline = whitelisted or (leases and leases.whitelistonline) or 0,
+		blacklisttotal = blacklisttotal or (leases and leases.blacklisttotal) or 0,
+		blacklistonline = blacklisted or (leases and leases.blacklistonline) or 0,
+	})
+	uci:save("luci_splash_leases")
+end
+
 function get_device_for_ip(ipaddr)
 	local dev
 	uci:foreach("network", "interface", function(s)
@@ -299,6 +312,11 @@ function add_lease(mac, arp, no_uci)
 	if ipaddr then
 		local device = get_device_for_ip(ipaddr)
 		if not no_uci then
+			local leased = uci:get("luci_splash_leases", "stats", "leases")
+			if type(tonumber(leased)) == "number" then
+				update_stats(leased + 1, nil, nil, nil, nil)
+			end
+
 			uci:section("luci_splash_leases", "lease", convert_mac_to_secname(mac), {
 				mac    = mac,
 				ipaddr = ipaddr,
@@ -324,6 +342,10 @@ function remove_lease(mac)
 		function(s)
 			if s.mac:lower() == mac then
 				remove_lease_rule(mac, s.ipaddr, s.device, tonumber(s.limit_up), tonumber(s.limit_down))
+				local leased = uci:get("luci_splash_leases", "stats", "leases")
+				if type(tonumber(leased)) == "number" and tonumber(leased) > 0 then
+					update_stats(leased - 1, nil, nil, nil, nil)
+				end
 				return true
 			end
 			return false
@@ -503,7 +525,7 @@ function sync()
 				-- Remove expired
 				remove_lease_rule(v.mac, v.ipaddr, v.device, tonumber(v.limit_up), tonumber(v.limit_down))
 			else
-				leasecount = count + 1
+				leasecount = leasecount + 1
 				-- Rewrite state
 				uci:section("luci_splash_leases", "lease", convert_mac_to_secname(v.mac), {		
 					mac    = v.mac,
@@ -551,13 +573,7 @@ function sync()
 		end
 	end
 
-	uci:section("luci_splash_leases", "stats", "stats", {
-		leases    = leasecount,
-		whitelisttotal = whitelist_total,
-		whitelistonline = whitelist_online,
-		blacklisttotal = blacklist_total,
-		blacklistonline = blacklist_online,
-	})
+	update_stats(leasecount, whitelist_online, whitelist_total, blacklist_online, blacklist_total)
 
 	uci:save("luci_splash_leases")
 
