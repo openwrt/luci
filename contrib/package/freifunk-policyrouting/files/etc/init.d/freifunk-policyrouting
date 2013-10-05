@@ -53,8 +53,11 @@ disable_dyngw() {
 
 	dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
 	if [ -n "$dyngwplainlib" ]; then
-		uci set $dyngwplainlib.ignore=1
-		uci commit olsrd
+		rttable="$(uci -q get $dyngwplainlib.RtTable)"
+		if [ -z "$rttable" ] || [ "$rttable" = "254" ]; then 
+			uci set $dyngwplainlib.ignore=1
+			uci commit olsrd
+		fi
 	fi
 }
 
