@@ -3,17 +3,28 @@
 # Licensed under the GNU General Public License (GPL) v3
 # This script monitors the local internet gateway
 
+. /lib/functions.sh
 . /lib/functions/network.sh
 
-# exit if dyngw_plain is not installed or enabled
-dgwlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
-if [ -n "$dgwlib" ]; then
-	if [ "$(uci -q get $dgwlib.ignore)" == 1 ]; then
-		exit 1
+# exit if dyngw_plain is not enabled or RtTable is not (254 or unset)
+config_load olsrd
+
+check_dyngw_plain()
+{
+        local cfg="$1"
+	config_get library "$cfg" library
+	if [ "${library#olsrd_dyn_gw_plain}" != "$library" ]; then
+		config_get ignore "$cfg" ignore
+		config_get RtTable "$cfg" RtTable
+		if [ "$ignore" != "1" ] && [ -z "$RtTable" -o "$RtTable" = "254" ]; then
+			exit=0
+		fi
 	fi
-else
-	exit 1
-fi
+}
+
+exit=1
+config_foreach check_dyngw_plain LoadPlugin
+[ "$exit" = "1" ] && exit 1
 
 #Exit if this script is already running
 pid="$(pidof ff_olsr_test_gw.sh)"
