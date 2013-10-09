@@ -24,6 +24,7 @@ You may obtain a copy of the License at
 	if swaptotal > 0 then
 		has_swap = 1
 	end
+	local has_dsl = luci.fs.stat("/etc/init.d/dsl_control")
 
 	if luci.http.formvalue("status") == "1" then
 		local ntm = require "luci.model.network".init()
@@ -81,6 +82,12 @@ You may obtain a copy of the License at
 				ifname  = wan6:ifname(),
 				link    = wan6:adminlink()
 			}
+		end
+
+		if has_dsl then
+			local dsl_stat = luci.sys.exec("/etc/init.d/dsl_control lucistat")
+			local dsl_func = loadstring(dsl_stat)
+			rv.dsl = dsl_func()
 		end
 
 		luci.http.prepare_content("application/json")
@@ -215,6 +222,30 @@ You may obtain a copy of the License at
 				si6.innerHTML = '<img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small>';
 				ss6.innerHTML = '<em><%:Not connected%></em>';
 			}
+			<% end %>
+
+			<% if has_dsl then %>
+				var dsl_i = document.getElementById('dsl_i');
+				var dsl_s = document.getElementById('dsl_s');
+
+				var s = String.format(
+					'<strong><%:Status%>: </strong>%s<br />' +
+					'<strong><%:Line State%>: </strong>%s [0x%x]<br />' +
+					'<strong><%:Line Speed%>: </strong>%s/s / %s/s<br />' +
+					'<strong><%:Line Attenuation%>: </strong>%s dB / %s dB<br />' +
+					'<strong><%:Noise Margin%>: </strong>%s dB / %s dB<br />',
+						info.dsl.line_state, info.dsl.line_state_detail,
+						info.dsl.line_state_num,
+						info.dsl.data_rate_down_s, info.dsl.data_rate_up_s,
+						info.dsl.line_attenuation_down, info.dsl.line_attenuation_up,
+						info.dsl.noise_margin_down, info.dsl.noise_margin_up
+				);
+
+				dsl_s.innerHTML = String.format('<small>%s</small>', s);
+				dsl_i.innerHTML = String.format(
+					'<img src="<%=resource%>/icons/ethernet.png" />' +
+					'<br /><small>ADSL</small>'
+				);
 			<% end %>
 
 			<% if has_dhcp then %>
@@ -618,6 +649,20 @@ You may obtain a copy of the License at
 			<td colspan="4"><em><br /><%:Collecting data...%></em></td>
 		</tr>
 	</table>
+</fieldset>
+<% end %>
+
+<% if has_dsl then %>
+<fieldset class="cbi-section">
+       <legend><%:ADSL%></legend>
+       <table width="100%" cellspacing="10">
+               <tr><td width="33%" style="vertical-align:top"><%:ADSL Status%></td><td>
+                       <table><tr>
+                               <td id="dsl_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></td>
+                               <td id="dsl_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></td>
+                       </tr></table>
+               </td></tr>
+       </table>
 </fieldset>
 <% end %>
 
