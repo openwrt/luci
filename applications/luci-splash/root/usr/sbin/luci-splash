@@ -390,10 +390,12 @@ function remove_whitelist_tc(mac)
 	end
         uci:foreach("luci_splash", "iface", function(s)
 		local device = get_physdev(s['.name'])
-		local handle = get_filter_handle('ffff:', 'src', device, mac)
-		exec('tc filter del dev "%s" parent ffff: protocol ip prio 1 handle %s u32' % { device, handle })
-		local handle = get_filter_handle('1:', 'dest', device, mac)
-		exec('tc filter del dev "%s" parent 1:0 protocol ip prio 1 handle %s u32' % { device, handle })
+		if device and device ~= "" then
+			local handle = get_filter_handle('ffff:', 'src', device, mac)
+			exec('tc filter del dev "%s" parent ffff: protocol ip prio 1 handle %s u32' % { device, handle })
+			local handle = get_filter_handle('1:', 'dest', device, mac)
+			exec('tc filter del dev "%s" parent 1:0 protocol ip prio 1 handle %s u32' % { device, handle })
+		end
         end)
 end
 
@@ -486,8 +488,10 @@ function add_whitelist_rule(mac)
 	end
         uci:foreach("luci_splash", "iface", function(s)
 		local device = get_physdev(s['.name'])
-		exec('tc filter add dev "%s" parent ffff: protocol ip prio 1 u32 match ether src %s police pass' % { device, mac })
-		exec('tc filter add dev "%s" parent 1:0 protocol ip prio 1 u32 match ether dst %s classid 1:1' % { device, mac })
+		if device and device ~= "" then
+			exec('tc filter add dev "%s" parent ffff: protocol ip prio 1 u32 match ether src %s police pass' % { device, mac })
+			exec('tc filter add dev "%s" parent 1:0 protocol ip prio 1 u32 match ether dst %s classid 1:1' % { device, mac })
+		end
         end)
 end
 

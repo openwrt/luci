@@ -114,7 +114,7 @@ whitelist_add() {
 	config_get mac "$1" mac
 	iface=$2
 	$TC filter add dev "$iface" parent ffff: protocol ip prio 1 u32 match ether src $mac police pass
-	$TC filter add dev "$iface" parent 1:0 protocol ip prio 1 u32 match ether dst classid 1:1
+	$TC filter add dev "$iface" parent 1:0 protocol ip prio 1 u32 match ether dst $mac classid 1:1
 }
 
 
