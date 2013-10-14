@@ -17,24 +17,41 @@ local utl = require "luci.util"
 local last_update
 local i = 1
 local rawdata
-local services_file_empty
+local rawdata6
+local services_file_empty = true
 local has_services = false
 local uci = require "luci.model.uci".cursor()
+local ip = require "luci.ip"
 
 uci:foreach("olsrd", "LoadPlugin", function(s)
 	if s.library == "olsrd_nameservice.so.0.3" then
-		if s.services_file and fs.access(s.services_file) then
+		local services_file=s.services_file
+		if services_file and fs.access(services_file) then
 			has_services = true
 			rawdata = fs.readfile(s.services_file)
-			
 		else
-			if fs.access("/var/run/services_olsr") then
+			services_file="/var/run/services_olsr"
+			if fs.access(services_file) then
 				has_services = true
-				rawdata = fs.readfile("/var/run/services_olsr")
+				rawdata = fs.readfile(services_file)
 			end
 		end
-		if rawdata and #rawdata == 0 then
-			services_file_empty = true
+		services_file=services_file..".ipv6"
+		if services_file and fs.access(services_file) then
+			has_services = true
+			rawdata6 = fs.readfile(services_file)
+		else
+			services_file="/var/run/services_olsr.ipv6"
+			if fs.access(services_file) then
+				has_services = true
+				rawdata6 = fs.readfile(services_file)
+			end
+		end
+		if rawdata and #rawdata ~= 0 then
+			services_file_empty = nil
+		end
+		if rawdata6 and #rawdata6 ~= 0 then
+			services_file_empty = nil
 		end
 	end
 end)
@@ -51,15 +68,31 @@ if not has_services or services_file_empty then
 end
 
 function fetch_services()
-	local tables = utl.split(utl.trim(rawdata), "\n", nil, true)
-	-- remove first 3 lines
-	for i = 1,3 do
-		table.remove(tables,1)
+	local tables = {}
+	if rawdata and #rawdata ~= 0 then
+		tables = utl.split(utl.trim(rawdata), "\n", nil, true)
+		-- remove first 3 lines
+		for i = 1,3 do
+			table.remove(tables,1)
+		end
+	end
+	local tables6 = {}
+	if rawdata6 and #rawdata6 ~= 0 then
+		tables6 = utl.split(utl.trim(rawdata6), "\n", nil, true)
+		-- remove first 3 lines
+		for i = 1,3 do
+			table.remove(tables6,1)
+		end
 	end
 
-        -- store last line in last_update and remove it, then remove another empty line at the end
-        last_update=table.remove(tables)
+	-- store last line in last_update and remove it, then remove another empty line at the end
+	last_update=table.remove(tables)
 	table.remove(tables)
+	last_update=table.remove(tables6)
+	table.remove(tables6)
+	for k, v in ipairs(tables6) do
+		table.insert(tables, v)
+	end
 	return tables
 end
 local services = fetch_services()
@@ -68,11 +101,19 @@ if luci.http.formvalue("status") == "1" then
 	local rv = {}
 	for k, line in ipairs(services) do
 		local field = utl.split(line, "[#|]", split, true)
+		local origin_lnk = ip.IPv6(pcdata(field[4])) or ""
+		local origin_link = ""
+		if #origin_lnk ~= 0 and origin_lnk:is6() then
+			origin_link = "["..origin_lnk:string().."]"
+		else
+			origin_link = pcdata(field[4])
+		end
 		local url, proto, descr, origin = pcdata(field[1]), pcdata(field[2]), utl.trim(pcdata(field[3])), pcdata(field[4])
 		rv[#rv+1] = {
 			url = url,
 			proto = proto,
 			origin = origin,
+			origin_link = origin_link,
 			descr = descr,
 			}
 	end
@@ -100,11 +141,11 @@ end
 				var service = info[idx];
 				s += String.format(
 					'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-						'<td class="cbi-section-table-cell"><a href="%s">%s</a></td>' +
-						'<td class="cbi-section-table-cell">%s</td>' +
-						'<td class="cbi-section-table-cell"><a href="http://%s/cgi-bin-status.html">%s</a></td>' +
+						'<td class="cbi-section-table-titles"><a href="%s">%s</a></td>' +
+						'<td class="cbi-section-table-titles">%s</td>' +
+						'<td class="cbi-section-table-titles"><a href="http://%s/cgi-bin-status.html">%s</a></td>' +
 					'</tr>',
-					service.url, service.descr, service.proto, service.origin, service.origin || '?'
+					service.url, service.descr, service.proto, service.origin_link, service.origin || '?'
 					);
 				}
 				tbody.innerHTML = s;
@@ -135,14 +176,21 @@ end
 			local field = {}
 			-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
 			local field = utl.split(line, "[#|]", split, true)
+			local origin_lnk = ip.IPv6(pcdata(field[4])) or ""
+			local origin_link
+			if #origin_lnk ~= 0 and origin_lnk:is6() then
+				origin_link = "["..origin_lnk:string().."]"
+			else
+				origin_link = pcdata(field[4])
+			end
 			local url, proto, descr, origin = pcdata(field[1]), pcdata(field[2]), utl.trim(pcdata(field[3])), pcdata(field[4])
 			%>
 
 			<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-				<td class="cbi-section-table-cell"><a href="<%=url%>"><%=descr%></a></td>
-				<td class="cbi-section-table-cell"><%=proto%></td>
-				<td class="cbi-section-table-cell"><a href="http://<%=origin%>/cgi-bin-status.html"><%=origin%></a></td>
-		</tr>
+				<td class="cbi-section-table-titles"><a href="<%=url%>"><%=descr%></a></td>
+				<td class="cbi-section-table-titles"><%=proto%></td>
+				<td class="cbi-section-table-titles"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></td>
+			</tr>
 			<% i = ((i % 2) + 1)
 		end %>
 		</tbody>
