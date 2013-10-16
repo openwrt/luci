@@ -106,6 +106,26 @@ function get_filter_handle(parent, direction, device, mac)
 	return handle
 end
 
+function macvalid(mac)
+	if mac and mac:match(
+		"^[a-fA-F0-9][a-fA-F0-9]:[a-fA-F0-9][a-fA-F0-9]:" ..
+		"[a-fA-F0-9][a-fA-F0-9]:[a-fA-F0-9][a-fA-F0-9]:" ..
+		"[a-fA-F0-9][a-fA-F0-9]:[a-fA-F0-9][a-fA-F0-9]$"
+	) then
+		return true
+	end
+
+	return false
+end
+
+function ipvalid(ipaddr)
+	if ipaddr then
+		return ip.IPv4(ipaddr) and true or false
+	end
+
+	return false
+end
+
 function main(argv)
 	local cmd = table.remove(argv, 1)
 	local arg = argv[1]
@@ -116,6 +136,12 @@ function main(argv)
 	if ( cmd == "lease" or cmd == "add-rules" or cmd == "remove" or
 	     cmd == "whitelist" or cmd == "blacklist" or cmd == "status" ) and #argv > 0
 	then
+		if not (macvalid(arg) or ipvalid(arg)) then
+			print("Invalid argument. The second argument must " ..
+				"be a valid IPv4 or Mac Address.")
+			os.exit(1)
+		end
+
 		lock()
 
 		local arp_cache      = net.arptable()
