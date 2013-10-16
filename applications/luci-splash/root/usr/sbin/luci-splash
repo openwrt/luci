@@ -411,16 +411,24 @@ function remove_whitelist(mac)
 end
 
 function remove_whitelist_tc(mac)
-	if debug then
-		print("Removing whitelist filters for " .. mac)
-	end
         uci:foreach("luci_splash", "iface", function(s)
 		local device = get_physdev(s['.name'])
 		if device and device ~= "" then
+			if debug then
+				print("Removing whitelist filters for %s interface %s." % {mac, device})
+			end
 			local handle = get_filter_handle('ffff:', 'src', device, mac)
-			exec('tc filter del dev "%s" parent ffff: protocol ip prio 1 handle %s u32' % { device, handle })
+			if handle then
+				exec('tc filter del dev "%s" parent ffff: protocol ip prio 1 handle %s u32' % { device, handle })
+			else
+				print('Warning! Could not get a handle for %s parent :ffff on interface %s' % { mac, device })
+			end
 			local handle = get_filter_handle('1:', 'dest', device, mac)
-			exec('tc filter del dev "%s" parent 1:0 protocol ip prio 1 handle %s u32' % { device, handle })
+			if handle then
+				exec('tc filter del dev "%s" parent 1:0 protocol ip prio 1 handle %s u32' % { device, handle })
+			else
+				print('Warning! Could not get a handle for %s parent 1:0 on interface %s' % { mac, device })
+			end
 		end
         end)
 end
@@ -493,6 +501,8 @@ function remove_lease_rule(mac, ipaddr, device, limit_up, limit_down)
 		local handle = get_filter_handle('ffff:', 'src', device, mac)
 		if handle then
 			exec('tc filter del dev "%s" parent ffff: protocol ip prio 2 handle %s u32 police rate %skbit mtu 6k burst 6k drop' % {device, handle, limit_up})
+		else
+			print('Warning! Could not get a handle for %s parent :ffff on interface %s' % { mac, device })
 		end
 	end
 
