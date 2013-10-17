@@ -13,7 +13,7 @@ local net = sys.net
 local fs = require "luci.fs"
 local ip = require "luci.ip"
 
-local debug = true
+local debug = false
 
 local has_ipv6 = fs.access("/proc/net/ipv6_route") and fs.access("/usr/sbin/ip6tables")
 
@@ -26,12 +26,14 @@ function unlock()
 end
 
 function exec(cmd)
-	local ret = sys.exec(cmd)
 	if debug then
+		local ret = sys.exec(cmd)
 		print('+ ' .. cmd)
 		if ret and ret ~= "" then
 			print(ret)
 		end
+	else
+		local ret = sys.exec(cmd .. " &> /dev/null")
 	end
 end
 
