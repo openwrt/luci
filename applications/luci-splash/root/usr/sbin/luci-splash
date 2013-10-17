@@ -13,7 +13,7 @@ local net = sys.net
 local fs = require "luci.fs"
 local ip = require "luci.ip"
 
-local debug = false
+local debug = true
 
 local has_ipv6 = fs.access("/proc/net/ipv6_route") and fs.access("/usr/sbin/ip6tables")
 
@@ -183,9 +183,19 @@ function main(argv)
 				end
 
 				if cmd ~= "whitelist" and whitelist_macs[mac] then
-					print("Removing %s from whitelist" % mac)
-					remove_whitelist(mac)
-					whitelist_macs[mac] = nil					
+					if cmd == "lease" then
+						print('%s is whitelisted. Remove it before you can lease it.' % mac)
+					else
+						print("Removing %s from whitelist" % mac)
+						remove_whitelist(mac)
+						whitelist_macs[mac] = nil
+					end
+				end
+
+				if cmd == "whitelist" and leased_macs[mac] then
+					print("Removing %s from leases" % mac)
+					remove_lease(mac)
+					leased_macs[mac] = nil
 				end
 
 				if cmd ~= "blacklist" and blacklist_macs[mac] then
@@ -195,9 +205,11 @@ function main(argv)
 				end
 
 				if cmd == "lease" and not leased_macs[mac] then
-					print("Adding %s to leases" % mac)
-					add_lease(mac)
-					leased_macs[mac] = true
+					if not whitelist_macs[mac] then
+						print("Adding %s to leases" % mac)
+						add_lease(mac)
+						leased_macs[mac] = true
+					end
 				elseif cmd == "whitelist" and not whitelist_macs[mac] then
 					print("Adding %s to whitelist" % mac)
 					add_whitelist(mac)
