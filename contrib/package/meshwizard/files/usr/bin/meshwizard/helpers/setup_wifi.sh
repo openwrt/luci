@@ -28,7 +28,6 @@ uci set wireless.${net}=wifi-device
 set_defaults "wifi_device_" wireless.${net}
 
 channel="$(uci -q get meshwizard.netconfig.$net\_channel)"
-vap="$(uci -q get meshwizard.netconfig.$net\_vap)"
 
 if [ -z "$channel" -o "$channel" == "default" ]; then
 	channel=$wifi_device_channel
@@ -76,27 +75,4 @@ uci batch << EOF
 EOF
 
 uci_commitverbose "Setup wifi interface for $netrenamed" wireless
-
-## VAP
-ip4addr="$(uci get meshwizard.netconfig.$net\_ip4addr)"
-
-# check if this hardware supports VAPs
-# the interface needs to be up before the check can happen
-
-/sbin/wifi
-
-supports_vap="0"
-$dir/helpers/supports_vap.sh $net $type && supports_vap=1
-
-if [ "$supports_vap" == "1" -a "$vap" == 1 ]; then
-	uci batch <<- EOF
-		set wireless.$net\_iface_dhcp="wifi-iface"
-		set wireless.$net\_iface_dhcp.device="$net"
-		set wireless.$net\_iface_dhcp.mode="ap"
-		set wireless.$net\_iface_dhcp.encryption="none"
-		set wireless.$net\_iface_dhcp.network="${netrenamed}dhcp"
-		set wireless.$net\_iface_dhcp.ssid="Freifunk-$ip4addr"
-	EOF
-	uci_commitverbose "Setup VAP interface for $netrenamed" wireless
-fi
 

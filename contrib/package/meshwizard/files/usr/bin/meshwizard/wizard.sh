@@ -12,7 +12,7 @@
 . /lib/functions.sh
 
 echo "
-/* Meshwizard 0.0.9 */
+/* Meshwizard 0.1.0 */
 "
 
 # config
@@ -95,10 +95,21 @@ for net in $networks; do
 	# radioX devices need to be renamed
 	netrenamed="${net/radio/wireless}"
 	export netrenamed
-	$dir/helpers/setup_network.sh $net
+
 	if [ ! "$net" == "wan" ] && [ ! "$net" == "lan" ]; then
 		$dir/helpers/setup_wifi.sh $net
+		# check if this net supports vap
+		/sbin/wifi # wifi needs to be up for the check
+		export supports_vap="0"
+		type="$(uci -q get wireless.$net.type)"
+		[ -n "$type" ] && $dir/helpers/supports_vap.sh $net $type && export supports_vap=1
+		if [ "$supports_vap" = 1 ]; then
+			$dir/helpers/setup_wifi_vap.sh $net
+		fi
 	fi
+
+	$dir/helpers/setup_network.sh $net
+
 	$dir/helpers/setup_olsrd_interface.sh $net
 
 	net_dhcp=$(uci -q get meshwizard.netconfig.${net}_dhcp)

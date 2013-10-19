@@ -68,10 +68,13 @@ if [ "$net_dhcp" == 1 ]; then
 		uci set meshwizard.netconfig.${net}_dhcprange="$dhcprange"
 	fi
 
-	# If we use VAP then cut the dhcp range in two halves
-	# one for the adhoc, one for the managed VAP interface
+	# If we use VAP and also offer dhcp on the adhoc interface then cut the dhcp
+	# range in two halves. one for the adhoc, one for the managed VAP interface
+	ahdhcp_when_vap="$(uci get profile_$community.profile.adhoc_dhcp_when_vap)"
 
-	if [ "$vap" == 1 ]; then
+	if [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
+		# VAPs are enabled for this interface, supported and we want to
+		# also use DHCP on the adhoc interface
 		local network
 		local mask
 		network=${dhcprange%%/*}
@@ -94,21 +97,35 @@ if [ "$net_dhcp" == 1 ]; then
 			set network.${netrenamed}dhcp.netmask="$NETMASKVAP"
 		EOF
 		uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
-
 	else
 		eval $(sh $dir/helpers/ipcalc-cidr.sh $dhcprange 1 0)
 		STARTADHOC=$START
 		NETMASKADHOC=$NETMASK
 	fi
+	if [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" != 1 ]; then
+		# vaps are enabled and supported and we do not use DHCP on adhoc
+		# Add dhcp interface
+		uci batch <<- EOF
+			set network.${netrenamed}dhcp=interface
+			set network.${netrenamed}dhcp.proto=static
+			set network.${netrenamed}dhcp.ipaddr="$STARTADHOC"
+			set network.${netrenamed}dhcp.netmask="$NETMASKADHOC"
+		EOF
+		uci_commitverbose  "Setup interface for ${netrenamed}dhcp" network
+	fi
 
-	# Setup alias for $net adhoc interface
 
-	uci batch <<- EOF
-		set network.${netrenamed}ahdhcp=interface
-		set network.${netrenamed}ahdhcp.ifname="@${netrenamed}"
-		set network.${netrenamed}ahdhcp.proto=static
-		set network.${netrenamed}ahdhcp.ipaddr="$STARTADHOC"
-		set network.${netrenamed}ahdhcp.netmask="$NETMASKADHOC"
-	EOF
+	# Setup alias for $net adhoc interface 
+	if  [ "$supports_vap" = 0 ] || [ "$vap" = 0 ] || [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
+		# vaps are either not supported or enabled or they are supported and enabled
+		# but we also want to use DHCP on the adhoc interface
+		uci batch <<- EOF
+			set network.${netrenamed}ahdhcp=interface
+			set network.${netrenamed}ahdhcp.ifname="@${netrenamed}"
+			set network.${netrenamed}ahdhcp.proto=static
+			set network.${netrenamed}ahdhcp.ipaddr="$STARTADHOC"
+			set network.${netrenamed}ahdhcp.netmask="$NETMASKADHOC"
+		EOF
+	fi
 	uci_commitverbose  "Setup interface for ${netrenamed}ahdhcp" network
 fi
