@@ -529,7 +529,7 @@ function remove_lease_rule(mac, ipaddr, device, limit_up, limit_down)
 	if device and id then
 		exec('tc class del dev "%s" classid 1:%s' % {device, id})
 		exec('tc filter del dev "%s" parent 1:0 prio 1' % device) -- ipv6 rule
-		exec('tc qdisc del dev "%s" parent 1:%s sfq perturb 10' % { device, id })
+		--exec('tc qdisc del dev "%s" parent 1:%s sfq perturb 10' % { device, id })
 	end
 
 end
