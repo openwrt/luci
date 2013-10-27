@@ -576,9 +576,22 @@ function sync()
 	-- Clean state file
 	uci:load("luci_splash_leases")
 	uci:revert("luci_splash_leases")
-	
+
+        
+        -- Get the mac addresses of current leases
+	local macs = get_known_macs()
+	local arpcache = get_arpcache()
+
+	local blackwhitelist = uci:get_all("luci_splash")
+	local whitelist_total = 0
+	local whitelist_online = 0
+	local blacklist_total = 0
+	local blacklist_online = 0
+
+
 	-- For all leases
 	local leasecount = 0
+        local leases_online = 0
 	for k, v in pairs(leases) do
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
@@ -586,6 +599,12 @@ function sync()
 				remove_lease_rule(v.mac, v.ipaddr, v.device, tonumber(v.limit_up), tonumber(v.limit_down))
 			else
 				leasecount = leasecount + 1
+
+                                -- only count leases_online for connected clients
+                                if arpcache[v.mac] then
+                                    leases_online = leases_online + 1
+                                end
+
 				-- Rewrite state
 				uci:section("luci_splash_leases", "lease", convert_mac_to_secname(v.mac), {		
 					mac    = v.mac,
@@ -599,16 +618,6 @@ function sync()
 		end
 	end
 	
-	-- Get the mac addresses of current leases
-	local macs = get_known_macs()
-	local arpcache = get_arpcache()
-
-	local blackwhitelist = uci:get_all("luci_splash")
-	local whitelist_total = 0
-	local whitelist_online = 0
-	local blacklist_total = 0
-	local blacklist_online = 0
-
 	-- Whitelist, Blacklist
 	for _, s in utl.spairs(blackwhitelist,
 		function(a,b) return blackwhitelist[a][".type"] > blackwhitelist[b][".type"] end
@@ -633,7 +642,10 @@ function sync()
 		end
 	end
 
-	update_stats(leasecount, whitelist_online, whitelist_total, blacklist_online, blacklist_total)
+	-- ToDo:
+        -- include a new field "leases_online" in stats to differ between active clients and leases:
+        -- update_stats(leasecount, leases_online, whitelist_online, whitelist_total, blacklist_online, blacklist_total) later: 
+        update_stats(leases_online, whitelist_online, whitelist_total, blacklist_online, blacklist_total)
 
 	uci:save("luci_splash_leases")
 
