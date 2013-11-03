@@ -13,19 +13,12 @@ local net = sys.net
 local fs = require "luci.fs"
 local ip = require "luci.ip"
 
-local debug = true
+local debug = false
 
 local has_ipv6 = fs.access("/proc/net/ipv6_route") and fs.access("/usr/sbin/ip6tables")
 
-function lock()
-	os.execute("lock /var/run/luci_splash.lock")
-end
-
-function unlock()
-	os.execute("lock -u /var/run/luci_splash.lock")
-end
-
 function exec(cmd)
+	-- executes a cmd and gets its output
 	if debug then
 		local ret = sys.exec(cmd)
 		print('+ ' .. cmd)
@@ -37,6 +30,23 @@ function exec(cmd)
 	end
 end
 
+function call(cmd)
+	-- just calls a command
+	if debug then
+		print('+ ' .. cmd)
+	end
+	os.execute(cmd)
+end
+
+
+function lock()
+	call("lock /var/run/luci_splash.lock")
+end
+
+function unlock()
+	call("lock -u /var/run/luci_splash.lock")
+end
+
 function get_id(ip)
 	local o3, o4 = ip:match("[0-9]+%.[0-9]+%.([0-9]+)%.([0-9]+)")
 	if o3 and 04 then
@@ -46,7 +56,7 @@ function get_id(ip)
 	end
 end
 
-function update_stats(leased, whitelisted, whitelisttotal, blacklisted, blacklisttotal) 
+function update_stats(leased, whitelisted, whitelisttotal, blacklisted, blacklisttotal)
 	local leases = uci:get_all("luci_splash_leases", "stats")
 	uci:delete("luci_splash_leases", "stats")
 	uci:section("luci_splash_leases", "stats", "stats", {
@@ -58,6 +68,7 @@ function update_stats(leased, whitelisted, whitelisttotal, blacklisted, blacklis
 	})
 	uci:save("luci_splash_leases")
 end
+
 
 function get_device_for_ip(ipaddr)
 	local dev
@@ -239,13 +250,13 @@ function main(argv)
 				else
 					print("The mac %s is not known" % mac)
 				end
+
 			else
 				print("Can not find mac for ip %s" % argv[i])
 			end
 		end
-
 		unlock()
-		os.exit(0)	
+		os.exit(0)
 	elseif cmd == "sync" then
 		sync()
 		os.exit(0)
@@ -280,6 +291,7 @@ function get_known_macs(list)
 	local leased_macs = { }
 
 	if not list or list == "lease" then
+
 		uci:foreach("luci_splash_leases", "lease",
 			function(s) leased_macs[s.mac:lower()] = true end)
 	end
@@ -381,16 +393,17 @@ function remove_lease(mac)
 	uci:delete_all("luci_splash_leases", "lease",
 		function(s)
 			if s.mac:lower() == mac then
-				remove_lease_rule(mac, s.ipaddr, s.device, tonumber(s.limit_up), tonumber(s.limit_down))
+
 				local leased = uci:get("luci_splash_leases", "stats", "leases")
 				if type(tonumber(leased)) == "number" and tonumber(leased) > 0 then
 					update_stats(leased - 1, nil, nil, nil, nil)
 				end
+				remove_lease_rule(mac, s.ipaddr, s.device, tonumber(s.limit_up), tonumber(s.limit_down))
 				return true
 			end
 			return false
 		end)
-		
+
 	uci:save("luci_splash_leases")
 end
 
@@ -474,6 +487,7 @@ function add_lease_rule(mac, ipaddr, device)
 	end
 
 	--for ipv6: need to use the mac here
+
 	if has_ipv6 then
 		exec("ip6tables -t mangle -I luci_splash_mark_out -m mac --mac-source %q -j MARK --set-mark 79" % mac)
 		if id and device and tonumber(limit_down) then
@@ -501,6 +515,7 @@ end
 
 -- Remove lease, black- or whitelist rules
 function remove_lease_rule(mac, ipaddr, device, limit_up, limit_down)
+
 	local id
 	if ipaddr then
 		id = get_id(ipaddr)
@@ -524,14 +539,12 @@ function remove_lease_rule(mac, ipaddr, device, limit_up, limit_down)
 			print('Warning! Could not get a handle for %s parent :ffff on interface %s' % { mac, device })
 		end
 	end
-
 	-- remove clients class
 	if device and id then
 		exec('tc class del dev "%s" classid 1:%s' % {device, id})
 		exec('tc filter del dev "%s" parent 1:0 prio 1' % device) -- ipv6 rule
 		--exec('tc qdisc del dev "%s" parent 1:%s sfq perturb 10' % { device, id })
 	end
-
 end
 
 
@@ -578,8 +591,6 @@ function sync()
 	uci:revert("luci_splash_leases")
 
         
-        -- Get the mac addresses of current leases
-	local macs = get_known_macs()
 	local arpcache = get_arpcache()
 
 	local blackwhitelist = uci:get_all("luci_splash")
@@ -587,11 +598,10 @@ function sync()
 	local whitelist_online = 0
 	local blacklist_total = 0
 	local blacklist_online = 0
-
+	local leasecount = 0
+	local leases_online = 0
 
 	-- For all leases
-	local leasecount = 0
-        local leases_online = 0
 	for k, v in pairs(leases) do
 		if v[".type"] == "lease" then
 			if os.difftime(time, tonumber(v.start)) > leasetime then
@@ -602,7 +612,7 @@ function sync()
 
                                 -- only count leases_online for connected clients
                                 if arpcache[v.mac] then
-                                    leases_online = leases_online + 1
+                                	leases_online = leases_online + 1
                                 end
 
 				-- Rewrite state
@@ -648,6 +658,9 @@ function sync()
         update_stats(leases_online, whitelist_online, whitelist_total, blacklist_online, blacklist_total)
 
 	uci:save("luci_splash_leases")
+
+        -- Get the mac addresses of current leases
+	local macs = get_known_macs()
 
 	ipt:resync()
 
