@@ -291,21 +291,28 @@ function get_known_macs(list)
 	local leased_macs = { }
 
 	if not list or list == "lease" then
-
-		uci:foreach("luci_splash_leases", "lease",
-			function(s) leased_macs[s.mac:lower()] = true end)
+		uci:foreach("luci_splash_leases", "lease", function(s)
+			if s.mac then
+				leased_macs[s.mac:lower()] = true
+			end
+		end)
 	end
 
 	if not list or list == "whitelist" then
-		uci:foreach("luci_splash", "whitelist",
-			function(s) leased_macs[s.mac:lower()] = true end)
+		uci:foreach("luci_splash", "whitelist",	function(s)
+			if s.mac then
+				leased_macs[s.mac:lower()] = true
+			end
+		end)
 	end
 
 	if not list or list == "blacklist" then
-		uci:foreach("luci_splash", "blacklist",
-			function(s) leased_macs[s.mac:lower()] = true end)
+		uci:foreach("luci_splash", "blacklist",	function(s)
+			if s.mac then
+				leased_macs[s.mac:lower()] = true
+			end
+		end)
 	end
-
 	return leased_macs
 end
 
