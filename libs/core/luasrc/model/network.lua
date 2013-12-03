@@ -1173,11 +1173,7 @@ function interface.bridge_stp(self)
 end
 
 function interface.is_up(self)
-	if self.wif then
-		return self.wif:is_up()
-	else
-		return self:_ubus("up") or false
-	end
+	return self:_ubus("up") or false
 end
 
 function interface.is_bridge(self)
@@ -1425,7 +1421,8 @@ function wifinet.get_device(self)
 end
 
 function wifinet.is_up(self)
-	return (_wifi_state("section", self.sid, "up") == true)
+	local ifc = self:get_interface()
+	return (ifc and ifc:is_up() or false)
 end
 
 function wifinet.active_mode(self)
