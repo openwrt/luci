@@ -15,16 +15,16 @@ $Id$
 Decoder:
 	Info:
 		null will be decoded to luci.json.null if first parameter of Decoder() is true
-	
+
 	Example:
 		decoder = luci.json.Decoder()
 		luci.ltn12.pump.all(luci.ltn12.source.string("decodableJSON"), decoder:sink())
 		luci.util.dumptable(decoder:get())
-		
+
 	Known issues:
 		does not support unicode conversion \uXXYY with XX != 00 will be ignored
-		
-			
+
+
 Encoder:
 	Info:
 		Accepts numbers, strings, nil, booleans as they are
@@ -33,12 +33,13 @@ Encoder:
 		Mixed tables will loose their associative values during conversion
 		Iterator functions will be encoded as an array of their return values
 		Non-iterator functions will probably corrupt the encoder
-	
+
 	Example:
 		encoder = luci.json.Encoder(encodableData)
 		luci.ltn12.pump.all(encoder:source(), luci.ltn12.sink.file(io.open("someFile", w)))
 ]]--
 
+local nixio     = require "nixio"
 local util      = require "luci.util"
 local table     = require "table"
 local string    = require "string"
@@ -53,6 +54,11 @@ local pairs	    = pairs
 local ipairs    = ipairs
 local next      = next
 local pcall		= pcall
+
+local band      = nixio.bit.band
+local bor       = nixio.bit.bor
+local rshift    = nixio.bit.rshift
+local char      = string.char
 
 local getmetatable = getmetatable
 
@@ -98,7 +104,7 @@ end
 -- @name	Encoder
 -- @param data			Lua-Object to be encoded.
 -- @param buffersize	Blocksize of returned data source.
--- @param fastescape	Use non-standard escaping (don't escape control chars) 
+-- @param fastescape	Use non-standard escaping (don't escape control chars)
 -- @return JSON-Encoder
 Encoder = util.class()
 
@@ -107,7 +113,7 @@ function Encoder.__init__(self, data, buffersize, fastescape)
 	self.buffersize = buffersize or 512
 	self.buffer = ""
 	self.fastescape = fastescape
-	
+
 	getmetatable(self).__call = Encoder.source
 end
 
@@ -122,19 +128,19 @@ function Encoder.source(self)
 		else
 			return nil, data
 		end
-	end	
+	end
 end
 
 function Encoder.dispatch(self, data, start)
 	local parser = self.parsers[type(data)]
-	
+
 	parser(self, data)
-	
+
 	if start then
 		if #self.buffer > 0 then
 			coroutine.yield(self.buffer)
 		end
-		
+
 		coroutine.yield()
 	end
 end
@@ -149,13 +155,13 @@ function Encoder.put(self, chunk)
 
 			coroutine.yield(self.buffer .. chunk:sub(written + 1, fbuffer))
 			written = fbuffer
-			
+
 			while #chunk - written > self.buffersize do
 				fbuffer = written + self.buffersize
 				coroutine.yield(chunk:sub(written + 1, fbuffer))
 				written = fbuffer
-			end 
-			
+			end
+
 			self.buffer = chunk:sub(written + 1)
 		else
 			self.buffer = self.buffer .. chunk
@@ -197,7 +203,7 @@ function Encoder.parse_iter(self, obj)
 	if type(obj) == "table" and (#obj == 0 and next(obj)) then
 		self:put("{")
 		local first = true
-		
+
 		for key, entry in pairs(obj) do
 			first = first or self:put(",")
 			first = first and false
@@ -205,12 +211,12 @@ function Encoder.parse_iter(self, obj)
 			self:put(":")
 			self:dispatch(entry)
 		end
-		
-		self:put("}") 		
+
+		self:put("}")
 	else
 		self:put("[")
 		local first = true
-		
+
 		if type(obj) == "table" then
 			for i=1, #obj do
 				first = first or self:put(",")
@@ -222,10 +228,10 @@ function Encoder.parse_iter(self, obj)
 				first = first or self:put(",")
 				first = first and nil
 				self:dispatch(entry)
-			end		
+			end
 		end
-		
-		self:put("]") 	
+
+		self:put("]")
 	end
 end
 
@@ -236,7 +242,7 @@ Encoder.parsers = {
 	['string']   = Encoder.parse_string,
 	['boolean']  = Encoder.parse_bool,
 	['function'] = Encoder.parse_iter
-} 
+}
 
 
 --- Create a new JSON-Decoder.
@@ -270,37 +276,37 @@ end
 function Decoder.dispatch(self, chunk, src_err, strict)
 	local robject, object
 	local oset = false
-	 
+
 	while chunk do
 		while chunk and #chunk < 1 do
 			chunk = self:fetch()
 		end
-		
+
 		assert(not strict or chunk, "Unexpected EOS")
 		if not chunk then break end
-		
+
 		local char   = chunk:sub(1, 1)
 		local parser = self.parsers[char]
 		 or (char:match("%s")     and self.parse_space)
 		 or (char:match("[0-9-]") and self.parse_number)
 		 or error("Unexpected char '%s'" % char)
-		
+
 		chunk, robject = parser(self, chunk)
-		
+
 		if parser ~= self.parse_space then
 			assert(not oset, "Scope violation: Too many objects")
 			object = robject
 			oset = true
-		
+
 			if strict then
 				return chunk, object
 			end
 		end
 	end
-	
+
 	assert(not src_err, src_err)
 	assert(oset, "Unexpected EOS")
-	
+
 	self.data = object
 end
 
@@ -318,7 +324,7 @@ function Decoder.fetch_atleast(self, chunk, bytes)
 		assert(nchunk, "Unexpected EOS")
 		chunk = chunk .. nchunk
 	end
-	
+
 	return chunk
 end
 
@@ -339,7 +345,7 @@ end
 
 function Decoder.parse_space(self, chunk)
 	local start = chunk:find("[^%s]")
-	
+
 	while not start do
 		chunk = self:fetch()
 		if not chunk then
@@ -347,13 +353,13 @@ function Decoder.parse_space(self, chunk)
 		end
 		start = chunk:find("[^%s]")
 	end
-	
+
 	return chunk:sub(start)
 end
 
 
 function Decoder.parse_literal(self, chunk, literal, value)
-	chunk = self:fetch_atleast(chunk, #literal)	
+	chunk = self:fetch_atleast(chunk, #literal)
 	assert(chunk:sub(1, #literal) == literal, "Invalid character sequence")
 	return chunk:sub(#literal + 1), value
 end
@@ -392,7 +398,7 @@ function Decoder.parse_string(self, chunk)
 		local spos = chunk:find('[\\"]')
 		if spos then
 			str = str .. chunk:sub(1, spos - 1)
-			
+
 			local char = chunk:sub(spos, spos)
 			if char == '"' then				-- String end
 				chunk = chunk:sub(spos + 1)
@@ -404,11 +410,40 @@ function Decoder.parse_string(self, chunk)
 		else
 			str = str .. chunk
 			chunk = self:fetch()
-			assert(chunk, "Unexpected EOS while parsing a string")		
+			assert(chunk, "Unexpected EOS while parsing a string")
 		end
 	end
 
 	return chunk, str
+end
+
+
+function Decoder.utf8_encode(self, s1, s2)
+	local n = s1 * 256 + s2
+
+	if n >= 0 and n <= 0x7F then
+		return char(n)
+	elseif n >= 0 and n <= 0x7FF then
+		return char(
+			bor(band(rshift(n,  6), 0x1F), 0xC0),
+			bor(band(n,             0x3F), 0x80)
+		)
+	elseif n >= 0 and n <= 0xFFFF then
+		return char(
+			bor(band(rshift(n, 12), 0x0F), 0xE0),
+			bor(band(rshift(n,  6), 0x3F), 0x80),
+			bor(band(n,             0x3F), 0x80)
+		)
+	elseif n >= 0 and n <= 0x10FFFF then
+		return char(
+			bor(band(rshift(n, 18), 0x07), 0xF0),
+			bor(band(rshift(n, 12), 0x3F), 0x80),
+			bor(band(rshift(n,  6), 0x3F), 0x80),
+			bor(band(n,             0x3F), 0x80)
+		)
+	else
+		return "?"
+	end
 end
 
 
@@ -417,7 +452,7 @@ function Decoder.parse_escape(self, chunk)
 	chunk = self:fetch_atleast(chunk:sub(2), 1)
 	local char = chunk:sub(1, 1)
 	chunk = chunk:sub(2)
-	
+
 	if char == '"' then
 		return chunk, '"'
 	elseif char == "\\" then
@@ -427,9 +462,8 @@ function Decoder.parse_escape(self, chunk)
 		local s1, s2 = chunk:sub(1, 2), chunk:sub(3, 4)
 		s1, s2 = tonumber(s1, 16), tonumber(s2, 16)
 		assert(s1 and s2, "Invalid Unicode character")
-		
-		-- ToDo: Unicode support
-		return chunk:sub(5), s1 == 0 and string.char(s2) or ""
+
+		return chunk:sub(5), self:utf8_encode(s1, s2)
 	elseif char == "/" then
 		return chunk, "/"
 	elseif char == "b" then
@@ -452,18 +486,18 @@ function Decoder.parse_array(self, chunk)
 	chunk = chunk:sub(2)
 	local array = {}
 	local nextp = 1
-	
+
 	local chunk, object = self:parse_delimiter(chunk, "%]")
-	
+
 	if object then
 		return chunk, array
 	end
-	
+
 	repeat
 		chunk, object = self:dispatch(chunk, nil, true)
 		table.insert(array, nextp, object)
 		nextp = nextp + 1
-		
+
 		chunk, object = self:parse_delimiter(chunk, ",%]")
 		assert(object, "Delimiter expected")
 	until object == "]"
@@ -486,12 +520,12 @@ function Decoder.parse_object(self, chunk)
 	repeat
 		chunk = self:parse_space(chunk)
 		assert(chunk, "Unexpected EOS")
-		
+
 		chunk, name   = self:parse_string(chunk)
-		
+
 		chunk, object = self:parse_delimiter(chunk, ":")
 		assert(object, "Separator expected")
-		
+
 		chunk, object = self:dispatch(chunk, nil, true)
 		array[name] = object
 
@@ -519,7 +553,7 @@ function Decoder.parse_delimiter(self, chunk, delimiter)
 end
 
 
-Decoder.parsers = { 
+Decoder.parsers = {
 	['"'] = Decoder.parse_string,
 	['t'] = Decoder.parse_true,
 	['f'] = Decoder.parse_false,
