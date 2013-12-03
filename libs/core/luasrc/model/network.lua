@@ -47,7 +47,7 @@ protocol = utl.class()
 local _protocols = { }
 
 local _interfaces, _bridge, _switch, _tunnel
-local _ubus, _ubusnetcache, _ubusdevcache
+local _ubus, _ubusnetcache, _ubusdevcache, _ubuswificache
 local _uci_real, _uci_state
 
 function _filter(c, s, o, r)
@@ -134,6 +134,22 @@ function _wifi_iface(x)
 	return false
 end
 
+function _wifi_state(key, val, field)
+	if not next(_ubuswificache) then
+		_ubuswificache = _ubus:call("network.wireless", "status", {}) or {}
+	end
+
+	local radio, radiostate
+	for radio, radiostate in pairs(_ubuswificache) do
+		local ifc, ifcstate
+		for ifc, ifcstate in pairs(radiostate.interfaces) do
+			if ifcstate[key] == val then
+				return ifcstate[field]
+			end
+		end
+	end
+end
+
 function _wifi_lookup(ifn)
 	-- got a radio#.network# pseudo iface, locate the corresponding section
 	local radio, ifnidx = ifn:match("^(%w+)%.network(%d+)$")
@@ -157,15 +173,16 @@ function _wifi_lookup(ifn)
 
 	-- looks like wifi, try to locate the section via state vars
 	elseif _wifi_iface(ifn) then
-		local sid = nil
-
-		_uci_state:foreach("wireless", "wifi-iface",
-			function(s)
-				if s.ifname == ifn then
-					sid = s['.name']
-					return false
-				end
-			end)
+		local sid = _wifi_state("ifname", ifn, "section")
+		if not sid then
+			_uci_state:foreach("wireless", "wifi-iface",
+				function(s)
+					if s.ifname == ifn then
+						sid = s['.name']
+						return false
+					end
+				end)
+		end
 
 		return sid
 	end
@@ -201,9 +218,10 @@ function init(cursor)
 	_switch     = { }
 	_tunnel     = { }
 
-	_ubus         = bus.connect()
-	_ubusnetcache = { }
-	_ubusdevcache = { }
+	_ubus          = bus.connect()
+	_ubusnetcache  = { }
+	_ubusdevcache  = { }
+	_ubuswificache = { }
 
 	-- read interface information
 	local n, i
@@ -1030,7 +1048,7 @@ function interface.__init__(self, ifname, network)
 	local wif = _wifi_lookup(ifname)
 	if wif then
 		self.wif    = wifinet(wif)
-		self.ifname = _uci_state:get("wireless", wif, "ifname")
+		self.ifname = _wifi_state("section", wif, "ifname")
 	end
 
 	self.ifname  = self.ifname or ifname
@@ -1265,8 +1283,11 @@ function wifidev.get_i18n(self)
 end
 
 function wifidev.is_up(self)
-	local up = false
+	if _ubuswificache[self.sid] then
+		return (_ubuswificache[self.sid].up == true)
+	end
 
+	local up = false
 	_uci_state:foreach("wireless", "wifi-iface",
 		function(s)
 			if s.device == self.sid then
@@ -1348,7 +1369,7 @@ function wifinet.__init__(self, net, data)
 			end
 		end)
 
-	local dev = _uci_state:get("wireless", self.sid, "ifname") or netid
+	local dev = _wifi_state("section", self.sid, "ifname") or netid
 
 	self.netid  = netid
 	self.wdev   = dev
@@ -1404,7 +1425,7 @@ function wifinet.get_device(self)
 end
 
 function wifinet.is_up(self)
-	return (self.iwdata.up == "1")
+	return (_wifi_state("section", self.sid, "up") == true)
 end
 
 function wifinet.active_mode(self)
