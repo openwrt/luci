@@ -61,7 +61,7 @@ function m.parse(map)
 		wdev:set("disabled", nil)
 
 		nw:commit("wireless")
-		luci.sys.call("(env -i /sbin/wifi down; env -i /sbin/wifi up) >/dev/null 2>/dev/null")
+		luci.sys.call("(env -i /bin/ubus call network reload) >/dev/null 2>/dev/null")
 
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
 		return
