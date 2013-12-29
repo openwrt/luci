@@ -13,6 +13,9 @@ $Id$
 
 ]]--
 
+local util = require "luci.util"
+local ip = require "luci.ip"
+
 function write_float(self, section, value)
     local n = tonumber(value)
     if n ~= nil then
@@ -77,7 +80,7 @@ weight.datatype = "uinteger"
 weight.placeholder = "0"
 
 lqmult = i:taboption("general", DynamicList, "LinkQualityMult", translate("LinkQuality Multiplicator"),
-	translate("Multiply routes with the factor given here. Allowed values are between 0.01 and 1. "..
+	translate("Multiply routes with the factor given here. Allowed values are between 0.01 and 1.0. "..
 	"It is only used when LQ-Level is greater than 0. Examples:<br />"..
 	"reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />"..
 	"reduce LQ to all nodes on this interface by 20%: default 0.8"))
@@ -86,6 +89,28 @@ lqmult.rmempty = true
 lqmult.cast = "table"
 lqmult.placeholder = "default 1.0"
 
+function lqmult.validate(self, value)
+	for _, v in pairs(value) do
+		if v ~= "" then
+			local val = util.split(v, " ")
+			local host = val[1]
+			local mult = val[2]
+			if not host or not mult then
+				return nil, translate("LQMult requires two values (IP address or 'default' and multiplicator) seperated by space.")
+			end
+			if not (host == "default" or ip.IPv4(host) or ip.IPv6(host)) then
+				return nil, translate("Can only be a valid IPv4 or IPv6 address or 'default'")
+			end
+			if not tonumber(mult) or tonumber(mult) > 1 or tonumber(mult) < 0.01 then
+				return nil, translate("Invalid Value for LQMult-Value. Must be between 0.01 and 1.0.")
+			end
+			if not mult:match("[0-1]%.[0-9]+") then
+				return nil, translate("Invalid Value for LQMult-Value. You must use a decimal number between 0.01 and 1.0 here.")
+			end
+		end
+	end
+	return value
+end
 
 ip4b = i:taboption("addrs", Value, "Ip4Broadcast", translate("IPv4 broadcast"),
 	translate("IPv4 broadcast address for outgoing OLSR packets. One useful example would be 255.255.255.255. "..
