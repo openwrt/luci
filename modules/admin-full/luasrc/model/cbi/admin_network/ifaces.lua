@@ -405,7 +405,7 @@ if has_dnsmasq and net:proto() == "static" then
 		end
 	end)
 
-	if not has_section then
+	if not has_section and has_dnsmasq then
 
 		s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
 		s.anonymous   = true
@@ -416,13 +416,14 @@ if has_dnsmasq and net:proto() == "static" then
 		x.inputtitle = translate("Setup DHCP Server")
 		x.inputstyle = "apply"
 
-	else
+	elseif has_section then
 
 		s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
 		s.addremove = false
 		s.anonymous = true
 		s:tab("general",  translate("General Setup"))
 		s:tab("advanced", translate("Advanced Settings"))
+		s:tab("ipv6", translate("IPv6 Settings"))
 
 		function s.filter(self, section)
 			return m2.uci:get("dhcp", section, "interface") == arg[1]
@@ -481,6 +482,41 @@ if has_dnsmasq and net:proto() == "static" then
 			end
 		end
 
+		o = s:taboption("ipv6", ListValue, "ra", translate("Router Advertisement-Service"))
+		o:value("", translate("disabled"))
+		o:value("server", translate("server mode"))
+		o:value("relay", translate("relay mode"))
+		o:value("hybrid", translate("hybrid mode"))
+
+		o = s:taboption("ipv6", ListValue, "dhcpv6", translate("DHCPv6-Service"))
+		o:value("", translate("disabled"))
+		o:value("server", translate("server mode"))
+		o:value("relay", translate("relay mode"))
+		o:value("hybrid", translate("hybrid mode"))
+
+		o = s:taboption("ipv6", ListValue, "ndp", translate("NDP-Proxy"))
+		o:value("", translate("disabled"))
+		o:value("relay", translate("relay mode"))
+		o:value("hybrid", translate("hybrid mode"))
+
+		o = s:taboption("ipv6", ListValue, "ra_management", translate("DHCPv6-Mode"))
+		o:value("", translate("stateless"))
+		o:value("1", translate("stateless + stateful"))
+		o:value("2", translate("stateful-only"))
+		o:depends("dhcpv6", "server")
+		o:depends("dhcpv6", "hybrid")
+		o.default = "1"
+
+		o = s:taboption("ipv6", Flag, "ra_default", translate("Always announce default router"),
+		        translate("Announce as default router even if no public prefix is available."))
+		o:depends("ra", "server")
+		o:depends("ra", "hybrid")
+
+		s:taboption("ipv6", DynamicList, "dns", translate("Announced DNS servers"))
+		s:taboption("ipv6", DynamicList, "domain", translate("Announced DNS domains"))
+
+	else
+		m2 = nil
 	end
 end
 

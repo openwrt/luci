@@ -58,6 +58,34 @@ local function dhcp_leases_common(family)
 		fd:close()
 	end
 
+	local fd = io.open("/tmp/hosts/odhcpd", "r")
+	if fd then
+		while true do
+			local ln = fd:read("*l")
+			if not ln then
+				break
+			else
+				local iface, duid, iaid, name, ts, id, length, ip = ln:match("^# (%S+) (%S+) (%S+) (%S+) (%d+) (%S+) (%S+) (.*)")
+				if ip and iaid ~= "ipv4" and family == 6 then
+					rv[#rv+1] = {
+						expires  = os.difftime(tonumber(ts) or 0, os.time()),
+						duid     = duid,
+						ip6addr  = ip,
+						hostname = (name ~= "-") and name
+					}
+				elseif ip and iaid == "ipv4" and family == 4 then
+					rv[#rv+1] = {
+						expires  = os.difftime(tonumber(ts) or 0, os.time()),
+						macaddr  = duid,
+						ipaddr   = ip,
+						hostname = (name ~= "-") and name
+					}
+				end
+			end
+		end
+		fd:close()
+	end
+
 	return rv
 end
 
@@ -66,35 +94,7 @@ function dhcp_leases()
 end
 
 function dhcp6_leases()
-	local nfs = require "nixio.fs"
-	local leasefile = "/tmp/hosts/6relayd"
-	local rv = {}
-
-	if nfs.access(leasefile, "r") then
-		local fd = io.open(leasefile, "r")
-		if fd then
-			while true do
-				local ln = fd:read("*l")
-				if not ln then
-					break
-				else
-					local iface, duid, iaid, name, ts, id, length, ip = ln:match("^# (%S+) (%S+) (%S+) (%S+) (%d+) (%S+) (%S+) (.*)")
-					if ip then
-						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
-							duid     = duid,
-							ip6addr  = ip,
-							hostname = (name ~= "-") and name
-						}
-					end
-				end
-			end
-			fd:close()
-		end
-		return rv
-	elseif luci.sys.call("dnsmasq --version 2>/dev/null | grep -q ' DHCPv6 '") == 0 then
-		return dhcp_leases_common(6)
-	end
+	return dhcp_leases_common(6)
 end
 
 function wifi_networks()
