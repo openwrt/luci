@@ -108,11 +108,22 @@ end
 function request_raw(uri, options)
 	options = options or {}
 	local pr, auth, host, port, path
-	if uri:find("@") then
-		pr, auth, host, port, path =
-			uri:match("(%w+)://(.+)@([%w-.]+):?([0-9]*)(.*)")
+	
+	if uri:find("%[") then
+		if uri:find("@") then
+			pr, auth, host, port, path = uri:match("(%w+)://(.+)@(%b[]):?([0-9]*)(.*)")
+			host = host:sub(2,-2)
+		else
+			pr, host, port, path = uri:match("(%w+)://(%b[]):?([0-9]*)(.*)")
+			host = host:sub(2,-2)
+		end
 	else
-		pr, host, port, path = uri:match("(%w+)://([%w-.]+):?([0-9]*)(.*)")
+		if uri:find("@") then
+			pr, auth, host, port, path =
+				uri:match("(%w+)://(.+)@([%w-.]+):?([0-9]*)(.*)")
+		else
+			pr, host, port, path = uri:match("(%w+)://([%w-.]+):?([0-9]*)(.*)")
+		end
 	end
 
 	if not host then
