@@ -39,4 +39,5 @@ compile: $(UCI_DIR)/.prepared
 compile-all: compile
 
 clean:
+	rm -rf $(UCI_PATCHDIR)/series
 	rm -rf $(UCI_DIR) $(UCI_FILE)

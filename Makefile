@@ -33,7 +33,7 @@ i18nbuild:
 clean:
 	rm -f .running-sdk
 	rm -rf docs
-	make -C libs/lmo host-clean
+	make -C libs/web host-clean
 	for i in $(MODULES); do make -C$$i clean; done
 
 
