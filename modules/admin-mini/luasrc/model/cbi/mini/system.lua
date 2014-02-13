@@ -27,8 +27,8 @@ s.addremove = false
 local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 local uptime = luci.sys.uptime()
 
-s:option(DummyValue, "_system", translate("System")).value = system
-s:option(DummyValue, "_cpu", translate("Processor")).value = model
+s:option(DummyValue, "_system", translate("System")).value = model
+s:option(DummyValue, "_cpu", translate("Processor")).value = system
 
 local load1, load5, load15 = luci.sys.loadavg()
 s:option(DummyValue, "_la", translate("Load")).value =
