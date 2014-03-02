@@ -125,6 +125,11 @@ for net in $networks; do
 	fi
 done
 
+##### postinstall script
+
+[ -f /etc/rc.local.meshkitpostinstall ] && /etc/rc.local.meshkitpostinstall
+
+
 ##### Reboot the router (because simply restarting services gave errors)
 
 echo "+ The wizard has finished and the router will reboot now."
