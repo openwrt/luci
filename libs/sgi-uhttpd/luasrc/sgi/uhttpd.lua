@@ -43,7 +43,7 @@ function handle_request(env)
 		renv["HTTP_" .. k] = v
 	end
 
-	local len = env.CONTENT_LENGTH or 0
+	local len = tonumber(env.CONTENT_LENGTH) or 0
 	local function recv()
 		if len > 0 then
 			local rlen, rbuf = uhttpd.recv(4096)
