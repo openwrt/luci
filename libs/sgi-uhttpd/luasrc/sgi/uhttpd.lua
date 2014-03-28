@@ -55,17 +55,7 @@ function handle_request(env)
 		return nil
 	end
 
-	local function send(...)
-		return uhttpd.send(...)
-	end
-
-	local function sendc(...)
-		if env.HTTP_VERSION > 1.0 then
-			return uhttpd.sendc(...)
-		else
-			return uhttpd.send(...)
-		end
-	end
+	local send = uhttpd.send
 
 	local req = luci.http.Request(
 		renv, recv, luci.ltn12.sink.file(io.stderr)
@@ -76,16 +66,11 @@ function handle_request(env)
 	local hcache = { }
 	local active = true
 
-	if env.HTTP_VERSION > 1.0 then
-		hcache["Transfer-Encoding"] = "chunked"
-	end
-
 	while coroutine.status(x) ~= "dead" do
 		local res, id, data1, data2 = coroutine.resume(x, req)
 
 		if not res then
-			send(env.SERVER_PROTOCOL)
-			send(" 500 Internal Server Error\r\n")
+			send("Status: 500 Internal Server Error\r\n")
 			send("Content-Type: text/plain\r\n\r\n")
 			send(tostring(id))
 			break
@@ -93,8 +78,7 @@ function handle_request(env)
 
 		if active then
 			if id == 1 then
-				send(env.SERVER_PROTOCOL)
-				send(" ")
+				send("Status: ")
 				send(tostring(data1))
 				send(" ")
 				send(tostring(data2))
@@ -110,7 +94,7 @@ function handle_request(env)
 				end
 				send("\r\n")
 			elseif id == 4 then
-				sendc(tostring(data1 or ""))
+				send(tostring(data1 or ""))
 			elseif id == 5 then
 				active = false
 			elseif id == 6 then
