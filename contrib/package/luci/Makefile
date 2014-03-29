@@ -618,6 +618,7 @@ define Build/Prepare
 		--exclude='boa-0*' --exclude='*.o' --exclude='*.so' \
 		--exclude=dist | \
 			tar x -C $(PKG_BUILD_DIR)/
+	$(call Build/Prepare/Default)
 endef
 
 define Build/Configure
