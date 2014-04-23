@@ -60,7 +60,9 @@ function index()
 		assign({"freifunk", "status", "splash"}, {"splash", "publicstatus"}, _("Splash"), 40)
 	end
 
-	assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, _("OLSR"), 30)
+	page = assign({"freifunk", "olsr"}, {"admin", "status", "olsr"}, _("OLSR"), 30)
+	page.setuser = false
+	page.setgroup = false
 
 	if nixio.fs.access("/etc/config/luci_statistics") then
 		assign({"freifunk", "graph"}, {"admin", "statistics", "graph"}, _("Statistics"), 40)

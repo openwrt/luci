@@ -19,10 +19,6 @@ LUCI_CFLAGS:=
 LUCI_BUILD_PACKAGES:=
 LUCI_SELECTED_MODULES:=
 
-ifeq ($(BOARD),brcm-2.4)
-  MAKE_FLAGS += CRAP="1"
-endif
-
 
 ### Templates ###
 define Package/luci/install/template
@@ -203,35 +199,6 @@ $(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
 $(eval $(call protocol,relay,Support for relayd pseudo bridges,+PACKAGE_luci-proto-relay:relayd))
 
 
-### Community Packages ###
-define Package/luci-mod-freifunk-community
-  SECTION:=luci
-  CATEGORY:=LuCI
-  TITLE:=LuCI - Lua Configuration Interface
-  URL:=http://luci.subsignal.org/
-  MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-  SUBMENU:=9. Freifunk
-  TITLE:=Freifunk Community Meta-Package
-  DEPENDS+= \
-   +luci-lib-web +luci-app-splash +luci-i18n-german \
-   +PACKAGE_luci-mod-freifunk-community:olsrd +PACKAGE_luci-mod-freifunk-community:olsrd-mod-dyn-gw-plain \
-   +PACKAGE_luci-mod-freifunk-community:olsrd-mod-jsoninfo +PACKAGE_luci-mod-freifunk-community:olsrd-mod-nameservice \
-   +PACKAGE_luci-mod-freifunk-community:olsrd-mod-watchdog +PACKAGE_luci-mod-freifunk-community:kmod-tun \
-   +PACKAGE_luci-mod-freifunk-community:ip +PACKAGE_luci-mod-freifunk-community:freifunk-watchdog +luci-app-olsr \
-   +luci-app-olsr-services +freifunk-gwcheck +freifunk-mapupdate
-endef
-
-define Package/luci-mod-freifunk-community/install
-	$(call Package/luci/install/template,$(1),applications/freifunk-community)
-endef
-
-ifneq ($(CONFIG_PACKAGE_luci-mod-freifunk-community),)
-	LUCI_SELECTED_MODULES+=applications/freifunk-community
-endif
-
-LUCI_BUILD_PACKAGES += luci-mod-freifunk-community
-
-
 ### Modules ###
 define module
   define Package/luci-mod-$(1)
@@ -267,7 +234,6 @@ $(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendl
 $(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-lib-ipkg))
 $(eval $(call module,failsafe,LuCI Fail-Safe - Fail-Safe sysupgrade module,+luci-mod-admin-core))
 $(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-lib-json))
-$(eval $(call module,freifunk,LuCI Freifunk module,+luci-mod-admin-full +luci-lib-json +PACKAGE_luci-mod-freifunk:freifunk-firewall +freifunk-common))
 $(eval $(call module,niu,NIU - Next Generation Interface,+luci-mod-admin-core @BROKEN))
 
 
@@ -295,167 +261,15 @@ define application
   LUCI_BUILD_PACKAGES += luci-app-$(1)
 endef
 
-define Package/luci-app-splash/conffiles
-/etc/config/luci_splash
-/usr/lib/luci-splash/splashtext.html
-/usr/lib/luci-splash/splashtextinclude.html
-endef
-
-define Package/luci-app-statistics/conffiles
-/etc/config/luci_statistics
-endef
-
-define Package/luci-app-diag-devinfo/conffiles
-/etc/config/luci_devinfo
-endef
-
-
-$(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
-	+PACKAGE_luci-app-siitwizard:kmod-siit))
 
 $(eval $(call application,firewall,Firewall and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
-$(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
-        +PACKAGE_luci-app-freifunk-policyrouting:freifunk-policyrouting))
-
-$(eval $(call application,freifunk-widgets,Widgets for the Freifunk index page,\
-        +PACKAGE_luci-app-freifunk-widgets:luci-mod-freifunk))
-
-$(eval $(call application,meshwizard, Shellscript based wizard to setup mesh networks,\
-        +PACKAGE_luci-app-freifunk-meshwizard:meshwizard))
-
-$(eval $(call application,olsr,OLSR configuration and status module,\
-	+olsrd +olsrd-mod-jsoninfo +luci-lib-luaneightbl))
-
-$(eval $(call application,olsr-viz,OLSR Visualisation,\
-	luci-app-olsr +olsrd-mod-txtinfo))
-
-$(eval $(call application,freifunk-diagnostics,Tools for network diagnosis like traceroute and ping))
-
-$(eval $(call application,olsr-services,Show services announced with the nameservice plugin,\
-	luci-app-olsr +olsrd-mod-nameservice))
-
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
 
-$(eval $(call application,splash,Freifunk DHCP-Splash application,\
-	+luci-lib-nixio +tc +kmod-sched +iptables-mod-nat-extra +iptables-mod-ipopt))
-
-$(eval $(call application,statistics,LuCI Statistics Application,\
-	+PACKAGE_luci-app-statistics:collectd \
-	+PACKAGE_luci-app-statistics:rrdtool1 \
-	+PACKAGE_luci-app-statistics:collectd-mod-rrdtool \
-	+PACKAGE_luci-app-statistics:collectd-mod-iwinfo \
-	+PACKAGE_luci-app-statistics:collectd-mod-interface \
-	+PACKAGE_luci-app-statistics:collectd-mod-load)) \
-	+PACKAGE_luci-app-statistics:collectd-mod-network))
-
-
-$(eval $(call application,diag-core,LuCI Diagnostics Tools (Core)))
-
-$(eval $(call application,diag-devinfo,LuCI Diagnostics Tools (Device Info),\
-	+luci-app-diag-core \
-	+PACKAGE_luci-app-diag-devinfo:smap \
-	+PACKAGE_luci-app-diag-devinfo:netdiscover \
-	+PACKAGE_luci-app-diag-devinfo:mac-to-devinfo \
-	+PACKAGE_luci-app-diag-devinfo:httping \
-	+PACKAGE_luci-app-diag-devinfo:smap-to-devinfo \
-	+PACKAGE_luci-app-diag-devinfo:netdiscover-to-devinfo))
-
-$(eval $(call application,voice-core,LuCI Voice Software (Core)))
-
-$(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),\
-	luci-app-diag-devinfo))
-
 $(eval $(call application,commands,LuCI Shell Command Module))
 
-$(eval $(call application,upnp,Universal Plug & Play configuration module,\
-	+PACKAGE_luci-app-upnp:miniupnpd))
-
-$(eval $(call application,ntpc,NTP time synchronisation configuration module,\
-	+PACKAGE_luci-app-ntpc:ntpclient))
-
-$(eval $(call application,ddns,Dynamic DNS configuration module,\
-	+PACKAGE_luci-app-ddns:ddns-scripts))
-
-$(eval $(call application,samba,Network Shares - Samba SMB/CIFS module,\
-	+PACKAGE_luci-app-samba:samba36-server))
-
-$(eval $(call application,mmc-over-gpio,MMC-over-GPIO configuration module,\
-	+PACKAGE_luci-app-mmc-over-gpio:kmod-mmc-over-gpio))
-
-$(eval $(call application,p910nd,p910nd - Printer server module,\
-	+PACKAGE_luci-app-p910nd:p910nd))
-
-$(eval $(call application,ushare,uShare - UPnP A/V & DLNA Media Server,\
-	+PACKAGE_luci-app-ushare:ushare))
-
-$(eval $(call application,hd-idle,Hard Disk Idle Spin-Down module,\
-	+PACKAGE_luci-app-hd-idle:hd-idle))
-
-$(eval $(call application,tinyproxy,Tinyproxy - HTTP(S)-Proxy configuration,\
-	+PACKAGE_luci-app-tinyproxy:tinyproxy))
-
-$(eval $(call application,polipo,LuCI Support for the Polipo Proxy,\
-	+PACKAGE_luci-app-polipo:polipo))
-
-$(eval $(call application,openvpn,LuCI Support for OpenVPN,\
-	+PACKAGE_luci-app-openvpn:openvpn @BROKEN))
-
-$(eval $(call application,p2pblock,LuCI Support for the Freifunk P2P-Block addon,\
-	luci-app-firewall +PACKAGE_luci-app-p2pblock:freifunk-p2pblock))
-
-$(eval $(call application,multiwan,LuCI Support for the OpenWrt MultiWAN agent,\
-	luci-app-firewall +PACKAGE_luci-app-multiwan:multiwan))
-
-$(eval $(call application,wol,LuCI Support for Wake-on-LAN,\
-	+PACKAGE_luci-app-wol:etherwake))
-
-$(eval $(call application,vnstat,LuCI Support for VnStat,\
-	+PACKAGE_luci-app-vnstat:vnstat \
-    +PACKAGE_luci-app-vnstat:vnstati))
-
-$(eval $(call application,radvd,LuCI Support for Radvd,\
-	+PACKAGE_luci-app-radvd:radvd))
-
-$(eval $(call application,ahcp,LuCI Support for AHCPd,\
-	+PACKAGE_luci-app-ahcp:ahcpd))
-
-$(eval $(call application,wshaper,LuCI Support for wshaper,\
-	+PACKAGE_luci-app-wshaper:wshaper))
-
-$(eval $(call application,pbx,LuCI PBX Administration,\
-	+PACKAGE_luci-app-pbx:asterisk18 \
-	+PACKAGE_luci-app-pbx:asterisk18-app-authenticate \
-	+PACKAGE_luci-app-pbx:asterisk18-app-disa \
-	+PACKAGE_luci-app-pbx:asterisk18-app-setcallerid \
-	+PACKAGE_luci-app-pbx:asterisk18-app-system \
-	+PACKAGE_luci-app-pbx:asterisk18-chan-gtalk \
-	+PACKAGE_luci-app-pbx:asterisk18-codec-a-mu \
-	+PACKAGE_luci-app-pbx:asterisk18-codec-alaw \
-	+PACKAGE_luci-app-pbx:asterisk18-func-cut \
-	+PACKAGE_luci-app-pbx:asterisk18-res-clioriginate \
-	+PACKAGE_luci-app-pbx:asterisk18-func-channel \
-	+PACKAGE_luci-app-pbx:asterisk18-chan-local \
-	+PACKAGE_luci-app-pbx:asterisk18-app-record \
-	+PACKAGE_luci-app-pbx:asterisk18-app-senddtmf \
-	+PACKAGE_luci-app-pbx:asterisk18-res-crypto))
-
-$(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,\
-	luci-app-pbx +PACKAGE_luci-app-pbx-voicemail:msmtp \
-	+PACKAGE_luci-app-pbx-voicemail:coreutils-base64))
-
-$(eval $(call application,ltqtapi,Lantiq voip))
-
-$(eval $(call application,minidlna,LuCI Support for miniDLNA,\
-	+PACKAGE_luci-app-minidlna:minidlna))
-
-$(eval $(call application,transmission,LuCI Support for Transmission,\
-	+PACKAGE_luci-app-transmission:transmission-daemon))
-
-$(eval $(call application,watchcat,LuCI Support for Watchcat,\
-	+PACKAGE_luci-app-watchcat:watchcat))
 
 ### Server Gateway Interfaces ###
 define sgi
