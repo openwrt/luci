@@ -233,7 +233,8 @@ net = {}
 --			The following fields are defined for arp entry objects:
 --			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
 function net.arptable(callback)
-	local arp, e, r, v
+	local arp = (not callback) and {} or nil
+	local e, r, v
 	if fs.access("/proc/net/arp") then
 		for e in io.lines("/proc/net/arp") do
 			local r = { }, v
