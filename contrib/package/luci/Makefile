@@ -593,7 +593,7 @@ $(eval $(call collection,,\
 
 $(eval $(call collection,ssl,\
 	Standard OpenWrt set with HTTPS support,\
-	+luci +libustream-cyassl +px5g))
+	+luci +libustream-polarssl +px5g))
 
 $(eval $(call collection,light,\
 	Minimum package set using only admin mini and the standard theme,\
