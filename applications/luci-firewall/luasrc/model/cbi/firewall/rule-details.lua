@@ -13,6 +13,7 @@ You may obtain a copy of the License at
 ]]--
 
 local sys = require "luci.sys"
+local utl = require "luci.util"
 local dsp = require "luci.dispatcher"
 local nxo = require "nixio"
 
@@ -62,7 +63,7 @@ elseif rule_type == "redirect" then
 			local n = s.network or s.name
 			if n then
 				local i
-				for i in n:gmatch("%S+") do
+				for i in utl.imatch(n) do
 					if i == "wan" then
 						wan_zone = s.name
 						return false
