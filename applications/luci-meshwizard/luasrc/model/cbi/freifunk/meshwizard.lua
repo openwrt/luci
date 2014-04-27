@@ -118,7 +118,7 @@ uci:foreach("wireless", "wifi-device", function(section)
 	chan:value('default')
 
 	local iwinfo = sys.wifi.getiwinfo(device)
-	if iwinfo then
+	if iwinfo and iwinfo.freqlist then
 		for _, f in ipairs(iwinfo.freqlist) do
 			if not f.restricted then
 				chan:value(f.channel)
