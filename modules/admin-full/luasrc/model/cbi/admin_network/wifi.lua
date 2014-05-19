@@ -143,7 +143,6 @@ end
 
 
 local hwtype = wdev:get("type")
-local htcaps = wdev:get("ht_capab") and true or false
 
 -- NanoFoo
 local nsantenna = wdev:get("antenna")
@@ -192,26 +191,31 @@ if hwtype == "mac80211" then
 	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
-	mode:value("", translate("auto"))
 	if hw_modes.b then mode:value("11b", "802.11b") end
 	if hw_modes.g then mode:value("11g", "802.11g") end
 	if hw_modes.a then mode:value("11a", "802.11a") end
 
-	if htcaps then
-		if hw_modes.g and hw_modes.n then mode:value("11ng", "802.11g+n") end
-		if hw_modes.a and hw_modes.n then mode:value("11na", "802.11a+n") end
-
-		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode"))
-		htmode:depends("hwmode", "11na")
-		htmode:depends("hwmode", "11ng")
+	if hw_modes.n then
+		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode (802.11n)"))
+		htmode:depends("hwmode", "11a")
+		htmode:depends("hwmode", "11g")
+		htmode:value("", translate("disabled"))
 		htmode:value("HT20", "20MHz")
-		htmode:value("HT40-", translate("40MHz 2nd channel below"))
-		htmode:value("HT40+", translate("40MHz 2nd channel above"))
+		htmode:value("HT40", "40MHz")
+
+		function mode.cfgvalue(...)
+			local v = Value.cfgvalue(...)
+			if v == "11na" then
+				return "11a"
+			elseif v == "11ng" then
+				return "11g"
+			end
+			return v
+		end
 
 		noscan = s:taboption("advanced", Flag, "noscan", translate("Force 40MHz mode"),
 			translate("Always use 40MHz channels even if the secondary channel overlaps. Using this option does not comply with IEEE 802.11n-2009!"))
-		noscan:depends("htmode", "HT40+")
-		noscan:depends("htmode", "HT40-")
+		noscan:depends("htmode", "HT40")
 		noscan.default = noscan.disabled
 
 		--htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
