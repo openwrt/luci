@@ -190,15 +190,13 @@ if hwtype == "mac80211" then
 		end
 	end
 
-	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
-	if hw_modes.b then mode:value("11b", "802.11b") end
-	if hw_modes.g then mode:value("11g", "802.11g") end
-	if hw_modes.a then mode:value("11a", "802.11a") end
+	mode = s:taboption("advanced", ListValue, "hwmode", translate("Band"))
 
 	if hw_modes.n then
+		if hw_modes.g then mode:value("11g", "2.4GHz (802.11g+n)") end
+		if hw_modes.a then mode:value("11a", "5GHz (802.11a+n)") end
+
 		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode (802.11n)"))
-		htmode:depends("hwmode", "11a")
-		htmode:depends("hwmode", "11g")
 		htmode:value("", translate("disabled"))
 		htmode:value("HT20", "20MHz")
 		htmode:value("HT40", "40MHz")
@@ -217,10 +215,9 @@ if hwtype == "mac80211" then
 			translate("Always use 40MHz channels even if the secondary channel overlaps. Using this option does not comply with IEEE 802.11n-2009!"))
 		noscan:depends("htmode", "HT40")
 		noscan.default = noscan.disabled
-
-		--htcapab = s:taboption("advanced", DynamicList, "ht_capab", translate("HT capabilities"))
-		--htcapab:depends("hwmode", "11na")
-		--htcapab:depends("hwmode", "11ng")
+	else
+		if hw_modes.g then mode:value("11g", "2.4GHz (802.11g)") end
+		if hw_modes.a then mode:value("11a", "5GHz (802.11a)") end
 	end
 
 	local cl = iw and iw.countrylist
