@@ -227,6 +227,9 @@ end
 auto = s:taboption("advanced", Flag, "auto", translate("Bring up on boot"))
 auto.default = (net:proto() == "none") and auto.disabled or auto.enabled
 
+delegate = s:taboption("advanced", Flag, "delegate", translate("Use builtin IPv6-management"))
+delegate.default = delegate.enabled
+
 
 if not net:is_virtual() then
 	br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
