@@ -96,4 +96,6 @@ ports:value("", translate("all"))
 
 bytes = s:option(Value, "connbytes", translate("Number of bytes"))
 
+comment = s:option(Value, "comment", translate("Comment"))
+
 return m
