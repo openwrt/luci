@@ -15,13 +15,20 @@ local map, section, net = ...
 section:taboption("general", Flag, "guest", translate("Guest mode"))
 section:taboption("advanced", Flag, "adhoc", translate("Ad-hoc mode"))
 
-local plen = section:taboption("advanced", Value, "ip6_plen", translate("IPv6 assignment length"),
+local plen = section:taboption("advanced", Value, "ip6assign", translate("IPv6 assignment length"),
 	translate("Assign a part of given length of every public IPv6-prefix to this interface"))
 plen.datatype = "max(128)"
 plen.default = "64"
 
 section:taboption("advanced", Value, "link_id", translate("IPv6 assignment hint"),
 	translate("Assign prefix parts using this hexadecimal subprefix ID for this interface."))
+
+plen = section:taboption("advanced", Value, "ip4assign", translate("IPv4 assignment length"))
+plen.datatype = "max(32)"
+plen.default = "24"
+
+local o = section:taboption("advanced", Value, "dnsname", translate("DNS-Label / FQDN"))
+o.default = map.name
 
 luci.tools.proto.opt_macaddr(section, ifc, translate("Override MAC address"))
 
