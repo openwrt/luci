@@ -270,9 +270,7 @@ define theme
     URL:=http://luci.subsignal.org/
     SUBMENU:=4. Themes
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
-	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
-	DEPENDS:=+luci-base $(4)
-	$(if $(5),DEFAULT:=PACKAGE_luci-base)
+    MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
   endef
 
   define Package/luci-theme-$(1)/install
@@ -287,7 +285,7 @@ define theme
 endef
 
 $(eval $(call theme,openwrt,OpenWrt.org))
-$(eval $(call theme,bootstrap,Bootstrap Theme (default),,,1))
+$(eval $(call theme,bootstrap,Bootstrap Theme (default)))
 
 
 ### Translations ###
