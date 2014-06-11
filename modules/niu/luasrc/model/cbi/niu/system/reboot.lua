@@ -1,1 +1,0 @@
-local f = Form("reboot", "Rebooting Device", "Device is rebooting. Please wait...") 

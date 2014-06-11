@@ -158,13 +158,9 @@ ifneq ($(CONFIG_PACKAGE_luci-lib-nixio_cyassl),)
 endif
 
 
-$(eval $(call library,fastindex,Fastindex indexing module,+PACKAGE_luci-lib-fastindex:liblua))
 $(eval $(call library,httpclient,HTTP(S) client library,+luci-lib-web +luci-lib-nixio))
 $(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
 $(eval $(call library,json,LuCI JSON library))
-$(eval $(call library,lucid,LuCId Full-Stack Webserver,+luci-lib-nixio +luci-lib-web +luci-lib-px5g))
-$(eval $(call library,lucid-http,LuCId HTTP Backend,+luci-lib-lucid))
-$(eval $(call library,lucid-rpc,LuCId RPC Backend,+luci-lib-lucid))
 $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
 $(eval $(call library,sys,LuCI Linux/POSIX system library))
@@ -238,7 +234,6 @@ $(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendl
 $(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-lib-ipkg))
 $(eval $(call module,failsafe,LuCI Fail-Safe - Fail-Safe sysupgrade module,+luci-mod-admin-core))
 $(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-lib-json))
-$(eval $(call module,niu,NIU - Next Generation Interface,+luci-mod-admin-core @BROKEN))
 
 
 ### Applications ###
