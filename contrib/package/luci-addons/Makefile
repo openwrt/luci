@@ -262,7 +262,7 @@ define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(TAR) c -C $(LUCI_TOPDIR) . \
 		--exclude=.pc --exclude=.svn --exclude=.git \
-		--exclude='boa-0*' --exclude='*.o' --exclude='*.so' \
+		--exclude='*.o' --exclude='*.so' \
 		--exclude=dist | \
 			tar x -C $(PKG_BUILD_DIR)/
 	$(call Build/Prepare/Default)

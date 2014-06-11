@@ -60,9 +60,6 @@ sdk:
 ucidefaults:
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-freifunk-*"
 
-runhttpd: hostenv
-	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua build/lucid.lua"
-
 runuhttpd: hostenv
 	cp $(realpath build)/luci.cgi $(realpath host)/www/cgi-bin/luci
 	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/usr/sbin/uhttpd -p 8080 -h $(realpath host)/www -f"
@@ -92,11 +89,8 @@ run:
 	#	make run is deprecated				#
 	#	Please use:					#
 	#							#
-	#	To run LuCI WebUI using LuCIttpd		#
-	#	make runhttpd					#
-	#							#
-	#	To run LuCI WebUI using Boa/Webuci		#
-	#	make runboa 					#
+	#	To run LuCI WebUI using uhttpd			#
+	#	make runuhttpd					#
 	#							#
 	#	To start a shell in the LuCI environment	#
 	#	make runshell					#
