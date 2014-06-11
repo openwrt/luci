@@ -32,7 +32,7 @@ endef
 
 
 ### Core package ###
-define Package/luci-lib-core
+define Package/luci-base
   SECTION:=luci
   CATEGORY:=LuCI
   TITLE:=LuCI - Lua Configuration Interface
@@ -43,8 +43,8 @@ define Package/luci-lib-core
   TITLE:=LuCI core libraries
 endef
 
-define Package/luci-lib-core/install
-	$(call Package/luci/install/template,$(1),libs/core)
+define Package/luci-base/install
+	$(call Package/luci/install/template,$(1),modules/base)
 	$(PKG_BUILD_DIR)/build/mkversion.sh $(1)/usr/lib/lua/luci/version.lua \
 		"OpenWrt Firmware" \
 		"$(OPENWRTVERSION)" \
@@ -52,43 +52,47 @@ define Package/luci-lib-core/install
 		"$(PKG_VERSION)"
 endef
 
-define Package/luci-lib-core/config
+define Package/luci-base/config
        choice
                prompt "Build Target"
-               default PACKAGE_luci-lib-core_source
+               default PACKAGE_luci-base_source
 
-       config PACKAGE_luci-lib-core_compile
+       config PACKAGE_luci-base_compile
                bool "Precompiled"
 
-       config PACKAGE_luci-lib-core_stripped
+       config PACKAGE_luci-base_stripped
                bool "Stripped"
 
-       config PACKAGE_luci-lib-core_srcdiet
+       config PACKAGE_luci-base_srcdiet
                bool "Compressed Source"
 
-       config PACKAGE_luci-lib-core_source
+       config PACKAGE_luci-base_source
                bool "Full Source"
 
        endchoice
 endef
 
-ifneq ($(CONFIG_PACKAGE_luci-lib-core_compile),)
+define Package/luci-base/conffiles
+/etc/config/luci
+endef
+
+ifneq ($(CONFIG_PACKAGE_luci-base_compile),)
   LUA_TARGET:=compile
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-lib-core_stripped),)
+ifneq ($(CONFIG_PACKAGE_luci-base_stripped),)
   LUA_TARGET:=strip
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-lib-core_srcdiet),)
+ifneq ($(CONFIG_PACKAGE_luci-base_srcdiet),)
   LUA_TARGET:=diet
 endif
 
-ifneq ($(CONFIG_PACKAGE_luci-lib-core),)
-  LUCI_SELECTED_MODULES+=libs/core
+ifneq ($(CONFIG_PACKAGE_luci-base),)
+  LUCI_SELECTED_MODULES+=modules/base
 endif
 
-LUCI_BUILD_PACKAGES += luci-lib-core
+LUCI_BUILD_PACKAGES += luci-base
 
 
 ### Libraries ###
@@ -101,7 +105,7 @@ define library
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
     SUBMENU:=8. Libraries
     TITLE:=$(if $(2),$(2),LuCI $(1) library)
-    $(if $(3),DEPENDS:=+luci-lib-core $(3))
+    $(if $(3),DEPENDS:=+luci-base $(3))
   endef
 
   define Package/luci-lib-$(1)/install
@@ -114,10 +118,6 @@ define library
   endif
 
   LUCI_BUILD_PACKAGES += luci-lib-$(1)
-endef
-
-define Package/luci-lib-web/conffiles
-/etc/config/luci
 endef
 
 define Package/luci-lib-nixio/config
@@ -158,14 +158,11 @@ ifneq ($(CONFIG_PACKAGE_luci-lib-nixio_cyassl),)
 endif
 
 
-$(eval $(call library,httpclient,HTTP(S) client library,+luci-lib-web +luci-lib-nixio))
-$(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
+$(eval $(call library,httpclient,HTTP(S) client library,+luci-base +luci-lib-nixio))
 $(eval $(call library,json,LuCI JSON library))
 $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
-$(eval $(call library,sys,LuCI Linux/POSIX system library))
-$(eval $(call library,web,MVC Webframework,+luci-lib-sys +luci-lib-nixio +luci-lib-core +luci-sgi-cgi))
-$(eval $(call library,luaneightbl,neightbl - Lua lib for IPv6 neighbors,+luci-lib-core))
+$(eval $(call library,luaneightbl,neightbl - Lua lib for IPv6 neighbors,+luci-base))
 
 
 ### Protocols ###
@@ -192,7 +189,6 @@ define protocol
   LUCI_BUILD_PACKAGES += luci-proto-$(1)
 endef
 
-$(eval $(call protocol,core,Support for static/dhcp/none))
 $(eval $(call protocol,ppp,Support for PPP/PPPoE/PPPoA/PPtP))
 $(eval $(call protocol,ipv6,Support for DHCPv6/6in4/6to4/6rd/DS-Lite))
 $(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
@@ -225,14 +221,9 @@ define module
 endef
 
 
-define Package/luci-mod-admin-core/extra-install
-	touch $(1)/etc/init.d/luci_fixtime || true
-endef
-
-$(eval $(call module,admin-core,Web UI Core module,+luci-lib-web +luci-proto-core +luci-i18n-english))
-$(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendly,+luci-mod-admin-core @BROKEN))
-$(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-mod-admin-core +luci-lib-ipkg))
-$(eval $(call module,failsafe,LuCI Fail-Safe - Fail-Safe sysupgrade module,+luci-mod-admin-core))
+$(eval $(call module,admin-mini,LuCI Essentials - stripped down and user-friendly,+luci-base @BROKEN))
+$(eval $(call module,admin-full,LuCI Administration - full-featured for full control,+luci-base))
+$(eval $(call module,failsafe,LuCI Fail-Safe - Fail-Safe sysupgrade module,+luci-base))
 $(eval $(call module,rpc,LuCI RPC - JSON-RPC API,+luci-lib-json))
 
 
@@ -270,34 +261,6 @@ $(eval $(call application,qos,Quality of Service configuration module,\
 $(eval $(call application,commands,LuCI Shell Command Module))
 
 
-### Server Gateway Interfaces ###
-define sgi
-  define Package/luci-sgi-$(1)
-    SECTION:=luci
-    CATEGORY:=LuCI
-    TITLE:=LuCI - Lua Configuration Interface
-    URL:=http://luci.subsignal.org/
-    MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
-    SUBMENU:=7. Server Interfaces
-    TITLE:=$(if $(2),$(2),LuCI $(1) server gateway interface)
-	DEPENDS:=$(3)
-  endef
-
-  define Package/luci-sgi-$(1)/install
-	$(call Package/luci/install/template,$$(1),libs/sgi-$(1))
-  endef
-
-  ifneq ($(CONFIG_PACKAGE_luci-sgi-$(1)),)
-    LUCI_SELECTED_MODULES+=libs/sgi-$(1)
-  endif
-
-  LUCI_BUILD_PACKAGES += luci-sgi-$(1)
-endef
-
-$(eval $(call sgi,cgi,CGI Gateway behind existing Webserver))
-$(eval $(call sgi,uhttpd,Binding for the uHTTPd server,+uhttpd +uhttpd-mod-lua))
-
-
 ### Themes ###
 define theme
   define Package/luci-theme-$(1)
@@ -308,8 +271,8 @@ define theme
     SUBMENU:=4. Themes
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
 	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
-	DEPENDS:=$(if $(filter-out base,$(1)),+luci-theme-base) $(4)
-	$(if $(5),DEFAULT:=PACKAGE_luci-lib-core)
+	DEPENDS:=+luci-base $(4)
+	$(if $(5),DEFAULT:=PACKAGE_luci-base)
   endef
 
   define Package/luci-theme-$(1)/install
@@ -323,7 +286,6 @@ define theme
   LUCI_BUILD_PACKAGES += luci-theme-$(1)
 endef
 
-$(eval $(call theme,base,Common base for all themes))
 $(eval $(call theme,openwrt,OpenWrt.org))
 $(eval $(call theme,bootstrap,Bootstrap Theme (default),,,1))
 
@@ -397,7 +359,7 @@ $(eval $(call collection,,\
 	Standard OpenWrt set including full admin with ppp support and the \
 	default OpenWrt theme,\
 	+uhttpd +uhttpd-mod-ubus +luci-mod-admin-full +luci-theme-bootstrap \
-	+luci-app-firewall +luci-proto-core +luci-proto-ppp +libiwinfo-lua))
+	+luci-app-firewall +luci-proto-ppp +libiwinfo-lua))
 
 $(eval $(call collection,ssl,\
 	Standard OpenWrt set with HTTPS support,\

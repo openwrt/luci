@@ -14,7 +14,7 @@ all: build
 build: gccbuild luabuild
 
 gccbuild:
-	make -C libs/web CC="cc" CFLAGS="" LDFLAGS="" SDK="$(shell test -f .running-sdk && echo 1)" host-install
+	make -C modules/base CC="cc" CFLAGS="" LDFLAGS="" SDK="$(shell test -f .running-sdk && echo 1)" host-install
 	for i in $(MODULES); do \
 		make -C$$i SDK="$(shell test -f .running-sdk && echo 1)" compile || { \
 			echo "*** Compilation of $$i failed!"; \
@@ -33,7 +33,7 @@ i18nbuild:
 clean:
 	rm -f .running-sdk
 	rm -rf docs
-	make -C libs/web host-clean
+	make -C modules/base host-clean
 	for i in $(MODULES); do make -C$$i clean; done
 
 

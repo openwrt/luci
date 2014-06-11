@@ -49,7 +49,7 @@ define Package/luci-mod-freifunk-community
   TITLE:=Freifunk Community Meta-Package
   DEPENDS+=$(call add_deps,mod-freifunk-community, \
     iptables-mod-nat-extra iptables-mod-ipopt \
-	luci-lib-web luci-app-splash luci-i18n-german \
+	luci-app-splash luci-i18n-german \
 	olsrd olsrd-mod-dyn-gw-plain \
 	olsrd-mod-jsoninfo olsrd-mod-nameservice \
 	olsrd-mod-watchdog kmod-tun \
@@ -224,8 +224,7 @@ define theme
     SUBMENU:=4. Themes
     TITLE:=$(if $(2),$(2),LuCI $(1) theme)
 	MAINTAINER:=$(if $(3),$(3),LuCI Development Team <luci@lists.subsignal.org>)
-	DEPENDS:=$(if $(filter-out base,$(1)),+luci-theme-base) $(4)
-	$(if $(5),DEFAULT:=PACKAGE_luci-lib-core)
+	DEPENDS:=+luci-base $(4)
   endef
 
   define Package/luci-theme-$(1)/install
