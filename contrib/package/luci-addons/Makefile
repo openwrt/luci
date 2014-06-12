@@ -207,7 +207,7 @@ $(eval $(call application,pbx,LuCI PBX Administration,\
 	asterisk18-app-senddtmf \
 	asterisk18-res-crypto))
 
-$(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,luci-app-pbx msmtp coreutils-base64))
+$(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,luci-app-pbx asterisk18 msmtp coreutils-base64))
 $(eval $(call application,ltqtapi,Lantiq voip))
 $(eval $(call application,minidlna,LuCI Support for miniDLNA,minidlna))
 $(eval $(call application,transmission,LuCI Support for Transmission,transmission-daemon))
