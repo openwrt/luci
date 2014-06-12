@@ -142,9 +142,9 @@ $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic
 $(eval $(call application,freifunk-widgets,Widgets for the Freifunk index page,luci-mod-freifunk))
 $(eval $(call application,meshwizard, Shellscript based wizard to setup mesh networks,meshwizard))
 $(eval $(call application,olsr,OLSR configuration and status module,olsrd olsrd-mod-jsoninfo luci-lib-luaneightbl))
-$(eval $(call application,olsr-viz,OLSR Visualisation,luci-app-olsr olsrd-mod-txtinfo))
+$(eval $(call application,olsr-viz,OLSR Visualisation,luci-app-olsr olsrd olsrd-mod-txtinfo))
 $(eval $(call application,freifunk-diagnostics,Tools for network diagnosis like traceroute and ping))
-$(eval $(call application,olsr-services,Show services announced with the nameservice plugin,luci-app-olsr olsrd-mod-nameservice))
+$(eval $(call application,olsr-services,Show services announced with the nameservice plugin,luci-app-olsr olsrd olsrd-mod-nameservice))
 $(eval $(call application,splash,Freifunk DHCP-Splash application,luci-lib-nixio tc kmod-sched iptables-mod-nat-extra iptables-mod-ipopt))
 
 $(eval $(call application,statistics,LuCI Statistics Application,\
