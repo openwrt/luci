@@ -39,17 +39,28 @@ msgstr "Anunciar enlace superior (uplink)"
 msgid "Announced network"
 msgstr "Rede anunciada"
 
+msgid "Bad (ETX > 10)"
+msgstr ""
+
+msgid "Bad (SNR < 5)"
+msgstr ""
+
 msgid "Both values must use the dotted decimal notation."
 msgstr "Ambos os valores devem usar a notação decimal com pontos."
 
 msgid "Broadcast address"
 msgstr "Endereço de broadcast"
 
+msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configuração"
 
-msgid "Device"
-msgstr "Dispositivo"
+msgid ""
+"Could not get any data. Make sure the jsoninfo plugin is installed and "
+"allows connections from localhost."
+msgstr ""
 
 msgid "Display"
 msgstr "Visão"
@@ -116,6 +127,15 @@ msgstr "Configurações Gerais"
 msgid "General settings"
 msgstr "Configurações gerais"
 
+msgid "Good (2 < ETX < 4)"
+msgstr ""
+
+msgid "Good (30 > SNR > 20)"
+msgstr ""
+
+msgid "Green"
+msgstr ""
+
 msgid "HNA"
 msgstr ""
 "<abbr title=\"Host and network association, Associação de equipamentos e "
@@ -144,6 +164,12 @@ msgstr "Intervalo entre Saudações (Hello)"
 
 msgid "Hello validity time"
 msgstr "Validade da Saudação (Hello)"
+
+msgid "Hide IPv4"
+msgstr ""
+
+msgid "Hide IPv6"
+msgstr ""
 
 msgid "Hna4"
 msgstr "Hna4"
@@ -289,6 +315,14 @@ msgstr ""
 "Intervalo para consultar as interfaces de rede por mudanças nas "
 "configurações (em segundos). O padrão é \"2.5\"."
 
+msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
+msgstr ""
+
+msgid ""
+"Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
+"and 1.0 here."
+msgstr ""
+
 msgid "Known OLSR routes"
 msgstr "Rotas OLSR conhecidas"
 
@@ -307,6 +341,11 @@ msgstr "Fisheye <abbr title=\"Link Quality, Qualidade do Enlace\">LQ</abbr>"
 
 msgid "LQ level"
 msgstr "Nível <abbr title=\"Link Quality, Qualidade do Enlace\">LQ</abbr>"
+
+msgid ""
+"LQMult requires two values (IP address or 'default' and multiplicator) "
+"seperated by space."
+msgstr ""
 
 msgid "Last hop"
 msgstr "Último salto"
@@ -390,12 +429,9 @@ msgid "Main IP"
 msgstr "IP Principal"
 
 msgid ""
-"Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-"configured on port 2006 and accepts connections from \"127.0.0.1\"."
+"Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
+"configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
-"Certifique-se que o processo OLSRd está em execução, que o plugin \"txtinfo"
-"\" está carregado e configurado para a porta 2006 e que aceita conexões a "
-"partir de \"127.0.0.1\"."
 
 msgid "Metric"
 msgstr "Métrica"
@@ -405,16 +441,10 @@ msgstr "Modo"
 
 msgid ""
 "Multiply routes with the factor given here. Allowed values are between 0.01 "
-"and 1. It is only used when LQ-Level is greater than 0. Examples:<br /"
+"and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
-"Multiplica rotas com o fator informado. Os valores válidos são entre 0.01 e "
-"1. Somente é usado quando o nível <abbr title=\"Link Quality, Qualidade do "
-"Enlace\">LQ</abbr> é maior que 0. Exemplos:<br />reduzir o <abbr title="
-"\"Link Quality, Qualidade do Enlace\">LQ</abbr> para 192.168.0.1 pela "
-"metade: 192.168.0.1 0.5<br />reduzir o <abbr title=\"Link Quality, Qualidade "
-"do Enlace\">LQ</abbr> de todos os nós desta interface para 20%: Padrão 0.8"
 
 msgid "NAT threshold"
 msgstr "Limiar do NAT"
@@ -477,6 +507,9 @@ msgstr "Roteador OLSR"
 msgid "OLSR node"
 msgstr "Nó OLSR"
 
+msgid "Orange"
+msgstr ""
+
 msgid "Overview"
 msgstr "Visão Geral"
 
@@ -520,6 +553,9 @@ msgstr "Porta"
 msgid "Prefix"
 msgstr "Prefixo"
 
+msgid "Red"
+msgstr ""
+
 msgid "Resolve"
 msgstr "Resolver"
 
@@ -547,6 +583,15 @@ msgstr ""
 "Define o IP principal (ip originador) do seu roteador. Este IP nunca muda "
 "durante o funcionamento do olsrd. O padrão é 0.0.0.0, que faz com que o "
 "endereço da primeira interface seja usado."
+
+msgid "Show IPv4"
+msgstr ""
+
+msgid "Show IPv6"
+msgstr ""
+
+msgid "Signal Noise Ratio in dB"
+msgstr ""
 
 msgid "SmartGW"
 msgstr "SmartGW"
@@ -576,6 +621,12 @@ msgstr "Estado"
 
 msgid "Status"
 msgstr "Estado"
+
+msgid "Still usable (20 > SNR > 5)"
+msgstr ""
+
+msgid "Still usable (4 < ETX < 10)"
+msgstr ""
 
 msgid "Success rate of packages received from the neighbour"
 msgstr "Taxa de sucesso de pacotes recebidos de vizinhos"
@@ -647,8 +698,8 @@ msgid "Topology"
 msgstr "Topologia"
 
 msgid ""
-"Type of service value for the IP header of control traffic. Default is \"16"
-"\"."
+"Type of service value for the IP header of control traffic. Default is "
+"\"16\"."
 msgstr ""
 "Valor do tipo de serviço para o cabeçalho IP para controle de tráfego. O "
 "padrao é \"16\"."
@@ -665,8 +716,17 @@ msgstr "Enlace superior (uplink) usa NAT"
 msgid "Use hysteresis"
 msgstr "Usar retardo"
 
+msgid "Validity Time"
+msgstr ""
+
 msgid "Version"
 msgstr "Versão"
+
+msgid "Very good (ETX < 2)"
+msgstr ""
+
+msgid "Very good (SNR > 30)"
+msgstr ""
 
 msgid "WLAN"
 msgstr "Rede sem fio (WLAN)"
@@ -711,3 +771,37 @@ msgstr ""
 
 msgid "Willingness"
 msgstr "Disponibilidade"
+
+msgid "Yellow"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+#~ msgid "Device"
+#~ msgstr "Dispositivo"
+
+#~ msgid ""
+#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
+#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
+#~ msgstr ""
+#~ "Certifique-se que o processo OLSRd está em execução, que o plugin "
+#~ "\"txtinfo\" está carregado e configurado para a porta 2006 e que aceita "
+#~ "conexões a partir de \"127.0.0.1\"."
+
+#~ msgid ""
+#~ "Multiply routes with the factor given here. Allowed values are between "
+#~ "0.01 and 1. It is only used when LQ-Level is greater than 0. Examples:"
+#~ "<br />reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to "
+#~ "all nodes on this interface by 20%: default 0.8"
+#~ msgstr ""
+#~ "Multiplica rotas com o fator informado. Os valores válidos são entre 0.01 "
+#~ "e 1. Somente é usado quando o nível <abbr title=\"Link Quality, Qualidade "
+#~ "do Enlace\">LQ</abbr> é maior que 0. Exemplos:<br />reduzir o <abbr title="
+#~ "\"Link Quality, Qualidade do Enlace\">LQ</abbr> para 192.168.0.1 pela "
+#~ "metade: 192.168.0.1 0.5<br />reduzir o <abbr title=\"Link Quality, "
+#~ "Qualidade do Enlace\">LQ</abbr> de todos os nós desta interface para 20%: "
+#~ "Padrão 0.8"

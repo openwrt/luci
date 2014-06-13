@@ -37,17 +37,28 @@ msgstr "通知するアップリンク"
 msgid "Announced network"
 msgstr "通知ネットワーク"
 
+msgid "Bad (ETX > 10)"
+msgstr ""
+
+msgid "Bad (SNR < 5)"
+msgstr ""
+
 msgid "Both values must use the dotted decimal notation."
 msgstr "どちらの値もドット付き十進数の形式で入力してください。"
 
 msgid "Broadcast address"
 msgstr "ブロードキャストアドレス"
 
+msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "設定"
 
-msgid "Device"
-msgstr "デバイス"
+msgid ""
+"Could not get any data. Make sure the jsoninfo plugin is installed and "
+"allows connections from localhost."
+msgstr ""
 
 msgid "Display"
 msgstr "ディスプレイ"
@@ -110,6 +121,15 @@ msgstr "一般設定"
 msgid "General settings"
 msgstr "一般設定"
 
+msgid "Good (2 < ETX < 4)"
+msgstr ""
+
+msgid "Good (30 > SNR > 20)"
+msgstr ""
+
+msgid "Green"
+msgstr ""
+
 msgid "HNA"
 msgstr "HNA"
 
@@ -130,6 +150,12 @@ msgstr "Hello 送信間隔"
 
 msgid "Hello validity time"
 msgstr "Hello 有効時間"
+
+msgid "Hide IPv4"
+msgstr ""
+
+msgid "Hide IPv6"
+msgstr ""
 
 msgid "Hna4"
 msgstr "Hna4"
@@ -273,6 +299,14 @@ msgstr ""
 "ネットワーク・インターフェースの設定が変更されたかをチェックするポーリング間"
 "隔を秒単位で設定します。標準設定は\"2.5\"です。"
 
+msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
+msgstr ""
+
+msgid ""
+"Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
+"and 1.0 here."
+msgstr ""
+
 msgid "Known OLSR routes"
 msgstr "OLSR ルーティング"
 
@@ -290,6 +324,11 @@ msgstr "LQ fisheye"
 
 msgid "LQ level"
 msgstr "LQ レベル"
+
+msgid ""
+"LQMult requires two values (IP address or 'default' and multiplicator) "
+"seperated by space."
+msgstr ""
 
 msgid "Last hop"
 msgstr "最終ホップ"
@@ -366,12 +405,9 @@ msgid "Main IP"
 msgstr "メインIP"
 
 msgid ""
-"Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-"configured on port 2006 and accepts connections from \"127.0.0.1\"."
+"Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
+"configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
-"OLSRdが稼働中であること、\"txinfo\"プラグインがロードされていること、ポート"
-"2006番が設定されていること、\"127.0.0.1\"からの接続が許可されていることを確認"
-"してください。"
 
 msgid "Metric"
 msgstr "メトリック"
@@ -381,14 +417,10 @@ msgstr "モード"
 
 msgid ""
 "Multiply routes with the factor given here. Allowed values are between 0.01 "
-"and 1. It is only used when LQ-Level is greater than 0. Examples:<br /"
+"and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
-"経路のLQと設定値の乗算を行います。設定可能な値は0.01-1です。この設定はLQ レベ"
-"ルが0以上の場合のみ設定可能です。<br />例:192.168.0.1へのLQを半分にする場合: "
-"192.168.0.1 0.5<br />このインターフェースから全てのノードへ対して20%減らす場"
-"合: default 0.8"
 
 msgid "NAT threshold"
 msgstr "NAT しきい値"
@@ -447,6 +479,9 @@ msgstr "OLSR ゲートウェイ"
 msgid "OLSR node"
 msgstr "OLSR ノード"
 
+msgid "Orange"
+msgstr ""
+
 msgid "Overview"
 msgstr "概要"
 
@@ -489,6 +524,9 @@ msgstr "ポート"
 msgid "Prefix"
 msgstr "プレフィックス"
 
+msgid "Red"
+msgstr ""
+
 msgid "Resolve"
 msgstr "名前解決"
 
@@ -517,6 +555,15 @@ msgstr ""
 "して変更しません。標準設定は0.0.0.0であり、プライマリ・インターフェースのIPを"
 "自動的に使用します。"
 
+msgid "Show IPv4"
+msgstr ""
+
+msgid "Show IPv6"
+msgstr ""
+
+msgid "Signal Noise Ratio in dB"
+msgstr ""
+
 msgid "SmartGW"
 msgstr "SmartGW"
 
@@ -544,6 +591,12 @@ msgstr "状態"
 
 msgid "Status"
 msgstr "ステータス"
+
+msgid "Still usable (20 > SNR > 5)"
+msgstr ""
+
+msgid "Still usable (4 < ETX < 10)"
+msgstr ""
 
 msgid "Success rate of packages received from the neighbour"
 msgstr "隣接ノードから受信したパケットの受信成功率"
@@ -607,8 +660,8 @@ msgid "Topology"
 msgstr "トポロジー"
 
 msgid ""
-"Type of service value for the IP header of control traffic. Default is \"16"
-"\"."
+"Type of service value for the IP header of control traffic. Default is "
+"\"16\"."
 msgstr ""
 "OLSRコントロールパケットにおける、IPヘッダのTOS (Type Of Service) 値を設定し"
 "ます。標準設定は\"16\"です。"
@@ -625,8 +678,17 @@ msgstr "NATを使用して上位ネットワークに接続する"
 msgid "Use hysteresis"
 msgstr "ヒステリシスを使用する"
 
+msgid "Validity Time"
+msgstr ""
+
 msgid "Version"
 msgstr "バージョン"
+
+msgid "Very good (ETX < 2)"
+msgstr ""
+
+msgid "Very good (SNR > 30)"
+msgstr ""
 
 msgid "WLAN"
 msgstr "WLAN"
@@ -668,3 +730,34 @@ msgstr ""
 
 msgid "Willingness"
 msgstr "Willingness"
+
+msgid "Yellow"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+#~ msgid "Device"
+#~ msgstr "デバイス"
+
+#~ msgid ""
+#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
+#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
+#~ msgstr ""
+#~ "OLSRdが稼働中であること、\"txinfo\"プラグインがロードされていること、ポー"
+#~ "ト2006番が設定されていること、\"127.0.0.1\"からの接続が許可されていること"
+#~ "を確認してください。"
+
+#~ msgid ""
+#~ "Multiply routes with the factor given here. Allowed values are between "
+#~ "0.01 and 1. It is only used when LQ-Level is greater than 0. Examples:"
+#~ "<br />reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to "
+#~ "all nodes on this interface by 20%: default 0.8"
+#~ msgstr ""
+#~ "経路のLQと設定値の乗算を行います。設定可能な値は0.01-1です。この設定はLQ "
+#~ "レベルが0以上の場合のみ設定可能です。<br />例:192.168.0.1へのLQを半分にす"
+#~ "る場合: 192.168.0.1 0.5<br />このインターフェースから全てのノードへ対して"
+#~ "20%減らす場合: default 0.8"

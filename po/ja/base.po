@@ -40,12 +40,6 @@ msgstr "過去1分の負荷:"
 msgid "15 Minute Load:"
 msgstr "過去15分の負荷:"
 
-msgid "40MHz 2nd channel above"
-msgstr "40MHz 上側第2チャネル"
-
-msgid "40MHz 2nd channel below"
-msgstr "40MHz 下側第2チャネル"
-
 msgid "5 Minute Load:"
 msgstr "過去5分の負荷:"
 
@@ -87,6 +81,9 @@ msgstr ""
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"
 msgstr "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-ゲートウェイ"
 
+msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"
+msgstr ""
+
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
 msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> 設定"
 
@@ -116,6 +113,12 @@ msgstr "<abbr title=\"maximal\">最大</abbr> 並列処理クエリ"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr ""
 
+msgid "ADSL"
+msgstr ""
+
+msgid "ADSL Status"
+msgstr ""
+
 msgid "APN"
 msgstr "APN"
 
@@ -142,9 +145,6 @@ msgstr ""
 
 msgid "ATM device number"
 msgstr "ATMデバイス番号"
-
-msgid "Accept router advertisements"
-msgstr "ルーター広告の受信を許可する"
 
 msgid "Access Concentrator"
 msgstr "Access Concentrator"
@@ -181,6 +181,9 @@ msgstr "アクティブなDHCPv6リース"
 msgid "Ad-Hoc"
 msgstr "アドホック"
 
+msgid "Ad-hoc mode"
+msgstr ""
+
 msgid "Add"
 msgstr "追加"
 
@@ -204,12 +207,6 @@ msgstr "管理画面"
 
 msgid "Advanced Settings"
 msgstr "詳細設定"
-
-msgid "Advertise IPv6 on network"
-msgstr "ネットワーク上のにIPv6 アドレスを広告する"
-
-msgid "Advertised network ID"
-msgstr "ネットワークIDを広告する"
 
 msgid "Alert"
 msgstr "警告"
@@ -240,16 +237,27 @@ msgid ""
 "Allow upstream responses in the 127.0.0.0/8 range, e.g. for RBL services"
 msgstr ""
 
-msgid "Allowed range is 1 to 65535"
-msgstr "設定可能な範囲は1から65535です"
+msgid "Always announce default router"
+msgstr ""
 
 msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
 "option does not comply with IEEE 802.11n-2009!"
-msgstr "第2チャネルが重複しても、常に40MHz帯域幅を使用します。ただし本オプションはIEEE 802.11n-2009を満たしていません!"
+msgstr ""
+"第2チャネルが重複しても、常に40MHz帯域幅を使用します。ただし本オプションは"
+"IEEE 802.11n-2009を満たしていません!"
 
 msgid "An additional network will be created if you leave this unchecked."
 msgstr "チェックボックスがオフの場合、追加のネットワークが作成されます。"
+
+msgid "Announce as default router even if no public prefix is available."
+msgstr ""
+
+msgid "Announced DNS domains"
+msgstr ""
+
+msgid "Announced DNS servers"
+msgstr ""
 
 msgid "Antenna 1"
 msgstr "アンテナ 1"
@@ -269,7 +277,15 @@ msgstr "適用"
 msgid "Applying changes"
 msgstr "変更を適用"
 
+msgid ""
+"Assign a part of given length of every public IPv6-prefix to this interface"
+msgstr ""
+
 msgid "Assign interfaces..."
+msgstr ""
+
+msgid ""
+"Assign prefix parts using this hexadecimal subprefix ID for this interface."
 msgstr ""
 
 msgid "Associated Stations"
@@ -289,6 +305,9 @@ msgstr "ログイン認証"
 
 msgid "Auto Refresh"
 msgstr "自動更新"
+
+msgid "Automatic Homenet (HNCP)"
+msgstr ""
 
 msgid "Available"
 msgstr "使用可"
@@ -331,6 +350,9 @@ msgstr "バックアップ・ファイルリスト"
 
 msgid "Bad address specified!"
 msgstr "無効なアドレスです!"
+
+msgid "Band"
+msgstr ""
 
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
@@ -520,6 +542,9 @@ msgstr "Cronのログ出力レベル"
 msgid "Custom Interface"
 msgstr "新しいインターフェース"
 
+msgid "Custom delegated IPv6-prefix"
+msgstr ""
+
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
@@ -545,11 +570,26 @@ msgstr "DHCPオプション"
 msgid "DHCPv6 Leases"
 msgstr "DHCPv6 リース"
 
+msgid "DHCPv6 client"
+msgstr ""
+
+msgid "DHCPv6-Mode"
+msgstr ""
+
+msgid "DHCPv6-Service"
+msgstr ""
+
 msgid "DNS"
 msgstr "DNS"
 
 msgid "DNS forwardings"
 msgstr "DNSフォワーディング"
+
+msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DS-Lite AFTR address"
+msgstr ""
 
 msgid "DUID"
 msgstr "DUID"
@@ -694,6 +734,9 @@ msgstr ""
 "Dropbear は <abbr title=\"Secure Shell\">SSH</abbr> ネットワークへのシェルア"
 "クセスと統合された <abbr title=\"Secure Copy\">SCP</abbr> サーバーを提供しま"
 "す。"
+
+msgid "Dual-Stack Lite (RFC6333)"
+msgstr ""
 
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
@@ -875,7 +918,8 @@ msgid "Force CCMP (AES)"
 msgstr "CCMP (AES) を使用"
 
 msgid "Force DHCP on this network even if another server is detected."
-msgstr "別のDHCPサーバーが検出された場合でも、DHCPサーバー機能を強制的に起動します。"
+msgstr ""
+"別のDHCPサーバーが検出された場合でも、DHCPサーバー機能を強制的に起動します。"
 
 msgid "Force TKIP"
 msgstr "TKIP を使用"
@@ -934,11 +978,17 @@ msgstr "802.11%s 無線LANコントローラ"
 msgid "Given password confirmation did not match, password not changed!"
 msgstr "入力されたパスワードが一致しません。パスワードは変更されませんでした!"
 
+msgid "Global network options"
+msgstr ""
+
 msgid "Go to password configuration..."
 msgstr "パスワード設定へ移動..."
 
 msgid "Go to relevant configuration page"
 msgstr "関連する設定ページへ移動"
+
+msgid "Guest mode"
+msgstr ""
 
 msgid "HE.net password"
 msgstr "HE.net パスワード"
@@ -946,11 +996,8 @@ msgstr "HE.net パスワード"
 msgid "HE.net user ID"
 msgstr "HE.net ユーザーID"
 
-msgid "HT capabilities"
-msgstr "HT機能"
-
-msgid "HT mode"
-msgstr "HTモード"
+msgid "HT mode (802.11n)"
+msgstr ""
 
 msgid "Handler"
 msgstr "ハンドラ"
@@ -1012,6 +1059,9 @@ msgstr "IPv4 アドレス"
 msgid "IPv4 and IPv6"
 msgstr "IPv4及びIPv6"
 
+msgid "IPv4 assignment length"
+msgstr ""
+
 msgid "IPv4 broadcast"
 msgstr "IPv4 ブロードキャスト"
 
@@ -1036,11 +1086,23 @@ msgstr "IPv6"
 msgid "IPv6 Firewall"
 msgstr "IPv6 ファイアウォール"
 
+msgid "IPv6 Settings"
+msgstr ""
+
+msgid "IPv6 ULA-Prefix"
+msgstr ""
+
 msgid "IPv6 WAN Status"
 msgstr "IPv6 WAN ステータス"
 
 msgid "IPv6 address"
 msgstr "IPv6 アドレス"
+
+msgid "IPv6 assignment hint"
+msgstr ""
+
+msgid "IPv6 assignment length"
+msgstr ""
 
 msgid "IPv6 gateway"
 msgstr "IPv6 ゲートウェイ"
@@ -1053,6 +1115,9 @@ msgstr "IPv6 プレフィクス"
 
 msgid "IPv6 prefix length"
 msgstr "IPv6 プレフィクス長"
+
+msgid "IPv6 routed prefix"
+msgstr ""
 
 msgid "IPv6-Address"
 msgstr "IPv6-アドレス"
@@ -1131,6 +1196,9 @@ msgstr "起動スクリプト"
 
 msgid "Install"
 msgstr "インストール"
+
+msgid "Install iputils-traceroute6 for IPv6 traceroute"
+msgstr ""
 
 msgid "Install package %q"
 msgstr "%q パッケージをインストールします"
@@ -1267,6 +1335,15 @@ msgstr "凡例:"
 
 msgid "Limit"
 msgstr "割り当て数"
+
+msgid "Line Attenuation"
+msgstr ""
+
+msgid "Line Speed"
+msgstr ""
+
+msgid "Line State"
+msgstr ""
 
 msgid "Link On"
 msgstr "リンクオン"
@@ -1423,6 +1500,9 @@ msgstr "プロトコル %qのプロトコル拡張が見つかりません"
 msgid "Mode"
 msgstr "モード"
 
+msgid "Model"
+msgstr ""
+
 msgid "Modem device"
 msgstr "モデムデバイス"
 
@@ -1477,6 +1557,9 @@ msgstr "マルチキャストアドレス"
 
 msgid "NAS ID"
 msgstr "NAS ID"
+
+msgid "NDP-Proxy"
+msgstr ""
 
 msgid "NTP server candidates"
 msgstr "NTPサーバー候補"
@@ -1546,6 +1629,9 @@ msgstr "ゾーンが設定されていません"
 
 msgid "Noise"
 msgstr "ノイズ"
+
+msgid "Noise Margin"
+msgstr ""
 
 msgid "Noise:"
 msgstr "ノイズ:"
@@ -1810,6 +1896,9 @@ msgstr "新しいネットワークを設定する"
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "擬似アドホック (ahdemo)"
 
+msgid "Public prefix routed to this device for distribution to clients."
+msgstr ""
+
 msgid "Quality"
 msgstr "クオリティ"
 
@@ -1962,6 +2051,12 @@ msgstr "エントリーの置換"
 msgid "Replace wireless configuration"
 msgstr "無線設定を置換する"
 
+msgid "Request IPv6-address"
+msgstr ""
+
+msgid "Request IPv6-prefix of length"
+msgstr ""
+
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "DOCSIS 3.0を使用するいくつかのISPでは必要になります"
 
@@ -2001,11 +2096,8 @@ msgstr "ルート"
 msgid "Root directory for files served via TFTP"
 msgstr "TFTP経由でファイルを取り扱う際のルートディレクトリ"
 
-msgid "Router Model"
-msgstr "ルーターモデル"
-
-msgid "Router Name"
-msgstr "ルーター名"
+msgid "Router Advertisement-Service"
+msgstr ""
 
 msgid "Router Password"
 msgstr "ルーター・パスワード"
@@ -2068,9 +2160,6 @@ msgid ""
 msgstr ""
 "設定された秒間隔でLCP echoリクエストを送信します。失敗数しきい値を設定した場"
 "合のみ、機能が有効になります。"
-
-msgid "Send router solicitations"
-msgstr "ルータ要請を送信する"
 
 msgid "Separate Clients"
 msgstr "クライアントの分離"
@@ -2153,12 +2242,6 @@ msgstr "ソート"
 msgid "Source"
 msgstr "送信元"
 
-msgid "Specifies the advertised preferred prefix lifetime in seconds"
-msgstr "通知する推奨有効時間を設定してください。(秒単位)"
-
-msgid "Specifies the advertised valid prefix lifetime in seconds"
-msgstr "通知する最終有効時間を設定してください。(秒単位)"
-
 msgid "Specifies the button state to handle"
 msgstr ""
 
@@ -2228,6 +2311,9 @@ msgstr "問い合わせの制限"
 
 msgid "Submit"
 msgstr "送信"
+
+msgid "Swap"
+msgstr ""
 
 msgid "Swap Entry"
 msgstr "スワップ機能"
@@ -2357,7 +2443,9 @@ msgstr "設定されたネットワーク名はユニークなものではあり
 msgid ""
 "The hardware is not multi-SSID capable and existing configuration will be "
 "replaced if you proceed."
-msgstr "このハードウェアではマルチESSIDを設定することができないため、続行した場合、設定は既存の設定と置き換えられます。"
+msgstr ""
+"このハードウェアではマルチESSIDを設定することができないため、続行した場合、設"
+"定は既存の設定と置き換えられます。"
 
 msgid ""
 "The length of the IPv4 prefix in bits, the remainder is used in the IPv6 "
@@ -2467,6 +2555,10 @@ msgstr ""
 "ローカルネットワーク内のみの <abbr title=\"Dynamic Host Configuration "
 "Protocol\">DHCP</abbr>として使用する"
 
+msgid ""
+"This is the prefix routed to you by the tunnel broker for use by clients"
+msgstr ""
+
 msgid "This is the system crontab in which scheduled tasks can be defined."
 msgstr ""
 "スケジュールタスクシステムを使用することで、定期的に特定のタスクの実行を行う"
@@ -2544,6 +2636,9 @@ msgstr "トンネル ID"
 msgid "Tunnel Interface"
 msgstr "トンネルインターフェース"
 
+msgid "Tunnel Link"
+msgstr ""
+
 msgid "Turbo Mode"
 msgstr "ターボモード"
 
@@ -2594,8 +2689,10 @@ msgid ""
 "Check \"Keep settings\" to retain the current configuration (requires an "
 "OpenWrt compatible firmware image)."
 msgstr ""
-"システムをアップデートする場合、sysupgrade機能に互換性のあるファームウェアイメージをアップロードしてください。\"設定の保持\"を有効にすると、現"
-"在の設定を維持してアップデートを行います。ただし、OpenWrt互換のファームウェアイメージがアップロードされた場合のみ、設定は保持されます。"
+"システムをアップデートする場合、sysupgrade機能に互換性のあるファームウェアイ"
+"メージをアップロードしてください。\"設定の保持\"を有効にすると、現在の設定を"
+"維持してアップデートを行います。ただし、OpenWrt互換のファームウェアイメージが"
+"アップロードされた場合のみ、設定は保持されます。"
 
 msgid "Upload archive..."
 msgstr "アーカイブをアップロード"
@@ -2630,6 +2727,9 @@ msgstr "ルート・ファイルシステムとして使用する"
 msgid "Use broadcast flag"
 msgstr "ブロードキャスト・フラグを使用する"
 
+msgid "Use builtin IPv6-management"
+msgstr ""
+
 msgid "Use custom DNS servers"
 msgstr "DNSサーバーを手動で設定"
 
@@ -2638,9 +2738,6 @@ msgstr "デフォルトゲートウェイを使用する"
 
 msgid "Use gateway metric"
 msgstr "ゲートウェイ・メトリックを使用する"
-
-msgid "Use preferred lifetime"
-msgstr "推奨有効時間"
 
 msgid "Use routing table"
 msgstr ""
@@ -2655,9 +2752,6 @@ msgstr ""
 "ドレス</em> はそのホストを識別し, <em>IPv4-アドレス</em> には払いだす固定のア"
 "ドレスを設定します。また、<em>ホスト名</em> はそのホストに対して一時的なホス"
 "ト名をアサインします。"
-
-msgid "Use valid lifetime"
-msgstr "最終有効時間"
 
 msgid "Used"
 msgstr "使用"
@@ -2792,6 +2886,10 @@ msgstr "全て"
 msgid "auto"
 msgstr "自動"
 
+#, fuzzy
+msgid "automatic"
+msgstr "static"
+
 msgid "baseT"
 msgstr "baseT"
 
@@ -2812,6 +2910,9 @@ msgstr "dBm"
 
 msgid "disable"
 msgstr "無効"
+
+msgid "disabled"
+msgstr ""
 
 msgid "expired"
 msgstr "期限切れ"
@@ -2836,6 +2937,9 @@ msgid "help"
 msgstr "ヘルプ"
 
 msgid "hidden"
+msgstr ""
+
+msgid "hybrid mode"
 msgstr ""
 
 msgid "if target is a network"
@@ -2874,8 +2978,23 @@ msgstr "オン"
 msgid "open"
 msgstr ""
 
+msgid "relay mode"
+msgstr ""
+
 msgid "routed"
 msgstr "routed"
+
+msgid "server mode"
+msgstr ""
+
+msgid "stateful-only"
+msgstr ""
+
+msgid "stateless"
+msgstr ""
+
+msgid "stateless + stateful"
+msgstr ""
 
 msgid "tagged"
 msgstr "tagged"
@@ -2900,6 +3019,51 @@ msgstr "はい"
 
 msgid "« Back"
 msgstr "« 戻る"
+
+#~ msgid "40MHz 2nd channel above"
+#~ msgstr "40MHz 上側第2チャネル"
+
+#~ msgid "40MHz 2nd channel below"
+#~ msgstr "40MHz 下側第2チャネル"
+
+#~ msgid "Accept router advertisements"
+#~ msgstr "ルーター広告の受信を許可する"
+
+#~ msgid "Advertise IPv6 on network"
+#~ msgstr "ネットワーク上のにIPv6 アドレスを広告する"
+
+#~ msgid "Advertised network ID"
+#~ msgstr "ネットワークIDを広告する"
+
+#~ msgid "Allowed range is 1 to 65535"
+#~ msgstr "設定可能な範囲は1から65535です"
+
+#~ msgid "HT capabilities"
+#~ msgstr "HT機能"
+
+#~ msgid "HT mode"
+#~ msgstr "HTモード"
+
+#~ msgid "Router Model"
+#~ msgstr "ルーターモデル"
+
+#~ msgid "Router Name"
+#~ msgstr "ルーター名"
+
+#~ msgid "Send router solicitations"
+#~ msgstr "ルータ要請を送信する"
+
+#~ msgid "Specifies the advertised preferred prefix lifetime in seconds"
+#~ msgstr "通知する推奨有効時間を設定してください。(秒単位)"
+
+#~ msgid "Specifies the advertised valid prefix lifetime in seconds"
+#~ msgstr "通知する最終有効時間を設定してください。(秒単位)"
+
+#~ msgid "Use preferred lifetime"
+#~ msgstr "推奨有効時間"
+
+#~ msgid "Use valid lifetime"
+#~ msgstr "最終有効時間"
 
 #~ msgid "Waiting for router..."
 #~ msgstr "ルーターに接続中..."
@@ -3783,10 +3947,6 @@ msgstr "« 戻る"
 
 #~ msgid "adds domain names to hostentries in the resolv file"
 #~ msgstr "リゾルバファイルのホストエントリにドメイン名を追加します"
-
-#, fuzzy
-#~ msgid "automatic"
-#~ msgstr "static"
 
 #~ msgid "automatically reconnect"
 #~ msgstr "自動再接続"

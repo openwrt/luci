@@ -39,6 +39,12 @@ msgstr "Объявлять восходящий канал"
 msgid "Announced network"
 msgstr "Объявленная сеть"
 
+msgid "Bad (ETX > 10)"
+msgstr ""
+
+msgid "Bad (SNR < 5)"
+msgstr ""
+
 msgid "Both values must use the dotted decimal notation."
 msgstr ""
 "Оба значения должны быть в десятичном представлении с разделительными "
@@ -47,11 +53,16 @@ msgstr ""
 msgid "Broadcast address"
 msgstr "Широковещательный адрес"
 
+msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid "Device"
-msgstr "Устройство"
+msgid ""
+"Could not get any data. Make sure the jsoninfo plugin is installed and "
+"allows connections from localhost."
+msgstr ""
 
 msgid "Display"
 msgstr "Показать"
@@ -115,6 +126,15 @@ msgstr "Общие настройки"
 msgid "General settings"
 msgstr "Общие настройки"
 
+msgid "Good (2 < ETX < 4)"
+msgstr ""
+
+msgid "Good (30 > SNR > 20)"
+msgstr ""
+
+msgid "Green"
+msgstr ""
+
 msgid "HNA"
 msgstr "HNA"
 
@@ -135,6 +155,12 @@ msgstr "Интервал приветственных сообщений"
 
 msgid "Hello validity time"
 msgstr "Время действия приветственного сообщения"
+
+msgid "Hide IPv4"
+msgstr ""
+
+msgid "Hide IPv6"
+msgstr ""
 
 msgid "Hna4"
 msgstr "Hna4"
@@ -278,6 +304,14 @@ msgstr ""
 "Интервал опроса сетвых интерфейсов на наличие изменений в конфигурации "
 "(сек.). По умолчанию, \"2.5\"."
 
+msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
+msgstr ""
+
+msgid ""
+"Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
+"and 1.0 here."
+msgstr ""
+
 msgid "Known OLSR routes"
 msgstr "Известные OLSR-маршруты"
 
@@ -296,6 +330,11 @@ msgstr "Рыбий глаз LQ"
 
 msgid "LQ level"
 msgstr "Уровень LQ"
+
+msgid ""
+"LQMult requires two values (IP address or 'default' and multiplicator) "
+"seperated by space."
+msgstr ""
 
 msgid "Last hop"
 msgstr "Последний прыжок"
@@ -370,11 +409,9 @@ msgid "Main IP"
 msgstr "Основной IP-адрес"
 
 msgid ""
-"Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-"configured on port 2006 and accepts connections from \"127.0.0.1\"."
+"Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
+"configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
-"Удостоверьтесь, что OLSRd работает, модуль \"txtinfo\" загружен, настроен на "
-"порт 2006 и принимает соединения от \"127.0.0.1\"."
 
 msgid "Metric"
 msgstr "Метрика"
@@ -384,14 +421,10 @@ msgstr "Режим"
 
 msgid ""
 "Multiply routes with the factor given here. Allowed values are between 0.01 "
-"and 1. It is only used when LQ-Level is greater than 0. Examples:<br /"
+"and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
-"Умножить маршруты на указанный коэффициент в пределах от 0.01 до 1. Данный "
-"коэффициент используется только в случае, если LQ уровень > 0. Примеры:<br /"
-">уменьшить LQ для 192.168.0.1 на половину: 192.168.0.1 0.5<br />уменьшить LQ "
-"для всех узлов на данном интерфейсе на 20%: default 0.8"
 
 msgid "NAT threshold"
 msgstr "Порог NAT"
@@ -450,6 +483,9 @@ msgstr "OLSR-шлюз"
 msgid "OLSR node"
 msgstr "OLSR-узел"
 
+msgid "Orange"
+msgstr ""
+
 msgid "Overview"
 msgstr "Обзор"
 
@@ -494,6 +530,9 @@ msgstr "Порт"
 msgid "Prefix"
 msgstr "Префикс"
 
+msgid "Red"
+msgstr ""
+
 msgid "Resolve"
 msgstr "Разрешать имена"
 
@@ -520,6 +559,15 @@ msgstr ""
 "Устанавливает основной IP-адрес маршрутизатора. Данный адрес НИКОГДА не "
 "будет изменяться во время работы olsrd. По умолчанию 0.0.0.0 (используется "
 "IP-адрес первого сетевого интерфейса)."
+
+msgid "Show IPv4"
+msgstr ""
+
+msgid "Show IPv6"
+msgstr ""
+
+msgid "Signal Noise Ratio in dB"
+msgstr ""
 
 msgid "SmartGW"
 msgstr "SmartGW"
@@ -549,6 +597,12 @@ msgstr "Состояние"
 
 msgid "Status"
 msgstr "Статус"
+
+msgid "Still usable (20 > SNR > 5)"
+msgstr ""
+
+msgid "Still usable (4 < ETX < 10)"
+msgstr ""
 
 msgid "Success rate of packages received from the neighbour"
 msgstr "Достигнутая скорость приема посылок от соседних узлов"
@@ -616,8 +670,8 @@ msgid "Topology"
 msgstr "Топология"
 
 msgid ""
-"Type of service value for the IP header of control traffic. Default is \"16"
-"\"."
+"Type of service value for the IP header of control traffic. Default is "
+"\"16\"."
 msgstr ""
 "Значение поля ToS IP -аголовка управляющего трафика. По умолчанию \"16\"."
 
@@ -633,8 +687,17 @@ msgstr "Восходящий канал использует NAT"
 msgid "Use hysteresis"
 msgstr "Использовать гистерезис"
 
+msgid "Validity Time"
+msgstr ""
+
 msgid "Version"
 msgstr "Версия"
+
+msgid "Very good (ETX < 2)"
+msgstr ""
+
+msgid "Very good (SNR > 30)"
+msgstr ""
 
 msgid "WLAN"
 msgstr "WLAN"
@@ -677,3 +740,34 @@ msgstr ""
 
 msgid "Willingness"
 msgstr "Готовность"
+
+msgid "Yellow"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+#~ msgid "Device"
+#~ msgstr "Устройство"
+
+#~ msgid ""
+#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
+#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
+#~ msgstr ""
+#~ "Удостоверьтесь, что OLSRd работает, модуль \"txtinfo\" загружен, настроен "
+#~ "на порт 2006 и принимает соединения от \"127.0.0.1\"."
+
+#~ msgid ""
+#~ "Multiply routes with the factor given here. Allowed values are between "
+#~ "0.01 and 1. It is only used when LQ-Level is greater than 0. Examples:"
+#~ "<br />reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to "
+#~ "all nodes on this interface by 20%: default 0.8"
+#~ msgstr ""
+#~ "Умножить маршруты на указанный коэффициент в пределах от 0.01 до 1. "
+#~ "Данный коэффициент используется только в случае, если LQ уровень > 0. "
+#~ "Примеры:<br />уменьшить LQ для 192.168.0.1 на половину: 192.168.0.1 "
+#~ "0.5<br />уменьшить LQ для всех узлов на данном интерфейсе на 20%: default "
+#~ "0.8"

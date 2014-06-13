@@ -37,6 +37,12 @@ msgstr "Uplink ankündigen"
 msgid "Announced network"
 msgstr "Angekündigtes Netzwerk"
 
+msgid "Bad (ETX > 10)"
+msgstr ""
+
+msgid "Bad (SNR < 5)"
+msgstr ""
+
 msgid "Both values must use the dotted decimal notation."
 msgstr ""
 "Beide Werte müssen in der 'dotted decimal' Schreibweise angegeben werden."
@@ -44,11 +50,16 @@ msgstr ""
 msgid "Broadcast address"
 msgstr "Broadcast-Adresse"
 
+msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
-msgid "Device"
-msgstr "Schnittstelle"
+msgid ""
+"Could not get any data. Make sure the jsoninfo plugin is installed and "
+"allows connections from localhost."
+msgstr ""
 
 msgid "Display"
 msgstr "Anzeige"
@@ -113,6 +124,15 @@ msgstr "Allgemeine Einstellungen"
 msgid "General settings"
 msgstr "Allgemeine Einstellungen"
 
+msgid "Good (2 < ETX < 4)"
+msgstr ""
+
+msgid "Good (30 > SNR > 20)"
+msgstr ""
+
+msgid "Green"
+msgstr ""
+
 msgid "HNA"
 msgstr "HNA"
 
@@ -133,6 +153,12 @@ msgstr "Hello-Intervall"
 
 msgid "Hello validity time"
 msgstr "Hello-Gültigkeit"
+
+msgid "Hide IPv4"
+msgstr ""
+
+msgid "Hide IPv6"
+msgstr ""
 
 msgid "Hna4"
 msgstr "Hna4"
@@ -195,8 +221,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
-"IPv4 Quell-IP für ausgehende OLSR-Nachrichten. Der Defaultwert ist \"0.0.0.0"
-"\", dann wird die IP des Interfaces verwendet."
+"IPv4 Quell-IP für ausgehende OLSR-Nachrichten. Der Defaultwert ist "
+"\"0.0.0.0\", dann wird die IP des Interfaces verwendet."
 
 msgid "IPv6"
 msgstr "IPv6"
@@ -280,6 +306,14 @@ msgstr ""
 "Intervall mit dem Netzwerkschnittstellen auf Änderungen in ihrer "
 "Konfiguration überprüft werden (in Sekunden). Der Defaultwert ist \"2.5\"."
 
+msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
+msgstr ""
+
+msgid ""
+"Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
+"and 1.0 here."
+msgstr ""
+
 msgid "Known OLSR routes"
 msgstr "Bekannte OLSR-Routen"
 
@@ -297,6 +331,11 @@ msgstr "LQ-Fisheye"
 
 msgid "LQ level"
 msgstr "LQ-Level"
+
+msgid ""
+"LQMult requires two values (IP address or 'default' and multiplicator) "
+"seperated by space."
+msgstr ""
 
 msgid "Last hop"
 msgstr "letzter Hop"
@@ -372,11 +411,9 @@ msgid "Main IP"
 msgstr "Haupt-IP"
 
 msgid ""
-"Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-"configured on port 2006 and accepts connections from \"127.0.0.1\"."
+"Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
+"configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
-"Stellen Sie sicher das OLSRd läuft und das \"txtinfo\" Plugin auf Port 2006 "
-"geladen und \"127.0.0.1\" als Accept-Host gesetzt ist."
 
 msgid "Metric"
 msgstr "Metrik"
@@ -386,14 +423,10 @@ msgstr "Modus"
 
 msgid ""
 "Multiply routes with the factor given here. Allowed values are between 0.01 "
-"and 1. It is only used when LQ-Level is greater than 0. Examples:<br /"
+"and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
-"Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
-"Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die LQ "
-"zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes die mit "
-"diesem Interface kommunizieren um 20%: default 0.8"
 
 msgid "NAT threshold"
 msgstr "NAT-Schwellenwert"
@@ -452,6 +485,9 @@ msgstr "OLSR-Gateway"
 msgid "OLSR node"
 msgstr "OLSR-Knoten"
 
+msgid "Orange"
+msgstr ""
+
 msgid "Overview"
 msgstr "Übersicht"
 
@@ -494,6 +530,9 @@ msgstr "Port"
 msgid "Prefix"
 msgstr "Prefix"
 
+msgid "Red"
+msgstr ""
+
 msgid "Resolve"
 msgstr "DNS auflösen"
 
@@ -521,6 +560,15 @@ msgstr ""
 "Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
 "NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
 "0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
+
+msgid "Show IPv4"
+msgstr ""
+
+msgid "Show IPv6"
+msgstr ""
+
+msgid "Signal Noise Ratio in dB"
+msgstr ""
 
 msgid "SmartGW"
 msgstr "Smart Gateway"
@@ -550,6 +598,12 @@ msgstr "Status"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Still usable (20 > SNR > 5)"
+msgstr ""
+
+msgid "Still usable (4 < ETX < 10)"
+msgstr ""
 
 msgid "Success rate of packages received from the neighbour"
 msgstr "Erfolgsquote vom Nachbarn empfangener Pakete"
@@ -616,8 +670,8 @@ msgid "Topology"
 msgstr "Topologie"
 
 msgid ""
-"Type of service value for the IP header of control traffic. Default is \"16"
-"\"."
+"Type of service value for the IP header of control traffic. Default is "
+"\"16\"."
 msgstr ""
 "TOS-Wert für den IP-Header von OLSR-Nachrichten. Der Defaultwert ist \"16\"."
 
@@ -633,8 +687,17 @@ msgstr "Der Uplink benutzt NAT."
 msgid "Use hysteresis"
 msgstr "Hysterese aktivieren"
 
+msgid "Validity Time"
+msgstr ""
+
 msgid "Version"
 msgstr "Version"
+
+msgid "Very good (ETX < 2)"
+msgstr ""
+
+msgid "Very good (SNR > 30)"
+msgstr ""
 
 msgid "WLAN"
 msgstr "WLAN"
@@ -678,3 +741,33 @@ msgstr ""
 
 msgid "Willingness"
 msgstr "Bereitschaft"
+
+msgid "Yellow"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+#~ msgid "Device"
+#~ msgstr "Schnittstelle"
+
+#~ msgid ""
+#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
+#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
+#~ msgstr ""
+#~ "Stellen Sie sicher das OLSRd läuft und das \"txtinfo\" Plugin auf Port "
+#~ "2006 geladen und \"127.0.0.1\" als Accept-Host gesetzt ist."
+
+#~ msgid ""
+#~ "Multiply routes with the factor given here. Allowed values are between "
+#~ "0.01 and 1. It is only used when LQ-Level is greater than 0. Examples:"
+#~ "<br />reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to "
+#~ "all nodes on this interface by 20%: default 0.8"
+#~ msgstr ""
+#~ "Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
+#~ "Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die "
+#~ "LQ zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes "
+#~ "die mit diesem Interface kommunizieren um 20%: default 0.8"
