@@ -5,7 +5,7 @@
 my $source  = shift @ARGV;
 my $pattern = shift @ARGV || '*.po';
 
-sub fixup_header_order
+sub read_header
 {
 	my $file = shift || return;
 	local $/;
@@ -14,7 +14,34 @@ sub fixup_header_order
 	my $data = readline P;
 	close P;
 
-	$data =~ s/("Language-Team: .*?\\n"\n)(.+?)("Language: .*?\\n"\n)/$1$3$2/s;
+	$data =~ /
+		^ (
+		msgid \s "" \n
+		msgstr \s "" \n
+		(?: " [^\n]+ " \n )+
+		\n )
+	/mx;
+
+	return $1;
+}
+
+sub write_header
+{
+	my $file = shift || return;
+	my $head = shift || return;
+	local $/;
+
+	open P, "< $file" || die "open(): $!";
+	my $data = readline P;
+	close P;
+
+	$data =~ s/
+		^ (
+		msgid \s "" \n
+		msgstr \s "" \n
+		(?: " [^\n]+ " \n )+
+		\n )
+	/$head/mx;
 
 	open P, "> $file" || die "open(): $!";
 	print P $data;
@@ -29,9 +56,12 @@ if( open F, "find $source -type f -name '$pattern' |" )
 		
 		if( -f "$source/templates/$basename.pot" )
 		{
+			my $head = read_header($file);
+
 			printf "Updating %-40s", $file;
 			system("msgmerge", "-U", "-N", $file, "$source/templates/$basename.pot");
-			fixup_header_order($file);
+
+			write_header($file, $head);
 		}
 	}
 
