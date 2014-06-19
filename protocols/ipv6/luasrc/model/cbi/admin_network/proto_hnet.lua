@@ -12,8 +12,14 @@ You may obtain a copy of the License at
 
 local map, section, net = ...
 
-section:taboption("general", Flag, "guest", translate("Guest mode"))
-section:taboption("advanced", Flag, "adhoc", translate("Ad-hoc mode"))
+local mode = section:taboption("general", ListValue, "mode", translate("Category"))
+mode:value("auto", translate("Automatic"))
+mode:value("external", translate("External"))
+mode:value("guest", translate("Guest"))
+mode:value("adhoc", translate("Ad-Hoc"))
+mode.default = "auto"
+
+
 
 local plen = section:taboption("advanced", Value, "ip6assign", translate("IPv6 assignment length"),
 	translate("Assign a part of given length of every public IPv6-prefix to this interface"))
