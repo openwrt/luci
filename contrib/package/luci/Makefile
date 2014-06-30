@@ -9,7 +9,7 @@ PKG_BUILD_PARALLEL:=0
 
 PKG_VERSION:=$(shell $(LUCI_TOPDIR)/build/mkrevision.sh 2>/dev/null || echo unknown)
 
-PKG_BUILD_DEPENDS:=$(if $(STAGING_DIR_ROOT),lua/host)
+PKG_BUILD_DEPENDS:=$(if $(STAGING_DIR_ROOT),lua/host) iwinfo
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 PKG_USE_MIPS16:=0
