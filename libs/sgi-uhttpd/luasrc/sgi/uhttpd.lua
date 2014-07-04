@@ -112,6 +112,7 @@ function handle_request(env)
 			elseif id == 4 then
 				sendc(tostring(data1 or ""))
 			elseif id == 5 then
+				sendc("")
 				active = false
 			elseif id == 6 then
 				data1:copyz(nixio.stdout, data2)
