@@ -1,0 +1,15 @@
+#!/bin/sh
+
+/etc/init.d/shadowsocks enabled && {
+	/etc/init.d/shadowsocks stop
+	/etc/init.d/shadowsocks disable
+}
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.shadowsocks
+	set ucitrack.shadowsocks=luci-shadowsocks
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

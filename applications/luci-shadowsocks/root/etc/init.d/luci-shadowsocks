@@ -1,0 +1,210 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=95
+
+SERVICE_USE_PID=1
+SERVICE_WRITE_PID=1
+SERVICE_DAEMONIZE=1
+SERVICE_PID_FILE=/var/run/luci-shadowsocks.pid
+CONFIG_FILE="/tmp/shadowsocks.json"
+PROXY_EXEC="/usr/bin/ss-local"
+REDIR_EXEC="/usr/bin/ss-redir"
+
+AUTOREDIR_CONFIG_FILE="/tmp/autoredir.sh"
+CLEANDNS_CONFIG_FILE="/tmp/cleandns.sh"
+
+cfg_append() {
+        echo "$1" >> "$CONFIG_FILE"
+}
+
+cleandns_cfg_append() {
+        echo "$1" >> "$CLEANDNS_CONFIG_FILE"
+}
+
+autoredir_cfg_append() {
+        echo "$1" >> "$AUTOREDIR_CONFIG_FILE"
+}
+
+
+
+create_config() {
+    local cfg=$1
+    local server
+    local server_port
+    local method
+    local timeout
+    local password
+    local local_port
+
+    config_get server $cfg server
+    config_get server_port $cfg server_port
+    config_get method $cfg method
+    config_get timeout $cfg timeout
+    config_get password $cfg password
+    config_get local_port $cfg local_port
+
+    cat > $CONFIG_FILE <<EOF
+{
+    "server":"$server",
+    "server_port":$server_port,
+    "local_port":$local_port,
+    "password":"$password",
+    "timeout":$timeout,
+    "method":"$method"
+}
+EOF
+
+    return 0
+}
+
+cleandns_create_config() {
+    local cfg=$1
+    local server
+    local server_port
+    local method
+    local timeout
+    local password
+    local local_port
+
+    config_get server $cfg server
+    config_get server_port $cfg server_port
+    config_get method $cfg method
+    config_get timeout $cfg timeout
+    config_get password $cfg password
+    config_get local_port $cfg local_port
+
+    cat > $CLEANDNS_CONFIG_FILE <<EOF
+#!/bin/sh
+iptables -N dnsfilter -t mangle
+iptables -F dnsfilter -t mangle
+iptables -t mangle -I dnsfilter -p udp -m udp -m u32 --u32 "0&0x0F000000=0x05000000 && 22&0xFFFF@16=0x00000000,0x042442b2,0x0807c62d,0x253d369e,0x2e52ae44,0x3b1803ad,0x3cbf7cec,0x402158a1,0x4021632f,0x4042a3fb" -j DROP
+iptables -t mangle -I dnsfilter -p udp -m udp -m u32 --u32 "0&0x0F000000=0x05000000 && 22&0xFFFF@16=0x4168cafc,0x41a0db71,0x422dfced,0x480ecd63,0x480ecd68,0x4a7d2771,0x4a7d7f66,0x4a7d9b66,0x4e10310f,0x5d2e0859" -j DROP
+iptables -t mangle -I dnsfilter -p udp -m udp -m u32 --u32 "0&0x0F000000=0x05000000 && 22&0xFFFF@16=0x80797e8b,0x9f6a794b,0xa9840d67,0xb4a829af,0xc043c606,0xca6a0102,0xcab50755,0xcb620741,0xcba1e6ab,0xcf0c5862" -j DROP
+iptables -t mangle -I dnsfilter -p udp -m udp -m u32 --u32 "0&0x0F000000=0x05000000 && 22&0xFFFF@16=0xd0381f2b,0xd1244921,0xd155e58a,0xd1913632,0xd1dc1eae,0xd35e4293,0xd5a9fb23,0xd8ddbcb6,0xd8eab30d,0xf3b9bb1e" -j DROP
+iptables -t mangle -I dnsfilter -p udp -m udp -m u32 --u32 "0&0x0F000000=0x05000000 && 22&0xFFFF@16=0xf3b9bb27,0xffffffff,0x4a7d2766" -j DROP
+iptables -t mangle -I PREROUTING -m udp -p udp --sport 53 -j dnsfilter
+EOF
+
+    return 0
+}
+
+autoredir_create_config() {
+    local cfg=$1
+    local server
+    local server_port
+    local method
+    local timeout
+    local password
+    local local_port
+
+    config_get server $cfg server
+    config_get server_port $cfg server_port
+    config_get method $cfg method
+    config_get timeout $cfg timeout
+    config_get password $cfg password
+    config_get local_port $cfg local_port
+
+    cat > $AUTOREDIR_CONFIG_FILE <<EOF
+#!/bin/sh
+iptables -N fuckgfw -t nat
+iptables -F fuckgfw -t nat
+iptables -A fuckgfw -t nat -d $server -j RETURN
+iptables -A fuckgfw -t nat -d 8.8.8.8 -j RETURN
+iptables -A fuckgfw -t nat -d 8.8.4.4 -j RETURN
+iptables -A fuckgfw -t nat -d 208.67.222.222 -j RETURN
+iptables -A fuckgfw -t nat -d 208.67.220.220 -j RETURN
+iptables -A fuckgfw -t nat -d 192.168.0.0/16 -j RETURN
+iptables -A fuckgfw -t nat -d 172.16.0.0/12 -j RETURN
+iptables -A fuckgfw -t nat -d 10.0.0/8 -j RETURN
+iptables -A fuckgfw -t nat -d 127.0.0/8 -j RETURN
+iptables -A fuckgfw -t nat -p tcp -j REDIRECT --to-port $local_port
+iptables -A prerouting_rule -t nat -m geoip -p tcp ! --destination-country CN -j fuckgfw
+EOF
+
+    return 0
+}
+
+ss_start() {
+    local enabled
+    config_load 'shadowsocks'
+    config_get_bool enabled config 'enabled' '0'
+    
+    [ "$enabled" -gt 0 ] || return 1
+    
+    config_get_bool redir config 'redir' '0'
+    [ "$redir" -gt 0 ] && EXEC=$REDIR_EXEC || EXEC=$PROXY_EXEC
+    
+    create_config config || return 1
+    
+    service_start $EXEC -c $CONFIG_FILE -f $SERVICE_PID_FILE
+
+}
+
+cleandns_start() {
+    local cleandns
+    config_load 'shadowsocks'
+    config_get_bool cleandns config 'cleandns' '0'
+    [ "$cleandns" -gt 0 ] || return 1
+    
+    cleandns_create_config config || return 1
+                        
+    echo $CLEANDNS_CONFIG_FILE >> /etc/firewall.user
+                            
+    chmod +x $CLEANDNS_CONFIG_FILE
+    
+    uci set "network.wan.peerdns=0"
+    uci set "network.wan.dns=223.5.5.5 8.8.4.4 208.67.220.220 223.6.6.6"
+    uci commit
+}
+
+autoredir_start() {
+    local redir
+    config_load 'shadowsocks'
+    config_get_bool redir config 'redir' '0'
+    [ "$redir" -gt 0 ] || return 1
+                
+    autoredir_create_config config || return 1
+                    
+    echo $AUTOREDIR_CONFIG_FILE >> /etc/firewall.user
+                        
+    chmod +x $AUTOREDIR_CONFIG_FILE
+}
+
+
+start() {
+    ss_start
+    cleandns_start
+    autoredir_start
+    /etc/init.d/firewall restart
+    /etc/init.d/network restart
+}
+
+ss_stop() {
+    service_stop $PROXY_EXEC
+    service_stop $REDIR_EXEC
+    kill -9 `cat $SERVICE_PID_FILE` >/dev/null
+    killall -9 ss-redir >/dev/null
+    killall -9 ss-local >/dev/null
+}
+
+cleandns_stop() {
+    grep -v $CLEANDNS_CONFIG_FILE /etc/firewall.user > /tmp/firewall.user
+    mv -f /tmp/firewall.user /etc/firewall.user
+    
+    uci set "network.wan.peerdns=1"
+    uci commit
+}
+
+autoredir_stop() {
+    grep -v $AUTOREDIR_CONFIG_FILE /etc/firewall.user > /tmp/firewall.user
+    mv -f /tmp/firewall.user /etc/firewall.user
+}
+
+stop() {
+    autoredir_stop
+    cleandns_stop
+    ss_stop
+    /etc/init.d/firewall restart
+    /etc/init.d/network restart
+}
