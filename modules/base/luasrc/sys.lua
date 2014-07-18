@@ -186,6 +186,7 @@ function sysinfo()
 		cpuinfo:match("model name\t+: ([^\n]+)")
 
 	local model =
+		fs.readfile("/proc/device-tree/model") or
 		luci.util.pcdata(fs.readfile("/tmp/sysinfo/model")) or
 		cpuinfo:match("machine\t+: ([^\n]+)") or
 		cpuinfo:match("Hardware\t+: ([^\n]+)") or
