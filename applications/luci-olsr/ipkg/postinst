@@ -2,5 +2,6 @@
 [ -n "${IPKG_INSTROOT}" ] || {
 	( . /etc/uci-defaults/luci-olsr ) && rm -f /etc/uci-defaults/luci-olsr
 	/etc/init.d/olsrd enabled || /etc/init.d/olsrd enable
+	/etc/init.d/olsrd6 enabled || /etc/init.d/olsrd6 enable
 	exit 0
 }

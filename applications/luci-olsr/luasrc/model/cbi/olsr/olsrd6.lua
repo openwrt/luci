@@ -20,7 +20,7 @@ local ip = require "luci.ip"
 
 local has_ipip  = fs.glob("/etc/modules.d/[0-9]*-ipip")()
 
-m = Map("olsrd", translate("OLSR Daemon"),
+m = Map("olsrd6", translate("OLSR Daemon"),
         translate("The OLSR daemon is an implementation of the Optimized Link State Routing protocol. "..
 	"As such it allows mesh routing for any network equipment. "..
 	"It runs on any wifi card that supports ad-hoc mode and of course on any ethernet device. "..
@@ -29,14 +29,14 @@ m = Map("olsrd", translate("OLSR Daemon"),
 function m.on_parse()
 	local has_defaults = false
 
-	m.uci:foreach("olsrd", "InterfaceDefaults",
+	m.uci:foreach("olsrd6", "InterfaceDefaults",
 		function(s)
 			has_defaults = true
 			return false
 		end)
 
 	if not has_defaults then
-		m.uci:section("olsrd", "InterfaceDefaults")
+		m.uci:section("olsrd6", "InterfaceDefaults")
 	end
 end
 
@@ -47,19 +47,13 @@ function write_float(self, section, value)
     end
 end
 
-s = m:section(TypedSection, "olsrd", translate("General settings"))
+s = m:section(TypedSection, "olsrd6", translate("General settings"))
 s.anonymous = true
 
 s:tab("general",  translate("General Settings"))
 s:tab("lquality", translate("Link Quality Settings"))
 s:tab("smartgw", translate("SmartGW"), not has_ipip and translate("Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not work, please install it."))
 s:tab("advanced", translate("Advanced Settings"))
-
-ipv = s:taboption("general", ListValue, "IpVersion", translate("Internet protocol"),
-	translate("IP-version to use. If 6and4 is selected then one olsrd instance is started for each protocol."))
-ipv:value("4", "IPv4")
-ipv:value("6and4", "6and4")
-
 
 poll = s:taboption("advanced", Value, "Pollrate", translate("Pollrate"),
 	translate("Polling rate for OLSR sockets in seconds. Default is 0.05."))
@@ -142,11 +136,11 @@ port.rmempty = true
 
 mainip = s:taboption("general", Value, "MainIp", translate("Main IP"),
         translate("Sets the main IP (originator ip) of the router. This IP will NEVER change during the uptime of olsrd. "..
-	"Default is 0.0.0.0, which triggers usage of the IP of the first interface."))
+	"Default is ::, which triggers usage of the IP of the first interface."))
 mainip.optional = true
 mainip.rmempty = true
 mainip.datatype = "ipaddr"
-mainip.placeholder = "0.0.0.0"
+mainip.placeholder = "::"
 
 sgw = s:taboption("smartgw", Flag, "SmartGateway", translate("Enable"), translate("Enable SmartGateway. If it is disabled, then " ..
 	"all other SmartGateway parameters are ignored. Default is \"no\"."))
@@ -164,7 +158,7 @@ sgwnat.optional = true
 sgwnat.rmempty = true
 
 sgwuplink = s:taboption("smartgw", ListValue, "SmartGatewayUplink", translate("Announce uplink"), translate("Which kind of uplink is exported to the other mesh nodes. " ..
-	"An uplink is detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. Default setting is \"both\"."))
+	"An uplink is detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default setting is \"both\"."))
 sgwuplink:value("none")
 sgwuplink:value("ipv4")
 sgwuplink:value("ipv6")
@@ -256,7 +250,7 @@ weight.placeholder = "0"
 lqmult = i:taboption("general", DynamicList, "LinkQualityMult", translate("LinkQuality Multiplicator"),
 	translate("Multiply routes with the factor given here. Allowed values are between 0.01 and 1.0. "..
 	"It is only used when LQ-Level is greater than 0. Examples:<br />"..
-	"reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />"..
+	"reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />"..
 	"reduce LQ to all nodes on this interface by 20%: default 0.8"))
 lqmult.optional = true
 lqmult.rmempty = true
@@ -272,8 +266,8 @@ function lqmult.validate(self, value)
 			if not host or not mult then
 				return nil, translate("LQMult requires two values (IP address or 'default' and multiplicator) seperated by space.")
 			end
-			if not (host == "default" or ip.IPv4(host) or ip.IPv6(host)) then
-				return nil, translate("Can only be a valid IPv4 or IPv6 address or 'default'")
+			if not (host == "default" or ip.IPv6(host)) then
+				return nil, translate("Can only be a valid IPv6 address or 'default'")
 			end
 			if not tonumber(mult) or tonumber(mult) > 1 or tonumber(mult) < 0.01 then
 				return nil, translate("Invalid Value for LQMult-Value. Must be between 0.01 and 1.0.")
@@ -283,27 +277,14 @@ function lqmult.validate(self, value)
 			end
 		end
 	end
-        return value
+	return value
 end
-
-ip4b = i:taboption("addrs", Value, "Ip4Broadcast", translate("IPv4 broadcast"),
-	translate("IPv4 broadcast address for outgoing OLSR packets. One useful example would be 255.255.255.255. "..
-	"Default is \"0.0.0.0\", which triggers the usage of the interface broadcast IP."))
-ip4b.optional = true
-ip4b.datatype = "ip4addr"
-ip4b.placeholder = "0.0.0.0"
 
 ip6m = i:taboption("addrs", Value, "IPv6Multicast", translate("IPv6 multicast"),
 	translate("IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal multicast."))
 ip6m.optional = true
 ip6m.datatype = "ip6addr"
 ip6m.placeholder = "FF02::6D"
-
-ip4s = i:taboption("addrs", Value, "IPv4Src", translate("IPv4 source"),
-	translate("IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which triggers usage of the interface IP."))
-ip4s.optional = true
-ip4s.datatype = "ip4addr"
-ip4s.placeholder = "0.0.0.0"
 
 ip6s = i:taboption("addrs", Value, "IPv6Src", translate("IPv6 source"),
 	translate("IPv6 src prefix. OLSRd will choose one of the interface IPs which matches the prefix of this parameter. "..
@@ -365,7 +346,7 @@ av.write = write_float
 ifs = m:section(TypedSection, "Interface", translate("Interfaces"))
 ifs.addremove = true
 ifs.anonymous = true
-ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd/iface/%s")
+ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd6/iface/%s")
 ifs.template  = "cbi/tblsection"
 
 function ifs.create(...)
@@ -386,34 +367,34 @@ network.template = "cbi/network_netinfo"
 
 mode = ifs:option(DummyValue, "Mode", translate("Mode"))
 function mode.cfgvalue(...)
-	return Value.cfgvalue(...) or m.uci:get_first("olsrd", "InterfaceDefaults", "Mode", "mesh")
+	return Value.cfgvalue(...) or m.uci:get_first("olsrd6", "InterfaceDefaults", "Mode", "mesh")
 end
 
 hello = ifs:option(DummyValue, "_hello", translate("Hello"))
 function hello.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "HelloInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HelloInterval", 5))
-	local v = tonumber(m.uci:get("olsrd", section, "HelloValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HelloValidityTime", 40))
+	local i = tonumber(m.uci:get("olsrd6", section, "HelloInterval"))     or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "HelloInterval", 5))
+	local v = tonumber(m.uci:get("olsrd6", section, "HelloValidityTime")) or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "HelloValidityTime", 40))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
 tc = ifs:option(DummyValue, "_tc", translate("TC"))
 function tc.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "TcInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "TcInterval", 2))
-	local v = tonumber(m.uci:get("olsrd", section, "TcValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "TcValidityTime", 256))
+	local i = tonumber(m.uci:get("olsrd6", section, "TcInterval"))     or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "TcInterval", 2))
+	local v = tonumber(m.uci:get("olsrd6", section, "TcValidityTime")) or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "TcValidityTime", 256))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
 mid = ifs:option(DummyValue, "_mid", translate("MID"))
 function mid.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "MidInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "MidInterval", 18))
-	local v = tonumber(m.uci:get("olsrd", section, "MidValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "MidValidityTime", 324))
+	local i = tonumber(m.uci:get("olsrd6", section, "MidInterval"))     or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "MidInterval", 18))
+	local v = tonumber(m.uci:get("olsrd6", section, "MidValidityTime")) or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "MidValidityTime", 324))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 
 hna = ifs:option(DummyValue, "_hna", translate("HNA"))
 function hna.cfgvalue(self, section)
-	local i = tonumber(m.uci:get("olsrd", section, "HnaInterval"))     or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HnaInterval", 18))
-	local v = tonumber(m.uci:get("olsrd", section, "HnaValidityTime")) or tonumber(m.uci:get_first("olsrd", "InterfaceDefaults", "HnaValidityTime", 108))
+	local i = tonumber(m.uci:get("olsrd6", section, "HnaInterval"))     or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "HnaInterval", 18))
+	local v = tonumber(m.uci:get("olsrd6", section, "HnaValidityTime")) or tonumber(m.uci:get_first("olsrd6", "InterfaceDefaults", "HnaValidityTime", 108))
 	return "%.01fs / %.01fs" %{ i, v }
 end
 

@@ -1,7 +1,14 @@
 module("luci.controller.olsr", package.seeall)
 
 function index()
-	if not nixio.fs.access("/etc/config/olsrd") then
+	local ipv4,ipv6
+	if nixio.fs.access("/etc/config/olsrd") then
+		ipv4 = 1
+	end
+	if nixio.fs.access("/etc/config/olsrd6") then
+		ipv6 = 1
+	end
+	if not ipv4 and not ipv6 then
 		return
 	end
 
@@ -60,46 +67,11 @@ function index()
 	page.title  = _("Interfaces")
 	page.order  = 70
 
-	local ol = entry(
-		{"admin", "services", "olsrd"},
-		cbi("olsr/olsrd"), "OLSR"
-	)
-	ol.subindex = true
-
-	entry(
-		{"admin", "services", "olsrd", "iface"},
-		cbi("olsr/olsrdiface")
-	).leaf = true
-
-	entry(
-		{"admin", "services", "olsrd", "hna"},
-		cbi("olsr/olsrdhna"), _("HNA Announcements")
-	)
-
-	oplg = entry(
-		{"admin", "services", "olsrd", "plugins"},
-		cbi("olsr/olsrdplugins"), _("Plugins")
-	)
-
 	odsp = entry(
 		{"admin", "services", "olsrd", "display"},
 		cbi("olsr/olsrddisplay"), _("Display")
 	)
 
-	oplg.leaf = true
-	oplg.subindex = true
-
-	local uci = require("luci.model.uci").cursor()
-	uci:foreach("olsrd", "LoadPlugin",
-		function (section)
-			local lib = section.library
-			entry(
-				{"admin", "services", "olsrd", "plugins", lib },
-				cbi("olsr/olsrdplugins"),
-				nil --'Plugin "%s"' % lib:gsub("^olsrd_",""):gsub("%.so.+$","")
-			)
-		end
-	)
 end
 
 function action_json()
@@ -109,13 +81,8 @@ function action_json()
 	local jsonreq4
 	local jsonreq6
 
-	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
-	if IpVersion == "4" or IpVersion == "6and4" then
-		jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
-	end
-	if IpVersion == "6" or IpVersion == "6and4" then
-		jsonreq6 = utl.exec("echo /status | nc ::1 9090")
-	end
+	jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
+	jsonreq6 = utl.exec("echo /status | nc ::1 9090")
 	http.prepare_content("application/json")
 	if not jsonreq4 or jsonreq4 == "" then
 		jsonreq4 = "{}"
@@ -394,12 +361,8 @@ function fetch_jsoninfo(otable)
 	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
 	local jsonreq4 = ""
 	local jsonreq6 = ""
-	if IpVersion == "4" or IpVersion == "6and4" then
-		jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
-	end
-	if IpVersion == "6" or IpVersion == "6and4" then
-		jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
-	end
+	jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
+	jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
 	local jsondata4 = {}
 	local jsondata6 = {}
 	local data4 = {}
