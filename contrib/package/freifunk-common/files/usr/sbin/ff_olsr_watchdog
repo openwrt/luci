@@ -5,7 +5,7 @@ require "io"
 require "uci"
 local fs = require "nixio.fs"
 
-if fs.access("/var/run/olsrd.pid") then
+if fs.access("/var/run/olsrd.pid") or fs.access("/var/run/olsrd4.pid") then
 	local stamp, intv
 	local x = uci.cursor()
 
