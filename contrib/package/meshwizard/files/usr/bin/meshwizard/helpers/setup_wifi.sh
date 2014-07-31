@@ -65,7 +65,7 @@ bssid="$($dir/helpers/gen_bssid.sh $channel $community)"
 ssid="$profile_ssid"
 if [ "$profile_ssid_scheme" == "addchannel" ]; then
 	ssid="$ssid - ch$channel"
-else if [ "$profile_ssid_scheme" == "addchannelbefore" ]; then
+elif [ "$profile_ssid_scheme" == "addchannelbefore" ]; then
 	ssid="ch$channel.$ssid"
 fi
 
