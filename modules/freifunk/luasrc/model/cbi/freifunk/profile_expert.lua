@@ -31,7 +31,7 @@ else
 	function f.handle(self, state, data)
 		if state == FORM_VALID then
 			if data.cop then
-				fs.writefile(cop, data.rcs:gsub("\r\n", "\n"))
+				fs.writefile(community, data.cop:gsub("\r\n", "\n"))
 			end
 		end
 		return true
