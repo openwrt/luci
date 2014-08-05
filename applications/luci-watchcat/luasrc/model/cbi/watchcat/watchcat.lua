@@ -14,8 +14,8 @@ $Id$
 
 m = Map("system", 
 	translate("Watchcat"), 
-	translate("Watchcat allows to configure a periodic reboot and/or when " ..
-		  "internet connection has been lost for a certain period of time."  
+	translate("Watchcat allows configuring a periodic reboot when the " ..
+		  "Internet connection has been lost for a certain period of time."
 		 ))
 
 s = m:section(TypedSection, "watchcat")
@@ -30,8 +30,8 @@ mode:value("allways", "Periodic reboot")
 
 forcedelay = s:option(Value, "forcedelay",
 		      translate("Forced reboot delay"),
-		      translate("When rebooting the system the watchcat will trigger a soft reboot, " ..
-				"Entering a non zero value here, will trigger a delayed hard reboot " ..
+		      translate("When rebooting the system, the watchcat will trigger a soft reboot. " ..
+				"Entering a non zero value here will trigger a delayed hard reboot " ..
 				"if the soft reboot fails. Enter a number of seconds to enable, " ..
 				"use 0 to disable"))
 forcedelay.datatype = "uinteger"

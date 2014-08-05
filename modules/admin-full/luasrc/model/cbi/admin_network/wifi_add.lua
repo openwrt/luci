@@ -60,7 +60,7 @@ if iw and iw.mbssid_support then
 	function replace.cfgvalue() return "1" end
 else
 	replace = m:field(DummyValue, "replace", translate("Replace wireless configuration"))
-	replace.default = translate("The hardware is not multi-SSID capable and existing " ..
+	replace.default = translate("The hardware is not multi-SSID capable and the existing " ..
 		"configuration will be replaced if you proceed.")
 
 	function replace.formvalue() return "1" end

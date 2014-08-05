@@ -50,7 +50,7 @@ s = m:section(NamedSection, zone.sid, "zone",
 		<em>forward</em> option describes the policy for forwarded traffic \
 		between different networks within the zone. \
 		<em>Covered networks</em> specifies which available networks are \
-		member of this zone.", zone:name()))
+		members of this zone.", zone:name()))
 
 s.anonymous = true
 s.addremove = false

@@ -52,6 +52,9 @@ msgstr "ブロードキャストアドレス"
 msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
 msgstr ""
 
+msgid "Can only be a valid IPv6 address or 'default'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "設定"
 
@@ -142,6 +145,10 @@ msgstr "HNA 送信間隔"
 msgid "HNA validity time"
 msgstr "HNA 有効時間"
 
+#, fuzzy
+msgid "HNA6 Announcements"
+msgstr "HNA 通知"
+
 msgid "Hello"
 msgstr "Hello"
 
@@ -172,6 +179,11 @@ msgstr "ホスト名"
 msgid ""
 "Hosts in a OLSR routed network can announce connecitivity to external "
 "networks using HNA messages."
+msgstr ""
+
+msgid ""
+"Hosts in a OLSR routed network can announce connecitivity to external "
+"networks using HNA6 messages."
 msgstr ""
 
 msgid ""
@@ -422,6 +434,18 @@ msgid ""
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
 
+#, fuzzy
+msgid ""
+"Multiply routes with the factor given here. Allowed values are between 0.01 "
+"and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
+">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
+"LQ to all nodes on this interface by 20%: default 0.8"
+msgstr ""
+"経路のLQと設定値の乗算を行います。設定可能な値は0.01-1です。この設定はLQ レベ"
+"ルが0以上の場合のみ設定可能です。<br />例:192.168.0.1へのLQを半分にする場合: "
+"192.168.0.1 0.5<br />このインターフェースから全てのノードへ対して20%減らす場"
+"合: default 0.8"
+
 msgid "NAT threshold"
 msgstr "NAT しきい値"
 
@@ -459,6 +483,10 @@ msgid "OLSR - Display Options"
 msgstr "OLSR - 表示オプション"
 
 msgid "OLSR - HNA-Announcements"
+msgstr "OLSR - HNA (Host and Network Association) 通知"
+
+#, fuzzy
+msgid "OLSR - HNA6-Announcements"
 msgstr "OLSR - HNA (Host and Network Association) 通知"
 
 msgid "OLSR - Plugins"
@@ -550,6 +578,16 @@ msgid ""
 "Sets the main IP (originator ip) of the router. This IP will NEVER change "
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
+msgstr ""
+"ルーターのメインIP (発信元IP)を設定してください。このIPは、OLSRdの稼働中は決"
+"して変更しません。標準設定は0.0.0.0であり、プライマリ・インターフェースのIPを"
+"自動的に使用します。"
+
+#, fuzzy
+msgid ""
+"Sets the main IP (originator ip) of the router. This IP will NEVER change "
+"during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
+"the first interface."
 msgstr ""
 "ルーターのメインIP (発信元IP)を設定してください。このIPは、OLSRdの稼働中は決"
 "して変更しません。標準設定は0.0.0.0であり、プライマリ・インターフェースのIPを"
@@ -728,6 +766,16 @@ msgstr ""
 "ローカルのHNAである0.0.0.0/0、::ffff:0:0/96、2000::/3を探索することで検出しま"
 "す。標準設定は、\"both\"です。"
 
+#, fuzzy
+msgid ""
+"Which kind of uplink is exported to the other mesh nodes. An uplink is "
+"detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
+"setting is \"both\"."
+msgstr ""
+"どのアップリンクを他のメッシュノードへ通知するかを設定します。アップリンクは"
+"ローカルのHNAである0.0.0.0/0、::ffff:0:0/96、2000::/3を探索することで検出しま"
+"す。標準設定は、\"both\"です。"
+
 msgid "Willingness"
 msgstr "Willingness"
 
@@ -747,15 +795,6 @@ msgstr ""
 #~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
 #~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
 #~ msgstr ""
-#~ "OLSRdが稼働中であること、\"txinfo\"プラグインがロードされていること、ポート2006番が設定されていること、\"127.0.0.1\"からの接続が"
-#~ "許可されていることを確認してください。"
-
-#~ msgid ""
-#~ "Multiply routes with the factor given here. Allowed values are between "
-#~ "0.01 and 1. It is only used when LQ-Level is greater than 0. Examples:"
-#~ "<br />reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to "
-#~ "all nodes on this interface by 20%: default 0.8"
-#~ msgstr ""
-#~ "経路のLQと設定値の乗算を行います。設定可能な値は0.01-1です。この設定はLQ レベルが0以上の場合のみ設定可能です。<br "
-#~ "/>例:192.168.0.1へのLQを半分にする場合: 192.168.0.1 0.5<br />このインターフェースから全てのノードへ対して20%"
-#~ "減らす場合: default 0.8"
+#~ "OLSRdが稼働中であること、\"txinfo\"プラグインがロードされていること、ポー"
+#~ "ト2006番が設定されていること、\"127.0.0.1\"からの接続が許可されていること"
+#~ "を確認してください。"

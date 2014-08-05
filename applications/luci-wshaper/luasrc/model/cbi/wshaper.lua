@@ -13,7 +13,7 @@ You may obtain a copy of the License at
 require("luci.tools.webadmin")
 
 m = Map("wshaper", translate("Wondershaper"),
-	translate("Wondershaper uses traffic shaping to ensure low latencies for interactive traffic even when your " ..
+	translate("Wondershaper shapes traffic to ensure low latencies for interactive traffic even when your " ..
 	"internet connection is highly saturated."))
 
 s = m:section(NamedSection, "settings", "wshaper", translate("Wondershaper settings"))

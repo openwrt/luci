@@ -134,7 +134,7 @@ You may obtain a copy of the License at
 	function wifi_shutdown(id, toggle) {
 		var reconnect = (toggle.getAttribute('active') == 'false');
 
-		if (!reconnect && !confirm(String.format('<%:Really shutdown network ?\nYou might lose access to this device if you are connected via this interface.%>')))
+		if (!reconnect && !confirm(String.format('<%:Really shut down network?\nYou might lose access to this device if you are connected via this interface.%>')))
 			return;
 
 		is_reconnecting = true;

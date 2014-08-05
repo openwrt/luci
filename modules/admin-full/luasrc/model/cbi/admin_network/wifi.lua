@@ -22,7 +22,7 @@ arg[1] = arg[1] or ""
 
 m = Map("wireless", "",
 	translate("The <em>Device Configuration</em> section covers physical settings of the radio " ..
-		"hardware such as channel, transmit power or antenna selection which is shared among all " ..
+		"hardware such as channel, transmit power or antenna selection which are shared among all " ..
 		"defined wireless networks (if the radio hardware is multi-SSID capable). Per network settings " ..
 		"like encryption or operation mode are grouped in the <em>Interface Configuration</em>."))
 

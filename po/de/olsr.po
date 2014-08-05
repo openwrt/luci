@@ -53,6 +53,9 @@ msgstr "Broadcast-Adresse"
 msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
 msgstr ""
 
+msgid "Can only be a valid IPv6 address or 'default'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -145,6 +148,10 @@ msgstr "HNA-Intervall"
 msgid "HNA validity time"
 msgstr "HNA-Gültigkeit"
 
+#, fuzzy
+msgid "HNA6 Announcements"
+msgstr "HNA-Ankündigungen"
+
 msgid "Hello"
 msgstr "Hello"
 
@@ -175,6 +182,14 @@ msgstr "Hostname"
 msgid ""
 "Hosts in a OLSR routed network can announce connecitivity to external "
 "networks using HNA messages."
+msgstr ""
+"Rechner in einem OLSR-geroutetem Netzwerk können Konnektivität zu externen "
+"Netzwerken mittels HNA-Nachrichten ankündigen."
+
+#, fuzzy
+msgid ""
+"Hosts in a OLSR routed network can announce connecitivity to external "
+"networks using HNA6 messages."
 msgstr ""
 "Rechner in einem OLSR-geroutetem Netzwerk können Konnektivität zu externen "
 "Netzwerken mittels HNA-Nachrichten ankündigen."
@@ -428,6 +443,18 @@ msgid ""
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
 
+#, fuzzy
+msgid ""
+"Multiply routes with the factor given here. Allowed values are between 0.01 "
+"and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
+">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
+"LQ to all nodes on this interface by 20%: default 0.8"
+msgstr ""
+"Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
+"Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die LQ "
+"zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes die mit "
+"diesem Interface kommunizieren um 20%: default 0.8"
+
 msgid "NAT threshold"
 msgstr "NAT-Schwellenwert"
 
@@ -465,6 +492,10 @@ msgid "OLSR - Display Options"
 msgstr "OLSR - Anzeigeoptionen"
 
 msgid "OLSR - HNA-Announcements"
+msgstr "OLSR - HNA-Ankündigungen"
+
+#, fuzzy
+msgid "OLSR - HNA6-Announcements"
 msgstr "OLSR - HNA-Ankündigungen"
 
 msgid "OLSR - Plugins"
@@ -556,6 +587,16 @@ msgid ""
 "Sets the main IP (originator ip) of the router. This IP will NEVER change "
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
+msgstr ""
+"Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
+"NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
+"0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
+
+#, fuzzy
+msgid ""
+"Sets the main IP (originator ip) of the router. This IP will NEVER change "
+"during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
+"the first interface."
 msgstr ""
 "Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
 "NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
@@ -739,6 +780,17 @@ msgstr ""
 "2000::/3). Der Defaultwert ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
 "ankündigen sofern verfügbar)."
 
+#, fuzzy
+msgid ""
+"Which kind of uplink is exported to the other mesh nodes. An uplink is "
+"detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
+"setting is \"both\"."
+msgstr ""
+"Welche Art von Uplink im Mesh angekündigt wird. Ein Uplink wird automatisch "
+"anhand der lokal angekündigten HNA erkannt (0.0.0.0/0, ::ffff:0:0/96 oder "
+"2000::/3). Der Defaultwert ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
+"ankündigen sofern verfügbar)."
+
 msgid "Willingness"
 msgstr "Bereitschaft"
 
@@ -758,16 +810,5 @@ msgstr ""
 #~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
 #~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
 #~ msgstr ""
-#~ "Stellen Sie sicher das OLSRd läuft und das \"txtinfo\" Plugin auf Port 2006 "
-#~ "geladen und \"127.0.0.1\" als Accept-Host gesetzt ist."
-
-#~ msgid ""
-#~ "Multiply routes with the factor given here. Allowed values are between "
-#~ "0.01 and 1. It is only used when LQ-Level is greater than 0. Examples:"
-#~ "<br />reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to "
-#~ "all nodes on this interface by 20%: default 0.8"
-#~ msgstr ""
-#~ "Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
-#~ "Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die LQ "
-#~ "zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes die "
-#~ "mit diesem Interface kommunizieren um 20%: default 0.8"
+#~ "Stellen Sie sicher das OLSRd läuft und das \"txtinfo\" Plugin auf Port "
+#~ "2006 geladen und \"127.0.0.1\" als Accept-Host gesetzt ist."

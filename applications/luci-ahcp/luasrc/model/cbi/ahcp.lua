@@ -14,7 +14,7 @@ $Id: init.lua 5764 2010-03-08 19:05:34Z jow $
 
 m = Map("ahcpd", translate("AHCP Server"), translate("AHCP is an autoconfiguration protocol " ..
 	"for IPv6 and dual-stack IPv6/IPv4 networks designed to be used in place of router " ..
-	"discovery and DHCP on networks where it is difficult or impossible to configure a " ..
+	"discovery or DHCP on networks where it is difficult or impossible to configure a " ..
 	"server within every link-layer broadcast domain, for example mobile ad-hoc networks."))
 
 

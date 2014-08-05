@@ -28,7 +28,7 @@ s = m:section(SimpleSection)
 
 if has_ewk and has_wol then
 	bin = s:option(ListValue, "binary", translate("WoL program"),
-		translate("Sometimes only one of both tools work. If one of fails, try the other one"))
+		translate("Sometimes only one of the two tools works. If one fails, try the other one"))
 
 	bin:value("/usr/bin/etherwake", "Etherwake")
 	bin:value("/usr/bin/wol", "WoL")

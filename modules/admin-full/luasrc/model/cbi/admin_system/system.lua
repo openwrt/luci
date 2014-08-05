@@ -183,7 +183,7 @@ if has_ntpd then
 
 		x = s:option(Button, "_enable")
 		x.title      = translate("Time Synchronization is not configured yet.")
-		x.inputtitle = translate("Setup Time Synchronization")
+		x.inputtitle = translate("Set up Time Synchronization")
 		x.inputstyle = "apply"
 
 	else
