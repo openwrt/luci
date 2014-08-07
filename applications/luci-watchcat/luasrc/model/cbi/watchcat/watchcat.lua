@@ -46,7 +46,7 @@ period = s:option(Value, "period",
 			    "suffix 'm' for minutes, 'h' for hours or 'd' " ..
 			    "for days"))
 
-pinghost = s:option(Value, "pinghost", 
+pinghost = s:option(Value, "pinghosts", 
 		    translate("Ping host"),
 		    translate("Host address to ping"))
 pinghost.datatype = "host"
