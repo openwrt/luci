@@ -12,7 +12,7 @@
 . /lib/functions.sh
 
 echo "
-/* Meshwizard 0.1.0 */
+/* Meshwizard 0.2.0 */
 "
 
 # config
@@ -69,6 +69,10 @@ fi
 
 if [ "$wan_proto" == "dhcp" ]; then
 	$dir/helpers/setup_wan_dhcp.sh
+fi
+
+if [ -n "$wan_down" -a -n "$wan_up" ]; then
+	$dir/helpers/setup_qos.sh
 fi
 
 if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" ]; then
