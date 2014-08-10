@@ -67,7 +67,7 @@ end
 
 if luci.http.formvalue("status") == "1" then
 	local rv = { }
-	for dev in ipairs(netdevs) do
+	for dev in pairs(netdevs) do
 		local j = { id = dev }
 		local iw = luci.sys.wifi.getiwinfo(dev)
 		if iw then
@@ -271,7 +271,7 @@ end
 			netlist[#netlist+1] = net:ifname()
 			netdevs[net:ifname()] = dev:name()
 
-			if net.iwdata.ifname then
+			if net.iwdata.device then
 				local signal = net.iwinfo.signal or "N/A"
 				local noise = net.iwinfo.noise or "N/A"
 				local q = net.iwinfo.quality or "0"
