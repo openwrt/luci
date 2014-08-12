@@ -38,6 +38,4 @@ unit:value("minutes", translate("min"))
 unit:value("hours", translate("h"))
 unit.rmempty = true
 
-s:option(Flag, "enable_debug", translate("Enable debug"))
-
 return m
