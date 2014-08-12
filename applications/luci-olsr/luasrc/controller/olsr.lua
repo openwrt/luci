@@ -106,7 +106,7 @@ function action_neigh(json)
 	local devices  = ntm:get_wifidevs()
 	local sys = require "luci.sys"
 	local assoclist = {}
-	local neightbl = require "neightbl"
+	--local neightbl = require "neightbl"
 	local ipc = require "luci.ip"
 
 	luci.sys.net.routes(function(r) 
@@ -176,17 +176,19 @@ function action_neigh(json)
 						if not a:is6linklocal() then
 							if a:host() == locip:host() then
 								interface = name
-								neihgt = neightbl.get(device.ifname) or {}
+								--neihgt = neightbl.get(device.ifname) or {}
 							end
 						end
 					end
 				end
 			end)
+			--[[
 			for ip,mac in pairs(neihgt) do
 				if ip == v.remoteIP then
 					rmac = mac
 				end
 			end
+			]]--
 		end
 		for _, val in ipairs(assoclist) do
 			if val.network == interface and val.list then
