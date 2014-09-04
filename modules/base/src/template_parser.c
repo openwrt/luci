@@ -100,6 +100,36 @@ err:
 	return NULL;
 }
 
+struct template_parser * template_string(const char *str, uint32_t len)
+{
+	struct template_parser *parser;
+
+	if (!str) {
+		errno = EINVAL;
+		goto err;
+	}
+
+	if (!(parser = malloc(sizeof(*parser))))
+		goto err;
+
+	memset(parser, 0, sizeof(*parser));
+	parser->fd = -1;
+
+	parser->size = len;
+	parser->data = (char*)str;
+
+	parser->off = parser->data;
+	parser->cur_chunk.type = T_TYPE_INIT;
+	parser->cur_chunk.s    = parser->data;
+	parser->cur_chunk.e    = parser->data;
+
+	return parser;
+
+err:
+	template_close(parser);
+	return NULL;
+}
+
 void template_close(struct template_parser *parser)
 {
 	if (!parser)
@@ -108,11 +138,14 @@ void template_close(struct template_parser *parser)
 	if (parser->gc != NULL)
 		free(parser->gc);
 
-	if ((parser->data != NULL) && (parser->data != MAP_FAILED))
-		munmap(parser->data, parser->size);
+	/* if file is not set, we were parsing a string */
+	if (parser->file) {
+		if ((parser->data != NULL) && (parser->data != MAP_FAILED))
+			munmap(parser->data, parser->size);
 
-	if (parser->fd >= 0)
-		close(parser->fd);
+		if (parser->fd >= 0)
+			close(parser->fd);
+	}
 
 	free(parser);
 }
@@ -376,7 +409,7 @@ int template_error(lua_State *L, struct template_parser *parser)
 			line++;
 
 	snprintf(msg, sizeof(msg), "Syntax error in %s:%d: %s",
-			 parser->file, line + chunkline, err ? err : "(unknown error)");
+			 parser->file ? parser->file : "[string]", line + chunkline, err ? err : "(unknown error)");
 
 	lua_pushnil(L);
 	lua_pushinteger(L, line + chunkline);

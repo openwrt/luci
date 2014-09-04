@@ -18,10 +18,8 @@
 
 #include "template_lualib.h"
 
-int template_L_parse(lua_State *L)
+static int template_L_do_parse(lua_State *L, struct template_parser *parser, const char *chunkname)
 {
-	const char *file = luaL_checkstring(L, 1);
-	struct template_parser *parser = template_open(file);
 	int lua_status, rv;
 
 	if (!parser)
@@ -32,7 +30,7 @@ int template_L_parse(lua_State *L)
 		return 3;
 	}
 
-	lua_status = lua_load(L, template_reader, parser, file);
+	lua_status = lua_load(L, template_reader, parser, chunkname);
 
 	if (lua_status == 0)
 		rv = 1;
@@ -42,6 +40,23 @@ int template_L_parse(lua_State *L)
 	template_close(parser);
 
 	return rv;
+}
+
+int template_L_parse(lua_State *L)
+{
+	const char *file = luaL_checkstring(L, 1);
+	struct template_parser *parser = template_open(file);
+
+	return template_L_do_parse(L, parser, file);
+}
+
+int template_L_parse_string(lua_State *L)
+{
+	size_t len;
+	const char *str = luaL_checklstring(L, 1, &len);
+	struct template_parser *parser = template_string(str, len);
+
+	return template_L_do_parse(L, parser, "[string]");
 }
 
 int template_L_utf8(lua_State *L)
@@ -146,6 +161,7 @@ static int template_L_hash(lua_State *L) {
 /* module table */
 static const luaL_reg R[] = {
 	{ "parse",				template_L_parse },
+	{ "parse_string",		template_L_parse_string },
 	{ "utf8",				template_L_utf8 },
 	{ "pcdata",				template_L_pcdata },
 	{ "striptags",			template_L_striptags },
