@@ -281,6 +281,18 @@ You may obtain a copy of the License at
 						pt_otr += ' ' + width + ',' + y_otr + ' ' + width + ',' + height;
 
 
+						var order = [
+							[ line_udp, data_udp[data_udp.length-1] ],
+							[ line_tcp, data_tcp[data_tcp.length-1] ],
+							[ line_otr, data_otr[data_otr.length-1] ]
+						];
+
+						order.sort(function(a, b) { return b[1] - a[1] });
+
+						for (var i = 0; i < order.length; i++)
+							order[i][0].parentNode.appendChild(order[i][0]);
+
+
 						line_udp.setAttribute('points', pt_udp);
 						line_tcp.setAttribute('points', pt_tcp);
 						line_otr.setAttribute('points', pt_otr);
