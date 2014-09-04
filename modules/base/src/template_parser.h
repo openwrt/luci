@@ -58,7 +58,7 @@ struct template_chunk {
 struct template_parser {
 	int fd;
 	uint32_t size;
-	char *mmap;
+	char *data;
 	char *off;
 	char *gc;
 	int line;
