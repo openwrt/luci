@@ -66,7 +66,7 @@ static char *strfind(char *haystack, int hslen, const char *needle, int ndlen)
 struct template_parser * template_open(const char *file)
 {
 	struct stat s;
-	static struct template_parser *parser;
+	struct template_parser *parser;
 
 	if (!(parser = malloc(sizeof(*parser))))
 		goto err;
