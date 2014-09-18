@@ -42,8 +42,8 @@ function Request.__init__(self, env, sourcein, sinkerr)
 	self.error = sinkerr
 
 
-	-- File handler
-	self.filehandler = function() end
+	-- File handler nil by default to let .content() work
+	self.filehandler = nil
 
 	-- HTTP-Message table
 	self.message = {
