@@ -20,7 +20,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		-- Ping roundtrip time
 		{ title = "%H: ICMP Round Trip Time", vlabel = "ms",
 		  number_format = "%5.1lf ms", data = {
-			sources = { ping = { "ping" } },
+			sources = { ping = { "value" } },
 			options = { ping__ping = { noarea = true, title = "%di" } }
 		} },
 

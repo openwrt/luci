@@ -22,9 +22,9 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local traffic = {
 
-		-- draw this diagram for each data instance
+		-- draw this diagram for each plugin instance
 		per_instance = true,
-		title = "%H: Transfer on %di",
+		title = "%H: Transfer on %pi",
 		vlabel = "Bytes/s",
 
 		-- diagram data description
@@ -58,9 +58,9 @@ function rrdargs( graph, plugin, plugin_instance )
 	--
 	local packets = {
 
-		-- draw this diagram for each data instance
+		-- draw this diagram for each plugin instance
 		per_instance = true,
-		title = "%H: Packets on %di",
+		title = "%H: Packets on %pi",
 		vlabel = "Packets/s",
 
 		-- diagram data description

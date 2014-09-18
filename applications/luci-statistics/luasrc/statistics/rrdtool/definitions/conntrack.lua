@@ -22,7 +22,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		number_format = "%5.0lf",
 		data = {
 			sources = {
-				conntrack = { "entropy" }
+				conntrack = { "value" }
 			},
 			options = {
 				conntrack = { 
