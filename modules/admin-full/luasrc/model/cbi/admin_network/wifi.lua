@@ -147,21 +147,27 @@ local hwtype = wdev:get("type")
 -- NanoFoo
 local nsantenna = wdev:get("antenna")
 
--- Check whether there is a client interface on the same radio,
--- if yes, lock the channel choice as the station will dicatate the freq
-local has_sta = nil
+-- Check whether there are client interfaces on the same radio,
+-- if yes, lock the channel choice as these stations will dicatate the freq
+local found_sta = nil
 local _, net
-for _, net in ipairs(wdev:get_wifinets()) do
-	if net:mode() == "sta" and net:id() ~= wnet:id() then
-		has_sta = net
-		break
+if wnet:mode() ~= "sta" then
+	for _, net in ipairs(wdev:get_wifinets()) do
+		if net:mode() == "sta" then
+			if not found_sta then
+				found_sta = {}
+				found_sta.channel = net:channel()
+				found_sta.names = {}
+			end
+			found_sta.names[#found_sta.names+1] = net:shortname()
+		end
 	end
 end
 
-if has_sta then
+if found_sta then
 	ch = s:taboption("general", DummyValue, "choice", translate("Channel"))
-	ch.value = translatef("Locked to channel %d used by %s",
-		has_sta:channel(), has_sta:shortname())
+	ch.value = translatef("Locked to channel %d used by: %s",
+		found_sta.channel, table.concat(found_sta.names, ", "))
 else
 	ch = s:taboption("general", Value, "channel", translate("Channel"))
 	ch:value("auto", translate("auto"))
