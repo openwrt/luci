@@ -218,7 +218,7 @@ You may obtain a copy of the License at
 					var toggle = document.getElementById(iw.id + '-iw-toggle');
 					if (toggle)
 					{
-						if (is_assoc)
+						if (!iw.disabled)
 						{
 							toggle.className = 'cbi-button cbi-button-reset';
 							toggle.value = '<%:Disable%>';
