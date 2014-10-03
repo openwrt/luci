@@ -166,6 +166,8 @@ function wifi_network(id)
 				country    = net:country(),
 				txpower    = net:txpower(),
 				txpoweroff = net:txpower_offset(),
+				disabled   = (dev:get("disabled") == "1" or
+				              net:get("disabled") == "1"),
 				device     = {
 					up     = dev:is_up(),
 					device = dev:name(),
