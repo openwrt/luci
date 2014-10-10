@@ -975,4 +975,18 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	password:depends({mode="sta-wds", eap_type="ttls", encryption="wpa"})
 end
 
+if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
+	local wpasupplicant = fs.access("/usr/sbin/wpa_supplicant")
+	local hostcli = fs.access("/usr/sbin/hostapd_cli")
+	if hostcli and wpasupplicant then
+		wps = s:taboption("encryption", Flag, "wps_pushbutton", translate("Enable WPS pushbutton, requires WPA(2)-PSK"))
+		wps.enabled = "1"
+		wps.disabled = "0"
+		wps.rmempty = false
+		wps:depends("encryption", "psk")
+		wps:depends("encryption", "psk2")
+		wps:depends("encryption", "psk-mixed")
+	end
+end
+
 return m
