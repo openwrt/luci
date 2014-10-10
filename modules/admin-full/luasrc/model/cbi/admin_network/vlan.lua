@@ -25,6 +25,7 @@ m.uci:foreach("network", "switch",
 		local has_learn   = nil
 		local has_vlan4k  = nil
 		local has_jumbo3  = nil
+		local has_mirror  = nil
 		local min_vid     = 0
 		local max_vid     = 16
 		local num_vlans   = 16
@@ -74,6 +75,9 @@ m.uci:foreach("network", "switch",
 				elseif line:match(": enable_learning") then
 					has_learn = "enable_learning"
 
+				elseif line:match(": enable_mirror_rx") then
+					has_mirror = "enable_mirror_rx"
+
 				elseif line:match(": max_length") then
 					has_jumbo3 = "max_length"
 				end
@@ -105,6 +109,24 @@ m.uci:foreach("network", "switch",
 			x.rmempty = true
 		end
 
+		-- Does this switch support port mirroring?
+		if has_mirror then
+			s:option(Flag, "enable_mirror_rx", translate("Enable mirroring of incoming packets"))
+			s:option(Flag, "enable_mirror_tx", translate("Enable mirroring of outgoing packets"))
+
+			local sp = s:option(ListValue, "mirror_source_port", translate("Mirror source port"))
+			local mp = s:option(ListValue, "mirror_monitor_port", translate("Mirror monitor port"))
+
+			local pt
+			for pt = 0, num_ports - 1 do
+				local name
+
+				name = (pt == cpu_port) and translate("CPU") or translatef("Port %d", pt)
+
+				sp:value(pt, name)
+				mp:value(pt, name)
+			end
+		end
 
 		-- VLAN table
 		s = m:section(TypedSection, "switch_vlan",
