@@ -99,7 +99,9 @@ define theme
   LUCI_BUILD_PACKAGES += luci-theme-$(1)
 endef
 
-
+$(eval $(call theme,lucixeye,Luci XEYE Theme))
+$(eval $(call theme,openwrtcn,Luci OpenWrt CN Theme))
+$(eval $(call theme,oxygen,oxygen Theme))
 
 
 ### Compile ###
