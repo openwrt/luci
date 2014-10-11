@@ -64,6 +64,8 @@ define application
 endef
 $(eval $(call application,macvlan,LuCI Support for macvlan,\
 	kmod-macvlan luci-app-mwan3))
+$(eval $(call application,vsftpd,FTP Server,\
+	vsftpd-pam))
 
 
 
