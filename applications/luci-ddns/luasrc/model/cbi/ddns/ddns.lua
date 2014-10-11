@@ -26,6 +26,10 @@ s.anonymous = false
 
 s:option(Flag, "enabled", translate("Enable"))
 
+interface = s:option(ListValue, "interface", translate("Event interface"), translate("Network on which the ddns-updater scripts will be started"))
+luci.tools.webadmin.cbi_add_networks(interface)
+interface.default = "wan"
+
 svc = s:option(ListValue, "service_name", translate("Service"))
 svc.rmempty = false
 svc.default = "dyndns.org"
