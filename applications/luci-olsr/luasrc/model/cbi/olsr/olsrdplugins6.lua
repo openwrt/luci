@@ -17,7 +17,7 @@ local ip = require "luci.ip"
 local fs = require "nixio.fs"
 
 if arg[1] then
-	mp = Map("olsrd", translate("OLSR - Plugins"))
+	mp = Map("olsrd6", translate("OLSR - Plugins"))
 
 	p = mp:section(TypedSection, "LoadPlugin", translate("Plugin configuration"))
 	p:depends("library", arg[1])
