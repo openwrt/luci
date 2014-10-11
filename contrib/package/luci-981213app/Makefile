@@ -71,6 +71,7 @@ $(eval $(call application,shadowsocks,LuCI Support for shadowsocks,\
 $(eval $(call application,webshell,webshell configuration module))
 $(eval $(call application,cpulimit,CPULIMIT configuration module,cpulimit))
 $(eval $(call application,usb-printer,USB Printer Share via TCP/IP,p910nd))
+$(eval $(call application,n2n_v2,n2n_v2 Configuration module,n2n_v2))
 
 
 
