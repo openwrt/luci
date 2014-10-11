@@ -194,7 +194,6 @@ $(eval $(call protocol,ipv6,Support for DHCPv6/6in4/6to4/6rd/DS-Lite))
 $(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
 $(eval $(call protocol,relay,Support for relayd pseudo bridges,+PACKAGE_luci-proto-relay:relayd))
 
-
 ### Modules ###
 define module
   define Package/luci-mod-$(1)
@@ -251,12 +250,14 @@ define application
   LUCI_BUILD_PACKAGES += luci-app-$(1)
 endef
 
-
 $(eval $(call application,firewall,Firewall and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
+
+$(eval $(call application,ocserv,LuCI Support for OpenConnect VPN,\
+	+PACKAGE_luci-app-ocserv:ocserv certtool))
 
 $(eval $(call application,commands,LuCI Shell Command Module))
 
