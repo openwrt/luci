@@ -353,10 +353,25 @@ if hwtype == "broadcom" then
 	end
 
 	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
-	mode:value("11bg", "802.11b+g")
-	mode:value("11b", "802.11b")
-	mode:value("11g", "802.11g")
-	mode:value("11gst", "802.11g + Turbo")
+	if hw_modes.n then
+		if hw_modes.g then mode:value("11ng", "802.11g+n") end
+		if hw_modes.a then mode:value("11na", "802.11a+n") end
+		mode:value("11n", "802.11n")
+
+		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode (802.11n)"))
+		htmode:depends("hwmode", "11n")
+		htmode:depends("hwmode", "11ng")
+		htmode:depends("hwmode", "11na")
+		htmode:value("HT20", "20MHz")
+		htmode:value("HT40-", translate("40MHz 2nd channel below"))
+		htmode:value("HT40+", translate("40MHz 2nd channel above"))
+	end
+	if hw_modes.a then mode:value("11a", "802.11a") end
+	if hw_modes.b and hw_modes.g then mode:value("11bg", "802.11b+g") end
+	if hw_modes.b then mode:value("11b", "802.11b") end
+	if hw_modes.g then mode:value("11g", "802.11g") end
+	if hw_modes.g then mode:value("11gst", "802.11g Turbo") end
+	if hw_modes.g then mode:value("11lrs", "802.11g Limited Rate Support") end
 
 	ant1 = s:taboption("advanced", ListValue, "txantenna", translate("Transmitter Antenna"))
 	ant1.widget = "radio"
