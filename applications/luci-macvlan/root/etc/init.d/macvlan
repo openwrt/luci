@@ -1,0 +1,75 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+. /lib/functions.sh
+START=19
+
+pppoe_name=$(uci get network.wan.username) 
+pppoe_pw=$(uci get network.wan.password)
+pppoe_metric=$(uci get network.wan.metric) 
+wannum=$(uci get macvlan.config.wannum)
+ENABLED=$(uci get macvlan.config.enabled)
+genrmcfg() {
+	echo '#!/bin/sh' > /tmp/rmcfg.sh
+	for i in $(seq 1 $wannum)
+	do
+		echo "uci del network.vwan${i}
+uci del dhcp.macvlan${i}
+uci del_list firewall.@zone[1].network=vwan${i}
+uci del mwan3.vwan${i}
+uci del mwan3.vwan${i}_m1_w1
+uci del_list mwan3.balanced.use_member=vwan${i}_m1_w1
+ip link delete macvlan${i}" >> /tmp/rmcfg.sh
+	done
+	echo "uci commit " >> /tmp/rmcfg.sh
+	chmod +x /tmp/rmcfg.sh	
+}
+
+genifsh() {
+	echo '#!/bin/sh' > /tmp/macvlan_ifdown.sh
+	[ "$wansw" == "1" ] && echo 'ifdown wan' >> /tmp/macvlan_ifdown.sh
+	echo '#!/bin/sh' > /tmp/macvlan_ifup.sh
+	[ "$wansw" == "1" ] && echo 'ifup wan &' >> /tmp/macvlan_ifup.sh
+
+
+	for i in $(seq 1 $wannum)
+	do
+		echo "ifdown vwan${i}" >> /tmp/macvlan_ifdown.sh
+		echo "ifup vwan${i} &" >> /tmp/macvlan_ifup.sh
+	done
+	chmod +x /tmp/macvlan_ifdown.sh
+	chmod +x /tmp/macvlan_ifup.sh	
+}
+
+
+
+start() {
+	[ -f /etc/config/macvlan ] || {
+		echo "You are missing configuration file /etc/config/macvlan"
+		return 1
+	}
+
+	config_load "macvlan"
+
+	config_get ENABLED config enabled
+
+	[ "$ENABLED" == "0" ] && {
+		echo "MACVLAN is disabled."
+		return 1
+	}
+
+	config_get PORTNUM config wannum
+	ifname=$(uci get network.wan.ifname)
+	for i in $(seq 0 $PORTNUM)
+	do
+		ip link add link $ifname name macvlan$i type macvlan
+		ifconfig macvlan$i hw ether $(echo $(cat /sys/class/net/$ifname/address|awk -F ":" '{print $1":"$2":"$3":"$4":"$5":" }')$(echo "" | awk -F ":" '{printf("%X\n", 16+i);}' i=$i))
+		ifconfig macvlan$i up
+	done
+	genrmcfg
+	genifsh
+
+}
+
+stop() {
+	echo "Nothing to do"
+}

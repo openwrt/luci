@@ -1,0 +1,31 @@
+#!/bin/sh
+#PPP detect script. written by 981213
+. /lib/functions.sh
+
+[ -f /etc/config/macvlan ] || {
+	echo "You are missing configuration file /etc/config/macvlan"
+	return 1
+}
+
+config_load "macvlan"
+config_get DIAGCHK config diagchk
+config_get DIAGNUM config diagnum
+config_get ENABLED config enabled
+[ "$DIAGCHK" == "0" ] && {
+	echo "diag check disabled."
+	return 0
+}
+[ $(ps | grep -c "pppconnectcheck") -gt 3 ] && logger "another checker is running.exit." && return 1
+sleep 30
+PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
+logger "$PPPUPNUM interfaces are online."
+if [ "$PPPUPNUM" -lt $DIAGNUM ]
+then
+	logger "Rediag."
+    [ "$ENABLED" == "1" ] && /etc/init.d/ppp_syncdiag restart | logger
+	[ "$ENABLED" == "0" ] && ifdown wan && ifup wan
+	logger "completed."
+else
+	logger "Exit."
+fi
+return 0

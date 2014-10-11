@@ -62,7 +62,8 @@ define application
 
   LUCI_BUILD_PACKAGES += luci-app-$(1)
 endef
-
+$(eval $(call application,macvlan,LuCI Support for macvlan,\
+	kmod-macvlan luci-app-mwan3))
 
 
 

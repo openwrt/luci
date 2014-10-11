@@ -1,0 +1,67 @@
+#!/bin/ash 
+
+pppoe_name=$(uci get network.wan.username) 
+pppoe_pw=$(uci get network.wan.password)
+pppoe_metric=$(uci get network.wan.metric) 
+wannum=$(uci get macvlan.config.wannum)
+ENABLED=$(uci get macvlan.config.enabled)
+wansw=$(uci get macvlan.config.wansw)
+
+sh /tmp/rmcfg.sh
+[ "$wansw" == "0" ] && {
+	uci set network.wan.proto=pppoe
+}
+
+[ "$ENABLED" == "0" ] && {
+#	echo "MACVLAN is disabled.STOP generating anythong."
+	uci commit
+	/etc/init.d/network restart
+	/etc/init.d/firewall restart
+	/etc/init.d/mwan3 restart
+	return 0
+}
+
+/etc/init.d/macvlan start
+for i in $(seq 1 $wannum)
+do
+	#gen wan if
+	uci set network.vwan${i}=interface
+	uci set network.vwan${i}.ifname=macvlan${i}
+	uci set network.vwan${i}.proto=pppoe
+	uci set network.vwan${i}.username=$pppoe_name
+	uci set network.vwan${i}.password=$pppoe_pw
+	uci set network.vwan${i}.metric=$((pppoe_metric+i))
+	#gen /etc/config/dhcp
+	uci set dhcp.macvlan${i}=dhcp 
+	uci set dhcp.macvlan${i}.interface=vwan${i}
+	uci set dhcp.macvlan${i}.ignore=1 
+	#gen firewall
+	uci add_list firewall.@zone[1].network=vwan$i
+	#gen mwan3_interface
+	uci set mwan3.vwan${i}=interface
+	uci set mwan3.vwan${i}.enabled=1
+	uci set mwan3.vwan${i}.count=1
+	uci set mwan3.vwan${i}.timeout=2
+	uci set mwan3.vwan${i}.interval=5
+	uci set mwan3.vwan${i}.down=3
+	uci set mwan3.vwan${i}.up=8
+	uci add_list mwan3.vwan${i}.track_ip='114.114.114.114'
+	uci add_list mwan3.vwan${i}.track_ip='114.114.115.115'
+	uci set mwan3.vwan${i}.reliability=1
+	#gen mwan3_member
+	uci set mwan3.vwan${i}_m1_w1=member
+	uci set mwan3.vwan${i}_m1_w1.interface=vwan${i}
+	uci set mwan3.vwan${i}_m1_w1.metric=1
+	uci set mwan3.vwan${i}_m1_w1.weight=1
+	#gen mwan3_policy
+	uci add_list mwan3.balanced.use_member=vwan${i}_m1_w1
+done
+[ "$wansw" == "0" ] && {
+	uci set network.wan.proto=none
+}
+
+uci commit
+/etc/init.d/network restart
+/etc/init.d/firewall restart
+/etc/init.d/mwan3 restart
+/bin/pppconnectcheck &
