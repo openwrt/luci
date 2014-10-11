@@ -32,7 +32,7 @@ local basicParams = {
 	{ Value,"server_bridge","192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254", translate("Configure server bridge") },
 	{ Flag,"nobind",0, translate("Do not bind to local address and port") },
 
-	{ Flag,"comp_lzo",0, translate("Use fast LZO compression") },
+	{ ListValue,"comp_lzo",{"yes","no","adaptive"}, translate("Use fast LZO compression") },
 	{ Value,"keepalive","10 60", translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
 
 	{ ListValue,"proto",{ "udp", "tcp" }, translate("Use protocol") },

@@ -88,7 +88,7 @@ local knownParams = {
 
 		{ ListValue,	"mtu_disc",						{ "yes", "maybe", "no" },										translate("Enable Path MTU discovery") },
 		{ Flag,			"mtu_test",						0,																translate("Empirically measure MTU") },
-		{ Flag,			"comp_lzo",						0,																translate("Use fast LZO compression") },
+		{ ListValue,			"comp_lzo",				{ "yes", "no", "adaptive" },																translate("Use fast LZO compression") },
 		{ Flag,			"comp_noadapt",					0,																translate("Don't use adaptive lzo compression"),	{ comp_lzo=1 } },
 		{ Value,		"link_mtu",						1500,															translate("Set TCP/UDP MTU") },
 		{ Value,		"tun_mtu",						1500,															translate("Set tun/tap device MTU") },
