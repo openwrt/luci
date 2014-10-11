@@ -68,6 +68,7 @@ $(eval $(call application,vsftpd,FTP Server,\
 	vsftpd-pam))
 $(eval $(call application,shadowsocks,LuCI Support for shadowsocks,\
 	shadowsocks-libev))
+$(eval $(call application,webshell,webshell configuration module))
 
 
 
