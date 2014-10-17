@@ -314,7 +314,7 @@ function request_raw(uri, options)
 	-- Follow 
 	response.code = tonumber(status)
 	if response.code and options.depth > 0 then
-		if response.code == 301 or response.code == 302 or response.code == 307
+		if (response.code == 301 or response.code == 302 or response.code == 307)
 		 and response.headers.Location then
 			local nuri = response.headers.Location or response.headers.location
 			if not nuri then

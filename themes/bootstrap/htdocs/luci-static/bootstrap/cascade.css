@@ -956,9 +956,9 @@ a.menu:after, .dropdown-toggle:after {
 .menu-dropdown, .dropdown-menu {
 	background-color: #ffffff;
 	float: left;
-	display: none;
 	position: absolute;
 	top: 40px;
+	left: -9999px;
 	z-index: 900;
 	min-width: 160px;
 	max-width: 220px;
@@ -1040,11 +1040,11 @@ header .dropdown-menu a.hover,
 .dropdown.open .menu-dropdown,
 .open .dropdown-menu,
 .dropdown.open .dropdown-menu {
-	display: block;
+	left: 0;
 }
 
 .dropdown:hover ul.dropdown-menu {
-	display: block;
+	left: 0;
 }
 
 .dropdown-menu .dropdown-menu {
