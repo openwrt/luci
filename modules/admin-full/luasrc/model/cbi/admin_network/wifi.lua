@@ -860,20 +860,6 @@ wpakey.datatype = "wpakey"
 wpakey.rmempty = true
 wpakey.password = true
 
-if (os.execute("opkg list | grep \"wpad - \" >/dev/null 2>/dev/null") == 0) then
-	wps_pbc = s:taboption("encryption", Flag, "wps_pushbutton", translate("WPS Pushbutton Config"))
-	wps_pbc.rmempty = true
-	wps_pbc:depends({mode="ap", encryption="psk"})
-	wps_pbc:depends({mode="ap", encryption="psk2"})
-	wps_pbc:depends({mode="ap", encryption="psk+psk2"})
-	wps_pbc:depends({mode="ap", encryption="psk-mixed"})
-	wps_pbc:depends({mode="ap-wds", encryption="psk"})
-	wps_pbc:depends({mode="ap-wds", encryption="psk2"})
-	wps_pbc:depends({mode="ap-wds", encryption="psk+psk2"})
-	wps_pbc:depends({mode="ap-wds", encryption="psk-mixed"})
-end
-
-
 wpakey.cfgvalue = function(self, section, value)
 	local key = m.uci:get("wireless", section, "key")
 	if key == "1" or key == "2" or key == "3" or key == "4" then
