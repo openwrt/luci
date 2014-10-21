@@ -135,13 +135,25 @@ function _wifi_iface(x)
 end
 
 function _wifi_state(key, val, field)
+	local radio, radiostate, ifc, ifcstate
+
 	if not next(_ubuswificache) then
 		_ubuswificache = _ubus:call("network.wireless", "status", {}) or {}
+
+		-- workaround extended section format
+		for radio, radiostate in pairs(_ubuswificache) do
+			for ifc, ifcstate in pairs(radiostate.interfaces) do
+				if ifcstate.section and ifcstate.section:sub(1, 1) == '@' then
+					local s = _uci_real:get_all('wireless.%s' % ifcstate.section)
+					if s then
+						ifcstate.section = s['.name']
+					end
+				end
+			end
+		end
 	end
 
-	local radio, radiostate
 	for radio, radiostate in pairs(_ubuswificache) do
-		local ifc, ifcstate
 		for ifc, ifcstate in pairs(radiostate.interfaces) do
 			if ifcstate[key] == val then
 				return ifcstate[field]
