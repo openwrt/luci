@@ -145,8 +145,8 @@ function error500(message)
 end
 
 function authenticator.htmlauth(validator, accs, default)
-	local user = luci.http.formvalue("username")
-	local pass = luci.http.formvalue("password")
+	local user = luci.http.formvalue("luci_username")
+	local pass = luci.http.formvalue("luci_password")
 
 	if user and validator(user, pass) then
 		return user

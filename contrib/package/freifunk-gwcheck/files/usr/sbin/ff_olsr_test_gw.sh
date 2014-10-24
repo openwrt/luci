@@ -5,6 +5,7 @@
 
 . /lib/functions.sh
 . /lib/functions/network.sh
+. /usr/share/libubox/jshn.sh
 
 # exit if dyngw_plain is not enabled or RtTable is not (254 or unset)
 config_load olsrd
