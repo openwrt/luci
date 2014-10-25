@@ -1,0 +1,17 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@redsocks2[-1]
+	add ucitrack redsocks2
+	set ucitrack.@redsocks2[-1].init=redsocks2
+	commit ucitrack
+	delete firewall.redsocks2
+	set firewall.redsocks2=include
+	set firewall.redsocks2.type=script
+	set firewall.redsocks2.path=/usr/share/redsocks2/firewall.include
+	set firewall.redsocks2.reload=1
+	commit firewall
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

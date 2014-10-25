@@ -1,0 +1,75 @@
+#!/bin/sh /etc/rc.common
+
+START=90
+APP=redsocks2
+PID_FILE=/var/run/$APP.pid
+ipset_blacklist="/etc/ipset/blacklist"
+ipset_whitelist="/etc/ipset/whitelist"
+
+start() {
+	# HACK fd
+	ulimit -n 4096
+
+	config_load "$APP"
+	local enabled localport proxytype autoproxy timeout proxyip proxyport whitelist_enabled blacklist_enabled
+	
+	config_get enabled config enabled
+	[ "$enabled" = '0' ] && {
+		return 0
+	}
+
+	config_get localport config localport
+	config_get proxytype config proxytype
+	config_get autoproxy config autoproxy 0
+	config_get timeout config timeout 5
+	config_get proxyip config proxyip
+	config_get proxyport config proxyport
+	config_get whitelist_enabled config whitelist_enabled
+	config_get blacklist_enabled config blacklist_enabled
+
+	mkdir -p /var/etc
+	sed -e "s#|LOCALPORT|#$localport#g" \
+		-e "s#|PROXYTYPE|#$proxytype#g" \
+		-e "s#|AUTOPROXY|#$autoproxy#g" \
+		-e "s#|TIMEOUT|#$timeout#g" \
+		-e "s#|PROXYIP|#$proxyip#g" \
+		-e "s#|PROXYPORT|#$proxyport#g" \
+		/etc/redsocks2/redsocks2.conf.template > /var/etc/redsocks2.conf
+
+	service_start /usr/sbin/redsocks2 -c /var/etc/redsocks2.conf -p $PID_FILE
+
+	remoteip="`resolveip -t5 $proxyip`"
+
+	iptables -t nat -N REDSOCKS2
+	iptables -t nat -A REDSOCKS2 -d 0.0.0.0/8 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 10.0.0.0/8 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 127.0.0.0/8 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 169.254.0.0/16 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 172.16.0.0/12 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 192.168.0.0/16 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 224.0.0.0/4 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 240.0.0.0/4 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d "$remoteip" -j RETURN
+
+	[ "$blacklist_enabled" = '1' ] && {
+		sed -e "s/^/-A blacklist &/g" -e "1 i\-N blacklist nethash --hashsize 64" $ipset_blacklist | ipset -R -!
+		iptables -t nat -A REDSOCKS2 -p tcp -m set --match-set blacklist src -j RETURN
+	}
+	if [ "$whitelist_enabled" = '1' ];then
+		sed -e "s/^/-A whitelist &/g" -e "1 i\-N whitelist nethash --hashsize 4096" $ipset_whitelist | ipset -R -!
+		iptables -t nat -A REDSOCKS2 -p tcp -m set ! --match-set whitelist dst -j REDIRECT --to-ports "$localport"
+	else
+		iptables -t nat -A REDSOCKS2 -p tcp -j REDIRECT --to-ports "$localport"
+	fi
+	iptables -t nat -I zone_lan_prerouting -j REDSOCKS2
+}
+
+stop() {
+	service_stop /usr/sbin/redsocks2 && rm -rf $PID_FILE
+	iptables -t nat -D zone_lan_prerouting -j REDSOCKS2 &> /dev/null
+	iptables -t nat -F REDSOCKS2 &> /dev/null
+	sleep 1
+	iptables -t nat -X REDSOCKS2 &> /dev/null
+	ipset destroy whitelist &> /dev/null
+	ipset destroy blacklist &> /dev/null
+}
