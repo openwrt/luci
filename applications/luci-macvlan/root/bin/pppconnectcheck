@@ -24,7 +24,15 @@ then
 	logger "Rediag."
     [ "$ENABLED" == "1" ] && /etc/init.d/ppp_syncdiag restart | logger
 	[ "$ENABLED" == "0" ] && ifdown wan && ifup wan
-	logger "completed."
+	logger "completed.Wait 30s for second check"
+    sleep 30
+    PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
+    logger "$PPPUPNUM interfaces are online."
+    if [ "$PPPUPNUM" -lt $DIAGNUM ]
+    then
+        logger "Kill pppd"
+        killall -9 pppd
+    fi
 else
 	logger "Exit."
 fi
