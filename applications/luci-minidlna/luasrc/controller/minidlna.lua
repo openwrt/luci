@@ -44,9 +44,9 @@ function minidlna_status()
 		if fd then
 			local html = fd:read("*a")
 			if html then
-				status.audio = (tonumber(html:match("Audio files: (%d+)")) or 0)
-				status.video = (tonumber(html:match("Video files: (%d+)")) or 0)
-				status.image = (tonumber(html:match("Image files: (%d+)")) or 0)
+				status.audio = (tonumber(html:match("Audio files</td><td>(%d+)")) or 0)
+				status.video = (tonumber(html:match("Video files</td><td>(%d+)")) or 0)
+				status.image = (tonumber(html:match("Image files</td><td>(%d+)")) or 0)
 			end
 			fd:close()
 		end
