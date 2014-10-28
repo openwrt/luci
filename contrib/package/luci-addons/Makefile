@@ -174,6 +174,7 @@ $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),luci-app-
 $(eval $(call application,upnp,Universal Plug & Play configuration module,miniupnpd))
 $(eval $(call application,ntpc,NTP time synchronisation configuration module,ntpclient))
 $(eval $(call application,ddns,Dynamic DNS configuration module,ddns-scripts))
+$(eval $(call application,dump1090,LuCI Support for dump1090,dump1090))
 $(eval $(call application,samba,Network Shares - Samba SMB/CIFS module,samba36-server))
 $(eval $(call application,mmc-over-gpio,MMC-over-GPIO configuration module,kmod-mmc-over-gpio))
 $(eval $(call application,p910nd,p910nd - Printer server module,p910nd))
