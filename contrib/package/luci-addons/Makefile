@@ -171,6 +171,7 @@ $(eval $(call application,diag-devinfo,LuCI Diagnostics Tools (Device Info),\
 $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),luci-app-diag-devinfo))
 
+$(eval $(call application,udpxy,LuCI Support for udpxy,udpxy))
 $(eval $(call application,upnp,Universal Plug & Play configuration module,miniupnpd))
 $(eval $(call application,ntpc,NTP time synchronisation configuration module,ntpclient))
 $(eval $(call application,ddns,Dynamic DNS configuration module,ddns-scripts))
