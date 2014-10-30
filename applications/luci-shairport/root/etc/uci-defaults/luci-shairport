@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# needed for "Save and Apply" to restart shairport
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@shairport[-1]
+	add ucitrack shairport
+	set ucitrack.@shairport[-1].init="shairport"
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

@@ -213,6 +213,7 @@ $(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Suppor
 $(eval $(call application,ltqtapi,Lantiq voip))
 $(eval $(call application,minidlna,LuCI Support for miniDLNA,minidlna))
 $(eval $(call application,shairplay,LuCI Support for Shairplay,shairplay))
+$(eval $(call application,shairport,LuCI Support for Shairport,shairport))
 $(eval $(call application,transmission,LuCI Support for Transmission,transmission-daemon))
 $(eval $(call application,watchcat,LuCI Support for Watchcat,watchcat))
 
