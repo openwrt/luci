@@ -1,8 +1,7 @@
 #!/bin/sh
-if [ "${4%%/*}" = "branches" ]; then
-	variant="LuCI ${4##*[-/]} Branch"
-elif [ "${4%%/*}" = "tags" ]; then
-	variant="LuCI ${4##*[-/]} Release"
+GITBRANCH=`git symbolic-ref --short -q HEAD`
+if [ $GITBRANCH != "master" ]; then
+	variant="LuCI branch: $GITBRANCH"
 else
 	variant="LuCI Trunk"
 fi
