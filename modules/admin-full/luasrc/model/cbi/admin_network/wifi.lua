@@ -169,12 +169,31 @@ if found_sta then
 	ch.value = translatef("Locked to channel %d used by: %s",
 		found_sta.channel, table.concat(found_sta.names, ", "))
 else
-	ch = s:taboption("general", Value, "channel", translate("Channel"))
-	ch:value("auto", translate("auto"))
-	for _, f in ipairs(iw and iw.freqlist or { }) do
-		if not f.restricted then
-			ch:value(f.channel, "%i (%.3f GHz)" %{ f.channel, f.mhz / 1000 })
-		end
+	ch = s:taboption("general", Value, "_mode_freq", '<br />'..translate("Operating frequency"))
+	ch.hwmodes = iw.hwmodelist
+	ch.freqlist = iw.freqlist
+	ch.template = "cbi/wireless_modefreq"
+
+	function ch.cfgvalue(self, section)
+		return {
+			m:get(section, "hwmode") or "",
+			m:get(section, "channel") or "auto",
+			m:get(section, "htmode") or ""
+		}
+	end
+
+	function ch.formvalue(self, section)
+		return {
+			m:formvalue(self:cbid(section) .. ".band") or (iw.hwmodelist.g and "11g" or "11a"),
+			m:formvalue(self:cbid(section) .. ".channel") or "auto",
+			m:formvalue(self:cbid(section) .. ".htmode") or ""
+		}
+	end
+
+	function ch.write(self, section, value)
+		m:set(section, "hwmode", value[1])
+		m:set(section, "channel", value[2])
+		m:set(section, "htmode", value[3])
 	end
 end
 
@@ -194,45 +213,6 @@ if hwtype == "mac80211" then
 			tp:value(p.driver_dbm, "%i dBm (%i mW)"
 				%{ p.display_dbm, p.display_mw })
 		end
-	end
-
-	mode = s:taboption("advanced", ListValue, "hwmode", translate("Band"))
-
-	if hw_modes.ac then
-		if hw_modes.ac then mode:value("11a", "5GHz (802.11n+ac)") end
-
-		htmode = s:taboption("advanced", ListValue, "htmode", translate("VHT mode (802.11ac)"))
-		htmode:value("", translate("disabled"))
-		htmode:value("VHT20", "20MHz")
-		htmode:value("VHT40", "40MHz")
-		htmode:value("VHT80", "80MHz")
-
-	elseif hw_modes.n then
-		if hw_modes.g then mode:value("11g", "2.4GHz (802.11g+n)") end
-		if hw_modes.a then mode:value("11a", "5GHz (802.11a+n)") end
-
-		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode (802.11n)"))
-		htmode:value("", translate("disabled"))
-		htmode:value("HT20", "20MHz")
-		htmode:value("HT40", "40MHz")
-
-		function mode.cfgvalue(...)
-			local v = Value.cfgvalue(...)
-			if v == "11na" then
-				return "11a"
-			elseif v == "11ng" then
-				return "11g"
-			end
-			return v
-		end
-
-		noscan = s:taboption("advanced", Flag, "noscan", translate("Force 40MHz mode"),
-			translate("Always use 40MHz channels even if the secondary channel overlaps. Using this option does not comply with IEEE 802.11n-2009!"))
-		noscan:depends("htmode", "HT40")
-		noscan.default = noscan.disabled
-	else
-		if hw_modes.g then mode:value("11g", "2.4GHz (802.11g)") end
-		if hw_modes.a then mode:value("11a", "5GHz (802.11a)") end
 	end
 
 	local cl = iw and iw.countrylist
@@ -284,16 +264,6 @@ if hwtype == "atheros" then
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
 	end
-
-	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
-	mode:value("", translate("auto"))
-	if hw_modes.b then mode:value("11b", "802.11b") end
-	if hw_modes.g then mode:value("11g", "802.11g") end
-	if hw_modes.a then mode:value("11a", "802.11a") end
-	if hw_modes.g then mode:value("11bg", "802.11b+g") end
-	if hw_modes.g then mode:value("11gst", "802.11g + Turbo") end
-	if hw_modes.a then mode:value("11ast", "802.11a + Turbo") end
-	mode:value("fh", translate("Frequency Hopping"))
 
 	s:taboption("advanced", Flag, "diversity", translate("Diversity")).rmempty = false
 
@@ -351,27 +321,6 @@ if hwtype == "broadcom" then
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
 	end
-
-	mode = s:taboption("advanced", ListValue, "hwmode", translate("Mode"))
-	if hw_modes.n then
-		if hw_modes.g then mode:value("11ng", "802.11g+n") end
-		if hw_modes.a then mode:value("11na", "802.11a+n") end
-		mode:value("11n", "802.11n")
-
-		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode (802.11n)"))
-		htmode:depends("hwmode", "11n")
-		htmode:depends("hwmode", "11ng")
-		htmode:depends("hwmode", "11na")
-		htmode:value("HT20", "20MHz")
-		htmode:value("HT40-", translate("40MHz 2nd channel below"))
-		htmode:value("HT40+", translate("40MHz 2nd channel above"))
-	end
-	if hw_modes.a then mode:value("11a", "802.11a") end
-	if hw_modes.b and hw_modes.g then mode:value("11bg", "802.11b+g") end
-	if hw_modes.b then mode:value("11b", "802.11b") end
-	if hw_modes.g then mode:value("11g", "802.11g") end
-	if hw_modes.g then mode:value("11gst", "802.11g Turbo") end
-	if hw_modes.g then mode:value("11lrs", "802.11g Limited Rate Support") end
 
 	ant1 = s:taboption("advanced", ListValue, "txantenna", translate("Transmitter Antenna"))
 	ant1.widget = "radio"

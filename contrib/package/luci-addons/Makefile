@@ -171,9 +171,11 @@ $(eval $(call application,diag-devinfo,LuCI Diagnostics Tools (Device Info),\
 $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),luci-app-diag-devinfo))
 
+$(eval $(call application,udpxy,LuCI Support for udpxy,udpxy))
 $(eval $(call application,upnp,Universal Plug & Play configuration module,miniupnpd))
 $(eval $(call application,ntpc,NTP time synchronisation configuration module,ntpclient))
 $(eval $(call application,ddns,Dynamic DNS configuration module,ddns-scripts))
+$(eval $(call application,dump1090,LuCI Support for dump1090,dump1090))
 $(eval $(call application,samba,Network Shares - Samba SMB/CIFS module,samba36-server))
 $(eval $(call application,mmc-over-gpio,MMC-over-GPIO configuration module,kmod-mmc-over-gpio))
 $(eval $(call application,p910nd,p910nd - Printer server module,p910nd))
@@ -210,6 +212,8 @@ $(eval $(call application,pbx,LuCI PBX Administration,\
 $(eval $(call application,pbx-voicemail,LuCI PBX Administration Voicemail Support,luci-app-pbx asterisk18 msmtp coreutils-base64))
 $(eval $(call application,ltqtapi,Lantiq voip))
 $(eval $(call application,minidlna,LuCI Support for miniDLNA,minidlna))
+$(eval $(call application,shairplay,LuCI Support for Shairplay,shairplay))
+$(eval $(call application,shairport,LuCI Support for Shairport,shairport))
 $(eval $(call application,transmission,LuCI Support for Transmission,transmission-daemon))
 $(eval $(call application,watchcat,LuCI Support for Watchcat,watchcat))
 
