@@ -257,9 +257,6 @@ $(eval $(call application,firewall,Firewall and Portforwarding application,\
 $(eval $(call application,qos,Quality of Service configuration module,\
 	+PACKAGE_luci-app-qos:qos-scripts))
 
-$(eval $(call application,ocserv,LuCI Support for OpenConnect VPN,\
-	+PACKAGE_luci-app-ocserv:ocserv certtool))
-
 $(eval $(call application,commands,LuCI Shell Command Module))
 
 
