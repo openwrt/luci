@@ -17,6 +17,10 @@ config olsr
 
 config dhcp
 	option init dnsmasq
+	list affects odhcpd
+
+config odhcpd
+	option init odhcpd
 
 config dropbear
 	option init dropbear
