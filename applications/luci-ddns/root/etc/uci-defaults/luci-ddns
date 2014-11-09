@@ -1,10 +1,8 @@
 #!/bin/sh
 
-# needed for "Save and Apply" to restart ddns
+# no longer needed for "Save and Apply" to restart ddns
 uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@ddns[-1]
-	add ucitrack ddns
-	set ucitrack.@ddns[-1].init="ddns"
 	commit ucitrack
 EOF
 
