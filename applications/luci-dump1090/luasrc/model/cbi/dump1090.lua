@@ -58,6 +58,10 @@ net_beast.default = false
 net_only=s:option(Flag, "net_only", translate("Enable just networking, no RTL device or file used"))
 net_only.default = false
 
+net_bind_address=s:option(Value, "net_bind_address", translate("IP address to bind to"))
+net_bind_address.rmempty = true
+net_bind_address.datatype = "ipaddr"
+
 net_http_port=s:option(Value, "net_http_port", translate("HTTP server port"))
 net_http_port.rmempty = true
 net_http_port.datatype = "port"
