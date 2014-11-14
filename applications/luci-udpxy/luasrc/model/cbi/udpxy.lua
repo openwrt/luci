@@ -22,6 +22,7 @@ enable=s:option(Flag, "disabled", translate("Enabled"))
 enable.enabled="0"
 enable.disabled="1"
 enable.default = "1"
+enable.rmempty = false
 respawn=s:option(Flag, "respawn", translate("Respawn"))
 respawn.default = false
 
