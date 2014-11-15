@@ -44,7 +44,7 @@ end
 
 -- check if IPv6 supported by OpenWrt
 function check_ipv6()
-	return NXFS.access("/proc/net/ipv6_route") 
+	return NXFS.access("/proc/net/ipv6_route")
 	   and NXFS.access("/usr/sbin/ip6tables")
 end
 
@@ -113,7 +113,7 @@ end
 
 -- read version information for given package if installed
 function ipkg_version(package)
-	if not package then 
+	if not package then
 		return nil
 	end
 	local info = OPKG.info(package)
@@ -121,7 +121,7 @@ function ipkg_version(package)
 	local version = ""
 	local i = 0
 	for k, v in pairs(info) do
-		if v.Package == package and v.Status.installed then		
+		if v.Package == package and v.Status.installed then
 			version = v.Version
 			i = i + 1
 		end
@@ -182,7 +182,7 @@ function flag_parse(self, section)
 		if (fvalue ~= cvalue) then self.section.changed = true end
 	else
 		self:remove(section)
-		self.section.changed = true 
+		self.section.changed = true
 	end
 end
 
@@ -222,14 +222,14 @@ end
 function parse_url(url)	--, default)
 	-- initialize default parameters
 	local parsed = {}
---	for i,v in base.pairs(default or parsed) do 
+--	for i,v in base.pairs(default or parsed) do
 --		parsed[i] = v
 --	end
 
 	-- remove whitespace
 --	url = string.gsub(url, "%s", "")
 	-- get fragment
-	url = string.gsub(url, "#(.*)$", 
+	url = string.gsub(url, "#(.*)$",
 		function(f)
 			parsed.fragment = f
 			return ""
@@ -262,7 +262,7 @@ function parse_url(url)	--, default)
 	parsed.path = url
 
 	local authority = parsed.authority
-	if not authority then 
+	if not authority then
 		return parsed
 	end
 	authority = string.gsub(authority,"^([^@]*)@",

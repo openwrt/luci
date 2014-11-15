@@ -113,18 +113,18 @@ web.default = "http://checkip.dyndns.com/"
 web.rmempty = true
 
 
-local ci = s:option(Value, "check_interval", translate("Check for changed IP every")) 
-ci.datatype = "and(uinteger,min(1))" 
-ci.default = 10 
+local ci = s:option(Value, "check_interval", translate("Check for changed IP every"))
+ci.datatype = "and(uinteger,min(1))"
+ci.default = 10
 
 local unit = s:option(ListValue, "check_unit", translate("Check-time unit"))
 unit.default = "minutes"
 unit:value("minutes", translate("min"))
 unit:value("hours", translate("h"))
 
-fi = s:option(Value, "force_interval", translate("Force update every")) 
-fi.datatype = "and(uinteger,min(1))" 
-fi.default = 72 
+fi = s:option(Value, "force_interval", translate("Force update every"))
+fi.datatype = "and(uinteger,min(1))"
+fi.default = 72
 
 local unit = s:option(ListValue, "force_unit", translate("Force-time unit"))
 unit.default = "hours"
