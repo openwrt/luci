@@ -21,17 +21,17 @@ PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
 logger "$PPPUPNUM interfaces are online."
 if [ "$PPPUPNUM" -lt $DIAGNUM ]
 then
-	logger "Rediag."
-    [ "$ENABLED" == "1" ] && /etc/init.d/ppp_syncdiag restart | logger
-	[ "$ENABLED" == "0" ] && ifdown wan && ifup wan
+    logger "Kill pppd"
+    kill -INT `pidof pppd`
 	logger "completed.Wait 30s for second check"
     sleep 30
     PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
     logger "$PPPUPNUM interfaces are online."
     if [ "$PPPUPNUM" -lt $DIAGNUM ]
     then
-        logger "Kill pppd"
-        killall -9 pppd
+        logger "ifdown&&ifup all ifs"
+        [ "$ENABLED" == "1" ] && /etc/init.d/ppp_syncdiag restart | logger
+	    [ "$ENABLED" == "0" ] && ifdown wan && ifup wan
     fi
 else
 	logger "Exit."
