@@ -35,7 +35,9 @@ diagnum.datatype = "range(0,20)"
 diagnum.optional = false
 
 
-s:option(DummyValue,"opennewwindow" ,"<br /><p align=\"justify\"><script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\""..translate("rediag").."\" onclick=\"window.open('"..luci.dispatcher.build_url("admin", "network", "macvlan_rediag").."')\" /></p>")
+o = s:option(DummyValue, "_rediag", translate("rediag"))
+o.template = "macvlan/macvlan_rediag"
+o.width    = "10%"
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
