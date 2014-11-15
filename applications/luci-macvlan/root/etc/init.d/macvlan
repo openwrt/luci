@@ -7,6 +7,7 @@ pppoe_name=$(uci get network.wan.username)
 pppoe_pw=$(uci get network.wan.password)
 pppoe_metric=$(uci get network.wan.metric) 
 wannum=$(uci get macvlan.config.wannum)
+wansw=$(uci get macvlan.config.wansw)
 ENABLED=$(uci get macvlan.config.enabled)
 genrmcfg() {
 	echo '#!/bin/sh' > /tmp/rmcfg.sh
