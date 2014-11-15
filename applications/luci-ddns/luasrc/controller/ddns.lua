@@ -16,15 +16,22 @@ $Id$
 
 module("luci.controller.ddns", package.seeall)
 
-require "nixio"
-require "nixio.fs"
-require "luci.sys"
-require "luci.http"
-require "luci.model.uci"
-require "luci.dispatcher"
-require "luci.tools.ddns"
+local NX   = require "nixio"
+local NXFS = require "nixio.fs"
+local DISP = require "luci.dispatcher"
+local HTTP = require "luci.http"
+local UCI  = require "luci.model.uci"
+local SYS  = require "luci.sys"
+local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
+local UTIL = require "luci.util"
+
+local luci_ddns_version = "2.1.0-1"	-- luci-app-ddns / openwrt Makefile compatible version
+local ddns_scripts_min  = "2.1.0-1"	-- minimum version of ddns-scripts required
 
 function index()
+	-- above 'require "mod"' definitions are not recognized 
+	-- inside index() during initialisation
+
 	-- no configuration file, don't start
 	if not nixio.fs.access("/etc/config/ddns") then
 		return
@@ -44,25 +51,27 @@ function index()
 		entry( {"admin", "services", "ddns", "hints"}, cbi("ddns/hints", 
 			{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), nil ).leaf = true
 		entry( {"admin", "services", "ddns", "logview"}, call("logread") ).leaf = true
-		entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
 		entry( {"admin", "services", "ddns", "startstop"}, call("startstop") ).leaf = true
+		entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
 	end
 end
 
 -- function to read all sections status and return data array
-function _get_status()
-	local uci	= luci.model.uci.cursor()
-	local service	= luci.sys.init.enabled("ddns") and 1 or 0
-	local url_start	= luci.dispatcher.build_url("admin", "system", "startup")
-	local data	= {}	-- Array to transfer data to javascript
-
-	-- read application settings
-	local date_format = uci:get("ddns", "global", "date_format") or "%F %R"
-	local run_dir	  = uci:get("ddns", "global", "run_dir") or "/var/run/ddns"
+local function _get_status()
+	local uci	 = UCI.cursor()
+	local service	 = SYS.init.enabled("ddns") and 1 or 0
+	local url_start	 = DISP.build_url("admin", "system", "startup")
+	local luci_build = DDNS.ipkg_version("luci-app-ddns").version
+	local ddns_act   = DDNS.ipkg_version("ddns-scripts").version
+	local data	 = {}	-- Array to transfer data to javascript
 
 	data[#data+1] 	= {
-		enabled	= service,	-- service enabled
-		url_up	= url_start	-- link to enable DDS (System-Startup)
+		enabled	   = service,		-- service enabled
+		url_up	   = url_start,		-- link to enable DDS (System-Startup)
+		luci_ver   = luci_ddns_version,	-- luci-app-ddns / openwrt Makefile compatible version
+		luci_build = luci_build,	-- installed luci build
+		script_min = ddns_scripts_min,	-- minimum version of ddns-scripts needed
+		script_ver = ddns_act		-- installed ddns-scripts
 	}
 
 	uci:foreach("ddns", "service", function (s)
@@ -75,13 +84,13 @@ function _get_status()
 		local datenext	= "_empty_"	-- formated date of next update
 
 		-- get force seconds
-		local force_seconds = luci.tools.ddns.calc_seconds(
+		local force_seconds = DDNS.calc_seconds(
 				tonumber(s["force_interval"]) or 72 ,
 				s["force_unit"] or "hours" )
 		-- get/validate pid and last update 
-		local pid      = luci.tools.ddns.get_pid(section, run_dir)
-		local uptime   = luci.sys.uptime()
-		local lasttime = tonumber(nixio.fs.readfile("%s/%s.update" % { run_dir, section } ) or 0 )
+		local pid      = DDNS.get_pid(section)
+		local uptime   = SYS.uptime()
+		local lasttime = DDNS.get_lastupd(section)
 		if lasttime > uptime then 	-- /var might not be linked to /tmp
 			lasttime = 0 		-- and/or not cleared on reboot
 		end
@@ -96,10 +105,9 @@ function _get_status()
 			--             sys.epoch - sys uptime   + lastupdate(uptime)
 			local epoch = os.time() - uptime + lasttime
 			-- use linux date to convert epoch
-			datelast = luci.sys.exec([[/bin/date -d @]] .. epoch .. [[ +']] .. date_format .. [[']])
+			datelast = DDNS.epoch2date(epoch)
 			-- calc and fill next update
-			datenext = luci.sys.exec([[/bin/date -d @]] .. (epoch + force_seconds) .. 
-						[[ +']] .. date_format .. [[']])
+			datenext = DDNS.epoch2date(epoch + force_seconds)
 		end
 
 		-- process running but update needs to happen
@@ -137,7 +145,7 @@ function _get_status()
 		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
 		command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 .. 
 			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
-		local reg_ip = luci.sys.exec(command)
+		local reg_ip = SYS.exec(command)
 		if reg_ip == "" then 
 			reg_ip = "_nodata_"
 		end
@@ -156,41 +164,38 @@ function _get_status()
 	end)
 
 	uci:unload("ddns")
-
 	return data
 end
 
 -- called by XHR.get from detail_logview.htm
 function logread(section)
 	-- read application settings
-	local uci	  = luci.model.uci.cursor()
+	local uci	  = UCI.cursor()
 	local log_dir	  = uci:get("ddns", "global", "log_dir") or "/var/log/ddns"
 	local lfile=log_dir .. "/" .. section .. ".log"
 
-	local ldata=nixio.fs.readfile(lfile)
+	local ldata=NXFS.readfile(lfile)
 	if not ldata or #ldata == 0 then
 		ldata="_nodata_"
 	end 
-	luci.http.write(ldata)
+	uci:unload("ddns")
+	HTTP.write(ldata)
 end
 
 -- called by XHR.get from overview_status.htm
 function startstop(section, enabled)
-	-- Array to transfer data to javascript
-	local data	= {}
-	-- read application settings
-	local uci	  = luci.model.uci.cursor()
-	local run_dir	  = uci:get("ddns", "global", "run_dir") or "/var/run/ddns"
+	local uci  = UCI.cursor()
+	local data = {}		-- Array to transfer data to javascript
 
 	-- if process running we want to stop and return
-	local pid = luci.tools.ddns.get_pid(section, run_dir)
+	local pid = DDNS.get_pid(section)
 	if pid > 0 then
-		os.execute ([[kill -9 %s]] % pid)
-		nixio.nanosleep(2)	-- 2 second "show time"
+		local tmp = NX.kill(pid, 15)	-- terminate
+		NX.nanosleep(2)	-- 2 second "show time"
 		-- status changed so return full status
 		data = _get_status()
-		luci.http.prepare_content("application/json")
-		luci.http.write_json(data)
+		HTTP.prepare_content("application/json")
+		HTTP.write_json(data)
 		return
 	end
 
@@ -219,13 +224,12 @@ function startstop(section, enabled)
 				end
 			end
 		end
-
 	end
 
 	-- we can not execute because other 
 	-- uncommited changes pending, so exit here
 	if not exec then
-		luci.http.write("_uncommited_")
+		HTTP.write("_uncommited_")
 		return
 	end
 
@@ -237,17 +241,28 @@ function startstop(section, enabled)
 
 	-- start dynamic_dns_updater.sh script
 	os.execute ([[/usr/lib/ddns/dynamic_dns_updater.sh %s 0 > /dev/null 2>&1 &]] % section)
-	nixio.nanosleep(3)	-- 3 seconds "show time"
-
+	NX.nanosleep(3)	-- 3 seconds "show time"
+	
 	-- status changed so return full status
 	data = _get_status()
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(data)
+	HTTP.prepare_content("application/json")
+	HTTP.write_json(data)
 end
 
 -- called by XHR.poll from overview_status.htm
 function status()
 	local data = _get_status()
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(data)
+	HTTP.prepare_content("application/json")
+	HTTP.write_json(data)
 end
+
+-- check if installed ddns-scripts version < required version
+function update_needed()
+	local sver = DDNS.ipkg_version("ddns-scripts")
+	local rver = UTIL.split(ddns_scripts_min, "[%.%-]", nil, true)
+	return (sver.major < (tonumber(rver[1]) or 0))
+	    or (sver.minor < (tonumber(rver[2]) or 0))
+	    or (sver.patch < (tonumber(rver[3]) or 0))
+	    or (sver.build < (tonumber(rver[4]) or 0))
+end
+

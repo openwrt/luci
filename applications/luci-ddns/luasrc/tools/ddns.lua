@@ -1,7 +1,7 @@
 --[[
 LuCI - Lua Configuration Interface
 
-shared module for luci-app-ddns-v2
+shared module for luci-app-ddns
 Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 
 function parse_url copied from https://svn.nmap.org/nmap/nselib/url.lua
@@ -18,40 +18,12 @@ You may obtain a copy of the License at
 
 module("luci.tools.ddns", package.seeall)
 
-require "luci.sys"
-require "nixio.fs"
-
-function check_ipv6()
-	return nixio.fs.access("/proc/net/ipv6_route") 
-	   and nixio.fs.access("/usr/sbin/ip6tables")
-end
-
-function check_ssl()
-	if (luci.sys.call([[ grep -iq "\+ssl" /usr/bin/wget 2>/dev/null ]]) == 0) then
-		return true
-	else
-		return nixio.fs.access("/usr/bin/curl")
-	end
-end
-
-function check_proxy()
-	-- we prefere GNU Wget for communication
-	if (luci.sys.call([[ grep -iq "\+ssl" /usr/bin/wget 2>/dev/null ]]) == 0) then
-		return true
-
-	-- if not installed cURL must support proxy
-	elseif nixio.fs.access("/usr/bin/curl") then
-		return (luci.sys.call([[ grep -iq all_proxy /usr/lib/libcurl.so* 2>/dev/null ]]) == 0)
-
-	-- only BusyBox Wget is installed
-	else
-		return nixio.fs.access("/usr/bin/wget")
-	end
-end
-
-function check_bind_host()
-	return nixio.fs.access("/usr/bin/host")
-end
+local NX   = require "nixio"
+local NXFS = require "nixio.fs"
+local OPKG = require "luci.model.ipkg"
+local UCI  = require "luci.model.uci"
+local SYS  = require "luci.sys"
+local UTIL = require "luci.util"
 
 -- function to calculate seconds from given interval and unit
 function calc_seconds(interval, unit)
@@ -70,13 +42,102 @@ function calc_seconds(interval, unit)
 	end
 end
 
+-- check if IPv6 supported by OpenWrt
+function check_ipv6()
+	return NXFS.access("/proc/net/ipv6_route") 
+	   and NXFS.access("/usr/sbin/ip6tables")
+end
+
+-- check if Wget with SSL support or cURL installed
+function check_ssl()
+	if (SYS.call([[ grep -iq "\+ssl" /usr/bin/wget 2>/dev/null ]]) == 0) then
+		return true
+	else
+		return NXFS.access("/usr/bin/curl")
+	end
+end
+
+-- check if Wget with SSL or cURL with proxy support installed
+function check_proxy()
+	-- we prefere GNU Wget for communication
+	if (SYS.call([[ grep -iq "\+ssl" /usr/bin/wget 2>/dev/null ]]) == 0) then
+		return true
+
+	-- if not installed cURL must support proxy
+	elseif NXFS.access("/usr/bin/curl") then
+		return (SYS.call([[ grep -iq all_proxy /usr/lib/libcurl.so* 2>/dev/null ]]) == 0)
+
+	-- only BusyBox Wget is installed
+	else
+		return NXFS.access("/usr/bin/wget")
+	end
+end
+
+-- check if BIND host installed
+function check_bind_host()
+	return NXFS.access("/usr/bin/host")
+end
+
+-- convert epoch date to given format
+function epoch2date(epoch, format)
+	if not format or #format < 2 then
+		local uci = UCI.cursor()
+		format    = uci:get("ddns", "global", "date_format") or "%F %R"
+		uci:unload("ddns")
+	end
+	format = format:gsub("%%n", "<br />")	-- replace newline
+	format = format:gsub("%%t", "    ")	-- replace tab
+	return os.date(format, epoch)
+end
+
+-- read lastupdate from [section].update file
+function get_lastupd(section)
+	local uci     = UCI.cursor()
+	local run_dir = uci:get("ddns", "global", "run_dir") or "/var/run/ddns"
+	local etime   = tonumber(NXFS.readfile("%s/%s.update" % { run_dir, section } ) or 0 )
+	uci:unload("ddns")
+	return etime
+end
+
 -- read PID from run file and verify if still running
-function get_pid(section, run_dir)
-	local pid = tonumber(nixio.fs.readfile("%s/%s.pid" % { run_dir, section } ) or 0 )
-	if pid > 0 and not luci.sys.process.signal(pid, 0) then
+function get_pid(section)
+	local uci     = UCI.cursor()
+	local run_dir = uci:get("ddns", "global", "run_dir") or "/var/run/ddns"
+	local pid     = tonumber(NXFS.readfile("%s/%s.pid" % { run_dir, section } ) or 0 )
+	if pid > 0 and not NX.kill(pid, 0) then
 		pid = 0
 	end
+	uci:unload("ddns")
 	return pid
+end
+
+-- read version information for given package if installed
+function ipkg_version(package)
+	if not package then 
+		return nil
+	end
+	local info = OPKG.info(package)
+	local data = {}
+	local version = ""
+	local i = 0
+	for k, v in pairs(info) do
+		if v.Package == package and v.Status.installed then		
+			version = v.Version
+			i = i + 1
+		end
+	end
+	if i > 1 then	-- more then one valid record
+		return data
+	end
+	local sver = UTIL.split(version, "[%.%-]", nil, true)
+	data = {
+		version = version,
+		major   = tonumber(sver[1]) or 0,
+		minor   = tonumber(sver[2]) or 0,
+		patch   = tonumber(sver[3]) or 0,
+		build   = tonumber(sver[4]) or 0
+	}
+	return data
 end
 
 -- replacement of build-in read of UCI option
@@ -100,6 +161,28 @@ function read_value(self, section, option)
 		end
 	elseif self.cast == "table" then
 		return { value }
+	end
+end
+
+-- replacement of build-in Flag.parse of cbi.lua
+-- modified to mark section as changed if value changes
+-- current parse did not do this, but it is done AbstaractValue.parse()
+function flag_parse(self, section)
+	local fexists = self.map:formvalue(
+		luci.cbi.FEXIST_PREFIX .. self.config .. "." .. section .. "." .. self.option)
+
+	if fexists then
+		local fvalue = self:formvalue(section) and self.enabled or self.disabled
+		local cvalue = self:cfgvalue(section)
+		if fvalue ~= self.default or (not self.optional and not self.rmempty) then
+			self:write(section, fvalue)
+		else
+			self:remove(section)
+		end
+		if (fvalue ~= cvalue) then self.section.changed = true end
+	else
+		self:remove(section)
+		self.section.changed = true 
 	end
 end
 

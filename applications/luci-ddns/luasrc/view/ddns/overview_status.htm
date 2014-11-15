@@ -2,6 +2,12 @@
 <!-- ++ BEGIN ++ Dynamic DNS ++ overview_status.htm ++ -->
 <script type="text/javascript">//<![CDATA[
 
+	// variables to store version information
+	var luci_version
+	var luci_build
+	var ddns_version
+	var ddns_required
+
 	// helper to extract section from objects id
 	// cbi.ddns.SECTION._xyz
 	function _id2section(id) {
@@ -14,7 +20,11 @@
 	// called by XHR.poll and onclick_startstop
 	function _data2elements(data) {
 		// DDNS Service
-		// data[0] ignored here
+		// fill Version informations
+		luci_version  = data[0].luci_ver
+		luci_build    = data[0].luci_build
+		ddns_version  = data[0].script_ver
+		ddns_required = data[0].script_min
 
 		// Service sections
 		for( i = 1; i < data.length; i++ )
@@ -38,7 +48,7 @@
 				btn.className = "cbi-button cbi-input-apply";
 			}
 			btn.disabled = false;	// button enabled
-			
+
 			// last update
 			switch (data[i].datelast) {
 				case "_empty_":
@@ -71,7 +81,7 @@
 						nup.innerHTML = '<em><%:Disabled%></em>';
 						btn.value = '----------';
 						btn.className = "cbi-button cbi-input-button";	// no image
-						btn.disabled = true;	// disabled 
+						btn.disabled = true;	// disabled
 					}
 					break;
 				default:
@@ -84,13 +94,13 @@
 
 			// registered IP
 			// rip.innerHTML = "Registered IP";
-			if (data[i].domain == "_nodomain_") 
+			if (data[i].domain == "_nodomain_")
 				rip.innerHTML = '';
 			else if (data[i].reg_ip == "_nodata_")
 				rip.innerHTML = '<em><%:No data%></em>';
 			else
 				rip.innerHTML = data[i].reg_ip;
-		
+
 			// monitored interfacce
 			// data[i].iface ignored here
 		}
@@ -121,13 +131,27 @@
 		} else {
 			btn.value = '----------';
 			btn.className = "cbi-button cbi-input-button";	// no image
-			btn.disabled = true;		// disabled 
-		}		
+			btn.disabled = true;		// disabled
+		}
+	}
+
+	// event handler for map.title link
+	function onclick_maptitle() {
+		var str = "<%:Version Information%>";
+		str += "\n\nluci-app-ddns:";
+		str += "\n\t<%:Version%>:\t" + luci_version;
+		str += "\n\t<%:Build%>:\t" + luci_build;
+		str += "\n\nddns-scripts <%:installed%>:";
+		str += "\n\t<%:Version%>:\t" + ddns_version;
+		str += "\n\nddns-scripts <%:required%>:";
+		str += "\n\t<%:Version%>:\t" + ddns_required + " <%:or greater%>";
+		str += "\n\n"
+		alert(str);
 	}
 
 	// event handler for start/stop button
 	function onclick_startstop(id) {
-		// extract section		
+		// extract section
 		var section = _id2section(id);
 		// get elements
 		var cbx = document.getElementById("cbid.ddns." + section + ".enabled");		// Enabled
@@ -158,14 +182,20 @@
 		);
 	}
 
+	// force to immediate show status on page load (not waiting for XHR.poll)
+	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+		function(x, data) {
+			_data2elements(data);
+		}
+	);
+
 	// define only ONE XHR.poll in a page because if one is running it blocks the other one
 	// optimum is to define on Map or Section Level from here you can reach all elements
-	// we need update every 30 seconds only
-	XHR.poll(30, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
-		function(x, data)
-		{
+	// we need update every 15 seconds only
+	XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+		function(x, data) {
 			_data2elements(data);
-		}			
+		}
 	);
 
 //]]></script>
