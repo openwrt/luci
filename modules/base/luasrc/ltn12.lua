@@ -144,6 +144,7 @@ function source.file(handle, io_err)
     if handle then
         return function()
             local chunk = handle:read(BLOCKSIZE)
+            if chunk and chunk:len() == 0 then chunk = nil end
             if not chunk then handle:close() end
             return chunk
         end
