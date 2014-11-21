@@ -658,7 +658,7 @@ function parse_message_body( src, msg, filecb )
 
 			if not ok and err then
 				return nil, err
-			elseif not err then
+			elseif not ok then -- eof
 				return true
 			end
 		end
