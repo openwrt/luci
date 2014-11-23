@@ -98,6 +98,12 @@ if has_extroot then
 	o:depends("fstype", "ext2")
 	o:depends("fstype", "ext3")
 	o:depends("fstype", "ext4")
+    function o.write(self, section, value)
+        ListValue.write(self, section, value)
+        if value == "1" then
+            m.uci:set("fstab", section, "target", "/overlay")
+        end
+    end
 end
 
 if has_fscheck then
