@@ -25,11 +25,11 @@ local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 local UTIL = require "luci.util"
 
-local luci_ddns_version = "2.1.0-1"	-- luci-app-ddns / openwrt Makefile compatible version
-local ddns_scripts_min  = "2.1.0-1"	-- minimum version of ddns-scripts required
+local luci_ddns_version = "2.1.0-2"	-- luci-app-ddns / openwrt Makefile compatible version
+local ddns_scripts_min  = "2.1.0-2"	-- minimum version of ddns-scripts required
 
 function index()
-	-- above 'require "mod"' definitions are not recognized 
+	-- above 'require "mod"' definitions are not recognized
 	-- inside index() during initialisation
 
 	-- no configuration file, don't start
@@ -48,7 +48,7 @@ function index()
 	else
 		entry( {"admin", "services", "ddns"}, cbi("ddns/overview"), _("Dynamic DNS"), 59)
 		entry( {"admin", "services", "ddns", "detail"}, cbi("ddns/detail"), nil ).leaf = true
-		entry( {"admin", "services", "ddns", "hints"}, cbi("ddns/hints", 
+		entry( {"admin", "services", "ddns", "hints"}, cbi("ddns/hints",
 			{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), nil ).leaf = true
 		entry( {"admin", "services", "ddns", "logview"}, call("logread") ).leaf = true
 		entry( {"admin", "services", "ddns", "startstop"}, call("startstop") ).leaf = true
@@ -80,14 +80,14 @@ local function _get_status()
 		-- and enabled state
 		local section	= s[".name"]
 		local enabled	= tonumber(s["enabled"]) or 0
-		local datelast	= "_empty_"	-- formated date of last update 
+		local datelast	= "_empty_"	-- formated date of last update
 		local datenext	= "_empty_"	-- formated date of next update
 
 		-- get force seconds
 		local force_seconds = DDNS.calc_seconds(
 				tonumber(s["force_interval"]) or 72 ,
 				s["force_unit"] or "hours" )
-		-- get/validate pid and last update 
+		-- get/validate pid and last update
 		local pid      = DDNS.get_pid(section)
 		local uptime   = SYS.uptime()
 		local lasttime = DDNS.get_lastupd(section)
@@ -116,7 +116,7 @@ local function _get_status()
 		if pid > 0 and ( lasttime + force_seconds - uptime ) <= 0 then
 			datenext = "_verify_"
 
-		-- run once 
+		-- run once
 		elseif force_seconds == 0 then
 			datenext = "_runonce_"
 
@@ -124,11 +124,11 @@ local function _get_status()
 		elseif pid == 0 and enabled == 0 then
 			datenext  = "_disabled_"
 
-		-- no process running and NOT 
+		-- no process running and NOT
 		elseif pid == 0 and enabled ~= 0 then
 			datenext = "_stopped_"
 		end
-		
+
 		-- get/set monitored interface and IP version
 		local iface	= s["interface"] or "_nonet_"
 		local use_ipv6	= tonumber(s["use_ipv6"]) or 0
@@ -143,10 +143,10 @@ local function _get_status()
 		local force_ipversion = tonumber(s["force_ipversion"] or 0)
 		local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
 		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
-		command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 .. 
+		command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 ..
 			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
 		local reg_ip = SYS.exec(command)
-		if reg_ip == "" then 
+		if reg_ip == "" then
 			reg_ip = "_nodata_"
 		end
 
@@ -177,7 +177,7 @@ function logread(section)
 	local ldata=NXFS.readfile(lfile)
 	if not ldata or #ldata == 0 then
 		ldata="_nodata_"
-	end 
+	end
 	uci:unload("ddns")
 	HTTP.write(ldata)
 end
@@ -226,7 +226,7 @@ function startstop(section, enabled)
 		end
 	end
 
-	-- we can not execute because other 
+	-- we can not execute because other
 	-- uncommited changes pending, so exit here
 	if not exec then
 		HTTP.write("_uncommited_")
@@ -235,14 +235,14 @@ function startstop(section, enabled)
 
 	-- save enable state
 	uci:set("ddns", section, "enabled", ( (enabled == "true") and "1" or "0") )
-	uci:save("ddns") 
+	uci:save("ddns")
 	uci:commit("ddns")
 	uci:unload("ddns")
 
 	-- start dynamic_dns_updater.sh script
 	os.execute ([[/usr/lib/ddns/dynamic_dns_updater.sh %s 0 > /dev/null 2>&1 &]] % section)
 	NX.nanosleep(3)	-- 3 seconds "show time"
-	
+
 	-- status changed so return full status
 	data = _get_status()
 	HTTP.prepare_content("application/json")

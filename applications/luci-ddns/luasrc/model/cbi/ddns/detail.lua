@@ -112,7 +112,7 @@ local function _verify_ip_source()
 
 	local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh get_local_ip ]] ..
 		_ipv6 .. [[ ]] .. _source .. [[ ]] .. _network .. [[ ]] ..
-		_url .. [[ ]] .. _interface .. [[ ]] .. _script.. [[ ]] .. _proxy
+		_url .. [[ ]] .. _interface .. [[ ']] .. _script.. [[' ]] .. _proxy
 	local ret = SYS.call(command)
 
 	if ret == 0 then
@@ -126,7 +126,7 @@ end
 m = Map("ddns")
 
 -- first need to close <a> from cbi map template our <a> closed by template
-m.title = [[</a><a href="]] .. DISP.build_url("admin", "services", "ddns") .. [[">]] .. 
+m.title = [[</a><a href="]] .. DISP.build_url("admin", "services", "ddns") .. [[">]] ..
 		translate("Dynamic DNS")
 
 m.description = translate("Dynamic DNS allows that your router can be reached with " ..
@@ -167,8 +167,8 @@ en = ns:taboption("basic", Flag, "enabled",
 	translate("If this service section is disabled it could not be started." .. "<br />" ..
 		"Neither from LuCI interface nor from console") )
 en.orientation = "horizontal"
-function en.parse(self, section) 
-	DDNS.flag_parse(self, section) 
+function en.parse(self, section)
+	DDNS.flag_parse(self, section)
 end
 
 -- use_ipv6 (NEW)  -- ##########################################################
@@ -189,13 +189,13 @@ function usev6.cfgvalue(self, section)
 	return value
 end
 function usev6.validate(self, value)
-	if (value == "1" and has_ipv6) or value == "0" then 
+	if (value == "1" and has_ipv6) or value == "0" then
 		return value
 	end
 	return nil, err_tab_basic(self) .. err_ipv6_plain
 end
 function usev6.write(self, section, value)
-	if value == "0" then	-- force rmempty 
+	if value == "0" then	-- force rmempty
 		return self.map:del(section, self.option)
 	else
 		return self.map:set(section, self.option, value)
@@ -256,8 +256,8 @@ svc6 = ns:taboption("basic", ListValue, "ipv6_service_name",
 	translate("DDNS Service provider") .. " [IPv6]" )
 svc6.default	= "-"
 svc6:depends("use_ipv6", "1")	-- only show on IPv6
-if not has_ipv6 then 
-	svc6.description = err_ipv6_basic 
+if not has_ipv6 then
+	svc6.description = err_ipv6_basic
 end
 
 local services6 = { }
@@ -425,8 +425,8 @@ if has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 		end
 		return value
 	end
-	function https.parse(self, section) 
-		DDNS.flag_parse(self, section) 
+	function https.parse(self, section)
+		DDNS.flag_parse(self, section)
 	end
 	function https.validate(self, value)
 		if (value == "1" and has_ssl ) or value == "0" then return value end
@@ -453,7 +453,7 @@ if has_ssl then
 	cert.rmempty = false -- force validate function
 	cert.default = "/etc/ssl/certs"
 	function cert.validate(self, value)
-		if https:formvalue(section) == "0" then 
+		if https:formvalue(section) == "0" then
 			return ""	-- supress validate error if NOT https
 		end
 		if value then	-- otherwise errors in datatype check
@@ -487,8 +487,8 @@ logf = ns:taboption("basic", Flag, "use_logfile",
 logf.orientation = "horizontal"
 logf.rmempty = false	-- we want to save in /etc/config/ddns file on "0" because
 logf.default = "1"	-- if not defined write to log by default
-function logf.parse(self, section) 
-	DDNS.flag_parse(self, section) 
+function logf.parse(self, section)
+	DDNS.flag_parse(self, section)
 end
 
 -- TAB: Advanced  ##################################################################################
@@ -644,8 +644,8 @@ function ipn6.validate(self, value)
 	 or src6:formvalue(section) ~= "network" then
 		-- ignore if IPv4 selected OR
 		-- ignore everything except "network"
-		return ""	
-	elseif has_ipv6 then 
+		return ""
+	elseif has_ipv6 then
 		return value
 	else
 		return nil, err_tab_adv(self) .. err_ipv6_plain
@@ -712,7 +712,7 @@ iurl6 = ns:taboption("advanced", Value, "ipv6_url",
 	translate("URL to detect") .. " [IPv6]" )
 iurl6:depends("ipv6_source", "web")
 iurl6.default = "http://checkipv6.dyndns.com"
-if has_ipv6 then 
+if has_ipv6 then
 	iurl6.description = translate("Defines the Web page to read systems IPv6-Address from")
 else
 	iurl6.description = err_ipv6_other
@@ -796,12 +796,16 @@ ips = ns:taboption("advanced", Value, "ip_script",
 	translate("User defined script to read systems IP-Address") )
 ips:depends("ipv4_source", "script")	-- IPv4
 ips:depends("ipv6_source", "script")	-- or IPv6
+ips.rmempty	= false
 ips.placeholder = "/path/to/script.sh"
 function ips.validate(self, value)
+	local split
+	if value then split = UTIL.split(value, " ") end
+
 	if (usev6:formvalue(section) == "0" and src4:formvalue(section) ~= "script")
 	or (usev6:formvalue(section) == "1" and src6:formvalue(section) ~= "script") then
 		return ""
-	elseif not value or not FS.access(value, "x") then
+	elseif not value or not (#value > 0) or not FS.access(split[1], "x") then
 		return nil, err_tab_adv(self) ..
 			translate("not found or not executable - Sample: '/path/to/script.sh'")
 	else
@@ -913,8 +917,8 @@ if has_force or ( ( m:get(section, "force_ipversion") or "0" ) ~= "0" ) then
 		if (value == "1" and has_force) or value == "0" then return value end
 		return nil, err_tab_adv(self) .. translate("Force IP Version not supported")
 	end
-	function fipv.parse(self, section) 
-		DDNS.flag_parse(self, section) 
+	function fipv.parse(self, section)
+		DDNS.flag_parse(self, section)
 	end
 	function fipv.write(self, section, value)
 		if value == "1" then
@@ -970,13 +974,13 @@ if has_dnstcp or ( ( m:get(section, "force_dnstcp") or "0" ) ~= "0" ) then
 		return value
 	end
 	function tcp.validate(self, value)
-		if (value == "1" and has_dnstcp ) or value == "0" then 
+		if (value == "1" and has_dnstcp ) or value == "0" then
 			return value
 		end
 		return nil, err_tab_adv(self) .. translate("DNS requests via TCP not supported")
 	end
-	function tcp.parse(self, section) 
-		DDNS.flag_parse(self, section) 
+	function tcp.parse(self, section)
+		DDNS.flag_parse(self, section)
 	end
 end
 
@@ -1018,7 +1022,7 @@ if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 			else                 return nil, err_tab_adv(self) .. translate("unspecific error")
 			end
 		else
-			return nil, err .. translate("PROXY-Server not supported")
+			return nil, err_tab_adv(self) .. translate("PROXY-Server not supported")
 		end
 	end
 end
@@ -1082,7 +1086,7 @@ fi.template = "ddns/detail_value"
 fi.default  = 72 	-- see dynamic_dns_updater.sh script
 fi.rmempty = false	-- validate ourselves for translatable error messages
 function fi.validate(self, value)
-	if not DTYP.uinteger(value) 
+	if not DTYP.uinteger(value)
 	or tonumber(value) < 0 then
 		return nil, err_tab_timer(self) .. translate("minimum value '0'")
 	end
@@ -1144,7 +1148,7 @@ rc = ns:taboption("timer", Value, "retry_count",
 rc.default = 5
 rc.rmempty = false	-- validate ourselves for translatable error messages
 function rc.validate(self, value)
-	if not DTYP.uinteger(value) 
+	if not DTYP.uinteger(value)
 	or tonumber(value) < 1 then
 		return nil, err_tab_timer(self) .. translate("minimum value '1'")
 	else
