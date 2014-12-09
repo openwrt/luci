@@ -28,8 +28,8 @@
 -- one button on top, one at the buttom
 %>
 <input class="cbi-button cbi-input-button" style="align: center; width: 100%" type="button" onclick="onclick_logview(this.name, false)"
-<%= 
-attr("name", section) .. attr("id", cbid .. ".btn1") .. attr("value", self.inputtitle) 
+<%=
+attr("name", section) .. attr("id", cbid .. ".btn1") .. attr("value", self.inputtitle)
 %> />
 
 <br /><br />
@@ -39,15 +39,15 @@ attr("name", section) .. attr("id", cbid .. ".btn1") .. attr("value", self.input
 -- in openwrt theme there are problems with a width of 100 so we check for theme and set to lower value
 %>
 <textarea style="width: <%if media == "/luci-static/openwrt.org" then%>98.7%<%else%>100%<%end%> ; min-height: 500px; border: 3px solid #cccccc; padding: 5px; font-family: monospace; resize: none;" wrap="off" readonly="readonly"
-<%= 
-attr("name", cbid .. ".txt") .. attr("id", cbid .. ".txt") .. ifattr(self.rows, "rows") 
+<%=
+attr("name", cbid .. ".txt") .. attr("id", cbid .. ".txt") .. ifattr(self.rows, "rows")
 %> >
 <%-=pcdata(self:cfgvalue(section))-%>
 </textarea>
 <br /><br />
 
-<% 
--- one button on top, one at the buttom 
+<%
+-- one button on top, one at the buttom
 %>
 <input class="cbi-button cbi-input-button" style="align: center; width: 100%" type="button" onclick="onclick_logview(this.name, true)"
 <%= attr("name", section) .. attr("id", cbid .. ".btn2") .. attr("value", self.inputtitle) %> />
