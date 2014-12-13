@@ -25,35 +25,28 @@ local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 local UTIL = require "luci.util"
 
-local luci_ddns_version = "2.1.0-2"	-- luci-app-ddns / openwrt Makefile compatible version
+local luci_ddns_version = "2.1.0-3"	-- luci-app-ddns / openwrt Makefile compatible version
 local ddns_scripts_min  = "2.1.0-2"	-- minimum version of ddns-scripts required
 
 function index()
-	-- above 'require "mod"' definitions are not recognized
-	-- inside index() during initialisation
-
-	-- no configuration file, don't start
-	if not nixio.fs.access("/etc/config/ddns") then
+	-- no services_ipv6 file or no dynamic_dns_lucihelper.sh
+	-- do NOT start
+	if not nixio.fs.access("/usr/lib/ddns/services_ipv6") 
+	or not nixio.fs.access("/usr/lib/ddns/dynamic_dns_lucihelper.sh") then
 		return
 	end
-	-- ddns-scripts 1.0.0 installed, run old luci app
-	if not nixio.fs.access("/usr/lib/ddns/services_ipv6")
-	    or nixio.fs.access("/usr/lib/ddns/url_escape.sed") then
-		local page
-		page = entry({"admin", "services", "ddns"}, cbi("ddns/ddns"), _("Dynamic DNS"), 60)
-		page.dependent = true
-		page = entry({"mini", "network", "ddns"}, cbi("ddns/ddns", {autoapply=true}), _("Dynamic DNS"), 60)
-		page.dependent = true
-	-- it looks like ddns-scripts 2.x.x are installed
-	else
-		entry( {"admin", "services", "ddns"}, cbi("ddns/overview"), _("Dynamic DNS"), 59)
-		entry( {"admin", "services", "ddns", "detail"}, cbi("ddns/detail"), nil ).leaf = true
-		entry( {"admin", "services", "ddns", "hints"}, cbi("ddns/hints",
-			{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), nil ).leaf = true
-		entry( {"admin", "services", "ddns", "logview"}, call("logread") ).leaf = true
-		entry( {"admin", "services", "ddns", "startstop"}, call("startstop") ).leaf = true
-		entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
+	-- no config create an empty one
+	if not nixio.fs.access("/etc/config/ddns") then
+		nixio.fs.writefile("/etc/config/ddns", "")
 	end
+
+	entry( {"admin", "services", "ddns"}, cbi("ddns/overview"), _("Dynamic DNS"), 59)
+	entry( {"admin", "services", "ddns", "detail"}, cbi("ddns/detail"), nil ).leaf = true
+	entry( {"admin", "services", "ddns", "hints"}, cbi("ddns/hints",
+		{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), nil ).leaf = true
+	entry( {"admin", "services", "ddns", "logview"}, call("logread") ).leaf = true
+	entry( {"admin", "services", "ddns", "startstop"}, call("startstop") ).leaf = true
+	entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
 end
 
 -- function to read all sections status and return data array

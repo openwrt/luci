@@ -468,29 +468,6 @@ if has_ssl then
 	end
 end
 
--- use_syslog -- ###############################################################
-slog = ns:taboption("basic", ListValue, "use_syslog",
-	translate("Log to syslog"),
-	translate("Writes log messages to syslog. Critical Errors will always be written to syslog.") )
-slog.default = "0"
-slog:value("0", translate("No logging"))
-slog:value("1", translate("Info"))
-slog:value("2", translate("Notice"))
-slog:value("3", translate("Warning"))
-slog:value("4", translate("Error"))
-
--- use_logfile (NEW) -- ########################################################
-logf = ns:taboption("basic", Flag, "use_logfile",
-	translate("Log to file"),
-	translate("Writes detailed messages to log file. File will be truncated automatically.") .. "<br />" ..
-	translate("File") .. [[: "]] .. log_dir .. [[/]] .. section .. [[.log"]] )
-logf.orientation = "horizontal"
-logf.rmempty = false	-- we want to save in /etc/config/ddns file on "0" because
-logf.default = "1"	-- if not defined write to log by default
-function logf.parse(self, section)
-	DDNS.flag_parse(self, section)
-end
-
 -- TAB: Advanced  ##################################################################################
 -- IPv4 - ip_source -- #########################################################
 src4 = ns:taboption("advanced", ListValue, "ipv4_source",
@@ -1027,6 +1004,29 @@ if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 	end
 end
 
+-- use_syslog -- ###############################################################
+slog = ns:taboption("advanced", ListValue, "use_syslog",
+	translate("Log to syslog"),
+	translate("Writes log messages to syslog. Critical Errors will always be written to syslog.") )
+slog.default = "2"
+slog:value("0", translate("No logging"))
+slog:value("1", translate("Info"))
+slog:value("2", translate("Notice"))
+slog:value("3", translate("Warning"))
+slog:value("4", translate("Error"))
+
+-- use_logfile (NEW) -- ########################################################
+logf = ns:taboption("advanced", Flag, "use_logfile",
+	translate("Log to file"),
+	translate("Writes detailed messages to log file. File will be truncated automatically.") .. "<br />" ..
+	translate("File") .. [[: "]] .. log_dir .. [[/]] .. section .. [[.log"]] )
+logf.orientation = "horizontal"
+logf.rmempty = false	-- we want to save in /etc/config/ddns file on "0" because
+logf.default = "1"	-- if not defined write to log by default
+function logf.parse(self, section)
+	DDNS.flag_parse(self, section)
+end
+
 -- TAB: Timer  #####################################################################################
 -- check_interval -- ###########################################################
 ci = ns:taboption("timer", Value, "check_interval",
@@ -1148,9 +1148,8 @@ rc = ns:taboption("timer", Value, "retry_count",
 rc.default = 5
 rc.rmempty = false	-- validate ourselves for translatable error messages
 function rc.validate(self, value)
-	if not DTYP.uinteger(value)
-	or tonumber(value) < 1 then
-		return nil, err_tab_timer(self) .. translate("minimum value '1'")
+	if not DTYP.uinteger(value) then
+		return nil, err_tab_timer(self) .. translate("minimum value '0'")
 	else
 		return value
 	end
