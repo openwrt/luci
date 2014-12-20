@@ -45,6 +45,13 @@ function Request.__init__(self, env, sourcein, sinkerr)
 	-- File handler nil by default to let .content() work
 	self.filehandler = nil
 
+	-- Workaround for wrong SCRIPT_NAME under mini_httpd with vhosts enabled
+	if string.find(env.SERVER_SOFTWARE, "^mini_httpd") then
+		if env.PATH_INFO then
+			env.SCRIPT_NAME = env.SCRIPT_NAME:gsub(env.PATH_INFO, "")
+		end
+	end
+
 	-- HTTP-Message table
 	self.message = {
 		env = env,
