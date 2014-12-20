@@ -75,6 +75,7 @@ $(eval $(call application,n2n_v2,n2n_v2 Configuration module,n2n_v2))
 $(eval $(call application,mjpg-streamer,mjpg streamer luci page,mjpg-streamer))
 $(eval $(call application,redsocks2,LuCI Support for redsocks2,redsocks2 kmod-ipt-nat kmod-ipt-nat-extra kmod-ipt-ipset ipset resolveip))
 $(eval $(call application,aria2,LuCI Support for aria2,aria2 curl wget openssl-util))
+$(eval $(call application,qos_gargoyle,LuCI Support for  qos_gargoyle,qos-gargoyle))
 
 
 ### Themes ###
