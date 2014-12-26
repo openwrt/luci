@@ -8,11 +8,11 @@ ENABLED=$(uci get macvlan.config.enabled)
 wansw=$(uci get macvlan.config.wansw)
 
 sh /tmp/rmcfg.sh
-[ "$wansw" == "0" ] && {
+[ "$wansw" = "0" ] && {
 	uci set network.wan.proto=pppoe
 }
 
-[ "$ENABLED" == "0" ] && {
+[ "$ENABLED" = "0" ] && {
 #	echo "MACVLAN is disabled.STOP generating anythong."
 	uci commit
 	/etc/init.d/network restart
@@ -56,7 +56,8 @@ do
 	#gen mwan3_policy
 	uci add_list mwan3.balanced.use_member=vwan${i}_m1_w1
 done
-[ "$wansw" == "0" ] && {
+uci add_list firewall.@zone[1].network=wan
+[ "$wansw" = "0" ] && {
 	uci set network.wan.proto=none
 }
 
