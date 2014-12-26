@@ -1,0 +1,45 @@
+config 'community' 'profile'
+  option 'name' 'Freifunk 31c3'
+  option 'homepage' 'http://31c3.freifunk.net'
+  option 'ssid' '02:CA:FF:EE:BA:BE'
+  option 'mesh_network' '10.197.0.0/16'
+  option 'latitude' '53.56176'
+  option 'longitude' '9.9833'
+  option 'suffix' 'olsr.31c3.freifunk.net'
+  option 'vap' '0'
+  option 'adhoc_dhcp_when_vap' '0'
+
+config 'defaults' 'interface'
+  option 'netmask' '255.255.255.255'
+
+config 'defaults' 'bssidscheme'
+  option '1' '02:CA:FF:EE:BA:BE'
+  option '36' '02:36:CA:FF:EE:EE'
+
+config 'defaults' 'wifi_device'
+  option 'country' 'DE'
+
+config 'defaults' 'wifi_iface'
+  option 'mcast_rate' '12000'
+
+config 'defaults' 'olsrd'
+  option 'LinkQualityAlgorithm' 'etx_ff'
+
+config widget 'customindex'
+  option enabled '1'
+  option width '50%'
+  option paddingright '5%'
+  option template 'html'
+
+config widget 'rssbundesweit'
+  option cache '3600'
+  option width '50%'
+  option title 'bundesweiter Freifunk Blog'
+  option template 'rssfeed'
+  option enabled '1'
+  option max '10'
+  option url 'http://blog.freifunk.net/rss.xml'
+
+config widget 'clear1'
+  option template 'clear'
+  option enabled '1'
