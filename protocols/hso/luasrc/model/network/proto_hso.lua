@@ -1,7 +1,7 @@
 --[[
-LuCI - Network model - 3G, PPP, PPtP, PPPoE and PPPoA protocol extension
+LuCI - Network model - HSO protocol extension
 
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2015 Stanislas Bertrand <stanislasbertrand@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ limitations under the License.
 ]]--
 
 local netmod = luci.model.network
-
-local _, p
 
 local proto = netmod:register_protocol("hso")
 
