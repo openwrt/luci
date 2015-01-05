@@ -217,7 +217,7 @@ $(eval $(call application,shairplay,LuCI Support for Shairplay,shairplay))
 $(eval $(call application,shairport,LuCI Support for Shairport,shairport))
 $(eval $(call application,transmission,LuCI Support for Transmission,transmission-daemon))
 $(eval $(call application,watchcat,LuCI Support for Watchcat,watchcat))
-
+$(eval $(call application,mjpg-streamer,MJPG-Streamer service configuration module,mjpg-streamer))
 
 ### Themes ###
 define theme
