@@ -105,7 +105,7 @@ define library
     MAINTAINER:=LuCI Development Team <luci@lists.subsignal.org>
     SUBMENU:=8. Libraries
     TITLE:=$(if $(2),$(2),LuCI $(1) library)
-    $(if $(3),DEPENDS:=+luci-base $(3))
+    $(if $(3),DEPENDS:=+lua $(3))
   endef
 
   define Package/luci-lib-$(1)/install
@@ -159,10 +159,10 @@ endif
 
 
 $(eval $(call library,httpclient,HTTP(S) client library,+luci-base +luci-lib-nixio))
-$(eval $(call library,json,LuCI JSON library))
+$(eval $(call library,json,LuCI JSON library,+luci-base))
 $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
-$(eval $(call library,luaneightbl,neightbl - Lua lib for IPv6 neighbors,+luci-base))
+$(eval $(call library,luaneightbl,neightbl - Lua lib for IPv6 neighbors))
 
 
 ### Protocols ###
