@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Administration - full-featured for full control
 LUCI_DEPENDS:=+luci-base
 
+PKG_BUILD_DEPENDS:=+libiwinfo
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
