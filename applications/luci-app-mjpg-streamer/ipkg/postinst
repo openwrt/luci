@@ -1,6 +1,0 @@
-#!/bin/sh
-[ -n "${IPKG_INSTROOT}" ] || {
-	( . /etc/uci-defaults/luci-mjpg-streamer ) && rm -f /etc/uci-defaults/luci-mjpg-streamer
-	/etc/init.d/mjpg-streamer enabled || /etc/init.d/mjpg-streamer enable
-	exit 0
-}
