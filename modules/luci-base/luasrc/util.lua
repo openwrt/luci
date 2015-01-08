@@ -125,10 +125,11 @@ local tl_meta = {
 
 	__newindex = function(self, key, value)
 		local c = coxpt[coroutine.running()] or coroutine.running() or 0
-		if not rawget(self, c) then
+		local r = rawget(self, c)
+		if not r then
 			rawset(self, c, { [key] = value })
 		else
-			rawget(self, c)[key] = value
+			r[key] = value
 		end
 	end
 }
