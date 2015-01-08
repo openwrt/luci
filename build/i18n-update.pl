@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-@ARGV >= 1 || die "Usage: $0 <po directory> [<file pattern>]\n";
+@ARGV <= 2 || die "Usage: $0 [<po directory>] [<file pattern>]\n";
 
 my $source  = shift @ARGV;
 my $pattern = shift @ARGV || '*.po';
@@ -48,22 +48,36 @@ sub write_header
 	close P;
 }
 
-if( open F, "find $source -type f -name '$pattern' |" )
+my @dirs;
+
+if( ! $source )
 {
-	while( chomp( my $file = readline F ) )
+	@dirs = glob("./*/*/po/");
+}
+else
+{
+	@dirs = ( $source );
+}
+
+foreach my $dir (@dirs)
+{
+	if( open F, "find $dir -type f -name '$pattern' |" )
 	{
-		my ( $basename ) = $file =~ m{.+/([^/]+)\.po$};
-		
-		if( -f "$source/templates/$basename.pot" )
+		while( chomp( my $file = readline F ) )
 		{
-			my $head = read_header($file);
+			my ( $basename ) = $file =~ m{.+/([^/]+)\.po$};
+		
+			if( -f "$dir/templates/$basename.pot" )
+			{
+				my $head = read_header($file);
 
-			printf "Updating %-40s", $file;
-			system("msgmerge", "-U", "-N", $file, "$source/templates/$basename.pot");
+				printf "Updating %-40s", $file;
+				system("msgmerge", "-U", "-N", $file, "$dir/templates/$basename.pot");
 
-			write_header($file, $head);
+				write_header($file, $head);
+			}
 		}
-	}
 
-	close F;
+		close F;
+	}
 }
