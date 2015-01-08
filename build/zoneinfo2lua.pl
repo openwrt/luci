@@ -8,7 +8,7 @@ use strict;
 my %TZ;
 
 my $tzdin  = $ARGV[0] || "/usr/share/zoneinfo";
-my $tzdout = $ARGV[1] || "./libs/sys/luasrc/sys/zoneinfo";
+my $tzdout = $ARGV[1] || "./modules/luci-base/luasrc/sys/zoneinfo";
 
 local $/ = "\012";
 open( ZTAB, "< $tzdin/zone.tab" ) || die "open($tzdin/zone.tab): $!";
