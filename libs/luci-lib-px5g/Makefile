@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=RSA/X.509 Key Generator (required for LuCId SSL support)
-LUCI_DEPENDS:=+luci-lib-nixio
+LUCI_DEPENDS:=+liblua
 
 include ../../luci.mk
 
