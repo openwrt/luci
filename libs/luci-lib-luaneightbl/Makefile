@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=neightbl - Lua lib for IPv6 neighbors
-LUCI_DEPENDS:=+luci-base
+LUCI_DEPENDS:=+liblua
 
 include ../../luci.mk
 
