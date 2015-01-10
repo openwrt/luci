@@ -3,6 +3,7 @@ LuCI - Lua Configuration Interface
 
 Copyright 2008 Steven Barth <steven@midlink.org>
 Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
 Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +26,8 @@ local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 local UTIL = require "luci.util"
 
-local luci_ddns_version = "2.1.0-3"	-- luci-app-ddns / openwrt Makefile compatible version
-local ddns_scripts_min  = "2.1.0-2"	-- minimum version of ddns-scripts required
+local luci_ddns_version = "2.1.0-4"	-- luci-app-ddns / openwrt Makefile compatible version
+local ddns_scripts_min  = "2.1.0-3"	-- minimum version of ddns-scripts required
 
 function index()
 	-- no services_ipv6 file or no dynamic_dns_lucihelper.sh
