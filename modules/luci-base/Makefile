@@ -12,7 +12,7 @@ LUCI_TYPE:=mod
 LUCI_BASENAME:=base
 
 LUCI_TITLE:=LuCI core libraries
-LUCI_DEPENDS:=lua
+LUCI_DEPENDS:=+lua
 
 PKG_SOURCE:=LuaSrcDiet-0.12.1.tar.bz2
 PKG_SOURCE_URL:=https://luasrcdiet.googlecode.com/files
