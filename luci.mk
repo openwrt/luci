@@ -79,7 +79,7 @@ define Package/$(PKG_NAME)
   CATEGORY:=LuCI
   SUBMENU:=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
   TITLE:=$(if $(LUCI_TITLE),$(LUCI_TITLE),LuCI $(LUCI_NAME) $(LUCI_TYPE))
-  DEPENDS:=$(foreach lang,$(LUCI_LANGUAGES),+LUCI_LANG_$(lang):luci-i18n-$(LUCI_BASENAME)-$(lang)) $(LUCI_DEPENDS)
+  DEPENDS:=$(LUCI_DEPENDS)
 endef
 
 ifneq ($(LUCI_DESCRIPTION),)
@@ -179,7 +179,12 @@ define LuciTranslation
     CATEGORY:=LuCI
     TITLE:=$(PKG_NAME) - $(1) translation
     HIDDEN:=1
-    DEFAULT:=m if ALL||LUCI_LANG_$(1)
+    DEFAULT:=LUCI_LANG_$(1)||ALL
+    DEPENDS:=$(PKG_NAME)
+  endef
+
+  define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/description
+    $(LUCI_LANG.$(1))
   endef
 
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/install
