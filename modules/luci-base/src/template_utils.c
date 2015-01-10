@@ -477,18 +477,8 @@ void luastr_translate(struct template_buffer *out, const char *s, unsigned int l
 	char *tr;
 	int trlen;
 
-	switch (lmo_translate(s, l, &tr, &trlen))
-	{
-		case 0:
-			luastr_escape(out, tr, trlen, escape_xml);
-			break;
-
-		case -1:
-			luastr_escape(out, s, l, escape_xml);
-			break;
-
-		default:
-			/* no catalog loaded */
-			break;
-	}
+	if (!lmo_translate(s, l, &tr, &trlen))
+		luastr_escape(out, tr, trlen, escape_xml);
+	else
+		luastr_escape(out, s, l, escape_xml);
 }
