@@ -98,7 +98,7 @@ ifeq ($(PKG_NAME),luci-base)
    menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),
 
      config LUCI_LANG_$(lang)
-	   bool "$(shell echo '$(LUCI_LANG.$(lang))' | sed -e 's/^.* (\(.*\))$$/\1/') ($(lang))")
+	   tristate "$(shell echo '$(LUCI_LANG.$(lang))' | sed -e 's/^.* (\(.*\))$$/\1/') ($(lang))")
 
    endmenu
  endef
@@ -179,6 +179,7 @@ define LuciTranslation
     CATEGORY:=LuCI
     TITLE:=$(PKG_NAME) - $(1) translation
     HIDDEN:=1
+    DEFAULT:=m if ALL||LUCI_LANG_$(1)
   endef
 
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/install
