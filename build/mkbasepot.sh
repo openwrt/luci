@@ -5,11 +5,11 @@
 	exit 1
 }
 
-echo -n "Updating po/templates/base.pot ... "
+echo -n "Updating modules/luci-base/po/templates/base.pot ... "
 
 ./build/i18n-scan.pl \
-	modules/base/ modules/admin-full/ \
-	protocols/ themes/openwrt/ \
-> po/templates/base.pot
+	modules/luci-base/ modules/luci-mod-admin-full/ \
+	protocols/ themes/ \
+> modules/luci-base/po/templates/base.pot
 
 echo "done"
