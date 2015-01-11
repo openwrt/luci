@@ -2,6 +2,7 @@
 local wa = require "luci.tools.webadmin"
 local fs = require "nixio.fs"
 require "luci.sys"
+local qos_gargoyle_enabled=luci.sys.init.enabled("qos_gargoyle")
 
 m = Map("qos_gargoyle", translate("Global"),translate("Global set"))
 
@@ -20,25 +21,26 @@ end
 if count == 0 then
 	os.execute("echo \"\nconfig global 'global'\" >> /etc/config/qos_gargoyle")
 end
-if luci.sys.init.enabled("qos_gargoyle") then
-	e = s:option(Button, "endisable", " ", translate("QoS Enabled."))
-	e.render = function(self, section, scope)
+
+e = s:option(Button, "endisable", " ", translate("QoS Switch"))
+e.render = function(self, section, scope)
+	if qos_gargoyle_enabled then
 		self.title = translate("Disable QoS")
 		self.inputstyle = "reset"
-		Button.render(self, section, scope)
+	else
+		self.title = translate("Enable QoS")
+		self.inputstyle = "apply"
 	end
-	e.write = function(self, section)
+	Button.render(self, section, scope)
+end
+
+e.write = function(self, section)
+	if qos_gargoyle_enabled then
+		qos_gargoyle_enabled=false
 		luci.sys.call("/etc/init.d/qos_gargoyle stop >/dev/null")
 		return luci.sys.init.disable("qos_gargoyle")
-	end
-else
-	e = s:option(Button, "endisable", " ", translate("QoS Disabled."))
-	e.render = function(self, section, scope)
-		self.title = translate("Enable QoS")
-		self.inputstyle = "save"
-		Button.render(self, section, scope)
-	end
-	e.write = function(self, section)
+	else
+		qos_gargoyle_enabled=true
 		luci.sys.call("/etc/init.d/qos_gargoyle restart >/dev/null")
 		return luci.sys.init.enable("qos_gargoyle")
 	end
