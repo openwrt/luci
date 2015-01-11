@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=uShare - UPnP A/V & DLNA Media Server
-LUCI_DEPENDS:=+ushare
+LUCI_DEPENDS:=+ushare @BROKEN
 
 include ../../luci.mk
 
