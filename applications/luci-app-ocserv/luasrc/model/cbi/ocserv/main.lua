@@ -32,7 +32,7 @@ local o_sha = s:taboption("general", DummyValue, "sha_hash", translate("Server's
 local o_pki = s:taboption("general", DummyValue, "pkid", translate("Server's Public Key ID"),
 			  translate("An alternative value to be communicated to the client to verify the server's certificate; this value only depends on the public key"))
 
-local fd = io.popen("/usr/bin/certtool -i --infile /etc/ocserv/server-cert.pem", "r")
+local fd = io.popen("/usr/bin/certtool -i --infile /etc/config/ocserv-dir/server-cert.pem", "r")
 if fd then local ln
 	local found_sha = false
 	local found_pki = false
@@ -147,7 +147,7 @@ ca.template = "cbi/tvalue"
 ca.rows = 20
 
 function ca.cfgvalue(self, section)
-	return nixio.fs.readfile("/etc/ocserv/ca.pem")
+	return nixio.fs.readfile("/etc/config/ocserv-dir/ca.pem")
 end
 
 --[[DNS]]--
