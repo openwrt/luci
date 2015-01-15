@@ -15,6 +15,7 @@ $Id$
 ]]--
 
 local uci = require "luci.model.uci".cursor()
+local bit = require "nixio".bit
 
 -------------------- Init --------------------
 
