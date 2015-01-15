@@ -30,6 +30,9 @@ local string = require "string"
 local coroutine = require "coroutine"
 local tparser = require "luci.template.parser"
 
+local _ubus = require "ubus"
+local _ubus_connection = nil
+
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
 local tostring, type, assert = tostring, type, assert
@@ -702,6 +705,29 @@ function execl(command)
 	pp:close()
 
 	return data
+end
+
+--- Issue an ubus call.
+-- @param object		String containing the ubus object to call
+-- @param method		String containing the ubus method to call
+-- @param values		Table containing the values to pass
+-- @return			Table containin the ubus result
+function ubus(object, method, data)
+	if not _ubus_connection then
+		_ubus_connection = _ubus.connect()
+		assert(_ubus_connection, "Unable to establish ubus connection")
+	end
+
+	if object and method then
+		if type(data) ~= "table" then
+			data = { }
+		end
+		return _ubus_connection:call(object, method, data)
+	elseif object then
+		return _ubus_connection:signatures(object)
+	else
+		return _ubus_connection:objects()
+	end
 end
 
 --- Returns the absolute path to LuCI base directory.
