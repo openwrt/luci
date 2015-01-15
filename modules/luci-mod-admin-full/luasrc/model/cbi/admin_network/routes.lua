@@ -19,7 +19,6 @@ m = Map("network",
 		"can be reached."))
 
 local routes6 = luci.sys.net.routes6()
-local bit = require "bit"
 
 s = m:section(TypedSection, "route", translate("Static IPv4 Routes"))
 s.addremove = true
