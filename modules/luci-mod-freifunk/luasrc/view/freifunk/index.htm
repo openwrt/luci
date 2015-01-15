@@ -16,7 +16,7 @@ $Id$
 <% 
 local uci = require "luci.model.uci".cursor()
 local tpl = require "luci.template"
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local ff = {}
 local ff = uci:get_all("freifunk")
 

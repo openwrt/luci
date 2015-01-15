@@ -11,7 +11,7 @@ You may obtain a copy of the License at
 	http://www.apache.org/licenses/LICENSE-2.0
 ]]
 
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local util = require "luci.util"
 local uci = require "luci.model.uci".cursor()
 local profiles = "/etc/config/profile_"
@@ -22,13 +22,10 @@ c = m:section(NamedSection, "community", "public", nil, translate("These are the
 community = c:option(ListValue, "name", translate ("Community"))
 community.rmempty = false
 
-local list = { }
-local list = fs.glob(profiles .. "*")
-
-for k,v in ipairs(list) do
-	local name = uci:get_first(v, "community", "name") or "?"
-	local n = string.gsub(v, profiles, "")
-	community:value(n, name)
+local profile
+for profile in fs.dir(profiles) do
+	local name = uci:get_first(profile, "community", "name") or "?"
+	community:value(profile, name)
 end
 
 
