@@ -12,13 +12,13 @@ You may obtain a copy of the License at
 -%>
 
 <%
-	require "luci.fs"
-	require "luci.tools.status"
+	local fs = require "nixio.fs"
+	local util = require "luci.util"
+	local stat = require "luci.tools.status"
 
-	local has_ipv6 = luci.fs.access("/proc/net/ipv6_route")
-	local has_dhcp = luci.fs.access("/etc/config/dhcp")
-	local has_wifi = luci.fs.stat("/etc/config/wireless")
-	      has_wifi = has_wifi and has_wifi.size > 0
+	local has_ipv6 = fs.access("/proc/net/ipv6_route")
+	local has_dhcp = fs.access("/etc/config/dhcp")
+	local has_wifi = ((fs.stat("/etc/config/wireless", "size") or 0) > 0)
 
 	local sysinfo = luci.util.ubus("system", "info") or { }
 	local boardinfo = luci.util.ubus("system", "board") or { }
@@ -35,7 +35,7 @@ You may obtain a copy of the License at
 		free = 0
 	}
 
-	local has_dsl = luci.fs.stat("/etc/init.d/dsl_control")
+	local has_dsl = fs.access("/etc/init.d/dsl_control")
 
 	if luci.http.formvalue("status") == "1" then
 		local ntm = require "luci.model.network".init()
@@ -60,9 +60,9 @@ You may obtain a copy of the License at
 			swap       = swapinfo,
 			connmax    = conn_max,
 			conncount  = conn_count,
-			leases     = luci.tools.status.dhcp_leases(),
-			leases6    = luci.tools.status.dhcp6_leases(),
-			wifinets   = luci.tools.status.wifi_networks()
+			leases     = stat.dhcp_leases(),
+			leases6    = stat.dhcp6_leases(),
+			wifinets   = stat.wifi_networks()
 		}
 
 		if wan then
@@ -695,13 +695,10 @@ You may obtain a copy of the License at
 <% end %>
 
 <%-
-	require "luci.util"
-	require "nixio.fs"
-
-	local plugins = nixio.fs.dir(luci.util.libpath() .. "/view/admin_status/index")
-	if plugins then
+	local incdir = util.libpath() .. "/view/admin_status/index/"
+	if fs.access(incdir) then
 		local inc
-		for inc in plugins do
+		for inc in fs.dir(incdir) do
 			if inc:match("%.htm$") then
 				include("admin_status/index/" .. inc:gsub("%.htm$", ""))
 			end

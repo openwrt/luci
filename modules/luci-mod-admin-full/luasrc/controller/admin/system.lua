@@ -16,13 +16,15 @@ $Id$
 module("luci.controller.admin.system", package.seeall)
 
 function index()
+	local fs = require "nixio.fs"
+
 	entry({"admin", "system"}, alias("admin", "system", "system"), _("System"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), _("System"), 1)
 	entry({"admin", "system", "clock_status"}, call("action_clock_status"))
 
 	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), _("Administration"), 2)
 
-	if nixio.fs.access("/bin/opkg") then
+	if fs.access("/bin/opkg") then
 		entry({"admin", "system", "packages"}, call("action_packages"), _("Software"), 10)
 		entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
 	end
@@ -30,13 +32,13 @@ function index()
 	entry({"admin", "system", "startup"}, form("admin_system/startup"), _("Startup"), 45)
 	entry({"admin", "system", "crontab"}, form("admin_system/crontab"), _("Scheduled Tasks"), 46)
 
-	if nixio.fs.access("/etc/config/fstab") then
+	if fs.access("/etc/config/fstab") then
 		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), _("Mount Points"), 50)
 		entry({"admin", "system", "fstab", "mount"}, cbi("admin_system/fstab/mount"), nil).leaf = true
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
 	end
 
-	if nixio.fs.access("/sys/class/leds") then
+	if fs.access("/sys/class/leds") then
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
 
@@ -142,12 +144,11 @@ function action_packages()
 	-- List state
 	local no_lists = true
 	local old_lists = false
-	local tmp = nixio.fs.dir("/var/opkg-lists/")
-	if tmp then
-		for tmp in tmp do
+	if fs.access("/var/opkg-lists/") then
+		local list
+		for list in fs.dir("/var/opkg-lists/") do
 			no_lists = false
-			tmp = nixio.fs.stat("/var/opkg-lists/"..tmp)
-			if tmp and tmp.mtime < (os.time() - (24 * 60 * 60)) then
+			if (fs.stat("/var/opkg-lists/"..list, "mtime") or 0) < (os.time() - (24 * 60 * 60)) then
 				old_lists = true
 				break
 			end
@@ -171,15 +172,15 @@ function action_packages()
 
 	-- Remove index cache
 	if changes then
-		nixio.fs.unlink("/tmp/luci-indexcache")
+		fs.unlink("/tmp/luci-indexcache")
 	end
 end
 
 function action_flashops()
 	local sys = require "luci.sys"
-	local fs  = require "luci.fs"
+	local fs  = require "nixio.fs"
 
-	local upgrade_avail = nixio.fs.access("/lib/upgrade/platform.sh")
+	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
 	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 
 	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
@@ -202,7 +203,7 @@ function action_flashops()
 
 	local function storage_size()
 		local size = 0
-		if nixio.fs.access("/proc/mtd") then
+		if fs.access("/proc/mtd") then
 			for l in io.lines("/proc/mtd") do
 				local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
 				if n == "linux" or n == "firmware" then
@@ -210,7 +211,7 @@ function action_flashops()
 					break
 				end
 			end
-		elseif nixio.fs.access("/proc/partitions") then
+		elseif fs.access("/proc/partitions") then
 			for l in io.lines("/proc/partitions") do
 				local x, y, b, n = l:match('^%s*(%d+)%s+(%d+)%s+([^%s]+)%s+([^%s]+)')
 				if b and n and not n:match('[0-9]') then
@@ -270,11 +271,11 @@ function action_flashops()
 				luci.template.render("admin_system/upgrade", {
 					checksum = image_checksum(),
 					storage  = storage_size(),
-					size     = nixio.fs.stat(image_tmp).size,
+					size     = (fs.stat(image_tmp, "size") or 0),
 					keep     = (not not luci.http.formvalue("keep"))
 				})
 			else
-				nixio.fs.unlink(image_tmp)
+				fs.unlink(image_tmp)
 				luci.template.render("admin_system/flashops", {
 					reset_avail   = reset_avail,
 					upgrade_avail = upgrade_avail,
