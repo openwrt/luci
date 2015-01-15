@@ -89,9 +89,6 @@ function keepalive_failure.cfgvalue(self, section)
 	end
 end
 
-function keepalive_failure.write() end
-function keepalive_failure.remove() end
-
 keepalive_failure.placeholder = "0"
 keepalive_failure.datatype    = "uinteger"
 
@@ -119,6 +116,8 @@ function keepalive_interval.write(self, section, value)
 end
 
 keepalive_interval.remove      = keepalive_interval.write
+keepalive_failure.write        = keepalive_interval.write
+keepalive_failure.remove       = keepalive_interval.write
 keepalive_interval.placeholder = "5"
 keepalive_interval.datatype    = "min(1)"
 
