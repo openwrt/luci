@@ -38,9 +38,11 @@ end
 
 function action_logout()
 	local dsp = require "luci.dispatcher"
-	local sauth = require "luci.sauth"
+	local utl = require "luci.util"
 	if dsp.context.authsession then
-		sauth.kill(dsp.context.authsession)
+		utl.ubus("session", "destroy", {
+			ubus_rpc_session = dsp.context.authsession
+		})
 		dsp.context.urltoken.stok = nil
 	end
 

@@ -25,7 +25,7 @@ function index()
 	local function authenticator(validator, accs)
 		local auth = luci.http.formvalue("auth", true)
 		if auth then -- if authentication token was given
-			local sdat = luci.sauth.read(auth)
+			local sdat = (luci.util.ubus("session", "get", { ubus_rpc_session = auth }) or { }).values
 			if sdat then -- if given token is valid
 				if sdat.user and luci.util.contains(accs, sdat.user) then
 					return sdat.user, auth
@@ -49,7 +49,6 @@ end
 
 function rpc_auth()
 	local jsonrpc = require "luci.jsonrpc"
-	local sauth   = require "luci.sauth"
 	local http    = require "luci.http"
 	local sys     = require "luci.sys"
 	local ltn12   = require "luci.ltn12"
@@ -62,17 +61,22 @@ function rpc_auth()
 		local sid, token, secret
 
 		if sys.user.checkpasswd(user, pass) then
-			sid = sys.uniqueid(16)
-			token = sys.uniqueid(16)
-			secret = sys.uniqueid(16)
+			local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
+			if sdat then
+				sid = sdat.ubus_rpc_session
+				token = sys.uniqueid(16)
+				secret = sys.uniqueid(16)
 
-			http.header("Set-Cookie", "sysauth=" .. sid.."; path=/")
-			sauth.reap()
-			sauth.write(sid, {
-				user=user,
-				token=token,
-				secret=secret
-			})
+				http.header("Set-Cookie", "sysauth="..sid.."; path=/")
+				util.ubus("session", "set", {
+					ubus_rpc_session = sid,
+					values = {
+						user = user,
+						token = token,
+						secret = secret
+					}
+				})
+			end
 		end
 
 		return sid and {sid=sid, token=token, secret=secret}

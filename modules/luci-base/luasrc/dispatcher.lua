@@ -333,8 +333,6 @@ function dispatch(request)
 	)
 
 	if track.sysauth then
-		local sauth = require "luci.sauth"
-
 		local authen = type(track.sysauth_authenticator) == "function"
 		 and track.sysauth_authenticator
 		 or authenticator[track.sysauth_authenticator]
@@ -349,7 +347,7 @@ function dispatch(request)
 			verifytoken = true
 		end
 
-		local sdat = sauth.read(sess)
+		local sdat = (util.ubus("session", "get", { ubus_rpc_session = sess }) or { }).values
 		local user
 
 		if sdat then
@@ -371,20 +369,28 @@ function dispatch(request)
 				if not user or not util.contains(accs, user) then
 					return
 				else
-					local sid = sess or luci.sys.uniqueid(16)
 					if not sess then
-						local token = luci.sys.uniqueid(16)
-						sauth.reap()
-						sauth.write(sid, {
-							user=user,
-							token=token,
-							secret=luci.sys.uniqueid(16)
-						})
-						ctx.urltoken.stok = token
+						local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
+						if sdat then
+							local token = luci.sys.uniqueid(16)
+							util.ubus("session", "set", {
+								ubus_rpc_session = sdat.ubus_rpc_session,
+								values = {
+									user = user,
+									token = token,
+									section = luci.sys.uniqueid(16)
+								}
+							})
+							sess = sdat.ubus_rpc_session
+							ctx.urltoken.stok = token
+						end
 					end
-					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
-					ctx.authsession = sid
-					ctx.authuser = user
+
+					if sess then
+						luci.http.header("Set-Cookie", "sysauth=" .. sess.."; path="..build_url())
+						ctx.authsession = sess
+						ctx.authuser = user
+					end
 				end
 			else
 				luci.http.status(403, "Forbidden")
