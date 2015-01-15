@@ -114,13 +114,13 @@ end
 -- @param message	Custom error message (optional)
 -- @return			false
 function error404(message)
-	luci.http.status(404, "Not Found")
+	http.status(404, "Not Found")
 	message = message or "Not Found"
 
 	require("luci.template")
-	if not luci.util.copcall(luci.template.render, "error404") then
-		luci.http.prepare_content("text/plain")
-		luci.http.write(message)
+	if not util.copcall(luci.template.render, "error404") then
+		http.prepare_content("text/plain")
+		http.write(message)
 	end
 	return false
 end
@@ -129,24 +129,24 @@ end
 -- @param message	Custom error message (optional)#
 -- @return			false
 function error500(message)
-	luci.util.perror(message)
+	util.perror(message)
 	if not context.template_header_sent then
-		luci.http.status(500, "Internal Server Error")
-		luci.http.prepare_content("text/plain")
-		luci.http.write(message)
+		http.status(500, "Internal Server Error")
+		http.prepare_content("text/plain")
+		http.write(message)
 	else
 		require("luci.template")
-		if not luci.util.copcall(luci.template.render, "error500", {message=message}) then
-			luci.http.prepare_content("text/plain")
-			luci.http.write(message)
+		if not util.copcall(luci.template.render, "error500", {message=message}) then
+			http.prepare_content("text/plain")
+			http.write(message)
 		end
 	end
 	return false
 end
 
 function authenticator.htmlauth(validator, accs, default)
-	local user = luci.http.formvalue("luci_username")
-	local pass = luci.http.formvalue("luci_password")
+	local user = http.formvalue("luci_username")
+	local pass = http.formvalue("luci_password")
 
 	if user and validator(user, pass) then
 		return user
@@ -163,7 +163,7 @@ end
 --- Dispatch an HTTP request.
 -- @param request	LuCI HTTP Request object
 function httpdispatch(request, prefix)
-	luci.http.context.request = request
+	http.context.request = request
 
 	local r = {}
 	context.request = r
@@ -195,7 +195,7 @@ function httpdispatch(request, prefix)
 		dispatch(context.request)
 	end, error500)
 
-	luci.http.close()
+	http.close()
 
 	--context._disable_memtrace()
 end
@@ -290,7 +290,7 @@ function dispatch(request)
 				local scope = (type(env.self) == "table") and env.self
 				return string.format(
 					' %s="%s"', tostring(key),
-					luci.util.pcdata(tostring( val
+					util.pcdata(tostring( val
 					 or (type(env[key]) ~= "function" and env[key])
 					 or (scope and type(scope[key]) ~= "function" and scope[key])
 					 or "" ))
@@ -301,7 +301,7 @@ function dispatch(request)
 		end
 
 		tpl.context.viewns = setmetatable({
-		   write       = luci.http.write;
+		   write       = http.write;
 		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
 		   translate   = i18n.translate;
 		   translatef  = i18n.translatef;
@@ -342,7 +342,7 @@ function dispatch(request)
 		local sess = ctx.authsession
 		local verifytoken = false
 		if not sess then
-			sess = luci.http.getcookie("sysauth")
+			sess = http.getcookie("sysauth")
 			sess = sess and sess:match("^[a-f0-9]*$")
 			verifytoken = true
 		end
@@ -387,13 +387,13 @@ function dispatch(request)
 					end
 
 					if sess then
-						luci.http.header("Set-Cookie", "sysauth=" .. sess.."; path="..build_url())
+						http.header("Set-Cookie", "sysauth=" .. sess.."; path="..build_url())
 						ctx.authsession = sess
 						ctx.authuser = user
 					end
 				end
 			else
-				luci.http.status(403, "Forbidden")
+				http.status(403, "Forbidden")
 				return
 			end
 		else
@@ -469,46 +469,18 @@ function dispatch(request)
 	end
 end
 
---- Generate the dispatching index using the best possible strategy.
-function createindex()
-	local path = luci.util.libpath() .. "/controller/"
-	local suff = { ".lua", ".lua.gz" }
-
-	if luci.util.copcall(require, "luci.fastindex") then
-		createindex_fastindex(path, suff)
-	else
-		createindex_plain(path, suff)
-	end
-end
-
---- Generate the dispatching index using the fastindex C-indexer.
--- @param path		Controller base directory
--- @param suffixes	Controller file suffixes
-function createindex_fastindex(path, suffixes)
-	index = {}
-
-	if not fi then
-		fi = luci.fastindex.new("index")
-		for _, suffix in ipairs(suffixes) do
-			fi.add(path .. "*" .. suffix)
-			fi.add(path .. "*/*" .. suffix)
-		end
-	end
-	fi.scan()
-
-	for k, v in pairs(fi.indexes) do
-		index[v[2]] = v[1]
-	end
-end
-
 --- Generate the dispatching index using the native file-cache based strategy.
--- @param path		Controller base directory
--- @param suffixes	Controller file suffixes
-function createindex_plain(path, suffixes)
+function createindex()
 	local controllers = { }
-	for _, suffix in ipairs(suffixes) do
-		nixio.util.consume((fs.glob(path .. "*" .. suffix)), controllers)
-		nixio.util.consume((fs.glob(path .. "*/*" .. suffix)), controllers)
+	local base = "%s/controller/" % util.libpath()
+	local _, path
+
+	for path in (fs.glob("%s*.lua" % base) or function() end) do
+		controllers[#controllers+1] = path
+	end
+
+	for path in (fs.glob("%s*/*.lua" % base) or function() end) do
+		controllers[#controllers+1] = path
 	end
 
 	if indexcache then
@@ -520,7 +492,7 @@ function createindex_plain(path, suffixes)
 				realdate = (omtime and omtime > realdate) and omtime or realdate
 			end
 
-			if cachedate > realdate then
+			if cachedate > realdate and sys.process.info("uid") == 0 then
 				assert(
 					sys.process.info("uid") == fs.stat(indexcache, "uid")
 					and fs.stat(indexcache, "modestr") == "rw-------",
@@ -535,23 +507,19 @@ function createindex_plain(path, suffixes)
 
 	index = {}
 
-	for i,c in ipairs(controllers) do
-		local modname = "luci.controller." .. c:sub(#path+1, #c):gsub("/", ".")
-		for _, suffix in ipairs(suffixes) do
-			modname = modname:gsub(suffix.."$", "")
-		end
-
+	for _, path in ipairs(controllers) do
+		local modname = "luci.controller." .. path:sub(#base+1, #path-4):gsub("/", ".")
 		local mod = require(modname)
 		assert(mod ~= true,
 		       "Invalid controller file found\n" ..
-		       "The file '" .. c .. "' contains an invalid module line.\n" ..
+		       "The file '" .. path .. "' contains an invalid module line.\n" ..
 		       "Please verify whether the module name is set to '" .. modname ..
 		       "' - It must correspond to the file path!")
 
 		local idx = mod.index
 		assert(type(idx) == "function",
 		       "Invalid controller file found\n" ..
-		       "The file '" .. c .. "' contains no index() function.\n" ..
+		       "The file '" .. path .. "' contains no index() function.\n" ..
 		       "Please make sure that the controller contains a valid " ..
 		       "index function and verify the spelling!")
 
