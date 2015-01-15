@@ -64,7 +64,8 @@ function action_clock_status()
 end
 
 function action_packages()
-	local ipkg = require("luci.model.ipkg")
+	local fs = require "nixio.fs"
+	local ipkg = require "luci.model.ipkg"
 	local submit = luci.http.formvalue("submit")
 	local changes = false
 	local install = { }
