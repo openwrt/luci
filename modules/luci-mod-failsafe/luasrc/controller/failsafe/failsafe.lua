@@ -43,9 +43,9 @@ end
 
 function action_flashops()
 	local sys = require "luci.sys"
-	local fs  = require "luci.fs"
+	local fs  = require "nixio.fs"
 
-	local upgrade_avail = nixio.fs.access("/lib/upgrade/platform.sh")
+	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
 	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 
 	local image_tmp   = "/tmp/firmware.img"
@@ -66,7 +66,7 @@ function action_flashops()
 
 	local function storage_size()
 		local size = 0
-		if nixio.fs.access("/proc/mtd") then
+		if fs.access("/proc/mtd") then
 			for l in io.lines("/proc/mtd") do
 				local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
 				if n == "linux" or n == "firmware" then
@@ -74,7 +74,7 @@ function action_flashops()
 					break
 				end
 			end
-		elseif nixio.fs.access("/proc/partitions") then
+		elseif fs.access("/proc/partitions") then
 			for l in io.lines("/proc/partitions") do
 				local x, y, b, n = l:match('^%s*(%d+)%s+(%d+)%s+([^%s]+)%s+([^%s]+)')
 				if b and n and not n:match('[0-9]') then
@@ -114,11 +114,11 @@ function action_flashops()
 				luci.template.render("failsafe/upgrade", {
 					checksum = image_checksum(),
 					storage  = storage_size(),
-					size     = nixio.fs.stat(image_tmp).size,
+					size     = (fs.stat(image_tmp, "size") or 0),
 					keep     = false
 				})
 			else
-				nixio.fs.unlink(image_tmp)
+				fs.unlink(image_tmp)
 				luci.template.render("failsafe/flashops", {
 					reset_avail   = reset_avail,
 					upgrade_avail = upgrade_avail,
