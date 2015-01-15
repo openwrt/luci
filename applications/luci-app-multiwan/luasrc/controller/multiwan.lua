@@ -1,7 +1,7 @@
 module("luci.controller.multiwan", package.seeall)
 
 function index()
-	local fs = luci.fs or nixio.fs
+	local fs = require "nixio.fs"
 	if not fs.access("/etc/config/multiwan") then
 		return
 	end
