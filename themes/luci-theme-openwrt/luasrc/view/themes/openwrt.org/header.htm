@@ -14,11 +14,13 @@ $Id$
 -%>
 <%
 	local sys  = require "luci.sys"
+	local util = require "luci.util"
 	local http = require "luci.http"
 	local disp = require "luci.dispatcher"
 
-	local hostname = sys.hostname()
-	local load1, load5, load15 = sys.loadavg()
+	local sysinfo = util.ubus("system", "info") or { }
+	local loadinfo = sysinfo.load or { 0, 0, 0 }
+	local boardinfo = util.ubus("system", "board") or { }
 
 	local request  = disp.context.path
 	local request2 = disp.context.request
@@ -112,7 +114,7 @@ $Id$
 </style>
 <% end -%>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
-<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
 
@@ -125,8 +127,8 @@ $Id$
 <h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
 <div class="hostinfo">
-	<%=hostname%> | <%=luci.version.distversion%> |
-	<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%>
+	<%=(boardinfo.hostname or "?")%> | <%=luci.version.distversion%> |
+	<%:Load%>: <%="%.2f" % loadinfo[1] / 65535.0%> <%="%.2f" % loadinfo[2] / 65535.0%> <%="%.2f" % loadinfo[3] / 65535.0%>
 	<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 		| <%:Auto Refresh%>:
 		<span id="xhr_poll_status_on"><%:on%></span>

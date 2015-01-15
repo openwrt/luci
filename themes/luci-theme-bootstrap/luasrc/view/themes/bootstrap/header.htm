@@ -13,10 +13,11 @@ You may obtain a copy of the License at
 -%>
 <%
 	local sys  = require "luci.sys"
+	local util = require "luci.util"
 	local http = require "luci.http"
 	local disp = require "luci.dispatcher"
 
-	local hostname = sys.hostname()
+	local boardinfo = util.ubus("system", "board")
 
 	local request  = disp.context.path
 	local request2 = disp.context.request
@@ -100,7 +101,7 @@ You may obtain a copy of the License at
 <html lang="<%=luci.i18n.context.lang%>">
  <head>
   <meta charset="utf-8">
-  <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+  <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
   <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
   <meta name="viewport" content="initial-scale=1.0">
   <link rel="stylesheet" href="<%=media%>/cascade.css">
@@ -119,7 +120,7 @@ You may obtain a copy of the License at
   <header>
    <div class="fill">
     <div class="container">
-     <a class="brand" href="#"><%=hostname%></a>
+     <a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
      <ul class="nav">
 	 <%-
 		local function submenu(prefix, node)
