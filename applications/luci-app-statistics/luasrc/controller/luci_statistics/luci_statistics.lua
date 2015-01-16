@@ -1,5 +1,5 @@
--- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
--- Copyright 2012 Jo-Philipp Wich <xm@subsignal.org>
+-- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2012 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.luci_statistics.luci_statistics", package.seeall)

@@ -1,5 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
+-- Copyright 2008-2011 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"

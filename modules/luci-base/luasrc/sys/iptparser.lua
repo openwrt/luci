@@ -1,7 +1,7 @@
 --[[
 
 Iptables parser and query library
-(c) 2008-2009 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+(c) 2008-2009 Jo-Philipp Wich <jow@openwrt.org>
 (c) 2008-2009 Steven Barth <steven@midlink.org>
 
 Licensed under the Apache License, Version 2.0 (the "License");

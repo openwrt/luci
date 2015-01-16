@@ -1,5 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+-- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 require("luci.tools.webadmin")
