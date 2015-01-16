@@ -357,7 +357,7 @@ function dispatch(request)
 		else
 			local eu = http.getenv("HTTP_AUTH_USER")
 			local ep = http.getenv("HTTP_AUTH_PASS")
-			if eu and ep and luci.sys.user.checkpasswd(eu, ep) then
+			if eu and ep and sys.user.checkpasswd(eu, ep) then
 				authen = function() return eu end
 			end
 		end
@@ -365,20 +365,20 @@ function dispatch(request)
 		if not util.contains(accs, user) then
 			if authen then
 				ctx.urltoken.stok = nil
-				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
+				local user, sess = authen(sys.user.checkpasswd, accs, def)
 				if not user or not util.contains(accs, user) then
 					return
 				else
 					if not sess then
 						local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
 						if sdat then
-							local token = luci.sys.uniqueid(16)
+							local token = sys.uniqueid(16)
 							util.ubus("session", "set", {
 								ubus_rpc_session = sdat.ubus_rpc_session,
 								values = {
 									user = user,
 									token = token,
-									section = luci.sys.uniqueid(16)
+									section = sys.uniqueid(16)
 								}
 							})
 							sess = sdat.ubus_rpc_session
@@ -403,11 +403,11 @@ function dispatch(request)
 	end
 
 	if track.setgroup then
-		luci.sys.process.setgroup(track.setgroup)
+		sys.process.setgroup(track.setgroup)
 	end
 
 	if track.setuser then
-		luci.sys.process.setuser(track.setuser)
+		sys.process.setuser(track.setuser)
 	end
 
 	local target = nil
