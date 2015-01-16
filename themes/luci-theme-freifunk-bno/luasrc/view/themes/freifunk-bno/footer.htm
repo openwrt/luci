@@ -17,7 +17,10 @@ $Id$
 </div></div>
 </div>
 
-<div class="luci separator black whitetext bold"><a href="<%=controller%>/about">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a></div>
+<div class="luci separator black whitetext bold">
+	<% local ver = require "luci.version" -%>
+	<a href="<%=controller%>/about">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a>
+</div>
 </div><!-- end main --><div align="center" style="padding-top:5px "></div>
 <br>
 </div><!-- end wrapper -->

@@ -12,20 +12,15 @@ You may obtain a copy of the License at
 
 -%>
 <%
+	local ver = require "luci.version"
 	local disp = require "luci.dispatcher"
-
 	local request  = disp.context.path
-
 	local category = request[1]
-
 	local tree = disp.node()
-
 	local categories = disp.node_childs(tree)
 %>
-   <footer><a href="http://luci.subsignal.org/">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a>
-
-    <%=luci.version.distversion%>
-
+   <footer>
+    <a href="http://luci.subsignal.org/">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
     <% if #categories > 1 then %>
      <ul class="breadcrumb pull-right" id="modemenu">
 	    <% for i, r in ipairs(categories) do %>

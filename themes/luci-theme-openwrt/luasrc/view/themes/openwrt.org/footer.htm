@@ -16,6 +16,9 @@ $Id$
 </div>
 </div>
 
-<p class="luci">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></p>
+<p class="luci">
+	<% local ver = require "luci.version" -%>
+	Powered by <%= ver.luciname %> (<%= ver.luciversion %>)
+</p>
 </body>
 </html>

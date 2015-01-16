@@ -9,10 +9,14 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 -%>
-<% local xtime
-if exectime then
-	xtime = (string.format("%.2fs", os.clock() - exectime)) 
-end %>
+<%
+	local ver = require "luci.version"
+
+	local xtime
+	if exectime then
+		xtime = (string.format("%.2fs", os.clock() - exectime))
+	end
+%>
 
 </div>
 <div class="clear"></div>
@@ -20,7 +24,7 @@ end %>
 </div>
 
 <div class="footer">
-<p class="luci"><a href="http://luci.subsignal.org">Powered by <%= luci.__appname__ .. " (" .. luci.__version__ .. ")" %></a></p>
+<p class="luci"><a href="http://luci.subsignal.org">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a></p>
 <% if xtime then %>
 <p class="exectime">Script execution time: <%=xtime%></p>
 <% end %>
