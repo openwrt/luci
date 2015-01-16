@@ -27,7 +27,6 @@ limitations under the License.
 --- LuCI web dispatcher.
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
-local init = require "luci.init"
 local util = require "luci.util"
 local http = require "luci.http"
 local nixio = require "nixio", require "nixio.util"
