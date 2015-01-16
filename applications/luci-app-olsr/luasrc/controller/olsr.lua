@@ -115,6 +115,10 @@ function action_neigh(json)
 		end
 	end)
 
+	if not defaultgw then
+		defaultgw = luci.util.exec("ip route list exact 0.0.0.0/0 table all"):match(" via (%S+)")
+	end
+
 	local function compare(a,b)
 		if a.proto == b.proto then
 			return a.linkCost < b.linkCost
