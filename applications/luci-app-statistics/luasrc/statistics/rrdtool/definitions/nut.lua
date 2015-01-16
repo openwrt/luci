@@ -1,17 +1,4 @@
---[[
-
-Luci statistics - ups plugin diagram definition
-Copyright © 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
-Copyright © 2012 David Woodhouse <dwmw2@infradead.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-]]--
-
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.statistics.rrdtool.definitions.nut",package.seeall)
 
