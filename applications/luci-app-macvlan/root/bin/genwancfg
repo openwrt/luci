@@ -57,6 +57,7 @@ do
 	uci add_list mwan3.balanced.use_member=vwan${i}_m1_w1
 done
 uci add_list firewall.@zone[1].network=wan
+uci add_list firewall.@zone[1].network=wan6
 [ "$wansw" = "0" ] && {
 	uci set network.wan.proto=none
 }
