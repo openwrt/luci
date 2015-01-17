@@ -184,7 +184,7 @@ define LuciTranslation
   endef
 
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/description
-    $(LUCI_LANG.$(1))
+    Translation for $(PKG_NAME) - $(LUCI_LANG.$(1))
   endef
 
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/install

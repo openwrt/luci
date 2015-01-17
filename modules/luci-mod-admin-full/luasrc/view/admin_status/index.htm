@@ -1,30 +1,36 @@
 <%#
-LuCI - Lua Configuration Interface
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2011 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
 -%>
 
 <%
-	require "luci.fs"
-	require "luci.tools.status"
+	local fs = require "nixio.fs"
+	local util = require "luci.util"
+	local stat = require "luci.tools.status"
+	local ver = require "luci.version"
 
-	local has_ipv6 = luci.fs.access("/proc/net/ipv6_route")
-	local has_dhcp = luci.fs.access("/etc/config/dhcp")
-	local has_wifi = luci.fs.stat("/etc/config/wireless")
-	      has_wifi = has_wifi and has_wifi.size > 0
-	local _, _, memtotal, memcached, membuffers, memfree, _, swaptotal, swapcached, swapfree = luci.sys.sysinfo()
-	local has_swap
-	if swaptotal > 0 then
-		has_swap = 1
-	end
-	local has_dsl = luci.fs.stat("/etc/init.d/dsl_control")
+	local has_ipv6 = fs.access("/proc/net/ipv6_route")
+	local has_dhcp = fs.access("/etc/config/dhcp")
+	local has_wifi = ((fs.stat("/etc/config/wireless", "size") or 0) > 0)
+
+	local sysinfo = luci.util.ubus("system", "info") or { }
+	local boardinfo = luci.util.ubus("system", "board") or { }
+	local unameinfo = nixio.uname() or { }
+
+	local meminfo = sysinfo.memory or {
+		total = 0,
+		free = 0,
+		buffered = 0,
+		shared = 0
+	}
+
+	local swapinfo = sysinfo.swap or {
+		total = 0,
+		free = 0
+	}
+
+	local has_dsl = fs.access("/etc/init.d/dsl_control")
 
 	if luci.http.formvalue("status") == "1" then
 		local ntm = require "luci.model.network".init()
@@ -42,22 +48,17 @@ You may obtain a copy of the License at
 			""):match("%d+")) or 4096
 
 		local rv = {
-			uptime     = luci.sys.uptime(),
+			uptime     = sysinfo.uptime or 0,
 			localtime  = os.date(),
-			loadavg    = { luci.sys.loadavg() },
 			cpuusage   = luci.sys.exec("echo $( echo $(cat /proc/stat | grep \"^cpu \" | awk '{print $1+$2+$3+$4+$5+$6+$7 \" \" $1+$2+$3+$6+$7}') $(sleep 1 && cat /proc/stat | grep \"^cpu \" | awk '{print $1+$2+$3+$4+$5+$6+$7 \" \" $1+$2+$3+$6+$7}') | awk '{print (($4-$2)/($3-$1))*100}' )"),
-			memtotal   = memtotal,
-			memcached  = memcached,
-			membuffers = membuffers,
-			memfree    = memfree,
-			swaptotal  = swaptotal,
-			swapcached = swapcached,
-			swapfree   = swapfree,
+			loadavg    = sysinfo.load or { 0, 0, 0 },
+			memory     = meminfo,
+			swap       = swapinfo,
 			connmax    = conn_max,
 			conncount  = conn_count,
-			leases     = luci.tools.status.dhcp_leases(),
-			leases6    = luci.tools.status.dhcp6_leases(),
-			wifinets   = luci.tools.status.wifi_networks()
+			leases     = stat.dhcp_leases(),
+			leases6    = stat.dhcp6_leases(),
+			wifinets   = stat.wifi_networks()
 		}
 
 		if wan then
@@ -96,8 +97,6 @@ You may obtain a copy of the License at
 
 		return
 	end
-
-	local system, model = luci.sys.sysinfo()
 
 	local soc_model = luci.sys.exec("cat /proc/cpuinfo | grep 'system type' | cut -d : -f 2-");
 
@@ -508,53 +507,50 @@ You may obtain a copy of the License at
 			var e;
 
 			if (e = document.getElementById('localtime'))
-				e.innerHTML = info.localtime;
+                e.innerHTML = (new Date(info.localtime * 1000)).toUTCString();
 
 			if (e = document.getElementById('uptime'))
 				e.innerHTML = String.format('%t', info.uptime);
 
 			if (e = document.getElementById('loadavg'))
-				e.innerHTML = String.format('%.02f, %.02f, %.02f',
-					info.loadavg[0], info.loadavg[1], info.loadavg[2]);
+				e.innerHTML = String.format(
+					'%.02f, %.02f, %.02f',
+					info.loadavg[0] / 65535.0,
+					info.loadavg[1] / 65535.0,
+					info.loadavg[2] / 65535.0
+				);
 
 			if (e = document.getElementById('cpuusage'))
 				e.innerHTML = String.format('%.02f\%',info.cpuusage);
 
 			if (e = document.getElementById('memtotal'))
 				e.innerHTML = progressbar(
-					(info.memfree + info.membuffers + info.memcached) + " <%:kB%>",
-					info.memtotal + " <%:kB%>"
+					((info.memory.free + info.memory.buffered) / 1024) + " <%:kB%>",
+					(info.memory.total / 1024) + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('memfree'))
 				e.innerHTML = progressbar(
-					info.memfree + " <%:kB%>", info.memtotal + " <%:kB%>"
-				);
-
-			if (e = document.getElementById('memcache'))
-				e.innerHTML = progressbar(
-					info.memcached + " <%:kB%>", info.memtotal + " <%:kB%>"
+					(info.memory.free / 1024) + " <%:kB%>",
+					(info.memory.total / 1024) + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('membuff'))
 				e.innerHTML = progressbar(
-					info.membuffers + " <%:kB%>", info.memtotal + " <%:kB%>"
-				);
-
-			if (e = document.getElementById('swapcache'))
-				e.innerHTML = progressbar(
-					info.swapcached + " <%:kB%>", info.swaptotal + " <%:kB%>"
+					(info.memory.buffered / 1024) + " <%:kB%>",
+					(info.memory.total / 1024) + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('swaptotal'))
 				e.innerHTML = progressbar(
-					(info.swapfree + info.swapcached) + " <%:kB%>",
-					info.swaptotal + " <%:kB%>"
+					(info.swap.free / 1024) + " <%:kB%>",
+					(info.swap.total / 1024) + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('swapfree'))
 				e.innerHTML = progressbar(
-					info.swapfree + " <%:kB%>", info.swaptotal + " <%:kB%>"
+					(info.swap.free / 1024) + " <%:kB%>",
+					(info.swap.total / 1024) + " <%:kB%>"
 				);
 
 			if (e = document.getElementById('conns'))
@@ -571,13 +567,13 @@ You may obtain a copy of the License at
 
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
-		<tr><td width="33%"><%:Model%></td><td><%=pcdata(model or "?")%></td></tr>
+		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or boardinfo.system or "?")%></td></tr>
 		<tr><td width="33%"><%:Firmware Version%></td><td>
-			<%=pcdata(luci.version.distname)%> <%=pcdata(luci.version.distversion)%> /
-			<%=pcdata(luci.version.luciname)%> (<%=pcdata(luci.version.luciversion)%>)
+			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
+			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
 		</td></tr>
 		<tr><td width="33%"><%:Chip Model%></td><td><%=soc_model%></td></tr>
-		<tr><td width="33%"><%:Kernel Version%></td><td><%=luci.sys.exec("uname -r")%></td></tr>
+		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
@@ -591,19 +587,17 @@ You may obtain a copy of the License at
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Total Available%></td><td id="memtotal">-</td></tr>
 		<tr><td width="33%"><%:Free%></td><td id="memfree">-</td></tr>
-		<tr><td width="33%"><%:Cached%></td><td id="memcache">-</td></tr>
 		<tr><td width="33%"><%:Buffered%></td><td id="membuff">-</td></tr>
 	</table>
 </fieldset>
 
-<% if has_swap then %>
+<% if swapinfo.total > 0 then %>
 <fieldset class="cbi-section">
 	<legend><%:Swap%></legend>
 
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Total Available%></td><td id="swaptotal">-</td></tr>
 		<tr><td width="33%"><%:Free%></td><td id="swapfree">-</td></tr>
-		<tr><td width="33%"><%:Cached%></td><td id="swapcache">-</td></tr>
 	</table>
 </fieldset>
 <% end %>
@@ -708,13 +702,10 @@ You may obtain a copy of the License at
 <% end %>
 
 <%-
-	require "luci.util"
-	require "nixio.fs"
-
-	local plugins = nixio.fs.dir(luci.util.libpath() .. "/view/admin_status/index")
-	if plugins then
+	local incdir = util.libpath() .. "/view/admin_status/index/"
+	if fs.access(incdir) then
 		local inc
-		for inc in plugins do
+		for inc in fs.dir(incdir) do
 			if inc:match("%.htm$") then
 				include("admin_status/index/" .. inc:gsub("%.htm$", ""))
 			end

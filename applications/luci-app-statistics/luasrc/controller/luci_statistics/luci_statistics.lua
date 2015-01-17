@@ -1,16 +1,6 @@
---[[
-
-Luci statistics - statistics controller module
-(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
-(c) 2012 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-]]--
+-- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2012 Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.luci_statistics.luci_statistics", package.seeall)
 

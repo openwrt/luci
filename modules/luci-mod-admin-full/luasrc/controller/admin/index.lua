@@ -1,16 +1,5 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2008 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.admin.index", package.seeall)
 
@@ -38,9 +27,11 @@ end
 
 function action_logout()
 	local dsp = require "luci.dispatcher"
-	local sauth = require "luci.sauth"
+	local utl = require "luci.util"
 	if dsp.context.authsession then
-		sauth.kill(dsp.context.authsession)
+		utl.ubus("session", "destroy", {
+			ubus_rpc_session = dsp.context.authsession
+		})
 		dsp.context.urltoken.stok = nil
 	end
 

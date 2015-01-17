@@ -1,25 +1,16 @@
 <%#
-LuCI - Lua Configuration Interface
-Copyright 2008-2009 Steven Barth <steven@midlink.org>
-Copyright 2008-2011 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
+ Copyright 2008-2009 Steven Barth <steven@midlink.org>
+ Copyright 2008-2011 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
 -%>
 
 <%-
 
 	require "luci.sys.iptparser"
-	require "luci.tools.webadmin"
-	require "luci.fs"
+	local wba = require "luci.tools.webadmin"
+	local fs = require "nixio.fs"
 
-	local has_ip6tables = luci.fs.access("/usr/sbin/ip6tables")
+	local has_ip6tables = fs.access("/usr/sbin/ip6tables")
 	local mode = 4
 
 	if has_ip6tables then
@@ -28,7 +19,6 @@ $Id$
 	end
 
 	local ipt = luci.sys.iptparser.IptParser(mode)
-	local wba = luci.tools.webadmin
 
 	local rowcnt = 1
 	function rowstyle()

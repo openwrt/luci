@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2012 Jo-Philipp Wich <xm@subsignal.org>
+# Copyright (C) 2009-2012 Jo-Philipp Wich <jow@openwrt.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.

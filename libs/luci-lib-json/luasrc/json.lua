@@ -1,43 +1,6 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
-Decoder:
-	Info:
-		null will be decoded to luci.json.null if first parameter of Decoder() is true
-
-	Example:
-		decoder = luci.json.Decoder()
-		luci.ltn12.pump.all(luci.ltn12.source.string("decodableJSON"), decoder:sink())
-		luci.util.dumptable(decoder:get())
-
-	Known issues:
-		does not support unicode conversion \uXXYY with XX != 00 will be ignored
-
-
-Encoder:
-	Info:
-		Accepts numbers, strings, nil, booleans as they are
-		Accepts luci.json.null as replacement for nil
-		Accepts full associative and full numerically indexed tables
-		Mixed tables will loose their associative values during conversion
-		Iterator functions will be encoded as an array of their return values
-		Non-iterator functions will probably corrupt the encoder
-
-	Example:
-		encoder = luci.json.Encoder(encodableData)
-		luci.ltn12.pump.all(encoder:source(), luci.ltn12.sink.file(io.open("someFile", w)))
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 local nixio     = require "nixio"
 local util      = require "luci.util"

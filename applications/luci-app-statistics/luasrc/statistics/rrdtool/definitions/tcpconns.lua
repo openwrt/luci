@@ -1,17 +1,5 @@
---[[
-
-Luci statistics - tcpconns plugin diagram definition
-(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-$Id: tcp_connections.lua 2274 2008-06-03 23:15:16Z jow $
-
-]]--
+-- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.statistics.rrdtool.definitions.tcpconns", package.seeall)
 

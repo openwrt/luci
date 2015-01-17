@@ -10,7 +10,7 @@ require("luci.sys.iptparser")
 local uci = luci.model.uci.cursor_state()
 local ipt = luci.sys.iptparser.IptParser()
 local net = sys.net
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local ip = require "luci.ip"
 
 local debug = false

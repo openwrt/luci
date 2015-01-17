@@ -1,33 +1,9 @@
---[[
-LuCI - Dispatcher
-
-Description:
-The request dispatcher and module dispatcher generators
-
-FileId:
-$Id$
-
-License:
-Copyright 2008 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 --- LuCI web dispatcher.
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
-local init = require "luci.init"
 local util = require "luci.util"
 local http = require "luci.http"
 local nixio = require "nixio", require "nixio.util"
@@ -114,13 +90,13 @@ end
 -- @param message	Custom error message (optional)
 -- @return			false
 function error404(message)
-	luci.http.status(404, "Not Found")
+	http.status(404, "Not Found")
 	message = message or "Not Found"
 
 	require("luci.template")
-	if not luci.util.copcall(luci.template.render, "error404") then
-		luci.http.prepare_content("text/plain")
-		luci.http.write(message)
+	if not util.copcall(luci.template.render, "error404") then
+		http.prepare_content("text/plain")
+		http.write(message)
 	end
 	return false
 end
@@ -129,24 +105,24 @@ end
 -- @param message	Custom error message (optional)#
 -- @return			false
 function error500(message)
-	luci.util.perror(message)
+	util.perror(message)
 	if not context.template_header_sent then
-		luci.http.status(500, "Internal Server Error")
-		luci.http.prepare_content("text/plain")
-		luci.http.write(message)
+		http.status(500, "Internal Server Error")
+		http.prepare_content("text/plain")
+		http.write(message)
 	else
 		require("luci.template")
-		if not luci.util.copcall(luci.template.render, "error500", {message=message}) then
-			luci.http.prepare_content("text/plain")
-			luci.http.write(message)
+		if not util.copcall(luci.template.render, "error500", {message=message}) then
+			http.prepare_content("text/plain")
+			http.write(message)
 		end
 	end
 	return false
 end
 
 function authenticator.htmlauth(validator, accs, default)
-	local user = luci.http.formvalue("luci_username")
-	local pass = luci.http.formvalue("luci_password")
+	local user = http.formvalue("luci_username")
+	local pass = http.formvalue("luci_password")
 
 	if user and validator(user, pass) then
 		return user
@@ -163,7 +139,7 @@ end
 --- Dispatch an HTTP request.
 -- @param request	LuCI HTTP Request object
 function httpdispatch(request, prefix)
-	luci.http.context.request = request
+	http.context.request = request
 
 	local r = {}
 	context.request = r
@@ -195,7 +171,7 @@ function httpdispatch(request, prefix)
 		dispatch(context.request)
 	end, error500)
 
-	luci.http.close()
+	http.close()
 
 	--context._disable_memtrace()
 end
@@ -290,7 +266,7 @@ function dispatch(request)
 				local scope = (type(env.self) == "table") and env.self
 				return string.format(
 					' %s="%s"', tostring(key),
-					luci.util.pcdata(tostring( val
+					util.pcdata(tostring( val
 					 or (type(env[key]) ~= "function" and env[key])
 					 or (scope and type(scope[key]) ~= "function" and scope[key])
 					 or "" ))
@@ -301,7 +277,7 @@ function dispatch(request)
 		end
 
 		tpl.context.viewns = setmetatable({
-		   write       = luci.http.write;
+		   write       = http.write;
 		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
 		   translate   = i18n.translate;
 		   translatef  = i18n.translatef;
@@ -333,8 +309,6 @@ function dispatch(request)
 	)
 
 	if track.sysauth then
-		local sauth = require "luci.sauth"
-
 		local authen = type(track.sysauth_authenticator) == "function"
 		 and track.sysauth_authenticator
 		 or authenticator[track.sysauth_authenticator]
@@ -344,12 +318,12 @@ function dispatch(request)
 		local sess = ctx.authsession
 		local verifytoken = false
 		if not sess then
-			sess = luci.http.getcookie("sysauth")
+			sess = http.getcookie("sysauth")
 			sess = sess and sess:match("^[a-f0-9]*$")
 			verifytoken = true
 		end
 
-		local sdat = sauth.read(sess)
+		local sdat = (util.ubus("session", "get", { ubus_rpc_session = sess }) or { }).values
 		local user
 
 		if sdat then
@@ -359,7 +333,7 @@ function dispatch(request)
 		else
 			local eu = http.getenv("HTTP_AUTH_USER")
 			local ep = http.getenv("HTTP_AUTH_PASS")
-			if eu and ep and luci.sys.user.checkpasswd(eu, ep) then
+			if eu and ep and sys.user.checkpasswd(eu, ep) then
 				authen = function() return eu end
 			end
 		end
@@ -367,27 +341,35 @@ function dispatch(request)
 		if not util.contains(accs, user) then
 			if authen then
 				ctx.urltoken.stok = nil
-				local user, sess = authen(luci.sys.user.checkpasswd, accs, def)
+				local user, sess = authen(sys.user.checkpasswd, accs, def)
 				if not user or not util.contains(accs, user) then
 					return
 				else
-					local sid = sess or luci.sys.uniqueid(16)
 					if not sess then
-						local token = luci.sys.uniqueid(16)
-						sauth.reap()
-						sauth.write(sid, {
-							user=user,
-							token=token,
-							secret=luci.sys.uniqueid(16)
-						})
-						ctx.urltoken.stok = token
+						local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
+						if sdat then
+							local token = sys.uniqueid(16)
+							util.ubus("session", "set", {
+								ubus_rpc_session = sdat.ubus_rpc_session,
+								values = {
+									user = user,
+									token = token,
+									section = sys.uniqueid(16)
+								}
+							})
+							sess = sdat.ubus_rpc_session
+							ctx.urltoken.stok = token
+						end
 					end
-					luci.http.header("Set-Cookie", "sysauth=" .. sid.."; path="..build_url())
-					ctx.authsession = sid
-					ctx.authuser = user
+
+					if sess then
+						http.header("Set-Cookie", "sysauth=" .. sess.."; path="..build_url())
+						ctx.authsession = sess
+						ctx.authuser = user
+					end
 				end
 			else
-				luci.http.status(403, "Forbidden")
+				http.status(403, "Forbidden")
 				return
 			end
 		else
@@ -397,11 +379,11 @@ function dispatch(request)
 	end
 
 	if track.setgroup then
-		luci.sys.process.setgroup(track.setgroup)
+		sys.process.setgroup(track.setgroup)
 	end
 
 	if track.setuser then
-		luci.sys.process.setuser(track.setuser)
+		sys.process.setuser(track.setuser)
 	end
 
 	local target = nil
@@ -463,46 +445,18 @@ function dispatch(request)
 	end
 end
 
---- Generate the dispatching index using the best possible strategy.
-function createindex()
-	local path = luci.util.libpath() .. "/controller/"
-	local suff = { ".lua", ".lua.gz" }
-
-	if luci.util.copcall(require, "luci.fastindex") then
-		createindex_fastindex(path, suff)
-	else
-		createindex_plain(path, suff)
-	end
-end
-
---- Generate the dispatching index using the fastindex C-indexer.
--- @param path		Controller base directory
--- @param suffixes	Controller file suffixes
-function createindex_fastindex(path, suffixes)
-	index = {}
-
-	if not fi then
-		fi = luci.fastindex.new("index")
-		for _, suffix in ipairs(suffixes) do
-			fi.add(path .. "*" .. suffix)
-			fi.add(path .. "*/*" .. suffix)
-		end
-	end
-	fi.scan()
-
-	for k, v in pairs(fi.indexes) do
-		index[v[2]] = v[1]
-	end
-end
-
 --- Generate the dispatching index using the native file-cache based strategy.
--- @param path		Controller base directory
--- @param suffixes	Controller file suffixes
-function createindex_plain(path, suffixes)
+function createindex()
 	local controllers = { }
-	for _, suffix in ipairs(suffixes) do
-		nixio.util.consume((fs.glob(path .. "*" .. suffix)), controllers)
-		nixio.util.consume((fs.glob(path .. "*/*" .. suffix)), controllers)
+	local base = "%s/controller/" % util.libpath()
+	local _, path
+
+	for path in (fs.glob("%s*.lua" % base) or function() end) do
+		controllers[#controllers+1] = path
+	end
+
+	for path in (fs.glob("%s*/*.lua" % base) or function() end) do
+		controllers[#controllers+1] = path
 	end
 
 	if indexcache then
@@ -514,7 +468,7 @@ function createindex_plain(path, suffixes)
 				realdate = (omtime and omtime > realdate) and omtime or realdate
 			end
 
-			if cachedate > realdate then
+			if cachedate > realdate and sys.process.info("uid") == 0 then
 				assert(
 					sys.process.info("uid") == fs.stat(indexcache, "uid")
 					and fs.stat(indexcache, "modestr") == "rw-------",
@@ -529,23 +483,19 @@ function createindex_plain(path, suffixes)
 
 	index = {}
 
-	for i,c in ipairs(controllers) do
-		local modname = "luci.controller." .. c:sub(#path+1, #c):gsub("/", ".")
-		for _, suffix in ipairs(suffixes) do
-			modname = modname:gsub(suffix.."$", "")
-		end
-
+	for _, path in ipairs(controllers) do
+		local modname = "luci.controller." .. path:sub(#base+1, #path-4):gsub("/", ".")
 		local mod = require(modname)
 		assert(mod ~= true,
 		       "Invalid controller file found\n" ..
-		       "The file '" .. c .. "' contains an invalid module line.\n" ..
+		       "The file '" .. path .. "' contains an invalid module line.\n" ..
 		       "Please verify whether the module name is set to '" .. modname ..
 		       "' - It must correspond to the file path!")
 
 		local idx = mod.index
 		assert(type(idx) == "function",
 		       "Invalid controller file found\n" ..
-		       "The file '" .. c .. "' contains no index() function.\n" ..
+		       "The file '" .. path .. "' contains no index() function.\n" ..
 		       "Please make sure that the controller contains a valid " ..
 		       "index function and verify the spelling!")
 

@@ -1,14 +1,5 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2011-2012 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-]]--
+-- Copyright 2011-2012 Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 local map, section, net = ...
 
@@ -69,9 +60,6 @@ function keepalive_failure.cfgvalue(self, section)
 	end
 end
 
-function keepalive_failure.write() end
-function keepalive_failure.remove() end
-
 keepalive_failure.placeholder = "0"
 keepalive_failure.datatype    = "uinteger"
 
@@ -99,6 +87,8 @@ function keepalive_interval.write(self, section, value)
 end
 
 keepalive_interval.remove      = keepalive_interval.write
+keepalive_failure.write        = keepalive_interval.write
+keepalive_failure.remove       = keepalive_interval.write
 keepalive_interval.placeholder = "5"
 keepalive_interval.datatype    = "min(1)"
 

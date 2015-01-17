@@ -1,21 +1,5 @@
---[[
-LuCI - Network model
-
-Copyright 2009-2010 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-]]--
+-- Copyright 2009-2015 Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 local type, next, pairs, ipairs, loadfile, table
 	= type, next, pairs, ipairs, loadfile, table
@@ -24,7 +8,6 @@ local tonumber, tostring, math = tonumber, tostring, math
 
 local require = require
 
-local bus = require "ubus"
 local nxo = require "nixio"
 local nfs = require "nixio.fs"
 local ipc = require "luci.ip"
@@ -47,7 +30,7 @@ protocol = utl.class()
 local _protocols = { }
 
 local _interfaces, _bridge, _switch, _tunnel
-local _ubus, _ubusnetcache, _ubusdevcache, _ubuswificache
+local _ubusnetcache, _ubusdevcache, _ubuswificache
 local _uci_real, _uci_state
 
 function _filter(c, s, o, r)
@@ -138,7 +121,7 @@ function _wifi_state(key, val, field)
 	local radio, radiostate, ifc, ifcstate
 
 	if not next(_ubuswificache) then
-		_ubuswificache = _ubus:call("network.wireless", "status", {}) or {}
+		_ubuswificache = utl.ubus("network.wireless", "status", {}) or {}
 
 		-- workaround extended section format
 		for radio, radiostate in pairs(_ubuswificache) do
@@ -230,7 +213,6 @@ function init(cursor)
 	_switch     = { }
 	_tunnel     = { }
 
-	_ubus          = bus.connect()
 	_ubusnetcache  = { }
 	_ubusdevcache  = { }
 	_ubuswificache = { }
@@ -637,10 +619,10 @@ end
 
 function get_status_by_route(self, addr, mask)
 	local _, object
-	for _, object in ipairs(_ubus:objects()) do
+	for _, object in ipairs(utl.ubus()) do
 		local net = object:match("^network%.interface%.(.+)")
 		if net then
-			local s = _ubus:call(object, "status", {})
+			local s = utl.ubus(object, "status", {})
 			if s and s.route then
 				local rt
 				for _, rt in ipairs(s.route) do
@@ -655,10 +637,10 @@ end
 
 function get_status_by_address(self, addr)
 	local _, object
-	for _, object in ipairs(_ubus:objects()) do
+	for _, object in ipairs(utl.ubus()) do
 		local net = object:match("^network%.interface%.(.+)")
 		if net then
-			local s = _ubus:call(object, "status", {})
+			local s = utl.ubus(object, "status", {})
 			if s and s['ipv4-address'] then
 				local a
 				for _, a in ipairs(s['ipv4-address']) do
@@ -722,8 +704,8 @@ end
 
 function protocol._ubus(self, field)
 	if not _ubusnetcache[self.sid] then
-		_ubusnetcache[self.sid] = _ubus:call("network.interface.%s" % self.sid,
-		                                     "status", { })
+		_ubusnetcache[self.sid] = utl.ubus("network.interface.%s" % self.sid,
+		                                   "status", { })
 	end
 	if _ubusnetcache[self.sid] and field then
 		return _ubusnetcache[self.sid][field]
@@ -1070,8 +1052,8 @@ end
 
 function interface._ubus(self, field)
 	if not _ubusdevcache[self.ifname] then
-		_ubusdevcache[self.ifname] = _ubus:call("network.device", "status",
-		                                        { name = self.ifname })
+		_ubusdevcache[self.ifname] = utl.ubus("network.device", "status",
+		                                      { name = self.ifname })
 	end
 	if _ubusdevcache[self.ifname] and field then
 		return _ubusdevcache[self.ifname][field]

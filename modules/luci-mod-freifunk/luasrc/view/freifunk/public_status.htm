@@ -1,33 +1,37 @@
 <%
+local utl = require "luci.util"
 local sys = require "luci.sys"
 local twa = require "luci.tools.webadmin"
 
 -- System
-local model, system, memtotal, memcached, membuffers, memfree, bogomips = sys.sysinfo()
-local uptime = twa.date_format(tonumber(sys.uptime()))
+
+local sysinfo = utl.ubus("system", "info") or { }
+local boardinfo = utl.ubus("system", "board") or { }
+
+local loads = sysinfo.load or { 0, 0, 0 }
+local meminfo = sysinfo.memory or {
+	total = 0,
+	free = 0,
+	buffered = 0,
+	shared = 0
+}
+
+local uptime = twa.date_format(sysinfo.uptime or 0)
 local time = os.date("%a, %d %b %Y, %H:%M:%S")
-local load1, load5, load15 = sys.loadavg()
-local load = string.format("%.2f, %.2f, %.2f", load1, load5, load15)
+local load = string.format("%.2f, %.2f, %.2f", loads[1] / 65535.0, loads[2] / 65535.0, loads[3] / 65535.0)
 
 local mem = string.format(
-	"%.2f MB (%.2f %s, %.2f %s, %.2f %s, %.2f %s)",
-	tonumber(memtotal) / 1024,
-	tonumber(memtotal - memfree) / 1024,
+	"%.2f MB (%.2f %s, %.2f %s, %.2f %s)",
+	memory.total / 1024 / 1024,
+	(memory.total - memory.free) / 1024 / 1024,
 	tostring(i18n.translate("used")),
-	memfree / 1024,
+	memory.free / 1024 / 1024,
 	tostring(i18n.translate("free")),
-	memcached / 1024,
-	tostring(i18n.translate("cached")),
-	membuffers / 1024,
+	memory.buffered / 1024 / 1024,
 	tostring(i18n.translate("buffered"))
 )
 
--- update interval
-local bogomips = bogomips or 100
-local interval = 10
-if bogomips > 350 then
-	interval = 5
-end
+local interval = 5
 
 -- wireless
 local ntm = require "luci.model.network".init()
@@ -230,8 +234,8 @@ end
 <div class="cbi-map">
 	<h2><%:System%></h2>
 	<div class="cbi-section-node">
-		<div class="cbi-value"><label class="cbi-value-title"><%:System%></label><div class="cbi-value-field"><%=system%></div></div>
-		<div class="cbi-value"><label class="cbi-value-title"><%:Processor%></label><div class="cbi-value-field"><%=model%></div></div>
+		<div class="cbi-value"><label class="cbi-value-title"><%:System%></label><div class="cbi-value-field"><%=boardinfo.system or "?"%></div></div>
+		<div class="cbi-value"><label class="cbi-value-title"><%:Model%></label><div class="cbi-value-field"><%=boardinfo.model or "?"%></div></div>
 		<div class="cbi-value"><label class="cbi-value-title"><%:Load%></label><div class="cbi-value-field" id="dynload"><%=load%></div></div>
 		<div class="cbi-value"><label class="cbi-value-title"><%:Memory%></label><div class="cbi-value-field" id="dynmem"><%=mem%></div></div>
 		<div class="cbi-value"><label class="cbi-value-title"><%:Local Time%></label><div class="cbi-value-field" id="dyntime"><%=time%></div></div>

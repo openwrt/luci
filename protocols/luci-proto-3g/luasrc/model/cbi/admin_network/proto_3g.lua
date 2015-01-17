@@ -1,18 +1,9 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-]]--
+-- Copyright 2011 Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 local map, section, net = ...
 
-local device, apn, service, pincode, username, password
+local device, apn, service, pincode, username, password, dialnumber
 local ipv6, maxwait, defaultroute, metric, peerdns, dns,
       keepalive_failure, keepalive_interval, demand
 
@@ -51,6 +42,8 @@ username = section:taboption("general", Value, "username", translate("PAP/CHAP u
 password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
 password.password = true
 
+dialnumber = section:taboption("general", Value, "dialnumber", translate("Dial number"))
+dialnumber.placeholder = "*99***1#"
 
 if luci.model.network:has_ipv6() then
 

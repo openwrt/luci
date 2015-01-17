@@ -1,17 +1,5 @@
---[[
-
-LuCI uShare
-(c) 2008 Yanira <forum-2008@email.de>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
-]]--
+-- Copyright 2008 Yanira <forum-2008@email.de>
+-- Licensed to the public under the Apache License 2.0.
 
 m = Map("ushare", translate("uShare"),
 	luci.util.pcdata(translate("uShare is a UPnP (TM) A/V & DLNA Media Server. It implements the server component that provides UPnP media devices with information on available multimedia files.")))

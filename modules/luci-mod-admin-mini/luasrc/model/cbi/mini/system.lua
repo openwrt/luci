@@ -1,20 +1,10 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2008 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 require("luci.sys")
 require("luci.sys.zoneinfo")
 require("luci.tools.webadmin")
+require("luci.util")
 
 
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
@@ -24,24 +14,30 @@ s.anonymous = true
 s.addremove = false
 
 
-local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
-local uptime = luci.sys.uptime()
+local sysinfo = luci.util.ubus("system", "info") or { }
+local boardinfo = luci.util.ubus("system", "board") or { }
 
-s:option(DummyValue, "_system", translate("System")).value = model
-s:option(DummyValue, "_cpu", translate("Processor")).value = system
+local uptime = sysinfo.uptime or 0
+local loads = sysinfo.load or { 0, 0, 0 }
+local memory = sysinfo.memory or {
+	total = 0,
+	free = 0,
+	buffered = 0,
+	shared = 0
+}
 
-local load1, load5, load15 = luci.sys.loadavg()
+s:option(DummyValue, "_system", translate("Model")).value = boardinfo.model or "?"
+s:option(DummyValue, "_cpu", translate("System")).value = boardinfo.system or "?"
+
 s:option(DummyValue, "_la", translate("Load")).value =
- string.format("%.2f, %.2f, %.2f", load1, load5, load15)
+ string.format("%.2f, %.2f, %.2f", loads[1] / 65535.0, loads[2] / 65535.0, loads[3] / 65535.0)
 
 s:option(DummyValue, "_memtotal", translate("Memory")).value =
- string.format("%.2f MB (%.0f%% %s, %.0f%% %s, %.0f%% %s)",
-  tonumber(memtotal) / 1024,
-  100 * memcached / memtotal,
-  tostring(translate("cached")),
-  100 * membuffers / memtotal,
+ string.format("%.2f MB (%.0f%% %s, %.0f%% %s)",
+  tonumber(memory.total) / 1024 / 1024,
+  100 * memory.buffered / memory.total,
   tostring(translate("buffered")),
-  100 * memfree / memtotal,
+  100 * memory.free / memory.total,
   tostring(translate("free"))
 )
 

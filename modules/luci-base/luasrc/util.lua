@@ -1,25 +1,5 @@
---[[
-LuCI - Utility library
-
-Description:
-Several common useful Lua functions
-
-License:
-Copyright 2008 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 local io = require "io"
 local math = require "math"
@@ -29,6 +9,9 @@ local ldebug = require "luci.debug"
 local string = require "string"
 local coroutine = require "coroutine"
 local tparser = require "luci.template.parser"
+
+local _ubus = require "ubus"
+local _ubus_connection = nil
 
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
@@ -702,6 +685,29 @@ function execl(command)
 	pp:close()
 
 	return data
+end
+
+--- Issue an ubus call.
+-- @param object		String containing the ubus object to call
+-- @param method		String containing the ubus method to call
+-- @param values		Table containing the values to pass
+-- @return			Table containin the ubus result
+function ubus(object, method, data)
+	if not _ubus_connection then
+		_ubus_connection = _ubus.connect()
+		assert(_ubus_connection, "Unable to establish ubus connection")
+	end
+
+	if object and method then
+		if type(data) ~= "table" then
+			data = { }
+		end
+		return _ubus_connection:call(object, method, data)
+	elseif object then
+		return _ubus_connection:signatures(object)
+	else
+		return _ubus_connection:objects()
+	end
 end
 
 --- Returns the absolute path to LuCI base directory.

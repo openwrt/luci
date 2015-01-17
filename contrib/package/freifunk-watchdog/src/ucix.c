@@ -15,7 +15,7 @@
  *
  *   Copyright (C) 2008 John Crispin <blogic@openwrt.org> 
  *
- *   Changed by Jo-Philipp Wich <xm@subsignal.org>
+ *   Changed by Jo-Philipp Wich <jow@openwrt.org>
  */
 
 #include <string.h>

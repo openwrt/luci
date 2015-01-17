@@ -1,16 +1,5 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2008 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.freifunk.freifunk", package.seeall)
 
@@ -139,14 +128,42 @@ function jsonstatus()
 	local ffznet = ffzone and cursor:get("firewall", ffzone, "network")
 	local ffwifs = ffznet and util.split(ffznet, " ") or {}
 
+	local sysinfo = util.ubus("system", "info") or { }
+	local boardinfo = util.ubus("system", "board") or { }
+
+	local loads = sysinfo.load or { 0, 0, 0 }
+
+	local memory = sysinfo.memory or {
+		total = 0,
+		free = 0,
+		shared = 0,
+		buffered = 0
+	}
+
+	local swap = sysinfo.swap or {
+		total = 0,
+		free = 0
+	}
+
 
 	root.protocol = 1
 
 	root.system = {
-		uptime = {sys.uptime()},
-		loadavg = {sys.loadavg()},
-		sysinfo = {sys.sysinfo()},
-		hostname = sys.hostname()
+		uptime = { sysinfo.uptime or 0 },
+		loadavg = { loads[1] / 65535.0, loads[2] / 65535.0, loads[3] / 65535.0 },
+		sysinfo = {
+			boardinfo.system or "?",
+			boardinfo.model or "?",
+			memory.total,
+			0, -- former cached memory
+			memory.buffered,
+			memory.free,
+			0, -- former bogomips
+			swap.total,
+			0, -- former cached swap
+			swap.free
+		},
+		hostname = boardinfo.hostname
 	}
 
 	root.firmware = {

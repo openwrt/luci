@@ -1,17 +1,5 @@
---[[
-
-Luci statistics - load plugin diagram definition
-(c) 2008 Freifunk Leipzig / Jo-Philipp Wich <xm@leipzig.freifunk.net>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-$Id: load.lua 2329 2008-06-08 21:51:55Z jow $
-
-]]--
+-- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.statistics.rrdtool.definitions.load", package.seeall)
 

@@ -5,7 +5,7 @@ clean:
 	rm -f luci-bwc *.o
 
 luci-bwc: luci-bwc.o
-	$(CC) $(LDFLAGS) -shared -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ -ldl
 
 compile: luci-bwc
 

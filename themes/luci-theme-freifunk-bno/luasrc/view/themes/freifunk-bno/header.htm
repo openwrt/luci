@@ -1,26 +1,20 @@
 <%#
-LuCI - Lua Configuration Interface
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
 -%>
+
 <%
 require("luci.sys")
-local load1, load5, load15 = luci.sys.loadavg()
+require("luci.util")
+
+local boardinfo = luci.util.ubus("system", "board")
+
 local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
 local node     = luci.dispatcher.context.dispatched
-local hostname = luci.sys.hostname()
 
 local c = tree
 for i,r in ipairs(request) do
@@ -48,7 +42,7 @@ require("luci.http").prepare_content("text/html")
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="content-script-type" content="text/javascript" />
 	<script type="text/javascript" src="<%=resource%>/xhr.js"></script>
-	<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+	<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 
 	<!--[if lt IE 7]>
 		<script type="text/javascript">

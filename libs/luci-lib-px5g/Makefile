@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=RSA/X.509 Key Generator (required for LuCId SSL support)
 LUCI_DEPENDS:=+liblua
 
+PKG_USE_MIPS16:=0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

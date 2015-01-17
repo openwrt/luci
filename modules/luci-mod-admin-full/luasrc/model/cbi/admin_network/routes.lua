@@ -1,16 +1,5 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2008 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-]]--
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 require("luci.tools.webadmin")
 m = Map("network",
@@ -19,7 +8,6 @@ m = Map("network",
 		"can be reached."))
 
 local routes6 = luci.sys.net.routes6()
-local bit = require "bit"
 
 s = m:section(TypedSection, "route", translate("Static IPv4 Routes"))
 s.addremove = true

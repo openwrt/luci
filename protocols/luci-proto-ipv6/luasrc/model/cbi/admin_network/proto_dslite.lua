@@ -1,15 +1,6 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
-Copyright 2013 Steven Barth <steven@midlink.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-]]--
+-- Copyright 2011 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2013 Steven Barth <steven@midlink.org>
+-- Licensed to the public under the Apache License 2.0.
 
 local map, section, net = ...
 

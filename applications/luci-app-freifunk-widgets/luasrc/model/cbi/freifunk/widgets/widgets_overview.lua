@@ -1,17 +1,8 @@
---[[
-LuCI - Lua Configuration Interface
-
-Copyright 2012 Manuel Munz <freifunk at somakoma dot de>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-]]--
+-- Copyright 2012 Manuel Munz <freifunk at somakoma dot de>
+-- Licensed to the public under the Apache License 2.0.
 
 local uci = require "luci.model.uci".cursor()
-local fs = require "luci.fs"
+local fs = require "nixio.fs"
 local utl = require "luci.util"
 m = Map("freifunk-widgets", translate("Widgets"),
         translate("Configure installed widgets."))
@@ -37,9 +28,10 @@ function en.cfgvalue(self, section)
 end
 
 local tmpl = wdg:option(ListValue, "template", translate("Template"))
-for k, v in ipairs(fs.dir('/usr/lib/lua/luci/view/freifunk/widgets/')) do
-	if v ~= "." and v ~= ".." then
-		tmpl:value(v)
+local file
+for file in fs.dir("/usr/lib/lua/luci/view/freifunk/widgets/") do
+	if file ~= "." and file ~= ".." then
+		tmpl:value(file)
 	end
 end
 
@@ -64,10 +56,11 @@ function m.on_commit(self)
 			table.insert(active, s[".name"])
 		end
 	end )
-	for k, v in ipairs(fs.dir(dir)) do
-		filename = string.gsub(v, ".html", "")
+	local file
+	for file in fs.dir(dir) do
+		local filename = string.gsub(file, ".html", "")
 		if not utl.contains(active, filename) then
-			fs.unlink(dir .. v)
+			fs.unlink(dir .. file)
 		end
 	end
 end

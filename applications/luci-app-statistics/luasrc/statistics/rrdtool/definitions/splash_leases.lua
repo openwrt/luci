@@ -1,16 +1,6 @@
---[[
-    
-Luci statistics - splash_leases plugin diagram definition
-(c) 2013 Freifunk Augsburg / Michael Wendland <michael@michiwend.com>
-                                     
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at             
-                       
-    http://www.apache.org/licenses/LICENSE-2.0
-                          
+-- Copyright 2013 Freifunk Augsburg / Michael Wendland <michael@michiwend.com>
+-- Licensed to the public under the Apache License 2.0.
 
-]]--
     
 module("luci.statistics.rrdtool.definitions.splash_leases", package.seeall)
                                        

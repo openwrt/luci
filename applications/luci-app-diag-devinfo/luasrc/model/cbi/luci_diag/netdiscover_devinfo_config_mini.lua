@@ -1,16 +1,5 @@
---[[
-LuCI - Lua Configuration Interface
-
-(c) 2009 Daniel Dickinson
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-]]--
+-- Copyright 2009 Daniel Dickinson
+-- Licensed to the public under the Apache License 2.0.
 
 require("luci.controller.luci_diag.devinfo_common")
 

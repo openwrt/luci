@@ -1,26 +1,14 @@
---[[
-LuCI - Lua Configuration Interface
+-- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Copyright 2011 Jo-Philipp Wich <jow@openwrt.org>
+-- Licensed to the public under the Apache License 2.0.
 
-Copyright 2008 Steven Barth <steven@midlink.org>
-Copyright 2011 Jo-Philipp Wich <xm@subsignal.org>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-$Id$
-]]--
-
-require("luci.sys")
-require("luci.sys.zoneinfo")
-require("luci.tools.webadmin")
-require("luci.fs")
-require("luci.config")
+local sys   = require "luci.sys"
+local zones = require "luci.sys.zoneinfo"
+local fs    = require "nixio.fs"
+local conf  = require "luci.config"
 
 local m, s, o
-local has_ntpd = luci.fs.access("/usr/sbin/ntpd")
+local has_ntpd = fs.access("/usr/sbin/ntpd")
 
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 m:chain("luci")
@@ -48,20 +36,20 @@ o.datatype = "hostname"
 
 function o.write(self, section, value)
 	Value.write(self, section, value)
-	luci.sys.hostname(value)
+	sys.hostname(value)
 end
 
 
 o = s:taboption("general", ListValue, "zonename", translate("Timezone"))
 o:value("UTC")
 
-for i, zone in ipairs(luci.sys.zoneinfo.TZ) do
+for i, zone in ipairs(zones.TZ) do
 	o:value(zone[1])
 end
 
 function o.write(self, section, value)
 	local function lookup_zone(title)
-		for _, zone in ipairs(luci.sys.zoneinfo.TZ) do
+		for _, zone in ipairs(zones.TZ) do
 			if zone[1] == title then return zone[2] end
 		end
 	end
@@ -69,7 +57,7 @@ function o.write(self, section, value)
 	AbstractValue.write(self, section, value)
 	local timezone = lookup_zone(value) or "GMT0"
 	self.map.uci:set("system", section, "timezone", timezone)
-	luci.fs.writefile("/etc/TZ", timezone .. "\n")
+	fs.writefile("/etc/TZ", timezone .. "\n")
 end
 
 
@@ -117,9 +105,9 @@ o = s:taboption("language", ListValue, "_lang", translate("Language"))
 o:value("auto")
 
 local i18ndir = luci.i18n.i18ndir .. "base."
-for k, v in luci.util.kspairs(luci.config.languages) do
+for k, v in luci.util.kspairs(conf.languages) do
 	local file = i18ndir .. k:gsub("_", "-")
-	if k:sub(1, 1) ~= "." and luci.fs.access(file .. ".lmo") then
+	if k:sub(1, 1) ~= "." and fs.access(file .. ".lmo") then
 		o:value(k, v)
 	end
 end
@@ -134,7 +122,7 @@ end
 
 
 o = s:taboption("language", ListValue, "_mediaurlbase", translate("Design"))
-for k, v in pairs(luci.config.themes) do
+for k, v in pairs(conf.themes) do
 	if k:sub(1, 1) ~= "." then
 		o:value(v, k)
 	end
@@ -196,17 +184,17 @@ if has_ntpd then
 		o.rmempty = false
 
 		function o.cfgvalue(self)
-			return luci.sys.init.enabled("sysntpd")
+			return sys.init.enabled("sysntpd")
 				and self.enabled or self.disabled
 		end
 
 		function o.write(self, section, value)
 			if value == self.enabled then
-				luci.sys.init.enable("sysntpd")
-				luci.sys.call("env -i /etc/init.d/sysntpd start >/dev/null")
+				sys.init.enable("sysntpd")
+				sys.call("env -i /etc/init.d/sysntpd start >/dev/null")
 			else
-				luci.sys.call("env -i /etc/init.d/sysntpd stop >/dev/null")
-				luci.sys.init.disable("sysntpd")
+				sys.call("env -i /etc/init.d/sysntpd stop >/dev/null")
+				sys.init.disable("sysntpd")
 			end
 		end
 
