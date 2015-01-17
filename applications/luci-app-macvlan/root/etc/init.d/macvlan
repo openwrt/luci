@@ -16,7 +16,7 @@ get_config() {
 
 genrmcfg() {
 	echo '#!/bin/sh' > /tmp/rmcfg.sh
-	for ((i=1;i<=wannum;i++))
+	for i in $(seq 1 $wannum)
 	do
 		echo "uci del network.vwan${i}
 uci del dhcp.macvlan${i}
@@ -37,7 +37,7 @@ genifsh() {
 	[ "$wansw" = "1" ] && echo 'ifup wan &' >> /tmp/macvlan_ifup.sh
 
 
-	for ((i=1;i<=wannum;i++))
+	for i in $(seq 1 $wannum)
 	do
 		echo "ifdown vwan${i}" >> /tmp/macvlan_ifdown.sh
 		echo "ifup vwan${i} &" >> /tmp/macvlan_ifup.sh
@@ -58,7 +58,7 @@ start() {
 	}
 
 	ifname=$(uci get network.wan.ifname)
-	for ((i=1;i<=wannum;i++))
+	for i in $(seq 1 $wannum)
 	do
 		ip link add link $ifname name macvlan$i type macvlan
 		ifconfig macvlan$i hw ether $(echo $(cat /sys/class/net/$ifname/address|awk -F ":" '{print $1":"$2":"$3":"$4":"$5":" }')$(echo "" | awk -F ":" '{printf("%X\n", 16+i);}' i=$i))
