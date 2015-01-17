@@ -9,9 +9,9 @@ get_config() {
 		return 1
 	}
 	config_load "macvlan"
-	config_get ENABLED config enabled
+	config_get_bool ENABLED config enabled 0
 	config_get wannum config wannum
-	config_get wansw config wansw
+	config_get_bool wansw config wansw 0
 }
 
 genrmcfg() {

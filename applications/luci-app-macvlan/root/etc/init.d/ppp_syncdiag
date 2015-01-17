@@ -12,7 +12,7 @@ start() {
 
 	config_load "macvlan"
 
-	config_get ENABLED config enabled
+	config_get_bool ENABLED config enabled 0
 
 	[ "$ENABLED" = "0" ] && {
 		echo "Macvlan scripts disabled."
@@ -32,7 +32,7 @@ stop() {
 
 	config_load "macvlan"
 
-	config_get ENABLED config enabled
+	config_get_bool ENABLED config enabled 0
 
 	[ "$ENABLED" = "0" ] && {
 		echo "Macvlan scripts disabled."

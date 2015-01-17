@@ -8,10 +8,10 @@
 }
 
 config_load "macvlan"
-config_get DIAGCHK config diagchk
+config_get_bool DIAGCHK config diagchk 0
 config_get DIAGNUM config diagnum
-config_get ENABLED config enabled
-[ "$DIAGCHK" == "0" ] && {
+config_get_bool ENABLED config enabled 0
+[ "$DIAGCHK" = "0" ] && {
 	echo "diag check disabled."
 	return 0
 }
