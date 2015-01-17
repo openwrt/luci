@@ -3,15 +3,20 @@
 . /lib/functions.sh
 START=19
 
-pppoe_name=$(uci get network.wan.username) 
-pppoe_pw=$(uci get network.wan.password)
-pppoe_metric=$(uci get network.wan.metric) 
-wannum=$(uci get macvlan.config.wannum)
-wansw=$(uci get macvlan.config.wansw)
-ENABLED=$(uci get macvlan.config.enabled)
+get_config() {
+	[ -f /etc/config/macvlan ] || {
+		echo "You are missing configuration file /etc/config/macvlan"
+		return 1
+	}
+	config_load "macvlan"
+	config_get ENABLED config enabled
+	config_get wannum config wannum
+	config_get wansw config wansw
+}
+
 genrmcfg() {
 	echo '#!/bin/sh' > /tmp/rmcfg.sh
-	for i in $(seq 1 $wannum)
+	for ((i=1;i<=wannum;i++))
 	do
 		echo "uci del network.vwan${i}
 uci del dhcp.macvlan${i}
@@ -27,12 +32,12 @@ ip link delete macvlan${i}" >> /tmp/rmcfg.sh
 
 genifsh() {
 	echo '#!/bin/sh' > /tmp/macvlan_ifdown.sh
-	[ "$wansw" == "1" ] && echo 'ifdown wan' >> /tmp/macvlan_ifdown.sh
+	[ "$wansw" = "1" ] && echo 'ifdown wan' >> /tmp/macvlan_ifdown.sh
 	echo '#!/bin/sh' > /tmp/macvlan_ifup.sh
-	[ "$wansw" == "1" ] && echo 'ifup wan &' >> /tmp/macvlan_ifup.sh
+	[ "$wansw" = "1" ] && echo 'ifup wan &' >> /tmp/macvlan_ifup.sh
 
 
-	for i in $(seq 1 $wannum)
+	for ((i=1;i<=wannum;i++))
 	do
 		echo "ifdown vwan${i}" >> /tmp/macvlan_ifdown.sh
 		echo "ifup vwan${i} &" >> /tmp/macvlan_ifup.sh
@@ -44,23 +49,16 @@ genifsh() {
 
 
 start() {
-	[ -f /etc/config/macvlan ] || {
-		echo "You are missing configuration file /etc/config/macvlan"
-		return 1
-	}
 
-	config_load "macvlan"
+	get_config
 
-	config_get ENABLED config enabled
-
-	[ "$ENABLED" == "0" ] && {
+	[ "$ENABLED" = "0" ] && {
 		echo "MACVLAN is disabled."
 		return 1
 	}
 
-	config_get PORTNUM config wannum
 	ifname=$(uci get network.wan.ifname)
-	for i in $(seq 0 $PORTNUM)
+	for ((i=1;i<=wannum;i++))
 	do
 		ip link add link $ifname name macvlan$i type macvlan
 		ifconfig macvlan$i hw ether $(echo $(cat /sys/class/net/$ifname/address|awk -F ":" '{print $1":"$2":"$3":"$4":"$5":" }')$(echo "" | awk -F ":" '{printf("%X\n", 16+i);}' i=$i))
@@ -72,5 +70,5 @@ start() {
 }
 
 stop() {
-	echo "Nothing to do"
+	echo "Nothing to be done."
 }
