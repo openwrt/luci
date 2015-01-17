@@ -14,15 +14,13 @@ start() {
 
 	config_get ENABLED config enabled
 
-	[ "$ENABLED" == "0" ] && {
-		echo "并发拨号已禁用"
+	[ "$ENABLED" = "0" ] && {
+		echo "Macvlan scripts disabled."
 		return 1
 	}
-	echo "开始并发拨号……"
+	echo "Starting interfaces..."
 	/tmp/macvlan_ifup.sh
-#    sleep 1
-#    killall -9 pppd
-	echo "并发拨号结束。"
+	echo "Interfaces started."
 
 }
 
@@ -36,22 +34,22 @@ stop() {
 
 	config_get ENABLED config enabled
 
-	[ "$ENABLED" == "0" ] && {
-		echo "并发拨号已禁用"
+	[ "$ENABLED" = "0" ] && {
+		echo "Macvlan scripts disabled."
 		return 1
 	}
 
-	echo "正在停止所有接口……"
+	echo "Stopping interfaces..."
 	/tmp/macvlan_ifdown.sh
-	echo "所有接口已经停止。"
+	echo "Intefaces stopped."
 }
 restart()
 {
-    stop
-    sleep 2
-    start 
-    return 0
+	stop
+	sleep 10
+	start 
+	return 0
 }
 boot() {
-    /bin/pppconnectcheck &
+	/bin/pppconnectcheck &
 }
