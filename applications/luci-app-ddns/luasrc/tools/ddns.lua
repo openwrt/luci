@@ -96,33 +96,29 @@ function get_pid(section)
 	return pid
 end
 
--- read version information for given package if installed
-function ipkg_version(package)
-	if not package then
+-- compare versions using "<=" "<" ">" ">=" "=" "<<" ">>"
+function ipkg_ver_compare(ver1, comp, ver2)
+	if not ver1 or not (#ver1 > 0)
+	or not ver2 or not (#ver2 > 0)
+	or not comp or not (#comp > 0) then
 		return nil
 	end
-	local info = OPKG.info(package)
-	local data = {}
-	local version = ""
-	local i = 0
-	for k, v in pairs(info) do
-		if v.Package == package and v.Status.installed then
-			version = v.Version
-			i = i + 1
-		end
+	return (tonumber(SYS.call(
+		[[opkg compare-versions "]] .. ver1 .. [[" "]] .. comp .. [[" "]] .. ver2 .. [["]]
+		)) == 1)
+end
+
+-- read version information for given package if installed
+function ipkg_ver_installed(pkg)
+	if not pkg then
+		return nil
 	end
-	if i > 1 then	-- more then one valid record
-		return data
+	-- opkg list-installed [pkg] | cut -d " " -f 3 - return version as sting
+	local ver = SYS.exec([[opkg list-installed ]] .. pkg .. [[ | cut -d " " -f 3 ]])
+	if (#ver > 0) then
+		return ver
 	end
-	local sver = UTIL.split(version, "[%.%-]", nil, true)
-	data = {
-		version = version,
-		major   = tonumber(sver[1]) or 0,
-		minor   = tonumber(sver[2]) or 0,
-		patch   = tonumber(sver[3]) or 0,
-		build   = tonumber(sver[4]) or 0
-	}
-	return data
+	return nil
 end
 
 -- replacement of build-in read of UCI option

@@ -22,7 +22,7 @@ has_ipv6   = DDNS.check_ipv6()	-- IPv6 support
 has_ssl    = DDNS.check_ssl()	-- HTTPS support
 has_proxy  = DDNS.check_proxy()	-- Proxy support
 has_dnstcp = DDNS.check_bind_host()	-- DNS TCP support
-has_force  = has_ssl and has_dnstcp		-- Force IP Protocoll
+has_force  = has_ssl and has_dnstcp	-- Force IP Protocoll
 
 -- html constants -- ###########################################################
 font_red = "<font color='red'>"
