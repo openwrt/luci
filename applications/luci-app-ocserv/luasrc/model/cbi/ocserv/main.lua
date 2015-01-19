@@ -42,7 +42,7 @@ if fd then local ln
 			found_pki = true
 		elseif found_pki then
 			local hash = ln:match("([a-f0-9]+)")
-			o_pki.default = hash and hash:upper()
+			o_pki.default = hash and "sha1:" .. hash:upper()
 			complete = complete + 1
 			found_pki = false
 		end
