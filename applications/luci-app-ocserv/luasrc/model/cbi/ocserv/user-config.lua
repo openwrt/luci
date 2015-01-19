@@ -103,7 +103,7 @@ ca.template = "cbi/tvalue"
 ca.rows = 20
 
 function ca.cfgvalue(self, section)
-	return nixio.fs.readfile("/etc/ocserv/ca.pem")
+	return nixio.fs.readfile("/etc/config/ocserv-dir/ca.pem")
 end
 
 --[[DNS]]--
