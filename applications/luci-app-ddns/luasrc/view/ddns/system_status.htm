@@ -106,7 +106,7 @@
 					break;
 			}
 
-			// monitored interfacce
+			// monitored interface
 			if (data[i].iface == "_nonet_")
 				tr.insertCell(-1).innerHTML = '<em><%:Config error%></em>';
 			else
@@ -125,14 +125,15 @@
 		}
 	}
 
+	var ddns_status_XHR = new XHR();
 	// force to immediate show status (not waiting for XHR.poll)
-	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	ddns_status_XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
 			_data2elements(x, data);
 		}
 	);
 
-	XHR.poll(10, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	ddns_status_XHR.poll(10, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
 			_data2elements(x, data);
 		}

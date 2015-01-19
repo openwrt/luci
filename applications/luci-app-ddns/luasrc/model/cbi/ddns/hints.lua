@@ -11,7 +11,8 @@ local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 has_ssl     = DDNS.check_ssl()		-- HTTPS support
 has_proxy   = DDNS.check_proxy()	-- Proxy support
 has_dnstcp  = DDNS.check_bind_host()	-- DNS TCP support
-need_update = CTRL.update_needed()	-- correct ddns-scripts version
+-- correct ddns-scripts version
+need_update = DDNS.ipkg_ver_compare(DDNS.ipkg_ver_installed("ddns-scripts"), "<<", CTRL.DDNS_MIN)
 
 -- html constants
 font_red = [[<font color="red">]]
