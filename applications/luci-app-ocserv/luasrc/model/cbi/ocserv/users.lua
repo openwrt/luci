@@ -30,7 +30,7 @@ function pwd.write(self, section, value)
 		pass = value
 	else
 		local t = tonumber(nixio.getpid()*os.time())
-		local salt = "$5$" .. t .. "$"
+		local salt = "$1$" .. t .. "$"
 		pass = nixio.crypt(value, salt)
 	end
 	Value.write(self, section, pass)
