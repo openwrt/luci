@@ -25,8 +25,17 @@ end
 
 function action_dispatch()
 	local uci = luci.model.uci.cursor_state()
-	local mac = luci.sys.net.ip4mac(luci.http.getenv("REMOTE_ADDR")) or ""
+	local ipc = require "luci.ip"
+
+	local i, n
+	local mac = ""
 	local access = false
+
+	for i, n in ipairs(ipc.neighbors()) do
+		if n.mac and n.dest and n.dest:equal(luci.http.getenv("REMOTE_ADDR")) then
+			mac = n.mac
+		end
+	end
 
 	uci:foreach("luci_splash", "lease", function(s)
 		if s.mac and s.mac:lower() == mac then access = true end

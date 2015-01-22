@@ -2,14 +2,11 @@
 
 utl = require "luci.util"
 sys = require "luci.sys"
+ipc = require "luci.ip"
 
-require("luci.model.uci")
-require("luci.sys.iptparser")
 
 -- Init state session
-local uci = luci.model.uci.cursor_state()
-local ipt = luci.sys.iptparser.IptParser()
-local net = sys.net
+local uci = require "luci.model.uci".cursor_state()
 local fs = require "nixio.fs"
 local ip = require "luci.ip"
 
@@ -139,6 +136,30 @@ function ipvalid(ipaddr)
 	return false
 end
 
+function mac_to_ip(mac)
+	ipc.neighbors({ family = 4 }, function(n)
+		if n.mac == mac and n.dest then
+			return n.dest:string()
+		end
+	end)
+end
+
+function mac_to_dev(mac)
+	ipc.neighbors({ family = 4 }, function(n)
+		if n.mac == mac and n.dev then
+			return n.dev
+		end
+	end)
+end
+
+function ip_to_mac(ip)
+	ipc.neighbors({ family = 4 }, function(n)
+		if n.mac and n.dest and n.dest:equal(ip) then
+			return n.mac
+		end
+	end)
+end
+
 function main(argv)
 	local cmd = table.remove(argv, 1)
 	local arg = argv[1]
@@ -157,7 +178,6 @@ function main(argv)
 
 		lock()
 
-		local arp_cache      = net.arptable()
 		local leased_macs    = get_known_macs("lease")
 		local blacklist_macs = get_known_macs("blacklist")
 		local whitelist_macs = get_known_macs("whitelist")
@@ -167,17 +187,12 @@ function main(argv)
 			if adr:find(":") then
 				mac = adr:lower()
 			else
-				for _, e in ipairs(arp_cache) do
-					if e["IP address"] == adr then
-						mac = e["HW address"]:lower()
-						break
-					end
-				end
+				mac = ip_to_mac(adr)
 			end
 
 			if mac and cmd == "add-rules" then
 				if leased_macs[mac] then
-					add_lease(mac, arp_cache, true)
+					add_lease(mac, true)
 				elseif blacklist_macs[mac] then
 					add_blacklist_rule(mac)
 				elseif whitelist_macs[mac] then
@@ -277,15 +292,6 @@ function main(argv)
 	end
 end
 
--- Get current arp cache
-function get_arpcache()
-	local arpcache = { }
-	for _, entry in ipairs(net.arptable()) do
-		arpcache[entry["HW address"]:lower()] = { entry["Device"]:lower(), entry["IP address"]:lower() }
-	end
-	return arpcache
-end
-
 -- Get a list of known mac addresses
 function get_known_macs(list)
 	local leased_macs = { }
@@ -355,17 +361,11 @@ function convert_mac_to_secname(mac)
 end
 
 -- Add a lease to state and invoke add_rule
-function add_lease(mac, arp, no_uci)
+function add_lease(mac, no_uci)
 	mac = mac:lower()
 
 	-- Get current ip address
-	local ipaddr
-	for _, entry in ipairs(arp or net.arptable()) do
-		if entry["HW address"]:lower() == mac then
-			ipaddr = entry["IP address"]
-			break
-		end
-	end
+	local ipaddr = mac_to_ip(mac)
 
 	-- Add lease if there is an ip addr
 	if ipaddr then
@@ -598,8 +598,6 @@ function sync()
 	uci:revert("luci_splash_leases")
 
         
-	local arpcache = get_arpcache()
-
 	local blackwhitelist = uci:get_all("luci_splash")
 	local whitelist_total = 0
 	local whitelist_online = 0
@@ -618,7 +616,7 @@ function sync()
 				leasecount = leasecount + 1
 
                                 -- only count leases_online for connected clients
-                                if arpcache[v.mac] then
+				if mac_to_ip(v.mac) then
                                 	leases_online = leases_online + 1
                                 end
 
@@ -643,7 +641,7 @@ function sync()
 			whitelist_total = whitelist_total + 1
 			if s.mac then
 				local mac = s.mac:lower()
-				if arpcache[mac] then
+				if mac_to_ip(mac) then
 					whitelist_online = whitelist_online + 1
 				end
 			end
@@ -652,7 +650,7 @@ function sync()
 			blacklist_total = blacklist_total + 1
 			if s.mac then
 				local mac = s.mac:lower()
-				if arpcache[mac] then
+				if mac_to_ip(mac) then
 					blacklist_online = blacklist_online + 1
 				end
 			end
@@ -693,7 +691,6 @@ end
 
 -- Show client info
 function list()
-	local arpcache = get_arpcache()
 	-- Find traffic usage
 	local function traffic(lease)
 		local traffic_in  = 0
@@ -722,12 +719,11 @@ function list()
 		if s[".type"] == "lease" and s.mac then
 			local ti, to = traffic(s)
 			local mac = s.mac:lower()
-			local arp = arpcache[mac]
 			print(string.format(
 				"%-17s  %-15s  %-9s  %3dm  %-7s  %7dKB  %7dKB",
 				mac, s.ipaddr, "leased",
 				math.floor(( os.time() - tonumber(s.start) ) / 60),
-				arp and arp[1] or "?", ti, to
+				mac_to_dev(mac) or "?", ti, to
 			))
 		end
 	end
@@ -738,11 +734,10 @@ function list()
 	) do
 		if (s[".type"] == "whitelist" or s[".type"] == "blacklist") and s.mac then
 			local mac = s.mac:lower()
-			local arp = arpcache[mac]
 			print(string.format(
 				"%-17s  %-15s  %-9s  %4s  %-7s  %9s  %9s",
-				mac, arp and arp[2] or "?", s[".type"],
-				"- ", arp and arp[1] or "?", "-", "-"
+				mac, mac_to_ip(mac) or "?", s[".type"],
+				"- ", mac_to_dev(mac) or "?", "-", "-"
 			))
 		end
 	end
