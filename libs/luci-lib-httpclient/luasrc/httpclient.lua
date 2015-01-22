@@ -97,7 +97,11 @@ end
 function request_raw(uri, options)
 	options = options or {}
 	local pr, auth, host, port, path
-	
+
+	if options.params then
+		uri = uri .. '?' .. http.urlencode_params(options.params)
+	end
+
 	if uri:find("%[") then
 		if uri:find("@") then
 			pr, auth, host, port, path = uri:match("(%w+)://(.+)@(%b[]):?([0-9]*)(.*)")
