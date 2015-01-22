@@ -962,7 +962,7 @@ static int _route_dump(lua_State *L, struct dump_filter *filter)
 
 out:
 	nl_cb_put(cb);
-	return (s.index > 0 && s.callback == 0);
+	return (s.callback == 0);
 }
 
 static int route_get(lua_State *L)
@@ -1191,7 +1191,7 @@ static int neighbor_dump(lua_State *L)
 
 out:
 	nl_cb_put(cb);
-	return (st.index > 0 && st.callback == 0);
+	return (st.callback == 0);
 }
 
 
