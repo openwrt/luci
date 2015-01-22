@@ -1,4 +1,4 @@
-OS            = $(shell uname)
+OS            = Linux
 AXTLS_VERSION = 1.2.1
 AXTLS_DIR     = axTLS
 AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VERSION).tar.gz
