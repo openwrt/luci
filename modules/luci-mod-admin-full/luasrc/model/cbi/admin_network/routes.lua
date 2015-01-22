@@ -1,13 +1,13 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require("luci.tools.webadmin")
+local wa = require "luci.tools.webadmin"
+local fs = require "nixio.fs"
+
 m = Map("network",
 	translate("Routes"),
 	translate("Routes specify over which interface and gateway a certain host or network " ..
 		"can be reached."))
-
-local routes6 = luci.sys.net.routes6()
 
 s = m:section(TypedSection, "route", translate("Static IPv4 Routes"))
 s.addremove = true
@@ -16,7 +16,7 @@ s.anonymous = true
 s.template  = "cbi/tblsection"
 
 iface = s:option(ListValue, "interface", translate("Interface"))
-luci.tools.webadmin.cbi_add_networks(iface)
+wa.cbi_add_networks(iface)
 
 t = s:option(Value, "target", translate("Target"), translate("Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"))
 t.datatype = "ip4addr"
@@ -41,7 +41,7 @@ mtu.placeholder = 1500
 mtu.datatype = "range(64,9000)"
 mtu.rmempty = true
 
-if routes6 then
+if fs.access("/proc/net/ipv6_route") then
 	s = m:section(TypedSection, "route6", translate("Static IPv6 Routes"))
 	s.addremove = true
 	s.anonymous = true
@@ -49,7 +49,7 @@ if routes6 then
 	s.template  = "cbi/tblsection"
 
 	iface = s:option(ListValue, "interface", translate("Interface"))
-	luci.tools.webadmin.cbi_add_networks(iface)
+	wa.cbi_add_networks(iface)
 
 	t = s:option(Value, "target", translate("Target"), translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address or Network (CIDR)"))
 	t.datatype = "ip6addr"
