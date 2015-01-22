@@ -176,6 +176,25 @@ function request_raw(uri, options)
 		options.method = options.method or "POST"
 	end
 
+	if options.cookies then
+		local cookiedata = {}
+		for _, c in ipairs(options.cookies) do
+			local cdo = c.flags.domain
+			local cpa = c.flags.path
+			if   (cdo == host or cdo == "."..host or host:sub(-#cdo) == cdo) 
+			 and (cpa == path or cpa == "/" or cpa .. "/" == path:sub(#cpa+1))
+			 and (not c.flags.secure or pr == "https")
+			then
+				cookiedata[#cookiedata+1] = c.key .. "=" .. c.value
+			end 
+		end
+		if headers["Cookie"] then
+			headers["Cookie"] = headers["Cookie"] .. "; " .. table.concat(cookiedata, "; ")
+		else
+			headers["Cookie"] = table.concat(cookiedata, "; ")
+		end
+	end
+
 	-- Assemble message
 	local message = {(options.method or "GET") .. " " .. path .. " " .. protocol}
 	
@@ -188,20 +207,7 @@ function request_raw(uri, options)
 			end
 		end
 	end
-	
-	if options.cookies then
-		for _, c in ipairs(options.cookies) do
-			local cdo = c.flags.domain
-			local cpa = c.flags.path
-			if   (cdo == host or cdo == "."..host or host:sub(-#cdo) == cdo) 
-			 and (cpa == path or cpa == "/" or cpa .. "/" == path:sub(#cpa+1))
-			 and (not c.flags.secure or pr == "https")
-			then
-				message[#message+1] = "Cookie: " .. c.key .. "=" .. c.value
-			end 
-		end
-	end
-	
+
 	message[#message+1] = ""
 	message[#message+1] = ""
 	
