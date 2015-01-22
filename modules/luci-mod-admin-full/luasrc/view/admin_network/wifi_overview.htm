@@ -1,12 +1,12 @@
 <%#
  Copyright 2008-2009 Steven Barth <steven@midlink.org>
- Copyright 2008-2013 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
  Licensed to the public under the Apache License 2.0.
 -%>
 
 <%-
 
-	local sys = require "luci.sys"
+	local ip = require "luci.ip"
 	local fs = require "nixio.fs"
 	local utl = require "luci.util"
 	local uci = require "luci.model.uci".cursor()
@@ -90,7 +90,9 @@
 
 	local devices  = ntm:get_wifidevs()
 	local arpcache = { }
-	sys.net.arptable(function(e) arpcache[e["HW address"]:upper()] = e["IP address"] end)
+	ip.neighbors({ family = 4 }, function(n)
+		if n.mac and n.dest then arpcache[n.mac:upper()] = n.dest:string() end
+	end)
 
 	local netlist = { }
 	local netdevs = { }

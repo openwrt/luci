@@ -1,9 +1,9 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2010-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require("luci.sys")
-require("luci.util")
+local ipc = require "luci.ip"
+
 m = Map("dhcp", translate("Hostnames"))
 
 s = m:section(TypedSection, "domain", translate("Host entries"))
@@ -19,12 +19,10 @@ ip = s:option(Value, "ip", translate("IP address"))
 ip.datatype = "ipaddr"
 ip.rmempty  = true
 
-local arptable = luci.sys.net.arptable() or {}
-for i, dataset in ipairs(arptable) do
-	ip:value(
-		dataset["IP address"],
-		"%s (%s)" %{ dataset["IP address"], dataset["HW address"] }
-	)
-end
+ipc.neighbors({ }, function(n)
+	if n.mac and n.dest and not n.dest:is6linklocal() then
+		ip:value(n.dest:string(), "%s (%s)" %{ n.dest:string(), n.mac })
+	end
+end)
 
 return m
