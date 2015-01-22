@@ -1,11 +1,12 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.tools.webadmin", package.seeall)
-local uci = require("luci.model.uci")
-require("luci.sys")
-require("luci.ip")
+
+local util = require "luci.util"
+local uci  = require "luci.model.uci"
+local ip   = require "luci.ip"
 
 function byte_format(byte)
 	local suff = {"B", "KB", "MB", "GB", "TB"}
@@ -47,49 +48,6 @@ function date_format(secs)
 	end
 end
 
-function network_get_addresses(net)
-	local state = uci.cursor_state()
-	state:load("network")
-	local addr = {}
-	local ipv4 = state:get("network", net, "ipaddr")
-	local mav4 = state:get("network", net, "netmask")
-	local ipv6 = state:get("network", net, "ip6addr")
-	
-	if ipv4 and #ipv4 > 0 then
-		if mav4 and #mav4 == 0 then mav4 = nil end
-
-		ipv4 = luci.ip.IPv4(ipv4, mav4)
-		
-		if ipv4 then 
-			table.insert(addr, ipv4:string())
-		end
-	end
-
-	if ipv6 then
-		table.insert(addr, ipv6)
-	end
-	
-	state:foreach("network", "alias",
-		function (section)
-			if section.interface == net then
-				if section.ipaddr and section.netmask then
-					local ipv4 = luci.ip.IPv4(section.ipaddr, section.netmask)
-					
-					if ipv4 then
-						table.insert(addr, ipv4:string())
-					end
-				end
-				
-				if section.ip6addr then
-					table.insert(addr, section.ip6addr)
-				end
-			end
-		end
-	)
-	
-	return addr
-end
-
 function cbi_add_networks(field)
 	uci.cursor():foreach("network", "interface",
 		function (section)
@@ -102,29 +60,12 @@ function cbi_add_networks(field)
 end
 
 function cbi_add_knownips(field)
-	for i, dataset in ipairs(luci.sys.net.arptable()) do
-		field:value(dataset["IP address"])
-	end
-end
-
-function network_get_zones(net)
-	local state = uci.cursor_state()
-	if not state:load("firewall") then
-		return nil
-	end
-	
-	local zones = {}
-	
-	state:foreach("firewall", "zone", 
-		function (section)
-			local znet = section.network or section.name
-			if luci.util.contains(luci.util.split(znet, " "), net) then
-				table.insert(zones, section.name)
-			end
+	local _, n
+	for _, n in ipairs(ip.neighbors({ family = 4 })) do
+		if n.dest then
+			field:value(n.dest:string())
 		end
-	)
-	
-	return zones
+	end
 end
 
 function firewall_find_zone(name)
@@ -142,21 +83,31 @@ function firewall_find_zone(name)
 end
 
 function iface_get_network(iface)
-	local state = uci.cursor_state()
-	state:load("network")
-	local net
-	
-	state:foreach("network", "interface",
-		function (section)
-			local ifname = state:get(
-				"network", section[".name"], "ifname"
-			)
-			
-			if iface == ifname then
-				net = section[".name"]
+	local devs = util.ubus("network.device", "status", { })
+	local _, net, subdev, dev, status
+
+	for dev, status in pairs(devs) do
+		if status["bridge-members"] then
+			for _, subdev in ipairs(status["bridge-members"]) do
+				if subdev == iface then
+					iface = dev
+					break
+				end
 			end
 		end
-	)
-	
-	return net
+	end
+
+	local cur = uci.cursor()
+	local dump = util.ubus("network.interface", "dump", { })
+	if dump then
+		for _, net in ipairs(dump.interface) do
+			if net.l3_device == iface or net.device == iface then
+				-- cross check with uci to filter out @name style aliases
+				local uciname = cur:get("network", net.interface, "ifname")
+				if not uciname or uciname:sub(1, 1) ~= "@" then
+					return net.interface
+				end
+			end
+		end
+	end
 end
