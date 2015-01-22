@@ -108,16 +108,10 @@ function action_neigh(json)
 	local assoclist = {}
 	--local neightbl = require "neightbl"
 	local ipc = require "luci.ip"
+	local defaultgw
 
-	luci.sys.net.routes(function(r) 
-		if r.dest:prefix() == 0 then 
-			defaultgw = r.gateway:string() 
-		end
-	end)
-
-	if not defaultgw then
-		defaultgw = luci.util.exec("ip route list exact 0.0.0.0/0 table all"):match(" via (%S+)")
-	end
+	ipc.routes({ family = 4, type = 1, dest_exact = "0.0.0.0/0" },
+		function(rt) defaultgw = rt.gw end)
 
 	local function compare(a,b)
 		if a.proto == b.proto then
