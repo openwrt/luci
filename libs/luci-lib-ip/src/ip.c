@@ -869,7 +869,7 @@ static int cb_dump_route(struct nl_msg *msg, void *arg)
 	if (s->callback)
 		lua_call(s->L, 1, 0);
 	else if (hdr->nlmsg_flags & NLM_F_MULTI)
-		lua_rawseti(s->L, 3, s->index);
+		lua_rawseti(s->L, -2, s->index);
 
 out:
 	s->pending = !!(hdr->nlmsg_flags & NLM_F_MULTI);
