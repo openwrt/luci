@@ -69,6 +69,7 @@ struct dump_filter {
 	cidr_t from;
 	cidr_t src;
 	cidr_t dst;
+	struct ether_addr mac;
 };
 
 struct dump_state {
@@ -1028,26 +1029,48 @@ static int route_dump(lua_State *L)
 }
 
 
+static bool diff_macaddr(struct ether_addr *mac1, struct ether_addr *mac2)
+{
+	struct ether_addr empty = { };
+
+	if (!memcmp(mac2, &empty, sizeof(empty)))
+		return false;
+
+	if (!mac1 || memcmp(mac1, mac2, sizeof(empty)))
+		return true;
+
+	return false;
+}
+
 static int cb_dump_neigh(struct nl_msg *msg, void *arg)
 {
 	char buf[32];
-	struct ether_addr *addr;
+	struct ether_addr *mac;
+	struct in6_addr *dst;
 	struct dump_state *s = arg;
 	struct dump_filter *f = s->filter;
 	struct nlmsghdr *hdr = nlmsg_hdr(msg);
 	struct ndmsg *nd = NLMSG_DATA(hdr);
 	struct nlattr *tb[NDA_MAX+1];
+	int bitlen;
 
 	if (hdr->nlmsg_type != RTM_NEWNEIGH ||
 	    (nd->ndm_family != AF_INET && nd->ndm_family != AF_INET6))
 		return NL_SKIP;
 
+	nlmsg_parse(hdr, sizeof(*nd), tb, NDA_MAX, NULL);
+
+	mac = tb[NDA_LLADDR] ? RTA_DATA(tb[NDA_LLADDR]) : NULL;
+	dst = tb[NDA_DST]    ? RTA_DATA(tb[NDA_DST])    : NULL;
+
+	bitlen = (nd->ndm_family == AF_INET) ? 32 : 128;
+
 	if ((f->family && nd->ndm_family  != f->family) ||
 	    (f->iif    && nd->ndm_ifindex != f->iif) ||
-		(f->type   && !(f->type & nd->ndm_state)))
+		(f->type   && !(f->type & nd->ndm_state)) ||
+	    diff_prefix(nd->ndm_family, dst, bitlen, &f->dst) ||
+	    diff_macaddr(mac, &f->mac))
 		goto out;
-
-	nlmsg_parse(hdr, sizeof(*nd), tb, NDA_MAX, NULL);
 
 	if (s->callback)
 		lua_pushvalue(s->L, 2);
@@ -1069,16 +1092,15 @@ static int cb_dump_neigh(struct nl_msg *msg, void *arg)
 	L_setbool(s->L, "noarp", (nd->ndm_state & NUD_NOARP));
 	L_setbool(s->L, "permanent", (nd->ndm_state & NUD_PERMANENT));
 
-	if (tb[NDA_DST])
-		L_setaddr(s->L, "dest", nd->ndm_family, RTA_DATA(tb[NDA_DST]), -1);
+	if (dst)
+		L_setaddr(s->L, "dest", nd->ndm_family, dst, -1);
 
-	if (tb[NDA_LLADDR])
+	if (mac)
 	{
-		addr = RTA_DATA(tb[NDA_LLADDR]);
 		snprintf(buf, sizeof(buf), "%02x:%02x:%02x:%02x:%02x:%02x",
-		         addr->ether_addr_octet[0], addr->ether_addr_octet[1],
-				 addr->ether_addr_octet[2], addr->ether_addr_octet[3],
-				 addr->ether_addr_octet[4], addr->ether_addr_octet[5]);
+		         mac->ether_addr_octet[0], mac->ether_addr_octet[1],
+		         mac->ether_addr_octet[2], mac->ether_addr_octet[3],
+		         mac->ether_addr_octet[4], mac->ether_addr_octet[5]);
 
 		lua_pushstring(s->L, buf);
 		lua_setfield(s->L, -2, "mac");
@@ -1098,10 +1120,10 @@ out:
 
 static int neighbor_dump(lua_State *L)
 {
+	cidr_t p;
 	const char *s;
-	struct dump_filter filter = {
-		.type = 0xFF & ~NUD_NOARP
-	};
+	struct ether_addr *mac;
+	struct dump_filter filter = { .type = 0xFF & ~NUD_NOARP };
 	struct dump_state st = {
 		.callback = lua_isfunction(L, 2),
 		.pending = 1,
@@ -1122,6 +1144,13 @@ static int neighbor_dump(lua_State *L)
 
 		if ((s = L_getstr(L, 1, "dev")) != NULL)
 			filter.iif = if_nametoindex(s);
+
+		if ((s = L_getstr(L, 1, "dest")) != NULL && parse_cidr(s, &p))
+			filter.dst = p;
+
+		if ((s = L_getstr(L, 1, "mac")) != NULL &&
+		    (mac = ether_aton(s)) != NULL)
+			filter.mac = *mac;
 	}
 
 	if (!sock)
