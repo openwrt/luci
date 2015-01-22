@@ -323,7 +323,7 @@ function request_raw(uri, options)
 		end
 	end
 	
-	return response.code, response, linesrc(true), sock
+	return response.code, response, linesrc(true)..sock:readall(), sock
 end
 
 function cookie_parse(cookiestr)
