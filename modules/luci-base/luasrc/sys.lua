@@ -387,55 +387,6 @@ function net.conntrack(callback)
 	return connt
 end
 
---- Determine the current IPv4 default route. If multiple default routes exist,
--- return the one with the lowest metric.
--- @return	Table with the properties of the current default route.
---			The following fields are defined:
---			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
---			  "flags", "device" }
-function net.defaultroute()
-	local route
-
-	net.routes(function(rt)
-		if rt.dest:prefix() == 0 and (not route or route.metric > rt.metric) then
-			route = rt
-		end
-	end)
-
-	return route
-end
-
---- Determine the current IPv6 default route. If multiple default routes exist,
--- return the one with the lowest metric.
--- @return	Table with the properties of the current default route.
---			The following fields are defined:
---			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
---			  "flags", "device" }
-function net.defaultroute6()
-	local route
-
-	net.routes6(function(rt)
-		if rt.dest:prefix() == 0 and rt.device ~= "lo" and
-		   (not route or route.metric > rt.metric)
-		then
-			route = rt
-		end
-	end)
-
-	if not route then
-		local global_unicast = luci.ip.IPv6("2000::/3")
-		net.routes6(function(rt)
-			if rt.dest:equal(global_unicast) and
-			   (not route or route.metric > rt.metric)
-			then
-				route = rt
-			end
-		end)
-	end
-
-	return route
-end
-
 --- Determine the names of available network interfaces.
 -- @return	Table containing all current interface names
 function net.devices()
@@ -478,19 +429,6 @@ function net.deviceinfo()
 	return devs
 end
 
-
--- Determine the MAC address belonging to the given IP address.
--- @param ip	IPv4 address
--- @return		String containing the MAC address or nil if it cannot be found
-function net.ip4mac(ip)
-	local mac = nil
-	net.arptable(function(e)
-		if e["IP address"] == ip then
-			mac = e["HW address"]
-		end
-	end)
-	return mac
-end
 
 --- Returns the current kernel routing table entries.
 -- @return	Table of tables with properties of the corresponding routes.
