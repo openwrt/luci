@@ -3,7 +3,7 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local uci = require "luci.model.uci".cursor()
-local sys = require "luci.sys"
+local ipc = require "luci.ip"
 local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
 
@@ -86,12 +86,12 @@ s2.template = "cbi/tblsection"
 name = s2:option(Value, "name", translate("Hostname"))
 mac = s2:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 ip = s2:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
-sys.net.arptable(function(entry)
-	ip:value(entry["IP address"])
-	mac:value(
-		entry["HW address"],
-		entry["HW address"] .. " (" .. entry["IP address"] .. ")"
-	)
+
+ipc.neighbors({ family = 4 }, function(n)
+	if n.mac and n.dest then
+		ip:value(n.dest:string())
+		mac:value(n.mac, "%s (%s)" %{ n.mac, n.dest:string() })
+	end
 end)
 
 return m
