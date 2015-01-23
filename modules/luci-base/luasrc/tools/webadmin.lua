@@ -83,23 +83,15 @@ function firewall_find_zone(name)
 end
 
 function iface_get_network(iface)
-	local devs = util.ubus("network.device", "status", { })
-	local _, net, subdev, dev, status
-
-	for dev, status in pairs(devs) do
-		if status["bridge-members"] then
-			for _, subdev in ipairs(status["bridge-members"]) do
-				if subdev == iface then
-					iface = dev
-					break
-				end
-			end
-		end
+	local link = ip.link(tostring(iface))
+	if link.master then
+		iface = link.master
 	end
 
 	local cur = uci.cursor()
 	local dump = util.ubus("network.interface", "dump", { })
 	if dump then
+		local _, net
 		for _, net in ipairs(dump.interface) do
 			if net.l3_device == iface or net.device == iface then
 				-- cross check with uci to filter out @name style aliases
