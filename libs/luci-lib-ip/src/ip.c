@@ -1195,6 +1195,90 @@ out:
 }
 
 
+static int cb_dump_link(struct nl_msg *msg, void *arg)
+{
+	char *p, *addr, buf[32];
+	struct dump_state *s = arg;
+	struct nlmsghdr *hdr = nlmsg_hdr(msg);
+	struct ifinfomsg *ifm = NLMSG_DATA(hdr);
+	struct nlattr *tb[IFLA_MAX+1];
+	int i;
+
+	if (hdr->nlmsg_type != RTM_NEWLINK)
+		return NL_SKIP;
+
+	nlmsg_parse(hdr, sizeof(*ifm), tb, IFLA_MAX, NULL);
+
+	L_setbool(s->L, "up", (ifm->ifi_flags & IFF_RUNNING));
+	L_setint(s->L, "type", ifm->ifi_type);
+	L_setstr(s->L, "name", if_indextoname(ifm->ifi_index, buf));
+
+	if (tb[IFLA_MTU])
+		L_setint(s->L, "mtu", RTA_U32(tb[IFLA_MTU]));
+
+	if (tb[IFLA_TXQLEN])
+		L_setint(s->L, "qlen", RTA_U32(tb[IFLA_TXQLEN]));
+
+	if (tb[IFLA_MASTER])
+		L_setdev(s->L, "master", tb[IFLA_MASTER]);
+
+	if (tb[IFLA_ADDRESS])
+	{
+		addr = nla_get_string(tb[IFLA_ADDRESS]);
+
+		for (p = buf, i = 0; i < nla_len(tb[IFLA_ADDRESS]); i++)
+			p += sprintf(p, "%s%02x", (i ? ":" : ""), (uint8_t)*addr++);
+
+		L_setstr(s->L, "mac", buf);
+	}
+
+	s->pending = 0;
+	return NL_SKIP;
+}
+
+static int link_get(lua_State *L)
+{
+	const char *dev = luaL_checkstring(L, 1);
+	struct dump_state st = {
+		.pending = 1,
+		.L = L
+	};
+
+	if (!sock)
+	{
+		sock = nl_socket_alloc();
+		if (!sock)
+			return _error(L, -1, "Out of memory");
+
+		if (nl_connect(sock, NETLINK_ROUTE))
+			return _error(L, 0, NULL);
+	}
+
+	struct nl_msg *msg = nlmsg_alloc_simple(RTM_GETLINK, NLM_F_REQUEST);
+	struct nl_cb *cb = nl_cb_alloc(NL_CB_DEFAULT);
+	struct ifinfomsg ifm = { .ifi_index = if_nametoindex(dev) };
+
+	if (!msg || !cb)
+		return 0;
+
+	nlmsg_append(msg, &ifm, sizeof(ifm), 0);
+
+	nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM, cb_dump_link, &st);
+	nl_cb_set(cb, NL_CB_FINISH, NL_CB_CUSTOM, cb_done, &st);
+	nl_cb_err(cb, NL_CB_CUSTOM, cb_error, &st);
+
+	lua_newtable(L);
+
+	nl_send_auto_complete(sock, msg);
+	nl_recvmsgs(sock, cb);
+
+	nlmsg_free(msg);
+	nl_cb_put(cb);
+
+	return 1;
+}
+
+
 static const luaL_reg ip_methods[] = {
 	{ "new",			cidr_new          },
 	{ "IPv4",			cidr_ipv4         },
@@ -1204,6 +1288,8 @@ static const luaL_reg ip_methods[] = {
 	{ "routes",			route_dump        },
 
 	{ "neighbors",		neighbor_dump     },
+
+	{ "link",           link_get          },
 
 	{ }
 };
