@@ -2,6 +2,7 @@
 local utl = require "luci.util"
 local sys = require "luci.sys"
 local twa = require "luci.tools.webadmin"
+local ip  = require "luci.ip"
 
 -- System
 
@@ -48,27 +49,6 @@ for _, dev in ipairs(devices) do
 end
 local has_iwinfo = pcall(require, "iwinfo")
 
--- Routes
-local defroutev4 = sys.net.defaultroute()
-local defroutev6 = sys.net.defaultroute6()
-
-if defroutev4 then
-	defroutev4.dest = defroutev4.dest:string()
-	defroutev4.gateway = defroutev4.gateway:string()
-else
-	-- probably policy routing activated, try olsr-default table
-	local dr4 = sys.exec("ip r s t olsr-default")
-	if dr4 then
-		defroutev4 = { }
-		defroutev4.dest, defroutev4.gateway, defroutev4.device, defroutev4.metric = dr4:match("^(%w+) via (%d+.%d+.%d+.%d+) dev ([%w-]+) +metric (%d+)")
-	end
-end
-
-if defroutev6 then
-	defroutev6.dest = defroutev6.dest:string()
-	defroutev6.nexthop = defroutev6.nexthop:string()
-end
-
 if luci.http.formvalue("status") == "1" then
 	local rv = { }
 	for dev in pairs(netdevs) do
@@ -86,22 +66,29 @@ if luci.http.formvalue("status") == "1" then
 		rv[#rv+1] = j
 	end
 
-	if defroutev6 then
-		def6 = {
-			gateway = defroutev6.nexthop,
-			dest = defroutev6.dest,
-			dev = defroutev6.device,
-			metr = defroutev6.metric
+
+	-- Find default routes
+
+	local _, r, def4, def6
+
+	for _, r in ipairs(ip.routes({ type = 1, dest_exact = "0.0.0.0/0" })) do
+		def4 = {
+			gateway = r.gw:string(),
+			dest = r.dest:string(),
+			dev = r.dev,
+			metr = r.metric or 0
 		}
+		break
 	end
 
-	if defroutev4 then
-		def4 = {
-			gateway = defroutev4.gateway,
-			dest = defroutev4.dest,
-			dev = defroutev4.device,
-			metr = defroutev4.metric
+	for _, r in ipairs(ip.routes({ type = 1, dest_exact = "::/0" })) do
+		def6 = {
+			gateway = r.gw:string(),
+			dest = r.dest:string(),
+			dev = r.dev,
+			metr = r.metric or 0
 		}
+		break
 	end
 
 	rv[#rv+1] = {

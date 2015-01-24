@@ -710,6 +710,64 @@ function ubus(object, method, data)
 	end
 end
 
+--- Convert data structure to JSON
+-- @param data		The data to serialize
+-- @param writer	A function to write a chunk of JSON data (optional)
+-- @return			String containing the JSON if called without write callback
+function serialize_json(x, cb)
+	local rv, push = nil, cb
+	if not push then
+		rv = { }
+		push = function(tok) rv[#rv+1] = tok end
+	end
+
+	if x == nil then
+		push("null")
+	elseif type(x) == "table" then
+		-- test if table is array like
+		local k, v
+		local n1, n2 = 0, 0
+		for k in pairs(x) do n1 = n1 + 1 end
+		for k in ipairs(x) do n2 = n2 + 1 end
+
+		if n1 == n2 and n1 > 0 then
+			push("[")
+			for k = 1, n2 do
+				if k > 1 then
+					push(",")
+				end
+				serialize_json(x[k], push)
+			end
+			push("]")
+		else
+			push("{")
+			for k, v in pairs(x) do
+				push("%q:" % tostring(k))
+				serialize_json(v, push)
+				if next(x, k) then
+					push(",")
+				end
+			end
+			push("}")
+		end
+	elseif type(x) == "number" or type(x) == "boolean" then
+		if (x ~= x) then
+			-- NaN is the only value that doesn't equal to itself.
+			push("Number.NaN")
+		else
+			push(tostring(x))
+		end
+	else
+		push('"%s"' % tostring(x):gsub('["%z\1-\31]',
+			function(c) return '\\u%04x' % c:byte(1) end))
+	end
+
+	if not cb then
+		return table.concat(rv, "")
+	end
+end
+
+
 --- Returns the absolute path to LuCI base directory.
 -- @return		String containing the directory path
 function libpath()

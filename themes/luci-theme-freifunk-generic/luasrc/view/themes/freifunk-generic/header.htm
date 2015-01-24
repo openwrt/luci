@@ -123,7 +123,7 @@
 		</div>
 		<div class="header_right">
 			<%=luci.version.distversion%><br />
-			<%:Load%>: <%="%.2f" % loadinfo[1] / 65535.0%> <%="%.2f" % loadinfo[2] / 65535.0%> <%="%.2f" % loadinfo[3] / 65535.0%><br />
+			<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%><br />
 			<%:Hostname%>: <%=boardinfo.hostname or "?"%><br />
 			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 				<%:Auto Refresh%>:

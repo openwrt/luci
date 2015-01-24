@@ -23,14 +23,26 @@ function index()
 	page.leaf   = true
 end
 
+function ip_to_mac(ip)
+	local ipc = require "luci.ip"
+	local i, n
+
+	for i, n in ipairs(ipc.neighbors()) do
+		if n.mac and n.dest and n.dest:equal(ip) then
+			return n.mac
+		end
+	end
+end
+
 function action_dispatch()
 	local uci = luci.model.uci.cursor_state()
-	local mac = luci.sys.net.ip4mac(luci.http.getenv("REMOTE_ADDR")) or ""
+	local mac = ip_to_mac(luci.http.getenv("REMOTE_ADDR")) or ""
 	local access = false
 
 	uci:foreach("luci_splash", "lease", function(s)
 		if s.mac and s.mac:lower() == mac then access = true end
 	end)
+
 	uci:foreach("luci_splash", "whitelist", function(s)
 		if s.mac and s.mac:lower() == mac then access = true end
 	end)
@@ -51,13 +63,13 @@ function blacklist()
 end
 
 function action_activate()
-	local ip = luci.http.getenv("REMOTE_ADDR") or "127.0.0.1"
-	local mac = luci.sys.net.ip4mac(ip:match("^[\[::ffff:]*(%d+.%d+%.%d+%.%d+)\]*$"))
+	local ipc = require "luci.ip"
+	local mac = ip_to_mac(luci.http.getenv("REMOTE_ADDR") or "127.0.0.1") or ""
 	local uci_state = require "luci.model.uci".cursor_state()
 	local blacklisted = false
 	if mac and luci.http.formvalue("accept") then
 		uci:foreach("luci_splash", "blacklist",
-        	        function(s) if s.mac:lower() == mac or s.mac == mac then blacklisted = true end
+        	        function(s) if s.mac and s.mac:lower() == mac then blacklisted = true end
 	        end)
 		if blacklisted then	
 			luci.http.redirect(luci.dispatcher.build_url("splash" ,"blocked"))

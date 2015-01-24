@@ -9,6 +9,7 @@ local utl = require "luci.util"
 local ipt = require "luci.sys.iptparser".IptParser()
 local uci = require "luci.model.uci".cursor_state()
 local wat = require "luci.tools.webadmin"
+local ipc = require "luci.ip"
 local fs  = require "nixio.fs"
 
 local clients = { }
@@ -100,10 +101,12 @@ if fs.access(leasefile) then
 	end
 end
 
-for i, a in ipairs(luci.sys.net.arptable()) do
-	local c = clients[a["HW address"]:lower()]
-	if c and not c.ip then
-		c.ip = a["IP address"]
+for i, n in ipairs(ipc.neighbors({ family = 4 })) do
+	if n.mac and n.dest then
+		local c = clients[n.mac]
+		if c and not c.ip then
+			c.ip = n.dest:string()
+		end
 	end
 end
 

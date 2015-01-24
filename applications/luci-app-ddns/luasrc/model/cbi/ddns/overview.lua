@@ -14,7 +14,8 @@ show_hints = not (DDNS.check_ipv6()		-- IPv6 support
 		and DDNS.check_proxy()		-- Proxy support
 		and DDNS.check_bind_host()	-- DNS TCP support
 		)
-need_update = CTRL.update_needed()		-- correct ddns-scripts version
+-- correct ddns-scripts version
+need_update = DDNS.ipkg_ver_compare(DDNS.ipkg_ver_installed("ddns-scripts"), "<<", CTRL.DDNS_MIN)
 
 -- html constants
 font_red = [[<font color="red">]]
@@ -28,8 +29,17 @@ m = Map("ddns")
 -- first need to close <a> from cbi map template our <a> closed by template
 --m.title = [[</a><a href="javascript:alert(']] .. CTRL.show_versions() ..[[')">]] ..
 --		translate("Dynamic DNS")
-m.title = [[</a><a href="#" onclick="onclick_maptitle();">]] ..
-		translate("Dynamic DNS")
+m.title	= [[</a><a href="javascript:alert(']]
+		.. translate("Version Information")
+		.. [[\n\nluci-app-ddns]]
+		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("luci-app-ddns")
+		.. [[\n\nddns-scripts ]] .. translate("required") .. [[:]]
+		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. CTRL.DDNS_MIN .. [[ ]] .. translate("or higher")
+		.. [[\n\nddns-scripts ]] .. translate("installed") .. [[:]]
+		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("ddns-scripts")
+		.. [[\n\n]]
+	.. [[')">]]
+	.. translate("Dynamic DNS")
 
 m.description = translate("Dynamic DNS allows that your router can be reached with " ..
 			"a fixed hostname while having a dynamically changing " ..

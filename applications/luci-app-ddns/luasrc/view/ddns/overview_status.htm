@@ -2,12 +2,6 @@
 <!-- ++ BEGIN ++ Dynamic DNS ++ overview_status.htm ++ -->
 <script type="text/javascript">//<![CDATA[
 
-	// variables to store version information
-	var luci_version
-	var luci_build
-	var ddns_version
-	var ddns_required
-
 	// helper to extract section from objects id
 	// cbi.ddns.SECTION._xyz
 	function _id2section(id) {
@@ -19,13 +13,6 @@
 	// screen objects
 	// called by XHR.poll and onclick_startstop
 	function _data2elements(data) {
-		// DDNS Service
-		// fill Version informations
-		luci_version  = data[0].luci_ver
-		luci_build    = data[0].luci_build
-		ddns_version  = data[0].script_ver
-		ddns_required = data[0].script_min
-
 		// Service sections
 		for( i = 1; i < data.length; i++ )
 		{
@@ -135,27 +122,13 @@
 		}
 	}
 
-	// event handler for map.title link
-	function onclick_maptitle() {
-		var str = "<%:Version Information%>";
-		str += "\n\nluci-app-ddns:";
-		str += "\n\t<%:Version%>:\t" + luci_version;
-		str += "\n\t<%:Build%>:\t" + luci_build;
-		str += "\n\nddns-scripts <%:required%>:";
-		str += "\n\t<%:Version%>:\t" + ddns_required + " <%:or greater%>";
-		str += "\n\nddns-scripts <%:installed%>:";
-		str += "\n\t<%:Version%>:\t" + ddns_version;
-		str += "\n\n"
-		alert(str);
-	}
-
 	// event handler for start/stop button
 	function onclick_startstop(id) {
 		// extract section
 		var section = _id2section(id);
 		// get elements
 		var cbx = document.getElementById("cbid.ddns." + section + ".enabled");		// Enabled
-		var obj = document.getElementById("cbi-ddns-overview-status-legend");		// objext defined below to make in-/visible
+		var obj = document.getElementById("cbi-ddns-overview-status-legend");		// object defined below to make in-/visible
 		if ( !(obj && cbx) ) { return; }	// security check
 
 		// make me visible
@@ -165,7 +138,7 @@
 		var btnXHR = new XHR();
 		btnXHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "startstop")%>/' + section + '/' + cbx.checked, null,
 			function(x, data) {
-				if (x.responseText == "_uncommited_") {
+				if (x.responseText == "_uncommitted_") {
 					// we need a trick to display Ampersand "&" in stead of "&#38;" or "&amp;"
 					// after translation
 					txt="<%:Please [Save & Apply] your changes first%>";
@@ -182,8 +155,9 @@
 		);
 	}
 
+	var ddns_ov_XHR = new XHR();
 	// force to immediate show status on page load (not waiting for XHR.poll)
-	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	ddns_ov_XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
 			_data2elements(data);
 		}
@@ -192,7 +166,7 @@
 	// define only ONE XHR.poll in a page because if one is running it blocks the other one
 	// optimum is to define on Map or Section Level from here you can reach all elements
 	// we need update every 15 seconds only
-	XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	ddns_ov_XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
 			_data2elements(data);
 		}

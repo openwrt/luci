@@ -1,5 +1,8 @@
 module("luci.controller.olsr", package.seeall)
 
+local neigh_table = nil
+local ifaddr_table = nil
+
 function index()
 	local ipv4,ipv6
 	if nixio.fs.access("/etc/config/olsrd") then
@@ -93,6 +96,46 @@ function action_json()
 	http.write('{"v4":' .. jsonreq4 .. ', "v6":' .. jsonreq6 .. '}')
 end
 
+
+local function local_mac_lookup(ipaddr)
+	local _, ifa, dev
+
+	ipaddr = tostring(ipaddr)
+
+	if not ifaddr_table then
+		ifaddr_table = nixio.getifaddrs()
+	end
+
+	-- ipaddr -> ifname
+	for _, ifa in ipairs(ifaddr_table) do
+		if ifa.addr == ipaddr then
+			dev = ifa.name
+			break
+		end
+	end
+
+	-- ifname -> macaddr
+	for _, ifa in ipairs(ifaddr_table) do
+		if ifa.name == dev and ifa.family == "packet" then
+			return ifa.addr
+		end
+	end
+end
+
+local function remote_mac_lookup(ipaddr)
+	local _, n
+
+	if not neigh_table then
+		neigh_table = luci.ip.neighbors()
+	end
+
+	for _, n in ipairs(neigh_table) do
+		if n.mac and n.dest and n.dest:equal(ipaddr) then
+			return n.mac
+		end
+	end
+end
+
 function action_neigh(json)
 	local data, has_v4, has_v6, error = fetch_jsoninfo('links')
 
@@ -107,17 +150,13 @@ function action_neigh(json)
 	local sys = require "luci.sys"
 	local assoclist = {}
 	--local neightbl = require "neightbl"
+	local ntm = require "luci.model.network"
 	local ipc = require "luci.ip"
+	local nxo = require "nixio"
+	local defaultgw
 
-	luci.sys.net.routes(function(r) 
-		if r.dest:prefix() == 0 then 
-			defaultgw = r.gateway:string() 
-		end
-	end)
-
-	if not defaultgw then
-		defaultgw = luci.util.exec("ip route list exact 0.0.0.0/0 table all"):match(" via (%S+)")
-	end
+	ipc.routes({ family = 4, type = 1, dest_exact = "0.0.0.0/0" },
+		function(rt) defaultgw = rt.gw end)
 
 	local function compare(a,b)
 		if a.proto == b.proto then
@@ -138,14 +177,10 @@ function action_neigh(json)
 	end
 
 	for k, v in ipairs(data) do
-		local interface
 		local snr = 0
 		local signal = 0
 		local noise = 0
-		local arptable = sys.net.arptable()
 		local mac = ""
-		local rmac = ""
-		local lmac = ""
 		local ip
 		local neihgt = {}
 		
@@ -155,45 +190,11 @@ function action_neigh(json)
 				v.hostname = hostname
 			end
 		end
-		if v.proto == '4' then
-			uci:foreach("network", "interface",function(vif)
-				if vif.ipaddr and vif.ipaddr == v.localIP then
-					interface = vif['.name'] or vif.interface
-					lmac = string.lower(vif.macaddr or "") 
-					return
-				end
-			end)
-			for _, arpt in ipairs(arptable) do
-				ip = arpt['IP address']
-				if ip == v.remoteIP then
-					rmac = string.lower(arpt['HW address'] or "")
-				end
-			end
-		elseif v.proto == '6' then
-			uci:foreach("network", "interface",function(vif)
-				local name = vif['.name']
-				local net = ntm:get_network(name)
-				local device = net and net:get_interface()
-				local locip = ipc.IPv6(v.localIP)
-				if device and device:ip6addrs() and locip then
-					for _, a in ipairs(device:ip6addrs()) do
-						if not a:is6linklocal() then
-							if a:host() == locip:host() then
-								interface = name
-								--neihgt = neightbl.get(device.ifname) or {}
-							end
-						end
-					end
-				end
-			end)
-			--[[
-			for ip,mac in pairs(neihgt) do
-				if ip == v.remoteIP then
-					rmac = mac
-				end
-			end
-			]]--
-		end
+
+		local interface = ntm:get_status_by_address(v.localIP)
+		local lmac = local_mac_lookup(v.localIP)
+		local rmac = remote_mac_lookup(v.remoteIP)
+
 		for _, val in ipairs(assoclist) do
 			if val.network == interface and val.list then
 				for assocmac, assot in pairs(val.list) do

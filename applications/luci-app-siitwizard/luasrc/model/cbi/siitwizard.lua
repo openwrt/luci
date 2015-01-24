@@ -1,23 +1,24 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 local uci = require "luci.model.uci".cursor()
 local bit = require "nixio".bit
+local ip  = require "luci.ip"
 
 -------------------- Init --------------------
 
 --
 -- Find link-local address
 --
-LL_PREFIX = luci.ip.IPv6("fe80::/64")
 function find_ll()
-	for _, r in ipairs(luci.sys.net.routes6()) do
-		if LL_PREFIX:contains(r.dest) and r.dest:higher(LL_PREFIX) then
-			return r.dest:sub(LL_PREFIX)
+	local _, r
+	for _, r in ipairs(ip.routes({ family = 6, dest = "fe80::/64" })) do
+		if r.dest:higher("fe80:0:0:0:ff:fe00:0:0") then
+			return (r.dest - "fe80::")
 		end
 	end
-	return luci.ip.IPv6("::")
+	return ip.IPv6("::")
 end
 
 --
@@ -33,15 +34,15 @@ local ipv4_netsz  = uci:get("siit", "ipv4", "netsize")     or "24"
 --
 -- Find IPv4 allocation pool
 --
-local gv4_net = luci.ip.IPv4(ipv4_pool)
+local gv4_net = ip.IPv4(ipv4_pool)
 
 --
 -- Generate ULA
 --
-local ula = luci.ip.IPv6("::/64")
+local ula = ip.IPv6("::/64")
 
 for _, prefix in ipairs({ ula_prefix, ula_global, ula_subnet }) do
-	ula = ula:add(luci.ip.IPv6(prefix))
+	ula = ula:add(ip.IPv6(prefix))
 end
 
 ula = ula:add(find_ll())
@@ -72,7 +73,7 @@ uci:foreach("wireless", "wifi-device",
 lanip = f:field(Value, "ipaddr", "LAN IPv4 subnet")
 function lanip.formvalue(self, section)
 	local val = self.map:formvalue(self:cbid(section))
-	local net = luci.ip.IPv4("%s/%i" %{ val, ipv4_netsz })
+	local net = ip.IPv4("%s/%i" %{ val, ipv4_netsz })
 
 	if net then
 		if gv4_net:contains(net) then
@@ -110,7 +111,7 @@ function mode.write(self, section, value)
 	--
 	-- Find LAN IPv4 range
 	--
-	local lan_net = luci.ip.IPv4(
+	local lan_net = ip.IPv4(
 		( lanip:formvalue(section) or "172.16.0.1" ) .. "/" .. ipv4_netsz
 	)
 
@@ -182,7 +183,7 @@ function mode.write(self, section, value)
 		})
 
 		-- use full siit subnet
-		siit_route = luci.ip.IPv6(siit_prefix .. "/96")
+		siit_route = ip.IPv6(siit_prefix .. "/96")
 
 		-- v4 <-> siit route
 		uci:delete_all("network", "route",
@@ -212,7 +213,7 @@ function mode.write(self, section, value)
 		})
 
 		-- derive siit subnet from lan config
-		siit_route = luci.ip.IPv6(
+		siit_route = ip.IPv6(
 			siit_prefix .. "/" .. (96 + lan_net:prefix())
 		):add(lan_net[2])
 
@@ -301,7 +302,7 @@ function mode.write(self, section, value)
 
 	-- siit0 route
 	uci:delete_all("network", "route6",
-		function(s) return siit_route:contains(luci.ip.IPv6(s.target)) end)
+		function(s) return siit_route:contains(ip.IPv6(s.target)) end)
 
 	uci:section("network", "route6", nil, {
 		interface = "siit0",
