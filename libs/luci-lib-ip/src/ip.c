@@ -1270,7 +1270,9 @@ static int link_get(lua_State *L)
 	lua_newtable(L);
 
 	nl_send_auto_complete(sock, msg);
-	nl_recvmsgs(sock, cb);
+
+	while (st.pending > 0)
+		nl_recvmsgs(sock, cb);
 
 	nlmsg_free(msg);
 	nl_cb_put(cb);
