@@ -1197,12 +1197,12 @@ out:
 
 static int cb_dump_link(struct nl_msg *msg, void *arg)
 {
-	char *p, *addr, buf[32];
+	char *p, *addr, buf[48];
 	struct dump_state *s = arg;
 	struct nlmsghdr *hdr = nlmsg_hdr(msg);
 	struct ifinfomsg *ifm = NLMSG_DATA(hdr);
 	struct nlattr *tb[IFLA_MAX+1];
-	int i;
+	int i, len;
 
 	if (hdr->nlmsg_type != RTM_NEWLINK)
 		return NL_SKIP;
@@ -1224,12 +1224,16 @@ static int cb_dump_link(struct nl_msg *msg, void *arg)
 
 	if (tb[IFLA_ADDRESS])
 	{
+		len  = nla_len(tb[IFLA_ADDRESS]);
 		addr = nla_get_string(tb[IFLA_ADDRESS]);
 
-		for (p = buf, i = 0; i < nla_len(tb[IFLA_ADDRESS]); i++)
-			p += sprintf(p, "%s%02x", (i ? ":" : ""), (uint8_t)*addr++);
+		if ((len * 3) <= sizeof(buf))
+		{
+			for (p = buf, i = 0; i < len; i++)
+				p += sprintf(p, "%s%02x", (i ? ":" : ""), (uint8_t)*addr++);
 
-		L_setstr(s->L, "mac", buf);
+			L_setstr(s->L, "mac", buf);
+		}
 	}
 
 	s->pending = 0;
