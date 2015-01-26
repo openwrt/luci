@@ -128,10 +128,18 @@ function authenticator.htmlauth(validator, accs, default)
 		return user
 	end
 
-	require("luci.i18n")
-	require("luci.template")
-	context.path = {}
-	luci.template.render("sysauth", {duser=default, fuser=user})
+	if context.urltoken.stok then
+		context.urltoken.stok = nil
+		http.header("Set-Cookie", "sysauth=; path="..build_url())
+		http.redirect(build_url())
+	else
+		require("luci.i18n")
+		require("luci.template")
+		context.path = {}
+		http.status(403, "Forbidden")
+		luci.template.render("sysauth", {duser=default, fuser=user})
+	end
+
 	return false
 
 end
@@ -340,7 +348,6 @@ function dispatch(request)
 
 		if not util.contains(accs, user) then
 			if authen then
-				ctx.urltoken.stok = nil
 				local user, sess = authen(sys.user.checkpasswd, accs, def)
 				if not user or not util.contains(accs, user) then
 					return
@@ -364,6 +371,7 @@ function dispatch(request)
 
 					if sess then
 						http.header("Set-Cookie", "sysauth=" .. sess.."; path="..build_url())
+						http.redirect(build_url(unpack(ctx.requestpath)))
 						ctx.authsession = sess
 						ctx.authuser = user
 					end
