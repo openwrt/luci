@@ -81,14 +81,14 @@ struct dump_state {
 };
 
 
-static int _cidr_new(lua_State *L, int index, int family);
+static int _cidr_new(lua_State *L, int index, int family, bool mask);
 
 static cidr_t *L_checkcidr (lua_State *L, int index, cidr_t *p)
 {
 	if (lua_type(L, index) == LUA_TUSERDATA)
 		return luaL_checkudata(L, index, LUCI_IP_CIDR);
 
-	if (_cidr_new(L, index, p ? p->family : 0))
+	if (_cidr_new(L, index, p ? p->family : 0, false))
 		return lua_touserdata(L, -1);
 
 	luaL_error(L, "Invalid operand");
@@ -284,7 +284,7 @@ static int L_checkbits(lua_State *L, int index, cidr_t *p)
 	return bits;
 }
 
-static int _cidr_new(lua_State *L, int index, int family)
+static int _cidr_new(lua_State *L, int index, int family, bool mask)
 {
 	uint32_t n;
 	const char *addr;
@@ -321,6 +321,9 @@ static int _cidr_new(lua_State *L, int index, int family)
 
 		if (family && cidr.family != family)
 			return 0;
+
+		if (mask)
+			cidr.bits = L_checkbits(L, index + 1, &cidr);
 	}
 
 	if (!(cidrp = lua_newuserdata(L, sizeof(*cidrp))))
@@ -334,17 +337,17 @@ static int _cidr_new(lua_State *L, int index, int family)
 
 static int cidr_new(lua_State *L)
 {
-	return _cidr_new(L, 1, 0);
+	return _cidr_new(L, 1, 0, true);
 }
 
 static int cidr_ipv4(lua_State *L)
 {
-	return _cidr_new(L, 1, AF_INET);
+	return _cidr_new(L, 1, AF_INET, true);
 }
 
 static int cidr_ipv6(lua_State *L)
 {
-	return _cidr_new(L, 1, AF_INET6);
+	return _cidr_new(L, 1, AF_INET6, true);
 }
 
 static int cidr_is4(lua_State *L)
