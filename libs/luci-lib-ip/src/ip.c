@@ -126,27 +126,23 @@ static bool parse_mask(int family, const char *mask, int *bits)
 
 static bool parse_cidr(const char *dest, cidr_t *pp)
 {
-	char *p, *a, buf[INET6_ADDRSTRLEN * 2 + 2];
+	char *p, buf[INET6_ADDRSTRLEN * 2 + 2];
 	uint8_t bitlen = 0;
 
 	strncpy(buf, dest, sizeof(buf) - 1);
 
-	a = buf;
 	p = strchr(buf, '/');
 
 	if (p)
 		*p++ = 0;
 
-	if (!strncasecmp(buf, "::ffff:", 7))
-		a += 7;
-
-	if (inet_pton(AF_INET, a, &pp->addr.v4))
+	if (inet_pton(AF_INET, buf, &pp->addr.v4))
 	{
 		bitlen = 32;
 		pp->family = AF_INET;
 		pp->len = sizeof(struct in_addr);
 	}
-	else if (inet_pton(AF_INET6, a, &pp->addr.v6))
+	else if (inet_pton(AF_INET6, buf, &pp->addr.v6))
 	{
 		bitlen = 128;
 		pp->family = AF_INET6;
@@ -383,6 +379,31 @@ static int cidr_is4linklocal(lua_State *L)
 	return 1;
 }
 
+static bool _is_mapped4(cidr_t *p)
+{
+	return (p->family == AF_INET6 &&
+	        p->addr.v6.s6_addr[0] == 0 &&
+	        p->addr.v6.s6_addr[1] == 0 &&
+	        p->addr.v6.s6_addr[2] == 0 &&
+	        p->addr.v6.s6_addr[3] == 0 &&
+	        p->addr.v6.s6_addr[4] == 0 &&
+	        p->addr.v6.s6_addr[5] == 0 &&
+	        p->addr.v6.s6_addr[6] == 0 &&
+	        p->addr.v6.s6_addr[7] == 0 &&
+	        p->addr.v6.s6_addr[8] == 0 &&
+	        p->addr.v6.s6_addr[9] == 0 &&
+	        p->addr.v6.s6_addr[10] == 0xFF &&
+	        p->addr.v6.s6_addr[11] == 0xFF);
+}
+
+static int cidr_is6mapped4(lua_State *L)
+{
+	cidr_t *p = L_checkcidr(L, 1, NULL);
+
+	lua_pushboolean(L, _is_mapped4(p));
+	return 1;
+}
+
 static int cidr_is6(lua_State *L)
 {
 	cidr_t *p = L_checkcidr(L, 1, NULL);
@@ -544,6 +565,26 @@ static int cidr_broadcast(lua_State *L)
 	*p2 = *p1;
 	p2->bits = (p1->family == AF_INET) ? 32 : 128;
 	_apply_mask(p2, bits, true);
+
+	luaL_getmetatable(L, LUCI_IP_CIDR);
+	lua_setmetatable(L, -2);
+	return 1;
+}
+
+static int cidr_mapped4(lua_State *L)
+{
+	cidr_t *p1 = L_checkcidr(L, 1, NULL);
+	cidr_t *p2;
+
+	if (!_is_mapped4(p1))
+		return 0;
+
+	if (!(p2 = lua_newuserdata(L, sizeof(*p2))))
+		return 0;
+
+	p2->family = AF_INET;
+	p2->bits = (p1->bits > 32) ? 32 : p1->bits;
+	memcpy(&p2->addr.v4, p1->addr.v6.s6_addr + 12, sizeof(p2->addr.v4));
 
 	luaL_getmetatable(L, LUCI_IP_CIDR);
 	lua_setmetatable(L, -2);
@@ -1309,6 +1350,7 @@ static const luaL_reg ip_cidr_methods[] = {
 	{ "is4linklocal",	cidr_is4linklocal },
 	{ "is6",			cidr_is6          },
 	{ "is6linklocal",	cidr_is6linklocal },
+	{ "is6mapped4",		cidr_is6mapped4   },
 	{ "lower",			cidr_lower        },
 	{ "higher",			cidr_higher       },
 	{ "equal",			cidr_equal        },
@@ -1317,6 +1359,7 @@ static const luaL_reg ip_cidr_methods[] = {
 	{ "host",			cidr_host         },
 	{ "mask",			cidr_mask         },
 	{ "broadcast",		cidr_broadcast    },
+	{ "mapped4",		cidr_mapped4      },
 	{ "contains",       cidr_contains     },
 	{ "add",			cidr_add          },
 	{ "sub",			cidr_sub          },
