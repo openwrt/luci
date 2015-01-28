@@ -299,10 +299,10 @@ static int _cidr_new(lua_State *L, int index, int family, bool mask)
 			cidr.family = AF_INET6;
 			cidr.bits = 128;
 			cidr.len = sizeof(cidr.addr.v6);
-			cidr.addr.v6.s6_addr[15] = n;
-			cidr.addr.v6.s6_addr[14] = (n >> 8);
-			cidr.addr.v6.s6_addr[13] = (n >> 16);
-			cidr.addr.v6.s6_addr[12] = (n >> 24);
+			cidr.addr.v6.s6_addr[12] = n;
+			cidr.addr.v6.s6_addr[13] = (n >> 8);
+			cidr.addr.v6.s6_addr[14] = (n >> 16);
+			cidr.addr.v6.s6_addr[15] = (n >> 24);
 		}
 		else
 		{
@@ -586,7 +586,7 @@ static int _cidr_add_sub(lua_State *L, bool add)
 	{
 		if (p1->family == AF_INET6)
 		{
-			for (i = 0, carry = 0; i < sizeof(r); i++)
+			for (i = 0, carry = 0; i < sizeof(r.addr.v6.s6_addr); i++)
 			{
 				if (add)
 				{
@@ -1123,7 +1123,7 @@ out:
 
 static int neighbor_dump(lua_State *L)
 {
-	cidr_t p;
+	cidr_t p = { };
 	const char *s;
 	struct ether_addr *mac;
 	struct dump_filter filter = { .type = 0xFF & ~NUD_NOARP };
