@@ -147,6 +147,7 @@ define Package/$(PKG_NAME)/install
 	if [ -d $(PKG_BUILD_DIR)/luasrc ]; then \
 	  $(INSTALL_DIR) $(1)$(LUCI_LIBRARYDIR); \
 	  cp -pR $(PKG_BUILD_DIR)/luasrc/* $(1)$(LUCI_LIBRARYDIR)/; \
+	  $(FIND) $(1)$(LUCI_LIBRARYDIR)/ -type f -name '*.luadoc' | $(XARGS) rm; \
 	  $(if $(CONFIG_LUCI_SRCDIET),$(call SrcDiet,$(1)$(LUCI_LIBRARYDIR)/),true); \
 	else true; fi
 	if [ -d $(PKG_BUILD_DIR)/htdocs ]; then \
