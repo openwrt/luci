@@ -9,17 +9,10 @@ local nixio = require "nixio", require "nixio.util"
 local tostring, assert, setmetatable = tostring, assert, setmetatable
 local error = error
 
---- LuCI RPC Client.
--- @cstyle instance
 module "luci.rpcc"
 
 RQLIMIT = 32 * nixio.const.buffersize
 
---- Create a new JSON-RPC stream client.
--- @class function
--- @param fd File descriptor
--- @param v1 Use protocol version 1.0
--- @return RPC Client
 Client = util.class()
 
 function Client.__init__(self, fd, v1)
@@ -29,11 +22,6 @@ function Client.__init__(self, fd, v1)
 	self.v1 = v1
 end
 
---- Request an RP call and get the response.
--- @param method Remote method
--- @param params Parameters
--- @param notification Notification only?
--- @return response 
 function Client.request(self, method, params, notification)
 	local oldchunk = self.decoder and self.decoder.chunk
 	self.decoder = json.ActiveDecoder(self.fd:blocksource(nil, RQLIMIT))
@@ -58,9 +46,6 @@ function Client.request(self, method, params, notification)
 	end
 end
 
---- Create a transparent RPC proxy.
--- @param prefix Method prefix
--- @return RPC Proxy object
 function Client.proxy(self, prefix)
 	prefix = prefix or ""
 	return setmetatable({}, {

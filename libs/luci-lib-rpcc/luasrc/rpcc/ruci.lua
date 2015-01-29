@@ -5,16 +5,11 @@ local util = require "luci.util"
 local rawget, setmetatable = rawget, setmetatable
 local ipairs = ipairs
 
---- Transparent UCI over RPC client.
--- @cstyle instance
 module "luci.rpcc.ruci"
 
 
 local Proxy = util.class()
 
---- Create a new UCI over RPC proxy.
--- @param rpccl RPC client
--- @return Network transparent UCI module 
 function factory(rpccl)
 	return {
 		cursor = function(...)

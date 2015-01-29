@@ -1,7 +1,6 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
---- LuCI http protocol implementation - date helper class.
 -- This class contains functions to parse, compare and format http dates.
 module("luci.http.protocol.date", package.seeall)
 
@@ -13,9 +12,6 @@ MONTHS = {
 	"Sep", "Oct", "Nov", "Dec"
 }
 
---- Return the time offset in seconds between the UTC and given time zone.
--- @param tz	Symbolic or numeric timezone specifier
--- @return		Time offset to UTC in seconds
 function tz_offset(tz)
 
 	if type(tz) == "string" then
@@ -39,9 +35,6 @@ function tz_offset(tz)
 	return 0
 end
 
---- Parse given HTTP date string and convert it to unix epoch time.
--- @param data	String containing the date
--- @return		Unix epoch time
 function to_unix(date)
 
 	local wd, day, mon, yr, hr, min, sec, tz = date:match(
@@ -75,19 +68,10 @@ function to_unix(date)
 	return 0
 end
 
---- Convert the given unix epoch time to valid HTTP date string.
--- @param time	Unix epoch time
--- @return		String containing the formatted date
 function to_http(time)
 	return os.date( "%a, %d %b %Y %H:%M:%S GMT", time )
 end
 
---- Compare two dates which can either be unix epoch times or HTTP date strings.
--- @param d1	The first date or epoch time to compare
--- @param d2	The first date or epoch time to compare
--- @return		-1  -  if d1 is lower then d2
--- @return		0   -  if both dates are equal
--- @return		1   -  if d1 is higher then d2
 function compare(d1, d2)
 
 	if d1:match("[^0-9]") then d1 = to_unix(d1) end

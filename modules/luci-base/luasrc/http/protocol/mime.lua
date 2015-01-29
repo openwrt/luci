@@ -1,15 +1,12 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
---- LuCI http protocol implementation - mime helper class.
 -- This class provides functions to guess mime types from file extensions and
 -- vice versa.
 module("luci.http.protocol.mime", package.seeall)
 
 require("luci.util")
 
---- MIME mapping table containg extension - mimetype relations.
--- @class table
 MIME_TYPES = {
     ["txt"]   = "text/plain";
     ["js"]    = "text/javascript";
@@ -54,10 +51,7 @@ MIME_TYPES = {
     ["avi"]   = "video/x-msvideo";
 }
 
---- Extract extension from a filename and return corresponding mime-type or
 -- "application/octet-stream" if the extension is unknown.
--- @param filename	The filename for which the mime type is guessed
--- @return			String containign the determined mime type
 function to_mime(filename)
 	if type(filename) == "string" then
 		local ext = filename:match("[^%.]+$")
@@ -70,10 +64,7 @@ function to_mime(filename)
 	return "application/octet-stream"
 end
 
---- Return corresponding extension for a given mime type or nil if the
 -- given mime-type is unknown.
--- @param mimetype	The mimetype to retrieve the extension from
--- @return			String with the extension or nil for unknown type
 function to_ext(mimetype)
 	if type(mimetype) == "string" then
 		for ext, type in luci.util.kspairs( MIME_TYPES ) do

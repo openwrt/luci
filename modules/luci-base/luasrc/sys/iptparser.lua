@@ -21,15 +21,8 @@ luci.ip     = require "luci.ip"
 
 local tonumber, ipairs, table = tonumber, ipairs, table
 
---- LuCI iptables parser and query library
--- @cstyle	instance
 module("luci.sys.iptparser")
 
---- Create a new iptables parser object.
--- @class	function
--- @name	IptParser
--- @param	family	Number specifying the address family. 4 for IPv4, 6 for IPv6
--- @return	IptParser instance
 IptParser = luci.util.class()
 
 function IptParser.__init__( self, family )
@@ -50,7 +43,6 @@ function IptParser.__init__( self, family )
 	self:_parse_rules()
 end
 
---- Find all firewall rules that match the given criteria. Expects a table with
 -- search criteria as only argument. If args is nil or an empty table then all
 -- rules will be returned.
 --
@@ -108,8 +100,6 @@ end
 -- This will match all rules with target "-j REJECT",
 -- protocol "-p tcp" (or "-p all")
 -- and the option "--reject-with tcp-reset".
--- @params args		Table containing the search arguments (optional)
--- @return			Table of matching rule tables
 function IptParser.find( self, args )
 
 	local args = args or { }
@@ -205,9 +195,7 @@ function IptParser.find( self, args )
 end
 
 
---- Rebuild the internal lookup table, for example when rules have changed
 -- through external commands.
--- @return	nothing
 function IptParser.resync( self )
 	self._rules = { }
 	self._chain = nil
@@ -215,16 +203,11 @@ function IptParser.resync( self )
 end
 
 
---- Find the names of all tables.
--- @return		Table of table names.
 function IptParser.tables( self )
 	return self._tables
 end
 
 
---- Find the names of all chains within the given table name.
--- @param table	String containing the table name
--- @return		Table of chain names in the order they occur.
 function IptParser.chains( self, table )
 	local lookup = { }
 	local chains = { }
@@ -238,19 +221,12 @@ function IptParser.chains( self, table )
 end
 
 
---- Return the given firewall chain within the given table name.
--- @param table	String containing the table name
--- @param chain	String containing the chain name
--- @return		Table containing the fields "policy", "packets", "bytes"
 --				and "rules". The "rules" field is a table of rule tables.
 function IptParser.chain( self, table, chain )
 	return self._chains[table:lower()] and self._chains[table:lower()][chain]
 end
 
 
---- Test whether the given target points to a custom chain.
--- @param target	String containing the target action
--- @return			Boolean indicating whether target is a custom chain.
 function IptParser.is_custom_target( self, target )
 	for _, r in ipairs(self._rules) do
 		if r.chain == target then

@@ -25,14 +25,9 @@ local char      = string.char
 
 local getmetatable = getmetatable
 
---- LuCI JSON-Library
--- @cstyle	instance
 module "luci.json"
 
 
---- Directly decode a JSON string
--- @param json JSON-String
--- @return Lua object
 function decode(json, ...)
 	local a = ActiveDecoder(function() return nil end, ...)
 	a.chunk = json
@@ -41,9 +36,6 @@ function decode(json, ...)
 end
 
 
---- Direcly encode a Lua object into a JSON string.
--- @param obj Lua Object
--- @return JSON string
 function encode(obj, ...)
 	local out = {}
 	local e = Encoder(obj, 1, ...):source()
@@ -56,19 +48,10 @@ function encode(obj, ...)
 end
 
 
---- Null replacement function
--- @return null
 function null()
 	return null
 end
 
---- Create a new JSON-Encoder.
--- @class	function
--- @name	Encoder
--- @param data			Lua-Object to be encoded.
--- @param buffersize	Blocksize of returned data source.
--- @param fastescape	Use non-standard escaping (don't escape control chars)
--- @return JSON-Encoder
 Encoder = util.class()
 
 function Encoder.__init__(self, data, buffersize, fastescape)
@@ -80,8 +63,6 @@ function Encoder.__init__(self, data, buffersize, fastescape)
 	getmetatable(self).__call = Encoder.source
 end
 
---- Create an LTN12 source providing the encoded JSON-Data.
--- @return LTN12 source
 function Encoder.source(self)
 	local source = coroutine.create(self.dispatch)
 	return function()
@@ -208,11 +189,6 @@ Encoder.parsers = {
 }
 
 
---- Create a new JSON-Decoder.
--- @class	function
--- @name	Decoder
--- @param customnull Use luci.json.null instead of nil for decoding null
--- @return JSON-Decoder
 Decoder = util.class()
 
 function Decoder.__init__(self, customnull)
@@ -220,8 +196,6 @@ function Decoder.__init__(self, customnull)
 	getmetatable(self).__call = Decoder.sink
 end
 
---- Create an LTN12 sink from the decoder object which accepts the JSON-Data.
--- @return LTN12 sink
 function Decoder.sink(self)
 	local sink = coroutine.create(self.dispatch)
 	return function(...)
@@ -230,8 +204,6 @@ function Decoder.sink(self)
 end
 
 
---- Get the decoded data packets after the rawdata has been sent to the sink.
--- @return Decoded data
 function Decoder.get(self)
 	return self.data
 end
@@ -526,11 +498,6 @@ Decoder.parsers = {
 }
 
 
---- Create a new Active JSON-Decoder.
--- @class	function
--- @name	ActiveDecoder
--- @param   customnull	Use luci.json.null instead of nil for decoding null
--- @return  Active JSON-Decoder
 ActiveDecoder = util.class(Decoder)
 
 function ActiveDecoder.__init__(self, source, customnull)
@@ -541,8 +508,6 @@ function ActiveDecoder.__init__(self, source, customnull)
 end
 
 
---- Fetches one JSON-object from given source
--- @return Decoded object
 function ActiveDecoder.get(self)
 	local chunk, src_err, object
 	if not self.chunk then

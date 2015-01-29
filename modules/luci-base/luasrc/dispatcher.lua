@@ -1,7 +1,6 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Licensed to the public under the Apache License 2.0.
 
---- LuCI web dispatcher.
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local util = require "luci.util"
@@ -23,9 +22,6 @@ local index = nil
 local fi
 
 
---- Build the URL relative to the server webroot from given virtual path.
--- @param ...	Virtual path
--- @return 		Relative URL
 function build_url(...)
 	local path = {...}
 	local url = { http.getenv("SCRIPT_NAME") or "" }
@@ -49,9 +45,6 @@ function build_url(...)
 	return table.concat(url, "")
 end
 
---- Check whether a dispatch node shall be visible
--- @param node	Dispatch node
--- @return		Boolean indicating whether the node should be visible
 function node_visible(node)
    if node then
 	  return not (
@@ -64,9 +57,6 @@ function node_visible(node)
    return false
 end
 
---- Return a sorted table of visible childs within a given node
--- @param node	Dispatch node
--- @return		Ordered table of child node names
 function node_childs(node)
 	local rv = { }
 	if node then
@@ -86,9 +76,6 @@ function node_childs(node)
 end
 
 
---- Send a 404 error code and render the "error404" template if available.
--- @param message	Custom error message (optional)
--- @return			false
 function error404(message)
 	http.status(404, "Not Found")
 	message = message or "Not Found"
@@ -101,9 +88,6 @@ function error404(message)
 	return false
 end
 
---- Send a 500 error code and render the "error500" template if available.
--- @param message	Custom error message (optional)#
--- @return			false
 function error500(message)
 	util.perror(message)
 	if not context.template_header_sent then
@@ -144,8 +128,6 @@ function authenticator.htmlauth(validator, accs, default)
 
 end
 
---- Dispatch an HTTP request.
--- @param request	LuCI HTTP Request object
 function httpdispatch(request, prefix)
 	http.context.request = request
 
@@ -184,8 +166,6 @@ function httpdispatch(request, prefix)
 	--context._disable_memtrace()
 end
 
---- Dispatches a LuCI virtual path.
--- @param request	Virtual path
 function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
@@ -453,7 +433,6 @@ function dispatch(request)
 	end
 end
 
---- Generate the dispatching index using the native file-cache based strategy.
 function createindex()
 	local controllers = { }
 	local base = "%s/controller/" % util.libpath()
@@ -517,7 +496,6 @@ function createindex()
 	end
 end
 
---- Create the dispatching tree from the index.
 -- Build the index before if it does not exist yet.
 function createtree()
 	if not index then
@@ -556,9 +534,6 @@ function createtree()
 	return tree
 end
 
---- Register a tree modifier.
--- @param	func	Modifier function
--- @param	order	Modifier order value (optional)
 function modifier(func, order)
 	context.modifiers[#context.modifiers+1] = {
 		func = func,
@@ -568,12 +543,6 @@ function modifier(func, order)
 	}
 end
 
---- Clone a node of the dispatching tree to another position.
--- @param	path	Virtual path destination
--- @param	clone	Virtual path source
--- @param	title	Destination node title (optional)
--- @param	order	Destination node order value (optional)
--- @return			Dispatching tree node
 function assign(path, clone, title, order)
 	local obj  = node(unpack(path))
 	obj.nodes  = nil
@@ -587,12 +556,6 @@ function assign(path, clone, title, order)
 	return obj
 end
 
---- Create a new dispatching node and define common parameters.
--- @param	path	Virtual path
--- @param	target	Target function to call when dispatched.
--- @param	title	Destination node title
--- @param	order	Destination node order value (optional)
--- @return			Dispatching tree node
 function entry(path, target, title, order)
 	local c = node(unpack(path))
 
@@ -604,17 +567,11 @@ function entry(path, target, title, order)
 	return c
 end
 
---- Fetch or create a dispatching node without setting the target module or
 -- enabling the node.
--- @param	...		Virtual path
--- @return			Dispatching tree node
 function get(...)
 	return _create_node({...})
 end
 
---- Fetch or create a new dispatching node.
--- @param	...		Virtual path
--- @return			Dispatching tree node
 function node(...)
 	local c = _create_node({...})
 
@@ -674,13 +631,10 @@ function _firstchild()
    dispatch(path)
 end
 
---- Alias the first (lowest order) page automatically
 function firstchild()
    return { type = "firstchild", target = _firstchild }
 end
 
---- Create a redirect to another dispatching node.
--- @param	...		Virtual path destination
 function alias(...)
 	local req = {...}
 	return function(...)
@@ -692,9 +646,6 @@ function alias(...)
 	end
 end
 
---- Rewrite the first x path values of the request.
--- @param	n		Number of path values to replace
--- @param	...		Virtual path to replace removed path values with
 function rewrite(n, ...)
 	local req = {...}
 	return function(...)
@@ -733,9 +684,6 @@ local function _call(self, ...)
 	end
 end
 
---- Create a function-call dispatching target.
--- @param	name	Target function of local controller
--- @param	...		Additional parameters passed to the function
 function call(name, ...)
 	return {type = "call", argv = {...}, name = name, target = _call}
 end
@@ -745,8 +693,6 @@ local _template = function(self, ...)
 	require "luci.template".render(self.view)
 end
 
---- Create a template render dispatching target.
--- @param	name	Template to be rendered
 function template(name)
 	return {type = "template", view = name, target = _template}
 end
@@ -852,8 +798,6 @@ local function _cbi(self, ...)
 	end
 end
 
---- Create a CBI model dispatching target.
--- @param	model	CBI model to be rendered
 function cbi(model, config)
 	return {type = "cbi", config = config, model = model, target = _cbi}
 end
@@ -866,9 +810,6 @@ local function _arcombine(self, ...)
 	target:target(unpack(argv))
 end
 
---- Create a combined dispatching target for non argv and argv requests.
--- @param trg1	Overview Target
--- @param trg2	Detail Target
 function arcombine(trg1, trg2)
 	return {type = "arcombine", env = getfenv(), target = _arcombine, targets = {trg1, trg2}}
 end
@@ -897,19 +838,12 @@ local function _form(self, ...)
 	tpl.render("footer")
 end
 
---- Create a CBI form model dispatching target.
--- @param	model	CBI form model tpo be rendered
 function form(model)
 	return {type = "cbi", model = model, target = _form}
 end
 
---- Access the luci.i18n translate() api.
--- @class  function
--- @name   translate
--- @param  text    Text to translate
 translate = i18n.translate
 
---- No-op function used to mark translation entries for menu labels.
 -- This function does not actually translate the given argument but
 -- is used by build/i18n-scan.pl to find translatable entries.
 function _(text)
