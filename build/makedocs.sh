@@ -1,2 +1,14 @@
-luadoc -d $2 --no-files $(for f in $(find $1 -name '*.lua' -type f); do if grep -q -- "@return" $f; then echo $f; fi; done)
-echo API-Documentation was created in $2.
+#!/bin/bash
+
+topdir=$(pwd)
+
+[ -f "$topdir/build/makedocs.sh" -a -n "$1" ] || {
+	echo "Please execute as ./build/makedocs.sh [output directory]" >&2
+	exit 1
+}
+
+(
+	cd "$topdir/build/luadoc/"
+	find "$topdir/libs/" "$topdir/modules/" -type f -name '*.lua' -or -name '*.luadoc' | \
+		xargs grep -l '@return' | xargs ./doc.lua --no-files -d "$1"
+)

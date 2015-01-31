@@ -6,7 +6,8 @@
 	for _, z in ipairs(fw:get_zones()) do
 		if z:name() ~= "wan" then
 			izl[#izl+1] = z
-		elseif z:name() ~= "lan" then
+		end
+		if z:name() ~= "lan" then
 			ezl[#ezl+1] = z
 		end
 	end

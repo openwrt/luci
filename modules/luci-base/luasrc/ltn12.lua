@@ -39,7 +39,6 @@ local string = require("string")
 local table = require("table")
 local base = _G
 
---- Diego Nehab's LTN12 - Filters, sources, sinks and pumps.
 -- See http://lua-users.org/wiki/FiltersSourcesAndSinks for design concepts 
 module("luci.ltn12")
 
@@ -56,16 +55,8 @@ _VERSION = "LTN12 1.0.1"
 -- Filter stuff
 -----------------------------------------------------------------------------
 
---- LTN12 Filter constructors
--- @class module
--- @name luci.ltn12.filter
 
---- Return a high level filter that cycles a low-level filter
 -- by passing it each chunk and updating a context between calls. 
--- @param low   Low-level filter
--- @param ctx   Context
--- @param extra Extra argument passed to the low-level filter
--- @return LTN12 filter
 function filter.cycle(low, ctx, extra)
     base.assert(low)
     return function(chunk)
@@ -75,10 +66,7 @@ function filter.cycle(low, ctx, extra)
     end
 end
 
---- Chain a bunch of filters together.
 -- (thanks to Wim Couwenberg)
--- @param ... filters to be chained
--- @return LTN12 filter
 function filter.chain(...)
     local n = table.getn(arg)
     local top, index = 1, 1
@@ -112,34 +100,22 @@ end
 -- Source stuff
 -----------------------------------------------------------------------------
 
---- LTN12 Source constructors
--- @class module
--- @name luci.ltn12.source
 
 -- create an empty source
 local function empty()
     return nil
 end
 
---- Create an empty source.
--- @return LTN12 source
 function source.empty()
     return empty
 end
 
---- Return a source that just outputs an error.
--- @param err Error object
--- @return LTN12 source
 function source.error(err)
     return function()
         return nil, err
     end
 end
 
---- Create a file source.
--- @param handle File handle ready for reading
--- @param io_err IO error object
--- @return LTN12 source
 function source.file(handle, io_err)
     if handle then
         return function()
@@ -151,9 +127,6 @@ function source.file(handle, io_err)
     else return source.error(io_err or "unable to open file") end
 end
 
---- Turn a fancy source into a simple source.
--- @param src fancy source
--- @return LTN12 source
 function source.simplify(src)
     base.assert(src)
     return function()
@@ -164,9 +137,6 @@ function source.simplify(src)
     end
 end
 
---- Create a string source.
--- @param s Data
--- @return LTN12 source
 function source.string(s)
     if s then
         local i = 1
@@ -179,9 +149,6 @@ function source.string(s)
     else return source.empty() end
 end
 
---- Creates rewindable source.
--- @param src LTN12 source to be made rewindable
--- @return LTN12 source
 function source.rewind(src)
     base.assert(src)
     local t = {}
@@ -196,10 +163,6 @@ function source.rewind(src)
     end
 end
 
---- Chain a source and a filter together.
--- @param src LTN12 source
--- @param f LTN12 filter
--- @return LTN12 source
 function source.chain(src, f)
     base.assert(src and f)
     local last_in, last_out = "", ""
@@ -247,11 +210,8 @@ function source.chain(src, f)
     end
 end
 
---- Create a source that produces contents of several sources.
 -- Sources will be used one after the other, as if they were concatenated
 -- (thanks to Wim Couwenberg)
--- @param ... LTN12 sources
--- @return LTN12 source
 function source.cat(...)
     local src = table.remove(arg, 1)
     return function()
@@ -268,13 +228,7 @@ end
 -- Sink stuff
 -----------------------------------------------------------------------------
 
---- LTN12 sink constructors
--- @class module
--- @name luci.ltn12.sink
 
---- Create a sink that stores into a table.
--- @param t output table to store into
--- @return LTN12 sink
 function sink.table(t)
     t = t or {}
     local f = function(chunk, err)
@@ -284,9 +238,6 @@ function sink.table(t)
     return f, t
 end
 
---- Turn a fancy sink into a simple sink.
--- @param snk fancy sink
--- @return LTN12 sink
 function sink.simplify(snk)
     base.assert(snk)
     return function(chunk, err)
@@ -297,10 +248,6 @@ function sink.simplify(snk)
     end
 end
 
---- Create a file sink.
--- @param handle file handle to write to
--- @param io_err IO error
--- @return LTN12 sink
 function sink.file(handle, io_err)
     if handle then
         return function(chunk, err)
@@ -317,25 +264,16 @@ local function null()
     return 1
 end
 
---- Create a sink that discards data.
--- @return LTN12 sink
 function sink.null()
     return null
 end
 
---- Create a sink that just returns an error.
--- @param err Error object
--- @return LTN12 sink
 function sink.error(err)
     return function()
         return nil, err
     end
 end
 
---- Chain a sink with a filter.
--- @param f LTN12 filter
--- @param snk LTN12 sink
--- @return LTN12 sink
 function sink.chain(f, snk)
     base.assert(f and snk)
     return function(chunk, err)
@@ -356,15 +294,7 @@ end
 -- Pump stuff
 -----------------------------------------------------------------------------
 
---- LTN12 pump functions
--- @class module
--- @name luci.ltn12.pump
 
---- Pump one chunk from the source to the sink.
--- @param src LTN12 source
--- @param snk LTN12 sink
--- @return Chunk of data or nil if an error occured
--- @return Error object
 function pump.step(src, snk)
     local chunk, src_err = src()
     local ret, snk_err = snk(chunk, src_err)
@@ -372,12 +302,6 @@ function pump.step(src, snk)
     else return nil, src_err or snk_err end
 end
 
---- Pump all data from a source to a sink, using a step function.
--- @param src LTN12 source
--- @param snk LTN12 sink
--- @param step step function (optional)
--- @return 1 if the operation succeeded otherwise nil
--- @return Error object
 function pump.all(src, snk, step)
     base.assert(src and snk)
     step = step or pump.step

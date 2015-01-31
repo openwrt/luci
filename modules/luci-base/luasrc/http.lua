@@ -11,7 +11,6 @@ local table = require "table"
 local ipairs, pairs, next, type, tostring, error =
 	ipairs, pairs, next, type, tostring, error
 
---- LuCI Web Framework high-level HTTP functions.
 module "luci.http"
 
 context = util.threadlocal()
@@ -101,7 +100,6 @@ function Request._parse_input(self)
 	self.parsed_input = true
 end
 
---- Close the HTTP-Connection.
 function close()
 	if not context.eoh then
 		context.eoh = true
@@ -114,52 +112,31 @@ function close()
 	end
 end
 
---- Return the request content if the request was of unknown type.
--- @return	HTTP request body
--- @return	HTTP request body length
 function content()
 	return context.request:content()
 end
 
---- Get a certain HTTP input value or a table of all input values.
--- @param name		Name of the GET or POST variable to fetch
--- @param noparse	Don't parse POST data before getting the value
--- @return			HTTP input value or table of all input value
 function formvalue(name, noparse)
 	return context.request:formvalue(name, noparse)
 end
 
---- Get a table of all HTTP input values with a certain prefix.
--- @param prefix	Prefix
--- @return			Table of all HTTP input values with given prefix
 function formvaluetable(prefix)
 	return context.request:formvaluetable(prefix)
 end
 
---- Get the value of a certain HTTP-Cookie.
--- @param name		Cookie Name
--- @return			String containing cookie data
 function getcookie(name)
 	return context.request:getcookie(name)
 end
 
---- Get the value of a certain HTTP environment variable
 -- or the environment table itself.
--- @param name		Environment variable
--- @return			HTTP environment value or environment table
 function getenv(name)
 	return context.request:getenv(name)
 end
 
---- Set a handler function for incoming user file uploads.
--- @param callback	Handler function
 function setfilehandler(callback)
 	return context.request:setfilehandler(callback)
 end
 
---- Send a HTTP-Header.
--- @param key	Header key
--- @param value Header value
 function header(key, value)
 	if not context.headers then
 		context.headers = {}
@@ -168,8 +145,6 @@ function header(key, value)
 	coroutine.yield(2, key, value)
 end
 
---- Set the mime type of following content data.
--- @param mime	Mimetype of following content
 function prepare_content(mime)
 	if not context.headers or not context.headers["content-type"] then
 		if mime == "application/xhtml+xml" then
@@ -183,15 +158,10 @@ function prepare_content(mime)
 	end
 end
 
---- Get the RAW HTTP input source
--- @return	HTTP LTN12 source
 function source()
 	return context.request.input
 end
 
---- Set the HTTP status code and status message.
--- @param code		Status code
--- @param message	Status message
 function status(code, message)
 	code = code or 200
 	message = message or "OK"
@@ -199,12 +169,8 @@ function status(code, message)
 	coroutine.yield(1, code, message)
 end
 
---- Send a chunk of content data to the client.
 -- This function is as a valid LTN12 sink.
 -- If the content chunk is nil this function will automatically invoke close.
--- @param content	Content chunk
--- @param src_err	Error object from source (optional)
--- @see close
 function write(content, src_err)
 	if not content then
 		if src_err then
@@ -237,24 +203,16 @@ function write(content, src_err)
 	end
 end
 
---- Splice data from a filedescriptor to the client.
--- @param fp	File descriptor
--- @param size	Bytes to splice (optional)
 function splice(fd, size)
 	coroutine.yield(6, fd, size)
 end
 
---- Redirects the client to a new URL and closes the connection.
--- @param url	Target URL
 function redirect(url)
 	status(302, "Found")
 	header("Location", url)
 	close()
 end
 
---- Create a querystring out of a table of key - value pairs.
--- @param table		Query string source table
--- @return			Encoded HTTP query string
 function build_querystring(q)
 	local s = { "?" }
 
@@ -269,21 +227,10 @@ function build_querystring(q)
 	return table.concat(s, "")
 end
 
---- Return the URL-decoded equivalent of a string.
--- @param str		URL-encoded string
--- @param no_plus	Don't decode + to " "
--- @return			URL-decoded string
--- @see urlencode
 urldecode = protocol.urldecode
 
---- Return the URL-encoded equivalent of a string.
--- @param str		Source string
--- @return			URL-encoded string
--- @see urldecode
 urlencode = protocol.urlencode
 
---- Send the given data as JSON encoded string.
--- @param data		Data to send
 function write_json(x)
 	util.serialize_json(x, write)
 end

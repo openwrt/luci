@@ -16,27 +16,14 @@ local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select 
 	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select
 
 
---- LuCI Linux and POSIX system utilities.
 module "luci.sys"
 
---- Execute a given shell command and return the error code
--- @class		function
--- @name		call
--- @param 		...		Command to call
--- @return		Error code of the command
 function call(...)
 	return os.execute(...) / 256
 end
 
---- Execute a given shell command and capture its standard output
--- @class		function
--- @name		exec
--- @param command	Command to call
--- @return			String containg the return the output of the command
 exec = luci.util.exec
 
---- Retrieve information about currently mounted file systems.
--- @return 	Table containing mount information
 function mounts()
 	local data = {}
 	local k = {"fs", "blocks", "used", "available", "percent", "mountpoint"}
@@ -82,20 +69,11 @@ function mounts()
 	return data
 end
 
---- Retrieve environment variables. If no variable is given then a table
 -- containing the whole environment is returned otherwise this function returns
 -- the corresponding string value for the given name or nil if no such variable
 -- exists.
--- @class		function
--- @name		getenv
--- @param var	Name of the environment variable to retrieve (optional)
--- @return		String containg the value of the specified variable
--- @return		Table containing all variables if no variable name is given
 getenv = nixio.getenv
 
---- Get or set the current hostname.
--- @param		String containing a new hostname to set (optional)
--- @return		String containing the system hostname
 function hostname(newname)
 	if type(newname) == "string" and #newname > 0 then
 		fs.writefile( "/proc/sys/kernel/hostname", newname )
@@ -105,11 +83,6 @@ function hostname(newname)
 	end
 end
 
---- Returns the contents of a documented referred by an URL.
--- @param url	 The URL to retrieve
--- @param stream Return a stream instead of a buffer
--- @param target Directly write to target file name
--- @return		String containing the contents of given the URL
 function httpget(url, stream, target)
 	if not target then
 		local source = stream and io.popen or luci.util.exec
@@ -120,46 +93,30 @@ function httpget(url, stream, target)
 	end
 end
 
---- Initiate a system reboot.
--- @return	Return value of os.execute()
 function reboot()
 	return os.execute("reboot >/dev/null 2>&1")
 end
 
---- Retrieves the output of the "logread" command.
--- @return	String containing the current log buffer
 function syslog()
 	return luci.util.exec("logread")
 end
 
---- Retrieves the output of the "dmesg" command.
--- @return	String containing the current log buffer
 function dmesg()
 	return luci.util.exec("dmesg")
 end
 
---- Generates a random id with specified length.
--- @param bytes	Number of bytes for the unique id
--- @return		String containing hex encoded id
 function uniqueid(bytes)
 	local rand = fs.readfile("/dev/urandom", bytes)
 	return rand and nixio.bin.hexlify(rand)
 end
 
---- Returns the current system uptime stats.
--- @return	String containing total uptime in seconds
 function uptime()
 	return nixio.sysinfo().uptime
 end
 
 
---- LuCI system utilities / network related functions.
--- @class	module
--- @name	luci.sys.net
 net = {}
 
---- Returns the current arp-table entries as two-dimensional table.
--- @return	Table of table containing the current arp entries.
 --			The following fields are defined for arp entry objects:
 --			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
 function net.arptable(callback)
@@ -269,8 +226,6 @@ local function _nethints(what, callback)
 	end
 end
 
---- Returns a two-dimensional table of mac address hints.
--- @return  Table of table containing known hosts from various sources.
 --          Each entry contains the values in the following order:
 --          [ "mac", "name" ]
 function net.mac_hints(callback)
@@ -293,8 +248,6 @@ function net.mac_hints(callback)
 	end
 end
 
---- Returns a two-dimensional table of IPv4 address hints.
--- @return  Table of table containing known hosts from various sources.
 --          Each entry contains the values in the following order:
 --          [ "ip", "name" ]
 function net.ipv4_hints(callback)
@@ -317,8 +270,6 @@ function net.ipv4_hints(callback)
 	end
 end
 
---- Returns a two-dimensional table of IPv6 address hints.
--- @return  Table of table containing known hosts from various sources.
 --          Each entry contains the values in the following order:
 --          [ "ip", "name" ]
 function net.ipv6_hints(callback)
@@ -341,8 +292,6 @@ function net.ipv6_hints(callback)
 	end
 end
 
---- Returns conntrack information
--- @return	Table with the currently tracked IP connections
 function net.conntrack(callback)
 	local connt = {}
 	if fs.access("/proc/net/nf_conntrack", "r") then
@@ -387,8 +336,6 @@ function net.conntrack(callback)
 	return connt
 end
 
---- Determine the names of available network interfaces.
--- @return	Table containing all current interface names
 function net.devices()
 	local devs = {}
 	for k, v in ipairs(nixio.getifaddrs()) do
@@ -400,8 +347,6 @@ function net.devices()
 end
 
 
---- Return information about available network interfaces.
--- @return	Table containing all current interface names and their information
 function net.deviceinfo()
 	local devs = {}
 	for k, v in ipairs(nixio.getifaddrs()) do
@@ -430,8 +375,6 @@ function net.deviceinfo()
 end
 
 
---- Returns the current kernel routing table entries.
--- @return	Table of tables with properties of the corresponding routes.
 --			The following fields are defined for route entry tables:
 --			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
 --			  "flags", "device" }
@@ -477,8 +420,6 @@ function net.routes(callback)
 	return routes
 end
 
---- Returns the current ipv6 kernel routing table entries.
--- @return	Table of tables with properties of the corresponding routes.
 --			The following fields are defined for route entry tables:
 --			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
 --			  "flags", "device" }
@@ -540,30 +481,18 @@ function net.routes6(callback)
 	end
 end
 
---- Tests whether the given host responds to ping probes.
--- @param host	String containing a hostname or IPv4 address
--- @return		Number containing 0 on success and >= 1 on error
 function net.pingtest(host)
 	return os.execute("ping -c1 '"..host:gsub("'", '').."' >/dev/null 2>&1")
 end
 
 
---- LuCI system utilities / process related functions.
--- @class	module
--- @name	luci.sys.process
 process = {}
 
---- Get the current process id.
--- @class function
--- @name  process.info
--- @return	Number containing the current pid
 function process.info(key)
 	local s = {uid = nixio.getuid(), gid = nixio.getgid()}
 	return not key and s or s[key]
 end
 
---- Retrieve information about currently running processes.
--- @return 	Table containing process information
 function process.list()
 	local data = {}
 	local k
@@ -596,51 +525,22 @@ function process.list()
 	return data
 end
 
---- Set the gid of a process identified by given pid.
--- @param gid	Number containing the Unix group id
--- @return		Boolean indicating successful operation
--- @return		String containing the error message if failed
--- @return		Number containing the error code if failed
 function process.setgroup(gid)
 	return nixio.setgid(gid)
 end
 
---- Set the uid of a process identified by given pid.
--- @param uid	Number containing the Unix user id
--- @return		Boolean indicating successful operation
--- @return		String containing the error message if failed
--- @return		Number containing the error code if failed
 function process.setuser(uid)
 	return nixio.setuid(uid)
 end
 
---- Send a signal to a process identified by given pid.
--- @class function
--- @name  process.signal
--- @param pid	Number containing the process id
--- @param sig	Signal to send (default: 15 [SIGTERM])
--- @return		Boolean indicating successful operation
--- @return		Number containing the error code if failed
 process.signal = nixio.kill
 
 
---- LuCI system utilities / user related functions.
--- @class	module
--- @name	luci.sys.user
 user = {}
 
---- Retrieve user informations for given uid.
--- @class		function
--- @name		getuser
--- @param uid	Number containing the Unix user id
--- @return		Table containing the following fields:
 --				{ "uid", "gid", "name", "passwd", "dir", "shell", "gecos" }
 user.getuser = nixio.getpw
 
---- Retrieve the current user password hash.
--- @param username	String containing the username to retrieve the password for
--- @return			String containing the hash or nil if no password is set.
--- @return			Password database entry
 function user.getpasswd(username)
 	local pwe = nixio.getsp and nixio.getsp(username) or nixio.getpw(username)
 	local pwh = pwe and (pwe.pwdp or pwe.passwd)
@@ -651,10 +551,6 @@ function user.getpasswd(username)
 	end
 end
 
---- Test whether given string matches the password of a given system user.
--- @param username	String containing the Unix user name
--- @param pass		String containing the password to compare
--- @return			Boolean indicating wheather the passwords are equal
 function user.checkpasswd(username, pass)
 	local pwh, pwe = user.getpasswd(username)
 	if pwe then
@@ -663,10 +559,6 @@ function user.checkpasswd(username, pass)
 	return false
 end
 
---- Change the password of given user.
--- @param username	String containing the Unix user name
--- @param password	String containing the password to compare
--- @return			Number containing 0 on success and >= 1 on error
 function user.setpasswd(username, password)
 	if password then
 		password = password:gsub("'", [['"'"']])
@@ -683,14 +575,8 @@ function user.setpasswd(username, password)
 end
 
 
---- LuCI system utilities / wifi related functions.
--- @class	module
--- @name	luci.sys.wifi
 wifi = {}
 
---- Get wireless information for given interface.
--- @param ifname        String containing the interface name
--- @return              A wrapped iwinfo object instance
 function wifi.getiwinfo(ifname)
 	local stat, iwinfo = pcall(require, "iwinfo")
 
@@ -736,14 +622,9 @@ function wifi.getiwinfo(ifname)
 end
 
 
---- LuCI system utilities / init related functions.
--- @class	module
--- @name	luci.sys.init
 init = {}
 init.dir = "/etc/init.d/"
 
---- Get the names of all installed init scripts
--- @return	Table containing the names of all inistalled init scripts
 function init.names()
 	local names = { }
 	for name in fs.glob(init.dir.."*") do
@@ -752,9 +633,6 @@ function init.names()
 	return names
 end
 
---- Get the index of he given init script
--- @param name	Name of the init script
--- @return		Numeric index value
 function init.index(name)
 	if fs.access(init.dir..name) then
 		return call("env -i sh -c 'source %s%s enabled; exit ${START:-255}' >/dev/null"
@@ -768,37 +646,22 @@ local function init_action(action, name)
 	end
 end
 
---- Test whether the given init script is enabled
--- @param name	Name of the init script
--- @return		Boolean indicating whether init is enabled
 function init.enabled(name)
 	return (init_action("enabled", name) == 0)
 end
 
---- Enable the given init script
--- @param name	Name of the init script
--- @return		Boolean indicating success
 function init.enable(name)
 	return (init_action("enable", name) == 1)
 end
 
---- Disable the given init script
--- @param name	Name of the init script
--- @return		Boolean indicating success
 function init.disable(name)
 	return (init_action("disable", name) == 0)
 end
 
---- Start the given init script
--- @param name	Name of the init script
--- @return		Boolean indicating success
 function init.start(name)
 	return (init_action("start", name) == 0)
 end
 
---- Stop the given init script
--- @param name	Name of the init script
--- @return		Boolean indicating success
 function init.stop(name)
 	return (init_action("stop", name) == 0)
 end

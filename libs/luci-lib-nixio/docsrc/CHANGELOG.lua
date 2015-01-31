@@ -1,5 +1,5 @@
 --- Changes and improvements.
-module "CHANGELOG"
+module "nixio.CHANGELOG"
 
 --- Service Release.
 -- <ul>

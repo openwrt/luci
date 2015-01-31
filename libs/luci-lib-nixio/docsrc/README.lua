@@ -1,5 +1,5 @@
 --- General Information.
-module "README"
+module "nixio.README"
 
 --- General error handling information.
 -- <ul>
