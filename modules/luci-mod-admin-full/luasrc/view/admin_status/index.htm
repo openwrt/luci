@@ -507,7 +507,7 @@
 			var e;
 
 			if (e = document.getElementById('localtime'))
-                e.innerHTML = (new Date(info.localtime * 1000)).toUTCString();
+				e.innerHTML = info.localtime;
 
 			if (e = document.getElementById('uptime'))
 				e.innerHTML = String.format('%t', info.uptime);
