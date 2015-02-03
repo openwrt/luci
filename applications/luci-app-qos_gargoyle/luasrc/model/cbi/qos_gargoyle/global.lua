@@ -9,7 +9,7 @@ m = Map("qos_gargoyle", translate("Global"),translate("Global set"))
 
 s = m:section(TypedSection, "global", translate("Global"), translate("<b><font color=\"#FF0000\" size=\"4\"></font></b>"))
 
-s.anonymous = false
+s.anonymous = true
 --s.sortable  = true
 local count = 0
 for line in io.lines("/etc/config/qos_gargoyle") do
@@ -22,7 +22,7 @@ if count == 0 then
 	os.execute("echo \"\nconfig global 'global'\" >> /etc/config/qos_gargoyle")
 end
 
-e = s:option(Button, "endisable", " ", translate("QoS Switch"))
+e = s:option(Button, "endisable", " ", translate("Toggle QoS here."))
 e.render = function(self, section, scope)
 	if qos_gargoyle_enabled then
 		self.title = translate("Disable QoS")
@@ -46,7 +46,7 @@ e.write = function(self, section)
 	end
 end
 
-network = s:option(Value, "network", translate("network"),translate("wan,lan....."))
+network = s:option(Value, "network", translate("network"),translate("Choose an interface that QoS should be applied to."))
 network.default = ""
 wa.cbi_add_networks(network)
 
@@ -54,6 +54,7 @@ mtu = s:option(Value, "mtu", translate("mtu"))
 mtu.datatype = "and(uinteger,min(1))"
 
 s = m:section(TypedSection, "upload", translate("UpLoad"))
+s.anonymous = true
 
 uclass = s:option(Value, "default_class", translate("default_class"))
 uclass.rmempty = "true"
@@ -69,11 +70,12 @@ for line in io.lines("/etc/config/qos_gargoyle") do
 	end
 end
 
-tb = s:option(Value, "total_bandwidth", translate("total_bandwidth"), "Kbit/s")
+tb = s:option(Value, "total_bandwidth", translate("total_bandwidth"), translate("In KBit/s."))
 tb.datatype = "and(uinteger,min(1))"
 
 
 s = m:section(TypedSection, "download", translate("DownLoad"))
+s.anonymous = true
 
 dclass = s:option(Value, "default_class", translate("default_class"))
 dclass.rmempty = "true"
@@ -89,7 +91,7 @@ for l in io.lines("/etc/config/qos_gargoyle") do
 	end
 end
 
-tb = s:option(Value, "total_bandwidth", translate("total_bandwidth"), "Kbit/s")
+tb = s:option(Value, "total_bandwidth", translate("total_bandwidth"), translate("In KBit/s."))
 tb.datatype = "and(uinteger,min(1))"
 
 return m
