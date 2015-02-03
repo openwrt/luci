@@ -77,15 +77,15 @@ whitelist.wrap = "off"
 whitelist:depends("whitelist_enabled", 1)
 
 function whitelist.cfgvalue(self, section)
-	return fs.readfile("/etc/ipset/whitelist") or ""
+	return fs.readfile("/etc/chinadns_chnroute.txt") or ""
 end
 function whitelist.write(self, section, value)
 	if value then
 		value = value:gsub("\r\n?", "\n")
 		fs.writefile("/tmp/whitelist", value)
 		fs.mkdirr("/etc/ipset")
-		if (fs.access("/etc/ipset/whitelist") ~= true or luci.sys.call("cmp -s /tmp/whitelist /etc/ipset/whitelist") == 1) then
-			fs.writefile("/etc/ipset/whitelist", value)
+		if (fs.access("/etc/chinadns_chnroute.txt") ~= true or luci.sys.call("cmp -s /tmp/whitelist /etc/chinadns_chnroute.txt") == 1) then
+			fs.writefile("/etc/chinadns_chnroute.txt", value)
 		end
 		fs.remove("/tmp/whitelist")
 	end
