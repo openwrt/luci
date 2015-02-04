@@ -1,0 +1,36 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2015 GuoGuo <gch981213@gmail.com>
+. /lib/functions.sh
+START=95
+
+SERVICE_USE_PID=1
+SERVICE_WRITE_PID=1
+SERVICE_DAEMONIZE=1
+
+start() {
+	[ -f /etc/config/dns2socks ] || {
+		echo "You are missing configuration file /etc/config/dns2socks"
+		return 1
+	}
+
+	config_load "dns2socks"
+
+	config_get ENABLED config enabled
+
+	[ "$ENABLED" = "0" ] && {
+		echo "dns2socks is disabled."
+		return 1
+	}
+
+	config_get SOCKSSERVER config socksserver
+	config_get SOCKSPORT config socksport
+	config_get DNSSERVER config dnsserver
+	config_get LOCALIP config localip
+	config_get LOCALPORT config localport
+	service_start /usr/bin/dns2socks $SOCKSSERVER:$SOCKSPORT $DNSSERVER $LOCALIP:$LOCALPORT
+}
+
+stop() {
+	service_stop /usr/bin/dns2socks
+}
