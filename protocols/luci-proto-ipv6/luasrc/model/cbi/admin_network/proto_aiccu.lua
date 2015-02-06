@@ -57,18 +57,12 @@ ip6prefix.datatype = "ip6prefix"
 ip6prefix.optional = true
 
 
-requiretls = section:taboption("general", Flag, "requiretls",
-	translate("Require TLS"),
-	translate("Connection to server fails when TLS cannot be used"))
-requiretls.optional = true
-requiretls.default = requiretls.enabled
-
-
-heartbeat = section:taboption("general", Flag, "heartbeat",
-	translate("Make heartbeats"),
-	translate("Use when IPv4 address of local WAN may change dynamically, does not apply to static tunnels"))
-heartbeat.optional = true
-heartbeat.default = heartbeat.enabled
+heartbeat = s:taboption("general", ListValue, "heartbeat",
+        translate("Tunnel type"),
+	translate("Also see <a href=\"https://www.sixxs.net/faq/connectivity/?faq=comparison\">Tunneling Comparison</a> on SIXXS"))
+heartbeat:value("0", translate("AYIYA"))
+heartbeat:value("1", translate("Heartbeat"))
+heartbeat.default = "0"
 
 
 nat = section:taboption("general", Flag, "nat",
@@ -76,6 +70,13 @@ nat = section:taboption("general", Flag, "nat",
 	translate("The tunnel end-point is behind NAT, defaults to disabled and only applies to AYIYA"))
 nat.optional = true
 nat.default = disabled
+
+
+requiretls = section:taboption("general", Flag, "requiretls",
+	translate("Require TLS"),
+	translate("Connection to server fails when TLS cannot be used"))
+requiretls.optional = true
+requiretls.default = requiretls.enabled
 
 
 verbose = section:taboption("advanced", Flag, "verbose",
@@ -128,7 +129,7 @@ ttl.placeholder = "64"
 
 
 mtu = section:taboption("advanced", Value, "mtu",
-	translate("Use MTU on tunnel interface"))
+	translate("Use MTU on tunnel interface"),
         translate("minimum 1280, maximum 1480"))
 mtu.datatype = "range(1280,1480)"
 mtu.placeholder = "1280"
