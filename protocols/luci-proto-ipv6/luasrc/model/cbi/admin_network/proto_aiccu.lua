@@ -53,7 +53,7 @@ tunnelid.optional = true
 local ip6prefix = section:taboption("general", Value, "ip6prefix",
 	translate("IPv6 prefix"),
 	translate("Routed IPv6 prefix for downstream interfaces"))
-ip6prefix.datatype = "ip6prefix"
+ip6prefix.datatype = "ip6addr"
 ip6prefix.optional = true
 
 
