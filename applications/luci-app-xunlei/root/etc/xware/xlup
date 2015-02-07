@@ -12,7 +12,7 @@ FILES=$(uci get xunlei.config.xware)
 ver=$(uci get xunlei.config.ver)
 url=$(uci get xunlei.config.url)
 zversion=$(uci get xunlei.config.zversion)
-VERSION=`wget -qO- http://dl.lazyzhu.com/file/Thunder/Xware/latest`
+VERSION=$(wget --no-check-certificate -O- ${url}/latest)
 
 {
 	if [ "$zversion" -eq 1 ];then
