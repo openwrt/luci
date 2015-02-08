@@ -90,6 +90,10 @@ local pip = s:taboption("general", Flag, "predictable_ips", translate("Predictab
 	translate("The assigned IPs will be selected deterministically"))
 pip.default = "1"
 
+local compr = s:taboption("general", Flag, "compression", translate("Enable compression"),
+	translate("Enable compression"))
+compr.default = "1"
+
 local udp = s:taboption("general", Flag, "udp", translate("Enable UDP"),
 	translate("Enable UDP channel support; this must be enabled unless you know what you are doing"))
 udp.default = "1"
