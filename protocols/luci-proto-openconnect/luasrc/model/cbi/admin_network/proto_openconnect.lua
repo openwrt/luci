@@ -19,6 +19,9 @@ port = section:taboption("general", Value, "port", translate("VPN Server port"))
 port.placeholder = "443"
 port.datatype    = "port"
 
+ifname = section:taboption("general", Value, "interface", translate("Output Interface"))
+ifname.template = "cbi/network_netlist"
+
 section:taboption("general", Value, "serverhash", translate("VPN Server's certificate SHA1 hash"))
 
 section:taboption("general", Value, "authgroup", translate("AuthGroup"))
