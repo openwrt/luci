@@ -333,7 +333,7 @@ function dispatch(request)
 					return
 				else
 					if not sess then
-						local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
+						local sdat = util.ubus("session", "create", { timeout = tonumber(luci.config.sauth.sessiontime) })
 						if sdat then
 							local token = sys.uniqueid(16)
 							util.ubus("session", "set", {
