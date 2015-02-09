@@ -371,6 +371,9 @@ function dispatch(request)
 	end
 
 	if track.setuser then
+		-- trigger ubus connection before dropping root privs
+		util.ubus()
+
 		sys.process.setuser(track.setuser)
 	end
 
