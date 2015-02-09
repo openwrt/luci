@@ -28,13 +28,17 @@ end
 function action_logout()
 	local dsp = require "luci.dispatcher"
 	local utl = require "luci.util"
-	if dsp.context.authsession then
-		utl.ubus("session", "destroy", {
-			ubus_rpc_session = dsp.context.authsession
-		})
+	local sid = dsp.context.authsession
+
+	if sid then
+		utl.ubus("session", "destroy", { ubus_rpc_session = sid })
+
 		dsp.context.urltoken.stok = nil
+
+		luci.http.header("Set-Cookie", "sysauth=%s; expires=%s; path=%s/" %{
+			sid, 'Thu, 01 Jan 1970 01:00:00 GMT', dsp.build_url()
+		})
 	end
 
-	luci.http.header("Set-Cookie", "sysauth=; path=" .. dsp.build_url())
 	luci.http.redirect(luci.dispatcher.build_url())
 end
