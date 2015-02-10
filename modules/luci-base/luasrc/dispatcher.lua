@@ -114,7 +114,14 @@ function authenticator.htmlauth(validator, accs, default)
 
 	if context.urltoken.stok then
 		context.urltoken.stok = nil
-		http.header("Set-Cookie", "sysauth=; path="..build_url())
+
+		local cookie = 'sysauth=%s; expires=%s; path=%s/' %{
+		    http.getcookie('sysauth') or 'x',
+			'Thu, 01 Jan 1970 01:00:00 GMT',
+			build_url()
+		}
+
+		http.header("Set-Cookie", cookie)
 		http.redirect(build_url())
 	else
 		require("luci.i18n")
@@ -329,13 +336,14 @@ function dispatch(request)
 		if not util.contains(accs, user) then
 			if authen then
 				local user, sess = authen(sys.user.checkpasswd, accs, def)
+				local token
 				if not user or not util.contains(accs, user) then
 					return
 				else
 					if not sess then
-						local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
+						local sdat = util.ubus("session", "create", { timeout = tonumber(luci.config.sauth.sessiontime) })
 						if sdat then
-							local token = sys.uniqueid(16)
+							token = sys.uniqueid(16)
 							util.ubus("session", "set", {
 								ubus_rpc_session = sdat.ubus_rpc_session,
 								values = {
@@ -345,15 +353,19 @@ function dispatch(request)
 								}
 							})
 							sess = sdat.ubus_rpc_session
-							ctx.urltoken.stok = token
 						end
 					end
 
-					if sess then
-						http.header("Set-Cookie", "sysauth=" .. sess.."; path="..build_url())
-						http.redirect(build_url(unpack(ctx.requestpath)))
+					if sess and token then
+						http.header("Set-Cookie", 'sysauth=%s; path=%s/' %{
+						   sess, build_url()
+						})
+
+						ctx.urltoken.stok = token
 						ctx.authsession = sess
 						ctx.authuser = user
+
+						http.redirect(build_url(unpack(ctx.requestpath)))
 					end
 				end
 			else
@@ -371,6 +383,9 @@ function dispatch(request)
 	end
 
 	if track.setuser then
+		-- trigger ubus connection before dropping root privs
+		util.ubus()
+
 		sys.process.setuser(track.setuser)
 	end
 

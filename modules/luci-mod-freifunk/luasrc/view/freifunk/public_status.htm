@@ -23,12 +23,12 @@ local load = string.format("%.2f, %.2f, %.2f", loads[1] / 65535.0, loads[2] / 65
 
 local mem = string.format(
 	"%.2f MB (%.2f %s, %.2f %s, %.2f %s)",
-	memory.total / 1024 / 1024,
-	(memory.total - memory.free) / 1024 / 1024,
+	meminfo.total / 1024 / 1024,
+	(meminfo.total - meminfo.free) / 1024 / 1024,
 	tostring(i18n.translate("used")),
-	memory.free / 1024 / 1024,
+	meminfo.free / 1024 / 1024,
 	tostring(i18n.translate("free")),
-	memory.buffered / 1024 / 1024,
+	meminfo.buffered / 1024 / 1024,
 	tostring(i18n.translate("buffered"))
 )
 

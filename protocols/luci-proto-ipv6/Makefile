@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=Support for DHCPv6/6in4/6to4/6rd/DS-Lite
+LUCI_TITLE:=Support for DHCPv6/6in4/6to4/6rd/DS-Lite/aiccu
 LUCI_DEPENDS:=
 
 include ../../luci.mk
