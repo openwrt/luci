@@ -8,7 +8,7 @@ local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 -- check supported options -- ##################################################
 -- saved to local vars here because doing multiple os calls slow down the system
-has_ssl     = DDNS.check_ssl()		-- HTTPS support
+has_ssl     = DDNS.check_ssl()		-- HTTPS support and --bind-network / --interface
 has_proxy   = DDNS.check_proxy()	-- Proxy support
 has_dnstcp  = DDNS.check_bind_host()	-- DNS TCP support
 -- correct ddns-scripts version
@@ -84,6 +84,22 @@ if not has_ssl then
 	dv.value = translate("Neither GNU Wget with SSL nor cURL installed to support updates via HTTPS protocol.") ..
 			"<br />- " ..
 			translate("You should install GNU Wget with SSL (prefered) or cURL package.") ..
+			"<br />- " ..
+			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
+end
+
+-- No bind_network
+if not has_ssl then
+	local dv = s:option(DummyValue, "_no_bind_network")
+	dv.titleref = DISP.build_url("admin", "system", "packages")
+	dv.rawhtml  = true
+	dv.title = bold_on ..
+		translate("Binding to a specific network not supported") .. bold_off
+	dv.value = translate("Neither GNU Wget with SSL nor cURL installed to select a network to use for communication.") ..
+			"<br />- " ..
+			translate("You should install GNU Wget with SSL or cURL package.") ..
+			"<br />- " ..
+			translate("GNU Wget will use the IP of given network, cURL will use the physical interface.") ..
 			"<br />- " ..
 			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
 end
