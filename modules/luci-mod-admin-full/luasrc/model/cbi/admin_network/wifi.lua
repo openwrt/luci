@@ -17,6 +17,7 @@ m = Map("wireless", "",
 
 m:chain("network")
 m:chain("firewall")
+m.redirect = luci.dispatcher.build_url("admin/network/wireless")
 
 local ifsection
 
