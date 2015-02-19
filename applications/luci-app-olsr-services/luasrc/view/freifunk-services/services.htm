@@ -93,9 +93,9 @@ if luci.http.formvalue("status") == "1" then
 	local rv = {}
 	for k, line in ipairs(services) do
 		local field = utl.split(line, "[#|]", split, true)
-		local origin_lnk = ip.IPv6(pcdata(field[4])) or ""
+		local origin_lnk = ip.IPv6(pcdata(field[4]))
 		local origin_link = ""
-		if #origin_lnk ~= 0 and origin_lnk:is6() then
+		if origin_lnk and origin_lnk:is6() then
 			origin_link = "["..origin_lnk:string().."]"
 		else
 			origin_link = pcdata(field[4])
@@ -168,9 +168,9 @@ end
 			local field = {}
 			-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
 			local field = utl.split(line, "[#|]", split, true)
-			local origin_lnk = ip.IPv6(pcdata(field[4])) or ""
+			local origin_lnk = ip.IPv6(pcdata(field[4]))
 			local origin_link
-			if #origin_lnk ~= 0 and origin_lnk:is6() then
+			if origin_lnk and origin_lnk:is6() then
 				origin_link = "["..origin_lnk:string().."]"
 			else
 				origin_link = pcdata(field[4])
