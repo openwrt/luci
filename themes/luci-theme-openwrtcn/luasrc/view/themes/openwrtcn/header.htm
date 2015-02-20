@@ -6,8 +6,9 @@
     local ver  = require "luci.version"
 
 	local sysinfo = util.ubus("system", "info") or { }
+    local boardinfo = luci.util.ubus("system", "board") or { }
 
-local load1, load5, load15 = sysinfo.load or { 0, 0, 0 }
+local loadinfo = sysinfo.load or { 0, 0, 0 }
 local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local request2 = require("luci.dispatcher").context.request
@@ -162,8 +163,9 @@ document.getElementById('logomap').coords= x1 + "," + y1 + "," + x2 + "," + y2
 		<div class="header_right">
 			<br />
 			<%=luci.version.distversion%><br />
-			<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%><br />
-			<%:Hostname%>: <%=hostname%><br />
+            <%:Hostname%>: <%=hostname%>
+			<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%><br />
+			<%:Model%>: <%=pcdata(boardinfo.model or boardinfo.system or "?")%> <br />
 		</div>
 
 </div>
