@@ -7,6 +7,7 @@ ipc = require "luci.ip"
 
 -- Init state session
 local uci = require "luci.model.uci".cursor_state()
+local ipt = require "luci.sys.iptparser".IptParser()
 local fs = require "nixio.fs"
 local ip = require "luci.ip"
 
@@ -137,27 +138,33 @@ function ipvalid(ipaddr)
 end
 
 function mac_to_ip(mac)
+	local ipaddr = nil
 	ipc.neighbors({ family = 4 }, function(n)
 		if n.mac == mac and n.dest then
-			return n.dest:string()
+			ipaddr = n.dest:string()
 		end
 	end)
+	return ipaddr
 end
 
 function mac_to_dev(mac)
+	local dev = nil
 	ipc.neighbors({ family = 4 }, function(n)
 		if n.mac == mac and n.dev then
-			return n.dev
+			dev = n.dev
 		end
 	end)
+	return dev
 end
 
 function ip_to_mac(ip)
+	local mac = nil
 	ipc.neighbors({ family = 4 }, function(n)
 		if n.mac and n.dest and n.dest:equal(ip) then
-			return n.mac
+			mac = n.mac
 		end
 	end)
+	return mac
 end
 
 function main(argv)
