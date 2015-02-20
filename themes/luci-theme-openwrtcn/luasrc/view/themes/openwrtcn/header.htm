@@ -1,6 +1,13 @@
 <%
-require("luci.sys")
-local load1, load5, load15 = luci.sys.loadavg()
+    local sys  = require "luci.sys"
+    local util = require "luci.util"
+    local http = require "luci.http"
+    local disp = require "luci.dispatcher"
+    local ver  = require "luci.version"
+
+	local sysinfo = util.ubus("system", "info") or { }
+
+local load1, load5, load15 = sysinfo.load or { 0, 0, 0 }
 local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local request2 = require("luci.dispatcher").context.request
@@ -9,11 +16,6 @@ local tree     = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
 local node     = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
-local isddnas = luci.util.exec("cat /proc/cpuinfo|grep -c DDNAS") or 0 
-local isddnas = tonumber(isddnas) 
-if isddnas >= 1 then 
- hostname = "DDNAS Wireless"
-end
 
 local c = tree
 for i,r in ipairs(request) do
