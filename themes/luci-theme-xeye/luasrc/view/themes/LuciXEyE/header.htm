@@ -14,8 +14,16 @@ $Id: header.htm 6844 2011-02-06 02:08:39Z jow $
 Redesigned by XEyE 04/15/2011
 -%>
 <%
-require("luci.sys")
-local load1, load5, load15 = luci.sys.loadavg()
+    local sys  = require "luci.sys"
+    local util = require "luci.util"
+    local http = require "luci.http"
+    local disp = require "luci.dispatcher"
+    local ver  = require "luci.version"
+
+	local sysinfo = util.ubus("system", "info") or { }
+    local boardinfo = luci.util.ubus("system", "board") or { }
+
+local loadinfo = sysinfo.load or { 0, 0, 0 }
 local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local request2 = require("luci.dispatcher").context.request
@@ -119,8 +127,10 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
 <div class="hostinfo">
-	<%=hostname%> | <%=luci.version.distversion%> |
-	<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%>
+			<%=luci.version.distversion%><br />
+            <%:Hostname%>: <%=hostname%>
+			<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%><br />
+			<%:Model%>: <%=pcdata(boardinfo.model or boardinfo.system or "?")%> <br />
 </div>
 
 <ul id="modemenu"><%
