@@ -14,23 +14,23 @@ $Id: header.htm 6844 2011-02-06 02:08:39Z jow $
 Redesigned by XEyE 04/15/2011
 -%>
 <%
-    local sys  = require "luci.sys"
-    local util = require "luci.util"
-    local http = require "luci.http"
-    local disp = require "luci.dispatcher"
-    local ver  = require "luci.version"
+	local sys  = require "luci.sys"
+	local util = require "luci.util"
+	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+	local ver  = require "luci.version"
 
 	local sysinfo = util.ubus("system", "info") or { }
-    local boardinfo = luci.util.ubus("system", "board") or { }
+	local boardinfo = luci.util.ubus("system", "board") or { }
 
 local loadinfo = sysinfo.load or { 0, 0, 0 }
 local request  = require("luci.dispatcher").context.path
 local category = request[1]
 local request2 = require("luci.dispatcher").context.request
-local leaf     = request2[#request2]
-local tree     = luci.dispatcher.node()
+local leaf	 = request2[#request2]
+local tree	 = luci.dispatcher.node()
 local cattree  = category and luci.dispatcher.node(category)
-local node     = luci.dispatcher.context.dispatched
+local node	 = luci.dispatcher.context.dispatched
 local hostname = luci.sys.hostname()
 
 local c = tree
@@ -112,7 +112,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie8.css" /><![endif]-->
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
-<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
+<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title)or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
 <div id="bodydiv">
@@ -128,7 +128,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 
 <div class="hostinfo">
 			<%=luci.version.distversion%><br />
-            <%:Hostname%>: <%=hostname%>
+			<%:Hostname%>: <%=hostname%>
 			<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%><br />
 			<%:Model%>: <%=pcdata(boardinfo.model or boardinfo.system or "?")%> <br />
 </div>
@@ -136,7 +136,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <ul id="modemenu"><%
 for k,node in pairs(tree.nodes) do
 	if node.title and not node.hidden then %>
-<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(node.title)%></a></li><%
+<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(translate(node.title))%></a></li><%
 	end
 end
 %>
@@ -178,6 +178,7 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 <div class="errorbox">
 	<strong><%:No password set!%></strong><br />
 	<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
+	<a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
 	</div>
 <%- end -%>
 <table id="maincontainer" cellspacing="13">
