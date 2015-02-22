@@ -105,7 +105,7 @@
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <link rel="alternate icon" type="image/png" href="<%=media%>/favicon.png">
   <link rel="stylesheet" href="<%=media%>/cascade.css"/>
-  <link rel="stylesheet" href="<%=media%>/amazeui.min.css"/>
+  <link rel="stylesheet" href="<%=media%>/amazeui-cut.min.css"/>
   <link rel="stylesheet" href="<%=media%>/cbi.css"/>
   <% if node and node.css then %><link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
   <% end -%>
@@ -207,7 +207,7 @@
 <%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
   <div>
     <div class="am-panel-group">
-	<section class="am-panel am-panel-default">
+	<section class="am-panel am-panel-danger">
         <div class="am-panel-hd"><%:No password set!%></div>
         <div class="am-panel-bd">
           <p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
