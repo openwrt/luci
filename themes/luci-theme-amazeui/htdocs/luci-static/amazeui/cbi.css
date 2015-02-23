@@ -245,6 +245,7 @@ fieldset[disabled] .cbi-input-save.cbi-button-active {
 }
 
 
+.cbi-button-link,
 .cbi-button-save {
   color: #ffffff;
   background-color: #f37b1d;
@@ -254,14 +255,22 @@ fieldset[disabled] .cbi-input-save.cbi-button-active {
 .cbi-button-save:focus,
 .cbi-button-save:active,
 .cbi-button-save.am-active,
-.am-active .cbi-button-save.am-dropdown-toggle {
+.am-active .cbi-button-save.am-dropdown-toggle,
+.cbi-button-link:hover,
+.cbi-button-link:focus,
+.cbi-button-link:active,
+.cbi-button-link.am-active,
+.am-active .cbi-button-link.am-dropdown-toggle {
   color: #ffffff;
   background-color: #c85e0b;
   border-color: #c85e0b;
 }
 .cbi-button-save:active,
 .cbi-button-save.cbi-button-active,
-.am-active .cbi-button-save.am-dropdown-toggle {
+.am-active .cbi-button-save.am-dropdown-toggle,
+.cbi-button-link:active,
+.cbi-button-link.cbi-button-active,
+.am-active .cbi-button-link.am-dropdown-toggle {
   background-image: none;
 }
 .cbi-button-save.am-disabled,
@@ -677,41 +686,6 @@ fieldset[disabled] .cbi-button-edit.cbi-button-active {
 .cbi-button-group-stacked .cbi-button-edit {
   border-color: #23abf0;
 }
-/* Style links like a button */
-.cbi-button-link {
-  color: #0e90d2;
-  font-weight: normal;
-  cursor: pointer;
-  border-radius: 0;
-}
-.cbi-button-link,
-.cbi-button-link:active,
-.cbi-button-link[disabled],
-fieldset[disabled] .cbi-button-link {
-  background-color: transparent;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-.cbi-button-link,
-.cbi-button-link:hover,
-.cbi-button-link:focus,
-.cbi-button-link:active {
-  border-color: transparent;
-}
-.cbi-button-link:hover,
-.cbi-button-link:focus {
-  color: #095f8a;
-  text-decoration: underline;
-  background-color: transparent;
-}
-.cbi-button-link[disabled]:hover,
-fieldset[disabled] .cbi-button-link:hover,
-.cbi-button-link[disabled]:focus,
-fieldset[disabled] .cbi-button-link:focus {
-  color: #999999;
-  text-decoration: none;
-}
-
 .cbi-button-up,
 .cbi-input-up {
 	background-position: center center;
