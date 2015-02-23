@@ -97,23 +97,6 @@ input[type="text"]::-moz-placeholder,
 .cbi-input-password::-moz-placeholder {
   opacity: 1;
 }
-select[disabled],
-.cbi-input-select[disabled],
-.cbi-input-textarea[disabled],
-.cbi-input-text[disabled],
-.cbi-input-password[disabled],
-.cbi-input-select[readonly],
-.cbi-input-textarea[readonly],
-.cbi-input-text[readonly],
-.cbi-input-password[readonly],
-fieldset[disabled] select,
-fieldset[disabled] .cbi-input-select,
-fieldset[disabled] .cbi-input-textarea,
-fieldset[disabled] .cbi-input-text,
-fieldset[disabled] .cbi-input-password {
-  cursor: not-allowed;
-  background-color: #eeeeee;
-}
 select.am-radius,
 .cbi-input-select.am-radius,
 .cbi-input-textarea.am-radius,
@@ -149,8 +132,6 @@ select,
   color: #999999;
   font-size: 1.3rem;
 }
-
-
 
 .cbi-button {
   display: inline-block;
@@ -192,16 +173,6 @@ select,
   -webkit-box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.125);
           box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.125);
 }
-.cbi-button.am-disabled,
-.cbi-button[disabled],
-fieldset[disabled] .cbi-button {
-  pointer-events: none;
-  border-color: transparent;
-  cursor: not-allowed;
-  opacity: 0.45;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
 .cbi-button.am-round {
   border-radius: 1000px;
 }
@@ -233,26 +204,6 @@ fieldset[disabled] .cbi-button {
 .am-active .cbi-input-save.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-input-save.am-disabled,
-.cbi-input-save[disabled],
-fieldset[disabled] .cbi-input-save,
-.cbi-input-save.am-disabled:hover,
-.cbi-input-save[disabled]:hover,
-fieldset[disabled] .cbi-input-save:hover,
-.cbi-input-save.am-disabled:focus,
-.cbi-input-save[disabled]:focus,
-fieldset[disabled] .cbi-input-save:focus,
-.cbi-input-save.am-disabled:active,
-.cbi-input-save[disabled]:active,
-fieldset[disabled] .cbi-input-save:active,
-.cbi-input-save.am-disabled.cbi-button-active,
-.cbi-input-save[disabled].cbi-button-active,
-fieldset[disabled] .cbi-input-save.cbi-button-active {
-  background-color: #0e90d2;
-  border-color: #0e90d2;
-}
-
-
 .cbi-button-link,
 .cbi-button-save {
   color: #ffffff;
@@ -281,25 +232,6 @@ fieldset[disabled] .cbi-input-save.cbi-button-active {
 .am-active .cbi-button-link.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-button-save.am-disabled,
-.cbi-button-save[disabled],
-fieldset[disabled] .cbi-button-save,
-.cbi-button-save.am-disabled:hover,
-.cbi-button-save[disabled]:hover,
-fieldset[disabled] .cbi-button-save:hover,
-.cbi-button-save.am-disabled:focus,
-.cbi-button-save[disabled]:focus,
-fieldset[disabled] .cbi-button-save:focus,
-.cbi-button-save.am-disabled:active,
-.cbi-button-save[disabled]:active,
-fieldset[disabled] .cbi-button-save:active,
-.cbi-button-save.am-disabled.cbi-button-active,
-.cbi-button-save[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-save.cbi-button-active {
-  background-color: #f37b1d;
-  border-color: #f37b1d;
-}
-
 .cbi-button-reset {
   color: #ffffff;
   background-color: #dd514c;
@@ -319,25 +251,6 @@ fieldset[disabled] .cbi-button-save.cbi-button-active {
 .am-active .cbi-button-reset.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-button-reset.am-disabled,
-.cbi-button-reset[disabled],
-fieldset[disabled] .cbi-button-reset,
-.cbi-button-reset.am-disabled:hover,
-.cbi-button-reset[disabled]:hover,
-fieldset[disabled] .cbi-button-reset:hover,
-.cbi-button-reset.am-disabled:focus,
-.cbi-button-reset[disabled]:focus,
-fieldset[disabled] .cbi-button-reset:focus,
-.cbi-button-reset.am-disabled:active,
-.cbi-button-reset[disabled]:active,
-fieldset[disabled] .cbi-button-reset:active,
-.cbi-button-reset.am-disabled.cbi-button-active,
-.cbi-button-reset[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-reset.cbi-button-active {
-  background-color: #dd514c;
-  border-color: #dd514c;
-}
-
 .cbi-input-reset {
   color: #ffffff;
   background-color: #f37b1d;
@@ -357,26 +270,6 @@ fieldset[disabled] .cbi-button-reset.cbi-button-active {
 .am-active .cbi-input-reset.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-input-reset.am-disabled,
-.cbi-input-reset[disabled],
-fieldset[disabled] .cbi-input-reset,
-.cbi-input-reset.am-disabled:hover,
-.cbi-input-reset[disabled]:hover,
-fieldset[disabled] .cbi-input-reset:hover,
-.cbi-input-reset.am-disabled:focus,
-.cbi-input-reset[disabled]:focus,
-fieldset[disabled] .cbi-input-reset:focus,
-.cbi-input-reset.am-disabled:active,
-.cbi-input-reset[disabled]:active,
-fieldset[disabled] .cbi-input-reset:active,
-.cbi-input-reset.am-disabled.cbi-button-active,
-.cbi-input-reset[disabled].cbi-button-active,
-fieldset[disabled] .cbi-input-reset.cbi-button-active {
-  background-color: #f37b1d;
-  border-color: #f37b1d;
-}
-
-
 .cbi-input-remove {
   color: #ffffff;
   background-color: #dd514c;
@@ -396,25 +289,6 @@ fieldset[disabled] .cbi-input-reset.cbi-button-active {
 .am-active .cbi-input-remove.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-input-remove.am-disabled,
-.cbi-input-remove[disabled],
-fieldset[disabled] .cbi-input-remove,
-.cbi-input-remove.am-disabled:hover,
-.cbi-input-remove[disabled]:hover,
-fieldset[disabled] .cbi-input-remove:hover,
-.cbi-input-remove.am-disabled:focus,
-.cbi-input-remove[disabled]:focus,
-fieldset[disabled] .cbi-input-remove:focus,
-.cbi-input-remove.am-disabled:active,
-.cbi-input-remove[disabled]:active,
-fieldset[disabled] .cbi-input-remove:active,
-.cbi-input-remove.am-disabled.cbi-button-active,
-.cbi-input-remove[disabled].cbi-button-active,
-fieldset[disabled] .cbi-input-remove.cbi-button-active {
-  background-color: #dd514c;
-  border-color: #dd514c;
-}
-
 .cbi-button-remove {
   color: #ffffff;
   background-color: #dd514c;
@@ -434,25 +308,6 @@ fieldset[disabled] .cbi-input-remove.cbi-button-active {
 .am-active .cbi-button-remove.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-button-remove.am-disabled,
-.cbi-button-remove[disabled],
-fieldset[disabled] .cbi-button-remove,
-.cbi-button-remove.am-disabled:hover,
-.cbi-button-remove[disabled]:hover,
-fieldset[disabled] .cbi-button-remove:hover,
-.cbi-button-remove.am-disabled:focus,
-.cbi-button-remove[disabled]:focus,
-fieldset[disabled] .cbi-button-remove:focus,
-.cbi-button-remove.am-disabled:active,
-.cbi-button-remove[disabled]:active,
-fieldset[disabled] .cbi-button-remove:active,
-.cbi-button-remove.am-disabled.cbi-button-active,
-.cbi-button-remove[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-remove.cbi-button-active {
-  background-color: #dd514c;
-  border-color: #dd514c;
-}
-
 .cbi-button-apply {
   color: #ffffff;
   background-color: #5eb95e;
@@ -472,25 +327,6 @@ fieldset[disabled] .cbi-button-remove.cbi-button-active {
 .am-active .cbi-button-apply.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-button-apply.am-disabled,
-.cbi-button-apply[disabled],
-fieldset[disabled] .cbi-button-apply,
-.cbi-button-apply.am-disabled:hover,
-.cbi-button-apply[disabled]:hover,
-fieldset[disabled] .cbi-button-apply:hover,
-.cbi-button-apply.am-disabled:focus,
-.cbi-button-apply[disabled]:focus,
-fieldset[disabled] .cbi-button-apply:focus,
-.cbi-button-apply.am-disabled:active,
-.cbi-button-apply[disabled]:active,
-fieldset[disabled] .cbi-button-apply:active,
-.cbi-button-apply.am-disabled.cbi-button-active,
-.cbi-button-apply[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-apply.cbi-button-active {
-  background-color: #5eb95e;
-  border-color: #5eb95e;
-}
-
 .cbi-input-apply {
   color: #ffffff;
   background-color: #5eb95e;
@@ -510,25 +346,6 @@ fieldset[disabled] .cbi-button-apply.cbi-button-active {
 .am-active .cbi-input-apply.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-input-apply.am-disabled,
-.cbi-input-apply[disabled],
-fieldset[disabled] .cbi-input-apply,
-.cbi-input-apply.am-disabled:hover,
-.cbi-input-apply[disabled]:hover,
-fieldset[disabled] .cbi-input-apply:hover,
-.cbi-input-apply.am-disabled:focus,
-.cbi-input-apply[disabled]:focus,
-fieldset[disabled] .cbi-input-apply:focus,
-.cbi-input-apply.am-disabled:active,
-.cbi-input-apply[disabled]:active,
-fieldset[disabled] .cbi-input-apply:active,
-.cbi-input-apply.am-disabled.cbi-button-active,
-.cbi-input-apply[disabled].cbi-button-active,
-fieldset[disabled] .cbi-input-apply.cbi-button-active {
-  background-color: #5eb95e;
-  border-color: #5eb95e;
-}
-
 .cbi-button-add {
   color: #ffffff;
   background-color: #5eb95e;
@@ -548,25 +365,6 @@ fieldset[disabled] .cbi-input-apply.cbi-button-active {
 .am-active .cbi-button-add.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-button-add.am-disabled,
-.cbi-button-add[disabled],
-fieldset[disabled] .cbi-button-add,
-.cbi-button-add.am-disabled:hover,
-.cbi-button-add[disabled]:hover,
-fieldset[disabled] .cbi-button-add:hover,
-.cbi-button-add.am-disabled:focus,
-.cbi-button-add[disabled]:focus,
-fieldset[disabled] .cbi-button-add:focus,
-.cbi-button-add.am-disabled:active,
-.cbi-button-add[disabled]:active,
-fieldset[disabled] .cbi-button-add:active,
-.cbi-button-add.am-disabled.cbi-button-active,
-.cbi-button-add[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-add.cbi-button-active {
-  background-color: #5eb95e;
-  border-color: #5eb95e;
-}
-
 .cbi-input-reload {
   color: #ffffff;
   background-color: #f37b1d;
@@ -586,25 +384,6 @@ fieldset[disabled] .cbi-button-add.cbi-button-active {
 .am-active .cbi-input-reload.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-input-reload.am-disabled,
-.cbi-input-reload[disabled],
-fieldset[disabled] .cbi-input-reload,
-.cbi-input-reload.am-disabled:hover,
-.cbi-input-reload[disabled]:hover,
-fieldset[disabled] .cbi-input-reload:hover,
-.cbi-input-reload.am-disabled:focus,
-.cbi-input-reload[disabled]:focus,
-fieldset[disabled] .cbi-input-reload:focus,
-.cbi-input-reload.am-disabled:active,
-.cbi-input-reload[disabled]:active,
-fieldset[disabled] .cbi-input-reload:active,
-.cbi-input-reload.am-disabled.cbi-button-active,
-.cbi-input-reload[disabled].cbi-button-active,
-fieldset[disabled] .cbi-input-reload.cbi-button-active {
-  background-color: #f37b1d;
-  border-color: #f37b1d;
-}
-
 .cbi-button-find,
 .cbi-button-reload {
   color: #ffffff;
@@ -630,25 +409,6 @@ fieldset[disabled] .cbi-input-reload.cbi-button-active {
 .am-active .cbi-button-reload.am-dropdown-toggle {
   background-image: none;
 }
-.cbi-button-reload.am-disabled,
-.cbi-button-reload[disabled],
-fieldset[disabled] .cbi-button-reload,
-.cbi-button-reload.am-disabled:hover,
-.cbi-button-reload[disabled]:hover,
-fieldset[disabled] .cbi-button-reload:hover,
-.cbi-button-reload.am-disabled:focus,
-.cbi-button-reload[disabled]:focus,
-fieldset[disabled] .cbi-button-reload:focus,
-.cbi-button-reload.am-disabled:active,
-.cbi-button-reload[disabled]:active,
-fieldset[disabled] .cbi-button-reload:active,
-.cbi-button-reload.am-disabled.cbi-button-active,
-.cbi-button-reload[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-reload.cbi-button-active {
-  background-color: #f37b1d;
-  border-color: #f37b1d;
-}
-
 .cbi-button-group .cbi-input-apply,
 .cbi-button-group-stacked .cbi-input-apply {
   border-color: #4db14d;
@@ -671,24 +431,6 @@ fieldset[disabled] .cbi-button-reload.cbi-button-active {
 .cbi-button-edit.cbi-button-active,
 .am-active .cbi-button-edit.am-dropdown-toggle {
   background-image: none;
-}
-.cbi-button-edit.am-disabled,
-.cbi-button-edit[disabled],
-fieldset[disabled] .cbi-button-edit,
-.cbi-button-edit.am-disabled:hover,
-.cbi-button-edit[disabled]:hover,
-fieldset[disabled] .cbi-button-edit:hover,
-.cbi-button-edit.am-disabled:focus,
-.cbi-button-edit[disabled]:focus,
-fieldset[disabled] .cbi-button-edit:focus,
-.cbi-button-edit.am-disabled:active,
-.cbi-button-edit[disabled]:active,
-fieldset[disabled] .cbi-button-edit:active,
-.cbi-button-edit.am-disabled.cbi-button-active,
-.cbi-button-edit[disabled].cbi-button-active,
-fieldset[disabled] .cbi-button-edit.cbi-button-active {
-  background-color: #3bb4f2;
-  border-color: #3bb4f2;
 }
 .cbi-button-group .cbi-button-edit,
 .cbi-button-group-stacked .cbi-button-edit {
