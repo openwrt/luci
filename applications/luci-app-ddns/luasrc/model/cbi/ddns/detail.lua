@@ -5,7 +5,7 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local NX   = require "nixio"
-local FS   = require "nixio.fs"
+local NXFS = require "nixio.fs"
 local SYS  = require "luci.sys"
 local UTIL = require "luci.util"
 local DISP = require "luci.dispatcher"
@@ -14,21 +14,22 @@ local DTYP = require "luci.cbi.datatypes"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 -- takeover arguments -- #######################################################
-section = arg[1]
+local section	= arg[1]
 
 -- check supported options -- ##################################################
 -- saved to local vars here because doing multiple os calls slow down the system
-has_ipv6   = DDNS.check_ipv6()	-- IPv6 support
-has_ssl    = DDNS.check_ssl()	-- HTTPS support
-has_proxy  = DDNS.check_proxy()	-- Proxy support
-has_dnstcp = DDNS.check_bind_host()	-- DNS TCP support
-has_force  = has_ssl and has_dnstcp	-- Force IP Protocoll
+local has_ipv6   = DDNS.check_ipv6()	-- IPv6 support
+local has_ssl    = DDNS.check_ssl()	-- HTTPS support
+local has_proxy  = DDNS.check_proxy()	-- Proxy support
+local has_dnstcp = DDNS.check_bind_host()	-- DNS TCP support
+local has_force  = has_ssl and has_dnstcp	-- Force IP Protocoll
 
 -- html constants -- ###########################################################
-font_red = "<font color='red'>"
-font_off = "</font>"
-bold_on  = "<strong>"
-bold_off = "</strong>"
+local LFLF	= (DDNS.get_theme() == "Bootstrap") and [[<br /><br />]] or [[]]
+local font_red	= "<font color='red'>"
+local font_off	= "</font>"
+local bold_on	= "<strong>"
+local bold_off	= "</strong>"
 
 -- error text constants -- #####################################################
 err_ipv6_plain = translate("IPv6 not supported") .. " - " ..
@@ -136,7 +137,10 @@ log_dir = m.uci:get(m.config, "global", "log_dir") or "/var/log/ddns"
 -- cbi-section definition -- ###################################################
 ns = m:section( NamedSection, section, "service",
 	translate("Details for") .. ([[: <strong>%s</strong>]] % section),
-	translate("Configure here the details for selected Dynamic DNS service") )
+	translate("Configure here the details for selected Dynamic DNS service.")
+	.. [[<br /><a href="http://wiki.openwrt.org/doc/uci/ddns#version_1x" target="_blank">]]
+	.. translate("For detailed information about parameter settings look here.")
+	.. [[</a>]] )
 ns.instance = section	-- arg [1]
 ns:tab("basic", translate("Basic Settings"), nil )
 ns:tab("advanced", translate("Advanced Settings"), nil )
@@ -344,7 +348,7 @@ function ush.validate(self, value)
 		end
 	elseif (#url > 0) then
 		return nil, err_tab_basic(self) .. translate("either url or script could be set")
-	elseif not FS.access(value) then
+	elseif not NXFS.access(value) then
 		return nil, err_tab_basic(self) .. translate("File not found")
 	end
 	return value
@@ -765,7 +769,7 @@ function ips.validate(self, value)
 	if (usev6:formvalue(section) == "0" and src4:formvalue(section) ~= "script")
 	or (usev6:formvalue(section) == "1" and src6:formvalue(section) ~= "script") then
 		return ""
-	elseif not value or not (#value > 0) or not FS.access(split[1], "x") then
+	elseif not value or not (#value > 0) or not NXFS.access(split[1], "x") then
 		return nil, err_tab_adv(self) ..
 			translate("not found or not executable - Sample: '/path/to/script.sh'")
 	else
@@ -852,6 +856,34 @@ function eif6.write(self, section, value)
 	else
 		self.map:del(section, self.option)		 -- delete "ipv6_interface" helper
 		return self.map:set(section, "interface", value) -- and write "interface"
+	end
+end
+
+-- IPv4/IPv6 - bind_network -- #################################################
+if has_ssl or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
+	bnet = ns:taboption("advanced", ListValue, "bind_network",
+		translate("Bind Network") )
+	bnet:depends("ipv4_source", "web")
+	bnet:depends("ipv6_source", "web")
+	bnet.rmempty = true
+	bnet.default = ""
+	bnet:value("", translate("-- default --"))
+	WADM.cbi_add_networks(bnet)
+	function bnet.cfgvalue(self, section)
+		local value = AbstractValue.cfgvalue(self, section)
+		if not has_ssl and value ~= "" then
+			self.description = bold_on .. font_red ..
+				translate("Binding to a specific network not supported") .. font_off .. "<br />" ..
+				translate("please set to 'default'") .. " !" .. bold_off
+		else
+			self.description = translate("OPTIONAL: Network to use for communication") ..
+				"<br />" .. translate("Casual users should not change this setting")
+		end
+		return value
+	end
+	function bnet.validate(self, value)
+		if (value ~= "" and has_ssl ) or value == "" then return value end
+		return nil, err_tab_adv(self) .. translate("Binding to a specific network not supported") .. " !"
 	end
 end
 
@@ -1198,7 +1230,7 @@ lv.inputtitle = translate("Read / Reread log file")
 lv.rows = 50
 function lv.cfgvalue(self, section)
 	local lfile=log_dir .. "/" .. section .. ".log"
-	if FS.access(lfile) then
+	if NXFS.access(lfile) then
 		return lfile .. "\n" .. translate("Please press [Read] button")
 	end
 	return lfile .. "\n" .. translate("File not found or empty")

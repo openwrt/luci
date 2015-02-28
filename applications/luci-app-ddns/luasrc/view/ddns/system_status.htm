@@ -14,53 +14,38 @@
 			tbl.deleteRow(1);
 
 		// variable for Modulo-Division use to set cbi-rowstyle-? (0 or 1)
-		var x = -1;
-		var i = 1;
-
-		// no data => no ddns-scripts Version 2 installed
-		if ( !data ) {
-			var txt = '<br /><strong><font color="red"><%:Old version of ddns-scripts installed%></font>' ;
-			var url = '<a href="' ;
-			url += '<%=luci.dispatcher.build_url("admin", "system", "packages")%>' ;
-			url += '"><%:install update here%></a></strong>' ;
-			var tr = tbl.insertRow(-1);
-			tr.className = 'cbi-section-table-row cbi-rowstyle-' + (((i + x) % 2) + 1);
-			var td = tr.insertCell(-1);
-			td.colSpan = 2 ;
-			td.innerHTML = txt + " - " + url
-			tr.insertCell(-1).colSpan = 3 ;
-			return;
-		}
+		var i = -1;
+		var j = 1;
 
 		// DDNS Service disabled
 		if (data[0].enabled == 0) {
 			var txt = '<strong><font color="red"><%:DDNS Autostart disabled%></font>' ;
 			var url = '<a href="' + data[0].url_up + '"><%:enable here%></a></strong>' ;
 			var tr = tbl.insertRow(-1);
-			tr.className = 'cbi-section-table-row cbi-rowstyle-' + (((i + x) % 2) + 1);
+			tr.className = 'cbi-section-table-row cbi-rowstyle-' + (((j + i) % 2) + 1);
 			var td = tr.insertCell(-1);
 			td.colSpan = 2 ;
 			td.innerHTML = txt + " - " + url
 			tr.insertCell(-1).colSpan = 3 ;
-			x++ ;
+			i++ ;
 		}
 
-		for( i = 1; i < data.length; i++ )
+		for( j = 1; j < data.length; j++ )
 		{
 			var tr = tbl.insertRow(-1);
-			tr.className = 'cbi-section-table-row cbi-rowstyle-' + (((i + x) % 2) + 1) ;
+			tr.className = 'cbi-section-table-row cbi-rowstyle-' + (((j + i) % 2) + 1) ;
 
 			// configuration
-			tr.insertCell(-1).innerHTML = '<strong>' + data[i].section + '</strong>' ;
+			tr.insertCell(-1).innerHTML = '<strong>' + data[j].section + '</strong>' ;
 
 			// pid
-			// data[i].pid ignored here
+			// data[j].pid ignored here
 
 			// last update
-			// data[i].datelast ignored here
+			// data[j].datelast ignored here
 
 			// next update
-			switch (data[i].datenext) {
+			switch (data[j].datenext) {
 				case "_empty_":
 					tr.insertCell(-1).innerHTML = '<em><%:Unknown error%></em>' ;
 					break;
@@ -80,18 +65,18 @@
 					tr.insertCell(-1).innerHTML = '<em><%:Verify%></em>';
 					break;
 				default:
-					tr.insertCell(-1).innerHTML = data[i].datenext ;
+					tr.insertCell(-1).innerHTML = data[j].datenext ;
 					break;
 			}
 
 			// domain
-			if (data[i].domain == "_nodomain_")
+			if (data[j].domain == "_nodomain_")
 				tr.insertCell(-1).innerHTML = '<em><%:config error%></em>';
 			else
-				tr.insertCell(-1).innerHTML = data[i].domain;
+				tr.insertCell(-1).innerHTML = data[j].domain;
 
 			// registered IP
-			switch (data[i].reg_ip) {
+			switch (data[j].reg_ip) {
 				case "_nodomain_":
 					tr.insertCell(-1).innerHTML = '<em><%:Config error%></em>';
 					break;
@@ -102,15 +87,15 @@
 					tr.insertCell(-1).innerHTML = '<em><%:IPv6 not supported%></em>';
 					break;
 				default:
-					tr.insertCell(-1).innerHTML = data[i].reg_ip;
+					tr.insertCell(-1).innerHTML = data[j].reg_ip;
 					break;
 			}
 
 			// monitored interface
-			if (data[i].iface == "_nonet_")
+			if (data[j].iface == "_nonet_")
 				tr.insertCell(-1).innerHTML = '<em><%:Config error%></em>';
 			else
-				tr.insertCell(-1).innerHTML = data[i].iface;
+				tr.insertCell(-1).innerHTML = data[j].iface;
 		}
 
 		if (tbl.rows.length == 1 || (data[0].enabled == 0 && tbl.rows.length == 2) ) {
@@ -125,19 +110,19 @@
 		}
 	}
 
-	var ddns_status_XHR = new XHR();
 	// force to immediate show status (not waiting for XHR.poll)
-	ddns_status_XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
-			_data2elements(x, data);
+			if (data) { _data2elements(x, data); }
 		}
 	);
 
-	ddns_status_XHR.poll(10, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
-			_data2elements(x, data);
+			if (data) { _data2elements(x, data); }
 		}
 	);
+
 //]]></script>
 
 <fieldset class="cbi-section" id="ddns_status_section">

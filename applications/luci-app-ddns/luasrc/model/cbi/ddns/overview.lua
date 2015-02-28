@@ -27,8 +27,6 @@ bold_off = [[</strong>]]
 m = Map("ddns")
 
 -- first need to close <a> from cbi map template our <a> closed by template
---m.title = [[</a><a href="javascript:alert(']] .. CTRL.show_versions() ..[[')">]] ..
---		translate("Dynamic DNS")
 m.title	= [[</a><a href="javascript:alert(']]
 		.. translate("Version Information")
 		.. [[\n\nluci-app-ddns]]
@@ -109,9 +107,13 @@ end
 -- TableSection definition -- ##################################################
 ts = m:section( TypedSection, "service",
 	translate("Overview"),
-	translate("Below is a list of configured DDNS configurations and their current state." .. "<br />" ..
-		"If you want to send updates for IPv4 and IPv6 you need to define two separate Configurations " ..
-		"i.e. 'myddns_ipv4' and 'myddns_ipv6'") )
+	translate("Below is a list of configured DDNS configurations and their current state.") 
+	.. "<br />" 
+	.. translate("If you want to send updates for IPv4 and IPv6 you need to define two separate Configurations " 
+		.. "i.e. 'myddns_ipv4' and 'myddns_ipv6'") 
+	.. "<br />" 
+	.. [[<a href="]] .. DISP.build_url("admin", "services", "ddns", "global") .. [[">]]
+	.. translate("To change global settings click here") .. [[</a>]] )
 ts.sectionhead = translate("Configuration")
 ts.template = "cbi/tblsection"
 ts.addremove = true
