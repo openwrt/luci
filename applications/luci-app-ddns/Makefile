@@ -9,16 +9,17 @@ include $(TOPDIR)/rules.mk
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Dynamic DNS Client (ddns-scripts)
 LUCI_DEPENDS:=+luci-mod-admin-full +ddns-scripts
+LUCI_PKGARCH:=all
 
 PKG_NAME:=luci-app-ddns
 
 # Version == major.minor.patch
 # increase on new functionality (minor) or patches (patch)
-PKG_VERSION:=2.1.1
+PKG_VERSION:=2.2.0
 
 # Release == build
 # increase on changes of translation files
-PKG_RELEASE:=0
+PKG_RELEASE:=1
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
