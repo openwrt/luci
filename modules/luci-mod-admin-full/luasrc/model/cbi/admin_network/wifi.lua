@@ -353,16 +353,16 @@ if hwtype == "rt2860v2" or hwtype == "mt7612" then
 	tp = s:taboption("general", ListValue,
 		"txpower", translate("Transmit Power"), "%")
 	tp.rmempty = true
-	tp:value("10","10% (2dBm)")
-	tp:value("20","20% (4dBm)")
-	tp:value("30","30% (6dBm)")
-	tp:value("40","40% (8dBm)")
-	tp:value("50","50% (10dBm)")
-	tp:value("60","60% (12dBm)")
-	tp:value("70","70% (14dBm)")
-	tp:value("80","80% (16dBm)")
-	tp:value("90","90% (18dBm)")
-	tp:value("100","100% (20dBm)")
+	tp:value("10","10%")
+	tp:value("20","20%")
+	tp:value("30","30%")
+	tp:value("40","40%")
+	tp:value("50","50%")
+	tp:value("60","60%")
+	tp:value("70","70%")
+	tp:value("80","80%")
+	tp:value("90","90%")
+	tp:value("100","100%")
 end
 
 ----------------------- Interface -----------------------
