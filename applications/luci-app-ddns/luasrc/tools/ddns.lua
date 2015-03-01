@@ -100,39 +100,67 @@ end
 function ipkg_ver_compare(ver1, comp, ver2)
 	if not ver1 or not (#ver1 > 0)
 	or not ver2 or not (#ver2 > 0)
-	or not comp or not (#comp > 0) then
-		return nil
+	or not comp or not (#comp > 0) then return nil end
+	-- correct compare string
+	if comp == "<>" or comp == "><" or comp == "!=" or comp == "~=" then comp = "~="
+	elseif comp == "<=" or comp == "<" or comp == "=<" then comp = "<="
+	elseif comp == ">=" or comp == ">" or comp == "=>" then comp = ">="
+	elseif comp == "="  or comp == "==" then comp = "=="
+	elseif comp == "<<" then comp = "<"
+	elseif comp == ">>" then comp = ">"
+	else return nil end
+
+	local av1 = UTIL.split(ver1, "[%.%-]", nil, true)
+	local av2 = UTIL.split(ver2, "[%.%-]", nil, true)
+
+	for i = 1, math.max(table.getn(av1),table.getn(av2)), 1  do
+		local s1 = av1[i] or ""
+		local s2 = av2[i] or ""
+		local n1 = tonumber(s1)
+		local n2 = tonumber(s2)
+
+		-- one numeric and other empty string then set other to 0
+		if n1 and not n2 and (not s2 or #s2 == 0) then n2 = 0 end
+		if n2 and not n1 and (not s1 or #s1 == 0) then n1 = 0 end
+
+		local nc = (n1 and n2)	-- numeric compare
+
+		if nc then
+			-- first "not equal" found return true
+			if comp == "~=" and (n1 ~= n2) then return true end
+			-- first "lower" found return true
+			if (comp == "<" or comp == "<=") and (n1 < n2) then return true end
+			-- first "greater" found return true
+			if (comp == ">" or comp == ">=") and (n1 > n2) then return true end
+			-- not equal then return false
+			if (n1 ~= n2) then return false end
+		else
+			if comp == "~=" and (s1 ~= s2) then return true end
+			if (comp == "<" or comp == "<=") and (s1 < s2) then return true end
+			if (comp == ">" or comp == ">=") and (s1 > s2) then return true end
+			if (s1 ~= s2) then return false end
+		end
 	end
-	return (tonumber(SYS.call(
-		[[opkg compare-versions "]] .. ver1 .. [[" "]] .. comp .. [[" "]] .. ver2 .. [["]]
-		)) == 1)
+	-- all equal then true
+	return true
 end
 
 -- read version information for given package if installed
 function ipkg_ver_installed(pkg)
-	if not pkg then
-		return nil
+	local version = nil
+	local control = io.open("/usr/lib/opkg/info/%s.control" % pkg, "r")
+	if control then
+		local ln
+		repeat
+			ln = control:read("*l")
+			if ln and ln:match("^Version: ") then
+				version = ln:gsub("^Version: ", "")
+				break
+			end
+		until not ln
+		control:close()
 	end
-	-- opkg list-installed [pkg] | cut -d " " -f 3 - return version as sting
-	local ver = SYS.exec([[opkg list-installed ]] .. pkg .. [[ | cut -d " " -f 3 ]])
-	if (#ver > 0) then
-		return ver
-	end
-	return nil
-end
-
--- get the "name" of the current active theme
-function get_theme()
-	local _uci  = UCI.cursor()
-	local _base = _uci:get("luci", "main", "mediaurlbase")	-- only pathname
-	_uci:unload("luci")
-
-	for k, v in pairs(luci.config.themes) do
-		if k:sub(1, 1) ~= "." and v == _base then
-			return k
-		end
-	end
-	return nil
+	return version
 end
 
 -- replacement of build-in read of UCI option

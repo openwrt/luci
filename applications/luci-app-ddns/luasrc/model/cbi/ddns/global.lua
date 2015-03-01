@@ -7,9 +7,6 @@ local DISP = require "luci.dispatcher"
 local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
--- Bootstrap theme needs 2 or 3 additional linefeeds for tab description for better optic
-local LFLF = (DDNS.get_theme() == "Bootstrap") and [[<br /><br />]] or [[]]
-
 -- cbi-map definition -- #######################################################
 local m = Map("ddns")
 
@@ -38,7 +35,7 @@ local ns = m:section( NamedSection, "global", "ddns",
 	.. [[<a href="http://wiki.openwrt.org/doc/uci/ddns#version_2x1" target="_blank">]]
 	.. translate("For detailed information about parameter settings look here.")
 	.. [[</a>]]
-	.. LFLF )
+
 -- section might not exist
 function ns.cfgvalue(self, section)
 	if not self.map:get(section) then
