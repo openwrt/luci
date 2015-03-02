@@ -135,7 +135,7 @@ end
 
 -- dhcp setup was requested, create section and reload page
 if m:formvalue("cbid.dhcp._enable._enable") then
-	m.uci:section("dhcp", "dhcp", nil, {
+	m.uci:section("dhcp", "dhcp", arg[1], {
 		interface = arg[1],
 		start     = "100",
 		limit     = "150",
