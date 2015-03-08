@@ -19,7 +19,7 @@ function index()
 end
 
 function act_status()
-	local ipt = io.popen("iptables --line-numbers -t nat -xnvL MINIUPNPD")
+	local ipt = io.popen("iptables --line-numbers -t nat -xnvL MINIUPNPD 2>/dev/null")
 	if ipt then
 		local fwd = { }
 		while true do
