@@ -6,33 +6,33 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_NAME:=luci-app-privoxy
+
+# Version == major.minor.patch
+# increase "minor" on new functionality and "patch" on patches/optimization
+PKG_VERSION:=1.0.3
+
+# Release == build
+# increase on changes of translation files
+PKG_RELEASE:=1
+
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
+
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Privoxy WEB proxy
 LUCI_DEPENDS:=+luci-mod-admin-full +privoxy
 LUCI_PKGARCH:=all
 
-PKG_NAME:=luci-app-privoxy
-
-# Version == major.minor.patch
-# increase "minor" on new functionality and "patch" on patches/optimization
-PKG_VERSION:=1.0.2
-
-# Release == build
-# increase on changes of translation files
-PKG_RELEASE:=0
-
-PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
-
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>
 help
 	$(LUCI_TITLE)
-
-	Version   : $(PKG_VERSION)-$(PKG_RELEASE)
-	Maintainer: $(PKG_MAINTAINER)
+	.
+	Version: $(PKG_VERSION)-$(PKG_RELEASE)
+	$(PKG_MAINTAINER)
 endef
 
-include ../../luci.mk
+include $(TOPDIR)/feeds/luci/luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
