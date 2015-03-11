@@ -72,7 +72,7 @@ function urlencode( str )
 
 	if type(str) == "string" then
 		str = str:gsub(
-			"([^a-zA-Z0-9$_%-%.%+!*'(),])",
+			"([^a-zA-Z0-9$_%-%.!*'(),])",
 			__chrenc
 		)
 	end
