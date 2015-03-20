@@ -35,6 +35,7 @@ local ns = m:section( NamedSection, "global", "ddns",
 	.. [[<a href="http://wiki.openwrt.org/doc/uci/ddns#version_2x1" target="_blank">]]
 	.. translate("For detailed information about parameter settings look here.")
 	.. [[</a>]]
+	)
 
 -- section might not exist
 function ns.cfgvalue(self, section)
@@ -119,7 +120,6 @@ ll.title	= translate("Log length")
 ll.description	= translate("Number of last lines stored in log files")
 ll.rmempty	= true
 ll.default	= "250"
-ll.datatype	= "and(uinteger,min(1))"
 function ll.validate(self, value)
 	local n = tonumber(value)
 	if not n or math.floor(n) ~= n or n < 1 then
