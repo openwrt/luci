@@ -89,6 +89,11 @@ s:taboption("advanced", Flag, "nonegcache",
 	translate("No negative cache"),
 	translate("Do not cache negative replies, e.g. for not existing domains"))
 
+s:taboption("advanced", Value, "serversfile",
+	translate("Additional servers file"),
+	translate("This file may contain lines like 'server=/domain/1.2.3.4' or 'server=1.2.3.4' for"..
+	        "domain-specific or full upstream <abbr title=\"Domain Name System\">DNS</abbr> servers."))
+
 s:taboption("advanced", Flag, "strictorder",
 	translate("Strict order"),
 	translate("<abbr title=\"Domain Name System\">DNS</abbr> servers will be queried in the " ..
