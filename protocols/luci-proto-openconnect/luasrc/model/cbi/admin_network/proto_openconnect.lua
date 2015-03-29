@@ -22,6 +22,20 @@ port.datatype    = "port"
 ifname = section:taboption("general", Value, "interface", translate("Output Interface"))
 ifname.template = "cbi/network_netlist"
 
+defaultroute = section:taboption("advanced", Flag, "defaultroute",
+	translate("Use default gateway"),
+	translate("If unchecked, no default route is configured"))
+
+defaultroute.default = defaultroute.enabled
+
+
+metric = section:taboption("advanced", Value, "metric",
+	translate("Use gateway metric"))
+
+metric.placeholder = "0"
+metric.datatype    = "uinteger"
+metric:depends("defaultroute", defaultroute.enabled)
+
 section:taboption("general", Value, "serverhash", translate("VPN Server's certificate SHA1 hash"))
 
 section:taboption("general", Value, "authgroup", translate("AuthGroup"))
