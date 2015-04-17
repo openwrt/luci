@@ -87,24 +87,30 @@ dev.cfgvalue = function(self, section)
 
 	v = m.uci:get("fstab", section, "uuid")
 	e = v and devices[v:lower()]
-	if v and e then
+	if v and e and e.size then
 		return "UUID: %s (%s, %d MB)" %{ tp.pcdata(v), e.dev, e.size }
+	elseif v and e then
+		return "UUID: %s (%s)" %{ tp.pcdata(v), e.dev }
 	elseif v then
 		return "UUID: %s (<em>%s</em>)" %{ tp.pcdata(v), translate("not present") }
 	end
 
 	v = m.uci:get("fstab", section, "label")
 	e = v and devices[v]
-	if v and e then
+	if v and e and e.size then
 		return "Label: %s (%s, %d MB)" %{ tp.pcdata(v), e.dev, e.size }
+	elseif v and e then
+		return "Label: %s (%s)" %{ tp.pcdata(v), e.dev }
 	elseif v then
 		return "Label: %s (<em>%s</em>)" %{ tp.pcdata(v), translate("not present") }
 	end
 
 	v = Value.cfgvalue(self, section) or "?"
 	e = v and devices[v]
-	if v and e then
+	if v and e and e.size then
 		return "%s (%d MB)" %{ tp.pcdata(v), e.size }
+	elseif v and e then
+		return tp.pcdata(v)
 	elseif v then
 		return "%s (<em>%s</em>)" %{ tp.pcdata(v), translate("not present") }
 	end
