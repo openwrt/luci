@@ -57,8 +57,10 @@ o = mount:taboption("general", Value, "uuid", translate("UUID"),
 	translate("If specified, mount the device by its UUID instead of a fixed device node"))
 
 for i, d in ipairs(devices) do
-	if d.uuid then
+	if d.uuid and d.size then
 		o:value(d.uuid, "%s (%s, %d MB)" %{ d.uuid, d.dev, d.size })
+	elseif d.uuid then
+		o:value(d.uuid, "%s (%s)" %{ d.uuid, d.dev })
 	end
 end
 
@@ -71,8 +73,10 @@ o = mount:taboption("general", Value, "label", translate("Label"),
 o:depends("uuid", "")
 
 for i, d in ipairs(devices) do
-	if d.label then
+	if d.label and d.size then
 		o:value(d.label, "%s (%s, %d MB)" %{ d.label, d.dev, d.size })
+	elseif d.label then
+		o:value(d.label, "%s (%s)" %{ d.label, d.dev })
 	end
 end
 
@@ -85,7 +89,11 @@ o = mount:taboption("general", Value, "device", translate("Device"),
 o:depends({ uuid = "", label = "" })
 
 for i, d in ipairs(devices) do
-	o:value(d.dev, "%s (%d MB)" %{ d.dev, d.size })
+	if d.size then
+		o:value(d.dev, "%s (%d MB)" %{ d.dev, d.size })
+	else
+		o:value(d.dev)
+	end
 end
 
 
