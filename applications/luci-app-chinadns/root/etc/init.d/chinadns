@@ -2,7 +2,6 @@
 
 START=90
 STOP=15
-PIDFILE='/tmp/run/chinadns.pid'
 
 start()
 {
@@ -14,23 +13,14 @@ start()
 
 	[ $enabled = '0' ] && exit 0
 
-	if [ -f $PIDFILE ];then
-		echo "already started: $PIDFILE exists"
-		return 1
-	fi
-
 	chinadns \
 		-c /etc/chinadns_chnroute.txt \
-		-m \
 		-p $port \
-		-s "$dns" &
-	echo $! > $PIDFILE
+		-vv \
+		-s "$dns" 2>&1 | logger -t ChinaDNS &
 }
 
 stop()
 {
-	[ -f $PIDFILE ] && {
-		kill -9 `cat $PIDFILE`
-		rm $PIDFILE
-	}
+	killall -9 chinadns
 }
