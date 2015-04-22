@@ -11,6 +11,6 @@ function index()
 	end
 
 	local page
-	page = entry({"admin", "services", "shadowsocks"}, cbi("shadowsocks"), _("Shadowsocks"), 45)
+	page = entry({"admin", "services", "shadowsocks"}, cbi("shadowsocks"), _("Shadowsocks Client"), 45)
 	page.dependent = true
 end
