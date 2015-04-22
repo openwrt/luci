@@ -17,7 +17,7 @@ o.datatype = "uinteger"
 s = m:section(TypedSection, "redsocks2_ipcache", translate("IP Cache Options"))
 s.anonymous = true
 
-o = s:option(Value, "cache_size", translate("Cache File Size"))
+o = s:option(Value, "cache_size", translate("Max Cached Records(K)"))
 o.datatype = "uinteger"
 
 o = s:option(Value, "cache_file", translate("Cache File Path"))
