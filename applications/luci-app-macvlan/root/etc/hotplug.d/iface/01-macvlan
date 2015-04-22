@@ -1,0 +1,9 @@
+#!/bin/sh
+[ "$ACTION" = "ifdown" ] && pppconnectcheck &
+
+[ "$(uci get macvlan.config.enabled)" = "1" ] && \
+	[ "$(uci get macvlan.config.wansw)" = "0" ] && \
+	[ "$DEVICE" = "$(uci get network.wan.ifname)" ] && \
+	[ "$ACTION" = "ifup" ] && \
+	/etc/init.d/macvlan start
+

@@ -1,0 +1,116 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+
+start() {
+	
+	ulimit -n 4096
+
+	config_load "aria2"	
+	config_get enabled config enabled 0
+
+	[ "$enabled" = 0 ] && return 0
+
+	config_get device config device
+
+	[ -z "$device" ] && exit 1
+
+	mountpoint="`mount | grep "$device" | awk '{print $3}'`"
+
+	[ -z "$mountpoint" ] && exit 1
+
+	config_get download_folder config download_folder Downloads
+	config_get diskcache config diskcache '1M'
+	config_get download_limit config download_limit 0
+	config_get upload_limit config upload_limit 0
+	config_get btmaxpeers config btmaxpeers 25
+	config_get maxjobs config maxjobs 5
+	config_get maxthread config maxthread 5
+	config_get tcp_port config tcp_port 51413
+	config_get udp_port config udp_port 51413
+	config_get seedtime config seedtime 525600
+	config_get rpc_token config rpc_token ""
+
+	aria2_conf_path="$mountpoint/.aria2"
+	aria2_downloadlist="$aria2_conf_path/aria2file.txt"
+	aria2_DHT="$aria2_conf_path/dht.dat"
+	aria2_downloadfolder="$mountpoint/$download_folder"
+
+	case "`mount | grep $device | cut -d' ' -f5`" in
+		#Only for fallocate patched uClibc
+		#'ext4')fileallocation="falloc";;
+		*fat*)fileallocation="none";;
+		*)fileallocation="trunc";;
+	esac
+
+	[ ! -d "$aria2_conf_path" ] && mkdir -p "$aria2_conf_path"
+	[ ! -f "$aria2_downloadlist" ] && touch "$aria2_downloadlist"
+	[ ! -f "$aria2_DHT" ] && touch "$aria2_DHT"
+
+	aria2_configfile="/etc/aria2/aria2.conf"
+	[ ! -f "$aria2_configfile" ] && {
+		aria2_configfile="/etc/aria2/aria2.conf"
+		cat > "$aria2_configfile" << EOF
+# General Setting
+continue
+peer-id-prefix=-TR2760-
+user-agent=Transmission/2.76 (13775)
+event-poll=epoll
+on-download-complete=/etc/aria2/post
+on-bt-download-complete=/etc/aria2/post
+save-session-interval=60
+force-save
+
+# Connection Setting
+disable-ipv6
+check-certificate=false
+min-split-size=1M
+
+# BitTorrent Setting
+enable-dht6=false
+bt-seed-unverified
+bt-save-metadata
+bt-hash-check-seed
+bt-remove-unselected-file
+bt-request-peer-speed-limit=100K
+bt-stop-timeout=1800
+seed-ratio=0.0
+
+# RPC
+rpc-save-upload-metadata
+EOF
+	}
+
+	cmd="aria2c -c -D \
+	--conf-path="$aria2_configfile" \
+	--dir="$aria2_downloadfolder" \
+	--enable-rpc \
+	--rpc-listen-all \
+	--rpc-allow-origin-all \
+	--listen-port=$tcp_port \
+	--dht-listen-port=$udp_port \
+	--file-allocation=$fileallocation \
+	--input-file="$aria2_downloadlist" \
+	--save-session="$aria2_downloadlist" \
+	--dht-file-path="$aria2_DHT" \
+	--seed-time=$seedtime \
+	--disk-cache=$diskcache \
+	--max-overall-download-limit=$download_limit \
+	--max-overall-upload-limit=$upload_limit \
+	--bt-max-peers=$btmaxpeers \
+	--split=$maxthread \
+	--max-connection-per-server=$maxthread \
+	--max-concurrent-downloads=$maxjobs"
+
+	[ -n "$rpc_token" ] && cmd="$cmd --rpc-secret=$rpc_token"
+
+	eval "$cmd"
+    sleep 2
+    renice 19 -p $(pidof aria2c)
+}
+
+stop() {
+	# must interrupt it to save session
+	killall -2 aria2c
+	sleep 3
+}

@@ -1,0 +1,156 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+<%
+require("luci.sys")
+local load1, load5, load15 = luci.sys.loadavg()
+
+local hostname = require("luci.sys").hostname()
+local crequest = luci.dispatcher.context.request
+local request  = require("luci.dispatcher").context.path
+local category = request[1]
+local tree     = luci.dispatcher.node()
+local cattree  = category and luci.dispatcher.node(category)
+local node     = luci.dispatcher.context.dispatched
+
+local c = tree
+for i,r in ipairs(request) do
+	if c.nodes and c.nodes[r] then
+		c = c.nodes[r]
+		c._menu_selected = true
+	end
+end
+
+require("luci.i18n").loadc("base")
+require("luci.http").prepare_content("application/xhtml+xml")
+
+-%>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%=luci.i18n.context.lang%>" lang="<%=luci.i18n.context.lang%>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/dashboard.css" />
+<!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie6.css" /><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
+<!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie8.css" /><![endif]-->
+<% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
+<% end -%>
+<script type="text/javascript" src="<%=resource%>/xhr.js"></script>
+<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+</head>
+<body class="lang_<%=luci.i18n.context.lang%>">
+<div id="screen">
+
+<p class="skiplink">
+<span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
+<span id="skiplink2"><a href="#content"><%:Skip to content%></a></span>
+</p>
+
+<%-
+local function ucimenu(prefix, node)
+	if not node.nodes or node.hidden then
+		return false
+	end
+	local index = {}
+	local count = 0
+	for k, n in pairs(node.nodes) do
+		if n.title and n.target then
+			table.insert(index, {name=k, order=n.order or 100})
+			count = count + 1
+		end
+	end
+
+	table.sort(index, function(a, b) return a.order < b.order end)
+
+	if count > 0 then
+		for j, v in pairs(index) do
+			if #v.name > 0 then
+				local nnode = node.nodes[v.name]
+				local href = controller .. prefix .. v.name .. "/"
+				href = (nnode.query) and href .. luci.http.build_querystring(nnode.query) or href
+%>
+<span><a class="menulink<% if nnode._menu_selected then %> active<%end%>" href="<%=pcdata(href)%>"> &gt; <%=pcdata(striptags(nnode.title))%></a></span>
+<%-
+			end
+		end
+%>
+
+<%
+	end
+end
+%>
+
+<div id="header"></div>
+
+<%
+if tree.nodes[category] and tree.nodes[category].ucidata then
+	local ucic = 0
+	for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+		for k, l in pairs(j) do
+			for m, n in pairs(l) do
+				ucic = ucic + 1;
+			end
+		end
+	end
+-%>
+
+<div class="savemenu">
+	<% if ucic > 0 then %>
+		<a class="warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=luci.http.urlencode(luci.http.formvalue("redir") or REQUEST_URI)%>"><%:Unsaved Changes%>: <%=ucic%></a>
+	<% end -%>
+</div>
+
+<% end %>
+
+<div class="hostinfo">
+		<%=hostname%> | <%=luci.version.distversion%> |
+	<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%>
+	<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+		| <%:Auto Refresh%>:
+		<span id="xhr_poll_status_on"><%:on%></span>
+		<span id="xhr_poll_status_off" style="display:none"><%:off%></span>
+	</span>
+
+</div>
+
+
+<div class="menubar">
+<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
+<strong><a href="<%=controller%>"> <%:Menu%></a>:</strong>
+
+<%
+	local pointer = tree
+	for k, v in ipairs(crequest) do
+		if pointer.nodes and pointer.nodes[v] then
+			pointer = pointer.nodes[v]
+			local menu_url=luci.dispatcher.build_url(unpack(crequest, 1, k))
+		if not pointer.title then
+			pointer.title = ""
+		end
+			%>
+			&#187;<a href="<%=menu_url%>/"><%=pcdata(striptags(translate(pointer.title) or v))%></a>
+			<%
+		end
+	end
+%>
+
+</div>
+
+
+<div id="maincontent">
+

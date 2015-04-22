@@ -1,0 +1,55 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+# Written by 981213
+. /lib/functions.sh
+START=99
+
+start() {
+	[ -f /etc/config/macvlan ] || {
+		echo "You are missing configuration file /etc/config/macvlan"
+		return 1
+	}
+
+	config_load "macvlan"
+
+	config_get_bool ENABLED config enabled 0
+
+	[ "$ENABLED" = "0" ] && {
+		echo "Macvlan scripts disabled."
+		return 1
+	}
+	echo "Starting interfaces..."
+	/tmp/macvlan_ifup.sh
+	echo "Interfaces started."
+
+}
+
+stop() {
+		[ -f /etc/config/macvlan ] || {
+		echo "You are missing configuration file /etc/config/macvlan"
+		return 1
+	}
+
+	config_load "macvlan"
+
+	config_get_bool ENABLED config enabled 0
+
+	[ "$ENABLED" = "0" ] && {
+		echo "Macvlan scripts disabled."
+		return 1
+	}
+
+	echo "Stopping interfaces..."
+	/tmp/macvlan_ifdown.sh
+	echo "Intefaces stopped."
+}
+restart()
+{
+	stop
+	sleep 10
+	start 
+	return 0
+}
+boot() {
+	/bin/pppconnectcheck &
+}

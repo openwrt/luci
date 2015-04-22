@@ -1,0 +1,43 @@
+#!/bin/sh
+# RA-MOD
+# aria2 post-process script
+
+urldecode(){
+  echo -e "$(sed 's/+/ /g; s/%/\\x/g')"
+}
+
+getExtension(){
+	echo $(sed 's/.*\.//')
+}
+
+# fix URL encoded filename
+
+rawfile="$3"
+newfile="$(dirname "$rawfile")/$(basename "$rawfile" | urldecode)"
+
+[ "$rawfile" != "$newfile" ] && mv "$rawfile" "$newfile"
+
+# Download Subtitle
+
+[ -z "`which fetchsub`" ] && exit 1
+
+. /lib/functions.sh
+autosub_config(){
+	cfg="$1"
+	config_get "autosub_enable" "$cfg" "autosub_enable" 0	
+
+	[ "$autosub_enable" -eq 0 ] && exit 0
+
+	filetype="`echo "$newfile" | getExtension`"
+
+	config_get "autosub_filetype" "$cfg" "autosub_filetype"
+
+	autosub_filetype="`echo "$autosub_filetype" | sed -e 's/[,]/|/g'`"
+
+	echo "$filetype" | grep -Eiqw "$autosub_filetype"
+
+	[ $? -eq 0 ] && fetchsub "$newfile"
+}
+
+config_load aria2
+config_foreach autosub_config aria2
