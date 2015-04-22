@@ -1,0 +1,203 @@
+<%
+    local sys  = require "luci.sys"
+    local util = require "luci.util"
+    local http = require "luci.http"
+    local disp = require "luci.dispatcher"
+    local ver  = require "luci.version"
+
+	local sysinfo = util.ubus("system", "info") or { }
+    local boardinfo = luci.util.ubus("system", "board") or { }
+
+local loadinfo = sysinfo.load or { 0, 0, 0 }
+local request  = require("luci.dispatcher").context.path
+local category = request[1]
+local request2 = require("luci.dispatcher").context.request
+local leaf     = request2[#request2]
+local tree     = luci.dispatcher.node()
+local cattree  = category and luci.dispatcher.node(category)
+local node     = luci.dispatcher.context.dispatched
+local hostname = luci.sys.hostname()
+
+local c = tree
+for i,r in ipairs(request) do
+	if c.nodes and c.nodes[r] then
+		c = c.nodes[r]
+		c._menu_selected = true
+	end
+end
+
+
+require("luci.i18n").loadc("base")
+require("luci.http").prepare_content("application/xhtml+xml")
+
+
+	local function nodeurl(prefix, name, query)
+		local url = controller .. prefix .. name .. "/"
+		if query then
+			url = url .. luci.http.build_querystring(query)
+		end
+		return pcdata(url)
+	end
+
+	local function subtree(prefix, node, level)
+		%><%=node.nodes[0]%><%
+		if not node.nodes or node.hidden then
+			return false
+		end
+
+		if not level then
+			level = 1
+		end
+		local index = {}
+		local count = 0
+		for k, n in pairs(node.nodes) do
+			if n.title and n.target then
+				table.insert(index, {name=k, order=n.order or 100})
+				count = count + 1
+			end
+		end
+
+		table.sort(index, function(a, b) return a.order < b.order end)
+
+		if count > 0 then
+			local selected_node
+			local selected_name
+			for j, v in pairs(index) do
+				if #v.name > 0 then
+					local nnode = node.nodes[v.name]
+
+					if nnode._menu_selected then
+						selected_node = nnode
+						selected_name = v.name
+					end
+					%><li class="tabmenu-lv<%=level%>" >
+						<a style="display:block;padding-left:<%=(level-1)*20+5%>px;<% if nnode._menu_selected or (node.leaf and v.name == leaf) then %>font-weight:bold;background:#b8cee0;color:#000000<% end %>"  href="<%=nodeurl(prefix, v.name, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
+					</li>		<%
+					if nnode._menu_selected then
+						subtree(prefix .. selected_name .. "/", selected_node, level + 1)
+					elseif (v.name=="network" and level<2) then
+						subtree(prefix .. v.name .. "/", nnode, level + 1)
+					end
+			
+				end
+			end
+		end
+	end
+-%>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%=luci.i18n.context.lang%>" lang="<%=luci.i18n.context.lang%>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
+<% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
+<% end -%>
+<!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie6.css" /><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
+<!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie8.css" /><![endif]-->
+<script type="text/javascript" src="<%=resource%>/xhr.js"></script>
+<title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. translate(node.title)or '')) %> - LuCI</title>
+</head>
+<body class="lang_<%=luci.i18n.context.lang%>">
+<div id="bodydiv">
+
+<p class="skiplink">
+<span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
+<span id="skiplink2"><a href="#content"><%:Skip to content%></a></span>
+</p>
+
+<div id="menubar">
+<div style="width:839px;height:0px;padding:0;margin:0;"></div>
+<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
+
+
+
+<ul id="modemenu"><%
+for k,node in pairs(tree.nodes) do
+	if node.title and not node.hidden then %>
+<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(translate(node.title))%></a></li><%
+	end
+end
+%>
+</ul>
+
+<%
+if tree.nodes[category] and tree.nodes[category].ucidata then
+	local ucic = 0
+	for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+		for k, l in pairs(j) do
+			for m, n in pairs(l) do
+				ucic = ucic + 1;
+			end
+		end
+	end
+-%>
+<div id="savemenu">
+	<% if ucic > 0 then %>
+		<a class="warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=luci.http.urlencode(luci.http.formvalue("redir") or REQUEST_URI)%>"><%:Unsaved Changes%>: <%=ucic%></a>
+	<%- else -%>
+		<a href="#"><%:Changes%>: 0</a>
+	<% end -%>
+</div><% end %>
+
+<div class="clear"></div>
+</div>
+
+<div id="banner">
+	
+<img id="logoimg" border="0" src="/luci-static/openwrtcn/logo.jpg"  usemap="#FPMap0" />
+<map name="FPMap0">
+<area id ="logomap" target="_blank" href="http://www.right.com.cn" shape="rect" coords="1, 1, 2, 2"/>
+</map>
+<script language="javascript" >
+logowidth= document.getElementById('logoimg').width;
+logoheight= document.getElementById('logoimg').height;
+x1=logowidth * 0.033
+x2=logowidth * 0.113
+y1=logoheight * 0.277
+y2=logoheight * 0.623
+document.getElementById('logomap').coords= x1 + "," + y1 + "," + x2 + "," + y2
+</script>
+		<div class="header_right">
+			<br />
+			<%=luci.version.distversion%><br />
+            <%:Hostname%>: <%=hostname%>
+			<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%><br />
+			<%:Model%>: <%=pcdata(boardinfo.model or boardinfo.system or "?")%> <br />
+		</div>
+
+</div>
+<noscript>
+	<div class="errorbox">
+	<strong><%:Java Script required!%></strong><br />
+	<%:You must enable Java Script in your browser or LuCI will not work properly.%>
+	</div>
+</noscript>
+
+<%- if luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
+<div class="errorbox">
+	<strong><%:No password set!%></strong><br />
+	<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%>
+	<a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+	</div>
+<%- end -%>
+<table id="maincontainer" cellspacing="13">
+	<tr id="maintr" >
+	<% if not category or category=="about" then else%>
+	<td  valign="top" width="1%">
+		<div id="tabmenu">
+		<div class="tabmenu1">
+		<ul class="tabmenu l1">
+		<% subtree("/" .. category .. "/", cattree)%>
+		</ul>
+		</div>
+		</div>	
+	</td>
+	<% end %>
+	<td  valign="top" style=" WORD-BREAK:BREAK-ALL;">
+		<div style="height:0;width:600px;"></div>
+		<div class="maincontent">
+			
+				

@@ -1,0 +1,16 @@
+<%+cbi/valueheader%>
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+
+	function do_macvlan_rediag()
+	{
+		XHR.get('<%=luci.dispatcher.build_url("admin", "network", "macvlan_rediag")%>', null,
+			function(x, st)
+			{
+			}
+		);
+	}
+//]]></script>
+
+<input class="cbi-button cbi-input-save" id="cbi-macvlan_rediag-<%=section%>-action" type="button" value="<%:rediag%>" onclick="do_macvlan_rediag()" />
+<%+cbi/valuefooter%>

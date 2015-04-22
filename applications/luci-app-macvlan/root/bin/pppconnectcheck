@@ -1,0 +1,33 @@
+#!/bin/sh
+#PPPoE interfaces check script. written by 981213
+. /lib/functions.sh
+
+[ -f /etc/config/macvlan ] || {
+	echo "You are missing configuration file /etc/config/macvlan"
+	return 1
+}
+
+config_load "macvlan"
+config_get_bool DIAGCHK config diagchk 0
+config_get DIAGNUM config diagnum
+config_get_bool ENABLED config enabled 0
+[ "$DIAGCHK" = "0" ] && {
+	echo "diag check disabled."
+	return 0
+}
+[ $(ps | grep -c "pppconnectcheck") -gt 3 ] && logger -t PPPoE-IFChecker "Another checker is running.exit." && return 1
+sleep 40
+PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
+logger -t PPPoE-IFChecker "$PPPUPNUM interfaces are online."
+if [ "$PPPUPNUM" -lt $DIAGNUM ]
+then
+	logger -t PPPoE-IFChecker "Reconnect interfaces."
+	[ "$ENABLED" = "1" ] && /etc/init.d/ppp_syncdiag restart | logger -t PPPoE-IFChecker
+	[ "$ENABLED" = "0" ] && ifdown wan && ifup wan
+	logger -t PPPoE-IFChecker "Interfaces restarted."
+	logger -t PPPoE-IFChecker "Another checker will be started 10s later."
+	sleep 10 && pppconnectcheck &
+else
+	logger -t PPPoE-IFChecker "Nothing to do.Exit."
+fi
+return 0

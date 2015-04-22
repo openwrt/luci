@@ -50,6 +50,7 @@
 		local rv = {
 			uptime     = sysinfo.uptime or 0,
 			localtime  = os.date(),
+			cpuusage   = luci.sys.exec("echo $( echo $(cat /proc/stat | grep \"^cpu \" | awk '{print $1+$2+$3+$4+$5+$6+$7 \" \" $1+$2+$3+$6+$7}') $(sleep 1 && cat /proc/stat | grep \"^cpu \" | awk '{print $1+$2+$3+$4+$5+$6+$7 \" \" $1+$2+$3+$6+$7}') | awk '{print (($4-$2)/($3-$1))*100}' )"),
 			loadavg    = sysinfo.load or { 0, 0, 0 },
 			memory     = meminfo,
 			swap       = swapinfo,
@@ -95,6 +96,12 @@
 		luci.http.write_json(rv)
 
 		return
+	end
+
+	local soc_model = luci.sys.exec("cat /proc/cpuinfo | grep 'system type' | cut -d : -f 2-");
+
+	if string.sub(soc_model, 1, 1) == " " then
+		soc_model = string.sub(soc_model, 2, -1);
 	end
 -%>
 
@@ -513,6 +520,9 @@
 					info.loadavg[2] / 65535.0
 				);
 
+			if (e = document.getElementById('cpuusage'))
+				e.innerHTML = String.format('%.02f\%',info.cpuusage);
+
 			if (e = document.getElementById('memtotal'))
 				e.innerHTML = progressbar(
 					((info.memory.free + info.memory.buffered) / 1024) + " <%:kB%>",
@@ -562,10 +572,12 @@
 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
 		</td></tr>
+		<tr><td width="33%"><%:Chip Model%></td><td><%=soc_model%></td></tr>
 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
+		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
 	</table>
 </fieldset>
 

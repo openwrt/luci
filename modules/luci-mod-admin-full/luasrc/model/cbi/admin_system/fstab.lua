@@ -118,11 +118,7 @@ end
 
 mp = mount:option(DummyValue, "target", translate("Mount Point"))
 mp.cfgvalue = function(self, section)
-	if m.uci:get("fstab", section, "is_rootfs") == "1" then
-		return "/overlay"
-	else
-		return Value.cfgvalue(self, section) or "?"
-	end
+	return Value.cfgvalue(self, section) or "?"
 end
 
 fs = mount:option(DummyValue, "fstype", translate("Filesystem"))

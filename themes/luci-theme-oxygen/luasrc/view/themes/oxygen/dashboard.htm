@@ -1,0 +1,46 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id$
+
+-%>
+<%
+	local node = luci.dispatcher.context.requested
+	if node.nodes then
+%>
+	<div class="dashboard">
+<%-
+			for k, v in luci.util.spairs(node.nodes, function (a,b)
+				return (node.nodes[a].order or 100) < (node.nodes[b].order or 100)
+			end) do
+				if v.title and #v.title > 0 and not v.ignoreindex and (v.index or v.target) then
+					local csscl = "dashicon di_%s" % (v.style or k)
+					local iconl = v.icon
+					local pref = luci.util.clone(luci.dispatcher.context.request)
+					pref[#pref+1] = k
+					local target = luci.dispatcher.build_url(unpack(pref))  
+%>
+					<div class="<%=csscl%>">
+						<a href="<%=target%>/" <%-
+							if iconl then
+								%> style="background-image: url(<%=resource%>/<%=iconl%>)"<%-
+							end
+						-%>><%=translate(v.title)%></a>
+					</div>
+<% 
+				end 
+			end 
+-%>
+	</div>
+	<div class="clear"></div>
+<%
+end
+%>
