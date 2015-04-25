@@ -13,7 +13,7 @@ start()
 
 	[ $enabled = '0' ] && exit 0
 
-	chinadns \
+	/usr/bin/chinadns \
 		-c /etc/chinadns_chnroute.txt \
 		-p $port \
 		-vv \
@@ -22,5 +22,5 @@ start()
 
 stop()
 {
-	killall -9 chinadns
+	killall -9 /usr/bin/chinadns
 }
