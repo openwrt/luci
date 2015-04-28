@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-02 13:44+0100\n"
 "PO-Revision-Date: 2015-04-23 13:00+0800\n"
-"Last-Translator: GuoGuo <gch981213@gmail.com>\n"
+"Last-Translator: Syrone Wong <wong.syrone@gmail.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,13 +43,13 @@ msgid "Binding to a specific network not supported"
 msgstr "不支持绑定到一个指定的网络"
 
 msgid "BusyBox's nslookup and Wget do not support to specify the IP version to use for communication with DDNS Provider."
-msgstr "BusyBox的nslookup和wget不支持使用指定的IP协议版本与DDNS供应商联系."
+msgstr "与DDNS供应商通讯时BusyBox的nslookup和Wget不支持设置特定的IP协议版本."
 
 msgid "BusyBox's nslookup does not support to specify to use TCP instead of default UDP when requesting DNS server"
 msgstr "BusyBox的nslookup不支持使用TCP协议代替UDP协议请求DNS记录"
 
 msgid "Casual users should not change this setting"
-msgstr "普通账户不应该改变这个设置"
+msgstr "普通用户不应该改变这个设置"
 
 msgid "Check Interval"
 msgstr "检查时间周期"
@@ -73,10 +73,10 @@ msgid "Current setting"
 msgstr "当前设置"
 
 msgid "Currently DDNS updates are not started at boot or on interface events.<br />This is the default if you run DDNS scripts by yourself (i.e. via cron with force_interval set to '0')"
-msgstr "现在,DDNS更新在开机或者接口动作时不会被被触发<br />如果你手工运行DDNS脚本的话(例如使用cron时把force_interval设置为0),这是默认设置."
+msgstr "现在,DDNS更新在开机或者接口动作时不会被触发<br />如果你手工运行DDNS脚本的话(例如使用cron时把force_interval设置为0),这是默认设置."
 
 msgid "Currently DDNS updates are not started at boot or on interface events.<br />You can start/stop each configuration here. It will run until next reboot."
-msgstr "现在,DDNS更新在开机或者接口动作时不会被被触发<br />你可以在这里开始/停止每一个设置的条目.它将在下一次重启之前一直生效."
+msgstr "现在,DDNS更新在开机或者接口动作时不会被触发<br />你可以在这里开始/停止每一个设置的条目.它在下次重启之前一直有效."
 
 msgid "Custom update script to be used for updating your DDNS Provider."
 msgstr "用来更新动态DNS的自定义脚本"
@@ -157,7 +157,7 @@ msgid "Error Retry Counter"
 msgstr "错误重试计数"
 
 msgid "Error Retry Interval"
-msgstr "错误重试时间隔"
+msgstr "错误重试间隔"
 
 msgid "Event Network"
 msgstr "事件网络"
@@ -202,7 +202,7 @@ msgid "Format: IP or FQDN"
 msgstr "格式:IP或者FQDN"
 
 msgid "GNU Wget will use the IP of given network, cURL will use the physical interface."
-msgstr "GNU wget将会使用给定的网络的IP地址,而cURL将会使用物理接口"
+msgstr "GNU Wget将会使用给定的网络的IP地址,而cURL将会使用物理接口"
 
 msgid "Global Settings"
 msgstr "全局设置"
@@ -256,10 +256,10 @@ msgid "Interface"
 msgstr "接口"
 
 msgid "Interval to check for changed IP<br />Values below 5 minutes == 300 seconds are not supported"
-msgstr "检查IP是否改变的时间隔<br />低于5分钟(300秒)的数值是不被支持的."
+msgstr "检查IP是否改变的时间隔<br />不支持低于5分钟(300秒)的数值."
 
 msgid "Interval to force updates send to DDNS Provider<br />Setting this parameter to 0 will force the script to only run once<br />Values lower 'Check Interval' except '0' are not supported"
-msgstr "强制向提供商更新DDNS的时间周期<br />把这个参数设置为0将会让脚本仅执行一次<br />低于\"检查时间周期\"的数值(除了0)是不被支持的."
+msgstr "强制向提供商更新DDNS的时间周期<br />把这个参数设置为0将会让脚本仅执行一次<br />不支持低于\"检查时间周期\"的数值(除了0)."
 
 msgid "It is NOT recommended for casual users to change settings on this page."
 msgstr "强烈不建议初次使用的用户修改本页设定."
@@ -271,7 +271,7 @@ msgid "Loading"
 msgstr "加载中"
 
 msgid "Log File Viewer"
-msgstr "日志件查看器"
+msgstr "日志查看器"
 
 msgid "Log directory"
 msgstr "日志目录"
@@ -322,7 +322,7 @@ msgid "OPTIONAL: Force the usage of pure IPv4/IPv6 only communication."
 msgstr "可选:强制使用仅IPv4/IPv6通信."
 
 msgid "OPTIONAL: Force the use of TCP instead of default UDP on DNS requests."
-msgstr "可选:强制使用TCP请求DNS而不是UDP."
+msgstr "可选:强制使用TCP而非UDP请求DNS."
 
 msgid "OPTIONAL: Network to use for communication"
 msgstr "可选:用于通信的网络"
@@ -556,7 +556,7 @@ msgid "not found or not executable - Sample: '/path/to/script.sh'"
 msgstr "未找到或者不可执行 - 示例: '/path/to/script.sh'"
 
 msgid "nslookup can not resolve host"
-msgstr "nslookup不能解析地址"
+msgstr "nslookup不能解析主机"
 
 msgid "or"
 msgstr "或者"
@@ -583,13 +583,13 @@ msgid "proxy port missing"
 msgstr "代理端口未填"
 
 msgid "required"
-msgstr "必须天蝎"
+msgstr "必须填写"
 
 msgid "seconds"
 msgstr "秒"
 
 msgid "to run HTTPS without verification of server certificates (insecure)"
-msgstr "使用HTTPS但不见查服务器证书(不安全)"
+msgstr "使用HTTPS但不检查服务器证书(不安全)"
 
 msgid "unknown error"
 msgstr "未知错误"
