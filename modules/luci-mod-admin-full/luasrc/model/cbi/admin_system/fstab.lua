@@ -186,7 +186,12 @@ dev.cfgvalue = function(self, section)
 	if v then return "Label: %s" % v end
 
 	v = Value.cfgvalue(self, section) or "?"
-	return size[v] and "%s (%s MB)" % {v, size[v]} or v
+	e = v and devices[v]
+	if v and e and e.size then
+		return "%s (%s MB)" % {v, e.size}
+	else
+		return v
+	end
 end
 
 return m
