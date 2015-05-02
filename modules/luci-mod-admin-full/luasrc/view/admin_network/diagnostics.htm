@@ -63,7 +63,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			<br />
 
 			<div style="width:30%; float:left">
-				<input style="margin: 5px 0" type="text" value="openwrt.org" name="ping" /><br />
+				<input style="margin: 5px 0" type="text" value="dev.openwrt.org" name="ping" /><br />
 				<% if has_ping6 then %>
 				<select name="ping_proto" style="width:auto">
 					<option value="" selected="selected"><%:IPv4%></option>
@@ -76,7 +76,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			</div>
 
 			<div style="width:33%; float:left">
-				<input style="margin: 5px 0" type="text" value="openwrt.org" name="traceroute" /><br />
+				<input style="margin: 5px 0" type="text" value="dev.openwrt.org" name="traceroute" /><br />
 				<% if has_traceroute6 then %>
 				<select name="traceroute_proto" style="width:auto">
 					<option value="" selected="selected"><%:IPv4%></option>
@@ -93,7 +93,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			</div>
 
 			<div style="width:33%; float:left;">
-				<input style="margin: 5px 0" type="text" value="openwrt.org" name="nslookup" /><br />
+				<input style="margin: 5px 0" type="text" value="dev.openwrt.org" name="nslookup" /><br />
 				<input type="button" value="<%:Nslookup%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.nslookup)" />
 			</div>
 

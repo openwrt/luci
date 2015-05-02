@@ -643,7 +643,7 @@ function serialize_json(x, cb)
 			push(tostring(x))
 		end
 	else
-		push('"%s"' % tostring(x):gsub('["%z\1-\31]',
+		push('"%s"' % tostring(x):gsub('["%z\1-\31\\]',
 			function(c) return '\\u%04x' % c:byte(1) end))
 	end
 

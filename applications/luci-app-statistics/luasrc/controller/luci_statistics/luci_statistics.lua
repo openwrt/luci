@@ -150,7 +150,6 @@ function statistics_render()
 		if png then
 			luci.http.prepare_content("image/png")
 			l12.pump.all(l12.source.file(png), luci.http.write)
-			png:close()
 		end
 		return
 	end

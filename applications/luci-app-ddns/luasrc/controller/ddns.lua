@@ -15,7 +15,7 @@ local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 local UTIL = require "luci.util"
 
-DDNS_MIN = "2.1.0-2"	-- minimum version of service required
+DDNS_MIN = "2.2.0-1"	-- minimum version of service required
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -36,6 +36,7 @@ function index()
 	entry( {"admin", "services", "ddns", "detail"}, cbi("ddns/detail"), nil ).leaf = true
 	entry( {"admin", "services", "ddns", "hints"}, cbi("ddns/hints",
 		{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), nil ).leaf = true
+	entry( {"admin", "services", "ddns", "global"}, cbi("ddns/global"), nil ).leaf = true
 	entry( {"admin", "services", "ddns", "logview"}, call("logread") ).leaf = true
 	entry( {"admin", "services", "ddns", "startstop"}, call("startstop") ).leaf = true
 	entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
@@ -90,7 +91,7 @@ local function _get_status()
 		end
 
 		-- process running but update needs to happen
-		-- problems it force_seconds > uptime
+		-- problems if force_seconds > uptime
 		force_seconds = (force_seconds > uptime) and uptime or force_seconds
 		if pid > 0 and ( lasttime + force_seconds - uptime ) <= 0 then
 			datenext = "_verify_"
@@ -103,7 +104,7 @@ local function _get_status()
 		elseif pid == 0 and enabled == 0 then
 			datenext  = "_disabled_"
 
-		-- no process running and NOT
+		-- no process running and enabled
 		elseif pid == 0 and enabled ~= 0 then
 			datenext = "_stopped_"
 		end
@@ -149,11 +150,11 @@ end
 -- called by XHR.get from detail_logview.htm
 function logread(section)
 	-- read application settings
-	local uci	  = UCI.cursor()
-	local log_dir	  = uci:get("ddns", "global", "log_dir") or "/var/log/ddns"
-	local lfile=log_dir .. "/" .. section .. ".log"
+	local uci	= UCI.cursor()
+	local log_dir	= uci:get("ddns", "global", "log_dir") or "/var/log/ddns"
+	local lfile	= log_dir .. "/" .. section .. ".log"
+	local ldata	= NXFS.readfile(lfile)
 
-	local ldata=NXFS.readfile(lfile)
 	if not ldata or #ldata == 0 then
 		ldata="_nodata_"
 	end
@@ -164,10 +165,10 @@ end
 -- called by XHR.get from overview_status.htm
 function startstop(section, enabled)
 	local uci  = UCI.cursor()
+	local pid  = DDNS.get_pid(section)
 	local data = {}		-- Array to transfer data to javascript
 
 	-- if process running we want to stop and return
-	local pid = DDNS.get_pid(section)
 	if pid > 0 then
 		local tmp = NX.kill(pid, 15)	-- terminate
 		NX.nanosleep(2)	-- 2 second "show time"

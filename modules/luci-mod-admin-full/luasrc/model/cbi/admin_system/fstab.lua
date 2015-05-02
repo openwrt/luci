@@ -5,18 +5,33 @@ require("luci.tools.webadmin")
 
 local fs   = require "nixio.fs"
 local util = require "nixio.util"
+local tp   = require "luci.template.parser"
 
-local devices = {}
-util.consume((fs.glob("/dev/sd*")), devices)
-util.consume((fs.glob("/dev/hd*")), devices)
-util.consume((fs.glob("/dev/scd*")), devices)
-util.consume((fs.glob("/dev/mmc*")), devices)
+local block = io.popen("block info", "r")
+local ln, dev, devices = nil, nil, {}
 
-local size = {}
-for i, dev in ipairs(devices) do
-	local s = tonumber((fs.readfile("/sys/class/block/%s/size" % dev:sub(6))))
-	size[dev] = s and math.floor(s / 2048)
-end
+repeat
+	ln = block:read("*l")
+	dev = ln and ln:match("^/dev/(.-):")
+
+	if dev then
+		local e, s, key, val = { }
+
+		for key, val in ln:gmatch([[(%w+)="(.-)"]]) do
+			e[key:lower()] = val
+			devices[val] = e
+		end
+
+		s = tonumber((fs.readfile("/sys/class/block/%s/size" % dev)))
+
+		e.dev  = "/dev/%s" % dev
+		e.size = s and math.floor(s / 2048)
+
+		devices[e.dev] = e
+	end
+until not ln
+
+block:close()
 
 
 m = Map("fstab", translate("Mount Points"))
@@ -66,17 +81,39 @@ end
 mount:option(Flag, "enabled", translate("Enabled")).rmempty = false
 
 dev = mount:option(DummyValue, "device", translate("Device"))
+dev.rawhtml = true
 dev.cfgvalue = function(self, section)
-	local v
+	local v, e
 
 	v = m.uci:get("fstab", section, "uuid")
-	if v then return "UUID: %s" % v end
+	e = v and devices[v:lower()]
+	if v and e and e.size then
+		return "UUID: %s (%s, %d MB)" %{ tp.pcdata(v), e.dev, e.size }
+	elseif v and e then
+		return "UUID: %s (%s)" %{ tp.pcdata(v), e.dev }
+	elseif v then
+		return "UUID: %s (<em>%s</em>)" %{ tp.pcdata(v), translate("not present") }
+	end
 
 	v = m.uci:get("fstab", section, "label")
-	if v then return "Label: %s" % v end
+	e = v and devices[v]
+	if v and e and e.size then
+		return "Label: %s (%s, %d MB)" %{ tp.pcdata(v), e.dev, e.size }
+	elseif v and e then
+		return "Label: %s (%s)" %{ tp.pcdata(v), e.dev }
+	elseif v then
+		return "Label: %s (<em>%s</em>)" %{ tp.pcdata(v), translate("not present") }
+	end
 
 	v = Value.cfgvalue(self, section) or "?"
-	return size[v] and "%s (%s MB)" % {v, size[v]} or v
+	e = v and devices[v]
+	if v and e and e.size then
+		return "%s (%d MB)" %{ tp.pcdata(v), e.size }
+	elseif v and e then
+		return tp.pcdata(v)
+	elseif v then
+		return "%s (<em>%s</em>)" %{ tp.pcdata(v), translate("not present") }
+	end
 end
 
 mp = mount:option(DummyValue, "target", translate("Mount Point"))
@@ -90,7 +127,15 @@ end
 
 fs = mount:option(DummyValue, "fstype", translate("Filesystem"))
 fs.cfgvalue = function(self, section)
-	return Value.cfgvalue(self, section) or "?"
+	local v, e
+
+	v = m.uci:get("fstab", section, "uuid")
+	v = v and v:lower() or m.uci:get("fstab", section, "label")
+	v = v or m.uci:get("fstab", section, "device")
+
+	e = v and devices[v]
+
+	return e and e.type or m.uci:get("fstab", section, "fstype") or "?"
 end
 
 op = mount:option(DummyValue, "options", translate("Options"))
@@ -100,8 +145,14 @@ end
 
 rf = mount:option(DummyValue, "is_rootfs", translate("Root"))
 rf.cfgvalue = function(self, section)
-	return Value.cfgvalue(self, section) == "1"
-		and translate("yes") or translate("no")
+	local target = m.uci:get("fstab", section, "target")
+	if target == "/" then
+		return translate("yes")
+	elseif target == "/overlay" then
+		return translate("overlay")
+	else
+		return translate("no")
+	end
 end
 
 ck = mount:option(DummyValue, "enabled_fsck", translate("Check"))
@@ -139,7 +190,12 @@ dev.cfgvalue = function(self, section)
 	if v then return "Label: %s" % v end
 
 	v = Value.cfgvalue(self, section) or "?"
-	return size[v] and "%s (%s MB)" % {v, size[v]} or v
+	e = v and devices[v]
+	if v and e and e.size then
+		return "%s (%s MB)" % {v, e.size}
+	else
+		return v
+	end
 end
 
 return m

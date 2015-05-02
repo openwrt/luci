@@ -146,8 +146,7 @@
 				} else {
 					// should have data because status changed
 					// so update screen
-					if (data)
-						_data2elements(data);
+					if (data) { _data2elements(data); }
 				}
 				// make me invisible
 				obj.parentNode.style.display = "none";
@@ -155,20 +154,19 @@
 		);
 	}
 
-	var ddns_ov_XHR = new XHR();
 	// force to immediate show status on page load (not waiting for XHR.poll)
-	ddns_ov_XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
-			_data2elements(data);
+			if (data) { _data2elements(data); }
 		}
 	);
 
 	// define only ONE XHR.poll in a page because if one is running it blocks the other one
 	// optimum is to define on Map or Section Level from here you can reach all elements
 	// we need update every 15 seconds only
-	ddns_ov_XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
 		function(x, data) {
-			_data2elements(data);
+			if (data) { _data2elements(data); }
 		}
 	);
 

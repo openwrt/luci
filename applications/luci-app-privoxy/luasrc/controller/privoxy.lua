@@ -7,26 +7,16 @@ local NX   = require "nixio"
 local NXFS = require "nixio.fs"
 local HTTP = require "luci.http"
 local UCI  = require "luci.model.uci"
+local UTIL = require "luci.util"
 local SYS  = require "luci.sys"
 
 PRIVOXY_MIN = "3.0.22-0"	-- minimum version of service required
 
 function index()
-	local _sys	= require "luci.sys"
-	local _verinst	= _sys.exec([[opkg list-installed ]] .. "privoxy" .. [[ | cut -d " " -f 3 ]])
-	local _cmd 	= [[opkg compare-versions "]] .. _verinst .. [[" ">=" "]] .. "3.0.22-0" .. [["]]
-	local _verok	= tonumber(_sys.call(_cmd))
-
-	-- check config file and version
-	if not nixio.fs.access("/etc/config/privoxy") or (_verok == 0) then
-		entry( {"admin", "services", "privoxy"}, cbi("privoxy/apperror",
-			{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true }), _("Privoxy WEB proxy"), 59)
-	else
-		entry( {"admin", "services", "privoxy"}, cbi("privoxy/detail"), _("Privoxy WEB proxy"), 59)
-		entry( {"admin", "services", "privoxy", "logview"}, call("logread") ).leaf = true
-		entry( {"admin", "services", "privoxy", "startstop"}, call("startstop") ).leaf = true
-		entry( {"admin", "services", "privoxy", "status"}, call("get_pid") ).leaf = true
-	end
+	entry( {"admin", "services", "privoxy"}, cbi("privoxy"), _("Privoxy WEB proxy"), 59)
+	entry( {"admin", "services", "privoxy", "logview"}, call("logread") ).leaf = true
+	entry( {"admin", "services", "privoxy", "startstop"}, call("startstop") ).leaf = true
+	entry( {"admin", "services", "privoxy", "status"}, call("get_pid") ).leaf = true
 end
 
 -- called by XHR.get from detail_logview.htm
@@ -80,18 +70,71 @@ function get_pid(from_lua)
 	end
 end
 
--- get the "name" of the current active theme
-function get_theme()
-	local _uci  = UCI.cursor()
-	local _base = _uci:get("luci", "main", "mediaurlbase")	-- only pathname
-	_uci:unload("luci")
+-- compare versions using "<=" "<" ">" ">=" "=" "<<" ">>"
+function ipkg_ver_compare(ver1, comp, ver2)
+	if not ver1 or not (#ver1 > 0)
+	or not ver2 or not (#ver2 > 0)
+	or not comp or not (#comp > 0) then return nil end
+	-- correct compare string
+	if comp == "<>" or comp == "><" or comp == "!=" or comp == "~=" then comp = "~="
+	elseif comp == "<=" or comp == "<" or comp == "=<" then comp = "<="
+	elseif comp == ">=" or comp == ">" or comp == "=>" then comp = ">="
+	elseif comp == "="  or comp == "==" then comp = "=="
+	elseif comp == "<<" then comp = "<"
+	elseif comp == ">>" then comp = ">"
+	else return nil end
 
-	for k, v in pairs(luci.config.themes) do
-		if k:sub(1, 1) ~= "." and v == _base then
-			return k
+	local av1 = UTIL.split(ver1, "[%.%-]", nil, true)
+	local av2 = UTIL.split(ver2, "[%.%-]", nil, true)
+
+	for i = 1, math.max(table.getn(av1),table.getn(av2)), 1  do
+		local s1 = av1[i] or ""
+		local s2 = av2[i] or ""
+		local n1 = tonumber(s1)
+		local n2 = tonumber(s2)
+
+		-- one numeric and other empty string then set other to 0
+		if n1 and not n2 and (not s2 or #s2 == 0) then n2 = 0 end
+		if n2 and not n1 and (not s1 or #s1 == 0) then n1 = 0 end
+
+		local nc = (n1 and n2)	-- numeric compare
+
+		if nc then
+			-- first "not equal" found return true
+			if comp == "~=" and (n1 ~= n2) then return true end
+			-- first "lower" found return true
+			if (comp == "<" or comp == "<=") and (n1 < n2) then return true end
+			-- first "greater" found return true
+			if (comp == ">" or comp == ">=") and (n1 > n2) then return true end
+			-- not equal then return false
+			if (n1 ~= n2) then return false end
+		else
+			if comp == "~=" and (s1 ~= s2) then return true end
+			if (comp == "<" or comp == "<=") and (s1 < s2) then return true end
+			if (comp == ">" or comp == ">=") and (s1 > s2) then return true end
+			if (s1 ~= s2) then return false end
 		end
 	end
-	return nil
+	-- all equal then true
+	return true
+end
+
+-- read version information for given package if installed
+function ipkg_ver_installed(pkg)
+	local version = nil
+	local control = io.open("/usr/lib/opkg/info/%s.control" % pkg, "r")
+	if control then
+		local ln
+		repeat
+			ln = control:read("*l")
+			if ln and ln:match("^Version: ") then
+				version = ln:gsub("^Version: ", "")
+				break
+			end
+		until not ln
+		control:close()
+	end
+	return version
 end
 
 -- replacement of build-in Flag.parse of cbi.lua

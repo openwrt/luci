@@ -12,5 +12,5 @@ function proto.is_installed(self)
 end
 
 function proto.opkg_package(self)
-	return "hnetd"
+	return "hnet-full"
 end
