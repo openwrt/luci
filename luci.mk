@@ -182,7 +182,7 @@ define LuciTranslation
     CATEGORY:=LuCI
     TITLE:=$(PKG_NAME) - $(1) translation
     HIDDEN:=1
-    DEFAULT:=LUCI_LANG_$(1)||ALL
+    DEFAULT:=LUCI_LANG_$(1)||(ALL&&m)
     DEPENDS:=$(PKG_NAME)
     PKGARCH:=all
   endef

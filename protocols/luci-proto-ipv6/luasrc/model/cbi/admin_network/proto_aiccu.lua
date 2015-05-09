@@ -69,21 +69,21 @@ nat = section:taboption("general", Flag, "nat",
 	translate("Behind NAT"),
 	translate("The tunnel end-point is behind NAT, defaults to disabled and only applies to AYIYA"))
 nat.optional = true
-nat.default = disabled
+nat.default = nat.disabled
 
 
 requiretls = section:taboption("general", Flag, "requiretls",
 	translate("Require TLS"),
 	translate("Connection to server fails when TLS cannot be used"))
 requiretls.optional = true
-requiretls.default = requiretls.enabled
+requiretls.default = requiretls.disabled
 
 
 verbose = section:taboption("advanced", Flag, "verbose",
 	translate("Verbose"),
 	translate("Verbose logging by aiccu daemon"))
 verbose.optional = true
-verbose.default = disabled
+verbose.default = verbose.disabled
 
 
 ntpsynctimeout = section:taboption("advanced", Value, "ntpsynctimeout",
