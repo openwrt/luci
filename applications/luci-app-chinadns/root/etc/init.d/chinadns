@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
 
+SERVICE_DAEMONIZE=1
 START=90
 STOP=15
 
@@ -13,14 +14,11 @@ start()
 
 	[ $enabled = '0' ] && exit 0
 
-	/usr/bin/chinadns \
-		-c /etc/chinadns_chnroute.txt \
-		-p $port \
-		-vv \
-		-s "$dns" 2>&1 | logger -t ChinaDNS &
+	service_start /usr/bin/chinadns -c /etc/chinadns_chnroute.txt -p $port -s "$dns"
+
 }
 
 stop()
 {
-	killall -9 /usr/bin/chinadns
+	service_stop /usr/bin/chinadns
 }
