@@ -6,6 +6,9 @@ m = Map("fwknopd", translate("Firewall Knock Operator"))
 s = m:section(TypedSection, "global", translate("Enable Uci/Luci control")) -- Set uci control on or off
 s.anonymous=true
 s:option(Flag, "uci_enabled", translate("Enable config overwrite"), translate("When unchecked, the config files in /etc/fwknopd will be used as is, ignoring any settings here."))
+qr = s:option(DummyValue, "note0", "dummy")
+qr.template = "fwknopd-qr"
+qr:depends("uci_enabled", "1")
 
 s = m:section(TypedSection, "access", translate("access.conf stanzas")) -- set the access.conf settings
 s.anonymous=true
