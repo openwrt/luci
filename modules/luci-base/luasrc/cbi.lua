@@ -324,6 +324,7 @@ function Map.__init__(self, config, ...)
 				luci.http.redirect(url)
 			end
 		end
+		self.save = false
 	end
 
 	if not ok then
