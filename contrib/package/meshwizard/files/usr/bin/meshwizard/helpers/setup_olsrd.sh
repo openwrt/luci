@@ -115,12 +115,16 @@ setup_watchdog() {
 }
 
 setup_jsoninfo() {
-    # Setup jsoninfo
+	# Setup jsoninfo
+	proto="$1"
 	uci batch <<- EOF
 		set $cfg.olsrd_jsoninfo=LoadPlugin
 		set $cfg.olsrd_jsoninfo.library="olsrd_jsoninfo.so.0.0"
 	EOF
-    uci_commitverbose "Setup olsr jsoninfo plugin" $cfg
+	if [ "$proto" = "6" ]; then
+		uci set $cfg.olsrd_jsoninfo.port='9091'
+	fi
+	uci_commitverbose "Setup olsr jsoninfo plugin" $cfg
 }
 
 
@@ -140,6 +144,6 @@ for proto in $protocols; do
     setup_nameservice
     setup_dyngw_plain
     setup_watchdog
-    setup_jsoninfo
+    setup_jsoninfo $proto
 
 done
