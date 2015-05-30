@@ -33,7 +33,7 @@ for i in `seq 0 $posIB`; do
 			uci show meshwizard.netconfig | grep $IBwifi | while read line; do
 				oldline=$(echo $line | cut -d "=" -f 1)
 				uci set $oldline=""
-				newline=$(echo $line |sed "s/$IBwifi/$syswifi/g")
+				newline=$(echo $line |sed -e "s/$IBwifi/$syswifi/g" -e "s/'//g")
 				uci set $newline
 			done
 		;;
