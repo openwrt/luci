@@ -12,6 +12,7 @@ require("luci.http")
 local fs         = require("nixio.fs")
 local uci        = require("luci.model.uci")
 local datatypes  = require("luci.cbi.datatypes")
+local dispatcher = require("luci.dispatcher")
 local class      = util.class
 local instanceof = util.instanceof
 
@@ -307,8 +308,30 @@ function Map.__init__(self, config, ...)
 
 	self.changed = false
 
-	if not self.uci:load(self.config) then
-		error("Unable to read UCI data: " .. self.config)
+	local path = "%s/%s" %{ self.uci:get_confdir(), self.config }
+	if fs.stat(path, "type") ~= "reg" then
+		fs.writefile(path, "")
+	end
+
+	local ok, err = self.uci:load(self.config)
+	if not ok then
+		local url = dispatcher.build_url(unpack(dispatcher.context.request))
+		local source = self:formvalue("cbi.source")
+		if type(source) == "string" then
+			fs.writefile(path, source:gsub("\r\n", "\n"))
+			ok, err = self.uci:load(self.config)
+			if ok then
+				luci.http.redirect(url)
+			end
+		end
+		self.save = false
+	end
+
+	if not ok then
+		self.template   = "cbi/error"
+		self.error      = err
+		self.source     = fs.readfile(path) or ""
+		self.pageaction = false
 	end
 end
 

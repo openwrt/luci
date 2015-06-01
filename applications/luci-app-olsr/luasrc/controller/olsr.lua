@@ -80,12 +80,15 @@ end
 function action_json()
 	local http = require "luci.http"
 	local utl = require "luci.util"
-	local uci = require "luci.model.uci".cursor_state()
+	local uci = require "luci.model.uci".cursor()
 	local jsonreq4
 	local jsonreq6
 
-	jsonreq4 = utl.exec("echo /status | nc 127.0.0.1 9090")
-	jsonreq6 = utl.exec("echo /status | nc ::1 9090")
+	local v4_port = uci:get("olsrd", "olsrd_jsoninfo", "port") or 9090
+	local v6_port = uci:get("olsrd6", "olsrd_jsoninfo", "port") or 9090
+
+	jsonreq4 = utl.exec("(echo /status | nc 127.0.0.1 " .. v4_port .. ") 2>/dev/null" )
+	jsonreq6 = utl.exec("(echo /status | nc ::1 " .. v6_port .. ") 2>/dev/null")
 	http.prepare_content("application/json")
 	if not jsonreq4 or jsonreq4 == "" then
 		jsonreq4 = "{}"
@@ -368,8 +371,11 @@ function fetch_jsoninfo(otable)
 	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
 	local jsonreq4 = ""
 	local jsonreq6 = ""
-	jsonreq4 = utl.exec("echo /" .. otable .. " | nc 127.0.0.1 9090")
-	jsonreq6 = utl.exec("echo /" .. otable .. " | nc ::1 9090")
+	local v4_port = uci:get("olsrd", "olsrd_jsoninfo", "port") or 9090
+	local v6_port = uci:get("olsrd6", "olsrd_jsoninfo", "port") or 9090
+
+	jsonreq4 = utl.exec("(echo /" .. otable .. " | nc 127.0.0.1 " .. v4_port .. ") 2>/dev/null")
+	jsonreq6 = utl.exec("(echo /" .. otable .. " | nc ::1 " .. v6_port .. ") 2>/dev/null")
 	local jsondata4 = {}
 	local jsondata6 = {}
 	local data4 = {}
