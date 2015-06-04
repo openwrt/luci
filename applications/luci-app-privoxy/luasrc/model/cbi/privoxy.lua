@@ -39,6 +39,7 @@ if not nixio.fs.access("/etc/config/privoxy") or not VEROK then
 	local f	= SimpleForm("_no_config")
 	f.title = TITLE
 	f.description = DESC
+	f.embedded = true
 	f.submit = false
 	f.reset	 = false
 
