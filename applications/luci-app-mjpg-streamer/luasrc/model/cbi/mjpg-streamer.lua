@@ -5,19 +5,19 @@ m = Map("mjpg-streamer", "MJPG-streamer", translate("mjpg streamer is a streamin
 
 --- General settings ---
 
-section_gen = m:section(TypedSection, "mjpg-streamer", "General")
+section_gen = m:section(TypedSection, "mjpg-streamer", translate("General"))
     section_gen.addremove=false
     section_gen.anonymous=true
 
-enabled = section_gen:option(Flag, "enabled", "Enabled", "Enable MJPG-streamer")
+enabled = section_gen:option(Flag, "enabled", translate("Enabled"), translate("Enable MJPG-streamer"))
 
-input = section_gen:option(ListValue, "input",  "Input plugin")
+input = section_gen:option(ListValue, "input",  translate("Input plugin"))
    input:depends("enabled", "1")
    input:value("uvc", "UVC")
    ---input:value("file", "File")
    input.optional = false
 
-output = section_gen:option(ListValue, "output",  "Output plugin")
+output = section_gen:option(ListValue, "output",  translate("Output plugin"))
    output:depends("enabled", "1")
    output:value("http", "HTTP")
    output:value("file", "File")
@@ -26,7 +26,7 @@ output = section_gen:option(ListValue, "output",  "Output plugin")
 
 --- Plugin settings ---
 
-s = m:section(TypedSection, "mjpg-streamer", "Plugin settings")
+s = m:section(TypedSection, "mjpg-streamer", translate("Plugin settings"))
     s.addremove=false
     s.anonymous=true
 
