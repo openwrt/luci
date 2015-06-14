@@ -1156,11 +1156,13 @@ function fu.write(self, section, value)
 end
 
 -- retry_count (NEW) -- ########################################################
-rc = ns:taboption("timer", Value, "retry_count",
-	translate("Error Retry Counter"),
-	translate("On Error the script will stop execution after given number of retrys") )
-rc.default = 5
-rc.rmempty = false	-- validate ourselves for translatable error messages
+rc = ns:taboption("timer", Value, "retry_count")
+rc.title	= translate("Error Retry Counter")
+rc.description	= translate("On Error the script will stop execution after given number of retrys")
+		.. "<br />"
+		.. translate("The default setting of '0' will retry infinite.")
+rc.default	= 0
+rc.rmempty	= false	-- validate ourselves for translatable error messages
 function rc.validate(self, value)
 	if not DTYP.uinteger(value) then
 		return nil, err_tab_timer(self) .. translate("minimum value '0'")
