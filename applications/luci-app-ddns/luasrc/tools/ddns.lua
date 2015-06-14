@@ -98,8 +98,7 @@ end
 
 -- compare versions using "<=" "<" ">" ">=" "=" "<<" ">>"
 function ipkg_ver_compare(ver1, comp, ver2)
-	if not ver1 or not (#ver1 > 0)
-	or not ver2 or not (#ver2 > 0)
+	if not ver1 or not ver2
 	or not comp or not (#comp > 0) then return nil end
 	-- correct compare string
 	if comp == "<>" or comp == "><" or comp == "!=" or comp == "~=" then comp = "~="
@@ -116,33 +115,19 @@ function ipkg_ver_compare(ver1, comp, ver2)
 	for i = 1, math.max(table.getn(av1),table.getn(av2)), 1  do
 		local s1 = av1[i] or ""
 		local s2 = av2[i] or ""
-		local n1 = tonumber(s1)
-		local n2 = tonumber(s2)
 
-		-- one numeric and other empty string then set other to 0
-		if n1 and not n2 and (not s2 or #s2 == 0) then n2 = 0 end
-		if n2 and not n1 and (not s1 or #s1 == 0) then n1 = 0 end
-
-		local nc = (n1 and n2)	-- numeric compare
-
-		if nc then
-			-- first "not equal" found return true
-			if comp == "~=" and (n1 ~= n2) then return true end
-			-- first "lower" found return true
-			if (comp == "<" or comp == "<=") and (n1 < n2) then return true end
-			-- first "greater" found return true
-			if (comp == ">" or comp == ">=") and (n1 > n2) then return true end
-			-- not equal then return false
-			if (n1 ~= n2) then return false end
-		else
-			if comp == "~=" and (s1 ~= s2) then return true end
-			if (comp == "<" or comp == "<=") and (s1 < s2) then return true end
-			if (comp == ">" or comp == ">=") and (s1 > s2) then return true end
-			if (s1 ~= s2) then return false end
-		end
+		-- first "not equal" found return true
+		if comp == "~=" and (s1 ~= s2) then return true end
+		-- first "lower" found return true
+		if (comp == "<" or comp == "<=") and (s1 < s2) then return true end
+		-- first "greater" found return true
+		if (comp == ">" or comp == ">=") and (s1 > s2) then return true end
+		-- not equal then return false
+		if (s1 ~= s2) then return false end
 	end
-	-- all equal then true
-	return true
+
+	-- all equal and not compare greater or lower then true
+	return not (comp == "<" or comp == ">")
 end
 
 -- read version information for given package if installed

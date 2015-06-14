@@ -15,7 +15,7 @@ local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 local UTIL = require "luci.util"
 
-DDNS_MIN = "2.2.0-1"	-- minimum version of service required
+DDNS_MIN = "2.4.2-1"	-- minimum version of service required
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
