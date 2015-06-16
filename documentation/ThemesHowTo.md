@@ -1,5 +1,5 @@
 # HowTo: Create Themes
-*Note:* You should read the [wiki:Documentation/Modules Module Reference] and the [wiki:Documentation/Templates Template Reference] before.
+*Note:* You should read the [Module Reference](Modules.md) and the [Template Reference](Templates.md) before.
 
 We assume you want to call your new theme _mytheme_. Make sure you replace this by your module name everytime this is mentionend in this Howto.
 
