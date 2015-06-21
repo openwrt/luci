@@ -20,5 +20,5 @@ function index()
 end
 
 function rediag()
-	os.execute("/etc/init.d/ppp_syncdiag restart")
+	os.execute("killall -9 pppd")
 end

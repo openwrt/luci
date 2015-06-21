@@ -7,6 +7,7 @@
 		XHR.get('<%=luci.dispatcher.build_url("admin", "network", "macvlan_rediag")%>', null,
 			function(x, st)
 			{
+				window.location.href='<%=luci.dispatcher.build_url("admin", "network", "network")%>';
 			}
 		);
 	}
