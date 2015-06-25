@@ -1,0 +1,90 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2015 GuoGuo <gch981213@gmail.com>
+# Xware3 启动脚本
+
+START=95
+STOP=15
+
+mount_cfg=/tmp/xware3/thunder_mounts.cfg
+log_cfg=/tmp/xware3/log.ini
+
+#检查是否启用并获取主程序目录 CFG_TYPE=xware3_general
+load_general() {
+	local cfg="$1"
+	config_get_bool enabled "$cfg" 'enabled' '0'
+	[ $enabled = '0' ] && {
+		echo "Xware3 is not enabled.Exit now."
+		exit 1
+	}
+	config_get prog_path "$cfg" 'prog_path'
+}
+
+#日志文件配置生成 CFG_TYPE=xware3_log
+gen_log_cfg() {
+	local cfg="$1"
+
+	config_get level "$cfg" 'level' 'WARN'
+	config_get log_file "$cfg" 'file' '/tmp/etm.log'
+	config_get max_file_size "$cfg" 'max_file_size' '2M'
+	config_get max_file_number "$cfg" 'max_file_number' '2'
+	
+	cat > $log_cfg <<EOF
+level=$level
+file=$log_file
+max_file_size=$max_file_size
+max_file_number=$max_file_number
+EOF
+}
+
+#挂载点配置生成 CFG_TYPE=xware3_mount
+gen_mnt_cfg() {
+	local cfg="$1"
+	
+	config_get available_mounts "$cfg" 'available_mounts'
+	
+	echo "available_mounts
+{" > $mount_cfg
+	for i in $available_mounts
+	do
+		echo "	$i" >>  $mount_cfg
+	done
+	echo "}" >>  $mount_cfg
+}
+
+
+
+start() {
+	config_load 'xware3'
+	config_foreach load_general 'xware3_general'
+
+	[ -z '$prog_path' ] && {
+		echo "Config file invaled:Please specifiy the path of Xware main program."
+		exit 1
+	}
+	
+	[ -f $prog_path/etm_xware ] && [ -f $prog_path/xware_bash.sh ] || {
+		echo "Please confirm that etm_xware and xware_bash.sh are copied to $prog_path ."
+		exit 1
+	}
+	chmod +x $prog_path/etm_xware
+	chmod +x $prog_path/xware_bash.sh
+
+	mkdir -p /tmp/xware3/
+
+	touch $log_cfg
+	ln -sfn $log_cfg $prog_path/log.ini
+	
+	touch $mount_cfg
+	ln -sfn $mount_cfg $prog_path/thunder_mounts.cfg
+
+	config_foreach gen_log_cfg 'xware3_log'
+	config_foreach gen_mnt_cfg 'xware3_mount'
+
+	$prog_path/xware_bash.sh &
+}
+
+stop() {
+	killall -9 xware_bash.sh
+	killall etm_xware
+	killall -9 vod_httpserver
+}

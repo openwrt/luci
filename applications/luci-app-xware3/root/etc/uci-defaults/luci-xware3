@@ -1,0 +1,11 @@
+#!/bin/sh 
+
+uci -q batch <<-EOF >/dev/null
+          delete ucitrack.@xware3[-1]
+          add ucitrack xware3
+          set ucitrack.@xware3[-1].init=xware3
+          commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcahe
+exit 0
