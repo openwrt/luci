@@ -50,7 +50,7 @@ s.anonymous = true
 
 s:option(Flag, "enabled", "启用 迅雷远程下载")
 
-s:option(Value, "prog_path", "Xware3主程序路径", "<br />Xware3主程序所在路径，例如：/mnt/sda1/xware3。请确认已经将Xware3的主程序etm_xware以及xware_bash.sh复制到该目录下。")
+s:option(Value, "prog_path", "Xware3主程序路径", "<br />Xware3主程序所在路径，例如：/mnt/sda1/xware3。请确认已经将Xware3的主程序etm_xware复制到该目录下。")
 
 if running then
 	s:option(DummyValue,"opennewwindow" ,"<br /><p align=\"justify\"><script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"获取启动信息\" onclick=\"window.open('http://'+window.location.host+':19000/getsysinfo')\" /></p>", detailInfo)
