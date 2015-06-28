@@ -299,7 +299,7 @@ end
 				if bitrate ~= "N/A" then
 					bitrate = ( bitrate / 1000 ).."Mb/s"
 				end
-				local interface = netiwdata.ifname or "N/A"
+				local interface = net.iwinfo.ifname or "N/A"
 	%>
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
 						<td class="cbi-value-field" id="<%=net:ifname()%>-signal"><%=signal_string%></td>
