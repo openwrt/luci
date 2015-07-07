@@ -7,7 +7,6 @@
 . $dir/functions.sh
 
 wan_is_olsr=$(uci -q get meshwizard.netconfig.wan_config)
-lan_is_olsr=$(uci -q get meshwizard.netconfig.lan_config)
 
 config_load firewall
 
@@ -34,7 +33,7 @@ handle_fwzone() {
 		fi
 	fi
 
-	if [ "$name" == "lan" ] && [ "$lan_is_olsr" == 1 ]; then
+	if [ "$name" == "lan" ] && [ "$lan_is_olsr" == "1" ]; then
 			uci set firewall.$1.network=' ' && uci_commitverbose "LAN is used for olsr, removed the lan interface from zone lan" firewall
 	fi
 }
