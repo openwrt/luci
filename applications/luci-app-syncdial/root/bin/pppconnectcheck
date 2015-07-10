@@ -1,29 +1,28 @@
 #!/bin/sh
-#PPPoE interfaces check script. written by 981213
+#PPPoE拨号在线接口数检测及重拨脚本
+#Copyright (C) 2015 GuoGuo<gch981213@gmail.com>
 . /lib/functions.sh
 
-[ -f /etc/config/macvlan ] || {
+[ -f /etc/config/syncdial ] || {
 	echo "You are missing configuration file /etc/config/macvlan"
 	return 1
 }
 
-config_load "macvlan"
-config_get_bool DIAGCHK config diagchk 0
-config_get DIAGNUM config diagnum
-config_get_bool ENABLED config enabled 0
-[ "$DIAGCHK" = "0" ] && {
-	echo "diag check disabled."
+config_load "syncdial"
+config_get_bool dialchk config dialchk 0
+config_get dial config dialnum
+[ "$dialchk" = "0" ] && {
+	echo "dial check disabled."
 	return 0
 }
 [ $(ps | grep -c "pppconnectcheck") -gt 3 ] && logger -t PPPoE-IFChecker "Another checker is running.exit." && return 1
-sleep 40
+sleep 50
 PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
 logger -t PPPoE-IFChecker "$PPPUPNUM interfaces are online."
-if [ "$PPPUPNUM" -lt $DIAGNUM ]
+if [ "$PPPUPNUM" -lt $dial ]
 then
 	logger -t PPPoE-IFChecker "Reconnect interfaces."
-	[ "$ENABLED" = "1" ] && /etc/init.d/ppp_syncdiag restart | logger -t PPPoE-IFChecker
-	[ "$ENABLED" = "0" ] && ifdown wan && ifup wan
+	killall -9 pppd
 	logger -t PPPoE-IFChecker "Interfaces restarted."
 	logger -t PPPoE-IFChecker "Another checker will be started 10s later."
 	sleep 10 && pppconnectcheck &
