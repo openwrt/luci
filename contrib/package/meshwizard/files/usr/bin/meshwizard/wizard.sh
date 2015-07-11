@@ -10,7 +10,7 @@
 # You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 echo "
-/* Meshwizard 0.3.0 */
+/* Meshwizard 0.3.1 */
 "
 
 # config
@@ -33,6 +33,8 @@ cleanup=$(uci -q get meshwizard.general.cleanup)
 
 # Rename wifi interfaces
 $dir/helpers/rename-wifi.sh
+
+export lan_is_olsr="$(uci -q get meshwizard.netconfig.lan_config)"
 
 # Get community
 community="$(uci -q get meshwizard.community.name || uci -q get freifunk.community.name)"
@@ -114,6 +116,13 @@ for net in $networks; do
 	$dir/helpers/setup_olsrd_interface.sh $net
 
 	net_dhcp=$(uci -q get meshwizard.netconfig.${net}_dhcp)
+	export ${net}_dhcp=$net_dhcp
+
+        if [ "$net" = "lan" ] && [ "$lan_is_olsr" = "1" ]; then
+                uci -q set dhcp.lan.ignore="1"
+                uci_commitverbose "Disable DHCP on LAN because it is an olsr interface." dhcp
+        fi
+
 	if [ "$net_dhcp" == 1 ]; then
 		$dir/helpers/setup_dhcp.sh $net
 	fi

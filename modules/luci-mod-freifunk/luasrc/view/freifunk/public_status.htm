@@ -49,6 +49,32 @@ for _, dev in ipairs(devices) do
 end
 local has_iwinfo = pcall(require, "iwinfo")
 
+
+-- Find default routes
+
+local _, r, def4, def6
+
+for _, r in ipairs(ip.routes({ type = 1, dest_exact = "0.0.0.0/0" })) do
+	def4 = {
+		gateway = r.gw:string(),
+		dest = r.dest:string(),
+		dev = r.dev,
+		metr = r.metric or 0
+	}
+	break
+end
+
+for _, r in ipairs(ip.routes({ type = 1, dest_exact = "::/0" })) do
+	def6 = {
+		gateway = r.gw:string(),
+		dest = r.dest:string(),
+		dev = r.dev,
+		metr = r.metric or 0
+	}
+	break
+end
+
+
 if luci.http.formvalue("status") == "1" then
 	local rv = { }
 	for dev in pairs(netdevs) do
@@ -66,30 +92,6 @@ if luci.http.formvalue("status") == "1" then
 		rv[#rv+1] = j
 	end
 
-
-	-- Find default routes
-
-	local _, r, def4, def6
-
-	for _, r in ipairs(ip.routes({ type = 1, dest_exact = "0.0.0.0/0" })) do
-		def4 = {
-			gateway = r.gw:string(),
-			dest = r.dest:string(),
-			dev = r.dev,
-			metr = r.metric or 0
-		}
-		break
-	end
-
-	for _, r in ipairs(ip.routes({ type = 1, dest_exact = "::/0" })) do
-		def6 = {
-			gateway = r.gw:string(),
-			dest = r.dest:string(),
-			dev = r.dev,
-			metr = r.metric or 0
-		}
-		break
-	end
 
 	rv[#rv+1] = {
 		time = time,
@@ -297,7 +299,7 @@ end
 				if bitrate ~= "N/A" then
 					bitrate = ( bitrate / 1000 ).."Mb/s"
 				end
-				local interface = net.iwdata.ifname or "N/A"
+				local interface = net.iwinfo.ifname or "N/A"
 	%>
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
 						<td class="cbi-value-field" id="<%=net:ifname()%>-signal"><%=signal_string%></td>
@@ -323,7 +325,7 @@ end
 		<div class="cbi-section">
 			<div class="cbi-section-node">
 
-<% if not defroutev4 and not defroutev6 then %>
+<% if not def4 and not def6 then %>
 	<%:No default routes known.%>
 <%else%>
 				<table class="cbi-section-table">
@@ -334,23 +336,22 @@ end
 							<th class="cbi-section-table-cell"><%:Metric%></th>
 						</tr>
 
-	<% if defroutev4 then %>
-
+	<% if def4 then %>
 						<tr class="cbi-section-table-row cbi-rowstyle-1">
-							<td class="cbi-value-field" id="v4dst"><%=defroutev4.dest%></td>
-							<td class="cbi-value-field" id="v4dev"><%=defroutev4.device%></td>
-							<td class="cbi-value-field" id="v4gw"><%=defroutev4.gateway%></td>
-							<td class="cbi-value-field" id="v4metr"><%=defroutev4.metric%></td>
+							<td class="cbi-value-field" id="v4dst"><%=def4.dest%></td>
+							<td class="cbi-value-field" id="v4dev"><%=def4.dev%></td>
+							<td class="cbi-value-field" id="v4gw"><%=def4.gateway%></td>
+							<td class="cbi-value-field" id="v4metr"><%=def4.metr%></td>
 						</tr>
 
 	<% end
-	if defroutev6 then %>
+	if def6 then %>
 
 						<tr class="cbi-section-table-row cbi-rowstyle-2">
-							<td class="cbi-value-field" id="v6dst"><%=defroutev6.dest%></td>
-							<td class="cbi-value-field" id="v6dev"><%=defroutev6.device%></td>
-							<td class="cbi-value-field" id="v6gw"><%=defroutev6.nexthop%></td>
-							<td class="cbi-value-field" id="v6metr"><%=defroutev6.metric%></td>
+							<td class="cbi-value-field" id="v6dst"><%=def6.dest%></td>
+							<td class="cbi-value-field" id="v6dev"><%=def6.dev%></td>
+							<td class="cbi-value-field" id="v6gw"><%=def6.gateway%></td>
+							<td class="cbi-value-field" id="v6metr"><%=def6.metr%></td>
 						</tr>
 
 	<% end %>

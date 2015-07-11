@@ -44,7 +44,7 @@ set_defaults() {
 		a="$(echo $option |cut -d '=' -f1)"
 		b="$(echo $option |cut -d '=' -f2-)"
 		b="${b//_/ }"
-		string_contains "$a" "_LENGTH" && return
+		string_contains "$a" "_LENGTH" && continue
 		string_contains "$a" "_ITEM" && {
 		    # special threatment for lists. use add_list and remove the
 		    # item index (_ITEMx).
