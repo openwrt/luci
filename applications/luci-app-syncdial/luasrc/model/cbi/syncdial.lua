@@ -20,7 +20,7 @@ s.anonymous = true
 switch = s:option(Flag, "enabled", "启用")
 switch.rmempty = false
 
-s:option(Flag, "force_redial", "强制全部重拨", "如果有接口掉线则强制所有接口下线重拨。").rmempty = false
+--s:option(Flag, "force_redial", "强制全部重拨", "如果有接口掉线则强制所有接口下线重拨。").rmempty = false
 
 wannum = s:option(Value, "wannum", "虚拟WAN接口数量")
 wannum.datatype = "range(0,4)"
