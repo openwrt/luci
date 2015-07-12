@@ -70,8 +70,8 @@ EOF
 		socks5 | \
 		shadowsocks)
 			[ ! -z $redsocks2_login ] && {
-				echo "login = $redsocks2_login;" >> $CFG_FILE
-				echo "password = $redsocks2_password;" >> $CFG_FILE
+				echo "login = \"$redsocks2_login\";" >> $CFG_FILE
+				echo "password = \"$redsocks2_password\";" >> $CFG_FILE
 			}
 			;;
 		direct)
@@ -146,8 +146,8 @@ EOF
 		socks5 | \
 		shadowsocks)
 			[ ! -z $redsocks2_login ] && {
-				echo "login = $redsocks2_login;" >> $CFG_FILE
-				echo "password = $redsocks2_password;" >> $CFG_FILE
+				echo "login = \"$redsocks2_login\";" >> $CFG_FILE
+				echo "password = \"$redsocks2_password\";" >> $CFG_FILE
 			}
 			;;
 		direct)
