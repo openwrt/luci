@@ -22,7 +22,7 @@ style = (style and #style > 0) and style or "s"
 --
 if iface then
 	style = style:gsub("[^%w]", "")
-	iface = iface:gsub("[^%w%.%-]", "")
+	iface = iface:gsub("[^%w%.%-%_]", "")
 
 	luci.http.prepare_content("image/png")
 
