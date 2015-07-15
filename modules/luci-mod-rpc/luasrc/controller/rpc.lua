@@ -43,13 +43,13 @@ function rpc_auth()
 	local ltn12   = require "luci.ltn12"
 	local util    = require "luci.util"
 
-	require "luci.config"
-
 	local loginstat
 
 	local server = {}
 	server.challenge = function(user, pass)
 		local sid, token, secret
+
+		require "luci.config"
 
 		if sys.user.checkpasswd(user, pass) then
 			local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
