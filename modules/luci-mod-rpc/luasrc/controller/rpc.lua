@@ -43,6 +43,8 @@ function rpc_auth()
 	local ltn12   = require "luci.ltn12"
 	local util    = require "luci.util"
 
+	require "luci.config"
+
 	local loginstat
 
 	local server = {}
