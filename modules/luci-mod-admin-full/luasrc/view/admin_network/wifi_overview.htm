@@ -183,7 +183,7 @@
 				for( var i = 0; i < st.length; i++ )
 				{
 					var iw = st[i];
-					var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && iw.mode != 'Unknown');
+					var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && iw.mode != 'Unknown' && !iw.disabled);
 					var p = iw.quality;
 					var q = is_assoc ? p : -1;
 
