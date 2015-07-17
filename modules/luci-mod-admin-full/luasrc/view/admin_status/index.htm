@@ -352,7 +352,7 @@
 					for (var nidx = 0; nidx < dev.networks.length; nidx++)
 					{
 						var net = dev.networks[nidx];
-						var is_assoc = (net.bssid != '00:00:00:00:00:00' && net.channel);
+						var is_assoc = (net.bssid != '00:00:00:00:00:00' && net.channel && !net.disabled);
 
 						var icon;
 						if (!is_assoc)
