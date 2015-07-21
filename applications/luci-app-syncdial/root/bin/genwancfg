@@ -61,6 +61,7 @@ apply_cfg() {
 	uci commit
 	/etc/init.d/network restart
 	/etc/init.d/firewall restart
+	mwan3 restart
 }
 
 general_config_load() {
