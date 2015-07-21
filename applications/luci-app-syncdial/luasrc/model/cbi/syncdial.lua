@@ -33,6 +33,9 @@ diagnum = s:option(Value, "dialnum", "最低在线接口数量", "如果在线�
 diagnum.datatype = "range(0,5)"
 diagnum.optional = false
 
+dialwait = s:option(Value, "dialwait", "重拨等待时间", "重拨时，接口全部下线后下一次拨号前的等待时间。单位：秒 最小值：5秒")
+dialwait.datatype = "and(uinteger,min(5))"
+dialwait.optional = false
 
 o = s:option(DummyValue, "_redial", "重新并发拨号")
 o.template = "syncdial/redial_button"
