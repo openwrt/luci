@@ -9,36 +9,6 @@ else
 	m = Map("shadowsocks-libev", translate("ShadowSocks-libev"), translate("ShadowSocks-libev is not running"))
 end
 
--- Global Setting
-s = m:section(TypedSection, "shadowsocks-libev", translate("Global Setting"))
-s.anonymous = true
-
-o = s:option(Flag, "enable", translate("Enable"))
-o.default = 1
-o.rmempty = false
-
-o = s:option(Value, "server", translate("Server Address"))
-o.datatype = "host"
-o.rmempty = false
-
-o = s:option(Value, "server_port", translate("Server Port"))
-o.datatype = "port"
-o.rmempty = false
-
-o = s:option(Value, "local_port", translate("Local Port"))
-o.datatype = "port"
-o.default = 1080
-o.rmempty = false
-
-o = s:option(Value, "timeout", translate("Connection Timeout"))
-o.datatype = "uinteger"
-o.default = 60
-o.rmempty = false
-
-o = s:option(Value, "password", translate("Password"))
-o.password = true
-o.rmempty = false
-
 e = {
 	"table",
 	"rc4",
@@ -59,26 +29,85 @@ e = {
 	"chacha20",
 }
 
+-- Global Setting
+s = m:section(TypedSection, "shadowsocks-libev", translate("Global Setting"))
+s.anonymous = true
+
+o = s:option(Flag, "enable", translate("Enable"))
+o.default = 1
+o.rmempty = false
+
+o = s:option(Value, "server", translate("Server Address"))
+o.datatype = "ipaddr"
+o.rmempty = false
+
+o = s:option(Value, "server_port", translate("Server Port"))
+o.datatype = "port"
+o.rmempty = false
+
+o = s:option(Value, "local_port", translate("Local Port"))
+o.datatype = "port"
+o.default = 1080
+o.rmempty = false
+
+o = s:option(Value, "timeout", translate("Connection Timeout"))
+o.datatype = "uinteger"
+o.default = 60
+o.rmempty = false
+
+o = s:option(Value, "password", translate("Password"))
+o.password = true
+o.rmempty = false
+
 o = s:option(ListValue, "encrypt_method", translate("Encrypt Method"))
 for i,v in ipairs(e) do
 	o:value(v)
 end
 o.rmempty = false
 
--- Proxy Setting
-s = m:section(TypedSection, "shadowsocks-libev", translate("Proxy Setting"))
-s.anonymous = true
-
-o = s:option(ListValue, "udp_relay", translate("Proxy Protocol"))
-o:value("0", translate("TCP only"))
-o:value("1", translate("TCP+UDP"))
-o.default = 1
-o.rmempty = false
-
 o = s:option(Value, "ignore_list", translate("Ignore List"))
 o:value("/dev/null", translate("Disabled"))
 o.default = "/dev/null"
 o.rmempty = false
+
+-- UDP Relay
+s = m:section(TypedSection, "shadowsocks-libev", translate("UDP Relay"))
+s.anonymous = true
+
+o = s:option(ListValue, "udp_mode", translate("Relay Mode"))
+o:value("0", translate("Disabled"))
+o:value("1", translate("Enabled"))
+o:value("2", translate("Custom"))
+o.default = 0
+o.rmempty = false
+
+o = s:option(Value, "udp_server", translate("Server Address"))
+o.datatype = "ipaddr"
+o:depends("udp_mode", 2)
+
+o = s:option(Value, "udp_server_port", translate("Server Port"))
+o.datatype = "port"
+o:depends("udp_mode", 2)
+
+o = s:option(Value, "udp_local_port", translate("Local Port"))
+o.datatype = "port"
+o.default = 1081
+o:depends("udp_mode", 2)
+
+o = s:option(Value, "udp_timeout", translate("Connection Timeout"))
+o.datatype = "uinteger"
+o.default = 60
+o:depends("udp_mode", 2)
+
+o = s:option(Value, "udp_password", translate("Password"))
+o.password = true
+o:depends("udp_mode", 2)
+
+o = s:option(ListValue, "udp_encrypt_method", translate("Encrypt Method"))
+for i,v in ipairs(e) do
+	o:value(v)
+end
+o:depends("udp_mode", 2)
 
 -- UDP Forward
 s = m:section(TypedSection, "shadowsocks-libev", translate("UDP Forward"))
