@@ -120,7 +120,9 @@ function wifi_networks()
 				assoclist  = net:assoclist(),
 				country    = net:country(),
 				txpower    = net:txpower(),
-				txpoweroff = net:txpower_offset()
+				txpoweroff = net:txpower_offset(),
+				disabled   = (dev:get("disabled") == "1" or
+				             net:get("disabled") == "1")
 			}
 		end
 

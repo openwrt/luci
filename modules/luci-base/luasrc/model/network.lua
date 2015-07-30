@@ -1421,7 +1421,7 @@ function wifinet.is_up(self)
 end
 
 function wifinet.active_mode(self)
-	local m = _stror(self.iwinfo.mode, self.iwdata.mode) or "ap"
+	local m = _stror(self.iwdata.mode, self.iwinfo.mode) or "ap"
 
 	if     m == "ap"      then m = "Master"
 	elseif m == "sta"     then m = "Client"
@@ -1438,11 +1438,11 @@ function wifinet.active_mode_i18n(self)
 end
 
 function wifinet.active_ssid(self)
-	return _stror(self.iwinfo.ssid, self.iwdata.ssid)
+	return _stror(self.iwdata.ssid, self.iwinfo.ssid)
 end
 
 function wifinet.active_bssid(self)
-	return _stror(self.iwinfo.bssid, self.iwdata.bssid) or "00:00:00:00:00:00"
+	return _stror(self.iwdata.bssid, self.iwinfo.bssid) or "00:00:00:00:00:00"
 end
 
 function wifinet.active_encryption(self)

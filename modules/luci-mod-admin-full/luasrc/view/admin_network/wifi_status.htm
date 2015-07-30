@@ -6,7 +6,7 @@
 		{
 			if (iw && (iw = iw[0]))
 			{
-				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel);
+				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && !iw.disabled);
 				var p = iw.quality;
 				var q = is_assoc ? p : -1;
 
