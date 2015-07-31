@@ -13,6 +13,8 @@ $Id$
 ]]--
 
 local sys = require "luci.sys"
+local fs = require "nixio.fs"
+local dnsmasqloc = "/etc/dnsmasq.conf"
 
 m = Map("dhcp", translate("DHCP and DNS"),
 	translate("Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol" ..
@@ -215,6 +217,25 @@ db.optional = true
 db:depends("enable_tftp", "1")
 db.placeholder = "pxelinux.0"
 
+if fs.access(dnsmasqloc) then
+	dns = s:taboption("files", TextValue, "dnsmasqtext",
+		translate("Addvance DNSMasq Configuration"),
+		translate("Modifies the <code>dnsmaq.conf</code> file."))
+	dns.rmempty = true
+	dns.rows = 5
+	dns.wrap = "off"
+
+	function dns.cfgvalue()
+		return fs.readfile(dnsmasqloc) or ""
+	end
+
+	function dns.write(self, section, value)
+		if value then
+			fs.writefile(dnsmasqloc, value:gsub("\r\n", "\n"))
+			luci.sys.call("/etc/init.d/dnsmasq restart")
+		end
+	end
+end
 
 m:section(SimpleSection).template = "admin_network/lease_status"
 
