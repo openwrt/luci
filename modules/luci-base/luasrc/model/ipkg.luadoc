@@ -107,3 +107,20 @@ Determines the overlay root used by opkg.
 @return		String containing the directory path of the overlay root.
 ]]
 
+---[[
+lua version of opkg compare-versions
+
+@class function
+@name compare_versions
+@param ver1	string version 1
+@param ver2	string version 2
+@param comp	string compare versions using
+		"<=" or "<" lower-equal
+		">" or ">=" greater-equal
+		"=" equal
+		"<<" lower
+		">>" greater
+		"~=" not equal
+@return Boolean indicating the status of the compare
+]]
+
