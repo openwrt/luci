@@ -211,7 +211,12 @@ function compare_versions(ver1, comp, ver2)
 	local av1 = util.split(ver1, "[%.%-]", nil, true)
 	local av2 = util.split(ver2, "[%.%-]", nil, true)
 
-	for i = 1, math.max(table.getn(av1),table.getn(av2)), 1  do
+	local max = table.getn(av1)
+	if (table.getn(av1) < table.getn(av2)) then
+		max = table.getn(av2)
+	end
+
+	for i = 1, max, 1  do
 		local s1 = av1[i] or ""
 		local s2 = av2[i] or ""
 
