@@ -1533,13 +1533,16 @@ function Flag.parse(self, section)
 
 	if fexists then
 		local fvalue = self:formvalue(section) and self.enabled or self.disabled
+		local cvalue = self:cfgvalue(section)
 		if fvalue ~= self.default or (not self.optional and not self.rmempty) then
 			self:write(section, fvalue)
 		else
 			self:remove(section)
 		end
+		if (fvalue ~= cvalue) then self.section.changed = true end
 	else
 		self:remove(section)
+		self.section.changed = true
 	end
 end
 
