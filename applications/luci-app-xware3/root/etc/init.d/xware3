@@ -2,10 +2,7 @@
 # Copyright (C) 2015 GuoGuo <gch981213@gmail.com>
 # Xware3 启动脚本
 
-START=95
-STOP=15
-PID_FILE=/var/run/xware3.pid
-SERVICE_DAEMONIZE=1
+USE_PROCD=1
 
 mount_cfg=/tmp/xware3/thunder_mounts.cfg
 log_cfg=/tmp/xware3/log.ini
@@ -64,9 +61,12 @@ gen_mnt_cfg() {
 	echo "}" >>  $mount_cfg
 }
 
+service_triggers()
+{
+        procd_add_reload_trigger "xware3"
+}
 
-
-start() {
+start_service() {
 	config_load 'xware3'
 	config_foreach check_enabled 'xware3_general'
 	config_foreach load_prog_path 'xware3_general'
@@ -98,17 +98,8 @@ start() {
 	ETM_ARGS="$ETM_ARGS --listen_addr=$ETM_LISTEN_ADDR"
 
 #Start ETM
-	service_start $prog_path/etm_xware $ETM_ARGS
-	renice -n 19 $(pidof etm_xware)
-}
-
-stop() {
-	config_load 'xware3'
-	config_foreach load_prog_path 'xware3_general'
-
-	[ -z '$prog_path' ] || {
-		service_stop $prog_path/etm_xware $ETM_ARGS
-	}
-	killall -9 etm_xware
-	return 0
+	procd_open_instance
+	procd_set_param command nice -n19 $prog_path/etm_xware $ETM_ARGS
+	procd_set_param respawn
+	procd_close_instance
 }
