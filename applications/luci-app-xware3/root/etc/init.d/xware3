@@ -74,11 +74,16 @@ start_service() {
 		echo "Config file invaled:Please specifiy the path of Xware main program."
 		exit 1
 	}
-	
+
+	[ ! -f $prog_path/etm_xware ] && [ -f /usr/bin/etm_xware ] && {
+		prog_path='/usr/bin'
+	}
+
 	[ -f $prog_path/etm_xware ] || {
 		echo "Please confirm that etm_xware is copied to $prog_path ."
 		exit 1
 	}
+
 	chmod +x $prog_path/etm_xware
 
 	mkdir -p /tmp/xware3/

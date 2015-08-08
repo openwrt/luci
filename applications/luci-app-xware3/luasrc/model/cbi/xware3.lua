@@ -50,7 +50,9 @@ s.anonymous = true
 
 s:option(Flag, "enabled", "启用 迅雷远程下载")
 
+if not nixio.fs.access("/usr/bin/etm_xware") then
 s:option(Value, "prog_path", "Xware3主程序路径", "<br />Xware3主程序所在路径，例如：/mnt/sda1/xware3。请确认已经将Xware3的主程序etm_xware复制到该目录下。")
+end
 
 if running then
 	s:option(DummyValue,"opennewwindow" ,"<br /><p align=\"justify\"><script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"获取启动信息\" onclick=\"window.open('http://'+window.location.host+':19000/getsysinfo')\" /></p>", detailInfo)
@@ -58,6 +60,7 @@ if running then
 
 	s:option(DummyValue,"opennewwindow" ,"<br /><p align=\"justify\"><script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"迅雷远程下载页面\" onclick=\"window.open('http://yuancheng.xunlei.com')\" /></p>", "将激活码填进网页即可绑定。")
 end
+
 s = m:section(TypedSection, "xware3_mount","Xware挂载点","请在此设置Xware3下载目录所在的“挂载点”。")
 s.anonymous = true
 
@@ -67,6 +70,28 @@ util.consume((fs.glob("/mnt/sd??*")), devices)
 device = s:option(DynamicList, "available_mounts", "挂载点")
 for i, dev in ipairs(devices) do
 	device:value(dev)
+end
+
+s = m:section(TypedSection, "xware3_mount","Xware配置文件","编辑Xware3配置文件")
+s.anonymous = true
+
+editconf = s:option(Value, "_editconf", "")
+editconf.template = "cbi/tvalue"
+editconf.rows = 20
+editconf.wrap = "off"
+
+function editconf.cfgvalue(self, section)
+	return fs.readfile("/etc/xware3.ini") or ""
+end
+function editconf.write(self, section, value3)
+	if value3 then
+		value3 = value3:gsub("\r\n?", "\n")
+		fs.writefile("/tmp/xware_cfg_tmp", value3)
+		if (luci.sys.call("cmp -s /tmp/xware_cfg_tmp /etc/xware3.ini") == 1) then
+			fs.writefile("/etc/xware3.ini", value3)
+		end
+		fs.remove("/tmp/xware_cfg_tmp")
+	end
 end
 
 return m
