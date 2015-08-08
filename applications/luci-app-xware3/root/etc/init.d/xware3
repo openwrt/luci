@@ -7,6 +7,9 @@ USE_PROCD=1
 
 mount_cfg=/tmp/xware3/thunder_mounts.cfg
 log_cfg=/tmp/xware3/log.ini
+global_cfg=/etc/xware3.ini
+pid_file=/var/run/xware3.pid
+
 #ETM Configs
 LC_PORT="19000"
 ETM_LICENSE="1506082001000004j000000ah9cbluti0nbn9b8e4m"
@@ -84,11 +87,11 @@ start_service() {
 	config_foreach gen_mnt_cfg 'xware3_mount'
 
 #ETM arguments
-	ETM_ARGS="$ETM_ARGS --system_path=$prog_path"
+	ETM_ARGS="$ETM_ARGS --system_path=/tmp/xware3"
 	ETM_ARGS="$ETM_ARGS --disk_cfg=$mount_cfg"
-	ETM_ARGS="$ETM_ARGS --etm_cfg=$prog_path/etm.ini"
+	ETM_ARGS="$ETM_ARGS --etm_cfg=$global_cfg"
 	ETM_ARGS="$ETM_ARGS --log_cfg=$log_cfg"
-	ETM_ARGS="$ETM_ARGS --pid_file=$PID_FILE"
+	ETM_ARGS="$ETM_ARGS --pid_file=$pid_file"
 	ETM_ARGS="$ETM_ARGS --license=$ETM_LICENSE"
 	ETM_ARGS="$ETM_ARGS --import_v1v2_mode=$ETM_IMPORT_V1V2_MODE"
 	ETM_ARGS="$ETM_ARGS --listen_addr=$ETM_LISTEN_ADDR"
