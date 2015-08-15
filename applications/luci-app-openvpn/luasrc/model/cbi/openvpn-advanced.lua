@@ -153,7 +153,7 @@ local knownParams = {
 	} },
 
 	{ "Cryptography", {
-		{ Value,		"secret",						"/etc/openvpn/secret.key 1",									translate("Enable Static Key encryption mode (non-TLS)") },
+		{ FileUpload,	"secret",						"/etc/openvpn/secret.key",  									translate("Enable Static Key encryption mode (non-TLS)") },
 		{ Value,		"auth",							"SHA1",															translate("HMAC authentication for packets") }, -- parse
 		{ Value,		"cipher",						"BF-CBC",														translate("Encryption cipher for packets") }, -- parse
 		{ Value,		"keysize",						1024,															translate("Size of cipher key") }, -- parse
@@ -181,13 +181,16 @@ local knownParams = {
 		{ Value,		"tran_window",					3600,															translate("Key transition window") },
 		{ Flag,			"single_session",				0,																translate("Allow only one session") },
 		{ Flag,			"tls_exit",						0,																translate("Exit on TLS negotiation failure") },
-		{ Value,		"tls_auth",						"/etc/openvpn/tlsauth.key 1",									translate("Additional authentication over TLS") },
+		{ Value,		"tls_auth",						"/etc/openvpn/tlsauth.key", 									translate("Additional authentication over TLS") },
 		--{ Value,		"askpass",						"[file]",														translate("Get PEM password from controlling tty before we daemonize") },
 		{ Flag,			"auth_nocache",					0,																translate("Don't cache --askpass or --auth-user-pass passwords") },
 		{ Value,		"tls_remote",					"remote_x509_name",												translate("Only accept connections from given X509 name") },
 		{ ListValue,	"ns_cert_type",					{ "client", "server" },											translate("Require explicit designation on certificate") },
 		{ ListValue,	"remote_cert_tls",				{ "client", "server" },											translate("Require explicit key usage on certificate") },
 		{ Value,		"crl_verify",					"/etc/easy-rsa/keys/crl.pem",									translate("Check peer certificate against a CRL") },
+		{ Value,        "tls_version_min",              "1.0",															translate("The lowest supported TLS version") },
+		{ Value,        "tls_version_max",              "1.2",															translate("The highest supported TLS version") },
+		{ Value,        "key_direction",                "1",															translate("The key direction for 'tls-auth' and 'secret' options") },
  	} }
 }
 
