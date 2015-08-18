@@ -559,14 +559,23 @@ function parse_message_body( src, msg, filecb )
 
 		-- If we have a file callback then feed it
 		if type(filecb) == "function" then
-			sink = filecb
-
+			local meta = {
+				name = "raw",
+				encoding = msg.env.CONTENT_TYPE
+			}
+			sink = function( chunk )
+				if chunk then
+					return filecb(meta, chunk, false)
+				else
+					return filecb(meta, nil, true)
+				end
+			end
 		-- ... else append to .content
 		else
 			msg.content = ""
 			msg.content_length = 0
 
-			sink = function( chunk, err )
+			sink = function( chunk )
 				if chunk then
 					if ( msg.content_length + #chunk ) <= HTTP_MAX_CONTENT then
 						msg.content        = msg.content        .. chunk
