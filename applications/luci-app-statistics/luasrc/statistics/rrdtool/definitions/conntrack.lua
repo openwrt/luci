@@ -9,6 +9,10 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		vlabel = "Count",
 		number_format = "%5.0lf",
 		data = {
+			-- collectd 5.5+: specify "" to exclude "max" instance
+			instances = {
+				conntrack = { "" }
+			},
 			sources = {
 				conntrack = { "value" }
 			},
