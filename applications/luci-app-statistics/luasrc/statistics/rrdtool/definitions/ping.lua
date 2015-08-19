@@ -9,7 +9,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		{ title = "%H: ICMP Round Trip Time", vlabel = "ms",
 		  number_format = "%5.1lf ms", data = {
 			sources = { ping = { "value" } },
-			options = { ping__ping = { noarea = true, title = "%di" } }
+			options = { ping__value = { noarea = true, title = "%di" } }
 		} },
 
 		-- Ping droprate
