@@ -17,6 +17,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		title = "%H: Memory usage",
 		vlabel = "MB",
 		number_format = "%5.1lf%s",
+		y_min = "0",
+		alt_autoscale_max = true,
 		data = {
 			instances = { 
 				memory = { "free", "buffered", "cached", "used" }
