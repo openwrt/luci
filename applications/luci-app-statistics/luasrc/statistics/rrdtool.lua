@@ -457,6 +457,12 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 			_ti ( _args, "-X" )
 			_ti ( _args, opts.units_exponent )
 		end
+		if opts.alt_autoscale then
+			_ti ( _args, "-A" )
+		end
+		if opts.alt_autoscale_max then
+			_ti ( _args, "-M" )
+		end
 
 		-- store additional rrd options
 		if opts.rrdopts then
