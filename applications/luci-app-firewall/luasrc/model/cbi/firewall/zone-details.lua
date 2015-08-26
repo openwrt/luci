@@ -76,6 +76,15 @@ function name.write(self, section, value)
 	}
 end
 
+function name.validate(self, value)
+	-- fw3 defines 14 as the maximum length of zone name
+	if #value > 14 then
+		return nil, translate("Zone name is too long")
+	else
+		return value
+	end
+end
+
 p = {
 	s:taboption("general", ListValue, "input", translate("Input")),
 	s:taboption("general", ListValue, "output", translate("Output")),
