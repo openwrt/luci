@@ -50,10 +50,10 @@ config statistics 'collectd_unixsock'
 # input plugins
 
 config statistics 'collectd_conntrack'
-	option enable '1'
+	option enable '0'
 
 config statistics 'collectd_cpu'
-	option enable '1'
+	option enable '0'
 
 config statistics 'collectd_df'
 	option enable '0'
@@ -69,7 +69,7 @@ config statistics 'collectd_disk'
 
 config statistics 'collectd_dns'
 	option enable '0'
-	option Interfaces 'ffdhcp ff br-lan'
+	option Interfaces 'br-lan'
 	option IgnoreSources '127.0.0.1'
 
 config statistics 'collectd_entropy'
@@ -80,11 +80,11 @@ config statistics 'collectd_exec'
 
 config statistics 'collectd_interface'
 	option enable '1'
-	option Interfaces 'br-lan br-ff'
+	option Interfaces 'br-lan'
 	option IgnoreSelected '0'
 
 config statistics 'collectd_iptables'
-	option enable '1'
+	option enable '0'
 
 config collectd_iptables_match
 	option table 'nat'
@@ -92,7 +92,7 @@ config collectd_iptables_match
 	option target 'MASQUERADE'
 	option source '192.168.1.0/24'
 	option outputif 'br-ff'
-	option name 'Verkehr LAN-Clients'
+	option name 'LAN-Clients traffic'
 
 config collectd_iptables_match
 	option chain 'luci_fw_postrouting'
@@ -100,7 +100,7 @@ config collectd_iptables_match
 	option target 'MASQUERADE'
 	option source '10.61.230.0/24'
 	option outputif 'br-ff'
-	option name 'Verkehr WLAN-Clients'
+	option name 'WLAN-Clients traffic'
 
 config statistics 'collectd_irq'
 	option enable '0'
@@ -113,20 +113,20 @@ config statistics 'collectd_load'
 	option enable '1'
 
 config statistics 'collectd_memory'
-	option enable '1'
+	option enable '0'
 
 config statistics 'collectd_netlink'
 	option enable '0'
 	option IgnoreSelected '0'
-	option VerboseInterfaces 'br-lan br-ff'
-	option QDiscs 'br-lan br-ff'
+	option VerboseInterfaces 'br-lan'
+	option QDiscs 'br-lan'
 
 config statistics 'collectd_nut'
 	option enable '0'
 	option UPS 'myupsname'
 
 config statistics 'collectd_olsrd'
-	option enable '1'
+	option enable '0'
 	option Port '2006'
 	option Host '127.0.0.1'
 
@@ -137,17 +137,17 @@ config statistics 'collectd_ping'
 	option Hosts '127.0.0.1'
 
 config statistics 'collectd_processes'
-	option enable '1'
+	option enable '0'
 	option Processes 'uhttpd dnsmasq dropbear'
 
 config statistics 'collectd_splash_leases'
-	option enable '1'
+	option enable '0'
 
 config statistics 'collectd_tcpconns'
-	option enable '1'
+	option enable '0'
 	option ListeningPorts '0'
 	option LocalPorts '22 80'
 
 config statistics 'collectd_uptime'
-	option enable '1'
+	option enable '0'
 
