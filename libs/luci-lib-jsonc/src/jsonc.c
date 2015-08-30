@@ -222,7 +222,7 @@ static int _lua_test_array(lua_State *L, int index)
 
 out:
 		lua_pop(L, 2);
-		return 0;
+		return -1;
 	}
 
 	/* check for holes */
@@ -254,7 +254,7 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 	case LUA_TTABLE:
 		max = _lua_test_array(L, index);
 
-		if (max > 0)
+		if (max >= 0)
 		{
 			obj = json_object_new_array();
 
