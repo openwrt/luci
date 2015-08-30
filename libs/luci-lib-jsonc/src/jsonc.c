@@ -286,8 +286,9 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 			lua_pushvalue(L, -2);
 			key = lua_tostring(L, -1);
 
-			json_object_object_add(obj, key,
-								   _lua_to_json(L, lua_gettop(L) - 1));
+			if (key)
+				json_object_object_add(obj, key,
+				                       _lua_to_json(L, lua_gettop(L) - 1));
 
 			lua_pop(L, 2);
 		}
