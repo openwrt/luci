@@ -328,6 +328,76 @@ static int json_parse_set(lua_State *L)
 	return 0;
 }
 
+static int json_parse_sink_closure(lua_State *L)
+{
+	bool finished = lua_toboolean(L, lua_upvalueindex(2));
+	if (lua_isnil(L, 1))
+	{
+		// no more data available
+		if (finished)
+		{
+			// we were finished parsing
+			lua_pushboolean(L, true);
+			return 1;
+		}
+		else
+		{
+			lua_pushnil(L);
+			lua_pushstring(L, "Incomplete JSON data");
+			return 2;
+		}
+	}
+	else
+	{
+		if (finished)
+		{
+			lua_pushnil(L);
+			lua_pushstring(L, "Unexpected data after complete JSON object");
+			return 2;
+		}
+		else
+		{
+			// luci.jsonc.parser.chunk()
+			lua_pushcfunction(L, json_parse_chunk);
+			// parser object from closure
+			lua_pushvalue(L, lua_upvalueindex(1));
+			// chunk
+			lua_pushvalue(L, 1);
+			lua_call(L, 2, 2);
+
+			if (lua_isnil(L, -2))
+			{
+				// an error occurred, leave (nil, errmsg) on the stack and return it
+				return 2;
+			}
+			else if (lua_toboolean(L, -2))
+			{
+				// finished reading, set finished=true and return nil to prevent further input
+				lua_pop(L, 2);
+				lua_pushboolean(L, true);
+				lua_replace(L, lua_upvalueindex(2));
+				lua_pushnil(L);
+				return 1;
+			}
+			else
+			{
+				// not finished reading, return true
+				lua_pop(L, 2);
+				lua_pushboolean(L, true);
+				return 1;
+			}
+		}
+	}
+}
+
+static int json_parse_sink(lua_State *L)
+{
+	luaL_checkudata(L, 1, LUCI_JSONC_PARSER);
+	lua_pushboolean(L, false);
+	lua_pushcclosure(L, json_parse_sink_closure, 2);
+	return 1;
+}
+
 static int json_tostring(lua_State *L)
 {
 	struct json_state *s = luaL_checkudata(L, 1, LUCI_JSONC_PARSER);
@@ -367,6 +437,7 @@ static const luaL_reg jsonc_parser_methods[] = {
 	{ "parse",			json_parse_chunk  },
 	{ "get",			json_parse_get    },
 	{ "set",			json_parse_set    },
+	{ "sink",			json_parse_sink   },
 	{ "stringify",		json_tostring     },
 
 	{ "__gc",			json_gc           },
