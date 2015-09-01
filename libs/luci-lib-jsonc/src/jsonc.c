@@ -106,6 +106,7 @@ static int json_stringify(lua_State *L)
 		flags |= JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED;
 
 	lua_pushstring(L, json_object_to_json_string_ext(obj, flags));
+	json_object_put(obj);
 	return 1;
 }
 
