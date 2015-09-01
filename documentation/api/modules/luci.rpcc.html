@@ -58,8 +58,10 @@
 		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
 	</li>
 
-	<li><strong>luci.i18n</strong></li>
-	
+	<li>
+		<a href="../modules/luci.i18n.html">luci.i18n</a>
+	</li>
+
 	<li>
 		<a href="../modules/luci.ip.html">luci.ip</a>
 	</li>
@@ -88,10 +90,8 @@
 		<a href="../modules/luci.model.uci.html">luci.model.uci</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.rpcc.html">luci.rpcc</a>
-	</li>
-
+	<li><strong>luci.rpcc</strong></li>
+	
 	<li>
 		<a href="../modules/luci.rpcc.ruci.html">luci.rpcc.ruci</a>
 	</li>
@@ -196,7 +196,7 @@
 
 <div id="content">
 
-<h1>Class <code>luci.i18n</code></h1>
+<h1>Object Instance <code>luci.rpcc</code></h1>
 
 <p></p>
 
@@ -210,61 +210,17 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#clear">clear</a>&nbsp;()</td>
+	<td class="name" nowrap><a href="#Client.proxy">Client:proxy</a>&nbsp;(prefix)</td>
 	<td class="summary">
  
-Clear the translation table.</td>
+Create a transparent RPC proxy.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#load">load</a>&nbsp;(file, lang, force)</td>
+	<td class="name" nowrap><a href="#Client.request">Client:request</a>&nbsp;(method, params, notification)</td>
 	<td class="summary">
  
-Load a translation and copy its data into the translation table.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#loadc">loadc</a>&nbsp;(file, force)</td>
-	<td class="summary">
- 
-Load a translation file using the default translation language.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#setlanguage">setlanguage</a>&nbsp;(lang)</td>
-	<td class="summary">
- 
-Set the context default translation language.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#string">string</a>&nbsp;(key)</td>
-	<td class="summary">
- 
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#stringf">stringf</a>&nbsp;(key, ...)</td>
-	<td class="summary">
- 
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#translate">translate</a>&nbsp;(key)</td>
-	<td class="summary">
- 
-Return the translated value for a specific translation key.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#translatef">translatef</a>&nbsp;(key, ...)</td>
-	<td class="summary">
- 
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
+Request an RP call and get the response.</td>
 	</tr>
 
 </table>
@@ -283,32 +239,11 @@ Return the translated value for a specific translation key and use it as sprintf
 
 
 
-<dt><a name="clear"></a><strong>clear</strong>&nbsp;()</dt>
+<dt><a name="Client.proxy"></a><strong>Client:proxy</strong>&nbsp;(prefix)</dt>
 <dd>
 
  
-Clear the translation table. 
- 
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="load"></a><strong>load</strong>&nbsp;(file, lang, force)</dt>
-<dd>
-
- 
-Load a translation and copy its data into the translation table. 
+Create a transparent RPC proxy. 
 
 
 
@@ -316,15 +251,7 @@ Load a translation and copy its data into the translation table.
 <ul>
 	
 	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  lang: Two-letter language code
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
+	  prefix: Method prefix
 	</li>
 	
 </ul>
@@ -335,7 +262,7 @@ Load a translation and copy its data into the translation table.
 
 
 <h3>Return value:</h3>
-Success status
+RPC Proxy object
 
 
 
@@ -344,45 +271,11 @@ Success status
 
 
 
-<dt><a name="loadc"></a><strong>loadc</strong>&nbsp;(file, force)</dt>
+<dt><a name="Client.request"></a><strong>Client:request</strong>&nbsp;(method, params, notification)</dt>
 <dd>
 
  
-Load a translation file using the default translation language. 
- 
-Alternatively load the translation of the fallback language.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="setlanguage"></a><strong>setlanguage</strong>&nbsp;(lang)</dt>
-<dd>
-
- 
-Set the context default translation language. 
+Request an RP call and get the response. 
 
 
 
@@ -390,38 +283,15 @@ Set the context default translation language.
 <ul>
 	
 	<li>
-	  lang: Two-letter language code
+	  method: Remote method
 	</li>
 	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="string"></a><strong>string</strong>&nbsp;(key)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translate(...))</code>
-
-
-<h3>Parameters</h3>
-<ul>
+	<li>
+	  params: Parameters
+	</li>
 	
 	<li>
-	  key: Default translation text
+	  notification: Notification only?
 	</li>
 	
 </ul>
@@ -432,113 +302,7 @@ This is the same as calling <code>tostring(translate(...))</code>
 
 
 <h3>Return value:</h3>
-Translated string
-
-
-
-</dd>
-
-
-
-
-<dt><a name="stringf"></a><strong>stringf</strong>&nbsp;(key, ...)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key and use it as sprintf pattern. 
- 
-Ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translatef(...))</code>
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
-	</li>
-	
-	<li>
-	  ...: Format parameters
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Translated and formatted string
-
-
-
-</dd>
-
-
-
-
-<dt><a name="translate"></a><strong>translate</strong>&nbsp;(key)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Translated string
-
-
-
-</dd>
-
-
-
-
-<dt><a name="translatef"></a><strong>translatef</strong>&nbsp;(key, ...)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key and use it as sprintf pattern. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
-	</li>
-	
-	<li>
-	  ...: Format parameters
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Translated and formatted string
+response 
 
 
 

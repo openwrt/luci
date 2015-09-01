@@ -58,8 +58,10 @@
 		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
 	</li>
 
-	<li><strong>luci.i18n</strong></li>
-	
+	<li>
+		<a href="../modules/luci.i18n.html">luci.i18n</a>
+	</li>
+
 	<li>
 		<a href="../modules/luci.ip.html">luci.ip</a>
 	</li>
@@ -68,10 +70,8 @@
 		<a href="../modules/luci.ip.cidr.html">luci.ip.cidr</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.json.html">luci.json</a>
-	</li>
-
+	<li><strong>luci.json</strong></li>
+	
 	<li>
 		<a href="../modules/luci.jsonc.html">luci.jsonc</a>
 	</li>
@@ -196,7 +196,7 @@
 
 <div id="content">
 
-<h1>Class <code>luci.i18n</code></h1>
+<h1>Object Instance <code>luci.json</code></h1>
 
 <p></p>
 
@@ -210,61 +210,76 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#clear">clear</a>&nbsp;()</td>
+	<td class="name" nowrap><a href="#ActiveDecoder">ActiveDecoder</a>&nbsp;(customnull)</td>
 	<td class="summary">
  
-Clear the translation table.</td>
+Create a new Active JSON-Decoder.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#load">load</a>&nbsp;(file, lang, force)</td>
+	<td class="name" nowrap><a href="#ActiveDecoder.get">ActiveDecoder:get</a>&nbsp;()</td>
 	<td class="summary">
  
-Load a translation and copy its data into the translation table.</td>
+Fetches one JSON-object from given source 
+ </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#loadc">loadc</a>&nbsp;(file, force)</td>
+	<td class="name" nowrap><a href="#Decoder">Decoder</a>&nbsp;(customnull)</td>
 	<td class="summary">
  
-Load a translation file using the default translation language.</td>
+Create a new JSON-Decoder.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#setlanguage">setlanguage</a>&nbsp;(lang)</td>
+	<td class="name" nowrap><a href="#Decoder.get">Decoder:get</a>&nbsp;()</td>
 	<td class="summary">
  
-Set the context default translation language.</td>
+Get the decoded data packets after the rawdata has been sent to the sink.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#string">string</a>&nbsp;(key)</td>
+	<td class="name" nowrap><a href="#Decoder.sink">Decoder:sink</a>&nbsp;()</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value.</td>
+Create an LTN12 sink from the decoder object which accepts the JSON-Data.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#stringf">stringf</a>&nbsp;(key, ...)</td>
+	<td class="name" nowrap><a href="#Encoder">Encoder</a>&nbsp;(data, buffersize, fastescape)</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
+Create a new JSON-Encoder.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#translate">translate</a>&nbsp;(key)</td>
+	<td class="name" nowrap><a href="#Encoder.source">Encoder:source</a>&nbsp;()</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key.</td>
+Create an LTN12 source providing the encoded JSON-Data.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#translatef">translatef</a>&nbsp;(key, ...)</td>
+	<td class="name" nowrap><a href="#decode">decode</a>&nbsp;(json)</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
+Directly decode a JSON string 
+ </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#encode">encode</a>&nbsp;(obj)</td>
+	<td class="summary">
+ 
+Direcly encode a Lua object into a JSON string.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#null">null</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Null replacement function 
+ </td>
 	</tr>
 
 </table>
@@ -283,32 +298,11 @@ Return the translated value for a specific translation key and use it as sprintf
 
 
 
-<dt><a name="clear"></a><strong>clear</strong>&nbsp;()</dt>
+<dt><a name="ActiveDecoder"></a><strong>ActiveDecoder</strong>&nbsp;(customnull)</dt>
 <dd>
 
  
-Clear the translation table. 
- 
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="load"></a><strong>load</strong>&nbsp;(file, lang, force)</dt>
-<dd>
-
- 
-Load a translation and copy its data into the translation table. 
+Create a new Active JSON-Decoder. 
 
 
 
@@ -316,15 +310,7 @@ Load a translation and copy its data into the translation table.
 <ul>
 	
 	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  lang: Two-letter language code
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
+	  customnull: Use luci.json.null instead of nil for decoding null
 	</li>
 	
 </ul>
@@ -335,7 +321,7 @@ Load a translation and copy its data into the translation table.
 
 
 <h3>Return value:</h3>
-Success status
+Active JSON-Decoder
 
 
 
@@ -344,32 +330,21 @@ Success status
 
 
 
-<dt><a name="loadc"></a><strong>loadc</strong>&nbsp;(file, force)</dt>
+<dt><a name="ActiveDecoder.get"></a><strong>ActiveDecoder:get</strong>&nbsp;()</dt>
 <dd>
 
  
-Load a translation file using the default translation language. 
- 
-Alternatively load the translation of the fallback language.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
-	</li>
-	
-</ul>
+Fetches one JSON-object from given source 
 
 
 
 
 
+
+
+
+<h3>Return value:</h3>
+Decoded object
 
 
 
@@ -378,11 +353,11 @@ Alternatively load the translation of the fallback language.
 
 
 
-<dt><a name="setlanguage"></a><strong>setlanguage</strong>&nbsp;(lang)</dt>
+<dt><a name="Decoder"></a><strong>Decoder</strong>&nbsp;(customnull)</dt>
 <dd>
 
  
-Set the context default translation language. 
+Create a new JSON-Decoder. 
 
 
 
@@ -390,38 +365,7 @@ Set the context default translation language.
 <ul>
 	
 	<li>
-	  lang: Two-letter language code
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="string"></a><strong>string</strong>&nbsp;(key)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translate(...))</code>
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
+	  customnull: Use luci.json.null instead of nil for decoding null
 	</li>
 	
 </ul>
@@ -432,7 +376,7 @@ This is the same as calling <code>tostring(translate(...))</code>
 
 
 <h3>Return value:</h3>
-Translated string
+JSON-Decoder
 
 
 
@@ -441,25 +385,73 @@ Translated string
 
 
 
-<dt><a name="stringf"></a><strong>stringf</strong>&nbsp;(key, ...)</dt>
+<dt><a name="Decoder.get"></a><strong>Decoder:get</strong>&nbsp;()</dt>
 <dd>
 
  
-Return the translated value for a specific translation key and use it as sprintf pattern. 
+Get the decoded data packets after the rawdata has been sent to the sink. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+Decoded data
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Decoder.sink"></a><strong>Decoder:sink</strong>&nbsp;()</dt>
+<dd>
+
  
-Ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translatef(...))</code>
+Create an LTN12 sink from the decoder object which accepts the JSON-Data. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+LTN12 sink
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Encoder"></a><strong>Encoder</strong>&nbsp;(data, buffersize, fastescape)</dt>
+<dd>
+
+ 
+Create a new JSON-Encoder. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  key: Default translation text
+	  data: Lua-Object to be encoded.
 	</li>
 	
 	<li>
-	  ...: Format parameters
+	  buffersize: Blocksize of returned data source.
+	</li>
+	
+	<li>
+	  fastescape: Use non-standard escaping (don't escape control chars)
 	</li>
 	
 </ul>
@@ -470,7 +462,7 @@ This is the same as calling <code>tostring(translatef(...))</code>
 
 
 <h3>Return value:</h3>
-Translated and formatted string
+JSON-Encoder
 
 
 
@@ -479,11 +471,34 @@ Translated and formatted string
 
 
 
-<dt><a name="translate"></a><strong>translate</strong>&nbsp;(key)</dt>
+<dt><a name="Encoder.source"></a><strong>Encoder:source</strong>&nbsp;()</dt>
 <dd>
 
  
-Return the translated value for a specific translation key. 
+Create an LTN12 source providing the encoded JSON-Data. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+LTN12 source
+
+
+
+</dd>
+
+
+
+
+<dt><a name="decode"></a><strong>decode</strong>&nbsp;(json)</dt>
+<dd>
+
+ 
+Directly decode a JSON string 
 
 
 
@@ -491,7 +506,7 @@ Return the translated value for a specific translation key.
 <ul>
 	
 	<li>
-	  key: Default translation text
+	  json: JSON-String
 	</li>
 	
 </ul>
@@ -502,7 +517,7 @@ Return the translated value for a specific translation key.
 
 
 <h3>Return value:</h3>
-Translated string
+Lua object
 
 
 
@@ -511,11 +526,11 @@ Translated string
 
 
 
-<dt><a name="translatef"></a><strong>translatef</strong>&nbsp;(key, ...)</dt>
+<dt><a name="encode"></a><strong>encode</strong>&nbsp;(obj)</dt>
 <dd>
 
  
-Return the translated value for a specific translation key and use it as sprintf pattern. 
+Direcly encode a Lua object into a JSON string. 
 
 
 
@@ -523,11 +538,7 @@ Return the translated value for a specific translation key and use it as sprintf
 <ul>
 	
 	<li>
-	  key: Default translation text
-	</li>
-	
-	<li>
-	  ...: Format parameters
+	  obj: Lua Object
 	</li>
 	
 </ul>
@@ -538,7 +549,30 @@ Return the translated value for a specific translation key and use it as sprintf
 
 
 <h3>Return value:</h3>
-Translated and formatted string
+JSON string
+
+
+
+</dd>
+
+
+
+
+<dt><a name="null"></a><strong>null</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Null replacement function 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+null
 
 
 

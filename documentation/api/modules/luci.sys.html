@@ -58,8 +58,10 @@
 		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
 	</li>
 
-	<li><strong>luci.i18n</strong></li>
-	
+	<li>
+		<a href="../modules/luci.i18n.html">luci.i18n</a>
+	</li>
+
 	<li>
 		<a href="../modules/luci.ip.html">luci.ip</a>
 	</li>
@@ -96,10 +98,8 @@
 		<a href="../modules/luci.rpcc.ruci.html">luci.rpcc.ruci</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.sys.html">luci.sys</a>
-	</li>
-
+	<li><strong>luci.sys</strong></li>
+	
 	<li>
 		<a href="../modules/luci.sys.init.html">luci.sys.init</a>
 	</li>
@@ -196,7 +196,7 @@
 
 <div id="content">
 
-<h1>Class <code>luci.i18n</code></h1>
+<h1>Class <code>luci.sys</code></h1>
 
 <p></p>
 
@@ -210,61 +210,82 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#clear">clear</a>&nbsp;()</td>
+	<td class="name" nowrap><a href="#call">call</a>&nbsp;(...)</td>
 	<td class="summary">
  
-Clear the translation table.</td>
+Execute a given shell command and return the error code 
+ </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#load">load</a>&nbsp;(file, lang, force)</td>
+	<td class="name" nowrap><a href="#dmesg">dmesg</a>&nbsp;()</td>
 	<td class="summary">
  
-Load a translation and copy its data into the translation table.</td>
+Retrieves the output of the "dmesg" command.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#loadc">loadc</a>&nbsp;(file, force)</td>
+	<td class="name" nowrap><a href="#exec">exec</a>&nbsp;(command)</td>
 	<td class="summary">
  
-Load a translation file using the default translation language.</td>
+Execute a given shell command and capture its standard output 
+ </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#setlanguage">setlanguage</a>&nbsp;(lang)</td>
+	<td class="name" nowrap><a href="#getenv">getenv</a>&nbsp;(var)</td>
 	<td class="summary">
  
-Set the context default translation language.</td>
+Retrieve environment variables.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#string">string</a>&nbsp;(key)</td>
+	<td class="name" nowrap><a href="#hostname">hostname</a>&nbsp;(String)</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value.</td>
+Get or set the current hostname.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#stringf">stringf</a>&nbsp;(key, ...)</td>
+	<td class="name" nowrap><a href="#httpget">httpget</a>&nbsp;(url, stream, target)</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
+Returns the contents of a documented referred by an URL.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#translate">translate</a>&nbsp;(key)</td>
+	<td class="name" nowrap><a href="#mounts">mounts</a>&nbsp;()</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key.</td>
+Retrieve information about currently mounted file systems.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#translatef">translatef</a>&nbsp;(key, ...)</td>
+	<td class="name" nowrap><a href="#reboot">reboot</a>&nbsp;()</td>
 	<td class="summary">
  
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
+Initiate a system reboot.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#syslog">syslog</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Retrieves the output of the "logread" command.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#uniqueid">uniqueid</a>&nbsp;(bytes)</td>
+	<td class="summary">
+ 
+Generates a random id with specified length.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#uptime">uptime</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Returns the current system uptime stats.</td>
 	</tr>
 
 </table>
@@ -283,32 +304,11 @@ Return the translated value for a specific translation key and use it as sprintf
 
 
 
-<dt><a name="clear"></a><strong>clear</strong>&nbsp;()</dt>
+<dt><a name="call"></a><strong>call</strong>&nbsp;(...)</dt>
 <dd>
 
  
-Clear the translation table. 
- 
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="load"></a><strong>load</strong>&nbsp;(file, lang, force)</dt>
-<dd>
-
- 
-Load a translation and copy its data into the translation table. 
+Execute a given shell command and return the error code 
 
 
 
@@ -316,15 +316,7 @@ Load a translation and copy its data into the translation table.
 <ul>
 	
 	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  lang: Two-letter language code
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
+	  ...: Command to call
 	</li>
 	
 </ul>
@@ -335,7 +327,7 @@ Load a translation and copy its data into the translation table.
 
 
 <h3>Return value:</h3>
-Success status
+Error code of the command
 
 
 
@@ -344,32 +336,21 @@ Success status
 
 
 
-<dt><a name="loadc"></a><strong>loadc</strong>&nbsp;(file, force)</dt>
+<dt><a name="dmesg"></a><strong>dmesg</strong>&nbsp;()</dt>
 <dd>
 
  
-Load a translation file using the default translation language. 
- 
-Alternatively load the translation of the fallback language.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
-	</li>
-	
-</ul>
+Retrieves the output of the "dmesg" command. 
 
 
 
 
 
+
+
+
+<h3>Return value:</h3>
+String containing the current log buffer
 
 
 
@@ -378,11 +359,11 @@ Alternatively load the translation of the fallback language.
 
 
 
-<dt><a name="setlanguage"></a><strong>setlanguage</strong>&nbsp;(lang)</dt>
+<dt><a name="exec"></a><strong>exec</strong>&nbsp;(command)</dt>
 <dd>
 
  
-Set the context default translation language. 
+Execute a given shell command and capture its standard output 
 
 
 
@@ -390,38 +371,7 @@ Set the context default translation language.
 <ul>
 	
 	<li>
-	  lang: Two-letter language code
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="string"></a><strong>string</strong>&nbsp;(key)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translate(...))</code>
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
+	  command: Command to call
 	</li>
 	
 </ul>
@@ -432,7 +382,7 @@ This is the same as calling <code>tostring(translate(...))</code>
 
 
 <h3>Return value:</h3>
-Translated string
+String containg the return the output of the command
 
 
 
@@ -441,25 +391,60 @@ Translated string
 
 
 
-<dt><a name="stringf"></a><strong>stringf</strong>&nbsp;(key, ...)</dt>
+<dt><a name="getenv"></a><strong>getenv</strong>&nbsp;(var)</dt>
 <dd>
 
  
-Return the translated value for a specific translation key and use it as sprintf pattern. 
+Retrieve environment variables. If no variable is given then a table 
  
-Ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translatef(...))</code>
+containing the whole environment is returned otherwise this function returns 
+the corresponding string value for the given name or nil if no such variable 
+exists.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  key: Default translation text
+	  var: Name of the environment variable to retrieve (optional)
 	</li>
 	
+</ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>String containg the value of the specified variable
+	
+	<li>Table containing all variables if no variable name is given
+	
+</ol>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="hostname"></a><strong>hostname</strong>&nbsp;(String)</dt>
+<dd>
+
+ 
+Get or set the current hostname. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
 	<li>
-	  ...: Format parameters
+	  String: containing a new hostname to set (optional)
 	</li>
 	
 </ul>
@@ -470,7 +455,7 @@ This is the same as calling <code>tostring(translatef(...))</code>
 
 
 <h3>Return value:</h3>
-Translated and formatted string
+String containing the system hostname
 
 
 
@@ -479,11 +464,11 @@ Translated and formatted string
 
 
 
-<dt><a name="translate"></a><strong>translate</strong>&nbsp;(key)</dt>
+<dt><a name="httpget"></a><strong>httpget</strong>&nbsp;(url, stream, target)</dt>
 <dd>
 
  
-Return the translated value for a specific translation key. 
+Returns the contents of a documented referred by an URL. 
 
 
 
@@ -491,7 +476,15 @@ Return the translated value for a specific translation key.
 <ul>
 	
 	<li>
-	  key: Default translation text
+	  url: The URL to retrieve
+	</li>
+	
+	<li>
+	  stream: Return a stream instead of a buffer
+	</li>
+	
+	<li>
+	  target: Directly write to target file name
 	</li>
 	
 </ul>
@@ -502,7 +495,7 @@ Return the translated value for a specific translation key.
 
 
 <h3>Return value:</h3>
-Translated string
+String containing the contents of given the URL
 
 
 
@@ -511,11 +504,80 @@ Translated string
 
 
 
-<dt><a name="translatef"></a><strong>translatef</strong>&nbsp;(key, ...)</dt>
+<dt><a name="mounts"></a><strong>mounts</strong>&nbsp;()</dt>
 <dd>
 
  
-Return the translated value for a specific translation key and use it as sprintf pattern. 
+Retrieve information about currently mounted file systems. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+Table containing mount information
+
+
+
+</dd>
+
+
+
+
+<dt><a name="reboot"></a><strong>reboot</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Initiate a system reboot. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+Return value of os.execute()
+
+
+
+</dd>
+
+
+
+
+<dt><a name="syslog"></a><strong>syslog</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Retrieves the output of the "logread" command. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+String containing the current log buffer
+
+
+
+</dd>
+
+
+
+
+<dt><a name="uniqueid"></a><strong>uniqueid</strong>&nbsp;(bytes)</dt>
+<dd>
+
+ 
+Generates a random id with specified length. 
 
 
 
@@ -523,11 +585,7 @@ Return the translated value for a specific translation key and use it as sprintf
 <ul>
 	
 	<li>
-	  key: Default translation text
-	</li>
-	
-	<li>
-	  ...: Format parameters
+	  bytes: Number of bytes for the unique id
 	</li>
 	
 </ul>
@@ -538,7 +596,30 @@ Return the translated value for a specific translation key and use it as sprintf
 
 
 <h3>Return value:</h3>
-Translated and formatted string
+String containing hex encoded id
+
+
+
+</dd>
+
+
+
+
+<dt><a name="uptime"></a><strong>uptime</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Returns the current system uptime stats. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+String containing total uptime in seconds
 
 
 

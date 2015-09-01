@@ -82,10 +82,8 @@
 		<a href="../modules/luci.jsonc.parser.html">luci.jsonc.parser</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.model.ipkg.html">luci.model.ipkg</a>
-	</li>
-
+	<li><strong>luci.model.ipkg</strong></li>
+	
 	<li>
 		<a href="../modules/luci.model.uci.html">luci.model.uci</a>
 	</li>
@@ -170,8 +168,10 @@
 		<a href="../modules/nixio.bin.html">nixio.bin</a>
 	</li>
 
-	<li><strong>nixio.bit</strong></li>
-	
+	<li>
+		<a href="../modules/nixio.bit.html">nixio.bit</a>
+	</li>
+
 	<li>
 		<a href="../modules/nixio.crypto.html">nixio.crypto</a>
 	</li>
@@ -196,11 +196,9 @@
 
 <div id="content">
 
-<h1>Class <code>nixio.bit</code></h1>
+<h1>Class <code>luci.model.ipkg</code></h1>
 
-<p>
- Bitfield operators and mainpulation functions. 
- Can be used as a drop-in replacement for bitlib.</p>
+<p></p>
 
 
 
@@ -212,75 +210,88 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#arshift">arshift</a>&nbsp;(oper, shift)</td>
+	<td class="name" nowrap><a href="#compare_versions">compare_versions</a>&nbsp;(ver1, ver2, comp)</td>
 	<td class="summary">
- Arithmetically right shift a number.</td>
+ 
+lua version of opkg compare-versions 
+ </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#band">band</a>&nbsp;(oper1, oper2, ...)</td>
+	<td class="name" nowrap><a href="#find">find</a>&nbsp;(pat, cb)</td>
 	<td class="summary">
- Bitwise AND several numbers.</td>
+ 
+Find packages that match the given pattern.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#bnot">bnot</a>&nbsp;(oper)</td>
+	<td class="name" nowrap><a href="#info">info</a>&nbsp;(pkg)</td>
 	<td class="summary">
- Invert given number.</td>
+ 
+Return information about installed and available packages.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#bor">bor</a>&nbsp;(oper1, oper2, ...)</td>
+	<td class="name" nowrap><a href="#install">install</a>&nbsp;(...)</td>
 	<td class="summary">
- Bitwise OR several numbers.</td>
+ 
+Install one or more packages.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#bxor">bxor</a>&nbsp;(oper1, oper2, ...)</td>
+	<td class="name" nowrap><a href="#installed">installed</a>&nbsp;(pkg)</td>
 	<td class="summary">
- Bitwise XOR several numbers.</td>
+ 
+Determine whether a given package is installed.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#cast">cast</a>&nbsp;(oper)</td>
+	<td class="name" nowrap><a href="#list_all">list_all</a>&nbsp;(pat, cb)</td>
 	<td class="summary">
- Cast a number to the bit-operating range.</td>
+ 
+List all packages known to opkg.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#check">check</a>&nbsp;(bitfield, flag1, ...)</td>
+	<td class="name" nowrap><a href="#list_installed">list_installed</a>&nbsp;(pat, cb)</td>
 	<td class="summary">
- Checks whether given flags are set in a bitfield.</td>
+ 
+List installed packages.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#div">div</a>&nbsp;(oper1, oper2, ...)</td>
+	<td class="name" nowrap><a href="#overlay_root">overlay_root</a>&nbsp;()</td>
 	<td class="summary">
- Integer division of 2 or more numbers.</td>
+ 
+Determines the overlay root used by opkg.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#lshift">lshift</a>&nbsp;(oper, shift)</td>
+	<td class="name" nowrap><a href="#remove">remove</a>&nbsp;(...)</td>
 	<td class="summary">
- Left shift a number.</td>
+ 
+Remove one or more packages.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#rshift">rshift</a>&nbsp;(oper, shift)</td>
+	<td class="name" nowrap><a href="#status">status</a>&nbsp;(pkg)</td>
 	<td class="summary">
- Right shift a number.</td>
+ 
+Return the package status of one or more packages.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#set">set</a>&nbsp;(bitfield, flag1, ...)</td>
+	<td class="name" nowrap><a href="#update">update</a>&nbsp;()</td>
 	<td class="summary">
- Sets one or more flags of a bitfield.</td>
+ 
+Update package lists.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#unset">unset</a>&nbsp;(bitfield, flag1, ...)</td>
+	<td class="name" nowrap><a href="#upgrade">upgrade</a>&nbsp;()</td>
 	<td class="summary">
- Unsets one or more flags of a bitfield.</td>
+ 
+Upgrades all installed packages.</td>
 	</tr>
 
 </table>
@@ -299,21 +310,33 @@
 
 
 
-<dt><a name="arshift"></a><strong>arshift</strong>&nbsp;(oper, shift)</dt>
+<dt><a name="compare_versions"></a><strong>compare_versions</strong>&nbsp;(ver1, ver2, comp)</dt>
 <dd>
 
- Arithmetically right shift a number.
+ 
+lua version of opkg compare-versions 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper: number
+	  ver1: string version 1
 	</li>
 	
 	<li>
-	  shift: bits to shift 
+	  ver2: string version 2
+	</li>
+	
+	<li>
+	  comp: string compare versions using 
+		"<=" or "<" lower-equal 
+		">" or ">=" greater-equal 
+		"=" equal 
+		"<<" lower 
+		">>" greater 
+		"~=" not equal
 	</li>
 	
 </ul>
@@ -324,7 +347,7 @@
 
 
 <h3>Return value:</h3>
-number
+Boolean indicating the status of the compare
 
 
 
@@ -333,25 +356,23 @@ number
 
 
 
-<dt><a name="band"></a><strong>band</strong>&nbsp;(oper1, oper2, ...)</dt>
+<dt><a name="find"></a><strong>find</strong>&nbsp;(pat, cb)</dt>
 <dd>
 
- Bitwise AND several numbers.
+ 
+Find packages that match the given pattern. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper1: First Operand
+	  pat: Find packages whose names or descriptions match this pattern, nil results in zero results
 	</li>
 	
 	<li>
-	  oper2: Second Operand
-	</li>
-	
-	<li>
-	  ...: More Operands
+	  cb: Callback function invoked for each patckage, receives name, version and description as arguments
 	</li>
 	
 </ul>
@@ -362,7 +383,7 @@ number
 
 
 <h3>Return value:</h3>
-number
+nothing
 
 
 
@@ -371,17 +392,19 @@ number
 
 
 
-<dt><a name="bnot"></a><strong>bnot</strong>&nbsp;(oper)</dt>
+<dt><a name="info"></a><strong>info</strong>&nbsp;(pkg)</dt>
 <dd>
 
- Invert given number.
+ 
+Return information about installed and available packages. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper: Operand
+	  pkg: Limit output to a (set of) packages
 	</li>
 	
 </ul>
@@ -392,7 +415,7 @@ number
 
 
 <h3>Return value:</h3>
-number
+Table containing package information
 
 
 
@@ -401,25 +424,19 @@ number
 
 
 
-<dt><a name="bor"></a><strong>bor</strong>&nbsp;(oper1, oper2, ...)</dt>
+<dt><a name="install"></a><strong>install</strong>&nbsp;(...)</dt>
 <dd>
 
- Bitwise OR several numbers.
+ 
+Install one or more packages. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper1: First Operand
-	</li>
-	
-	<li>
-	  oper2: Second Operand
-	</li>
-	
-	<li>
-	  ...: More Operands
+	  ...: List of packages to install
 	</li>
 	
 </ul>
@@ -429,8 +446,14 @@ number
 
 
 
-<h3>Return value:</h3>
-number
+<h3>Return values:</h3>
+<ol>
+	
+	<li>Boolean indicating the status of the action
+	
+	<li>OPKG return code, STDOUT and STDERR
+	
+</ol>
 
 
 
@@ -439,25 +462,19 @@ number
 
 
 
-<dt><a name="bxor"></a><strong>bxor</strong>&nbsp;(oper1, oper2, ...)</dt>
+<dt><a name="installed"></a><strong>installed</strong>&nbsp;(pkg)</dt>
 <dd>
 
- Bitwise XOR several numbers.
+ 
+Determine whether a given package is installed. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper1: First Operand
-	</li>
-	
-	<li>
-	  oper2: Second Operand
-	</li>
-	
-	<li>
-	  ...: More Operands
+	  pkg: Package
 	</li>
 	
 </ul>
@@ -468,7 +485,7 @@ number
 
 
 <h3>Return value:</h3>
-number
+Boolean
 
 
 
@@ -477,17 +494,23 @@ number
 
 
 
-<dt><a name="cast"></a><strong>cast</strong>&nbsp;(oper)</dt>
+<dt><a name="list_all"></a><strong>list_all</strong>&nbsp;(pat, cb)</dt>
 <dd>
 
- Cast a number to the bit-operating range.
+ 
+List all packages known to opkg. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper: number
+	  pat: Only find packages matching this pattern, nil lists all packages
+	</li>
+	
+	<li>
+	  cb: Callback function invoked for each package, receives name, version and description as arguments
 	</li>
 	
 </ul>
@@ -498,7 +521,7 @@ number
 
 
 <h3>Return value:</h3>
-number
+nothing
 
 
 
@@ -507,25 +530,23 @@ number
 
 
 
-<dt><a name="check"></a><strong>check</strong>&nbsp;(bitfield, flag1, ...)</dt>
+<dt><a name="list_installed"></a><strong>list_installed</strong>&nbsp;(pat, cb)</dt>
 <dd>
 
- Checks whether given flags are set in a bitfield.
+ 
+List installed packages. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  bitfield: Bitfield
+	  pat: Only find packages matching this pattern, nil lists all packages
 	</li>
 	
 	<li>
-	  flag1: First Flag
-	</li>
-	
-	<li>
-	  ...: More Flags
+	  cb: Callback function invoked for each package, receives name, version and description as arguments
 	</li>
 	
 </ul>
@@ -536,7 +557,7 @@ number
 
 
 <h3>Return value:</h3>
-true when all flags are set, otherwise false
+nothing
 
 
 
@@ -545,28 +566,13 @@ true when all flags are set, otherwise false
 
 
 
-<dt><a name="div"></a><strong>div</strong>&nbsp;(oper1, oper2, ...)</dt>
+<dt><a name="overlay_root"></a><strong>overlay_root</strong>&nbsp;()</dt>
 <dd>
 
- Integer division of 2 or more numbers.
+ 
+Determines the overlay root used by opkg. 
 
 
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  oper1: Operand 1
-	</li>
-	
-	<li>
-	  oper2: Operand 2
-	</li>
-	
-	<li>
-	  ...: More Operands
-	</li>
-	
-</ul>
 
 
 
@@ -574,7 +580,7 @@ true when all flags are set, otherwise false
 
 
 <h3>Return value:</h3>
-number
+String containing the directory path of the overlay root.
 
 
 
@@ -583,21 +589,19 @@ number
 
 
 
-<dt><a name="lshift"></a><strong>lshift</strong>&nbsp;(oper, shift)</dt>
+<dt><a name="remove"></a><strong>remove</strong>&nbsp;(...)</dt>
 <dd>
 
- Left shift a number.
+ 
+Remove one or more packages. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper: number
-	</li>
-	
-	<li>
-	  shift: bits to shift 
+	  ...: List of packages to install
 	</li>
 	
 </ul>
@@ -607,8 +611,14 @@ number
 
 
 
-<h3>Return value:</h3>
-number
+<h3>Return values:</h3>
+<ol>
+	
+	<li>Boolean indicating the status of the action
+	
+	<li>OPKG return code, STDOUT and STDERR
+	
+</ol>
 
 
 
@@ -617,21 +627,19 @@ number
 
 
 
-<dt><a name="rshift"></a><strong>rshift</strong>&nbsp;(oper, shift)</dt>
+<dt><a name="status"></a><strong>status</strong>&nbsp;(pkg)</dt>
 <dd>
 
- Right shift a number.
+ 
+Return the package status of one or more packages. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  oper: number
-	</li>
-	
-	<li>
-	  shift: bits to shift 
+	  pkg: Limit output to a (set of) packages
 	</li>
 	
 </ul>
@@ -642,7 +650,7 @@ number
 
 
 <h3>Return value:</h3>
-number
+Table containing package status information
 
 
 
@@ -651,36 +659,27 @@ number
 
 
 
-<dt><a name="set"></a><strong>set</strong>&nbsp;(bitfield, flag1, ...)</dt>
+<dt><a name="update"></a><strong>update</strong>&nbsp;()</dt>
 <dd>
 
- Sets one or more flags of a bitfield.
+ 
+Update package lists. 
 
 
-<h3>Parameters</h3>
-<ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
 	
-	<li>
-	  bitfield: Bitfield
-	</li>
+	<li>Boolean indicating the status of the action
 	
-	<li>
-	  flag1: First Flag
-	</li>
+	<li>OPKG return code, STDOUT and STDERR
 	
-	<li>
-	  ...: More Flags
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-altered bitfield
+</ol>
 
 
 
@@ -689,36 +688,27 @@ altered bitfield
 
 
 
-<dt><a name="unset"></a><strong>unset</strong>&nbsp;(bitfield, flag1, ...)</dt>
+<dt><a name="upgrade"></a><strong>upgrade</strong>&nbsp;()</dt>
 <dd>
 
- Unsets one or more flags of a bitfield.
+ 
+Upgrades all installed packages. 
 
 
-<h3>Parameters</h3>
-<ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
 	
-	<li>
-	  bitfield: Bitfield
-	</li>
+	<li>Boolean indicating the status of the action
 	
-	<li>
-	  flag1: First Flag
-	</li>
+	<li>OPKG return code, STDOUT and STDERR
 	
-	<li>
-	  ...: More Flags
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-altered bitfield
+</ol>
 
 
 

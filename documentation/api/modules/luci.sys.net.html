@@ -39,6 +39,10 @@
 	</li>
 
 	<li>
+		<a href="../modules/luci.http.html">luci.http</a>
+	</li>
+
+	<li>
 		<a href="../modules/luci.http.protocol.html">luci.http.protocol</a>
 	</li>
 
@@ -67,11 +71,35 @@
 	</li>
 
 	<li>
+		<a href="../modules/luci.json.html">luci.json</a>
+	</li>
+
+	<li>
 		<a href="../modules/luci.jsonc.html">luci.jsonc</a>
 	</li>
 
 	<li>
 		<a href="../modules/luci.jsonc.parser.html">luci.jsonc.parser</a>
+	</li>
+
+	<li>
+		<a href="../modules/luci.model.ipkg.html">luci.model.ipkg</a>
+	</li>
+
+	<li>
+		<a href="../modules/luci.model.uci.html">luci.model.uci</a>
+	</li>
+
+	<li>
+		<a href="../modules/luci.rpcc.html">luci.rpcc</a>
+	</li>
+
+	<li>
+		<a href="../modules/luci.rpcc.ruci.html">luci.rpcc.ruci</a>
+	</li>
+
+	<li>
+		<a href="../modules/luci.sys.html">luci.sys</a>
 	</li>
 
 	<li>
@@ -94,6 +122,10 @@
 
 	<li>
 		<a href="../modules/luci.sys.wifi.html">luci.sys.wifi</a>
+	</li>
+
+	<li>
+		<a href="../modules/luci.util.html">luci.util</a>
 	</li>
 
 	<li>
@@ -181,57 +213,6 @@ LuCI system utilities / network related functions.
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#call">call</a>&nbsp;(...)</td>
-	<td class="summary">
- 
-Execute a given shell command and return the error code 
- </td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#dmesg">dmesg</a>&nbsp;()</td>
-	<td class="summary">
- 
-Retrieves the output of the "dmesg" command.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#exec">exec</a>&nbsp;(command)</td>
-	<td class="summary">
- 
-Execute a given shell command and capture its standard output 
- </td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#getenv">getenv</a>&nbsp;(var)</td>
-	<td class="summary">
- 
-Retrieve environment variables.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#hostname">hostname</a>&nbsp;(String)</td>
-	<td class="summary">
- 
-Get or set the current hostname.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#httpget">httpget</a>&nbsp;(url, stream, target)</td>
-	<td class="summary">
- 
-Returns the contents of a documented referred by an URL.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#mounts">mounts</a>&nbsp;()</td>
-	<td class="summary">
- 
-Retrieve information about currently mounted file systems.</td>
-	</tr>
-
-	<tr>
 	<td class="name" nowrap><a href="#net.arptable">arptable</a>&nbsp;()</td>
 	<td class="summary">
  
@@ -302,34 +283,6 @@ Returns the current kernel routing table entries.</td>
 Returns the current ipv6 kernel routing table entries.</td>
 	</tr>
 
-	<tr>
-	<td class="name" nowrap><a href="#reboot">reboot</a>&nbsp;()</td>
-	<td class="summary">
- 
-Initiate a system reboot.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#syslog">syslog</a>&nbsp;()</td>
-	<td class="summary">
- 
-Retrieves the output of the "logread" command.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#uniqueid">uniqueid</a>&nbsp;(bytes)</td>
-	<td class="summary">
- 
-Generates a random id with specified length.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#uptime">uptime</a>&nbsp;()</td>
-	<td class="summary">
- 
-Returns the current system uptime stats.</td>
-	</tr>
-
 </table>
 
 
@@ -343,229 +296,6 @@ Returns the current system uptime stats.</td>
 
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
-
-
-
-<dt><a name="call"></a><strong>call</strong>&nbsp;(...)</dt>
-<dd>
-
- 
-Execute a given shell command and return the error code 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  ...: Command to call
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Error code of the command
-
-
-
-</dd>
-
-
-
-
-<dt><a name="dmesg"></a><strong>dmesg</strong>&nbsp;()</dt>
-<dd>
-
- 
-Retrieves the output of the "dmesg" command. 
-
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containing the current log buffer
-
-
-
-</dd>
-
-
-
-
-<dt><a name="exec"></a><strong>exec</strong>&nbsp;(command)</dt>
-<dd>
-
- 
-Execute a given shell command and capture its standard output 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  command: Command to call
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containg the return the output of the command
-
-
-
-</dd>
-
-
-
-
-<dt><a name="getenv"></a><strong>getenv</strong>&nbsp;(var)</dt>
-<dd>
-
- 
-Retrieve environment variables. If no variable is given then a table 
- 
-containing the whole environment is returned otherwise this function returns 
-the corresponding string value for the given name or nil if no such variable 
-exists.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  var: Name of the environment variable to retrieve (optional)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return values:</h3>
-<ol>
-	
-	<li>String containg the value of the specified variable
-	
-	<li>Table containing all variables if no variable name is given
-	
-</ol>
-
-
-
-</dd>
-
-
-
-
-<dt><a name="hostname"></a><strong>hostname</strong>&nbsp;(String)</dt>
-<dd>
-
- 
-Get or set the current hostname. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  String: containing a new hostname to set (optional)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containing the system hostname
-
-
-
-</dd>
-
-
-
-
-<dt><a name="httpget"></a><strong>httpget</strong>&nbsp;(url, stream, target)</dt>
-<dd>
-
- 
-Returns the contents of a documented referred by an URL. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  url: The URL to retrieve
-	</li>
-	
-	<li>
-	  stream: Return a stream instead of a buffer
-	</li>
-	
-	<li>
-	  target: Directly write to target file name
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containing the contents of given the URL
-
-
-
-</dd>
-
-
-
-
-<dt><a name="mounts"></a><strong>mounts</strong>&nbsp;()</dt>
-<dd>
-
- 
-Retrieve information about currently mounted file systems. 
-
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-Table containing mount information
-
-
-
-</dd>
-
 
 
 
@@ -814,107 +544,6 @@ Table of tables with properties of the corresponding routes.
 			The following fields are defined for route entry tables: 
 			{ "source", "dest", "nexthop", "metric", "refcount", "usecount", 
 			  "flags", "device" }
-
-
-
-</dd>
-
-
-
-
-<dt><a name="reboot"></a><strong>reboot</strong>&nbsp;()</dt>
-<dd>
-
- 
-Initiate a system reboot. 
-
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-Return value of os.execute()
-
-
-
-</dd>
-
-
-
-
-<dt><a name="syslog"></a><strong>syslog</strong>&nbsp;()</dt>
-<dd>
-
- 
-Retrieves the output of the "logread" command. 
-
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containing the current log buffer
-
-
-
-</dd>
-
-
-
-
-<dt><a name="uniqueid"></a><strong>uniqueid</strong>&nbsp;(bytes)</dt>
-<dd>
-
- 
-Generates a random id with specified length. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  bytes: Number of bytes for the unique id
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containing hex encoded id
-
-
-
-</dd>
-
-
-
-
-<dt><a name="uptime"></a><strong>uptime</strong>&nbsp;()</dt>
-<dd>
-
- 
-Returns the current system uptime stats. 
-
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containing total uptime in seconds
 
 
 

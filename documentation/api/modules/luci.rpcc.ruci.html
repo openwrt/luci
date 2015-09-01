@@ -54,8 +54,10 @@
 		<a href="../modules/luci.http.protocol.date.html">luci.http.protocol.date</a>
 	</li>
 
-	<li><strong>luci.http.protocol.mime</strong></li>
-	
+	<li>
+		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
+	</li>
+
 	<li>
 		<a href="../modules/luci.i18n.html">luci.i18n</a>
 	</li>
@@ -92,10 +94,8 @@
 		<a href="../modules/luci.rpcc.html">luci.rpcc</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.rpcc.ruci.html">luci.rpcc.ruci</a>
-	</li>
-
+	<li><strong>luci.rpcc.ruci</strong></li>
+	
 	<li>
 		<a href="../modules/luci.sys.html">luci.sys</a>
 	</li>
@@ -196,7 +196,7 @@
 
 <div id="content">
 
-<h1>Class <code>luci.http.protocol.mime</code></h1>
+<h1>Object Instance <code>luci.rpcc.ruci</code></h1>
 
 <p></p>
 
@@ -210,21 +210,10 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#to_ext">to_ext</a>&nbsp;(mimetype)</td>
+	<td class="name" nowrap><a href="#factory">factory</a>&nbsp;(rpccl)</td>
 	<td class="summary">
  
-Return corresponding extension for a given mime type or nil if the 
- 
-given mime-type is unknown.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#to_mime">to_mime</a>&nbsp;(filename)</td>
-	<td class="summary">
- 
-Extract extension from a filename and return corresponding mime-type or 
- 
-"application/octet-stream" if the extension is unknown.</td>
+Create a new UCI over RPC proxy.</td>
 	</tr>
 
 </table>
@@ -243,20 +232,19 @@ Extract extension from a filename and return corresponding mime-type or
 
 
 
-<dt><a name="to_ext"></a><strong>to_ext</strong>&nbsp;(mimetype)</dt>
+<dt><a name="factory"></a><strong>factory</strong>&nbsp;(rpccl)</dt>
 <dd>
 
  
-Return corresponding extension for a given mime type or nil if the 
- 
-given mime-type is unknown.
+Create a new UCI over RPC proxy. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  mimetype: The mimetype to retrieve the extension from
+	  rpccl: RPC client
 	</li>
 	
 </ul>
@@ -267,40 +255,7 @@ given mime-type is unknown.
 
 
 <h3>Return value:</h3>
-String with the extension or nil for unknown type
-
-
-
-</dd>
-
-
-
-
-<dt><a name="to_mime"></a><strong>to_mime</strong>&nbsp;(filename)</dt>
-<dd>
-
- 
-Extract extension from a filename and return corresponding mime-type or 
- 
-"application/octet-stream" if the extension is unknown.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  filename: The filename for which the mime type is guessed
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String containign the determined mime type
+Network transparent UCI module 
 
 
 
