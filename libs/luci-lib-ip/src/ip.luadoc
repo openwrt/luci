@@ -42,10 +42,10 @@ if the given optional netmask is of a different family.
 containing a prefix size between `0` and `32` bit.
 Overrides mask embedded in the first argument if specified. (optional)
 @return A `luci.ip.cidr` object representing the given IPv4 range.
-@usage `addr = luci.ip.new("10.24.0.1/24")
-addr = luci.ip.new("10.24.0.1/255.255.255.0")
-addr = luci.ip.new("10.24.0.1", "255.255.255.0")        -- separate netmask
-addr = luci.ip.new("10.24.0.1/24", 16)                  -- override netmask`
+@usage `addr = luci.ip.IPv4("10.24.0.1/24")
+addr = luci.ip.IPv4("10.24.0.1/255.255.255.0")
+addr = luci.ip.IPv4("10.24.0.1", "255.255.255.0")        -- separate netmask
+addr = luci.ip.IPv4("10.24.0.1/24", 16)                  -- override netmask`
 @see IPv6
 ]]
 
@@ -62,10 +62,10 @@ if the given optional netmask is of a different family.
 containing a prefix size between `0` and `128` bit.
 Overrides mask embedded in the first argument if specified. (optional)
 @return A `luci.ip.cidr` object representing the given IPv6 range.
-@usage `addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/64")
-addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/ffff:ffff:ffff:ffff::")
-addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17", "ffff:ffff:ffff:ffff::")
-addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/64", 128) -- override netmask`
+@usage `addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/64")
+addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/ffff:ffff:ffff:ffff::")
+addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17", "ffff:ffff:ffff:ffff::")
+addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/64", 128) -- override netmask`
 @see IPv4
 ]]
 

@@ -370,10 +370,10 @@ Overrides mask embedded in the first argument if specified. (optional)
 
 
 <h3>Usage:</h3>
-<pre>addr = luci.ip.new("10.24.0.1/24") 
-addr = luci.ip.new("10.24.0.1/255.255.255.0") 
-addr = luci.ip.new("10.24.0.1", "255.255.255.0")        -- separate netmask 
-addr = luci.ip.new("10.24.0.1/24", 16)                  -- override netmask</pre>
+<pre>addr = luci.ip.IPv4("10.24.0.1/24") 
+addr = luci.ip.IPv4("10.24.0.1/255.255.255.0") 
+addr = luci.ip.IPv4("10.24.0.1", "255.255.255.0")        -- separate netmask 
+addr = luci.ip.IPv4("10.24.0.1/24", 16)                  -- override netmask</pre>
 
 
 
@@ -425,10 +425,10 @@ Overrides mask embedded in the first argument if specified. (optional)
 
 
 <h3>Usage:</h3>
-<pre>addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/64") 
-addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/ffff:ffff:ffff:ffff::") 
-addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17", "ffff:ffff:ffff:ffff::") 
-addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/64", 128) -- override netmask</pre>
+<pre>addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/64") 
+addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/ffff:ffff:ffff:ffff::") 
+addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17", "ffff:ffff:ffff:ffff::") 
+addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/64", 128) -- override netmask</pre>
 
 
 
