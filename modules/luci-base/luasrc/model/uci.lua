@@ -111,7 +111,7 @@ function Cursor.get_list(self, config, section, option)
 		local val = self:get(config, section, option)
 		return ( type(val) == "table" and val or { val } )
 	end
-	return nil
+	return {}
 end
 
 function Cursor.get_first(self, conf, stype, opt, def)
