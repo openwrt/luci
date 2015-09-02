@@ -139,6 +139,9 @@ end
 
 function Cursor.set_list(self, config, section, option, value)
 	if config and section and option then
+		if not value or #value == 0 then
+			return self:delete(config, section, option)
+		end
 		return self:set(
 			config, section, option,
 			( type(value) == "table" and value or { value } )
