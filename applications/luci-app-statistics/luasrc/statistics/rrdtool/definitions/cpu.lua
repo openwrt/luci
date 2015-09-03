@@ -8,11 +8,12 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 	return {
 		title = "%H: Processor usage on core #%pi",
 		y_min = "0",
+		alt_autoscale_max = true,
 		vlabel = "Percent",
 		number_format = "%5.1lf%%",
 		data = {
 			instances = { 
-				cpu = { "idle", "user", "nice", "system", "softirq", "interrupt" }
+				cpu = { "user", "nice", "system", "softirq", "interrupt" }
 			},
 
 			options = {
