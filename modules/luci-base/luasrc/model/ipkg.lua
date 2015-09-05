@@ -139,6 +139,10 @@ function _list(action, pat, cb)
 				desc = ""
 			end
 
+			if #version > 26 then
+				version = version:sub(1,21) .. ".." .. version:sub(-3,-1)
+			end
+
 			cb(name, version, desc)
 
 			name    = nil
