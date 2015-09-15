@@ -30,6 +30,7 @@ function index()
 		disk		= _("Disk Usage"),
 		dns			= _("DNS"),
 		email		= _("Email"),
+		entropy		= _("Entropy"),
 		exec		= _("Exec"),
 		interface	= _("Interfaces"),
 		iptables	= _("Firewall"),
@@ -53,7 +54,7 @@ function index()
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "csv", "network", "rrdtool", "unixsock" },
-		system  = { "cpu", "df", "disk", "email", "exec", "irq", "load", "memory", "nut", "processes", "uptime" },
+		system  = { "cpu", "df", "disk", "email", "entropy", "exec", "irq", "load", "memory", "nut", "processes", "uptime" },
 		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "ping", "splash_leases", "tcpconns", "iwinfo" }
 	}
 
