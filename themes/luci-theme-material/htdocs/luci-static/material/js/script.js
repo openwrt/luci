@@ -1,5 +1,21 @@
 /**
- * Created by WebStorm on 15-9-13.
+ *  Material is a clean HTML5 theme for LuCI. It is based on luci-theme-bootstrap and MUI
+ *
+ *  luci-theme-material
+ *      Copyright 2015 Lutty Yang <lutty@wcan.in>
+ *
+ *  Have a bug? Please create an issue here on GitHub!
+ *      https://github.com/LuttyYang/luci-theme-material/issues
+ *
+ *  luci-theme-bootstrap:
+ *      Copyright 2008 Steven Barth <steven@midlink.org>
+ *      Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ *      Copyright 2012 David Menting <david@nut-bolt.nl>
+ *
+ *  MUI:
+ *      https://github.com/muicss/mui
+ *
+ *  Licensed to the public under the Apache License 2.0
  */
 (function ($) {
     var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
@@ -104,15 +120,24 @@
     };
 }(jQuery));
 
-
-function trimText(text) {
-    return text.replace(/[ \t\n\r]+/g, " ");
-}
-
 (function ($) {
+    /**
+     * trim text, Remove spaces, wrap
+     * @param text
+     * @returns {string}
+     */
+    function trimText(text) {
+        return text.replace(/[ \t\n\r]+/g, " ");
+    }
+
+
     var tree = undefined;
     var lastNode = undefined;
 
+    /**
+     * get the current node by Hash (reserve)
+     * @returns {boolean} success?
+     */
     function getCurrentNodeByHash() {
         var ret = false;
         var hash = window.location.hash;
@@ -138,6 +163,10 @@ function trimText(text) {
         return ret;
     }
 
+    /**
+     * get the current node by Burl (primary)
+     * @returns {boolean} success?
+     */
     function getCurrentNodeByUrl() {
         var ret = false;
         var getUrlNode = function (href){
@@ -188,6 +217,9 @@ function trimText(text) {
         return ret;
     }
 
+    /**
+     * menu click
+     */
     $(".main > .main-left > .nav > .slide > .menu").click(function () {
         var ul = $(this).next(".slide-menu");
         var menu = $(this);
@@ -203,6 +235,9 @@ function trimText(text) {
         }
     });
 
+    /**
+     * hook menu click and add the hash
+     */
     $(".main > .main-left > .nav > .slide > .slide-menu > li > a").click(function () {
         var href = $(this).attr("href");
         var tree = trimText($(this).parent().parent().prev().data("title")) + "|" + trimText($(this).data("title"));
@@ -213,11 +248,16 @@ function trimText(text) {
         return false;
     });
 
+    /**
+     * fix menu click
+     */
     $(".main > .main-left > .nav > .slide > .slide-menu > li").click(function () {
         $(this).find("a").click();
     });
 
-
+    /**
+     * get current node and open it
+     */
     if (!getCurrentNodeByUrl()){
         getCurrentNodeByHash();
         if (tree[0] == "Status" && tree[1] == "Overview"){
@@ -232,6 +272,9 @@ function trimText(text) {
     $(".cbi-button-down").val("");
 
 
+    /**
+     * hook other "A Label" and add hash to it.
+     */
     $("#maincontent > .container").find("a").each(function () {
         var that = $(this);
         var onclick = that.attr("onclick");
@@ -248,6 +291,9 @@ function trimText(text) {
         }
     });
 
+    /**
+     * Sidebar expand
+     */
     var showSide = false;
     $(".showSide").click(function () {
         if (showSide){
@@ -285,10 +331,11 @@ function trimText(text) {
         }
     });
 
+    /**
+     * fix legend position
+     */
     $("legend").each(function () {
         var that = $(this);
         that.after("<span class='panel-title'>" + that.text() + "</span>");
     });
-
-    window.scrollTo(0,1);
 })(jQuery);
