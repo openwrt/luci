@@ -44,9 +44,6 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		y_max = "100",
 		number_format = "%5.1lf%%",
 		data = {
-		        sources = {
-				percent = { "percent" }
-			},
 			instances = {
 				percent = "charge"
 			},
@@ -77,9 +74,6 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		vlabel = "Minutes",
 		number_format = "%.1lfm",
 		data = {
-			sources = {
-				timeleft = { "timeleft" }
-			},
 			instances = {
 				timeleft = { "battery" }
 			},
