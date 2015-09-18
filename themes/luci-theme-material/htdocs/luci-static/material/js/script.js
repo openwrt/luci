@@ -260,14 +260,16 @@
      */
     if (!getCurrentNodeByUrl()){
         getCurrentNodeByHash();
-        if (tree[0] == "Status" && tree[1] == "Overview"){
+        if (tree != undefined && tree[0] == "Status" && tree[1] == "Overview"){
             //overview
             lastNode.addClass("active");
             $($(".main > .main-left > .nav > .slide > .menu")[0]).click();
         }
     }
-    var mainNodeName = "node-"+ tree[0] + "-" + tree[1];
-    $("body").addClass(mainNodeName.replace(/[ \t\n\r\/]+/g,"_").toLowerCase());
+    if (tree != undefined){
+        var mainNodeName = "node-"+ tree[0] + "-" + tree[1];
+        $("body").addClass(mainNodeName.replace(/[ \t\n\r\/]+/g,"_").toLowerCase());
+    }
     $(".cbi-button-up").val("");
     $(".cbi-button-down").val("");
 

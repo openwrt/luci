@@ -219,10 +219,12 @@ header > .container > .brand {
 
 .main > .main-left > .nav > li a {
     color: #404040;
+    display: block;
 }
 
 .main > .main-left > .nav > li:nth-last-child(1) {
     margin-top: 2rem;
+    font-size: 1.2rem;
 }
 
 .main > .main-left > .nav > li {
@@ -859,7 +861,7 @@ input[name="nslookup"] {
     width: 80%;
 }
 
-#xhr_poll_status {
+header > .container > .pull-right > *{
     position: relative;
     top: 0.45rem;
     cursor: pointer;
@@ -869,7 +871,7 @@ input[name="nslookup"] {
     background-color: #14CE14;
 }
 
-#xhr_poll_status > .label {
+.label {
     padding: 0.3rem 0.8rem;
     font-size: 1rem;
     box-sizing: border-box;
@@ -882,6 +884,11 @@ input[name="nslookup"] {
     -moz-border-radius: 3px;
     border-radius: 3px;
     text-shadow: none;
+    text-decoration: none;
+}
+
+.notice{
+    background-color: #5BC0DE;
 }
 
 .showSide {
@@ -1068,11 +1075,11 @@ input[name="nslookup"] {
         line-height: 1.5;
     }
 
-    #xhr_poll_status {
+    header > .container > .pull-right > * {
         top: 0.35rem;
     }
 
-    #xhr_poll_status > .label {
+    .label {
         padding: 0.2rem 0.6rem;
     }
 
@@ -1203,7 +1210,7 @@ input[name="nslookup"] {
         padding: 0.2rem 0.7rem;
     }
 
-    .cbi-page-actions > div {
+    .cbi-page-actions > div > input {
         display: none;
     }
 
@@ -1250,5 +1257,9 @@ input[name="nslookup"] {
     select,
     input {
         font-size: 1.2rem;
+    }
+    
+    .mobile-hide{
+        display: none;
     }
 }

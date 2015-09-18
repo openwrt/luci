@@ -154,11 +154,11 @@
 			end
 			%>
 			<% if ucichanges > 0 then %>
-			<a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+			<a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><span class="mobile-hide"><%:Unsaved Changes%>: </span><%=ucichanges%></a>
 			<% end %>
 			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-				<span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
-				<span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
+				<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide"><%:Auto Refresh%> </span><%:on%></span>
+				<span class="label" id="xhr_poll_status_off" style="display:none"><span class="mobile-hide"><%:Auto Refresh%> </span><%:off%></span>
 			</span>
 		<% end %>
 		</div>
