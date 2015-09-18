@@ -219,10 +219,12 @@ header > .container > .brand {
 
 .main > .main-left > .nav > li a {
     color: #404040;
+    display: block;
 }
 
 .main > .main-left > .nav > li:nth-last-child(1) {
     margin-top: 2rem;
+    font-size: 1.2rem;
 }
 
 .main > .main-left > .nav > li {
@@ -570,12 +572,13 @@ td > table > tbody > tr > td {
 }
 
 .cbi-value-title {
+    word-wrap: break-word;
     padding-top: 0.6rem;
-    min-width: 23rem;
-    display: inline-block;
+    width: 23rem;
     float: left;
     text-align: right;
     padding-right: 2rem;
+    display: table-cell;
 }
 
 .cbi-value {
@@ -680,17 +683,18 @@ td > table > tbody > tr > td {
 .cbi-input-textarea {
     box-sizing: border-box;
     width: 100%;
-    min-height: 15rem;
+    min-height: 16rem;
     padding: 1rem;
-    font-size: 1.2rem;
+    font-size: 0.9rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: black;
 }
 
 #syslog {
-    width: 90%;
-    width: calc(100% - 2rem);
+    width: 100%;
     min-height: 15rem;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: smaller;
     color: #5F5F5F;
 
     margin-bottom: 20px;
@@ -859,7 +863,7 @@ input[name="nslookup"] {
     width: 80%;
 }
 
-#xhr_poll_status {
+header > .container > .pull-right > *{
     position: relative;
     top: 0.45rem;
     cursor: pointer;
@@ -869,7 +873,7 @@ input[name="nslookup"] {
     background-color: #14CE14;
 }
 
-#xhr_poll_status > .label {
+.label {
     padding: 0.3rem 0.8rem;
     font-size: 1rem;
     box-sizing: border-box;
@@ -882,6 +886,11 @@ input[name="nslookup"] {
     -moz-border-radius: 3px;
     border-radius: 3px;
     text-shadow: none;
+    text-decoration: none;
+}
+
+.notice{
+    background-color: #5BC0DE;
 }
 
 .showSide {
@@ -908,8 +917,8 @@ input[name="nslookup"] {
 }
 
 .node-main-login > .main fieldset {
-    margin-bottom: 2rem;
-    margin-bottom: 2rem;
+    padding: 0;
+    margin-bottom: 1rem;
     display: inline;
     background: none;
     border: none;
@@ -917,7 +926,7 @@ input[name="nslookup"] {
 }
 
 .node-main-login > .main .cbi-value-title {
-    min-width: 6rem;
+    width: 7rem;
 }
 
 .node-main-login > .main #maincontent {
@@ -1040,6 +1049,12 @@ input[name="nslookup"] {
     padding: 0.5rem 1rem;
 }
 
+.node-system-software > .main .cbi-value > pre{
+    background-color: #eee;
+    padding: 0.5rem;
+    overflow: auto;
+}
+
 .node-status-firewall fieldset,
 .node-system-software fieldset,
 .node-system-backup_flash_firmware fieldset {
@@ -1051,6 +1066,11 @@ input[name="nslookup"] {
 .node-system-backup_flash_firmware .cbi-tabmenu {
     border: none;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+}
+
+/* language fix */
+body.lang_pl.node-main-login .cbi-value-title{
+    width: 12rem;
 }
 
 @media screen and (max-width: 1600px) {
@@ -1068,20 +1088,24 @@ input[name="nslookup"] {
         line-height: 1.5;
     }
 
-    #xhr_poll_status {
+    header > .container > .pull-right > * {
         top: 0.35rem;
     }
 
-    #xhr_poll_status > .label {
+    .label {
         padding: 0.2rem 0.6rem;
     }
 
     .cbi-value-title {
-        min-width: 15rem;
+        width: 15rem;
     }
 
     fieldset {
         padding: 1rem;
+    }
+
+    .cbi-input-textarea{
+        font-size: smaller;
     }
 }
 
@@ -1122,7 +1146,8 @@ input[name="nslookup"] {
     }
 
     .cbi-value-title {
-        min-width: 6rem;
+        width: 9rem;
+        padding-right: 1rem;
     }
 
 
@@ -1150,6 +1175,10 @@ input[name="nslookup"] {
 
     #diag-rc-output > pre {
         font-size: 1.2rem;
+    }
+
+    .node-main-login > .main .cbi-value-title{
+        text-align: left;
     }
 }
 
@@ -1180,10 +1209,12 @@ input[name="nslookup"] {
     }
 
     .cbi-value-title {
+        width: 100%;
         min-width: 0rem !important;
         display: block;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
+        text-align: left;
     }
 
     .cbi-value-field, .cbi-value-description {
@@ -1203,7 +1234,7 @@ input[name="nslookup"] {
         padding: 0.2rem 0.7rem;
     }
 
-    .cbi-page-actions > div {
+    .cbi-page-actions > div > input {
         display: none;
     }
 
@@ -1220,11 +1251,13 @@ input[name="nslookup"] {
     }
 
     .node-main-login > .main .cbi-value-title {
+        width: 100% !important;
         font-size: 1.2rem;
     }
 
     .node-main-login > .main fieldset {
         margin: 0;
+        padding: 0.5rem;
     }
 
     h2 {
@@ -1250,5 +1283,22 @@ input[name="nslookup"] {
     select,
     input {
         font-size: 1.2rem;
+    }
+
+    .mobile-hide{
+        display: none;
+    }
+
+    .panel-title{
+        font-size: 1.4rem;
+        padding-bottom: 1rem;
+    }
+
+    .node-system-software > .main .cbi-value.cbi-value-last > div{
+        width: 100% !important;
+    }
+
+    .node-system-software > .main .cbi-value .cbi-value-field input{
+        width: 100%;
     }
 }
