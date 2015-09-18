@@ -572,12 +572,13 @@ td > table > tbody > tr > td {
 }
 
 .cbi-value-title {
+    word-wrap: break-word;
     padding-top: 0.6rem;
-    min-width: 23rem;
-    display: inline-block;
+    width: 23rem;
     float: left;
     text-align: right;
     padding-right: 2rem;
+    display: table-cell;
 }
 
 .cbi-value {
@@ -915,8 +916,8 @@ header > .container > .pull-right > *{
 }
 
 .node-main-login > .main fieldset {
-    margin-bottom: 2rem;
-    margin-bottom: 2rem;
+    padding: 0;
+    margin-bottom: 1rem;
     display: inline;
     background: none;
     border: none;
@@ -924,7 +925,7 @@ header > .container > .pull-right > *{
 }
 
 .node-main-login > .main .cbi-value-title {
-    min-width: 6rem;
+    width: 7rem;
 }
 
 .node-main-login > .main #maincontent {
@@ -1047,6 +1048,12 @@ header > .container > .pull-right > *{
     padding: 0.5rem 1rem;
 }
 
+.node-system-software > .main .cbi-value > pre{
+    background-color: #eee;
+    padding: 0.5rem;
+    overflow: auto;
+}
+
 .node-status-firewall fieldset,
 .node-system-software fieldset,
 .node-system-backup_flash_firmware fieldset {
@@ -1058,6 +1065,11 @@ header > .container > .pull-right > *{
 .node-system-backup_flash_firmware .cbi-tabmenu {
     border: none;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+}
+
+/* language fix */
+body.lang_pl.node-main-login .cbi-value-title{
+    width: 12rem;
 }
 
 @media screen and (max-width: 1600px) {
@@ -1084,7 +1096,7 @@ header > .container > .pull-right > *{
     }
 
     .cbi-value-title {
-        min-width: 15rem;
+        width: 15rem;
     }
 
     fieldset {
@@ -1129,7 +1141,8 @@ header > .container > .pull-right > *{
     }
 
     .cbi-value-title {
-        min-width: 6rem;
+        width: 9rem;
+        padding-right: 1rem;
     }
 
 
@@ -1157,6 +1170,10 @@ header > .container > .pull-right > *{
 
     #diag-rc-output > pre {
         font-size: 1.2rem;
+    }
+
+    .node-main-login > .main .cbi-value-title{
+        text-align: left;
     }
 }
 
@@ -1187,10 +1204,12 @@ header > .container > .pull-right > *{
     }
 
     .cbi-value-title {
+        width: 100%;
         min-width: 0rem !important;
         display: block;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
+        text-align: left;
     }
 
     .cbi-value-field, .cbi-value-description {
@@ -1227,11 +1246,13 @@ header > .container > .pull-right > *{
     }
 
     .node-main-login > .main .cbi-value-title {
+        width: 100% !important;
         font-size: 1.2rem;
     }
 
     .node-main-login > .main fieldset {
         margin: 0;
+        padding: 0.5rem;
     }
 
     h2 {
@@ -1258,8 +1279,21 @@ header > .container > .pull-right > *{
     input {
         font-size: 1.2rem;
     }
-    
+
     .mobile-hide{
         display: none;
+    }
+
+    .panel-title{
+        font-size: 1.4rem;
+        padding-bottom: 1rem;
+    }
+
+    .node-system-software > .main .cbi-value.cbi-value-last > div{
+        width: 100% !important;
+    }
+
+    .node-system-software > .main .cbi-value .cbi-value-field input{
+        width: 100%;
     }
 }
