@@ -11,6 +11,7 @@ f = SimpleForm("ipkgconf", translate("OPKG-Configuration"), translate("General o
 f:append(Template("admin_system/ipkg"))
 
 t = f:field(TextValue, "lines")
+t.wrap = "off"
 t.rows = 10
 function t.cfgvalue()
 	return nixio.fs.readfile(ipkgfile) or ""
@@ -28,6 +29,7 @@ g = SimpleForm("distfeedconf", translate("Distribution feeds"),
 	translate("Build/distribution specific feed definitions. This file will NOT be preserved in any sysupgrade."))
 
 d = g:field(TextValue, "lines2")
+d.wrap = "off"
 d.rows = 10
 function d.cfgvalue()
 	return nixio.fs.readfile(distfeeds) or ""
@@ -45,6 +47,7 @@ h = SimpleForm("customfeedconf", translate("Custom feeds"),
 	translate("Custom feed definitions, e.g. private feeds. This file can be preserved in a sysupgrade."))
 
 c = h:field(TextValue, "lines3")
+c.wrap = "off"
 c.rows = 10
 function c.cfgvalue()
 	return nixio.fs.readfile(customfeeds) or ""
