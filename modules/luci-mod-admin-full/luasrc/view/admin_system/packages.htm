@@ -132,7 +132,7 @@ end
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
 					</tr>
-					<% local empty = true; luci.model.ipkg.list_installed(querypat, function(n, v, d) empty = false; filter[n] = true %>
+					<% local empty = true; luci.model.ipkg.list_installed(querypat, function(n, v, s, d) empty = false; filter[n] = true %>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
 						<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;remove=<%=luci.util.pcdata(n)%>"><%:Remove%></a></td>
 						<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
@@ -164,13 +164,15 @@ end
 						<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
+						<th class="cbi-section-table-cell" style="text-align:right"><%:Size (.ipk)%></th>
 						<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
 					</tr>
-					<% local empty = true; opkg_list(querypat or letterpat, function(n, v, d) if filter[n] then return end; empty = false %>
+					<% local empty = true; opkg_list(querypat or letterpat, function(n, v, s, d) if filter[n] then return end; empty = false %>
 					<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
 						<td style="text-align:left; width:10%"><a onclick="return window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?')" href="<%=REQUEST_URI%>?submit=1&amp;install=<%=luci.util.pcdata(n)%>"><%:Install%></a></td>
 						<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
 						<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
+						<td style="text-align:right"><%=luci.util.pcdata(s)%></td>
 						<td style="text-align:left"><%=luci.util.pcdata(d)%></td>
 					</tr>
 					<% end) %>
@@ -179,6 +181,7 @@ end
 						<td style="text-align:left">&#160;</td>
 						<td style="text-align:left"><em><%:none%></em></td>
 						<td style="text-align:left"><em><%:none%></em></td>
+						<td style="text-align:right"><em><%:none%></em></td>
 						<td style="text-align:left"><em><%:none%></em></td>
 					</tr>
 					<% end %>

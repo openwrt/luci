@@ -60,7 +60,7 @@ s:tab("advanced", translate("Advanced Settings"))
 name = s:taboption("general", Value, "name", translate("Name"))
 name.optional = false
 name.forcewrite = true
-name.datatype = "uciname"
+name.datatype = "and(uciname,maxlength(14))"
 
 function name.write(self, section, value)
 	if zone:name() ~= value then
@@ -74,15 +74,6 @@ function name.write(self, section, value)
 		translate("Firewall - Zone Settings"),
 		translatef("Zone %q", value or "?")
 	}
-end
-
-function name.validate(self, value)
-	-- fw3 defines 14 as the maximum length of zone name
-	if #value > 14 then
-		return nil, translate("Zone name is too long")
-	else
-		return value
-	end
 end
 
 p = {
