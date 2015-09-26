@@ -60,7 +60,7 @@ s:tab("advanced", translate("Advanced Settings"))
 name = s:taboption("general", Value, "name", translate("Name"))
 name.optional = false
 name.forcewrite = true
-name.datatype = "uciname"
+name.datatype = "and(uciname,maxlength(14))"
 
 function name.write(self, section, value)
 	if zone:name() ~= value then
