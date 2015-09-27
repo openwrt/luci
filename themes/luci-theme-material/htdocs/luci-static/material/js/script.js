@@ -180,6 +180,7 @@
 
                 if (currentNode.indexOf(getUrlNode(href)) != -1){
                     ulNode.click();
+                    ulNode.next(".slide-menu").stop(true,true);
                     lastNode = that.parent();
                     tree = [trimText(ulNode.data("title")), trimText(that.data("title"))];
                     lastNode.addClass("active");
@@ -215,7 +216,7 @@
     $(".main > .main-left > .nav > .slide > .slide-menu > li > a").click(function () {
         if (lastNode != undefined) lastNode.removeClass("active");
         $(this).parent().addClass("active");
-        $(".main > .loading").fadeIn();
+        $(".main > .loading").fadeIn("fast");
         return true;
     });
 
@@ -225,7 +226,7 @@
     $(".main > .main-left > .nav > .slide > .slide-menu > li").click(function () {
         if (lastNode != undefined) lastNode.removeClass("active");
         $(this).addClass("active");
-        $(".main > .loading").fadeIn();
+        $(".main > .loading").fadeIn("fast");
         window.location = $($(this).find("a")[0]).attr("href");
         return;
     });
@@ -260,7 +261,7 @@
             that.click(function () {
                 var href = that.attr("href");
                 if (href.indexOf("#") == -1){
-                    $(".main > .loading").fadeIn();
+                    $(".main > .loading").fadeIn("fast");
                     return true;
                 }
             });
@@ -318,6 +319,7 @@
 
     $(".main-right").focus();
     $(".main-right").blur();
+    $("input").attr("size", "0");
 
     if (mainNodeName != undefined){
         console.log(mainNodeName);
@@ -329,6 +331,14 @@
                     $(".main-right").focus();
                     $(".main-right").blur();
                 });
+                break;
+            case "node-status-firewall":
+                var button = $(".node-status-firewall > .main fieldset li > a");
+                button.addClass("cbi-button cbi-button-reset a-to-btn");
+                break;
+            case "node-system-reboot":
+                var button = $(".node-system-reboot > .main > .main-right p > a");
+                button.addClass("cbi-button cbi-input-reset a-to-btn");
                 break;
         }
     }
