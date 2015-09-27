@@ -51,13 +51,10 @@ rf.optional = true
 
 
 s:taboption("files", Flag, "nohosts",
-	translate("Ignore Hosts files")).optional = true
+	translate("Ignore <code>/etc/hosts</code>")).optional = true
 
-hf = s:taboption("files", DynamicList, "addnhosts",
-	translate("Additional Hosts files"))
-
-hf:depends("nohosts", "")
-hf.optional = true
+s:taboption("files", DynamicList, "addnhosts",
+	translate("Additional Hosts files")).optional = true
 
 
 s:taboption("advanced", Flag, "boguspriv",
