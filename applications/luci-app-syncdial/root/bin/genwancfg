@@ -124,7 +124,7 @@ uci set network.wan.metric=40
 
 for i in $(seq 1 $wannum)
 do
-	macvlan_dev_add macvlan$i $pppoe_ifname
+	[ $old_frame -eq 0 ] && macvlan_dev_add macvlan$i $pppoe_ifname
 	pppoe_if_add vwan$i macvlan$i $pppoe_user $pppoe_password $((40+$i))
 	mwan_cfg_add vwan$i
 done
