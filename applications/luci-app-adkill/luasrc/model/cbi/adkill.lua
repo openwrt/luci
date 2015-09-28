@@ -25,7 +25,7 @@ s.template = "cbi/tblsection"
 s:option(Value, "host", translate("Host")).optional=false
 s:option(Value, "url", translate("URL")).optional=false
 
-s = m:section(TypedSection, "rule_302", translate("Rules - 302"), translate("The requests which match the source URL will be redirected to the destination URL.This rule is usually used to replace the flash player on the website."))
+s = m:section(TypedSection, "rule_redirect", translate("Rules - Redirect"), translate("The requests which match the source URL will be redirected to the destination URL.This rule is usually used to replace the flash player on the website."))
 s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"
@@ -42,4 +42,12 @@ s:option(Value, "host", translate("Host")).optional=false
 s:option(Value, "mark", translate("Keyword")).optional=false
 s:option(Value, "val", translate("Value")).optional=false
 
+s = m:section(TypedSection, "rule_fakepack", translate("Rules - Fake Package"), translate("Send a fake reply for the requests which match the source URL."))
+s.anonymous = true
+s.addremove = true
+s.template = "cbi/tblsection"
+s:option(Value, "host", translate("Host")).optional=false
+s:option(Value, "url", translate("URL")).optional=false
+s:option(Value, "type", translate("Content Type")).optional=false
+s:option(Value, "content", translate("Content")).optional=false
 return m
