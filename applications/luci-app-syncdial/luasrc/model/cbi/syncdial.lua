@@ -23,19 +23,21 @@ switch.rmempty = false
 --s:option(Flag, "force_redial", "强制全部重拨", "如果有接口掉线则强制所有接口下线重拨。").rmempty = false
 
 wannum = s:option(Value, "wannum", "虚拟WAN接口数量")
-wannum.datatype = "range(0,4)"
+wannum.datatype = "range(0,20)"
 wannum.optional = false
 
 diagchk = s:option(Flag, "dialchk", "启用掉线检测")
 diagchk.rmempty = false
 
 diagnum = s:option(Value, "dialnum", "最低在线接口数量", "如果在线接口数量小于这个值则重拨。")
-diagnum.datatype = "range(0,5)"
+diagnum.datatype = "range(0,21)"
 diagnum.optional = false
 
 dialwait = s:option(Value, "dialwait", "重拨等待时间", "重拨时，接口全部下线后下一次拨号前的等待时间。单位：秒 最小值：5秒")
 dialwait.datatype = "and(uinteger,min(5))"
 dialwait.optional = false
+
+s:option(Flag, "old_frame", "使用旧的macvlan创建方式").rmempty = false
 
 o = s:option(DummyValue, "_redial", "重新并发拨号")
 o.template = "syncdial/redial_button"

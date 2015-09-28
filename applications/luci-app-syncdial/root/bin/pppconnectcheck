@@ -48,8 +48,8 @@ then
 	config_foreach ifs_opt_up "interface"
 	ifup wan
 	logger -t PPPoE-IFChecker "Interfaces restarted."
-	logger -t PPPoE-IFChecker "Another checker will be started 15s later."
-	sleep 15 && pppconnectcheck &
+	logger -t PPPoE-IFChecker "Another checker will be started 60s later."
+	sleep 60 && pppconnectcheck &
 else
 	logger -t PPPoE-IFChecker "Nothing to do.Exit."
 fi
