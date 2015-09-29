@@ -60,6 +60,7 @@ pppoe_if_add() {
 apply_cfg() {
 	uci commit
 	/etc/init.d/network restart
+	killall pppconnectcheck
 	/etc/init.d/firewall restart
 	mwan3 restart
 }
