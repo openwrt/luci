@@ -7,7 +7,6 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for Asterisk
-LUCI_DEPENDS:=+ahcpd
 
 include ../../luci.mk
 
