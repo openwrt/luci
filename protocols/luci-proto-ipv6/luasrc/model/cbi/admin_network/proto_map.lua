@@ -50,7 +50,7 @@ ip6prefixlen.datatype    = "range(0,64)"
 
 
 s:taboption("general", Value, "ealen",
-	translate("EA-bits length")).datatype = "range(0,16)"
+	translate("EA-bits length")).datatype = "range(0,48)"
 
 s:taboption("general", Value, "psidlen",
 	translate("PSID-bits length")).datatype = "range(0,16)"
