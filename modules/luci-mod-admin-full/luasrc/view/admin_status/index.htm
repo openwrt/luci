@@ -88,7 +88,9 @@
 		if has_dsl then
 			local dsl_stat = luci.sys.exec("/etc/init.d/dsl_control lucistat")
 			local dsl_func = loadstring(dsl_stat)
-			rv.dsl = dsl_func()
+			if dsl_func then
+				rv.dsl = dsl_func()
+			end
 		end
 
 		luci.http.prepare_content("application/json")
