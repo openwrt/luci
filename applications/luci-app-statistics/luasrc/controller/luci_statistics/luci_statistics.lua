@@ -170,7 +170,7 @@ function statistics_render()
 	if #instances == 0 then
 		--instances = { graph.tree:plugin_instances( plugin )[1] }
 		instances = graph.tree:plugin_instances( plugin )
-		is_index = true
+		is_index = (#instances > 1)
 
 	-- index instance requested
 	elseif instances[1] == "-" then
