@@ -61,6 +61,7 @@ function rrdargs( graph, plugin, plugin_instance )
 			options = {
 				-- processed packets (tx DS)
 				if_packets__tx = {
+					weight  = 2,
 					title   = "Total   (TX)",
 					overlay = true,		-- don't summarize
 					total   = true,		-- report total amount of bytes
@@ -69,6 +70,7 @@ function rrdargs( graph, plugin, plugin_instance )
 
 				-- processed packets (rx DS)
 				if_packets__rx = {
+					weight  = 3,
 					title   = "Total   (RX)",
 					overlay = true,		-- don't summarize
 					flip    = true,		-- flip rx line
@@ -78,6 +80,7 @@ function rrdargs( graph, plugin, plugin_instance )
 
 				-- dropped packets (tx DS)
 				if_dropped__tx = {
+					weight  = 1,
 					title   = "Dropped (TX)",
 					overlay = true,		-- don't summarize
 					total   = true,		-- report total amount of bytes
@@ -86,6 +89,7 @@ function rrdargs( graph, plugin, plugin_instance )
 
 				-- dropped packets (rx DS)
 				if_dropped__rx = {
+					weight  = 4,
 					title   = "Dropped (RX)",
 					overlay = true,		-- don't summarize
 					flip    = true,		-- flip rx line
@@ -95,6 +99,7 @@ function rrdargs( graph, plugin, plugin_instance )
 
 				-- packet errors (tx DS)
 				if_errors__tx = {
+					weight  = 0,
 					title   = "Errors  (TX)",
 					overlay = true,		-- don't summarize
 					total   = true,		-- report total amount of packets
@@ -103,6 +108,7 @@ function rrdargs( graph, plugin, plugin_instance )
 
 				-- packet errors (rx DS)
 				if_errors__rx = {
+					weight  = 5,
 					title   = "Errors  (RX)",
 					overlay = true,		-- don't summarize
 					flip    = true,		-- flip rx line

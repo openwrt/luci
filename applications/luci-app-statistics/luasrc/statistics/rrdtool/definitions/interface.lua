@@ -66,36 +66,40 @@ function rrdargs( graph, plugin, plugin_instance )
 			options = {
 				-- processed packets (tx DS)
 				if_packets__tx = {
+					weight  = 1,
 					overlay = true,		-- don't summarize
 					total   = true,		-- report total amount of bytes
 					color   = "00ff00",	-- processed tx is green
-					title	= "Processed (tx)"
+					title	= "Processed (TX)"
 				},
 
 				-- processed packets (rx DS)
 				if_packets__rx = {
+					weight  = 2,
 					overlay = true,		-- don't summarize
 					flip    = true,		-- flip rx line
 					total   = true,		-- report total amount of bytes
 					color   = "0000ff",	-- processed rx is blue
-					title	= "Processed (rx)"
+					title	= "Processed (RX)"
 				},
 
 				-- packet errors (tx DS)
 				if_errors__tx = {
+					weight  = 0,
 					overlay = true,		-- don't summarize
 					total   = true,		-- report total amount of packets
 					color   = "ff5500",	-- tx errors are orange
-					title	= "Errors (tx)"
+					title	= "Errors    (TX)"
 				},
 
 				-- packet errors (rx DS)
 				if_errors__rx = {
+					weight  = 3,
 					overlay = true,		-- don't summarize
 					flip    = true,		-- flip rx line
 					total   = true,		-- report total amount of packets
 					color   = "ff0000",	-- rx errors are red
-					title	= "Errors (rx)"
+					title	= "Errors    (RX)"
 				}
 			}
 		}
