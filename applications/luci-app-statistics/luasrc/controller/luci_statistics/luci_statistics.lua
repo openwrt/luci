@@ -42,6 +42,7 @@ function index()
 		network		= _("Network"),
 		nut			= _("UPS"),
 		olsrd		= _("OLSRd"),
+		openvpn		= _("OpenVPN"),
 		ping		= _("Ping"),
 		processes	= _("Processes"),
 		rrdtool		= _("RRDTool"),
@@ -56,7 +57,7 @@ function index()
 	local collectd_menu = {
 		output  = { "csv", "network", "rrdtool", "unixsock" },
 		general = { "cpu", "df", "disk", "email", "entropy", "exec", "irq", "load", "memory", "nut", "processes", "sensors", "uptime" },
-		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "ping", "splash_leases", "tcpconns", "iwinfo" }
+		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "openvpn", "ping", "splash_leases", "tcpconns", "iwinfo" }
 	}
 
 	-- create toplevel menu nodes
