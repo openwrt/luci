@@ -62,6 +62,11 @@
     color: inherit;
 }
 
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
 html, body {
     margin: 0px;
     padding: 0px;
@@ -90,16 +95,19 @@ input {
     background-image: none;
     height: 2rem;
     font-size: 1.1rem;
-    transition: all 0.2s ease-in-out;
 }
 
-select:focus,
+select:not([multiple="multiple"]):focus,
 input:focus {
     height: 2rem;
     height: calc(2rem + 1px);
     margin-bottom: -1px;
     border-color: #0099CC;
     border-width: 2px;
+}
+
+select[multiple="multiple"]{
+    height: auto;
 }
 
 code {
@@ -256,6 +264,10 @@ header > .container > .brand {
     border-color: #eea236;
 }
 
+.error{
+    color: red;
+}
+
 #maincontent > .container > div:nth-child(1).alert-message.warning > a {
     font: inherit;
     overflow: visible;
@@ -395,11 +407,14 @@ fieldset {
     font-family: inherit;
 
     min-width: inherit;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     border-radius: 0;
     background-color: #FFF;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+
+    -webkit-overflow-scrolling:touch;
 }
 
 fieldset > legend {
@@ -488,9 +503,10 @@ td > table > tbody > tr > td {
 /* button style */
 
 .cbi-button {
+    -webkit-appearance: none;
     text-transform: uppercase;
     color: rgba(0, 0, 0, 0.87);
-    background-color: #FFF;
+    background-color: #F0F0F0;
     transition: all 0.2s ease-in-out;
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -515,7 +531,6 @@ td > table > tbody > tr > td {
 .cbi-button:focus,
 .cbi-button:active {
     color: rgba(0, 0, 0, 0.87);
-    background-color: white;
     outline: 0;
     text-decoration: none;
     color: rgba(0, 0, 0, 0.87);
@@ -603,9 +618,9 @@ td > table > tbody > tr > td {
 .tabs > li[class~="active"],
 .tabs > li:hover {
     cursor: pointer;
-    background-color: white;
     border-bottom: 0.2rem solid #0099CC;
     color: #0099CC;
+    margin-bottom: -0.18751rem;
 }
 
 .tabs > li[class~="active"] > a {
@@ -613,7 +628,7 @@ td > table > tbody > tr > td {
 }
 
 .tabs > li:hover {
-    border-bottom: 0.2rem solid #C9C9C9;
+    border-bottom: 0.18751rem solid #C9C9C9;
 }
 
 .cbi-tabmenu {
@@ -677,6 +692,8 @@ td > table > tbody > tr > td {
 
 .cbi-value {
     padding: 1rem;
+    display: inline-block;
+    width: 100%;
 }
 
 .cbi-section-table-descr > .cbi-section-table-cell,
@@ -697,6 +714,7 @@ td > table > tbody > tr > td {
 .cbi-map-descr {
     padding: 0.5rem;
     color: #999;
+    font-size: small;
 }
 
 /* luci */
@@ -735,8 +753,7 @@ td > table > tbody > tr > td {
 }
 
 .ifacebadge {
-    display: inline-block;
-    min-width: 8rem;
+    display: inline-flex;
     border-bottom: 1px solid #CCCCCC;
     padding: 0.5rem 1rem;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -914,6 +931,11 @@ small {
     font-size: 1.3rem;
 }
 
+.cbi-optionals {
+    padding: 1rem 1rem 0 1rem;
+    border-top: 1px solid #CCC;
+}
+
 #diag-rc-output > pre {
     background-color: #f5f5f5;
     display: block;
@@ -992,6 +1014,7 @@ header > .container > .pull-right > * {
     background: none;
     border: none;
     box-shadow: none;
+    overflow: hidden;
 }
 
 .node-main-login > .main .cbi-value-title {
@@ -1014,6 +1037,19 @@ header > .container > .pull-right > * {
 
 .node-main-login > .main form > div:nth-last-child(1) {
     float: right;
+}
+
+.node-main-login > .main .cbi-value{
+    display: block;
+}
+
+.node-main-login > .main .cbi-value > *{
+    display: inline-block !important;
+}
+
+.node-main-login > .main .cbi-input-user,
+.node-main-login > .main .cbi-input-password{
+    min-width: 15rem;
 }
 
 .node-main-login footer{
@@ -1079,6 +1115,11 @@ header > .container > .pull-right > * {
 
 .cbi-tabmenu + .cbi-section {
     margin-top: 0;
+}
+
+/* fix network firewall*/
+.node-network-firewall > .main .cbi-section-table-row > .cbi-value-field .cbi-input-select{
+    min-width: 4rem;
 }
 
 .node-status-firewall fieldset,
@@ -1347,5 +1388,38 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     .node-system-software > .main .cbi-value .cbi-value-field input {
         width: 100%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .cbi-value input[type="password"],
+    .cbi-value input[type="text"] {
+        min-width: 20rem;
+    }
+
+    .cbi-value-field .cbi-input-select {
+        min-width: 20rem;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .cbi-value input[type="password"],
+    .cbi-value input[type="text"] {
+        min-width: 22rem;
+    }
+
+    .cbi-value-field .cbi-input-select {
+        min-width: 22rem;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .cbi-value input[type="password"],
+    .cbi-value input[type="text"] {
+        min-width: 25rem;
+    }
+
+    .cbi-value-field .cbi-input-select {
+        min-width: 25rem;
     }
 }
