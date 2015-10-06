@@ -4,7 +4,7 @@
 	<script type="text/javascript">//<![CDATA[
 		var apply_xhr = new XHR();
 
-		apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "restart", table.concat(configs, ","))%>', null,
+		apply_xhr.post('<%=luci.dispatcher.build_url("servicectl", "restart", table.concat(configs, ","))%>', { token: '<%=token%>' },
 			function() {
 				var checkfinish = function() {
 					apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "status")%>', null,
