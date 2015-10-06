@@ -34,7 +34,8 @@ function index()
 	entry({"admin", "system", "flashops"}, call("action_flashops"), _("Backup / Flash Firmware"), 70)
 	entry({"admin", "system", "flashops", "backupfiles"}, form("admin_system/backupfiles"))
 
-	entry({"admin", "system", "reboot"}, call("action_reboot"), _("Reboot"), 90)
+	entry({"admin", "system", "reboot"}, template("admin_system/reboot"), _("Reboot"), 90)
+	entry({"admin", "system", "reboot", "call"}, post("action_reboot"))
 end
 
 function action_clock_status()
@@ -316,11 +317,7 @@ function action_passwd()
 end
 
 function action_reboot()
-	local reboot = luci.http.formvalue("reboot")
-	luci.template.render("admin_system/reboot", {reboot=reboot})
-	if reboot then
-		luci.sys.reboot()
-	end
+	luci.sys.reboot()
 end
 
 function fork_exec(command)
