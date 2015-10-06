@@ -1,5 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2010-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.admin.uci", package.seeall)
@@ -10,9 +10,9 @@ function index()
 
 	entry({"admin", "uci"}, nil, _("Configuration"))
 	entry({"admin", "uci", "changes"}, call("action_changes"), _("Changes"), 40).query = {redir=redir}
-	entry({"admin", "uci", "revert"}, call("action_revert"), _("Revert"), 30).query = {redir=redir}
-	entry({"admin", "uci", "apply"}, call("action_apply"), _("Apply"), 20).query = {redir=redir}
-	entry({"admin", "uci", "saveapply"}, call("action_apply"), _("Save &#38; Apply"), 10).query = {redir=redir}
+	entry({"admin", "uci", "revert"}, post("action_revert"), _("Revert"), 30).query = {redir=redir}
+	entry({"admin", "uci", "apply"}, post("action_apply"), _("Apply"), 20).query = {redir=redir}
+	entry({"admin", "uci", "saveapply"}, post("action_apply"), _("Save &#38; Apply"), 10).query = {redir=redir}
 end
 
 function action_changes()
