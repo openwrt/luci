@@ -743,6 +743,15 @@ local function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+
+	if http.formvalue("cbi.submit") == "1" and
+	   http.formvalue("token") ~= disp.context.urltoken.stok
+	then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return
+	end
 
 	local config = self.config or {}
 	local maps = cbi.load(self.model, ...)
