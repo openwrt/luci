@@ -5,7 +5,7 @@
 -%>
 
 <%+header%>
-<h2><a id="content" name="content"><%:Kernel Log%></a></h2>
+<h2 name="content"><%:Kernel Log%></h2>
 <div id="content_syslog">
 <textarea readonly="readonly" wrap="off" rows="<%=dmesg:cmatch("\n")+2%>" id="syslog"><%=dmesg:pcdata()%></textarea>
 </div>
