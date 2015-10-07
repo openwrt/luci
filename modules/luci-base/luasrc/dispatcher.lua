@@ -286,6 +286,7 @@ function dispatch(request)
 		   ifattr      = function(...) return _ifattr(...) end;
 		   attr        = function(...) return _ifattr(true, ...) end;
 		   token       = ctx.urltoken.stok;
+		   url         = build_url;
 		}, {__index=function(table, key)
 			if key == "controller" then
 				return build_url()
