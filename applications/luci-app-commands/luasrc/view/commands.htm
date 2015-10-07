@@ -58,7 +58,7 @@
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("admin", "system", "commands", "run")%>/' + id + (args ? '/' + args : ''), null,
+			stxhr.get('<%=url('admin/system/commands/run')%>/' + id + (args ? '/' + args : ''), null,
 				function(x, st)
 				{
 					if (st)
@@ -93,7 +93,7 @@
 		if (field)
 			args = encodeURIComponent(field.value);
 
-		location.href = '<%=luci.dispatcher.build_url("admin", "system", "commands", "download")%>/' + id + (args ? '/' + args : '');
+		location.href = '<%=url('admin/system/commands/download')%>/' + id + (args ? '/' + args : '');
 	}
 
 	function command_link(id)

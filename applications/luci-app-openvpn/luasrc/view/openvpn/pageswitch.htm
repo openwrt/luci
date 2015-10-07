@@ -6,14 +6,14 @@
 
 <fieldset class="cbi-section">
 	<legend>
-		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn")%>"><%:Overview%></a> &raquo;
+		<a href="<%=url('admin/services/openvpn')%>"><%:Overview%></a> &raquo;
 		<%=luci.i18n.translatef("Instance \"%s\"", self.instance)%>
 	</legend>
 
 	<% if self.mode == "basic" then %>
-		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "advanced", self.instance, "Service")%>"><%:Switch to advanced configuration »%></a>
+		<a href="<%=url('admin/services/openvpn/advanced', self.instance, "Service")%>"><%:Switch to advanced configuration »%></a>
 	<% else %>
-		<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "basic", self.instance)%>"><%:« Switch to basic configuration%></a>
+		<a href="<%=url('admin/services/openvpn/basic', self.instance)%>"><%:« Switch to basic configuration%></a>
 		<hr style="margin:0.5em 0" />
 		<%:Configuration category%>:
 		<% for i, c in ipairs(self.categories) do %>

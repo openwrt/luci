@@ -1,7 +1,7 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "wireless_status", self.ifname)%>', null,
+	XHR.poll(5, '<%=url('admin/network/wireless_status', self.ifname)%>', null,
 		function(x, iw)
 		{
 			if (iw && (iw = iw[0]))
