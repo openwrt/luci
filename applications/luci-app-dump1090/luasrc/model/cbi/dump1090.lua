@@ -114,11 +114,11 @@ forward_mlat.default = false
 
 lat=s:option(Value, "lat", translate("Reference/receiver latitude for surface posn"))
 lat.rmempty = true
-lat.datatype = "integer"
+lat.datatype = "float"
 
 lon=s:option(Value, "lon", translate("Reference/receiver longitude for surface posn"))
 lon.rmempty = true
-lon.datatype = "integer"
+lon.datatype = "float"
 
 max_range=s:option(Value, "max_range", translate("Absolute maximum range for position decoding"))
 max_range.rmempty = true
