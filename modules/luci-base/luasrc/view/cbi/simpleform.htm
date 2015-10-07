@@ -2,6 +2,7 @@
 <form method="post" enctype="multipart/form-data" action="<%=REQUEST_URI%>">
 	<div>
 		<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+		<input type="hidden" name="token" value="<%=token%>" />
 		<input type="hidden" name="cbi.submit" value="1" />
 	</div>
 <% end %>

@@ -869,6 +869,15 @@ local function _form(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+
+	if http.formvalue("cbi.submit") == "1" and
+	   http.formvalue("token") ~= disp.context.urltoken.stok
+	then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return
+	end
 
 	local maps = luci.cbi.load(self.model, ...)
 	local state = nil
