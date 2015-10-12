@@ -109,7 +109,7 @@ end
 m = Map("ddns")
 
 m.title = [[<a href="]] .. DISP.build_url("admin", "services", "ddns") .. [[">]] ..
-		translate("Dynamic DNS") .. [["</a>"]]
+		translate("Dynamic DNS") .. [[</a>]]
 
 m.description = translate("Dynamic DNS allows that your router can be reached with " ..
 			"a fixed hostname while having a dynamically changing " ..
