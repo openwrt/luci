@@ -10,9 +10,8 @@ local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 -- cbi-map definition -- #######################################################
 local m = Map("ddns")
 
--- first need to close <a> from cbi map template our <a> closed by template
-m.title = [[</a><a href="]] .. DISP.build_url("admin", "services", "ddns") .. [[">]] 
-	.. translate("Dynamic DNS")
+m.title = [[<a href="]] .. DISP.build_url("admin", "services", "ddns") .. [[">]] 
+	.. translate("Dynamic DNS") .. [[</a>]]
 
 m.description = translate("Dynamic DNS allows that your router can be reached with " ..
 			"a fixed hostname while having a dynamically changing IP address.")
