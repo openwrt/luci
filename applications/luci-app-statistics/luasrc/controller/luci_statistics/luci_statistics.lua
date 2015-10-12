@@ -20,7 +20,7 @@ function index()
 
 	local labels = {
 		s_output	= _("Output plugins"),
-		s_system	= _("System plugins"),
+		s_general	= _("General plugins"),
 		s_network	= _("Network plugins"),
 
 		conntrack	= _("Conntrack"),
@@ -54,7 +54,7 @@ function index()
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "csv", "network", "rrdtool", "unixsock" },
-		system  = { "cpu", "df", "disk", "email", "entropy", "exec", "irq", "load", "memory", "nut", "processes", "uptime" },
+		general = { "cpu", "df", "disk", "email", "entropy", "exec", "irq", "load", "memory", "nut", "processes", "uptime" },
 		network = { "conntrack", "dns", "interface", "iptables", "netlink", "olsrd", "ping", "splash_leases", "tcpconns", "iwinfo" }
 	}
 
@@ -62,7 +62,7 @@ function index()
 	local st = entry({"admin", "statistics"}, template("admin_statistics/index"), _("Statistics"), 80)
 	st.index = true
 
-	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _("Collectd"), 10).subindex = true
+	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _("Setup"), 20).subindex = true
 
 
 	-- populate collectd plugin menu
@@ -87,7 +87,7 @@ function index()
 	end
 
 	-- output views
-	local page = entry( { "admin", "statistics", "graph" }, template("admin_statistics/index"), _("Graphs"), 80)
+	local page = entry( { "admin", "statistics", "graph" }, template("admin_statistics/index"), _("Graphs"), 10)
 	      page.setuser  = "nobody"
 	      page.setgroup = "nogroup"
 
