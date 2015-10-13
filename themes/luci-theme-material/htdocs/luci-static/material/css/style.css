@@ -150,6 +150,9 @@ footer > a{
 .main {
     top: 4rem;
     bottom: 0rem;
+    position: relative;
+    height: 100%;
+    height: calc(100% - 4rem);
 }
 
 .main > .loading{
@@ -195,19 +198,26 @@ footer > a{
 
 .main-left {
     float: left;
+    top: 4rem;
     width: 15%;
     width: calc(0% + 17rem);
     height: 100%;
-    overflow-y: auto;
+    height: calc(100% - 4rem);
     background-color: white;
+
+    overflow-x: auto;
+    position: fixed;
 }
 
 .main-right {
     width: 85%;
     width: calc(100% - 17rem);
     float: right;
-    overflow-y: auto;
     height: 100%;
+    background-color: #EEE;
+}
+
+.main-right > #maincontent{
     background-color: #EEE;
 }
 
@@ -1195,10 +1205,13 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     .main {
         top: 3.5rem;
+        height: calc(100% - 3.5rem);
     }
 
     .main-left {
         width: calc(0% + 13rem);
+        top: 3.5rem;
+        height: calc(100% - 3.5rem);
     }
 
     .main-right {
