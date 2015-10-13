@@ -19,6 +19,7 @@
 -%>
 
 <%
+	local ver = require "luci.version"
 	local sys  = require "luci.sys"
 	local util = require "luci.util"
 	local http = require "luci.http"
@@ -121,7 +122,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="msapplication-TileColor" content="#0099CC">
     <meta name="msapplication-TileImage" content="<%=media%>/logo.png"/>
-    <link rel="stylesheet" href="<%=media%>/css/style.css">
+    <link rel="stylesheet" href="<%=media%>/css/style.css?<%= ver.luciversion %>">
     <link rel="shortcut icon" href="<%=media%>/favicon.ico">
     <% if node and node.css then %>
         <link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
