@@ -58,7 +58,7 @@
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("admin", "system", "commands", "run")%>/' + id + (args ? '/' + args : ''), null,
+			stxhr.get('<%=url('admin/system/commands/run')%>/' + id + (args ? '/' + args : ''), null,
 				function(x, st)
 				{
 					if (st)
@@ -93,7 +93,7 @@
 		if (field)
 			args = encodeURIComponent(field.value);
 
-		location.href = '<%=luci.dispatcher.build_url("admin", "system", "commands", "download")%>/' + id + (args ? '/' + args : '');
+		location.href = '<%=url('admin/system/commands/download')%>/' + id + (args ? '/' + args : '');
 	}
 
 	function command_link(id)
@@ -135,7 +135,7 @@
 
 <form method="get" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
 	<div class="cbi-map">
-		<h2><a id="content" name="content"><%:Custom Commands%></a></h2>
+		<h2 name="content"><%:Custom Commands%></h2>
 
 		<fieldset class="cbi-section">
 			<% local _, command; for _, command in ipairs(commands) do %>

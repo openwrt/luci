@@ -397,6 +397,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 					transform_rpn = dopts.transform_rpn or "0,+",
 					noarea   = dopts.noarea  or false,
 					title    = dopts.title   or nil,
+					weight   = dopts.weight  or nil,
 					ds       = dsource,
 					type     = dtype,
 					instance = dinst,
@@ -469,6 +470,12 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 			for i, o in ipairs(opts.rrdopts) do _ti( _args, o ) end
 		end
 
+		-- sort sources
+		table.sort(_sources, function(a, b)
+			local x = a.weight or a.index or 0
+			local y = b.weight or b.index or 0
+			return x < y
+		end)
 
 		-- create DEF statements for each instance
 		for i, source in ipairs(_sources) do

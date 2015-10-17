@@ -178,7 +178,7 @@
 	%>
 	<div class="pull-right">
 	<% if ucichanges > 0 then %>
-	  <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+	  <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes?redir=<%=http.urlencode(http.formvalue("redir") or REQUEST_URI)%>"><%:Unsaved Changes%>: <%=ucichanges%></a>
 	<% end %>
       <span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
        <span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>

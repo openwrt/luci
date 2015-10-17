@@ -1,4 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
@@ -284,6 +285,8 @@ function dispatch(request)
 		   resource    = luci.config.main.resourcebase;
 		   ifattr      = function(...) return _ifattr(...) end;
 		   attr        = function(...) return _ifattr(true, ...) end;
+		   token       = ctx.urltoken.stok;
+		   url         = build_url;
 		}, {__index=function(table, key)
 			if key == "controller" then
 				return build_url()
@@ -375,6 +378,20 @@ function dispatch(request)
 		else
 			ctx.authsession = sess
 			ctx.authuser = user
+		end
+	end
+
+	if c and type(c.target) == "table" and c.target.post == true then
+		if http.getenv("REQUEST_METHOD") ~= "POST" then
+			http.status(405, "Method Not Allowed")
+			http.header("Allow", "POST")
+			return
+		end
+
+		if http.formvalue("token") ~= ctx.urltoken.stok then
+			http.status(403, "Forbidden")
+			luci.template.render("csrftoken")
+			return
 		end
 	end
 
@@ -703,6 +720,16 @@ function call(name, ...)
 	return {type = "call", argv = {...}, name = name, target = _call}
 end
 
+function post(name, ...)
+	return {
+		type = "call",
+		post = true,
+		argv = { ... },
+		name = name,
+		target = _call
+	}
+end
+
 
 local _template = function(self, ...)
 	require "luci.template".render(self.view)
@@ -717,6 +744,15 @@ local function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+
+	if http.formvalue("cbi.submit") == "1" and
+	   http.formvalue("token") ~= disp.context.urltoken.stok
+	then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return
+	end
 
 	local config = self.config or {}
 	local maps = cbi.load(self.model, ...)
@@ -834,6 +870,15 @@ local function _form(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+
+	if http.formvalue("cbi.submit") == "1" and
+	   http.formvalue("token") ~= disp.context.urltoken.stok
+	then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return
+	end
 
 	local maps = luci.cbi.load(self.model, ...)
 	local state = nil

@@ -87,7 +87,7 @@
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:Join Network: Wireless Scan%></a></h2>
+<h2 name="content"><%:Join Network: Wireless Scan%></h2>
 
 <div class="cbi-map">
 	<fieldset class="cbi-section">
@@ -135,7 +135,7 @@
 	</fieldset>
 </div>
 <div class="cbi-page-actions right">
-	<form class="inline" action="<%=luci.dispatcher.build_url("admin/network/wireless")%>" method="get">
+	<form class="inline" action="<%=url("admin/network/wireless")%>" method="get">
 		<input class="cbi-button cbi-button-reset" type="submit" value="<%:Back to overview%>" />
 	</form>
 	<form class="inline" action="<%=REQUEST_URI%>" method="get">

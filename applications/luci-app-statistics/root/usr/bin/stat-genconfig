@@ -187,9 +187,9 @@ function _list_expand( c, l, nopad )
 			end
 
 			if n:find("(%w+)ses") then
-				k = n:gsub("(%w+)ses", "%1s")
+				k = n:gsub("(%w+)ses$", "%1s")
 			else
-				k = n:gsub("(%w+)s", "%1")
+				k = n:gsub("(%w+)s$", "%1")
 			end
 
 			str = str .. _expand( c[n], k, nopad )
@@ -375,6 +375,12 @@ plugins = {
 		{ }
 	},
 
+	openvpn = {
+		{ },
+		{ "CollectIndividualUsers", "CollectUserCount", "CollectCompression", "ImprovedNamingSchema" },
+		{ "StatusFile" }
+	},
+
 	ping	= {
 		{ "TTL", "Interval" },
 		{ },
@@ -391,6 +397,12 @@ plugins = {
 		{ "DataDir", "StepSize", "HeartBeat", "RRARows", "XFF", "CacheFlush", "CacheTimeout" },
 		{ "RRASingle" },
 		{ "RRATimespans" }
+	},
+
+	sensors = {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Sensor" }
 	},
 
         splash_leases = {

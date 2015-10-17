@@ -59,12 +59,12 @@
 	}
 </style>
 
-<h2><a id="content" name="content"><%:Firewall Status%></a></h2>
+<h2 name="content"><%:Firewall Status%></h2>
 
 <% if has_ip6tables then %>
 <ul class="cbi-tabmenu">
-	<li class="cbi-tab<%= mode ~= 4 and "-disabled" %>"><a href="<%=luci.dispatcher.build_url("admin/status/iptables/4")%>"><%:IPv4 Firewall%></a></li>
-	<li class="cbi-tab<%= mode ~= 6 and "-disabled" %>"><a href="<%=luci.dispatcher.build_url("admin/status/iptables/6")%>"><%:IPv6 Firewall%></a></li>
+	<li class="cbi-tab<%= mode ~= 4 and "-disabled" %>"><a href="<%=url("admin/status/iptables/4")%>"><%:IPv4 Firewall%></a></li>
+	<li class="cbi-tab<%= mode ~= 6 and "-disabled" %>"><a href="<%=url("admin/status/iptables/6")%>"><%:IPv6 Firewall%></a></li>
 </ul>
 <% end %>
 

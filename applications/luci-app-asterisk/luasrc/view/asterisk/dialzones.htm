@@ -47,7 +47,7 @@
 %>
 
 
-<form method="post" action="<%=luci.dispatcher.build_url("admin", "asterisk", "dialplans", "zones")%>" enctype="multipart/form-data">
+<form method="post" action="<%=url('admin/asterisk/dialplans/zones')%>" enctype="multipart/form-data">
 	<div>
 		<script type="text/javascript" src="/luci-static/resources/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />
@@ -55,9 +55,9 @@
 	</div>
 
 <div class="cbi-map" id="cbi-asterisk">
-	<h2><a id="content" name="content">Dial Zone Management</a></h2>
+	<h2 name="content">Dial Zone Management</h2>
 	<div class="cbi-map-descr">
-		<a href="<%=luci.dispatcher.build_url("admin/asterisk/dialplans")%>" class="cbi-title-ref">Back to dialplan overview</a><br /><br />
+		<a href="<%=url("admin/asterisk/dialplans")%>" class="cbi-title-ref">Back to dialplan overview</a><br /><br />
 		Here you can manage your dial zones. The zones are used to route outgoing calls to the destination.
 		Each zone groups multiple trunks and number matches to represent a logical destination. Zones can
 		also be used to enforce certain dial restrictions on selected extensions.
@@ -109,10 +109,10 @@
 						<%=rule.description or rule.name%>
 					</td>
 					<td style="text-align:left" class="cbi-value-field">
-						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans', 'out', rule.name)%>">
+						<a href="<%=url('admin/asterisk/dialplans/out', rule.name)%>">
 							<img style="border:none" alt="Edit entry" title="Edit entry" src="/luci-static/resources/cbi/edit.gif" />
 						</a>
-						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans', 'zones')%>?delzone=<%=rule.name%>">
+						<a href="<%=url('admin/asterisk/dialplans/zones')%>?delzone=<%=rule.name%>">
 							<img style="border:none" alt="Delete entry" title="Delete entry" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
 					</td>

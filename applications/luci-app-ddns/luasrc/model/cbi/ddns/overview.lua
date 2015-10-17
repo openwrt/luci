@@ -26,8 +26,7 @@ bold_off = [[</strong>]]
 -- cbi-map definition -- #######################################################
 m = Map("ddns")
 
--- first need to close <a> from cbi map template our <a> closed by template
-m.title	= [[</a><a href="javascript:alert(']]
+m.title	= [[<a href="javascript:alert(']]
 		.. translate("Version Information")
 		.. [[\n\nluci-app-ddns]]
 		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("luci-app-ddns")
@@ -37,7 +36,7 @@ m.title	= [[</a><a href="javascript:alert(']]
 		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("ddns-scripts")
 		.. [[\n\n]]
 	.. [[')">]]
-	.. translate("Dynamic DNS")
+	.. translate("Dynamic DNS") .. [[</a>]]
 
 m.description = translate("Dynamic DNS allows that your router can be reached with " ..
 			"a fixed hostname while having a dynamically changing " ..

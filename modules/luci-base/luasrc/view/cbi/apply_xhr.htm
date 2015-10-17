@@ -4,10 +4,10 @@
 	<script type="text/javascript">//<![CDATA[
 		var apply_xhr = new XHR();
 
-		apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "restart", table.concat(configs, ","))%>', null,
+		apply_xhr.post('<%=url('servicectl/restart', table.concat(configs, ","))%>', { token: '<%=token%>' },
 			function() {
 				var checkfinish = function() {
-					apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "status")%>', null,
+					apply_xhr.get('<%=url('servicectl/status')%>', null,
 						function(x) {
 							if( x.responseText == 'finish' )
 							{

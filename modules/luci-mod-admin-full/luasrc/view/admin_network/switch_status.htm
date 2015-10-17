@@ -1,6 +1,6 @@
 <script type="text/javascript">//<![CDATA[
 	var switches = [ '<%=table.concat(self.switches, "', '")%>' ];
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "switch_status")%>/' + switches.join(','), null,
+	XHR.poll(5, '<%=url('admin/network/switch_status')%>/' + switches.join(','), null,
 		function(x, st)
 		{
 			for (var i = 0; i < switches.length; i++)

@@ -1,7 +1,7 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
+	XHR.poll(5, '<%=url('admin/network/iface_status', self.network)%>', null,
 		function(x, ifc)
 		{
 			if (ifc && (ifc = ifc[0]))

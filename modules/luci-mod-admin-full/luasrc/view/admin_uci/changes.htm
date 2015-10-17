@@ -1,12 +1,12 @@
 <%#
  Copyright 2008 Steven Barth <steven@midlink.org>
- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
  Licensed to the public under the Apache License 2.0.
 -%>
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:Configuration%> / <%:Changes%></a></h2>
+<h2 name="content"><%:Configuration%> / <%:Changes%></h2>
 
 <% if changes then %>
 	<%+admin_uci/changelog%>
@@ -25,15 +25,18 @@
 	<% end %>
 
 	<div style="text-align:right">
-		<form class="inline" method="get" action="<%=controller%>/admin/uci/apply">
+		<form class="inline" method="post" action="<%=controller%>/admin/uci/apply">
+			<input type="hidden" name="token" value="<%=token%>" />
 			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-apply" type="submit" value="<%:Apply%>" />
 		</form>
-		<form class="inline" method="get" action="<%=controller%>/admin/uci/saveapply">
+		<form class="inline" method="post" action="<%=controller%>/admin/uci/saveapply">
+			<input type="hidden" name="token" value="<%=token%>" />
 			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-save" type="submit" value="<%:Save & Apply%>" />
 		</form>
-		<form class="inline" method="get" action="<%=controller%>/admin/uci/revert">
+		<form class="inline" method="post" action="<%=controller%>/admin/uci/revert">
+			<input type="hidden" name="token" value="<%=token%>" />
 			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
 		</form>

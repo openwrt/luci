@@ -111,13 +111,13 @@
 	}
 
 	// force to immediate show status (not waiting for XHR.poll)
-	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.get('<%=url('admin/services/ddns/status')%>', null,
 		function(x, data) {
 			if (data) { _data2elements(x, data); }
 		}
 	);
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.poll(5, '<%=url('admin/services/ddns/status')%>', null,
 		function(x, data) {
 			if (data) { _data2elements(x, data); }
 		}
@@ -126,7 +126,7 @@
 //]]></script>
 
 <fieldset class="cbi-section" id="ddns_status_section">
-	<legend><a href="<%=luci.dispatcher.build_url([[admin]], [[services]], [[ddns]])%>"><%:Dynamic DNS%></a></legend>
+	<legend><a href="<%=url([[admin]], [[services]], [[ddns]])%>"><%:Dynamic DNS%></a></legend>
 
 	<table class="cbi-section-table" id="ddns_status_table">
 		<tr class="cbi-section-table-titles">

@@ -367,63 +367,64 @@ end
 
 -- Use optimized UCI writing
 function Map.parse(self, readinput, ...)
-	self.readinput = (readinput ~= false)
-	self:_run_hooks("on_parse")
-
 	if self:formvalue("cbi.skip") then
 		self.state = FORM_SKIP
+	elseif not self.save then
+		self.state = FORM_INVALID
+	elseif not self:submitstate() then
+		self.state = FORM_NODATA
+	end
+
+	-- Back out early to prevent unauthorized changes on the subsequent parse
+	if self.state ~= nil then
 		return self:state_handler(self.state)
 	end
 
+	self.readinput = (readinput ~= false)
+	self:_run_hooks("on_parse")
+
 	Node.parse(self, ...)
 
-	if self.save then
-		self:_run_hooks("on_save", "on_before_save")
+	self:_run_hooks("on_save", "on_before_save")
+	for i, config in ipairs(self.parsechain) do
+		self.uci:save(config)
+	end
+	self:_run_hooks("on_after_save")
+	if (not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply") then
+		self:_run_hooks("on_before_commit")
 		for i, config in ipairs(self.parsechain) do
-			self.uci:save(config)
-		end
-		self:_run_hooks("on_after_save")
-		if self:submitstate() and ((not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply")) then
-			self:_run_hooks("on_before_commit")
-			for i, config in ipairs(self.parsechain) do
-				self.uci:commit(config)
+			self.uci:commit(config)
 
-				-- Refresh data because commit changes section names
-				self.uci:load(config)
-			end
-			self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
-			if self.apply_on_parse then
-				self.uci:apply(self.parsechain)
-				self:_run_hooks("on_apply", "on_after_apply")
-			else
-				-- This is evaluated by the dispatcher and delegated to the
-				-- template which in turn fires XHR to perform the actual
-				-- apply actions.
-				self.apply_needed = true
-			end
+			-- Refresh data because commit changes section names
+			self.uci:load(config)
+		end
+		self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
+		if self.apply_on_parse then
+			self.uci:apply(self.parsechain)
+			self:_run_hooks("on_apply", "on_after_apply")
+		else
+			-- This is evaluated by the dispatcher and delegated to the
+			-- template which in turn fires XHR to perform the actual
+			-- apply actions.
+			self.apply_needed = true
+		end
 
-			-- Reparse sections
-			Node.parse(self, true)
-
-		end
-		for i, config in ipairs(self.parsechain) do
-			self.uci:unload(config)
-		end
-		if type(self.commit_handler) == "function" then
-			self:commit_handler(self:submitstate())
-		end
+		-- Reparse sections
+		Node.parse(self, true)
+	end
+	for i, config in ipairs(self.parsechain) do
+		self.uci:unload(config)
+	end
+	if type(self.commit_handler) == "function" then
+		self:commit_handler(self:submitstate())
 	end
 
-	if self:submitstate() then
-		if not self.save then
-			self.state = FORM_INVALID
-		elseif self.proceed then
-			self.state = FORM_PROCEED
-		else
-			self.state = self.changed and FORM_CHANGED or FORM_VALID
-		end
+	if self.proceed then
+		self.state = FORM_PROCEED
+	elseif self.changed then
+		self.state = FORM_CHANGED
 	else
-		self.state = FORM_NODATA
+		self.state = FORM_VALID
 	end
 
 	return self:state_handler(self.state)

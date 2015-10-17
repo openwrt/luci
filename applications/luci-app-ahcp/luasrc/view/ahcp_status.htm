@@ -1,5 +1,5 @@
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "ahcpd", "status")%>', null,
+	XHR.poll(5, '<%=url('admin/network/ahcpd/status')%>', null,
 		function(x, st)
 		{
 			var tb = document.getElementById('ahcpd_status_table');

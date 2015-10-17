@@ -136,7 +136,7 @@
 
 		// do start/stop
 		var btnXHR = new XHR();
-		btnXHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "startstop")%>/' + section + '/' + cbx.checked, null,
+		btnXHR.get('<%=url('admin/services/ddns/startstop')%>/' + section + '/' + cbx.checked, null,
 			function(x, data) {
 				if (x.responseText == "_uncommitted_") {
 					// we need a trick to display Ampersand "&" in stead of "&#38;" or "&amp;"
@@ -155,7 +155,7 @@
 	}
 
 	// force to immediate show status on page load (not waiting for XHR.poll)
-	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.get('<%=url('admin/services/ddns/status')%>', null,
 		function(x, data) {
 			if (data) { _data2elements(data); }
 		}
@@ -164,7 +164,7 @@
 	// define only ONE XHR.poll in a page because if one is running it blocks the other one
 	// optimum is to define on Map or Section Level from here you can reach all elements
 	// we need update every 15 seconds only
-	XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.poll(15, '<%=url('admin/services/ddns/status')%>', null,
 		function(x, data) {
 			if (data) { _data2elements(data); }
 		}

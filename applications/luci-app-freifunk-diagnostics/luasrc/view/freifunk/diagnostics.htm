@@ -34,7 +34,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("freifunk", "status")%>/diag_' + tool + protocol + '/' + addr, null,
+			stxhr.get('<%=url('freifunk/status')%>/diag_' + tool + protocol + '/' + addr, null,
 				function(x)
 				{
 					if (x.responseText)
@@ -55,7 +55,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 
 <form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
 	<div class="cbi-map">
-		<h2><a id="content" name="content"><%:Diagnostics%></a></h2>
+		<h2 name="content"><%:Diagnostics%></h2>
 
 		<fieldset class="cbi-section">
 			<legend><%:Network Utilities%></legend>
