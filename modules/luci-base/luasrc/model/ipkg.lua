@@ -139,11 +139,13 @@ local function _list(action, pat, cb)
 				desc = ""
 			end
 
-			if #version > 26 then
-				version = version:sub(1,21) .. ".." .. version:sub(-3,-1)
-			end
+			if name and version then
+				if #version > 26 then
+					version = version:sub(1,21) .. ".." .. version:sub(-3,-1)
+				end
 
-			cb(name, version, sz, desc)
+				cb(name, version, sz, desc)
+			end
 
 			name    = nil
 			version = nil
@@ -238,4 +240,3 @@ function compare_versions(ver1, comp, ver2)
 	-- all equal and not compare greater or lower then true
 	return not (comp == "<" or comp == ">")
 end
-
