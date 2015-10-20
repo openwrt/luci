@@ -214,7 +214,7 @@ end
 	<fieldset id="cbi-table-table" class="cbi-section">
 		<legend><%:Active Clients%></legend>
 		<div class="cbi-section-node">
-			<% if is_admin then %><form action="<%=REQUEST_URI%>" method="post"><% end %>
+			<% if is_admin then %><form action="<%=REQUEST_URI%>" method="post"><input type="hidden" name="token" value="<%=token%>" /><% end %>
 			<table class="cbi-section-table">
 				<thead>
 					<tr class="cbi-section-table-titles">
