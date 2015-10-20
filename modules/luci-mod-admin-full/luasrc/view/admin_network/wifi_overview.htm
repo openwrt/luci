@@ -149,7 +149,7 @@
 				st.innerHTML = '<em><%:Wireless is restarting...%></em>';
 		}
 
-		XHR.get('<%=url('admin/network')%>/wireless_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
+		(new XHR()).post('<%=url('admin/network')%>/wireless_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, { token: '<%=token%>' },
 			function(x)
 			{
 				if (s)
@@ -163,6 +163,17 @@
 						is_reconnecting = false;
 					}, 1000);
 				}
+			}
+		);
+	}
+
+	function wifi_delete(id) {
+		if (!confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this device if you are connected via this network.%>'))
+			return;
+
+		(new XHR()).post('<%=url('admin/network/wireless_delete')%>/' + id, { token: '<%=token%>' },
+			function(x) {
+				location.href = '<%=url('admin/network/wireless')%>';
 			}
 		);
 	}
@@ -370,8 +381,16 @@
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</td>
 				<td style="width:310px;text-align:right">
-					<input type="button" class="cbi-button cbi-button-find" style="width:100px" onclick="location.href='<%=url("admin/network/wireless_join")%>?device=<%=dev:name()%>'" title="<%:Find and join network%>" value="<%:Scan%>" />
-					<input type="button" class="cbi-button cbi-button-add" style="width:100px" onclick="location.href='<%=url("admin/network/wireless_add")%>?device=<%=dev:name()%>'" title="<%:Provide new network%>" value="<%:Add%>" />
+					<form action="<%=url('admin/network/wireless_join')%>" method="post" class="inline">
+						<input type="hidden" name="device" value="<%=dev:name()%>" />
+						<input type="hidden" name="token" value="<%=token%>" />
+						<input type="submit" class="cbi-button cbi-button-find" style="width:100px" title="<%:Find and join network%>" value="<%:Scan%>" />
+					</form>
+					<form action="<%=url('admin/network/wireless_add')%>" method="post" class="inline">
+						<input type="hidden" name="device" value="<%=dev:name()%>" />
+						<input type="hidden" name="token" value="<%=token%>" />
+						<input type="submit" class="cbi-button cbi-button-add" style="width:100px" title="<%:Provide new network%>" value="<%:Add%>" />
+					</form>
 				</td>
 			</tr>
 			<!-- /physical device -->
@@ -391,7 +410,7 @@
 					<td class="cbi-value-field" style="width:310px;text-align:right">
 						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
 						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
-						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this wireless network? The deletion cannot be undone!\nYou might lose access to this device if you are connected via this network.%>')) location.href='<%=url("admin/network/wireless_delete", net:ifname())%>'" title="<%:Delete this network%>" value="<%:Remove%>" />
+						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="wifi_delete('<%=net:ifname()%>')" title="<%:Delete this network%>" value="<%:Remove%>" />
 					</td>
 				</tr>
 				<% end %>
@@ -410,7 +429,7 @@
 	<% end %>
 
 
-	<h2 name="content"><%:Associated Stations%></h2>
+	<h2><%:Associated Stations%></h2>
 
 	<fieldset class="cbi-section">
 		<table class="cbi-section-table" style="margin:10px" id="iw-assoclist">
