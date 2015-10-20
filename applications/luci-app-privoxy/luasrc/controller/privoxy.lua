@@ -15,7 +15,7 @@ PRIVOXY_MIN = "3.0.22-0"	-- minimum version of service required
 function index()
 	entry( {"admin", "services", "privoxy"}, cbi("privoxy"), _("Privoxy WEB proxy"), 59)
 	entry( {"admin", "services", "privoxy", "logview"}, call("logread") ).leaf = true
-	entry( {"admin", "services", "privoxy", "startstop"}, call("startstop") ).leaf = true
+	entry( {"admin", "services", "privoxy", "startstop"}, post("startstop") ).leaf = true
 	entry( {"admin", "services", "privoxy", "status"}, call("get_pid") ).leaf = true
 end
 
