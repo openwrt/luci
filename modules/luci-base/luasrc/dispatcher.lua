@@ -174,6 +174,32 @@ function httpdispatch(request, prefix)
 	--context._disable_memtrace()
 end
 
+local function require_post_security(target)
+	if type(target) == "table" then
+		if type(target.post) == "table" then
+			local param_name, required_val, request_val
+
+			for param_name, required_val in pairs(target.post) do
+				request_val = http.formvalue(param_name)
+
+				if (type(required_val) == "string" and
+				    request_val ~= required_val) or
+				   (required_val == true and
+				    (request_val == nil or request_val == ""))
+				then
+					return false
+				end
+			end
+
+			return true
+		end
+
+		return (target.post == true)
+	end
+
+	return false
+end
+
 function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
@@ -381,7 +407,7 @@ function dispatch(request)
 		end
 	end
 
-	if c and type(c.target) == "table" and c.target.post == true then
+	if c and require_post_security(c.target) then
 		if http.getenv("REQUEST_METHOD") ~= "POST" then
 			http.status(405, "Method Not Allowed")
 			http.header("Allow", "POST")
@@ -720,14 +746,18 @@ function call(name, ...)
 	return {type = "call", argv = {...}, name = name, target = _call}
 end
 
-function post(name, ...)
+function post_on(params, name, ...)
 	return {
 		type = "call",
-		post = true,
+		post = params,
 		argv = { ... },
 		name = name,
 		target = _call
 	}
+end
+
+function post(...)
+	return post_on(true, ...)
 end
 
 
@@ -744,15 +774,6 @@ local function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
-	local disp = require "luci.dispatcher"
-
-	if http.formvalue("cbi.submit") == "1" and
-	   http.formvalue("token") ~= disp.context.urltoken.stok
-	then
-		http.status(403, "Forbidden")
-		luci.template.render("csrftoken")
-		return
-	end
 
 	local config = self.config or {}
 	local maps = cbi.load(self.model, ...)
@@ -850,7 +871,13 @@ local function _cbi(self, ...)
 end
 
 function cbi(model, config)
-	return {type = "cbi", config = config, model = model, target = _cbi}
+	return {
+		type = "cbi",
+		post = { ["cbi.submit"] = "1" },
+		config = config,
+		model = model,
+		target = _cbi
+	}
 end
 
 
@@ -870,15 +897,6 @@ local function _form(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
-	local disp = require "luci.dispatcher"
-
-	if http.formvalue("cbi.submit") == "1" and
-	   http.formvalue("token") ~= disp.context.urltoken.stok
-	then
-		http.status(403, "Forbidden")
-		luci.template.render("csrftoken")
-		return
-	end
 
 	local maps = luci.cbi.load(self.model, ...)
 	local state = nil
@@ -899,7 +917,12 @@ local function _form(self, ...)
 end
 
 function form(model)
-	return {type = "cbi", model = model, target = _form}
+	return {
+		type = "cbi",
+		post = { ["cbi.submit"] = "1" },
+		model = model,
+		target = _form
+	}
 end
 
 translate = i18n.translate
