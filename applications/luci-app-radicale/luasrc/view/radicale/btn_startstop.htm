@@ -21,7 +21,7 @@
 	function onclick_startstop(id) {
 		// do start/stop
 		var btnXHR = new XHR();
-		btnXHR.get('<%=url('admin/services/radicale/startstop')%>', null,
+		btnXHR.post('<%=url('admin/services/radicale/startstop')%>', { token: '<%=token%>' },
 			function(x) { _data2elements(x); }
 		);
 	}

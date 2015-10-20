@@ -15,7 +15,7 @@ function index()
 	entry( {"admin", "services", "radicale"}, alias("admin", "services", "radicale", "edit"), _("CalDAV/CardDAV"), 58)
 	entry( {"admin", "services", "radicale", "edit"}, cbi("radicale") ).leaf = true
 	entry( {"admin", "services", "radicale", "logview"}, call("_logread") ).leaf = true
-	entry( {"admin", "services", "radicale", "startstop"}, call("_startstop") ).leaf = true
+	entry( {"admin", "services", "radicale", "startstop"}, post("_startstop") ).leaf = true
 	entry( {"admin", "services", "radicale", "status"}, call("_status") ).leaf = true
 end
 
