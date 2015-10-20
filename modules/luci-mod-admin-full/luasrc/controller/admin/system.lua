@@ -9,12 +9,12 @@ function index()
 
 	entry({"admin", "system"}, alias("admin", "system", "system"), _("System"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), _("System"), 1)
-	entry({"admin", "system", "clock_status"}, call("action_clock_status"))
+	entry({"admin", "system", "clock_status"}, post_on({ set = true }, "action_clock_status"))
 
 	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), _("Administration"), 2)
 
 	if fs.access("/bin/opkg") then
-		entry({"admin", "system", "packages"}, call("action_packages"), _("Software"), 10)
+		entry({"admin", "system", "packages"}, post_on({ exec = "1" }, "action_packages"), _("Software"), 10)
 		entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
 	end
 
@@ -31,7 +31,7 @@ function index()
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
 
-	entry({"admin", "system", "flashops"}, call("action_flashops"), _("Backup / Flash Firmware"), 70)
+	entry({"admin", "system", "flashops"}, post_on({ exec = "1" }, "action_flashops"), _("Backup / Flash Firmware"), 70)
 	entry({"admin", "system", "flashops", "backupfiles"}, form("admin_system/backupfiles"))
 
 	entry({"admin", "system", "reboot"}, template("admin_system/reboot"), _("Reboot"), 90)
@@ -56,7 +56,8 @@ end
 function action_packages()
 	local fs = require "nixio.fs"
 	local ipkg = require "luci.model.ipkg"
-	local submit = luci.http.formvalue("submit")
+	local submit = (luci.http.formvalue("exec") == "1")
+	local update, upgrade
 	local changes = false
 	local install = { }
 	local remove  = { }
@@ -76,59 +77,62 @@ function action_packages()
 	query = (query ~= '') and query or nil
 
 
-	-- Packets to be installed
-	local ninst = submit and luci.http.formvalue("install")
-	local uinst = nil
+	-- Modifying actions
+	if submit then
+		-- Packets to be installed
+		local ninst = luci.http.formvalue("install")
+		local uinst = nil
 
-	-- Install from URL
-	local url = luci.http.formvalue("url")
-	if url and url ~= '' and submit then
-		uinst = url
-	end
+		-- Install from URL
+		local url = luci.http.formvalue("url")
+		if url and url ~= '' then
+			uinst = url
+		end
 
-	-- Do install
-	if ninst then
-		install[ninst], out, err = ipkg.install(ninst)
-		stdout[#stdout+1] = out
-		stderr[#stderr+1] = err
-		changes = true
-	end
-
-	if uinst then
-		local pkg
-		for pkg in luci.util.imatch(uinst) do
-			install[uinst], out, err = ipkg.install(pkg)
+		-- Do install
+		if ninst then
+			install[ninst], out, err = ipkg.install(ninst)
 			stdout[#stdout+1] = out
 			stderr[#stderr+1] = err
 			changes = true
 		end
-	end
 
-	-- Remove packets
-	local rem = submit and luci.http.formvalue("remove")
-	if rem then
-		remove[rem], out, err = ipkg.remove(rem)
-		stdout[#stdout+1] = out
-		stderr[#stderr+1] = err
-		changes = true
-	end
+		if uinst then
+			local pkg
+			for pkg in luci.util.imatch(uinst) do
+				install[uinst], out, err = ipkg.install(pkg)
+				stdout[#stdout+1] = out
+				stderr[#stderr+1] = err
+				changes = true
+			end
+		end
+
+		-- Remove packets
+		local rem = luci.http.formvalue("remove")
+		if rem then
+			remove[rem], out, err = ipkg.remove(rem)
+			stdout[#stdout+1] = out
+			stderr[#stderr+1] = err
+			changes = true
+		end
 
 
-	-- Update all packets
-	local update = luci.http.formvalue("update")
-	if update then
-		update, out, err = ipkg.update()
-		stdout[#stdout+1] = out
-		stderr[#stderr+1] = err
-	end
+		-- Update all packets
+		update = luci.http.formvalue("update")
+		if update then
+			update, out, err = ipkg.update()
+			stdout[#stdout+1] = out
+			stderr[#stderr+1] = err
+		end
 
 
-	-- Upgrade all packets
-	local upgrade = luci.http.formvalue("upgrade")
-	if upgrade then
-		upgrade, out, err = ipkg.upgrade()
-		stdout[#stdout+1] = out
-		stderr[#stderr+1] = err
+		-- Upgrade all packets
+		upgrade = luci.http.formvalue("upgrade")
+		if upgrade then
+			upgrade, out, err = ipkg.upgrade()
+			stdout[#stdout+1] = out
+			stderr[#stderr+1] = err
+		end
 	end
 
 
@@ -168,8 +172,11 @@ function action_packages()
 end
 
 function action_flashops()
-	local sys = require "luci.sys"
-	local fs  = require "nixio.fs"
+	local http = require "luci.http"
+	local sys  = require "luci.sys"
+	local fs   = require "nixio.fs"
+
+	local submit = (http.formvalue("exec") == "1")
 
 	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
 	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
@@ -208,96 +215,108 @@ function action_flashops()
 		return size
 	end
 
+	--
+	-- Handle modifying actions
+	--
+	if submit then
 
-	local fp
-	luci.http.setfilehandler(
-		function(meta, chunk, eof)
-			if not fp then
-				if meta and meta.name == "image" then
-					fp = io.open(image_tmp, "w")
-				else
-					fp = io.popen(restore_cmd, "w")
+		local fp
+		http.setfilehandler(
+			function(meta, chunk, eof)
+				if not fp then
+					if meta and meta.name == "image" then
+						fp = io.open(image_tmp, "w")
+					else
+						fp = io.popen(restore_cmd, "w")
+					end
+				end
+				if chunk then
+					fp:write(chunk)
+				end
+				if eof then
+					fp:close()
 				end
 			end
-			if chunk then
-				fp:write(chunk)
-			end
-			if eof then
-				fp:close()
-			end
-		end
-	)
+		)
 
-	if luci.http.formvalue("backup") then
-		--
-		-- Assemble file list, generate backup
-		--
-		local reader = ltn12_popen(backup_cmd)
-		luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
-			luci.sys.hostname(), os.date("%Y-%m-%d")})
-		luci.http.prepare_content("application/x-targz")
-		luci.ltn12.pump.all(reader, luci.http.write)
-	elseif luci.http.formvalue("restore") then
-		--
-		-- Unpack received .tar.gz
-		--
-		local upload = luci.http.formvalue("archive")
-		if upload and #upload > 0 then
-			luci.template.render("admin_system/applyreboot")
-			luci.sys.reboot()
-		end
-	elseif luci.http.formvalue("image") or luci.http.formvalue("step") then
-		--
-		-- Initiate firmware flash
-		--
-		local step = tonumber(luci.http.formvalue("step") or 1)
-		if step == 1 then
-			if image_supported() then
-				luci.template.render("admin_system/upgrade", {
-					checksum = image_checksum(),
-					storage  = storage_size(),
-					size     = (fs.stat(image_tmp, "size") or 0),
-					keep     = (not not luci.http.formvalue("keep"))
-				})
-			else
-				fs.unlink(image_tmp)
-				luci.template.render("admin_system/flashops", {
-					reset_avail   = reset_avail,
-					upgrade_avail = upgrade_avail,
-					image_invalid = true
-				})
+		if http.formvalue("backup") then
+			--
+			-- Assemble file list, generate backup
+			--
+			local reader = ltn12_popen(backup_cmd)
+			http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
+				luci.sys.hostname(), os.date("%Y-%m-%d")})
+			http.prepare_content("application/x-targz")
+			luci.ltn12.pump.all(reader, http.write)
+			return
+
+		elseif http.formvalue("restore") then
+			--
+			-- Unpack received .tar.gz
+			--
+			local upload = http.formvalue("archive")
+			if upload and #upload > 0 then
+				luci.template.render("admin_system/applyreboot")
+				luci.sys.reboot()
+				return
 			end
-		--
-		-- Start sysupgrade flash
-		--
-		elseif step == 2 then
-			local keep = (luci.http.formvalue("keep") == "1") and "" or "-n"
+
+		elseif http.formvalue("image") or http.formvalue("step") then
+			--
+			-- Initiate firmware flash
+			--
+			local step = tonumber(http.formvalue("step") or 1)
+			if step == 1 then
+				if image_supported() then
+					luci.template.render("admin_system/upgrade", {
+						checksum = image_checksum(),
+						storage  = storage_size(),
+						size     = (fs.stat(image_tmp, "size") or 0),
+						keep     = (not not http.formvalue("keep"))
+					})
+				else
+					fs.unlink(image_tmp)
+					luci.template.render("admin_system/flashops", {
+						reset_avail   = reset_avail,
+						upgrade_avail = upgrade_avail,
+						image_invalid = true
+					})
+				end
+				return
+			--
+			-- Start sysupgrade flash
+			--
+			elseif step == 2 then
+				local keep = (http.formvalue("keep") == "1") and "" or "-n"
+				luci.template.render("admin_system/applyreboot", {
+					title = luci.i18n.translate("Flashing..."),
+					msg   = luci.i18n.translate("The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
+					addr  = (#keep > 0) and "192.168.1.1" or nil
+				})
+				fork_exec("killall dropbear uhttpd; sleep 1; /sbin/sysupgrade %s %q" %{ keep, image_tmp })
+				return
+			end
+		elseif reset_avail and http.formvalue("reset") then
+			--
+			-- Reset system
+			--
 			luci.template.render("admin_system/applyreboot", {
-				title = luci.i18n.translate("Flashing..."),
-				msg   = luci.i18n.translate("The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-				addr  = (#keep > 0) and "192.168.1.1" or nil
+				title = luci.i18n.translate("Erasing..."),
+				msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
+				addr  = "192.168.1.1"
 			})
-			fork_exec("killall dropbear uhttpd; sleep 1; /sbin/sysupgrade %s %q" %{ keep, image_tmp })
+			fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
+			return
 		end
-	elseif reset_avail and luci.http.formvalue("reset") then
-		--
-		-- Reset system
-		--
-		luci.template.render("admin_system/applyreboot", {
-			title = luci.i18n.translate("Erasing..."),
-			msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
-			addr  = "192.168.1.1"
-		})
-		fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
-	else
-		--
-		-- Overview
-		--
-		luci.template.render("admin_system/flashops", {
-			reset_avail   = reset_avail,
-			upgrade_avail = upgrade_avail
-		})
 	end
+
+	--
+	-- Overview
+	--
+	luci.template.render("admin_system/flashops", {
+		reset_avail   = reset_avail,
+		upgrade_avail = upgrade_avail
+	})
 end
 
 function action_passwd()

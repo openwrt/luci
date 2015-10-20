@@ -1,6 +1,6 @@
 <%#
  Copyright 2008 Steven Barth <steven@midlink.org>
- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -17,7 +17,9 @@
 
 	<fieldset class="cbi-section">
 		<legend><%:Backup / Restore%></legend>
-		<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+		<form method="post" action="<%=url('admin/system/flashops')%>" enctype="multipart/form-data">
+			<input type="hidden" name="exec" value="1" />
+			<input type="hidden" name="token" value="<%=token%>" />
 			<div class="cbi-section-descr"><%:Click "Generate archive" to download a tar archive of the current configuration files. To reset the firmware to its initial state, click "Perform reset" (only possible with squashfs images).%></div>
 			<div class="cbi-section-node">
 				<div class="cbi-value<% if not reset_avail then %> cbi-value-last<% end %>">
@@ -54,7 +56,9 @@
 	<fieldset class="cbi-section">
 		<legend><%:Flash new firmware image%></legend>
 		<% if upgrade_avail then %>
-			<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
+			<form method="post" action="<%=url('admin/system/flashops')%>" enctype="multipart/form-data">
+				<input type="hidden" name="exec" value="1" />
+				<input type="hidden" name="token" value="<%=token%>" />
 				<div class="cbi-section-descr"><%:Upload a sysupgrade-compatible image here to replace the running firmware. Check "Keep settings" to retain the current configuration (requires an OpenWrt compatible firmware image).%></div>
 				<div class="cbi-section-node">
 					<div class="cbi-value">
