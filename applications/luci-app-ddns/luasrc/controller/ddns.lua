@@ -38,7 +38,7 @@ function index()
 		{hideapplybtn=true, hidesavebtn=true, hideresetbtn=true}), nil ).leaf = true
 	entry( {"admin", "services", "ddns", "global"}, cbi("ddns/global"), nil ).leaf = true
 	entry( {"admin", "services", "ddns", "logview"}, call("logread") ).leaf = true
-	entry( {"admin", "services", "ddns", "startstop"}, call("startstop") ).leaf = true
+	entry( {"admin", "services", "ddns", "startstop"}, post("startstop") ).leaf = true
 	entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
 end
 
