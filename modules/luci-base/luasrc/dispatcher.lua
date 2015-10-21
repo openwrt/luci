@@ -27,20 +27,16 @@ function build_url(...)
 	local path = {...}
 	local url = { http.getenv("SCRIPT_NAME") or "" }
 
-	local k, v
-	for k, v in pairs(context.urltoken) do
-		url[#url+1] = "/;"
-		url[#url+1] = http.urlencode(k)
-		url[#url+1] = "="
-		url[#url+1] = http.urlencode(v)
-	end
-
 	local p
 	for _, p in ipairs(path) do
 		if p:match("^[a-zA-Z0-9_%-%.%%/,;]+$") then
 			url[#url+1] = "/"
 			url[#url+1] = p
 		end
+	end
+
+	if #path == 0 then
+		url[#url+1] = "/"
 	end
 
 	return table.concat(url, "")
@@ -128,7 +124,6 @@ function httpdispatch(request, prefix)
 
 	local r = {}
 	context.request = r
-	context.urltoken = {}
 
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
@@ -210,7 +205,6 @@ function dispatch(request)
 	ctx.args = args
 	ctx.requestargs = ctx.requestargs or args
 	local n
-	local token = ctx.urltoken
 	local preq = {}
 	local freq = {}
 
@@ -361,9 +355,7 @@ function dispatch(request)
 					end
 
 					if sess and token then
-						http.header("Set-Cookie", 'sysauth=%s; path=%s/' %{
-						   sess, build_url()
-						})
+						http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sess, build_url() })
 
 						ctx.authsession = sess
 						ctx.authtoken = token
