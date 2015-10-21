@@ -33,12 +33,10 @@ function action_logout()
 	if sid then
 		utl.ubus("session", "destroy", { ubus_rpc_session = sid })
 
-		dsp.context.urltoken.stok = nil
-
 		luci.http.header("Set-Cookie", "sysauth=%s; expires=%s; path=%s/" %{
 			sid, 'Thu, 01 Jan 1970 01:00:00 GMT', dsp.build_url()
 		})
 	end
 
-	luci.http.redirect(luci.dispatcher.build_url())
+	luci.http.redirect(dsp.build_url())
 end
