@@ -31,8 +31,14 @@ function index()
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
 
-	entry({"admin", "system", "flashops"}, post_on({ exec = "1" }, "action_flashops"), _("Backup / Flash Firmware"), 70)
+	entry({"admin", "system", "flashops"}, call("action_flashops"), _("Backup / Flash Firmware"), 70)
+	entry({"admin", "system", "flashops", "reset"}, post("action_reset"))
+	entry({"admin", "system", "flashops", "backup"}, post("action_backup"))
 	entry({"admin", "system", "flashops", "backupfiles"}, form("admin_system/backupfiles"))
+
+	-- call() instead of post() due to upload handling!
+	entry({"admin", "system", "flashops", "restore"}, call("action_restore"))
+	entry({"admin", "system", "flashops", "sysupgrade"}, call("action_sysupgrade"))
 
 	entry({"admin", "system", "reboot"}, template("admin_system/reboot"), _("Reboot"), 90)
 	entry({"admin", "system", "reboot", "call"}, post("action_reboot"))
@@ -171,152 +177,185 @@ function action_packages()
 	end
 end
 
+local function image_supported(image)
+	return (os.execute("sysupgrade -T %q >/dev/null" % image) == 0)
+end
+
+local function image_checksum(image)
+	return (luci.sys.exec("md5sum %q" % image):match("^([^%s]+)"))
+end
+
+local function supports_sysupgrade()
+	return nixio.fs.access("/lib/upgrade/platform.sh")
+end
+
+local function supports_reset()
+	return (os.execute([[grep -sq '"rootfs_data"' /proc/mtd]]) == 0)
+end
+
+local function storage_size()
+	local size = 0
+	if nixio.fs.access("/proc/mtd") then
+		for l in io.lines("/proc/mtd") do
+			local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
+			if n == "linux" or n == "firmware" then
+				size = tonumber(s, 16)
+				break
+			end
+		end
+	elseif nixio.fs.access("/proc/partitions") then
+		for l in io.lines("/proc/partitions") do
+			local x, y, b, n = l:match('^%s*(%d+)%s+(%d+)%s+([^%s]+)%s+([^%s]+)')
+			if b and n and not n:match('[0-9]') then
+				size = tonumber(b) * 1024
+				break
+			end
+		end
+	end
+	return size
+end
+
+
 function action_flashops()
-	local http = require "luci.http"
-	local sys  = require "luci.sys"
-	local fs   = require "nixio.fs"
-
-	local submit = (http.formvalue("exec") == "1")
-
-	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
-	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
-
-	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
-	local backup_cmd  = "sysupgrade --create-backup - 2>/dev/null"
-	local image_tmp   = "/tmp/firmware.img"
-
-	local function image_supported()
-		return (os.execute("sysupgrade -T %q >/dev/null" % image_tmp) == 0)
-	end
-
-	local function image_checksum()
-		return (luci.sys.exec("md5sum %q" % image_tmp):match("^([^%s]+)"))
-	end
-
-	local function storage_size()
-		local size = 0
-		if fs.access("/proc/mtd") then
-			for l in io.lines("/proc/mtd") do
-				local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
-				if n == "linux" or n == "firmware" then
-					size = tonumber(s, 16)
-					break
-				end
-			end
-		elseif fs.access("/proc/partitions") then
-			for l in io.lines("/proc/partitions") do
-				local x, y, b, n = l:match('^%s*(%d+)%s+(%d+)%s+([^%s]+)%s+([^%s]+)')
-				if b and n and not n:match('[0-9]') then
-					size = tonumber(b) * 1024
-					break
-				end
-			end
-		end
-		return size
-	end
-
-	--
-	-- Handle modifying actions
-	--
-	if submit then
-
-		local fp
-		http.setfilehandler(
-			function(meta, chunk, eof)
-				if not fp then
-					if meta and meta.name == "image" then
-						fp = io.open(image_tmp, "w")
-					else
-						fp = io.popen(restore_cmd, "w")
-					end
-				end
-				if chunk then
-					fp:write(chunk)
-				end
-				if eof then
-					fp:close()
-				end
-			end
-		)
-
-		if http.formvalue("backup") then
-			--
-			-- Assemble file list, generate backup
-			--
-			local reader = ltn12_popen(backup_cmd)
-			http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' % {
-				luci.sys.hostname(), os.date("%Y-%m-%d")})
-			http.prepare_content("application/x-targz")
-			luci.ltn12.pump.all(reader, http.write)
-			return
-
-		elseif http.formvalue("restore") then
-			--
-			-- Unpack received .tar.gz
-			--
-			local upload = http.formvalue("archive")
-			if upload and #upload > 0 then
-				luci.template.render("admin_system/applyreboot")
-				luci.sys.reboot()
-				return
-			end
-
-		elseif http.formvalue("image") or http.formvalue("step") then
-			--
-			-- Initiate firmware flash
-			--
-			local step = tonumber(http.formvalue("step") or 1)
-			if step == 1 then
-				if image_supported() then
-					luci.template.render("admin_system/upgrade", {
-						checksum = image_checksum(),
-						storage  = storage_size(),
-						size     = (fs.stat(image_tmp, "size") or 0),
-						keep     = (not not http.formvalue("keep"))
-					})
-				else
-					fs.unlink(image_tmp)
-					luci.template.render("admin_system/flashops", {
-						reset_avail   = reset_avail,
-						upgrade_avail = upgrade_avail,
-						image_invalid = true
-					})
-				end
-				return
-			--
-			-- Start sysupgrade flash
-			--
-			elseif step == 2 then
-				local keep = (http.formvalue("keep") == "1") and "" or "-n"
-				luci.template.render("admin_system/applyreboot", {
-					title = luci.i18n.translate("Flashing..."),
-					msg   = luci.i18n.translate("The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-					addr  = (#keep > 0) and "192.168.1.1" or nil
-				})
-				fork_exec("killall dropbear uhttpd; sleep 1; /sbin/sysupgrade %s %q" %{ keep, image_tmp })
-				return
-			end
-		elseif reset_avail and http.formvalue("reset") then
-			--
-			-- Reset system
-			--
-			luci.template.render("admin_system/applyreboot", {
-				title = luci.i18n.translate("Erasing..."),
-				msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
-				addr  = "192.168.1.1"
-			})
-			fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
-			return
-		end
-	end
-
 	--
 	-- Overview
 	--
 	luci.template.render("admin_system/flashops", {
-		reset_avail   = reset_avail,
-		upgrade_avail = upgrade_avail
+		reset_avail   = supports_reset(),
+		upgrade_avail = supports_sysupgrade()
 	})
+end
+
+function action_sysupgrade()
+	local fs = require "nixio.fs"
+	local http = require "luci.http"
+	local image_tmp = "/tmp/firmware.img"
+
+	local fp
+	http.setfilehandler(
+		function(meta, chunk, eof)
+			if not fp and meta and meta.name == "image" then
+				fp = io.open(image_tmp, "w")
+			end
+			if fp and chunk then
+				fp:write(chunk)
+			end
+			if fp and eof then
+				fp:close()
+			end
+		end
+	)
+
+	if not luci.dispatcher.test_post_security() then
+		fs.unlink(image_tmp)
+		return
+	end
+
+	--
+	-- Cancel firmware flash
+	--
+	if http.formvalue("cancel") then
+		fs.unlink(image_tmp)
+		http.redirect(luci.dispatcher.build_url('admin/system/flashops'))
+		return
+	end
+
+	--
+	-- Initiate firmware flash
+	--
+	local step = tonumber(http.formvalue("step") or 1)
+	if step == 1 then
+		if image_supported(image_tmp) then
+			luci.template.render("admin_system/upgrade", {
+				checksum = image_checksum(image_tmp),
+				storage  = storage_size(),
+				size     = (fs.stat(image_tmp, "size") or 0),
+				keep     = (not not http.formvalue("keep"))
+			})
+		else
+			fs.unlink(image_tmp)
+			luci.template.render("admin_system/flashops", {
+				reset_avail   = supports_reset(),
+				upgrade_avail = supports_sysupgrade(),
+				image_invalid = true
+			})
+		end
+	--
+	-- Start sysupgrade flash
+	--
+	elseif step == 2 then
+		local keep = (http.formvalue("keep") == "1") and "" or "-n"
+		luci.template.render("admin_system/applyreboot", {
+			title = luci.i18n.translate("Flashing..."),
+			msg   = luci.i18n.translate("The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
+			addr  = (#keep > 0) and "192.168.1.1" or nil
+		})
+		fork_exec("killall dropbear uhttpd; sleep 1; /sbin/sysupgrade %s %q" %{ keep, image_tmp })
+	end
+end
+
+function action_backup()
+	local reader = ltn12_popen("sysupgrade --create-backup - 2>/dev/null")
+
+	luci.http.header(
+		'Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' %{
+			luci.sys.hostname(),
+			os.date("%Y-%m-%d")
+		})
+
+	luci.http.prepare_content("application/x-targz")
+	luci.ltn12.pump.all(reader, luci.http.write)
+end
+
+function action_restore()
+	local fs = require "nixio.fs"
+	local http = require "luci.http"
+	local archive_tmp = "/tmp/restore.tar.gz"
+
+	local fp
+	http.setfilehandler(
+		function(meta, chunk, eof)
+			if not fp and meta and meta.name == "archive" then
+				fp = io.open(archive_tmp, "w")
+			end
+			if fp and chunk then
+				fp:write(chunk)
+			end
+			if fp and eof then
+				fp:close()
+			end
+		end
+	)
+
+	if not luci.dispatcher.test_post_security() then
+		fs.unlink(archive_tmp)
+		return
+	end
+
+	local upload = http.formvalue("archive")
+	if upload and #upload > 0 then
+		luci.template.render("admin_system/applyreboot")
+		os.execute("tar -C / -xzf %q >/dev/null 2>&1" % archive_tmp)
+		luci.sys.reboot()
+		return
+	end
+
+	http.redirect(luci.dispatcher.build_url('admin/system/flashops'))
+end
+
+function action_reset()
+	if supports_reset() then
+		luci.template.render("admin_system/applyreboot", {
+			title = luci.i18n.translate("Erasing..."),
+			msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
+			addr  = "192.168.1.1"
+		})
+
+		fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
+		return
+	end
+
+	http.redirect(luci.dispatcher.build_url('admin/system/flashops'))
 end
 
 function action_passwd()
