@@ -172,6 +172,22 @@ local function require_post_security(target)
 	return false
 end
 
+function test_post_security()
+	if http.getenv("REQUEST_METHOD") ~= "POST" then
+		http.status(405, "Method Not Allowed")
+		http.header("Allow", "POST")
+		return false
+	end
+
+	if http.formvalue("token") ~= context.authtoken then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return false
+	end
+
+	return true
+end
+
 function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
@@ -376,15 +392,7 @@ function dispatch(request)
 	end
 
 	if c and require_post_security(c.target) then
-		if http.getenv("REQUEST_METHOD") ~= "POST" then
-			http.status(405, "Method Not Allowed")
-			http.header("Allow", "POST")
-			return
-		end
-
-		if http.formvalue("token") ~= ctx.authtoken then
-			http.status(403, "Forbidden")
-			luci.template.render("csrftoken")
+		if not test_post_security(c) then
 			return
 		end
 	end
