@@ -141,7 +141,7 @@ end
 							<input type="hidden" name="exec" value="1" />
 							<input type="hidden" name="token" value="<%=token%>" />
 							<input type="hidden" name="remove" value="<%=pcdata(n)%>" />
-							<a onclick="window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?') && this.parentNode.submit(); return false" href="#"><%:Remove%></a>
+							<a onclick="window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?') &#38;&#38; this.parentNode.submit(); return false" href="#"><%:Remove%></a>
 						</form>
 					</td>
 					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
@@ -183,7 +183,7 @@ end
 							<input type="hidden" name="exec" value="1" />
 							<input type="hidden" name="token" value="<%=token%>" />
 							<input type="hidden" name="install" value="<%=pcdata(n)%>" />
-							<a onclick="window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?') && this.parentNode.submit(); return false" href="#"><%:Install%></a>
+							<a onclick="window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?') &#38;&#38; this.parentNode.submit(); return false" href="#"><%:Install%></a>
 						</form>
 					</td>
 					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
