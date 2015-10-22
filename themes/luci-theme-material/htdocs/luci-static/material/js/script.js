@@ -144,11 +144,10 @@
     function getCurrentNodeByUrl() {
         var ret = false;
         var getUrlNode = function (href){
-            var linkPos = href.indexOf(";");
-            if (linkPos == -1){
+            if (!$('body').hasClass('logged-in')){
                 return "login";
             }else{
-                linkPos = href.indexOf("/", linkPos);
+                var linkPos = href.indexOf("/", linkPos);
                 if (linkPos == -1){
                     return "overview";
                 }else{
