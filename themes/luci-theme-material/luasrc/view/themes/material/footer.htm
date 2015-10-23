@@ -41,6 +41,10 @@
             </div>
         </div>
 
+    <script>
+        // thanks for Jo-Philipp Wich <jow@openwrt.org>
+        var luciLocation = <%= luci.http.write_json(luci.dispatcher.context.path) %>;
+    </script>
     <script src="<%=media%>/js/jquery.min.js"></script>
     <script src="<%=media%>/js/script.js"></script>
 </body>

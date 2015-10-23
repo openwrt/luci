@@ -1096,7 +1096,7 @@ header > .container > .pull-right > * {
     white-space: normal;
 }
 
-.node-status-firewall > .main div > .cbi-map > form {
+.node-status-iptables > .main div > .cbi-map > form {
     margin: 2rem 2rem 0 0;
 }
 
@@ -1108,34 +1108,34 @@ header > .container > .pull-right > * {
 }
 
 /* fix Services  Network Shares*/
-.node-services-network_shares > .main .cbi-tabcontainer:nth-child(3) .cbi-value-title {
+.node-services-samba > .main .cbi-tabcontainer:nth-child(3) .cbi-value-title {
     margin-bottom: 1rem;
 }
 
-.node-services-network_shares > .main .cbi-tabcontainer:nth-child(3) .cbi-value-field {
+.node-services-samba > .main .cbi-tabcontainer:nth-child(3) .cbi-value-field {
     display: list-item;
 }
 
-.node-services-network_shares > .main .cbi-tabcontainer:nth-child(3) .cbi-value-description {
+.node-services-samba > .main .cbi-tabcontainer:nth-child(3) .cbi-value-description {
     padding-top: 1rem;
 }
 
 /* fix System Software*/
-.node-system-software > .main table tr td:nth-child(1) {
+.node-system-packages > .main table tr td:nth-child(1) {
     width: auto !important;
 }
 
-.node-system-software > .main table tr td:nth-last-child(1) {
+.node-system-packages > .main table tr td:nth-last-child(1) {
     white-space: normal;
     font-size: small;
     color: #404040;
 }
 
-.node-system-software > .main .cbi-tabmenu > li > a, .tabs > li > a {
+.node-system-packages > .main .cbi-tabmenu > li > a, .tabs > li > a {
     padding: 0.5rem 1rem;
 }
 
-.node-system-software > .main .cbi-value > pre {
+.node-system-packages > .main .cbi-value > pre {
     background-color: #eee;
     padding: 0.5rem;
     overflow: auto;
@@ -1150,15 +1150,15 @@ header > .container > .pull-right > * {
     min-width: 4rem;
 }
 
-.node-status-firewall fieldset,
-.node-system-software fieldset,
-.node-system-backup_flash_firmware fieldset {
+.node-status-iptables fieldset,
+.node-system-packages fieldset,
+.node-system-flashops fieldset {
     margin-top: 0;
 }
 
-.node-status-firewall .cbi-tabmenu,
-.node-system-software .cbi-tabmenu,
-.node-system-backup_flash_firmware .cbi-tabmenu {
+.node-status-iptables .cbi-tabmenu,
+.node-system-packages .cbi-tabmenu,
+.node-system-flashops .cbi-tabmenu {
     border: none;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 }
@@ -1223,7 +1223,7 @@ body.lang_pl.node-main-login .cbi-value-title {
         font-size: smaller;
     }
 
-    .node-status-firewall > .main fieldset li > a {
+    .node-status-iptables > .main fieldset li > a {
         padding: 0.3rem 0.6rem;
     }
 }
@@ -1434,15 +1434,15 @@ body.lang_pl.node-main-login .cbi-value-title {
         padding-bottom: 1rem;
     }
 
-    .node-system-software > .main .cbi-value.cbi-value-last > div {
+    .node-system-packages > .main .cbi-value.cbi-value-last > div {
         width: 100% !important;
     }
 
-    .node-system-software > .main .cbi-value .cbi-value-field input {
+    .node-system-packages > .main .cbi-value .cbi-value-field input {
         width: 100%;
     }
 
-    .node-status-firewall > .main div > .cbi-map > form {
+    .node-status-iptables > .main div > .cbi-map > form {
         position: static !important;
         margin: 0 0 2rem 0;
         padding: 2rem;
@@ -1460,12 +1460,12 @@ body.lang_pl.node-main-login .cbi-value-title {
         -webkit-overflow-scrolling: touch;
     }
 
-    .node-status-firewall > .main div > .cbi-map > form input[type="submit"]{
+    .node-status-iptables > .main div > .cbi-map > form input[type="submit"]{
         width: 100% !important;
         margin: 0;
     }
 
-    .node-status-firewall > .main div > .cbi-map > form input[type="submit"] + input[type="submit"]{
+    .node-status-iptables > .main div > .cbi-map > form input[type="submit"] + input[type="submit"]{
         margin-top: 1rem;
     }
 }
