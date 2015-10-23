@@ -15,7 +15,7 @@ function index()
 	page.dependent = true
 
 	entry({"admin", "services", "upnp", "status"}, call("act_status")).leaf = true
-	entry({"admin", "services", "upnp", "delete"}, call("act_delete")).leaf = true
+	entry({"admin", "services", "upnp", "delete"}, post("act_delete")).leaf = true
 end
 
 function act_status()

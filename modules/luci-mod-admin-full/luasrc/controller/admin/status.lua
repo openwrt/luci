@@ -7,7 +7,10 @@ module("luci.controller.admin.status", package.seeall)
 function index()
 	entry({"admin", "status"}, alias("admin", "status", "overview"), _("Status"), 20).index = true
 	entry({"admin", "status", "overview"}, template("admin_status/index"), _("Overview"), 1)
-	entry({"admin", "status", "iptables"}, call("action_iptables"), _("Firewall"), 2).leaf = true
+
+	entry({"admin", "status", "iptables"}, template("admin_status/iptables"), _("Firewall"), 2).leaf = true
+	entry({"admin", "status", "iptables_action"}, post("action_iptables")).leaf = true
+
 	entry({"admin", "status", "routes"}, template("admin_status/routes"), _("Routes"), 3)
 	entry({"admin", "status", "syslog"}, call("action_syslog"), _("System Log"), 4)
 	entry({"admin", "status", "dmesg"}, call("action_dmesg"), _("Kernel Log"), 5)
@@ -42,22 +45,16 @@ end
 
 function action_iptables()
 	if luci.http.formvalue("zero") then
-		if luci.http.formvalue("zero") == "6" then
-			luci.util.exec("ip6tables -Z")
+		if luci.http.formvalue("family") == "6" then
+			luci.util.exec("/usr/sbin/ip6tables -Z")
 		else
-			luci.util.exec("iptables -Z")
+			luci.util.exec("/usr/sbin/iptables -Z")
 		end
-		luci.http.redirect(
-			luci.dispatcher.build_url("admin", "status", "iptables")
-		)
-	elseif luci.http.formvalue("restart") == "1" then
+	elseif luci.http.formvalue("restart") then
 		luci.util.exec("/etc/init.d/firewall restart")
-		luci.http.redirect(
-			luci.dispatcher.build_url("admin", "status", "iptables")
-		)
-	else
-		luci.template.render("admin_status/iptables")
 	end
+
+	luci.http.redirect(luci.dispatcher.build_url("admin/status/iptables"))
 end
 
 function action_bandwidth(iface)

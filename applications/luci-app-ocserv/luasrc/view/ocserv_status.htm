@@ -1,7 +1,7 @@
 <script type="text/javascript">//<![CDATA[
 
 	function ocserv_disconnect(idx) {
-		XHR.get('<%=url('admin/services/ocserv/disconnect')%>/' + idx, null,
+		(new XHR()).post('<%=url('admin/services/ocserv/disconnect')%>/' + idx, { token: '<%=token%>' },
 			function(x)
 			{
 				var tb = document.getElementById('ocserv_status_table');

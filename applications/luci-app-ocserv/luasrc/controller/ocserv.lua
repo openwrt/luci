@@ -28,7 +28,7 @@ function index()
 		call("ocserv_status")).leaf = true
 
 	entry({"admin", "services", "ocserv", "disconnect"},
-		call("ocserv_disconnect")).leaf = true
+		post("ocserv_disconnect")).leaf = true
 
 end
 

@@ -1,6 +1,6 @@
 <script type="text/javascript">//<![CDATA[
 	function upnp_delete_fwd(idx) {
-		XHR.get('<%=url('admin/services/upnp/delete')%>/' + idx, null,
+		(new XHR()).post('<%=url('admin/services/upnp/delete')%>/' + idx, { token: '<%=token%>' },
 			function(x)
 			{
 				var tb = document.getElementById('upnp_status_table');

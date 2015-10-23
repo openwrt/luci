@@ -27,20 +27,16 @@ function build_url(...)
 	local path = {...}
 	local url = { http.getenv("SCRIPT_NAME") or "" }
 
-	local k, v
-	for k, v in pairs(context.urltoken) do
-		url[#url+1] = "/;"
-		url[#url+1] = http.urlencode(k)
-		url[#url+1] = "="
-		url[#url+1] = http.urlencode(v)
-	end
-
 	local p
 	for _, p in ipairs(path) do
 		if p:match("^[a-zA-Z0-9_%-%.%%/,;]+$") then
 			url[#url+1] = "/"
 			url[#url+1] = p
 		end
+	end
+
+	if #path == 0 then
+		url[#url+1] = "/"
 	end
 
 	return table.concat(url, "")
@@ -113,24 +109,11 @@ function authenticator.htmlauth(validator, accs, default)
 		return user
 	end
 
-	if context.urltoken.stok then
-		context.urltoken.stok = nil
-
-		local cookie = 'sysauth=%s; expires=%s; path=%s/' %{
-		    http.getcookie('sysauth') or 'x',
-			'Thu, 01 Jan 1970 01:00:00 GMT',
-			build_url()
-		}
-
-		http.header("Set-Cookie", cookie)
-		http.redirect(build_url())
-	else
-		require("luci.i18n")
-		require("luci.template")
-		context.path = {}
-		http.status(403, "Forbidden")
-		luci.template.render("sysauth", {duser=default, fuser=user})
-	end
+	require("luci.i18n")
+	require("luci.template")
+	context.path = {}
+	http.status(403, "Forbidden")
+	luci.template.render("sysauth", {duser=default, fuser=user})
 
 	return false
 
@@ -141,7 +124,6 @@ function httpdispatch(request, prefix)
 
 	local r = {}
 	context.request = r
-	context.urltoken = {}
 
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
@@ -151,18 +133,8 @@ function httpdispatch(request, prefix)
 		end
 	end
 
-	local tokensok = true
 	for node in pathinfo:gmatch("[^/]+") do
-		local tkey, tval
-		if tokensok then
-			tkey, tval = node:match(";(%w+)=([a-fA-F0-9]*)")
-		end
-		if tkey then
-			context.urltoken[tkey] = tval
-		else
-			tokensok = false
-			r[#r+1] = node
-		end
+		r[#r+1] = node
 	end
 
 	local stat, err = util.coxpcall(function()
@@ -172,6 +144,48 @@ function httpdispatch(request, prefix)
 	http.close()
 
 	--context._disable_memtrace()
+end
+
+local function require_post_security(target)
+	if type(target) == "table" then
+		if type(target.post) == "table" then
+			local param_name, required_val, request_val
+
+			for param_name, required_val in pairs(target.post) do
+				request_val = http.formvalue(param_name)
+
+				if (type(required_val) == "string" and
+				    request_val ~= required_val) or
+				   (required_val == true and
+				    (request_val == nil or request_val == ""))
+				then
+					return false
+				end
+			end
+
+			return true
+		end
+
+		return (target.post == true)
+	end
+
+	return false
+end
+
+function test_post_security()
+	if http.getenv("REQUEST_METHOD") ~= "POST" then
+		http.status(405, "Method Not Allowed")
+		http.header("Allow", "POST")
+		return false
+	end
+
+	if http.formvalue("token") ~= context.authtoken then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return false
+	end
+
+	return true
 end
 
 function dispatch(request)
@@ -207,7 +221,6 @@ function dispatch(request)
 	ctx.args = args
 	ctx.requestargs = ctx.requestargs or args
 	local n
-	local token = ctx.urltoken
 	local preq = {}
 	local freq = {}
 
@@ -285,13 +298,14 @@ function dispatch(request)
 		   resource    = luci.config.main.resourcebase;
 		   ifattr      = function(...) return _ifattr(...) end;
 		   attr        = function(...) return _ifattr(true, ...) end;
-		   token       = ctx.urltoken.stok;
 		   url         = build_url;
 		}, {__index=function(table, key)
 			if key == "controller" then
 				return build_url()
 			elseif key == "REQUEST_URI" then
 				return build_url(unpack(ctx.requestpath))
+			elseif key == "token" then
+				return ctx.authtoken
 			else
 				return rawget(table, key) or _G[key]
 			end
@@ -314,20 +328,17 @@ function dispatch(request)
 		local def  = (type(track.sysauth) == "string") and track.sysauth
 		local accs = def and {track.sysauth} or track.sysauth
 		local sess = ctx.authsession
-		local verifytoken = false
 		if not sess then
 			sess = http.getcookie("sysauth")
 			sess = sess and sess:match("^[a-f0-9]*$")
-			verifytoken = true
 		end
 
 		local sdat = (util.ubus("session", "get", { ubus_rpc_session = sess }) or { }).values
-		local user
+		local user, token
 
 		if sdat then
-			if not verifytoken or ctx.urltoken.stok == sdat.token then
-				user = sdat.user
-			end
+			user = sdat.user
+			token = sdat.token
 		else
 			local eu = http.getenv("HTTP_AUTH_USER")
 			local ep = http.getenv("HTTP_AUTH_PASS")
@@ -360,12 +371,10 @@ function dispatch(request)
 					end
 
 					if sess and token then
-						http.header("Set-Cookie", 'sysauth=%s; path=%s/' %{
-						   sess, build_url()
-						})
+						http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sess, build_url() })
 
-						ctx.urltoken.stok = token
 						ctx.authsession = sess
+						ctx.authtoken = token
 						ctx.authuser = user
 
 						http.redirect(build_url(unpack(ctx.requestpath)))
@@ -377,20 +386,13 @@ function dispatch(request)
 			end
 		else
 			ctx.authsession = sess
+			ctx.authtoken = token
 			ctx.authuser = user
 		end
 	end
 
-	if c and type(c.target) == "table" and c.target.post == true then
-		if http.getenv("REQUEST_METHOD") ~= "POST" then
-			http.status(405, "Method Not Allowed")
-			http.header("Allow", "POST")
-			return
-		end
-
-		if http.formvalue("token") ~= ctx.urltoken.stok then
-			http.status(403, "Forbidden")
-			luci.template.render("csrftoken")
+	if c and require_post_security(c.target) then
+		if not test_post_security(c) then
 			return
 		end
 	end
@@ -720,14 +722,18 @@ function call(name, ...)
 	return {type = "call", argv = {...}, name = name, target = _call}
 end
 
-function post(name, ...)
+function post_on(params, name, ...)
 	return {
 		type = "call",
-		post = true,
+		post = params,
 		argv = { ... },
 		name = name,
 		target = _call
 	}
+end
+
+function post(...)
+	return post_on(true, ...)
 end
 
 
@@ -744,15 +750,6 @@ local function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
-	local disp = require "luci.dispatcher"
-
-	if http.formvalue("cbi.submit") == "1" and
-	   http.formvalue("token") ~= disp.context.urltoken.stok
-	then
-		http.status(403, "Forbidden")
-		luci.template.render("csrftoken")
-		return
-	end
 
 	local config = self.config or {}
 	local maps = cbi.load(self.model, ...)
@@ -850,7 +847,13 @@ local function _cbi(self, ...)
 end
 
 function cbi(model, config)
-	return {type = "cbi", config = config, model = model, target = _cbi}
+	return {
+		type = "cbi",
+		post = { ["cbi.submit"] = "1" },
+		config = config,
+		model = model,
+		target = _cbi
+	}
 end
 
 
@@ -870,15 +873,6 @@ local function _form(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
-	local disp = require "luci.dispatcher"
-
-	if http.formvalue("cbi.submit") == "1" and
-	   http.formvalue("token") ~= disp.context.urltoken.stok
-	then
-		http.status(403, "Forbidden")
-		luci.template.render("csrftoken")
-		return
-	end
 
 	local maps = luci.cbi.load(self.model, ...)
 	local state = nil
@@ -899,7 +893,12 @@ local function _form(self, ...)
 end
 
 function form(model)
-	return {type = "cbi", model = model, target = _form}
+	return {
+		type = "cbi",
+		post = { ["cbi.submit"] = "1" },
+		model = model,
+		target = _form
+	}
 end
 
 translate = i18n.translate

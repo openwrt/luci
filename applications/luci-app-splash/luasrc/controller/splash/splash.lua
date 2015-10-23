@@ -16,7 +16,7 @@ function index()
 	node("splash", "splash").target   = template("splash_splash/splash")
 	node("splash", "blocked").target  = template("splash/blocked")
 
-	entry({"admin", "status", "splash"}, call("action_status_admin"), _("Client-Splash"))
+	entry({"admin", "status", "splash"}, post("action_status_admin"), _("Client-Splash"))
 
 	local page  = node("splash", "publicstatus")
 	page.target = call("action_status_public")

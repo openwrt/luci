@@ -17,8 +17,8 @@
 		btn.disabled = true;
 		btn.value    = '<%:Synchronizing...%>';
 
-		XHR.get('<%=url('admin/system/clock_status')%>',
-			{ set: Math.floor((new Date()).getTime() / 1000) },
+		(new XHR()).post('<%=url('admin/system/clock_status')%>',
+			{ token: '<%=token%>', set: Math.floor((new Date()).getTime() / 1000) },
 			function()
 			{
 				btn.disabled = false;
