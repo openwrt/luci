@@ -122,7 +122,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="msapplication-TileColor" content="#0099CC">
     <meta name="msapplication-TileImage" content="<%=media%>/logo.png"/>
-    <link rel="stylesheet" href="<%=media%>/css/style.css?<%= ver.luciversion %>">
+    <link rel="stylesheet" href="<%=media%>/css/style.css">
     <link rel="shortcut icon" href="<%=media%>/favicon.ico">
     <% if node and node.css then %>
         <link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
@@ -135,7 +135,7 @@
     <script src="<%=resource%>/xhr.js"></script>
 </head>
 
-<body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
+<body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>">
 
 <header>
 	<div class="container">
