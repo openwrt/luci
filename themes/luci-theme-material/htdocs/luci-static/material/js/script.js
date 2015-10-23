@@ -144,15 +144,13 @@
     function getCurrentNodeByUrl() {
         var ret = false;
         var getUrlNode = function (href){
-            var linkPos = href.indexOf(";");
-            if (linkPos == -1){
+            if (!$('body').hasClass('logged-in')){
                 return "login";
             }else{
-                linkPos = href.indexOf("/", linkPos);
-                if (linkPos == -1){
+                if (href == "/cgi-bin/luci/"){
                     return "overview";
                 }else{
-                    var link = href.substr(linkPos);
+                    var link = href.substr(href.indexOf("admin/"));
                     if (link == "/")
                         return "overview";
                     else
@@ -278,12 +276,14 @@
             $(".main-left").stop(true).animate({
                 width: "0"
             },"fast");
+            $(".main-right").css("overflow-y", "auto");
             showSide = false;
         }else{
             $(".darkMask").stop(true).fadeIn("fast");
             $(".main-left").stop(true).animate({
                 width: "15rem"
             },"fast");
+            $(".main-right").css("overflow-y", "hidden");
             showSide = true;
         }
     });
@@ -296,6 +296,7 @@
             $(".main-left").stop(true).animate({
                 width: "0"
             },"fast");
+            $(".main-right").css("overflow-y", "auto");
         }
     });
 
@@ -343,12 +344,4 @@
         }
     }
 
-
-    document.addEventListener("touchmove", function(evt){
-        evt.preventDefault();
-    }, false);
-    var container = document.getElementById("maincontent");
-    container.addEventListener("touchmove", function(evt){
-        evt.stopPropagation();
-    }, false);
 })(jQuery);

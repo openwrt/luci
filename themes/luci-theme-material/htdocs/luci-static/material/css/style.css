@@ -85,9 +85,9 @@ select {
 select,
 input {
     background-color: transparent;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,.26);
+    border-bottom: 1px solid rgba(0, 0, 0, .26);
     outline: 0;
     padding: 0;
     box-shadow: none;
@@ -106,7 +106,7 @@ input:focus {
     border-width: 2px;
 }
 
-select[multiple="multiple"]{
+select[multiple="multiple"] {
     height: auto;
 }
 
@@ -115,9 +115,15 @@ code {
 }
 
 abbr {
-    color: #0099CC;
+    color: #005470;
     text-decoration: underline;
     cursor: help;
+}
+
+hr{
+    margin: 1rem 0;
+    border-color: #EEE;
+    opacity: 0.1;
 }
 
 header, .main {
@@ -134,7 +140,7 @@ header {
     z-index: 101;
 }
 
-footer{
+footer {
     text-align: right;
     padding: 1rem;
     color: #aaa;
@@ -142,7 +148,7 @@ footer{
     text-shadow: 0px 0px 2px #BBB;
 }
 
-footer > a{
+footer > a {
     color: #aaa;
     text-decoration: none;
 }
@@ -155,7 +161,7 @@ footer > a{
     height: calc(100% - 4rem);
 }
 
-.main > .loading{
+.main > .loading {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -165,7 +171,7 @@ footer > a{
     top: 0;
 }
 
-.main > .loading > span{
+.main > .loading > span {
     display: block;
     text-align: center;
     margin-top: 2rem;
@@ -173,11 +179,11 @@ footer > a{
     font-size: 1.3rem;
 }
 
-.main > .loading > span > .loading-img:before{
+.main > .loading > span > .loading-img:before {
     content: "\e603";
 }
 
-.main > .loading > span > .loading-img{
+.main > .loading > span > .loading-img {
     animation: anim-rotate 2s infinite linear;
     margin-right: 0.2rem;
     display: inline-block;
@@ -185,14 +191,14 @@ footer > a{
 
 @keyframes anim-rotate {
     0% {
-        -webkit-transform:rotate(0);
-        -ms-transform:rotate(0);
-        transform:rotate(0);
+        -webkit-transform: rotate(0);
+        -ms-transform: rotate(0);
+        transform: rotate(0);
     }
     100% {
-        -webkit-transform:rotate(360deg);
-        -ms-transform:rotate(360deg);
-        transform:rotate(360deg)
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg)
     }
 }
 
@@ -217,7 +223,7 @@ footer > a{
     background-color: #EEE;
 }
 
-.main-right > #maincontent{
+.main-right > #maincontent {
     background-color: #EEE;
 }
 
@@ -274,7 +280,7 @@ header > .container > .brand {
     border-color: #eea236;
 }
 
-.error{
+.error {
     color: red;
 }
 
@@ -424,7 +430,7 @@ fieldset {
     background-color: #FFF;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 
-    -webkit-overflow-scrolling:touch;
+    -webkit-overflow-scrolling: touch;
 }
 
 fieldset > legend {
@@ -476,6 +482,8 @@ fieldset > table > tbody > tr:nth-of-type(odd) {
 }
 
 /* fix progress bar */
+#swaptotal > div,
+#swapfree > div,
 #memfree > div,
 #membuff > div,
 #conns > div,
@@ -484,6 +492,8 @@ fieldset > table > tbody > tr:nth-of-type(odd) {
     height: 1.4rem !important;
 }
 
+#swaptotal > div > div,
+#swapfree > div > div,
 #memfree > div > div,
 #membuff > div > div,
 #conns > div > div,
@@ -562,6 +572,7 @@ td > table > tbody > tr > td {
     box-shadow: none;
 }
 
+form.inline + form.inline,
 .cbi-button + .cbi-button {
     margin-left: 0.6rem;
 }
@@ -600,7 +611,7 @@ td > table > tbody > tr > td {
     border-color: #d43f3a !important;
 }
 
-.a-to-btn{
+.a-to-btn {
     text-decoration: none;
 }
 
@@ -715,6 +726,11 @@ td > table > tbody > tr > td {
     background-color: #eee;
 }
 
+.cbi-rowstyle-2 .cbi-button-up,
+.cbi-rowstyle-2 .cbi-button-down{
+    background-color: #FFF !important;
+}
+
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
     width: auto !important;
 }
@@ -742,7 +758,7 @@ td > table > tbody > tr > td {
 }
 
 .inline {
-    display: inline-block;
+    display: inline;
 }
 
 .cbi-page-actions {
@@ -1049,20 +1065,20 @@ header > .container > .pull-right > * {
     float: right;
 }
 
-.node-main-login > .main .cbi-value{
+.node-main-login > .main .cbi-value {
     display: block;
 }
 
-.node-main-login > .main .cbi-value > *{
+.node-main-login > .main .cbi-value > * {
     display: inline-block !important;
 }
 
 .node-main-login > .main .cbi-input-user,
-.node-main-login > .main .cbi-input-password{
+.node-main-login > .main .cbi-input-password {
     min-width: 15rem;
 }
 
-.node-main-login footer{
+.node-main-login footer {
     bottom: 0;
     position: absolute;
     width: 100%;
@@ -1070,10 +1086,9 @@ header > .container > .pull-right > * {
 
 /* fix status overview */
 
-.node-status-overview > .main fieldset:nth-child(4) td:nth-child(2){
+.node-status-overview > .main fieldset:nth-child(4) td:nth-child(2) {
     white-space: normal;
 }
-
 
 /* fix status processes */
 
@@ -1081,10 +1096,9 @@ header > .container > .pull-right > * {
     white-space: normal;
 }
 
-.node-status-firewall > .main fieldset li {
-    display: inline-block;
+.node-status-firewall > .main div > .cbi-map > form {
+    margin: 2rem 2rem 0 0;
 }
-
 
 /* fix system reboot */
 
@@ -1132,7 +1146,7 @@ header > .container > .pull-right > * {
 }
 
 /* fix network firewall*/
-.node-network-firewall > .main .cbi-section-table-row > .cbi-value-field .cbi-input-select{
+.node-network-firewall > .main .cbi-section-table-row > .cbi-value-field .cbi-input-select {
     min-width: 4rem;
 }
 
@@ -1148,6 +1162,25 @@ header > .container > .pull-right > * {
     border: none;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 }
+
+#cbi-firewall-redirect table *,
+#cbi-network-switch_vlan table *,
+#cbi-firewall-zone table *{
+    font-size: smaller;
+}
+
+#cbi-firewall-redirect table input[type="text"],
+#cbi-network-switch_vlan table input[type="text"],
+#cbi-firewall-zone table input[type="text"]{
+    width: 5rem;
+}
+
+#cbi-firewall-redirect table select,
+#cbi-network-switch_vlan table select,
+#cbi-firewall-zone table select{
+    min-width: 3.5rem;
+}
+
 
 /* language fix */
 body.lang_pl.node-main-login .cbi-value-title {
@@ -1179,6 +1212,7 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     .cbi-value-title {
         width: 15rem;
+        padding-right: 0.6rem;
     }
 
     fieldset {
@@ -1229,6 +1263,7 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     table {
         font-size: 0.8rem !important;
+        width: 100% !important;
     }
 
     .main > .main-left > .nav > li,
@@ -1405,6 +1440,33 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     .node-system-software > .main .cbi-value .cbi-value-field input {
         width: 100%;
+    }
+
+    .node-status-firewall > .main div > .cbi-map > form {
+        position: static !important;
+        margin: 0 0 2rem 0;
+        padding: 2rem;
+        border: 0;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        font-family: inherit;
+        min-width: inherit;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-radius: 0;
+        background-color: #FFF;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .node-status-firewall > .main div > .cbi-map > form input[type="submit"]{
+        width: 100% !important;
+        margin: 0;
+    }
+
+    .node-status-firewall > .main div > .cbi-map > form input[type="submit"] + input[type="submit"]{
+        margin-top: 1rem;
     }
 }
 
