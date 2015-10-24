@@ -57,7 +57,7 @@
         var ret = false;
         if (!$('body').hasClass('logged-in')) {
             luciLocation = ["Main", "Login"];
-            return false;
+            return true;
         }
 
         $(".main > .main-left > .nav > .slide > .menu").each(function () {
