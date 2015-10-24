@@ -103,9 +103,8 @@ start_service() {
 
 #Start ETM
 	procd_open_instance
-	procd_set_param command $prog_path/etm_xware $ETM_ARGS
+	procd_set_param command nice -n19 $prog_path/etm_xware $ETM_ARGS
 	procd_set_param respawn
-	procd_set_param limits nice=19
 	procd_close_instance
 }
 
