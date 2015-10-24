@@ -3,6 +3,9 @@
 #Copyright (C) 2015 GuoGuo<gch981213@gmail.com>
 . /lib/functions.sh
 
+#检测IP列表
+chk_ip_list="$(cat /tmp/resolv.conf.auto | grep nameserver | cut -d' ' -f2 | sort -u | tr '\n' ' ') 115.239.210.27 115.239.211.112 220.181.112.244 220.181.111.188 114.114.114.114 114.114.115.115"
+
 #添加MWAN负载均衡相关配置
 #$1:接口名称
 mwan_cfg_add() {
@@ -14,8 +17,10 @@ mwan_cfg_add() {
 	uci set mwan3.${1}.interval=5
 	uci set mwan3.${1}.down=3
 	uci set mwan3.${1}.up=2
-	uci add_list mwan3.${1}.track_ip='114.114.114.114'
-	uci add_list mwan3.${1}.track_ip='114.114.115.115'
+	for i in $chk_ip_list
+	do
+		uci add_list mwan3.${1}.track_ip="$i"
+	done
 	uci set mwan3.${1}.reliability=1
 	#gen mwan3_member
 	uci set mwan3.${1}_m1_w1=member
