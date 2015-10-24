@@ -53,7 +53,7 @@ s:option(Flag, "enabled", "启用 迅雷远程下载")
 if not nixio.fs.access("/usr/bin/etm_xware") then
 s:option(Value, "prog_path", "Xware3主程序路径", "<br />Xware3主程序所在路径，例如：/mnt/sda1/xware3。请确认已经将Xware3的主程序etm_xware复制到该目录下。")
 end
-
+s:option(Value, "etm_license", "Xware3 License", "<br />获取方式：打开下载的Xware3主程序中的xware_bash.sh，搜索set_etm_license，把函数中ETM_LICENSE=之后的引号中的内容贴在这里。")
 if running then
 	s:option(DummyValue,"opennewwindow" ,"<br /><p align=\"justify\"><script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"获取启动信息\" onclick=\"window.open('http://'+window.location.host+':19000/getsysinfo')\" /></p>", detailInfo)
 
