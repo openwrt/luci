@@ -99,12 +99,6 @@
 
 		return
 	end
-
-	local soc_model = luci.sys.exec("cat /proc/cpuinfo | grep 'system type' | cut -d : -f 2-");
-
-	if string.sub(soc_model, 1, 1) == " " then
-		soc_model = string.sub(soc_model, 2, -1);
-	end
 -%>
 
 <%+header%>
@@ -574,7 +568,7 @@
 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
 		</td></tr>
-		<tr><td width="33%"><%:Chip Model%></td><td><%=soc_model%></td></tr>
+		<tr><td width="33%"><%:Chip Model%></td><td><%=(boardinfo.system or "?"%></td></tr>
 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
