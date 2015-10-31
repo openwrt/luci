@@ -102,7 +102,7 @@ o:value(9, translate("Warning"))
 --
 
 o = s:taboption("language", ListValue, "_lang", translate("Language"))
-o:value("auto")
+o:value("auto", translate("auto"))
 
 local i18ndir = luci.i18n.i18ndir .. "base."
 for k, v in luci.util.kspairs(conf.languages) do

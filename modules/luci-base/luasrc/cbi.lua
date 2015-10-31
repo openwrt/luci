@@ -1471,6 +1471,7 @@ function Value.__init__(self, ...)
 	self.template  = "cbi/value"
 	self.keylist = {}
 	self.vallist = {}
+	self.readonly = nil
 end
 
 function Value.reset_values(self)
@@ -1484,6 +1485,10 @@ function Value.value(self, key, val)
 	table.insert(self.vallist, tostring(val))
 end
 
+function Value.parse(self, section, novld)
+	if self.readonly then return end
+	AbstractValue.parse(self, section, novld)
+end
 
 -- DummyValue - This does nothing except being there
 DummyValue = class(AbstractValue)
@@ -1528,17 +1533,25 @@ function Flag.__init__(self, ...)
 end
 
 -- A flag can only have two states: set or unset
-function Flag.parse(self, section)
+function Flag.parse(self, section, novld)
 	local fexists = self.map:formvalue(
 		FEXIST_PREFIX .. self.config .. "." .. section .. "." .. self.option)
 
 	if fexists then
 		local fvalue = self:formvalue(section) and self.enabled or self.disabled
 		local cvalue = self:cfgvalue(section)
-		if fvalue ~= self.default or (not self.optional and not self.rmempty) then
-			self:write(section, fvalue)
-		else
+		local val_err
+		fvalue, val_err = self:validate(fvalue, section)
+		if not fvalue then
+			if not novld then
+				self:add_error(section, "invalid", val_err)
+			end
+			return
+		end
+		if fvalue == self.default and (self.optional or self.rmempty) then
 			self:remove(section)
+		else
+			self:write(section, fvalue)
 		end
 		if (fvalue ~= cvalue) then self.section.changed = true end
 	else
@@ -1550,7 +1563,9 @@ end
 function Flag.cfgvalue(self, section)
 	return AbstractValue.cfgvalue(self, section) or self.default
 end
-
+function Flag.validate(self, value)
+	return value
+end
 
 --[[
 ListValue - A one-line value predefined in a list
