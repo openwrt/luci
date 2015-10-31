@@ -74,12 +74,6 @@ o.default = "plain"
 o:value("plain")
 o:value("PAM")
 
-o = s:taboption("general", Value, "zone", translate("Firewall Zone"),
-	translate("The firewall zone that the VPN clients will be set to"))
-o.nocreate = true
-o.default = "lan"
-o.template = "cbi/firewall_zonelist"
-
 s:taboption("general", Value, "port", translate("Port"),
 	translate("The same UDP and TCP ports will be used"))
 s:taboption("general", Value, "max_clients", translate("Max clients"))
