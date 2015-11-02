@@ -6,9 +6,9 @@ local map, section, net = ...
 
 local o = section:taboption("general", ListValue, "reqaddress",
 	translate("Request IPv6-address"))
-o:value("try")
-o:value("force")
-o:value("none", "disabled")
+o:value("try", translate("try"))
+o:value("force", translate("force"))
+o:value("none", translate("disabled"))
 o.default = "try"
 
 
