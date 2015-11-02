@@ -1471,6 +1471,7 @@ function Value.__init__(self, ...)
 	self.template  = "cbi/value"
 	self.keylist = {}
 	self.vallist = {}
+	self.readonly = nil
 end
 
 function Value.reset_values(self)
@@ -1484,6 +1485,10 @@ function Value.value(self, key, val)
 	table.insert(self.vallist, tostring(val))
 end
 
+function Value.parse(self, section, novld)
+	if self.readonly then return end
+	AbstractValue.parse(self, section, novld)
+end
 
 -- DummyValue - This does nothing except being there
 DummyValue = class(AbstractValue)
