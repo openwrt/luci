@@ -545,7 +545,7 @@ function cbi_browser_init(id, respath, url, defpath)
 	cbi_bind(btn, 'click', cbi_browser_btnclick);
 }
 
-function cbi_dynlist_init(name, respath, datatype, optional, choices)
+function cbi_dynlist_init(name, respath, datatype, optional, url, defpath, choices)
 {
 	var input0 = document.getElementsByName(name)[0];
 	var prefix = input0.name;
@@ -606,6 +606,11 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 
 			parent.appendChild(t);
 			parent.appendChild(b);
+			if (datatype == 'file')
+			{
+				cbi_browser_init(t.id, respath, url, defpath);
+			}
+
 			parent.appendChild(document.createElement('br'));
 
 			if (datatype)
@@ -616,13 +621,13 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 			if (choices)
 			{
 				cbi_combobox_init(t.id, choices[0], '', choices[1]);
-				t.nextSibling.index = i;
+				b.index = i;
 
-				cbi_bind(t.nextSibling, 'keydown',  cbi_dynlist_keydown);
-				cbi_bind(t.nextSibling, 'keypress', cbi_dynlist_keypress);
+				cbi_bind(b, 'keydown',  cbi_dynlist_keydown);
+				cbi_bind(b, 'keypress', cbi_dynlist_keypress);
 
 				if (i == focus || -i == focus)
-					t.nextSibling.focus();
+					b.focus();
 			}
 			else
 			{
@@ -758,20 +763,24 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 		ev = ev ? ev : window.event;
 
 		var se = ev.target ? ev.target : ev.srcElement;
+		var input = se.previousSibling;
+		while (input && input.name != name) {
+			input = input.previousSibling;
+		}
 
 		if (se.src.indexOf('remove') > -1)
 		{
-			se.previousSibling.value = '';
+			input.value = '';
 
 			cbi_dynlist_keydown({
-				target:  se.previousSibling,
+				target:  input,
 				keyCode: 8
 			});
 		}
 		else
 		{
 			cbi_dynlist_keydown({
-				target:  se.previousSibling,
+				target:  input,
 				keyCode: 13
 			});
 		}
