@@ -112,7 +112,7 @@ o.default = [[
 mkdir -p /tmp/extroot
 mount --bind / /tmp/introot
 mount /dev/sda1 /tmp/extroot
-tar -C /tmp/intproot -cvf - . | tar -C /tmp/extroot -xf -
+tar -C /tmp/introot -cvf - . | tar -C /tmp/extroot -xf -
 umount /tmp/introot
 umount /tmp/extroot</pre>
 ]] %{
