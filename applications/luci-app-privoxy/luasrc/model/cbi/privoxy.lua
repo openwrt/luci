@@ -14,7 +14,7 @@ local HELP = [[<a href="http://www.privoxy.org/user-manual/config.html#%s" targe
 local VERINST = CTRL.ipkg_ver_installed("privoxy")
 local VEROK   = CTRL.ipkg_ver_compare(VERINST,">=",CTRL.PRIVOXY_MIN)
 
-local TITLE = [[</a><a href="javascript:alert(']]
+local TITLE = [[<a href="javascript:alert(']]
 		.. translate("Version Information")
 		.. [[\n\nluci-app-privoxy]]
 		.. [[\n\t]] .. translate("Version") .. [[:\t]]
@@ -26,6 +26,7 @@ local TITLE = [[</a><a href="javascript:alert(']]
 		.. [[\n\n]]
  	.. [[')">]]
 	.. translate("Privoxy WEB proxy")
+	.. [[</a>]]
 
 local DESC = translate("Privoxy is a non-caching web proxy with advanced filtering "
 		.. "capabilities for enhancing privacy, modifying web page data and HTTP headers, "
