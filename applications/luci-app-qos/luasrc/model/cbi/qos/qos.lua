@@ -41,6 +41,16 @@ t:value("Priority", translate("priority"))
 t:value("Express", translate("express"))
 t:value("Normal", translate("normal"))
 t:value("Bulk", translate("low"))
+
+local uci = require "luci.model.uci"
+uci.cursor():foreach("qos", "class",
+    function (section)
+        local n = section[".name"]
+        if string.sub(n,-string.len("_down"))~="_down" then
+            t:value(n)
+        end
+    end)
+
 t.default = "Normal"
 
 srch = s:option(Value, "srchost", translate("Source host"))
