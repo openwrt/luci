@@ -208,6 +208,7 @@ function splice(fd, size)
 end
 
 function redirect(url)
+	if url == "" then url = "/" end
 	status(302, "Found")
 	header("Location", url)
 	close()
