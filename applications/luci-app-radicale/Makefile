@@ -10,7 +10,7 @@ PKG_NAME:=luci-app-radicale
 
 # Version == major.minor.patch
 # increase "minor" on new functionality and "patch" on patches/optimization
-PKG_VERSION:=1.0.1
+PKG_VERSION:=1.0.2
 
 # Release == build
 # increase on changes of translation files

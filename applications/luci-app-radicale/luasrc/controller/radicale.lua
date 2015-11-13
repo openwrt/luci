@@ -82,7 +82,7 @@ function service_ok()
 end
 
 function app_title_main()
-	return	[[</a><a href="javascript:alert(']]
+	return	[[<a href="javascript:alert(']]
 			.. I18N.translate("Version Information")
 			.. [[\n\n]] .. luci_app_name()
 			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
@@ -100,12 +100,14 @@ function app_title_main()
 			.. [[\n\n]]
 	 	.. [[')">]]
 		.. I18N.translate("Radicale CalDAV/CardDAV Server")
+		.. [[</a>]]
 end
 function app_title_back()
-	return	[[</a><a href="]]
+	return	[[<a href="]]
 			.. DISP.build_url("admin", "services", "radicale")
 		.. [[">]]
 		.. I18N.translate("Radicale CalDAV/CardDAV Server")
+		.. [[</a>]]
 end
 function app_description()
 	return	I18N.translate("The Radicale Project is a complete CalDAV (calendar) and CardDAV (contact) server solution.") .. [[<br />]]
