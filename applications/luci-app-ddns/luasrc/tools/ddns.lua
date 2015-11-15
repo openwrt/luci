@@ -96,58 +96,6 @@ function get_pid(section)
 	return pid
 end
 
--- compare versions using "<=" "<" ">" ">=" "=" "<<" ">>"
-function ipkg_ver_compare(ver1, comp, ver2)
-	if not ver1 or not ver2
-	or not comp or not (#comp > 0) then return nil end
-	-- correct compare string
-	if comp == "<>" or comp == "><" or comp == "!=" or comp == "~=" then comp = "~="
-	elseif comp == "<=" or comp == "<" or comp == "=<" then comp = "<="
-	elseif comp == ">=" or comp == ">" or comp == "=>" then comp = ">="
-	elseif comp == "="  or comp == "==" then comp = "=="
-	elseif comp == "<<" then comp = "<"
-	elseif comp == ">>" then comp = ">"
-	else return nil end
-
-	local av1 = UTIL.split(ver1, "[%.%-]", nil, true)
-	local av2 = UTIL.split(ver2, "[%.%-]", nil, true)
-
-	for i = 1, math.max(table.getn(av1),table.getn(av2)), 1  do
-		local s1 = av1[i] or ""
-		local s2 = av2[i] or ""
-
-		-- first "not equal" found return true
-		if comp == "~=" and (s1 ~= s2) then return true end
-		-- first "lower" found return true
-		if (comp == "<" or comp == "<=") and (s1 < s2) then return true end
-		-- first "greater" found return true
-		if (comp == ">" or comp == ">=") and (s1 > s2) then return true end
-		-- not equal then return false
-		if (s1 ~= s2) then return false end
-	end
-
-	-- all equal and not compare greater or lower then true
-	return not (comp == "<" or comp == ">")
-end
-
--- read version information for given package if installed
-function ipkg_ver_installed(pkg)
-	local version = nil
-	local control = io.open("/usr/lib/opkg/info/%s.control" % pkg, "r")
-	if control then
-		local ln
-		repeat
-			ln = control:read("*l")
-			if ln and ln:match("^Version: ") then
-				version = ln:gsub("^Version: ", "")
-				break
-			end
-		until not ln
-		control:close()
-	end
-	return version
-end
-
 -- replacement of build-in read of UCI option
 -- modified AbstractValue.cfgvalue(self, section) from cbi.lua
 -- needed to read from other option then current value definition
@@ -172,24 +120,77 @@ function read_value(self, section, option)
 	end
 end
 
--- replacement of build-in Flag.parse of cbi.lua
--- modified to mark section as changed if value changes
--- current parse did not do this, but it is done AbstaractValue.parse()
-function flag_parse(self, section)
-	local fexists = self.map:formvalue(
-		luci.cbi.FEXIST_PREFIX .. self.config .. "." .. section .. "." .. self.option)
+-- replacement of build-in parse of "Value"
+-- modified AbstractValue.parse(self, section, novld) from cbi.lua
+-- validate is called if rmempty/optional true or false
+-- before write check if forcewrite, value eq default, and more
+function value_parse(self, section, novld)
+	local fvalue = self:formvalue(section)
+	local fexist = ( fvalue and (#fvalue > 0) )	-- not "nil" and "not empty"
+	local cvalue = self:cfgvalue(section)
+	local rm_opt = ( self.rmempty or self.optional )
+	local eq_cfg					-- flag: equal cfgvalue
 
-	if fexists then
-		local fvalue = self:formvalue(section) and self.enabled or self.disabled
-		local cvalue = self:cfgvalue(section)
-		if fvalue ~= self.default or (not self.optional and not self.rmempty) then
-			self:write(section, fvalue)
-		else
-			self:remove(section)
+	-- If favlue and cvalue are both tables and have the same content
+	-- make them identical
+	if type(fvalue) == "table" and type(cvalue) == "table" then
+		eq_cfg = (#fvalue == #cvalue)
+		if eq_cfg then
+			for i=1, #fvalue do
+				if cvalue[i] ~= fvalue[i] then
+					eq_cfg = false
+				end
+			end
 		end
-		if (fvalue ~= cvalue) then self.section.changed = true end
-	else
-		self:remove(section)
+		if eq_cfg then
+			fvalue = cvalue
+		end
+	end
+
+	-- removed parameter "section" from function call because used/accepted nowhere
+	-- also removed call to function "transfer"
+	local vvalue, errtxt = self:validate(fvalue)
+
+	-- error handling; validate return "nil"
+	if not vvalue then
+		if novld then 		-- and "novld" set
+			return		-- then exit without raising an error
+		end
+
+		if fexist then		-- and there is a formvalue
+			self:add_error(section, "invalid", errtxt)
+			return		-- so data are invalid
+
+		elseif not rm_opt then	-- and empty formvalue but NOT (rmempty or optional) set
+			self:add_error(section, "missing", errtxt)
+			return		-- so data is missing
+		end
+	end
+	-- for whatever reason errtxt set and not handled above
+	assert( not (errtxt and (#errtxt > 0)), "unhandled validate error" )
+
+	-- lets continue with value returned from validate
+	eq_cfg  = ( vvalue == cvalue )			-- update equal_config flag
+	local vexist = ( vvalue and (#vvalue > 0) )	-- not "nil" and "not empty"
+	local eq_def = ( vvalue == self.default )	-- equal_default flag
+
+	-- not forcewrite and (rmempty or optional)
+	-- and (no data or equal_default)
+	if not self.forcewrite and rm_opt
+	  and (not vexist or eq_def) then
+		if self:remove(section) then		-- remove data from UCI
+			self.section.changed = true	-- and push events
+		end
+		return
+	end
+
+	-- not forcewrite and no changes, so nothing to write
+	if not self.forcewrite and eq_cfg then
+		return
+	end
+
+	-- write data to UCI; raise event only on changes
+	if self:write(section, vvalue) and not eq_cfg then
 		self.section.changed = true
 	end
 end
