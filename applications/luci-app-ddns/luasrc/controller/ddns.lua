@@ -10,27 +10,42 @@ local NX   = require "nixio"
 local NXFS = require "nixio.fs"
 local DISP = require "luci.dispatcher"
 local HTTP = require "luci.http"
-local UCI  = require "luci.model.uci"
+local I18N = require "luci.i18n" 		-- not globally avalible here
+local IPKG = require "luci.model.ipkg"
 local SYS  = require "luci.sys"
-local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
+local UCI  = require "luci.model.uci"
 local UTIL = require "luci.util"
+local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
-DDNS_MIN = "2.4.2-1"	-- minimum version of service required
+local srv_name    = "ddns-scripts"
+local srv_ver_min = "2.5.0"			-- minimum version of service required
+local srv_ver_cmd = [[/usr/lib/ddns/dynamic_dns_updater.sh --version | awk {'print $2'}]]
+local app_name    = "luci-app-ddns"
+local app_title   = "Dynamic DNS"
+local app_version = "2.3.0-1"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
 	local sys	= require "luci.sys"		-- in function index()
 	local ddns	= require "luci.tools.ddns"	-- ddns multiused functions
-	local verinst	= ddns.ipkg_ver_installed("ddns-scripts")
-	local verok	= ddns.ipkg_ver_compare(verinst, ">=", "2.0.0-0")
-	-- do NOT start it not ddns-scripts version 2.x
-	if not verok then
-		return
-	end
+	local muci	= require "luci.model.uci"
+
 	-- no config create an empty one
 	if not nxfs.access("/etc/config/ddns") then
 		nxfs.writefile("/etc/config/ddns", "")
 	end
+
+	-- preset new option "lookup_host" if not already defined
+	local uci = muci.cursor()
+	local commit = false
+	uci:foreach("ddns", "service", function (s)
+		if not s["lookup_host"] and s["domain"] then
+			uci:set("ddns", s[".name"], "lookup_host", s["domain"])
+			commit = true
+		end
+	end)
+	if commit then uci:commit("ddns") end
+	uci:unload("ddns")
 
 	entry( {"admin", "services", "ddns"}, cbi("ddns/overview"), _("Dynamic DNS"), 59)
 	entry( {"admin", "services", "ddns", "detail"}, cbi("ddns/detail"), nil ).leaf = true
@@ -42,7 +57,60 @@ function index()
 	entry( {"admin", "services", "ddns", "status"}, call("status") ).leaf = true
 end
 
--- function to read all sections status and return data array
+-- Application specific information functions
+function app_description()
+	return	I18N.translate("Dynamic DNS allows that your router can be reached with " ..
+			"a fixed hostname while having a dynamically changing IP address.")
+		.. [[<br />]]
+		.. I18N.translate("OpenWrt Wiki") .. ": "
+		.. [[<a href="http://wiki.openwrt.org/doc/howto/ddns.client" target="_blank">]]
+		.. I18N.translate("DDNS Client Documentation") .. [[</a>]]
+		.. " --- "
+		.. [[<a href="http://wiki.openwrt.org/doc/uci/ddns" target="_blank">]]
+		.. I18N.translate("DDNS Client Configuration") .. [[</a>]]
+end
+function app_title_back()
+	return	[[<a href="]]
+		.. DISP.build_url("admin", "services", "ddns")
+		.. [[">]]
+		.. I18N.translate(app_title)
+		.. [[</a>]]
+end
+
+-- Standardized application/service functions
+function app_title_main()
+	return	[[<a href="javascript:alert(']]
+			.. I18N.translate("Version Information")
+			.. [[\n\n]] .. app_name
+			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]] .. app_version
+			.. [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("required") .. [[:]]
+			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
+				.. srv_ver_min .. [[ ]] .. I18N.translate("or higher")
+			.. [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("installed") .. [[:]]
+			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
+				.. (service_version() or I18N.translate("NOT installed"))
+			.. [[\n\n]]
+	 	.. [[')">]]
+		.. I18N.translate(app_title)
+		.. [[</a>]]
+end
+function service_version()
+	local ver = nil
+	IPKG.list_installed(srv_name, function(n, ver, d)
+			-- nothing to do
+		end
+	)
+	if not ver then
+		ver = UTIL.exec(srv_ver_cmd)
+		if #ver == 0 then ver = nil end
+	end
+	return	ver
+end
+function service_ok()
+	return	IPKG.compare_versions((service_version() or "0"), ">=", srv_ver_min)
+end
+
+-- internal function to read all sections status and return data array
 local function _get_status()
 	local uci	 = UCI.cursor()
 	local service	 = SYS.init.enabled("ddns") and 1 or 0
@@ -118,12 +186,12 @@ local function _get_status()
 		end
 
 		-- try to get registered IP
-		local domain	= s["domain"] or "_nodomain_"
+		local lookup_host = s["lookup_host"] or "_nolookup_"
 		local dnsserver	= s["dns_server"] or ""
 		local force_ipversion = tonumber(s["force_ipversion"] or 0)
 		local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
 		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
-		command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 ..
+		command = command .. [[ get_registered_ip ]] .. lookup_host .. [[ ]] .. use_ipv6 ..
 			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
 		local reg_ip = SYS.exec(command)
 		if reg_ip == "" then
@@ -135,7 +203,7 @@ local function _get_status()
 			section  = section,
 			enabled  = enabled,
 			iface    = iface,
-			domain   = domain,
+			lookup   = lookup_host,
 			reg_ip   = reg_ip,
 			pid      = pid,
 			datelast = datelast,
@@ -235,3 +303,4 @@ function status()
 	HTTP.prepare_content("application/json")
 	HTTP.write_json(data)
 end
+

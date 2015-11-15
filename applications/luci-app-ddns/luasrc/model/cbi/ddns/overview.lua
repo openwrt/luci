@@ -2,10 +2,10 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local NXFS = require "nixio.fs"
-local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DISP = require "luci.dispatcher"
 local HTTP = require "luci.http"
 local SYS  = require "luci.sys"
+local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 -- show hints ?
@@ -15,7 +15,7 @@ show_hints = not (DDNS.check_ipv6()		-- IPv6 support
 		and DDNS.check_bind_host()	-- DNS TCP support
 		)
 -- correct ddns-scripts version
-need_update = DDNS.ipkg_ver_compare(DDNS.ipkg_ver_installed("ddns-scripts"), "<<", CTRL.DDNS_MIN)
+need_update = not CTRL.service_ok()
 
 -- html constants
 font_red = [[<font color="red">]]
@@ -25,22 +25,8 @@ bold_off = [[</strong>]]
 
 -- cbi-map definition -- #######################################################
 m = Map("ddns")
-
-m.title	= [[<a href="javascript:alert(']]
-		.. translate("Version Information")
-		.. [[\n\nluci-app-ddns]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("luci-app-ddns")
-		.. [[\n\nddns-scripts ]] .. translate("required") .. [[:]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. CTRL.DDNS_MIN .. [[ ]] .. translate("or higher")
-		.. [[\n\nddns-scripts ]] .. translate("installed") .. [[:]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("ddns-scripts")
-		.. [[\n\n]]
-	.. [[')">]]
-	.. translate("Dynamic DNS") .. [[</a>]]
-
-m.description = translate("Dynamic DNS allows that your router can be reached with " ..
-			"a fixed hostname while having a dynamically changing " ..
-			"IP address.")
+m.title		= CTRL.app_title_main()
+m.description	= CTRL.app_description()
 
 m.on_after_commit = function(self)
 	if self.changed then	-- changes ?
@@ -122,21 +108,21 @@ function ts.create(self, name)
 	HTTP.redirect( self.extedit:format(name) )
 end
 
--- Domain and registered IP -- #################################################
-dom = ts:option(DummyValue, "_domainIP",
-	translate("Hostname/Domain") .. "<br />" .. translate("Registered IP") )
+-- Lookup_Host and registered IP -- #################################################
+dom = ts:option(DummyValue, "_lookupIP",
+	translate("Lookup Hostname") .. "<br />" .. translate("Registered IP") )
 dom.template = "ddns/overview_doubleline"
 function dom.set_one(self, section)
-	local domain = self.map:get(section, "domain") or ""
-	if domain ~= "" then
-		return domain
+	local lookup = self.map:get(section, "lookup_host") or ""
+	if lookup ~= "" then
+		return lookup
 	else
 		return [[<em>]] .. translate("config error") .. [[</em>]]
 	end
 end
 function dom.set_two(self, section)
-	local domain = self.map:get(section, "domain") or ""
-	if domain == "" then return "" end
+	local lookup = self.map:get(section, "lookup_host") or ""
+	if lookup == "" then return "" end
 	local dnsserver = self.map:get(section, "dnsserver") or ""
 	local use_ipv6 = tonumber(self.map:get(section, "use_ipv6") or 0)
 	local force_ipversion = tonumber(self.map:get(section, "force_ipversion") or 0)
@@ -145,7 +131,7 @@ function dom.set_two(self, section)
 	if not NXFS.access(command, "rwx", "rx", "rx") then
 		NXFS.chmod(command, 755)
 	end
-	command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 ..
+	command = command .. [[ get_registered_ip ]] .. lookup .. [[ ]] .. use_ipv6 ..
 		[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
 	local ip = SYS.exec(command)
 	if ip == "" then ip = translate("no data") end
@@ -157,9 +143,6 @@ ena = ts:option( Flag, "enabled",
 	translate("Enabled"))
 ena.template = "ddns/overview_enabled"
 ena.rmempty = false
-function ena.parse(self, section)
-	DDNS.flag_parse(self, section)
-end
 
 -- show PID and next update
 upd = ts:option( DummyValue, "_update",

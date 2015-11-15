@@ -8,13 +8,15 @@ local NX   = require "nixio"
 local NXFS = require "nixio.fs"
 local SYS  = require "luci.sys"
 local UTIL = require "luci.util"
+local HTTP = require "luci.http"
 local DISP = require "luci.dispatcher"
 local WADM = require "luci.tools.webadmin"
 local DTYP = require "luci.cbi.datatypes"
+local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 -- takeover arguments -- #######################################################
-local section	= arg[1]
+local section = arg[1]
 
 -- check supported options -- ##################################################
 -- saved to local vars here because doing multiple os calls slow down the system
@@ -31,15 +33,15 @@ local bold_on	= "<strong>"
 local bold_off	= "</strong>"
 
 -- error text constants -- #####################################################
-err_ipv6_plain = translate("IPv6 not supported") .. " - " ..
+local err_ipv6_plain = translate("IPv6 not supported") .. " - " ..
 		translate("please select 'IPv4' address version")
-err_ipv6_basic = bold_on ..
+local err_ipv6_basic = bold_on ..
 			font_red ..
 				translate("IPv6 not supported") ..
 			font_off ..
 			"<br />" .. translate("please select 'IPv4' address version") ..
 		 bold_off
-err_ipv6_other = bold_on ..
+local err_ipv6_other = bold_on ..
 			font_red ..
 				translate("IPv6 not supported") ..
 			font_off ..
@@ -52,16 +54,46 @@ err_ipv6_other = bold_on ..
 			[[</a>]] ..
 		 bold_off
 
-function err_tab_basic(self)
+local function err_tab_basic(self)
 	return translate("Basic Settings") .. " - " .. self.title .. ": "
 end
-function err_tab_adv(self)
+local function err_tab_adv(self)
 	return translate("Advanced Settings") .. " - " .. self.title .. ": "
 end
-function err_tab_timer(self)
+local function err_tab_timer(self)
 	return translate("Timer Settings") .. " - " .. self.title .. ": "
 end
 
+-- read services/services_ipv6 files -- ########################################
+local services4 = { }		-- IPv4 --
+local fd4 = io.open("/usr/lib/ddns/services", "r")
+if fd4 then
+	local ln, s, t
+	repeat
+		ln = fd4:read("*l")
+		s  = ln and ln:match('^%s*".*')	-- only handle lines beginning with "
+		s  = s  and  s:gsub('"','')	-- remove "
+		t  = s  and UTIL.split(s,"(%s+)",nil,true)	-- split on whitespaces
+		if t then services4[t[1]]=t[2] end
+	until not ln
+	fd4:close()
+end
+
+local services6 = { }		-- IPv6 --
+local fd6 = io.open("/usr/lib/ddns/services_ipv6", "r")
+if fd6 then
+	local ln, s, t
+	repeat
+		ln = fd6:read("*l")
+		s  = ln and ln:match('^%s*".*')	-- only handle lines beginning with "
+		s  = s  and  s:gsub('"','')	-- remove "
+		t  = s  and UTIL.split(s,"(%s+)",nil,true)	-- split on whitespaces
+		if t then services6[t[1]]=t[2] end
+	until not ln
+	fd6:close()
+end
+
+-- multi-used functions -- ####################################################
 -- function to verify settings around ip_source
 -- will use dynamic_dns_lucihelper to check if
 -- local IP can be read
@@ -105,17 +137,94 @@ local function _verify_ip_source()
 	end
 end
 
+-- function to check if option is used inside url or script
+-- return -1 on error, 0 NOT required, 1 required
+local function _option_used(option, urlscript)
+	local surl	-- search string for url
+	local ssh	-- search string for script
+	local required	-- option used inside url or script
+
+	if     option == "domain"    then surl, ssh = '%[DOMAIN%]', '%$domain'
+	elseif option == "username"  then surl, ssh = '%[USERNAME%]', '%$username'
+	elseif option == "password"  then surl, ssh = '%[PASSWORD%]', '%$password'
+	elseif option == "param_enc" then surl, ssh = '%[PARAMENC%]', '%$param_enc'
+	elseif option == "param_opt" then surl, ssh = '%[PARAMOPT%]', '%$param_opt'
+	else
+		error("undefined option")
+		return -1	-- return on error
+	end
+
+	local required = false
+	-- handle url
+	if urlscript:find('http') then
+		required = ( urlscript:find(surl) )
+	-- handle script
+	else
+		if not urlscript:find("/") then
+			-- might be inside ddns-scripts directory
+			urlscript = "/usr/lib/ddns/" .. urlscript
+		end
+		-- problem with script exit here
+		if not NXFS.access(urlscript) then return -1 end
+
+		local f = io.input(urlscript)
+		-- still problem with script exit here
+		if not f then return -1 end
+		for l in f:lines() do
+			repeat
+				if l:find('^#') then break end  -- continue on comment lines
+				required = ( l:find(surl) or l:find(ssh) )
+			until true
+			if required then break end
+		end
+		f:close()
+	end
+	return (required and 1 or 0)
+end
+
+-- function to verify if option is valid
+local function _option_validate(self, value)
+	-- section is globally defined here be calling agrument (see above)
+	local fusev6 = usev6:formvalue(section)
+	local fsvc4  = svc4:formvalue(section)
+	local fsvc6  = svc6:formvalue(section)
+	local urlsh, used
+
+	-- IP-Version dependent custom service selected
+	if (fusev6 == "0" and fsvc4 == "-") or
+	   (fusev6 == "1" and fsvc6 == "-") then
+		-- read custom url
+		urlsh = uurl:formvalue(section)
+		-- no url then read custom script
+		if not urlsh or (#urlsh == 0) then
+			urlsh = ush:formvalue(section)
+		end
+	-- IPv4 read from services4 table
+	elseif (fusev6 == "0") then
+		urlsh = services4[fsvc4]
+	-- IPv6 read from services6 table
+	else
+		urlsh = services6[fsvc6]
+	end
+	-- problem with url or script exit here
+	-- error handled somewhere else
+	if not urlsh or (#urlsh == 0) then return "" end
+
+	used = _option_used(self.option, urlsh)
+	-- on error or not used return empty sting
+	if used < 1 then return "" end
+	-- needed but no data then return error
+	if not value or (#value == 0) then
+		return nil, err_tab_basic(self) .. translate("missing / required")
+	end
+	return value
+end
+
 -- cbi-map definition -- #######################################################
-m = Map("ddns")
-
-m.title = [[<a href="]] .. DISP.build_url("admin", "services", "ddns") .. [[">]] ..
-		translate("Dynamic DNS") .. [[</a>]]
-
-m.description = translate("Dynamic DNS allows that your router can be reached with " ..
-			"a fixed hostname while having a dynamically changing " ..
-			"IP address.")
-
-m.redirect = DISP.build_url("admin", "services", "ddns")
+local m 	= Map("ddns")
+m.title		= CTRL.app_title_back()
+m.description	= CTRL.app_description()
+m.redirect	= DISP.build_url("admin", "services", "ddns")
 
 m.on_after_commit = function(self)
 	if self.changed then	-- changes ?
@@ -126,19 +235,42 @@ m.on_after_commit = function(self)
 	end
 end
 
+-- provider switch was requested, save and reload page
+if m:formvalue("cbid.ddns.%s._switch" % section) then	-- section == arg[1]
+	local fsvc
+	local fusev6 = m:formvalue("cbid.ddns.%s.use_ipv6" % section)
+	if fusev6 == "1" then
+		fsvc = m:formvalue("cbid.ddns.%s.ipv6_service_name" % section)
+	else
+		fsvc = m:formvalue("cbid.ddns.%s.ipv4_service_name" % section)
+	end
+
+	if fusev6 ~= (m:get(section, "use_ipv6") or "0") then	-- IPv6 was changed
+		m:set(section, "use_ipv6", fusev6)		-- save it
+	end
+
+	if fsvc ~= "-" then					-- NOT "custom"
+		m:set(section, "service_name", fsvc)		-- save it
+	else							-- else
+		m:del(section, "service_name")			-- delete it
+	end
+	m.uci:save(m.config)
+
+	-- reload page
+	HTTP.redirect( DISP.build_url("admin", "services", "ddns", "detail", section) )
+	return
+end
+
 -- read application settings -- ################################################
 -- date format; if not set use ISO format
-date_format = m.uci:get(m.config, "global", "date_format") or "%F %R"
+local date_format = m.uci:get(m.config, "global", "date_format") or "%F %R"
 -- log directory
-log_dir = m.uci:get(m.config, "global", "log_dir") or "/var/log/ddns"
+local log_dir = m.uci:get(m.config, "global", "log_dir") or "/var/log/ddns"
 
 -- cbi-section definition -- ###################################################
-ns = m:section( NamedSection, section, "service",
+local ns = m:section( NamedSection, section, "service",
 	translate("Details for") .. ([[: <strong>%s</strong>]] % section),
-	translate("Configure here the details for selected Dynamic DNS service.")
-	.. [[<br /><a href="http://wiki.openwrt.org/doc/uci/ddns#version_1x" target="_blank">]]
-	.. translate("For detailed information about parameter settings look here.")
-	.. [[</a>]] )
+	translate("Configure here the details for selected Dynamic DNS service.") )
 ns.instance = section	-- arg [1]
 ns:tab("basic", translate("Basic Settings"), nil )
 ns:tab("advanced", translate("Advanced Settings"), nil )
@@ -146,17 +278,33 @@ ns:tab("timer", translate("Timer Settings"), nil )
 ns:tab("logview", translate("Log File Viewer"), nil )
 
 -- TAB: Basic  #####################################################################################
--- enabled  -- #################################################################
+-- enabled -- #################################################################
 en = ns:taboption("basic", Flag, "enabled",
 	translate("Enabled"),
 	translate("If this service section is disabled it could not be started." .. "<br />" ..
 		"Neither from LuCI interface nor from console") )
 en.orientation = "horizontal"
-function en.parse(self, section)
-	DDNS.flag_parse(self, section)
+
+-- IPv4/IPv6 - lookup_host -- #################################################
+luh = ns:taboption("basic", Value, "lookup_host",
+		translate("Lookup Hostname"),
+		translate("Hostname/FQDN to validate, if IP update happen or necessary") )
+luh.rmempty	= false
+luh.placeholder = "myhost.example.com"
+function luh.validate(self, value)
+	if not value
+	or not (#value > 0)
+	or not DTYP.hostname(value) then
+		return nil, err_tab_basic(self) .. translate("invalid FQDN / required - Sample") .. ": 'myhost.example.com'"
+	else
+		return UTIL.trim(value)
+	end
+end
+function luh.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
 end
 
--- use_ipv6 (NEW)  -- ##########################################################
+-- use_ipv6 -- ################################################################
 usev6 = ns:taboption("basic", ListValue, "use_ipv6",
 	translate("IP address version"),
 	translate("Defines which IP address 'IPv4/IPv6' is send to the DDNS provider") )
@@ -179,36 +327,15 @@ function usev6.validate(self, value)
 	end
 	return nil, err_tab_basic(self) .. err_ipv6_plain
 end
-function usev6.write(self, section, value)
-	if value == "0" then	-- force rmempty
-		return self.map:del(section, self.option)
-	else
-		return self.map:set(section, self.option, value)
-	end
+function usev6.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
 end
 
--- IPv4 - service_name -- ######################################################
+-- IPv4 - service_name -- #####################################################
 svc4 = ns:taboption("basic", ListValue, "ipv4_service_name",
 	translate("DDNS Service provider") .. " [IPv4]" )
 svc4.default	= "-"
 svc4:depends("use_ipv6", "0")	-- only show on IPv4
-
-local services4 = { }
-local fd4 = io.open("/usr/lib/ddns/services", "r")
-
-if fd4 then
-	local ln
-	repeat
-		ln = fd4:read("*l")
-		local s = ln and ln:match('^%s*"([^"]+)"')
-		if s then services4[#services4+1] = s end
-	until not ln
-	fd4:close()
-end
-
-for _, v in UTIL.vspairs(services4) do svc4:value(v) end
-svc4:value("-", translate("-- custom --") )
-
 function svc4.cfgvalue(self, section)
 	local v =  DDNS.read_value(self, section, "service_name")
 	if not v or #v == 0 then
@@ -229,14 +356,18 @@ function svc4.write(self, section, value)
 		self.map:del(section, self.option)	-- to be shure
 		if value ~= "-" then			-- and write "service_name
 			self.map:del(section, "update_url")	-- delete update_url
+			self.map:del(section, "update_script")	-- delete update_script
 			return self.map:set(section, "service_name", value)
 		else
 			return self.map:del(section, "service_name")
 		end
 	end
 end
+function svc4.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv6 - service_name -- ######################################################
+-- IPv6 - service_name -- #####################################################
 svc6 = ns:taboption("basic", ListValue, "ipv6_service_name",
 	translate("DDNS Service provider") .. " [IPv6]" )
 svc6.default	= "-"
@@ -244,23 +375,6 @@ svc6:depends("use_ipv6", "1")	-- only show on IPv6
 if not has_ipv6 then
 	svc6.description = err_ipv6_basic
 end
-
-local services6 = { }
-local fd6 = io.open("/usr/lib/ddns/services_ipv6", "r")
-
-if fd6 then
-	local ln
-	repeat
-		ln = fd6:read("*l")
-		local s = ln and ln:match('^%s*"([^"]+)"')
-		if s then services6[#services6+1] = s end
-	until not ln
-	fd6:close()
-end
-
-for _, v in UTIL.vspairs(services6) do svc6:value(v) end
-svc6:value("-", translate("-- custom --") )
-
 function svc6.cfgvalue(self, section)
 	local v =  DDNS.read_value(self, section, "service_name")
 	if not v or #v == 0 then
@@ -282,33 +396,42 @@ function svc6.write(self, section, value)
 		self.map:del(section, self.option)	-- delete "ipv6_service_name" helper
 		if value ~= "-" then			-- and write "service_name
 			self.map:del(section, "update_url")	-- delete update_url
+			self.map:del(section, "update_script")	-- delete update_script
 			return self.map:set(section, "service_name", value)
 		else
 			return self.map:del(section, "service_name")
 		end
 	end
 end
+function svc6.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4/IPv6 - update_url -- ###################################################
+-- IPv4/IPv6 - change Provider -- #############################################
+svs		= ns:taboption("basic", Button, "_switch")
+svs.title      = translate("Really change DDNS provider?")
+svs.inputtitle = translate("Change provider")
+svs.inputstyle = "apply"
+
+-- IPv4/IPv6 - update_url -- ##################################################
 uurl = ns:taboption("basic", Value, "update_url",
 	translate("Custom update-URL"),
 	translate("Update URL to be used for updating your DDNS Provider." .. "<br />" ..
 		"Follow instructions you will find on their WEB page.") )
-uurl:depends("ipv4_service_name", "-")
-uurl:depends("ipv6_service_name", "-")
 function uurl.validate(self, value)
-	local script = ush:formvalue(section)
+	local fush   = ush:formvalue(section)
+	local fusev6 = usev6:formvalue(section)
 
-	if (usev6:formvalue(section) == "0" and svc4:formvalue(section) ~= "-") or
-	   (usev6:formvalue(section) == "1" and svc6:formvalue(section) ~= "-") then
+	if (fusev6 == "0" and svc4:formvalue(section) ~= "-") or
+	   (fusev6 == "1" and svc6:formvalue(section) ~= "-") then
 		return ""	-- suppress validate error
 	elseif not value then
-		if not script or not (#script > 0) then
+		if not fush or (#fush == 0) then
 			return nil, err_tab_basic(self) .. translate("missing / required")
 		else
 			return ""	-- suppress validate error / update_script is given
 		end
-	elseif (#script > 0) then
+	elseif (#fush > 0) then
 		return nil, err_tab_basic(self) .. translate("either url or script could be set")
 	end
 
@@ -325,80 +448,159 @@ function uurl.validate(self, value)
 
 	return value
 end
+function uurl.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4/IPv6 - update_script -- ################################################
+-- IPv4/IPv6 - update_script -- ###############################################
 ush = ns:taboption("basic", Value, "update_script",
 	translate("Custom update-script"),
 	translate("Custom update script to be used for updating your DDNS Provider.") )
-ush:depends("ipv4_service_name", "-")
-ush:depends("ipv6_service_name", "-")
 function ush.validate(self, value)
-	local url = uurl:formvalue(section)
+	local fuurl  = uurl:formvalue(section)
+	local fusev6 = usev6:formvalue(section)
 
-	if (usev6:formvalue(section) == "0" and svc4:formvalue(section) ~= "-") or
-	   (usev6:formvalue(section) == "1" and svc6:formvalue(section) ~= "-") then
+	if (fusev6 == "0" and svc4:formvalue(section) ~= "-") or
+	   (fusev6 == "1" and svc6:formvalue(section) ~= "-") then
 		return ""	-- suppress validate error
 	elseif not value then
-		if not url or not (#url > 0) then
+		if not fuurl or (#fuurl == 0) then
 			return nil, err_tab_basic(self) .. translate("missing / required")
 		else
 			return ""	-- suppress validate error / update_url is given
 		end
-	elseif (#url > 0) then
+	elseif (#fuurl > 0) then
 		return nil, err_tab_basic(self) .. translate("either url or script could be set")
 	elseif not NXFS.access(value) then
 		return nil, err_tab_basic(self) .. translate("File not found")
 	end
 	return value
 end
-
--- IPv4/IPv6 - domain -- #######################################################
-dom = ns:taboption("basic", Value, "domain",
-		translate("Hostname/Domain"),
-		translate("Replaces [DOMAIN] in Update-URL") )
-dom.rmempty	= false
-dom.placeholder	= "mypersonaldomain.dyndns.org"
-function dom.validate(self, value)
-	if not value
-	or not (#value > 0)
-	or not DTYP.hostname(value) then
-		return nil, err_tab_basic(self) ..	translate("invalid - Sample") .. ": 'mypersonaldomain.dyndns.org'"
-	else
-		return value
-	end
+function ush.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
 end
 
--- IPv4/IPv6 - username -- #####################################################
+-- IPv4/IPv6 - domain -- ######################################################
+dom = ns:taboption("basic", Value, "domain",
+		translate("Domain"),
+		translate("Replaces [DOMAIN] in Update-URL") )
+dom.placeholder = "myhost.example.com"
+function dom.validate(self, value)
+	return _option_validate(self, value)
+end
+function dom.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
+
+-- IPv4/IPv6 - username -- ####################################################
 user = ns:taboption("basic", Value, "username",
 		translate("Username"),
-		translate("Replaces [USERNAME] in Update-URL") )
-user.rmempty = false
+		translate("Replaces [USERNAME] in Update-URL (URL-encoded)") )
 function user.validate(self, value)
-	if not value then
-		return nil, err_tab_basic(self) .. translate("missing / required")
-	end
-	return value
+	return _option_validate(self, value)
+end
+function user.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
 end
 
--- IPv4/IPv6 - password -- #####################################################
+-- IPv4/IPv6 - password -- ####################################################
 pw = ns:taboption("basic", Value, "password",
 		translate("Password"),
-		translate("Replaces [PASSWORD] in Update-URL") )
-pw.rmempty  = false
+		translate("Replaces [PASSWORD] in Update-URL (URL-encoded)") )
 pw.password = true
 function pw.validate(self, value)
-	if not value then
-		return nil, err_tab_basic(self) .. translate("missing / required")
-	end
-	return value
+	return _option_validate(self, value)
+end
+function pw.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
 end
 
--- IPv4/IPv6 - use_https (NEW) -- ##############################################
+-- IPv4/IPv6 - param_enc -- ###################################################
+pe = ns:taboption("basic", Value, "param_enc",
+		translate("Optional Encoded Parameter"),
+		translate("Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)") )
+function pe.validate(self, value)
+	return _option_validate(self, value)
+end
+function pe.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
+
+-- IPv4/IPv6 - param_enc -- ###################################################
+po = ns:taboption("basic", Value, "param_opt",
+		translate("Optional Parameter"),
+		translate("Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)") )
+function po.validate(self, value)
+	return _option_validate(self, value)
+end
+function po.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
+
+-- handled service dependent show/display -- ##################################
+-- IPv4 --
+local cv4 = svc4:cfgvalue(section)
+if cv4 ~= "-" then
+	svs:depends ("ipv4_service_name", "-" )	-- show only if "-"
+	ush:depends ("ipv4_service_name", "?")
+	uurl:depends("ipv4_service_name", "?")
+else
+	uurl:depends("ipv4_service_name", "-")
+	ush:depends ("ipv4_service_name", "-")
+	dom:depends("ipv4_service_name", "-" )
+	user:depends("ipv4_service_name", "-" )
+	pw:depends("ipv4_service_name", "-" )
+	pe:depends("ipv4_service_name", "-" )
+	po:depends("ipv4_service_name", "-" )
+end
+for s, u in UTIL.kspairs(services4) do
+	svc4:value(s)	-- fill DropDown-List
+	if cv4 ~= s then
+		svs:depends("ipv4_service_name", s )
+	else
+		dom:depends ("ipv4_service_name", ((_option_used(dom.option, u) == 1) and s or "?") )
+		user:depends("ipv4_service_name", ((_option_used(user.option, u) == 1) and s or "?") )
+		pw:depends  ("ipv4_service_name", ((_option_used(pw.option, u) == 1) and s or "?") )
+		pe:depends  ("ipv4_service_name", ((_option_used(pe.option, u) == 1) and s or "?") )
+		po:depends  ("ipv4_service_name", ((_option_used(po.option, u) == 1) and s or "?") )
+	end
+end
+svc4:value("-", translate("-- custom --") )
+
+-- IPv6 --
+local cv6 = svc6:cfgvalue(section)
+if cv6 ~= "-" then
+	svs:depends ("ipv6_service_name", "-" )
+	uurl:depends("ipv6_service_name", "?")
+	ush:depends ("ipv6_service_name", "?")
+else
+	uurl:depends("ipv6_service_name", "-")
+	ush:depends ("ipv6_service_name", "-")
+	dom:depends("ipv6_service_name", "-" )
+	user:depends("ipv6_service_name", "-" )
+	pw:depends("ipv6_service_name", "-" )
+	pe:depends("ipv6_service_name", "-" )
+	po:depends("ipv6_service_name", "-" )
+end
+for s, u in UTIL.kspairs(services6) do
+	svc6:value(s)	-- fill DropDown-List
+	if cv6 ~= s then
+		svs:depends("ipv6_service_name", s )
+	else
+		dom:depends ("ipv6_service_name", ((_option_used(dom.option, u) == 1) and s or "?") )
+		user:depends("ipv6_service_name", ((_option_used(user.option, u) == 1) and s or "?") )
+		pw:depends  ("ipv6_service_name", ((_option_used(pw.option, u) == 1) and s or "?") )
+		pe:depends  ("ipv6_service_name", ((_option_used(pe.option, u) == 1) and s or "?") )
+		po:depends  ("ipv6_service_name", ((_option_used(po.option, u) == 1) and s or "?") )
+	end
+end
+svc6:value("-", translate("-- custom --") )
+
+-- IPv4/IPv6 - use_https -- ###################################################
 if has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 	https = ns:taboption("basic", Flag, "use_https",
 		translate("Use HTTP Secure") )
 	https.orientation = "horizontal"
-	https.rmempty = false -- force validate function
 	function https.cfgvalue(self, section)
 		local value = AbstractValue.cfgvalue(self, section)
 		if not has_ssl and value == "1" then
@@ -409,9 +611,6 @@ if has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 			self.description = translate("Enable secure communication with DDNS provider")
 		end
 		return value
-	end
-	function https.parse(self, section)
-		DDNS.flag_parse(self, section)
 	end
 	function https.validate(self, value)
 		if (value == "1" and has_ssl ) or value == "0" then return value end
@@ -427,7 +626,7 @@ if has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 	end
 end
 
--- IPv4/IPv6 - cacert (NEW) -- #################################################
+-- IPv4/IPv6 - cacert -- ######################################################
 if has_ssl then
 	cert = ns:taboption("basic", Value, "cacert",
 		translate("Path to CA-Certificate"),
@@ -435,8 +634,8 @@ if has_ssl then
 		translate("or") .. bold_on .. " IGNORE " .. bold_off ..
 		translate("to run HTTPS without verification of server certificates (insecure)") )
 	cert:depends("use_https", "1")
-	cert.rmempty = false -- force validate function
 	cert.default = "/etc/ssl/certs"
+	cert.forcewrite = true
 	function cert.validate(self, value)
 		if https:formvalue(section) == "0" then
 			return ""	-- supress validate error if NOT https
@@ -451,10 +650,13 @@ if has_ssl then
 		return nil, err_tab_basic(self) ..
 			translate("file or directory not found or not 'IGNORE'") .. " !"
 	end
+	function cert.parse(self, section, novld)
+		DDNS.value_parse(self, section, novld)
+	end
 end
 
--- TAB: Advanced  ##################################################################################
--- IPv4 - ip_source -- #########################################################
+-- TAB: Advanced  #################################################################################
+-- IPv4 - ip_source -- ########################################################
 src4 = ns:taboption("advanced", ListValue, "ipv4_source",
 	translate("IP address source") .. " [IPv4]",
 	translate("Defines the source to read systems IPv4-Address from, that will be send to the DDNS provider") )
@@ -500,8 +702,11 @@ function src4.write(self, section, value)
 	self.map:del(section, self.option)		 -- delete "ipv4_source" helper
 	return self.map:set(section, "ip_source", value) -- and write "ip_source
 end
+function src4.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv6 - ip_source -- #########################################################
+-- IPv6 - ip_source -- ########################################################
 src6 = ns:taboption("advanced", ListValue, "ipv6_source",
 	translate("IP address source") .. " [IPv6]",
 	translate("Defines the source to read systems IPv6-Address from, that will be send to the DDNS provider") )
@@ -552,8 +757,11 @@ function src6.write(self, section, value)
 	self.map:del(section, self.option)		 -- delete "ipv4_source" helper
 	return self.map:set(section, "ip_source", value) -- and write "ip_source
 end
+function src6.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4 - ip_network (default "wan") -- ########################################
+-- IPv4 - ip_network (default "wan") -- #######################################
 ipn4 = ns:taboption("advanced", ListValue, "ipv4_network",
 	translate("Network") .. " [IPv4]",
 	translate("Defines the network to read systems IPv4-Address from") )
@@ -586,8 +794,11 @@ function ipn4.write(self, section, value)
 		return self.map:set(section, "ip_network", value) -- and write "ip_network"
 	end
 end
+function ipn4.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv6 - ip_network (default "wan6") -- #######################################
+-- IPv6 - ip_network (default "wan6") -- ######################################
 ipn6 = ns:taboption("advanced", ListValue, "ipv6_network",
 	translate("Network") .. " [IPv6]" )
 ipn6:depends("ipv6_source", "network")
@@ -626,8 +837,11 @@ function ipn6.write(self, section, value)
 		return self.map:set(section, "ip_network", value) -- and write "ip_network"
 	end
 end
+function ipn6.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4 - ip_url (default "checkip.dyndns.com") -- #############################
+-- IPv4 - ip_url (default "checkip.dyndns.com") -- ############################
 iurl4 = ns:taboption("advanced", Value, "ipv4_url",
 	translate("URL to detect") .. " [IPv4]",
 	translate("Defines the Web page to read systems IPv4-Address from") )
@@ -668,8 +882,11 @@ function iurl4.write(self, section, value)
 		return self.map:set(section, "ip_url", value)	-- and write "ip_url"
 	end
 end
+function iurl4.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv6 - ip_url (default "checkipv6.dyndns.com") -- ###########################
+-- IPv6 - ip_url (default "checkipv6.dyndns.com") -- ##########################
 iurl6 = ns:taboption("advanced", Value, "ipv6_url",
 	translate("URL to detect") .. " [IPv6]" )
 iurl6:depends("ipv6_source", "web")
@@ -716,8 +933,11 @@ function iurl6.write(self, section, value)
 		return self.map:set(section, "ip_url", value)	-- and write "ip_url"
 	end
 end
+function iurl6.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4 + IPv6 - ip_interface -- ###############################################
+-- IPv4 + IPv6 - ip_interface -- ##############################################
 ipi = ns:taboption("advanced", ListValue, "ip_interface",
 	translate("Interface"),
 	translate("Defines the interface to read systems IP-Address from") )
@@ -732,16 +952,18 @@ for _, v in pairs(SYS.net.devices()) do
 	end
 end
 function ipi.validate(self, value)
-	if (usev6:formvalue(section) == "0" and src4:formvalue(section) ~= "interface")
-	or (usev6:formvalue(section) == "1" and src6:formvalue(section) ~= "interface") then
+	local fusev6 = usev6:formvalue(section)
+	if (fusev6 == "0" and src4:formvalue(section) ~= "interface")
+	or (fusev6 == "1" and src6:formvalue(section) ~= "interface") then
 		return ""
 	else
 		return value
 	end
 end
 function ipi.write(self, section, value)
-	if (usev6:formvalue(section) == "0" and src4:formvalue(section) ~= "interface")
-	or (usev6:formvalue(section) == "1" and src6:formvalue(section) ~= "interface") then
+	local fusev6 = usev6:formvalue(section)
+	if (fusev6 == "0" and src4:formvalue(section) ~= "interface")
+	or (fusev6 == "1" and src6:formvalue(section) ~= "interface") then
 		return true
 	else
 		-- get network from device to
@@ -751,21 +973,24 @@ function ipi.write(self, section, value)
 		return self.map:set(section, self.option, value)
 	end
 end
+function ipi.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4 + IPv6 - ip_script (NEW) -- ############################################
+-- IPv4 + IPv6 - ip_script -- #################################################
 ips = ns:taboption("advanced", Value, "ip_script",
 	translate("Script"),
 	translate("User defined script to read systems IP-Address") )
 ips:depends("ipv4_source", "script")	-- IPv4
 ips:depends("ipv6_source", "script")	-- or IPv6
-ips.rmempty	= false
 ips.placeholder = "/path/to/script.sh"
 function ips.validate(self, value)
+	local fusev6 = usev6:formvalue(section)
 	local split
 	if value then split = UTIL.split(value, " ") end
 
-	if (usev6:formvalue(section) == "0" and src4:formvalue(section) ~= "script")
-	or (usev6:formvalue(section) == "1" and src6:formvalue(section) ~= "script") then
+	if (fusev6 == "0" and src4:formvalue(section) ~= "script")
+	or (fusev6 == "1" and src6:formvalue(section) ~= "script") then
 		return ""
 	elseif not value or not (#value > 0) or not NXFS.access(split[1], "x") then
 		return nil, err_tab_adv(self) ..
@@ -775,15 +1000,19 @@ function ips.validate(self, value)
 	end
 end
 function ips.write(self, section, value)
-	if (usev6:formvalue(section) == "0" and src4:formvalue(section) ~= "script")
-	or (usev6:formvalue(section) == "1" and src6:formvalue(section) ~= "script") then
+	local fusev6 = usev6:formvalue(section)
+	if (fusev6 == "0" and src4:formvalue(section) ~= "script")
+	or (fusev6 == "1" and src6:formvalue(section) ~= "script") then
 		return true
 	else
 		return self.map:set(section, self.option, value)
 	end
 end
+function ips.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4 - interface - default "wan" -- #########################################
+-- IPv4 - interface - default "wan" -- ########################################
 -- event network to monitor changes/hotplug/dynamic_dns_updater.sh
 -- only needs to be set if "ip_source"="web" or "script"
 -- if "ip_source"="network" or "interface" we use their network
@@ -798,27 +1027,32 @@ function eif4.cfgvalue(self, section)
 	return DDNS.read_value(self, section, "interface")
 end
 function eif4.validate(self, value)
+	local fsrc4 = src4:formvalue(section)
 	if usev6:formvalue(section) == "1"
-	 or src4:formvalue(section) == "network"
-	 or src4:formvalue(section) == "interface" then
+	 or fsrc4 == "network"
+	 or fsrc4 == "interface" then
 		return ""	-- ignore IPv6, network, interface
 	else
 		return value
 	end
 end
 function eif4.write(self, section, value)
+	local fsrc4 = src4:formvalue(section)
 	if usev6:formvalue(section) == "1"
-	 or src4:formvalue(section) == "network"
-	 or src4:formvalue(section) == "interface" then
+	 or fsrc4 == "network"
+	 or fsrc4 == "interface" then
 		return true	-- ignore IPv6, network, interface
 	else
 		self.map:del(section, self.option)		 -- delete "ipv4_interface" helper
 		return self.map:set(section, "interface", value) -- and write "interface"
 	end
 end
+function eif4.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv6 - interface (NEW) - default "wan6" -- ##################################
--- event network to monitor changes/hotplug (NEW)
+-- IPv6 - interface - default "wan6" -- #######################################
+-- event network to monitor changes/hotplug
 -- only needs to be set if "ip_source"="web" or "script"
 -- if "ip_source"="network" or "interface" we use their network
 eif6 = ns:taboption("advanced", ListValue, "ipv6_interface",
@@ -836,9 +1070,10 @@ function eif6.cfgvalue(self, section)
 	return DDNS.read_value(self, section, "interface")
 end
 function eif6.validate(self, value)
+	local fsrc6 = src6:formvalue(section)
 	if usev6:formvalue(section) == "0"
-	 or src4:formvalue(section) == "network"
-	 or src4:formvalue(section) == "interface" then
+	 or fsrc6 == "network"
+	 or fsrc6 == "interface" then
 		return ""	-- ignore IPv4, network, interface
 	elseif not has_ipv6 then
 		return nil, err_tab_adv(self) .. err_ipv6_plain
@@ -847,23 +1082,26 @@ function eif6.validate(self, value)
 	end
 end
 function eif6.write(self, section, value)
+	local fsrc6 = src6:formvalue(section)
 	if usev6:formvalue(section) == "0"
-	 or src4:formvalue(section) == "network"
-	 or src4:formvalue(section) == "interface" then
+	 or fsrc6 == "network"
+	 or fsrc6 == "interface" then
 		return true	-- ignore IPv4, network, interface
 	else
 		self.map:del(section, self.option)		 -- delete "ipv6_interface" helper
 		return self.map:set(section, "interface", value) -- and write "interface"
 	end
 end
+function eif6.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4/IPv6 - bind_network -- #################################################
+-- IPv4/IPv6 - bind_network -- ################################################
 if has_ssl or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
 	bnet = ns:taboption("advanced", ListValue, "bind_network",
 		translate("Bind Network") )
 	bnet:depends("ipv4_source", "web")
 	bnet:depends("ipv6_source", "web")
-	bnet.rmempty = true
 	bnet.default = ""
 	bnet:value("", translate("-- default --"))
 	WADM.cbi_add_networks(bnet)
@@ -883,9 +1121,12 @@ if has_ssl or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
 		if (value ~= "" and has_ssl ) or value == "" then return value end
 		return nil, err_tab_adv(self) .. translate("Binding to a specific network not supported") .. " !"
 	end
+	function bnet.parse(self, section, novld)
+		DDNS.value_parse(self, section, novld)
+	end
 end
 
--- IPv4 + IPv6 - force_ipversion (NEW) -- ######################################
+-- IPv4 + IPv6 - force_ipversion -- ###########################################
 -- optional to force wget/curl and host to use only selected IP version
 -- command parameter "-4" or "-6"
 if has_force or ( ( m:get(section, "force_ipversion") or "0" ) ~= "0" ) then
@@ -907,19 +1148,9 @@ if has_force or ( ( m:get(section, "force_ipversion") or "0" ) ~= "0" ) then
 		if (value == "1" and has_force) or value == "0" then return value end
 		return nil, err_tab_adv(self) .. translate("Force IP Version not supported")
 	end
-	function fipv.parse(self, section)
-		DDNS.flag_parse(self, section)
-	end
-	function fipv.write(self, section, value)
-		if value == "1" then
-			return self.map:set(section, self.option, value)
-		else
-			return self.map:del(section, self.option)
-		end
-	end
 end
 
--- IPv4 + IPv6 - dns_server (NEW) -- ###########################################
+-- IPv4 + IPv6 - dns_server -- ################################################
 -- optional DNS Server to use resolving my IP if "ip_source"="web"
 dns = ns:taboption("advanced", Value, "dns_server",
 	translate("DNS-Server"),
@@ -928,7 +1159,7 @@ dns = ns:taboption("advanced", Value, "dns_server",
 dns.placeholder = "mydns.lan"
 function dns.validate(self, value)
 	-- if .datatype is set, then it is checked before calling this function
-	if not value then
+	if not value or (#value == 0) then
 		return ""	-- ignore on empty
 	elseif not DTYP.host(value) then
 		return nil, err_tab_adv(self) .. translate("use hostname, FQDN, IPv4- or IPv6-Address")
@@ -946,8 +1177,11 @@ function dns.validate(self, value)
 		end
 	end
 end
+function dns.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- IPv4 + IPv6 - force_dnstcp (NEW) -- #########################################
+-- IPv4 + IPv6 - force_dnstcp -- ##############################################
 if has_dnstcp or ( ( m:get(section, "force_dnstcp") or "0" ) ~= "0" ) then
 	tcp = ns:taboption("advanced", Flag, "force_dnstcp",
 		translate("Force TCP on DNS") )
@@ -969,12 +1203,9 @@ if has_dnstcp or ( ( m:get(section, "force_dnstcp") or "0" ) ~= "0" ) then
 		end
 		return nil, err_tab_adv(self) .. translate("DNS requests via TCP not supported")
 	end
-	function tcp.parse(self, section)
-		DDNS.flag_parse(self, section)
-	end
 end
 
--- IPv4 + IPv6 - proxy (NEW) -- ################################################
+-- IPv4 + IPv6 - proxy -- #####################################################
 -- optional Proxy to use for http/https requests  [user:password@]proxyhost[:port]
 if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 	pxy = ns:taboption("advanced", Value, "proxy",
@@ -996,7 +1227,7 @@ if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 	end
 	function pxy.validate(self, value)
 		-- if .datatype is set, then it is checked before calling this function
-		if not value then
+		if not value or (#value == 0) then
 			return ""	-- ignore on empty
 		elseif has_proxy then
 			local ipv6  = usev6:formvalue(section) or "0"
@@ -1015,9 +1246,12 @@ if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 			return nil, err_tab_adv(self) .. translate("PROXY-Server not supported")
 		end
 	end
+	function pxy.parse(self, section, novld)
+		DDNS.value_parse(self, section, novld)
+	end
 end
 
--- use_syslog -- ###############################################################
+-- use_syslog -- ##############################################################
 slog = ns:taboption("advanced", ListValue, "use_syslog",
 	translate("Log to syslog"),
 	translate("Writes log messages to syslog. Critical Errors will always be written to syslog.") )
@@ -1027,26 +1261,24 @@ slog:value("1", translate("Info"))
 slog:value("2", translate("Notice"))
 slog:value("3", translate("Warning"))
 slog:value("4", translate("Error"))
+function slog.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- use_logfile (NEW) -- ########################################################
+-- use_logfile -- #############################################################
 logf = ns:taboption("advanced", Flag, "use_logfile",
 	translate("Log to file"),
 	translate("Writes detailed messages to log file. File will be truncated automatically.") .. "<br />" ..
 	translate("File") .. [[: "]] .. log_dir .. [[/]] .. section .. [[.log"]] )
 logf.orientation = "horizontal"
-logf.rmempty = false	-- we want to save in /etc/config/ddns file on "0" because
-logf.default = "1"	-- if not defined write to log by default
-function logf.parse(self, section)
-	DDNS.flag_parse(self, section)
-end
+logf.default     = "1"		-- if not defined write to log by default
 
--- TAB: Timer  #####################################################################################
--- check_interval -- ###########################################################
+-- TAB: Timer  ####################################################################################
+-- check_interval -- ##########################################################
 ci = ns:taboption("timer", Value, "check_interval",
 	translate("Check Interval") )
 ci.template = "ddns/detail_value"
-ci.default  = 10
-ci.rmempty = false	-- validate ourselves for translatable error messages
+ci.default  = "10"
 function ci.validate(self, value)
 	if not DTYP.uinteger(value)
 	or tonumber(value) < 1 then
@@ -1061,7 +1293,7 @@ function ci.validate(self, value)
 	end
 end
 function ci.write(self, section, value)
-	-- simulate rmempty=true remove default
+	-- remove when default
 	local secs = DDNS.calc_seconds(value, cu:formvalue(section))
 	if secs ~= 600 then	--default 10 minutes
 		return self.map:set(section, self.option, value)
@@ -1070,20 +1302,22 @@ function ci.write(self, section, value)
 		return self.map:del(section, self.option)
 	end
 end
+function ci.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- check_unit -- ###############################################################
+-- check_unit -- ##############################################################
 cu = ns:taboption("timer", ListValue, "check_unit", "not displayed, but needed otherwise error",
 	translate("Interval to check for changed IP" .. "<br />" ..
 		"Values below 5 minutes == 300 seconds are not supported") )
 cu.template = "ddns/detail_lvalue"
 cu.default  = "minutes"
-cu.rmempty  = false	-- want to control write process
 cu:value("seconds", translate("seconds"))
 cu:value("minutes", translate("minutes"))
 cu:value("hours", translate("hours"))
 --cu:value("days", translate("days"))
 function cu.write(self, section, value)
-	-- simulate rmempty=true remove default
+	-- remove when default
 	local secs = DDNS.calc_seconds(ci:formvalue(section), value)
 	if secs ~= 600 then	--default 10 minutes
 		return self.map:set(section, self.option, value)
@@ -1091,13 +1325,16 @@ function cu.write(self, section, value)
 		return true
 	end
 end
+function cu.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- force_interval (modified) -- ################################################
+-- force_interval (modified) -- ###############################################
 fi = ns:taboption("timer", Value, "force_interval",
 	translate("Force Interval") )
 fi.template = "ddns/detail_value"
-fi.default  = 72 	-- see dynamic_dns_updater.sh script
-fi.rmempty = false	-- validate ourselves for translatable error messages
+fi.default  = "72" 	-- see dynamic_dns_updater.sh script
+--fi.rmempty = false	-- validate ourselves for translatable error messages
 function fi.validate(self, value)
 	if not DTYP.uinteger(value)
 	or tonumber(value) < 0 then
@@ -1131,15 +1368,18 @@ function fi.write(self, section, value)
 		return self.map:del(section, self.option)
 	end
 end
+function fi.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- force_unit -- ###############################################################
+-- force_unit -- ##############################################################
 fu = ns:taboption("timer", ListValue, "force_unit", "not displayed, but needed otherwise error",
 	translate("Interval to force updates send to DDNS Provider" .. "<br />" ..
 		"Setting this parameter to 0 will force the script to only run once" .. "<br />" ..
 		"Values lower 'Check Interval' except '0' are not supported") )
 fu.template = "ddns/detail_lvalue"
 fu.default  = "hours"
-fu.rmempty  = false	-- want to control write process
+--fu.rmempty  = false	-- want to control write process
 --fu:value("seconds", translate("seconds"))
 fu:value("minutes", translate("minutes"))
 fu:value("hours", translate("hours"))
@@ -1153,15 +1393,17 @@ function fu.write(self, section, value)
 		return true
 	end
 end
+function fu.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- retry_count (NEW) -- ########################################################
+-- retry_count -- #############################################################
 rc = ns:taboption("timer", Value, "retry_count")
 rc.title	= translate("Error Retry Counter")
 rc.description	= translate("On Error the script will stop execution after given number of retrys")
 		.. "<br />"
 		.. translate("The default setting of '0' will retry infinite.")
-rc.default	= 0
-rc.rmempty	= false	-- validate ourselves for translatable error messages
+rc.default	= "0"
 function rc.validate(self, value)
 	if not DTYP.uinteger(value) then
 		return nil, err_tab_timer(self) .. translate("minimum value '0'")
@@ -1169,21 +1411,15 @@ function rc.validate(self, value)
 		return value
 	end
 end
-function rc.write(self, section, value)
-	-- simulate rmempty=true remove default
-	if tonumber(value) ~= self.default then
-		return self.map:set(section, self.option, value)
-	else
-		return self.map:del(section, self.option)
-	end
+function rc.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
 end
 
--- retry_interval -- ###########################################################
+-- retry_interval -- ##########################################################
 ri = ns:taboption("timer", Value, "retry_interval",
 	translate("Error Retry Interval") )
 ri.template = "ddns/detail_value"
-ri.default  = 60
-ri.rmempty  = false	-- validate ourselves for translatable error messages
+ri.default  = "60"
 function ri.validate(self, value)
 	if not DTYP.uinteger(value)
 	or tonumber(value) < 1 then
@@ -1202,13 +1438,16 @@ function ri.write(self, section, value)
 		return self.map:del(section, self.option)
 	end
 end
+function ri.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- retry_unit -- ###############################################################
+-- retry_unit -- ##############################################################
 ru = ns:taboption("timer", ListValue, "retry_unit", "not displayed, but needed otherwise error",
 	translate("On Error the script will retry the failed action after given time") )
 ru.template = "ddns/detail_lvalue"
 ru.default  = "seconds"
-ru.rmempty  = false	-- want to control write process
+--ru.rmempty  = false	-- want to control write process
 ru:value("seconds", translate("seconds"))
 ru:value("minutes", translate("minutes"))
 --ru:value("hours", translate("hours"))
@@ -1222,8 +1461,11 @@ function ru.write(self, section, value)
 		return true -- will be deleted by retry_interval
 	end
 end
+function ru.parse(self, section, novld)
+	DDNS.value_parse(self, section, novld)
+end
 
--- TAB: LogView  (NEW) #############################################################################
+-- TAB: LogView  ##################################################################################
 lv = ns:taboption("logview", DummyValue, "_logview")
 lv.template = "ddns/detail_logview"
 lv.inputtitle = translate("Read / Reread log file")
