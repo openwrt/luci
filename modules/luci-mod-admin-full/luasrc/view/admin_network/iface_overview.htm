@@ -250,7 +250,7 @@
 						<input type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
 						<input type="button" class="cbi-button cbi-button-reset" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
 						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
-						<input type="submit" class="cbi-button cbi-button-remove" style="width:100px" onclick="iface_delete('<%=net[1]%>')" value="<%:Delete%>" />
+						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="iface_delete('<%=net[1]%>')" value="<%:Delete%>" />
 					</td>
 				</tr>
 			<% end %>
