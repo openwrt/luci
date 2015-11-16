@@ -1119,6 +1119,12 @@ Name of created section
 
  
 Set a value or create a named section. 
+ 
+When invoked with three arguments <code>config</code>, <code>sectionname</code>, <code>sectiontype</code>, 
+then a named section of the given type is created. 
+ 
+When invoked with four arguments <code>config</code>, <code>sectionname</code>, <code>optionname</code> and 
+<code>optionvalue</code> then the value of the specified option is set to the given value. 
 
 
 
@@ -1138,7 +1144,7 @@ Set a value or create a named section.
 	</li>
 	
 	<li>
-	  value: UCI value or nil if you want to create a section
+	  value: UCI value or nothing if you want to create a section
 	</li>
 	
 </ul>
