@@ -49,6 +49,33 @@ function neg(v, ...)
 	return _M['or'](v:gsub("^%s*!%s*", ""), ...)
 end
 
+function pattern(v, p, ...)
+	local caps
+	local f, a
+	local i
+	local j = 1
+
+	v = tostring(v)
+	caps = { v:match(p) }
+	if #caps == 0 then
+		return false
+	end
+	for i = 1, select('#', ...), 2 do
+		f = select(i, ...)
+		a = select(i+1, ...)
+		if type(f) ~= "function" then
+			if f ~= caps[j] then
+				return false
+			end
+			i = i - 1
+		elseif not (caps[j] and f(caps[j], unpack(a))) then
+			return false
+		end
+		j = j + 1
+	end
+	return true
+end
+
 function list(v, subvalidator, subargs)
 	if type(subvalidator) ~= "function" then
 		return false
