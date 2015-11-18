@@ -7,10 +7,10 @@ hostsfile_getname()
 	local i=0
 	local value file
 
-	while value="$( uci -q get olsrd.@LoadPlugin[i].library )"; do {
-		case "$file" in
-			*'olsrd_nameservice.so.'*)
-				file="$( uci -q get olsrd.@LoadPlugin[i].hosts_file )"
+	while value="$( uci -q get olsrd.@LoadPlugin[$i].library )"; do {
+		case "$value" in
+			'olsrd_nameservice.so.'*)
+				file="$( uci -q get olsrd.@LoadPlugin[$i].hosts_file )"
 				break
 			;;
 		esac
