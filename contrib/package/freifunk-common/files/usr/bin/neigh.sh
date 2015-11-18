@@ -2,30 +2,51 @@
 
 . /usr/share/libubox/jshn.sh
 
+hostsfile_getname()
+{
+	local i=0
+	local value file
+
+	while value="$( uci -q get olsrd.@LoadPlugin[i].library )"; do {
+		case "$file" in
+			*'olsrd_nameservice.so.'*)
+				file="$( uci -q get olsrd.@LoadPlugin[i].hosts_file )"
+				break
+			;;
+		esac
+
+		i=$(( i + 1 ))
+	} done
+
+	echo "${file:-/var/run/hosts_olsr}"
+}
+
 read_hostnames()
 {
-	local file_hostnames='/var/run/hosts_olsr'
+	local file="$( hostsfile_getname )"
 	local line ip hostname
 
-	[ -e "$file_hostnames" ] || return
+	[ -e "$file" ] || return
 
 	while read -r line; do {
 		case "$line" in
 			[0-9]*)
+				# 2001:bf7:820:901::1 stuttgarter-core.olsr   # myself
 				# 10.63.160.161  AlexLaterne    # 10.63.160.161
 				set -f
 				set +f -- $line
 				ip="$1"
 				hostname="$2"
 
-				# global vars, e.g. IP_1_2_3_4='foo'
-				eval IP_${ip//./_}="$hostname"
+				# global vars, e.g.
+				# IP_1_2_3_4='foo' or IP_2001_bf7_820_901__1='bar'
+				eval IP_${ip//[.:]/_}="$hostname"
 			;;
 		esac
-	} done <"$file_hostnames"
+	} done <"$file"
 }
 
-read_hostnames		# TODO! IPv6 not implemented yet
+read_hostnames
 
 VARS='localIP:Local remoteIP:Remote validityTime:vTime linkQuality:LQ'
 VARS="$VARS neighborLinkQuality:NLQ linkCost:Cost remoteHostname:Host"
@@ -55,7 +76,7 @@ for HOST in '127.0.0.1' '::1';do
 				;;*)
 					for v in ${VARS};do
 						eval printf \"%-\${_${v%:*}}s \" \$${v%:*}
-						eval remoteHostname="\$IP_${remoteIP//./_}"
+						eval remoteHostname="\$IP_${remoteIP//[.:]/_}"
 					done
 					echo
 				;;esac
