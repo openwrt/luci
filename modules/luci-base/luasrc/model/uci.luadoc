@@ -235,12 +235,18 @@ Saves changes made to a config to make them committable.
 ---[[
 Set a value or create a named section.
 
+When invoked with three arguments `config`, `sectionname`, `sectiontype`,
+then a named section of the given type is created.
+
+When invoked with four arguments `config`, `sectionname`, `optionname` and
+`optionvalue` then the value of the specified option is set to the given value.
+
 @class function
 @name Cursor.set
 @param config	UCI config
 @param section	UCI section name
 @param option	UCI option or UCI section type
-@param value		UCI value or nil if you want to create a section
+@param value		UCI value or nothing if you want to create a section
 @return			Boolean whether operation succeeded
 ]]
 

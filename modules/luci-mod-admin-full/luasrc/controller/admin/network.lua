@@ -235,6 +235,8 @@ function iface_status(ifaces)
 				proto      = net:proto(),
 				uptime     = net:uptime(),
 				gwaddr     = net:gwaddr(),
+				ipaddrs    = net:ipaddrs(),
+				ip6addrs   = net:ip6addrs(),
 				dnsaddrs   = net:dnsaddrs(),
 				name       = device:shortname(),
 				type       = device:type(),
@@ -246,28 +248,8 @@ function iface_status(ifaces)
 				rx_packets = device:rx_packets(),
 				tx_packets = device:tx_packets(),
 
-				ipaddrs    = { },
-				ip6addrs   = { },
 				subdevices = { }
 			}
-
-			local _, a
-			for _, a in ipairs(device:ipaddrs()) do
-				data.ipaddrs[#data.ipaddrs+1] = {
-					addr      = a:host():string(),
-					netmask   = a:mask():string(),
-					prefix    = a:prefix()
-				}
-			end
-			for _, a in ipairs(device:ip6addrs()) do
-				if not a:is6linklocal() then
-					data.ip6addrs[#data.ip6addrs+1] = {
-						addr      = a:host():string(),
-						netmask   = a:mask():string(),
-						prefix    = a:prefix()
-					}
-				end
-			end
 
 			for _, device in ipairs(net:get_interfaces() or {}) do
 				data.subdevices[#data.subdevices+1] = {
