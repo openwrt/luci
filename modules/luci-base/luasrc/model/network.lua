@@ -16,6 +16,7 @@ local utl = require "luci.util"
 local dsp = require "luci.dispatcher"
 local uci = require "luci.model.uci"
 local lng = require "luci.i18n"
+local jsc = require "luci.jsonc"
 
 module "luci.model.network"
 
@@ -473,6 +474,21 @@ function get_interface(self, i)
 	end
 end
 
+local function swdev_from_board_json()
+	local boardinfo = jsc.parse(nfs.readfile("/etc/board.json") or "")
+	if type(boardinfo) == "table" and type(boardinfo.network) == "table" then
+		local net, val
+		for net, val in pairs(boardinfo.network) do
+			if type(val) == "table" and type(val.ifname) == "string" and
+			   val.create_vlan == true
+			then
+				return val.ifname
+			end
+		end
+	end
+	return nil
+end
+
 function get_interfaces(self)
 	local iface
 	local ifaces = { }
@@ -514,7 +530,7 @@ function get_interfaces(self)
 						end
 					end
 					if not base or not base:match("^eth%d") then
-						base = "eth0"
+						base = swdev_from_board_json() or "eth0"
 					end
 				else
 					base = s.device
