@@ -4,13 +4,14 @@
 
 hostsfile_getname()
 {
+	local config="$1"
 	local i=0
 	local value file
 
-	while value="$( uci -q get olsrd.@LoadPlugin[$i].library )"; do {
+	while value="$( uci -q get $config.@LoadPlugin[$i].library )"; do {
 		case "$value" in
 			'olsrd_nameservice.so.'*)
-				file="$( uci -q get olsrd.@LoadPlugin[$i].hosts_file )"
+				file="$( uci -q get $config.@LoadPlugin[$i].hosts_file )"
 				break
 			;;
 		esac
@@ -23,27 +24,39 @@ hostsfile_getname()
 
 read_hostnames()
 {
-	local file="$( hostsfile_getname )"
-	local line ip hostname
+	local file_list=" $( hostsfile_getname 'olsrd' ) $(hostsfile_getname 'olsrd6' ) "
+	local line ip hostname file file_list_uniq
 
-	[ -e "$file" ] || return
-
-	while read -r line; do {
-		case "$line" in
-			[0-9]*)
-				# 2001:bf7:820:901::1 stuttgarter-core.olsr   # myself
-				# 10.63.160.161  AlexLaterne    # 10.63.160.161
-				set -f
-				set +f -- $line
-				ip="$1"
-				hostname="$2"
-
-				# global vars, e.g.
-				# IP_1_2_3_4='foo' or IP_2001_bf7_820_901__1='bar'
-				eval IP_${ip//[.:]/_}="$hostname"
+	for file in $file_list; do {
+		case " $file_list_uniq " in
+			*" $file "*)
+			;;
+			*)
+				file_list_uniq="$file_list_uniq $file"
 			;;
 		esac
-	} done <"$file"
+	} done
+
+	for file in $file_list_uniq; do {
+		[ -e "$file" ] || continue
+
+		while read -r line; do {
+			case "$line" in
+				[0-9]*)
+					# 2001:bf7:820:901::1 stuttgarter-core.olsr   # myself
+					# 10.63.160.161  AlexLaterne    # 10.63.160.161
+					set -f
+					set +f -- $line
+					ip="$1"
+					hostname="$2"
+
+					# global vars, e.g.
+					# IP_1_2_3_4='foo' or IP_2001_bf7_820_901__1='bar'
+					eval IP_${ip//[.:]/_}="$hostname"
+				;;
+			esac
+		} done <"$file"
+	} done
 }
 
 read_hostnames
