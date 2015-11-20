@@ -107,6 +107,12 @@ m.uci:foreach("network", "switch",
 			local sp = s:option(ListValue, "mirror_source_port", translate("Mirror source port"))
 			local mp = s:option(ListValue, "mirror_monitor_port", translate("Mirror monitor port"))
 
+			sp:depends("enable_mirror_tx", "1")
+			sp:depends("enable_mirror_rx", "1")
+
+			mp:depends("enable_mirror_tx", "1")
+			mp:depends("enable_mirror_rx", "1")
+
 			local pt
 			for pt = 0, num_ports - 1 do
 				local name
