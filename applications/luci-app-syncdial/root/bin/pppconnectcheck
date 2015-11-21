@@ -36,7 +36,7 @@ config_get dialwait config dialwait 20
 }
 [ $(ps | grep -c "pppconnectcheck") -gt 3 ] && logger -t PPPoE-IFChecker "Another checker is running.exit." && return 1
 sleep 5
-PPPUPNUM=$(mwan3 status | grep -c "is online (tracking active)")
+PPPUPNUM=$(mwan3 status | grep -c "is online and tracking is active")
 logger -t PPPoE-IFChecker "$PPPUPNUM interfaces are online."
 if [ "$PPPUPNUM" -lt $dial ]
 then
