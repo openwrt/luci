@@ -5,7 +5,7 @@ Copyright (C) 2015 GuoGuo <gch981213@gmail.com>
 
 local fs = require "nixio.fs"
 
-local cmd = "mwan3 status | grep -c \"is online (tracking active)\""
+local cmd = "mwan3 status | grep -c \"is online and tracking is active\""
 local shellpipe = io.popen(cmd,"r")
 local ifnum = shellpipe:read("*a")
 shellpipe:close()
