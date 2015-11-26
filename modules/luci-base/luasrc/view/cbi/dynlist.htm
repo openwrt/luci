@@ -15,7 +15,9 @@
 <script type="text/javascript">
 cbi_dynlist_init(
 	'<%=cbid%>', '<%=resource%>', '<%=self.datatype%>',
-	<%=tostring(self.optional or self.rmempty)%>
+	<%=tostring(self.optional or self.rmempty)%>,
+	'<%=url('admin/filebrowser')%>',
+	'<%=self.default_path and self.default_path%>'
 	<%- if #self.keylist > 0 then -%>, [{
 		<%- for i, k in ipairs(self.keylist) do -%>
 			<%-=string.format("%q", k) .. ":" .. string.format("%q", self.vallist[i])-%>
