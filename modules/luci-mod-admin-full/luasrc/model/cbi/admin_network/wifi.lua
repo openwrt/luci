@@ -361,7 +361,8 @@ s:tab("encryption", translate("Wireless Security"))
 s:tab("macfilter", translate("MAC-Filter"))
 s:tab("advanced", translate("Advanced Settings"))
 
-s:taboption("general", Value, "ssid", translate("<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+ssid = s:taboption("general", Value, "ssid", translate("<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+ssid.datatype = "maxlength(32)"
 
 mode = s:taboption("general", ListValue, "mode", translate("Mode"))
 mode.override_values = true
