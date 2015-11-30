@@ -74,6 +74,7 @@ local knownParams = {
 		{ Value,		"route_gateway",				"10.234.1.1",													translate("Specify a default gateway for routes") },
 		{ Value,		"route_delay",					0,																translate("Delay n seconds after connection") },
 		{ Flag,			"route_noexec",					0,																translate("Don't add routes automatically") },
+		{ Flag,			"route_nopull",					0,																translate("Don't pull routes automatically") },
 
 		{ ListValue,	"mtu_disc",						{ "yes", "maybe", "no" },										translate("Enable Path MTU discovery") },
 		{ Flag,			"mtu_test",						0,																translate("Empirically measure MTU") },
