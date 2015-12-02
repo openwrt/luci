@@ -29,7 +29,7 @@
 		<%- end -%>');
 		<%- end %>
 		<% if self.datatype then -%>
-		cbi_validate_field('<%=cbid%>', <%=tostring((self.optional or self.rmempty) == true)%>, '<%=self.datatype:gsub("'", "\\'")%>');
+		cbi_validate_field('<%=cbid%>', <%=tostring((self.optional or self.rmempty) == true)%>, '<%=self.datatype:gsub("\\", "\\\\"):gsub("'", "\\'")%>');
 		<%- end %>
 	//]]></script>
 	<% end -%>
