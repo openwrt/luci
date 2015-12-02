@@ -307,6 +307,36 @@ var cbi_validators = {
 			this.replace(/^[ \t]*![ \t]*/, ''), arguments);
 	},
 
+	'pattern': function()
+	{
+		var p = cbi_validate_conv_pattern(arguments[0]);
+		var args = Array.prototype.slice.call(arguments, 1);
+		var caps
+		var i, j = 1;
+
+		p = new RegExp(p);
+		caps = p.exec(this);
+		if (!caps)
+		{
+			return false;
+		}
+		for (i = 0; i < args.length; i += 2)
+		{
+			if (typeof args[i] != 'function')
+			{
+				if (caps.length <= j || args[i] != caps[j])
+					return false;
+				i--;
+			}
+			else if (caps.length <= j || !args[i].apply(caps[j], args.slice(i+1)))
+			{
+				return false;
+			}
+			j += 1;
+		}
+		return true;
+	},
+
 	'list': function(subvalidator, subargs)
 	{
 		if (typeof subvalidator != 'function')
@@ -926,6 +956,113 @@ function cbi_validate_reset(form)
 	);
 
 	return true;
+}
+
+// convert lua string pattern to javascript RegExp syntax
+function cbi_validate_conv_pattern(pattern)
+{
+	var regstr = '';
+	var c, i;
+	var sub, pos;
+	var set = false;	// is scanning set
+	var lppos = [];		// left parentheses position
+	var cc_map = {		// character class map
+		'a': 'A-Za-z',
+		'c': '\x00-\x1f\x7f',
+		'd': '0-9',
+		'l': 'a-z',
+		'p': '\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e',
+		's': '\\s',
+		'u': 'A-Z',
+		'w': '0-9A-Za-z',
+		'x': '0-9A-Fa-f',
+		'z': '\\0',
+		'A': '\x00-\x40\x5b-\x60\x7b-\xff',
+		'C': '\x20-\x7e\x80-\xff',
+		'D': '\x00-\x2f\x3a-\xff',
+		'L': '\x00-\x60\x7b-\xff',
+		'P': '\x00-\x200-9A-Za-z\x7f-\xff',
+		'S': '\\S',
+		'U': '\x00-\x40\x5b-\xff',
+		'W': '\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\xff',
+		'X': '\x00-\x2f\x3a-\x40\x47-\x60\x67-\xff',
+		'Z': '\x01-\xff',
+	};
+
+	for (i = 0; i < pattern.length; i++)
+	{
+		switch(pattern[i])
+		{
+		case '%':
+			if (pattern.length <= i+1)
+				throw "malformed pattern (ends with '%')";
+
+			c = pattern[++i];
+			if (cc_map[c])
+			{
+				regstr += set ? cc_map[c] : '[' + cc_map[c] + ']';
+			}
+			else if (c >= '1' && c <= '9')
+			{
+				regstr += set ? c : '\\' + c;
+			}
+			else if (c == 'b')
+			{
+				if (set)
+					regstr += c;
+				else
+					throw "pattern %bxy is not supported";
+			}
+			else
+			{
+				if ('*+?.^$[]()\\'.indexOf(c) >= 0)
+					regstr += '\\';
+				regstr += c;
+			}
+			break;
+		case '-':
+			regstr += set ? '-' : '*?';
+			break;
+		case '[':
+		case ']':
+			regstr += pattern[i];
+			set = pattern[i] == '[';
+			break;
+		case '(':
+			regstr += pattern[i];
+			if (!set)
+				lppos.push(regstr.length);
+			break;
+		case ')':
+			if (set)
+			{
+				regstr += ')';
+				break;
+			}
+
+			if (lppos.length < 1)
+				throw "invalid pattern capture";
+			pos = lppos.pop();
+			if (pos == i)
+				throw "empty capture is not supported";
+
+			sub = regstr.slice(pos);
+			if (sub.match(/^\?:/))
+				regstr = regstr.slice(0, pos) + '\\' + sub;
+			regstr += pattern[i];
+			break;
+		case '\\':
+			regstr += '\\';
+		default:
+			// *+?.^$ and others
+			regstr += pattern[i];
+			break;
+		}
+	}
+	if (lppos.length > 0)
+		throw "unfinished capture";
+
+	return regstr;
 }
 
 function cbi_validate_compile(code)
