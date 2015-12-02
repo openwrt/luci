@@ -38,7 +38,7 @@ function load(cbimap, ...)
 	require("luci.config")
 	require("luci.util")
 
-	local upldir = "/lib/uci/upload/"
+	local upldir = "/etc/luci-uploads/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
 	local func, err
 
