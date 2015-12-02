@@ -33,11 +33,18 @@ until not ln
 
 block:close()
 
-
 m = Map("fstab", translate("Mount Points"))
 s = m:section(TypedSection, "global", translate("Global Settings"))
 s.addremove = false
 s.anonymous = true
+
+detect = s:option(Button, "block_detect", translate("Generate Config"), translate("Find all currently attached filesystems and swap and replace configuration with defaults based on what was detected"))
+detect.inputstyle = "reload"
+
+detect.write = function(self, section)
+	luci.sys.call("block detect >/etc/config/fstab")
+	luci.http.redirect(luci.dispatcher.build_url("admin/system", "fstab"))
+end
 
 o = s:option(Flag, "anon_swap", translate("Anonymous Swap"), translate("Mount swap not specifically configured"))
 o.default = o.disabled
