@@ -316,4 +316,34 @@ else
 		translate("Passes additional arguments to iptables. Use with care!"))
 end
 
+o = s:option(MultiValue, "weekdays", translate("Week Days"))
+o.oneline = true
+o.widget = "checkbox"
+o:value("sun", translate("Sunday"))
+o:value("mon", translate("Monday"))
+o:value("tue", translate("Tuesday"))
+o:value("wed", translate("Wednesday"))
+o:value("thu", translate("Thursday"))
+o:value("fri", translate("Friday"))
+o:value("sat", translate("Saturday"))
+
+o = s:option(MultiValue, "monthdays", translate("Month Days"))
+o.oneline = true
+o.widget = "checkbox"
+for i = 1,31 do
+	o:value(translate(i))
+end
+
+o = s:option(Value, "start_time", translate("Start Time (hh:mm:ss)"))
+o.datatype = "timehhmmss"
+o = s:option(Value, "stop_time", translate("Stop Time (hh:mm:ss)"))
+o.datatype = "timehhmmss"
+o = s:option(Value, "start_date", translate("Start Date (yyyy-mm-dd)"))
+o.datatype = "dateyyyymmdd"
+o = s:option(Value, "stop_date", translate("Stop Date (yyyy-mm-dd)"))
+o.datatype = "dateyyyymmdd"
+
+o = s:option(Flag, "utc_time", translate("Time in UTC"))
+o.default = o.disabled
+
 return m
