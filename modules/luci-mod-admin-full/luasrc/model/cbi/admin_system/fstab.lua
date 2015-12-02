@@ -39,6 +39,7 @@ m = Map("fstab", translate("Mount Points"))
 local mounts = luci.sys.mounts()
 local non_system_mounts = {}
 for rawmount, val in pairs(mounts) do
+    if (string.find(val.mountpoint, "/tmp/.jail") == nil) then
       repeat 
           val.umount = false
           if (val.mountpoint == "/") then
