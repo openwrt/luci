@@ -35,6 +35,29 @@ block:close()
 
 
 m = Map("fstab", translate("Mount Points"))
+s = m:section(TypedSection, "global", translate("Global Settings"))
+s.addremove = false
+s.anonymous = true
+
+o = s:option(Flag, "anon_swap", translate("Anonymous Swap"), translate("Mount swap not specifically configured"))
+o.default = o.disabled
+o.rmempty = false
+
+o = s:option(Flag, "anon_mount", translate("Anonymous Mount"), translate("Mount filesystems not specifically configured"))
+o.default = o.disabled
+o.rmempty = false
+
+o = s:option(Flag, "auto_swap", translate("Automount Swap"), translate("Automatically mount swap on hotplug"))
+o.default = o.enabled
+o.rmempty = false
+
+o = s:option(Flag, "auto_mount", translate("Automount Filesystem"), translate("Automatically mount filesystems on hotplug"))
+o.default = o.enabled
+o.rmempty = false
+
+o = s:option(Flag, "check_fs", translate("Check fileystems before mount"), translate("Automatically check filesystem for errors before mounting"))
+o.default = o.disabled
+o.rmempty = false
 
 local mounts = luci.sys.mounts()
 local non_system_mounts = {}
