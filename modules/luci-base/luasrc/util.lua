@@ -151,6 +151,28 @@ function striptags(value)
 	return value and tparser.striptags(tostring(value))
 end
 
+-- for bash, ash and similar shells single-quoted strings are taken
+-- literally except for single quotes (which terminate the string)
+-- (and the exception noted below for dash (-) at the start of a
+-- command line parameter).
+function shellsqescape(value)
+   local res
+   res, _ = string.gsub(res, "'", "'\\''")
+   return res
+end
+
+-- bash, ash and other similar shells interpret a dash (-) at the start
+-- of a command-line parameters as an option indicator regardless of
+-- whether it is inside a single-quoted string.  It must be backlash
+-- escaped to resolve this.  This requires in some funky special-case
+-- handling.  It may actually be a property of the getopt function
+-- rather than the shell proper.
+function shellstartsqescape(value)
+   res, _ = string.gsub(value, "^\-", "\\-")
+   res, _ = string.gsub(res, "^-", "\-")
+   return shellsqescape(value)
+end
+
 -- containing the resulting substrings. The optional max parameter specifies
 -- the number of bytes to process, regardless of the actual length of the given
 -- string. The optional last parameter, regex, specifies whether the separator
