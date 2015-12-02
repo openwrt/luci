@@ -184,6 +184,16 @@ function network(val)
 	return uciname(val) or host(val)
 end
 
+function hostport(val)
+	local h, p = val:match("^([^:]+):([^:]+)$")
+	return not not (h and p and host(h) and port(p))
+end
+
+function ipaddrport(val)
+	local h, p = val:match("^([^:]+):([^:]+)$")
+	return not not (h and p and ipaddr(h) and port(p))
+end
+
 function wpakey(val)
 	if #val == 64 then
 		return (val:match("^[a-fA-F0-9]+$") ~= nil)

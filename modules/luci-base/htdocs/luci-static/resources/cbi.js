@@ -161,6 +161,28 @@ var cbi_validators = {
 			cbi_validators.host.apply(this);
 	},
 
+	'hostport': function()
+	{
+		var hp = this.split(/:/);
+
+		if (hp.length == 2)
+			return (cbi_validators.host.apply(hp[0]) &&
+			        cbi_validators.port.apply(hp[1]));
+
+		return false;
+	},
+
+	'ipaddrport': function()
+	{
+		var hp = this.split(/:/);
+
+		if (hp.length == 2)
+			return (cbi_validators.ipaddr.apply(hp[0]) &&
+			        cbi_validators.port.apply(hp[1]));
+
+		return false;
+	},
+
 	'wpakey': function()
 	{
 		var v = this;
