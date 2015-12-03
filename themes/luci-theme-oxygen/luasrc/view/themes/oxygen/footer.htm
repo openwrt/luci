@@ -1,0 +1,29 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: footer.htm 6384 2010-11-03 00:01:10Z jow $
+
+-%>
+<%
+local isddnas = luci.util.exec("cat /proc/cpuinfo|grep -c DDNAS") or 0 
+local isddnas = tonumber(isddnas) 
+%>
+<div class="clear"></div>
+</div>
+</div>
+<% if  isddnas >= 1 then %>
+<p class="luci"><a target="_blank" href="http://ddnas.openmobilefree.net/">http://ddnas.openmobilefree.net</a></p>
+<% else -%>
+<p class="luci"><a href="<%=controller%>/about">Powered by OpenWrt-DreamBox Team</a></p>
+<% end -%>
+
+</body>
+</html>

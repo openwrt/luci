@@ -347,6 +347,28 @@ if hwtype == "prism2" then
 	s:taboption("advanced", Value, "rxantenna", translate("Receiver Antenna"))
 end
 
+------------------- Ralink Device ------------------
+
+if hwtype == "rt2860v2" or hwtype == "mt7612" then
+	tp = s:taboption("general", ListValue,
+		"txpower", translate("Transmit Power"), "%")
+	tp.rmempty = true
+	tp:value("10","10%")
+	tp:value("20","20%")
+	tp:value("30","30%")
+	tp:value("40","40%")
+	tp:value("50","50%")
+	tp:value("60","60%")
+	tp:value("70","70%")
+	tp:value("80","80%")
+	tp:value("90","90%")
+	tp:value("100","100%")
+	s:taboption("advanced", Flag, "greenap", translate("Green AP"))
+	s:taboption("advanced", Value, "maxassoc", translate("Max associated clients"))
+	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
+	s:taboption("advanced", Value, "rts", translate("RTS_CTS Threshold"))
+
+end
 
 ----------------------- Interface -----------------------
 
@@ -594,6 +616,36 @@ if hwtype == "broadcom" then
 end
 
 
+-------------------- Ralink Interface ----------------------
+
+if hwtype == "rt2860v2" or hwtype == "mt7612" then
+--	mode:value("wds", translate("WDS"))
+
+	hidden = s:taboption("general", Flag, "hidden", translate("Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+	hidden:depends({mode="ap"})
+
+	isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
+	 translate("Prevents client-to-client communication"))
+	isolate:depends({mode="ap"})
+
+	s:taboption("advanced", Flag, "doth", "802.11h")
+	s:taboption("advanced", Flag, "wmm", translate("WMM Mode"))
+
+--	bssid:depends({mode="wds"})
+	bssid:depends({mode="sta"})
+
+	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("MAC-Address Filter"))
+	mp:value("", translate("disable"))
+	mp:value("allow", translate("Allow listed only"))
+	mp:value("deny", translate("Allow all except listed"))
+
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
+	ml.datatype = "macaddr"
+	ml:depends({macpolicy="allow"})
+	ml:depends({macpolicy="deny"})
+	nt.mac_hints(function(mac, name) ml:value(mac, "%s (%s)" %{ mac, name }) end)
+end
+
 ----------------------- HostAP Interface ---------------------
 
 if hwtype == "prism2" then
@@ -737,7 +789,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 			"and ad-hoc mode) to be installed."
 		)
 	end
-elseif hwtype == "broadcom" then
+elseif hwtype == "broadcom" or hwtype == "rt2860v2" or hwtype == "mt7612" then
 	encr:value("psk", "WPA-PSK")
 	encr:value("psk2", "WPA2-PSK")
 	encr:value("psk+psk2", "WPA-PSK/WPA2-PSK Mixed Mode")
@@ -942,6 +994,22 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 		wps:depends("encryption", "psk2")
 		wps:depends("encryption", "psk-mixed")
 	end
+end
+
+if hwtype == "rt2860v2" or hwtype == "mt7612" then
+	wps = s:taboption("encryption", ListValue, "wps", translate("WPS Mode"))
+	wps:depends("encryption", "psk")
+	wps:depends("encryption", "psk2")
+	wps:depends("encryption", "psk+psk2")
+	wps:depends({mode="ap"})
+
+	wps:value("", translate("Disabled"))
+	wps:value("pbc", translate("PBC"))
+--	wps:value("pin", translate("PIN"))
+
+--	wpspin = s:taboption("encryption", Value, "pin", translate("WPS PIN"))
+--	wpspin:depends("wps", "pin")
+
 end
 
 return m

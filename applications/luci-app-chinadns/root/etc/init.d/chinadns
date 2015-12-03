@@ -1,0 +1,24 @@
+#!/bin/sh /etc/rc.common
+
+SERVICE_DAEMONIZE=1
+START=90
+STOP=15
+
+start()
+{
+	config_load "chinadns"
+	local enabled dns port
+	config_get enabled config enabled
+	config_get dns config dns
+	config_get port config port
+
+	[ $enabled = '0' ] && exit 0
+
+	service_start /usr/bin/chinadns -c /etc/chinadns_chnroute.txt -p $port -s "$dns"
+
+}
+
+stop()
+{
+	service_stop /usr/bin/chinadns
+}

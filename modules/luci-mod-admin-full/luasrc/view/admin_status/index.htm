@@ -50,6 +50,7 @@
 		local rv = {
 			uptime     = sysinfo.uptime or 0,
 			localtime  = os.date(),
+			cpuusage   = luci.sys.exec("echo $( echo $(cat /proc/stat | grep \"^cpu \" | awk '{print $1+$2+$3+$4+$5+$6+$7 \" \" $1+$2+$3+$6+$7}') $(sleep 1 && cat /proc/stat | grep \"^cpu \" | awk '{print $1+$2+$3+$4+$5+$6+$7 \" \" $1+$2+$3+$6+$7}') | awk '{print (($4-$2)/($3-$1))*100}' )"),
 			loadavg    = sysinfo.load or { 0, 0, 0 },
 			memory     = meminfo,
 			swap       = swapinfo,
@@ -515,6 +516,9 @@
 					info.loadavg[2] / 65535.0
 				);
 
+			if (e = document.getElementById('cpuusage'))
+				e.innerHTML = String.format('%.02f\%',info.cpuusage);
+
 			if (e = document.getElementById('memtotal'))
 				e.innerHTML = progressbar(
 					((info.memory.free + info.memory.buffered) / 1024) + " <%:kB%>",
@@ -564,10 +568,12 @@
 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
 		</td></tr>
+		<tr><td width="33%"><%:Chip Model%></td><td><%=(boardinfo.system or "?")%></td></tr>
 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
 		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
+		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
 	</table>
 </fieldset>
 

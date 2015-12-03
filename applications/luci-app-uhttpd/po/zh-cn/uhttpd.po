@@ -1,0 +1,134 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-20\n"
+"PO-Revision-Date: 9999-12-31\n"
+"Last-Translator: GuoGuo <gch981213@gmail.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+
+msgid "HTTP Service"
+msgstr "HTTP服务"
+
+msgid "uHTTPd is a tiny single threaded HTTP server with TLS, CGI and Lua support. It is intended as a drop-in replacement for the Busybox HTTP daemon."
+msgstr "uHTTPd是个支持TLS CGI和Lua的微型单线程HTTP服务器。它被用来作为Busybox HTTPd的替代品以提供基本的http服务。<br />！注意！除非你知道你在干什么，否则请不要随意更改本页设置！"
+
+msgid "Listen HTTP"
+msgstr "监听的HTTP地址"
+
+msgid "Specifies the ports and addresses to listen on for plain HTTP access. If only a port number is given, the server will attempt to serve both IPv4 and IPv6 requests. Use 0.0.0.0:80 to bind at port 80 only on IPv4 interfaces or [::]:80 to serve only IPv6."
+msgstr "在这里设定uHTTPd监听的HTTP连接的地址及端口。如果单独填写一个端口，服务器将同时监听IPv4和IPv6请求。可以设定为0.0.0.0:80以单独监听IPv4的80端口，或者设定为[::]:80以单独监听IPv6的80端口。"
+
+msgid "Listen HTTPS"
+msgstr "监听的HTTPS地址"
+
+msgid "Specifies the ports and addresses to listen on for encrypted HTTPS access. The format is the same as for Listen HTTP."
+msgstr "在这里设定uHTTPd监听的加密HTTPS连接的地址及端口。设定值的格式同上。"
+
+msgid "Index pages"
+msgstr "首页文件名称"
+
+msgid "Index file to use for directories."
+msgstr "指定每个目录使用的默认页面文件"
+
+msgid "Document Root"
+msgstr "网页根目录"
+
+msgid "Defines the server document root."
+msgstr "设定服务器的根目录。"
+
+msgid "Enable RFC1918 Filter"
+msgstr "启用RFC1918过滤"
+
+msgid "Reject requests from RFC1918 IP addresses directed to the servers public IP(s). This is a DNS rebinding countermeasure."
+msgstr "拒绝来自公网的HTTP请求。"
+
+msgid "Max requests"
+msgstr "最大请求数"
+
+msgid "Maximum number of concurrent requests.If this number is exceeded, further requests are queued until the number of running requests drops below the limit again."
+msgstr "同时处理的请求的最大数量。如果实际请求数超出这个数值，多出的请求将会等待处理中的请求结束。"
+
+msgid "Max connections"
+msgstr "最大连接数"
+
+msgid "Maximum number of concurrent connections. If this number is exceeded, further TCP connection attempts are queued until the number of active connections drops below the limit again."
+msgstr "同时处理的TCP连接的最大数量。如果实际连接数超出这个数值，多出的连接将会等待处理中的TCP连接结束。"
+
+msgid "ASN.1/DER certificate path"
+msgstr "ASN.1/DER证书公钥路径"
+
+msgid "ASN.1/DER private key path"
+msgstr "ASN.1/DER证书私钥路径"
+
+msgid "Certificate and private key for HTTPS. If no 'Listen HTTPS' addresses are given, the key options are ignored."
+msgstr "HTTPS证书公/私钥路径。如果没有设定“监听的HTTPS地址”，这两个选项将被忽略。"
+
+msgid "CGI url prefix"
+msgstr "CGI程序路径"
+
+msgid "Defines the prefix for CGI scripts, relative to the document root. CGI support is disabled if this option is missing."
+msgstr "设定所有CGI脚本的URL路径（相对于网页根目录）。如果没有设定这个选项，CGI支持将被禁用。"
+
+msgid "Interpreters"
+msgstr "解释器设定"
+
+msgid "List of extension->interpreter mappings.Files with an associated interpreter can be called outside of the CGI prefix and do not need to be executable."
+msgstr "一个文件扩展名到解释器的映射的路径。所有包含设定的扩展名的文件将被传到解释器内执行。（即使这个文件不在CGI程序路径内或并没有被设定为“可执行”权限）。"
+
+msgid "Lua prefix"
+msgstr "Lua脚本前缀"
+
+msgid "Lua handler"
+msgstr "Lua脚本解释器"
+
+msgid "Lua url prefix and handler script.Embedded Lua support is disabled if no prefix given."
+msgstr "Lua脚本的URL前缀以及对应的解释器路径。如果这两个值未设定，则内嵌的Lua支持将被禁用。"
+
+msgid "CGI/Lua timeout"
+msgstr "CGI/Lua脚本超时时间"
+
+msgid "If the called script does not write data within the given amount of seconds, the server will terminate the request with 504 Gateway Timeout response."
+msgstr "如果被执行的脚本没有在设定的时间（单位为 秒 ）内返回数据，服务器将使用“504 Gateway Timeout”终止这个请求。"
+
+msgid "Network timeout"
+msgstr "网络连接超时时间"
+
+msgid "If the current connection is blocked for the specified amount of seconds, the server will terminate the associated request process."
+msgstr "如果网络连接暂停超过设定的时间（单位为 秒 ），服务器将中断请求。"
+
+#msgid "HTTP Keep-Alive"
+#msgstr ""
+
+#msgid "Specifies the timeout for persistent HTTP/1.1 connections. Setting this to 0 will disable persistent HTTP connections."
+#msgstr "设定HTTP/1.1 Keep-Alive超时时间。设定为0将禁用这项功能。"
+
+#msgid "TCP Keep-Alive"
+#msgstr ""
+
+#msgid "Send periodic keep-alive probes over established connections to detect dead peers. The value is given in seconds to specify the interval between subsequent probes. Setting this to 0 will disable TCP keep-alive."
+#msgstr ""
+
+msgid "No symlinks"
+msgstr "不使用链接"
+
+msgid "Do not follow symlinks that point outside of the document root."
+msgstr "不读取指向服务器根目录外的链接。"
+
+msgid "No dirlists"
+msgstr "不列目录"
+
+msgid "Do not produce directory listings but send 403 instead if a client requests an url pointing to a directory without any index file."
+msgstr "当客户端请求一个不包含首页文件的URL时，返回403错误而不是列出该目录下的文件。"
+
+msgid "External config file path"
+msgstr "外部配置文件路径"
+
+msgid "External configuration file in busybox httpd format."
+msgstr "使用Busybox HTTPd格式的外部配置文件。"
+
