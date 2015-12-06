@@ -65,7 +65,8 @@ s = m:section(TypedSection, "xware3_mount","Xware挂载点","请在此设置Xwar
 s.anonymous = true
 
 local devices = {}
-util.consume((fs.glob("/mnt/sd??*")), devices)
+util.consume((fs.glob("/mnt/sd*")), devices)
+util.consume((fs.glob("/mnt/mmcblk*")), devices)
 
 device = s:option(DynamicList, "available_mounts", "挂载点")
 for i, dev in ipairs(devices) do
