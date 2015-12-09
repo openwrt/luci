@@ -149,30 +149,20 @@
 
 						if (ifc.ipaddrs && ifc.ipaddrs.length)
 						{
-							html += '<strong><%:IPv4%>: </strong>';
-
 							for (var i = 0; i < ifc.ipaddrs.length; i++)
 								html += String.format(
-									'%s%s',
-									i ? ', ' : '',
+									'<strong><%:IPv4%>:</strong> %s<br />',
 									ifc.ipaddrs[i]
 								);
-
-							html += '<br />';
 						}
 
 						if (ifc.ip6addrs && ifc.ip6addrs.length)
 						{
-							html += '<strong><%:IPv6%>: </strong>';
-
 							for (var i = 0; i < ifc.ip6addrs.length; i++)
 								html += String.format(
-									'%s%s',
-									i ? ', ' : '',
-									ifc.ip6addrs[i].toUpperCase()
+									'<strong><%:IPv6%>:</strong> %s<br />',
+									ifc.ip6addrs[i]
 								);
-
-							html += '<br />';
 						}
 
 						d.innerHTML = html;
