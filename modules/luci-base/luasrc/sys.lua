@@ -293,47 +293,51 @@ function net.ipv6_hints(callback)
 end
 
 function net.conntrack(callback)
-	local connt = {}
-	if fs.access("/proc/net/nf_conntrack", "r") then
-		for line in io.lines("/proc/net/nf_conntrack") do
-			line = line:match "^(.-( [^ =]+=).-)%2"
-			local entry, flags = _parse_mixed_record(line, " +")
-			if flags[6] ~= "TIME_WAIT" then
-				entry.layer3 = flags[1]
-				entry.layer4 = flags[3]
-				for i=1, #entry do
-					entry[i] = nil
-				end
-
-				if callback then
-					callback(entry)
-				else
-					connt[#connt+1] = entry
-				end
-			end
-		end
-	elseif fs.access("/proc/net/ip_conntrack", "r") then
-		for line in io.lines("/proc/net/ip_conntrack") do
-			line = line:match "^(.-( [^ =]+=).-)%2"
-			local entry, flags = _parse_mixed_record(line, " +")
-			if flags[4] ~= "TIME_WAIT" then
-				entry.layer3 = "ipv4"
-				entry.layer4 = flags[1]
-				for i=1, #entry do
-					entry[i] = nil
-				end
-
-				if callback then
-					callback(entry)
-				else
-					connt[#connt+1] = entry
-				end
-			end
-		end
-	else
+	local ok, nfct = pcall(io.lines, "/proc/net/nf_conntrack")
+	if not ok or not nfct then
 		return nil
 	end
-	return connt
+
+	local line, connt = nil, (not callback) and { }
+	for line in nfct do
+		local fam, l3, l4, timeout, state, tuples =
+			line:match("^(ipv[46]) +(%d+) +%S+ +(%d+) +(%d+) +([A-Z_]+) +(.+)$")
+
+		if fam and l3 and l4 and timeout and state and tuples and
+		   state ~= "TIME_WAIT"
+		then
+			l4 = nixio.getprotobynumber(l4)
+
+			local entry = {
+				bytes = 0,
+				packets = 0,
+				layer3 = fam,
+				layer4 = l4 and l4.name or "unknown",
+				timeout = tonumber(timeout, 10)
+			}
+
+			local key, val
+			for key, val in tuples:gmatch("(%w+)=(%S+)") do
+				if key == "bytes" or key == "packets" then
+					entry[key] = entry[key] + tonumber(val, 10)
+				elseif key == "src" or key == "dst" or key == "sport" or key == "dport" then
+					if entry[key] == nil then
+						entry[key] = val
+					end
+				elseif val then
+					entry[key] = val
+				end
+			end
+
+			if callback then
+				callback(entry)
+			else
+				connt[#connt+1] = entry
+			end
+		end
+	end
+
+	return callback and true or connt
 end
 
 function net.devices()
@@ -654,29 +658,4 @@ end
 
 function init.stop(name)
 	return (init_action("stop", name) == 0)
-end
-
-
--- Internal functions
-
-function _parse_mixed_record(cnt, delimiter)
-	delimiter = delimiter or "  "
-	local data = {}
-	local flags = {}
-
-	for i, l in pairs(luci.util.split(luci.util.trim(cnt), "\n")) do
-		for j, f in pairs(luci.util.split(luci.util.trim(l), delimiter, nil, true)) do
-			local k, x, v = f:match('([^%s][^:=]*) *([:=]*) *"*([^\n"]*)"*')
-
-			if k then
-				if x == "" then
-					table.insert(flags, k)
-				else
-					data[k] = v
-				end
-			end
-		end
-	end
-
-	return data, flags
 end
