@@ -39,7 +39,7 @@ protocol.optional = true
 server = section:taboption("general", Value, "server",
 	translate("Tunnel setup server"),
 	translate("Optional, specify to override default server (tic.sixxs.net)"))
-server.datatype = "host"
+server.datatype = "host(0)"
 server.optional = true
 
 

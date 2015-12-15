@@ -749,7 +749,7 @@ auth_server:depends({mode="ap", encryption="wpa2"})
 auth_server:depends({mode="ap-wds", encryption="wpa"})
 auth_server:depends({mode="ap-wds", encryption="wpa2"})
 auth_server.rmempty = true
-auth_server.datatype = "host"
+auth_server.datatype = "host(0)"
 
 auth_port = s:taboption("encryption", Value, "auth_port", translate("Radius-Authentication-Port"), translatef("Default %d", 1812))
 auth_port:depends({mode="ap", encryption="wpa"})
@@ -773,7 +773,7 @@ acct_server:depends({mode="ap", encryption="wpa2"})
 acct_server:depends({mode="ap-wds", encryption="wpa"})
 acct_server:depends({mode="ap-wds", encryption="wpa2"})
 acct_server.rmempty = true
-acct_server.datatype = "host"
+acct_server.datatype = "host(0)"
 
 acct_port = s:taboption("encryption", Value, "acct_port", translate("Radius-Accounting-Port"), translatef("Default %d", 1813))
 acct_port:depends({mode="ap", encryption="wpa"})

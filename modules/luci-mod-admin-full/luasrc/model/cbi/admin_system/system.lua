@@ -204,7 +204,7 @@ if has_ntpd then
 
 
 		o = s:option(DynamicList, "server", translate("NTP server candidates"))
-		o.datatype = "host"
+		o.datatype = "host(0)"
 		o:depends("enable", "1")
 
 		-- retain server list even if disabled

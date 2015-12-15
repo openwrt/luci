@@ -92,7 +92,7 @@ s = m:section(NamedSection, "voicemail_smtp", "voicemail", translate("Outgoing m
 s.anonymous = true
 
 serv = s:option(Value, "smtp_server", translate("SMTP Server Hostname or IP Address"))
-serv.datatype = "host"
+serv.datatype = "host(0)"
 
 port = s:option(Value, "smtp_port", translate("SMTP Port Number"))
 port.datatype = "port"
