@@ -10,7 +10,7 @@ Regardless of whether you send a patch or open a pull request, please try to fol
 * Have a useful subject prefixed with the component name
     (E.g.: "luci-mod-admin-full: fix wifi channel selection on multiple STA networks")
 * Shortly explain the changes made and - if applicable - the reasoning behind them
-* Include Signed-off-by in the comment
+* Commit message of each commit should include a Signed-off-by line
     (See <https://dev.openwrt.org/wiki/SubmittingPatches#a10.Signyourwork>)
 	
 In case you like to send patches by mail, please use the [LuCI mailinglist](https://lists.subsignal.org/mailman/listinfo/luci)
