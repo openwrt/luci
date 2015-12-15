@@ -135,7 +135,7 @@ rd = s:taboption("general", DynamicList, "rebind_domain",
 	translate("List of domains to allow RFC1918 responses for"))
 
 rd:depends("rebind_protection", "1")
-rd.datatype = "host"
+rd.datatype = "host(1)"
 rd.placeholder = "ihost.netflix.com"
 
 

@@ -139,10 +139,11 @@ var cbi_validators = {
 		return (this.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
 	},
 
-	'host': function()
+	'host': function(ipv4only)
 	{
 		return cbi_validators.hostname.apply(this) ||
-			cbi_validators.ipaddr.apply(this);
+			((ipv4only != 1) && cbi_validators.ipaddr.apply(this)) ||
+			((ipv4only == 1) && cb_validators.ip4addr.apply(this));
 	},
 
 	'hostname': function()
@@ -161,12 +162,12 @@ var cbi_validators = {
 			cbi_validators.host.apply(this);
 	},
 
-	'hostport': function()
+	'hostport': function(ipv4only)
 	{
 		var hp = this.split(/:/);
 
 		if (hp.length == 2)
-			return (cbi_validators.host.apply(hp[0]) &&
+			return (cbi_validators.host.apply(hp[0], ipv4only) &&
 			        cbi_validators.port.apply(hp[1]));
 
 		return false;
