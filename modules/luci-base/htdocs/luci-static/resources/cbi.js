@@ -322,6 +322,47 @@ var cbi_validators = {
 	'phonedigit': function()
 	{
 		return (this.match(/^[0-9\*#!\.]+$/) != null);
+	},
+        'timehhmmss': function()
+	{
+		return (this.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/) != null);
+	},
+	'dateyyyymmdd': function()
+	{
+		if (this == null) {
+			return false;
+		}
+		if (this.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
+			var year = RegExp.$1;
+			var month = RegExp.$2;
+			var day = RegExp.$2
+
+			var days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30 , 31, 30, 31 ];
+			function is_leap_year(year) {
+				return ((year % 4) == 0) && ((year % 100) != 0) || ((year % 400) == 0);
+			}
+			function get_days_in_month(month, year) {
+				if ((month == 2) && is_leap_year(year)) {
+					return 29;
+				} else {
+					return days_in_month[month];
+				}
+			}
+			/* Firewall rules in the past don't make sense */
+			if (year < 2015) {
+				return false;
+			}
+			if ((month <= 0) || (month > 12)) {
+				return false;
+			}
+			if ((day <= 0) || (day > get_days_in_month(month, year))) {
+				return false;
+			}
+			return true;
+
+		} else {
+			return false;
+		}
 	}
 };
 
