@@ -8,7 +8,7 @@ local ipv6, defaultroute, metric, peerdns, dns, mtu
 
 
 server = section:taboption("general", Value, "server", translate("L2TP Server"))
-server.datatype = "or(host, hostport)"
+server.datatype = "or(host(1), hostport(1))"
 
 
 username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))

@@ -38,7 +38,7 @@ period = s:option(Value, "period",
 pinghost = s:option(Value, "pinghosts", 
 		    translate("Ping host"),
 		    translate("Host address to ping"))
-pinghost.datatype = "host"
+pinghost.datatype = "host(1)"
 pinghost.default = "8.8.8.8"
 pinghost:depends({mode="ping"})
 

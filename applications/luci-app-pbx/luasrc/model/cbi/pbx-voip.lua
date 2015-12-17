@@ -84,7 +84,7 @@ function pwd.write(self, section, value)
 end
 
 h = s:option(Value, "host", translate("SIP Server/Registrar"))
-h.datatype = "host"
+h.datatype = "host(0)"
 
 p = s:option(ListValue, "register", translate("Enable Incoming Calls (Register via SIP)"),
              translate("This option should be set to \"Yes\" if you have a DID \(real telephone number\) \
@@ -103,7 +103,7 @@ p.default = "yes"
 from = s:option(Value, "fromdomain",
                 translate("SIP Realm (needed by some providers)"))
 from.optional = true
-from.datatype = "host"
+from.datatype = "host(0)"
 
 port = s:option(Value, "port", translate("SIP Server/Registrar Port"))
 port.optional = true
@@ -111,6 +111,6 @@ port.datatype = "port"
 
 op = s:option(Value, "outboundproxy", translate("Outbound Proxy"))
 op.optional = true
-op.datatype = "host"
+op.datatype = "host(0)"
 
 return m

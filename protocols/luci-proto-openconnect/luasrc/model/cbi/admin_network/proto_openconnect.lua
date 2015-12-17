@@ -13,7 +13,7 @@ oc_key_file = "/etc/openconnect/user-key-" .. ifc .. ".pem"
 oc_ca_file = "/etc/openconnect/ca-" .. ifc .. ".pem"
 
 server = section:taboption("general", Value, "server", translate("VPN Server"))
-server.datatype = "host"
+server.datatype = "host(0)"
 
 port = section:taboption("general", Value, "port", translate("VPN Server port"))
 port.placeholder = "443"
