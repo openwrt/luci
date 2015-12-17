@@ -30,7 +30,8 @@ local basicParams = {
 	{ Flag,"client_to_client",0, translate("Allow client-to-client traffic") },
 	{ DynamicList,"remote","vpnserver.example.org", translate("Remote host name or ip address") },
 
-	{ FileUpload,"secret","/etc/openvpn/secret.key 1", translate("Enable Static Key encryption mode (non-TLS)") },
+	{ FileUpload,"secret","/etc/openvpn/secret.key", translate("Enable Static Key encryption mode (non-TLS)") },
+	{ Value,"key_direction","1", translate("The key direction for 'tls-auth' and 'secret' options") },
 	{ FileUpload,"pkcs12","/etc/easy-rsa/keys/some-client.pk12", translate("PKCS#12 file containing keys") },
 	{ FileUpload,"ca","/etc/easy-rsa/keys/ca.crt", translate("Certificate authority") },
 	{ FileUpload,"dh","/etc/easy-rsa/keys/dh1024.pem", translate("Diffie Hellman parameters") },
