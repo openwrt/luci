@@ -88,7 +88,8 @@ Get an option or list and return values as table.
 @param config	UCI config
 @param section	UCI section name
 @param option	UCI option
-@return			UCI value
+@return		table.  If the option was not found, you will simply get
+--		an empty table.
 ]]
 
 ---[[
@@ -104,14 +105,15 @@ Get the given option from the first section with the given type.
 ]]
 
 ---[[
-Set given values as list.
+Set given values as list. Setting a list option to an empty list
+has the same effect as deleting the option.
 
 @class function
 @name Cursor.set_list
 @param config	UCI config
 @param section	UCI section name
 @param option	UCI option
-@param value		UCI value
+@param value	value or table. Raw values will become a single item table.
 @return			Boolean whether operation succeeded
 ]]
 
