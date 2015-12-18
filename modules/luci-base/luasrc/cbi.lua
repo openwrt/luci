@@ -38,7 +38,7 @@ function load(cbimap, ...)
 	require("luci.config")
 	require("luci.util")
 
-	local upldir = "/lib/uci/upload/"
+	local upldir = "/etc/luci-uploads/"
 	local cbidir = luci.util.libpath() .. "/model/cbi/"
 	local func, err
 
@@ -1811,6 +1811,7 @@ function Button.__init__(self, ...)
 	self.template  = "cbi/button"
 	self.inputstyle = nil
 	self.rmempty = true
+        self.unsafeupload = false
 end
 
 
@@ -1827,9 +1828,15 @@ function FileUpload.__init__(self, ...)
 end
 
 function FileUpload.formcreated(self, section)
-	return AbstractValue.formcreated(self, section) or
-		self.map:formvalue("cbi.rlf."..section.."."..self.option) or
-		self.map:formvalue("cbi.rlf."..section.."."..self.option..".x")
+	if self.unsafeupload then
+		return AbstractValue.formcreated(self, section) or
+			self.map:formvalue("cbi.rlf."..section.."."..self.option) or
+			self.map:formvalue("cbi.rlf."..section.."."..self.option..".x") or
+			self.map:formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+	else
+		return AbstractValue.formcreated(self, section) or
+			self.map:formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+	end
 end
 
 function FileUpload.cfgvalue(self, section)
@@ -1840,26 +1847,49 @@ function FileUpload.cfgvalue(self, section)
 	return nil
 end
 
+-- If we have a new value, use it
+-- otherwise use old value
+-- deletion should be managed by a separate button object
+-- unless self.unsafeupload is set in which case if the user
+-- choose to remove the old file we do so.
+-- Also, allow to specify (via textbox) a file already on router
 function FileUpload.formvalue(self, section)
 	local val = AbstractValue.formvalue(self, section)
 	if val then
-		if not self.map:formvalue("cbi.rlf."..section.."."..self.option) and
-		   not self.map:formvalue("cbi.rlf."..section.."."..self.option..".x")
-		then
+		if self.unsafeupload then
+			if not self.map:formvalue("cbi.rlf."..section.."."..self.option) and
+		   	    not self.map:formvalue("cbi.rlf."..section.."."..self.option..".x")
+			then
+				return val
+			end
+			fs.unlink(val)
+			self.value = nil
+			return nil
+                elseif val ~= "" then
 			return val
-		end
-		fs.unlink(val)
-		self.value = nil
+                end
 	end
-	return nil
+	val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+	if val == "" then
+		val = nil
+	end
+        if not self.unsafeupload then
+		if not val then
+			val = self.map:formvalue("cbi.rlf."..section.."."..self.option)
+		end
+        end
+	return val
 end
 
 function FileUpload.remove(self, section)
-	local val = AbstractValue.formvalue(self, section)
-	if val and fs.access(val) then fs.unlink(val) end
-	return AbstractValue.remove(self, section)
+	if self.unsafeupload then
+		local val = AbstractValue.formvalue(self, section)
+		if val and fs.access(val) then fs.unlink(val) end
+		return AbstractValue.remove(self, section)
+	else
+		return nil
+	end
 end
-
 
 FileBrowser = class(AbstractValue)
 

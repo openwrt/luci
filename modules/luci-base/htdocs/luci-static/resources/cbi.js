@@ -139,10 +139,11 @@ var cbi_validators = {
 		return (this.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
 	},
 
-	'host': function()
+	'host': function(ipv4only)
 	{
 		return cbi_validators.hostname.apply(this) ||
-			cbi_validators.ipaddr.apply(this);
+			((ipv4only != 1) && cbi_validators.ipaddr.apply(this)) ||
+			((ipv4only == 1) && cb_validators.ip4addr.apply(this));
 	},
 
 	'hostname': function()
@@ -161,26 +162,47 @@ var cbi_validators = {
 			cbi_validators.host.apply(this);
 	},
 
-	'hostport': function()
+	'hostport': function(ipv4only)
 	{
 		var hp = this.split(/:/);
 
 		if (hp.length == 2)
-			return (cbi_validators.host.apply(hp[0]) &&
+			return (cbi_validators.host.apply(hp[0], ipv4only) &&
 			        cbi_validators.port.apply(hp[1]));
 
 		return false;
 	},
 
-	'ipaddrport': function()
+	'ip4addrport': function()
 	{
 		var hp = this.split(/:/);
 
 		if (hp.length == 2)
 			return (cbi_validators.ipaddr.apply(hp[0]) &&
 			        cbi_validators.port.apply(hp[1]));
-
 		return false;
+	},
+
+	'ipaddrport': function(bracket)
+	{
+		if (this.match(/^([^\[\]:]+):([^:]+)$/)) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip4addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+                } else if ((bracket == 1) && (this.match(/^\[(.+)\]:([^:]+)$/))) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip6addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+                } else if ((bracket != 1) && (this.match(/^([^\[\]]+):([^:]+)$/))) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip6addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+		} else {
+			return false;
+		}
 	},
 
 	'wpakey': function()
@@ -322,6 +344,47 @@ var cbi_validators = {
 	'phonedigit': function()
 	{
 		return (this.match(/^[0-9\*#!\.]+$/) != null);
+	},
+        'timehhmmss': function()
+	{
+		return (this.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/) != null);
+	},
+	'dateyyyymmdd': function()
+	{
+		if (this == null) {
+			return false;
+		}
+		if (this.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
+			var year = RegExp.$1;
+			var month = RegExp.$2;
+			var day = RegExp.$2
+
+			var days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30 , 31, 30, 31 ];
+			function is_leap_year(year) {
+				return ((year % 4) == 0) && ((year % 100) != 0) || ((year % 400) == 0);
+			}
+			function get_days_in_month(month, year) {
+				if ((month == 2) && is_leap_year(year)) {
+					return 29;
+				} else {
+					return days_in_month[month];
+				}
+			}
+			/* Firewall rules in the past don't make sense */
+			if (year < 2015) {
+				return false;
+			}
+			if ((month <= 0) || (month > 12)) {
+				return false;
+			}
+			if ((day <= 0) || (day > get_days_in_month(month, year))) {
+				return false;
+			}
+			return true;
+
+		} else {
+			return false;
+		}
 	}
 };
 

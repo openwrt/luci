@@ -8,7 +8,7 @@ local sshuser, server, port, ssh_options, identity, ipaddr, peeraddr
 sshuser = section:taboption("general", Value, "sshuser", translate("SSH username"))
 
 server = section:taboption("general", Value, "server", translate("SSH server address"))
-server.datatype = "host"
+server.datatype = "host(0)"
 
 port = section:taboption("general", Value, "port", translate("SSH server port"))
 port.datatype = "port"

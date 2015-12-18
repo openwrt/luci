@@ -234,6 +234,13 @@ Put Lua data into the parser.</td>
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#parser.sink">parser:sink</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Generate an ltn12-compatible sink.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#parser.stringify">parser:stringify</a>&nbsp;(pretty)</td>
 	<td class="summary">
  
@@ -400,6 +407,34 @@ Nothing is returned.
 	</a>
 	
 </ul>
+
+</dd>
+
+
+
+
+<dt><a name="parser.sink"></a><strong>parser:sink</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Generate an ltn12-compatible sink. 
+
+
+
+
+
+
+<h3>Usage:</h3>
+<pre>parser = luci.jsonc.new() 
+ltn12.pump.all(ltn12.source.file(io.input()), parser:sink()) 
+print(parser:get())</pre>
+
+
+
+<h3>Return value:</h3>
+Returns a function that can be used as an ltn12 sink.
+
+
 
 </dd>
 

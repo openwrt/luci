@@ -176,22 +176,41 @@ function hostname(val)
 	return false
 end
 
-function host(val)
-	return hostname(val) or ipaddr(val)
+function host(val, ipv4only)
+	return hostname(val) or ((ipv4only == 1) and ip4addr(val)) or ((not (ipv4only == 1)) and ipaddr(val))
 end
 
 function network(val)
 	return uciname(val) or host(val)
 end
 
-function hostport(val)
+function hostport(val, ipv4only)
 	local h, p = val:match("^([^:]+):([^:]+)$")
-	return not not (h and p and host(h) and port(p))
+	return not not (h and p and host(h, ipv4only) and port(p))
 end
 
-function ipaddrport(val)
+function ip4addrport(val, bracket)
 	local h, p = val:match("^([^:]+):([^:]+)$")
-	return not not (h and p and ipaddr(h) and port(p))
+	return (h and p and ip4addr(h) and port(p))
+end
+
+function ip4addrport(val)
+	local h, p = val:match("^([^:]+):([^:]+)$")
+	return (h and p and ip4addr(h) and port(p))
+end
+
+function ipaddrport(val, bracket)
+	local h, p = val:match("^([^%[%]:]+):([^:]+)$")
+	if (h and p and ip4addr(h) and port(p)) then
+		return true
+	elseif (bracket == 1) then
+		h, p = val:match("^%[(.+)%]:([^:]+)$")
+		if  (h and p and ip6addr(h) and port(p)) then
+			return true
+		end
+	end
+	h, p = val:match("^([^%[%]]+):([^:]+)$")
+	return (h and p and ip6addr(h) and port(p))
 end
 
 function wpakey(val)
@@ -341,3 +360,48 @@ end
 function phonedigit(val)
 	return (val:match("^[0-9\*#!%.]+$") ~= nil)
 end
+
+function timehhmmss(val)
+	return (val:match("^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$") ~= nil)
+end
+
+function dateyyyymmdd(val)
+	if val ~= nil then
+		yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
+		if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
+			return false;
+		end
+		year = tonumber(yearstr)
+		month = tonumber(monthstr)
+		day = tonumber(daystr)
+		if (year == nil) or (month == nil) or (day == nil) then
+			return false;
+		end
+
+        	local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+
+        	local function is_leap_year(year)
+            		return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
+        	end
+
+        	function get_days_in_month(month, year)
+            		if (month == 2) and is_leap_year(year) then
+               			return 29
+            		else
+                		return days_in_month[month]
+            		end
+        	end
+        	if (year < 2015) then
+	    		return false
+        	end 
+        	if ((month == 0) or (month > 12)) then
+            		return false
+        	end 
+        	if ((day == 0) or (day > get_days_in_month(month, year))) then
+            		return false
+        	end
+        	return true
+	end
+	return false
+end
+
