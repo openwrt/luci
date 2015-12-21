@@ -39,32 +39,22 @@
 
 					if (ifc.ipaddrs && ifc.ipaddrs.length)
 					{
-						html += '<strong><%:IPv4%>: </strong>';
-
 						for (var i = 0; i < ifc.ipaddrs.length; i++)
 							html += String.format(
-								'%s%s/%d',
-								i ? ', ' : '',
+								'<strong><%:IPv4%>:</strong> %s/%d<br />',
 								ifc.ipaddrs[i].addr,
 								ifc.ipaddrs[i].prefix
 							);
-
-						html += '<br />';
 					}
 
 					if (ifc.ip6addrs && ifc.ip6addrs.length)
 					{
-						html += '<strong><%:IPv6%>: </strong>';
-
 						for (var i = 0; i < ifc.ip6addrs.length; i++)
 							html += String.format(
-								'%s%s/%d',
-								i ? ', ' : '',
-								ifc.ip6addrs[i].addr.toUpperCase(),
+								'<strong><%:IPv6%>:</strong> %s/%d<br />',
+								ifc.ip6addrs[i].addr,
 								ifc.ip6addrs[i].prefix
 							);
-
-						html += '<br />';
 					}
 
 					d.innerHTML = html;
