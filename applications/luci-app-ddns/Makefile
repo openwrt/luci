@@ -10,7 +10,7 @@ PKG_NAME:=luci-app-ddns
 
 # Version == major.minor.patch
 # increase on new functionality (minor) or patches (patch)
-PKG_VERSION:=2.2.4
+PKG_VERSION:=2.3.1
 
 # Release == build
 # increase on changes of translation files
@@ -33,6 +33,6 @@ help
 	$(PKG_MAINTAINER)
 endef
 
-include $(TOPDIR)/feeds/luci/luci.mk
+include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

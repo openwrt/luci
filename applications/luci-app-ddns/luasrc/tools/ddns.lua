@@ -166,8 +166,6 @@ function value_parse(self, section, novld)
 			return		-- so data is missing
 		end
 	end
-	-- for whatever reason errtxt set and not handled above
-	assert( not (errtxt and (#errtxt > 0)), "unhandled validate error" )
 
 	-- lets continue with value returned from validate
 	eq_cfg  = ( vvalue == cvalue )			-- update equal_config flag
