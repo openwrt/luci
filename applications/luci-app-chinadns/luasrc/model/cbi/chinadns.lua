@@ -1,49 +1,48 @@
 --[[
-RA-MOD
+openwrt-dist-luci: ChinaDNS
 ]]--
 
-local fs = require "nixio.fs"
+local m, s, o
 
-local running=(luci.sys.call("pidof chinadns > /dev/null") == 0)
-if running then	
-	m = Map("chinadns", translate("chinadns"), translate("chinadns is running"))
+if luci.sys.call("pidof chinadns >/dev/null") == 0 then
+	m = Map("chinadns", translate("ChinaDNS"), translate("ChinaDNS is running"))
 else
-	m = Map("chinadns", translate("chinadns"), translate("chinadns is not running"))
+	m = Map("chinadns", translate("ChinaDNS"), translate("ChinaDNS is not running"))
 end
 
-s = m:section(TypedSection, "chinadns", "")
+s = m:section(TypedSection, "chinadns", translate("General Setting"))
 s.anonymous = true
 
-switch = s:option(Flag, "enabled", translate("Enable"))
-switch.rmempty = false
+o = s:option(Flag, "enable", translate("Enable"))
+o.rmempty = false
 
-upstream = s:option(Value, "dns", translate("Upstream DNS Server"))
-upstream.optional = false
-upstream.default = "114.114.114.114,8.8.8.8"
+o = s:option(Flag, "bidirectional",
+	translate("Enable Bidirectional Filter"),
+	translate("Also filter results inside China from foreign DNS servers"))
+o.rmempty = false
 
-port = s:option(Value, "port", translate("Port"))
-port.datatype = "range(0,65535)"
-port.optional = false
+o = s:option(Flag, "apnt_en",
+	translate("Enable DNS compression pointer"),
+	translate("use DNS compression pointer mutation."))
+o.rmempty = false
 
-chn = s:option(Value, "chn", translate("CHNroute"), "")
-chn.template = "cbi/tvalue"
-chn.size = 30
-chn.rows = 10
-chn.wrap = "off"
+o = s:option(Value, "port", translate("Local Port"))
+o.placeholder = 1053
+o.default = 1053
+o.datatype = "port"
+o.rmempty = false
 
-function chn.cfgvalue(self, section)
-	return fs.readfile("/etc/chinadns_chnroute.txt") or ""
-end
+o = s:option(Value, "chnroute", translate("CHNRoute File"))
+o.placeholder = "/etc/chinadns_chnroute.txt"
+o.default = "/etc/chinadns_chnroute.txt"
+o.datatype = "file"
+o.rmempty = false
 
-function chn.write(self, section, value)
-	if value then
-		value = value:gsub("\r\n?", "\n")
-		fs.writefile("/tmp/chinadns_chnroute.txt", value)
-		if (fs.access("/etc/chinadns_chnroute.txt") ~= true or luci.sys.call("cmp -s /tmp/chinadns_chnroute.txt /etc/chinadns_chnroute.txt") == 1) then
-			fs.writefile("/etc/chinadns_chnroute.txt", value)
-		end
-		fs.remove("/tmp/chinadns_chnroute.txt")
-	end
-end
+o = s:option(Value, "server",
+	translate("Upstream Servers"),
+	translate("Use commas to separate multiple ip address"))
+o.placeholder = "114.114.114.114,208.67.222.222:443,8.8.8.8"
+o.default = "114.114.114.114,208.67.222.222:443,8.8.8.8"
+o.rmempty = false
 
 return m
