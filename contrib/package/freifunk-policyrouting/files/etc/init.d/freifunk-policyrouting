@@ -51,22 +51,33 @@ rt_tables() {
 
 }
 
-disable_dyngw() {
-	for cfg in $cfgs; do
-		local dyngwlib=`uci show $cfg |grep dyn_gw.so |awk {' FS="."; print $1"."$2 '}`
-		if [ -n "$dyngwlib" ]; then
-			uci set $dyngwlib.ignore=1
-			uci commit $cfg
-		fi
-
-		dyngwplainlib=`uci show $cfg |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
-		if [ -n "$dyngwplainlib" ]; then
-			rttable="$(uci -q get $dyngwplainlib.RtTable)"
-			if [ -z "$rttable" ] || [ "$rttable" = "254" ]; then 
-				uci set $dyngwplainlib.ignore=1
-				uci commit $cfg
+handle_disable_dyngw() {
+	local cfg="$1"
+	local olsrd_cfg="$2"
+	config_get library "$cfg" library
+	case "$library" in
+		olsrd_dyn_gw_plain*)
+			config_get RtTable "$cfg" RtTable
+			if [ -z "$RtTable" ] || [ "$RtTable" = "254" ]; then
+				config_set "$cfg" ignore '1'
+				uci set $olsrd_cfg.$cfg.ignore="1"
+				uci commit $olsrd_cfg
+				logger -s -t policyrouting -p info "dyngw_plain plugin disabled."
 			fi
-		fi
+		;;
+		olsrd_dyn_gw.so*)
+			logger -s -t policyrouting -p info "$cfg"
+			uci set $olsrd_cfg.$cfg.ignore="1"
+				uci commit $olsrd_cfg
+			logger -s -t policyrouting -p info "dyngw plugin disabled."
+		;;
+	esac
+}
+
+disable_dyngw() {
+	for olsrd_cfg in $cfgs; do
+		config_load $olsrd_cfg
+		config_foreach handle_disable_dyngw LoadPlugin $olsrd_cfg
 	done
 }
 
