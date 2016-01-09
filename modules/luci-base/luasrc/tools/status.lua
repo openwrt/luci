@@ -8,7 +8,7 @@ local uci = require "luci.model.uci".cursor()
 local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
-	local leasefile = "/var/dhcp.leases"
+	local leasefile = "/tmp/dhcp.leases"
 
 	uci:foreach("dhcp", "dnsmasq",
 		function(s)

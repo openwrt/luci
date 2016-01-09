@@ -186,8 +186,8 @@ local function _nethints(what, callback)
 		end
 	end
 
-	if fs.access("/var/dhcp.leases") then
-		for e in io.lines("/var/dhcp.leases") do
+	if fs.access("/tmp/dhcp.leases") then
+		for e in io.lines("/tmp/dhcp.leases") do
 			mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
 			if mac and ip then
 				_add(what, mac:upper(), ip, nil, name ~= "*" and name)
