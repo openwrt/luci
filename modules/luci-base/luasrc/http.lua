@@ -89,6 +89,37 @@ end
 
 function Request.setfilehandler(self, callback)
 	self.filehandler = callback
+
+	-- If input has already been parsed then any files are either in temporary files
+	-- or are in self.message.params[key]
+	if self.parsed_input then
+		for param, value in pairs(self.message.params) do
+		repeat
+			-- We're only interested in files
+			if (not value["file"]) then break end
+			-- If we were able to write to temporary file
+			if (value["fd"]) then 
+				fd = value["fd"]
+				local eof = false
+				repeat	
+					filedata = fd:read(1024)
+					if (filedata:len() < 1024) then
+						eof = true
+					end
+					callback({ name=value["name"], file=value["file"] }, filedata, eof)
+				until (eof)
+				fd:close()
+				value["fd"] = nil
+			-- We had to read into memory
+			else
+				-- There should only be one numbered value in table - the data
+				for k, v in ipairs(value) do
+					callback({ name=value["name"], file=value["file"] }, v, true)
+				end
+			end
+		until true
+		end
+	end
 end
 
 function Request._parse_input(self)
