@@ -8,6 +8,27 @@
 	<% if self.title and #self.title > 0 then %><h2 name="content"><%=self.title%></h2><% end %>
 	<% if self.description and #self.description > 0 then %><div class="cbi-map-descr"><%=self.description%></div><% end %>
 	<%- if firstmap and applymap then cbi_apply_xhr(self.config, parsechain, redirect) end -%>
-	<%- self:render_children() %>
+
+	<% if self.tabbed then %>
+		<ul class="cbi-tabmenu">
+			<%- self.selected_tab = luci.http.formvalue("tab.m-" .. self.config) %>
+			<% for i, section in ipairs(self.children) do %>
+				<script type="text/javascript">cbi_c['container.m-<%=self.config%>.<%=section.sectiontype%>'] = 1;</script>
+				<%- if not self.selected_tab then self.selected_tab = section.sectiontype end %>
+				<li id="tab.m-<%=self.config%>.<%=section.sectiontype%>" class="cbi-tab<%=(section.sectiontype == self.selected_tab) and '' or '-disabled'%>">
+					<a onclick="this.blur(); return cbi_t_switch('m-<%=self.config%>', '<%=section.sectiontype%>')" href="<%=REQUEST_URI%>?tab.m-<%=self.config%>=<%=section.sectiontype%>"><%=section.title or section.sectiontype %></a>
+					<% if section.sectiontype == self.selected_tab then %><input type="hidden" id="tab.m-<%=self.config%>" name="tab.m-<%=self.config%>" value="<%=section.sectiontype%>" /><% end %>
+				</li>
+			<% end %>
+		</ul>
+		<% for i, section in ipairs(self.children) do %>
+			<div class="cbi-tabcontainer" id="container.m-<%=self.config%>.<%=section.sectiontype%>"<% if section.sectiontype ~= self.selected_tab then %> style="display:none"<% end %>>
+				<% section:render() %>
+			</div>
+			<script type="text/javascript">cbi_t_add('m-<%=self.config%>', '<%=section.sectiontype%>')</script>
+		<% end %>
+	<% else %>
+		<%- self:render_children() %>
+	<% end %>
 	<br />
 </div>
