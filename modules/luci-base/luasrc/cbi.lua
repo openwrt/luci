@@ -336,7 +336,7 @@ function Map.__init__(self, config, ...)
 end
 
 function Map.formvalue(self, key)
-	return self.readinput and luci.http.formvalue(key)
+	return self.readinput and luci.http.formvalue(key) or nil
 end
 
 function Map.formvaluetable(self, key)
@@ -886,14 +886,18 @@ function AbstractSection.render_tab(self, tab, ...)
 end
 
 -- Parse optional options
-function AbstractSection.parse_optionals(self, section)
+function AbstractSection.parse_optionals(self, section, noparse)
 	if not self.optional then
 		return
 	end
 
 	self.optionals[section] = {}
 
-	local field = self.map:formvalue("cbi.opt."..self.config.."."..section)
+	local field = nil
+	if not noparse then
+		field = self.map:formvalue("cbi.opt."..self.config.."."..section)
+	end
+
 	for k,v in ipairs(self.children) do
 		if v.optional and not v:cfgvalue(section) and not self:has_tabs() then
 			if field == v.option then
@@ -1071,6 +1075,11 @@ function NamedSection.__init__(self, map, section, stype, ...)
 	self.section = section
 end
 
+function NamedSection.prepare(self)
+	AbstractSection.prepare(self)
+	AbstractSection.parse_optionals(self, self.section, true)
+end
+
 function NamedSection.parse(self, novld)
 	local s = self.section
 	local active = self:cfgvalue(s)
@@ -1118,6 +1127,15 @@ function TypedSection.__init__(self, map, type, ...)
 	self.template = "cbi/tsection"
 	self.deps = {}
 	self.anonymous = false
+end
+
+function TypedSection.prepare(self)
+	AbstractSection.prepare(self)
+
+	local i, s
+	for i, s in ipairs(self:cfgsections()) do
+		AbstractSection.parse_optionals(self, s, true)
+	end
 end
 
 -- Return all matching UCI sections for this TypedSection
