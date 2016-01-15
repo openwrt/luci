@@ -385,41 +385,45 @@ function Map.parse(self, readinput, ...)
 
 	Node.parse(self, ...)
 
-	self:_run_hooks("on_save", "on_before_save")
-	for i, config in ipairs(self.parsechain) do
-		self.uci:save(config)
-	end
-	self:_run_hooks("on_after_save")
-	if (not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply") then
-		self:_run_hooks("on_before_commit")
+	if self.save then
+		self:_run_hooks("on_save", "on_before_save")
 		for i, config in ipairs(self.parsechain) do
-			self.uci:commit(config)
-
-			-- Refresh data because commit changes section names
-			self.uci:load(config)
+			self.uci:save(config)
 		end
-		self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
-		if self.apply_on_parse then
-			self.uci:apply(self.parsechain)
-			self:_run_hooks("on_apply", "on_after_apply")
-		else
-			-- This is evaluated by the dispatcher and delegated to the
-			-- template which in turn fires XHR to perform the actual
-			-- apply actions.
-			self.apply_needed = true
+		self:_run_hooks("on_after_save")
+		if (not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply") then
+			self:_run_hooks("on_before_commit")
+			for i, config in ipairs(self.parsechain) do
+				self.uci:commit(config)
+
+				-- Refresh data because commit changes section names
+				self.uci:load(config)
+			end
+			self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
+			if self.apply_on_parse then
+				self.uci:apply(self.parsechain)
+				self:_run_hooks("on_apply", "on_after_apply")
+			else
+				-- This is evaluated by the dispatcher and delegated to the
+				-- template which in turn fires XHR to perform the actual
+				-- apply actions.
+				self.apply_needed = true
+			end
+
+			-- Reparse sections
+			Node.parse(self, true)
 		end
-
-		-- Reparse sections
-		Node.parse(self, true)
-	end
-	for i, config in ipairs(self.parsechain) do
-		self.uci:unload(config)
-	end
-	if type(self.commit_handler) == "function" then
-		self:commit_handler(self:submitstate())
+		for i, config in ipairs(self.parsechain) do
+			self.uci:unload(config)
+		end
+		if type(self.commit_handler) == "function" then
+			self:commit_handler(self:submitstate())
+		end
 	end
 
-	if self.proceed then
+	if not self.save then
+		self.state = FORM_INVALID
+	elseif self.proceed then
 		self.state = FORM_PROCEED
 	elseif self.changed then
 		self.state = FORM_CHANGED
