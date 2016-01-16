@@ -79,6 +79,38 @@ static int nixio_open(lua_State *L) {
 	return 1;
 }
 
+static int nixio_mkstemp(lua_State *L) {
+	const char *intemplate = luaL_checklstring(L, 1, NULL);
+	size_t len = lua_strlen(L, 1);
+	char *template = (char *)lua_newuserdata(L, 13 + len);
+	if (!template) {
+		return luaL_error(L, "out of memory");
+	}
+	snprintf(template, 13 + len, "/tmp/%s.XXXXXX", intemplate);
+
+	int fd;
+
+	do {
+		fd = mkstemp(template);
+	} while (fd == -1 && errno == EINTR);
+	if (fd == -1) {
+		return nixio__perror(L);
+	}
+	unlink(template);
+
+	int *udata = lua_newuserdata(L, sizeof(int));
+	if (!udata) {
+		return luaL_error(L, "out of memory");
+	}
+
+	*udata = fd;
+
+	luaL_getmetatable(L, NIXIO_FILE_META);
+	lua_setmetatable(L, -2);
+
+	return 1;
+}
+
 static int nixio_open_flags(lua_State *L) {
 	int mode = 0;
 	const int j = lua_gettop(L);
@@ -366,6 +398,7 @@ static const luaL_reg R[] = {
 	{"dup",			nixio_dup},
 	{"open",		nixio_open},
 	{"open_flags",	nixio_open_flags},
+	{"mkstemp", 		nixio_mkstemp},
 	{"pipe",		nixio_pipe},
 	{NULL,			NULL}
 };

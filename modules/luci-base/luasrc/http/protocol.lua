@@ -114,6 +114,16 @@ local function __initval( tbl, key )
 end
 
 -- (Internal function)
+-- Initialize given file parameter.
+local function __initfileval( tbl, key, filename, fd )
+	if tbl[key] == nil then
+		tbl[key] = { file=filename, fd=fd, name=key, "" }
+	else
+		table.insert( tbl[key], "" )
+	end
+end
+
+-- (Internal function)
 -- Append given data to given parameter, either by extending the string value
 -- or by appending it to the last string in the parameter's value table.
 local function __appendval( tbl, key, chunk )
@@ -313,6 +323,22 @@ function mimedecode_message_body( src, msg, filecb )
 				__appendval( msg.params, field.name, field.file )
 
 				store = filecb
+			elseif field.name and field.file then
+				local nxf = require "nixio"
+				local fd = nxf.mkstemp(field.name)
+				__initfileval ( msg.params, field.name, field.file, fd )
+				if fd then
+					store = function(hdr, buf, eof)
+						fd:write(buf)
+						if (eof) then
+							fd:seek(0, "set")
+						end
+					end
+				else
+					store = function( hdr, buf, eof )
+						__appendval( msg.params, field.name, buf )
+					end
+				end
 			elseif field.name then
 				__initval( msg.params, field.name )
 

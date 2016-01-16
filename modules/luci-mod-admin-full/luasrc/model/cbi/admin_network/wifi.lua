@@ -160,7 +160,7 @@ if found_sta then
 		found_sta.channel, table.concat(found_sta.names, ", "))
 else
 	ch = s:taboption("general", Value, "_mode_freq", '<br />'..translate("Operating frequency"))
-	ch.hwmodes = iw.hwmodelist
+	ch.hwmodes = hw_modes
 	ch.freqlist = iw.freqlist
 	ch.template = "cbi/wireless_modefreq"
 
@@ -174,7 +174,7 @@ else
 
 	function ch.formvalue(self, section)
 		return {
-			m:formvalue(self:cbid(section) .. ".band") or (iw.hwmodelist.g and "11g" or "11a"),
+			m:formvalue(self:cbid(section) .. ".band") or (hw_modes.g and "11g" or "11a"),
 			m:formvalue(self:cbid(section) .. ".channel") or "auto",
 			m:formvalue(self:cbid(section) .. ".htmode") or ""
 		}
