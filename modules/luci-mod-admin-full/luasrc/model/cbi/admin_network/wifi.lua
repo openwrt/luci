@@ -156,8 +156,8 @@ end
 
 if found_sta then
 	ch = s:taboption("general", DummyValue, "choice", translate("Channel"))
-	ch.value = translatef("Locked to channel %d used by: %s",
-		found_sta.channel, table.concat(found_sta.names, ", "))
+	ch.value = translatef("Locked to channel %s used by: %s",
+		found_sta.channel or "(auto)", table.concat(found_sta.names, ", "))
 else
 	ch = s:taboption("general", Value, "_mode_freq", '<br />'..translate("Operating frequency"))
 	ch.hwmodes = hw_modes
