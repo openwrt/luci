@@ -137,6 +137,13 @@ input[type="submit"] {
 	-webkit-appearance: button;
 }
 
+button[disabled],
+input[type="button"][disabled],
+input[type="reset"][disabled],
+input[type="submit"][disabled] {
+	opacity: 0.7;
+}
+
 input[type="search"] {
 	-webkit-appearance: textfield;
 	-webkit-box-sizing: content-box;
@@ -1099,6 +1106,19 @@ header .dropdown-menu a.hover,
 .cbi-tabmenu > li {
 	position: relative;
 	margin-bottom: -1px;
+}
+
+.cbi-tabmenu.map {
+	margin: 0;
+}
+
+.cbi-tabmenu.map > li {
+	font-size: 16.5px;
+	font-weight: bold;
+}
+
+.cbi-tabcontainer > fieldset > legend {
+	display: none;
 }
 
 .tabs > li > a,
