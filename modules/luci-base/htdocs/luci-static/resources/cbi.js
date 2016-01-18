@@ -475,7 +475,7 @@ function cbi_d_update() {
 		if (node && node.parentNode && !cbi_d_check(entry.deps)) {
 			node.parentNode.removeChild(node);
 			state = true;
-			if( entry.parent )
+			if( entry.parent && typeof(cbi_c[entry.parent]) == 'number')
 				cbi_c[entry.parent]--;
 		} else if ((!node || !node.parentNode) && cbi_d_check(entry.deps)) {
 			if (!next) {
@@ -484,7 +484,7 @@ function cbi_d_update() {
 				next.parentNode.insertBefore(entry.node, next);
 			}
 			state = true;
-			if( entry.parent )
+			if( entry.parent && typeof(cbi_c[entry.parent]) == 'number' )
 				cbi_c[entry.parent]++;
 		}
 	}
@@ -935,7 +935,10 @@ function cbi_t_update() {
 	for( var sid in cbi_t )
 		for( var tid in cbi_t[sid] )
 		{
-			if( cbi_c[cbi_t[sid][tid].cid] == 0 ) {
+			if (typeof(cbi_c[cbi_t[sid][tid].cid]) !== 'number') {
+				continue;
+			}
+			else if( cbi_c[cbi_t[sid][tid].cid] == 0 ) {
 				cbi_t[sid][tid].tab.style.display = 'none';
 			}
 			else if( cbi_t[sid][tid].tab && cbi_t[sid][tid].tab.style.display == 'none' ) {
