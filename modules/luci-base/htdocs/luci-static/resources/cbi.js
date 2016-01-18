@@ -545,7 +545,7 @@ function cbi_bind(obj, type, callback, mode) {
 	return obj;
 }
 
-function cbi_combobox(id, values, def, man) {
+function cbi_combobox(id, values, def, man, focus) {
 	var selid = "cbi.combobox." + id;
 	if (document.getElementById(selid)) {
 		return
@@ -605,6 +605,7 @@ function cbi_combobox(id, values, def, man) {
 	cbi_bind(sel, "change", function() {
 		if (sel.selectedIndex == sel.options.length - 1) {
 			obj.style.display = "inline";
+			sel.blur();
 			sel.parentNode.removeChild(sel);
 			obj.focus();
 		} else {
@@ -619,16 +620,18 @@ function cbi_combobox(id, values, def, man) {
 	})
 
 	// Retrigger validation in select
-	sel.focus();
-	sel.blur();
+	if (focus) {
+		sel.focus();
+		sel.blur();
+	}
 }
 
 function cbi_combobox_init(id, values, def, man) {
 	var obj = document.getElementById(id);
 	cbi_bind(obj, "blur", function() {
-		cbi_combobox(id, values, def, man)
+		cbi_combobox(id, values, def, man, true);
 	});
-	cbi_combobox(id, values, def, man);
+	cbi_combobox(id, values, def, man, false);
 }
 
 function cbi_filebrowser(id, url, defpath) {
