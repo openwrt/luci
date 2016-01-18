@@ -506,10 +506,11 @@ function cbi_init() {
 	var nodes = document.querySelectorAll('[data-depends]');
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
-		var deps = JSON.parse(node.getAttribute('data-depends'));
-		if (deps.length > 0) {
-			for (var alt = 0; alt < deps.length; alt++) {
-				cbi_d_add(node, deps[alt], i);
+		var index = parseInt(node.getAttribute('data-index'), 10);
+		var depends = JSON.parse(node.getAttribute('data-depends'));
+		if (!isNaN(index) && depends.length > 0) {
+			for (var alt = 0; alt < depends.length; alt++) {
+				cbi_d_add(node, depends[alt], index);
 			}
 		}
 	}
