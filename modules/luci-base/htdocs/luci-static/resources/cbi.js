@@ -515,6 +515,15 @@ function cbi_init() {
 		}
 	}
 
+	nodes = document.querySelectorAll('[data-change]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		var events = node.getAttribute('data-change').split(' ');
+		for (var j = 0, event; (event = events[j]) !== undefined; j++) {
+			cbi_bind(node, event, cbi_d_update);
+		}
+	}
+
 	cbi_d_update();
 }
 

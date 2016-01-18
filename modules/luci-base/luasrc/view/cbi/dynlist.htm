@@ -6,7 +6,7 @@
 		local val = vals[i]
 		if (val and #val > 0) or (i == 1) then
 %>
-	<input class="cbi-input-text" value="<%=pcdata(val)%>" onchange="cbi_d_update(this.id)" type="text"<%=
+	<input class="cbi-input-text" value="<%=pcdata(val)%>" data-update="change" type="text"<%=
 		attr("id", cbid .. "." .. i) .. attr("name", cbid) .. ifattr(self.size, "size") ..
 		ifattr(i == 1 and self.placeholder, "placeholder", self.placeholder)
 	%> /><br />

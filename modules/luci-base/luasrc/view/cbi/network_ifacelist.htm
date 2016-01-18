@@ -41,7 +41,7 @@
 		    iface:name() ~= self.exclude
 		 then %>
 	<li>
-		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+		<input class="cbi-input-<%=self.widget or "radio"%>" data-update="click change"<%=
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "." .. iface:name()) ..
 			attr("name", cbid) .. attr("value", iface:name()) ..
@@ -63,7 +63,7 @@
 	<% end end %>
 	<% if not self.nocreate then %>
 	<li>
-		<input class="cbi-input-<%=self.widget or "radio"%>" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)"<%=
+		<input class="cbi-input-<%=self.widget or "radio"%>" data-update="click change"<%=
 			attr("type", self.widget or "radio") ..
 			attr("id", cbid .. "_custom") ..
 			attr("name", cbid) ..

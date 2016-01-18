@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 <% if self.widget == "select" then %>
-	<select class="cbi-input-select" onchange="cbi_d_update(this.id)"<%= attr("id", cbid) .. attr("name", cbid) .. ifattr(self.size, "size") %>>
+	<select class="cbi-input-select" data-update="change"<%= attr("id", cbid) .. attr("name", cbid) .. ifattr(self.size, "size") %>>
 	<% for i, key in pairs(self.keylist) do -%>
 		<option id="cbi-<%=self.config.."-"..section.."-"..self.option.."-"..key%>"<%= attr("value", key) .. ifattr(tostring(self:cfgvalue(section) or self.default) == key, "selected", "selected") .. attr("data-index", i) .. attr("data-depends", self:deplist2json(section, self.deplist[i])) %>><%=striptags(self.vallist[i])%></option>
 	<%- end %>
@@ -10,7 +10,7 @@
 	for i, key in pairs(self.keylist) do
 	c = c + 1
 %>
-	<input class="cbi-input-radio" onclick="cbi_d_update(this.id)" onchange="cbi_d_update(this.id)" type="radio"<%= attr("id", cbid.."-"..key) .. attr("name", cbid) .. attr("value", key) .. ifattr((self:cfgvalue(section) or self.default) == key, "checked", "checked") .. attr("data-index", i) .. attr("data-depends", self:deplist2json(section, self.deplist[i])) %> />
+	<input class="cbi-input-radio" data-update="click change" type="radio"<%= attr("id", cbid.."-"..key) .. attr("name", cbid) .. attr("value", key) .. ifattr((self:cfgvalue(section) or self.default) == key, "checked", "checked") .. attr("data-index", i) .. attr("data-depends", self:deplist2json(section, self.deplist[i])) %> />
 	<label<%= attr("for", cbid.."-"..key) %>><%=self.vallist[i]%></label>
 <% if c == self.size then c = 0 %><% if self.orientation == "horizontal" then %>&#160;<% else %><br /><% end %>
 <% end end %>
