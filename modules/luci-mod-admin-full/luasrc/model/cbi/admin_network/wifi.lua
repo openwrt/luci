@@ -864,6 +864,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	eaptype:value("tls",  "TLS")
 	eaptype:value("ttls", "TTLS")
 	eaptype:value("peap", "PEAP")
+	eaptype:value("fast", "FAST")
 	eaptype:depends({mode="sta", encryption="wpa"})
 	eaptype:depends({mode="sta", encryption="wpa2"})
 	eaptype:depends({mode="sta-wds", encryption="wpa"})
@@ -874,12 +875,13 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	cacert:depends({mode="sta", encryption="wpa2"})
 	cacert:depends({mode="sta-wds", encryption="wpa"})
 	cacert:depends({mode="sta-wds", encryption="wpa2"})
+	cacert.rmempty = true
 
 	clientcert = s:taboption("encryption", FileUpload, "client_cert", translate("Path to Client-Certificate"))
-	clientcert:depends({mode="sta", encryption="wpa"})
-	clientcert:depends({mode="sta", encryption="wpa2"})
-	clientcert:depends({mode="sta-wds", encryption="wpa"})
-	clientcert:depends({mode="sta-wds", encryption="wpa2"})
+	clientcert:depends({mode="sta", eap_type="tls", encryption="wpa"})
+	clientcert:depends({mode="sta", eap_type="tls", encryption="wpa2"})
+	clientcert:depends({mode="sta-wds", eap_type="tls", encryption="wpa"})
+	clientcert:depends({mode="sta-wds", eap_type="tls", encryption="wpa2"})
 
 	privkey = s:taboption("encryption", FileUpload, "priv_key", translate("Path to Private Key"))
 	privkey:depends({mode="sta", eap_type="tls", encryption="wpa2"})
@@ -892,42 +894,86 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	privkeypwd:depends({mode="sta", eap_type="tls", encryption="wpa"})
 	privkeypwd:depends({mode="sta-wds", eap_type="tls", encryption="wpa2"})
 	privkeypwd:depends({mode="sta-wds", eap_type="tls", encryption="wpa"})
+	privkeypwd.rmempty = true
+	privkeypwd.password = true
 
-
-	auth = s:taboption("encryption", Value, "auth", translate("Authentication"))
-	auth:value("PAP")
-	auth:value("CHAP")
-	auth:value("MSCHAP")
-	auth:value("MSCHAPV2")
+	auth = s:taboption("encryption", ListValue, "auth", translate("Authentication"))
+	auth:value("PAP", "PAP", {eap_type="ttls"})
+	auth:value("CHAP", "CHAP", {eap_type="ttls"})
+	auth:value("MSCHAP", "MSCHAP", {eap_type="ttls"})
+	auth:value("MSCHAPV2", "MSCHAPv2", {eap_type="ttls"})
+	auth:value("EAP-GTC")
+	auth:value("EAP-MD5")
+	auth:value("EAP-MSCHAPV2")
+	auth:value("EAP-TLS")
+	auth:depends({mode="sta", eap_type="fast", encryption="wpa2"})
+	auth:depends({mode="sta", eap_type="fast", encryption="wpa"})
 	auth:depends({mode="sta", eap_type="peap", encryption="wpa2"})
 	auth:depends({mode="sta", eap_type="peap", encryption="wpa"})
 	auth:depends({mode="sta", eap_type="ttls", encryption="wpa2"})
 	auth:depends({mode="sta", eap_type="ttls", encryption="wpa"})
+	auth:depends({mode="sta-wds", eap_type="fast", encryption="wpa2"})
+	auth:depends({mode="sta-wds", eap_type="fast", encryption="wpa"})
 	auth:depends({mode="sta-wds", eap_type="peap", encryption="wpa2"})
 	auth:depends({mode="sta-wds", eap_type="peap", encryption="wpa"})
 	auth:depends({mode="sta-wds", eap_type="ttls", encryption="wpa2"})
 	auth:depends({mode="sta-wds", eap_type="ttls", encryption="wpa"})
 
+	cacert2 = s:taboption("encryption", FileUpload, "ca_cert2", translate("Path to inner CA-Certificate"))
+	cacert2:depends({mode="sta", auth="EAP-TLS", encryption="wpa"})
+	cacert2:depends({mode="sta", auth="EAP-TLS", encryption="wpa2"})
+	cacert2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa"})
+	cacert2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa2"})
+
+	clientcert2 = s:taboption("encryption", FileUpload, "client_cert2", translate("Path to inner Client-Certificate"))
+	clientcert2:depends({mode="sta", auth="EAP-TLS", encryption="wpa"})
+	clientcert2:depends({mode="sta", auth="EAP-TLS", encryption="wpa2"})
+	clientcert2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa"})
+	clientcert2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa2"})
+
+	privkey2 = s:taboption("encryption", FileUpload, "priv_key2", translate("Path to inner Private Key"))
+	privkey2:depends({mode="sta", auth="EAP-TLS", encryption="wpa"})
+	privkey2:depends({mode="sta", auth="EAP-TLS", encryption="wpa2"})
+	privkey2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa"})
+	privkey2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa2"})
+
+	privkeypwd2 = s:taboption("encryption", Value, "priv_key2_pwd", translate("Password of inner Private Key"))
+	privkeypwd2:depends({mode="sta", auth="EAP-TLS", encryption="wpa"})
+	privkeypwd2:depends({mode="sta", auth="EAP-TLS", encryption="wpa2"})
+	privkeypwd2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa"})
+	privkeypwd2:depends({mode="sta-wds", auth="EAP-TLS", encryption="wpa2"})
+	privkeypwd2.rmempty = true
+	privkeypwd2.password = true
 
 	identity = s:taboption("encryption", Value, "identity", translate("Identity"))
+	identity:depends({mode="sta", eap_type="fast", encryption="wpa2"})
+	identity:depends({mode="sta", eap_type="fast", encryption="wpa"})
 	identity:depends({mode="sta", eap_type="peap", encryption="wpa2"})
 	identity:depends({mode="sta", eap_type="peap", encryption="wpa"})
 	identity:depends({mode="sta", eap_type="ttls", encryption="wpa2"})
 	identity:depends({mode="sta", eap_type="ttls", encryption="wpa"})
+	identity:depends({mode="sta-wds", eap_type="fast", encryption="wpa2"})
+	identity:depends({mode="sta-wds", eap_type="fast", encryption="wpa"})
 	identity:depends({mode="sta-wds", eap_type="peap", encryption="wpa2"})
 	identity:depends({mode="sta-wds", eap_type="peap", encryption="wpa"})
 	identity:depends({mode="sta-wds", eap_type="ttls", encryption="wpa2"})
 	identity:depends({mode="sta-wds", eap_type="ttls", encryption="wpa"})
 
 	password = s:taboption("encryption", Value, "password", translate("Password"))
+	password:depends({mode="sta", eap_type="fast", encryption="wpa2"})
+	password:depends({mode="sta", eap_type="fast", encryption="wpa"})
 	password:depends({mode="sta", eap_type="peap", encryption="wpa2"})
 	password:depends({mode="sta", eap_type="peap", encryption="wpa"})
 	password:depends({mode="sta", eap_type="ttls", encryption="wpa2"})
 	password:depends({mode="sta", eap_type="ttls", encryption="wpa"})
+	password:depends({mode="sta-wds", eap_type="fast", encryption="wpa2"})
+	password:depends({mode="sta-wds", eap_type="fast", encryption="wpa"})
 	password:depends({mode="sta-wds", eap_type="peap", encryption="wpa2"})
 	password:depends({mode="sta-wds", eap_type="peap", encryption="wpa"})
 	password:depends({mode="sta-wds", eap_type="ttls", encryption="wpa2"})
 	password:depends({mode="sta-wds", eap_type="ttls", encryption="wpa"})
+	password.rmempty = true
+	password.password = true
 end
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
