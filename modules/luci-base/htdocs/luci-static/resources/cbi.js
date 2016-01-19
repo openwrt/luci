@@ -947,9 +947,8 @@ function cbi_t_update() {
 		{
 			var t = cbi_t[sid][tid].tab;
 			var c = cbi_t[sid][tid].container;
-			var n = c.getElementsByTagName('div');
 
-			if (n.length === 0) {
+			if (!c.firstElementChild) {
 				t.style.display = 'none';
 			}
 			else if (t.style.display == 'none') {
