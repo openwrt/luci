@@ -262,6 +262,7 @@ function Node.render_children(self, ...)
 	local k, node
 	for k, node in ipairs(self.children) do
 		node.last_child = (k == #self.children)
+		node.index = k
 		node:render(...)
 	end
 end
@@ -885,6 +886,7 @@ function AbstractSection.render_tab(self, tab, ...)
 	local k, node
 	for k, node in ipairs(self.tabs[tab].childs) do
 		node.last_child = (k == #self.tabs[tab].childs)
+		node.index = k
 		node:render(...)
 	end
 end
@@ -1294,7 +1296,6 @@ function AbstractValue.__init__(self, map, section, option, ...)
 	self.tag_reqerror = {}
 	self.tag_error = {}
 	self.deps = {}
-	self.subdeps = {}
 	--self.cast = "string"
 
 	self.track_missing = false
@@ -1318,7 +1319,30 @@ function AbstractValue.depends(self, field, value)
 		deps = field
 	end
 
-	table.insert(self.deps, {deps=deps, add=""})
+	table.insert(self.deps, deps)
+end
+
+-- Serialize dependencies
+function AbstractValue.deplist2json(self, section, deplist)
+	local deps, i, d = { }
+
+	if type(self.deps) == "table" then
+		for i, d in ipairs(deplist or self.deps) do
+			local a, k, v = { }
+			for k, v in pairs(d) do
+				if k:find("!", 1, true) then
+					a[k] = v
+				elseif k:find(".", 1, true) then
+					a['cbid.%s' % k] = v
+				else
+					a['cbid.%s.%s.%s' %{ self.config, section, k }] = v
+				end
+			end
+			deps[#deps+1] = a
+		end
+	end
+
+	return util.serialize_json(deps)
 end
 
 -- Generates the unique CBID
@@ -1601,6 +1625,7 @@ function ListValue.__init__(self, ...)
 
 	self.keylist = {}
 	self.vallist = {}
+	self.deplist = {}
 	self.size   = 1
 	self.widget = "select"
 end
@@ -1618,10 +1643,7 @@ function ListValue.value(self, key, val, ...)
 	val = val or key
 	table.insert(self.keylist, tostring(key))
 	table.insert(self.vallist, tostring(val))
-
-	for i, deps in ipairs({...}) do
-		self.subdeps[#self.subdeps + 1] = {add = "-"..key, deps=deps}
-	end
+	table.insert(self.deplist, {...})
 end
 
 function ListValue.validate(self, val)
