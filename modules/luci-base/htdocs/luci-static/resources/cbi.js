@@ -515,10 +515,10 @@ function cbi_init() {
 		}
 	}
 
-	nodes = document.querySelectorAll('[data-change]');
+	nodes = document.querySelectorAll('[data-update]');
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
-		var events = node.getAttribute('data-change').split(' ');
+		var events = node.getAttribute('data-update').split(' ');
 		for (var j = 0, event; (event = events[j]) !== undefined; j++) {
 			cbi_bind(node, event, cbi_d_update);
 		}
