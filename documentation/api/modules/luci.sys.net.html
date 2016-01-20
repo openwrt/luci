@@ -242,6 +242,13 @@ Determine the names of available network interfaces.</td>
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#net.host_hints">host_hints</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Returns a two-dimensional table of host hints.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#net.ipv4_hints">ipv4_hints</a>&nbsp;()</td>
 	<td class="summary">
  
@@ -385,6 +392,31 @@ Determine the names of available network interfaces.
 
 <h3>Return value:</h3>
 Table containing all current interface names
+
+
+
+</dd>
+
+
+
+
+<dt><a name="net.host_hints"></a><strong>host_hints</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Returns a two-dimensional table of host hints. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+Table of table containing known hosts from various sources, 
+         indexed by mac address. Each subtable contains at least one 
+         of the fields "name", "ipv4" or "ipv6".
 
 
 

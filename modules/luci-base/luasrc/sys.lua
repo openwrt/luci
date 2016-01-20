@@ -292,6 +292,28 @@ function net.ipv6_hints(callback)
 	end
 end
 
+function net.host_hints(callback)
+	if callback then
+		_nethints(1, function(mac, v4, v6, name)
+			if mac and mac ~= "00:00:00:00:00:00" and (v4 or v6 or name) then
+				callback(mac, v4, v6, name)
+			end
+		end)
+	else
+		local rv = { }
+		_nethints(1, function(mac, v4, v6, name)
+			if mac and mac ~= "00:00:00:00:00:00" and (v4 or v6 or name) then
+				local e = { }
+				if v4   then e.ipv4 = v4   end
+				if v6   then e.ipv6 = v6   end
+				if name then e.name = name end
+				rv[mac] = e
+			end
+		end)
+		return rv
+	end
+end
+
 function net.conntrack(callback)
 	local ok, nfct = pcall(io.lines, "/proc/net/nf_conntrack")
 	if not ok or not nfct then
