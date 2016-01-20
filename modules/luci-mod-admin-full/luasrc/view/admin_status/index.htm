@@ -97,6 +97,11 @@
 		luci.http.write_json(rv)
 
 		return
+	elseif luci.http.formvalue("hosts") == "1" then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(luci.sys.net.host_hints())
+
+		return
 	end
 -%>
 
@@ -121,12 +126,21 @@
 		);
 	}
 
-	var wifidevs = <%=luci.http.write_json(netdevs)%>;
-	var arptable = <%=luci.http.write_json(arpcache)%>;
+	var npoll = 1;
+	var hosts = <%=luci.http.write_json(luci.sys.net.host_hints())%>;
+
+	function updateHosts() {
+		XHR.get('<%=REQUEST_URI%>', { hosts: 1 }, function(x, data) {
+			hosts = data;
+		});
+	}
 
 	XHR.poll(5, '<%=REQUEST_URI%>', { status: 1 },
 		function(x, info)
 		{
+			if (!(npoll++ % 5))
+				updateHosts();
+
 			var si = document.getElementById('wan4_i');
 			var ss = document.getElementById('wan4_s');
 			var ifc = info.wan;
@@ -416,7 +430,9 @@
 								tx_mcs:   net.assoclist[bssid].tx_mcs,
 								tx_40mhz: net.assoclist[bssid].tx_40mhz,
 								link:     net.link,
-								name:     net.name
+								name:     net.name,
+								ifname:   net.ifname,
+								radio:    dev.name
 							});
 						}
 					}
@@ -461,11 +477,9 @@
 						icon = "<%=resource%>/icons/signal-75-100.png";
 
 					tr.insertCell(-1).innerHTML = String.format(
-						'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" />',
-						icon, assoclist[i].signal, assoclist[i].noise
+						'<span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> %h</span>',
+						assoclist[i].radio, assoclist[i].ifname
 					);
-
-					tr.insertCell(-1).innerHTML = assoclist[i].bssid;
 
 					tr.insertCell(-1).innerHTML = String.format(
 						'<a href="%s">%s</a>',
@@ -473,18 +487,33 @@
 							'%h'.format(assoclist[i].name).nobr()
 					);
 
-					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].signal).nobr();
-					tr.insertCell(-1).innerHTML = String.format('%d <%:dBm%>', assoclist[i].noise).nobr();
+					tr.insertCell(-1).innerHTML = assoclist[i].bssid;
 
-					tr.insertCell(-1).innerHTML = (assoclist[i].rx_mcs > -1)
+					var host = hosts[assoclist[i].bssid];
+					if (host)
+						tr.insertCell(-1).innerHTML = String.format(
+							'<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%s</div>',
+							((host.name && (host.ipv4 || host.ipv6))
+								? '%h (%s)'.format(host.name, host.ipv4 || host.ipv6)
+								: '%h'.format(host.name || host.ipv4 || host.ipv6)).nobr()
+						);
+					else
+						tr.insertCell(-1).innerHTML = '?';
+
+					tr.insertCell(-1).innerHTML = String.format(
+						'<span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span>',
+						assoclist[i].signal, assoclist[i].noise, assoclist[i].signal - assoclist[i].noise,
+						icon,
+						assoclist[i].signal, assoclist[i].noise
+					);
+
+					tr.insertCell(-1).innerHTML = ((assoclist[i].rx_mcs > -1)
 						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20).nobr()
 						: String.format('%.1f <%:Mbit/s%>', assoclist[i].rx_rate / 1000).nobr()
-					;
-
-					tr.insertCell(-1).innerHTML = (assoclist[i].tx_mcs > -1)
+					).nobr() + '<br />' + ((assoclist[i].tx_mcs > -1)
 						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20).nobr()
 						: String.format('%.1f <%:Mbit/s%>', assoclist[i].tx_rate / 1000).nobr()
-					;
+					).nobr();
 				}
 
 				if (ac.rows.length == 1)
@@ -674,18 +703,17 @@
 <fieldset class="cbi-section">
 	<legend><%:Associated Stations%></legend>
 
-	<table class="cbi-section-table" id="wifi_assoc_table">
+	<table class="cbi-section-table valign-middle" id="wifi_assoc_table">
 		<tr class="cbi-section-table-titles">
 			<th class="cbi-section-table-cell">&#160;</th>
-			<th class="cbi-section-table-cell"><%:MAC-Address%></th>
 			<th class="cbi-section-table-cell"><%:Network%></th>
-			<th class="cbi-section-table-cell"><%:Signal%></th>
-			<th class="cbi-section-table-cell"><%:Noise%></th>
-			<th class="cbi-section-table-cell"><%:RX Rate%></th>
-			<th class="cbi-section-table-cell"><%:TX Rate%></th>
+			<th class="cbi-section-table-cell"><%:MAC-Address%></th>
+			<th class="cbi-section-table-cell"><%:Host%></th>
+			<th class="cbi-section-table-cell"><%:Signal%> / <%:Noise%></th>
+			<th class="cbi-section-table-cell"><%:RX Rate%> / <%:TX Rate%></th>
 		</tr>
 		<tr class="cbi-section-table-row">
-			<td colspan="7"><em><br /><%:Collecting data...%></em></td>
+			<td colspan="6"><em><br /><%:Collecting data...%></em></td>
 		</tr>
 	</table>
 </fieldset>
