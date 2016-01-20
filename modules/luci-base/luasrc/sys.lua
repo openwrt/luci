@@ -168,14 +168,13 @@ local function _nethints(what, callback)
 		end
 	end
 
-	if fs.access("/proc/net/arp") then
-		for e in io.lines("/proc/net/arp") do
-			ip, mac = e:match("^([%d%.]+)%s+%S+%s+%S+%s+([a-fA-F0-9:]+)%s+")
-			if ip and mac then
-				_add(what, mac:upper(), ip, nil, nil)
-			end
+	luci.ip.neighbors(nil, function(neigh)
+		if neigh.mac and neigh.family == 4 then
+			_add(what, neigh.mac:upper(), neigh.dest:string(), nil, nil)
+		elseif neigh.mac and neigh.family == 6 then
+			_add(what, neigh.mac:upper(), nil, neigh.dest:string(), nil)
 		end
-	end
+	end)
 
 	if fs.access("/etc/ethers") then
 		for e in io.lines("/etc/ethers") do
