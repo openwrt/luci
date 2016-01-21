@@ -32,7 +32,6 @@
 #include <arpa/inet.h>
 
 #include <dlfcn.h>
-#include <iwinfo.h>
 
 #define STEP_COUNT	60
 #define STEP_TIME	1
@@ -141,7 +140,9 @@ static void reset_countdown(int sig)
 static char *progname;
 static int prognamelen;
 
-static struct iwinfo_ops *backend = NULL;
+static int (*iw_get_rate)(const char *, int *) = NULL;
+static int (*iw_get_rssi)(const char *, int *) = NULL;
+static int (*iw_get_noise)(const char *, int *) = NULL;
 
 
 static int init_directory(char *path)
@@ -251,45 +252,59 @@ static void umap_file(struct file_map *m)
 		close(m->fd);
 }
 
-static void * iw_open(void)
+static void * iwinfo_open(void)
 {
 	return dlopen("/usr/lib/libiwinfo.so", RTLD_LAZY);
 }
 
-static int iw_update(
+static int iwinfo_update(
 	void *iw, const char *ifname, uint16_t *rate, uint8_t *rssi, uint8_t *noise
 ) {
-	struct iwinfo_ops *(*probe)(const char *);
+	int (*probe)(const char *);
 	int val;
 
-	if (!backend)
+	if (!iw_get_rate)
 	{
-		probe = dlsym(iw, "iwinfo_backend");
-
-		if (!probe)
+		if ((probe = dlsym(iw, "nl80211_probe")) != NULL && probe(ifname))
+		{
+			iw_get_rate  = dlsym(iw, "nl80211_get_bitrate");
+			iw_get_rssi  = dlsym(iw, "nl80211_get_signal");
+			iw_get_noise = dlsym(iw, "nl80211_get_noise");
+		}
+		else if ((probe = dlsym(iw, "madwifi_probe")) != NULL && probe(ifname))
+		{
+			iw_get_rate  = dlsym(iw, "madwifi_get_bitrate");
+			iw_get_rssi  = dlsym(iw, "madwifi_get_signal");
+			iw_get_noise = dlsym(iw, "madwifi_get_noise");
+		}
+		else if ((probe = dlsym(iw, "wl_probe")) != NULL && probe(ifname))
+		{
+			iw_get_rate  = dlsym(iw, "wl_get_bitrate");
+			iw_get_rssi  = dlsym(iw, "wl_get_signal");
+			iw_get_noise = dlsym(iw, "wl_get_noise");
+		}
+		else
+		{
 			return 0;
-
-		backend = probe(ifname);
-
-		if (!backend)
-			return 0;
+		}
 	}
 
-	*rate = (backend->bitrate && !backend->bitrate(ifname, &val)) ? val : 0;
-	*rssi = (backend->signal && !backend->signal(ifname, &val)) ? val : 0;
-	*noise = (backend->noise && !backend->noise(ifname, &val)) ? val : 0;
+	*rate = (iw_get_rate && !iw_get_rate(ifname, &val)) ? val : 0;
+	*rssi = (iw_get_rssi && !iw_get_rssi(ifname, &val)) ? val : 0;
+	*noise = (iw_get_noise && !iw_get_noise(ifname, &val)) ? val : 0;
 
 	return 1;
 }
 
-static void iw_close(void *iw)
+static void iwinfo_close(void *iw)
 {
-	void (*finish)(void);
+	void (*do_close)(void);
 
-	finish = dlsym(iw, "iwinfo_finish");
-
-	if (finish)
-		finish();
+	if ((do_close = dlsym(iw, "nl80211_close")) != NULL) do_close();
+	if ((do_close = dlsym(iw, "madwifi_close")) != NULL) do_close();
+	if ((do_close = dlsym(iw, "wl_close"))      != NULL) do_close();
+	if ((do_close = dlsym(iw, "wext_close"))    != NULL) do_close();
+	if ((do_close = dlsym(iw, "iwinfo_close"))  != NULL) do_close();
 
 	dlclose(iw);
 }
@@ -464,7 +479,7 @@ static int run_daemon(void)
 	}
 
 	/* initialize iwinfo */
-	iw = iw_open();
+	iw = iwinfo_open();
 
 	/* go */
 	for (reset_countdown(0); countdown >= 0; countdown--)
@@ -494,19 +509,19 @@ static int run_daemon(void)
 		{
 			for (i = 0; i < 5; i++)
 			{
-#define iw_checkif(pattern) \
+#define iwinfo_checkif(pattern) \
 				do {                                                      \
 					snprintf(ifname, sizeof(ifname), pattern, i);         \
-					if (iw_update(iw, ifname, &rate, &rssi, &noise))  \
+					if (iwinfo_update(iw, ifname, &rate, &rssi, &noise))  \
 					{                                                     \
 						update_radiostat(ifname, rate, rssi, noise);      \
 						continue;                                         \
 					}                                                     \
 				} while(0)
 
-				iw_checkif("wlan%d");
-				iw_checkif("ath%d");
-				iw_checkif("wl%d");
+				iwinfo_checkif("wlan%d");
+				iwinfo_checkif("ath%d");
+				iwinfo_checkif("wl%d");
 			}
 		}
 
@@ -559,7 +574,7 @@ static int run_daemon(void)
 	unlink(PID_PATH);
 
 	if (iw)
-		iw_close(iw);
+		iwinfo_close(iw);
 
 	return 0;
 }
