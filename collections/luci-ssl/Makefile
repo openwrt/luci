@@ -10,7 +10,7 @@ LUCI_TYPE:=col
 LUCI_BASENAME:=ssl
 
 LUCI_TITLE:=Standard OpenWrt set with HTTPS support
-LUCI_DEPENDS:=+luci +libustream-polarssl +px5g
+LUCI_DEPENDS:=+luci +uhttpd-mod-tls +px5g
 
 include ../../luci.mk
 
