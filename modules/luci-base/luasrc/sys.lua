@@ -168,14 +168,13 @@ local function _nethints(what, callback)
 		end
 	end
 
-	if fs.access("/proc/net/arp") then
-		for e in io.lines("/proc/net/arp") do
-			ip, mac = e:match("^([%d%.]+)%s+%S+%s+%S+%s+([a-fA-F0-9:]+)%s+")
-			if ip and mac then
-				_add(what, mac:upper(), ip, nil, nil)
-			end
+	luci.ip.neighbors(nil, function(neigh)
+		if neigh.mac and neigh.family == 4 then
+			_add(what, neigh.mac:upper(), neigh.dest:string(), nil, nil)
+		elseif neigh.mac and neigh.family == 6 then
+			_add(what, neigh.mac:upper(), nil, neigh.dest:string(), nil)
 		end
-	end
+	end)
 
 	if fs.access("/etc/ethers") then
 		for e in io.lines("/etc/ethers") do
@@ -286,6 +285,28 @@ function net.ipv6_hints(callback)
 			name = name or nixio.getnameinfo(v6, nil, 100) or mac
 			if name and name ~= v6 then
 				rv[#rv+1] = { v6, name }
+			end
+		end)
+		return rv
+	end
+end
+
+function net.host_hints(callback)
+	if callback then
+		_nethints(1, function(mac, v4, v6, name)
+			if mac and mac ~= "00:00:00:00:00:00" and (v4 or v6 or name) then
+				callback(mac, v4, v6, name)
+			end
+		end)
+	else
+		local rv = { }
+		_nethints(1, function(mac, v4, v6, name)
+			if mac and mac ~= "00:00:00:00:00:00" and (v4 or v6 or name) then
+				local e = { }
+				if v4   then e.ipv4 = v4   end
+				if v6   then e.ipv6 = v6   end
+				if name then e.name = name end
+				rv[mac] = e
 			end
 		end)
 		return rv

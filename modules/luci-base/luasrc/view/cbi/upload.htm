@@ -15,10 +15,10 @@
         <% if not self.unsafeupload then %>
 		<input type="hidden"<%= attr("value", v) .. attr("name", "cbi.rlf." .. section .. "." .. self.option) .. attr("id", "cbi.rlf." .. section .. "." .. self.option) %> />
 	<% end %>
-		
+
 	<% if (not s) or (s and not self.unsafeupload) then %>
 		<input class="cbi-input-file" type="file"<%= attr("name", cbid) .. attr("id", cbid) %> />
 	<% end %>
-	<input type="text" class="cbi-input-text" onchange="cbi_d_update(this.id)"<%=
+	<input type="text" class="cbi-input-text" data-update="change"<%=
 		attr("name", cbid .. ".textbox") .. attr("id", cbid .. ".textbox") .. attr("value", luci.cbi.AbstractValue.cfgvalue(self, section) or self.default) .. ifattr(self.size, "size") .. ifattr(self.placeholder, "placeholder") .. ifattr(self.readonly, "readonly") .. ifattr(self.maxlength, "maxlength") %> />
 <%+cbi/valuefooter%>

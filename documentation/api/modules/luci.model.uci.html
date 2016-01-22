@@ -903,7 +903,8 @@ Get an option or list and return values as table.
 
 
 <h3>Return value:</h3>
-UCI value
+table.  If the option was not found, you will simply get 
+		an empty table.
 
 
 
@@ -1200,7 +1201,8 @@ Boolean whether operation succeeded
 <dd>
 
  
-Set given values as list. 
+Set given values as list. Setting a list option to an empty list 
+has the same effect as deleting the option. 
 
 
 
@@ -1220,7 +1222,7 @@ Set given values as list.
 	</li>
 	
 	<li>
-	  value: UCI value
+	  value: value or table. Raw values will become a single item table.
 	</li>
 	
 </ul>

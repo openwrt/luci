@@ -10,10 +10,9 @@
 	<%- if firstmap and applymap then cbi_apply_xhr(self.config, parsechain, redirect) end -%>
 
 	<% if self.tabbed then %>
-		<ul class="cbi-tabmenu">
+		<ul class="cbi-tabmenu map">
 			<%- self.selected_tab = luci.http.formvalue("tab.m-" .. self.config) %>
 			<% for i, section in ipairs(self.children) do %>
-				<script type="text/javascript">cbi_c['container.m-<%=self.config%>.<%=section.sectiontype%>'] = 1;</script>
 				<%- if not self.selected_tab then self.selected_tab = section.sectiontype end %>
 				<li id="tab.m-<%=self.config%>.<%=section.sectiontype%>" class="cbi-tab<%=(section.sectiontype == self.selected_tab) and '' or '-disabled'%>">
 					<a onclick="this.blur(); return cbi_t_switch('m-<%=self.config%>', '<%=section.sectiontype%>')" href="<%=REQUEST_URI%>?tab.m-<%=self.config%>=<%=section.sectiontype%>"><%=section.title or section.sectiontype %></a>

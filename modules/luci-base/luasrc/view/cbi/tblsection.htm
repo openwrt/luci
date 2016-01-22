@@ -99,7 +99,7 @@ end
 							%> onclick="location.href='<%=self.extedit:format(section)%>'"
 							<%- elseif type(self.extedit) == "function" then
 							%> onclick="location.href='<%=self:extedit(section)%>'"
-							<%- end 
+							<%- end
 							%> alt="<%:Edit%>" title="<%:Edit%>" />
 						<%- end; if self.addremove then %>
 							<input class="cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
