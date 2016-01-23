@@ -185,14 +185,18 @@ local function _nethints(what, callback)
 		end
 	end
 
-	if fs.access("/var/dhcp.leases") then
-		for e in io.lines("/var/dhcp.leases") do
-			mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
-			if mac and ip then
-				_add(what, mac:upper(), ip, nil, name ~= "*" and name)
+	cur:foreach("dhcp", "dnsmasq",
+		function(s)
+			if s.leasefile and fs.access(s.leasefile) then
+				for e in io.lines(s.leasefile) do
+					mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
+					if mac and ip then
+						_add(what, mac:upper(), ip, nil, name ~= "*" and name)
+					end
+				end
 			end
 		end
-	end
+	)
 
 	cur:foreach("dhcp", "host",
 		function(s)
