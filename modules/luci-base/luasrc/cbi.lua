@@ -1623,16 +1623,16 @@ function ListValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/lvalue"
 
-	self.keylist = {}
-	self.vallist = {}
-	self.deplist = {}
 	self.size   = 1
 	self.widget = "select"
+
+	self:reset_values()
 end
 
 function ListValue.reset_values(self)
 	self.keylist = {}
 	self.vallist = {}
+	self.deplist = {}
 end
 
 function ListValue.value(self, key, val, ...)
@@ -1667,11 +1667,10 @@ function MultiValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template = "cbi/mvalue"
 
-	self.keylist = {}
-	self.vallist = {}
-
 	self.widget = "checkbox"
 	self.delimiter = " "
+
+	self:reset_values()
 end
 
 function MultiValue.render(self, ...)
@@ -1685,6 +1684,7 @@ end
 function MultiValue.reset_values(self)
 	self.keylist = {}
 	self.vallist = {}
+	self.deplist = {}
 end
 
 function MultiValue.value(self, key, val)
@@ -1759,8 +1759,7 @@ function DynamicList.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/dynlist"
 	self.cast = "table"
-	self.keylist = {}
-	self.vallist = {}
+	self:reset_values()
 end
 
 function DynamicList.reset_values(self)
