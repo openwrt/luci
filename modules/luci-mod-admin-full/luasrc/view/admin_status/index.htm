@@ -126,6 +126,24 @@
 		);
 	}
 
+	function wifirate(bss, rx) {
+		var p = rx ? 'rx_' : 'tx_',
+		    s = '%.1f <%:Mbit/s%>, %d<%:MHz%>'
+					.format(bss[p+'rate'] / 1000, bss[p+'mhz']),
+		    ht = bss[p+'ht'], vht = bss[p+'vht'],
+			mhz = bss[p+'mhz'], nss = bss[p+'nss'],
+			mcs = bss[p+'mcs'], sgi = bss[p+'short_gi'];
+
+		if (ht || vht) {
+			if (vht) s += ', VHT-MCS %d'.format(mcs);
+			if (nss) s += ', VHT-NSS %d'.format(nss);
+			if (ht)  s += ', MCS %s'.format(mcs);
+			if (sgi) s += ', <%:Short GI%>';
+		}
+
+		return s;
+	}
+
 	var npoll = 1;
 	var hosts = <%=luci.http.write_json(luci.sys.net.host_hints())%>;
 
@@ -419,21 +437,15 @@
 
 						for (var bssid in net.assoclist)
 						{
-							assoclist.push({
-								bssid:    bssid,
-								signal:   net.assoclist[bssid].signal,
-								noise:    net.assoclist[bssid].noise,
-								rx_rate:  net.assoclist[bssid].rx_rate,
-								rx_mcs:   net.assoclist[bssid].rx_mcs,
-								rx_40mhz: net.assoclist[bssid].rx_40mhz,
-								tx_rate:  net.assoclist[bssid].tx_rate,
-								tx_mcs:   net.assoclist[bssid].tx_mcs,
-								tx_40mhz: net.assoclist[bssid].tx_40mhz,
-								link:     net.link,
-								name:     net.name,
-								ifname:   net.ifname,
-								radio:    dev.name
-							});
+							var bss = net.assoclist[bssid];
+
+							bss.bssid  = bssid;
+							bss.link   = net.link;
+							bss.name   = net.name;
+							bss.ifname = net.ifname;
+							bss.radio  = dev.name;
+
+							assoclist.push(bss);
 						}
 					}
 
@@ -507,13 +519,7 @@
 						assoclist[i].signal, assoclist[i].noise
 					);
 
-					tr.insertCell(-1).innerHTML = ((assoclist[i].rx_mcs > -1)
-						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20).nobr()
-						: String.format('%.1f <%:Mbit/s%>', assoclist[i].rx_rate / 1000).nobr()
-					).nobr() + '<br />' + ((assoclist[i].tx_mcs > -1)
-						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20).nobr()
-						: String.format('%.1f <%:Mbit/s%>', assoclist[i].tx_rate / 1000).nobr()
-					).nobr();
+					tr.insertCell(-1).innerHTML = wifirate(assoclist[i], true).nobr() + '<br />' + wifirate(assoclist[i], false).nobr();
 				}
 
 				if (ac.rows.length == 1)
