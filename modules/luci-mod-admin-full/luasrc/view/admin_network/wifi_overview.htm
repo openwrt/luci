@@ -121,6 +121,24 @@
 		return s.replace(/ /g, '&#160;');
 	}
 
+	function wifirate(bss, rx) {
+		var p = rx ? 'rx_' : 'tx_',
+		    s = '%.1f <%:Mbit/s%>, %d<%:MHz%>'
+					.format(bss[p+'rate'] / 1000, bss[p+'mhz']),
+		    ht = bss[p+'ht'], vht = bss[p+'vht'],
+			mhz = bss[p+'mhz'], nss = bss[p+'nss'],
+			mcs = bss[p+'mcs'], sgi = bss[p+'short_gi'];
+
+		if (ht || vht) {
+			if (vht) s += ', VHT-MCS %d'.format(mcs);
+			if (nss) s += ', VHT-NSS %d'.format(nss);
+			if (ht)  s += ', MCS %s'.format(mcs);
+			if (sgi) s += ', <%:Short GI%>';
+		}
+
+		return s;
+	}
+
 	function wifi_shutdown(id, toggle) {
 		var reconnect = (toggle.getAttribute('active') == 'false');
 
@@ -331,13 +349,7 @@
 								assoclist[j].signal, assoclist[j].noise
 							);
 
-							tr.insertCell(-1).innerHTML = nowrap((assoclist[j].rx_mcs > -1)
-								? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[j].rx_rate / 1000, assoclist[j].rx_mcs, assoclist[j].rx_40mhz ? 40 : 20)
-								: String.format('%.1f <%:Mbit/s%>', assoclist[j].rx_rate / 1000)
-							) + '<br />' + nowrap((assoclist[j].tx_mcs > -1)
-								? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[j].tx_rate / 1000, assoclist[j].tx_mcs, assoclist[j].tx_40mhz ? 40 : 20)
-								: String.format('%.1f <%:Mbit/s%>', assoclist[j].tx_rate / 1000)
-							);
+							tr.insertCell(-1).innerHTML = nowrap(wifirate(assoclist[j], true)) + '<br />' + nowrap(wifirate(assoclist[j], false));
 
 							rowstyle = (rowstyle == 1) ? 2 : 1;
 						}

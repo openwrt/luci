@@ -161,6 +161,7 @@ if found_sta then
 else
 	ch = s:taboption("general", Value, "_mode_freq", '<br />'..translate("Operating frequency"))
 	ch.hwmodes = hw_modes
+	ch.htmodes = iw.htmodelist
 	ch.freqlist = iw.freqlist
 	ch.template = "cbi/wireless_modefreq"
 

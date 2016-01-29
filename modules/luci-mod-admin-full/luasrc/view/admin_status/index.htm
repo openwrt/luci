@@ -127,6 +127,36 @@
 		);
 	}
 
+	function wifirate(bss, rx) {
+		var p = rx ? 'rx_' : 'tx_',
+		    s = '%.1f <%:Mbit/s%>, %d<%:MHz%>'
+					.format(bss[p+'rate'] / 1000, bss[p+'mhz']),
+		    ht = bss[p+'ht'], vht = bss[p+'vht'],
+			mhz = bss[p+'mhz'], nss = bss[p+'nss'],
+			mcs = bss[p+'mcs'], sgi = bss[p+'short_gi'];
+
+		if (ht || vht) {
+			if (vht) s += ', VHT-MCS %d'.format(mcs);
+			if (nss) s += ', VHT-NSS %d'.format(nss);
+			if (ht)  s += ', MCS %s'.format(mcs);
+			if (sgi) s += ', <%:Short GI%>';
+		}
+
+		return s;
+	}
+
+	function duid2mac(duid) {
+		// DUID-LLT / Ethernet
+		if (duid.length === 28 && duid.substr(0, 8) === '00010001')
+			return duid.substr(16).replace(/(..)(?=..)/g, '$1:').toUpperCase();
+
+		// DUID-LL / Ethernet
+		if (duid.length === 24 && duid.substr(0, 8) === '00030001')
+			return duid.substr(8).replace(/(..)(?=..)/g, '$1:').toUpperCase();
+
+		return null;
+	}
+
 	var npoll = 1;
 	var hosts = <%=luci.http.write_json(luci.sys.net.host_hints())%>;
 
@@ -322,7 +352,17 @@
 					var tr = ls6.rows[0].parentNode.insertRow(-1);
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
-					tr.insertCell(-1).innerHTML = info.leases6[i].hostname ? info.leases6[i].hostname : '?';
+					var host = hosts[duid2mac(info.leases6[i].duid)];
+					if (host)
+						tr.insertCell(-1).innerHTML = String.format(
+							'<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%s</div>',
+							((host.name && (host.ipv4 || host.ipv6))
+								? '%h (%s)'.format(host.name, host.ipv4 || host.ipv6)
+								: '%h'.format(host.name || host.ipv4 || host.ipv6)).nobr()
+						);
+					else
+						tr.insertCell(-1).innerHTML = info.leases6[i].hostname ? info.leases6[i].hostname : '?';
+
 					tr.insertCell(-1).innerHTML = info.leases6[i].ip6addr;
 					tr.insertCell(-1).innerHTML = info.leases6[i].duid;
 					tr.insertCell(-1).innerHTML = timestr;
@@ -420,21 +460,15 @@
 
 						for (var bssid in net.assoclist)
 						{
-							assoclist.push({
-								bssid:    bssid,
-								signal:   net.assoclist[bssid].signal,
-								noise:    net.assoclist[bssid].noise,
-								rx_rate:  net.assoclist[bssid].rx_rate,
-								rx_mcs:   net.assoclist[bssid].rx_mcs,
-								rx_40mhz: net.assoclist[bssid].rx_40mhz,
-								tx_rate:  net.assoclist[bssid].tx_rate,
-								tx_mcs:   net.assoclist[bssid].tx_mcs,
-								tx_40mhz: net.assoclist[bssid].tx_40mhz,
-								link:     net.link,
-								name:     net.name,
-								ifname:   net.ifname,
-								radio:    dev.name
-							});
+							var bss = net.assoclist[bssid];
+
+							bss.bssid  = bssid;
+							bss.link   = net.link;
+							bss.name   = net.name;
+							bss.ifname = net.ifname;
+							bss.radio  = dev.name;
+
+							assoclist.push(bss);
 						}
 					}
 
@@ -508,13 +542,7 @@
 						assoclist[i].signal, assoclist[i].noise
 					);
 
-					tr.insertCell(-1).innerHTML = ((assoclist[i].rx_mcs > -1)
-						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].rx_rate / 1000, assoclist[i].rx_mcs, assoclist[i].rx_40mhz ? 40 : 20).nobr()
-						: String.format('%.1f <%:Mbit/s%>', assoclist[i].rx_rate / 1000).nobr()
-					).nobr() + '<br />' + ((assoclist[i].tx_mcs > -1)
-						? String.format('%.1f <%:Mbit/s%>, MCS %d, %d<%:MHz%>', assoclist[i].tx_rate / 1000, assoclist[i].tx_mcs, assoclist[i].tx_40mhz ? 40 : 20).nobr()
-						: String.format('%.1f <%:Mbit/s%>', assoclist[i].tx_rate / 1000).nobr()
-					).nobr();
+					tr.insertCell(-1).innerHTML = wifirate(assoclist[i], true).nobr() + '<br />' + wifirate(assoclist[i], false).nobr();
 				}
 
 				if (ac.rows.length == 1)
@@ -671,7 +699,7 @@
 
 	<table class="cbi-section-table" id="lease6_status_table">
 		<tr class="cbi-section-table-titles">
-			<th class="cbi-section-table-cell"><%:Hostname%></th>
+			<th class="cbi-section-table-cell"><%:Host%></th>
 			<th class="cbi-section-table-cell"><%:IPv6-Address%></th>
 			<th class="cbi-section-table-cell"><%:DUID%></th>
 			<th class="cbi-section-table-cell"><%:Leasetime remaining%></th>

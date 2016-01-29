@@ -3,6 +3,7 @@
 <script type="text/javascript">//<![CDATA[
 	var freqlist = <%= luci.http.write_json(self.freqlist) %>;
 	var hwmodes  = <%= luci.http.write_json(self.hwmodes) %>;
+	var htmodes  = <%= luci.http.write_json(self.htmodes) %>;
 
 	var channels = {
 		'11g': [
@@ -31,14 +32,14 @@
 			'', '-', true
 		],
 		'n':  [
-			'HT20', '20 MHz', true,
-			'HT40', '40 MHz', true
+			'HT20', '20 MHz', htmodes.HT20,
+			'HT40', '40 MHz', htmodes.HT40
 		],
 		'ac': [
-			'VHT20', '20 MHz', true,
-			'VHT40', '40 MHz', true,
-			'VHT80', '80 MHz', true,
-			'VHT160', '160 MHz', true
+			'VHT20', '20 MHz', htmodes.VHT20,
+			'VHT40', '40 MHz', htmodes.VHT40,
+			'VHT80', '80 MHz', htmodes.VHT80,
+			'VHT160', '160 MHz', htmodes.VHT160
 		]
 	};
 
