@@ -1,7 +1,7 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
 -- Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.ddns", package.seeall)
@@ -18,11 +18,11 @@ local UTIL = require "luci.util"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 local srv_name    = "ddns-scripts"
-local srv_ver_min = "2.5.0"			-- minimum version of service required
+local srv_ver_min = "2.6.0"			-- minimum version of service required
 local srv_ver_cmd = [[/usr/lib/ddns/dynamic_dns_updater.sh --version | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
-local app_version = "2.3.1-1"
+local app_version = "2.4.0-1"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -96,11 +96,11 @@ function app_title_main()
 end
 function service_version()
 	local ver = nil
-	IPKG.list_installed(srv_name, function(n, ver, d)
-			-- nothing to do
+	IPKG.list_installed(srv_name, function(n, v, d)
+			if v and (#v > 0) then ver = v end
 		end
 	)
-	if not ver then
+	if not ver or (#ver == 0) then
 		ver = UTIL.exec(srv_ver_cmd)
 		if #ver == 0 then ver = nil end
 	end

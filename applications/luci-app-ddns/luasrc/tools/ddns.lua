@@ -1,4 +1,4 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.tools.ddns", package.seeall)
@@ -9,6 +9,30 @@ local OPKG = require "luci.model.ipkg"
 local UCI  = require "luci.model.uci"
 local SYS  = require "luci.sys"
 local UTIL = require "luci.util"
+
+local function _check_certs()
+	local _, v = NXFS.glob("/etc/ssl/certs/*.crt")
+	if ( v == 0 ) then _, v = NXFS.glob("/etc/ssl/certs/*.pem") end
+	return (v > 0)
+end
+
+has_wgetssl	= (UTIL.exec( [[which wget-ssl]] ) ~= "")	-- and true or nil
+has_curl	= (UTIL.exec( [[which curl]] ) ~= "")
+has_curlssl	= (SYS.call( [[$(which curl) -V | grep "Protocols:" | grep -qF "https"]] ) ~= 0)
+has_curlpxy	= (SYS.call( [[grep -i "all_proxy" /usr/lib/libcurl.so* >/dev/null 2>&1]] ) == 0)
+has_fetch	= (UTIL.exec( [[which uclient-fetch]] ) ~= "")
+has_fetchssl	= NXFS.access("/lib/libustream-ssl.so")
+has_bbwget	= (SYS.call( [[/usr/bin/wget -V 2>&1 | grep -iqF "busybox"]] ) == 0)
+has_bindhost	= (UTIL.exec( [[which host]] ) ~= "")
+has_hostip	= (UTIL.exec( [[which hostip]] ) ~= "")
+has_nslookup	= (SYS.call( [[$(which nslookup) 127.0.0.1 0 >/dev/null 2>&1]] ) ~= 0)
+has_ipv6	= (NXFS.access("/proc/net/ipv6_route") and NXFS.access("/usr/sbin/ip6tables"))
+has_ssl		= (has_wgetssl or has_curlssl or (has_fetch and has_fetchssl))
+has_proxy	= (has_wgetssl or has_curlpxy or has_fetch or has_bbwget)
+has_forceip	= ((has_wgetssl or has_curl) and (has_bindhost or has_hostip))
+has_dnsserver	= (has_bindhost or has_hostip or has_nslookup)
+has_bindnet	= (has_wgetssl or has_curl)
+has_cacerts	= _check_certs()
 
 -- function to calculate seconds from given interval and unit
 function calc_seconds(interval, unit)
@@ -25,42 +49,6 @@ function calc_seconds(interval, unit)
 	else
 		return nil
 	end
-end
-
--- check if IPv6 supported by OpenWrt
-function check_ipv6()
-	return NXFS.access("/proc/net/ipv6_route")
-	   and NXFS.access("/usr/sbin/ip6tables")
-end
-
--- check if Wget with SSL support or cURL installed
-function check_ssl()
-	if (SYS.call([[ grep -i "\+ssl" /usr/bin/wget >/dev/null 2>&1 ]]) == 0) then
-		return true
-	else
-		return NXFS.access("/usr/bin/curl")
-	end
-end
-
--- check if Wget with SSL or cURL with proxy support installed
-function check_proxy()
-	-- we prefere GNU Wget for communication
-	if (SYS.call([[ grep -i "\+ssl" /usr/bin/wget >/dev/null 2>&1 ]]) == 0) then
-		return true
-
-	-- if not installed cURL must support proxy
-	elseif NXFS.access("/usr/bin/curl") then
-		return (SYS.call([[ grep -i all_proxy /usr/lib/libcurl.so* >/dev/null 2>&1 ]]) == 0)
-
-	-- only BusyBox Wget is installed
-	else
-		return NXFS.access("/usr/bin/wget")
-	end
-end
-
--- check if BIND host installed
-function check_bind_host()
-	return NXFS.access("/usr/bin/host")
 end
 
 -- convert epoch date to given format
@@ -158,24 +146,35 @@ function value_parse(self, section, novld)
 		end
 
 		if fexist then		-- and there is a formvalue
-			self:add_error(section, "invalid", errtxt)
+			self:add_error(section, "invalid", errtxt or self.title .. ": invalid")
 			return		-- so data are invalid
-
 		elseif not rm_opt then	-- and empty formvalue but NOT (rmempty or optional) set
-			self:add_error(section, "missing", errtxt)
+			self:add_error(section, "missing", errtxt or self.title .. ": missing")
 			return		-- so data is missing
+		elseif errtxt then
+			self:add_error(section, "invalid", errtxt)
+			return
 		end
+--		error  ("\n option: " .. self.option ..
+--			"\n fvalue: " .. tostring(fvalue) ..
+--			"\n fexist: " .. tostring(fexist) ..
+--			"\n cvalue: " .. tostring(cvalue) ..
+--			"\n vvalue: " .. tostring(vvalue) ..
+--			"\n vexist: " .. tostring(vexist) ..
+--			"\n rm_opt: " .. tostring(rm_opt) ..
+--			"\n eq_cfg: " .. tostring(eq_cfg) ..
+--			"\n eq_def: " .. tostring(eq_def) ..
+--			"\n novld : " .. tostring(novld) ..
+--			"\n errtxt: " .. tostring(errtxt) )
 	end
 
 	-- lets continue with value returned from validate
-	eq_cfg  = ( vvalue == cvalue )			-- update equal_config flag
-	local vexist = ( vvalue and (#vvalue > 0) )	-- not "nil" and "not empty"
-	local eq_def = ( vvalue == self.default )	-- equal_default flag
+	eq_cfg  = ( vvalue == cvalue )					-- update equal_config flag
+	local vexist = ( vvalue and (#vvalue > 0) ) and true or false	-- not "nil" and "not empty"
+	local eq_def = ( vvalue == self.default )			-- equal_default flag
 
-	-- not forcewrite and (rmempty or optional)
-	-- and (no data or equal_default)
-	if not self.forcewrite and rm_opt
-	  and (not vexist or eq_def) then
+	-- (rmempty or optional) and (no data or equal_default)
+	if rm_opt and (not vexist or eq_def) then
 		if self:remove(section) then		-- remove data from UCI
 			self.section.changed = true	-- and push events
 		end
@@ -186,6 +185,18 @@ function value_parse(self, section, novld)
 	if not self.forcewrite and eq_cfg then
 		return
 	end
+
+	-- we should have a valid value here
+	assert (vvalue, "\n option: " .. self.option ..
+			"\n fvalue: " .. tostring(fvalue) ..
+			"\n fexist: " .. tostring(fexist) ..
+			"\n cvalue: " .. tostring(cvalue) ..
+			"\n vvalue: " .. tostring(vvalue) ..
+			"\n vexist: " .. tostring(vexist) ..
+			"\n rm_opt: " .. tostring(rm_opt) ..
+			"\n eq_cfg: " .. tostring(eq_cfg) ..
+			"\n eq_def: " .. tostring(eq_def) ..
+			"\n errtxt: " .. tostring(errtxt) )
 
 	-- write data to UCI; raise event only on changes
 	if self:write(section, vvalue) and not eq_cfg then

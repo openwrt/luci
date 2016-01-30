@@ -1,10 +1,7 @@
-# Generated from applications/luci-ddns/luasrc/model/cbi/ddns/ddns.lua
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-02 13:44+0100\n"
+"Project-Id-Version: luci-app-ddns 2.4.0-1\n"
+"POT-Creation-Date: 2016-01-30 11:07+0100\n"
 "PO-Revision-Date: 2012-09-10 04:26+0200\n"
 "Last-Translator: Snoof <sagim9@gmail.com>\n"
 "Language-Team: none\n"
@@ -13,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.6\n"
+"X-Generator: Poedit 1.8.4\n"
 
 msgid "&"
 msgstr ""
@@ -53,12 +50,17 @@ msgstr ""
 
 msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
-"for communication with DDNS Provider."
+"for communication with DDNS Provider!"
 msgstr ""
 
 msgid ""
-"BusyBox's nslookup does not support to specify to use TCP instead of default "
-"UDP when requesting DNS server"
+"BusyBox's nslookup and hostip do not support to specify to use TCP instead "
+"of default UDP when requesting DNS server!"
+msgstr ""
+
+msgid ""
+"BusyBox's nslookup in the current compiled version does not handle given DNS "
+"Servers correctly!"
 msgstr ""
 
 msgid "Casual users should not change this setting"
@@ -294,6 +296,9 @@ msgid ""
 "from LuCI interface nor from console"
 msgstr ""
 
+msgid "If using secure communication you should verify server certificates!"
+msgstr ""
+
 msgid ""
 "If you want to send updates for IPv4 and IPv6 you need to define two "
 "separate Configurations i.e. 'myddns_ipv4' and 'myddns_ipv6'"
@@ -304,6 +309,11 @@ msgid ""
 msgstr ""
 
 msgid "Info"
+msgstr ""
+
+msgid ""
+"Install ca-certificates package or needed certificates by hand into /etc/ssl/"
+"certs default directory"
 msgstr ""
 
 msgid "Interface"
@@ -370,6 +380,9 @@ msgid "Never"
 msgstr ""
 
 msgid "Next Update"
+msgstr ""
+
+msgid "No certificates found"
 msgstr ""
 
 msgid "No data"
@@ -480,6 +493,9 @@ msgstr ""
 msgid "Software update required"
 msgstr ""
 
+msgid "Specifying a DNS-Server is not supported"
+msgstr ""
+
 msgid "Start"
 msgstr ""
 
@@ -541,6 +557,9 @@ msgstr ""
 msgid "Username"
 msgstr "שם משתמש"
 
+msgid "Using specific DNS Server not supported"
+msgstr ""
+
 msgid "Verify"
 msgstr ""
 
@@ -563,6 +582,14 @@ msgstr ""
 msgid ""
 "Writes log messages to syslog. Critical Errors will always be written to "
 "syslog."
+msgstr ""
+
+msgid "You should install BIND host or hostip package for DNS requests."
+msgstr ""
+
+msgid ""
+"You should install BIND host or hostip package, if you need to specify a DNS "
+"server to detect your registered IP."
 msgstr ""
 
 msgid "You should install BIND host package for DNS requests."
@@ -696,42 +723,3 @@ msgstr ""
 
 msgid "use hostname, FQDN, IPv4- or IPv6-Address"
 msgstr ""
-
-#~ msgid "Check for changed IP every"
-#~ msgstr "בצע בדיקה ל- IP שהתחלף כל"
-
-#~ msgid "Check-time unit"
-#~ msgstr "בדוק-יחידת זמן"
-
-#~ msgid "Enable"
-#~ msgstr "אפשר"
-
-#~ msgid "Force update every"
-#~ msgstr "אלץ עדכון כל"
-
-#, fuzzy
-#~ msgid "Force-time unit"
-#~ msgstr "יחידת זמן של אילוץ"
-
-#~ msgid "Service"
-#~ msgstr "שירות"
-
-#~ msgid "Source of IP address"
-#~ msgstr "מקור כתובת IP"
-
-#~ msgid "custom"
-#~ msgstr "מותאם אישית"
-
-# Hours
-#~ msgid "h"
-#~ msgstr "ש'"
-
-#~ msgid "interface"
-#~ msgstr "ממשק"
-
-# Minutes (not minimum)
-#~ msgid "min"
-#~ msgstr "דק'"
-
-#~ msgid "network"
-#~ msgstr "רשת"
