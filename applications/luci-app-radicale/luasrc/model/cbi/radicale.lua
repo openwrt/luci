@@ -1,14 +1,43 @@
--- Copyright 2015 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2015-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed under the Apache License, Version 2.0
 
-local NXFS  = require("nixio.fs")
-local DISP  = require("luci.dispatcher")
-local DTYP  = require("luci.cbi.datatypes")
-local HTTP  = require("luci.http")
-local UTIL  = require("luci.util")
-local UCI   = require("luci.model.uci")
-local SYS   = require("luci.sys")
-local TOOLS = require("luci.controller.radicale")	-- this application's controller and multiused functions
+local NXFS = require("nixio.fs")
+local DISP = require("luci.dispatcher")
+local DTYP = require("luci.cbi.datatypes")
+local HTTP = require("luci.http")
+local UTIL = require("luci.util")
+local UCI  = require("luci.model.uci")
+local SYS  = require("luci.sys")
+local WADM = require("luci.tools.webadmin")
+local CTRL = require("luci.controller.radicale")	-- this application's controller and multiused functions
+
+-- #################################################################################################
+-- Error handling if not installed or wrong version -- #########################
+if not CTRL.service_ok() then
+	local f		= SimpleForm("__sf")
+	f.title		= CTRL.app_title_main()
+	f.description	= CTRL.app_description()
+	f.embedded	= true
+	f.submit	= false
+	f.reset		= false
+
+	local s = f:section(SimpleSection)
+	s.title = [[<font color="red">]] .. [[<strong>]]
+		.. translate("Software update required")
+		.. [[</strong>]] .. [[</font>]]
+
+	local v   = s:option(DummyValue, "_dv")
+	v.rawhtml = true
+	v.value   = CTRL.app_err_value
+
+	return f
+end
+
+-- #################################################################################################
+-- Error handling if no config, create an empty one -- #########################
+if not NXFS.access("/etc/config/radicale") then
+	NXFS.writefile("/etc/config/radicale", "")
+end
 
 -- #################################################################################################
 -- takeover arguments if any -- ################################################
@@ -19,8 +48,8 @@ if arg[1] then
 
 	-- SimpleForm ------------------------------------------------
 	local ft	= SimpleForm("_text")
-	ft.title	= TOOLS.app_title_back()
-	ft.description	= TOOLS.app_description()
+	ft.title	= CTRL.app_title_back()
+	ft.description	= CTRL.app_description()
 	ft.redirect	= DISP.build_url("admin", "services", "radicale") .. "#cbi-radicale-" .. argument
 	if argument == "logger" then
 		ft.reset	= false
@@ -95,54 +124,12 @@ if arg[1] then
 
 end
 
--- #################################################################################################
--- Error handling if not installed or wrong version -- #########################
-if not TOOLS.service_ok() then
-	local f		= SimpleForm("_no_config")
-	f.title		= TOOLS.app_title_main()
-	f.description	= TOOLS.app_description()
-	f.submit	= false
-	f.reset		= false
-
-	local s = f:section(SimpleSection)
-
-	local v    = s:option(DummyValue, "_update_needed")
-	v.rawhtml  = true
-	if TOOLS.service_installed() == "0" then
-		v.value    = [[<h3><strong><br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. translate("Software package '" .. TOOLS.service_name() .. "' is not installed.")
-			   .. [[</font><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. translate("required") .. [[: ]] .. TOOLS.service_name() .. [[ ]] .. TOOLS.service_required()
-			   .. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. [[<a href="]] .. DISP.build_url("admin", "system", "packages") ..[[">]]
-			   .. translate("Please install current version !")
-			   .. [[</a><br />&nbsp;</strong></h3>]]
-	else
-		v.value    = [[<h3><strong><br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. translate("Software package '" .. TOOLS.service_name() .. "' is outdated.")
-			   .. [[</font><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. translate("installed") .. [[: ]] .. TOOLS.service_name() .. [[ ]] .. TOOLS.service_installed()
-			   .. [[<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. translate("required") .. [[: ]] .. TOOLS.service_name() .. [[ ]] .. TOOLS.service_required()
-			   .. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
-			   .. [[<a href="]] .. DISP.build_url("admin", "system", "packages") ..[[">]]
-			   .. translate("Please update to current version !")
-			   .. [[</a><br />&nbsp;</strong></h3>]]
-	end
-
-	return f
-end
-
--- #################################################################################################
--- Error handling if no config, create an empty one -- #########################
-if not NXFS.access("/etc/config/radicale") then
-	NXFS.writefile("/etc/config/radicale", "")
-end
-
 -- cbi-map -- ##################################################################
 local m		= Map("radicale")
-m.title		= TOOLS.app_title_main()
-m.description	= TOOLS.app_description()
+m.title		= CTRL.app_title_main()
+m.description	= CTRL.app_description()
+m.template	= "radicale/tabmap_nsections"
+m.tabbed	= true
 function m.commit_handler(self)
 	if self.changed then	-- changes ?
 		os.execute("/etc/init.d/radicale reload &")	-- reload configuration
@@ -150,11 +137,14 @@ function m.commit_handler(self)
 end
 
 -- cbi-section "System" -- #####################################################
-local sys	= m:section( NamedSection, "_system" )
+local sys	= m:section( NamedSection, "system", "system" )
 sys.title	= translate("System")
 sys.description	= nil
 function sys.cfgvalue(self, section)
-	return "_dummysection"
+	if not self.map:get(section) then	-- section might not exist
+		self.map:set(section, nil, self.sectiontype)
+	end
+	return self.map:get(section)
 end
 
 -- start/stop button -----------------------------------------------------------
@@ -165,7 +155,7 @@ btn.rmempty	= true
 btn.title	= translate("Start / Stop")
 btn.description	= translate("Start/Stop Radicale server")
 function btn.cfgvalue(self, section)
-	local pid = TOOLS.get_pid(true)
+	local pid = CTRL.get_pid(true)
 	if pid > 0 then
 		btn.inputtitle	= "PID: " .. pid
 		btn.inputstyle	= "reset"
@@ -183,17 +173,38 @@ local ena	= sys:option(Flag, "_enabled")
 ena.title       = translate("Auto-start")
 ena.description = translate("Enable/Disable auto-start of Radicale on system start-up and interface events")
 ena.orientation = "horizontal"	-- put description under the checkbox
-ena.rmempty	= false		-- we need write
+ena.rmempty	= false		-- force write() function
 function ena.cfgvalue(self, section)
-	return (SYS.init.enabled("radicale")) and "1" or "0"
+	return (SYS.init.enabled("radicale")) and self.enabled or self.disabled
 end
 function ena.write(self, section, value)
-	if value == "1" then
+	if value == self.enabled then
 		return SYS.init.enable("radicale")
 	else
 		return SYS.init.disable("radicale")
 	end
 end
+
+-- boot_delay ------------------------------------------------------------------
+local bd	= sys:option(Value, "boot_delay")
+bd.title	= translate("Boot delay")
+bd.description	= translate("Delay (in seconds) during system boot before Radicale start")
+		.. [[<br />]]
+		.. translate("During delay ifup-events are not monitored !")
+bd.default	= "10"
+function bd.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
+function bd.validate(self, value)
+	local val = tonumber(value)
+	if not val then
+		return nil, self.title .. ": " .. translate("Value is not a number")
+	elseif val < 0 or val > 300 then
+		return nil, self.title .. ": " .. translate("Value not between 0 and 300")
+	end
+	return value
+end
+
 
 -- cbi-section "Server" -- #####################################################
 local srv	= m:section( NamedSection, "server", "setting" )
@@ -215,15 +226,17 @@ sh.description	= translate("'Hostname:Port' or 'IPv4:Port' or '[IPv6]:Port' Radi
 		.. [[</strong>]]
 sh.placeholder	= "0.0.0.0:5232"
 sh.rmempty	= true
+function sh.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- realm -----------------------------------------------------------------------
 local alm	= srv:option( Value, "realm" )
 alm.title	= translate("Logon message")
 alm.description	= translate("Message displayed in the client when a password is needed.")
 alm.default	= "Radicale - Password Required"
-alm.rmempty	= false
-function alm.parse(self, section)
-	AbstractValue.parse(self, section, "true")	-- otherwise unspecific validate error
+function alm.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
 end
 function alm.validate(self, value)
 	if value then
@@ -232,22 +245,11 @@ function alm.validate(self, value)
 		return self.default
 	end
 end
-function alm.write(self, section, value)
-	if value ~= self.default then
-		return self.map:set(section, self.option, value)
-	else
-		return self.map:del(section, self.option)
-	end
-end
 
 -- ssl -------------------------------------------------------------------------
 local ssl	= srv:option( Flag, "ssl" )
 ssl.title	= translate("Enable HTTPS")
 ssl.description	= nil
-ssl.rmempty	= false
-function ssl.parse(self, section)
-	TOOLS.flag_parse(self, section)
-end
 function ssl.write(self, section, value)
 	if value == "0" then					-- delete all if not https enabled
 		self.map:del(section, "protocol")		-- protocol
@@ -273,18 +275,18 @@ prt:value	("PROTOCOL_SSLv3", "SSL v3")
 prt:value	("PROTOCOL_TLSv1", "TLS v1")
 prt:value	("PROTOCOL_TLSv1_1", "TLS v1.1")
 prt:value	("PROTOCOL_TLSv1_2", "TLS v1.2")
+function prt.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- certificate -----------------------------------------------------------------
 local crt	= srv:option( Value, "certificate" )
 crt.title	= translate("Certificate file")
 crt.description	= translate("Full path and file name of certificate")
 crt.placeholder	= "/etc/radicale/ssl/server.crt"
-crt.rmempty	= false		-- force validate/write
 crt:depends	("ssl", "1")
-function crt.parse(self, section)
-	local  _ssl = ssl:formvalue(section) or "0"
-	local novld = (_ssl == "0")
-	AbstractValue.parse(self, section, novld)	-- otherwise unspecific validate error
+function crt.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
 end
 function crt.validate(self, value)
 	local _ssl = ssl:formvalue(srv.section) or "0"
@@ -295,17 +297,10 @@ function crt.validate(self, value)
 		if DTYP.file(value) then
 			return value
 		else
-			return nil, self.title .. " - " .. translate("File not found !")
+			return nil, self.title .. ": " .. translate("File not found !")
 		end
 	else
-		return nil, self.title .. " - " .. translate("Path/File required !")
-	end
-end
-function crt.write(self, section, value)
-	if not value or #value == 0 then
-		return self.map:del(section, self.option)
-	else
-		return self.map:set(section, self.option, value)
+		return nil, self.title .. ": " .. translate("Path/File required !")
 	end
 end
 
@@ -314,12 +309,9 @@ local key	= srv:option( Value, "key" )
 key.title	= translate("Private key file")
 key.description	= translate("Full path and file name of private key")
 key.placeholder	= "/etc/radicale/ssl/server.key"
-key.rmempty	= false		-- force validate/write
 key:depends	("ssl", "1")
-function key.parse(self, section)
-	local  _ssl = ssl:formvalue(section) or "0"
-	local novld = (_ssl == "0")
-	AbstractValue.parse(self, section, novld)	-- otherwise unspecific validate error
+function key.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
 end
 function key.validate(self, value)
 	local _ssl = ssl:formvalue(srv.section) or "0"
@@ -330,17 +322,10 @@ function key.validate(self, value)
 		if DTYP.file(value) then
 			return value
 		else
-			return nil, self.title .. " - " .. translate("File not found !")
+			return nil, self.title .. ": " .. translate("File not found !")
 		end
 	else
-		return nil, self.title .. " - " .. translate("Path/File required !")
-	end
-end
-function key.write(self, section, value)
-	if not value or #value == 0 then
-		return self.map:del(section, self.option)
-	else
-		return self.map:set(section, self.option, value)
+		return nil, self.title .. ": " .. translate("Path/File required !")
 	end
 end
 
@@ -377,6 +362,9 @@ aty:value	("htpasswd", translate("htpasswd file"))
 --aty:value	("HTTP", "HTTP")			-- The HTTP authentication module relies on the requests module
 --aty:value	("remote_user", "remote_user")
 --aty:value	("custom", translate("custom"))
+function aty.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function aty.write(self, section, value)
 	if value ~= "htpasswd" then
 		self.map:del(section, "htpasswd_encryption")
@@ -403,9 +391,12 @@ hte:value	("crypt", translate("crypt"))
 hte:value	("plain", translate("plain"))
 hte:value	("sha1",  translate("SHA-1"))
 hte:value	("ssha",  translate("salted SHA-1"))
+function hte.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- htpasswd_file (dummy) -------------------------------------------------------
-local htf	= aut:option( DummyValue, "_htf" )
+local htf	= aut:option( Value, "_htf" )
 htf.title	= translate("htpasswd file")
 htf.description	= [[<strong>]]
 		.. translate("Read only!")
@@ -416,9 +407,6 @@ htf.description	= [[<strong>]]
 		.. [[">]]
 		.. translate("To edit the file follow this link!")
 		.. [[</a>]]
-htf.keylist	= {}	-- required by template
-htf.vallist	= {}	-- required by template
-htf.template	= "radicale/ro_value"
 htf.readonly	= true
 htf:depends	("type", "htpasswd")
 function htf.cfgvalue()
@@ -448,6 +436,9 @@ rty:value	("owner_only", translate("Full access for Owner only") )
 rty:value	("owner_write", translate("Owner allow write, authenticated users allow read") )
 rty:value	("from_file", translate("Rights are based on a regexp-based file") )
 --rty:value	("custom", "Custom handler")
+function rty.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function rty.write(self, section, value)
 	if value ~= "custom" then
 		self.map:del(section, "custom_handler")
@@ -460,7 +451,7 @@ function rty.write(self, section, value)
 end
 
 -- from_file (dummy) -----------------------------------------------------------
-local rtf	= rig:option( DummyValue, "_rtf" )
+local rtf	= rig:option( Value, "_rtf" )
 rtf.title	= translate("RegExp file")
 rtf.description	= [[<strong>]]
 		.. translate("Read only!")
@@ -471,9 +462,6 @@ rtf.description	= [[<strong>]]
 		.. [[">]]
 		.. translate("To edit the file follow this link!")
 		.. [[</a>]]
-rtf.keylist	= {}	-- required by template
-rtf.vallist	= {}	-- required by template
-rtf.template	= "radicale/ro_value"
 rtf.readonly	= true
 rtf:depends	("type", "from_file")
 function rtf.cfgvalue()
@@ -501,6 +489,9 @@ sty:value	("filesystem", translate("File-system"))
 --sty:value	("multifilesystem", translate("") )
 --sty:value	("database", translate("Database") )
 --sty:value	("custom", translate("Custom") )
+function sty.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function sty.write(self, section, value)
 	if value ~= "filesystem" then
 		self.map:del(section, "filesystem_folder")
@@ -516,13 +507,10 @@ end
 local sfi	= sto:option( Value, "filesystem_folder" )
 sfi.title	= translate("Directory")
 sfi.description	= nil
-sfi.default	= "/srv/radicale"
-sfi.rmempty	= false		-- force validate/write
+sfi.placeholder	= "/srv/radicale"
 sfi:depends	("type", "filesystem")
-function sfi.parse(self, section)
-	local  _typ = sty:formvalue(sto.section) or ""
-	local novld = (_typ ~= "filesystem")
-	AbstractValue.parse(self, section, novld)	-- otherwise unspecific validate error
+function sfi.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
 end
 function sfi.validate(self, value)
 	local _typ = sty:formvalue(sto.section) or ""
@@ -533,10 +521,10 @@ function sfi.validate(self, value)
 		if DTYP.directory(value) then
 			return value
 		else
-			return nil, self.title .. " - " .. translate("Directory not exists/found !")
+			return nil, self.title .. ": " .. translate("Directory not exists/found !")
 		end
 	else
-		return nil, self.title .. " - " .. translate("Directory required !")
+		return nil, self.title .. ": " .. translate("Directory required !")
 	end
 end
 
@@ -562,6 +550,9 @@ lco:value	("INFO", translate("Info") )
 lco:value	("WARNING", translate("Warning") )
 lco:value	("ERROR", translate("Error") )
 lco:value	("CRITICAL", translate("Critical") )
+function lco.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function lco.write(self, section, value)
 	if value ~= self.default then
 		return self.map:set(section, self.option, value)
@@ -581,6 +572,9 @@ lsl:value	("INFO", translate("Info") )
 lsl:value	("WARNING", translate("Warning") )
 lsl:value	("ERROR", translate("Error") )
 lsl:value	("CRITICAL", translate("Critical") )
+function lsl.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function lsl.write(self, section, value)
 	if value ~= self.default then
 		return self.map:set(section, self.option, value)
@@ -600,6 +594,9 @@ lfi:value	("INFO", translate("Info") )
 lfi:value	("WARNING", translate("Warning") )
 lfi:value	("ERROR", translate("Error") )
 lfi:value	("CRITICAL", translate("Critical") )
+function lfi.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function lfi.write(self, section, value)
 	if value ~= self.default then
 		return self.map:set(section, self.option, value)
@@ -618,12 +615,14 @@ lfp.description	= translate("Directory where the rotating log-files are stored")
 		.. translate("To view latest log file follow this link!")
 		.. [[</a>]]
 lfp.default	= "/var/log/radicale"
-function lfp.write(self, section, value)
-	if value ~= self.default then
-		return self.map:set(section, self.option, value)
-	else
-		return self.map:del(section, self.option)
+function lfp.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
+function lfp.validate(self, value)
+	if not value or (#value < 1) or (value:find("/") ~= 1) then
+		return nil, self.title .. ": " .. translate("no valid path given!")
 	end
+	return value
 end
 
 -- file_maxbytes ---------------------------------------------------------------
@@ -634,23 +633,18 @@ lmb.description	= translate("Maximum size of each rotation log-file.")
 		.. translate("Setting this parameter to '0' will disable rotation of log-file.")
 		.. [[</strong>]]
 lmb.default	= "8196"
-lmb.rmempty	= false
+function lmb.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function lmb.validate(self, value)
 	if value then		-- otherwise errors in datatype check
 		if DTYP.uinteger(value) then
 			return value
 		else
-			return nil, self.title .. " - " .. translate("Value is not an Integer >= 0 !")
+			return nil, self.title .. ": " .. translate("Value is not an Integer >= 0 !")
 		end
 	else
-		return nil, self.title .. " - " .. translate("Value required ! Integer >= 0 !")
-	end
-end
-function lmb.write(self, section, value)
-	if value ~= self.default then
-		return self.map:set(section, self.option, value)
-	else
-		return self.map:del(section, self.option)
+		return nil, self.title .. ": " .. translate("Value required ! Integer >= 0 !")
 	end
 end
 
@@ -662,23 +656,18 @@ lbc.description	= translate("Number of backup files of log to create.")
 		.. translate("Setting this parameter to '0' will disable rotation of log-file.")
 		.. [[</strong>]]
 lbc.default	= "1"
-lbc.rmempty	= false
+function lbc.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 function lbc.validate(self, value)
 	if value then		-- otherwise errors in datatype check
 		if DTYP.uinteger(value) then
 			return value
 		else
-			return nil, self.title .. " - " .. translate("Value is not an Integer >= 0 !")
+			return nil, self.title .. ": " .. translate("Value is not an Integer >= 0 !")
 		end
 	else
-		return nil, self.title .. " - " .. translate("Value required ! Integer >= 0 !")
-	end
-end
-function lbc.write(self, section, value)
-	if value ~= self.default then
-		return self.map:set(section, self.option, value)
-	else
-		return self.map:del(section, self.option)
+		return nil, self.title .. ": " .. translate("Value required ! Integer >= 0 !")
 	end
 end
 
@@ -699,14 +688,18 @@ local enr	= enc:option( Value, "request" )
 enr.title	= translate("Response Encoding")
 enr.description	= translate("Encoding for responding requests.")
 enr.default	= "utf-8"
-enr.optional	= true
+function enr.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- stock -----------------------------------------------------------------------
 local ens	= enc:option( Value, "stock" )
 ens.title	= translate("Storage Encoding")
 ens.description	= translate("Encoding for storing local collections.")
 ens.default	= "utf-8"
-ens.optional	= true
+function ens.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- cbi-section "Headers" -- ####################################################
 local hea	= m:section( NamedSection, "headers", "setting" )
@@ -724,25 +717,32 @@ end
 local heo	= hea:option( DynamicList, "Access_Control_Allow_Origin" )
 heo.title	= translate("Access-Control-Allow-Origin")
 heo.description	= nil
-heo.default	= "*"
-heo.optional	= true
+function heo.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- Access_Control_Allow_Methods ------------------------------------------------
 local hem	= hea:option( DynamicList, "Access_Control_Allow_Methods" )
 hem.title	= translate("Access-Control-Allow-Methods")
 hem.description	= nil
-hem.optional	= true
+function hem.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- Access_Control_Allow_Headers ------------------------------------------------
 local heh	= hea:option( DynamicList, "Access_Control_Allow_Headers" )
 heh.title	= translate("Access-Control-Allow-Headers")
 heh.description	= nil
-heh.optional	= true
+function heh.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- Access_Control_Expose_Headers -----------------------------------------------
 local hee	= hea:option( DynamicList, "Access_Control_Expose_Headers" )
 hee.title	= translate("Access-Control-Expose-Headers")
 hee.description	= nil
-hee.optional	= true
+function hee.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 return m
