@@ -19,7 +19,7 @@ s.addremove = false
 s:option(Flag, "syn_flood", translate("Enable SYN-flood protection"))
 
 o = s:option(Flag, "drop_invalid", translate("Drop invalid packets"))
-o.default = o.disabled
+o.default = o.enabled
 
 p = {
 	s:option(ListValue, "input", translate("Input")),
