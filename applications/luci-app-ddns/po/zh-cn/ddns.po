@@ -1,8 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-02 13:44+0100\n"
+"Project-Id-Version: luci-app-ddns 2.4.0-1\n"
+"POT-Creation-Date: 2016-01-30 11:07+0100\n"
 "PO-Revision-Date: 2015-04-23 13:00+0800\n"
 "Last-Translator: Syrone Wong <wong.syrone@gmail.com>\n"
 "Language: zh_CN\n"
@@ -10,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.8.4\n"
 
 msgid "&"
 msgstr ""
@@ -50,13 +49,18 @@ msgstr "不支持绑定到一个指定的网络"
 
 msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
-"for communication with DDNS Provider."
+"for communication with DDNS Provider!"
 msgstr "与DDNS供应商通讯时BusyBox的nslookup和Wget不支持设置特定的IP协议版本."
 
 msgid ""
-"BusyBox's nslookup does not support to specify to use TCP instead of default "
-"UDP when requesting DNS server"
-msgstr "BusyBox的nslookup不支持使用TCP协议代替UDP协议请求DNS记录"
+"BusyBox's nslookup and hostip do not support to specify to use TCP instead "
+"of default UDP when requesting DNS server!"
+msgstr ""
+
+msgid ""
+"BusyBox's nslookup in the current compiled version does not handle given DNS "
+"Servers correctly!"
+msgstr ""
 
 msgid "Casual users should not change this setting"
 msgstr "普通用户不应该改变这个设置"
@@ -297,6 +301,9 @@ msgid ""
 msgstr ""
 "如果服务配置被禁用那么它将不能被启动.<br />无论是通过LuCI页面或者是通过终端."
 
+msgid "If using secure communication you should verify server certificates!"
+msgstr ""
+
 msgid ""
 "If you want to send updates for IPv4 and IPv6 you need to define two "
 "separate Configurations i.e. 'myddns_ipv4' and 'myddns_ipv6'"
@@ -310,6 +317,11 @@ msgstr "OpenWrt中,cURL/libcurl的某些版本编译时没有启用代理服务�
 
 msgid "Info"
 msgstr "信息"
+
+msgid ""
+"Install ca-certificates package or needed certificates by hand into /etc/ssl/"
+"certs default directory"
+msgstr ""
 
 msgid "Interface"
 msgstr "接口"
@@ -378,6 +390,9 @@ msgstr "从不"
 
 msgid "Next Update"
 msgstr "下次更新"
+
+msgid "No certificates found"
+msgstr ""
 
 msgid "No data"
 msgstr "无数据"
@@ -470,10 +485,10 @@ msgid "Replaces [DOMAIN] in Update-URL"
 msgstr "在更新URL中使用[DOMAIN]替换域名"
 
 msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "在更新URL中使用[PASSWORD]替换密码"
 
 msgid "Replaces [USERNAME] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "在更新URL中使用[USERNAME]替换用户名"
 
 msgid "Run once"
 msgstr "运行一次"
@@ -486,6 +501,9 @@ msgstr "查看更多"
 
 msgid "Software update required"
 msgstr "需要进行软件更新"
+
+msgid "Specifying a DNS-Server is not supported"
+msgstr ""
 
 msgid "Start"
 msgstr "启用"
@@ -549,6 +567,9 @@ msgstr "使用设定的脚本来读取系统IP地址"
 msgid "Username"
 msgstr "用户名"
 
+msgid "Using specific DNS Server not supported"
+msgstr ""
+
 msgid "Verify"
 msgstr "验证"
 
@@ -572,6 +593,14 @@ msgid ""
 "Writes log messages to syslog. Critical Errors will always be written to "
 "syslog."
 msgstr "把日志写入系统日志.无论是否启用这项,错误信息总是会被写入系统日志"
+
+msgid "You should install BIND host or hostip package for DNS requests."
+msgstr ""
+
+msgid ""
+"You should install BIND host or hostip package, if you need to specify a DNS "
+"server to detect your registered IP."
+msgstr ""
 
 msgid "You should install BIND host package for DNS requests."
 msgstr "你需要安装BIND以请求DNS记录."
@@ -704,15 +733,3 @@ msgstr "未指定的错误"
 
 msgid "use hostname, FQDN, IPv4- or IPv6-Address"
 msgstr "使用主机名或IPv4/IPv6地址"
-
-#~ msgid "Hostname/Domain"
-#~ msgstr "主机名/域名"
-
-#~ msgid "Replaces [PASSWORD] in Update-URL"
-#~ msgstr "在更新URL中使用[PASSWORD]替换密码"
-
-#~ msgid "Replaces [USERNAME] in Update-URL"
-#~ msgstr "在更新URL中使用[USERNAME]替换用户名"
-
-#~ msgid "invalid - Sample"
-#~ msgstr "不合法 - 示例"

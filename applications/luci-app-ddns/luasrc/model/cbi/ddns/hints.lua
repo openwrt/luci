@@ -1,16 +1,10 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local DISP = require "luci.dispatcher"
 local SYS  = require "luci.sys"
 local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
-
--- check supported options -- ##################################################
--- saved to local vars here because doing multiple os calls slow down the system
-has_ssl     = DDNS.check_ssl()		-- HTTPS support and --bind-network / --interface
-has_proxy   = DDNS.check_proxy()	-- Proxy support
-has_dnstcp  = DDNS.check_bind_host()	-- DNS TCP support
 
 -- html constants
 font_red = [[<font color="red">]]
@@ -32,47 +26,47 @@ s = m:section( SimpleSection,
 
 -- ddns_scripts needs to be updated for full functionality
 if not CTRL.service_ok() then
-	local dv = s:option(DummyValue, "_update_needed")
-	dv.titleref = DISP.build_url("admin", "system", "packages")
-	dv.rawhtml  = true
-	dv.title = font_red .. bold_on ..
+	local so = s:option(DummyValue, "_update_needed")
+	so.titleref = DISP.build_url("admin", "system", "packages")
+	so.rawhtml  = true
+	so.title = font_red .. bold_on ..
 		translate("Software update required") .. bold_off .. font_off
-	dv.value = translate("The currently installed 'ddns-scripts' package did not support all available settings.") ..
+	so.value = translate("The currently installed 'ddns-scripts' package did not support all available settings.") ..
 			"<br />" ..
 			translate("Please update to the current version!")
 end
 
 -- DDNS Service disabled
 if not SYS.init.enabled("ddns") then
-	local dv = s:option(DummyValue, "_not_enabled")
-	dv.titleref = DISP.build_url("admin", "system", "startup")
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+	local se = s:option(DummyValue, "_not_enabled")
+	se.titleref = DISP.build_url("admin", "system", "startup")
+	se.rawhtml  = true
+	se.title = bold_on ..
 		translate("DDNS Autostart disabled") .. bold_off
-	dv.value = translate("Currently DDNS updates are not started at boot or on interface events." .. "<br />" ..
+	se.value = translate("Currently DDNS updates are not started at boot or on interface events." .. "<br />" ..
 			"This is the default if you run DDNS scripts by yourself (i.e. via cron with force_interval set to '0')" )
 end
 
 -- No IPv6 support
-if not DDNS.check_ipv6() then
-	local dv = s:option(DummyValue, "_no_ipv6")
-	dv.titleref = 'http://www.openwrt.org" target="_blank'
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+if not DDNS.has_ipv6 then
+	local v6 = s:option(DummyValue, "_no_ipv6")
+	v6.titleref = 'http://www.openwrt.org" target="_blank'
+	v6.rawhtml  = true
+	v6.title = bold_on ..
 		translate("IPv6 not supported") .. bold_off
-	dv.value = translate("IPv6 is currently not (fully) supported by this system" .. "<br />" ..
+	v6.value = translate("IPv6 is currently not (fully) supported by this system" .. "<br />" ..
 			"Please follow the instructions on OpenWrt's homepage to enable IPv6 support" .. "<br />" ..
 			"or update your system to the latest OpenWrt Release")
 end
 
 -- No HTTPS support
-if not has_ssl then
-	local dv = s:option(DummyValue, "_no_https")
-	dv.titleref = DISP.build_url("admin", "system", "packages")
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+if not DDNS.has_ssl then
+	local sl = s:option(DummyValue, "_no_https")
+	sl.titleref = DISP.build_url("admin", "system", "packages")
+	sl.rawhtml  = true
+	sl.title = bold_on ..
 		translate("HTTPS not supported") .. bold_off
-	dv.value = translate("Neither GNU Wget with SSL nor cURL installed to support updates via HTTPS protocol.") ..
+	sl.value = translate("Neither GNU Wget with SSL nor cURL installed to support updates via HTTPS protocol.") ..
 			"<br />- " ..
 			translate("You should install GNU Wget with SSL (prefered) or cURL package.") ..
 			"<br />- " ..
@@ -80,13 +74,13 @@ if not has_ssl then
 end
 
 -- No bind_network
-if not has_ssl then
-	local dv = s:option(DummyValue, "_no_bind_network")
-	dv.titleref = DISP.build_url("admin", "system", "packages")
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+if not DDNS.has_bindnet then
+	local bn = s:option(DummyValue, "_no_bind_network")
+	bn.titleref = DISP.build_url("admin", "system", "packages")
+	bn.rawhtml  = true
+	bn.title = bold_on ..
 		translate("Binding to a specific network not supported") .. bold_off
-	dv.value = translate("Neither GNU Wget with SSL nor cURL installed to select a network to use for communication.") ..
+	bn.value = translate("Neither GNU Wget with SSL nor cURL installed to select a network to use for communication.") ..
 			"<br />- " ..
 			translate("You should install GNU Wget with SSL or cURL package.") ..
 			"<br />- " ..
@@ -95,14 +89,14 @@ if not has_ssl then
 			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
 end
 
--- cURL without proxy support
-if has_ssl and not has_proxy then
-	local dv = s:option(DummyValue, "_no_proxy")
-	dv.titleref = DISP.build_url("admin", "system", "packages")
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+-- currently only cURL possibly without proxy support
+if not DDNS.has_proxy then
+	local px = s:option(DummyValue, "_no_proxy")
+	px.titleref = DISP.build_url("admin", "system", "packages")
+	px.rawhtml  = true
+	px.title = bold_on ..
 		translate("cURL without Proxy Support") .. bold_off
-	dv.value = translate("cURL is installed, but libcurl was compiled without proxy support.") ..
+	px.value = translate("cURL is installed, but libcurl was compiled without proxy support.") ..
 			"<br />- " ..
 			translate("You should install GNU Wget with SSL or replace libcurl.") ..
 			"<br />- " ..
@@ -110,35 +104,63 @@ if has_ssl and not has_proxy then
 end
 
 -- "Force IP Version not supported"
-if not (has_ssl and has_dnstcp) then
-	local dv = s:option(DummyValue, "_no_force_ip")
-	dv.titleref = DISP.build_url("admin", "system", "packages")
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+if not DDNS.has_forceip then
+	local fi = s:option(DummyValue, "_no_force_ip")
+	fi.titleref = DISP.build_url("admin", "system", "packages")
+	fi.rawhtml  = true
+	fi.title = bold_on ..
 		translate("Force IP Version not supported") .. bold_off
 	local value = translate("BusyBox's nslookup and Wget do not support to specify " ..
-			"the IP version to use for communication with DDNS Provider.")
-	if not has_ssl then
+				"the IP version to use for communication with DDNS Provider!")
+	if not (DDNS.has_wgetssl or DDNS.has_curl) then
 		value = value .. "<br />- " ..
 			translate("You should install GNU Wget with SSL (prefered) or cURL package.")
 	end
-	if not has_dnstcp then
+	if not (DDNS.has_bindhost or DDNS.has_hostip) then
 		value = value .. "<br />- " ..
-			translate("You should install BIND host package for DNS requests.")
+			translate("You should install BIND host or hostip package for DNS requests.")
 	end
-	dv.value = value
+	fi.value = value
 end
 
 -- "DNS requests via TCP not supported"
-if not has_dnstcp then
-	local dv = s:option(DummyValue, "_no_dnstcp")
-	dv.titleref = DISP.build_url("admin", "system", "packages")
-	dv.rawhtml  = true
-	dv.title = bold_on ..
+if not DDNS.has_bindhost then
+	local dt = s:option(DummyValue, "_no_dnstcp")
+	dt.titleref = DISP.build_url("admin", "system", "packages")
+	dt.rawhtml  = true
+	dt.title = bold_on ..
 		translate("DNS requests via TCP not supported") .. bold_off
-	dv.value = translate("BusyBox's nslookup does not support to specify to use TCP instead of default UDP when requesting DNS server") ..
+	dt.value = translate("BusyBox's nslookup and hostip do not support to specify to use TCP " ..
+				"instead of default UDP when requesting DNS server!") ..
 			"<br />- " ..
 			translate("You should install BIND host package for DNS requests.")
+end
+
+-- nslookup compiled with musl produce problems when using
+if not DDNS.has_dnsserver then
+	local ds = s:option(DummyValue, "_no_dnsserver")
+	ds.titleref = DISP.build_url("admin", "system", "packages")
+	ds.rawhtml  = true
+	ds.title = bold_on ..
+		translate("Using specific DNS Server not supported") .. bold_off
+	ds.value = translate("BusyBox's nslookup in the current compiled version " ..
+				"does not handle given DNS Servers correctly!") ..
+			"<br />- " ..
+			translate("You should install BIND host or hostip package, " ..
+				"if you need to specify a DNS server to detect your registered IP.")
+end
+
+-- certificates installed
+if DDNS.has_ssl and not DDNS.has_cacerts then
+	local ca = s:option(DummyValue, "_no_certs")
+	ca.titleref = DISP.build_url("admin", "system", "packages")
+	ca.rawhtml  = true
+	ca.title = bold_on ..
+		translate("No certificates found") .. bold_off
+	ca.value = translate("If using secure communication you should verify server certificates!") ..
+			"<br />- " ..
+			translate("Install ca-certificates package or needed certificates " ..
+				"by hand into /etc/ssl/certs default directory")
 end
 
 return m

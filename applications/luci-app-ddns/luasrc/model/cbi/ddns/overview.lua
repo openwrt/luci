@@ -1,4 +1,4 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local NXFS = require "nixio.fs"
@@ -8,14 +8,17 @@ local SYS  = require "luci.sys"
 local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
--- show hints ?
-show_hints = not (DDNS.check_ipv6()		-- IPv6 support
-		and DDNS.check_ssl()		-- HTTPS support
-		and DDNS.check_proxy()		-- Proxy support
-		and DDNS.check_bind_host()	-- DNS TCP support
+local show_hints = not (DDNS.has_ipv6		-- IPv6 support
+		    and DDNS.has_ssl		-- HTTPS support
+		    and DDNS.has_proxy		-- Proxy support
+		    and DDNS.has_bindhost	-- DNS TCP support
+		    and DDNS.has_forceip	-- Force IP version
+		    and DDNS.has_dnsserver	-- DNS server support
+		    and DDNS.has_bindnet	-- Bind to network/interface
+		    and DDNS.has_cacerts	-- certificates installed at /etc/ssl/certs
 		)
--- correct ddns-scripts version
-need_update = not CTRL.service_ok()
+local not_enabled = not SYS.init.enabled("ddns")
+local need_update = not CTRL.service_ok()
 
 -- html constants
 font_red = [[<font color="red">]]
@@ -45,13 +48,8 @@ a.template = "ddns/overview_status"
 
 -- SimpleSection definition -- #################################################
 -- show Hints to optimize installation and script usage
--- only show if 	service not enabled
---		or	no IPv6 support
---		or	not GNU Wget and not cURL	(for https support)
---		or	not GNU Wget but cURL without proxy support
---		or	not BIND's host
---		or	ddns-scripts package need update
-if show_hints or need_update or not SYS.init.enabled("ddns") then
+if show_hints or need_update or not_enabled then
+
 	s = m:section( SimpleSection, translate("Hints") )
 
 	-- ddns_scripts needs to be updated for full functionality
@@ -67,7 +65,7 @@ if show_hints or need_update or not SYS.init.enabled("ddns") then
 	end
 
 	-- DDNS Service disabled
-	if not SYS.init.enabled("ddns") then
+	if not_enabled then
 		local dv = s:option(DummyValue, "_not_enabled")
 		dv.titleref = DISP.build_url("admin", "system", "startup")
 		dv.rawhtml  = true
@@ -92,11 +90,11 @@ end
 -- TableSection definition -- ##################################################
 ts = m:section( TypedSection, "service",
 	translate("Overview"),
-	translate("Below is a list of configured DDNS configurations and their current state.") 
-	.. "<br />" 
-	.. translate("If you want to send updates for IPv4 and IPv6 you need to define two separate Configurations " 
-		.. "i.e. 'myddns_ipv4' and 'myddns_ipv6'") 
-	.. "<br />" 
+	translate("Below is a list of configured DDNS configurations and their current state.")
+	.. "<br />"
+	.. translate("If you want to send updates for IPv4 and IPv6 you need to define two separate Configurations "
+		.. "i.e. 'myddns_ipv4' and 'myddns_ipv6'")
+	.. "<br />"
 	.. [[<a href="]] .. DISP.build_url("admin", "services", "ddns", "global") .. [[">]]
 	.. translate("To change global settings click here") .. [[</a>]] )
 ts.sectionhead = translate("Configuration")
