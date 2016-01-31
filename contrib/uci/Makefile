@@ -7,10 +7,11 @@ UCI_VERSION  = 0.8.0
 #UCI_FILE    = $(UCI_DIR).tar.gz
 #UCI_URL     = $(UCI_SITE)/$(UCI_FILE)
 UCI_GITREV   = aa3ab8012bfbf793d2884c08ea924545a04e9544
-UCI_SITE     = http://nbd.name
-UCI_DIR      = uci.git
+UCI_SITE     = http://git.openwrt.org
+UCI_SRCDIR   = project/uci.git
+UCI_DIR      = uci
 UCI_FILE     = uci-$(UCI_VERSION)$(UCI_APPEND).tar.gz
-UCI_URL      = $(UCI_SITE)/gitweb.cgi?p=uci.git;a=snapshot;h=$(UCI_GITREV)
+UCI_URL      = $(UCI_SITE)/?p=$(UCI_SRCDIR);a=snapshot;h=$(UCI_GITREV);sf=tgz
 UCI_PATCHDIR = patches
 
 all: compile
@@ -22,7 +23,8 @@ $(UCI_FILE):
 
 $(UCI_DIR)/.prepared: $(UCI_FILE)
 	rm -rf $(UCI_DIR)
-	tar xvfz $(UCI_FILE)
+	mkdir $(UCI_DIR)
+	tar xvfz $(UCI_FILE) --strip-components 1 -C $(UCI_DIR)
 	(cd $(UCI_PATCHDIR); ls *.patch | sort > series) || true
 	[ -f "$(UCI_PATCHDIR)/series" ] && while read patch; do \
 		patch -d $(UCI_DIR) -p1 < $(UCI_PATCHDIR)/$$patch; \
