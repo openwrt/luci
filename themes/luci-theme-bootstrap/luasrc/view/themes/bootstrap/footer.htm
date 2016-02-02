@@ -14,7 +14,7 @@
 	local categories = disp.node_childs(tree)
 %>
    <footer>
-    <a href="http://luci.subsignal.org/">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
+    <a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
     <% if #categories > 1 then %>
      <ul class="breadcrumb pull-right" id="modemenu">
 	    <% for i, r in ipairs(categories) do %>

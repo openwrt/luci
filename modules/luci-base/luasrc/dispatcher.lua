@@ -300,7 +300,7 @@ function dispatch(request)
 		"Access Violation\nThe page at '" .. table.concat(request, "/") .. "/' " ..
 		"has no parent node so the access to this location has been denied.\n" ..
 		"This is a software bug, please report this message at " ..
-		"http://luci.subsignal.org/trac/newticket"
+		"https://github.com/openwrt/luci/issues"
 	)
 
 	if track.sysauth then
