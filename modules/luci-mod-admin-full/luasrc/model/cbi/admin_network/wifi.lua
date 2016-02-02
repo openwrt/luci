@@ -959,6 +959,10 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	identity:depends({mode="sta-wds", eap_type="peap", encryption="wpa"})
 	identity:depends({mode="sta-wds", eap_type="ttls", encryption="wpa2"})
 	identity:depends({mode="sta-wds", eap_type="ttls", encryption="wpa"})
+	identity:depends({mode="sta", eap_type="tls", encryption="wpa2"})
+	identity:depends({mode="sta", eap_type="tls", encryption="wpa"})
+	identity:depends({mode="sta-wds", eap_type="tls", encryption="wpa2"})
+	identity:depends({mode="sta-wds", eap_type="tls", encryption="wpa"})
 
 	password = s:taboption("encryption", Value, "password", translate("Password"))
 	password:depends({mode="sta", eap_type="fast", encryption="wpa2"})
