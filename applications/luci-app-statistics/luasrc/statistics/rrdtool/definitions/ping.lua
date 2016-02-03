@@ -23,16 +23,6 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			types   = { "ping_droprate" },
 			options = { ping_droprate = {
 				noarea = true, overlay = true, title = "%di" } }
-		} },
-
-		-- Ping standard deviation
-		{ title = "%H: ICMP Standard Deviation",
-		  vlabel = "ms",
-		  number_format = "%5.2lf ms",
-		  data = {
-			types   = { "ping_stddev" },
-			options = { ping_stddev = {
-				noarea = true, overlay = true, title = "%di" } }
-		} },
+		} }
 	}
 end
