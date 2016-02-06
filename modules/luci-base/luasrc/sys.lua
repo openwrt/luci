@@ -325,12 +325,10 @@ function net.conntrack(callback)
 
 	local line, connt = nil, (not callback) and { }
 	for line in nfct do
-		local fam, l3, l4, timeout, state, tuples =
-			line:match("^(ipv[46]) +(%d+) +%S+ +(%d+) +(%d+) +([A-Z_]+) +(.+)$")
+		local fam, l3, l4, timeout, tuples =
+			line:match("^(ipv[46]) +(%d+) +%S+ +(%d+) +(%d+) +(.+)$")
 
-		if fam and l3 and l4 and timeout and state and tuples and
-		   state ~= "TIME_WAIT"
-		then
+		if fam and l3 and l4 and timeout and not tuples:match("^TIME_WAIT ") then
 			l4 = nixio.getprotobynumber(l4)
 
 			local entry = {
