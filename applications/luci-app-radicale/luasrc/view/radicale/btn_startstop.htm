@@ -4,7 +4,7 @@
 
 	// show XHR.poll/XHR.get response on button
 	function _data2elements(x) {
-		var btn = document.getElementById("cbid.radicale._system._startstop");
+		var btn = document.getElementById("cbid.radicale.<%=section%>._startstop");
 		if ( ! btn ) { return; }	// security check
 		if (x.responseText == "0") {
 			btn.value = "<%:Start%>";
@@ -21,12 +21,12 @@
 	function onclick_startstop(id) {
 		// do start/stop
 		var btnXHR = new XHR();
-		btnXHR.post('<%=url('admin/services/radicale/startstop')%>', { token: '<%=token%>' },
+		btnXHR.post('<%=url([[admin/services/radicale/startstop]])%>', { token: '<%=token%>' },
 			function(x) { _data2elements(x); }
 		);
 	}
 
-	XHR.poll(5, '<%=url('admin/services/radicale/status')%>', null,
+	XHR.poll(5, '<%=url([[admin/services/radicale/status]])%>', null,
 		function(x, data) { _data2elements(x); }
 	);
 
