@@ -490,6 +490,10 @@ function cbi_d_update() {
 
 			state = true;
 		}
+
+		// hide optionals widget if no choices remaining
+		if (parent.parentNode && parent.getAttribute('data-optionals'))
+			parent.parentNode.style.display = (parent.options.length <= 1) ? 'none' : '';
 	}
 
 	if (entry && entry.parent) {
