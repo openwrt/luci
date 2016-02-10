@@ -273,6 +273,13 @@ function dispatch(request)
 			if cond then
 				local env = getfenv(3)
 				local scope = (type(env.self) == "table") and env.self
+				if type(val) == "table" then
+					if not next(val) then
+						return ''
+					else
+						val = util.serialize_json(val)
+					end
+				end
 				return string.format(
 					' %s="%s"', tostring(key),
 					util.pcdata(tostring( val
