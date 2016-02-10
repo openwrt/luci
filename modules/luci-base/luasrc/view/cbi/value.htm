@@ -12,7 +12,7 @@
 		ifattr(self.datatype, "data-type", self.datatype) ..
 		ifattr(self.datatype, "data-optional", self.optional or self.rmempty) ..
 		ifattr(self.combobox_manual, "data-manual", self.combobox_manual) ..
-		ifattr(#self.keylist > 0, "data-choices", luci.util.serialize_json({ self.keylist, self.vallist }))
+		ifattr(#self.keylist > 0, "data-choices", { self.keylist, self.vallist })
 	%> />
 	<% if self.password then %><img src="<%=resource%>/cbi/reload.gif" style="vertical-align:middle" title="<%:Reveal/hide password%>" onclick="var e = document.getElementById('<%=cbid%>'); e.type = (e.type=='password') ? 'text' : 'password';" /><% end %>
 <%+cbi/valuefooter%>
