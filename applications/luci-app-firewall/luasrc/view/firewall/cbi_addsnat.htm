@@ -48,7 +48,7 @@
 				</td>
 				<td class="cbi-section-table-cell" style="width:110px">
 					<input type="text" class="cbi-input-text" id="_newsnat.dip" name="_newsnat.dip" placeholder="<%:Do not rewrite%>" data-type="ip4addr" data-optional="true"<%=
-						ifattr(#keys > 0, "data-choices", luci.util.serialize_json({ keys, vals }))
+						ifattr(#keys > 0, "data-choices", { keys, vals })
 					%> />
 				</td>
 				<td class="cbi-section-table-cell" style="width:110px">
