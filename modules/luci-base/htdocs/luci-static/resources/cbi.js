@@ -454,7 +454,7 @@ function cbi_d_update() {
 		if (node && node.parentNode && !cbi_d_check(entry.deps)) {
 			node.parentNode.removeChild(node);
 			state = true;
-		} else if ((!node || !node.parentNode) && cbi_d_check(entry.deps)) {
+		} else if (parent && (!node || !node.parentNode) && cbi_d_check(entry.deps)) {
 			var next = undefined;
 
 			for (next = parent.firstChild; next; next = next.nextSibling) {
@@ -473,7 +473,7 @@ function cbi_d_update() {
 		}
 
 		// hide optionals widget if no choices remaining
-		if (parent.parentNode && parent.getAttribute('data-optionals'))
+		if (parent && parent.parentNode && parent.getAttribute('data-optionals'))
 			parent.parentNode.style.display = (parent.options.length <= 1) ? 'none' : '';
 	}
 
