@@ -550,10 +550,14 @@ function cbi_init() {
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		var choices = JSON.parse(node.getAttribute('data-dynlist'));
-		var options = {};
+		var options = null;
 
-		for (var j = 0; j < choices[0].length; j++)
-			options[choices[0][j]] = choices[1][j];
+		if (choices[0] && choices[0].length) {
+			options = {};
+
+			for (var j = 0; j < choices[0].length; j++)
+				options[choices[0][j]] = choices[1][j];
+		}
 
 		cbi_dynlist_init(node, choices[2], choices[3], options);
 	}
