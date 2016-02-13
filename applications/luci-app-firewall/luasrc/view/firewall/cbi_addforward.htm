@@ -11,6 +11,12 @@
 			ezl[#ezl+1] = z
 		end
 	end
+
+	local keys, vals = { }, { }
+	luci.sys.net.ipv4_hints(function(ip, name)
+		keys[#keys+1] = ip
+		vals[#vals+1] = '%s (%s)' %{ ip, name }
+	end)
 -%>
 <div class="cbi-section-create cbi-tblsection-create">
 	<br />
@@ -46,7 +52,7 @@
 				</select>
 			</td>
 			<td class="cbi-section-table-cell" style="width:110px">
-				<input type="text" class="cbi-input-text" id="_newfwd.extport" name="_newfwd.extport" />
+				<input type="text" class="cbi-input-text" id="_newfwd.extport" name="_newfwd.extport" data-type="portrange" data-optional="true" />
 			</td>
 			<td class="cbi-section-table-cell" style="width:55px">
 				<select class="cbi-input-select" id="_newfwd.intzone" name="_newfwd.intzone">
@@ -54,10 +60,12 @@
 				</select>
 			</td>
 			<td class="cbi-section-table-cell" style="width:110px">
-				<input type="text" class="cbi-input-text" id="_newfwd.intaddr" name="_newfwd.intaddr" />
+				<input type="text" class="cbi-input-text" id="_newfwd.intaddr" name="_newfwd.intaddr" data-type="host" data-optional="true"<%=
+					ifattr(#keys > 0, "data-choices", {keys, vals})
+				%>/>
 			</td>
 			<td class="cbi-section-table-cell" style="width:110px">
-				<input type="text" class="cbi-input-text" id="_newfwd.intport" name="_newfwd.intport" />
+				<input type="text" class="cbi-input-text" id="_newfwd.intport" name="_newfwd.intport" data-type="portrange" data-optional="true" />
 			</td>
 			<td class="cbi-section-table-cell">
 				<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
@@ -66,15 +74,6 @@
 	</table>
 
 	<script type="text/javascript">//<![CDATA[
-		cbi_validate_field('_newfwd.extport', true, 'portrange');
-		cbi_validate_field('_newfwd.intaddr', true, 'host');
-		cbi_validate_field('_newfwd.intport', true, 'portrange');
-
-		cbi_combobox_init('_newfwd.intaddr', {
-			<% first = true; luci.sys.net.ipv4_hints(function(ip, name) %>
-				<%- if first then first = false else %>,<% end -%>'<%=ip%>': '<%=ip%> (<%=name%>)'
-			<%- end) %> }, '', '<%: -- custom -- %>');
-
 		cbi_bind(document.getElementById('_newfwd.extport'), 'blur',
 			function() {
 				var n = document.getElementById('_newfwd.name');
@@ -109,8 +108,5 @@
 					}
 				}
 			});
-
-
-		cbi_validate_field('cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>', true, 'uciname');
 	//]]></script>
 </div>

@@ -1,19 +1,42 @@
-<% local v = self:valuelist(section) or {} -%>
+<%
+	local i, key
+	local v = self:valuelist(section) or {}
+-%>
+
 <%+cbi/valueheader%>
 <% if self.widget == "select" then %>
-	<select class="cbi-input-select" multiple="multiple" data-update="click change"<%= attr("name", cbid) .. ifattr(self.size, "size") %>>
-	<% for i, key in pairs(self.keylist) do -%>
-		<option<%= attr("id", cbid.."-"..key) .. attr("value", key) .. ifattr(luci.util.contains(v, key), "selected", "selected") .. attr("data-index", i) .. attr("data-depends", self:deplist2json(section, self.deplist[i])) %>><%=striptags(self.vallist[i])%></option>
-	<%- end %>
+	<select class="cbi-input-select" multiple="multiple" data-update="click change"<%=
+		attr("id", cbid) ..
+		attr("name", cbid) ..
+		ifattr(self.size, "size")
+	%>>
+		<% for i, key in pairs(self.keylist) do -%>
+			<option<%=
+				attr("id", cbid.."-"..key) ..
+				attr("value", key) ..
+				attr("data-index", i) ..
+				attr("data-depends", self:deplist2json(section, self.deplist[i])) ..
+				ifattr(luci.util.contains(v, key), "selected", "selected")
+			%>><%=pcdata(self.vallist[i])%></option>
+		<%- end %>
 	</select>
-<% elseif self.widget == "checkbox" then
-	local c = 0;
-	for i, key in pairs(self.keylist) do
-	c = c + 1
-%>
-	<input class="cbi-input-checkbox" type="checkbox" data-update="click change"<%= attr("id", cbid.."-"..key) .. attr("name", cbid) .. attr("value", key) .. ifattr(luci.util.contains(v, key), "checked", "checked") .. attr("data-index", i) .. attr("data-depends", self:deplist2json(section, self.deplist[i])) %> />
-	<label<%= attr("for", cbid.."-"..key) %>><%=self.vallist[i]%></label><br />
-<% if c == self.size then c = 0 %><br />
-<% end end %>
+<% elseif self.widget == "checkbox" then %>
+	<div<%= attr("id", cbid) %>>
+		<% for i, key in pairs(self.keylist) do %>
+			<label<%=
+				attr("id", cbid.."-"..key) ..
+				attr("data-index", i) ..
+				attr("data-depends", self:deplist2json(section, self.deplist[i]))
+			%>>
+				<input class="cbi-input-checkbox" type="checkbox" data-update="click change"<%=
+					attr("name", cbid) ..
+					attr("value", key) ..
+					ifattr(luci.util.contains(v, key), "checked", "checked")
+				%> />
+				<%=pcdata(self.vallist[i])%>
+			</label>
+			<% if i == self.size then write('<br />') end %>
+		<% end %>
+	</div>
 <% end %>
 <%+cbi/valuefooter%>
