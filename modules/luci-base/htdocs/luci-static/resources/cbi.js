@@ -1309,7 +1309,7 @@ String.prototype.format = function()
 	var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
 	var a = b = [], numSubstitutions = 0, numMatches = 0;
 
-	while( a = re.exec(str) )
+	while (a = re.exec(str))
 	{
 		var m = a[1];
 		var leftpart = a[2], pPad = a[3], pJustify = a[4], pMinLength = a[5];
@@ -1332,6 +1332,8 @@ String.prototype.format = function()
 					pad = leftpart.substr(1,1);
 				else if (pPad)
 					pad = pPad;
+				else
+					pad = ' ';
 
 				var justifyRight = true;
 				if (pJustify && pJustify === "-")
@@ -1432,15 +1434,25 @@ String.prototype.format = function()
 
 						var i = 0;
 						var val = (+param || 0);
-						var units = [ '', 'K', 'M', 'G', 'T', 'P', 'E' ];
+						var units = [ ' ', ' K', ' M', ' G', ' T', ' P', ' E' ];
 
 						for (i = 0; (i < units.length) && (val > mf); i++)
 							val /= mf;
 
-						subst = val.toFixed(pr) + ' ' + units[i];
+						subst = (i ? val.toFixed(pr) : val) + units[i];
+						pMinLength = null;
 						break;
 				}
 			}
+		}
+
+		if (pMinLength) {
+			subst = subst.toString();
+			for (var i = subst.length; i < pMinLength; i++)
+				if (pJustify == '-')
+					subst = subst + ' ';
+				else
+					subst = pad + subst;
 		}
 
 		out += leftpart + subst;
