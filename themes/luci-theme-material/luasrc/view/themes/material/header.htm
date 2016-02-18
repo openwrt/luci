@@ -50,7 +50,7 @@
 			c._menu_selected = true
 		end
 	end
-    
+
     -- send as HTML5
 	http.prepare_content("text/html")
 
@@ -69,11 +69,11 @@
 
 		local childs = disp.node_childs(node)
 		if #childs > 0 then
-        
+
             if level > 2 then
 %>
 	<ul class="tabs">
-		<%  
+		<%
             end
 
 			local selected_node
@@ -93,7 +93,7 @@
 			</li>
 		<%      end
 			end
-            
+
             if level > 2 then
 		%>
 	</ul>
@@ -110,7 +110,7 @@
 <head>
     <meta charset="utf-8">
     <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
     <meta name="format-detection" content="telephone=no, email=no"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -121,7 +121,13 @@
     <meta name="theme-color" content="#0099CC">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="msapplication-TileColor" content="#0099CC">
+
+    <meta name="application-name" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
+    <meta name="apple-mobile-web-app-title" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
     <meta name="msapplication-TileImage" content="<%=media%>/logo.png"/>
+    <link rel="icon" href="<%=media%>/logo.png" sizes="144x144">
+    <link rel="apple-touch-icon-precomposed" href="<%=media%>/logo.png" sizes="144x144">
+
     <link rel="stylesheet" href="<%=media%>/css/style.css">
     <link rel="shortcut icon" href="<%=media%>/favicon.ico">
     <% if node and node.css then %>
