@@ -57,7 +57,7 @@
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     font-family: inherit;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.1;
     color: inherit;
 }
@@ -67,16 +67,16 @@ html {
     -ms-text-size-adjust: 100%;
 }
 
+body {
+    font-size: 0.8rem;
+    background-color: #EEE;
+}
+
 html, body {
     margin: 0px;
     padding: 0px;
     height: 100%;
-    font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
-    font-size: 62.5%; /* font-size 1rem = 10px on default browser settings */
-}
-
-body {
-    font-size: 1.3rem; /* 1.3rem = 13px */
+    font-family: Microsoft Yahei, WenQuanYi Micro Hei, sans-serif, "Helvetica Neue", Helvetica, Hiragino Sans GB;
 }
 
 select {
@@ -92,23 +92,19 @@ input {
     background-color: transparent;
     color: rgba(0, 0, 0, .87);
     border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, .26);
+    border-bottom: 2px solid rgba(0, 0, 0, .26);
     outline: 0;
     padding: 0;
     box-shadow: none;
     border-radius: 0;
     background-image: none;
-    height: 2rem;
-    font-size: 1.1rem;
+    height: 1.8rem;
+    font-size: 0.8rem;
 }
 
 select:not([multiple="multiple"]):focus,
 input:focus {
-    height: 2rem;
-    height: calc(2rem + 1px);
-    margin-bottom: -1px;
     border-color: #0099CC;
-    border-width: 2px;
 }
 
 select[multiple="multiple"] {
@@ -125,7 +121,7 @@ abbr {
     cursor: help;
 }
 
-hr{
+hr {
     margin: 1rem 0;
     border-color: #EEE;
     opacity: 0.1;
@@ -181,7 +177,7 @@ footer > a {
     text-align: center;
     margin-top: 2rem;
     color: #888;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 }
 
 .main > .loading > span > .loading-img:before {
@@ -211,18 +207,17 @@ footer > a {
     float: left;
     top: 4rem;
     width: 15%;
-    width: calc(0% + 17rem);
+    width: calc(0% + 15rem);
     height: 100%;
     height: calc(100% - 4rem);
     background-color: white;
-
     overflow-x: auto;
     position: fixed;
 }
 
 .main-right {
     width: 85%;
-    width: calc(100% - 17rem);
+    width: calc(100% - 15rem);
     float: right;
     height: 100%;
     background-color: #EEE;
@@ -251,7 +246,7 @@ header > .container {
 }
 
 header > .container > .brand {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: white;
     text-decoration: none;
     cursor: default;
@@ -308,7 +303,7 @@ header > .container > .brand {
     background-image: none;
     min-width: 6rem;
     padding: 0.5rem 1rem;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     line-height: 1.42857143;
     color: #fff;
     background-color: #5bc0de;
@@ -349,7 +344,7 @@ header > .container > .brand {
     padding: 0.5rem 1rem;
     text-decoration: none;
     cursor: default;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
 }
 
 .main > .main-left > .nav > li:hover,
@@ -396,21 +391,21 @@ li {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 2rem;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
 h2 {
     margin: 2rem 0 0 0;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
 h3 {
     margin: 2rem 0 0 0;
-    font-size: 2rem;
+    font-size: 1.4rem;
     padding-bottom: 10px;
 }
 
@@ -438,6 +433,10 @@ fieldset {
     -webkit-overflow-scrolling: touch;
 }
 
+.cbi-map-descr + fieldset {
+    margin-top: 1rem;
+}
+
 fieldset > legend {
     display: none !important;
 }
@@ -454,8 +453,8 @@ fieldset > fieldset {
     display: block;
     line-height: 1;
     color: #404040;
-    font-size: 1.9rem;
-    padding-bottom: 2rem;
+    font-size: 1.4rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid #eee;
 }
 
@@ -467,10 +466,8 @@ table {
 }
 
 table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table > tfoot > tr > th, table > thead > tr > td, table > thead > tr > th {
-    padding: 8px;
-    line-height: 1.42857143;
+    padding: .5rem;
     border-top: 1px solid #ddd;
-
     white-space: nowrap;
 }
 
@@ -482,7 +479,7 @@ table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table
     text-align: center;
 }
 
-fieldset > table > tbody > tr:nth-of-type(odd) {
+fieldset > table > tbody > tr:nth-of-type(2n) {
     background-color: #f9f9f9;
 }
 
@@ -494,7 +491,7 @@ fieldset > table > tbody > tr:nth-of-type(odd) {
 #conns > div,
 #memtotal > div {
     width: 100% !important;
-    height: 1.4rem !important;
+    height: 1.2rem !important;
 }
 
 #swaptotal > div > div,
@@ -503,7 +500,7 @@ fieldset > table > tbody > tr:nth-of-type(odd) {
 #membuff > div > div,
 #conns > div > div,
 #memtotal > div > div {
-    height: 1.4rem !important;
+    height: 100% !important;
     background-color: #0099CC !important;
 }
 
@@ -534,7 +531,7 @@ td > table > tbody > tr > td {
     background-color: #F0F0F0;
     transition: all 0.2s ease-in-out;
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 0 0.8rem;
     border: none;
     border-radius: 0.2rem;
     cursor: pointer;
@@ -548,7 +545,7 @@ td > table > tbody > tr > td {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-size: 1rem;
+    font-size: 0.8rem;
     width: auto !important;
 }
 
@@ -610,6 +607,7 @@ form.inline + form.inline,
 }
 
 .cbi-input-reset,
+.cbi-section-remove > .cbi-button,
 .cbi-button-remove {
     color: #fff !important;
     background-color: #d9534f !important;
@@ -631,14 +629,14 @@ form.inline + form.inline,
 .cbi-tabmenu > li,
 .tabs > li {
     display: inline-block;
-    padding: 0.9rem 0rem;
+    padding: 0.6rem 0rem;
 }
 
 .cbi-tabmenu > li > a,
 .tabs > li > a {
     text-decoration: none;
     color: #404040;
-    padding: 0.9rem 1.5rem;
+    padding: 0.5rem 0.8rem;
 }
 
 .tabs > li[class~="active"],
@@ -675,6 +673,11 @@ form.inline + form.inline,
     background-color: #D4D4D4;
 }
 
+.cbi-section-remove:nth-of-type(2n),
+.cbi-section-node:nth-of-type(2n){
+    background-color: #f9f9f9;
+}
+
 .cbi-section-node-tabbed {
     padding: 0;
     margin-top: 0;
@@ -690,6 +693,7 @@ form.inline + form.inline,
 .cbi-value-field,
 .cbi-value-description {
     display: table-cell;
+    line-height: 1.25;
 }
 
 .cbi-value-helpicon > img {
@@ -717,7 +721,7 @@ form.inline + form.inline,
 }
 
 .cbi-value {
-    padding: 1rem;
+    padding: 0.3rem 1rem;
     display: inline-block;
     width: 100%;
 }
@@ -732,7 +736,7 @@ form.inline + form.inline,
 }
 
 .cbi-rowstyle-2 .cbi-button-up,
-.cbi-rowstyle-2 .cbi-button-down{
+.cbi-rowstyle-2 .cbi-button-down {
     background-color: #FFF !important;
 }
 
@@ -768,7 +772,7 @@ form.inline + form.inline,
 
 .cbi-page-actions {
     border-top: 1px solid #eee;
-    padding-top: 2rem;
+    padding-top: 1rem;
     text-align: right;
 }
 
@@ -792,18 +796,23 @@ form.inline + form.inline,
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+td > .ifacebadge {
+    background-color: #F0F0F0;
+    font-size: 0.9rem;
+}
+
 .ifacebadge > img {
     float: right;
-    margin-left: 0.3rem;
+    margin: 0 0.3rem;
 }
 
 /*textarea*/
 
 .cbi-input-textarea {
     width: 100%;
-    min-height: 16rem;
-    padding: 1rem;
-    font-size: 0.9rem;
+    min-height: 14rem;
+    padding: 0.8rem;
+    font-size: 0.8rem;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: black;
 }
@@ -933,7 +942,26 @@ form.inline + form.inline,
 
 .cbi-value-field .cbi-input-checkbox,
 .cbi-value-field .cbi-input-radio {
-    margin-top: 0.3rem;
+    margin-top: 0.5rem;
+    height: 1rem;
+}
+
+.cbi-value-field > input + .cbi-value-description {
+    padding: 0;
+}
+
+.cbi-value-field > ul > li {
+    display: flex;
+}
+
+.cbi-value-field > ul > li > label {
+    margin-top: 0.5rem;
+}
+
+.cbi-value-field > ul > li .ifacebadge {
+    background-color: #eee;
+    margin-left: 0.4rem;
+    margin-top: -0.5rem;
 }
 
 .cbi-section-table-row > .cbi-value-field .cbi-input-select {
@@ -944,14 +972,19 @@ form.inline + form.inline,
     margin: 0.5rem;
 }
 
+.cbi-section-remove {
+    padding: 0.5rem;
+}
+
 div.cbi-value var, td.cbi-value-field var {
     font-style: italic;
     color: #0069D6;
 }
 
 small {
-    font-size: small;
+    font-size: 90%;
     white-space: normal;
+    line-height: 1.42857143;
 }
 
 .cbi-button-up,
@@ -959,7 +992,7 @@ small {
     display: inline-block;
     min-width: 0;
     padding: 0.2rem 0.3rem;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 }
 
 .cbi-optionals {
@@ -976,7 +1009,7 @@ small {
     -moz-border-radius: 3px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: #404040;
 }
 
@@ -998,7 +1031,7 @@ header > .container > .pull-right > * {
 
 .label {
     padding: 0.3rem 0.8rem;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #ffffff !important;
     text-transform: uppercase;
@@ -1115,6 +1148,7 @@ header > .container > .pull-right > * {
 /* fix Services  Network Shares*/
 .node-services-samba > .main .cbi-tabcontainer:nth-child(3) .cbi-value-title {
     margin-bottom: 1rem;
+    width: auto;
 }
 
 .node-services-samba > .main .cbi-tabcontainer:nth-child(3) .cbi-value-field {
@@ -1137,7 +1171,7 @@ header > .container > .pull-right > * {
 }
 
 .node-system-packages > .main .cbi-tabmenu > li > a, .tabs > li > a {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.8rem;
 }
 
 .node-system-packages > .main .cbi-value > pre {
@@ -1168,24 +1202,27 @@ header > .container > .pull-right > * {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 }
 
+.node-system-flashops form.inline + form.inline {
+    margin-left: 0;
+}
+
 #cbi-firewall-redirect table *,
 #cbi-network-switch_vlan table *,
-#cbi-firewall-zone table *{
+#cbi-firewall-zone table * {
     font-size: small;
 }
 
 #cbi-firewall-redirect table input[type="text"],
 #cbi-network-switch_vlan table input[type="text"],
-#cbi-firewall-zone table input[type="text"]{
+#cbi-firewall-zone table input[type="text"] {
     width: 5rem;
 }
 
 #cbi-firewall-redirect table select,
 #cbi-network-switch_vlan table select,
-#cbi-firewall-zone table select{
+#cbi-firewall-zone table select {
     min-width: 3.5rem;
 }
-
 
 /* language fix */
 body.lang_pl.node-main-login .cbi-value-title {
@@ -1194,17 +1231,16 @@ body.lang_pl.node-main-login .cbi-value-title {
 
 @media screen and (max-width: 1600px) {
     .main-left {
-        width: calc(0% + 15rem);
+        width: calc(0% + 13rem);
     }
 
     .main-right {
-        width: calc(100% - 15rem);
+        width: calc(100% - 13rem);
     }
 
     .cbi-button {
         padding: 0.3rem 0.6rem;
-        font-size: 1rem;
-        line-height: 1.5;
+        font-size: 0.8rem;
     }
 
     header > .container > .pull-right > * {
@@ -1262,23 +1298,23 @@ body.lang_pl.node-main-login .cbi-value-title {
     }
 
     .panel-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         padding-bottom: 1rem;
     }
 
     table {
-        font-size: 0.8rem !important;
+        font-size: 0.7rem !important;
         width: 100% !important;
     }
 
     .main > .main-left > .nav > li,
     .main > .main-left > .nav > li a,
     .main > .main-left > .nav > .slide > .menu {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
 
     .main > .main-left > .nav > .slide > .slide-menu > li > a {
-        font-size: 0.9rem;
+        font-size: 0.7rem;
     }
 }
 
@@ -1335,7 +1371,7 @@ body.lang_pl.node-main-login .cbi-value-title {
     }
 
     #diag-rc-output > pre {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .node-main-login > .main .cbi-value-title {
@@ -1344,6 +1380,10 @@ body.lang_pl.node-main-login .cbi-value-title {
 }
 
 @media screen and (max-width: 480px) {
+    body {
+        font-size: 1rem;
+    }
+
     fieldset {
         padding: 1rem;
         margin: 1rem 0 0 0;
@@ -1465,12 +1505,12 @@ body.lang_pl.node-main-login .cbi-value-title {
         -webkit-overflow-scrolling: touch;
     }
 
-    .node-status-iptables > .main div > .cbi-map > form input[type="submit"]{
+    .node-status-iptables > .main div > .cbi-map > form input[type="submit"] {
         width: 100% !important;
         margin: 0;
     }
 
-    .node-status-iptables > .main div > .cbi-map > form input[type="submit"] + input[type="submit"]{
+    .node-status-iptables > .main div > .cbi-map > form input[type="submit"] + input[type="submit"] {
         margin-top: 1rem;
     }
 }
