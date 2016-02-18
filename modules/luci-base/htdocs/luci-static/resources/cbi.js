@@ -1360,11 +1360,11 @@ String.prototype.format = function()
 						break;
 
 					case 'd':
-						subst = (+param || 0);
+						subst = ~~(+param || 0);
 						break;
 
 					case 'u':
-						subst = Math.abs(+param || 0);
+						subst = ~~Math.abs(+param || 0);
 						break;
 
 					case 'f':
