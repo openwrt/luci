@@ -95,6 +95,7 @@
                 ul.removeClass("active");
             });
         }
+        return false;
     });
 
     /**
@@ -115,7 +116,7 @@
         $(this).addClass("active");
         $(".main > .loading").fadeIn("fast");
         window.location = $($(this).find("a")[0]).attr("href");
-        return;
+        return false;
     });
 
     /**
@@ -196,6 +197,13 @@
     $("legend").each(function () {
         var that = $(this);
         that.after("<span class='panel-title'>" + that.text() + "</span>");
+    });
+
+    $(".cbi-section-table-titles, .cbi-section-table-descr, .cbi-section-descr").each(function () {
+        var that = $(this);
+        if (that.text().trim() == ""){
+            that.css("display", "none");
+        }
     });
 
 
