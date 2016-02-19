@@ -61,17 +61,10 @@ if running then
 	s:option(DummyValue,"opennewwindow" ,"<br /><p align=\"justify\"><script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"迅雷远程下载页面\" onclick=\"window.open('http://yuancheng.xunlei.com')\" /></p>", "将激活码填进网页即可绑定。")
 end
 
-s = m:section(TypedSection, "xware3_mount","Xware挂载点","请在此设置Xware3下载目录所在的“挂载点”。")
+s = m:section(TypedSection, "xware3_mount","Xware挂载点","请在此设置Xware3接受的挂载点前缀。例如设置为'/mnt/'将接受所有以'/mnt/'开头的挂载点。")
 s.anonymous = true
 
-local devices = {}
-util.consume((fs.glob("/mnt/sd*")), devices)
-util.consume((fs.glob("/mnt/mmcblk*")), devices)
-
-device = s:option(DynamicList, "available_mounts", "挂载点")
-for i, dev in ipairs(devices) do
-	device:value(dev)
-end
+s:option(DynamicList, "available_mounts", "挂载点前缀")
 
 s = m:section(TypedSection, "xware3_mount","Xware配置文件","编辑Xware3配置文件")
 s.anonymous = true
