@@ -57,5 +57,52 @@ o7 = s3:option(Value, "adb_logfile", translate("Debug log file"))
 o7.rmempty = false
 o7.datatype = "string"
 
+-- Extra options
+
+e = m:section(NamedSection, "global", "adblock", translate("Extra options"),
+	translate("Options for further tweaking in case the defaults are not suitable for you."))
+
+a1 = e:option(Value, "adb_port", translate("Port of the adblock uhttpd instance"))
+a1.optional = true
+a1.rmempty = true
+a1.default = 65535
+a1.datatype = "port"
+
+a2 = e:option(Value, "adb_nullipv4", translate("IPv4 blackhole ip address"))
+a2.optional = true
+a2.rmempty = true
+a2.default = "192.0.2.1"
+a2.datatype = "ip4addr"
+
+a3 = e:option(Value, "adb_nullipv6", translate("IPv6 blackhole ip address"))
+a3.optional = true
+a3.rmempty = true
+a3.default = "::ffff:c000:0201"
+a3.datatype = "ip6addr"
+
+a4 = e:option(Value, "adb_maxtime", translate("Download timeout limit in seconds"))
+a4.optional = true
+a4.rmempty = true
+a4.default = 60
+a4.datatype = "uinteger"
+
+a5 = e:option(Value, "adb_maxloop", translate("Timeout limit for active wan lookup at startup"))
+a5.optional = true
+a5.rmempty = true
+a5.default = 20
+a5.datatype = "uinteger"
+
+a6 = e:option(Value, "adb_wanif", translate("Name of the logical wan interface") )
+a6.optional = true
+a6.rmempty = true
+a6.default = "wan"
+a6.datatype = "network"
+
+a7 = e:option(Value, "adb_lanif", translate("Name of the logical lan interface") )
+a7.optional = true
+a7.rmempty = true
+a7.default = "lan"
+a7.datatype = "network"
+
 return m
 
