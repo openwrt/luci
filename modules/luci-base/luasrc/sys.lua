@@ -343,7 +343,11 @@ function net.conntrack(callback)
 			for key, val in tuples:gmatch("(%w+)=(%S+)") do
 				if key == "bytes" or key == "packets" then
 					entry[key] = entry[key] + tonumber(val, 10)
-				elseif key == "src" or key == "dst" or key == "sport" or key == "dport" then
+				elseif key == "src" or key == "dst" then
+					if entry[key] == nil then
+						entry[key] = luci.ip.new(val):string()
+					end
+				elseif key == "sport" or key == "dport" then
 					if entry[key] == nil then
 						entry[key] = val
 					end
