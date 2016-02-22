@@ -592,6 +592,7 @@ function cbi_combobox(id, values, def, man, focus) {
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
 		sel.id = selid;
+		sel.index = obj.index;
 		sel.className = obj.className.replace(/cbi-input-text/, 'cbi-input-select');
 
 	if (obj.nextSibling) {
@@ -925,14 +926,14 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 			input.value = '';
 
 			cbi_dynlist_keydown({
-				target:  se,
+				target:  input,
 				keyCode: 8
 			});
 		}
 		else
 		{
 			cbi_dynlist_keydown({
-				target:  se,
+				target:  input,
 				keyCode: 13
 			});
 		}
