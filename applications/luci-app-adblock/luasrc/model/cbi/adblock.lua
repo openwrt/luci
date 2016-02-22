@@ -83,18 +83,6 @@ a3.rmempty = true
 a3.default = "::ffff:c000:0201"
 a3.datatype = "ip6addr"
 
-a4 = e:option(Value, "adb_maxtime", translate("Download timeout limit in seconds"))
-a4.optional = true
-a4.rmempty = true
-a4.default = 60
-a4.datatype = "uinteger"
-
-a5 = e:option(Value, "adb_maxloop", translate("Timeout limit for active wan lookup at startup"))
-a5.optional = true
-a5.rmempty = true
-a5.default = 20
-a5.datatype = "uinteger"
-
 a6 = e:option(Value, "adb_wanif", translate("Name of the logical wan interface"))
 a6.optional = true
 a6.rmempty = true
@@ -106,18 +94,6 @@ a7.optional = true
 a7.rmempty = true
 a7.default = "lan"
 a7.datatype = "network"
-
-a8 = e:option(Value, "adb_probeipv4", translate("IPv4 address used for uplink online check"))
-a8.optional = true
-a8.rmempty = true
-a8.default = "8.8.8.8"
-a8.datatype = "ip4addr"
-
-a9 = e:option(Value, "adb_probeipv6", translate("IPv6 address used for uplink online check"))
-a9.optional = true
-a9.rmempty = true
-a9.default = "2001:4860:4860::8888"
-a9.datatype = "ip6addr"
 
 return m
 
