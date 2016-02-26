@@ -215,7 +215,9 @@ s = m:section(TypedSection, "host", translate("Static Leases"),
 		"only hosts with a corresponding lease are served.") .. "<br />" ..
 	translate("Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</em> " ..
 		"indentifies the host, the <em>IPv4-Address</em> specifies to the fixed address to " ..
-		"use and the <em>Hostname</em> is assigned as symbolic name to the requesting host."))
+		"use and the <em>Hostname</em> is assigned as symbolic name to the requesting host. " ..
+		"The optional <em>Lease time</em> can be used to set non-standard host-specific " ..
+		"lease time, e.g. 12h, 3d or infinite."))
 
 s.addremove = true
 s.anonymous = true
@@ -231,6 +233,9 @@ mac.rmempty  = true
 
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ip.datatype = "or(ip4addr,'ignore')"
+
+time = s:option(Value, "leasetime", translate("Lease time"))
+time.rmempty  = true
 
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
 
