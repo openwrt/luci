@@ -21,7 +21,7 @@
 		<%- end %>
 	</select>
 <% elseif self.widget == "radio" then %>
-	<div<%= attr("id", cbid) %>>
+	<div>
 		<% for i, key in pairs(self.keylist) do %>
 			<label<%=
 				attr("id", cbid.."-"..key) ..

@@ -5,8 +5,8 @@
 	<% if self.description and #self.description > 0 then -%>
 		<div class="cbi-section-descr"><%=self.description%></div>
 	<%- end %>
-	<div class="cbi-section-node" id="cbi-<%=self.config%>-<%=tostring(self):sub(8)%>">
-		<div>
+	<div class="cbi-section-node">
+		<div id="cbi-<%=self.config%>-<%=tostring(self):sub(8)%>">
 			<% self:render_children(1, scope or {}) %>
 		</div>
 		<% if self.error and self.error[1] then -%>
