@@ -276,14 +276,50 @@
 				var s = String.format(
 					'<strong><%:Status%>: </strong>%s<br />' +
 					'<strong><%:Line State%>: </strong>%s [0x%x]<br />' +
-					'<strong><%:Line Speed%>: </strong>%s/s / %s/s<br />' +
-					'<strong><%:Line Attenuation%>: </strong>%s dB / %s dB<br />' +
-					'<strong><%:Noise Margin%>: </strong>%s dB / %s dB<br />',
+					'<strong><%:Line Mode%>: </strong>%s<br />' +
+					'<strong><%:Annex%>: </strong>%s<br />' +
+					'<strong><%:Profile%>: </strong>%s<br />' +
+					'<strong><%:Data Rate%>: </strong>%s/s / %s/s<br />' +
+					'<strong><%:Max. Attainable Data Rate (ATTNDR)%>: </strong>%s/s / %s/s<br />' +
+					'<strong><%:Latency%>: </strong>%s / %s<br />' +
+					'<strong><%:Line Attenuation (LATN)%>: </strong>%s dB / %s dB<br />' +
+					'<strong><%:Signal Attenuation (SATN)%>: </strong>%s dB / %s dB<br />' +
+					'<strong><%:Noise Margin (SNR)%>: </strong>%s dB / %s dB<br />' +
+					'<strong><%:Aggregate Transmit Power(ACTATP)%>: </strong>%s dB / %s dB<br />' +
+					'<strong><%:Forward Error Correction Seconds (FECS)%>: </strong>%s / %s<br />' +
+					'<strong><%:Errored seconds (ES)%>: </strong>%s / %s<br />' +
+					'<strong><%:Severely Errored Seconds (SES)%>: </strong>%s / %s<br />' +
+					'<strong><%:Loss of Signal Seconds (LOSS)%>: </strong>%s / %s<br />' +
+					'<strong><%:Unavailable Seconds (UAS)%>: </strong>%s / %s<br />' +
+					'<strong><%:Header Error Code Errors (HEC)%>: </strong>%s / %s<br />' +
+					'<strong><%:Non Pre-emtive CRC errors (CRC_P)%>: </strong>%s / %s<br />' +
+					'<strong><%:Pre-emtive CRC errors (CRCP_P)%>: </strong>%s / %s<br />' +
+					'<strong><%:Line Uptime%>: </strong>%s<br />' +
+					'<strong><%:ATU-C System Vendor ID%>: </strong>%s<br />' +
+					'<strong><%:Power Management Mode%>: </strong>%s<br />',
 						info.dsl.line_state, info.dsl.line_state_detail,
 						info.dsl.line_state_num,
+						info.dsl.line_mode_s,
+						info.dsl.annex_s,
+						info.dsl.profile_s,
 						info.dsl.data_rate_down_s, info.dsl.data_rate_up_s,
+						info.dsl.max_data_rate_down_s, info.dsl.max_data_rate_up_s,						
+						info.dsl.latency_num_down, info.dsl.latency_num_up,
 						info.dsl.line_attenuation_down, info.dsl.line_attenuation_up,
-						info.dsl.noise_margin_down, info.dsl.noise_margin_up
+						info.dsl.noise_margin_down, info.dsl.noise_margin_up,
+						info.dsl.signal_attenuation_down, info.dsl.signal_attenuation_up,
+						info.dsl.actatp_down, info.dsl.actatp_up,
+						info.dsl.errors_fec_near, info.dsl.errors_fec_far,
+						info.dsl.errors_es_near, info.dsl.errors_es_far,
+						info.dsl.errors_ses_near, info.dsl.errors_ses_far,
+						info.dsl.errors_loss_near, info.dsl.errors_loss_far,
+						info.dsl.errors_uas_near, info.dsl.errors_uas_far,
+						info.dsl.errors_hec_near, info.dsl.errors_hec_far,
+						info.dsl.errors_crc_p_near, info.dsl.errors_crc_p_far,
+						info.dsl.errors_crcp_p_near, info.dsl.errors_crcp_p_far,
+						info.dsl.line_uptime_s,
+						info.dsl.atuc_vendor_id,
+						info.dsl.power_mode_s
 				);
 
 				dsl_s.innerHTML = String.format('<small>%s</small>', s);
