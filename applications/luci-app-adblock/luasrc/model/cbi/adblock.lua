@@ -22,6 +22,12 @@ o3 = s:option(Value, "adb_whitelist", translate("Whitelist file"),
 o3.rmempty = false
 o3.datatype = "file"
 
+fdns = s:option(Flag, "adb_forcedns", translate("Redirect all DNS queries to the local resolver"),
+        translate("When adblock is active, all DNS queries are redirected to the local resolver " ..
+        "in this server by default. You can disable that to allow queries to external DNS servers."))
+fdns.rmempty = false
+fdns.default = fdns.enabled
+
 -- Blocklist options
 
 bl = m:section(TypedSection, "source", translate("Blocklist sources"),
@@ -50,16 +56,6 @@ o5 = s2:option(Value, "adb_backupdir", translate("Backup directory"))
 o5.rmempty = false
 o5.datatype = "directory"
 
-s3 = m:section(NamedSection, "log", "service", translate("Log options"))
-
-o6 = s3:option(Flag, "enabled", translate("Enable log"))
-o6.rmempty = false
-o6.default = 0
-
-o7 = s3:option(Value, "adb_logfile", translate("Log file"))
-o7.rmempty = false
-o7.datatype = "string"
-
 -- Extra options
 
 e = m:section(NamedSection, "global", "adblock", translate("Extra options"),
@@ -67,31 +63,26 @@ e = m:section(NamedSection, "global", "adblock", translate("Extra options"),
 
 a1 = e:option(Value, "adb_port", translate("Port of the adblock uhttpd instance"))
 a1.optional = true
-a1.rmempty = true
 a1.default = 65535
 a1.datatype = "port"
 
 a2 = e:option(Value, "adb_nullipv4", translate("IPv4 blackhole ip address"))
 a2.optional = true
-a2.rmempty = true
 a2.default = "192.0.2.1"
 a2.datatype = "ip4addr"
 
 a3 = e:option(Value, "adb_nullipv6", translate("IPv6 blackhole ip address"))
 a3.optional = true
-a3.rmempty = true
 a3.default = "::ffff:c000:0201"
 a3.datatype = "ip6addr"
 
 a6 = e:option(Value, "adb_wanif", translate("Name of the logical wan interface"))
 a6.optional = true
-a6.rmempty = true
 a6.default = "wan"
 a6.datatype = "network"
 
 a7 = e:option(Value, "adb_lanif", translate("Name of the logical lan interface"))
 a7.optional = true
-a7.rmempty = true
 a7.default = "lan"
 a7.datatype = "network"
 
