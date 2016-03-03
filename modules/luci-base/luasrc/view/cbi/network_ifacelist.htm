@@ -46,7 +46,11 @@
 			attr("id", cbid .. "." .. iface:name()) ..
 			attr("name", cbid) .. attr("value", iface:name()) ..
 			ifattr(checked[iface:name()], "checked", "checked")
-		%> /> &#160;
+		%> />
+		<%- if not self.widget or self.widget == "checkbox" or self.widget == "radio" then -%>
+			<label<%=attr("for", cbid .. "." .. iface:name())%>></label>
+		<%- end -%>
+		&#160;
 		<label<%=attr("for", cbid .. "." .. iface:name())%>>
 			<% if link then -%><a href="<%=link%>"><% end -%>
 			<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
@@ -68,7 +72,11 @@
 			attr("id", cbid .. "_custom") ..
 			attr("name", cbid) ..
 			attr("value", " ")
-		%> /> &#160;
+		%> />
+		<%- if not self.widget or self.widget == "checkbox" or self.widget == "radio" then -%>
+			<label<%=attr("for", cbid .. "_custom")%>></label>
+		<%- end -%>
+		&#160;
 		<label<%=attr("for", cbid .. "_custom")%>>
 			<img title="<%:Custom Interface%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.png" />
 			<%:Custom Interface%>:
