@@ -52,6 +52,9 @@
 	<% if not self.nocreate then %>
 	<li style="padding:0.25em 0">
 		<input class="cbi-input-<%=self.widget or "radio"%>" data-update="click change"<%=attr("type", self.widget or "radio") .. attr("id", cbid .. "_new") .. attr("name", cbid) .. attr("value", "-") .. ifattr(not value and self.widget ~= "checkbox", "checked", "checked")%> /> &#160;
+		<%- if not self.widget or self.widget == "checkbox" or self.widget == "radio" then -%>
+			<label<%=attr("for", cbid .. "_new")%>></label>
+		<%- end -%>
 		<div style="padding:0.5em; display:inline">
 			<label<%=attr("for", cbid .. "_new")%>><em>
 				<%- if self.widget == "checkbox" then -%>
