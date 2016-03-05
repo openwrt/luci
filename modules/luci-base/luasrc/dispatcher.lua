@@ -197,6 +197,7 @@ function dispatch(request)
 	assert(conf.main,
 		"/etc/config/luci seems to be corrupt, unable to find section 'main'")
 
+	local i18n = require "luci.i18n"
 	local lang = conf.main.lang or "auto"
 	if lang == "auto" then
 		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
@@ -208,7 +209,10 @@ function dispatch(request)
 			end
 		end
 	end
-	require "luci.i18n".setlanguage(lang)
+	if lang == "auto" then
+		lang = i18n.default
+	end
+	i18n.setlanguage(lang)
 
 	local c = ctx.tree
 	local stat

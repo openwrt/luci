@@ -210,7 +210,7 @@
 			 %>
 			 <li class="slide">
 				 <a class="menu" data-title="<%=pcdata(striptags(nnode.title))%>" href="#"><%=pcdata(striptags(translate(nnode.title)))%></a>
-				 <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+				 <%- submenu(category .. "/" .. r .. "/", nnode) %>
 			 </li>
 			 <%          else %>
 			 <li>
