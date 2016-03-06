@@ -224,9 +224,6 @@ start() {
 
 stop() {
 	config_load 'redsocks2'
-	config_foreach if_enabled 'redsocks2_base'
-
 	service_stop /usr/sbin/redsocks2 && rm -rf $PID_FILE
-
 	config_foreach redsocks2_iptables_stop_instance 'redsocks2_iptables'
 }
