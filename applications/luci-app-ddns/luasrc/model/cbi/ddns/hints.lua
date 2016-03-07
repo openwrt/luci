@@ -112,9 +112,9 @@ if not DDNS.has_forceip then
 		translate("Force IP Version not supported") .. bold_off
 	local value = translate("BusyBox's nslookup and Wget do not support to specify " ..
 				"the IP version to use for communication with DDNS Provider!")
-	if not (DDNS.has_wgetssl or DDNS.has_curl) then
+	if not (DDNS.has_wgetssl or DDNS.has_curl or DDNS.has_fetch) then
 		value = value .. "<br />- " ..
-			translate("You should install GNU Wget with SSL (prefered) or cURL package.")
+			translate("You should install GNU Wget with SSL (prefered) or cURL or uclient-fetch package.")
 	end
 	if not (DDNS.has_bindhost or DDNS.has_hostip) then
 		value = value .. "<br />- " ..
