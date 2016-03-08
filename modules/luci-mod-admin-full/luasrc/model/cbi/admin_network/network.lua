@@ -8,6 +8,49 @@ m = Map("network", translate("Interfaces"))
 m.pageaction = false
 m:section(SimpleSection).template = "admin_network/iface_overview"
 
+if fs.access("/etc/init.d/dsl_control") then
+	dsl = m:section(TypedSection, "dsl", translate("DSL"))
+
+	dsl.anonymous = true
+
+	annex = dsl:option(ListValue, "annex", translate("Annex"))
+	annex:value("a", translate("Annex A + L + M (all)"))
+	annex:value("b", translate("Annex B (all)"))
+	annex:value("j", translate("Annex J (all)"))
+	annex:value("m", translate("Annex M (all)"))
+	annex:value("bdmt", translate("Annex B G.992.1"))
+	annex:value("b2", translate("Annex B G.992.3"))
+	annex:value("b2p", translate("Annex B G.992.5"))
+	annex:value("at1", translate("ANSI T1.413"))
+	annex:value("admt", translate("Annex A G.992.1"))
+	annex:value("alite", translate("Annex A G.992.2"))
+	annex:value("a2", translate("Annex A G.992.3"))
+	annex:value("a2p", translate("Annex A G.992.5"))
+	annex:value("l", translate("Annex L G.992.3 POTS 1"))
+	annex:value("m2", translate("Annex M G.992.3"))
+	annex:value("m2p", translate("Annex M G.992.5"))
+
+	tone = dsl:option(ListValue, "tone", translate("Tone"))
+	tone:value("", translate("auto"))
+	tone:value("a", translate("A43C + J43 + A43"))
+	tone:value("av", translate("A43C + J43 + A43 + V43"))
+	tone:value("b", translate("B43 + B43C"))
+	tone:value("bv", translate("B43 + B43C + V43"))
+
+	xfer_mode = dsl:option(ListValue, "xfer_mode", translate("Encapsulation mode"))
+	xfer_mode:value("atm", translate("ATM (Asynchronous Transfer Mode)"))
+	xfer_mode:value("ptm", translate("PTM/EFM (Packet Transfer Mode)"))
+
+	line_mode = dsl:option(ListValue, "line_mode", translate("DSL line mode"))
+	line_mode:value("", translate("auto"))
+	line_mode:value("adsl", translate("ADSL"))
+	line_mode:value("vdsl", translate("VDSL"))
+
+	firmware = dsl:option(Value, "firmware", translate("Firmware File"))
+
+	m.pageaction = true
+end
+
 -- Show ATM bridge section if we have the capabilities
 if fs.access("/usr/sbin/br2684ctl") then
 	atm = m:section(TypedSection, "atm-bridge", translate("ATM Bridges"),
