@@ -11,7 +11,7 @@ parser.so: template_parser.o template_utils.o template_lmo.o template_lualib.o
 	$(CC) $(LDFLAGS) -shared -o $@ $^
 
 version.lua:
-	./mkversion.sh $@ $(LUCI_VERSION)
+	./mkversion.sh $@ $(LUCI_VERSION) "$(LUCI_GITBRANCH)"
 
 compile: parser.so version.lua
 
