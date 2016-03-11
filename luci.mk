@@ -66,6 +66,19 @@ PKG_VERSION?=$(if $(DUMP),x,$(strip $(shell \
 	echo "$$revision" \
 )))
 
+PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
+	variant="LuCI"; \
+	if git log -1 >/dev/null 2>/dev/null; then \
+		branch="$$(git symbolic-ref --short -q HEAD 2>/dev/null)"; \
+		if [ "$$branch" != "master" ]; then \
+			variant="LuCI $$branch branch"; \
+		else \
+			variant="LuCI Master"; \
+		fi; \
+	fi; \
+	echo "$$variant" \
+)))
+
 PKG_RELEASE?=1
 PKG_INSTALL:=$(if $(realpath src/Makefile),1)
 PKG_BUILD_DEPENDS += lua/host luci-base/host $(LUCI_BUILD_DEPENDS)
@@ -121,7 +134,7 @@ endef
 
 ifneq ($(wildcard ${CURDIR}/src/Makefile),)
  MAKE_PATH := src/
- MAKE_VARS += FPIC="$(FPIC)" LUCI_VERSION="$(PKG_VERSION)"
+ MAKE_VARS += FPIC="$(FPIC)" LUCI_VERSION="$(PKG_VERSION)" LUCI_GITBRANCH="$(PKG_GITBRANCH)"
 
  define Build/Compile
 	$(call Build/Compile/Default,clean compile)
