@@ -173,6 +173,10 @@ function action_flashops()
 	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
 	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 
+	if not reset_avail then
+		 reset_avail   = os.execute([[grep '"ubi"' /proc/mtd >/dev/null 2>&1]]) == 0
+	end
+
 	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
 	local backup_cmd  = "sysupgrade --create-backup - 2>/dev/null"
 	local image_tmp   = "/tmp/firmware.img"
@@ -287,7 +291,11 @@ function action_flashops()
 			msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
 			addr  = "192.168.1.1"
 		})
-		fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
+		if os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0 then
+			fork_exec("sleep 1; killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
+		else
+			fork_exec("sleep 1; killall dropbear uhttpd; sleep 1; jffs2reset -y && reboot")
+		end
 	else
 		--
 		-- Overview
