@@ -19,6 +19,8 @@ function f.handle(self, state, data)
 		if data.crons then
 			fs.writefile(cronfile, data.crons:gsub("\r\n", "\n"))
 			luci.sys.call("/usr/bin/crontab %q" % cronfile)
+		else
+			fs.writefile(cronfile, "")
 		end
 	end
 	return true
