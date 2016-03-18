@@ -19,6 +19,8 @@ luci.util   = require "luci.util"
 luci.sys    = require "luci.sys"
 luci.ip     = require "luci.ip"
 
+local pcall = pcall
+local io = require "io"
 local tonumber, ipairs, table = tonumber, ipairs, table
 
 module("luci.sys.iptparser")
@@ -37,6 +39,15 @@ function IptParser.__init__( self, family )
 	else
 		self._nulladdr = "::/0"
 		self._tables   = { "filter", "mangle", "raw" }
+                local ok, lines = pcall(io.lines, "/proc/net/ip6_tables_names")
+                if ok and lines then
+                        local line
+                        for line in lines do
+                                if line == "nat" then
+                                        self._tables = { "filter", "nat", "mangle", "raw" }
+                                end
+                        end
+                end
 		self._command  = "ip6tables -t %s --line-numbers -nxvL"
 	end
 
