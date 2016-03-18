@@ -25,8 +25,11 @@ function e.write(self, section, value)
 	end
 end
 
-local lserver = nil
-lserver = s:option(DynamicList, "server", translate("Natcap server (ip address)"), translate("Specifying the natcap server address"))
+local a = s:option(Value, "account", translate("Natcap Account"))
+a.rmempty = true
+a.placeholder = 'account'
+
+local lserver = s:option(DynamicList, "server", translate("Natcap Server (ip address)"), translate("Specifying the natcap server address"))
 lserver.datatype = "list(ipaddr)"
 
 local o = s:option(Flag, "client_forward_mode", translate("Client Forward Mode"), translate("Enable if use as router"))
