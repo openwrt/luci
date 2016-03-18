@@ -36,9 +36,9 @@ o.rmempty = false
 e = s:option(Value, "debug", translate("Debug Mode Mask"), translate("Mask value for kernel debug print"))
 e.default = '0'
 e.rmempty = true
+e.placeholder = '0'
 
 dns = s:option(Value, "dns_proxy_server", translate("DNS Proxy Server"))
-dns.optional = true
 dns.rmempty = true
 dns.datatype = "ipaddrport(1)"
 dns.placeholder = "8.8.8.8:53"
