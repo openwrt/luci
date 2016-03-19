@@ -492,8 +492,9 @@ if has_dnsmasq and net:proto() == "static" then
 		o:value("relay", translate("relay mode"))
 		o:value("hybrid", translate("hybrid mode"))
 
-		o = s:taboption("ipv6", ListValue, "ra_management", translate("DHCPv6-Mode"))
-		o:value("", translate("stateless"))
+		o = s:taboption("ipv6", ListValue, "ra_management", translate("DHCPv6-Mode"),
+			translate("Default is stateless + stateful"))
+		o:value("0", translate("stateless"))
 		o:value("1", translate("stateless + stateful"))
 		o:value("2", translate("stateful-only"))
 		o:depends("dhcpv6", "server")
