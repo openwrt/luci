@@ -5,7 +5,7 @@
 local wa = require "luci.tools.webadmin"
 local fs = require "nixio.fs"
 
-m = Map("qos_gargoyle", translate("upload"),translate("Upload Settings"))
+m = Map("qos_guoguo", translate("upload"),translate("Upload Settings"))
 
 s = m:section(TypedSection, "upload_class", translate("Classification Rules"),
 		translate("Each upload service class is specified by three parameters: percent bandwidth at capacity, minimum bandwidth and maximum bandwidth.") .. "<br />" ..
