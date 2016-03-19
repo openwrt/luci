@@ -6,11 +6,9 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=LuCI Support for  qos_gargoyle
-LUCI_DEPENDS:=+qos-gargoyle
+LUCI_TITLE:=LuCI Support for QoS scripts by GuoGuo
+LUCI_DEPENDS:=+qos-guoguo
 
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
-#applications/luci-app-qos_gargoyle/
-#applications/luci-app-qos_gargoyle/
