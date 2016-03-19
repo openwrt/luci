@@ -1,9 +1,9 @@
 #!/bin/sh
 
 uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@qos_gargoyle[-1]
-	add ucitrack qos_gargoyle
-	set ucitrack.@qos_gargoyle[-1].init=qos_gargoyle
+	delete ucitrack.@qos_guoguo[-1]
+	add ucitrack qos_guoguo
+	set ucitrack.@qos_guoguo[-1].init=qos_guoguo
 	commit ucitrack
 EOF
 

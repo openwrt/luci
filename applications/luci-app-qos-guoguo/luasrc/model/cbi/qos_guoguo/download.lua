@@ -1,41 +1,49 @@
 --[[
-
+luci for QoS by GuoGuo
+Based on luci-app-qos-gargoyle.
 ]]--
 
 local wa = require "luci.tools.webadmin"
 local fs = require "nixio.fs"
 
-m = Map("qos_gargoyle", translate("Download"),translate("Download set"))
+m = Map("qos_guoguo", translate("Download Settings"))
 
-s = m:section(TypedSection, "download_class", translate("download_class"))
+s = m:section(TypedSection, "download_class", translate("Service Classes"), 
+		translate("Each service class is specified by four parameters: percent bandwidth at capacity, realtime bandwidth and maximum bandwidth and the minimimze round trip time flag.") .. "<br />" ..
+		translate("<em>Percent bandwidth at capacity</em> is the percentage of the total available bandwidth that should be allocated to this class when all available bandwidth is being used. If unused bandwidth is available, more can (and will) be allocated. The percentages can be configured to equal more (or less) than 100, but when the settings are applied the percentages will be adjusted proportionally so that they add to 100. This setting only comes into effect when the WAN link is saturated.").. "<br />" ..
+		translate("<em>Minimum bandwidth</em> specifies the minimum service this class will be allocated when the link is at capacity. Classes which specify minimum service are known as realtime classes by the active congestion controller. Streaming video, VoIP and interactive online gaming are all examples of applications that must have a minimum bandwith to function. To determine what to enter use the application on an unloaded LAN and observe how much bandwidth it uses. Then enter a number only slightly higher than this into this field. QoS will satisfiy the minimum service of all classes first before allocating to other waiting classes so be careful to use minimum bandwidths sparingly.") .. "<br />" ..
+		translare("<em>Maximum bandwidth</em> specifies an absolute maximum amount of bandwidth this class will be allocated in kbit/s. Even if unused bandwidth is available, this service class will never be permitted to use more than this amount of bandwidth.") .. "<br />" ..
+		translate("<em>Minimize RTT</em> indicates to the active congestion controller that you wish to minimize round trip times (RTT) when this class is active. Use this setting for online gaming or VoIP applications that need low round trip times (ping times). Minimizing RTT comes at the expense of efficient WAN throughput so while these class are active your WAN throughput will decline (usually around 20%).")
+	)
 s.addremove = true
 s.template = "cbi/tblsection"
 
 
-name = s:option(Value, "name", translate("name"))
+name = s:option(Value, "name", translate("Name"))
 
-pb = s:option(Value, "percent_bandwidth", translate("percent_bandwidth"), translate("percent of total bandwidth to use"))
+pb = s:option(Value, "percent_bandwidth", translate("Percent bandwidth at capacity"))
 
-minb = s:option(Value, "min_bandwidth", translate("min_bandwidth"), translate("min bandwidth useage in absolute speed (kbit/s)"))
+minb = s:option(Value, "min_bandwidth", translate("Minimum bandwidth"))
 minb.datatype = "and(uinteger,min(0))"
 
-maxb = s:option(Value, "max_bandwidth", translate("max_bandwidth"), translate("max bandwidth useage in absolute speed (kbit/s)"))
+maxb = s:option(Value, "max_bandwidth", translate("Maximum bandwidth"))
 maxb.datatype = "and(uinteger,min(0))"
 
-minRTT = s:option(ListValue, "minRTT", translate("minRTT"))
+minRTT = s:option(ListValue, "minRTT", translate("Minimize RTT"))
 minRTT:value("Yes")
 minRTT:value("No")
 minRTT.default = "No"
 
-s = m:section(TypedSection, "download_rule", translate("download_rule"))
+s = m:section(TypedSection, "download_rule", translate("Classification Rules"),
+	translate("Packets are tested against the rules in the order specified -- rules toward the top have priority. As soon as a packet matches a rule it is classified, and the rest of the rules are ignored. The order of the rules can be altered using the arrow controls.") .. "<br />" ..
+	)
 s.addremove = true
---s.sortable = true
---s.anonymous = true
+s.sortable = true
+s.anonymous = true
 s.template = "cbi/tblsection"
 
-class = s:option(Value, "class", translate("class"), translate("<abbr title=\"name of bandwidth class to use if rule matches, this is required in each rule section\">Help</abbr>"))
-class.default = "dclass_2"
-for l in io.lines("/etc/config/qos_gargoyle") do
+class = s:option(Value, "class", translate("Service Class"))
+for l in io.lines("/etc/config/qos_guoguo") do
 	local s = l
 	l = string.gsub(l, "config ['\"]*download_class['\"]* ", "")
 	if s ~= l then
@@ -43,71 +51,37 @@ for l in io.lines("/etc/config/qos_gargoyle") do
 		l = string.gsub(l, "^\"", "")
 		l = string.gsub(l, "'$", "")
 		l = string.gsub(l, "\"$", "")
-		class:value(l, translate(m.uci:get("qos_gargoyle", l, "name")))
+		class:value(l, translate(m.uci:get("qos_guoguo", l, "name")))
 	end
 end
 
-to = s:option(Value, "test_order", translate("test_order"), translate("<abbr title=\"an integer that specifies the order in which the rule should be checked for a match (lower numbers are checked first)\">Help</abbr>"))
-to.rmempty = "true"
-to:value(100)
-to:value(200)
-to:value(300)
-to:value(400)
-to:value(500)
-to:value(600)
-to:value(700)
-to:value(800)
-to:value(900)
-
-pr = s:option(Value, "proto", translate("proto"), translate("<abbr title=\"check that packet has this protocol (tcp, udp, both)\">Help</abbr>"))
+pr = s:option(Value, "proto", translate("Application Protocol"))
 pr:value("tcp")
 pr:value("udp")
 pr:value("icmp")
 pr:value("gre")
 pr.rmempty = "true"
 
-sip = s:option(Value, "source", translate("source ip"), translate("<abbr title=\"check that packet has this source ip, can optionally have /[mask] after it (see -s option in iptables man page)\">Help</abbr>"))
+sip = s:option(Value, "source", translate("Source IP"))
 wa.cbi_add_knownips(sip)
 sip.datatype = "and(ipaddr)"
 
-dip = s:option(Value, "destination", translate("destination ip"), translate("<abbr title=\"check that packet has this destination ip, can optionally have /[mask] after it (see -d option in iptables man page)\">Help</abbr>"))
+dip = s:option(Value, "destination", translate("Destination IP"))
 wa.cbi_add_knownips(dip)
 dip.datatype = "and(ipaddr)"
 
-dport = s:option(Value, "dstport", translate("destination port"), translate("<abbr title=\"check that packet has this destination port\">Help</abbr>"))
-dport.datatype = "and(uinteger,max(65536),min(1))"
+s:option(Value, "dstport", translate("Destination Port")).datatype = "and(uinteger,max(65536),min(1))"
 
-sport = s:option(Value, "srcport", translate("source port"), translate("<abbr title=\"check that packet has this source port\">Help</abbr>"))
-sport.datatype = "and(uinteger,max(65536),min(1))"
+s:option(Value, "srcport", translate("Source Port")).datatype = "and(uinteger,max(65536),min(1))"
 
-min_pkt_size = s:option(Value, "min_pkt_size", translate("min_pkt_size"), translate("<abbr title=\"check that packet is at least this size (in bytes)\">Help</abbr>"))
+min_pkt_size = s:option(Value, "min_pkt_size", translate("Minimum Packet Length"))
 min_pkt_size.datatype = "and(uinteger,min(1))"
 
-max_pkt_size = s:option(Value, "max_pkt_size", translate("max_pkt_size"), translate("<abbr title=\"check that packet is no larger than this size (in bytes)\">Help</abbr>"))
+max_pkt_size = s:option(Value, "max_pkt_size", translate("Maximum Packet Length"))
 max_pkt_size.datatype = "and(uinteger,min(1))"
 
-connbytes_kb = s:option(Value, "connbytes_kb", translate("connbytes_kbyte"), translate("<abbr title=\"kbyte\">Help</abbr>"))
+connbytes_kb = s:option(Value, "connbytes_kb", translate("Connection bytes reach"))
 connbytes_kb.datatype = "and(uinteger,min(0))"
-
-layer7 = s:option(Value, "layer7", translate("layer7"), translate("<abbr title=\"check whether packet matches layer7 specification\">Help</abbr>"))
-local pats = io.popen("find /etc/l7-protocols/ -type f -name '*.pat'")
-if pats then
-	local l
-	while true do
-		l = pats:read("*l")
-		if not l then break end
-
-		l = l:match("([^/]+)%.pat$")
-		if l then
-			layer7:value(l)
-		end
-	end
-	pats:close()
-end
-
-ipp2p = s:option(Value, "ipp2p", translate("ipp2p"), translate("<abbr title=\"check wither packet matches ipp2p specification (used to recognize p2p protocols),ipp2p or all will match any of the specified p2p protocols, you can also specifically match any protocol listed in the documentation here: http://ipp2p.org/docu_en.html\">Help</abbr>"))
-ipp2p:value("ipp2p")
-ipp2p:value("all")
 
 return m
 
