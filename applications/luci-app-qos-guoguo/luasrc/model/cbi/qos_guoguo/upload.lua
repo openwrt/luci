@@ -11,7 +11,7 @@ s = m:section(TypedSection, "upload_class", translate("Classification Rules"),
 		translate("Each upload service class is specified by three parameters: percent bandwidth at capacity, minimum bandwidth and maximum bandwidth.") .. "<br />" ..
 		translate("<em>Percent bandwidth</em> is the percentage of the total available bandwidth that should be allocated to this class when all available bandwidth is being used. If unused bandwidth is available, more can (and will) be allocated. The percentages can be configured to equal more (or less) than 100, but when the settings are applied the percentages will be adjusted proportionally so that they add to 100.").. "<br />" ..
 		translate("<em>Minimum bandwidth</em> specifies the minimum service this class will be allocated when the link is at capacity. For certain applications like VoIP or online gaming it is better to specify a minimum service in bps rather than a percentage. QoS will satisfiy the minimum service of all classes first before allocating the remaining service to other waiting classes.") .. "<br />" ..
-		translare("<em>Maximum bandwidth</em> specifies an absolute maximum amount of bandwidth this class will be allocated in kbit/s. Even if unused bandwidth is available, this service class will never be permitted to use more than this amount of bandwidth.")
+		translate("<em>Maximum bandwidth</em> specifies an absolute maximum amount of bandwidth this class will be allocated in kbit/s. Even if unused bandwidth is available, this service class will never be permitted to use more than this amount of bandwidth.")
 	)
 s.addremove = true
 s.template = "cbi/tblsection"
@@ -28,7 +28,7 @@ maxb = s:option(Value, "max_bandwidth", translate("Maximum bandwidth"))
 maxb.datatype = "and(uinteger,min(0))"
 
 s = m:section(TypedSection, "upload_rule",translate("Classification Rules"),
-	translate("Packets are tested against the rules in the order specified -- rules toward the top have priority. As soon as a packet matches a rule it is classified, and the rest of the rules are ignored. The order of the rules can be altered using the arrow controls.") .. "<br />" ..
+	translate("Packets are tested against the rules in the order specified -- rules toward the top have priority. As soon as a packet matches a rule it is classified, and the rest of the rules are ignored. The order of the rules can be altered using the arrow controls.")
 )
 
 s.addremove = true
