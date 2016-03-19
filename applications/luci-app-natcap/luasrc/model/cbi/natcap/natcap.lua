@@ -36,6 +36,10 @@ local o = s:option(Flag, "client_forward_mode", translate("Client Forward Mode")
 o.default = o.enabled
 o.rmempty = false
 
+local c = s:option(Flag, "clear_dst_on_reload", translate("Clear Dst On Reload"), translate("Enable if you want to clear dst on reload"))
+c.default = c.disabled
+c.rmempty = false
+
 e = s:option(Value, "debug", translate("Debug Mode Mask"), translate("Mask value for kernel debug print"))
 e.default = '0'
 e.rmempty = true
