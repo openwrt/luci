@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-qos-guoguo\n"
-"POT-Creation-Date: 2016-03-20 11:06+0800\n"
-"PO-Revision-Date: 2016-03-20 11:08+0800\n"
+"POT-Creation-Date: 2016-03-20 11:31+0800\n"
+"PO-Revision-Date: 2016-03-20 11:34+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -272,58 +272,74 @@ msgid ""
 "download speed and the demand from your network adjusting the link speed to "
 "the highest speed possible which will maintain proper QoS function. The "
 "effective range of this control is between 15% and 100% of the total "
-"download bandwidth you entered above.</p><p>While ACC does not adjust your "
-"upload link speed you must enable and properly configure your upload QoS for "
-"it to function properly.</p><p><em>Ping Target-</em> The segment of network "
-"between your router and the ping target is where congestion is controlled. "
-"By monitoring the round trip ping times to the target congestion is "
-"detected. By default ACC uses your WAN gateway as the ping target. If you "
-"know that congestion on your link will occur in a different segment then you "
-"can enter an alternate ping target.</p><p><em>Manual Ping Limit-</em> Round "
-"trip ping times are compared against the ping limits. ACC controls the link "
-"limit to maintain ping times under the appropriate limit. By default ACC "
-"attempts to automatically select appropriate target ping limits for you "
-"based on the link speeds you entered and the performance of your link it "
-"measures during initialization.  You cannot change the target ping time for "
-"the minRTT mode but by entering a manual time you can control the target "
-"ping time of the active mode. The time you enter becomes the increase in the "
-"target ping time between minRTT and active mode."
+"download bandwidth you entered above.</p>"
 msgstr ""
 "<p>主动拥塞控制系统（ACC）观察你的下载活动并自动调整你的下载链接限制以保持适"
 "当的QoS性能。ACC自动调整QoS功能以补偿来自你ISP的下载速度变化及来自你网络链接"
 "速度的调整需求，使速度最大化。这个控制的有效范围在你上面输入的下载总带宽的15%"
-"至100%之间。</p><p>虽然ACC不调整你的上传链路速度，但你必须启用并正确配置你的"
-"上传QoS以使该功能正常。</p><p><em>Ping目标：</em>在路由器和Ping目标之间的网络"
-"部分是拥塞控制的地方。拥塞通过监视和目标间的Ping延时来检测。默认情况下ACC使用"
-"你的WAN网关作为Ping的目标。假如你知道拥塞会在你链路的不同段发生，你可用输入一"
-"个备用的Ping目标。</p><p><em>手动Ping限制：</em>Ping延时会与Ping限制进行比"
-"较。ACC控制链路限制以保持Ping延时在适当范围。默认情况下，ACC会自动根据你输入"
-"的链接适当为你选择适当的Ping限制。如果你想尝试不同的Ping限制，你可以在这里输"
-"入一个时间值。输入高的时间值将导致更高的Ping限制，低的时间值会有更低的限制。"
+"至100%之间。</p>"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:85
+msgid ""
+"<p>While ACC does not adjust your upload link speed you must enable and "
+"properly configure your upload QoS for it to function properly.</p>"
+msgstr ""
+"<p>虽然ACC不调整你的上传链路速度，但你必须启用并正确配置你的上传QoS带宽以使该"
+"功能正常工作。</p>"
 
 #: luasrc/model/cbi/qos_guoguo/general.lua:86
+msgid ""
+"<p><em>Ping Target-</em> The segment of network between your router and the "
+"ping target is where congestion is controlled. By monitoring the round trip "
+"ping times to the target congestion is detected. By default ACC uses your "
+"WAN gateway as the ping target. If you know that congestion on your link "
+"will occur in a different segment then you can enter an alternate ping "
+"target.</p>"
+msgstr ""
+"<em>Ping目标：</em>在路由器和Ping目标之间的网络部分是拥塞控制的地方。拥塞通过"
+"监视和目标间的Ping延时来检测。默认情况下ACC使用你的WAN网关作为Ping的目标。假"
+"如你知道拥塞会在你链路的不同段发生，你可用输入一个备用的Ping目标。</p>"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:87
+msgid ""
+"<p><em>Manual Ping Limit-</em> Round trip ping times are compared against "
+"the ping limits. ACC controls the link limit to maintain ping times under "
+"the appropriate limit. By default ACC attempts to automatically select "
+"appropriate target ping limits for you based on the link speeds you entered "
+"and the performance of your link it measures during initialization.  You "
+"cannot change the target ping time for the minRTT mode but by entering a "
+"manual time you can control the target ping time of the active mode. The "
+"time you enter becomes the increase in the target ping time between minRTT "
+"and active mode."
+msgstr ""
+"<p><em>手动Ping限制：</em>Ping延时会与Ping限制进行比较。ACC控制链路限制以保持"
+"Ping延时在适当范围。默认情况下，ACC会自动根据你输入的链接适当为你选择适当的"
+"Ping限制。如果你想尝试不同的Ping限制，你可以在这里输入一个时间值。输入高的时"
+"间值将导致更高的Ping限制，低的时间值会有更低的限制。"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:89
 msgid "Enable"
 msgstr "启用"
 
-#: luasrc/model/cbi/qos_guoguo/general.lua:87
+#: luasrc/model/cbi/qos_guoguo/general.lua:90
 msgid "Disable"
 msgstr "禁用"
 
-#: luasrc/model/cbi/qos_guoguo/general.lua:90
+#: luasrc/model/cbi/qos_guoguo/general.lua:93
 msgid "Use non-standard ping target"
 msgstr "使用自定义Ping目标"
 
-#: luasrc/model/cbi/qos_guoguo/general.lua:90
+#: luasrc/model/cbi/qos_guoguo/general.lua:93
 msgid ""
 "Specify a custom ping target here if you want.Leave empty to use the default "
 "settings."
 msgstr "如果需要，你可以在这里设置自定义Ping目标。留空则将由ACC自动控制。"
 
-#: luasrc/model/cbi/qos_guoguo/general.lua:94
+#: luasrc/model/cbi/qos_guoguo/general.lua:97
 msgid "Manual Ping Limit"
 msgstr "手动Ping限制"
 
-#: luasrc/model/cbi/qos_guoguo/general.lua:94
+#: luasrc/model/cbi/qos_guoguo/general.lua:97
 msgid ""
 "Specify a custom ping time limit here if you want.Leave empty to use the "
 "default settings."
@@ -360,3 +376,4 @@ msgstr ""
 "<em>最小带宽：</em>指定将被分配用于该服务类型的最低链路带宽容量。对于某些应用"
 "如VoIP或在线游戏最好使用一个固定值而不是一个百分比来设置带宽。在分配剩余带宽"
 "到其它服务类型前，QoS将优先满足所有服务类型的最小带宽要求。"
+
