@@ -19,7 +19,7 @@ s.addremove = true
 s.template = "cbi/tblsection"
 
 
-name = s:option(Value, "name", translate("Name"))
+name = s:option(Value, "name", translate("Class Name"))
 
 pb = s:option(Value, "percent_bandwidth", translate("Percent bandwidth at capacity"))
 
@@ -51,7 +51,7 @@ for l in io.lines("/etc/config/qos_guoguo") do
 		l = string.gsub(l, "^\"", "")
 		l = string.gsub(l, "'$", "")
 		l = string.gsub(l, "\"$", "")
-		class:value(l, translate(m.uci:get("qos_guoguo", l, "name")))
+		class:value(l, m.uci:get("qos_guoguo", l, "name"))
 	end
 end
 

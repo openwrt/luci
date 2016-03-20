@@ -52,7 +52,7 @@ for line in io.lines("/etc/config/qos_guoguo") do
 		line = string.gsub(line, "^\"", "")
 		line = string.gsub(line, "'$", "")
 		line = string.gsub(line, "\"$", "")
-		uclass:value(line, translate(m.uci:get("qos_guoguo", line, "name")))
+		uclass:value(line, m.uci:get("qos_guoguo", line, "name"))
 	end
 end
 
