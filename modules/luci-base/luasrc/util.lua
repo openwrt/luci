@@ -157,7 +157,7 @@ end
 -- command line parameter).
 function shellsqescape(value)
    local res
-   res, _ = string.gsub(res, "'", "'\\''")
+   res, _ = string.gsub(value, "'", "'\\''")
    return res
 end
 
