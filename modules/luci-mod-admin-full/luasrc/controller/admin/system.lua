@@ -190,7 +190,7 @@ local function supports_sysupgrade()
 end
 
 local function supports_reset()
-	return (os.execute([[grep -sq '"rootfs_data"' /proc/mtd]]) == 0)
+	return (os.execute([[grep -sqE '"rootfs_data"|"ubi"' /proc/mtd]]) == 0)
 end
 
 local function storage_size()
@@ -351,7 +351,7 @@ function action_reset()
 			addr  = "192.168.1.1"
 		})
 
-		fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
+		fork_exec("sleep 1; killall dropbear uhttpd; sleep 1; jffs2reset -y && reboot")
 		return
 	end
 
