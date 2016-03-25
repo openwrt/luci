@@ -25,6 +25,10 @@ uci:foreach( "openvpn_recipes", "openvpn_recipe",
 	end
 )
 
+function s.getPID(section)
+	return sys.exec("%s | grep -w %s | grep openvpn | grep -v grep | awk '{print $1}'" % { psstring,section} )
+end
+
 function s.parse(self, section)
 	local recipe = luci.http.formvalue(
 		luci.cbi.CREATE_PREFIX .. self.config .. "." ..
@@ -68,7 +72,7 @@ s:option( Flag, "enabled", translate("Enabled") )
 
 local active = s:option( DummyValue, "_active", translate("Started") )
 function active.cfgvalue(self, section)
-	local pid = sys.exec("%s | grep %s | grep openvpn | grep -v grep | awk '{print $1}'" % { psstring,section} )
+	local pid = s.getPID(section)
 	if pid and #pid > 0 and tonumber(pid) ~= nil then
 		return (sys.process.signal(pid, 0))
 			and translatef("yes (%i)", pid)
@@ -83,7 +87,7 @@ updown.redirect = luci.dispatcher.build_url(
 	"admin", "services", "openvpn"
 )
 function updown.cbid(self, section)
-	local pid = sys.exec("%s | grep %s | grep openvpn | grep -v grep | awk '{print $1}'" % { psstring,section} )
+	local pid = s.getPID(section)
 	self._state = pid and #pid > 0 and sys.process.signal(pid, 0)
 	self.option = self._state and "stop" or "start"
 	return AbstractValue.cbid(self, section)
@@ -94,7 +98,7 @@ function updown.cfgvalue(self, section)
 end
 function updown.write(self, section, value)
 	if self.option == "stop" then
-		local pid = sys.exec("%s | grep %s | grep openvpn | grep -v grep | awk '{print $1}'" % { psstring,section} )
+		local pid = s.getPID(section)
 		sys.process.signal(pid,15)
 	else
 		luci.sys.call("/etc/init.d/openvpn start %s" % section)
