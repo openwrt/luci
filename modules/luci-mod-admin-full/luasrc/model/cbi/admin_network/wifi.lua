@@ -475,6 +475,9 @@ if hwtype == "mac80211" then
 	wmm:depends({mode="ap"})
 	wmm:depends({mode="ap-wds"})
 	wmm.default = wmm.enabled
+	
+	ifname = s:taboption("advanced", Value, "ifname", translate("Interface name"), translate("Override default interface name"))
+	ifname.optional = true
 end
 
 
