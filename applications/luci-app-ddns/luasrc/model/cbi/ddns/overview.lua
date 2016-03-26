@@ -41,7 +41,7 @@ m.on_after_commit = function(self)
 	end
 end
 
--- SimpleSection definiton -- ##################################################
+-- SimpleSection definition -- ##################################################
 -- with all the JavaScripts we need for "a good Show"
 a = m:section( SimpleSection )
 a.template = "ddns/overview_status"

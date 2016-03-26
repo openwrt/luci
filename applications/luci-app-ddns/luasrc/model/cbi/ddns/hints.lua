@@ -68,7 +68,7 @@ if not DDNS.has_ssl then
 		translate("HTTPS not supported") .. bold_off
 	sl.value = translate("Neither GNU Wget with SSL nor cURL installed to support updates via HTTPS protocol.") ..
 			"<br />- " ..
-			translate("You should install GNU Wget with SSL (prefered) or cURL package.") ..
+			translate("You should install GNU Wget with SSL (preferred) or cURL package.") ..
 			"<br />- " ..
 			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
 end
@@ -114,7 +114,7 @@ if not DDNS.has_forceip then
 				"the IP version to use for communication with DDNS Provider!")
 	if not (DDNS.has_wgetssl or DDNS.has_curl or DDNS.has_fetch) then
 		value = value .. "<br />- " ..
-			translate("You should install GNU Wget with SSL (prefered) or cURL or uclient-fetch package.")
+			translate("You should install GNU Wget with SSL (preferred) or cURL or uclient-fetch package.")
 	end
 	if not (DDNS.has_bindhost or DDNS.has_hostip) then
 		value = value .. "<br />- " ..
