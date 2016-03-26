@@ -25,29 +25,34 @@ function e.write(self, section, value)
 	end
 end
 
-local a = s:option(Value, "account", translate("Natcap Account"))
-a.rmempty = true
-a.placeholder = 'account'
+e = s:option(Value, "account", translate("Natcap Account"))
+e.rmempty = true
+e.placeholder = 'account'
 
-local lserver = s:option(DynamicList, "server", translate("Natcap Server (ip address)"), translate("Specifying the natcap server address"))
-lserver.datatype = "list(ipaddr)"
+e = s:option(DynamicList, "server", translate("Natcap Server (ip address)"), translate("Specifying the natcap server address"))
+e.datatype = "list(ipaddr)"
 
-local o = s:option(Flag, "client_forward_mode", translate("Client Forward Mode"), translate("Enable if use as router"))
-o.default = o.enabled
-o.rmempty = false
+e = s:option(Flag, "client_forward_mode", translate("Client Forward Mode"), translate("Enable if use as router"))
+e.default = e.enabled
+e.rmempty = false
 
-local c = s:option(Flag, "clear_dst_on_reload", translate("Clear Dst On Reload"), translate("Enable if you want to clear dst on reload"))
-c.default = c.disabled
-c.rmempty = false
+e = s:option(Flag, "clear_dst_on_reload", translate("Clear Dst On Reload"), translate("Enable if you want to clear dst on reload"))
+e.default = e.disabled
+e.rmempty = false
+
+e = s:option(Value, "server_persist_timeout", translate("Server Persist Timeout(s)"), translate("Switch to diffrent server after timeout"))
+e.default = '60'
+e.rmempty = true
+e.placeholder = '60'
 
 e = s:option(Value, "debug", translate("Debug Mode Mask"), translate("Mask value for kernel debug print"))
 e.default = '0'
 e.rmempty = true
 e.placeholder = '0'
 
-dns = s:option(Value, "dns_proxy_server", translate("DNS Proxy Server"))
-dns.rmempty = true
-dns.datatype = "ipaddrport(1)"
-dns.placeholder = "8.8.8.8:53"
+e = s:option(Value, "dns_proxy_server", translate("DNS Proxy Server"))
+e.rmempty = true
+e.datatype = "ipaddrport(1)"
+e.placeholder = "8.8.8.8:53"
 
 return m
