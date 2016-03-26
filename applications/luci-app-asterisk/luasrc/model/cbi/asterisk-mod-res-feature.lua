@@ -84,7 +84,7 @@ pickupexten = featurepark:option(Value, "pickupexten", "Pickup extension", "")
 pickupexten.rmempty = true
 pickupexten:depends({ parkenabled = "1" })
 
-transferdigittimeout = featurepark:option(Value, "transferdigittimeout", "Seconds to wait bewteen digits when transferring", "")
+transferdigittimeout = featurepark:option(Value, "transferdigittimeout", "Seconds to wait between digits when transferring", "")
 transferdigittimeout.rmempty = true
 transferdigittimeout:depends({ parkenabled = "1" })
 

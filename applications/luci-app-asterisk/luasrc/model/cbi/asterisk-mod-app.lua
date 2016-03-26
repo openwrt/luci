@@ -15,7 +15,7 @@ app_authenticate:value("no", "Do Not Load")
 app_authenticate:value("auto", "Load as Required")
 app_authenticate.rmempty = true
 
-app_cdr = module:option(ListValue, "app_cdr", "Make sure asterisk doesnt save CDR", "")
+app_cdr = module:option(ListValue, "app_cdr", "Make sure asterisk doesn't save CDR", "")
 app_cdr:value("yes", "Load")
 app_cdr:value("no", "Do Not Load")
 app_cdr:value("auto", "Load as Required")
@@ -117,7 +117,7 @@ app_externalivr:value("no", "Do Not Load")
 app_externalivr:value("auto", "Load as Required")
 app_externalivr.rmempty = true
 
-app_forkcdr = module:option(ListValue, "app_forkcdr", "Fork The CDR into 2 seperate entities", "")
+app_forkcdr = module:option(ListValue, "app_forkcdr", "Fork The CDR into 2 separate entities", "")
 app_forkcdr:value("yes", "Load")
 app_forkcdr:value("no", "Do Not Load")
 app_forkcdr:value("auto", "Load as Required")
