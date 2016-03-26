@@ -29,8 +29,13 @@ e = s:option(Value, "account", translate("Natcap Account"))
 e.rmempty = true
 e.placeholder = 'account'
 
-e = s:option(DynamicList, "server", translate("Natcap Server (ip address)"), translate("Specifying the natcap server address"))
-e.datatype = "list(ipaddr)"
+e = s:option(DynamicList, "server", translate("Natcap Server"), translate("Specifying the natcap server address (ip:port)"))
+e.datatype = "list(ipaddrport(1))"
+e.placeholder = "1.2.3.4:0"
+
+e = s:option(Flag, "enable_encryption", translate("Enable Encryption"))
+e.default = e.enabled
+e.rmempty = false
 
 e = s:option(Flag, "client_forward_mode", translate("Client Forward Mode"), translate("Enable if use as router"))
 e.default = e.enabled
