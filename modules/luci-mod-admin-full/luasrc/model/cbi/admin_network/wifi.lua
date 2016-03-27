@@ -254,7 +254,17 @@ if hwtype == "qcawifi" then
 		end
 	end
 
-	s:taboption("advanced", Value, "country", translate("Country Code"))
+	local cl = iw and iw.countrylist
+	if cl and #cl > 0 then
+		cc = s:taboption("advanced", ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+		cc.default = tostring(iw and iw.country or "00")
+		for _, c in ipairs(cl) do
+			cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+		end
+	else
+		s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	end
+
 	s:taboption("advanced", Flag, "disablecoext", translate("Force HT40"))
 end
 
@@ -559,7 +569,7 @@ if hwtype == "qcawifi" then
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="ap-wds"})
 --	hidden:depends({mode="sta-wds"})
-	isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
+	isolate = s:taboption("advanced", Flag, "isolated", translate("Separate Clients"),
 	 translate("Prevents client-to-client communication"))
 	isolate:depends({mode="ap"})
 	s:taboption("advanced", Flag, "uapsd", translate("UAPSD Enable"))
