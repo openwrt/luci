@@ -340,7 +340,7 @@ Add given amount to CIDR instance.</td>
 	<td class="name" nowrap><a href="#cidr.sub">cidr:sub</a>&nbsp;(amount, inplace)</td>
 	<td class="summary">
  
-Substract given amount from CIDR instance.</td>
+Subtract given amount from CIDR instance.</td>
 	</tr>
 
 	<tr>
@@ -1082,7 +1082,7 @@ print(addr)                  -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64"</pr
 
 <h3>Return value:</h3>
 <ul> 
-	<li>When adding inplace: Return <code>true</code> if the addition succeded 
+	<li>When adding inplace: Return <code>true</code> if the addition succeeded
 	    or <code>false</code> when the addition overflowed.</li> 
 	<li>When deriving new CIDR: Return new instance representing the value of 
         this instance plus the added amount or the highest possible address if 
@@ -1099,7 +1099,7 @@ print(addr)                  -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64"</pr
 <dd>
 
  
-Substract given amount from CIDR instance. If the result would under, the lowest 
+Subtract given amount from CIDR instance. If the result would under, the lowest
 possible address is returned. 
 
 
@@ -1148,11 +1148,11 @@ print(addr)                  -- "::/64"</pre>
 
 <h3>Return value:</h3>
 <ul> 
-	<li>When substracting inplace: Return <code>true</code> if the substraction 
-	    succeded or <code>false</code> when the substraction underflowed.</li> 
+	<li>When subtracting inplace: Return <code>true</code> if the subtraction
+	    succeeded or <code>false</code> when the subtraction underflowed.</li>
 	<li>When deriving new CIDR: Return new instance representing the value of 
-        this instance minus the substracted amount or the lowest address if 
-	    the substraction underflowed.</li></ul>
+        this instance minus the subtracted amount or the lowest address if
+	    the subtraction underflowed.</li></ul>
 
 
 
