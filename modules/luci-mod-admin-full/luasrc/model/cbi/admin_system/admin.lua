@@ -38,8 +38,8 @@ function m.on_commit(map)
 	end
 end
 
-
-if false and fs.access("/etc/config/dropbear") then
+if not fs.access("/etc/adv_luci_disabled") then
+if fs.access("/etc/config/dropbear") then
 
 m2 = Map("dropbear", translate("SSH Access"),
 	translate("Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"))
@@ -114,6 +114,7 @@ function keys.write(self, section, value)
 	end
 end
 
+end
 end
 
 return m, m2
