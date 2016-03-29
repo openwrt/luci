@@ -2,6 +2,8 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local ipc = require "luci.ip"
+local o
+require "luci.util"
 
 m = Map("dhcp", translate("DHCP and DNS"),
 	translate("Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol" ..
@@ -69,6 +71,19 @@ s:taboption("advanced", Flag, "filterwin2k",
 s:taboption("advanced", Flag, "localise_queries",
 	translate("Localise queries"),
 	translate("Localise hostname depending on the requesting subnet if multiple IPs are available"))
+
+local have_dnssec_support = luci.util.checklib("/usr/sbin/dnsmasq", "libhogweed.so")
+
+if have_dnssec_support then
+	o = s:taboption("advanced", Flag, "dnssec",
+		translate("DNSSEC"))
+	o.optional = true
+
+	o = s:taboption("advanced", Flag, "dnsseccheckunsigned",
+		translate("DNSSEC check unsigned"),
+		translate("Requires upstream supports DNSSEC; verify unsigned domain responses really come from unsigned domains"))
+	o.optional = true
+end
 
 s:taboption("general", Value, "local",
 	translate("Local server"),
