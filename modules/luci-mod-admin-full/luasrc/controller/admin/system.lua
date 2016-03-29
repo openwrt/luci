@@ -171,7 +171,7 @@ function action_flashops()
 	local fs  = require "nixio.fs"
 
 	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
-	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
+	local reset_avail   = os.execute([[grep -E '"rootfs_data"|"ubi"' /proc/mtd >/dev/null 2>&1]]) == 0
 
 	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
 	local backup_cmd  = "sysupgrade --create-backup - 2>/dev/null"
@@ -287,7 +287,7 @@ function action_flashops()
 			msg   = luci.i18n.translate("The system is erasing the configuration partition now and will reboot itself when finished."),
 			addr  = "192.168.1.1"
 		})
-		fork_exec("killall dropbear uhttpd; sleep 1; mtd -r erase rootfs_data")
+		fork_exec("sleep 1; killall dropbear uhttpd; sleep 1; jffs2reset -y && reboot")
 	else
 		--
 		-- Overview
