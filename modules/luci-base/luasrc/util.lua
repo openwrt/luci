@@ -636,6 +636,23 @@ function libpath()
 	return require "nixio.fs".dirname(ldebug.__file__)
 end
 
+function checklib(fullpathexe, wantedlib)
+	local fs = require "nixio.fs"
+	local haveldd = fs.access('/usr/bin/ldd')
+	if not haveldd then
+		return -1
+	end
+	local libs = exec("/usr/bin/ldd " .. fullpathexe)
+	if not libs then
+		return 0
+	end
+	for k, v in ipairs(split(libs)) do
+		if v:find(wantedlib) then
+			return 1
+		end
+	end
+	return 0
+end
 
 --
 -- Coroutine safe xpcall and pcall versions modified for Luci
