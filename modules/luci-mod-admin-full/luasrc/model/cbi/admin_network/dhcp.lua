@@ -148,6 +148,7 @@ rl:depends("rebind_protection", "1")
 rd = s:taboption("general", DynamicList, "rebind_domain",
 	translate("Domain whitelist"),
 	translate("List of domains to allow RFC1918 responses for"))
+rd.optional = true
 
 rd:depends("rebind_protection", "1")
 rd.datatype = "host(1)"
@@ -221,6 +222,29 @@ db.optional = true
 db:depends("enable_tftp", "1")
 db.placeholder = "pxelinux.0"
 
+o = s:taboption("general", Flag, "localservice",
+	translate("Local Service Only"),
+	translate("Limit DNS service to subnets interfaces on which we are serving DNS."))
+o.optional = false
+o.rmempty = false
+
+o = s:taboption("general", Flag, "nonwildcard",
+	translate("Non-wildcard"),
+	translate("Bind only to specific interfaces rather than wildcard address."))
+o.optional = false
+o.rmempty = false
+
+o = s:taboption("general", DynamicList, "interface",
+	translate("Listen Interfaces"),
+	translate("Limit listening to these interfaces, and loopback."))
+o.optional = true
+o:depends("nonwildcard", true)
+
+o = s:taboption("general", DynamicList, "notinterface",
+	translate("Exclude interfaces"),
+	translate("Prevent listening on thise interfaces."))
+o.optional = true
+o:depends("nonwildcard", true)
 
 m:section(SimpleSection).template = "admin_network/lease_status"
 
