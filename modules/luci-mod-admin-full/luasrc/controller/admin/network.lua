@@ -23,6 +23,7 @@ function index()
 				return false
 			end)
 
+		if not fs.access("/etc/adv_luci_disabled") then
 		if has_switch then
 			page  = node("admin", "network", "vlan")
 			page.target = cbi("admin_network/vlan")
@@ -31,6 +32,7 @@ function index()
 
 			page = entry({"admin", "network", "switch_status"}, call("switch_status"), nil)
 			page.leaf = true
+		end
 		end
 
 
@@ -113,6 +115,7 @@ function index()
 		end
 
 
+		if not fs.access("/etc/adv_luci_disabled") then
 		if nixio.fs.access("/etc/config/dhcp") then
 			page = node("admin", "network", "dhcp")
 			page.target = cbi("admin_network/dhcp")
@@ -126,6 +129,7 @@ function index()
 			page.target = cbi("admin_network/hosts")
 			page.title  = _("Hostnames")
 			page.order  = 40
+		end
 		end
 
 		page  = node("admin", "network", "routes")
