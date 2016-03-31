@@ -319,13 +319,13 @@ end
 o = s:option(MultiValue, "weekdays", translate("Week Days"))
 o.oneline = true
 o.widget = "checkbox"
-o:value("sun", translate("Sunday"))
-o:value("mon", translate("Monday"))
-o:value("tue", translate("Tuesday"))
-o:value("wed", translate("Wednesday"))
-o:value("thu", translate("Thursday"))
-o:value("fri", translate("Friday"))
-o:value("sat", translate("Saturday"))
+o:value("Sun", translate("Sunday"))
+o:value("Mon", translate("Monday"))
+o:value("Tue", translate("Tuesday"))
+o:value("Wed", translate("Wednesday"))
+o:value("Thu", translate("Thursday"))
+o:value("Fri", translate("Friday"))
+o:value("Sat", translate("Saturday"))
 
 o = s:option(MultiValue, "monthdays", translate("Month Days"))
 o.oneline = true
