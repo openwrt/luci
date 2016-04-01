@@ -666,8 +666,8 @@ function get_status_by_address(self, addr)
 end
 
 function get_wannet(self)
-	local net = self:get_status_by_route("0.0.0.0", 0)
-	return net and network(net)
+	local net, stat = self:get_status_by_route("0.0.0.0", 0)
+	return net and network(net, stat.proto)
 end
 
 function get_wandev(self)
@@ -676,8 +676,8 @@ function get_wandev(self)
 end
 
 function get_wan6net(self)
-	local net = self:get_status_by_route("::", 0)
-	return net and network(net)
+	local net, stat = self:get_status_by_route("::", 0)
+	return net and network(net, stat.proto)
 end
 
 function get_wan6dev(self)
