@@ -335,7 +335,7 @@ function svc4.validate(self, value)
 	if usev6:formvalue(section) ~= "1" then	-- do only on IPv4
 		return value
 	else
-		return ""	-- supress validate error
+		return ""	-- suppress validate error
 	end
 end
 function svc4.write(self, section, value)
@@ -376,7 +376,7 @@ function svc6.validate(self, value)
 		if DDNS.has_ipv6 then return value end
 		return nil, err_tab_basic(self) .. err_ipv6_plain
 	else
-		return ""	-- supress validate error
+		return ""	-- suppress validate error
 	end
 end
 function svc6.write(self, section, value)
@@ -626,7 +626,7 @@ if DDNS.has_ssl then
 	cert.forcewrite = true
 	function cert.validate(self, value)
 		if https:formvalue(section) ~= "1" then
-			return ""	-- supress validate error if NOT https
+			return ""	-- suppress validate error if NOT https
 		end
 		if value then	-- otherwise errors in datatype check
 			if DTYP.directory(value)

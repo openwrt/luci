@@ -12,21 +12,27 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		number_format = "%5.1lf%sB",
 
 		data = {
-			sources = {
-				df = { "free", "used" }
+			instances = {
+				df_complex = { "free", "used", "reserved" }
 			},
 
 			options = {
-				df__free = {
+				df_complex_free = {
 					color = "00ff00",
 					overlay = false,
 					title = "free"
 				},
 
-				df__used = {
+				df_complex_used = {
 					color = "ff0000",
 					overlay = false,
 					title = "used"
+				},
+
+				df_complex_reserved = {
+					color = "0000ff",
+					overlay = false,
+					title = "reserved"
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-LAR is a simple archive format to pack multiple lua source files and arbitary other resources into a single file.
+LAR is a simple archive format to pack multiple lua source files and arbitrary other resources into a single file.
 
 
 # Format Specification

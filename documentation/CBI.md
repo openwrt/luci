@@ -164,7 +164,7 @@ If you call this function several times the dependencies will be linked with **"
 The default value
 
 #### property .disabled = 0
-the value that shoudl be set if the checkbox is unchecked
+the value that should be set if the checkbox is unchecked
 
 #### property .enabled = 1
 the value that should be set if the checkbox is checked
