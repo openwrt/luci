@@ -640,18 +640,18 @@ function checklib(fullpathexe, wantedlib)
 	local fs = require "nixio.fs"
 	local haveldd = fs.access('/usr/bin/ldd')
 	if not haveldd then
-		return -1
+		return false
 	end
 	local libs = exec("/usr/bin/ldd " .. fullpathexe)
 	if not libs then
-		return 0
+		return false
 	end
 	for k, v in ipairs(split(libs)) do
 		if v:find(wantedlib) then
-			return 1
+			return true
 		end
 	end
-	return 0
+	return false
 end
 
 --
