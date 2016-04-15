@@ -1086,7 +1086,7 @@ function eif6.parse(self, section, novld)
 end
 
 -- IPv4/IPv6 - bind_network -- ################################################
-if DDNS.has_bindnet or ( ( m:get(section, "bind_network") ) ~= "" ) then
+if DDNS.has_bindnet or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
 	bnet = ns:taboption("advanced", ListValue, "bind_network",
 		translate("Bind Network") )
 	bnet:depends("ipv4_source", "web")
