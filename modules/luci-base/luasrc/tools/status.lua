@@ -48,7 +48,15 @@ local function dhcp_leases_common(family)
 		fd:close()
 	end
 
-	local fd = io.open("/tmp/hosts/odhcpd", "r")
+	local lease6file = "/tmp/hosts/odhcpd"
+	uci:foreach("dhcp", "odhcpd",
+		function(t)
+			if t.leasefile and nfs.access(t.leasefile) then
+				lease6file = t.leasefile
+				return false
+			end
+		end)
+	local fd = io.open(lease6file, "r")
 	if fd then
 		while true do
 			local ln = fd:read("*l")
