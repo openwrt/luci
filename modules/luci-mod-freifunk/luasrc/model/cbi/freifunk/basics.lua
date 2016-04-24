@@ -16,7 +16,7 @@ community.rmempty = false
 local profile
 for profile in fs.glob(profiles) do
 	local name = uci:get_first(profile, "community", "name") or "?"
-	community:value(profile, name)
+	community:value(string.gsub(profile, "/etc/config/profile_", ""), name)
 end
 
 
