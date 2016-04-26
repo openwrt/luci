@@ -190,7 +190,7 @@ function _iface_ignore(x)
 			return true
 		end
 	end
-	return _iface_virtual(x)
+	return false
 end
 
 
@@ -216,7 +216,7 @@ function init(cursor)
 			_tunnel[name] = true
 		end
 
-		if _tunnel[name] or not _iface_ignore(name) then
+		if _tunnel[name] or not (_iface_ignore(name) or _iface_virtual(name)) then
 			_interfaces[name] = _interfaces[name] or {
 				idx      = i.ifindex or n,
 				name     = name,
@@ -500,7 +500,7 @@ function get_interfaces(self)
 	_uci:foreach("network", "interface",
 		function(s)
 			for iface in utl.imatch(s.ifname) do
-				if not _iface_ignore(iface) and not _wifi_iface(iface) then
+				if not _iface_ignore(iface) and not _iface_virtual(iface) and not _wifi_iface(iface) then
 					seen[iface] = true
 					nfs[iface] = interface(iface)
 				end
@@ -508,7 +508,7 @@ function get_interfaces(self)
 		end)
 
 	for iface in utl.kspairs(_interfaces) do
-		if not (seen[iface] or _iface_ignore(iface) or _wifi_iface(iface)) then
+		if not (seen[iface] or (_iface_ignore(iface) or _iface_virtual(iface) or _wifi_iface(iface)) then
 			nfs[iface] = interface(iface)
 		end
 	end
