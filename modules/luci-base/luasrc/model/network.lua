@@ -508,7 +508,7 @@ function get_interfaces(self)
 		end)
 
 	for iface in utl.kspairs(_interfaces) do
-		if not (seen[iface] or (_iface_ignore(iface) or _iface_virtual(iface) or _wifi_iface(iface)) then
+		if not (seen[iface] or _iface_ignore(iface) or _iface_virtual(iface) or _wifi_iface(iface)) then
 			nfs[iface] = interface(iface)
 		end
 	end
