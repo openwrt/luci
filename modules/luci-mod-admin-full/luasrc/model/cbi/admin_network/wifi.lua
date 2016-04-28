@@ -572,7 +572,7 @@ if hwtype == "qcawifi" then
 	hidden:depends({mode="ap"})
 	hidden:depends({mode="ap-wds"})
 --	hidden:depends({mode="sta-wds"})
-	isolate = s:taboption("advanced", Flag, "isolated", translate("Separate Clients"),
+	isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
 	 translate("Prevents client-to-client communication"))
 	isolate:depends({mode="ap"})
 	s:taboption("advanced", Flag, "uapsd", translate("UAPSD Enable"))
