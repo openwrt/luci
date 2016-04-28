@@ -1141,7 +1141,7 @@ if hwtype == "atheros" or hwtype == "qcawifi" or hwtype == "mac80211" or hwtype 
 	password.password = true
 end
 
-if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
+if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" or hwtype == "qcawifi" then
 	local wpasupplicant = fs.access("/usr/sbin/wpa_supplicant")
 	local hostcli = fs.access("/usr/sbin/hostapd_cli")
 	if hostcli and wpasupplicant then
