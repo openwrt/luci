@@ -59,7 +59,7 @@ o5.datatype = "directory"
 e = m:section(NamedSection, "global", "adblock", translate("Extra options"),
 	translate("Options for further tweaking in case the defaults are not suitable for you."))
 
-a1 = e:option(Value, "adb_port", translate("Port of the adblock uhttpd instance"))
+a1 = e:option(Value, "adb_nullport", translate("Port of the adblock uhttpd instance"))
 a1.optional = true
 a1.default = 65535
 a1.datatype = "port"
