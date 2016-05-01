@@ -58,6 +58,15 @@ s:taboption("files", Flag, "nohosts",
 s:taboption("files", DynamicList, "addnhosts",
 	translate("Additional Hosts files")).optional = true
 
+qu = s:taboption("advanced", Flag, "quietdhcp",
+	translate("Suppress logging"),
+	translate("Suppress logging of the routine operation of these protocols"))
+qu.optional = true
+
+se = s:taboption("advanced", Flag, "sequential_ip",
+	translate("Allocate IP sequentially"),
+	translate("Allocate IP addresses sequentially, starting from the lowest available address"))
+se.optional = true
 
 s:taboption("advanced", Flag, "boguspriv",
 	translate("Filter private"),
