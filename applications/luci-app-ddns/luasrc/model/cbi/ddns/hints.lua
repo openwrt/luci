@@ -66,9 +66,9 @@ if not DDNS.has_ssl then
 	sl.rawhtml  = true
 	sl.title = bold_on ..
 		translate("HTTPS not supported") .. bold_off
-	sl.value = translate("Neither GNU Wget with SSL nor cURL installed to support updates via HTTPS protocol.") ..
+	sl.value = translate("Neither GNU Wget with SSL nor cURL installed to support secure updates via HTTPS protocol.") ..
 			"<br />- " ..
-			translate("You should install GNU Wget with SSL (preferred) or cURL package.") ..
+			translate("You should install 'wget' or 'curl' or 'uclient-fetch' with 'libustream-*ssl' package.") ..
 			"<br />- " ..
 			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
 end
@@ -82,7 +82,7 @@ if not DDNS.has_bindnet then
 		translate("Binding to a specific network not supported") .. bold_off
 	bn.value = translate("Neither GNU Wget with SSL nor cURL installed to select a network to use for communication.") ..
 			"<br />- " ..
-			translate("You should install GNU Wget with SSL or cURL package.") ..
+			translate("You should install 'wget' or 'curl' package.") ..
 			"<br />- " ..
 			translate("GNU Wget will use the IP of given network, cURL will use the physical interface.") ..
 			"<br />- " ..
@@ -98,7 +98,7 @@ if not DDNS.has_proxy then
 		translate("cURL without Proxy Support") .. bold_off
 	px.value = translate("cURL is installed, but libcurl was compiled without proxy support.") ..
 			"<br />- " ..
-			translate("You should install GNU Wget with SSL or replace libcurl.") ..
+			translate("You should install 'wget' or 'uclient-fetch' package or replace libcurl.") ..
 			"<br />- " ..
 			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
 end
@@ -114,11 +114,11 @@ if not DDNS.has_forceip then
 				"the IP version to use for communication with DDNS Provider!")
 	if not (DDNS.has_wgetssl or DDNS.has_curl or DDNS.has_fetch) then
 		value = value .. "<br />- " ..
-			translate("You should install GNU Wget with SSL (preferred) or cURL or uclient-fetch package.")
+			translate("You should install 'wget' or 'curl' or 'uclient-fetch' package.")
 	end
 	if not (DDNS.has_bindhost or DDNS.has_hostip) then
 		value = value .. "<br />- " ..
-			translate("You should install BIND host or hostip package for DNS requests.")
+			translate("You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' package for DNS requests.")
 	end
 	fi.value = value
 end
@@ -133,7 +133,7 @@ if not DDNS.has_bindhost then
 	dt.value = translate("BusyBox's nslookup and hostip do not support to specify to use TCP " ..
 				"instead of default UDP when requesting DNS server!") ..
 			"<br />- " ..
-			translate("You should install BIND host package for DNS requests.")
+			translate("You should install 'bind-host' or 'knot-host' or 'drill' package for DNS requests.")
 end
 
 -- nslookup compiled with musl produce problems when using
@@ -146,7 +146,7 @@ if not DDNS.has_dnsserver then
 	ds.value = translate("BusyBox's nslookup in the current compiled version " ..
 				"does not handle given DNS Servers correctly!") ..
 			"<br />- " ..
-			translate("You should install BIND host or hostip package, " ..
+			translate("You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' package, " ..
 				"if you need to specify a DNS server to detect your registered IP.")
 end
 
@@ -159,7 +159,7 @@ if DDNS.has_ssl and not DDNS.has_cacerts then
 		translate("No certificates found") .. bold_off
 	ca.value = translate("If using secure communication you should verify server certificates!") ..
 			"<br />- " ..
-			translate("Install ca-certificates package or needed certificates " ..
+			translate("Install 'ca-certificates' package or needed certificates " ..
 				"by hand into /etc/ssl/certs default directory")
 end
 
