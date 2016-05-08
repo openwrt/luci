@@ -18,11 +18,11 @@ local UTIL = require "luci.util"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 local srv_name    = "ddns-scripts"
-local srv_ver_min = "2.6.3"			-- minimum version of service required
+local srv_ver_min = "2.7.1"			-- minimum version of service required
 local srv_ver_cmd = [[/usr/lib/ddns/dynamic_dns_updater.sh --version | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
-local app_version = "2.4.2-1"
+local app_version = "2.4.4-1"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
