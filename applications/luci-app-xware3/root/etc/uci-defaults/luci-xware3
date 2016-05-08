@@ -1,0 +1,12 @@
+#!/bin/sh
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@xware3[-1]
+	add ucitrack xware3
+	set ucitrack.@xware3[-1].init=xware3
+	commit ucitrack
+EOF
+/etc/init.d/xware3 enable
+rm -f /tmp/luci-indexcahe
+echo "/etc/xware3.ini" > /lib/upgrade/keep.d/xware3
+exit 0
+

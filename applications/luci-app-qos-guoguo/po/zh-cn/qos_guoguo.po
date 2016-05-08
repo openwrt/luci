@@ -1,0 +1,394 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-qos-guoguo\n"
+"POT-Creation-Date: 2016-03-20 11:50+0800\n"
+"PO-Revision-Date: 2016-03-20 11:51+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-KeywordsList: translate;_\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: luasrc/controller/qos_guoguo.lua:17
+msgid "QoS by GuoGuo"
+msgstr "蝈蝈的QoS"
+
+#: luasrc/controller/qos_guoguo.lua:21
+#: luasrc/model/cbi/qos_guoguo/general.lua:11
+msgid "General Settings"
+msgstr "全局设置"
+
+#: luasrc/controller/qos_guoguo.lua:25
+#: luasrc/model/cbi/qos_guoguo/general.lua:42
+#: luasrc/model/cbi/qos_guoguo/upload.lua:8
+msgid "Upload Settings"
+msgstr "上传设置"
+
+#: luasrc/controller/qos_guoguo.lua:29
+#: luasrc/model/cbi/qos_guoguo/download.lua:9
+#: luasrc/model/cbi/qos_guoguo/general.lua:63
+msgid "Download Settings"
+msgstr "下载设置"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:11
+msgid "Service Classes"
+msgstr "服务类型"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:12
+msgid ""
+"Each service class is specified by four parameters: percent bandwidth at "
+"capacity, realtime bandwidth and maximum bandwidth and the minimimze round "
+"trip time flag."
+msgstr ""
+"每个下载服务类型由四个参数指定：带宽占用百分比、最小保证带宽、最大带宽和最小"
+"往返延时标志。"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:13
+msgid ""
+"<em>Percent bandwidth at capacity</em> is the percentage of the total "
+"available bandwidth that should be allocated to this class when all "
+"available bandwidth is being used. If unused bandwidth is available, more "
+"can (and will) be allocated. The percentages can be configured to equal more "
+"(or less) than 100, but when the settings are applied the percentages will "
+"be adjusted proportionally so that they add to 100. This setting only comes "
+"into effect when the WAN link is saturated."
+msgstr ""
+"<em>带宽占用百分比：</em>是指当所有可用带宽被占满后该服务类型占据总带宽的百分"
+"比。如果带宽未用完，该服务类型会被分配更多带宽。该百分比值可被设置为等于、大"
+"于或小于100，但当设置被应用时，百分比值将会被按比例调整以便使它们加起来等于"
+"100。该设置只在WAN端链路饱和时才生效。<em>（PS：WAN端链路饱和即出口带宽被占用"
+"完）</em>"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:14
+msgid ""
+"<em>Minimum bandwidth</em> specifies the minimum service this class will be "
+"allocated when the link is at capacity. Classes which specify minimum "
+"service are known as realtime classes by the active congestion controller. "
+"Streaming video, VoIP and interactive online gaming are all examples of "
+"applications that must have a minimum bandwith to function. To determine "
+"what to enter use the application on an unloaded LAN and observe how much "
+"bandwidth it uses. Then enter a number only slightly higher than this into "
+"this field. QoS will satisfiy the minimum service of all classes first "
+"before allocating to other waiting classes so be careful to use minimum "
+"bandwidths sparingly."
+msgstr ""
+"<em>最小带宽：</em>指定将被分配用于该服务类型的最低链路带宽容量。指定了最小带"
+"宽的服务类型会被主动拥塞控制器看作实时类应用。例如视频流、VoIP和在线互动游戏"
+"都应该设置最小带宽。要确定需要多少最小带宽，可以在一个没有负载的局域网中使用"
+"应用程序并观察它使用了多少带宽。然后输入一个略高于这个值的数字到字段中。在分"
+"配剩余带宽到其它服务类型前，QoS将优先满足所有服务类型的最小带宽要求，所以要谨"
+"慎地使用最小带宽。"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:15
+#: luasrc/model/cbi/qos_guoguo/upload.lua:14
+msgid ""
+"<em>Maximum bandwidth</em> specifies an absolute maximum amount of bandwidth "
+"this class will be allocated in kbit/s. Even if unused bandwidth is "
+"available, this service class will never be permitted to use more than this "
+"amount of bandwidth."
+msgstr ""
+"<em>最大带宽：</em>指定该服务类型可被分配的带宽最大值（以kbit/s为单位）。即使"
+"存在未使用带宽，该服务类型也将永远不被允许使用超过此量的带宽。"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:16
+msgid ""
+"<em>Minimize RTT</em> indicates to the active congestion controller that you "
+"wish to minimize round trip times (RTT) when this class is active. Use this "
+"setting for online gaming or VoIP applications that need low round trip "
+"times (ping times). Minimizing RTT comes at the expense of efficient WAN "
+"throughput so while these class are active your WAN throughput will decline "
+"(usually around 20%)."
+msgstr ""
+"<em>最小往返延时：</em>告诉主动拥塞控制器你希望该服务类型启用时尽量减少往返延"
+"时（RTT）。该设置一般用在VoIP或在线游戏这类需要低延时（ping times）的应用上。"
+"减小往返延时（RTT）会带来WAN有效吞吐量的额外花销，所以当这些服务类型启用时你"
+"的WAN吞吐量将下降（通常在20%左右）。"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:22
+#: luasrc/model/cbi/qos_guoguo/upload.lua:20
+msgid "Class Name"
+msgstr "服务类型名称"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:24
+#: luasrc/model/cbi/qos_guoguo/upload.lua:22
+msgid "Percent bandwidth at capacity"
+msgstr "带宽占用百分比"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:26
+#: luasrc/model/cbi/qos_guoguo/upload.lua:24
+msgid "Minimum bandwidth"
+msgstr "最小带宽"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:29
+#: luasrc/model/cbi/qos_guoguo/upload.lua:27
+msgid "Maximum bandwidth"
+msgstr "最大带宽"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:32
+msgid "Minimize RTT"
+msgstr "最小往返延时"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:37
+#: luasrc/model/cbi/qos_guoguo/upload.lua:10
+#: luasrc/model/cbi/qos_guoguo/upload.lua:30
+msgid "Classification Rules"
+msgstr "分类规则"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:38
+#: luasrc/model/cbi/qos_guoguo/upload.lua:31
+msgid ""
+"Packets are tested against the rules in the order specified -- rules toward "
+"the top have priority. As soon as a packet matches a rule it is classified, "
+"and the rest of the rules are ignored. The order of the rules can be altered "
+"using the arrow controls."
+msgstr ""
+"数据包将按规则中指定的顺序进行匹配——靠上的规则优先进行匹配。一旦数据包匹配一"
+"条规则那它将被归类，并且其余的规则将被忽略。使用上下箭头可调整规则的顺序。"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:45
+#: luasrc/model/cbi/qos_guoguo/upload.lua:39
+msgid "Service Class"
+msgstr "服务类型"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:58
+#: luasrc/model/cbi/qos_guoguo/upload.lua:51
+msgid "Application Protocol"
+msgstr "协议"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:65
+#: luasrc/model/cbi/qos_guoguo/upload.lua:58
+msgid "Source IP"
+msgstr "源IP"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:69
+#: luasrc/model/cbi/qos_guoguo/upload.lua:62
+msgid "Destination IP"
+msgstr "目的IP"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:73
+#: luasrc/model/cbi/qos_guoguo/upload.lua:66
+msgid "Destination Port"
+msgstr "目的端口"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:75
+#: luasrc/model/cbi/qos_guoguo/upload.lua:68
+msgid "Source Port"
+msgstr "源端口"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:77
+#: luasrc/model/cbi/qos_guoguo/upload.lua:70
+msgid "Minimum Packet Length"
+msgstr "最小数据包长度"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:80
+#: luasrc/model/cbi/qos_guoguo/upload.lua:73
+msgid "Maximum Packet Length"
+msgstr "最大数据包长度"
+
+#: luasrc/model/cbi/qos_guoguo/download.lua:83
+#: luasrc/model/cbi/qos_guoguo/upload.lua:76
+msgid "Connection bytes reach"
+msgstr "连接流量达到（单位：字节）"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:11
+msgid "QoS by GuoGuo.Based on the QoS scripts in Gargoyle firmware."
+msgstr "蝈蝈的QoS。基于石像鬼QoS修改而来。"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:14
+msgid "Toggle"
+msgstr "开关"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:14
+#: luasrc/model/cbi/qos_guoguo/general.lua:18
+msgid "Toggle QoS here."
+msgstr "在这里启用或禁用QoS"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:21
+msgid "Disable QoS"
+msgstr "禁用QoS"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:24
+msgid "Enable QoS"
+msgstr "启用QoS"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:45
+#: luasrc/model/cbi/qos_guoguo/general.lua:66
+msgid "Default Service Class"
+msgstr "默认服务类型"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:45
+#: luasrc/model/cbi/qos_guoguo/general.lua:66
+msgid ""
+"The <em>Default Service Class</em> specifies how packets that do not match "
+"any rule should be classified."
+msgstr "<em>默认服务类型：</em>指定当数据包不匹配任何规则时将被如何归类。"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:59
+msgid "Total Upload Bandwidth"
+msgstr "上传总带宽"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:59
+msgid ""
+"<em>Total Upload Bandwidth</em> should be set to around 98% of your "
+"available upload bandwidth. Entering a number which is too high will result "
+"in QoS not meeting its class requirements. Entering a number which is too "
+"low will needlessly penalize your upload speed. You should use a speed test "
+"program (with QoS off) to determine available upload bandwidth. Note that "
+"bandwidth is specified in kbps. There are 8 kilobits per kilobyte."
+msgstr ""
+"<em>上传总带宽：</em>应被设置为你可用上传带宽的98%左右。输入数值太高将导致QoS"
+"不能匹配服务类型的要求。输入数值太低将造成不必要的上传速度限制。你应当在QoS关"
+"闭的情况下使用测速程序以确定可用的上传带宽。带宽以kbps为单位。（1KByte/"
+"s=8Kbps）"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:80
+msgid "Total Download Bandwidth"
+msgstr "下载总带宽"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:80
+msgid ""
+"Specifying <em>Total Download Bandwidth</em> correctly is crucial to making "
+"QoS work.Note that bandwidth is specified in kbps. There are 8 kilobits per "
+"kilobyte."
+msgstr ""
+"<em>下载总带宽：</em>设置正确对于QoS的工作至关重要。带宽以kbps为单位。"
+"（1KByte/s=8Kbps）"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:83
+msgid "Enable Active Congestion Control"
+msgstr "启用主动拥塞控制"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:84
+msgid ""
+"<p>The active congestion control (ACC) observes your download activity and "
+"automatically adjusts your download link limit to maintain proper QoS "
+"performance. ACC automatically compensates for changes in your ISP's "
+"download speed and the demand from your network adjusting the link speed to "
+"the highest speed possible which will maintain proper QoS function. The "
+"effective range of this control is between 15% and 100% of the total "
+"download bandwidth you entered above.</p>"
+msgstr ""
+"<p>主动拥塞控制系统（ACC）观察你的下载活动并自动调整你的下载链接限制以保持适"
+"当的QoS性能。ACC自动调整QoS功能以补偿来自你ISP的下载速度变化及来自你网络链接"
+"速度的调整需求，使速度最大化。这个控制的有效范围在你上面输入的下载总带宽的15%"
+"至100%之间。</p>"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:85
+msgid ""
+"<p>While ACC does not adjust your upload link speed you must enable and "
+"properly configure your upload QoS for it to function properly.</p>"
+msgstr ""
+"<p>虽然ACC不调整你的上传链路速度，但你必须启用并正确配置你的上传QoS带宽以使该"
+"功能正常工作。</p>"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:86
+msgid ""
+"<p><em>Ping Target-</em> The segment of network between your router and the "
+"ping target is where congestion is controlled. By monitoring the round trip "
+"ping times to the target congestion is detected. By default ACC uses your "
+"WAN gateway as the ping target. If you know that congestion on your link "
+"will occur in a different segment then you can enter an alternate ping "
+"target.</p>"
+msgstr ""
+"<em>Ping目标：</em>在路由器和Ping目标之间的网络部分是拥塞控制的地方。拥塞通过"
+"监视和目标间的Ping延时来检测。默认情况下ACC使用你的WAN网关作为Ping的目标。假"
+"如你知道拥塞会在你链路的不同段发生，你可用输入一个备用的Ping目标。</p>"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:87
+msgid ""
+"<p><em>Manual Ping Limit</em> Round trip ping times are compared against the "
+"ping limits. ACC controls the link limit to maintain ping times under the "
+"appropriate limit. By default ACC attempts to automatically select "
+"appropriate target ping limits for you based on the link speeds you entered "
+"and the performance of your link it measures during initialization. You "
+"cannot change the target ping time for the minRTT mode but by entering a "
+"manual time you can control the target ping time of the active mode. The "
+"time you enter becomes the increase in the target ping time between minRTT "
+"and active mode."
+msgstr ""
+"<p><em>手动Ping限制</em>Ping延时会与Ping限制进行比较。ACC控制链路限制以保持"
+"Ping延时在适当范围。默认情况下，ACC会自动根据你输入的链接适当为你选择适当的"
+"Ping限制。如果你想尝试不同的Ping限制，你可以在这里输入一个时间值。输入高的时"
+"间值将导致更高的Ping限制，低的时间值会有更低的限制。</p>"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:89
+msgid "Enable"
+msgstr "启用"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:90
+msgid "Disable"
+msgstr "禁用"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:93
+msgid "Use non-standard ping target"
+msgstr "使用自定义Ping目标"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:93
+msgid ""
+"Specify a custom ping target here if you want.Leave empty to use the default "
+"settings."
+msgstr "如果需要，你可以在这里设置自定义Ping目标。留空则将由ACC自动控制。"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:97
+msgid "Manual Ping Limit"
+msgstr "手动Ping限制"
+
+#: luasrc/model/cbi/qos_guoguo/general.lua:97
+msgid ""
+"Specify a custom ping time limit here if you want.Leave empty to use the "
+"default settings."
+msgstr "如果需要，你可以在这里设置自定义Ping限制。留空则将由ACC自动控制。"
+
+#: luasrc/model/cbi/qos_guoguo/upload.lua:11
+msgid ""
+"Each upload service class is specified by three parameters: percent "
+"bandwidth at capacity, minimum bandwidth and maximum bandwidth."
+msgstr "每个上传服务类型由三个参数指定：带宽占用百分比、最小带宽和最大带宽。"
+
+#: luasrc/model/cbi/qos_guoguo/upload.lua:12
+msgid ""
+"<em>Percent bandwidth</em> is the percentage of the total available "
+"bandwidth that should be allocated to this class when all available "
+"bandwidth is being used. If unused bandwidth is available, more can (and "
+"will) be allocated. The percentages can be configured to equal more (or "
+"less) than 100, but when the settings are applied the percentages will be "
+"adjusted proportionally so that they add to 100."
+msgstr ""
+"<em>带宽占用百分比：</em>是指当所有可用带宽被占满后该服务类型占据总带宽的百分"
+"比。如果带宽未用完，该服务类型会被分配更多带宽。该百分比值可被设置为等于、大"
+"于或小于100，但当设置被应用时，百分比值将会被按比例调整以便使它们加起来等于"
+"100。"
+
+#: luasrc/model/cbi/qos_guoguo/upload.lua:13
+msgid ""
+"<em>Minimum bandwidth</em> specifies the minimum service this class will be "
+"allocated when the link is at capacity. For certain applications like VoIP "
+"or online gaming it is better to specify a minimum service in bps rather "
+"than a percentage. QoS will satisfiy the minimum service of all classes "
+"first before allocating the remaining service to other waiting classes."
+msgstr ""
+"<em>最小带宽：</em>指定将被分配用于该服务类型的最低链路带宽容量。对于某些应用"
+"如VoIP或在线游戏最好使用一个固定值而不是一个百分比来设置带宽。在分配剩余带宽"
+"到其它服务类型前，QoS将优先满足所有服务类型的最小带宽要求。"
+
+#~ msgid ""
+#~ "<p><em>Manual Ping Limit-</em> Round trip ping times are compared against "
+#~ "the ping limits. ACC controls the link limit to maintain ping times under "
+#~ "the appropriate limit. By default ACC attempts to automatically select "
+#~ "appropriate target ping limits for you based on the link speeds you "
+#~ "entered and the performance of your link it measures during "
+#~ "initialization.  You cannot change the target ping time for the minRTT "
+#~ "mode but by entering a manual time you can control the target ping time "
+#~ "of the active mode. The time you enter becomes the increase in the target "
+#~ "ping time between minRTT and active mode."
+#~ msgstr ""
+#~ "<p><em>手动Ping限制：</em>Ping延时会与Ping限制进行比较。ACC控制链路限制以"
+#~ "保持Ping延时在适当范围。默认情况下，ACC会自动根据你输入的链接适当为你选择"
+#~ "适当的Ping限制。如果你想尝试不同的Ping限制，你可以在这里输入一个时间值。输"
+#~ "入高的时间值将导致更高的Ping限制，低的时间值会有更低的限制。"

@@ -1,0 +1,113 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2015 GuoGuo <gch981213@gmail.com>
+# Xware3 启动脚本
+
+START=99
+USE_PROCD=1
+
+mount_cfg=/tmp/xware3/thunder_mounts.cfg
+log_cfg=/tmp/xware3/log.ini
+global_cfg=/etc/xware3.ini
+pid_file=/var/run/xware3.pid
+
+#ETM Configs
+LC_PORT="19000"
+ETM_LISTEN_ADDR="0.0.0.0:${LC_PORT}"
+ETM_IMPORT_V1V2_MODE="2"
+ETM_ARGS=""
+
+#检查是否启用 CFG_TYPE=xware3_general
+check_enabled() {
+	local cfg="$1"
+	config_get_bool enabled "$cfg" 'enabled' '0'
+	[ $enabled = '0' ] && {
+		echo "Xware3 is not enabled.Exit now."
+		exit 1
+	}
+}
+
+#获取主程序启动信息 CFG_TYPE=xware3_general
+load_prog_info() {
+	local cfg="$1"
+	config_get prog_path "$cfg" 'prog_path'
+	config_get etm_license "$cfg" 'etm_license'
+}
+
+#日志文件配置生成 CFG_TYPE=xware3_log
+gen_log_cfg() {
+	local cfg="$1"
+
+	config_get level "$cfg" 'level' 'WARN'
+	config_get log_file "$cfg" 'file' '/tmp/etm.log'
+	config_get max_file_size "$cfg" 'max_file_size' '2M'
+	config_get max_file_number "$cfg" 'max_file_number' '2'
+	
+	cat > $log_cfg <<EOF
+level=$level
+file=$log_file
+max_file_size=$max_file_size
+max_file_number=$max_file_number
+EOF
+}
+
+#挂载点配置生成 CFG_TYPE=xware3_mount
+gen_mnt_cfg() {
+	local cfg="$1"
+	
+	config_get available_mounts "$cfg" 'available_mounts'
+	
+	echo "available_mounts
+{" > $mount_cfg
+	for i in $available_mounts
+	do
+		echo "	$i" >>  $mount_cfg
+	done
+	echo "}" >>  $mount_cfg
+}
+
+start_service() {
+	config_load 'xware3'
+	config_foreach check_enabled 'xware3_general'
+	config_foreach load_prog_info 'xware3_general'
+
+	[ -z '$prog_path' ] && {
+		echo "Config file invaled:Please specifiy the path of Xware main program."
+		exit 1
+	}
+
+	[ ! -f $prog_path/etm_xware ] && [ -f /usr/bin/etm_xware ] && {
+		prog_path='/usr/bin'
+	}
+
+	[ -f $prog_path/etm_xware ] || {
+		echo "Please confirm that etm_xware is copied to $prog_path ."
+		exit 1
+	}
+
+	chmod +x $prog_path/etm_xware
+
+	mkdir -p /tmp/xware3/
+
+	config_foreach gen_log_cfg 'xware3_log'
+	config_foreach gen_mnt_cfg 'xware3_mount'
+
+#ETM arguments
+	ETM_ARGS="$ETM_ARGS --system_path=/tmp/xware3"
+	ETM_ARGS="$ETM_ARGS --disk_cfg=$mount_cfg"
+	ETM_ARGS="$ETM_ARGS --etm_cfg=$global_cfg"
+	ETM_ARGS="$ETM_ARGS --log_cfg=$log_cfg"
+	ETM_ARGS="$ETM_ARGS --pid_file=$pid_file"
+	ETM_ARGS="$ETM_ARGS --license=$etm_license"
+	ETM_ARGS="$ETM_ARGS --import_v1v2_mode=$ETM_IMPORT_V1V2_MODE"
+	ETM_ARGS="$ETM_ARGS --listen_addr=$ETM_LISTEN_ADDR"
+
+#Start ETM
+	procd_open_instance
+	procd_set_param command nice -n19 $prog_path/etm_xware $ETM_ARGS
+	procd_set_param respawn
+	procd_close_instance
+}
+
+reload_service() {
+	restart
+}

@@ -1,0 +1,75 @@
+#!/bin/sh
+# Author : RA <ravageralpha@gmail.com>
+
+[ -z `which wget` ] && echo "No wget" >&2 && exit 1
+[ -n `which openssl` ] && BASE64='openssl base64'
+[ -n `which base64` ] && BASE64='base64'
+[ -z "$BASE64" ] && echo "No base64/Openssl tools" >&2 && exit 1
+
+usage() {
+	echo -e "Usage:
+	-add [url]\t\tadd task
+	-addTorrent [file]\tadd BitTorrent task
+	-pause\t\t\tpause all task
+	-resume\t\t\tresume all task
+	-status\t\t\tget global status"
+}
+
+[ $# -eq 0 ] && usage
+
+aria2_getToken(){
+	config_load "aria2"
+	config_get rpc_token config rpc_token ""
+}
+. /lib/functions.sh
+aria2_getToken
+JSONPATH="http://127.0.0.1:6800/jsonrpc"
+
+if [ $# -ge 1 ]; then
+
+	case "$1" in
+		'-add')
+			json="{\"jsonrpc\":\"2.0\", \"id\":\"RA\", \"method\":\"aria2.addUri\", \"params\":[\"token:"$rpc_token"\", [\""$2"\"]]}"
+			;;
+		'-addTorrent')
+			json="{\"jsonrpc\":\"2.0\", \"id\":\"RA\", \"method\":\"aria2.addTorrent\", \"params\":[\"token:"$rpc_token"\", \""`cat "$2" | "$BASE64"`"\"]}"
+			;;
+		'-pause')
+			json="{\"jsonrpc\":\"2.0\", \"id\":\"RA\", \"method\":\"aria2.pauseAll\", \"params\":[\"token:"$rpc_token"\"]}"
+			;;
+		'-resume')
+			json="{\"jsonrpc\":\"2.0\", \"id\":\"RA\", \"method\":\"aria2.unpauseAll\", \"params\":[\"token:"$rpc_token"\"]}"
+			;;
+		'-status')
+			json="{\"jsonrpc\":\"2.0\", \"id\":\"RA\", \"method\":\"aria2.getGlobalStat\", \"params\":[\"token:"$rpc_token"\"]}"
+			;;
+		*)
+			usage
+			exit 1
+	esac
+
+	result=$(wget -qO- --header="Content-Type: application/json" --post-data="$json" "$JSONPATH")
+	if [ -n "$result" ]; then
+		case "$1" in
+			-status)
+
+				rawdata=$(echo "$result" | awk -F 'result":' '{print $2}' | sed -e 's/["{}]//g' | awk -v RS="," '{print}' | awk -F ':' '{print $2}')
+
+				DOWNLOADSPEED="$(($(echo "$rawdata" | sed -n 1p)/1024))K"
+				UPLOADSPEED="$(($(echo "$rawdata" | sed -n 6p)/1024))K"
+				ActivedTask=$(echo "$rawdata" | sed -n 2p)
+				WaitingTask=$(echo "$rawdata" | sed -n 5p)
+
+				echo "DownloadSpeed:$DOWNLOADSPEED"
+				echo "UploadSpeed:$UPLOADSPEED"
+				echo "ActiveTask:$ActivedTask"
+				echo "WaitingTask:$WaitingTask"
+				;;
+			*)
+				echo "Successful"
+				;;
+		esac
+	else
+		echo "Fail" >&2
+	fi
+fi

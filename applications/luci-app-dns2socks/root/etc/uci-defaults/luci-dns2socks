@@ -1,0 +1,12 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@dns2socks[-1]
+	add ucitrack dns2socks
+	set ucitrack.@dns2socks[-1].init=dns2socks
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+/etc/init.d/dns2socks enable
+exit 0

@@ -110,6 +110,10 @@ s:taboption("advanced", Flag, "nonegcache",
 	translate("No negative cache"),
 	translate("Do not cache negative replies, e.g. for not existing domains"))
 
+s:taboption("advanced", Flag, "allservers",
+	translate("Use all servers"),
+	translate("Setting this flag forces dnsmasq to send all queries to all available servers. The reply from the server which answers first will be returned to the original requester."))
+
 s:taboption("advanced", Value, "serversfile",
 	translate("Additional servers file"),
 	translate("This file may contain lines like 'server=/domain/1.2.3.4' or 'server=1.2.3.4' for"..
@@ -127,6 +131,12 @@ bn = s:taboption("advanced", DynamicList, "bogusnxdomain", translate("Bogus NX D
 bn.optional = true
 bn.placeholder = "67.215.65.132"
 
+fl = s:taboption("advanced", Value, "fil_iplist",
+	translate("IP list for DNS Filter"),
+	translate("IP list for dnsmasq to select a server.By using this, dnsmasq will only forward the reply from servers in this list if the replied ip is in the list."..
+		"Or it will forward the reply from other servers.<br />Leave empty to disable this feature."))
+fl:depends("allservers", "1")
+fl.optional = true
 
 s:taboption("general", Flag, "logqueries",
 	translate("Log queries"),

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@qos_guoguo[-1]
+	add ucitrack qos_guoguo
+	set ucitrack.@qos_guoguo[-1].init=qos_guoguo
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

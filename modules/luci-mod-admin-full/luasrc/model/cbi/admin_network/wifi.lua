@@ -236,6 +236,37 @@ if hwtype == "mac80211" then
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
 end
 
+------------------- qcawifi Device ------------------
+
+if hwtype == "qcawifi" then
+	if #tx_power_list > 1 then
+		tp = s:taboption("general", ListValue,
+			"txpower", translate("Transmit Power"), "dBm")
+		tp.rmempty = true
+		tp.default = tx_power_cur
+		function tp.cfgvalue(...)
+			return txpower_current(Value.cfgvalue(...), tx_power_list)
+		end
+
+		for _, p in ipairs(tx_power_list) do
+			tp:value(p.driver_dbm, "%i dBm (%i mW)"
+				%{ p.display_dbm, p.display_mw })
+		end
+	end
+
+	local cl = iw and iw.countrylist
+	if cl and #cl > 0 then
+		cc = s:taboption("advanced", ListValue, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+		cc.default = tostring(iw and iw.country or "00")
+		for _, c in ipairs(cl) do
+			cc:value(c.alpha2, "%s - %s" %{ c.alpha2, c.name })
+		end
+	else
+		s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
+	end
+
+	s:taboption("advanced", Flag, "disablecoext", translate("Force HT40"))
+end
 
 ------------------- Madwifi Device ------------------
 
@@ -348,6 +379,28 @@ if hwtype == "prism2" then
 	s:taboption("advanced", Value, "rxantenna", translate("Receiver Antenna"))
 end
 
+------------------- Ralink Device ------------------
+
+if hwtype == "rt2860v2" or hwtype == "mt7612" then
+	tp = s:taboption("general", ListValue,
+		"txpower", translate("Transmit Power"), "%")
+	tp.rmempty = true
+	tp:value("10","10%")
+	tp:value("20","20%")
+	tp:value("30","30%")
+	tp:value("40","40%")
+	tp:value("50","50%")
+	tp:value("60","60%")
+	tp:value("70","70%")
+	tp:value("80","80%")
+	tp:value("90","90%")
+	tp:value("100","100%")
+	s:taboption("advanced", Flag, "greenap", translate("Green AP"))
+	s:taboption("advanced", Value, "maxassoc", translate("Max associated clients"))
+	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
+	s:taboption("advanced", Value, "rts", translate("RTS_CTS Threshold"))
+
+end
 
 ----------------------- Interface -----------------------
 
@@ -480,7 +533,63 @@ if hwtype == "mac80211" then
 	ifname.optional = true
 end
 
+-------------------- qcawifi Interface ----------------------
+if hwtype == "qcawifi" then
+	mode:value("ap-wds", "%s (%s)" % {translate("Access Point"), translate("WDS")})
+	mode:value("sta-wds", "%s (%s)" % {translate("Client"), translate("WDS")})
+ 
+	function mode.write(self, section, value)
+		if value == "ap-wds" then
+			ListValue.write(self, section, "ap")
+			m.uci:set("wireless", section, "wds", 1)
+		elseif value == "sta-wds" then
+			ListValue.write(self, section, "sta")
+			m.uci:set("wireless", section, "wds", 1)
+		else
+			ListValue.write(self, section, value)
+			m.uci:delete("wireless", section, "wds")
+		end
+	end
 
+	function mode.cfgvalue(self, section)
+		local mode = ListValue.cfgvalue(self, section)
+		local wds  = m.uci:get("wireless", section, "wds") == "1"
+
+		if mode == "ap" and wds then
+			return "ap-wds"
+		elseif mode == "sta" and wds then
+			return "sta-wds"
+		else
+			return mode
+		end
+	end
+
+	bssid:depends({mode="sta"})
+	bssid:depends({mode="adhoc"})
+
+	s:taboption("advanced", Flag, "doth", "802.11h")
+	hidden = s:taboption("general", Flag, "hidden", translate("Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+	hidden:depends({mode="ap"})
+	hidden:depends({mode="ap-wds"})
+--	hidden:depends({mode="sta-wds"})
+	isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
+	 translate("Prevents client-to-client communication"))
+	isolate:depends({mode="ap"})
+	s:taboption("advanced", Flag, "uapsd", translate("UAPSD Enable"))
+	s:taboption("advanced", Value, "mcast_rate", translate("Multicast Rate"))
+	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
+	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
+	s:taboption("advanced", Flag, "wmm", translate("WMM Mode"))
+
+        -------------------------------support 11ac------------------------------
+	if hw_modes.ac then
+		s:taboption("advanced", Value, "nss", translate("Number of Spatial Streams"))
+		s:taboption("advanced", Flag, "ldpc",translate("LDPC"))
+		s:taboption("advanced", Flag,"rx_stbc",translate("RX STBC"))
+		s:taboption("advanced", Flag,"tx_stbc",translate("TX STBC"))
+	end
+
+end
 
 -------------------- Madwifi Interface ----------------------
 
@@ -598,6 +707,36 @@ if hwtype == "broadcom" then
 end
 
 
+-------------------- Ralink Interface ----------------------
+
+if hwtype == "rt2860v2" or hwtype == "mt7612" then
+--	mode:value("wds", translate("WDS"))
+
+	hidden = s:taboption("general", Flag, "hidden", translate("Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+	hidden:depends({mode="ap"})
+
+	isolate = s:taboption("advanced", Flag, "isolate", translate("Separate Clients"),
+	 translate("Prevents client-to-client communication"))
+	isolate:depends({mode="ap"})
+
+	s:taboption("advanced", Flag, "doth", "802.11h")
+	s:taboption("advanced", Flag, "wmm", translate("WMM Mode"))
+
+--	bssid:depends({mode="wds"})
+	bssid:depends({mode="sta"})
+
+	mp = s:taboption("macfilter", ListValue, "macpolicy", translate("MAC-Address Filter"))
+	mp:value("", translate("disable"))
+	mp:value("allow", translate("Allow listed only"))
+	mp:value("deny", translate("Allow all except listed"))
+
+	ml = s:taboption("macfilter", DynamicList, "maclist", translate("MAC-List"))
+	ml.datatype = "macaddr"
+	ml:depends({macpolicy="allow"})
+	ml:depends({macpolicy="deny"})
+	nt.mac_hints(function(mac, name) ml:value(mac, "%s (%s)" %{ mac, name }) end)
+end
+
 ----------------------- HostAP Interface ---------------------
 
 if hwtype == "prism2" then
@@ -695,7 +834,7 @@ encr:value("none", "No Encryption")
 encr:value("wep-open",   translate("WEP Open System"), {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"}, {mode="ahdemo"}, {mode="wds"})
 encr:value("wep-shared", translate("WEP Shared Key"),  {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"}, {mode="ahdemo"}, {mode="wds"})
 
-if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
+if hwtype == "atheros" or hwtype == "qcawifi" or hwtype == "mac80211" or hwtype == "prism2" then
 	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
 	local hostapd = fs.access("/usr/sbin/hostapd")
 
@@ -741,7 +880,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 			"and ad-hoc mode) to be installed."
 		)
 	end
-elseif hwtype == "broadcom" then
+elseif hwtype == "broadcom" or hwtype == "rt2860v2" or hwtype == "mt7612" then
 	encr:value("psk", "WPA-PSK")
 	encr:value("psk2", "WPA2-PSK")
 	encr:value("psk+psk2", "WPA-PSK/WPA2-PSK Mixed Mode")
@@ -856,7 +995,7 @@ for slot=1,4 do
 end
 
 
-if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
+if hwtype == "atheros" or hwtype == "qcawifi" or hwtype == "mac80211" or hwtype == "prism2" then
 	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})
@@ -1002,7 +1141,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	password.password = true
 end
 
-if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
+if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" or hwtype == "qcawifi" then
 	local wpasupplicant = fs.access("/usr/sbin/wpa_supplicant")
 	local hostcli = fs.access("/usr/sbin/hostapd_cli")
 	if hostcli and wpasupplicant then
@@ -1014,6 +1153,22 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 		wps:depends("encryption", "psk2")
 		wps:depends("encryption", "psk-mixed")
 	end
+end
+
+if hwtype == "rt2860v2" or hwtype == "mt7612" then
+	wps = s:taboption("encryption", ListValue, "wps", translate("WPS Mode"))
+	wps:depends("encryption", "psk")
+	wps:depends("encryption", "psk2")
+	wps:depends("encryption", "psk+psk2")
+	wps:depends({mode="ap"})
+
+	wps:value("", translate("Disabled"))
+	wps:value("pbc", translate("PBC"))
+--	wps:value("pin", translate("PIN"))
+
+--	wpspin = s:taboption("encryption", Value, "pin", translate("WPS PIN"))
+--	wpspin:depends("wps", "pin")
+
 end
 
 return m
