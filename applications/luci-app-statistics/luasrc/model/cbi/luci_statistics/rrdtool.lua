@@ -47,9 +47,15 @@ heartbeat:depends( "enable", 1 )
 rrasingle = s:option( Flag, "RRASingle",
 	translate("Only create average RRAs"), translate("reduces rrd size") )
 rrasingle.default  = true
-rrasingle.rmempty  = true
-rrasingle.optional = true
 rrasingle:depends( "enable", 1 )
+
+-- collectd_rrdtool.rramax (RRAMax)
+rramax = s:option( Flag, "RRAMax",
+	translate("Show max values instead of averages"),
+	translate("Max values for a period can be used instead of averages when not using 'only average RRAs'") )
+rramax.default  = false
+rramax.rmempty  = true
+rramax:depends( "RRASingle", 0 )
 
 -- collectd_rrdtool.rratimespans (RRATimespan)
 rratimespans = s:option( Value, "RRATimespans",
