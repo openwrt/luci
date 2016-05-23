@@ -1,7 +1,7 @@
 *Note:* If you plan to integrate your module into LuCI, you should read the [wiki:Documentation/Modules Module Reference] before.
 
 This tutorial describes how to write your own modules for the LuCI WebUI.
-For this tutorial we refer to your LuCI installation direcotry as *lucidir_' (/usr/lib/lua/luci if you are working with an installed version) and assume your LuCI installation is reachable through your webserver via '_/cgi-bin/luci*.
+For this tutorial we refer to your LuCI installation directory as *lucidir_' (/usr/lib/lua/luci if you are working with an installed version) and assume your LuCI installation is reachable through your webserver via '_/cgi-bin/luci*.
 
 If you are working with the development environment replace *lucidir_' with '''''/path/to/your/luci/checkout''/applications/myapplication/luasrc''' (this is a default empty module you can use for your experiments) and your LuCI installation can probably be reached via http://localhost:8080/luci/ after you ran '_make runhttpd*.
 
