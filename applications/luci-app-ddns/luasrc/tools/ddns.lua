@@ -17,10 +17,11 @@ local function _check_certs()
 end
 
 has_wgetssl	= (SYS.call( [[which wget-ssl >/dev/null 2>&1]] ) == 0)	-- and true or nil
+has_wgetnossl	= (SYS.call( [[which wget-nossl >/dev/null 2>&1]] ) == 0) -- and true or nil
 has_curl	= (SYS.call( [[which curl >/dev/null 2>&1]] ) == 0)
 has_curlssl	= (SYS.call( [[$(which curl) -V 2>&1 | grep "Protocols:" | grep -qF "https"]] ) ~= 0)
 has_curlpxy	= (SYS.call( [[grep -i "all_proxy" /usr/lib/libcurl.so* >/dev/null 2>&1]] ) == 0)
-has_fetch	= (SYS.call( [[which uclient-fetch >/dev/null 2>&1]] ) == 0)
+has_fetch	= (SYS.call( [[which uclient-fetch >/dev/null 2>&1]] ) == 0) -- and true or nil
 has_fetchssl	= NXFS.access("/lib/libustream-ssl.so")
 has_bbwget	= (SYS.call( [[$(which wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
 has_bindhost	= (SYS.call( [[which host >/dev/null 2>&1]] ) == 0)
@@ -30,10 +31,10 @@ has_hostip	= (SYS.call( [[which hostip >/dev/null 2>&1]] ) == 0)
 has_nslookup	= (SYS.call( [[$(which nslookup) localhost 2>&1 | grep -qF "(null)"]] ) ~= 0)
 has_ipv6	= (NXFS.access("/proc/net/ipv6_route") and NXFS.access("/usr/sbin/ip6tables"))
 has_ssl		= (has_wgetssl or has_curlssl or (has_fetch and has_fetchssl))
-has_proxy	= (has_wgetssl or has_curlpxy or has_fetch or has_bbwget)
-has_forceip	= ((has_wgetssl or has_curl or has_fetch) and (has_bindhost or has_hostip))
+has_proxy	= (has_wgetssl or has_wgetnossl or has_curlpxy or has_fetch or has_bbwget)
+has_forceip	= ((has_wgetssl or has_wgetnossl or has_curl or has_fetch) and (has_bindhost or has_hostip))
 has_dnsserver	= (has_bindhost or has_hostip or has_nslookup)
-has_bindnet	= (has_wgetssl or has_curl)
+has_bindnet	= (has_wgetssl or has_wgetnossl or has_curl)
 has_cacerts	= _check_certs()
 
 -- function to calculate seconds from given interval and unit
