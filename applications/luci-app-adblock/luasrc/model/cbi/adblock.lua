@@ -74,6 +74,11 @@ a3.optional = true
 a3.default = "::ffff:c000:0201"
 a3.datatype = "ip6addr"
 
+a4 = e:option(Value, "adb_fetchttl", translate("Timeout for blocklist fetch (seconds)"))
+a4.optional = true
+a4.default = 5
+a4.datatype = "range(2,60)"
+
 a7 = e:option(Value, "adb_lanif", translate("Name of the logical lan interface"))
 a7.optional = true
 a7.default = "lan"
