@@ -9,6 +9,7 @@
 	require "luci.sys.iptparser"
 	local wba = require "luci.tools.webadmin"
 	local fs = require "nixio.fs"
+	local io = require "io"
 
 	local has_ip6tables = fs.access("/usr/sbin/ip6tables")
 	local mode = 4
@@ -47,6 +48,15 @@
 	local tables = { "Filter", "NAT", "Mangle", "Raw" }
 	if mode == 6 then
 		tables = { "Filter", "Mangle", "Raw" }
+		local ok, lines = pcall(io.lines, "/proc/net/ip6_tables_names")
+		if ok and lines then
+			local line
+			for line in lines do
+				if line == "nat" then
+					tables = { "Filter", "NAT", "Mangle", "Raw" }
+				end
+			end
+		end
 	end
 -%>
 
