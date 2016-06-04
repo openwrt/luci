@@ -190,9 +190,11 @@ local function _get_status()
 		local dnsserver	= s["dns_server"] or ""
 		local force_ipversion = tonumber(s["force_ipversion"] or 0)
 		local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
+		local is_glue = tonumber(s["is_glue"] or 0)
 		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
 		command = command .. [[ get_registered_ip ]] .. lookup_host .. [[ ]] .. use_ipv6 ..
-			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
+			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver ..
+			[[ ]] .. is_glue
 		local reg_ip = SYS.exec(command)
 		if reg_ip == "" then
 			reg_ip = "_nodata_"
