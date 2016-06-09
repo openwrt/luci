@@ -264,7 +264,7 @@ end
 			netlist[#netlist+1] = net:ifname()
 			netdevs[net:ifname()] = dev:name()
 
-			if net.iwdata.device then
+			if net.iwinfo.signal and net.iwinfo.bssid then
 				local signal = net.iwinfo.signal or "N/A"
 				local noise = net.iwinfo.noise or "N/A"
 				local q = net.iwinfo.quality or "0"
