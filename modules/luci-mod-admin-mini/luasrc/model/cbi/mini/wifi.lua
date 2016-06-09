@@ -33,7 +33,7 @@ wlcursor:foreach("wireless", "wifi-device",
 
 -- Main Map --
 
-m = Map("wireless", translate("Wifi"), translate("Here you can configure installed wifi devices."))
+m = Map("wireless", translate("Wireless"), translate("Here you can configure installed wifi devices."))
 m:chain("network")
 
 

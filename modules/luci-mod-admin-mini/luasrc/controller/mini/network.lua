@@ -7,6 +7,6 @@ module("luci.controller.mini.network", package.seeall)
 function index()
 	entry({"mini", "network"}, alias("mini", "network", "index"), _("Network"), 20).index = true
 	entry({"mini", "network", "index"}, cbi("mini/network", {autoapply=true}), _("General"), 1)
-	entry({"mini", "network", "wifi"}, cbi("mini/wifi", {autoapply=true}), _("Wifi"), 10)
+	entry({"mini", "network", "wifi"}, cbi("mini/wifi", {autoapply=true}), _("Wireless"), 10)
 	entry({"mini", "network", "dhcp"}, cbi("mini/dhcp", {autoapply=true}), _("DHCP"), 20)
 end

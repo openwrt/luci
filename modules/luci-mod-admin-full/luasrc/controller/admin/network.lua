@@ -61,7 +61,7 @@ function index()
 			page = entry({"admin", "network", "wireless_shutdown"}, post("wifi_shutdown"), nil)
 			page.leaf = true
 
-			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wifi"), 15)
+			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
 			page.leaf = true
 			page.subindex = true
 
