@@ -23,7 +23,13 @@ fdns = s:option(Flag, "adb_forcedns", translate("Redirect all DNS queries to the
 fdns.rmempty = false
 fdns.default = fdns.enabled
 
-tot = s:option(DummyValue, "adb_overall_count", translate("Total count of blocked domains"))
+-- Statistics
+
+t = m:section(NamedSection, "global", "adblock", translate("Statistics"))
+
+dat = t:option(DummyValue, "adb_lastrun", translate("Last update of the blocklists"))
+tot = t:option(DummyValue, "adb_overall_count", translate("Total count of blocked domains"))
+prc = t:option(DummyValue, "adb_percentage", translate("Percentage of blocked packets (before last update, IPv4/IPv6)"))
 
 -- Blocklist options
 
@@ -65,17 +71,22 @@ a0.default = 0
 
 a1 = e:option(Value, "adb_nullport", translate("Port of the adblock uhttpd instance"))
 a1.optional = true
-a1.default = 65535
+a1.default = 65534
 a1.datatype = "port"
+
+a5 = e:option(Value, "adb_nullportssl", translate("Port of the adblock uhttpd instance for https links"))
+a5.optional = true
+a5.default = 65535
+a5.datatype = "port"
 
 a2 = e:option(Value, "adb_nullipv4", translate("IPv4 blackhole ip address"))
 a2.optional = true
-a2.default = "192.0.2.1"
+a2.default = "198.18.0.1"
 a2.datatype = "ip4addr"
 
 a3 = e:option(Value, "adb_nullipv6", translate("IPv6 blackhole ip address"))
 a3.optional = true
-a3.default = "::ffff:c000:0201"
+a3.default = "::ffff:c612:0001"
 a3.datatype = "ip6addr"
 
 a4 = e:option(Value, "adb_fetchttl", translate("Timeout for blocklist fetch (seconds)"))
