@@ -18,11 +18,11 @@ local UTIL = require "luci.util"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 local srv_name    = "ddns-scripts"
-local srv_ver_min = "2.7.1"			-- minimum version of service required
+local srv_ver_min = "2.7.2"			-- minimum version of service required
 local srv_ver_cmd = [[/usr/lib/ddns/dynamic_dns_updater.sh --version | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
-local app_version = "2.4.4-1"
+local app_version = "2.4.6-1"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -193,8 +193,8 @@ local function _get_status()
 		local is_glue = tonumber(s["is_glue"] or 0)
 		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
 		command = command .. [[ get_registered_ip ]] .. lookup_host .. [[ ]] .. use_ipv6 ..
-			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver ..
-			[[ ]] .. is_glue
+			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp ..
+			[[ ]] .. is_glue .. [[ ]] .. dnsserver
 		local reg_ip = SYS.exec(command)
 		if reg_ip == "" then
 			reg_ip = "_nodata_"
