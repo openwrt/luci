@@ -235,7 +235,6 @@ for _, option in ipairs(params) do
 		o.value = option[3]
 	else
 		if option[1] == DynamicList then
-			o.cast = nil
 			function o.cfgvalue(...)
 				local val = AbstractValue.cfgvalue(...)
 				return ( val and type(val) ~= "table" ) and { val } or val
