@@ -26,7 +26,7 @@ port.datatype    = "port"
 ifname = section:taboption("general", Value, "interface", translate("Output Interface"))
 ifname.template = "cbi/network_netlist"
 
-mtu = section.taboption("general", Value, "mtu", translate("MTU"))
+mtu = section:taboption("general", Value, "mtu", translate("MTU"))
 mtu.datatype = "uinteger"
 
 section:taboption("general", Value, "authgroup", translate("AuthGroup"))
@@ -56,11 +56,11 @@ dh_group:value("dh1")
 dh_group:value("dh2")
 dh_group:value("dh5")
 
-natt_mode = section:taboption("general", ListValue, "natt_mode", translate("NAT-T Mode")
+natt_mode = section:taboption("general", ListValue, "natt_mode", translate("NAT-T Mode"))
 natt_mode:value("natt", translate("RFC3947 NAT-T mode"))
 natt_mode:value("none", translate("No NAT-T"))
-natt_mode:value("force-natt", translate("Force use of NAT-T")
-natt_mode:value("cisco-udp", translate("Cisco UDP encapsulation")
+natt_mode:value("force-natt", translate("Force use of NAT-T"))
+natt_mode:value("cisco-udp", translate("Cisco UDP encapsulation"))
 
 enable_no_enc = section:taboption("general", Flag, "enable_no_enc",
 	translate("Disable Encryption"),
@@ -72,11 +72,10 @@ enable_single_des = section:taboption("general", Flag, "enable_single_des",
 	translate("If checked, 1DES is enaled"))
 enable_no_enc.default = enable_single_des.disabled
 
-dpd_idle = section.taboption("general", Value, "dpd_idle", translate("DPD Idle Timeout"))
+dpd_idle = section:taboption("general", Value, "dpd_idle", translate("DPD Idle Timeout"))
 dpd_idle.datatype = "uinteger"
-dpd.placeholder = "600"
+dpd_idle.placeholder = "600"
 
 ifname = section:taboption("general", Value, "target_network", translate("Target network"))
 port.placeholder = "0.0.0.0/0"
 port.datatype    = "network"
-
