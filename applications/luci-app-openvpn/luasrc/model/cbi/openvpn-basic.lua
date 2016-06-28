@@ -62,7 +62,7 @@ for _, option in ipairs(basicParams) do
 		o.value = option[3]
 	else
 		if option[1] == DynamicList then
-			o.cast = nil
+			-- o.cast = nil -- I don't know why it was nilled (it becomes "string") as current openvpn script parses all options from "table" (list) correctly.
 			function o.cfgvalue(...)
 				local val = AbstractValue.cfgvalue(...)
 				return ( val and type(val) ~= "table" ) and { val } or val
