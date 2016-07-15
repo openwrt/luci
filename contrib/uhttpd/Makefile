@@ -1,7 +1,7 @@
 include ../../build/config.mk
 include ../../build/gccconfig.mk
 
-UHTTPD_SRC		= svn://svn.openwrt.org/openwrt/branches/backfire/package/uhttpd/src
+UHTTPD_SRC		= https://github.com/circuitrocks/openwrt_backfire/trunk/package/uhttpd/src
 UHTTPD_DIR		= uhttpd-src
 UHTTPD_PATCHDIR = patches
 
