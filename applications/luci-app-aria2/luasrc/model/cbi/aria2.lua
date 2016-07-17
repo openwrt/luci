@@ -75,16 +75,29 @@ rpc_auth_method:value("token", translate("Token"))
 
 o = s:taboption("general", Value, "rpc_user", translate("RPC username"))
 o:depends("rpc_auth_method", "user_pass")
-o.rmempty = false
+o.rmempty = true
 
 o = s:taboption("general", Value, "rpc_passwd", translate("RPC password"))
 o:depends("rpc_auth_method", "user_pass")
 o.password  =  true
-o.rmempty = false
+o.rmempty = true
 
 o = s:taboption("general", Value, "rpc_secret", translate("RPC Token"), "<br/>" .. cfgbtn)
 o:depends("rpc_auth_method", "token")
-o.rmempty = false
+o.rmempty = true
+
+o = s:taboption("file", Flag, "enable_log", translate("Enable log"), translate("Log file is in the config file dir."))
+o.enabled = "true"
+o.disabled = "false"
+o.optional = true
+
+o = s:taboption("file", ListValue, "log_level", translate("Log level"))
+o:depends("enable_log", "true")
+o:value("debug", translate("Debug"))
+o:value("info", translate("Info"))
+o:value("notice", translate("Notice"))
+o:value("warn", translate("Warn"))
+o:value("error", translate("Error"))
 
 o = s:taboption("file", Value, "config_dir", translate("Config file directory"))
 o.placeholder = "/var/etc/aria2"
@@ -92,7 +105,8 @@ o.placeholder = "/var/etc/aria2"
 o = s:taboption("file", Value, "dir", translate("Default download directory"))
 o.rmempty = false
 
-s:taboption("file", Value, "disk_cache", translate("Disk cache"), translate("in bytes, You can append K or M."))
+o = s:taboption("file", Value, "disk_cache", translate("Disk cache"), translate("in bytes, You can append K or M."))
+o.rmempty = true
 
 o = s:taboption("file", ListValue, "file_allocation", translate("Preallocation"), translate("\"Falloc\" is not available in all cases."))
 o:value("none", translate("Off"))
@@ -101,6 +115,7 @@ o:value("trunc", translate("Trunc"))
 o:value("falloc", translate("Falloc"))
 
 overall_speed_limit = s:taboption("task", Flag, "overall_speed_limit", translate("Overall speed limit enabled"))
+overall_speed_limit.optional = true
 
 o = s:taboption("task", Value, "max_overall_download_limit", translate("Overall download limit"), translate("in bytes/sec, You can append K or M."))
 o:depends("overall_speed_limit", "1")
@@ -109,6 +124,7 @@ o = s:taboption("task", Value, "max_overall_upload_limit", translate("Overall up
 o:depends("overall_speed_limit", "1")
 
 task_speed_limit = s:taboption("task", Flag, "task_speed_limit", translate("Per task speed limit enabled"))
+task_speed_limit.optional = true
 
 o = s:taboption("task", Value, "max_download_limit", translate("Per task download limit"), translate("in bytes/sec, You can append K or M."))
 o:depends("task_speed_limit", "1")
@@ -138,6 +154,7 @@ o.placeholder = "aria2/" .. ipkg_ver("aria2")
 o = s:taboption("bittorrent", Flag, "enable_dht", translate("<abbr title=\"Distributed Hash Table\">DHT</abbr> enabled"))
 o.enabled = "true"
 o.disabled = "false"
+o.optional = true
 
 o = s:taboption("bittorrent", Flag, "bt_enable_lpd", translate("<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"))
 o.enabled = "true"
