@@ -151,9 +151,9 @@ ena.rmempty	= false
 function ena.cfgvalue(self, section)
 	return (SYS.init.enabled("privoxy")) and "1" or "0"
 end
-function ena.validate(self, value)
-	error("Validate " .. value)
-end
+--function ena.validate(self, value)
+--	error("Validate " .. value)
+--end
 function ena.write(self, section, value)
 	--error("Write " .. value)
 	if value == "1" then
