@@ -8,64 +8,35 @@ local DISP = require "luci.dispatcher"
 local DTYP = require "luci.cbi.datatypes"
 local CTRL = require "luci.controller.privoxy"	-- this application's controller
 
--- Bootstrap theme needs 2 or 3 additional linefeeds for tab description for better optic
 local HELP = [[<a href="http://www.privoxy.org/user-manual/config.html#%s" target="_blank">%s</a>]]
 
-local VERINST = CTRL.ipkg_ver_installed("privoxy")
-local VEROK   = CTRL.ipkg_ver_compare(VERINST,">=",CTRL.PRIVOXY_MIN)
-
-local TITLE = [[<a href="javascript:alert(']]
-		.. translate("Version Information")
-		.. [[\n\nluci-app-privoxy]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]]
-		.. CTRL.ipkg_ver_installed("luci-app-privoxy")
-		.. [[\n\nprivoxy ]] .. translate("required") .. [[:]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. CTRL.PRIVOXY_MIN .. [[ ]] .. translate("or higher")
-		.. [[\n\nprivoxy ]] .. translate("installed") .. [[:]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. VERINST
-		.. [[\n\n]]
- 	.. [[')">]]
-	.. translate("Privoxy WEB proxy")
-	.. [[</a>]]
-
-local DESC = translate("Privoxy is a non-caching web proxy with advanced filtering "
-		.. "capabilities for enhancing privacy, modifying web page data and HTTP headers, "
-		.. "controlling access, and removing ads and other obnoxious Internet junk.")
-		.. [[<br /><strong>]]
-		.. translate("For help use link at the relevant option")
-		.. [[</strong>]]
-
 -- Error handling if wrong privoxy version installed -- ########################
-if not nixio.fs.access("/etc/config/privoxy") or not VEROK then
-	local f	= SimpleForm("_no_config")
-	f.title = TITLE
-	f.description = DESC
-	f.embedded = true
-	f.submit = false
-	f.reset	 = false
+if not CTRL.service_ok() then
+	local f		= SimpleForm("_sf")
+	f.title		= CTRL.app_title_main()
+	f.description	= CTRL.app_description()
+	f.embedded	= true
+	f.submit	= false
+	f.reset		= false
 
-	local s = f:section(SimpleSection)
-	s.title = [[<font color="red">]] .. [[<strong>]]
-		.. translate("Software update required")
-		.. [[</strong>]] .. [[</font>]]
-
-	local v    = s:option(DummyValue, "_update_needed")
+	local s    = f:section(SimpleSection)
+	local v    = s:option(DummyValue, "_dv")
 	v.titleref = DISP.build_url("admin", "system", "packages")
 	v.rawhtml  = true
-	v.value    = [[<h3><strong><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
-		   .. translate("The currently installed 'privoxy' package is not supported by LuCI application.")
-		   .. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
-		   .. translate("required") .. ": " .. CTRL.PRIVOXY_MIN .. " *** ".. translate("installed") .. ": " .. VERINST
-		   .. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
-		   .. translate("Please update to the current version!")
-		   .. [[<br /><br /></strong></h3>]]
+	v.value    = CTRL.service_update()
 	return f
+end
+
+-- #################################################################################################
+-- Error handling if no config, create an empty one -- #########################
+if not NXFS.access("/etc/config/privoxy") then
+	NXFS.writefile("/etc/config/privoxy", "")
 end
 
 -- cbi-map -- ##################################################################
 local m	= Map("privoxy")
-m.title	= TITLE
-m.description = DESC
+m.title	= CTRL.app_title_main()
+m.description = CTRL.app_description()
 function m.commit_handler(self)
 	if self.changed then	-- changes ?
 		os.execute("/etc/init.d/privoxy reload &")	-- reload configuration
@@ -74,14 +45,30 @@ end
 
 -- cbi-section -- ##############################################################
 local ns = m:section( NamedSection, "privoxy", "privoxy")
+function ns.cfgvalue(self, section)
+	if not self.map:get("system") then	-- section might not exist
+		self.map:set("system", nil, "system")
+	end
+	if not self.map:get(section) then	-- section might not exist
+		self.map:set(section, nil, self.sectiontype)
+	end
+	return self.map:get(section)
+end
 
-ns:tab("local",
-	translate("Local Set-up"),
+ns:tab("sys",
+	translate("System"),
+	nil )
+local function err_tab_sys(title, msg)
+	return string.format(translate("System") .. " - %s: %s", title, msg )
+end
+
+ns:tab("doc",
+	translate("Documentation"),
 	translate("If you intend to operate Privoxy for more users than just yourself, "
 		.. "it might be a good idea to let them know how to reach you, what you block "
 		.. "and why you do that, your policies, etc.") )
-local function err_tab_local(title, msg)
-	return string.format(translate("Local Set-up") .. " - %s: %s", title, msg )
+local function err_tab_doc(title, msg)
+	return string.format(translate("Documentation") .. " - %s: %s", title, msg )
 end
 
 ns:tab("filter",
@@ -124,7 +111,7 @@ ns:tab("logview",
 -- tab: local -- ###############################################################
 
 -- start/stop button -----------------------------------------------------------
-local btn	= ns:taboption("local", Button, "_startstop")
+local btn	= ns:taboption("sys", Button, "_startstop")
 btn.title	= translate("Start / Stop")
 btn.description	= translate("Start/Stop Privoxy WEB Proxy")
 btn.template	= "privoxy/detail_startstop"
@@ -143,7 +130,7 @@ function btn.cfgvalue(self, section)
 end
 
 -- enabled ---------------------------------------------------------------------
-local ena	= ns:taboption("local", Flag, "_enabled")
+local ena	= ns:taboption("sys", Flag, "_enabled")
 ena.title       = translate("Enabled")
 ena.description = translate("Enable/Disable autostart of Privoxy on system startup and interface events")
 ena.orientation = "horizontal" -- put description under the checkbox
@@ -151,11 +138,7 @@ ena.rmempty	= false
 function ena.cfgvalue(self, section)
 	return (SYS.init.enabled("privoxy")) and "1" or "0"
 end
-function ena.validate(self, value)
-	error("Validate " .. value)
-end
 function ena.write(self, section, value)
-	--error("Write " .. value)
 	if value == "1" then
 		return SYS.init.enable("privoxy")
 	else
@@ -163,24 +146,61 @@ function ena.write(self, section, value)
 	end
 end
 
+-- boot_delay ------------------------------------------------------------------
+local bd	= ns:taboption("sys", Value, "boot_delay")
+bd.title	= translate("Boot delay")
+bd.description	= translate("Delay (in seconds) during system boot before Privoxy start")
+		.. [[<br />]]
+		.. translate("During delay ifup-events are not monitored !")
+bd.default	= "10"
+bd.rmempty	= false
+-- value is in a separate section so we need to do by hand
+function bd.cfgvalue(self, section)
+	local value = tonumber(self.map:get("system", "boot_delay") )
+	if not value then return nil end
+	return tostring(value)
+end
+function bd.validate(self, value)
+	local val = tonumber(value)
+	if not val then
+		return nil, err_tab_sys(self.title, translate("Value is not a number") )
+	elseif val < 0 or val > 300 then
+		return nil, err_tab_sys(self.title, translate("Value not between 0 and 300") )
+	end
+	return value
+end
+function bd.write(self, section, value)
+	local fvalue = self:formvalue(section)
+	local cvalue = self:cfgvalue(section)
+	if (fvalue ~= cvalue) then
+		self.map:set("system", "boot_delay", value)
+	end
+end
+
 -- hostname --------------------------------------------------------------------
-local hn	= ns:taboption("local", Value, "hostname")
+local hn	= ns:taboption("doc", Value, "hostname")
 hn.title	= string.format(HELP, "HOSTNAME", "Hostname" )
 hn.description	= translate("The hostname shown on the CGI pages.")
 hn.placeholder	= SYS.hostname()
 hn.optional	= true
 hn.rmempty	= true
+function hn.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- user-manual -----------------------------------------------------------------
-local um	= ns:taboption("local", Value, "user_manual")
+local um	= ns:taboption("doc", Value, "user_manual")
 um.title	= string.format(HELP, "USER-MANUAL", "User Manual" )
 um.description	= translate("Location of the Privoxy User Manual.")
 um.placeholder	= "http://www.privoxy.org/user-manual/"
 um.optional	= true
 um.rmempty	= true
+function um.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- admin-address ---------------------------------------------------------------
-local aa	= ns:taboption("local", Value, "admin_address")
+local aa	= ns:taboption("doc", Value, "admin_address")
 aa.title_base	= "Admin Email"
 aa.title	= string.format(HELP, "ADMIN-ADDRESS", aa.title_base )
 aa.description	= translate("An email address to reach the Privoxy administrator.")
@@ -192,20 +212,26 @@ function aa.validate(self, value)
 		return ""
 	end
 	if not (value:match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")) then
-		return nil, err_tab_local(self.title_base, translate("Invalid email address") )
+		return nil, err_tab_doc(self.title_base, translate("Invalid email address") )
 	end
 	return value
 end
+function aa.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- proxy-info-url --------------------------------------------------------------
-local piu	= ns:taboption("local", Value, "proxy_info_url")
+local piu	= ns:taboption("doc", Value, "proxy_info_url")
 piu.title	= string.format(HELP, "PROXY-INFO-URL", "Proxy Info URL" )
 piu.description	= translate("A URL to documentation about the local Privoxy setup, configuration or policies.")
 piu.optional	= true
 piu.rmempty	= true
+function piu.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- trust-info-url --------------------------------------------------------------
-local tiu	= ns:taboption("local", Value, "trust_info_url")
+local tiu	= ns:taboption("doc", Value, "trust_info_url")
 tiu.title	= string.format(HELP, "TRUST-INFO-URL", "Trust Info URLs" )
 tiu.description	= translate("A URL to be displayed in the error page that users will see if access to an untrusted page is denied.")
 		.. [[<br /><strong>]]
@@ -213,6 +239,9 @@ tiu.description	= translate("A URL to be displayed in the error page that users 
 		.. [[</strong>]]
 tiu.optional	= true
 tiu.rmepty	= true
+function tiu.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
+end
 
 -- tab: filter -- ##############################################################
 
@@ -233,6 +262,9 @@ function ld.validate(self, value)
 	else
 		return value
 	end
+end
+function ld.parse(self, section, novld)
+	CTRL.value_parse(self, section, novld)
 end
 
 -- logfile ---------------------------------------------------------------------
@@ -526,9 +558,6 @@ tgl.description	= translate("Enable/Disable filtering when Privoxy starts.")
 tgl.orientation	= "horizontal"
 tgl.default	= "1"
 tgl.rmempty	= false
-function tgl.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- enable-remote-toggle --------------------------------------------------------
 local ert	= ns:taboption("access", Flag, "enable_remote_toggle")
@@ -536,9 +565,6 @@ ert.title	= string.format(HELP, "ENABLE-REMOTE-TOGGLE", "Enable remote toggle" )
 ert.description	= translate("Whether or not the web-based toggle feature may be used.")
 ert.orientation	= "horizontal"
 ert.rmempty	= true
-function ert.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- enable-remote-http-toggle ---------------------------------------------------
 local eht	= ns:taboption("access", Flag, "enable_remote_http_toggle")
@@ -549,9 +575,6 @@ eht.description	= translate("Whether or not Privoxy recognizes special HTTP head
 		.. [[</strong>]]
 eht.orientation	= "horizontal"
 eht.rmempty	= true
-function eht.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- enable-edit-actions ---------------------------------------------------------
 local eea	= ns:taboption("access", Flag, "enable_edit_actions")
@@ -559,9 +582,6 @@ eea.title	= string.format(HELP, "ENABLE-EDIT-ACTIONS", "Enable action file edito
 eea.description	= translate("Whether or not the web-based actions file editor may be used.")
 eea.orientation	= "horizontal"
 eea.rmempty	= true
-function eea.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- enforce-blocks --------------------------------------------------------------
 local eb	= ns:taboption("access", Flag, "enforce_blocks")
@@ -570,9 +590,6 @@ eb.description	= translate("If enabled, Privoxy hides the 'go there anyway' link
 		.. "The user obviously should not be able to bypass any blocks.")
 eb.orientation	= "horizontal"
 eb.rmempty	= true
-function eb.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- tab: forward -- #############################################################
 
@@ -586,9 +603,6 @@ paf.description	= translate("Whether or not proxy authentication through Privoxy
 		.. [[</strong>]]
 --paf.orientation	= "horizontal"
 paf.rmempty	= true
-function paf.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- forward ---------------------------------------------------------------------
 local fwd	= ns:taboption("forward", DynamicList, "forward")
@@ -632,9 +646,6 @@ air.title	= string.format(HELP, "ACCEPT-INTERCEPTED-REQUESTS", "Accept intercept
 air.description	= translate("Whether intercepted requests should be treated as valid.")
 air.orientation	= "horizontal"
 air.rmempty	= true
-function air.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- allow-cgi-request-crunching -------------------------------------------------
 local crc	= ns:taboption("misc", Flag, "allow_cgi_request_crunching")
@@ -642,9 +653,6 @@ crc.title	= string.format(HELP, "ALLOW-CGI-REQUEST-CRUNCHING", "Allow CGI reques
 crc.description	= translate("Whether requests to Privoxy's CGI pages can be blocked or redirected.")
 crc.orientation	= "horizontal"
 crc.rmempty	= true
-function crc.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- split-large-forms -----------------------------------------------------------
 local slf	= ns:taboption("misc", Flag, "split_large_forms")
@@ -652,9 +660,6 @@ slf.title	= string.format(HELP, "SPLIT-LARGE-FORMS", "Split large forms" )
 slf.description	= translate("Whether the CGI interface should stay compatible with broken HTTP clients.")
 slf.orientation	= "horizontal"
 slf.rmempty	= true
-function slf.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- keep-alive-timeout ----------------------------------------------------------
 local kat	= ns:taboption("misc", Value, "keep_alive_timeout")
@@ -678,9 +683,6 @@ tp.title	= string.format(HELP, "TOLERATE-PIPELINING", "Tolerate pipelining" )
 tp.description	= translate("Whether or not pipelined requests should be served.")
 tp.orientation	= "horizontal"
 tp.rmempty	= true
-function tp.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- default-server-timeout ------------------------------------------------------
 local dst	= ns:taboption("misc", Value, "default_server_timeout")
@@ -704,9 +706,6 @@ cs.title	= string.format(HELP, "CONNECTION-SHARING", "Connection sharing" )
 cs.description	= translate("Whether or not outgoing connections that have been kept alive should be shared between different incoming connections.")
 cs.orientation	= "horizontal"
 cs.rmempty	= true
-function cs.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- socket-timeout --------------------------------------------------------------
 local st	= ns:taboption("misc", Value, "socket_timeout")
@@ -752,9 +751,6 @@ her.title	= string.format(HELP, "HANDLE-AS-EMPTY-DOC-RETURNS-OK", "Handle as emp
 her.description	= translate("The status code Privoxy returns for pages blocked with +handle-as-empty-document.")
 her.orientation	= "horizontal"
 her.rmempty	= true
-function her.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- enable-compression ----------------------------------------------------------
 local ec	= ns:taboption("misc", Flag, "enable_compression")
@@ -762,9 +758,6 @@ ec.title	= string.format(HELP, "ENABLE-COMPRESSION", "Enable compression" )
 ec.description	= translate("Whether or not buffered content is compressed before delivery.")
 ec.orientation	= "horizontal"
 ec.rmempty	= true
-function ec.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- compression-level -----------------------------------------------------------
 local cl	= ns:taboption("misc", Value, "compression_level")
@@ -803,135 +796,90 @@ st.description	= translate("Whether to run only one server thread.")
 		.. translate("This option is only there for debugging purposes. It will drastically reduce performance.")
 		.. [[</strong>]]
 st.rmempty	= true
-function st.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 1 ---------------------------------------------------------------------
 local d0	= ns:taboption("debug", Flag, "debug_1")
 d0.title	= string.format(HELP, "DEBUG", "Debug 1" )
 d0.description	= translate("Log the destination for each request Privoxy let through. See also 'Debug 1024'.")
 d0.rmempty	= true
-function d0.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 2 ---------------------------------------------------------------------
 local d1	= ns:taboption("debug", Flag, "debug_2")
 d1.title	= string.format(HELP, "DEBUG", "Debug 2" )
 d1.description	= translate("Show each connection status")
 d1.rmempty	= true
-function d1.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 4 ---------------------------------------------------------------------
 local d2	= ns:taboption("debug", Flag, "debug_4")
 d2.title	= string.format(HELP, "DEBUG", "Debug 4" )
 d2.description	= translate("Show I/O status")
 d2.rmempty	= true
-function d2.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 8 ---------------------------------------------------------------------
 local d3	= ns:taboption("debug", Flag, "debug_8")
 d3.title	= string.format(HELP, "DEBUG", "Debug 8" )
 d3.description	= translate("Show header parsing")
 d3.rmempty	= true
-function d3.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 16 --------------------------------------------------------------------
 local d4	= ns:taboption("debug", Flag, "debug_16")
 d4.title	= string.format(HELP, "DEBUG", "Debug 16" )
 d4.description	= translate("Log all data written to the network")
 d4.rmempty	= true
-function d4.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 32 --------------------------------------------------------------------
 local d5	= ns:taboption("debug", Flag, "debug_32")
 d5.title	= string.format(HELP, "DEBUG", "Debug 32" )
 d5.description	= translate("Debug force feature")
 d5.rmempty	= true
-function d5.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 64 --------------------------------------------------------------------
 local d6	= ns:taboption("debug", Flag, "debug_64")
 d6.title	= string.format(HELP, "DEBUG", "Debug 64" )
 d6.description	= translate("Debug regular expression filters")
 d6.rmempty	= true
-function d6.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 128 -------------------------------------------------------------------
 local d7	= ns:taboption("debug", Flag, "debug_128")
 d7.title	= string.format(HELP, "DEBUG", "Debug 128" )
 d7.description	= translate("Debug redirects")
 d7.rmempty	= true
-function d7.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 256 -------------------------------------------------------------------
 local d8	= ns:taboption("debug", Flag, "debug_256")
 d8.title	= string.format(HELP, "DEBUG", "Debug 256" )
 d8.description	= translate("Debug GIF de-animation")
 d8.rmempty	= true
-function d8.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 512 -------------------------------------------------------------------
 local d9	= ns:taboption("debug", Flag, "debug_512")
 d9.title	= string.format(HELP, "DEBUG", "Debug 512" )
 d9.description	= translate("Common Log Format")
 d9.rmempty	= true
-function d9.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 1024 ------------------------------------------------------------------
 local d10	= ns:taboption("debug", Flag, "debug_1024")
 d10.title	= string.format(HELP, "DEBUG", "Debug 1024" )
 d10.description	= translate("Log the destination for requests Privoxy didn't let through, and the reason why.")
 d10.rmempty	= true
-function d10.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 2048 ------------------------------------------------------------------
 local d11	= ns:taboption("debug", Flag, "debug_2048")
 d11.title	= string.format(HELP, "DEBUG", "Debug 2048" )
 d11.description	= translate("CGI user interface")
 d11.rmempty	= true
-function d11.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 4096 ------------------------------------------------------------------
 local d12	= ns:taboption("debug", Flag, "debug_4096")
 d12.title	= string.format(HELP, "DEBUG", "Debug 4096" )
 d12.description	= translate("Startup banner and warnings.")
 d12.rmempty	= true
-function d12.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 8192 ------------------------------------------------------------------
 local d13	= ns:taboption("debug", Flag, "debug_8192")
 d13.title	= string.format(HELP, "DEBUG", "Debug 8192" )
 d13.description	= translate("Non-fatal errors - *we highly recommended enabling this*")
 d13.rmempty	= true
-function d13.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 16384 -----------------------------------------------------------------
 --[[ TODO ???
@@ -939,9 +887,6 @@ local d14	= ns:taboption("debug", Flag, "debug_16384")
 d14.title	= string.format(HELP, "DEBUG", "Debug 16384" )
 d14.description	= translate("")
 d14.rmempty	= true
-function d14.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 ]]--
 
 -- debug 32768 -----------------------------------------------------------------
@@ -949,18 +894,12 @@ local d15	= ns:taboption("debug", Flag, "debug_32768")
 d15.title	= string.format(HELP, "DEBUG", "Debug 32768" )
 d15.description	= translate("Log all data read from the network")
 d15.rmempty	= true
-function d15.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- debug 65536 -----------------------------------------------------------------
 local d16	= ns:taboption("debug", Flag, "debug_65536")
 d16.title	= string.format(HELP, "DEBUG", "Debug 65536" )
 d16.description	= translate("Log the applying actions")
 d16.rmempty	= true
-function d16.parse(self, section)
-	CTRL.flag_parse(self, section)
-end
 
 -- tab: logview -- #############################################################
 
