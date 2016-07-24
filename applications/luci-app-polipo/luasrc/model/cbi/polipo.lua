@@ -80,7 +80,7 @@ o = s:taboption("proxy", Value, "parentProxy",
 		"will forward the requests."))
 
 o.optional = true
-o.datatype = "ipaddr"
+--o.datatype = "ipaddr"
 
 
 o = s:taboption("proxy", Value, "parentAuthCredentials",
