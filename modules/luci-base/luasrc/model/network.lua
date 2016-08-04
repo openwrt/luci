@@ -1140,10 +1140,7 @@ end
 
 function interface.shortname(self)
 	if self.wif then
-		return "%s %q" %{
-			self.wif:active_mode(),
-			self.wif:active_ssid() or self.wif:active_bssid()
-		}
+		return self.wif:shortname()
 	else
 		return self.ifname
 	end
@@ -1154,7 +1151,7 @@ function interface.get_i18n(self)
 		return "%s: %s %q" %{
 			lng.translate("Wireless Network"),
 			self.wif:active_mode(),
-			self.wif:active_ssid() or self.wif:active_bssid()
+			self.wif:active_ssid() or self.wif:active_bssid() or self.wif:id()
 		}
 	else
 		return "%s: %q" %{ self:get_type_i18n(), self:name() }
@@ -1593,7 +1590,7 @@ end
 function wifinet.shortname(self)
 	return "%s %q" %{
 		lng.translate(self:active_mode()),
-		self:active_ssid() or self:active_bssid()
+		self:active_ssid() or self:active_bssid() or self:id()
 	}
 end
 
@@ -1601,7 +1598,7 @@ function wifinet.get_i18n(self)
 	return "%s: %s %q (%s)" %{
 		lng.translate("Wireless Network"),
 		lng.translate(self:active_mode()),
-		self:active_ssid() or self:active_bssid(),
+		self:active_ssid() or self:active_bssid() or self:id(),
 		self:ifname()
 	}
 end
