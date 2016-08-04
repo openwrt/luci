@@ -16,7 +16,7 @@ local _ubus_connection = nil
 
 local getmetatable, setmetatable = getmetatable, setmetatable
 local rawget, rawset, unpack = rawget, rawset, unpack
-local tostring, type, assert = tostring, type, assert
+local tostring, type, assert, error = tostring, type, assert, error
 local ipairs, pairs, next, loadstring = ipairs, pairs, next, loadstring
 local require, pcall, xpcall = require, pcall, xpcall
 local collectgarbage, get_memory_limit = collectgarbage, get_memory_limit
@@ -27,14 +27,27 @@ module "luci.util"
 -- Pythonic string formatting extension
 --
 getmetatable("").__mod = function(a, b)
+	local ok, res
+
 	if not b then
 		return a
 	elseif type(b) == "table" then
+		local k, _
 		for k, _ in pairs(b) do if type(b[k]) == "userdata" then b[k] = tostring(b[k]) end end
-		return a:format(unpack(b))
+
+		ok, res = pcall(a.format, a, unpack(b))
+		if not ok then
+			error(res, 2)
+		end
+		return res
 	else
 		if type(b) == "userdata" then b = tostring(b) end
-		return a:format(b)
+
+		ok, res = pcall(a.format, a, b)
+		if not ok then
+			error(res, 2)
+		end
+		return res
 	end
 end
 
