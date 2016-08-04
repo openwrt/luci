@@ -471,7 +471,7 @@
 								'<strong><%:Bitrate%>:</strong> %s <%:Mbit/s%><br />',
 								icon, net.signal, net.noise,
 								net.quality,
-								net.link, net.ssid,
+								net.link, net.ssid || '?',
 								net.mode,
 								net.channel, net.frequency,
 								net.bitrate || '?'
@@ -482,7 +482,7 @@
 							s += String.format(
 								'<strong><%:BSSID%>:</strong> %s<br />' +
 								'<strong><%:Encryption%>:</strong> %s',
-									net.bssid,
+									net.bssid || '?',
 									net.encryption
 							);
 						}
