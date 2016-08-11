@@ -56,6 +56,10 @@ if ipaddr == nil or ipaddr == "" then
    ipaddr = "(IP address not static)"
 end
 
+if externhost == nil or externhost == "" then
+   externhost = "(Domain/IP Address/Dynamic Domain not set)"
+end
+
 if bindport ~= nil then
    just_ipaddr = ipaddr
    ipaddr = ipaddr .. ":" .. bindport
