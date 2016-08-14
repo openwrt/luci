@@ -1,0 +1,17 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@nut_server[-1]
+	delete ucitrack.@nut_monitor[-1]
+	delete ucitrack.@nut_cgi[-1]
+	add ucitrack nut_server
+	set ucitrack.@nut_server[-1].init=nut-server
+	add ucitrack nut_monitor
+	set ucitrack.@nut_monitor[-1].init=nut-monitor
+	add ucitrack nut_cgi
+	set ucitrack.@nut_cgi[-1].init=nut-cgi
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0
