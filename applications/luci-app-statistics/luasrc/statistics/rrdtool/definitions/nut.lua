@@ -32,23 +32,24 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 
 			options = {
 				current_output  = { color = "00e000", title = "Output current", noarea=true, overlay=true },
-				current_battery = { color = "0000ff", title = "Battery current", noarea=true, overlay=true },
+				current_battery = { color = "0000ff", title = "Battery current", noarea=true, overlay=true }
 			}
 		}
 	}
 
 	local percentage = {
-		title = "%H: Battery charge on UPS \"%pi\"",
+		title = "%H: Battery charge/load on UPS \"%pi\"",
 		vlabel = "Percent",
 		y_min = "0",
 		y_max = "100",
 		number_format = "%5.1lf%%",
 		data = {
 			instances = {
-				percent = "charge"
+				percent = { "charge", "load" }
 			},
 			options = {
-				percent_charge = { color = "00ff00", title = "Charge level"  }
+				percent_charge = { color = "00ff00", title = "Charge level"  },
+				percent_load = { color = "ff0000", title = "Load"  }
 			}
 		}
 	}
@@ -78,10 +79,39 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				timeleft = { "battery" }
 			},
 			options = {
-				timeleft_battery = { color = "0000ff", title = "Time left", transform_rpn = "60,/" }
+				timeleft_battery = { color = "0000ff", title = "Time left", transform_rpn = "60,/", noarea=true }
 			}
 		}
 	}
 
-	return { voltages, currents, percentage, temperature, timeleft }
+	local power = {
+		title = "%H: Power on UPS \"%pi\"",
+		vlabel = "Power",
+		number_format = "%5.1lf%%",
+		data = {
+			instances = {
+				power = { "ups" }
+			},
+			options = {
+				power_ups = { color = "00ff00", title = "Power level"  }
+			}
+		}
+	}
+
+	local frequencies = {
+		title = "%H: Frequencies on UPS \"%pi\"",
+		vlabel = "Hz",
+		number_format = "%5.1lfHz",
+		data = {
+			instances = {
+				frequency = { "input", "output" }
+			},
+
+			options = {
+				frequency_output  = { color = "00e000", title = "Output frequency", noarea=true, overlay=true },
+				frequency_input   = { color = "ffb000", title = "Input frequency", noarea=true, overlay=true }
+			}
+		}
+	}
+	return { voltages, currents, percentage, temperature, timeleft, power, frequencies }
 end
