@@ -30,7 +30,7 @@ protocol = utl.class()
 
 local _protocols = { }
 
-local _interfaces, _bridge, _switch, _tunnel
+local _interfaces, _bridge, _switch, _tunnel, _swtopo
 local _ubusnetcache, _ubusdevcache, _ubuswificache
 local _uci
 
@@ -193,7 +193,6 @@ function _iface_ignore(x)
 	return false
 end
 
-
 function init(cursor)
 	_uci = cursor or _uci or uci.cursor()
 
@@ -201,6 +200,7 @@ function init(cursor)
 	_bridge     = { }
 	_switch     = { }
 	_tunnel     = { }
+	_swtopo     = { }
 
 	_ubusnetcache  = { }
 	_ubusdevcache  = { }
@@ -210,7 +210,6 @@ function init(cursor)
 	local n, i
 	for n, i in ipairs(nxo.getifaddrs()) do
 		local name = i.name:match("[^:]+")
-		local prnt = name:match("^([^%.]+)%.")
 
 		if _iface_virtual(name) then
 			_tunnel[name] = true
@@ -225,11 +224,6 @@ function init(cursor)
 				ipaddrs  = { },
 				ip6addrs = { }
 			}
-
-			if prnt then
-				_switch[name] = true
-				_switch[prnt] = true
-			end
 
 			if i.family == "packet" then
 				_interfaces[name].flags   = i.flags
@@ -262,6 +256,79 @@ function init(cursor)
 			elseif b then
 				b.ifnames[#b.ifnames+1] = _interfaces[r[2]]
 				b.ifnames[#b.ifnames].bridge = b
+			end
+		end
+	end
+
+	-- read switch topology
+	local boardinfo = jsc.parse(nfs.readfile("/etc/board.json") or "")
+	if type(boardinfo) == "table" and type(boardinfo.switch) == "table" then
+		local switch, layout
+		for switch, layout in pairs(boardinfo.switch) do
+			if type(layout) == "table" and type(layout.ports) == "table" then
+				local _, port
+				local ports = { }
+				local nports = { }
+				local netdevs = { }
+
+				for _, port in ipairs(layout.ports) do
+					if type(port) == "table" and
+					   type(port.num) == "number" and
+					   (type(port.role) == "string" or
+					    type(port.device) == "string")
+					then
+						local spec = {
+							num    = port.num,
+							role   = port.role or "cpu",
+							index  = port.index or port.num
+						}
+
+						if port.device then
+							spec.device = port.device
+							spec.tagged = port.need_tag
+							netdevs[tostring(port.num)] = port.device
+						end
+
+						ports[#ports+1] = spec
+
+						if port.role then
+							nports[port.role] = (nports[port.role] or 0) + 1
+						end
+					end
+				end
+
+				table.sort(ports, function(a, b)
+					if a.role ~= b.role then
+						return (a.role < b.role)
+					end
+
+					return (a.index < b.index)
+				end)
+
+				local pnum, role
+				for _, port in ipairs(ports) do
+					if port.role ~= role then
+						role = port.role
+						pnum = 1
+					end
+
+					if role == "cpu" then
+						port.label = "CPU (%s)" % port.device
+					elseif nports[role] > 1 then
+						port.label = "%s %d" %{ role:upper(), pnum }
+						pnum = pnum + 1
+					else
+						port.label = role:upper()
+					end
+
+					port.role = nil
+					port.index = nil
+				end
+
+				_swtopo[switch] = {
+					ports = ports,
+					netdevs = netdevs
+				}
 			end
 		end
 	end
@@ -474,41 +541,23 @@ function get_interface(self, i)
 	end
 end
 
-local function swdev_from_board_json()
-	local boardinfo = jsc.parse(nfs.readfile("/etc/board.json") or "")
-	if type(boardinfo) == "table" and type(boardinfo.network) == "table" then
-		local net, val
-		for net, val in pairs(boardinfo.network) do
-			if type(val) == "table" and type(val.ifname) == "string" and
-			   val.create_vlan == true
-			then
-				return val.ifname
-			end
-		end
-	end
-	return nil
-end
-
 function get_interfaces(self)
 	local iface
 	local ifaces = { }
-	local seen = { }
 	local nfs = { }
-	local baseof = { }
 
 	-- find normal interfaces
 	_uci:foreach("network", "interface",
 		function(s)
 			for iface in utl.imatch(s.ifname) do
 				if not _iface_ignore(iface) and not _iface_virtual(iface) and not _wifi_iface(iface) then
-					seen[iface] = true
 					nfs[iface] = interface(iface)
 				end
 			end
 		end)
 
 	for iface in utl.kspairs(_interfaces) do
-		if not (seen[iface] or _iface_ignore(iface) or _iface_virtual(iface) or _wifi_iface(iface)) then
+		if not (nfs[iface] or _iface_ignore(iface) or _iface_virtual(iface) or _wifi_iface(iface)) then
 			nfs[iface] = interface(iface)
 		end
 	end
@@ -516,34 +565,32 @@ function get_interfaces(self)
 	-- find vlan interfaces
 	_uci:foreach("network", "switch_vlan",
 		function(s)
-			if not s.device then
+			if type(s.ports) ~= "string" or
+			   type(s.device) ~= "string" or
+			   type(_swtopo[s.device]) ~= "table"
+			then
 				return
 			end
 
-			local base = baseof[s.device]
-			if not base then
-				if not s.device:match("^eth%d") then
-					local l
-					for l in utl.execi("swconfig dev %q help 2>/dev/null" % s.device) do
-						if not base then
-							base = l:match("^%w+: (%w+)")
+			local pnum, ptag
+			for pnum, ptag in s.ports:gmatch("(%d+)([tu]?)") do
+				local netdev = _swtopo[s.device].netdevs[pnum]
+				if netdev then
+					if not nfs[netdev] then
+						nfs[netdev] = interface(netdev)
+					end
+					_switch[netdev] = true
+
+					if ptag == "t" then
+						local vid = tonumber(s.vid or s.vlan)
+						if vid ~= nil and vid >= 0 and vid <= 4095 then
+							local iface = "%s.%d" %{ netdev, vid }
+							if not nfs[iface] then
+								nfs[iface] = interface(iface)
+							end
+							_switch[iface] = true
 						end
 					end
-					if not base or not base:match("^eth%d") then
-						base = swdev_from_board_json() or "eth0"
-					end
-				else
-					base = s.device
-				end
-				baseof[s.device] = base
-			end
-
-			local vid = tonumber(s.vid or s.vlan)
-			if vid ~= nil and vid >= 0 and vid <= 4095 then
-				local iface = "%s.%d" %{ base, vid }
-				if not seen[iface] then
-					seen[iface] = true
-					nfs[iface] = interface(iface)
 				end
 			end
 		end)
@@ -683,6 +730,10 @@ end
 function get_wan6dev(self)
 	local _, stat = self:get_status_by_route("::", 0)
 	return stat and interface(stat.l3_device or stat.device)
+end
+
+function get_switch_topologies(self)
+	return _swtopo
 end
 
 
@@ -1167,7 +1218,11 @@ function interface.get_type_i18n(self)
 	elseif x == "switch" then
 		return lng.translate("Ethernet Switch")
 	elseif x == "vlan" then
-		return lng.translate("VLAN Interface")
+		if _switch[self.ifname] then
+			return lng.translate("Switch VLAN")
+		else
+			return lng.translate("Software VLAN")
+		end
 	elseif x == "tunnel" then
 		return lng.translate("Tunnel Interface")
 	else
