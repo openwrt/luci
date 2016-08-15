@@ -5,7 +5,12 @@
 m = Map("network", translate("Switch"), translate("The network ports on this device can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
 
 local fs = require "nixio.fs"
+local nw = require "luci.model.network"
 local switches = { }
+
+nw.init(m.uci)
+
+local topologies = nw:get_switch_topologies() or {}
 
 m.uci:foreach("network", "switch",
 	function(x)
@@ -19,15 +24,15 @@ m.uci:foreach("network", "switch",
 		local min_vid     = 0
 		local max_vid     = 16
 		local num_vlans   = 16
-		local cpu_port    = tonumber(fs.readfile("/proc/switch/eth0/cpuport") or 5)
-		local num_ports   = cpu_port + 1
 
 		local switch_title
 		local enable_vlan4k = false
 
+		local topo = topologies[switch_name]
+
 		-- Parse some common switch properties from swconfig help output.
 		local swc = io.popen("swconfig dev %q help 2>/dev/null" % switch_name)
-		if swc then
+		if swc and topo then
 
 			local is_port_attr = false
 			local is_vlan_attr = false
@@ -45,12 +50,7 @@ m.uci:foreach("network", "switch",
 
 				elseif line:match("cpu @") then
 					switch_title = line:match("^switch%d: %w+%((.-)%)")
-					num_ports, cpu_port, num_vlans =
-						line:match("ports: (%d+) %(cpu @ (%d+)%), vlans: (%d+)")
-
-					num_ports  = tonumber(num_ports) or  6
-					num_vlans  = tonumber(num_vlans) or 16
-					cpu_port   = tonumber(cpu_port)  or  5
+					num_vlans  = tonumber(line:match("vlans: (%d+)")) or 16
 					min_vid    = 1
 
 				elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
@@ -113,14 +113,10 @@ m.uci:foreach("network", "switch",
 			mp:depends("enable_mirror_tx", "1")
 			mp:depends("enable_mirror_rx", "1")
 
-			local pt
-			for pt = 0, num_ports - 1 do
-				local name
-
-				name = (pt == cpu_port) and translate("CPU") or translatef("Port %d", pt)
-
-				sp:value(pt, name)
-				mp:value(pt, name)
+			local _, pt
+			for _, pt in ipairs(topo.ports) do
+				sp:value(pt.num, pt.label)
+				mp:value(pt.num, pt.label)
 			end
 		end
 
@@ -211,9 +207,9 @@ m.uci:foreach("network", "switch",
 			if value == "u" then
 				if not untagged[self.option] then
 					untagged[self.option] = true
-				elseif min_vid > 0 or tonumber(self.option) ~= cpu_port then -- enable multiple untagged cpu ports due to weird broadcom default setup
+				else
 					return nil,
-						translatef("Port %d is untagged in multiple VLANs!", tonumber(self.option) + 1)
+						translatef("%s is untagged in multiple VLANs!", self.title)
 				end
 			end
 			return value
@@ -276,20 +272,16 @@ m.uci:foreach("network", "switch",
 				or m:get(section, "vlan")
 		end
 
-		-- Build per-port off/untagged/tagged choice lists.
-		local pt
-		for pt = 0, num_ports - 1 do
-			local title
-			if pt == cpu_port then
-				title = translate("CPU")
-			else
-				title = translatef("Port %d", pt)
-			end
-
-			local po = s:option(ListValue, tostring(pt), title)
+		local _, pt
+		for _, pt in ipairs(topo.ports) do
+			local po = s:option(ListValue, tostring(pt.num), pt.label, '<div id="portstatus-%s-%d"></div>' %{ switch_name, pt.num })
 
 			po:value("",  translate("off"))
-			po:value("u", translate("untagged"))
+
+			if not pt.tagged then
+				po:value("u", translate("untagged"))
+			end
+
 			po:value("t", translate("tagged"))
 
 			po.cfgvalue = portvalue
@@ -299,6 +291,7 @@ m.uci:foreach("network", "switch",
 			port_opts[#port_opts+1] = po
 		end
 
+		table.sort(port_opts, function(a, b) return a.option < b.option end)
 		switches[#switches+1] = switch_name
 	end
 )
