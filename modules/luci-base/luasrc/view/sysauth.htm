@@ -7,14 +7,14 @@
 <%+header%>
 
 <form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+	<%- if fuser then %>
+	<div class="errorbox"><%:Invalid username and/or password! Please try again.%></div>
+	<% end -%>
+
 	<div class="cbi-map">
 		<h2 name="content"><%:Authorization Required%></h2>
 		<div class="cbi-map-descr">
 			<%:Please enter your username and password.%>
-			<%- if fuser then %>
-			<div class="error"><%:Invalid username and/or password! Please try again.%></div>
-			<br />
-			<% end -%>
 		</div>
 		<fieldset class="cbi-section"><fieldset class="cbi-section-node">
 			<div class="cbi-value">
