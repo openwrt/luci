@@ -30,9 +30,23 @@ m.uci:foreach("network", "switch",
 
 		local topo = topologies[switch_name]
 
+		if not topo then
+			m.message = translatef("Switch %q has an unknown topology - the VLAN settings might not be accurate.", switch_name)
+			topo = {
+				ports = {
+					{ num = 0, label = "Port 1" },
+					{ num = 1, label = "Port 2" },
+					{ num = 2, label = "Port 3" },
+					{ num = 3, label = "Port 4" },
+					{ num = 4, label = "Port 5" },
+					{ num = 5, label = "CPU (eth0)", tagged = false }
+				}
+			}
+		end
+
 		-- Parse some common switch properties from swconfig help output.
 		local swc = io.popen("swconfig dev %q help 2>/dev/null" % switch_name)
-		if swc and topo then
+		if swc then
 
 			local is_port_attr = false
 			local is_vlan_attr = false
