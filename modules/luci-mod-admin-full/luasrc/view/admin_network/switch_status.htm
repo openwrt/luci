@@ -17,6 +17,9 @@
 					{
 						var th = document.getElementById('portstatus-' + switches[i] + '-' + j);
 
+						if (!th)
+							continue;
+
 						if (ports[j].link)
 						{
 							th.innerHTML = String.format(
