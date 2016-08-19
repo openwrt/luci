@@ -24,7 +24,8 @@
 
 <fieldset class="cbi-section">
 	<ul>
-		<li><%:Checksum%>: <code><%=checksum%></code></li>
+		<li><%:Checksum MD5%>: <code><%=checksum%></code></li>
+		<li><%:Checksum SHA256%>: <code><%=sha256ch%></code></li>
 		<li><%:Size%>: <%
 			local w = require "luci.tools.webadmin"
 			write(w.byte_format(size))
