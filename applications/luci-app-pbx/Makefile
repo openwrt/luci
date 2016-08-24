@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI PBX Administration
-LUCI_DEPENDS:= \
+LUCI_DEPENDS:= @BROKEN \
 	+asterisk18 +asterisk18-app-authenticate +asterisk18-app-disa \
 	+asterisk18-app-setcallerid +asterisk18-app-system +asterisk18-chan-gtalk \
 	+asterisk18-codec-a-mu +asterisk18-codec-alaw +asterisk18-func-cut \
