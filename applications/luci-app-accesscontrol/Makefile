@@ -12,6 +12,6 @@ PKG_RELEASE=$(PKG_SOURCE_VERSION)
 PKG_MAINTAINER:=August Germar <august@anonabox.com>
 LUCI_DEPENDS:=
 
-include /home/anonabox/8/openwrt/feeds/luci/luci.mk
+include ../../luci.mk
 #
 # call BuildPackage - OpenWrt buildroot signature
