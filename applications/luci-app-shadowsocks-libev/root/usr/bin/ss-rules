@@ -1,0 +1,243 @@
+#!/bin/sh
+#
+# Copyright (C) 2016 Jian Chang <aa65535@live.com>
+#
+# This is free software, licensed under the GNU General Public License v3.
+# See /LICENSE for more information.
+#
+
+usage() {
+	cat <<-EOF
+		Usage: ss-rules [options]
+
+		Valid options are:
+
+		    -s <server_ips>         ip address of shadowsocks remote server
+		    -l <local_port>         port number of shadowsocks local server
+		    -S <server_ips>         ip address of shadowsocks remote UDP server
+		    -L <local_port>         port number of shadowsocks local UDP server
+		    -i <ip_list_file>       a file whose content is bypassed ip list
+		    -b <wan_ips>            wan ip of will be bypassed
+		    -w <wan_ips>            wan ip of will be forwarded
+		    -I <interface>          proxy only for the given interface
+		    -d <target>             the default target of lan access control
+		    -a <lan_hosts>          lan ip of access control, need a prefix to
+		                            define proxy type
+		    -e <extra_options>      extra options for iptables
+		    -o                      apply the rules to the OUTPUT chain
+		    -u                      enable udprelay mode, TPROXY is required
+		    -U                      enable udprelay mode, using different IP
+		                            and ports for TCP and UDP
+		    -f                      flush the rules
+		    -h                      show this help message and exit
+EOF
+	exit $1
+}
+
+loger() {
+	# 1.alert 2.crit 3.err 4.warn 5.notice 6.info 7.debug
+	logger -st ss-rules[$$] -p$1 $2
+}
+
+flush_rules() {
+	iptables-save -c | grep -v "SS_SPEC" | iptables-restore -c
+	ip rule del fwmark 0x01/0x01 table 100 2>/dev/null
+	ip route del local 0.0.0.0/0 dev lo table 100 2>/dev/null
+	for setname in $(ipset -n list | grep "ss_spec"); do
+		ipset destroy $setname 2>/dev/null
+	done
+	FWI=$(uci get firewall.shadowsocks-libev.path 2>/dev/null)
+	[ -n "$FWI" ] && echo '# firewall include file' >$FWI
+	return 0
+}
+
+ipset_init() {
+	ipset -! restore <<-EOF || return 1
+		create ss_spec_src_ac hash:ip hashsize 64
+		create ss_spec_src_bp hash:ip hashsize 64
+		create ss_spec_src_fw hash:ip hashsize 64
+		create ss_spec_dst_sp hash:net hashsize 64
+		create ss_spec_dst_bp hash:net hashsize 64
+		create ss_spec_dst_fw hash:net hashsize 64
+		$(gen_special_purpose_ip | sed -e "s/^/add ss_spec_dst_sp /")
+		$(sed -e "s/^/add ss_spec_dst_bp /" ${IGNORED:=/dev/null} 2>/dev/null)
+		$(for ip in $WAN_BP_IP; do echo "add ss_spec_dst_bp $ip"; done)
+		$(for ip in $WAN_FW_IP; do echo "add ss_spec_dst_fw $ip"; done)
+EOF
+	return 0
+}
+
+ipt_nat() {
+	for host in $LAN_HOSTS; do
+		case "${host:0:1}" in
+			n|N)
+				ipset add ss_spec_src_ac ${host:2}
+				;;
+			b|B)
+				ipset add ss_spec_src_bp ${host:2}
+				;;
+			g|G)
+				ipset add ss_spec_src_fw ${host:2}
+				;;
+		esac
+	done
+	include_ac_rules nat
+	gen_prerouting_rules nat
+	iptables -t nat -A SS_SPEC_WAN_FW -p tcp \
+		-j REDIRECT --to-ports $local_port || return 1
+	if [ "$OUTPUT" = 1 ]; then
+		iptables -t nat -I OUTPUT 1 -p tcp -j SS_SPEC_WAN_DG
+	fi
+	return $?
+}
+
+ipt_mangle() {
+	[ -n "$TPROXY" ] && lsmod | grep -q TPROXY || return 0
+	ip rule add fwmark 0x01/0x01 table 100
+	ip route add local 0.0.0.0/0 dev lo table 100
+	include_ac_rules mangle
+	gen_prerouting_rules mangle
+	iptables -t mangle -A SS_SPEC_WAN_FW -p udp \
+		-j TPROXY --on-port $LOCAL_PORT --tproxy-mark 0x01/0x01
+	return $?
+}
+
+export_ipt_rules() {
+	[ -n "$FWI" ] || return 0
+	cat <<-CAT >>$FWI
+	iptables-restore -n <<-EOF
+	$(iptables-save | grep -E "SS_SPEC|^\*|^COMMIT" |\
+			sed -e "s/^-A \(OUTPUT\|PREROUTING\)/-I \1 1/")
+	EOF
+CAT
+	return $?
+}
+
+include_ac_rules() {
+	local protocol=$([ "$1" = "mangle" ] && echo udp || echo tcp)
+	iptables-restore -n <<-EOF
+	*$1
+	:SS_SPEC_LAN_DG - [0:0]
+	:SS_SPEC_LAN_AC - [0:0]
+	:SS_SPEC_WAN_DG - [0:0]
+	:SS_SPEC_WAN_AC - [0:0]
+	:SS_SPEC_WAN_FW - [0:0]
+	-A SS_SPEC_LAN_DG -m set --match-set ss_spec_dst_sp dst -j RETURN
+	-A SS_SPEC_LAN_DG -p $protocol $EXT_ARGS -j SS_SPEC_LAN_AC
+	-A SS_SPEC_LAN_AC -m set --match-set ss_spec_src_bp src -j RETURN
+	-A SS_SPEC_LAN_AC -m set --match-set ss_spec_src_fw src -j SS_SPEC_WAN_FW
+	-A SS_SPEC_LAN_AC -m set --match-set ss_spec_src_ac src -j SS_SPEC_WAN_AC
+	-A SS_SPEC_LAN_AC -j ${LAN_TARGET:=SS_SPEC_WAN_AC}
+	-A SS_SPEC_WAN_DG -m set --match-set ss_spec_dst_sp dst -j RETURN
+	-A SS_SPEC_WAN_DG -p $protocol $EXT_ARGS -j SS_SPEC_WAN_AC
+	-A SS_SPEC_WAN_AC -m set --match-set ss_spec_dst_fw dst -j SS_SPEC_WAN_FW
+	-A SS_SPEC_WAN_AC -m set --match-set ss_spec_dst_bp dst -j RETURN
+	-A SS_SPEC_WAN_AC -j SS_SPEC_WAN_FW
+	COMMIT
+EOF
+}
+
+gen_prerouting_rules() {
+	for ifname in $IFNAMES; do
+		local empty=no
+		iptables -t $1 -I PREROUTING 1 -i $ifname -j SS_SPEC_LAN_DG
+	done
+	if [ -z "$empty" ]; then
+		iptables -t $1 -I PREROUTING 1 -j SS_SPEC_LAN_DG
+	fi
+}
+
+gen_special_purpose_ip() {
+	cat <<-EOF | grep -E "^([0-9]{1,3}\.){3}[0-9]{1,3}"
+		0.0.0.0/8
+		10.0.0.0/8
+		100.64.0.0/10
+		127.0.0.0/8
+		169.254.0.0/16
+		172.16.0.0/12
+		192.0.0.0/24
+		192.0.2.0/24
+		192.31.196.0/24
+		192.52.193.0/24
+		192.88.99.0/24
+		192.168.0.0/16
+		192.175.48.0/24
+		198.18.0.0/15
+		198.51.100.0/24
+		203.0.113.0/24
+		224.0.0.0/4
+		240.0.0.0/4
+		255.255.255.255
+		$server
+		$SERVER
+EOF
+}
+
+while getopts ":s:l:S:L:i:b:w:I:d:a:e:ouUfh" arg; do
+	case "$arg" in
+		s)
+			server=$(for ip in $OPTARG; do echo $ip; done)
+			;;
+		l)
+			local_port=$OPTARG
+			;;
+		S)
+			SERVER=$(for ip in $OPTARG; do echo $ip; done)
+			;;
+		L)
+			LOCAL_PORT=$OPTARG
+			;;
+		i)
+			IGNORED=$OPTARG
+			;;
+		b)
+			WAN_BP_IP=$OPTARG
+			;;
+		w)
+			WAN_FW_IP=$OPTARG
+			;;
+		I)
+			IFNAMES=$OPTARG
+			;;
+		d)
+			LAN_TARGET=$OPTARG
+			;;
+		a)
+			LAN_HOSTS=$OPTARG
+			;;
+		e)
+			EXT_ARGS=$OPTARG
+			;;
+		o)
+			OUTPUT=1
+			;;
+		u)
+			TPROXY=1
+			;;
+		U)
+			TPROXY=2
+			;;
+		f)
+			flush_rules
+			exit 0
+			;;
+		h)
+			usage 0
+			;;
+	esac
+done
+
+[ -z "$server" -o -z "$local_port" ] && usage 2
+
+if [ "$TPROXY" = 1 ]; then
+	unset SERVER
+	LOCAL_PORT=$local_port
+elif [ "$TPROXY" = 2 ]; then
+	: ${SERVER:?"You must assign an ip for the udp relay server."}
+	: ${LOCAL_PORT:?"You must assign a port for the udp relay server."}
+fi
+
+flush_rules && ipset_init && ipt_nat && ipt_mangle && export_ipt_rules
+RET=$?
+[ "$RET" = 0 ] || loger 3 "Start failed!"
+exit $RET
