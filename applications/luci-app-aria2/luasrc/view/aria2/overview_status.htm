@@ -1,5 +1,5 @@
 <script type="text/javascript">//<![CDATA[
-XHR.poll(5, '<%=url([[admin]], [[services]], [[aria2]], [[status]])%>', null,
+XHR.poll(5, '<%=luci.dispatcher.build_url("admin/services/aria2/status")%>', null,
 	function(x, data) {
 		var tb = document.getElementById('aria2_status');
 		if (data && tb) {
