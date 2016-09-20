@@ -44,7 +44,7 @@ end
 
 m = Map("aria2", translate("Aria2"), translate("Aria2 is a multi-protocol &amp; multi-source download utility, here you can configure the settings."))
 
-m:section(SimpleSection).template  = "aria2/web_script"
+m:section(SimpleSection).template  = "aria2/overview_status"
 
 s = m:section(TypedSection, "aria2", translate("Aria2 Settings"))
 s.addremove = false
