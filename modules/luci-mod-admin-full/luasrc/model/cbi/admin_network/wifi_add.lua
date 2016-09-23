@@ -44,7 +44,7 @@ m.hidden = {
 
 if iw and iw.mbssid_support then
 	replace = m:field(Flag, "replace", translate("Replace wireless configuration"),
-		translate("An additional network will be created if you leave this unchecked."))
+		translate("An additional network will be created if you leave this checked."))
 
 	function replace.cfgvalue() return "1" end
 else
