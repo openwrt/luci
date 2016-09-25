@@ -18,7 +18,7 @@ local UTIL = require "luci.util"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
 local srv_name    = "ddns-scripts"
-local srv_ver_min = "2.7.4"			-- minimum version of service required
+local srv_ver_min = "2.7.5"			-- minimum version of service required
 local srv_ver_cmd = [[/usr/lib/ddns/dynamic_dns_updater.sh --version | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
