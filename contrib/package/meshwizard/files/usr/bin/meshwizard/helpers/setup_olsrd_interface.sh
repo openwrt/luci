@@ -7,7 +7,7 @@ net=$1
 . /lib/functions.sh
 . $dir/functions.sh
 
-local protocols="4"
+protocols="4"
 if [ "$ipv6_enabled" = 1 ] && [ "$has_ipv6" == "1" ]; then
 	protocols="4 6"
 fi
@@ -61,9 +61,9 @@ for proto in $protocols; do
 		# Set Hna entry for ipv6 net for static ipv6 config
 		uci -q delete $cfg.${netrenamed}static
 		if [ "$ipv6_config" = "static" ]; then
-			local v6range="$(uci -q get meshwizard.netconfig.$net\_ip6addr)"
-			local v6net="$(echo $v6range | cut -d '/' -f 1)"
-			local v6mask="$(echo $v6range | cut -d '/' -f 2)"
+			v6range="$(uci -q get meshwizard.netconfig.$net\_ip6addr)"
+			v6net="$(echo $v6range | cut -d '/' -f 1)"
+			v6mask="$(echo $v6range | cut -d '/' -f 2)"
 			if [ -n "$v6net" ] && [ -n "$v6mask" ]; then
 				uci set $cfg.${netrenamed}static="Hna6"
 				uci set $cfg.${netrenamed}static.netaddr="$v6net"
