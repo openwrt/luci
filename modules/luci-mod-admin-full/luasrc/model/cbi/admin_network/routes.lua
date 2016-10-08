@@ -41,6 +41,18 @@ mtu.placeholder = 1500
 mtu.datatype = "range(64,9000)"
 mtu.rmempty = true
 
+routetype = s:option(Value, "type", translate("Route type"))
+routetype:value("", "unicast")
+routetype:value("local", "local")
+routetype:value("broadcast", "broadcast")
+routetype:value("multicast", "multicast")
+routetype:value("unreachable", "unreachable")
+routetype:value("prohibit", "prohibit")
+routetype:value("blackhole", "blackhole")
+routetype:value("anycast", "anycast")
+routetype.default = ""
+routetype.rmempty = true
+
 if fs.access("/proc/net/ipv6_route") then
 	s = m:section(TypedSection, "route6", translate("Static IPv6 Routes"))
 	s.addremove = true
@@ -68,6 +80,18 @@ if fs.access("/proc/net/ipv6_route") then
 	mtu.placeholder = 1500
 	mtu.datatype = "range(64,9000)"
 	mtu.rmempty = true
+
+	routetype = s:option(Value, "type", translate("Route type"))
+	routetype:value("", "unicast")
+	routetype:value("local", "local")
+	routetype:value("broadcast", "broadcast")
+	routetype:value("multicast", "multicast")
+	routetype:value("unreachable", "unreachable")
+	routetype:value("prohibit", "prohibit")
+	routetype:value("blackhole", "blackhole")
+	routetype:value("anycast", "anycast")
+	routetype.default = ""
+	routetype.rmempty = true
 end
 
 
