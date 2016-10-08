@@ -34,11 +34,13 @@ g.rmempty = true
 metric = s:option(Value, "metric", translate("Metric"))
 metric.placeholder = 0
 metric.datatype = "range(0,255)"
+metric.size = 5
 metric.rmempty = true
 
 mtu = s:option(Value, "mtu", translate("MTU"))
 mtu.placeholder = 1500
 mtu.datatype = "range(64,9000)"
+mtu.size = 5
 mtu.rmempty = true
 
 routetype = s:option(Value, "type", translate("Route type"))
@@ -74,11 +76,13 @@ if fs.access("/proc/net/ipv6_route") then
 	metric = s:option(Value, "metric", translate("Metric"))
 	metric.placeholder = 0
 	metric.datatype = "range(0,65535)" -- XXX: not sure
+	metric.size = 5
 	metric.rmempty = true
 
 	mtu = s:option(Value, "mtu", translate("MTU"))
 	mtu.placeholder = 1500
 	mtu.datatype = "range(64,9000)"
+	mtu.size = 5
 	mtu.rmempty = true
 
 	routetype = s:option(Value, "type", translate("Route type"))
