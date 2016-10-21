@@ -251,7 +251,7 @@ o:depends("nonwildcard", true)
 
 o = s:taboption("general", DynamicList, "notinterface",
 	translate("Exclude interfaces"),
-	translate("Prevent listening on thise interfaces."))
+	translate("Prevent listening on these interfaces."))
 o.optional = true
 o:depends("nonwildcard", true)
 
