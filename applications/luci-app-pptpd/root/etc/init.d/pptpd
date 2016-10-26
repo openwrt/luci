@@ -1,0 +1,102 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=60
+BIN=/usr/sbin/pptpd
+DEFAULT=/etc/default/$BIN
+RUN_D=/var/run
+PID_F=$RUN_D/$BIN.pid
+CONFIG=/var/etc/pptpd.conf
+CHAP_SECRETS=/var/etc/chap-secrets
+
+setup_dns() {
+	[ -n "$1" ] || return 0
+	echo ms-dns $1>>/etc/ppp/options.pptpd
+}
+setup_login() {
+	local section="$1"
+
+	## Code by VPN Server ##
+	config_get enabled "$section" enabled
+	[ "$enabled" -eq 0 ] && return 0
+
+	config_get ipaddress "$section" ipaddress
+	[ -n "$ipaddress" ] || local ipaddress = "*"
+	## Code by VPN Server ##
+
+	config_get username "$section" username
+	config_get password "$section" password
+	[ -n "$username" ] || return 0
+	[ -n "$password" ] || return 0
+
+	echo "$username * $password $ipaddress" >> $CHAP_SECRETS
+	## echo "$username pptp-server $password *" >> $CHAP_SECRETS
+}
+
+setup_config() {
+	local section="$1"
+
+	config_get enabled "$section" enabled
+	[ "$enabled" -eq 0 ] && return 1
+
+	mkdir -p /var/etc
+	cp /etc/pptpd.conf $CONFIG
+
+	config_get localip "$section" localip
+	config_get remoteip "$section" remoteip
+	[ -n "$localip" ] && echo "localip  $localip" >> $CONFIG
+	[ -n "$remoteip" ] && echo "remoteip  $remoteip" >> $CONFIG
+
+	## Code by VPN Server ##
+	config_get nat "$section" nat
+	config_get internet "$section" internet
+	echo Update firewall ...
+	sed -i -e "/## luci-app-pptpd/d" /etc/firewall.user
+	if [ "$nat" -eq 1 ]; then
+		echo "iptables -A forwarding_rule -s ${localip%.*}.0/24 -j ACCEPT ## luci-app-pptpd" >> /etc/firewall.user
+		echo Update NAT rule ...
+	fi
+	if [ "$internet" -eq 1 ]; then
+		echo "iptables -A input_rule -i ppp+ -p tcp -m tcp --dport 1723 -j ACCEPT ## luci-app-pptpd" >> /etc/firewall.user
+		echo "iptables -A input_rule -i ppp+ -p gre -j ACCEPT ## luci-app-pptpd" >> /etc/firewall.user
+		echo Update input rule ...
+	fi
+	fw3 restart
+	config_get mppe "$section" mppe
+	sed -i -e 's/#*mppe/mppe/g' /etc/ppp/options.pptpd
+	if [ "$mppe" -eq 0 ]; then
+		sed -i -e 's/mppe/#mppe/g' /etc/ppp/options.pptpd
+	fi
+	sed -i -e '/ms-dns/d' /etc/ppp/options.pptpd
+	config_list_foreach "pptpd" "dns" setup_dns
+	## Code by VPN Server ##
+
+	return 0
+}
+
+start_pptpd() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	mkdir -p $RUN_D
+	for m in arc4 sha1_generic slhc crc-ccitt ppp_generic ppp_async ppp_mppe; do
+		insmod $m >/dev/null 2>&1
+	done
+	ln -sfn $CHAP_SECRETS /etc/ppp/chap-secrets
+	service_start $BIN $OPTIONS -c $CONFIG
+}
+
+start() {
+	config_load pptpd
+	setup_config pptpd || return
+	rm -f $CHAP_SECRETS
+	config_foreach setup_login login
+	start_pptpd
+}
+
+stop() {
+	service_stop $BIN
+
+	## Code by VPN Server ##
+	sed -i -e "/## luci-app-pptpd/d" /etc/firewall.user
+	fw3 restart
+	## Code by VPN Server ##
+}
