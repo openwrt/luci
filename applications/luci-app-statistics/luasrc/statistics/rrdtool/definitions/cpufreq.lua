@@ -8,7 +8,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		title = "%H: Processor frequency",
 		alt_autoscale = true,
 		vlabel = "Frequency (Hz)",
-		number_format = "%4.0lf%s",
+		number_format = "%3.2lf%s",
 		data = {
 			instances = {
 				cpufreq = { "3", "2", "1", "0" }
