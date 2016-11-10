@@ -10,8 +10,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		vlabel = "Frequency (Hz)",
 		number_format = "%3.2lf%s",
 		data = {
-			instances = {
-				cpufreq = { "3", "2", "1", "0" }
+			sources = {
+				cpufreq = { "" }
 			},
 			options = {
 				cpufreq_0 = { color = "ff0000", title = "Core 0", noarea=true, overlay=true },
