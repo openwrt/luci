@@ -39,7 +39,7 @@ end
 -- -------------------------------------------------------------------------------------------------
 
 -- BEGIN Map
-m = Map("wifi_schedule", translate("Wifi Schedule"), translate("Defines a schedule when to turn on and off wifi.<br>dag")) 
+m = Map("wifi_schedule", translate("Wifi Schedule"), translate("Defines a schedule when to turn on and off wifi.")) 
 function m.on_commit(self)
     luci.sys.exec("/usr/bin/wifi_schedule.sh cron")
 end
