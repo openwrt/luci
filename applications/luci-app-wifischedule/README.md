@@ -75,4 +75,3 @@ Then call the script as follows in order to get the necessary cron jobs created:
     savemodules: Saves a list of automatic determined modules to UCI
     help: This description.`
 
-
