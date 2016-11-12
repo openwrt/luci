@@ -32,3 +32,47 @@ The option "Force disabling wifi even if stations associated" does what it says 
 When unchecked, its checked every `recheck_interval` minutes if there are still stations associated. Once the stations disconnect, WiFi is disabled.
 
 Please note, that the parameters `module_load` and `recheck_interval` are only accessible through uci.
+
+## UCI Configuration `wifi_schedule`
+`config global
+        option logging '0'
+        option enabled '0'
+        option recheck_interval '10'
+        option modules_retries '10'
+
+config entry 'Businesshours'
+        option enabled '0'
+        option daysofweek 'Monday Tuesday Wednesday Thursday Friday'
+        option starttime '06:00'
+        option stoptime '22:00'
+        option forcewifidown '0'
+
+config entry 'Weekend'
+        option enabled '0'
+        option daysofweek 'Saturday Sunday'
+        option starttime '00:00'
+        option stoptime '00:00'
+        option forcewifidown '1'
+`
+
+## Script: `wifi_schedule.sh`
+This is the script that does the work. Make your changes to the UCI config file.
+Then call the script as follows in order to get the necessary cron jobs created:
+
+`wifi_schedule.sh cron`
+
+ 
+`wifi_schedule.sh cron|start|stop|forcestop|recheck|getmodules|savemodules|help
+
+    UCI Config File: /etc/config/wifi_schedule.sh
+
+    cron: Create cronjob entries.
+    start: Start wifi.
+    stop: Stop wifi gracefully, i.e. check if there are stations associated and if so keep retrying.
+    forcestop: Stop wifi immediately.
+    recheck: Recheck if wifi can be disabled now.
+    getmodules: Returns a list of modules used by the wireless driver(s)
+    savemodules: Saves a list of automatic determined modules to UCI
+    help: This description.`
+
+

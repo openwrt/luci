@@ -59,10 +59,11 @@ global_enable.rmempty = false;
 
 function global_enable.validate(self, value, global_section)
     if value == "1" then
-        if file_exists("/sbin/wifi") then
+        if ( file_exists("/sbin/wifi") and
+             file_exists("/usr/bin/wifi_schedule.sh") )then
             return value
         else
-            return nil, translate("Could not find required /sbin/wifi")
+            return nil, translate("Could not find required /usr/bin/wifi_schedule.sh or /sbin/wifi")
         end
     else
         return "0"
