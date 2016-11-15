@@ -19,7 +19,7 @@ private_key = section:taboption(
   translate("Required. Base64-encoded private key for this interface.")
 )
 private_key.password = true
-private_key.datatype = "and(minlength(44),maxlength(44))"
+private_key.datatype = "rangelength(44, 44)"
 private_key.optional = false
 
 
@@ -70,7 +70,7 @@ preshared_key = section:taboption(
             "cryptography for post-quantum resistance.")
 )
 preshared_key.password = true
-preshared_key.datatype = "and(minlength(44),maxlength(44))"
+preshared_key.datatype = "rangelength(44, 44)"
 preshared_key.optional = true
 
 
@@ -94,7 +94,7 @@ public_key = peers:option(
   translate("Public Key"),
   translate("Required. Public key of peer.")
 )
-public_key.datatype = "and(minlength(44),maxlength(44))"
+public_key.datatype = "rangelength(44, 44)"
 public_key.optional = false
 
 
@@ -105,7 +105,7 @@ allowed_ips = peers:option(
   translate("Required. IP addresses and prefixes that this peer is allowed " ..
             "to use inside the tunnel. Routes will be added accordingly.")
 )
-allowed_ips.datatype = "or(ip6addr, ip4addr)"
+allowed_ips.datatype = "ipaddr"
 allowed_ips.optional = false
 
 
