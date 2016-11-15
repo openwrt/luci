@@ -382,7 +382,7 @@ function dispatch(request)
 					end
 
 					if sess and token then
-						http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sess, build_url() })
+						http.header("Set-Cookie", 'sysauth=%s; path=%s; HttpOnly' %{ sess, build_url() })
 
 						ctx.authsession = sess
 						ctx.authtoken = token
