@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for WireGuard VPN
-LUCI_DEPENDS:=+wireguard
+LUCI_DEPENDS:=+kmod-wireguard +wireguard-tools
 
 PKG_MAINTAINER:=Dan Luedtke <mail@danrl.com>
 
