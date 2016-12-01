@@ -103,7 +103,8 @@ allowed_ips = peers:option(
   "allowed_ips",
   translate("Allowed IPs"),
   translate("Required. IP addresses and prefixes that this peer is allowed " ..
-            "to use inside the tunnel. Routes will be added accordingly.")
+            "to use inside the tunnel. Usually the peer's tunnel IP " ..
+            "addresses and the networks the peer routes through the tunnel.")
 )
 allowed_ips.datatype = "ipaddr"
 allowed_ips.optional = false
