@@ -19,6 +19,16 @@ ip = s:option(Value, "ip", translate("IP address"))
 ip.datatype = "ipaddr"
 ip.rmempty  = true
 
+local l = s:option(ListValue, "instance", translate("Instance"))
+l.datatype = "uciname"
+l:reset_values()
+
+l:value("", translate("Any"))
+local instancecursor = m.uci
+instancecursor:foreach("dhcp", "dnsmasq", function(sect)
+	l:value(sect['.name'])
+end)
+
 ipc.neighbors({ }, function(n)
 	if n.mac and n.dest and not n.dest:is6linklocal() then
 		ip:value(n.dest:string(), "%s (%s)" %{ n.dest:string(), n.mac })
