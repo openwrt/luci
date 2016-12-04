@@ -16,7 +16,8 @@ m.redirect	= DISP.build_url("admin", "services", "ddns")
 
 function m.commit_handler(self)
 	if self.changed then	-- changes ?
-		os.execute("/etc/init.d/ddns reload &")	-- reload configuration
+		local command = CTRL.luci_helper .. " -- reload"
+		os.execute(command)	-- reload configuration
 	end
 end
 
@@ -40,8 +41,8 @@ function ns.cfgvalue(self, section)
 	return self.map:get(section)
 end
 
--- allow_local_ip  -- ##########################################################
-local ali	= ns:option(Flag, "allow_local_ip")
+-- upd_privateip  -- ###########################################################
+local ali	= ns:option(Flag, "upd_privateip")
 ali.title	= translate("Allow non-public IP's")
 ali.description = translate("Non-public and by default blocked IP's") .. ":"
 		.. [[<br /><strong>IPv4: </strong>]]
@@ -50,8 +51,8 @@ ali.description = translate("Non-public and by default blocked IP's") .. ":"
 		.. "::/32, f000::/4"
 ali.default	= "0"
 
--- date_format  -- #############################################################
-local df	= ns:option(Value, "date_format")
+-- ddns_dateformat  -- #########################################################
+local df	= ns:option(Value, "ddns_dateformat")
 df.title	= translate("Date format")
 df.description	= [[<a href="http://www.cplusplus.com/reference/ctime/strftime/" target="_blank">]]
 		.. translate("For supported codes look here") 
@@ -69,8 +70,8 @@ function df.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
 end
 
--- run_dir  -- #################################################################
-local rd	= ns:option(Value, "run_dir")
+-- ddns_rundir  -- #############################################################
+local rd	= ns:option(Value, "ddns_rundir")
 rd.title	= translate("Status directory")
 rd.description	= translate("Directory contains PID and other status information for each running section")
 rd.default	= "/var/run/ddns"
@@ -79,8 +80,8 @@ function rd.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
 end
 
--- log_dir  -- #################################################################
-local ld	= ns:option(Value, "log_dir")
+-- ddns_logdir  -- #############################################################
+local ld	= ns:option(Value, "ddns_logdir")
 ld.title	= translate("Log directory")
 ld.description	= translate("Directory contains Log files for each running section")
 ld.default	= "/var/log/ddns"
@@ -89,8 +90,8 @@ function ld.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
 end
 
--- log_lines  -- ###############################################################
-local ll	= ns:option(Value, "log_lines")
+-- ddns_loglines  -- ###########################################################
+local ll	= ns:option(Value, "ddns_loglines")
 ll.title	= translate("Log length")
 ll.description	= translate("Number of last lines stored in log files")
 ll.default	= "250"
