@@ -24,7 +24,7 @@ s = m:section( SimpleSection,
 	translate("Hints"),
 	translate("Below a list of configuration tips for your system to run Dynamic DNS updates without limitations") )
 
--- ddns_scripts needs to be updated for full functionality
+-- ddns-scripts needs to be updated for full functionality
 if not CTRL.service_ok() then
 	local so = s:option(DummyValue, "_update_needed")
 	so.titleref = DISP.build_url("admin", "system", "packages")
