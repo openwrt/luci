@@ -17,12 +17,14 @@ local UCI  = require "luci.model.uci"
 local UTIL = require "luci.util"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
+luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
+
 local srv_name    = "ddns-scripts"
-local srv_ver_min = "2.7.5"			-- minimum version of service required
-local srv_ver_cmd = [[/usr/lib/ddns/dynamic_dns_updater.sh --version | awk {'print $2'}]]
+local srv_ver_min = "2.7.6"			-- minimum version of service required
+local srv_ver_cmd = luci_helper .. [[ -V | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
-local app_version = "2.4.7-1"
+local app_version = "2.4.8-1"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -96,14 +98,14 @@ function app_title_main()
 end
 function service_version()
 	local ver = nil
+
+	ver = UTIL.exec(srv_ver_cmd)
+	if #ver > 0 then return ver end
+
 	IPKG.list_installed(srv_name, function(n, v, d)
 			if v and (#v > 0) then ver = v end
 		end
 	)
-	if not ver or (#ver == 0) then
-		ver = UTIL.exec(srv_ver_cmd)
-		if #ver == 0 then ver = nil end
-	end
 	return	ver
 end
 function service_ok()
@@ -191,10 +193,14 @@ local function _get_status()
 		local force_ipversion = tonumber(s["force_ipversion"] or 0)
 		local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
 		local is_glue = tonumber(s["is_glue"] or 0)
-		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
-		command = command .. [[ get_registered_ip ]] .. lookup_host .. [[ ]] .. use_ipv6 ..
-			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp ..
-			[[ ]] .. is_glue .. [[ ]] .. dnsserver
+		local command = luci_helper .. [[ -]]
+		if (use_ipv6 == 1) then command = command .. [[6]] end
+		if (force_ipversion == 1) then command = command .. [[f]] end
+		if (force_dnstcp == 1) then command = command .. [[t]] end
+		if (is_glue == 1) then command = command .. [[g]] end
+		command = command .. [[l ]] .. lookup_host
+		if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
+		command = command .. [[ -- get_registered_ip]]
 		local reg_ip = SYS.exec(command)
 		if reg_ip == "" then
 			reg_ip = "_nodata_"
@@ -221,8 +227,8 @@ end
 function logread(section)
 	-- read application settings
 	local uci	= UCI.cursor()
-	local log_dir	= uci:get("ddns", "global", "log_dir") or "/var/log/ddns"
-	local lfile	= log_dir .. "/" .. section .. ".log"
+	local ldir	= uci:get("ddns", "global", "ddns_logdir") or "/var/log/ddns"
+	local lfile	= ldir .. "/" .. section .. ".log"
 	local ldata	= NXFS.readfile(lfile)
 
 	if not ldata or #ldata == 0 then
@@ -289,8 +295,9 @@ function startstop(section, enabled)
 	uci:commit("ddns")
 	uci:unload("ddns")
 
-	-- start dynamic_dns_updater.sh script
-	os.execute ([[/usr/lib/ddns/dynamic_dns_updater.sh %s 0 > /dev/null 2>&1 &]] % section)
+	-- start ddns-updater for section
+	local command = luci_helper .. [[ -S ]] .. section .. [[ -- start]]
+	os.execute(command)
 	NX.nanosleep(3)	-- 3 seconds "show time"
 
 	-- status changed so return full status
