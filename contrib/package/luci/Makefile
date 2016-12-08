@@ -194,6 +194,7 @@ $(eval $(call protocol,ipv6,Support for DHCPv6/6in4/6to4/6rd/DS-Lite))
 $(eval $(call protocol,3g,Support for 3G,+PACKAGE_luci-proto-3g:comgt))
 $(eval $(call protocol,hso,Support for HSO,+PACKAGE_luci-proto-hso:comgt +PACKAGE_luci-proto-hso:kmod-usb-net +PACKAGE_luci-proto-hso:kmod-usb-net-hso))
 $(eval $(call protocol,relay,Support for relayd pseudo bridges,+PACKAGE_luci-proto-relay:relayd))
+$(eval $(call protocol,sstp,Support for MS-SSTP))
 
 
 ### Modules ###
