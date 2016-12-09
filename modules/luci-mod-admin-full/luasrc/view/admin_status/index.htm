@@ -341,7 +341,9 @@
 				{
 					var timestr;
 
-					if (info.leases[i].expires <= 0)
+					if (info.leases[i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (info.leases[i].expires <= 0)
 						timestr = '<em><%:expired%></em>';
 					else
 						timestr = String.format('%t', info.leases[i].expires);
@@ -379,7 +381,9 @@
 				{
 					var timestr;
 
-					if (info.leases6[i].expires <= 0)
+					if (info.leases6[i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (info.leases6[i].expires <= 0)
 						timestr = '<em><%:expired%></em>';
 					else
 						timestr = String.format('%t', info.leases6[i].expires);
