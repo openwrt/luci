@@ -4,7 +4,7 @@
 . /lib/functions.sh
 . $dir/functions.sh
 
-local protocols="4"
+protocols="4"
 if [ "$ipv6_enabled" = 1 ] && [ "$has_ipv6" == "1" ]; then
     protocols="4 6"
 fi
