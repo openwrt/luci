@@ -32,7 +32,6 @@ if [ "$netrenamed" = "lan" ]; then
 fi
 
 # Setup IPv6 for the interface
-local ip6addr
 if [ "$ipv6_enabled" = 1 ]; then
 	if [ "$ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 		ip6addr="$($dir/helpers/gen_auto-ipv6-dhcpv6-ip.sh $netrenamed)"
@@ -82,8 +81,6 @@ if [ "$net_dhcp" == 1 ]; then
 	if [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
 		# VAPs are enabled for this interface, supported and we want to
 		# also use DHCP on the adhoc interface
-		local network
-		local mask
 		network=${dhcprange%%/*}
 		mask=${dhcprange##*/}
 		# Divide network size by adding 1 to the netmask
