@@ -74,9 +74,19 @@ local function dhcp_leases_common(family)
 						hostname = (name ~= "-") and name
 					}
 				elseif ip and iaid == "ipv4" and family == 4 then
+					local mac, mac1, mac2, mac3, mac4, mac5, mac6
+					if duid and type(duid) == "string" then
+						 mac1, mac2, mac3, mac4, mac5, mac6 = duid:match("^(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+					end
+					if not (mac1 and mac2 and mac3 and mac4 and mac5 and mac6) then
+						mac = "FF:FF:FF:FF:FF:FF"
+					else
+						mac = mac1..":"..mac2..":"..mac3..":"..mac4..":"..mac5..":"..mac6
+					end
 					rv[#rv+1] = {
 						expires  = (expire >= 0) and os.difftime(expire, os.time()),
 						macaddr  = duid,
+						macaddr  = mac:lower(),
 						ipaddr   = ip,
 						hostname = (name ~= "-") and name
 					}
