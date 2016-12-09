@@ -27,14 +27,12 @@
 				{
 					var timestr;
 
-					if (st[0][i].expires <= 0)
-					{
+					if (st[0][i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (st[0][i].expires <= 0)
 						timestr = '<em><%:expired%></em>';
-					}
 					else
-					{
 						timestr = String.format('%t', st[0][i].expires);
-					}
 
 					var tr = tb.insertRow(-1);
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
@@ -69,14 +67,12 @@
 				{
 					var timestr;
 
-					if (st[1][i].expires <= 0)
-					{
+					if (st[1][i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (st[1][i].expires <= 0)
 						timestr = '<em><%:expired%></em>';
-					}
 					else
-					{
 						timestr = String.format('%t', st[1][i].expires);
-					}
 
 					var tr = tb6.insertRow(-1);
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
