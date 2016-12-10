@@ -4,6 +4,8 @@
  Licensed to the public under the Apache License 2.0.
 -%>
 
+<% local ver = require "luci.version" %>
+
 <%+header%>
 
 <h2 name="content"><%:Flash operations%></h2>
@@ -63,7 +65,11 @@
 		<% if upgrade_avail then %>
 			<form method="post" action="<%=url('admin/system/flashops/sysupgrade')%>" enctype="multipart/form-data">
 				<input type="hidden" name="token" value="<%=token%>" />
+				<% if string.find(ver.distversion, "LEDE") then %>
+				<div class="cbi-section-descr"><%:Upload a sysupgrade-compatible image here to replace the running firmware. Check "Keep settings" to retain the current configuration (requires a LEDE Project compatible firmware image).%></div>
+				<% else %>
 				<div class="cbi-section-descr"><%:Upload a sysupgrade-compatible image here to replace the running firmware. Check "Keep settings" to retain the current configuration (requires an OpenWrt compatible firmware image).%></div>
+				<% end %>
 				<div class="cbi-section-node">
 					<div class="cbi-value">
 						<label class="cbi-value-title" for="keep"><%:Keep settings%>:</label>
@@ -84,7 +90,11 @@
 				<% end %>
 			</form>
 		<% else %>
+			<% if string.find(ver.distversion, "LEDE") then %>
+			<div class="cbi-section-descr"><%:Sorry, there is no sysupgrade support present; a new firmware image must be flashed manually. Please refer to the LEDE Project wiki for device specific install instructions.%></div>
+			<% else %>
 			<div class="cbi-section-descr"><%:Sorry, there is no sysupgrade support present; a new firmware image must be flashed manually. Please refer to the OpenWrt wiki for device specific install instructions.%></div>
+			<% end %>
 		<% end %>
 	</fieldset>
 
