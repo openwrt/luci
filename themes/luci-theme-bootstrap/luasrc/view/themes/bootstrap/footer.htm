@@ -12,9 +12,11 @@
 	local category = request[1]
 	local tree = disp.node()
 	local categories = disp.node_childs(tree)
+	local link = (string.find(ver.distversion, "LEDE")) and "https://www.lede-project.org" or "https://www.openwrt.org"
 %>
    <footer>
-    <a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
+    <a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / 
+    <a href="<%= link %>"><%= ver.distversion %></a>
     <% if #categories > 1 then %>
      <ul class="breadcrumb pull-right" id="modemenu">
 	    <% for i, r in ipairs(categories) do %>

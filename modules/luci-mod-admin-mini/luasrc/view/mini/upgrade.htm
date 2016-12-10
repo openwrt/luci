@@ -13,7 +13,11 @@
 	<% if supported then %>
 	<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
 	<p>
-		<%:Upload an OpenWrt image file to reflash the device.%>
+	<% if string.find(ver.distversion, "LEDE") then %>
+			<%:Upload a LEDE Project image file to reflash the device.%>
+	<% else %>
+			<%:Upload an OpenWrt image file to reflash the device.%>
+	<% end %>
 		<% if bad_image then %>
 			<br /><br />
 			<div class="error"><%:The uploaded image file does not
@@ -37,9 +41,15 @@
 	</div>
 	</form>
 	<% else %>
-		<div class="error"><%_ Sorry.
-			OpenWrt does not support a system upgrade on this platform.<br />
-			You need to manually flash your device. %></div>
+		<% if string.find(ver.distversion, "LEDE") then %>
+			<div class="error"><%_ Sorry.
+				LEDE Project does not support a system upgrade on this platform.<br />
+				You need to manually flash your device. %></div>
+		<% else %>
+			<div class="error"><%_ Sorry.
+				OpenWrt does not support a system upgrade on this platform.<br />
+				You need to manually flash your device. %></div>
+		<% end %>
 	<% end %>
 <% elseif step == 2 then %>
 	<p>
