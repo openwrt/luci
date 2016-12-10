@@ -12,6 +12,10 @@ LUCI_DEPENDS:= \
 	+collectd-mod-cpu +collectd-mod-memory \
 	+collectd-mod-interface +collectd-mod-load +collectd-mod-network
 
+define Package/luci-app-statistics/conffiles
+/etc/config/luci_statistics
+endef
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
