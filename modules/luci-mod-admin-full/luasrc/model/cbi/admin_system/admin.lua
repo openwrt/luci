@@ -3,6 +3,7 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
+local conf = require "luci.config"
 
 m = Map("system", translate("Router Password"),
 	translate("Changes the administrator password for accessing the device"))
@@ -11,11 +12,14 @@ s = m:section(TypedSection, "_dummy", "")
 s.addremove = false
 s.anonymous = true
 
-pw1 = s:option(Value, "pw1", translate("Password"))
+local pw_length =  tonumber(conf.main.password_length) or 6
+pw1 = s:option(Value, "pw1", translate("Password"), translatef("Minimal password length is %s characters", pw_length))
 pw1.password = true
+pw1.datatype = "minlength(" .. pw_length ..")"
 
-pw2 = s:option(Value, "pw2", translate("Confirmation"))
+pw2 = s:option(Value, "pw2", translate("Confirmation"), translatef("Minimal password length is %s characters", pw_length))
 pw2.password = true
+pw2.datatype = "minlength(" .. pw_length ..")"
 
 function s.cfgsections()
 	return { "_pass" }
