@@ -1,2 +1,2 @@
-<% print(luci.sys.exec("sh /usr/sbin/gen-qr.sh " .. self.tmp)) %>
+<% write(luci.sys.exec("sh /usr/sbin/gen-qr.sh " .. self.tmp):gsub("^<%?xml.*%?>\n","")) %>
 <% self.tmp = self.tmp + 1 %>
