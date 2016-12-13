@@ -1,5 +1,6 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2016 Eric Luehrsen <ericluehrsen@hotmail.com>
+-- Copyright 2016 Dan Luedtke <mail@danrl.com>
 -- Licensed to the public under the Apache License 2.0.
 
 m = Map("unbound", translate("Recursive DNS"),
@@ -79,6 +80,17 @@ tlm = s:taboption("service", Value, "ttl_min", translate("TTL Minimum:"),
   translate("Prevent excessively short cache periods"))
 tlm.datatype = "and(uinteger,min(0),max(600))"
 tlm.rmempty = false
+
+d64 = s:taboption("service", Flag, "dns64", translate("Enable DNS64:"),
+  translate("Enable the DNS64 module"))
+d64.rmempty = false
+
+pfx = s:taboption("service", Value, "dns64_prefix", translate("DNS64 Prefix:"),
+  translate("Prefix for generated DNS64 addresses"))
+pfx.datatype = "ip6addr"
+pfx.placeholder = "64:ff9b::/96"
+pfx.optional = true
+pfx:depends({ dns64 = "1" })
 
 --Resource Tuning Tab
 
