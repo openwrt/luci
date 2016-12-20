@@ -68,12 +68,6 @@ function name.write(self, section, value)
 		out.exclude = value
 		inp.exclude = value
 	end
-
-	m.redirect = ds.build_url("admin/network/firewall/zones", value)
-	m.title = "%s - %s" %{
-		translate("Firewall - Zone Settings"),
-		translatef("Zone %q", value or "?")
-	}
 end
 
 p = {
