@@ -9,8 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TYPE:=col
 LUCI_BASENAME:=ssl
 
-LUCI_TITLE:=LuCI with HTTPS support (PolarSSL as SSL backend)
-LUCI_DEPENDS:=+luci +libustream-polarssl +px5g
+LUCI_TITLE:=LuCI with HTTPS support (mbedTLS as SSL backend)
+LUCI_DEPENDS:=+luci +libustream-mbedtls +px5g
 
 include ../../luci.mk
 
