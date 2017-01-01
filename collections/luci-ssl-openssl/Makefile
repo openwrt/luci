@@ -11,8 +11,8 @@ LUCI_BASENAME:=ssl-openssl
 
 LUCI_TITLE:=LuCI with HTTPS support (OpenSSL as SSL backend)
 LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
- Note: px5g still requires libpolarssl
-LUCI_DEPENDS:=+luci +libustream-openssl +px5g
+ Note: px5g still requires libmbedtls
+LUCI_DEPENDS:=+luci +libustream-openssl +px5g-mbedtls
 
 include ../../luci.mk
 
