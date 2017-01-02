@@ -46,7 +46,7 @@ end
 -- END Map
 
 -- BEGIN Global Section
-global_section = m:section(TypedSection, "global", "Global Settings")
+global_section = m:section(TypedSection, "global", translate("Global Settings"))
 global_section.optional = false
 global_section.rmempty = false
 global_section.anonymous = true
@@ -142,7 +142,7 @@ end
 
 
 -- BEGIN Section
-d = m:section(TypedSection, "entry", "Schedule events")
+d = m:section(TypedSection, "entry", translate("Schedule events"))
 d.addremove = true  
 --d.anonymous = true
 -- END Section
@@ -157,13 +157,13 @@ c.optional=false; c.rmempty = false;
 dow = d:option(MultiValue, "daysofweek", translate("Day(s) of Week"))
 dow.optional = false
 dow.rmempty = false
-dow:value("Monday")
-dow:value("Tuesday")
-dow:value("Wednesday")
-dow:value("Thursday")
-dow:value("Friday")
-dow:value("Saturday")
-dow:value("Sunday")
+dow:value("Monday", translate("Monday"))
+dow:value("Tuesday", translate("Tuesday"))
+dow:value("Wednesday", translate("Wednesday"))
+dow:value("Thursday", translate("Thursday"))
+dow:value("Friday", translate("Friday"))
+dow:value("Saturday", translate("Saturday"))
+dow:value("Sunday", translate("Sunday"))
 -- END Day(s) of Weel
 
 -- BEGIN Start Wifi Dropdown
