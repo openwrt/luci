@@ -15,10 +15,10 @@
 module("luci.controller.wifischedule.wifi_schedule", package.seeall)  
 
 function index()
-     entry({"admin", "wifi_schedule"}, firstchild(), "Wifi Schedule", 60).dependent=false  
-     entry({"admin", "wifi_schedule", "tab_from_cbi"}, cbi("wifischedule/wifi_schedule"), "Schedule", 1)
-     entry({"admin", "wifi_schedule", "wifi_schedule"}, call("wifi_schedule_log"), "View Logfile", 2) 
-     entry({"admin", "wifi_schedule", "cronjob"}, call("view_crontab"), "View Cron Jobs", 3) 
+     entry({"admin", "wifi_schedule"}, firstchild(), _("Wifi Schedule"), 60).dependent=false
+     entry({"admin", "wifi_schedule", "tab_from_cbi"}, cbi("wifischedule/wifi_schedule"), _("Schedule"), 1)
+     entry({"admin", "wifi_schedule", "wifi_schedule"}, call("wifi_schedule_log"), _("View Logfile"), 2)
+     entry({"admin", "wifi_schedule", "cronjob"}, call("view_crontab"), _("View Cron Jobs"), 3)
 end
 
 function wifi_schedule_log()

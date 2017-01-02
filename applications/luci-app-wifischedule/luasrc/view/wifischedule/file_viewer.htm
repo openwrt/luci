@@ -15,7 +15,7 @@ Author: Nils Koenig <openwrt@newk.it>
 -%>
 
 <%+header%>
-<h2 name="title"><%=title%></h2>
+<h2 name="title"><%=translate(title)%></h2>
 <div id="content_fileviewer">
 <textarea style="width: 100%" readonly="readonly" wrap="off" rows="<%=content:cmatch("\n")+1%>" id="content_id"><%=content:pcdata()%></textarea>
 </div>
