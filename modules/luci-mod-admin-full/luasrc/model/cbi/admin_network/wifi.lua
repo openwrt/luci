@@ -94,7 +94,7 @@ local function txpower_current(pwr, list)
 			end
 		end
 	end
-	return (list[#list] and list[#list].driver_dbm) or pwr or 0
+	return pwr or ""
 end
 
 local iw = luci.sys.wifi.getiwinfo(arg[1])
@@ -191,7 +191,7 @@ end
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
-	if #tx_power_list > 1 then
+	if #tx_power_list > 0 then
 		tp = s:taboption("general", ListValue,
 			"txpower", translate("Transmit Power"), "dBm")
 		tp.rmempty = true
@@ -200,6 +200,7 @@ if hwtype == "mac80211" then
 			return txpower_current(Value.cfgvalue(...), tx_power_list)
 		end
 
+		tp:value("", translate("auto"))
 		for _, p in ipairs(tx_power_list) do
 			tp:value(p.driver_dbm, "%i dBm (%i mW)"
 				%{ p.display_dbm, p.display_mw })
@@ -251,6 +252,7 @@ if hwtype == "atheros" then
 		return txpower_current(Value.cfgvalue(...), tx_power_list)
 	end
 
+	tp:value("", translate("auto"))
 	for _, p in ipairs(tx_power_list) do
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
@@ -308,6 +310,7 @@ if hwtype == "broadcom" then
 		return txpower_current(Value.cfgvalue(...), tx_power_list)
 	end
 
+	tp:value("", translate("auto"))
 	for _, p in ipairs(tx_power_list) do
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
