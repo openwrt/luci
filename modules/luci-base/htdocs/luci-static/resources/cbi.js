@@ -523,13 +523,6 @@ function cbi_init() {
 		}
 	}
 
-	nodes = document.querySelectorAll('[data-type]');
-
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
-		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
-		                   node.getAttribute('data-type'));
-	}
-
 	nodes = document.querySelectorAll('[data-choices]');
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
@@ -560,6 +553,13 @@ function cbi_init() {
 		}
 
 		cbi_dynlist_init(node, choices[2], choices[3], options);
+	}
+
+	nodes = document.querySelectorAll('[data-type]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
+		                   node.getAttribute('data-type'));
 	}
 
 	cbi_d_update();
