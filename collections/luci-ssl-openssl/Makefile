@@ -11,7 +11,9 @@ LUCI_BASENAME:=ssl-openssl
 
 LUCI_TITLE:=LuCI with HTTPS support (OpenSSL as SSL backend)
 LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
- Note: px5g still requires libpolarssl
+ Note: px5g still requires libmbedtls (in LEDE) or libpolarssl (in Openwrt). \
+ In LEDE it is also possible to replace px5g with openssl-util as uhttpd can \
+ also generate keys with openssl commandline tools if px5g is not installed.
 LUCI_DEPENDS:=+luci +libustream-openssl +px5g
 
 include ../../luci.mk
