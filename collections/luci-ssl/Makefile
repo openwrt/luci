@@ -10,7 +10,7 @@ LUCI_TYPE:=col
 LUCI_BASENAME:=ssl
 
 LUCI_TITLE:=LuCI with HTTPS support (mbedTLS as SSL backend)
-LUCI_DEPENDS:=+luci +libustream-mbedtls +px5g
+LUCI_DEPENDS:=+luci +libustream-mbedtls +px5g-mbedtls
 
 include ../../luci.mk
 
