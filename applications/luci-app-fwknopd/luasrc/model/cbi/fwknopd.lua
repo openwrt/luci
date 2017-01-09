@@ -1,19 +1,19 @@
 -- Copyright 2015 Jonathan Bennett <jbennett@incomsystems.biz>
 -- Licensed to the public under the GNU General Public License v2.
-
+tmp = 0
 m = Map("fwknopd", translate("Firewall Knock Operator"))
 
 s = m:section(TypedSection, "global", translate("Enable Uci/Luci control")) -- Set uci control on or off
 s.anonymous=true
 s:option(Flag, "uci_enabled", translate("Enable config overwrite"), translate("When unchecked, the config files in /etc/fwknopd will be used as is, ignoring any settings here."))
-qr = s:option(DummyValue, "note0", "dummy")
-qr.template = "fwknopd-qr"
-qr:depends("uci_enabled", "1")
 
 s = m:section(TypedSection, "access", translate("access.conf stanzas")) -- set the access.conf settings
 s.anonymous=true
 s.addremove=true
-s.dynamic=true
+qr = s:option(DummyValue, "note0", "dummy")
+qr.tmp = tmp
+qr.template = "fwknopd-qr"
+qr:depends("uci_enabled", "1")
 s:option(Value, "SOURCE", "SOURCE", translate("Use ANY for any source ip"))
 k1 = s:option(Value, "KEY", "KEY", translate("Define the symmetric key used for decrypting an incoming SPA packet that is encrypted by the fwknop client with Rijndael."))
 k1:depends("keytype", translate("Normal Key"))
@@ -40,15 +40,13 @@ s:option(Value, "REQUIRE_SOURCE_ADDRESS", "REQUIRE_SOURCE_ADDRESS", translate("F
 					This makes it impossible to use the -s command line argument on the fwknop client command line, so either -R \
 					has to be used to automatically resolve the external address (if the client behind a NAT) or the client must \
 					know the external IP and set it via the -a argument."))
-s:option(DummyValue, "note1", translate("Enter custom access.conf variables below:"))
 
 s = m:section(TypedSection, "config", translate("fwknopd.conf config options")) 
 s.anonymous=true
-s.dynamic=true
 s:option(Value, "MAX_SPA_PACKET_AGE", "MAX_SPA_PACKET_AGE", translate("Maximum age in seconds that an SPA packet will be accepted. defaults to 120 seconds"))
 s:option(Value, "PCAP_INTF", "PCAP_INTF", translate("Specify the ethernet interface on which fwknopd will sniff packets."))
 s:option(Value, "ENABLE_IPT_FORWARDING", "ENABLE_IPT_FORWARDING", translate("Allow SPA clients to request access to services through an iptables firewall instead of just to it."))
-s:option(DummyValue, "note2", translate("Enter custom fwknopd.conf variables below:"))
+s:option(Value, "ENABLE_NAT_DNS", "ENABLE_NAT_DNS", translate("Allow SPA clients to request forwarding destination by DNS name."))
 
 return m
 
