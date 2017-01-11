@@ -73,11 +73,11 @@
 			if (data[j].domain == "_nodomain_")
 				tr.insertCell(-1).innerHTML = '<em><%:config error%></em>';
 			else
-				tr.insertCell(-1).innerHTML = data[j].domain;
+				tr.insertCell(-1).innerHTML = data[j].lookup;
 
 			// registered IP
 			switch (data[j].reg_ip) {
-				case "_nodomain_":
+				case "_nolookup_":
 					tr.insertCell(-1).innerHTML = '<em><%:Config error%></em>';
 					break;
 				case "_nodata_":

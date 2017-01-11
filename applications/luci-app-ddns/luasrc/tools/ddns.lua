@@ -1,4 +1,4 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.tools.ddns", package.seeall)
@@ -35,17 +35,21 @@ end
 
 -- check if Wget with SSL support or cURL installed
 function check_ssl()
-	if (SYS.call([[ grep -i "\+ssl" /usr/bin/wget >/dev/null 2>&1 ]]) == 0) then
+	if NXFS.access("/usr/bin/wget-ssl") then
 		return true
+	elseif NXFS.access("/usr/bin/curl") then
+		return true
+	elseif NXFS.access("/usr/bin/uclient-fetch") then
+		return NXFS.access("/lib/libustream-ssl.so")
 	else
-		return NXFS.access("/usr/bin/curl")
+		return false
 	end
 end
 
 -- check if Wget with SSL or cURL with proxy support installed
 function check_proxy()
 	-- we prefere GNU Wget for communication
-	if (SYS.call([[ grep -i "\+ssl" /usr/bin/wget >/dev/null 2>&1 ]]) == 0) then
+	if NXFS.access("/usr/bin/wget-ssl") then
 		return true
 
 	-- if not installed cURL must support proxy
@@ -54,13 +58,13 @@ function check_proxy()
 
 	-- only BusyBox Wget is installed
 	else
-		return NXFS.access("/usr/bin/wget")
+		return NXFS.access("/usr/bin/wget") or NXFS.access("/usr/bin/uclient-fetch")
 	end
 end
 
 -- check if BIND host installed
 function check_bind_host()
-	return NXFS.access("/usr/bin/host")
+	return NXFS.access("/usr/bin/host") or NXFS.access("/usr/bin/khost")
 end
 
 -- convert epoch date to given format

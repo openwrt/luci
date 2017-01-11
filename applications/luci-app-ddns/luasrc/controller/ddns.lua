@@ -1,7 +1,7 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
 -- Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.ddns", package.seeall)
@@ -15,7 +15,8 @@ local SYS  = require "luci.sys"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 local UTIL = require "luci.util"
 
-DDNS_MIN = "2.4.2-1"	-- minimum version of service required
+DDNS_MIN = "2.7.6-1"	-- minimum version of service required
+luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -118,13 +119,19 @@ local function _get_status()
 		end
 
 		-- try to get registered IP
-		local domain	= s["domain"] or "_nodomain_"
+		local lookup_host = s["lookup_host"] or "_nolookup_"
 		local dnsserver	= s["dns_server"] or ""
 		local force_ipversion = tonumber(s["force_ipversion"] or 0)
 		local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
-		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
-		command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 ..
-			[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
+		local is_glue = tonumber(s["is_glue"] or 0)
+		local command = luci_helper .. [[ -]]
+		if (use_ipv6 == 1) then command = command .. [[6]] end
+		if (force_ipversion == 1) then command = command .. [[f]] end
+		if (force_dnstcp == 1) then command = command .. [[t]] end
+		if (is_glue == 1) then command = command .. [[g]] end
+		command = command .. [[l ]] .. lookup_host
+		if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
+		command = command .. [[ -- get_registered_ip]]
 		local reg_ip = SYS.exec(command)
 		if reg_ip == "" then
 			reg_ip = "_nodata_"
@@ -135,7 +142,7 @@ local function _get_status()
 			section  = section,
 			enabled  = enabled,
 			iface    = iface,
-			domain   = domain,
+			lookup   = lookup_host,
 			reg_ip   = reg_ip,
 			pid      = pid,
 			datelast = datelast,
@@ -151,7 +158,7 @@ end
 function logread(section)
 	-- read application settings
 	local uci	= UCI.cursor()
-	local log_dir	= uci:get("ddns", "global", "log_dir") or "/var/log/ddns"
+	local log_dir	= uci:get("ddns", "global", "ddns_logdir") or "/var/log/ddns"
 	local lfile	= log_dir .. "/" .. section .. ".log"
 	local ldata	= NXFS.readfile(lfile)
 
@@ -220,7 +227,8 @@ function startstop(section, enabled)
 	uci:unload("ddns")
 
 	-- start dynamic_dns_updater.sh script
-	os.execute ([[/usr/lib/ddns/dynamic_dns_updater.sh %s 0 > /dev/null 2>&1 &]] % section)
+	local command = luci_helper .. [[ -S ]] .. section .. [[ -- start]]
+	os.execute(command)
 	NX.nanosleep(3)	-- 3 seconds "show time"
 
 	-- status changed so return full status
