@@ -18,17 +18,17 @@ o = s:option(Flag, "trm_enabled", translate("Enable Travelmate"))
 o.rmempty = false
 o.default = 0
 
-o = s:option(Value, "trm_loop", translate("Loop timeout in seconds for wlan monitoring"),
-	translate("Default 30, range 5-60"))
+o = s:option(Value, "trm_maxwait", translate("Max. timeout in seconds for wlan interface reload"),
+	translate("Default 20, range 10-60"))
 o.rmempty = false
-o.default = 30
-o.datatype = "range(5,60)"
+o.default = 20
+o.datatype = "range(10,60)"
 
 o = s:option(Value, "trm_maxretry", translate("Max. number of connection retries to an uplink"),
-	translate("Default 3, range 0-10. Set to 0 to allow unlimited retries"))
+	translate("Default 3, range 1-10"))
 o.rmempty = false
 o.default = 3
-o.datatype = "range(0,10)"
+o.datatype = "range(1,10)"
 
 -- Extra options
 
@@ -38,8 +38,8 @@ a = e:option(Flag, "trm_debug", translate("Debug logging"))
 a.rmempty = true
 a.default = a.disabled
 
-a = e:option(Value, "trm_device", translate("Use only one radio, e.g. 'radio0'"),
-	translate("Default: empty = use all radios."))
+a = e:option(Value, "trm_iface", translate("Restrict reload trigger to certain interface(s)"),
+	translate("Space separated list of wwan interfaces that trigger reload action. To disable reload trigger set it to 'false'. Default: empty"))
 a.rmempty = true
 a.default = ""
 a.datatype = "uciname"
