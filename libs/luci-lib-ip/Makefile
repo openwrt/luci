@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Lua library for IP calculation and routing information
 LUCI_DEPENDS:=+liblua +libnl-tiny
 
+PKG_LICENSE:=Apache-2.0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
