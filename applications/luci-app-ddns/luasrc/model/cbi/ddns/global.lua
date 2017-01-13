@@ -1,4 +1,4 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local NX   = require "nixio"
@@ -45,8 +45,8 @@ function ns.cfgvalue(self, section)
 	return self.map:get(section)
 end
 
--- allow_local_ip  -- ##########################################################
-local ali	= ns:option(Flag, "allow_local_ip")
+-- upd_privateip  -- ###########################################################
+local ali	= ns:option(Flag, "upd_privateip")
 ali.title	= translate("Allow non-public IP's")
 ali.description = translate("Non-public and by default blocked IP's") .. ":"
 		.. [[<br /><strong>IPv4: </strong>]]
@@ -65,8 +65,8 @@ function ali.validate(self, value)
 	return value
 end
 
--- date_format  -- #############################################################
-local df	= ns:option(Value, "date_format")
+-- ddns_dateformat  -- #########################################################
+local df	= ns:option(Value, "ddns_dateformat")
 df.title	= translate("Date format")
 df.description	= [[<a href="http://www.cplusplus.com/reference/ctime/strftime/" target="_blank">]]
 		.. translate("For supported codes look here") 
@@ -88,8 +88,8 @@ function df.validate(self, value)
 	return value
 end
 
--- run_dir  -- #################################################################
-local rd	= ns:option(Value, "run_dir")
+-- ddns_rundir  -- #############################################################
+local rd	= ns:option(Value, "ddns_rundir")
 rd.title	= translate("Status directory")
 rd.description	= translate("Directory contains PID and other status information for each running section")
 rd.rmempty	= true
@@ -101,8 +101,8 @@ function rd.validate(self, value)
 	return value
 end
 
--- log_dir  -- #################################################################
-local ld	= ns:option(Value, "log_dir")
+-- ddns_logdir  -- #############################################################
+local ld	= ns:option(Value, "ddns_logdir")
 ld.title	= translate("Log directory")
 ld.description	= translate("Directory contains Log files for each running section")
 ld.rmempty	= true
@@ -114,8 +114,8 @@ function ld.validate(self, value)
 	return value
 end
 
--- log_lines  -- ###############################################################
-local ll	= ns:option(Value, "log_lines")
+-- ddns_loglines  -- ###########################################################
+local ll	= ns:option(Value, "ddns_loglines")
 ll.title	= translate("Log length")
 ll.description	= translate("Number of last lines stored in log files")
 ll.rmempty	= true

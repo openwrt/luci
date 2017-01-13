@@ -1,7 +1,7 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
 -- Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
--- Copyright 2014-2015 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local NX   = require "nixio"
@@ -12,6 +12,7 @@ local DISP = require "luci.dispatcher"
 local WADM = require "luci.tools.webadmin"
 local DTYP = require "luci.cbi.datatypes"
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
+local CTRL = require "luci.controller.ddns"	-- this application's controller
 
 -- takeover arguments -- #######################################################
 local section	= arg[1]
@@ -67,42 +68,39 @@ end
 -- local IP can be read
 local function _verify_ip_source()
 	-- section is globally defined here be calling agrument (see above)
-	local _network   = "-"
-	local _url       = "-"
-	local _interface = "-"
-	local _script    = "-"
-	local _proxy     = ""
+	local _arg
 
 	local _ipv6   = usev6:formvalue(section)
 	local _source = (_ipv6 == "1")
 			and src6:formvalue(section)
 			or  src4:formvalue(section)
+
+	local command = CTRL.luci_helper .. [[ -]]
+	if (_ipv6 == "1")  then command = command .. [[6]] end
+
 	if _source == "network" then
-		_network = (_ipv6 == "1")
+		_arg = (_ipv6 == "1")
 			and ipn6:formvalue(section)
 			or  ipn4:formvalue(section)
+		command = command .. [[n ]] .. _arg
 	elseif _source == "web" then
-		_url = (_ipv6 == "1")
+		_arg = (_ipv6 == "1")
 			and iurl6:formvalue(section)
 			or  iurl4:formvalue(section)
+		command = command .. [[u ]] .. _arg
+
 		-- proxy only needed for checking url
-		_proxy = (pxy) and pxy:formvalue(section) or ""
+		_arg = (pxy) and pxy:formvalue(section) or ""
+		if (_arg and #_arg > 0) then
+			command = command .. [[ -p ]] .. _arg
+		end
 	elseif _source == "interface" then
-		_interface = ipi:formvalue(section)
+		command = command .. [[i ]] .. ipi:formvalue(section)
 	elseif _source == "script" then
-		_script = ips:formvalue(section)
+		command = command .. [[s ]] .. ips:formvalue(section)
 	end
-
-	local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh get_local_ip ]] ..
-		_ipv6 .. [[ ]] .. _source .. [[ ]] .. _network .. [[ ]] ..
-		_url .. [[ ]] .. _interface .. [[ ']] .. _script.. [[' ]] .. _proxy
-	local ret = SYS.call(command)
-
-	if ret == 0 then
-		return true	-- valid
-	else
-		return nil	-- invalid
-	end
+	command = command .. [[ -- get_local_ip]]
+	return (SYS.call(command) == 0)
 end
 
 -- cbi-map definition -- #######################################################
@@ -129,9 +127,9 @@ end
 
 -- read application settings -- ################################################
 -- date format; if not set use ISO format
-date_format = m.uci:get(m.config, "global", "date_format") or "%F %R"
+ddns_dateformat = m.uci:get(m.config, "global", "ddns_dateformat") or "%F %R"
 -- log directory
-log_dir = m.uci:get(m.config, "global", "log_dir") or "/var/log/ddns"
+ddns_logdir = m.uci:get(m.config, "global", "ddns_logdir") or "/var/log/ddns"
 
 -- cbi-section definition -- ###################################################
 ns = m:section( NamedSection, section, "service",
@@ -156,6 +154,25 @@ en.orientation = "horizontal"
 function en.parse(self, section)
 	DDNS.flag_parse(self, section)
 end
+
+-- IPv4/IPv6 - lookup_host -- #################################################
+luh = ns:taboption("basic", Value, "lookup_host",
+		translate("Lookup Hostname"),
+		translate("Hostname/FQDN to validate, if IP update happen or necessary") )
+luh.rmempty	= false
+luh.placeholder = "myhost.example.com"
+function luh.validate(self, value)
+	if not value
+	or not (#value > 0)
+	or not DTYP.hostname(value) then
+		return nil, err_tab_basic(self) .. translate("invalid FQDN / required - Sample") .. ": 'myhost.example.com'"
+	else
+		return UTIL.trim(value)
+	end
+end
+--function luh.parse(self, section, novld)
+--	DDNS.value_parse(self, section, novld)
+--end
 
 -- use_ipv6 (NEW)  -- ##########################################################
 usev6 = ns:taboption("basic", ListValue, "use_ipv6",
@@ -195,7 +212,7 @@ svc4.default	= "-"
 svc4:depends("use_ipv6", "0")	-- only show on IPv4
 
 local services4 = { }
-local fd4 = io.open("/usr/lib/ddns/services", "r")
+local fd4 = io.open("/etc/ddns/services", "r")
 
 if fd4 then
 	local ln
@@ -247,7 +264,7 @@ if not has_ipv6 then
 end
 
 local services6 = { }
-local fd6 = io.open("/usr/lib/ddns/services_ipv6", "r")
+local fd6 = io.open("/etc/ddns/services_ipv6", "r")
 
 if fd6 then
 	local ln
@@ -936,8 +953,10 @@ function dns.validate(self, value)
 	else
 		local ipv6  = usev6:formvalue(section)
 		local force = (fipv) and fipv:formvalue(section) or "0"
-		local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh verify_dns ]] ..
-			value .. [[ ]] .. ipv6 .. [[ ]] .. force
+		local command = CTRL.luci_helper .. [[ -]]
+		if (ipv6 == 1)  then command = command .. [[6]] end
+		if (force == 1) then command = command .. [[f]] end
+		command = command .. [[d ]] .. value .. [[ -- verify_dns]]
 		local ret = SYS.call(command)
 		if     ret == 0 then return value	-- everything OK
 		elseif ret == 2 then return nil, err_tab_adv(self) .. translate("nslookup can not resolve host")
@@ -1002,8 +1021,10 @@ if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 		elseif has_proxy then
 			local ipv6  = usev6:formvalue(section) or "0"
 			local force = (fipv) and fipv:formvalue(section) or "0"
-			local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh verify_proxy ]] ..
-				value .. [[ ]] .. ipv6 .. [[ ]] .. force
+			local command = CRTL.luci_helper .. [[ -]]
+			if (ipv6 == 1)  then command = command .. [[6]] end
+			if (force == 1) then command = command .. [[f]] end
+			command = command .. [[p ]] .. value .. [[ -- verify_proxy]]
 			local ret = SYS.call(command)
 			if     ret == 0 then return value
 			elseif ret == 2 then return nil, err_tab_adv(self) .. translate("nslookup can not resolve host")
@@ -1033,7 +1054,7 @@ slog:value("4", translate("Error"))
 logf = ns:taboption("advanced", Flag, "use_logfile",
 	translate("Log to file"),
 	translate("Writes detailed messages to log file. File will be truncated automatically.") .. "<br />" ..
-	translate("File") .. [[: "]] .. log_dir .. [[/]] .. section .. [[.log"]] )
+	translate("File") .. [[: "]] .. ddns_logdir .. [[/]] .. section .. [[.log"]] )
 logf.orientation = "horizontal"
 logf.rmempty = false	-- we want to save in /etc/config/ddns file on "0" because
 logf.default = "1"	-- if not defined write to log by default
@@ -1230,7 +1251,7 @@ lv.template = "ddns/detail_logview"
 lv.inputtitle = translate("Read / Reread log file")
 lv.rows = 50
 function lv.cfgvalue(self, section)
-	local lfile=log_dir .. "/" .. section .. ".log"
+	local lfile=ddns_logdir .. "/" .. section .. ".log"
 	if NXFS.access(lfile) then
 		return lfile .. "\n" .. translate("Please press [Read] button")
 	end

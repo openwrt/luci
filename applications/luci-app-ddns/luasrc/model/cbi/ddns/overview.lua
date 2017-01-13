@@ -1,4 +1,4 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local NXFS = require "nixio.fs"
@@ -45,10 +45,13 @@ m.description = translate("Dynamic DNS allows that your router can be reached wi
 
 m.on_after_commit = function(self)
 	if self.changed then	-- changes ?
+		local command = CTRL.luci_helper
 		if SYS.init.enabled("ddns") then	-- ddns service enabled, restart all
-			os.execute("/etc/init.d/ddns restart")
+			command = command .. " -- restart"
+			os.execute(command)
 		else	-- ddns service disabled, send SIGHUP to running
-			os.execute("killall -1 dynamic_dns_updater.sh")
+			command = command .. " -- reload"
+			os.execute(command)
 		end
 	end
 end
@@ -123,31 +126,34 @@ function ts.create(self, name)
 	HTTP.redirect( self.extedit:format(name) )
 end
 
--- Domain and registered IP -- #################################################
-dom = ts:option(DummyValue, "_domainIP",
-	translate("Hostname/Domain") .. "<br />" .. translate("Registered IP") )
+-- Lookup_Host and registered IP -- #################################################
+dom = ts:option(DummyValue, "_lookupIP",
+	translate("Lookup Hostname") .. "<br />" .. translate("Registered IP") )
 dom.template = "ddns/overview_doubleline"
 function dom.set_one(self, section)
-	local domain = self.map:get(section, "domain") or ""
-	if domain ~= "" then
-		return domain
+	local lookup = self.map:get(section, "lookup_host") or ""
+	if lookup ~= "" then
+		return lookup
 	else
 		return [[<em>]] .. translate("config error") .. [[</em>]]
 	end
 end
 function dom.set_two(self, section)
-	local domain = self.map:get(section, "domain") or ""
-	if domain == "" then return "" end
+	local lookup_host = self.map:get(section, "lookup_host") or ""
+	if lookup_host == "" then return "" end
 	local dnsserver = self.map:get(section, "dnsserver") or ""
 	local use_ipv6 = tonumber(self.map:get(section, "use_ipv6") or 0)
 	local force_ipversion = tonumber(self.map:get(section, "force_ipversion") or 0)
 	local force_dnstcp = tonumber(self.map:get(section, "force_dnstcp") or 0)
-	local command = [[/usr/lib/ddns/dynamic_dns_lucihelper.sh]]
-	if not NXFS.access(command, "rwx", "rx", "rx") then
-		NXFS.chmod(command, 755)
-	end
-	command = command .. [[ get_registered_ip ]] .. domain .. [[ ]] .. use_ipv6 ..
-		[[ ]] .. force_ipversion .. [[ ]] .. force_dnstcp .. [[ ]] .. dnsserver
+	local is_glue = tonumber(self.map:get(section, "is_glue") or 0)
+	local command = CTRL.luci_helper .. [[ -]]
+	if (use_ipv6 == 1) then command = command .. [[6]] end
+	if (force_ipversion == 1) then command = command .. [[f]] end
+	if (force_dnstcp == 1) then command = command .. [[t]] end
+	if (is_glue == 1) then command = command .. [[g]] end
+	command = command .. [[l ]] .. lookup_host
+	if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
+	command = command .. [[ -- get_registered_ip]]
 	local ip = SYS.exec(command)
 	if ip == "" then ip = translate("no data") end
 	return ip

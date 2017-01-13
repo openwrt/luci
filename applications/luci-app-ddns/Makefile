@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2015 The LuCI Team <luci@lists.subsignal.org>
+# Copyright (C) 2008-2017 The LuCI Team <luci@lists.subsignal.org>
 #
 # This is free software, licensed under the Apache License, Version 2.0 .
 #
@@ -10,7 +10,7 @@ PKG_NAME:=luci-app-ddns
 
 # Version == major.minor.patch
 # increase on new functionality (minor) or patches (patch)
-PKG_VERSION:=2.2.4
+PKG_VERSION:=2.2.5
 
 # Release == build
 # increase on changes of translation files

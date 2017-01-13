@@ -1,4 +1,4 @@
--- Copyright 2014 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local CTRL = require "luci.controller.ddns"	-- this application's controller
