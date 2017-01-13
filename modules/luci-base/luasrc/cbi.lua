@@ -31,6 +31,34 @@ REMOVE_PREFIX = "cbi.rts."
 RESORT_PREFIX = "cbi.sts."
 FEXIST_PREFIX = "cbi.cbe."
 
+-- For the Simple* derivatives of AbstractValue
+-- we need to modify cfgvalue
+function simple_cfgvalue(self, section)
+	local value
+	if self.value then
+		if type(self.value) == "function" then
+			value = self:value(section)
+		else
+			value = self.value
+		end
+	elseif self.fakemap then
+		value = AbstractValue.formvalue(self, section)
+	else
+		value = AbstractValue.cfgvalue(self, section)
+	end
+	return value
+end
+
+-- For the Simple* derivatives of AbstractValue
+-- we need to modify parse
+function simple_parse(self, section, novld)
+	local fvalue = self:formvalue(section)
+	if fvalue and #fvalue > 0 then
+		self:write(section, fvalue)
+	end
+end
+
+-- Override for actual desired action
 -- Loads a CBI map from given file, creating an environment and returns it
 function load(cbimap, ...)
 	local fs   = require "nixio.fs"
@@ -1007,6 +1035,31 @@ function SimpleSection.__init__(self, form, ...)
 	self.template = "cbi/nullsection"
 end
 
+DummySection = class(AbstractSection)
+
+-- So SimpleSection can be used with a regular map (not only e.g. SimpleForm or Table)
+function DummySection.__init__(self, form, section, ...)
+	AbstractSection.__init__(self, form, nil, ...)
+	self.template = "cbi/nullsection"
+	self.section = section or "1"
+end
+
+function DummySection.cfgsections(self)
+	return { self.section }
+end
+
+function DummySection.set(self, section, option, value)
+end
+
+function DummySection.del(self, section)
+end
+
+function DummySection.remove(self, section)
+end
+
+function DummySection.parse(self, section)
+	AbstractSection.parse(self, self.section)
+end
 
 Table = class(AbstractSection)
 
@@ -1543,6 +1596,7 @@ function DummyValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template = "cbi/dvalue"
 	self.value = nil
+	self.fakemap = false
 end
 
 function DummyValue.cfgvalue(self, section)
@@ -1563,6 +1617,24 @@ function DummyValue.parse(self)
 
 end
 
+-- SimpleValue is used to have UI elements not attached to the underlying Map
+SimpleValue = class(AbstractValue)
+
+function SimpleValue.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template = "cbi/value"
+	self.section = "1"
+	self.keylist = {}
+	self.vallist = {}
+end
+
+SimpleValue.cfgvalue=simple_cfgvalue
+SimpleValue.parse=simple_parse
+
+-- Override for actual desired action
+function SimpleValue.write(self, section)
+
+end
 
 --[[
 Flag - A flag being enabled or disabled
@@ -1613,6 +1685,39 @@ function Flag.validate(self, value)
 	return value
 end
 
+SimpleFlag = class(Flag)
+
+function SimpleFlag.__init__(self, ...)
+	Flag.__init__(self, ...)
+	self.section = "1"
+end
+
+SimpleFlag.cfgvalue=simple_cfgvalue
+
+function SimpleFlag.parse(self, section, novld)
+	local fexists = self.map:formvalue(
+		FEXIST_PREFIX .. self.config .. "." .. section .. "." .. self.option)
+
+	if fexists then
+		local fvalue = self:formvalue(section) and self.enabled or self.disabled
+		fvalue, val_err = self:validate(fvalue, section)
+		if not fvalue then
+			if not novld then
+				self:add_error(section, "invalid", val_err)
+			end
+			return
+		end
+		if not (fvalue == self.default and (self.optional or self.rmempty)) then
+			self:write(section, fvalue)
+		end
+	end
+end
+
+-- Override for actual desired action
+function SimpleFlag.write(self, section)
+
+end
+
 --[[
 ListValue - A one-line value predefined in a list
 	widget: The widget that will be used (select, radio)
@@ -1655,6 +1760,23 @@ function ListValue.validate(self, val)
 end
 
 
+--[[
+SimpleListValue - A one-line value predefined in a list no attached to a map
+	widget: The widget that will be used (select, radio)
+]]--
+SimpleListValue = class(ListValue)
+
+function SimpleListValue.__init__(self, ...)
+	ListValue.__init__(self, ...)
+	self.section = "1"
+end
+
+SimpleListValue.cfgvalue=simple_cfgvalue
+SimpleListValue.parse=simple_parse
+
+function SimpleListValue.write(self, section)
+
+end
 
 --[[
 MultiValue - Multiple delimited values
@@ -1721,6 +1843,24 @@ function MultiValue.validate(self, val)
 	return result
 end
 
+--[[
+SimpleMultiValue - Multiple delimited values no attached to a map uci
+	widget: The widget that will be used (select, checkbox)
+	delimiter: The delimiter that will separate the values (default: " ")
+]]--
+SimpleMultiListValue = class(ListValue)
+
+function SimpleMultiListValue.__init__(self, ...)
+	MultiListValue.__init__(self, ...)
+	self.section = "1"
+end
+
+SimpleMultiListValue.cfgvalue=simple_cfgvalue
+SimpleMultiListValue.parse=simple_parse
+
+function SimpleMultiListValue.write(self, section)
+
+end
 
 StaticList = class(MultiValue)
 
@@ -1752,6 +1892,18 @@ function StaticList.validate(self, value)
 	return valid
 end
 
+SimpleStaticList = class(StaticList)
+function SimpleStaticList.__init__(self, ...)
+	StaticList.__init__(self, ...)
+	self.section = "1"
+end
+
+SimpleStaticList.cfgvalue=simple_cfgvalue
+SimpleStaticList.parse=simple_parse
+
+function SimpleStaticList.write(self, section)
+
+end
 
 DynamicList = class(AbstractValue)
 
@@ -1833,6 +1985,19 @@ function DynamicList.formvalue(self, section)
 end
 
 
+SimpleDynamicList = class(DynamicList)
+function SimpleDynamicList.__init__(self, ...)
+	DynamicList.__init__(self, ...)
+	self.section = "1"
+end
+
+SimpleDynamicList.parse=simple_parse
+SimpleDynamicList.cfgvalue=DynamicList.formvalue
+
+function SimpleDynamicList.write(self, section)
+
+end
+
 --[[
 TextValue - A multi-line value
 	rows:	Rows
@@ -1842,6 +2007,23 @@ TextValue = class(AbstractValue)
 function TextValue.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/tvalue"
+end
+
+SimpleTextValue = class(TextValue)
+function SimpleTextValue.__init__(self, ...)
+	TextValue.__init__(self, ...)
+	self.section = "1"
+end
+
+--[[
+SimpleTextValue - A multi-line value not associated with a map's uci config
+	rows:	Rows
+]]--
+SimpleTextValue.parse=simple_parse
+SimpleTextValue.cfgvalue=simple_cfgvalue
+
+function SimpleTextValue.write(self, section)
+
 end
 
 --[[
@@ -1857,6 +2039,15 @@ function Button.__init__(self, ...)
         self.unsafeupload = false
 end
 
+SimpleButton = class(SimpleValue)
+
+function SimpleButton.__init__(self, ...)
+	AbstractValue.__init__(self, ...)
+	self.template  = "cbi/button"
+	self.inputstyle = nil
+	self.rmempty = true
+	self.unsafeupload = false
+end
 
 FileUpload = class(AbstractValue)
 
