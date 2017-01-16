@@ -24,8 +24,10 @@ function index()
 	entry({"admin", "status", "realtime", "bandwidth"}, template("admin_status/bandwidth"), _("Traffic"), 2).leaf = true
 	entry({"admin", "status", "realtime", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
-	entry({"admin", "status", "realtime", "wireless"}, template("admin_status/wireless"), _("Wireless"), 3).leaf = true
-	entry({"admin", "status", "realtime", "wireless_status"}, call("action_wireless")).leaf = true
+	if nixio.fs.access("/etc/config/wireless") then
+		entry({"admin", "status", "realtime", "wireless"}, template("admin_status/wireless"), _("Wireless"), 3).leaf = true
+		entry({"admin", "status", "realtime", "wireless_status"}, call("action_wireless")).leaf = true
+	end
 
 	entry({"admin", "status", "realtime", "connections"}, template("admin_status/connections"), _("Connections"), 4).leaf = true
 	entry({"admin", "status", "realtime", "connections_status"}, call("action_connections")).leaf = true
