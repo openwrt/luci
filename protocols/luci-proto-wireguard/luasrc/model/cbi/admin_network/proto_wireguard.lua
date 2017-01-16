@@ -1,4 +1,4 @@
--- Copyright 2016 Dan Luedtke <mail@danrl.com>
+-- Copyright 2016-2017 Dan Luedtke <mail@danrl.com>
 -- Licensed to the public under the Apache License 2.0.
 
 
@@ -33,6 +33,16 @@ listen_port = section:taboption(
 listen_port.datatype = "port"
 listen_port.placeholder = "51820"
 listen_port.optional = true
+
+addresses = section:taboption(
+  "general",
+  DynamicList,
+  "addresses",
+  translate("IP Addresses"),
+  translate("Recommended. IP addresses of the WireGuard interface.")
+)
+addresses.datatype = "ipaddr"
+addresses.optional = true
 
 
 -- advanced --------------------------------------------------------------------
