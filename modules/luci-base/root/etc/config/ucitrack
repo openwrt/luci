@@ -29,7 +29,7 @@ config httpd
 	option init httpd
 
 config fstab
-	option init fstab
+	option exec '/sbin/block mount'
 
 config qos
 	option init qos
