@@ -56,6 +56,8 @@ mount:taboption("general", Flag, "enabled", translate("Enable this mount")).rmem
 o = mount:taboption("general", Value, "uuid", translate("UUID"),
 	translate("If specified, mount the device by its UUID instead of a fixed device node"))
 
+o:value("", translate("-- match by uuid --"))
+
 for i, d in ipairs(devices) do
 	if d.uuid and d.size then
 		o:value(d.uuid, "%s (%s, %d MB)" %{ d.uuid, d.dev, d.size })
@@ -64,11 +66,11 @@ for i, d in ipairs(devices) do
 	end
 end
 
-o:value("", translate("-- match by label --"))
-
 
 o = mount:taboption("general", Value, "label", translate("Label"),
 	translate("If specified, mount the device by the partition label instead of a fixed device node"))
+
+o:value("", translate("-- match by label --"))
 
 o:depends("uuid", "")
 
@@ -80,11 +82,11 @@ for i, d in ipairs(devices) do
 	end
 end
 
-o:value("", translate("-- match by device --"))
-
 
 o = mount:taboption("general", Value, "device", translate("Device"),
 	translate("The device file of the memory or partition (<abbr title=\"for example\">e.g.</abbr> <code>/dev/sda1</code>)"))
+
+o:value("", translate("-- match by device --"))
 
 o:depends({ uuid = "", label = "" })
 
