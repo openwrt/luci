@@ -153,8 +153,8 @@ local function parse_cmdline(cmdid, args)
 	end
 end
 
-function action_run(...)
-	local fs   = require "nixio.fs"
+function execute_command(callback, ...)
+	local fs = require "nixio.fs"
 	local argv = parse_cmdline(...)
 	if argv then
 		local outfile = os.tmpname()
@@ -169,8 +169,8 @@ function action_run(...)
 
 		local binary = not not (stdout:match("[%z\1-\8\14-\31]"))
 
-		luci.http.prepare_content("application/json")
-		luci.http.write_json({
+		callback({
+			ok       = true,
 			command  = table.concat(argv, " "),
 			stdout   = not binary and stdout,
 			stderr   = stderr,
@@ -178,8 +178,39 @@ function action_run(...)
 			binary   = binary
 		})
 	else
-		luci.http.status(404, "No such command")
+		callback({
+			ok       = false,
+			code     = 404,
+			reason   = "No such command"
+		})
 	end
+end
+
+function return_json(result)
+	if result.ok then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(result)
+	else
+		luci.http.status(result.code, result.reason)
+	end
+end
+
+function action_run(...)
+	execute_command(return_json, ...)
+end
+
+function return_html(result)
+	if result.ok then
+		require("luci.template")
+		luci.template.render("commands_public", {
+			exitcode = result.exitcode,
+			stdout = result.stdout,
+			stderr = result.stderr
+		})
+	else
+		luci.http.status(result.code, result.reason)
+	end
+
 end
 
 function action_download(...)
@@ -192,11 +223,11 @@ function action_download(...)
 			local name
 			if chunk:match("[%z\1-\8\14-\31]") then
 				luci.http.header("Content-Disposition", "attachment; filename=%s"
-				                 % fs.basename(argv[1]):gsub("%W+", ".") .. ".bin")
+					% fs.basename(argv[1]):gsub("%W+", ".") .. ".bin")
 				luci.http.prepare_content("application/octet-stream")
 			else
 				luci.http.header("Content-Disposition", "attachment; filename=%s"
-				                 % fs.basename(argv[1]):gsub("%W+", ".") .. ".txt")
+					% fs.basename(argv[1]):gsub("%W+", ".") .. ".txt")
 				luci.http.prepare_content("text/plain")
 			end
 
@@ -214,14 +245,24 @@ function action_download(...)
 	end
 end
 
+
 function action_public(cmdid, args)
+	local disp = false
+	if string.sub(cmdid, -1) == "s" then
+		disp = true
+		cmdid = string.sub(cmdid, 1, -2)
+	end
 	local uci = require "luci.model.uci".cursor()
 	if cmdid and
-	   uci:get("luci", cmdid) == "command" and
-	   uci:get("luci", cmdid, "public") == "1"
-	then
-		action_download(cmdid, args)
-	else
-		luci.http.status(403, "Access to command denied")
+		uci:get("luci", cmdid) == "command" and
+		uci:get("luci", cmdid, "public") == "1"
+		then
+			if disp then
+				execute_command(return_html, cmdid, args)
+			else
+				action_download(cmdid, args)
+			end
+		else
+			luci.http.status(403, "Access to command denied")
+		end
 	end
-end
