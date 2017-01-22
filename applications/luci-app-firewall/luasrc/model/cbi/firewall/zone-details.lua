@@ -88,7 +88,8 @@ for i, v in ipairs(p) do
 	v:value("ACCEPT", translate("accept"))
 end
 
-s:taboption("general", Flag, "masq", translate("Masquerading"))
+s:taboption("general", Flag, "masq", translate("IPv4 Masquerading"))
+s:taboption("general", Flag, "masq6", translate("IPv6 Masquerading"))
 s:taboption("general", Flag, "mtu_fix", translate("MSS clamping"))
 
 net = s:taboption("general", Value, "network", translate("Covered networks"))
