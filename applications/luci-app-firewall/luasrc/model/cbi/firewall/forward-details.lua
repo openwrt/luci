@@ -73,7 +73,7 @@ o = s:option(Value, "src_ip",
 	translate("Source IP address"),
 	translate("Only match incoming traffic from this IP or range."))
 o.rmempty = true
-o.datatype = "neg(ip4addr)"
+o.datatype = "neg(ipmask4)"
 o.placeholder = translate("any")
 
 luci.sys.net.ipv4_hints(function(ip, name)
@@ -99,7 +99,7 @@ end)
 
 
 o.rmempty = true
-o.datatype = "neg(ip4addr)"
+o.datatype = "neg(ipmask4)"
 o.placeholder = translate("any")
 
 
@@ -119,7 +119,7 @@ o.template = "cbi/firewall_zonelist"
 o = s:option(Value, "dest_ip", translate("Internal IP address"),
 	translate("Redirect matched incoming traffic to the specified \
 		internal host"))
-o.datatype = "ip4addr"
+o.datatype = "ipmask4"
 
 luci.sys.net.ipv4_hints(function(ip, name)
 	o:value(ip, "%s (%s)" %{ ip, name })
