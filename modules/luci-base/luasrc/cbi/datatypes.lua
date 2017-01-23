@@ -131,6 +131,40 @@ function ip6prefix(val)
 	return ( val and val >= 0 and val <= 128 )
 end
 
+function ipmask(val)
+	return ipmask4(val) or ipmask6(val)
+end
+
+function ipmask4(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+	local bits = tonumber(mask)
+
+	if bits and bits < 0 or bits > 32 then
+		return false
+	end
+
+	if not bits and not ip4addr(mask) then
+		return false
+	end
+
+	return ip4addr(ip or val)
+end
+
+function ipmask6(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+	local bits = tonumber(mask)
+
+	if bits and bits < 0 or bits > 128 then
+		return false
+	end
+
+	if not bits and not ip6addr(mask) then
+		return false
+	end
+
+	return ip6addr(ip or val)
+end
+
 function port(val)
 	val = tonumber(val)
 	return ( val and val >= 0 and val <= 65535 )
