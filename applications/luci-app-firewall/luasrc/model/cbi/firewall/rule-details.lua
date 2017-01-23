@@ -99,7 +99,7 @@ elseif rule_type == "redirect" then
 
 	o = s:option(Value, "src_ip", translate("Source IP address"))
 	o.rmempty = true
-	o.datatype = "neg(ipaddr)"
+	o.datatype = "neg(ipmask4)"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)
@@ -123,7 +123,7 @@ elseif rule_type == "redirect" then
 
 
 	o = s:option(Value, "dest_ip", translate("Destination IP address"))
-	o.datatype = "neg(ip4addr)"
+	o.datatype = "neg(ipmask4)"
 
 	luci.sys.net.ipv4_hints(function(ip, name)
 		o:value(ip, "%s (%s)" %{ ip, name })
@@ -269,7 +269,7 @@ else
 
 
 	o = s:option(Value, "src_ip", translate("Source address"))
-	o.datatype = "neg(ipaddr)"
+	o.datatype = "neg(ipmask)"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)
@@ -290,7 +290,7 @@ else
 
 
 	o = s:option(Value, "dest_ip", translate("Destination address"))
-	o.datatype = "neg(ipaddr)"
+	o.datatype = "neg(ipmask)"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)
