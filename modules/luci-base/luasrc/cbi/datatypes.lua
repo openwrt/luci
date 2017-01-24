@@ -139,7 +139,7 @@ function ipmask4(val)
 	local ip, mask = val:match("^([^/]+)/([^/]+)$")
 	local bits = tonumber(mask)
 
-	if bits and bits < 0 or bits > 32 then
+	if bits and (bits < 0 or bits > 32) then
 		return false
 	end
 
@@ -154,7 +154,7 @@ function ipmask6(val)
 	local ip, mask = val:match("^([^/]+)/([^/]+)$")
 	local bits = tonumber(mask)
 
-	if bits and bits < 0 or bits > 128 then
+	if bits and (bits < 0 or bits > 128) then
 		return false
 	end
 
