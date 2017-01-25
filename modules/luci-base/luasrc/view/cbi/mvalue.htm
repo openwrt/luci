@@ -36,7 +36,7 @@
 				<label<%= attr("for", cbid.."-"..key)%>></label>
 				<%=pcdata(self.vallist[i])%>
 			</label>
-			<% if i == self.size then write('<br />') end %>
+			<% if self.size and (i % self.size) == 0 then write('<br />') end %>
 		<% end %>
 	</div>
 <% end %>
