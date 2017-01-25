@@ -109,11 +109,26 @@ function usbdev.remove(self, section)
 	end
 end
 
+
+usbport = s:option(MultiValue, "ports", translate("USB Ports"))
+usbport:depends("trigger", "usbport")
+usbport.rmempty = true
+usbport.widget = "checkbox"
+usbport.size = 1
+
 for p in nixio.fs.glob("/sys/bus/usb/devices/[0-9]*/manufacturer") do
 	local id = p:match("%d+-%d+")
 	local mf = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/manufacturer") or "?"
 	local pr = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/product")      or "?"
 	usbdev:value(id, "%s (%s - %s)" %{ id, mf, pr })
+end
+
+for p in nixio.fs.glob("/sys/bus/usb/devices/[0-9]*") do
+	local bus, port = p:match("(%d+)-(%d+)")
+	if bus and port then
+		usbport:value("usb%u-port%u" %{ tonumber(bus), tonumber(port) },
+		              "Hub %u, Port %u" %{ tonumber(bus), tonumber(port) })
+	end
 end
 
 return m
