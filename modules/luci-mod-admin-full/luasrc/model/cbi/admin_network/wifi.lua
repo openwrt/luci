@@ -42,6 +42,9 @@ end
 
 -- wireless toggle was requested, commit and reload page
 function m.parse(map)
+	local new_cc = m:formvalue("cbid.wireless.%s.country" % wdev:name())
+	local old_cc = m:get(wdev:name(), "country")
+
 	if m:formvalue("cbid.wireless.%s.__toggle" % wdev:name()) then
 		if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
 			wnet:set("disabled", nil)
@@ -56,7 +59,14 @@ function m.parse(map)
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
 		return
 	end
+
 	Map.parse(map)
+
+	if m:get(wdev:name(), "type") == "mac80211" and new_cc and new_cc ~= old_cc then
+		luci.sys.call("iw reg set %q" % new_cc)
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
+		return
+	end
 end
 
 m.title = luci.util.pcdata(wnet:get_i18n())
