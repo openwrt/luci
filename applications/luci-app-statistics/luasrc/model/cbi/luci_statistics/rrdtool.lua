@@ -19,7 +19,12 @@ enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 1
 
 -- collectd_rrdtool.datadir (DataDir)
-datadir = s:option( Value, "DataDir", translate("Storage directory") )
+datadir = s:option( Value, "DataDir",
+	translate("Storage directory"),
+	translate("Note: as pages are rendered by user 'nobody', the *.rrd files, " ..
+		  "the storage directory and all its parent directories need " ..
+		  "to be world readable."
+	))
 datadir.default  = "/tmp"
 datadir.rmempty  = true
 datadir.optional = true

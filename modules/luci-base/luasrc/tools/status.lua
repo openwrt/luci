@@ -26,17 +26,18 @@ local function dhcp_leases_common(family)
 				break
 			else
 				local ts, mac, ip, name, duid = ln:match("^(%d+) (%S+) (%S+) (%S+) (%S+)")
+				local expire = tonumber(ts) or 0
 				if ts and mac and ip and name and duid then
 					if family == 4 and not ip:match(":") then
 						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							expires  = (expire ~= 0) and os.difftime(expire, os.time()),
 							macaddr  = mac,
 							ipaddr   = ip,
 							hostname = (name ~= "*") and name
 						}
 					elseif family == 6 and ip:match(":") then
 						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							expires  = (expire ~= 0) and os.difftime(expire, os.time()),
 							ip6addr  = ip,
 							duid     = (duid ~= "*") and duid,
 							hostname = (name ~= "*") and name

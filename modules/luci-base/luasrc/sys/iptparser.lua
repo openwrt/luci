@@ -31,27 +31,41 @@ function IptParser.__init__( self, family )
 	self._family = (tonumber(family) == 6) and 6 or 4
 	self._rules  = { }
 	self._chains = { }
+	self._tables = { }
+
+	local t = self._tables
+	local s = self:_supported_tables(self._family)
+
+	if s.filter then t[#t+1] = "filter" end
+	if s.nat    then t[#t+1] = "nat"    end
+	if s.mangle then t[#t+1] = "mangle" end
+	if s.raw    then t[#t+1] = "raw"    end
 
 	if self._family == 4 then
 		self._nulladdr = "0.0.0.0/0"
-		self._tables   = { "filter", "nat", "mangle", "raw" }
 		self._command  = "iptables -t %s --line-numbers -nxvL"
 	else
 		self._nulladdr = "::/0"
-		self._tables   = { "filter", "mangle", "raw" }
-		local ok, lines = pcall(io.lines, "/proc/net/ip6_tables_names")
-		if ok and lines then
-			local line
-			for line in lines do
-				if line == "nat" then
-					self._tables = { "filter", "nat", "mangle", "raw" }
-				end
-			end
-		end
 		self._command  = "ip6tables -t %s --line-numbers -nxvL"
 	end
 
 	self:_parse_rules()
+end
+
+function IptParser._supported_tables( self, family )
+	local tables = { }
+	local ok, lines = pcall(io.lines,
+		(family == 6) and "/proc/net/ip6_tables_names"
+		               or "/proc/net/ip_tables_names")
+
+	if ok and lines then
+		local line
+		for line in lines do
+			tables[line] = true
+		end
+	end
+
+	return tables
 end
 
 -- search criteria as only argument. If args is nil or an empty table then all

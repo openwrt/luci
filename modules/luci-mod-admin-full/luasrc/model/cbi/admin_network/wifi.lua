@@ -42,6 +42,9 @@ end
 
 -- wireless toggle was requested, commit and reload page
 function m.parse(map)
+	local new_cc = m:formvalue("cbid.wireless.%s.country" % wdev:name())
+	local old_cc = m:get(wdev:name(), "country")
+
 	if m:formvalue("cbid.wireless.%s.__toggle" % wdev:name()) then
 		if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
 			wnet:set("disabled", nil)
@@ -56,7 +59,14 @@ function m.parse(map)
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
 		return
 	end
+
 	Map.parse(map)
+
+	if m:get(wdev:name(), "type") == "mac80211" and new_cc and new_cc ~= old_cc then
+		luci.sys.call("iw reg set %q" % new_cc)
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
+		return
+	end
 end
 
 m.title = luci.util.pcdata(wnet:get_i18n())
@@ -94,7 +104,7 @@ local function txpower_current(pwr, list)
 			end
 		end
 	end
-	return (list[#list] and list[#list].driver_dbm) or pwr or 0
+	return pwr or ""
 end
 
 local iw = luci.sys.wifi.getiwinfo(arg[1])
@@ -191,7 +201,7 @@ end
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
-	if #tx_power_list > 1 then
+	if #tx_power_list > 0 then
 		tp = s:taboption("general", ListValue,
 			"txpower", translate("Transmit Power"), "dBm")
 		tp.rmempty = true
@@ -200,6 +210,7 @@ if hwtype == "mac80211" then
 			return txpower_current(Value.cfgvalue(...), tx_power_list)
 		end
 
+		tp:value("", translate("auto"))
 		for _, p in ipairs(tx_power_list) do
 			tp:value(p.driver_dbm, "%i dBm (%i mW)"
 				%{ p.display_dbm, p.display_mw })
@@ -251,6 +262,7 @@ if hwtype == "atheros" then
 		return txpower_current(Value.cfgvalue(...), tx_power_list)
 	end
 
+	tp:value("", translate("auto"))
 	for _, p in ipairs(tx_power_list) do
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
@@ -308,6 +320,7 @@ if hwtype == "broadcom" then
 		return txpower_current(Value.cfgvalue(...), tx_power_list)
 	end
 
+	tp:value("", translate("auto"))
 	for _, p in ipairs(tx_power_list) do
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })

@@ -12,8 +12,8 @@ local i = 1
 if luci.http.formvalue("status") == "1" then
 	local rv = {}
 	for k, link in ipairs(links) do
-		link.linkCost = tonumber(link.linkCost)/1024 or 0
-		if link.linkCost == 4096 then
+		link.linkCost = tonumber(link.linkCost) or 0
+		if link.linkCost == 4194304 then
 			link.linkCost = 0
 		end
 		local color = olsrtools.etx_color(link.linkCost)
@@ -129,8 +129,8 @@ end
 		<tbody id="olsr_neigh_table">
 		<% 	local i = 1
 			for k, link in ipairs(links) do
-			link.linkCost = tonumber(link.linkCost)/1024 or 0
-			if link.linkCost == 4096 then
+			link.linkCost = tonumber(link.linkCost) or 0
+			if link.linkCost == 4194304 then
 				link.linkCost = 0
 			end
 

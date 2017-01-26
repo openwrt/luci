@@ -12,15 +12,11 @@
 --
 -- Author: Nils Koenig <openwrt@newk.it>
 
-function file_exists(name)
-   local f=io.open(name,"r")
-   if f~=nil then io.close(f) return true else return false end
-end
-
+local fs = require "nixio.fs"
+local sys = require "luci.sys"
 
 function time_validator(self, value, desc)
     if value ~= nil then
-        
         h_str, m_str = string.match(value, "^(%d%d?):(%d%d?)$")
         h = tonumber(h_str)
         m = tonumber(m_str)
@@ -32,21 +28,21 @@ function time_validator(self, value, desc)
              m <= 59) then
             return value
         end
-    end 
-    return nil, translate("The value '" .. desc .. "' is invalid")
+    end
+    return nil, translatef("The value %s is invalid", desc)
 end
 
 -- -------------------------------------------------------------------------------------------------
 
 -- BEGIN Map
-m = Map("wifi_schedule", translate("Wifi Schedule"), translate("Defines a schedule when to turn on and off wifi.")) 
+m = Map("wifi_schedule", translate("Wifi Schedule"), translate("Defines a schedule when to turn on and off wifi."))
 function m.on_commit(self)
-    luci.sys.exec("/usr/bin/wifi_schedule.sh cron")
+    sys.exec("/usr/bin/wifi_schedule.sh cron")
 end
 -- END Map
 
 -- BEGIN Global Section
-global_section = m:section(TypedSection, "global", "Global Settings")
+global_section = m:section(TypedSection, "global", translate("Global Settings"))
 global_section.optional = false
 global_section.rmempty = false
 global_section.anonymous = true
@@ -54,13 +50,13 @@ global_section.anonymous = true
 
 -- BEGIN Global Enable Checkbox
 global_enable = global_section:option(Flag, "enabled", translate("Enable Wifi Schedule"))
-global_enable.optional=false; 
-global_enable.rmempty = false;
+global_enable.optional = false
+global_enable.rmempty = false
 
 function global_enable.validate(self, value, global_section)
     if value == "1" then
-        if ( file_exists("/sbin/wifi") and
-             file_exists("/usr/bin/wifi_schedule.sh") )then
+        if ( fs.access("/sbin/wifi") and
+             fs.access("/usr/bin/wifi_schedule.sh") )then
             return value
         else
             return nil, translate("Could not find required /usr/bin/wifi_schedule.sh or /sbin/wifi")
@@ -71,39 +67,38 @@ function global_enable.validate(self, value, global_section)
 end
 -- END Global Enable Checkbox
 
-
 -- BEGIN Global Logging Checkbox
 global_logging = global_section:option(Flag, "logging", translate("Enable logging"))
-global_logging.optional=false; 
-global_logging.rmempty = false;
+global_logging.optional = false
+global_logging.rmempty = false
 global_logging.default = 0
 -- END Global Enable Checkbox
 
 -- BEGIN Global Activate WiFi Button
 enable_wifi = global_section:option(Button, "enable_wifi", translate("Activate wifi"))
 function enable_wifi.write()
-    luci.sys.exec("/usr/bin/wifi_schedule.sh start manual")
+    sys.exec("/usr/bin/wifi_schedule.sh start manual")
 end
 -- END Global Activate Wifi Button
 
 -- BEGIN Global Disable WiFi Gracefully Button
 disable_wifi_gracefully = global_section:option(Button, "disable_wifi_gracefully", translate("Disable wifi gracefully"))
 function disable_wifi_gracefully.write()
-    luci.sys.exec("/usr/bin/wifi_schedule.sh stop manual")
+    sys.exec("/usr/bin/wifi_schedule.sh stop manual")
 end
--- END Global Disable Wifi Gracefully Button 
+-- END Global Disable Wifi Gracefully Button
 
 -- BEGIN Disable WiFi Forced Button
 disable_wifi_forced = global_section:option(Button, "disable_wifi_forced", translate("Disabled wifi forced"))
 function disable_wifi_forced.write()
-    luci.sys.exec("/usr/bin/wifi_schedule.sh forcestop manual")
+    sys.exec("/usr/bin/wifi_schedule.sh forcestop manual")
 end
 -- END Global Disable WiFi Forced Button
 
 -- BEGIN Global Unload Modules Checkbox
 global_unload_modules = global_section:option(Flag, "unload_modules", translate("Unload Modules (experimental; saves more power)"))
-global_unload_modules.optional = false;
-global_unload_modules.rmempty = false;
+global_unload_modules.optional = false
+global_unload_modules.rmempty = false
 global_unload_modules.default = 0
 -- END Global Unload Modules Checkbox
 
@@ -111,13 +106,13 @@ global_unload_modules.default = 0
 -- BEGIN Modules
 modules = global_section:option(TextValue, "modules", "")
 modules:depends("unload_modules", global_unload_modules.enabled);
-modules.wrap    = "off"
-modules.rows    = 10
+modules.wrap = "off"
+modules.rows = 10
 
 function modules.cfgvalue(self, section)
-    mod=uci.get("wifi_schedule", section, "modules")
+    mod = uci.get("wifi_schedule", section, "modules")
     if mod == nil then
-        mod=""
+        mod = ""
     end
     return mod:gsub(" ", "\r\n")
 end
@@ -131,45 +126,44 @@ function modules.write(self, section, value)
 end
 -- END Modules
 
--- BEGIN Determine Modules 
+-- BEGIN Determine Modules
 determine_modules = global_section:option(Button, "determine_modules", translate("Determine Modules Automatically"))
 determine_modules:depends("unload_modules", global_unload_modules.enabled);
 function determine_modules.write(self, section)
-    output = luci.sys.exec("/usr/bin/wifi_schedule.sh getmodules")
+    output = sys.exec("/usr/bin/wifi_schedule.sh getmodules")
     modules:write(section, output)
 end
 -- END Determine Modules
 
-
 -- BEGIN Section
-d = m:section(TypedSection, "entry", "Schedule events")
-d.addremove = true  
+d = m:section(TypedSection, "entry", translate("Schedule events"))
+d.addremove = true
 --d.anonymous = true
 -- END Section
 
 -- BEGIN Enable Checkbox
 c = d:option(Flag, "enabled", translate("Enable"))
-c.optional=false; c.rmempty = false;
+c.optional = false
+c.rmempty = false
 -- END Enable Checkbox
-
 
 -- BEGIN Day(s) of Week
 dow = d:option(MultiValue, "daysofweek", translate("Day(s) of Week"))
 dow.optional = false
 dow.rmempty = false
-dow:value("Monday")
-dow:value("Tuesday")
-dow:value("Wednesday")
-dow:value("Thursday")
-dow:value("Friday")
-dow:value("Saturday")
-dow:value("Sunday")
+dow:value("Monday", translate("Monday"))
+dow:value("Tuesday", translate("Tuesday"))
+dow:value("Wednesday", translate("Wednesday"))
+dow:value("Thursday", translate("Thursday"))
+dow:value("Friday", translate("Friday"))
+dow:value("Saturday", translate("Saturday"))
+dow:value("Sunday", translate("Sunday"))
 -- END Day(s) of Weel
 
 -- BEGIN Start Wifi Dropdown
 starttime =  d:option(Value, "starttime", translate("Start WiFi"))
-starttime.optional=false; 
-starttime.rmempty = false;
+starttime.optional = false
+starttime.rmempty = false
 starttime:value("00:00")
 starttime:value("01:00")
 starttime:value("02:00")
@@ -198,14 +192,12 @@ starttime:value("23:00")
 function starttime.validate(self, value, d)
     return time_validator(self, value, translate("Start Time"))
 end
-
 -- END Start Wifi Dropdown
 
-
 -- BEGIN Stop Wifi Dropdown
-stoptime =  d:option(Value, "stoptime", translate("Stop WiFi"))
-stoptime.optional=false;
-stoptime.rmempty = false;
+stoptime = d:option(Value, "stoptime", translate("Stop WiFi"))
+stoptime.optional = false
+stoptime.rmempty = false
 stoptime:value("00:00")
 stoptime:value("01:00")
 stoptime:value("02:00")
@@ -236,15 +228,14 @@ function stoptime.validate(self, value, d)
 end
 -- END Stop Wifi Dropdown
 
-
 -- BEGIN Force Wifi Stop Checkbox
 force_wifi = d:option(Flag, "forcewifidown", translate("Force disabling wifi even if stations associated"))
 force_wifi.default = false
-force_wifi.rmempty = false;
+force_wifi.rmempty = false
 
 function force_wifi.validate(self, value, d)
     if value == "0" then
-        if file_exists("/usr/bin/iwinfo") then
+        if fs.access("/usr/bin/iwinfo") then
             return value
         else
             return nil, translate("Could not find required programm /usr/bin/iwinfo")
@@ -254,6 +245,5 @@ function force_wifi.validate(self, value, d)
     end
 end
 -- END Force Wifi Checkbox
-
 
 return m

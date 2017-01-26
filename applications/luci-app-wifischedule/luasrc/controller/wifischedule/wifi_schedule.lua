@@ -12,21 +12,31 @@
 --
 -- Author: Nils Koenig <openwrt@newk.it>
 
-module("luci.controller.wifischedule.wifi_schedule", package.seeall)  
+module("luci.controller.wifischedule.wifi_schedule", package.seeall)
+
+local fs = require "nixio.fs"
+local sys = require "luci.sys"
+local template = require "luci.template"
+local i18n = require "luci.i18n"
 
 function index()
-     entry({"admin", "wifi_schedule"}, firstchild(), "Wifi Schedule", 60).dependent=false  
-     entry({"admin", "wifi_schedule", "tab_from_cbi"}, cbi("wifischedule/wifi_schedule"), "Schedule", 1)
-     entry({"admin", "wifi_schedule", "wifi_schedule"}, call("wifi_schedule_log"), "View Logfile", 2) 
-     entry({"admin", "wifi_schedule", "cronjob"}, call("view_crontab"), "View Cron Jobs", 3) 
+    if not nixio.fs.access("/etc/config/wifi_schedule") then
+        return
+    end
+    entry({"admin", "services", "wifi_schedule"}, firstchild(), _("Wifi Schedule"), 60).dependent=false
+    entry({"admin", "services", "wifi_schedule", "tab_from_cbi"}, cbi("wifischedule/wifi_schedule"), _("Schedule"), 1)
+    entry({"admin", "services", "wifi_schedule", "wifi_schedule"}, call("wifi_schedule_log"), _("View Logfile"), 2)
+    entry({"admin", "services", "wifi_schedule", "cronjob"}, call("view_crontab"), _("View Cron Jobs"), 3)
 end
 
 function wifi_schedule_log()
-        local logfile = luci.sys.exec("cat /tmp/log/wifi_schedule.log")
-        luci.template.render("wifischedule/file_viewer", {title="Wifi Schedule Logfile", content=logfile})
+    local logfile = fs.readfile("/tmp/log/wifi_schedule.log") or ""
+    template.render("wifischedule/file_viewer",
+        {title = i18n.translate("Wifi Schedule Logfile"), content = logfile})
 end
 
 function view_crontab()
-        local crontab = luci.sys.exec("cat /etc/crontabs/root")
-        luci.template.render("wifischedule/file_viewer", {title="Cron Jobs", content=crontab})
+    local crontab = fs.readfile("/etc/crontabs/root") or ""
+    template.render("wifischedule/file_viewer",
+        {title = i18n.translate("Cron Jobs"), content = crontab})
 end
