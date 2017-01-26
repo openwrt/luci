@@ -44,6 +44,10 @@ end
 host = s:option(Value, "mac", translate("Host to wake up"),
 	translate("Choose the host to wake up or enter a custom MAC address to use"))
 
+broadcast = s:option(Flag, "broadcast",
+		translate("Send to broadcast address"))
+broadcast:depends("binary", "/usr/bin/etherwake")
+
 sys.net.mac_hints(function(mac, name)
 	host:value(mac, "%s (%s)" %{ mac, name })
 end)
@@ -59,8 +63,10 @@ function host.write(self, s, val)
 
 		if util == "/usr/bin/etherwake" then
 			local iface = luci.http.formvalue("cbid.wol.1.iface")
-			cmd = "%s -D%s %q" %{
-				util, (iface ~= "" and " -i %q" % iface or ""), host
+			local broadcast = luci.http.formvalue("cbid.wol.1.broadcast")
+			cmd = "%s -D%s %s %q" %{
+				util, (iface ~= "" and " -i %q" % iface or ""),
+				(broadcast == "1" and " -b" or ""), host
 			}
 		else
 			cmd = "%s -v %q" %{ util, host }
