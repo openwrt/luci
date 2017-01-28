@@ -950,6 +950,13 @@ function protocol.dns6addrs(self)
 	return dns
 end
 
+function protocol.ip6prefix(self)
+	local prefix = self:_ubus("ipv6-prefix")
+	if prefix and #prefix > 0 then
+		return "%s/%d" %{ prefix[1].address, prefix[1].mask }
+	end
+end
+
 function protocol.is_bridge(self)
 	return (not self:is_virtual() and self:type() == "bridge")
 end
