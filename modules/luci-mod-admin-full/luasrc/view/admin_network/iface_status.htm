@@ -54,6 +54,11 @@
 								ifc.ip6addrs[i]
 							);
 					}
+					
+					if (ifc.ip6prefix)
+					{
+						html += String.format('<strong><%:IPv6-PD%>:</strong> %s<br />', ifc.ip6prefix);
+					}
 
 					d.innerHTML = html;
 				}
