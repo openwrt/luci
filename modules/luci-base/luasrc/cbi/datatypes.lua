@@ -143,7 +143,7 @@ function ipmask4(val)
 		return false
 	end
 
-	if not bits and not ip4addr(mask) then
+	if not bits and mask and not ip4addr(mask) then
 		return false
 	end
 
@@ -158,7 +158,7 @@ function ipmask6(val)
 		return false
 	end
 
-	if not bits and not ip6addr(mask) then
+	if not bits and mask and not ip6addr(mask) then
 		return false
 	end
 
