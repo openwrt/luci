@@ -66,8 +66,8 @@ mtu = section:taboption(
   translate("MTU"),
   translate("Optional. Maximum Transmission Unit of tunnel interface.")
 )
-mtu.datatype = "range(1280,1423)"
-mtu.placeholder = "1423"
+mtu.datatype = "range(1280,1420)"
+mtu.placeholder = "1420"
 mtu.optional = true
 
 
