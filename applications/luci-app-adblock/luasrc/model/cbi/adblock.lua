@@ -34,13 +34,13 @@ des = bl:option(DummyValue, "adb_src_desc", translate("Description"))
 
 -- Additional options
 
-s2 = m:section(NamedSection, "backup", "service", translate("Backup options"))
+s2 = m:section(NamedSection, "global", "adblock", translate("Backup options"))
 
-o4 = s2:option(Flag, "enabled", translate("Enable blocklist backup"))
+o4 = s2:option(Flag, "adb_backup", translate("Enable blocklist backup"))
 o4.rmempty = false
 o4.default = 0
 
-o5 = s2:option(Value, "adb_dir", translate("Backup directory"))
+o5 = s2:option(Value, "adb_backupdir", translate("Backup directory"))
 o5.rmempty = false
 o5.datatype = "directory"
 
