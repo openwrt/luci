@@ -255,6 +255,22 @@ o = s:taboption("general", DynamicList, "notinterface",
 o.optional = true
 o:depends("nonwildcard", true)
 
+s = m:section(NamedSection, "odhcpd", "odhcpd", translate("odhcpd Server Settings"))
+s.anonymous = true
+s.addremove = false
+
+o = s:option(Flag, "maindhcp", translate("odhcpd as DHCPv4+DHCPv6 Server"),
+	translate("Use odhcpd as DHCPv4 and DHCPv6 server instead of only for DHCPv6; DNSMasq DHCP will be disabled for the interfaces on which odhcp listens."))
+o.default = false
+
+o = s:option(Value, "leasefile", translate("Leasefile"),
+	translate("File to store assigned and static leases, and for use as a /etc/hosts format file for DNS. NB."))
+o.default = "/var/hosts/odhcpd"
+
+o = s:option(Value, "leasetrigger", translate("Lease trigger"),
+	translate("Script to run on lease activity."))
+o.default = "/usr/sbin/odhcpd-update"
+
 m:section(SimpleSection).template = "admin_network/lease_status"
 
 s = m:section(TypedSection, "host", translate("Static Leases"),
