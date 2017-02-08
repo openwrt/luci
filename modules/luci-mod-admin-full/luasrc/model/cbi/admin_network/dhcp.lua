@@ -296,6 +296,19 @@ ip.datatype = "or(ip4addr,'ignore')"
 time = s:option(Value, "leasetime", translate("Lease time"))
 time.rmempty  = true
 
+duid = s:option(Value, "duid", translate("<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"))
+duid.datatype = "and(rangelength(28,36),hexstring)"
+fp = io.open("/var/hosts/odhcpd")
+if fp then
+	for line in fp:lines() do
+		local net_val, duid_val = string.match(line, "# (%S+)%s+(%S+)")
+		if duid_val then
+			duid:value(duid_val, duid_val)
+		end
+	end
+	fp:close()
+end
+
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
 
 ipc.neighbors({ family = 4 }, function(n)
