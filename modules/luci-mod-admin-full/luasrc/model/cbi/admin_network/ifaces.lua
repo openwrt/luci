@@ -548,7 +548,7 @@ if has_dhcp and net:proto() == "static" then
 		-- ipv4
 		local dhcpv4 = s:taboption("ipv4", ListValue, "dhcpv4",
 			translate("DHCPv4 Service"))
-		dhcpv4:value("", translate("disabled"))
+		dhcpv4:value("disabled", translate("disabled"))
 		dhcpv4:value("server", translate("server mode"))
 		dhcpv4.default = "server"
 
@@ -574,7 +574,7 @@ if has_dhcp and net:proto() == "static" then
 		-- ipv6
 		local ra = s:taboption("ipv6", ListValue, "ra",
 			translate("Router Advertisement Service"))
-		ra:value("", translate("disabled"))
+		ra:value("disabled", translate("disabled"))
 		ra:value("server", translate("server mode"))
 		ra:value("relay", translate("relay mode"))
 		ra:value("hybrid", translate("hybrid mode"))
