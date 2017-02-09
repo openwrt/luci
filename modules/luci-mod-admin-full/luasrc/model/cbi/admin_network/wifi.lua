@@ -900,7 +900,6 @@ end
 
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
-	local hostapd = fs.access("/usr/sbin/hostapd")
 
 	-- Probe EAP support as a proxy for determining if 802.11r support is present
 	
