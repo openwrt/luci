@@ -934,6 +934,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 			translate("4-character hexadecimal ID"))
 	mobility_domain:depends({ieee80211r="1"})
 	mobility_domain.placeholder = "4f57"
+	mobility_domain.datatype = "and(hexstring,rangelength(4,4))"
 	mobility_domain.rmempty = true
 
 	r0_key_lifetime = s:taboption("encryption", Value, "r0_key_lifetime",
@@ -948,6 +949,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 			translate("6-octet identifier as a hex string - no colons"))
 	r1_key_holder:depends({ieee80211r="1"})
 	r1_key_holder.placeholder = "00004f577274"
+	r1_key_holder.datatype = "and(hexstring,rangelength(12,12))"
 	r1_key_holder.rmempty = true
 
 	reassociation_deadline = s:taboption("encryption", Value, "reassociation_deadline",
