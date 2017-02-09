@@ -267,6 +267,13 @@ function wepkey(val)
 	end
 end
 
+function hexstring(val)
+        if val then
+                return (val:match("^[a-fA-F0-9]+$") ~= nil)
+        end
+        return false
+end
+
 function string(val)
 	return true		-- Everything qualifies as valid string
 end
