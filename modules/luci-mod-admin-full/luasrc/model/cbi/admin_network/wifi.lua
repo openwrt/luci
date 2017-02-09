@@ -900,11 +900,16 @@ end
 
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
-	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"))
+	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"),
+		translate("Used for two different purposes: RADIUS NAS ID and " ..
+			  "802.11r R0KH-ID. Not needed with normal WPA(2)-PSK."))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})
 	nasid:depends({mode="ap-wds", encryption="wpa"})
 	nasid:depends({mode="ap-wds", encryption="wpa2"})
+	nasid:depends({mode="ap", encryption="psk"})
+	nasid:depends({mode="ap", encryption="psk2"})
+	nasid:depends({mode="ap", encryption="psk-mixed"})
 	nasid.rmempty = true
 
 	eaptype = s:taboption("encryption", ListValue, "eap_type", translate("EAP-Method"))
