@@ -903,6 +903,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	local hostapd = fs.access("/usr/sbin/hostapd")
 
 	-- Probe EAP support as a proxy for determining if 802.11r support is present
+	
 	local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)
 
 	ieee80211r = s:taboption("encryption", Flag, "ieee80211r", translate("802.11r Fast Transition"))
