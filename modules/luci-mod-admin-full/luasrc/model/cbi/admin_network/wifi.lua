@@ -1125,16 +1125,16 @@ end
 
 -- ieee802.11w options
 if hwtype == "mac80211" then
-	ieee80211w = s:taboption("encryption", Value, "ieee80211w",
+	ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
 		translate("802.11w Management Frame Protection"),
 		translate("Requires the 'full' version of wpad/hostapd " ..
 			"and support from the wifi driver <br>(as of Feb 2017: " ..
 			"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
 	ieee80211w.default = "0"
 	ieee80211w.rmempty = true
-	ieee80211w:value("0", "Disabled (default)")
-	ieee80211w:value("1", "Optional")
-	ieee80211w:value("2", "Required")
+	ieee80211w:value("0", translate("Disabled (default)"))
+	ieee80211w:value("1", translate("Optional"))
+	ieee80211w:value("2", translate("Required"))
 	ieee80211w:depends({mode="ap", encryption="wpa2"})
 	ieee80211w:depends({mode="ap-wds", encryption="wpa2"})
 	ieee80211w:depends({mode="ap", encryption="psk2"})
