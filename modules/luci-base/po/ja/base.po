@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2017-01-30 02:40+0900\n"
+"PO-Revision-Date: 2017-02-11 03:28+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -52,11 +52,35 @@ msgstr "過去1分の負荷:"
 msgid "15 Minute Load:"
 msgstr "過去15分の負荷:"
 
+msgid "4-character hexadecimal ID"
+msgstr ""
+
 msgid "464XLAT (CLAT)"
 msgstr ""
 
 msgid "5 Minute Load:"
 msgstr "過去5分の負荷:"
+
+msgid "6-octet identifier as a hex string - no colons"
+msgstr ""
+
+msgid "802.11r Fast Transition"
+msgstr ""
+
+msgid "802.11w Association SA Query maximum timeout"
+msgstr "802.11w アソシエーションSAクエリの最大タイムアウト時間です。"
+
+msgid "802.11w Association SA Query retry timeout"
+msgstr "802.11w アソシエーションSAクエリの再試行タイムアウト時間です。"
+
+msgid "802.11w Management Frame Protection"
+msgstr "802.11w 管理フレーム保護"
+
+msgid "802.11w maximum timeout"
+msgstr "802.11w 最大タイムアウト"
+
+msgid "802.11w retry timeout"
+msgstr "802.11w 再試行タイムアウト"
 
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 msgstr "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -877,6 +901,9 @@ msgstr "HWビーコンタイマーを無効にする"
 msgid "Disabled"
 msgstr "無効"
 
+msgid "Disabled (default)"
+msgstr "無効（デフォルト）"
+
 msgid "Discard upstream RFC1918 responses"
 msgstr "RFC1918の応答を破棄します"
 
@@ -1049,6 +1076,11 @@ msgstr "有効/無効"
 msgid "Enabled"
 msgstr "有効"
 
+msgid ""
+"Enables fast roaming among access points that belong to the same Mobility "
+"Domain"
+msgstr ""
+
 msgid "Enables the Spanning Tree Protocol on this bridge"
 msgstr "スパニングツリー・プロトコルを有効にする"
 
@@ -1096,6 +1128,12 @@ msgstr ""
 
 msgid "External"
 msgstr "外部"
+
+msgid "External R0 Key Holder List"
+msgstr ""
+
+msgid "External R1 Key Holder List"
+msgstr ""
 
 msgid "External system log server"
 msgstr "外部システムログ・サーバー"
@@ -1716,6 +1754,22 @@ msgstr ""
 "問い合わせを転送する<abbr title=\"Domain Name System\">DNS</abbr> サーバーの"
 "リストを設定します"
 
+msgid ""
+"List of R0KHs in the same Mobility Domain. <br>Format: MAC-address,NAS-"
+"Identifier,128-bit key as hex string. <br>This list is used to map R0KH-ID "
+"(NAS Identifier) to a destination MAC address when requesting PMK-R1 key "
+"from the R0KH that the STA used during the Initial Mobility Domain "
+"Association."
+msgstr ""
+
+msgid ""
+"List of R1KHs in the same Mobility Domain. <br>Format: MAC-address,R1KH-ID "
+"as 6 octets with colons,128-bit key as hex string. <br>This list is used to "
+"map R1KH-ID to a destination MAC address when sending PMK-R1 key from the "
+"R0KH. This is also the list of authorized R1KHs in the MD that can request "
+"PMK-R1 keys."
+msgstr ""
+
 msgid "List of SSH key files for auth"
 msgstr "認証用 SSH暗号キー ファイルのリスト"
 
@@ -1908,6 +1962,9 @@ msgstr ""
 
 msgid "Missing protocol extension for proto %q"
 msgstr "プロトコル %qのプロトコル拡張が見つかりません"
+
+msgid "Mobility Domain"
+msgstr ""
 
 msgid "Mode"
 msgstr "モード"
@@ -2162,6 +2219,9 @@ msgstr "変更されるオプション"
 msgid "Option removed"
 msgstr "削除されるオプション"
 
+msgid "Optional"
+msgstr "オプション"
+
 msgid "Optional, specify to override default server (tic.sixxs.net)"
 msgstr ""
 
@@ -2265,6 +2325,9 @@ msgstr "PID"
 
 msgid "PIN"
 msgstr "PIN"
+
+msgid "PMK R1 Push"
+msgstr ""
 
 msgid "PPP"
 msgstr "PPP"
@@ -2465,6 +2528,12 @@ msgstr ""
 msgid "Quality"
 msgstr "クオリティ"
 
+msgid "R0 Key Lifetime"
+msgstr ""
+
+msgid "R1 Key Holder"
+msgstr ""
+
 msgid "RFC3947 NAT-T mode"
 msgstr "RFC3947 NAT-Tモード"
 
@@ -2560,6 +2629,9 @@ msgstr "リアルタイム・トラフィック"
 msgid "Realtime Wireless"
 msgstr "リアルタイム・無線LAN"
 
+msgid "Reassociation Deadline"
+msgstr ""
+
 msgid "Rebind protection"
 msgstr "DNSリバインディング・プロテクション"
 
@@ -2632,6 +2704,9 @@ msgstr "リクエストするIPv6-プレフィクス長"
 msgid "Require TLS"
 msgstr "TLSが必要"
 
+msgid "Required"
+msgstr "必須"
+
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "DOCSIS 3.0を使用するいくつかのISPでは必要になります"
 
@@ -2646,6 +2721,13 @@ msgstr ""
 
 msgid "Required. Public key of peer."
 msgstr "ピアの公開鍵（必須）"
+
+msgid ""
+"Requires the 'full' version of wpad/hostapd and support from the wifi driver "
+"<br>(as of Feb 2017: ath9k and ath10k, in LEDE also mwlwifi and mt76)"
+msgstr ""
+"'フル' バージョンの wpad/hostapd と、無線LANドライバーによるサポートが必要で"
+"す。<br>（2017年2月現在: ath9k と ath10k、LEDE内では mwlwifi と mt76）"
 
 msgid ""
 "Requires upstream supports DNSSEC; verify unsigned domain responses really "
@@ -3498,6 +3580,11 @@ msgstr "使用"
 msgid "Used Key Slot"
 msgstr "使用するキースロット"
 
+msgid ""
+"Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not "
+"needed with normal WPA(2)-PSK."
+msgstr ""
+
 msgid "User certificate (PEM encoded)"
 msgstr ""
 
@@ -3759,6 +3846,9 @@ msgstr "ローカル <abbr title=\"Domain Name System\">DNS</abbr>ファイル"
 msgid "minimum 1280, maximum 1480"
 msgstr "最小値 1280、最大値 1480"
 
+msgid "minutes"
+msgstr ""
+
 msgid "navigation Navigation"
 msgstr ""
 
@@ -3812,6 +3902,9 @@ msgstr "ステートレス + ステートフル"
 
 msgid "tagged"
 msgstr "tagged"
+
+msgid "time units (TUs / 1.024 ms) [1000-65535]"
+msgstr ""
 
 msgid "unknown"
 msgstr "不明"
