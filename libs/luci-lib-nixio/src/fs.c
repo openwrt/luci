@@ -355,7 +355,7 @@ static int nixio_stat(lua_State *L) {
 
 static int nixio_lstat(lua_State *L) {
 	nixio_stat_t buf;
-	if (stat(luaL_checkstring(L, 1), &buf)) {
+	if (lstat(luaL_checkstring(L, 1), &buf)) {
 		return nixio__perror(L);
 	} else {
 		nixio__push_stat(L, &buf);

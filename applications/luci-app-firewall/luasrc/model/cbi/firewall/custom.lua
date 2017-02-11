@@ -22,6 +22,10 @@ end
 function o.write(self, section, value)
 	value = value:gsub("\r\n?", "\n")
 	fs.writefile("/etc/firewall.user", value)
+	require("luci.sys").call("/etc/init.d/firewall restart >/dev/null 2<&1")
+	require("nixio").syslog('info', 'Restarting firewall on custom /etc/firewall.user change')
 end
+
+f.submit = translate("Restart Firewall")
 
 return f

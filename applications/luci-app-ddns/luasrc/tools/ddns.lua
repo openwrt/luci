@@ -57,7 +57,7 @@ end
 function epoch2date(epoch, format)
 	if not format or #format < 2 then
 		local uci = UCI.cursor()
-		format    = uci:get("ddns", "global", "date_format") or "%F %R"
+		format    = uci:get("ddns", "global", "ddns_dateformat") or "%F %R"
 		uci:unload("ddns")
 	end
 	format = format:gsub("%%n", "<br />")	-- replace newline
@@ -67,18 +67,18 @@ end
 
 -- read lastupdate from [section].update file
 function get_lastupd(section)
-	local uci     = UCI.cursor()
-	local run_dir = uci:get("ddns", "global", "run_dir") or "/var/run/ddns"
-	local etime   = tonumber(NXFS.readfile("%s/%s.update" % { run_dir, section } ) or 0 )
+	local uci   = UCI.cursor()
+	local rdir  = uci:get("ddns", "global", "ddns_rundir") or "/var/run/ddns"
+	local etime = tonumber(NXFS.readfile("%s/%s.update" % { rdir, section } ) or 0 )
 	uci:unload("ddns")
 	return etime
 end
 
 -- read PID from run file and verify if still running
 function get_pid(section)
-	local uci     = UCI.cursor()
-	local run_dir = uci:get("ddns", "global", "run_dir") or "/var/run/ddns"
-	local pid     = tonumber(NXFS.readfile("%s/%s.pid" % { run_dir, section } ) or 0 )
+	local uci  = UCI.cursor()
+	local rdir = uci:get("ddns", "global", "ddns_rundir") or "/var/run/ddns"
+	local pid  = tonumber(NXFS.readfile("%s/%s.pid" % { rdir, section } ) or 0 )
 	if pid > 0 and not NX.kill(pid, 0) then
 		pid = 0
 	end

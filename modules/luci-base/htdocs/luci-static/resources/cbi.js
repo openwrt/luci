@@ -118,6 +118,50 @@ var cbi_validators = {
 		return false;
 	},
 
+	'ipmask': function()
+	{
+		return cbi_validators.ipmask4.apply(this) ||
+			cbi_validators.ipmask6.apply(this);
+	},
+
+	'ipmask4': function()
+	{
+		var ip = this, mask = 32;
+
+		if (ip.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			mask = RegExp.$2;
+		}
+
+		if (!isNaN(mask) && (mask < 0 || mask > 32))
+			return false;
+
+		if (isNaN(mask) && !cbi_validators.ip4addr.apply(mask))
+			return false;
+
+		return cbi_validators.ip4addr.apply(ip);
+	},
+
+	'ipmask6': function()
+	{
+		var ip = this, mask = 128;
+
+		if (ip.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			mask = RegExp.$2;
+		}
+
+		if (!isNaN(mask) && (mask < 0 || mask > 128))
+			return false;
+
+		if (isNaN(mask) && !cbi_validators.ip6addr.apply(mask))
+			return false;
+
+		return cbi_validators.ip6addr.apply(ip);
+	},
+
 	'port': function()
 	{
 		var p = Int(this);
@@ -523,13 +567,6 @@ function cbi_init() {
 		}
 	}
 
-	nodes = document.querySelectorAll('[data-type]');
-
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
-		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
-		                   node.getAttribute('data-type'));
-	}
-
 	nodes = document.querySelectorAll('[data-choices]');
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
@@ -560,6 +597,13 @@ function cbi_init() {
 		}
 
 		cbi_dynlist_init(node, choices[2], choices[3], options);
+	}
+
+	nodes = document.querySelectorAll('[data-type]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
+		                   node.getAttribute('data-type'));
 	}
 
 	cbi_d_update();

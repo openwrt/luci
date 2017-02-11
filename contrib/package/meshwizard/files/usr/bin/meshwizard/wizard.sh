@@ -42,7 +42,7 @@ community="$(uci -q get meshwizard.community.name || uci -q get freifunk.communi
 export community="$community"
 
 # we need a list of widgets later on. It will be populated in read_defaults.sh
-local widgets=""
+widgets=""
 
 # Get a list of networks we need to setup
 networks=$(uci show meshwizard.netconfig | grep -v "netconfig=" | sed -e 's/meshwizard.netconfig\.\(.*\)\_.*/\1/' |sort|uniq)

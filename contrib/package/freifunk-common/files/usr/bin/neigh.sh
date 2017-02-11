@@ -66,7 +66,8 @@ VARS="$VARS neighborLinkQuality:NLQ linkCost:Cost remoteHostname:Host"
 
 for HOST in '127.0.0.1' '::1';do
 	json_init
-	json_load "$(echo /links|nc ${HOST} 9090)"
+	json_load "$( echo /links | nc $HOST 9090 | sed -n '/^[}{ ]/p' )"	# remove header/non-json
+
 	if json_is_a links array;then
 		json_select links
 		for v in ${VARS};do

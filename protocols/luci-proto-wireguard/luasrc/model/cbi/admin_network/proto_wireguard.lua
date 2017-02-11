@@ -1,4 +1,4 @@
--- Copyright 2016 Dan Luedtke <mail@danrl.com>
+-- Copyright 2016-2017 Dan Luedtke <mail@danrl.com>
 -- Licensed to the public under the Apache License 2.0.
 
 
@@ -34,6 +34,16 @@ listen_port.datatype = "port"
 listen_port.placeholder = "51820"
 listen_port.optional = true
 
+addresses = section:taboption(
+  "general",
+  DynamicList,
+  "addresses",
+  translate("IP Addresses"),
+  translate("Recommended. IP addresses of the WireGuard interface.")
+)
+addresses.datatype = "ipaddr"
+addresses.optional = true
+
 
 -- advanced --------------------------------------------------------------------
 
@@ -56,8 +66,8 @@ mtu = section:taboption(
   translate("MTU"),
   translate("Optional. Maximum Transmission Unit of tunnel interface.")
 )
-mtu.datatype = "range(1280,1423)"
-mtu.placeholder = "1423"
+mtu.datatype = "range(1280,1420)"
+mtu.placeholder = "1420"
 mtu.optional = true
 
 
@@ -103,7 +113,8 @@ allowed_ips = peers:option(
   "allowed_ips",
   translate("Allowed IPs"),
   translate("Required. IP addresses and prefixes that this peer is allowed " ..
-            "to use inside the tunnel. Routes will be added accordingly.")
+            "to use inside the tunnel. Usually the peer's tunnel IP " ..
+            "addresses and the networks the peer routes through the tunnel.")
 )
 allowed_ips.datatype = "ipaddr"
 allowed_ips.optional = false

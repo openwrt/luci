@@ -76,12 +76,14 @@
 
 		if wan6 then
 			rv.wan6 = {
-				ip6addr = wan6:ip6addr(),
-				gw6addr = wan6:gw6addr(),
-				dns     = wan6:dns6addrs(),
-				uptime  = wan6:uptime(),
-				ifname  = wan6:ifname(),
-				link    = wan6:adminlink()
+				ip6addr   = wan6:ip6addr(),
+				gw6addr   = wan6:gw6addr(),
+				dns       = wan6:dns6addrs(),
+				ip6prefix = wan6:ip6prefix(),
+				uptime    = wan6:uptime(),
+				proto     = wan6:proto(),
+				ifname    = wan6:ifname(),
+				link      = wan6:adminlink()
 			}
 		end
 
@@ -233,9 +235,34 @@
 			if (ifc6 && ifc6.ifname && ifc6.proto != 'none')
 			{
 				var s = String.format(
-					'<strong><%:Address%>: </strong>%s<br />' +
+					'<strong><%:Type%>: </strong>%s%s<br />',
+						ifc6.proto, (ifc6.ip6prefix) ? '-pd' : ''
+				);
+				
+				if (!ifc6.ip6prefix)
+				{
+					s += String.format(
+						'<strong><%:Address%>: </strong>%s<br />',
+						(ifc6.ip6addr) ? ifc6.ip6addr : '::'
+					);
+				}
+				else
+				{
+					s += String.format(
+						'<strong><%:Prefix Delegated%>: </strong>%s<br />',
+						ifc6.ip6prefix
+					);
+					if (ifc6.ip6addr)
+					{
+						s += String.format(
+							'<strong><%:Address%>: </strong>%s<br />',
+							ifc6.ip6addr
+						);
+					}
+				}
+
+				s += String.format(
 					'<strong><%:Gateway%>: </strong>%s<br />',
-						(ifc6.ip6addr) ? ifc6.ip6addr : '::',
 						(ifc6.gw6addr) ? ifc6.gw6addr : '::'
 				);
 
@@ -341,7 +368,9 @@
 				{
 					var timestr;
 
-					if (info.leases[i].expires <= 0)
+					if (info.leases[i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (info.leases[i].expires <= 0)
 						timestr = '<em><%:expired%></em>';
 					else
 						timestr = String.format('%t', info.leases[i].expires);
@@ -379,7 +408,9 @@
 				{
 					var timestr;
 
-					if (info.leases6[i].expires <= 0)
+					if (info.leases6[i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (info.leases6[i].expires <= 0)
 						timestr = '<em><%:expired%></em>';
 					else
 						timestr = String.format('%t', info.leases6[i].expires);

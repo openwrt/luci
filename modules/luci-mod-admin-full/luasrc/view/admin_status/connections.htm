@@ -153,7 +153,8 @@
 						{
 							var c  = conn[i];
 
-							if (c.src == '127.0.0.1' && c.dst == '127.0.0.1')
+							if ((c.src == '127.0.0.1' && c.dst == '127.0.0.1')
+							|| (c.src == '::1' && c.dst == '::1'))
 								continue;
 
 							var tr = conn_table.rows[0].parentNode.insertRow(-1);

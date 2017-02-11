@@ -131,6 +131,40 @@ function ip6prefix(val)
 	return ( val and val >= 0 and val <= 128 )
 end
 
+function ipmask(val)
+	return ipmask4(val) or ipmask6(val)
+end
+
+function ipmask4(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+	local bits = tonumber(mask)
+
+	if bits and (bits < 0 or bits > 32) then
+		return false
+	end
+
+	if not bits and mask and not ip4addr(mask) then
+		return false
+	end
+
+	return ip4addr(ip or val)
+end
+
+function ipmask6(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+	local bits = tonumber(mask)
+
+	if bits and (bits < 0 or bits > 128) then
+		return false
+	end
+
+	if not bits and mask and not ip6addr(mask) then
+		return false
+	end
+
+	return ip6addr(ip or val)
+end
+
 function port(val)
 	val = tonumber(val)
 	return ( val and val >= 0 and val <= 65535 )
@@ -231,6 +265,13 @@ function wepkey(val)
 	else
 		return (#val == 5) or (#val == 13)
 	end
+end
+
+function hexstring(val)
+        if val then
+                return (val:match("^[a-fA-F0-9]+$") ~= nil)
+        end
+        return false
 end
 
 function string(val)
@@ -378,29 +419,29 @@ function dateyyyymmdd(val)
 			return false;
 		end
 
-        	local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+		local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 
-        	local function is_leap_year(year)
-            		return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
-        	end
+		local function is_leap_year(year)
+			return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
+		end
 
-        	function get_days_in_month(month, year)
-            		if (month == 2) and is_leap_year(year) then
-               			return 29
-            		else
-                		return days_in_month[month]
-            		end
-        	end
-        	if (year < 2015) then
-	    		return false
-        	end 
-        	if ((month == 0) or (month > 12)) then
-            		return false
-        	end 
-        	if ((day == 0) or (day > get_days_in_month(month, year))) then
-            		return false
-        	end
-        	return true
+		function get_days_in_month(month, year)
+			if (month == 2) and is_leap_year(year) then
+				return 29
+			else
+				return days_in_month[month]
+			end
+		end
+		if (year < 2015) then
+			return false
+		end
+		if ((month == 0) or (month > 12)) then
+			return false
+		end
+		if ((day == 0) or (day > get_days_in_month(month, year))) then
+			return false
+		end
+		return true
 	end
 	return false
 end
