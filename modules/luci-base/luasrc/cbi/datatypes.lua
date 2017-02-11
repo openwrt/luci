@@ -199,6 +199,10 @@ function macaddr(val)
 	return false
 end
 
+function duid(val)
+	return (val and val:match("^[a-fA-F0-9]{16}$"))
+end
+
 function hostname(val)
 	if val and (#val < 254) and (
 	   val:match("^[a-zA-Z_]+$") or
