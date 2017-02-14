@@ -1125,6 +1125,8 @@ end
 
 -- ieee802.11w options
 if hwtype == "mac80211" then
+   local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)
+   if has_ap_eap then
 	ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
 		translate("802.11w Management Frame Protection"),
 		translate("Requires the 'full' version of wpad/hostapd " ..
@@ -1159,6 +1161,7 @@ if hwtype == "mac80211" then
 	retry_timeout.datatype = "uinteger"
 	retry_timeout.placeholder = "201"
 	retry_timeout.rmempty = true
+   end
 end
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
