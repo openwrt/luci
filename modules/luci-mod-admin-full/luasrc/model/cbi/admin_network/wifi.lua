@@ -967,8 +967,8 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 
 	r0kh = s:taboption("encryption", DynamicList, "r0kh", translate("External R0 Key Holder List"),
 		translate("List of R0KHs in the same Mobility Domain. " ..
-			"<br>Format: MAC-address,NAS-Identifier,128-bit key as hex string. " ..
-			"<br>This list is used to map R0KH-ID (NAS Identifier) to a destination " ..
+			"<br />Format: MAC-address,NAS-Identifier,128-bit key as hex string. " ..
+			"<br />This list is used to map R0KH-ID (NAS Identifier) to a destination " ..
 			"MAC address when requesting PMK-R1 key from the R0KH that the STA " ..
 			"used during the Initial Mobility Domain Association."))
 
@@ -977,8 +977,8 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 
 	r1kh = s:taboption("encryption", DynamicList, "r1kh", translate("External R1 Key Holder List"),
 		translate ("List of R1KHs in the same Mobility Domain. "..
-			"<br>Format: MAC-address,R1KH-ID as 6 octets with colons,128-bit key as hex string. "..
-			"<br>This list is used to map R1KH-ID to a destination MAC address " ..
+			"<br />Format: MAC-address,R1KH-ID as 6 octets with colons,128-bit key as hex string. "..
+			"<br />This list is used to map R1KH-ID to a destination MAC address " ..
 			"when sending PMK-R1 key from the R0KH. This is also the " ..
 			"list of authorized R1KHs in the MD that can request PMK-R1 keys."))
 	r1kh:depends({ieee80211r="1"})
@@ -1130,7 +1130,7 @@ if hwtype == "mac80211" then
 	ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
 		translate("802.11w Management Frame Protection"),
 		translate("Requires the 'full' version of wpad/hostapd " ..
-			"and support from the wifi driver <br>(as of Feb 2017: " ..
+			"and support from the wifi driver <br />(as of Feb 2017: " ..
 			"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
 	ieee80211w.default = "0"
 	ieee80211w.rmempty = true
