@@ -209,7 +209,15 @@ function macaddr(val)
 end
 
 function duid(val)
-	return (val and val:match("^[a-fA-F0-9]{16}$"))
+	return (val and val:match("^[a-fA-F0-9]+$") and (#val == 28))
+end
+
+function hostid(val)
+	if val and val:match("^[a-fA-F0-9:]+$") and (#val > 2) then
+		return (ip6addr("2001:db8:0:0" .. val) or ip6addr("2001:db8:0:0:" .. val))
+	end
+
+	return false
 end
 
 function hostname(val)
