@@ -19,7 +19,7 @@ private_key = section:taboption(
   translate("Required. Base64-encoded private key for this interface.")
 )
 private_key.password = true
-private_key.datatype = "rangelength(44, 44)"
+private_key.datatype = "and(base64,rangelength(44, 44))"
 private_key.optional = false
 
 
@@ -76,11 +76,12 @@ preshared_key = section:taboption(
   Value,
   "preshared_key",
   translate("Preshared Key"),
-  translate("Optional. Adds in an additional layer of symmetric-key " ..
+  translate("Optional. Base64-encoded preshared key. " ..
+            "Adds in an additional layer of symmetric-key " ..
             "cryptography for post-quantum resistance.")
 )
 preshared_key.password = true
-preshared_key.datatype = "rangelength(44, 44)"
+preshared_key.datatype = "and(base64,rangelength(44, 44))"
 preshared_key.optional = true
 
 
@@ -102,9 +103,9 @@ public_key = peers:option(
   Value,
   "public_key",
   translate("Public Key"),
-  translate("Required. Public key of peer.")
+  translate("Required. Base64-encoded public key of peer.")
 )
-public_key.datatype = "rangelength(44, 44)"
+public_key.datatype = "and(base64,rangelength(44, 44))"
 public_key.optional = false
 
 
