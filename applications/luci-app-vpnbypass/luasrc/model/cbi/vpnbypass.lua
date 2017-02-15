@@ -27,13 +27,12 @@ r2.addremove = true
 r2.optional = true
 
 -- Domains
-d1 = s:option(DynamicList, "domain", translate("Domains to Bypass"), translate("Domains which will be accessed directly (outside of the VPN tunnel)"))
-d1.addremove = true
-d1.optional = true
-
 d = Map("dhcp")
 s4 = d:section(TypedSection, "dnsmasq")
 s4.anonymous = true
-di = s4:option(DynamicList, "ipset", translate("Domains to Bypass"), translate("Domains to be accessed directly (outside of the VPN tunnel), see <a href='https://github.com/openwrt/packages/tree/master/net/vpnbypass/files#bypass-domains-formatsyntax'>README</a> for syntax"))
+di = s4:option(DynamicList, "ipset", translate("Domains to Bypass"),
+    translate("Domains to be accessed directly (outside of the VPN tunnel), see ")
+    .. [[<a href="https://github.com/openwrt/packages/tree/master/net/vpnbypass/files#bypass-domains-formatsyntax" target="_blank">]]
+    .. translate("README") .. [[</a>]] .. translate(" for syntax"))
 
 return m, d
