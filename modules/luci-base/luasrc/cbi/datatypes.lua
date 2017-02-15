@@ -1,4 +1,5 @@
 -- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2017 Dan Luedtke <mail@danrl.com>
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
@@ -165,6 +166,14 @@ function ipmask6(val)
 	return ip6addr(ip or val)
 end
 
+function ip6hostid(val)
+	if val and val:match("^[a-fA-F0-9:]+$") and (#val > 2) then
+		return (ip6addr("2001:db8:0:0" .. val) or ip6addr("2001:db8:0:0:" .. val))
+	end
+
+	return false
+end
+
 function port(val)
 	val = tonumber(val)
 	return ( val and val >= 0 and val <= 65535 )
@@ -268,17 +277,24 @@ function wepkey(val)
 end
 
 function hexstring(val)
-        if val then
-                return (val:match("^[a-fA-F0-9]+$") ~= nil)
-        end
-        return false
+	if val then
+		return (val:match("^[a-fA-F0-9]+$") ~= nil)
+	end
+	return false
+end
+
+function base64(val)
+	if val then
+		return (val:match("^[a-zA-Z0-9/+]+=?=?$") ~= nil) and (math.fmod(#val, 4) == 0)
+	end
+	return false
 end
 
 function string(val)
 	return true		-- Everything qualifies as valid string
 end
 
-function directory( val, seen )
+function directory(val, seen)
 	local s = fs.stat(val)
 	seen = seen or { }
 
@@ -294,7 +310,7 @@ function directory( val, seen )
 	return false
 end
 
-function file( val, seen )
+function file(val, seen)
 	local s = fs.stat(val)
 	seen = seen or { }
 
@@ -310,7 +326,7 @@ function file( val, seen )
 	return false
 end
 
-function device( val, seen )
+function device(val, seen)
 	local s = fs.stat(val)
 	seen = seen or { }
 
@@ -445,4 +461,3 @@ function dateyyyymmdd(val)
 	end
 	return false
 end
-
