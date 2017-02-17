@@ -1,0 +1,122 @@
+<%+header%>
+
+<ul class="cbi-tabmenu">
+	<li class="cbi-tab"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/overview")%>"><%:Interface Status%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/overview/overview_detailed")%>"><%:Detailed Status%></a></li>
+</ul>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "mwan", "overview", "interface_status")%>', null,
+		function(x, mArray)
+		{
+			var statusDiv = document.getElementById('mwan_status_text');
+			if (mArray.wans)
+			{
+				var interfaceStatus = '';
+				for ( var i = 0; i < mArray.wans.length; i++ )
+				{
+					var status = '';
+					var css = '';
+					switch (mArray.wans[i].status)
+					{
+						case 'online':
+							status = 'Online (tracking active)';
+							css = 'wanon';
+							break;
+						case 'notMonitored':
+							status = 'Online (tracking off)';
+							css = 'wanon';
+							break;
+						case 'offline':
+							status = 'Offline';
+							css = 'wanoff';
+							break;
+						case 'notEnabled':
+							status = 'Disabled';
+							css = 'wanoff';
+							break;
+					}
+					interfaceStatus += String.format(
+						'<span class="%s"><strong>%s (<a href="%q">%s</a>)</strong><br />%s</span>',
+						css, mArray.wans[i].name, mArray.wans[i].link, mArray.wans[i].ifname, status
+					);
+				}
+				statusDiv.innerHTML = interfaceStatus;
+			}
+			else
+			{
+				statusDiv.innerHTML = '<strong>No MWAN interfaces found</strong>';
+			}
+
+			var logs = document.getElementById('mwan_statuslog_text');
+			if (mArray.mwanlog)
+			{
+				var mwanLog = 'Last 50 MWAN systemlog entries. Newest entries sorted at the top :';
+				logs.innerHTML = String.format('<pre>%s<br /><br />%s</pre>', mwanLog, mArray.mwanlog[0]);
+			}
+			else
+			{
+				logs.innerHTML = '<strong>No MWAN systemlog history found</strong>';
+			}
+		}
+	);
+//]]></script>
+
+<div id="mwan_interface_status">
+	<fieldset id="interface_field" class="cbi-section">
+		<legend><%:MWAN Interface Live Status%></legend>
+		<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+	</fieldset>
+	<fieldset class="cbi-section">
+		<legend><%:MWAN Interface Systemlog%></legend>
+		<div id="mwan_statuslog_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+	</fieldset>
+</div>
+
+<style type="text/css">
+  .container {	/* container for entire page. fixes bootstrap theme's ridiculously small page width */
+	max-width: none;
+	margin-left: 30px;
+	padding-right: 30px;
+	width: auto;
+  }
+  #mwan_interface_status {
+	background-color: #FFFFFF;
+	border: 1px dotted #555555;
+	padding: 20px;
+  }
+  #interface_field {
+	padding: 12px 20px 20px 20px;
+  }
+  #mwan_status_text {
+	display: table;
+	font-size: 14px;
+	margin: auto;
+	max-width: 1044px;
+	min-width: 246px;
+	width: 100%;
+  }
+  .wanon {
+	background-color: rgb(144, 240, 144);
+  }
+  .wanoff {
+	background-color: rgb(240, 144, 144);
+  }
+  .wanon, .wanoff {
+	border-radius: 60px;
+	box-shadow: 0px 2px 5px -3px;
+	float: left;
+	margin: 8px 3px 0px 3px;
+	min-height: 30px;
+	min-width: 235px;
+	padding: 5px 10px 8px 10px;
+	text-align: center;
+  }
+  #mwan_statuslog_text {
+	padding: 20px;
+	text-align: left;
+  }
+</style>
+
+<%+footer%>

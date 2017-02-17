@@ -1,0 +1,129 @@
+<%+header%>
+
+<ul class="cbi-tabmenu">
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/hotplugscript")%>"><%:Hotplug Script%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/mwanconfig")%>"><%:MWAN Config%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/networkconfig")%>"><%:Network Config%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/wirelessconfig")%>"><%:Wireless Config%></a></li>
+	<li class="cbi-tab"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/diagnostics")%>"><%:Diagnostics%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/troubleshooting")%>"><%:Troubleshooting%></a></li>
+</ul>
+
+<%
+	local uci = require "luci.model.uci"
+
+	interfaceNames = ""
+	uci.cursor():foreach("mwan3", "interface",
+		function (section)
+			interfaceNames = interfaceNames .. section[".name"] .. " "
+		end
+	)
+%>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	var stxhr = new XHR();
+
+	function update_status(tool, task)
+	{
+		var iface = document.getElementById('mwaniface').value;
+		var output = document.getElementById('diag_output');
+
+		if (tool == "service")
+			{
+				output.innerHTML =
+					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
+					"Waiting for MWAN to " + task + "..."
+				;
+			}
+			else
+			{
+				output.innerHTML =
+					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
+					"Waiting for diagnostic results..."
+				;
+			}
+
+		output.parentNode.style.display = 'block';
+		output.style.display = 'inline';
+
+		stxhr.get('<%=luci.dispatcher.build_url("admin", "network", "mwan", "advanced")%>/diagnostics_display' + '/' + iface + '/' + tool + '/' + task, null,
+			function(x, mArray)
+			{
+				if (mArray.diagnostics)
+				{
+					output.innerHTML = String.format('<pre id="diag_output_css">%h</pre>', mArray.diagnostics[0]);
+				}
+				else
+				{
+					output.innerHTML = '<pre id="diag_output_css"><strong>No diagnostic results returned</strong></pre>';
+				}
+			}
+		);
+	}
+//]]></script>
+
+<div id="mwan_diagnostics" class="cbi-map">
+	<fieldset id="diag_select" class="cbi-section">
+		<legend><%:MWAN Interface Diagnostics%></legend>
+		<select id="mwaniface">
+			<% for z in interfaceNames:gmatch("[^ ]+") do -%><option value="<%=z%>"><%=z%></option><%- end %>
+		</select>
+		<div id="buttoncss">
+			<input type="button" value="<%:Ping default gateway%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'gateway')" />
+			<input type="button" value="<%:Ping tracking IP%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'track_ip')" />
+			<input type="button" value="<%:Check IP rules%>" class="cbi-button cbi-button-apply" onclick="update_status('rulechk', null)" />
+			<input type="button" value="<%:Check routing table%>" class="cbi-button cbi-button-apply" onclick="update_status('routechk', null)" />
+			<input type="button" value="<%:Hotplug ifup%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifup')" />
+			<input type="button" value="<%:Hotplug ifdown%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifdown')" />
+		</div>
+	</fieldset>
+	<fieldset id="diag_select" class="cbi-section">
+		<legend><%:MWAN Service Control%></legend>
+		<div id="buttoncss">
+			<input type="button" value="<%:Restart MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'restart')" />
+			<input type="button" value="<%:Stop MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'stop')" />
+			<input type="button" value="<%:Start MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'start')" />
+		</div>
+	</fieldset>
+	<fieldset class="cbi-section" style="display:none">
+		<legend><%:Diagnostic Results%></legend>
+		<div id="diag_output"></div>
+	</fieldset>
+</div>
+
+<style type="text/css">
+  .container {  /* container for entire page. fixes bootstrap theme's ridiculously small page width */
+	max-width: none;
+	margin-left: 30px;
+	padding-right: 30px;
+	width: auto;
+  }
+  #mwan_diagnostics {
+	background-color: #FFFFFF;
+	border: 1px dotted #555555;
+	padding: 20px;
+  }
+  #diag_select {
+	padding: 12px 20px 20px 20px;
+  }
+  #mwaniface {
+	float: left;
+	margin: 8px 20px 0px 0px;
+  }
+  #buttoncss {
+	display: table;
+	float: left;
+	text-align: left;
+  }
+  .cbi-button {
+	margin: 8px 20px 0px 0px;
+	min-width: 153px;
+  }
+  #diag_output_css {
+	padding: 20px;
+	text-align: left;
+  }
+</style>
+
+<%+footer%>
