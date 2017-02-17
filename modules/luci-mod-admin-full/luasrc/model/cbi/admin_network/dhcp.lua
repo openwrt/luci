@@ -49,7 +49,7 @@ ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\
 ip.datatype = "or(ip4addr,'ignore')"
 
 duid = s:option(Value, "duid", translate("<abbr title=\"DHCP Unique Identifier\">DUID</abbr>"))
-duid.datatype = "duid"
+duid.datatype = "and(rangelength(28,36),hexstring)"
 duid.rmempty  = true
 
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
