@@ -70,9 +70,8 @@ PKG_VERSION?=$(if $(DUMP),x,$(strip $(shell \
 PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 	variant="LuCI"; \
 	if git log -1 >/dev/null 2>/dev/null; then \
-		branch="$$(git symbolic-ref --short -q HEAD 2>/dev/null || \
-			git branch --remote --verbose --no-abbrev --contains 2>/dev/null | \
-				sed -e 's|^.*/||; s| .*||; q')"; \
+		branch="$$(git branch --remote --verbose --no-abbrev --contains 2>/dev/null | \
+			sed -rne 's|^[^/]+/([^ ]+) [a-f0-9]{40} .+$$|\1|p' | head -n1)"; \
 		if [ "$$branch" != "master" ]; then \
 			variant="LuCI $$branch branch"; \
 		else \
