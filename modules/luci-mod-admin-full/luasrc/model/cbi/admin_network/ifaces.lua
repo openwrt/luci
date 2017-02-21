@@ -406,6 +406,7 @@ if has_dnsmasq and net:proto() == "static" then
 
 		x = s:option(Button, "_enable")
 		x.title      = translate("No DHCP Server configured for this interface")
+		x.description= translate("Settings in the upper section will be lost if they have not already been saved!")
 		x.inputtitle = translate("Setup DHCP Server")
 		x.inputstyle = "apply"
 
