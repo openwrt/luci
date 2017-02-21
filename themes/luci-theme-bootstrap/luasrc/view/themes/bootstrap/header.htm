@@ -201,5 +201,12 @@
 			</div>
 		<%- end -%>
 
+		<noscript>
+			<div class="alert-message warning">
+				<strong><%:JavaScript required!%></strong><br />
+				<%:You must enable JavaScript in your browser or LuCI will not work properly.%>
+			</div>
+		</noscript>
+
 		<div id="maincontent" class="container">
 			<% if category then render_tabmenu(category, cattree) end %>
