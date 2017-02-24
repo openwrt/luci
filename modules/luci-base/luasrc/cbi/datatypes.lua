@@ -283,6 +283,14 @@ function hexstring(val)
 	return false
 end
 
+function hex(val, maxbytes)
+	maxbytes = tonumber(maxbytes)
+	if val and maxbytes ~= nil then
+		return ((val:match("^0x[a-fA-F0-9]+$") ~= nil) and (#val <= 2 + maxbytes * 2))
+	end
+	return false
+end
+
 function base64(val)
 	if val then
 		return (val:match("^[a-zA-Z0-9/+]+=?=?$") ~= nil) and (math.fmod(#val, 4) == 0)
