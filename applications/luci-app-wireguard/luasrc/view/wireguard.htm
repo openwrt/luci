@@ -4,133 +4,43 @@
 -%>
 
 <%
-  function strip(s)
-    return (s:gsub("^%s*(.-)%s*$", "%1"))
-  end
+  local data = { }
+  local last_device = ""
 
-  function is_valid(s)
-    return (string.len(strip(s)) > 0)
-  end
-
-  function peer_add(peers, public_key)
-    table.insert(peers, {
-      public_key = public_key,
-      endpoint = "",
-      transfer_rx = 0,
-      transfer_tx = 0,
-      latest_handshake = -1,
-      persistent_keepalive = "",
-      allowed_ips = { }
-    })
-  end
-
-  function peer_set_transfer(peers, public_key, rx, tx)
-    for key, peer in pairs(peers) do
-      if peer.public_key == public_key then
-        peers[key].transfer_rx = rx
-        peers[key].transfer_tx = tx
-        break
-      end
-    end
-  end
-
-  function peer_set_latest_handshake(peers, public_key, latest_handshake)
-    for key, peer in pairs(peers) do
-      if peer.public_key == public_key then
-        peers[key].latest_handshake = latest_handshake
-        break
-      end
-    end
-  end
-
-  function peer_set_endpoint(peers, public_key, endpoint)
-    for key, peer in pairs(peers) do
-      if peer.public_key == public_key then
-        peers[key].endpoint = endpoint
-        break
-      end
-    end
-  end
-
-  function peer_set_persistent_keepalive(peers, public_key, persistent_keepalive)
-    for key, peer in pairs(peers) do
-      if peer.public_key == public_key then
-        peers[key].persistent_keepalive = persistent_keepalive
-        break
-      end
-    end
-  end
-
-  function peer_set_allowed_ips(peers, public_key, allowed_ips)
-    for key, peer in pairs(peers) do
-      if peer.public_key == public_key then
-        for ipkey, ipvalue in pairs(string.split(allowed_ips, " ")) do
-          if is_valid(ipvalue) then
-            table.insert(peers[key].allowed_ips, strip(ipvalue))
+  local wg_dump = io.popen("wg show all dump")
+  if wg_dump then
+    local line
+    for line in wg_dump:lines() do
+      local line = string.split(line, "\t")
+      if not (last_device == line[1]) then
+        last_device = line[1]
+        data[line[1]] = {
+          name                 = line[1],
+          public_key           = line[3],
+          listen_port          = line[5],
+          fwmark               = line[6],
+          peers                = { }
+        }
+      else
+        local peer = {
+          public_key           = line[2],
+          endpoint             = line[3],
+          allowed_ips          = { },
+          latest_handshake     = line[5],
+          transfer_rx          = line[6],
+          transfer_tx          = line[7],
+          persistent_keepalive = line[8]
+        }
+        if not (line[4] == '(none)') then
+          for ipkey, ipvalue in pairs(string.split(line[4], ",")) do
+            if #ipvalue > 0 then
+              table.insert(peer['allowed_ips'], ipvalue)
+            end
           end
         end
-        break
+        table.insert(data[line[1]].peers, peer)
       end
     end
-  end
-
-  local data = { }
-
-  local wg_ifaces = luci.sys.exec("wg show interfaces")
-  for key, name in pairs(string.split(wg_ifaces, "\n")) do
-    if not is_valid(name) then break end
-    name = strip(name)
-    local public_key = luci.sys.exec("wg show \"" .. name .. "\" public-key")
-    local listening_port = luci.sys.exec("wg show \"" .. name .. "\" listen-port")
-
-    local peers = { }
-    local wg_peers = luci.sys.exec("wg show \"" .. name .. "\" peers")
-    for key, public_key in pairs(string.split(wg_peers, "\n")) do
-      if not is_valid(public_key) then break end
-      peer_add(peers, public_key)
-    end
-
-    local wg_endpoints = luci.sys.exec("wg show \"" .. name .. "\" endpoints")
-    for key, endpoint in pairs(string.split(wg_endpoints, "\n")) do
-      if not is_valid(endpoint) then break end
-      local ln = string.split(strip(endpoint), "\t")
-      peer_set_endpoint(peers, ln[1], strip(ln[2]))
-    end
-
-    local wg_allowed_ips = luci.sys.exec("wg show \"" .. name .. "\" allowed-ips")
-    for key, allowed_ips in pairs(string.split(wg_allowed_ips, "\n")) do
-      if not is_valid(allowed_ips) then break end
-      local ln = string.split(strip(allowed_ips), "\t", 2)
-      peer_set_allowed_ips(peers, ln[1], strip(ln[2]))
-    end
-
-    local wg_persistent_keepalives = luci.sys.exec("wg show \"" .. name .. "\" persistent-keepalive")
-    for key, persistent_keepalive in pairs(string.split(wg_persistent_keepalives, "\n")) do
-      if not is_valid(persistent_keepalive) then break end
-      local ln = string.split(strip(persistent_keepalive), "\t")
-      peer_set_persistent_keepalive(peers, strip(ln[1]), strip(ln[2]))
-    end
-
-    local wg_latest_handshakes = luci.sys.exec("wg show \"" .. name .. "\" latest-handshakes")
-    for key, latest_handshake in pairs(string.split(wg_latest_handshakes, "\n")) do
-      if not is_valid(latest_handshake) then break end
-      local ln = string.split(strip(latest_handshake), "\t")
-      peer_set_latest_handshake(peers, strip(ln[1]), tonumber(ln[2]))
-    end
-
-    local wg_transfers = luci.sys.exec("wg show \"" .. name .. "\" transfer")
-    for key, transfer in pairs(string.split(wg_transfers, "\n")) do
-      if not is_valid(transfer) then break end
-      local ln = string.split(strip(transfer), "\t")
-      peer_set_transfer(peers, ln[1], strip(ln[2]), strip(ln[3]))
-    end
-
-    table.insert(data, {
-      name = name,
-      public_key = strip(public_key),
-      listening_port = tonumber(strip(listening_port)),
-      peers = peers
-    })
   end
 
   if luci.http.formvalue("status") == "1" then
@@ -146,80 +56,102 @@
 <script type="text/javascript">//<![CDATA[
 
   function bytes_to_str(bytes) {
-     var sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
-     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    bytes = parseFloat(bytes);
+    if (bytes < 1) { return "0 B"; }
+    var sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
   };
 
   function timestamp_to_str(timestamp) {
+    if (timestamp < 1) {
+      return '<%:Never%>';
+    }
     var now = new Date();
     var seconds = (now.getTime() / 1000) - timestamp;
-    if (seconds < 60){
-      return parseInt(seconds) + '<%:s ago%>';
-    }
-    else if (seconds < 3600){
-      return parseInt(seconds / 60) + '<%:m ago%>';
-    }
-    else if (seconds < 86400){
-      return parseInt(seconds / 3600) + '<%:h ago%>';
+    var ago = "";
+    if (seconds < 60) {
+      ago = parseInt(seconds) + '<%:s ago%>';
+    } else if (seconds < 3600) {
+      ago = parseInt(seconds / 60) + '<%:m ago%>';
+    } else if (seconds < 86401) {
+      ago = parseInt(seconds / 3600) + '<%:h ago%>';
     } else {
-      return '<%:over a day ago%>';
+      ago = '<%:over a day ago%>';
     }
+    var t = new Date(timestamp * 1000);
+    return t.toUTCString() + ' (' + ago + ')';
   }
 
   XHR.poll(5, '<%=REQUEST_URI%>', { status: 1 },
    function(x, data) {
-    for (var i = 0, ilen = data.length; i < ilen; i++) {
-      var iface = data[i];
-      var ifid = iface['public_key'] + "_";
-      var s = String.format(
-        '<strong><%:Public Key%>: </strong>%s' +
-        '<br /><strong><%:Listening Port%>: </strong>%<%:s%>',
-        iface['public_key'],
-        iface['listening_port']
-      );
-      document.getElementById(ifid + "info").innerHTML = s;
-      for (var j = 0, jlen = iface['peers'].length; j < jlen; j++) {
-        var peer = iface['peers'][j];
-        var pid = ifid + peer['public_key'] + "_";
-        s = String.format(
+    for (var key in data) {
+      if (!data.hasOwnProperty(key)) { continue; }
+      var ifname = key;
+      var iface = data[key];
+      var s = "";
+      if (iface.public_key == '(none)') {
+        s += '<em><%:Interface does not have a public key!%></em>';
+      } else {
+        s += String.format(
           '<strong><%:Public Key%>: </strong>%s',
-          peer['public_key']
+          iface.public_key
         );
-        if (peer['endpoint'] != '(none)') {
+      }
+      if (iface.listen_port > 0) {
+        s += String.format(
+          '<br /><strong><%:Listen Port%>: </strong>%s',
+          iface.listen_port
+        );
+      }
+      if (iface.fwmark != 'off') {
+        s += String.format(
+          '<br /><strong><%:Firewall Mark%>: </strong>%s',
+          iface.fwmark
+        );
+      }
+      document.getElementById(ifname + "_info").innerHTML = s;
+      for (var i = 0, ilen = iface.peers.length; i < ilen; i++) {
+        var peer = iface.peers[i];
+        var s = String.format(
+          '<strong><%:Public Key%>: </strong>%s',
+          peer.public_key
+        );
+        if (peer.endpoint != '(none)') {
           s += String.format(
             '<br /><strong><%:Endpoint%>: </strong>%s',
-            peer['endpoint']
+            peer.endpoint
           );
         }
-        if (peer['allowed_ips'].length > 0) {
+        if (peer.allowed_ips.length > 0) {
           s += '<br /><strong><%:Allowed IPs%>:</strong>';
-          for (var k = 0, klen = peer['allowed_ips'].length; k < klen; k++) {
-            s += '<br />&nbsp;&nbsp;&bull;&nbsp;' + peer['allowed_ips'][k];
+          for (var k = 0, klen = peer.allowed_ips.length; k < klen; k++) {
+            s += '<br />&nbsp;&nbsp;&bull;&nbsp;' + peer.allowed_ips[k];
           }
         }
-        if (peer['persistent_keepalive'] != 'off') {
+        if (peer.persistent_keepalive != 'off') {
           s += String.format(
             '<br /><strong><%:Persistent Keepalive%>: </strong>%ss',
-            peer['persistent_keepalive']
+            peer.persistent_keepalive
           );
         }
         var icon = '<img src="<%=resource%>/icons/tunnel_disabled.png" />';
-        if (((now.getTime() / 1000) - peer['latest_handshake']) < 140) {
+        var now = new Date();
+        if (((now.getTime() / 1000) - peer.latest_handshake) < 140) {
           icon = '<img src="<%=resource%>/icons/tunnel.png" />';
-          s += String.format(
-            '<br /><strong><%:Latest Handshake%>: </strong>%s',
-            timestamp_to_str(peer['latest_handshake'])
-          );
         }
+        s += String.format(
+          '<br /><strong><%:Latest Handshake%>: </strong>%s',
+          timestamp_to_str(peer.latest_handshake)
+        );
         s += String.format(
           '<br /><strong><%:Data Received%>: </strong>%s' +
           '<br /><strong><%:Data Transmitted%>: </strong>%s',
-          bytes_to_str(peer['transfer_rx']),
-          bytes_to_str(peer['transfer_tx'])
+          bytes_to_str(peer.transfer_rx),
+          bytes_to_str(peer.transfer_tx)
         );
-        document.getElementById(pid + "icon").innerHTML = icon;
-        document.getElementById(pid + "info").innerHTML = s;
+        document.getElementById(ifname + "_" + peer.public_key + "_icon").innerHTML = icon;
+        document.getElementById(ifname + "_" + peer.public_key + "_info").innerHTML = s;
       }
     }
   });
@@ -227,42 +159,39 @@
 
 <h2>WireGuard Status</h2>
 
-
 <fieldset class="cbi-section">
 <%-
-for key, iface in pairs(data) do
-  local ifid = iface.public_key .. "_"
+for ikey, iface in pairs(data) do
   -%>
-  <legend><%:Interface%> <%=iface.name%></legend>
+  <legend><%:Interface%> <%=ikey%></legend>
   <table width="100%" cellspacing="10">
     <tr>
       <td width="33%" style="vertical-align:top"><%:Configuration%></td>
       <td>
         <table>
           <tr>
-            <td id="<%=ifid%>icon" style="width:16px; text-align:center; padding:3px">
+            <td id="<%=ikey%>_icon" style="width:16px; text-align:center; padding:3px">
               &nbsp;
             </td>
-            <td id="<%=ifid%>info" style="vertical-align:middle; padding: 3px">
+            <td id="<%=ikey%>_info" style="vertical-align:middle; padding: 3px">
               <em><%:Collecting data...%></em>
             </td>
         </tr></table>
       </td>
     </tr>
   <%-
-  for key, peer in pairs(iface.peers) do
-    local pid = ifid .. peer.public_key .. "_"
+  for pkey, peer in pairs(iface.peers) do
     -%>
     <tr>
       <td width="33%" style="vertical-align:top"><%:Peer%></td>
       <td>
         <table>
           <tr>
-            <td id="<%=pid%>icon" style="width:16px; text-align:center; padding:3px">
+            <td id="<%=ikey%>_<%=peer.public_key%>_icon" style="width:16px; text-align:center; padding:3px">
               <img src="<%=resource%>/icons/tunnel_disabled.png" /><br />
               <small>?</small>
             </td>
-            <td id="<%=pid%>info" style="vertical-align:middle; padding: 3px">
+            <td id="<%=ikey%>_<%=peer.public_key%>_info" style="vertical-align:middle; padding: 3px">
               <em><%:Collecting data...%></em>
             </td>
         </tr></table>
