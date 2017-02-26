@@ -1,11 +1,15 @@
 #!/bin/sh
-
-uci -q batch <<-EOF >/dev/null
+uci -q batch <<-EOF >/dev/null 2>&1
 	delete ucitrack.@shadowsocks-libev[-1]
 	add ucitrack shadowsocks-libev
 	set ucitrack.@shadowsocks-libev[-1].init=shadowsocks-libev
 	commit ucitrack
+	delete firewall.shadowsocks-libev
+	set firewall.shadowsocks-libev=include
+	set firewall.shadowsocks-libev.type=script
+	set firewall.shadowsocks-libev.path=/var/etc/shadowsocks-libev.include
+	set firewall.shadowsocks-libev.reload=1
+	commit firewall
 EOF
-
-rm -f /tmp/luci-indexcache
+rm -rf /tmp/luci-indexcache /tmp/luci-modulecache
 exit 0

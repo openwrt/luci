@@ -1,0 +1,162 @@
+#!/bin/sh /etc/rc.common
+#
+# Copyright (C) 2016 Jian Chang <aa65535@live.com>
+#
+# This is free software, licensed under the GNU General Public License v3.
+# See /LICENSE for more information.
+#
+
+START=90
+STOP=15
+
+NAME=shadowsocks-libev
+EXTRA_COMMANDS=rules
+CONFIG_FILE=/var/etc/$NAME.json
+
+uci_get_by_name() {
+	local ret=$(uci get $NAME.$1.$2 2>/dev/null)
+	echo ${ret:=$3}
+}
+
+uci_get_by_type() {
+	local ret=$(uci get $NAME.@$1[0].$2 2>/dev/null)
+	echo ${ret:=$3}
+}
+
+uci_bool_by_name() {
+	case "$(uci_get_by_name $1 $2)" in
+		1|on|true|yes|enabled) return 0;;
+	esac
+	return 1
+}
+
+valid_server() {
+	[ "$(uci get $NAME.$1 2>/dev/null)" = "servers" ]
+}
+
+get_arg_udp() {
+	local server=$(uci_get_by_type transparent_proxy udp_relay_server)
+	[ "$server" = "same" ] || valid_server $server && echo "-u"
+}
+
+get_arg_ota() {
+	uci_bool_by_name $1 auth && echo "-A"
+}
+
+get_arg_tfo() {
+	if [ "3" = "$(cat /proc/sys/net/ipv4/tcp_fastopen 2>/dev/null)" ]; then
+		uci_bool_by_name $1 fast_open && echo "--fast-open"
+	fi
+}
+
+get_server_ips() {
+	echo $(uci_get_by_name $1 server)
+}
+
+get_lan_hosts() {
+	uci_bool_by_name $1 enable && \
+		echo "$(uci_get_by_name $1 type),$(uci_get_by_name $1 host)"
+}
+
+gen_config_file() {
+	cat <<-EOF >$CONFIG_FILE
+		{
+		    "server": "$(uci_get_by_name $1 server)",
+		    "server_port": $(uci_get_by_name $1 server_port),
+		    "local_address": "0.0.0.0",
+		    "password": "$(uci_get_by_name $1 password)",
+		    "timeout": $(uci_get_by_name $1 timeout 60),
+		    "method": "$(uci_get_by_name $1 encrypt_method)"
+		}
+EOF
+}
+
+start_rules() {
+	config_load $NAME
+	/usr/bin/ss-rules \
+		-s "$(echo $(config_foreach get_server_ips servers))" \
+		-l "$(uci_get_by_type transparent_proxy local_port 1234)" \
+		-i "$(uci_get_by_type access_control wan_bp_list)" \
+		-b "$(uci_get_by_type access_control wan_bp_ips)" \
+		-w "$(uci_get_by_type access_control wan_fw_ips)" \
+		-I "$(uci_get_by_type access_control lan_ifaces)" \
+		-d "$(uci_get_by_type access_control lan_target)" \
+		-a "$(echo $(config_foreach get_lan_hosts lan_hosts))" \
+		-e "$(uci_get_by_type access_control ipt_ext)" \
+		-o $(get_arg_udp)
+}
+
+rules() {
+	if !(pidof ss-redir >/dev/null); then
+		logger -st $NAME -p3 "ss-redir not running."
+		return 1
+	fi
+	start_rules || /usr/bin/ss-rules -f
+}
+
+start_redir() {
+	gen_config_file $1
+	ss-redir -c $CONFIG_FILE $2 $(get_arg_ota $1) \
+		-l $(uci_get_by_type transparent_proxy local_port 1234) \
+		-f /var/run/ss-redir$3.pid
+}
+
+ss_redir() {
+	command -v ss-redir >/dev/null 2>&1 || return 1
+	local main_server=$(uci_get_by_type transparent_proxy main_server)
+	valid_server $main_server || return 1
+	local udp_relay_server=$(uci_get_by_type transparent_proxy udp_relay_server)
+	[ "$udp_relay_server" = "same" ] && udp_relay_server=$main_server
+	if [ "$udp_relay_server" = "$main_server" ]; then
+		start_redir $main_server -u
+	elif valid_server $udp_relay_server; then
+		start_redir $main_server
+		start_redir $udp_relay_server -U -udp
+	else
+		start_redir $main_server
+	fi
+}
+
+start_local() {
+	gen_config_file $1
+	ss-local -c $CONFIG_FILE -u $(get_arg_ota $1) $(get_arg_tfo $1) \
+		-l $(uci_get_by_type socks5_proxy local_port 1080) \
+		-f /var/run/ss-local.pid
+}
+
+ss_local() {
+	command -v ss-local >/dev/null 2>&1 || return 0
+	local server=$(uci_get_by_type socks5_proxy server)
+	valid_server $server && start_local $server
+}
+
+start_tunnel() {
+	gen_config_file $1
+	ss-tunnel -c $CONFIG_FILE -u $(get_arg_ota $1) \
+		-l $(uci_get_by_type port_forward local_port 5300) \
+		-L $(uci_get_by_type port_forward destination 8.8.4.4:53) \
+		-f /var/run/ss-tunnel.pid
+}
+
+ss_tunnel() {
+	command -v ss-tunnel >/dev/null 2>&1 || return 0
+	local server=$(uci_get_by_type port_forward server)
+	valid_server $server && start_tunnel $server
+}
+
+start() {
+	mkdir -p /var/run /var/etc
+	ss_redir && rules
+	ss_local
+	ss_tunnel
+	rm -f $CONFIG_FILE
+}
+
+kill_all() {
+	kill -9 $(pidof $@) >/dev/null 2>&1
+}
+
+stop() {
+	/usr/bin/ss-rules -f
+	kill_all ss-redir ss-local ss-tunnel
+}
