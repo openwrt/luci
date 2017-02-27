@@ -19,7 +19,7 @@ private_key = section:taboption(
   translate("Required. Base64-encoded private key for this interface.")
 )
 private_key.password = true
-private_key.datatype = "and(base64,rangelength(44, 44))"
+private_key.datatype = "and(base64,rangelength(44,44))"
 private_key.optional = false
 
 
@@ -81,8 +81,20 @@ preshared_key = section:taboption(
             "cryptography for post-quantum resistance.")
 )
 preshared_key.password = true
-preshared_key.datatype = "and(base64,rangelength(44, 44))"
+preshared_key.datatype = "and(base64,rangelength(44,44))"
 preshared_key.optional = true
+
+
+fwmark = section:taboption(
+  "advanced",
+  Value,
+  "fwmark",
+  translate("Firewall Mark"),
+  translate("Optional. 32-bit mark for outgoing encrypted packets. " ..
+            "Enter value in hex, starting with <code>0x</code>.")
+)
+fwmark.datatype = "hex(4)"
+fwmark.optional = true
 
 
 -- peers -----------------------------------------------------------------------
@@ -105,7 +117,7 @@ public_key = peers:option(
   translate("Public Key"),
   translate("Required. Base64-encoded public key of peer.")
 )
-public_key.datatype = "and(base64,rangelength(44, 44))"
+public_key.datatype = "and(base64,rangelength(44,44))"
 public_key.optional = false
 
 
@@ -155,5 +167,5 @@ persistent_keepalive = peers:option(
   translate("Optional. Seconds between keep alive messages. " ..
             "Default is 0 (disabled). Recommended value if " ..
             "this device is behind a NAT is 25."))
-persistent_keepalive.datatype = "range(0, 65535)"
+persistent_keepalive.datatype = "range(0,65535)"
 persistent_keepalive.placeholder = "0"
