@@ -901,8 +901,8 @@ end
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 
-	-- Probe EAP support as a proxy for determining if 802.11r support is present
-	local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)
+	-- Probe 802.11r support (and EAP support as a proxy for Openwrt)
+	local has_80211r = (os.execute("hostapd -v11r 2>/dev/null || hostapd -veap 2>/dev/null") == 0)
 
 	ieee80211r = s:taboption("encryption", Flag, "ieee80211r",
 		translate("802.11r Fast Transition"),
@@ -912,7 +912,7 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	ieee80211r:depends({mode="ap", encryption="wpa2"})
 	ieee80211r:depends({mode="ap-wds", encryption="wpa"})
 	ieee80211r:depends({mode="ap-wds", encryption="wpa2"})
-	if has_ap_eap then
+	if has_80211r then
 		ieee80211r:depends({mode="ap", encryption="psk"})
 		ieee80211r:depends({mode="ap", encryption="psk2"})
 		ieee80211r:depends({mode="ap", encryption="psk-mixed"})
@@ -1125,16 +1125,16 @@ end
 
 -- ieee802.11w options
 if hwtype == "mac80211" then
-   local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)
-   if has_ap_eap then
+   local has_80211w = (os.execute("hostapd -v11w 2>/dev/null || hostapd -veap 2>/dev/null") == 0)
+   if has_80211w then
 	ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
 		translate("802.11w Management Frame Protection"),
 		translate("Requires the 'full' version of wpad/hostapd " ..
 			"and support from the wifi driver <br />(as of Feb 2017: " ..
 			"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
-	ieee80211w.default = "0"
+	ieee80211w.default = ""
 	ieee80211w.rmempty = true
-	ieee80211w:value("0", translate("Disabled (default)"))
+	ieee80211w:value("", translate("Disabled (default)"))
 	ieee80211w:value("1", translate("Optional"))
 	ieee80211w:value("2", translate("Required"))
 	ieee80211w:depends({mode="ap", encryption="wpa2"})
