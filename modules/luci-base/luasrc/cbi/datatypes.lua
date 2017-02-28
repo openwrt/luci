@@ -165,6 +165,14 @@ function ipmask6(val)
 	return ip6addr(ip or val)
 end
 
+function ip6hostid(val)
+	if val and val:match("^[a-fA-F0-9:]+$") and (#val > 2) then
+		return (ip6addr("2001:db8:0:0" .. val) or ip6addr("2001:db8:0:0:" .. val))
+	end
+
+	return false
+end
+
 function port(val)
 	val = tonumber(val)
 	return ( val and val >= 0 and val <= 65535 )
@@ -268,10 +276,25 @@ function wepkey(val)
 end
 
 function hexstring(val)
-        if val then
-                return (val:match("^[a-fA-F0-9]+$") ~= nil)
-        end
-        return false
+	if val then
+		return (val:match("^[a-fA-F0-9]+$") ~= nil)
+	end
+	return false
+end
+
+function hex(val, maxbytes)
+	maxbytes = tonumber(maxbytes)
+	if val and maxbytes ~= nil then
+		return ((val:match("^0x[a-fA-F0-9]+$") ~= nil) and (#val <= 2 + maxbytes * 2))
+	end
+	return false
+end
+
+function base64(val)
+	if val then
+		return (val:match("^[a-zA-Z0-9/+]+=?=?$") ~= nil) and (math.fmod(#val, 4) == 0)
+	end
+	return false
 end
 
 function string(val)
