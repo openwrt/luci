@@ -156,18 +156,6 @@ end
 
 local hwtype = m:get(wifidevs[1], "type")
 
-if hwtype == "atheros" then
-	mode = s:option(ListValue, "hwmode", translate("Mode"))
-	mode.override_values = true
-	mode:value("", "auto")
-	mode:value("11b", "802.11b")
-	mode:value("11g", "802.11g")
-	mode:value("11a", "802.11a")
-	mode:value("11bg", "802.11b+g")
-	mode.rmempty = true
-end
-
-
 ch = s:option(Value, "channel", translate("Channel"))
 for i=1, 14 do
 	ch:value(i, i .. " (2.4 GHz)")
@@ -224,7 +212,7 @@ encr.override_values = true
 encr:value("none", "No Encryption")
 encr:value("wep", "WEP")
 
-if hwtype == "atheros" or hwtype == "mac80211" then
+if hwtype == "mac80211" then
 	local supplicant = fs.access("/usr/sbin/wpa_supplicant")
 	local hostapd    = fs.access("/usr/sbin/hostapd")
 
@@ -288,7 +276,7 @@ port:depends({mode="ap", encryption="wpa2"})
 port.rmempty = true
 
 
-if hwtype == "atheros" or hwtype == "mac80211" then
+if hwtype == "mac80211" then
 	nasid = s:option(Value, "nasid", translate("NAS ID"))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})
@@ -339,7 +327,7 @@ if hwtype == "atheros" or hwtype == "mac80211" then
 end
 
 
-if hwtype == "atheros" or hwtype == "broadcom" then
+if hwtype == "broadcom" then
 	iso = s:option(Flag, "isolate", translate("AP-Isolation"), translate("Prevents Client to Client communication"))
 	iso.rmempty = true
 	iso:depends("mode", "ap")
@@ -349,7 +337,7 @@ if hwtype == "atheros" or hwtype == "broadcom" then
 	hide:depends("mode", "ap")
 end
 
-if hwtype == "mac80211" or hwtype == "atheros" then
+if hwtype == "mac80211" then
 	bssid:depends({mode="adhoc"})
 end
 

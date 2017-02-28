@@ -1362,8 +1362,6 @@ function wifidev.get_i18n(self)
 	local t = "Generic"
 	if self.iwinfo.type == "wl" then
 		t = "Broadcom"
-	elseif self.iwinfo.type == "madwifi" then
-		t = "Atheros"
 	end
 
 	local m = ""
