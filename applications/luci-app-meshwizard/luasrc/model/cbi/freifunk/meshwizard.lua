@@ -103,10 +103,7 @@ uci:foreach("wireless", "wifi-device", function(section)
 
 	-- Channel selection
 
-	if hwtype == "atheros" then
-		local cc = util.trim(sys.exec("grep -i '" .. syscc .. "' /lib/wifi/cc_translate.txt |cut -d ' ' -f 2")) or 0
-		sys.exec('"echo " .. cc .. " > /proc/sys/dev/" .. device .. "/countrycode"')
-	elseif hwtype == "mac80211" then
+	if hwtype == "mac80211" then
 		sys.exec("iw reg set " .. syscc)
 	elseif hwtype == "broadcom" then
 		sys.exec ("wlc country " .. syscc)

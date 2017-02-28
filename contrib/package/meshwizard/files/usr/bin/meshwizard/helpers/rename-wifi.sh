@@ -1,6 +1,6 @@
 #!/bin/sh
 # This script renames IB_wifi_ interface names into real interface names used on this system.
-# E.g. wireless.IB_wifi0 would become wireless.wifi0 on madwifi and wireless.radio0 on mac80211
+# E.g. wireless.IB_wifi0 would become wireless.radio0 on mac80211
 
 . $dir/functions.sh
 
