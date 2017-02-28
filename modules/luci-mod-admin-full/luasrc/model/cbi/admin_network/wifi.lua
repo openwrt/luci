@@ -1132,9 +1132,9 @@ if hwtype == "mac80211" then
 		translate("Requires the 'full' version of wpad/hostapd " ..
 			"and support from the wifi driver <br />(as of Feb 2017: " ..
 			"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
-	ieee80211w.default = "0"
+	ieee80211w.default = ""
 	ieee80211w.rmempty = true
-	ieee80211w:value("0", translate("Disabled (default)"))
+	ieee80211w:value("", translate("Disabled (default)"))
 	ieee80211w:value("1", translate("Optional"))
 	ieee80211w:value("2", translate("Required"))
 	ieee80211w:depends({mode="ap", encryption="wpa2"})
