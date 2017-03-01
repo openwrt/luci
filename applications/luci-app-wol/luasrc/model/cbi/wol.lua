@@ -48,6 +48,13 @@ sys.net.mac_hints(function(mac, name)
 	host:value(mac, "%s (%s)" %{ mac, name })
 end)
 
+if has_ewk then
+	broadcast = s:option(Flag, "broadcast",
+		translate("Send to broadcast address"))
+	if has_wol then
+		broadcast:depends("binary", "/usr/bin/etherwake")
+	end
+end
 
 function host.write(self, s, val)
 	local host = luci.http.formvalue("cbid.wol.1.mac")
@@ -59,8 +66,10 @@ function host.write(self, s, val)
 
 		if util == "/usr/bin/etherwake" then
 			local iface = luci.http.formvalue("cbid.wol.1.iface")
-			cmd = "%s -D%s %q" %{
-				util, (iface ~= "" and " -i %q" % iface or ""), host
+			local broadcast = luci.http.formvalue("cbid.wol.1.broadcast")
+			cmd = "%s -D%s %s %q" %{
+				util, (iface ~= "" and " -i %q" % iface or ""),
+				(broadcast == "1" and " -b" or ""), host
 			}
 		else
 			cmd = "%s -v %q" %{ util, host }

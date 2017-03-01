@@ -42,6 +42,9 @@ end
 
 -- wireless toggle was requested, commit and reload page
 function m.parse(map)
+	local new_cc = m:formvalue("cbid.wireless.%s.country" % wdev:name())
+	local old_cc = m:get(wdev:name(), "country")
+
 	if m:formvalue("cbid.wireless.%s.__toggle" % wdev:name()) then
 		if wdev:get("disabled") == "1" or wnet:get("disabled") == "1" then
 			wnet:set("disabled", nil)
@@ -56,7 +59,14 @@ function m.parse(map)
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
 		return
 	end
+
 	Map.parse(map)
+
+	if m:get(wdev:name(), "type") == "mac80211" and new_cc and new_cc ~= old_cc then
+		luci.sys.call("iw reg set %q" % new_cc)
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
+		return
+	end
 end
 
 m.title = luci.util.pcdata(wnet:get_i18n())
@@ -94,7 +104,7 @@ local function txpower_current(pwr, list)
 			end
 		end
 	end
-	return (list[#list] and list[#list].driver_dbm) or pwr or 0
+	return pwr or ""
 end
 
 local iw = luci.sys.wifi.getiwinfo(arg[1])
@@ -191,7 +201,7 @@ end
 ------------------- MAC80211 Device ------------------
 
 if hwtype == "mac80211" then
-	if #tx_power_list > 1 then
+	if #tx_power_list > 0 then
 		tp = s:taboption("general", ListValue,
 			"txpower", translate("Transmit Power"), "dBm")
 		tp.rmempty = true
@@ -200,6 +210,7 @@ if hwtype == "mac80211" then
 			return txpower_current(Value.cfgvalue(...), tx_power_list)
 		end
 
+		tp:value("", translate("auto"))
 		for _, p in ipairs(tx_power_list) do
 			tp:value(p.driver_dbm, "%i dBm (%i mW)"
 				%{ p.display_dbm, p.display_mw })
@@ -251,6 +262,7 @@ if hwtype == "atheros" then
 		return txpower_current(Value.cfgvalue(...), tx_power_list)
 	end
 
+	tp:value("", translate("auto"))
 	for _, p in ipairs(tx_power_list) do
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
@@ -308,9 +320,40 @@ if hwtype == "broadcom" then
 		return txpower_current(Value.cfgvalue(...), tx_power_list)
 	end
 
+	tp:value("", translate("auto"))
 	for _, p in ipairs(tx_power_list) do
 		tp:value(p.driver_dbm, "%i dBm (%i mW)"
 			%{ p.display_dbm, p.display_mw })
+	end
+
+	mode = s:taboption("advanced", ListValue, "hwmode", translate("Band"))
+	if hw_modes.b then
+		mode:value("11b", "2.4GHz (802.11b)")
+		if hw_modes.g then
+			mode:value("11bg", "2.4GHz (802.11b+g)")
+		end
+	end
+	if hw_modes.g then
+		mode:value("11g", "2.4GHz (802.11g)")
+		mode:value("11gst", "2.4GHz (802.11g + Turbo)")
+		mode:value("11lrs", "2.4GHz (802.11g Limited Rate Support)")
+	end
+	if hw_modes.a then mode:value("11a", "5GHz (802.11a)") end
+	if hw_modes.n then
+		if hw_modes.g then
+			mode:value("11ng", "2.4GHz (802.11g+n)")
+			mode:value("11n", "2.4GHz (802.11n)")
+		end
+		if hw_modes.a then
+			mode:value("11na", "5GHz (802.11a+n)")
+			mode:value("11n", "5GHz (802.11n)")
+		end
+		htmode = s:taboption("advanced", ListValue, "htmode", translate("HT mode (802.11n)"))
+		htmode:depends("hwmode", "11ng")
+		htmode:depends("hwmode", "11na")
+		htmode:depends("hwmode", "11n")
+		htmode:value("HT20", "20MHz")
+		htmode:value("HT40", "40MHz")
 	end
 
 	ant1 = s:taboption("advanced", ListValue, "txantenna", translate("Transmitter Antenna"))
@@ -857,12 +900,90 @@ end
 
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
-	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"))
+
+	-- Probe EAP support as a proxy for determining if 802.11r support is present
+	local has_ap_eap  = (os.execute("hostapd -veap >/dev/null 2>/dev/null") == 0)
+
+	ieee80211r = s:taboption("encryption", Flag, "ieee80211r",
+		translate("802.11r Fast Transition"),
+		translate("Enables fast roaming among access points that belong " ..
+			"to the same Mobility Domain"))
+	ieee80211r:depends({mode="ap", encryption="wpa"})
+	ieee80211r:depends({mode="ap", encryption="wpa2"})
+	ieee80211r:depends({mode="ap-wds", encryption="wpa"})
+	ieee80211r:depends({mode="ap-wds", encryption="wpa2"})
+	if has_ap_eap then
+		ieee80211r:depends({mode="ap", encryption="psk"})
+		ieee80211r:depends({mode="ap", encryption="psk2"})
+		ieee80211r:depends({mode="ap", encryption="psk-mixed"})
+	end
+	ieee80211r.rmempty = true
+
+	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"),
+		translate("Used for two different purposes: RADIUS NAS ID and " ..
+			"802.11r R0KH-ID. Not needed with normal WPA(2)-PSK."))
 	nasid:depends({mode="ap", encryption="wpa"})
 	nasid:depends({mode="ap", encryption="wpa2"})
 	nasid:depends({mode="ap-wds", encryption="wpa"})
 	nasid:depends({mode="ap-wds", encryption="wpa2"})
+	nasid:depends({ieee80211r="1"})
 	nasid.rmempty = true
+
+	mobility_domain = s:taboption("encryption", Value, "mobility_domain",
+			translate("Mobility Domain"),
+			translate("4-character hexadecimal ID"))
+	mobility_domain:depends({ieee80211r="1"})
+	mobility_domain.placeholder = "4f57"
+	mobility_domain.datatype = "and(hexstring,rangelength(4,4))"
+	mobility_domain.rmempty = true
+
+	r0_key_lifetime = s:taboption("encryption", Value, "r0_key_lifetime",
+			translate("R0 Key Lifetime"), translate("minutes"))
+	r0_key_lifetime:depends({ieee80211r="1"})
+	r0_key_lifetime.placeholder = "10000"
+	r0_key_lifetime.datatype = "uinteger"
+	r0_key_lifetime.rmempty = true
+
+	r1_key_holder = s:taboption("encryption", Value, "r1_key_holder",
+			translate("R1 Key Holder"),
+			translate("6-octet identifier as a hex string - no colons"))
+	r1_key_holder:depends({ieee80211r="1"})
+	r1_key_holder.placeholder = "00004f577274"
+	r1_key_holder.datatype = "and(hexstring,rangelength(12,12))"
+	r1_key_holder.rmempty = true
+
+	reassociation_deadline = s:taboption("encryption", Value, "reassociation_deadline",
+		translate("Reassociation Deadline"),
+		translate("time units (TUs / 1.024 ms) [1000-65535]"))
+	reassociation_deadline:depends({ieee80211r="1"})
+	reassociation_deadline.placeholder = "1000"
+	reassociation_deadline.datatype = "range(1000,65535)"
+	reassociation_deadline.rmempty = true
+
+	pmk_r1_push = s:taboption("encryption", Flag, "pmk_r1_push", translate("PMK R1 Push"))
+	pmk_r1_push:depends({ieee80211r="1"})
+	pmk_r1_push.placeholder = "0"
+	pmk_r1_push.rmempty = true
+
+	r0kh = s:taboption("encryption", DynamicList, "r0kh", translate("External R0 Key Holder List"),
+		translate("List of R0KHs in the same Mobility Domain. " ..
+			"<br>Format: MAC-address,NAS-Identifier,128-bit key as hex string. " ..
+			"<br>This list is used to map R0KH-ID (NAS Identifier) to a destination " ..
+			"MAC address when requesting PMK-R1 key from the R0KH that the STA " ..
+			"used during the Initial Mobility Domain Association."))
+
+	r0kh:depends({ieee80211r="1"})
+	r0kh.rmempty = true
+
+	r1kh = s:taboption("encryption", DynamicList, "r1kh", translate("External R1 Key Holder List"),
+		translate ("List of R1KHs in the same Mobility Domain. "..
+			"<br>Format: MAC-address,R1KH-ID as 6 octets with colons,128-bit key as hex string. "..
+			"<br>This list is used to map R1KH-ID to a destination MAC address " ..
+			"when sending PMK-R1 key from the R0KH. This is also the " ..
+			"list of authorized R1KHs in the MD that can request PMK-R1 keys."))
+	r1kh:depends({ieee80211r="1"})
+	r1kh.rmempty = true
+	-- End of 802.11r options
 
 	eaptype = s:taboption("encryption", ListValue, "eap_type", translate("EAP-Method"))
 	eaptype:value("tls",  "TLS")
@@ -1000,6 +1121,44 @@ if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
 	password:depends({mode="sta-wds", eap_type="ttls", encryption="wpa"})
 	password.rmempty = true
 	password.password = true
+end
+
+-- ieee802.11w options
+if hwtype == "mac80211" then
+	ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
+		translate("802.11w Management Frame Protection"),
+		translate("Requires the 'full' version of wpad/hostapd " ..
+			"and support from the wifi driver <br>(as of Feb 2017: " ..
+			"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
+	ieee80211w.default = "0"
+	ieee80211w.rmempty = true
+	ieee80211w:value("0", translate("Disabled (default)"))
+	ieee80211w:value("1", translate("Optional"))
+	ieee80211w:value("2", translate("Required"))
+	ieee80211w:depends({mode="ap", encryption="wpa2"})
+	ieee80211w:depends({mode="ap-wds", encryption="wpa2"})
+	ieee80211w:depends({mode="ap", encryption="psk2"})
+	ieee80211w:depends({mode="ap", encryption="psk-mixed"})
+	ieee80211w:depends({mode="ap-wds", encryption="psk2"})
+	ieee80211w:depends({mode="ap-wds", encryption="psk-mixed"})
+
+	max_timeout = s:taboption("encryption", Value, "ieee80211w_max_timeout",
+			translate("802.11w maximum timeout"),
+			translate("802.11w Association SA Query maximum timeout"))
+	max_timeout:depends({ieee80211w="1"})
+	max_timeout:depends({ieee80211w="2"})
+	max_timeout.datatype = "uinteger"
+	max_timeout.placeholder = "1000"
+	max_timeout.rmempty = true
+
+	retry_timeout = s:taboption("encryption", Value, "ieee80211w_retry_timeout",
+			translate("802.11w retry timeout"),
+			translate("802.11w Association SA Query retry timeout"))
+	retry_timeout:depends({ieee80211w="1"})
+	retry_timeout:depends({ieee80211w="2"})
+	retry_timeout.datatype = "uinteger"
+	retry_timeout.placeholder = "201"
+	retry_timeout.rmempty = true
 end
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
