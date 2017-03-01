@@ -1,19 +1,35 @@
 config 'community' 'profile'
 	option 'name' 'Freifunk Potsdam'
 	option 'homepage' 'http://potsdam.freifunk.net'
-	option 'ssid' 'www.freifunk-potsdam.de'
+	option 'ssid' 'Freifunk-Potsdam-XXX-YYY'
 	option 'mesh_network' '10.22.0.0/16'
 	option 'splash_network' '192.168.22.0/24'
 	option 'splash_prefix' '24'
 	option 'latitude' '52.39349'
 	option 'longitude' '13.06489'
+	option 'ipv6' '0'
+
+config 'defaults' 'interface'
+	option 'netmask' '255.255.0.0'
+	option 'dns' '85.214.20.141 213.73.91.35 194.150.168.168'
+	option 'delegate' '0'
 
 config 'defaults' 'wifi_device'
 	option 'channel' '5'
 
+config 'defaults' 'wifi_device_5'
+	option 'channel' '44'
+
 config 'defaults' 'bssidscheme'
 	option '5' '02:CA:FF:EE:BA:BE'
+	option '44' '02:CA:FF:EE:BA:BE'
 
-config 'defaults' 'interface'
-        option 'dns' '85.214.20.141 213.73.91.35 194.150.168.168'
+config 'defaults' 'ssidscheme'
+	option '5' 'Mesh23'
+	option '44' 'Mesh23'
 
+config 'defaults' 'dhcp'
+	option 'leasetime' '15m'
+
+config 'defaults' 'olsrd'
+	option 'LinkQualityAlgorithm' 'etx_ffeth'
