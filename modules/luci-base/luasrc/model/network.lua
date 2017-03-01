@@ -1063,7 +1063,7 @@ function protocol.get_interface(self)
 end
 
 function protocol.get_interfaces(self)
-	if self:is_bridge() or (self:is_virtual() and not self:is_floating()) then
+	if self:is_bridge() or (self:_get("_orig_bridge") == "true") or (self:is_virtual() and not self:is_floating()) then
 		local ifaces = { }
 
 		local ifn

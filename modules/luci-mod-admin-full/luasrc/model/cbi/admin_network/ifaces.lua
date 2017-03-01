@@ -28,7 +28,7 @@ fw.init(m.uci)
 local net = nw:get_network(arg[1])
 
 local function backup_ifnames(is_bridge)
-	if not net:is_floating() and not m:get(net:name(), "_orig_ifname") then
+	if not net:is_floating() then
 		local ifcs = net:get_interfaces() or { net:get_interface() }
 		if ifcs then
 			local _, ifn
@@ -273,13 +273,13 @@ if not net:is_floating() then
 
 		for i = 1, math.max(#old_ifs, #new_ifs) do
 			if old_ifs[i] ~= new_ifs[i] then
-				backup_ifnames()
 				for i = 1, #old_ifs do
 					net:del_interface(old_ifs[i])
 				end
 				for i = 1, #new_ifs do
 					net:add_interface(new_ifs[i])
 				end
+				backup_ifnames()
 				break
 			end
 		end
