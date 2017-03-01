@@ -8,9 +8,7 @@ if [ -z "$dev" -o -z "$type" ]; then
 	exit 1
 fi
 
-if [ "$type" = "atheros" ]; then
-        exit 0
-elif [ "$type" = "mac80211" ]; then
+if [ "$type" = "mac80211" ]; then
 	# not hostapd[-mini], no VAP
 	if [ ! -x /usr/sbin/hostapd ]; then
 		echo "WARNING: hostapd[-mini] is required to be able to use VAP with mac80211."
