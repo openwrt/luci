@@ -1,0 +1,25 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+  delete ucitrack.@unbound[-1]
+  add ucitrack unbound
+  set ucitrack.@unbound[-1].init=unbound
+  commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+[ ! -x /usr/sbin/unbound-control ] && exit 0
+
+uci -q batch <<-EOF >/dev/null
+  set luci.unboundhosts=command
+  set luci.unboundhosts.name='Unbound Local Hosts'
+  set luci.unboundhosts.command='unbound-control -c /var/lib/unbound/unbound.conf list_local_data'
+  set luci.unboundzones=command
+  set luci.unboundzones.name='Unbound Local Zones'
+  set luci.unboundzones.command='unbound-control -c /var/lib/unbound/unbound.conf list_local_zones'
+  commit luci
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0
+
