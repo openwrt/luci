@@ -1,0 +1,29 @@
+<%#
+ Copyright 2017 Mauro Mozzarelli <mauro@ezplanet.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%-
+	local ipvs_list = luci.util.exec("/sbin/ipvsadm -ln")
+	local ipvs_conn = luci.util.exec("/sbin/ipvsadm -lcn")
+	local ipvs_log  = luci.util.exec("cat /tmp/loadbalancer.log")
+-%>
+<%+header%>
+<h2 name="content"><%:Virtual Server Load Balancer Status%></h2> 
+<fieldset class="cbi-section">
+	<legend><%:Servers%></legend>
+	<textarea readonly="readonly" style="font-family:monospace;" wrap="off" rows="<%=ipvs_list:cmatch("\n")+1%>" id="syslog"><%=ipvs_list:pcdata()%>
+	</textarea>
+</fieldset>
+<fieldset class="cbi-section">
+	<legend><%:Connections%></legend>
+	<textarea readonly="readonly" style="font-family:monospace;" wrap="off" rows="<%=ipvs_conn:cmatch("\n")+1%>" id="syslog"><%=ipvs_conn:pcdata()%>
+	</textarea>
+</fieldset>
+<fieldset class="cbi-section">
+	<legend><%:Log%></legend>
+	<textarea readonly="readonly" style="font-family:monospace;" wrap="off" rows="<%=ipvs_log:cmatch("\n")%>" id="syslog"><%=ipvs_log:pcdata()%>
+	</textarea>
+</fieldset>
+<%+footer%>
+
