@@ -9,6 +9,7 @@ PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
 LUCI_TITLE:=VPN Bypass Web UI
 LUCI_DEPENDS:=+vpnbypass
 LUCI_PKGARCH:=all
+PKG_RELEASE:=1
 
 include ../../luci.mk
 
