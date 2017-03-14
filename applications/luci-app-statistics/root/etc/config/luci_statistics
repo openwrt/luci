@@ -49,6 +49,11 @@ config statistics 'collectd_unixsock'
 
 # input plugins
 
+config statistics 'collectd_apcups'
+	option enable '0'
+	option Host 'localhost'
+	option Port '3551'
+
 config statistics 'collectd_conntrack'
 	option enable '0'
 
