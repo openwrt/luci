@@ -153,23 +153,74 @@ end
 function config_network( c )
 	local str = ""
 
-	for s in pairs(sections) do
-		for key, type in pairs({ Listen="collectd_network_listen", Server="collectd_network_server" }) do
-			if sections[s][".type"] == type then
+	if not luci.util.checklib("/usr/lib/collectd/network.so", "libgcrypt.so") then
+		for s in pairs(sections) do
+			for key, type in pairs({ Listen="collectd_network_listen", Server="collectd_network_server" }) do
+				if sections[s][".type"] == type then
 
-				host = sections[s].host
-				port = sections[s].port
+					host = sections[s].host
+					port = sections[s].port
 
-				if host then
-					if port then
-						str = str .. "\t" .. key .. " \"" .. host .. "\" \"" .. port .. "\"\n"
-					else
-						str = str .. "\t" .. key .. " \"" .. host .. "\"\n"
+					if host then
+						if port then
+							str = str .. "\t" .. key .. " \"" .. host .. "\" \"" .. port .. "\"\n"
+						else
+							str = str .. "\t" .. key .. " \"" .. host .. "\"\n"
+						end
 					end
 				end
-						end
-				end
+			end
 		end
+	else
+		for s in pairs(sections) do
+			for key, type in pairs({ Listen="collectd_network_listen", Server="collectd_network_server" }) do
+				if sections[s][".type"] == type then
+					host = sections[s].host
+					port = sections[s].port
+					if host then
+						if section[s][".type"] == "collectd_network_server" then
+							if port then
+								str = str .. "\t<Server " .. host .. " " .. port .. ">\n"
+							else
+								str = str .. "\t<Server " .. host .. ">\n"
+							end
+							securitylevel = section[s].security_level
+							if securitylevel then
+								str = str .. "\t\tSecurityLevel \"" .. securitylevel .. "\"\n"
+								username = section[s].username
+								password = section[s].password
+								resolve_interval = section[s].resolve_interval
+								str = str .. "\t\tUsername \"" .. username .. "\"\n"
+								if resolve_interval then
+									str = str .. "\t\tResolveInterval \"" .. resolve_interval .. "\"\n"
+								end
+								str = str .. "\t\tPassword \"" .. password .. "\"\n"
+							else
+								str = str .. "\t\tSecurityLevel \"none\"\n"
+							end
+							str = str .. "\t</Server>\n"
+						else
+							if port then
+								str = str .. "\t<Listen " .. host .. " " .. port .. ">\n"
+							else
+							str = str .. "\t<Listen " .. host .. ">\n"
+							end
+							securitylevel = section[s].security_level
+							if securitylevel then
+								authfile = section[s].auth_file or "/etc/collectd/authfile"
+								str = str .. "\t\tSecurityLevel \"" .. securitylevel .. "\"\n"
+								str = str .. "\t\tAuthFile " .. authfile .. "\n"
+							else
+								str = str .. "\t\tSecurityLevel \"none\"\n"
+							end
+						
+							str = str .. "\t</Listen>\n"
+						end
+					end
+				end
+			end
+		end
+	end
 
 	return str .. _string( c["TimeToLive"], "TimeToLive" )
 		   .. _string( c["CacheFlush"], "CacheFlush" )
