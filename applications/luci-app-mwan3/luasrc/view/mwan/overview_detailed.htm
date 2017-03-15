@@ -1,0 +1,51 @@
+<%+header%>
+
+<ul class="cbi-tabmenu">
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/overview")%>"><%:Interface Status%></a></li>
+	<li class="cbi-tab"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/overview/overview_detailed")%>"><%:Detailed Status%></a></li>
+</ul>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "mwan", "overview", "detailed_status")%>', null,
+		function(x, mArray)
+		{
+			var status = document.getElementById('mwan_detail_text');
+			if (mArray.mwandetail)
+			{
+				status.innerHTML = String.format('<pre>%s</pre>', mArray.mwandetail[0]);
+			}
+			else
+			{
+				status.innerHTML = '<strong>No detailed status information available</strong>';
+			}
+		}
+	);
+//]]></script>
+
+<div id="mwan_detail_status">
+	<fieldset class="cbi-section">
+		<legend><%:MWAN Detailed Status%></legend>
+		<div id="mwan_detail_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+	</fieldset>
+</div>
+
+<style type="text/css">
+  .container {	/* container for entire page. fixes bootstrap theme's ridiculously small page width */
+	max-width: none;
+	margin-left: 30px;
+	padding-right: 30px;
+	width: auto;
+  }
+  #mwan_detail_status {
+	border: 1px dotted #555555;
+	background-color: #FFFFFF;
+	padding: 20px;
+  }
+  #mwan_detail_text {
+	padding: 20px;
+	text-align: left;
+  }
+</style>
+
+<%+footer%>

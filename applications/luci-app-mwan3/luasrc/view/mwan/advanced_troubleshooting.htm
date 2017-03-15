@@ -1,0 +1,74 @@
+<%+header%>
+
+<ul class="cbi-tabmenu">
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/hotplugscript")%>"><%:Hotplug Script%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/mwanconfig")%>"><%:MWAN Config%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/networkconfig")%>"><%:Network Config%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/wirelessconfig")%>"><%:Wireless Config%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/diagnostics")%>"><%:Diagnostics%></a></li>
+	<li class="cbi-tab"><a href="<%=luci.dispatcher.build_url("admin/network/mwan/advanced/troubleshooting")%>"><%:Troubleshooting%></a></li>
+</ul>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	XHR.poll(15, '<%=luci.dispatcher.build_url("admin", "network", "mwan", "advanced", "troubleshooting_display")%>', null,
+		function(x, mArray)
+		{
+			var tshoot = document.getElementById('troubleshoot_text');
+			if (mArray.versions)
+			{
+				var versions = '<span class="description">Software versions : </span><br /><br />';
+				var mwanConfig = '<br /><br /><span class="description">Output of &#34;cat /etc/config/mwan3&#34; : </span><br /><br />';
+				var netConfig = '<br /><br /><span class="description">Output of &#34;cat /etc/config/network&#34; : </span><br /><br />';
+				var wifiConfig = '<br /><br /><span class="description">Output of &#34;cat /etc/config/wireless&#34; : </span><br /><br />';
+				var ifconfig = '<br /><br /><span class="description">Output of &#34;ifconfig&#34; : </span><br /><br />';
+				var ipRoute = '<br /><br /><span class="description">Output of &#34;route -n&#34; : </span><br /><br />';
+				var ipRuleShow = '<br /><br /><span class="description">Output of &#34;ip rule show&#34; : </span><br /><br />';
+				var routeListTable = '<br /><br /><span class="description">Output of &#34;ip route list table 1-250&#34; : </span><br /><br />';
+				var firewallOut = '<br /><br /><span class="description">Firewall default output policy (must be ACCEPT) : </span><br /><br />';
+				var iptables = '<br /><br /><span class="description">Output of &#34;iptables -L -t mangle -v -n&#34; : </span><br /><br />';
+				tshoot.innerHTML = String.format(
+					'<pre>%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s</pre>',
+					versions, mArray.versions[0], mwanConfig, mArray.mwanconfig[0], netConfig, mArray.netconfig[0],
+					wifiConfig, mArray.wificonfig[0], ifconfig, mArray.ifconfig[0], ipRoute, mArray.routeshow[0],
+					ipRuleShow, mArray.iprule[0], routeListTable, mArray.routelist[0], firewallOut, mArray.firewallout[0],
+					iptables, mArray.iptables[0]
+				);
+			}
+			else
+			{
+				tshoot.innerHTML = '<strong>Error collecting troubleshooting information</strong>';
+			}
+		}
+	);
+//]]></script>
+
+<div id="troubleshoot">
+	<fieldset class="cbi-section">
+		<legend><%:Troubleshooting Data%></legend>
+		<div id="troubleshoot_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+	</fieldset>
+</div>
+
+<style type="text/css">
+  .container {	/* container for entire page. fixes bootstrap theme's ridiculously small page width */
+	max-width: none;
+	margin-left: 30px;
+	padding-right: 30px;
+	width: auto;
+  }
+  #troubleshoot {
+	background-color: #FFFFFF;
+	border: 1px dotted #555555;
+	padding: 20px;
+  }
+  #troubleshoot_text {
+	padding: 20px;
+	text-align: left;
+  }
+  .description {
+	background-color: rgb(78, 186, 241);
+  }
+</style>
+
+<%+footer%>

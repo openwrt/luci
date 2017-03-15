@@ -1,0 +1,83 @@
+<script type="text/javascript">//<![CDATA[
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "mwan", "overview", "interface_status")%>', null,
+		function(x, mArray)
+		{
+			var status = document.getElementById('mwan_status_text');
+			if (mArray.wans)
+			{
+				var temp = '';
+				for ( var i = 0; i < mArray.wans.length; i++ )
+				{
+					var stat = '';
+					var cssc = '';
+					switch (mArray.wans[i].status)
+					{
+						case 'online':
+							stat = 'Online (tracking active)';
+							cssc = 'wanon';
+							break;
+						case 'notMonitored':
+							stat = 'Online (tracking off)';
+							cssc = 'wanon';
+							break;
+						case 'offline':
+							stat = 'Offline';
+							cssc = 'wanoff';
+							break;
+						case 'notEnabled':
+							stat = 'Disabled';
+							cssc = 'wanoff';
+							break;
+					}
+					temp += String.format(
+						'<span class="%s"><strong>%s (<a href="%q">%s</a>)</strong><br />%s</span>',
+						cssc, mArray.wans[i].name, mArray.wans[i].link, mArray.wans[i].ifname, stat
+					);
+				}
+				status.innerHTML = temp;
+			}
+			else
+			{
+				status.innerHTML = '<strong>No MWAN interfaces found</strong>';
+			}
+		}
+	);
+//]]></script>
+
+<fieldset id="interface_field" class="cbi-section">
+	<legend><%:MWAN Interface Live Status%></legend>
+	<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+</fieldset>
+
+<style type="text/css">
+  .container {	/* container for entire page. fixes bootstrap theme's ridiculously small page width */
+	max-width: 1044px;
+  }
+  #interface_field {
+	padding: 12px 20px 20px 20px;
+  }
+  #mwan_status_text {
+	display: table;
+	font-size: 14px;
+	margin: auto;
+	max-width: 1044px;
+	min-width: 246px;
+	width: 100%;
+  }
+  .wanon {
+	background-color: rgb(144, 240, 144);
+  }
+  .wanoff {
+	background-color: rgb(240, 144, 144);
+  }
+  .wanon, .wanoff {
+	border-radius: 60px;
+	box-shadow: 0px 2px 5px -3px;
+	float: left;
+	margin: 8px 3px 0px 3px;
+	min-height: 30px;
+	min-width: 235px;
+	padding: 5px 10px 8px 10px;
+	text-align: center;
+  }
+</style>
