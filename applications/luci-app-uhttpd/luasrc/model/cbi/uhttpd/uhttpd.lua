@@ -139,6 +139,16 @@ o = ucs:taboption("server", Value, "realm", translate("Realm for Basic Auth"))
 o.optional = true
 o.placeholder = luci.sys.hostname() or "OpenWrt"
 
+local l = ucs:taboption("server", StaticList, "httpauth", translate("Basic Auth sections to include"),
+	translate("Which Basic Auth section configured below to use in this instance of uHTTPd."))
+l.datatype = "list(uciname)"
+l.widget = "select"
+l:reset_values()
+local authcursor = m.uci
+authcursor:foreach("uhttpd", "httpauth", function(sect)
+	l:value(sect['.name'])
+end)
+
 local httpconfig = ucs:taboption("server", Value, "config", translate("Config file (e.g. for credentials for Basic Auth)"), translate("Will not use HTTP authentication if not present"))
 httpconfig.optional = true
 
@@ -202,7 +212,19 @@ o = ucs:taboption("advanced", Value, "max_requests", translate("Maximum number o
 o.optional = true
 o.datatype = "uinteger"
 
+local s = m:section(TypedSection, "httpauth", translate("Basic Authentication"))
+s.addremove = true
+s.anonymous = false
+
+s:option(Value, "prefix", translate("URI path"), translate("URI path prefix to protect. (e.g. '/cgi-bin')"))
+
+s:option(Value, "username", translate("Username"))
+
+o = s:option(Value, "password", translate("Password"))
+o.password = true
+
 local s = m:section(NamedSection, "px5g", "cert", translate("uHTTPd Self-signed Certificate Parameters"))
+s.addremove = false
 
 o = s:option(Value, "days", translate("Valid for # of Days"))
 o.default = 730
