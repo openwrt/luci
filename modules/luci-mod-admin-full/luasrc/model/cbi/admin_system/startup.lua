@@ -37,11 +37,11 @@ e = s:option(Button, "endisable", translate("Enable/Disable"))
 
 e.render = function(self, section, scope)
 	if inits[section].enabled then
-		self.title = translate("Enabled")
-		self.inputstyle = "save"
-	else
-		self.title = translate("Disabled")
+		self.title = translate("Disable")
 		self.inputstyle = "reset"
+	else
+		self.title = translate("Enable")
+		self.inputstyle = "apply"
 	end
 
 	Button.render(self, section, scope)
