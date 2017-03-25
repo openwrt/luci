@@ -118,6 +118,30 @@ has the same effect as deleting the option.
 ]]
 
 ---[[
+Add a given value to a list of unique values.
+
+@class function
+@name Cursor.add_to_set
+@param config	UCI config
+@param section	UCI section name
+@param option	UCI option
+@param value		UCI value
+@return			Boolean whether operation succeeded
+]]
+
+---[[
+Remove a given value from a list of unique values.
+
+@class function
+@name Cursor.add_to_set
+@param config	UCI config
+@param section	UCI section name
+@param option	UCI option
+@param value		UCI value
+@return			Boolean whether operation succeeded
+]]
+
+---[[
 Create a sub-state of this cursor. The sub-state is tied to the parent
 
 curser, means it the parent unloads or loads configs, the sub state will

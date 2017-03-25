@@ -9,7 +9,7 @@ local table = require "table"
 
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local require, getmetatable = require, getmetatable
-local error, pairs, ipairs = error, pairs, ipairs
+local error, pairs, ipairs, next = error, pairs, ipairs, next
 local type, tostring, tonumber, unpack = type, tostring, tonumber, unpack
 
 -- The typical workflow for UCI is:  Get a cursor instance from the
@@ -148,6 +148,40 @@ function Cursor.set_list(self, config, section, option, value)
 		)
 	end
 	return false
+end
+
+function Cursor.add_to_set(self, config, section, option, value, remove)
+	local list = self:get_list(config, section, option)
+
+	if not list then
+		return false
+	end
+
+	local set = {}
+	for _, l in ipairs(list) do
+		set[l] = true
+	end
+
+	if remove then
+		set[value] = nil
+	else
+		set[value] = true
+	end
+
+	list = {}
+	for k, _ in pairs(set) do
+		table.insert(list, k)
+	end
+
+	if next(list) == nil then
+		return self:delete(config, section, option)
+	else
+		return self:set(config, section, option, list)
+	end
+end
+
+function Cursor.remove_from_set(self, config, section, option, value)
+	self:add_to_set(config, section, option, value, true)
 end
 
 -- Return a list of initscripts affected by configuration changes.
