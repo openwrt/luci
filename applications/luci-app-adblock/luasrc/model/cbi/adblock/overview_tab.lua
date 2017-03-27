@@ -5,8 +5,8 @@
 local sys = require("luci.sys")
 local util = require("luci.util")
 local data = util.ubus("service", "get_data", "name", "adblock") or { }
-local dnsFile1 = sys.exec("find '/tmp/dnsmasq.d' -maxdepth 1 -type f -name 'adb_list*' -print")
-local dnsFile2 = sys.exec("find '/var/lib/unbound' -maxdepth 1 -type f -name 'adb_list*' -print")
+local dnsFile1 = sys.exec("find '/tmp/dnsmasq.d' -maxdepth 1 -type f -name 'adb_list*' -print 2>/dev/null")
+local dnsFile2 = sys.exec("find '/var/lib/unbound' -maxdepth 1 -type f -name 'adb_list*' -print 2>/dev/null")
 
 m = Map("adblock", translate("Adblock"),
 	translate("Configuration of the adblock package to block ad/abuse domains by using DNS. ")
@@ -24,17 +24,24 @@ o1 = s:option(Flag, "adb_enabled", translate("Enable adblock"))
 o1.rmempty = false
 o1.default = 0
 
-if data.adblock ~= nil and (dnsFile1 ~= "" or dnsFile2 ~= "") then
-btn = s:option( Button, "_btn", translate("Suspend adblock"))
+btn = s:option(Button, "", translate("Suspend / Resume adblock"))
+if data.adblock == nil then
+	btn.inputtitle = "n/a"
+	btn.inputstyle = nil
+	btn.disabled = true
+elseif dnsFile1 ~= "" or dnsFile2 ~= "" then
+	btn.inputtitle = "Suspend adblock"
 	btn.inputstyle = "reset"
+	btn.disabled = false
 	function btn.write()
-		luci.sys.call("/etc/init.d/adblock suspend")
+		luci.sys.call("/etc/init.d/adblock suspend >/dev/null 2>&1")
 	end
 else
-	btn = s:option( Button, "_btn", translate("Resume adblock"))
+	btn.inputtitle = "Resume adblock"
 	btn.inputstyle = "apply"
+	btn.disabled = false
 	function btn.write()
-		luci.sys.call("/etc/init.d/adblock resume")
+		luci.sys.call("/etc/init.d/adblock resume >/dev/null 2>&1")
 	end
 end
 
@@ -53,44 +60,46 @@ o3.rmempty =false
 	ds.template = "cbi/nullsection"
 
 	dv1 = s:option(DummyValue, "adblock_version", translate("Adblock version"))
-	if data.adblock ~= nil then
-		dv1.value = data.adblock.adblock.adblock_version or "?"
-	else
-		dv1.value = "?"
-	end
 	dv1.template = "adblock/runtime"
+	if data.adblock ~= nil then
+		dv1.value = data.adblock.adblock.adblock_version or "n/a"
+	else
+		dv1.value = "n/a"
+	end
 
 	dv2 = s:option(DummyValue, "status", translate("Status"))
-	if dnsFile1 ~= "" or dnsFile2 ~= "" then
+	dv2.template = "adblock/runtime"
+	if data.adblock == nil then
+		dv2.value = "n/a"
+	elseif dnsFile1 ~= "" or dnsFile2 ~= "" then
 		dv2.value = "active"
 	else
 		dv2.value = "suspended"
 	end
-	dv2.template = "adblock/runtime"
 
 	dv3 = s:option(DummyValue, "dns_backend", translate("DNS backend"))
-	if data.adblock ~= nil then
-		dv3.value = data.adblock.adblock.dns_backend or "?"
-	else
-		dv3.value = "?"
-	end
 	dv3.template = "adblock/runtime"
+	if data.adblock ~= nil then
+		dv3.value = data.adblock.adblock.dns_backend or "n/a"
+	else
+		dv3.value = "n/a"
+	end
 
 	dv4 = s:option(DummyValue, "blocked_domains", translate("Blocked domains (overall)"))
-	if data.adblock ~= nil then
-		dv4.value = data.adblock.adblock.blocked_domains or "?"
-	else
-		dv4.value = "?"
-	end
 	dv4.template = "adblock/runtime"
+	if data.adblock ~= nil then
+		dv4.value = data.adblock.adblock.blocked_domains or "n/a"
+	else
+		dv4.value = "n/a"
+	end
 
 	dv5 = s:option(DummyValue, "last_rundate", translate("Last rundate"))
-	if data.adblock ~= nil then
-		dv5.value = data.adblock.adblock.last_rundate or "?"
-	else
-		dv5.value = "?"
-	end
 	dv5.template = "adblock/runtime"
+	if data.adblock ~= nil then
+		dv5.value = data.adblock.adblock.last_rundate or "n/a"
+	else
+		dv5.value = "n/a"
+	end
 
 -- Blocklist options
 
