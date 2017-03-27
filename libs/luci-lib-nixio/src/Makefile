@@ -35,6 +35,7 @@ ifeq ($(NIXIO_TLS),cyassl)
 	TLS_DEPENDS = cyassl-compat.o
 	TLS_CFLAGS = -include cyassl-compat.h
 	NIXIO_OBJ += cyassl-compat.o
+	NIXIO_CFLAGS+=-I$(STAGING_DIR)/usr/include/cyassl
 endif
 
 ifeq ($(NIXIO_TLS),)

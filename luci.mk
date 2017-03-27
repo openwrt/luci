@@ -147,7 +147,7 @@ endef
 
 ifneq ($(wildcard ${CURDIR}/src/Makefile),)
  MAKE_PATH := src/
- MAKE_VARS += FPIC="$(FPIC)" LUCI_VERSION="$(PKG_VERSION)" LUCI_GITBRANCH="$(PKG_GITBRANCH)"
+ MAKE_VARS += FPIC="$(FPIC)" LUCI_VERSION="$(PKG_VERSION)" LUCI_GITBRANCH="$(PKG_GITBRANCH)" $(MAKE_EXTRA_VARS)
 
  define Build/Compile
 	$(call Build/Compile/Default,clean compile)
