@@ -11,18 +11,26 @@ msgstr ""
 "X-Generator: Poedit 1.8.12\n"
 "Language: ja\n"
 
-msgid ""
-"). Note that list URLs and Shallalist category selections are not "
-"configurable via Luci."
-msgstr ""
-"）。これらのリストのURLおよびshallaリストの選択済みカテゴリーは、Luciを通して"
-"設定することができません。"
+msgid "."
+msgstr "。"
 
 msgid "Adblock"
 msgstr "Adblock"
 
-msgid "Available blocklist sources ("
-msgstr "利用可能なブロックリスト提供元です（"
+msgid "Adblock Domain Query"
+msgstr "Adblock ドメイン検索"
+
+msgid "Adblock Logfile"
+msgstr "Adblock ログファイル"
+
+msgid "Adblock version"
+msgstr "Adblock バージョン"
+
+msgid "Advanced"
+msgstr "詳細設定"
+
+msgid "Available blocklist sources."
+msgstr "利用可能なブロックリスト提供元です。"
 
 msgid "Backup directory"
 msgstr "バックアップ先 ディレクトリ"
@@ -30,8 +38,14 @@ msgstr "バックアップ先 ディレクトリ"
 msgid "Backup options"
 msgstr "バックアップ オプション"
 
+msgid "Blocked domains (overall)"
+msgstr "ブロック済みドメイン（全体）"
+
 msgid "Blocklist sources"
 msgstr "ブロックリスト提供元"
+
+msgid "Collecting data..."
+msgstr "データ収集中です..."
 
 msgid ""
 "Configuration of the adblock package to block ad/abuse domains by using DNS."
@@ -39,11 +53,23 @@ msgstr ""
 "DNSの利用によって広告/不正ドメインをブロックする、adblock パッケージの設定で"
 "す。"
 
+msgid "DNS backend"
+msgstr "DNS バックエンド"
+
 msgid "Description"
 msgstr "説明"
 
+msgid "Edit Blacklist"
+msgstr "ブラックリストの編集"
+
+msgid "Edit Configuration"
+msgstr "設定の編集"
+
+msgid "Edit Whitelist"
+msgstr "ホワイトリストの編集"
+
 msgid "Enable adblock"
-msgstr "adblockの有効化"
+msgstr "Adblockの有効化"
 
 msgid "Enable blocklist backup"
 msgstr "ブロックリスト バックアップの有効化"
@@ -54,38 +80,153 @@ msgstr "詳細なデバッグ ログの有効化"
 msgid "Enabled"
 msgstr "有効"
 
-msgid "Extra options"
-msgstr "拡張設定"
+msgid "For further information"
+msgstr "詳細な情報は"
+
+msgid "Input file not found, please check your configuration."
+msgstr "入力ファイルが見つかりません。設定を確認してください。"
+
+msgid "Invalid domain specified!"
+msgstr "無効なドメインが指定されています！"
+
+msgid "Last rundate"
+msgstr "最終実行日時"
+
+msgid "Loading"
+msgstr "読込中"
 
 msgid ""
-"File with whitelisted hosts/domains that are allowed despite being on a "
-"blocklist."
+"Note that list URLs and Shallalist category selections are configurable in "
+"the 'Advanced' section."
 msgstr ""
-"ホワイトリスト ファイル内のホスト/ドメインは、ブロックリストの登録に関わらず"
-"許可されます。"
+"リストのURL及び \"Shalla\" リストのカテゴリー設定は、'詳細設定' セクションで"
+"設定することができます。"
 
-msgid "Global options"
-msgstr "一般設定"
-
-msgid ""
-"Options for further tweaking in case the defaults are not suitable for you."
-msgstr "デフォルト設定が適切でない場合、追加で設定するためのオプションです。"
-
-msgid "Restrict reload trigger to certain interface(s)"
-msgstr "リロードトリガを特定のインターフェースに限定する"
+msgid "Overview"
+msgstr "概要"
 
 msgid ""
-"Space separated list of wan interfaces that trigger reload action. To "
-"disable reload trigger set it to 'false'. Default: empty"
+"Please add only one domain per line. Comments introduced with '#' are "
+"allowed - ip addresses, wildcards & regex are not."
 msgstr ""
-"リロード実行のトリガとなる、スペースで区切られたWANインターフェースのリストで"
-"す。リロードトリガを無効にするには、 false を設定します。デフォルト:（空）"
+"一行に一つのドメインを追加してください。'#' から始まるコメントを記述できます"
+"が、IPアドレスやワイルドカード、正規表現を設定値として使用することはできませ"
+"ん。"
 
-msgid "Whitelist file"
-msgstr "ホワイトリスト ファイル"
+msgid "Query"
+msgstr "検索"
 
-msgid "see list details"
-msgstr "リストの詳細を見る"
+msgid "Query domains"
+msgstr "ドメインの検索"
+
+msgid "Restrict interface reload trigger to certain interface(s)"
+msgstr "リロード トリガを特定のインターフェースに限定する"
+
+msgid "Runtime information"
+msgstr "実行情報"
+
+msgid ""
+"Space separated list of interfaces that trigger a reload action. To disable "
+"reload trigger at all set it to 'false'."
+msgstr ""
+"リロードのトリガとなる、スペースで区切られたインターフェースのリストで"
+"す。'false' に設定した場合、全てのリロード トリガは無効になります。"
+
+msgid "Status"
+msgstr "ステータス"
+
+msgid "Suspend / Resume adblock"
+msgstr "Adblockの一時停止/再開"
+
+msgid ""
+"This form allows you to modify the content of the adblock blacklist (%s)."
+"<br />"
+msgstr ""
+"このフォームでは、Adblock ブラックリスト (%s) の内容を変更することができま"
+"す。<br />"
+
+msgid ""
+"This form allows you to modify the content of the adblock whitelist (%s)."
+"<br />"
+msgstr ""
+"このフォームでは、Adblock ホワイトリスト (%s) の内容を変更することができま"
+"す。<br />"
+
+msgid ""
+"This form allows you to modify the content of the main adblock configuration "
+"file (/etc/config/adblock)."
+msgstr ""
+"このフォームでは、メインのAdblock 設定ファイル (/etc/config/adblock) の内容を"
+"変更することができます。"
+
+msgid ""
+"This form allows you to query active block lists for certain domains, e.g. "
+"for whitelisting."
+msgstr ""
+"このフォームでは、現在有効なリスト内で特定のドメインを検索することができま"
+"す。例: ホワイトリスト内"
+
+msgid ""
+"This form shows the syslog output, pre-filtered for adblock related messages "
+"only."
+msgstr ""
+"このフォームには、システムログ内のAdblockに関連するメッセージのみが表示されま"
+"す。"
+
+msgid "View Logfile"
+msgstr "ログファイルを見る"
+
+msgid "Waiting for command to complete..."
+msgstr "コマンドの完了をお待ちください..."
+
+msgid "see online documentation"
+msgstr "オンライン ドキュメントを確認してください"
+
+#~ msgid ""
+#~ "). Note that list URLs and Shallalist category selections are not "
+#~ "configurable via Luci."
+#~ msgstr ""
+#~ "）。これらのリストのURLおよびshallaリストの選択済みカテゴリーは、Luciを通"
+#~ "して設定することができません。"
+
+#~ msgid "Available blocklist sources ("
+#~ msgstr "利用可能なブロックリスト提供元です（"
+
+#~ msgid "Extra options"
+#~ msgstr "拡張設定"
+
+#~ msgid ""
+#~ "File with whitelisted hosts/domains that are allowed despite being on a "
+#~ "blocklist."
+#~ msgstr ""
+#~ "ホワイトリスト ファイル内のホスト/ドメインは、ブロックリストの登録に関わら"
+#~ "ず許可されます。"
+
+#~ msgid "Global options"
+#~ msgstr "一般設定"
+
+#~ msgid ""
+#~ "Options for further tweaking in case the defaults are not suitable for "
+#~ "you."
+#~ msgstr ""
+#~ "デフォルト設定が適切でない場合、追加で設定するためのオプションです。"
+
+#~ msgid "Restrict reload trigger to certain interface(s)"
+#~ msgstr "リロードトリガを特定のインターフェースに限定する"
+
+#~ msgid ""
+#~ "Space separated list of wan interfaces that trigger reload action. To "
+#~ "disable reload trigger set it to 'false'. Default: empty"
+#~ msgstr ""
+#~ "リロード実行のトリガとなる、スペースで区切られたWANインターフェースのリス"
+#~ "トです。リロードトリガを無効にするには、 false を設定します。デフォルト:"
+#~ "（空）"
+
+#~ msgid "Whitelist file"
+#~ msgstr "ホワイトリスト ファイル"
+
+#~ msgid "see list details"
+#~ msgstr "リストの詳細を見る"
 
 #~ msgid "Count"
 #~ msgstr "カウント"
