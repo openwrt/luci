@@ -102,6 +102,11 @@ enabled = mwan_interface:option(ListValue, "enabled", translate("Enabled"))
 	enabled:value("1", translate("Yes"))
 	enabled:value("0", translate("No"))
 
+family = mwan_interface:option(ListValue, "family", translate("Internet Protocol"))
+	family.default = "ipv4"
+	family:value("ipv4", translate("IPv4"))
+	family:value("ipv6", translate("IPv6"))
+
 track_ip = mwan_interface:option(DynamicList, "track_ip", translate("Tracking IP"),
 	translate("This IP address will be pinged to dermine if the link is up or down. Leave blank to assume interface is always online"))
 	track_ip.datatype = "ipaddr"
