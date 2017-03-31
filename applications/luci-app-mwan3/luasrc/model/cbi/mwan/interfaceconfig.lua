@@ -119,6 +119,21 @@ count = mwan_interface:option(ListValue, "count", translate("Ping count"))
 	count:value("4")
 	count:value("5")
 
+size = mwan_interface:option(Value, "size", translate("Ping size"))
+	size.default = "56"
+	size:value("8")
+	size:value("24")
+	size:value("56")
+	size:value("120")
+	size:value("248")
+	size:value("504")
+	size:value("1016")
+	size:value("1472")
+	size:value("2040")
+	size.datatype = "range(1, 65507)"
+	size.rmempty = false
+	size.optional = false
+
 timeout = mwan_interface:option(ListValue, "timeout", translate("Ping timeout"))
 	timeout.default = "2"
 	timeout:value("1", translate("1 second"))
