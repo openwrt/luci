@@ -102,6 +102,11 @@ enabled = mwan_interface:option(ListValue, "enabled", translate("Enabled"))
 	enabled:value("1", translate("Yes"))
 	enabled:value("0", translate("No"))
 
+family = mwan_interface:option(ListValue, "family", translate("Internet Protocol"))
+	family.default = "ipv4"
+	family:value("ipv4", translate("IPv4"))
+	family:value("ipv6", translate("IPv6"))
+
 track_ip = mwan_interface:option(DynamicList, "track_ip", translate("Tracking IP"),
 	translate("This IP address will be pinged to dermine if the link is up or down. Leave blank to assume interface is always online"))
 	track_ip.datatype = "ipaddr"
@@ -118,6 +123,21 @@ count = mwan_interface:option(ListValue, "count", translate("Ping count"))
 	count:value("3")
 	count:value("4")
 	count:value("5")
+
+size = mwan_interface:option(Value, "size", translate("Ping size"))
+	size.default = "56"
+	size:value("8")
+	size:value("24")
+	size:value("56")
+	size:value("120")
+	size:value("248")
+	size:value("504")
+	size:value("1016")
+	size:value("1472")
+	size:value("2040")
+	size.datatype = "range(1, 65507)"
+	size.rmempty = false
+	size.optional = false
 
 timeout = mwan_interface:option(ListValue, "timeout", translate("Ping timeout"))
 	timeout.default = "2"
@@ -174,6 +194,14 @@ up = mwan_interface:option(ListValue, "up", translate("Interface up"),
 	up:value("8")
 	up:value("9")
 	up:value("10")
+
+flush = mwan_interface:option(ListValue, "flush_conntrack", translate("Flush conntrack table"),
+	translate("Flush global firewall conntrack table on interface events"))
+	flush.default = "never"
+	flush:value("ifup", translate("ifup"))
+	flush:value("ifdown", translate("ifdown"))
+	flush:value("never", translate("never"))
+	flush:value("always", translate("always"))
 
 metric = mwan_interface:option(DummyValue, "metric", translate("Metric"),
 	translate("This displays the metric assigned to this interface in /etc/config/network"))
