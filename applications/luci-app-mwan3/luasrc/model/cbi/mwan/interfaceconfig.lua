@@ -167,6 +167,38 @@ interval = mwan_interface:option(ListValue, "interval", translate("Ping interval
 	interval:value("1800", translatef("%d minutes", 30))
 	interval:value("3600", translatef("%d hour", 1))
 
+failure = mwan_interface:option(Value, "failure_interval", translate("Failure interval"),
+	translate("Ping interval during failure detection"))
+	failure.default = "5"
+	failure:value("1", translatef("%d second", 1))
+	failure:value("3", translatef("%d seconds", 3))
+	failure:value("5", translatef("%d seconds", 5))
+	failure:value("10", translatef("%d seconds", 10))
+	failure:value("20", translatef("%d seconds", 20))
+	failure:value("30", translatef("%d seconds", 30))
+	failure:value("60", translatef("%d minute", 1))
+	failure:value("300", translatef("%d minutes", 5))
+	failure:value("600", translatef("%d minutes", 10))
+	failure:value("900", translatef("%d minutes", 15))
+	failure:value("1800", translatef("%d minutes", 30))
+	failure:value("3600", translatef("%d hour", 1))
+
+recovery = mwan_interface:option(Value, "recovery_interval", translate("Recovery interval"),
+	translate("Ping interval during failure recovering"))
+	recovery.default = "5"
+	recovery:value("1", translatef("%d second", 1))
+	recovery:value("3", translatef("%d seconds", 3))
+	recovery:value("5", translatef("%d seconds", 5))
+	recovery:value("10", translatef("%d seconds", 10))
+	recovery:value("20", translatef("%d seconds", 20))
+	recovery:value("30", translatef("%d seconds", 30))
+	recovery:value("60", translatef("%d minute", 1))
+	recovery:value("300", translatef("%d minutes", 5))
+	recovery:value("600", translatef("%d minutes", 10))
+	recovery:value("900", translatef("%d minutes", 15))
+	recovery:value("1800", translatef("%d minutes", 30))
+	recovery:value("3600", translatef("%d hour", 1))
+
 down = mwan_interface:option(ListValue, "down", translate("Interface down"),
 	translate("Interface will be deemed down after this many failed ping tests"))
 	down.default = "3"
