@@ -11,7 +11,8 @@ LUCI_DEPENDS:=+mwan3 +luci-mod-admin-full +luci-app-firewall +luci-lib-nixio
 LUCI_PKGARCH:=all
 PKG_LICENSE:=GPLv2
 
-PKG_MAINTAINER:=Aedan Renner <chipdankly@gmail.com>
+PKG_MAINTAINER:=Aedan Renner <chipdankly@gmail.com> \
+		Florian Eckert <fe@dev.tdt.de>
 
 include ../../luci.mk
 
