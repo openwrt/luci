@@ -25,7 +25,7 @@ This is free software, licensed under the Apache License, Version 2.0
 			;
 			input.parentNode.style.display = 'block';
 			input.style.display = 'inline';
-			stxhr.post('<%=url('admin/services/adblock/advanced/result/')%>' + domain, { token: '<%=token%>' },
+			stxhr.post('<%=luci.dispatcher.build_url('admin/services/adblock/advanced/result/')%>' + domain, { token: '<%=token%>' },
 				function(x)
 				{
 					if (x.responseText)
