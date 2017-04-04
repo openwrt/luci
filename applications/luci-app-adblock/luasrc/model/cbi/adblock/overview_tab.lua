@@ -30,14 +30,14 @@ if data.adblock == nil then
 	btn.inputstyle = nil
 	btn.disabled = true
 elseif dnsFile1 ~= "" or dnsFile2 ~= "" then
-	btn.inputtitle = "Suspend adblock"
+	btn.inputtitle = translate("Suspend adblock")
 	btn.inputstyle = "reset"
 	btn.disabled = false
 	function btn.write()
 		luci.sys.call("/etc/init.d/adblock suspend >/dev/null 2>&1")
 	end
 else
-	btn.inputtitle = "Resume adblock"
+	btn.inputtitle = translate("Resume adblock")
 	btn.inputstyle = "apply"
 	btn.disabled = false
 	function btn.write()
@@ -51,8 +51,8 @@ o2.rmempty = false
 
 o3 = s:option(Value, "adb_iface", translate("Restrict interface reload trigger to certain interface(s)"),
 	translate("Space separated list of interfaces that trigger a reload action. "..
-	"To disable reload trigger at all set it to 'false'."))
-o3.rmempty =false
+	"To disable reload trigger at all remove all entries."))
+o3.rmempty =true
 
 -- Runtime information
 
