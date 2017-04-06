@@ -12,59 +12,20 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Language: ja\n"
 
-msgid "1 hour"
-msgstr "1時間"
+msgid "%d hour"
+msgstr "%d 時間"
 
-msgid "1 minute"
-msgstr "1分"
+msgid "%d minute"
+msgstr "%d 分"
 
-msgid "1 second"
-msgstr "1秒"
+msgid "%d minutes"
+msgstr "%d 分"
 
-msgid "10 minutes"
-msgstr "10分"
+msgid "%d second"
+msgstr "%d 秒"
 
-msgid "10 seconds"
-msgstr "10秒"
-
-msgid "15 minutes"
-msgstr "15分"
-
-msgid "2 seconds"
-msgstr "2秒"
-
-msgid "20 seconds"
-msgstr "20秒"
-
-msgid "3 seconds"
-msgstr "3秒"
-
-msgid "30 minutes"
-msgstr "30分"
-
-msgid "30 seconds"
-msgstr "30秒"
-
-msgid "4 seconds"
-msgstr "4秒"
-
-msgid "5 minutes"
-msgstr "5分"
-
-msgid "5 seconds"
-msgstr "5秒"
-
-msgid "6 seconds"
-msgstr "6秒"
-
-msgid "7 seconds"
-msgstr "7秒"
-
-msgid "8 seconds"
-msgstr "8秒"
-
-msgid "9 seconds"
-msgstr "9秒"
+msgid "%d seconds"
+msgstr "%d 秒"
 
 msgid ""
 "Acceptable values: 1-100. This many Tracking IP addresses must respond for "
@@ -124,6 +85,9 @@ msgstr "有効"
 msgid "Errors"
 msgstr "エラー"
 
+msgid "Failure interval"
+msgstr "障害検出 インターバル"
+
 msgid "Flush conntrack table"
 msgstr ""
 
@@ -178,7 +142,7 @@ msgid "Load Balancing"
 msgstr "負荷分散"
 
 msgid "Loading"
-msgstr ""
+msgstr "読込中"
 
 msgid "MWAN Config"
 msgstr "MWAN 設定"
@@ -196,7 +160,7 @@ msgid "MWAN Interface Diagnostics"
 msgstr "MWAN インターフェース診断"
 
 msgid "MWAN Interface Live Status"
-msgstr "MWAN インターフェース ライブステータス"
+msgstr "MWAN インターフェース Live ステータス"
 
 msgid "MWAN Interface Systemlog"
 msgstr "MWAN インターフェース システムログ"
@@ -292,6 +256,12 @@ msgstr "Ping デフォルト ゲートウェイ"
 msgid "Ping interval"
 msgstr "Ping インターバル"
 
+msgid "Ping interval during failure detection"
+msgstr "障害検出動作中の Ping 実行間隔です。"
+
+msgid "Ping interval during failure recovering"
+msgstr "障害復旧中の Ping 実行間隔です。"
+
 msgid "Ping size"
 msgstr "Ping サイズ"
 
@@ -328,6 +298,9 @@ msgstr "アサイン済みポリシー"
 msgid "Protocol"
 msgstr "プロトコル"
 
+msgid "Recovery interval"
+msgstr "障害復旧 インターバル"
+
 msgid "Restart MWAN"
 msgstr "MWAN の再起動"
 
@@ -350,6 +323,16 @@ msgid ""
 ">Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />Rules may "
 "not share the same name as configured interfaces, members or policies"
 msgstr ""
+"ルールは IP アドレスやポート、プロトコルを基に、トラフィックがどの MWAN ポリ"
+"シーを使用するかを設定します。<br />ルールは上から下へマッチングが行われ、合"
+"致したルールより下のルールは無視されます。全てのルールに合致しないトラフィッ"
+"クは、メインのルーティング テーブルを使用してルートが決定されます。<br />既知"
+"（デフォルト以外）のネットワークへのトラフィックは、メインのルーティング テー"
+"ブルによって制御されます。ルールに合致したトラフィックでも、当該ポリシーの全 "
+"WAN インターフェースが Down 状態の場合は blackhole 状態となります。<br />名前"
+"は A-Z, a-z, 0-9, _ を含むことができますが、スペースは使用できません。<br />"
+"ルールは、設定済みのインターフェースやメンバー、ポリシーと同じ名前を使用する"
+"ことはできません。"
 
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
 msgstr "秒。利用可能な値: 1-1000000。空欄の場合のデフォルト値は600です。"
@@ -361,7 +344,7 @@ msgid "Source port"
 msgstr "送信元ポート"
 
 msgid "Start MWAN"
-msgstr "MWANの起動"
+msgstr "MWAN の起動"
 
 msgid "Sticky"
 msgstr "Sticky"
@@ -370,7 +353,7 @@ msgid "Sticky timeout"
 msgstr "Sticky タイムアウト"
 
 msgid "Stop MWAN"
-msgstr "MWANの停止"
+msgstr "MWAN の停止"
 
 msgid "Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"
 msgstr "CIDR 表記のサポート（例: \"192.168.100.0/24\"）"
@@ -432,6 +415,9 @@ msgid ""
 "Traffic from the same source IP address that previously matched this rule "
 "within the sticky timeout period will use the same WAN interface"
 msgstr ""
+"以前このルールにマッチした同じアクセス元 IP アドレスからのトラフィックが、再"
+"度 Sticky 制限時間内にマッチした場合には、同じ WAN インターフェースが使用され"
+"ます。"
 
 msgid "Troubleshooting"
 msgstr "トラブルシューティング"
@@ -477,3 +463,57 @@ msgstr "never"
 
 msgid "unreachable (reject)"
 msgstr "unreachable (reject)"
+
+#~ msgid "1 hour"
+#~ msgstr "1時間"
+
+#~ msgid "1 minute"
+#~ msgstr "1分"
+
+#~ msgid "1 second"
+#~ msgstr "1秒"
+
+#~ msgid "10 minutes"
+#~ msgstr "10分"
+
+#~ msgid "10 seconds"
+#~ msgstr "10秒"
+
+#~ msgid "15 minutes"
+#~ msgstr "15分"
+
+#~ msgid "2 seconds"
+#~ msgstr "2秒"
+
+#~ msgid "20 seconds"
+#~ msgstr "20秒"
+
+#~ msgid "3 seconds"
+#~ msgstr "3秒"
+
+#~ msgid "30 minutes"
+#~ msgstr "30分"
+
+#~ msgid "30 seconds"
+#~ msgstr "30秒"
+
+#~ msgid "4 seconds"
+#~ msgstr "4秒"
+
+#~ msgid "5 minutes"
+#~ msgstr "5分"
+
+#~ msgid "5 seconds"
+#~ msgstr "5秒"
+
+#~ msgid "6 seconds"
+#~ msgstr "6秒"
+
+#~ msgid "7 seconds"
+#~ msgstr "7秒"
+
+#~ msgid "8 seconds"
+#~ msgstr "8秒"
+
+#~ msgid "9 seconds"
+#~ msgstr "9秒"
