@@ -220,6 +220,12 @@ auto.default = (net:proto() == "none") and auto.disabled or auto.enabled
 delegate = s:taboption("advanced", Flag, "delegate", translate("Use builtin IPv6-management"))
 delegate.default = delegate.enabled
 
+force_link = s:taboption("advanced", Flag, "force_link",
+	translate("Force link"),
+	translate("Set interface properties regardless of the link carrier (If set, carrier sense events do not invoke hotplug handlers)."))
+
+force_link.default = (net:proto() == "static") and force_link.enabled or force_link.disabled
+
 
 if not net:is_virtual() then
 	br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
