@@ -38,9 +38,9 @@ define Host/Compile
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(1)/bin
-	$(INSTALL_BIN) src/po2lmo $(1)/bin/po2lmo
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/bin/LuaSrcDiet.lua $(1)/bin/LuaSrcDiet
+	$(INSTALL_DIR) $(HOST_BUILD_PREFIX)/bin
+	$(INSTALL_BIN) src/po2lmo $(HOST_BUILD_PREFIX)/bin/po2lmo
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/bin/LuaSrcDiet.lua $(HOST_BUILD_PREFIX)/bin/LuaSrcDiet
 endef
 
 $(eval $(call HostBuild))
