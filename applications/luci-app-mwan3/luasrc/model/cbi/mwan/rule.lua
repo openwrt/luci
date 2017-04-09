@@ -17,7 +17,7 @@ end
 
 function ruleWarn() -- display warning messages at the top of the page
 	if error_protocol_list ~= " " then
-		return "<font color=\"ff0000\"><strong>WARNING: some rules have a port configured with no or improper protocol specified! Please configure a specific protocol!</strong></font>"
+		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: some rules have a port configured with no or improper protocol specified! Please configure a specific protocol!") .. "</strong></font>"
 	else
 		return ""
 	end
@@ -34,7 +34,7 @@ ruleCheck()
 
 
 m5 = Map("mwan3", translate("MWAN Rule Configuration"),
-	translate(ruleWarn()))
+	ruleWarn())
 	m5:append(Template("mwan/config_css"))
 
 

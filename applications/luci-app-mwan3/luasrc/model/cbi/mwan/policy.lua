@@ -13,7 +13,7 @@ end
 
 function policyWarn() -- display status and warning messages at the top of the page
 	if nameTooLong == 1 then
-		return "<font color=\"ff0000\"><strong>WARNING: Some policies have names exceeding the maximum of 15 characters!</strong></font>"
+		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: Some policies have names exceeding the maximum of 15 characters!") .. "</strong></font>"
 	else
 		return ""
 	end
@@ -30,7 +30,7 @@ policyCheck()
 
 
 m5 = Map("mwan3", translate("MWAN Policy Configuration"),
-	translate(policyWarn()))
+	policyWarn())
 	m5:append(Template("mwan/config_css"))
 
 

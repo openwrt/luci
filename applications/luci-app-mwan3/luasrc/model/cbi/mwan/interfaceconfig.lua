@@ -50,21 +50,21 @@ end
 function interfaceWarnings() -- display warning messages at the top of the page
 	local warns, lineBreak = "", ""
 	if errorReliability == 1 then
-		warns = "<font color=\"ff0000\"><strong>WARNING: this interface has a higher reliability requirement than there are tracking IP addresses!</strong></font>"
+		warns = "<font color=\"ff0000\"><strong>" .. translate("WARNING: this interface has a higher reliability requirement than there are tracking IP addresses!") .. "</strong></font>"
 		lineBreak = "<br /><br />"
 	end
 	if errorRoute == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>WARNING: this interface has no default route in the main routing table!</strong></font>"
+		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: this interface has no default route in the main routing table!") .. "</strong></font>"
 		lineBreak = "<br /><br />"
 	end
 	if errorNetConfig == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>WARNING: this interface is configured incorrectly or not at all in /etc/config/network!</strong></font>"
+		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: this interface is configured incorrectly or not at all in /etc/config/network!") .. "</strong></font>"
 		lineBreak = "<br /><br />"
 	end
 	if errorNoMetric == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>WARNING: this interface has no metric configured in /etc/config/network!</strong></font>"
+		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: this interface has no metric configured in /etc/config/network!") .. "</strong></font>"
 	elseif errorDuplicateMetric == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>WARNING: this and other interfaces have duplicate metrics configured in /etc/config/network!</strong></font>"
+		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: this and other interfaces have duplicate metrics configured in /etc/config/network!") .. "</strong></font>"
 	end
 	return warns
 end
@@ -87,8 +87,8 @@ errorReliability = 0
 interfaceCheck()
 
 
-m5 = Map("mwan3", translate("MWAN Interface Configuration - " .. arg[1]),
-	translate(interfaceWarnings()))
+m5 = Map("mwan3", translatef("MWAN Interface Configuration - %s", arg[1]),
+	interfaceWarnings())
 	m5.redirect = dsp.build_url("admin", "network", "mwan", "configuration", "interface")
 
 
