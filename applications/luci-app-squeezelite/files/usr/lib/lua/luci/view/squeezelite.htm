@@ -1,0 +1,34 @@
+<%+header%>
+<h2><a id="content" name="content"><%:Info%></a></h2>
+<h3><%:Audio device(s):%></h3>
+<%
+	for cardpath in luci.util.execi("ls -1d /proc/asound/card*/") do
+		for streampath in luci.util.execi("ls -1d " .. cardpath .. "stream*") do
+			local flag = 0
+			for line in io.lines(streampath) do
+				if flag == 0 then
+					flag = 1
+					luci.http.write("<h4>" .. line .. "</h4>")
+					luci.http.write("<pre>")
+				else
+					if line == "" then
+					else
+						luci.http.write(line)
+						luci.http.write("<br>")
+					end
+				end
+			end
+			luci.http.write("</pre>")
+
+			for strmpath in luci.util.execi("ls -1 " .. cardpath .. "pcm*p/sub*/hw_params") do
+				luci.http.write("<pre>")
+				for line in io.lines(strmpath) do
+					luci.http.write(line)
+					luci.http.write("<br>")
+				end
+				luci.http.write("</pre>")
+			end
+		end
+	end
+%>
+<%+footer%>
