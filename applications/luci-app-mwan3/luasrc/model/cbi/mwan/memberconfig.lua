@@ -14,7 +14,7 @@ dsp = require "luci.dispatcher"
 arg[1] = arg[1] or ""
 
 
-m5 = Map("mwan3", translate("MWAN Member Configuration - ") .. arg[1])
+m5 = Map("mwan3", translatef("MWAN Member Configuration - %s", arg[1]))
 	m5.redirect = dsp.build_url("admin", "network", "mwan", "configuration", "member")
 
 

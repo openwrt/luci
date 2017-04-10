@@ -9,7 +9,7 @@ end
 
 function policyWarn() -- display status and warning messages at the top of the page
 	if nameTooLong == 1 then
-		return "<font color=\"ff0000\"><strong>WARNING: this policy's name is " .. policyNameLength .. " characters exceeding the maximum of 15!</strong></font>"
+		return "<font color=\"ff0000\"><strong>" .. translatef("WARNING: this policy's name is %d characters exceeding the maximum of 15!", policyNameLength) .. "</strong></font>"
 	else
 		return ""
 	end
@@ -32,8 +32,8 @@ nameTooLong = 0
 policyCheck()
 
 
-m5 = Map("mwan3", translate("MWAN Policy Configuration - " .. arg[1]),
-	translate(policyWarn()))
+m5 = Map("mwan3", translatef("MWAN Policy Configuration - %s", arg[1]),
+	policyWarn())
 	m5.redirect = dsp.build_url("admin", "network", "mwan", "configuration", "policy")
 
 
