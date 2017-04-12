@@ -1,4 +1,3 @@
--- Copyright 2016 Hannu Nyman
 -- Copyright 2017 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
@@ -12,25 +11,25 @@ if not nixio.fs.access(adbinput) then
 end
 
 m = SimpleForm("input", nil)
-	m:append(Template("adblock/config_css"))
+m:append(Template("adblock/config_css"))
 
 s = m:section(SimpleSection, nil,
-translate("This form allows you to modify the content of the main adblock configuration file (/etc/config/adblock)."))
+	translate("This form allows you to modify the content of the main adblock configuration file (/etc/config/adblock)."))
 
 f = s:option(TextValue, "data")
-	f.rmempty = true
-	f.rows = 20
+f.rows = 20
+f.rmempty = true
 
-	function f.cfgvalue()
-		return nixio.fs.readfile(adbinput) or ""
-	end
+function f.cfgvalue()
+	return nixio.fs.readfile(adbinput) or ""
+end
 
-	function f.write(self, section, data)
-		return nixio.fs.writefile(adbinput, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
-	end
+function f.write(self, section, data)
+	return nixio.fs.writefile(adbinput, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
+end
 
-	function s.handle(self, state, data)
-		return true
-	end
+function s.handle(self, state, data)
+	return true
+end
 
 return m
