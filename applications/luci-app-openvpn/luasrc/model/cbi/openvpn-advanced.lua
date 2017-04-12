@@ -511,7 +511,7 @@ local knownParams = {
 			{ client="1" } },
 		{ Flag,
 			"remote_random",
-			1,
+			0,
 			translate("Randomly choose remote server"),
 			{ client="1" } },
 		{ ListValue,
