@@ -1,0 +1,11 @@
+#!/bin/sh
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@openvpn-policy-routing[-1]
+	add ucitrack openvpn-policy-routing
+	set ucitrack.@openvpn-policy-routing[-1].init=openvpn-policy-routing
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0
+
