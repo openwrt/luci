@@ -64,9 +64,9 @@ function index()
 end
 
 function getInterfaceStatus(ruleNumber, interfaceName)
-	if ut.trim(sys.exec("uci -p /var/state get mwan3." .. interfaceName .. ".enabled")) == "1" then
+	if ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interfaceName .. ".enabled")) == "1" then
 		if ut.trim(sys.exec(ip .. "route list table " .. ruleNumber)) ~= "" then
-			if ut.trim(sys.exec("uci -p /var/state get mwan3." .. interfaceName .. ".track_ip")) ~= "" then
+			if ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interfaceName .. ".track_ip")) ~= "" then
 				return "online"
 			else
 				return "notMonitored"
@@ -102,7 +102,7 @@ function interfaceStatus()
 		wansid = {}
 
 		for wanName, interfaceState in string.gfind(statusString, "([^%[]+)%[([^%]]+)%]") do
-			local wanInterfaceName = ut.trim(sys.exec("uci -p /var/state get network." .. wanName .. ".ifname"))
+			local wanInterfaceName = ut.trim(sys.exec("uci -q -p /var/state get network." .. wanName .. ".ifname"))
 				if wanInterfaceName == "" then
 					wanInterfaceName = "X"
 				end
@@ -115,7 +115,7 @@ function interfaceStatus()
 	end
 
 	-- overview status log
-	local mwanLog = ut.trim(sys.exec("logread | grep mwan3 | tail -n 50 | sed 'x;1!H;$!d;x'"))
+	local mwanLog = ut.trim(sys.exec("logread | grep mwan3 | tail -n 50 | sed 'x;1!H;$!d;x' 2>/dev/null"))
 	if mwanLog ~= "" then
 		mArray.mwanlog = { mwanLog }
 	end
@@ -163,7 +163,7 @@ function diagnosticsData(interface, tool, task)
 			results = "MWAN3 started"
 		end
 	else
-		local interfaceDevice = ut.trim(sys.exec("uci -p /var/state get network." .. interface .. ".ifname"))
+		local interfaceDevice = ut.trim(sys.exec("uci -q -p /var/state get network." .. interface .. ".ifname"))
 		if interfaceDevice ~= "" then
 			if tool == "ping" then
 				local gateway = ut.trim(sys.exec("route -n | awk '{if ($8 == \"" .. interfaceDevice .. "\" && $1 == \"0.0.0.0\" && $3 == \"0.0.0.0\") print $2}'"))
@@ -172,7 +172,7 @@ function diagnosticsData(interface, tool, task)
 						local pingCommand = "ping -c 3 -W 2 -I " .. interfaceDevice .. " " .. gateway
 						results = pingCommand .. "\n\n" .. sys.exec(pingCommand)
 					else
-						local tracked = ut.trim(sys.exec("uci -p /var/state get mwan3." .. interface .. ".track_ip"))
+						local tracked = ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interface .. ".track_ip"))
 						if tracked ~= "" then
 							for z in tracked:gmatch("[^ ]+") do
 								local pingCommand = "ping -c 3 -W 2 -I " .. interfaceDevice .. " " .. z
@@ -301,7 +301,7 @@ function troubleshootingData()
 	mArray.iprule = { ipRuleShow }
 
 	-- ip route list table 1-250
-	local routeList, routeString = ut.trim(sys.exec(ip .. "rule | sed 's/://g' | awk '$1>=2001 && $1<=2250' | awk '{print $NF}'")), ""
+	local routeList, routeString = ut.trim(sys.exec(ip .. "rule | sed 's/://g' 2>/dev/null | awk '$1>=2001 && $1<=2250' | awk '{print $NF}'")), ""
 		if routeList ~= "" then
 			for line in routeList:gmatch("[^\r\n]+") do
 				routeString = routeString .. line .. "\n" .. sys.exec(ip .. "route list table " .. line)
@@ -313,7 +313,7 @@ function troubleshootingData()
 	mArray.routelist = { routeString }
 
 	-- default firewall output policy
-	local firewallOut = ut.trim(sys.exec("uci -p /var/state get firewall.@defaults[0].output"))
+	local firewallOut = ut.trim(sys.exec("uci -q -p /var/state get firewall.@defaults[0].output"))
 		if firewallOut == "" then
 			firewallOut = "No data found"
 		end
