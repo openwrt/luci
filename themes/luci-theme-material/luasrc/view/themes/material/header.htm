@@ -138,7 +138,7 @@
             <%-= css %>
         </style>
     <% end -%>
-    <script src="<%=resource%>/xhr.js"></script>
+    <script async src="<%=resource%>/xhr.js"></script>
 </head>
 
 <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>">
