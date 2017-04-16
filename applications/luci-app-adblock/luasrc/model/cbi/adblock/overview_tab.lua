@@ -50,7 +50,7 @@ o2.rmempty = true
 
 o3 = s:option(Value, "adb_triggerdelay", translate("Trigger delay"),
 	translate("Additional trigger delay in seconds before adblock processing begins."))
-o3.default = 1
+o3.default = 2
 o3.datatype = "range(1,90)"
 o3.rmempty = false
 
