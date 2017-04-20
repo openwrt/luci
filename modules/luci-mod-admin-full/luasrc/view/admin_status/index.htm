@@ -37,10 +37,8 @@
 		local wan = ntm:get_wannet()
 		local wan6 = ntm:get_wan6net()
 
-		local conn_count = tonumber((
-			luci.sys.exec("wc -l /proc/net/nf_conntrack") or
-			luci.sys.exec("wc -l /proc/net/ip_conntrack") or
-			""):match("%d+")) or 0
+		local conn_count = tonumber(
+			fs.readfile("/proc/sys/net/netfilter/nf_conntrack_count")) or 0
 
 		local conn_max = tonumber((
 			luci.sys.exec("sysctl net.nf_conntrack_max") or
