@@ -25,11 +25,11 @@ function iface.validate(self, value, section)
 	else
 		iface.datatype = false
 		iface.default = iface.disabled
-		f = m:field(DummyValue, "textfield", "&nbsp;", translate("Direct Link: "
-			.. [[<a href="]] .. luci.dispatcher.build_url("admin/network/wireless") .. [[">]]
-			.. "Wireless Setup" .. [[</a>]]))
-		f.default = translate("Network Interface '" .. value .. "' created successfully." ..
-					" Feel free to scan & add new stations via standard wireless setup.")
+		f = m:field(DummyValue, "textfield", "&nbsp;", translatef("Direct Link: "
+			.. "<a href=\"%s\">"
+			.. "Wireless Setup</a>", luci.dispatcher.build_url("admin/network/wireless")))
+		f.default = translatef("Network Interface '%s' created successfully." ..
+					" Feel free to scan & add new stations via standard wireless setup.", value)
 		f.disabled = true
 	end
 	return value
