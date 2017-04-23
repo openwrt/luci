@@ -1,5 +1,6 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008-2011 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2017 Dan Luedtke <mail@danrl.com>
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
@@ -10,8 +11,10 @@ local fw = require "luci.model.firewall"
 
 arg[1] = arg[1] or ""
 
-local has_dnsmasq  = fs.access("/etc/config/dhcp")
 local has_firewall = fs.access("/etc/config/firewall")
+local has_dnsmasq  = fs.access("/usr/sbin/dnsmasq")
+local has_odhcpd   = fs.access("/usr/sbin/odhcpd")
+local has_dhcp     = has_odhcpd or has_dnsmasq
 
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m.redirect = luci.dispatcher.build_url("admin", "network", "network")
@@ -389,10 +392,10 @@ end
 
 
 --
--- Display DNS settings if dnsmasq is available
+-- Display DHCP/RA settings
 --
 
-if has_dnsmasq and net:proto() == "static" then
+if has_dhcp and net:proto() == "static" then
 	m2 = Map("dhcp", "", "")
 
 	local has_section = false
@@ -404,9 +407,9 @@ if has_dnsmasq and net:proto() == "static" then
 		end
 	end)
 
-	if not has_section and has_dnsmasq then
+	if not has_section and has_dhcp then
 
-		s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
+		s = m2:section(TypedSection, "dhcp", translate("DHCP & RA Server"))
 		s.anonymous   = true
 		s.cfgsections = function() return { "_enable" } end
 
@@ -415,8 +418,7 @@ if has_dnsmasq and net:proto() == "static" then
 		x.inputtitle = translate("Setup DHCP Server")
 		x.inputstyle = "apply"
 
-	elseif has_section then
-
+	elseif has_section and has_dnsmasq then
 		s = m2:section(TypedSection, "dhcp", translate("DHCP Server"))
 		s.addremove = false
 		s.anonymous = true
@@ -514,6 +516,121 @@ if has_dnsmasq and net:proto() == "static" then
 
 		s:taboption("ipv6", DynamicList, "dns", translate("Announced DNS servers"))
 		s:taboption("ipv6", DynamicList, "domain", translate("Announced DNS domains"))
+
+	elseif has_section and has_odhcpd then
+		s = m2:section(TypedSection, "dhcp", translate("DHCP & RA Server"))
+		s.addremove = false
+		s.anonymous = true
+		s:tab("general",  translate("General Setup"))
+		s:tab("ipv4", translate("IPv4 Settings"))
+		s:tab("ipv6", translate("IPv6 Settings"))
+
+		function s.filter(self, section)
+			return m2.uci:get("dhcp", section, "interface") == arg[1]
+		end
+
+		-- general
+		local ignore = s:taboption("general", Flag, "ignore",
+			translate("Ignore interface"),
+			translate("Disable " ..
+				"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> " ..
+				"and <abbr title=\"Router Advertisement\">RA</abbr> " ..
+				"service for this interface."))
+
+		local dynamicdhcp = s:taboption("general", Flag, "dynamicdhcp",
+			translate("Dynamic " ..
+				"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"),
+			translate("Dynamically allocate DHCP addresses for clients. " ..
+				"If disabled, only clients having static leases will be served."))
+		dynamicdhcp.default = dynamicdhcp.enabled
+
+		s:taboption("general", DynamicList, "dns",
+			translate("Announced DNS servers"),
+			translate("IPv4 and IPv6 addresses of resolving DNS servers."))
+
+		s:taboption("general", DynamicList, "domain",
+			translate("Announced DNS domains"))
+
+		-- ipv4
+		local dhcpv4 = s:taboption("ipv4", ListValue, "dhcpv4",
+			translate("DHCPv4 Service"))
+		dhcpv4:value("disabled", translate("disabled"))
+		dhcpv4:value("server", translate("server mode"))
+		dhcpv4.default = "server"
+
+		local start = s:taboption("ipv4", Value, "start", translate("Start"),
+			translate("Lowest leased address as offset from the network address."))
+		start.optional = true
+		start.datatype = "or(uinteger,ip4addr)"
+		start.default = "100"
+
+		local limit = s:taboption("ipv4", Value, "limit", translate("Limit"),
+			translate("Maximum number of leased addresses."))
+		limit.optional = true
+		limit.datatype = "uinteger"
+		limit.default = "150"
+
+		local ltime = s:taboption("ipv4", Value, "leasetime",
+			translate("Leasetime"),
+			translate("Expiry time of leased addresses, minimum is 2 minutes " ..
+				"(<code>2m</code>)."))
+		ltime.rmempty = true
+		ltime.default = "12h"
+
+		-- ipv6
+		local ra = s:taboption("ipv6", ListValue, "ra",
+			translate("Router Advertisement Service"))
+		ra:value("disabled", translate("disabled"))
+		ra:value("server", translate("server mode"))
+		ra:value("relay", translate("relay mode"))
+		ra:value("hybrid", translate("hybrid mode"))
+
+		local ra_management = s:taboption("ipv6", ListValue, "ra_management",
+			translate("Router Flags"),
+			translate("Default is SLAAC + DHCPv6"))
+		ra_management:value("0", translate("SLAAC"))
+		ra_management:value("2", translate("DHCPv6"))
+		ra_management:value("1", translate("SLAAC + DHCPv6"))
+		ra_management:depends("ra", "server")
+		ra_management:depends("ra", "hybrid")
+		ra_management.default = "1"
+
+		local ra_preference = s:taboption("ipv6", ListValue, "ra_preference",
+			translate("Router Preference"),
+			translate("Default is medium"))
+		ra_preference:value("low", translate("Low"))
+		ra_preference:value("medium", translate("Medium"))
+		ra_preference:value("high", translate("High"))
+		ra_preference:depends("ra", "server")
+		ra_preference:depends("ra", "hybrid")
+		ra_preference.default = "medium"
+
+		local ra_default = s:taboption("ipv6", Flag, "ra_default",
+			translate("Default Router"),
+			translate("Announce as default router even if no public prefix is " ..
+				"available."))
+		ra_default:depends("ra", "server")
+		ra_default:depends("ra", "hybrid")
+
+		local ra_offlink = s:taboption("ipv6", Flag, "ra_offlink",
+			translate("Off-link prefixes"),
+			translate("Announce prefixes as off-link."))
+		ra_offlink:depends("ra", "server")
+		ra_offlink:depends("ra", "hybrid")
+		ra_offlink.default = ra_offlink.disabled
+
+		local dhcpv6 = s:taboption("ipv6", ListValue, "dhcpv6",
+			translate("DHCPv6 Service"))
+		dhcpv6:value("", translate("disabled"))
+		dhcpv6:value("server", translate("server mode"))
+		dhcpv6:value("relay", translate("relay mode"))
+		dhcpv6:value("hybrid", translate("hybrid mode"))
+
+		local ndp = s:taboption("ipv6", ListValue, "ndp",
+			translate("NDP Proxy"))
+		ndp:value("", translate("disabled"))
+		ndp:value("relay", translate("relay mode"))
+		ndp:value("hybrid", translate("hybrid mode"))
 
 	else
 		m2 = nil
