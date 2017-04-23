@@ -56,7 +56,7 @@ PKG_VERSION?=$(if $(DUMP),x,$(strip $(shell \
 	elif git log -1 >/dev/null 2>/dev/null; then \
 		revision="svn-r$$(LC_ALL=C git log -1 | sed -ne 's/.*git-svn-id: .*@\([0-9]\+\) .*/\1/p')"; \
 		if [ "$$revision" = "svn-r" ]; then \
-			set -- $$(git log -1 --format="%ct %h"); \
+			set -- $$(git log -1 --format="%ct %h" --abbrev=7); \
 			secs="$$(($$1 % 86400))"; \
 			yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
 			revision="$$(printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2")"; \
