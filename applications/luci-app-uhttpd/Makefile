@@ -11,15 +11,8 @@ LUCI_TITLE:=uHTTPd Webserver Configuration
 LUCI_DEPENDS:=+uhttpd
 LUCI_PKGARCH:=all
 
-PKG_NAME:=luci-app-uhttpd
-PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Daniel Dickinson <openwrt@daniel.thecshore.com>
-
-PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
-
-include $(INCLUDE_DIR)/package.mk
 
 LUA_TARGET:=source
 
