@@ -44,6 +44,10 @@ end
 host = s:option(Value, "mac", translate("Host to wake up"),
 	translate("Choose the host to wake up or enter a custom MAC address to use"))
 
+broadcast = s:option(Flag, "broadcast",
+		translate("Send to broadcast address"))
+broadcast:depends("binary", "/usr/bin/etherwake")
+
 sys.net.mac_hints(function(mac, name)
 	host:value(mac, "%s (%s)" %{ mac, name })
 end)
