@@ -13,6 +13,7 @@ end
 
 m = SimpleForm("input", nil)
 m:append(Template("adblock/config_css"))
+m.reset = false
 
 s = m:section(SimpleSection, nil,
 	translatef("This form allows you to modify the content of the adblock whitelist (%s).<br />", adbinput)

@@ -12,6 +12,7 @@ end
 
 m = SimpleForm("input", nil)
 m:append(Template("adblock/config_css"))
+m.reset = false
 
 s = m:section(SimpleSection, nil,
 	translate("This form allows you to modify the content of the main adblock configuration file (/etc/config/adblock)."))
