@@ -71,8 +71,7 @@ se.optional = true
 bp = s:taboption("advanced", Flag, "boguspriv",
 	translate("Filter private"),
 	translate("Do not forward reverse lookups for local networks"))
-bp.default = 1
-bp.rmempty = false
+bp.default = bp.enabled
 
 s:taboption("advanced", Flag, "filterwin2k",
 	translate("Filter useless"),
