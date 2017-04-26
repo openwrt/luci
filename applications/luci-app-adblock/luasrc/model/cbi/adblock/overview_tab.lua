@@ -149,7 +149,7 @@ e1.default = e1.disabled
 e1.rmempty = false
 
 e2 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
-	translate("Enable memory intense overall sort / duplicate removal on low memory devices (< 64 MB RAM)"))
+	translate("Enable memory intense overall sort / duplicate removal on low memory devices (&lt; 64 MB RAM)"))
 e2.default = e2.disabled
 e2.rmempty = false
 
