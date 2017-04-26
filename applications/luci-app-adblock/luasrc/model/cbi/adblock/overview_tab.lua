@@ -17,6 +17,7 @@ m = Map("adblock", translate("Adblock"),
 	.. translate("see online documentation")
 	.. [[</a>]]
 	.. translate("."))
+m.reset = false
 
 -- Main adblock options
 
@@ -137,16 +138,27 @@ end
 
 des = bl:option(DummyValue, "adb_src_desc", translate("Description"))
 
--- Backup options
+-- Extra options
 
-s = m:section(NamedSection, "global", "adblock", translate("Backup options"))
+e = m:section(NamedSection, "global", "adblock", translate("Extra options"),
+	translate("Options for further tweaking in case the defaults are not suitable for you."))
 
-o5 = s:option(Flag, "adb_backup", translate("Enable blocklist backup"))
-o5.default = o5.disabled
-o5.rmempty = false
+e1 = e:option(Flag, "adb_forcedns", translate("Force local DNS"),
+	translate("Redirect all DNS queries to the local resolver."))
+e1.default = e1.disabled
+e1.rmempty = false
 
-o6 = s:option(Value, "adb_backupdir", translate("Backup directory"))
-o6.datatype = "directory"
-o6.rmempty = false
+e2 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
+	translate("Enable memory intense overall sort / duplicate removal on low memory devices (< 64 MB RAM)"))
+e2.default = e2.disabled
+e2.rmempty = false
+
+e3 = e:option(Flag, "adb_backup", translate("Enable blocklist backup"))
+e3.default = e3.disabled
+e3.rmempty = false
+
+e4 = e:option(Value, "adb_backupdir", translate("Backup directory"))
+e4.datatype = "directory"
+e4.rmempty = false
 
 return m
