@@ -1,7 +1,7 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
 -- Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
--- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.ddns", package.seeall)
@@ -24,7 +24,7 @@ local srv_ver_min = "2.7.6"			-- minimum version of service required
 local srv_ver_cmd = luci_helper .. [[ -V | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
-local app_version = "2.4.8-1"
+local app_version = "2.4.8-2"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -180,12 +180,10 @@ local function _get_status()
 		end
 
 		-- get/set monitored interface and IP version
-		local iface	= s["interface"] or "_nonet_"
+		local iface	= s["interface"] or "wan"
 		local use_ipv6	= tonumber(s["use_ipv6"]) or 0
-		if iface ~= "_nonet_" then
-			local ipv = (use_ipv6 == 1) and "IPv6" or "IPv4"
-			iface = ipv .. " / " .. iface
-		end
+		local ipv = (use_ipv6 == 1) and "IPv6" or "IPv4"
+		iface = ipv .. " / " .. iface
 
 		-- try to get registered IP
 		local lookup_host = s["lookup_host"] or "_nolookup_"
