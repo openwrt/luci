@@ -53,6 +53,12 @@ ro.rmempty = false
 ro.enabled = "yes"
 ro.disabled = "no"
 
+br = s:option(Flag, "browseable", translate("Browseable"))
+br.rmempty = false
+br.default = "yes"
+br.enabled = "yes"
+br.disabled = "no"
+
 go = s:option(Flag, "guest_ok", translate("Allow guests"))
 go.rmempty = false
 go.enabled = "yes"
