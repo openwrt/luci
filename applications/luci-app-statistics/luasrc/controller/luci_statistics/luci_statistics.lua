@@ -24,6 +24,7 @@ function index()
 		s_network	= _("Network plugins"),
 
 		conntrack	= _("Conntrack"),
+		contextswitch	= _("Context Switches"),
 		cpu			= _("Processor"),
 		cpufreq		= _("CPU Frequency"),
 		csv			= _("CSV Output"),
@@ -58,7 +59,7 @@ function index()
 	-- our collectd menu
 	local collectd_menu = {
 		output  = { "csv", "network", "rrdtool", "unixsock" },
-		general = { "cpu", "cpufreq", "df", "disk", "email",
+		general = { "contextswitch", "cpu", "cpufreq", "df", "disk", "email",
 			"entropy", "exec", "irq", "load", "memory",
 			"nut", "processes", "sensors", "thermal", "uptime" },
 		network = { "conntrack", "dns", "interface", "iptables",
