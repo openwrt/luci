@@ -3,8 +3,8 @@
 
 require("nixio.fs")
 
-m = Map("hd-idle", "hd-idle",
-	translate("hd-idle is a utility program for spinning-down external " ..
+m = Map("hd-idle", translate("HDD Idle"),
+	translate("HDD Idle is a utility program for spinning-down external " ..
 		"disks after a period of idle time."))
 
 s = m:section(TypedSection, "hd-idle", translate("Settings"))
@@ -18,9 +18,9 @@ for dev in nixio.fs.glob("/dev/[sh]d[a-z]") do
 	disk:value(nixio.fs.basename(dev))
 end
 
-s:option(Value, "idle_time_interval", translate("Idle-time")).default = 10
+s:option(Value, "idle_time_interval", translate("Idle time")).default = 10
 s.rmempty = true
-unit = s:option(ListValue, "idle_time_unit", translate("Idle-time unit"))
+unit = s:option(ListValue, "idle_time_unit", translate("Idle time unit"))
 unit.default = "minutes"
 unit:value("minutes", translate("min"))
 unit:value("hours", translate("h"))
