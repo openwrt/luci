@@ -54,11 +54,6 @@ ro.rmempty = false
 ro.enabled = "yes"
 ro.disabled = "no"
 
-go = s:option(Flag, "guest_ok", translate("Allow guests"))
-go.rmempty = false
-go.enabled = "yes"
-go.disabled = "no"
-
 cm = s:option(Value, "create_mask", translate("Create mask"),
         translate("Mask for new files"))
 cm.rmempty = true
