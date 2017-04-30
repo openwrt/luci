@@ -43,6 +43,8 @@ section:taboption("general", Value, "authgroup", translate("Auth Group"))
 username = section:taboption("general", Value, "username", translate("Username"))
 password = section:taboption("general", Value, "password", translate("Password"))
 password.password = true
+password2 = section:taboption("general", Value, "password2", translate("Password2"))
+password2.password = true
 
 
 cert = section:taboption("advanced", Value, "usercert", translate("User certificate (PEM encoded)"))
@@ -84,3 +86,7 @@ function ca.write(self, section, value)
 	value = value:gsub("\r\n?", "\n")
 	nixio.fs.writefile(oc_ca_file, value)
 end
+
+mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
+mtu.placeholder = "1406"
+mtu.datatype    = "max(9200)"
