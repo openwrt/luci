@@ -12,17 +12,18 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			data = {
 				instances = {
 					ps_state = {
-						"sleeping", "running", "paging", "blocked", "stopped", "zombies"
+						"sleeping", "running", "paging",
+						"blocked", "stopped", "zombies"
 					}
 				},
 
 				options = {
-					ps_state_sleeping = { color = "0000ff" },
-					ps_state_running  = { color = "008000" },
-					ps_state_paging   = { color = "ffff00" },
-					ps_state_blocked  = { color = "ff5000" },
-					ps_state_stopped  = { color = "555555" },
-					ps_state_zombies  = { color = "ff0000" }
+					ps_state_sleeping = { color = "0000ff", title = "Sleeping" },
+					ps_state_running  = { color = "008000", title = "Running" },
+					ps_state_paging   = { color = "ffff00", title = "Paging" },
+					ps_state_blocked  = { color = "ff5000", title = "Blocked" },
+					ps_state_stopped  = { color = "555555", title = "Stopped" },
+					ps_state_zombies  = { color = "ff0000", title = "Zombies" }
 				}
 			}
 		},
@@ -38,11 +39,13 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				options = {
 					ps_cputime__user = {
 						color   = "0000ff",
+						title   = "User",
 						overlay = true
 					},
 
 					ps_cputime__syst = {
 						color   = "ff0000",
+						title   = "System",
 						overlay = true
 					}
 				}
@@ -59,15 +62,15 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				},
 
 				options = {
-					ps_count__threads   = { color = "00ff00" },
-					ps_count__processes = { color = "0000bb" }
+					ps_count__threads   = { color = "00ff00", title = "Threads" },
+					ps_count__processes = { color = "0000bb", title = "Processes" }
 				}
 			}
 		},
 
 		{
 			title = "%H: Page faults in %pi",
-			vlabel = "Pagefaults",
+			vlabel = "Page faults",
 			detail = true,
 			data = {
 				sources = {
@@ -75,14 +78,14 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				},
 
 				options = {
-					ps_pagefaults__minflt = { color = "ff0000" },
-					ps_pagefaults__majflt = { color = "ff5500" }
+					ps_pagefaults__minflt = { color = "0000ff", title = "Minor" },
+					ps_pagefaults__majflt = { color = "ff0000", title = "Major" }
 				}
 			}
 		},
 
 		{
-			title = "%H: Virtual memory size of %pi",
+			title = "%H: Resident segment size (RSS) of %pi",
 			vlabel = "Bytes",
 			detail = true,
 			number_format = "%5.1lf%sB",
@@ -90,7 +93,21 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				types = { "ps_rss" },
 
 				options = {
-					ps_rss = { color = "0000ff" }
+					ps_rss = { color = "0000ff", title = "Resident segment" }
+				}
+			}
+		},
+
+		{
+			title = "%H: Virtual memory size (VSZ) of %pi",
+			vlabel = "Bytes",
+			detail = true,
+			number_format = "%5.1lf%sB",
+			data = {
+				types = { "ps_vm" },
+
+				options = {
+					ps_vm = { color = "0000ff", title = "Virtual memory" }
 				}
 			}
 		}
