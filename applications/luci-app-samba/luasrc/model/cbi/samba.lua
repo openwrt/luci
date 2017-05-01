@@ -47,7 +47,18 @@ if nixio.fs.access("/etc/config/fstab") then
         pth.titleref = luci.dispatcher.build_url("admin", "system", "fstab")
 end
 
-s:option(Value, "users", translate("Allowed users")).rmempty = true
+au = s:option(Value, "users", translate("Allowed users"))
+au.rmempty = true
+function au.validate(self, value, section)
+    local u = value or ""
+    local g = go:formvalue(section) or "no"
+    if (u == "" and g == "yes") or (u ~= "" and g == "no") then
+        return value
+    end
+    return nil, "'" .. translate("Allowed users") .. "'" ..
+                translate(" cannot be used together with ") .. "'" ..
+                translate("Allow guests") .. "'"
+end
 
 ro = s:option(Flag, "read_only", translate("Read-only"))
 ro.rmempty = false
@@ -74,6 +85,5 @@ dm = s:option(Value, "dir_mask", translate("Directory mask"),
         translate("Mask for new directories"))
 dm.rmempty = true
 dm.size = 4
-
 
 return m
