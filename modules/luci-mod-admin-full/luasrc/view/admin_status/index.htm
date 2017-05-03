@@ -30,6 +30,9 @@
 		free = 0
 	}
 
+	local procmeminfo = fs.readfile("/proc/meminfo")
+	local cacheinfo = 1024 * tonumber(procmeminfo:match("Cached:%s+([0-9]+)%s+")) or 0
+
 	local has_dsl = fs.access("/etc/init.d/dsl_control")
 
 	if luci.http.formvalue("status") == "1" then
@@ -51,6 +54,7 @@
 			loadavg    = sysinfo.load or { 0, 0, 0 },
 			memory     = meminfo,
 			swap       = swapinfo,
+			cached     = cacheinfo,
 			connmax    = conn_max,
 			conncount  = conn_count,
 			leases     = stat.dhcp_leases(),
@@ -639,7 +643,13 @@
 
 			if (e = document.getElementById('memtotal'))
 				e.innerHTML = progressbar(
-					((info.memory.free + info.memory.buffered) / 1024) + " <%:kB%>",
+					((info.memory.free + info.memory.buffered + info.cached) / 1024) + " <%:kB%>",
+					(info.memory.total / 1024) + " <%:kB%>"
+				);
+
+			if (e = document.getElementById('memcache'))
+				e.innerHTML = progressbar(
+					(info.cached / 1024) + " <%:kB%>",
 					(info.memory.total / 1024) + " <%:kB%>"
 				);
 
@@ -698,6 +708,7 @@
 
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Total Available%></td><td id="memtotal">-</td></tr>
+		<tr><td width="33%"><%:Cached%></td><td id="memcache">-</td></tr>
 		<tr><td width="33%"><%:Free%></td><td id="memfree">-</td></tr>
 		<tr><td width="33%"><%:Buffered%></td><td id="membuff">-</td></tr>
 	</table>
