@@ -24,7 +24,7 @@ local basicParams = {
 	{ ListValue,"comp_lzo",{"yes","no","adaptive"}, translate("Use fast LZO compression") },
 	{ Value,"keepalive","10 60", translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
 
-	{ ListValue,"proto",{ "udp", "udp6", "tcp", "tcp6" }, translate("Use protocol") },
+	{ ListValue,"proto",{ "udp", "tcp-client", "tcp-server" }, translate("Use protocol") },
 
 	{ Flag,"client",0, translate("Configure client mode") },
 	{ Flag,"client_to_client",0, translate("Allow client-to-client traffic") },
