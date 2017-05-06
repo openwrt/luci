@@ -3,18 +3,18 @@
 
 local fs = require("nixio.fs")
 local uci = require("uci")
-local sys = require("luci.sys")
 local json = require("luci.jsonc")
+local nw  = require("luci.model.network").init()
+local fw  = require("luci.model.firewall").init()
+local uplink = uci.get("network", "trm_wwan") or ""
 local trminput = uci.get("travelmate", "global", "trm_rtfile") or "/tmp/trm_runtime.json"
 local parse = json.parse(fs.readfile(trminput) or "")
 
 m = Map("travelmate", translate("Travelmate"),
 	translate("Configuration of the travelmate package to to enable travel router functionality. ")
-	.. translate("For further information ")
-	.. [[<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank">]]
-	.. translate("see online documentation")
-	.. [[</a>]]
-	.. translate("."))
+	.. translatef("For further information "
+	.. "<a href=\"%s\" target=\"_blank\">"
+	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md"))
 
 -- Main travelmate options
 
@@ -43,6 +43,42 @@ o4.rmempty = false
 o5 = s:option(Flag, "trm_debug", translate("Enable verbose debug logging"))
 o5.default = o5.disabled
 o5.rmempty = false
+
+-- Interface setup
+
+if uplink == "" then
+	dv = s:option(DummyValue, "_dummy", translate("Interface Setup"))
+	dv.template = "cbi/nullsection"
+	btn = s:option(Button, "", translate("Create Uplink Interface"),
+		translate("Automatically create a new wireless wan uplink interface 'trm_wwan', configure it to use dhcp and ")
+		.. translate("add it to the wan zone of the firewall. This step has only to be done once."))
+	btn.inputtitle = translate("Add Interface")
+	btn.inputstyle = "apply"
+	btn.disabled = false
+	function btn.write()
+		local name = "trm_wwan"
+		local net = nw:add_network(name, { proto = "dhcp" })
+		if net then
+			nw:save("network")
+			nw:commit("network")
+			local zone = fw:get_zone_by_network("wan")
+			if zone then
+				zone:add_network(name)
+				fw:save("firewall")
+				fw:commit("firewall")
+			end
+			luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>&1")
+			luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+		end
+	end
+else
+	dv = s:option(DummyValue, "_dummy", translate("Interface Setup"),
+		translate("<br />&nbsp;Network Interface 'trm_wwan' created successfully. ")
+		.. translatef("Scan &amp; Add new wireless stations via standard "
+		.. "<a href=\"%s\">"
+		.. "Wireless Setup</a>", luci.dispatcher.build_url("admin/network/wireless")))
+	dv.template = "cbi/nullsection"
+end
 
 -- Runtime information
 
