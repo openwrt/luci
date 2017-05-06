@@ -101,7 +101,7 @@ function error500(message)
 	return false
 end
 
-function authenticator.htmlauth(validator, accs, default)
+function authenticator.htmlauth(validator, accs, default, template)
 	local user = http.formvalue("luci_username")
 	local pass = http.formvalue("luci_password")
 
@@ -113,7 +113,7 @@ function authenticator.htmlauth(validator, accs, default)
 	require("luci.template")
 	context.path = {}
 	http.status(403, "Forbidden")
-	luci.template.render("sysauth", {duser=default, fuser=user})
+	luci.template.render(template or "sysauth", {duser=default, fuser=user})
 
 	return false
 
@@ -360,7 +360,7 @@ function dispatch(request)
 
 		if not util.contains(accs, user) then
 			if authen then
-				local user, sess = authen(sys.user.checkpasswd, accs, def)
+				local user, sess = authen(sys.user.checkpasswd, accs, def, track.sysauth_template)
 				local token
 				if not user or not util.contains(accs, user) then
 					return
