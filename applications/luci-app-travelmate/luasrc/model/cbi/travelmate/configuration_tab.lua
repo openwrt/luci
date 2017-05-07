@@ -7,6 +7,8 @@ local trminput = "/etc/config/travelmate"
 
 if not nixio.fs.access(trminput) then
 	m = SimpleForm("error", nil, translate("Input file not found, please check your configuration."))
+	m.reset = false
+	m.submit = false
 	return m
 end
 
