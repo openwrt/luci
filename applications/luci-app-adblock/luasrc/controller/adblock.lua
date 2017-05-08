@@ -13,7 +13,7 @@ function index()
 		return
 	end
 	entry({"admin", "services", "adblock"}, firstchild(), _("Adblock"), 30).dependent = false
-	entry({"admin", "services", "adblock", "tab_from_cbi"}, cbi("adblock/overview_tab"), _("Overview"), 10).leaf = true
+	entry({"admin", "services", "adblock", "tab_from_cbi"}, cbi("adblock/overview_tab", {hideresetbtn=true, hidesavebtn=true}), _("Overview"), 10).leaf = true
 	entry({"admin", "services", "adblock", "logfile"}, call("logread"), _("View Logfile"), 20).leaf = true
 	entry({"admin", "services", "adblock", "advanced"}, firstchild(), _("Advanced"), 100)
 	entry({"admin", "services", "adblock", "advanced", "blacklist"}, cbi("adblock/blacklist_tab"), _("Edit Blacklist"), 110).leaf = true

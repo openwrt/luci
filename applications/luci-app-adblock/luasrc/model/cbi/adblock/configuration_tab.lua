@@ -7,6 +7,8 @@ local adbinput = "/etc/config/adblock"
 
 if not nixio.fs.access(adbinput) then
 	m = SimpleForm("error", nil, translate("Input file not found, please check your configuration."))
+	m.reset = false
+	m.submit = false
 	return m
 end
 

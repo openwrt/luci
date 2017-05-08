@@ -12,12 +12,14 @@ local dnsFile2 = sys.exec("find '/var/lib/unbound/.adb_hidden' -maxdepth 1 -type
 
 m = Map("adblock", translate("Adblock"),
 	translate("Configuration of the adblock package to block ad/abuse domains by using DNS. ")
-	.. translate("For further information ")
-	.. [[<a href="https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md" target="_blank">]]
-	.. translate("see online documentation")
-	.. [[</a>]]
-	.. translate("."))
-m.reset = false
+	.. translatef("For further information "
+	.. "<a href=\"%s\" target=\"_blank\">"
+	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md"))
+
+function m.on_after_commit(self)
+	luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
+	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
+end
 
 -- Main adblock options
 
@@ -34,6 +36,7 @@ if dnsFile1 ~= "" or dnsFile2 ~= "" then
 	btn.disabled = false
 	function btn.write()
 		luci.sys.call("/etc/init.d/adblock resume >/dev/null 2>&1")
+		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
 	end
 else
 	btn.inputtitle = translate("Suspend adblock")
@@ -41,6 +44,7 @@ else
 	btn.disabled = false
 	function btn.write()
 		luci.sys.call("/etc/init.d/adblock suspend >/dev/null 2>&1")
+		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
 	end
 end
 
