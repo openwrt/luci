@@ -8,9 +8,9 @@ local oc_cert_file, oc_key_file, oc_ca_file
 
 local ifc = net:get_interface():name()
 
-oc_cert_file = "/etc/openconnect/user-cert-" .. ifc .. ".pem"
-oc_key_file = "/etc/openconnect/user-key-" .. ifc .. ".pem"
-oc_ca_file = "/etc/openconnect/ca-" .. ifc .. ".pem"
+oc_cert_file = "/etc/config/openconnect-user-cert-" .. ifc .. ".pem"
+oc_key_file = "/etc/config/openconnect-user-key-" .. ifc .. ".pem"
+oc_ca_file = "/etc/config/openconnect-ca-" .. ifc .. ".pem"
 
 server = section:taboption("general", Value, "server", translate("VPN Server"))
 server.datatype = "host(0)"
