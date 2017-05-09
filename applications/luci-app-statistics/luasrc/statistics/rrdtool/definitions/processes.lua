@@ -5,8 +5,8 @@ module("luci.statistics.rrdtool.definitions.processes", package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
+    if  plugin_instance == "" then
 	return {
-		{
 			title = "%H: Processes",
 			vlabel = "Processes/s",
 			data = {
@@ -26,8 +26,9 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 					ps_state_zombies  = { color = "ff0000", title = "Zombies" }
 				}
 			}
-		},
-
+	}
+    else
+	return {
 		{
 			title = "%H: CPU time used by %pi",
 			vlabel = "Jiffies",
@@ -112,4 +113,5 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			}
 		}
 	}
+    end
 end
