@@ -16,6 +16,11 @@ m = Map("travelmate", translate("Travelmate"),
 	.. "<a href=\"%s\" target=\"_blank\">"
 	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md"))
 
+function m.on_after_commit(self)
+	luci.sys.call("/etc/init.d/travelmate restart >/dev/null 2>&1")
+	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+end
+
 -- Main travelmate options
 
 s = m:section(NamedSection, "global", "travelmate")
