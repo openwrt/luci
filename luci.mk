@@ -189,8 +189,9 @@ endef
 
 ifneq ($(LUCI_DEFAULTS),)
 define Package/$(PKG_NAME)/postinst
-[ -n "$${IPKG_INSTROOT}" ] || {$(foreach script,$(LUCI_DEFAULTS),
-	(. /etc/uci-defaults/$(script)) && rm -f /etc/uci-defaults/$(script))
+[ -n "$${IPKG_INSTROOT}" ] || grep -q uci-defaults /etc/functions.sh || {
+	$(foreach script,$(LUCI_DEFAULTS),
+	([ -r /etc/uci-defaults/$(script) ] && . /etc/uci-defaults/$(script)) && rm -f /etc/uci-defaults/$(script))
 	exit 0
 }
 endef
