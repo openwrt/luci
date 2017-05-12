@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # register commit handler
-uci -q batch <<-EOF >/dev/null
+uci -q batch <<-EOF >/dev/null 2>&1 || true
 	delete ucitrack.@luci_statistics[-1]
 	add ucitrack luci_statistics
 	set ucitrack.@luci_statistics[-1].init=luci_statistics
