@@ -1389,12 +1389,15 @@ end
 
 function AbstractValue.parse(self, section, novld)
 	local fvalue = self:formvalue(section)
+	local fexist = ( fvalue and (#fvalue > 0) )
 	local cvalue = self:cfgvalue(section)
+	local rm_opt = ( self.rmempty or self.opotional )
+	local equal, errtxt
 
 	-- If favlue and cvalue are both tables and have the same content
 	-- make them identical
 	if type(fvalue) == "table" and type(cvalue) == "table" then
-		local equal = #fvalue == #cvalue
+		equal = #fvalue == #cvalue
 		if equal then
 			for i=1, #fvalue do
 				if cvalue[i] ~= fvalue[i] then
@@ -1405,35 +1408,54 @@ function AbstractValue.parse(self, section, novld)
 		if equal then
 			fvalue = cvalue
 		end
+	else
+		equal = ( fvalue == cvalue )
 	end
 
-	if fvalue and #fvalue > 0 then -- If we have a form value, write it to UCI
-		local val_err
-		fvalue, val_err = self:validate(fvalue, section)
-		fvalue = self:transform(fvalue)
+	-- removed parameter section from function call because used/accepted nowhere
+	-- also removed call to transfer
+	local vvalue, errtxt = self:validate(fvalue)
+	local vexist = ( vvalue and (#vvalue > 0) ) -- and true or false
 
-		if not fvalue and not novld then
-			self:add_error(section, "invalid", val_err)
+	-- formvalue and no validate value then (raise error) and exit
+	if fexist and not vexist then
+		if not novld then
+			self:add_error(section, "invalid", errtxt)
 		end
+		return
+	end
 
-		if fvalue and (self.forcewrite or not (fvalue == cvalue)) then
-			if self:write(section, fvalue) then
-				-- Push events
-				self.section.changed = true
-				--luci.util.append(self.map.events, self.events)
-			end
+	-- no formvalue and no (user changed inside validate) value and
+	-- not rmempty and not optional and cvalue~=fvalue then (raise error) and exit
+	if not fexist and not vexist and not rm_opt and not equal then
+		if not novld then
+			self:add_error(section, "missing", errtxt)
 		end
-	else							-- Unset the UCI or error
-		if self.rmempty or self.optional then
-			if self:remove(section) then
-				-- Push events
-				self.section.changed = true
-				--luci.util.append(self.map.events, self.events)
-			end
-		elseif cvalue ~= fvalue and not novld then
-			-- trigger validator with nil value to get custom user error msg.
-			local _, val_err = self:validate(nil, section)
-			self:add_error(section, "missing", val_err)
+		return
+	end
+
+	-- for whatever reason errtxt set and not handled above then (raise error) and exit
+	if errtxt and (#errtxt > 0) then
+		if not novld then
+			self:add_error(section, "invalid", errtxt)
+		end
+		return
+	end
+
+	-- no formvalue but validate returns one then use it
+	if not fexist and vexist then
+		fvalue = vvalue
+		equal = ( fvalue == cvalue )	-- update equal flag
+	end
+
+	-- write changed data to UCI
+	if self.forcewrite or not equal then
+		-- no need to check rmempty or optional again
+		-- so developer gets the chance to use function for overwriting
+		if self:write(section, fvalue) then
+			-- Push events
+			self.section.changed = true
+			--luci.util.append(self.map.events, self.events)
 		end
 	end
 end
@@ -1490,11 +1512,14 @@ function AbstractValue.validate(self, value)
 	return value
 end
 
-AbstractValue.transform = AbstractValue.validate
+-- AbstractValue.transform = AbstractValue.validate	-- no longer needed
 
 
 -- Write to UCI
 function AbstractValue.write(self, section, value)
+	if not self.forcewrite and (value == self.default) and (self.rmempty or self.optional) then
+		value = ""	-- self.map:set() will remove options with empty values
+	end
 	return self.map:set(section, self.option, value)
 end
 
