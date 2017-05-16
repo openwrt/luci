@@ -3,7 +3,7 @@ module("luci.controller.mwan3", package.seeall)
 sys = require "luci.sys"
 ut = require "luci.util"
 
-ip = "/usr/bin/ip -4 "
+ip = "ip -4 "
 
 function index()
 	if not nixio.fs.access("/etc/config/mwan3") then
