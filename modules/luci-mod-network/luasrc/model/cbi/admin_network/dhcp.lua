@@ -250,21 +250,19 @@ o.rmempty = false
 
 o = s:taboption("general", Flag, "nonwildcard",
 	translate("Non-wildcard"),
-	translate("Bind only to specific interfaces rather than wildcard address."))
+	translate("Bind dynamically to interfaces rather than wildcard address (recommended as linux default)"))
 o.optional = false
-o.rmempty = false
+o.rmempty = true
 
 o = s:taboption("general", DynamicList, "interface",
 	translate("Listen Interfaces"),
 	translate("Limit listening to these interfaces, and loopback."))
 o.optional = true
-o:depends("nonwildcard", true)
 
 o = s:taboption("general", DynamicList, "notinterface",
 	translate("Exclude interfaces"),
 	translate("Prevent listening on these interfaces."))
 o.optional = true
-o:depends("nonwildcard", true)
 
 m:section(SimpleSection).template = "lease_status"
 
