@@ -213,4 +213,8 @@ if has_ntpd then
 	end
 end
 
+function m.on_after_commit(self,map)
+	require("luci.sys").call('/sbin/reload_config')
+end
+
 return m
