@@ -17,22 +17,22 @@
         data[line[1]] = {
           name                 = line[1],
           public_key           = line[3],
-          listen_port          = line[5],
-          fwmark               = line[6],
+          listen_port          = line[4],
+          fwmark               = line[5],
           peers                = { }
         }
       else
         local peer = {
           public_key           = line[2],
-          endpoint             = line[3],
+          endpoint             = line[4],
           allowed_ips          = { },
-          latest_handshake     = line[5],
-          transfer_rx          = line[6],
-          transfer_tx          = line[7],
-          persistent_keepalive = line[8]
+          latest_handshake     = line[6],
+          transfer_rx          = line[7],
+          transfer_tx          = line[8],
+          persistent_keepalive = line[9]
         }
         if not (line[4] == '(none)') then
-          for ipkey, ipvalue in pairs(string.split(line[4], ",")) do
+          for ipkey, ipvalue in pairs(string.split(line[5], ",")) do
             if #ipvalue > 0 then
               table.insert(peer['allowed_ips'], ipvalue)
             end

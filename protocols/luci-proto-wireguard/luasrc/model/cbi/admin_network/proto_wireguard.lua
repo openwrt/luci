@@ -70,21 +70,6 @@ mtu.datatype = "range(1280,1420)"
 mtu.placeholder = "1420"
 mtu.optional = true
 
-
-preshared_key = section:taboption(
-  "advanced",
-  Value,
-  "preshared_key",
-  translate("Preshared Key"),
-  translate("Optional. Base64-encoded preshared key. " ..
-            "Adds in an additional layer of symmetric-key " ..
-            "cryptography for post-quantum resistance.")
-)
-preshared_key.password = true
-preshared_key.datatype = "and(base64,rangelength(44,44))"
-preshared_key.optional = true
-
-
 fwmark = section:taboption(
   "advanced",
   Value,
@@ -119,6 +104,19 @@ public_key = peers:option(
 )
 public_key.datatype = "and(base64,rangelength(44,44))"
 public_key.optional = false
+
+
+preshared_key = peers:option(
+  Value,
+  "preshared_key",
+  translate("Preshared Key"),
+  translate("Optional. Base64-encoded preshared key. " ..
+            "Adds in an additional layer of symmetric-key " ..
+            "cryptography for post-quantum resistance.")
+)
+preshared_key.password = true
+preshared_key.datatype = "and(base64,rangelength(44,44))"
+preshared_key.optional = true
 
 
 allowed_ips = peers:option(
