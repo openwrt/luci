@@ -13,9 +13,17 @@ local sections = uci:get_all("luci_statistics")
 Instance = util.class()
 
 function Instance.__init__( self, host )
-	self._host    = host or sections.collectd.Hostname or sys.hostname()
-	self._libdir  = sections.collectd.PluginDir        or "/usr/lib/collectd"
-	self._rrddir  = sections.collectd_rrdtool.DataDir  or "/tmp/rrd"
+	self._host    = host or sys.hostname()
+	self._libdir  = "/usr/lib/collectd"
+	self._rrddir  = "/tmp/rrd"
+
+	if sections and sections.collectd then
+		self._host    = host or sections.collectd.Hostname or sys.hostname()
+		self._libdir  = sections.collectd.PluginDir        or "/usr/lib/collectd"
+	end
+	if sections and sections.collectd_rrdtool then
+		self._rrddir  = sections.collectd_rrdtool.DataDir  or "/tmp/rrd"
+	end
 
 	self._libdir  = self._libdir:gsub("/$","")
 	self._rrddir  = self._rrddir:gsub("/$","")
