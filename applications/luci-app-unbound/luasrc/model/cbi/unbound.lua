@@ -3,8 +3,20 @@
 -- Copyright 2016 Dan Luedtke <mail@danrl.com>
 -- Licensed to the public under the Apache License 2.0.
 
+local m
+local s1
+local ena, mcf, lsv, rlh, rpv, vld, nvd, eds, prt, tlm
+local ctl, dlk, dom, dty, lfq, wfq, exa, ctl, d64, pfx, qry, qrs
+local pro, tgr, rsc, rsn, ag2
+
 m = Map("unbound", translate("Recursive DNS"),
-	translate("Unbound is a validating, recursive, and caching DNS resolver."))
+  translatef("<a href=\"%s\" target=\"_blank\">Unbound</a>"
+  .. " is a validating, recursive, and caching DNS resolver. "
+  .. "UCI help can be found on "
+  .. "<a href=\"%s\" target=\"_blank\">github</a>.",
+  "https://www.unbound.net/",
+  "https://github.com/openwrt/packages/blob/master/net/unbound/files/README.md"))
+
 
 s1 = m:section(TypedSection, "unbound")
 s1.addremove = false
@@ -24,19 +36,19 @@ mcf = s1:taboption("service", Flag, "manual_conf", translate("Manual Conf:"),
 mcf.rmempty = false
 
 function ena.cfgvalue(self, section)
-	return luci.sys.init.enabled("unbound") and self.enabled or self.disabled
+  return luci.sys.init.enabled("unbound") and self.enabled or self.disabled
 end
 
 function ena.write(self, section, value)
-	if value == "1" then
-		luci.sys.init.enable("unbound")
-		luci.sys.call("/etc/init.d/unbound start >/dev/null")
-	else
-		luci.sys.call("/etc/init.d/unbound stop >/dev/null")
-		luci.sys.init.disable("unbound")
-	end
+  if value == "1" then
+    luci.sys.init.enable("unbound")
+    luci.sys.call("/etc/init.d/unbound start >/dev/null")
+  else
+    luci.sys.call("/etc/init.d/unbound stop >/dev/null")
+    luci.sys.init.disable("unbound")
+  end
 
-	return Flag.write(self, section, value)
+  return Flag.write(self, section, value)
 end
 
 --Basic Tab
@@ -125,6 +137,15 @@ wfq:value("4", translate("Interface FQDN, All Addresses"))
 wfq:depends({ dhcp_link = "none" })
 wfq:depends({ dhcp_link = "odhcpd" })
 
+exa = s1:taboption("advanced", ListValue, "add_extra_dns", translate("Extra DNS:"),
+  translate("Use extra DNS entries found in /etc/config/dhcp"))
+exa:value("0", translate("Ignore"))
+exa:value("1", translate("Include Network/Hostnames"))
+exa:value("2", translate("Advanced MX/SRV RR"))
+exa:value("3", translate("Advanced CNAME RR"))
+exa:depends({ dhcp_link = "none" })
+exa:depends({ dhcp_link = "odhcpd" })
+
 ctl = s1:taboption("advanced", Flag, "dhcp4_slaac6", translate("DHCPv4 to SLAAC:"),
   translate("Use DHCPv4 MAC to discover IP6 hosts SLAAC (EUI64)"))
 ctl.rmempty = false
@@ -179,11 +200,17 @@ rsc.rmempty = false
 ag2 = s1:taboption("resource", Value, "root_age", translate("Root DSKEY Age:"),
   translate("Limit days between RFC5011 to reduce flash writes"))
 ag2.datatype = "and(uinteger,min(1),max(99))"
-ag2:value("14", "14")
-ag2:value("28", "28 ("..translate("default")..")")
-ag2:value("45", "45")
-ag2:value("90", "90")
+ag2:value("3", "3")
+ag2:value("9", "9 ("..translate("default")..")")
+ag2:value("12", "12")
+ag2:value("24", "24")
 ag2:value("99", "99 ("..translate("never")..")")
+
+tgr = s1:taboption("resource", Value, "trigger", translate("Trigger Networks:"),
+  translate("Networks that may trigger Unbound to reload (avoid wan6)"))
+tgr.template = "cbi/network_netlist"
+tgr.widget = "checkbox"
+tgr.cast = "string"
 
 return m
 
