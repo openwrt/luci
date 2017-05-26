@@ -206,6 +206,12 @@ function dispatch(request)
 			if conf.languages[lpat] then
 				lang = lpat
 				break
+			else
+				lpat = lpat and lpat:gsub("_.*", "")
+				if conf.languages[lpat] then
+					lang = lpat
+					break
+				end
 			end
 		end
 	end
