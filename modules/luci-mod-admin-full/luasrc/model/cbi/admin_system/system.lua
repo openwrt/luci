@@ -6,6 +6,7 @@ local sys   = require "luci.sys"
 local zones = require "luci.sys.zoneinfo"
 local fs    = require "nixio.fs"
 local conf  = require "luci.config"
+local utl   = require "luci.util"
 
 local m, s, o
 local has_ntpd = fs.access("/usr/sbin/ntpd")
@@ -68,7 +69,15 @@ end
 o = s:taboption("logging", Value, "log_size", translate("System log buffer size"), "kiB")
 o.optional    = true
 o.placeholder = 16
-o.datatype    = "uinteger"
+--Limit log size to 10% of total RAM
+local sysinfo = utl.ubus("system", "info") or { }
+local meminfo = sysinfo.memory or {
+	total = 0
+}
+if meminfo.total > 0 then
+	local max = math.floor(meminfo.total / 1024 * 0.1)
+	o.datatype    = "range(1, " .. max ..")"
+end
 
 o = s:taboption("logging", Value, "log_ip", translate("External system log server"))
 o.optional    = true
