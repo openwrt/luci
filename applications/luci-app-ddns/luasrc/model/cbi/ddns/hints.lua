@@ -56,7 +56,7 @@ if not DDNS.has_ipv6 then
 		translate("IPv6 not supported") .. bold_off
 	v6.value = translate("IPv6 is currently not (fully) supported by this system" .. "<br />" ..
 			"Please follow the instructions on OpenWrt's homepage to enable IPv6 support" .. "<br />" ..
-			"or update your system to the latest OpenWrt Release")
+			"or update your system to the latest OpenWrt (or derivative) Release")
 end
 
 -- No HTTPS support
@@ -70,7 +70,7 @@ if not DDNS.has_ssl then
 			"<br />- " ..
 			translate("You should install 'wget' or 'curl' or 'uclient-fetch' with 'libustream-*ssl' package.") ..
 			"<br />- " ..
-			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
+			translate("In some versions cURL/libcurl in OpenWrt (or derivative) is compiled without proxy support.")
 end
 
 -- No bind_network
@@ -86,7 +86,7 @@ if not DDNS.has_bindnet then
 			"<br />- " ..
 			translate("GNU Wget will use the IP of given network, cURL will use the physical interface.") ..
 			"<br />- " ..
-			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
+			translate("In some versions cURL/libcurl in OpenWrt (or derivative) is compiled without proxy support.")
 end
 
 -- currently only cURL possibly without proxy support
@@ -100,7 +100,7 @@ if not DDNS.has_proxy then
 			"<br />- " ..
 			translate("You should install 'wget' or 'uclient-fetch' package or replace libcurl.") ..
 			"<br />- " ..
-			translate("In some versions cURL/libcurl in OpenWrt is compiled without proxy support.")
+			translate("In some versions cURL/libcurl in OpenWrt (or derivative) is compiled without proxy support.")
 end
 
 -- "Force IP Version not supported"
