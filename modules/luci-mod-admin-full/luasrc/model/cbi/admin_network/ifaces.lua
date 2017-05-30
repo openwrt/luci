@@ -445,7 +445,7 @@ if has_dnsmasq and net:proto() == "static" then
 		limit.datatype = "uinteger"
 		limit.default = "150"
 
-		local ltime = s:taboption("general", Value, "leasetime", translate("Leasetime"),
+		local ltime = s:taboption("general", Value, "leasetime", translate("Lease time"),
 			translate("Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>)."))
 		ltime.rmempty = true
 		ltime.default = "12h"
