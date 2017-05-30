@@ -38,7 +38,7 @@ metric:depends("defaultroute", defaultroute.enabled)
 
 section:taboption("general", Value, "serverhash", translate("VPN Server's certificate SHA1 hash"))
 
-section:taboption("general", Value, "authgroup", translate("AuthGroup"))
+section:taboption("general", Value, "authgroup", translate("Auth Group"))
 
 username = section:taboption("general", Value, "username", translate("Username"))
 password = section:taboption("general", Value, "password", translate("Password"))
