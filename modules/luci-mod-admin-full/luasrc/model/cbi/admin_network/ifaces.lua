@@ -493,6 +493,11 @@ if has_dnsmasq and net:proto() == "static" then
 		o:value("relay", translate("relay mode"))
 		o:value("hybrid", translate("hybrid mode"))
 
+		o = s:taboption("general", ListValue, "dhcpv4", translate("DHCPv4-Service"))
+		o:value("", translate("disabled"))
+		o:value("server", translate("server mode"))
+		o:depends("odhcpd.maindhcp", "1")
+
 		o = s:taboption("ipv6", ListValue, "ndp", translate("NDP-Proxy"))
 		o:value("", translate("disabled"))
 		o:value("relay", translate("relay mode"))
