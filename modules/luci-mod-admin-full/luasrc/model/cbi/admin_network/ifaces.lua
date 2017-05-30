@@ -515,6 +515,27 @@ if has_dnsmasq and net:proto() == "static" then
 		s:taboption("ipv6", DynamicList, "dns", translate("Announced DNS servers"))
 		s:taboption("ipv6", DynamicList, "domain", translate("Announced DNS domains"))
 
+		local l = s:taboption("advanced", ListValue, "instance", translate("Instance"),
+			translate("DHCP instance to which to limit this interface."))
+		l.datatype = "uciname"
+		l:reset_values()
+
+		l:value("", translate("Any"))
+		local instancecursor = m.uci
+		instancecursor:foreach("dhcp", "dnsmasq", function(sect)
+			l:value(sect['.name'])
+		end)
+
+		s:taboption("advanced", Value, "leasefile",
+			translate("Leasefile"),
+				translate("file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</" ..
+				"abbr>-leases will be stored"))
+
+
+		local instancecursor = m.uci
+		instancecursor:foreach("dhcp", "dnsmasq", function(sect)
+			l:value(sect['.name'])
+		end)
 	else
 		m2 = nil
 	end

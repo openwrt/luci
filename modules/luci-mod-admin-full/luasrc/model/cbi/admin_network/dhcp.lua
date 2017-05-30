@@ -12,8 +12,8 @@ m = Map("dhcp", translate("DHCP and DNS"),
 		"firewalls"))
 
 s = m:section(TypedSection, "dnsmasq", translate("Server Settings"))
-s.anonymous = true
-s.addremove = false
+s.anonymous = false
+s.addremove = true
 
 s:tab("general", translate("General Settings"))
 s:tab("files", translate("Resolv and Hosts Files"))
@@ -287,6 +287,17 @@ time = s:option(Value, "leasetime", translate("Lease time"))
 time.rmempty  = true
 
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
+
+local l = s:option(ListValue, "instance", translate("Instance"))
+l.datatype = "uciname"
+l:reset_values()
+
+l:value("", translate("Any"))
+local instancecursor = m.uci
+instancecursor:foreach("dhcp", "dnsmasq", function(sect)
+	l:value(sect['.name'])
+end)
+
 
 ipc.neighbors({ family = 4 }, function(n)
 	if n.mac and n.dest then
