@@ -14,7 +14,7 @@ o.default = "try"
 
 o = section:taboption("general", Value, "reqprefix",
 	translate("Request IPv6-prefix of length"))
-o:value("auto", translate("automatic"))
+o:value("auto", translate("Automatic"))
 o:value("no", translate("disabled"))
 o:value("48")
 o:value("52")
