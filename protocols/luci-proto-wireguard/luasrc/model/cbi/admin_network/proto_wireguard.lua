@@ -52,7 +52,7 @@ metric = section:taboption(
   Value,
   "metric",
   translate("Metric"),
-  translate("Optional.")
+  translate("Optional")
 )
 metric.datatype = "uinteger"
 metric.placeholder = "0"
