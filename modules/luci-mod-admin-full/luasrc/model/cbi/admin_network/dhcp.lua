@@ -275,6 +275,16 @@ name = s:option(Value, "name", translate("Hostname"))
 name.datatype = "hostname"
 name.rmempty  = true
 
+function name.write(self, section, value)
+	Value.write(self, section, value)
+	m:set(section, "dns", "1")
+end
+
+function name.remove(self, section)
+	Value.remove(self, section)
+	m:del(section, "dns")
+end
+
 mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 mac.datatype = "list(macaddr)"
 mac.rmempty  = true
