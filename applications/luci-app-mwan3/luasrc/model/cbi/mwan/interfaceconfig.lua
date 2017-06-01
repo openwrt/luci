@@ -107,9 +107,9 @@ family = mwan_interface:option(ListValue, "family", translate("Internet Protocol
 	family:value("ipv4", translate("IPv4"))
 	family:value("ipv6", translate("IPv6"))
 
-track_ip = mwan_interface:option(DynamicList, "track_ip", translate("Tracking IP"),
-	translate("This IP address will be pinged to dermine if the link is up or down. Leave blank to assume interface is always online"))
-	track_ip.datatype = "ipaddr"
+track_ip = mwan_interface:option(DynamicList, "track_ip", translate("Tracking hostname or IP address"),
+	translate("This hostname or IP address will be pinged to determine if the link is up or down. Leave blank to assume interface is always online"))
+	track_ip.datatype = "host"
 
 reliability = mwan_interface:option(Value, "reliability", translate("Tracking reliability"),
 	translate("Acceptable values: 1-100. This many Tracking IP addresses must respond for the link to be deemed up"))

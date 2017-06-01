@@ -112,7 +112,7 @@ mwan_interface = m5:section(TypedSection, "interface", translate("Interfaces"),
 	mwan_interface.addremove = true
 	mwan_interface.dynamic = false
 	mwan_interface.sectionhead = "Interface"
-	mwan_interface.sortable = true
+	mwan_interface.sortable = false
 	mwan_interface.template = "cbi/tblsection"
 	mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "configuration", "interface", "%s")
 	function mwan_interface.create(self, section)
