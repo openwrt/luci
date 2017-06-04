@@ -304,9 +304,9 @@ function action_backup()
 	local reader = ltn12_popen("sysupgrade --create-backup - 2>/dev/null")
 
 	luci.http.header(
-		'Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' %{
-			luci.sys.hostname(),
-			os.date("%Y-%m-%d")
+		'Content-Disposition', 'attachment; filename="%s-backup-%s.tar.gz"' %{
+			os.date("%Y-%m-%d"),
+			luci.sys.hostname()
 		})
 
 	luci.http.prepare_content("application/x-targz")
