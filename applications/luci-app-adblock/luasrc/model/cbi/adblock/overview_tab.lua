@@ -157,12 +157,18 @@ e2 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
 e2.default = e2.disabled
 e2.rmempty = false
 
-e3 = e:option(Flag, "adb_backup", translate("Enable blocklist backup"))
+e3 = e:option(Flag, "adb_manmode", translate("Manual mode"),
+	translate("Do not automatically update blocklists during startup, use blocklist backups instead."))
 e3.default = e3.disabled
 e3.rmempty = false
 
-e4 = e:option(Value, "adb_backupdir", translate("Backup directory"))
-e4.datatype = "directory"
+e4 = e:option(Flag, "adb_backup", translate("Enable blocklist backup"),
+	translate("Create compressed blocklist backups, they will be used in case of download errors or during startup in manual mode."))
+e4.default = e4.disabled
 e4.rmempty = false
+
+e5 = e:option(Value, "adb_backupdir", translate("Backup directory"))
+e5.datatype = "directory"
+e5.rmempty = false
 
 return m
