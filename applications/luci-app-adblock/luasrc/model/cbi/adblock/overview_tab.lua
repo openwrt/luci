@@ -17,7 +17,13 @@ m = Map("adblock", translate("Adblock"),
 	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md"))
 
 function m.on_after_commit(self)
-	luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
+	function e3.validate(self, value)
+		if value == "0" then
+			luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
+		else
+			luci.sys.call("/etc/init.d/adblock start >/dev/null 2>&1")
+		end
+	end
 	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
 end
 
