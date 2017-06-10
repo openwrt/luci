@@ -278,7 +278,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- create line1 statement
 		_tif( _args, "LINE%d:%s_%s#%s:%s",
-			source.noarea and 2 or 1,
+			source.width or (source.noarea and 2 or 1),
 			source.sname, var, line_color, legend )
 	end
 
