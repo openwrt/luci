@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2015 The LuCI Team <luci@lists.subsignal.org>
+# Copyright (C) 2008-2017 The LuCI Team <luci@lists.subsignal.org>
 #
 # This is free software, licensed under the Apache License, Version 2.0 .
 #
@@ -14,10 +14,10 @@ PKG_VERSION:=1.0.6
 
 # Release == build
 # increase on changes of translation files
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
+PKG_MAINTAINER:=
 
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Privoxy WEB proxy
@@ -30,7 +30,6 @@ help
 	$(LUCI_TITLE)
 	.
 	Version: $(PKG_VERSION)-$(PKG_RELEASE)
-	$(PKG_MAINTAINER)
 endef
 
 include ../../luci.mk
