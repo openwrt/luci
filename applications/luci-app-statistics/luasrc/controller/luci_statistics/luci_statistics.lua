@@ -88,7 +88,7 @@ function index()
 			_entry(
 				{ "admin", "statistics", "collectd", section, plugin },
 				cbi("luci_statistics/" .. plugin ),
-				labels[plugin], j * 10
+				labels[plugin] or plugin, j * 10
 			)
 		end
 
