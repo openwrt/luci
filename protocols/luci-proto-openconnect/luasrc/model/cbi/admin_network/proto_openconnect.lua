@@ -19,8 +19,6 @@ port = section:taboption("general", Value, "port", translate("VPN Server port"))
 port.placeholder = "443"
 port.datatype    = "port"
 
-ifname = section:taboption("general", Value, "interface", translate("Output Interface"))
-ifname.template = "cbi/network_netlist"
 
 defaultroute = section:taboption("advanced", Flag, "defaultroute",
 	translate("Use default gateway"),
