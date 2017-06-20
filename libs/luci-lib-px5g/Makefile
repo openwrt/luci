@@ -10,6 +10,7 @@ LUCI_TITLE:=RSA/X.509 Key Generator (required for LuCId SSL support)
 LUCI_DEPENDS:=+liblua
 
 PKG_USE_MIPS16:=0
+PKG_LICENSE:=LGPL-2.1
 
 include ../../luci.mk
 
