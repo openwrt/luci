@@ -99,9 +99,12 @@ s:taboption("general", Value, "local",
 	translate("Local server"),
 	translate("Local domain specification. Names matching this domain are never forwarded and are resolved from DHCP or hosts files only"))
 
-s:taboption("general", Value, "domain",
+ld = s:taboption("general", DynamicList, "domain",
 	translate("Local domain"),
 	translate("Local domain suffix appended to DHCP names and hosts file entries"))
+
+ld.optional = true
+ld.placeholder = "example.com,192.168.1.0/24,local"
 
 s:taboption("advanced", Flag, "expandhosts",
 	translate("Expand hosts"),
