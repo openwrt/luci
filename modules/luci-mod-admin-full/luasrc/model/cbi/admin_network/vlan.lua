@@ -128,7 +128,8 @@ m.uci:foreach("network", "switch",
 		s.addremove = false
 
 		if has_vlan then
-			s:option(Flag, has_vlan, translate("Enable VLAN functionality"))
+			x = s:option(Flag, has_vlan, translate("Enable VLAN functionality"))
+			x.default = x.enabled
 		end
 
 		if has_learn then
