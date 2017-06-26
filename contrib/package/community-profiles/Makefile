@@ -15,7 +15,6 @@ define Package/community-profiles
   CATEGORY:=LuCI
   SUBMENU:=9. Freifunk
   TITLE:=Community profiles
-  DEPENDS:=freifunk-common
 endef
 
 define Package/community-profiles/description
