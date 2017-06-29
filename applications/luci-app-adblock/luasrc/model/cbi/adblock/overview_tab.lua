@@ -6,9 +6,25 @@ local uci = require("uci")
 local sys = require("luci.sys")
 local json = require("luci.jsonc")
 local adbinput = uci.get("adblock", "global", "adb_rtfile") or "/tmp/adb_runtime.json"
-local parse = json.parse(fs.readfile(adbinput) or "")
-local dnsFile1 = sys.exec("find '/tmp/dnsmasq.d/.adb_hidden' -maxdepth 1 -type f -name 'adb_list*' -print 2>/dev/null")
-local dnsFile2 = sys.exec("find '/var/lib/unbound/.adb_hidden' -maxdepth 1 -type f -name 'adb_list*' -print 2>/dev/null")
+local dnspath = uci.get("adblock", "global", "adb_dnsdir") or ""
+local parse = json.parse(fs.readfile(adbinput))
+if parse ~= nil then
+	version = parse.data.adblock_version
+	domains = parse.data.blocked_domains
+	fetch = parse.data.fetch_info
+	backend = parse.data.dns_backend
+	rundate = parse.data.last_rundate
+	if dnspath == "" then
+		if backend == "dnsmasq" then
+			dnspath = "/tmp/dnsmasq.d"
+		elseif backend == "unbound" then
+			dnspath = "/var/lib/unbound"
+		elseif backend == "named" then
+			dnspath = "/var/lib/bind"
+		end
+	end
+end
+local dnsfile = dnspath .. "/.adb_hidden/adb_list.overall"
 
 m = Map("adblock", translate("Adblock"),
 	translate("Configuration of the adblock package to block ad/abuse domains by using DNS. ")
@@ -36,7 +52,7 @@ o1.default = o1.enabled
 o1.rmempty = false
 
 btn = s:option(Button, "", translate("Suspend / Resume adblock"))
-if dnsFile1 ~= "" or dnsFile2 ~= "" then
+if parse ~= nil and nixio.fs.access(dnsfile) then
 	btn.inputtitle = translate("Resume adblock")
 	btn.inputstyle = "apply"
 	btn.disabled = false
@@ -78,52 +94,53 @@ dv1 = s:option(DummyValue, "status", translate("Status"))
 dv1.template = "adblock/runtime"
 if parse == nil then
 	dv1.value = translate("n/a")
-elseif parse.data.blocked_domains == "0" then
+elseif domains == "0" then
 	dv1.value = translate("no domains blocked")
-elseif dnsFile1 ~= "" or dnsFile2 ~= "" then
+elseif nixio.fs.access(dnsfile) then
 	dv1.value = translate("suspended")
 else
 	dv1.value = translate("active")
 end
+
 dv2 = s:option(DummyValue, "adblock_version", translate("Adblock version"))
 dv2.template = "adblock/runtime"
-if parse ~= nil then
-	dv2.value = parse.data.adblock_version or translate("n/a")
-else
+if parse == nil then
 	dv2.value = translate("n/a")
+else
+	dv2.value = version
 end
 
 dv3 = s:option(DummyValue, "fetch_info", translate("Download Utility (SSL Library)"),
 	translate("For SSL protected blocklist sources you need a suitable SSL library, e.g. 'libustream-ssl' or the wget 'built-in'."))
 dv3.template = "adblock/runtime"
-if parse ~= nil then
-	dv3.value = parse.data.fetch_info or translate("n/a")
-else
+if parse == nil then
 	dv3.value = translate("n/a")
+else
+	dv3.value = fetch
 end
 
 dv4 = s:option(DummyValue, "dns_backend", translate("DNS backend"))
 dv4.template = "adblock/runtime"
-if parse ~= nil then
-	dv4.value = parse.data.dns_backend or translate("n/a")
-else
+if parse == nil then
 	dv4.value = translate("n/a")
+else
+	dv4.value = backend
 end
 
 dv5 = s:option(DummyValue, "blocked_domains", translate("Blocked domains (overall)"))
 dv5.template = "adblock/runtime"
-if parse ~= nil then
-	dv5.value = parse.data.blocked_domains or translate("n/a")
-else
+if parse == nil then
 	dv5.value = translate("n/a")
+else
+	dv5.value = domains
 end
 
 dv6 = s:option(DummyValue, "last_rundate", translate("Last rundate"))
 dv6.template = "adblock/runtime"
-if parse ~= nil then
-	dv6.value = parse.data.last_rundate or translate("n/a")
-else
+if parse == nil then
 	dv6.value = translate("n/a")
+else
+	dv6.value = rundate
 end
 
 -- Blocklist table
