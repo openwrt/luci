@@ -137,13 +137,14 @@ o:value("2", translate("Allow all except listed"))
 o.default = 0
 o.rmempty = false
 
-a = luci.sys.net.arptable() or {}
-
 o = s:taboption("lan_ac", DynamicList, "lan_ac_ip", translate("LAN IP List"))
 o.datatype = "ipaddr"
-for i,v in ipairs(a) do
-	o:value(v["IP address"])
-end
+
+luci.ip.neighbors({ family = 4 }, function(entry)
+	if entry.reachable then
+		o:value(entry.dest:string())
+	end
+end)
 
 s:tab("wan_ac", translate("WAN"))
 
