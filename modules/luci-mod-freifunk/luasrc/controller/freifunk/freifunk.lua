@@ -70,7 +70,7 @@ function index()
 	page.target = cbi("freifunk/basics")
 	page.title  = _("Basic Settings")
 	page.order  = 5
-	
+
 	page        = node("admin", "freifunk", "basics", "profile")
 	page.target = cbi("freifunk/profile")
 	page.title  = _("Profile")
@@ -102,7 +102,7 @@ function zeroes()
 	local zeroes = string.rep(string.char(0), 8192)
 	local cnt = 0
 	local lim = 1024 * 1024 * 1024
-	
+
 	http.prepare_content("application/x-many-zeroes")
 
 	while cnt < lim do
@@ -188,7 +188,6 @@ function jsonstatus()
 	root.network = {}
 	root.wireless = {devices = {}, interfaces = {}, status = {}}
 	local wifs = root.wireless.interfaces
-	local netdata = luci.sys.net.deviceinfo() or {}
 
 	for _, vif in ipairs(ffwifs) do
 		root.network[vif] = cursor:get_all("network", vif)
