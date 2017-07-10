@@ -122,6 +122,7 @@ local function _nethints(what, callback)
 	local cur = uci.cursor()
 	local ifn = { }
 	local hosts = { }
+	local lookup = { }
 
 	local function _add(i, ...)
 		local k = select(i, ...)
@@ -190,8 +191,20 @@ local function _nethints(what, callback)
 		end
 	end
 
+	for _, e in pairs(hosts) do
+		lookup[#lookup+1] = (what > 1) and e[what] or (e[2] or e[3])
+	end
+
+	if #lookup > 0 then
+		lookup = luci.util.ubus("network.rrdns", "lookup", {
+			addrs   = lookup,
+			timeout = 250,
+			limit   = 1000
+		}) or { }
+	end
+
 	for _, e in luci.util.kspairs(hosts) do
-		callback(e[1], e[2], e[3], e[4])
+		callback(e[1], e[2], e[3], lookup[e[2]] or lookup[e[3]] or e[4])
 	end
 end
 
@@ -200,17 +213,17 @@ end
 function net.mac_hints(callback)
 	if callback then
 		_nethints(1, function(mac, v4, v6, name)
-			name = name or nixio.getnameinfo(v4 or v6, nil, 100) or v4
+			name = name or v4
 			if name and name ~= mac then
-				callback(mac, name or nixio.getnameinfo(v4 or v6, nil, 100) or v4)
+				callback(mac, name or v4)
 			end
 		end)
 	else
 		local rv = { }
 		_nethints(1, function(mac, v4, v6, name)
-			name = name or nixio.getnameinfo(v4 or v6, nil, 100) or v4
+			name = name or v4
 			if name and name ~= mac then
-				rv[#rv+1] = { mac, name or nixio.getnameinfo(v4 or v6, nil, 100) or v4 }
+				rv[#rv+1] = { mac, name or v4 }
 			end
 		end)
 		return rv
@@ -222,7 +235,7 @@ end
 function net.ipv4_hints(callback)
 	if callback then
 		_nethints(2, function(mac, v4, v6, name)
-			name = name or nixio.getnameinfo(v4, nil, 100) or mac
+			name = name or mac
 			if name and name ~= v4 then
 				callback(v4, name)
 			end
@@ -230,7 +243,7 @@ function net.ipv4_hints(callback)
 	else
 		local rv = { }
 		_nethints(2, function(mac, v4, v6, name)
-			name = name or nixio.getnameinfo(v4, nil, 100) or mac
+			name = name or mac
 			if name and name ~= v4 then
 				rv[#rv+1] = { v4, name }
 			end
@@ -244,7 +257,7 @@ end
 function net.ipv6_hints(callback)
 	if callback then
 		_nethints(3, function(mac, v4, v6, name)
-			name = name or nixio.getnameinfo(v6, nil, 100) or mac
+			name = name or mac
 			if name and name ~= v6 then
 				callback(v6, name)
 			end
@@ -252,7 +265,7 @@ function net.ipv6_hints(callback)
 	else
 		local rv = { }
 		_nethints(3, function(mac, v4, v6, name)
-			name = name or nixio.getnameinfo(v6, nil, 100) or mac
+			name = name or mac
 			if name and name ~= v6 then
 				rv[#rv+1] = { v6, name }
 			end
