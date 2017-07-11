@@ -24,27 +24,12 @@ m.reset  = false
 
 nw.init(luci.model.uci.cursor_state())
 
-local ifaces = { }
-local enabled = { }
-local iface
-
-if fs.access(dbdir) then
-	for iface in fs.dir(dbdir) do
-		if iface:sub(1,1) ~= '.' then
-			ifaces[iface] = iface
-			enabled[iface] = iface
-		end
-	end
-end
-
-for _, iface in ipairs(sys.net.devices()) do
-	ifaces[iface] = iface
-end
-
-
 local s = m:section(TypedSection, "vnstat")
 s.anonymous = true
 s.addremove = false
+
+datadiroption = s:option(Value, "datadir", translate("Data directory"))
+datadiroption.optional = true
 
 mon_ifaces = s:option(Value, "interface", translate("Monitor selected interfaces"))
 mon_ifaces.template   = "cbi/network_ifacelist"
@@ -52,6 +37,32 @@ mon_ifaces.widget     = "checkbox"
 mon_ifaces.cast       = "table"
 mon_ifaces.noinactive = true
 mon_ifaces.nocreate   = true
+
+function getifaces(dbdir, section)
+	local iface
+	local ifaces = { }
+	local enabled = { }
+
+	cfgdbdir = datadiroption:cfgvalue(section)
+	if (not cfgdbdir == nil) and (not cfgdbdir == '') then
+		dbdir = cfgdbdir
+	end
+
+	if fs.access(dbdir) then
+		for iface in fs.dir(dbdir) do
+			if iface:sub(1,1) ~= '.' then
+				ifaces[iface] = iface
+				enabled[iface] = iface
+			end
+		end
+	end
+
+	for _, iface in ipairs(sys.net.devices()) do
+		ifaces[iface] = iface
+	end
+
+	return ifaces, enabled
+end
 
 function mon_ifaces.write(self, section, val)
 	local i
@@ -62,6 +73,8 @@ function mon_ifaces.write(self, section, val)
 			s[i] = true
 		end
 	end
+
+	local ifaces = getifaces(dbdir, section)
 
 	for i, _ in pairs(ifaces) do
 		if not s[i] then
