@@ -139,14 +139,12 @@ function action_connections()
 end
 
 function action_nameinfo(...)
-	local i
-	local rv = { }
-	for i = 1, select('#', ...) do
-		local addr = select(i, ...)
-		local fqdn = nixio.getnameinfo(addr)
-		rv[addr] = fqdn or (addr:match(":") and "[%s]" % addr or addr)
-	end
+	local util = require "luci.util"
 
 	luci.http.prepare_content("application/json")
-	luci.http.write_json(rv)
+	luci.http.write_json(util.ubus("network.rrdns", "lookup", {
+		addrs = { ... },
+		timeout = 5000,
+		limit = 1000
+	}) or { })
 end
