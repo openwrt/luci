@@ -174,7 +174,8 @@ local function session_retrieve(sid, allowed_users)
 	if type(sdat) == "table" and
 	   type(sdat.values) == "table" and
 	   type(sdat.values.token) == "string" and
-	   util.contains(allowed_users, sdat.values.username)
+	   (not allowed_users or
+	    util.contains(allowed_users, sdat.values.username))
 	then
 		return sid, sdat.values
 	end
@@ -182,25 +183,27 @@ local function session_retrieve(sid, allowed_users)
 	return nil, nil
 end
 
-local function session_setup(user, pass)
-	local login = util.ubus("session", "login", {
-		username = user,
-		password = pass,
-		timeout  = tonumber(luci.config.sauth.sessiontime)
-	})
-
-	if type(login) == "table" and
-	   type(login.ubus_rpc_session) == "string"
-	then
-		util.ubus("session", "set", {
-			ubus_rpc_session = login.ubus_rpc_session,
-			values = { token = sys.uniqueid(16) }
+local function session_setup(user, pass, allowed_users)
+	if util.contains(allowed_users, user) then
+		local login = util.ubus("session", "login", {
+			username = user,
+			password = pass,
+			timeout  = tonumber(luci.config.sauth.sessiontime)
 		})
 
-		return login.ubus_rpc_session
+		if type(login) == "table" and
+		   type(login.ubus_rpc_session) == "string"
+		then
+			util.ubus("session", "set", {
+				ubus_rpc_session = login.ubus_rpc_session,
+				values = { token = sys.uniqueid(16) }
+			})
+
+			return session_retrieve(login.ubus_rpc_session)
+		end
 	end
 
-	return nil
+	return nil, nil
 end
 
 function dispatch(request)
@@ -350,6 +353,11 @@ function dispatch(request)
 		local authen = track.sysauth_authenticator
 		local _, sid, sdat, default_user, allowed_users
 
+		if type(authen) == "string" and authen ~= "htmlauth" then
+			error500("Unsupported authenticator %q configured" % authen)
+			return
+		end
+
 		if type(track.sysauth) == "table" then
 			default_user, allowed_users = nil, track.sysauth
 		else
@@ -358,44 +366,39 @@ function dispatch(request)
 
 		if type(authen) == "function" then
 			_, sid = authen(sys.user.checkpasswd, allowed_users)
-		elseif authen == "htmlauth" then
-			sid, sdat = session_retrieve(http.getcookie("sysauth"), allowed_users)
-
-			if not sid then
-				local user = http.getenv("HTTP_AUTH_USER")
-				local pass = http.getenv("HTTP_AUTH_PASS")
-
-				if user == nil and pass == nil then
-					user = http.formvalue("luci_username")
-					pass = http.formvalue("luci_password")
-				end
-
-				if util.contains(allowed_users, user) then
-					sid, sdat = session_setup(user, pass), nil
-				end
-
-				if not sid then
-					require("luci.i18n")
-					require("luci.template")
-					context.path = {}
-					http.status(403, "Forbidden")
-					luci.template.render(track.sysauth_template or "sysauth", {
-						duser = default_user,
-						fuser = user
-					})
-					return
-				end
-
-				http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sid, build_url() })
-				http.redirect(build_url(unpack(ctx.requestpath)))
-			end
 		else
-			error500("Unsupported authenticator configured")
-			return
+			sid = http.getcookie("sysauth")
 		end
 
-		if not sdat then
-			sid, sdat = session_retrieve(sid, allowed_users)
+		sid, sdat = session_retrieve(sid, allowed_users)
+
+		if not (sid and sdat) and authen == "htmlauth" then
+			local user = http.getenv("HTTP_AUTH_USER")
+			local pass = http.getenv("HTTP_AUTH_PASS")
+
+			if user == nil and pass == nil then
+				user = http.formvalue("luci_username")
+				pass = http.formvalue("luci_password")
+			end
+
+			sid, sdat = session_setup(user, pass, allowed_users)
+
+			if not sid then
+				local tmpl = require "luci.template"
+
+				context.path = {}
+
+				http.status(403, "Forbidden")
+				tmpl.render(track.sysauth_template or "sysauth", {
+					duser = default_user,
+					fuser = user
+				})
+
+				return
+			end
+
+			http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sid, build_url() })
+			http.redirect(build_url(unpack(ctx.requestpath)))
 		end
 
 		if not sid or not sdat then
