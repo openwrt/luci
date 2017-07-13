@@ -1,0 +1,11 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@acme[-1]
+	add ucitrack acme
+        add_list ucitrack.@bcp38[0].init=acme
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0
