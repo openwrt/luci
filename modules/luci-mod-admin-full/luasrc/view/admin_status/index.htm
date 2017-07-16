@@ -563,7 +563,7 @@
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + (1 + (i % 2));
 
 					var icon;
-					var q = (-1 * (assoclist[i].noise - assoclist[i].signal)) / 5;
+					var q = Math.abs((assoclist[i].noise - assoclist[i].signal)) / 5;
 					if (q < 1)
 						icon = "<%=resource%>/icons/signal-0.png";
 					else if (q < 2)
