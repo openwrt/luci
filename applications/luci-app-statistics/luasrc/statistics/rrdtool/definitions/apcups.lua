@@ -5,18 +5,34 @@ module("luci.statistics.rrdtool.definitions.apcups",package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
-	local voltages = {
-		title = "%H: Voltages on APC UPS ",
-		vlabel = "V",
+	local voltagesdc = {
+		title = "%H: Voltages on APC UPS - Battery",
+		vlabel = "Volts DC",
+    alt_autoscale = true,
 		number_format = "%5.1lfV",
 		data = {
 			instances = {
-				voltage = { "battery", "input", "output" }
+				voltage = { "battery" }
+			},
+
+			options = { 
+				voltage = { title = "Battery voltage", noarea=true }
+			}
+		}
+	}
+	
+	local voltages = {
+		title = "%H: Voltages on APC UPS - AC",
+		vlabel = "Volts AC",
+		alt_autoscale = true,
+		number_format = "%5.1lfV",
+		data = {
+			instances = {
+				voltage = {  "input", "output" }
 			},
 
 			options = {
 				voltage_output  = { color = "00e000", title = "Output voltage", noarea=true, overlay=true },
-				voltage_battery = { color = "0000ff", title = "Battery voltage", noarea=true, overlay=true },
 				voltage_input   = { color = "ffb000", title = "Input voltage", noarea=true, overlay=true }
 			}
 		}
@@ -97,5 +113,5 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		}
 	}
 
-	return { voltages, percentload, charge_percent, temperature, timeleft, frequency }
+	return { voltages, voltagesdc, percentload, charge_percent, temperature, timeleft, frequency }
 end
