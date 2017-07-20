@@ -348,8 +348,10 @@ end
 
 function net.devices()
 	local devs = {}
+	local seen = {}
 	for k, v in ipairs(nixio.getifaddrs()) do
-		if v.family == "packet" then
+		if v.name and not seen[v.name] then
+			seen[v.name] = true
 			devs[#devs+1] = v.name
 		end
 	end
