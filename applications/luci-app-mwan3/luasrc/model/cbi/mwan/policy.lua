@@ -42,7 +42,7 @@ mwan_policy = m5:section(TypedSection, "policy", translate("Policies"),
 	"Policies may not share the same name as configured interfaces, members or rules"))
 	mwan_policy.addremove = true
 	mwan_policy.dynamic = false
-	mwan_policy.sectionhead = "Policy"
+	mwan_policy.sectionhead = translate("Policy")
 	mwan_policy.sortable = true
 	mwan_policy.template = "cbi/tblsection"
 	mwan_policy.extedit = ds.build_url("admin", "network", "mwan", "configuration", "policy", "%s")
@@ -65,7 +65,6 @@ use_member = mwan_policy:option(DummyValue, "use_member", translate("Members ass
 		else
 			return "&#8212;"
 		end
-		
 	end
 
 last_resort = mwan_policy:option(DummyValue, "last_resort", translate("Last resort"))
@@ -73,11 +72,11 @@ last_resort = mwan_policy:option(DummyValue, "last_resort", translate("Last reso
 	function last_resort.cfgvalue(self, s)
 		local action = self.map:get(s, "last_resort")
 		if action == "blackhole" then
-			return "blackhole (drop)"
+			return translate("blackhole (drop)")
 		elseif action == "default" then
-			return "default (use main routing table)"
+			return translate("default (use main routing table)")
 		else
-			return "unreachable (reject)"
+			return translate("unreachable (reject)")
 		end
 	end
 

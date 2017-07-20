@@ -21,19 +21,19 @@
 					switch (mArray.wans[i].status)
 					{
 						case 'online':
-							status = 'Online (tracking active)';
+							status = '<%:Online (tracking active)%>';
 							css = 'wanon';
 							break;
 						case 'notMonitored':
-							status = 'Online (tracking off)';
+							status = '<%:Online (tracking off)%>';
 							css = 'wanon';
 							break;
 						case 'offline':
-							status = 'Offline';
+							status = '<%:Offline%>';
 							css = 'wanoff';
 							break;
 						case 'notEnabled':
-							status = 'Disabled';
+							status = '<%:Disabled%>';
 							css = 'wanoff';
 							break;
 					}
@@ -46,18 +46,18 @@
 			}
 			else
 			{
-				statusDiv.innerHTML = '<strong>No MWAN interfaces found</strong>';
+				statusDiv.innerHTML = '<strong><%:No MWAN interfaces found%></strong>';
 			}
 
 			var logs = document.getElementById('mwan_statuslog_text');
 			if (mArray.mwanlog)
 			{
-				var mwanLog = 'Last 50 MWAN systemlog entries. Newest entries sorted at the top :';
+				var mwanLog = '<%:Last 50 MWAN systemlog entries. Newest entries sorted at the top :%>';
 				logs.innerHTML = String.format('<pre>%s<br /><br />%s</pre>', mwanLog, mArray.mwanlog[0]);
 			}
 			else
 			{
-				logs.innerHTML = '<strong>No MWAN systemlog history found</strong>';
+				logs.innerHTML = '<strong><%:No MWAN systemlog history found%></strong>';
 			}
 		}
 	);
@@ -66,11 +66,11 @@
 <div id="mwan_interface_status">
 	<fieldset id="interface_field" class="cbi-section">
 		<legend><%:MWAN Interface Live Status%></legend>
-		<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+		<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
 	</fieldset>
 	<fieldset class="cbi-section">
 		<legend><%:MWAN Interface Systemlog%></legend>
-		<div id="mwan_statuslog_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+		<div id="mwan_statuslog_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
 	</fieldset>
 </div>
 
