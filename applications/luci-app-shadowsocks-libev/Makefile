@@ -1,13 +1,15 @@
 #
-# Copyright (C) 2008-2014 The LuCI Team <luci@lists.subsignal.org>
+# Copyright (C) 2017 Yousong Zhou <yszhou4tech@gmail.com>
 #
 # This is free software, licensed under the Apache License, Version 2.0 .
 #
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=LuCI Support for Shadowsocks-libev
+LUCI_TITLE:=LuCI Support for shadowsocks-libev
 LUCI_DEPENDS:=
+
+PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk
 

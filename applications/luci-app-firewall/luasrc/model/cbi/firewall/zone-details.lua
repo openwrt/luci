@@ -21,7 +21,7 @@ nw.init(m.uci)
 
 local zone = fw:get_zone(arg[1])
 if not zone then
-	luci.http.redirect(dsp.build_url("admin/network/firewall/zones"))
+	luci.http.redirect(ds.build_url("admin/network/firewall/zones"))
 	return
 else
 	m.title = "%s - %s" %{

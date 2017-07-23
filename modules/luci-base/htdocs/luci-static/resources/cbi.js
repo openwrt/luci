@@ -727,7 +727,7 @@ function cbi_filebrowser(id, defpath) {
 	browser.focus();
 }
 
-function cbi_browser_init(id, defpath)
+function cbi_browser_init(id, resource, defpath)
 {
 	function cbi_browser_btnclick(e) {
 		cbi_filebrowser(id, defpath);
@@ -738,7 +738,7 @@ function cbi_browser_init(id, defpath)
 
 	var btn = document.createElement('img');
 	btn.className = 'cbi-image-button';
-	btn.src = cbi_strings.path.resource + '/cbi/folder.gif';
+	btn.src = (resource || cbi_strings.path.resource) + '/cbi/folder.gif';
 	field.parentNode.insertBefore(btn, field.nextSibling);
 
 	cbi_bind(btn, 'click', cbi_browser_btnclick);
@@ -805,7 +805,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 			parent.appendChild(b);
 			if (datatype == 'file')
 			{
-				cbi_browser_init(t.id, parent.getAttribute('data-browser-path'));
+				cbi_browser_init(t.id, null, parent.getAttribute('data-browser-path'));
 			}
 
 			parent.appendChild(document.createElement('br'));
