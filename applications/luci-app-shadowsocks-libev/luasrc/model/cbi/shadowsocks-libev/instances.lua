@@ -15,19 +15,10 @@ m = Map("shadowsocks-libev",
 
 local instances = {}
 local cfgtypes = { "ss_local", "ss_redir", "ss_server", "ss_tunnel" }
-local instances_data = ut.ubus("service", "list", {name = "shadowsocks-libev"})["shadowsocks-libev"]
-if instances_data ~= nil then
-	instances_data = instances_data["instances"]
-end
 
 for sname, sdata in pairs(m:get()) do
 	local key, value = ss.cfgvalue_overview(sdata)
 	if key ~= nil then
-		if instances_data and instances_data[key] and instances_data[key]["running"] then
-			value["running"] = "yes"
-		else
-			value["running"] = "no"
-		end
 		instances[key] = value
 	end
 end

@@ -19,4 +19,15 @@ function index()
 	entry({"admin", "services", "shadowsocks-libev", "rules"},
 		cbi("shadowsocks-libev/rules"),
 		_("Redir Rules"), 30).leaf = true
+
+	entry({"admin", "services", "shadowsocks-libev", "status"}, call("ss_status"), nil).leaf = true
+
+end
+
+function ss_status()
+	local ut = require "luci.util"
+	local rv = ut.ubus("service", "list", {name = "shadowsocks-libev"})["shadowsocks-libev"] or {_=0}
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
 end
