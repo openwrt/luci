@@ -35,9 +35,13 @@ This is free software, licensed under the Apache License, Version 2.0
     local ssid = s.ssid or ""
     local encryption = s.encryption or ""
     local disabled = s.disabled or ""
+    local style = "color:#000000"
+    if disabled == "0" then
+      style = "color:#0069d6"
+    end
     if iface == trmiface then
 %>
-    <tr class="cbi-section-table-row cbi-rowstyle-6"> 
+    <tr class="cbi-section-table-row cbi-rowstyle-6" style="<%=style%>">
       <td style="text-align:left"><%=device%></td>
       <td style="text-align:left"><%=mode%></td>
       <td style="text-align:left"><%=iface%></td>

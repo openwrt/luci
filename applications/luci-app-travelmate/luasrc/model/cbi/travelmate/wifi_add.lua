@@ -22,8 +22,12 @@ m.hidden = {
 	wpa_version = http.formvalue("wpa_version")
 }
 
-wssid = m:field(Value, "ssid", translate("SSID"))
-wssid.default = m.hidden.ssid
+if m.hidden.ssid ~= "" then
+	wssid = m:field(Value, "ssid", translate("SSID"))
+	wssid.default = m.hidden.ssid
+else
+	wssid = m:field(Value, "ssid", translate("SSID (hidden)"))
+end
 
 if (tonumber(m.hidden.wep) or 0) == 1 then
 	wkey = m:field(Value, "key", translate("WEP passphrase"),
