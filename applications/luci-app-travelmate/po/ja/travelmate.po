@@ -7,17 +7,19 @@ msgstr ""
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.3\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Language: ja\n"
 
-msgid "<br />&nbsp;Network Interface 'trm_wwan' created successfully."
-msgstr ""
-"<br />&nbsp;ネットワーク インターフェース 'trm_wwan' の作成に成功しました。"
-
 msgid "Add Interface"
 msgstr "インターフェースの追加"
+
+msgid "Add Uplink"
+msgstr "アップリンクの追加"
+
+msgid "Add Wireless Uplink Configuration"
+msgstr "無線アップリンク追加の設定"
 
 msgid ""
 "Additional trigger delay in seconds before travelmate processing begins."
@@ -26,12 +28,8 @@ msgstr "Travelmate の処理が開始されるまでの、追加の遅延時間�
 msgid "Advanced"
 msgstr "詳細設定"
 
-msgid ""
-"Automatically create a new wireless wan uplink interface 'trm_wwan', "
-"configure it to use dhcp and"
-msgstr ""
-"新しい無線 WAN インターフェース 'trm_wwan' を自動的に作成し、 DHCP を使用する"
-"よう構成して"
+msgid "Back to overview"
+msgstr "概要へ戻る"
 
 msgid ""
 "Configuration of the travelmate package to to enable travel router "
@@ -45,6 +43,27 @@ msgstr "接続制限"
 msgid "Create Uplink Interface"
 msgstr "アップリンク インターフェースの作成"
 
+msgid ""
+"Create a new wireless wan uplink interface, configure it to use dhcp and"
+msgstr ""
+"新規の無線 WAN アップリンク インターフェースを作成し、 DHCP を使用するよう構"
+"成して"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Delete this Uplink"
+msgstr "このアップリンクを削除"
+
+msgid "Device"
+msgstr "デバイス"
+
+msgid "Disabled"
+msgstr "無効"
+
+msgid "Edit"
+msgstr "編集"
+
 msgid "Edit Firewall Configuration"
 msgstr "ファイアウォール設定の編集"
 
@@ -57,6 +76,12 @@ msgstr "Travelmate 設定の編集"
 msgid "Edit Wireless Configuration"
 msgstr "無線設定の編集"
 
+msgid "Edit Wireless Uplink Configuration"
+msgstr "無線アップリンク設定の編集"
+
+msgid "Edit this Uplink"
+msgstr "このアップリンクを編集"
+
 msgid "Enable 'automatic' mode"
 msgstr "'automatic' モードの有効化"
 
@@ -66,15 +91,21 @@ msgstr "Travelmate の有効化"
 msgid "Enable verbose debug logging"
 msgstr "詳細なデバッグ ログの有効化"
 
+msgid "Encryption"
+msgstr "暗号化"
+
 msgid "Extra options"
 msgstr "拡張オプション"
+
+msgid "Find and join network on"
+msgstr "ネットワークの検索と参加:"
 
 msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">see online "
 "documentation</a>"
 msgstr ""
-"詳細な情報は <a href=\"%s\" target=\"_blank\">オンライン ドキュメント</a>を確"
-"認してください。"
+"詳細な情報は <a href=\"%s\" target=\"_blank\">オンライン ドキュメント</a> を"
+"確認してください。"
 
 msgid "How long should travelmate wait for a successful wlan interface reload"
 msgstr ""
@@ -82,16 +113,16 @@ msgstr ""
 "す。"
 
 msgid "How many times should travelmate try to connect to an Uplink"
-msgstr "Travelmate がアップリンクに対して接続を試行する回数です。"
+msgstr "Travelmate がアップリンクへの接続を試行する回数です。"
 
 msgid "Input file not found, please check your configuration."
 msgstr "入力ファイルが見つかりません。設定を確認してください。"
 
-msgid "Interface Setup"
-msgstr "インターフェース設定"
-
 msgid "Interface Timeout"
 msgstr "インターフェース タイムアウト"
+
+msgid "Interface Wizard"
+msgstr "インターフェース ウィザード"
 
 msgid "Keep travelmate in an active state."
 msgstr "Travelmate をアクティブ状態で維持します。"
@@ -99,8 +130,18 @@ msgstr "Travelmate をアクティブ状態で維持します。"
 msgid "Last rundate"
 msgstr "最終実行日時"
 
+msgid "Mode"
+msgstr "モード"
+
+msgid "Name of the uplink interface that triggers travelmate processing."
+msgstr ""
+"Travelmate の処理のトリガーとなる、アップリンク インターフェースの名前です。"
+
 msgid "Online Status"
 msgstr "オンライン ステータス"
+
+msgid "Open"
+msgstr "オープン"
 
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
@@ -112,11 +153,22 @@ msgstr "全体タイムアウト"
 msgid "Overview"
 msgstr "概要"
 
+msgid "Passphrase (%s)"
+msgstr "暗号フレーズ (%s)"
+
+msgid ""
+"Provides an overview of all configured uplink interfaces for travelmate. You "
+"can edit and delete existing interfaces or scan for new uplinks."
+msgstr ""
+"Travelmate における、全ての設定済みアップリンク インターフェースの一覧です。"
+"既存のインターフェースを編集または削除したり、新規アップリンクの追加のために"
+"スキャンを行うことができます。"
+
 msgid "Radio selection"
 msgstr "無線の選択"
 
-msgid "Restrict interface trigger to certain interface(s)"
-msgstr "インターフェース トリガーを特定のインターフェースに限定する"
+msgid "Repeat scan"
+msgstr "再スキャン"
 
 msgid "Restrict travelmate to a dedicated radio, e.g. 'radio0'"
 msgstr "Travelmate が特定の無線に接続するようにします。例: 'radio0'"
@@ -124,26 +176,23 @@ msgstr "Travelmate が特定の無線に接続するようにします。例: 'r
 msgid "Runtime information"
 msgstr "実行情報"
 
-msgid ""
-"Scan &amp; Add new wireless stations via standard <a href=\"%s\">Wireless "
-"Setup</a>"
-msgstr ""
-"通常の<a href=\"%s\">無線設定</a>にて、新規の無線ステーションのスキャン及び追"
-"加を行います。"
+msgid "SSID"
+msgstr "SSID"
 
-msgid ""
-"Space separated list of interfaces that trigger travelmate processing. To "
-"disable event driven (re-)starts remove all entries."
-msgstr ""
-"Travelmate の処理のトリガーとなる、スペースで区切られたインターフェースのリス"
-"トです。処理を発生させるイベントを無効にするには、全てのエントリーを削除して"
-"空欄にします。"
+msgid "Scan"
+msgstr "スキャン:"
+
+msgid "Signal strength"
+msgstr "信号強度"
+
+msgid "Specify the secret encryption key here."
+msgstr "暗号キーを設定します。"
 
 msgid "Station Interface"
 msgstr "ステーション インターフェース"
 
 msgid "Station Radio"
-msgstr "ステーション 無線"
+msgstr "ステーション電波"
 
 msgid "Station SSID"
 msgstr "ステーション SSID"
@@ -198,8 +247,41 @@ msgstr "Travelmate バージョン"
 msgid "Trigger delay"
 msgstr "トリガー遅延"
 
+msgid "Unknown"
+msgstr "不明"
+
+msgid "Uplink / Trigger interface"
+msgstr "アップリンク/トリガー インターフェース"
+
+msgid "Uplink Interface"
+msgstr "アップリンク インターフェース"
+
+msgid "Uplink SSID"
+msgstr "アップリンク SSID"
+
+msgid "Uplink interface"
+msgstr "アップリンク インターフェース"
+
 msgid "View Logfile"
 msgstr "ログファイルの確認"
+
+msgid "WEP"
+msgstr "WEP"
+
+msgid "WEP passphrase"
+msgstr "WEP 暗号キー"
+
+msgid "WPA / WPA2"
+msgstr "WPA / WPA2"
+
+msgid "WPA passphrase"
+msgstr "WPA 暗号キー"
+
+msgid "Wireless Scan"
+msgstr "無線スキャン"
+
+msgid "Wireless Stations"
+msgstr "無線ステーション"
 
 msgid ""
 "add it to the wan zone of the firewall. This step has only to be done once."
@@ -210,126 +292,11 @@ msgstr ""
 msgid "connected"
 msgstr "接続済み"
 
+msgid "hidden"
+msgstr "（不明）"
+
 msgid "n/a"
 msgstr "利用不可"
 
 msgid "not connected"
 msgstr "未接続"
-
-#~ msgid "."
-#~ msgstr "。"
-
-#~ msgid ""
-#~ "Automatically create a new wireless wan interface, configure it to use "
-#~ "dhcp and add it to the wan zone of the firewall. This step has only to be "
-#~ "done once."
-#~ msgstr ""
-#~ "新しい無線 WAN インターフェースを自動的に作成し、DHCP を使用するよう構成し"
-#~ "てファイアウォールの wan ゾーンに追加します。このステップは、一度だけ実行"
-#~ "する必要があります。"
-
-#~ msgid "Direct Link: <a href=\"%s\">Wireless Setup</a>"
-#~ msgstr "ダイレクト リンク: <a href=\"%s\">無線設定</a>"
-
-#~ msgid "For further information"
-#~ msgstr "詳細情報は"
-
-#~ msgid "Name of the new wireless wan interface"
-#~ msgstr "新しい無線 WAN のインターフェース名"
-
-#~ msgid ""
-#~ "Network Interface '%s' created successfully. Feel free to scan & add new "
-#~ "stations via standard wireless setup."
-#~ msgstr ""
-#~ "ネットワーク インターフェース '%s' の作成に成功しました。通常の無線設定に"
-#~ "て、スキャン及び新規ステーションの追加が可能です。"
-
-#~ msgid "Setup WWAN Interface"
-#~ msgstr "WWAN インターフェース設定"
-
-#~ msgid ""
-#~ "The allowed characters are: <code>A-Z</code>, <code>a-z</code>, "
-#~ "<code>0-9</code> and <code>_</code> (3-15 characters)."
-#~ msgstr ""
-#~ "使用可能文字: <code>A-Z</code>, <code>a-z</code>, <code>0-9</code> and "
-#~ "<code>_</code>（3 - 15文字)"
-
-#~ msgid "The given network interface name already exist"
-#~ msgstr "入力されたネットワーク インターフェース名は、既に存在しています。"
-
-#~ msgid "see online documentation"
-#~ msgstr "オンライン ドキュメントを確認してください"
-
-#~ msgid ""
-#~ "Brief advice: Create a wwan interface, configure it to use dhcp and add "
-#~ "it to the wan zone in firewall. Create the wifi interfaces to be used "
-#~ "('client' mode, assigned to wwan network, left as disabled). Travelmate "
-#~ "will try to connect to the known wifi client interfaces in the defined "
-#~ "order."
-#~ msgstr ""
-#~ "簡単な解説: 予めWWANインターフェースを作成し、DHCPを使用するよう構成して"
-#~ "ファイアウォールのWANゾーンに追加します。また、使用される無線インター"
-#~ "フェースを作成しておきます（\"クライアント\" モード、WWANに割り当て、無効"
-#~ "状態）。Travelmateは、登録されている順序で既知の無線クライアント インター"
-#~ "フェースへの接続を試行します。"
-
-#~ msgid ""
-#~ "Configuration of the Travelmate package to enable travel router "
-#~ "functionality."
-#~ msgstr "トラベル ルータ機能を有効にする、Travelmate パッケージの設定です。"
-
-#~ msgid "Debug logging"
-#~ msgstr "デバッグ ログ"
-
-#~ msgid "Default 20, range 10-60"
-#~ msgstr "既定値 20、範囲 10 - 60"
-
-#~ msgid "Default 3, range 1-10"
-#~ msgstr "既定値 3、範囲 1 - 10"
-
-#~ msgid "Disable this if you want to use iwinfo instead of iw"
-#~ msgstr "iw の代わりに iwinfo を使用したい場合、この設定を無効にします。"
-
-#~ msgid "Enable Travelmate"
-#~ msgstr "Travelmateの有効化"
-
-#~ msgid "Global options"
-#~ msgstr "全般オプション"
-
-#~ msgid "Link to detailed advice"
-#~ msgstr "詳細な解説へのリンク"
-
-#~ msgid "Max. number of connection retries to an uplink"
-#~ msgstr "確立までの接続試行回数"
-
-#~ msgid "Max. timeout in seconds for wlan interface reload"
-#~ msgstr "無線LANインターフェース リロード時の最大待機時間（秒）"
-
-#~ msgid "Restrict reload trigger to certain interface(s)"
-#~ msgstr "リロード トリガを特定のインターフェースに限定する"
-
-#~ msgid ""
-#~ "Space separated list of wwan interfaces that trigger reload action. To "
-#~ "disable reload trigger set it to 'false'. Default: empty"
-#~ msgstr ""
-#~ "リロード動作のトリガとなる、スペースで区切られたWWAN インターフェースのリ"
-#~ "ストです。リロードのトリガを無効にするには、'false' を設定します。既定値:"
-#~ "（空）"
-
-#~ msgid "Use iw for scanning"
-#~ msgstr "スキャンに iw を使用する"
-
-#~ msgid "Default 3, range 0-10. Set to 0 to allow unlimited retries"
-#~ msgstr "既定値 3、範囲 0 - 10。再試行回数を制限しない場合、0 に設定します。"
-
-#~ msgid "Default 30, range 5-60"
-#~ msgstr "既定値 30、範囲 5 - 60"
-
-#~ msgid "Default: empty = use all radios."
-#~ msgstr "デフォルト:（空）= 全ての無線を使用"
-
-#~ msgid "Loop timeout in seconds for wlan monitoring"
-#~ msgstr "無線LAN モニターのループ タイムアウト（秒）"
-
-#~ msgid "Use only one radio, e.g. 'radio0'"
-#~ msgstr "単一の無線のみ使用する　例: 'radio0'"
