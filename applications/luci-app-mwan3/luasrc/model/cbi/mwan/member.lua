@@ -13,7 +13,7 @@ mwan_member = m5:section(TypedSection, "member", translate("Members"),
 	"Members may not share the same name as configured interfaces, policies or rules"))
 	mwan_member.addremove = true
 	mwan_member.dynamic = false
-	mwan_member.sectionhead = "Member"
+	mwan_member.sectionhead = translate("Member")
 	mwan_member.sortable = true
 	mwan_member.template = "cbi/tblsection"
 	mwan_member.extedit = ds.build_url("admin", "network", "mwan", "configuration", "member", "%s")

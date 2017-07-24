@@ -13,19 +13,19 @@
 					switch (mArray.wans[i].status)
 					{
 						case 'online':
-							stat = 'Online (tracking active)';
+							stat = '<%:Online (tracking active)%>';
 							cssc = 'wanon';
 							break;
 						case 'notMonitored':
-							stat = 'Online (tracking off)';
+							stat = '<%:Online (tracking off)%>';
 							cssc = 'wanon';
 							break;
 						case 'offline':
-							stat = 'Offline';
+							stat = '<%:Offline%>';
 							cssc = 'wanoff';
 							break;
 						case 'notEnabled':
-							stat = 'Disabled';
+							stat = '<%:Disabled%>';
 							cssc = 'wanoff';
 							break;
 					}
@@ -38,7 +38,7 @@
 			}
 			else
 			{
-				status.innerHTML = '<strong>No MWAN interfaces found</strong>';
+				status.innerHTML = '<strong><%:No MWAN interfaces found%></strong>';
 			}
 		}
 	);
@@ -46,7 +46,7 @@
 
 <fieldset id="interface_field" class="cbi-section">
 	<legend><%:MWAN Interface Live Status%></legend>
-	<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /> Collecting data...</div>
+	<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
 </fieldset>
 
 <style type="text/css">

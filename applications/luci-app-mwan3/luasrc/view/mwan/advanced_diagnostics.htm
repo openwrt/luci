@@ -33,14 +33,14 @@
 			{
 				output.innerHTML =
 					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
-					"Waiting for MWAN to " + task + "..."
+					String.format("<%:Waiting for MWAN to %s...%>", task)
 				;
 			}
 			else
 			{
 				output.innerHTML =
 					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
-					"Waiting for diagnostic results..."
+					"<%:Waiting for diagnostic results...%>"
 				;
 			}
 
@@ -56,7 +56,7 @@
 				}
 				else
 				{
-					output.innerHTML = '<pre id="diag_output_css"><strong>No diagnostic results returned</strong></pre>';
+					output.innerHTML = '<pre id="diag_output_css"><strong><%:No diagnostic results returned%></strong></pre>';
 				}
 			}
 		);
