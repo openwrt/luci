@@ -26,6 +26,7 @@ function index()
 	entry({"admin", "services", "travelmate", "wifiadd"}, cbi("travelmate/wifi_add", {hideresetbtn=true, hidesavebtn=true})).leaf = true
 	entry({"admin", "services", "travelmate", "wifiedit"}, cbi("travelmate/wifi_edit", {hideresetbtn=true, hidesavebtn=true})).leaf = true
 	entry({"admin", "services", "travelmate", "wifidelete"}, cbi("travelmate/wifi_delete", {hideresetbtn=true, hidesavebtn=true})).leaf = true
+	entry({"admin", "services", "travelmate", "wifiorder"}, cbi("travelmate/wifi_order", {hideresetbtn=true, hidesavebtn=true})).leaf = true
 end
 
 function logread()
