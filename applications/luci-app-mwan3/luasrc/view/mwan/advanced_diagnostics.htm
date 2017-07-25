@@ -24,7 +24,7 @@
 <script type="text/javascript">//<![CDATA[
 	var stxhr = new XHR();
 
-	function update_status(tool, task)
+	function update_status(tool, task, task_name)
 	{
 		var iface = document.getElementById('mwaniface').value;
 		var output = document.getElementById('diag_output');
@@ -33,7 +33,7 @@
 			{
 				output.innerHTML =
 					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
-					String.format("<%:Waiting for MWAN to %s...%>", task)
+					String.format("<%:Waiting for MWAN to %s...%>", task_name)
 				;
 			}
 			else
@@ -70,20 +70,20 @@
 			<% for z in interfaceNames:gmatch("[^ ]+") do -%><option value="<%=z%>"><%=z%></option><%- end %>
 		</select>
 		<div id="buttoncss">
-			<input type="button" value="<%:Ping default gateway%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'gateway')" />
-			<input type="button" value="<%:Ping tracking IP%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'track_ip')" />
-			<input type="button" value="<%:Check IP rules%>" class="cbi-button cbi-button-apply" onclick="update_status('rulechk', null)" />
-			<input type="button" value="<%:Check routing table%>" class="cbi-button cbi-button-apply" onclick="update_status('routechk', null)" />
-			<input type="button" value="<%:Hotplug ifup%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifup')" />
-			<input type="button" value="<%:Hotplug ifdown%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifdown')" />
+			<input type="button" value="<%:Ping default gateway%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'gateway', null)" />
+			<input type="button" value="<%:Ping tracking IP%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'track_ip', null)" />
+			<input type="button" value="<%:Check IP rules%>" class="cbi-button cbi-button-apply" onclick="update_status('rulechk', null, null)" />
+			<input type="button" value="<%:Check routing table%>" class="cbi-button cbi-button-apply" onclick="update_status('routechk', null, null)" />
+			<input type="button" value="<%:Hotplug ifup%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifup', null)" />
+			<input type="button" value="<%:Hotplug ifdown%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifdown', null)" />
 		</div>
 	</fieldset>
 	<fieldset id="diag_select" class="cbi-section">
 		<legend><%:MWAN Service Control%></legend>
 		<div id="buttoncss">
-			<input type="button" value="<%:Restart MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'restart')" />
-			<input type="button" value="<%:Stop MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'stop')" />
-			<input type="button" value="<%:Start MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'start')" />
+			<input type="button" value="<%:Restart MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'restart', '<%:restart%>')" />
+			<input type="button" value="<%:Stop MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'stop', '<%:stop%>')" />
+			<input type="button" value="<%:Start MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'start', '<%:start%>')" />
 		</div>
 	</fieldset>
 	<fieldset class="cbi-section" style="display:none">
