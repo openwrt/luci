@@ -481,8 +481,9 @@ function cbi_d_check(deps) {
 				istat = (istat && cbi_d_checkvalue(j, deps[i][j]))
 			}
 		}
-		if (istat) {
-			return !reverse;
+
+		if (istat ^ reverse) {
+			return true;
 		}
 	}
 	return def;
@@ -648,9 +649,6 @@ function cbi_combobox(id, values, def, man, focus) {
 	var dt = obj.getAttribute('cbi_datatype');
 	var op = obj.getAttribute('cbi_optional');
 
-	if (dt)
-		cbi_validate_field(sel, op == 'true', dt);
-
 	if (!values[obj.value]) {
 		if (obj.value == "") {
 			var optdef = document.createElement("option");
@@ -684,6 +682,9 @@ function cbi_combobox(id, values, def, man, focus) {
 	sel.appendChild(optman);
 
 	obj.style.display = "none";
+
+	if (dt)
+		cbi_validate_field(sel, op == 'true', dt);
 
 	cbi_bind(sel, "change", function() {
 		if (sel.selectedIndex == sel.options.length - 1) {
