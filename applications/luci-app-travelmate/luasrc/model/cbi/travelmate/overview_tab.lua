@@ -35,12 +35,8 @@ if uplink == "" then
 	o.default = "trm_wwan"
 	o.rmempty = false
 
-	function o.validate(self, value)
-		iface = value
-		return iface
-	end
-
 	function o.write(self, section, value)
+		iface = o:formvalue(section)
 		uci:set("travelmate", section, "trm_iface", iface)
 		uci:save("travelmate")
 		uci:commit("travelmate")
@@ -77,12 +73,22 @@ o1.default = o1.disabled
 o1.rmempty = false
 
 o2 = s:option(Flag, "trm_automatic", translate("Enable 'automatic' mode"),
-	translate("Keep travelmate in an active state."))
+	translate("Keep travelmate in an active state. Check every n seconds the connection status, i.e. the uplink availability."))
 o2.default = o2.enabled
 o2.rmempty = false
 
+btn = s:option(Button, "", translate("Manual Rescan"))
+btn:depends("trm_automatic", "")
+btn.inputtitle = translate("Rescan")
+btn.inputstyle = "find"
+btn.disabled = false
+function btn.write()
+	luci.sys.call("/etc/init.d/travelmate start >/dev/null 2>&1")
+	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+end
+
 o3 = s:option(Value, "trm_iface", translate("Uplink / Trigger interface"),
-	translate("Name of the uplink interface that triggers travelmate processing."))
+	translate("Name of the uplink interface that triggers travelmate processing in 'manual' mode."))
 o3.datatype = "and(uciname,rangelength(3,15))"
 o3.default = "trm_wwan"
 o3.rmempty = false
