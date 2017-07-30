@@ -36,7 +36,8 @@ function tmpl.write(self, section, value)
 end
 
 
-s = m:section(TypedSection, "sambashare", translate("Shared Directories"))
+s = m:section(TypedSection, "sambashare", translate("Shared Directories")
+  , translate("Please add directories to share. Each directory refers to a folder on a mounted device."))
 s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"
