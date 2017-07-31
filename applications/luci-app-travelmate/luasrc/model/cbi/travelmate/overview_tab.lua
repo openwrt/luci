@@ -90,7 +90,7 @@ end
 o3 = s:option(Value, "trm_iface", translate("Uplink / Trigger interface"),
 	translate("Name of the uplink interface that triggers travelmate processing in 'manual' mode."))
 o3.datatype = "and(uciname,rangelength(3,15))"
-o3.default = "trm_wwan"
+o3.default = trmiface
 o3.rmempty = false
 
 o4 = s:option(Value, "trm_triggerdelay", translate("Trigger delay"),
