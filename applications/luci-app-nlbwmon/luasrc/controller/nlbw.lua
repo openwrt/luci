@@ -13,6 +13,7 @@ function index()
 	entry({"admin", "nlbw", "ptr"}, call("action_ptr"), nil, 6).leaf = true
 	entry({"admin", "nlbw", "download"}, call("action_download"), nil, 7)
 	entry({"admin", "nlbw", "restore"}, post("action_restore"), nil, 8)
+	entry({"admin", "nlbw", "commit"}, call("action_commit"), nil, 9)
 end
 
 local function exec(cmd, args, writer)
@@ -213,4 +214,12 @@ function action_restore()
 			"The following database files have been restored: %s",
 			table.concat(output, ", "))
 	})
+end
+
+function action_commit()
+	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+
+	http.redirect(disp.build_url("admin/nlbw/display"))
+	exec("/usr/sbin/nlbw", { "-c", "commit" })
 end
