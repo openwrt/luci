@@ -26,32 +26,27 @@ This is free software, licensed under the Apache License, Version 2.0
       <th class="cbi-section-table-cell" style="text-align:center" colspan="2"><%:Actions%></th>
     </tr>
 <%
-  local pos = -1
-  uci:foreach("wireless", "wifi-device", function(s)
-    pos = pos + 1
-  end)
   uci:foreach("wireless", "wifi-iface", function(s)
-    pos = pos + 1
-    local section = s['.name']
-    local device = s.device or ""
-    local mode = s.mode or ""
     local iface = s.network or ""
-    local ssid = s.ssid or ""
-    local encryption = s.encryption or ""
-    local disabled = s.disabled or ""
-    local style = "color:#000000"
-    if disabled == "0" then
-      style = "color:#0069d6;font-weight:bold"
-    end
     if iface == trmiface then
+      local section = s['.name']
+      local device = s.device or ""
+      local mode = s.mode or ""
+      local ssid = s.ssid or ""
+      local encryption = s.encryption or ""
+      local disabled = s.disabled or ""
+      local style = "color:#000000"
+      if disabled == "0" then
+        style = "color:#0069d6;font-weight:bold"
+      end
 %>
     <tr class="cbi-section-table-row cbi-rowstyle-1" style="<%=style%>">
       <td style="text-align:left"><%=device%></td>
       <td style="text-align:left"><%=ssid%></td>
       <td style="text-align:left"><%=encryption%></td>
       <td class="cbi-value-field" style="width:70px;text-align:right">
-        <input class="cbi-button cbi-button-up" type="button" value="" onclick="location.href='<%=url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>;pos=<%=pos%>;dir=up'" alt="<%:Move up%>" title="<%:Move up%>"/>
-        <input class="cbi-button cbi-button-down" type="button" value="" onclick="location.href='<%=url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>;pos=<%=pos%>;dir=down'" alt="<%:Move down%>" title="<%:Move down%>"/>
+        <input class="cbi-button cbi-button-up" type="button" value="" onclick="location.href='<%=url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>;dir=up'" alt="<%:Move up%>" title="<%:Move up%>"/>
+        <input class="cbi-button cbi-button-down" type="button" value="" onclick="location.href='<%=url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>;dir=down'" alt="<%:Move down%>" title="<%:Move down%>"/>
       </td>
       <td class="cbi-value-field" style="width:150px;text-align:right">
         <input type="button" class="cbi-button cbi-button-edit" onclick="location.href='<%=url('admin/services/travelmate/wifiedit')%>?cfg=<%=section%>'" title="<%:Edit this Uplink%>" value="<%:Edit%>"/>
