@@ -5,41 +5,41 @@
 
 <% css = [[
 
-    #chartjs-tooltip {
-        opacity: 0;
-        position: absolute;
-        background: rgba(0, 0, 0, .7);
-        color: white;
-        padding: 3px;
-        border-radius: 3px;
-        -webkit-transition: all .1s ease;
-        transition: all .1s ease;
-        pointer-events: none;
-        -webkit-transform: translate(-50%, 0);
-        transform: translate(-50%, 0);
+	#chartjs-tooltip {
+		opacity: 0;
+		position: absolute;
+		background: rgba(0, 0, 0, .7);
+		color: white;
+		padding: 3px;
+		border-radius: 3px;
+		-webkit-transition: all .1s ease;
+		transition: all .1s ease;
+		pointer-events: none;
+		-webkit-transform: translate(-50%, 0);
+		transform: translate(-50%, 0);
 		z-index: 200;
-    }
+	}
 
-    #chartjs-tooltip.above {
-        -webkit-transform: translate(-50%, -100%);
-        transform: translate(-50%, -100%);
-    }
+	#chartjs-tooltip.above {
+		-webkit-transform: translate(-50%, -100%);
+		transform: translate(-50%, -100%);
+	}
 
-    #chartjs-tooltip.above:before {
-        border: solid;
-        border-color: #111 transparent;
-        border-color: rgba(0, 0, 0, .8) transparent;
-        border-width: 8px 8px 0 8px;
-        bottom: 1em;
-        content: "";
-        display: block;
-        left: 50%;
-        top: 100%;
-        position: absolute;
-        z-index: 99;
-        -webkit-transform: translate(-50%, 0);
-        transform: translate(-50%, 0);
-    }
+	#chartjs-tooltip.above:before {
+		border: solid;
+		border-color: #111 transparent;
+		border-color: rgba(0, 0, 0, .8) transparent;
+		border-width: 8px 8px 0 8px;
+		bottom: 1em;
+		content: "";
+		display: block;
+		left: 50%;
+		top: 100%;
+		position: absolute;
+		z-index: 99;
+		-webkit-transform: translate(-50%, 0);
+		transform: translate(-50%, 0);
+	}
 
 	table {
 		border: 1px solid #999;
@@ -195,8 +195,8 @@
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<script type="text/javascript" src="<%=resource%>/nlbw.chart.min.js"></script>
+<script type="text/javascript" src="<%=resource%>/cbi.js?v=git-17.211.60529-fd6f892"></script>
+<script type="text/javascript" src="<%=resource%>/nlbw.chart.min.js?v=git-17.211.60529-fd6f892"></script>
 <script type="text/javascript">//<![CDATA[
 
 var chartRegistry = {},
@@ -278,6 +278,13 @@ function kpi(id, val1, val2, val3)
 function pie(id, data)
 {
 	data.sort(function(a, b) { return b.value - a.value });
+
+	if (data.length === 0 || (data.length === 1 && data[0].value === 0))
+		data[0] = {
+			value: 1,
+			color: '#cccccc',
+			label: [ '<%:no traffic%>' ]
+		};
 
 	for (var i = 0; i < data.length; i++) {
 		if (!data[i].color) {
@@ -474,7 +481,7 @@ function renderHostDetail()
 		}
 	);
 
-	var rxData = [], txData = [], rxEmpty = true, txEmpty = true;
+	var rxData = [], txData = [];
 
 	table.innerHTML = '<tr>' +
 		'<th>%s</th>'.format(label || col) +
@@ -503,24 +510,6 @@ function renderHostDetail()
 			label: ['%s: %%1024.2mB'.format(rec[col] || '<%:other%>'), row],
 			value: rec.tx_bytes
 		});
-
-		if (rec.rx_bytes)
-			rxEmpty = false;
-
-		if (rec.tx_bytes)
-			txEmpty = false;
-	}
-
-	if (rxEmpty) {
-		rxData[0].value = 1;
-		rxData[0].color = '#cccccc';
-		rxData[0].label[0] = '<%:no traffic%>';
-	}
-
-	if (txEmpty) {
-		txData[0].value = 1;
-		txData[0].color = '#cccccc';
-		txData[0].label[0] = '<%:no traffic%>';
 	}
 
 	pie('bubble-pie1', rxData);
@@ -639,6 +628,13 @@ function renderHostData()
 		conn_total += rec.conns;
 	}
 
+	if (table.rows.length === 1) {
+		var cell = table.insertRow(-1).insertCell(-1);
+
+		cell.setAttribute('colspan', 6);
+		cell.innerHTML = '<em><%:No data recorded yet.%> <a href="<%=url("admin/nlbw/commit")%>"><%:Force reload…%></a></em>';
+	}
+
 	pie('traf-pie', trafData);
 	pie('conn-pie', connData);
 
@@ -690,6 +686,13 @@ function renderLayer7Data()
 			topTx.push([rec.tx_bytes, rec.layer7]);
 			topConn.push([rec.conns, rec.layer7]);
 		}
+	}
+
+	if (table.rows.length === 1) {
+		var cell = table.insertRow(-1).insertCell(-1);
+
+		cell.setAttribute('colspan', 6);
+		cell.innerHTML = '<em><%:No data recorded yet.%> <a href="<%=url("admin/nlbw/commit")%>"><%:Force reload…%></a></em>';
 	}
 
 	pie('layer7-rx-pie', rxData);
@@ -774,8 +777,7 @@ function renderIPv6Data()
 		if (mac === '00:00:00:00:00:00')
 			continue;
 
-		var tbd = document.createElement('tbody'),
-		    row = tbd.insertRow(-1),
+		var row = table.insertRow(-1),
 		    cell1 = row.insertCell(-1),
 		    cell2 = row.insertCell(-1),
 		    dns = hostInfo[mac] ? hostInfo[mac].name : null,
@@ -795,40 +797,61 @@ function renderIPv6Data()
 		row.insertCell(-1).innerHTML = rec4 ? "%1024.2mB".format(rec4.tx_bytes) : '-';
 		row.insertCell(-1).innerHTML = rec4 ? "%1000.2mP".format(rec4.tx_pkts)  : '-';
 
-		row = tbd.insertRow(-1);
+		row = table.insertRow(-1);
 
 		row.insertCell(-1).innerHTML = 'IPv6';
 		row.insertCell(-1).innerHTML = rec6 ? "%1024.2mB".format(rec6.rx_bytes) : '-';
 		row.insertCell(-1).innerHTML = rec6 ? "%1000.2mP".format(rec6.rx_pkts)  : '-';
 		row.insertCell(-1).innerHTML = rec6 ? "%1024.2mB".format(rec6.tx_bytes) : '-';
 		row.insertCell(-1).innerHTML = rec6 ? "%1000.2mP".format(rec6.tx_pkts)  : '-';
-
-		table.appendChild(tbd);
 	}
 
-	pie('ipv6-share-pie', [{
-		value: rx4_total + tx4_total,
-		label: ["IPv4: %.2mB"],
-		color: 'hsl(140, 100%, 50%)'
-	}, {
-		value: rx6_total + tx6_total,
-		label: ["IPv6: %.2mB"],
-		color: 'hsl(180, 100%, 50%)'
-	}]);
+	if (table.rows.length === 1) {
+		var cell = table.insertRow(-1).insertCell(-1);
 
-	pie('ipv6-hosts-pie', [{
-		value: v4_total,
-		label: ["<%:%d IPv4-only hosts%>"],
-		color: 'hsl(140, 100%, 50%)'
-	}, {
-		value: v6_total,
-		label: ["<%:%d IPv6-only hosts%>"],
-		color: 'hsl(180, 100%, 50%)'
-	}, {
-		value: ds_total,
-		label: ["<%:%d dual-stack hosts%>"],
-		color: 'hsl(50, 100%, 50%)'
-	}]);
+		cell.setAttribute('colspan', 7);
+		cell.innerHTML = '<em><%:No data recorded yet.%> <a href="<%=url("admin/nlbw/commit")%>"><%:Force reload…%></a></em>';
+	}
+
+	var shareData = [], hostsData = [];
+
+	if (rx4_total > 0 || tx4_total > 0)
+		shareData.push({
+			value: rx4_total + tx4_total,
+			label: ["IPv4: %.2mB"],
+			color: 'hsl(140, 100%, 50%)'
+	        });
+
+	if (rx6_total > 0 || tx6_total > 0)
+		shareData.push({
+			value: rx6_total + tx6_total,
+			label: ["IPv6: %.2mB"],
+			color: 'hsl(180, 100%, 50%)'
+		});
+
+	if (v4_total > 0)
+		hostsData.push({
+			value: v4_total,
+			label: ["<%:%d IPv4-only hosts%>"],
+			color: 'hsl(140, 100%, 50%)'
+		});
+
+	if (v6_total > 0)
+		hostsData.push({
+			value: v6_total,
+			label: ["<%:%d IPv6-only hosts%>"],
+			color: 'hsl(180, 100%, 50%)'
+		});
+
+	if (ds_total > 0)
+		hostsData.push({
+			value: ds_total,
+			label: ["<%:%d dual-stack hosts%>"],
+			color: 'hsl(50, 100%, 50%)'
+		});
+
+	pie('ipv6-share-pie', shareData);
+	pie('ipv6-hosts-pie', hostsData);
 
 	kpi('ipv6-hosts', '%.2f%%'.format(100 / (ds_total + v4_total + v6_total) * (ds_total + v6_total)));
 	kpi('ipv6-share', '%.2f%%'.format(100 / (rx4_total + rx6_total + tx4_total + tx6_total) * (rx6_total + tx6_total)));
