@@ -430,19 +430,21 @@ function renderPeriods()
 
 	for (var e, i = trafficPeriods.length - 1; e = trafficPeriods[i]; i--) {
 		var d1 = new Date(e);
-		var d2;
+		var d2, pd;
 
 		if (i) {
 			d2 = new Date(trafficPeriods[i - 1]);
 			d2.setDate(d2.getDate() - 1);
+			pd = '%04d-%02d-%02d'.format(d1.getFullYear(), d1.getMonth() + 1, d1.getDate());
 		}
 		else {
 			d2 = new Date();
+			pd = '';
 		}
 
 		var opt = document.createElement('option');
 		    opt.setAttribute('data-duration', (d2.getTime() - d1.getTime()) / 1000);
-		    opt.value = '%04d-%02d-%02d'.format(d1.getFullYear(), d1.getMonth() + 1, d1.getDate());
+		    opt.value = pd;
 		    opt.text = '%04d-%02d-%02d - %04d-%02d-%02d'.format(
 				d1.getFullYear(), d1.getMonth() + 1, d1.getDate(),
 				d2.getFullYear(), d2.getMonth() + 1, d2.getDate());
@@ -1040,7 +1042,7 @@ function bubbleDismiss()
 				if (res !== null && typeof(res) === 'object' && (res.length % 3) === 0)
 					ouiData = res;
 
-				fetchData(trafficPeriods[0]);
+				fetchData('');
 			}
 		};
 		xhr.send(null);
