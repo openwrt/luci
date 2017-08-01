@@ -247,7 +247,4 @@ methods = {
 	"salsa20",
 	"chacha20",
 	"chacha20-ietf",
-	"aes-128-gcm",
-	"aes-192-gcm",
-	"aes-256-gcm",
 }
