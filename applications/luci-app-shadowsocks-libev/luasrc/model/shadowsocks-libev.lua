@@ -108,6 +108,7 @@ function options_common(s, tab)
 	s:taboption(tab, Value, "user", translate("Run as"))
 
 	s:taboption(tab, Flag, "verbose", translate("Verbose"))
+	s:taboption(tab, Flag, "ipv6_first", translate("IPv6 First"), translate("Prefer IPv6 addresses when resolving names"))
 	s:taboption(tab, Flag, "fast_open", translate("Enable TCP Fast Open"))
 	s:taboption(tab, Flag, "reuse_port", translate("Enable SO_REUSEPORT"))
 end
@@ -205,6 +206,7 @@ names_options_client = {
 
 names_options_common = {
 	"verbose",
+	"ipv6_first",
 	"fast_open",
 	"reuse_port",
 	"mode",
