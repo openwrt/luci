@@ -91,8 +91,6 @@ XHR = function()
 
 		xhr.open('POST', url, true);
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.setRequestHeader('Content-length', code.length);
-		xhr.setRequestHeader('Connection', 'close');
 		xhr.send(code);
 	}
 
