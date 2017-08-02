@@ -62,14 +62,14 @@
                     table.insert(objects, { object, func })
                 end
             end
- 
+
             util.ubus("session", "grant", {
                 ubus_rpc_session = session,
                 scope = scope, objects = objects
             })
         end
     end
- 
+
     apply_acls("/usr/share/rpcd/acl.d/attendedsysupgrade.json", luci.dispatcher.context.authsession)
     apply_acls("/usr/share/rpcd/acl.d/packagelist.json", luci.dispatcher.context.authsession)
 %>
@@ -98,7 +98,7 @@ function server_request(request_dict, path, callback) {
 	request_dict.distro = data.release.distribution;
 	request_dict.target = data.release.target.split("\/")[0];
 	request_dict.subtarget = data.release.target.split("\/")[1];
-	request_dict.packages = data.installed_pkgs;
+	request_dict.packages = data.packagelist;
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("POST", url, true);
 	xmlhttp.setRequestHeader("Content-type", "application/json");
@@ -160,10 +160,10 @@ function ubus_request_callback_uci(response_object, callback) {
 // initial setup, get system information
 function setup() {
 	data["ubus_rpc_session"] = "<%=luci.dispatcher.context.authsession%>"
-	ubus_request("packagelist", "list", '{  }', "installed_pkgs")
+	ubus_request("packagelist", "list", '{  }', "packagelist")
 	ubus_request("system", "board", '{  }', "release")
 	ubus_request("system", "board", '{  }', "board_name")
-	ubus_request("uci", "get", '{"config": "attendedsysupgrade", "section": "@settings[0]", "option": "update_server"}', "update_server")	
+	ubus_request("uci", "get", '{"config": "attendedsysupgrade", "section": "@settings[0]", "option": "update_server"}', "update_server")
 }
 
 // shows notification if update is available
