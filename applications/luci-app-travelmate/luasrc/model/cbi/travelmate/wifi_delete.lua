@@ -10,5 +10,4 @@ if cfg ~= nil then
 	uci:save("wireless")
 	uci:commit("wireless")
 end
-
 http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
