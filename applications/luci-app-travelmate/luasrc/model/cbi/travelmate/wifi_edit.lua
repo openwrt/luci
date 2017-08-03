@@ -21,7 +21,6 @@ local s = uci:get_all("wireless", m.hidden.cfg)
 if s ~= nil then
 	wssid = m:field(Value, "ssid", translate("SSID"))
 	wssid.default = s.ssid
-	
 	if s.encryption and s.key then
 		wkey = m:field(Value, "key", translatef("Passphrase (%s)", s.encryption))
 		wkey.password = true
@@ -33,7 +32,7 @@ if s ~= nil then
 		end
 	end
 else
-	http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
+	m.on_cancel()
 end
 
 function wssid.write(self, section, value)
@@ -43,7 +42,7 @@ function wssid.write(self, section, value)
 	end
 	uci:save("wireless")
 	uci:commit("wireless")
-	http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
+	m.on_cancel()
 end
 
 return m
