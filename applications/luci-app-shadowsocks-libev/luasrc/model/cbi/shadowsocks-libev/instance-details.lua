@@ -24,6 +24,7 @@ s:tab("general", translate("General Settings"))
 s:tab("advanced", translate("Advanced Settings"))
 s:taboption("general", Flag, "disabled", translate("Disable"))
 ss.option_install_package(s, "general")
+ss.options_common(s, "advanced")
 
 if stype == "ss_server" then
 	ss.options_server(s, "general")
@@ -42,8 +43,11 @@ else
 			translate("Tunnel address"),
 			translate("The address ss-tunnel will forward traffic to"))
 		o.datatype = "hostport"
+	elseif stype == "ss_redir" then
+		o = s:taboption("advanced", Flag, "disable_sni",
+			translate("Disable SNI"),
+			translate("Disable parsing HTTP/HTTPS payload to find then resolve hostname at remote server"))
 	end
 end
-ss.options_common(s, "advanced")
 
 return m
