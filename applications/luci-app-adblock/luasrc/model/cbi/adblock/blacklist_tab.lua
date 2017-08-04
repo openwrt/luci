@@ -25,6 +25,7 @@ end
 
 m = SimpleForm("input", nil)
 m:append(Template("adblock/config_css"))
+m.submit = translate("Save")
 m.reset = false
 
 s = m:section(SimpleSection, nil,

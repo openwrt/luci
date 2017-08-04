@@ -5,7 +5,7 @@ module("luci.controller.adblock", package.seeall)
 
 local fs = require("nixio.fs")
 local util = require("luci.util")
-local template = require("luci.template")
+local templ = require("luci.template")
 local i18n = require("luci.i18n")
 
 function index()
@@ -19,17 +19,13 @@ function index()
 	entry({"admin", "services", "adblock", "advanced", "blacklist"}, cbi("adblock/blacklist_tab"), _("Edit Blacklist"), 110).leaf = true
 	entry({"admin", "services", "adblock", "advanced", "whitelist"}, cbi("adblock/whitelist_tab"), _("Edit Whitelist"), 120).leaf = true
 	entry({"admin", "services", "adblock", "advanced", "configuration"}, cbi("adblock/configuration_tab"), _("Edit Configuration"), 130).leaf = true
-	entry({"admin", "services", "adblock", "advanced", "query"}, call("query"), _("Query domains"), 140).leaf = true
+	entry({"admin", "services", "adblock", "advanced", "query"}, template("adblock/query"), _("Query domains"), 140).leaf = true
 	entry({"admin", "services", "adblock", "advanced", "result"}, call("queryData"), nil, 150).leaf = true
 end
 
 function logread()
 	local logfile = util.trim(util.exec("logread -e 'adblock'"))
-	template.render("adblock/logread", {title = i18n.translate("Adblock Logfile"), content = logfile})
-end
-
-function query()
-	template.render("adblock/query", {title = i18n.translate("Adblock Domain Query")})
+	templ.render("adblock/logread", {title = i18n.translate("Adblock Logfile"), content = logfile})
 end
 
 function queryData(domain)

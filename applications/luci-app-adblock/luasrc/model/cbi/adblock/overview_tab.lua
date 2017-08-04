@@ -21,6 +21,8 @@ if parse ~= nil then
 			dnspath = "/var/lib/unbound"
 		elseif backend == "named" then
 			dnspath = "/var/lib/bind"
+		elseif backend == "kresd" then
+			dnspath = "/tmp/kresd"
 		end
 	end
 end
@@ -180,7 +182,7 @@ e2 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
 e2.default = e2.disabled
 e2.rmempty = false
 
-e3 = e:option(Flag, "adb_manmode", translate("Manual mode"),
+e3 = e:option(Flag, "adb_manmode", translate("Manual / Backup mode"),
 	translate("Do not automatically update blocklists during startup, use blocklist backups instead."))
 e3.default = e3.disabled
 e3.rmempty = false
