@@ -178,7 +178,7 @@ function image_request() {
 	request_dict = {}
 	request_dict.version = latest_version;
 	request_dict.board = data.board_name
-	server_request(request_dict, "/image-request", image_request_handler)
+	server_request(request_dict, "image-request", image_request_handler)
 }
 
 function image_request_handler(response) {
