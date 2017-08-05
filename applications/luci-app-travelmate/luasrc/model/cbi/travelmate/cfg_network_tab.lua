@@ -12,6 +12,7 @@ end
 
 m = SimpleForm("input", nil)
 m:append(Template("travelmate/config_css"))
+m.submit = translate("Save")
 m.reset = false
 
 s = m:section(SimpleSection, nil,

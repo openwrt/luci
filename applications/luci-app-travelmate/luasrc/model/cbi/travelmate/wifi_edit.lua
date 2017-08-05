@@ -6,6 +6,7 @@ local uci = require("luci.model.uci").cursor()
 local http = require("luci.http")
 
 m = SimpleForm("edit", translate("Edit Wireless Uplink Configuration"))
+m.submit = translate("Save")
 m.cancel = translate("Back to overview")
 m.reset = false
 
