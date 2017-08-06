@@ -35,20 +35,17 @@ if uplink == "" then
 	o.default = "trm_wwan"
 	o.rmempty = false
 
-	function o.write(self, section, value)
-		iface = o:formvalue(section)
-		uci:set("travelmate", section, "trm_iface", iface)
-		uci:save("travelmate")
-		uci:commit("travelmate")
-	end
-
 	btn = s:option(Button, "", translate("Create Uplink Interface"),
 		translate("Create a new wireless wan uplink interface, configure it to use dhcp and ")
 		.. translate("add it to the wan zone of the firewall. This step has only to be done once."))
 	btn.inputtitle = translate("Add Interface")
 	btn.inputstyle = "apply"
 	btn.disabled = false
-	function btn.write()
+	function btn.write(self, section, value)
+		iface = o:formvalue(section)
+		uci:set("travelmate", section, "trm_iface", iface)
+		uci:save("travelmate")
+		uci:commit("travelmate")
 		local net = nw:add_network(iface, { proto = "dhcp" })
 		if net then
 			nw:save("network")

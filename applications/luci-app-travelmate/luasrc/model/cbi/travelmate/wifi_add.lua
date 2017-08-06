@@ -7,6 +7,7 @@ local http = require("luci.http")
 local trmiface = uci.get("travelmate", "global", "trm_iface") or "trm_wwan"
 
 m = SimpleForm("add", translate("Add Wireless Uplink Configuration"))
+m.submit = translate("Save")
 m.cancel = translate("Back to overview")
 m.reset = false
 
