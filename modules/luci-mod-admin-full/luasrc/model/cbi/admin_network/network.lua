@@ -38,6 +38,7 @@ if fs.access("/etc/init.d/dsl_control") then
 	tone:value("bv", translate("B43 + B43C + V43"))
 
 	xfer_mode = dsl:option(ListValue, "xfer_mode", translate("Encapsulation mode"))
+	xfer_mode:value("", translate("auto"))
 	xfer_mode:value("atm", translate("ATM (Asynchronous Transfer Mode)"))
 	xfer_mode:value("ptm", translate("PTM/EFM (Packet Transfer Mode)"))
 
