@@ -156,6 +156,9 @@ function cfgvalue_overview_(sdata, lines, names)
 	for _, n in ipairs(names) do
 		local v = sdata[n]
 		if v ~= nil then
+			if n == "key" or n == "password" then
+				v = translate("<hidden>")
+			end
 			local fv = "<var>%s</var>" % ut.pcdata(v)
 			if sdata[".type"] ~= "ss_server" and n == "server" then
 				fv = '<a class="label" href="%s">%s</a>' % {
