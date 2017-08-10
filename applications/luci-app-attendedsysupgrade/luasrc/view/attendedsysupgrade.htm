@@ -6,6 +6,12 @@
 </div>
 <input class="cbi-button" value="search for updates" onclick="update_request()" type="button" id="update_button">
 <div style="display: none" id="packages" class="alert-message success"></div>
+<div class="cbi-value" id="keep_container" style="display: none">
+	<label class="cbi-value-title" for="keep">keep settings:</label>
+	<div class="cbi-value-field">
+		<input type="checkbox" name="keep" id="keep" checked="checked" />
+	</div>
+</div>
 
 <script type="text/javascript">
 
@@ -217,6 +223,7 @@ function image_request_handler(response) {
 		update_info("image created")
 		document.getElementById("update_button").value = "sysupgrade"
 		document.getElementById("update_button").onclick = function() {download_image(response_content.url); }
+		document.getElementById("keep_container").style.display = "block";
 	}
 }
 
@@ -234,7 +241,8 @@ function upload_image(blob) {
 	upload_request.addEventListener('load', function(event) {
 		// this checksum should be parsed
 		document.getElementById("update_info").innerHTML = "flashing... please wait" // show fancy indicator http://www.ajaxload.info/
-		ubus_request("attendedsysupgrade", "sysupgrade", '{  }', 'done');
+
+		ubus_request("attendedsysupgrade", "sysupgrade", '{ "keep_settings": ' + document.getElementById("keep").checked + ' }', 'done');
   	});
 
   	upload_request.addEventListener('error', function(event) {
