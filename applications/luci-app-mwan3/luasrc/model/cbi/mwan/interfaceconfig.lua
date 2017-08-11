@@ -102,6 +102,12 @@ enabled = mwan_interface:option(ListValue, "enabled", translate("Enabled"))
 	enabled:value("1", translate("Yes"))
 	enabled:value("0", translate("No"))
 
+initial_state = mwan_interface:option(ListValue, "initial_state", translate("Initial state"),
+	translate("Expect interface state on up event"))
+	initial_state.default = "online"
+	initial_state:value("online", translate("Online"))
+	initial_state:value("offline", translate("Offline"))
+
 family = mwan_interface:option(ListValue, "family", translate("Internet Protocol"))
 	family.default = "ipv4"
 	family:value("ipv4", translate("IPv4"))
@@ -182,6 +188,10 @@ failure = mwan_interface:option(Value, "failure_interval", translate("Failure in
 	failure:value("900", translatef("%d minutes", 15))
 	failure:value("1800", translatef("%d minutes", 30))
 	failure:value("3600", translatef("%d hour", 1))
+
+keep_failure = mwan_interface:option(Flag, "keep_failure_interval", translate("Keep failure interval"),
+	translate("Keep ping failure interval during failure state"))
+	keep_failure.default = keep_failure.disabled
 
 recovery = mwan_interface:option(Value, "recovery_interval", translate("Recovery interval"),
 	translate("Ping interval during failure recovering"))

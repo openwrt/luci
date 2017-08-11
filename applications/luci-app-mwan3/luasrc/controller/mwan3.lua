@@ -29,6 +29,8 @@ function index()
 	entry({"admin", "network", "mwan", "configuration"},
 		alias("admin", "network", "mwan", "configuration", "interface"),
 		_("Configuration"), 20)
+	entry({"admin", "network", "mwan", "configuration", "globals"},
+		cbi("mwan/globalsconfig"),_("Globals"), 5).leaf = true
 	entry({"admin", "network", "mwan", "configuration", "interface"},
 		arcombine(cbi("mwan/interface"), cbi("mwan/interfaceconfig")),
 		_("Interfaces"), 10).leaf = true
