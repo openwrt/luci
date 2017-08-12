@@ -8,13 +8,12 @@ local uci = require("luci.model.uci").cursor()
 local trmiface = uci:get("travelmate", "global", "trm_iface") or "trm_wwan"
 
 if cfg ~= nil then
-	local iface = ""
 	local section = ""
 	local idx = ""
 	local idx_change = ""
 	local changed = ""
 	uci:foreach("wireless", "wifi-iface", function(s)
-		iface = s.network
+		local iface = s.network or ""
 		if iface == trmiface then
 			section = s['.name']
 			if cfg == section then
