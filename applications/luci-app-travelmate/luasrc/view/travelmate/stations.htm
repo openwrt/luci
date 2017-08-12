@@ -5,7 +5,7 @@ This is free software, licensed under the Apache License, Version 2.0
 
 <%-
   local write = io.write
-  local uci = require "luci.model.uci".cursor()
+  local uci = require("luci.model.uci").cursor()
   local trmiface = uci:get("travelmate", "global", "trm_iface") or "trm_wwan"
 -%>
 
@@ -29,9 +29,8 @@ This is free software, licensed under the Apache License, Version 2.0
   uci:foreach("wireless", "wifi-iface", function(s)
     local iface = s.network or ""
     if iface == trmiface then
-      local section = s['.name']
+      local section = s['.name'] or ""
       local device = s.device or ""
-      local mode = s.mode or ""
       local ssid = s.ssid or ""
       local encryption = s.encryption or ""
       local disabled = s.disabled or ""
