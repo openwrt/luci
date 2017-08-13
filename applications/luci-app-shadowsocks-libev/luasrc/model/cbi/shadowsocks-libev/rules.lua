@@ -16,8 +16,13 @@ m = Map("shadowsocks-libev",
 		If the prior check results in action <em>checkdst</em>, packets will continue \
 		to have their destination addresses checked."))
 
+local sdata = m:get('ss_rules')
+if not sdata then
+	m:set('ss_rules', nil, 'ss_rules')
+	m:set('ss_rules', 'ss_rules', 'disabled', true)
+end
 
-s = m:section(NamedSection, "ss_rules", "ss-rules")
+s = m:section(NamedSection, "ss_rules", "ss_rules")
 s:tab("general", translate("General Settings"))
 s:tab("srcip", translate("Source Settings"))
 s:tab("dstip", translate("Destination Settings"))
