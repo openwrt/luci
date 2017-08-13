@@ -90,6 +90,7 @@ function setup() {
 	ubus_request("packagelist", "list", '{  }', "packagelist")
 	ubus_request("system", "board", '{  }', "release")
 	ubus_request("system", "board", '{  }', "board_name")
+	ubus_request("system", "board", '{  }', "model")
 	ubus_request("uci", "get", '{"config": "attendedsysupgrade", "section": "@settings[0]", "option": "update_server"}', "update_server")
 }
 
@@ -188,6 +189,7 @@ function image_request() {
 	request_dict.version = latest_version;
 	request_dict.board = data.board_name
 	request_dict.packages = data.packages;
+	request_dict.model = data.model
 	server_request(request_dict, "image-request", image_request_handler)
 }
 
