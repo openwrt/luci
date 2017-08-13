@@ -1,12 +1,11 @@
 <%+header%>
 <h2 name="content"><%:Attended Sysupgrade%></h2>
-<div  class="container">
-	<div style="display: none" id="update_info" class="alert-message info">
-	</div>
-	<div style="display: none" id="update_error" class="alert-message danger">
-	</div>
+<div class="container">
+	<div style="display: none" id="update_info" class="alert-message info"></div>
+	<div style="display: none" id="update_error" class="alert-message danger"></div>
 </div>
 <input class="cbi-button" value="search for updates" onclick="update_request()" type="button" id="update_button">
+<div style="display: none" id="packages" class="alert-message success"></div>
 
 <script type="text/javascript">
 
@@ -22,7 +21,6 @@ function server_request(request_dict, path, callback) {
 	request_dict.distro = data.release.distribution;
 	request_dict.target = data.release.target.split("\/")[0];
 	request_dict.subtarget = data.release.target.split("\/")[1];
-	request_dict.packages = data.packagelist;
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("POST", url, true);
 	xmlhttp.setRequestHeader("Content-type", "application/json");
@@ -37,7 +35,6 @@ function server_request(request_dict, path, callback) {
 
 // requests ubus via rpcd
 function ubus_request(command, argument, params, callback) {
-	// perform login if ubus_rpc_session is empty
 	var request_data = '{ "jsonrpc": "2.0", "id": ' + ubus_counter + ', "method": "call", "params": [ "'+ data["ubus_rpc_session"] +'", "' + command + '", "' + argument + '", ' + params + ' ] }'
 	ubus_counter++
 	var xmlhttp = new XMLHttpRequest();
@@ -107,6 +104,7 @@ function update_request() {
 	console.log("update_request")
 	request_dict = {}
 	request_dict.version = data.release.version;
+	request_dict.packages = data.packagelist;
 	server_request(request_dict, "update-request", update_request_callback)
 }
 
@@ -161,11 +159,16 @@ function back_online_callback(response_object) {
 function update_request_200(response_content) {
 	info_output = ""
 	if(response_content.version != undefined) {
-		info_output += "new update available. from " + data.release.version + " to " + response_content.version
+		info_output += "<h3>new update available</h3>"
+		info_output += data.release.version + " to " + response_content.version
 		latest_version = response_content.version;
 	}
-	if(response_content.packages != undefined) {
-		info_output += "package updates available"
+	if(response_content.updates != undefined) {
+		info_output += "<h3>package updates available</h3>"
+		for (update in response_content.updates) {
+			info_output += "<b>" + update + "</b>: " + response_content.updates[update][1] + " to " + response_content.updates[update][0] + "</br>"
+		}
+		data.packages = response_content.packages
 	}
 	update_info(info_output)
 	document.getElementById("update_button").value = "request image";
@@ -178,6 +181,7 @@ function image_request() {
 	request_dict = {}
 	request_dict.version = latest_version;
 	request_dict.board = data.board_name
+	request_dict.packages = data.packages;
 	server_request(request_dict, "image-request", image_request_handler)
 }
 
@@ -211,7 +215,7 @@ function image_request_handler(response) {
 		// ready to download
 		response_content = JSON.parse(response.responseText)
 		update_info("image created")
-		document.getElementById("update_button").value = "download and flash"
+		document.getElementById("update_button").value = "sysupgrade"
 		document.getElementById("update_button").onclick = function() {download_image(response_content.url); }
 	}
 }
