@@ -19,7 +19,7 @@ m = Map("shadowsocks-libev",
 local sdata = m:get('ss_rules')
 if not sdata then
 	m:set('ss_rules', nil, 'ss_rules')
-	m:set('ss_rules', 'ss_rules', 'disabled', true)
+	m:set('ss_rules', 'disabled', true)
 end
 
 s = m:section(NamedSection, "ss_rules", "ss_rules")
