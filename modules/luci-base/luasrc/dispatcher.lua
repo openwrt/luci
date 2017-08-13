@@ -219,10 +219,19 @@ function dispatch(request)
 	local lang = conf.main.lang or "auto"
 	if lang == "auto" then
 		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
-		for lpat in aclang:gmatch("[%w-]+") do
-			lpat = lpat and lpat:gsub("-", "_")
-			if conf.languages[lpat] then
-				lang = lpat
+		for aclang in aclang:gmatch("[%w_-]+") do
+			local country, culture = aclang:match("^([a-z][a-z])[_-]([a-zA-Z][a-zA-Z])$")
+			if country and culture then
+				local cc = "%s_%s" %{ country, culture:lower() }
+				if conf.languages[cc] then
+					lang = cc
+					break
+				elseif conf.languages[country] then
+					lang = country
+					break
+				end
+			elseif conf.languages[aclang] then
+				lang = aclang
 				break
 			end
 		end
