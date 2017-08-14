@@ -29,4 +29,12 @@ for _, net in ipairs(net:get_networks()) do
 end
 n.rmempty = false
 
+mask = s:option(
+	Value,
+	"mmx_mask",
+	translate("Firewall mask"),
+	translate("Enter value in hex, starting with <code>0x</code>"))
+mask.datatype = "hex(4)"
+mask.default = "0xff00"
+
 return m
