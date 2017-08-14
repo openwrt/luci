@@ -41,7 +41,11 @@ function server_request(request_dict, path, callback) {
 
 // requests ubus via rpcd
 function ubus_request(command, argument, params, callback) {
-	var request_data = '{ "jsonrpc": "2.0", "id": ' + ubus_counter + ', "method": "call", "params": [ "'+ data["ubus_rpc_session"] +'", "' + command + '", "' + argument + '", ' + params + ' ] }'
+	request_data = {};
+	request_data.jsonrpc = "2.0";
+	request_data.id = ubus_counter;
+	request_data.method = "call";
+	request_data.params = [ data.ubus_rpc_session, command, argument, params ]
 	ubus_counter++
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("POST", ubus_url, true);
@@ -56,7 +60,7 @@ function ubus_request(command, argument, params, callback) {
 			ubus_request_callback(xmlhttp, callback)
 		}
 	});
-	xmlhttp.send(request_data);
+	xmlhttp.send(JSON.stringify(request_data));
 }
 
 // handle ubus_requests, set variables or perform functions
@@ -87,11 +91,11 @@ function ubus_request_callback_uci(response_object, callback) {
 // initial setup, get system information
 function setup() {
 	data["ubus_rpc_session"] = "<%=luci.dispatcher.context.authsession%>"
-	ubus_request("packagelist", "list", '{  }', "packagelist")
-	ubus_request("system", "board", '{  }', "release")
-	ubus_request("system", "board", '{  }', "board_name")
-	ubus_request("system", "board", '{  }', "model")
-	ubus_request("uci", "get", '{"config": "attendedsysupgrade", "section": "@settings[0]", "option": "update_server"}', "update_server")
+	ubus_request("packagelist", "list", {}, "packagelist");
+	ubus_request("system", "board", {}, "release");
+	ubus_request("system", "board", {}, "board_name");
+	ubus_request("system", "board", {}, "model");
+	ubus_request("uci", "get", { "config": "attendedsysupgrade", "section": "updateserver", "option": "url" }, "update_server")
 }
 
 // shows notification if update is available
@@ -149,7 +153,7 @@ function update_request_callback(response_object) {
 }
 
 function back_online() {
-	ubus_request("session", "login", '{  }', back_online_callback)
+	ubus_request("session", "login", {}, back_online_callback)
 }
 
 function back_online_callback(response_object) {
@@ -244,7 +248,7 @@ function upload_image(blob) {
 		// this checksum should be parsed
 		document.getElementById("update_info").innerHTML = "flashing... please wait" // show fancy indicator http://www.ajaxload.info/
 
-		ubus_request("attendedsysupgrade", "sysupgrade", '{ "keep_settings": ' + document.getElementById("keep").checked + ' }', 'done');
+		ubus_request("attendedsysupgrade", "sysupgrade", { "keep_settings": document.getElementById("keep").checked }, 'done');
   	});
 
   	upload_request.addEventListener('error', function(event) {
