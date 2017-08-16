@@ -117,6 +117,12 @@ track_ip = mwan_interface:option(DynamicList, "track_ip", translate("Tracking ho
 	translate("This hostname or IP address will be pinged to determine if the link is up or down. Leave blank to assume interface is always online"))
 	track_ip.datatype = "host"
 
+track_method = mwan_interface:option(ListValue, "track_method", translate("Tracking method"))
+	track_method.default = "ping"
+	track_method:value("ping")
+	track_method:value("arping")
+	track_method:value("httping")
+
 reliability = mwan_interface:option(Value, "reliability", translate("Tracking reliability"),
 	translate("Acceptable values: 1-100. This many Tracking IP addresses must respond for the link to be deemed up"))
 	reliability.datatype = "range(1, 100)"

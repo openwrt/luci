@@ -147,6 +147,16 @@ track_ip = mwan_interface:option(DummyValue, "track_ip", translate("Tracking IP"
 		end
 	end
 
+track_method = mwan_interface:option(DummyValue, "track_method", translate("Tracking method"))
+	track_method.rawhtml = true
+	function track_method.cfgvalue(self, s)
+		if tracked then
+			return self.map:get(s, "track_method") or "&#8212;"
+		else
+			return "&#8212;"
+		end
+	end
+
 reliability = mwan_interface:option(DummyValue, "reliability", translate("Tracking reliability"))
 	reliability.rawhtml = true
 	function reliability.cfgvalue(self, s)
