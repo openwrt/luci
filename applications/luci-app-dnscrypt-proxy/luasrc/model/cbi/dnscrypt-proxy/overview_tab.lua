@@ -11,6 +11,13 @@ local plug_cnt  = tonumber(luci.sys.exec("env -i /usr/sbin/dnscrypt-proxy --vers
 local res_list  = {}
 local url       = "https://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-resolvers.csv"
 
+if not fs.access("/lib/libustream-ssl.so") then
+	m = SimpleForm("error", nil, translate("SSL support not available, please install an libustream-ssl variant to use this package."))
+	m.submit = false
+	m.reset = false
+	return m
+end
+
 if not fs.access(res_input) then
 	luci.sys.call("env -i /bin/uclient-fetch --no-check-certificate -O " .. res_input .. " " .. url .. " >/dev/null 2>&1")
 end
