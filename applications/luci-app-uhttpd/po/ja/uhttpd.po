@@ -1,141 +1,87 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-01 18:11+0900\n"
+"Report-Msgid-Bugs-To: https://github.com/openwrt/luci/\n"
+"POT-Creation-Date: 2017-08-19 22:33+0200\n"
+"PO-Revision-Date: 2017-08-19 23:13+0200\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.3\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid ""
-"(/old/path=/new/path) or (just /old/path which becomes /cgi-prefix/old/path)"
-msgstr ""
-"(/old/path=/new/path) または (just /old/path which becomes /cgi-prefix/old/"
-"path)"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:6
+msgid "uHTTPd"
+msgstr "uHTTPd"
 
-msgid "404 Error"
-msgstr "404 エラー"
-
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:7
 msgid "A lightweight single-threaded HTTP(S) server"
 msgstr "軽量なシングル スレッド HTTP(S) サーバーです。"
 
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:18
+msgid "General Settings"
+msgstr "一般設定"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:19
+#, fuzzy
+#| msgid "Full Web Server Settings"
+msgid "Web Server Settings"
+msgstr "完全なWebサーバー設定"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:19
+#, fuzzy
+#| msgid "For settings primarily geared to serving more than the web UI"
+msgid "Settings primarily geared towards serving more than the web UI"
+msgstr "主に、Web UI以上のものを提供することを対象とした設定です。"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:20
 msgid "Advanced Settings"
 msgstr "詳細設定"
 
-msgid "Aliases"
-msgstr "エイリアス"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:20
+#, fuzzy
+#| msgid ""
+#| "Settings which are either rarely needed or which affect serving the WebUI"
+msgid "Rarely needed settings that can affect serving the WebUI"
+msgstr "まれに必要とされる設定、またはWeb UIに影響する設定です。"
 
-msgid "Base directory for files to be served"
-msgstr "サーバーがホストするファイルのベースディレクトリです。"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:22
+#, fuzzy
+#| msgid "HTTP listeners (address:port)"
+msgid "HTTP Server-Addresses (Address:Port)"
+msgstr "HTTP 待ち受け（アドレス:ポート）"
 
-msgid "Bind to specific interface:port (by specifying interface address"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:22 luasrc/model/cbi/uhttpd/uhttpd.lua:50
+#, fuzzy
+#| msgid "Bind to specific interface:port (by specifying interface address"
+msgid "Bind to specific interface:port (by specifying interface address)"
 msgstr ""
 "インターフェースのアドレスを使用して、特定のインターフェースとポートに関連付"
 "けます。"
 
-msgid "CGI filetype handler"
-msgstr "CGIファイル形式 ハンドラー"
-
-msgid "CGI is disabled if not present."
-msgstr "指定しない場合、CGIは無効になります。"
-
-msgid "Config file (e.g. for credentials for Basic Auth)"
-msgstr "設定ファイル（例: 基本認証用の資格情報）"
-
-msgid "Connection reuse"
-msgstr "接続の再使用"
-
-msgid "Country"
-msgstr "国"
-
-msgid "Disable JSON-RPC authorization via ubus session API"
-msgstr "ubus セッションAPI経由のJSON-RPC認証を無効にする"
-
-msgid "Do not follow symlinks outside document root"
-msgstr "ドキュメント ルート外へのシンボリックリンクを追随しない"
-
-msgid "Do not generate directory listings."
-msgstr "ディレクトリの待ち受けを生成しない"
-
-msgid "Document root"
-msgstr "ドキュメント ルート"
-
-msgid "E.g specify with index.html and index.php when using PHP"
-msgstr "index.html や、PHPを使用しているときは index.php を設定します。"
-
-msgid "Embedded Lua interpreter is disabled if not present."
-msgstr "指定しない場合、組込みLua インタープリタは無効になります。"
-
-msgid "Enable JSON-RPC Cross-Origin Resource Support"
-msgstr ""
-
-msgid "For settings primarily geared to serving more than the web UI"
-msgstr "主に、Web UI以上のものを提供することを対象とした設定です。"
-
-msgid "Full Web Server Settings"
-msgstr "完全なWebサーバー設定"
-
-msgid "Full real path to handler for Lua scripts"
-msgstr "Lua スクリプトへの絶対パス"
-
-msgid "General Settings"
-msgstr "一般設定"
-
-msgid "HTTP listeners (address:port)"
-msgstr "HTTP 待ち受け（アドレス:ポート）"
-
-msgid "HTTPS Certificate (DER Encoded)"
-msgstr "HTTPS 証明書（DER エンコード）"
-
-msgid "HTTPS Private Key (DER Encoded)"
-msgstr "HTTPS 秘密鍵（DER エンコード）"
-
-msgid "HTTPS listener (address:port)"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:50
+#, fuzzy
+#| msgid "HTTPS listener (address:port)"
+msgid "HTTPS Server-Addresses (Address:Port)"
 msgstr "HTTPS 待ち受け（アドレス:ポート）"
 
-msgid "Ignore private IPs on public interface"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:86
+#, fuzzy
+#| msgid "Redirect all HTTP to HTTPS"
+msgid "Redirect all HTTP requests to HTTPS"
+msgstr "全てのHTTPをHTTPSにリダイレクトする"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:90
+#, fuzzy
+#| msgid "Ignore private IPs on public interface"
+msgid "Ignore private IP addresses on public interfaces"
 msgstr "公開側インターフェースでのプライベートIPを無視する"
 
-msgid "Index page(s)"
-msgstr "インデックス ページ"
-
-msgid ""
-"Interpreter to associate with file endings ('suffix=handler', e.g. '.php=/"
-"usr/bin/php-cgi')"
-msgstr ""
-"ファイル拡張子に関連付けるインタープリタです。（'suffix=handler'、例: '.php=/"
-"usr/bin/php-cgi')"
-
-msgid "Length of key in bits"
-msgstr "鍵のビット数"
-
-msgid "Location"
-msgstr "場所"
-
-msgid "Maximum number of connections"
-msgstr "最大接続数"
-
-msgid "Maximum number of script requests"
-msgstr "スクリプトの最大リクエスト数"
-
-msgid "Maximum wait time for Lua, CGI, or ubus execution"
-msgstr "LuaやCGI、ubus実行の最大待機時間"
-
-msgid "Maximum wait time for network activity"
-msgstr "ネットワークアクティビティの最大待機時間"
-
-msgid "Override path for ubus socket"
-msgstr "ubus ソケットのパスを上書きする"
-
-msgid "Path prefix for CGI scripts"
-msgstr "CGI スクリプトのパスプレフィクス"
-
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:90
 msgid ""
 "Prevent access from private (RFC1918) IPs on an interface if it has an "
 "public IP address"
@@ -143,71 +89,256 @@ msgstr ""
 "グローバル IPアドレスを持つインターフェースでは、プライベート IP (RFC1918) か"
 "らのアクセスをブロックします。"
 
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:94
+#, fuzzy
+#| msgid "HTTPS Certificate (DER Encoded)"
+msgid "HTTPS Certificate (DER encoded)"
+msgstr "HTTPS 証明書（DER エンコード）"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:96
+#, fuzzy
+#| msgid "HTTPS Private Key (DER Encoded)"
+msgid "HTTPS Private Key (DER encoded)"
+msgstr "HTTPS 秘密鍵（DER エンコード）"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:98
+#, fuzzy
+#| msgid "Remove old certificate and key"
+msgid "Generate new certificate and key"
+msgstr "古い証明書と鍵を削除する"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:99
+#, fuzzy
+#| msgid ""
+#| "uHTTPd will generate a new self-signed certificate using the "
+#| "configuration shown below."
+msgid ""
+"uHTTPd will generate a new self-signed certificate using the configuration "
+"shown below"
+msgstr "uHTTPd は、以下に表示した設定で新しい自己署名証明書を生成します。"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:109
+#, fuzzy
+#| msgid "Remove old certificate and key"
+msgid "Remove certificate and key configuration"
+msgstr "古い証明書と鍵を削除する"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:110
+msgid ""
+"Permanently delete the certificate and key, as well as the configuration to "
+"use them"
+msgstr ""
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:122
+msgid "Index page(s)"
+msgstr "インデックス ページ"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:122
+#, fuzzy
+#| msgid "E.g specify with index.html and index.php when using PHP"
+msgid "e.g.: enter index.html and index.php when using PHP"
+msgstr "index.html や、PHPを使用しているときは index.php を設定します。"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:126
+msgid "CGI filetype handler"
+msgstr "CGIファイル形式 ハンドラー"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:126
+msgid ""
+"Interpreter to associate with file endings ('suffix=handler', e.g. '.php=/"
+"usr/bin/php-cgi')"
+msgstr ""
+"ファイル拡張子に関連付けるインタープリタです。（'suffix=handler'、例: '.php=/"
+"usr/bin/php-cgi')"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:129
+#, fuzzy
+#| msgid "Do not follow symlinks outside document root"
+msgid "Do not follow symlinks outside of the document root"
+msgstr "ドキュメント ルート外へのシンボリックリンクを追随しない"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:132
+#, fuzzy
+#| msgid "Do not generate directory listings."
+msgid "Do not generate directory listings"
+msgstr "ディレクトリの待ち受けを生成しない"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:135
+msgid "Aliases"
+msgstr "エイリアス"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:135
+msgid ""
+"(/old/path=/new/path) or (just /old/path which becomes /cgi-prefix/old/path)"
+msgstr ""
+"(/old/path=/new/path) または (just /old/path which becomes /cgi-prefix/old/"
+"path)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:138
 msgid "Realm for Basic Auth"
 msgstr "基本認証の領域名"
 
-msgid "Redirect all HTTP to HTTPS"
-msgstr "全てのHTTPをHTTPSにリダイレクトする"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:142
+#, fuzzy
+#| msgid "Config file (e.g. for credentials for Basic Auth)"
+msgid "Config file (e.g. for Basic Auth credentials)"
+msgstr "設定ファイル（例: 基本認証用の資格情報）"
 
-msgid "Remove configuration for certificate and key"
-msgstr "証明書と鍵の設定を削除する"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:142
+msgid "HTTP authentication will not be available if empty"
+msgstr ""
 
-msgid "Remove old certificate and key"
-msgstr "古い証明書と鍵を削除する"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:145
+#, fuzzy
+#| msgid "404 Error"
+msgid "404 Error Page"
+msgstr "404 エラー"
 
-msgid "Server Hostname"
-msgstr "サーバー ホスト名"
-
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:145
+#, fuzzy
+#| msgid ""
+#| "Virtual URL or CGI script to display on status '404 Not Found'.  Must "
+#| "begin with '/'"
 msgid ""
-"Settings which are either rarely needed or which affect serving the WebUI"
-msgstr "まれに必要とされる設定、またはWeb UIに影響する設定です。"
+"URL or CGI script to display on status '404 Not Found'; must begin with a '/'"
+msgstr ""
+"'404 Not Found' ステータスを表示する、仮想URLまたはCGIスクリプトです。'/' か"
+"ら始まる必要があります。"
 
-msgid "State"
-msgstr "ステータス"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:148
+msgid "Document root"
+msgstr "ドキュメント ルート"
 
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:149
+msgid "Base directory for files to be served"
+msgstr "サーバーがホストするファイルのベースディレクトリです。"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:153
+msgid "Path prefix for CGI scripts"
+msgstr "CGI スクリプトのパスプレフィクス"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:153
+msgid "CGI support will be disabled if empty"
+msgstr ""
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:156
+#, fuzzy
+#| msgid "Virtual path prefix for Lua scripts"
+msgid "URL path prefix for Lua scripts"
+msgstr "Lua スクリプトへの仮想パスプレフィクス"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:160
+msgid "Filesystem path of Lua runtime initialization script"
+msgstr ""
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:160
+#, fuzzy
+#| msgid "Embedded Lua interpreter is disabled if not present."
+msgid "Embedded Lua interpreter will be disabled if empty"
+msgstr "指定しない場合、組込みLua インタープリタは無効になります。"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:163
+msgid "URL path prefix for ubus JSON-RPC"
+msgstr ""
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:163
+msgid "ubus integration will be disabled if empty"
+msgstr ""
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:166
+msgid "Override path for ubus socket"
+msgstr "ubus ソケットのパスを上書きする"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:169
+msgid "Enable JSON-RPC Cross-Origin Resource Sharing"
+msgstr ""
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:173
+#, fuzzy
+#| msgid "Disable JSON-RPC authorization via ubus session API"
+msgid "Disable JSON-RPC authorization when using the ubus session API"
+msgstr "ubus セッションAPI経由のJSON-RPC認証を無効にする"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:177
+msgid "Maximum wait time for Lua, CGI, or ubus execution"
+msgstr "LuaやCGI、ubus実行の最大待機時間"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:182
+msgid "Maximum wait time for network activity"
+msgstr "ネットワークアクティビティの最大待機時間"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:187
+#, fuzzy
+#| msgid "TCP Keepalive"
+msgid "HTTP Keepalive"
+msgstr "TCP キープアライブ"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:192
 msgid "TCP Keepalive"
 msgstr "TCP キープアライブ"
 
-msgid "This permanently deletes the cert, key, and configuration to use same."
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:197
+msgid "Maximum number of connections"
+msgstr "最大接続数"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:201
+msgid "Maximum number of script requests"
+msgstr "スクリプトの最大リクエスト数"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:205
+msgid "Parameters for Generating Certificates"
 msgstr ""
 
-msgid "Valid for # of Days"
-msgstr "有効日数"
-
-msgid ""
-"Virtual URL or CGI script to display on status '404 Not Found'. Must begin "
-"with '/'"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:210
+msgid "Validity (days)"
 msgstr ""
 
-msgid "Virtual path prefix for Lua scripts"
-msgstr "Lua スクリプトへの仮想パスプレフィクス"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:214
+msgid "Length of key in bits"
+msgstr "鍵のビット数"
 
-msgid "Virtual path prefix for ubus via JSON-RPC integration"
-msgstr ""
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:218
+msgid "Server Hostname"
+msgstr "サーバー ホスト名"
 
-msgid "Will not use HTTP authentication if not present"
-msgstr "指定しない場合、HTTP 認証は使用されません。"
-
-msgid "a.k.a CommonName"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:218
+#, fuzzy
+#| msgid "a.k.a CommonName"
+msgid "X.509 CommonName field"
 msgstr "共通名"
 
-msgid "uHTTPd"
-msgstr "uHTTPd"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:221
+msgid "Country"
+msgstr "国"
 
-msgid "uHTTPd Self-signed Certificate Parameters"
-msgstr "uHTTPd 自己署名証明書 パラメーター"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:224
+msgid "State"
+msgstr "ステータス"
 
-msgid ""
-"uHTTPd will generate a new self-signed certificate using the configuration "
-"shown below."
-msgstr "uHTTPd は、以下に表示した設定で新しい自己署名証明書を生成します。"
-
-msgid "ubus integration is disabled if not present"
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:227
+msgid "Locality (i.e. nearby city)"
 msgstr ""
 
-#~ msgid ""
-#~ "Virtual URL or CGI script to display on status '404 Not Found'.  Must "
-#~ "begin with '/'"
-#~ msgstr ""
-#~ "'404 Not Found' ステータスを表示する、仮想URLまたはCGIスクリプトです。'/' "
-#~ "から始まる必要があります。"
+#~ msgid "Remove configuration for certificate and key"
+#~ msgstr "証明書と鍵の設定を削除する"
+
+#~ msgid "Will not use HTTP authentication if not present"
+#~ msgstr "指定しない場合、HTTP 認証は使用されません。"
+
+#~ msgid "CGI is disabled if not present."
+#~ msgstr "指定しない場合、CGIは無効になります。"
+
+#~ msgid "Full real path to handler for Lua scripts"
+#~ msgstr "Lua スクリプトへの絶対パス"
+
+#~ msgid "Connection reuse"
+#~ msgstr "接続の再使用"
+
+#~ msgid "uHTTPd Self-signed Certificate Parameters"
+#~ msgstr "uHTTPd 自己署名証明書 パラメーター"
+
+#~ msgid "Valid for # of Days"
+#~ msgstr "有効日数"
+
+#~ msgid "Location"
+#~ msgstr "場所"

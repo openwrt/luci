@@ -1,4 +1,5 @@
 -- Copyright 2015 Daniel Dickinson <openwrt@daniel.thecshore.com>
+-- Copyright 2017 Alexander Schlarb <alexander@ninetailed.ninja>
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require("nixio.fs")
@@ -16,10 +17,10 @@ local cert_file = nil
 local key_file = nil
 
 ucs:tab("general", translate("General Settings"))
-ucs:tab("server", translate("Full Web Server Settings"), translate("For settings primarily geared to serving more than the web UI"))
-ucs:tab("advanced", translate("Advanced Settings"), translate("Settings which are either rarely needed or which affect serving the WebUI"))
+ucs:tab("server", translate("Web Server Settings"), translate("Settings primarily geared towards serving more than the web UI"))
+ucs:tab("advanced", translate("Advanced Settings"), translate("Rarely needed settings that can affect serving the WebUI"))
 
-lhttp = ucs:taboption("general", DynamicList, "listen_http", translate("HTTP listeners (address:port)"), translate("Bind to specific interface:port (by specifying interface address"))
+lhttp = ucs:taboption("general", DynamicList, "listen_http", translate("HTTP Server-Addresses (Address:Port)"), translate("Bind to specific interface:port (by specifying interface address)"))
 lhttp.datatype = "list(ipaddrport(1))"
 
 function lhttp.validate(self, value, section)
@@ -47,7 +48,7 @@ function lhttp.validate(self, value, section)
 	return DynamicList.validate(self, value, section)
 end
 
-lhttps = ucs:taboption("general", DynamicList, "listen_https", translate("HTTPS listener (address:port)"), translate("Bind to specific interface:port (by specifying interface address"))
+lhttps = ucs:taboption("general", DynamicList, "listen_https", translate("HTTPS Server-Addresses (Address:Port)"), translate("Bind to specific interface:port (by specifying interface address)"))
 lhttps.datatype = "list(ipaddrport(1))"
 lhttps:depends("cert")
 lhttps:depends("key")
@@ -83,20 +84,20 @@ function lhttps.validate(self, value, section)
 	return DynamicList.validate(self, value, section)
 end
 
-o = ucs:taboption("general", Flag, "redirect_https", translate("Redirect all HTTP to HTTPS"))
+o = ucs:taboption("general", Flag, "redirect_https", translate("Redirect all HTTP requests to HTTPS"))
 o.default = o.enabled
 o.rmempty = false
 
-o = ucs:taboption("general", Flag, "rfc1918_filter", translate("Ignore private IPs on public interface"), translate("Prevent access from private (RFC1918) IPs on an interface if it has an public IP address"))
+o = ucs:taboption("general", Flag, "rfc1918_filter", translate("Ignore private IP addresses on public interfaces"), translate("Prevent access from private (RFC1918) IPs on an interface if it has an public IP address"))
 o.default = o.enabled
 o.rmempty = false
 
-cert_file = ucs:taboption("general", FileUpload, "cert", translate("HTTPS Certificate (DER Encoded)"))
+cert_file = ucs:taboption("general", FileUpload, "cert", translate("HTTPS Certificate (DER encoded)"))
 
-key_file = ucs:taboption("general", FileUpload, "key", translate("HTTPS Private Key (DER Encoded)"))
+key_file = ucs:taboption("general", FileUpload, "key", translate("HTTPS Private Key (DER encoded)"))
 
-o = ucs:taboption("general", Button, "remove_old", translate("Remove old certificate and key"),
-		  translate("uHTTPd will generate a new self-signed certificate using the configuration shown below."))
+o = ucs:taboption("general", Button, "remove_old", translate("Generate new certificate and key"),
+		  translate("uHTTPd will generate a new self-signed certificate using the configuration shown below"))
 o.inputstyle = "remove"
 
 function o.write(self, section)
@@ -106,8 +107,8 @@ function o.write(self, section)
 	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "uhttpd"))
 end
 
-o = ucs:taboption("general", Button, "remove_conf", translate("Remove configuration for certificate and key"),
-	translate("This permanently deletes the cert, key, and configuration to use same."))
+o = ucs:taboption("general", Button, "remove_conf", translate("Remove certificate and key configuration"),
+	translate("Permanently delete the certificate and key, as well as the configuration to use them"))
 o.inputstyle = "remove"
 
 function o.write(self, section)
@@ -119,17 +120,17 @@ function o.write(self, section)
 	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "uhttpd"))
 end
 
-o = ucs:taboption("server", DynamicList, "index_page", translate("Index page(s)"), translate("E.g specify with index.html and index.php when using PHP"))
+o = ucs:taboption("server", DynamicList, "index_page", translate("Index page(s)"), translate("e.g.: enter index.html and index.php when using PHP"))
 o.optional = true
 o.placeholder = "index.html"
 
 o = ucs:taboption("server", DynamicList, "interpreter", translate("CGI filetype handler"), translate("Interpreter to associate with file endings ('suffix=handler', e.g. '.php=/usr/bin/php-cgi')"))
 o.optional = true
 
-o = ucs:taboption("server", Flag, "no_symlinks", translate("Do not follow symlinks outside document root"))
+o = ucs:taboption("server", Flag, "no_symlinks", translate("Do not follow symlinks outside of the document root"))
 o.optional = true
 
-o = ucs:taboption("server", Flag, "no_dirlists", translate("Do not generate directory listings."))
+o = ucs:taboption("server", Flag, "no_dirlists", translate("Do not generate directory listings"))
 o.default = o.disabled
 
 o = ucs:taboption("server", DynamicList, "alias", translate("Aliases"), translate("(/old/path=/new/path) or (just /old/path which becomes /cgi-prefix/old/path)"))
@@ -139,10 +140,10 @@ o = ucs:taboption("server", Value, "realm", translate("Realm for Basic Auth"))
 o.optional = true
 o.placeholder = luci.sys.hostname() or "OpenWrt"
 
-local httpconfig = ucs:taboption("server", Value, "config", translate("Config file (e.g. for credentials for Basic Auth)"), translate("Will not use HTTP authentication if not present"))
+local httpconfig = ucs:taboption("server", Value, "config", translate("Config file (e.g. for Basic Auth credentials)"), translate("HTTP authentication will not be available if empty"))
 httpconfig.optional = true
 
-o = ucs:taboption("server", Value, "error_page", translate("404 Error"), translate("Virtual URL or CGI script to display on status '404 Not Found'.  Must begin with '/'"))
+o = ucs:taboption("server", Value, "error_page", translate("404 Error Page"), translate("URL or CGI script to display on status '404 Not Found'; must begin with a '/'"))
 o.optional = true
 
 o = ucs:taboption("advanced", Value, "home", translate("Document root"),
@@ -150,27 +151,27 @@ o = ucs:taboption("advanced", Value, "home", translate("Document root"),
 o.default = "/www"
 o.datatype = "directory"
 
-o = ucs:taboption("advanced", Value, "cgi_prefix", translate("Path prefix for CGI scripts"), translate("CGI is disabled if not present."))
+o = ucs:taboption("advanced", Value, "cgi_prefix", translate("Path prefix for CGI scripts"), translate("CGI support will be disabled if empty"))
 o.optional = true
 
-o = ucs:taboption("advanced", Value, "lua_prefix", translate("Virtual path prefix for Lua scripts"))
+o = ucs:taboption("advanced", Value, "lua_prefix", translate("URL path prefix for Lua scripts"))
 o.placeholder = "/lua"
 o.optional = true
 
-o = ucs:taboption("advanced", Value, "lua_handler", translate("Full real path to handler for Lua scripts"), translate("Embedded Lua interpreter is disabled if not present."))
+o = ucs:taboption("advanced", Value, "lua_handler", translate("Filesystem path of Lua runtime initialization script"), translate("Embedded Lua interpreter will be disabled if empty"))
 o.optional = true
 
-o = ucs:taboption("advanced", Value, "ubus_prefix", translate("Virtual path prefix for ubus via JSON-RPC integration"), translate("ubus integration is disabled if not present"))
+o = ucs:taboption("advanced", Value, "ubus_prefix", translate("URL path prefix for ubus JSON-RPC"), translate("ubus integration will be disabled if empty"))
 o.optional = true
 
 o = ucs:taboption("advanced", Value, "ubus_socket", translate("Override path for ubus socket"))
 o.optional = true
 
-o = ucs:taboption("advanced", Flag, "ubus_cors", translate("Enable JSON-RPC Cross-Origin Resource Support"))
+o = ucs:taboption("advanced", Flag, "ubus_cors", translate("Enable JSON-RPC Cross-Origin Resource Sharing"))
 o.default = o.disabled
 o.optional = true
 
-o = ucs:taboption("advanced", Flag, "no_ubusauth", translate("Disable JSON-RPC authorization via ubus session API"))
+o = ucs:taboption("advanced", Flag, "no_ubusauth", translate("Disable JSON-RPC authorization when using the ubus session API"))
 o.optional= true
 o.default = o.disabled
 
@@ -184,7 +185,7 @@ o.placeholder = 30
 o.datatype = "uinteger"
 o.optional = true
 
-o = ucs:taboption("advanced", Value, "http_keepalive", translate("Connection reuse"))
+o = ucs:taboption("advanced", Value, "http_keepalive", translate("HTTP Keepalive"))
 o.placeholder = 20
 o.datatype = "uinteger"
 o.optional = true
@@ -202,12 +203,12 @@ o = ucs:taboption("advanced", Value, "max_requests", translate("Maximum number o
 o.optional = true
 o.datatype = "uinteger"
 
-local s = m:section(TypedSection, "cert", translate("uHTTPd Self-signed Certificate Parameters"))
+local s = m:section(TypedSection, "cert", translate("Parameters for Generating Certificates"))
 
 s.template  = "cbi/tsection"
 s.anonymous = true
 
-o = s:option(Value, "days", translate("Valid for # of Days"))
+o = s:option(Value, "days", translate("Validity (days)"))
 o.default = 730
 o.datatype = "uinteger"
 
@@ -215,7 +216,7 @@ o = s:option(Value, "bits", translate("Length of key in bits"))
 o.default = 2048
 o.datatype = "min(1536)"
 
-o = s:option(Value, "commonname", translate("Server Hostname"), translate("a.k.a CommonName"))
+o = s:option(Value, "commonname", translate("Server Hostname"), translate("X.509 CommonName field"))
 o.default = luci.sys.hostname()
 
 o = s:option(Value, "country", translate("Country"))
@@ -224,7 +225,7 @@ o.default = "ZZ"
 o = s:option(Value, "state", translate("State"))
 o.default = "Unknown"
 
-o = s:option(Value, "location", translate("Location"))
-o.default = "Unknown"
+o = s:option(Value, "location", translate("Locality (i.e. nearby city)"))
+o.default = "Somewhere"
 
 return m
