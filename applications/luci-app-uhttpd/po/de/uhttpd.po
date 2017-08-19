@@ -1,0 +1,281 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://github.com/openwrt/luci/\n"
+"POT-Creation-Date: 2017-08-19 22:33+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Alexander Schlarb <alexander@ninetailed.ninja>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:6
+msgid "uHTTPd"
+msgstr "uHTTPd"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:7
+msgid "A lightweight single-threaded HTTP(S) server"
+msgstr "Ein einfach aufgebauter HTTP(S)-Server"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:18
+msgid "General Settings"
+msgstr "Allgemeine Einstellungen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:19
+msgid "Web Server Settings"
+msgstr "Web-Server Einstellungen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:19
+msgid "Settings primarily geared towards serving more than the web UI"
+msgstr ""
+"Einstellungen die nützlich sind um andere Dienste neben der Web-Oberfläche "
+"bereitzustellen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:20
+msgid "Advanced Settings"
+msgstr "Erweiterte Einstellungen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:20
+msgid "Rarely needed settings that can affect serving the WebUI"
+msgstr ""
+"Selten genutzte Einstellungen die sich negativ auf die Web-Oberfläche "
+"auswirken könnten"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:22
+msgid "HTTP Server-Addresses (Address:Port)"
+msgstr "HTTP-Server-Adressen (Adresse:Port)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:22 luasrc/model/cbi/uhttpd/uhttpd.lua:50
+msgid "Bind to specific interface:port (by specifying interface address)"
+msgstr ""
+"Liste der HTTP Schnittstellen-Adressen und Ports an denen der Server "
+"lauschen soll"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:50
+msgid "HTTPS Server-Addresses (Address:Port)"
+msgstr "HTTPS-Server-Adressen (Adresse:Port)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:86
+msgid "Redirect all HTTP requests to HTTPS"
+msgstr "Alle HTTP-Anfragen an HTTPS weiterleiten"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:90
+msgid "Ignore private IP addresses on public interfaces"
+msgstr "Private IP-Adressen auf öffentlichen Schnittstellen ignorieren"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:90
+msgid ""
+"Prevent access from private (RFC1918) IPs on an interface if it has an "
+"public IP address"
+msgstr ""
+"Zugriff von privaten (RFC 1918) IP-Adressen auf Netzwerkschnittstellen mit "
+"öffentlichen Adressen verhindern"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:94
+msgid "HTTPS Certificate (DER encoded)"
+msgstr "HTTPS-Zertifikat (DER kodiert)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:96
+msgid "HTTPS Private Key (DER encoded)"
+msgstr "Privater HTTPS-Schlüssel (DER kodiert)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:98
+msgid "Generate new certificate and key"
+msgstr "Neues Zertifikat generieren"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:99
+msgid ""
+"uHTTPd will generate a new self-signed certificate using the configuration "
+"shown below"
+msgstr ""
+"uHTPd will ein neues, selbst-signiertes Zertifikat mit den unten gewählten "
+"Einstellungen generieren"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:109
+msgid "Remove certificate and key configuration"
+msgstr "Zertifikatskonfiguration zurücksetzten"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:110
+msgid ""
+"Permanently delete the certificate and key, as well as the configuration to "
+"use them"
+msgstr ""
+"Das Zertifikat, sowie dessen Schlüssel und verwendete Konfiguration, "
+"endgültig löschen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:122
+msgid "Index page(s)"
+msgstr "Indexdateien"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:122
+msgid "e.g.: enter index.html and index.php when using PHP"
+msgstr "z.B. index.html und index.php um PHP zu verwenden"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:126
+msgid "CGI filetype handler"
+msgstr "CGI Datei-Handler"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:126
+msgid ""
+"Interpreter to associate with file endings ('suffix=handler', e.g. '.php=/"
+"usr/bin/php-cgi')"
+msgstr ""
+"Interpreter für Dateiendungen ('Suffix=Programmpfad', z.B.: '.php=/usr/bin/"
+"php-cgi')"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:129
+msgid "Do not follow symlinks outside of the document root"
+msgstr ""
+"Symbolischen Verknüpfungen nicht außerhalb des Basis-Verzeichnisses folgen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:132
+msgid "Do not generate directory listings"
+msgstr "Keine Verzeichnis-Auflistungen erzeugen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:135
+msgid "Aliases"
+msgstr "Alternativnamen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:135
+msgid ""
+"(/old/path=/new/path) or (just /old/path which becomes /cgi-prefix/old/path)"
+msgstr ""
+"(/alter/Pfad=/neuer/Pfad) oder (nur /alter/Pfad um /CGI-Präfix/alter/Pfad "
+"als neuen Pfad zu verwenden)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:138
+msgid "Realm for Basic Auth"
+msgstr "Realm-Wert für HTTP-Basic-Authentifizierung"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:142
+msgid "Config file (e.g. for Basic Auth credentials)"
+msgstr ""
+"Konfigurationsdatei (z.B. Anmeldedaten für HTTP-Basic-Authentifizierung)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:142
+msgid "HTTP authentication will not be available if empty"
+msgstr ""
+"Die HTTP-Authentifizierung wird nicht verfügbar sein, wenn das Feld leer "
+"gelassen wird"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:145
+msgid "404 Error Page"
+msgstr "404 Error-Seite"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:145
+msgid ""
+"URL or CGI script to display on status '404 Not Found'; must begin with a '/'"
+msgstr ""
+"URL oder CGI-Skript das bei einem '404 Seite nicht gefunden'-Fehler "
+"angezeigt werden soll; muss mit '/' beginnen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:148
+msgid "Document root"
+msgstr "Basis-Verzeichnis"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:149
+msgid "Base directory for files to be served"
+msgstr "Basis-Verzeichnis für Dateien die vom Web-Server bereitgestellt werden"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:153
+msgid "Path prefix for CGI scripts"
+msgstr "Pfadpräfix für CGI-Skripte"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:153
+msgid "CGI support will be disabled if empty"
+msgstr "CGI-Unterstützung wird deaktiviert, wenn dieses Feld leergelassen wird"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:156
+msgid "URL path prefix for Lua scripts"
+msgstr "URL Pfadpräfix für Lua-Skripte"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:160
+msgid "Filesystem path of Lua runtime initialization script"
+msgstr "Vollständiger Pfad zum Interpreter für Lua-Skripte"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:160
+msgid "Embedded Lua interpreter will be disabled if empty"
+msgstr ""
+"Der integrierte Lua-Interpreter wird deaktiviert wenn das Feld leer gelassen "
+"wird"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:163
+msgid "URL path prefix for ubus JSON-RPC"
+msgstr "URL Pfadpräfix für UBus JSON-RPC"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:163
+msgid "ubus integration will be disabled if empty"
+msgstr ""
+"Die UBus-Integration wird deaktiviert, wenn das Feld leer gelassen wird"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:166
+msgid "Override path for ubus socket"
+msgstr "Pfad für UBus-Socket überschreiben"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:169
+msgid "Enable JSON-RPC Cross-Origin Resource Sharing"
+msgstr "JSON-RPC von fremden Domains (Cross-Origin Resource Sharing) erlauben"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:173
+msgid "Disable JSON-RPC authorization when using the ubus session API"
+msgstr ""
+"JSON-RPC-Authentifizierung bei Verwendung der UBus-Session-API deaktivieren"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:177
+msgid "Maximum wait time for Lua, CGI, or ubus execution"
+msgstr "Maximale Wartezeit beim Ausführen von Lua, CGI oder UBus"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:182
+msgid "Maximum wait time for network activity"
+msgstr "Maximale Wartezeit auf Netzwerkaktivität"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:187
+msgid "HTTP Keepalive"
+msgstr "HTTP keep-alive"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:192
+msgid "TCP Keepalive"
+msgstr "TCP Keep-alive"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:197
+msgid "Maximum number of connections"
+msgstr "Maximale Anzahl an Verbindungen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:201
+msgid "Maximum number of script requests"
+msgstr "Maximale Anzahl an Skript-Anfragen"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:205
+msgid "Parameters for Generating Certificates"
+msgstr "Parameter für das Generieren von Zertifikaten"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:210
+msgid "Validity (days)"
+msgstr "Gültigkeit (Tage)"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:214
+msgid "Length of key in bits"
+msgstr "Schlüssellänge in Bits"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:218
+msgid "Server Hostname"
+msgstr "Server-Hostname"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:218
+msgid "X.509 CommonName field"
+msgstr "X.509 CommonName-Feld"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:221
+msgid "Country"
+msgstr "Staat"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:224
+msgid "State"
+msgstr "Bundesland"
+
+#: luasrc/model/cbi/uhttpd/uhttpd.lua:227
+msgid "Locality (i.e. nearby city)"
+msgstr "Lokalität (z.B.: nahe gelegene Stadt)"
