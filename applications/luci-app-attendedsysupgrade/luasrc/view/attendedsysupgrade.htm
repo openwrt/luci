@@ -1,3 +1,78 @@
+<%
+-- all lua code provided by https://github.com/jow-/
+-- thank you very much!
+
+    function apply_acls(filename, session)
+        local json = require "luci.jsonc"
+        local util = require "luci.util"
+        local fs   = require "nixio.fs"
+
+        local grants = { }
+
+        local acl = json.parse(fs.readfile(filename))
+        if type(acl) ~= "table" then
+            return
+        end
+
+        local group, perms
+        for group, perms in pairs(acl) do
+            local perm, scopes
+            for perm, scopes in pairs(perms) do
+                if type(scopes) == "table" then
+                    local scope, objects
+                    for scope, objects in pairs(scopes) do
+                        if type(objects) == "table" then
+                            if not grants[scope] then
+                                grants[scope] = { }
+                            end
+
+                            if next(objects) == 1 then
+                                local _, object
+                                for _, object in ipairs(objects) do
+                                    if not grants[scope][object] then
+                                        grants[scope][object] = { }
+                                    end
+                                    table.insert(grants[scope][object], perm)
+                                end
+                            else
+                                local object, funcs
+                                for object, funcs in pairs(objects) do
+                                    if type(funcs) == "table" then
+                                        local _, func
+                                        for _, func in ipairs(funcs) do
+                                            if not grants[scope][object] then
+                                                grants[scope][object] = { }
+                                            end
+                                            table.insert(grants[scope][object], func)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+
+        local _, scope, object, func
+        for scope, _ in pairs(grants) do
+            local objects = { }
+            for object, _ in pairs(_) do
+                for _, func in ipairs(_) do
+                    table.insert(objects, { object, func })
+                end
+            end
+
+            util.ubus("session", "grant", {
+                ubus_rpc_session = session,
+                scope = scope, objects = objects
+            })
+        end
+    end
+
+    apply_acls("/usr/share/rpcd/acl.d/attendedsysupgrade.json", luci.dispatcher.context.authsession)
+    apply_acls("/usr/share/rpcd/acl.d/packagelist.json", luci.dispatcher.context.authsession)
+%>
 <%+header%>
 <h2 name="content"><%:Attended Sysupgrade%></h2>
 <div class="container">
