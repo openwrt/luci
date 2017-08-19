@@ -202,7 +202,10 @@ o = ucs:taboption("advanced", Value, "max_requests", translate("Maximum number o
 o.optional = true
 o.datatype = "uinteger"
 
-local s = m:section(NamedSection, "px5g", "cert", translate("uHTTPd Self-signed Certificate Parameters"))
+local s = m:section(TypedSection, "cert", translate("uHTTPd Self-signed Certificate Parameters"))
+
+s.template  = "cbi/tsection"
+s.anonymous = true
 
 o = s:option(Value, "days", translate("Valid for # of Days"))
 o.default = 730
