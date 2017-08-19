@@ -41,7 +41,7 @@ end
 
 -- Trigger selection
 
-s = m:section(TypedSection, "global", "General options")
+s = m:section(TypedSection, "global", translate("General options"))
 s.anonymous = true
 
 -- Main dnscrypt-proxy resource list
@@ -69,7 +69,7 @@ end
 
 -- Trigger settings
 
-t = s:option(DynamicList, "procd_trigger", "Startup Trigger",
+t = s:option(DynamicList, "procd_trigger", translate("Startup Trigger"),
 	translate("By default the DNSCrypt-Proxy startup will be triggered by ifup events of multiple network interfaces. ")
 	.. translate("To restrict the trigger, add only the relevant network interface(s). ")
 	.. translate("Usually the 'wan' interface should work for most users."))
@@ -85,7 +85,7 @@ t.rmempty = true
 
 -- Mandatory options per instance
 
-s = m:section(TypedSection, "dnscrypt-proxy", "Instance options")
+s = m:section(TypedSection, "dnscrypt-proxy", translate("Instance options"))
 s.anonymous = true
 s.addremove = true
 
