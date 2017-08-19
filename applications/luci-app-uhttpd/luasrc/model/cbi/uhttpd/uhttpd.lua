@@ -212,7 +212,7 @@ o.default = 730
 o.datatype = "uinteger"
 
 o = s:option(Value, "bits", translate("Length of key in bits"))
-o.default = 1024
+o.default = 2048
 o.datatype = "min(1024)"
 
 o = s:option(Value, "commonname", translate("Server Hostname"), translate("a.k.a CommonName"))
@@ -225,6 +225,6 @@ o = s:option(Value, "state", translate("State"))
 o.default = "Unknown"
 
 o = s:option(Value, "location", translate("Location"))
-o.default = "Somewhere"
+o.default = "Unknown"
 
 return m
