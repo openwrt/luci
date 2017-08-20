@@ -22,6 +22,12 @@ if not fs.access(res_input) then
 	luci.sys.call("env -i /bin/uclient-fetch --no-check-certificate -O " .. res_input .. " " .. url .. " >/dev/null 2>&1")
 end
 
+if not uci:get_first("dnscrypt-proxy", "global") then
+	uci:add("dnscrypt-proxy", "global")
+	uci:save("dnscrypt-proxy")
+	uci:commit("dnscrypt-proxy")
+end
+
 for line in io.lines(res_input) do
 	local name = line:match("^[%w_.-]*")
 	res_list[#res_list + 1] = { name = name }
@@ -38,8 +44,6 @@ function m.on_after_commit(self)
 	luci.sys.call("env -i /etc/init.d/dnsmasq restart >/dev/null 2>&1")
 	luci.sys.call("env -i /etc/init.d/dnscrypt-proxy restart >/dev/null 2>&1")
 end
-
--- Trigger selection
 
 s = m:section(TypedSection, "global", translate("General options"))
 s.anonymous = true
@@ -83,6 +87,26 @@ if dump then
 end
 t.rmempty = true
 
+-- Extra options
+
+ds = s:option(DummyValue, "_dummy", translate("Extra options"),
+	translate("Options for further tweaking in case the defaults are not suitable for you."))
+ds.template = "cbi/nullsection"
+
+btn = s:option(Button, "", translate("Create custom config file"),
+	translate("Create '/etc/resolv-crypt.conf' with 'options timeout:1' to reduce DNS upstream timeouts with multiple DNSCrypt instances. ")
+	.. translatef("For further information "
+	.. "<a href=\"%s\" target=\"_blank\">"
+	.. "see the wiki online</a>", "https://wiki.openwrt.org/inbox/dnscrypt"))
+btn.inputtitle = translate("Create Config File")
+btn.inputstyle = "apply"
+btn.disabled = false
+function btn.write(self, section, value)
+	if not fs.access("/etc/resolv-crypt.conf") then
+		luci.sys.call("env -i echo 'options timeout:1' > '/etc/resolv-crypt.conf'")
+	end
+end
+
 -- Mandatory options per instance
 
 s = m:section(TypedSection, "dnscrypt-proxy", translate("Instance options"))
@@ -90,8 +114,7 @@ s.anonymous = true
 s.addremove = true
 
 o1 = s:option(Value, "address", translate("IP Address"),
-	translate("The local IP address."))
-o1.datatype = "ip4addr"
+	translate("The local IPv4 or IPv6 address. The latter one should be specified within brackets, e.g. '[::1]'."))
 o1.default = address or "127.0.0.1"
 o1.rmempty = false
 
