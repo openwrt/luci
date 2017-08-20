@@ -19,7 +19,7 @@ m = Map("shadowsocks-libev",
 local sdata = m:get('ss_rules')
 if not sdata then
 	m:set('ss_rules', nil, 'ss_rules')
-	m:set('ss_rules', 'ss_rules', 'disabled', true)
+	m:set('ss_rules', 'disabled', true)
 end
 
 s = m:section(NamedSection, "ss_rules", "ss_rules")
@@ -39,8 +39,12 @@ ss.values_redir(o, 'udp')
 
 o = s:taboption('general', ListValue, "local_default",
 	translate("Local-out default"),
-	translate("Default action for locally generated packets"))
+	translate("Default action for locally generated TCP packets"))
 ss.values_actions(o)
+o = s:taboption('general', DynamicList, "ifnames",
+	translate("Ingress interfaces"),
+	translate("Only apply rules on packets from these network interfaces"))
+ss.values_ifnames(o)
 s:taboption('general', Value, "ipt_args",
 	translate("Extra arguments"),
 	translate("Passes additional arguments to iptables. Use with care!"))
@@ -74,5 +78,9 @@ s:taboption('dstip', FileBrowser, "dst_ips_forward_file",
 	translate("Dst ip forward file"),
 	translate("File containing ip addresses for the purposes as with <em>Dst ip forward</em>"))
 o.datatype = "file"
+o = s:taboption('dstip', ListValue, "dst_default",
+	translate("Dst default"),
+	translate("Default action for packets whose destination addresses do not match any of the destination ip list"))
+ss.values_actions(o)
 
 return m

@@ -14,8 +14,10 @@ module("luci.model.shadowsocks-libev", function(m)
 end)
 
 function values_actions(o)
-	for _, a in ipairs(actions) do
-		o:value(a)
+	o:value("bypass")
+	o:value("forward")
+	if o.option ~= "dst_default" then
+		o:value("checkdst")
 	end
 end
 
@@ -43,10 +45,17 @@ function values_serverlist(o)
 end
 
 function values_ipaddr(o)
-	local keys, vals = {}, {}
 	for _, v in ipairs(nw:get_interfaces()) do
 		for _, a in ipairs(v:ipaddrs()) do
 			o:value(a:host():string(), '%s (%s)' %{ a:host(), v:shortname() })
+		end
+	end
+end
+
+function values_ifnames(o)
+	for _, v in ipairs(nw:get_interfaces()) do
+		if v.dev then
+			o:value(v.dev.name)
 		end
 	end
 end
@@ -226,17 +235,13 @@ modes = {
 	"udp_only",
 }
 
-actions = {
-	"bypass",
-	"forward",
-	"checkdst",
-}
-
 methods = {
 	-- aead
 	"aes-128-gcm",
 	"aes-192-gcm",
 	"aes-256-gcm",
+	"chacha20-ietf-poly1305",
+	"xchacha20-ietf-poly1305",
 	-- stream
 	"table",
 	"rc4",
