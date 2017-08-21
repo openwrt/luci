@@ -22,6 +22,11 @@ if not sdata then
 	m:set('ss_rules', 'disabled', true)
 end
 
+function src_dst_option(s, ...)
+	local o = s:taboption(...)
+	o.datatype = "or(ip4addr,cidr4)"
+end
+
 s = m:section(NamedSection, "ss_rules", "ss_rules")
 s:tab("general", translate("General Settings"))
 s:tab("srcip", translate("Source Settings"))
@@ -49,13 +54,13 @@ s:taboption('general', Value, "ipt_args",
 	translate("Extra arguments"),
 	translate("Passes additional arguments to iptables. Use with care!"))
 
-s:taboption('srcip', DynamicList, "src_ips_bypass",
+src_dst_option(s, 'srcip', DynamicList, "src_ips_bypass",
 	translate("Src ip bypass"),
 	translate("Bypass redir action for packets with source addresses in this list"))
-s:taboption('srcip', DynamicList, "src_ips_forward",
+src_dst_option(s, 'srcip', DynamicList, "src_ips_forward",
 	translate("Src ip forward"),
 	translate("Go through redir action for packets with source addresses in this list"))
-s:taboption('srcip', DynamicList, "src_ips_checkdst",
+src_dst_option(s, 'srcip', DynamicList, "src_ips_checkdst",
 	translate("Src ip checkdst"),
 	translate("Continue to have dst address checked for packets with source addresses in this list"))
 o = s:taboption('srcip', ListValue, "src_default",
@@ -63,10 +68,10 @@ o = s:taboption('srcip', ListValue, "src_default",
 	translate("Default action for packets whose source addresses do not match any of the source ip list"))
 ss.values_actions(o)
 
-s:taboption('dstip', DynamicList, "dst_ips_bypass",
+src_dst_option(s, 'dstip', DynamicList, "dst_ips_bypass",
 	translate("Dst ip bypass"),
 	translate("Bypass redir action for packets with destination addresses in this list"))
-s:taboption('dstip', DynamicList, "dst_ips_forward",
+src_dst_option(s, 'dstip', DynamicList, "dst_ips_forward",
 	translate("Dst ip forward"),
 	translate("Go through redir action for packets with destination addresses in this list"))
 
