@@ -9,12 +9,12 @@ m = Map("shadowsocks-libev",
 	translate("Redir Rules"),
 	translate("On this page you can configure how traffics are to be \
 		forwarded to ss-redir instances. \
-		If enabled, packets will first have their source ip addresses checked \
-		against <em>Src ip bypass</em>, <em>Src ip forward</em>, \
-		<em>Src ip checkdst</em> and if none matches <em>Src default</em> \
+		If enabled, packets will first have their src ip addresses checked \
+		against <em>Src ip/net bypass</em>, <em>Src ip/net forward</em>, \
+		<em>Src ip/net checkdst</em> and if none matches <em>Src default</em> \
 		will give the default action to be taken. \
 		If the prior check results in action <em>checkdst</em>, packets will continue \
-		to have their destination addresses checked."))
+		to have their dst addresses checked."))
 
 local sdata = m:get('ss_rules')
 if not sdata then
@@ -29,8 +29,8 @@ end
 
 s = m:section(NamedSection, "ss_rules", "ss_rules")
 s:tab("general", translate("General Settings"))
-s:tab("srcip", translate("Source Settings"))
-s:tab("dstip", translate("Destination Settings"))
+s:tab("src", translate("Source Settings"))
+s:tab("dst", translate("Destination Settings"))
 
 s:taboption('general', Flag, "disabled", translate("Disable"))
 ss.option_install_package(s, 'general')
@@ -54,38 +54,38 @@ s:taboption('general', Value, "ipt_args",
 	translate("Extra arguments"),
 	translate("Passes additional arguments to iptables. Use with care!"))
 
-src_dst_option(s, 'srcip', DynamicList, "src_ips_bypass",
-	translate("Src ip bypass"),
-	translate("Bypass redir action for packets with source addresses in this list"))
-src_dst_option(s, 'srcip', DynamicList, "src_ips_forward",
-	translate("Src ip forward"),
-	translate("Go through redir action for packets with source addresses in this list"))
-src_dst_option(s, 'srcip', DynamicList, "src_ips_checkdst",
-	translate("Src ip checkdst"),
-	translate("Continue to have dst address checked for packets with source addresses in this list"))
-o = s:taboption('srcip', ListValue, "src_default",
+src_dst_option(s, 'src', DynamicList, "src_ips_bypass",
+	translate("Src ip/net bypass"),
+	translate("Bypass ss-redir for packets with src address in this list"))
+src_dst_option(s, 'src', DynamicList, "src_ips_forward",
+	translate("Src ip/net forward"),
+	translate("Forward through ss-redir for packets with src address in this list"))
+src_dst_option(s, 'src', DynamicList, "src_ips_checkdst",
+	translate("Src ip/net checkdst"),
+	translate("Continue to have dst address checked for packets with src address in this list"))
+o = s:taboption('src', ListValue, "src_default",
 	translate("Src default"),
-	translate("Default action for packets whose source addresses do not match any of the source ip list"))
+	translate("Default action for packets whose src address do not match any of the src ip/net list"))
 ss.values_actions(o)
 
-src_dst_option(s, 'dstip', DynamicList, "dst_ips_bypass",
-	translate("Dst ip bypass"),
-	translate("Bypass redir action for packets with destination addresses in this list"))
-src_dst_option(s, 'dstip', DynamicList, "dst_ips_forward",
-	translate("Dst ip forward"),
-	translate("Go through redir action for packets with destination addresses in this list"))
+src_dst_option(s, 'dst', DynamicList, "dst_ips_bypass",
+	translate("Dst ip/net bypass"),
+	translate("Bypass ss-redir for packets with dst address in this list"))
+src_dst_option(s, 'dst', DynamicList, "dst_ips_forward",
+	translate("Dst ip/net forward"),
+	translate("Forward through ss-redir for packets with dst address in this list"))
 
-o = s:taboption('dstip', FileBrowser, "dst_ips_bypass_file",
-	translate("Dst ip bypass file"),
-	translate("File containing ip addresses for the purposes as with <em>Dst ip bypass</em>"))
+o = s:taboption('dst', FileBrowser, "dst_ips_bypass_file",
+	translate("Dst ip/net bypass file"),
+	translate("File containing ip/net for the purposes as with <em>Dst ip/net bypass</em>"))
 o.datatype = "file"
-s:taboption('dstip', FileBrowser, "dst_ips_forward_file",
-	translate("Dst ip forward file"),
-	translate("File containing ip addresses for the purposes as with <em>Dst ip forward</em>"))
+s:taboption('dst', FileBrowser, "dst_ips_forward_file",
+	translate("Dst ip/net forward file"),
+	translate("File containing ip/net for the purposes as with <em>Dst ip/net forward</em>"))
 o.datatype = "file"
-o = s:taboption('dstip', ListValue, "dst_default",
+o = s:taboption('dst', ListValue, "dst_default",
 	translate("Dst default"),
-	translate("Default action for packets whose destination addresses do not match any of the destination ip list"))
+	translate("Default action for packets whose dst address do not match any of the dst ip list"))
 ss.values_actions(o)
 
 return m
