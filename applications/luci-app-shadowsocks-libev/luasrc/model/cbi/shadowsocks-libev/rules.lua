@@ -19,7 +19,7 @@ m = Map("shadowsocks-libev",
 local sdata = m:get('ss_rules')
 if not sdata then
 	m:set('ss_rules', nil, 'ss_rules')
-	m:set('ss_rules', 'disabled', true)
+	m:set('ss_rules', 'disabled', "1")
 end
 
 function src_dst_option(s, ...)
