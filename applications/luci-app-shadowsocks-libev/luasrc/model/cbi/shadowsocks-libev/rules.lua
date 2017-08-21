@@ -88,4 +88,22 @@ o = s:taboption('dst', ListValue, "dst_default",
 	translate("Default action for packets whose dst address do not match any of the dst ip list"))
 ss.values_actions(o)
 
+local installed = os.execute("iptables -m recent -h &>/dev/null") == 0
+if installed then
+	o = s:taboption('dst', Flag, "dst_forward_recentrst")
+else
+	m:set('ss_rules', 'dst_forward_recentrst', "0")
+	o = s:taboption("dst", Button, "_install")
+	o.inputtitle = translate("Install package iptables-mod-conntrack-extra")
+	o.inputstyle = "apply"
+	o.write = function()
+		return luci.http.redirect(
+			luci.dispatcher.build_url("admin/system/packages") ..
+			"?submit=1&install=iptables-mod-conntrack-extra"
+		)
+	end
+end
+o.title = translate("Forward recentrst")
+o.description = translate("Forward those packets whose dst have recently sent to us multiple tcp-rst")
+
 return m
