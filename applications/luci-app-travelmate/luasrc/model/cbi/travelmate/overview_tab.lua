@@ -163,24 +163,25 @@ e = m:section(NamedSection, "global", "travelmate", translate("Extra options"),
 translate("Options for further tweaking in case the defaults are not suitable for you."))
 
 e1 = e:option(Value, "trm_radio", translate("Radio selection"),
-	translate("Restrict travelmate to a dedicated radio, e.g. 'radio0'"))
+	translate("Restrict travelmate to a dedicated radio, e.g. 'radio0'."))
 e1.datatype = "and(uciname,rangelength(6,6))"
 e1.rmempty = true
 
 e2 = e:option(Value, "trm_maxretry", translate("Connection Limit"),
-	translate("How many times should travelmate try to connect to an Uplink"))
+	translate("How many times should travelmate try to connect to an Uplink. ")
+	.. translate("To disable this feature set it to '0' which means unlimited retries."))
 e2.default = 3
-e2.datatype = "range(1,10)"
+e2.datatype = "range(0,30)"
 e2.rmempty = false
 
 e3 = e:option(Value, "trm_maxwait", translate("Interface Timeout"),
-	translate("How long should travelmate wait for a successful wlan interface reload"))
+	translate("How long should travelmate wait for a successful wlan interface reload."))
 e3.default = 30
 e3.datatype = "range(5,60)"
 e3.rmempty = false
 
 e4 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
-	translate("Timeout in seconds between retries in 'automatic' mode"))
+	translate("Timeout in seconds between retries in 'automatic' mode."))
 e4.default = 60
 e4.datatype = "range(60,300)"
 e4.rmempty = false
