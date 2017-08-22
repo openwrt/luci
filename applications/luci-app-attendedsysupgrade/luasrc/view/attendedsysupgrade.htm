@@ -6,6 +6,12 @@
 </div>
 <input class="cbi-button" value="search for updates" onclick="update_request()" type="button" id="update_button">
 <div style="display: none" id="packages" class="alert-message success"></div>
+<div class="cbi-value" id="update_packages_container" style="display: block">
+	<label class="cbi-value-title" for="keep">search for package updates:</label>
+	<div class="cbi-value-field">
+		<input type="checkbox" name="update_packages" id="update_packages" />
+	</div>
+</div>
 <div class="cbi-value" id="keep_container" style="display: none">
 	<label class="cbi-value-title" for="keep">keep settings:</label>
 	<div class="cbi-value-field">
@@ -15,7 +21,7 @@
 
 <script type="text/javascript">
 
-latest_release = "";
+latest_version = "";
 data = {};
 ubus_counter = 1
 origin = document.location.href.replace(location.pathname, "")
@@ -69,6 +75,9 @@ function ubus_request_callback(response_object, callback) {
 		console.log(callback)
 		if(typeof callback === "string") {
 			response_json = JSON.parse(response_object.responseText).result[1]
+			if (callback == "release") {
+				latest_version = response_json.release.version
+			}
 			data[callback] = response_json[callback]
 		} else {
 			callback(response_object)
@@ -83,6 +92,8 @@ function ubus_request_callback_uci(response_object, callback) {
 		console.log(callback)
 		response_json = JSON.parse(response_object.responseText).result[1].value
 		data[callback] = response_json
+
+		document.getElementById("update_packages").checked = data.update_packages;
 	} else {
 		console.log(respons_object.responseText)
 	}
@@ -96,6 +107,7 @@ function setup() {
 	ubus_request("system", "board", {}, "board_name");
 	ubus_request("system", "board", {}, "model");
 	ubus_request("uci", "get", { "config": "attendedsysupgrade", "section": "updateserver", "option": "url" }, "update_server")
+	ubus_request("uci", "get", { "config": "attendedsysupgrade", "section": "updateclient", "option": "update_packages" }, "update_packages")
 }
 
 // shows notification if update is available
@@ -107,7 +119,7 @@ function update_info(info_output) {
 function update_error(error_output) {
 	document.getElementById("update_error").style.display = "block";
 	document.getElementById("update_error").innerHTML = error_output;
-	document.getElementById("update_info").style.display = "None";
+	document.getElementById("update_info").style.display = "none";
 }
 
 // asks server for news updates, actually only based on relesae not packages
@@ -116,6 +128,9 @@ function update_request() {
 	request_dict = {}
 	request_dict.version = data.release.version;
 	request_dict.packages = data.packagelist;
+	if (document.getElementById("update_packages").checked == 1) {
+		request_dict.update_packages = 1
+	}
 	server_request(request_dict, "update-request", update_request_callback)
 }
 
@@ -144,7 +159,7 @@ function update_request_callback(response_object) {
 		// bad request
 		console.log(response_object.responseText)
 		response_object_content = JSON.parse(response_object.responseText)
-		update_error(response_object_content)
+		update_error(response_object_content.error)
 	} else if (response_object.status === 200) {
 		// new release/updates
 		response_object_content = JSON.parse(response_object.responseText)
@@ -179,16 +194,18 @@ function update_request_200(response_content) {
 		for (update in response_content.updates) {
 			info_output += "<b>" + update + "</b>: " + response_content.updates[update][1] + " to " + response_content.updates[update][0] + "</br>"
 		}
-		data.packages = response_content.packages
 	}
+	data.packages = response_content.packages
 	update_info(info_output)
 	document.getElementById("update_button").value = "request image";
+	document.getElementById("update_packages_container").style.display = "none";
 	document.getElementById("update_button").onclick = image_request;
 }
 
 // request the image, need merge with update_request
 function image_request() {
 	console.log("image_request")
+	document.getElementById("update_packages_container").style.display = "none";
 	request_dict = {}
 	request_dict.version = latest_version;
 	request_dict.board = data.board_name
