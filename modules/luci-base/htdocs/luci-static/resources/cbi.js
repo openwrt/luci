@@ -118,6 +118,70 @@ var cbi_validators = {
 		return false;
 	},
 
+	'ip4prefix': function()
+	{
+		return !isNaN(this) && this >= 0 && this <= 32;
+	},
+
+	'ip6prefix': function()
+	{
+		return !isNaN(this) && this >= 0 && this <= 128;
+	},
+
+	'cidr': function()
+	{
+		return cbi_validators.cidr4.apply(this) ||
+			cbi_validators.cidr6.apply(this);
+	},
+
+	'cidr4': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			mask = RegExp.$2;
+			return cbi_validators.ip4addr.apply(ip) &&
+				cbi_validators.ip4prefix.apply(mask);
+		}
+		return false;
+	},
+
+	'cidr6': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			mask = RegExp.$2;
+			return cbi_validators.ip6addr.apply(ip) &&
+				cbi_validators.ip6prefix.apply(mask);
+		}
+		return false;
+	},
+
+	'ipnet4': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			net = RegExp.$2;
+			return cbi_validators.ip4addr.apply(ip) &&
+				cbi_validators.ip4addr.apply(net);
+		}
+		return false;
+	},
+
+	'ipnet6': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			net = RegExp.$2;
+			return cbi_validators.ip6addr.apply(ip) &&
+				cbi_validators.ip6addr.apply(net);
+		}
+		return false;
+	},
+
 	'ipmask': function()
 	{
 		return cbi_validators.ipmask4.apply(this) ||
@@ -126,40 +190,16 @@ var cbi_validators = {
 
 	'ipmask4': function()
 	{
-		var ip = this, mask = 32;
-
-		if (ip.match(/^(\S+)\/(\S+)$/))
-		{
-			ip = RegExp.$1;
-			mask = RegExp.$2;
-		}
-
-		if (!isNaN(mask) && (mask < 0 || mask > 32))
-			return false;
-
-		if (isNaN(mask) && !cbi_validators.ip4addr.apply(mask))
-			return false;
-
-		return cbi_validators.ip4addr.apply(ip);
+		return cbi_validators.cidr4.apply(this) ||
+			cbi_validators.ipnet4.apply(this) ||
+			cbi_validators.ip4addr.apply(this);
 	},
 
 	'ipmask6': function()
 	{
-		var ip = this, mask = 128;
-
-		if (ip.match(/^(\S+)\/(\S+)$/))
-		{
-			ip = RegExp.$1;
-			mask = RegExp.$2;
-		}
-
-		if (!isNaN(mask) && (mask < 0 || mask > 128))
-			return false;
-
-		if (isNaN(mask) && !cbi_validators.ip6addr.apply(mask))
-			return false;
-
-		return cbi_validators.ip6addr.apply(ip);
+		return cbi_validators.cidr6.apply(this) ||
+			cbi_validators.ipnet6.apply(this) ||
+			cbi_validators.ip6addr.apply(this);
 	},
 
 	'port': function()

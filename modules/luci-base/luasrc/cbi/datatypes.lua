@@ -132,38 +132,40 @@ function ip6prefix(val)
 	return ( val and val >= 0 and val <= 128 )
 end
 
+function cidr4(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+
+	return ip4addr(ip) and ip4prefix(mask)
+end
+
+function cidr6(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+
+	return ip6addr(ip) and ip6prefix(mask)
+end
+
+function ipnet4(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+
+	return ip4addr(ip) and ip4addr(mask)
+end
+
+function ipnet6(val)
+	local ip, mask = val:match("^([^/]+)/([^/]+)$")
+
+	return ip6addr(ip) and ip6addr(mask)
+end
+
 function ipmask(val)
 	return ipmask4(val) or ipmask6(val)
 end
 
 function ipmask4(val)
-	local ip, mask = val:match("^([^/]+)/([^/]+)$")
-	local bits = tonumber(mask)
-
-	if bits and (bits < 0 or bits > 32) then
-		return false
-	end
-
-	if not bits and mask and not ip4addr(mask) then
-		return false
-	end
-
-	return ip4addr(ip or val)
+	return cidr4(val) or ipnet4(val) or ip4addr(val)
 end
 
 function ipmask6(val)
-	local ip, mask = val:match("^([^/]+)/([^/]+)$")
-	local bits = tonumber(mask)
-
-	if bits and (bits < 0 or bits > 128) then
-		return false
-	end
-
-	if not bits and mask and not ip6addr(mask) then
-		return false
-	end
-
-	return ip6addr(ip or val)
+	return cidr6(val) or ipnet6(val) or ip6addr(val)
 end
 
 function ip6hostid(val)
