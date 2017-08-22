@@ -3,6 +3,7 @@
 
 local _up = getfenv(3)
 local ut = require("luci.util")
+local sys = require("luci.sys")
 local ds = require("luci.dispatcher")
 local nw = require("luci.model.network")
 nw.init()
@@ -56,10 +57,8 @@ function values_ipaddr(o)
 end
 
 function values_ifnames(o)
-	for _, v in ipairs(nw:get_interfaces()) do
-		if v.dev then
-			o:value(v.dev.name)
-		end
+	for _, v in ipairs(sys.net.devices()) do
+		o:value(v)
 	end
 end
 
