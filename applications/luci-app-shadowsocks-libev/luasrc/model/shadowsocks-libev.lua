@@ -23,13 +23,16 @@ end
 
 function values_redir(o, xmode)
 	o.map.uci.foreach("shadowsocks-libev", "ss_redir", function(sdata)
+		local disabled = ucival_to_bool(sdata["disabled"])
 		local sname = sdata[".name"]
 		local mode = sdata["mode"] or "tcp_only"
-		if mode and mode:find(xmode) then
+		if not disabled and mode:find(xmode) then
 			local desc = "%s - %s" % {sname, mode}
 			o:value(sname, desc)
 		end
 	end)
+	o:value("", "<unset>")
+	o.default = ""
 end
 
 function values_serverlist(o)
