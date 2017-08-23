@@ -16,6 +16,8 @@
 
 	local sysinfo = luci.util.ubus("system", "info") or { }
 	local boardinfo = luci.util.ubus("system", "board") or { }
+	local cpuinfo = luci.sys.exec("cat /proc/cpuinfo") or { }
+	local processor = cpuinfo:match("system type\t+: ([^\n]+)") or { }
 	local unameinfo = nixio.uname() or { }
 
 	local meminfo = sysinfo.memory or {
@@ -682,6 +684,11 @@
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
 		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or boardinfo.system or "?")%></td></tr>
+		<tr><td width="33%"><%:Processor%></td><td><%=pcdata(processor or "?")%></td></tr>
+		<tr><td width="33%"><%:Architecture%></td><td><%=pcdata(march or "?")%></td></tr>
+		<tr><td width="33%"><%:Builder%></td><td>
+            crackself  (<%=luci.sys.exec("cat /proc/version | cut -c52-69") %>) <%=luci.sys.exec("cat /proc/version | cut -f15-19 -d' '") %>
+        </td></tr>
 		<tr><td width="33%"><%:Firmware Version%></td><td>
 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)

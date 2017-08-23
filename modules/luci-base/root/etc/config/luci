@@ -1,5 +1,5 @@
 config core main
-	option lang auto
+	option lang 'zh_cn'
 	option mediaurlbase /luci-static/bootstrap
 	option resourcebase /luci-static/resources
 	
@@ -13,6 +13,8 @@ config extern flash_keep
 	option uploads	"/lib/uci/upload/"
 	
 config internal languages
+	option zh_cn 'chinese'
+	option en 'English'
 	
 config internal sauth
 	option sessionpath "/tmp/luci-sessions"
