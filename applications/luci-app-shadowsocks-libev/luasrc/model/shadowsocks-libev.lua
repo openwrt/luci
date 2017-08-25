@@ -42,7 +42,8 @@ function values_serverlist(o)
 		local server = sdata["server"]
 		local server_port = sdata["server_port"]
 		if server and server_port then
-			local desc = "%s - %s:%s" % {sname, sdata["server"], sdata["server_port"]}
+			local disabled = ucival_to_bool(sdata[".disabled"]) and " - disabled" or ""
+			local desc = "%s - %s:%s%s" % {sname, server, server_port, disabled}
 			o:value(sname, desc)
 		end
 	end)
