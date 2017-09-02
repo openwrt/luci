@@ -224,7 +224,15 @@ function write(content, src_err)
 				header("Cache-Control", "no-cache")
 				header("Expires", "0")
 			end
-
+			if not context.headers["x-frame-options"] then
+				header("X-Frame-Options", "SAMEORIGIN")
+			end
+			if not context.headers["x-xss-protection"] then
+				header("X-XSS-Protection", "1; mode=block")
+			end
+			if not context.headers["x-content-type-options"] then
+				header("X-Content-Type-Options", "nosniff")
+			end
 
 			context.eoh = true
 			coroutine.yield(3)
