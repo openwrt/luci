@@ -1,0 +1,101 @@
+<%#
+ Copyright 2017 Hsing-wang Liao <kuoruan@gmail.com>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local ipkg = require "luci.model.ipkg"
+	local has_ui = false
+
+	local uilist = {
+		supported = {
+			["ariang"] = "AriaNg",
+			["webui-aria2"] = "WebUI-Aria2",
+			["yaaw"] = "YAAW"
+		},
+		installed = {}
+	}
+
+	for k in pairs(uilist.supported) do
+		if ipkg.installed(k) then
+			uilist.installed[#uilist.installed + 1] = k
+			has_ui = true
+		end
+	end
+%>
+
+<fieldset class="cbi-section">
+	<p id="aria2_status">
+		<em><%:Collecting data...%></em>
+	</p>
+	<% if has_ui then %>
+	<p>
+		<%:Installed web interface: %>
+		<%- for _, v in pairs(uilist.installed) do %>
+		<input type="button" class="cbi-button" style="margin: 0 5px;" value="<%=uilist.supported[v]%>"
+			onclick="openWebInterface('<%=v%>');" />
+		<%- end %>
+	<p>
+	<% end %>
+</fieldset>
+
+<script type="text/javascript">//<![CDATA[
+XHR.poll(5, '<%=url("admin/services/aria2/status")%>', null,
+	function(x, data) {
+		var tb = document.getElementById('aria2_status');
+		if (data && tb) {
+			if (data.running) {
+				tb.innerHTML = '<%:The Aria2 service is running.%>';
+			} else {
+				tb.innerHTML = '<%:The Aria2 service is not running.%>';
+			}
+		}
+	}
+);
+
+function randomString(len) {
+	if (isNaN(len)) len = 32;
+
+	var randomStr = '';
+	var restLen = len;
+	while ((restLen = len - randomStr.length) > 0) {
+		randomStr += Math.random().toString(36).substring(2, 2 + restLen);
+	}
+	return randomStr;
+}
+
+function randomToken() {
+	var len = prompt('<%:Please input token length:%>', 20);
+	if (len != null && len != "") {
+		document.getElementById('cbid.aria2.main.rpc_secret').value = randomString(len);
+	}
+};
+
+function showRPCURL() {
+	var port = document.getElementById('cbid.aria2.main.rpc_listen_port').value || '6800';
+	var auth_method = document.getElementById('cbid.aria2.main.rpc_auth_method').value;
+	var use_ws = document.getElementById('cbid.aria2.main._use_ws').checked;
+	var secure_elm = document.getElementById('cbid.aria2.main.rpc_secure');
+	var secure = secure_elm ? secure_elm.checked : false;
+
+	var protocol = use_ws ? (secure ? 'wss' : 'ws') : (secure ? 'https' : 'http');
+	var url = protocol + "://";
+
+	if (auth_method == 'token') {
+		var auth_token = document.getElementById('cbid.aria2.main.rpc_secret').value;
+		url += 'token:' + auth_token + '@';
+	} else if (auth_method == 'user_pass') {
+		var auth_user = document.getElementById('cbid.aria2.main.rpc_user').value;
+		var auth_passwd = document.getElementById('cbid.aria2.main.rpc_passwd').value;
+		url += auth_user + ':' + auth_passwd + '@';
+	}
+	url += window.location.hostname + ':' + port + '/jsonrpc';
+	document.getElementById('cbid.aria2.main._rpc_url').value = url;
+};
+
+function openWebInterface(path) {
+	var host = window.location.host;
+	var protocol = window.location.protocol;
+	window.open(protocol + '//' + host + '/' + path);
+};
+//]]></script>
