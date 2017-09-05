@@ -11,7 +11,7 @@ function index()
 
 	local page
 
-	page = entry({"admin", "services", "unbound"}, cbi("unbound"), _("Recursive DNS"))
+	page = entry({"admin", "services", "unbound"}, cbi("unbound/configure"), _("Recursive DNS"))
 	page.dependent = true
 end
 
