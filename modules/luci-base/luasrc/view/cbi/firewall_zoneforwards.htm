@@ -43,11 +43,12 @@
 	&#160;&#8658;&#160;
 	<% for _, fwd in ipairs(zone:get_forwardings_by("src")) do
 		fz = fwd:dest_zone()
-		empty = false %>
+		if fz then
+			empty = false %>
 		<label class="zonebadge" style="background-color:<%=fz:get_color()%>">
 			<strong><%=fz:name()%></strong>
 		</label>&#160;
-	<% end %>
+	<% end end %>
 	<% if empty then %>
 		<label class="zonebadge zonebadge-empty">
 			<strong><%=zone:forward():upper()%></strong>
