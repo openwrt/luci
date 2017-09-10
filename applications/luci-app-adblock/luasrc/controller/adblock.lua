@@ -3,10 +3,10 @@
 
 module("luci.controller.adblock", package.seeall)
 
-local fs = require("nixio.fs")
-local util = require("luci.util")
+local fs    = require("nixio.fs")
+local util  = require("luci.util")
 local templ = require("luci.template")
-local i18n = require("luci.i18n")
+local i18n  = require("luci.i18n")
 
 function index()
 	if not nixio.fs.access("/etc/config/adblock") then
@@ -24,7 +24,13 @@ function index()
 end
 
 function logread()
-	local logfile = util.trim(util.exec("logread -e 'adblock'"))
+	local logfile
+
+	if nixio.fs.access("/var/log/messages") then
+		logfile = util.trim(util.exec("cat /var/log/messages | grep 'adblock'"))
+	else
+		logfile = util.trim(util.exec("logread -e 'adblock'"))
+	end
 	templ.render("adblock/logread", {title = i18n.translate("Adblock Logfile"), content = logfile})
 end
 
