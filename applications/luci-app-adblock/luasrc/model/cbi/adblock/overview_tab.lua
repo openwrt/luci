@@ -113,7 +113,15 @@ dv1.template = "adblock/runtime"
 if parse == nil then
 	dv1.value = translate("n/a")
 else
-	dv1.value = translate(status)
+	if status == "error" then
+		dv1.value = translate("error")
+	elseif status == "disabled" then
+		dv1.value = translate("disabled")
+	elseif status == "paused" then
+		dv1.value = translate("paused")
+	else
+		dv1.value = translate("enabled")
+	end
 end
 
 dv2 = s:option(DummyValue, "", translate("Adblock Version"))
