@@ -405,14 +405,25 @@ s:tab("encryption", translate("Wireless Security"))
 s:tab("macfilter", translate("MAC-Filter"))
 s:tab("advanced", translate("Advanced Settings"))
 
-ssid = s:taboption("general", Value, "ssid", translate("<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
-ssid.datatype = "maxlength(32)"
-
 mode = s:taboption("general", ListValue, "mode", translate("Mode"))
 mode.override_values = true
 mode:value("ap", translate("Access Point"))
 mode:value("sta", translate("Client"))
 mode:value("adhoc", translate("Ad-Hoc"))
+
+meshid = s:taboption("general", Value, "mesh_id", translate("Mesh Id"))
+meshid:depends({mode="mesh"})
+
+ssid = s:taboption("general", Value, "ssid", translate("<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"))
+ssid.datatype = "maxlength(32)"
+ssid:depends({mode="ap"})
+ssid:depends({mode="sta"})
+ssid:depends({mode="adhoc"})
+ssid:depends({mode="ahdemo"})
+ssid:depends({mode="monitor"})
+ssid:depends({mode="ap-wds"})
+ssid:depends({mode="sta-wds"})
+ssid:depends({mode="wds"})
 
 bssid = s:taboption("general", Value, "bssid", translate("<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"))
 
