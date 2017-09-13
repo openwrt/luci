@@ -7,6 +7,6 @@
 <%+header%>
 <h2 name="content"><%:Kernel Log%></h2>
 <div id="content_syslog">
-<textarea readonly="readonly" wrap="off" rows="<%=dmesg:cmatch("\n")+2%>" id="syslog"><%=dmesg:pcdata()%></textarea>
+<textarea style="font-size: 12px;" readonly="readonly" wrap="off" rows="<%=dmesg:cmatch("\n")+2%>" id="syslog"><%=dmesg:pcdata()%></textarea>
 </div>
 <%+footer%>
