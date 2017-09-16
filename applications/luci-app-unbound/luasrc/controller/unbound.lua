@@ -1,17 +1,135 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2017 Eric Luehrsen <ericluehrsen@hotmail.com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.unbound", package.seeall)
 
+
 function index()
-	if not nixio.fs.access("/etc/config/unbound") then
-		return
-	end
+  local ucl = luci.model.uci.cursor()
+  local valexp = ucl:get_first("unbound", "unbound", "luci_expanded")
+  local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 
-	local page
 
-	page = entry({"admin", "services", "unbound"}, cbi("unbound"), _("Recursive DNS"))
-	page.dependent = true
+  if not nixio.fs.access("/etc/config/unbound") then
+    return
+  end
+
+
+  if valexp == "1" then
+    -- Expanded View
+    entry({"admin", "services", "unbound"}, firstchild(), _("Recursive DNS")).dependent = false
+
+    -- UCI Tab(s)
+    entry({"admin", "services", "unbound", "configure"}, cbi("unbound/configure"), _("Settings"), 10)
+
+    -- Status Tab(s)
+    entry({"admin", "services", "unbound", "status"}, firstchild(), _("Status"), 20)
+    entry({"admin", "services", "unbound", "status", "syslog"}, call("QuerySysLog"), _("Log"), 50).leaf = true
+
+
+    if nixio.fs.access("/usr/sbin/unbound-control") then
+      -- Require unbound-control to execute
+      entry({"admin", "services", "unbound", "status", "statistics"}, call("QueryStatistics"), _("Statistics"), 10).leaf = true
+      entry({"admin", "services", "unbound", "status", "localdata"}, call("QueryLocalData"), _("Local Data"), 20).leaf = true
+      entry({"admin", "services", "unbound", "status", "localzone"}, call("QueryLocalZone"), _("Local Zones"), 30).leaf = true
+
+    else
+      entry({"admin", "services", "unbound", "status", "statistics"}, call("ShowEmpty"), _("Statistics"), 10).leaf = true
+    end
+
+
+    -- Raw File Tab(s)
+    entry({"admin", "services", "unbound", "files"}, firstchild(), _("Files"), 30)
+
+
+    if valman ~= "1" then
+      entry({"admin", "services", "unbound", "files", "base"}, call("ShowUnboundConf"), _("UCI: Unbound"), 10).leaf = true
+    else
+      entry({"admin", "services", "unbound", "files", "base"}, cbi("unbound/manual"), _("Edit: Unbound"), 10).leaf = true
+    end
+
+
+    entry({"admin", "services", "unbound", "files", "server"}, cbi("unbound/server"), _("Edit: Server"), 20).leaf = true
+    entry({"admin", "services", "unbound", "files", "extended"}, cbi("unbound/extended"), _("Edit: Extended"), 30).leaf = true
+
+
+    if nixio.fs.access("/var/lib/unbound/unbound_dhcp.conf") then
+      entry({"admin", "services", "unbound", "files", "dhcp"}, call("ShowDHCPConf"), _("Include: DHCP"), 40).leaf = true
+    end
+
+
+    if nixio.fs.access("/var/lib/unbound/adb_list.overall") then
+      entry({"admin", "services", "unbound", "files", "adblock"}, call("ShowAdblock"), _("Include: Adblock"), 50).leaf = true
+    end
+
+  else
+    -- Simple View to UCI only
+    entry({"admin", "services", "unbound"}, cbi("unbound/configure"), _("Recursive DNS")).dependent = false
+  end
+end
+
+
+function ShowEmpty()
+  local lclhead = "Unbound Control"
+  local lcldesc = luci.i18n.translate("This could display more statistics with the unbound-control package.")
+  luci.template.render("unbound/show-empty", {heading = lclhead, description = lcldesc})
+end
+
+
+function QuerySysLog()
+  local lclhead = "System Log"
+  local lcldata = luci.util.exec("logread | grep -i unbound")
+  local lcldesc = luci.i18n.translate("This shows syslog filtered for events involving Unbound.")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
+end
+
+
+function QueryStatistics()
+  local lclhead = "Unbound Control Stats"
+  local lcldata = luci.util.exec("unbound-control -c /var/lib/unbound/unbound.conf stats_noreset")
+  local lcldesc = luci.i18n.translate("This shows some performances statistics tracked by Unbound.")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
+end
+
+
+function QueryLocalData()
+  local lclhead = "Unbound Control Local Data"
+  local lcldata = luci.util.exec("unbound-control -c /var/lib/unbound/unbound.conf list_local_data")
+  local lcldesc = luci.i18n.translate("This shows local RR including this router, DHCP assignments, and RFC1918 SOA stubs.")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
+end
+
+
+function QueryLocalZone()
+  local lclhead = "Unbound Control Local Zones"
+  local lcldata = luci.util.exec("unbound-control -c /var/lib/unbound/unbound.conf list_local_zones")
+  local lcldesc = luci.i18n.translate("This shows local zones including LAN, adblock, forwarding, and RFC1918 in-arpa. ")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
+end
+
+
+function ShowUnboundConf()
+  local lclhead = "Unbound Conf"
+  local lcldata = luci.util.exec("cat /var/lib/unbound/unbound.conf")
+  local lcldesc = luci.i18n.translate("This shows '/var/lib/unbound/unbound.conf' generated by UCI.")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
+end
+
+
+function ShowDHCPConf()
+  local lclhead = "DHCP Conf"
+  local lcldata = luci.util.exec("cat /var/lib/unbound/unbound_dhcp.conf")
+  local lcldesc = luci.i18n.translate("This shows '/var/lib/unbound/unbound_dhcp.conf' generated by DHCP hook script(s).")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
+end
+
+
+function ShowAdblock()
+  local lclhead = "Adblock Conf"
+  local lcldata = luci.util.exec("cat /var/lib/unbound/adb_list.overall")
+  local lcldesc = luci.i18n.translate("This shows '/var/lib/unbound/adb_list.overall' provided by Adblock script(s).")
+  luci.template.render("unbound/show-textbox", {heading = lclhead, description = lcldesc, content = lcldata})
 end
 
