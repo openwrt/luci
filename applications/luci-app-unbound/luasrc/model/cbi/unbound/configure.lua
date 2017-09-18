@@ -6,7 +6,7 @@
 local m1, s1
 local ena, mcf, lci, lsv, rlh, rpv, vld, nvd, eds, prt, tlm
 local ctl, dlk, dom, dty, lfq, wfq, exa, dp6, d64, pfx, qry, qrs
-local pro, tgr, rsc, rsn, ag2
+local pro, tgr, rsc, rsn, ag2, stt
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 
@@ -34,8 +34,8 @@ mcf = s1:taboption("basic", Flag, "manual_conf", translate("Manual Conf:"),
   translate("Skip UCI and use /etc/unbound/unbound.conf"))
 mcf.rmempty = false
 
-lci = s1:taboption("basic", Flag, "luci_expanded", translate("LuCI Expanded:"),
-  translate("See more detailed tabs for debug"))
+lci = s1:taboption("basic", Flag, "extended_luci", translate("Advanced LuCI:"),
+  translate("See detailed tabs for debug and advanced manual configuration"))
 lci.rmempty = false
 
 
@@ -109,9 +109,14 @@ if valman ~= "1" then
   tlm.rmempty = false
 
   --Advanced Tab
-  ctl = s1:taboption("advanced", Flag, "unbound_control", translate("Unbound Control App:"),
-    translate("Enable unecrypted localhost access for unbound-control"))
+  ctl = s1:taboption("advanced", ListValue, "unbound_control", translate("Unbound Control App:"),
+    translate("Enable access for unbound-control"))
   ctl.rmempty = false
+  ctl:value("0", translate("No Remote Control"))
+  ctl:value("1", translate("Local Host, No Encryption"))
+  ctl:value("2", translate("Local Host, Encrypted"))
+  ctl:value("3", translate("Local Subnet, Encrypted"))
+  ctl:value("4", translate("Local Subnet, Static Encryption"))
 
   dlk = s1:taboption("advanced", ListValue, "dhcp_link", translate("DHCP Link:"),
     translate("Link to supported programs to load DHCP into DNS"))
@@ -222,6 +227,10 @@ if valman ~= "1" then
   ag2:value("12", "12")
   ag2:value("24", "24")
   ag2:value("99", "99 ("..translate("never")..")")
+
+  stt = s1:taboption("resource", Flag, "extended_stats", translate("Extended Statistics:"),
+    translate("Extended statistics are printed from unbound-control"))
+  stt.rmempty = false
 
   tgr = s1:taboption("resource", Value, "trigger", translate("Trigger Networks:"),
     translate("Networks that may trigger Unbound to reload (avoid wan6)"))
