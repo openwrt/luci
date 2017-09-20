@@ -721,6 +721,10 @@ local knownParams = {
 			"key_direction",
 			"1",
 			translate("The key direction for 'tls-auth' and 'secret' options") },
+		{ Value,
+			"ecdh_curve",
+			"secp256k1",
+			translate("The Elliptic Curve Cryptography parameter") },	
 	} }
 }
 
