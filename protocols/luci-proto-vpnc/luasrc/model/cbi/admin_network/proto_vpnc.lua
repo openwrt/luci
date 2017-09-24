@@ -67,7 +67,7 @@ enable_no_enc.default = enable_no_enc.disabled
 
 enable_single_des = section:taboption("general", Flag, "enable_single_des",
 	translate("Enable Single DES"),
-	translate("If checked, 1DES is enaled"))
+	translate("If checked, 1DES is enabled"))
 enable_no_enc.default = enable_single_des.disabled
 
 dpd_idle = section:taboption("general", Value, "dpd_idle", translate("DPD Idle Timeout"))
